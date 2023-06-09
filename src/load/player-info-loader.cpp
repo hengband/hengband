@@ -65,9 +65,7 @@ void rd_base_info(PlayerType *player_ptr)
     if (!h_older_than(1, 7, 0, 1)) {
         char buf[1024];
         rd_string(buf, sizeof buf);
-        if (buf[0]) {
-            player_ptr->last_message = string_make(buf);
-        }
+        player_ptr->last_message = buf;
     }
 
     load_quick_start();

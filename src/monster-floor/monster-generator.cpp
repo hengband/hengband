@@ -69,9 +69,9 @@ static MONSTER_IDX place_monster_m_idx = 0;
  */
 bool mon_scatter(PlayerType *player_ptr, MonsterRaceId r_idx, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION max_dist)
 {
-    POSITION place_x[MON_SCAT_MAXD];
-    POSITION place_y[MON_SCAT_MAXD];
-    int num[MON_SCAT_MAXD];
+    int place_x[MON_SCAT_MAXD]{};
+    int place_y[MON_SCAT_MAXD]{};
+    int num[MON_SCAT_MAXD]{};
 
     if (max_dist >= MON_SCAT_MAXD) {
         return false;

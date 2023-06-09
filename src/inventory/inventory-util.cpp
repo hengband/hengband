@@ -15,6 +15,7 @@
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
@@ -312,7 +313,7 @@ bool verify(PlayerType *player_ptr, concptr prompt, INVENTORY_IDX item)
 void prepare_label_string(PlayerType *player_ptr, char *label, BIT_FLAGS mode, const ItemTester &item_tester)
 {
     concptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    int offset = (mode == USE_EQUIP) ? INVEN_MAIN_HAND : 0;
+    int offset = match_bits(mode, USE_EQUIP, USE_EQUIP) ? INVEN_MAIN_HAND : 0;
     strcpy(label, alphabet_chars);
     for (int i = 0; i < 52; i++) {
         COMMAND_CODE index;

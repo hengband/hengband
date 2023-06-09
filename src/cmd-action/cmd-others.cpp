@@ -156,7 +156,7 @@ static void accept_winner_message(PlayerType *player_ptr)
     } while (!get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
 
     if (buf[0]) {
-        player_ptr->last_message = string_make(buf);
+        player_ptr->last_message = buf;
         msg_print(player_ptr->last_message);
     }
 }
@@ -183,11 +183,7 @@ void do_cmd_suicide(PlayerType *player_ptr)
         return;
     }
 
-    if (player_ptr->last_message) {
-        string_free(player_ptr->last_message);
-    }
-
-    player_ptr->last_message = nullptr;
+    player_ptr->last_message = "";
     player_ptr->playing = false;
     player_ptr->is_dead = true;
     player_ptr->leaving = true;

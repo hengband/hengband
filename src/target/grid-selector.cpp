@@ -109,16 +109,21 @@ std::unordered_map<int, std::function<bool(grid_type *)>> tgt_pt_symbol_call_bac
  * ang_sort() を利用する関係上、y/x 座標それぞれについて配列を作る。
  */
 struct tgt_pt_info {
+    tgt_pt_info()
+    {
+        get_screen_size(&this->wid, &this->hgt);
+    };
+
     TERM_LEN wid; //!< 画面サイズ(幅)
     TERM_LEN hgt; //!< 画面サイズ(高さ)
-    POSITION y; //!< 現在の指定位置(Y)
-    POSITION x; //!< 現在の指定位置(X)
-    std::vector<POSITION> ys; //!< "interesting" な座標たちを記録する配列(Y)
-    std::vector<POSITION> xs; //!< "interesting" な座標たちを記録する配列(X)
-    size_t n; //<! シンボル配列の何番目か
-    char ch; //<! 入力キー
-    char prev_ch; //<! 前回入力キー
-    std::function<bool(grid_type *)> callback; //<! 条件判定コールバック
+    POSITION y = 0; //!< 現在の指定位置(Y)
+    POSITION x = 0; //!< 現在の指定位置(X)
+    std::vector<POSITION> ys{}; //!< "interesting" な座標たちを記録する配列(Y)
+    std::vector<POSITION> xs{}; //!< "interesting" な座標たちを記録する配列(X)
+    size_t n = 0; //<! シンボル配列の何番目か
+    char ch = '\0'; //<! 入力キー
+    char prev_ch = '\0'; //<! 前回入力キー
+    std::function<bool(grid_type *)> callback{}; //<! 条件判定コールバック
 
     void move_to_symbol(PlayerType *player_ptr);
 };
@@ -184,8 +189,6 @@ void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
 bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
 {
     tgt_pt_info info;
-    get_screen_size(&info.wid, &info.hgt);
-
     info.y = player_ptr->y;
     info.x = player_ptr->x;
     if (expand_list) {

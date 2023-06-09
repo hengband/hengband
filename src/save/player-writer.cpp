@@ -46,7 +46,7 @@ void wr_player(PlayerType *player_ptr)
 {
     wr_string(player_ptr->name);
     wr_string(player_ptr->died_from);
-    wr_string(player_ptr->last_message ? player_ptr->last_message : "");
+    wr_string(player_ptr->last_message);
 
     save_quick_start();
     for (int i = 0; i < 4; i++) {

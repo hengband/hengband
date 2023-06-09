@@ -49,31 +49,31 @@
 
 // Melee-post-process-type
 struct mam_pp_type {
+    mam_pp_type(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *dead, bool *fear, std::string_view note, MONSTER_IDX who);
     MONSTER_IDX m_idx;
     MonsterEntity *m_ptr;
-    bool seen;
-    GAME_TEXT m_name[160];
     int dam;
-    bool known; /* Can the player be aware of this attack? */
-    std::string note;
     bool *dead;
     bool *fear;
+    std::string note;
     MONSTER_IDX who;
+    bool seen;
+    bool known; /* Can the player be aware of this attack? */
+    std::string m_name;
 };
 
-mam_pp_type *initialize_mam_pp_type(
-    PlayerType *player_ptr, mam_pp_type *mam_pp_ptr, MONSTER_IDX m_idx, int dam, bool *dead, bool *fear, std::string_view note, MONSTER_IDX who)
+mam_pp_type::mam_pp_type(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *dead, bool *fear, std::string_view note, MONSTER_IDX who)
+    : m_idx(m_idx)
+    , m_ptr(&player_ptr->current_floor_ptr->m_list[m_idx])
+    , dam(dam)
+    , dead(dead)
+    , fear(fear)
+    , note(note)
+    , who(who)
 {
-    mam_pp_ptr->m_idx = m_idx;
-    mam_pp_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    mam_pp_ptr->seen = is_seen(player_ptr, mam_pp_ptr->m_ptr);
-    mam_pp_ptr->dam = dam;
-    mam_pp_ptr->known = mam_pp_ptr->m_ptr->cdis <= MAX_PLAYER_SIGHT;
-    mam_pp_ptr->dead = dead;
-    mam_pp_ptr->fear = fear;
-    mam_pp_ptr->note = note;
-    mam_pp_ptr->who = who;
-    return mam_pp_ptr;
+    this->seen = is_seen(player_ptr, this->m_ptr);
+    this->known = this->m_ptr->cdis <= MAX_PLAYER_SIGHT;
+    this->m_name = monster_desc(player_ptr, m_ptr, 0);
 }
 
 static void prepare_redraw(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
@@ -104,7 +104,7 @@ static bool process_invulnerability(mam_pp_type *mam_pp_ptr)
     }
 
     if (mam_pp_ptr->seen) {
-        msg_format(_("%s^はダメージを受けない。", "%s^ is unharmed."), mam_pp_ptr->m_name);
+        msg_format(_("%s^はダメージを受けない。", "%s^ is unharmed."), mam_pp_ptr->m_name.data());
     }
 
     return true;
@@ -134,7 +134,7 @@ static bool process_all_resistances(mam_pp_type *mam_pp_ptr)
     }
 
     if (mam_pp_ptr->seen) {
-        msg_format(_("%s^はダメージを受けない。", "%s^ is unharmed."), mam_pp_ptr->m_name);
+        msg_format(_("%s^はダメージを受けない。", "%s^ is unharmed."), mam_pp_ptr->m_name.data());
     }
 
     return true;
@@ -154,7 +154,7 @@ static void print_monster_dead_by_monster(PlayerType *player_ptr, mam_pp_type *m
         return;
     }
 
-    angband_strcpy(mam_pp_ptr->m_name, monster_desc(player_ptr, mam_pp_ptr->m_ptr, MD_TRUE_NAME), sizeof(mam_pp_ptr->m_name));
+    mam_pp_ptr->m_name = monster_desc(player_ptr, mam_pp_ptr->m_ptr, MD_TRUE_NAME);
     if (!mam_pp_ptr->seen) {
         player_ptr->current_floor_ptr->monster_noise = true;
         return;
@@ -163,18 +163,18 @@ static void print_monster_dead_by_monster(PlayerType *player_ptr, mam_pp_type *m
     if (!mam_pp_ptr->note.empty()) {
         sound_type kill_sound = mam_pp_ptr->m_ptr->has_living_flag() ? SOUND_KILL : SOUND_N_KILL;
         sound(kill_sound);
-        msg_format(_("%s^%s", "%s^%s"), mam_pp_ptr->m_name, mam_pp_ptr->note.data());
+        msg_format(_("%s^%s", "%s^%s"), mam_pp_ptr->m_name.data(), mam_pp_ptr->note.data());
         return;
     }
 
     if (!mam_pp_ptr->m_ptr->has_living_flag()) {
         sound(SOUND_N_KILL);
-        msg_format(_("%s^は破壊された。", "%s^ is destroyed."), mam_pp_ptr->m_name);
+        msg_format(_("%s^は破壊された。", "%s^ is destroyed."), mam_pp_ptr->m_name.data());
         return;
     }
 
     sound(SOUND_KILL);
-    msg_format(_("%s^は殺された。", "%s^ is killed."), mam_pp_ptr->m_name);
+    msg_format(_("%s^は殺された。", "%s^ is killed."), mam_pp_ptr->m_name.data());
 }
 
 /*!
@@ -257,13 +257,13 @@ static void fall_off_horse_by_melee(PlayerType *player_ptr, mam_pp_type *mam_pp_
         return;
     }
 
-    angband_strcpy(mam_pp_ptr->m_name, monster_desc(player_ptr, mam_pp_ptr->m_ptr, 0), sizeof(mam_pp_ptr->m_name));
+    mam_pp_ptr->m_name = monster_desc(player_ptr, mam_pp_ptr->m_ptr, 0);
     if (mam_pp_ptr->m_ptr->hp > mam_pp_ptr->m_ptr->maxhp / 3) {
         mam_pp_ptr->dam = (mam_pp_ptr->dam + 1) / 2;
     }
 
     if (process_fall_off_horse(player_ptr, (mam_pp_ptr->dam > 200) ? 200 : mam_pp_ptr->dam, false)) {
-        msg_format(_("%s^に振り落とされた！", "You have been thrown off from %s!"), mam_pp_ptr->m_name);
+        msg_format(_("%s^に振り落とされた！", "You have been thrown off from %s!"), mam_pp_ptr->m_name.data());
     }
 }
 
@@ -282,9 +282,8 @@ void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    mam_pp_type tmp_mam_pp;
-    mam_pp_type *mam_pp_ptr = initialize_mam_pp_type(player_ptr, &tmp_mam_pp, m_idx, dam, dead, fear, note, who);
-    angband_strcpy(mam_pp_ptr->m_name, monster_desc(player_ptr, m_ptr, 0), sizeof(mam_pp_ptr->m_name));
+    mam_pp_type tmp_mam_pp(player_ptr, m_idx, dam, dead, fear, note, who);
+    mam_pp_type *mam_pp_ptr = &tmp_mam_pp;
     prepare_redraw(player_ptr, mam_pp_ptr);
     (void)set_monster_csleep(player_ptr, m_idx, 0);
 

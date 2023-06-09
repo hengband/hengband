@@ -24,11 +24,45 @@ enum monster_sex {
     MSEX_FEMALE = 2,
 };
 
+enum monster_lore_mode {
+    MONSTER_LORE_NONE,
+    MONSTER_LORE_NORMAL,
+    MONSTER_LORE_RESEARCH,
+    MONSTER_LORE_DEBUG
+};
+
 class MonsterRaceInfo;
 struct lore_type {
+    lore_type(MonsterRaceId r_idx, monster_lore_mode mode);
+
 #ifndef JP
-    bool sin;
+    bool sin = false;
 #endif
+
+    bool reinforce = false;
+    bool know_everything = false;
+    bool old = false;
+    int count = 0;
+    bool shoot = false;
+    bool rocket = false;
+    int vn = 0;
+    byte color[96]{};
+    concptr vp[96]{};
+    char tmp_msg[96][96]{};
+    bool breath = false;
+    bool magic = false;
+    int drop_quantity = 0;
+    concptr drop_quality = "";
+    concptr p = "";
+    byte pc = 0;
+    concptr q = "";
+    byte qc = 0;
+
+    MonsterRaceId r_idx;
+    BIT_FLAGS mode;
+    monster_sex msex;
+    RaceBlowMethodType method;
+
     bool nightmare;
     MonsterRaceInfo *r_ptr;
     byte speed;
@@ -37,6 +71,7 @@ struct lore_type {
     BIT_FLAGS flags1;
     BIT_FLAGS flags2;
     BIT_FLAGS flags3;
+    BIT_FLAGS flags7;
     EnumClassFlagGroup<MonsterAbilityType> ability_flags;
     EnumClassFlagGroup<MonsterAuraType> aura_flags;
     EnumClassFlagGroup<MonsterBehaviorType> behavior_flags;
@@ -46,43 +81,11 @@ struct lore_type {
     EnumClassFlagGroup<MonsterDropType> drop_flags;
     EnumClassFlagGroup<MonsterFeatureType> feature_flags;
     EnumClassFlagGroup<MonsterBrightnessType> brightness_flags;
-
-    BIT_FLAGS flags7;
-    bool reinforce;
-    bool know_everything;
-    BIT_FLAGS mode;
-    monster_sex msex;
-    bool old;
-    MonsterRaceId r_idx;
-    int vn;
-    byte color[96];
-    concptr vp[96];
-    char tmp_msg[96][96];
-    bool breath;
-    bool magic;
-    int drop_quantity;
-    concptr drop_quality;
-    concptr p;
-    byte pc;
-    concptr q;
-    byte qc;
-    RaceBlowMethodType method;
-    int count;
-    bool shoot = false;
-    bool rocket = false;
-};
-
-enum monster_lore_mode {
-    MONSTER_LORE_NONE,
-    MONSTER_LORE_NORMAL,
-    MONSTER_LORE_RESEARCH,
-    MONSTER_LORE_DEBUG
 };
 
 using hook_c_roff_pf = void (*)(TERM_COLOR attr, std::string_view str);
 extern hook_c_roff_pf hook_c_roff;
 
-lore_type *initialize_lore_type(lore_type *lore_ptr, MonsterRaceId r_idx, monster_lore_mode mode);
 void hooked_roff(std::string_view str);
 
 enum WHO_WORD_TYPE { WHO = 0,
