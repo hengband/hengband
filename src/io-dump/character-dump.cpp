@@ -577,7 +577,7 @@ static void dump_aux_home_museum(PlayerType *player_ptr, FILE *fff)
  */
 static std::string get_check_sum(void)
 {
-    return format("%02x%02x%02x%02x%02x%02x%02x%02x%02x", terrains_header.checksum, baseitems_header.checksum,
+    return angband::format("%02x%02x%02x%02x%02x%02x%02x%02x%02x", terrains_header.checksum, baseitems_header.checksum,
         artifacts_header.checksum, egos_header.checksum, monraces_header.checksum, dungeons_header.checksum,
         class_magics_header.checksum, class_skills_header.checksum, vaults_header.checksum);
 }

@@ -159,12 +159,12 @@ void print_state(PlayerType *player_ptr)
     std::string text;
     if (command_rep) {
         if (command_rep > 999) {
-            text = format("%2d00", command_rep / 100);
+            text = angband::format("%2d00", command_rep / 100);
         } else {
-            text = format("  %2d", command_rep);
+            text = angband::format("  %2d", command_rep);
         }
 
-        c_put_str(attr, format("%5.5s", text.data()), ROW_STATE, COL_STATE);
+        c_put_str(attr, angband::format("%5.5s", text.data()), ROW_STATE, COL_STATE);
         return;
     }
 
@@ -175,7 +175,7 @@ void print_state(PlayerType *player_ptr)
     }
     case ACTION_REST:
         if (player_ptr->resting > 0) {
-            text = format("%4d", player_ptr->resting);
+            text = angband::format("%4d", player_ptr->resting);
         } else if (player_ptr->resting == COMMAND_ARG_REST_FULL_HEALING) {
             text = "****";
         } else if (player_ptr->resting == COMMAND_ARG_REST_UNTIL_DONE) {
@@ -246,7 +246,7 @@ void print_state(PlayerType *player_ptr)
     }
     }
 
-    c_put_str(attr, format("%5.5s", text.data()), ROW_STATE, COL_STATE);
+    c_put_str(attr, angband::format("%5.5s", text.data()), ROW_STATE, COL_STATE);
 }
 
 /*!
@@ -283,7 +283,7 @@ void print_speed(PlayerType *player_ptr)
         } else {
             attr = TERM_L_GREEN;
         }
-        buf = format("%s(+%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("加速", "Fast")), speed);
+        buf = angband::format("%s(+%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("加速", "Fast")), speed);
     } else if (speed < 0) {
         auto is_slow = player_ptr->effects()->deceleration()->is_slow();
         if (player_ptr->riding) {
@@ -302,13 +302,13 @@ void print_speed(PlayerType *player_ptr)
         } else {
             attr = TERM_L_UMBER;
         }
-        buf = format("%s(%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("減速", "Slow")), speed);
+        buf = angband::format("%s(%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("減速", "Slow")), speed);
     } else if (player_ptr->riding) {
         attr = TERM_GREEN;
         buf = _("乗馬中", "Riding");
     }
 
-    c_put_str(attr, format("%-9s", buf.data()), row_speed, col_speed);
+    c_put_str(attr, angband::format("%-9s", buf.data()), row_speed, col_speed);
 }
 
 /*!

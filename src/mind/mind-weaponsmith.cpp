@@ -73,9 +73,9 @@ static void display_essence(PlayerType *player_ptr)
              ++num, ++ei) {
             auto name = Smith::get_essence_name(essences[ei]);
             auto amount = smith.get_essence_num_of_posessions(essences[ei]);
-            prt(format("%-11s %5d", name, amount), 2 + num % row_count, 8 + (num / row_count) * column_width);
+            prt(angband::format("%-11s %5d", name, amount), 2 + num % row_count, 8 + (num / row_count) * column_width);
         }
-        prt(format(_("現在所持しているエッセンス %d/%d", "List of all essences you have. %d/%d"), (page + 1), page_max), 0, 0);
+        prt(angband::format(_("現在所持しているエッセンス %d/%d", "List of all essences you have. %d/%d"), (page + 1), page_max), 0, 0);
 
         auto key = inkey();
         if (key == ESCAPE) {
@@ -133,7 +133,7 @@ static void drain_essence(PlayerType *player_ptr)
 
     if (o_ptr->is_known() && !o_ptr->is_nameless()) {
         const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        if (!get_check(format(_("本当に%sから抽出してよろしいですか？", "Really extract from %s? "), item_name.data()))) {
+        if (!get_check(angband::format(_("本当に%sから抽出してよろしいですか？", "Really extract from %s? "), item_name.data()))) {
             return;
         }
     }
@@ -187,10 +187,10 @@ static COMMAND_CODE choose_essence(void)
             int i;
             for (i = 0; i < mode_max; i++)
 #ifdef JP
-                prt(format(" %s %s", (menu_line == 1 + i) ? "》" : "  ", menu_name[i]), 2 + i, 14);
+                prt(angband::format(" %s %s", (menu_line == 1 + i) ? "》" : "  ", menu_name[i]), 2 + i, 14);
             prt("どの種類のエッセンス付加を行いますか？", 0, 0);
 #else
-                prt(format(" %s %s", (menu_line == 1 + i) ? "> " : "  ", menu_name[i]), 2 + i, 14);
+                prt(angband::format(" %s %s", (menu_line == 1 + i) ? "> " : "  ", menu_name[i]), 2 + i, 14);
             prt("Choose from menu.", 0, 0);
 #endif
 
@@ -229,7 +229,7 @@ static COMMAND_CODE choose_essence(void)
             int i;
 
             for (i = 0; i < mode_max; i++) {
-                prt(format("  %c) %s", 'a' + i, menu_name[i]), 2 + i, 14);
+                prt(angband::format("  %c) %s", 'a' + i, menu_name[i]), 2 + i, 14);
             }
 
             if (!get_com(_("何を付加しますか:", "Command :"), &choice, true)) {
@@ -270,9 +270,9 @@ static void display_smith_effect_list(const Smith &smith, const std::vector<Smit
     }
 
 #ifdef JP
-    prt(format("   %-45s %6s/%s", "能力(必要エッセンス)", "所持数", "必要数"), 1, x);
+    prt(angband::format("   %-45s %6s/%s", "能力(必要エッセンス)", "所持数", "必要数"), 1, x);
 #else
-    prt(format("   %-44s %7s/%s", "Ability (needed essence)", "Possess", "Needs"), 1, x);
+    prt(angband::format("   %-44s %7s/%s", "Ability (needed essence)", "Possess", "Needs"), 1, x);
 #endif
 
     for (int ctr = 0U, ei = start_idx; ctr < line_max && ei < static_cast<int>(smith_effect_list.size()); ++ctr, ++ei) {
@@ -341,7 +341,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
 
         while (!flag) {
             if (page_max > 1) {
-                std::string page_str = format("%d/%d", page + 1, page_max);
+                std::string page_str = angband::format("%d/%d", page + 1, page_max);
                 strnfmt(out_val, 78, _("(SPACEで次ページ, ESCで中断) どの能力を付加しますか？ %s", "(SPACE=next, ESC=exit) Add which ability? %s"), page_str.data());
             } else {
                 strnfmt(out_val, 78, _("(ESCで中断) どの能力を付加しますか？", "(ESC=exit) Add which ability? "));
@@ -483,7 +483,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
             char tmp_val[8] = "1";
             auto limit = std::min(5, smith.get_addable_count(effect, o_ptr));
 
-            if (!get_string(format(_("いくつ付加しますか？ (1-%d): ", "Enchant how many? (1-%d): "), limit), tmp_val, 1)) {
+            if (!get_string(angband::format(_("いくつ付加しますか？ (1-%d): ", "Enchant how many? (1-%d): "), limit), tmp_val, 1)) {
                 return;
             }
             o_ptr->pval = static_cast<PARAMETER_VALUE>(std::clamp(atoi(tmp_val), 1, limit));
@@ -493,7 +493,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
     } else if (effect == SmithEffectType::SLAY_GLOVE) {
         char tmp_val[8] = "1";
         const auto max_val = player_ptr->lev / 7 + 3;
-        if (!get_string(format(_("いくつ付加しますか？ (1-%d):", "Enchant how many? (1-%d):"), max_val), tmp_val, 2)) {
+        if (!get_string(angband::format(_("いくつ付加しますか？ (1-%d):", "Enchant how many? (1-%d):"), max_val), tmp_val, 2)) {
             return;
         }
         add_essence_count = std::clamp(atoi(tmp_val), 1, max_val);
@@ -533,7 +533,7 @@ static void erase_essence(PlayerType *player_ptr)
     }
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    if (!get_check(format(_("よろしいですか？ [%s]", "Are you sure? [%s]"), item_name.data()))) {
+    if (!get_check(angband::format(_("よろしいですか？ [%s]", "Are you sure? [%s]"), item_name.data()))) {
         return;
     }
 
@@ -579,19 +579,19 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
             if (use_menu) {
                 while (!mode) {
 #ifdef JP
-                    prt(format(" %s エッセンス一覧", (menu_line == 1) ? "》" : "  "), 2, 14);
-                    prt(format(" %s エッセンス抽出", (menu_line == 2) ? "》" : "  "), 3, 14);
-                    prt(format(" %s エッセンス消去", (menu_line == 3) ? "》" : "  "), 4, 14);
-                    prt(format(" %s エッセンス付加", (menu_line == 4) ? "》" : "  "), 5, 14);
-                    prt(format(" %s 武器/防具強化", (menu_line == 5) ? "》" : "  "), 6, 14);
-                    prt(format("どの種類の技術を%sますか？", only_browse ? "調べ" : "使い"), 0, 0);
+                    prt(angband::format(" %s エッセンス一覧", (menu_line == 1) ? "》" : "  "), 2, 14);
+                    prt(angband::format(" %s エッセンス抽出", (menu_line == 2) ? "》" : "  "), 3, 14);
+                    prt(angband::format(" %s エッセンス消去", (menu_line == 3) ? "》" : "  "), 4, 14);
+                    prt(angband::format(" %s エッセンス付加", (menu_line == 4) ? "》" : "  "), 5, 14);
+                    prt(angband::format(" %s 武器/防具強化", (menu_line == 5) ? "》" : "  "), 6, 14);
+                    prt(angband::format("どの種類の技術を%sますか？", only_browse ? "調べ" : "使い"), 0, 0);
 #else
-                    prt(format(" %s List essences", (menu_line == 1) ? "> " : "  "), 2, 14);
-                    prt(format(" %s Extract essence", (menu_line == 2) ? "> " : "  "), 3, 14);
-                    prt(format(" %s Remove essence", (menu_line == 3) ? "> " : "  "), 4, 14);
-                    prt(format(" %s Add essence", (menu_line == 4) ? "> " : "  "), 5, 14);
-                    prt(format(" %s Enchant weapon/armor", (menu_line == 5) ? "> " : "  "), 6, 14);
-                    prt(format("Choose command from menu."), 0, 0);
+                    prt(angband::format(" %s List essences", (menu_line == 1) ? "> " : "  "), 2, 14);
+                    prt(angband::format(" %s Extract essence", (menu_line == 2) ? "> " : "  "), 3, 14);
+                    prt(angband::format(" %s Remove essence", (menu_line == 3) ? "> " : "  "), 4, 14);
+                    prt(angband::format(" %s Add essence", (menu_line == 4) ? "> " : "  "), 5, 14);
+                    prt(angband::format(" %s Enchant weapon/armor", (menu_line == 5) ? "> " : "  "), 6, 14);
+                    prt(angband::format("Choose command from menu."), 0, 0);
 #endif
                     choice = inkey();
                     switch (choice) {
@@ -631,7 +631,7 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
                     prt(_("  d) エッセンス付加", "  d) Add essence"), 5, 14);
                     prt(_("  e) 武器/防具強化", "  e) Enchant weapon/armor"), 6, 14);
 #ifdef JP
-                    if (!get_com(format("どの能力を%sますか:", only_browse ? "調べ" : "使い"), &choice, true))
+                    if (!get_com(angband::format("どの能力を%sますか:", only_browse ? "調べ" : "使い"), &choice, true))
 #else
                     if (!get_com("Command :", &choice, true))
 #endif

@@ -15,7 +15,7 @@ void display_monster_drop_quantity(lore_type *lore_ptr)
     } else if (lore_ptr->drop_quantity == 2) {
         hooked_roff(_("一つか二つの", " one or two"));
     } else {
-        hooked_roff(format(_(" %d 個までの", " up to %d"), lore_ptr->drop_quantity));
+        hooked_roff(angband::format(_(" %d 個までの", " up to %d"), lore_ptr->drop_quantity));
     }
 }
 
@@ -103,7 +103,7 @@ void display_monster_drops(lore_type *lore_ptr)
         return;
     }
 
-    hooked_roff(format(_("%s^は", "%s^ may carry"), Who::who(lore_ptr->msex)));
+    hooked_roff(angband::format(_("%s^は", "%s^ may carry"), Who::who(lore_ptr->msex)));
 #ifdef JP
 #else
     lore_ptr->sin = false;

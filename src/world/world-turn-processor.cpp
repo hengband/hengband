@@ -111,12 +111,12 @@ void WorldTurnProcessor::print_time()
     c_put_str(TERM_WHITE, "             ", row, COL_DAY);
     extract_day_hour_min(this->player_ptr, &day, &this->hour, &this->min);
     if (day < 1000) {
-        c_put_str(TERM_WHITE, format(_("%2d日目", "Day%3d"), day), row, COL_DAY);
+        c_put_str(TERM_WHITE, angband::format(_("%2d日目", "Day%3d"), day), row, COL_DAY);
     } else {
         c_put_str(TERM_WHITE, _("***日目", "Day***"), row, COL_DAY);
     }
 
-    c_put_str(TERM_WHITE, format("%2d:%02d", this->hour, this->min), row, COL_DAY + 7);
+    c_put_str(TERM_WHITE, angband::format("%2d:%02d", this->hour, this->min), row, COL_DAY + 7);
 }
 
 void WorldTurnProcessor::process_downward()

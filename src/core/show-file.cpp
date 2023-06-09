@@ -180,7 +180,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
         fff = angband_fopen(path_reopen, FileOpenMode::READ);
     }
 
-    const auto open_error_mes = format(_("'%s'をオープンできません。", "Cannot open '%s'."), name.data());
+    const auto open_error_mes = angband::format(_("'%s'をオープンできません。", "Cannot open '%s'."), name.data());
     if (!fff) {
         THROW_EXCEPTION(std::runtime_error, open_error_mes);
     }
@@ -305,10 +305,10 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
 
         if (show_version) {
             constexpr auto title = _("[%s, %s, %d/%d]", "[%s, %s, Line %d/%d]");
-            prt(format(title, get_version().data(), caption_str.data(), line, size), 0, 0);
+            prt(angband::format(title, get_version().data(), caption_str.data(), line, size), 0, 0);
         } else {
             constexpr auto title = _("[%s, %d/%d]", "[%s, Line %d/%d]");
-            prt(format(title, caption_str.data(), line, size), 0, 0);
+            prt(angband::format(title, caption_str.data(), line, size), 0, 0);
         }
 
         if (size <= rows) {

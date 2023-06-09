@@ -30,9 +30,9 @@ static void display_diary(PlayerType *player_ptr)
     const auto choice = Rand_external(subtitle_candidates.size());
     const auto &subtitle = subtitle_candidates[choice];
 #ifdef JP
-    const auto diary_title = format("「%s%s%sの伝説 -%s-」", ap_ptr->title, ap_ptr->no ? "の" : "", player_ptr->name, subtitle.data());
+    const auto diary_title = angband::format("「%s%s%sの伝説 -%s-」", ap_ptr->title, ap_ptr->no ? "の" : "", player_ptr->name, subtitle.data());
 #else
-    const auto diary_title = format("Legend of %s %s '%s'", ap_ptr->title, player_ptr->name, subtitle.data());
+    const auto diary_title = angband::format("Legend of %s %s '%s'", ap_ptr->title, player_ptr->name, subtitle.data());
 #endif
 
     std::stringstream ss;
@@ -61,14 +61,14 @@ static void do_cmd_last_get(PlayerType *player_ptr)
         return;
     }
 
-    const auto record = format(_("%sの入手を記録します。", "Do you really want to record getting %s? "), record_o_name);
+    const auto record = angband::format(_("%sの入手を記録します。", "Do you really want to record getting %s? "), record_o_name);
     if (!get_check(record)) {
         return;
     }
 
     GAME_TURN turn_tmp = w_ptr->game_turn;
     w_ptr->game_turn = record_turn;
-    const auto mes = format(_("%sを手に入れた。", "discover %s."), record_o_name);
+    const auto mes = angband::format(_("%sを手に入れた。", "discover %s."), record_o_name);
     exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, mes);
     w_ptr->game_turn = turn_tmp;
 }

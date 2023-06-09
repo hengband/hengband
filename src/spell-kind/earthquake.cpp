@@ -163,7 +163,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             if (m_idx) {
                 auto *m_ptr = &floor_ptr->m_list[m_idx];
                 const auto m_name = monster_desc(player_ptr, m_ptr, MD_WRONGDOER_NAME);
-                killer = format(_("%sの起こした地震", "an earthquake caused by %s"), m_name.data());
+                killer = angband::format(_("%sの起こした地震", "an earthquake caused by %s"), m_name.data());
             } else {
                 killer = _("地震", "an earthquake");
             }

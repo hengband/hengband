@@ -85,12 +85,12 @@ static void racial_power_display_list(PlayerType *player_ptr, rc_type *rc_ptr)
                 letter = '0' + ctr - 26;
             }
 
-            dummy = format(" %c) ", letter);
+            dummy = angband::format(" %c) ", letter);
         }
 
         auto &rpi = rc_ptr->power_desc[ctr];
         dummy.append(
-            format("%-30.30s %2d %4d %3d%% %s", rpi.racial_name.data(), rpi.min_level, rpi.cost, 100 - racial_chance(player_ptr, &rc_ptr->power_desc[ctr]),
+            angband::format("%-30.30s %2d %4d %3d%% %s", rpi.racial_name.data(), rpi.min_level, rpi.cost, 100 - racial_chance(player_ptr, &rc_ptr->power_desc[ctr]),
                 rpi.info.data())
                 .data());
 

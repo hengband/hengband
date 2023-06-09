@@ -394,16 +394,16 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId who, bo
         std::string mes;
         switch (who) {
         case MonsterRaceId::DIO:
-            mes = _("「『ザ・ワールド』！　時は止まった！」", format("%s yells 'The World! Time has stopped!'", m_name.data()));
+            mes = _("「『ザ・ワールド』！　時は止まった！」", angband::format("%s yells 'The World! Time has stopped!'", m_name.data()));
             break;
         case MonsterRaceId::WONG:
-            mes = _("「時よ！」", format("%s yells 'Time!'", m_name.data()));
+            mes = _("「時よ！」", angband::format("%s yells 'Time!'", m_name.data()));
             break;
         case MonsterRaceId::DIAVOLO:
-            mes = _("『キング・クリムゾン』！", format("%s yells 'King Crison!'", m_name.data()));
+            mes = _("『キング・クリムゾン』！", angband::format("%s yells 'King Crison!'", m_name.data()));
             break;
         default:
-            mes = format(_("%sは時を止めた！", "%s stops the time!"), m_name.data());
+            mes = angband::format(_("%sは時を止めた！", "%s stops the time!"), m_name.data());
             break;
         }
 

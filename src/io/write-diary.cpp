@@ -323,7 +323,7 @@ void exe_write_diary(PlayerType *player_ptr, DiaryKind dk, int num, std::string_
                       ? _("地上", "the surface")
                   : !(player_ptr->current_floor_ptr->dun_level + num)
                       ? _("地上", "the surface")
-                      : format(_("%d階", "level %d"), player_ptr->current_floor_ptr->dun_level + num);
+                      : angband::format(_("%d階", "level %d"), player_ptr->current_floor_ptr->dun_level + num);
         constexpr auto mes = _(" %2d:%02d %20s %sへ%s。\n", " %2d:%02d %20s %s %s.\n");
         fprintf(fff, mes, hour, min, note_level.data(), _(to.data(), note.data()), _(note.data(), to.data()));
         break;
@@ -383,7 +383,7 @@ void exe_write_diary(PlayerType *player_ptr, DiaryKind dk, int num, std::string_
         const auto &floor_ref = *player_ptr->current_floor_ptr;
         auto to = !floor_ref.is_in_dungeon()
                       ? _("地上", "the surface")
-                      : format(_("%d階(%s)", "level %d of %s"), floor.dun_level, floor.get_dungeon_definition().name.data());
+                      : angband::format(_("%d階(%s)", "level %d of %s"), floor.dun_level, floor.get_dungeon_definition().name.data());
         constexpr auto mes = _(" %2d:%02d %20s %sへとパターンの力で移動した。\n", " %2d:%02d %20s used Pattern to teleport to %s.\n");
         fprintf(fff, mes, hour, min, note_level.data(), to.data());
         break;

@@ -299,7 +299,7 @@ bool monster_arena_comm(PlayerType *player_ptr)
         }
 
         constexpr auto fmt = _("%d) %-58s  %4ld.%02ld倍", "%d) %-58s  %4ld.%02ld");
-        prt(format(fmt, i + 1, name.data(), (long int)mon_odds[i] / 100, (long int)mon_odds[i] % 100), 5 + i, 1);
+        prt(angband::format(fmt, i + 1, name.data(), (long int)mon_odds[i] / 100, (long int)mon_odds[i] % 100), 5 + i, 1);
     }
 
     prt(_("どれに賭けますか:", "Which monster: "), 0, 0);
@@ -340,7 +340,7 @@ bool monster_arena_comm(PlayerType *player_ptr)
      * the int16_t value returned by get_quantity().
      */
     out_val[0] = '\0';
-    if (!get_string(format(_("賭け金 (1-%ld)？", "Your wager (1-%ld) ? "), (long int)maxbet), out_val, 32)) {
+    if (!get_string(angband::format(_("賭け金 (1-%ld)？", "Your wager (1-%ld) ? "), (long int)maxbet), out_val, 32)) {
         screen_load();
         return false;
     }

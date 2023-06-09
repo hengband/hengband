@@ -113,7 +113,7 @@ static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
         std::string details;
 
         if (r_ptr->defeat_level && r_ptr->defeat_time) {
-            details = format(_(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
+            details = angband::format(_(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
                 (r_ptr->defeat_time / 60) % 60, r_ptr->defeat_time % 60);
         }
 

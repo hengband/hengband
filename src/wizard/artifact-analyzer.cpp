@@ -213,13 +213,13 @@ static void analyze_misc_magic(ItemEntity *o_ptr, concptr *misc_list)
     std::string desc;
     if (flags.has(TR_LITE_FUEL)) {
         if (rad > 0) {
-            desc = format(_("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), (int)rad);
+            desc = angband::format(_("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), (int)rad);
         }
     } else {
         if (rad > 0) {
-            desc = format(_("永久光源(半径 %d)", "Permanent Light(radius %d)"), (int)rad);
+            desc = angband::format(_("永久光源(半径 %d)", "Permanent Light(radius %d)"), (int)rad);
         } else if (rad < 0) {
-            desc = format(_("永久光源(半径-%d)。", "Permanent Light(radius -%d)"), (int)-rad);
+            desc = angband::format(_("永久光源(半径-%d)。", "Permanent Light(radius -%d)"), (int)-rad);
         }
     }
 

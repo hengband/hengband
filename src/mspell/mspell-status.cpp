@@ -492,9 +492,9 @@ MonsterSpellResult spell_RF6_HASTE(PlayerType *player_ptr, MONSTER_IDX m_idx, MO
     const auto m_poss = monster_desc(player_ptr, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
     mspell_cast_msg msg(_("%s^が何かをつぶやいた。", "%s^ mumbles."),
-        _("%s^が自分の体に念を送った。", format("%%s^ concentrates on %s body.", m_poss.data())),
-        _("%s^が自分の体に念を送った。", format("%%s^ concentrates on %s body.", m_poss.data())),
-        _("%s^が自分の体に念を送った。", format("%%s^ concentrates on %s body.", m_poss.data())));
+        _("%s^が自分の体に念を送った。", angband::format("%%s^ concentrates on %s body.", m_poss.data())),
+        _("%s^が自分の体に念を送った。", angband::format("%%s^ concentrates on %s body.", m_poss.data())),
+        _("%s^が自分の体に念を送った。", angband::format("%%s^ concentrates on %s body.", m_poss.data())));
 
     monspell_message_base(player_ptr, m_idx, t_idx, msg, player_ptr->effects()->blindness()->is_blind(), target_type);
 
@@ -594,9 +594,9 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
     const auto m_poss = monster_desc(player_ptr, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
     msg.to_player_true = _("%s^が何かをつぶやいた。", "%s^ mumbles.");
-    msg.to_mons_true = _("%s^は自分の傷に念を集中した。", format("%%s^ concentrates on %s wounds.", m_poss.data()));
-    msg.to_player_false = _("%s^が自分の傷に集中した。", format("%%s^ concentrates on %s wounds.", m_poss.data()));
-    msg.to_mons_false = _("%s^は自分の傷に念を集中した。", format("%%s^ concentrates on %s wounds.", m_poss.data()));
+    msg.to_mons_true = _("%s^は自分の傷に念を集中した。", angband::format("%%s^ concentrates on %s wounds.", m_poss.data()));
+    msg.to_player_false = _("%s^が自分の傷に集中した。", angband::format("%%s^ concentrates on %s wounds.", m_poss.data()));
+    msg.to_mons_false = _("%s^は自分の傷に念を集中した。", angband::format("%%s^ concentrates on %s wounds.", m_poss.data()));
 
     monspell_message_base(player_ptr, m_idx, t_idx, msg, is_blind, target_type);
 
@@ -634,7 +634,7 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
 
     if (see_monster(player_ptr, m_idx)) {
         const auto m_name = monster_name(player_ptr, m_idx);
-        msg_print(_(format("%s^は勇気を取り戻した。", m_name.data()), format("%s^ recovers %s courage.", m_name.data(), m_poss.data())));
+        msg_print(_(angband::format("%s^は勇気を取り戻した。", m_name.data()), angband::format("%s^ recovers %s courage.", m_name.data(), m_poss.data())));
     }
 
     return res;

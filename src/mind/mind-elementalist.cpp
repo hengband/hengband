@@ -376,7 +376,7 @@ static std::string get_element_tip(PlayerType *player_ptr, int spell_idx)
     auto realm = i2enum<ElementRealmType>(player_ptr->element);
     auto spell = i2enum<ElementSpells>(spell_idx);
     auto elem = element_powers.at(spell).elem;
-    return format(element_tips.at(spell).data(), element_types.at(realm).name[elem].data());
+    return angband::format(element_tips.at(spell).data(), element_types.at(realm).name[elem].data());
 }
 
 /*!
@@ -419,34 +419,34 @@ static std::string get_element_effect_info(PlayerType *player_ptr, int spell_idx
 
     switch (spell) {
     case ElementSpells::BOLT_1ST:
-        return format(" %s%dd%d", KWD_DAM, 3 + ((plev - 1) / 5), 4);
+        return angband::format(" %s%dd%d", KWD_DAM, 3 + ((plev - 1) / 5), 4);
     case ElementSpells::CURE:
-        return format(" %s%dd%d", KWD_HEAL, 2, 8);
+        return angband::format(" %s%dd%d", KWD_HEAL, 2, 8);
     case ElementSpells::BOLT_2ND:
-        return format(" %s%dd%d", KWD_DAM, 8 + ((plev - 5) / 4), 8);
+        return angband::format(" %s%dd%d", KWD_DAM, 8 + ((plev - 5) / 4), 8);
     case ElementSpells::BALL_3RD:
-        return format(" %s%d", KWD_DAM, (50 + plev * 2));
+        return angband::format(" %s%d", KWD_DAM, (50 + plev * 2));
     case ElementSpells::BALL_1ST:
-        return format(" %s%d", KWD_DAM, 55 + plev);
+        return angband::format(" %s%d", KWD_DAM, 55 + plev);
     case ElementSpells::BREATH_2ND:
         dam = p_ptr->chp / 2;
-        return format(" %s%d", KWD_DAM, (dam > 150) ? 150 : dam);
+        return angband::format(" %s%d", KWD_DAM, (dam > 150) ? 150 : dam);
     case ElementSpells::ANNIHILATE:
-        return format(" %s%d", _("効力:", "pow "), 50 + plev);
+        return angband::format(" %s%d", _("効力:", "pow "), 50 + plev);
     case ElementSpells::BOLT_3RD:
-        return format(" %s%dd%d", KWD_DAM, 12 + ((plev - 5) / 4), 8);
+        return angband::format(" %s%dd%d", KWD_DAM, 12 + ((plev - 5) / 4), 8);
     case ElementSpells::WAVE_1ST:
-        return format(" %s50+d%d", KWD_DAM, plev * 3);
+        return angband::format(" %s50+d%d", KWD_DAM, plev * 3);
     case ElementSpells::BALL_2ND:
-        return format(" %s%d", KWD_DAM, 75 + plev * 3 / 2);
+        return angband::format(" %s%d", KWD_DAM, 75 + plev * 3 / 2);
     case ElementSpells::BURST_1ST:
-        return format(" %s%dd%d", KWD_DAM, 6 + plev / 8, 7);
+        return angband::format(" %s%dd%d", KWD_DAM, 6 + plev / 8, 7);
     case ElementSpells::STORM_2ND:
-        return format(" %s%d", KWD_DAM, 115 + plev * 5 / 2);
+        return angband::format(" %s%d", KWD_DAM, 115 + plev * 5 / 2);
     case ElementSpells::BREATH_1ST:
-        return format(" %s%d", KWD_DAM, p_ptr->chp * 2 / 3);
+        return angband::format(" %s%d", KWD_DAM, p_ptr->chp * 2 / 3);
     case ElementSpells::STORM_3ND:
-        return format(" %s%d", KWD_DAM, 300 + plev * 5);
+        return angband::format(" %s%d", KWD_DAM, 300 + plev * 5);
     default:
         return std::string();
     }
@@ -793,12 +793,12 @@ static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_b
                             desc = "     ";
                         }
                     } else {
-                        desc = format("  %c) ", I2A(i));
+                        desc = angband::format("  %c) ", I2A(i));
                     }
 
                     concptr s = get_element_name(player_ptr->element, elem);
-                    std::string name = format(spell.name, s);
-                    desc.append(format("%-30s%2d %4d %3d%%%s", name.data(), spell.min_lev, mana_cost, chance, comment.data()));
+                    std::string name = angband::format(spell.name, s);
+                    desc.append(angband::format("%-30s%2d %4d %3d%%%s", name.data(), spell.min_lev, mana_cost, chance, comment.data()));
                     prt(desc, y + i + 1, x);
                 }
 
@@ -1112,7 +1112,7 @@ static void display_realm_cursor(int i, int n, term_color_type color)
         name = element_types.at(i2enum<ElementRealmType>(i + 1)).title.data();
     }
 
-    c_put_str(color, format("%c) %s", sym, name), 12 + (i / 5), 2 + 15 * (i % 5));
+    c_put_str(color, angband::format("%c) %s", sym, name), 12 + (i / 5), 2 + 15 * (i % 5));
 }
 
 /*!
@@ -1167,7 +1167,7 @@ static int get_element_realm(PlayerType *player_ptr, int is, int n)
     int os = cs;
     int k;
 
-    std::string buf = format(_("領域を選んで下さい(%c-%c) ('='初期オプション設定): ", "Choose a realm (%c-%c) ('=' for options): "), I2A(0), I2A(n - 1));
+    std::string buf = angband::format(_("領域を選んで下さい(%c-%c) ('='初期オプション設定): ", "Choose a realm (%c-%c) ('=' for options): "), I2A(0), I2A(n - 1));
 
     while (true) {
         display_realm_cursor(os, n, TERM_WHITE);
@@ -1285,7 +1285,7 @@ void switch_element_racial(PlayerType *player_ptr, rc_type *rc_ptr)
         break;
     case ElementRealmType::ICE:
         rpi = rpi_type(_("周辺フリーズ", "Sleep monsters"));
-        rpi.info = format("%s%d", KWD_POWER, 20 + plev * 3 / 2);
+        rpi.info = angband::format("%s%d", KWD_POWER, 20 + plev * 3 / 2);
         rpi.text = _("視界内の全てのモンスターを眠らせる。抵抗されると無効。", "Attempts to put all monsters in sight to sleep.");
         rpi.min_level = 10;
         rpi.cost = 15;
@@ -1295,7 +1295,7 @@ void switch_element_racial(PlayerType *player_ptr, rc_type *rc_ptr)
         break;
     case ElementRealmType::SKY:
         rpi = rpi_type(_("魔力充填", "Recharging"));
-        rpi.info = format("%s%d", KWD_POWER, 120);
+        rpi.info = angband::format("%s%d", KWD_POWER, 120);
         rpi.text = _("杖/魔法棒の充填回数を増やすか、充填中のロッドの充填時間を減らす。", "Recharges staffs, wands or rods.");
         rpi.min_level = 20;
         rpi.cost = 15;
@@ -1314,7 +1314,7 @@ void switch_element_racial(PlayerType *player_ptr, rc_type *rc_ptr)
         break;
     case ElementRealmType::DARKNESS:
         rpi = rpi_type(_("闇の扉", "Door to darkness"));
-        rpi.info = format("%s%d", KWD_SPHERE, 15 + plev / 2);
+        rpi.info = angband::format("%s%d", KWD_SPHERE, 15 + plev / 2);
         rpi.min_level = 5;
         rpi.cost = 5 + plev / 7;
         rpi.stat = A_WIS;
@@ -1332,7 +1332,7 @@ void switch_element_racial(PlayerType *player_ptr, rc_type *rc_ptr)
         break;
     case ElementRealmType::EARTH:
         rpi = rpi_type(_("地震", "Earthquake"));
-        rpi.info = format("%s%d", KWD_SPHERE, 10);
+        rpi.info = angband::format("%s%d", KWD_SPHERE, 10);
         rpi.text = _("周囲のダンジョンを揺らし、壁と床をランダムに入れ変える。", "Shakes dungeon structure, and results in random swapping of floors and walls.");
         rpi.min_level = 25;
         rpi.cost = 15;

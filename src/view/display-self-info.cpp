@@ -45,31 +45,31 @@ void display_virtue(PlayerType *player_ptr, self_info_type *self_ptr)
         std::string vir_desc;
         int tester = player_ptr->virtues[v_nr];
         if (tester < -100) {
-            vir_desc = format(_("[%s]の対極 (%d)", "You are the polar opposite of %s (%d)."), vir_name, tester);
+            vir_desc = angband::format(_("[%s]の対極 (%d)", "You are the polar opposite of %s (%d)."), vir_name, tester);
         } else if (tester < -80) {
-            vir_desc = format(_("[%s]の大敵 (%d)", "You are an arch-enemy of %s (%d)."), vir_name, tester);
+            vir_desc = angband::format(_("[%s]の大敵 (%d)", "You are an arch-enemy of %s (%d)."), vir_name, tester);
         } else if (tester < -60) {
-            vir_desc = format(_("[%s]の強敵 (%d)", "You are a bitter enemy of %s (%d)."), vir_name, tester);
+            vir_desc = angband::format(_("[%s]の強敵 (%d)", "You are a bitter enemy of %s (%d)."), vir_name, tester);
         } else if (tester < -40) {
-            vir_desc = format(_("[%s]の敵 (%d)", "You are an enemy of %s (%d)."), vir_name, tester);
+            vir_desc = angband::format(_("[%s]の敵 (%d)", "You are an enemy of %s (%d)."), vir_name, tester);
         } else if (tester < -20) {
-            vir_desc = format(_("[%s]の罪者 (%d)", "You have sinned against %s (%d)."), vir_name, tester);
+            vir_desc = angband::format(_("[%s]の罪者 (%d)", "You have sinned against %s (%d)."), vir_name, tester);
         } else if (tester < 0) {
-            vir_desc = format(_("[%s]の迷道者 (%d)", "You have strayed from the path of %s (%d)."), vir_name, tester);
+            vir_desc = angband::format(_("[%s]の迷道者 (%d)", "You have strayed from the path of %s (%d)."), vir_name, tester);
         } else if (tester == 0) {
-            vir_desc = format(_("[%s]の中立者 (%d)", "You are neutral to %s (%d)."), vir_name, tester);
+            vir_desc = angband::format(_("[%s]の中立者 (%d)", "You are neutral to %s (%d)."), vir_name, tester);
         } else if (tester < 20) {
-            vir_desc = format(_("[%s]の小徳者 (%d)", "You are somewhat virtuous in %s (%d)."), vir_name, tester);
+            vir_desc = angband::format(_("[%s]の小徳者 (%d)", "You are somewhat virtuous in %s (%d)."), vir_name, tester);
         } else if (tester < 40) {
-            vir_desc = format(_("[%s]の中徳者 (%d)", "You are virtuous in %s (%d)."), vir_name, tester);
+            vir_desc = angband::format(_("[%s]の中徳者 (%d)", "You are virtuous in %s (%d)."), vir_name, tester);
         } else if (tester < 60) {
-            vir_desc = format(_("[%s]の高徳者 (%d)", "You are very virtuous in %s (%d)."), vir_name, tester);
+            vir_desc = angband::format(_("[%s]の高徳者 (%d)", "You are very virtuous in %s (%d)."), vir_name, tester);
         } else if (tester < 80) {
-            vir_desc = format(_("[%s]の覇者 (%d)", "You are a champion of %s (%d)."), vir_name, tester);
+            vir_desc = angband::format(_("[%s]の覇者 (%d)", "You are a champion of %s (%d)."), vir_name, tester);
         } else if (tester < 100) {
-            vir_desc = format(_("[%s]の偉大な覇者 (%d)", "You are a great champion of %s (%d)."), vir_name, tester);
+            vir_desc = angband::format(_("[%s]の偉大な覇者 (%d)", "You are a great champion of %s (%d)."), vir_name, tester);
         } else {
-            vir_desc = format(_("[%s]の具現者 (%d)", "You are the living embodiment of %s (%d)."), vir_name, tester);
+            vir_desc = angband::format(_("[%s]の具現者 (%d)", "You are the living embodiment of %s (%d)."), vir_name, tester);
         }
 
         angband_strcpy(self_ptr->v_string[v_nr], vir_desc, sizeof(self_ptr->v_string[v_nr]));

@@ -238,12 +238,12 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
                         } else {
                             letter = '0' + line - 27;
                         }
-                        psi_desc = format("  %c)", letter);
+                        psi_desc = angband::format("  %c)", letter);
                     }
 
                     /* Dump the spell --(-- */
                     const auto spell_name = exe_spell(player_ptr, REALM_HISSATSU, i, SpellProcessType::NAME);
-                    psi_desc.append(format(" %-18s%2d %3d", spell_name->data(), spell.slevel, spell.smana));
+                    psi_desc.append(angband::format(" %-18s%2d %3d", spell_name->data(), spell.slevel, spell.smana));
                     prt(psi_desc, y + (line % 17) + (line >= 17), x + (line / 17) * 30);
                     prt("", y + (line % 17) + (line >= 17) + 1, x + (line / 17) * 30);
                 }

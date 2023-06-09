@@ -394,7 +394,7 @@ void MonsterDamageProcessor::show_kill_message(std::string_view note, std::strin
 void MonsterDamageProcessor::show_explosion_message(std::string_view died_mes, std::string_view m_name)
 {
     std::stringstream ss;
-    ss << _(m_name, format("%s^", m_name.data()));
+    ss << _(m_name, angband::format("%s^", m_name.data()));
     ss << died_mes;
     msg_print(ss.str());
     return;

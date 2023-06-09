@@ -58,7 +58,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
         change = true;
         const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
-        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
+        if (!get_check(angband::format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
             continue;
         }
 
@@ -77,7 +77,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
         change = true;
         const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
-        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
+        if (!get_check(angband::format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
             continue;
         }
 
@@ -96,7 +96,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
         change = true;
         const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
-        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
+        if (!get_check(angband::format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
             continue;
         }
 
@@ -115,7 +115,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
         change = true;
         const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
-        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
+        if (!get_check(angband::format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
             continue;
         }
 
@@ -135,7 +135,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
         change = true;
         const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
-        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
+        if (!get_check(angband::format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
             continue;
         }
 
@@ -162,7 +162,7 @@ bool exchange_cash(PlayerType *player_ptr)
             ItemEntity forge;
 
             const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
-            if (!get_check(format(_("%sを渡しますか？", "Hand %s over? "), item_name.data()))) {
+            if (!get_check(angband::format(_("%sを渡しますか？", "Hand %s over? "), item_name.data()))) {
                 continue;
             }
 
@@ -173,7 +173,7 @@ bool exchange_cash(PlayerType *player_ptr)
             auto num = static_cast<int>(std::count_if(std::begin(w_ptr->bounties), std::end(w_ptr->bounties),
                 [](const auto &b_ref) { return b_ref.is_achieved; }));
 
-            msg_print(_(format("これで合計 %d ポイント獲得しました。", num), format("You earned %d point%s total.", num, (num > 1 ? "s" : ""))));
+            msg_print(_(angband::format("これで合計 %d ポイント獲得しました。", num), angband::format("You earned %d point%s total.", num, (num > 1 ? "s" : ""))));
 
             (&forge)->prep(lookup_baseitem_id(prize_list[num - 1]));
             ItemMagicApplier(player_ptr, &forge, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART).execute();
@@ -215,9 +215,9 @@ void today_target(PlayerType *player_ptr)
 
     clear_bldg(4, 18);
     c_put_str(TERM_YELLOW, _("本日の賞金首", "Wanted monster that changes from day to day"), 5, 10);
-    c_put_str(TERM_YELLOW, format(_("ターゲット： %s", "target: %s"), r_ptr->name.data()), 6, 10);
-    prt(format(_("死体 ---- $%d", "corpse   ---- $%d"), (int)r_ptr->level * 50 + 100), 8, 10);
-    prt(format(_("骨   ---- $%d", "skeleton ---- $%d"), (int)r_ptr->level * 30 + 60), 9, 10);
+    c_put_str(TERM_YELLOW, angband::format(_("ターゲット： %s", "target: %s"), r_ptr->name.data()), 6, 10);
+    prt(angband::format(_("死体 ---- $%d", "corpse   ---- $%d"), (int)r_ptr->level * 50 + 100), 8, 10);
+    prt(angband::format(_("骨   ---- $%d", "skeleton ---- $%d"), (int)r_ptr->level * 30 + 60), 9, 10);
     player_ptr->knows_daily_bounty = true;
 }
 
@@ -252,7 +252,7 @@ void show_bounty(void)
         auto color = is_achieved ? TERM_RED : TERM_WHITE;
         auto done_mark = is_achieved ? _("(済)", "(done)") : "";
 
-        c_prt(color, format("%s %s", r_ptr->name.data(), done_mark), y + 7, 10);
+        c_prt(color, angband::format("%s %s", r_ptr->name.data(), done_mark), y + 7, 10);
 
         y = (y + 1) % 10;
         if (!y && (i < std::size(w_ptr->bounties) - 1)) {

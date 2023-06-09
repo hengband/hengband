@@ -121,18 +121,18 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const M
         }
         nam.append(name.front());
 
-        std::string lev = format("%d", (int)r_ptr->level);
-        std::string rar = format("%d", (int)r_ptr->rarity);
-        std::string spd = format("%+d", r_ptr->speed - STANDARD_SPEED);
-        std::string ac = format("%d", r_ptr->ac);
+        std::string lev = angband::format("%d", (int)r_ptr->level);
+        std::string rar = angband::format("%d", (int)r_ptr->rarity);
+        std::string spd = angband::format("%+d", r_ptr->speed - STANDARD_SPEED);
+        std::string ac = angband::format("%d", r_ptr->ac);
         std::string hp;
         if (any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) || (r_ptr->hside == 1)) {
-            hp = format("%d", r_ptr->hdice * r_ptr->hside);
+            hp = angband::format("%d", r_ptr->hdice * r_ptr->hside);
         } else {
-            hp = format("%dd%d", r_ptr->hdice, r_ptr->hside);
+            hp = angband::format("%dd%d", r_ptr->hdice, r_ptr->hside);
         }
 
-        std::string symbol = format("%s '%c'", attr_to_text(r_ptr), r_ptr->d_char);
+        std::string symbol = angband::format("%s '%c'", attr_to_text(r_ptr), r_ptr->d_char);
         fprintf(spoiler_file, "%-45.45s%4s %4s %4s %7s %7s  %19.19s\n",
             nam.data(), lev.data(), rar.data(), spd.data(), hp.data(),
             ac.data(), symbol.data());
@@ -193,22 +193,22 @@ SpoilerOutputResultType spoil_mon_info(concptr fname)
             spoil_out("[N] ");
         }
 
-        spoil_out(format(_("%s/%s  (", "%s%s ("), r_ptr->name.data(), _(r_ptr->E_name.data(), ""))); /* ---)--- */
+        spoil_out(angband::format(_("%s/%s  (", "%s%s ("), r_ptr->name.data(), _(r_ptr->E_name.data(), ""))); /* ---)--- */
         spoil_out(attr_to_text(r_ptr));
-        spoil_out(format(" '%c')\n", r_ptr->d_char));
+        spoil_out(angband::format(" '%c')\n", r_ptr->d_char));
         spoil_out("=== ");
-        spoil_out(format("Num:%d  ", enum2i(r_idx)));
-        spoil_out(format("Lev:%d  ", (int)r_ptr->level));
-        spoil_out(format("Rar:%d  ", r_ptr->rarity));
-        spoil_out(format("Spd:%+d  ", r_ptr->speed - STANDARD_SPEED));
+        spoil_out(angband::format("Num:%d  ", enum2i(r_idx)));
+        spoil_out(angband::format("Lev:%d  ", (int)r_ptr->level));
+        spoil_out(angband::format("Rar:%d  ", r_ptr->rarity));
+        spoil_out(angband::format("Spd:%+d  ", r_ptr->speed - STANDARD_SPEED));
         if (any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) || (r_ptr->hside == 1)) {
-            spoil_out(format("Hp:%d  ", r_ptr->hdice * r_ptr->hside));
+            spoil_out(angband::format("Hp:%d  ", r_ptr->hdice * r_ptr->hside));
         } else {
-            spoil_out(format("Hp:%dd%d  ", r_ptr->hdice, r_ptr->hside));
+            spoil_out(angband::format("Hp:%dd%d  ", r_ptr->hdice, r_ptr->hside));
         }
 
-        spoil_out(format("Ac:%d  ", r_ptr->ac));
-        spoil_out(format("Exp:%ld\n", (long)(r_ptr->mexp)));
+        spoil_out(angband::format("Ac:%d  ", r_ptr->ac));
+        spoil_out(angband::format("Exp:%ld\n", (long)(r_ptr->mexp)));
         output_monster_spoiler(r_idx, roff_func);
         spoil_out({}, true);
     }

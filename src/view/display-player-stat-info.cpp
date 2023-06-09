@@ -123,13 +123,13 @@ static void display_basic_stat_name(PlayerType *player_ptr, int stat_num, int ro
  */
 static void display_basic_stat_value(PlayerType *player_ptr, int stat_num, int r_adj, int e_adj, int row, int stat_col)
 {
-    c_put_str(TERM_L_BLUE, format("%3d", r_adj), row + stat_num + 1, stat_col + 13);
+    c_put_str(TERM_L_BLUE, angband::format("%3d", r_adj), row + stat_num + 1, stat_col + 13);
 
-    c_put_str(TERM_L_BLUE, format("%3d", (int)cp_ptr->c_adj[stat_num]), row + stat_num + 1, stat_col + 16);
+    c_put_str(TERM_L_BLUE, angband::format("%3d", (int)cp_ptr->c_adj[stat_num]), row + stat_num + 1, stat_col + 16);
 
-    c_put_str(TERM_L_BLUE, format("%3d", (int)ap_ptr->a_adj[stat_num]), row + stat_num + 1, stat_col + 19);
+    c_put_str(TERM_L_BLUE, angband::format("%3d", (int)ap_ptr->a_adj[stat_num]), row + stat_num + 1, stat_col + 19);
 
-    c_put_str(TERM_L_BLUE, format("%3d", (int)e_adj), row + stat_num + 1, stat_col + 22);
+    c_put_str(TERM_L_BLUE, angband::format("%3d", (int)e_adj), row + stat_num + 1, stat_col + 22);
 
     c_put_str(TERM_L_GREEN, cnv_stat(player_ptr->stat_top[stat_num]), row + stat_num + 1, stat_col + 26);
 

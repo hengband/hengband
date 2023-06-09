@@ -335,7 +335,7 @@ void mitokohmon(PlayerType *player_ptr)
 
     msg_print(_(
         "「者ども、ひかえおろう！！！このお方をどなたとこころえる。」",
-        format("%s^ says 'WHO do you think this person is! Bow your head, down to your knees!'", sukekakusan)));
+        angband::format("%s^ says 'WHO do you think this person is! Bow your head, down to your knees!'", sukekakusan)));
     sukekaku = true;
     stun_monsters(player_ptr, 120);
     confuse_monsters(player_ptr, 120);

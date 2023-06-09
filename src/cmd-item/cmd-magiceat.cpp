@@ -155,13 +155,13 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
 
         while (tval == ItemKindType::NONE) {
 #ifdef JP
-            prt(format(" %s 杖", (menu_line == 1) ? "》" : "  "), 2, 14);
-            prt(format(" %s 魔法棒", (menu_line == 2) ? "》" : "  "), 3, 14);
-            prt(format(" %s ロッド", (menu_line == 3) ? "》" : "  "), 4, 14);
+            prt(angband::format(" %s 杖", (menu_line == 1) ? "》" : "  "), 2, 14);
+            prt(angband::format(" %s 魔法棒", (menu_line == 2) ? "》" : "  "), 3, 14);
+            prt(angband::format(" %s ロッド", (menu_line == 3) ? "》" : "  "), 4, 14);
 #else
-            prt(format(" %s staff", (menu_line == 1) ? "> " : "  "), 2, 14);
-            prt(format(" %s wand", (menu_line == 2) ? "> " : "  "), 3, 14);
-            prt(format(" %s rod", (menu_line == 3) ? "> " : "  "), 4, 14);
+            prt(angband::format(" %s staff", (menu_line == 1) ? "> " : "  "), 2, 14);
+            prt(angband::format(" %s wand", (menu_line == 2) ? "> " : "  "), 3, 14);
+            prt(angband::format(" %s rod", (menu_line == 3) ? "> " : "  "), 4, 14);
 #endif
 
             if (only_browse) {
@@ -269,11 +269,11 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
 
             /* Print header(s) */
 #ifdef JP
-            prt(format("                           %s 失率                           %s 失率", (tval == ItemKindType::ROD ? "  状態  " : "使用回数"),
+            prt(angband::format("                           %s 失率                           %s 失率", (tval == ItemKindType::ROD ? "  状態  " : "使用回数"),
                     (tval == ItemKindType::ROD ? "  状態  " : "使用回数")),
                 y++, x);
 #else
-            prt(format("                           %s Fail                           %s Fail", (tval == ItemKindType::ROD ? "  Stat  " : " Charges"),
+            prt(angband::format("                           %s Fail                           %s Fail", (tval == ItemKindType::ROD ? "  Stat  " : " Charges"),
                     (tval == ItemKindType::ROD ? "  Stat  " : " Charges")),
                 y++, x);
 #endif
@@ -303,7 +303,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
                     } else {
                         letter = '0' + sval_ctr - 26;
                     }
-                    dummy = format("%c)", letter);
+                    dummy = angband::format("%c)", letter);
                 }
                 x1 = ((sval_ctr < item_group_size / 2) ? x : x + 40);
                 y1 = ((sval_ctr < item_group_size / 2) ? y + sval_ctr : y + sval_ctr - item_group_size / 2);
@@ -330,7 +330,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
                 if (bi_id) {
                     if (tval == ItemKindType::ROD) {
                         dummy.append(
-                            format(_(" %-22.22s 充填:%2d/%2d%3d%%", " %-22.22s   (%2d/%2d) %3d%%"), baseitem.name.data(),
+                            angband::format(_(" %-22.22s 充填:%2d/%2d%3d%%", " %-22.22s   (%2d/%2d) %3d%%"), baseitem.name.data(),
                                 item.charge ? (item.charge - 1) / (EATER_ROD_CHARGE * baseitem.pval) + 1 : 0,
                                 item.count, chance)
                                 .data());
@@ -339,7 +339,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
                         }
                     } else {
                         dummy.append(
-                            format(" %-22.22s    %2d/%2d %3d%%", baseitem.name.data(), (int16_t)(item.charge / EATER_CHARGE),
+                            angband::format(" %-22.22s    %2d/%2d %3d%%", baseitem.name.data(), (int16_t)(item.charge / EATER_CHARGE),
                                 item.count, chance)
                                 .data());
                         if (item.charge < EATER_CHARGE) {

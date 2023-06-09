@@ -222,22 +222,22 @@ static int find_split(concptr str, int len)
 static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_COLOR col, concptr str)
 {
     if (len == 1) {
-        insert_ringbuf(format("s%c%c%c%c", x + 1, y + 1, col, *str));
+        insert_ringbuf(angband::format("s%c%c%c%c", x + 1, y + 1, col, *str));
         return (*old_text_hook)(x, y, len, col, str);
     }
 
     if (string_is_repeat(str, len)) {
         while (len > SPLIT_MAX) {
-            insert_ringbuf(format("n%c%c%c%c%c", x + 1, y + 1, SPLIT_MAX, col, *str));
+            insert_ringbuf(angband::format("n%c%c%c%c%c", x + 1, y + 1, SPLIT_MAX, col, *str));
             x += SPLIT_MAX;
             len -= SPLIT_MAX;
         }
 
         std::string formatted_text;
         if (len > 1) {
-            formatted_text = format("n%c%c%c%c%c", x + 1, y + 1, len, col, *str);
+            formatted_text = angband::format("n%c%c%c%c%c", x + 1, y + 1, len, col, *str);
         } else {
-            formatted_text = format("s%c%c%c%c", x + 1, y + 1, col, *str);
+            formatted_text = angband::format("s%c%c%c%c", x + 1, y + 1, col, *str);
         }
 
         insert_ringbuf(formatted_text);
@@ -253,24 +253,24 @@ static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_CO
 #endif
     while (len > SPLIT_MAX) {
         auto split_len = _(find_split(payload, SPLIT_MAX), SPLIT_MAX);
-        insert_ringbuf(format("t%c%c%c%c", x + 1, y + 1, split_len, col), std::string_view(payload, split_len));
+        insert_ringbuf(angband::format("t%c%c%c%c", x + 1, y + 1, split_len, col), std::string_view(payload, split_len));
         x += split_len;
         len -= split_len;
         payload += split_len;
     }
 
-    insert_ringbuf(format("t%c%c%c%c", x + 1, y + 1, len, col), std::string_view(payload, len));
+    insert_ringbuf(angband::format("t%c%c%c%c", x + 1, y + 1, len, col), std::string_view(payload, len));
     return (*old_text_hook)(x, y, len, col, str);
 }
 
 static errr send_wipe_to_chuukei_server(int x, int y, int len)
 {
     while (len > SPLIT_MAX) {
-        insert_ringbuf(format("w%c%c%c", x + 1, y + 1, SPLIT_MAX));
+        insert_ringbuf(angband::format("w%c%c%c", x + 1, y + 1, SPLIT_MAX));
         x += SPLIT_MAX;
         len -= SPLIT_MAX;
     }
-    insert_ringbuf(format("w%c%c%c", x + 1, y + 1, len));
+    insert_ringbuf(angband::format("w%c%c%c", x + 1, y + 1, len));
 
     return (*old_wipe_hook)(x, y, len);
 }
@@ -278,7 +278,7 @@ static errr send_wipe_to_chuukei_server(int x, int y, int len)
 static errr send_xtra_to_chuukei_server(int n, int v)
 {
     if (n == TERM_XTRA_CLEAR || n == TERM_XTRA_FRESH || n == TERM_XTRA_SHAPE) {
-        insert_ringbuf(format("x%c", n + 1));
+        insert_ringbuf(angband::format("x%c", n + 1));
 
         if (n == TERM_XTRA_FRESH) {
             insert_ringbuf("d", std::to_string(get_current_time() - epoch_time));
@@ -295,14 +295,14 @@ static errr send_xtra_to_chuukei_server(int n, int v)
 
 static errr send_curs_to_chuukei_server(int x, int y)
 {
-    insert_ringbuf(format("c%c%c", x + 1, y + 1));
+    insert_ringbuf(angband::format("c%c%c", x + 1, y + 1));
 
     return (*old_curs_hook)(x, y);
 }
 
 static errr send_bigcurs_to_chuukei_server(int x, int y)
 {
-    insert_ringbuf(format("C%c%c", x + 1, y + 1));
+    insert_ringbuf(angband::format("C%c%c", x + 1, y + 1));
 
     return (*old_bigcurs_hook)(x, y);
 }

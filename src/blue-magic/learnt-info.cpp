@@ -36,7 +36,7 @@ static std::string set_bluemage_damage(PlayerType *player_ptr, MonsterAbilityTyp
     int dice_side = monspell_bluemage_damage(player_ptr, ms_type, plev, DICE_SIDE);
     int dice_mult = monspell_bluemage_damage(player_ptr, ms_type, plev, DICE_MULT);
     int dice_div = monspell_bluemage_damage(player_ptr, ms_type, plev, DICE_DIV);
-    return format(" %s %s", msg, dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div).data());
+    return angband::format(" %s %s", msg, dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div).data());
 }
 
 /*!
@@ -114,19 +114,19 @@ std::string learnt_info(PlayerType *player_ptr, MonsterAbilityType power)
     case MonsterAbilityType::MISSILE:
         return set_bluemage_damage(player_ptr, power, plev, KWD_DAM);
     case MonsterAbilityType::HASTE:
-        return format(" %sd%d+%d", KWD_DURATION, 20 + plev, plev);
+        return angband::format(" %sd%d+%d", KWD_DURATION, 20 + plev, plev);
     case MonsterAbilityType::HEAL:
         return set_bluemage_damage(player_ptr, power, plev, KWD_HEAL);
     case MonsterAbilityType::INVULNER:
-        return format(" %sd7+7", KWD_DURATION);
+        return angband::format(" %sd7+7", KWD_DURATION);
     case MonsterAbilityType::BLINK:
-        return format(" %s10", KWD_SPHERE);
+        return angband::format(" %s10", KWD_SPHERE);
     case MonsterAbilityType::TPORT:
-        return format(" %s%d", KWD_SPHERE, plev * 5);
+        return angband::format(" %s%d", KWD_SPHERE, plev * 5);
     case MonsterAbilityType::PSY_SPEAR:
         return set_bluemage_damage(player_ptr, power, plev, KWD_DAM);
     case MonsterAbilityType::RAISE_DEAD:
-        return format(" %s5", KWD_SPHERE);
+        return angband::format(" %s5", KWD_SPHERE);
     default:
         return std::string();
     }

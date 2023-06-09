@@ -96,17 +96,17 @@ static void do_cmd_options_autosave(PlayerType *player_ptr, concptr info)
     int i, k = 0, n = 2;
     term_clear();
     while (true) {
-        prt(format(_("%s ( リターンで次へ, y/n でセット, F で頻度を入力, ESC で決定 ) ", "%s (RET to advance, y/n to set, 'F' for frequency, ESC to accept) "), info), 0, 0);
+        prt(angband::format(_("%s ( リターンで次へ, y/n でセット, F で頻度を入力, ESC で決定 ) ", "%s (RET to advance, y/n to set, 'F' for frequency, ESC to accept) "), info), 0, 0);
         for (i = 0; i < n; i++) {
             byte a = TERM_WHITE;
             if (i == k) {
                 a = TERM_L_BLUE;
             }
 
-            c_prt(a, format("%-48s: %s (%s)", autosave_info[i].o_desc, (*autosave_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ")), autosave_info[i].o_text), i + 2, 0);
+            c_prt(a, angband::format("%-48s: %s (%s)", autosave_info[i].o_desc, (*autosave_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ")), autosave_info[i].o_text), i + 2, 0);
         }
 
-        prt(format(_("自動セーブの頻度： %d ターン毎", "Timed autosave frequency: every %d turns"), autosave_freq), 5, 0);
+        prt(angband::format(_("自動セーブの頻度： %d ターン毎", "Timed autosave frequency: every %d turns"), autosave_freq), 5, 0);
         move_cursor(k + 2, 50);
         ch = inkey();
         switch (ch) {
@@ -148,7 +148,7 @@ static void do_cmd_options_autosave(PlayerType *player_ptr, concptr info)
         case 'f':
         case 'F': {
             autosave_freq = toggle_frequency(autosave_freq);
-            prt(format(_("自動セーブの頻度： %d ターン毎", "Timed autosave frequency: every %d turns"), autosave_freq), 5, 0);
+            prt(angband::format(_("自動セーブの頻度： %d ターン毎", "Timed autosave frequency: every %d turns"), autosave_freq), 5, 0);
             break;
         }
 
@@ -336,7 +336,7 @@ static void do_cmd_options_cheat(PlayerType *player_ptr, concptr info)
     auto k = 0U;
     const auto n = cheat_info.size();
     while (true) {
-        prt(format(_("%s ( リターンで次へ, y/n でセット, ESC で決定 )", "%s (RET to advance, y/n to set, ESC to accept) "), info), 0, 0);
+        prt(angband::format(_("%s ( リターンで次へ, y/n でセット, ESC で決定 )", "%s (RET to advance, y/n to set, ESC to accept) "), info), 0, 0);
 
 #ifdef JP
         /* 詐欺オプションをうっかりいじってしまう人がいるようなので注意 */
@@ -352,7 +352,7 @@ static void do_cmd_options_cheat(PlayerType *player_ptr, concptr info)
             }
 
             const auto yesno = *cheat_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ");
-            c_prt(enum2i(a), format("%-48s: %s (%s)", cheat_info[i].o_desc, yesno, cheat_info[i].o_text), i + 2, 0);
+            c_prt(enum2i(a), angband::format("%-48s: %s (%s)", cheat_info[i].o_desc, yesno, cheat_info[i].o_text), i + 2, 0);
         }
 
         move_cursor(k + 2, 50);
@@ -453,7 +453,7 @@ void do_cmd_options(PlayerType *player_ptr)
                 if (i == y) {
                     a = TERM_L_BLUE;
                 }
-                term_putstr(5, option_fields[i].row, -1, a, format("(%c) %s", toupper(option_fields[i].key), option_fields[i].name));
+                term_putstr(5, option_fields[i].row, -1, a, angband::format("(%c) %s", toupper(option_fields[i].key), option_fields[i].name));
             }
 
             prt(_("<方向>で移動, Enterで決定, ESCでキャンセル, ?でヘルプ: ", "Move to <dir>, Select to Enter, Cancel to ESC, ? to help: "), 21, 0);
@@ -570,7 +570,7 @@ void do_cmd_options(PlayerType *player_ptr)
         case 'D':
         case 'd': {
             clear_from(18);
-            prt(format(_("現在ウェイト量(msec): %d", "Current Delay Factor(msec): %d"), delay_factor), 19, 0);
+            prt(angband::format(_("現在ウェイト量(msec): %d", "Current Delay Factor(msec): %d"), delay_factor), 19, 0);
             (void)get_value(_("コマンド: ウェイト量(msec)", "Command: Delay Factor(msec)"), 0, 1000, &delay_factor);
             clear_from(18);
             break;
@@ -580,7 +580,7 @@ void do_cmd_options(PlayerType *player_ptr)
             clear_from(18);
             prt(_("コマンド: 低ヒットポイント警告", "Command: Hitpoint Warning"), 19, 0);
             while (true) {
-                prt(format(_("現在の低ヒットポイント警告: %d0%%", "Current hitpoint warning: %d0%%"), hitpoint_warn), 22, 0);
+                prt(angband::format(_("現在の低ヒットポイント警告: %d0%%", "Current hitpoint warning: %d0%%"), hitpoint_warn), 22, 0);
                 prt(_("低ヒットポイント警告 (0-9) ESCで決定: ", "Hitpoint Warning (0-9 or ESC to accept): "), 20, 0);
                 k = inkey();
                 if (k == ESCAPE) {
@@ -602,7 +602,7 @@ void do_cmd_options(PlayerType *player_ptr)
             clear_from(18);
             prt(_("コマンド: 低魔力色閾値", "Command: Mana Color Threshold"), 19, 0);
             while (true) {
-                prt(format(_("現在の低魔力色閾値: %d0%%", "Current mana color threshold: %d0%%"), mana_warn), 22, 0);
+                prt(angband::format(_("現在の低魔力色閾値: %d0%%", "Current mana color threshold: %d0%%"), mana_warn), 22, 0);
                 prt(_("低魔力閾値 (0-9) ESCで決定: ", "Mana color Threshold (0-9 or ESC to accept): "), 20, 0);
                 k = inkey();
                 if (k == ESCAPE) {
@@ -663,7 +663,7 @@ void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr 
     while (true) {
         DIRECTION dir;
         constexpr auto command = _("%s (リターン:次, %sESC:終了, ?:ヘルプ) ", "%s (RET:next, %s, ?:help) ");
-        prt(format(command, info, browse_only ? _("", "ESC:exit") : _("y/n:変更, ", "y/n:change, ESC:accept")), 0, 0);
+        prt(angband::format(command, info, browse_only ? _("", "ESC:exit") : _("y/n:変更, ", "y/n:change, ESC:accept")), 0, 0);
         if (page == OPT_PAGE_AUTODESTROY) {
             constexpr auto mes = _("以下のオプションは、簡易自動破壊を使用するときのみ有効", "Following options will protect items from easy auto-destroyer.");
             c_prt(TERM_YELLOW, mes, 6, _(6, 3));
@@ -675,7 +675,7 @@ void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr 
                 a = TERM_L_BLUE;
             }
 
-            std::string label = format("%-48s: %s (%.19s)", option_info[opt[i]].o_desc, (*option_info[opt[i]].o_var ? _("はい  ", "yes") : _("いいえ", "no ")),
+            std::string label = angband::format("%-48s: %s (%.19s)", option_info[opt[i]].o_desc, (*option_info[opt[i]].o_var ? _("はい  ", "yes") : _("いいえ", "no ")),
                 option_info[opt[i]].o_text);
             if ((page == OPT_PAGE_AUTODESTROY) && i > 2) {
                 c_prt(a, label, i + 5, 0);

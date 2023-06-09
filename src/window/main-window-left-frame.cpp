@@ -60,7 +60,7 @@ void print_title(PlayerType *player_ptr)
  */
 void print_level(PlayerType *player_ptr)
 {
-    std::string tmp = format("%5d", player_ptr->lev);
+    std::string tmp = angband::format("%5d", player_ptr->lev);
     if (player_ptr->lev >= player_ptr->max_plv) {
         put_str(_("レベル ", "LEVEL "), ROW_LEVEL, 0);
         c_put_str(TERM_L_GREEN, tmp, ROW_LEVEL, COL_LEVEL + 7);
@@ -79,12 +79,12 @@ void print_exp(PlayerType *player_ptr)
 
     PlayerRace pr(player_ptr);
     if ((!exp_need) || pr.equals(PlayerRaceType::ANDROID)) {
-        out_val = format("%8ld", (long)player_ptr->exp);
+        out_val = angband::format("%8ld", (long)player_ptr->exp);
     } else {
         if (player_ptr->lev >= PY_MAX_LEVEL) {
             out_val = "********";
         } else {
-            out_val = format("%8ld", (long)(player_exp[player_ptr->lev - 1] * player_ptr->expfact / 100L) - player_ptr->exp);
+            out_val = angband::format("%8ld", (long)(player_exp[player_ptr->lev - 1] * player_ptr->expfact / 100L) - player_ptr->exp);
         }
     }
 
@@ -108,7 +108,7 @@ void print_ac(PlayerType *player_ptr)
 {
     /* AC の表示方式を変更している */
     put_str(_(" ＡＣ(     )", "Cur AC "), ROW_AC, COL_AC);
-    c_put_str(TERM_L_GREEN, format("%5d", player_ptr->dis_ac + player_ptr->dis_to_a), ROW_AC, COL_AC + _(6, 7));
+    c_put_str(TERM_L_GREEN, angband::format("%5d", player_ptr->dis_ac + player_ptr->dis_to_a), ROW_AC, COL_AC + _(6, 7));
 }
 
 /*!
@@ -126,10 +126,10 @@ void print_hp(PlayerType *player_ptr)
         color = TERM_RED;
     }
 
-    c_put_str(color, format("%4ld", (long int)player_ptr->chp), ROW_CURHP, COL_CURHP + 3);
+    c_put_str(color, angband::format("%4ld", (long int)player_ptr->chp), ROW_CURHP, COL_CURHP + 3);
     put_str("/", ROW_CURHP, COL_CURHP + 7);
     color = TERM_L_GREEN;
-    c_put_str(color, format("%4ld", (long int)player_ptr->mhp), ROW_CURHP, COL_CURHP + 8);
+    c_put_str(color, angband::format("%4ld", (long int)player_ptr->mhp), ROW_CURHP, COL_CURHP + 8);
 }
 
 /*!
@@ -151,10 +151,10 @@ void print_sp(PlayerType *player_ptr)
         color = TERM_RED;
     }
 
-    c_put_str(color, format("%4ld", (long int)player_ptr->csp), ROW_CURSP, COL_CURSP + 3);
+    c_put_str(color, angband::format("%4ld", (long int)player_ptr->csp), ROW_CURSP, COL_CURSP + 3);
     put_str("/", ROW_CURSP, COL_CURSP + 7);
     color = TERM_L_GREEN;
-    c_put_str(color, format("%4ld", (long int)player_ptr->msp), ROW_CURSP, COL_CURSP + 8);
+    c_put_str(color, angband::format("%4ld", (long int)player_ptr->msp), ROW_CURSP, COL_CURSP + 8);
 }
 
 /*!
@@ -164,7 +164,7 @@ void print_sp(PlayerType *player_ptr)
 void print_gold(PlayerType *player_ptr)
 {
     put_str(_("＄ ", "AU "), ROW_GOLD, COL_GOLD);
-    c_put_str(TERM_L_GREEN, format("%9ld", (long)player_ptr->au), ROW_GOLD, COL_GOLD + 3);
+    c_put_str(TERM_L_GREEN, angband::format("%9ld", (long)player_ptr->au), ROW_GOLD, COL_GOLD + 3);
 }
 
 /*!
@@ -182,20 +182,20 @@ void print_depth(PlayerType *player_ptr)
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->dun_level) {
-        c_prt(attr, format("%7s", _("地上", "Surf.")), row_depth, col_depth);
+        c_prt(attr, angband::format("%7s", _("地上", "Surf.")), row_depth, col_depth);
         return;
     }
 
     if (inside_quest(floor_ptr->quest_number) && !floor_ptr->dungeon_idx) {
-        c_prt(attr, format("%7s", _("地上", "Quest")), row_depth, col_depth);
+        c_prt(attr, angband::format("%7s", _("地上", "Quest")), row_depth, col_depth);
         return;
     }
 
     std::string depths;
     if (depth_in_feet) {
-        depths = format(_("%d ft", "%d ft"), (int)floor_ptr->dun_level * 50);
+        depths = angband::format(_("%d ft", "%d ft"), (int)floor_ptr->dun_level * 50);
     } else {
-        depths = format(_("%d 階", "Lev %d"), (int)floor_ptr->dun_level);
+        depths = angband::format(_("%d 階", "Lev %d"), (int)floor_ptr->dun_level);
     }
 
     switch (player_ptr->feeling) {
@@ -234,7 +234,7 @@ void print_depth(PlayerType *player_ptr)
         break; /* Boring place */
     }
 
-    c_prt(attr, format("%7s", depths.data()), row_depth, col_depth);
+    c_prt(attr, angband::format("%7s", depths.data()), row_depth, col_depth);
 }
 
 /*!
@@ -287,9 +287,9 @@ static void print_health_monster_in_arena_for_wizard(PlayerType *player_ptr)
         auto &monster = player_ptr->current_floor_ptr->m_list[monster_list_index];
         if (MonsterRace(monster.r_idx).is_valid()) {
             term_putstr(col - 2, row + row_offset, 2, monraces_info[monster.r_idx].x_attr,
-                format("%c", monraces_info[monster.r_idx].x_char));
-            term_putstr(col - 1, row + row_offset, 5, TERM_WHITE, format("%5d", monster.hp));
-            term_putstr(col + 5, row + row_offset, 6, TERM_WHITE, format("%5d", monster.max_maxhp));
+                angband::format("%c", monraces_info[monster.r_idx].x_char));
+            term_putstr(col - 1, row + row_offset, 5, TERM_WHITE, angband::format("%5d", monster.hp));
+            term_putstr(col + 5, row + row_offset, 6, TERM_WHITE, angband::format("%5d", monster.max_maxhp));
         }
     }
 }

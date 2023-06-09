@@ -117,9 +117,9 @@ void building_recharge(PlayerType *player_ptr)
 
     if (tval == ItemKindType::ROD) {
 #ifdef JP
-        if (get_check(format("そのロッドを＄%d で再充填しますか？", price)))
+        if (get_check(angband::format("そのロッドを＄%d で再充填しますか？", price)))
 #else
-        if (get_check(format("Recharge the %s for %d gold? ", ((o_ptr->number > 1) ? "rods" : "rod"), price)))
+        if (get_check(angband::format("Recharge the %s for %d gold? ", ((o_ptr->number > 1) ? "rods" : "rod"), price)))
 #endif
 
         {
@@ -136,7 +136,7 @@ void building_recharge(PlayerType *player_ptr)
         }
 
         const auto mes = _("一回分＄%d で何回分充填しますか？", "Add how many charges for %d gold apiece? ");
-        const auto charges = get_quantity(format(mes, price), std::min(player_ptr->au / price, max_charges));
+        const auto charges = get_quantity(angband::format(mes, price), std::min(player_ptr->au / price, max_charges));
         if (charges < 1) {
             return;
         }
@@ -228,7 +228,7 @@ void building_recharge_all(PlayerType *player_ptr)
         return;
     }
 
-    if (!get_check(format(_("すべてのアイテムを ＄%d で再充填しますか？", "Recharge all items for %d gold? "), total_cost))) {
+    if (!get_check(angband::format(_("すべてのアイテムを ＄%d で再充填しますか？", "Recharge all items for %d gold? "), total_cost))) {
         return;
     }
 

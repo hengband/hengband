@@ -92,14 +92,14 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                     const auto &monrace = monraces_info[quest.r_idx];
                     if (quest.max_num > 1) {
 #ifdef JP
-                        note = format(" - %d 体の%sを倒す。(あと %d 体)", (int)quest.max_num, monrace.name.data(), (int)(quest.max_num - quest.cur_num));
+                        note = angband::format(" - %d 体の%sを倒す。(あと %d 体)", (int)quest.max_num, monrace.name.data(), (int)(quest.max_num - quest.cur_num));
 #else
                         auto monster_name(monrace.name);
                         plural_aux(monster_name.data());
-                        note = format(" - kill %d %s, have killed %d.", (int)quest.max_num, monster_name.data(), (int)quest.cur_num);
+                        note = angband::format(" - kill %d %s, have killed %d.", (int)quest.max_num, monster_name.data(), (int)quest.cur_num);
 #endif
                     } else {
-                        note = format(_(" - %sを倒す。", " - kill %s."), monrace.name.data());
+                        note = angband::format(_(" - %sを倒す。", " - kill %s."), monrace.name.data());
                     }
 
                     break;
@@ -116,7 +116,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                         item_name = describe_flavor(player_ptr, &item, OD_NAME_ONLY);
                     }
 
-                    note = format(_("\n   - %sを見つけ出す。", "\n   - Find %s."), item_name.data());
+                    note = angband::format(_("\n   - %sを見つけ出す。", "\n   - Find %s."), item_name.data());
                     break;
                 }
                 case QuestKindType::FIND_EXIT:
@@ -124,9 +124,9 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                     break;
                 case QuestKindType::KILL_NUMBER:
 #ifdef JP
-                    note = format(" - %d 体のモンスターを倒す。(あと %d 体)", (int)quest.max_num, (int)(quest.max_num - quest.cur_num));
+                    note = angband::format(" - %d 体のモンスターを倒す。(あと %d 体)", (int)quest.max_num, (int)(quest.max_num - quest.cur_num));
 #else
-                    note = format(" - Kill %d monsters, have killed %d.", (int)quest.max_num, (int)quest.cur_num);
+                    note = angband::format(" - Kill %d monsters, have killed %d.", (int)quest.max_num, (int)quest.cur_num);
 #endif
                     break;
 
@@ -165,17 +165,17 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
         const auto &monrace = monraces_info[quest.r_idx];
         if (quest.max_num <= 1) {
             constexpr auto mes = _("  %s (%d 階) - %sを倒す。\n", "  %s (Dungeon level: %d)\n  Kill %s.\n");
-            rand_tmp_str = format(mes, quest.name.data(), (int)quest.level, monrace.name.data());
+            rand_tmp_str = angband::format(mes, quest.name.data(), (int)quest.level, monrace.name.data());
             continue;
         }
 
 #ifdef JP
-        rand_tmp_str = format("  %s (%d 階) - %d 体の%sを倒す。(あと %d 体)\n", quest.name.data(), (int)quest.level, (int)quest.max_num, monrace.name.data(),
+        rand_tmp_str = angband::format("  %s (%d 階) - %d 体の%sを倒す。(あと %d 体)\n", quest.name.data(), (int)quest.level, (int)quest.max_num, monrace.name.data(),
             (int)(quest.max_num - quest.cur_num));
 #else
         auto monster_name(monrace.name);
         plural_aux(monster_name.data());
-        rand_tmp_str = format("  %s (Dungeon level: %d)\n  Kill %d %s, have killed %d.\n", quest.name.data(), (int)quest.level, (int)quest.max_num,
+        rand_tmp_str = angband::format("  %s (Dungeon level: %d)\n  Kill %d %s, have killed %d.\n", quest.name.data(), (int)quest.level, (int)quest.max_num,
             monster_name.data(), (int)quest.cur_num);
 #endif
     }
@@ -207,7 +207,7 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, Quest
         }
     }
 
-    std::string playtime_str = format("%02d:%02d:%02d", quest.comptime / (60 * 60), (quest.comptime / 60) % 60, quest.comptime % 60);
+    std::string playtime_str = angband::format("%02d:%02d:%02d", quest.comptime / (60 * 60), (quest.comptime / 60) % 60, quest.comptime % 60);
 
     auto fputs_name_remain = [fff](const auto &name) {
         for (auto i = 1U; i < name.size(); ++i) {

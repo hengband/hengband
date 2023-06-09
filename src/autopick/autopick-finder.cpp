@@ -67,7 +67,7 @@ bool get_object_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concpt
     *o_handle = o_ptr;
     string_free(*search_strp);
     const auto item_name = describe_flavor(player_ptr, *o_handle, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
-    *search_strp = string_make(format("<%s>", item_name.data()).data());
+    *search_strp = string_make(angband::format("<%s>", item_name.data()).data());
     return true;
 }
 
@@ -83,7 +83,7 @@ bool get_destroyed_object_for_search(PlayerType *player_ptr, ItemEntity **o_hand
     *o_handle = &autopick_last_destroyed_object;
     string_free(*search_strp);
     const auto item_name = describe_flavor(player_ptr, *o_handle, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
-    *search_strp = string_make(format("<%s>", item_name.data()).data());
+    *search_strp = string_make(angband::format("<%s>", item_name.data()).data());
     return true;
 }
 

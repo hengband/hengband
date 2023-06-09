@@ -51,7 +51,7 @@ static void redraw_edit_command_menu(bool *redraw, int level, int start, char *l
             com_key_str[0] = '\0';
         }
 
-        const auto str = format("| %c) %-*s %2s | ", *menu_key + 'a', max_len, menu_data[i].name, com_key_str);
+        const auto str = angband::format("| %c) %-*s %2s | ", *menu_key + 'a', max_len, menu_data[i].name, com_key_str);
 
         term_putstr(col0, row1++, -1, TERM_WHITE, str);
 
@@ -103,7 +103,7 @@ int do_command_menu(int level, int start)
     bool redraw = true;
     while (true) {
         redraw_edit_command_menu(&redraw, level, start, linestr, &menu_key, max_len);
-        prt(format(_("(a-%c) コマンド:", "(a-%c) Command:"), menu_key + 'a' - 1), 0, 0);
+        prt(angband::format(_("(a-%c) コマンド:", "(a-%c) Command:"), menu_key + 'a' - 1), 0, 0);
         char key = inkey();
         if (key == ESCAPE) {
             return 0;

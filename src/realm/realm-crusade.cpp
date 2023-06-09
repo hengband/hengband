@@ -377,7 +377,7 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
         auto dam_sides = plev * 6;
         auto heal = 100;
         if (info) {
-            return format(_("損:1d%d/回%d", "dam:d%d/h%d"), dam_sides, heal);
+            return angband::format(_("損:1d%d/回%d", "dam:d%d/h%d"), dam_sides, heal);
         }
 
         if (cast) {
@@ -714,7 +714,7 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
             int power = plev * 4;
 
             if (info) {
-                return format(_("回%d/損%d+%d", "h%d/dm%d+%d"), heal, d_dam, b_dam / 2);
+                return angband::format(_("回%d/損%d+%d", "h%d/dm%d+%d"), heal, d_dam, b_dam / 2);
             }
             if (cast) {
                 project(player_ptr, 0, 1, player_ptr->y, player_ptr->x, b_dam, AttributeType::HOLY_FIRE, PROJECT_KILL);

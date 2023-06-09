@@ -170,7 +170,7 @@ std::filesystem::path path_build(const std::filesystem::path &path, std::string_
     constexpr auto max_path_length = 1024;
     const auto path_str = path_ret.string();
     if (path_str.length() > max_path_length) {
-        THROW_EXCEPTION(std::runtime_error, format("Path is too long! %s", path_str.data()));
+        THROW_EXCEPTION(std::runtime_error, angband::format("Path is too long! %s", path_str.data()));
     }
 
     return path_ret;

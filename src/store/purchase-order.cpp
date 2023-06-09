@@ -52,7 +52,7 @@ static std::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, ItemEntity *o_
     auto price_ask = price_item(player_ptr, o_ptr, ot_ptr->inflate, false, store_num);
 
     price_ask *= o_ptr->number;
-    const auto s = format(_("買値 $%ld で買いますか？", "Do you buy for $%ld? "), static_cast<long>(price_ask));
+    const auto s = angband::format(_("買値 $%ld で買いますか？", "Do you buy for $%ld? "), static_cast<long>(price_ask));
     if (get_check_strict(player_ptr, s, CHECK_DEFAULT_Y)) {
         return price_ask;
     }
@@ -143,8 +143,8 @@ static void shuffle_store(PlayerType *player_ptr, StoreSaleType store_num)
     msg_print(_("店主は引退した。", "The shopkeeper retires."));
     store_shuffle(player_ptr, store_num);
     prt("", 3, 0);
-    put_str(format("%s (%s)", ot_ptr->owner_name, race_info[enum2i(ot_ptr->owner_race)].title), 3, 10);
-    prt(format("%s (%ld)", terrains_info[cur_store_feat].name.data(), (long)(ot_ptr->max_cost)), 3, 50);
+    put_str(angband::format("%s (%s)", ot_ptr->owner_name, race_info[enum2i(ot_ptr->owner_race)].title), 3, 10);
+    prt(angband::format("%s (%ld)", terrains_info[cur_store_feat].name.data(), (long)(ot_ptr->max_cost)), 3, 50);
 }
 
 static void switch_store_stock(PlayerType *player_ptr, const int i, const COMMAND_CODE item, StoreSaleType store_num)

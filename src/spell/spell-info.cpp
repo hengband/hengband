@@ -303,11 +303,11 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell, SPELL_IDX *spe
                 out_val = "     ";
             }
         } else {
-            out_val = format("  %c) ", I2A(i));
+            out_val = angband::format("  %c) ", I2A(i));
         }
 
         if (s_ptr->slevel >= 99) {
-            out_val.append(format("%-30s", _("(判読不能)", "(illegible)")));
+            out_val.append(angband::format("%-30s", _("(判読不能)", "(illegible)")));
             c_prt(TERM_L_DARK, out_val, y + i + 1, x);
             continue;
         }
@@ -339,9 +339,9 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell, SPELL_IDX *spe
 
         const auto spell_name = exe_spell(player_ptr, use_realm, spell, SpellProcessType::NAME);
         if (use_realm == REALM_HISSATSU) {
-            out_val.append(format("%-25s %2d %4d", spell_name->data(), s_ptr->slevel, need_mana));
+            out_val.append(angband::format("%-25s %2d %4d", spell_name->data(), s_ptr->slevel, need_mana));
         } else {
-            out_val.append(format("%-25s%c%-4s %2d %4d %3d%% %s", spell_name->data(), (max ? '!' : ' '), ryakuji, s_ptr->slevel,
+            out_val.append(angband::format("%-25s%c%-4s %2d %4d %3d%% %s", spell_name->data(), (max ? '!' : ' '), ryakuji, s_ptr->slevel,
                 need_mana, spell_chance(player_ptr, spell, use_realm), comment));
         }
 

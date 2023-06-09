@@ -31,7 +31,7 @@ void do_cmd_knowledge(PlayerType *player_ptr)
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
     while (true) {
         term_clear();
-        prt(format(_("%d/2 ページ", "page %d/2"), (p + 1)), 2, 65);
+        prt(angband::format(_("%d/2 ページ", "page %d/2"), (p + 1)), 2, 65);
         prt(_("現在の知識を確認する", "Display current knowledge"), 3, 0);
         if (p == 0) {
             prt(_("(1) 既知の伝説のアイテム                 の一覧", "(1) Display known artifacts"), 6, 5);

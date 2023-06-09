@@ -101,17 +101,17 @@ std::string info_string_dice(concptr str, DICE_NUMBER dice, DICE_SID sides, int 
 {
     /* Fix value */
     if (!dice) {
-        return format("%s%d", str, base);
+        return angband::format("%s%d", str, base);
     }
 
     /* Dice only */
     else if (!base) {
-        return format("%s%dd%d", str, dice, sides);
+        return angband::format("%s%dd%d", str, dice, sides);
     }
 
     /* Dice plus base value */
     else {
-        return format("%s%dd%d%+d", str, dice, sides, base);
+        return angband::format("%s%dd%d%+d", str, dice, sides, base);
     }
 }
 
@@ -135,7 +135,7 @@ std::string info_damage(DICE_NUMBER dice, DICE_SID sides, int base)
  */
 std::string info_duration(int base, DICE_SID sides)
 {
-    return format(_("期間:%d+1d%d", "dur %d+1d%d"), base, sides);
+    return angband::format(_("期間:%d+1d%d", "dur %d+1d%d"), base, sides);
 }
 
 /*!
@@ -145,7 +145,7 @@ std::string info_duration(int base, DICE_SID sides)
  */
 std::string info_range(POSITION range)
 {
-    return format(_("範囲:%d", "range %d"), range);
+    return angband::format(_("範囲:%d", "range %d"), range);
 }
 
 /*!
@@ -168,7 +168,7 @@ std::string info_heal(DICE_NUMBER dice, DICE_SID sides, int base)
  */
 std::string info_delay(int base, DICE_SID sides)
 {
-    return format(_("遅延:%d+1d%d", "delay %d+1d%d"), base, sides);
+    return angband::format(_("遅延:%d+1d%d", "delay %d+1d%d"), base, sides);
 }
 
 /*!
@@ -178,7 +178,7 @@ std::string info_delay(int base, DICE_SID sides)
  */
 std::string info_multi_damage(int dam)
 {
-    return format(_("損傷:各%d", "dam %d each"), dam);
+    return angband::format(_("損傷:各%d", "dam %d each"), dam);
 }
 
 /*!
@@ -189,7 +189,7 @@ std::string info_multi_damage(int dam)
  */
 std::string info_multi_damage_dice(DICE_NUMBER dice, DICE_SID sides)
 {
-    return format(_("損傷:各%dd%d", "dam %dd%d each"), dice, sides);
+    return angband::format(_("損傷:各%dd%d", "dam %dd%d each"), dice, sides);
 }
 
 /*!
@@ -199,7 +199,7 @@ std::string info_multi_damage_dice(DICE_NUMBER dice, DICE_SID sides)
  */
 std::string info_power(int power)
 {
-    return format(_("効力:%d", "power %d"), power);
+    return angband::format(_("効力:%d", "power %d"), power);
 }
 
 /*!
@@ -213,7 +213,7 @@ std::string info_power(int power)
  */
 std::string info_power_dice(DICE_NUMBER dice, DICE_SID sides)
 {
-    return format(_("効力:%dd%d", "power %dd%d"), dice, sides);
+    return angband::format(_("効力:%dd%d", "power %dd%d"), dice, sides);
 }
 
 /*!
@@ -223,7 +223,7 @@ std::string info_power_dice(DICE_NUMBER dice, DICE_SID sides)
  */
 std::string info_radius(POSITION rad)
 {
-    return format(_("半径:%d", "rad %d"), rad);
+    return angband::format(_("半径:%d", "rad %d"), rad);
 }
 
 /*!
@@ -234,9 +234,9 @@ std::string info_radius(POSITION rad)
 std::string info_weight(WEIGHT weight)
 {
 #ifdef JP
-    return format("最大重量:%d.%dkg", lb_to_kg_integer(weight), lb_to_kg_fraction(weight));
+    return angband::format("最大重量:%d.%dkg", lb_to_kg_integer(weight), lb_to_kg_fraction(weight));
 #else
-    return format("max wgt %d", weight / 10);
+    return angband::format("max wgt %d", weight / 10);
 #endif
 }
 
@@ -697,7 +697,7 @@ static void change_realm2(PlayerType *player_ptr, int16_t next_realm)
     player_ptr->spell_forgotten2 = 0L;
 
     constexpr auto fmt_realm = _("魔法の領域を%sから%sに変更した。", "changed magic realm from %s to %s.");
-    const auto mes = format(fmt_realm, realm_names[player_ptr->realm2], realm_names[next_realm]);
+    const auto mes = angband::format(fmt_realm, realm_names[player_ptr->realm2], realm_names[next_realm]);
     exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, mes);
     player_ptr->old_realm |= 1U << (player_ptr->realm2 - 1);
     player_ptr->realm2 = next_realm;
@@ -856,9 +856,9 @@ void do_cmd_study(PlayerType *player_ptr)
             return;
         }
 #ifdef JP
-        if (!get_check(format("%sの%sをさらに学びます。よろしいですか？", spell_name->data(), p)))
+        if (!get_check(angband::format("%sの%sをさらに学びます。よろしいですか？", spell_name->data(), p)))
 #else
-        if (!get_check(format("You will study a %s of %s again. Are you sure? ", p, spell_name->data())))
+        if (!get_check(angband::format("You will study a %s of %s again. Are you sure? ", p, spell_name->data())))
 #endif
         {
             return;

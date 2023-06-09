@@ -263,7 +263,7 @@ errr init_feat_variables(void)
     /* Locked doors */
     FEAT_IDX i;
     for (i = 1; i < MAX_LJ_DOORS; i++) {
-        int16_t door = f_tag_to_index(format("LOCKED_DOOR_%d", i));
+        int16_t door = f_tag_to_index(angband::format("LOCKED_DOOR_%d", i));
         if (door < 0) {
             break;
         }
@@ -277,7 +277,7 @@ errr init_feat_variables(void)
 
     /* Jammed doors */
     for (i = 0; i < MAX_LJ_DOORS; i++) {
-        int16_t door = f_tag_to_index(format("JAMMED_DOOR_%d", i));
+        int16_t door = f_tag_to_index(angband::format("JAMMED_DOOR_%d", i));
         if (door < 0) {
             break;
         }
@@ -296,7 +296,7 @@ errr init_feat_variables(void)
 
     /* Locked glass doors */
     for (i = 1; i < MAX_LJ_DOORS; i++) {
-        int16_t door = f_tag_to_index(format("LOCKED_GLASS_DOOR_%d", i));
+        int16_t door = f_tag_to_index(angband::format("LOCKED_GLASS_DOOR_%d", i));
         if (door < 0) {
             break;
         }
@@ -310,7 +310,7 @@ errr init_feat_variables(void)
 
     /* Jammed glass doors */
     for (i = 0; i < MAX_LJ_DOORS; i++) {
-        int16_t door = f_tag_to_index(format("JAMMED_GLASS_DOOR_%d", i));
+        int16_t door = f_tag_to_index(angband::format("JAMMED_GLASS_DOOR_%d", i));
         if (door < 0) {
             break;
         }

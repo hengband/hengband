@@ -79,7 +79,7 @@ ProcessResult effect_monster_star_heal(PlayerType *player_ptr, EffectMonster *em
 
     if (em_ptr->m_ptr->maxhp < em_ptr->m_ptr->max_maxhp) {
         if (em_ptr->seen_msg) {
-            msg_print(_(format("%s^の強さが戻った。", em_ptr->m_name), format("%s^ recovers %s vitality.", em_ptr->m_name, em_ptr->m_poss)));
+            msg_print(_(angband::format("%s^の強さが戻った。", em_ptr->m_name), angband::format("%s^ recovers %s vitality.", em_ptr->m_name, em_ptr->m_poss)));
         }
         em_ptr->m_ptr->maxhp = em_ptr->m_ptr->max_maxhp;
     }
@@ -148,7 +148,7 @@ static void effect_monster_old_heal_recovery(PlayerType *player_ptr, EffectMonst
 
     if (em_ptr->m_ptr->is_fearful()) {
         if (em_ptr->seen_msg) {
-            msg_print(_(format("%s^は勇気を取り戻した。", em_ptr->m_name), format("%s^ recovers %s courage.", em_ptr->m_name, em_ptr->m_poss)));
+            msg_print(_(angband::format("%s^は勇気を取り戻した。", em_ptr->m_name), angband::format("%s^ recovers %s courage.", em_ptr->m_name, em_ptr->m_poss)));
         }
 
         (void)set_monster_monfear(player_ptr, em_ptr->g_ptr->m_idx, 0);

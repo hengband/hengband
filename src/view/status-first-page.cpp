@@ -183,7 +183,7 @@ static std::pair<std::string, TERM_COLOR> likert(int x, int y)
     std::string desc;
 
     if (show_actual_value) {
-        desc = format("%3d-", x);
+        desc = angband::format("%3d-", x);
     }
 
     if (x < 0) {
@@ -230,7 +230,7 @@ static std::pair<std::string, TERM_COLOR> likert(int x, int y)
         return make_pair(desc.append(_("英雄的", "Heroic")), TERM_BLUE);
     }
     default: {
-        desc.append(format(_("伝説的[%d]", "Legendary[%d]"), (int)((((x / y) - 17) * 5) / 2)));
+        desc.append(angband::format(_("伝説的[%d]", "Legendary[%d]"), (int)((((x / y) - 17) * 5) / 2)));
         return make_pair(desc, TERM_VIOLET);
     }
     }
@@ -359,22 +359,22 @@ static void display_first_page(PlayerType *player_ptr, int xthb, int *damage, in
     display_player_one_line(ENTRY_SKILL_DIG, sd.first, sd.second);
 
     if (!muta_att) {
-        display_player_one_line(ENTRY_BLOWS, format("%d+%d", blows1, blows2), TERM_L_BLUE);
+        display_player_one_line(ENTRY_BLOWS, angband::format("%d+%d", blows1, blows2), TERM_L_BLUE);
     } else {
-        display_player_one_line(ENTRY_BLOWS, format("%d+%d+%d", blows1, blows2, muta_att), TERM_L_BLUE);
+        display_player_one_line(ENTRY_BLOWS, angband::format("%d+%d+%d", blows1, blows2, muta_att), TERM_L_BLUE);
     }
 
-    display_player_one_line(ENTRY_SHOTS, format("%d.%02d", shots, shot_frac), TERM_L_BLUE);
+    display_player_one_line(ENTRY_SHOTS, angband::format("%d.%02d", shots, shot_frac), TERM_L_BLUE);
 
     std::string desc;
     if ((damage[0] + damage[1]) == 0) {
         desc = "nil!";
     } else {
-        desc = format("%d+%d", blows1 * damage[0] / 100, blows2 * damage[1] / 100);
+        desc = angband::format("%d+%d", blows1 * damage[0] / 100, blows2 * damage[1] / 100);
     }
 
     display_player_one_line(ENTRY_AVG_DMG, desc, TERM_L_BLUE);
-    display_player_one_line(ENTRY_INFRA, format("%d feet", player_ptr->see_infra * 10), TERM_WHITE);
+    display_player_one_line(ENTRY_INFRA, angband::format("%d feet", player_ptr->see_infra * 10), TERM_WHITE);
 }
 
 /*!

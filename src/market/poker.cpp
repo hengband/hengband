@@ -568,7 +568,7 @@ static void display_cards(void)
             if (IS_JOKER(cards[i])) {
                 c_put_str(TERM_VIOLET, joker_grph[j], j + 6, 2 + i * 16);
             } else {
-                c_put_str(suitcolor[SUIT_OF(cards[i])], format(card_grph[NUM_OF(cards[i])][j], suit[SUIT_OF(cards[i])], suit[SUIT_OF(cards[i])]), j + 6, 2 + i * 16);
+                c_put_str(suitcolor[SUIT_OF(cards[i])], angband::format(card_grph[NUM_OF(cards[i])][j], suit[SUIT_OF(cards[i])], suit[SUIT_OF(cards[i])]), j + 6, 2 + i * 16);
             }
             prt(_("┃", "| "), j + 6, i * 16 + 14);
         }

@@ -71,12 +71,12 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
         attr = ((i + feat_top == feat_cur) ? TERM_L_BLUE : TERM_WHITE);
         c_prt(attr, f_ptr->name.data(), row_i, col);
         if (per_page == 1) {
-            c_prt(attr, format("(%s)", lighting_level_str[lighting_level]), row_i, col + 1 + f_ptr->name.size());
-            c_prt(attr, format("%02x/%02x", f_ptr->x_attr[lighting_level], (unsigned char)f_ptr->x_char[lighting_level]), row_i,
+            c_prt(attr, angband::format("(%s)", lighting_level_str[lighting_level]), row_i, col + 1 + f_ptr->name.size());
+            c_prt(attr, angband::format("%02x/%02x", f_ptr->x_attr[lighting_level], (unsigned char)f_ptr->x_char[lighting_level]), row_i,
                 f_idx_col - ((w_ptr->wizard || visual_only) ? 6 : 2));
         }
         if (w_ptr->wizard || visual_only) {
-            c_prt(attr, format("%d", f_idx), row_i, f_idx_col);
+            c_prt(attr, angband::format("%d", f_idx), row_i, f_idx_col);
         }
 
         term_queue_bigchar(lit_col[F_LIT_STANDARD], row_i, f_ptr->x_attr[F_LIT_STANDARD], f_ptr->x_char[F_LIT_STANDARD], 0, 0);
@@ -229,7 +229,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             display_visual_list(max + 3, 7, browser_rows - 1, wid - (max + 3), attr_top, char_left);
         }
 
-        prt(format(_("<方向>%s, 'd'で標準光源効果%s, ESC", "<dir>%s, 'd' for default lighting%s, ESC"),
+        prt(angband::format(_("<方向>%s, 'd'で標準光源効果%s, ESC", "<dir>%s, 'd' for default lighting%s, ESC"),
                 visual_list ? _(", ENTERで決定, 'a'で対象明度変更", ", ENTER to accept, 'a' for lighting level")
                             : _(", 'v'でシンボル変更", ", 'v' for visuals"),
                 (attr_idx || char_idx) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),

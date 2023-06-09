@@ -362,7 +362,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
 
             const auto item_name = describe_flavor(this->player_ptr, &this->player_ptr->inventory_list[slot], OD_NAME_ONLY);
             (void)curse_weapon_object(this->player_ptr, false, &this->player_ptr->inventory_list[slot]);
-            reward = format(_("%sが破壊された。", "destroying %s"), item_name.data());
+            reward = angband::format(_("%sが破壊された。", "destroying %s"), item_name.data());
             break;
         }
         case REW_CURSE_AR: {
@@ -374,7 +374,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
             msg_print(_("「汝、防具に頼ることなかれ。」", "'Thou reliest too much on thine equipment.'"));
             const auto item_name = describe_flavor(this->player_ptr, &this->player_ptr->inventory_list[INVEN_BODY], OD_NAME_ONLY);
             (void)curse_armor(this->player_ptr);
-            reward = format(_("%sが破壊された。", "destroying %s"), item_name.data());
+            reward = angband::format(_("%sが破壊された。", "destroying %s"), item_name.data());
             break;
         }
         case REW_PISS_OFF: {
@@ -405,7 +405,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
 
                     const auto item_name = describe_flavor(this->player_ptr, &this->player_ptr->inventory_list[slot], OD_NAME_ONLY);
                     (void)curse_weapon_object(this->player_ptr, false, &this->player_ptr->inventory_list[slot]);
-                    reward = format(_("%sが破壊された。", "destroying %s"), item_name.data());
+                    reward = angband::format(_("%sが破壊された。", "destroying %s"), item_name.data());
                 } else {
                     if (!this->player_ptr->inventory_list[INVEN_BODY].is_valid()) {
                         break;
@@ -413,7 +413,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
 
                     const auto item_name = describe_flavor(this->player_ptr, &this->player_ptr->inventory_list[INVEN_BODY], OD_NAME_ONLY);
                     (void)curse_armor(this->player_ptr);
-                    reward = format(_("%sが破壊された。", "destroying %s"), item_name.data());
+                    reward = angband::format(_("%sが破壊された。", "destroying %s"), item_name.data());
                 }
                 break;
             default:
@@ -516,7 +516,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
     }
 
     if (!reward.empty()) {
-        const auto note = format(_("パトロンの報酬で%s", "The patron rewarded you with %s."), reward.data());
+        const auto note = angband::format(_("パトロンの報酬で%s", "The patron rewarded you with %s."), reward.data());
         exe_write_diary(this->player_ptr, DiaryKind::DESCRIPTION, 0, note);
     }
 }

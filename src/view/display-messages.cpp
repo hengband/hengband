@@ -149,7 +149,7 @@ static void message_add_aux(std::string str)
         }
 
         if (str == last_message && (j < 1000)) {
-            str = format("%s <x%d>", str.data(), j + 1);
+            str = angband::format("%s <x%d>", str.data(), j + 1);
             message_history.pop_front();
             if (!now_message) {
                 now_message++;
@@ -337,7 +337,7 @@ void msg_print(std::string_view msg)
 
     std::string msg_includes_turn;
     if (cheat_turn) {
-        msg = msg_includes_turn = format("T:%d - %s", w_ptr->game_turn, msg.data());
+        msg = msg_includes_turn = angband::format("T:%d - %s", w_ptr->game_turn, msg.data());
     }
 
     if ((msg_head_pos > 0) && ((msg_head_pos + msg.size()) > 72)) {

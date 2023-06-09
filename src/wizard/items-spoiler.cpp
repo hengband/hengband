@@ -41,12 +41,12 @@ static std::string describe_dam_or_ac(const ItemEntity &item)
     case ItemKindType::SHOT:
     case ItemKindType::BOLT:
     case ItemKindType::ARROW:
-        return format("%dd%d", item.dd, item.ds);
+        return angband::format("%dd%d", item.dd, item.ds);
     case ItemKindType::HAFTED:
     case ItemKindType::POLEARM:
     case ItemKindType::SWORD:
     case ItemKindType::DIGGING:
-        return format("%dd%d", item.dd, item.ds);
+        return angband::format("%dd%d", item.dd, item.ds);
     case ItemKindType::BOOTS:
     case ItemKindType::GLOVES:
     case ItemKindType::CLOAK:
@@ -56,7 +56,7 @@ static std::string describe_dam_or_ac(const ItemEntity &item)
     case ItemKindType::SOFT_ARMOR:
     case ItemKindType::HARD_ARMOR:
     case ItemKindType::DRAG_ARMOR:
-        return format("%d", item.ac);
+        return angband::format("%d", item.ac);
     default:
         return {};
     }
@@ -76,7 +76,7 @@ static std::string describe_chance(const ItemEntity &item)
     for (auto i = 0U; i < baseitem.alloc_tables.size(); i++) {
         const auto &[level, chance] = baseitem.alloc_tables[i];
         if (chance > 0) {
-            ss << format("%s%3dF:%+4d", (i != 0 ? "/" : ""), level, 100 / chance);
+            ss << angband::format("%s%3dF:%+4d", (i != 0 ? "/" : ""), level, 100 / chance);
         }
     }
 
@@ -91,7 +91,7 @@ static std::string describe_chance(const ItemEntity &item)
  */
 static std::string describe_weight(const ItemEntity &item)
 {
-    return format("%3d.%d", (int)(item.weight / 10), (int)(item.weight % 10));
+    return angband::format("%3d.%d", (int)(item.weight / 10), (int)(item.weight % 10));
 }
 
 /*!

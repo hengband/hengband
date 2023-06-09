@@ -26,8 +26,8 @@ bool enchant_item(PlayerType *player_ptr, PRICE cost, HIT_PROB to_hit, int to_da
 {
     clear_bldg(4, 18);
     int maxenchant = (player_ptr->lev / 5);
-    prt(format(_("現在のあなたの技量だと、+%d まで改良できます。", "  Based on your skill, we can improve up to +%d."), maxenchant), 5, 0);
-    prt(format(_(" 改良の料金は一個につき＄%d です。", "  The price for the service is %d gold per item."), cost), 7, 0);
+    prt(angband::format(_("現在のあなたの技量だと、+%d まで改良できます。", "  Based on your skill, we can improve up to +%d."), maxenchant), 5, 0);
+    prt(angband::format(_(" 改良の料金は一個につき＄%d です。", "  The price for the service is %d gold per item."), cost), 7, 0);
 
     const auto q = _("どのアイテムを改良しますか？", "Improve which item? ");
     const auto s = _("改良できるものがありません。", "You have nothing to improve.");

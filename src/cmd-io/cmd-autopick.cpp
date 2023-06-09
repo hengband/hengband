@@ -162,9 +162,9 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
                 "(^Q:Quit, ^W:Save&Quit, ESC:Menu, Other:Input text)"),
             0, 0);
         if (!tb->mark) {
-            prt(format("(%d,%d)", tb->cx, tb->cy), 0, 60);
+            prt(angband::format("(%d,%d)", tb->cx, tb->cy), 0, 60);
         } else {
-            prt(format("(%d,%d)-(%d,%d)", tb->mx, tb->my, tb->cx, tb->cy), 0, 60);
+            prt(angband::format("(%d,%d)-(%d,%d)", tb->mx, tb->my, tb->cx, tb->cy), 0, 60);
         }
 
         term_gotoxy(tb->cx - tb->left, tb->cy - tb->upper + 1);

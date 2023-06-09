@@ -124,18 +124,18 @@ static void display_magic_realms(PlayerType *player_ptr)
 static void display_phisique(PlayerType *player_ptr)
 {
 #ifdef JP
-    display_player_one_line(ENTRY_AGE, format("%d才", (int)player_ptr->age), TERM_L_BLUE);
-    display_player_one_line(ENTRY_HEIGHT, format("%dcm", (int)((player_ptr->ht * 254) / 100)), TERM_L_BLUE);
-    display_player_one_line(ENTRY_WEIGHT, format("%dkg", (int)((player_ptr->wt * 4536) / 10000)), TERM_L_BLUE);
-    display_player_one_line(ENTRY_SOCIAL, format("%d  ", (int)player_ptr->sc), TERM_L_BLUE);
+    display_player_one_line(ENTRY_AGE, angband::format("%d才", (int)player_ptr->age), TERM_L_BLUE);
+    display_player_one_line(ENTRY_HEIGHT, angband::format("%dcm", (int)((player_ptr->ht * 254) / 100)), TERM_L_BLUE);
+    display_player_one_line(ENTRY_WEIGHT, angband::format("%dkg", (int)((player_ptr->wt * 4536) / 10000)), TERM_L_BLUE);
+    display_player_one_line(ENTRY_SOCIAL, angband::format("%d  ", (int)player_ptr->sc), TERM_L_BLUE);
 #else
-    display_player_one_line(ENTRY_AGE, format("%d", (int)player_ptr->age), TERM_L_BLUE);
-    display_player_one_line(ENTRY_HEIGHT, format("%d", (int)player_ptr->ht), TERM_L_BLUE);
-    display_player_one_line(ENTRY_WEIGHT, format("%d", (int)player_ptr->wt), TERM_L_BLUE);
-    display_player_one_line(ENTRY_SOCIAL, format("%d", (int)player_ptr->sc), TERM_L_BLUE);
+    display_player_one_line(ENTRY_AGE, angband::format("%d", (int)player_ptr->age), TERM_L_BLUE);
+    display_player_one_line(ENTRY_HEIGHT, angband::format("%d", (int)player_ptr->ht), TERM_L_BLUE);
+    display_player_one_line(ENTRY_WEIGHT, angband::format("%d", (int)player_ptr->wt), TERM_L_BLUE);
+    display_player_one_line(ENTRY_SOCIAL, angband::format("%d", (int)player_ptr->sc), TERM_L_BLUE);
 #endif
     std::string alg = PlayerAlignment(player_ptr).get_alignment_description();
-    display_player_one_line(ENTRY_ALIGN, format("%s", alg.data()), TERM_L_BLUE);
+    display_player_one_line(ENTRY_ALIGN, angband::format("%s", alg.data()), TERM_L_BLUE);
 }
 
 /*!
@@ -176,16 +176,16 @@ static std::optional<std::string> search_death_cause(PlayerType *player_ptr)
     }
 
     if (w_ptr->total_winner) {
-        return format(_("…あなたは勝利の後%sした。", "...You %s after winning."),
+        return angband::format(_("…あなたは勝利の後%sした。", "...You %s after winning."),
             streq(player_ptr->died_from, "Seppuku") ? _("切腹", "committed seppuku") : _("引退", "retired from the adventure"));
     }
 
     if (!floor_ptr->dun_level) {
         constexpr auto killed_monster = _("…あなたは%sで%sに殺された。", "...You were killed by %s in %s.");
 #ifdef JP
-        return format(killed_monster, map_name(player_ptr).data(), player_ptr->died_from.data());
+        return angband::format(killed_monster, map_name(player_ptr).data(), player_ptr->died_from.data());
 #else
-        return format(killed_monster, player_ptr->died_from.data(), map_name(player_ptr).data());
+        return angband::format(killed_monster, player_ptr->died_from.data(), map_name(player_ptr).data());
 #endif
     }
 
@@ -200,17 +200,17 @@ static std::optional<std::string> search_death_cause(PlayerType *player_ptr)
         const auto *q_ptr = &quest_list[floor_ptr->quest_number];
         constexpr auto killed_quest = _("…あなたは、クエスト「%s」で%sに殺された。", "...You were killed by %s in the quest '%s'.");
 #ifdef JP
-        return format(killed_quest, q_ptr->name.data(), player_ptr->died_from.data());
+        return angband::format(killed_quest, q_ptr->name.data(), player_ptr->died_from.data());
 #else
-        return format(killed_quest, player_ptr->died_from.data(), q_ptr->name.data());
+        return angband::format(killed_quest, player_ptr->died_from.data(), q_ptr->name.data());
 #endif
     }
 
     constexpr auto killed_floor = _("…あなたは、%sの%d階で%sに殺された。", "...You were killed by %s on level %d of %s.");
 #ifdef JP
-    return format(killed_floor, map_name(player_ptr).data(), (int)floor_ptr->dun_level, player_ptr->died_from.data());
+    return angband::format(killed_floor, map_name(player_ptr).data(), (int)floor_ptr->dun_level, player_ptr->died_from.data());
 #else
-    return format(killed_floor, player_ptr->died_from.data(), floor_ptr->dun_level, map_name(player_ptr).data());
+    return angband::format(killed_floor, player_ptr->died_from.data(), floor_ptr->dun_level, map_name(player_ptr).data());
 #endif
 }
 
@@ -235,7 +235,7 @@ static std::optional<std::string> decide_death_in_quest(PlayerType *player_ptr)
     quest_text_line = 0;
     init_flags = INIT_NAME_ONLY;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
-    return std::string(format(_("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest_list[floor_ptr->quest_number].name.data()));
+    return std::string(angband::format(_("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest_list[floor_ptr->quest_number].name.data()));
 }
 
 /*!
@@ -252,7 +252,7 @@ static std::string decide_current_floor(PlayerType *player_ptr)
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->dun_level == 0) {
-        return format(_("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name(player_ptr).data());
+        return angband::format(_("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name(player_ptr).data());
     }
 
     if (auto decision = decide_death_in_quest(player_ptr); decision.has_value()) {
@@ -261,9 +261,9 @@ static std::string decide_current_floor(PlayerType *player_ptr)
 
     constexpr auto mes = _("…あなたは現在、 %s の %d 階で探索している。", "...Now, you are exploring level %d of %s.");
 #ifdef JP
-    return format(mes, map_name(player_ptr).data(), (int)floor_ptr->dun_level);
+    return angband::format(mes, map_name(player_ptr).data(), (int)floor_ptr->dun_level);
 #else
-    return format(mes, (int)floor_ptr->dun_level, map_name(player_ptr).data());
+    return angband::format(mes, (int)floor_ptr->dun_level, map_name(player_ptr).data());
 #endif
 }
 

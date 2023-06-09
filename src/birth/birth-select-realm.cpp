@@ -400,7 +400,7 @@ bool get_player_realms(PlayerType *player_ptr)
 
     if (player_ptr->realm2) {
         /* Print the realm */
-        c_put_str(TERM_L_BLUE, format("%s, %s", realm_names[player_ptr->realm1], realm_names[player_ptr->realm2]), 6, 15);
+        c_put_str(TERM_L_BLUE, angband::format("%s, %s", realm_names[player_ptr->realm1], realm_names[player_ptr->realm2]), 6, 15);
     }
 
     return true;

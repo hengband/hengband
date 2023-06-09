@@ -48,13 +48,13 @@ std::string pickpref_filename(PlayerType *player_ptr, int filename_mode)
 
     switch (filename_mode) {
     case PT_DEFAULT:
-        return format("%s.prf", namebase);
+        return angband::format("%s.prf", namebase);
 
     case PT_WITH_PNAME:
-        return format("%s-%s.prf", namebase, player_ptr->base_name);
+        return angband::format("%s-%s.prf", namebase, player_ptr->base_name);
 
     default: {
-        const auto msg = format("The value of argument 'filename_mode' is invalid: %d", filename_mode);
+        const auto msg = angband::format("The value of argument 'filename_mode' is invalid: %d", filename_mode);
         THROW_EXCEPTION(std::invalid_argument, msg);
     }
     }

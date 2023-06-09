@@ -55,7 +55,7 @@ static void print_questinfo(PlayerType *player_ptr, QuestId questnum, bool do_in
 
     const auto &quest_list = QuestList::get_instance();
     const auto *q_ptr = &quest_list[questnum];
-    prt(format(_("クエスト情報 (危険度: %d 階相当)", "Quest Information (Danger level: %d)"), (int)q_ptr->level), 5, 0);
+    prt(angband::format(_("クエスト情報 (危険度: %d 階相当)", "Quest Information (Danger level: %d)"), (int)q_ptr->level), 5, 0);
     prt(q_ptr->name, 7, 0);
 
     for (int i = 0; i < 10; i++) {
@@ -91,7 +91,7 @@ void castle_quest(PlayerType *player_ptr)
         put_str(_("CTRL-Qを使えばクエストの状態がチェックできます。", "Use CTRL-Q to check the status of your quest."), 9, 0);
 
         get_questinfo(player_ptr, q_index, false);
-        put_str(format(_("現在のクエスト「%s」", "Current quest is '%s'."), q_ptr->name.data()), 11, 0);
+        put_str(angband::format(_("現在のクエスト「%s」", "Current quest is '%s'."), q_ptr->name.data()), 11, 0);
 
         if (q_ptr->type != QuestKindType::KILL_LEVEL || q_ptr->dungeon == 0) {
             put_str(_("クエストを終わらせたら戻って来て下さい。", "Return when you have completed your quest."), 12, 0);

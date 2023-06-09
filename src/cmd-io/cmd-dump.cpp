@@ -135,13 +135,13 @@ void do_cmd_colors(PlayerType *player_ptr)
                 clear_from(10);
                 for (byte j = 0; j < 16; j++) {
                     term_putstr(j * 4, 20, -1, a, "###");
-                    term_putstr(j * 4, 22, -1, j, format("%3d", j));
+                    term_putstr(j * 4, 22, -1, j, angband::format("%3d", j));
                 }
 
                 name = ((a < 16) ? color_names[a] : _("未定義", "undefined"));
-                term_putstr(5, 10, -1, TERM_WHITE, format(_("カラー = %d, 名前 = %s", "Color = %d, Name = %s"), a, name));
+                term_putstr(5, 10, -1, TERM_WHITE, angband::format(_("カラー = %d, 名前 = %s", "Color = %d, Name = %s"), a, name));
                 term_putstr(5, 12, -1, TERM_WHITE,
-                    format("K = 0x%02x / R,G,B = 0x%02x,0x%02x,0x%02x", angband_color_table[a][0], angband_color_table[a][1], angband_color_table[a][2],
+                    angband::format("K = 0x%02x / R,G,B = 0x%02x,0x%02x,0x%02x", angband_color_table[a][0], angband_color_table[a][1], angband_color_table[a][2],
                         angband_color_table[a][3]));
                 term_putstr(0, 14, -1, TERM_WHITE, _("コマンド (n/N/k/K/r/R/g/G/b/B): ", "Command (n/N/k/K/r/R/g/G/b/B): "));
                 i = inkey();

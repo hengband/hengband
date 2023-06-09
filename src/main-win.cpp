@@ -428,7 +428,7 @@ static void save_prefs(void)
     angband_dir_str = angband_dir_str.substr(0, path_length);
     const auto savefile_str = savefile.string();
     if (angband_dir_str == savefile_str) {
-        const auto relative_path = format(".\\%s", (savefile_str.data() + path_length));
+        const auto relative_path = angband::format(".\\%s", (savefile_str.data() + path_length));
         WritePrivateProfileStringA("Angband", "SaveFile", relative_path.data(), ini_file);
     } else {
         WritePrivateProfileStringA("Angband", "SaveFile", savefile_str.data(), ini_file);

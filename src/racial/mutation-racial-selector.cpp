@@ -11,7 +11,7 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
     rpi_type rpi;
     if (player_ptr->muta.has(PlayerMutationType::SPIT_ACID)) {
         rpi = rpi_type(_("酸の唾", "Spit Acid"));
-        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl);
+        rpi.info = angband::format("%s%d", KWD_DAM, rc_ptr->lvl);
         rpi.text = _("酸のボールを放つ", "Fires a boll of acid.");
         rpi.min_level = 9;
         rpi.cost = 9;
@@ -22,7 +22,7 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 
     if (player_ptr->muta.has(PlayerMutationType::BR_FIRE)) {
         rpi = rpi_type(_("炎のブレス", "Fire Breath"));
-        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl);
+        rpi.info = angband::format("%s%d", KWD_DAM, rc_ptr->lvl);
         rpi.text = _("火炎のブレスを放つ", "Fires a breath of fire.");
         rpi.min_level = 20;
         rpi.cost = rc_ptr->lvl;
@@ -33,7 +33,7 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 
     if (player_ptr->muta.has(PlayerMutationType::HYPN_GAZE)) {
         rpi = rpi_type(_("催眠睨み", "Hypnotic Gaze"));
-        rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl);
+        rpi.info = angband::format("%s%d", KWD_POWER, rc_ptr->lvl);
         rpi.text = _("モンスター1体をペットにする。抵抗されると無効。", "Attempts to charm a monster.");
         rpi.min_level = 12;
         rpi.cost = 12;
@@ -45,9 +45,9 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
     if (player_ptr->muta.has(PlayerMutationType::TELEKINES)) {
         rpi = rpi_type(_("念動力", "Telekinesis"));
 #ifdef JP
-        rpi.info = format("最大重量: %d.%dkg", lb_to_kg_integer(rc_ptr->lvl * 10), lb_to_kg_fraction(rc_ptr->lvl * 10));
+        rpi.info = angband::format("最大重量: %d.%dkg", lb_to_kg_integer(rc_ptr->lvl * 10), lb_to_kg_fraction(rc_ptr->lvl * 10));
 #else
-        rpi.info = format("max wgt %d", rc_ptr->lvl * 10);
+        rpi.info = angband::format("max wgt %d", rc_ptr->lvl * 10);
 #endif
         rpi.text = _("アイテムを自分の足元へ移動させる。", "Pulls a distant item close to you.");
         rpi.min_level = 9;
@@ -59,7 +59,7 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 
     if (player_ptr->muta.has(PlayerMutationType::VTELEPORT)) {
         rpi = rpi_type(_("テレポート", "Teleport"));
-        rpi.info = format("%s%d", KWD_SPHERE, 10 + rc_ptr->lvl * 4);
+        rpi.info = angband::format("%s%d", KWD_SPHERE, 10 + rc_ptr->lvl * 4);
         rpi.text = _("遠距離のテレポートをする。", "Teleports you a long distance.");
         rpi.min_level = 7;
         rpi.cost = 7;
@@ -70,7 +70,7 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 
     if (player_ptr->muta.has(PlayerMutationType::MIND_BLST)) {
         rpi = rpi_type(_("精神攻撃", "Mind Blast"));
-        rpi.info = format("%s%dd%d", KWD_DAM, 3 + (rc_ptr->lvl - 1) / 5, 3);
+        rpi.info = angband::format("%s%dd%d", KWD_DAM, 3 + (rc_ptr->lvl - 1) / 5, 3);
         rpi.text = _("モンスター1体に精神攻撃を行う。", "Deals a PSI damage to a monster.");
         rpi.min_level = 5;
         rpi.cost = 3;
@@ -81,7 +81,7 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 
     if (player_ptr->muta.has(PlayerMutationType::RADIATION)) {
         rpi = rpi_type(_("放射能", "Emit Radiation"));
-        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
+        rpi.info = angband::format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
         rpi.text = _("自分を中心とする放射性廃棄物のボールを放つ。", "Burst nuke ball.");
         rpi.min_level = 15;
         rpi.cost = 15;
@@ -92,7 +92,7 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 
     if (player_ptr->muta.has(PlayerMutationType::VAMPIRISM)) {
         rpi = rpi_type(_("吸血", "Vampiric Drain"));
-        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
+        rpi.info = angband::format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
         rpi.text = _("隣接したモンスター1体から生命力を吸い取る。吸い取った生命力によって満腹度があがる。",
             "Drains and transfers HP from a monster near by you. You will also gain nutritional sustenance from this.");
         rpi.min_level = 2;
@@ -124,7 +124,7 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 
     if (player_ptr->muta.has(PlayerMutationType::BLINK)) {
         rpi = rpi_type(_("ショート・テレポート", "Blink"));
-        rpi.info = format("%s%d", KWD_SPHERE, 10);
+        rpi.info = angband::format("%s%d", KWD_SPHERE, 10);
         rpi.text = _("近距離のテレポートをする。", "Teleports you a short distance.");
         rpi.min_level = 3;
         rpi.cost = 3;
@@ -145,7 +145,7 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 
     if (player_ptr->muta.has(PlayerMutationType::SWAP_POS)) {
         rpi = rpi_type(_("位置交換", "Swap Position"));
-        rpi.info = format("%s%d", KWD_SPHERE, 10 + rc_ptr->lvl * 3 / 2);
+        rpi.info = angband::format("%s%d", KWD_SPHERE, 10 + rc_ptr->lvl * 3 / 2);
         rpi.text = _("対象のモンスター1体を位置を交換する。", "Swaps positions between you and a target monster.");
         rpi.min_level = 15;
         rpi.cost = 12;
@@ -186,7 +186,7 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 
     if (player_ptr->muta.has(PlayerMutationType::BERSERK)) {
         rpi = rpi_type(_("狂戦士化", "Berserk"));
-        rpi.info = format("%s%d+d%d", KWD_DURATION, 25, 25);
+        rpi.info = angband::format("%s%d+d%d", KWD_DURATION, 25, 25);
         rpi.text = _("狂戦士化し、恐怖を除去する。防御力が少し低下する。", "Gives a bonus to hit and HP, immunity to fear for a while. But decreases AC.");
         rpi.min_level = 8;
         rpi.cost = 8;
@@ -227,7 +227,7 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 
     if (player_ptr->muta.has(PlayerMutationType::RESIST)) {
         rpi = rpi_type(_("エレメント耐性", "Resist Elements"));
-        rpi.info = format("%s%d+d%d", KWD_DURATION, 20, 20);
+        rpi.info = angband::format("%s%d+d%d", KWD_DURATION, 20, 20);
         rpi.text = _("1つ以上の元素の一時耐性を得る。", "Gains one or more resitances for elements.");
         rpi.min_level = 10;
         rpi.cost = 12;
@@ -238,7 +238,7 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 
     if (player_ptr->muta.has(PlayerMutationType::EARTHQUAKE)) {
         rpi = rpi_type(_("地震", "Earthquake"));
-        rpi.info = format("%s%d", KWD_SPHERE, 10);
+        rpi.info = angband::format("%s%d", KWD_SPHERE, 10);
         rpi.text = _("周囲のダンジョンを揺らし、壁と床をランダムに入れ変える。", "Shakes dungeon structure, and results in random swapping of floors and walls.");
         rpi.min_level = 12;
         rpi.cost = 12;
@@ -249,7 +249,7 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 
     if (player_ptr->muta.has(PlayerMutationType::EAT_MAGIC)) {
         rpi = rpi_type(_("魔力食い", "Eat Magic"));
-        rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl * 2);
+        rpi.info = angband::format("%s%d", KWD_POWER, rc_ptr->lvl * 2);
         rpi.text = _("魔法道具から魔力を吸収してMPを回復する。", "Absorbs mana from a magic device to heal your SP.");
         rpi.min_level = 17;
         rpi.cost = 1;
@@ -280,7 +280,7 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 
     if (player_ptr->muta.has(PlayerMutationType::HIT_AND_AWAY)) {
         rpi = rpi_type(_("ヒット＆アウェイ", "Panic Hit"));
-        rpi.info = format("%s%d", KWD_SPHERE, 30);
+        rpi.info = angband::format("%s%d", KWD_SPHERE, 30);
         rpi.text = _("対象のモンスターを攻撃したあと短距離テレポートする。", "Attacks a monster then tereports you a short range.");
         rpi.min_level = 10;
         rpi.cost = 12;
@@ -291,7 +291,7 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 
     if (player_ptr->muta.has(PlayerMutationType::DAZZLE)) {
         rpi = rpi_type(_("眩惑", "Dazzle"));
-        rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl * 4);
+        rpi.info = angband::format("%s%d", KWD_POWER, rc_ptr->lvl * 4);
         rpi.text = _("周辺のモンスターを混乱・朦朧・恐怖させようとする。抵抗されると無効。",
             "Tries to make all monsters in your sight confused, stunned, scared.");
         rpi.min_level = 7;
@@ -303,7 +303,7 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 
     if (player_ptr->muta.has(PlayerMutationType::LASER_EYE)) {
         rpi = rpi_type(_("レーザー・アイ", "Laser Eye"));
-        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
+        rpi.info = angband::format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
         rpi.text = _("閃光のビームを放つ。", "Fires a beam of light.");
         rpi.min_level = 7;
         rpi.cost = 10;
@@ -325,7 +325,7 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 
     if (player_ptr->muta.has(PlayerMutationType::BANISH)) {
         rpi = rpi_type(_("邪悪消滅", "Banish Evil"));
-        rpi.info = format("%s%d", KWD_POWER, 50 + rc_ptr->lvl);
+        rpi.info = angband::format("%s%d", KWD_POWER, 50 + rc_ptr->lvl);
         rpi.text = _("邪悪なモンスター1体を階から消滅させる。", "Erase a evil monster from current level.");
         rpi.min_level = 25;
         rpi.cost = 25;
@@ -336,7 +336,7 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 
     if (player_ptr->muta.has(PlayerMutationType::COLD_TOUCH)) {
         rpi = rpi_type(_("凍結の手", "Cold Touch"));
-        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
+        rpi.info = angband::format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
         rpi.text = _("冷気のビームを放つ。", "Fires a beam of cold.");
         rpi.min_level = 2;
         rpi.cost = 2;

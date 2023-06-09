@@ -90,7 +90,7 @@ void MonsterAttackPlayer::make_attack_normal()
     angband_strcpy(this->m_name, monster_desc(this->player_ptr, this->m_ptr, 0), sizeof(this->m_name));
     angband_strcpy(this->ddesc, monster_desc(this->player_ptr, this->m_ptr, MD_WRONGDOER_NAME), sizeof(this->ddesc));
     if (PlayerClass(this->player_ptr).samurai_stance_is(SamuraiStanceType::IAI)) {
-        msg_print(_("相手が襲いかかる前に素早く武器を振るった。", format("You took sen, drew and cut in one motion before %s moved.", this->m_name)));
+        msg_print(_("相手が襲いかかる前に素早く武器を振るった。", angband::format("You took sen, drew and cut in one motion before %s moved.", this->m_name)));
         if (do_cmd_attack(this->player_ptr, this->m_ptr->fy, this->m_ptr->fx, HISSATSU_IAI)) {
             return;
         }

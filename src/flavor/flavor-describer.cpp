@@ -149,7 +149,7 @@ static std::string describe_weapon_dice(PlayerType *player_ptr, const ItemEntity
 
     const auto is_bonus = (player_ptr->riding > 0) && item.is_lance();
     const auto bonus = is_bonus ? 2 : 0;
-    return format(" (%dd%d)", item.dd + bonus, item.ds);
+    return angband::format(" (%dd%d)", item.dd + bonus, item.ds);
 }
 
 static std::string describe_bow_power(PlayerType *player_ptr, const ItemEntity &item, const describe_option_type &opt)
@@ -161,7 +161,7 @@ static std::string describe_bow_power(PlayerType *player_ptr, const ItemEntity &
     }
 
     std::stringstream ss;
-    ss << format(" (x%d)", power);
+    ss << angband::format(" (x%d)", power);
 
     auto num_fire = 100;
     if (none_bits(opt.mode, OD_DEBUG)) {
@@ -177,7 +177,7 @@ static std::string describe_bow_power(PlayerType *player_ptr, const ItemEntity &
     }
 
     const auto fire_rate = item.get_bow_energy() / num_fire;
-    ss << format(" (%d.%dturn)", fire_rate / 100, fire_rate % 100);
+    ss << angband::format(" (%d.%dturn)", fire_rate / 100, fire_rate % 100);
 
     return ss.str();
 }
@@ -207,15 +207,15 @@ static std::string describe_accuracy_and_damage_bonus(const ItemEntity &item, co
     }
 
     if (should_show_slaying_bonus(item)) {
-        return format(" (%+d,%+d)", item.to_h, item.to_d);
+        return angband::format(" (%+d,%+d)", item.to_h, item.to_d);
     }
 
     if (item.to_h != 0) {
-        return format(" (%+d)", item.to_h);
+        return angband::format(" (%+d)", item.to_h);
     }
 
     if (item.to_d != 0) {
-        return format(" (%+d)", item.to_d);
+        return angband::format(" (%+d)", item.to_d);
     }
 
     return "";
@@ -241,7 +241,7 @@ static std::string describe_fire_energy(PlayerType *player_ptr, const ItemEntity
     const auto bow_bonus = bow.is_known() ? bow.to_h : 0;
     const auto percent = calc_crit_ratio_shot(player_ptr, ammo_bonus, bow_bonus);
 
-    ss << format("/%d.%02d%s", percent / 100, percent % 100, show_ammo_detail ? "% crit" : "%");
+    ss << angband::format("/%d.%02d%s", percent / 100, percent % 100, show_ammo_detail ? "% crit" : "%");
 
     return ss.str();
 }
@@ -295,20 +295,20 @@ static std::string describe_spike_detail(PlayerType *player_ptr)
     const auto energy_fire = 100 - player_ptr->lev;
     const auto avgdam_per_turn = 100 * avgdam / energy_fire;
 
-    return format(" (%d/%d)", avgdam, avgdam_per_turn);
+    return angband::format(" (%d/%d)", avgdam, avgdam_per_turn);
 }
 
 static std::string describe_known_item_ac(const ItemEntity &item)
 {
     if (should_show_ac_bonus(item)) {
-        return format(" [%d,%+d]", item.ac, item.to_a);
+        return angband::format(" [%d,%+d]", item.ac, item.to_a);
     }
 
     if (item.to_a == 0) {
         return "";
     }
 
-    return format(" [%+d]", item.to_a);
+    return angband::format(" [%+d]", item.to_a);
 }
 
 static std::string describe_ac(const ItemEntity &item, const describe_option_type &opt)
@@ -321,18 +321,18 @@ static std::string describe_ac(const ItemEntity &item, const describe_option_typ
         return "";
     }
 
-    return format(" [%d]", item.ac);
+    return angband::format(" [%d]", item.ac);
 }
 
 static std::string describe_charges_staff_wand(const ItemEntity &item)
 {
     std::string staff_num;
     if ((item.bi_key.tval() == ItemKindType::STAFF) && (item.number > 1)) {
-        staff_num = format("%dx ", item.number);
+        staff_num = angband::format("%dx ", item.number);
     }
 
     const auto charge_str = _("回分", (item.pval != 1 ? " charge" : " charges"));
-    return format(" (%s%d%s)", staff_num.data(), item.pval, charge_str);
+    return angband::format(" (%s%d%s)", staff_num.data(), item.pval, charge_str);
 }
 
 static std::string describe_charges_rod(const ItemEntity &item)
@@ -351,7 +351,7 @@ static std::string describe_charges_rod(const ItemEntity &item)
         num_of_charging = item.number;
     }
 
-    return format(" (%d%s)", num_of_charging, _("本 充填中", " charging"));
+    return angband::format(" (%d%s)", num_of_charging, _("本 充填中", " charging"));
 }
 
 static std::string describe_pval_type(const ItemEntity &item)
@@ -392,7 +392,7 @@ static std::string describe_pval(const ItemEntity &item)
     }
 
     const auto pval_type = describe_pval_type(item);
-    return format(" (%+d%s)", item.pval, pval_type.data());
+    return angband::format(" (%+d%s)", item.pval, pval_type.data());
 }
 
 static std::string describe_lamp_life(const ItemEntity &item)
@@ -496,7 +496,7 @@ static std::string describe_item_discount(const ItemEntity &item, bool hide_disc
         return "";
     }
 
-    return format("%d%s", item.discount, _("%引き", "% off"));
+    return angband::format("%d%s", item.discount, _("%引き", "% off"));
 }
 
 /*!
@@ -534,7 +534,7 @@ static std::string describe_inscription(const ItemEntity &item, const describe_o
     }
 
     const auto insc = ss.str();
-    return insc.empty() ? "" : format(" {%s}", insc.data());
+    return insc.empty() ? "" : angband::format(" {%s}", insc.data());
 }
 
 static describe_option_type decide_describe_option(const ItemEntity &item, BIT_FLAGS mode)

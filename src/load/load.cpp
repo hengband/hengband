@@ -129,7 +129,7 @@ static errr load_hp(PlayerType *player_ptr)
 {
     auto tmp16u = rd_u16b();
     if (tmp16u > PY_MAX_LEVEL) {
-        load_note(format(_("ヒットポイント配列が大きすぎる(%u)！", "Too many (%u) hitpoint entries!"), tmp16u));
+        load_note(angband::format(_("ヒットポイント配列が大きすぎる(%u)！", "Too many (%u) hitpoint entries!"), tmp16u));
         return 25;
     }
 

@@ -595,7 +595,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
             int dam = 100;
 
             if (info) {
-                return format("%s3*%d", KWD_DAM, dam);
+                return angband::format("%s3*%d", KWD_DAM, dam);
             }
 
             if (cast) {

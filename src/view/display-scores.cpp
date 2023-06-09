@@ -73,7 +73,7 @@ void display_scores(int from, int to, int note, high_score *score)
         term_clear();
         put_str(_("                変愚蛮怒: 勇者の殿堂", "                Hengband Hall of Fame"), 0, 0);
         if (k > 0) {
-            put_str(format(_("( %d 位以下 )", "(from position %d)"), k + 1), 0, 40);
+            put_str(angband::format(_("( %d 位以下 )", "(from position %d)"), k + 1), 0, 40);
         }
 
         for (auto n = 0, j = k; (j < num_scores) && (n < per_screen); place++, j++, n++) {
@@ -119,69 +119,69 @@ void display_scores(int from, int to, int note, high_score *score)
 
             std::string alt_when;
             if ((*when == '@') && strlen(when) == 9) {
-                alt_when = format("%.4s-%.2s-%.2s", when + 1, when + 5, when + 7);
+                alt_when = angband::format("%.4s-%.2s-%.2s", when + 1, when + 5, when + 7);
                 when = alt_when.data();
             }
 
             std::string out_val;
 #ifdef JP
-            /* out_val = format("%3d.%9s  %s%s%sという名の%sの%s (レベル %d)", */
-            out_val = format("%3d.%9s  %s%s%s - %s%s (レベル %d)", place, the_score.pts, personality_info[pa].title, (personality_info[pa].no ? "の" : ""),
+            /* out_val = angband::format("%3d.%9s  %s%s%sという名の%sの%s (レベル %d)", */
+            out_val = angband::format("%3d.%9s  %s%s%s - %s%s (レベル %d)", place, the_score.pts, personality_info[pa].title, (personality_info[pa].no ? "の" : ""),
                 the_score.who, race_info[pr].title, class_info[pc].title, clev);
 
 #else
-            out_val = format("%3d.%9s  %s %s the %s %s, Level %d", place, the_score.pts, personality_info[pa].title, the_score.who, race_info[pr].title,
+            out_val = angband::format("%3d.%9s  %s %s the %s %s, Level %d", place, the_score.pts, personality_info[pa].title, the_score.who, race_info[pr].title,
                 class_info[pc].title, clev);
 #endif
             if (mlev > clev) {
-                out_val.append(format(_(" (最高%d)", " (Max %d)"), mlev));
+                out_val.append(angband::format(_(" (最高%d)", " (Max %d)"), mlev));
             }
 
             c_put_str(attr, out_val, n * 4 + 2, 0);
 #ifdef JP
             if (mdun != 0) {
-                out_val = format("    最高%3d階", mdun);
+                out_val = angband::format("    最高%3d階", mdun);
             } else {
                 out_val = "             ";
             }
 
             /* 死亡原因をオリジナルより細かく表示 */
             if (streq(the_score.how, "yet")) {
-                out_val.append(format("  まだ生きている (%d%s)", cdun, "階"));
+                out_val.append(angband::format("  まだ生きている (%d%s)", cdun, "階"));
             } else if (streq(the_score.how, "ripe")) {
-                out_val.append(format("  勝利の後に引退 (%d%s)", cdun, "階"));
+                out_val.append(angband::format("  勝利の後に引退 (%d%s)", cdun, "階"));
             } else if (streq(the_score.how, "Seppuku")) {
-                out_val.append(format("  勝利の後に切腹 (%d%s)", cdun, "階"));
+                out_val.append(angband::format("  勝利の後に切腹 (%d%s)", cdun, "階"));
             } else {
                 codeconv(the_score.how);
                 if (!cdun) {
-                    out_val.append(format("  地上で%sに殺された", the_score.how));
+                    out_val.append(angband::format("  地上で%sに殺された", the_score.how));
                 } else {
-                    out_val.append(format("  %d階で%sに殺された", cdun, the_score.how));
+                    out_val.append(angband::format("  %d階で%sに殺された", cdun, the_score.how));
                 }
             }
 #else
             if (!cdun) {
-                out_val = format("               Killed by %s on the surface", the_score.how);
+                out_val = angband::format("               Killed by %s on the surface", the_score.how);
             } else {
-                out_val = format("               Killed by %s on %s %d", the_score.how, "Dungeon Level", cdun);
+                out_val = angband::format("               Killed by %s on %s %d", the_score.how, "Dungeon Level", cdun);
             }
 
             if (mdun > cdun) {
-                out_val.append(format(" (Max %d)", mdun));
+                out_val.append(angband::format(" (Max %d)", mdun));
             }
 #endif
             c_put_str(attr, out_val, n * 4 + 3, 0);
 #ifdef JP
             /* 日付を 19yy/mm/dd の形式に変更する */
             if (strlen(when) == 8 && when[2] == '/' && when[5] == '/') {
-                alt_when = format("%d%s/%.5s", 19 + (when[6] < '8'), when + 6, when);
+                alt_when = angband::format("%d%s/%.5s", 19 + (when[6] < '8'), when + 6, when);
                 when = alt_when.data();
             }
 
-            out_val = format("        (ユーザー:%s, 日付:%s, 所持金:%s, ターン:%s)", user, when, gold, aged);
+            out_val = angband::format("        (ユーザー:%s, 日付:%s, 所持金:%s, ターン:%s)", user, when, gold, aged);
 #else
-            out_val = format("               (User %s, Date %s, Gold %s, Turn %s).", user, when, gold, aged);
+            out_val = angband::format("               (User %s, Date %s, Gold %s, Turn %s).", user, when, gold, aged);
 #endif
 
             c_put_str(attr, out_val, n * 4 + 4, 0);

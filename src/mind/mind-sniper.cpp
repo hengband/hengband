@@ -329,8 +329,8 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
                     } else if (spell.mana_cost > sniper_data->concent) {
                         tcol = TERM_L_BLUE;
                     }
-                    term_putstr(x, y + i + 1, -1, tcol, (spell.min_lev > plev) ? "   ) " : format("  %c) ", I2A(i)));
-                    term_putstr(x + 5, y + i + 1, -1, tcol, format("%-30s%2d %4d", spell.name, spell.min_lev, spell.mana_cost));
+                    term_putstr(x, y + i + 1, -1, tcol, (spell.min_lev > plev) ? "   ) " : angband::format("  %c) ", I2A(i)));
+                    term_putstr(x + 5, y + i + 1, -1, tcol, angband::format("%-30s%2d %4d", spell.name, spell.min_lev, spell.mana_cost));
                 }
 
                 /* Clear the bottom line */

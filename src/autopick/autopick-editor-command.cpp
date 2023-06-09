@@ -603,7 +603,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
         draw_text_editor(player_ptr, tb);
         term_erase(0, tb->cy - tb->upper + 1, tb->wid);
         term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW,
-            format(_("C:%d:<コマンドキー>: ", "C:%d:<Keypress>: "), (rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)));
+            angband::format(_("C:%d:<コマンドキー>: ", "C:%d:<Keypress>: "), (rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)));
 
         if (!insert_keymap_line(tb)) {
             break;

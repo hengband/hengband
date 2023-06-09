@@ -31,7 +31,7 @@ std::string PlayerAlignment::get_alignment_description(bool with_value)
 {
     auto s = alignment_label();
     if (with_value || show_actual_value) {
-        return format(_("%s(%ld)", "%s (%ld)"), s, static_cast<long>(this->player_ptr->alignment));
+        return angband::format(_("%s(%ld)", "%s (%ld)"), s, static_cast<long>(this->player_ptr->alignment));
     }
 
     return s;

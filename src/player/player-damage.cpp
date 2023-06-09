@@ -413,9 +413,9 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
 
                 auto hallucintion_state = is_hallucinated ? _("幻覚に歪んだ", "hallucinatingly distorted ") : "";
 #ifdef JP
-                player_ptr->died_from = format("%s%s%s", paralysis_state, hallucintion_state, hit_from.data());
+                player_ptr->died_from = angband::format("%s%s%s", paralysis_state, hallucintion_state, hit_from.data());
 #else
-                player_ptr->died_from = format("%s%s%s", hallucintion_state, hit_from.data(), paralysis_state);
+                player_ptr->died_from = angband::format("%s%s%s", hallucintion_state, hit_from.data(), paralysis_state);
 #endif
             }
 
@@ -433,13 +433,13 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                 } else if (inside_quest(q_idx) && (QuestType::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT)))) {
                     place = _("クエスト", "in a quest");
                 } else {
-                    place = format(_("%d階", "on level %d"), static_cast<int>(floor.dun_level));
+                    place = angband::format(_("%d階", "on level %d"), static_cast<int>(floor.dun_level));
                 }
 
 #ifdef JP
-                const auto note = format("%sで%sに殺された。", place.data(), player_ptr->died_from.data());
+                const auto note = angband::format("%sで%sに殺された。", place.data(), player_ptr->died_from.data());
 #else
-                const auto note = format("killed by %s %s.", player_ptr->died_from.data(), place.data());
+                const auto note = angband::format("killed by %s %s.", player_ptr->died_from.data(), place.data());
 #endif
                 exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, note);
             }
@@ -488,7 +488,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                 death_message = player_last_words;
                 if (death_message.empty()) {
 #ifdef JP
-                    death_message = format("あなたは%sました。", android ? "壊れ" : "死に");
+                    death_message = angband::format("あなたは%sました。", android ? "壊れ" : "死に");
 #else
                     death_message = android ? "You are broken." : "You die.";
 #endif

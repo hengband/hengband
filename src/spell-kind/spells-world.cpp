@@ -261,7 +261,7 @@ bool teleport_level_other(PlayerType *player_ptr)
     auto has_immune = r_ptr->resistance_flags.has_any_of(RFR_EFF_RESIST_NEXUS_MASK) || r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT);
 
     if (has_immune || (r_ptr->flags1 & RF1_QUESTOR) || (r_ptr->level + randint1(50) > player_ptr->lev + randint1(60))) {
-        msg_print(_("しかし効果がなかった！", format("%s^ is unaffected!", m_name.data())));
+        msg_print(_("しかし効果がなかった！", angband::format("%s^ is unaffected!", m_name.data())));
     } else {
         teleport_level(player_ptr, target_m_idx);
     }
@@ -423,7 +423,7 @@ static DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
         prt(_("      選べるダンジョンがない。", "      No dungeon is available."), y, x);
     }
 
-    prt(format(_("どのダンジョン%sしますか:", "Which dungeon do you %s?: "), note), 0, 0);
+    prt(angband::format(_("どのダンジョン%sしますか:", "Which dungeon do you %s?: "), note), 0, 0);
     while (true) {
         auto i = inkey();
         if ((i == ESCAPE) || dun.empty()) {
@@ -513,7 +513,7 @@ bool free_level_recall(PlayerType *player_ptr)
     }
 
     const auto mes = _("%sの何階にテレポートしますか？", "Teleport to which level of %s? ");
-    QUANTITY amt = get_quantity(format(mes, dungeon.name.data()), (QUANTITY)max_depth);
+    QUANTITY amt = get_quantity(angband::format(mes, dungeon.name.data()), (QUANTITY)max_depth);
     if (amt <= 0) {
         return false;
     }

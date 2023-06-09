@@ -406,7 +406,7 @@ void do_cmd_pet(PlayerType *player_ptr)
     auto target_of_pet_appearance = is_hallucinated ? _("何か奇妙な物", "something strange") : taget_of_pet;
     auto mes = _("ペットのターゲットを指定 (現在：%s)", "specify a target of pet (now:%s)");
     auto target_name = player_ptr->pet_t_m_idx > 0 ? target_of_pet_appearance : _("指定なし", "nothing");
-    auto target_ask = format(mes, target_name);
+    auto target_ask = angband::format(mes, target_name);
     power_desc[num] = target_ask;
     powers[num++] = PET_TARGET;
     power_desc[num] = _("近くにいろ", "stay close");
@@ -554,7 +554,7 @@ void do_cmd_pet(PlayerType *player_ptr)
             screen_save();
             prompt = _("(コマンド、ESC=終了) コマンドを選んでください:", "(Command, ESC=exit) Choose command from menu.");
         } else {
-            prompt = format(_("(コマンド %c-%c、'*'=一覧、ESC=終了) コマンドを選んでください:", "(Command %c-%c, *=List, ESC=exit) Select a command: "),
+            prompt = angband::format(_("(コマンド %c-%c、'*'=一覧、ESC=終了) コマンドを選んでください:", "(Command %c-%c, *=List, ESC=exit) Select a command: "),
                 I2A(0), I2A(num - 1));
         }
 
@@ -630,9 +630,9 @@ void do_cmd_pet(PlayerType *player_ptr)
                         /* Letter/number for power selection */
                         std::stringstream ss;
                         if (use_menu) {
-                            ss << format("%c%s ", (control == command_idx) ? '*' : ' ', (control == (menu_line - 1)) ? _("》", "> ") : "  ");
+                            ss << angband::format("%c%s ", (control == command_idx) ? '*' : ' ', (control == (menu_line - 1)) ? _("》", "> ") : "  ");
                         } else {
-                            ss << format("%c%c) ", (control == command_idx) ? '*' : ' ', I2A(control));
+                            ss << angband::format("%c%c) ", (control == command_idx) ? '*' : ' ', I2A(control));
                         }
 
                         ss << power_desc[control];

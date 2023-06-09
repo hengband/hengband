@@ -239,7 +239,7 @@ static void check_mind_mindcrafter(PlayerType *player_ptr, cm_type *cm_ptr)
         return;
     }
 
-    msg_print(_(format("%sの力が制御できない氾流となって解放された！", cm_ptr->mind_explanation), "Your mind unleashes its power in an uncontrollable storm!"));
+    msg_print(_(angband::format("%sの力が制御できない氾流となって解放された！", cm_ptr->mind_explanation), "Your mind unleashes its power in an uncontrollable storm!"));
     project(player_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + cm_ptr->plev / 10, player_ptr->y, player_ptr->x, cm_ptr->plev * 2, AttributeType::MANA,
         PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM);
     player_ptr->csp = std::max(0, player_ptr->csp - cm_ptr->plev * std::max(1, cm_ptr->plev / 10));
@@ -267,7 +267,7 @@ static void check_mind_mirror_master(PlayerType *player_ptr, cm_type *cm_ptr)
         return;
     }
 
-    msg_print(_(format("%sの力が制御できない氾流となって解放された！", cm_ptr->mind_explanation), "Your mind unleashes its power in an uncontrollable storm!"));
+    msg_print(_(angband::format("%sの力が制御できない氾流となって解放された！", cm_ptr->mind_explanation), "Your mind unleashes its power in an uncontrollable storm!"));
     project(player_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + cm_ptr->plev / 10, player_ptr->y, player_ptr->x, cm_ptr->plev * 2, AttributeType::MANA,
         PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM);
     player_ptr->csp = std::max(0, player_ptr->csp - cm_ptr->plev * std::max(1, cm_ptr->plev / 10));
@@ -359,7 +359,7 @@ static void mind_reflection(PlayerType *player_ptr, cm_type *cm_ptr)
     }
 
     player_ptr->csp = std::max(0, player_ptr->csp - cm_ptr->mana_cost);
-    msg_print(_(format("%sを集中しすぎて気を失ってしまった！", cm_ptr->mind_explanation), "You faint from the effort!"));
+    msg_print(_(angband::format("%sを集中しすぎて気を失ってしまった！", cm_ptr->mind_explanation), "You faint from the effort!"));
     (void)BadStatusSetter(player_ptr).mod_paralysis(randint1(5 * oops + 1));
     if (randint0(100) >= 50) {
         return;

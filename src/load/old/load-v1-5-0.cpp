@@ -730,7 +730,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
     uint16_t limit;
     limit = rd_u16b();
     if (limit > w_ptr->max_o_idx) {
-        load_note(format(_("アイテムの配列が大きすぎる(%d)！", "Too many (%d) object entries!"), limit));
+        load_note(angband::format(_("アイテムの配列が大きすぎる(%d)！", "Too many (%d) object entries!"), limit));
         return 151;
     }
 
@@ -738,7 +738,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
     for (int i = 1; i < limit; i++) {
         OBJECT_IDX o_idx = o_pop(floor_ptr);
         if (i != o_idx) {
-            load_note(format(_("アイテム配置エラー (%d <> %d)", "Object allocation error (%d <> %d)"), i, o_idx));
+            load_note(angband::format(_("アイテム配置エラー (%d <> %d)", "Object allocation error (%d <> %d)"), i, o_idx));
             return 152;
         }
 
@@ -750,7 +750,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
 
     limit = rd_u16b();
     if (limit > w_ptr->max_m_idx) {
-        load_note(format(_("モンスターの配列が大きすぎる(%d)！", "Too many (%d) monster entries!"), limit));
+        load_note(angband::format(_("モンスターの配列が大きすぎる(%d)！", "Too many (%d) monster entries!"), limit));
         return 161;
     }
 
@@ -758,7 +758,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
     for (int i = 1; i < limit; i++) {
         auto m_idx = m_pop(floor_ptr);
         if (i != m_idx) {
-            load_note(format(_("モンスター配置エラー (%d <> %d)", "Monster allocation error (%d <> %d)"), i, m_idx));
+            load_note(angband::format(_("モンスター配置エラー (%d <> %d)", "Monster allocation error (%d <> %d)"), i, m_idx));
             return 162;
         }
 

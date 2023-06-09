@@ -202,7 +202,7 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
             if (dead) {
                 std::string details;
                 if (r_ptr->defeat_level && r_ptr->defeat_time) {
-                    details = format(_(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
+                    details = angband::format(_(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
                         (r_ptr->defeat_time / 60) % 60, r_ptr->defeat_time % 60);
                 }
 
@@ -263,18 +263,18 @@ static void display_monster_list(int col, int row, int per_page, const std::vect
         attr = ((i + mon_top == mon_cur) ? TERM_L_BLUE : TERM_WHITE);
         c_prt(attr, (r_ptr->name.data()), row + i, col);
         if (per_page == 1) {
-            c_prt(attr, format("%02x/%02x", r_ptr->x_attr, r_ptr->x_char), row + i, (w_ptr->wizard || visual_only) ? 56 : 61);
+            c_prt(attr, angband::format("%02x/%02x", r_ptr->x_attr, r_ptr->x_char), row + i, (w_ptr->wizard || visual_only) ? 56 : 61);
         }
 
         if (w_ptr->wizard || visual_only) {
-            c_prt(attr, format("%d", enum2i(r_idx)), row + i, 62);
+            c_prt(attr, angband::format("%d", enum2i(r_idx)), row + i, 62);
         }
 
         term_erase(69, row + i, 255);
         term_queue_bigchar(use_bigtile ? 69 : 70, row + i, r_ptr->x_attr, r_ptr->x_char, 0, 0);
         if (!visual_only) {
             if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-                put_str(format("%5d", r_ptr->r_pkills), row + i, 73);
+                put_str(angband::format("%5d", r_ptr->r_pkills), row + i, 73);
             } else {
                 c_put_str((r_ptr->max_num == 0 ? TERM_L_DARK : TERM_WHITE), (r_ptr->max_num == 0 ? _("死亡", " dead") : _("生存", "alive")), row + i, 74);
             }
@@ -342,7 +342,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
     while (!flag) {
         if (redraw) {
             clear_from(0);
-            prt(format(_("%s - モンスター", "%s - monsters"), !visual_only ? _("知識", "Knowledge") : _("表示", "Visuals")), 2, 0);
+            prt(angband::format(_("%s - モンスター", "%s - monsters"), !visual_only ? _("知識", "Knowledge") : _("表示", "Visuals")), 2, 0);
             if (!direct_r_idx.has_value()) {
                 prt(_("グループ", "Group"), 4, 0);
             }
@@ -400,8 +400,8 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
             display_visual_list(max + 3, 7, browser_rows - 1, wid - (max + 3), attr_top, char_left);
         }
 
-        prt(format(_("%lu 種", "%lu Races"), r_idx_list.size()), 3, 26);
-        prt(format(_("<方向>%s%s%s, ESC", "<dir>%s%s%s, ESC"), (!visual_list && !visual_only) ? _(", 'r'で思い出を見る", ", 'r' to recall") : "",
+        prt(angband::format(_("%lu 種", "%lu Races"), r_idx_list.size()), 3, 26);
+        prt(angband::format(_("<方向>%s%s%s, ESC", "<dir>%s%s%s, ESC"), (!visual_list && !visual_only) ? _(", 'r'で思い出を見る", ", 'r' to recall") : "",
                 visual_list ? _(", ENTERで決定", ", ENTER to accept") : _(", 'v'でシンボル変更", ", 'v' for visuals"),
                 (attr_idx || char_idx) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
             hgt - 1, 0);

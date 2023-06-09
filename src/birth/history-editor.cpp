@@ -47,10 +47,10 @@ void edit_history(PlayerType *player_ptr)
 #ifdef JP
         if (iskanji2(player_ptr->history[y], x)) {
             char kanji[3] = { player_ptr->history[y][x], player_ptr->history[y][x + 1], '\0' };
-            c_put_str(TERM_L_BLUE, format("%s", kanji), y + 12, x + 10);
+            c_put_str(TERM_L_BLUE, angband::format("%s", kanji), y + 12, x + 10);
         } else
 #endif
-            c_put_str(TERM_L_BLUE, format("%c", player_ptr->history[y][x]), y + 12, x + 10);
+            c_put_str(TERM_L_BLUE, angband::format("%c", player_ptr->history[y][x]), y + 12, x + 10);
 
         term_gotoxy(x + 10, y + 12);
         int skey = inkey_special(true);

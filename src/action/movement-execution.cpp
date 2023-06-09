@@ -228,17 +228,17 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
         } else if (f_ptr->flags.has(TerrainCharacteristics::CAN_SWIM) && (riding_r_ptr->feature_flags.has(MonsterFeatureType::CAN_SWIM))) {
             /* Allow moving */
         } else if (f_ptr->flags.has(TerrainCharacteristics::WATER) && riding_r_ptr->feature_flags.has_not(MonsterFeatureType::AQUATIC) && (f_ptr->flags.has(TerrainCharacteristics::DEEP) || riding_r_ptr->aura_flags.has(MonsterAuraType::FIRE))) {
-            msg_print(_(format("%sの上に行けない。", terrains_info[g_ptr->get_feat_mimic()].name.data()), "Can't swim."));
+            msg_print(_(angband::format("%sの上に行けない。", terrains_info[g_ptr->get_feat_mimic()].name.data()), "Can't swim."));
             energy.reset_player_turn();
             can_move = false;
             disturb(player_ptr, false, true);
         } else if (f_ptr->flags.has_not(TerrainCharacteristics::WATER) && riding_r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC)) {
-            msg_print(_(format("%sから上がれない。", terrains_info[floor_ptr->grid_array[player_ptr->y][player_ptr->x].get_feat_mimic()].name.data()), "Can't land."));
+            msg_print(_(angband::format("%sから上がれない。", terrains_info[floor_ptr->grid_array[player_ptr->y][player_ptr->x].get_feat_mimic()].name.data()), "Can't land."));
             energy.reset_player_turn();
             can_move = false;
             disturb(player_ptr, false, true);
         } else if (f_ptr->flags.has(TerrainCharacteristics::LAVA) && riding_r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_FIRE_MASK)) {
-            msg_print(_(format("%sの上に行けない。", terrains_info[g_ptr->get_feat_mimic()].name.data()), "Too hot to go through."));
+            msg_print(_(angband::format("%sの上に行けない。", terrains_info[g_ptr->get_feat_mimic()].name.data()), "Too hot to go through."));
             energy.reset_player_turn();
             can_move = false;
             disturb(player_ptr, false, true);

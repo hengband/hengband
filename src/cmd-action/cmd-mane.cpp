@@ -92,23 +92,23 @@ static std::string mane_info(PlayerType *player_ptr, MonsterAbilityType power, i
         Mat::PSY_SPEAR, Mat::BO_VOID, Mat::BO_ABYSS, Mat::BA_VOID, Mat::BA_ABYSS, Mat::BR_VOID, Mat::BR_ABYSS
     };
     if ((power_int > 2 && power_int < 41) || (power_int > 41 && power_int < 59) || flags.has(power)) {
-        return format(" %s%d", KWD_DAM, (int)dam);
+        return angband::format(" %s%d", KWD_DAM, (int)dam);
     }
     switch (power) {
     case MonsterAbilityType::DRAIN_MANA:
-        return format(" %sd%d+%d", KWD_HEAL, plev * 3, plev);
+        return angband::format(" %sd%d+%d", KWD_HEAL, plev * 3, plev);
     case MonsterAbilityType::HASTE:
-        return format(" %sd%d+%d", KWD_DURATION, 20 + plev, plev);
+        return angband::format(" %sd%d+%d", KWD_DURATION, 20 + plev, plev);
     case MonsterAbilityType::HEAL:
-        return format(" %s%d", KWD_HEAL, plev * 6);
+        return angband::format(" %s%d", KWD_HEAL, plev * 6);
     case MonsterAbilityType::INVULNER:
-        return format(" %sd7+7", KWD_DURATION);
+        return angband::format(" %sd7+7", KWD_DURATION);
     case MonsterAbilityType::BLINK:
-        return format(" %s10", KWD_SPHERE);
+        return angband::format(" %s10", KWD_SPHERE);
     case MonsterAbilityType::TPORT:
-        return format(" %s%d", KWD_SPHERE, plev * 5);
+        return angband::format(" %s%d", KWD_SPHERE, plev * 5);
     case MonsterAbilityType::RAISE_DEAD:
-        return format(" %s5", KWD_SPHERE);
+        return angband::format(" %s5", KWD_SPHERE);
     default:
         return std::string();
     }
@@ -226,7 +226,7 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
                     const auto comment = mane_info(player_ptr, mane.spell, (baigaesi ? mane.damage * 2 : mane.damage));
 
                     /* Dump the spell --(-- */
-                    prt(format("  %c) %-30s %3d%%%s", I2A(i), spell.name, chance, comment.data()), y + i + 1, x);
+                    prt(angband::format("  %c) %-30s %3d%%%s", I2A(i), spell.name, chance, comment.data()), y + i + 1, x);
                 }
 
                 /* Clear the bottom line */

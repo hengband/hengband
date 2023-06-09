@@ -102,7 +102,7 @@ static void show_weapon_dmg(int r, int c, int mindice, int maxdice, int blows, i
     c_put_str(color, attr, r, c);
     int mindam = blows * (mindice + dam_bonus);
     int maxdam = blows * (maxdice + dam_bonus);
-    put_str(format(_("１ターン: %d-%d ダメージ", "Attack: %d-%d damage"), mindam, maxdam), r, c + 8);
+    put_str(angband::format(_("１ターン: %d-%d ダメージ", "Attack: %d-%d damage"), mindam, maxdam), r, c + 8);
 }
 
 /*!
@@ -315,10 +315,10 @@ static void list_weapon(PlayerType *player_ptr, ItemEntity *o_ptr, TERM_LEN row,
     const auto hit_reliability = player_ptr->skill_thn + (player_ptr->to_h[0] + o_ptr->to_h) * BTH_PLUS_ADJ;
     const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
     c_put_str(TERM_YELLOW, item_name, row, col);
-    put_str(format(_("攻撃回数: %d", "Number of Blows: %d"), player_ptr->num_blow[0]), row + 1, col);
+    put_str(angband::format(_("攻撃回数: %d", "Number of Blows: %d"), player_ptr->num_blow[0]), row + 1, col);
 
     put_str(_("命中率:  0  50 100 150 200 (敵のAC)", "To Hit:  0  50 100 150 200 (AC)"), row + 2, col);
-    put_str(format("        %2d  %2d  %2d  %2d  %2d (%%)",
+    put_str(angband::format("        %2d  %2d  %2d  %2d  %2d (%%)",
                 (int)hit_chance(player_ptr, hit_reliability, 0),
                 (int)hit_chance(player_ptr, hit_reliability, 50),
                 (int)hit_chance(player_ptr, hit_reliability, 100),
@@ -327,12 +327,12 @@ static void list_weapon(PlayerType *player_ptr, ItemEntity *o_ptr, TERM_LEN row,
         row + 3, col);
     c_put_str(TERM_YELLOW, _("可能なダメージ:", "Possible Damage:"), row + 5, col);
 
-    put_str(format(_("攻撃一回につき %d-%d", "One Strike: %d-%d damage"),
+    put_str(angband::format(_("攻撃一回につき %d-%d", "One Strike: %d-%d damage"),
                 (int)(eff_dd + o_ptr->to_d + player_ptr->to_d[0]),
                 (int)(eff_ds * eff_dd + o_ptr->to_d + player_ptr->to_d[0])),
         row + 6, col + 1);
 
-    put_str(format(_("１ターンにつき %d-%d", "One Attack: %d-%d damage"),
+    put_str(angband::format(_("１ターンにつき %d-%d", "One Attack: %d-%d damage"),
                 (int)(player_ptr->num_blow[0] * (eff_dd + o_ptr->to_d + player_ptr->to_d[0])),
                 (int)(player_ptr->num_blow[0] * (eff_ds * eff_dd + o_ptr->to_d + player_ptr->to_d[0]))),
         row + 7, col + 1);
@@ -399,11 +399,11 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
 
         w_ptr->character_xtra = old_character_xtra;
 #ifdef JP
-        put_str(format("[ 比較対象: 's'で変更 ($%d) ]", cost), 1, (wid + mgn));
+        put_str(angband::format("[ 比較対象: 's'で変更 ($%d) ]", cost), 1, (wid + mgn));
         put_str("(一番高いダメージが適用されます。複数の倍打効果は足し算されません。)", row + 4, 0);
         prt("現在の技量から判断すると、あなたの武器は以下のような威力を発揮します:", 0, 0);
 #else
-        put_str(format("[ 's' Select secondary weapon($%d) ]", cost), 1, (wid + mgn));
+        put_str(angband::format("[ 's' Select secondary weapon($%d) ]", cost), 1, (wid + mgn));
         put_str("(Only highest damage applies per monster. Special damage not cumulative.)", row + 4, 0);
         prt("Based on your current abilities, here is what your weapons will do", 0, 0);
 #endif

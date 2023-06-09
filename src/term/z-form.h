@@ -10,9 +10,12 @@
 #include "system/h-basic.h"
 #include <string>
 
+namespace angband {
+std::string format(const char *fmt, ...) __attribute__((angband::format(printf, 1, 2)));
+}
+
 uint32_t vstrnfmt(char *buf, uint32_t max, const char *fmt, va_list vp);
-uint32_t strnfmt(char *buf, uint32_t max, const char *fmt, ...) __attribute__((format(printf, 3, 4)));
-std::string format(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
-void plog_fmt(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
-void quit_fmt(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
-void core_fmt(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
+uint32_t strnfmt(char *buf, uint32_t max, const char *fmt, ...) __attribute__((angband::format(printf, 3, 4)));
+void plog_fmt(const char *fmt, ...) __attribute__((angband::format(printf, 1, 2)));
+void quit_fmt(const char *fmt, ...) __attribute__((angband::format(printf, 1, 2)));
+void core_fmt(const char *fmt, ...) __attribute__((angband::format(printf, 1, 2)));

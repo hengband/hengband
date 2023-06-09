@@ -45,8 +45,8 @@ bool eval_ac(ARMOUR_CLASS iAC)
     screen_save();
     clear_bldg(0, 22);
 
-    put_str(format(_("あなたの現在のAC: %3d", "Your current AC : %3d"), iAC), row++, 0);
-    put_str(format(_("ダメージ軽減率  : %3d%%", "Protection rate : %3d%%"), protection), row++, 0);
+    put_str(angband::format(_("あなたの現在のAC: %3d", "Your current AC : %3d"), iAC), row++, 0);
+    put_str(angband::format(_("ダメージ軽減率  : %3d%%", "Protection rate : %3d%%"), protection), row++, 0);
     row++;
 
     put_str(_("敵のレベル      :", "Level of Monster:"), row + 0, 0);
@@ -58,15 +58,15 @@ bool eval_ac(ARMOUR_CLASS iAC)
         int dodge; /* 回避率(%) */
         int average; /* ダメージ期待値 */
 
-        put_str(format("%3d", lvl), row + 0, col);
+        put_str(angband::format("%3d", lvl), row + 0, col);
 
         /* 回避率を計算 */
         dodge = 5 + (std::min(100, 100 * (iAC * 3 / 4) / quality) * 9 + 5) / 10;
-        put_str(format("%3d%%", dodge), row + 1, col);
+        put_str(angband::format("%3d%%", dodge), row + 1, col);
 
         /* 100点の攻撃に対してのダメージ期待値を計算 */
         average = (100 - dodge) * (100 - protection) / 100;
-        put_str(format("%3d", average), row + 2, col);
+        put_str(angband::format("%3d", average), row + 2, col);
     }
 
     display_wrap_around(memo, 70, row + 4, 4);

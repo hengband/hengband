@@ -755,7 +755,7 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
             DICE_SID e_sides = plev * 3;
 
             if (info) {
-                return format("%s1d%d+1d%d", KWD_DAM, m_sides, e_sides);
+                return angband::format("%s1d%d+1d%d", KWD_DAM, m_sides, e_sides);
             }
 
             if (cont) {

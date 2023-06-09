@@ -30,7 +30,7 @@
 void store_prt_gold(PlayerType *player_ptr)
 {
     prt(_("手持ちのお金: ", "Gold Remaining: "), 19 + xtra_stock, 53);
-    prt(format("%9ld", (long)player_ptr->au), 19 + xtra_stock, 68);
+    prt(angband::format("%9ld", (long)player_ptr->au), 19 + xtra_stock, 68);
 }
 
 /*!
@@ -46,7 +46,7 @@ void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
     int i = (pos % store_bottom);
 
     /* Label it, clear the line --(-- */
-    prt(format("%c) ", ((i > 25) ? toupper(I2A(i - 26)) : I2A(i))), i + 6, 0);
+    prt(angband::format("%c) ", ((i > 25) ? toupper(I2A(i - 26)) : I2A(i))), i + 6, 0);
 
     int cur_col = 3;
     if (show_item_graph) {
@@ -73,7 +73,7 @@ void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
 
         if (show_weights) {
             WEIGHT wgt = o_ptr->weight;
-            put_str(format(_("%3d.%1d kg", "%3d.%d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10)), i + 6, _(67, 68));
+            put_str(angband::format(_("%3d.%1d kg", "%3d.%d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10)), i + 6, _(67, 68));
         }
 
         return;
@@ -89,11 +89,11 @@ void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
 
     if (show_weights) {
         int wgt = o_ptr->weight;
-        put_str(format("%3d.%1d", _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10)), i + 6, _(60, 61));
+        put_str(angband::format("%3d.%1d", _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10)), i + 6, _(60, 61));
     }
 
     const auto price = price_item(player_ptr, o_ptr, ot_ptr->inflate, false, store_num);
-    put_str(format("%9ld  ", (long)price), i + 6, 68);
+    put_str(angband::format("%9ld  ", (long)price), i + 6, 68);
 }
 
 /*!
@@ -121,7 +121,7 @@ void display_store_inventory(PlayerType *player_ptr, StoreSaleType store_num)
     put_str(_("          ", "        "), 5, _(20, 22));
     if (st_ptr->stock_num > store_bottom) {
         prt(_("-続く-", "-more-"), k + 6, 3);
-        put_str(format(_("(%dページ)  ", "(Page %d)  "), store_top / store_bottom + 1), 5, _(20, 22));
+        put_str(angband::format(_("(%dページ)  ", "(Page %d)  "), store_top / store_bottom + 1), 5, _(20, 22));
     }
 
     if (store_num == StoreSaleType::HOME || store_num == StoreSaleType::MUSEUM) {
@@ -130,7 +130,7 @@ void display_store_inventory(PlayerType *player_ptr, StoreSaleType store_num)
             k /= 10;
         }
 
-        put_str(format(_("アイテム数:  %4d/%4d", "Objects:  %4d/%4d"), st_ptr->stock_num, k), 19 + xtra_stock, _(27, 30));
+        put_str(angband::format(_("アイテム数:  %4d/%4d", "Objects:  %4d/%4d"), st_ptr->stock_num, k), 19 + xtra_stock, _(27, 30));
     }
 }
 
@@ -170,9 +170,9 @@ void display_store(PlayerType *player_ptr, StoreSaleType store_num)
     concptr store_name = terrains_info[cur_store_feat].name.data();
     concptr owner_name = (ot_ptr->owner_name);
     concptr race_name = race_info[enum2i(ot_ptr->owner_race)].title;
-    put_str(format("%s (%s)", owner_name, race_name), 3, 10);
+    put_str(angband::format("%s (%s)", owner_name, race_name), 3, 10);
 
-    prt(format("%s (%ld)", store_name, (long)(ot_ptr->max_cost)), 3, 50);
+    prt(angband::format("%s (%ld)", store_name, (long)(ot_ptr->max_cost)), 3, 50);
 
     put_str(_("商品の一覧", "Item Description"), 5, 5);
     if (show_weights) {

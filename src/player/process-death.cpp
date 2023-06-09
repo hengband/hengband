@@ -70,11 +70,11 @@ static void show_tomb_line(std::string_view str, int row)
  */
 static void show_basic_params(PlayerType *player_ptr)
 {
-    show_tomb_line(format(_("レベル: %d", "Level: %d"), (int)player_ptr->lev), GRAVE_LEVEL_ROW);
+    show_tomb_line(angband::format(_("レベル: %d", "Level: %d"), (int)player_ptr->lev), GRAVE_LEVEL_ROW);
 
-    show_tomb_line(format(_("経験値: %ld", "Exp: %ld"), (long)player_ptr->exp), GRAVE_EXP_ROW);
+    show_tomb_line(angband::format(_("経験値: %ld", "Exp: %ld"), (long)player_ptr->exp), GRAVE_EXP_ROW);
 
-    show_tomb_line(format(_("所持金: %ld", "AU: %ld"), (long)player_ptr->au), GRAVE_AU_ROW);
+    show_tomb_line(angband::format(_("所持金: %ld", "AU: %ld"), (long)player_ptr->au), GRAVE_AU_ROW);
 }
 
 #ifdef JP
@@ -141,14 +141,14 @@ static void show_dead_place(PlayerType *player_ptr, int extra_line)
     if (player_ptr->current_floor_ptr->dun_level == 0) {
         concptr field_name = player_ptr->town_num ? "街" : "荒野";
         if (streq(player_ptr->died_from, "途中終了")) {
-            place = format("%sで死んだ", field_name);
+            place = angband::format("%sで死んだ", field_name);
         } else {
-            place = format("に%sで殺された", field_name);
+            place = angband::format("に%sで殺された", field_name);
         }
     } else if (streq(player_ptr->died_from, "途中終了")) {
-        place = format("地下 %d 階で死んだ", (int)player_ptr->current_floor_ptr->dun_level);
+        place = angband::format("地下 %d 階で死んだ", (int)player_ptr->current_floor_ptr->dun_level);
     } else {
-        place = format("に地下 %d 階で殺された", (int)player_ptr->current_floor_ptr->dun_level);
+        place = angband::format("に地下 %d 階で殺された", (int)player_ptr->current_floor_ptr->dun_level);
     }
 
     show_tomb_line(place, GRAVE_DEAD_PLACE_ROW + extra_line);
@@ -182,9 +182,9 @@ static void show_tomb_detail(PlayerType *player_ptr)
  */
 static void show_tomb_detail(PlayerType *player_ptr)
 {
-    show_tomb_line(format("Killed on Level %d", player_ptr->current_floor_ptr->dun_level), GRAVE_DEAD_PLACE_ROW);
+    show_tomb_line(angband::format("Killed on Level %d", player_ptr->current_floor_ptr->dun_level), GRAVE_DEAD_PLACE_ROW);
 
-    auto lines = shape_buffer(format("by %s.", player_ptr->died_from.data()).data(), GRAVE_LINE_WIDTH + 1);
+    auto lines = shape_buffer(angband::format("by %s.", player_ptr->died_from.data()).data(), GRAVE_LINE_WIDTH + 1);
     show_tomb_line(lines[0], GRAVE_KILLER_NAME_ROW);
     if (lines.size() == 1) {
         return;
@@ -227,7 +227,7 @@ void print_tomb(PlayerType *player_ptr)
     show_tomb_detail(player_ptr);
 
     time_t ct = time((time_t *)0);
-    show_tomb_line(format("%-.24s", ctime(&ct)), GRAVE_DEAD_DATETIME_ROW);
+    show_tomb_line(angband::format("%-.24s", ctime(&ct)), GRAVE_DEAD_DATETIME_ROW);
     msg_format(_("さようなら、%s!", "Goodbye, %s!"), player_ptr->name);
 }
 
@@ -314,12 +314,12 @@ static void show_dead_home_items(PlayerType *player_ptr)
             term_clear();
             for (int j = 0; (j < 12) && (i < store_ptr->stock_num); j++, i++) {
                 const auto *o_ptr = &store_ptr->stock[i];
-                prt(format("%c) ", I2A(j)), j + 2, 4);
+                prt(angband::format("%c) ", I2A(j)), j + 2, 4);
                 const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
                 c_put_str(tval_to_attr[enum2i(o_ptr->bi_key.tval())], item_name, j + 2, 7);
             }
 
-            prt(format(_("我が家に置いてあったアイテム ( %d ページ): -続く-", "Your home contains (page %d): -more-"), k + 1), 0, 0);
+            prt(angband::format(_("我が家に置いてあったアイテム ( %d ページ): -続く-", "Your home contains (page %d): -more-"), k + 1), 0, 0);
             if (inkey() == ESCAPE) {
                 return;
             }

@@ -6,73 +6,73 @@
  * @detail
  * Legal format characters: %,n,p,c,s,d,i,o,u,X,x,E,e,F,f,G,g.
  *
- * Format("%%")
+ * angband::format("%%")
  *   Append the literal "%".
  *   No legal modifiers.
  *
- * Format("%n", int *np)
+ * angband::format("%n", int *np)
  *   Save the current length into (*np).
  *   No legal modifiers.
  *
- * Format("%p", vptr v)
+ * angband::format("%p", vptr v)
  *   Append the pointer "v" (implementation varies).
  *   No legal modifiers.
  *
- * Format("%E", double r)
- * Format("%F", double r)
- * Format("%G", double r)
- * Format("%e", double r)
- * Format("%f", double r)
- * Format("%g", double r)
+ * angband::format("%E", double r)
+ * angband::format("%F", double r)
+ * angband::format("%G", double r)
+ * angband::format("%e", double r)
+ * angband::format("%f", double r)
+ * angband::format("%g", double r)
  *   Append the double "r", in various formats.
  *
- * Format("%LE", long double r)
- * Format("%LF", long double r)
- * Format("%LG", long double r)
- * Format("%Le", long double r)
- * Format("%Lf", long double r)
- * Format("%Lg", long double r)
+ * angband::format("%LE", long double r)
+ * angband::format("%LF", long double r)
+ * angband::format("%LG", long double r)
+ * angband::format("%Le", long double r)
+ * angband::format("%Lf", long double r)
+ * angband::format("%Lg", long double r)
  *   Append the long double "r", in various formats.
  *
- * Format("%ld", long int i)
+ * angband::format("%ld", long int i)
  *   Append the long integer "i".
  *
- * Format("%lld", long long int i)
+ * angband::format("%lld", long long int i)
  *   Append the long long integer "i".
  *
- * Format("%d", int i)
+ * angband::format("%d", int i)
  *   Append the integer "i".
  *
- * Format("%lu", unsigned long int i)
+ * angband::format("%lu", unsigned long int i)
  *   Append the unsigned long integer "i".
  *
- * Format("%llu", unsigned long long int i)
+ * angband::format("%llu", unsigned long long int i)
  *   Append the unsigned long long integer "i".
  *
- * Format("%u", unsigned int i)
+ * angband::format("%u", unsigned int i)
  *   Append the unsigned integer "i".
  *
- * Format("%lo", unsigned long int i)
+ * angband::format("%lo", unsigned long int i)
  *   Append the unsigned long integer "i", in octal.
  *
- * Format("%o", unsigned int i)
+ * angband::format("%o", unsigned int i)
  *   Append the unsigned integer "i", in octal.
  *
- * Format("%lX", unsigned long int i)
+ * angband::format("%lX", unsigned long int i)
  *   Note -- use all capital letters
- * Format("%lx", unsigned long int i)
+ * angband::format("%lx", unsigned long int i)
  *   Append the unsigned long integer "i", in hexidecimal.
  *
- * Format("%X", unsigned int i)
+ * angband::format("%X", unsigned int i)
  *   Note -- use all capital letters
- * Format("%x", unsigned int i)
+ * angband::format("%x", unsigned int i)
  *   Append the unsigned integer "i", in hexidecimal.
  *
- * Format("%c", char c)
+ * angband::format("%c", char c)
  *   Append the character "c".
  *   Do not use the "+" or "0" flags.
  *
- * Format("%s", const char *s)
+ * angband::format("%s", const char *s)
  *   Append the string "s".
  *   Do not use the "+" or "0" flags.
  *   Note that a "nullptr" value of "s" is converted to the empty string.
@@ -97,6 +97,23 @@ std::string vformat(const char *fmt, va_list vp)
 
         format_buf.resize(format_buf.size() * 2);
     }
+}
+}
+
+/*
+ * Do a vstrnfmt() into (see above) into a (growable) static buffer.
+ * This buffer is usable for very short term formatting of results.
+ * Note that the buffer is (technically) writable, but only up to
+ * the length of the string contained inside it.
+ */
+namespace angband {
+std::string format(const char *fmt, ...)
+{
+    va_list vp;
+    va_start(vp, fmt);
+    auto res = vformat(fmt, vp);
+    va_end(vp);
+    return res;
 }
 }
 
@@ -358,21 +375,6 @@ uint32_t strnfmt(char *buf, uint32_t max, const char *fmt, ...)
     auto len = vstrnfmt(buf, max, fmt, vp);
     va_end(vp);
     return len;
-}
-
-/*
- * Do a vstrnfmt() into (see above) into a (growable) static buffer.
- * This buffer is usable for very short term formatting of results.
- * Note that the buffer is (technically) writable, but only up to
- * the length of the string contained inside it.
- */
-std::string format(const char *fmt, ...)
-{
-    va_list vp;
-    va_start(vp, fmt);
-    auto res = vformat(fmt, vp);
-    va_end(vp);
-    return res;
 }
 
 /*

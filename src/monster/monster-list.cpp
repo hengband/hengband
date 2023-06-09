@@ -385,7 +385,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
         if (!(r_ptr->flags7 & RF7_RIDING)) {
             if (process_fall_off_horse(player_ptr, 0, true)) {
                 const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-                msg_print(_("地面に落とされた。", format("You have fallen from %s.", m_name.data())));
+                msg_print(_("地面に落とされた。", angband::format("You have fallen from %s.", m_name.data())));
             }
         }
     }

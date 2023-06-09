@@ -807,7 +807,7 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
         auto statue_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
         auto *r_ptr = &monraces_info[statue_r_idx];
         int namelen = strlen(r_ptr->name.data());
-        prt(format("%s: '", r_ptr->name.data()), 1, 15);
+        prt(angband::format("%s: '", r_ptr->name.data()), 1, 15);
         term_queue_bigchar(18 + namelen, 1, r_ptr->x_attr, r_ptr->x_char, 0, 0);
         prt("'", 1, (use_bigtile ? 20 : 19) + namelen);
     } else {

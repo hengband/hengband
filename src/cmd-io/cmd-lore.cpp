@@ -81,11 +81,11 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
             temp[0] = 0;
             return;
         }
-        buf = format(_("名前:%sにマッチ", "Monsters' names with \"%s\""), temp);
+        buf = angband::format(_("名前:%sにマッチ", "Monsters' names with \"%s\""), temp);
     } else if (ident_info[ident_i]) {
-        buf = format("%c - %s.", sym, ident_info[ident_i] + 2);
+        buf = angband::format("%c - %s.", sym, ident_info[ident_i] + 2);
     } else {
-        buf = format("%c - %s", sym, _("無効な文字", "Unknown Symbol"));
+        buf = angband::format("%c - %s", sym, _("無効な文字", "Unknown Symbol"));
     }
 
     prt(buf, 0, 0);

@@ -227,7 +227,7 @@ bool MindPowerGetter::display_minds_chance(const bool only_browse)
 
         prt("", y, x);
         put_str(_("名前", "Name"), y, x + 5);
-        put_str(format(_("Lv   %s   失率 効果", "Lv   %s   Fail Info"),
+        put_str(angband::format(_("Lv   %s   失率 効果", "Lv   %s   Fail Info"),
                     ((this->use_mind == MindKindType::BERSERKER) || (this->use_mind == MindKindType::NINJUTSU)) ? "HP" : "MP"),
             y, x + 35);
         display_each_mind_chance();
@@ -265,10 +265,10 @@ void MindPowerGetter::display_each_mind_chance()
                 psi_desc = "     ";
             }
         } else {
-            psi_desc = format("  %c) ", I2A(this->index));
+            psi_desc = angband::format("  %c) ", I2A(this->index));
         }
 
-        psi_desc.append(format("%-30s%2d %4d%s %3d%%%s", this->spell->name, this->spell->min_lev, mana_cost,
+        psi_desc.append(angband::format("%-30s%2d %4d%s %3d%%%s", this->spell->name, this->spell->min_lev, mana_cost,
             (((this->use_mind == MindKindType::MINDCRAFTER) && (this->index == 13)) ? _("～", "~ ") : "  "), chance, comment.data()));
         prt(psi_desc, y + this->index + 1, x);
     }

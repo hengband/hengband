@@ -85,7 +85,7 @@ void display_buikding_service(PlayerType *player_ptr, building_type *bldg)
     byte action_color;
 
     term_clear();
-    prt(format("%s (%s) %35s", bldg->owner_name, bldg->owner_race, bldg->name), 2, 1);
+    prt(angband::format("%s (%s) %35s", bldg->owner_name, bldg->owner_race, bldg->name), 2, 1);
 
     for (int i = 0; i < 8; i++) {
         if (!bldg->letters[i]) {
@@ -98,13 +98,13 @@ void display_buikding_service(PlayerType *player_ptr, building_type *bldg)
                 action_color = TERM_WHITE;
             } else if (is_owner(player_ptr, bldg)) {
                 action_color = TERM_YELLOW;
-                buff = format(_("($%ld)", "(%ldgp)"), (long int)bldg->member_costs[i]);
+                buff = angband::format(_("($%ld)", "(%ldgp)"), (long int)bldg->member_costs[i]);
             } else {
                 action_color = TERM_YELLOW;
-                buff = format(_("($%ld)", "(%ldgp)"), (long int)bldg->other_costs[i]);
+                buff = angband::format(_("($%ld)", "(%ldgp)"), (long int)bldg->other_costs[i]);
             }
 
-            c_put_str(action_color, format(" %c) %s %s", bldg->letters[i], bldg->act_names[i], buff.data()), 19 + (i / 2), 35 * (i % 2));
+            c_put_str(action_color, angband::format(" %c) %s %s", bldg->letters[i], bldg->act_names[i], buff.data()), 19 + (i / 2), 35 * (i % 2));
             continue;
         }
 
@@ -116,13 +116,13 @@ void display_buikding_service(PlayerType *player_ptr, building_type *bldg)
                 action_color = TERM_WHITE;
             } else if (is_owner(player_ptr, bldg)) {
                 action_color = TERM_YELLOW;
-                buff = format(_("($%ld)", "(%ldgp)"), (long int)bldg->member_costs[i]);
+                buff = angband::format(_("($%ld)", "(%ldgp)"), (long int)bldg->member_costs[i]);
             } else {
                 action_color = TERM_YELLOW;
-                buff = format(_("($%ld)", "(%ldgp)"), (long int)bldg->other_costs[i]);
+                buff = angband::format(_("($%ld)", "(%ldgp)"), (long int)bldg->other_costs[i]);
             }
 
-            c_put_str(action_color, format(" %c) %s %s", bldg->letters[i], bldg->act_names[i], buff.data()), 19 + (i / 2), 35 * (i % 2));
+            c_put_str(action_color, angband::format(" %c) %s %s", bldg->letters[i], bldg->act_names[i], buff.data()), 19 + (i / 2), 35 * (i % 2));
             continue;
         }
 
@@ -131,12 +131,12 @@ void display_buikding_service(PlayerType *player_ptr, building_type *bldg)
             buff = _("(閉店)", "(closed)");
         } else if (bldg->member_costs[i] != 0) {
             action_color = TERM_YELLOW;
-            buff = format(_("($%ld)", "(%ldgp)"), (long int)bldg->member_costs[i]);
+            buff = angband::format(_("($%ld)", "(%ldgp)"), (long int)bldg->member_costs[i]);
         } else {
             action_color = TERM_WHITE;
         }
 
-        c_put_str(action_color, format(" %c) %s %s", bldg->letters[i], bldg->act_names[i], buff.data()), 19 + (i / 2), 35 * (i % 2));
+        c_put_str(action_color, angband::format(" %c) %s %s", bldg->letters[i], bldg->act_names[i], buff.data()), 19 + (i / 2), 35 * (i % 2));
     }
 
     prt(_(" ESC) 建物を出る", " ESC) Exit building"), 23, 0);

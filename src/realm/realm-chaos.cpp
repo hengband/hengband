@@ -694,7 +694,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             if (info) {
-                return format("%s150 / 250", KWD_DAM);
+                return angband::format("%s150 / 250", KWD_DAM);
             }
 
             if (cast) {
@@ -782,7 +782,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
         {
             if (info) {
-                return format("%s3 * 175", KWD_DAM);
+                return angband::format("%s3 * 175", KWD_DAM);
             }
 
             if (cast) {

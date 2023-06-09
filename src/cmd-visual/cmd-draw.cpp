@@ -161,7 +161,7 @@ void do_cmd_player_status(PlayerType *player_ptr)
  */
 void do_cmd_message_one(void)
 {
-    prt(format("> %s", message_str(0)), 0, 0);
+    prt(angband::format("> %s", message_str(0)), 0, 0);
 }
 
 /*!
@@ -221,7 +221,7 @@ void do_cmd_messages(int num_now)
             term_erase(0, num_lines + 1 - j, 255);
         }
 
-        prt(format(_("以前のメッセージ %d-%d 全部で(%d)", "Message Recall (%d-%d of %d)"), i, i + j - 1, n), 0, 0);
+        prt(angband::format(_("以前のメッセージ %d-%d 全部で(%d)", "Message Recall (%d-%d of %d)"), i, i + j - 1, n), 0, 0);
         prt(_("[ 'p' で更に古いもの, 'n' で更に新しいもの, '/' で検索, ESC で中断 ]", "[Press 'p' for older, 'n' for newer, ..., or ESCAPE]"), hgt - 1, 0);
         skey = inkey_special(true);
         if (skey == ESCAPE) {

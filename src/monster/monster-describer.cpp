@@ -162,10 +162,10 @@ static std::string replace_monster_name_undefined(std::string_view name)
     if (name.starts_with("』")) {
         constexpr auto ja_char_length = 2;
         const auto name_without_brackets = name.substr(0, name.length() - ja_char_length);
-        return format("%s？』", name_without_brackets.data());
+        return angband::format("%s？』", name_without_brackets.data());
     }
 
-    return format("%s？", name.data());
+    return angband::format("%s？", name.data());
 }
 #endif
 
@@ -178,11 +178,11 @@ static std::optional<std::string> get_fake_monster_name(const PlayerType &player
     }
 
     if (monster.mflag2.has(MonsterConstantFlagType::CHAMELEON) && none_bits(mode, MD_TRUE_NAME)) {
-        return _(replace_monster_name_undefined(name), format("%s?", name.data()));
+        return _(replace_monster_name_undefined(name), angband::format("%s?", name.data()));
     }
 
     if (player.phase_out && !(player.riding && (&player.current_floor_ptr->m_list[player.riding] == &monster))) {
-        return format(_("%sもどき", "fake %s"), name.data());
+        return angband::format(_("%sもどき", "fake %s"), name.data());
     }
 
     return name;
@@ -255,7 +255,7 @@ std::string monster_desc(PlayerType *player_ptr, const MonsterEntity *m_ptr, BIT
     const auto name = get_describing_monster_name(*m_ptr, is_hallucinated, mode);
     std::stringstream ss;
     if (m_ptr->is_pet() && !m_ptr->is_original_ap()) {
-        ss << _(replace_monster_name_undefined(name), format("%s?", name.data()));
+        ss << _(replace_monster_name_undefined(name), angband::format("%s?", name.data()));
     } else {
         ss << describe_non_pet(*player_ptr, *m_ptr, name, mode);
     }

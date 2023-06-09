@@ -12,7 +12,7 @@ void display_monster_breath(lore_type *lore_ptr)
     }
 
     lore_ptr->breath = true;
-    hooked_roff(format(_("%s^は", "%s^"), Who::who(lore_ptr->msex)));
+    hooked_roff(angband::format(_("%s^は", "%s^"), Who::who(lore_ptr->msex)));
     for (int n = 0; n < lore_ptr->vn; n++) {
 #ifdef JP
         if (n != 0) {
@@ -46,7 +46,7 @@ void display_monster_magic_types(lore_type *lore_ptr)
     if (lore_ptr->breath) {
         hooked_roff(_("、なおかつ", ", and is also"));
     } else {
-        hooked_roff(format(_("%s^は", "%s^ is"), Who::who(lore_ptr->msex)));
+        hooked_roff(angband::format(_("%s^は", "%s^ is"), Who::who(lore_ptr->msex)));
     }
 
 #ifdef JP
@@ -93,10 +93,10 @@ void display_mosnter_magic_possibility(lore_type *lore_ptr)
     int m = lore_ptr->r_ptr->r_cast_spell;
     int n = lore_ptr->r_ptr->freq_spell;
     if (m > 100 || lore_ptr->know_everything) {
-        hooked_roff(format(_("(確率:1/%d)", "; 1 time in %d"), 100 / n));
+        hooked_roff(angband::format(_("(確率:1/%d)", "; 1 time in %d"), 100 / n));
     } else if (m) {
         n = ((n + 9) / 10) * 10;
-        hooked_roff(format(_("(確率:約1/%d)", "; about 1 time in %d"), 100 / n));
+        hooked_roff(angband::format(_("(確率:約1/%d)", "; about 1 time in %d"), 100 / n));
     }
 
     hooked_roff(_("。", ".  "));

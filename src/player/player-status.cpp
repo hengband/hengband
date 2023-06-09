@@ -2975,12 +2975,12 @@ void check_experience(PlayerType *player_ptr)
                 while (true) {
                     int n;
 
-                    prt(format(_("        a) 腕力 (現在値 %s)", "        a) Str (cur %s)"), cnv_stat(player_ptr->stat_max[0]).data()), 2, 14);
-                    prt(format(_("        b) 知能 (現在値 %s)", "        b) Int (cur %s)"), cnv_stat(player_ptr->stat_max[1]).data()), 3, 14);
-                    prt(format(_("        c) 賢さ (現在値 %s)", "        c) Wis (cur %s)"), cnv_stat(player_ptr->stat_max[2]).data()), 4, 14);
-                    prt(format(_("        d) 器用 (現在値 %s)", "        d) Dex (cur %s)"), cnv_stat(player_ptr->stat_max[3]).data()), 5, 14);
-                    prt(format(_("        e) 耐久 (現在値 %s)", "        e) Con (cur %s)"), cnv_stat(player_ptr->stat_max[4]).data()), 6, 14);
-                    prt(format(_("        f) 魅力 (現在値 %s)", "        f) Chr (cur %s)"), cnv_stat(player_ptr->stat_max[5]).data()), 7, 14);
+                    prt(angband::format(_("        a) 腕力 (現在値 %s)", "        a) Str (cur %s)"), cnv_stat(player_ptr->stat_max[0]).data()), 2, 14);
+                    prt(angband::format(_("        b) 知能 (現在値 %s)", "        b) Int (cur %s)"), cnv_stat(player_ptr->stat_max[1]).data()), 3, 14);
+                    prt(angband::format(_("        c) 賢さ (現在値 %s)", "        c) Wis (cur %s)"), cnv_stat(player_ptr->stat_max[2]).data()), 4, 14);
+                    prt(angband::format(_("        d) 器用 (現在値 %s)", "        d) Dex (cur %s)"), cnv_stat(player_ptr->stat_max[3]).data()), 5, 14);
+                    prt(angband::format(_("        e) 耐久 (現在値 %s)", "        e) Con (cur %s)"), cnv_stat(player_ptr->stat_max[4]).data()), 6, 14);
+                    prt(angband::format(_("        f) 魅力 (現在値 %s)", "        f) Chr (cur %s)"), cnv_stat(player_ptr->stat_max[5]).data()), 7, 14);
 
                     prt("", 8, 14);
                     prt(_("        どの能力値を上げますか？", "        Which stat do you want to raise?"), 1, 14);
@@ -3049,16 +3049,16 @@ void check_experience(PlayerType *player_ptr)
 std::string cnv_stat(int val)
 {
     if (val <= 18) {
-        return format("    %2d", val);
+        return angband::format("    %2d", val);
     }
 
     int bonus = (val - 18);
     if (bonus >= 220) {
         return "18/***";
     } else if (bonus >= 100) {
-        return format("18/%03d", bonus);
+        return angband::format("18/%03d", bonus);
     } else {
-        return format(" 18/%02d", bonus);
+        return angband::format(" 18/%02d", bonus);
     }
 }
 

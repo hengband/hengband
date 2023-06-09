@@ -121,7 +121,7 @@ static std::string evaluate_monster_exp(PlayerType *player_ptr, MonsterEntity *m
     s64b_div(&exp_adv, &exp_adv_frac, exp_mon, exp_mon_frac);
 
     auto num = std::min<uint>(999, exp_adv_frac);
-    return format("%03ld", (long int)num);
+    return angband::format("%03ld", (long int)num);
 }
 
 static void describe_scan_result(PlayerType *player_ptr, GridExamination *ge_ptr)
@@ -179,7 +179,7 @@ static bool describe_grid_lore(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
     screen_save();
     screen_roff(player_ptr, ge_ptr->m_ptr->ap_r_idx, MONSTER_LORE_NORMAL);
-    term_addstr(-1, TERM_WHITE, format(_("  [r思 %s%s]", "  [r,%s%s]"), ge_ptr->x_info, ge_ptr->info));
+    term_addstr(-1, TERM_WHITE, angband::format(_("  [r思 %s%s]", "  [r,%s%s]"), ge_ptr->x_info, ge_ptr->info));
     ge_ptr->query = inkey();
     screen_load();
     return ge_ptr->query != 'r';
@@ -464,7 +464,7 @@ static std::string decide_target_floor(PlayerType *player_ptr, GridExamination *
         init_flags = INIT_NAME_ONLY;
         parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
         floor_ptr->quest_number = old_quest;
-        return format(msg.data(), q_ptr->name.data(), q_ptr->level);
+        return angband::format(msg.data(), q_ptr->name.data(), q_ptr->level);
     }
 
     if (ge_ptr->f_ptr->flags.has(TerrainCharacteristics::BLDG) && !floor_ptr->inside_arena) {
@@ -473,7 +473,7 @@ static std::string decide_target_floor(PlayerType *player_ptr, GridExamination *
 
     if (ge_ptr->f_ptr->flags.has(TerrainCharacteristics::ENTRANCE)) {
         const auto &dungeon = dungeons_info[ge_ptr->g_ptr->special];
-        return format(_("%s(%d階相当)", "%s(level %d)"), dungeon.text.data(), dungeon.mindepth);
+        return angband::format(_("%s(%d階相当)", "%s(level %d)"), dungeon.text.data(), dungeon.mindepth);
     }
 
     if (ge_ptr->f_ptr->flags.has(TerrainCharacteristics::TOWN)) {
@@ -500,7 +500,7 @@ static void describe_grid_monster_all(GridExamination *ge_ptr)
 
     std::string f_idx_str;
     if (ge_ptr->g_ptr->mimic) {
-        f_idx_str = format("%d/%d", ge_ptr->g_ptr->feat, ge_ptr->g_ptr->mimic);
+        f_idx_str = angband::format("%d/%d", ge_ptr->g_ptr->feat, ge_ptr->g_ptr->mimic);
     } else {
         f_idx_str = std::to_string(ge_ptr->g_ptr->feat);
     }

@@ -549,7 +549,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
             int sides2 = plev * 2;
 
             if (info) {
-                return format("%sd%d+d%d", KWD_DAM, sides1, sides2);
+                return angband::format("%sd%d+d%d", KWD_DAM, sides1, sides2);
             }
 
             if (cast) {
@@ -660,7 +660,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
             POSITION rad = 3 + plev / 20;
 
             if (info) {
-                return format("%s%d+%d", KWD_DAM, dam / 2, dam / 2);
+                return angband::format("%s%d+%d", KWD_DAM, dam / 2, dam / 2);
             }
 
             if (cast) {

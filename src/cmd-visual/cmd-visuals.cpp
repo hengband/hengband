@@ -40,7 +40,7 @@ static bool cmd_visuals_aux(int i, IDX *num, IDX max)
     if (iscntrl(i)) {
         char str[10] = "";
         strnfmt(str, sizeof(str), "%d", *num);
-        if (!get_string(format("Input new number(0-%d): ", max - 1), str, 4)) {
+        if (!get_string(angband::format("Input new number(0-%d): ", max - 1), str, 4)) {
             return false;
         }
 
@@ -75,7 +75,7 @@ static void print_visuals_menu(concptr choice_msg)
     prt(_("(8) アイテムの   色/文字 を変更する (シンボルエディタ)", "(8) Change object attr/chars (visual mode)"), 11, 5);
     prt(_("(9) 地形の       色/文字 を変更する (シンボルエディタ)", "(9) Change feature attr/chars (visual mode)"), 12, 5);
     prt(_("(R) 画面表示方法の初期化", "(R) Reset visuals"), 13, 5);
-    prt(format(_("コマンド: %s", "Command: %s"), choice_msg ? choice_msg : _("", "")), 15, 0);
+    prt(angband::format(_("コマンド: %s", "Command: %s"), choice_msg ? choice_msg : _("", "")), 15, 0);
 }
 
 /*
@@ -215,7 +215,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             IDX num = 0;
             static concptr choice_msg = _("モンスターの[色/文字]を変更します", "Change monster attr/chars");
             static MonsterRaceId r = monraces_info.begin()->second.idx;
-            prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
+            prt(angband::format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
             while (true) {
                 auto *r_ptr = &monraces_info[r];
                 int c;
@@ -226,11 +226,11 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 TERM_COLOR ca = r_ptr->x_attr;
                 byte cc = r_ptr->x_char;
 
-                term_putstr(5, 17, -1, TERM_WHITE, format(_("モンスター = %d, 名前 = %-40.40s", "Monster = %d, Name = %-40.40s"), enum2i(r), r_ptr->name.data()));
-                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3u / %3u", "Default attr/char = %3u / %3u"), da, dc));
+                term_putstr(5, 17, -1, TERM_WHITE, angband::format(_("モンスター = %d, 名前 = %-40.40s", "Monster = %d, Name = %-40.40s"), enum2i(r), r_ptr->name.data()));
+                term_putstr(10, 19, -1, TERM_WHITE, angband::format(_("初期値  色 / 文字 = %3u / %3u", "Default attr/char = %3u / %3u"), da, dc));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 19, da, dc, 0, 0);
-                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3u / %3u", "Current attr/char = %3u / %3u"), ca, cc));
+                term_putstr(10, 20, -1, TERM_WHITE, angband::format(_("現在値  色 / 文字 = %3u / %3u", "Current attr/char = %3u / %3u"), ca, cc));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 20, ca, cc, 0, 0);
                 term_putstr(0, 22, -1, TERM_WHITE, _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
@@ -285,7 +285,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
         case '5': {
             static concptr choice_msg = _("アイテムの[色/文字]を変更します", "Change object attr/chars");
             static short k = 0;
-            prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
+            prt(angband::format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
             while (true) {
                 auto &baseitem = baseitems_info[k];
                 int c;
@@ -297,12 +297,12 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 auto cc = baseitem.x_char;
 
                 term_putstr(5, 17, -1, TERM_WHITE,
-                    format(
+                    angband::format(
                         _("アイテム = %d, 名前 = %-40.40s", "Object = %d, Name = %-40.40s"), k, (!baseitem.flavor ? baseitem.name : baseitem.flavor_name).data()));
-                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
+                term_putstr(10, 19, -1, TERM_WHITE, angband::format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 19, da, dc, 0, 0);
-                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), ca, cc));
+                term_putstr(10, 20, -1, TERM_WHITE, angband::format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), ca, cc));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 20, ca, cc, 0, 0);
                 term_putstr(0, 22, -1, TERM_WHITE, _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
@@ -358,7 +358,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             static concptr choice_msg = _("地形の[色/文字]を変更します", "Change feature attr/chars");
             static IDX f = 0;
             static IDX lighting_level = F_LIT_STANDARD;
-            prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
+            prt(angband::format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
             while (true) {
                 auto *f_ptr = &terrains_info[f];
                 int c;
@@ -371,12 +371,12 @@ void do_cmd_visuals(PlayerType *player_ptr)
 
                 prt("", 17, 5);
                 term_putstr(5, 17, -1, TERM_WHITE,
-                    format(_("地形 = %d, 名前 = %s, 明度 = %s", "Terrain = %d, Name = %s, Lighting = %s"), f, (f_ptr->name.data()),
+                    angband::format(_("地形 = %d, 名前 = %s, 明度 = %s", "Terrain = %d, Name = %s, Lighting = %s"), f, (f_ptr->name.data()),
                         lighting_level_str[lighting_level]));
-                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
+                term_putstr(10, 19, -1, TERM_WHITE, angband::format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 19, da, dc, 0, 0);
-                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), ca, cc));
+                term_putstr(10, 20, -1, TERM_WHITE, angband::format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), ca, cc));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 20, ca, cc, 0, 0);
                 term_putstr(0, 22, -1, TERM_WHITE,

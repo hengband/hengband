@@ -132,7 +132,7 @@ static std::optional<short> wiz_select_tval()
         auto row = 2 + (list % 20);
         auto col = _(32, 24) * (list / 20);
         ch = listsym[list];
-        prt(format("[%c] %s", ch, tvals[list].desc), row, col);
+        prt(angband::format("[%c] %s", ch, tvals[list].desc), row, col);
     }
 
     auto max_num = list;
@@ -172,12 +172,12 @@ static short wiz_select_sval(const ItemKindType tval, concptr tval_description)
         auto col = _(30, 32) * (num / 20);
         ch = listsym[num];
         const auto buf = strip_name(baseitem.idx);
-        prt(format("[%c] %s", ch, buf.data()), row, col);
+        prt(angband::format("[%c] %s", ch, buf.data()), row, col);
         choice[num++] = baseitem.idx;
     }
 
     auto max_num = num;
-    if (!get_com(format(_("%s群の具体的なアイテムを選んで下さい", "What Kind of %s? "), tval_description), &ch, false)) {
+    if (!get_com(angband::format(_("%s群の具体的なアイテムを選んで下さい", "What Kind of %s? "), tval_description), &ch, false)) {
         return 0;
     }
 
@@ -302,7 +302,7 @@ static std::optional<FixedArtifactId> wiz_select_named_artifact(PlayerType *play
             put_str(ss.str(), i + 1, 15);
         }
         if (page_max > 1) {
-            put_str(format("-- more (%lu/%lu) --", current_page + 1, page_max), page_item_count + 1, 15);
+            put_str(angband::format("-- more (%lu/%lu) --", current_page + 1, page_max), page_item_count + 1, 15);
         }
 
         char cmd = ESCAPE;
@@ -615,9 +615,9 @@ static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH de
     leave_quest_check(player_ptr);
     auto to = !floor.is_in_dungeon()
                   ? _("地上", "the surface")
-                  : format(_("%d階(%s)", "level %d of %s"), floor.dun_level, floor.get_dungeon_definition().name.data());
+                  : angband::format(_("%d階(%s)", "level %d of %s"), floor.dun_level, floor.get_dungeon_definition().name.data());
     constexpr auto mes = _("%sへとウィザード・テレポートで移動した。\n", "You wizard-teleported to %s.\n");
-    msg_print_wizard(player_ptr, 2, format(mes, to.data()));
+    msg_print_wizard(player_ptr, 2, angband::format(mes, to.data()));
     floor.quest_number = QuestId::NONE;
     PlayerEnergy(player_ptr).reset_player_turn();
     player_ptr->energy_need = 0;

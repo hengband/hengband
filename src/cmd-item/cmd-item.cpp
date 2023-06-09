@@ -86,9 +86,9 @@ void do_cmd_inven(PlayerType *player_ptr)
     WEIGHT weight_lim = calc_weight_limit(player_ptr);
     std::string out_val;
 #ifdef JP
-    out_val = format("持ち物： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ", lb_to_kg_integer(weight), lb_to_kg_fraction(weight),
+    out_val = angband::format("持ち物： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ", lb_to_kg_integer(weight), lb_to_kg_fraction(weight),
 #else
-    out_val = format("Inventory: carrying %d.%d pounds (%ld%% of capacity). Command: ", weight / 10, weight % 10,
+    out_val = angband::format("Inventory: carrying %d.%d pounds (%ld%% of capacity). Command: ", weight / 10, weight % 10,
 #endif
         (long int)(weight * 100) / weight_lim);
 

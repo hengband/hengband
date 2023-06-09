@@ -95,7 +95,7 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
             POSITION range = plev / 6 + 2;
 
             if (info) {
-                return format("%s%dd%d %s%d", KWD_DAM, dice, sides, KWD_RANGE, range);
+                return angband::format("%s%dd%d %s%d", KWD_DAM, dice, sides, KWD_RANGE, range);
             }
 
             if (cast) {
@@ -764,7 +764,7 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
             POSITION q_rad = 20 + plev / 2;
 
             if (info) {
-                return format("%s%d+%d", KWD_DAM, d_dam, b_dam / 2);
+                return angband::format("%s%d+%d", KWD_DAM, d_dam, b_dam / 2);
             }
 
             if (cast) {

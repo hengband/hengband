@@ -182,7 +182,7 @@ char InputKeyRequestor::input_repeat_num()
         auto cmd = inkey();
         if ((cmd == 0x7F) || (cmd == KTRL('H'))) {
             command_arg = command_arg / 10;
-            prt(format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
+            prt(angband::format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
             continue;
         }
 
@@ -194,7 +194,7 @@ char InputKeyRequestor::input_repeat_num()
                 command_arg = command_arg * 10 + D2I(cmd);
             }
 
-            prt(format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
+            prt(angband::format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
             continue;
         }
 
@@ -214,12 +214,12 @@ bool InputKeyRequestor::process_repeat_num(short &cmd)
     cmd = this->input_repeat_num();
     if (command_arg == 0) {
         command_arg = 99;
-        prt(format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
+        prt(angband::format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
     }
 
     if (old_arg != 0) {
         command_arg = old_arg;
-        prt(format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
+        prt(angband::format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
     }
 
     if ((cmd != ' ') && (cmd != '\n') && (cmd != '\r')) {

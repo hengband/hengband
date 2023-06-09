@@ -23,5 +23,5 @@ void clear_bldg(int min_row, int max_row)
 void building_prt_gold(PlayerType *player_ptr)
 {
     prt(_("手持ちのお金: ", "Gold Remaining: "), 23, 53);
-    prt(format("%9ld", (long)player_ptr->au), 23, 68);
+    prt(angband::format("%9ld", (long)player_ptr->au), 23, 68);
 }

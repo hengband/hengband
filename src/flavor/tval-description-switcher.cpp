@@ -36,13 +36,13 @@ static std::pair<std::string, std::string> describe_monster_ball(const ItemEntit
     }
 
 #ifdef JP
-    std::string modstr = format(" (%s)", r_ptr->name.data());
+    std::string modstr = angband::format(" (%s)", r_ptr->name.data());
 #else
     std::string modstr;
     if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        modstr = format(" (%s%s)", (is_a_vowel(r_ptr->name[0]) ? "an " : "a "), r_ptr->name.data());
+        modstr = angband::format(" (%s%s)", (is_a_vowel(r_ptr->name[0]) ? "an " : "a "), r_ptr->name.data());
     } else {
-        modstr = format(" (%s)", r_ptr->name.data());
+        modstr = angband::format(" (%s)", r_ptr->name.data());
     }
 #endif
     return { basename, modstr };
@@ -58,7 +58,7 @@ static std::pair<std::string, std::string> describe_statue(const ItemEntity &ite
 #else
     std::string modstr;
     if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        modstr = format("%s%s", (is_a_vowel(r_ptr->name[0]) ? "an " : "a "), r_ptr->name.data());
+        modstr = angband::format("%s%s", (is_a_vowel(r_ptr->name[0]) ? "an " : "a "), r_ptr->name.data());
     } else {
         modstr = r_ptr->name;
     }

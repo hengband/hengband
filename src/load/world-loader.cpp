@@ -189,7 +189,7 @@ errr analyze_wilderness(void)
     auto wild_y_size = rd_s32b();
 
     if ((wild_x_size > w_ptr->max_wild_x) || (wild_y_size > w_ptr->max_wild_y)) {
-        load_note(format(_("荒野が大きすぎる(%u/%u)！", "Wilderness is too big (%u/%u)!"), wild_x_size, wild_y_size));
+        load_note(angband::format(_("荒野が大きすぎる(%u/%u)！", "Wilderness is too big (%u/%u)!"), wild_x_size, wild_y_size));
         return 23;
     }
 

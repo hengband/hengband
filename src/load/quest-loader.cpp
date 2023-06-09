@@ -24,7 +24,7 @@ errr load_town(void)
         return 0;
     }
 
-    load_note(format(_("町が多すぎる(%u)！", "Too many (%u) towns!"), max_towns_load));
+    load_note(angband::format(_("町が多すぎる(%u)！", "Too many (%u) towns!"), max_towns_load));
     return 23;
 }
 

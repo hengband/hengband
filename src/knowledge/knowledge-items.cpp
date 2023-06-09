@@ -197,11 +197,11 @@ static void display_object_list(int col, int row, int per_page, const std::vecto
         const auto o_name = is_flavor_only ? flavor_baseitem.flavor_name : strip_name(bi_id);
         c_prt(attr, o_name.data(), row + i, col);
         if (per_page == 1) {
-            c_prt(attr, format("%02x/%02x", flavor_baseitem.x_attr, flavor_baseitem.x_char), row + i, (w_ptr->wizard || visual_only) ? 64 : 68);
+            c_prt(attr, angband::format("%02x/%02x", flavor_baseitem.x_attr, flavor_baseitem.x_char), row + i, (w_ptr->wizard || visual_only) ? 64 : 68);
         }
 
         if (w_ptr->wizard || visual_only) {
-            c_prt(attr, format("%d", bi_id), row + i, 70);
+            c_prt(attr, angband::format("%d", bi_id), row + i, 70);
         }
 
         a = flavor_baseitem.x_attr;
@@ -306,7 +306,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             clear_from(0);
 
 #ifdef JP
-            prt(format("%s - アイテム", !visual_only ? "知識" : "表示"), 2, 0);
+            prt(angband::format("%s - アイテム", !visual_only ? "知識" : "表示"), 2, 0);
             if (direct_k_idx < 0) {
                 prt("グループ", 4, 0);
             }
@@ -316,7 +316,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             }
             prt("文字", 4, 74);
 #else
-            prt(format("%s - objects", !visual_only ? "Knowledge" : "Visuals"), 2, 0);
+            prt(angband::format("%s - objects", !visual_only ? "Knowledge" : "Visuals"), 2, 0);
             if (direct_k_idx < 0) {
                 prt("Group", 4, 0);
             }
@@ -380,11 +380,11 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems_info[baseitem.flavor] : baseitem;
 
 #ifdef JP
-        prt(format("<方向>%s%s%s, ESC", (!visual_list && !visual_only) ? ", 'r'で詳細を見る" : "", visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更",
+        prt(angband::format("<方向>%s%s%s, ESC", (!visual_list && !visual_only) ? ", 'r'で詳細を見る" : "", visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更",
                 (attr_idx || char_idx) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"),
             hgt - 1, 0);
 #else
-        prt(format("<dir>%s%s%s, ESC", (!visual_list && !visual_only) ? ", 'r' to recall" : "", visual_list ? ", ENTER to accept" : ", 'v' for visuals",
+        prt(angband::format("<dir>%s%s%s, ESC", (!visual_list && !visual_only) ? ", 'r' to recall" : "", visual_list ? ", ENTER to accept" : ", 'v' for visuals",
                 (attr_idx || char_idx) ? ", 'c', 'p' to paste" : ", 'c' to copy"),
             hgt - 1, 0);
 #endif

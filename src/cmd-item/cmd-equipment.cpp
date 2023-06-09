@@ -105,9 +105,9 @@ void do_cmd_equip(PlayerType *player_ptr)
     auto weight_lim = calc_weight_limit(player_ptr);
     const auto mes = _("装備： 合計 %3d.%1d kg (限界の%d%%) コマンド: ", "Equipment: carrying %d.%d pounds (%d%% of capacity). Command: ");
 #ifdef JP
-    const auto out_val = format(mes, lb_to_kg_integer(weight), lb_to_kg_fraction(weight), weight * 100 / weight_lim);
+    const auto out_val = angband::format(mes, lb_to_kg_integer(weight), lb_to_kg_fraction(weight), weight * 100 / weight_lim);
 #else
-    const auto out_val = format(mes, weight / 10, weight % 10, weight * 100 / weight_lim);
+    const auto out_val = angband::format(mes, weight / 10, weight % 10, weight * 100 / weight_lim);
 #endif
 
     prt(out_val, 0, 0);
@@ -238,7 +238,7 @@ void do_cmd_wield(PlayerType *player_ptr)
     should_equip_cursed &= confirm_wear;
     if (should_equip_cursed) {
         const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        if (!get_check(format(_("本当に%s{呪われている}を使いますか？", "Really use the %s {cursed}? "), item_name.data()))) {
+        if (!get_check(angband::format(_("本当に%s{呪われている}を使いますか？", "Really use the %s {cursed}? "), item_name.data()))) {
             return;
         }
     }
@@ -252,7 +252,7 @@ void do_cmd_wield(PlayerType *player_ptr)
         const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         constexpr auto mes = _("%sを装備すると吸血鬼になります。よろしいですか？",
             "%s will transform you into a vampire permanently when equipped. Do you become a vampire? ");
-        if (!get_check(format(mes, item_name.data()))) {
+        if (!get_check(angband::format(mes, item_name.data()))) {
             return;
         }
     }

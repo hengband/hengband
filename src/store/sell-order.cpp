@@ -54,7 +54,7 @@ static std::optional<PRICE> prompt_to_sell(PlayerType *player_ptr, ItemEntity *o
 
     price_ask = std::min(price_ask, ot_ptr->max_cost);
     price_ask *= o_ptr->number;
-    const auto s = format(_("売値 $%ld で売りますか？", "Do you sell for $%ld? "), static_cast<long>(price_ask));
+    const auto s = angband::format(_("売値 $%ld で売りますか？", "Do you sell for $%ld? "), static_cast<long>(price_ask));
     if (get_check_strict(player_ptr, s, CHECK_DEFAULT_Y)) {
         return price_ask;
     }
@@ -200,7 +200,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
             msg_print(_("博物館に寄贈したものは取り出すことができません！！", "You cannot take back items which have been donated to the Museum!!"));
         }
 
-        if (!get_check(format(_("本当に%sを寄贈しますか？", "Really give %s to the Museum? "), museum_item_name.data()))) {
+        if (!get_check(angband::format(_("本当に%sを寄贈しますか？", "Really give %s to the Museum? "), museum_item_name.data()))) {
             return;
         }
 
