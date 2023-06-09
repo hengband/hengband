@@ -21,7 +21,7 @@ void birth_quit(void)
 void show_help(PlayerType *player_ptr, concptr helpfile)
 {
     screen_save();
-    (void)show_file(player_ptr, true, helpfile, nullptr, 0, 0);
+    (void)show_file(player_ptr, true, helpfile, 0, 0);
     screen_load();
 }
 
