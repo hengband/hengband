@@ -1,5 +1,6 @@
 ﻿#include "util/angband-files.h"
 #include "locale/japanese.h"
+#include "system/angband-exceptions.h"
 #include "util/string-processor.h"
 #include <sstream>
 #include <string>
@@ -89,7 +90,7 @@ std::filesystem::path path_parse(const std::filesystem::path &path)
     constexpr auto user_size = 128;
     char user[user_size]{};
     if ((s != nullptr) && (s >= u + user_size)) {
-        throw std::runtime_error("User name is too long!");
+        THROW_EXCEPTION(std::runtime_error, "User name is too long!");
     }
 
     if (s != nullptr) {
@@ -113,7 +114,7 @@ std::filesystem::path path_parse(const std::filesystem::path &path)
     }
 
     if (pw == nullptr) {
-        throw std::runtime_error("Failed to get User ID!");
+        THROW_EXCEPTION(std::runtime_error, "Failed to get User ID!");
     }
 
     if (s == nullptr) {
@@ -169,7 +170,7 @@ std::filesystem::path path_build(const std::filesystem::path &path, std::string_
     constexpr auto max_path_length = 1024;
     const auto path_str = path_ret.string();
     if (path_str.length() > max_path_length) {
-        throw std::runtime_error(format("Path is too long! %s", path_str.data()));
+        THROW_EXCEPTION(std::runtime_error, format("Path is too long! %s", path_str.data()));
     }
 
     return path_ret;
@@ -189,7 +190,7 @@ static std::string make_file_mode(const FileOpenMode mode, const bool is_binary)
         ss << 'a';
         break;
     default:
-        throw std::logic_error("Invalid file mode is specified!");
+        THROW_EXCEPTION(std::logic_error, "Invalid file mode is specified!");
     }
 
     if (is_binary) {

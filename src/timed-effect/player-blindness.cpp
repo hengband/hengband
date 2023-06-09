@@ -5,7 +5,7 @@
  */
 
 #include "timed-effect/player-blindness.h"
-#include <stdexcept>
+#include "system/angband-exceptions.h"
 
 short PlayerBlindness::current() const
 {
@@ -20,7 +20,7 @@ bool PlayerBlindness::is_blind() const
 void PlayerBlindness::set(short value)
 {
     if (value < 0) {
-        throw std::invalid_argument("Negative value can't be set in the player's blindness parameter!");
+        THROW_EXCEPTION(std::invalid_argument, "Negative value can't be set in the player's blindness parameter!");
     }
 
     this->blindness = value;

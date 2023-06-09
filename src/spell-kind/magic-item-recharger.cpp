@@ -21,6 +21,7 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "player-base/player-class.h"
+#include "system/angband-exceptions.h"
 #include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
@@ -223,7 +224,7 @@ bool recharge(PlayerType *player_ptr, int power)
         vary_item(player_ptr, item, -999);
         break;
     default:
-        throw std::logic_error("Invalid fail type!");
+        THROW_EXCEPTION(std::logic_error, "Invalid fail type!");
     }
 
     return update_player();

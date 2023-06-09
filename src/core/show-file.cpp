@@ -3,6 +3,7 @@
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
+#include "system/angband-exceptions.h"
 #include "system/angband-version.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
@@ -181,7 +182,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
 
     const auto open_error_mes = format(_("'%s'をオープンできません。", "Cannot open '%s'."), name.data());
     if (!fff) {
-        throw std::runtime_error(open_error_mes);
+        THROW_EXCEPTION(std::runtime_error, open_error_mes);
     }
 
     const auto caption_str = caption.str();
@@ -247,7 +248,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
             angband_fclose(fff);
             fff = angband_fopen(path_reopen, FileOpenMode::READ);
             if (!fff) {
-                throw std::runtime_error(open_error_mes);
+                THROW_EXCEPTION(std::runtime_error, open_error_mes);
             }
 
             next = 0;

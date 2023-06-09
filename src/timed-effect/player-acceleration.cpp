@@ -5,7 +5,7 @@
  */
 
 #include "timed-effect/player-acceleration.h"
-#include <stdexcept>
+#include "system/angband-exceptions.h"
 
 short PlayerAcceleration::current() const
 {
@@ -20,7 +20,7 @@ bool PlayerAcceleration::is_fast() const
 void PlayerAcceleration::set(short value)
 {
     if (value < 0) {
-        throw std::invalid_argument("Negative value can't be set in the player's acceleration parameter!");
+        THROW_EXCEPTION(std::invalid_argument, "Negative value can't be set in the player's acceleration parameter!");
     }
 
     this->acceleration = value;

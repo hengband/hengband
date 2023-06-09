@@ -2,6 +2,7 @@
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"
 #include "io/write-diary.h"
+#include "system/angband-exceptions.h"
 #include "view/display-messages.h"
 #include <array>
 #include <sstream>
@@ -11,7 +12,7 @@ void msg_print_wizard(PlayerType *player_ptr, int cheat_type, std::string_view m
 {
     constexpr auto max_type = 4;
     if ((cheat_type < 0) || (cheat_type >= max_type)) {
-        throw std::logic_error("Invalid cheat type is specified!");
+        THROW_EXCEPTION(std::logic_error, "Invalid cheat type is specified!");
     }
 
     if (!cheat_room && cheat_type == CHEAT_DUNGEON) {

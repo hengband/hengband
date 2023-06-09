@@ -1,4 +1,5 @@
 ﻿#include "timed-effect/player-cut.h"
+#include "system/angband-exceptions.h"
 #include "system/angband.h"
 
 PlayerCutRank PlayerCut::get_rank(short value)
@@ -54,7 +55,7 @@ std::string_view PlayerCut::get_cut_mes(PlayerCutRank stun_rank)
     case PlayerCutRank::MORTAL:
         return _("致命的な傷を負ってしまった。", "You have been given a mortal wound.");
     default:
-        throw("Invalid StunRank was specified!");
+        THROW_EXCEPTION(std::logic_error, "Invalid CutRank is specified!");
     }
 }
 
@@ -122,7 +123,7 @@ std::tuple<term_color_type, std::string_view> PlayerCut::get_expr() const
     case PlayerCutRank::MORTAL:
         return std::make_tuple(TERM_L_RED, _("致命傷      ", "Mortal wound"));
     default:
-        throw("Invalid StunRank was specified!");
+        THROW_EXCEPTION(std::logic_error, "Invalid CutRank is specified!");
     }
 }
 
@@ -146,7 +147,7 @@ int PlayerCut::get_damage() const
     case PlayerCutRank::MORTAL:
         return 200;
     default:
-        throw("Invalid StunRank was specified!");
+        THROW_EXCEPTION(std::logic_error, "Invalid CutRank is specified!");
     }
 }
 

@@ -4,11 +4,11 @@
 #include "autopick/autopick-util.h"
 #include "io/files-util.h"
 #include "io/read-pref-file.h"
+#include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
-#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -53,8 +53,10 @@ std::string pickpref_filename(PlayerType *player_ptr, int filename_mode)
     case PT_WITH_PNAME:
         return format("%s-%s.prf", namebase, player_ptr->base_name);
 
-    default:
-        throw std::invalid_argument(format("The value of argument 'filename_mode' is invalid: %d", filename_mode));
+    default: {
+        const auto msg = format("The value of argument 'filename_mode' is invalid: %d", filename_mode);
+        THROW_EXCEPTION(std::invalid_argument, msg);
+    }
     }
 }
 
