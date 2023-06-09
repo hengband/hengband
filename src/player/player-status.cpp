@@ -774,7 +774,7 @@ static void update_num_of_spells(PlayerType *player_ptr)
     player_ptr->old_spells = player_ptr->new_spells;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::STUDY);
-    rfu.set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGTE);
+    rfu.set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
 }
 
 /*!

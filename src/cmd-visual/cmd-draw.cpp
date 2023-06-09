@@ -74,7 +74,7 @@ void do_cmd_redraw(PlayerType *player_ptr)
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
         SubWindowRedrawingFlag::MONSTER_LORE,
-        SubWindowRedrawingFlag::ITEM_KNOWLEDGTE,
+        SubWindowRedrawingFlag::ITEM_KNOWLEDGE,
     };
     rfu.set_flags(flags_swrf);
     update_playtime();

@@ -38,7 +38,7 @@ void monster_race_track(PlayerType *player_ptr, MonsterRaceId r_idx)
 void object_kind_track(PlayerType *player_ptr, short bi_id)
 {
     player_ptr->tracking_bi_id = bi_id;
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGTE);
+    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
 }
 
 /*

@@ -919,7 +919,7 @@ void do_cmd_study(PlayerType *player_ptr)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRecalculatingFlag::SPELLS);
     update_creature(player_ptr);
-    rfu.set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGTE);
+    rfu.set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
 }
 
 /*!
@@ -1182,7 +1182,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
             }
 
             gain_exp(player_ptr, e * s_ptr->slevel);
-            RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGTE);
+            RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
 
             switch (realm) {
             case REALM_LIFE:

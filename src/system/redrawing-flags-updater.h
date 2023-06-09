@@ -40,7 +40,7 @@ enum class SubWindowRedrawingFlag {
     MESSAGE = 6, /*!< メッセージログ */
     OVERHEAD = 7, /*!< 周辺の光景 */
     MONSTER_LORE = 8, /*!< モンスターの思い出 */
-    ITEM_KNOWLEDGTE = 9, /*!< アイテムの知識 */
+    ITEM_KNOWLEDGE = 9, /*!< アイテムの知識 */
     DUNGEON = 10, /*!< ダンジョンの地形 */
     SNAPSHOT = 11, /*!< 記念写真 */
     FLOOR_ITEMS = 12, /*!< 床上のアイテム一覧 */
@@ -63,7 +63,7 @@ inline constexpr auto ALL_SUB_WINDOW_FLAGS = {
     SubWindowRedrawingFlag::MESSAGE,
     SubWindowRedrawingFlag::OVERHEAD,
     SubWindowRedrawingFlag::MONSTER_LORE,
-    SubWindowRedrawingFlag::ITEM_KNOWLEDGTE,
+    SubWindowRedrawingFlag::ITEM_KNOWLEDGE,
     SubWindowRedrawingFlag::DUNGEON,
     SubWindowRedrawingFlag::SNAPSHOT,
     SubWindowRedrawingFlag::FLOOR_ITEMS,
