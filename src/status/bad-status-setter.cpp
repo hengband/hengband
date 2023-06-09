@@ -16,6 +16,7 @@
 #include "spell-realm/spells-hex.h"
 #include "status/base-status.h"
 #include "status/buff-setter.h"
+#include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-blindness.h"
@@ -623,7 +624,7 @@ void BadStatusSetter::decrease_int_wis(const short v)
 
         return;
     default:
-        throw("Invalid random number is specified!");
+        THROW_EXCEPTION(std::logic_error, "Invalid random number is specified!");
     }
 }
 

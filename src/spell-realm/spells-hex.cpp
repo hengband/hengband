@@ -17,6 +17,7 @@
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
 #include "status/action-setter.h"
+#include "system/angband-exceptions.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -49,7 +50,7 @@ SpellHex::SpellHex(PlayerType *player_ptr)
     HexSpellFlagGroup::get_flags(this->spell_hex_data->casting_spells, std::back_inserter(this->casting_spells));
 
     if (this->casting_spells.size() > MAX_KEEP) {
-        throw("Invalid numbers of hex magics keep!");
+        THROW_EXCEPTION(std::logic_error, "Invalid numbers of hex magics keep!");
     }
 }
 
@@ -382,7 +383,7 @@ void SpellHex::interrupt_spelling()
 void SpellHex::eyes_on_eyes()
 {
     if (this->monap_ptr == nullptr) {
-        throw("Invalid constructor was used!");
+        THROW_EXCEPTION(std::logic_error, "Invalid constructor was used!");
     }
 
     const auto is_eyeeye_finished = (this->player_ptr->tim_eyeeye == 0) && !this->is_spelling_specific(HEX_EYE_FOR_EYE);
@@ -407,7 +408,7 @@ void SpellHex::eyes_on_eyes()
 void SpellHex::thief_teleport()
 {
     if (this->monap_ptr == nullptr) {
-        throw("Invalid constructor was used!");
+        THROW_EXCEPTION(std::logic_error, "Invalid constructor was used!");
     }
 
     if (!this->monap_ptr->blinked || !this->monap_ptr->alive || this->player_ptr->is_dead) {

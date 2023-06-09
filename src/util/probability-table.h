@@ -1,7 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband-exceptions.h"
 #include "term/z-rand.h"
-
 #include <algorithm>
 #include <exception>
 #include <stdexcept>
@@ -109,7 +109,7 @@ public:
     IdType pick_one_at_random() const
     {
         if (empty()) {
-            throw std::runtime_error("There is no entry in the probability table.");
+            THROW_EXCEPTION(std::runtime_error, "There is no entry in the probability table.");
         }
 
         // probの合計の範囲からランダムでkeyを取得し、二分探索で選択する項目を決定する

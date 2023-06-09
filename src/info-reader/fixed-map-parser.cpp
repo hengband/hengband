@@ -17,6 +17,7 @@
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "realm/realm-names-table.h"
+#include "system/angband-exceptions.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
@@ -25,7 +26,6 @@
 #include "world/world.h"
 #include <algorithm>
 #include <sstream>
-#include <stdexcept>
 
 static concptr variant = "ZANGBAND";
 
@@ -338,7 +338,7 @@ static void parse_quest_info_aux(std::string_view file_name, std::set<QuestId> &
         if (key_list_ref.find(q) != key_list_ref.end()) {
             std::stringstream ss;
             ss << _("重複したQuestID ", "Duplicated Quest Id ") << enum2i(q) << '(' << file_name << ", L" << line << ')';
-            throw std::runtime_error(ss.str());
+            THROW_EXCEPTION(std::runtime_error, ss.str());
         }
 
         key_list_ref.insert(q);
@@ -349,7 +349,7 @@ static void parse_quest_info_aux(std::string_view file_name, std::set<QuestId> &
     if (fp == nullptr) {
         std::stringstream ss;
         ss << _("ファイルが見つかりません (", "File is not found (") << file_name << ')';
-        throw std::runtime_error(ss.str());
+        THROW_EXCEPTION(std::runtime_error, ss.str());
     }
 
     char buf[4096];

@@ -7,6 +7,7 @@
 #include "monster-race/monster-race.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-kind-hook.h"
+#include "system/angband-exceptions.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info.h"
 #include "system/dungeon-info.h"
@@ -179,7 +180,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
             rumor_eff_format = _("%sに行ったことがある気がする。", "You feel you have been to %s.");
         }
     } else {
-        throw std::runtime_error("Unknown token exists in rumor.txt");
+        THROW_EXCEPTION(std::runtime_error, "Unknown token exists in rumor.txt");
     }
 
     const auto rumor_msg = bind_rumor_name(tokens[2], fullname);
