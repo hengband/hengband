@@ -35,31 +35,6 @@ turn_flags *init_turn_flags(MONSTER_IDX riding_idx, MONSTER_IDX m_idx, turn_flag
     turn_flags_ptr->did_kill_wall = false;
     return turn_flags_ptr;
 }
-
-/*!
- * @brief old_race_flags_ptr の初期化
- */
-old_race_flags *init_old_race_flags(old_race_flags *old_race_flags_ptr)
-{
-    old_race_flags_ptr->old_r_flags1 = 0L;
-    old_race_flags_ptr->old_r_flags2 = 0L;
-    old_race_flags_ptr->old_r_flags3 = 0L;
-    old_race_flags_ptr->old_r_resistance_flags.clear();
-    old_race_flags_ptr->old_r_ability_flags.clear();
-    old_race_flags_ptr->old_r_behavior_flags.clear();
-    old_race_flags_ptr->old_r_kind_flags.clear();
-    old_race_flags_ptr->old_r_drop_flags.clear();
-    old_race_flags_ptr->old_r_feature_flags.clear();
-
-    old_race_flags_ptr->old_r_blows0 = 0;
-    old_race_flags_ptr->old_r_blows1 = 0;
-    old_race_flags_ptr->old_r_blows2 = 0;
-    old_race_flags_ptr->old_r_blows3 = 0;
-
-    old_race_flags_ptr->old_r_cast_spell = 0;
-    return old_race_flags_ptr;
-}
-
 /*!
  * @brief coordinate_candidate の初期化
  * @param なし
