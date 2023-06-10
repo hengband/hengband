@@ -37,25 +37,25 @@ struct turn_flags {
 };
 
 struct old_race_flags {
-    old_race_flags() = default;
+    old_race_flags(MonsterRaceId monrace_idx);
 
-    BIT_FLAGS old_r_flags1 = 0;
-    BIT_FLAGS old_r_flags2 = 0;
-    BIT_FLAGS old_r_flags3 = 0;
+    BIT_FLAGS old_r_flags1;
+    BIT_FLAGS old_r_flags2;
+    BIT_FLAGS old_r_flags3;
     BIT_FLAGS old_r_flagsr = 0;
-    EnumClassFlagGroup<MonsterAbilityType> old_r_ability_flags{};
-    EnumClassFlagGroup<MonsterBehaviorType> old_r_behavior_flags{};
-    EnumClassFlagGroup<MonsterKindType> old_r_kind_flags{};
-    EnumClassFlagGroup<MonsterResistanceType> old_r_resistance_flags{};
-    EnumClassFlagGroup<MonsterDropType> old_r_drop_flags{};
-    EnumClassFlagGroup<MonsterFeatureType> old_r_feature_flags{};
+    EnumClassFlagGroup<MonsterAbilityType> old_r_ability_flags;
+    EnumClassFlagGroup<MonsterBehaviorType> old_r_behavior_flags;
+    EnumClassFlagGroup<MonsterKindType> old_r_kind_flags;
+    EnumClassFlagGroup<MonsterResistanceType> old_r_resistance_flags;
+    EnumClassFlagGroup<MonsterDropType> old_r_drop_flags;
+    EnumClassFlagGroup<MonsterFeatureType> old_r_feature_flags;
 
-    byte old_r_blows0 = 0;
-    byte old_r_blows1 = 0;
-    byte old_r_blows2 = 0;
-    byte old_r_blows3 = 0;
+    byte old_r_blows0;
+    byte old_r_blows1;
+    byte old_r_blows2;
+    byte old_r_blows3;
 
-    byte old_r_cast_spell = 0;
+    byte old_r_cast_spell;
 };
 
 struct coordinate_candidate {
@@ -70,4 +70,3 @@ coordinate_candidate init_coordinate_candidate(void);
 
 void store_enemy_approch_direction(int *mm, POSITION y, POSITION x);
 void store_moves_val(int *mm, int y, int x);
-void save_old_race_flags(MonsterRaceId monster_race_idx, old_race_flags *old_race_flags_ptr);
