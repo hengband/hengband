@@ -63,7 +63,6 @@
  */
 static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
 {
-    SPELL_IDX i;
     int j = 0;
     int num = 0;
     POSITION y = 1;
@@ -71,11 +70,9 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
     PLAYER_LEVEL plev = player_ptr->lev;
     char choice;
     char out_val[160];
-    SPELL_IDX sentaku[32];
     concptr p = _("必殺剣", "special attack");
     COMMAND_CODE code;
     magic_type spell;
-    bool flag, redraw;
     int menu_line = (use_menu ? 1 : 0);
 
     /* Assume cancelled */
@@ -91,12 +88,14 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
         }
     }
 
-    flag = false;
-    redraw = false;
+    auto flag = false;
+    auto redraw = false;
 
+    int i;
+    int selections[32]{};
     for (i = 0; i < 32; i++) {
         if (technic_info[TECHNIC_HISSATSU][i].slevel <= PY_MAX_LEVEL) {
-            sentaku[num] = i;
+            selections[num] = i;
             num++;
         }
     }
@@ -269,12 +268,12 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
         }
 
         /* Totally Illegal */
-        if ((i < 0) || (i >= 32) || !(player_ptr->spell_learned1 & (1U << sentaku[i]))) {
+        if ((i < 0) || (i >= 32) || !(player_ptr->spell_learned1 & (1U << selections[i]))) {
             bell();
             continue;
         }
 
-        j = sentaku[i];
+        j = selections[i];
 
         /* Stop the loop */
         flag = true;
