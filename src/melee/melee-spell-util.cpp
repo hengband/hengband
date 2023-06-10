@@ -11,24 +11,19 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 
-melee_spell_type *initialize_melee_spell_type(PlayerType *player_ptr, melee_spell_type *ms_ptr, MONSTER_IDX m_idx)
+melee_spell_type::melee_spell_type(PlayerType *player_ptr, MONSTER_IDX m_idx)
+    : m_idx(m_idx)
+    , thrown_spell(MonsterAbilityType::MAX)
 {
-    ms_ptr->m_idx = m_idx;
-    ms_ptr->y = 0;
-    ms_ptr->x = 0;
-    ms_ptr->target_idx = 0;
-    ms_ptr->thrown_spell = MonsterAbilityType::MAX;
-    ms_ptr->dam = 0;
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    ms_ptr->m_ptr = &floor_ptr->m_list[m_idx];
-    ms_ptr->t_ptr = nullptr;
-    ms_ptr->r_ptr = &monraces_info[ms_ptr->m_ptr->r_idx];
-    ms_ptr->see_m = is_seen(player_ptr, ms_ptr->m_ptr);
-    ms_ptr->maneable = player_has_los_bold(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx);
-    ms_ptr->pet = ms_ptr->m_ptr->is_pet();
+    this->m_ptr = &floor_ptr->m_list[m_idx];
+    this->t_ptr = nullptr;
+    this->r_ptr = &monraces_info[this->m_ptr->r_idx];
+    this->see_m = is_seen(player_ptr, this->m_ptr);
+    this->maneable = player_has_los_bold(player_ptr, this->m_ptr->fy, this->m_ptr->fx);
+    this->pet = this->m_ptr->is_pet();
     const auto &dungeon = floor_ptr->get_dungeon_definition();
     const auto is_in_dungeon = floor_ptr->is_in_dungeon();
     const auto is_in_random_quest = inside_quest(floor_ptr->quest_number) && !QuestType::is_fixed(floor_ptr->quest_number);
-    ms_ptr->in_no_magic_dungeon = dungeon.flags.has(DungeonFeatureType::NO_MAGIC) && is_in_dungeon && !is_in_random_quest;
-    return ms_ptr;
+    this->in_no_magic_dungeon = dungeon.flags.has(DungeonFeatureType::NO_MAGIC) && is_in_dungeon && !is_in_random_quest;
 }

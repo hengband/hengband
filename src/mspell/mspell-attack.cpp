@@ -129,10 +129,6 @@ static void set_mspell_list(msa_type *msa_ptr)
     EnumClassFlagGroup<MonsterAbilityType>::get_flags(msa_ptr->ability_flags, std::back_inserter(msa_ptr->mspells));
 }
 
-static void describe_mspell_monster(PlayerType *player_ptr, msa_type *msa_ptr)
-{
-}
-
 static bool switch_do_spell(PlayerType *player_ptr, msa_type *msa_ptr)
 {
     switch (msa_ptr->do_spell) {
