@@ -3,6 +3,7 @@
 #include "monster-race/race-ability-flags.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
+#include <string>
 #include <vector>
 
 enum mspell_lite_type {
@@ -24,7 +25,7 @@ struct msa_type {
     bool in_no_magic_dungeon = false;
     bool success = false;
     std::vector<MonsterAbilityType> mspells{};
-    GAME_TEXT m_name[MAX_NLEN]{};
+    std::string m_name = "";
     bool can_remember = false;
     int dam = 0;
     DEPTH rlev = 0;
