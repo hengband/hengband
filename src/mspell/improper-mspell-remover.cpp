@@ -48,11 +48,11 @@ void remove_bad_spells(MONSTER_IDX m_idx, PlayerType *player_ptr, EnumClassFlagG
             m_ptr->smart.clear();
         }
 
-        msr_ptr->smart = m_ptr->smart;
+        msr_ptr->smart_flags = m_ptr->smart;
     }
 
     add_cheat_remove_flags(player_ptr, msr_ptr);
-    if (msr_ptr->smart.none()) {
+    if (msr_ptr->smart_flags.none()) {
         return;
     }
 

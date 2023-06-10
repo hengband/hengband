@@ -11,7 +11,7 @@ struct msr_type {
     msr_type(PlayerType *player_ptr, short m_idx, const EnumClassFlagGroup<MonsterAbilityType> &ability_flags);
     MonsterRaceInfo *r_ptr;
     EnumClassFlagGroup<MonsterAbilityType> ability_flags;
-    EnumClassFlagGroup<MonsterSmartLearnType> smart{};
+    EnumClassFlagGroup<MonsterSmartLearnType> smart_flags{};
 };
 
 bool int_outof(MonsterRaceInfo *r_ptr, int prob);
