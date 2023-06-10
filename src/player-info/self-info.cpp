@@ -249,7 +249,7 @@ static void set_esp_info(PlayerType *player_ptr, self_info_type *self_ptr)
 void self_knowledge(PlayerType *player_ptr)
 {
     self_info_type tmp_si;
-    self_info_type *self_ptr = initialize_self_info_type(&tmp_si);
+    self_info_type *self_ptr = &tmp_si;
     display_life_rating(player_ptr, self_ptr);
     chg_virtue(player_ptr, Virtue::KNOWLEDGE, 1);
     chg_virtue(player_ptr, Virtue::ENLIGHTEN, 1);
