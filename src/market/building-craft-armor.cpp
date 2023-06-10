@@ -9,20 +9,20 @@
  * @details
  * Calculate and display the dodge-rate and the protection-rate
  * based on AC
- * @param iAC プレイヤーのAC。
+ * @param ac プレイヤーのAC。
  * @return 常にTRUEを返す。
  */
-bool eval_ac(ARMOUR_CLASS iAC)
+bool eval_ac(short ac)
 {
-    const GAME_TEXT memo[] = _("ダメージ軽減率とは、敵の攻撃が当たった時そのダメージを\n"
-                               "何パーセント軽減するかを示します。\n"
-                               "ダメージ軽減は通常の直接攻撃(種類が「攻撃する」と「粉砕する」の物)\n"
-                               "に対してのみ効果があります。\n \n"
-                               "敵のレベルとは、その敵が通常何階に現れるかを示します。\n \n"
-                               "回避率は敵の直接攻撃を何パーセントの確率で避けるかを示し、\n"
-                               "敵のレベルとあなたのACによって決定されます。\n \n"
-                               "ダメージ期待値とは、敵の１００ポイントの通常攻撃に対し、\n"
-                               "回避率とダメージ軽減率を考慮したダメージの期待値を示します。\n",
+    constexpr auto memo = _("ダメージ軽減率とは、敵の攻撃が当たった時そのダメージを\n"
+                            "何パーセント軽減するかを示します。\n"
+                            "ダメージ軽減は通常の直接攻撃(種類が「攻撃する」と「粉砕する」の物)\n"
+                            "に対してのみ効果があります。\n \n"
+                            "敵のレベルとは、その敵が通常何階に現れるかを示します。\n \n"
+                            "回避率は敵の直接攻撃を何パーセントの確率で避けるかを示し、\n"
+                            "敵のレベルとあなたのACによって決定されます。\n \n"
+                            "ダメージ期待値とは、敵の１００ポイントの通常攻撃に対し、\n"
+                            "回避率とダメージ軽減率を考慮したダメージの期待値を示します。\n",
         "'Protection Rate' means how much damage is reduced by your armor.\n"
         "Note that the Protection rate is effective only against normal "
         "'attack' and 'shatter' type melee attacks, "
@@ -33,19 +33,16 @@ bool eval_ac(ARMOUR_CLASS iAC)
         "'Average Damage' indicates the expected amount of damage "
         "when you are attacked by normal melee attacks with power=100.");
 
-    int protection;
-    TERM_LEN col, row = 2;
-    DEPTH lvl;
-
-    if (iAC < 0) {
-        iAC = 0;
+    if (ac < 0) {
+        ac = 0;
     }
 
-    protection = 100 * std::min<short>(iAC, 150) / 250;
+    const auto protection = 100 * std::min<short>(ac, 150) / 250;
     screen_save();
     clear_bldg(0, 22);
 
-    put_str(format(_("あなたの現在のAC: %3d", "Your current AC : %3d"), iAC), row++, 0);
+    auto row = 2;
+    put_str(format(_("あなたの現在のAC: %3d", "Your current AC : %3d"), ac), row++, 0);
     put_str(format(_("ダメージ軽減率  : %3d%%", "Protection rate : %3d%%"), protection), row++, 0);
     row++;
 
@@ -53,19 +50,16 @@ bool eval_ac(ARMOUR_CLASS iAC)
     put_str(_("回避率          :", "Dodge Rate      :"), row + 1, 0);
     put_str(_("ダメージ期待値  :", "Average Damage  :"), row + 2, 0);
 
-    for (col = 17 + 1, lvl = 0; lvl <= 100; lvl += 10, col += 5) {
-        int quality = 60 + lvl * 3; /* attack quality with power 60 */
-        int dodge; /* 回避率(%) */
-        int average; /* ダメージ期待値 */
-
+    for (auto col = 17 + 1, lvl = 0; lvl <= 100; lvl += 10, col += 5) {
+        auto quality = 60 + lvl * 3; /* attack quality with power 60 */
         put_str(format("%3d", lvl), row + 0, col);
 
         /* 回避率を計算 */
-        dodge = 5 + (std::min(100, 100 * (iAC * 3 / 4) / quality) * 9 + 5) / 10;
+        auto dodge = 5 + (std::min(100, 100 * (ac * 3 / 4) / quality) * 9 + 5) / 10;
         put_str(format("%3d%%", dodge), row + 1, col);
 
         /* 100点の攻撃に対してのダメージ期待値を計算 */
-        average = (100 - dodge) * (100 - protection) / 100;
+        auto average = (100 - dodge) * (100 - protection) / 100;
         put_str(format("%3d", average), row + 2, col);
     }
 
