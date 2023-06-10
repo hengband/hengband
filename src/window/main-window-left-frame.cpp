@@ -329,36 +329,6 @@ static std::vector<condition_layout_info> get_condition_layout_info(const Monste
 }
 
 /*!
- * @brief 対象のモンスターの状態（無敵、起きているか、HPの割合）に応じてHPバーの色を算出する
- * @param monster 対象のモンスター
- * @return HPバーの色
- */
-static TERM_COLOR get_monster_hp_point_bar_color(const MonsterEntity &monster)
-{
-    auto pct = monster.maxhp > 0 ? 100 * monster.hp / monster.maxhp : 0;
-
-    if (monster.is_invulnerable()) {
-        return TERM_WHITE;
-    }
-    if (monster.is_asleep()) {
-        return TERM_BLUE;
-    }
-    if (pct >= 100) {
-        return TERM_L_GREEN;
-    }
-    if (pct >= 60) {
-        return TERM_YELLOW;
-    }
-    if (pct >= 25) {
-        return TERM_ORANGE;
-    }
-    if (pct >= 10) {
-        return TERM_L_RED;
-    }
-    return TERM_RED;
-}
-
-/*!
  * @brief モンスターの体力ゲージを表示する
  * @param riding TRUEならば騎乗中のモンスターの体力、FALSEならターゲットモンスターの体力を表示する。表示位置は固定。
  * @details
@@ -421,11 +391,7 @@ void print_health(PlayerType *player_ptr, bool riding)
         return;
     }
 
-    // HPの割合計算
-    int pct2 = monster.maxhp > 0 ? 100L * monster.hp / monster.max_maxhp : 0;
-    int len = (pct2 < 10) ? 1 : (pct2 < 90) ? (pct2 / 10 + 1)
-                                            : 10;
-    auto hit_point_bar_color = get_monster_hp_point_bar_color(monster);
+    const auto [hit_point_bar_color, len] = monster.get_hp_bar_data();
 
     term_putstr(col, row, max_width, TERM_WHITE, "[----------]");
     term_putstr(col + 1, row, len, hit_point_bar_color, "**********");

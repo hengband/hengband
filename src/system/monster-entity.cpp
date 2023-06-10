@@ -5,7 +5,9 @@
 #include "monster-race/race-kind-flags.h"
 #include "monster/monster-status.h"
 #include "system/monster-race-info.h"
+#include "term/term-color-types.h"
 #include "util/string-processor.h"
+#include <algorithm>
 
 bool MonsterEntity::is_friendly() const
 {
@@ -209,4 +211,34 @@ std::string MonsterEntity::get_died_message() const
 {
     const auto &monrace = monraces_info[this->r_idx];
     return monrace.get_died_message();
+}
+
+/*!
+ * @brief モンスターの状態（無敵、起きているか、HPの割合）に応じてHPバーの色と長さを算出する
+ * @return HPバーの色と長さ(1-10)のペア
+ */
+std::pair<TERM_COLOR, int> MonsterEntity::get_hp_bar_data() const
+{
+    const auto percent = (this->maxhp > 0) ? (100 * this->hp / this->maxhp) : 0;
+    const auto len = std::clamp(percent / 10 + 1, 1, 10);
+
+    if (this->is_invulnerable()) {
+        return { TERM_WHITE, len };
+    }
+    if (this->is_asleep()) {
+        return { TERM_BLUE, len };
+    }
+    if (percent >= 100) {
+        return { TERM_L_GREEN, len };
+    }
+    if (percent >= 60) {
+        return { TERM_YELLOW, len };
+    }
+    if (percent >= 25) {
+        return { TERM_ORANGE, len };
+    }
+    if (percent >= 10) {
+        return { TERM_L_RED, len };
+    }
+    return { TERM_RED, len };
 }
