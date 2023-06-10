@@ -115,7 +115,8 @@ void RedrawingFlagsUpdater::reset_flags(const EnumClassFlagGroup<StatusRecalcula
 
 void RedrawingFlagsUpdater::fill_up_sub_flags()
 {
-    this->sub_window_flags.set(ALL_SUB_WINDOW_FLAGS);
+    constexpr auto all_sub_window_flags = EnumRange(SubWindowRedrawingFlag::INVENTORY, SubWindowRedrawingFlag::FOUND_ITEMS);
+    this->sub_window_flags.set(all_sub_window_flags);
 }
 
 EnumClassFlagGroup<SubWindowRedrawingFlag> RedrawingFlagsUpdater::get_sub_intersection(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags)

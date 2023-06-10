@@ -50,27 +50,6 @@ enum class SubWindowRedrawingFlag {
     MAX = 16,
 };
 
-/*!
- * @details 欠番があるためEnumRageをそのまま作るのが困難であり、代替として定義する.
- * 欠番が埋まったら不要となるので削除すること。
- */
-inline constexpr auto ALL_SUB_WINDOW_FLAGS = {
-    SubWindowRedrawingFlag::INVENTORY,
-    SubWindowRedrawingFlag::EQUIPMENT,
-    SubWindowRedrawingFlag::SPELL,
-    SubWindowRedrawingFlag::PLAYER,
-    SubWindowRedrawingFlag::SIGHT_MONSTERS,
-    SubWindowRedrawingFlag::PETS,
-    SubWindowRedrawingFlag::MESSAGE,
-    SubWindowRedrawingFlag::OVERHEAD,
-    SubWindowRedrawingFlag::MONSTER_LORE,
-    SubWindowRedrawingFlag::ITEM_KNOWLEDGE,
-    SubWindowRedrawingFlag::DUNGEON,
-    SubWindowRedrawingFlag::SNAPSHOT,
-    SubWindowRedrawingFlag::FLOOR_ITEMS,
-    SubWindowRedrawingFlag::FOUND_ITEMS,
-};
-
 enum class StatusRecalculatingFlag {
     BONUS, /*!< 能力値修正 */
     TORCH, /*!< 光源半径 */
