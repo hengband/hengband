@@ -27,34 +27,36 @@
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include <utility>
 
 /*!
  * @brief キャラクタのビジュアルIDを変更する際の対象指定関数
  * @param i 指定対象となるキャラクタコード
- * @param num 指定されたビジュアルIDを返す参照ポインタ
+ * @param visual_id 指定されたビジュアルID
  * @param max ビジュアルIDの最大数
- * @return 指定が実際に行われた場合TRUE、キャンセルされた場合FALSE
+ * @return 指定が実際に行われたかと、その時のビジュアルIDの組み合わせ
  */
-static bool cmd_visuals_aux(int i, IDX *num, IDX max)
+static std::pair<bool, short> cmd_visuals_aux(int i, short visual_id, short max)
 {
+    auto num = visual_id;
     if (iscntrl(i)) {
         char str[10] = "";
-        strnfmt(str, sizeof(str), "%d", *num);
+        strnfmt(str, sizeof(str), "%d", num);
         if (!get_string(format("Input new number(0-%d): ", max - 1), str, 4)) {
-            return false;
+            return { false, num };
         }
 
-        IDX tmp = (IDX)strtol(str, nullptr, 0);
+        auto tmp = static_cast<short>(strtol(str, nullptr, 0));
         if (tmp >= 0 && tmp < max) {
-            *num = tmp;
+            num = tmp;
         }
     } else if (isupper(i)) {
-        *num = (*num + max - 1) % max;
+        num = (num + max - 1) % max;
     } else {
-        *num = (*num + 1) % max;
+        num = (num + 1) % max;
     }
 
-    return true;
+    return { true, num };
 }
 
 /*!
@@ -251,27 +253,36 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 case 'n': {
                     auto prev_r = r;
                     do {
-                        if (!cmd_visuals_aux(i, &num, static_cast<IDX>(monraces_info.size()))) {
+                        const auto &[is_input, visual_id] = cmd_visuals_aux(i, num, static_cast<IDX>(monraces_info.size()));
+                        num = visual_id;
+                        if (!is_input) {
                             r = prev_r;
                             break;
                         }
-                        r = i2enum<MonsterRaceId>(num);
-                    } while (monraces_info[r].name.empty());
-                }
 
-                break;
-                case 'a':
+                        r = i2enum<MonsterRaceId>(visual_id);
+                    } while (monraces_info[r].name.empty());
+
+                    break;
+                }
+                case 'a': {
                     t = (int)r_ptr->x_attr;
-                    (void)cmd_visuals_aux(i, &t, 256);
+                    const auto &[is_input, visual_id] = cmd_visuals_aux(i, t, 256);
+                    (void)is_input;
+                    t = visual_id;
                     r_ptr->x_attr = (byte)t;
                     need_redraw = true;
                     break;
-                case 'c':
+                }
+                case 'c': {
                     t = (int)r_ptr->x_char;
-                    (void)cmd_visuals_aux(i, &t, 256);
+                    const auto &[is_input, visual_id] = cmd_visuals_aux(i, t, 256);
+                    (void)is_input;
+                    t = visual_id;
                     r_ptr->x_char = (byte)t;
                     need_redraw = true;
                     break;
+                }
                 case 'v':
                     do_cmd_knowledge_monsters(player_ptr, &need_redraw, true, r);
                     term_clear();
@@ -322,28 +333,36 @@ void do_cmd_visuals(PlayerType *player_ptr)
 
                 switch (c) {
                 case 'n': {
-                    short prev_k = k;
+                    auto prev_k = k;
                     do {
-                        if (!cmd_visuals_aux(i, &k, static_cast<short>(baseitems_info.size()))) {
+                        const auto &[is_input, visual_id] = cmd_visuals_aux(i, k, static_cast<short>(baseitems_info.size()));
+                        k = visual_id;
+                        if (!is_input) {
                             k = prev_k;
                             break;
                         }
                     } while (baseitems_info[k].name.empty());
-                }
 
-                break;
-                case 'a':
+                    break;
+                }
+                case 'a': {
                     t = (int)baseitem.x_attr;
-                    (void)cmd_visuals_aux(i, &t, 256);
+                    const auto &[is_input, visual_id] = cmd_visuals_aux(i, t, 256);
+                    (void)is_input;
+                    t = visual_id;
                     baseitem.x_attr = (byte)t;
                     need_redraw = true;
                     break;
-                case 'c':
+                }
+                case 'c': {
                     t = (int)baseitem.x_char;
-                    (void)cmd_visuals_aux(i, &t, 256);
+                    const auto &[is_input, visual_id] = cmd_visuals_aux(i, t, 256);
+                    (void)is_input;
+                    t = visual_id;
                     baseitem.x_char = (byte)t;
                     need_redraw = true;
                     break;
+                }
                 case 'v':
                     do_cmd_knowledge_objects(player_ptr, &need_redraw, true, k);
                     term_clear();
@@ -397,9 +416,11 @@ void do_cmd_visuals(PlayerType *player_ptr)
 
                 switch (c) {
                 case 'n': {
-                    IDX prev_f = f;
+                    auto prev_f = f;
                     do {
-                        if (!cmd_visuals_aux(i, &f, static_cast<IDX>(terrains_info.size()))) {
+                        const auto &[is_input, visual_id] = cmd_visuals_aux(i, f, static_cast<short>(terrains_info.size()));
+                        f = visual_id;
+                        if (!is_input) {
                             f = prev_f;
                             break;
                         }
@@ -407,21 +428,30 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 }
 
                 break;
-                case 'a':
+                case 'a': {
                     t = (int)f_ptr->x_attr[lighting_level];
-                    (void)cmd_visuals_aux(i, &t, 256);
+                    const auto &[is_input, visual_id] = cmd_visuals_aux(i, t, 256);
+                    (void)is_input;
+                    t = visual_id;
                     f_ptr->x_attr[lighting_level] = (byte)t;
                     need_redraw = true;
                     break;
-                case 'c':
+                }
+                case 'c': {
                     t = (int)f_ptr->x_char[lighting_level];
-                    (void)cmd_visuals_aux(i, &t, 256);
+                    const auto &[is_input, visual_id] = cmd_visuals_aux(i, t, 256);
+                    (void)is_input;
+                    t = visual_id;
                     f_ptr->x_char[lighting_level] = (byte)t;
                     need_redraw = true;
                     break;
-                case 'l':
-                    (void)cmd_visuals_aux(i, &lighting_level, F_LIT_MAX);
+                }
+                case 'l': {
+                    const auto &[is_input, visual_id] = cmd_visuals_aux(i, lighting_level, F_LIT_MAX);
+                    (void)is_input;
+                    lighting_level = visual_id;
                     break;
+                }
                 case 'd':
                     apply_default_feat_lighting(f_ptr->x_attr, f_ptr->x_char);
                     need_redraw = true;
