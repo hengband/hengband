@@ -209,7 +209,7 @@ static std::string describe_non_pet(const PlayerType &player, const MonsterEntit
     }
 
     std::stringstream ss;
-    if (monster.is_pet()) {
+    if (monster.is_pet() && none_bits(mode, MD_NO_OWNER)) {
         ss << _("あなたの", "your ");
     } else {
         ss << _("", "the ");
