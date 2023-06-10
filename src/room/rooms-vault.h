@@ -1,19 +1,20 @@
 ﻿#pragma once
 
-#include "system/angband.h"
+#include <stdint.h>
 #include <string>
 #include <vector>
 
 struct vault_type {
-    int16_t idx;
+    vault_type() = default;
+    short idx = 0;
 
-    std::string name; /* Name (offset) */
-    std::string text; /* Text (offset) */
+    std::string name = ""; /* Name (offset) */
+    std::string text = ""; /* Text (offset) */
 
-    byte typ{}; /* Vault type */
-    PROB rat{}; /* Vault rating (unused) */
-    POSITION hgt{}; /* Vault height */
-    POSITION wid{}; /* Vault width */
+    uint8_t typ = 0; /* Vault type */
+    int rat = 0; /* Vault rating (unused) */
+    int hgt = 0; /* Vault height */
+    int wid = 0; /* Vault width */
 };
 
 extern std::vector<vault_type> vaults_info;
