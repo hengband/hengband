@@ -35,7 +35,7 @@ PlayerCutRank PlayerCut::get_rank(short value)
     return PlayerCutRank::NONE;
 }
 
-std::string_view PlayerCut::get_cut_mes(PlayerCutRank stun_rank)
+std::string PlayerCut::get_cut_mes(PlayerCutRank stun_rank)
 {
     switch (stun_rank) {
     case PlayerCutRank::NONE:
@@ -103,7 +103,7 @@ bool PlayerCut::is_cut() const
     return this->cut > 0;
 }
 
-std::tuple<term_color_type, std::string_view> PlayerCut::get_expr() const
+std::tuple<term_color_type, std::string> PlayerCut::get_expr() const
 {
     switch (this->get_rank()) {
     case PlayerCutRank::NONE: // dummy.
