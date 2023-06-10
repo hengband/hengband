@@ -3,6 +3,7 @@
 #include "monster-race/race-ability-flags.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
+#include <string>
 #include <vector>
 
 class MonsterRaceInfo;
@@ -18,11 +19,7 @@ struct melee_spell_type {
     std::vector<MonsterAbilityType> spells{};
     bool can_remember = false;
     EnumClassFlagGroup<MonsterAbilityType> ability_flags{};
-    GAME_TEXT m_name[160]{};
-#ifdef JP
-#else
-    char m_poss[160]{};
-#endif
+    std::string m_name = "";
 
     MONSTER_IDX m_idx;
     MonsterAbilityType thrown_spell;

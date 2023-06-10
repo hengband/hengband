@@ -40,7 +40,7 @@ static bool try_melee_spell(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 
     disturb(player_ptr, true, true);
     if (ms_ptr->see_m) {
-        msg_format(_("%s^は呪文を唱えようとしたが失敗した。", "%s^ tries to cast a spell, but fails."), ms_ptr->m_name);
+        msg_format(_("%s^は呪文を唱えようとしたが失敗した。", "%s^ tries to cast a spell, but fails."), ms_ptr->m_name.data());
     }
 
     return true;
@@ -53,7 +53,7 @@ static bool disturb_melee_spell(PlayerType *player_ptr, melee_spell_type *ms_ptr
     }
 
     if (ms_ptr->see_m) {
-        msg_format(_("反魔法バリアが%s^の呪文をかき消した。", "Anti magic barrier cancels the spell which %s^ casts."), ms_ptr->m_name);
+        msg_format(_("反魔法バリアが%s^の呪文をかき消した。", "Anti magic barrier cancels the spell which %s^ casts."), ms_ptr->m_name.data());
     }
 
     return true;
@@ -96,17 +96,6 @@ static void process_rememberance(melee_spell_type *ms_ptr)
     }
 }
 
-static void describe_melee_spell(PlayerType *player_ptr, melee_spell_type *ms_ptr)
-{
-    /* Get the monster name (or "it") */
-    angband_strcpy(ms_ptr->m_name, monster_desc(player_ptr, ms_ptr->m_ptr, 0x00), sizeof(ms_ptr->m_name));
-#ifdef JP
-#else
-    /* Get the monster possessive ("his"/"her"/"its") */
-    angband_strcpy(ms_ptr->m_poss, monster_desc(player_ptr, ms_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE), sizeof(ms_ptr->m_poss));
-#endif
-}
-
 /*!
  * @brief モンスターが敵モンスターに特殊能力を使う処理のメインルーチン /
  * Monster tries to 'cast a spell' (or breath, etc) at another monster.
@@ -124,7 +113,7 @@ bool monst_spell_monst(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return false;
     }
 
-    describe_melee_spell(player_ptr, ms_ptr);
+    ms_ptr->m_name = monster_desc(player_ptr, ms_ptr->m_ptr, 0x00);
     ms_ptr->thrown_spell = rand_choice(ms_ptr->spells);
     if (player_ptr->riding && (m_idx == player_ptr->riding)) {
         disturb(player_ptr, true, true);
