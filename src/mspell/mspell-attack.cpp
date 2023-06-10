@@ -313,8 +313,8 @@ static void remember_mspell(msa_type *msa_ptr)
  */
 bool make_attack_spell(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    msa_type tmp_msa;
-    msa_type *msa_ptr = initialize_msa_type(player_ptr, &tmp_msa, m_idx);
+    msa_type tmp_msa(player_ptr, m_idx);
+    msa_type *msa_ptr = &tmp_msa;
     if (msa_ptr->m_ptr->is_confused()) {
         reset_target(msa_ptr->m_ptr);
         return false;
