@@ -25,7 +25,7 @@
 #include "monster/monster-update.h"
 #include "object-enchant/trc-types.h"
 #include "object/object-kind-hook.h"
-#include "player-attack/player-attack-util.h"
+#include "player-attack/player-attack.h"
 #include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
 #include "player-info/ninja-data-type.h"

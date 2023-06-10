@@ -699,7 +699,6 @@ hengband_SOURCES = \
 	player-ability/player-strength.cpp player-ability/player-strength.h \
 	player-ability/player-wisdom.cpp player-ability/player-wisdom.h \
 	\
-	player-attack/player-attack-util.h \
 	player-attack/attack-chaos-effect.cpp player-attack/attack-chaos-effect.h \
 	player-attack/blood-sucking-processor.cpp player-attack/blood-sucking-processor.h \
 	player-attack/player-attack.cpp player-attack/player-attack.h \

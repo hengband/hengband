@@ -13,7 +13,7 @@
 #include "main/sound-of-music.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
-#include "player-attack/player-attack-util.h"
+#include "player-attack/player-attack.h"
 #include "player-base/player-class.h"
 #include "player-info/race-info.h"
 #include "player/player-damage.h"

@@ -3512,9 +3512,6 @@
     <ClInclude Include="..\..\src\player-attack\player-attack.h">
       <Filter>player-attack</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-attack\player-attack-util.h">
-      <Filter>player-attack</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster-attack\insults-moans.h">
       <Filter>monster-attack</Filter>
     </ClInclude>

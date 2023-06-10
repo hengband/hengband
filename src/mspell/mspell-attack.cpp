@@ -129,11 +129,6 @@ static void set_mspell_list(msa_type *msa_ptr)
     EnumClassFlagGroup<MonsterAbilityType>::get_flags(msa_ptr->ability_flags, std::back_inserter(msa_ptr->mspells));
 }
 
-static void describe_mspell_monster(PlayerType *player_ptr, msa_type *msa_ptr)
-{
-    angband_strcpy(msa_ptr->m_name, monster_desc(player_ptr, msa_ptr->m_ptr, 0x00), sizeof(msa_ptr->m_name));
-}
-
 static bool switch_do_spell(PlayerType *player_ptr, msa_type *msa_ptr)
 {
     switch (msa_ptr->do_spell) {
@@ -179,7 +174,7 @@ static bool check_mspell_continuation(PlayerType *player_ptr, msa_type *msa_ptr)
         return false;
     }
 
-    describe_mspell_monster(player_ptr, msa_ptr);
+    msa_ptr->m_name = monster_desc(player_ptr, msa_ptr->m_ptr, 0x00);
     if (!switch_do_spell(player_ptr, msa_ptr) || (msa_ptr->thrown_spell == MonsterAbilityType::MAX)) {
         return false;
     }
@@ -196,12 +191,12 @@ static bool check_mspell_unexploded(PlayerType *player_ptr, msa_type *msa_ptr)
 
     if (!spell_is_inate(msa_ptr->thrown_spell) && (msa_ptr->in_no_magic_dungeon || (msa_ptr->m_ptr->get_remaining_stun() && one_in_(2)) || (randint0(100) < fail_rate))) {
         disturb(player_ptr, true, true);
-        msg_format(_("%s^は呪文を唱えようとしたが失敗した。", "%s^ tries to cast a spell, but fails."), msa_ptr->m_name);
+        msg_format(_("%s^は呪文を唱えようとしたが失敗した。", "%s^ tries to cast a spell, but fails."), msa_ptr->m_name.data());
         return true;
     }
 
     if (!spell_is_inate(msa_ptr->thrown_spell) && SpellHex(player_ptr).check_hex_barrier(msa_ptr->m_idx, HEX_ANTI_MAGIC)) {
-        msg_format(_("反魔法バリアが%s^の呪文をかき消した。", "Anti magic barrier cancels the spell which %s^ casts."), msa_ptr->m_name);
+        msg_format(_("反魔法バリアが%s^の呪文をかき消した。", "Anti magic barrier cancels the spell which %s^ casts."), msa_ptr->m_name.data());
         return true;
     }
 
@@ -313,8 +308,8 @@ static void remember_mspell(msa_type *msa_ptr)
  */
 bool make_attack_spell(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    msa_type tmp_msa;
-    msa_type *msa_ptr = initialize_msa_type(player_ptr, &tmp_msa, m_idx);
+    msa_type tmp_msa(player_ptr, m_idx);
+    msa_type *msa_ptr = &tmp_msa;
     if (msa_ptr->m_ptr->is_confused()) {
         reset_target(msa_ptr->m_ptr);
         return false;

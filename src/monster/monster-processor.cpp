@@ -570,14 +570,13 @@ bool process_monster_fear(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MO
  */
 void process_monsters(PlayerType *player_ptr)
 {
-    old_race_flags tmp_flags;
-    old_race_flags *old_race_flags_ptr = init_old_race_flags(&tmp_flags);
+    const auto old_monrace_id = player_ptr->monster_race_idx;
+    old_race_flags tmp_flags(old_monrace_id);
+    old_race_flags *old_race_flags_ptr = &tmp_flags;
     player_ptr->current_floor_ptr->monster_noise = false;
-    MonsterRaceId old_monster_race_idx = player_ptr->monster_race_idx;
-    save_old_race_flags(player_ptr->monster_race_idx, old_race_flags_ptr);
     sweep_monster_process(player_ptr);
     hack_m_idx = 0;
-    if (!MonsterRace(player_ptr->monster_race_idx).is_valid() || (player_ptr->monster_race_idx != old_monster_race_idx)) {
+    if (!MonsterRace(player_ptr->monster_race_idx).is_valid() || (player_ptr->monster_race_idx != old_monrace_id)) {
         return;
     }
 

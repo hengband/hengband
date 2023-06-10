@@ -37,10 +37,12 @@ struct turn_flags {
 };
 
 struct old_race_flags {
+    old_race_flags(MonsterRaceId monrace_idx);
+
     BIT_FLAGS old_r_flags1;
     BIT_FLAGS old_r_flags2;
     BIT_FLAGS old_r_flags3;
-    BIT_FLAGS old_r_flagsr;
+    BIT_FLAGS old_r_flagsr = 0;
     EnumClassFlagGroup<MonsterAbilityType> old_r_ability_flags;
     EnumClassFlagGroup<MonsterBehaviorType> old_r_behavior_flags;
     EnumClassFlagGroup<MonsterKindType> old_r_kind_flags;
@@ -64,9 +66,7 @@ struct coordinate_candidate {
 
 class MonsterEntity;
 turn_flags *init_turn_flags(MONSTER_IDX riding_idx, MONSTER_IDX m_idx, turn_flags *turn_flags_ptr);
-old_race_flags *init_old_race_flags(old_race_flags *old_race_flags_ptr);
 coordinate_candidate init_coordinate_candidate(void);
 
 void store_enemy_approch_direction(int *mm, POSITION y, POSITION x);
 void store_moves_val(int *mm, int y, int x);
-void save_old_race_flags(MonsterRaceId monster_race_idx, old_race_flags *old_race_flags_ptr);
