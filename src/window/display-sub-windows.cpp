@@ -17,6 +17,8 @@
 #include "mind/mind-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
+#include "monster/monster-describer.h"
+#include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
@@ -233,6 +235,50 @@ void print_monster_list(FloorType *floor_ptr, const std::vector<MONSTER_IDX> &mo
     }
 }
 
+static void print_pet_list_oneline(PlayerType *player_ptr, const MonsterEntity &monster, TERM_LEN x, TERM_LEN y, TERM_LEN width)
+{
+    const auto &monrace = monraces_info[monster.ap_r_idx];
+    const auto name = monster_desc(player_ptr, &monster, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE | MD_NO_OWNER);
+    const auto [bar_color, bar_len] = monster.get_hp_bar_data();
+    const auto is_visible = monster.ml && !player_ptr->effects()->hallucination()->is_hallucinated();
+
+    term_erase(0, y, 255);
+    if (is_visible) {
+        term_putstr(x, y, -1, TERM_WHITE, "[----------]");
+        term_putstr(x + 1, y, bar_len, bar_color, "**********");
+    }
+
+    term_gotoxy(x + 13, y);
+    term_add_bigch(monrace.x_attr, monrace.x_char);
+    term_addstr(-1, TERM_WHITE, " ");
+    term_addstr(-1, TERM_WHITE, name);
+
+    if (width >= 50) {
+        const auto location = format(" (X:%3d Y:%3d)", monster.fx, monster.fy);
+        prt(is_visible ? location : "", y, width - location.length());
+    }
+}
+
+static void print_pet_list(PlayerType *player_ptr, const std::vector<MONSTER_IDX> &pets, TERM_LEN x, TERM_LEN y, TERM_LEN width, TERM_LEN height)
+{
+    for (auto n = 0U; n < pets.size(); ++n) {
+        const auto &monster = player_ptr->current_floor_ptr->m_list[pets[n]];
+        const int line = y + n;
+
+        print_pet_list_oneline(player_ptr, monster, x, line, width);
+
+        if ((line == height - 2) && (n < pets.size() - 2)) {
+            term_erase(0, line + 1, 255);
+            term_putstr(x, line + 1, -1, TERM_WHITE, "-- and more --");
+            break;
+        }
+    }
+
+    for (int n = pets.size(); n < height; ++n) {
+        term_erase(0, y + n, 255);
+    }
+}
+
 /*!
  * @brief 出現中モンスターのリストをサブウィンドウに表示する / Hack -- display monster list in sub-windows
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -254,6 +300,20 @@ void fix_monster_list(PlayerType *player_ptr)
         std::call_once(once, target_sensing_monsters_prepare, player_ptr, monster_list);
         select_monster_music(player_ptr, monster_list);
     }
+}
+
+/*!
+ * @brief 視界内のペットのリストをサブウィンドウに表示する
+ */
+void fix_pet_list(PlayerType *player_ptr)
+{
+    display_sub_windows(SubWindowRedrawingFlag::PETS,
+        [player_ptr] {
+            int w, h;
+            term_get_size(&w, &h);
+            const auto pets = target_pets_prepare(player_ptr);
+            print_pet_list(player_ptr, pets, 0, 0, w, h);
+        });
 }
 
 /*!

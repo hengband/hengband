@@ -36,7 +36,7 @@ enum class SubWindowRedrawingFlag {
     SPELL = 2, /*!< 魔法一覧 */
     PLAYER = 3, /*!< プレイヤーのステータス */
     SIGHT_MONSTERS = 4, /*!< 視界内モンスターの一覧 */
-    /*!< 5は予約領域、セーブデータに影響があるので互換性を保つ変更をしない限り欠番埋め禁止 */
+    PETS = 5, /*!< ペットの一覧 */
     MESSAGE = 6, /*!< メッセージログ */
     OVERHEAD = 7, /*!< 周辺の光景 */
     MONSTER_LORE = 8, /*!< モンスターの思い出 */
@@ -48,26 +48,6 @@ enum class SubWindowRedrawingFlag {
     /*!< 14は予約領域 */
     /*!< 15は予約領域 */
     MAX = 16,
-};
-
-/*!
- * @details 欠番があるためEnumRageをそのまま作るのが困難であり、代替として定義する.
- * 欠番が埋まったら不要となるので削除すること。
- */
-inline constexpr auto ALL_SUB_WINDOW_FLAGS = {
-    SubWindowRedrawingFlag::INVENTORY,
-    SubWindowRedrawingFlag::EQUIPMENT,
-    SubWindowRedrawingFlag::SPELL,
-    SubWindowRedrawingFlag::PLAYER,
-    SubWindowRedrawingFlag::SIGHT_MONSTERS,
-    SubWindowRedrawingFlag::MESSAGE,
-    SubWindowRedrawingFlag::OVERHEAD,
-    SubWindowRedrawingFlag::MONSTER_LORE,
-    SubWindowRedrawingFlag::ITEM_KNOWLEDGE,
-    SubWindowRedrawingFlag::DUNGEON,
-    SubWindowRedrawingFlag::SNAPSHOT,
-    SubWindowRedrawingFlag::FLOOR_ITEMS,
-    SubWindowRedrawingFlag::FOUND_ITEMS,
 };
 
 enum class StatusRecalculatingFlag {

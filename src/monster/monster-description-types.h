@@ -12,6 +12,7 @@ enum monsetr_description_type {
     MD_ASSUME_VISIBLE = 0x00000080, /* Assume the monster is visible */
     MD_TRUE_NAME = 0x00000100, /* Chameleon's true name */
     MD_IGNORE_HALLU = 0x00000200, /* Ignore hallucination, and penetrate shape change */
+    MD_NO_OWNER = 0x00000400, /* Do not indicate the pet's owner as in "your" */
 };
 
 #define MD_WRONGDOER_NAME (MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE) /* 加害明記向け */
