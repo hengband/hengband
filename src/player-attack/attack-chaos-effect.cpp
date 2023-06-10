@@ -24,7 +24,7 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "object/object-mark-types.h"
-#include "player-attack/player-attack-util.h"
+#include "player-attack/player-attack.h"
 #include "player/attack-defense-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-kind/spells-polymorph.h"

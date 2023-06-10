@@ -36,7 +36,6 @@
 #include "object/tval-types.h"
 #include "player-attack/attack-chaos-effect.h"
 #include "player-attack/blood-sucking-processor.h"
-#include "player-attack/player-attack-util.h"
 #include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
@@ -68,25 +67,21 @@ constexpr auto MAX_VAMPIRIC_DRAIN = 50;
 /*!
  * @brief プレイヤーの攻撃情報を初期化する(コンストラクタ以外の分)
  */
-static player_attack_type *initialize_player_attack_type(
-    player_attack_type *pa_ptr, PlayerType *player_ptr, POSITION y, POSITION x, int16_t hand, combat_options mode, bool *fear, bool *mdeath)
+player_attack_type::player_attack_type(FloorType &floor, POSITION y, POSITION x, int16_t hand, combat_options mode, bool *fear, bool *mdeath)
+    : hand(hand)
+    , mode(mode)
+    , fear(fear)
+    , mdeath(mdeath)
+    , drain_left(MAX_VAMPIRIC_DRAIN)
+    , g_ptr(&floor.grid_array[y][x])
+    , chaos_effect(CE_NONE)
+    , magical_effect(MagicalBrandEffectType::NONE)
 {
-    auto floor_ptr = player_ptr->current_floor_ptr;
-    auto g_ptr = &floor_ptr->grid_array[y][x];
-    auto m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-
-    pa_ptr->hand = hand;
-    pa_ptr->mode = mode;
-    pa_ptr->m_idx = g_ptr->m_idx;
-    pa_ptr->m_ptr = m_ptr;
-    pa_ptr->r_idx = m_ptr->r_idx;
-    pa_ptr->r_ptr = &monraces_info[m_ptr->r_idx];
-    pa_ptr->ma_ptr = &ma_blows[0];
-    pa_ptr->g_ptr = g_ptr;
-    pa_ptr->fear = fear;
-    pa_ptr->mdeath = mdeath;
-    pa_ptr->drain_left = MAX_VAMPIRIC_DRAIN;
-    return pa_ptr;
+    this->m_idx = this->g_ptr->m_idx;
+    this->m_ptr = &floor.m_list[this->g_ptr->m_idx];
+    this->r_idx = this->m_ptr->r_idx;
+    this->r_ptr = &monraces_info[this->m_ptr->r_idx];
+    this->ma_ptr = &ma_blows[0];
 }
 
 /*!
@@ -548,8 +543,8 @@ void exe_player_attack_to_monster(PlayerType *player_ptr, POSITION y, POSITION x
     bool do_quake = false;
     bool drain_msg = true;
 
-    player_attack_type tmp_attack;
-    auto pa_ptr = initialize_player_attack_type(&tmp_attack, player_ptr, y, x, hand, mode, fear, mdeath);
+    player_attack_type tmp_attack(*player_ptr->current_floor_ptr, y, x, hand, mode, fear, mdeath);
+    auto pa_ptr = &tmp_attack;
 
     bool is_human = (pa_ptr->r_ptr->d_char == 'p');
     bool is_lowlevel = (pa_ptr->r_ptr->level < (player_ptr->lev - 15));

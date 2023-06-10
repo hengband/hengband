@@ -20,7 +20,7 @@
 #include "monster-race/race-flags3.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
-#include "player-attack/player-attack-util.h"
+#include "player-attack/player-attack.h"
 #include "player-base/player-class.h"
 #include "player-info/monk-data-type.h"
 #include "player/attack-defense-types.h"

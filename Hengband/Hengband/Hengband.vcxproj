@@ -1483,7 +1483,6 @@
     <ClInclude Include="..\..\src\monster-attack\monster-attack-table.h" />
     <ClInclude Include="..\..\src\combat\attack-accuracy.h" />
     <ClInclude Include="..\..\src\monster-attack\monster-eating.h" />
-    <ClInclude Include="..\..\src\player-attack\player-attack-util.h" />
     <ClInclude Include="..\..\src\player-attack\player-attack.h" />
     <ClInclude Include="..\..\src\combat\slaying.h" />
     <ClInclude Include="..\..\src\object-enchant\vorpal-weapon.h" />

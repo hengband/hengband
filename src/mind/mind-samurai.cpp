@@ -23,7 +23,7 @@
 #include "monster/monster-status.h"
 #include "object-enchant/tr-types.h"
 #include "pet/pet-util.h"
-#include "player-attack/player-attack-util.h"
+#include "player-attack/player-attack.h"
 #include "player-base/player-class.h"
 #include "player-info/samurai-data-type.h"
 #include "player/attack-defense-types.h"
