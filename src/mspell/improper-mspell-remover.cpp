@@ -31,8 +31,8 @@ static void add_cheat_remove_flags(PlayerType *player_ptr, msr_type *msr_ptr)
  */
 void remove_bad_spells(MONSTER_IDX m_idx, PlayerType *player_ptr, EnumClassFlagGroup<MonsterAbilityType> &ability_flags)
 {
-    msr_type tmp_msr;
-    msr_type *msr_ptr = initialize_msr_type(player_ptr, &tmp_msr, m_idx, ability_flags);
+    msr_type tmp_msr(player_ptr, m_idx, ability_flags);
+    auto *msr_ptr = &tmp_msr;
     if (msr_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID)) {
         return;
     }
