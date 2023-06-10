@@ -312,7 +312,11 @@ void process_player(PlayerType *player_ptr)
         } else {
             move_cursor_relative(player_ptr->y, player_ptr->x);
 
-            rfu.set_flag(SubWindowRedrawingFlag::SIGHT_MONSTERS);
+            static constexpr auto flags = {
+                SubWindowRedrawingFlag::SIGHT_MONSTERS,
+                SubWindowRedrawingFlag::PETS,
+            };
+            rfu.set_flags(flags);
             window_stuff(player_ptr);
 
             can_save = true;

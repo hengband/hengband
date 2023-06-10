@@ -112,7 +112,7 @@ const concptr window_flag_desc[32] = {
     _("呪文一覧", "Display spell list"),
     _("キャラクタ情報", "Display character"),
     _("視界内のモンスター表示", "Display monsters in sight"),
-    nullptr,
+    _("ペット一覧", "Display pets"),
     _("メッセージ", "Display messages"),
     _("ダンジョン全体図", "Display overhead view"),
     _("モンスターの思い出", "Display monster recall"),

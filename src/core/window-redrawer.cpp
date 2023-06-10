@@ -286,6 +286,11 @@ void window_stuff(PlayerType *player_ptr)
         fix_monster_list(player_ptr);
     }
 
+    if (window_flags.has(SubWindowRedrawingFlag::PETS)) {
+        rfu.reset_flag(SubWindowRedrawingFlag::PETS);
+        fix_pet_list(player_ptr);
+    }
+
     if (window_flags.has(SubWindowRedrawingFlag::MESSAGE)) {
         rfu.reset_flag(SubWindowRedrawingFlag::MESSAGE);
         fix_message();

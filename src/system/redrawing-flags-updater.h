@@ -36,7 +36,7 @@ enum class SubWindowRedrawingFlag {
     SPELL = 2, /*!< 魔法一覧 */
     PLAYER = 3, /*!< プレイヤーのステータス */
     SIGHT_MONSTERS = 4, /*!< 視界内モンスターの一覧 */
-    /*!< 5は予約領域、セーブデータに影響があるので互換性を保つ変更をしない限り欠番埋め禁止 */
+    PETS = 5, /*!< ペットの一覧 */
     MESSAGE = 6, /*!< メッセージログ */
     OVERHEAD = 7, /*!< 周辺の光景 */
     MONSTER_LORE = 8, /*!< モンスターの思い出 */
@@ -60,6 +60,7 @@ inline constexpr auto ALL_SUB_WINDOW_FLAGS = {
     SubWindowRedrawingFlag::SPELL,
     SubWindowRedrawingFlag::PLAYER,
     SubWindowRedrawingFlag::SIGHT_MONSTERS,
+    SubWindowRedrawingFlag::PETS,
     SubWindowRedrawingFlag::MESSAGE,
     SubWindowRedrawingFlag::OVERHEAD,
     SubWindowRedrawingFlag::MONSTER_LORE,
