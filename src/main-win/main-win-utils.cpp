@@ -50,7 +50,7 @@ void save_screen_as_html(HWND hWnd)
     ofnw.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
 
     if (GetSaveFileNameW(&ofnw)) {
-        do_cmd_save_screen_html_aux(to_multibyte(&buf[0]).c_str(), 0);
+        exe_cmd_save_screen_html(to_multibyte(&buf[0]).c_str(), false);
     }
 }
 
