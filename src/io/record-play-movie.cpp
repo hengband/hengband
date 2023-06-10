@@ -523,8 +523,6 @@ static void update_term_size(int x, int y, int len)
 
 static bool flush_ringbuf_client()
 {
-    char buf[1024];
-
     /* 書くデータなし */
     if (fresh_queue.next == fresh_queue.tail) {
         return false;
@@ -536,21 +534,16 @@ static bool flush_ringbuf_client()
     }
 
     /* 時間情報(区切り)が得られるまで書く */
+    char buf[1024]{};
     while (get_nextbuf(buf)) {
-        char id;
-        int x, y, len;
-        TERM_COLOR col;
-        int i;
-        unsigned char tmp1, tmp2, tmp3, tmp4;
+        auto id = buf[0];
+        auto x = static_cast<uint8_t>(buf[1]) - 1;
+        auto y = static_cast<uint8_t>(buf[2]) - 1;
+        int len = static_cast<uint8_t>(buf[3]);
+        uint8_t col = buf[4];
         char *mesg;
-
-        sscanf(buf, "%c%c%c%c%c", &id, &tmp1, &tmp2, &tmp3, &tmp4);
-        x = tmp1 - 1;
-        y = tmp2 - 1;
-        len = tmp3;
-        col = tmp4;
         if (id == 's') {
-            col = tmp3;
+            col = buf[3];
             mesg = &buf[4];
         } else {
             mesg = &buf[5];
@@ -567,43 +560,46 @@ static bool flush_ringbuf_client()
             update_term_size(x, y, len);
             (void)((*angband_terms[0]->text_hook)(x, y, len, (byte)col, mesg));
             std::copy_n(mesg, len, &game_term->scr->c[y][x]);
-            for (i = x; i < x + len; i++) {
+            for (auto i = x; i < x + len; i++) {
                 game_term->scr->a[y][i] = col;
             }
-            break;
 
+            break;
         case 'n': /* 繰り返し */
-            for (i = 1; i < len; i++) {
+            for (auto i = 1; i < len + 1; i++) {
+                if (i == len) {
+                    mesg[i] = '\0';
+                    break;
+                }
+
                 mesg[i] = mesg[0];
             }
-            mesg[i] = '\0';
+
             update_term_size(x, y, len);
             (void)((*angband_terms[0]->text_hook)(x, y, len, (byte)col, mesg));
             std::copy_n(mesg, len, &game_term->scr->c[y][x]);
-            for (i = x; i < x + len; i++) {
+            for (auto i = x; i < x + len; i++) {
                 game_term->scr->a[y][i] = col;
             }
-            break;
 
+            break;
         case 's': /* 一文字 */
             update_term_size(x, y, 1);
             (void)((*angband_terms[0]->text_hook)(x, y, 1, (byte)col, mesg));
             std::copy_n(&game_term->scr->c[y][x], 1, mesg);
             game_term->scr->a[y][x] = col;
             break;
-
         case 'w':
             update_term_size(x, y, len);
             (void)((*angband_terms[0]->wipe_hook)(x, y, len));
             break;
-
         case 'x':
             if (x == TERM_XTRA_CLEAR) {
                 term_clear();
             }
+
             (void)((*angband_terms[0]->xtra_hook)(x, 0));
             break;
-
         case 'c':
             update_term_size(x, y, 1);
             (void)((*angband_terms[0]->curs_hook)(x, y));
