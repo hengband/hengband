@@ -762,7 +762,7 @@ static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_b
             }
         }
 
-        int spell_max = enum2i(ElementSpells::MAX);
+        constexpr auto spell_max = enum2i(ElementSpells::MAX);
         if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && should_redraw_cursor)) {
             if (!redraw || use_menu) {
                 redraw = true;
@@ -1232,7 +1232,7 @@ byte select_element_realm(PlayerType *player_ptr)
 {
     clear_from(10);
 
-    int realm_max = enum2i(ElementRealmType::MAX);
+    constexpr auto realm_max = enum2i(ElementRealmType::MAX);
     int realm_idx = 1;
     int row = 16;
     while (1) {
