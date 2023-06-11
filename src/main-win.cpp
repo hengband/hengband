@@ -1399,8 +1399,9 @@ static void init_windows(void)
             td->dwExStyle, AngList, td->name, td->dwStyle, td->pos_x, td->pos_y, td->size_wid, td->size_hgt, HWND_DESKTOP, NULL, hInstance, NULL);
         my_td = NULL;
 
-        if (!td->w) {
+        if (td->w == NULL) {
             quit(_("サブウィンドウに作成に失敗しました", "Failed to create sub-window"));
+            return; // 静的解析対応.
         }
 
         td->size_hack = true;
@@ -1435,8 +1436,9 @@ static void init_windows(void)
         td->pos_x, td->pos_y, td->size_wid, td->size_hgt, HWND_DESKTOP, NULL, hInstance, NULL);
     my_td = NULL;
 
-    if (!td->w) {
+    if (td->w == NULL) {
         quit(_("メインウィンドウの作成に失敗しました", "Failed to create main window"));
+        return; // 静的解析対応.
     }
 
     /* Resize */
@@ -2308,8 +2310,6 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
         if (!mouse_down) {
             return 0;
         }
-        HGLOBAL hGlobal;
-        LPSTR lpStr;
         TERM_LEN dx = abs(oldx - mousex) + 1;
         TERM_LEN dy = abs(oldy - mousey) + 1;
         TERM_LEN ox = (oldx > mousex) ? mousex : oldx;
@@ -2323,13 +2323,13 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 #else
         int sz = (dx + 2) * dy;
 #endif
-        hGlobal = GlobalAlloc(GHND, sz + 1);
-        if (hGlobal == NULL) {
+        const auto window_size = GlobalAlloc(GHND, sz + 1);
+        if (window_size == NULL) {
             return 0;
         }
-        lpStr = (LPSTR)GlobalLock(hGlobal);
 
-        for (int i = 0; i < dy; i++) {
+        auto global_lock = static_cast<LPSTR>(GlobalLock(window_size));
+        for (auto i = 0; (i < dy) && (global_lock != NULL); i++) {
 #ifdef JP
             const auto &scr = data[0].t.scr->c;
 
@@ -2352,27 +2352,32 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
                 if (s[j] == 127) {
                     s[j] = '#';
                 }
-                *lpStr++ = s[j];
+                *global_lock++ = s[j];
             }
 #else
             for (int j = 0; j < dx; j++) {
-                *lpStr++ = data[0].t.scr->c[oy + i][ox + j];
+                *global_lock++ = data[0].t.scr->c[oy + i][ox + j];
             }
 #endif
             if (dy > 1) {
-                *lpStr++ = '\r';
-                *lpStr++ = '\n';
+                *global_lock++ = '\r';
+                *global_lock++ = '\n';
             }
         }
 
-        GlobalUnlock(hGlobal);
-        if (OpenClipboard(hWnd) == 0) {
-            GlobalFree(hGlobal);
+        GlobalUnlock(window_size);
+        if (!OpenClipboard(hWnd)) {
+            GlobalFree(window_size);
             return 0;
         }
 
         EmptyClipboard();
-        SetClipboardData(CF_TEXT, hGlobal);
+        if (SetClipboardData(CF_TEXT, window_size) == NULL) {
+            CloseClipboard();
+            GlobalFree(window_size);
+            return 0;
+        }
+
         CloseClipboard();
         term_redraw();
         return 0;

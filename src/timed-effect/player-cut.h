@@ -21,13 +21,13 @@ public:
     virtual ~PlayerCut() = default;
 
     static PlayerCutRank get_rank(short value);
-    static std::string_view get_cut_mes(PlayerCutRank stun_rank);
+    static std::string get_cut_mes(PlayerCutRank stun_rank);
     static short get_accumulation(int total, int damage);
 
     short current() const;
     PlayerCutRank get_rank() const;
     bool is_cut() const;
-    std::tuple<term_color_type, std::string_view> get_expr() const;
+    std::tuple<term_color_type, std::string> get_expr() const;
     int get_damage() const;
     void set(short value);
     void reset();

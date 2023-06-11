@@ -200,7 +200,7 @@ static element_type_list element_types = {
 /*!
  * @brief 元素魔法呪文定義
  */
-static element_power_list element_powers = {
+static const element_power_list element_powers = {
     { ElementSpells::BOLT_1ST,   { 0, {  1,  1,  15, _("%sの矢", "%s Bolt") }}},
     { ElementSpells::MON_DETECT, { 0, {  2,  2,  20, _("モンスター感知", "Detect Monsters") }}},
     { ElementSpells::PERCEPT,    { 0, {  5,  5,  50, _("擬似鑑定", "Psychometry") }}},
@@ -461,7 +461,7 @@ static std::string get_element_effect_info(PlayerType *player_ptr, int spell_idx
 static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
 {
     auto spell = i2enum<ElementSpells>(spell_idx);
-    auto power = element_powers.at(spell);
+    auto &power = element_powers.at(spell);
     AttributeType typ;
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
@@ -762,7 +762,7 @@ static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_b
             }
         }
 
-        int spell_max = enum2i(ElementSpells::MAX);
+        constexpr auto spell_max = enum2i(ElementSpells::MAX);
         if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && should_redraw_cursor)) {
             if (!redraw || use_menu) {
                 redraw = true;
@@ -1232,7 +1232,7 @@ byte select_element_realm(PlayerType *player_ptr)
 {
     clear_from(10);
 
-    int realm_max = enum2i(ElementRealmType::MAX);
+    constexpr auto realm_max = enum2i(ElementRealmType::MAX);
     int realm_idx = 1;
     int row = 16;
     while (1) {

@@ -648,8 +648,7 @@ bool BadStatusSetter::process_cut_effect(const short v)
 
 void BadStatusSetter::decrease_charisma(const PlayerCutRank new_rank, const short v)
 {
-    auto player_cut = this->player_ptr->effects()->cut();
-    auto cut_mes = player_cut->get_cut_mes(new_rank);
+    auto cut_mes = PlayerCut::get_cut_mes(new_rank);
     msg_print(cut_mes);
     if (v <= randint1(1000) && !one_in_(16)) {
         return;

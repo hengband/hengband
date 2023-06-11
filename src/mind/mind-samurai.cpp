@@ -45,6 +45,7 @@
 #include "view/display-messages.h"
 
 struct samurai_slaying_type {
+    samurai_slaying_type(MULTIPLY mult, const TrFlags &flags, MonsterEntity *m_ptr, combat_options mode, MonsterRaceInfo *r_ptr);
     MULTIPLY mult;
     TrFlags flags;
     MonsterEntity *m_ptr;
@@ -52,15 +53,13 @@ struct samurai_slaying_type {
     MonsterRaceInfo *r_ptr;
 };
 
-static samurai_slaying_type *initialize_samurai_slaying_type(
-    samurai_slaying_type *samurai_slaying_ptr, MULTIPLY mult, const TrFlags &flags, MonsterEntity *m_ptr, combat_options mode, MonsterRaceInfo *r_ptr)
+samurai_slaying_type::samurai_slaying_type(MULTIPLY mult, const TrFlags &flags, MonsterEntity *m_ptr, combat_options mode, MonsterRaceInfo *r_ptr)
+    : mult(mult)
+    , flags(flags)
+    , m_ptr(m_ptr)
+    , mode(mode)
+    , r_ptr(r_ptr)
 {
-    samurai_slaying_ptr->mult = mult;
-    samurai_slaying_ptr->flags = flags;
-    samurai_slaying_ptr->m_ptr = m_ptr;
-    samurai_slaying_ptr->mode = mode;
-    samurai_slaying_ptr->r_ptr = r_ptr;
-    return samurai_slaying_ptr;
 }
 
 /*!
@@ -325,8 +324,8 @@ static void hissatsu_keiun_kininken(PlayerType *player_ptr, samurai_slaying_type
 MULTIPLY mult_hissatsu(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flags, MonsterEntity *m_ptr, combat_options mode)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
-    samurai_slaying_type tmp_slaying;
-    samurai_slaying_type *samurai_slaying_ptr = initialize_samurai_slaying_type(&tmp_slaying, mult, flags, m_ptr, mode, r_ptr);
+    samurai_slaying_type tmp_slaying(mult, flags, m_ptr, mode, r_ptr);
+    samurai_slaying_type *samurai_slaying_ptr = &tmp_slaying;
     hissatsu_burning_strike(player_ptr, samurai_slaying_ptr);
     hissatsu_serpent_tongue(player_ptr, samurai_slaying_ptr);
     hissatsu_zanma_ken(samurai_slaying_ptr);

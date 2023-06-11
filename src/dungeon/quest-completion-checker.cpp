@@ -25,6 +25,7 @@
 QuestCompletionChecker::QuestCompletionChecker(PlayerType *player_ptr, MonsterEntity *m_ptr)
     : player_ptr(player_ptr)
     , m_ptr(m_ptr)
+    , quest_idx(QuestId::NONE)
 {
 }
 
