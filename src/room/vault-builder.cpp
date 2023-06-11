@@ -56,7 +56,7 @@ void vault_monsters(PlayerType *player_ptr, POSITION y1, POSITION x1, int num)
             }
 
             floor_ptr->monster_level = floor_ptr->base_level + 2;
-            (void)place_monster(player_ptr, y, x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
+            (void)place_random_monster(player_ptr, y, x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
             floor_ptr->monster_level = floor_ptr->base_level;
         }
     }

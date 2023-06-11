@@ -83,7 +83,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
                     return false;
                 }
 
-                if (place_monster_aux(player_ptr, 0, y, x, quest.r_idx, mode)) {
+                if (place_specific_monster(player_ptr, 0, y, x, quest.r_idx, mode)) {
                     break;
                 } else {
                     continue;

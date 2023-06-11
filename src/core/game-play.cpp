@@ -317,7 +317,7 @@ static void init_riding_pet(PlayerType *player_ptr, bool new_game)
 
     MonsterRaceId pet_r_idx = pc.equals(PlayerClassType::CAVALRY) ? MonsterRaceId::HORSE : MonsterRaceId::YASE_HORSE;
     auto *r_ptr = &monraces_info[pet_r_idx];
-    place_monster_aux(player_ptr, 0, player_ptr->y, player_ptr->x - 1, pet_r_idx, (PM_FORCE_PET | PM_NO_KAGE));
+    place_specific_monster(player_ptr, 0, player_ptr->y, player_ptr->x - 1, pet_r_idx, (PM_FORCE_PET | PM_NO_KAGE));
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[hack_m_idx_ii];
     m_ptr->mspeed = r_ptr->speed;
     m_ptr->maxhp = r_ptr->hdice * (r_ptr->hside + 1) / 2;

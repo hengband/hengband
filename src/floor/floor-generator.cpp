@@ -139,7 +139,7 @@ static void generate_challenge_arena(PlayerType *player_ptr)
 
     build_arena(player_ptr, &y, &x);
     player_place(player_ptr, y, x);
-    if (place_monster_aux(player_ptr, 0, player_ptr->y + 5, player_ptr->x, arena_info[player_ptr->arena_number].r_idx, PM_NO_KAGE | PM_NO_PET)) {
+    if (place_specific_monster(player_ptr, 0, player_ptr->y + 5, player_ptr->x, arena_info[player_ptr->arena_number].r_idx, PM_NO_KAGE | PM_NO_PET)) {
         return;
     }
 
@@ -238,7 +238,7 @@ static void generate_gambling_arena(PlayerType *player_ptr)
     build_battle(player_ptr, &y, &x);
     player_place(player_ptr, y, x);
     for (MONSTER_IDX i = 0; i < 4; i++) {
-        place_monster_aux(player_ptr, 0, player_ptr->y + 8 + (i / 2) * 4, player_ptr->x - 2 + (i % 2) * 4, battle_mon_list[i], (PM_NO_KAGE | PM_NO_PET));
+        place_specific_monster(player_ptr, 0, player_ptr->y + 8 + (i / 2) * 4, player_ptr->x - 2 + (i % 2) * 4, battle_mon_list[i], (PM_NO_KAGE | PM_NO_PET));
         set_friendly(&floor_ptr->m_list[floor_ptr->grid_array[player_ptr->y + 8 + (i / 2) * 4][player_ptr->x - 2 + (i % 2) * 4].m_idx]);
     }
 
