@@ -256,15 +256,15 @@ void store_moves_val(int *mm, int y, int x)
 
 /*!
  * @brief 古いモンスター情報の保存
- * @param monrace_idx モンスター種族ID
+ * @param monrace_id モンスター種族ID
  */
-old_race_flags::old_race_flags(MonsterRaceId monrace_idx)
+old_race_flags::old_race_flags(MonsterRaceId monrace_id)
 {
-    if (!MonsterRace(monrace_idx).is_valid()) {
+    if (!MonsterRace(monrace_id).is_valid()) {
         return;
     }
 
-    const auto &monrace = monraces_info[monrace_idx];
+    const auto &monrace = monraces_info[monrace_id];
 
     this->old_r_flags1 = monrace.r_flags1;
     this->old_r_flags2 = monrace.r_flags2;
