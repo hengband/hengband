@@ -255,7 +255,7 @@ std::vector<MONSTER_IDX> target_pets_prepare(PlayerType *player_ptr)
     std::vector<MONSTER_IDX> pets;
     const auto &floor = *player_ptr->current_floor_ptr;
 
-    for (auto i = 1; i < floor.m_max; ++i) {
+    for (short i = 1; i < floor.m_max; ++i) {
         const auto &monster = floor.m_list[i];
 
         if (monster.is_valid() && monster.is_pet()) {
