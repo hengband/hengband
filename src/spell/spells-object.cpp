@@ -188,21 +188,14 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
  * @param x1 配置したいフロアのX座標
  * @param num 獲得の処理回数
  * @param great TRUEならば必ず高級品以上を落とす
- * @param special TRUEならば必ず特別品を落とす
- * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
  */
-void acquirement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool great, bool special, bool known)
+void acquirement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool great)
 {
-    auto mode = AM_GOOD | (great || special ? AM_GREAT : AM_NONE) | (special ? AM_SPECIAL : AM_NONE);
+    auto mode = AM_GOOD | (great ? AM_GREAT : AM_NONE);
     for (auto i = 0; i < num; i++) {
         ItemEntity item;
         if (!make_object(player_ptr, &item, mode)) {
             continue;
-        }
-
-        if (known) {
-            object_aware(player_ptr, &item);
-            object_known(&item);
         }
 
         (void)drop_near(player_ptr, &item, -1, y1, x1);

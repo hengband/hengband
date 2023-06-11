@@ -155,7 +155,7 @@ bool multiply_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool clone, BIT
         mode |= PM_NO_PET;
     }
 
-    if (!place_monster_aux(player_ptr, m_idx, y, x, m_ptr->r_idx, (mode | PM_NO_KAGE | PM_MULTIPLY))) {
+    if (!place_specific_monster(player_ptr, m_idx, y, x, m_ptr->r_idx, (mode | PM_NO_KAGE | PM_MULTIPLY))) {
         return false;
     }
 
@@ -281,7 +281,7 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MonsterRaceId r_idx
 }
 
 /*!
- * @brief 一般的なモンスター生成処理のサブルーチン / Attempt to place a monster of the given race at the given location
+ * @brief 特定モンスターを生成する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param who 召喚主のモンスター情報ID
  * @param y 生成地点y座標
@@ -289,8 +289,9 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MonsterRaceId r_idx
  * @param r_idx 生成するモンスターの種族ID
  * @param mode 生成オプション
  * @return 生成に成功したらtrue
+ * @details 護衛も一緒に生成する
  */
-bool place_monster_aux(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode)
+bool place_specific_monster(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode)
 {
     auto *r_ptr = &monraces_info[r_idx];
 
@@ -362,14 +363,14 @@ bool place_monster_aux(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
 }
 
 /*!
- * @brief 一般的なモンスター生成処理のメインルーチン / Attempt to place a monster of the given race at the given location
+ * @brief フロア相当のモンスターを1体生成する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 生成地点y座標
  * @param x 生成地点x座標
  * @param mode 生成オプション
  * @return 生成に成功したらtrue
  */
-bool place_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
+bool place_random_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 {
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
     MonsterRaceId r_idx;
@@ -385,7 +386,7 @@ bool place_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mod
         mode |= PM_JURAL;
     }
 
-    return place_monster_aux(player_ptr, 0, y, x, r_idx, mode);
+    return place_specific_monster(player_ptr, 0, y, x, r_idx, mode);
 }
 
 static std::optional<MonsterRaceId> select_horde_leader_r_idx(PlayerType *player_ptr)
@@ -433,7 +434,7 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
             return false;
         }
 
-        if (place_monster_aux(player_ptr, 0, y, x, r_idx.value(), 0L)) {
+        if (place_specific_monster(player_ptr, 0, y, x, r_idx.value(), 0L)) {
             break;
         }
     }
@@ -496,7 +497,7 @@ bool alloc_guardian(PlayerType *player_ptr, bool def_val)
             continue;
         }
 
-        if (place_monster_aux(player_ptr, 0, oy, ox, guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) {
+        if (place_specific_monster(player_ptr, 0, oy, ox, guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) {
             return true;
         }
 
@@ -508,23 +509,22 @@ bool alloc_guardian(PlayerType *player_ptr, bool def_val)
 
 /*!
  * @brief ダンジョンの初期配置モンスターを生成1回生成する / Attempt to allocate a random monster in the dungeon.
- * @param dis プレイヤーから離れるべき最低距離
+ * @param dis プレイヤーから離れるべき最小距離
  * @param mode 生成オプション
+ * @param summon_specific 特定モンスター種別を生成するための関数ポインタ
+ * @param max_dis プレイヤーから離れるべき最大距離 (デバッグ用)
  * @return 生成に成功したらtrue
- * @details
- * Place the monster at least "dis" distance from the player.
- * Use "slp" to choose the initial "sleep" status
- * Use "floor_ptr->monster_level" for the monster level
  */
-bool alloc_monster(PlayerType *player_ptr, POSITION dis, BIT_FLAGS mode, summon_specific_pf summon_specific)
+bool alloc_monster(PlayerType *player_ptr, int min_dis, BIT_FLAGS mode, summon_specific_pf summon_specific, int max_dis)
 {
     if (alloc_guardian(player_ptr, false)) {
         return true;
     }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    POSITION y = 0, x = 0;
-    int attempts_left = 10000;
+    auto y = 0;
+    auto x = 0;
+    auto attempts_left = 10000;
     while (attempts_left--) {
         y = randint0(floor_ptr->height);
         x = randint0(floor_ptr->width);
@@ -539,7 +539,8 @@ bool alloc_monster(PlayerType *player_ptr, POSITION dis, BIT_FLAGS mode, summon_
             }
         }
 
-        if (distance(y, x, player_ptr->y, player_ptr->x) > dis) {
+        const auto dist = distance(y, x, player_ptr->y, player_ptr->x);
+        if ((min_dis < dist) && (dist <= max_dis)) {
             break;
         }
     }
@@ -557,7 +558,7 @@ bool alloc_monster(PlayerType *player_ptr, POSITION dis, BIT_FLAGS mode, summon_
             return true;
         }
     } else {
-        if (place_monster(player_ptr, y, x, (mode | PM_ALLOW_GROUP))) {
+        if (place_random_monster(player_ptr, y, x, (mode | PM_ALLOW_GROUP))) {
             return true;
         }
     }

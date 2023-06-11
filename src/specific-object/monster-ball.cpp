@@ -100,7 +100,7 @@ static bool release_monster(PlayerType *player_ptr, ItemEntity &item, DIRECTION 
         return false;
     }
 
-    if (!place_monster_aux(player_ptr, 0, player_ptr->y + ddy[dir], player_ptr->x + ddx[dir], r_idx, PM_FORCE_PET | PM_NO_KAGE)) {
+    if (!place_specific_monster(player_ptr, 0, player_ptr->y + ddy[dir], player_ptr->x + ddx[dir], r_idx, PM_FORCE_PET | PM_NO_KAGE)) {
         return false;
     }
 

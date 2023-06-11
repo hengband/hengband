@@ -100,7 +100,7 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
             y = yval + 2 * ddy_ddd[dir1];
             x = xval + 2 * ddx_ddd[dir1];
             if (MonsterRace(r_idx).is_valid()) {
-                place_monster_aux(player_ptr, 0, y, x, r_idx, PM_ALLOW_SLEEP);
+                place_specific_monster(player_ptr, 0, y, x, r_idx, PM_ALLOW_SLEEP);
             }
 
             /* Walls around the breather */
@@ -162,7 +162,7 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
         r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level, 0);
         if (MonsterRace(r_idx).is_valid()) {
-            place_monster_aux(player_ptr, 0, yval, xval, r_idx, 0L);
+            place_specific_monster(player_ptr, 0, yval, xval, r_idx, 0L);
         }
 
         /* Walls around the breather */
@@ -226,7 +226,7 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
             y = yval + ddy_ddd[dir1];
             x = xval + ddx_ddd[dir1];
             if (MonsterRace(r_idx).is_valid()) {
-                place_monster_aux(player_ptr, 0, y, x, r_idx, 0L);
+                place_specific_monster(player_ptr, 0, y, x, r_idx, 0L);
             }
         }
 

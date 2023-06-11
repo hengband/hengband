@@ -42,6 +42,7 @@
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include "wizard/wizard-messages.h"
 #include "wizard/wizard-special-process.h"
 #include "world/world.h"
 #include <algorithm>
@@ -59,15 +60,19 @@ namespace {
 constexpr std::array wizard_sub_menu_table = {
     std::make_tuple('a', _("アーティファクト出現フラグリセット", "Restore aware flag of fixed artifact")),
     std::make_tuple('A', _("アーティファクトを出現済みにする", "Make a fixed artifact awared")),
-    std::make_tuple('e', _("高級品獲得ドロップ", "Drop excellent object")),
+    std::make_tuple('B', _("フロア相当の呪物ドロップ", "Drop cursed item")),
+    std::make_tuple('c', _("フロア相当の一般品獲得ドロップ (★不許可)", "Drop normal item (excluding fixed artifacts)")),
+    std::make_tuple('C', _("フロア相当の一般品獲得ドロップ (★許可)", "Drop normal item (including fixed artifacts)")),
+    std::make_tuple('d', _("フロア相当の上質品獲得ドロップ", "Drop good item")),
+    std::make_tuple('D', _("フロア相当の高級品獲得ドロップ", "Drop excellent item")),
+    std::make_tuple('e', _("フロア相当のエゴ品獲得ドロップ", "Drop excellent item")),
+    std::make_tuple('E', _("フロア相当の特別品獲得ドロップ", "Drop special item")),
     std::make_tuple('f', _("*鑑定*", "*Idenfity*")),
     std::make_tuple('i', _("鑑定", "Idenfity")),
-    std::make_tuple('I', _("インベントリ全*鑑定*", "Idenfity all objects fully in inventory")),
-    std::make_tuple('l', _("指定アイテム番号まで一括鑑定", "Make objects awared to target object id")),
-    std::make_tuple('g', _("上質なアイテムドロップ", "Drop good object")),
-    std::make_tuple('s', _("特別品獲得ドロップ", "Drop special object")),
-    std::make_tuple('w', _("願い", "Wishing")),
+    std::make_tuple('I', _("インベントリ全*鑑定*", "Idenfity all items fully in inventory")),
+    std::make_tuple('l', _("指定アイテム番号まで一括鑑定", "Make items awared to target item id")),
     std::make_tuple('U', _("発動を変更する", "Modify item activation")),
+    std::make_tuple('w', _("願い", "Wishing")),
 };
 
 /*!
@@ -104,6 +109,49 @@ void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx
 void wiz_modify_item_activation(PlayerType *player_ptr);
 void wiz_identify_full_inventory(PlayerType *player_ptr);
 
+static void wiz_item_drop(PlayerType *player_ptr, const int num_items, const EnumClassFlagGroup<ItemMagicAppliance> &appliance)
+{
+    uint mode = AM_NONE;
+    const auto is_cursed = appliance.has(ItemMagicAppliance::CURSED);
+    if (is_cursed) {
+        mode |= AM_CURSED;
+    }
+
+    if (appliance.has(ItemMagicAppliance::GOOD)) {
+        mode |= AM_GOOD;
+    }
+
+    if (appliance.has(ItemMagicAppliance::GREAT)) {
+        mode |= AM_GREAT;
+    }
+
+    if (appliance.has(ItemMagicAppliance::SPECIAL)) {
+        mode |= AM_SPECIAL;
+    }
+
+    for (auto i = 0; i < num_items; i++) {
+        ItemEntity item;
+        if (!make_object(player_ptr, &item, mode)) {
+            continue;
+        }
+
+        if (is_cursed && !item.is_cursed()) {
+            i--;
+            continue;
+        }
+
+        if (appliance.has(ItemMagicAppliance::EGO) && !item.is_ego()) {
+            i--;
+            continue;
+        }
+
+        if (!drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x)) {
+            msg_print_wizard(player_ptr, 0, "No item dropping space!");
+            return;
+        }
+    }
+}
+
 /*!
  * @brief ゲーム設定コマンドの入力を受け付ける
  * @param player_ptr プレイヤーの情報へのポインタ
@@ -129,22 +177,36 @@ void wizard_item_modifier(PlayerType *player_ptr)
     case 'A':
         wiz_restore_aware_flag_of_fixed_arfifact(i2enum<FixedArtifactId>(command_arg), true);
         break;
+    case 'B':
+        command_arg = std::clamp<short>(command_arg, 1, 999);
+        wiz_item_drop(player_ptr, command_arg, { ItemMagicAppliance::CURSED });
+        break;
+    case 'c':
+        command_arg = std::clamp<short>(command_arg, 1, 999);
+        wiz_item_drop(player_ptr, command_arg, { ItemMagicAppliance::NO_FIXED_ART });
+        break;
+    case 'C':
+        command_arg = std::clamp<short>(command_arg, 1, 999);
+        wiz_item_drop(player_ptr, command_arg, {});
+        break;
+    case 'd':
+        command_arg = std::clamp<short>(command_arg, 1, 999);
+        wiz_item_drop(player_ptr, command_arg, { ItemMagicAppliance::GOOD });
+        break;
+    case 'D':
+        command_arg = std::clamp<short>(command_arg, 1, 999);
+        wiz_item_drop(player_ptr, command_arg, { ItemMagicAppliance::GOOD, ItemMagicAppliance::GREAT });
+        break;
     case 'e':
-        if (command_arg <= 0) {
-            command_arg = 1;
-        }
-
-        acquirement(player_ptr, player_ptr->y, player_ptr->x, command_arg, true, false, true);
+        command_arg = std::clamp<short>(command_arg, 1, 999);
+        wiz_item_drop(player_ptr, command_arg, { ItemMagicAppliance::GOOD, ItemMagicAppliance::GREAT, ItemMagicAppliance::EGO });
+        break;
+    case 'E':
+        command_arg = std::clamp<short>(command_arg, 1, 999);
+        wiz_item_drop(player_ptr, command_arg, { ItemMagicAppliance::GOOD, ItemMagicAppliance::GREAT, ItemMagicAppliance::SPECIAL });
         break;
     case 'f':
         identify_fully(player_ptr, false);
-        break;
-    case 'g':
-        if (command_arg <= 0) {
-            command_arg = 1;
-        }
-
-        acquirement(player_ptr, player_ptr->y, player_ptr->x, command_arg, false, false, true);
         break;
     case 'i':
         (void)ident_spell(player_ptr, false);
@@ -154,13 +216,6 @@ void wizard_item_modifier(PlayerType *player_ptr)
         break;
     case 'l':
         wiz_learn_items_all(player_ptr);
-        break;
-    case 's':
-        if (command_arg <= 0) {
-            command_arg = 1;
-        }
-
-        acquirement(player_ptr, player_ptr->y, player_ptr->x, command_arg, true, true, true);
         break;
     case 'U':
         wiz_modify_item_activation(player_ptr);
@@ -196,7 +251,7 @@ void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx
  */
 void wiz_modify_item_activation(PlayerType *player_ptr)
 {
-    constexpr auto q = _("どのアイテムの発動を変更しますか？ ", "Which object? ");
+    constexpr auto q = _("どのアイテムの発動を変更しますか？ ", "Which item? ");
     constexpr auto s = _("発動を変更するアイテムがない。", "Nothing to do with.");
     short item;
     auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT);

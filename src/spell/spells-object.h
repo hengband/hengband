@@ -5,7 +5,7 @@
 class ItemEntity;
 class PlayerType;
 void generate_amusement(PlayerType *player_ptr, int num, bool known);
-void acquirement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool great, bool special, bool known);
+void acquirement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool great);
 bool curse_armor(PlayerType *player_ptr);
 bool curse_weapon_object(PlayerType *player_ptr, bool force, ItemEntity *o_ptr);
 void brand_bolts(PlayerType *player_ptr);
