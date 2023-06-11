@@ -42,6 +42,7 @@ void wiz_summon_horde(PlayerType *player_ptr);
 void wiz_teleport_back(PlayerType *player_ptr);
 void wiz_learn_blue_magic_all(PlayerType *player_ptr);
 void wiz_fillup_all_smith_essences(PlayerType *player_ptr);
+void wiz_generate_random_monster(PlayerType *player_ptr, int num);
 void wiz_summon_random_monster(PlayerType *player_ptr, int num);
 void wiz_summon_specific_monster(PlayerType *player_ptr, MonsterRaceId r_idx);
 void wiz_summon_pet(PlayerType *player_ptr, MonsterRaceId r_idx);

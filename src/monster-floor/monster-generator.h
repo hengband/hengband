@@ -13,4 +13,4 @@ bool place_specific_monster(PlayerType *player_ptr, MONSTER_IDX who, POSITION y,
 bool place_random_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode);
 bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific_pf summon_specific);
 bool alloc_guardian(PlayerType *player_ptr, bool def_val);
-bool alloc_monster(PlayerType *player_ptr, POSITION dis, BIT_FLAGS mode, summon_specific_pf summon_specific);
+bool alloc_monster(PlayerType *player_ptr, int min_dis, BIT_FLAGS mode, summon_specific_pf summon_specific, int max_dis = 65535);

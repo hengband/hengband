@@ -41,6 +41,7 @@
 #include "util/enum-converter.h"
 #include "util/flag-group.h"
 #include "view/display-messages.h"
+#include "wizard/wizard-messages.h"
 #include <string_view>
 #include <vector>
 
@@ -181,15 +182,39 @@ void wiz_fillup_all_smith_essences(PlayerType *player_ptr)
 }
 
 /*!
- * @brief 現在のフロアに合ったモンスターをランダムに召喚する /
- * Summon some creatures
+ * @brief 現在のフロアに合ったモンスターをランダムに生成する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param num 生成処理回数
+ * @details 半径5マス以内に生成する。生成場所がなかったらキャンセル。
+ */
+void wiz_generate_random_monster(PlayerType *player_ptr, int num)
+{
+    constexpr auto flags = PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_QUEST;
+    for (auto i = 0; i < num; i++) {
+        if (!alloc_monster(player_ptr, 0, flags, summon_specific, 5)) {
+            msg_print_wizard(player_ptr, 1, "Monster isn't generated correctly...");
+            return;
+        }
+    }
+}
+
+/*!
+ * @brief 現在のフロアに合ったモンスターをランダムに召喚する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param num 生成処理回数
+ * @details 現在のレベル+5F からランダムに選定する。生成場所がなかったらキャンセル。
  */
 void wiz_summon_random_monster(PlayerType *player_ptr, int num)
 {
-    for (int i = 0; i < num; i++) {
-        (void)summon_specific(player_ptr, 0, player_ptr->y, player_ptr->x, player_ptr->current_floor_ptr->dun_level, SUMMON_NONE, PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
+    const auto level = player_ptr->current_floor_ptr->dun_level;
+    constexpr auto flags = PM_ALLOW_GROUP | PM_ALLOW_UNIQUE;
+    const auto y = player_ptr->y;
+    const auto x = player_ptr->x;
+    for (auto i = 0; i < num; i++) {
+        if (!summon_specific(player_ptr, 0, y, x, level, SUMMON_NONE, flags)) {
+            msg_print_wizard(player_ptr, 1, "Monster isn't summoned correctly...");
+            return;
+        }
     }
 }
 

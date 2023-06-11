@@ -509,23 +509,22 @@ bool alloc_guardian(PlayerType *player_ptr, bool def_val)
 
 /*!
  * @brief ダンジョンの初期配置モンスターを生成1回生成する / Attempt to allocate a random monster in the dungeon.
- * @param dis プレイヤーから離れるべき最低距離
+ * @param dis プレイヤーから離れるべき最小距離
  * @param mode 生成オプション
+ * @param summon_specific 特定モンスター種別を生成するための関数ポインタ
+ * @param max_dis プレイヤーから離れるべき最大距離 (デバッグ用)
  * @return 生成に成功したらtrue
- * @details
- * Place the monster at least "dis" distance from the player.
- * Use "slp" to choose the initial "sleep" status
- * Use "floor_ptr->monster_level" for the monster level
  */
-bool alloc_monster(PlayerType *player_ptr, POSITION dis, BIT_FLAGS mode, summon_specific_pf summon_specific)
+bool alloc_monster(PlayerType *player_ptr, int min_dis, BIT_FLAGS mode, summon_specific_pf summon_specific, int max_dis)
 {
     if (alloc_guardian(player_ptr, false)) {
         return true;
     }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    POSITION y = 0, x = 0;
-    int attempts_left = 10000;
+    auto y = 0;
+    auto x = 0;
+    auto attempts_left = 10000;
     while (attempts_left--) {
         y = randint0(floor_ptr->height);
         x = randint0(floor_ptr->width);
@@ -540,7 +539,8 @@ bool alloc_monster(PlayerType *player_ptr, POSITION dis, BIT_FLAGS mode, summon_
             }
         }
 
-        if (distance(y, x, player_ptr->y, player_ptr->x) > dis) {
+        const auto dist = distance(y, x, player_ptr->y, player_ptr->x);
+        if ((min_dis < dist) && (dist <= max_dis)) {
             break;
         }
     }
