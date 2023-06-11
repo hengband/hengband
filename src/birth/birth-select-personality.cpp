@@ -82,75 +82,76 @@ static bool check_selected_sex(int pp_idx, player_sex psex)
     return (ppersonality.sex != 0) && (ppersonality.sex != (psex + 1));
 }
 
-static void interpret_personality_select_key_move(PlayerType *player_ptr, char c, int *cs)
+static int interpret_personality_select_key_move(PlayerType *player_ptr, char key, int initial_personality)
 {
-    switch (c) {
+    auto pp_idx = initial_personality;
+    switch (key) {
     case '8':
-        if (*cs >= 4) {
-            *cs -= 4;
+        if (pp_idx >= 4) {
+            pp_idx -= 4;
         }
 
-        if ((*cs >= MAX_PERSONALITIES) || !check_selected_sex(*cs, player_ptr->psex)) {
-            return;
+        if ((pp_idx >= MAX_PERSONALITIES) || !check_selected_sex(pp_idx, player_ptr->psex)) {
+            return pp_idx;
         }
 
-        if ((*cs - 4) > 0) {
-            *cs -= 4;
+        if ((pp_idx - 4) > 0) {
+            pp_idx -= 4;
         } else {
-            *cs += 4;
+            pp_idx += 4;
         }
 
-        return;
+        return pp_idx;
     case '4':
-        if (*cs > 0) {
-            (*cs)--;
+        if (pp_idx > 0) {
+            (pp_idx)--;
         }
 
-        if ((*cs >= MAX_PERSONALITIES) || !check_selected_sex(*cs, player_ptr->psex)) {
-            return;
+        if ((pp_idx >= MAX_PERSONALITIES) || !check_selected_sex(pp_idx, player_ptr->psex)) {
+            return pp_idx;
         }
 
-        if ((*cs - 1) > 0) {
-            (*cs)--;
+        if ((pp_idx - 1) > 0) {
+            (pp_idx)--;
         } else {
-            (*cs)++;
+            (pp_idx)++;
         }
 
-        return;
+        return pp_idx;
     case '6':
-        if (*cs < MAX_PERSONALITIES) {
-            (*cs)++;
+        if (pp_idx < MAX_PERSONALITIES) {
+            (pp_idx)++;
         }
 
-        if ((*cs >= MAX_PERSONALITIES) || !check_selected_sex(*cs, player_ptr->psex)) {
-            return;
+        if ((pp_idx >= MAX_PERSONALITIES) || !check_selected_sex(pp_idx, player_ptr->psex)) {
+            return pp_idx;
         }
 
-        if ((*cs + 1) <= MAX_PERSONALITIES) {
-            (*cs)++;
+        if ((pp_idx + 1) <= MAX_PERSONALITIES) {
+            (pp_idx)++;
         } else {
-            (*cs)--;
+            (pp_idx)--;
         }
 
-        return;
+        return pp_idx;
     case '2':
-        if ((*cs + 4) <= MAX_PERSONALITIES) {
-            *cs += 4;
+        if ((pp_idx + 4) <= MAX_PERSONALITIES) {
+            pp_idx += 4;
         }
 
-        if ((*cs >= MAX_PERSONALITIES) || !check_selected_sex(*cs, player_ptr->psex)) {
-            return;
+        if ((pp_idx >= MAX_PERSONALITIES) || !check_selected_sex(pp_idx, player_ptr->psex)) {
+            return pp_idx;
         }
 
-        if ((*cs + 4) <= MAX_PERSONALITIES) {
-            *cs += 4;
+        if ((pp_idx + 4) <= MAX_PERSONALITIES) {
+            pp_idx += 4;
         } else {
-            *cs -= 4;
+            pp_idx -= 4;
         }
 
-        return;
+        return pp_idx;
     default:
-        return;
+        return pp_idx;
     }
 }
 
@@ -191,7 +192,7 @@ static bool select_personality(PlayerType *player_ptr, int *k, concptr sym)
             }
         }
 
-        interpret_personality_select_key_move(player_ptr, c, &cs);
+        cs = interpret_personality_select_key_move(player_ptr, c, cs);
         if (c == '*') {
             player_personality ppersonality{};
             do {
