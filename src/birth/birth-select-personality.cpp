@@ -82,7 +82,7 @@ static void interpret_personality_select_key_move(PlayerType *player_ptr, char c
         if (*cs >= 4) {
             *cs -= 4;
         }
-        if ((*cs != MAX_PERSONALITIES) && personality_info[*cs].sex && (personality_info[*cs].sex != (player_ptr->psex + 1))) {
+        if ((*cs < MAX_PERSONALITIES) && personality_info[*cs].sex && (personality_info[*cs].sex != (player_ptr->psex + 1))) {
             if ((*cs - 4) > 0) {
                 *cs -= 4;
             } else {
@@ -95,7 +95,7 @@ static void interpret_personality_select_key_move(PlayerType *player_ptr, char c
         if (*cs > 0) {
             (*cs)--;
         }
-        if ((*cs != MAX_PERSONALITIES) && personality_info[*cs].sex && (personality_info[*cs].sex != (player_ptr->psex + 1))) {
+        if ((*cs < MAX_PERSONALITIES) && personality_info[*cs].sex && (personality_info[*cs].sex != (player_ptr->psex + 1))) {
             if ((*cs - 1) > 0) {
                 (*cs)--;
             } else {
@@ -108,7 +108,7 @@ static void interpret_personality_select_key_move(PlayerType *player_ptr, char c
         if (*cs < MAX_PERSONALITIES) {
             (*cs)++;
         }
-        if ((*cs != MAX_PERSONALITIES) && personality_info[*cs].sex && (personality_info[*cs].sex != (player_ptr->psex + 1))) {
+        if ((*cs < MAX_PERSONALITIES) && personality_info[*cs].sex && (personality_info[*cs].sex != (player_ptr->psex + 1))) {
             if ((*cs + 1) <= MAX_PERSONALITIES) {
                 (*cs)++;
             } else {
@@ -121,7 +121,7 @@ static void interpret_personality_select_key_move(PlayerType *player_ptr, char c
         if ((*cs + 4) <= MAX_PERSONALITIES) {
             *cs += 4;
         }
-        if ((*cs != MAX_PERSONALITIES) && personality_info[*cs].sex && (personality_info[*cs].sex != (player_ptr->psex + 1))) {
+        if ((*cs < MAX_PERSONALITIES) && personality_info[*cs].sex && (personality_info[*cs].sex != (player_ptr->psex + 1))) {
             if ((*cs + 4) <= MAX_PERSONALITIES) {
                 *cs += 4;
             } else {
