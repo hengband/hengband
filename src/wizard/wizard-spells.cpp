@@ -186,7 +186,7 @@ void wiz_fillup_all_smith_essences(PlayerType *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param num 生成処理回数
  */
-void wiz_summon_random_enemy(PlayerType *player_ptr, int num)
+void wiz_summon_random_monster(PlayerType *player_ptr, int num)
 {
     for (int i = 0; i < num; i++) {
         (void)summon_specific(player_ptr, 0, player_ptr->y, player_ptr->x, player_ptr->current_floor_ptr->dun_level, SUMMON_NONE, PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
@@ -200,7 +200,7 @@ void wiz_summon_random_enemy(PlayerType *player_ptr, int num)
  * @details
  * This function is rather dangerous
  */
-void wiz_summon_specific_enemy(PlayerType *player_ptr, MonsterRaceId r_idx)
+void wiz_summon_specific_monster(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     if (!MonsterRace(r_idx).is_valid()) {
         int val = 1;
