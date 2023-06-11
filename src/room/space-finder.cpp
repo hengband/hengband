@@ -254,6 +254,10 @@ bool find_space(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION *y, POSI
 
     for (POSITION by = by1; by < by2; by++) {
         for (POSITION bx = bx1; bx < bx2; bx++) {
+            if ((by < 0) || (bx < 0)) {
+                continue;
+            }
+
             dd_ptr->room_map[by][bx] = true;
         }
     }
