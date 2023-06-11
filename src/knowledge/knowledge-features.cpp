@@ -266,11 +266,11 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             }
 
             if (f_ptr->x_attr[prev_lighting_level] != f_ptr->x_attr[*lighting_level]) {
-                attr_top = std::max<byte>(0, (f_ptr->x_attr[*lighting_level] & 0x7f) - 5);
+                attr_top = std::max<int8_t>(0, (f_ptr->x_attr[*lighting_level] & 0x7f) - 5);
             }
 
             if (f_ptr->x_char[prev_lighting_level] != f_ptr->x_char[*lighting_level]) {
-                char_left = std::max<byte>(0, f_ptr->x_char[*lighting_level] - 10);
+                char_left = std::max<int8_t>(0, f_ptr->x_char[*lighting_level] - 10);
             }
 
             continue;
@@ -282,11 +282,11 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
 
             if (visual_list) {
                 if (prev_x_attr != f_ptr->x_attr[*lighting_level]) {
-                    attr_top = std::max<byte>(0, (f_ptr->x_attr[*lighting_level] & 0x7f) - 5);
+                    attr_top = std::max<int8_t>(0, (f_ptr->x_attr[*lighting_level] & 0x7f) - 5);
                 }
 
                 if (prev_x_char != f_ptr->x_char[*lighting_level]) {
-                    char_left = std::max<byte>(0, f_ptr->x_char[*lighting_level] - 10);
+                    char_left = std::max<int8_t>(0, f_ptr->x_char[*lighting_level] - 10);
                 }
             } else {
                 *need_redraw = true;
