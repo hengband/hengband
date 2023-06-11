@@ -13,7 +13,6 @@ public:
     bool get_mind_power(SPELL_IDX *sn, bool only_browse);
 
 private:
-    PlayerType *player_ptr;
     SPELL_IDX index = 0;
     int num = 0;
     TERM_LEN y = 1;
@@ -24,11 +23,13 @@ private:
     const mind_type *spell = nullptr;
     bool flag = false;
     bool redraw = false;
-    MindKindType use_mind;
-    int menu_line;
     const mind_power *mind_ptr = nullptr;
     PERCENTAGE chance = 0;
     int mana_cost = 0;
+
+    PlayerType *player_ptr;
+    MindKindType use_mind;
+    int menu_line;
 
     void select_mind_description();
     bool select_spell_index(SPELL_IDX *sn);

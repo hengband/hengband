@@ -25,6 +25,7 @@
 
 MindPowerGetter::MindPowerGetter(PlayerType *player_ptr)
     : player_ptr(player_ptr)
+    , use_mind(MindKindType::MINDCRAFTER)
     , menu_line(use_menu ? 1 : 0)
 {
 }
