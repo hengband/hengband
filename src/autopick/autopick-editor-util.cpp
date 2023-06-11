@@ -222,6 +222,10 @@ static chain_str_type *new_chain_str(concptr str)
 {
     size_t len = strlen(str);
     auto *chain = static_cast<chain_str_type *>(std::malloc(sizeof(chain_str_type) + len * sizeof(char)));
+    if (chain == nullptr) {
+        return nullptr;
+    }
+
     strcpy(chain->s, str);
     chain->next = nullptr;
     return chain;
