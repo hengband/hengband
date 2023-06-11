@@ -156,13 +156,13 @@ bool wr_dungeon(PlayerType *player_ptr)
     forget_lite(player_ptr->current_floor_ptr);
     forget_view(player_ptr->current_floor_ptr);
     clear_mon_lite(player_ptr->current_floor_ptr);
-    const auto flags = {
-        StatusRedrawingFlag::VIEW,
-        StatusRedrawingFlag::LITE,
-        StatusRedrawingFlag::MONSTER_LITE,
-        StatusRedrawingFlag::MONSTER_STATUSES,
-        StatusRedrawingFlag::DISTANCE,
-        StatusRedrawingFlag::FLOW,
+    static constexpr auto flags = {
+        StatusRecalculatingFlag::VIEW,
+        StatusRecalculatingFlag::LITE,
+        StatusRecalculatingFlag::MONSTER_LITE,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
+        StatusRecalculatingFlag::DISTANCE,
+        StatusRecalculatingFlag::FLOW,
     };
     RedrawingFlagsUpdater::get_instance().set_flags(flags);
     wr_s16b(max_floor_id);
@@ -258,18 +258,18 @@ bool save_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
     char ext[32];
     strnfmt(ext, sizeof(ext), ".F%02d", (int)sf_ptr->savefile_id);
     floor_savefile.append(ext);
-    safe_setuid_grab(player_ptr);
+    safe_setuid_grab();
     fd_kill(floor_savefile);
     safe_setuid_drop();
     saving_savefile = nullptr;
-    safe_setuid_grab(player_ptr);
+    safe_setuid_grab();
 
     auto fd = fd_make(floor_savefile);
     safe_setuid_drop();
     bool is_save_successful = false;
     if (fd >= 0) {
         (void)fd_close(fd);
-        safe_setuid_grab(player_ptr);
+        safe_setuid_grab();
         saving_savefile = angband_fopen(floor_savefile, FileOpenMode::WRITE, true);
         safe_setuid_drop();
         if (saving_savefile) {
@@ -283,7 +283,7 @@ bool save_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
         }
 
         if (!is_save_successful) {
-            safe_setuid_grab(player_ptr);
+            safe_setuid_grab();
             (void)fd_kill(floor_savefile);
             safe_setuid_drop();
         }

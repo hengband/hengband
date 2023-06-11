@@ -294,7 +294,6 @@ hengband_SOURCES = \
 	io/exit-panic.cpp io/exit-panic.h \
 	io/files-util.cpp io/files-util.h \
 	io/gf-descriptions.cpp io/gf-descriptions.h \
-	io/inet.cpp io/inet.h \
 	io/input-key-acceptor.cpp io/input-key-acceptor.h \
 	io/input-key-processor.cpp io/input-key-processor.h \
 	io/input-key-requester.cpp io/input-key-requester.h \
@@ -395,8 +394,10 @@ hengband_SOURCES = \
 	main/scene-table-monster.cpp main/scene-table-monster.h \
 	main/sound-definitions-table.cpp main/sound-definitions-table.h \
 	main/sound-of-music.cpp main/sound-of-music.h \
-	main/x11-gamma-builder.cpp main/x11-gamma-builder.h \
-	main/x11-type-string.cpp main/x11-type-string.h \
+	\
+	main-unix/unix-user-ids.cpp main-unix/unix-user-ids.h \
+	main-unix/x11-gamma-builder.cpp main-unix/x11-gamma-builder.h \
+	main-unix/x11-type-string.cpp main-unix/x11-type-string.h \
 	\
 	market/arena-info-table.cpp market/arena-info-table.h \
 	market/building-initializer.cpp market/building-initializer.h \
@@ -698,7 +699,6 @@ hengband_SOURCES = \
 	player-ability/player-strength.cpp player-ability/player-strength.h \
 	player-ability/player-wisdom.cpp player-ability/player-wisdom.h \
 	\
-	player-attack/player-attack-util.h \
 	player-attack/attack-chaos-effect.cpp player-attack/attack-chaos-effect.h \
 	player-attack/blood-sucking-processor.cpp player-attack/blood-sucking-processor.h \
 	player-attack/player-attack.cpp player-attack/player-attack.h \

@@ -1,10 +1,13 @@
 ﻿#include "io/uid-checker.h"
-#include "system/player-type-definition.h"
+#include "system/angband.h"
+#if defined(SET_UID) && defined(SAFE_SETUID) && defined(SAFE_SETUID_POSIX)
+#include "main-unix/unix-user-ids.h"
+#endif
 
 /*!
  * @brief ファイルのドロップパーミッションチェック / Check drop permissions
  */
-void safe_setuid_drop(void)
+void safe_setuid_drop()
 {
 #if defined(SET_UID) && defined(SAFE_SETUID)
 #ifdef SAFE_SETUID_POSIX
@@ -33,23 +36,22 @@ void safe_setuid_drop(void)
 
 /*!
  * @brief ファイルのグラブパーミッションチェック / Check grab permissions
- * @param プレイヤーへの参照ポインタ
  */
-void safe_setuid_grab(PlayerType *player_ptr)
+void safe_setuid_grab()
 {
 #if defined(SET_UID) && defined(SAFE_SETUID)
 #ifdef SAFE_SETUID_POSIX
-    if (auto ret = setuid(player_ptr->player_euid); ret != 0) {
+    auto &ids = UnixUserIds::get_instance();
+    if (auto ret = setuid(ids.get_effective_user_id()); ret != 0) {
         auto msg = _("setuid(): 正しく許可が取れません！ エラーコード：%d", "setuid(): cannot set permissions correctly! Error code: %d");
         quit_fmt(msg, ret);
     }
 
-    if (auto ret = setgid(player_ptr->player_egid); ret != 0) {
+    if (auto ret = setgid(ids.get_effective_group_id()); ret != 0) {
         auto msg = _("setgid(): 正しく許可が取れません！ エラーコード：%d", "setgid(): cannot set permissions correctly! Error code: %d");
         quit_fmt(msg, ret);
     }
 #else
-    (void)player_ptr;
     if (auto ret = setreuid(geteuid(), getuid()); ret != 0) {
         auto msg = _("setreuid(): 正しく許可が取れません！ エラーコード：%d", "setreuid(): cannot set permissions correctly! Error code: %d");
         quit_fmt(msg, ret);
@@ -61,6 +63,5 @@ void safe_setuid_grab(PlayerType *player_ptr)
     }
 #endif
 #else
-    (void)player_ptr;
 #endif
 }

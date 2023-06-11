@@ -103,9 +103,12 @@ bool apply_disenchant(PlayerType *player_ptr, BIT_FLAGS mode)
     chg_virtue(player_ptr, Virtue::HARMONY, 1);
     chg_virtue(player_ptr, Virtue::ENCHANT, -2);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
-    player_ptr->window_flags |= (PW_EQUIPMENT | PW_PLAYER);
-
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    static constexpr auto flags = {
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::PLAYER,
+    };
+    rfu.set_flags(flags);
     calc_android_exp(player_ptr);
     return true;
 }

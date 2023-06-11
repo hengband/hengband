@@ -462,7 +462,7 @@ void chg_virtue(PlayerType *player_ptr, Virtue virtue_id, int amount)
             }
         }
 
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
         return;
     }
 }

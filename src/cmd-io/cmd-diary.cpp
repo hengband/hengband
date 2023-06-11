@@ -38,8 +38,7 @@ static void display_diary(PlayerType *player_ptr)
     std::stringstream ss;
     ss << _("playrecord-", "playrec-") << savefile_base << ".txt";
     const auto &path = path_build(ANGBAND_DIR_USER, ss.str());
-    const auto &filename = path.string();
-    (void)show_file(player_ptr, false, filename.data(), diary_title.data(), -1, 0);
+    (void)show_file(player_ptr, false, path.string(), -1, 0, diary_title);
 }
 
 /*!
@@ -49,7 +48,7 @@ static void add_diary_note(PlayerType *player_ptr)
 {
     char tmp[80]{};
     if (get_string(_("内容: ", "diary note: "), tmp, 79)) {
-        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, tmp);
+        exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, tmp);
     }
 }
 
@@ -70,7 +69,7 @@ static void do_cmd_last_get(PlayerType *player_ptr)
     GAME_TURN turn_tmp = w_ptr->game_turn;
     w_ptr->game_turn = record_turn;
     const auto mes = format(_("%sを手に入れた。", "discover %s."), record_o_name);
-    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, mes);
+    exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, mes);
     w_ptr->game_turn = turn_tmp;
 }
 

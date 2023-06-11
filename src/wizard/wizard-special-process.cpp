@@ -97,6 +97,7 @@
 #include "view/display-messages.h"
 #include "wizard/spoiler-table.h"
 #include "wizard/tval-descriptions-table.h"
+#include "wizard/wizard-messages.h"
 #include "wizard/wizard-spells.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
@@ -518,7 +519,7 @@ void wiz_create_feature(PlayerType *player_ptr)
 
     note_spot(player_ptr, y, x);
     lite_spot(player_ptr, y, x);
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
 }
 
 /*!
@@ -602,20 +603,21 @@ static bool select_debugging_floor(PlayerType *player_ptr, int dungeon_type)
 static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    floor.dungeon_idx = dun_idx;
+    floor.set_dungeon_index(dun_idx);
     floor.dun_level = depth;
     prepare_change_floor_mode(player_ptr, CFM_RAND_PLACE);
     if (!floor.is_in_dungeon()) {
-        floor.dungeon_idx = 0;
+        floor.reset_dungeon_index();
     }
 
     floor.inside_arena = false;
     player_ptr->wild_mode = false;
     leave_quest_check(player_ptr);
-    if (record_stair) {
-        exe_write_diary(player_ptr, DIARY_WIZ_TELE, 0);
-    }
-
+    auto to = !floor.is_in_dungeon()
+                  ? _("地上", "the surface")
+                  : format(_("%d階(%s)", "level %d of %s"), floor.dun_level, floor.get_dungeon_definition().name.data());
+    constexpr auto mes = _("%sへとウィザード・テレポートで移動した。\n", "You wizard-teleported to %s.\n");
+    msg_print_wizard(player_ptr, 2, format(mes, to.data()));
     floor.quest_number = QuestId::NONE;
     PlayerEnergy(player_ptr).reset_player_turn();
     player_ptr->energy_need = 0;
@@ -655,8 +657,7 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
 }
 
 /*!
- * @brief 全ベースアイテムを鑑定済みにする /
- * Become aware of a lot of objects
+ * @brief 全ベースアイテムを鑑定済みにする
  * @param player_ptr プレイヤーへの参照ポインタ
  */
 void wiz_learn_items_all(PlayerType *player_ptr)
@@ -672,18 +673,18 @@ void wiz_learn_items_all(PlayerType *player_ptr)
     }
 }
 
-static void change_birth_flags(PlayerType *player_ptr)
+static void change_birth_flags()
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
-        StatusRedrawingFlag::MP,
-        StatusRedrawingFlag::SPELLS,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
+        StatusRecalculatingFlag::MP,
+        StatusRecalculatingFlag::SPELLS,
     };
-    player_ptr->window_flags |= PW_PLAYER;
+    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     rfu.set_flags(flags_srf);
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::HP,
         MainWindowRedrawingFlag::MP,
@@ -704,7 +705,7 @@ void wiz_reset_race(PlayerType *player_ptr)
 
     player_ptr->prace = i2enum<PlayerRaceType>(val);
     rp_ptr = &race_info[enum2i(player_ptr->prace)];
-    change_birth_flags(player_ptr);
+    change_birth_flags();
     handle_stuff(player_ptr);
 }
 
@@ -723,7 +724,7 @@ void wiz_reset_class(PlayerType *player_ptr)
     cp_ptr = &class_info[val];
     mp_ptr = &class_magics_info[val];
     PlayerClass(player_ptr).init_specific_data();
-    change_birth_flags(player_ptr);
+    change_birth_flags();
     handle_stuff(player_ptr);
 }
 
@@ -745,7 +746,7 @@ void wiz_reset_realms(PlayerType *player_ptr)
 
     player_ptr->realm1 = static_cast<int16_t>(val1);
     player_ptr->realm2 = static_cast<int16_t>(val2);
-    change_birth_flags(player_ptr);
+    change_birth_flags();
     handle_stuff(player_ptr);
 }
 
@@ -821,7 +822,7 @@ void wiz_zap_surrounding_monsters(PlayerType *player_ptr)
 
         if (record_named_pet && m_ptr->is_named_pet()) {
             const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
-            exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
+            exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
         }
 
         delete_monster_idx(player_ptr, i);
@@ -842,7 +843,7 @@ void wiz_zap_floor_monsters(PlayerType *player_ptr)
 
         if (record_named_pet && m_ptr->is_named_pet()) {
             const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
-            exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
+            exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
         }
 
         delete_monster_idx(player_ptr, i);
@@ -878,7 +879,8 @@ void cheat_death(PlayerType *player_ptr)
     if (floor_ptr->dungeon_idx) {
         player_ptr->recall_dungeon = floor_ptr->dungeon_idx;
     }
-    floor_ptr->dungeon_idx = 0;
+
+    floor_ptr->reset_dungeon_index();
     if (lite_town || vanilla_town) {
         player_ptr->wilderness_y = 1;
         player_ptr->wilderness_x = 1;
@@ -899,6 +901,6 @@ void cheat_death(PlayerType *player_ptr)
     player_ptr->wild_mode = false;
     player_ptr->leaving = true;
     constexpr auto note = _("                            しかし、生き返った。", "                            but revived.");
-    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, note);
+    exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 1, note);
     leave_floor(player_ptr);
 }

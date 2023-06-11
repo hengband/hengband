@@ -85,7 +85,7 @@ static void process_fishing(PlayerType *player_ptr)
             POSITION y, x;
             y = player_ptr->y + ddy[player_ptr->fishing_dir];
             x = player_ptr->x + ddx[player_ptr->fishing_dir];
-            if (place_monster_aux(player_ptr, 0, y, x, r_idx, PM_NO_KAGE)) {
+            if (place_specific_monster(player_ptr, 0, y, x, r_idx, PM_NO_KAGE)) {
                 const auto m_name = monster_desc(player_ptr, &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx], 0);
                 msg_print(_(format("%sが釣れた！", m_name.data()), "You have a good catch!"));
                 success = true;
@@ -229,7 +229,7 @@ void process_player(PlayerType *player_ptr)
         } else {
             set_current_ki(player_ptr, false, -40);
         }
-        rfu.set_flag(StatusRedrawingFlag::BONUS);
+        rfu.set_flag(StatusRecalculatingFlag::BONUS);
     }
 
     if (player_ptr->action == ACTION_LEARN) {
@@ -258,7 +258,7 @@ void process_player(PlayerType *player_ptr)
 
     /*** Handle actual user input ***/
     while (player_ptr->energy_need <= 0) {
-        player_ptr->window_flags |= PW_PLAYER;
+        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
         player_ptr->sutemi = false;
         player_ptr->counter = false;
         player_ptr->now_damaged = false;
@@ -312,7 +312,11 @@ void process_player(PlayerType *player_ptr)
         } else {
             move_cursor_relative(player_ptr->y, player_ptr->x);
 
-            player_ptr->window_flags |= PW_SIGHT_MONSTERS;
+            static constexpr auto flags = {
+                SubWindowRedrawingFlag::SIGHT_MONSTERS,
+                SubWindowRedrawingFlag::PETS,
+            };
+            rfu.set_flags(flags);
             window_stuff(player_ptr);
 
             can_save = true;
@@ -399,9 +403,12 @@ void process_player(PlayerType *player_ptr)
 
             if (player_ptr->timewalk && (player_ptr->energy_need > -1000)) {
                 rfu.set_flag(MainWindowRedrawingFlag::MAP);
-                rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-                player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
-
+                rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
+                static constexpr auto flags_swrf = {
+                    SubWindowRedrawingFlag::OVERHEAD,
+                    SubWindowRedrawingFlag::DUNGEON,
+                };
+                rfu.set_flags(flags_swrf);
                 msg_print(_("「時は動きだす…」", "You feel time flowing around you once more."));
                 msg_print(nullptr);
                 player_ptr->timewalk = false;
@@ -416,7 +423,7 @@ void process_player(PlayerType *player_ptr)
             break;
         }
 
-        auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+        auto sniper_data = PlayerClass(player_ptr).get_specific_data<SniperData>();
         if (player_ptr->energy_use && sniper_data && sniper_data->reset_concent) {
             reset_concentration(player_ptr, true);
         }

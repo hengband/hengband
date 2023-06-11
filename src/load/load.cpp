@@ -267,7 +267,7 @@ static errr exe_reading_savefile(PlayerType *player_ptr)
  */
 static errr rd_savefile(PlayerType *player_ptr)
 {
-    safe_setuid_grab(player_ptr);
+    safe_setuid_grab();
     loading_savefile = angband_fopen(savefile, FileOpenMode::READ, true);
     safe_setuid_drop();
     if (!loading_savefile) {

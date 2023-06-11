@@ -27,6 +27,7 @@
 #include "target/projection-path-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <string>
 
 /*!
  * @brief モンスターをペットにする
@@ -134,7 +135,7 @@ bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     }
 
     if (monraces_info[m_ptr->r_idx].brightness_flags.has_any_of(has_ld_mask)) {
-        rfu.set_flag(StatusRedrawingFlag::MONSTER_LITE);
+        rfu.set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 
     return true;
@@ -173,7 +174,7 @@ bool set_monster_fast(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     }
 
     if ((player_ptr->riding == m_idx) && !player_ptr->leaving) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     }
 
     return true;
@@ -207,7 +208,7 @@ bool set_monster_slow(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     }
 
     if ((player_ptr->riding == m_idx) && !player_ptr->leaving) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     }
 
     return true;
@@ -379,6 +380,7 @@ bool set_monster_invulner(PlayerType *player_ptr, MONSTER_IDX m_idx, int v, bool
  * @param who 時間停止を行う敵の種族番号
  * @param vs_player TRUEならば時間停止開始処理を行う
  * @return 時間停止が行われている状態ならばTRUEを返す
+ * @details monster_desc() は視認外のモンスターについて「何か」と返してくるので、この関数ではLOSや透明視等を判定する必要はない
  */
 bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId who, bool vs_player)
 {
@@ -389,24 +391,23 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId who, bo
 
     if (vs_player) {
         const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-
-        concptr mes;
+        std::string mes;
         switch (who) {
         case MonsterRaceId::DIO:
-            mes = _("「『ザ・ワールド』！　時は止まった！」", "%s yells 'The World! Time has stopped!'");
+            mes = _("「『ザ・ワールド』！　時は止まった！」", format("%s yells 'The World! Time has stopped!'", m_name.data()));
             break;
         case MonsterRaceId::WONG:
-            mes = _("「時よ！」", "%s yells 'Time!'");
+            mes = _("「時よ！」", format("%s yells 'Time!'", m_name.data()));
             break;
         case MonsterRaceId::DIAVOLO:
-            mes = _("『キング・クリムゾン』！", "%s yells 'King Crison!'");
+            mes = _("『キング・クリムゾン』！", format("%s yells 'King Crison!'", m_name.data()));
             break;
         default:
-            mes = "hek!";
+            mes = format(_("%sは時を止めた！", "%s stops the time!"), m_name.data());
             break;
         }
 
-        msg_format(mes, m_name.data());
+        msg_print(mes);
         msg_print(nullptr);
     }
 
@@ -430,11 +431,15 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId who, bo
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-    player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
+    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
+    static constexpr auto flags = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    rfu.set_flags(flags);
     w_ptr->timewalk_m_idx = 0;
     if (vs_player || (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) && projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx))) {
-        concptr mes;
+        std::string mes;
         switch (who) {
         case MonsterRaceId::DIAVOLO:
             mes = _("これが我が『キング・クリムゾン』の能力！　『時間を消し去って』飛び越えさせた…！！",

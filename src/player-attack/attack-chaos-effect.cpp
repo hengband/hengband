@@ -24,7 +24,7 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "object/object-mark-types.h"
-#include "player-attack/player-attack-util.h"
+#include "player-attack/player-attack.h"
 #include "player/attack-defense-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-kind/spells-polymorph.h"
@@ -243,7 +243,7 @@ static void attack_polymorph(PlayerType *player_ptr, player_attack_type *pa_ptr,
     }
 
     pa_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[pa_ptr->m_idx];
-    angband_strcpy(pa_ptr->m_name, monster_desc(player_ptr, pa_ptr->m_ptr, 0).data(), sizeof(pa_ptr->m_name));
+    angband_strcpy(pa_ptr->m_name, monster_desc(player_ptr, pa_ptr->m_ptr, 0), sizeof(pa_ptr->m_name));
 }
 
 /*!

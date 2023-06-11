@@ -556,7 +556,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
     tdam_base *= tmul;
     tdam_base /= 100;
 
-    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<SniperData>();
     auto sniper_concent = sniper_data ? sniper_data->concent : 0;
 
     /* Base range */
@@ -665,11 +665,11 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                     }
                     /* Forget the wall */
                     reset_bits(g_ptr->info, (CAVE_MARK));
-                    const auto flags = {
-                        StatusRedrawingFlag::VIEW,
-                        StatusRedrawingFlag::LITE,
-                        StatusRedrawingFlag::FLOW,
-                        StatusRedrawingFlag::MONSTER_LITE,
+                    static constexpr auto flags = {
+                        StatusRecalculatingFlag::VIEW,
+                        StatusRecalculatingFlag::LITE,
+                        StatusRecalculatingFlag::FLOW,
+                        StatusRecalculatingFlag::MONSTER_LITE,
                     };
                     RedrawingFlagsUpdater::get_instance().set_flags(flags);
 
@@ -1015,7 +1015,7 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, MonsterEntity *m_ptr, int
     /* Percentile dice */
     k = randint1(100);
 
-    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<SniperData>();
     auto sniper_concent = sniper_data ? sniper_data->concent : 0;
 
     /* Snipers with high-concentration reduce instant miss percentage.*/
@@ -1096,7 +1096,7 @@ int critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus
     }
 
     PlayerClass pc(player_ptr);
-    const auto sniper_data = pc.get_specific_data<sniper_data_type>();
+    const auto sniper_data = pc.get_specific_data<SniperData>();
     const auto sniper_concent = sniper_data ? sniper_data->concent : 0;
 
     /* Snipers can shot more critically with crossbows */
@@ -1149,7 +1149,7 @@ int calc_crit_ratio_shot(PlayerType *player_ptr, int plus_ammo, int plus_bow)
     }
 
     PlayerClass pc(player_ptr);
-    auto sniper_data = pc.get_specific_data<sniper_data_type>();
+    auto sniper_data = pc.get_specific_data<SniperData>();
     auto sniper_concent = sniper_data ? sniper_data->concent : 0;
 
     /* Snipers can shot more critically with crossbows */

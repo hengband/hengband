@@ -33,13 +33,14 @@ constexpr auto VIEW_MAX = 1536;
  */
 constexpr auto REDRAW_MAX = 2298;
 
+struct dungeon_type;
 struct grid_type;
 class MonsterEntity;
 class ItemEntity;
 class FloorType {
 public:
     FloorType() = default;
-    DUNGEON_IDX dungeon_idx = 0;
+    short dungeon_idx = 0;
     std::vector<std::vector<grid_type>> grid_array;
     DEPTH dun_level = 0; /*!< 現在の実ダンジョン階層 base_level の参照元となる / Current dungeon level */
     DEPTH base_level = 0; /*!< 基本生成レベル、後述のobject_level, monster_levelの参照元となる / Base dungeon level */
@@ -83,4 +84,7 @@ public:
     bool inside_arena = false; /* Is character inside on_defeat_arena_monster? */
 
     bool is_in_dungeon() const;
+    void set_dungeon_index(short dungeon_idx_); /*!< @todo 後でenum class にする */
+    void reset_dungeon_index();
+    dungeon_type &get_dungeon_definition() const;
 };

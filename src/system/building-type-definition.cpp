@@ -1,4 +1,4 @@
 ﻿#include "system/building-type-definition.h"
 
-building_type buildings[MAX_BLDG];
+std::array<building_type, MAX_BUILDINGS> buildings;
 MonsterRaceId battle_mon_list[4];

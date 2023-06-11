@@ -22,8 +22,8 @@ static bool precalc_ugarcade(int town_hgt, int town_wid, int n, std::vector<ugbl
 {
     POSITION i, y, x, center_y, center_x;
     int tmp, attempt = 10000;
-    POSITION max_bldg_hgt = 3 * town_hgt / MAX_TOWN_HGT;
-    POSITION max_bldg_wid = 5 * town_wid / MAX_TOWN_WID;
+    auto max_buildings_height = 3 * town_hgt / MAX_TOWN_HGT;
+    auto max_buildings_width = 5 * town_wid / MAX_TOWN_WID;
     ugbldg_type *cur_ugbldg;
     std::vector<std::vector<bool>> ugarcade_used(town_hgt, std::vector<bool>(town_wid));
     bool abort;
@@ -34,13 +34,13 @@ static bool precalc_ugarcade(int town_hgt, int town_wid, int n, std::vector<ugbl
         do {
             center_y = rand_range(2, town_hgt - 3);
             center_x = rand_range(2, town_wid - 3);
-            tmp = center_y - randint1(max_bldg_hgt);
+            tmp = center_y - randint1(max_buildings_height);
             cur_ugbldg->y0 = std::max(tmp, 1);
-            tmp = center_x - randint1(max_bldg_wid);
+            tmp = center_x - randint1(max_buildings_width);
             cur_ugbldg->x0 = std::max(tmp, 1);
-            tmp = center_y + randint1(max_bldg_hgt);
+            tmp = center_y + randint1(max_buildings_height);
             cur_ugbldg->y1 = std::min(tmp, town_hgt - 2);
-            tmp = center_x + randint1(max_bldg_wid);
+            tmp = center_x + randint1(max_buildings_width);
             cur_ugbldg->x1 = std::min(tmp, town_wid - 2);
             for (abort = false, y = cur_ugbldg->y0; (y <= cur_ugbldg->y1) && !abort; y++) {
                 for (x = cur_ugbldg->x0; x <= cur_ugbldg->x1; x++) {

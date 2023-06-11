@@ -230,7 +230,7 @@ bool gain_mutation(PlayerType *player_ptr, MUTATION_IDX choose_mut)
     neutralize_other_status(player_ptr, gm_ptr);
 
     player_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(player_ptr);
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -274,7 +274,7 @@ bool lose_mutation(PlayerType *player_ptr, MUTATION_IDX choose_mut)
         player_ptr->muta.reset(glm_ptr->muta_which);
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     player_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(player_ptr);
     return true;
@@ -286,7 +286,7 @@ void lose_all_mutations(PlayerType *player_ptr)
         chg_virtue(player_ptr, Virtue::CHANCE, -5);
         msg_print(_("全ての突然変異が治った。", "You are cured of all mutations."));
         player_ptr->muta.clear();
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
         handle_stuff(player_ptr);
         player_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(player_ptr);
     }

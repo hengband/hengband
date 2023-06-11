@@ -41,23 +41,23 @@ void do_cmd_redraw(PlayerType *player_ptr)
     term_xtra(TERM_XTRA_REACT, 0);
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
-        StatusRedrawingFlag::TORCH,
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
-        StatusRedrawingFlag::MP,
-        StatusRedrawingFlag::SPELLS,
-        StatusRedrawingFlag::UN_VIEW,
-        StatusRedrawingFlag::UN_LITE,
-        StatusRedrawingFlag::VIEW,
-        StatusRedrawingFlag::LITE,
-        StatusRedrawingFlag::MONSTER_LITE,
-        StatusRedrawingFlag::MONSTER_STATUSES,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
+        StatusRecalculatingFlag::TORCH,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
+        StatusRecalculatingFlag::MP,
+        StatusRecalculatingFlag::SPELLS,
+        StatusRecalculatingFlag::UN_VIEW,
+        StatusRecalculatingFlag::UN_LITE,
+        StatusRecalculatingFlag::VIEW,
+        StatusRecalculatingFlag::LITE,
+        StatusRecalculatingFlag::MONSTER_LITE,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::WIPE,
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::EXTRA,
@@ -65,8 +65,18 @@ void do_cmd_redraw(PlayerType *player_ptr)
         MainWindowRedrawingFlag::MAP,
     };
     rfu.set_flags(flags_mwrf);
-    player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT | PW_SPELL | PW_PLAYER);
-    player_ptr->window_flags |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER_LORE | PW_ITEM_KNOWLEDGTE);
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::SPELL,
+        SubWindowRedrawingFlag::PLAYER,
+        SubWindowRedrawingFlag::MESSAGE,
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+        SubWindowRedrawingFlag::MONSTER_LORE,
+        SubWindowRedrawingFlag::ITEM_KNOWLEDGE,
+    };
+    rfu.set_flags(flags_swrf);
     update_playtime();
     handle_stuff(player_ptr);
     if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
@@ -134,7 +144,7 @@ void do_cmd_player_status(PlayerType *player_ptr)
 
     screen_load();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::WIPE,
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::EXTRA,

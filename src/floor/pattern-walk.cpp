@@ -60,7 +60,7 @@ void pattern_teleport(PlayerType *player_ptr)
                 max_level = 100;
             }
         } else {
-            const auto &dungeon = dungeons_info[floor.dungeon_idx];
+            const auto &dungeon = floor.get_dungeon_definition();
             max_level = dungeon.maxdepth;
             min_level = dungeon.mindepth;
         }
@@ -94,7 +94,7 @@ void pattern_teleport(PlayerType *player_ptr)
     player_ptr->current_floor_ptr->dun_level = command_arg;
     leave_quest_check(player_ptr);
     if (record_stair) {
-        exe_write_diary(player_ptr, DIARY_PAT_TELE, 0);
+        exe_write_diary(player_ptr, DiaryKind::PAT_TELE, 0);
     }
 
     player_ptr->current_floor_ptr->quest_number = QuestId::NONE;

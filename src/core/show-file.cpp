@@ -3,6 +3,7 @@
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
+#include "system/angband-exceptions.h"
 #include "system/angband-version.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
@@ -13,6 +14,8 @@
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <sstream>
+#include <string>
 
 /*!
  * @brief ファイル内容の一行をコンソールに出力する
@@ -131,7 +134,7 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
  * </pre>
  * @todo 表示とそれ以外を分割する
  */
-bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr what, int line, BIT_FLAGS mode)
+bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_with_tag, int initial_line, uint32_t mode, std::string_view what)
 {
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, std::nullopt);
 
@@ -139,67 +142,57 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
     term_get_size(&wid, &hgt);
 
     char finder_str[81] = "";
-
     char shower_str[81] = "";
-
-    std::string caption;
-
-    char hook[68][32];
-    for (int i = 0; i < 68; i++) {
-        hook[i][0] = '\0';
-    }
-
-    std::string stripped_name;
-    concptr tag = angband_strstr(name, "#");
-    if (tag) {
-        stripped_name.append(name, tag - name);
-        name = stripped_name.data();
-        ++tag;
-    }
-
+    char hook[68][32]{};
+    auto stripped_names = str_split(name_with_tag, '#');
+    auto &name = stripped_names[0];
+    auto tag = stripped_names.size() > 1 ? stripped_names[1] : "";
     std::filesystem::path path_reopen("");
     FILE *fff = nullptr;
-    if (what) {
-        caption = what;
+    std::stringstream caption;
+    if (!what.empty()) {
+        caption << what;
         path_reopen = name;
         fff = angband_fopen(path_reopen, FileOpenMode::READ);
     }
 
     if (!fff) {
-        caption = _("ヘルプ・ファイル'", "Help file '");
-        caption.append(name).append("'");
+        caption.clear();
+        caption << _("ヘルプ・ファイル'", "Help file '");
+        caption << name << "'";
         path_reopen = path_build(ANGBAND_DIR_HELP, name);
         fff = angband_fopen(path_reopen, FileOpenMode::READ);
     }
 
     if (!fff) {
-        caption = _("スポイラー・ファイル'", "Info file '");
-        caption.append(name).append("'");
+        caption.clear();
+        caption << _("スポイラー・ファイル'", "Info file '");
+        caption << name << "'";
         path_reopen = path_build(ANGBAND_DIR_INFO, name);
         fff = angband_fopen(path_reopen, FileOpenMode::READ);
     }
 
     if (!fff) {
+        caption.clear();
         path_reopen = path_build(ANGBAND_DIR, name);
-        caption = _("スポイラー・ファイル'", "Info file '");
-        caption.append(name).append("'");
+        caption << _("スポイラー・ファイル'", "Info file '");
+        caption << name << "'";
         fff = angband_fopen(path_reopen, FileOpenMode::READ);
     }
 
+    const auto open_error_mes = format(_("'%s'をオープンできません。", "Cannot open '%s'."), name.data());
     if (!fff) {
-        msg_format(_("'%s'をオープンできません。", "Cannot open '%s'."), name);
-        msg_print(nullptr);
-
-        return true;
+        THROW_EXCEPTION(std::runtime_error, open_error_mes);
     }
 
+    const auto caption_str = caption.str();
     int skey;
-    int next = 0;
-    int size = 0;
-    int back = 0;
-    bool menu = false;
+    auto next = 0;
+    auto back = 0;
+    auto menu = false;
     char buf[1024]{};
-    bool reverse = (line < 0);
+    auto reverse = initial_line < 0;
+    auto line = initial_line;
     while (true) {
         char *str = buf;
         if (angband_fgets(fff, buf, sizeof(buf))) {
@@ -214,8 +207,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
             int k = str[7] - 'A';
             menu = true;
             if ((str[8] == ']') && (str[9] == ' ')) {
-                memcpy(hook[k], str + 10, 31);
-                hook[k][31] = '\0';
+                angband_strcpy(hook[k], str + 10, sizeof(hook[k]));
             }
 
             continue;
@@ -228,13 +220,13 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
         size_t len = strlen(str);
         if (str[len - 1] == '>') {
             str[len - 1] = '\0';
-            if (tag && streq(str + 7, tag)) {
+            if (!tag.empty() && streq(str + 7, tag)) {
                 line = next;
             }
         }
     }
 
-    size = next;
+    auto size = next;
     int rows = hgt - 4;
     if (line == -1) {
         line = ((size - 1) / rows) * rows;
@@ -256,7 +248,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
             angband_fclose(fff);
             fff = angband_fopen(path_reopen, FileOpenMode::READ);
             if (!fff) {
-                return false;
+                THROW_EXCEPTION(std::runtime_error, open_error_mes);
             }
 
             next = 0;
@@ -311,14 +303,12 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
             continue;
         }
 
-        prt(format(_("[変愚蛮怒 %d.%d.%d, %s, %d/%d]", "[Hengband %d.%d.%d, %s, Line %d/%d]"), H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH, caption.data(),
-                line, size),
-            0, 0);
-
         if (show_version) {
-            prt(format("[%s]", get_version().data()), 0, 0);
+            constexpr auto title = _("[%s, %s, %d/%d]", "[%s, %s, Line %d/%d]");
+            prt(format(title, get_version().data(), caption_str.data(), line, size), 0, 0);
         } else {
-            prt(format(_("[%s, %d/%d]", "[%s, Line %d/%d]"), caption.data(), line, size), 0, 0);
+            constexpr auto title = _("[%s, %d/%d]", "[%s, Line %d/%d]");
+            prt(format(title, caption_str.data(), line, size), 0, 0);
         }
 
         if (size <= rows) {
@@ -338,8 +328,8 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
         skey = inkey_special(true);
         switch (skey) {
         case '?':
-            if (strcmp(name, _("jhelpinfo.txt", "helpinfo.txt")) != 0) {
-                show_file(player_ptr, true, _("jhelpinfo.txt", "helpinfo.txt"), nullptr, 0, mode);
+            if (name != _("jhelpinfo.txt", "helpinfo.txt")) {
+                show_file(player_ptr, true, _("jhelpinfo.txt", "helpinfo.txt"), 0, mode);
             }
             break;
         case '=':
@@ -403,7 +393,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
             strcpy(tmp, _("jhelp.hlp", "help.hlp"));
 
             if (askfor(tmp, 80)) {
-                if (!show_file(player_ptr, true, tmp, nullptr, 0, mode)) {
+                if (!show_file(player_ptr, true, tmp, 0, mode)) {
                     skey = 'q';
                 }
             }
@@ -466,7 +456,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
 
             if ((key > -1) && hook[key][0]) {
                 /* Recurse on that file */
-                if (!show_file(player_ptr, true, hook[key], nullptr, 0, mode)) {
+                if (!show_file(player_ptr, true, hook[key], 0, mode)) {
                     skey = 'q';
                 }
             }
@@ -491,7 +481,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
                 break;
             }
 
-            fprintf(ffp, "%s: %s\n", player_ptr->name, what ? what : caption.data());
+            fprintf(ffp, "%s: %s\n", player_ptr->name, !what.empty() ? what.data() : caption_str.data());
             char buff[1024]{};
             while (!angband_fgets(fff, buff, sizeof(buff))) {
                 angband_fputs(ffp, buff, 80);

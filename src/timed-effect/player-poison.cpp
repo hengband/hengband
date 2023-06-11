@@ -5,7 +5,7 @@
  */
 
 #include "timed-effect/player-poison.h"
-#include <stdexcept>
+#include "system/angband-exceptions.h"
 
 short PlayerPoison::current() const
 {
@@ -20,7 +20,7 @@ bool PlayerPoison::is_poisoned() const
 void PlayerPoison::set(short value)
 {
     if (value < 0) {
-        throw std::invalid_argument("Negative value can't be set in the player's poison parameter!");
+        THROW_EXCEPTION(std::invalid_argument, "Negative value can't be set in the player's poison parameter!");
     }
 
     this->poison = value;

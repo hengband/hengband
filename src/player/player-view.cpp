@@ -379,5 +379,5 @@ void update_view(PlayerType *player_ptr)
         cave_redraw_later(floor_ptr, py, px);
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::DELAY_VISIBILITY);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::DELAY_VISIBILITY);
 }

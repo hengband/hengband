@@ -35,31 +35,6 @@ turn_flags *init_turn_flags(MONSTER_IDX riding_idx, MONSTER_IDX m_idx, turn_flag
     turn_flags_ptr->did_kill_wall = false;
     return turn_flags_ptr;
 }
-
-/*!
- * @brief old_race_flags_ptr の初期化
- */
-old_race_flags *init_old_race_flags(old_race_flags *old_race_flags_ptr)
-{
-    old_race_flags_ptr->old_r_flags1 = 0L;
-    old_race_flags_ptr->old_r_flags2 = 0L;
-    old_race_flags_ptr->old_r_flags3 = 0L;
-    old_race_flags_ptr->old_r_resistance_flags.clear();
-    old_race_flags_ptr->old_r_ability_flags.clear();
-    old_race_flags_ptr->old_r_behavior_flags.clear();
-    old_race_flags_ptr->old_r_kind_flags.clear();
-    old_race_flags_ptr->old_r_drop_flags.clear();
-    old_race_flags_ptr->old_r_feature_flags.clear();
-
-    old_race_flags_ptr->old_r_blows0 = 0;
-    old_race_flags_ptr->old_r_blows1 = 0;
-    old_race_flags_ptr->old_r_blows2 = 0;
-    old_race_flags_ptr->old_r_blows3 = 0;
-
-    old_race_flags_ptr->old_r_cast_spell = 0;
-    return old_race_flags_ptr;
-}
-
 /*!
  * @brief coordinate_candidate の初期化
  * @param なし
@@ -281,32 +256,30 @@ void store_moves_val(int *mm, int y, int x)
 
 /*!
  * @brief 古いモンスター情報の保存
- * @param monster_race_idx モンスターID
- * @param old_race_flags_ptr モンスターフラグへの参照ポインタ
+ * @param monrace_id モンスター種族ID
  */
-void save_old_race_flags(MonsterRaceId monster_race_idx, old_race_flags *old_race_flags_ptr)
+old_race_flags::old_race_flags(MonsterRaceId monrace_id)
 {
-    if (!MonsterRace(monster_race_idx).is_valid()) {
+    if (!MonsterRace(monrace_id).is_valid()) {
         return;
     }
 
-    MonsterRaceInfo *r_ptr;
-    r_ptr = &monraces_info[monster_race_idx];
+    const auto &monrace = monraces_info[monrace_id];
 
-    old_race_flags_ptr->old_r_flags1 = r_ptr->r_flags1;
-    old_race_flags_ptr->old_r_flags2 = r_ptr->r_flags2;
-    old_race_flags_ptr->old_r_flags3 = r_ptr->r_flags3;
-    old_race_flags_ptr->old_r_resistance_flags = r_ptr->r_resistance_flags;
-    old_race_flags_ptr->old_r_ability_flags = r_ptr->r_ability_flags;
-    old_race_flags_ptr->old_r_behavior_flags = r_ptr->r_behavior_flags;
-    old_race_flags_ptr->old_r_kind_flags = r_ptr->r_kind_flags;
-    old_race_flags_ptr->old_r_drop_flags = r_ptr->r_drop_flags;
-    old_race_flags_ptr->old_r_feature_flags = r_ptr->r_feature_flags;
+    this->old_r_flags1 = monrace.r_flags1;
+    this->old_r_flags2 = monrace.r_flags2;
+    this->old_r_flags3 = monrace.r_flags3;
+    this->old_r_ability_flags = monrace.r_ability_flags;
+    this->old_r_behavior_flags = monrace.r_behavior_flags;
+    this->old_r_kind_flags = monrace.r_kind_flags;
+    this->old_r_resistance_flags = monrace.r_resistance_flags;
+    this->old_r_drop_flags = monrace.r_drop_flags;
+    this->old_r_feature_flags = monrace.r_feature_flags;
 
-    old_race_flags_ptr->old_r_blows0 = r_ptr->r_blows[0];
-    old_race_flags_ptr->old_r_blows1 = r_ptr->r_blows[1];
-    old_race_flags_ptr->old_r_blows2 = r_ptr->r_blows[2];
-    old_race_flags_ptr->old_r_blows3 = r_ptr->r_blows[3];
+    this->old_r_blows0 = monrace.r_blows[0];
+    this->old_r_blows1 = monrace.r_blows[1];
+    this->old_r_blows2 = monrace.r_blows[2];
+    this->old_r_blows3 = monrace.r_blows[3];
 
-    old_race_flags_ptr->old_r_cast_spell = r_ptr->r_cast_spell;
+    this->old_r_cast_spell = monrace.r_cast_spell;
 }

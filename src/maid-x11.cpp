@@ -10,7 +10,7 @@
 
 #ifdef USE_X11
 
-#include "main/x11-gamma-builder.h"
+#include "main-unix/x11-gamma-builder.h"
 #include <math.h>
 
 /*

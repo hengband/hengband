@@ -18,7 +18,7 @@ void handle_stuff(PlayerType *player_ptr)
         redraw_stuff(player_ptr);
     }
 
-    if (player_ptr->window_flags) {
+    if (rfu.any_sub()) {
         window_stuff(player_ptr);
     }
 }
@@ -29,7 +29,7 @@ void handle_stuff(PlayerType *player_ptr)
 void monster_race_track(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     player_ptr->monster_race_idx = r_idx;
-    player_ptr->window_flags |= (PW_MONSTER_LORE);
+    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
 }
 
 /*
@@ -38,7 +38,7 @@ void monster_race_track(PlayerType *player_ptr, MonsterRaceId r_idx)
 void object_kind_track(PlayerType *player_ptr, short bi_id)
 {
     player_ptr->tracking_bi_id = bi_id;
-    player_ptr->window_flags |= (PW_ITEM_KNOWLEDGTE);
+    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
 }
 
 /*
@@ -57,15 +57,15 @@ void health_track(PlayerType *player_ptr, MONSTER_IDX m_idx)
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::HEALTH);
 }
 
-bool update_player(PlayerType *player_ptr)
+bool update_player()
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     rfu.set_flags(flags_srf);
-    player_ptr->window_flags |= PW_INVENTORY;
+    rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
     return true;
 }
 
@@ -77,11 +77,11 @@ bool redraw_player(PlayerType *player_ptr)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MP);
-    const auto flags_srf = {
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     rfu.set_flags(flags_srf);
-    player_ptr->window_flags |= PW_INVENTORY;
+    rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
     return true;
 }

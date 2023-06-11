@@ -22,7 +22,7 @@
  * The window options are stored in the same way, but note that each
  * window gets 32 options, and their order is fixed by certain defines.
  */
-void rd_options(void)
+void rd_options()
 {
     strip_bytes(16);
 
@@ -63,26 +63,27 @@ void rd_options(void)
     autosave_t = rd_bool();
     autosave_freq = rd_s16b();
 
-    BIT_FLAGS flag[8];
-    for (int n = 0; n < 8; n++) {
+    uint32_t flag[8]{};
+    for (auto n = 0; n < MAX_WINDOW_ENTITIES; n++) {
         flag[n] = rd_u32b();
     }
 
-    BIT_FLAGS mask[8];
-    for (int n = 0; n < 8; n++) {
+    uint32_t mask[8]{};
+    for (auto n = 0; n < MAX_WINDOW_ENTITIES; n++) {
         mask[n] = rd_u32b();
     }
 
-    for (auto n = 0; n < 8; n++) {
+    for (auto n = 0; n < MAX_WINDOW_ENTITIES; n++) {
         for (auto i = 0; i < 32; i++) {
-            if (none_bits(mask[n], 1U << i) || none_bits(option_mask[n], 1U << i)) {
+            if (none_bits(mask[n], 1U << i) || none_bits(g_option_masks[n], 1U << i)) {
                 continue;
             }
 
+            auto &option_flag = g_option_flags[n];
             if (flag[n] & (1UL << i)) {
-                option_flag[n] |= (1UL << i);
+                option_flag |= (1UL << i);
             } else {
-                option_flag[n] &= ~(1UL << i);
+                option_flag &= ~(1UL << i);
             }
         }
     }
@@ -92,28 +93,19 @@ void rd_options(void)
     }
 
     extract_option_vars();
-    for (int n = 0; n < 8; n++) {
-        flag[n] = rd_u32b();
+
+    decltype(g_window_flags) savefile_window_flags;
+    for (auto &window_flag : savefile_window_flags) {
+        rd_FlagGroup_bytes(window_flag, rd_byte, 4);
     }
 
-    for (int n = 0; n < 8; n++) {
-        mask[n] = rd_u32b();
+    decltype(g_window_masks) savefile_window_masks;
+    for (auto &window_mask : savefile_window_masks) {
+        rd_FlagGroup_bytes(window_mask, rd_byte, 4);
     }
 
-    for (int n = 0; n < 8; n++) {
-        for (int i = 0; i < 32; i++) {
-            if (!(mask[n] & (1UL << i))) {
-                continue;
-            }
-            if (!(window_mask[n] & (1UL << i))) {
-                continue;
-            }
-
-            if (flag[n] & (1UL << i)) {
-                window_flag[n] |= (1UL << i);
-            } else {
-                window_flag[n] &= ~(1UL << i);
-            }
-        }
+    for (auto n = 0; n < MAX_WINDOW_ENTITIES; n++) {
+        const auto window_mask = g_window_masks[n] & savefile_window_masks[n];
+        g_window_flags[n] = savefile_window_flags[n] & window_mask;
     }
 }

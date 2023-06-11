@@ -4,6 +4,7 @@
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player/player-realm.h"
+#include "realm/realm-names-table.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
@@ -61,7 +62,7 @@ void gain_attack_skill_exp(PlayerType *player_ptr, short &exp, const GainAmountL
     }
 
     exp += static_cast<short>(gain_amount);
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
 }
 
 void gain_spell_skill_exp_aux(PlayerType *player_ptr, short &exp, const GainAmountList &gain_amount_list, int spell_level)
@@ -91,7 +92,7 @@ void gain_spell_skill_exp_aux(PlayerType *player_ptr, short &exp, const GainAmou
     }
 
     exp += static_cast<short>(gain_amount);
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
 }
 
 }
@@ -305,7 +306,7 @@ void PlayerSkill::gain_riding_skill_exp_on_melee_attack(const MonsterRaceInfo *r
     }
 
     this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] = std::min<SUB_EXP>(max_exp, now_exp + inc);
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
 }
 
 void PlayerSkill::gain_riding_skill_exp_on_range_attack()
@@ -321,7 +322,7 @@ void PlayerSkill::gain_riding_skill_exp_on_range_attack()
     const auto &monrace = monraces_info[monster.r_idx];
     if (((this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] - (RIDING_EXP_BEGINNER * 2)) / 200 < monrace.level) && one_in_(2)) {
         this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] += 1;
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     }
 }
 
@@ -347,17 +348,17 @@ void PlayerSkill::gain_riding_skill_exp_on_fall_off_check(int dam)
     }
 
     this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] = std::min<SUB_EXP>(max_exp, now_exp + inc);
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
 }
 
 void PlayerSkill::gain_spell_skill_exp(int realm, int spell_idx)
 {
-    if ((realm < 1) || ((static_cast<int>(std::size(mp_ptr->info)) < realm) && (realm != REALM_MUSIC) && (realm != REALM_HEX))) {
-        return;
-    }
+    auto is_valid_realm = is_magic(realm) ||
+                          (realm == REALM_MUSIC) || (realm == REALM_HEX);
+    is_valid_realm &= (realm == this->player_ptr->realm1) || (realm == this->player_ptr->realm2);
+    const auto is_valid_spell_idx = (0 <= spell_idx) && (spell_idx < 32);
 
-    if (((spell_idx < 0) || (32 <= spell_idx)) ||
-        ((realm != this->player_ptr->realm1) && (realm != this->player_ptr->realm2))) {
+    if (!is_valid_realm || !is_valid_spell_idx) {
         return;
     }
 
@@ -365,7 +366,7 @@ void PlayerSkill::gain_spell_skill_exp(int realm, int spell_idx)
     constexpr GainAmountList gain_amount_list_second{ { 60, 8, 2, 0 } };
 
     const auto is_first_realm = (realm == this->player_ptr->realm1);
-    const auto *s_ptr = &mp_ptr->info[realm - 1][spell_idx];
+    const auto *s_ptr = is_magic(realm) ? &mp_ptr->info[realm - 1][spell_idx] : &technic_info[realm - MIN_TECHNIC][spell_idx];
 
     gain_spell_skill_exp_aux(this->player_ptr, this->player_ptr->spell_exp[spell_idx + (is_first_realm ? 0 : 32)],
         (is_first_realm ? gain_amount_list_first : gain_amount_list_second), s_ptr->slevel);
@@ -407,7 +408,7 @@ PlayerSkillRank PlayerSkill::gain_spell_skill_exp_over_learning(int spell_idx)
         exp = SPELL_EXP_BEGINNER + exp / 3;
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     return PlayerSkill::spell_skill_rank(exp);
 }
 

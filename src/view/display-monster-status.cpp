@@ -16,7 +16,9 @@ std::string look_mon_desc(MonsterEntity *m_ptr, BIT_FLAGS mode)
     auto perc = m_ptr->maxhp > 0 ? 100L * m_ptr->hp / m_ptr->maxhp : 0;
 
     concptr desc;
-    if (m_ptr->hp >= m_ptr->maxhp) {
+    if (!m_ptr->ml) {
+        desc = _("損傷具合不明", "damage unknown");
+    } else if (m_ptr->hp >= m_ptr->maxhp) {
         desc = living ? _("無傷", "unhurt") : _("無ダメージ", "undamaged");
     } else if (perc >= 60) {
         desc = living ? _("軽傷", "somewhat wounded") : _("小ダメージ", "somewhat damaged");

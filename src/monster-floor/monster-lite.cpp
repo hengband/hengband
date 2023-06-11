@@ -153,7 +153,7 @@ void update_mon_lite(PlayerType *player_ptr)
 
     void (*add_mon_lite)(PlayerType *, std::vector<Pos2D> &, const POSITION, const POSITION, const monster_lite_type *);
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto &dungeon = dungeons_info[floor_ptr->dungeon_idx];
+    const auto &dungeon = floor_ptr->get_dungeon_definition();
     auto dis_lim = (dungeon.flags.has(DungeonFeatureType::DARKNESS) && !player_ptr->see_nocto) ? (MAX_PLAYER_SIGHT / 2 + 1) : (MAX_PLAYER_SIGHT + 3);
     for (int i = 0; i < floor_ptr->mon_lite_n; i++) {
         grid_type *g_ptr;
@@ -199,7 +199,7 @@ void update_mon_lite(PlayerType *player_ptr)
                     continue;
                 }
 
-                if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
+                if (dungeon.flags.has(DungeonFeatureType::DARKNESS)) {
                     rad = 1;
                 }
 
@@ -341,7 +341,7 @@ void update_mon_lite(PlayerType *player_ptr)
         floor_ptr->grid_array[y][x].info &= ~(CAVE_TEMP | CAVE_XTRA);
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::DELAY_VISIBILITY);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::DELAY_VISIBILITY);
     player_ptr->monlite = (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_MNLT) != 0;
     auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
     if (!ninja_data || !ninja_data->s_stealth) {

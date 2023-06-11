@@ -46,13 +46,17 @@
 static void update_sun_light(PlayerType *player_ptr)
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::MONSTER_STATUSES,
-        StatusRedrawingFlag::MONSTER_LITE,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::MONSTER_STATUSES,
+        StatusRecalculatingFlag::MONSTER_LITE,
     };
     rfu.set_flags(flags_srf);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
+    static constexpr auto flags = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    rfu.set_flags(flags);
     if ((player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0) {
         set_superstealth(player_ptr, false);
     }
@@ -324,7 +328,7 @@ void update_dungeon_feeling(PlayerType *player_ptr)
 void glow_deep_lava_and_bldg(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
+    if (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
         return;
     }
 
@@ -349,10 +353,10 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::VIEW,
-        StatusRedrawingFlag::LITE,
-        StatusRedrawingFlag::MONSTER_LITE,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::VIEW,
+        StatusRecalculatingFlag::LITE,
+        StatusRecalculatingFlag::MONSTER_LITE,
     };
     rfu.set_flags(flags_srf);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);

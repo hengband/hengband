@@ -200,7 +200,7 @@ static element_type_list element_types = {
 /*!
  * @brief 元素魔法呪文定義
  */
-static element_power_list element_powers = {
+static const element_power_list element_powers = {
     { ElementSpells::BOLT_1ST,   { 0, {  1,  1,  15, _("%sの矢", "%s Bolt") }}},
     { ElementSpells::MON_DETECT, { 0, {  2,  2,  20, _("モンスター感知", "Detect Monsters") }}},
     { ElementSpells::PERCEPT,    { 0, {  5,  5,  50, _("擬似鑑定", "Psychometry") }}},
@@ -461,7 +461,7 @@ static std::string get_element_effect_info(PlayerType *player_ptr, int spell_idx
 static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
 {
     auto spell = i2enum<ElementSpells>(spell_idx);
-    auto power = element_powers.at(spell);
+    auto &power = element_powers.at(spell);
     AttributeType typ;
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
@@ -762,7 +762,7 @@ static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_b
             }
         }
 
-        int spell_max = enum2i(ElementSpells::MAX);
+        constexpr auto spell_max = enum2i(ElementSpells::MAX);
         if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && should_redraw_cursor)) {
             if (!redraw || use_menu) {
                 redraw = true;
@@ -827,7 +827,7 @@ static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_b
         screen_load();
     }
 
-    set_bits(player_ptr->window_flags, PW_SPELL);
+    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
     handle_stuff(player_ptr);
     if (!flag) {
         return false;
@@ -890,8 +890,11 @@ static bool try_cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx, 
         PlayerEnergy(player_ptr).set_player_turn_energy(100);
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(MainWindowRedrawingFlag::MP);
-        set_bits(player_ptr->window_flags, PW_PLAYER | PW_SPELL);
-
+        static constexpr auto flags_swrf = {
+            SubWindowRedrawingFlag::PLAYER,
+            SubWindowRedrawingFlag::SPELL,
+        };
+        rfu.set_flags(flags_swrf);
         return false;
     }
 
@@ -940,7 +943,11 @@ void do_cmd_element(PlayerType *player_ptr)
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MP);
-    set_bits(player_ptr->window_flags, PW_PLAYER | PW_SPELL);
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::PLAYER,
+        SubWindowRedrawingFlag::SPELL,
+    };
+    rfu.set_flags(flags_swrf);
 }
 
 /*!
@@ -1033,7 +1040,7 @@ bool is_elemental_genocide_effective(MonsterRaceInfo *r_ptr, AttributeType type)
  * @param em_ptr 魔法効果情報への参照ポインタ
  * @return 効果処理を続けるかどうか
  */
-ProcessResult effect_monster_elemental_genocide(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_elemental_genocide(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     auto type = get_element_type(player_ptr->element, 0);
     auto name = get_element_name(player_ptr->element, 0);
@@ -1225,7 +1232,7 @@ byte select_element_realm(PlayerType *player_ptr)
 {
     clear_from(10);
 
-    int realm_max = enum2i(ElementRealmType::MAX);
+    constexpr auto realm_max = enum2i(ElementRealmType::MAX);
     int realm_idx = 1;
     int row = 16;
     while (1) {

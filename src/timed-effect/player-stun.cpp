@@ -1,4 +1,5 @@
 ﻿#include "timed-effect/player-stun.h"
+#include "system/angband-exceptions.h"
 #include "system/angband.h"
 
 enum class PlayerStunRank {
@@ -51,7 +52,7 @@ std::string_view PlayerStun::get_stun_mes(PlayerStunRank stun_rank)
     case PlayerStunRank::KNOCKED:
         return _("あなたはぶっ倒れた！", "You are knocked out!!");
     default:
-        throw("Invalid StunRank was specified!");
+        THROW_EXCEPTION(std::logic_error, "Invalid StunRank is specified!");
     }
 }
 
@@ -161,7 +162,7 @@ int PlayerStun::get_magic_chance_penalty() const
     case PlayerStunRank::KNOCKED:
         return 100;
     default:
-        throw("Invalid stun rank is specified!");
+        THROW_EXCEPTION(std::logic_error, "Invalid StunRank is specified!");
     }
 }
 
@@ -186,7 +187,7 @@ int PlayerStun::get_item_chance_penalty() const
     case PlayerStunRank::KNOCKED:
         return 100;
     default:
-        throw("Invalid stun rank is specified!");
+        THROW_EXCEPTION(std::logic_error, "Invalid StunRank is specified!");
     }
 }
 
@@ -214,7 +215,7 @@ short PlayerStun::get_damage_penalty() const
     case PlayerStunRank::KNOCKED:
         return 100;
     default:
-        throw("Invalid stun rank is specified!");
+        THROW_EXCEPTION(std::logic_error, "Invalid StunRank is specified!");
     }
 }
 
@@ -252,7 +253,7 @@ std::tuple<term_color_type, std::string_view> PlayerStun::get_expr() const
     case PlayerStunRank::KNOCKED:
         return std::make_tuple(TERM_VIOLET, _("昏倒        ", "Knocked out "));
     default:
-        throw("Invalid stun rank is specified!");
+        THROW_EXCEPTION(std::logic_error, "Invalid StunRank is specified!");
     }
 }
 

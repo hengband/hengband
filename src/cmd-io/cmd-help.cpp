@@ -12,6 +12,6 @@
 void do_cmd_help(PlayerType *player_ptr)
 {
     screen_save();
-    (void)show_file(player_ptr, true, _("jhelp.hlp", "help.hlp"), nullptr, 0, 0);
+    (void)show_file(player_ptr, true, _("jhelp.hlp", "help.hlp"), 0, 0);
     screen_load();
 }

@@ -139,7 +139,7 @@ void set_lightspeed(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
 }
 
@@ -256,7 +256,7 @@ bool shock_power(PlayerType *player_ptr)
     lite_spot(player_ptr, ty, tx);
 
     if (r_ptr->brightness_flags.has_any_of(ld_mask)) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_LITE);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 
     return true;
@@ -306,7 +306,7 @@ bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
     case MindForceTrainerType::IMPROVE_FORCE:
         msg_print(_("気を練った。", "You improved the Force."));
         set_current_ki(player_ptr, false, 70 + plev);
-        rfu.set_flag(StatusRedrawingFlag::BONUS);
+        rfu.set_flag(StatusRecalculatingFlag::BONUS);
         if (randint1(get_current_ki(player_ptr)) > (plev * 4 + 120)) {
             msg_print(_("気が暴走した！", "The Force exploded!"));
             fire_ball(player_ptr, AttributeType::MANA, 0, get_current_ki(player_ptr) / 2, 10);
@@ -378,6 +378,6 @@ bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
     }
 
     set_current_ki(player_ptr, true, 0);
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     return true;
 }

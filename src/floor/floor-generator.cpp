@@ -139,7 +139,7 @@ static void generate_challenge_arena(PlayerType *player_ptr)
 
     build_arena(player_ptr, &y, &x);
     player_place(player_ptr, y, x);
-    if (place_monster_aux(player_ptr, 0, player_ptr->y + 5, player_ptr->x, arena_info[player_ptr->arena_number].r_idx, PM_NO_KAGE | PM_NO_PET)) {
+    if (place_specific_monster(player_ptr, 0, player_ptr->y + 5, player_ptr->x, arena_info[player_ptr->arena_number].r_idx, PM_NO_KAGE | PM_NO_PET)) {
         return;
     }
 
@@ -238,7 +238,7 @@ static void generate_gambling_arena(PlayerType *player_ptr)
     build_battle(player_ptr, &y, &x);
     player_place(player_ptr, y, x);
     for (MONSTER_IDX i = 0; i < 4; i++) {
-        place_monster_aux(player_ptr, 0, player_ptr->y + 8 + (i / 2) * 4, player_ptr->x - 2 + (i % 2) * 4, battle_mon_list[i], (PM_NO_KAGE | PM_NO_PET));
+        place_specific_monster(player_ptr, 0, player_ptr->y + 8 + (i / 2) * 4, player_ptr->x - 2 + (i % 2) * 4, battle_mon_list[i], (PM_NO_KAGE | PM_NO_PET));
         set_friendly(&floor_ptr->m_list[floor_ptr->grid_array[player_ptr->y + 8 + (i / 2) * 4][player_ptr->x - 2 + (i % 2) * 4].m_idx]);
     }
 
@@ -272,7 +272,7 @@ static void generate_fixed_floor(PlayerType *player_ptr)
     floor_ptr->object_level = floor_ptr->base_level;
     floor_ptr->monster_level = floor_ptr->base_level;
     if (record_stair) {
-        exe_write_diary_quest(player_ptr, DIARY_TO_QUEST, floor_ptr->quest_number);
+        exe_write_diary_quest(player_ptr, DiaryKind::TO_QUEST, floor_ptr->quest_number);
     }
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), nullptr);
     init_flags = INIT_CREATE_DUNGEON;
@@ -386,8 +386,8 @@ void clear_cave(PlayerType *player_ptr)
             g_ptr->m_idx = 0;
             g_ptr->special = 0;
             g_ptr->mimic = 0;
-            memset(g_ptr->costs, 0, sizeof(g_ptr->costs));
-            memset(g_ptr->costs, 0, sizeof(g_ptr->dists));
+            g_ptr->reset_costs();
+            g_ptr->reset_dists();
             g_ptr->when = 0;
         }
     }

@@ -9,7 +9,6 @@
 #include "cmd-visual/cmd-draw.h"
 #include "core/asking-player.h"
 #include "io/files-util.h"
-#include "io/inet.h"
 #include "io/signal-handlers.h"
 #include "locale/japanese.h"
 #include "system/player-type-definition.h"
@@ -129,9 +128,9 @@ static errr insert_ringbuf(std::string_view header, std::string_view payload = "
 
     /* バッファの終端までに収まる */
     if (ring.wptr + all_length + 1 < RINGBUF_SIZE) {
-        memcpy(ring.buf + ring.wptr, header.data(), header.length());
+        std::copy_n(header.begin(), header.length(), ring.buf + ring.wptr);
         if (!payload.empty()) {
-            memcpy(ring.buf + ring.wptr + header.length(), payload.data(), payload.length());
+            std::copy_n(payload.begin(), payload.length(), ring.buf + ring.wptr + header.length());
         }
         *(ring.buf + ring.wptr + all_length) = '\0';
         ring.wptr += all_length + 1;
@@ -142,18 +141,18 @@ static errr insert_ringbuf(std::string_view header, std::string_view payload = "
         int tail = all_length - head; /* 後半 */
 
         if ((int)header.length() <= head) {
-            memcpy(ring.buf + ring.wptr, header.data(), header.length());
+            std::copy_n(header.begin(), header.length(), ring.buf + ring.wptr);
             head -= header.length();
             if (head > 0) {
-                memcpy(ring.buf + ring.wptr + header.length(), payload.data(), head);
+                std::copy_n(payload.begin(), head, ring.buf + ring.wptr + header.length());
             }
-            memcpy(ring.buf, payload.data() + head, tail);
+            std::copy_n(payload.data() + head, tail, ring.buf);
         } else {
-            memcpy(ring.buf + ring.wptr, header.data(), head);
+            std::copy_n(header.begin(), head, ring.buf + ring.wptr);
             int part = header.length() - head;
-            memcpy(ring.buf, header.data() + head, part);
+            std::copy_n(header.data() + head, part, ring.buf);
             if (tail > part) {
-                memcpy(ring.buf + part, payload.data(), tail - part);
+                std::copy_n(payload.begin(), tail - part, ring.buf + part);
             }
         }
         *(ring.buf + tail) = '\0';
@@ -524,8 +523,6 @@ static void update_term_size(int x, int y, int len)
 
 static bool flush_ringbuf_client()
 {
-    char buf[1024];
-
     /* 書くデータなし */
     if (fresh_queue.next == fresh_queue.tail) {
         return false;
@@ -537,21 +534,16 @@ static bool flush_ringbuf_client()
     }
 
     /* 時間情報(区切り)が得られるまで書く */
+    char buf[1024]{};
     while (get_nextbuf(buf)) {
-        char id;
-        int x, y, len;
-        TERM_COLOR col;
-        int i;
-        unsigned char tmp1, tmp2, tmp3, tmp4;
+        auto id = buf[0];
+        auto x = static_cast<uint8_t>(buf[1]) - 1;
+        auto y = static_cast<uint8_t>(buf[2]) - 1;
+        int len = static_cast<uint8_t>(buf[3]);
+        uint8_t col = buf[4];
         char *mesg;
-
-        sscanf(buf, "%c%c%c%c%c", &id, &tmp1, &tmp2, &tmp3, &tmp4);
-        x = tmp1 - 1;
-        y = tmp2 - 1;
-        len = tmp3;
-        col = tmp4;
         if (id == 's') {
-            col = tmp3;
+            col = buf[3];
             mesg = &buf[4];
         } else {
             mesg = &buf[5];
@@ -567,44 +559,47 @@ static bool flush_ringbuf_client()
 #endif
             update_term_size(x, y, len);
             (void)((*angband_terms[0]->text_hook)(x, y, len, (byte)col, mesg));
-            memcpy(&game_term->scr->c[y][x], mesg, len);
-            for (i = x; i < x + len; i++) {
+            std::copy_n(mesg, len, &game_term->scr->c[y][x]);
+            for (auto i = x; i < x + len; i++) {
                 game_term->scr->a[y][i] = col;
             }
-            break;
 
+            break;
         case 'n': /* 繰り返し */
-            for (i = 1; i < len; i++) {
+            for (auto i = 1; i < len + 1; i++) {
+                if (i == len) {
+                    mesg[i] = '\0';
+                    break;
+                }
+
                 mesg[i] = mesg[0];
             }
-            mesg[i] = '\0';
+
             update_term_size(x, y, len);
             (void)((*angband_terms[0]->text_hook)(x, y, len, (byte)col, mesg));
-            memcpy(&game_term->scr->c[y][x], mesg, len);
-            for (i = x; i < x + len; i++) {
+            std::copy_n(mesg, len, &game_term->scr->c[y][x]);
+            for (auto i = x; i < x + len; i++) {
                 game_term->scr->a[y][i] = col;
             }
-            break;
 
+            break;
         case 's': /* 一文字 */
             update_term_size(x, y, 1);
             (void)((*angband_terms[0]->text_hook)(x, y, 1, (byte)col, mesg));
-            memcpy(&game_term->scr->c[y][x], mesg, 1);
+            std::copy_n(&game_term->scr->c[y][x], 1, mesg);
             game_term->scr->a[y][x] = col;
             break;
-
         case 'w':
             update_term_size(x, y, len);
             (void)((*angband_terms[0]->wipe_hook)(x, y, len));
             break;
-
         case 'x':
             if (x == TERM_XTRA_CLEAR) {
                 term_clear();
             }
+
             (void)((*angband_terms[0]->xtra_hook)(x, 0));
             break;
-
         case 'c':
             update_term_size(x, y, 1);
             (void)((*angband_terms[0]->curs_hook)(x, y));

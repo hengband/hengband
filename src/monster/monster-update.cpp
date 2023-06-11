@@ -108,13 +108,17 @@ void update_player_type(PlayerType *player_ptr, turn_flags *turn_flags_ptr, Mons
     const auto except_has_lite = EnumClassFlagGroup<Mbt>(self_ld_mask).set({ Mbt::HAS_DARK_1, Mbt::HAS_DARK_2 });
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (turn_flags_ptr->do_view) {
-        rfu.set_flag(StatusRedrawingFlag::FLOW);
-        player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
+        rfu.set_flag(StatusRecalculatingFlag::FLOW);
+        static constexpr auto flags = {
+            SubWindowRedrawingFlag::OVERHEAD,
+            SubWindowRedrawingFlag::DUNGEON,
+        };
+        rfu.set_flags(flags);
     }
 
     const auto has_lite = r_ptr->brightness_flags.has_any_of({ Mbt::HAS_LITE_1, Mbt::HAS_LITE_2 });
     if (turn_flags_ptr->do_move && (r_ptr->brightness_flags.has_any_of(except_has_lite) || (has_lite && !player_ptr->phase_out))) {
-        rfu.set_flag(StatusRedrawingFlag::MONSTER_LITE);
+        rfu.set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 }
 
@@ -177,7 +181,7 @@ void update_player_window(PlayerType *player_ptr, old_race_flags *old_race_flags
         (old_race_flags_ptr->old_r_blows3 != r_ptr->r_blows[3]) || (old_race_flags_ptr->old_r_cast_spell != r_ptr->r_cast_spell) ||
         (old_race_flags_ptr->old_r_behavior_flags != r_ptr->r_behavior_flags) || (old_race_flags_ptr->old_r_kind_flags != r_ptr->r_kind_flags) ||
         (old_race_flags_ptr->old_r_drop_flags != r_ptr->r_drop_flags) || (old_race_flags_ptr->old_r_feature_flags != r_ptr->r_feature_flags)) {
-        player_ptr->window_flags |= PW_MONSTER_LORE;
+        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
     }
 }
 
@@ -190,7 +194,7 @@ static um_type *initialize_um_type(PlayerType *player_ptr, um_type *um_ptr, MONS
     um_ptr->fx = um_ptr->m_ptr->fx;
     um_ptr->flag = false;
     um_ptr->easy = false;
-    um_ptr->in_darkness = dungeons_info[floor.dungeon_idx].flags.has(DungeonFeatureType::DARKNESS) && !player_ptr->see_nocto;
+    um_ptr->in_darkness = floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS) && !player_ptr->see_nocto;
     um_ptr->full = full;
     return um_ptr;
 }
@@ -458,7 +462,7 @@ static void decide_sight_invisible_monster(PlayerType *player_ptr, um_type *um_p
         return;
     }
 
-    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<SniperData>();
     if (sniper_data && (sniper_data->concent >= CONCENT_RADAR_THRESHOLD)) {
         um_ptr->easy = true;
         um_ptr->flag = true;

@@ -64,9 +64,9 @@ bool ask_quick_start(PlayerType *player_ptr)
     ap_ptr = &personality_info[player_ptr->ppersonality];
 
     get_extra(player_ptr, false);
-    const auto flags = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
+    static constexpr auto flags = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
     };
     RedrawingFlagsUpdater::get_instance().set_flags(flags);
     update_creature(player_ptr);

@@ -84,4 +84,5 @@ public:
     bool has_living_flag(bool is_apperance = false) const;
     bool is_explodable() const;
     std::string get_died_message() const;
+    std::pair<TERM_COLOR, int> get_hp_bar_data() const;
 };

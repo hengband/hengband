@@ -84,7 +84,7 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
             sound(SOUND_DIG_THROUGH);
             msg_format(_("%sをくずした。", "You have removed the %s."), name);
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::TUNNEL);
-            RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
+            RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
         } else {
             msg_format(_("%sをくずしている。", "You dig into the %s."), name);
             more = true;
@@ -97,7 +97,7 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
                 msg_format(_("%sを切り払った。", "You have cleared away the %s."), name);
             } else {
                 msg_print(_("穴を掘り終えた。", "You have finished the tunnel."));
-                RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
+                RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
             }
 
             if (f_ptr->flags.has(TerrainCharacteristics::GLASS)) {

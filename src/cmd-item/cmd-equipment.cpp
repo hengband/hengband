@@ -72,7 +72,7 @@ static void do_curse_on_equip(OBJECT_IDX slot, ItemEntity *o_ptr, PlayerType *pl
         chariot->curse_flags.set(CurseTraitType::VUL_CURSE);
 
         msg_format(_("『銀の戦車』プラス『アヌビス神』二刀流ッ！", "*Silver Chariot* plus *Anubis God* Two Swords!"));
-        rfu.set_flag(StatusRedrawingFlag::BONUS);
+        rfu.set_flag(StatusRecalculatingFlag::BONUS);
         return;
     }
 
@@ -86,7 +86,7 @@ static void do_curse_on_equip(OBJECT_IDX slot, ItemEntity *o_ptr, PlayerType *pl
     o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
     msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), item_name.data());
     o_ptr->feeling = FEEL_NONE;
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
 }
 
 /*!
@@ -349,15 +349,20 @@ void do_cmd_wield(PlayerType *player_ptr)
     }
 
     calc_android_exp(player_ptr);
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::TORCH,
-        StatusRedrawingFlag::MP,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::TORCH,
+        StatusRecalculatingFlag::MP,
     };
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flags(flags_srf);
     rfu.set_flag(MainWindowRedrawingFlag::EQUIPPY);
-    player_ptr->window_flags |= PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER;
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::PLAYER,
+    };
+    rfu.set_flags(flags_swrf);
 }
 
 /*!
@@ -390,8 +395,8 @@ void do_cmd_takeoff(PlayerType *player_ptr)
             o_ptr->ident |= (IDENT_SENSE);
             o_ptr->curse_flags.clear();
             o_ptr->feeling = FEEL_NONE;
-            rfu.set_flag(StatusRedrawingFlag::BONUS);
-            player_ptr->window_flags |= PW_EQUIPMENT;
+            rfu.set_flag(StatusRecalculatingFlag::BONUS);
+            rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
             msg_print(_("呪いを打ち破った。", "You break the curse."));
         } else {
             msg_print(_("装備を外せなかった。", "You couldn't remove the equipment."));
@@ -405,12 +410,17 @@ void do_cmd_takeoff(PlayerType *player_ptr)
     (void)inven_takeoff(player_ptr, item, 255);
     verify_equip_slot(player_ptr, item);
     calc_android_exp(player_ptr);
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::TORCH,
-        StatusRedrawingFlag::MP,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::TORCH,
+        StatusRecalculatingFlag::MP,
     };
     rfu.set_flags(flags_srf);
     rfu.set_flag(MainWindowRedrawingFlag::EQUIPPY);
-    player_ptr->window_flags |= PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER;
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::PLAYER,
+    };
+    rfu.set_flags(flags_swrf);
 }

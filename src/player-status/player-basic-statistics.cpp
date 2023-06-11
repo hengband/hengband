@@ -108,7 +108,7 @@ void PlayerBasicStatistics::update_top_status()
         this->player_ptr->stat_top[status] = (int16_t)top;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
-        set_bits(this->player_ptr->window_flags, PW_PLAYER);
+        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     }
 }
 
@@ -142,7 +142,7 @@ void PlayerBasicStatistics::update_use_status()
         this->player_ptr->stat_use[status] = (int16_t)use;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
-        set_bits(this->player_ptr->window_flags, PW_PLAYER);
+        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     }
 }
 
@@ -171,12 +171,12 @@ void PlayerBasicStatistics::update_index_status()
 
     this->player_ptr->stat_index[status] = (int16_t)index;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags = {
-        StatusRedrawingFlag::MP,
-        StatusRedrawingFlag::SPELLS,
+    static constexpr auto flags = {
+        StatusRecalculatingFlag::MP,
+        StatusRecalculatingFlag::SPELLS,
     };
     if (status == A_CON) {
-        rfu.set_flag(StatusRedrawingFlag::HP);
+        rfu.set_flag(StatusRecalculatingFlag::HP);
     } else if (status == A_INT) {
         if (mp_ptr->spell_stat == A_INT) {
             rfu.set_flags(flags);
@@ -191,5 +191,5 @@ void PlayerBasicStatistics::update_index_status()
         }
     }
 
-    set_bits(this->player_ptr->window_flags, PW_PLAYER);
+    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
 }

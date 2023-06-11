@@ -164,13 +164,13 @@ void do_cmd_go_up(PlayerType *player_ptr)
             up_num = 1;
         }
 
-        if (player_ptr->current_floor_ptr->dun_level - up_num < dungeons_info[floor_ptr->dungeon_idx].mindepth) {
+        if (player_ptr->current_floor_ptr->dun_level - up_num < floor_ptr->get_dungeon_definition().mindepth) {
             up_num = player_ptr->current_floor_ptr->dun_level;
         }
     }
 
     if (record_stair) {
-        exe_write_diary(player_ptr, DIARY_STAIR, 0 - up_num, _("階段を上った", "climbed up the stairs to"));
+        exe_write_diary(player_ptr, DiaryKind::STAIR, 0 - up_num, _("階段を上った", "climbed up the stairs to"));
     }
 
     if (up_num == player_ptr->current_floor_ptr->dun_level) {
@@ -260,7 +260,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
         return;
     }
 
-    DUNGEON_IDX target_dungeon = 0;
+    short target_dungeon = 0;
     if (!floor_ptr->is_in_dungeon()) {
         target_dungeon = f_ptr->flags.has(TerrainCharacteristics::ENTRANCE) ? g_ptr->special : DUNGEON_ANGBAND;
         if (ironman_downward && (target_dungeon != DUNGEON_ANGBAND)) {
@@ -279,7 +279,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
 
         player_ptr->oldpx = player_ptr->x;
         player_ptr->oldpy = player_ptr->y;
-        floor_ptr->dungeon_idx = target_dungeon;
+        floor_ptr->set_dungeon_index(target_dungeon);
         prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);
     }
 
@@ -294,16 +294,17 @@ void do_cmd_go_down(PlayerType *player_ptr)
         down_num += 1;
     }
 
+    const auto &dungeon = floor_ptr->get_dungeon_definition();
     if (!floor_ptr->is_in_dungeon()) {
         player_ptr->enter_dungeon = true;
-        down_num = dungeons_info[floor_ptr->dungeon_idx].mindepth;
+        down_num = dungeon.mindepth;
     }
 
     if (record_stair) {
         if (fall_trap) {
-            exe_write_diary(player_ptr, DIARY_STAIR, down_num, _("落とし戸に落ちた", "fell through a trap door"));
+            exe_write_diary(player_ptr, DiaryKind::STAIR, down_num, _("落とし戸に落ちた", "fell through a trap door"));
         } else {
-            exe_write_diary(player_ptr, DIARY_STAIR, down_num, _("階段を下りた", "climbed down the stairs to"));
+            exe_write_diary(player_ptr, DiaryKind::STAIR, down_num, _("階段を下りた", "climbed down the stairs to"));
         }
     }
 
@@ -311,7 +312,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
         msg_print(_("わざと落とし戸に落ちた。", "You deliberately jump through the trap door."));
     } else {
         if (target_dungeon) {
-            msg_format(_("%sへ入った。", "You entered %s."), dungeons_info[floor_ptr->dungeon_idx].text.data());
+            msg_format(_("%sへ入った。", "You entered %s."), dungeon.text.data());
         } else {
             if (is_echizen(player_ptr)) {
                 msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
@@ -496,7 +497,7 @@ void do_cmd_rest(PlayerType *player_ptr)
     player_ptr->resting = command_arg;
     player_ptr->action = ACTION_REST;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     rfu.set_flag(MainWindowRedrawingFlag::ACTION);
     handle_stuff(player_ptr);
     term_fresh();

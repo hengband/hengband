@@ -1,10 +1,28 @@
 ﻿#pragma once
 
 #include <bitset>
+#include <concepts>
+#include <iterator>
 #include <optional>
+#include <type_traits>
 
 template <typename T>
 class EnumRange;
+
+namespace flag_group {
+
+/**
+ * @brief 型がFlagGroupクラスで使用するフラグを指すイテレータであることを表すコンセプト
+ *
+ * Iter の型が以下の要件を満たすことを表す
+ *
+ * - 入力イテレータである
+ * - そのイテレータが指す要素の型が FlagType である
+ */
+template <typename Iter, typename FlagType>
+concept FlagIter = std::input_iterator<Iter> && std::same_as<std::iter_value_t<Iter>, FlagType>;
+
+}
 
 namespace flag_group::detail {
 
@@ -44,6 +62,16 @@ void write_bitset(const std::bitset<BITSET_SIZE> &bs, Func wr_byte_func, size_t 
     }
 }
 
+template <typename InputIter>
+constexpr unsigned long long calc_bitset_val(InputIter first, InputIter last) noexcept
+{
+    auto result = 0ULL;
+    for (; first != last; ++first) {
+        result |= 1ULL << static_cast<int>(*first);
+    }
+    return result;
+}
+
 }
 
 /**
@@ -76,7 +104,7 @@ public:
      *
      * すべてのフラグがOFFの状態のFlagGroupクラスのインスタンスを生成する
      */
-    FlagGroup() = default;
+    constexpr FlagGroup() = default;
 
     /**
      * @brief FlagGroupクラスのコンストラクタ
@@ -86,7 +114,7 @@ public:
      *
      * @param il ONの状態で生成するフラグを指定した initializer_list
      */
-    FlagGroup(std::initializer_list<FlagType> il)
+    constexpr FlagGroup(std::initializer_list<FlagType> il)
         : FlagGroup(il.begin(), il.end())
     {
     }
@@ -99,7 +127,7 @@ public:
      *
      * @param range 範囲を示すEnumRangeクラスのオブジェクト
      */
-    FlagGroup(const EnumRange<FlagType> &range)
+    constexpr FlagGroup(const EnumRange<FlagType> &range)
         : FlagGroup(range.begin(), range.end())
     {
     }
@@ -110,15 +138,44 @@ public:
      * 入力イテレータで指定した範囲のリストに含まれるフラグがON、
      * それ以外のフラグがOFFの状態のFlagGroupクラスのインスタンスを生成する
      *
+     * FLAG_TYPE_MAXがunsigned long longのビットサイズ以下の場合、
+     * unsigned long longの値を引数に取るstd::bitsetのconstexpr化された
+     * コンストラクタが使用できるので、FlagGroupクラスでも
+     * constexprコンストラクタとしてこちらを選択する。
+     *
      * @tparam InputIter 入力イテレータの型
      * @param first 範囲の開始位置を示す入力イテレータ
      * @param last 範囲の終了位置を示す入力イテレータ
      */
-    template <typename InputIter>
+    template <flag_group::FlagIter<FlagType> InputIter>
+        requires(FLAG_TYPE_MAX <= sizeof(unsigned long long) * 8)
+    constexpr FlagGroup(InputIter first, InputIter last)
+        : bs_(flag_group::detail::calc_bitset_val(first, last))
+    {
+    }
+
+    /**
+     * @brief FlagGroupクラスのコンストラクタ
+     *
+     * 入力イテレータで指定した範囲のリストに含まれるフラグがON、
+     * それ以外のフラグがOFFの状態のFlagGroupクラスのインスタンスを生成する
+     *
+     * FLAG_TYPE_MAXがunsigned long longのビットサイズより大きい場合、
+     * C++20の範囲ではstd::bitsetをconstexprコンストラクタで初期化することは
+     * できないため、constexprではない通常のコンストラクタとしてこちらを選択する。
+     *
+     * @todo C++23以降であればstd::bitsetの多くのメンバ関数がconstepxr化されているので
+     * FLAG_TYPE_MAXがunsigned long longのビットサイズより大きくてもconstexpr化が
+     * 可能になると思われる。
+     *
+     * @tparam InputIter 入力イテレータの型
+     * @param first 範囲の開始位置を示す入力イテレータ
+     * @param last 範囲の終了位置を示す入力イテレータ
+     */
+    template <flag_group::FlagIter<FlagType> InputIter>
+        requires(FLAG_TYPE_MAX > sizeof(unsigned long long) * 8)
     FlagGroup(InputIter first, InputIter last)
     {
-        static_assert(std::is_same<typename std::iterator_traits<InputIter>::value_type, FlagType>::value, "Iterator value type is invalid");
-
         for (; first != last; ++first) {
             set(*first);
         }
@@ -157,7 +214,7 @@ public:
      * @param last 範囲の終了位置を示す入力イテレータ
      * @return *thisを返す
      */
-    template <typename InputIter>
+    template <flag_group::FlagIter<FlagType> InputIter>
     FlagGroup<FlagType, MAX> &set(InputIter first, InputIter last)
     {
         return set(FlagGroup(first, last));
@@ -195,7 +252,7 @@ public:
      * @param last 範囲の終了位置を示す入力イテレータ
      * @return *thisを返す
      */
-    template <typename InputIter>
+    template <flag_group::FlagIter<FlagType> InputIter>
     FlagGroup<FlagType, MAX> &reset(InputIter first, InputIter last)
     {
         return reset(FlagGroup(first, last));
@@ -269,7 +326,7 @@ public:
      * @param last 範囲の終了位置を示す入力イテレータ
      * @return すべてのフラグがONであればtrue、そうでなければfalse
      */
-    template <typename InputIter>
+    template <flag_group::FlagIter<FlagType> InputIter>
     [[nodiscard]] bool has_all_of(InputIter first, InputIter last) const
     {
         return has_all_of(FlagGroup(first, last));
@@ -294,7 +351,7 @@ public:
      * @param last 範囲の終了位置を示す入力イテレータ
      * @return いずれかのフラグがONであればtrue、そうでなければfalse
      */
-    template <typename InputIter>
+    template <flag_group::FlagIter<FlagType> InputIter>
     [[nodiscard]] bool has_any_of(InputIter first, InputIter last) const
     {
         return has_any_of(FlagGroup(first, last));
@@ -319,7 +376,7 @@ public:
      * @param last 範囲の終了位置を示す入力イテレータ
      * @return すべてのフラグがOFFであればtrue、そうでなければfalse
      */
-    template <typename InputIter>
+    template <flag_group::FlagIter<FlagType> InputIter>
     [[nodiscard]] bool has_none_of(InputIter first, InputIter last) const
     {
         return !has_any_of(first, last);

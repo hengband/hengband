@@ -30,10 +30,6 @@ public:
     PlayerType();
     bool is_true_winner() const;
 
-    int player_uid{};
-    int player_euid{};
-    int player_egid{};
-
     FloorType *current_floor_ptr{};
     POSITION oldpy{}; /* Previous player location -KMW- */
     POSITION oldpx{}; /* Previous player location -KMW- */
@@ -189,7 +185,7 @@ public:
 
     int player_hp[PY_MAX_LEVEL]{};
     std::string died_from{}; /* What killed the player */
-    concptr last_message{}; /* Last message on death or retirement */
+    std::string last_message = ""; /* Last message on death or retirement */
     char history[4][60]{}; /* Textual "history" for the Player */
 
     uint16_t panic_save{}; /* Panic save */
@@ -281,7 +277,6 @@ public:
 
     POSITION cur_lite{}; /* Radius of lite (if any) */
 
-    BIT_FLAGS window_flags{}; /* Window Redraws */
     int16_t stat_use[A_MAX]{}; /* Current modified stats */
     int16_t stat_top[A_MAX]{}; /* Maximal modified stats */
 

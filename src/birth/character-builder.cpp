@@ -37,6 +37,7 @@
 #include "store/store-owners.h"
 #include "store/store.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/z-form.h"
 #include "util/enum-converter.h"
@@ -57,31 +58,31 @@ static void write_birth_diary(PlayerType *player_ptr)
     message_add(" ");
     message_add("  ");
 
-    exe_write_diary(player_ptr, DIARY_GAMESTART, 1, _("-------- 新規ゲーム開始 --------", "------- Started New Game -------"));
-    exe_write_diary(player_ptr, DIARY_DIALY, 0);
+    exe_write_diary(player_ptr, DiaryKind::GAMESTART, 1, _("-------- 新規ゲーム開始 --------", "------- Started New Game -------"));
+    exe_write_diary(player_ptr, DiaryKind::DIALY, 0);
     const auto mes_sex = format(_("%s性別に%sを選択した。", "%schose %s gender."), indent, sex_info[player_ptr->psex].title);
-    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, mes_sex);
+    exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 1, mes_sex);
     const auto mes_race = format(_("%s種族に%sを選択した。", "%schose %s race."), indent, race_info[enum2i(player_ptr->prace)].title);
-    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, mes_race);
+    exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 1, mes_race);
     const auto mes_class = format(_("%s職業に%sを選択した。", "%schose %s class."), indent, class_info[enum2i(player_ptr->pclass)].title);
-    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, mes_class);
+    exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 1, mes_class);
     if (player_ptr->realm1) {
         const std::string mes_realm2 = player_ptr->realm2 ? format(_("と%s", " and %s realms"), realm_names[player_ptr->realm2]) : _("", " realm");
         const auto mes_realm = format(_("%s魔法の領域に%s%sを選択した。", "%schose %s%s."), indent, realm_names[player_ptr->realm1], mes_realm2.data());
-        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, mes_realm);
+        exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 1, mes_realm);
     }
 
     if (player_ptr->element) {
         const auto mes_element = format(_("%s元素系統に%sを選択した。", "%schose %s system."), indent, get_element_title(player_ptr->element));
-        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, mes_element);
+        exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 1, mes_element);
     }
 
     const auto mes_personality = format(_("%s性格に%sを選択した。", "%schose %s personality."), indent, personality_info[player_ptr->ppersonality].title);
-    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, mes_personality);
+    exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 1, mes_personality);
     if (PlayerClass(player_ptr).equals(PlayerClassType::CHAOS_WARRIOR)) {
         const auto fmt_patron = _("%s守護神%sと契約を交わした。", "%smade a contract with patron %s.");
         const auto mes_patron = format(fmt_patron, indent, patron_list[player_ptr->chaos_patron].name.data());
-        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, mes_patron);
+        exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 1, mes_patron);
     }
 }
 
@@ -123,11 +124,11 @@ void player_birth(PlayerType *player_ptr)
         player_ptr->hack_mutation = false;
     }
 
-    if (!window_flag[1]) {
-        window_flag[1] |= PW_MESSAGE;
+    if (g_window_flags[1].none()) {
+        g_window_flags[1].set(SubWindowRedrawingFlag::MESSAGE);
     }
 
-    if (!window_flag[2]) {
-        window_flag[2] |= PW_INVENTORY;
+    if (g_window_flags[2].none()) {
+        g_window_flags[2].set(SubWindowRedrawingFlag::INVENTORY);
     }
 }

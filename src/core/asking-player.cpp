@@ -8,6 +8,7 @@
 #include "io/input-key-requester.h" //!< @todo 相互依存している、後で何とかする.
 #include "main/sound-of-music.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -15,7 +16,6 @@
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
-
 #include <algorithm>
 #include <charconv>
 #include <climits>
@@ -262,8 +262,9 @@ bool get_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLAGS
     }
     const auto buf = ss.str();
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (auto_more) {
-        player_ptr->window_flags |= PW_MESSAGE;
+        rfu.set_flag(SubWindowRedrawingFlag::MESSAGE);
         handle_stuff(player_ptr);
         num_more = 0;
     }
@@ -273,7 +274,7 @@ bool get_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLAGS
     prt(buf, 0, 0);
     if (!(mode & CHECK_NO_HISTORY) && player_ptr->playing) {
         message_add(buf);
-        player_ptr->window_flags |= (PW_MESSAGE);
+        rfu.set_flag(SubWindowRedrawingFlag::MESSAGE);
         handle_stuff(player_ptr);
     }
 

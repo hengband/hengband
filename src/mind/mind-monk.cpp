@@ -24,7 +24,7 @@ static void set_stance(PlayerType *player_ptr, const MonkStanceType new_stance)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     rfu.set_flag(MainWindowRedrawingFlag::ACTION);
     msg_format(_("%sの構えをとった。", "You assume the %s stance."), monk_stances[enum2i(new_stance) - 1].desc);
     pc.set_monk_stance(new_stance);

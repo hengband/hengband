@@ -394,7 +394,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return std::nullopt;
             }
-            if (dungeons_info[floor.dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+            if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::NO_MELEE)) {
                 return "";
             }
             if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
@@ -427,7 +427,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                     lite_spot(player_ptr, ty, tx);
 
                     if (monraces_info[m_ptr->r_idx].brightness_flags.has_any_of(ld_mask)) {
-                        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_LITE);
+                        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
                     }
                 }
             }
@@ -487,7 +487,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
 
             /* Destroy the feature */
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_ROCK);
-            RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
+            RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
         }
         break;
 
@@ -824,7 +824,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                     return std::nullopt;
                 }
 
-                if (dungeons_info[floor.dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+                if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::NO_MELEE)) {
                     return "";
                 }
 
@@ -1052,7 +1052,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
             x = player_ptr->x + ddx[dir];
 
             auto &floor = *player_ptr->current_floor_ptr;
-            if (dungeons_info[floor.dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+            if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::NO_MELEE)) {
                 msg_print(_("なぜか攻撃することができない。", "Something prevents you from attacking."));
                 return "";
             }

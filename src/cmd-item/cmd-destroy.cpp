@@ -33,20 +33,21 @@
 #include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
 struct destroy_type {
-    OBJECT_IDX item;
-    QUANTITY amt;
-    QUANTITY old_number;
-    bool force;
-    ItemEntity *o_ptr;
-    ItemEntity *q_ptr;
-    std::string item_name;
-    char out_val[MAX_NLEN + 40];
+    OBJECT_IDX item = 0;
+    QUANTITY amt = 0;
+    QUANTITY old_number = 0;
+    bool force = false;
+    ItemEntity *o_ptr = nullptr;
+    ItemEntity *q_ptr = nullptr;
+    std::string item_name = "";
+    char out_val[MAX_NLEN + 40]{};
 };
 
 static destroy_type *initialize_destroy_type(destroy_type *destroy_ptr, ItemEntity *o_ptr)
@@ -68,7 +69,7 @@ static bool check_destory_item(PlayerType *player_ptr, destroy_type *destroy_ptr
     strnfmt(destroy_ptr->out_val, sizeof(destroy_ptr->out_val), mes, destroy_ptr->item_name.data());
     msg_print(nullptr);
     message_add(destroy_ptr->out_val);
-    player_ptr->window_flags |= PW_MESSAGE;
+    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MESSAGE);
     handle_stuff(player_ptr);
     while (true) {
         prt(destroy_ptr->out_val, 0, 0);
@@ -240,7 +241,7 @@ void do_cmd_destroy(PlayerType *player_ptr)
     destroy_ptr->o_ptr->number = destroy_ptr->old_number;
     PlayerEnergy energy(player_ptr);
     energy.set_player_turn_energy(100);
-    if (!can_player_destroy_object(player_ptr, destroy_ptr->o_ptr)) {
+    if (!can_player_destroy_object(destroy_ptr->o_ptr)) {
         energy.reset_player_turn();
         msg_format(_("%sは破壊不可能だ。", "You cannot destroy %s."), destroy_ptr->item_name.data());
         return;

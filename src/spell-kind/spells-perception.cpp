@@ -71,24 +71,30 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     o_ptr->marked.set(OmType::TOUCHED);
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     rfu.set_flags(flags_srf);
-    set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
-
-    angband_strcpy(record_o_name, known_item_name.data(), MAX_NLEN);
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::PLAYER,
+        SubWindowRedrawingFlag::FLOOR_ITEMS,
+        SubWindowRedrawingFlag::FOUND_ITEMS,
+    };
+    rfu.set_flags(flags_swrf);
+    angband_strcpy(record_o_name, known_item_name, MAX_NLEN);
     record_turn = w_ptr->game_turn;
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
     if (record_fix_art && !old_known && o_ptr->is_fixed_artifact()) {
-        exe_write_diary(player_ptr, DIARY_ART, 0, item_name);
+        exe_write_diary(player_ptr, DiaryKind::ART, 0, item_name);
     }
 
     if (record_rand_art && !old_known && o_ptr->is_random_artifact()) {
-        exe_write_diary(player_ptr, DIARY_ART, 0, item_name);
+        exe_write_diary(player_ptr, DiaryKind::ART, 0, item_name);
     }
 
     return old_known;

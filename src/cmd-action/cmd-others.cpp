@@ -156,7 +156,7 @@ static void accept_winner_message(PlayerType *player_ptr)
     } while (!get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
 
     if (buf[0]) {
-        player_ptr->last_message = string_make(buf);
+        player_ptr->last_message = buf;
         msg_print(player_ptr->last_message);
     }
 }
@@ -183,11 +183,7 @@ void do_cmd_suicide(PlayerType *player_ptr)
         return;
     }
 
-    if (player_ptr->last_message) {
-        string_free(player_ptr->last_message);
-    }
-
-    player_ptr->last_message = nullptr;
+    player_ptr->last_message = "";
     player_ptr->playing = false;
     player_ptr->is_dead = true;
     player_ptr->leaving = true;
@@ -196,9 +192,9 @@ void do_cmd_suicide(PlayerType *player_ptr)
         add_retired_class(player_ptr->pclass);
     } else {
         play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_GAMEOVER);
-        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("ダンジョンの探索に絶望して自殺した。", "gave up all hope to commit suicide."));
-        exe_write_diary(player_ptr, DIARY_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
-        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, "\n\n\n\n");
+        exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, _("ダンジョンの探索に絶望して自殺した。", "gave up all hope to commit suicide."));
+        exe_write_diary(player_ptr, DiaryKind::GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
+        exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 1, "\n\n\n\n");
     }
 
     player_ptr->died_from = _("途中終了", "Quitting");

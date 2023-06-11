@@ -47,8 +47,9 @@ void reduce_lite_life(PlayerType *player_ptr)
  */
 void notice_lite_change(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if ((o_ptr->fuel < 100) || (!(o_ptr->fuel % 100))) {
-        player_ptr->window_flags |= (PW_EQUIPMENT);
+        rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
     }
 
     if (player_ptr->effects()->blindness()->is_blind()) {
@@ -58,11 +59,11 @@ void notice_lite_change(PlayerType *player_ptr, ItemEntity *o_ptr)
     } else if (o_ptr->fuel == 0) {
         disturb(player_ptr, false, true);
         msg_print(_("明かりが消えてしまった！", "Your light has gone out!"));
-        const auto flags = {
-            StatusRedrawingFlag::TORCH,
-            StatusRedrawingFlag::BONUS,
+        static constexpr auto flags = {
+            StatusRecalculatingFlag::TORCH,
+            StatusRecalculatingFlag::BONUS,
         };
-        RedrawingFlagsUpdater::get_instance().set_flags(flags);
+        rfu.set_flags(flags);
     } else if (o_ptr->ego_idx == EgoType::LITE_LONG) {
         if ((o_ptr->fuel < 50) && (!(o_ptr->fuel % 5)) && (w_ptr->game_turn % (TURNS_PER_TICK * 2))) {
             if (disturb_minor) {

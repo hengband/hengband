@@ -27,58 +27,58 @@
 
 void load_zangband_options(void)
 {
-    if (option_flag[5] & (0x00000001U << 4)) {
-        option_flag[5] &= ~(0x00000001U << 4);
+    if (g_option_flags[5] & (0x00000001U << 4)) {
+        g_option_flags[5] &= ~(0x00000001U << 4);
     } else {
-        option_flag[5] |= (0x00000001U << 4);
+        g_option_flags[5] |= (0x00000001U << 4);
     }
 
-    if (option_flag[2] & (0x00000001U << 5)) {
-        option_flag[2] &= ~(0x00000001U << 5);
+    if (g_option_flags[2] & (0x00000001U << 5)) {
+        g_option_flags[2] &= ~(0x00000001U << 5);
     } else {
-        option_flag[2] |= (0x00000001U << 5);
+        g_option_flags[2] |= (0x00000001U << 5);
     }
 
-    if (option_flag[4] & (0x00000001U << 5)) {
-        option_flag[4] &= ~(0x00000001U << 5);
+    if (g_option_flags[4] & (0x00000001U << 5)) {
+        g_option_flags[4] &= ~(0x00000001U << 5);
     } else {
-        option_flag[4] |= (0x00000001U << 5);
+        g_option_flags[4] |= (0x00000001U << 5);
     }
 
-    if (option_flag[5] & (0x00000001U << 0)) {
-        option_flag[5] &= ~(0x00000001U << 0);
+    if (g_option_flags[5] & (0x00000001U << 0)) {
+        g_option_flags[5] &= ~(0x00000001U << 0);
     } else {
-        option_flag[5] |= (0x00000001U << 0);
+        g_option_flags[5] |= (0x00000001U << 0);
     }
 
-    if (option_flag[5] & (0x00000001U << 12)) {
-        option_flag[5] &= ~(0x00000001U << 12);
+    if (g_option_flags[5] & (0x00000001U << 12)) {
+        g_option_flags[5] &= ~(0x00000001U << 12);
     } else {
-        option_flag[5] |= (0x00000001U << 12);
+        g_option_flags[5] |= (0x00000001U << 12);
     }
 
-    if (option_flag[1] & (0x00000001U << 0)) {
-        option_flag[1] &= ~(0x00000001U << 0);
+    if (g_option_flags[1] & (0x00000001U << 0)) {
+        g_option_flags[1] &= ~(0x00000001U << 0);
     } else {
-        option_flag[1] |= (0x00000001U << 0);
+        g_option_flags[1] |= (0x00000001U << 0);
     }
 
-    if (option_flag[1] & (0x00000001U << 18)) {
-        option_flag[1] &= ~(0x00000001U << 18);
+    if (g_option_flags[1] & (0x00000001U << 18)) {
+        g_option_flags[1] &= ~(0x00000001U << 18);
     } else {
-        option_flag[1] |= (0x00000001U << 18);
+        g_option_flags[1] |= (0x00000001U << 18);
     }
 
-    if (option_flag[1] & (0x00000001U << 19)) {
-        option_flag[1] &= ~(0x00000001U << 19);
+    if (g_option_flags[1] & (0x00000001U << 19)) {
+        g_option_flags[1] &= ~(0x00000001U << 19);
     } else {
-        option_flag[1] |= (0x00000001U << 19);
+        g_option_flags[1] |= (0x00000001U << 19);
     }
 
-    if (option_flag[5] & (0x00000001U << 3)) {
-        option_flag[1] &= ~(0x00000001U << 3);
+    if (g_option_flags[5] & (0x00000001U << 3)) {
+        g_option_flags[1] &= ~(0x00000001U << 3);
     } else {
-        option_flag[5] |= (0x00000001U << 3);
+        g_option_flags[5] |= (0x00000001U << 3);
     }
 }
 

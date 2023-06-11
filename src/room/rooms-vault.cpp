@@ -550,7 +550,7 @@ static void build_vault(
             switch (*t) {
             case '&': {
                 floor_ptr->monster_level = floor_ptr->base_level + 5;
-                place_monster(player_ptr, y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
+                place_random_monster(player_ptr, y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
                 floor_ptr->monster_level = floor_ptr->base_level;
                 break;
             }
@@ -558,7 +558,7 @@ static void build_vault(
             /* Meaner monster */
             case '@': {
                 floor_ptr->monster_level = floor_ptr->base_level + 11;
-                place_monster(player_ptr, y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
+                place_random_monster(player_ptr, y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
                 floor_ptr->monster_level = floor_ptr->base_level;
                 break;
             }
@@ -566,7 +566,7 @@ static void build_vault(
             /* Meaner monster, plus treasure */
             case '9': {
                 floor_ptr->monster_level = floor_ptr->base_level + 9;
-                place_monster(player_ptr, y, x, PM_ALLOW_SLEEP);
+                place_random_monster(player_ptr, y, x, PM_ALLOW_SLEEP);
                 floor_ptr->monster_level = floor_ptr->base_level;
                 floor_ptr->object_level = floor_ptr->base_level + 7;
                 place_object(player_ptr, y, x, AM_GOOD);
@@ -577,7 +577,7 @@ static void build_vault(
             /* Nasty monster and treasure */
             case '8': {
                 floor_ptr->monster_level = floor_ptr->base_level + 40;
-                place_monster(player_ptr, y, x, PM_ALLOW_SLEEP);
+                place_random_monster(player_ptr, y, x, PM_ALLOW_SLEEP);
                 floor_ptr->monster_level = floor_ptr->base_level;
                 floor_ptr->object_level = floor_ptr->base_level + 20;
                 place_object(player_ptr, y, x, AM_GOOD | AM_GREAT);
@@ -589,7 +589,7 @@ static void build_vault(
             case ',': {
                 if (randint0(100) < 50) {
                     floor_ptr->monster_level = floor_ptr->base_level + 3;
-                    place_monster(player_ptr, y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
+                    place_random_monster(player_ptr, y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
                     floor_ptr->monster_level = floor_ptr->base_level;
                 }
                 if (randint0(100) < 50) {
@@ -962,7 +962,7 @@ bool build_type10(PlayerType *player_ptr, dun_data_type *dd_ptr)
     /* Select type of vault */
     do {
         vtype = randint1(15);
-    } while (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_CAVE) && ((vtype == 1) || (vtype == 3) || (vtype == 8) || (vtype == 9) || (vtype == 11)));
+    } while (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::NO_CAVE) && ((vtype == 1) || (vtype == 3) || (vtype == 8) || (vtype == 9) || (vtype == 11)));
 
     switch (vtype) {
         /* Build an appropriate room */

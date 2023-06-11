@@ -122,14 +122,12 @@ void set_floor_and_wall(DUNGEON_IDX type)
     }
 
     cur_type = type;
-    dungeon_type *d_ptr = &dungeons_info[type];
-
-    set_floor_and_wall_aux(feat_ground_type, d_ptr->floor);
-    set_floor_and_wall_aux(feat_wall_type, d_ptr->fill);
-
-    feat_wall_outer = d_ptr->outer_wall;
-    feat_wall_inner = d_ptr->inner_wall;
-    feat_wall_solid = d_ptr->outer_wall;
+    const auto &dungeon = dungeons_info[type];
+    set_floor_and_wall_aux(feat_ground_type, dungeon.floor);
+    set_floor_and_wall_aux(feat_wall_type, dungeon.fill);
+    feat_wall_outer = dungeon.outer_wall;
+    feat_wall_inner = dungeon.inner_wall;
+    feat_wall_solid = dungeon.outer_wall;
 }
 
 /*!

@@ -25,6 +25,7 @@
 QuestCompletionChecker::QuestCompletionChecker(PlayerType *player_ptr, MonsterEntity *m_ptr)
     : player_ptr(player_ptr)
     , m_ptr(m_ptr)
+    , quest_idx(QuestId::NONE)
 {
 }
 
@@ -240,7 +241,7 @@ Pos2D QuestCompletionChecker::make_stairs(const bool create_stairs)
 
     msg_print(_("魔法の階段が現れた...", "A magical staircase appears..."));
     cave_set_feat(this->player_ptr, y, x, feat_down_stair);
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
     return Pos2D(y, x);
 }
 

@@ -155,7 +155,7 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<mane_data_type> &
     }
 }
 
-void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<sniper_data_type> &sniper_data) const
+void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<SniperData> &sniper_data) const
 {
     if (loading_savefile_version_is_older_than(9)) {
         // 古いセーブファイルのスナイパーのデータは magic_num には保存されていないので読み捨てる

@@ -256,7 +256,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
  */
 static bool save_player_aux(PlayerType *player_ptr, const std::filesystem::path &path, SaveType type)
 {
-    safe_setuid_grab(player_ptr);
+    safe_setuid_grab();
     auto fd = fd_make(path);
     safe_setuid_drop();
 
@@ -264,7 +264,7 @@ static bool save_player_aux(PlayerType *player_ptr, const std::filesystem::path 
     saving_savefile = nullptr;
     if (fd >= 0) {
         (void)fd_close(fd);
-        safe_setuid_grab(player_ptr);
+        safe_setuid_grab();
         saving_savefile = angband_fopen(path, FileOpenMode::WRITE, true);
         safe_setuid_drop();
         if (saving_savefile) {
@@ -277,7 +277,7 @@ static bool save_player_aux(PlayerType *player_ptr, const std::filesystem::path 
             }
         }
 
-        safe_setuid_grab(player_ptr);
+        safe_setuid_grab();
         if (!is_save_successful) {
             (void)fd_kill(path);
         }
@@ -309,7 +309,7 @@ bool save_player(PlayerType *player_ptr, SaveType type)
     std::stringstream ss_new;
     ss_new << savefile.string() << ".new";
     auto savefile_new = ss_new.str();
-    safe_setuid_grab(player_ptr);
+    safe_setuid_grab();
     fd_kill(savefile_new);
     safe_setuid_drop();
     update_playtime();
@@ -318,7 +318,7 @@ bool save_player(PlayerType *player_ptr, SaveType type)
         std::stringstream ss_old;
         ss_old << savefile.string() << ".old";
         auto savefile_old = ss_old.str();
-        safe_setuid_grab(player_ptr);
+        safe_setuid_grab();
         fd_kill(savefile_old);
         const auto &path = type == SaveType::DEBUG ? debug_savefile : savefile;
         fd_move(path, savefile_old);

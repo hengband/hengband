@@ -101,7 +101,7 @@ static int show_killing_monster(PlayerType *player_ptr)
 
     if (lines.size() >= 3) {
         char buf[GRAVE_LINE_WIDTH + 1];
-        angband_strcpy(buf, lines[1].data(), sizeof(buf) - 2);
+        angband_strcpy(buf, lines[1], sizeof(buf) - 2);
         angband_strcat(buf, "…", sizeof(buf));
         show_tomb_line(lines[0], GRAVE_KILLER_NAME_ROW);
         show_tomb_line(buf, GRAVE_KILLER_NAME_ROW + 1);
@@ -381,7 +381,7 @@ void show_death_info(PlayerType *player_ptr)
     inventory_aware(player_ptr);
     home_aware(player_ptr);
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     flush();
     msg_erase();

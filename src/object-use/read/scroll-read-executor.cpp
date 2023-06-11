@@ -343,7 +343,7 @@ bool ScrollReadExecutor::read()
         }
 
         this->player_ptr->add_spells++;
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::SPELLS);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::SPELLS);
         this->ident = true;
         break;
     case SV_SCROLL_GENOCIDE:
@@ -355,11 +355,11 @@ bool ScrollReadExecutor::read()
         this->ident = true;
         break;
     case SV_SCROLL_ACQUIREMENT:
-        acquirement(this->player_ptr, this->player_ptr->y, this->player_ptr->x, 1, true, false, false);
+        acquirement(this->player_ptr, this->player_ptr->y, this->player_ptr->x, 1, true);
         this->ident = true;
         break;
     case SV_SCROLL_STAR_ACQUIREMENT:
-        acquirement(this->player_ptr, this->player_ptr->y, this->player_ptr->x, randint1(2) + 1, true, false, false);
+        acquirement(this->player_ptr, this->player_ptr->y, this->player_ptr->x, randint1(2) + 1, true);
         this->ident = true;
         break;
     case SV_SCROLL_FIRE:

@@ -58,7 +58,7 @@ static void write_pet_death(PlayerType *player_ptr, monster_death_type *md_ptr)
     md_ptr->md_x = md_ptr->m_ptr->fx;
     if (record_named_pet && md_ptr->m_ptr->is_named_pet()) {
         const auto m_name = monster_desc(player_ptr, md_ptr->m_ptr, MD_INDEF_VISIBLE);
-        exe_write_diary(player_ptr, DIARY_NAMED_PET, 3, m_name);
+        exe_write_diary(player_ptr, DiaryKind::NAMED_PET, 3, m_name);
     }
 }
 
@@ -113,7 +113,7 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, monster_death_type *
     }
 
     const auto m_name = monster_desc(player_ptr, md_ptr->m_ptr, MD_WRONGDOER_NAME);
-    exe_write_diary(player_ptr, DIARY_ARENA, player_ptr->arena_number, m_name);
+    exe_write_diary(player_ptr, DiaryKind::ARENA, player_ptr->arena_number, m_name);
 }
 
 static void drop_corpse(PlayerType *player_ptr, monster_death_type *md_ptr)
@@ -189,7 +189,7 @@ bool drop_single_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, Fi
 
 static short drop_dungeon_final_artifact(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
-    const auto &dungeon = dungeons_info[player_ptr->current_floor_ptr->dungeon_idx];
+    const auto &dungeon = player_ptr->current_floor_ptr->get_dungeon_definition();
     const auto has_reward = dungeon.final_object > 0;
     const auto bi_id = has_reward ? dungeon.final_object : lookup_baseitem_id({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
     if (dungeon.final_artifact == FixedArtifactId::NONE) {
@@ -215,7 +215,7 @@ static void drop_artifacts(PlayerType *player_ptr, monster_death_type *md_ptr)
 
     drop_artifact_from_unique(player_ptr, md_ptr);
     const auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto &dungeon = dungeons_info[floor_ptr->dungeon_idx];
+    const auto &dungeon = floor_ptr->get_dungeon_definition();
     if (((md_ptr->r_ptr->flags7 & RF7_GUARDIAN) == 0) || (dungeon.final_guardian != md_ptr->m_ptr->r_idx)) {
         return;
     }
@@ -334,7 +334,7 @@ static void on_defeat_last_boss(PlayerType *player_ptr)
     add_winner_class(player_ptr->pclass);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TITLE);
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FINAL_QUEST_CLEAR);
-    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("見事に変愚蛮怒の勝利者となった！", "finally became *WINNER* of Hengband!"));
+    exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, _("見事に変愚蛮怒の勝利者となった！", "finally became *WINNER* of Hengband!"));
     patron_list[player_ptr->chaos_patron].admire(player_ptr);
     msg_print(_("*** おめでとう ***", "*** CONGRATULATIONS ***"));
     msg_print(_("あなたはゲームをコンプリートしました。", "You have won the game!"));
@@ -389,7 +389,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
     }
 
     if (md_ptr->r_ptr->brightness_flags.has_any_of(ld_mask)) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_LITE);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 
     write_pet_death(player_ptr, md_ptr);

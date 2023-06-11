@@ -17,6 +17,7 @@
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
 #include "status/action-setter.h"
+#include "system/angband-exceptions.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -49,7 +50,7 @@ SpellHex::SpellHex(PlayerType *player_ptr)
     HexSpellFlagGroup::get_flags(this->spell_hex_data->casting_spells, std::back_inserter(this->casting_spells));
 
     if (this->casting_spells.size() > MAX_KEEP) {
-        throw("Invalid numbers of hex magics keep!");
+        THROW_EXCEPTION(std::logic_error, "Invalid numbers of hex magics keep!");
     }
 }
 
@@ -74,14 +75,14 @@ void SpellHex::stop_all_spells()
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
-        StatusRedrawingFlag::MP,
-        StatusRedrawingFlag::SPELLS,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
+        StatusRecalculatingFlag::MP,
+        StatusRecalculatingFlag::SPELLS,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::EXTRA,
         MainWindowRedrawingFlag::HP,
         MainWindowRedrawingFlag::MP,
@@ -123,14 +124,14 @@ bool SpellHex::stop_spells_with_selection()
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
-        StatusRedrawingFlag::MP,
-        StatusRedrawingFlag::SPELLS,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
+        StatusRecalculatingFlag::MP,
+        StatusRecalculatingFlag::SPELLS,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::EXTRA,
         MainWindowRedrawingFlag::HP,
         MainWindowRedrawingFlag::MP,
@@ -246,19 +247,23 @@ bool SpellHex::process_mana_cost(const bool need_restart)
 
     msg_print(_("詠唱を再開した。", "You restart casting."));
     this->player_ptr->action = ACTION_SPELL;
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
-        StatusRedrawingFlag::MONSTER_STATUSES,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::MAP,
         MainWindowRedrawingFlag::TIMED_EFFECT,
         MainWindowRedrawingFlag::ACTION,
     };
     rfu.set_flags(flags_mwrf);
-    this->player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    rfu.set_flags(flags_swrf);
     return true;
 }
 
@@ -378,7 +383,7 @@ void SpellHex::interrupt_spelling()
 void SpellHex::eyes_on_eyes()
 {
     if (this->monap_ptr == nullptr) {
-        throw("Invalid constructor was used!");
+        THROW_EXCEPTION(std::logic_error, "Invalid constructor was used!");
     }
 
     const auto is_eyeeye_finished = (this->player_ptr->tim_eyeeye == 0) && !this->is_spelling_specific(HEX_EYE_FOR_EYE);
@@ -403,7 +408,7 @@ void SpellHex::eyes_on_eyes()
 void SpellHex::thief_teleport()
 {
     if (this->monap_ptr == nullptr) {
-        throw("Invalid constructor was used!");
+        THROW_EXCEPTION(std::logic_error, "Invalid constructor was used!");
     }
 
     if (!this->monap_ptr->blinked || !this->monap_ptr->alive || this->player_ptr->is_dead) {

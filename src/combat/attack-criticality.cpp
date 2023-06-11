@@ -6,7 +6,7 @@
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
 #include "object/tval-types.h"
-#include "player-attack/player-attack-util.h"
+#include "player-attack/player-attack.h"
 #include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
 #include "sv-definition/sv-weapon-types.h"

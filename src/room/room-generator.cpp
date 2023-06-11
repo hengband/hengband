@@ -110,7 +110,8 @@ bool generate_rooms(PlayerType *player_ptr, dun_data_type *dd_ptr)
      * かつ「常に通常でない部屋を生成する」フラグがONならば、
      * GRATER_VAULTのみを生成対象とする。 / Ironman sees only Greater Vaults
      */
-    if (ironman_rooms && dungeons_info[floor_ptr->dungeon_idx].flags.has_none_of({ DungeonFeatureType::BEGINNER, DungeonFeatureType::CHAMELEON, DungeonFeatureType::SMALLEST })) {
+    const auto &dungeon = floor_ptr->get_dungeon_definition();
+    if (ironman_rooms && dungeon.flags.has_none_of({ DungeonFeatureType::BEGINNER, DungeonFeatureType::CHAMELEON, DungeonFeatureType::SMALLEST })) {
         for (auto r : ROOM_TYPE_LIST) {
             if (r == RoomType::GREATER_VAULT) {
                 prob_list[r] = 1;
@@ -118,7 +119,7 @@ bool generate_rooms(PlayerType *player_ptr, dun_data_type *dd_ptr)
                 prob_list[r] = 0;
             }
         }
-    } else if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_VAULT)) {
+    } else if (dungeon.flags.has(DungeonFeatureType::NO_VAULT)) {
         /*! @details ダンジョンにNO_VAULTフラグがあるならば、LESSER_VAULT / GREATER_VAULT/ RANDOM_VAULTを除外 / Forbidden vaults */
         prob_list[RoomType::LESSER_VAULT] = 0;
         prob_list[RoomType::GREATER_VAULT] = 0;
@@ -126,16 +127,16 @@ bool generate_rooms(PlayerType *player_ptr, dun_data_type *dd_ptr)
     }
 
     /*! @details ダンジョンにBEGINNERフラグがあるならば、FIXED_ROOMを除外 / Forbidden vaults */
-    if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::BEGINNER)) {
+    if (dungeon.flags.has(DungeonFeatureType::BEGINNER)) {
         prob_list[RoomType::FIXED] = 0;
     }
 
     /*! @details ダンジョンにNO_CAVEフラグがある場合、FRACAVEの生成枠がNORMALに与えられる。CRIPT、OVALの生成枠がINNER_Fに与えられる。/ NO_CAVE dungeon */
-    if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_CAVE)) {
+    if (dungeon.flags.has(DungeonFeatureType::NO_CAVE)) {
         move_prob_list(RoomType::NORMAL, RoomType::FRACAVE, prob_list);
         move_prob_list(RoomType::INNER_FEAT, RoomType::CRYPT, prob_list);
         move_prob_list(RoomType::INNER_FEAT, RoomType::OVAL, prob_list);
-    } else if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::CAVE)) {
+    } else if (dungeon.flags.has(DungeonFeatureType::CAVE)) {
         /*! @details ダンジョンにCAVEフラグがある場合、NORMALの生成枠がFRACAVEに与えられる。/ CAVE dungeon (Orc floor_ptr->grid_array etc.) */
         move_prob_list(RoomType::FRACAVE, RoomType::NORMAL, prob_list);
     } else if (dd_ptr->cavern || dd_ptr->empty_level) {
@@ -144,12 +145,12 @@ bool generate_rooms(PlayerType *player_ptr, dun_data_type *dd_ptr)
     }
 
     /*! @details ダンジョンに最初からGLASS_ROOMフラグがある場合、GLASS を生成から除外。/ Forbidden glass rooms */
-    if (dungeons_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::GLASS_ROOM)) {
+    if (dungeon.flags.has_not(DungeonFeatureType::GLASS_ROOM)) {
         prob_list[RoomType::GLASS] = 0;
     }
 
     /*! @details ARCADEは同フラグがダンジョンにないと生成されない。 / Forbidden glass rooms */
-    if (dungeons_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::ARCADE)) {
+    if (dungeon.flags.has_not(DungeonFeatureType::ARCADE)) {
         prob_list[RoomType::ARCADE] = 0;
     }
 

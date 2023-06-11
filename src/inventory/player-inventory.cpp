@@ -103,7 +103,7 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
             sound(SOUND_SELL);
             player_ptr->au += o_ptr->pval;
             rfu.set_flag(MainWindowRedrawingFlag::GOLD);
-            player_ptr->window_flags |= (PW_PLAYER);
+            rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
             delete_object_idx(player_ptr, this_o_idx);
             continue;
         } else if (o_ptr->marked.has(OmType::SUPRESS_MESSAGE)) {
@@ -226,10 +226,10 @@ void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
         }
     }
 
-    angband_strcpy(record_o_name, old_item_name.data(), old_item_name.length());
+    angband_strcpy(record_o_name, old_item_name, old_item_name.length());
 #else
     msg_format("You have %s (%c).", item_name.data(), index_to_label(slot));
-    angband_strcpy(record_o_name, item_name.data(), item_name.length());
+    angband_strcpy(record_o_name, item_name, item_name.length());
 #endif
     record_turn = w_ptr->game_turn;
     check_find_art_quest_completion(player_ptr, o_ptr);
@@ -244,9 +244,9 @@ void carry(PlayerType *player_ptr, bool pickup)
 {
     verify_panel(player_ptr);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    player_ptr->window_flags |= PW_OVERHEAD;
+    rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
     handle_stuff(player_ptr);
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     autopick_pickup_items(player_ptr, g_ptr);
@@ -267,7 +267,7 @@ void carry(PlayerType *player_ptr, bool pickup)
             sound(SOUND_SELL);
             player_ptr->au += value;
             rfu.set_flag(MainWindowRedrawingFlag::GOLD);
-            player_ptr->window_flags |= (PW_PLAYER);
+            rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
             continue;
         }
 

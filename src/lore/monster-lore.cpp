@@ -144,8 +144,8 @@ static void set_race_flags(lore_type *lore_ptr)
  */
 void process_monster_lore(PlayerType *player_ptr, MonsterRaceId r_idx, monster_lore_mode mode)
 {
-    lore_type tmp_lore;
-    lore_type *lore_ptr = initialize_lore_type(&tmp_lore, r_idx, mode);
+    lore_type tmp_lore(r_idx, mode);
+    lore_type *lore_ptr = &tmp_lore;
 
     auto is_valid_reinforcer = [](const auto &reinforce) {
         auto [r_idx, dd, ds] = reinforce;

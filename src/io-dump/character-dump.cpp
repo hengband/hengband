@@ -152,11 +152,13 @@ static void dump_aux_last_message(PlayerType *player_ptr, FILE *fff)
         return;
     }
 
-    if (player_ptr->last_message) {
-        fprintf(fff, _("\n  [*勝利*メッセージ]\n\n", "\n  [*Winning* Message]\n\n"));
-        fprintf(fff, "  %s\n", player_ptr->last_message);
-        fputc('\n', fff);
+    if (player_ptr->last_message.empty()) {
+        return;
     }
+
+    fprintf(fff, _("\n  [*勝利*メッセージ]\n\n", "\n  [*Winning* Message]\n\n"));
+    fprintf(fff, "  %s\n", player_ptr->last_message.data());
+    fputc('\n', fff);
 }
 
 /*!

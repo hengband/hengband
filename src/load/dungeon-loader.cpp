@@ -41,7 +41,7 @@ static errr rd_dungeon(PlayerType *player_ptr)
     }
 
     max_floor_id = rd_s16b();
-    floor.dungeon_idx = rd_byte(); // @todo セーブデータの方を16ビットにするかdungeon_idxの定義を8ビットにした方が良い.
+    floor.set_dungeon_index(rd_byte()); // @todo セーブデータの方を16ビットにするかdungeon_idxの定義を8ビットにした方が良い.
     auto num = rd_byte();
     if (num == 0) {
         err = rd_saved_floor(player_ptr, nullptr);

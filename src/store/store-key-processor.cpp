@@ -150,7 +150,7 @@ void store_process_command(PlayerType *player_ptr, StoreSaleType store_num)
         break;
     }
     case KTRL('I'): {
-        toggle_inventory_equipment(player_ptr);
+        toggle_inventory_equipment();
         break;
     }
     case 'b': {

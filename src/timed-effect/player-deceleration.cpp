@@ -5,7 +5,7 @@
  */
 
 #include "timed-effect/player-deceleration.h"
-#include <stdexcept>
+#include "system/angband-exceptions.h"
 
 short PlayerDeceleration::current() const
 {
@@ -20,7 +20,7 @@ bool PlayerDeceleration::is_slow() const
 void PlayerDeceleration::set(short value)
 {
     if (value < 0) {
-        throw std::invalid_argument("Negative value can't be set in the player's deceleration parameter!");
+        THROW_EXCEPTION(std::invalid_argument, "Negative value can't be set in the player's deceleration parameter!");
     }
 
     this->deceleration = value;

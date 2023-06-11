@@ -52,6 +52,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
@@ -360,7 +361,7 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
 
         /* Memorize objects */
         o_ptr->marked.set(OmType::FOUND);
-        player_ptr->window_flags |= PW_FOUND_ITEMS;
+        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::FOUND_ITEMS);
     }
 
     /* Hack -- memorize grids */
@@ -431,7 +432,11 @@ void lite_spot(PlayerType *player_ptr, POSITION y, POSITION x)
         }
 
         term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, ta, tc);
-        player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+        static constexpr auto flags = {
+            SubWindowRedrawingFlag::OVERHEAD,
+            SubWindowRedrawingFlag::DUNGEON,
+        };
+        RedrawingFlagsUpdater::get_instance().set_flags(flags);
     }
 }
 
@@ -666,21 +671,22 @@ void update_flow(PlayerType *player_ptr)
 {
     POSITION x, y;
     DIRECTION d;
-    FloorType *f_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
 
     /* The last way-point is on the map */
-    if (player_ptr->running && in_bounds(f_ptr, flow_y, flow_x)) {
+    if (player_ptr->running && in_bounds(&floor, flow_y, flow_x)) {
         /* The way point is in sight - do not update.  (Speedup) */
-        if (f_ptr->grid_array[flow_y][flow_x].info & CAVE_VIEW) {
+        if (floor.grid_array[flow_y][flow_x].info & CAVE_VIEW) {
             return;
         }
     }
 
     /* Erase all of the current flow information */
-    for (y = 0; y < f_ptr->height; y++) {
-        for (x = 0; x < f_ptr->width; x++) {
-            memset(&f_ptr->grid_array[y][x].costs, 0, sizeof(f_ptr->grid_array[y][x].costs));
-            memset(&f_ptr->grid_array[y][x].dists, 0, sizeof(f_ptr->grid_array[y][x].dists));
+    for (y = 0; y < floor.height; y++) {
+        for (x = 0; x < floor.width; x++) {
+            auto &grid = floor.grid_array[y][x];
+            grid.reset_costs();
+            grid.reset_dists();
         }
     }
 
@@ -695,7 +701,7 @@ void update_flow(PlayerType *player_ptr)
 
         /* Now process the queue */
         while (!que.empty()) {
-            /* Extract the next entry */
+            // 参照で受けるとダングリング状態になるのでコピーする.
             const auto [ty, tx] = que.front();
             que.pop();
 

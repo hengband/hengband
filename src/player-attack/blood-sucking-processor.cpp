@@ -11,7 +11,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race-hook.h"
 #include "object-enchant/tr-types.h"
-#include "player-attack/player-attack-util.h"
+#include "player-attack/player-attack.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-hex.h"
 #include "system/item-entity.h"

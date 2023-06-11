@@ -61,11 +61,12 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
         (void)potion_smash_effect(this->player_ptr, 0, this->player_ptr->y, this->player_ptr->x, o_ref.bi_id);
     }
 
-    const auto flags_srf = {
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags_srf);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flags(flags_srf);
     this->change_virtue_as_quaff(o_ref);
     object_tried(&o_ref);
     if (ident && !o_ref.is_aware()) {
@@ -73,7 +74,12 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
         gain_exp(this->player_ptr, (o_ref.get_baseitem().level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
-    this->player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER);
+    static constexpr auto flags = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::PLAYER,
+    };
+    rfu.set_flags(flags);
     if (PlayerRace(this->player_ptr).equals(PlayerRaceType::SKELETON)) {
         return;
     }

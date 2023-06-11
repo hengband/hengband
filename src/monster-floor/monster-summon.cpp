@@ -73,7 +73,7 @@ static bool summon_specific_okay(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if ((r_ptr->flags7 & RF7_CHAMELEON) && dungeons_info[floor.dungeon_idx].flags.has(DungeonFeatureType::CHAMELEON)) {
+    if ((r_ptr->flags7 & RF7_CHAMELEON) && floor.get_dungeon_definition().flags.has(DungeonFeatureType::CHAMELEON)) {
         return true;
     }
 
@@ -155,7 +155,7 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX who, POSITION y1, POSIT
         mode |= PM_NO_KAGE;
     }
 
-    if (!place_monster_aux(player_ptr, who, y, x, r_idx, mode)) {
+    if (!place_specific_monster(player_ptr, who, y, x, r_idx, mode)) {
         summon_specific_type = SUMMON_NONE;
         return false;
     }
@@ -204,5 +204,5 @@ bool summon_named_creature(PlayerType *player_ptr, MONSTER_IDX who, POSITION oy,
         return false;
     }
 
-    return place_monster_aux(player_ptr, who, y, x, r_idx, (mode | PM_NO_KAGE));
+    return place_specific_monster(player_ptr, who, y, x, r_idx, (mode | PM_NO_KAGE));
 }

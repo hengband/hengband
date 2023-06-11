@@ -47,8 +47,17 @@ static void redraw_character_xtra(PlayerType *player_ptr)
 {
     w_ptr->character_xtra = true;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_SPELL | PW_PLAYER | PW_MONSTER_LORE | PW_OVERHEAD | PW_DUNGEON);
-    const auto flags_mwrf = {
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::SPELL,
+        SubWindowRedrawingFlag::PLAYER,
+        SubWindowRedrawingFlag::MONSTER_LORE,
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    rfu.set_flags(flags_swrf);
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::WIPE,
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::EXTRA,
@@ -57,17 +66,17 @@ static void redraw_character_xtra(PlayerType *player_ptr)
     };
     rfu.set_flags(flags_mwrf);
     auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
-        StatusRedrawingFlag::MP,
-        StatusRedrawingFlag::SPELLS,
-        StatusRedrawingFlag::VIEW,
-        StatusRedrawingFlag::LITE,
-        StatusRedrawingFlag::MONSTER_LITE,
-        StatusRedrawingFlag::TORCH,
-        StatusRedrawingFlag::MONSTER_STATUSES,
-        StatusRedrawingFlag::DISTANCE,
-        StatusRedrawingFlag::FLOW,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
+        StatusRecalculatingFlag::MP,
+        StatusRecalculatingFlag::SPELLS,
+        StatusRecalculatingFlag::VIEW,
+        StatusRecalculatingFlag::LITE,
+        StatusRecalculatingFlag::MONSTER_LITE,
+        StatusRecalculatingFlag::TORCH,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
+        StatusRecalculatingFlag::DISTANCE,
+        StatusRecalculatingFlag::FLOW,
     };
     rfu.set_flags(flags_srf);
     handle_stuff(player_ptr);
@@ -121,7 +130,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     if ((max_dlv[floor.dungeon_idx] < floor.dun_level) && !inside_quest(floor.quest_number)) {
         max_dlv[floor.dungeon_idx] = floor.dun_level;
         if (record_maxdepth) {
-            exe_write_diary(player_ptr, DIARY_MAXDEAPTH, floor.dun_level);
+            exe_write_diary(player_ptr, DiaryKind::MAXDEAPTH, floor.dun_level);
         }
     }
 
@@ -132,12 +141,12 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
 
     redraw_character_xtra(player_ptr);
     auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
-        StatusRedrawingFlag::MP,
-        StatusRedrawingFlag::SPELLS,
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
+        StatusRecalculatingFlag::MP,
+        StatusRecalculatingFlag::SPELLS,
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     RedrawingFlagsUpdater::get_instance().set_flags(flags_srf);
     handle_stuff(player_ptr);
@@ -173,7 +182,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         floor.quest_number = random_quest_number(floor, floor.dun_level);
     }
 
-    const auto &dungeon = dungeons_info[floor.dungeon_idx];
+    const auto &dungeon = floor.get_dungeon_definition();
     const auto guardian = dungeon.final_guardian;
     if ((floor.dun_level == dungeon.maxdepth) && MonsterRace(guardian).is_valid()) {
         const auto &guardian_ref = monraces_info[guardian];

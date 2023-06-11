@@ -376,12 +376,13 @@ static void update_bonuses(PlayerType *player_ptr)
     player_ptr->dis_ac = calc_base_ac(player_ptr);
     player_ptr->dis_to_a = calc_to_ac(player_ptr, false);
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (old_mighty_throw != player_ptr->mighty_throw) {
-        player_ptr->window_flags |= PW_INVENTORY;
+        rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
     }
 
     if (player_ptr->telepathy != old_telepathy) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
     }
 
     auto is_esp_updated = player_ptr->esp_animal != old_esp_animal;
@@ -396,13 +397,12 @@ static void update_bonuses(PlayerType *player_ptr)
     is_esp_updated |= player_ptr->esp_good != old_esp_good;
     is_esp_updated |= player_ptr->esp_nonliving != old_esp_nonliving;
     is_esp_updated |= player_ptr->esp_unique != old_esp_unique;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (is_esp_updated) {
-        rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+        rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
     }
 
     if (player_ptr->see_inv != old_see_inv) {
-        rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+        rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
     }
 
     if (player_ptr->pspeed != old_speed) {
@@ -411,7 +411,7 @@ static void update_bonuses(PlayerType *player_ptr)
 
     if ((player_ptr->dis_ac != old_dis_ac) || (player_ptr->dis_to_a != old_dis_to_a)) {
         rfu.set_flag(MainWindowRedrawingFlag::AC);
-        set_bits(player_ptr->window_flags, PW_PLAYER);
+        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     }
 
     if (w_ptr->character_xtra) {
@@ -498,7 +498,7 @@ static void update_max_hitpoints(PlayerType *player_ptr)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::HP);
-    player_ptr->window_flags |= PW_PLAYER;
+    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
 }
 
 /*!
@@ -774,7 +774,7 @@ static void update_num_of_spells(PlayerType *player_ptr)
     player_ptr->old_spells = player_ptr->new_spells;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::STUDY);
-    set_bits(player_ptr->window_flags, PW_ITEM_KNOWLEDGTE);
+    rfu.set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
 }
 
 /*!
@@ -1006,7 +1006,11 @@ static void update_max_mana(PlayerType *player_ptr)
         player_ptr->msp = msp;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(MainWindowRedrawingFlag::MP);
-        set_bits(player_ptr->window_flags, (PW_PLAYER | PW_SPELL));
+        static constexpr auto flags = {
+            SubWindowRedrawingFlag::PLAYER,
+            SubWindowRedrawingFlag::SPELL,
+        };
+        rfu.set_flags(flags);
     }
 
     if (w_ptr->character_xtra) {
@@ -2698,23 +2702,23 @@ void update_creature(PlayerType *player_ptr)
     }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (rfu.has(StatusRedrawingFlag::AUTO_DESTRUCTION)) {
-        rfu.reset_flag(StatusRedrawingFlag::AUTO_DESTRUCTION);
+    if (rfu.has(StatusRecalculatingFlag::AUTO_DESTRUCTION)) {
+        rfu.reset_flag(StatusRecalculatingFlag::AUTO_DESTRUCTION);
         autopick_delayed_alter(player_ptr);
     }
 
-    if (rfu.has(StatusRedrawingFlag::COMBINATION)) {
-        rfu.reset_flag(StatusRedrawingFlag::COMBINATION);
+    if (rfu.has(StatusRecalculatingFlag::COMBINATION)) {
+        rfu.reset_flag(StatusRecalculatingFlag::COMBINATION);
         combine_pack(player_ptr);
     }
 
-    if (rfu.has(StatusRedrawingFlag::REORDER)) {
-        rfu.reset_flag(StatusRedrawingFlag::REORDER);
+    if (rfu.has(StatusRecalculatingFlag::REORDER)) {
+        rfu.reset_flag(StatusRecalculatingFlag::REORDER);
         reorder_pack(player_ptr);
     }
 
-    if (rfu.has(StatusRedrawingFlag::BONUS)) {
-        rfu.reset_flag(StatusRedrawingFlag::BONUS);
+    if (rfu.has(StatusRecalculatingFlag::BONUS)) {
+        rfu.reset_flag(StatusRecalculatingFlag::BONUS);
         PlayerAlignment(player_ptr).update_alignment();
         PlayerSkill ps(player_ptr);
         ps.apply_special_weapon_skill_max_values();
@@ -2722,23 +2726,23 @@ void update_creature(PlayerType *player_ptr)
         update_bonuses(player_ptr);
     }
 
-    if (rfu.has(StatusRedrawingFlag::TORCH)) {
-        rfu.reset_flag(StatusRedrawingFlag::TORCH);
+    if (rfu.has(StatusRecalculatingFlag::TORCH)) {
+        rfu.reset_flag(StatusRecalculatingFlag::TORCH);
         update_lite_radius(player_ptr);
     }
 
-    if (rfu.has(StatusRedrawingFlag::HP)) {
-        rfu.reset_flag(StatusRedrawingFlag::HP);
+    if (rfu.has(StatusRecalculatingFlag::HP)) {
+        rfu.reset_flag(StatusRecalculatingFlag::HP);
         update_max_hitpoints(player_ptr);
     }
 
-    if (rfu.has(StatusRedrawingFlag::MP)) {
-        rfu.reset_flag(StatusRedrawingFlag::MP);
+    if (rfu.has(StatusRecalculatingFlag::MP)) {
+        rfu.reset_flag(StatusRecalculatingFlag::MP);
         update_max_mana(player_ptr);
     }
 
-    if (rfu.has(StatusRedrawingFlag::SPELLS)) {
-        rfu.reset_flag(StatusRedrawingFlag::SPELLS);
+    if (rfu.has(StatusRecalculatingFlag::SPELLS)) {
+        rfu.reset_flag(StatusRecalculatingFlag::SPELLS);
         update_num_of_spells(player_ptr);
     }
 
@@ -2746,48 +2750,48 @@ void update_creature(PlayerType *player_ptr)
         return;
     }
 
-    if (rfu.has(StatusRedrawingFlag::UN_LITE)) {
-        rfu.reset_flag(StatusRedrawingFlag::UN_LITE);
+    if (rfu.has(StatusRecalculatingFlag::UN_LITE)) {
+        rfu.reset_flag(StatusRecalculatingFlag::UN_LITE);
         forget_lite(floor_ptr);
     }
 
-    if (rfu.has(StatusRedrawingFlag::UN_VIEW)) {
-        rfu.reset_flag(StatusRedrawingFlag::UN_VIEW);
+    if (rfu.has(StatusRecalculatingFlag::UN_VIEW)) {
+        rfu.reset_flag(StatusRecalculatingFlag::UN_VIEW);
         forget_view(floor_ptr);
     }
 
-    if (rfu.has(StatusRedrawingFlag::VIEW)) {
-        rfu.reset_flag(StatusRedrawingFlag::VIEW);
+    if (rfu.has(StatusRecalculatingFlag::VIEW)) {
+        rfu.reset_flag(StatusRecalculatingFlag::VIEW);
         update_view(player_ptr);
     }
 
-    if (rfu.has(StatusRedrawingFlag::LITE)) {
-        rfu.reset_flag(StatusRedrawingFlag::LITE);
+    if (rfu.has(StatusRecalculatingFlag::LITE)) {
+        rfu.reset_flag(StatusRecalculatingFlag::LITE);
         update_lite(player_ptr);
     }
 
-    if (rfu.has(StatusRedrawingFlag::FLOW)) {
-        rfu.reset_flag(StatusRedrawingFlag::FLOW);
+    if (rfu.has(StatusRecalculatingFlag::FLOW)) {
+        rfu.reset_flag(StatusRecalculatingFlag::FLOW);
         update_flow(player_ptr);
     }
 
-    if (rfu.has(StatusRedrawingFlag::DISTANCE)) {
-        rfu.reset_flag(StatusRedrawingFlag::DISTANCE);
+    if (rfu.has(StatusRecalculatingFlag::DISTANCE)) {
+        rfu.reset_flag(StatusRecalculatingFlag::DISTANCE);
         update_monsters(player_ptr, true);
     }
 
-    if (rfu.has(StatusRedrawingFlag::MONSTER_LITE)) {
-        rfu.reset_flag(StatusRedrawingFlag::MONSTER_LITE);
+    if (rfu.has(StatusRecalculatingFlag::MONSTER_LITE)) {
+        rfu.reset_flag(StatusRecalculatingFlag::MONSTER_LITE);
         update_mon_lite(player_ptr);
     }
 
-    if (rfu.has(StatusRedrawingFlag::DELAY_VISIBILITY)) {
-        rfu.reset_flag(StatusRedrawingFlag::DELAY_VISIBILITY);
+    if (rfu.has(StatusRecalculatingFlag::DELAY_VISIBILITY)) {
+        rfu.reset_flag(StatusRecalculatingFlag::DELAY_VISIBILITY);
         delayed_visual_update(player_ptr);
     }
 
-    if (rfu.has(StatusRedrawingFlag::MONSTER_STATUSES)) {
-        rfu.reset_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+    if (rfu.has(StatusRecalculatingFlag::MONSTER_STATUSES)) {
+        rfu.reset_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
         update_monsters(player_ptr, false);
     }
 }
@@ -2906,21 +2910,21 @@ void check_experience(PlayerType *player_ptr)
     PlayerRace pr(player_ptr);
     bool android = pr.equals(PlayerRaceType::ANDROID);
     PLAYER_LEVEL old_lev = player_ptr->lev;
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
-        StatusRedrawingFlag::MP,
-        StatusRedrawingFlag::SPELLS,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
+        StatusRecalculatingFlag::MP,
+        StatusRecalculatingFlag::SPELLS,
     };
     while ((player_ptr->lev > 1) && (player_ptr->exp < ((android ? player_exp_a : player_exp)[player_ptr->lev - 2] * player_ptr->expfact / 100L))) {
         player_ptr->lev--;
         rfu.set_flags(flags_srf);
-        const auto flags_mwrf = {
+        static constexpr auto flags_mwrf = {
             MainWindowRedrawingFlag::LEVEL,
             MainWindowRedrawingFlag::TITLE,
         };
         rfu.set_flags(flags_mwrf);
-        set_bits(player_ptr->window_flags, PW_PLAYER);
+        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
         handle_stuff(player_ptr);
     }
 
@@ -2942,7 +2946,7 @@ void check_experience(PlayerType *player_ptr)
             }
             level_inc_stat = true;
 
-            exe_write_diary(player_ptr, DIARY_LEVELUP, player_ptr->lev);
+            exe_write_diary(player_ptr, DiaryKind::LEVELUP, player_ptr->lev);
         }
 
         sound(SOUND_LEVEL);
@@ -2954,7 +2958,12 @@ void check_experience(PlayerType *player_ptr)
             MainWindowRedrawingFlag::EXP,
         };
         rfu.set_flags(flags_mwrf_levelup);
-        set_bits(player_ptr->window_flags, (PW_PLAYER | PW_SPELL | PW_INVENTORY));
+        const auto &flags_swrf_levelup = {
+            SubWindowRedrawingFlag::PLAYER,
+            SubWindowRedrawingFlag::SPELL,
+            SubWindowRedrawingFlag::INVENTORY,
+        };
+        rfu.set_flags(flags_swrf_levelup);
         player_ptr->level_up_message = true;
         handle_stuff(player_ptr);
 
@@ -3014,12 +3023,16 @@ void check_experience(PlayerType *player_ptr)
         }
 
         rfu.set_flags(flags_srf);
-        const auto flags_mwrf = {
+        static constexpr auto flags_mwrf = {
             MainWindowRedrawingFlag::LEVEL,
             MainWindowRedrawingFlag::TITLE,
         };
         rfu.set_flags(flags_mwrf);
-        set_bits(player_ptr->window_flags, (PW_PLAYER | PW_SPELL));
+        static constexpr auto flags_swrf = {
+            SubWindowRedrawingFlag::PLAYER,
+            SubWindowRedrawingFlag::SPELL,
+        };
+        rfu.set_flags(flags_swrf);
         handle_stuff(player_ptr);
     }
 
@@ -3187,7 +3200,7 @@ bool is_blessed(PlayerType *player_ptr)
 
 bool is_tim_esp(PlayerType *player_ptr)
 {
-    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<SniperData>();
     auto sniper_concent = sniper_data ? sniper_data->concent : 0;
     return player_ptr->tim_esp || music_singing(player_ptr, MUSIC_MIND) || (sniper_concent >= CONCENT_TELE_THRESHOLD);
 }
@@ -3199,7 +3212,7 @@ bool is_tim_stealth(PlayerType *player_ptr)
 
 bool is_time_limit_esp(PlayerType *player_ptr)
 {
-    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<SniperData>();
     auto sniper_concent = sniper_data ? sniper_data->concent : 0;
     return player_ptr->tim_esp || music_singing(player_ptr, MUSIC_MIND) || (sniper_concent >= CONCENT_TELE_THRESHOLD);
 }

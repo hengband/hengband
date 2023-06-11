@@ -34,9 +34,9 @@ void disturb(PlayerType *player_ptr, bool stop_search, bool stop_travel)
             verify_panel(player_ptr);
         }
 
-        const auto flags = {
-            StatusRedrawingFlag::TORCH,
-            StatusRedrawingFlag::FLOW,
+        static constexpr auto flags = {
+            StatusRecalculatingFlag::TORCH,
+            StatusRecalculatingFlag::FLOW,
         };
         rfu.set_flags(flags);
     }
@@ -47,7 +47,7 @@ void disturb(PlayerType *player_ptr, bool stop_search, bool stop_travel)
             verify_panel(player_ptr);
         }
 
-        rfu.set_flag(StatusRedrawingFlag::TORCH);
+        rfu.set_flag(StatusRecalculatingFlag::TORCH);
     }
 
     if (flush_disturb) {

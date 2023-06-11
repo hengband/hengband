@@ -87,8 +87,8 @@ void MonsterAttackPlayer::make_attack_normal()
 
     auto *r_ptr = &monraces_info[this->m_ptr->r_idx];
     this->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-    angband_strcpy(this->m_name, monster_desc(this->player_ptr, this->m_ptr, 0).data(), sizeof(this->m_name));
-    angband_strcpy(this->ddesc, monster_desc(this->player_ptr, this->m_ptr, MD_WRONGDOER_NAME).data(), sizeof(this->ddesc));
+    angband_strcpy(this->m_name, monster_desc(this->player_ptr, this->m_ptr, 0), sizeof(this->m_name));
+    angband_strcpy(this->ddesc, monster_desc(this->player_ptr, this->m_ptr, MD_WRONGDOER_NAME), sizeof(this->ddesc));
     if (PlayerClass(this->player_ptr).samurai_stance_is(SamuraiStanceType::IAI)) {
         msg_print(_("相手が襲いかかる前に素早く武器を振るった。", format("You took sen, drew and cut in one motion before %s moved.", this->m_name)));
         if (do_cmd_attack(this->player_ptr, this->m_ptr->fy, this->m_ptr->fx, HISSATSU_IAI)) {
@@ -131,7 +131,7 @@ bool MonsterAttackPlayer::check_no_blow()
         return false;
     }
 
-    if (dungeons_info[this->player_ptr->current_floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+    if (this->player_ptr->current_floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::NO_MELEE)) {
         return false;
     }
 
@@ -474,7 +474,7 @@ void MonsterAttackPlayer::gain_armor_exp()
     }
 
     this->player_ptr->skill_exp[PlayerSkillKindType::SHIELD] = std::min<short>(max, cur + increment);
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
 }
 
 /*!

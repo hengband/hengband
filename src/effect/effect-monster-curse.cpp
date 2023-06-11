@@ -6,7 +6,7 @@
 #include "system/monster-race-info.h"
 #include "view/display-messages.h"
 
-ProcessResult effect_monster_curse_1(effect_monster_type *em_ptr)
+ProcessResult effect_monster_curse_1(EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -22,7 +22,7 @@ ProcessResult effect_monster_curse_1(effect_monster_type *em_ptr)
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_curse_2(effect_monster_type *em_ptr)
+ProcessResult effect_monster_curse_2(EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -39,7 +39,7 @@ ProcessResult effect_monster_curse_2(effect_monster_type *em_ptr)
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_curse_3(effect_monster_type *em_ptr)
+ProcessResult effect_monster_curse_3(EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -56,7 +56,7 @@ ProcessResult effect_monster_curse_3(effect_monster_type *em_ptr)
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_curse_4(effect_monster_type *em_ptr)
+ProcessResult effect_monster_curse_4(EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;

@@ -287,16 +287,16 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     object_aware(player_ptr, j_ptr);
 
     msg_format(_("%sを $%ldで購入しました。", "You bought %s for %ld gold."), purchased_item_name.data(), (long)price);
-    angband_strcpy(record_o_name, purchased_item_name.data(), MAX_NLEN);
+    angband_strcpy(record_o_name, purchased_item_name, MAX_NLEN);
     record_turn = w_ptr->game_turn;
 
     if (record_buy) {
-        exe_write_diary(player_ptr, DIARY_BUY, 0, purchased_item_name);
+        exe_write_diary(player_ptr, DiaryKind::BUY, 0, purchased_item_name);
     }
 
     const auto diary_item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
     if (record_rand_art && o_ptr->is_random_artifact()) {
-        exe_write_diary(player_ptr, DIARY_ART, 0, diary_item_name);
+        exe_write_diary(player_ptr, DiaryKind::ART, 0, diary_item_name);
     }
 
     j_ptr->inscription.reset();
@@ -304,7 +304,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     j_ptr->ident &= ~(IDENT_STORE);
 
     const auto idx = find_autopick_list(player_ptr, j_ptr);
-    auto_inscribe_item(player_ptr, j_ptr, idx);
+    auto_inscribe_item(j_ptr, idx);
 
     item_new = store_item_to_inventory(player_ptr, j_ptr);
     handle_stuff(player_ptr);

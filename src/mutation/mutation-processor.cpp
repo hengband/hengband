@@ -463,7 +463,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
         (void)set_invuln(player_ptr, randint1(8) + 8, false);
     }
 
-    const auto flags = {
+    static constexpr auto flags = {
         MainWindowRedrawingFlag::HP,
         MainWindowRedrawingFlag::MP,
     };

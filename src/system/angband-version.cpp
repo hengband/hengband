@@ -1,4 +1,5 @@
 ﻿#include "system/angband-version.h"
+#include "system/angband-exceptions.h"
 #include "system/angband.h"
 
 std::string get_version()
@@ -18,7 +19,7 @@ std::string get_version()
         expr = "";
         break;
     default:
-        throw("Invalid version status was specified!");
+        THROW_EXCEPTION(std::logic_error, "Invalid version status was specified!");
     }
 
     if (VERSION_STATUS != VersionStatusType::RELEASE) {

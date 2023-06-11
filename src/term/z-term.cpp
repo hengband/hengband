@@ -88,6 +88,10 @@ TermCenteredOffsetSetter::TermCenteredOffsetSetter(std::optional<TERM_LEN> width
     , orig_centered_wid(game_term != nullptr ? game_term->centered_wid : std::nullopt)
     , orig_centered_hgt(game_term != nullptr ? game_term->centered_hgt : std::nullopt)
 {
+    if (game_term == nullptr) {
+        return;
+    }
+
     const auto offset_x = width.has_value() ? (game_term->wid - width.value()) / 2 : 0;
     const auto offset_y = height.has_value() ? (game_term->hgt - height.value()) / 2 : 0;
     this->tos.emplace(offset_x, offset_y);
@@ -582,9 +586,7 @@ static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, std::s
      * (条件追加：タイルの1文字目でない事を確かめるように。)
      */
     {
-        int w, h;
-        term_get_size(&w, &h);
-        if (x != w && !(scr_aa[x] & AF_TILE1) && (scr_aa[x] & AF_KANJI2)) {
+        if ((x < game_term->wid) && !(scr_aa[x] & AF_TILE1) && (scr_aa[x] & AF_KANJI2)) {
             scr_cc[x] = ' ';
             scr_aa[x] &= AF_KANJIC;
             if (x1 < 0) {

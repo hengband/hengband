@@ -193,12 +193,18 @@ void do_cmd_uninscribe(PlayerType *player_ptr)
     msg_print(_("銘を消した。", "Inscription removed."));
     o_ptr->inscription.reset();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::BONUS,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::BONUS,
     };
     rfu.set_flags(flags_srf);
-    set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::FLOOR_ITEMS,
+        SubWindowRedrawingFlag::FOUND_ITEMS,
+    };
+    rfu.set_flags(flags_swrf);
 }
 
 /*!
@@ -221,18 +227,24 @@ void do_cmd_inscribe(PlayerType *player_ptr)
     msg_print(nullptr);
     strcpy(out_val, "");
     if (o_ptr->is_inscribed()) {
-        angband_strcpy(out_val, o_ptr->inscription->data(), MAX_INSCRIPTION);
+        angband_strcpy(out_val, o_ptr->inscription.value(), MAX_INSCRIPTION);
     }
 
     if (get_string(_("銘: ", "Inscription: "), out_val, MAX_INSCRIPTION)) {
         o_ptr->inscription.emplace(out_val);
         auto &rfu = RedrawingFlagsUpdater::get_instance();
-        const auto flags_srf = {
-            StatusRedrawingFlag::COMBINATION,
-            StatusRedrawingFlag::BONUS,
+        static constexpr auto flags_srf = {
+            StatusRecalculatingFlag::COMBINATION,
+            StatusRecalculatingFlag::BONUS,
         };
         rfu.set_flags(flags_srf);
-        set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
+        static constexpr auto flags_swrf = {
+            SubWindowRedrawingFlag::INVENTORY,
+            SubWindowRedrawingFlag::EQUIPMENT,
+            SubWindowRedrawingFlag::FLOOR_ITEMS,
+            SubWindowRedrawingFlag::FOUND_ITEMS,
+        };
+        rfu.set_flags(flags_swrf);
     }
 }
 

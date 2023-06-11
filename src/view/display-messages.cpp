@@ -7,11 +7,11 @@
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
 #include "world/world.h"
-
 #include <deque>
 #include <map>
 #include <memory>
@@ -197,7 +197,7 @@ bool is_msg_window_flowed(void)
 {
     auto i = 0U;
     for (; i < angband_terms.size(); ++i) {
-        if (angband_terms[i] && (window_flag[i] & PW_MESSAGE)) {
+        if (angband_terms[i] && g_window_flags[i].has(SubWindowRedrawingFlag::MESSAGE)) {
             break;
         }
     }
@@ -362,7 +362,7 @@ void msg_print(std::string_view msg)
     }
 
     term_putstr(msg_head_pos, 0, msg.size(), TERM_WHITE, msg.data());
-    p_ptr->window_flags |= (PW_MESSAGE);
+    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MESSAGE);
     window_stuff(p_ptr);
 
     msg_flag = true;

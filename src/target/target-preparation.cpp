@@ -235,3 +235,60 @@ void target_sensing_monsters_prepare(PlayerType *player_ptr, std::vector<MONSTER
 
     std::sort(monster_list.begin(), monster_list.end(), comp_importance);
 }
+
+/*!
+ * @brief プレイヤーのペットの一覧を得る
+ *
+ * プレイヤーのペットのモンスターIDのリストを取得する。
+ * リストは以下の通り、重要なペットと考えられる順にソートされる。
+ *
+ * - 乗馬している
+ * - 名前をつけている
+ * - ユニークモンスター
+ * - LV順（降順）
+ * - モンスターID順（昇順）
+ *
+ * @return ペットのモンスターIDのリスト
+ */
+std::vector<MONSTER_IDX> target_pets_prepare(PlayerType *player_ptr)
+{
+    std::vector<MONSTER_IDX> pets;
+    const auto &floor = *player_ptr->current_floor_ptr;
+
+    for (short i = 1; i < floor.m_max; ++i) {
+        const auto &monster = floor.m_list[i];
+
+        if (monster.is_valid() && monster.is_pet()) {
+            pets.push_back(i);
+        }
+    }
+
+    auto comp_importance = [riding_idx = player_ptr->riding, &floor](MONSTER_IDX idx1, MONSTER_IDX idx2) {
+        const auto &monster1 = floor.m_list[idx1];
+        const auto &monster2 = floor.m_list[idx2];
+        const auto &ap_monrace1 = monraces_info[monster1.ap_r_idx];
+        const auto &ap_monrace2 = monraces_info[monster2.ap_r_idx];
+
+        if ((riding_idx == idx1) != (riding_idx == idx2)) {
+            return riding_idx == idx1;
+        }
+
+        if (monster1.is_named_pet() != monster2.is_named_pet()) {
+            return monster1.is_named_pet();
+        }
+
+        if (ap_monrace1.kind_flags.has(MonsterKindType::UNIQUE) != ap_monrace2.kind_flags.has(MonsterKindType::UNIQUE)) {
+            return ap_monrace1.kind_flags.has(MonsterKindType::UNIQUE);
+        }
+
+        if (ap_monrace1.r_tkills && ap_monrace2.r_tkills && (ap_monrace1.level != ap_monrace2.level)) {
+            return ap_monrace1.level > ap_monrace2.level;
+        }
+
+        return idx1 < idx2;
+    };
+
+    std::sort(pets.begin(), pets.end(), comp_importance);
+
+    return pets;
+}

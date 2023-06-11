@@ -140,7 +140,7 @@ bool create_ammo(PlayerType *player_ptr)
         }
 
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_ROCK);
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
         return true;
     }
     case AMMO_ARROW: {

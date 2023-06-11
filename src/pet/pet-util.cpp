@@ -42,7 +42,7 @@ bool can_player_ride_pet(PlayerType *player_ptr, grid_type *g_ptr, bool now_ridi
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
 
     bool p_can_enter = player_can_enter(player_ptr, g_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
@@ -55,7 +55,7 @@ bool can_player_ride_pet(PlayerType *player_ptr, grid_type *g_ptr, bool now_ridi
 
     player_ptr->riding_ryoute = old_riding_two_hands;
     player_ptr->old_riding_ryoute = old_old_riding_two_hands;
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
 
     w_ptr->character_xtra = old_character_xtra;

@@ -56,7 +56,7 @@ static void do_cmd_refill_lamp(PlayerType *player_ptr)
     }
 
     vary_item(player_ptr, item, -1);
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::TORCH);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::TORCH);
 }
 
 /*!
@@ -96,7 +96,7 @@ static void do_cmd_refill_torch(PlayerType *player_ptr)
     }
 
     vary_item(player_ptr, item, -1);
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::TORCH);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::TORCH);
 }
 
 /*!

@@ -9,6 +9,7 @@
 #include "monster/monster-status.h"
 #include "player-info/equipment-info.h"
 #include "player-info/race-info.h"
+#include "system/angband-exceptions.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
@@ -87,7 +88,7 @@ void PlayerAlignment::update_alignment()
     case MimicKindType::VAMPIRE:
         break;
     default:
-        throw("Invalid MimicKindType was specified!");
+        THROW_EXCEPTION(std::logic_error, "Invalid MimicKindType was specified!");
     }
 
     for (int i = 0; i < 2; i++) {

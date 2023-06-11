@@ -19,7 +19,7 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
-ProcessResult effect_monster_drain_mana(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_drain_mana(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -62,7 +62,7 @@ ProcessResult effect_monster_drain_mana(PlayerType *player_ptr, effect_monster_t
     }
 
     if (em_ptr->see_s_msg) {
-        angband_strcpy(em_ptr->killer, monster_desc(player_ptr, em_ptr->m_caster_ptr, 0).data(), sizeof(em_ptr->killer));
+        angband_strcpy(em_ptr->killer, monster_desc(player_ptr, em_ptr->m_caster_ptr, 0), sizeof(em_ptr->killer));
         msg_format(_("%s^は気分が良さそうだ。", "%s^ appears healthier."), em_ptr->killer);
     }
 
@@ -70,7 +70,7 @@ ProcessResult effect_monster_drain_mana(PlayerType *player_ptr, effect_monster_t
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_mind_blast(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_mind_blast(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -118,7 +118,7 @@ ProcessResult effect_monster_mind_blast(PlayerType *player_ptr, effect_monster_t
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_brain_smash(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_brain_smash(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
