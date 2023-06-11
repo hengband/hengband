@@ -170,9 +170,15 @@ static bool select_personality(PlayerType *player_ptr, int *k, concptr sym)
 
         interpret_personality_select_key_move(player_ptr, c, &cs);
         if (c == '*') {
+            player_personality ppersonality{};
             do {
                 *k = randint0(MAX_PERSONALITIES);
-            } while (personality_info[*k].sex && (personality_info[*k].sex != (player_ptr->psex + 1)));
+                if (*k < 0) {
+                    continue; // 静的解析対応.
+                }
+
+                ppersonality = personality_info[*k];
+            } while (ppersonality.sex && (ppersonality.sex != (player_ptr->psex + 1)));
 
             cs = *k;
             continue;
