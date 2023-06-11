@@ -200,7 +200,7 @@ static element_type_list element_types = {
 /*!
  * @brief 元素魔法呪文定義
  */
-static element_power_list element_powers = {
+static const element_power_list element_powers = {
     { ElementSpells::BOLT_1ST,   { 0, {  1,  1,  15, _("%sの矢", "%s Bolt") }}},
     { ElementSpells::MON_DETECT, { 0, {  2,  2,  20, _("モンスター感知", "Detect Monsters") }}},
     { ElementSpells::PERCEPT,    { 0, {  5,  5,  50, _("擬似鑑定", "Psychometry") }}},
@@ -461,7 +461,7 @@ static std::string get_element_effect_info(PlayerType *player_ptr, int spell_idx
 static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
 {
     auto spell = i2enum<ElementSpells>(spell_idx);
-    auto power = element_powers.at(spell);
+    auto &power = element_powers.at(spell);
     AttributeType typ;
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
