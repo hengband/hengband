@@ -76,18 +76,18 @@ bool monspell_message_base(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_ID
 
     if (msg_flag_aux) {
         if (mon_to_player) {
-            msg_format(msgs.to_player_true, m_name.data());
+            msg_format(msgs.to_player_true.data(), m_name.data());
             notice = true;
         } else if (mon_to_mon && known && see_either) {
-            msg_format(msgs.to_mons_true, m_name.data());
+            msg_format(msgs.to_mons_true.data(), m_name.data());
             notice = true;
         }
     } else {
         if (mon_to_player) {
-            msg_format(msgs.to_player_false, m_name.data());
+            msg_format(msgs.to_player_false.data(), m_name.data());
             notice = true;
         } else if (mon_to_mon && known && see_either) {
-            msg_format(msgs.to_mons_false, m_name.data(), t_name.data());
+            msg_format(msgs.to_mons_false.data(), m_name.data(), t_name.data());
             notice = true;
         }
     }
