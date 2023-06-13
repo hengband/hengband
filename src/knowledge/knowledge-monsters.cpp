@@ -223,7 +223,7 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
         fprintf(fff, "     %3d %sの %s\n", (int)this_monster, number_of_kills, r_ptr->name.data());
 #else
         if (this_monster < 2) {
-            if (angband_strstr(r_ptr->name.data(), "coins")) {
+            if (r_ptr->name.find("coins") != std::string::npos) {
                 fprintf(fff, "     1 pile of %s\n", r_ptr->name.data());
             } else {
                 fprintf(fff, "     1 %s\n", r_ptr->name.data());
