@@ -18,6 +18,7 @@
 #include "view/display-messages.h"
 #include <algorithm>
 #include <sstream>
+#include <vector>
 
 #ifdef WINDOWS
 #include <windows.h>
@@ -51,7 +52,7 @@ static struct {
 
 /* リングバッファ構造体 */
 static struct {
-    char *buf;
+    std::vector<char> buf;
     int wptr;
     int rptr;
     int inlen;
@@ -77,17 +78,12 @@ static void disable_chuukei_server(void)
 }
 
 /* ANSI Cによればstatic変数は0で初期化されるが一応初期化する */
-static errr init_buffer(void)
+static void init_buffer(void)
 {
     fresh_queue.next = fresh_queue.tail = 0;
     ring.wptr = ring.rptr = ring.inlen = 0;
     fresh_queue.time[0] = 0;
-    ring.buf = static_cast<char *>(malloc(RINGBUF_SIZE));
-    if (ring.buf == nullptr) {
-        return -1;
-    }
-
-    return 0;
+    ring.buf.resize(RINGBUF_SIZE);
 }
 
 /* 現在の時間を100ms単位で取得する */
@@ -128,11 +124,11 @@ static errr insert_ringbuf(std::string_view header, std::string_view payload = "
 
     /* バッファの終端までに収まる */
     if (ring.wptr + all_length + 1 < RINGBUF_SIZE) {
-        std::copy_n(header.begin(), header.length(), ring.buf + ring.wptr);
+        std::copy_n(header.begin(), header.length(), ring.buf.begin() + ring.wptr);
         if (!payload.empty()) {
-            std::copy_n(payload.begin(), payload.length(), ring.buf + ring.wptr + header.length());
+            std::copy_n(payload.begin(), payload.length(), ring.buf.begin() + ring.wptr + header.length());
         }
-        *(ring.buf + ring.wptr + all_length) = '\0';
+        ring.buf[ring.wptr + all_length] = '\0';
         ring.wptr += all_length + 1;
     }
     /* バッファの終端までに収まらない(ピッタリ収まる場合も含む) */
@@ -141,21 +137,21 @@ static errr insert_ringbuf(std::string_view header, std::string_view payload = "
         int tail = all_length - head; /* 後半 */
 
         if ((int)header.length() <= head) {
-            std::copy_n(header.begin(), header.length(), ring.buf + ring.wptr);
+            std::copy_n(header.begin(), header.length(), ring.buf.begin() + ring.wptr);
             head -= header.length();
             if (head > 0) {
-                std::copy_n(payload.begin(), head, ring.buf + ring.wptr + header.length());
+                std::copy_n(payload.begin(), head, ring.buf.begin() + ring.wptr + header.length());
             }
-            std::copy_n(payload.data() + head, tail, ring.buf);
+            std::copy_n(payload.data() + head, tail, ring.buf.begin());
         } else {
-            std::copy_n(header.begin(), head, ring.buf + ring.wptr);
+            std::copy_n(header.begin(), head, ring.buf.begin() + ring.wptr);
             int part = header.length() - head;
-            std::copy_n(header.data() + head, part, ring.buf);
+            std::copy_n(header.data() + head, part, ring.buf.begin());
             if (tail > part) {
-                std::copy_n(payload.begin(), tail - part, ring.buf + part);
+                std::copy_n(payload.begin(), tail - part, ring.buf.begin() + part);
             }
         }
-        *(ring.buf + tail) = '\0';
+        ring.buf[tail] = '\0';
         ring.wptr = tail + 1;
     }
 
