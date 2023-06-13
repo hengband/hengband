@@ -17,7 +17,6 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
-#include "util/quarks.h"
 
 /*!
  * @brief アイテムオブジェクトを読み込む(v3.0.0 Savefile ver50まで)

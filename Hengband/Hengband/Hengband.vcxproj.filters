@@ -1190,9 +1190,6 @@
     <ClCompile Include="..\..\src\io\input-key-acceptor.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\util\quarks.cpp">
-      <Filter>util</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\view\display-messages.cpp">
       <Filter>view</Filter>
     </ClCompile>
@@ -3871,9 +3868,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io\input-key-acceptor.h">
       <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\util\quarks.h">
-      <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-messages.h">
       <Filter>view</Filter>

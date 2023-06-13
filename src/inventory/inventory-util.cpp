@@ -17,7 +17,6 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
-#include "util/quarks.h"
 #include "util/string-processor.h"
 #include <sstream>
 

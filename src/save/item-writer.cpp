@@ -6,7 +6,6 @@
 #include "system/item-entity.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
-#include "util/quarks.h"
 
 static void write_item_flags(ItemEntity *o_ptr, BIT_FLAGS *flags)
 {

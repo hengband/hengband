@@ -9,7 +9,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
-#include "util/quarks.h"
 
 /*!
  * @brief 自動拾い/破壊設定のリストに関する変数 / List for auto-picker/destroyer entries

@@ -29,7 +29,6 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
-#include "util/quarks.h"
 #include "util/string-processor.h"
 
 /*!
