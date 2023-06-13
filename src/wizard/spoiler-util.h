@@ -2,7 +2,9 @@
 
 #include "system/angband.h"
 #include "wizard/spoiler-table.h"
+#include <string>
 #include <string_view>
+#include <vector>
 
 /* MAX_LINE_LEN specifies when a line should wrap. */
 #define MAX_LINE_LEN 75
@@ -34,12 +36,7 @@ struct obj_desc_list {
     concptr resistances[N_ELEMENTS(resist_flags_desc) + 1]{}; /* A list of resistances granted by an object */
     concptr vulnerables[N_ELEMENTS(vulnerable_flags_desc) + 1]{}; /* A list of resistances granted by an object */
     concptr sustains[N_ELEMENTS(sustain_flags_desc) - 1 + 1]{}; /* A list of stats sustained by an object */
-
-    /* A list of various magical qualities an object may have */
-    concptr misc_magic[N_ELEMENTS(misc_flags2_desc) + N_ELEMENTS(misc_flags3_desc) + 1 /* Permanent Light */
-                       + 1 /* TY curse */
-                       + 1 /* type of curse */
-                       + 1]{}; /* sentinel nullptr */
+    std::vector<std::string> misc_magic{}; // その他の特性 (呪い、光源範囲等)
 
     char addition[80] = ""; /* Additional ability or resistance */
     concptr activation = ""; /* A string describing an artifact's activation */
