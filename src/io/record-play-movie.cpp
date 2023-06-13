@@ -352,7 +352,7 @@ void prepare_movie_hooks(PlayerType *player_ptr)
     if (fd >= 0) {
         const auto &filename = path.string();
         (void)fd_close(fd);
-        std::string query = _("現存するファイルに上>書きしますか? (", "Replace existing file ");
+        std::string query = _("現存するファイルに上書きしますか? (", "Replace existing file ");
         query.append(filename);
         query.append(_(")", "? "));
         if (!get_check(query)) {
