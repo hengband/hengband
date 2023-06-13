@@ -32,6 +32,10 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
+#include <span>
+#include <string>
+#include <string_view>
+#include <vector>
 
 #ifdef WORLD_SCORE
 #ifdef WINDOWS
@@ -52,87 +56,13 @@ concptr screen_dump = nullptr;
 #define SCORE_PATH "http://moon.kmc.gr.jp/hengband/hengscore-en/score.cgi" /*!< スコア開示URL */
 #endif
 
-/*
- * simple buffer library
- */
-struct BUF {
-    size_t max_size;
-    size_t size;
-    size_t read_head;
-    char *data;
-};
-
-#define BUFSIZE (65536) /*!< スコアサーバ転送バッファサイズ */
-
-/*!
- * @brief 転送用バッファの確保
- * @return 確保したバッファの参照ポインタ
- */
-static BUF *buf_new(void)
-{
-    BUF *p;
-    p = static_cast<BUF *>(malloc(sizeof(BUF)));
-    if (!p) {
-        return nullptr;
-    }
-
-    p->size = 0;
-    p->max_size = BUFSIZE;
-    p->data = static_cast<char *>(malloc(BUFSIZE));
-    if (!p->data) {
-        free(p);
-        return nullptr;
-    }
-
-    return p;
-}
-
-/*!
- * @brief 転送用バッファの解放
- * @param b 解放するバッファの参照ポインタ
- */
-static void buf_delete(BUF *b)
-{
-    free(b->data);
-    free(b);
-}
-
-/*!
- * @brief 転送用バッファにデータを追加する
- * @param buf 追加先バッファの参照ポインタ
- * @param data 追加元データ
- * @param size 追加サイズ
- * @return 追加後のバッファ容量
- */
-static int buf_append(BUF *buf, concptr data, size_t size)
-{
-    while (buf->size + size > buf->max_size) {
-        char *tmp;
-        if ((tmp = static_cast<char *>(malloc(buf->max_size * 2))) == nullptr) {
-            return -1;
-        }
-
-        std::copy_n(buf->data, buf->max_size, tmp);
-        free(buf->data);
-
-        buf->data = tmp;
-
-        buf->max_size *= 2;
-    }
-
-    std::copy_n(data, size, buf->data + buf->size);
-    buf->size += size;
-
-    return buf->size;
-}
-
 /*!
  * @brief 転送用バッファにフォーマット指定した文字列データを追加する
  * @param buf 追加先バッファの参照ポインタ
  * @param fmt 文字列フォーマット
  * @return 追加後のバッファ容量
  */
-static int buf_sprintf(BUF *buf, concptr fmt, ...)
+static void buf_sprintf(std::vector<char> &buf, concptr fmt, ...)
 {
     int ret;
     char tmpbuf[8192];
@@ -147,21 +77,19 @@ static int buf_sprintf(BUF *buf, concptr fmt, ...)
     va_end(ap);
 
     if (ret < 0) {
-        return -1;
+        return;
     }
 
-    ret = buf_append(buf, tmpbuf, strlen(tmpbuf));
-    return ret;
+    buf.insert(buf.end(), tmpbuf, tmpbuf + ret);
 }
 
 size_t read_callback(char *buffer, size_t size, size_t nitems, void *userdata)
 {
-    BUF *buf = static_cast<BUF *>(userdata);
-    const size_t remain = buf->size - buf->read_head;
-    const size_t copy_size = std::min<size_t>(size * nitems, remain);
+    auto &data = *static_cast<std::span<const char> *>(userdata);
+    const auto copy_size = std::min<size_t>(size * nitems, data.size());
 
-    strncpy(buffer, buf->data + buf->read_head, copy_size);
-    buf->read_head += copy_size;
+    std::copy_n(data.begin(), copy_size, buffer);
+    data = data.subspan(copy_size);
 
     return copy_size;
 }
@@ -172,7 +100,7 @@ size_t read_callback(char *buffer, size_t size, size_t nitems, void *userdata)
  * @param buf 伝送内容バッファ
  * @return 送信に成功した場合TRUE、失敗した場合FALSE
  */
-static bool http_post(concptr url, BUF *buf)
+static bool http_post(concptr url, const std::vector<char> &buf)
 {
     bool succeeded = false;
     CURL *curl = curl_easy_init();
@@ -214,10 +142,10 @@ static bool http_post(concptr url, BUF *buf)
     curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 10);
     curl_easy_setopt(curl, CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
 
-    buf->read_head = 0;
-    curl_easy_setopt(curl, CURLOPT_READDATA, buf);
+    std::span<const char> data(buf);
+    curl_easy_setopt(curl, CURLOPT_READDATA, &data);
     curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, buf->size);
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, data.size());
 
     if (curl_easy_perform(curl) == CURLE_OK) {
         long response_code;
@@ -239,7 +167,7 @@ static bool http_post(concptr url, BUF *buf)
  * @param dumpbuf 伝送内容バッファ
  * @return エラーコード
  */
-static errr make_dump(PlayerType *player_ptr, BUF *dumpbuf)
+static errr make_dump(PlayerType *player_ptr, std::vector<char> &dumpbuf)
 {
     char buf[1024];
     FILE *fff;
@@ -294,12 +222,7 @@ concptr make_screen_dump(PlayerType *player_ptr)
     int wid, hgt;
     term_get_size(&wid, &hgt);
 
-    /* Alloc buffer */
-    BUF *screen_buf;
-    screen_buf = buf_new();
-    if (screen_buf == nullptr) {
-        return nullptr;
-    }
+    std::vector<char> screen_buf;
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     bool old_use_graphics = use_graphics;
@@ -392,17 +315,12 @@ concptr make_screen_dump(PlayerType *player_ptr)
 
     /* Screen dump size is too big ? */
     concptr ret;
-    if (screen_buf->size + 1 > SCREEN_BUF_MAX_SIZE) {
+    if (screen_buf.size() + 1 > SCREEN_BUF_MAX_SIZE) {
         ret = nullptr;
     } else {
-        /* Terminate string */
-        buf_append(screen_buf, "", 1);
-
-        ret = string_make(screen_buf->data);
+        screen_buf.push_back('\0');
+        ret = string_make(screen_buf.data());
     }
-
-    /* Free buffer */
-    buf_delete(screen_buf);
 
     if (!old_use_graphics) {
         return ret;
@@ -429,7 +347,7 @@ concptr make_screen_dump(PlayerType *player_ptr)
  */
 bool report_score(PlayerType *player_ptr)
 {
-    auto *score = buf_new();
+    std::vector<char> score;
     std::string personality_desc = ap_ptr->title;
     personality_desc.append(_(ap_ptr->no ? "の" : "", " "));
 
@@ -455,7 +373,8 @@ bool report_score(PlayerType *player_ptr)
     make_dump(player_ptr, score);
     if (screen_dump) {
         buf_sprintf(score, "-----screen shot-----\n");
-        buf_append(score, screen_dump, strlen(screen_dump));
+        const std::string_view sv(screen_dump);
+        score.insert(score.end(), sv.begin(), sv.end());
     }
 
     term_clear();
@@ -464,7 +383,6 @@ bool report_score(PlayerType *player_ptr)
         prt(_("スコア送信中...", "Sending the score..."), 0, 0);
         term_fresh();
         if (http_post(SCORE_PATH, score)) {
-            buf_delete(score);
             return true;
         }
 
@@ -474,7 +392,6 @@ bool report_score(PlayerType *player_ptr)
             continue;
         }
 
-        buf_delete(score);
         return false;
     }
 }
