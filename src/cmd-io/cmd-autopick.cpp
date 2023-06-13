@@ -118,7 +118,7 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
     tb->old_wid = tb->old_hgt = -1;
     tb->old_com_id = 0;
 
-    tb->yank = nullptr;
+    tb->yank.clear();
     tb->search_o_ptr = nullptr;
     tb->search_str = nullptr;
     tb->last_destroyed = nullptr;

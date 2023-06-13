@@ -218,54 +218,16 @@ bool add_empty_line(text_body_type *tb)
     return true;
 }
 
-static chain_str_type *new_chain_str(concptr str)
-{
-    size_t len = strlen(str);
-    auto *chain = static_cast<chain_str_type *>(std::malloc(sizeof(chain_str_type) + len * sizeof(char)));
-    if (chain == nullptr) {
-        return nullptr;
-    }
-
-    strcpy(chain->s, str);
-    chain->next = nullptr;
-    return chain;
-}
-
 void kill_yank_chain(text_body_type *tb)
 {
-    chain_str_type *chain = tb->yank;
-    tb->yank = nullptr;
+    tb->yank.clear();
     tb->yank_eol = true;
-
-    while (chain) {
-        chain_str_type *next = chain->next;
-
-        std::free(chain);
-
-        chain = next;
-    }
 }
 
 void add_str_to_yank(text_body_type *tb, concptr str)
 {
     tb->yank_eol = false;
-    if (tb->yank == nullptr) {
-        tb->yank = new_chain_str(str);
-        return;
-    }
-
-    chain_str_type *chain;
-    chain = tb->yank;
-
-    while (true) {
-        if (!chain->next) {
-            chain->next = new_chain_str(str);
-            return;
-        }
-
-        /* Go to next */
-        chain = chain->next;
-    }
+    tb->yank.emplace_back(str);
 }
 
 /*!
