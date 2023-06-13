@@ -13,9 +13,26 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/enum-range.h"
-#include "util/quarks.h"
 #include "util/string-processor.h"
 #include "wizard/spoiler-util.h"
+
+/*!
+ * @brief
+ * @param art_flags 出力するアーティファクトの特性一覧
+ * @param definitions 表記対象の特性一覧
+ * @return 表記すべき特性一覧
+ */
+static std::vector<std::string> extract_spoiler_flags(const TrFlags &art_flags, const std::vector<flag_desc> definitions)
+{
+    std::vector<std::string> descriptions{};
+    for (const auto &definition : definitions) {
+        if (art_flags.has(definition.flag)) {
+            descriptions.push_back(definition.desc);
+        }
+    }
+
+    return descriptions;
+}
 
 /*!
  * @brief アーティファクトの特性一覧を出力する /
@@ -176,11 +193,14 @@ static void analyze_sustains(ItemEntity *o_ptr, concptr *sustain_list)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param misc_list その他の特性構造体の参照ポインタ
  */
-static void analyze_misc_magic(ItemEntity *o_ptr, concptr *misc_list)
+static std::vector<std::string> analyze_misc_magic(ItemEntity *o_ptr)
 {
+    std::vector<std::string> descriptions{};
     auto flags = object_flags(o_ptr);
-    misc_list = spoiler_flag_aux(flags, misc_flags2_desc, misc_list, N_ELEMENTS(misc_flags2_desc));
-    misc_list = spoiler_flag_aux(flags, misc_flags3_desc, misc_list, N_ELEMENTS(misc_flags3_desc));
+    const auto &flags2_descriptions = extract_spoiler_flags(flags, misc_flags2_desc);
+    descriptions.insert(descriptions.end(), flags2_descriptions.begin(), flags2_descriptions.end());
+    const auto &flags3_descriptions = extract_spoiler_flags(flags, misc_flags3_desc);
+    descriptions.insert(descriptions.end(), flags3_descriptions.begin(), flags3_descriptions.end());
     POSITION rad = 0;
     if (flags.has(TR_LITE_1)) {
         rad += 1;
@@ -224,30 +244,30 @@ static void analyze_misc_magic(ItemEntity *o_ptr, concptr *misc_list)
     }
 
     if (rad != 0) {
-        *misc_list++ = quark_str(quark_add(desc.data()));
+        descriptions.push_back(std::move(desc));
     }
 
     if (flags.has(TR_TY_CURSE)) {
-        *misc_list++ = _("太古の怨念", "Ancient Curse");
+        descriptions.emplace_back(_("太古の怨念", "Ancient Curse"));
     }
 
     if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE)) {
-        *misc_list++ = _("永遠の呪い", "Permanently Cursed");
+        descriptions.emplace_back(_("永遠の呪い", "Permanently Cursed"));
     } else if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
-        *misc_list++ = _("強力な呪い", "Heavily Cursed");
+        descriptions.emplace_back(_("強力な呪い", "Heavily Cursed"));
     } else if (o_ptr->curse_flags.has(CurseTraitType::CURSED)) {
-        *misc_list++ = _("呪い", "Cursed");
+        descriptions.emplace_back(_("呪い", "Cursed"));
     }
 
     if (flags.has(TR_ADD_L_CURSE)) {
-        *misc_list++ = _("呪いを増やす", "Cursing");
+        descriptions.emplace_back(_("呪いを増やす", "Cursing"));
     }
 
     if (flags.has(TR_ADD_H_CURSE)) {
-        *misc_list++ = _("強力な呪いを増やす", "Heavily Cursing");
+        descriptions.emplace_back(_("強力な呪いを増やす", "Heavily Cursing"));
     }
 
-    *misc_list = nullptr;
+    return descriptions;
 }
 
 /*!
@@ -320,7 +340,7 @@ void object_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *de
     analyze_resist(o_ptr, desc_ptr->resistances);
     analyze_vulnerable(o_ptr, desc_ptr->vulnerables);
     analyze_sustains(o_ptr, desc_ptr->sustains);
-    analyze_misc_magic(o_ptr, desc_ptr->misc_magic);
+    desc_ptr->misc_magic = analyze_misc_magic(o_ptr);
     analyze_addition(o_ptr, desc_ptr->addition, sizeof(desc_ptr->addition));
     analyze_misc(o_ptr, desc_ptr->misc_desc, sizeof(desc_ptr->misc_desc));
     desc_ptr->activation = activation_explanation(o_ptr);
@@ -343,7 +363,7 @@ void random_artifact_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc
     analyze_resist(o_ptr, desc_ptr->resistances);
     analyze_vulnerable(o_ptr, desc_ptr->vulnerables);
     analyze_sustains(o_ptr, desc_ptr->sustains);
-    analyze_misc_magic(o_ptr, desc_ptr->misc_magic);
+    desc_ptr->misc_magic = analyze_misc_magic(o_ptr);
     desc_ptr->activation = activation_explanation(o_ptr);
     strnfmt(desc_ptr->misc_desc, sizeof(desc_ptr->misc_desc), _("重さ %d.%d kg", "Weight %d.%d lbs"), _(lb_to_kg_integer(o_ptr->weight), o_ptr->weight / 10),
         _(lb_to_kg_fraction(o_ptr->weight), o_ptr->weight % 10));

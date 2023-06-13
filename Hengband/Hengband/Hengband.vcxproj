@@ -633,7 +633,6 @@
     <ClCompile Include="..\..\src\system\alloc-entries.cpp" />
     <ClCompile Include="..\..\src\term\screen-processor.cpp" />
     <ClCompile Include="..\..\src\util\buffer-shaper.cpp" />
-    <ClCompile Include="..\..\src\util\quarks.cpp" />
     <ClCompile Include="..\..\src\lore\combat-types-setter.cpp" />
     <ClCompile Include="..\..\src\lore\magic-types-setter.cpp" />
     <ClCompile Include="..\..\src\lore\lore-calculator.cpp" />
@@ -1425,7 +1424,6 @@
     <ClInclude Include="..\..\src\util\flag-group.h" />
     <ClInclude Include="..\..\src\util\int-char-converter.h" />
     <ClInclude Include="..\..\src\util\point-2d.h" />
-    <ClInclude Include="..\..\src\util\quarks.h" />
     <ClInclude Include="..\..\src\lore\combat-types-setter.h" />
     <ClInclude Include="..\..\src\lore\magic-types-setter.h" />
     <ClInclude Include="..\..\src\lore\lore-calculator.h" />

@@ -164,7 +164,7 @@ const flag_desc sustain_flags_desc[MAX_SUSTAINER_FLAGS_DESCRIPTION] = {
 };
 
 /* Miscellaneous magic given by an object's "flags2" field */
-const flag_desc misc_flags2_desc[] = {
+const std::vector<flag_desc> misc_flags2_desc = {
     { TR_THROW, _("投擲", "Throwing") },
     { TR_REFLECT, _("反射", "Reflection") },
     { TR_FREE_ACT, _("麻痺知らず", "Free Action") },
@@ -172,7 +172,7 @@ const flag_desc misc_flags2_desc[] = {
 };
 
 /* Miscellaneous magic given by an object's "flags3" field */
-const flag_desc misc_flags3_desc[MAX_MISC3_FLAGS_DESCRIPTION] = {
+const std::vector<flag_desc> misc_flags3_desc = {
     { TR_SH_FIRE, _("火炎オーラ", "Fiery Aura") },
     { TR_SH_ELEC, _("電撃オーラ", "Electric Aura") },
     { TR_SH_COLD, _("冷気オーラ", "Coldly Aura") },

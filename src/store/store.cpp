@@ -33,7 +33,6 @@
 #include "term/screen-processor.h"
 #include "term/z-form.h"
 #include "util/int-char-converter.h"
-#include "util/quarks.h"
 #include "view/display-messages.h"
 #include "world/world-object.h"
 
