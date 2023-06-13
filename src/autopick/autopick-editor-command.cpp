@@ -26,6 +26,8 @@
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
+#include <string>
+#include <string_view>
 
 /*!
  * @brief
@@ -258,9 +260,8 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
         break;
     }
     case EC_PASTE: {
-        chain_str_type *chain = tb->yank;
         int len = strlen(tb->lines_list[tb->cy]);
-        if (!chain) {
+        if (tb->yank.empty()) {
             break;
         }
         if (tb->cx > len) {
@@ -272,42 +273,30 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
             tb->dirty_flags |= DIRTY_ALL;
         }
 
-        while (chain) {
-            concptr yank_str = chain->s;
-            char buf[MAX_LINELEN];
-            int i;
-            char rest[MAX_LINELEN], *rest_ptr = rest;
-            for (i = 0; i < tb->cx; i++) {
-                buf[i] = tb->lines_list[tb->cy][i];
-            }
+        for (auto i = 0U; i < tb->yank.size(); ++i) {
+            const std::string_view line(tb->lines_list[tb->cy]);
+            std::string buf(line.substr(0, tb->cx));
+            buf.append(tb->yank[i], 0, MAX_LINELEN - buf.length() - 1);
 
-            strcpy(rest, &(tb->lines_list[tb->cy][i]));
-            while (*yank_str && i < MAX_LINELEN - 1) {
-                buf[i++] = *yank_str++;
-            }
-
-            buf[i] = '\0';
-            chain = chain->next;
-            if (chain || tb->yank_eol) {
+            const auto is_last_line = i + 1 == tb->yank.size();
+            if (!is_last_line || tb->yank_eol) {
                 if (!insert_return_code(tb)) {
                     break;
                 }
                 string_free(tb->lines_list[tb->cy]);
-                tb->lines_list[tb->cy] = string_make(buf);
+                tb->lines_list[tb->cy] = string_make(buf.data());
                 tb->cx = 0;
                 tb->cy++;
 
                 continue;
             }
 
-            tb->cx = strlen(buf);
-            while (*rest_ptr && i < MAX_LINELEN - 1) {
-                buf[i++] = *rest_ptr++;
-            }
+            const auto rest = line.substr(tb->cx);
+            tb->cx = buf.length();
+            buf.append(rest, 0, MAX_LINELEN - buf.length() - 1);
 
-            buf[i] = '\0';
             string_free(tb->lines_list[tb->cy]);
-            tb->lines_list[tb->cy] = string_make(buf);
+            tb->lines_list[tb->cy] = string_make(buf.data());
             break;
         }
 
@@ -357,7 +346,6 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
 
         if (tb->old_com_id != com_id) {
             kill_yank_chain(tb);
-            tb->yank = nullptr;
         }
 
         if (tb->cx < len) {
