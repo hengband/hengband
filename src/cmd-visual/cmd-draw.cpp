@@ -186,17 +186,14 @@ void do_cmd_message_one(void)
  */
 void do_cmd_messages(int num_now)
 {
-    char shower_str[81];
-    char finder_str[81];
-    char back_str[81];
-    concptr shower = nullptr;
+    std::string shower_str("");
+    std::string finder_str("");
+    std::string shower("");
     int wid, hgt;
     term_get_size(&wid, &hgt);
-    int num_lines = hgt - 4;
-    strcpy(finder_str, "");
-    strcpy(shower_str, "");
-    int n = message_num();
-    int i = 0;
+    auto num_lines = hgt - 4;
+    auto n = message_num();
+    auto i = 0;
     screen_save();
     term_clear();
     while (true) {
@@ -206,14 +203,16 @@ void do_cmd_messages(int num_now)
             const auto msg_str = message_str(i + j);
             const auto *msg = msg_str.data();
             c_prt((i + j < num_now ? TERM_WHITE : TERM_SLATE), msg, num_lines + 1 - j, 0);
-            if (!shower || !shower[0]) {
+            if (shower.empty()) {
                 continue;
             }
 
+            // @details ダメ文字対策でstringを使わない.
             const auto *str = msg;
             while ((str = angband_strstr(str, shower)) != nullptr) {
-                int len = strlen(shower);
+                const auto len = shower.length();
                 term_putstr(str - msg, num_lines + 1 - j, len, TERM_YELLOW, shower);
+                str = const_cast<char *>(std::string_view(str).substr(len).data());
                 str += len;
             }
         }
@@ -231,30 +230,40 @@ void do_cmd_messages(int num_now)
 
         j = i;
         switch (skey) {
-        case '=':
+        case '=': {
             prt(_("強調: ", "Show: "), hgt - 1, 0);
-            strcpy(back_str, shower_str);
-            if (askfor(shower_str, 80)) {
-                shower = shower_str[0] ? shower_str : nullptr;
+            char ask[81]{};
+            angband_strcpy(ask, shower_str, 80);
+            const auto back_str(shower_str);
+            if (askfor(ask, 80)) {
+                shower = ask;
+                shower_str = ask;
             } else {
-                strcpy(shower_str, back_str);
+                shower_str = back_str;
             }
 
             continue;
+        }
         case '/':
         case KTRL('s'): {
             prt(_("検索: ", "Find: "), hgt - 1, 0);
-            strcpy(back_str, finder_str);
-            if (!askfor(finder_str, 80)) {
-                strcpy(finder_str, back_str);
+            char ask[81]{};
+            angband_strcpy(ask, finder_str, 80);
+            const auto back_str(finder_str);
+            if (!askfor(ask, 80)) {
+                finder_str = back_str;
                 continue;
-            } else if (!finder_str[0]) {
-                shower = nullptr;
+            }
+
+            finder_str = ask;
+            if (finder_str.empty()) {
+                shower = "";
                 continue;
             }
 
             shower = finder_str;
             for (int z = i + 1; z < n; z++) {
+                // @details ダメ文字対策でstringを使わない.
                 const auto msg_str = message_str(z);
                 const auto *msg = msg_str.data();
                 if (angband_strstr(msg, finder_str) != nullptr) {
@@ -262,10 +271,9 @@ void do_cmd_messages(int num_now)
                     break;
                 }
             }
+
+            break;
         }
-
-        break;
-
         case SKEY_TOP:
             i = n - num_lines;
             break;
