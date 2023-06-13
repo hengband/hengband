@@ -161,7 +161,7 @@ void do_cmd_player_status(PlayerType *player_ptr)
  */
 void do_cmd_message_one(void)
 {
-    prt(format("> %s", message_str(0)), 0, 0);
+    prt(format("> %s", message_str(0).data()), 0, 0);
 }
 
 /*!
@@ -203,13 +203,14 @@ void do_cmd_messages(int num_now)
         int j;
         int skey;
         for (j = 0; (j < num_lines) && (i + j < n); j++) {
-            concptr msg = message_str(i + j);
+            const auto msg_str = message_str(i + j);
+            const auto *msg = msg_str.data();
             c_prt((i + j < num_now ? TERM_WHITE : TERM_SLATE), msg, num_lines + 1 - j, 0);
             if (!shower || !shower[0]) {
                 continue;
             }
 
-            concptr str = msg;
+            const auto *str = msg;
             while ((str = angband_strstr(str, shower)) != nullptr) {
                 int len = strlen(shower);
                 term_putstr(str - msg, num_lines + 1 - j, len, TERM_YELLOW, shower);
@@ -254,8 +255,9 @@ void do_cmd_messages(int num_now)
 
             shower = finder_str;
             for (int z = i + 1; z < n; z++) {
-                concptr msg = message_str(z);
-                if (angband_strstr(msg, finder_str)) {
+                const auto msg_str = message_str(z);
+                const auto *msg = msg_str.data();
+                if (angband_strstr(msg, finder_str) != nullptr) {
                     i = z;
                     break;
                 }

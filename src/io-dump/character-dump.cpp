@@ -145,7 +145,7 @@ static void dump_aux_last_message(PlayerType *player_ptr, FILE *fff)
     if (!w_ptr->total_winner) {
         fprintf(fff, _("\n  [死ぬ直前のメッセージ]\n\n", "\n  [Last Messages]\n\n"));
         for (int i = std::min(message_num(), 30); i >= 0; i--) {
-            fprintf(fff, "> %s\n", message_str((int16_t)i));
+            fprintf(fff, "> %s\n", message_str((int16_t)i).data());
         }
 
         fputc('\n', fff);

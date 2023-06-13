@@ -80,13 +80,13 @@ int32_t message_num(void)
  * @param age メッセージの世代
  * @return メッセージの文字列ポインタ
  */
-concptr message_str(int age)
+std::string message_str(int age)
 {
     if ((age < 0) || (age >= message_num())) {
         return "";
     }
 
-    return message_history[age]->data();
+    return *message_history[age];
 }
 
 static void message_add_aux(std::string str)
