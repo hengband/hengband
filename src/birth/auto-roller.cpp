@@ -3,6 +3,7 @@
 #include "birth/birth-util.h"
 #include "cmd-io/cmd-gameoption.h"
 #include "io/input-key-acceptor.h"
+#include "locale/japanese.h"
 #include "main/sound-of-music.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
@@ -444,10 +445,10 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
     }
 #ifdef JP
     /*身長と体重の単位をcmとkgに*/
-    mval[2] = mval[2] * 254 / 100;
-    mval[3] = mval[3] * 254 / 100;
-    mval[4] = mval[4] * 4536 / 10000;
-    mval[5] = mval[5] * 4536 / 10000;
+    mval[2] = inch_to_cm(mval[2]);
+    mval[3] = inch_to_cm(mval[3]);
+    mval[4] = lb_to_kg(mval[4]);
+    mval[5] = lb_to_kg(mval[5]);
 #endif
     for (auto i = 0; i < MAXITEMS; i++) {
         cval[i] = mval[i];

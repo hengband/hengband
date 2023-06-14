@@ -29,6 +29,25 @@ int utf8_to_euc(char *utf8_str, size_t utf8_str_len, char *euc_buf, size_t euc_b
 int euc_to_utf8(const char *euc_str, size_t euc_str_len, char *utf8_buf, size_t utf8_buf_len);
 #endif
 
+/*!
+ * @brief インチ→cm変換
+ */
+constexpr int inch_to_cm(int inch)
+{
+    return inch * 254 / 100;
+}
+
+/*!
+ * @brief ポンド→kg変換
+ *
+ * 体重表記用
+ * アイテムの重量は0.5kg単位にするためlb_to_kg_integer/fractionを使用する
+ */
+constexpr int lb_to_kg(int lb)
+{
+    return lb * 4536 / 10000;
+}
+
 #else
 
 constexpr bool is_kinsoku(std::string_view)
