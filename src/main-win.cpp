@@ -2755,11 +2755,9 @@ static void register_wndclass(void)
     }
 }
 
-/*!
- * @brief (Windows固有)Windowsアプリケーションとしてのエントリポイント
- */
-int WINAPI WinMain(
-    _In_ HINSTANCE hInst, [[maybe_unused]] _In_opt_ HINSTANCE hPrevInst, [[maybe_unused]] _In_ LPSTR lpCmdLine, [[maybe_unused]] _In_ int nCmdShow)
+
+#include "system/angband-exceptions.h"
+static int game_main(HINSTANCE hInst)
 {
     setlocale(LC_ALL, "ja_JP");
     hInstance = hInst;
@@ -2769,7 +2767,7 @@ int WINAPI WinMain(
         MessageBoxW(NULL, mes, caption, MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
         return 0;
     }
-
+    THROW_EXCEPTION(std::runtime_error, "exception occured!");
     command_line.handle();
     register_wndclass();
 
@@ -2848,4 +2846,23 @@ int WINAPI WinMain(
     quit(nullptr);
     return 0;
 }
+
+/*!
+ * @brief (Windows固有)Windowsアプリケーションとしてのエントリポイント
+ */
+int WINAPI WinMain(
+    _In_ HINSTANCE hInst, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
+{
+    try {
+        return game_main(hInst);
+    } catch (std::exception &e) {
+        constexpr auto caption = _(L"予期しないエラー！", L"Unexpected error!");
+        std::wstringstream ss;
+        ss << to_wchar(e.what()).wc_str() << L"\n\n"
+           << _(L"下記URLよりエラーの内容を報告してください。\n", L"Please report the details of the error from the URL below.\n")
+           << L"https://github.com/hengband/hengband/issues";
+        MessageBoxW(NULL, ss.str().data(), caption, MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
+    }
+}
+
 #endif /* WINDOWS */
