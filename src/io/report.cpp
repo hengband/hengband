@@ -12,6 +12,8 @@
 #include "core/visuals-reseter.h"
 #include "game-option/special-options.h"
 #include "io-dump/character-dump.h"
+#include "io/curl-data-sender.h"
+#include "io/http-client.h"
 #include "io/input-key-acceptor.h"
 #include "mind/mind-elementalist.h"
 #include "player-base/player-class.h"
@@ -32,26 +34,19 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
-#include <span>
 #include <string>
 #include <string_view>
 #include <vector>
 
 #ifdef WORLD_SCORE
-#ifdef WINDOWS
-#define CURL_STATICLIB
-#endif
-#include <curl/curl.h>
 
 concptr screen_dump = nullptr;
 
 /*
  * internet resource value
  */
-#define HTTP_TIMEOUT 30 /*!< デフォルトのタイムアウト時間(秒) / Timeout length (second) */
-
 #ifdef JP
-#define SCORE_PATH "http://mars.kmc.gr.jp/~dis/heng_score/register_score.php" /*!< スコア開示URL */
+#define SCORE_PATH "http://mars.kmc.gr.jp/~dis/heng_score_test/register_score.php" /*!< スコア開示URL */
 #else
 #define SCORE_PATH "http://moon.kmc.gr.jp/hengband/hengscore-en/score.cgi" /*!< スコア開示URL */
 #endif
@@ -81,84 +76,6 @@ static void buf_sprintf(std::vector<char> &buf, concptr fmt, ...)
     }
 
     buf.insert(buf.end(), tmpbuf, tmpbuf + ret);
-}
-
-size_t read_callback(char *buffer, size_t size, size_t nitems, void *userdata)
-{
-    auto &data = *static_cast<std::span<const char> *>(userdata);
-    const auto copy_size = std::min<size_t>(size * nitems, data.size());
-
-    std::copy_n(data.begin(), copy_size, buffer);
-    data = data.subspan(copy_size);
-
-    return copy_size;
-}
-
-/*!
- * @brief HTTPによるダンプ内容伝送
- * @param url 伝送先URL
- * @param buf 伝送内容バッファ
- * @return 送信に成功した場合TRUE、失敗した場合FALSE
- */
-static bool http_post(concptr url, const std::vector<char> &buf)
-{
-    bool succeeded = false;
-    CURL *curl = curl_easy_init();
-    if (curl == nullptr) {
-        return false;
-    }
-
-    struct curl_slist *slist = nullptr;
-    slist = curl_slist_append(slist,
-#ifdef JP
-#ifdef SJIS
-        "Content-Type: text/plain; charset=SHIFT_JIS"
-#endif
-#ifdef EUC
-        "Content-Type: text/plain; charset=EUC-JP"
-#endif
-#else
-        "Content-Type: text/plain; charset=ASCII"
-#endif
-    );
-
-    curl_easy_setopt(curl, CURLOPT_URL, url);
-    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist);
-
-    char user_agent[64];
-    snprintf(user_agent, sizeof(user_agent), "Hengband %d.%d.%d", H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH);
-    curl_easy_setopt(curl, CURLOPT_USERAGENT, user_agent);
-
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);
-
-    curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
-    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, HTTP_TIMEOUT);
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, HTTP_TIMEOUT);
-
-    curl_easy_setopt(curl, CURLOPT_POST, 1);
-
-    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
-    curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 10);
-    curl_easy_setopt(curl, CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
-
-    std::span<const char> data(buf);
-    curl_easy_setopt(curl, CURLOPT_READDATA, &data);
-    curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, data.size());
-
-    if (curl_easy_perform(curl) == CURLE_OK) {
-        long response_code;
-        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
-        if (response_code == 200) {
-            succeeded = true;
-        }
-    }
-
-    curl_slist_free_all(slist);
-    curl_easy_cleanup(curl);
-
-    return succeeded;
 }
 
 /*!
@@ -378,11 +295,31 @@ bool report_score(PlayerType *player_ptr)
     }
 
     term_clear();
+
+    HttpClient http_client;
+    http_client.user_agent = format("Hengband %d.%d.%d", H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH);
+
+    auto score_sender = curl_util::create_sender(std::move(score));
+
+    const auto media_type =
+        "text/plain; charset="
+#ifdef JP
+#ifdef SJIS
+        "SHIFT_JIS"
+#endif
+#ifdef EUC
+        "EUC-JP"
+#endif
+#else
+        "ASCII"
+#endif
+        ;
+
     while (true) {
         term_fresh();
         prt(_("スコア送信中...", "Sending the score..."), 0, 0);
         term_fresh();
-        if (http_post(SCORE_PATH, score)) {
+        if (http_client.perform_post_request(SCORE_PATH, score_sender, media_type) == 200) {
             return true;
         }
 
