@@ -2475,6 +2475,21 @@
     <ClCompile Include="..\..\src\system\redrawing-flags-updater.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io\curl-data-receiver.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\curl-data-sender.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\curl-easy-session.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\curl-slist.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\http-client.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5357,6 +5372,21 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\redrawing-flags-updater.h">
       <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\curl-data-receiver.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\curl-data-sender.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\curl-easy-session.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\curl-slist.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\http-client.h">
+      <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

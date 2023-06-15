@@ -290,10 +290,15 @@ hengband_SOURCES = \
 	inventory/recharge-processor.cpp inventory/recharge-processor.h \
 	\
 	io/command-repeater.cpp io/command-repeater.h \
+	io/curl-data-receiver.cpp io/curl-data-receiver.h \
+	io/curl-data-sender.cpp io/curl-data-sender.h \
+	io/curl-easy-session.cpp io/curl-easy-session.h \
+	io/curl-slist.cpp io/curl-slist.h \
 	io/cursor.cpp io/cursor.h \
 	io/exit-panic.cpp io/exit-panic.h \
 	io/files-util.cpp io/files-util.h \
 	io/gf-descriptions.cpp io/gf-descriptions.h \
+	io/http-client.cpp io/http-client.h \
 	io/input-key-acceptor.cpp io/input-key-acceptor.h \
 	io/input-key-processor.cpp io/input-key-processor.h \
 	io/input-key-requester.cpp io/input-key-requester.h \
