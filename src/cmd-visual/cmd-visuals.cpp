@@ -38,18 +38,20 @@
  */
 static std::optional<short> cmd_visuals_aux(int i, int initial_visual_id, short max)
 {
-    auto visual_id = initial_visual_id;
     if (iscntrl(i)) {
-        if (!get_value("Input new number", 0, max - 1, &visual_id)) {
+        const auto new_visual_id = get_value("Input new number", 0, max - 1, initial_visual_id);
+        if (!new_visual_id.has_value()) {
             return std::nullopt;
         }
+
+        return static_cast<short>(new_visual_id.value());
     }
 
     if (isupper(i)) {
-        return static_cast<short>((visual_id + max - 1) % max);
+        return static_cast<short>((initial_visual_id + max - 1) % max);
     }
 
-    return static_cast<short>((visual_id + 1) % max);
+    return static_cast<short>((initial_visual_id + 1) % max);
 }
 
 /*!

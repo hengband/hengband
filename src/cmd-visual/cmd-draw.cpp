@@ -212,7 +212,6 @@ void do_cmd_messages(int num_now)
             while ((str = angband_strstr(str, shower)) != nullptr) {
                 const auto len = shower.length();
                 term_putstr(str - msg, num_lines + 1 - j, len, TERM_YELLOW, shower);
-                str = const_cast<char *>(std::string_view(str).substr(len).data());
                 str += len;
             }
         }

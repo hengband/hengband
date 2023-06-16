@@ -228,12 +228,14 @@ void wiz_summon_random_monster(PlayerType *player_ptr, int num)
 void wiz_summon_specific_monster(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     if (!MonsterRace(r_idx).is_valid()) {
-        int val = 1;
-        if (!get_value("MonsterID", 1, monraces_info.size() - 1, &val)) {
+        const auto new_monrace_id = get_value("MonsterID", 1, monraces_info.size() - 1, 1);
+        if (!new_monrace_id.has_value()) {
             return;
         }
-        r_idx = static_cast<MonsterRaceId>(val);
+
+        r_idx = static_cast<MonsterRaceId>(new_monrace_id.value());
     }
+
     (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, r_idx, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
 }
 
@@ -247,12 +249,14 @@ void wiz_summon_specific_monster(PlayerType *player_ptr, MonsterRaceId r_idx)
 void wiz_summon_pet(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     if (!MonsterRace(r_idx).is_valid()) {
-        int val = 1;
-        if (!get_value("MonsterID", 1, monraces_info.size() - 1, &val)) {
+        const auto new_monrace_id = get_value("MonsterID", 1, monraces_info.size() - 1, 1);
+        if (!new_monrace_id.has_value()) {
             return;
         }
-        r_idx = static_cast<MonsterRaceId>(val);
+
+        r_idx = static_cast<MonsterRaceId>(new_monrace_id.value());
     }
+
     (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, r_idx, PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_FORCE_PET);
 }
 
@@ -263,19 +267,21 @@ void wiz_summon_pet(PlayerType *player_ptr, MonsterRaceId r_idx)
  * @param self 自分に与えるか否か
  * @details デフォルトは100万・GF_ARROW(射撃)。RES_ALL持ちも一撃で殺せる。
  */
-void wiz_kill_target(PlayerType *player_ptr, int dam, AttributeType effect_idx, const bool self)
+void wiz_kill_target(PlayerType *player_ptr, int initial_dam, AttributeType effect_idx, const bool self)
 {
+    auto dam = initial_dam;
     if (dam <= 0) {
-        dam = 1000000;
-        if (!get_value("Damage", 1, 1000000, &dam)) {
+        const auto input_dam = get_value("Damage", 1, 1000000, 1000000);
+        if (!input_dam.has_value()) {
             return;
         }
+
+        dam = input_dam.value();
     }
 
     constexpr auto max = enum2i(AttributeType::MAX);
     auto idx = enum2i(effect_idx);
-
-    if (idx <= 0) {
+    if (effect_idx == AttributeType::NONE) {
         screen_save();
         for (auto i = 1; i <= 23; i++) {
             prt("", i, 0);
@@ -288,11 +294,13 @@ void wiz_kill_target(PlayerType *player_ptr, int dam, AttributeType effect_idx, 
             put_str(format("%03d:%-.10s^", num, name.data()), 1 + i / 5, 1 + (i % 5) * 16);
         }
 
-        if (!get_value("EffectID", 1, max - 1, &idx)) {
+        const auto input_effect_id = get_value("EffectID", 1, max - 1, idx);
+        if (!input_effect_id.has_value()) {
             screen_load();
             return;
         }
 
+        idx = input_effect_id.value();
         screen_load();
     }
 
@@ -301,10 +309,9 @@ void wiz_kill_target(PlayerType *player_ptr, int dam, AttributeType effect_idx, 
         return;
     }
 
-    effect_idx = i2enum<AttributeType>(idx);
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir)) {
         return;
     }
-    fire_ball(player_ptr, effect_idx, dir, dam, 0);
+    fire_ball(player_ptr, i2enum<AttributeType>(idx), dir, dam, 0);
 }

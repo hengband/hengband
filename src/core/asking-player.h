@@ -20,4 +20,4 @@ bool get_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLAGS
 bool get_com(std::string_view prompt, char *command, bool z_escape);
 QUANTITY get_quantity(std::optional<std::string_view> prompt_opt, QUANTITY max);
 void pause_line(int row);
-bool get_value(std::string_view prompt, int min, int max, int *value);
+std::optional<int> get_value(std::string_view prompt, int min, int max, int initial_value = 0);

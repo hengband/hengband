@@ -487,30 +487,25 @@ void wiz_change_status(PlayerType *player_ptr)
  */
 void wiz_create_feature(PlayerType *player_ptr)
 {
-    int f_val1, f_val2;
     POSITION y, x;
     if (!tgt_pt(player_ptr, &x, &y)) {
         return;
     }
 
-    grid_type *g_ptr;
-    g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-
-    f_val1 = g_ptr->feat;
-    if (!get_value(_("実地形ID", "FeatureID"), 0, terrains_info.size() - 1, &f_val1)) {
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto f_val1 = get_value(_("実地形ID", "FeatureID"), 0, terrains_info.size() - 1, g_ptr->feat);
+    if (!f_val1.has_value()) {
         return;
     }
 
-    f_val2 = f_val1;
-    if (!get_value(_("偽装地形ID", "FeatureID"), 0, terrains_info.size() - 1, &f_val2)) {
+    auto f_val2 = get_value(_("偽装地形ID", "FeatureID"), 0, terrains_info.size() - 1, f_val1.value());
+    if (!f_val2.has_value()) {
         return;
     }
 
-    cave_set_feat(player_ptr, y, x, static_cast<FEAT_IDX>(f_val1));
-    g_ptr->mimic = (int16_t)f_val2;
-    TerrainType *f_ptr;
-    f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
-
+    cave_set_feat(player_ptr, y, x, static_cast<short>(f_val1.value()));
+    g_ptr->mimic = static_cast<short>(f_val2.value());
+    auto *f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
     if (f_ptr->flags.has(TerrainCharacteristics::RUNE_PROTECTION) || f_ptr->flags.has(TerrainCharacteristics::RUNE_EXPLOSION)) {
         g_ptr->info |= CAVE_OBJECT;
     } else if (f_ptr->flags.has(TerrainCharacteristics::MIRROR)) {
@@ -698,12 +693,13 @@ static void change_birth_flags()
  */
 void wiz_reset_race(PlayerType *player_ptr)
 {
-    int val = enum2i<PlayerRaceType>(player_ptr->prace);
-    if (!get_value("RaceID", 0, MAX_RACES - 1, &val)) {
+    const auto original_race = enum2i<PlayerRaceType>(player_ptr->prace);
+    const auto new_race = get_value("RaceID", 0, MAX_RACES - 1, original_race);
+    if (!new_race.has_value()) {
         return;
     }
 
-    player_ptr->prace = i2enum<PlayerRaceType>(val);
+    player_ptr->prace = i2enum<PlayerRaceType>(new_race.value());
     rp_ptr = &race_info[enum2i(player_ptr->prace)];
     change_birth_flags();
     handle_stuff(player_ptr);
@@ -715,14 +711,16 @@ void wiz_reset_race(PlayerType *player_ptr)
  */
 void wiz_reset_class(PlayerType *player_ptr)
 {
-    int val = enum2i<PlayerClassType>(player_ptr->pclass);
-    if (!get_value("ClassID", 0, PLAYER_CLASS_TYPE_MAX - 1, &val)) {
+    const auto original_class = enum2i<PlayerClassType>(player_ptr->pclass);
+    const auto new_class_opt = get_value("ClassID", 0, PLAYER_CLASS_TYPE_MAX - 1, original_class);
+    if (!new_class_opt.has_value()) {
         return;
     }
 
-    player_ptr->pclass = i2enum<PlayerClassType>(val);
-    cp_ptr = &class_info[val];
-    mp_ptr = &class_magics_info[val];
+    const auto new_class = new_class_opt.value();
+    player_ptr->pclass = i2enum<PlayerClassType>(new_class);
+    cp_ptr = &class_info[new_class];
+    mp_ptr = &class_magics_info[new_class];
     PlayerClass(player_ptr).init_specific_data();
     change_birth_flags();
     handle_stuff(player_ptr);
@@ -734,18 +732,20 @@ void wiz_reset_class(PlayerType *player_ptr)
  */
 void wiz_reset_realms(PlayerType *player_ptr)
 {
-    int val1 = player_ptr->realm1;
-    if (!get_value("1st Realm (None=0)", 0, MAX_REALM - 1, &val1)) {
+    const auto original_realm1 = player_ptr->realm1;
+    const auto new_realm1 = get_value("1st Realm (None=0)", 0, MAX_REALM - 1, original_realm1);
+    if (!new_realm1.has_value()) {
         return;
     }
 
-    int val2 = player_ptr->realm2;
-    if (!get_value("2nd Realm (None=0)", 0, MAX_REALM - 1, &val2)) {
+    const auto original_realm2 = player_ptr->realm2;
+    const auto new_realm2 = get_value("2nd Realm (None=0)", 0, MAX_REALM - 1, original_realm2);
+    if (!new_realm2.has_value()) {
         return;
     }
 
-    player_ptr->realm1 = static_cast<int16_t>(val1);
-    player_ptr->realm2 = static_cast<int16_t>(val2);
+    player_ptr->realm1 = new_realm1.value();
+    player_ptr->realm2 = new_realm2.value();
     change_birth_flags();
     handle_stuff(player_ptr);
 }
@@ -801,12 +801,12 @@ void wiz_dump_options(void)
  */
 void set_gametime(void)
 {
-    int game_time = 0;
-    if (!get_value("Dungeon Turn", 0, w_ptr->dungeon_turn_limit - 1, &game_time)) {
+    const auto game_time = get_value("Dungeon Turn", 0, w_ptr->dungeon_turn_limit - 1);
+    if (!game_time.has_value()) {
         return;
     }
 
-    w_ptr->dungeon_turn = w_ptr->game_turn = game_time;
+    w_ptr->dungeon_turn = w_ptr->game_turn = game_time.value();
 }
 
 /*!
