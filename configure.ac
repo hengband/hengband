@@ -86,6 +86,8 @@ if test "$use_japanese" = no; then
   worldscore=no
 fi
 if test "$worldscore" != no; then
+  PKG_CHECK_MODULES(libssl, [libssl])
+  PKG_CHECK_MODULES(libcrypto, [libcrypto])
   PKG_CHECK_MODULES(libcurl, [libcurl])
   AC_DEFINE(WORLD_SCORE, 1, [Allow the game to send scores to the score server])
 fi
