@@ -10,6 +10,7 @@
 #include "core/stuff-handler.h"
 #include "core/turn-compensator.h"
 #include "core/visuals-reseter.h"
+#include "external-lib/include-httplib.h"
 #include "game-option/special-options.h"
 #include "io-dump/character-dump.h"
 #include "io/input-key-acceptor.h"
@@ -38,22 +39,17 @@
 #include <vector>
 
 #ifdef WORLD_SCORE
-#ifdef WINDOWS
-#define CURL_STATICLIB
-#endif
-#include <curl/curl.h>
 
 concptr screen_dump = nullptr;
 
 /*
  * internet resource value
  */
-#define HTTP_TIMEOUT 30 /*!< デフォルトのタイムアウト時間(秒) / Timeout length (second) */
+constexpr auto HTTP_CONNECTION_TIMEOUT = 30; /*!< HTTP接続タイムアウト時間(秒) */
 
 #ifdef JP
-#define SCORE_PATH "http://mars.kmc.gr.jp/~dis/heng_score/register_score.php" /*!< スコア開示URL */
-#else
-#define SCORE_PATH "http://moon.kmc.gr.jp/hengband/hengscore-en/score.cgi" /*!< スコア開示URL */
+constexpr auto SCORE_SERVER_SCHEME_HOST = "http://mars.kmc.gr.jp"; /*!< スコアサーバホスト */
+constexpr auto SCORE_SERVER_PATH = "/~dis/heng_score_test/register_score.php"; /*< スコアサーバパス */
 #endif
 
 /*!
@@ -96,69 +92,35 @@ size_t read_callback(char *buffer, size_t size, size_t nitems, void *userdata)
 
 /*!
  * @brief HTTPによるダンプ内容伝送
- * @param url 伝送先URL
- * @param buf 伝送内容バッファ
+ * @param score ダンプ内容
  * @return 送信に成功した場合TRUE、失敗した場合FALSE
  */
-static bool http_post(concptr url, const std::vector<char> &buf)
+static bool report_score(const std::string &score)
 {
-    bool succeeded = false;
-    CURL *curl = curl_easy_init();
-    if (curl == nullptr) {
-        return false;
-    }
+    httplib::Client cli(SCORE_SERVER_SCHEME_HOST);
+    cli.set_connection_timeout(HTTP_CONNECTION_TIMEOUT);
+    cli.set_follow_location(true);
 
-    struct curl_slist *slist = nullptr;
-    slist = curl_slist_append(slist,
+    httplib::Headers headers = {
+        { "User-Agent", format("Hengband %d.%d.%d", H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH) }
+    };
+
+    auto content_type =
 #ifdef JP
 #ifdef SJIS
-        "Content-Type: text/plain; charset=SHIFT_JIS"
+        "text/plain; charset=SHIFT_JIS"
 #endif
 #ifdef EUC
-        "Content-Type: text/plain; charset=EUC-JP"
+        "text/plain; charset=EUC-JP"
 #endif
 #else
-        "Content-Type: text/plain; charset=ASCII"
+        "text/plain; charset=ASCII"
 #endif
-    );
+        ;
 
-    curl_easy_setopt(curl, CURLOPT_URL, url);
-    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist);
+    const auto res = cli.Post(SCORE_SERVER_PATH, score, content_type);
 
-    char user_agent[64];
-    snprintf(user_agent, sizeof(user_agent), "Hengband %d.%d.%d", H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH);
-    curl_easy_setopt(curl, CURLOPT_USERAGENT, user_agent);
-
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);
-
-    curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
-    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, HTTP_TIMEOUT);
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, HTTP_TIMEOUT);
-
-    curl_easy_setopt(curl, CURLOPT_POST, 1);
-
-    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
-    curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 10);
-    curl_easy_setopt(curl, CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
-
-    std::span<const char> data(buf);
-    curl_easy_setopt(curl, CURLOPT_READDATA, &data);
-    curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, data.size());
-
-    if (curl_easy_perform(curl) == CURLE_OK) {
-        long response_code;
-        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
-        if (response_code == 200) {
-            succeeded = true;
-        }
-    }
-
-    curl_slist_free_all(slist);
-    curl_easy_cleanup(curl);
-
-    return succeeded;
+    return res->status == 200;
 }
 
 /*!
@@ -377,12 +339,14 @@ bool report_score(PlayerType *player_ptr)
         score.insert(score.end(), sv.begin(), sv.end());
     }
 
+    const std::string score_data(score.begin(), score.end());
+
     term_clear();
     while (true) {
         term_fresh();
         prt(_("スコア送信中...", "Sending the score..."), 0, 0);
         term_fresh();
-        if (http_post(SCORE_PATH, score)) {
+        if (report_score(score_data)) {
             return true;
         }
 
