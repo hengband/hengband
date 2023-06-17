@@ -493,12 +493,12 @@ void wiz_create_feature(PlayerType *player_ptr)
     }
 
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    auto f_val1 = get_value(_("実地形ID", "FeatureID"), 0, terrains_info.size() - 1, g_ptr->feat);
+    auto f_val1 = input_value_int(_("実地形ID", "FeatureID"), 0, terrains_info.size() - 1, g_ptr->feat);
     if (!f_val1.has_value()) {
         return;
     }
 
-    auto f_val2 = get_value(_("偽装地形ID", "FeatureID"), 0, terrains_info.size() - 1, f_val1.value());
+    auto f_val2 = input_value_int(_("偽装地形ID", "FeatureID"), 0, terrains_info.size() - 1, f_val1.value());
     if (!f_val2.has_value()) {
         return;
     }
@@ -694,7 +694,7 @@ static void change_birth_flags()
 void wiz_reset_race(PlayerType *player_ptr)
 {
     const auto original_race = enum2i<PlayerRaceType>(player_ptr->prace);
-    const auto new_race = get_value("RaceID", 0, MAX_RACES - 1, original_race);
+    const auto new_race = input_value_int("RaceID", 0, MAX_RACES - 1, original_race);
     if (!new_race.has_value()) {
         return;
     }
@@ -712,7 +712,7 @@ void wiz_reset_race(PlayerType *player_ptr)
 void wiz_reset_class(PlayerType *player_ptr)
 {
     const auto original_class = enum2i<PlayerClassType>(player_ptr->pclass);
-    const auto new_class_opt = get_value("ClassID", 0, PLAYER_CLASS_TYPE_MAX - 1, original_class);
+    const auto new_class_opt = input_value_int("ClassID", 0, PLAYER_CLASS_TYPE_MAX - 1, original_class);
     if (!new_class_opt.has_value()) {
         return;
     }
@@ -733,13 +733,13 @@ void wiz_reset_class(PlayerType *player_ptr)
 void wiz_reset_realms(PlayerType *player_ptr)
 {
     const auto original_realm1 = player_ptr->realm1;
-    const auto new_realm1 = get_value("1st Realm (None=0)", 0, MAX_REALM - 1, original_realm1);
+    const auto new_realm1 = input_value_int("1st Realm (None=0)", 0, MAX_REALM - 1, original_realm1);
     if (!new_realm1.has_value()) {
         return;
     }
 
     const auto original_realm2 = player_ptr->realm2;
-    const auto new_realm2 = get_value("2nd Realm (None=0)", 0, MAX_REALM - 1, original_realm2);
+    const auto new_realm2 = input_value_int("2nd Realm (None=0)", 0, MAX_REALM - 1, original_realm2);
     if (!new_realm2.has_value()) {
         return;
     }
@@ -801,7 +801,7 @@ void wiz_dump_options(void)
  */
 void set_gametime(void)
 {
-    const auto game_time = get_value("Dungeon Turn", 0, w_ptr->dungeon_turn_limit - 1);
+    const auto game_time = input_value_int("Dungeon Turn", 0, w_ptr->dungeon_turn_limit - 1);
     if (!game_time.has_value()) {
         return;
     }

@@ -228,7 +228,7 @@ void wiz_summon_random_monster(PlayerType *player_ptr, int num)
 void wiz_summon_specific_monster(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     if (!MonsterRace(r_idx).is_valid()) {
-        const auto new_monrace_id = get_value("MonsterID", 1, monraces_info.size() - 1, 1);
+        const auto new_monrace_id = input_value_int("MonsterID", 1, monraces_info.size() - 1, 1);
         if (!new_monrace_id.has_value()) {
             return;
         }
@@ -249,7 +249,7 @@ void wiz_summon_specific_monster(PlayerType *player_ptr, MonsterRaceId r_idx)
 void wiz_summon_pet(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     if (!MonsterRace(r_idx).is_valid()) {
-        const auto new_monrace_id = get_value("MonsterID", 1, monraces_info.size() - 1, 1);
+        const auto new_monrace_id = input_value_int("MonsterID", 1, monraces_info.size() - 1, 1);
         if (!new_monrace_id.has_value()) {
             return;
         }
@@ -271,7 +271,7 @@ void wiz_kill_target(PlayerType *player_ptr, int initial_dam, AttributeType effe
 {
     auto dam = initial_dam;
     if (dam <= 0) {
-        const auto input_dam = get_value("Damage", 1, 1000000, 1000000);
+        const auto input_dam = input_value_int("Damage", 1, 1000000, 1000000);
         if (!input_dam.has_value()) {
             return;
         }
@@ -294,7 +294,7 @@ void wiz_kill_target(PlayerType *player_ptr, int initial_dam, AttributeType effe
             put_str(format("%03d:%-.10s^", num, name.data()), 1 + i / 5, 1 + (i % 5) * 16);
         }
 
-        const auto input_effect_id = get_value("EffectID", 1, max - 1, idx);
+        const auto input_effect_id = input_value_int("EffectID", 1, max - 1, idx);
         if (!input_effect_id.has_value()) {
             screen_load();
             return;

@@ -241,7 +241,7 @@ void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx
         return;
     }
 
-    const auto input_artifact_id = get_value("Artifact ID", 1, max_a_idx);
+    const auto input_artifact_id = input_value_int("Artifact ID", 1, max_a_idx);
     if (!input_artifact_id.has_value()) {
         return;
     }
@@ -266,7 +266,7 @@ void wiz_modify_item_activation(PlayerType *player_ptr)
 
     constexpr auto min = enum2i(RandomArtActType::NONE);
     constexpr auto max = enum2i(RandomArtActType::MAX) - 1;
-    const auto act_id = get_value("Activation ID", min, max);
+    const auto act_id = input_value_int("Activation ID", min, max);
     if (!act_id.has_value()) {
         return;
     }

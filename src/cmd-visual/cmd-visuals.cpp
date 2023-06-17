@@ -39,7 +39,7 @@
 static std::optional<short> input_new_visual_id(int i, int initial_visual_id, short max)
 {
     if (iscntrl(i)) {
-        const auto new_visual_id = get_value("Input new number", 0, max - 1, initial_visual_id);
+        const auto new_visual_id = input_value_int("Input new number", 0, max - 1, initial_visual_id);
         if (!new_visual_id.has_value()) {
             return std::nullopt;
         }
