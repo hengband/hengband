@@ -410,7 +410,7 @@ void print_health(PlayerType *player_ptr, bool riding)
         if (row_offset > extra_line_count) {
             break;
         }
-        if (col_offset + info.label.length() - 1 > max_width) { // 改行が必要かどうかチェック。length() - 1してるのは\0の分を文字数から取り除くため
+        if (col_offset + info.label.length() > max_width) { // 改行が必要かどうかチェック
             col_offset = 0;
             row_offset++;
         }
