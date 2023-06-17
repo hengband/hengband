@@ -125,13 +125,9 @@ void do_cmd_visuals(PlayerType *player_ptr)
             }
 
             auto_dump_printf(auto_dump_stream, _("\n# モンスターの[色/文字]の設定\n\n", "\n# Monster attr/char definitions\n\n"));
-            for (const auto &[r_idx, r_ref] : monraces_info) {
-                if (r_ref.name.empty()) {
-                    continue;
-                }
-
-                auto_dump_printf(auto_dump_stream, "# %s\n", r_ref.name.data());
-                auto_dump_printf(auto_dump_stream, "R:%d:0x%02X/0x%02X\n\n", enum2i(r_ref.idx), (byte)(r_ref.x_attr), (byte)(r_ref.x_char));
+            for (const auto &[monrace_id, monrace] : monraces_info) {
+                auto_dump_printf(auto_dump_stream, "# %s\n", monrace.name.data());
+                auto_dump_printf(auto_dump_stream, "R:%d:0x%02X/0x%02X\n\n", enum2i(monrace_id), monrace.x_attr, monrace.x_char);
             }
 
             close_auto_dump(&auto_dump_stream, mark);
@@ -244,19 +240,14 @@ void do_cmd_visuals(PlayerType *player_ptr)
 
                 switch (c) {
                 case 'n': {
-                    auto prev_r = monrace_id;
-                    do {
-                        const auto new_monrace_id_opt = cmd_visuals_aux(i, num, static_cast<short>(monraces_info.size()));
-                        if (!new_monrace_id_opt.has_value()) {
-                            monrace_id = prev_r;
-                            break;
-                        }
+                    const auto new_monrace_id_opt = cmd_visuals_aux(i, num, static_cast<short>(monraces_info.size()));
+                    if (!new_monrace_id_opt.has_value()) {
+                        break;
+                    }
 
-                        const auto new_monrace_id = new_monrace_id_opt.value();
-                        monrace_id = i2enum<MonsterRaceId>(new_monrace_id);
-                        num = new_monrace_id;
-                    } while (monraces_info[monrace_id].name.empty());
-
+                    const auto new_monrace_id = new_monrace_id_opt.value();
+                    monrace_id = i2enum<MonsterRaceId>(new_monrace_id);
+                    num = new_monrace_id;
                     break;
                 }
                 case 'a': {

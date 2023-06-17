@@ -127,21 +127,13 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         item.ident = IDENT_STORE;
         fullname = describe_flavor(player_ptr, &item, OD_NAME_ONLY);
     } else if (category == "MONSTER") {
-        MonsterRaceInfo *r_ptr;
         const auto &monster_name = tokens[1];
 
         // @details プレイヤーもダミーで入っているので、1つ引いておかないと数が合わなくなる.
         const auto monraces_size = static_cast<short>(monraces_info.size() - 1);
-        while (true) {
-            auto r_idx = i2enum<MonsterRaceId>(get_rumor_num(monster_name, monraces_size));
-            r_ptr = &monraces_info[r_idx];
-            if (!r_ptr->name.empty()) {
-                break;
-            }
-        }
-
+        auto monrace_id = i2enum<MonsterRaceId>(get_rumor_num(monster_name, monraces_size));
+        auto *r_ptr = &monraces_info[monrace_id];
         fullname = r_ptr->name;
-
         if (!r_ptr->r_sights) {
             r_ptr->r_sights++;
         }

@@ -151,12 +151,6 @@ void wiz_restore_monster_max_num(MonsterRaceId r_idx)
     }
 
     auto *r_ptr = &monraces_info[r_idx];
-    if (r_ptr->name.empty()) {
-        msg_print("そのモンスターは存在しません。");
-        msg_print(nullptr);
-        return;
-    }
-
     auto n = 0;
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         n = 1;
