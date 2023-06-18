@@ -19,6 +19,7 @@
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-flags.h"
+#include "monster-race/race-indice-types.h"
 #include "mutation/mutation-processor.h"
 #include "object-activation/activation-others.h"
 #include "player-base/player-class.h"
@@ -228,12 +229,12 @@ void wiz_summon_random_monster(PlayerType *player_ptr, int num)
 void wiz_summon_specific_monster(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     if (!MonsterRace(r_idx).is_valid()) {
-        const auto new_monrace_id = input_value_int("MonsterID", 1, monraces_info.size() - 1, 1);
+        const auto new_monrace_id = input_value("MonsterID", 1, monraces_info.size() - 1, MonsterRaceId::FILTHY_URCHIN);
         if (!new_monrace_id.has_value()) {
             return;
         }
 
-        r_idx = static_cast<MonsterRaceId>(new_monrace_id.value());
+        r_idx = new_monrace_id.value();
     }
 
     (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, r_idx, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
@@ -249,12 +250,12 @@ void wiz_summon_specific_monster(PlayerType *player_ptr, MonsterRaceId r_idx)
 void wiz_summon_pet(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     if (!MonsterRace(r_idx).is_valid()) {
-        const auto new_monrace_id = input_value_int("MonsterID", 1, monraces_info.size() - 1, 1);
+        const auto new_monrace_id = input_value("MonsterID", 1, monraces_info.size() - 1, MonsterRaceId::FILTHY_URCHIN);
         if (!new_monrace_id.has_value()) {
             return;
         }
 
-        r_idx = static_cast<MonsterRaceId>(new_monrace_id.value());
+        r_idx = new_monrace_id.value();
     }
 
     (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, r_idx, PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_FORCE_PET);
@@ -280,7 +281,7 @@ void wiz_kill_target(PlayerType *player_ptr, int initial_dam, AttributeType effe
     }
 
     constexpr auto max = enum2i(AttributeType::MAX);
-    auto idx = enum2i(effect_idx);
+    auto idx = effect_idx;
     if (effect_idx == AttributeType::NONE) {
         screen_save();
         for (auto i = 1; i <= 23; i++) {
@@ -294,7 +295,7 @@ void wiz_kill_target(PlayerType *player_ptr, int initial_dam, AttributeType effe
             put_str(format("%03d:%-.10s^", num, name.data()), 1 + i / 5, 1 + (i % 5) * 16);
         }
 
-        const auto input_effect_id = input_value_int("EffectID", 1, max - 1, idx);
+        const auto input_effect_id = input_value("EffectID", 1, max - 1, idx);
         if (!input_effect_id.has_value()) {
             screen_load();
             return;
@@ -305,7 +306,7 @@ void wiz_kill_target(PlayerType *player_ptr, int initial_dam, AttributeType effe
     }
 
     if (self) {
-        project(player_ptr, -1, 0, player_ptr->y, player_ptr->x, dam, i2enum<AttributeType>(idx), PROJECT_KILL | PROJECT_PLAYER);
+        project(player_ptr, -1, 0, player_ptr->y, player_ptr->x, dam, idx, PROJECT_KILL | PROJECT_PLAYER);
         return;
     }
 
@@ -313,5 +314,5 @@ void wiz_kill_target(PlayerType *player_ptr, int initial_dam, AttributeType effe
     if (!get_aim_dir(player_ptr, &dir)) {
         return;
     }
-    fire_ball(player_ptr, i2enum<AttributeType>(idx), dir, dam, 0);
+    fire_ball(player_ptr, idx, dir, dam, 0);
 }

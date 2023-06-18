@@ -36,7 +36,8 @@
  * @param max ビジュアルIDの最大数
  * @return 新しいビジュアルID
  */
-static std::optional<short> input_new_visual_id(int i, int initial_visual_id, short max)
+template <typename T>
+static std::optional<T> input_new_visual_id(int i, T initial_visual_id, int max)
 {
     if (iscntrl(i)) {
         const auto new_visual_id = input_value_int("Input new number", 0, max - 1, initial_visual_id);
@@ -44,14 +45,14 @@ static std::optional<short> input_new_visual_id(int i, int initial_visual_id, sh
             return std::nullopt;
         }
 
-        return static_cast<short>(new_visual_id.value());
+        return static_cast<T>(new_visual_id.value());
     }
 
     if (isupper(i)) {
-        return static_cast<short>((initial_visual_id + max - 1) % max);
+        return static_cast<T>((initial_visual_id + max - 1) % max);
     }
 
-    return static_cast<short>((initial_visual_id + 1) % max);
+    return static_cast<T>((initial_visual_id + 1) % max);
 }
 
 /*!
@@ -256,7 +257,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                         break;
                     }
 
-                    r_ptr->x_attr = static_cast<byte>(visual_id.value());
+                    r_ptr->x_attr = visual_id.value();
                     need_redraw = true;
                     break;
                 }
@@ -266,7 +267,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                         break;
                     }
 
-                    r_ptr->x_char = static_cast<byte>(visual_id.value());
+                    r_ptr->x_char = visual_id.value();
                     need_redraw = true;
                     break;
                 }
@@ -341,7 +342,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                         break;
                     }
 
-                    baseitem.x_attr = static_cast<byte>(visual_id.value());
+                    baseitem.x_attr = visual_id.value();
                     need_redraw = true;
                     break;
                 }
@@ -351,7 +352,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                         break;
                     }
 
-                    baseitem.x_char = static_cast<byte>(visual_id.value());
+                    baseitem.x_char = visual_id.value();
                     need_redraw = true;
                     break;
                 }
@@ -429,7 +430,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                         break;
                     }
 
-                    f_ptr->x_attr[lighting_level] = static_cast<byte>(visual_id.value());
+                    f_ptr->x_attr[lighting_level] = visual_id.value();
                     need_redraw = true;
                     break;
                 }
@@ -439,7 +440,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                         break;
                     }
 
-                    f_ptr->x_char[lighting_level] = static_cast<byte>(visual_id.value());
+                    f_ptr->x_char[lighting_level] = visual_id.value();
                     need_redraw = true;
                     break;
                 }

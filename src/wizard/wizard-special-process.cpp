@@ -493,18 +493,19 @@ void wiz_create_feature(PlayerType *player_ptr)
     }
 
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    auto f_val1 = input_value_int(_("実地形ID", "FeatureID"), 0, terrains_info.size() - 1, g_ptr->feat);
+    const int max = terrains_info.size() - 1;
+    const auto f_val1 = input_value(_("実地形ID", "FeatureID"), 0, max, g_ptr->feat);
     if (!f_val1.has_value()) {
         return;
     }
 
-    auto f_val2 = input_value_int(_("偽装地形ID", "FeatureID"), 0, terrains_info.size() - 1, f_val1.value());
+    const auto f_val2 = input_value(_("偽装地形ID", "FeatureID"), 0, max, f_val1.value());
     if (!f_val2.has_value()) {
         return;
     }
 
-    cave_set_feat(player_ptr, y, x, static_cast<short>(f_val1.value()));
-    g_ptr->mimic = static_cast<short>(f_val2.value());
+    cave_set_feat(player_ptr, y, x, f_val1.value());
+    g_ptr->mimic = f_val2.value();
     auto *f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
     if (f_ptr->flags.has(TerrainCharacteristics::RUNE_PROTECTION) || f_ptr->flags.has(TerrainCharacteristics::RUNE_EXPLOSION)) {
         g_ptr->info |= CAVE_OBJECT;
@@ -693,13 +694,12 @@ static void change_birth_flags()
  */
 void wiz_reset_race(PlayerType *player_ptr)
 {
-    const auto original_race = enum2i<PlayerRaceType>(player_ptr->prace);
-    const auto new_race = input_value_int("RaceID", 0, MAX_RACES - 1, original_race);
+    const auto new_race = input_value("RaceID", 0, MAX_RACES - 1, player_ptr->prace);
     if (!new_race.has_value()) {
         return;
     }
 
-    player_ptr->prace = i2enum<PlayerRaceType>(new_race.value());
+    player_ptr->prace = new_race.value();
     rp_ptr = &race_info[enum2i(player_ptr->prace)];
     change_birth_flags();
     handle_stuff(player_ptr);
@@ -711,14 +711,14 @@ void wiz_reset_race(PlayerType *player_ptr)
  */
 void wiz_reset_class(PlayerType *player_ptr)
 {
-    const auto original_class = enum2i<PlayerClassType>(player_ptr->pclass);
-    const auto new_class_opt = input_value_int("ClassID", 0, PLAYER_CLASS_TYPE_MAX - 1, original_class);
+    const auto new_class_opt = input_value("ClassID", 0, PLAYER_CLASS_TYPE_MAX - 1, player_ptr->pclass);
     if (!new_class_opt.has_value()) {
         return;
     }
 
-    const auto new_class = new_class_opt.value();
-    player_ptr->pclass = i2enum<PlayerClassType>(new_class);
+    const auto new_class_enum = new_class_opt.value();
+    const auto new_class = enum2i(new_class_enum);
+    player_ptr->pclass = new_class_enum;
     cp_ptr = &class_info[new_class];
     mp_ptr = &class_magics_info[new_class];
     PlayerClass(player_ptr).init_specific_data();
@@ -732,14 +732,12 @@ void wiz_reset_class(PlayerType *player_ptr)
  */
 void wiz_reset_realms(PlayerType *player_ptr)
 {
-    const auto original_realm1 = player_ptr->realm1;
-    const auto new_realm1 = input_value_int("1st Realm (None=0)", 0, MAX_REALM - 1, original_realm1);
+    const auto new_realm1 = input_value("1st Realm (None=0)", 0, MAX_REALM - 1, player_ptr->realm1);
     if (!new_realm1.has_value()) {
         return;
     }
 
-    const auto original_realm2 = player_ptr->realm2;
-    const auto new_realm2 = input_value_int("2nd Realm (None=0)", 0, MAX_REALM - 1, original_realm2);
+    const auto new_realm2 = input_value("2nd Realm (None=0)", 0, MAX_REALM - 1, player_ptr->realm2);
     if (!new_realm2.has_value()) {
         return;
     }
