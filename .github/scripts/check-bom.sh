@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SRC_FILES=$(find src/ -name \*.cpp -or -name \*.h)
+SRC_FILES=$(find src/ -type f ! -path "src/external-lib/*" \( -name \*.cpp -or -name \*.h \))
 
 STATUS=0
 

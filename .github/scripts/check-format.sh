@@ -3,7 +3,7 @@
 sudo apt-get update >/dev/null
 sudo apt-get install clang-format-15 >/dev/null
 
-SRC_FILES=$(find src/ -name \*.cpp -or -name \*.h)
+SRC_FILES=$(find src/ -type f ! -path "src/external-lib/*" \( -name \*.cpp -or -name \*.h \))
 
 clang-format-15 -style=file:.github/scripts/check-clang-format-style -i $SRC_FILES
 clang_format_result=$?
