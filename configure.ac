@@ -155,7 +155,7 @@ AC_PROG_GCC_TRADITIONAL
 AC_FUNC_MEMCMP
 AC_FUNC_STRFTIME
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS(gethostname mkdir select socket strtol vsnprintf mkstemp usleep)
+AC_CHECK_FUNCS(gethostname mkdir select socket strtol mkstemp usleep)
 
 AC_CONFIG_FILES(Makefile src/Makefile lib/Makefile lib/apex/Makefile \
 	lib/bone/Makefile lib/data/Makefile \
