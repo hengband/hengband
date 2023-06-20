@@ -128,13 +128,14 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
         }
         break;
     case EC_RIGHT: {
+        const int len = strlen(tb->lines_list[tb->cy]);
 #ifdef JP
-        if (iskanji(tb->lines_list[tb->cy][tb->cx])) {
+        if ((tb->cx + 1 < len) && iskanji(tb->lines_list[tb->cy][tb->cx])) {
             tb->cx++;
         }
 #endif
         tb->cx++;
-        int len = strlen(tb->lines_list[tb->cy]);
+
         if (len < tb->cx) {
             tb->cx = len;
             if (!tb->lines_list[tb->cy + 1]) {
