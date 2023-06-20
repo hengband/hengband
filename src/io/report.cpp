@@ -52,7 +52,7 @@ constexpr auto HTTP_CONNECTION_TIMEOUT = 30; /*!< HTTP接続タイムアウト�
 
 #ifdef JP
 constexpr auto SCORE_SERVER_SCHEME_HOST = "http://mars.kmc.gr.jp"; /*!< スコアサーバホスト */
-constexpr auto SCORE_SERVER_PATH = "/~dis/heng_score_test/register_score.php"; /*< スコアサーバパス */
+constexpr auto SCORE_SERVER_PATH = "/~dis/heng_score/register_score.php"; /*< スコアサーバパス */
 #endif
 
 size_t read_callback(char *buffer, size_t size, size_t nitems, void *userdata)
