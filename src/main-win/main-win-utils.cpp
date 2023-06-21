@@ -67,41 +67,29 @@ void open_dir_in_explorer(std::string_view filename)
 
 /*!
  * @brief GetOpenFileNameW APIのラッパー
- * @details
- * ワイド文字列版のAPIを使用するが、選択ファイルのパスをマルチバイト文字列で受け取る。
  * @param ofn GetOpenFileNameWに指定するOPENFILENAMEW構造体へのポインタ。
  * lpstrFile、nMaxFileメンバの設定は無視される（関数内で上書きするため）。
  * @param path_dir GetOpenFileNameWに指定する初期フォルダパス。
- * empty以外を指定した場合、ワイド文字列に変換しlpstrInitialDirに設定される。
- * @param path_file 選択ファイルパス
- * @param max_name_size filenameのバッファサイズ
- * @retval true filenameに選択されたファイルのパスが設定されている。
- * @retval false ファイル選択がキャンセルされた。
+ * @param path_file 初期選択ファイルパス
+ * @param max_name_size 選択ファイルパスの最大長
+ * @return 選択されたファイルパス。選択をキャンセルした場合はstd::nullopt。
  */
-std::optional<std::string> get_open_filename(OPENFILENAMEW *ofn, const std::filesystem::path &path_dir, const std::filesystem::path &path_file, DWORD max_name_size)
+std::optional<std::filesystem::path> get_open_filename(OPENFILENAMEW *ofn, const std::filesystem::path &path_dir, const std::filesystem::path &path_file, DWORD max_name_size)
 {
     std::vector<WCHAR> buf(max_name_size);
-    const auto &path_file_str = path_file.string();
-    wcscpy(&buf[0], to_wchar(path_file_str.data()).wc_str());
-    const char *dir = nullptr;
-    if (!path_dir.empty()) {
-        const auto &dirname_str = path_dir.string();
-        dir = dirname_str.data();
+    const auto path_file_str = path_file.wstring();
+    const auto path_dir_str = path_dir.wstring();
+
+    if (path_file_str.length() < buf.size()) {
+        std::copy(path_file_str.begin(), path_file_str.end(), buf.begin());
     }
 
-    to_wchar wc_dir(dir);
+    ofn->lpstrFile = buf.data();
+    ofn->nMaxFile = buf.size();
+    ofn->lpstrInitialDir = path_dir_str.empty() ? nullptr : path_dir_str.data();
 
-    // Overwrite struct data
-    ofn->lpstrFile = &buf[0];
-    ofn->nMaxFile = max_name_size - 1;
-    ofn->lpstrInitialDir = wc_dir.wc_str();
-
-    // call API
     if (GetOpenFileNameW(ofn)) {
-        // to multibyte
-        char multibyte_filename[1024];
-        strncpy_s(multibyte_filename, max_name_size, to_multibyte(&buf[0]).c_str(), _TRUNCATE);
-        return multibyte_filename;
+        return std::make_optional<std::filesystem::path>(buf.data());
     }
 
     return std::nullopt;
