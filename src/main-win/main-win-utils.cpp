@@ -74,7 +74,7 @@ void open_dir_in_explorer(std::string_view filename)
  * @param max_name_size 選択ファイルパスの最大長
  * @return 選択されたファイルパス。選択をキャンセルした場合はstd::nullopt。
  */
-std::optional<std::string> get_open_filename(OPENFILENAMEW *ofn, const std::filesystem::path &path_dir, const std::filesystem::path &path_file, DWORD max_name_size)
+std::optional<std::filesystem::path> get_open_filename(OPENFILENAMEW *ofn, const std::filesystem::path &path_dir, const std::filesystem::path &path_file, DWORD max_name_size)
 {
     std::vector<WCHAR> buf(max_name_size);
     const auto path_file_str = path_file.wstring();
@@ -89,7 +89,7 @@ std::optional<std::string> get_open_filename(OPENFILENAMEW *ofn, const std::file
     ofn->lpstrInitialDir = path_dir_str.empty() ? nullptr : path_dir_str.data();
 
     if (GetOpenFileNameW(ofn)) {
-        return std::filesystem::path(buf.data()).string();
+        return std::make_optional<std::filesystem::path>(buf.data());
     }
 
     return std::nullopt;
