@@ -2181,6 +2181,9 @@
     <ClCompile Include="..\..\src\core\score-util.cpp">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\external-lib\httplib.cpp">
+      <Filter>external-lib</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\view\display-scores.cpp">
       <Filter>view</Filter>
     </ClCompile>
@@ -5358,6 +5361,12 @@
     <ClInclude Include="..\..\src\system\redrawing-flags-updater.h">
       <Filter>system</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\external-lib\httplib.h">
+      <Filter>external-lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\external-lib\include-httplib.h">
+      <Filter>external-lib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5615,6 +5624,9 @@
     </Filter>
     <Filter Include="item-info">
       <UniqueIdentifier>{3aefd2e8-8dd8-41dd-bc6b-7dadd75dfd6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external-lib">
+      <UniqueIdentifier>{b0f75b81-c15a-43de-a96e-139123aa2ebb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

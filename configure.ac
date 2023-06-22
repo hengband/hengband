@@ -86,7 +86,8 @@ if test "$use_japanese" = no; then
   worldscore=no
 fi
 if test "$worldscore" != no; then
-  PKG_CHECK_MODULES(libcurl, [libcurl])
+  PKG_CHECK_MODULES(libssl, [libssl])
+  PKG_CHECK_MODULES(libcrypto, [libcrypto])
   AC_DEFINE(WORLD_SCORE, 1, [Allow the game to send scores to the score server])
 fi
 
@@ -153,7 +154,7 @@ AC_PROG_GCC_TRADITIONAL
 AC_FUNC_MEMCMP
 AC_FUNC_STRFTIME
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS(gethostname mkdir select socket strtol vsnprintf mkstemp usleep)
+AC_CHECK_FUNCS(gethostname mkdir select socket strtol mkstemp usleep)
 
 AC_CONFIG_FILES(Makefile src/Makefile lib/Makefile lib/apex/Makefile \
 	lib/bone/Makefile lib/data/Makefile \

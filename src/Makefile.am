@@ -193,6 +193,9 @@ hengband_SOURCES = \
 	effect/effect-processor.cpp effect/effect-processor.h \
 	effect/effect-characteristics.h \
 	\
+	external-lib/httplib.cpp external-lib/httplib.h \
+	external-lib/include-httplib.h \
+	\
 	flavor/flag-inscriptions-table.cpp flavor/flag-inscriptions-table.h \
 	flavor/flavor-describer.cpp flavor/flavor-describer.h \
 	flavor/flavor-util.cpp flavor/flavor-util.h \
@@ -1047,11 +1050,11 @@ EXTRA_DIST = \
 	gcc-wrap
 
 DEFAULT_INCLUDES = -I$(srcdir) -I$(top_builddir)/src
-CPPFLAGS += $(XFT_CFLAGS) $(libcurl_CFLAGS)
+CPPFLAGS += $(XFT_CFLAGS) $(libssl_CFLAGS) $(libcrypto_CFLAGS)
 if PCH
 CPPFLAGS += -include ../src/stdafx.h
 endif
-LIBS += $(XFT_LIBS) $(libcurl_LIBS)
+LIBS += $(XFT_LIBS) $(libssl_LIBS) $(libcrypto_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CXXCOMPILE = $(srcdir)/gcc-wrap $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
