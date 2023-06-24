@@ -228,21 +228,26 @@ void wizard_item_modifier(PlayerType *player_ptr)
 
 /*!
  * @brief 固定アーティファクトの出現フラグをリセットする
- * @param a_idx 指定したアーティファクトID
- * @details 外からはenum class を受け取るが、この関数内では数値の直指定処理なので数値型にキャストする.
+ * @param reset_artifact_idx 指定したアーティファクトID
  */
 void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx, bool aware)
 {
-    auto max_a_idx = enum2i(artifacts_info.rbegin()->first);
-    int int_a_idx = enum2i(reset_artifact_idx);
-    if (int_a_idx <= 0) {
-        if (!get_value("Artifact ID", 1, max_a_idx, &int_a_idx)) {
-            return;
-        }
+    const auto max_a_idx = enum2i(artifacts_info.rbegin()->first);
+    const auto message = aware ? "Modified." : "Restored.";
+    auto &artifacts = ArtifactsInfo::get_instance();
+    if (reset_artifact_idx != FixedArtifactId::NONE) {
+        artifacts.get_artifact(reset_artifact_idx).is_generated = aware;
+        msg_print(message);
+        return;
     }
 
-    ArtifactsInfo::get_instance().get_artifact(i2enum<FixedArtifactId>(int_a_idx)).is_generated = aware;
-    msg_print(aware ? "Modified." : "Restored.");
+    const auto input_artifact_id = input_value("Artifact ID", 1, max_a_idx, FixedArtifactId::GALADRIEL_PHIAL);
+    if (!input_artifact_id.has_value()) {
+        return;
+    }
+
+    artifacts.get_artifact(input_artifact_id.value()).is_generated = aware;
+    msg_print(message);
 }
 
 /*!
@@ -259,12 +264,14 @@ void wiz_modify_item_activation(PlayerType *player_ptr)
         return;
     }
 
-    int val;
-    if (!get_value("Activation ID", enum2i(RandomArtActType::NONE), enum2i(RandomArtActType::MAX) - 1, &val)) {
+    constexpr auto min = enum2i(RandomArtActType::NONE);
+    constexpr auto max = enum2i(RandomArtActType::MAX) - 1;
+    const auto act_id = input_value<RandomArtActType>("Activation ID", min, max);
+    if (!act_id.has_value()) {
         return;
     }
 
-    auto act_idx = i2enum<RandomArtActType>(val);
+    auto act_idx = act_id.value();
     o_ptr->art_flags.set(TR_ACTIVATE);
     o_ptr->activation_id = act_idx;
 }

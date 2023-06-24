@@ -24,7 +24,7 @@ void text_to_ascii(char *buf, std::string_view sv, size_t bufsize);
 void ascii_to_text(char *buf, std::string_view sv, size_t bufsize);
 size_t angband_strcpy(char *buf, std::string_view src, size_t bufsize);
 size_t angband_strcat(char *buf, std::string_view src, size_t bufsize);
-char *angband_strstr(concptr haystack, concptr needle);
+char *angband_strstr(const char *haystack, std::string_view needle);
 char *angband_strchr(concptr ptr, char ch);
 char *ltrim(char *p);
 char *rtrim(char *p);

@@ -21,6 +21,7 @@
 #include <climits>
 #include <iostream>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 
 /*
@@ -438,26 +439,32 @@ void pause_line(int row)
     prt("", row, 0);
 }
 
-bool get_value(std::string_view prompt, int min, int max, int *value)
+std::optional<int> input_value_int(std::string_view prompt, int min, int max, int initial_value)
 {
-    std::stringstream st;
-    int val;
+    std::stringstream ss;
     char tmp_val[12] = "";
-    std::to_chars(std::begin(tmp_val), std::end(tmp_val) - 1, *value);
-    st << prompt << "(" << min << "-" << max << "): ";
-    int digit = std::max(std::to_string(min).length(), std::to_string(max).length());
+    std::to_chars(std::begin(tmp_val), std::end(tmp_val) - 1, initial_value);
+    ss << prompt << "(" << min << "-" << max << "): ";
+    auto digit = std::max(std::to_string(min).length(), std::to_string(max).length());
     while (true) {
-        if (!get_string(st.str().data(), tmp_val, digit)) {
-            return false;
+        if (!get_string(ss.str().data(), tmp_val, digit)) {
+            return std::nullopt;
         }
 
-        val = atoi(tmp_val);
+        try {
+            auto val = std::stoi(tmp_val);
+            if ((val < min) || (val > max)) {
+                msg_format(_("%dから%dの間で指定して下さい。", "It must be between %d to %d."), min, max);
+                continue;
+            }
 
-        if (min <= val && max >= val) {
-            break;
+            return val;
+        } catch (std::invalid_argument const &) {
+            msg_print(_("数値を入力して下さい。", "Please input numeric value."));
+            continue;
+        } catch (std::out_of_range const &) {
+            msg_print(_("入力可能な数値の範囲を超えています。", "Input value overflows the maximum number."));
+            continue;
         }
-        msg_format(_("%dから%dの間で指定して下さい。", "It must be between %d to %d."), min, max);
     }
-    *value = val;
-    return true;
 }

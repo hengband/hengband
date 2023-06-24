@@ -12,6 +12,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
+#include "monster-race/race-indice-types.h"
 #include "player-info/self-info.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-info.h"
@@ -104,13 +105,14 @@ void wizard_game_modifier(PlayerType *player_ptr)
  */
 void wiz_enter_quest(PlayerType *player_ptr)
 {
-    auto quest_num = 0;
     auto &quest_list = QuestList::get_instance();
     const auto quest_max = enum2i(quest_list.rbegin()->first);
-    if (!get_value("QuestID", 0, quest_max - 1, &quest_num)) {
+    const auto quest_num = input_value("QuestID", 0, quest_max - 1, QuestId::NONE);
+    if (!quest_num.has_value()) {
         return;
     }
-    auto q_idx = i2enum<QuestId>(quest_num);
+
+    auto q_idx = quest_num.value();
     init_flags = i2enum<init_flags_type>(INIT_SHOW_TEXT | INIT_ASSIGN);
     player_ptr->current_floor_ptr->quest_number = q_idx;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
@@ -141,20 +143,15 @@ void wiz_complete_quest(PlayerType *player_ptr)
 void wiz_restore_monster_max_num(MonsterRaceId r_idx)
 {
     if (!MonsterRace(r_idx).is_valid()) {
-        int val = 1;
-        if (!get_value("MonsterID", 1, monraces_info.size() - 1, &val)) {
+        const auto restore_monrace_id = input_value("MonsterID", 1, monraces_info.size() - 1, MonsterRaceId::FILTHY_URCHIN);
+        if (!restore_monrace_id.has_value()) {
             return;
         }
-        r_idx = static_cast<MonsterRaceId>(val);
+
+        r_idx = restore_monrace_id.value();
     }
 
     auto *r_ptr = &monraces_info[r_idx];
-    if (r_ptr->name.empty()) {
-        msg_print("そのモンスターは存在しません。");
-        msg_print(nullptr);
-        return;
-    }
-
     auto n = 0;
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         n = 1;

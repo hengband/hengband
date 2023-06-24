@@ -478,23 +478,26 @@ size_t angband_strcat(char *buf, std::string_view src, size_t bufsize)
  *
  * angband_strstr() can handle Kanji strings correctly.
  */
-char *angband_strstr(concptr haystack, concptr needle)
+char *angband_strstr(const char *haystack, std::string_view needle)
 {
-    int l1 = strlen(haystack);
-    int l2 = strlen(needle);
+    std::string_view haystack_view(haystack);
+    auto l1 = haystack_view.length();
+    auto l2 = needle.length();
+    if (l1 < l2) {
+        return nullptr;
+    }
 
-    if (l1 >= l2) {
-        for (int i = 0; i <= l1 - l2; i++) {
-            if (!strncmp(haystack + i, needle, l2)) {
-                return (char *)haystack + i;
-            }
+    for (size_t i = 0; i <= l1 - l2; i++) {
+        const auto part = haystack_view.substr(i);
+        if (part.starts_with(needle)) {
+            return const_cast<char *>(haystack) + i;
+        }
 
 #ifdef JP
-            if (iskanji(*(haystack + i))) {
-                i++;
-            }
-#endif
+        if (iskanji(*(haystack + i))) {
+            i++;
         }
+#endif
     }
 
     return nullptr;

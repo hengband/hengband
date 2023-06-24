@@ -3,6 +3,7 @@
 #include "system/angband.h"
 #include <optional>
 #include <string_view>
+#include <type_traits>
 
 /*
  * Bit flags for control of get_check_strict()
@@ -20,4 +21,16 @@ bool get_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLAGS
 bool get_com(std::string_view prompt, char *command, bool z_escape);
 QUANTITY get_quantity(std::optional<std::string_view> prompt_opt, QUANTITY max);
 void pause_line(int row);
-bool get_value(std::string_view prompt, int min, int max, int *value);
+std::optional<int> input_value_int(std::string_view prompt, int min, int max, int initial_value = 0);
+
+template <typename T>
+std::optional<T> input_value(std::string_view prompt, int min, int max, T initial_value = static_cast<T>(0))
+    requires std::is_integral_v<T> || std::is_enum_v<T>
+{
+    auto result = input_value_int(prompt, min, max, static_cast<int>(initial_value));
+    if (!result.has_value()) {
+        return std::nullopt;
+    }
+
+    return std::make_optional(static_cast<T>(result.value()));
+}

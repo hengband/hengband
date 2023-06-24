@@ -87,20 +87,18 @@ bool research_mon(PlayerType *player_ptr)
     std::vector<MonsterRaceId> who;
 
     /* Collect matching monsters */
-    for (const auto &[r_idx, r_ref] : monraces_info) {
-        /* Empty monster */
-        if (!MonsterRace(r_ref.idx).is_valid() || r_ref.name.empty()) {
+    for (const auto &[monrace_id, monrace] : monraces_info) {
+        if (!MonsterRace(monrace_id).is_valid()) {
             continue;
         }
 
-        /* XTRA HACK WHATSEARCH */
         /* Require non-unique monsters if needed */
-        if (norm && r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
+        if (norm && monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
             continue;
         }
 
         /* Require unique monsters if needed */
-        if (uniq && r_ref.kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        if (uniq && monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
             continue;
         }
 
@@ -118,7 +116,7 @@ bool research_mon(PlayerType *player_ptr)
                 }
             }
 
-            std::string temp2 = _(r_ref.E_name, r_ref.name);
+            std::string temp2 = _(monrace.E_name, monrace.name);
             for (auto &ch : temp2) {
                 if (isupper(ch)) {
                     ch = static_cast<char>(tolower(ch));
@@ -126,13 +124,13 @@ bool research_mon(PlayerType *player_ptr)
             }
 
 #ifdef JP
-            if (angband_strstr(temp2.data(), temp) || angband_strstr(r_ref.name.data(), temp))
+            if (angband_strstr(temp2.data(), temp) || angband_strstr(monrace.name.data(), temp))
 #else
             if (angband_strstr(temp2.data(), temp))
 #endif
-                who.push_back(r_ref.idx);
-        } else if (all || (r_ref.d_char == sym)) {
-            who.push_back(r_ref.idx);
+                who.push_back(monrace_id);
+        } else if (all || (monrace.d_char == sym)) {
+            who.push_back(monrace_id);
         }
     }
 

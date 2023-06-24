@@ -12,6 +12,7 @@
 #include "game-option/special-options.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
+#include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
@@ -19,6 +20,8 @@
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
+#include <optional>
+#include <string>
 #include <string_view>
 
 // Encode the screen colors
@@ -141,21 +144,23 @@ static void screen_dump_lines(int wid, int hgt, FILE *fff)
 /*!
  * @brief ファイルへ書き込めない場合にエラーを表示する
  * @param fff ダンプファイルへの参照ポインタ
- * @param buf バッファ
- * @return ファイルへ書き込めるならTRUE、書き込めないならFALSE
+ * @param path 保存先HTMLファイルのパス
+ * @param need_message メッセージ表示の必要性
+ * @return メッセージを表示して後続処理を実行するか否か
  */
-static bool check_screen_html_can_open(FILE *fff, char *filename, int message)
+static bool check_screen_html_can_open(FILE *fff, const std::filesystem::path &path, bool need_message)
 {
     if (fff) {
         return true;
     }
-    if (message == 0) {
+
+    if (!need_message) {
         return false;
     }
 
-    msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), filename);
-    msg_print(nullptr);
-    return false;
+    const auto &path_str = path.string();
+    const auto mes = format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), path_str.data());
+    THROW_EXCEPTION(std::runtime_error, mes);
 }
 
 /*!
@@ -196,40 +201,39 @@ static void write_html_footer(FILE *tmpfff, FILE *fff)
     fprintf(fff, "\n");
 }
 
-void do_cmd_save_screen_html_aux(char *filename, int message)
+void exe_cmd_save_screen_html(const std::filesystem::path &path, bool need_message)
 {
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
-    auto *fff = angband_fopen(filename, FileOpenMode::WRITE);
-    if (!check_screen_html_can_open(fff, filename, message)) {
+    auto *fff = angband_fopen(path, FileOpenMode::WRITE);
+    if (!check_screen_html_can_open(fff, path, need_message)) {
         return;
     }
 
-    if (message) {
+    if (need_message) {
         screen_save();
     }
 
-    const auto &path = path_build(ANGBAND_DIR_USER, "htmldump.prf");
-    auto *tmpfff = angband_fopen(path, FileOpenMode::READ);
+    const auto &path_prf = path_build(ANGBAND_DIR_USER, "htmldump.prf");
+    auto *tmpfff = angband_fopen(path_prf, FileOpenMode::READ);
     write_html_header(tmpfff, fff);
     screen_dump_lines(wid, hgt, fff);
     write_html_footer(tmpfff, fff);
     angband_fclose(fff);
-    if (message) {
-        msg_print(_("画面(記念撮影)をファイルに書き出しました。", "Screen dump saved."));
-        msg_print(nullptr);
+    if (!need_message) {
+        return;
     }
 
-    if (message) {
-        screen_load();
-    }
+    msg_print(_("画面(記念撮影)をファイルに書き出しました。", "Screen dump saved."));
+    msg_print(nullptr);
+    screen_load();
 }
 
 /*!
  * @brief HTML方式で記念撮影する / Save a screen dump to a file
  * @param なし
  */
-static void do_cmd_save_screen_html(void)
+static void exe_cmd_save_screen_html_with_naming()
 {
     char tmp[256] = "screen.html";
     if (!get_string(_("ファイル名: ", "File name: "), tmp, 80)) {
@@ -237,9 +241,8 @@ static void do_cmd_save_screen_html(void)
     }
 
     auto path = path_build(ANGBAND_DIR_USER, tmp);
-    auto filename = path.string();
     msg_print(nullptr);
-    do_cmd_save_screen_html_aux(filename.data(), 1);
+    exe_cmd_save_screen_html(path, true);
 }
 
 /*!
@@ -379,7 +382,7 @@ void do_cmd_save_screen(PlayerType *player_ptr)
     bool old_use_graphics = update_use_graphics(player_ptr);
 
     if (html_dump) {
-        do_cmd_save_screen_html();
+        exe_cmd_save_screen_html_with_naming();
         do_cmd_redraw(player_ptr);
     } else if (!do_cmd_save_screen_text(wid, hgt)) {
         return;

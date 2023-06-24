@@ -53,12 +53,12 @@ typedef const char *concptr;
  */
 typedef int errr;
 
-#define MAX_UCHAR 255 /*!< Maximum value storable in a "byte" (hard-coded) */
-#define MAX_SHORT 32767 /*!< Maximum value storable in a "int16_t" (hard-coded) */
-
-#define MAX_NLEN 160 /*!< Maximum length of object's name */
+constexpr auto MAX_UCHAR = 255; /*!< Maximum value storable in a "byte" (hard-coded) */
+constexpr auto MAX_SHORT = 32767; /*!< Maximum value storable in a "int16_t" (hard-coded) */
+constexpr auto MAX_INT = 2147483647;
+constexpr auto MAX_NLEN = 160; /*!< Maximum length of object's name */
+constexpr auto MAX_MONSTER_NAME = 160; /*!< モンスター名称の最大バイト数 / Max characters of monster's name */
 #define MAX_INSCRIPTION _(76, 69) /*!< Maximum length of object's inscription */
-#define MAX_MONSTER_NAME 160 /*!< モンスター名称の最大バイト数 / Max characters of monster's name */
 
 /*!
  * @brief 符号なし整数の簡潔な定義

@@ -103,21 +103,13 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
         is_modified = true;
     }
 
-    if (is_modified || !savefile_base[0]) {
-        const auto &savefile_str = savefile.string();
-        auto s = savefile_str.data();
-        while (true) {
-            auto t = angband_strstr(s, PATH_SEP);
-            if (!t) {
-                break;
-            }
-            s = t + 1;
-        }
-
+    if (is_modified || savefile_base.empty()) {
 #ifdef SAVEFILE_USE_UID
-        savefile_base = angband_strstr(s, ".") + 1;
+        const auto &savefile_str = savefile.filename().string();
+        const auto split = str_split(savefile_str, '.');
+        savefile_base = split[1];
 #else
-        savefile_base = s;
+        savefile_base = savefile.filename().string();
 #endif
     }
 

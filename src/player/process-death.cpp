@@ -108,12 +108,10 @@ static int show_killing_monster(PlayerType *player_ptr)
         return 1;
     }
 
-    if (const auto start_ptr = angband_strstr(lines[0].data(), "『");
-        (start_ptr != nullptr) && suffix(lines[1], "』")) {
-        const auto start_pos = start_ptr - lines[0].data();
-
+    if (const auto start_pos = lines[0].find("『");
+        (start_pos != std::string::npos) && suffix(lines[1], "』")) {
         if (lines[0].length() + lines[1].length() - start_pos <= GRAVE_LINE_WIDTH) {
-            const auto name = lines[0].substr(start_pos).append(lines[1]);
+            const auto &name = lines[0].substr(start_pos).append(lines[1]);
             std::string_view title(lines[0].data(), start_pos);
             show_tomb_line(title, GRAVE_KILLER_NAME_ROW);
             show_tomb_line(name, GRAVE_KILLER_NAME_ROW + 1);
