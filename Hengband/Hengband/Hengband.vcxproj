@@ -279,6 +279,9 @@
     <ClCompile Include="..\..\src\monster-race\race-brightness-mask.cpp" />
     <ClCompile Include="..\..\src\monster-race\race-feature-mask.cpp" />
     <ClCompile Include="..\..\src\monster\monster-pain-describer.cpp" />
+    <ClCompile Include="..\..\src\net\curl-easy-session.cpp" />
+    <ClCompile Include="..\..\src\net\curl-slist.cpp" />
+    <ClCompile Include="..\..\src\net\http-client.cpp" />
     <ClCompile Include="..\..\src\object-enchant\enchanter-factory.cpp" />
     <ClCompile Include="..\..\src\mspell\mspell-attack\abstract-mspell.cpp" />
     <ClCompile Include="..\..\src\mspell\mspell-data.cpp" />
@@ -992,6 +995,9 @@
     <ClInclude Include="..\..\src\mspell\mspell-attack\abstract-mspell.h" />
     <ClInclude Include="..\..\src\mspell\mspell-data.h" />
     <ClInclude Include="..\..\src\mspell\mspell-result.h" />
+    <ClInclude Include="..\..\src\net\curl-easy-session.h" />
+    <ClInclude Include="..\..\src\net\curl-slist.h" />
+    <ClInclude Include="..\..\src\net\http-client.h" />
     <ClInclude Include="..\..\src\object-enchant\enchanter-factory.h" />
     <ClInclude Include="..\..\src\object-enchant\protector\apply-magic-soft-armor.h" />
     <ClInclude Include="..\..\src\object-enchant\others\apply-magic-lite.h" />
