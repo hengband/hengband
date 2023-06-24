@@ -570,6 +570,10 @@ hengband_SOURCES = \
 	mutation/mutation-processor.cpp mutation/mutation-processor.h \
 	mutation/mutation-techniques.cpp mutation/mutation-techniques.h \
 	\
+	net/curl-easy-session.cpp net/curl-easy-session.h \
+	net/curl-slist.cpp net/curl-slist.h \
+	net/http-client.cpp net/http-client.h \
+	\
 	object/item-tester-hooker.cpp object/item-tester-hooker.h \
 	object/object-broken.cpp object/object-broken.h \
 	object/object-flags.cpp object/object-flags.h \

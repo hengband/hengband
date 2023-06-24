@@ -2475,6 +2475,15 @@
     <ClCompile Include="..\..\src\system\redrawing-flags-updater.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\net\curl-easy-session.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\net\curl-slist.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\net\http-client.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5358,6 +5367,15 @@
     <ClInclude Include="..\..\src\system\redrawing-flags-updater.h">
       <Filter>system</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\net\http-client.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\net\curl-easy-session.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\net\curl-slist.h">
+      <Filter>net</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5615,6 +5633,9 @@
     </Filter>
     <Filter Include="item-info">
       <UniqueIdentifier>{3aefd2e8-8dd8-41dd-bc6b-7dadd75dfd6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net">
+      <UniqueIdentifier>{6f311bdc-4407-49b7-96ab-bc2ed187b61c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
