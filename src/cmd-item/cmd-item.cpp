@@ -229,7 +229,7 @@ void do_cmd_inscribe(PlayerType *player_ptr)
         angband_strcpy(out_val, o_ptr->inscription.value(), MAX_INSCRIPTION);
     }
 
-    if (get_string(_("銘: ", "Inscription: "), out_val, MAX_INSCRIPTION)) {
+    if (input_string(_("銘: ", "Inscription: "), out_val, MAX_INSCRIPTION)) {
         o_ptr->inscription.emplace(out_val);
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         static constexpr auto flags_srf = {

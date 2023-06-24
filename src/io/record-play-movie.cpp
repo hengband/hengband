@@ -343,7 +343,7 @@ void prepare_movie_hooks(PlayerType *player_ptr)
     std::stringstream ss;
     ss << player_ptr->base_name << ".amv";
     auto movie_filename = ss.str();
-    if (!get_string(_("ムービー記録ファイル: ", "Movie file name: "), movie_filename.data(), 80)) {
+    if (!input_string(_("ムービー記録ファイル: ", "Movie file name: "), movie_filename.data(), 80)) {
         return;
     }
 

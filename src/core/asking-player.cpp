@@ -226,7 +226,7 @@ bool askfor(char *buf, int len, bool numpad_cursor)
  *
  * We clear the input, and return FALSE, on "ESCAPE".
  */
-bool get_string(std::string_view prompt, char *buf, int len)
+bool input_string(std::string_view prompt, char *buf, int len)
 {
     bool res;
     msg_print(nullptr);
@@ -457,7 +457,7 @@ std::optional<int> input_integer(std::string_view prompt, int min, int max, int 
     ss << prompt << "(" << min << "-" << max << "): ";
     auto digit = std::max(std::to_string(min).length(), std::to_string(max).length());
     while (true) {
-        if (!get_string(ss.str().data(), tmp_val, digit)) {
+        if (!input_string(ss.str().data(), tmp_val, digit)) {
             return std::nullopt;
         }
 

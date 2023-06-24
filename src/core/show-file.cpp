@@ -466,7 +466,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
             FILE *ffp;
             char xtmp[81] = "";
 
-            if (!get_string(_("ファイル名: ", "File name: "), xtmp, 80)) {
+            if (!input_string(_("ファイル名: ", "File name: "), xtmp, 80)) {
                 continue;
             }
 

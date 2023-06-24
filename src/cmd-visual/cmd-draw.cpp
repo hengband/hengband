@@ -127,7 +127,7 @@ void do_cmd_player_status(PlayerType *player_ptr)
             process_player_name(player_ptr);
         } else if (c == 'f') {
             strnfmt(tmp, sizeof(tmp), "%s.txt", player_ptr->base_name);
-            if (get_string(_("ファイル名: ", "File name: "), tmp, 80)) {
+            if (input_string(_("ファイル名: ", "File name: "), tmp, 80)) {
                 if (tmp[0] && (tmp[0] != ' ')) {
                     update_playtime();
                     file_character(player_ptr, tmp);

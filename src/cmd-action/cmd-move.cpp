@@ -463,7 +463,7 @@ void do_cmd_rest(PlayerType *player_ptr)
         concptr p = _("休憩 (0-9999, '*' で HP/MP全快, '&' で必要なだけ): ", "Rest (0-9999, '*' for HP/SP, '&' as needed): ");
         char out_val[80];
         strcpy(out_val, "&");
-        if (!get_string(p, out_val, 4)) {
+        if (!input_string(p, out_val, 4)) {
             return;
         }
 

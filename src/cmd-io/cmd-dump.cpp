@@ -52,7 +52,7 @@ void do_cmd_pref(PlayerType *player_ptr)
 {
     char buf[80];
     strcpy(buf, "");
-    if (!get_string(_("設定変更コマンド: ", "Pref: "), buf, 80)) {
+    if (!input_string(_("設定変更コマンド: ", "Pref: "), buf, 80)) {
         return;
     }
 
@@ -200,7 +200,7 @@ void do_cmd_note(void)
 {
     char buf[80];
     strcpy(buf, "");
-    if (!get_string(_("メモ: ", "Note: "), buf, 60)) {
+    if (!input_string(_("メモ: ", "Note: "), buf, 60)) {
         return;
     }
     if (!buf[0] || (buf[0] == ' ')) {

@@ -62,7 +62,7 @@ static const std::vector<debug_spell_command> debug_spell_commands_list = {
 void wiz_debug_spell(PlayerType *player_ptr)
 {
     char tmp_val[50] = "\0";
-    if (!get_string("SPELL: ", tmp_val, 32)) {
+    if (!input_string("SPELL: ", tmp_val, 32)) {
         return;
     }
 

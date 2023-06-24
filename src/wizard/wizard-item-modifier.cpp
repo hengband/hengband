@@ -872,7 +872,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     bool fixed = true;
 
     while (1) {
-        if (get_string(_("何をお望み？ ", "For what do you wish?"), buf, (MAX_NLEN - 1))) {
+        if (input_string(_("何をお望み？ ", "For what do you wish?"), buf, (MAX_NLEN - 1))) {
             break;
         }
         if (confirm) {

@@ -150,7 +150,7 @@ static void accept_winner_message(PlayerType *player_ptr)
     char buf[1024] = "";
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_WINNER);
     do {
-        while (!get_string(_("*勝利*メッセージ: ", "*Winning* message: "), buf, sizeof(buf))) {
+        while (!input_string(_("*勝利*メッセージ: ", "*Winning* message: "), buf, sizeof(buf))) {
             ;
         }
     } while (!get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));

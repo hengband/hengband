@@ -77,7 +77,7 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
         buf = _("乗馬可能モンスターのリスト", "Ridable monster list.");
     } else if (sym == KTRL('M')) {
         all = true;
-        if (!get_string(_("名前(英語の場合小文字で可)", "Enter name:"), temp, 70)) {
+        if (!input_string(_("名前(英語の場合小文字で可)", "Enter name:"), temp, 70)) {
             temp[0] = 0;
             return;
         }

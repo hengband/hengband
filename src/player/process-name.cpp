@@ -135,7 +135,7 @@ void get_name(PlayerType *player_ptr)
     char tmp[64];
     strcpy(tmp, player_ptr->name);
 
-    if (get_string(_("キャラクターの名前を入力して下さい: ", "Enter a name for your character: "), tmp, 15)) {
+    if (input_string(_("キャラクターの名前を入力して下さい: ", "Enter a name for your character: "), tmp, 15)) {
         strcpy(player_ptr->name, tmp);
     }
 

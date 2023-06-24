@@ -402,7 +402,7 @@ static std::string name_unnatural_random_artifact(PlayerType *player_ptr, ItemEn
         return ss.str();
     };
     char new_name[160] = "";
-    if (!get_string(ask_msg, new_name, sizeof new_name) || !new_name[0]) {
+    if (!input_string(ask_msg, new_name, sizeof new_name) || !new_name[0]) {
         if (one_in_(2)) {
             return wrap_name(get_table_sindarin_aux());
         } else {

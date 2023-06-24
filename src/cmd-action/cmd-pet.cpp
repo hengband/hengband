@@ -360,7 +360,7 @@ static void do_name_pet(PlayerType *player_ptr)
         }
 
         /* Get a new inscription (possibly empty) */
-        if (get_string(_("名前: ", "Name: "), out_val, 15)) {
+        if (input_string(_("名前: ", "Name: "), out_val, 15)) {
             if (out_val[0]) {
                 /* Save the inscription */
                 m_ptr->nickname = out_val;
