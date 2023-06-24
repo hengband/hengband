@@ -110,7 +110,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
 
     wr_u32b(tmp32u);
     for (int i = tmp32u - 1; i >= 0; i--) {
-        wr_string(message_str(i));
+        wr_string(*message_str(i));
     }
 
     uint16_t tmp16u = static_cast<uint16_t>(monraces_info.size());

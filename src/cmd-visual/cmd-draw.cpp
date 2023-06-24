@@ -161,7 +161,7 @@ void do_cmd_player_status(PlayerType *player_ptr)
  */
 void do_cmd_message_one(void)
 {
-    prt(format("> %s", message_str(0).data()), 0, 0);
+    prt(format("> %s", message_str(0)->data()), 0, 0);
 }
 
 /*!
@@ -201,7 +201,7 @@ void do_cmd_messages(int num_now)
         int skey;
         for (j = 0; (j < num_lines) && (i + j < n); j++) {
             const auto msg_str = message_str(i + j);
-            const auto *msg = msg_str.data();
+            const auto *msg = msg_str->data();
             c_prt((i + j < num_now ? TERM_WHITE : TERM_SLATE), msg, num_lines + 1 - j, 0);
             if (shower.empty()) {
                 continue;
@@ -264,7 +264,7 @@ void do_cmd_messages(int num_now)
             for (int z = i + 1; z < n; z++) {
                 // @details ダメ文字対策でstringを使わない.
                 const auto msg_str = message_str(z);
-                const auto *msg = msg_str.data();
+                const auto *msg = msg_str->data();
                 if (angband_strstr(msg, finder_str) != nullptr) {
                     i = z;
                     break;

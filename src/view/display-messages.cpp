@@ -80,13 +80,13 @@ int32_t message_num(void)
  * @param age メッセージの世代
  * @return メッセージの文字列ポインタ
  */
-std::string message_str(int age)
+std::shared_ptr<const std::string> message_str(int age)
 {
     if ((age < 0) || (age >= message_num())) {
-        return "";
+        return std::make_shared<const std::string>("");
     }
 
-    return *message_history[age];
+    return message_history[age];
 }
 
 static void message_add_aux(std::string str)
