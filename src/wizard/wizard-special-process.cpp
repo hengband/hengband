@@ -531,20 +531,19 @@ static std::optional<short> select_debugging_dungeon(short initial_dungeon_id)
 }
 
 /*
- * @brief 選択したダンジョンの任意フロアを選択する
+ * @brief 選択したダンジョンの任意レベルを選択する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param dungeon_id ダンジョン番号
- * @return フロアを選択したらtrue、キャンセルならfalse
- * @details 0を指定すると地上に飛ぶが、元いた場所にしか飛ばない
- * @todo 可能ならダンジョンの入口 (例：ルルイエなら大洋の真ん中)へ飛べるようにしたい
+ * @return レベルを選択したらその値、キャンセルならnullopt
  */
 static std::optional<int> select_debugging_floor(const FloorType &floor, int dungeon_id)
 {
     const auto &dungeon = dungeons_info[dungeon_id];
     const auto max_depth = dungeon.maxdepth;
     const auto min_depth = dungeon.mindepth;
+    const auto is_current_dungeon = floor.dungeon_idx == dungeon_id;
     auto initial_depth = floor.dun_level;
-    if (floor.dungeon_idx != dungeon_id) {
+    if (!is_current_dungeon) {
         initial_depth = min_depth;
     }
 
@@ -587,25 +586,34 @@ static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH de
 void wiz_jump_to_dungeon(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto dungeon_id_opt = select_debugging_dungeon(floor.dungeon_idx);
+    const auto is_in_dungeon = floor.is_in_dungeon();
+    const auto dungeon_idx = is_in_dungeon ? floor.dungeon_idx : static_cast<short>(DUNGEON_ANGBAND);
+    const auto dungeon_id_opt = select_debugging_dungeon(dungeon_idx);
     if (!dungeon_id_opt.has_value()) {
+        if (!is_in_dungeon) {
+            return;
+        }
+
+        if (get_check(("Jump to the ground?"))) {
+            wiz_jump_floor(player_ptr, 0, 0);
+        }
+
         return;
     }
 
     const auto dungeon_id = dungeon_id_opt.value();
-    const auto level = select_debugging_floor(floor, dungeon_id);
-    if (!level.has_value()) {
+    const auto level_opt = select_debugging_floor(floor, dungeon_id);
+    if (!level_opt.has_value()) {
         return;
     }
 
-    const auto &dungeon = dungeons_info[dungeon_id];
-    command_arg = static_cast<short>(std::clamp(level.value(), dungeon.mindepth, dungeon.maxdepth));
-    msg_format("You jump to dungeon level %d.", command_arg);
+    const auto level = level_opt.value();
+    msg_format("You jump to dungeon level %d.", level);
     if (autosave_l) {
         do_cmd_save_game(player_ptr, true);
     }
 
-    wiz_jump_floor(player_ptr, dungeon_id, command_arg);
+    wiz_jump_floor(player_ptr, dungeon_id, level);
 }
 
 /*!
