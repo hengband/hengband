@@ -28,11 +28,14 @@
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
+#include <fstream>
 #include <span>
+#include <sstream>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -55,33 +58,6 @@ concptr screen_dump = nullptr;
 #else
 #define SCORE_PATH "http://moon.kmc.gr.jp/hengband/hengscore-en/score.cgi" /*!< スコア開示URL */
 #endif
-
-/*!
- * @brief 転送用バッファにフォーマット指定した文字列データを追加する
- * @param buf 追加先バッファの参照ポインタ
- * @param fmt 文字列フォーマット
- * @return 追加後のバッファ容量
- */
-static void buf_sprintf(std::vector<char> &buf, concptr fmt, ...)
-{
-    int ret;
-    char tmpbuf[8192];
-    va_list ap;
-
-    va_start(ap, fmt);
-#if defined(HAVE_VSNPRINTF)
-    ret = vsnprintf(tmpbuf, sizeof(tmpbuf), fmt, ap);
-#else
-    ret = vsprintf(tmpbuf, fmt, ap);
-#endif
-    va_end(ap);
-
-    if (ret < 0) {
-        return;
-    }
-
-    buf.insert(buf.end(), tmpbuf, tmpbuf + ret);
-}
 
 size_t read_callback(char *buffer, size_t size, size_t nitems, void *userdata)
 {
@@ -162,14 +138,13 @@ static bool http_post(concptr url, const std::vector<char> &buf)
 }
 
 /*!
- * @brief キャラクタダンプを作って BUFに保存
+ * @brief キャラクタダンプを引数で指定した出力ストリームに書き込む
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param dumpbuf 伝送内容バッファ
+ * @param stream 書き込む出力ストリーム
  * @return エラーコード
  */
-static errr make_dump(PlayerType *player_ptr, std::vector<char> &dumpbuf)
+static errr make_dump(PlayerType *player_ptr, std::ostream &stream)
 {
-    char buf[1024];
     FILE *fff;
     GAME_TEXT file_name[1024];
 
@@ -189,13 +164,12 @@ static errr make_dump(PlayerType *player_ptr, std::vector<char> &dumpbuf)
     make_character_dump(player_ptr, fff);
     angband_fclose(fff);
 
-    /* Open for read */
-    fff = angband_fopen(file_name, FileOpenMode::READ);
-
-    while (fgets(buf, 1024, fff)) {
-        (void)buf_sprintf(dumpbuf, "%s", buf);
+    // 一時ファイルを削除する前に閉じるためブロックにする
+    {
+        std::ifstream ifs(file_name);
+        stream << ifs.rdbuf();
     }
-    angband_fclose(fff);
+
     fd_kill(file_name);
 
     /* Success */
@@ -208,21 +182,17 @@ static errr make_dump(PlayerType *player_ptr, std::vector<char> &dumpbuf)
  */
 concptr make_screen_dump(PlayerType *player_ptr)
 {
-    static concptr html_head[] = {
-        "<html>\n<body text=\"#ffffff\" bgcolor=\"#000000\">\n",
-        "<pre>",
-        0,
-    };
-    static concptr html_foot[] = {
-        "</pre>\n",
-        "</body>\n</html>\n",
-        0,
-    };
+    constexpr auto html_head =
+        "<html>\n<body text=\"#ffffff\" bgcolor=\"#000000\">\n"
+        "<pre>\n";
+    constexpr auto html_foot =
+        "</pre>\n"
+        "</body>\n</html>\n";
 
     int wid, hgt;
     term_get_size(&wid, &hgt);
 
-    std::vector<char> screen_buf;
+    std::stringstream screen_ss;
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     bool old_use_graphics = use_graphics;
@@ -244,15 +214,13 @@ concptr make_screen_dump(PlayerType *player_ptr)
         handle_stuff(player_ptr);
     }
 
-    for (int i = 0; html_head[i]; i++) {
-        buf_sprintf(screen_buf, html_head[i]);
-    }
+    screen_ss << html_head;
 
     /* Dump the screen */
     for (int y = 0; y < hgt; y++) {
         /* Start the row */
         if (y != 0) {
-            buf_sprintf(screen_buf, "\n");
+            screen_ss << '\n';
         }
 
         /* Dump each row */
@@ -295,31 +263,28 @@ concptr make_screen_dump(PlayerType *player_ptr)
                 rv = angband_color_table[a][1];
                 gv = angband_color_table[a][2];
                 bv = angband_color_table[a][3];
-                buf_sprintf(screen_buf, "%s<font color=\"#%02x%02x%02x\">", ((y == 0 && x == 0) ? "" : "</font>"), rv, gv, bv);
+                screen_ss << format("%s<font color=\"#%02x%02x%02x\">", ((y == 0 && x == 0) ? "" : "</font>"), rv, gv, bv);
                 old_a = a;
             }
 
             if (cc) {
-                buf_sprintf(screen_buf, "%s", cc);
+                screen_ss << cc;
             } else {
-                buf_sprintf(screen_buf, "%c", c);
+                screen_ss << c;
             }
         }
     }
 
-    buf_sprintf(screen_buf, "</font>");
+    screen_ss << "</font>\n";
 
-    for (int i = 0; html_foot[i]; i++) {
-        buf_sprintf(screen_buf, html_foot[i]);
-    }
+    screen_ss << html_foot;
 
-    /* Screen dump size is too big ? */
     concptr ret;
-    if (screen_buf.size() + 1 > SCREEN_BUF_MAX_SIZE) {
-        ret = nullptr;
+    if (const auto screen_dump_size = screen_ss.tellp();
+        (0 <= screen_dump_size) && (screen_dump_size < SCREEN_BUF_MAX_SIZE)) {
+        ret = string_make(screen_ss.str().data());
     } else {
-        screen_buf.push_back('\0');
-        ret = string_make(screen_buf.data());
+        ret = nullptr;
     }
 
     if (!old_use_graphics) {
@@ -347,42 +312,44 @@ concptr make_screen_dump(PlayerType *player_ptr)
  */
 bool report_score(PlayerType *player_ptr)
 {
-    std::vector<char> score;
+    std::stringstream score_ss;
     std::string personality_desc = ap_ptr->title;
     personality_desc.append(_(ap_ptr->no ? "の" : "", " "));
 
     auto realm1_name = PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST) ? get_element_title(player_ptr->element) : realm_names[player_ptr->realm1];
-    buf_sprintf(score, "name: %s\n", player_ptr->name);
-    buf_sprintf(score, "version: %s\n", get_version().data());
-    buf_sprintf(score, "score: %d\n", calc_score(player_ptr));
-    buf_sprintf(score, "level: %d\n", player_ptr->lev);
-    buf_sprintf(score, "depth: %d\n", player_ptr->current_floor_ptr->dun_level);
-    buf_sprintf(score, "maxlv: %d\n", player_ptr->max_plv);
-    buf_sprintf(score, "maxdp: %d\n", max_dlv[DUNGEON_ANGBAND]);
-    buf_sprintf(score, "au: %d\n", player_ptr->au);
-    buf_sprintf(score, "turns: %d\n", turn_real(player_ptr, w_ptr->game_turn));
-    buf_sprintf(score, "sex: %d\n", player_ptr->psex);
-    buf_sprintf(score, "race: %s\n", rp_ptr->title);
-    buf_sprintf(score, "class: %s\n", cp_ptr->title);
-    buf_sprintf(score, "seikaku: %s\n", personality_desc.data());
-    buf_sprintf(score, "realm1: %s\n", realm1_name);
-    buf_sprintf(score, "realm2: %s\n", realm_names[player_ptr->realm2]);
-    buf_sprintf(score, "killer: %s\n", player_ptr->died_from.data());
-    buf_sprintf(score, "-----charcter dump-----\n");
+    score_ss << format("name: %s\n", player_ptr->name)
+             << format("version: %s\n", get_version().data())
+             << format("score: %ld\n", calc_score(player_ptr))
+             << format("level: %d\n", player_ptr->lev)
+             << format("depth: %d\n", player_ptr->current_floor_ptr->dun_level)
+             << format("maxlv: %d\n", player_ptr->max_plv)
+             << format("maxdp: %d\n", max_dlv[DUNGEON_ANGBAND])
+             << format("au: %d\n", player_ptr->au)
+             << format("turns: %d\n", turn_real(player_ptr, w_ptr->game_turn))
+             << format("sex: %d\n", player_ptr->psex)
+             << format("race: %s\n", rp_ptr->title)
+             << format("class: %s\n", cp_ptr->title)
+             << format("seikaku: %s\n", personality_desc.data())
+             << format("realm1: %s\n", realm1_name)
+             << format("realm2: %s\n", realm_names[player_ptr->realm2])
+             << format("killer: %s\n", player_ptr->died_from.data())
+             << "-----charcter dump-----\n";
 
-    make_dump(player_ptr, score);
+    make_dump(player_ptr, score_ss);
     if (screen_dump) {
-        buf_sprintf(score, "-----screen shot-----\n");
-        const std::string_view sv(screen_dump);
-        score.insert(score.end(), sv.begin(), sv.end());
+        score_ss << "-----screen shot-----\n"
+                 << screen_dump;
     }
+
+    const auto score = score_ss.str();
+    const std::vector<char> score_data(score.begin(), score.end());
 
     term_clear();
     while (true) {
         term_fresh();
         prt(_("スコア送信中...", "Sending the score..."), 0, 0);
         term_fresh();
-        if (http_post(SCORE_PATH, score)) {
+        if (http_post(SCORE_PATH, score_data)) {
             return true;
         }
 
