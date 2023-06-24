@@ -482,7 +482,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
             o_ptr->pval = 1;
         } else if (o_ptr->pval == 0) {
             const auto limit = std::min(5, smith.get_addable_count(effect, o_ptr));
-            const auto num_enchants = input_value<short>(prompt, 1, limit, 1);
+            const auto num_enchants = input_numerics<short>(prompt, 1, limit, 1);
             if (!num_enchants.has_value()) {
                 return;
             }
@@ -493,7 +493,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
         add_essence_count = o_ptr->pval;
     } else if (effect == SmithEffectType::SLAY_GLOVE) {
         const auto max_val = player_ptr->lev / 7 + 3;
-        const auto num_enchants = input_value(prompt, 1, max_val, 1);
+        const auto num_enchants = input_numerics(prompt, 1, max_val, 1);
         if (!num_enchants.has_value()) {
             return;
         }

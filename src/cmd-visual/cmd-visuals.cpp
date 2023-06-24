@@ -40,7 +40,7 @@ template <typename T>
 static std::optional<T> input_new_visual_id(int i, T initial_visual_id, int max)
 {
     if (iscntrl(i)) {
-        const auto new_visual_id = input_value_int("Input new number", 0, max - 1, initial_visual_id);
+        const auto new_visual_id = input_integer("Input new number", 0, max - 1, initial_visual_id);
         if (!new_visual_id.has_value()) {
             return std::nullopt;
         }

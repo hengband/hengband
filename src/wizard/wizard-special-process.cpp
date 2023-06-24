@@ -405,7 +405,7 @@ void wiz_change_status(PlayerType *player_ptr)
     for (int i = 0; i < A_MAX; i++) {
         const auto max_max_ability_score = player_ptr->stat_max_max[i];
         const auto max_ability_score = player_ptr->stat_max[i];
-        const auto new_ability_score = input_value(stat_names[i], 3, max_max_ability_score, max_ability_score);
+        const auto new_ability_score = input_numerics(stat_names[i], 3, max_max_ability_score, max_ability_score);
         if (!new_ability_score.has_value()) {
             return;
         }
@@ -417,7 +417,7 @@ void wiz_change_status(PlayerType *player_ptr)
 
     const auto unskilled = PlayerSkill::weapon_exp_at(PlayerSkillRank::UNSKILLED);
     const auto master = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
-    const auto proficiency_opt = input_value(_("熟練度", "Proficiency"), unskilled, master, static_cast<short>(master));
+    const auto proficiency_opt = input_numerics(_("熟練度", "Proficiency"), unskilled, master, static_cast<short>(master));
     if (!proficiency_opt.has_value()) {
         return;
     }
@@ -447,7 +447,7 @@ void wiz_change_status(PlayerType *player_ptr)
         player_ptr->spell_exp[k] = std::min(PlayerSkill::spell_exp_at(PlayerSkillRank::EXPERT), proficiency);
     }
 
-    const auto gold = input_value("Gold: ", 0, MAX_INT, player_ptr->au);
+    const auto gold = input_numerics("Gold: ", 0, MAX_INT, player_ptr->au);
     if (!gold.has_value()) {
         return;
     }
@@ -458,7 +458,7 @@ void wiz_change_status(PlayerType *player_ptr)
         return;
     }
 
-    const auto experience_opt = input_value("Experience: ", 0, MAX_INT, player_ptr->max_exp);
+    const auto experience_opt = input_numerics("Experience: ", 0, MAX_INT, player_ptr->max_exp);
     if (!experience_opt.has_value()) {
         return;
     }
@@ -485,12 +485,12 @@ void wiz_create_feature(PlayerType *player_ptr)
 
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     const int max = terrains_info.size() - 1;
-    const auto f_val1 = input_value(_("実地形ID", "FeatureID"), 0, max, g_ptr->feat);
+    const auto f_val1 = input_numerics(_("実地形ID", "FeatureID"), 0, max, g_ptr->feat);
     if (!f_val1.has_value()) {
         return;
     }
 
-    const auto f_val2 = input_value(_("偽装地形ID", "FeatureID"), 0, max, f_val1.value());
+    const auto f_val2 = input_numerics(_("偽装地形ID", "FeatureID"), 0, max, f_val1.value());
     if (!f_val2.has_value()) {
         return;
     }
@@ -521,7 +521,7 @@ static std::optional<short> select_debugging_dungeon(short initial_dungeon_id)
     }
 
     while (true) {
-        const auto dungeon_id = input_value("Jump which dungeon", DUNGEON_ANGBAND, DUNGEON_DARKNESS, initial_dungeon_id);
+        const auto dungeon_id = input_numerics("Jump which dungeon", DUNGEON_ANGBAND, DUNGEON_DARKNESS, initial_dungeon_id);
         if (!dungeon_id.has_value()) {
             return std::nullopt;
         }
@@ -547,7 +547,7 @@ static std::optional<int> select_debugging_floor(const FloorType &floor, int dun
         initial_depth = min_depth;
     }
 
-    return input_value("Jump to level", min_depth, max_depth, initial_depth);
+    return input_numerics("Jump to level", min_depth, max_depth, initial_depth);
 }
 
 /*!
@@ -658,7 +658,7 @@ static void change_birth_flags()
  */
 void wiz_reset_race(PlayerType *player_ptr)
 {
-    const auto new_race = input_value("RaceID", 0, MAX_RACES - 1, player_ptr->prace);
+    const auto new_race = input_numerics("RaceID", 0, MAX_RACES - 1, player_ptr->prace);
     if (!new_race.has_value()) {
         return;
     }
@@ -675,7 +675,7 @@ void wiz_reset_race(PlayerType *player_ptr)
  */
 void wiz_reset_class(PlayerType *player_ptr)
 {
-    const auto new_class_opt = input_value("ClassID", 0, PLAYER_CLASS_TYPE_MAX - 1, player_ptr->pclass);
+    const auto new_class_opt = input_numerics("ClassID", 0, PLAYER_CLASS_TYPE_MAX - 1, player_ptr->pclass);
     if (!new_class_opt.has_value()) {
         return;
     }
@@ -696,12 +696,12 @@ void wiz_reset_class(PlayerType *player_ptr)
  */
 void wiz_reset_realms(PlayerType *player_ptr)
 {
-    const auto new_realm1 = input_value("1st Realm (None=0)", 0, MAX_REALM - 1, player_ptr->realm1);
+    const auto new_realm1 = input_numerics("1st Realm (None=0)", 0, MAX_REALM - 1, player_ptr->realm1);
     if (!new_realm1.has_value()) {
         return;
     }
 
-    const auto new_realm2 = input_value("2nd Realm (None=0)", 0, MAX_REALM - 1, player_ptr->realm2);
+    const auto new_realm2 = input_numerics("2nd Realm (None=0)", 0, MAX_REALM - 1, player_ptr->realm2);
     if (!new_realm2.has_value()) {
         return;
     }
@@ -763,7 +763,7 @@ void wiz_dump_options(void)
  */
 void set_gametime(void)
 {
-    const auto game_time = input_value_int("Dungeon Turn", 0, w_ptr->dungeon_turn_limit - 1);
+    const auto game_time = input_integer("Dungeon Turn", 0, w_ptr->dungeon_turn_limit - 1);
     if (!game_time.has_value()) {
         return;
     }

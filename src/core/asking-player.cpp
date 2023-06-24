@@ -439,7 +439,7 @@ void pause_line(int row)
     prt("", row, 0);
 }
 
-std::optional<int> input_value_int(std::string_view prompt, int min, int max, int initial_value)
+std::optional<int> input_integer(std::string_view prompt, int min, int max, int initial_value)
 {
     std::stringstream ss;
     char tmp_val[12] = "";

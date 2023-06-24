@@ -40,7 +40,7 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
     auto maxbet = player_ptr->lev * 200;
     maxbet = std::min(maxbet, player_ptr->au);
     constexpr auto prompt = _("賭け金？", "Your wager ?");
-    const auto wager_opt = input_value_int(prompt, 1, maxbet, 1);
+    const auto wager_opt = input_integer(prompt, 1, maxbet, 1);
     if (!wager_opt.has_value()) {
         msg_print(nullptr);
         screen_load();
@@ -125,7 +125,7 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
             prt("0  1  2  3  4  5  6  7  8  9", 7, 5);
             prt("--------------------------------", 8, 3);
             while (true) {
-                const auto choice_opt = input_value_int(_("何番？", "Pick a number"), 0, 9);
+                const auto choice_opt = input_integer(_("何番？", "Pick a number"), 0, 9);
                 if (!choice_opt.has_value()) {
                     continue;
                 }

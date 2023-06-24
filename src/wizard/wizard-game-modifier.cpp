@@ -107,7 +107,7 @@ void wiz_enter_quest(PlayerType *player_ptr)
 {
     auto &quest_list = QuestList::get_instance();
     const auto quest_max = enum2i(quest_list.rbegin()->first);
-    const auto quest_num = input_value("QuestID", 0, quest_max - 1, QuestId::NONE);
+    const auto quest_num = input_numerics("QuestID", 0, quest_max - 1, QuestId::NONE);
     if (!quest_num.has_value()) {
         return;
     }
@@ -143,7 +143,7 @@ void wiz_complete_quest(PlayerType *player_ptr)
 void wiz_restore_monster_max_num(MonsterRaceId r_idx)
 {
     if (!MonsterRace(r_idx).is_valid()) {
-        const auto restore_monrace_id = input_value("MonsterID", 1, monraces_info.size() - 1, MonsterRaceId::FILTHY_URCHIN);
+        const auto restore_monrace_id = input_numerics("MonsterID", 1, monraces_info.size() - 1, MonsterRaceId::FILTHY_URCHIN);
         if (!restore_monrace_id.has_value()) {
             return;
         }

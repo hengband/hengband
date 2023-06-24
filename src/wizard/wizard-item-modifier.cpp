@@ -231,7 +231,7 @@ void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx
         return;
     }
 
-    const auto input_artifact_id = input_value("Artifact ID", 1, max_a_idx, FixedArtifactId::GALADRIEL_PHIAL);
+    const auto input_artifact_id = input_numerics("Artifact ID", 1, max_a_idx, FixedArtifactId::GALADRIEL_PHIAL);
     if (!input_artifact_id.has_value()) {
         return;
     }
@@ -256,7 +256,7 @@ void wiz_modify_item_activation(PlayerType *player_ptr)
 
     constexpr auto min = enum2i(RandomArtActType::NONE);
     constexpr auto max = enum2i(RandomArtActType::MAX) - 1;
-    const auto act_id = input_value<RandomArtActType>("Activation ID", min, max);
+    const auto act_id = input_numerics<RandomArtActType>("Activation ID", min, max);
     if (!act_id.has_value()) {
         return;
     }
@@ -489,7 +489,7 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
         }
 
         constexpr auto p = "Enter number of items to roll: ";
-        const auto rolls_opt = input_value(p, 0, MAX_INT, rolls);
+        const auto rolls_opt = input_numerics(p, 0, MAX_INT, rolls);
         if (rolls_opt.has_value()) {
             rolls = rolls_opt.value();
         }
@@ -668,28 +668,28 @@ static void wiz_tweak_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         return;
     }
 
-    const auto pval = input_value("Enter new 'pval' setting: ", -MAX_SHORT, MAX_SHORT, o_ptr->pval);
+    const auto pval = input_numerics("Enter new 'pval' setting: ", -MAX_SHORT, MAX_SHORT, o_ptr->pval);
     if (!pval.has_value()) {
         return;
     }
 
     o_ptr->pval = pval.value();
     wiz_display_item(player_ptr, o_ptr);
-    const auto bonus_ac = input_value("Enter new AC Bonus setting: ", -MAX_SHORT, MAX_SHORT, o_ptr->to_a);
+    const auto bonus_ac = input_numerics("Enter new AC Bonus setting: ", -MAX_SHORT, MAX_SHORT, o_ptr->to_a);
     if (!bonus_ac.has_value()) {
         return;
     }
 
     o_ptr->to_a = bonus_ac.value();
     wiz_display_item(player_ptr, o_ptr);
-    const auto bonus_hit = input_value("Enter new Hit Bonus setting: ", -MAX_SHORT, MAX_SHORT, o_ptr->to_h);
+    const auto bonus_hit = input_numerics("Enter new Hit Bonus setting: ", -MAX_SHORT, MAX_SHORT, o_ptr->to_h);
     if (!bonus_hit.has_value()) {
         return;
     }
 
     o_ptr->to_h = bonus_hit.value();
     wiz_display_item(player_ptr, o_ptr);
-    const auto bonus_damage = input_value("Enter new Damage Bonus setting: ", -MAX_SHORT, MAX_SHORT, o_ptr->to_d);
+    const auto bonus_damage = input_numerics("Enter new Damage Bonus setting: ", -MAX_SHORT, MAX_SHORT, o_ptr->to_d);
     if (!bonus_damage.has_value()) {
         return;
     }
@@ -708,7 +708,7 @@ static void wiz_quantity_item(ItemEntity *o_ptr)
         return;
     }
 
-    const auto quantity_opt = input_value("Quantity: ", 1, 99, o_ptr->number);
+    const auto quantity_opt = input_numerics("Quantity: ", 1, 99, o_ptr->number);
     if (!quantity_opt.has_value()) {
         return;
     }
