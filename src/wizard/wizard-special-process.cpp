@@ -402,38 +402,36 @@ void wiz_create_named_art(PlayerType *player_ptr)
  */
 void wiz_change_status(PlayerType *player_ptr)
 {
-    char tmp_val[160];
-    char ppp[80];
     for (int i = 0; i < A_MAX; i++) {
-        strnfmt(ppp, sizeof(ppp), "%s (3-%d): ", stat_names[i], player_ptr->stat_max_max[i]);
-        strnfmt(tmp_val, sizeof(tmp_val), "%d", player_ptr->stat_max[i]);
-        if (!get_string(ppp, tmp_val, 3)) {
+        const auto max_max_ability_score = player_ptr->stat_max_max[i];
+        const auto max_ability_score = player_ptr->stat_max[i];
+        const auto new_ability_score = input_value(stat_names[i], 3, max_max_ability_score, max_ability_score);
+        if (!new_ability_score.has_value()) {
             return;
         }
 
-        auto stat = std::clamp<short>(static_cast<short>(atoi(tmp_val)), 3, player_ptr->stat_max_max[i]);
+        auto stat = new_ability_score.value();
         player_ptr->stat_cur[i] = stat;
         player_ptr->stat_max[i] = stat;
     }
 
-    strnfmt(tmp_val, sizeof(tmp_val), "%d", PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER));
-    if (!get_string(_("熟練度: ", "Proficiency: "), tmp_val, 4)) {
+    const auto unskilled = PlayerSkill::weapon_exp_at(PlayerSkillRank::UNSKILLED);
+    const auto master = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
+    const auto proficiency_opt = input_value(_("熟練度", "Proficiency"), unskilled, master, static_cast<short>(master));
+    if (!proficiency_opt.has_value()) {
         return;
     }
 
-    auto tmp_s16b = std::clamp(static_cast<SUB_EXP>(atoi(tmp_val)),
-        PlayerSkill::weapon_exp_at(PlayerSkillRank::UNSKILLED),
-        PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER));
-
+    const auto proficiency = proficiency_opt.value();
     for (auto tval : TV_WEAPON_RANGE) {
         for (int i = 0; i < 64; i++) {
-            player_ptr->weapon_exp[tval][i] = tmp_s16b;
+            player_ptr->weapon_exp[tval][i] = proficiency;
         }
     }
-    PlayerSkill(player_ptr).limit_weapon_skills_by_max_value();
 
+    PlayerSkill(player_ptr).limit_weapon_skills_by_max_value();
     for (auto j : PLAYER_SKILL_KIND_TYPE_RANGE) {
-        player_ptr->skill_exp[j] = tmp_s16b;
+        player_ptr->skill_exp[j] = proficiency;
         auto short_pclass = enum2i(player_ptr->pclass);
         if (player_ptr->skill_exp[j] > class_skills_info[short_pclass].s_max[j]) {
             player_ptr->skill_exp[j] = class_skills_info[short_pclass].s_max[j];
@@ -442,40 +440,33 @@ void wiz_change_status(PlayerType *player_ptr)
 
     int k;
     for (k = 0; k < 32; k++) {
-        player_ptr->spell_exp[k] = std::min(PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER), tmp_s16b);
+        player_ptr->spell_exp[k] = std::min(PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER), proficiency);
     }
 
     for (; k < 64; k++) {
-        player_ptr->spell_exp[k] = std::min(PlayerSkill::spell_exp_at(PlayerSkillRank::EXPERT), tmp_s16b);
+        player_ptr->spell_exp[k] = std::min(PlayerSkill::spell_exp_at(PlayerSkillRank::EXPERT), proficiency);
     }
 
-    strnfmt(tmp_val, sizeof(tmp_val), "%ld", (long)(player_ptr->au));
-    if (!get_string("Gold: ", tmp_val, 9)) {
+    const auto gold = input_value("Gold: ", 0, MAX_INT, player_ptr->au);
+    if (!gold.has_value()) {
         return;
     }
 
-    long tmp_long = atol(tmp_val);
-    if (tmp_long < 0) {
-        tmp_long = 0L;
-    }
-
-    player_ptr->au = tmp_long;
-    strnfmt(tmp_val, sizeof(tmp_val), "%ld", (long)(player_ptr->max_exp));
-    if (!get_string("Experience: ", tmp_val, 9)) {
-        return;
-    }
-
-    tmp_long = atol(tmp_val);
-    if (tmp_long < 0) {
-        tmp_long = 0L;
-    }
-
+    player_ptr->au = gold.value();
     if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
+        do_cmd_redraw(player_ptr);
         return;
     }
 
-    player_ptr->max_exp = tmp_long;
-    player_ptr->exp = tmp_long;
+    const auto experience_opt = input_value("Experience: ", 0, MAX_INT, player_ptr->max_exp);
+    if (!experience_opt.has_value()) {
+        return;
+    }
+
+    const auto experience = experience_opt.value();
+    player_ptr->max_exp = experience;
+    player_ptr->exp = experience;
+    player_ptr->exp_frac = 0;
     check_experience(player_ptr);
     do_cmd_redraw(player_ptr);
 }
