@@ -124,9 +124,9 @@ bool research_mon(PlayerType *player_ptr)
             }
 
 #ifdef JP
-            if (angband_strstr(temp2.data(), temp) || angband_strstr(monrace.name.data(), temp))
+            if (str_find(temp2, temp) || str_find(monrace.name, temp))
 #else
-            if (angband_strstr(temp2.data(), temp))
+            if (str_find(temp2, temp))
 #endif
                 who.push_back(monrace_id);
         } else if (all || (monrace.d_char == sym)) {

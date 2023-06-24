@@ -347,7 +347,7 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, const autopick
             return false;
         }
     } else {
-        if (angband_strstr(item_name.data(), entry.name) == nullptr) {
+        if (!str_find(std::string(item_name), entry.name)) {
             return false;
         }
     }

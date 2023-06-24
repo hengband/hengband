@@ -595,6 +595,16 @@ int strrncmp(const char *s1, const char *s2, int len)
     return 0;
 }
 
+/*
+ * @brief マルチバイト文字のダメ文字('\')を考慮しつつ文字列比較を行う
+ * @param src 比較元の文字列
+ * @param find 比較したい文字列
+ */
+bool str_find(const std::string &src, std::string_view find)
+{
+    return angband_strstr(src.data(), find) != nullptr;
+}
+
 /**
  * @brief 文字列の両端の空白を削除する
  *
