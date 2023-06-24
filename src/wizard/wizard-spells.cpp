@@ -57,15 +57,13 @@ static const std::vector<debug_spell_command> debug_spell_commands_list = {
 
 /*!
  * @brief コマンド入力により任意にスペル効果を起こす / Wizard spells
- * @return 実際にテレポートを行ったらTRUEを返す
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
-bool wiz_debug_spell(PlayerType *player_ptr)
+void wiz_debug_spell(PlayerType *player_ptr)
 {
     char tmp_val[50] = "\0";
-    int tmp_int;
-
     if (!get_string("SPELL: ", tmp_val, 32)) {
-        return false;
+        return;
     }
 
     for (const auto &d : debug_spell_commands_list) {
@@ -76,32 +74,29 @@ bool wiz_debug_spell(PlayerType *player_ptr)
         switch (d.type) {
         case 2:
             (d.command_function.spell2.spell_function)(player_ptr);
-            return true;
-            break;
-        case 3:
-            tmp_val[0] = '\0';
-            if (!get_string("POWER:", tmp_val, 32)) {
-                return false;
+            return;
+        case 3: {
+            const auto power = input_value_int("POWER", -MAX_INT, MAX_INT);
+            if (!power.has_value()) {
+                return;
             }
-            tmp_int = atoi(tmp_val);
-            (d.command_function.spell3.spell_function)(player_ptr, tmp_int);
-            return true;
-            break;
-        case 4:
-            (d.command_function.spell4.spell_function)(player_ptr, true, &tmp_int);
-            return true;
-            break;
+
+            (d.command_function.spell3.spell_function)(player_ptr, power.value());
+            return;
+        }
+        case 4: {
+            auto count = 0;
+            (d.command_function.spell4.spell_function)(player_ptr, true, &count);
+            return;
+        }
         case 5:
             (d.command_function.spell5.spell_function)(player_ptr);
-            return true;
-            break;
+            return;
         default:
-            break;
+            msg_format("Command not found.");
+            return;
         }
     }
-
-    msg_format("Command not found.");
-    return false;
 }
 
 /*!
