@@ -52,10 +52,10 @@ static struct {
 
 /* リングバッファ構造体 */
 static struct {
-    std::vector<char> buf;
-    int wptr;
-    int rptr;
-    int inlen;
+    std::vector<char> buf{};
+    int wptr = 0;
+    int rptr = 0;
+    int inlen = 0;
 } ring;
 
 /*
