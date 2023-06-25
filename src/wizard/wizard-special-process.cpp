@@ -402,38 +402,36 @@ void wiz_create_named_art(PlayerType *player_ptr)
  */
 void wiz_change_status(PlayerType *player_ptr)
 {
-    char tmp_val[160];
-    char ppp[80];
     for (int i = 0; i < A_MAX; i++) {
-        strnfmt(ppp, sizeof(ppp), "%s (3-%d): ", stat_names[i], player_ptr->stat_max_max[i]);
-        strnfmt(tmp_val, sizeof(tmp_val), "%d", player_ptr->stat_max[i]);
-        if (!get_string(ppp, tmp_val, 3)) {
+        const auto max_max_ability_score = player_ptr->stat_max_max[i];
+        const auto max_ability_score = player_ptr->stat_max[i];
+        const auto new_ability_score = input_numerics(stat_names[i], 3, max_max_ability_score, max_ability_score);
+        if (!new_ability_score.has_value()) {
             return;
         }
 
-        auto stat = std::clamp<short>(static_cast<short>(atoi(tmp_val)), 3, player_ptr->stat_max_max[i]);
+        auto stat = new_ability_score.value();
         player_ptr->stat_cur[i] = stat;
         player_ptr->stat_max[i] = stat;
     }
 
-    strnfmt(tmp_val, sizeof(tmp_val), "%d", PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER));
-    if (!get_string(_("熟練度: ", "Proficiency: "), tmp_val, 4)) {
+    const auto unskilled = PlayerSkill::weapon_exp_at(PlayerSkillRank::UNSKILLED);
+    const auto master = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
+    const auto proficiency_opt = input_numerics(_("熟練度", "Proficiency"), unskilled, master, static_cast<short>(master));
+    if (!proficiency_opt.has_value()) {
         return;
     }
 
-    auto tmp_s16b = std::clamp(static_cast<SUB_EXP>(atoi(tmp_val)),
-        PlayerSkill::weapon_exp_at(PlayerSkillRank::UNSKILLED),
-        PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER));
-
+    const auto proficiency = proficiency_opt.value();
     for (auto tval : TV_WEAPON_RANGE) {
         for (int i = 0; i < 64; i++) {
-            player_ptr->weapon_exp[tval][i] = tmp_s16b;
+            player_ptr->weapon_exp[tval][i] = proficiency;
         }
     }
-    PlayerSkill(player_ptr).limit_weapon_skills_by_max_value();
 
+    PlayerSkill(player_ptr).limit_weapon_skills_by_max_value();
     for (auto j : PLAYER_SKILL_KIND_TYPE_RANGE) {
-        player_ptr->skill_exp[j] = tmp_s16b;
+        player_ptr->skill_exp[j] = proficiency;
         auto short_pclass = enum2i(player_ptr->pclass);
         if (player_ptr->skill_exp[j] > class_skills_info[short_pclass].s_max[j]) {
             player_ptr->skill_exp[j] = class_skills_info[short_pclass].s_max[j];
@@ -442,40 +440,33 @@ void wiz_change_status(PlayerType *player_ptr)
 
     int k;
     for (k = 0; k < 32; k++) {
-        player_ptr->spell_exp[k] = std::min(PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER), tmp_s16b);
+        player_ptr->spell_exp[k] = std::min(PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER), proficiency);
     }
 
     for (; k < 64; k++) {
-        player_ptr->spell_exp[k] = std::min(PlayerSkill::spell_exp_at(PlayerSkillRank::EXPERT), tmp_s16b);
+        player_ptr->spell_exp[k] = std::min(PlayerSkill::spell_exp_at(PlayerSkillRank::EXPERT), proficiency);
     }
 
-    strnfmt(tmp_val, sizeof(tmp_val), "%ld", (long)(player_ptr->au));
-    if (!get_string("Gold: ", tmp_val, 9)) {
+    const auto gold = input_numerics("Gold: ", 0, MAX_INT, player_ptr->au);
+    if (!gold.has_value()) {
         return;
     }
 
-    long tmp_long = atol(tmp_val);
-    if (tmp_long < 0) {
-        tmp_long = 0L;
-    }
-
-    player_ptr->au = tmp_long;
-    strnfmt(tmp_val, sizeof(tmp_val), "%ld", (long)(player_ptr->max_exp));
-    if (!get_string("Experience: ", tmp_val, 9)) {
-        return;
-    }
-
-    tmp_long = atol(tmp_val);
-    if (tmp_long < 0) {
-        tmp_long = 0L;
-    }
-
+    player_ptr->au = gold.value();
     if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
+        do_cmd_redraw(player_ptr);
         return;
     }
 
-    player_ptr->max_exp = tmp_long;
-    player_ptr->exp = tmp_long;
+    const auto experience_opt = input_numerics("Experience: ", 0, MAX_INT, player_ptr->max_exp);
+    if (!experience_opt.has_value()) {
+        return;
+    }
+
+    const auto experience = experience_opt.value();
+    player_ptr->max_exp = experience;
+    player_ptr->exp = experience;
+    player_ptr->exp_frac = 0;
     check_experience(player_ptr);
     do_cmd_redraw(player_ptr);
 }
@@ -494,12 +485,12 @@ void wiz_create_feature(PlayerType *player_ptr)
 
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     const int max = terrains_info.size() - 1;
-    const auto f_val1 = input_value(_("実地形ID", "FeatureID"), 0, max, g_ptr->feat);
+    const auto f_val1 = input_numerics(_("実地形ID", "FeatureID"), 0, max, g_ptr->feat);
     if (!f_val1.has_value()) {
         return;
     }
 
-    const auto f_val2 = input_value(_("偽装地形ID", "FeatureID"), 0, max, f_val1.value());
+    const auto f_val2 = input_numerics(_("偽装地形ID", "FeatureID"), 0, max, f_val1.value());
     if (!f_val2.has_value()) {
         return;
     }
@@ -523,73 +514,40 @@ void wiz_create_feature(PlayerType *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @details 範囲外の値が選択されたら再入力を促す
  */
-static bool select_debugging_dungeon(PlayerType *player_ptr, DUNGEON_IDX *dungeon_type)
+static std::optional<short> select_debugging_dungeon(short initial_dungeon_id)
 {
     if (command_arg > 0) {
-        return true;
+        return static_cast<short>(std::clamp(static_cast<int>(command_arg), DUNGEON_ANGBAND, DUNGEON_DARKNESS));
     }
 
     while (true) {
-        char tmp_val[160];
-        strnfmt(tmp_val, sizeof(tmp_val), "%d", player_ptr->current_floor_ptr->dungeon_idx);
-        if (!get_string("Jump which dungeon : ", tmp_val, 2)) {
-            return false;
+        const auto dungeon_id = input_numerics("Jump which dungeon", DUNGEON_ANGBAND, DUNGEON_DARKNESS, initial_dungeon_id);
+        if (!dungeon_id.has_value()) {
+            return std::nullopt;
         }
 
-        *dungeon_type = (DUNGEON_IDX)atoi(tmp_val);
-        if ((*dungeon_type < DUNGEON_ANGBAND) || (*dungeon_type > DUNGEON_MAX)) {
-            msg_print("Invalid dungeon. Please re-input.");
-            continue;
-        }
-
-        return true;
+        return dungeon_id.value();
     }
 }
 
 /*
- * @brief 選択したダンジョンの任意フロアを選択する
+ * @brief 選択したダンジョンの任意レベルを選択する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param dungeon_type ダンジョン番号
- * @return フロアを選択したらtrue、キャンセルならfalse
- * @details 0を指定すると地上に飛ぶが、元いた場所にしか飛ばない
- * @todo 可能ならダンジョンの入口 (例：ルルイエなら大洋の真ん中)へ飛べるようにしたい
+ * @param dungeon_id ダンジョン番号
+ * @return レベルを選択したらその値、キャンセルならnullopt
  */
-static bool select_debugging_floor(PlayerType *player_ptr, int dungeon_type)
+static std::optional<int> select_debugging_floor(const FloorType &floor, int dungeon_id)
 {
-    auto max_depth = dungeons_info[dungeon_type].maxdepth;
-    if ((max_depth == 0) || (dungeon_type > static_cast<int>(dungeons_info.size()))) {
-        dungeon_type = DUNGEON_ANGBAND;
+    const auto &dungeon = dungeons_info[dungeon_id];
+    const auto max_depth = dungeon.maxdepth;
+    const auto min_depth = dungeon.mindepth;
+    const auto is_current_dungeon = floor.dungeon_idx == dungeon_id;
+    auto initial_depth = floor.dun_level;
+    if (!is_current_dungeon) {
+        initial_depth = min_depth;
     }
 
-    auto min_depth = (int)dungeons_info[dungeon_type].mindepth;
-    while (true) {
-        char ppp[80];
-        char tmp_val[160];
-        strnfmt(ppp, sizeof(ppp), "Jump to level (0, %d-%d): ", min_depth, max_depth);
-        strnfmt(tmp_val, sizeof(tmp_val), "%d", (int)player_ptr->current_floor_ptr->dun_level);
-        if (!get_string(ppp, tmp_val, 10)) {
-            return false;
-        }
-
-        auto tmp_command_arg = (COMMAND_ARG)atoi(tmp_val);
-        if (tmp_command_arg == 0) {
-            command_arg = tmp_command_arg;
-            break;
-        }
-
-        auto is_valid_floor = tmp_command_arg > 0;
-        is_valid_floor &= tmp_command_arg >= min_depth;
-        is_valid_floor &= tmp_command_arg <= max_depth;
-        if (is_valid_floor) {
-            command_arg = tmp_command_arg;
-            break;
-        }
-
-        msg_print("Invalid floor. Please re-input.");
-        continue;
-    }
-
-    return true;
+    return input_numerics("Jump to level", min_depth, max_depth, initial_depth);
 }
 
 /*!
@@ -627,29 +585,35 @@ static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH de
  */
 void wiz_jump_to_dungeon(PlayerType *player_ptr)
 {
-    DUNGEON_IDX dungeon_type = 1;
-    if (!select_debugging_dungeon(player_ptr, &dungeon_type)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto is_in_dungeon = floor.is_in_dungeon();
+    const auto dungeon_idx = is_in_dungeon ? floor.dungeon_idx : static_cast<short>(DUNGEON_ANGBAND);
+    const auto dungeon_id_opt = select_debugging_dungeon(dungeon_idx);
+    if (!dungeon_id_opt.has_value()) {
+        if (!is_in_dungeon) {
+            return;
+        }
+
+        if (get_check(("Jump to the ground?"))) {
+            wiz_jump_floor(player_ptr, 0, 0);
+        }
+
         return;
     }
 
-    if (!select_debugging_floor(player_ptr, dungeon_type)) {
+    const auto dungeon_id = dungeon_id_opt.value();
+    const auto level_opt = select_debugging_floor(floor, dungeon_id);
+    if (!level_opt.has_value()) {
         return;
     }
 
-    if (command_arg < dungeons_info[dungeon_type].mindepth) {
-        command_arg = 0;
-    }
-
-    if (command_arg > dungeons_info[dungeon_type].maxdepth) {
-        command_arg = (COMMAND_ARG)dungeons_info[dungeon_type].maxdepth;
-    }
-
-    msg_format("You jump to dungeon level %d.", command_arg);
+    const auto level = level_opt.value();
+    msg_format("You jump to dungeon level %d.", level);
     if (autosave_l) {
         do_cmd_save_game(player_ptr, true);
     }
 
-    wiz_jump_floor(player_ptr, dungeon_type, command_arg);
+    wiz_jump_floor(player_ptr, dungeon_id, level);
 }
 
 /*!
@@ -694,7 +658,7 @@ static void change_birth_flags()
  */
 void wiz_reset_race(PlayerType *player_ptr)
 {
-    const auto new_race = input_value("RaceID", 0, MAX_RACES - 1, player_ptr->prace);
+    const auto new_race = input_numerics("RaceID", 0, MAX_RACES - 1, player_ptr->prace);
     if (!new_race.has_value()) {
         return;
     }
@@ -711,7 +675,7 @@ void wiz_reset_race(PlayerType *player_ptr)
  */
 void wiz_reset_class(PlayerType *player_ptr)
 {
-    const auto new_class_opt = input_value("ClassID", 0, PLAYER_CLASS_TYPE_MAX - 1, player_ptr->pclass);
+    const auto new_class_opt = input_numerics("ClassID", 0, PLAYER_CLASS_TYPE_MAX - 1, player_ptr->pclass);
     if (!new_class_opt.has_value()) {
         return;
     }
@@ -732,12 +696,12 @@ void wiz_reset_class(PlayerType *player_ptr)
  */
 void wiz_reset_realms(PlayerType *player_ptr)
 {
-    const auto new_realm1 = input_value("1st Realm (None=0)", 0, MAX_REALM - 1, player_ptr->realm1);
+    const auto new_realm1 = input_numerics("1st Realm (None=0)", 0, MAX_REALM - 1, player_ptr->realm1);
     if (!new_realm1.has_value()) {
         return;
     }
 
-    const auto new_realm2 = input_value("2nd Realm (None=0)", 0, MAX_REALM - 1, player_ptr->realm2);
+    const auto new_realm2 = input_numerics("2nd Realm (None=0)", 0, MAX_REALM - 1, player_ptr->realm2);
     if (!new_realm2.has_value()) {
         return;
     }
@@ -799,7 +763,7 @@ void wiz_dump_options(void)
  */
 void set_gametime(void)
 {
-    const auto game_time = input_value_int("Dungeon Turn", 0, w_ptr->dungeon_turn_limit - 1);
+    const auto game_time = input_integer("Dungeon Turn", 0, w_ptr->dungeon_turn_limit - 1);
     if (!game_time.has_value()) {
         return;
     }

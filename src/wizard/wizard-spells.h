@@ -36,7 +36,7 @@ struct debug_spell_command {
     spell_functions command_function;
 };
 
-bool wiz_debug_spell(PlayerType *player_ptr);
+void wiz_debug_spell(PlayerType *player_ptr);
 void wiz_dimension_door(PlayerType *player_ptr);
 void wiz_summon_horde(PlayerType *player_ptr);
 void wiz_teleport_back(PlayerType *player_ptr);

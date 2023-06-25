@@ -264,11 +264,6 @@ void update_gambling_monsters(PlayerType *player_ptr)
  */
 bool monster_arena_comm(PlayerType *player_ptr)
 {
-    PRICE maxbet;
-    PRICE wager;
-    char out_val[MAX_MONSTER_NAME];
-    concptr p;
-
     if ((w_ptr->game_turn - w_ptr->arena_start_turn) > TURNS_PER_TICK * 250) {
         update_gambling_monsters(player_ptr);
         w_ptr->arena_start_turn = w_ptr->game_turn;
@@ -329,40 +324,21 @@ bool monster_arena_comm(PlayerType *player_ptr)
         }
     }
 
-    maxbet = player_ptr->lev * 200;
-
-    /* We can't bet more than we have */
+    auto maxbet = player_ptr->lev * 200;
     maxbet = std::min(maxbet, player_ptr->au);
-
-    /*
-     * Get the wager
-     * Use get_string() because we may need more than
-     * the int16_t value returned by get_quantity().
-     */
-    out_val[0] = '\0';
-    if (!get_string(format(_("賭け金 (1-%ld)？", "Your wager (1-%ld) ? "), (long int)maxbet), out_val, 32)) {
+    constexpr auto prompt = _("賭け金？", "Your wager? ");
+    const auto wager_opt = input_integer(prompt, 1, maxbet, 1);
+    if (!wager_opt.has_value()) {
         screen_load();
         return false;
     }
 
-    for (p = out_val; *p == ' '; p++) {
-        ;
-    }
-
-    wager = atol(p);
+    auto wager = wager_opt.value();
     if (wager > player_ptr->au) {
         msg_print(_("おい！金が足りないじゃないか！出ていけ！", "Hey! You don't have the gold - get out of here!"));
-
         msg_print(nullptr);
         screen_load();
         return false;
-    } else if (wager > maxbet) {
-        msg_format(_("%ldゴールドだけ受けよう。残りは取っときな。", "I'll take %ld gold of that. Keep the rest."), (long int)maxbet);
-
-        wager = maxbet;
-    } else if (wager < 1) {
-        msg_print(_("ＯＫ、１ゴールドでいこう。", "Ok, we'll start with 1 gold."));
-        wager = 1;
     }
 
     msg_print(nullptr);

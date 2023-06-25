@@ -281,7 +281,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
                 char lc_buf[1024];
                 strcpy(lc_buf, str);
                 str_tolower(lc_buf);
-                if (!angband_strstr(lc_buf, find)) {
+                if (!str_find(lc_buf, find)) {
                     continue;
                 }
             }

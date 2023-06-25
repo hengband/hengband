@@ -209,7 +209,12 @@ void do_cmd_messages(int num_now)
 
             // @details ダメ文字対策でstringを使わない.
             const auto *str = msg;
-            while ((str = angband_strstr(str, shower)) != nullptr) {
+            while (true) {
+                str = angband_strstr(str, shower);
+                if (str == nullptr) {
+                    break;
+                }
+
                 const auto len = shower.length();
                 term_putstr(str - msg, num_lines + 1 - j, len, TERM_YELLOW, shower);
                 str += len;
@@ -263,9 +268,8 @@ void do_cmd_messages(int num_now)
             shower = finder_str;
             for (int z = i + 1; z < n; z++) {
                 // @details ダメ文字対策でstringを使わない.
-                const auto msg_str = message_str(z);
-                const auto *msg = msg_str->data();
-                if (angband_strstr(msg, finder_str) != nullptr) {
+                const auto msg = message_str(z);
+                if (str_find(*msg, finder_str)) {
                     i = z;
                     break;
                 }

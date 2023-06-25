@@ -34,6 +34,7 @@
 #include "view/display-messages.h"
 #include "world/world-movement-processor.h"
 #include "world/world.h"
+#include <algorithm>
 
 /*!
  * @brief パターン終点到達時のテレポート処理を行う
@@ -41,22 +42,19 @@
  */
 void pattern_teleport(PlayerType *player_ptr)
 {
-    DEPTH min_level = 0;
-    DEPTH max_level = 99;
-
+    auto min_level = 0;
+    auto max_level = 99;
+    auto current_level = static_cast<short>(player_ptr->current_floor_ptr->dun_level);
     if (get_check(_("他の階にテレポートしますか？", "Teleport level? "))) {
-        char ppp[80];
-        char tmp_val[160];
-
         if (ironman_downward) {
-            min_level = player_ptr->current_floor_ptr->dun_level;
+            min_level = current_level;
         }
 
         const auto &floor = *player_ptr->current_floor_ptr;
         if (floor.dungeon_idx == DUNGEON_ANGBAND) {
             if (floor.dun_level > 100) {
                 max_level = MAX_DEPTH - 1;
-            } else if (player_ptr->current_floor_ptr->dun_level == 100) {
+            } else if (current_level == 100) {
                 max_level = 100;
             }
         } else {
@@ -65,25 +63,18 @@ void pattern_teleport(PlayerType *player_ptr)
             min_level = dungeon.mindepth;
         }
 
-        strnfmt(ppp, sizeof(ppp), _("テレポート先:(%d-%d)", "Teleport to level (%d-%d): "), (int)min_level, (int)max_level);
-        strnfmt(tmp_val, sizeof(tmp_val), "%d", (int)player_ptr->current_floor_ptr->dun_level);
-        if (!get_string(ppp, tmp_val, 10)) {
+        constexpr auto prompt = _("テレポート先", "Teleport to level");
+        const auto input_level = input_numerics(prompt, min_level, max_level, current_level);
+        if (!input_level.has_value()) {
             return;
         }
 
-        command_arg = (COMMAND_ARG)atoi(tmp_val);
+        command_arg = input_level.value();
     } else if (get_check(_("通常テレポート？", "Normal teleport? "))) {
         teleport_player(player_ptr, 200, TELEPORT_SPONTANEOUS);
         return;
     } else {
         return;
-    }
-
-    if (command_arg < min_level) {
-        command_arg = (COMMAND_ARG)min_level;
-    }
-    if (command_arg > max_level) {
-        command_arg = (COMMAND_ARG)max_level;
     }
 
     msg_format(_("%d 階にテレポートしました。", "You teleport to dungeon level %d."), command_arg);

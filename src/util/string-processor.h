@@ -29,6 +29,7 @@ char *angband_strchr(concptr ptr, char ch);
 char *ltrim(char *p);
 char *rtrim(char *p);
 int strrncmp(const char *s1, const char *s2, int len);
+bool str_find(const std::string &src, std::string_view find);
 std::string str_trim(std::string_view str);
 std::string str_rtrim(std::string_view str);
 std::string str_ltrim(std::string_view str);

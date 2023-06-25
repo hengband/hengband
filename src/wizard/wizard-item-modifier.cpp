@@ -48,6 +48,7 @@
 #include <algorithm>
 #include <limits>
 #include <sstream>
+#include <string>
 #include <tuple>
 #include <vector>
 
@@ -92,17 +93,6 @@ void display_wizard_sub_menu()
         put_str(ss.str(), r++, c);
     }
 }
-}
-
-/*!
- * @brief キャスト先の型の最小値、最大値でclampする。
- */
-template <typename T>
-T clamp_cast(int val)
-{
-    return static_cast<T>(std::clamp(val,
-        static_cast<int>(std::numeric_limits<T>::min()),
-        static_cast<int>(std::numeric_limits<T>::max())));
 }
 
 void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx, bool aware = false);
@@ -241,7 +231,7 @@ void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx
         return;
     }
 
-    const auto input_artifact_id = input_value("Artifact ID", 1, max_a_idx, FixedArtifactId::GALADRIEL_PHIAL);
+    const auto input_artifact_id = input_numerics("Artifact ID", 1, max_a_idx, FixedArtifactId::GALADRIEL_PHIAL);
     if (!input_artifact_id.has_value()) {
         return;
     }
@@ -266,7 +256,7 @@ void wiz_modify_item_activation(PlayerType *player_ptr)
 
     constexpr auto min = enum2i(RandomArtActType::NONE);
     constexpr auto max = enum2i(RandomArtActType::MAX) - 1;
-    const auto act_id = input_value<RandomArtActType>("Activation ID", min, max);
+    const auto act_id = input_numerics<RandomArtActType>("Activation ID", min, max);
     if (!act_id.has_value()) {
         return;
     }
@@ -470,26 +460,21 @@ static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
  */
 static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    concptr q = "Rolls: %ld  Correct: %ld  Matches: %ld  Better: %ld  Worse: %ld  Other: %ld";
-    concptr p = "Enter number of items to roll: ";
-    char tmp_val[80];
-
+    constexpr auto pmt = "Roll for [n]ormal, [g]ood, or [e]xcellent treasure? ";
     if (o_ptr->is_fixed_artifact()) {
         o_ptr->get_fixed_artifact().is_generated = false;
     }
 
-    uint32_t i, matches, better, worse, other, correct;
-    uint32_t test_roll = 1000000;
-    char ch;
-    concptr quality;
-    BIT_FLAGS mode;
+    auto rolls = 1000000;
     while (true) {
-        concptr pmt = "Roll for [n]ormal, [g]ood, or [e]xcellent treasure? ";
         wiz_display_item(player_ptr, o_ptr);
+        char ch;
         if (!get_com(pmt, &ch, false)) {
             break;
         }
 
+        BIT_FLAGS mode;
+        std::string quality;
         if (ch == 'n' || ch == 'N') {
             mode = 0L;
             quality = "normal";
@@ -503,53 +488,60 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
             break;
         }
 
-        strnfmt(tmp_val, sizeof(tmp_val), "%ld", (long int)test_roll);
-        if (get_string(p, tmp_val, 10)) {
-            test_roll = atol(tmp_val);
+        constexpr auto p = "Enter number of items to roll: ";
+        const auto rolls_opt = input_numerics(p, 0, MAX_INT, rolls);
+        if (rolls_opt.has_value()) {
+            rolls = rolls_opt.value();
         }
-        test_roll = std::max<uint>(1, test_roll);
-        msg_format("Creating a lot of %s items. Base level = %d.", quality, player_ptr->current_floor_ptr->dun_level);
-        msg_print(nullptr);
 
-        correct = matches = better = worse = other = 0;
-        for (i = 0; i <= test_roll; i++) {
-            if ((i < 100) || (i % 100 == 0)) {
+        constexpr auto q = "Rolls: %d  Correct: %d  Matches: %d  Better: %d  Worse: %d  Other: %d";
+        msg_format("Creating a lot of %s items. Base level = %d.", quality.data(), player_ptr->current_floor_ptr->dun_level);
+        msg_print(nullptr);
+        auto correct = 0;
+        auto matches = 0;
+        auto better = 0;
+        auto worse = 0;
+        auto other = 0;
+        auto count = 0;
+        for (; count <= rolls; count++) {
+            if ((count < 100) || (count % 100 == 0)) {
                 inkey_scan = true;
                 if (inkey()) {
                     flush();
                     break; // stop rolling
                 }
 
-                prt(format(q, i, correct, matches, better, worse, other), 0, 0);
+                prt(format(q, count, correct, matches, better, worse, other), 0, 0);
                 term_fresh();
             }
 
-            ItemEntity forge;
-            auto *q_ptr = &forge;
-            q_ptr->wipe();
-            make_object(player_ptr, q_ptr, mode);
-            if (q_ptr->is_fixed_artifact()) {
-                q_ptr->get_fixed_artifact().is_generated = false;
+            ItemEntity item;
+            if (!make_object(player_ptr, &item, mode)) {
+                continue;
             }
 
-            if (o_ptr->bi_key != q_ptr->bi_key) {
+            if (item.is_fixed_artifact()) {
+                item.get_fixed_artifact().is_generated = false;
+            }
+
+            if (o_ptr->bi_key != item.bi_key) {
                 continue;
             }
 
             correct++;
-            const auto is_same_fixed_artifact_idx = o_ptr->is_specific_artifact(q_ptr->fixed_artifact_idx);
-            if ((q_ptr->pval == o_ptr->pval) && (q_ptr->to_a == o_ptr->to_a) && (q_ptr->to_h == o_ptr->to_h) && (q_ptr->to_d == o_ptr->to_d) && is_same_fixed_artifact_idx) {
+            const auto is_same_fixed_artifact_idx = o_ptr->is_specific_artifact(item.fixed_artifact_idx);
+            if ((item.pval == o_ptr->pval) && (item.to_a == o_ptr->to_a) && (item.to_h == o_ptr->to_h) && (item.to_d == o_ptr->to_d) && is_same_fixed_artifact_idx) {
                 matches++;
-            } else if ((q_ptr->pval >= o_ptr->pval) && (q_ptr->to_a >= o_ptr->to_a) && (q_ptr->to_h >= o_ptr->to_h) && (q_ptr->to_d >= o_ptr->to_d)) {
+            } else if ((item.pval >= o_ptr->pval) && (item.to_a >= o_ptr->to_a) && (item.to_h >= o_ptr->to_h) && (item.to_d >= o_ptr->to_d)) {
                 better++;
-            } else if ((q_ptr->pval <= o_ptr->pval) && (q_ptr->to_a <= o_ptr->to_a) && (q_ptr->to_h <= o_ptr->to_h) && (q_ptr->to_d <= o_ptr->to_d)) {
+            } else if ((item.pval <= o_ptr->pval) && (item.to_a <= o_ptr->to_a) && (item.to_h <= o_ptr->to_h) && (item.to_d <= o_ptr->to_d)) {
                 worse++;
             } else {
                 other++;
             }
         }
 
-        msg_format(q, i, correct, matches, better, worse, other);
+        msg_format(q, count, correct, matches, better, worse, other);
         msg_print(nullptr);
     }
 
@@ -676,45 +668,38 @@ static void wiz_tweak_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         return;
     }
 
-    concptr p = "Enter new 'pval' setting: ";
-    char tmp_val[80];
-    strnfmt(tmp_val, sizeof(tmp_val), "%d", o_ptr->pval);
-    if (!get_string(p, tmp_val, 5)) {
+    const auto pval = input_numerics("Enter new 'pval' setting: ", -MAX_SHORT, MAX_SHORT, o_ptr->pval);
+    if (!pval.has_value()) {
         return;
     }
 
-    o_ptr->pval = clamp_cast<int16_t>(atoi(tmp_val));
+    o_ptr->pval = pval.value();
     wiz_display_item(player_ptr, o_ptr);
-    p = "Enter new 'to_a' setting: ";
-    strnfmt(tmp_val, sizeof(tmp_val), "%d", o_ptr->to_a);
-    if (!get_string(p, tmp_val, 5)) {
+    const auto bonus_ac = input_numerics("Enter new AC Bonus setting: ", -MAX_SHORT, MAX_SHORT, o_ptr->to_a);
+    if (!bonus_ac.has_value()) {
         return;
     }
 
-    o_ptr->to_a = clamp_cast<int16_t>(atoi(tmp_val));
+    o_ptr->to_a = bonus_ac.value();
     wiz_display_item(player_ptr, o_ptr);
-    p = "Enter new 'to_h' setting: ";
-    strnfmt(tmp_val, sizeof(tmp_val), "%d", o_ptr->to_h);
-    if (!get_string(p, tmp_val, 5)) {
+    const auto bonus_hit = input_numerics("Enter new Hit Bonus setting: ", -MAX_SHORT, MAX_SHORT, o_ptr->to_h);
+    if (!bonus_hit.has_value()) {
         return;
     }
 
-    o_ptr->to_h = clamp_cast<int16_t>(atoi(tmp_val));
+    o_ptr->to_h = bonus_hit.value();
     wiz_display_item(player_ptr, o_ptr);
-    p = "Enter new 'to_d' setting: ";
-    strnfmt(tmp_val, sizeof(tmp_val), "%d", (int)o_ptr->to_d);
-    if (!get_string(p, tmp_val, 5)) {
+    const auto bonus_damage = input_numerics("Enter new Damage Bonus setting: ", -MAX_SHORT, MAX_SHORT, o_ptr->to_d);
+    if (!bonus_damage.has_value()) {
         return;
     }
 
-    o_ptr->to_d = clamp_cast<int16_t>(atoi(tmp_val));
+    o_ptr->to_d = bonus_damage.value();
     wiz_display_item(player_ptr, o_ptr);
 }
 
 /*!
- * @brief 検査対象のアイテムの数を変更する /
- * Change the quantity of a the item
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @brief 検査対象のアイテムの数を変更する
  * @param o_ptr 変更するアイテム情報構造体の参照ポインタ
  */
 static void wiz_quantity_item(ItemEntity *o_ptr)
@@ -723,24 +708,15 @@ static void wiz_quantity_item(ItemEntity *o_ptr)
         return;
     }
 
-    int tmp_qnt = o_ptr->number;
-    char tmp_val[100];
-    strnfmt(tmp_val, sizeof(tmp_val), "%d", (int)o_ptr->number);
-    if (get_string("Quantity: ", tmp_val, 2)) {
-        int tmp_int = atoi(tmp_val);
-        if (tmp_int < 1) {
-            tmp_int = 1;
-        }
-
-        if (tmp_int > 99) {
-            tmp_int = 99;
-        }
-
-        o_ptr->number = (byte)tmp_int;
+    const auto quantity_opt = input_numerics("Quantity: ", 1, 99, o_ptr->number);
+    if (!quantity_opt.has_value()) {
+        return;
     }
 
+    const auto quantity = quantity_opt.value();
+    o_ptr->number = quantity;
     if (o_ptr->bi_key.tval() == ItemKindType::ROD) {
-        o_ptr->pval = o_ptr->pval * o_ptr->number / tmp_qnt;
+        o_ptr->pval = o_ptr->pval * o_ptr->number / quantity;
     }
 }
 
