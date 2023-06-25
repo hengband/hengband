@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <optional>
 #include <string>
+#include <string_view>
 
 extern std::filesystem::path savefile; //!< セーブファイルのフルパス
 extern std::string savefile_base; //!< セーブファイル名
@@ -27,7 +28,7 @@ extern std::filesystem::path ANGBAND_DIR_XTRA;
 class PlayerType;
 typedef void (*update_playtime_pf)(void);
 
-errr file_character(PlayerType *player_ptr, concptr name);
+void file_character(PlayerType *player_ptr, std::string_view filename);
 std::optional<std::string> get_random_line(concptr file_name, int entry);
 void read_dead_file();
 
