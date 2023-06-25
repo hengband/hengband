@@ -93,6 +93,7 @@
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
+#include "util/finalizer.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "wizard/spoiler-table.h"
@@ -402,6 +403,11 @@ void wiz_create_named_art(PlayerType *player_ptr)
  */
 void wiz_change_status(PlayerType *player_ptr)
 {
+    const auto finalizer = util::make_finalizer([player_ptr]() {
+        check_experience(player_ptr);
+        do_cmd_redraw(player_ptr);
+    });
+
     for (int i = 0; i < A_MAX; i++) {
         const auto max_max_ability_score = player_ptr->stat_max_max[i];
         const auto max_ability_score = player_ptr->stat_max[i];
@@ -454,7 +460,6 @@ void wiz_change_status(PlayerType *player_ptr)
 
     player_ptr->au = gold.value();
     if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
-        do_cmd_redraw(player_ptr);
         return;
     }
 
@@ -467,8 +472,6 @@ void wiz_change_status(PlayerType *player_ptr)
     player_ptr->max_exp = experience;
     player_ptr->exp = experience;
     player_ptr->exp_frac = 0;
-    check_experience(player_ptr);
-    do_cmd_redraw(player_ptr);
 }
 
 /*!
