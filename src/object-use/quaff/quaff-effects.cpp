@@ -274,7 +274,7 @@ bool QuaffEffects::booze()
         ident = true;
     }
 
-    if (!is_monk || !one_in_(13)) {
+    if (is_monk || !one_in_(13)) {
         return ident;
     }
 
