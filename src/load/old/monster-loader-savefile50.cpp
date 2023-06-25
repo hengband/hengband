@@ -7,7 +7,6 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
-#include "util/quarks.h"
 
 MonsterLoader50::MonsterLoader50(PlayerType *player_ptr)
     : player_ptr(player_ptr)

@@ -37,14 +37,6 @@ struct autopick_type {
 };
 
 /*
- * Struct for yank buffer
- */
-struct chain_str_type {
-    struct chain_str_type *next = nullptr;
-    char s[1]{};
-};
-
-/*
  * Data struct for text editor
  */
 class ItemEntity;
@@ -68,7 +60,7 @@ struct text_body_type {
     concptr search_str = "";
     concptr last_destroyed = "";
 
-    chain_str_type *yank = nullptr;
+    std::vector<std::string> yank{};
     bool yank_eol = false;
 
     std::vector<concptr> lines_list{};

@@ -2,7 +2,6 @@
 #include "effect/attribute-types.h"
 #include "system/system-variables.h"
 #include "term/term-color-types.h"
-#include "util/quarks.h"
 #include "util/string-processor.h"
 #include <span>
 

@@ -570,6 +570,10 @@ hengband_SOURCES = \
 	mutation/mutation-processor.cpp mutation/mutation-processor.h \
 	mutation/mutation-techniques.cpp mutation/mutation-techniques.h \
 	\
+	net/curl-easy-session.cpp net/curl-easy-session.h \
+	net/curl-slist.cpp net/curl-slist.h \
+	net/http-client.cpp net/http-client.h \
+	\
 	object/item-tester-hooker.cpp object/item-tester-hooker.h \
 	object/object-broken.cpp object/object-broken.h \
 	object/object-flags.cpp object/object-flags.h \
@@ -961,12 +965,12 @@ hengband_SOURCES = \
 	util/bit-flags-calculator.h \
 	util/enum-converter.h \
 	util/enum-range.h \
+	util/finalizer.h \
 	util/flag-group.h \
 	util/int-char-converter.h \
 	util/object-sort.cpp util/object-sort.h \
 	util/point-2d.h \
 	util/probability-table.h \
-	util/quarks.cpp util/quarks.h \
 	util/rng-xoshiro.cpp util/rng-xoshiro.h \
 	util/sort.cpp util/sort.h \
 	util/string-processor.cpp util/string-processor.h \

@@ -18,6 +18,7 @@
 #include "core/asking-player.h"
 #include "game-option/birth-options.h"
 #include "io/input-key-acceptor.h"
+#include "locale/japanese.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "player-base/player-class.h"
@@ -381,10 +382,12 @@ static bool decide_body_spec(PlayerType *player_ptr, chara_limit_type chara_limi
         if ((player_ptr->age < chara_limit.agemin) || (player_ptr->age > chara_limit.agemax)) {
             *accept = false;
         }
-        if ((player_ptr->ht < chara_limit.htmin) || (player_ptr->ht > chara_limit.htmax)) {
+        const auto ht = _(inch_to_cm(player_ptr->ht), player_ptr->ht);
+        if ((ht < chara_limit.htmin) || (ht > chara_limit.htmax)) {
             *accept = false;
         }
-        if ((player_ptr->wt < chara_limit.wtmin) || (player_ptr->wt > chara_limit.wtmax)) {
+        const auto wt = _(lb_to_kg(player_ptr->wt), player_ptr->wt);
+        if ((wt < chara_limit.wtmin) || (wt > chara_limit.wtmax)) {
             *accept = false;
         }
         if ((player_ptr->sc < chara_limit.scmin) || (player_ptr->sc > chara_limit.scmax)) {

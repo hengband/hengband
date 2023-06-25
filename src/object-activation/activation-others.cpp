@@ -58,7 +58,6 @@
 #include "target/target-setter.h"
 #include "target/target-types.h"
 #include "util/bit-flags-calculator.h"
-#include "util/quarks.h"
 #include "view/display-messages.h"
 
 bool activate_sunlight(PlayerType *player_ptr)

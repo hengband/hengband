@@ -14,6 +14,7 @@
 #include "io-dump/character-dump.h"
 #include "io/input-key-acceptor.h"
 #include "mind/mind-elementalist.h"
+#include "net/http-client.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
@@ -28,220 +29,78 @@
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
+#include <fstream>
+#include <span>
+#include <sstream>
+#include <string>
+#include <string_view>
+#include <vector>
 
 #ifdef WORLD_SCORE
-#ifdef WINDOWS
-#define CURL_STATICLIB
-#endif
-#include <curl/curl.h>
 
 concptr screen_dump = nullptr;
 
-/*
- * internet resource value
- */
-#define HTTP_TIMEOUT 30 /*!< デフォルトのタイムアウト時間(秒) / Timeout length (second) */
-
 #ifdef JP
-#define SCORE_PATH "http://mars.kmc.gr.jp/~dis/heng_score/register_score.php" /*!< スコア開示URL */
-#else
-#define SCORE_PATH "http://moon.kmc.gr.jp/hengband/hengscore-en/score.cgi" /*!< スコア開示URL */
+constexpr auto SCORE_POST_URL = "http://mars.kmc.gr.jp/~dis/heng_score/register_score.php"; /*!< スコア開示URL */
 #endif
 
-/*
- * simple buffer library
- */
-struct BUF {
-    size_t max_size;
-    size_t size;
-    size_t read_head;
-    char *data;
-};
-
-#define BUFSIZE (65536) /*!< スコアサーバ転送バッファサイズ */
-
-/*!
- * @brief 転送用バッファの確保
- * @return 確保したバッファの参照ポインタ
- */
-static BUF *buf_new(void)
+static constexpr auto get_score_content_type()
 {
-    BUF *p;
-    p = static_cast<BUF *>(malloc(sizeof(BUF)));
-    if (!p) {
-        return nullptr;
-    }
-
-    p->size = 0;
-    p->max_size = BUFSIZE;
-    p->data = static_cast<char *>(malloc(BUFSIZE));
-    if (!p->data) {
-        free(p);
-        return nullptr;
-    }
-
-    return p;
-}
-
-/*!
- * @brief 転送用バッファの解放
- * @param b 解放するバッファの参照ポインタ
- */
-static void buf_delete(BUF *b)
-{
-    free(b->data);
-    free(b);
-}
-
-/*!
- * @brief 転送用バッファにデータを追加する
- * @param buf 追加先バッファの参照ポインタ
- * @param data 追加元データ
- * @param size 追加サイズ
- * @return 追加後のバッファ容量
- */
-static int buf_append(BUF *buf, concptr data, size_t size)
-{
-    while (buf->size + size > buf->max_size) {
-        char *tmp;
-        if ((tmp = static_cast<char *>(malloc(buf->max_size * 2))) == nullptr) {
-            return -1;
-        }
-
-        std::copy_n(buf->data, buf->max_size, tmp);
-        free(buf->data);
-
-        buf->data = tmp;
-
-        buf->max_size *= 2;
-    }
-
-    std::copy_n(data, size, buf->data + buf->size);
-    buf->size += size;
-
-    return buf->size;
-}
-
-/*!
- * @brief 転送用バッファにフォーマット指定した文字列データを追加する
- * @param buf 追加先バッファの参照ポインタ
- * @param fmt 文字列フォーマット
- * @return 追加後のバッファ容量
- */
-static int buf_sprintf(BUF *buf, concptr fmt, ...)
-{
-    int ret;
-    char tmpbuf[8192];
-    va_list ap;
-
-    va_start(ap, fmt);
-#if defined(HAVE_VSNPRINTF)
-    ret = vsnprintf(tmpbuf, sizeof(tmpbuf), fmt, ap);
-#else
-    ret = vsprintf(tmpbuf, fmt, ap);
-#endif
-    va_end(ap);
-
-    if (ret < 0) {
-        return -1;
-    }
-
-    ret = buf_append(buf, tmpbuf, strlen(tmpbuf));
-    return ret;
-}
-
-size_t read_callback(char *buffer, size_t size, size_t nitems, void *userdata)
-{
-    BUF *buf = static_cast<BUF *>(userdata);
-    const size_t remain = buf->size - buf->read_head;
-    const size_t copy_size = std::min<size_t>(size * nitems, remain);
-
-    strncpy(buffer, buf->data + buf->read_head, copy_size);
-    buf->read_head += copy_size;
-
-    return copy_size;
-}
-
-/*!
- * @brief HTTPによるダンプ内容伝送
- * @param url 伝送先URL
- * @param buf 伝送内容バッファ
- * @return 送信に成功した場合TRUE、失敗した場合FALSE
- */
-static bool http_post(concptr url, BUF *buf)
-{
-    bool succeeded = false;
-    CURL *curl = curl_easy_init();
-    if (curl == nullptr) {
-        return false;
-    }
-
-    struct curl_slist *slist = nullptr;
-    slist = curl_slist_append(slist,
 #ifdef JP
 #ifdef SJIS
-        "Content-Type: text/plain; charset=SHIFT_JIS"
+    return "text/plain; charset=SHIFT_JIS";
 #endif
 #ifdef EUC
-        "Content-Type: text/plain; charset=EUC-JP"
+    return "text/plain; charset=EUC-JP";
 #endif
 #else
-        "Content-Type: text/plain; charset=ASCII"
+    return "text/plain; charset=ASCII";
 #endif
-    );
-
-    curl_easy_setopt(curl, CURLOPT_URL, url);
-    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist);
-
-    char user_agent[64];
-    snprintf(user_agent, sizeof(user_agent), "Hengband %d.%d.%d", H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH);
-    curl_easy_setopt(curl, CURLOPT_USERAGENT, user_agent);
-
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);
-
-    curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
-    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, HTTP_TIMEOUT);
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, HTTP_TIMEOUT);
-
-    curl_easy_setopt(curl, CURLOPT_POST, 1);
-
-    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
-    curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 10);
-    curl_easy_setopt(curl, CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
-
-    buf->read_head = 0;
-    curl_easy_setopt(curl, CURLOPT_READDATA, buf);
-    curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, buf->size);
-
-    if (curl_easy_perform(curl) == CURLE_OK) {
-        long response_code;
-        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
-        if (response_code == 200) {
-            succeeded = true;
-        }
-    }
-
-    curl_slist_free_all(slist);
-    curl_easy_cleanup(curl);
-
-    return succeeded;
 }
 
 /*!
- * @brief キャラクタダンプを作って BUFに保存
+ * @brief スコアサーバにスコアを送信する
+ * @param score_data 送信するスコアデータ
+ * @return 送信に成功した場合true、失敗した場合false
+ */
+static bool post_score_to_score_server(PlayerType *player_ptr, const std::string &score_data)
+{
+    http::Client client;
+    client.user_agent = format("Hengband %d.%d.%d", H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH);
+
+    term_clear();
+
+    while (true) {
+        term_fresh();
+        prt(_("スコア送信中...", "Sending the score..."), 0, 0);
+        term_fresh();
+
+        const auto res = client.post(SCORE_POST_URL, score_data, get_score_content_type());
+        if (res.has_value() && (res->status == 200)) {
+            return true;
+        }
+
+        prt(_("スコア・サーバへの送信に失敗しました。", "Failed to send to the score server."), 0, 0);
+        (void)inkey();
+        if (!get_check_strict(player_ptr, _("もう一度接続を試みますか? ", "Try again? "), CHECK_NO_HISTORY)) {
+            return false;
+        }
+    }
+}
+
+/*!
+ * @brief キャラクタダンプを引数で指定した出力ストリームに書き込む
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param dumpbuf 伝送内容バッファ
+ * @param stream 書き込む出力ストリーム
  * @return エラーコード
  */
-static errr make_dump(PlayerType *player_ptr, BUF *dumpbuf)
+static errr make_dump(PlayerType *player_ptr, std::ostream &stream)
 {
-    char buf[1024];
     FILE *fff;
     GAME_TEXT file_name[1024];
 
@@ -261,13 +120,12 @@ static errr make_dump(PlayerType *player_ptr, BUF *dumpbuf)
     make_character_dump(player_ptr, fff);
     angband_fclose(fff);
 
-    /* Open for read */
-    fff = angband_fopen(file_name, FileOpenMode::READ);
-
-    while (fgets(buf, 1024, fff)) {
-        (void)buf_sprintf(dumpbuf, "%s", buf);
+    // 一時ファイルを削除する前に閉じるためブロックにする
+    {
+        std::ifstream ifs(file_name);
+        stream << ifs.rdbuf();
     }
-    angband_fclose(fff);
+
     fd_kill(file_name);
 
     /* Success */
@@ -280,26 +138,17 @@ static errr make_dump(PlayerType *player_ptr, BUF *dumpbuf)
  */
 concptr make_screen_dump(PlayerType *player_ptr)
 {
-    static concptr html_head[] = {
-        "<html>\n<body text=\"#ffffff\" bgcolor=\"#000000\">\n",
-        "<pre>",
-        0,
-    };
-    static concptr html_foot[] = {
-        "</pre>\n",
-        "</body>\n</html>\n",
-        0,
-    };
+    constexpr auto html_head =
+        "<html>\n<body text=\"#ffffff\" bgcolor=\"#000000\">\n"
+        "<pre>\n";
+    constexpr auto html_foot =
+        "</pre>\n"
+        "</body>\n</html>\n";
 
     int wid, hgt;
     term_get_size(&wid, &hgt);
 
-    /* Alloc buffer */
-    BUF *screen_buf;
-    screen_buf = buf_new();
-    if (screen_buf == nullptr) {
-        return nullptr;
-    }
+    std::stringstream screen_ss;
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     bool old_use_graphics = use_graphics;
@@ -321,15 +170,13 @@ concptr make_screen_dump(PlayerType *player_ptr)
         handle_stuff(player_ptr);
     }
 
-    for (int i = 0; html_head[i]; i++) {
-        buf_sprintf(screen_buf, html_head[i]);
-    }
+    screen_ss << html_head;
 
     /* Dump the screen */
     for (int y = 0; y < hgt; y++) {
         /* Start the row */
         if (y != 0) {
-            buf_sprintf(screen_buf, "\n");
+            screen_ss << '\n';
         }
 
         /* Dump each row */
@@ -372,37 +219,29 @@ concptr make_screen_dump(PlayerType *player_ptr)
                 rv = angband_color_table[a][1];
                 gv = angband_color_table[a][2];
                 bv = angband_color_table[a][3];
-                buf_sprintf(screen_buf, "%s<font color=\"#%02x%02x%02x\">", ((y == 0 && x == 0) ? "" : "</font>"), rv, gv, bv);
+                screen_ss << format("%s<font color=\"#%02x%02x%02x\">", ((y == 0 && x == 0) ? "" : "</font>"), rv, gv, bv);
                 old_a = a;
             }
 
             if (cc) {
-                buf_sprintf(screen_buf, "%s", cc);
+                screen_ss << cc;
             } else {
-                buf_sprintf(screen_buf, "%c", c);
+                screen_ss << c;
             }
         }
     }
 
-    buf_sprintf(screen_buf, "</font>");
+    screen_ss << "</font>\n";
 
-    for (int i = 0; html_foot[i]; i++) {
-        buf_sprintf(screen_buf, html_foot[i]);
-    }
+    screen_ss << html_foot;
 
-    /* Screen dump size is too big ? */
     concptr ret;
-    if (screen_buf->size + 1 > SCREEN_BUF_MAX_SIZE) {
-        ret = nullptr;
+    if (const auto screen_dump_size = screen_ss.tellp();
+        (0 <= screen_dump_size) && (screen_dump_size < SCREEN_BUF_MAX_SIZE)) {
+        ret = string_make(screen_ss.str().data());
     } else {
-        /* Terminate string */
-        buf_append(screen_buf, "", 1);
-
-        ret = string_make(screen_buf->data);
+        ret = nullptr;
     }
-
-    /* Free buffer */
-    buf_delete(screen_buf);
 
     if (!old_use_graphics) {
         return ret;
@@ -429,54 +268,36 @@ concptr make_screen_dump(PlayerType *player_ptr)
  */
 bool report_score(PlayerType *player_ptr)
 {
-    auto *score = buf_new();
+    std::stringstream score_ss;
     std::string personality_desc = ap_ptr->title;
     personality_desc.append(_(ap_ptr->no ? "の" : "", " "));
 
     auto realm1_name = PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST) ? get_element_title(player_ptr->element) : realm_names[player_ptr->realm1];
-    buf_sprintf(score, "name: %s\n", player_ptr->name);
-    buf_sprintf(score, "version: %s\n", get_version().data());
-    buf_sprintf(score, "score: %d\n", calc_score(player_ptr));
-    buf_sprintf(score, "level: %d\n", player_ptr->lev);
-    buf_sprintf(score, "depth: %d\n", player_ptr->current_floor_ptr->dun_level);
-    buf_sprintf(score, "maxlv: %d\n", player_ptr->max_plv);
-    buf_sprintf(score, "maxdp: %d\n", max_dlv[DUNGEON_ANGBAND]);
-    buf_sprintf(score, "au: %d\n", player_ptr->au);
-    buf_sprintf(score, "turns: %d\n", turn_real(player_ptr, w_ptr->game_turn));
-    buf_sprintf(score, "sex: %d\n", player_ptr->psex);
-    buf_sprintf(score, "race: %s\n", rp_ptr->title);
-    buf_sprintf(score, "class: %s\n", cp_ptr->title);
-    buf_sprintf(score, "seikaku: %s\n", personality_desc.data());
-    buf_sprintf(score, "realm1: %s\n", realm1_name);
-    buf_sprintf(score, "realm2: %s\n", realm_names[player_ptr->realm2]);
-    buf_sprintf(score, "killer: %s\n", player_ptr->died_from.data());
-    buf_sprintf(score, "-----charcter dump-----\n");
+    score_ss << format("name: %s\n", player_ptr->name)
+             << format("version: %s\n", get_version().data())
+             << format("score: %ld\n", calc_score(player_ptr))
+             << format("level: %d\n", player_ptr->lev)
+             << format("depth: %d\n", player_ptr->current_floor_ptr->dun_level)
+             << format("maxlv: %d\n", player_ptr->max_plv)
+             << format("maxdp: %d\n", max_dlv[DUNGEON_ANGBAND])
+             << format("au: %d\n", player_ptr->au)
+             << format("turns: %d\n", turn_real(player_ptr, w_ptr->game_turn))
+             << format("sex: %d\n", player_ptr->psex)
+             << format("race: %s\n", rp_ptr->title)
+             << format("class: %s\n", cp_ptr->title)
+             << format("seikaku: %s\n", personality_desc.data())
+             << format("realm1: %s\n", realm1_name)
+             << format("realm2: %s\n", realm_names[player_ptr->realm2])
+             << format("killer: %s\n", player_ptr->died_from.data())
+             << "-----charcter dump-----\n";
 
-    make_dump(player_ptr, score);
+    make_dump(player_ptr, score_ss);
     if (screen_dump) {
-        buf_sprintf(score, "-----screen shot-----\n");
-        buf_append(score, screen_dump, strlen(screen_dump));
+        score_ss << "-----screen shot-----\n"
+                 << screen_dump;
     }
 
-    term_clear();
-    while (true) {
-        term_fresh();
-        prt(_("スコア送信中...", "Sending the score..."), 0, 0);
-        term_fresh();
-        if (http_post(SCORE_PATH, score)) {
-            buf_delete(score);
-            return true;
-        }
-
-        prt(_("スコア・サーバへの送信に失敗しました。", "Failed to send to the score server."), 0, 0);
-        (void)inkey();
-        if (get_check_strict(player_ptr, _("もう一度接続を試みますか? ", "Try again? "), CHECK_NO_HISTORY)) {
-            continue;
-        }
-
-        buf_delete(score);
-        return false;
-    }
+    return post_score_to_score_server(player_ptr, score_ss.str());
 }
 #else
 concptr screen_dump = nullptr;

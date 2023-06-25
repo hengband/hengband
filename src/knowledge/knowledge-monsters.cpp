@@ -58,41 +58,37 @@ static std::vector<MonsterRaceId> collect_monsters(PlayerType *player_ptr, IDX g
     bool grp_wanted = (monster_group_char[grp_cur] == (char *)-3L);
     bool grp_amberite = (monster_group_char[grp_cur] == (char *)-4L);
 
-    std::vector<MonsterRaceId> r_idx_list;
-    for (const auto &[r_idx, r_ref] : monraces_info) {
-        if (r_ref.name.empty()) {
-            continue;
-        }
-        if (((mode != MONSTER_LORE_DEBUG) && (mode != MONSTER_LORE_RESEARCH)) && !cheat_know && !r_ref.r_sights) {
+    std::vector<MonsterRaceId> monrace_ids;
+    for (const auto &[monrace_id, monrace] : monraces_info) {
+        if (((mode != MONSTER_LORE_DEBUG) && (mode != MONSTER_LORE_RESEARCH)) && !cheat_know && !monrace.r_sights) {
             continue;
         }
 
         if (grp_unique) {
-            if (r_ref.kind_flags.has_not(MonsterKindType::UNIQUE)) {
+            if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
                 continue;
             }
         } else if (grp_riding) {
-            if (none_bits(r_ref.flags7, RF7_RIDING)) {
+            if (none_bits(monrace.flags7, RF7_RIDING)) {
                 continue;
             }
         } else if (grp_wanted) {
-            auto wanted = player_ptr->knows_daily_bounty && (w_ptr->today_mon == r_ref.idx);
-            wanted |= MonsterRace(r_ref.idx).is_bounty(false);
-
+            auto wanted = player_ptr->knows_daily_bounty && (w_ptr->today_mon == monrace_id);
+            wanted |= MonsterRace(monrace_id).is_bounty(false);
             if (!wanted) {
                 continue;
             }
         } else if (grp_amberite) {
-            if (r_ref.kind_flags.has_not(MonsterKindType::AMBERITE)) {
+            if (monrace.kind_flags.has_not(MonsterKindType::AMBERITE)) {
                 continue;
             }
         } else {
-            if (!angband_strchr(group_char, r_ref.d_char)) {
+            if (!angband_strchr(group_char, monrace.d_char)) {
                 continue;
             }
         }
 
-        r_idx_list.push_back(r_ref.idx);
+        monrace_ids.push_back(monrace_id);
         if (mode == MONSTER_LORE_NORMAL) {
             break;
         }
@@ -102,8 +98,8 @@ static std::vector<MonsterRaceId> collect_monsters(PlayerType *player_ptr, IDX g
     }
 
     int dummy_why;
-    ang_sort(player_ptr, r_idx_list.data(), &dummy_why, r_idx_list.size(), ang_sort_comp_monster_level, ang_sort_swap_hook);
-    return r_idx_list;
+    ang_sort(player_ptr, monrace_ids.data(), &dummy_why, monrace_ids.size(), ang_sort_comp_monster_level, ang_sort_swap_hook);
+    return monrace_ids;
 }
 
 /*!
@@ -187,9 +183,9 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
 
     std::vector<MonsterRaceId> who;
     total = 0;
-    for (const auto &[r_idx, r_ref] : monraces_info) {
-        if (MonsterRace(r_ref.idx).is_valid() && !r_ref.name.empty()) {
-            who.push_back(r_ref.idx);
+    for (const auto &[monrace_id, r_ref] : monraces_info) {
+        if (MonsterRace(monrace_id).is_valid()) {
+            who.push_back(monrace_id);
         }
     }
 
@@ -223,7 +219,7 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
         fprintf(fff, "     %3d %sの %s\n", (int)this_monster, number_of_kills, r_ptr->name.data());
 #else
         if (this_monster < 2) {
-            if (angband_strstr(r_ptr->name.data(), "coins")) {
+            if (r_ptr->name.find("coins") != std::string::npos) {
                 fprintf(fff, "     1 pile of %s\n", r_ptr->name.data());
             } else {
                 fprintf(fff, "     1 %s\n", r_ptr->name.data());

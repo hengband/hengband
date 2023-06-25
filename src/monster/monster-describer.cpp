@@ -13,7 +13,6 @@
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
-#include "util/quarks.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <optional>
@@ -146,7 +145,7 @@ static std::string get_describing_monster_name(const MonsterEntity &monster, con
     do {
         auto r_idx = MonsterRace::pick_one_at_random();
         hallu_race = &monraces_info[r_idx];
-    } while (hallu_race->name.empty() || hallu_race->kind_flags.has(MonsterKindType::UNIQUE));
+    } while (hallu_race->kind_flags.has(MonsterKindType::UNIQUE));
     return hallu_race->name;
 }
 

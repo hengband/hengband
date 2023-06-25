@@ -19,6 +19,7 @@
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-flags.h"
+#include "monster-race/race-indice-types.h"
 #include "mutation/mutation-processor.h"
 #include "object-activation/activation-others.h"
 #include "player-base/player-class.h"
@@ -56,15 +57,13 @@ static const std::vector<debug_spell_command> debug_spell_commands_list = {
 
 /*!
  * @brief コマンド入力により任意にスペル効果を起こす / Wizard spells
- * @return 実際にテレポートを行ったらTRUEを返す
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
-bool wiz_debug_spell(PlayerType *player_ptr)
+void wiz_debug_spell(PlayerType *player_ptr)
 {
     char tmp_val[50] = "\0";
-    int tmp_int;
-
     if (!get_string("SPELL: ", tmp_val, 32)) {
-        return false;
+        return;
     }
 
     for (const auto &d : debug_spell_commands_list) {
@@ -75,32 +74,29 @@ bool wiz_debug_spell(PlayerType *player_ptr)
         switch (d.type) {
         case 2:
             (d.command_function.spell2.spell_function)(player_ptr);
-            return true;
-            break;
-        case 3:
-            tmp_val[0] = '\0';
-            if (!get_string("POWER:", tmp_val, 32)) {
-                return false;
+            return;
+        case 3: {
+            const auto power = input_integer("POWER", -MAX_INT, MAX_INT);
+            if (!power.has_value()) {
+                return;
             }
-            tmp_int = atoi(tmp_val);
-            (d.command_function.spell3.spell_function)(player_ptr, tmp_int);
-            return true;
-            break;
-        case 4:
-            (d.command_function.spell4.spell_function)(player_ptr, true, &tmp_int);
-            return true;
-            break;
+
+            (d.command_function.spell3.spell_function)(player_ptr, power.value());
+            return;
+        }
+        case 4: {
+            auto count = 0;
+            (d.command_function.spell4.spell_function)(player_ptr, true, &count);
+            return;
+        }
         case 5:
             (d.command_function.spell5.spell_function)(player_ptr);
-            return true;
-            break;
+            return;
         default:
-            break;
+            msg_format("Command not found.");
+            return;
         }
     }
-
-    msg_format("Command not found.");
-    return false;
 }
 
 /*!
@@ -228,12 +224,14 @@ void wiz_summon_random_monster(PlayerType *player_ptr, int num)
 void wiz_summon_specific_monster(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     if (!MonsterRace(r_idx).is_valid()) {
-        int val = 1;
-        if (!get_value("MonsterID", 1, monraces_info.size() - 1, &val)) {
+        const auto new_monrace_id = input_numerics("MonsterID", 1, monraces_info.size() - 1, MonsterRaceId::FILTHY_URCHIN);
+        if (!new_monrace_id.has_value()) {
             return;
         }
-        r_idx = static_cast<MonsterRaceId>(val);
+
+        r_idx = new_monrace_id.value();
     }
+
     (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, r_idx, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
 }
 
@@ -247,12 +245,14 @@ void wiz_summon_specific_monster(PlayerType *player_ptr, MonsterRaceId r_idx)
 void wiz_summon_pet(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     if (!MonsterRace(r_idx).is_valid()) {
-        int val = 1;
-        if (!get_value("MonsterID", 1, monraces_info.size() - 1, &val)) {
+        const auto new_monrace_id = input_numerics("MonsterID", 1, monraces_info.size() - 1, MonsterRaceId::FILTHY_URCHIN);
+        if (!new_monrace_id.has_value()) {
             return;
         }
-        r_idx = static_cast<MonsterRaceId>(val);
+
+        r_idx = new_monrace_id.value();
     }
+
     (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, r_idx, PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_FORCE_PET);
 }
 
@@ -263,19 +263,21 @@ void wiz_summon_pet(PlayerType *player_ptr, MonsterRaceId r_idx)
  * @param self 自分に与えるか否か
  * @details デフォルトは100万・GF_ARROW(射撃)。RES_ALL持ちも一撃で殺せる。
  */
-void wiz_kill_target(PlayerType *player_ptr, int dam, AttributeType effect_idx, const bool self)
+void wiz_kill_target(PlayerType *player_ptr, int initial_dam, AttributeType effect_idx, const bool self)
 {
+    auto dam = initial_dam;
     if (dam <= 0) {
-        dam = 1000000;
-        if (!get_value("Damage", 1, 1000000, &dam)) {
+        const auto input_dam = input_integer("Damage", 1, 1000000, 1000000);
+        if (!input_dam.has_value()) {
             return;
         }
+
+        dam = input_dam.value();
     }
 
     constexpr auto max = enum2i(AttributeType::MAX);
-    auto idx = enum2i(effect_idx);
-
-    if (idx <= 0) {
+    auto idx = effect_idx;
+    if (effect_idx == AttributeType::NONE) {
         screen_save();
         for (auto i = 1; i <= 23; i++) {
             prt("", i, 0);
@@ -288,23 +290,24 @@ void wiz_kill_target(PlayerType *player_ptr, int dam, AttributeType effect_idx, 
             put_str(format("%03d:%-.10s^", num, name.data()), 1 + i / 5, 1 + (i % 5) * 16);
         }
 
-        if (!get_value("EffectID", 1, max - 1, &idx)) {
+        const auto input_effect_id = input_numerics("EffectID", 1, max - 1, idx);
+        if (!input_effect_id.has_value()) {
             screen_load();
             return;
         }
 
+        idx = input_effect_id.value();
         screen_load();
     }
 
     if (self) {
-        project(player_ptr, -1, 0, player_ptr->y, player_ptr->x, dam, i2enum<AttributeType>(idx), PROJECT_KILL | PROJECT_PLAYER);
+        project(player_ptr, -1, 0, player_ptr->y, player_ptr->x, dam, idx, PROJECT_KILL | PROJECT_PLAYER);
         return;
     }
 
-    effect_idx = i2enum<AttributeType>(idx);
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir)) {
         return;
     }
-    fire_ball(player_ptr, effect_idx, dir, dam, 0);
+    fire_ball(player_ptr, idx, dir, dam, 0);
 }

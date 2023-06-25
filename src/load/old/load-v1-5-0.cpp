@@ -49,7 +49,6 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
-#include "util/quarks.h"
 #include "world/world-object.h"
 #include "world/world.h"
 

@@ -135,9 +135,9 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
             }
 
 #ifdef JP
-            if (angband_strstr(temp2, temp) || angband_strstr(r_ref.name.data(), temp))
+            if (str_find(temp2, temp) || str_find(r_ref.name, temp))
 #else
-            if (angband_strstr(temp2, temp))
+            if (str_find(temp2, temp))
 #endif
                 who.push_back(r_ref.idx);
         }

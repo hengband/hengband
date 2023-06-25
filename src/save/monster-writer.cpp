@@ -8,7 +8,6 @@
 #include "system/monster-race-info.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
-#include "util/quarks.h"
 
 static void write_monster_flags(MonsterEntity *m_ptr, BIT_FLAGS *flags)
 {

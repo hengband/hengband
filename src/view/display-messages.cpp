@@ -80,13 +80,13 @@ int32_t message_num(void)
  * @param age メッセージの世代
  * @return メッセージの文字列ポインタ
  */
-concptr message_str(int age)
+std::shared_ptr<const std::string> message_str(int age)
 {
     if ((age < 0) || (age >= message_num())) {
-        return "";
+        return std::make_shared<const std::string>("");
     }
 
-    return message_history[age]->data();
+    return message_history[age];
 }
 
 static void message_add_aux(std::string str)
@@ -389,19 +389,6 @@ void msg_print(std::nullptr_t)
         msg_flag = false;
         msg_head_pos = 0;
     }
-}
-
-/*
- * Display a formatted message, using "vstrnfmt()" and "msg_print()".
- */
-void msg_format(std::string_view fmt, ...)
-{
-    va_list vp;
-    char buf[1024];
-    va_start(vp, fmt);
-    (void)vstrnfmt(buf, sizeof(buf), fmt.data(), vp);
-    va_end(vp);
-    msg_print(buf);
 }
 
 void msg_format(const char *fmt, ...)

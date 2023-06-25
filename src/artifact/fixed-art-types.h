@@ -6,6 +6,7 @@
 
 enum class FixedArtifactId : short {
     NONE = 0,
+    GALADRIEL_PHIAL = 1,
     JUDGE = 3,
     POWER = 13,
     CRIMSON = 16,

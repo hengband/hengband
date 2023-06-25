@@ -13,6 +13,7 @@
 #include "info-reader/fixed-map-parser.h"
 #include "inventory/inventory-slot-types.h"
 #include "knowledge/knowledge-mutations.h"
+#include "locale/japanese.h"
 #include "mind/mind-elementalist.h"
 #include "mutation/mutation-flag-types.h"
 #include "object/object-info.h"
@@ -125,8 +126,8 @@ static void display_phisique(PlayerType *player_ptr)
 {
 #ifdef JP
     display_player_one_line(ENTRY_AGE, format("%d才", (int)player_ptr->age), TERM_L_BLUE);
-    display_player_one_line(ENTRY_HEIGHT, format("%dcm", (int)((player_ptr->ht * 254) / 100)), TERM_L_BLUE);
-    display_player_one_line(ENTRY_WEIGHT, format("%dkg", (int)((player_ptr->wt * 4536) / 10000)), TERM_L_BLUE);
+    display_player_one_line(ENTRY_HEIGHT, format("%dcm", inch_to_cm(player_ptr->ht)), TERM_L_BLUE);
+    display_player_one_line(ENTRY_WEIGHT, format("%dkg", lb_to_kg(player_ptr->wt)), TERM_L_BLUE);
     display_player_one_line(ENTRY_SOCIAL, format("%d  ", (int)player_ptr->sc), TERM_L_BLUE);
 #else
     display_player_one_line(ENTRY_AGE, format("%d", (int)player_ptr->age), TERM_L_BLUE);

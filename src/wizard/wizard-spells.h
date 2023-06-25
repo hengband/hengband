@@ -36,7 +36,7 @@ struct debug_spell_command {
     spell_functions command_function;
 };
 
-bool wiz_debug_spell(PlayerType *player_ptr);
+void wiz_debug_spell(PlayerType *player_ptr);
 void wiz_dimension_door(PlayerType *player_ptr);
 void wiz_summon_horde(PlayerType *player_ptr);
 void wiz_teleport_back(PlayerType *player_ptr);
@@ -46,4 +46,4 @@ void wiz_generate_random_monster(PlayerType *player_ptr, int num);
 void wiz_summon_random_monster(PlayerType *player_ptr, int num);
 void wiz_summon_specific_monster(PlayerType *player_ptr, MonsterRaceId r_idx);
 void wiz_summon_pet(PlayerType *player_ptr, MonsterRaceId r_idx);
-void wiz_kill_target(PlayerType *player_ptr, int dam = 1000000, AttributeType effect_idx = AttributeType::DEBUG, const bool self = false);
+void wiz_kill_target(PlayerType *player_ptr, int initial_dam = 1000000, AttributeType effect_idx = AttributeType::DEBUG, const bool self = false);

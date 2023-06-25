@@ -117,11 +117,12 @@
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
+      <AdditionalOptions>/execution-charset:shift-jis %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalDependencies>winmm.lib;gdiplus.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;curl\x86 Debug\libcurl_a_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;gdiplus.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;curl\lib\libcurl_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ShowProgress>LinkVerbose</ShowProgress>
       <SubSystem>Windows</SubSystem>
     </Link>
@@ -146,7 +147,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>..\..\src;curl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
     </ClCompile>
@@ -154,7 +155,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
       <ShowProgress>LinkVerbose</ShowProgress>
-      <AdditionalDependencies>winmm.lib;gdiplus.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;curl\x86 Debug\libcurl_a_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;gdiplus.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;curl\lib\libcurl_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -171,13 +172,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <CompileAs>CompileAsCpp</CompileAs>
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
+      <AdditionalOptions>/execution-charset:shift-jis %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalDependencies>winmm.lib;gdiplus.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;curl\x86 Release\libcurl_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;gdiplus.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;curl\lib\libcurl_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <OptimizeReferences>true</OptimizeReferences>
@@ -204,13 +206,13 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>..\..\src;curl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <CompileAs>CompileAsCpp</CompileAs>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>winmm.lib;gdiplus.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;curl\x86 Release\libcurl_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;gdiplus.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;curl\lib\libcurl_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -277,6 +279,9 @@
     <ClCompile Include="..\..\src\monster-race\race-brightness-mask.cpp" />
     <ClCompile Include="..\..\src\monster-race\race-feature-mask.cpp" />
     <ClCompile Include="..\..\src\monster\monster-pain-describer.cpp" />
+    <ClCompile Include="..\..\src\net\curl-easy-session.cpp" />
+    <ClCompile Include="..\..\src\net\curl-slist.cpp" />
+    <ClCompile Include="..\..\src\net\http-client.cpp" />
     <ClCompile Include="..\..\src\object-enchant\enchanter-factory.cpp" />
     <ClCompile Include="..\..\src\mspell\mspell-attack\abstract-mspell.cpp" />
     <ClCompile Include="..\..\src\mspell\mspell-data.cpp" />
@@ -633,7 +638,6 @@
     <ClCompile Include="..\..\src\system\alloc-entries.cpp" />
     <ClCompile Include="..\..\src\term\screen-processor.cpp" />
     <ClCompile Include="..\..\src\util\buffer-shaper.cpp" />
-    <ClCompile Include="..\..\src\util\quarks.cpp" />
     <ClCompile Include="..\..\src\lore\combat-types-setter.cpp" />
     <ClCompile Include="..\..\src\lore\magic-types-setter.cpp" />
     <ClCompile Include="..\..\src\lore\lore-calculator.cpp" />
@@ -991,6 +995,9 @@
     <ClInclude Include="..\..\src\mspell\mspell-attack\abstract-mspell.h" />
     <ClInclude Include="..\..\src\mspell\mspell-data.h" />
     <ClInclude Include="..\..\src\mspell\mspell-result.h" />
+    <ClInclude Include="..\..\src\net\curl-easy-session.h" />
+    <ClInclude Include="..\..\src\net\curl-slist.h" />
+    <ClInclude Include="..\..\src\net\http-client.h" />
     <ClInclude Include="..\..\src\object-enchant\enchanter-factory.h" />
     <ClInclude Include="..\..\src\object-enchant\protector\apply-magic-soft-armor.h" />
     <ClInclude Include="..\..\src\object-enchant\others\apply-magic-lite.h" />
@@ -1422,10 +1429,10 @@
     <ClInclude Include="..\..\src\util\buffer-shaper.h" />
     <ClInclude Include="..\..\src\util\enum-converter.h" />
     <ClInclude Include="..\..\src\util\enum-range.h" />
+    <ClInclude Include="..\..\src\util\finalizer.h" />
     <ClInclude Include="..\..\src\util\flag-group.h" />
     <ClInclude Include="..\..\src\util\int-char-converter.h" />
     <ClInclude Include="..\..\src\util\point-2d.h" />
-    <ClInclude Include="..\..\src\util\quarks.h" />
     <ClInclude Include="..\..\src\lore\combat-types-setter.h" />
     <ClInclude Include="..\..\src\lore\magic-types-setter.h" />
     <ClInclude Include="..\..\src\lore\lore-calculator.h" />

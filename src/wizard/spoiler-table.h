@@ -14,8 +14,6 @@
 #define MAX_VULNERABLE_FLAGS_DESCRIPTION 6
 #define MAX_IMMUNITY_FLAGS_DESCRIPTION 4
 #define MAX_SUSTAINER_FLAGS_DESCRIPTION 6
-#define MAX_MISC2_FLAGS_DESCRIPTION 4
-#define MAX_MISC3_FLAGS_DESCRIPTION 39
 
 /* A tval grouper */
 struct grouper {
@@ -44,5 +42,5 @@ extern const flag_desc resist_flags_desc[MAX_RESISTANCE_FLAGS_DESCRIPTION];
 extern const flag_desc vulnerable_flags_desc[MAX_VULNERABLE_FLAGS_DESCRIPTION];
 extern const flag_desc immune_flags_desc[MAX_IMMUNITY_FLAGS_DESCRIPTION];
 extern const flag_desc sustain_flags_desc[MAX_SUSTAINER_FLAGS_DESCRIPTION];
-extern const flag_desc misc_flags2_desc[MAX_MISC2_FLAGS_DESCRIPTION];
-extern const flag_desc misc_flags3_desc[MAX_MISC3_FLAGS_DESCRIPTION];
+extern const std::vector<flag_desc> misc_flags2_desc;
+extern const std::vector<flag_desc> misc_flags3_desc;

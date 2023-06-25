@@ -23,7 +23,6 @@
 #include "term/gameterm.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
-#include "util/quarks.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
@@ -63,8 +62,6 @@ void init_other(PlayerType *player_ptr)
     macro__pat.assign(MACRO_MAX, {});
     macro__act.assign(MACRO_MAX, {});
     macro__buf.assign(FILE_READ_BUFF_SIZE, {});
-    quark_init();
-
     for (auto i = 0; option_info[i].o_desc; i++) {
         int os = option_info[i].o_set;
         int ob = option_info[i].o_bit;

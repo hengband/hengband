@@ -145,7 +145,7 @@ static void dump_aux_last_message(PlayerType *player_ptr, FILE *fff)
     if (!w_ptr->total_winner) {
         fprintf(fff, _("\n  [死ぬ直前のメッセージ]\n\n", "\n  [Last Messages]\n\n"));
         for (int i = std::min(message_num(), 30); i >= 0; i--) {
-            fprintf(fff, "> %s\n", message_str((int16_t)i));
+            fprintf(fff, "> %s\n", message_str(i)->data());
         }
 
         fputc('\n', fff);
@@ -262,16 +262,18 @@ static void dump_aux_arena(PlayerType *player_ptr, FILE *fff)
         return;
     }
 
-    if (player_ptr->arena_number < 0) {
-        if (player_ptr->arena_number <= ARENA_DEFEATED_OLD_VER) {
+    const auto arena_number = player_ptr->arena_number;
+    if (arena_number < 0) {
+        if (arena_number <= ARENA_DEFEATED_OLD_VER) {
             fprintf(fff, _("\n 闘技場: 敗北\n", "\n Arena: Defeated\n"));
         } else {
+            constexpr auto mes = _("\n 闘技場: %d回戦で%sの前に敗北\n", "\n Arena: Defeated by %s in the %d%s fight\n");
+            const auto &arena = arena_info[-1 - arena_number];
+            const auto &arena_monrace = monraces_info[arena.r_idx];
 #ifdef JP
-            fprintf(
-                fff, "\n 闘技場: %d回戦で%sの前に敗北\n", -player_ptr->arena_number, monraces_info[arena_info[-1 - player_ptr->arena_number].r_idx].name.data());
+            fprintf(fff, mes, -arena_number, arena_monrace.name.data());
 #else
-            fprintf(fff, "\n Arena: Defeated by %s in the %d%s fight\n", monraces_info[arena_info[-1 - player_ptr->arena_number].r_idx].name.data(),
-                -player_ptr->arena_number, get_ordinal_number_suffix(-player_ptr->arena_number).data());
+            fprintf(fff, mes, arena_monrace.name.data(), -arena_number, get_ordinal_number_suffix(-arena_number).data());
 #endif
         }
 
@@ -279,23 +281,23 @@ static void dump_aux_arena(PlayerType *player_ptr, FILE *fff)
         return;
     }
 
-    if (player_ptr->arena_number > MAX_ARENA_MONS + 2) {
+    if (arena_number > MAX_ARENA_MONS + 2) {
         fprintf(fff, _("\n 闘技場: 真のチャンピオン\n", "\n Arena: True Champion\n"));
         fprintf(fff, "\n");
         return;
     }
 
-    if (player_ptr->arena_number > MAX_ARENA_MONS - 1) {
+    if (arena_number > MAX_ARENA_MONS - 1) {
         fprintf(fff, _("\n 闘技場: チャンピオン\n", "\n Arena: Champion\n"));
         fprintf(fff, "\n");
         return;
     }
 
+    const auto victory_count = arena_number > MAX_ARENA_MONS ? MAX_ARENA_MONS : arena_number;
 #ifdef JP
-    fprintf(fff, "\n 闘技場: %2d勝\n", (player_ptr->arena_number > MAX_ARENA_MONS ? MAX_ARENA_MONS : player_ptr->arena_number));
+    fprintf(fff, "\n 闘技場: %2d勝\n", victory_count);
 #else
-    fprintf(fff, "\n Arena: %2d Victor%s\n", (player_ptr->arena_number > MAX_ARENA_MONS ? MAX_ARENA_MONS : player_ptr->arena_number),
-        (player_ptr->arena_number > 1) ? "ies" : "y");
+    fprintf(fff, "\n Arena: %2d %s\n", victory_count, (arena_number > 1) ? "Victories" : "Victory");
 #endif
     fprintf(fff, "\n");
 }
@@ -314,26 +316,26 @@ static void dump_aux_monsters(PlayerType *player_ptr, FILE *fff)
 
     /* Count monster kills */
     auto norm_total = 0;
-    for (const auto &[r_idx, r_ref] : monraces_info) {
+    for (const auto &[monrace_id, monrace] : monraces_info) {
         /* Ignore unused index */
-        if (!MonsterRace(r_ref.idx).is_valid() || r_ref.name.empty()) {
+        if (!MonsterRace(monrace_id).is_valid()) {
             continue;
         }
 
-        if (r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
-            bool dead = (r_ref.max_num == 0);
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+            auto dead = (monrace.max_num == 0);
             if (dead) {
                 norm_total++;
 
                 /* Add a unique monster to the list */
-                who.push_back(r_ref.idx);
+                who.push_back(monrace.idx);
             }
 
             continue;
         }
 
-        if (r_ref.r_pkills > 0) {
-            norm_total += r_ref.r_pkills;
+        if (monrace.r_pkills > 0) {
+            norm_total += monrace.r_pkills;
         }
     }
 

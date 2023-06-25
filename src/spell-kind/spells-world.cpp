@@ -42,6 +42,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <algorithm>
 
 /*!
  * @brief テレポート・レベルが効かないモンスターであるかどうかを判定する
@@ -538,9 +539,7 @@ bool free_level_recall(PlayerType *player_ptr)
  */
 bool reset_recall(PlayerType *player_ptr)
 {
-    int select_dungeon, dummy = 0;
-
-    select_dungeon = choose_dungeon(_("をセット", "reset"), 2, 14);
+    auto select_dungeon = choose_dungeon(_("をセット", "reset"), 2, 14);
     if (ironman_downward) {
         msg_print(_("何も起こらなかった。", "Nothing happens."));
         return true;
@@ -549,37 +548,25 @@ bool reset_recall(PlayerType *player_ptr)
     if (!select_dungeon) {
         return false;
     }
-    char ppp[80];
-    constexpr auto mes = _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): ");
-    strnfmt(ppp, sizeof(ppp), mes, (int)dungeons_info[select_dungeon].mindepth, (int)max_dlv[select_dungeon]);
-    char tmp_val[160];
-    strnfmt(tmp_val, sizeof(tmp_val), "%d", (int)std::max(player_ptr->current_floor_ptr->dun_level, 1));
 
-    if (!get_string(ppp, tmp_val, 10)) {
+    constexpr auto prompt = _("何階にセットしますか？", "Reset to which level?");
+    const auto min_level = dungeons_info[select_dungeon].mindepth;
+    const auto max_level = max_dlv[select_dungeon];
+    const auto reset_level_opt = input_numerics(prompt, min_level, max_level, player_ptr->current_floor_ptr->dun_level);
+    if (!reset_level_opt.has_value()) {
         return false;
     }
 
-    dummy = atoi(tmp_val);
-    if (dummy < 1) {
-        dummy = 1;
-    }
-    if (dummy > max_dlv[select_dungeon]) {
-        dummy = max_dlv[select_dungeon];
-    }
-    if (dummy < dungeons_info[select_dungeon].mindepth) {
-        dummy = dungeons_info[select_dungeon].mindepth;
-    }
-
-    max_dlv[select_dungeon] = dummy;
-
+    const auto reset_level = reset_level_opt.value();
+    max_dlv[select_dungeon] = reset_level;
     if (record_maxdepth) {
         constexpr auto note = _("フロア・リセットで", "using a scroll of reset recall");
         exe_write_diary(player_ptr, DiaryKind::TRUMP, select_dungeon, note);
     }
 #ifdef JP
-    msg_format("%sの帰還レベルを %d 階にセット。", dungeons_info[select_dungeon].name.data(), dummy);
+    msg_format("%sの帰還レベルを %d 階にセット。", dungeons_info[select_dungeon].name.data(), reset_level);
 #else
-    msg_format("Recall depth set to level %d (%d').", dummy, dummy * 50);
+    msg_format("Recall depth set to level %d (%d').", reset_level, reset_level * 50);
 #endif
     return true;
 }
