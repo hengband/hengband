@@ -965,6 +965,7 @@ hengband_SOURCES = \
 	util/bit-flags-calculator.h \
 	util/enum-converter.h \
 	util/enum-range.h \
+	util/finalizer.h \
 	util/flag-group.h \
 	util/int-char-converter.h \
 	util/object-sort.cpp util/object-sort.h \
