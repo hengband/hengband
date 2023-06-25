@@ -44,6 +44,7 @@
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <algorithm>
 
 /*!
  * @brief フロア脱出時に出戻りが不可能だった場合に警告を加える処理
@@ -460,21 +461,35 @@ void do_cmd_rest(PlayerType *player_ptr)
     }
 
     if (command_arg <= 0) {
-        concptr p = _("休憩 (0-9999, '*' で HP/MP全快, '&' で必要なだけ): ", "Rest (0-9999, '*' for HP/SP, '&' as needed): ");
-        char out_val[80];
-        strcpy(out_val, "&");
-        if (!input_string(p, out_val, 4)) {
-            return;
-        }
-
-        if (out_val[0] == '&') {
-            command_arg = COMMAND_ARG_REST_UNTIL_DONE;
-        } else if (out_val[0] == '*') {
-            command_arg = COMMAND_ARG_REST_FULL_HEALING;
-        } else {
-            command_arg = (COMMAND_ARG)atoi(out_val);
-            if (command_arg <= 0) {
+        while (true) {
+            constexpr auto p = _("休憩 (0-9999, '*' で HP/MP全快, '&' で必要なだけ): ", "Rest (0-9999, '*' for HP/SP, '&' as needed): ");
+            const auto rest_turns_opt = input_string(p, 4, "&");
+            if (!rest_turns_opt.has_value()) {
                 return;
+            }
+
+            const auto &rest_turns = rest_turns_opt.value();
+            if (rest_turns.starts_with('&')) {
+                command_arg = COMMAND_ARG_REST_UNTIL_DONE;
+                break;
+            }
+            
+            if (rest_turns.starts_with('*')) {
+                command_arg = COMMAND_ARG_REST_FULL_HEALING;
+                break;
+            }
+
+            try {
+                command_arg = static_cast<short>(std::stoi(rest_turns));
+                if (command_arg <= 0) {
+                    return;
+                }
+
+                break;
+            } catch (std::invalid_argument const &) {
+                msg_print(_("数値を入力して下さい。", "Please input numeric value."));
+            } catch (std::out_of_range const &) {
+                msg_print(_("入力可能な数値の範囲を超えています。", "Input value overflows the maximum number."));
             }
         }
     }

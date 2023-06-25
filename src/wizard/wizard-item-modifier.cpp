@@ -857,8 +857,6 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         nullptr,
     };
 
-    char buf[MAX_NLEN] = "\0";
-    char *str = buf;
     ItemEntity forge;
     auto *o_ptr = &forge;
     bool wish_art = false;
@@ -871,27 +869,35 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     bool blessed = false;
     bool fixed = true;
 
-    while (1) {
-        if (input_string(_("何をお望み？ ", "For what do you wish?"), buf, (MAX_NLEN - 1))) {
+    std::string pray;
+    while (true) {
+        const auto pray_opt = input_string(_("何をお望み？ ", "For what do you wish?"), MAX_NLEN);
+        if (pray_opt.has_value()) {
+            pray = pray_opt.value();
             break;
         }
+
         if (confirm) {
             if (!get_check(_("何も願いません。本当によろしいですか？", "Do you wish nothing, really? "))) {
                 continue;
             }
         }
+
         return WishResultType::NOTHING;
     }
 
+    auto *str = pray.data();
 #ifndef JP
     str_tolower(str);
-
-    /* remove 'a' */
-    if (!strncmp(buf, "a ", 2)) {
-        str = ltrim(str + 1);
-    } else if (!strncmp(buf, "an ", 3)) {
-        str = ltrim(str + 2);
+    const std::string article_single("a ");
+    const std::string article_multi("an ");
+    if (pray.starts_with("a ")) {
+        str += article_single.length();
+    } else if (pray.starts_with("an ")) {
+        str += article_multi.length();
     }
+
+    str = ltrim(str);
 #endif // !JP
 
     str = rtrim(str);
@@ -941,7 +947,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     }
 
     if (cheat_xtra) {
-        msg_format("Wishing %s....", buf);
+        msg_format("Wishing %s....", pray.data());
     }
 
     std::vector<short> k_ids;

@@ -64,11 +64,11 @@ void file_character(PlayerType *player_ptr, std::string_view filename)
     const auto &path = path_build(ANGBAND_DIR_USER, filename);
     auto fd = fd_open(path, O_RDONLY);
     if (fd >= 0) {
-        const auto &filename = path.string();
-        std::string query = _("現存するファイル ", "Replace existing file ");
-        query.append(filename).append(_(" に上書きしますか? ", "? "));
+        const auto &path_str = path.string();
+        std::stringstream ss;
+        ss << _("現存するファイル ", "Replace existing file ") << path_str << _(" に上書きしますか? ", "? ");
         (void)fd_close(fd);
-        if (get_check_strict(player_ptr, query, CHECK_NO_HISTORY)) {
+        if (get_check_strict(player_ptr, ss.str(), CHECK_NO_HISTORY)) {
             fd = -1;
         }
     }

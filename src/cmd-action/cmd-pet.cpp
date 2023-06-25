@@ -350,25 +350,20 @@ static void do_name_pet(PlayerType *player_ptr)
     msg_format(_("%sに名前をつける。", "Name %s."), monster_desc(player_ptr, m_ptr, 0).data());
     msg_print(nullptr);
 
-    /* Start with nothing */
-    char out_val[20]{};
-
-    /* Use old inscription */
     auto old_name = false;
+    std::string initial_name("");
     if (m_ptr->is_named()) {
-        /* Start with the old inscription */
-        angband_strcpy(out_val, m_ptr->nickname, sizeof(out_val));
+        initial_name = m_ptr->nickname;
         old_name = true;
     }
 
-    /* Get a new inscription (possibly empty) */
-    if (!input_string(_("名前: ", "Name: "), out_val, 15)) {
+    const auto new_name = input_string(_("名前: ", "Name: "), 15, initial_name);
+    if (!new_name.has_value()) {
         return;
     }
 
-    if (out_val[0]) {
-        /* Save the inscription */
-        m_ptr->nickname = out_val;
+    if (!new_name->empty()) {
+        m_ptr->nickname = new_name.value();
         if (record_named_pet) {
             exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_NAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE));
         }

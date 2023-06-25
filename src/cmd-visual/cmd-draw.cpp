@@ -102,7 +102,6 @@ void do_cmd_redraw(PlayerType *player_ptr)
 void do_cmd_player_status(PlayerType *player_ptr)
 {
     int mode = 0;
-    char tmp[160];
     screen_save();
     while (true) {
         TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
@@ -126,11 +125,13 @@ void do_cmd_player_status(PlayerType *player_ptr)
             get_name(player_ptr);
             process_player_name(player_ptr);
         } else if (c == 'f') {
-            strnfmt(tmp, sizeof(tmp), "%s.txt", player_ptr->base_name);
-            if (input_string(_("ファイル名: ", "File name: "), tmp, 80)) {
-                if (tmp[0] && (tmp[0] != ' ')) {
+            const auto initial_filename = format("%s.txt", player_ptr->base_name);
+            const auto input_filename = input_string(_("ファイル名: ", "File name: "), 80, initial_filename);
+            if (input_filename.has_value()) {
+                const auto &filename = str_ltrim(input_filename.value());
+                if (!filename.empty()) {
                     update_playtime();
-                    file_character(player_ptr, tmp);
+                    file_character(player_ptr, filename);
                 }
             }
         } else if (c == 'h') {
