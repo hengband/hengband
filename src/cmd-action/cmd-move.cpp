@@ -440,6 +440,38 @@ void do_cmd_stay(PlayerType *player_ptr, bool pickup)
 }
 
 /*!
+ * @brief 休憩ターン数のコマンド受付
+ */
+static bool input_rest_turns()
+{
+    constexpr auto p = _("休憩 (0-9999, '*' で HP/MP全快, '&' で必要なだけ): ", "Rest (0-9999, '*' for HP/SP, '&' as needed): ");
+    while (true) {
+        const auto rest_turns_opt = input_string(p, 4, "&");
+        if (!rest_turns_opt.has_value()) {
+            return false;
+        }
+
+        const auto &rest_turns = rest_turns_opt.value();
+        if (rest_turns.starts_with('&')) {
+            command_arg = COMMAND_ARG_REST_UNTIL_DONE;
+            return true;
+        }
+
+        if (rest_turns.starts_with('*')) {
+            command_arg = COMMAND_ARG_REST_FULL_HEALING;
+            return true;
+        }
+
+        try {
+            command_arg = static_cast<short>(std::clamp(std::stoi(rest_turns), 0, 9999));
+            return true;
+        } catch (std::invalid_argument const &) {
+            msg_print(_("数値を入力して下さい。", "Please input numeric value."));
+        }
+    }
+}
+
+/*!
  * @brief 「休む」動作コマンドのメインルーチン /
  * Resting allows a player to safely restore his hp	-RAK-
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -460,42 +492,8 @@ void do_cmd_rest(PlayerType *player_ptr)
         (void)spell_hex.stop_all_spells();
     }
 
-    if (command_arg <= 0) {
-        while (true) {
-            constexpr auto p = _("休憩 (0-9999, '*' で HP/MP全快, '&' で必要なだけ): ", "Rest (0-9999, '*' for HP/SP, '&' as needed): ");
-            const auto rest_turns_opt = input_string(p, 4, "&");
-            if (!rest_turns_opt.has_value()) {
-                return;
-            }
-
-            const auto &rest_turns = rest_turns_opt.value();
-            if (rest_turns.starts_with('&')) {
-                command_arg = COMMAND_ARG_REST_UNTIL_DONE;
-                break;
-            }
-            
-            if (rest_turns.starts_with('*')) {
-                command_arg = COMMAND_ARG_REST_FULL_HEALING;
-                break;
-            }
-
-            try {
-                command_arg = static_cast<short>(std::stoi(rest_turns));
-                if (command_arg <= 0) {
-                    return;
-                }
-
-                break;
-            } catch (std::invalid_argument const &) {
-                msg_print(_("数値を入力して下さい。", "Please input numeric value."));
-            } catch (std::out_of_range const &) {
-                msg_print(_("入力可能な数値の範囲を超えています。", "Input value overflows the maximum number."));
-            }
-        }
-    }
-
-    if (command_arg > 9999) {
-        command_arg = 9999;
+    if (!input_rest_turns()) {
+        return;
     }
 
     set_superstealth(player_ptr, false);
