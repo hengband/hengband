@@ -114,6 +114,16 @@ bool askfor(char *buf, int len, bool numpad_cursor)
             pos++;
 #endif
             break;
+        case SKEY_TOP:
+        case KTRL('a'):
+            color = TERM_WHITE;
+            pos = 0;
+            break;
+        case SKEY_BOTTOM:
+        case KTRL('e'):
+            color = TERM_WHITE;
+            pos = std::string_view(buf).length();
+            break;
         case ESCAPE:
             buf[0] = '\0';
             return false;
