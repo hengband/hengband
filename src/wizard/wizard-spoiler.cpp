@@ -192,7 +192,7 @@ static SpoilerOutputResultType spoil_player_spell(concptr fname)
         spoil_out(format("[[Class: %s]]\n", class_ptr->title));
 
         auto magic_ptr = &class_magics_info[c];
-        std::string book_name = "なし";
+        std::string book_name = _("なし", "None");
         if (magic_ptr->spell_book != ItemKindType::NONE) {
             ItemEntity book;
             auto o_ptr = &book;

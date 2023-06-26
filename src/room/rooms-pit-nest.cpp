@@ -404,7 +404,8 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
                 }
             }
 
-            msg_format_wizard(player_ptr, CHEAT_DUNGEON, "Nest構成モンスターNo.%d:%s", i, monraces_info[nest_mon_info[i].r_idx].name.data());
+            constexpr auto fmt = _("Nest構成モンスターNo.%d: %s", "Nest monster No.%d: %s");
+            msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt, i, monraces_info[nest_mon_info[i].r_idx].name.data());
         }
     }
 
