@@ -24,7 +24,6 @@ jobs:
 
   build_test_clang_without_pch:
     name: Build Japanese version with clang (without using pre-compiled headers)
-    needs: [check_bom, check_format]
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       cxx: clang++-14
@@ -51,3 +50,7 @@ jobs:
       configure-opts: "--disable-japanese"
       distcheck: true
       use-ccache: true
+
+  build_test_with_msvc:
+    name: Build test with MSVC
+    uses: ./.github/workflows/build-test-with-msvc.yml

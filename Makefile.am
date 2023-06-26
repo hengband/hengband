@@ -17,6 +17,7 @@ visual_studio_files = \
 	Hengband/Hengband/curl/include/curl/urlapi.h \
 	Hengband/Hengband/curl/include/curl/websockets.h \
 	Hengband/Hengband/curl/lib/libcurl_a.lib \
+	Hengband/Hengband/curl/lib/libcurl_a_debug.lib \
 	Hengband/Hengband/Hengband.vcxproj \
 	Hengband/Hengband/Hengband.vcxproj.filters \
 	Hengband/Hengband/packages.config
