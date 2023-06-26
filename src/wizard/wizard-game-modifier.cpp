@@ -160,7 +160,7 @@ void wiz_restore_monster_max_num(MonsterRaceId r_idx)
     }
 
     if (n == 0) {
-        msg_print("出現数に制限がないモンスターです。");
+        msg_print(_("出現数に制限がないモンスターです。", "This monster can appear any time."));
         msg_print(nullptr);
         return;
     }

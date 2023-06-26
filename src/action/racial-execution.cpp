@@ -71,7 +71,7 @@ PERCENTAGE racial_chance(PlayerType *player_ptr, rpi_type *rpi_ptr)
 
     auto special_easy = PlayerClass(player_ptr).equals(PlayerClassType::IMITATOR);
     special_easy &= player_ptr->inventory_list[INVEN_NECK].is_specific_artifact(FixedArtifactId::GOGO_PENDANT);
-    special_easy &= rpi_ptr->racial_name.compare("倍返し") == 0;
+    special_easy &= rpi_ptr->racial_name == _("倍返し", "Double Revenge");
     if (special_easy) {
         difficulty -= 12;
     }

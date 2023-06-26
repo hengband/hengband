@@ -293,7 +293,7 @@ void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
         r_ptr = &monraces_info[w_ptr->today_mon];
 
         if (cheat_hear) {
-            msg_format("日替わり候補: %s ", r_ptr->name.data());
+            msg_format(_("日替わり候補: %s ", "Today's candidate: %s "), r_ptr->name.data());
         }
 
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
