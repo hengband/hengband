@@ -51,3 +51,8 @@ jobs:
       configure-opts: "--disable-japanese"
       distcheck: true
       use-ccache: true
+
+  build_test_with_msvc:
+    name: Build test with MSVC
+    needs: [check_bom, check_format]
+    uses: ./.github/workflows/build-test-with-msvc.yml
