@@ -335,7 +335,7 @@ static bool racial_power_process_input(PlayerType *player_ptr, rc_type *rc_ptr)
     while (true) {
         if (rc_ptr->choice == ESCAPE) {
             rc_ptr->choice = ' ';
-        } else if (!get_com(rc_ptr->out_val, &rc_ptr->choice, false)) {
+        } else if (!input_command(rc_ptr->out_val, &rc_ptr->choice, false)) {
             return RC_CANCEL;
         }
 

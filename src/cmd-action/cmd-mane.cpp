@@ -166,7 +166,7 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
     while (!flag) {
         if (choice == ESCAPE) {
             choice = ' ';
-        } else if (!get_com(out_val, &choice, true)) {
+        } else if (!input_command(out_val, &choice, true)) {
             break;
         }
 

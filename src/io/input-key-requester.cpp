@@ -60,7 +60,7 @@ void InputKeyRequestor::request_command()
     command_arg = 0;
     command_dir = 0;
     use_menu = false;
-    this->input_command();
+    this->process_input_command();
     if (always_repeat && (command_arg <= 0)) {
         if (angband_strchr("TBDoc+", (char)command_cmd)) {
             command_arg = 99;
@@ -72,7 +72,7 @@ void InputKeyRequestor::request_command()
     prt("", 0, 0);
 }
 
-void InputKeyRequestor::input_command()
+void InputKeyRequestor::process_input_command()
 {
     while (true) {
         if (!this->shopping && !macro_running() && !command_new && auto_debug_save && (!inkey_next || *inkey_next == '\0')) {
@@ -226,7 +226,7 @@ bool InputKeyRequestor::process_repeat_num(short &cmd)
     }
 
     char tmp_cmd;
-    auto ret_cmd = get_com(_("コマンド: ", "Command: "), &tmp_cmd, false);
+    auto ret_cmd = input_command(_("コマンド: ", "Command: "), &tmp_cmd, false);
     cmd = tmp_cmd;
     if (ret_cmd) {
         return false;
@@ -248,7 +248,7 @@ void InputKeyRequestor::process_command_command(short &cmd)
     }
 
     char tmp_cmd;
-    (void)get_com(_("コマンド: ", "Command: "), &tmp_cmd, false);
+    (void)input_command(_("コマンド: ", "Command: "), &tmp_cmd, false);
     cmd = tmp_cmd;
     if (inkey_next == nullptr) {
         inkey_next = "";
@@ -262,7 +262,7 @@ void InputKeyRequestor::process_control_command(short &cmd)
     }
 
     char tmp_cmd;
-    auto ret_cmd = get_com(_("CTRL: ", "Control: "), &tmp_cmd, false);
+    auto ret_cmd = input_command(_("CTRL: ", "Control: "), &tmp_cmd, false);
     cmd = tmp_cmd;
     if (ret_cmd) {
         cmd = KTRL(cmd);

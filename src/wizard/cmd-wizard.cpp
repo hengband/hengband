@@ -305,7 +305,7 @@ void do_cmd_debug(PlayerType *player_ptr)
     while (true) {
         screen_save();
         display_debug_menu(page, max_page, page_size, max_line);
-        get_com("Debug Command: ", &cmd, false);
+        input_command("Debug Command: ", &cmd, false);
         screen_load();
 
         if (exe_cmd_debug(player_ptr, cmd)) {

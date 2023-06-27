@@ -63,7 +63,7 @@ static bool select_ammo_creation_type(ammo_creation_type &type, PLAYER_LEVEL ple
     while (type == AMMO_NONE) {
         char ch;
 
-        if (!get_com(com, &ch, true)) {
+        if (!input_command(com, &ch, true)) {
             return false;
         }
 

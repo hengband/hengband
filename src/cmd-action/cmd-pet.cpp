@@ -564,7 +564,7 @@ void do_cmd_pet(PlayerType *player_ptr)
         while (!flag) {
             if (choice == ESCAPE) {
                 choice = ' ';
-            } else if (!get_com(prompt.data(), &choice, true)) {
+            } else if (!input_command(prompt.data(), &choice, true)) {
                 break;
             }
 

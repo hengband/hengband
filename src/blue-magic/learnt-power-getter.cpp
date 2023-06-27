@@ -124,7 +124,7 @@ static std::optional<BlueMagicType> select_blue_magic_kind_by_symbol()
 
     while (true) {
         char ch;
-        if (!get_com(candidate_desc, &ch, true)) {
+        if (!input_command(candidate_desc, &ch, true)) {
             return std::nullopt;
         }
 
@@ -371,7 +371,7 @@ static std::optional<MonsterAbilityType> select_learnt_spells_by_symbol(PlayerTy
 
     while (!selected_spell.has_value()) {
         char choice = 0;
-        if (!first_show_list && !get_com(out_val, &choice, true)) {
+        if (!first_show_list && !input_command(out_val, &choice, true)) {
             break;
         }
 
@@ -432,7 +432,7 @@ static std::optional<MonsterAbilityType> select_learnt_spells_by_menu(PlayerType
         describe_blue_magic_name(player_ptr, menu_line, bluemage_data, spells);
 
         char choice;
-        if (!get_com(out_val, &choice, true) || choice == '0') {
+        if (!input_command(out_val, &choice, true) || choice == '0') {
             break;
         }
 

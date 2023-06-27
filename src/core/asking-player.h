@@ -18,7 +18,7 @@ bool askfor(char *buf, int len, bool numpad_cursor = true);
 std::optional<std::string> input_string(std::string_view prompt, int len, std::string_view initial_value = "");
 bool get_check(std::string_view prompt);
 bool get_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLAGS mode);
-bool get_com(std::string_view prompt, char *command, bool z_escape);
+bool input_command(std::string_view prompt, char *command, bool z_escape);
 QUANTITY get_quantity(std::optional<std::string_view> prompt_opt, QUANTITY max);
 void pause_line(int row);
 std::optional<int> input_integer(std::string_view prompt, int min, int max, int initial_value = 0);

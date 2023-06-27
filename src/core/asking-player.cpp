@@ -342,7 +342,7 @@ bool get_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLAGS
  *
  * Returns TRUE unless the character is "Escape"
  */
-bool get_com(std::string_view prompt, char *command, bool z_escape)
+bool input_command(std::string_view prompt, char *command, bool z_escape)
 {
     msg_print(nullptr);
     prt(prompt, 0, 0);

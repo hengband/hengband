@@ -726,7 +726,7 @@ static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_b
     while (!flag) {
         if (choice == ESCAPE) {
             choice = ' ';
-        } else if (!get_com(out_val, &choice, true)) {
+        } else if (!input_command(out_val, &choice, true)) {
             break;
         }
 

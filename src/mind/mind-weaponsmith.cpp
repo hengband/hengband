@@ -232,7 +232,7 @@ static COMMAND_CODE choose_essence(void)
                 prt(format("  %c) %s", 'a' + i, menu_name[i]), 2 + i, 14);
             }
 
-            if (!get_com(_("何を付加しますか:", "Command :"), &choice, true)) {
+            if (!input_command(_("何を付加しますか:", "Command :"), &choice, true)) {
                 screen_load();
                 return 0;
             }
@@ -351,7 +351,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
 
             const auto page_effect_num = std::min<int>(effect_num_per_page, smith_effect_list.size() - (page * effect_num_per_page));
 
-            if (!get_com(out_val, &choice, false)) {
+            if (!input_command(out_val, &choice, false)) {
                 break;
             }
 
@@ -633,9 +633,9 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
                     prt(_("  d) エッセンス付加", "  d) Add essence"), 5, 14);
                     prt(_("  e) 武器/防具強化", "  e) Enchant weapon/armor"), 6, 14);
 #ifdef JP
-                    if (!get_com(format("どの能力を%sますか:", only_browse ? "調べ" : "使い"), &choice, true))
+                    if (!input_command(format("どの能力を%sますか:", only_browse ? "調べ" : "使い"), &choice, true))
 #else
-                    if (!get_com("Command :", &choice, true))
+                    if (!input_command("Command :", &choice, true))
 #endif
                     {
                         screen_load();

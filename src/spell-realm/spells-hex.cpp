@@ -153,7 +153,7 @@ std::tuple<bool, bool, char> SpellHex::select_spell_stopping(char *out_val)
     while (true) {
         char choice = 0;
         this->display_casting_spells_list();
-        if (!get_com(out_val, &choice, true)) {
+        if (!input_command(out_val, &choice, true)) {
             return std::make_tuple(false, false, choice);
         }
 

@@ -172,7 +172,7 @@ int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j, [[maybe_unused]]
 
     char command;
     while (true) {
-        if (!get_com(out_val, &command, false)) {
+        if (!input_command(out_val, &command, false)) {
             break;
         }
 

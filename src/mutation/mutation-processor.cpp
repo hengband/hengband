@@ -66,7 +66,7 @@ static bool get_hack_dir(PlayerType *player_ptr, DIRECTION *dp)
         concptr p = target_okay(player_ptr)
                         ? _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ")
                         : _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
-        if (!get_com(p, &command, true)) {
+        if (!input_command(p, &command, true)) {
             break;
         }
 

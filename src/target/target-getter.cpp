@@ -56,7 +56,7 @@ bool get_aim_dir(PlayerType *player_ptr, DIRECTION *dp)
             p = _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ");
         }
 
-        if (!get_com(p, &command, true)) {
+        if (!input_command(p, &command, true)) {
             break;
         }
 
@@ -127,7 +127,7 @@ bool get_direction(PlayerType *player_ptr, DIRECTION *dp, bool allow_under, bool
 
     while (!dir) {
         char ch;
-        if (!get_com(prompt, &ch, true)) {
+        if (!input_command(prompt, &ch, true)) {
             break;
         }
 
@@ -217,7 +217,7 @@ bool get_rep_dir(PlayerType *player_ptr, DIRECTION *dp, bool under)
     concptr prompt = under ? _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ") : _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
     while (!dir) {
         char ch;
-        if (!get_com(prompt, &ch, true)) {
+        if (!input_command(prompt, &ch, true)) {
             break;
         }
 

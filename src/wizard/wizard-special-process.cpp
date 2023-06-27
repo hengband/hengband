@@ -138,7 +138,7 @@ static std::optional<short> wiz_select_tval()
     }
 
     auto max_num = list;
-    if (!get_com(_("アイテム種別を選んで下さい", "Get what type of object? "), &ch, false)) {
+    if (!input_command(_("アイテム種別を選んで下さい", "Get what type of object? "), &ch, false)) {
         return std::nullopt;
     }
 
@@ -179,7 +179,7 @@ static short wiz_select_sval(const ItemKindType tval, concptr tval_description)
     }
 
     auto max_num = num;
-    if (!get_com(format(_("%s群の具体的なアイテムを選んで下さい", "What Kind of %s? "), tval_description), &ch, false)) {
+    if (!input_command(format(_("%s群の具体的なアイテムを選んで下さい", "What Kind of %s? "), tval_description), &ch, false)) {
         return 0;
     }
 
@@ -308,7 +308,7 @@ static std::optional<FixedArtifactId> wiz_select_named_artifact(PlayerType *play
         }
 
         char cmd = ESCAPE;
-        get_com("Which artifact: ", &cmd, false);
+        input_command("Which artifact: ", &cmd, false);
         switch (cmd) {
         case ESCAPE:
             screen_load();
@@ -371,7 +371,7 @@ void wiz_create_named_art(PlayerType *player_ptr)
     std::optional<FixedArtifactId> create_a_idx;
     while (!create_a_idx.has_value()) {
         char cmd = ESCAPE;
-        get_com("Kind of artifact: ", &cmd, false);
+        input_command("Kind of artifact: ", &cmd, false);
         switch (cmd) {
         case ESCAPE:
             screen_load();

@@ -390,7 +390,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, int 
     while (!flag) {
         if (choice == ESCAPE) {
             choice = ' ';
-        } else if (!get_com(out_val, &choice, true)) {
+        } else if (!input_command(out_val, &choice, true)) {
             break;
         }
 

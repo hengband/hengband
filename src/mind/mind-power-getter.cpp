@@ -147,7 +147,7 @@ bool MindPowerGetter::decide_mind_choice(char *out_val, const bool only_browse)
     while (!this->flag) {
         if (this->choice == ESCAPE) {
             this->choice = ' ';
-        } else if (!get_com(out_val, &this->choice, true)) {
+        } else if (!input_command(out_val, &this->choice, true)) {
             break;
         }
 

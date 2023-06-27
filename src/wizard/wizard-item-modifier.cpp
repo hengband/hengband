@@ -152,7 +152,7 @@ void wizard_item_modifier(PlayerType *player_ptr)
     display_wizard_sub_menu();
 
     char cmd;
-    get_com("Player Command: ", &cmd, false);
+    input_command("Player Command: ", &cmd, false);
     screen_load();
 
     switch (cmd) {
@@ -469,7 +469,7 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
     while (true) {
         wiz_display_item(player_ptr, o_ptr);
         char ch;
-        if (!get_com(pmt, &ch, false)) {
+        if (!input_command(pmt, &ch, false)) {
             break;
         }
 
@@ -570,7 +570,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     bool changed = false;
     while (true) {
         wiz_display_item(player_ptr, q_ptr);
-        if (!get_com("[a]ccept, [w]orthless, [c]ursed, [n]ormal, [g]ood, [e]xcellent, [s]pecial? ", &ch, false)) {
+        if (!input_command("[a]ccept, [w]orthless, [c]ursed, [n]ormal, [g]ood, [e]xcellent, [s]pecial? ", &ch, false)) {
             if (q_ptr->is_fixed_artifact()) {
                 q_ptr->get_fixed_artifact().is_generated = false;
                 q_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
@@ -749,7 +749,7 @@ void wiz_modify_item(PlayerType *player_ptr)
     bool changed = false;
     while (true) {
         wiz_display_item(player_ptr, q_ptr);
-        if (!get_com("[a]ccept [s]tatistics [r]eroll [t]weak [q]uantity? ", &ch, false)) {
+        if (!input_command("[a]ccept [s]tatistics [r]eroll [t]weak [q]uantity? ", &ch, false)) {
             changed = false;
             break;
         }
