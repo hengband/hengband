@@ -70,6 +70,8 @@ void file_character(PlayerType *player_ptr, std::string_view filename)
         (void)fd_close(fd);
         if (get_check_strict(player_ptr, ss.str(), CHECK_NO_HISTORY)) {
             fd = -1;
+        } else {
+            return;
         }
     }
 

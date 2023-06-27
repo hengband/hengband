@@ -103,6 +103,7 @@ void do_cmd_player_status(PlayerType *player_ptr)
 {
     int mode = 0;
     screen_save();
+    constexpr auto prompt = _("['c'で名前変更, 'f'でファイルへ書出, 'h'でモード変更, ESCで終了]", "['c' to change name, 'f' to file, 'h' to change mode, or ESC]");
     while (true) {
         TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
 
@@ -114,30 +115,38 @@ void do_cmd_player_status(PlayerType *player_ptr)
             (void)display_player(player_ptr, mode);
         }
 
-        term_putstr(2, 23, -1, TERM_WHITE,
-            _("['c'で名前変更, 'f'でファイルへ書出, 'h'でモード変更, ESCで終了]", "['c' to change name, 'f' to file, 'h' to change mode, or ESC]"));
-        char c = inkey();
+        term_putstr(2, 23, -1, TERM_WHITE, prompt);
+        auto c = inkey();
         if (c == ESCAPE) {
             break;
         }
 
-        if (c == 'c') {
+        switch (c) {
+        case 'c':
             get_name(player_ptr);
             process_player_name(player_ptr);
-        } else if (c == 'f') {
+            break;
+        case 'f': {
             const auto initial_filename = format("%s.txt", player_ptr->base_name);
             const auto input_filename = input_string(_("ファイル名: ", "File name: "), 80, initial_filename);
-            if (input_filename.has_value()) {
-                const auto &filename = str_ltrim(input_filename.value());
-                if (!filename.empty()) {
-                    update_playtime();
-                    file_character(player_ptr, filename);
-                }
+            if (!input_filename.has_value()) {
+                break;
             }
-        } else if (c == 'h') {
+
+            const auto &filename = str_ltrim(input_filename.value());
+            if (!filename.empty()) {
+                update_playtime();
+                file_character(player_ptr, filename);
+            }
+
+            break;
+        }
+        case 'h':
             mode++;
-        } else {
+            break;
+        default:
             bell();
+            break;
         }
 
         msg_erase();
