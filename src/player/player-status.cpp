@@ -520,7 +520,7 @@ static void update_num_of_spells(PlayerType *player_ptr)
         return;
     }
 
-    concptr p = spell_category_name(mp_ptr->spell_book);
+    const auto spell_category = spell_category_name(mp_ptr->spell_book);
     int levels = player_ptr->lev - mp_ptr->spell_first + 1;
     if (levels < 0) {
         levels = 0;
@@ -608,9 +608,9 @@ static void update_num_of_spells(PlayerType *player_ptr)
 
         const auto spell_name = exe_spell(player_ptr, which, j % 32, SpellProcessType::NAME);
 #ifdef JP
-        msg_format("%sの%sを忘れてしまった。", spell_name->data(), p);
+        msg_format("%sの%sを忘れてしまった。", spell_name->data(), spell_category.data());
 #else
-        msg_format("You have forgotten the %s of %s.", p, spell_name->data());
+        msg_format("You have forgotten the %s of %s.", spell_category.data(), spell_name->data());
 #endif
         player_ptr->new_spells++;
     }
@@ -653,9 +653,9 @@ static void update_num_of_spells(PlayerType *player_ptr)
 
         const auto spell_name = exe_spell(player_ptr, which, j % 32, SpellProcessType::NAME);
 #ifdef JP
-        msg_format("%sの%sを忘れてしまった。", spell_name->data(), p);
+        msg_format("%sの%sを忘れてしまった。", spell_name->data(), spell_category.data());
 #else
-        msg_format("You have forgotten the %s of %s.", p, spell_name->data());
+        msg_format("You have forgotten the %s of %s.", spell_category.data(), spell_name->data());
 #endif
         player_ptr->new_spells++;
     }
@@ -714,9 +714,9 @@ static void update_num_of_spells(PlayerType *player_ptr)
 
         const auto spell_name = exe_spell(player_ptr, which, j % 32, SpellProcessType::NAME);
 #ifdef JP
-        msg_format("%sの%sを思い出した。", spell_name->data(), p);
+        msg_format("%sの%sを思い出した。", spell_name->data(), spell_category.data());
 #else
-        msg_format("You have remembered the %s of %s.", p, spell_name->data());
+        msg_format("You have remembered the %s of %s.", spell_category.data(), spell_name->data());
 #endif
         player_ptr->new_spells--;
     }
@@ -761,12 +761,12 @@ static void update_num_of_spells(PlayerType *player_ptr)
     if (player_ptr->new_spells) {
 #ifdef JP
         if (player_ptr->new_spells < 10) {
-            msg_format("あと %d つの%sを学べる。", player_ptr->new_spells, p);
+            msg_format("あと %d つの%sを学べる。", player_ptr->new_spells, spell_category.data());
         } else {
-            msg_format("あと %d 個の%sを学べる。", player_ptr->new_spells, p);
+            msg_format("あと %d 個の%sを学べる。", player_ptr->new_spells, spell_category.data());
         }
 #else
-        msg_format("You can learn %d more %s%s.", player_ptr->new_spells, p, (player_ptr->new_spells != 1) ? "s" : "");
+        msg_format("You can learn %d more %s%s.", player_ptr->new_spells, spell_category.data(), (player_ptr->new_spells != 1) ? "s" : "");
 #endif
     }
 

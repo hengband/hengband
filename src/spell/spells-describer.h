@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "object/tval-types.h"
-#include "system/angband.h"
+#include <string>
 
-concptr spell_category_name(ItemKindType tval);
+enum class ItemKindType : short;
+std::string spell_category_name(ItemKindType tval);
