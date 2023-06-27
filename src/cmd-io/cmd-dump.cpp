@@ -50,13 +50,13 @@
  */
 void do_cmd_pref(PlayerType *player_ptr)
 {
-    char buf[80];
-    strcpy(buf, "");
-    if (!get_string(_("設定変更コマンド: ", "Pref: "), buf, 80)) {
+    const auto input_str = input_string(_("設定変更コマンド: ", "Pref: "), 80);
+    if (!input_str.has_value()) {
         return;
     }
 
-    (void)interpret_pref_file(player_ptr, buf);
+    auto buf(input_str.value());
+    (void)interpret_pref_file(player_ptr, buf.data());
 }
 
 /*
@@ -198,16 +198,13 @@ void do_cmd_colors(PlayerType *player_ptr)
  */
 void do_cmd_note(void)
 {
-    char buf[80];
-    strcpy(buf, "");
-    if (!get_string(_("メモ: ", "Note: "), buf, 60)) {
-        return;
-    }
-    if (!buf[0] || (buf[0] == ' ')) {
+    const auto note_opt = input_string(_("メモ: ", "Note: "), 60);
+    if (!note_opt.has_value() || note_opt->empty()) {
         return;
     }
 
-    msg_format(_("メモ: %s", "Note: %s"), buf);
+    const auto note(note_opt.value());
+    msg_format(_("メモ: %s", "Note: %s"), note.data());
 }
 
 /*

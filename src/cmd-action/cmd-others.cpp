@@ -147,16 +147,21 @@ static void accept_winner_message(PlayerType *player_ptr)
         return;
     }
 
-    char buf[1024] = "";
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_WINNER);
-    do {
-        while (!get_string(_("*勝利*メッセージ: ", "*Winning* message: "), buf, sizeof(buf))) {
-            ;
+    std::optional<std::string> buf;
+    while (true) {
+        buf = input_string(_("*勝利*メッセージ: ", "*Winning* message: "), 1024);
+        if (!buf.has_value()) {
+            continue;
         }
-    } while (!get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
 
-    if (buf[0]) {
-        player_ptr->last_message = buf;
+        if (!get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY)) {
+            break;
+        }
+    }
+
+    if (!buf->empty()) {
+        player_ptr->last_message = buf.value();
         msg_print(player_ptr->last_message);
     }
 }

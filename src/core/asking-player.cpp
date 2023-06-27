@@ -226,14 +226,19 @@ bool askfor(char *buf, int len, bool numpad_cursor)
  *
  * We clear the input, and return FALSE, on "ESCAPE".
  */
-bool get_string(std::string_view prompt, char *buf, int len)
+std::optional<std::string> input_string(std::string_view prompt, int len, std::string_view initial_value)
 {
-    bool res;
     msg_print(nullptr);
     prt(prompt, 0, 0);
-    res = askfor(buf, len);
+    char buf[1024]{};
+    angband_strcpy(buf, initial_value, sizeof(buf));
+    const auto res = askfor(buf, len);
     prt("", 0, 0);
-    return res;
+    if (!res) {
+        return std::nullopt;
+    }
+
+    return buf;
 }
 
 /*
@@ -452,17 +457,16 @@ void pause_line(int row)
 std::optional<int> input_integer(std::string_view prompt, int min, int max, int initial_value)
 {
     std::stringstream ss;
-    char tmp_val[12] = "";
-    std::to_chars(std::begin(tmp_val), std::end(tmp_val) - 1, initial_value);
     ss << prompt << "(" << min << "-" << max << "): ";
     auto digit = std::max(std::to_string(min).length(), std::to_string(max).length());
     while (true) {
-        if (!get_string(ss.str().data(), tmp_val, digit)) {
+        const auto input_str = input_string(ss.str(), digit, std::to_string(initial_value));
+        if (!input_str.has_value()) {
             return std::nullopt;
         }
 
         try {
-            auto val = std::stoi(tmp_val);
+            auto val = std::stoi(input_str.value());
             if ((val < min) || (val > max)) {
                 msg_format(_("%dから%dの間で指定して下さい。", "It must be between %d to %d."), min, max);
                 continue;

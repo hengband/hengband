@@ -15,7 +15,7 @@
 
 class PlayerType;
 bool askfor(char *buf, int len, bool numpad_cursor = true);
-bool get_string(std::string_view prompt, char *buf, int len);
+std::optional<std::string> input_string(std::string_view prompt, int len, std::string_view initial_value = "");
 bool get_check(std::string_view prompt);
 bool get_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLAGS mode);
 bool get_com(std::string_view prompt, char *command, bool z_escape);

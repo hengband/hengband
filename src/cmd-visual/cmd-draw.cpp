@@ -20,6 +20,7 @@
 #include "view/display-messages.h"
 #include "view/display-player.h"
 #include "world/world.h"
+#include <optional>
 
 /*!
  * @brief 画面を再描画するコマンドのメインルーチン
@@ -96,49 +97,64 @@ void do_cmd_redraw(PlayerType *player_ptr)
     }
 }
 
+static std::optional<int> input_status_command(PlayerType *player_ptr, int page)
+{
+    auto c = inkey();
+    switch (c) {
+    case 'c':
+        get_name(player_ptr);
+        process_player_name(player_ptr);
+        return page;
+    case 'f': {
+        const auto initial_filename = format("%s.txt", player_ptr->base_name);
+        const auto input_filename = input_string(_("ファイル名: ", "File name: "), 80, initial_filename);
+        if (!input_filename.has_value()) {
+            return page;
+        }
+
+        const auto &filename = str_ltrim(input_filename.value());
+        if (!filename.empty()) {
+            update_playtime();
+            file_character(player_ptr, filename);
+        }
+
+        return page;
+    }
+    case 'h':
+        return page + 1;
+    case ESCAPE:
+        return std::nullopt;
+    default:
+        bell();
+        return page;
+    }
+}
+
 /*!
  * @brief プレイヤーのステータス表示
  */
 void do_cmd_player_status(PlayerType *player_ptr)
 {
-    int mode = 0;
-    char tmp[160];
+    auto page = 0;
     screen_save();
+    constexpr auto prompt = _("['c'で名前変更, 'f'でファイルへ書出, 'h'でモード変更, ESCで終了]", "['c' to change name, 'f' to file, 'h' to change mode, or ESC]");
     while (true) {
         TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
 
         update_playtime();
-        (void)display_player(player_ptr, mode);
-
-        if (mode == 5) {
-            mode = 0;
-            (void)display_player(player_ptr, mode);
+        (void)display_player(player_ptr, page);
+        if (page == 5) {
+            page = 0;
+            (void)display_player(player_ptr, page);
         }
 
-        term_putstr(2, 23, -1, TERM_WHITE,
-            _("['c'で名前変更, 'f'でファイルへ書出, 'h'でモード変更, ESCで終了]", "['c' to change name, 'f' to file, 'h' to change mode, or ESC]"));
-        char c = inkey();
-        if (c == ESCAPE) {
+        term_putstr(2, 23, -1, TERM_WHITE, prompt);
+        auto next_page = input_status_command(player_ptr, page);
+        if (!next_page.has_value()) {
             break;
         }
 
-        if (c == 'c') {
-            get_name(player_ptr);
-            process_player_name(player_ptr);
-        } else if (c == 'f') {
-            strnfmt(tmp, sizeof(tmp), "%s.txt", player_ptr->base_name);
-            if (get_string(_("ファイル名: ", "File name: "), tmp, 80)) {
-                if (tmp[0] && (tmp[0] != ' ')) {
-                    update_playtime();
-                    file_character(player_ptr, tmp);
-                }
-            }
-        } else if (c == 'h') {
-            mode++;
-        } else {
-            bell();
-        }
-
+        page = next_page.value();
         msg_erase();
     }
 

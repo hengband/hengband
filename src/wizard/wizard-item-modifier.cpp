@@ -840,7 +840,7 @@ static void wishing_puff_of_smoke(void)
  */
 WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, bool allow_ego, bool confirm)
 {
-    concptr fixed_str[] = {
+    const std::array<std::string, _(4, 6)> fixed_expressions = {
 #ifdef JP
         "燃えない",
         "錆びない",
@@ -854,44 +854,49 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         "corrodeproof",
         "fixed",
 #endif
-        nullptr,
     };
 
-    char buf[MAX_NLEN] = "\0";
-    char *str = buf;
     ItemEntity forge;
     auto *o_ptr = &forge;
-    bool wish_art = false;
-    bool wish_randart = false;
-    bool wish_ego = false;
-    bool exam_base = true;
-    bool ok_art = randint0(100) < prob;
-    bool ok_ego = randint0(100) < 50 + prob;
-    bool must = prob < 0;
-    bool blessed = false;
-    bool fixed = true;
+    auto wish_art = false;
+    auto wish_randart = false;
+    auto wish_ego = false;
+    auto exam_base = true;
+    auto ok_art = randint0(100) < prob;
+    auto ok_ego = randint0(100) < 50 + prob;
+    auto must = prob < 0;
+    auto blessed = false;
+    auto fixed = true;
 
-    while (1) {
-        if (get_string(_("何をお望み？ ", "For what do you wish?"), buf, (MAX_NLEN - 1))) {
+    std::string pray;
+    while (true) {
+        const auto pray_opt = input_string(_("何をお望み？ ", "For what do you wish?"), MAX_NLEN);
+        if (pray_opt.has_value()) {
+            pray = pray_opt.value();
             break;
         }
+
         if (confirm) {
             if (!get_check(_("何も願いません。本当によろしいですか？", "Do you wish nothing, really? "))) {
                 continue;
             }
         }
+
         return WishResultType::NOTHING;
     }
 
+    auto *str = pray.data();
 #ifndef JP
     str_tolower(str);
-
-    /* remove 'a' */
-    if (!strncmp(buf, "a ", 2)) {
-        str = ltrim(str + 1);
-    } else if (!strncmp(buf, "an ", 3)) {
-        str = ltrim(str + 2);
+    const std::string article_single("a ");
+    const std::string article_multi("an ");
+    if (pray.starts_with("a ")) {
+        str += article_single.length();
+    } else if (pray.starts_with("an ")) {
+        str += article_multi.length();
     }
+
+    str = ltrim(str);
 #endif // !JP
 
     str = rtrim(str);
@@ -901,9 +906,9 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         blessed = true;
     }
 
-    for (int i = 0; fixed_str[i] != nullptr; i++) {
-        int len = strlen(fixed_str[i]);
-        if (!strncmp(str, fixed_str[i], len)) {
+    for (const auto &expression : fixed_expressions) {
+        auto len = expression.length();
+        if (!std::string_view(str).starts_with(expression)) {
             str = ltrim(str + len);
             fixed = true;
             break;
@@ -941,13 +946,13 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     }
 
     if (cheat_xtra) {
-        msg_format("Wishing %s....", buf);
+        msg_format("Wishing %s....", pray.data());
     }
 
-    std::vector<short> k_ids;
-    std::vector<EgoType> e_ids;
+    std::vector<short> baseitem_ids;
+    std::vector<EgoType> ego_ids;
     if (exam_base) {
-        int max_len = 0;
+        auto max_len = 0;
         for (const auto &baseitem : baseitems_info) {
             if (baseitem.idx == 0 || baseitem.name.empty()) {
                 continue;
@@ -967,14 +972,14 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             const int len = item_name.length();
             if (std::string(str).find(item_name) != std::string::npos) {
                 if (len > max_len) {
-                    k_ids.push_back(baseitem.idx);
+                    baseitem_ids.push_back(baseitem.idx);
                     max_len = len;
                 }
             }
         }
 
-        if (allow_ego && k_ids.size() == 1) {
-            short bi_id = k_ids.back();
+        if (allow_ego && baseitem_ids.size() == 1) {
+            short bi_id = baseitem_ids.back();
             o_ptr->prep(bi_id);
 
             for (const auto &[e_idx, ego] : egos_info) {
@@ -996,20 +1001,20 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                         continue;
                     }
 
-                    e_ids.push_back(ego.idx);
+                    ego_ids.push_back(ego.idx);
                 }
             }
         }
     }
 
-    std::vector<FixedArtifactId> a_ids;
+    std::vector<FixedArtifactId> artifact_ids;
 
     if (allow_art) {
         char a_desc[MAX_NLEN] = "\0";
         char *a_str = a_desc;
 
         int len;
-        int mlen = 0;
+        auto mlen = 0;
         for (const auto &[a_idx, artifact] : artifacts_info) {
             if (a_idx == FixedArtifactId::NONE || artifact.name.empty()) {
                 continue;
@@ -1053,7 +1058,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             /* remove quotes */
             if (a_str[0] == '\'') {
                 a_str += 1;
-                char *s = strchr(a_desc, '\'');
+                auto *s = angband_strchr(a_desc, '\'');
                 *s = '\0';
             }
             /* remove 'of ' */
@@ -1073,7 +1078,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                 if (!strcmp(str, l.at(c))) {
                     len = strlen(l.at(c));
                     if (len > mlen) {
-                        a_ids.push_back(a_idx);
+                        artifact_ids.push_back(a_idx);
                         mlen = len;
                     }
                 }
@@ -1081,13 +1086,13 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         }
     }
 
-    if (w_ptr->wizard && (a_ids.size() > 1 || e_ids.size() > 1)) {
+    if (w_ptr->wizard && ((artifact_ids.size() > 1) || (ego_ids.size() > 1))) {
         msg_print(_("候補が多すぎる！", "Too many matches!"));
         return WishResultType::FAIL;
     }
 
-    if (a_ids.size() == 1) {
-        const auto a_idx = a_ids.back();
+    if (artifact_ids.size() == 1) {
+        const auto a_idx = artifact_ids.back();
         const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
         if (must || (ok_art && !artifact.is_generated)) {
             (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
@@ -1098,13 +1103,13 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         return WishResultType::ARTIFACT;
     }
 
-    if (!allow_ego && (wish_ego || e_ids.size() > 0)) {
+    if (!allow_ego && (wish_ego || ego_ids.size() > 0)) {
         msg_print(_("エゴアイテムは願えない！", "Can not wish ego item."));
         return WishResultType::NOTHING;
     }
 
-    if (k_ids.size() == 1) {
-        const auto bi_id = k_ids.back();
+    if (baseitem_ids.size() == 1) {
+        const auto bi_id = baseitem_ids.back();
         const auto &baseitem = baseitems_info[bi_id];
         auto a_idx = FixedArtifactId::NONE;
         if (baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
@@ -1146,15 +1151,15 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         }
 
         WishResultType res = WishResultType::NOTHING;
-        if (allow_ego && (wish_ego || e_ids.size() > 0)) {
+        if (allow_ego && (wish_ego || ego_ids.size() > 0)) {
             if (must || ok_ego) {
-                if (e_ids.size() > 0) {
+                if (ego_ids.size() > 0) {
                     o_ptr->prep(bi_id);
-                    o_ptr->ego_idx = e_ids[0];
+                    o_ptr->ego_idx = ego_ids[0];
                     apply_ego(o_ptr, player_ptr->current_floor_ptr->base_level);
                 } else {
-                    int max_roll = 1000;
-                    int i = 0;
+                    auto max_roll = 1000;
+                    auto i = 0;
                     for (i = 0; i < max_roll; i++) {
                         o_ptr->prep(bi_id);
                         ItemMagicApplier(player_ptr, o_ptr, baseitem.level, AM_GREAT | AM_NO_FIXED_ART).execute();
@@ -1166,8 +1171,8 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                             break;
                         }
 
-                        EgoType e_idx = EgoType::NONE;
-                        for (auto e : e_ids) {
+                        auto e_idx = EgoType::NONE;
+                        for (auto e : ego_ids) {
                             if (o_ptr->ego_idx == e) {
                                 e_idx = e;
                                 break;
@@ -1190,13 +1195,14 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
             res = WishResultType::EGO;
         } else {
-            for (int i = 0; i < 100; i++) {
+            for (auto i = 0; i < 100; i++) {
                 o_ptr->prep(bi_id);
                 ItemMagicApplier(player_ptr, o_ptr, 0, AM_NO_FIXED_ART).execute();
                 if (!o_ptr->is_cursed()) {
                     break;
                 }
             }
+
             res = WishResultType::NORMAL;
         }
 
@@ -1210,7 +1216,6 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         }
 
         (void)drop_near(player_ptr, o_ptr, -1, player_ptr->y, player_ptr->x);
-
         return res;
     }
 

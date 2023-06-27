@@ -462,30 +462,28 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
 
                 msg_print(nullptr);
             } else {
-                std::optional<std::string> opt_death_message;
+                std::optional<std::string> death_message_opt;
                 if (winning_seppuku) {
-                    opt_death_message = get_random_line(_("seppuku_j.txt", "seppuku.txt"), 0);
+                    death_message_opt = get_random_line(_("seppuku_j.txt", "seppuku.txt"), 0);
                 } else {
-                    opt_death_message = get_random_line(_("death_j.txt", "death.txt"), 0);
+                    death_message_opt = get_random_line(_("death_j.txt", "death.txt"), 0);
                 }
 
-                auto &death_message = opt_death_message.value();
+                auto &death_message = death_message_opt.value();
                 constexpr auto max_last_words = 1024;
-                char player_last_words[max_last_words]{};
-                angband_strcpy(player_last_words, death_message, max_last_words);
-                do {
-#ifdef JP
-                    while (!get_string(winning_seppuku ? "辞世の句: " : "断末魔の叫び: ", player_last_words, max_last_words)) {
-                        ;
+                const auto prompt = winning_seppuku ? _("辞世の句: ", "Haiku") : _("断末魔の叫び: ", "Last words");
+                while (true) {
+                    const auto input_last_words = input_string(prompt, max_last_words, death_message);
+                    if (!input_last_words.has_value()) {
+                        continue;
                     }
-#else
-                    while (!get_string("Last words: ", player_last_words, max_last_words)) {
-                        ;
-                    }
-#endif
-                } while (winning_seppuku && !get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
 
-                death_message = player_last_words;
+                    if (get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY)) {
+                        death_message = input_last_words.value();
+                        break;
+                    }
+                }
+
                 if (death_message.empty()) {
 #ifdef JP
                     death_message = format("あなたは%sました。", android ? "壊れ" : "死に");

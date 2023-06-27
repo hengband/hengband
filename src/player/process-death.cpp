@@ -345,7 +345,7 @@ static void export_player_info(PlayerType *player_ptr)
         }
 
         screen_save();
-        (void)file_character(player_ptr, out_val);
+        file_character(player_ptr, out_val);
         screen_load();
     }
 }
@@ -359,13 +359,10 @@ static void file_character_auto(PlayerType *player_ptr)
     struct tm *now_tm = localtime(&now_t);
 
     char datetime[32];
-    char filename[128];
-
     strftime(datetime, sizeof(datetime), "%Y-%m-%d_%H%M%S", now_tm);
-    strnfmt(filename, sizeof(filename), "%s_Autodump_%s.txt", p_ptr->name, datetime);
-
     screen_save();
-    (void)file_character(player_ptr, filename);
+    const auto filename = format("%s_Autodump_%s.txt", player_ptr->name, datetime);
+    file_character(player_ptr, filename);
     screen_load();
 }
 

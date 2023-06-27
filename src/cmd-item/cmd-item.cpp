@@ -213,7 +213,6 @@ void do_cmd_uninscribe(PlayerType *player_ptr)
 void do_cmd_inscribe(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
-    char out_val[MAX_INSCRIPTION + 1] = "";
     const auto q = _("どのアイテムに銘を刻みますか? ", "Inscribe which item? ");
     const auto s = _("銘を刻めるアイテムがない。", "You have nothing to inscribe.");
     auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
@@ -224,27 +223,26 @@ void do_cmd_inscribe(PlayerType *player_ptr)
     const auto item_name = describe_flavor(player_ptr, o_ptr, OD_OMIT_INSCRIPTION);
     msg_format(_("%sに銘を刻む。", "Inscribing %s."), item_name.data());
     msg_print(nullptr);
-    strcpy(out_val, "");
-    if (o_ptr->is_inscribed()) {
-        angband_strcpy(out_val, o_ptr->inscription.value(), MAX_INSCRIPTION);
+    const auto initial_inscription = o_ptr->is_inscribed() ? o_ptr->inscription.value() : "";
+    const auto input_inscription = input_string(_("銘: ", "Inscription: "), MAX_INSCRIPTION, initial_inscription);
+    if (!input_inscription.has_value()) {
+        return;
     }
 
-    if (get_string(_("銘: ", "Inscription: "), out_val, MAX_INSCRIPTION)) {
-        o_ptr->inscription.emplace(out_val);
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
-        static constexpr auto flags_srf = {
-            StatusRecalculatingFlag::COMBINATION,
-            StatusRecalculatingFlag::BONUS,
-        };
-        rfu.set_flags(flags_srf);
-        static constexpr auto flags_swrf = {
-            SubWindowRedrawingFlag::INVENTORY,
-            SubWindowRedrawingFlag::EQUIPMENT,
-            SubWindowRedrawingFlag::FLOOR_ITEMS,
-            SubWindowRedrawingFlag::FOUND_ITEMS,
-        };
-        rfu.set_flags(flags_swrf);
-    }
+    o_ptr->inscription.emplace(input_inscription.value());
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::BONUS,
+    };
+    rfu.set_flags(flags_srf);
+    static constexpr auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::FLOOR_ITEMS,
+        SubWindowRedrawingFlag::FOUND_ITEMS,
+    };
+    rfu.set_flags(flags_swrf);
 }
 
 /*!
