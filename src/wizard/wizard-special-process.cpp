@@ -104,6 +104,7 @@
 #include "world/world.h"
 #include <algorithm>
 #include <optional>
+#include <span>
 #include <sstream>
 #include <tuple>
 #include <vector>
@@ -397,6 +398,43 @@ void wiz_create_named_art(PlayerType *player_ptr)
     msg_print("Allocated.");
 }
 
+static void wiz_change_status_max(PlayerType *player_ptr)
+{
+    for (auto i = 0; i < A_MAX; ++i) {
+        player_ptr->stat_cur[i] = player_ptr->stat_max_max[i];
+        player_ptr->stat_max[i] = player_ptr->stat_max_max[i];
+    }
+
+    for (auto tval : TV_WEAPON_RANGE) {
+        for (auto &exp : player_ptr->weapon_exp[tval]) {
+            exp = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
+        }
+    }
+    PlayerSkill(player_ptr).limit_weapon_skills_by_max_value();
+
+    for (auto &[type, exp] : player_ptr->skill_exp) {
+        exp = class_skills_info[enum2i(player_ptr->pclass)].s_max[type];
+    }
+
+    const std::span spells_exp_span(player_ptr->spell_exp);
+    for (auto &exp : spells_exp_span.first(32)) {
+        exp = PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER);
+    }
+    for (auto &exp : spells_exp_span.last(32)) {
+        exp = PlayerSkill::spell_exp_at(PlayerSkillRank::EXPERT);
+    }
+
+    player_ptr->au = 999999999;
+
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
+        return;
+    }
+
+    player_ptr->max_exp = 99999999;
+    player_ptr->exp = 99999999;
+    player_ptr->exp_frac = 0;
+}
+
 /*!
  * @brief プレイヤーの現能力値を調整する / Change various "permanent" player variables.
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -407,6 +445,12 @@ void wiz_change_status(PlayerType *player_ptr)
         check_experience(player_ptr);
         do_cmd_redraw(player_ptr);
     });
+
+    constexpr auto msg = _("全てのステータスを最大にしますか？", "Maximize all statuses? ");
+    if (get_check_strict(player_ptr, msg, (CHECK_NO_ESCAPE | CHECK_NO_HISTORY))) {
+        wiz_change_status_max(player_ptr);
+        return;
+    }
 
     for (int i = 0; i < A_MAX; i++) {
         const auto max_max_ability_score = player_ptr->stat_max_max[i];
