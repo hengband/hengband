@@ -2484,6 +2484,9 @@
     <ClCompile Include="..\..\src\net\http-client.cpp">
       <Filter>net</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\util\sha256.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5377,6 +5380,9 @@
       <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\util\finalizer.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\sha256.h">
       <Filter>util</Filter>
     </ClInclude>
   </ItemGroup>
