@@ -78,15 +78,15 @@ struct SHA256::Impl {
     void finalize(std::byte pad_byte);
     void pad_message(std::byte pad_byte);
 
-    std::array<uint32_t, SHA256::DIGEST_SIZE / 4> hash_ = INITIAL_HASH;
-    uint64_t length_ = 0;
-    int message_block_index_ = 0;
-    std::array<std::byte, SHA256::BLOCK_SIZE> message_blocks_{};
-    bool computed_ = false;
+    std::array<uint32_t, SHA256::DIGEST_SIZE / 4> hash = INITIAL_HASH;
+    uint64_t length = 0;
+    int message_block_index = 0;
+    std::array<std::byte, SHA256::BLOCK_SIZE> message_block{};
+    bool computed = false;
 };
 
 SHA256::SHA256()
-    : pimpl_(std::make_unique<Impl>())
+    : pimpl(std::make_unique<Impl>())
 {
 }
 
@@ -97,11 +97,11 @@ SHA256::~SHA256() = default;
  */
 void SHA256::reset()
 {
-    pimpl_->hash_ = INITIAL_HASH;
-    pimpl_->length_ = 0;
-    pimpl_->message_block_index_ = 0;
-    pimpl_->message_blocks_.fill(std::byte(0));
-    pimpl_->computed_ = false;
+    this->pimpl->hash = INITIAL_HASH;
+    this->pimpl->length = 0;
+    this->pimpl->message_block_index = 0;
+    this->pimpl->message_block.fill(std::byte(0));
+    this->pimpl->computed = false;
 }
 
 /*!
@@ -116,21 +116,21 @@ void SHA256::update(const std::byte *message_array, size_t length)
         return;
     }
 
-    if (pimpl_->computed_) {
+    if (this->pimpl->computed) {
         THROW_EXCEPTION(std::logic_error, "SHA256::update() called after compute.");
     }
 
-    pimpl_->add_length(8 * length);
+    this->pimpl->add_length(8 * length);
 
     std::span remain(message_array, length);
     while (!remain.empty()) {
-        const auto copy_size = std::min<int>(remain.size(), BLOCK_SIZE - pimpl_->message_block_index_);
-        std::copy_n(remain.begin(), copy_size, pimpl_->message_blocks_.begin() + pimpl_->message_block_index_);
-        pimpl_->message_block_index_ += copy_size;
+        const auto copy_size = std::min<int>(remain.size(), BLOCK_SIZE - this->pimpl->message_block_index);
+        std::copy_n(remain.begin(), copy_size, this->pimpl->message_block.begin() + this->pimpl->message_block_index);
+        this->pimpl->message_block_index += copy_size;
         remain = remain.subspan(copy_size);
 
-        if (pimpl_->message_block_index_ == BLOCK_SIZE) {
-            pimpl_->process_message_block();
+        if (this->pimpl->message_block_index == BLOCK_SIZE) {
+            this->pimpl->process_message_block();
         }
     }
 }
@@ -157,7 +157,7 @@ void SHA256::update(std::string_view message)
  */
 void SHA256::final_bits(std::byte message_bits, size_t length)
 {
-    if (pimpl_->computed_) {
+    if (this->pimpl->computed) {
         THROW_EXCEPTION(std::logic_error, "SHA256::final_bits() called after compute.");
     }
 
@@ -165,15 +165,17 @@ void SHA256::final_bits(std::byte message_bits, size_t length)
         THROW_EXCEPTION(std::invalid_argument, "SHA256::final_bits() called with length >= 8.");
     }
 
-    static constexpr std::array<std::byte, 8> masks{ { //
+    // clang-format off
+    static constexpr std::array<std::byte, 8> masks{ {
         std::byte(0x00), std::byte(0x80), std::byte(0xC0), std::byte(0xE0),
         std::byte(0xF0), std::byte(0xF8), std::byte(0xFC), std::byte(0xFE) } };
-    static constexpr std::array<std::byte, 8> markbits{ { //
+    static constexpr std::array<std::byte, 8> markbits{ {
         std::byte(0x80), std::byte(0x40), std::byte(0x20), std::byte(0x10),
         std::byte(0x08), std::byte(0x04), std::byte(0x02), std::byte(0x01) } };
+    // clang-format on
 
-    pimpl_->add_length(length);
-    pimpl_->finalize((message_bits & masks[length]) | markbits[length]);
+    this->pimpl->add_length(length);
+    this->pimpl->finalize((message_bits & masks[length]) | markbits[length]);
 }
 
 /*!
@@ -183,25 +185,25 @@ void SHA256::final_bits(std::byte message_bits, size_t length)
  */
 SHA256::Digest SHA256::digest()
 {
-    if (!pimpl_->computed_) {
-        pimpl_->finalize(std::byte(0x80));
+    if (!this->pimpl->computed) {
+        this->pimpl->finalize(std::byte(0x80));
     }
 
     Digest result{};
     for (auto i = 0; i < SHA256::DIGEST_SIZE; ++i) {
-        result[i] = std::byte(pimpl_->hash_[i / 4] >> 8 * (3 - (i % 4)));
+        result[i] = std::byte(this->pimpl->hash[i / 4] >> 8 * (3 - (i % 4)));
     }
 
     return result;
 }
 
-void SHA256::Impl::add_length(size_t length)
+void SHA256::Impl::add_length(size_t len)
 {
-    if (std::numeric_limits<decltype(length_)>::max() - length < length_) {
+    if (std::numeric_limits<decltype(this->length)>::max() - len < this->length) {
         THROW_EXCEPTION(std::overflow_error, "SHA256::add_length() overflow.");
     }
 
-    length_ += length;
+    this->length += len;
 }
 
 void SHA256::Impl::process_message_block()
@@ -226,17 +228,17 @@ void SHA256::Impl::process_message_block()
     std::array<uint32_t, BLOCK_SIZE> w{};
 
     for (auto i = 0, i4 = 0; i4 < BLOCK_SIZE; ++i, i4 += 4) {
-        w[i] = (static_cast<uint32_t>(message_blocks_[i4]) << 24) |
-               (static_cast<uint32_t>(message_blocks_[i4 + 1]) << 16) |
-               (static_cast<uint32_t>(message_blocks_[i4 + 2]) << 8) |
-               (static_cast<uint32_t>(message_blocks_[i4 + 3]));
+        w[i] = (static_cast<uint32_t>(this->message_block[i4]) << 24) |
+               (static_cast<uint32_t>(this->message_block[i4 + 1]) << 16) |
+               (static_cast<uint32_t>(this->message_block[i4 + 2]) << 8) |
+               (static_cast<uint32_t>(this->message_block[i4 + 3]));
     }
 
     for (auto i = 16; i < BLOCK_SIZE; ++i) {
         w[i] = small_sigma1(w[i - 2]) + w[i - 7] + small_sigma0(w[i - 15]) + w[i - 16];
     }
 
-    auto h = hash_;
+    auto h = this->hash;
 
     for (auto i = 0; i < BLOCK_SIZE; ++i) {
         const auto tmp1 = h[7] + big_sigma1(h[4]) + sha_ch(h[4], h[5], h[6]) + k[i] + w[i];
@@ -246,37 +248,37 @@ void SHA256::Impl::process_message_block()
         h[0] = tmp1 + tmp2;
     }
 
-    std::transform(hash_.begin(), hash_.end(), h.begin(),
-        hash_.begin(), std::plus<uint32_t>{});
+    std::transform(this->hash.begin(), this->hash.end(), h.begin(),
+        this->hash.begin(), std::plus<uint32_t>{});
 
-    message_block_index_ = 0;
+    this->message_block_index = 0;
 }
 
 void SHA256::Impl::finalize(std::byte pad_byte)
 {
     this->pad_message(pad_byte);
-    message_blocks_.fill(std::byte(0));
-    length_ = 0;
-    computed_ = true;
+    this->message_block.fill(std::byte(0));
+    this->length = 0;
+    this->computed = true;
 }
 
 void SHA256::Impl::pad_message(std::byte pad_byte)
 {
-    message_blocks_[message_block_index_++] = pad_byte;
+    this->message_block[this->message_block_index++] = pad_byte;
 
-    const std::span whole(message_blocks_);
+    const std::span whole(this->message_block);
 
-    if (const auto remain = whole.subspan(message_block_index_); remain.size() < 8) {
+    if (const auto remain = whole.subspan(this->message_block_index); remain.size() < 8) {
         std::fill(remain.begin(), remain.end(), std::byte(0));
         this->process_message_block();
     }
 
-    const auto zerofill_span = whole.first(BLOCK_SIZE - 8).subspan(message_block_index_);
+    const auto zerofill_span = whole.first(BLOCK_SIZE - 8).subspan(this->message_block_index);
     std::fill(zerofill_span.begin(), zerofill_span.end(), std::byte(0));
 
     const auto length_span = whole.last(8);
     for (auto i = 0; i < 8; ++i) {
-        length_span[i] = std::byte((length_ >> (BLOCK_SIZE - 8 - i * 8)) & 0xff);
+        length_span[i] = std::byte((this->length >> (BLOCK_SIZE - 8 - i * 8)) & 0xff);
     }
 
     this->process_message_block();

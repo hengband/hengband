@@ -78,7 +78,7 @@ public:
 
 private:
     struct Impl;
-    std::unique_ptr<Impl> pimpl_;
+    std::unique_ptr<Impl> pimpl;
 };
 
 std::string to_string(const SHA256::Digest &hash);
