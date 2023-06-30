@@ -40,6 +40,7 @@
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-birth.h" // 暫定。後で消す予定。
+#include "view/display-player-misc-info.h"
 #include "view/display-player.h" // 暫定。後で消す.
 #include "view/display-util.h"
 #include "world/world.h"
@@ -58,11 +59,10 @@
 static void display_initial_birth_message(PlayerType *player_ptr)
 {
     term_clear();
-    put_str(_("名前  :", "Name  :"), 1, 26);
+    display_player_name(player_ptr, true);
     put_str(_("性別        :", "Sex         :"), 3, 1);
     put_str(_("種族        :", "Race        :"), 4, 1);
     put_str(_("職業        :", "Class       :"), 5, 1);
-    c_put_str(TERM_L_BLUE, player_ptr->name, 1, 34);
     put_str(_("キャラクターを作成します。('S'やり直す, 'Q'終了, '?'ヘルプ)", "Make your character. ('S' Restart, 'Q' Quit, '?' Help)"), 8, 10);
     put_str(_("注意：《性別》の違いはゲーム上ほとんど影響を及ぼしません。", "Note: Your 'sex' does not have any significant gameplay effects."), 23, 5);
 }
@@ -237,8 +237,7 @@ static bool let_player_select_personality(PlayerType *player_ptr)
             break;
         }
 
-        c_put_str(TERM_L_BLUE, player_ptr->name, 1, 34);
-        prt("", 1, 34 + strlen(player_ptr->name));
+        display_player_name(player_ptr, true);
     }
 
     return true;
