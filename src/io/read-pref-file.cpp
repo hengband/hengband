@@ -304,7 +304,7 @@ bool read_histpref(PlayerType *player_ptr)
     char *s;
     char histbuf[HISTPREF_LIMIT];
 
-    if (!get_check(_("生い立ち設定ファイルをロードしますか? ", "Load background history preference file? "))) {
+    if (!input_check(_("生い立ち設定ファイルをロードしますか? ", "Load background history preference file? "))) {
         return false;
     }
 

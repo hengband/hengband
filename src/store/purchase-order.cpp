@@ -53,7 +53,7 @@ static std::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, ItemEntity *o_
 
     price_ask *= o_ptr->number;
     const auto s = format(_("買値 $%ld で買いますか？", "Do you buy for $%ld? "), static_cast<long>(price_ask));
-    if (get_check_strict(player_ptr, s, CHECK_DEFAULT_Y)) {
+    if (input_check_strict(player_ptr, s, CHECK_DEFAULT_Y)) {
         return price_ask;
     }
 
@@ -227,7 +227,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
             msg_format(_("一つにつき $%dです。", "That costs %d gold per item."), best);
         }
 
-        amt = get_quantity(o_ptr->number);
+        amt = input_quantity(o_ptr->number);
         if (amt <= 0) {
             return;
         }

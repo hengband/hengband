@@ -150,7 +150,7 @@ bool send_world_score(PlayerType *player_ptr, bool do_send)
         return true;
     }
 
-    auto is_registration = get_check_strict(
+    auto is_registration = input_check_strict(
         player_ptr, _("スコアをスコア・サーバに登録しますか? ", "Do you send score to the world score server? "), (CHECK_NO_ESCAPE | CHECK_NO_HISTORY));
     if (!is_registration) {
         return true;

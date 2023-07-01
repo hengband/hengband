@@ -21,7 +21,7 @@
  */
 void do_cmd_reload_autopick(PlayerType *player_ptr)
 {
-    if (!get_check(_("自動拾い設定ファイルをロードしますか? ", "Reload auto-pick preference file? "))) {
+    if (!input_check(_("自動拾い設定ファイルをロードしますか? ", "Reload auto-pick preference file? "))) {
         return;
     }
 

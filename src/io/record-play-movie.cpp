@@ -357,7 +357,7 @@ void prepare_movie_hooks(PlayerType *player_ptr)
         std::string query = _("現存するファイルに上書きしますか? (", "Replace existing file ");
         query.append(filename);
         query.append(_(")", "? "));
-        if (!get_check(query)) {
+        if (!input_check(query)) {
             return;
         }
 

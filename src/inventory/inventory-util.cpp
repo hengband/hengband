@@ -299,7 +299,7 @@ bool verify(PlayerType *player_ptr, concptr prompt, INVENTORY_IDX item)
     ss << ' ';
 #endif
     ss << item_name << _("ですか? ", "? ");
-    return get_check(ss.str());
+    return input_check(ss.str());
 }
 
 /*!

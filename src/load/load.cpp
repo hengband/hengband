@@ -309,7 +309,7 @@ static bool on_read_save_data_not_supported(PlayerType *player_ptr, bool *new_ga
     auto mes_check_restart = _("最初からプレイを始めますか？(モンスターの思い出は引き継がれます)", "Play from the beginning? (Monster recalls will be inherited.) ");
     msg_print(mes_not_play);
     msg_print(nullptr);
-    if (!get_check(mes_check_restart)) {
+    if (!input_check(mes_check_restart)) {
         msg_print(_("ゲームを終了します。", "Exit the game."));
         msg_print(nullptr);
         return false;

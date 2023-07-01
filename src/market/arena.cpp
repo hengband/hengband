@@ -77,7 +77,7 @@ static bool battle_metal_babble(PlayerType *player_ptr)
 
     msg_print(_("君のために最強の挑戦者を用意しておいた。", "The strongest challenger is waiting for you."));
     msg_print(nullptr);
-    if (!get_check(_("挑戦するかね？", "Do you fight? "))) {
+    if (!input_check(_("挑戦するかね？", "Do you fight? "))) {
         msg_print(_("残念だ。", "We are disappointed."));
         return true;
     }

@@ -248,9 +248,9 @@ std::optional<std::string> input_string(std::string_view prompt, int len, std::s
  *
  * Note that "[y/n]" is appended to the prompt.
  */
-bool get_check(std::string_view prompt)
+bool input_check(std::string_view prompt)
 {
-    return get_check_strict(p_ptr, prompt, 0);
+    return input_check_strict(p_ptr, prompt, 0);
 }
 
 /*
@@ -261,7 +261,7 @@ bool get_check(std::string_view prompt)
  * mode & CHECK_NO_HISTORY  : no message_add
  * mode & CHECK_DEFAULT_Y   : accept any key as y, except n and Esc.
  */
-bool get_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLAGS mode)
+bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLAGS mode)
 {
     if (!rogue_like_commands) {
         mode &= ~CHECK_OKAY_CANCEL;
@@ -367,7 +367,7 @@ std::optional<char> input_command(std::string_view prompt, bool z_escape)
  *
  * Hack -- allow "command_arg" to specify a quantity
  */
-int get_quantity(int max, std::string_view initial_prompt)
+int input_quantity(int max, std::string_view initial_prompt)
 {
     int amt;
     if (command_arg) {

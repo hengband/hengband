@@ -2995,7 +2995,7 @@ void check_experience(PlayerType *player_ptr)
                             prt("", n + 2, 14);
                         }
                     }
-                    if (get_check(_("よろしいですか？", "Are you sure? "))) {
+                    if (input_check(_("よろしいですか？", "Are you sure? "))) {
                         break;
                     }
                 }

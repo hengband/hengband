@@ -6,7 +6,7 @@
 #include <type_traits>
 
 /*
- * Bit flags for control of get_check_strict()
+ * Bit flags for control of input_check_strict()
  */
 #define CHECK_OKAY_CANCEL 0x01
 #define CHECK_NO_ESCAPE 0x02
@@ -16,10 +16,10 @@
 class PlayerType;
 bool askfor(char *buf, int len, bool numpad_cursor = true);
 std::optional<std::string> input_string(std::string_view prompt, int len, std::string_view initial_value = "");
-bool get_check(std::string_view prompt);
-bool get_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLAGS mode);
+bool input_check(std::string_view prompt);
+bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLAGS mode);
 std::optional<char> input_command(std::string_view prompt, bool z_escape = false);
-int get_quantity(int max, std::string_view initial_prompt = "");
+int input_quantity(int max, std::string_view initial_prompt = "");
 void pause_line(int row);
 std::optional<int> input_integer(std::string_view prompt, int min, int max, int initial_value = 0);
 

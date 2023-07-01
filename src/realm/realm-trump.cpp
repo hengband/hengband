@@ -340,7 +340,7 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             if (cast) {
-                if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)"))) {
+                if (!input_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)"))) {
                     return std::nullopt;
                 }
                 teleport_level(player_ptr, 0);

@@ -38,7 +38,7 @@ bool alchemy(PlayerType *player_ptr)
 
     auto amt = 1;
     if (o_ptr->number > 1) {
-        amt = get_quantity(o_ptr->number);
+        amt = input_quantity(o_ptr->number);
         if (amt <= 0) {
             return false;
         }
@@ -53,7 +53,7 @@ bool alchemy(PlayerType *player_ptr)
         if (confirm_destroy || (o_ptr->get_price() > 0)) {
             char out_val[MAX_NLEN + 40];
             strnfmt(out_val, sizeof(out_val), _("本当に%sを金に変えますか？", "Really turn %s to gold? "), item_name.data());
-            if (!get_check(out_val)) {
+            if (!input_check(out_val)) {
                 return false;
             }
         }

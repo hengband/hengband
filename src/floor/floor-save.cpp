@@ -47,7 +47,7 @@ static void check_saved_tmp_files(const int fd, bool *force)
     msg_print(_("変愚蛮怒を二重に起動していないか確認してください。", "Make sure you are not running two game processes simultaneously."));
     msg_print(_("過去に変愚蛮怒がクラッシュした場合は一時ファイルを", "If the temporary files are garbage from an old crashed process, "));
     msg_print(_("強制的に削除して実行を続けられます。", "you can delete them safely."));
-    if (!get_check(_("強制的に削除してもよろしいですか？", "Do you delete the old temporary files? "))) {
+    if (!input_check(_("強制的に削除してもよろしいですか？", "Do you delete the old temporary files? "))) {
         quit(_("実行中止", "Aborted."));
     }
 
