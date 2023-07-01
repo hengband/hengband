@@ -121,16 +121,10 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
 }
 
 /*!
- * @brief プレイヤーの名前を変更するコマンドのメインルーチン
- * Gets a name for the character, reacting to name changes.
+ * @brief プレイヤーの名前を変更する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @details
- * <pre>
- * Assumes that "display_player()" has just been called
- * Perhaps we should NOT ask for a name (at "birth()") on
- * Unix machines?  XXX XXX
- * What a horrible name for a global function.
- * </pre>
+ * @details PlayerType::name は32バイトで定義されているが、
+ * 「ちからじまんのPLAYER」をスコアサーバに送らないといけない都合で実質15バイトまで
  */
 void get_name(PlayerType *player_ptr)
 {
@@ -139,7 +133,7 @@ void get_name(PlayerType *player_ptr)
     });
 
     std::string initial_name(player_ptr->name);
-    const auto max_name_size = sizeof(player_ptr->name);
+    const auto max_name_size = 15;
     constexpr auto prompt = _("キャラクターの名前を入力して下さい: ", "Enter a name for your character: ");
     const auto name = input_string(prompt, max_name_size, initial_name);
     if (name.has_value()) {
