@@ -142,7 +142,7 @@ bool exe_monster_capture(PlayerType *player_ptr, ItemEntity &item)
     }
 
     DIRECTION dir;
-    if (!get_direction(player_ptr, &dir, false, false)) {
+    if (!get_direction(player_ptr, &dir)) {
         return true;
     }
 

@@ -114,61 +114,32 @@ bool get_aim_dir(PlayerType *player_ptr, int *dp)
     return true;
 }
 
-bool get_direction(PlayerType *player_ptr, DIRECTION *dp, bool allow_under, bool with_steed)
+bool get_direction(PlayerType *player_ptr, int *dp)
 {
-    DIRECTION dir = command_dir;
-    COMMAND_CODE code;
+    auto dir = command_dir;
+    short code;
     if (repeat_pull(&code)) {
-        dir = (DIRECTION)code;
+        dir = code;
     }
 
-    *dp = (DIRECTION)code;
-    concptr prompt = allow_under ? _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ")
-                                 : _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
-
-    while (!dir) {
+    *dp = code;
+    constexpr auto prompt = _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
+    while (dir == 0) {
         char ch;
         if (!input_command(prompt, &ch, true)) {
-            break;
-        }
-
-        if ((allow_under) && ((ch == '5') || (ch == '-') || (ch == '.'))) {
-            dir = 5;
-            continue;
+            return false;
         }
 
         dir = get_keymap_dir(ch);
-        if (!dir) {
+        if (dir == 0) {
             bell();
         }
     }
 
-    if ((dir == 5) && (!allow_under)) {
-        dir = 0;
-    }
-
-    if (!dir) {
-        return false;
-    }
-
     command_dir = dir;
     auto is_confused = player_ptr->effects()->confusion()->is_confused();
-    if (is_confused) {
-        if (randint0(100) < 75) {
-            dir = ddd[randint0(8)];
-        }
-    } else if (player_ptr->riding && with_steed) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-        auto *r_ptr = &monraces_info[m_ptr->r_idx];
-        if (m_ptr->is_confused()) {
-            if (randint0(100) < 75) {
-                dir = ddd[randint0(8)];
-            }
-        } else if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25) && (randint0(100) < 50)) {
-            dir = ddd[randint0(8)];
-        } else if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && (randint0(100) < 25)) {
-            dir = ddd[randint0(8)];
-        }
+    if (is_confused && (randint0(100) < 75)) {
+        dir = ddd[randint0(8)];
     }
 
     if (command_dir != dir) {
@@ -186,7 +157,7 @@ bool get_direction(PlayerType *player_ptr, DIRECTION *dp, bool allow_under, bool
     }
 
     *dp = dir;
-    repeat_push((COMMAND_CODE)command_dir);
+    repeat_push(static_cast<short>(command_dir));
     return true;
 }
 
@@ -208,7 +179,7 @@ bool get_direction(PlayerType *player_ptr, DIRECTION *dp, bool allow_under, bool
  */
 bool get_rep_dir(PlayerType *player_ptr, DIRECTION *dp, bool under)
 {
-    DIRECTION dir = command_dir;
+    auto dir = command_dir;
     COMMAND_CODE code;
     if (repeat_pull(&code)) {
         dir = (DIRECTION)code;
