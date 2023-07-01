@@ -177,38 +177,35 @@ bool get_direction(PlayerType *player_ptr, int *dp)
  * This function tracks and uses the "global direction", and uses
  * that as the "desired direction", to which "confusion" is applied.
  */
-bool get_rep_dir(PlayerType *player_ptr, DIRECTION *dp, bool under)
+bool get_rep_dir(PlayerType *player_ptr, int *dp, bool under)
 {
     auto dir = command_dir;
-    COMMAND_CODE code;
+    short code;
     if (repeat_pull(&code)) {
-        dir = (DIRECTION)code;
+        dir = code;
     }
 
-    *dp = (DIRECTION)code;
-    concptr prompt = under ? _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ") : _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
-    while (!dir) {
+    *dp = code;
+    const auto prompt = under ? _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ")
+                              : _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
+    while (dir == 0) {
         char ch;
         if (!input_command(prompt, &ch, true)) {
+            return false;
+        }
+
+        if (under && ((ch == '5') || (ch == '-') || (ch == '.'))) {
+            dir = 5;
             break;
         }
 
-        if ((under) && ((ch == '5') || (ch == '-') || (ch == '.'))) {
-            dir = 5;
-            continue;
-        }
-
         dir = get_keymap_dir(ch);
-        if (!dir) {
+        if (dir == 0) {
             bell();
         }
     }
 
-    if ((dir == 5) && (!under)) {
-        dir = 0;
-    }
-
-    if (!dir) {
+    if ((dir == 5) && !under) {
         return false;
     }
 
@@ -247,6 +244,6 @@ bool get_rep_dir(PlayerType *player_ptr, DIRECTION *dp, bool under)
     }
 
     *dp = dir;
-    repeat_push((COMMAND_CODE)command_dir);
+    repeat_push(static_cast<short>(command_dir));
     return true;
 }

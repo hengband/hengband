@@ -1008,7 +1008,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
         if (cast) {
             POSITION x, y;
 
-            if (!get_rep_dir(player_ptr, &dir, false)) {
+            if (!get_rep_dir(player_ptr, &dir)) {
                 return std::nullopt;
             }
 

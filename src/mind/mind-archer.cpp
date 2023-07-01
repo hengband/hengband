@@ -107,7 +107,7 @@ bool create_ammo(PlayerType *player_ptr)
     switch (ext) {
     case AMMO_SHOT: {
         DIRECTION dir;
-        if (!get_rep_dir(player_ptr, &dir, false)) {
+        if (!get_rep_dir(player_ptr, &dir)) {
             return false;
         }
 
