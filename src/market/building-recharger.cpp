@@ -136,7 +136,7 @@ void building_recharge(PlayerType *player_ptr)
         }
 
         const auto mes = _("一回分＄%d で何回分充填しますか？", "Add how many charges for %d gold apiece? ");
-        const auto charges = get_quantity(format(mes, price), std::min(player_ptr->au / price, max_charges));
+        const auto charges = get_quantity(std::min(player_ptr->au / price, max_charges), format(mes, price));
         if (charges < 1) {
             return;
         }

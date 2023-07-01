@@ -221,13 +221,13 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
         return;
     }
 
-    PRICE best = price_item(player_ptr, j_ptr, ot_ptr->inflate, false, store_num);
+    const auto best = price_item(player_ptr, j_ptr, ot_ptr->inflate, false, store_num);
     if (o_ptr->number > 1) {
         if (store_num != StoreSaleType::HOME) {
-            msg_format(_("一つにつき $%ldです。", "That costs %ld gold per item."), (long)(best));
+            msg_format(_("一つにつき $%dです。", "That costs %d gold per item."), best);
         }
 
-        amt = get_quantity(std::nullopt, o_ptr->number);
+        amt = get_quantity(o_ptr->number);
         if (amt <= 0) {
             return;
         }

@@ -28,24 +28,23 @@ bool alchemy(PlayerType *player_ptr)
         force = true;
     }
 
-    concptr q = _("どのアイテムを金に変えますか？", "Turn which item to gold? ");
-    concptr s = _("金に変えられる物がありません。", "You have nothing to turn to gold.");
-    OBJECT_IDX item;
-    ItemEntity *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR));
+    constexpr auto q = _("どのアイテムを金に変えますか？", "Turn which item to gold? ");
+    constexpr auto s = _("金に変えられる物がありません。", "You have nothing to turn to gold.");
+    short item;
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR));
     if (!o_ptr) {
         return false;
     }
 
-    int amt = 1;
+    auto amt = 1;
     if (o_ptr->number > 1) {
-        amt = get_quantity(std::nullopt, o_ptr->number);
+        amt = get_quantity(o_ptr->number);
         if (amt <= 0) {
             return false;
         }
     }
 
-    ITEM_NUMBER old_number = o_ptr->number;
+    const auto old_number = o_ptr->number;
     o_ptr->number = amt;
     const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
     o_ptr->number = old_number;
@@ -65,7 +64,7 @@ bool alchemy(PlayerType *player_ptr)
         return false;
     }
 
-    PRICE price = object_value_real(o_ptr);
+    auto price = object_value_real(o_ptr);
     if (price <= 0) {
         msg_format(_("%sをニセの金に変えた。", "You turn %s to fool's gold."), item_name.data());
         vary_item(player_ptr, item, -amt);

@@ -514,7 +514,7 @@ bool free_level_recall(PlayerType *player_ptr)
     }
 
     const auto mes = _("%sの何階にテレポートしますか？", "Teleport to which level of %s? ");
-    QUANTITY amt = get_quantity(format(mes, dungeon.name.data()), (QUANTITY)max_depth);
+    const auto amt = get_quantity(max_depth, format(mes, dungeon.name.data()));
     if (amt <= 0) {
         return false;
     }

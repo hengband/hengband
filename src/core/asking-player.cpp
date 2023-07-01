@@ -367,19 +367,9 @@ std::optional<char> input_command(std::string_view prompt, bool z_escape)
  *
  * Hack -- allow "command_arg" to specify a quantity
  */
-QUANTITY get_quantity(std::optional<std::string_view> prompt_opt, QUANTITY max)
+int get_quantity(int max, std::string_view initial_prompt)
 {
-    /*!
-     * @todo QUANTITY、COMMAND_CODE、その他の型サイズがまちまちな変数とのやり取りが多数ある.
-     * この処理での数の入力を0からSHRT_MAXに制限することで不整合の発生を回避する.
-     */
-    max = std::clamp<QUANTITY>(max, 0, SHRT_MAX);
-
-    bool res;
-    char tmp[80];
-    char buf[80];
-
-    QUANTITY amt;
+    int amt;
     if (command_arg) {
         amt = command_arg;
         command_arg = 0;
@@ -390,13 +380,14 @@ QUANTITY get_quantity(std::optional<std::string_view> prompt_opt, QUANTITY max)
         return amt;
     }
 
-    COMMAND_CODE code;
-    bool result = repeat_pull(&code);
-    amt = (QUANTITY)code;
+    short code;
+    auto result = repeat_pull(&code);
+    amt = code;
     if ((max != 1) && result) {
         if (amt > max) {
             amt = max;
         }
+
         if (amt < 0) {
             amt = 0;
         }
@@ -404,25 +395,19 @@ QUANTITY get_quantity(std::optional<std::string_view> prompt_opt, QUANTITY max)
         return amt;
     }
 
-    std::string_view prompt;
-    if (prompt_opt.has_value()) {
-        prompt = prompt_opt.value();
+    std::string prompt;
+    if (!initial_prompt.empty()) {
+        prompt = initial_prompt;
     } else {
-        strnfmt(tmp, sizeof(tmp), _("いくつですか (1-%d): ", "Quantity (1-%d): "), max);
-        prompt = tmp;
+        prompt = format(_("いくつですか (1-%d): ", "Quantity (1-%d): "), max);
     }
 
     msg_print(nullptr);
     prt(prompt, 0, 0);
     amt = 1;
+    char buf[80]{};
     strnfmt(buf, sizeof(buf), "%d", amt);
-
-    /*
-     * Ask for a quantity
-     * Don't allow to use numpad as cursor key.
-     */
-    res = askfor(buf, 6, false);
-
+    const auto res = askfor(buf, 6, false);
     prt("", 0, 0);
     if (!res) {
         return 0;
@@ -435,7 +420,7 @@ QUANTITY get_quantity(std::optional<std::string_view> prompt_opt, QUANTITY max)
     }
 
     if (amt) {
-        repeat_push((COMMAND_CODE)amt);
+        repeat_push(static_cast<short>(amt));
     }
 
     return amt;
