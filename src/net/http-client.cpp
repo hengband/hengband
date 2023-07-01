@@ -1,6 +1,7 @@
 ﻿#include "net/http-client.h"
 #include "net/curl-easy-session.h"
 #include "net/curl-slist.h"
+#include <fstream>
 #include <string_view>
 
 #if defined(WORLD_SCORE)
@@ -22,6 +23,26 @@ namespace {
         session.setopt(CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
     }
 
+    std::optional<int> perform_get_request(const std::string &url, const libcurl::EasySession::ReceiveHandler &receiver, const std::optional<std::string> &user_agent)
+    {
+        libcurl::EasySession session;
+        if (!session.is_valid()) {
+            return std::nullopt;
+        }
+
+        session.common_setup(url, HTTP_CONNECTION_TIMEOUT);
+        setup_http_option(session, user_agent);
+
+        session.receiver_setup(receiver);
+
+        if (!session.perform()) {
+            return std::nullopt;
+        }
+
+        long status;
+        session.getinfo(CURLINFO_RESPONSE_CODE, &status);
+        return static_cast<int>(status);
+    }
 }
 
 /*!
@@ -31,27 +52,44 @@ namespace {
  */
 std::optional<Response> Client::get(const std::string &url)
 {
-    libcurl::EasySession session;
-    if (!session.is_valid()) {
-        return std::nullopt;
-    }
-
-    session.common_setup(url, HTTP_CONNECTION_TIMEOUT);
-    setup_http_option(session, this->user_agent);
-
     Response response{};
     auto receiver = [&response](char *buf, size_t n) {
         response.body.append(buf, n);
         return n;
     };
-    session.receiver_setup(std::move(receiver));
 
-    if (!session.perform()) {
+    const auto status_opt = perform_get_request(url, receiver, this->user_agent);
+    if (!status_opt) {
         return std::nullopt;
     }
 
-    session.getinfo(CURLINFO_RESPONSE_CODE, &response.status);
+    response.status = *status_opt;
     return std::make_optional(std::move(response));
+}
+
+/*!
+ * @brief HTTP GETリクエストを送信し、応答をファイルに保存する
+ *
+ * ファイルへの保存に成功した場合は、Responseオブジェクトのbodyにファイルパスが格納される。
+ *
+ * @param url リクエストの送信先URL
+ * @param path ファイルの保存先パス
+ * @return 送信に成功した場合Responseオブジェクト、失敗した場合std::nullopt
+ */
+std::optional<Response> Client::get(const std::string &url, const std::filesystem::path &path)
+{
+    std::ofstream ofs(path, std::ios::binary);
+    auto receiver = [&ofs](char *buf, size_t n) {
+        ofs.write(buf, n);
+        return ofs ? n : 0;
+    };
+
+    const auto status_opt = perform_get_request(url, receiver, this->user_agent);
+    if (!status_opt) {
+        return std::nullopt;
+    }
+
+    return Response{ *status_opt, path.string() };
 }
 
 /*!

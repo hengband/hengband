@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <filesystem>
 #include <optional>
 #include <string>
 
@@ -17,6 +18,7 @@ class HttpContentBase;
 class Client {
 public:
     std::optional<Response> get(const std::string &url);
+    std::optional<Response> get(const std::string &url, const std::filesystem::path &path);
     std::optional<Response> post(const std::string &url, const std::string &post_data, const std::string &media_type);
 
     std::optional<std::string> user_agent;
