@@ -107,18 +107,18 @@ bool SpellHex::stop_spells_with_selection()
         return true;
     }
 
-    char out_val[160];
-    strnfmt(out_val, 78, _("どの呪文の詠唱を中断しますか？(呪文 %c-%c, 'l'全て, ESC)", "Which spell do you stop casting? (Spell %c-%c, 'l' to all, ESC)"),
-        I2A(0), I2A(casting_num - 1));
+    constexpr auto fmt = _("どの呪文の詠唱を中断しますか？(呪文 %c-%c, 'l'全て, ESC)", "Which spell do you stop casting? (Spell %c-%c, 'l' to all, ESC)");
+    const auto prompt = format(fmt, I2A(0), I2A(casting_num - 1));
     screen_save();
-    auto [is_all, is_selected, choice] = select_spell_stopping(out_val);
+    const auto [is_all, choice] = select_spell_stopping(prompt);
     if (is_all) {
         return true;
     }
 
     screen_load();
+    const auto is_selected = choice.has_value();
     if (is_selected) {
-        auto n = this->casting_spells[A2I(choice)];
+        auto n = this->casting_spells[A2I(choice.value())];
         exe_spell(this->player_ptr, REALM_HEX, n, SpellProcessType::STOP);
         this->reset_casting_flag(i2enum<spell_hex_type>(n));
     }
@@ -148,13 +148,13 @@ bool SpellHex::stop_spells_with_selection()
  * Item2: 選択が完了したらtrue、キャンセルならばfalse
  * Item3: 選択した呪文番号 (a～d、lの5択)
  */
-std::tuple<bool, bool, char> SpellHex::select_spell_stopping(char *out_val)
+std::pair<bool, std::optional<char>> SpellHex::select_spell_stopping(std::string_view prompt)
 {
     while (true) {
-        char choice = 0;
         this->display_casting_spells_list();
-        if (!get_com(out_val, &choice, true)) {
-            return std::make_tuple(false, false, choice);
+        char choice = 0;
+        if (!input_command(prompt, &choice, true)) {
+            return { false, std::nullopt };
         }
 
         if (isupper(choice)) {
@@ -164,14 +164,14 @@ std::tuple<bool, bool, char> SpellHex::select_spell_stopping(char *out_val)
         if (choice == 'l') {
             screen_load();
             this->stop_all_spells();
-            return std::make_tuple(true, true, choice);
+            return { true, choice };
         }
 
         if ((choice < I2A(0)) || (choice > I2A(this->get_casting_num() - 1))) {
             continue;
         }
 
-        return std::make_tuple(false, true, choice);
+        return { false, choice };
     }
 }
 

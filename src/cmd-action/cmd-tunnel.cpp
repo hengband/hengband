@@ -44,7 +44,7 @@ void do_cmd_tunnel(PlayerType *player_ptr)
     }
 
     DIRECTION dir;
-    if (!get_rep_dir(player_ptr, &dir, false)) {
+    if (!get_rep_dir(player_ptr, &dir)) {
         if (!more) {
             disturb(player_ptr, false, false);
         }

@@ -57,16 +57,15 @@
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
-static bool get_hack_dir(PlayerType *player_ptr, DIRECTION *dp)
+static int get_hack_dir(PlayerType *player_ptr)
 {
-    *dp = 0;
-    char command;
-    DIRECTION dir = 0;
-    while (!dir) {
-        concptr p = target_okay(player_ptr)
-                        ? _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ")
-                        : _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
-        if (!get_com(p, &command, true)) {
+    auto dir = 0;
+    while (dir == 0) {
+        const auto p = target_okay(player_ptr)
+                           ? _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ")
+                           : _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
+        char command;
+        if (!input_command(p, &command, true)) {
             break;
         }
 
@@ -99,13 +98,13 @@ static bool get_hack_dir(PlayerType *player_ptr, DIRECTION *dp)
             dir = 0;
         }
 
-        if (!dir) {
+        if (dir == 0) {
             bell();
         }
     }
 
-    if (!dir) {
-        return false;
+    if (dir == 0) {
+        return 0;
     }
 
     command_dir = dir;
@@ -117,8 +116,7 @@ static bool get_hack_dir(PlayerType *player_ptr, DIRECTION *dp)
         msg_print(_("あなたは混乱している。", "You are confused."));
     }
 
-    *dp = dir;
-    return true;
+    return dir;
 }
 
 /*!
@@ -205,15 +203,14 @@ void process_world_aux_mutation(PlayerType *player_ptr)
     }
 
     if (player_ptr->muta.has(PlayerMutationType::PROD_MANA) && !player_ptr->anti_magic && one_in_(9000)) {
-        int dire = 0;
         disturb(player_ptr, false, true);
         msg_print(_("魔法のエネルギーが突然あなたの中に流れ込んできた！エネルギーを解放しなければならない！",
             "Magical energy flows through you! You must release it!"));
 
         flush();
         msg_print(nullptr);
-        (void)get_hack_dir(player_ptr, &dire);
-        fire_ball(player_ptr, AttributeType::MANA, dire, player_ptr->lev * 2, 3);
+        const auto dir = get_hack_dir(player_ptr);
+        fire_ball(player_ptr, AttributeType::MANA, dir, player_ptr->lev * 2, 3);
     }
 
     if (player_ptr->muta.has(PlayerMutationType::ATT_DEMON) && !player_ptr->anti_magic && (randint1(6666) == 666)) {

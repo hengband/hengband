@@ -62,7 +62,7 @@ void wizard_player_modifier(PlayerType *player_ptr)
     display_wizard_player_modifier_menu();
 
     char cmd;
-    get_com("Player Command: ", &cmd, false);
+    input_command("Player Command: ", &cmd, false);
     screen_load();
 
     switch (cmd) {

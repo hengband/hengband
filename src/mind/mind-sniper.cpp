@@ -297,7 +297,7 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
     while (!flag) {
         if (choice == ESCAPE) {
             choice = ' ';
-        } else if (!get_com(out_val, &choice, false)) {
+        } else if (!input_command(out_val, &choice, false)) {
             break;
         }
 

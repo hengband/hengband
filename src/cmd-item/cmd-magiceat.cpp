@@ -206,7 +206,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
         screen_load();
     } else {
         while (true) {
-            if (!get_com(_("[A] 杖, [B] 魔法棒, [C] ロッド:", "[A] staff, [B] wand, [C] rod:"), &choice, true)) {
+            if (!input_command(_("[A] 杖, [B] 魔法棒, [C] ロッド:", "[A] staff, [B] wand, [C] rod:"), &choice, true)) {
                 return std::nullopt;
             }
             if (choice == 'A' || choice == 'a') {
@@ -353,7 +353,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
             }
         }
 
-        if (!get_com(out_val, &choice, false)) {
+        if (!input_command(out_val, &choice, false)) {
             break;
         }
 

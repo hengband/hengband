@@ -20,6 +20,7 @@
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
+#include <string>
 
 /*
  * Get an "aiming direction" from the user.
@@ -32,31 +33,31 @@
  *
  * Note that confusion over-rides any (explicit?) user choice.
  */
-bool get_aim_dir(PlayerType *player_ptr, DIRECTION *dp)
+bool get_aim_dir(PlayerType *player_ptr, int *dp)
 {
-    DIRECTION dir = command_dir;
+    auto dir = command_dir;
     if (use_old_target && target_okay(player_ptr)) {
         dir = 5;
     }
 
-    COMMAND_CODE code;
+    short code;
     if (repeat_pull(&code)) {
         if (!(code == 5 && !target_okay(player_ptr))) {
-            dir = (DIRECTION)code;
+            dir = code;
         }
     }
 
-    *dp = (DIRECTION)code;
-    char command;
-    while (!dir) {
-        concptr p;
+    *dp = code;
+    while (dir == 0) {
+        std::string prompt;
         if (!target_okay(player_ptr)) {
-            p = _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
+            prompt = _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
         } else {
-            p = _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ");
+            prompt = _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ");
         }
 
-        if (!get_com(p, &command, true)) {
+        char command;
+        if (!input_command(prompt, &command, true)) {
             break;
         }
 
@@ -89,12 +90,12 @@ bool get_aim_dir(PlayerType *player_ptr, DIRECTION *dp)
             dir = 0;
         }
 
-        if (!dir) {
+        if (dir == 0) {
             bell();
         }
     }
 
-    if (!dir) {
+    if (dir == 0) {
         project_length = 0;
         return false;
     }
@@ -113,61 +114,32 @@ bool get_aim_dir(PlayerType *player_ptr, DIRECTION *dp)
     return true;
 }
 
-bool get_direction(PlayerType *player_ptr, DIRECTION *dp, bool allow_under, bool with_steed)
+bool get_direction(PlayerType *player_ptr, int *dp)
 {
-    DIRECTION dir = command_dir;
-    COMMAND_CODE code;
+    auto dir = command_dir;
+    short code;
     if (repeat_pull(&code)) {
-        dir = (DIRECTION)code;
+        dir = code;
     }
 
-    *dp = (DIRECTION)code;
-    concptr prompt = allow_under ? _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ")
-                                 : _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
-
-    while (!dir) {
+    *dp = code;
+    constexpr auto prompt = _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
+    while (dir == 0) {
         char ch;
-        if (!get_com(prompt, &ch, true)) {
-            break;
-        }
-
-        if ((allow_under) && ((ch == '5') || (ch == '-') || (ch == '.'))) {
-            dir = 5;
-            continue;
+        if (!input_command(prompt, &ch, true)) {
+            return false;
         }
 
         dir = get_keymap_dir(ch);
-        if (!dir) {
+        if (dir == 0) {
             bell();
         }
     }
 
-    if ((dir == 5) && (!allow_under)) {
-        dir = 0;
-    }
-
-    if (!dir) {
-        return false;
-    }
-
     command_dir = dir;
     auto is_confused = player_ptr->effects()->confusion()->is_confused();
-    if (is_confused) {
-        if (randint0(100) < 75) {
-            dir = ddd[randint0(8)];
-        }
-    } else if (player_ptr->riding && with_steed) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-        auto *r_ptr = &monraces_info[m_ptr->r_idx];
-        if (m_ptr->is_confused()) {
-            if (randint0(100) < 75) {
-                dir = ddd[randint0(8)];
-            }
-        } else if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25) && (randint0(100) < 50)) {
-            dir = ddd[randint0(8)];
-        } else if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && (randint0(100) < 25)) {
-            dir = ddd[randint0(8)];
-        }
+    if (is_confused && (randint0(100) < 75)) {
+        dir = ddd[randint0(8)];
     }
 
     if (command_dir != dir) {
@@ -185,7 +157,7 @@ bool get_direction(PlayerType *player_ptr, DIRECTION *dp, bool allow_under, bool
     }
 
     *dp = dir;
-    repeat_push((COMMAND_CODE)command_dir);
+    repeat_push(static_cast<short>(command_dir));
     return true;
 }
 
@@ -205,38 +177,35 @@ bool get_direction(PlayerType *player_ptr, DIRECTION *dp, bool allow_under, bool
  * This function tracks and uses the "global direction", and uses
  * that as the "desired direction", to which "confusion" is applied.
  */
-bool get_rep_dir(PlayerType *player_ptr, DIRECTION *dp, bool under)
+bool get_rep_dir(PlayerType *player_ptr, int *dp, bool under)
 {
-    DIRECTION dir = command_dir;
-    COMMAND_CODE code;
+    auto dir = command_dir;
+    short code;
     if (repeat_pull(&code)) {
-        dir = (DIRECTION)code;
+        dir = code;
     }
 
-    *dp = (DIRECTION)code;
-    concptr prompt = under ? _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ") : _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
-    while (!dir) {
+    *dp = code;
+    const auto prompt = under ? _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ")
+                              : _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
+    while (dir == 0) {
         char ch;
-        if (!get_com(prompt, &ch, true)) {
+        if (!input_command(prompt, &ch, true)) {
+            return false;
+        }
+
+        if (under && ((ch == '5') || (ch == '-') || (ch == '.'))) {
+            dir = 5;
             break;
         }
 
-        if ((under) && ((ch == '5') || (ch == '-') || (ch == '.'))) {
-            dir = 5;
-            continue;
-        }
-
         dir = get_keymap_dir(ch);
-        if (!dir) {
+        if (dir == 0) {
             bell();
         }
     }
 
-    if ((dir == 5) && (!under)) {
-        dir = 0;
-    }
-
-    if (!dir) {
+    if ((dir == 5) && !under) {
         return false;
     }
 
@@ -275,6 +244,6 @@ bool get_rep_dir(PlayerType *player_ptr, DIRECTION *dp, bool under)
     }
 
     *dp = dir;
-    repeat_push((COMMAND_CODE)command_dir);
+    repeat_push(static_cast<short>(command_dir));
     return true;
 }

@@ -241,7 +241,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
     case PlayerMutationType::RECALL:
         return recall_player(player_ptr, randint0(21) + 15);
     case PlayerMutationType::BANISH: {
-        if (!get_direction(player_ptr, &dir, false, false)) {
+        if (!get_direction(player_ptr, &dir)) {
             return false;
         }
 
@@ -281,7 +281,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         return true;
     }
     case PlayerMutationType::COLD_TOUCH: {
-        if (!get_direction(player_ptr, &dir, false, false)) {
+        if (!get_direction(player_ptr, &dir)) {
             return false;
         }
 

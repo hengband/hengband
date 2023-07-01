@@ -232,7 +232,7 @@ static COMMAND_CODE choose_essence(void)
                 prt(format("  %c) %s", 'a' + i, menu_name[i]), 2 + i, 14);
             }
 
-            if (!get_com(_("何を付加しますか:", "Command :"), &choice, true)) {
+            if (!input_command(_("何を付加しますか:", "Command :"), &choice, true)) {
                 screen_load();
                 return 0;
             }
@@ -351,7 +351,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
 
             const auto page_effect_num = std::min<int>(effect_num_per_page, smith_effect_list.size() - (page * effect_num_per_page));
 
-            if (!get_com(out_val, &choice, false)) {
+            if (!input_command(out_val, &choice, false)) {
                 break;
             }
 
@@ -554,32 +554,33 @@ static void erase_essence(PlayerType *player_ptr)
 void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
 {
     COMMAND_CODE mode = 0;
-    char choice;
-
     COMMAND_CODE menu_line = (use_menu ? 1 : 0);
-
     if (!only_browse) {
         if (cmd_limit_confused(player_ptr)) {
             return;
         }
+
         if (cmd_limit_blind(player_ptr)) {
             return;
         }
+
         if (cmd_limit_image(player_ptr)) {
             return;
         }
     }
 
-    if (!(repeat_pull(&mode) && 1 <= mode && mode <= 5)) {
+    if (!(repeat_pull(&mode) && (1 <= mode) && (mode <= 5))) {
         if (only_browse) {
             screen_save();
         }
+
         do {
             if (!only_browse) {
                 screen_save();
             }
+
             if (use_menu) {
-                while (!mode) {
+                while (mode == 0) {
 #ifdef JP
                     prt(format(" %s エッセンス一覧", (menu_line == 1) ? "》" : "  "), 2, 14);
                     prt(format(" %s エッセンス抽出", (menu_line == 2) ? "》" : "  "), 3, 14);
@@ -595,7 +596,7 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
                     prt(format(" %s Enchant weapon/armor", (menu_line == 5) ? "> " : "  "), 6, 14);
                     prt(format("Choose command from menu."), 0, 0);
 #endif
-                    choice = inkey();
+                    const auto choice = inkey();
                     switch (choice) {
                     case ESCAPE:
                     case 'z':
@@ -619,28 +620,25 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
                         mode = menu_line;
                         break;
                     }
+
                     if (menu_line > 5) {
                         menu_line -= 5;
                     }
                 }
-            }
-
-            else {
-                while (!mode) {
+            } else {
+                while (mode == 0) {
                     prt(_("  a) エッセンス一覧", "  a) List essences"), 2, 14);
                     prt(_("  b) エッセンス抽出", "  b) Extract essence"), 3, 14);
                     prt(_("  c) エッセンス消去", "  c) Remove essence"), 4, 14);
                     prt(_("  d) エッセンス付加", "  d) Add essence"), 5, 14);
                     prt(_("  e) 武器/防具強化", "  e) Enchant weapon/armor"), 6, 14);
-#ifdef JP
-                    if (!get_com(format("どの能力を%sますか:", only_browse ? "調べ" : "使い"), &choice, true))
-#else
-                    if (!get_com("Command :", &choice, true))
-#endif
-                    {
+                    std::string prompt = _(format("どの能力を%sますか:", only_browse ? "調べ" : "使い"), "Command :");
+                    char choice;
+                    if (!input_command(prompt, &choice, true)) {
                         screen_load();
                         return;
                     }
+
                     switch (choice) {
                     case 'A':
                     case 'a':
@@ -667,23 +665,26 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
             }
 
             if (only_browse) {
-                /* Clear lines, position cursor  (really should use strlen here) */
                 term_erase(14, 21, 255);
                 term_erase(14, 20, 255);
                 term_erase(14, 19, 255);
                 term_erase(14, 18, 255);
                 term_erase(14, 17, 255);
                 term_erase(14, 16, 255);
+                if (mode > 0) {
+                    display_wrap_around(kaji_tips[mode - 1], 62, 17, 15);
+                }
 
-                display_wrap_around(kaji_tips[mode - 1], 62, 17, 15);
                 mode = 0;
             }
+
             if (!only_browse) {
                 screen_load();
             }
         } while (only_browse);
         repeat_push(mode);
     }
+
     switch (mode) {
     case 1:
         display_essence(player_ptr);
@@ -699,6 +700,7 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
         if (mode == 0) {
             break;
         }
+
         add_essence(player_ptr, i2enum<SmithCategoryType>(mode));
         break;
     case 5:

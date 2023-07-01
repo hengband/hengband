@@ -105,7 +105,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
             DIRECTION cdir;
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false)) {
+            if (!get_direction(player_ptr, &dir)) {
                 return std::nullopt;
             }
             if (dir == 5) {
@@ -175,7 +175,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false)) {
+            if (!get_direction(player_ptr, &dir)) {
                 return std::nullopt;
             }
             if (dir == 5) {
@@ -218,7 +218,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false)) {
+            if (!get_direction(player_ptr, &dir)) {
                 return std::nullopt;
             }
             if (dir == 5) {
@@ -273,7 +273,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 return std::nullopt;
             }
 
-            if (!get_direction(player_ptr, &dir, false, false)) {
+            if (!get_direction(player_ptr, &dir)) {
                 return std::nullopt;
             }
 
@@ -316,7 +316,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false)) {
+            if (!get_direction(player_ptr, &dir)) {
                 return std::nullopt;
             }
             if (dir == 5) {
@@ -347,7 +347,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false)) {
+            if (!get_direction(player_ptr, &dir)) {
                 return std::nullopt;
             }
             if (dir == 5) {
@@ -377,7 +377,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false)) {
+            if (!get_direction(player_ptr, &dir)) {
                 return std::nullopt;
             }
             if (dir == 5) {
@@ -467,7 +467,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false)) {
+            if (!get_direction(player_ptr, &dir)) {
                 return std::nullopt;
             }
             if (dir == 5) {
@@ -503,7 +503,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false)) {
+            if (!get_direction(player_ptr, &dir)) {
                 return std::nullopt;
             }
             if (dir == 5) {
@@ -534,7 +534,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false)) {
+            if (!get_direction(player_ptr, &dir)) {
                 return std::nullopt;
             }
             if (dir == 5) {
@@ -564,7 +564,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false)) {
+            if (!get_direction(player_ptr, &dir)) {
                 return std::nullopt;
             }
             if (dir == 5) {
@@ -595,7 +595,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false)) {
+            if (!get_direction(player_ptr, &dir)) {
                 return std::nullopt;
             }
             if (dir == 5) {
@@ -626,7 +626,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false)) {
+            if (!get_direction(player_ptr, &dir)) {
                 return std::nullopt;
             }
             if (dir == 5) {
@@ -706,7 +706,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false)) {
+            if (!get_direction(player_ptr, &dir)) {
                 return std::nullopt;
             }
             if (dir == 5) {
@@ -798,7 +798,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
         if (cast) {
             int i;
 
-            if (!get_direction(player_ptr, &dir, false, false)) {
+            if (!get_direction(player_ptr, &dir)) {
                 return std::nullopt;
             }
             if (dir == 5) {
@@ -889,7 +889,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false)) {
+            if (!get_direction(player_ptr, &dir)) {
                 return std::nullopt;
             }
             if (dir == 5) {
@@ -1008,7 +1008,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
         if (cast) {
             POSITION x, y;
 
-            if (!get_rep_dir(player_ptr, &dir, false)) {
+            if (!get_rep_dir(player_ptr, &dir)) {
                 return std::nullopt;
             }
 
@@ -1041,7 +1041,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
             POSITION y, x;
             ItemEntity *o_ptr;
 
-            if (!get_direction(player_ptr, &dir, false, false)) {
+            if (!get_direction(player_ptr, &dir)) {
                 return std::nullopt;
             }
             if (dir == 5) {
@@ -1101,7 +1101,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false)) {
+            if (!get_direction(player_ptr, &dir)) {
                 return std::nullopt;
             }
             if (dir == 5) {

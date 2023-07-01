@@ -130,37 +130,39 @@ bool symbol_genocide(PlayerType *player_ptr, int power, bool player_cast)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     bool is_special_floor = inside_quest(floor.quest_number) && !inside_quest(random_quest_number(floor, floor.dun_level));
-    is_special_floor |= player_ptr->current_floor_ptr->inside_arena;
+    is_special_floor |= floor.inside_arena;
     is_special_floor |= player_ptr->phase_out;
     if (is_special_floor) {
         msg_print(_("何も起きないようだ……", "Nothing seems to happen..."));
         return false;
     }
 
-    char typ;
-    while (!get_com(_("どの種類(文字)のモンスターを抹殺しますか: ", "Choose a monster race (by symbol) to genocide: "), &typ, false)) {
-        ;
-    }
-    bool result = false;
-    for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        auto *r_ptr = &monraces_info[m_ptr->r_idx];
-        if (!m_ptr->is_valid()) {
-            continue;
+    constexpr auto prompt = _("どの種類(文字)のモンスターを抹殺しますか: ", "Choose a monster race (by symbol) to genocide: ");
+    char symbol;
+    while (true) {
+        if (input_command(prompt, &symbol, false)) {
+            break;
         }
-        if (r_ptr->d_char != typ) {
+    }
+
+    auto result = false;
+    for (short i = 1; i < floor.m_max; i++) {
+        auto *m_ptr = &floor.m_list[i];
+        auto *r_ptr = &monraces_info[m_ptr->r_idx];
+        if (!m_ptr->is_valid() || (r_ptr->d_char != symbol)) {
             continue;
         }
 
         result |= genocide_aux(player_ptr, i, power, player_cast, 4, _("抹殺", "Genocide"));
     }
 
-    if (result) {
-        chg_virtue(player_ptr, Virtue::VITALITY, -2);
-        chg_virtue(player_ptr, Virtue::CHANCE, -1);
+    if (!result) {
+        return false;
     }
 
-    return result;
+    chg_virtue(player_ptr, Virtue::VITALITY, -2);
+    chg_virtue(player_ptr, Virtue::CHANCE, -1);
+    return true;
 }
 
 /*!

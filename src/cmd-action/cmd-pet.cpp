@@ -204,9 +204,10 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
     grid_type *g_ptr;
     MonsterEntity *m_ptr;
 
-    if (!get_direction(player_ptr, &dir, false, false)) {
+    if (!get_direction(player_ptr, &dir)) {
         return false;
     }
+
     y = player_ptr->y + ddy[dir];
     x = player_ptr->x + ddx[dir];
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
@@ -564,7 +565,7 @@ void do_cmd_pet(PlayerType *player_ptr)
         while (!flag) {
             if (choice == ESCAPE) {
                 choice = ' ';
-            } else if (!get_com(prompt.data(), &choice, true)) {
+            } else if (!input_command(prompt.data(), &choice, true)) {
                 break;
             }
 

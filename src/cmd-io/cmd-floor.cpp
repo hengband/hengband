@@ -76,7 +76,7 @@ void do_cmd_locate(PlayerType *player_ptr)
         dir = 0;
         while (!dir) {
             char command;
-            if (!get_com(out_val, &command, true)) {
+            if (!input_command(out_val, &command, true)) {
                 break;
             }
 

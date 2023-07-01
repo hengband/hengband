@@ -47,8 +47,8 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
 
     uint16_t why = 0;
 
-    if (!get_com(_("知りたい文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^R乗馬,^M名前): ",
-                     "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): "),
+    if (!input_command(_("知りたい文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^R乗馬,^M名前): ",
+                           "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): "),
             &sym, false)) {
         return;
     }

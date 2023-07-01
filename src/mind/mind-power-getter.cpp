@@ -61,13 +61,13 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
         }
     }
 
-    char out_val[160];
+    std::string prompt;
     if (only_browse) {
-        constexpr auto mes = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
-        (void)strnfmt(out_val, 78, mes, this->mind_description, I2A(0), I2A(this->num - 1), this->mind_description);
+        constexpr auto fmt = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
+        prompt = format(fmt, this->mind_description, I2A(0), I2A(this->num - 1), this->mind_description);
     } else {
-        constexpr auto mes = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
-        (void)strnfmt(out_val, 78, mes, this->mind_description, I2A(0), I2A(this->num - 1), this->mind_description);
+        constexpr auto fmt = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
+        prompt = format(fmt, this->mind_description, I2A(0), I2A(this->num - 1), this->mind_description);
     }
 
     if (use_menu && !only_browse) {
@@ -75,7 +75,7 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
     }
 
     this->choice = (always_show_list || use_menu) ? ESCAPE : 1;
-    decide_mind_choice(out_val, only_browse);
+    this->decide_mind_choice(prompt, only_browse);
     if (this->redraw && !only_browse) {
         screen_load();
     }
@@ -142,12 +142,12 @@ bool MindPowerGetter::select_spell_index(SPELL_IDX *sn)
     return mind_ptr->info[*sn].min_lev <= this->player_ptr->lev;
 }
 
-bool MindPowerGetter::decide_mind_choice(char *out_val, const bool only_browse)
+bool MindPowerGetter::decide_mind_choice(std::string_view prompt, const bool only_browse)
 {
     while (!this->flag) {
         if (this->choice == ESCAPE) {
             this->choice = ' ';
-        } else if (!get_com(out_val, &this->choice, true)) {
+        } else if (!input_command(prompt, &this->choice, true)) {
             break;
         }
 
