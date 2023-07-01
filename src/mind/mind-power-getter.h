@@ -2,6 +2,7 @@
 
 #include "mind/mind-types.h"
 #include "system/angband.h"
+#include <string_view>
 
 struct mind_power;
 struct mind_type;
@@ -33,7 +34,7 @@ private:
 
     void select_mind_description();
     bool select_spell_index(SPELL_IDX *sn);
-    bool decide_mind_choice(char *out_val, const bool only_browse);
+    bool decide_mind_choice(std::string_view prompt, const bool only_browse);
     bool interpret_mind_key_input(const bool only_browse);
     bool display_minds_chance(const bool only_browse);
     void display_each_mind_chance();
