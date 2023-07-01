@@ -285,8 +285,8 @@ bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, EnumCla
     } else {
         ss << "[y/n]";
     }
-    const auto buf = ss.str();
 
+    const auto buf = ss.str();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (auto_more) {
         rfu.set_flag(SubWindowRedrawingFlag::MESSAGE);
@@ -372,9 +372,10 @@ std::optional<char> input_command(std::string_view prompt, bool z_escape)
 }
 
 /*
- * Request a "quantity" from the user
- *
- * Hack -- allow "command_arg" to specify a quantity
+ * @brief 数量をユーザ入力する
+ * @param max 最大値 (売出し商品の個数等)
+ * @param initial_prompt 初期値
+ * @details 数値でない値 ('a'等)を入力したら最大数を選択したとみなす.
  */
 int input_quantity(int max, std::string_view initial_prompt)
 {
@@ -394,11 +395,11 @@ int input_quantity(int max, std::string_view initial_prompt)
     amt = code;
     if ((max != 1) && result) {
         if (amt > max) {
-            amt = max;
+            return max;
         }
 
         if (amt < 0) {
-            amt = 0;
+            return 0;
         }
 
         return amt;
@@ -412,23 +413,22 @@ int input_quantity(int max, std::string_view initial_prompt)
     }
 
     msg_print(nullptr);
-    prt(prompt, 0, 0);
-    amt = 1;
-    char buf[80]{};
-    strnfmt(buf, sizeof(buf), "%d", amt);
-    const auto res = askfor(buf, 6, false);
-    prt("", 0, 0);
-    if (!res) {
+    const auto input_amount = input_string(prompt, 6, "1");
+    if (!input_amount) {
         return 0;
     }
 
-    if (isalpha(buf[0])) {
+    if (isalpha((*input_amount)[0])) {
         amt = max;
     } else {
-        amt = std::clamp<int>(atoi(buf), 0, max);
+        try {
+            amt = std::clamp<int>(std::stoi(*input_amount), 0, max);
+        } catch (const std::exception &) {
+            amt = 0;
+        }
     }
 
-    if (amt) {
+    if (amt > 0) {
         repeat_push(static_cast<short>(amt));
     }
 
