@@ -7,6 +7,7 @@
 #include "term/term-color-types.h"
 #include "term/z-form.h"
 #include "util/int-char-converter.h"
+#include "view/display-player-misc-info.h"
 #include <sstream>
 
 static std::string birth_personality_label(int cs, concptr sym)
@@ -251,17 +252,6 @@ bool get_player_personality(PlayerType *player_ptr)
 
     player_ptr->ppersonality = (player_personality_type)k;
     ap_ptr = &personality_info[player_ptr->ppersonality];
-    char tmp[64];
-#ifdef JP
-    strcpy(tmp, ap_ptr->title);
-    if (ap_ptr->no == 1) {
-        strcat(tmp, "の");
-    }
-#else
-    strcpy(tmp, ap_ptr->title);
-    strcat(tmp, " ");
-#endif
-    strcat(tmp, player_ptr->name);
-    c_put_str(TERM_L_BLUE, tmp, 1, 34);
+    display_player_name(player_ptr);
     return true;
 }

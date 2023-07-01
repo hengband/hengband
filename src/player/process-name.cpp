@@ -9,6 +9,7 @@
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
+#include "view/display-player-misc-info.h"
 #include "world/world.h"
 #include <sstream>
 #ifdef SAVEFILE_USE_UID
@@ -142,17 +143,5 @@ void get_name(PlayerType *player_ptr)
         angband_strcpy(player_ptr->name, "PLAYER", max_name_size);
     }
 
-    std::stringstream ss;
-    ss << ap_ptr->title;
-#ifdef JP
-    if (ap_ptr->no == 1) {
-        ss << "の";
-    }
-#else
-    ss << " ";
-#endif
-    ss << player_ptr->name;
-    term_erase(34, 1, 255);
-    c_put_str(TERM_L_BLUE, ss.str(), 1, 34);
-    clear_from(22);
+    display_player_misc_info(player_ptr);
 }
