@@ -20,6 +20,7 @@
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
+#include <string>
 
 /*
  * Get an "aiming direction" from the user.
@@ -32,31 +33,31 @@
  *
  * Note that confusion over-rides any (explicit?) user choice.
  */
-bool get_aim_dir(PlayerType *player_ptr, DIRECTION *dp)
+bool get_aim_dir(PlayerType *player_ptr, int *dp)
 {
-    DIRECTION dir = command_dir;
+    auto dir = command_dir;
     if (use_old_target && target_okay(player_ptr)) {
         dir = 5;
     }
 
-    COMMAND_CODE code;
+    short code;
     if (repeat_pull(&code)) {
         if (!(code == 5 && !target_okay(player_ptr))) {
-            dir = (DIRECTION)code;
+            dir = code;
         }
     }
 
-    *dp = (DIRECTION)code;
-    char command;
-    while (!dir) {
-        concptr p;
+    *dp = code;
+    while (dir == 0) {
+        std::string prompt;
         if (!target_okay(player_ptr)) {
-            p = _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
+            prompt = _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
         } else {
-            p = _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ");
+            prompt = _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ");
         }
 
-        if (!input_command(p, &command, true)) {
+        char command;
+        if (!input_command(prompt, &command, true)) {
             break;
         }
 
@@ -89,12 +90,12 @@ bool get_aim_dir(PlayerType *player_ptr, DIRECTION *dp)
             dir = 0;
         }
 
-        if (!dir) {
+        if (dir == 0) {
             bell();
         }
     }
 
-    if (!dir) {
+    if (dir == 0) {
         project_length = 0;
         return false;
     }
