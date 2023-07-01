@@ -57,7 +57,6 @@ void EasySession::common_setup(const std::string &url, int timeout_sec)
 
     if (timeout_sec > 0) {
         this->setopt(CURLOPT_CONNECTTIMEOUT, timeout_sec);
-        this->setopt(CURLOPT_TIMEOUT, timeout_sec);
     }
 }
 
