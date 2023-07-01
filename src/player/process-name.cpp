@@ -8,6 +8,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
+#include "util/finalizer.h"
 #include "util/string-processor.h"
 #include "view/display-player-misc-info.h"
 #include "world/world.h"
@@ -133,15 +134,23 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
  */
 void get_name(PlayerType *player_ptr)
 {
+    const auto finalizer = util::make_finalizer([player_ptr]() {
+        display_player_misc_info(player_ptr);
+    });
+
     std::string initial_name(player_ptr->name);
     const auto max_name_size = sizeof(player_ptr->name);
     constexpr auto prompt = _("キャラクターの名前を入力して下さい: ", "Enter a name for your character: ");
     const auto name = input_string(prompt, max_name_size, initial_name);
-    if (name.has_value() && !name->empty()) {
-        angband_strcpy(player_ptr->name, name.value(), max_name_size);
-    } else {
-        angband_strcpy(player_ptr->name, "PLAYER", max_name_size);
+    if (name.has_value()) {
+        if (!name->empty()) {
+            angband_strcpy(player_ptr->name, name.value(), max_name_size);
+        }
+
+        return;
     }
 
-    display_player_misc_info(player_ptr);
+    if (initial_name.empty()) {
+        angband_strcpy(player_ptr->name, "PLAYER", max_name_size);
+    }
 }
