@@ -1,23 +1,25 @@
 ﻿#pragma once
 
-#include "system/angband.h"
+#include "util/flag-group.h"
 #include <optional>
 #include <string_view>
 #include <type_traits>
 
-/*
- * Bit flags for control of input_check_strict()
- */
-#define CHECK_OKAY_CANCEL 0x01
-#define CHECK_NO_ESCAPE 0x02
-#define CHECK_NO_HISTORY 0x04
-#define CHECK_DEFAULT_Y 0x08
+enum class UserCheck {
+    NONE = 0,
+    OKAY_CANCEL = 1,
+    NO_ESCAPE = 2,
+    NO_HISTORY = 3,
+    DEFAULT_Y = 4,
+    MAX = 5,
+};
 
 class PlayerType;
 bool askfor(char *buf, int len, bool numpad_cursor = true);
 std::optional<std::string> input_string(std::string_view prompt, int len, std::string_view initial_value = "");
 bool input_check(std::string_view prompt);
-bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLAGS mode);
+bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, UserCheck one_mode);
+bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, EnumClassFlagGroup<UserCheck> mode);
 std::optional<char> input_command(std::string_view prompt, bool z_escape = false);
 int input_quantity(int max, std::string_view initial_prompt = "");
 void pause_line(int row);

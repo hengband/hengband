@@ -250,28 +250,37 @@ std::optional<std::string> input_string(std::string_view prompt, int len, std::s
  */
 bool input_check(std::string_view prompt)
 {
-    return input_check_strict(p_ptr, prompt, 0);
+    return input_check_strict(p_ptr, prompt, UserCheck::NONE);
+}
+
+/*!
+ * @details initializer_list を使うと再帰呼び出し扱いになるので一旦FlagGroup で受ける
+ */
+bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, UserCheck one_mode)
+{
+    EnumClassFlagGroup<UserCheck> mode = { one_mode };
+    return input_check_strict(player_ptr, prompt, mode);
 }
 
 /*
  * Verify something with the user strictly
  *
- * mode & CHECK_OKAY_CANCEL : force user to answer 'O'kay or 'C'ancel
- * mode & CHECK_NO_ESCAPE   : don't allow ESCAPE key
- * mode & CHECK_NO_HISTORY  : no message_add
- * mode & CHECK_DEFAULT_Y   : accept any key as y, except n and Esc.
+ * OKAY_CANCEL : force user to answer 'O'kay or 'C'ancel
+ * NO_ESCAPE   : don't allow ESCAPE key
+ * NO_HISTORY  : no message_add
+ * DEFAULT_Y   : accept any key as y, except n and Esc.
  */
-bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLAGS mode)
+bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, EnumClassFlagGroup<UserCheck> mode)
 {
     if (!rogue_like_commands) {
-        mode &= ~CHECK_OKAY_CANCEL;
+        mode.reset(UserCheck::OKAY_CANCEL);
     }
 
     std::stringstream ss;
     ss << prompt;
-    if (mode & CHECK_OKAY_CANCEL) {
+    if (mode.has(UserCheck::OKAY_CANCEL)) {
         ss << "[(O)k/(C)ancel]";
-    } else if (mode & CHECK_DEFAULT_Y) {
+    } else if (mode.has(UserCheck::DEFAULT_Y)) {
         ss << "[Y/n]";
     } else {
         ss << "[y/n]";
@@ -288,7 +297,7 @@ bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLA
     msg_print(nullptr);
 
     prt(buf, 0, 0);
-    if (!(mode & CHECK_NO_HISTORY) && player_ptr->playing) {
+    if (mode.has_not(UserCheck::NO_HISTORY) && player_ptr->playing) {
         message_add(buf);
         rfu.set_flag(SubWindowRedrawingFlag::MESSAGE);
         handle_stuff(player_ptr);
@@ -298,14 +307,14 @@ bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLA
     while (true) {
         int i = inkey();
 
-        if (!(mode & CHECK_NO_ESCAPE)) {
+        if (mode.has_not(UserCheck::NO_ESCAPE)) {
             if (i == ESCAPE) {
                 flag = false;
                 break;
             }
         }
 
-        if (mode & CHECK_OKAY_CANCEL) {
+        if (mode.has(UserCheck::OKAY_CANCEL)) {
             if (i == 'o' || i == 'O') {
                 flag = true;
                 break;
@@ -323,7 +332,7 @@ bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLA
             }
         }
 
-        if (mode & CHECK_DEFAULT_Y) {
+        if (mode.has(UserCheck::DEFAULT_Y)) {
             flag = true;
             break;
         }

@@ -1079,7 +1079,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
         }
 
         /* Verify */
-        if (!input_check_strict(player_ptr, _("それでも挑戦しますか? ", "Attempt it anyway? "), CHECK_OKAY_CANCEL)) {
+        if (!input_check_strict(player_ptr, _("それでも挑戦しますか? ", "Attempt it anyway? "), UserCheck::OKAY_CANCEL)) {
             return false;
         }
     }

@@ -53,7 +53,7 @@ static std::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, ItemEntity *o_
 
     price_ask *= o_ptr->number;
     const auto s = format(_("買値 $%ld で買いますか？", "Do you buy for $%ld? "), static_cast<long>(price_ask));
-    if (input_check_strict(player_ptr, s, CHECK_DEFAULT_Y)) {
+    if (input_check_strict(player_ptr, s, UserCheck::DEFAULT_Y)) {
         return price_ask;
     }
 

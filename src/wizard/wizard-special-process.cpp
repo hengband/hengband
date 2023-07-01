@@ -448,7 +448,7 @@ void wiz_change_status(PlayerType *player_ptr)
     });
 
     constexpr auto msg = _("全てのステータスを最大にしますか？", "Maximize all statuses? ");
-    if (input_check_strict(player_ptr, msg, (CHECK_NO_ESCAPE | CHECK_NO_HISTORY))) {
+    if (input_check_strict(player_ptr, msg, { UserCheck::NO_ESCAPE, UserCheck::NO_HISTORY })) {
         wiz_change_status_max(player_ptr);
         return;
     }

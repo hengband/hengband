@@ -55,7 +55,7 @@ static std::optional<PRICE> prompt_to_sell(PlayerType *player_ptr, ItemEntity *o
     price_ask = std::min(price_ask, ot_ptr->max_cost);
     price_ask *= o_ptr->number;
     const auto s = format(_("売値 $%ld で売りますか？", "Do you sell for $%ld? "), static_cast<long>(price_ask));
-    if (input_check_strict(player_ptr, s, CHECK_DEFAULT_Y)) {
+    if (input_check_strict(player_ptr, s, UserCheck::DEFAULT_Y)) {
         return price_ask;
     }
 
