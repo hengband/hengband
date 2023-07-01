@@ -908,7 +908,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
     for (const auto &expression : fixed_expressions) {
         auto len = expression.length();
-        if (!std::string_view(str).starts_with(expression)) {
+        if (std::string_view(str).starts_with(expression)) {
             str = ltrim(str + len);
             fixed = true;
             break;
