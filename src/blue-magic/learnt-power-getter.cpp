@@ -120,15 +120,15 @@ static std::optional<BlueMagicType> select_blue_magic_type_by_menu()
  */
 static std::optional<BlueMagicType> select_blue_magic_kind_by_symbol()
 {
-    auto candidate_desc = _("[A]ボルト, [B]ボール, [C]ブレス, [D]召喚, [E]その他:", "[A] bolt, [B] ball, [C] breath, [D] summoning, [E] others:");
-
+    constexpr auto candidate_desc = _("[A]ボルト, [B]ボール, [C]ブレス, [D]召喚, [E]その他:",
+        "[A] bolt, [B] ball, [C] breath, [D] summoning, [E] others:");
     while (true) {
-        char ch;
-        if (!input_command(candidate_desc, &ch, true)) {
+        const auto command = input_command(candidate_desc, true);
+        if (!command.has_value()) {
             return std::nullopt;
         }
 
-        switch (ch) {
+        switch (command.value()) {
         case 'A':
         case 'a':
             return BlueMagicType::BOLT;
@@ -185,7 +185,7 @@ static std::optional<std::vector<MonsterAbilityType>> sweep_learnt_spells(const 
  * @param blue_magics 青魔法のリスト(覚えていないものも含まれているが、カーソル移動時に選択をスキップする)
  * @return 選択確定キーが入力された場合は true、そうでなければ false
  */
-static bool switch_blue_magic_choice(char key, int &menu_line, const bluemage_data_type &bluemage_data, const std::vector<MonsterAbilityType> blue_magics)
+static bool switch_blue_magic_choice(const char key, int &menu_line, const bluemage_data_type &bluemage_data, const std::vector<MonsterAbilityType> blue_magics)
 {
     const auto &learnt_blue_magics = bluemage_data.learnt_blue_magics;
     const int blue_magics_count = blue_magics.size();
@@ -361,18 +361,22 @@ static bool confirm_cast_blue_magic(MonsterAbilityType spell)
  */
 static std::optional<MonsterAbilityType> select_learnt_spells_by_symbol(PlayerType *player_ptr, const bluemage_data_type &bluemage_data, std::vector<MonsterAbilityType> spells)
 {
-    char out_val[80];
-    (void)strnfmt(out_val, sizeof(out_val), _("(%c-%c, '*'で一覧, ESC) どの%sを唱えますか？", "(%c-%c, *=List, ESC=exit) Use which %s? "),
-        I2A(0), I2A(spells.size() - 1), _("魔法", "magic"));
+    constexpr auto fmt = _("(%c-%c, '*'で一覧, ESC) どの%sを唱えますか？", "(%c-%c, *=List, ESC=exit) Use which %s? ");
+    const auto prompt = format(fmt, I2A(0), I2A(spells.size() - 1), _("魔法", "magic"));
 
     bool first_show_list = always_show_list;
     auto show_list = false;
     std::optional<MonsterAbilityType> selected_spell;
 
     while (!selected_spell.has_value()) {
-        char choice = 0;
-        if (!first_show_list && !input_command(out_val, &choice, true)) {
-            break;
+        auto choice = '\0';
+        if (!first_show_list) {
+            const auto choice_opt = input_command(prompt, true);
+            if (!choice_opt.has_value()) {
+                break;
+            }
+
+            choice = choice_opt.value();
         }
 
         if (first_show_list || (choice == ' ') || (choice == '*') || (choice == '?')) {
@@ -385,6 +389,7 @@ static std::optional<MonsterAbilityType> select_learnt_spells_by_symbol(PlayerTy
             } else {
                 screen_load();
             }
+
             continue;
         }
 
@@ -418,8 +423,7 @@ static std::optional<MonsterAbilityType> select_learnt_spells_by_symbol(PlayerTy
  */
 static std::optional<MonsterAbilityType> select_learnt_spells_by_menu(PlayerType *player_ptr, const bluemage_data_type &bluemage_data, std::vector<MonsterAbilityType> spells)
 {
-    char out_val[80];
-    angband_strcpy(out_val, _("(ESC=中断) どの魔法を唱えますか？", "(ESC=exit) Use which magic? "), sizeof(out_val));
+    constexpr auto prompt = _("(ESC=中断) どの魔法を唱えますか？", "(ESC=exit) Use which magic? ");
 
     auto it = std::find_if(
         spells.begin(), spells.end(), [&bluemage_data](const auto &spell) { return bluemage_data.learnt_blue_magics.has(spell); });
@@ -431,8 +435,13 @@ static std::optional<MonsterAbilityType> select_learnt_spells_by_menu(PlayerType
     while (!selected_spell.has_value()) {
         describe_blue_magic_name(player_ptr, menu_line, bluemage_data, spells);
 
-        char choice;
-        if (!input_command(out_val, &choice, true) || choice == '0') {
+        const auto choice_opt = input_command(prompt, true);
+        if (!choice_opt.has_value()) {
+            break;
+        }
+
+        const auto choice = choice_opt.value();
+        if (choice == '0') {
             break;
         }
 

@@ -252,8 +252,6 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
     TERM_LEN y = 1;
     TERM_LEN x = 20;
     PLAYER_LEVEL plev = player_ptr->lev;
-    char choice;
-    char out_val[160];
     concptr p = _("射撃術", "power");
     snipe_power spell;
     bool flag, redraw;
@@ -284,21 +282,25 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
         }
     }
 
-    /* Build a prompt (accept all spells) */
+    std::string fmt;
     if (only_browse) {
-        constexpr auto mes = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
-        (void)strnfmt(out_val, 78, mes, p, I2A(0), I2A(num), p);
+        fmt = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
     } else {
-        constexpr auto mes = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
-        (void)strnfmt(out_val, 78, mes, p, I2A(0), I2A(num), p);
+        fmt = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
     }
 
-    choice = always_show_list ? ESCAPE : 1;
+    const auto prompt = format(fmt.data(), p, I2A(0), I2A(num), p);
+    auto choice = always_show_list ? ESCAPE : '\1';
     while (!flag) {
         if (choice == ESCAPE) {
             choice = ' ';
-        } else if (!input_command(out_val, &choice, false)) {
-            break;
+        } else {
+            const auto new_choice = input_command(prompt);
+            if (!new_choice.has_value()) {
+                break;
+            }
+
+            choice = new_choice.value();
         }
 
         /* Request redraw */

@@ -335,8 +335,13 @@ static bool racial_power_process_input(PlayerType *player_ptr, rc_type *rc_ptr)
     while (true) {
         if (rc_ptr->choice == ESCAPE) {
             rc_ptr->choice = ' ';
-        } else if (!input_command(rc_ptr->out_val, &rc_ptr->choice, false)) {
-            return RC_CANCEL;
+        } else {
+            const auto choice = input_command(rc_ptr->out_val);
+            if (!choice.has_value()) {
+                return true;
+            }
+
+            rc_ptr->choice = choice.value();
         }
 
         if (racial_power_select_by_menu(player_ptr, rc_ptr) == RC_CANCEL) {

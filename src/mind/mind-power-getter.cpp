@@ -147,8 +147,13 @@ bool MindPowerGetter::decide_mind_choice(std::string_view prompt, const bool onl
     while (!this->flag) {
         if (this->choice == ESCAPE) {
             this->choice = ' ';
-        } else if (!input_command(prompt, &this->choice, true)) {
-            break;
+        } else {
+            const auto command = input_command(prompt, true);
+            if (!command.has_value()) {
+                break;
+            }
+
+            this->choice = command.value();
         }
 
         if (!interpret_mind_key_input(only_browse)) {

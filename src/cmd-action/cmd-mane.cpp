@@ -142,7 +142,6 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
     PLAYER_LEVEL plev = player_ptr->lev;
     PERCENTAGE chance = 0;
     char choice;
-    char out_val[MAX_MONSTER_NAME];
     concptr p = _("能力", "power");
 
     monster_power spell;
@@ -159,15 +158,20 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
     num = mane_data->mane_list.size();
 
     /* Build a prompt (accept all spells) */
-    constexpr auto mes = _("(%c-%c, '*'で一覧, ESC) どの%sをまねますか？", "(%c-%c, *=List, ESC=exit) Use which %s? ");
-    (void)strnfmt(out_val, 78, mes, I2A(0), I2A(num - 1), p);
+    constexpr auto fmt = _("(%c-%c, '*'で一覧, ESC) どの%sをまねますか？", "(%c-%c, *=List, ESC=exit) Use which %s? ");
+    const auto prompt = format(fmt, I2A(0), I2A(num - 1), p);
 
     choice = always_show_list ? ESCAPE : 1;
     while (!flag) {
         if (choice == ESCAPE) {
             choice = ' ';
-        } else if (!input_command(out_val, &choice, true)) {
-            break;
+        } else {
+            const auto new_choice = input_command(prompt, true);
+            if (!new_choice.has_value()) {
+                break;
+            }
+
+            choice = new_choice.value();
         }
 
         /* Request redraw */

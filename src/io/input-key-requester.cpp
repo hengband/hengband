@@ -225,13 +225,8 @@ bool InputKeyRequestor::process_repeat_num(short &cmd)
         return false;
     }
 
-    char tmp_cmd;
-    auto ret_cmd = input_command(_("コマンド: ", "Command: "), &tmp_cmd, false);
-    cmd = tmp_cmd;
-    if (ret_cmd) {
-        return false;
-    }
-
+    const auto ret_cmd = input_command(_("コマンド: ", "Command: "));
+    cmd = ret_cmd.value_or(ESCAPE);
     command_arg = 0;
     return true;
 }
@@ -247,9 +242,8 @@ void InputKeyRequestor::process_command_command(short &cmd)
         return;
     }
 
-    char tmp_cmd;
-    (void)input_command(_("コマンド: ", "Command: "), &tmp_cmd, false);
-    cmd = tmp_cmd;
+    const auto new_command = input_command(_("コマンド: ", "Command: "));
+    cmd = new_command.value_or(ESCAPE);
     if (inkey_next == nullptr) {
         inkey_next = "";
     }
@@ -261,10 +255,10 @@ void InputKeyRequestor::process_control_command(short &cmd)
         return;
     }
 
-    char tmp_cmd;
-    auto ret_cmd = input_command(_("CTRL: ", "Control: "), &tmp_cmd, false);
-    cmd = tmp_cmd;
-    if (ret_cmd) {
+    const auto new_command = input_command(_("CTRL: ", "Control: "));
+    const auto is_input = new_command.has_value();
+    cmd = new_command.value_or(ESCAPE);
+    if (is_input) {
         cmd = KTRL(cmd);
     }
 }

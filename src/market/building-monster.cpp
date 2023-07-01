@@ -33,16 +33,15 @@ bool research_mon(PlayerType *player_ptr)
     bool uniq = false;
     bool norm = false;
     screen_save();
-    char sym;
-    if (!input_command(
-            _("モンスターの文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^M名前):", "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): "),
-            &sym, false))
-
-    {
+    constexpr auto prompt = _("モンスターの文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^M名前):",
+        "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): ");
+    const auto sym_opt = input_command(prompt, false);
+    if (!sym_opt.has_value()) {
         screen_load();
         return false;
     }
 
+    const auto sym = sym_opt.value();
     IDX ident_i;
     for (ident_i = 0; ident_info[ident_i]; ++ident_i) {
         if (sym == ident_info[ident_i][0]) {

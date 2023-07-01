@@ -140,7 +140,9 @@ bool symbol_genocide(PlayerType *player_ptr, int power, bool player_cast)
     constexpr auto prompt = _("どの種類(文字)のモンスターを抹殺しますか: ", "Choose a monster race (by symbol) to genocide: ");
     char symbol;
     while (true) {
-        if (input_command(prompt, &symbol, false)) {
+        const auto command = input_command(prompt);
+        if (command.has_value()) {
+            symbol = command.value();
             break;
         }
     }

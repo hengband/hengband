@@ -151,8 +151,8 @@ void wizard_item_modifier(PlayerType *player_ptr)
     screen_save();
     display_wizard_sub_menu();
 
-    char cmd;
-    input_command("Player Command: ", &cmd, false);
+    const auto command = input_command("Player Command: ");
+    const auto cmd = command.value_or(ESCAPE);
     screen_load();
 
     switch (cmd) {
@@ -460,7 +460,7 @@ static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
  */
 static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    constexpr auto pmt = "Roll for [n]ormal, [g]ood, or [e]xcellent treasure? ";
+    constexpr auto prompt = "Roll for [n]ormal, [g]ood, or [e]xcellent treasure? ";
     if (o_ptr->is_fixed_artifact()) {
         o_ptr->get_fixed_artifact().is_generated = false;
     }
@@ -468,11 +468,12 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
     auto rolls = 1000000;
     while (true) {
         wiz_display_item(player_ptr, o_ptr);
-        char ch;
-        if (!input_command(pmt, &ch, false)) {
+        const auto command = input_command(prompt);
+        if (!command.has_value()) {
             break;
         }
 
+        const auto ch = command.value();
         BIT_FLAGS mode;
         std::string quality;
         if (ch == 'n' || ch == 'N') {
@@ -562,15 +563,15 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     ItemEntity forge;
-    ItemEntity *q_ptr;
-    q_ptr = &forge;
+    auto *q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
 
-    char ch;
-    bool changed = false;
+    auto changed = false;
+    constexpr auto prompt = "[a]ccept, [w]orthless, [c]ursed, [n]ormal, [g]ood, [e]xcellent, [s]pecial? ";
     while (true) {
         wiz_display_item(player_ptr, q_ptr);
-        if (!input_command("[a]ccept, [w]orthless, [c]ursed, [n]ormal, [g]ood, [e]xcellent, [s]pecial? ", &ch, false)) {
+        const auto command = input_command(prompt);
+        if (!command.has_value()) {
             if (q_ptr->is_fixed_artifact()) {
                 q_ptr->get_fixed_artifact().is_generated = false;
                 q_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
@@ -580,6 +581,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
             break;
         }
 
+        const auto ch = command.value();
         if (ch == 'A' || ch == 'a') {
             changed = true;
             break;
@@ -742,18 +744,19 @@ void wiz_modify_item(PlayerType *player_ptr)
     screen_save();
 
     ItemEntity forge;
-    ItemEntity *q_ptr;
-    q_ptr = &forge;
+    auto *q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
-    char ch;
-    bool changed = false;
+    auto changed = false;
+    constexpr auto prompt = "[a]ccept [s]tatistics [r]eroll [t]weak [q]uantity? ";
     while (true) {
         wiz_display_item(player_ptr, q_ptr);
-        if (!input_command("[a]ccept [s]tatistics [r]eroll [t]weak [q]uantity? ", &ch, false)) {
+        const auto command = input_command(prompt);
+        if (!command.has_value()) {
             changed = false;
             break;
         }
 
+        const auto ch = command.value();
         if (ch == 'A' || ch == 'a') {
             changed = true;
             break;

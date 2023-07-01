@@ -56,11 +56,12 @@ bool get_aim_dir(PlayerType *player_ptr, int *dp)
             prompt = _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ");
         }
 
-        char command;
-        if (!input_command(prompt, &command, true)) {
+        const auto command_opt = input_command(prompt, true);
+        if (!command_opt.has_value()) {
             break;
         }
 
+        auto command = command_opt.value();
         if (use_menu && (command == '\r')) {
             command = 't';
         }
@@ -125,11 +126,12 @@ bool get_direction(PlayerType *player_ptr, int *dp)
     *dp = code;
     constexpr auto prompt = _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
     while (dir == 0) {
-        char ch;
-        if (!input_command(prompt, &ch, true)) {
+        const auto command = input_command(prompt, true);
+        if (!command.has_value()) {
             return false;
         }
 
+        const auto ch = command.value();
         dir = get_keymap_dir(ch);
         if (dir == 0) {
             bell();
@@ -189,11 +191,12 @@ bool get_rep_dir(PlayerType *player_ptr, int *dp, bool under)
     const auto prompt = under ? _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ")
                               : _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
     while (dir == 0) {
-        char ch;
-        if (!input_command(prompt, &ch, true)) {
+        const auto command = input_command(prompt, true);
+        if (!command.has_value()) {
             return false;
         }
 
+        const auto ch = command.value();
         if (under && ((ch == '5') || (ch == '-') || (ch == '.'))) {
             dir = 5;
             break;

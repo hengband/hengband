@@ -64,11 +64,12 @@ static int get_hack_dir(PlayerType *player_ptr)
         const auto p = target_okay(player_ptr)
                            ? _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ")
                            : _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
-        char command;
-        if (!input_command(p, &command, true)) {
+        const auto command_opt = input_command(p, true);
+        if (!command_opt.has_value()) {
             break;
         }
 
+        auto command = command_opt.value();
         if (use_menu && (command == '\r')) {
             command = 't';
         }

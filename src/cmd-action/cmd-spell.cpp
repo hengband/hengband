@@ -387,9 +387,12 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view pro
         if (choice == ESCAPE) {
             choice = ' ';
         } else {
-            if (!input_command(prompt, &choice, true)) {
+            const auto new_choice = input_command(prompt, true);
+            if (!new_choice.has_value()) {
                 break;
             }
+
+            choice = new_choice.value();
         }
 
         auto should_redraw_cursor = true;

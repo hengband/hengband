@@ -37,8 +37,6 @@
  */
 void do_cmd_query_symbol(PlayerType *player_ptr)
 {
-    char sym, query;
-
     bool all = false;
     bool uniq = false;
     bool norm = false;
@@ -47,12 +45,14 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
 
     uint16_t why = 0;
 
-    if (!input_command(_("知りたい文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^R乗馬,^M名前): ",
-                           "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): "),
-            &sym, false)) {
+    constexpr auto prompt = _("知りたい文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^R乗馬,^M名前): ",
+        "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): ");
+    const auto sym_opt = input_command(prompt);
+    if (!sym_opt.has_value()) {
         return;
     }
 
+    const auto sym = sym_opt.value();
     int ident_i;
     for (ident_i = 0; ident_info[ident_i]; ++ident_i) {
         if (sym == ident_info[ident_i][0]) {
@@ -150,7 +150,7 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
     }
 
     put_str(_("思い出を見ますか? (k:殺害順/y/n): ", "Recall details? (k/y/n): "), 0, _(36, 40));
-    query = inkey();
+    auto query = inkey();
     prt(buf, 0, 0);
     why = 2;
     ang_sort(player_ptr, monraces.data(), &why, monraces.size(), ang_sort_comp_hook, ang_sort_swap_hook);

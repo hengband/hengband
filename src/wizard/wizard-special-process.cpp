@@ -129,22 +129,22 @@ void wiz_cure_all(PlayerType *player_ptr)
 static std::optional<short> wiz_select_tval()
 {
     short list;
-    char ch;
     for (list = 0; (list < 80) && (tvals[list].tval > ItemKindType::NONE); list++) {
         auto row = 2 + (list % 20);
         auto col = _(32, 24) * (list / 20);
-        ch = listsym[list];
-        prt(format("[%c] %s", ch, tvals[list].desc), row, col);
+        prt(format("[%c] %s", listsym[list], tvals[list].desc), row, col);
     }
 
-    auto max_num = list;
-    if (!input_command(_("アイテム種別を選んで下さい", "Get what type of object? "), &ch, false)) {
+    const auto item_type_opt = input_command(_("アイテム種別を選んで下さい", "Get what type of object? "));
+    if (!item_type_opt.has_value()) {
         return std::nullopt;
     }
 
+    const auto item_type = item_type_opt.value();
     short selection;
+    auto max_num = list;
     for (selection = 0; selection < max_num; selection++) {
-        if (listsym[selection] == ch) {
+        if (listsym[selection] == item_type) {
             break;
         }
     }
@@ -156,11 +156,10 @@ static std::optional<short> wiz_select_tval()
     return selection;
 }
 
-static short wiz_select_sval(const ItemKindType tval, concptr tval_description)
+static short wiz_select_sval(const ItemKindType tval, std::string_view tval_description)
 {
     auto num = 0;
     short choice[80]{};
-    char ch;
     for (const auto &baseitem : baseitems_info) {
         if (num >= 80) {
             break;
@@ -172,17 +171,19 @@ static short wiz_select_sval(const ItemKindType tval, concptr tval_description)
 
         auto row = 2 + (num % 20);
         auto col = _(30, 32) * (num / 20);
-        ch = listsym[num];
         const auto buf = strip_name(baseitem.idx);
-        prt(format("[%c] %s", ch, buf.data()), row, col);
+        prt(format("[%c] %s", listsym[num], buf.data()), row, col);
         choice[num++] = baseitem.idx;
     }
 
     auto max_num = num;
-    if (!input_command(format(_("%s群の具体的なアイテムを選んで下さい", "What Kind of %s? "), tval_description), &ch, false)) {
+    const auto prompt = format(_("%s群の具体的なアイテムを選んで下さい", "What Kind of %s? "), tval_description.data());
+    const auto command = input_command(prompt);
+    if (!command.has_value()) {
         return 0;
     }
 
+    const auto ch = command.value();
     short selection;
     for (selection = 0; selection < max_num; selection++) {
         if (listsym[selection] == ch) {
@@ -307,8 +308,8 @@ static std::optional<FixedArtifactId> wiz_select_named_artifact(PlayerType *play
             put_str(format("-- more (%lu/%lu) --", current_page + 1, page_max), page_item_count + 1, 15);
         }
 
-        char cmd = ESCAPE;
-        input_command("Which artifact: ", &cmd, false);
+        const auto command = input_command("Which artifact: ");
+        const auto cmd = command.value_or(ESCAPE);
         switch (cmd) {
         case ESCAPE:
             screen_load();
@@ -370,8 +371,8 @@ void wiz_create_named_art(PlayerType *player_ptr)
 
     std::optional<FixedArtifactId> create_a_idx;
     while (!create_a_idx.has_value()) {
-        char cmd = ESCAPE;
-        input_command("Kind of artifact: ", &cmd, false);
+        const auto command = input_command("Kind of artifact: ");
+        const auto cmd = command.value_or(ESCAPE);
         switch (cmd) {
         case ESCAPE:
             screen_load();
