@@ -21,6 +21,7 @@ class EasySession {
 public:
     using SendHandler = std::function<size_t(char *, size_t)>;
     using ReceiveHandler = std::function<size_t(char *, size_t)>;
+    using ProgressHandler = std::function<bool(curl_off_t, curl_off_t, curl_off_t, curl_off_t)>;
 
     EasySession();
     ~EasySession();
@@ -33,6 +34,7 @@ public:
     void common_setup(const std::string &url, int timeout_sec = 0);
     void sender_setup(SendHandler handler, long post_field_size);
     void receiver_setup(ReceiveHandler handler);
+    void progress_setup(ProgressHandler handler);
     bool perform();
 
     template <typename T>
