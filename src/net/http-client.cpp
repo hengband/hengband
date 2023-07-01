@@ -23,7 +23,8 @@ namespace {
         session.setopt(CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
     }
 
-    std::optional<int> perform_get_request(const std::string &url, const libcurl::EasySession::ReceiveHandler &receiver, const std::optional<std::string> &user_agent)
+    std::optional<int> perform_get_request(const std::string &url, const libcurl::EasySession::ReceiveHandler &receiver, const std::optional<std::string> &user_agent,
+        const http::Client::GetRequestProgressHandler &progress_handler)
     {
         libcurl::EasySession session;
         if (!session.is_valid()) {
@@ -34,6 +35,12 @@ namespace {
         setup_http_option(session, user_agent);
 
         session.receiver_setup(receiver);
+        if (progress_handler) {
+            auto handler = [progress_handler](size_t dltotal, size_t dlnow, size_t, size_t) {
+                return progress_handler({ dltotal, dlnow });
+            };
+            session.progress_setup(handler);
+        }
 
         if (!session.perform()) {
             return std::nullopt;
@@ -48,9 +55,10 @@ namespace {
 /*!
  * @brief HTTP GETリクエストを送信する
  * @param url リクエストの送信先URL
+ * @param progress_handler 進捗状況を受け取るコールバック関数
  * @return 送信に成功した場合Responseオブジェクト、失敗した場合std::nullopt
  */
-std::optional<Response> Client::get(const std::string &url)
+std::optional<Response> Client::get(const std::string &url, GetRequestProgressHandler progress_handler)
 {
     Response response{};
     auto receiver = [&response](char *buf, size_t n) {
@@ -58,7 +66,7 @@ std::optional<Response> Client::get(const std::string &url)
         return n;
     };
 
-    const auto status_opt = perform_get_request(url, receiver, this->user_agent);
+    const auto status_opt = perform_get_request(url, receiver, this->user_agent, progress_handler);
     if (!status_opt) {
         return std::nullopt;
     }
@@ -74,9 +82,10 @@ std::optional<Response> Client::get(const std::string &url)
  *
  * @param url リクエストの送信先URL
  * @param path ファイルの保存先パス
+ * @param progress_handler 進捗状況を受け取るコールバック関数
  * @return 送信に成功した場合Responseオブジェクト、失敗した場合std::nullopt
  */
-std::optional<Response> Client::get(const std::string &url, const std::filesystem::path &path)
+std::optional<Response> Client::get(const std::string &url, const std::filesystem::path &path, GetRequestProgressHandler progress_handler)
 {
     std::ofstream ofs(path, std::ios::binary);
     auto receiver = [&ofs](char *buf, size_t n) {
@@ -84,7 +93,7 @@ std::optional<Response> Client::get(const std::string &url, const std::filesyste
         return ofs ? n : 0;
     };
 
-    const auto status_opt = perform_get_request(url, receiver, this->user_agent);
+    const auto status_opt = perform_get_request(url, receiver, this->user_agent, progress_handler);
     if (!status_opt) {
         return std::nullopt;
     }
