@@ -31,11 +31,11 @@ static void macro_dump(FILE **fpp, concptr fname)
 
     auto_dump_printf(*fpp, _("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
 
-    for (auto i = 0; i < macro__num; i++) {
+    for (auto i = 0; i < active_macros; i++) {
         char buf[1024]{};
-        ascii_to_text(buf, macro__act[i], sizeof(buf));
+        ascii_to_text(buf, macro_actions[i], sizeof(buf));
         auto_dump_printf(*fpp, "A:%s\n", buf);
-        ascii_to_text(buf, macro__pat[i], sizeof(buf));
+        ascii_to_text(buf, macro_patterns[i], sizeof(buf));
         auto_dump_printf(*fpp, "P:%s\n", buf);
         auto_dump_printf(*fpp, "\n");
     }
@@ -227,7 +227,7 @@ void do_cmd_macros(PlayerType *player_ptr)
             }
 
             // マクロの作成時に参照するためmacro_bufにコピーする
-            strncpy(macro_buf, macro__act[k].data(), sizeof(macro_buf) - 1);
+            strncpy(macro_buf, macro_actions[k].data(), sizeof(macro_buf) - 1);
             // too long macro must die
             strncpy(tmp, macro_buf, 80);
             tmp[80] = '\0';

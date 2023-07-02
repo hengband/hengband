@@ -1181,7 +1181,7 @@ static void react_keypress(XKeyEvent *xev)
 
     send_keys(msg);
 
-    if (n && !macro__pat.empty() && (macro_find_exact(msg) < 0)) {
+    if (n && !macro_patterns.empty() && (macro_find_exact(msg) < 0)) {
         macro_add(msg, buf);
     }
 }
