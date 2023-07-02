@@ -351,11 +351,9 @@ errr angband_fputs(FILE *fff, concptr buf, ulong n)
 void fd_kill(const std::filesystem::path &path)
 {
     const auto &parsed_path = path_parse(path);
-    if (!std::filesystem::exists(parsed_path)) {
-        return;
-    }
 
-    std::filesystem::remove(parsed_path);
+    std::error_code ec;
+    std::filesystem::remove(parsed_path, ec);
 }
 
 /*!
@@ -366,17 +364,10 @@ void fd_kill(const std::filesystem::path &path)
 void fd_move(const std::filesystem::path &path_from, const std::filesystem::path &path_to)
 {
     const auto &abs_path_from = path_parse(path_from);
-    if (!std::filesystem::exists(abs_path_from)) {
-        return;
-    }
-
     const auto &abs_path_to = path_parse(path_to);
-    const auto directory = std::filesystem::path(abs_path_to).remove_filename();
-    if (!std::filesystem::exists(directory)) {
-        std::filesystem::create_directory(directory);
-    }
 
-    std::filesystem::rename(abs_path_from, abs_path_to);
+    std::error_code ec;
+    std::filesystem::rename(abs_path_from, abs_path_to, ec);
 }
 
 /*!
