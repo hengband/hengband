@@ -153,6 +153,8 @@ void do_cmd_store(PlayerType *player_ptr)
         prt(_("コマンド:", "You may: "), 20 + xtra_stock, 0);
         InputKeyRequestor(player_ptr, true).request_command();
         store_process_command(player_ptr, store_num);
+
+        const auto should_redraw_store_inventory = rfu.has(StatusRecalculatingFlag::BONUS);
         w_ptr->character_icky_depth = 1;
         handle_stuff(player_ptr);
         if (player_ptr->inventory_list[INVEN_PACK].bi_id) {
@@ -189,7 +191,7 @@ void do_cmd_store(PlayerType *player_ptr)
             }
         }
 
-        if (rfu.has(StatusRecalculatingFlag::BONUS)) {
+        if (should_redraw_store_inventory) {
             display_store_inventory(player_ptr, store_num);
         }
 
