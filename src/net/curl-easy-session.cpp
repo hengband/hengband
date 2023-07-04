@@ -1,6 +1,6 @@
 ﻿#include "net/curl-easy-session.h"
 
-#if defined(WORLD_SCORE)
+#if !defined(DISABLE_NET)
 
 namespace libcurl {
 

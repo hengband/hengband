@@ -6,7 +6,7 @@
 #include <optional>
 #include <string>
 
-#if defined(WORLD_SCORE)
+#if !defined(DISABLE_NET)
 
 namespace http {
 

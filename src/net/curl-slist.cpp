@@ -1,6 +1,6 @@
 ﻿#include "net/curl-slist.h"
 
-#if defined(WORLD_SCORE)
+#if !defined(DISABLE_NET)
 
 namespace libcurl {
 

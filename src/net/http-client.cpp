@@ -4,7 +4,7 @@
 #include <fstream>
 #include <string_view>
 
-#if defined(WORLD_SCORE)
+#if !defined(DISABLE_NET)
 
 namespace http {
 
