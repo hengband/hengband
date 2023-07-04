@@ -54,7 +54,6 @@ struct rc_type {
     PLAYER_LEVEL lvl{}; //!< プレイヤーレベル
     bool is_warrior{}; //!< 戦士/狂戦士かどうか
     bool is_chosen{}; //!< 選択したかどうか
-    bool cast{}; //!< パワーが使用されたかどうか
     char choice{}; //!< コマンドキー
     char out_val[160]{}; //!< 出力文字列用バッファ
     int menu_line{}; //!< 現在選択中の行

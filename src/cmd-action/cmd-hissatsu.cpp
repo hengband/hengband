@@ -69,7 +69,6 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
     POSITION x = 15;
     PLAYER_LEVEL plev = player_ptr->lev;
     char choice;
-    char out_val[160];
     concptr p = _("必殺剣", "special attack");
     COMMAND_CODE code;
     magic_type spell;
@@ -101,7 +100,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
     }
 
     constexpr auto fmt = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
-    (void)strnfmt(out_val, 78, fmt, p, I2A(0), "abcdefghijklmnopqrstuvwxyz012345"[num - 1], p);
+    const auto prompt = format(fmt, p, I2A(0), "abcdefghijklmnopqrstuvwxyz012345"[num - 1], p);
 
     if (use_menu) {
         screen_save();
@@ -111,8 +110,13 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
     while (!flag) {
         if (choice == ESCAPE) {
             choice = ' ';
-        } else if (!input_command(out_val, &choice, false)) {
-            break;
+        } else {
+            const auto new_choice = input_command(prompt);
+            if (!new_choice.has_value()) {
+                break;
+            }
+
+            choice = new_choice.value();
         }
 
         auto should_redraw_cursor = true;

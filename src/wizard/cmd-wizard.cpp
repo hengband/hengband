@@ -300,16 +300,13 @@ void do_cmd_debug(PlayerType *player_ptr)
     int page_size = hgt - 5;
     int max_page = max_line / page_size + 1;
     int page = 0;
-    char cmd;
-
     while (true) {
         screen_save();
         display_debug_menu(page, max_page, page_size, max_line);
-        input_command("Debug Command: ", &cmd, false);
+        const auto command = input_command("Debug Command: ");
         screen_load();
-
-        if (exe_cmd_debug(player_ptr, cmd)) {
-            break;
+        if (exe_cmd_debug(player_ptr, command.value_or(ESCAPE))) {
+            return;
         }
 
         page = (page + 1) % max_page;

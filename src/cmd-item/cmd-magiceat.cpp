@@ -136,11 +136,8 @@ static std::optional<BaseitemKey> check_magic_eater_spell_repeat(magic_eater_dat
  */
 static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, bool only_browse)
 {
-    char choice;
     bool flag, request_list;
     auto tval = ItemKindType::NONE;
-    char out_val[160];
-
     int menu_line = (use_menu ? 1 : 0);
 
     auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
@@ -170,7 +167,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
                 prt(_("どの種類の魔法を使いますか？", "Which type of magic do you use?"), 0, 0);
             }
 
-            choice = inkey();
+            const auto choice = inkey();
             switch (choice) {
             case ESCAPE:
             case 'z':
@@ -206,17 +203,22 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
         screen_load();
     } else {
         while (true) {
-            if (!input_command(_("[A] 杖, [B] 魔法棒, [C] ロッド:", "[A] staff, [B] wand, [C] rod:"), &choice, true)) {
+            const auto new_choice = input_command(_("[A] 杖, [B] 魔法棒, [C] ロッド:", "[A] staff, [B] wand, [C] rod:"), true);
+            if (!new_choice.has_value()) {
                 return std::nullopt;
             }
+
+            const auto choice = new_choice.value();
             if (choice == 'A' || choice == 'a') {
                 tval = ItemKindType::STAFF;
                 break;
             }
+
             if (choice == 'B' || choice == 'b') {
                 tval = ItemKindType::WAND;
                 break;
             }
+
             if (choice == 'C' || choice == 'c') {
                 tval = ItemKindType::ROD;
                 break;
@@ -240,13 +242,14 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
     /* Nothing chosen yet */
     flag = false;
 
+    std::string prompt;
     if (only_browse) {
-        strnfmt(out_val, 78, _("('*'で一覧, ESCで中断) どの魔力を見ますか？", "(*=List, ESC=exit) Browse which power? "));
+        prompt = _("('*'で一覧, ESCで中断) どの魔力を見ますか？", "(*=List, ESC=exit) Browse which power? ");
     } else {
-        strnfmt(out_val, 78, _("('*'で一覧, ESCで中断) どの魔力を使いますか？", "(*=List, ESC=exit) Use which power? "));
+        prompt = _("('*'で一覧, ESCで中断) どの魔力を使いますか？", "(*=List, ESC=exit) Use which power? ");
     }
-    screen_save();
 
+    screen_save();
     request_list = always_show_list;
 
     const int item_group_size = item_group.size();
@@ -353,10 +356,12 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
             }
         }
 
-        if (!input_command(out_val, &choice, false)) {
+        const auto choice_opt = input_command(prompt);
+        if (!choice_opt.has_value()) {
             break;
         }
 
+        const auto choice = choice_opt.value();
         auto should_redraw_cursor = true;
         if (use_menu && choice != ' ') {
             switch (choice) {

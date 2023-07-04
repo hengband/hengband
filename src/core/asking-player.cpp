@@ -342,25 +342,24 @@ bool get_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLAGS
  *
  * Returns TRUE unless the character is "Escape"
  */
-bool input_command(std::string_view prompt, char *command, bool z_escape)
+std::optional<char> input_command(std::string_view prompt, bool z_escape)
 {
     msg_print(nullptr);
     prt(prompt, 0, 0);
+    char command;
     if (get_com_no_macros) {
-        *command = (char)inkey_special(false);
+        command = static_cast<char>(inkey_special(false));
     } else {
-        *command = inkey();
+        command = inkey();
     }
 
     prt("", 0, 0);
-    if (*command == ESCAPE) {
-        return false;
-    }
-    if (z_escape && ((*command == 'z') || (*command == 'Z'))) {
-        return false;
+    const auto is_z = (command == 'z') || (command == 'Z');
+    if ((command == ESCAPE) || (z_escape && is_z)) {
+        return std::nullopt;
     }
 
-    return true;
+    return command;
 }
 
 /*

@@ -555,8 +555,9 @@ void do_cmd_pet(PlayerType *player_ptr)
             screen_save();
             prompt = _("(コマンド、ESC=終了) コマンドを選んでください:", "(Command, ESC=exit) Choose command from menu.");
         } else {
-            prompt = format(_("(コマンド %c-%c、'*'=一覧、ESC=終了) コマンドを選んでください:", "(Command %c-%c, *=List, ESC=exit) Select a command: "),
-                I2A(0), I2A(num - 1));
+            constexpr auto fmt = _("(コマンド %c-%c、'*'=一覧、ESC=終了) コマンドを選んでください:",
+                "(Command %c-%c, *=List, ESC=exit) Select a command: ");
+            prompt = format(fmt, I2A(0), I2A(num - 1));
         }
 
         choice = (always_show_list || use_menu) ? ESCAPE : 1;
@@ -565,8 +566,13 @@ void do_cmd_pet(PlayerType *player_ptr)
         while (!flag) {
             if (choice == ESCAPE) {
                 choice = ' ';
-            } else if (!input_command(prompt.data(), &choice, true)) {
-                break;
+            } else {
+                const auto new_choice = input_command(prompt, true);
+                if (!new_choice.has_value()) {
+                    break;
+                }
+
+                choice = new_choice.value();
             }
 
             auto should_redraw_cursor = true;

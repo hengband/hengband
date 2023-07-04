@@ -27,14 +27,11 @@
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
-
 #ifdef JP
 #else
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #endif
-
-#include <iterator>
 
 /*!< 呪術の最大詠唱数 */
 constexpr int MAX_KEEP = 4;
@@ -152,11 +149,12 @@ std::pair<bool, std::optional<char>> SpellHex::select_spell_stopping(std::string
 {
     while (true) {
         this->display_casting_spells_list();
-        char choice = 0;
-        if (!input_command(prompt, &choice, true)) {
+        const auto choice_opt = input_command(prompt, true);
+        if (!choice_opt.has_value()) {
             return { false, std::nullopt };
         }
 
+        auto choice = choice_opt.value();
         if (isupper(choice)) {
             choice = static_cast<char>(tolower(choice));
         }

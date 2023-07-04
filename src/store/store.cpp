@@ -161,22 +161,24 @@ int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j, [[maybe_unused]]
 
     msg_print(nullptr);
     *com_val = (-1);
-    char lo = I2A(i);
-    char hi = (j > 25) ? toupper(I2A(j - 26)) : I2A(j);
-    char out_val[160];
+    const auto lo = I2A(i);
+    const auto hi = (j > 25) ? toupper(I2A(j - 26)) : I2A(j);
 #ifdef JP
-    strnfmt(out_val, sizeof(out_val), "(%s:%c-%c, ESCで中断) %s", (((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM)) ? "アイテム" : "商品"), lo, hi, pmt);
+    const auto title = (store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM) ? "アイテム" : "商品";
+    const auto prompt = format("(%s:%c-%c, ESCで中断) %s", title, lo, hi, pmt);
 #else
-    strnfmt(out_val, sizeof(out_val), "(Items %c-%c, ESC to exit) %s", lo, hi, pmt);
+    const auto prompt = format("(Items %c-%c, ESC to exit) %s", lo, hi, pmt);
 #endif
 
     char command;
     while (true) {
-        if (!input_command(out_val, &command, false)) {
-            break;
+        const auto command_opt = input_command(prompt);
+        if (!command_opt.has_value()) {
+            continue;
         }
 
-        COMMAND_CODE k;
+        command = command_opt.value();
+        short k;
         if (islower(command)) {
             k = A2I(command);
         } else if (isupper(command)) {

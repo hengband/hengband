@@ -30,6 +30,7 @@
 #include "view/display-util.h"
 #include <algorithm>
 #include <sstream>
+#include <string>
 
 static concptr const kaji_tips[5] = {
 #ifdef JP
@@ -226,17 +227,17 @@ static COMMAND_CODE choose_essence(void)
     } else {
         screen_save();
         while (!mode) {
-            int i;
-
-            for (i = 0; i < mode_max; i++) {
+            for (short i = 0; i < mode_max; i++) {
                 prt(format("  %c) %s", 'a' + i, menu_name[i]), 2 + i, 14);
             }
 
-            if (!input_command(_("何を付加しますか:", "Command :"), &choice, true)) {
+            const auto new_choice = input_command(_("何を付加しますか:", "Command :"), true);
+            if (!new_choice.has_value()) {
                 screen_load();
                 return 0;
             }
 
+            choice = new_choice.value();
             if (isupper(choice)) {
                 choice = (char)tolower(choice);
             }
@@ -317,10 +318,8 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
 {
     OBJECT_IDX item;
     bool flag;
-    char choice;
     concptr q, s;
     ItemEntity *o_ptr;
-    char out_val[160];
     int menu_line = (use_menu ? 1 : 0);
 
     Smith smith(player_ptr);
@@ -340,21 +339,23 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
         screen_save();
 
         while (!flag) {
+            std::string prompt;
             if (page_max > 1) {
                 std::string page_str = format("%d/%d", page + 1, page_max);
-                strnfmt(out_val, 78, _("(SPACEで次ページ, ESCで中断) どの能力を付加しますか？ %s", "(SPACE=next, ESC=exit) Add which ability? %s"), page_str.data());
+                prompt = format(_("(SPACEで次ページ, ESCで中断) どの能力を付加しますか？ %s", "(SPACE=next, ESC=exit) Add which ability? %s"), page_str.data());
             } else {
-                strnfmt(out_val, 78, _("(ESCで中断) どの能力を付加しますか？", "(ESC=exit) Add which ability? "));
+                prompt = format(_("(ESCで中断) どの能力を付加しますか？", "(ESC=exit) Add which ability? "));
             }
 
             display_smith_effect_list(smith, smith_effect_list, menu_line, page * effect_num_per_page, effect_num_per_page);
 
             const auto page_effect_num = std::min<int>(effect_num_per_page, smith_effect_list.size() - (page * effect_num_per_page));
-
-            if (!input_command(out_val, &choice, false)) {
+            const auto command = input_command(prompt);
+            if (!command.has_value()) {
                 break;
             }
 
+            const auto choice = command.value();
             auto should_redraw_cursor = true;
             if (use_menu) {
                 switch (choice) {
@@ -633,12 +634,13 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
                     prt(_("  d) エッセンス付加", "  d) Add essence"), 5, 14);
                     prt(_("  e) 武器/防具強化", "  e) Enchant weapon/armor"), 6, 14);
                     std::string prompt = _(format("どの能力を%sますか:", only_browse ? "調べ" : "使い"), "Command :");
-                    char choice;
-                    if (!input_command(prompt, &choice, true)) {
+                    const auto command = input_command(prompt, true);
+                    if (!command.has_value()) {
                         screen_load();
                         return;
                     }
 
+                    const auto choice = command.value();
                     switch (choice) {
                     case 'A':
                     case 'a':

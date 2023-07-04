@@ -61,8 +61,8 @@ void wizard_player_modifier(PlayerType *player_ptr)
     screen_save();
     display_wizard_player_modifier_menu();
 
-    char cmd;
-    input_command("Player Command: ", &cmd, false);
+    const auto command = input_command("Player Command: ");
+    const auto cmd = command.value_or(ESCAPE);
     screen_load();
 
     switch (cmd) {

@@ -27,6 +27,7 @@
 #include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <string>
 
 enum ammo_creation_type {
     AMMO_NONE = 0,
@@ -51,22 +52,22 @@ static bool select_ammo_creation_type(ammo_creation_type &type, PLAYER_LEVEL ple
         }
     }
 
-    concptr com;
+    std::string prompt;
     if (plev >= 20) {
-        com = _("[S]弾, [A]矢, [B]クロスボウの矢 :", "Create [S]hots, Create [A]rrow or Create [B]olt ?");
+        prompt = _("[S]弾, [A]矢, [B]クロスボウの矢 :", "Create [S]hots, Create [A]rrow or Create [B]olt ?");
     } else if (plev >= 10) {
-        com = _("[S]弾, [A]矢:", "Create [S]hots or Create [A]rrow ?");
+        prompt = _("[S]弾, [A]矢:", "Create [S]hots or Create [A]rrow ?");
     } else {
-        com = _("[S]弾:", "Create [S]hots ?");
+        prompt = _("[S]弾:", "Create [S]hots ?");
     }
 
     while (type == AMMO_NONE) {
-        char ch;
-
-        if (!input_command(com, &ch, true)) {
+        const auto command = input_command(prompt, true);
+        if (!command.has_value()) {
             return false;
         }
 
+        const auto ch = command.value();
         if (ch == 'S' || ch == 's') {
             type = AMMO_SHOT;
             break;
