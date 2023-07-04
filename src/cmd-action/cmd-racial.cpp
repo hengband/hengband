@@ -28,6 +28,7 @@
 #include "racial/race-racial-command-setter.h"
 #include "racial/racial-util.h"
 #include "status/action-setter.h"
+#include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
@@ -394,26 +395,24 @@ static bool racial_power_select_power(PlayerType *player_ptr, rc_type *rc_ptr)
  * @brief レイシャルパワーの使用を試みる
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
- * @details
- * 戻り値の代わりにrc_ptr->castに使用の有無を入れる。
+ * @return レイシャルパワーの使用有無
  */
-static void racial_power_cast_power(PlayerType *player_ptr, rc_type *rc_ptr)
+static bool racial_power_cast_power(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     auto *rpi_ptr = &rc_ptr->power_desc[rc_ptr->command_code];
     switch (check_racial_level(player_ptr, rpi_ptr)) {
     case RACIAL_SUCCESS:
         if (rpi_ptr->number < 0) {
-            rc_ptr->cast = exe_racial_power(player_ptr, rpi_ptr->number);
-        } else {
-            rc_ptr->cast = exe_mutation_power(player_ptr, i2enum<PlayerMutationType>(rpi_ptr->number));
+            return exe_racial_power(player_ptr, rpi_ptr->number);
         }
-        break;
+
+        return exe_mutation_power(player_ptr, i2enum<PlayerMutationType>(rpi_ptr->number));
     case RACIAL_FAILURE:
-        rc_ptr->cast = true;
-        break;
+        return true;
     case RACIAL_CANCEL:
-        rc_ptr->cast = false;
-        break;
+        return false;
+    default:
+        THROW_EXCEPTION(std::logic_error, "Invalid racial level check!");
     }
 }
 
@@ -480,11 +479,12 @@ void do_cmd_racial_power(PlayerType *player_ptr)
     rc_ptr->max_page = 1 + (rc_ptr->power_count() - 1) / RC_PAGE_SIZE;
     rc_ptr->page = use_menu ? 0 : -1;
     racial_power_make_prompt(rc_ptr);
+    auto should_cast = false;
     if (racial_power_select_power(player_ptr, rc_ptr)) {
-        racial_power_cast_power(player_ptr, rc_ptr);
+        should_cast = racial_power_cast_power(player_ptr, rc_ptr);
     }
 
-    if (!rc_ptr->cast) {
+    if (!should_cast) {
         energy.reset_player_turn();
         return;
     }
