@@ -193,6 +193,9 @@ hengband_SOURCES = \
 	effect/effect-processor.cpp effect/effect-processor.h \
 	effect/effect-characteristics.h \
 	\
+	external-lib/include-json.h \
+	external-lib/json.hpp \
+	\
 	flavor/flag-inscriptions-table.cpp flavor/flag-inscriptions-table.h \
 	flavor/flavor-describer.cpp flavor/flavor-describer.h \
 	flavor/flavor-util.cpp flavor/flavor-util.h \

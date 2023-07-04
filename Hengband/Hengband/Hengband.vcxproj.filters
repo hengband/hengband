@@ -5385,6 +5385,12 @@
     <ClInclude Include="..\..\src\util\sha256.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\external-lib\json.hpp">
+      <Filter>external-lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\external-lib\include-json.h">
+      <Filter>external-lib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5645,6 +5651,9 @@
     </Filter>
     <Filter Include="net">
       <UniqueIdentifier>{6f311bdc-4407-49b7-96ab-bc2ed187b61c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external-lib">
+      <UniqueIdentifier>{7a77d993-afa0-4750-97c6-d52b440fafa9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
