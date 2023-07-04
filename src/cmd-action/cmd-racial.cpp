@@ -154,46 +154,46 @@ static void racial_power_add_index(PlayerType *player_ptr, rc_type *rc_ptr, int 
 /*!
  * @brief メニューによる選択のキーを処理する
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
- * @return キャンセルならtrue、そうでないならfalse
+ * @return キャンセルならfalse、それ以外ならtrue
  */
 static bool racial_power_interpret_menu_keys(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     switch (rc_ptr->choice) {
     case '0':
-        return true;
+        return false;
     case '8':
     case 'k':
     case 'K':
         racial_power_add_index(player_ptr, rc_ptr, -1);
-        return false;
+        return true;
     case '2':
     case 'j':
     case 'J':
         racial_power_add_index(player_ptr, rc_ptr, 1);
-        return false;
+        return true;
     case '6':
     case 'l':
     case 'L':
         racial_power_add_index(player_ptr, rc_ptr, RC_PAGE_SIZE);
-        return false;
+        return true;
     case '4':
     case 'h':
     case 'H':
         racial_power_add_index(player_ptr, rc_ptr, 0 - RC_PAGE_SIZE);
-        return false;
+        return true;
     case 'x':
     case 'X':
     case '\r':
         rc_ptr->command_code = (COMMAND_CODE)rc_ptr->menu_line;
         rc_ptr->is_chosen = true;
         rc_ptr->ask = false;
-        return false;
+        return true;
     case '/':
         rc_ptr->browse_mode = !rc_ptr->browse_mode;
         racial_power_make_prompt(rc_ptr);
-        return false;
+        return true;
     default:
-        return false;
+        return true;
     }
 }
 
@@ -201,23 +201,23 @@ static bool racial_power_interpret_menu_keys(PlayerType *player_ptr, rc_type *rc
  * @brief メニューからの選択決定を処理
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
- * @return キャンセルしたらtrue、それ以外ならfalse
+ * @return キャンセルしたらfalse、それ以外ならtrue
  */
 static bool racial_power_select_by_menu(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     if (!use_menu || rc_ptr->choice == ' ') {
-        return false;
+        return true;
     }
 
-    if (racial_power_interpret_menu_keys(player_ptr, rc_ptr)) {
-        return true;
+    if (!racial_power_interpret_menu_keys(player_ptr, rc_ptr)) {
+        return false;
     }
 
     if (rc_ptr->menu_line > rc_ptr->power_count()) {
         rc_ptr->menu_line -= rc_ptr->power_count();
     }
 
-    return false;
+    return true;
 }
 
 /*!
@@ -322,7 +322,7 @@ static void racial_power_display_explanation(PlayerType *player_ptr, rc_type *rc
  * @brief レイシャルパワー選択処理のメインループ
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
- * @return コマンド選択したらfalse、キャンセルしたらtrue
+ * @return コマンド選択したらtrue、キャンセルしたらfalse
  */
 static bool racial_power_process_input(PlayerType *player_ptr, rc_type *rc_ptr)
 {
@@ -334,14 +334,14 @@ static bool racial_power_process_input(PlayerType *player_ptr, rc_type *rc_ptr)
         } else {
             const auto choice = input_command(rc_ptr->out_val);
             if (!choice.has_value()) {
-                return true;
+                return false;
             }
 
             rc_ptr->choice = choice.value();
         }
 
-        if (racial_power_select_by_menu(player_ptr, rc_ptr)) {
-            return true;
+        if (!racial_power_select_by_menu(player_ptr, rc_ptr)) {
+            return false;
         }
 
         if (!rc_ptr->is_chosen && racial_power_interpret_choise(player_ptr, rc_ptr)) {
@@ -360,19 +360,19 @@ static bool racial_power_process_input(PlayerType *player_ptr, rc_type *rc_ptr)
         }
     }
 
-    return false;
+    return true;
 }
 
 /*!
  * @brief レイシャル/クラスパワー選択を処理
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
- * @return コマンド選択したらfalse、キャンセルしたらtrue
+ * @return コマンド選択したらtrue、キャンセルしたらfalse
  */
 static bool racial_power_select_power(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     if (repeat_pull(&rc_ptr->command_code) && rc_ptr->command_code >= 0 && rc_ptr->command_code < rc_ptr->power_count()) {
-        return false;
+        return true;
     }
 
     screen_save();
@@ -380,14 +380,14 @@ static bool racial_power_select_power(PlayerType *player_ptr, rc_type *rc_ptr)
         racial_power_display_list(player_ptr, rc_ptr);
     }
 
-    const auto canceled = racial_power_process_input(player_ptr, rc_ptr);
+    const auto is_selected = racial_power_process_input(player_ptr, rc_ptr);
     screen_load();
-    if (canceled) {
-        return true;
+    if (!is_selected) {
+        return false;
     }
 
     repeat_push(rc_ptr->command_code);
-    return false;
+    return true;
 }
 
 /*!
@@ -480,7 +480,7 @@ void do_cmd_racial_power(PlayerType *player_ptr)
     rc_ptr->max_page = 1 + (rc_ptr->power_count() - 1) / RC_PAGE_SIZE;
     rc_ptr->page = use_menu ? 0 : -1;
     racial_power_make_prompt(rc_ptr);
-    if (!racial_power_select_power(player_ptr, rc_ptr)) {
+    if (racial_power_select_power(player_ptr, rc_ptr)) {
         racial_power_cast_power(player_ptr, rc_ptr);
     }
 
