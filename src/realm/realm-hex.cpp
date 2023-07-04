@@ -530,7 +530,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
             const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
             auto f = object_flags(o_ptr);
 
-            if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), item_name.data()))) {
+            if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really?"), item_name.data()))) {
                 return "";
             }
 
