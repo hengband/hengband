@@ -155,7 +155,7 @@ static void accept_winner_message(PlayerType *player_ptr)
             continue;
         }
 
-        if (!get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY)) {
+        if (!input_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), UserCheck::NO_HISTORY)) {
             break;
         }
     }
@@ -175,11 +175,11 @@ void do_cmd_suicide(PlayerType *player_ptr)
 {
     flush();
     if (w_ptr->total_winner) {
-        if (!get_check_strict(player_ptr, _("引退しますか? ", "Do you want to retire? "), CHECK_NO_HISTORY)) {
+        if (!input_check_strict(player_ptr, _("引退しますか? ", "Do you want to retire? "), UserCheck::NO_HISTORY)) {
             return;
         }
     } else {
-        if (!get_check(_("本当に自殺しますか？", "Do you really want to commit suicide? "))) {
+        if (!input_check(_("本当に自殺しますか？", "Do you really want to commit suicide? "))) {
             return;
         }
     }

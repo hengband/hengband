@@ -349,7 +349,7 @@ static bool confirm_cast_blue_magic(MonsterAbilityType spell)
 {
     char tmp_val[160];
     (void)strnfmt(tmp_val, 78, _("%sの魔法を唱えますか？", "Use %s? "), monster_powers.at(spell).name);
-    return get_check(tmp_val);
+    return input_check(tmp_val);
 }
 
 /*!

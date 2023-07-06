@@ -927,7 +927,7 @@ bool change_wild_mode(PlayerType *player_ptr, bool encount)
 
     if (has_pet) {
         concptr msg = _("ペットを置いて広域マップに入りますか？", "Do you leave your pets behind? ");
-        if (!get_check_strict(player_ptr, msg, CHECK_OKAY_CANCEL)) {
+        if (!input_check_strict(player_ptr, msg, UserCheck::OKAY_CANCEL)) {
             energy.reset_player_turn();
             return false;
         }

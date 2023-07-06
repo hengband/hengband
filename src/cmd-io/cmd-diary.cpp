@@ -62,7 +62,7 @@ static void do_cmd_last_get(PlayerType *player_ptr)
     }
 
     const auto record = format(_("%sの入手を記録します。", "Do you really want to record getting %s? "), record_o_name);
-    if (!get_check(record)) {
+    if (!input_check(record)) {
         return;
     }
 
@@ -78,7 +78,7 @@ static void do_cmd_last_get(PlayerType *player_ptr)
  */
 static void do_cmd_erase_diary()
 {
-    if (!get_check(_("本当に記録を消去しますか？", "Do you really want to delete all your records? "))) {
+    if (!input_check(_("本当に記録を消去しますか？", "Do you really want to delete all your records? "))) {
         return;
     }
 

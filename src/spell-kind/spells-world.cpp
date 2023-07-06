@@ -103,9 +103,9 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     if ((m_idx <= 0) && w_ptr->wizard) {
-        if (get_check("Force to go up? ")) {
+        if (input_check("Force to go up? ")) {
             go_up = true;
-        } else if (get_check("Force to go down? ")) {
+        } else if (input_check("Force to go down? ")) {
             go_up = false;
         }
     }
@@ -464,7 +464,7 @@ bool recall_player(PlayerType *player_ptr, TIME_EFFECT turns)
     is_special_floor &= !inside_quest(floor.quest_number);
     is_special_floor &= !player_ptr->word_recall;
     if (is_special_floor) {
-        if (get_check(_("ここは最深到達階より浅い階です。この階に戻って来ますか？ ", "Reset recall depth? "))) {
+        if (input_check(_("ここは最深到達階より浅い階です。この階に戻って来ますか？ ", "Reset recall depth? "))) {
             max_dlv[floor.dungeon_idx] = floor.dun_level;
             if (record_maxdepth) {
                 exe_write_diary(player_ptr, DiaryKind::TRUMP, floor.dungeon_idx, _("帰還のときに", "when recalled from dungeon"));
@@ -514,7 +514,7 @@ bool free_level_recall(PlayerType *player_ptr)
     }
 
     const auto mes = _("%sの何階にテレポートしますか？", "Teleport to which level of %s? ");
-    QUANTITY amt = get_quantity(format(mes, dungeon.name.data()), (QUANTITY)max_depth);
+    const auto amt = input_quantity(max_depth, format(mes, dungeon.name.data()));
     if (amt <= 0) {
         return false;
     }

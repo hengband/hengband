@@ -189,7 +189,7 @@ static bool let_player_select_race(PlayerType *player_ptr)
 
         clear_from(10);
         display_wrap_around(race_explanations[enum2i(player_ptr->prace)], 74, 12, 3);
-        if (get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y)) {
+        if (input_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), UserCheck::DEFAULT_Y)) {
             break;
         }
 
@@ -212,7 +212,7 @@ static bool let_player_select_class(PlayerType *player_ptr)
         clear_from(10);
         display_wrap_around(class_explanations[enum2i(player_ptr->pclass)], 74, 12, 3);
 
-        if (get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y)) {
+        if (input_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), UserCheck::DEFAULT_Y)) {
             break;
         }
 
@@ -233,7 +233,7 @@ static bool let_player_select_personality(PlayerType *player_ptr)
         clear_from(10);
         display_wrap_around(personality_explanations[player_ptr->ppersonality], 74, 12, 3);
 
-        if (get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y)) {
+        if (input_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), UserCheck::DEFAULT_Y)) {
             break;
         }
 

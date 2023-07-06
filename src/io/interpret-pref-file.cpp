@@ -253,7 +253,7 @@ static errr interpret_p_token(char *buf)
 {
     char tmp[1024];
     text_to_ascii(tmp, buf + 2, sizeof(tmp));
-    return macro_add(tmp, macro__buf.data());
+    return macro_add(tmp, macro_buffers.data());
 }
 
 /*!
@@ -281,7 +281,7 @@ static errr interpret_c_token(char *buf)
 
     int i = (byte)(tmp[0]);
     string_free(keymap_act[mode][i]);
-    keymap_act[mode][i] = string_make(macro__buf.data());
+    keymap_act[mode][i] = string_make(macro_buffers.data());
     return 0;
 }
 
@@ -527,7 +527,7 @@ errr interpret_pref_file(PlayerType *player_ptr, char *buf)
         return interpret_e_token(buf);
     case 'A': {
         /* Process "A:<str>" -- save an "action" for later */
-        text_to_ascii(macro__buf.data(), buf + 2, macro__buf.size());
+        text_to_ascii(macro_buffers.data(), buf + 2, macro_buffers.size());
         return 0;
     }
     case 'P':

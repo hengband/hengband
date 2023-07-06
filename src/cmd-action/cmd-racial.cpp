@@ -295,7 +295,7 @@ static bool ask_invoke_racial_power(rc_type *rc_ptr)
 
     char tmp_val[160];
     (void)strnfmt(tmp_val, 78, _("%sを使いますか？ ", "Use %s? "), rc_ptr->power_desc[rc_ptr->command_code].racial_name.data());
-    return get_check(tmp_val);
+    return input_check(tmp_val);
 }
 
 static void racial_power_display_explanation(PlayerType *player_ptr, rc_type *rc_ptr)

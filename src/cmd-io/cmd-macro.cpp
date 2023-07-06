@@ -31,11 +31,11 @@ static void macro_dump(FILE **fpp, concptr fname)
 
     auto_dump_printf(*fpp, _("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
 
-    for (auto i = 0; i < macro__num; i++) {
+    for (auto i = 0; i < active_macros; i++) {
         char buf[1024]{};
-        ascii_to_text(buf, macro__act[i], sizeof(buf));
+        ascii_to_text(buf, macro_actions[i], sizeof(buf));
         auto_dump_printf(*fpp, "A:%s\n", buf);
-        ascii_to_text(buf, macro__pat[i], sizeof(buf));
+        ascii_to_text(buf, macro_patterns[i], sizeof(buf));
         auto_dump_printf(*fpp, "P:%s\n", buf);
         auto_dump_printf(*fpp, "\n");
     }
@@ -176,14 +176,15 @@ void do_cmd_macros(PlayerType *player_ptr)
 
     while (true) {
         msg_print(_("コマンド: ", "Command: "));
-        const int key = inkey();
+        const auto key = inkey();
         if (key == ESCAPE) {
             break;
         }
         clear_from(1);
         print_macro_menu();
 
-        if (key == '1') {
+        switch (key) {
+        case '1': {
             prt(_("コマンド: ユーザー設定ファイルのロード", "Command: Load a user pref file"), 16, 0);
             prt(_("ファイル: ", "File: "), 18, 0);
             strnfmt(tmp, sizeof(tmp), "%s.prf", player_ptr->base_name);
@@ -191,7 +192,7 @@ void do_cmd_macros(PlayerType *player_ptr)
                 continue;
             }
 
-            errr err = process_pref_file(player_ptr, tmp, true);
+            const auto err = process_pref_file(player_ptr, tmp, true);
             if (-2 == err) {
                 msg_format(_("標準の設定ファイル'%s'を読み込みました。", "Loaded default '%s'."), tmp);
             } else if (err) {
@@ -199,7 +200,10 @@ void do_cmd_macros(PlayerType *player_ptr)
             } else {
                 msg_format(_("'%s'を読み込みました。", "Loaded '%s'."), tmp);
             }
-        } else if (key == '2') {
+
+            break;
+        }
+        case '2': {
             prt(_("コマンド: マクロをファイルに追加する", "Command: Append macros to a file"), 16, 0);
             prt(_("ファイル: ", "File: "), 18, 0);
             strnfmt(tmp, sizeof(tmp), "%s.prf", player_ptr->base_name);
@@ -209,25 +213,30 @@ void do_cmd_macros(PlayerType *player_ptr)
 
             macro_dump(&auto_dump_stream, tmp);
             msg_print(_("マクロを追加しました。", "Appended macros."));
-        } else if (key == '3') {
+            break;
+        }
+        case '3': {
             prt(_("コマンド: マクロの確認", "Command: Query a macro"), 16, 0);
             prt(_("マクロ行動が(もしあれば)下に表示されます:", "Current action (if any) shown below:"), 20, 0);
             prt(_("トリガーキー: ", "Trigger: "), 18, 0);
             do_cmd_macro_aux(buf);
-            int k = macro_find_exact(buf);
+            const auto k = macro_find_exact(buf);
             if (k < 0) {
                 msg_print(_("そのキーにはマクロは定義されていません。", "Found no macro."));
-            } else {
-                // マクロの作成時に参照するためmacro_bufにコピーする
-                strncpy(macro_buf, macro__act[k].data(), sizeof(macro_buf) - 1);
-                // too long macro must die
-                strncpy(tmp, macro_buf, 80);
-                tmp[80] = '\0';
-                ascii_to_text(buf, tmp, sizeof(buf));
-                prt(buf, 22, 0);
-                msg_print(_("マクロを確認しました。", "Found a macro."));
+                break;
             }
-        } else if (key == '4') {
+
+            // マクロの作成時に参照するためmacro_bufにコピーする
+            strncpy(macro_buf, macro_actions[k].data(), sizeof(macro_buf) - 1);
+            // too long macro must die
+            strncpy(tmp, macro_buf, 80);
+            tmp[80] = '\0';
+            ascii_to_text(buf, tmp, sizeof(buf));
+            prt(buf, 22, 0);
+            msg_print(_("マクロを確認しました。", "Found a macro."));
+            break;
+        }
+        case '4': {
             prt(_("コマンド: マクロの作成", "Command: Create a macro"), 16, 0);
             prt(_("トリガーキー: ", "Trigger: "), 18, 0);
             do_cmd_macro_aux(buf);
@@ -244,13 +253,17 @@ void do_cmd_macros(PlayerType *player_ptr)
                 macro_add(buf, macro_buf);
                 msg_print(_("マクロを追加しました。", "Added a macro."));
             }
-        } else if (key == '5') {
+
+            break;
+        }
+        case '5':
             prt(_("コマンド: マクロの削除", "Command: Remove a macro"), 16, 0);
             prt(_("トリガーキー: ", "Trigger: "), 18, 0);
             do_cmd_macro_aux(buf);
             macro_add(buf, buf);
             msg_print(_("マクロを削除しました。", "Removed a macro."));
-        } else if (key == '6') {
+            break;
+        case '6': {
             prt(_("コマンド: キー配置をファイルに追加する", "Command: Append keymaps to a file"), 16, 0);
             prt(_("ファイル: ", "File: "), 18, 0);
             strnfmt(tmp, sizeof(tmp), "%s.prf", player_ptr->base_name);
@@ -260,7 +273,9 @@ void do_cmd_macros(PlayerType *player_ptr)
 
             (void)keymap_dump(tmp);
             msg_print(_("キー配置を追加しました。", "Appended keymaps."));
-        } else if (key == '7') {
+            break;
+        }
+        case '7': {
             prt(_("コマンド: キー配置の確認", "Command: Query a keymap"), 16, 0);
             prt(_("マクロ行動が(もしあれば)下に表示されます:", "Current action (if any) shown below:"), 20, 0);
             prt(_("押すキー: ", "Keypress: "), 18, 0);
@@ -268,17 +283,20 @@ void do_cmd_macros(PlayerType *player_ptr)
             concptr act = keymap_act[mode][(byte)(buf[0])];
             if (!act) {
                 msg_print(_("キー配置は定義されていません。", "Found no keymap."));
-            } else {
-                // マクロの作成時に参照するためmacro_bufにコピーする
-                strncpy(macro_buf, act, sizeof(macro_buf) - 1);
-                // too long macro must die
-                strncpy(tmp, macro_buf, 80);
-                tmp[80] = '\0';
-                ascii_to_text(buf, tmp, sizeof(buf));
-                prt(buf, 22, 0);
-                msg_print(_("キー配置を確認しました。", "Found a keymap."));
+                break;
             }
-        } else if (key == '8') {
+
+            // マクロの作成時に参照するためmacro_bufにコピーする
+            strncpy(macro_buf, act, sizeof(macro_buf) - 1);
+            // too long macro must die
+            strncpy(tmp, macro_buf, 80);
+            tmp[80] = '\0';
+            ascii_to_text(buf, tmp, sizeof(buf));
+            prt(buf, 22, 0);
+            msg_print(_("キー配置を確認しました。", "Found a keymap."));
+            break;
+        }
+        case '8': {
             prt(_("コマンド: キー配置の作成", "Command: Create a keymap"), 16, 0);
             prt(_("押すキー: ", "Keypress: "), 18, 0);
             do_cmd_macro_aux_keymap(buf);
@@ -296,14 +314,18 @@ void do_cmd_macros(PlayerType *player_ptr)
                 keymap_act[mode][(byte)(buf[0])] = string_make(macro_buf);
                 msg_print(_("キー配置を追加しました。", "Added a keymap."));
             }
-        } else if (key == '9') {
+
+            break;
+        }
+        case '9':
             prt(_("コマンド: キー配置の削除", "Command: Remove a keymap"), 16, 0);
             prt(_("押すキー: ", "Keypress: "), 18, 0);
             do_cmd_macro_aux_keymap(buf);
             string_free(keymap_act[mode][(byte)(buf[0])]);
             keymap_act[mode][(byte)(buf[0])] = nullptr;
             msg_print(_("キー配置を削除しました。", "Removed a keymap."));
-        } else if (key == '0') {
+            break;
+        case '0':
             prt(_("コマンド: マクロ行動の入力", "Command: Enter a new action"), 16, 0);
             c_prt(TERM_L_RED,
                 _("カーソルキーの左右でカーソル位置を移動。BackspaceかDeleteで一文字削除。",
@@ -316,8 +338,10 @@ void do_cmd_macros(PlayerType *player_ptr)
             }
 
             text_to_ascii(macro_buf, buf, sizeof(macro_buf));
-        } else {
+            break;
+        default:
             bell();
+            break;
         }
 
         msg_erase();

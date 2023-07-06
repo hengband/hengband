@@ -111,7 +111,7 @@ bool insert_macro_line(text_body_type *tb)
     if (i == -1) {
         tmp[0] = '\0';
     } else {
-        ascii_to_text(tmp, macro__act[i], sizeof(tmp));
+        ascii_to_text(tmp, macro_actions[i], sizeof(tmp));
     }
 
     insert_return_code(tb);

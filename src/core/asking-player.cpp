@@ -248,36 +248,45 @@ std::optional<std::string> input_string(std::string_view prompt, int len, std::s
  *
  * Note that "[y/n]" is appended to the prompt.
  */
-bool get_check(std::string_view prompt)
+bool input_check(std::string_view prompt)
 {
-    return get_check_strict(p_ptr, prompt, 0);
+    return input_check_strict(p_ptr, prompt, UserCheck::NONE);
+}
+
+/*!
+ * @details initializer_list を使うと再帰呼び出し扱いになるので一旦FlagGroup で受ける
+ */
+bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, UserCheck one_mode)
+{
+    EnumClassFlagGroup<UserCheck> mode = { one_mode };
+    return input_check_strict(player_ptr, prompt, mode);
 }
 
 /*
  * Verify something with the user strictly
  *
- * mode & CHECK_OKAY_CANCEL : force user to answer 'O'kay or 'C'ancel
- * mode & CHECK_NO_ESCAPE   : don't allow ESCAPE key
- * mode & CHECK_NO_HISTORY  : no message_add
- * mode & CHECK_DEFAULT_Y   : accept any key as y, except n and Esc.
+ * OKAY_CANCEL : force user to answer 'O'kay or 'C'ancel
+ * NO_ESCAPE   : don't allow ESCAPE key
+ * NO_HISTORY  : no message_add
+ * DEFAULT_Y   : accept any key as y, except n and Esc.
  */
-bool get_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLAGS mode)
+bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, EnumClassFlagGroup<UserCheck> mode)
 {
     if (!rogue_like_commands) {
-        mode &= ~CHECK_OKAY_CANCEL;
+        mode.reset(UserCheck::OKAY_CANCEL);
     }
 
     std::stringstream ss;
     ss << prompt;
-    if (mode & CHECK_OKAY_CANCEL) {
+    if (mode.has(UserCheck::OKAY_CANCEL)) {
         ss << "[(O)k/(C)ancel]";
-    } else if (mode & CHECK_DEFAULT_Y) {
+    } else if (mode.has(UserCheck::DEFAULT_Y)) {
         ss << "[Y/n]";
     } else {
         ss << "[y/n]";
     }
-    const auto buf = ss.str();
 
+    const auto buf = ss.str();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (auto_more) {
         rfu.set_flag(SubWindowRedrawingFlag::MESSAGE);
@@ -288,7 +297,7 @@ bool get_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLAGS
     msg_print(nullptr);
 
     prt(buf, 0, 0);
-    if (!(mode & CHECK_NO_HISTORY) && player_ptr->playing) {
+    if (mode.has_not(UserCheck::NO_HISTORY) && player_ptr->playing) {
         message_add(buf);
         rfu.set_flag(SubWindowRedrawingFlag::MESSAGE);
         handle_stuff(player_ptr);
@@ -298,14 +307,14 @@ bool get_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLAGS
     while (true) {
         int i = inkey();
 
-        if (!(mode & CHECK_NO_ESCAPE)) {
+        if (mode.has_not(UserCheck::NO_ESCAPE)) {
             if (i == ESCAPE) {
                 flag = false;
                 break;
             }
         }
 
-        if (mode & CHECK_OKAY_CANCEL) {
+        if (mode.has(UserCheck::OKAY_CANCEL)) {
             if (i == 'o' || i == 'O') {
                 flag = true;
                 break;
@@ -323,7 +332,7 @@ bool get_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLAGS
             }
         }
 
-        if (mode & CHECK_DEFAULT_Y) {
+        if (mode.has(UserCheck::DEFAULT_Y)) {
             flag = true;
             break;
         }
@@ -363,23 +372,14 @@ std::optional<char> input_command(std::string_view prompt, bool z_escape)
 }
 
 /*
- * Request a "quantity" from the user
- *
- * Hack -- allow "command_arg" to specify a quantity
+ * @brief 数量をユーザ入力する
+ * @param max 最大値 (売出し商品の個数等)
+ * @param initial_prompt 初期値
+ * @details 数値でない値 ('a'等)を入力したら最大数を選択したとみなす.
  */
-QUANTITY get_quantity(std::optional<std::string_view> prompt_opt, QUANTITY max)
+int input_quantity(int max, std::string_view initial_prompt)
 {
-    /*!
-     * @todo QUANTITY、COMMAND_CODE、その他の型サイズがまちまちな変数とのやり取りが多数ある.
-     * この処理での数の入力を0からSHRT_MAXに制限することで不整合の発生を回避する.
-     */
-    max = std::clamp<QUANTITY>(max, 0, SHRT_MAX);
-
-    bool res;
-    char tmp[80];
-    char buf[80];
-
-    QUANTITY amt;
+    int amt;
     if (command_arg) {
         amt = command_arg;
         command_arg = 0;
@@ -390,52 +390,46 @@ QUANTITY get_quantity(std::optional<std::string_view> prompt_opt, QUANTITY max)
         return amt;
     }
 
-    COMMAND_CODE code;
-    bool result = repeat_pull(&code);
-    amt = (QUANTITY)code;
+    short code;
+    auto result = repeat_pull(&code);
+    amt = code;
     if ((max != 1) && result) {
         if (amt > max) {
-            amt = max;
+            return max;
         }
+
         if (amt < 0) {
-            amt = 0;
+            return 0;
         }
 
         return amt;
     }
 
-    std::string_view prompt;
-    if (prompt_opt.has_value()) {
-        prompt = prompt_opt.value();
+    std::string prompt;
+    if (!initial_prompt.empty()) {
+        prompt = initial_prompt;
     } else {
-        strnfmt(tmp, sizeof(tmp), _("いくつですか (1-%d): ", "Quantity (1-%d): "), max);
-        prompt = tmp;
+        prompt = format(_("いくつですか (1-%d): ", "Quantity (1-%d): "), max);
     }
 
     msg_print(nullptr);
-    prt(prompt, 0, 0);
-    amt = 1;
-    strnfmt(buf, sizeof(buf), "%d", amt);
-
-    /*
-     * Ask for a quantity
-     * Don't allow to use numpad as cursor key.
-     */
-    res = askfor(buf, 6, false);
-
-    prt("", 0, 0);
-    if (!res) {
+    const auto input_amount = input_string(prompt, 6, "1");
+    if (!input_amount) {
         return 0;
     }
 
-    if (isalpha(buf[0])) {
+    if (isalpha((*input_amount)[0])) {
         amt = max;
     } else {
-        amt = std::clamp<int>(atoi(buf), 0, max);
+        try {
+            amt = std::clamp<int>(std::stoi(*input_amount), 0, max);
+        } catch (const std::exception &) {
+            amt = 0;
+        }
     }
 
-    if (amt) {
-        repeat_push((COMMAND_CODE)amt);
+    if (amt > 0) {
+        repeat_push(static_cast<short>(amt));
     }
 
     return amt;

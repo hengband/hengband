@@ -65,7 +65,7 @@ static bool confirm_leave_level(PlayerType *player_ptr, bool down_stair)
 
     if (confirm_quest && inside_quest(player_ptr->current_floor_ptr->quest_number) && caution_in_quest) {
         msg_print(_("この階を一度去ると二度と戻って来られません。", "You can't come back here once you leave this floor."));
-        return get_check(_("本当にこの階を去りますか？", "Really leave this floor? "));
+        return input_check(_("本当にこの階を去りますか？", "Really leave this floor? "));
     }
 
     return true;
@@ -273,7 +273,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
             const auto mes = _("ここには%sの入り口(%d階相当)があります", "There is the entrance of %s (Danger level: %d)");
             const auto &dungeon = dungeons_info[target_dungeon];
             msg_format(mes, dungeon.name.data(), dungeon.mindepth);
-            if (!get_check(_("本当にこのダンジョンに入りますか？", "Do you really get in this dungeon? "))) {
+            if (!input_check(_("本当にこのダンジョンに入りますか？", "Do you really get in this dungeon? "))) {
                 return;
             }
         }

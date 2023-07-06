@@ -13,7 +13,7 @@ bool activate_muramasa(PlayerType *player_ptr, ItemEntity *o_ptr)
         return false;
     }
 
-    if (!get_check(_("本当に使いますか？", "Are you sure?! "))) {
+    if (!input_check(_("本当に使いますか？", "Are you sure?! "))) {
         return true;
     }
 

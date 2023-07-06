@@ -858,7 +858,7 @@ static bool check_element_mp_sufficiency(PlayerType *player_ptr, int mana_cost)
         return false;
     }
 
-    return get_check(_("それでも挑戦しますか? ", "Attempt it anyway? "));
+    return input_check(_("それでも挑戦しますか? ", "Attempt it anyway? "));
 }
 
 /*!
@@ -1255,7 +1255,7 @@ byte select_element_realm(PlayerType *player_ptr)
         auto realm = i2enum<ElementRealmType>(realm_idx);
         display_wrap_around(element_texts.at(realm), 74, row, 3);
 
-        if (get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y)) {
+        if (input_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), UserCheck::DEFAULT_Y)) {
             break;
         }
 

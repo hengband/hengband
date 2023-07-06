@@ -880,7 +880,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         }
 
         if (confirm) {
-            if (!get_check(_("何も願いません。本当によろしいですか？", "Do you wish nothing, really? "))) {
+            if (!input_check(_("何も願いません。本当によろしいですか？", "Do you wish nothing, really? "))) {
                 continue;
             }
         }

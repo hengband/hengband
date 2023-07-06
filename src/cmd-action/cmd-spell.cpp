@@ -771,7 +771,7 @@ void do_cmd_study(PlayerType *player_ptr)
     if (tval == get_realm2_book(player_ptr)) {
         increment = 32;
     } else if (tval != get_realm1_book(player_ptr)) {
-        if (!get_check(_("本当に魔法の領域を変更しますか？", "Really, change magic realm? "))) {
+        if (!input_check(_("本当に魔法の領域を変更しますか？", "Really, change magic realm? "))) {
             return;
         }
 
@@ -857,9 +857,9 @@ void do_cmd_study(PlayerType *player_ptr)
             return;
         }
 #ifdef JP
-        if (!get_check(format("%sの%sをさらに学びます。よろしいですか？", spell_name->data(), spell_category.data())))
+        if (!input_check(format("%sの%sをさらに学びます。よろしいですか？", spell_name->data(), spell_category.data())))
 #else
-        if (!get_check(format("You will study a %s of %s again. Are you sure? ", spell_category.data(), spell_name->data())))
+        if (!input_check(format("You will study a %s of %s again. Are you sure? ", spell_category.data(), spell_name->data())))
 #endif
         {
             return;
@@ -1079,7 +1079,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
         }
 
         /* Verify */
-        if (!get_check_strict(player_ptr, _("それでも挑戦しますか? ", "Attempt it anyway? "), CHECK_OKAY_CANCEL)) {
+        if (!input_check_strict(player_ptr, _("それでも挑戦しますか? ", "Attempt it anyway? "), UserCheck::OKAY_CANCEL)) {
             return false;
         }
     }

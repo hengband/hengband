@@ -48,8 +48,8 @@ static void send_world_score_on_closing(PlayerType *player_ptr, bool do_send)
         return;
     }
 
-    if (!get_check_strict(
-            player_ptr, _("後でスコアを登録するために待機しますか？", "Stand by for later score registration? "), (CHECK_NO_ESCAPE | CHECK_NO_HISTORY))) {
+    if (!input_check_strict(
+            player_ptr, _("後でスコアを登録するために待機しますか？", "Stand by for later score registration? "), { UserCheck::NO_ESCAPE, UserCheck::NO_HISTORY })) {
         return;
     }
 
@@ -167,7 +167,7 @@ void close_game(PlayerType *player_ptr)
     print_tomb(player_ptr);
 
     auto do_send = true;
-    if (!cheat_save || get_check(_("死んだデータをセーブしますか？ ", "Save death? "))) {
+    if (!cheat_save || input_check(_("死んだデータをセーブしますか？ ", "Save death? "))) {
         update_playtime();
         w_ptr->sf_play_time += w_ptr->play_time;
 

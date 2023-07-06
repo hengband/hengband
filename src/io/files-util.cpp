@@ -68,7 +68,7 @@ void file_character(PlayerType *player_ptr, std::string_view filename)
         std::stringstream ss;
         ss << _("現存するファイル ", "Replace existing file ") << path_str << _(" に上書きしますか? ", "? ");
         (void)fd_close(fd);
-        if (get_check_strict(player_ptr, ss.str(), CHECK_NO_HISTORY)) {
+        if (input_check_strict(player_ptr, ss.str(), UserCheck::NO_HISTORY)) {
             fd = -1;
         } else {
             return;

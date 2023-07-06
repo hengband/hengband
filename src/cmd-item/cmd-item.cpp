@@ -128,7 +128,7 @@ void do_cmd_drop(PlayerType *player_ptr)
     }
 
     if (o_ptr->number > 1) {
-        amt = get_quantity(std::nullopt, o_ptr->number);
+        amt = input_quantity(o_ptr->number);
         if (amt <= 0) {
             return;
         }

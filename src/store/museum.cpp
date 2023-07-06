@@ -34,7 +34,7 @@ void museum_remove_object(PlayerType *player_ptr)
     auto *o_ptr = &st_ptr->stock[item];
     const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
     msg_print(_("展示をやめさせたアイテムは二度と見ることはできません！", "Once removed from the Museum, an item will be gone forever!"));
-    if (!get_check(format(_("本当に%sの展示をやめさせますか？", "Really order to remove %s from the Museum? "), item_name.data()))) {
+    if (!input_check(format(_("本当に%sの展示をやめさせますか？", "Really order to remove %s from the Museum? "), item_name.data()))) {
         return;
     }
 

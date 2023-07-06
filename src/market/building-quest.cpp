@@ -100,7 +100,7 @@ void castle_quest(PlayerType *player_ptr)
 
         put_str(_("このクエストは放棄することができます。", "You can give up this quest."), 12, 0);
 
-        if (!get_check(_("二度と受けられなくなりますが放棄しますか？", "Are you sure to give up this quest? "))) {
+        if (!input_check(_("二度と受けられなくなりますが放棄しますか？", "Are you sure to give up this quest? "))) {
             return;
         }
 

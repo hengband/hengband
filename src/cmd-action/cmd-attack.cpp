@@ -242,7 +242,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
             chg_virtue(player_ptr, Virtue::JUSTICE, -1);
             chg_virtue(player_ptr, Virtue::COMPASSION, -1);
         } else if (!PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER)) {
-            if (get_check(_("本当に攻撃しますか？", "Really hit it? "))) {
+            if (input_check(_("本当に攻撃しますか？", "Really hit it? "))) {
                 chg_virtue(player_ptr, Virtue::INDIVIDUALISM, 1);
                 chg_virtue(player_ptr, Virtue::HONOUR, -1);
                 chg_virtue(player_ptr, Virtue::JUSTICE, -1);

@@ -16,6 +16,7 @@
 #include "view/display-messages.h"
 #include <sstream>
 #include <string>
+#include <string_view>
 
 /*!
  * @brief ファイル内容の一行をコンソールに出力する
@@ -33,15 +34,15 @@
  * </pre>
  * @todo 表示とそれ以外を分割する
  */
-static void show_file_aux_line(concptr str, int cy, concptr shower)
+static void show_file_aux_line(std::string_view str, int cy, std::string_view shower)
 {
     char lcstr[1024];
     concptr ptr;
     byte textcolor = TERM_WHITE;
     byte focuscolor = TERM_YELLOW;
 
-    if (shower) {
-        strcpy(lcstr, str);
+    if (!shower.empty()) {
+        strcpy(lcstr, str.data());
         str_tolower(lcstr);
 
         ptr = angband_strstr(lcstr, shower);
@@ -54,12 +55,12 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
     static const char tag_str[] = "[[[[";
     byte color = textcolor;
     char in_tag = '\0';
-    for (int i = 0; str[i];) {
+    for (size_t i = 0; i < str.length();) {
         int len = strlen(&str[i]);
         int showercol = len + 1;
         int bracketcol = len + 1;
         int endcol = len;
-        if (shower) {
+        if (!shower.empty()) {
             ptr = angband_strstr(&lcstr[i], shower);
             if (ptr) {
                 showercol = ptr - &lcstr[i];
@@ -81,8 +82,8 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
         cx += endcol;
         i += endcol;
 
-        if (shower && endcol == showercol) {
-            int showerlen = strlen(shower);
+        if (!shower.empty() && (endcol == showercol)) {
+            const auto showerlen = shower.length();
             term_addstr(showerlen, focuscolor, &str[i]);
             cx += showerlen;
             i += showerlen;
@@ -234,8 +235,8 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
 
     term_clear();
 
-    concptr find = nullptr;
-    concptr shower = nullptr;
+    std::string find;
+    std::string shower;
     while (true) {
         if (line >= size - rows) {
             line = size - rows;
@@ -277,7 +278,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
                 continue;
             }
             next++;
-            if (find && !row_count) {
+            if (!find.empty() && !row_count) {
                 char lc_buf[1024];
                 strcpy(lc_buf, str);
                 str_tolower(lc_buf);
@@ -286,7 +287,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
                 }
             }
 
-            find = nullptr;
+            find.clear();
             show_file_aux_line(str, row_count + 2, shower);
             row_count++;
         }
@@ -296,10 +297,10 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
             row_count++;
         }
 
-        if (find) {
+        if (!find.empty()) {
             bell();
             line = back;
-            find = nullptr;
+            find.clear();
             continue;
         }
 
@@ -331,125 +332,142 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
             if (name != _("jhelpinfo.txt", "helpinfo.txt")) {
                 show_file(player_ptr, true, _("jhelpinfo.txt", "helpinfo.txt"), 0, mode);
             }
-            break;
-        case '=':
-            prt(_("強調: ", "Show: "), hgt - 1, 0);
 
+            break;
+        case '=': {
+            prt(_("強調: ", "Show: "), hgt - 1, 0);
             char back_str[81];
             strcpy(back_str, shower_str);
-            if (askfor(shower_str, 80)) {
-                if (shower_str[0]) {
-                    str_tolower(shower_str);
-                    shower = shower_str;
-                } else {
-                    shower = nullptr;
-                }
-            } else {
+            if (!askfor(shower_str, 80)) {
                 strcpy(shower_str, back_str);
+                break;
             }
-            break;
 
+            if (!shower_str[0]) {
+                shower.clear();
+                break;
+            }
+
+            str_tolower(shower_str);
+            shower = shower_str;
+            break;
+        }
         case '/':
-        case KTRL('s'):
+        case KTRL('s'): {
             prt(_("検索: ", "Find: "), hgt - 1, 0);
+            char back_str[81];
             strcpy(back_str, finder_str);
-            if (askfor(finder_str, 80)) {
-                if (finder_str[0]) {
-                    find = finder_str;
-                    back = line;
-                    line = line + 1;
-                    str_tolower(finder_str);
-                    shower = finder_str;
-                } else {
-                    shower = nullptr;
-                }
-            } else {
+            if (!askfor(finder_str, 80)) {
                 strcpy(finder_str, back_str);
+                break;
             }
-            break;
 
+            if (!finder_str[0]) {
+                shower.clear();
+                break;
+            }
+
+            find = finder_str;
+            back = line;
+            line = line + 1;
+            str_tolower(finder_str);
+            shower = finder_str;
+            break;
+        }
         case '#': {
             char tmp[81];
             prt(_("行: ", "Goto Line: "), hgt - 1, 0);
-            strcpy(tmp, "0");
+            constexpr auto initial_goto = "0";
+            while (true) {
+                strcpy(tmp, initial_goto);
+                if (!askfor(tmp, 10)) {
+                    break;
+                }
 
-            if (askfor(tmp, 80)) {
-                line = atoi(tmp);
-            }
-            break;
-        }
-
-        case SKEY_TOP:
-            line = 0;
-            break;
-
-        case SKEY_BOTTOM:
-            line = ((size - 1) / rows) * rows;
-            break;
-
-        case '%': {
-            char tmp[81];
-            prt(_("ファイル・ネーム: ", "Goto File: "), hgt - 1, 0);
-            strcpy(tmp, _("jhelp.hlp", "help.hlp"));
-
-            if (askfor(tmp, 80)) {
-                if (!show_file(player_ptr, true, tmp, 0, mode)) {
-                    skey = 'q';
+                try {
+                    line = std::stoi(tmp);
+                    break;
+                } catch (std::invalid_argument const &) {
+                    prt(_("数値を入力して下さい。", "Please input numeric value."), hgt - 1, 0);
+                    continue;
+                } catch (std::out_of_range const &) {
+                    prt(_("入力可能な数値の範囲を超えています。", "Input value overflows the maximum number."), hgt - 1, 0);
+                    continue;
                 }
             }
 
             break;
         }
+        case SKEY_TOP:
+            line = 0;
+            break;
+        case SKEY_BOTTOM:
+            line = ((size - 1) / rows) * rows;
+            break;
+        case '%': {
+            prt(_("ファイル・ネーム: ", "Goto File: "), hgt - 1, 0);
+            char tmp[81];
+            strcpy(tmp, _("jhelp.hlp", "help.hlp"));
+            if (!askfor(tmp, 80)) {
+                break;
+            }
 
+            if (!show_file(player_ptr, true, tmp, 0, mode)) {
+                skey = 'q';
+            }
+
+            break;
+        }
         case '-':
             line = line + (reverse ? rows : -rows);
             if (line < 0) {
                 line = 0;
             }
-            break;
 
+            break;
         case SKEY_PGUP:
             line = line - rows;
             if (line < 0) {
                 line = 0;
             }
-            break;
 
+            break;
         case '\n':
         case '\r':
             line = line + (reverse ? -1 : 1);
             if (line < 0) {
                 line = 0;
             }
-            break;
 
+            break;
         case '8':
         case SKEY_UP:
             line--;
             if (line < 0) {
                 line = 0;
             }
-            break;
 
+            break;
         case '2':
         case SKEY_DOWN:
             line++;
             break;
-
         case ' ':
             line = line + (reverse ? -rows : rows);
             if (line < 0) {
                 line = 0;
             }
-            break;
 
+            break;
         case SKEY_PGDOWN:
             line = line + rows;
+            break;
+        default:
             break;
         }
 
         if (menu) {
-            int key = -1;
+            auto key = -1;
             if (!(skey & SKEY_MASK) && isalpha(skey)) {
                 key = skey - 'A';
             }

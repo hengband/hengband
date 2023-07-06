@@ -182,11 +182,11 @@ void do_cmd_wield(PlayerType *player_ptr)
     case ItemKindType::POLEARM:
     case ItemKindType::SWORD:
         if (slot == INVEN_SUB_HAND) {
-            if (!get_check(_("二刀流で戦いますか？", "Dual wielding? "))) {
+            if (!input_check(_("二刀流で戦いますか？", "Dual wielding? "))) {
                 slot = INVEN_MAIN_HAND;
             }
         } else if (!o_ptr_mh->is_valid() && has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
-            if (!get_check(_("二刀流で戦いますか？", "Dual wielding? "))) {
+            if (!input_check(_("二刀流で戦いますか？", "Dual wielding? "))) {
                 slot = INVEN_SUB_HAND;
             }
         } else if (o_ptr_mh->is_valid() && o_ptr_sh->is_valid()) {
@@ -238,7 +238,7 @@ void do_cmd_wield(PlayerType *player_ptr)
     should_equip_cursed &= confirm_wear;
     if (should_equip_cursed) {
         const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        if (!get_check(format(_("本当に%s{呪われている}を使いますか？", "Really use the %s {cursed}? "), item_name.data()))) {
+        if (!input_check(format(_("本当に%s{呪われている}を使いますか？", "Really use the %s {cursed}? "), item_name.data()))) {
             return;
         }
     }
@@ -252,7 +252,7 @@ void do_cmd_wield(PlayerType *player_ptr)
         const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         constexpr auto mes = _("%sを装備すると吸血鬼になります。よろしいですか？",
             "%s will transform you into a vampire permanently when equipped. Do you become a vampire? ");
-        if (!get_check(format(mes, item_name.data()))) {
+        if (!input_check(format(mes, item_name.data()))) {
             return;
         }
     }

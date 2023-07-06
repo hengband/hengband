@@ -503,7 +503,7 @@ void do_cmd_quest(PlayerType *player_ptr)
     }
 
     msg_print(_("ここにはクエストへの入口があります。", "There is an entry of a quest."));
-    if (!get_check(_("クエストに入りますか？", "Do you enter? "))) {
+    if (!input_check(_("クエストに入りますか？", "Do you enter? "))) {
         return;
     }
     if (is_echizen(player_ptr)) {

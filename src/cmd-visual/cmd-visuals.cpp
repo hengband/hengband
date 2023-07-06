@@ -93,12 +93,12 @@ void do_cmd_visuals(PlayerType *player_ptr)
     while (true) {
         term_clear();
         print_visuals_menu(nullptr);
-        int i = inkey();
-        if (i == ESCAPE) {
+        const auto key = inkey();
+        if (key == ESCAPE) {
             break;
         }
 
-        switch (i) {
+        switch (key) {
         case '0': {
             prt(_("コマンド: ユーザー設定ファイルのロード", "Command: Load a user pref file"), 15, 0);
             prt(_("ファイル: ", "File: "), 17, 0);
@@ -226,22 +226,22 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 20, ca, cc, 0, 0);
                 term_putstr(0, 22, -1, TERM_WHITE, _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
-                i = inkey();
-                if (i == ESCAPE) {
+                const auto ch = inkey();
+                if (ch == ESCAPE) {
                     break;
                 }
 
-                if (iscntrl(i)) {
-                    c = 'a' + i - KTRL('A');
-                } else if (isupper(i)) {
-                    c = 'a' + i - 'A';
+                if (iscntrl(ch)) {
+                    c = 'a' + ch - KTRL('A');
+                } else if (isupper(ch)) {
+                    c = 'a' + ch - 'A';
                 } else {
-                    c = i;
+                    c = ch;
                 }
 
                 switch (c) {
                 case 'n': {
-                    const auto new_monrace_id_opt = input_new_visual_id(i, num, static_cast<short>(monraces_info.size()));
+                    const auto new_monrace_id_opt = input_new_visual_id(ch, num, static_cast<short>(monraces_info.size()));
                     if (!new_monrace_id_opt.has_value()) {
                         break;
                     }
@@ -252,7 +252,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'a': {
-                    const auto visual_id = input_new_visual_id(i, r_ptr->x_attr, 256);
+                    const auto visual_id = input_new_visual_id(ch, r_ptr->x_attr, 256);
                     if (!visual_id.has_value()) {
                         break;
                     }
@@ -262,7 +262,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'c': {
-                    const auto visual_id = input_new_visual_id(i, r_ptr->x_char, 256);
+                    const auto visual_id = input_new_visual_id(ch, r_ptr->x_char, 256);
                     if (!visual_id.has_value()) {
                         break;
                     }
@@ -304,17 +304,17 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 term_queue_bigchar(43, 20, ca, cc, 0, 0);
                 term_putstr(0, 22, -1, TERM_WHITE, _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
 
-                i = inkey();
-                if (i == ESCAPE) {
+                const auto ch = inkey();
+                if (ch == ESCAPE) {
                     break;
                 }
 
-                if (iscntrl(i)) {
-                    c = 'a' + i - KTRL('A');
-                } else if (isupper(i)) {
-                    c = 'a' + i - 'A';
+                if (iscntrl(ch)) {
+                    c = 'a' + ch - KTRL('A');
+                } else if (isupper(ch)) {
+                    c = 'a' + ch - 'A';
                 } else {
-                    c = i;
+                    c = ch;
                 }
 
                 switch (c) {
@@ -322,7 +322,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     std::optional<short> new_baseitem_id(std::nullopt);
                     const auto previous_bi_id = bi_id;
                     while (true) {
-                        new_baseitem_id = input_new_visual_id(i, bi_id, static_cast<short>(baseitems_info.size()));
+                        new_baseitem_id = input_new_visual_id(ch, bi_id, static_cast<short>(baseitems_info.size()));
                         if (!new_baseitem_id.has_value()) {
                             bi_id = previous_bi_id;
                             break;
@@ -337,7 +337,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'a': {
-                    const auto visual_id = input_new_visual_id(i, baseitem.x_attr, 256);
+                    const auto visual_id = input_new_visual_id(ch, baseitem.x_attr, 256);
                     if (!visual_id.has_value()) {
                         break;
                     }
@@ -347,7 +347,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'c': {
-                    const auto visual_id = input_new_visual_id(i, baseitem.x_char, 256);
+                    const auto visual_id = input_new_visual_id(ch, baseitem.x_char, 256);
                     if (!visual_id.has_value()) {
                         break;
                     }
@@ -392,17 +392,17 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 term_putstr(0, 22, -1, TERM_WHITE,
                     _("コマンド (n/N/^N/a/A/^A/c/C/^C/l/L/^L/d/D/^D/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/l/L/^L/d/D/^D/v/V/^V): "));
 
-                i = inkey();
-                if (i == ESCAPE) {
+                const auto ch = inkey();
+                if (ch == ESCAPE) {
                     break;
                 }
 
-                if (iscntrl(i)) {
-                    c = 'a' + i - KTRL('A');
-                } else if (isupper(i)) {
-                    c = 'a' + i - 'A';
+                if (iscntrl(ch)) {
+                    c = 'a' + ch - KTRL('A');
+                } else if (isupper(ch)) {
+                    c = 'a' + ch - 'A';
                 } else {
-                    c = i;
+                    c = ch;
                 }
 
                 switch (c) {
@@ -410,7 +410,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     std::optional<short> new_terrain_id(std::nullopt);
                     const auto previous_terrain_id = terrain_id;
                     while (true) {
-                        new_terrain_id = input_new_visual_id(i, terrain_id, static_cast<short>(terrains_info.size()));
+                        new_terrain_id = input_new_visual_id(ch, terrain_id, static_cast<short>(terrains_info.size()));
                         if (!new_terrain_id.has_value()) {
                             terrain_id = previous_terrain_id;
                             break;
@@ -425,7 +425,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'a': {
-                    const auto visual_id = input_new_visual_id(i, f_ptr->x_attr[lighting_level], 256);
+                    const auto visual_id = input_new_visual_id(ch, f_ptr->x_attr[lighting_level], 256);
                     if (!visual_id.has_value()) {
                         break;
                     }
@@ -435,7 +435,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'c': {
-                    const auto visual_id = input_new_visual_id(i, f_ptr->x_char[lighting_level], 256);
+                    const auto visual_id = input_new_visual_id(ch, f_ptr->x_char[lighting_level], 256);
                     if (!visual_id.has_value()) {
                         break;
                     }
@@ -445,7 +445,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'l': {
-                    const auto visual_id = input_new_visual_id(i, lighting_level, F_LIT_MAX);
+                    const auto visual_id = input_new_visual_id(ch, lighting_level, F_LIT_MAX);
                     if (!visual_id.has_value()) {
                         break;
                     }
@@ -474,12 +474,12 @@ void do_cmd_visuals(PlayerType *player_ptr)
             do_cmd_knowledge_objects(player_ptr, &need_redraw, true, -1);
             break;
         case '9': {
-            IDX lighting_level = F_LIT_STANDARD;
+            short lighting_level = F_LIT_STANDARD;
             do_cmd_knowledge_features(&need_redraw, true, -1, &lighting_level);
             break;
         }
-        case 'R':
         case 'r':
+        case 'R':
             reset_visuals(player_ptr);
             msg_print(_("画面上の[色/文字]を初期値にリセットしました。", "Visual attr/char tables reset."));
             need_redraw = true;

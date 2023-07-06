@@ -58,7 +58,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
         change = true;
         const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
-        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
+        if (!input_check(format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
             continue;
         }
 
@@ -77,7 +77,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
         change = true;
         const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
-        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
+        if (!input_check(format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
             continue;
         }
 
@@ -96,7 +96,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
         change = true;
         const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
-        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
+        if (!input_check(format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
             continue;
         }
 
@@ -115,7 +115,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
         change = true;
         const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
-        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
+        if (!input_check(format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
             continue;
         }
 
@@ -135,7 +135,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
         change = true;
         const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
-        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
+        if (!input_check(format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
             continue;
         }
 
@@ -162,7 +162,7 @@ bool exchange_cash(PlayerType *player_ptr)
             ItemEntity forge;
 
             const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
-            if (!get_check(format(_("%sを渡しますか？", "Hand %s over? "), item_name.data()))) {
+            if (!input_check(format(_("%sを渡しますか？", "Hand %s over? "), item_name.data()))) {
                 continue;
             }
 

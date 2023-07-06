@@ -267,12 +267,12 @@ errr angband_fgets(FILE *fff, char *buf, ulong n)
     // Reserve for null termination
     --n;
 
-    std::vector<char> file_read__tmp(FILE_READ_BUFF_SIZE);
-    if (fgets(file_read__tmp.data(), file_read__tmp.size(), fff)) {
+    std::vector<char> file_read_tmp(FILE_READ_BUFF_SIZE);
+    if (fgets(file_read_tmp.data(), file_read_tmp.size(), fff)) {
 #ifdef JP
-        guess_convert_to_system_encoding(file_read__tmp.data(), FILE_READ_BUFF_SIZE);
+        guess_convert_to_system_encoding(file_read_tmp.data(), FILE_READ_BUFF_SIZE);
 #endif
-        for (s = file_read__tmp.data(); *s; s++) {
+        for (s = file_read_tmp.data(); *s; s++) {
             if (*s == '\n') {
                 buf[i] = '\0';
                 return 0;

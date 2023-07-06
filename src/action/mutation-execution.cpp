@@ -167,7 +167,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         (void)berserk(player_ptr, randint1(25) + 25);
         return true;
     case PlayerMutationType::POLYMORPH:
-        if (!get_check(_("変身します。よろしいですか？", "You will polymorph your self. Are you sure? "))) {
+        if (!input_check(_("変身します。よろしいですか？", "You will polymorph your self. Are you sure? "))) {
             return false;
         }
 

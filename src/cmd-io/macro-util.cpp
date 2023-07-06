@@ -1,32 +1,32 @@
 ﻿#include "cmd-io/macro-util.h"
 
 /* Current macro action [1024] */
-std::vector<char> macro__buf;
+std::vector<char> macro_buffers;
 
 /* Array of macro patterns [MACRO_MAX] */
-std::vector<std::string> macro__pat;
+std::vector<std::string> macro_patterns;
 
 /* Array of macro actions [MACRO_MAX] */
-std::vector<std::string> macro__act;
+std::vector<std::string> macro_actions;
 
 /* Number of active macros */
-int16_t macro__num;
+int16_t active_macros;
 
 /* Expand macros in "get_com" or not */
 bool get_com_no_macros = false;
 
 /* Determine if any macros have ever started with a given character */
-static bool macro__use[256];
+static bool macro_uses[256];
 
 /* Find the macro (if any) which exactly matches the given pattern */
 int macro_find_exact(concptr pat)
 {
-    if (!macro__use[(byte)(pat[0])]) {
+    if (!macro_uses[(byte)(pat[0])]) {
         return -1;
     }
 
-    for (int i = 0; i < macro__num; ++i) {
-        if (!streq(macro__pat[i], pat)) {
+    for (int i = 0; i < active_macros; ++i) {
+        if (!streq(macro_patterns[i], pat)) {
             continue;
         }
 
@@ -41,12 +41,12 @@ int macro_find_exact(concptr pat)
  */
 int macro_find_check(concptr pat)
 {
-    if (!macro__use[(byte)(pat[0])]) {
+    if (!macro_uses[(byte)(pat[0])]) {
         return -1;
     }
 
-    for (int i = 0; i < macro__num; ++i) {
-        if (!prefix(macro__pat[i], pat)) {
+    for (int i = 0; i < active_macros; ++i) {
+        if (!prefix(macro_patterns[i], pat)) {
             continue;
         }
 
@@ -61,15 +61,15 @@ int macro_find_check(concptr pat)
  */
 int macro_find_maybe(concptr pat)
 {
-    if (!macro__use[(byte)(pat[0])]) {
+    if (!macro_uses[(byte)(pat[0])]) {
         return -1;
     }
 
-    for (int i = 0; i < macro__num; ++i) {
-        if (!prefix(macro__pat[i], pat)) {
+    for (int i = 0; i < active_macros; ++i) {
+        if (!prefix(macro_patterns[i], pat)) {
             continue;
         }
-        if (streq(macro__pat[i], pat)) {
+        if (streq(macro_patterns[i], pat)) {
             continue;
         }
 
@@ -86,16 +86,16 @@ int macro_find_ready(concptr pat)
 {
     int t, n = -1, s = -1;
 
-    if (!macro__use[(byte)(pat[0])]) {
+    if (!macro_uses[(byte)(pat[0])]) {
         return -1;
     }
 
-    for (int i = 0; i < macro__num; ++i) {
-        if (!prefix(pat, macro__pat[i])) {
+    for (int i = 0; i < active_macros; ++i) {
+        if (!prefix(pat, macro_patterns[i])) {
             continue;
         }
 
-        t = macro__pat[i].size();
+        t = macro_patterns[i].size();
         if ((n >= 0) && (s > t)) {
             continue;
         }
@@ -132,11 +132,11 @@ errr macro_add(concptr pat, concptr act)
 
     int n = macro_find_exact(pat);
     if (n < 0) {
-        n = macro__num++;
-        macro__pat[n] = pat;
+        n = active_macros++;
+        macro_patterns[n] = pat;
     }
 
-    macro__act[n] = act;
-    macro__use[(byte)(pat[0])] = true;
+    macro_actions[n] = act;
+    macro_uses[(byte)(pat[0])] = true;
     return 0;
 }

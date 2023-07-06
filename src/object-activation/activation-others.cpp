@@ -146,7 +146,7 @@ bool activate_judgement(PlayerType *player_ptr, concptr name)
     (void)detect_doors(player_ptr, DETECT_RAD_DEFAULT);
     (void)detect_stairs(player_ptr, DETECT_RAD_DEFAULT);
 
-    if (get_check(_("帰還の力を使いますか？", "Activate recall? "))) {
+    if (input_check(_("帰還の力を使いますか？", "Activate recall? "))) {
         (void)recall_player(player_ptr, randint0(21) + 15);
     }
 

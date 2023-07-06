@@ -448,7 +448,7 @@ void wiz_change_status(PlayerType *player_ptr)
     });
 
     constexpr auto msg = _("全てのステータスを最大にしますか？", "Maximize all statuses? ");
-    if (get_check_strict(player_ptr, msg, (CHECK_NO_ESCAPE | CHECK_NO_HISTORY))) {
+    if (input_check_strict(player_ptr, msg, { UserCheck::NO_ESCAPE, UserCheck::NO_HISTORY })) {
         wiz_change_status_max(player_ptr);
         return;
     }
@@ -642,7 +642,7 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
             return;
         }
 
-        if (get_check(("Jump to the ground?"))) {
+        if (input_check(("Jump to the ground?"))) {
             wiz_jump_floor(player_ptr, 0, 0);
         }
 

@@ -337,7 +337,7 @@ void InputKeyRequestor::confirm_command(const std::optional<std::string> &inscri
         (void)caret_command;
 #endif
         if (sure) {
-            if (!get_check(_("本当ですか? ", "Are you sure? "))) {
+            if (!input_check(_("本当ですか? ", "Are you sure? "))) {
                 command_cmd = ' ';
             }
         }

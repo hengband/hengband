@@ -59,9 +59,9 @@ void init_other(PlayerType *player_ptr)
     floor_ptr->grid_array.assign(MAX_HGT, std::vector<grid_type>(MAX_WID));
     init_gf_colors();
 
-    macro__pat.assign(MACRO_MAX, {});
-    macro__act.assign(MACRO_MAX, {});
-    macro__buf.assign(FILE_READ_BUFF_SIZE, {});
+    macro_patterns.assign(MACRO_MAX, {});
+    macro_actions.assign(MACRO_MAX, {});
+    macro_buffers.assign(FILE_READ_BUFF_SIZE, {});
     for (auto i = 0; option_info[i].o_desc; i++) {
         int os = option_info[i].o_set;
         int ob = option_info[i].o_bit;
