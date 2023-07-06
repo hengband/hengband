@@ -226,10 +226,9 @@ void do_cmd_macros(PlayerType *player_ptr)
             }
 
             // マクロの作成時に参照するためmacro_bufにコピーする
-            strncpy(macro_buf, macro_actions[k].data(), sizeof(macro_buf) - 1);
+            angband_strcpy(macro_buf, macro_actions[k].data(), sizeof(macro_buf));
             char tmp[81]{};
-            angband_strcpy(tmp, macro_buf, 80);
-            tmp[80] = '\0';
+            angband_strcpy(tmp, macro_buf, sizeof(tmp));
             ascii_to_text(buf, tmp, sizeof(buf));
             prt(buf, 22, 0);
             msg_print(_("マクロを確認しました。", "Found a macro."));
@@ -289,11 +288,10 @@ void do_cmd_macros(PlayerType *player_ptr)
             }
 
             // マクロの作成時に参照するためmacro_bufにコピーする
-            strncpy(macro_buf, act, sizeof(macro_buf) - 1);
+            angband_strcpy(macro_buf, act, sizeof(macro_buf));
             // too long macro must die
             char tmp[81]{};
-            strncpy(tmp, macro_buf, 80);
-            tmp[80] = '\0';
+            angband_strcpy(tmp, macro_buf, sizeof(tmp));
             ascii_to_text(buf, tmp, sizeof(buf));
             prt(buf, 22, 0);
             msg_print(_("キー配置を確認しました。", "Found a keymap."));
