@@ -226,13 +226,13 @@ bool askfor(char *buf, int len, bool numpad_cursor)
  *
  * We clear the input, and return FALSE, on "ESCAPE".
  */
-std::optional<std::string> input_string(std::string_view prompt, int len, std::string_view initial_value)
+std::optional<std::string> input_string(std::string_view prompt, int len, std::string_view initial_value, bool numpad_cursor)
 {
     msg_print(nullptr);
     prt(prompt, 0, 0);
     char buf[1024]{};
     angband_strcpy(buf, initial_value, sizeof(buf));
-    const auto res = askfor(buf, len);
+    const auto res = askfor(buf, len, numpad_cursor);
     prt("", 0, 0);
     if (!res) {
         return std::nullopt;
@@ -413,7 +413,7 @@ int input_quantity(int max, std::string_view initial_prompt)
     }
 
     msg_print(nullptr);
-    const auto input_amount = input_string(prompt, 6, "1");
+    const auto input_amount = input_string(prompt, 6, "1", false);
     if (!input_amount) {
         return 0;
     }
@@ -453,7 +453,7 @@ std::optional<int> input_integer(std::string_view prompt, int min, int max, int 
     ss << prompt << "(" << min << "-" << max << "): ";
     auto digit = std::max(std::to_string(min).length(), std::to_string(max).length());
     while (true) {
-        const auto input_str = input_string(ss.str(), digit, std::to_string(initial_value));
+        const auto input_str = input_string(ss.str(), digit, std::to_string(initial_value), false);
         if (!input_str.has_value()) {
             return std::nullopt;
         }
