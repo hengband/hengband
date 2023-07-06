@@ -542,6 +542,8 @@ static bool utf8_to_sys(char *utf8_str, char *sys_str_buffer, size_t sys_str_buf
 
     return true;
 
+#else
+    return false;
 #endif
 }
 
@@ -574,6 +576,8 @@ std::optional<std::string> sys_to_utf8(std::string_view str)
     }
 
     return std::make_optional<std::string>(utf8buf.data(), utf8_len);
+#else
+    return std::nullopt;
 #endif
 }
 
