@@ -78,7 +78,7 @@ constexpr bool is_vector_v = is_vector<T>::value;
  */
 static void init_header(angband_header *head, IDX num = 0)
 {
-    head->checksum = 0;
+    head->digest = {};
     head->info_num = (IDX)num;
 }
 

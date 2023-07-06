@@ -579,9 +579,24 @@ static void dump_aux_home_museum(PlayerType *player_ptr, FILE *fff)
  */
 static std::string get_check_sum(void)
 {
-    return format("%02x%02x%02x%02x%02x%02x%02x%02x%02x", terrains_header.checksum, baseitems_header.checksum,
-        artifacts_header.checksum, egos_header.checksum, monraces_header.checksum, dungeons_header.checksum,
-        class_magics_header.checksum, class_skills_header.checksum, vaults_header.checksum);
+    static constexpr auto headers = {
+        &artifacts_header,
+        &baseitems_header,
+        &class_magics_header,
+        &class_skills_header,
+        &dungeons_header,
+        &egos_header,
+        &monraces_header,
+        &terrains_header,
+        &vaults_header,
+    };
+
+    util::SHA256 sha256;
+    for (const auto *header : headers) {
+        sha256.update(header->digest.data(), header->digest.size());
+    }
+
+    return util::to_string(sha256.digest());
 }
 
 /*!
@@ -614,5 +629,7 @@ void make_character_dump(PlayerType *player_ptr, FILE *fff)
     dump_aux_equipment_inventory(player_ptr, fff);
     dump_aux_home_museum(player_ptr, fff);
 
-    fprintf(fff, _("  [チェックサム: \"%s\"]\n\n", "  [Check Sum: \"%s\"]\n\n"), get_check_sum().data());
+    // ダンプの幅をはみ出さないように48文字目以降を切り捨てる
+    const auto checksum = get_check_sum().erase(48);
+    fprintf(fff, _("  [チェックサム: \"%s\"]\n\n", "  [Check Sum: \"%s\"]\n\n"), checksum.data());
 }
