@@ -18,13 +18,13 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief マクロ情報をprefファイルに保存する /
- * @param fname ファイル名
+ * @brief マクロ情報をprefファイルに保存する
+ * @param filename ファイル名
  */
-static void macro_dump(FILE **fpp, concptr fname)
+static void macro_dump(FILE **fpp, std::string_view filename)
 {
     constexpr auto mark = "Macro Dump";
-    const auto &path = path_build(ANGBAND_DIR_USER, fname);
+    const auto &path = path_build(ANGBAND_DIR_USER, filename);
     if (!open_auto_dump(fpp, path, mark)) {
         return;
     }
@@ -96,13 +96,11 @@ static void do_cmd_macro_aux_keymap(char *buf)
 }
 
 /*!
- * @brief キーマップをprefファイルにダンプする /
- * Hack -- append all keymaps to the given file
- * @param fname ファイルネーム
+ * @brief キーマップをprefファイルにダンプする
+ * @param filename ファイルネーム
  * @return エラーコード
- * @details
  */
-static errr keymap_dump(concptr fname)
+static errr keymap_dump(std::string_view filename)
 {
     FILE *auto_dump_stream;
     char key[1024];
@@ -113,7 +111,7 @@ static errr keymap_dump(concptr fname)
         mode = KEYMAP_MODE_ORIG;
     }
 
-    const auto &path = path_build(ANGBAND_DIR_USER, fname);
+    const auto &path = path_build(ANGBAND_DIR_USER, filename);
     constexpr auto mark = "Keymap Dump";
     if (!open_auto_dump(&auto_dump_stream, path, mark)) {
         return -1;
@@ -248,12 +246,13 @@ void do_cmd_macros(PlayerType *player_ptr)
             // 最後に参照したマクロデータを元に作成する（コピーを行えるように）
             macro_buf[80] = '\0';
             ascii_to_text(tmp, macro_buf, sizeof(tmp));
-            if (askfor(tmp, 80)) {
-                text_to_ascii(macro_buf, tmp, sizeof(macro_buf));
-                macro_add(buf, macro_buf);
-                msg_print(_("マクロを追加しました。", "Added a macro."));
+            if (!askfor(tmp, 80)) {
+                break;
             }
 
+            text_to_ascii(macro_buf, tmp, sizeof(macro_buf));
+            macro_add(buf, macro_buf);
+            msg_print(_("マクロを追加しました。", "Added a macro."));
             break;
         }
         case '5':
@@ -308,13 +307,14 @@ void do_cmd_macros(PlayerType *player_ptr)
             // 最後に参照したマクロデータを元に作成する（コピーを行えるように）
             macro_buf[80] = '\0';
             ascii_to_text(tmp, macro_buf, sizeof(tmp));
-            if (askfor(tmp, 80)) {
-                text_to_ascii(macro_buf, tmp, sizeof(macro_buf));
-                string_free(keymap_act[mode][(byte)(buf[0])]);
-                keymap_act[mode][(byte)(buf[0])] = string_make(macro_buf);
-                msg_print(_("キー配置を追加しました。", "Added a keymap."));
+            if (!askfor(tmp, 80)) {
+                break;
             }
 
+            text_to_ascii(macro_buf, tmp, sizeof(macro_buf));
+            string_free(keymap_act[mode][(byte)(buf[0])]);
+            keymap_act[mode][(byte)(buf[0])] = string_make(macro_buf);
+            msg_print(_("キー配置を追加しました。", "Added a keymap."));
             break;
         }
         case '9':
@@ -325,7 +325,7 @@ void do_cmd_macros(PlayerType *player_ptr)
             keymap_act[mode][(byte)(buf[0])] = nullptr;
             msg_print(_("キー配置を削除しました。", "Removed a keymap."));
             break;
-        case '0':
+        case '0': {
             prt(_("コマンド: マクロ行動の入力", "Command: Enter a new action"), 16, 0);
             c_prt(TERM_L_RED,
                 _("カーソルキーの左右でカーソル位置を移動。BackspaceかDeleteで一文字削除。",
@@ -339,6 +339,7 @@ void do_cmd_macros(PlayerType *player_ptr)
 
             text_to_ascii(macro_buf, buf, sizeof(macro_buf));
             break;
+        }
         default:
             bell();
             break;
