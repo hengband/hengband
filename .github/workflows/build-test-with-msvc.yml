@@ -11,9 +11,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          lfs: true
+        uses: nschloe/action-cached-lfs-checkout@v1
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
