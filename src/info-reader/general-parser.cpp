@@ -36,33 +36,35 @@ errr init_info_txt(FILE *fp, char *buf, angband_header *head, Parser parse_info_
     error_idx = -1;
     error_line = 0;
 
-    errr err;
+    util::SHA256 sha256;
+
     while (angband_fgets(fp, buf, 1024) == 0) {
         error_line++;
-        if (!buf[0] || (buf[0] == '#')) {
+        const std::string_view line = buf;
+        if (line.empty() || line.starts_with('#')) {
             continue;
         }
 
-        if (buf[1] != ':') {
+        if (!line.substr(1).starts_with(':')) {
             return PARSE_ERROR_GENERIC;
         }
 
-        if (buf[0] == 'V') {
+        if (line.starts_with('V')) {
             continue;
         }
 
-        if (buf[0] != 'N' && buf[0] != 'D') {
-            int i;
-            for (i = 0; buf[i]; i++) {
-                head->checksum += (byte)buf[i];
-                head->checksum ^= (1U << (i % 8));
-            }
+        // 文字コードの差異を吸収するため、日本語が含まれる可能性のある
+        // 「N:」「D:」「J:」はハッシュ計算から除外する
+        if (!line.starts_with('N') && !line.starts_with('D') && !line.starts_with('J')) {
+            sha256.update(line);
         }
 
-        if ((err = parse_info_txt_line(buf, head)) != 0) {
+        if (auto err = parse_info_txt_line(line, head); err != 0) {
             return err;
         }
     }
+
+    head->digest = sha256.digest();
 
     return 0;
 }
