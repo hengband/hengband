@@ -82,7 +82,6 @@ static void print_visuals_menu(concptr choice_msg)
 void do_cmd_visuals(PlayerType *player_ptr)
 {
     FILE *auto_dump_stream;
-    char tmp[160];
     bool need_redraw = false;
     concptr empty_symbol = "<< ? >>";
     if (use_bigtile) {
@@ -90,6 +89,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
     }
 
     screen_save();
+    const auto initial_filename = format("%s.prf", player_ptr->base_name);
     while (true) {
         term_clear();
         print_visuals_menu(nullptr);
@@ -102,24 +102,24 @@ void do_cmd_visuals(PlayerType *player_ptr)
         case '0': {
             prt(_("コマンド: ユーザー設定ファイルのロード", "Command: Load a user pref file"), 15, 0);
             prt(_("ファイル: ", "File: "), 17, 0);
-            strnfmt(tmp, sizeof(tmp), "%s.prf", player_ptr->base_name);
-            if (!askfor(tmp, 70)) {
+            const auto ask_result = askfor(70, initial_filename);
+            if (!ask_result) {
                 continue;
             }
 
-            (void)process_pref_file(player_ptr, tmp, true);
+            (void)process_pref_file(player_ptr, *ask_result, true);
             need_redraw = true;
             break;
         }
         case '1': {
             prt(_("コマンド: モンスターの[色/文字]をファイルに書き出します", "Command: Dump monster attr/chars"), 15, 0);
             prt(_("ファイル: ", "File: "), 17, 0);
-            strnfmt(tmp, sizeof(tmp), "%s.prf", player_ptr->base_name);
-            if (!askfor(tmp, 70)) {
+            const auto ask_result = askfor(70, initial_filename);
+            if (!ask_result) {
                 continue;
             }
 
-            const auto &path = path_build(ANGBAND_DIR_USER, tmp);
+            const auto &path = path_build(ANGBAND_DIR_USER, *ask_result);
             constexpr auto mark = "Monster attr/chars";
             if (!open_auto_dump(&auto_dump_stream, path, mark)) {
                 continue;
@@ -138,12 +138,12 @@ void do_cmd_visuals(PlayerType *player_ptr)
         case '2': {
             prt(_("コマンド: アイテムの[色/文字]をファイルに書き出します", "Command: Dump object attr/chars"), 15, 0);
             prt(_("ファイル: ", "File: "), 17, 0);
-            strnfmt(tmp, sizeof(tmp), "%s.prf", player_ptr->base_name);
-            if (!askfor(tmp, 70)) {
+            const auto ask_result = askfor(70, initial_filename);
+            if (!ask_result) {
                 continue;
             }
 
-            const auto &path = path_build(ANGBAND_DIR_USER, tmp);
+            const auto &path = path_build(ANGBAND_DIR_USER, *ask_result);
             constexpr auto mark = "Object attr/chars";
             if (!open_auto_dump(&auto_dump_stream, path, mark)) {
                 continue;
@@ -175,12 +175,12 @@ void do_cmd_visuals(PlayerType *player_ptr)
         case '3': {
             prt(_("コマンド: 地形の[色/文字]をファイルに書き出します", "Command: Dump feature attr/chars"), 15, 0);
             prt(_("ファイル: ", "File: "), 17, 0);
-            strnfmt(tmp, sizeof(tmp), "%s.prf", player_ptr->base_name);
-            if (!askfor(tmp, 70)) {
+            const auto ask_result = askfor(70, initial_filename);
+            if (!ask_result) {
                 continue;
             }
 
-            const auto &path = path_build(ANGBAND_DIR_USER, tmp);
+            const auto &path = path_build(ANGBAND_DIR_USER, *ask_result);
             constexpr auto mark = "Feature attr/chars";
             if (!open_auto_dump(&auto_dump_stream, path, mark)) {
                 continue;
