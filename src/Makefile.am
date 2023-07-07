@@ -576,6 +576,7 @@ hengband_SOURCES = \
 	net/curl-easy-session.cpp net/curl-easy-session.h \
 	net/curl-slist.cpp net/curl-slist.h \
 	net/http-client.cpp net/http-client.h \
+	net/report-error.cpp net/report-error.h \
 	\
 	object/item-tester-hooker.cpp object/item-tester-hooker.h \
 	object/object-broken.cpp object/object-broken.h \
@@ -1039,6 +1040,7 @@ EXTRA_hengband_SOURCES = \
 	main-win/main-win-bg.cpp main-win/main-win-bg.h \
 	main-win/main-win-cfg-reader.cpp main-win/main-win-cfg-reader.h \
 	main-win/main-win-define.h \
+	main-win/main-win-exception.cpp main-win/main-win-exception.h \
 	main-win/main-win-file-utils.cpp main-win/main-win-file-utils.h \
 	main-win/main-win-mci.cpp main-win/main-win-mci.h \
 	main-win/main-win-menuitem.h \

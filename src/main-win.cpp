@@ -102,6 +102,7 @@
 #include "main-win/commandline-win.h"
 #include "main-win/graphics-win.h"
 #include "main-win/main-win-bg.h"
+#include "main-win/main-win-exception.h"
 #include "main-win/main-win-file-utils.h"
 #include "main-win/main-win-mci.h"
 #include "main-win/main-win-menuitem.h"
@@ -2756,10 +2757,9 @@ static void register_wndclass(void)
 }
 
 /*!
- * @brief (Windows固有)Windowsアプリケーションとしてのエントリポイント
+ * @brief ゲームのメインルーチン
  */
-int WINAPI WinMain(
-    _In_ HINSTANCE hInst, [[maybe_unused]] _In_opt_ HINSTANCE hPrevInst, [[maybe_unused]] _In_ LPSTR lpCmdLine, [[maybe_unused]] _In_ int nCmdShow)
+int WINAPI game_main(_In_ HINSTANCE hInst)
 {
     setlocale(LC_ALL, "ja_JP");
     hInstance = hInst;
@@ -2848,4 +2848,19 @@ int WINAPI WinMain(
     quit(nullptr);
     return 0;
 }
+
+/*!
+ * @brief (Windows固有)Windowsアプリケーションとしてのエントリポイント
+ */
+int WINAPI WinMain(
+    _In_ HINSTANCE hInst, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
+{
+    try {
+        return game_main(hInst);
+    } catch (const std::exception &e) {
+        handle_unexpected_exception(e);
+        return 1;
+    }
+}
+
 #endif /* WINDOWS */

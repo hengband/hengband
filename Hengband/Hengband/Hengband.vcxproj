@@ -276,12 +276,14 @@
     <ClCompile Include="..\..\src\load\item\item-loader-factory.cpp" />
     <ClCompile Include="..\..\src\load\monster\monster-loader-factory.cpp" />
     <ClCompile Include="..\..\src\load\player-class-specific-data-loader.cpp" />
+    <ClCompile Include="..\..\src\main-win\main-win-exception.cpp" />
     <ClCompile Include="..\..\src\monster-race\race-brightness-mask.cpp" />
     <ClCompile Include="..\..\src\monster-race\race-feature-mask.cpp" />
     <ClCompile Include="..\..\src\monster\monster-pain-describer.cpp" />
     <ClCompile Include="..\..\src\net\curl-easy-session.cpp" />
     <ClCompile Include="..\..\src\net\curl-slist.cpp" />
     <ClCompile Include="..\..\src\net\http-client.cpp" />
+    <ClCompile Include="..\..\src\net\report-error.cpp" />
     <ClCompile Include="..\..\src\object-enchant\enchanter-factory.cpp" />
     <ClCompile Include="..\..\src\mspell\mspell-attack\abstract-mspell.cpp" />
     <ClCompile Include="..\..\src\mspell\mspell-data.cpp" />
@@ -979,6 +981,7 @@
     <ClInclude Include="..\..\src\load\old\monster-flag-types-savefile50.h" />
     <ClInclude Include="..\..\src\load\player-class-specific-data-loader.h" />
     <ClInclude Include="..\..\src\load\savedata-old-flag-types.h" />
+    <ClInclude Include="..\..\src\main-win\main-win-exception.h" />
     <ClInclude Include="..\..\src\market\bounty-type-definition.h" />
     <ClInclude Include="..\..\src\monster-race\monster-aura-types.h" />
     <ClInclude Include="..\..\src\monster-race\monster-kind-mask.h" />
@@ -1001,6 +1004,7 @@
     <ClInclude Include="..\..\src\net\curl-easy-session.h" />
     <ClInclude Include="..\..\src\net\curl-slist.h" />
     <ClInclude Include="..\..\src\net\http-client.h" />
+    <ClInclude Include="..\..\src\net\report-error.h" />
     <ClInclude Include="..\..\src\object-enchant\enchanter-factory.h" />
     <ClInclude Include="..\..\src\object-enchant\protector\apply-magic-soft-armor.h" />
     <ClInclude Include="..\..\src\object-enchant\others\apply-magic-lite.h" />
