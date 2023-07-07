@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <optional>
 #include <string>
 #include <string_view>
 
@@ -19,6 +20,7 @@ void sjis2euc(char *str);
 void euc2sjis(char *str);
 byte codeconv(char *str);
 bool iskanji2(concptr s, int x);
+std::optional<std::string> sys_to_utf8(std::string_view str);
 void guess_convert_to_system_encoding(char *strbuf, int buflen);
 
 int lb_to_kg_integer(int x);
@@ -53,6 +55,11 @@ constexpr int lb_to_kg(int lb)
 constexpr bool is_kinsoku(std::string_view)
 {
     return false;
+}
+
+inline std::optional<std::string> sys_to_utf8(std::string_view str)
+{
+    return std::make_optional<std::string>(str);
 }
 
 #endif
