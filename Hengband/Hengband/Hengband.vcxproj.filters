@@ -2490,6 +2490,9 @@
     <ClCompile Include="..\..\src\net\report-error.cpp">
       <Filter>net</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\main-win\main-win-exception.cpp">
+      <Filter>main-win</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5396,6 +5399,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\net\report-error.h">
       <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\main-win-exception.h">
+      <Filter>main-win</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
