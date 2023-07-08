@@ -33,7 +33,6 @@ jobs:
 
   build_test_japanese:
     name: Build Japanese version with gcc
-    needs: build_test_clang_without_pch
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       cxx: g++-11
@@ -42,7 +41,6 @@ jobs:
 
   build_test_english:
     name: Build English version with gcc
-    needs: build_test_japanese
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       cxx: g++-11
