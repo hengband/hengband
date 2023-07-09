@@ -84,23 +84,24 @@ static std::string analyze_general(PlayerType *player_ptr, ItemEntity *o_ptr)
  */
 static void analyze_pval(ItemEntity *o_ptr, pval_info_type *pi_ptr)
 {
-    concptr *affects_list;
     if (!o_ptr->pval) {
         pi_ptr->pval_desc[0] = '\0';
         return;
     }
 
     auto flags = object_flags(o_ptr);
-    affects_list = pi_ptr->pval_affects;
     strnfmt(pi_ptr->pval_desc, sizeof(pi_ptr->pval_desc), "%s%d", o_ptr->pval >= 0 ? "+" : "", o_ptr->pval);
+    std::vector<std::string> pval_descriptions;
     if (flags.has_all_of(EnumRange(TR_STR, TR_CHR))) {
-        *affects_list++ = _("全能力", "All stats");
+        pval_descriptions.push_back(_("全能力", "All stats"));
     } else if (flags.has_any_of(EnumRange(TR_STR, TR_CHR))) {
-        affects_list = spoiler_flag_aux(flags, stat_flags_desc, affects_list, N_ELEMENTS(stat_flags_desc));
+        const auto descriptions_stat = extract_spoiler_flags(flags, stat_flags_desc);
+        pval_descriptions.insert(pval_descriptions.end(), descriptions_stat.begin(), descriptions_stat.end());
     }
 
-    affects_list = spoiler_flag_aux(flags, pval_flags1_desc, affects_list, N_ELEMENTS(pval_flags1_desc));
-    *affects_list = nullptr;
+    const auto descriptions_pval1 = extract_spoiler_flags(flags, pval_flags1_desc);
+    pval_descriptions.insert(pval_descriptions.end(), descriptions_pval1.begin(), descriptions_pval1.end());
+    pi_ptr->pval_affects = pval_descriptions;
 }
 
 /*!

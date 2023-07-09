@@ -67,11 +67,11 @@ const std::vector<grouper> group_artifact_list = {
     { { ItemKindType::RING }, _("指輪", "Rings") },
 };
 
-flag_desc stat_flags_desc[MAX_STAT_FLAGS_DESCRIPTION] = { { TR_STR, _("腕力", "STR") }, { TR_INT, _("知能", "INT") }, { TR_WIS, _("賢さ", "WIS") },
+const std::vector<flag_desc> stat_flags_desc = { { TR_STR, _("腕力", "STR") }, { TR_INT, _("知能", "INT") }, { TR_WIS, _("賢さ", "WIS") },
     { TR_DEX, _("器用さ", "DEX") },
     { TR_CON, _("耐久力", "CON") }, { TR_CHR, _("魅力", "CHR") } };
 
-flag_desc pval_flags1_desc[MAX_PVAL_FLAGS_DESCRIPTION] = { { TR_MAGIC_MASTERY, _("魔法道具使用能力", "Magic Mastery") }, { TR_STEALTH, _("隠密", "Stealth") },
+const std::vector<flag_desc> pval_flags1_desc = { { TR_MAGIC_MASTERY, _("魔法道具使用能力", "Magic Mastery") }, { TR_STEALTH, _("隠密", "Stealth") },
     { TR_SEARCH, _("探索", "Searching") }, { TR_INFRA, _("赤外線視力", "Infravision") }, { TR_TUNNEL, _("採掘", "Tunneling") },
     { TR_BLOWS, _("攻撃回数", "Attacks") }, { TR_SPEED, _("スピード", "Speed") } };
 

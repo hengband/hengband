@@ -21,10 +21,12 @@ enum class SpoilerOutputResultType {
 
 /* A special type used just for deailing with pvals */
 struct pval_info_type {
-    char pval_desc[12]; /* This will contain a string such as "+2", "-10", etc. */
+    pval_info_type() = default;
+
+    char pval_desc[12]{}; /* This will contain a string such as "+2", "-10", etc. */
 
     /* A list of various player traits affected by an object's pval such as stats, speed, stealth, etc. */
-    concptr pval_affects[N_ELEMENTS(stat_flags_desc) - 1 + N_ELEMENTS(pval_flags1_desc) + 1];
+    std::vector<std::string> pval_affects{};
 };
 
 struct obj_desc_list {

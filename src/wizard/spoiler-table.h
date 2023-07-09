@@ -6,8 +6,6 @@
 
 #include <vector>
 
-#define MAX_STAT_FLAGS_DESCRIPTION 6
-#define MAX_PVAL_FLAGS_DESCRIPTION 7
 #define MAX_SLAY_FLAGS_DESCRIPTION 20
 #define MAX_BRAND_FLAGS_DESCRIPTION 12
 #define MAX_RESISTANCE_FLAGS_DESCRIPTION 19
@@ -34,8 +32,8 @@ struct flag_desc {
 
 extern const std::vector<grouper> group_item_list;
 extern const std::vector<grouper> group_artifact_list;
-extern flag_desc stat_flags_desc[MAX_STAT_FLAGS_DESCRIPTION];
-extern flag_desc pval_flags1_desc[MAX_PVAL_FLAGS_DESCRIPTION];
+extern const std::vector<flag_desc> stat_flags_desc;
+extern const std::vector<flag_desc> pval_flags1_desc;
 extern flag_desc slay_flags_desc[MAX_SLAY_FLAGS_DESCRIPTION];
 extern flag_desc brand_flags_desc[MAX_BRAND_FLAGS_DESCRIPTION];
 extern const flag_desc resist_flags_desc[MAX_RESISTANCE_FLAGS_DESCRIPTION];
