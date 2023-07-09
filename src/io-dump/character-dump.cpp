@@ -39,6 +39,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "term/gameterm.h"
 #include "term/z-form.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
@@ -608,7 +609,7 @@ static std::string get_check_sum(void)
  */
 void make_character_dump(PlayerType *player_ptr, FILE *fff)
 {
-    TermCenteredOffsetSetter tos(std::nullopt, std::nullopt);
+    TermCenteredOffsetSetter tos(MAIN_TERM_MIN_COLS, std::nullopt);
 
     fprintf(fff, _("  [%s キャラクタ情報]\n\n", "  [%s Character Dump]\n\n"), get_version().data());
 
