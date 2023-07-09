@@ -1,0 +1,48 @@
+﻿name: Create Release
+
+on:
+  push:
+    branches:
+      - master
+  # 手動トリガーを許可
+  workflow_dispatch:
+
+
+jobs:
+  publish-release-page:
+    name: Publish Release Page
+    runs-on: windows-2022
+    steps:
+      - name: Checkout Repository
+        uses: nschloe/action-cached-lfs-checkout@v1
+        with:
+          submodules: true
+
+      - name: Extract version from configure.ac
+        id: get_version
+        run: |
+          $version = Select-String -Path configure.ac -Pattern 'AC_INIT\(hengband, (.+?)\)' | ForEach-Object { $_.Matches.Groups[1].Value }
+          echo "version=$version" >> $Env:GITHUB_OUTPUT
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1
+
+      - name: Restore Nuget Packages
+        run: |
+          NuGet restore .\Hengband\Hengband.sln
+
+      - name: Build Windows Release Package
+        run: |
+          .\Build-Windows-Release-Package.ps1 -Version ${{ steps.get_version.outputs.version }}
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: Hengband-*.zip
+          name: ${{ steps.get_version.outputs.version }}
+          tag_name: ${{ steps.get_version.outputs.version }}
+          generate_release_notes: true
+          draft: true
