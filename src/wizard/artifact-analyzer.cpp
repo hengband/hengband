@@ -82,7 +82,7 @@ static std::string analyze_general(PlayerType *player_ptr, ItemEntity *o_ptr)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param pi_ptr pval修正構造体の参照ポインタ
  */
-static void analyze_pval(ItemEntity *o_ptr, pval_info_type *pi_ptr)
+static void analyze_pval(ItemEntity *o_ptr, ParameterValueInfo *pi_ptr)
 {
     if (!o_ptr->pval) {
         return;
