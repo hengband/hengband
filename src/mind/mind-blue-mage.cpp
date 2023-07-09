@@ -48,7 +48,7 @@ bool do_cmd_cast_learned(PlayerType *player_ptr)
             return false;
         }
 
-        if (!get_check(_("それでも挑戦しますか? ", "Attempt it anyway? "))) {
+        if (!input_check(_("それでも挑戦しますか? ", "Attempt it anyway? "))) {
             return false;
         }
     }

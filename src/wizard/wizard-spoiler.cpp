@@ -192,20 +192,21 @@ static SpoilerOutputResultType spoil_player_spell(concptr fname)
         spoil_out(format("[[Class: %s]]\n", class_ptr->title));
 
         auto magic_ptr = &class_magics_info[c];
-        auto book_name = "なし";
+        std::string book_name = _("なし", "None");
         if (magic_ptr->spell_book != ItemKindType::NONE) {
             ItemEntity book;
             auto o_ptr = &book;
             o_ptr->prep(lookup_baseitem_id({ magic_ptr->spell_book, 0 }));
-            const auto item_name = describe_flavor(&dummy_p, o_ptr, OD_NAME_ONLY);
-            book_name = item_name.data();
-            char *s = angband_strchr(book_name, '[');
-            *s = '\0';
+            book_name = describe_flavor(&dummy_p, o_ptr, OD_NAME_ONLY);
+            auto *s = angband_strchr(book_name.data(), '[');
+            if (s != nullptr) {
+                book_name.erase(s - book_name.data());
+            }
         }
 
         constexpr auto mes = "BookType:%s Stat:%s Xtra:%x Type:%d Weight:%d\n";
         const auto &spell = wiz_spell_stat[magic_ptr->spell_stat];
-        spoil_out(format(mes, book_name, spell.data(), magic_ptr->spell_xtra, magic_ptr->spell_type, magic_ptr->spell_weight));
+        spoil_out(format(mes, book_name.data(), spell.data(), magic_ptr->spell_xtra, magic_ptr->spell_type, magic_ptr->spell_weight));
         if (magic_ptr->spell_book == ItemKindType::NONE) {
             spoil_out(_("呪文なし\n\n", "No spells.\n\n"));
             continue;

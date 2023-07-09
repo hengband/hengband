@@ -38,7 +38,7 @@ private:
     bool is_max_num_odd = false;
     char sub_cmd = 0;
 
-    void input_command();
+    void process_input_command();
     short get_command();
     char inkey_from_menu();
     bool process_repeat_num(short &cmd);

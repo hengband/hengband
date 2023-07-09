@@ -204,9 +204,10 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
     grid_type *g_ptr;
     MonsterEntity *m_ptr;
 
-    if (!get_direction(player_ptr, &dir, false, false)) {
+    if (!get_direction(player_ptr, &dir)) {
         return false;
     }
+
     y = player_ptr->y + ddy[dir];
     x = player_ptr->x + ddx[dir];
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
@@ -322,10 +323,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
  */
 static void do_name_pet(PlayerType *player_ptr)
 {
-    MonsterEntity *m_ptr;
-    bool old_name = false;
-    bool old_target_pet = target_pet;
-
+    auto old_target_pet = target_pet;
     target_pet = true;
     if (!target_set(player_ptr, TARGET_KILL)) {
         target_pet = old_target_pet;
@@ -333,48 +331,52 @@ static void do_name_pet(PlayerType *player_ptr)
     }
 
     target_pet = old_target_pet;
-
-    if (player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx) {
-        m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx];
-
-        if (!m_ptr->is_pet()) {
-            msg_print(_("そのモンスターはペットではない。", "This monster is not a pet."));
-            return;
-        }
-        if (monraces_info[m_ptr->r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
-            msg_print(_("そのモンスターの名前は変えられない！", "You cannot change the name of this monster!"));
-            return;
-        }
-
-        msg_format(_("%sに名前をつける。", "Name %s."), monster_desc(player_ptr, m_ptr, 0).data());
-        msg_print(nullptr);
-
-        /* Start with nothing */
-        char out_val[20]{};
-
-        /* Use old inscription */
-        if (m_ptr->is_named()) {
-            /* Start with the old inscription */
-            angband_strcpy(out_val, m_ptr->nickname, sizeof(out_val));
-            old_name = true;
-        }
-
-        /* Get a new inscription (possibly empty) */
-        if (get_string(_("名前: ", "Name: "), out_val, 15)) {
-            if (out_val[0]) {
-                /* Save the inscription */
-                m_ptr->nickname = out_val;
-                if (record_named_pet) {
-                    exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_NAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE));
-                }
-            } else {
-                if (record_named_pet && old_name) {
-                    exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_UNNAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE));
-                }
-                m_ptr->nickname.clear();
-            }
-        }
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto &grid = floor.grid_array[target_row][target_col];
+    if (grid.m_idx == 0) {
+        return;
     }
+
+    auto *m_ptr = &floor.m_list[grid.m_idx];
+    if (!m_ptr->is_pet()) {
+        msg_print(_("そのモンスターはペットではない。", "This monster is not a pet."));
+        return;
+    }
+
+    if (monraces_info[m_ptr->r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
+        msg_print(_("そのモンスターの名前は変えられない！", "You cannot change the name of this monster!"));
+        return;
+    }
+
+    msg_format(_("%sに名前をつける。", "Name %s."), monster_desc(player_ptr, m_ptr, 0).data());
+    msg_print(nullptr);
+
+    auto old_name = false;
+    std::string initial_name("");
+    if (m_ptr->is_named()) {
+        initial_name = m_ptr->nickname;
+        old_name = true;
+    }
+
+    const auto new_name = input_string(_("名前: ", "Name: "), 15, initial_name);
+    if (!new_name.has_value()) {
+        return;
+    }
+
+    if (!new_name->empty()) {
+        m_ptr->nickname = new_name.value();
+        if (record_named_pet) {
+            exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_NAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE));
+        }
+
+        return;
+    }
+
+    if (record_named_pet && old_name) {
+        exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_UNNAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE));
+    }
+
+    m_ptr->nickname.clear();
 }
 
 /*!
@@ -553,8 +555,9 @@ void do_cmd_pet(PlayerType *player_ptr)
             screen_save();
             prompt = _("(コマンド、ESC=終了) コマンドを選んでください:", "(Command, ESC=exit) Choose command from menu.");
         } else {
-            prompt = format(_("(コマンド %c-%c、'*'=一覧、ESC=終了) コマンドを選んでください:", "(Command %c-%c, *=List, ESC=exit) Select a command: "),
-                I2A(0), I2A(num - 1));
+            constexpr auto fmt = _("(コマンド %c-%c、'*'=一覧、ESC=終了) コマンドを選んでください:",
+                "(Command %c-%c, *=List, ESC=exit) Select a command: ");
+            prompt = format(fmt, I2A(0), I2A(num - 1));
         }
 
         choice = (always_show_list || use_menu) ? ESCAPE : 1;
@@ -563,8 +566,13 @@ void do_cmd_pet(PlayerType *player_ptr)
         while (!flag) {
             if (choice == ESCAPE) {
                 choice = ' ';
-            } else if (!get_com(prompt.data(), &choice, true)) {
-                break;
+            } else {
+                const auto new_choice = input_command(prompt, true);
+                if (!new_choice.has_value()) {
+                    break;
+                }
+
+                choice = new_choice.value();
             }
 
             auto should_redraw_cursor = true;

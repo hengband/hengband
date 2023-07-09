@@ -1,6 +1,6 @@
 ﻿#include "net/curl-easy-session.h"
 
-#if defined(WORLD_SCORE)
+#if !defined(DISABLE_NET)
 
 namespace libcurl {
 
@@ -16,6 +16,10 @@ namespace {
         return (*userdata)(buf, size * nitems);
     }
 
+    int progress_callback(EasySession::ProgressHandler *userdata, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow)
+    {
+        return (*userdata)(dltotal, dlnow, ultotal, ulnow) ? 0 : 1;
+    }
 }
 
 class EasySession::Impl {
@@ -33,6 +37,7 @@ public:
     std::unique_ptr<CURL, decltype(&curl_easy_cleanup)> handle_;
     SendHandler send_handler_;
     ReceiveHandler receive_handler_;
+    ProgressHandler progress_handler_;
 };
 
 EasySession::EasySession()
@@ -57,7 +62,6 @@ void EasySession::common_setup(const std::string &url, int timeout_sec)
 
     if (timeout_sec > 0) {
         this->setopt(CURLOPT_CONNECTTIMEOUT, timeout_sec);
-        this->setopt(CURLOPT_TIMEOUT, timeout_sec);
     }
 }
 
@@ -82,6 +86,19 @@ void EasySession::receiver_setup(ReceiveHandler handler)
 
     this->setopt(CURLOPT_WRITEDATA, &pimpl_->receive_handler_);
     this->setopt(CURLOPT_WRITEFUNCTION, write_callback);
+}
+
+void EasySession::progress_setup(ProgressHandler handler)
+{
+    pimpl_->progress_handler_ = std::move(handler);
+    if (!pimpl_->progress_handler_) {
+        this->setopt(CURLOPT_NOPROGRESS, 1);
+        return;
+    }
+
+    this->setopt(CURLOPT_NOPROGRESS, 0);
+    this->setopt(CURLOPT_XFERINFODATA, &pimpl_->progress_handler_);
+    this->setopt(CURLOPT_XFERINFOFUNCTION, progress_callback);
 }
 
 bool EasySession::perform()

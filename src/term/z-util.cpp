@@ -110,27 +110,30 @@ void quit(concptr str)
 void (*core_aux)(concptr) = nullptr;
 
 /*
- * Dump a core file, after printing a warning message
- * As with "quit()", try to use the "core_aux()" hook first.
+ * @brief 意図的にクラッシュさせ、コアファイルをダンプする
+ * @param str エラーメッセージ
+ * @details MSVC以外のコンパイラはpragma warning をコンパイルエラーにする.
+ * 汚いがプリプロで分岐する.
  */
 void core(concptr str)
 {
     char *crash = nullptr;
-
-    /* Use the aux function */
     if (core_aux) {
         (*core_aux)(str);
     }
 
-    /* Dump the warning string */
     if (str) {
         plog(str);
     }
 
-    /* Attempt to Crash */
-    (*crash) = (*crash);
-
-    /* Be sure we exited */
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 6011)
+#endif
+    *crash = *crash;
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
     quit("core() failed");
 }
 

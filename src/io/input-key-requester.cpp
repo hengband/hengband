@@ -60,7 +60,7 @@ void InputKeyRequestor::request_command()
     command_arg = 0;
     command_dir = 0;
     use_menu = false;
-    this->input_command();
+    this->process_input_command();
     if (always_repeat && (command_arg <= 0)) {
         if (angband_strchr("TBDoc+", (char)command_cmd)) {
             command_arg = 99;
@@ -72,7 +72,7 @@ void InputKeyRequestor::request_command()
     prt("", 0, 0);
 }
 
-void InputKeyRequestor::input_command()
+void InputKeyRequestor::process_input_command()
 {
     while (true) {
         if (!this->shopping && !macro_running() && !command_new && auto_debug_save && (!inkey_next || *inkey_next == '\0')) {
@@ -225,13 +225,8 @@ bool InputKeyRequestor::process_repeat_num(short &cmd)
         return false;
     }
 
-    char tmp_cmd;
-    auto ret_cmd = get_com(_("コマンド: ", "Command: "), &tmp_cmd, false);
-    cmd = tmp_cmd;
-    if (ret_cmd) {
-        return false;
-    }
-
+    const auto ret_cmd = input_command(_("コマンド: ", "Command: "));
+    cmd = ret_cmd.value_or(ESCAPE);
     command_arg = 0;
     return true;
 }
@@ -247,9 +242,8 @@ void InputKeyRequestor::process_command_command(short &cmd)
         return;
     }
 
-    char tmp_cmd;
-    (void)get_com(_("コマンド: ", "Command: "), &tmp_cmd, false);
-    cmd = tmp_cmd;
+    const auto new_command = input_command(_("コマンド: ", "Command: "));
+    cmd = new_command.value_or(ESCAPE);
     if (inkey_next == nullptr) {
         inkey_next = "";
     }
@@ -261,10 +255,10 @@ void InputKeyRequestor::process_control_command(short &cmd)
         return;
     }
 
-    char tmp_cmd;
-    auto ret_cmd = get_com(_("CTRL: ", "Control: "), &tmp_cmd, false);
-    cmd = tmp_cmd;
-    if (ret_cmd) {
+    const auto new_command = input_command(_("CTRL: ", "Control: "));
+    const auto is_input = new_command.has_value();
+    cmd = new_command.value_or(ESCAPE);
+    if (is_input) {
         cmd = KTRL(cmd);
     }
 }
@@ -343,7 +337,7 @@ void InputKeyRequestor::confirm_command(const std::optional<std::string> &inscri
         (void)caret_command;
 #endif
         if (sure) {
-            if (!get_check(_("本当ですか? ", "Are you sure? "))) {
+            if (!input_check(_("本当ですか? ", "Are you sure? "))) {
                 command_cmd = ' ';
             }
         }

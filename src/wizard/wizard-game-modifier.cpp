@@ -71,8 +71,8 @@ void wizard_game_modifier(PlayerType *player_ptr)
     screen_save();
     display_wizard_game_modifier_menu();
 
-    char cmd;
-    get_com("Player Command: ", &cmd, false);
+    const auto command = input_command("Player Command: ");
+    const auto cmd = command.value_or(ESCAPE);
     screen_load();
 
     switch (cmd) {
@@ -160,7 +160,7 @@ void wiz_restore_monster_max_num(MonsterRaceId r_idx)
     }
 
     if (n == 0) {
-        msg_print("出現数に制限がないモンスターです。");
+        msg_print(_("出現数に制限がないモンスターです。", "This monster can appear any time."));
         msg_print(nullptr);
         return;
     }

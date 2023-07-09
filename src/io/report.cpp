@@ -87,7 +87,7 @@ static bool post_score_to_score_server(PlayerType *player_ptr, const std::string
 
         prt(_("スコア・サーバへの送信に失敗しました。", "Failed to send to the score server."), 0, 0);
         (void)inkey();
-        if (!get_check_strict(player_ptr, _("もう一度接続を試みますか? ", "Try again? "), CHECK_NO_HISTORY)) {
+        if (!input_check_strict(player_ptr, _("もう一度接続を試みますか? ", "Try again? "), UserCheck::NO_HISTORY)) {
             return false;
         }
     }

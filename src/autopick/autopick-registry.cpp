@@ -78,7 +78,7 @@ static bool clear_auto_register(PlayerType *player_ptr)
         msg_format(_("以前のキャラクター用の自動設定(%d行)が残っています。", "Auto registered lines (%d lines) for previous character are remaining."), num);
         constexpr auto mes = _("古い設定行は削除します。よろしいですか？", "These lines will be deleted.  Are you sure? ");
 
-        if (!get_check(mes)) {
+        if (!input_check(mes)) {
             okay = false;
             autoregister = false;
 

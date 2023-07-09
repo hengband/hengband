@@ -315,7 +315,7 @@ static bool check_realm_selection(PlayerType *player_ptr, int count)
         (void)inkey();
         prt("", 0, 0);
         return true;
-    } else if (get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y)) {
+    } else if (input_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), UserCheck::DEFAULT_Y)) {
         return true;
     }
 

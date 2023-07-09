@@ -71,7 +71,7 @@ PERCENTAGE racial_chance(PlayerType *player_ptr, rpi_type *rpi_ptr)
 
     auto special_easy = PlayerClass(player_ptr).equals(PlayerClassType::IMITATOR);
     special_easy &= player_ptr->inventory_list[INVEN_NECK].is_specific_artifact(FixedArtifactId::GOGO_PENDANT);
-    special_easy &= rpi_ptr->racial_name.compare("倍返し") == 0;
+    special_easy &= rpi_ptr->racial_name == _("倍返し", "Double Revenge");
     if (special_easy) {
         difficulty -= 12;
     }
@@ -146,7 +146,7 @@ racial_level_check_result check_racial_level(PlayerType *player_ptr, rpi_type *r
         energy.reset_player_turn();
         return RACIAL_CANCEL;
     } else if (player_ptr->chp < use_hp) {
-        if (!get_check(_("本当に今の衰弱した状態でこの能力を使いますか？", "Really use the power in your weakened state? "))) {
+        if (!input_check(_("本当に今の衰弱した状態でこの能力を使いますか？", "Really use the power in your weakened state? "))) {
             energy.reset_player_turn();
             return RACIAL_CANCEL;
         }

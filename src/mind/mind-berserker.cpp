@@ -36,7 +36,7 @@ bool cast_berserk_spell(PlayerType *player_ptr, MindBerserkerType spell)
             return false;
         }
 
-        if (!get_direction(player_ptr, &dir, false, false) || (dir == 5)) {
+        if (!get_direction(player_ptr, &dir) || (dir == 5)) {
             return false;
         }
 
@@ -62,7 +62,7 @@ bool cast_berserk_spell(PlayerType *player_ptr, MindBerserkerType spell)
         break;
     }
     case MindBerserkerType::SMASH_TRAP: {
-        if (!get_direction(player_ptr, &dir, false, false)) {
+        if (!get_direction(player_ptr, &dir)) {
             return false;
         }
 

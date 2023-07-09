@@ -84,10 +84,7 @@ static bool display_player_info(PlayerType *player_ptr, int mode)
  */
 static void display_player_basic_info(PlayerType *player_ptr)
 {
-    std::string tmp = ap_ptr->title;
-    tmp.append(_(ap_ptr->no == 1 ? "の" : "", " ")).append(player_ptr->name);
-
-    display_player_one_line(ENTRY_NAME, tmp, TERM_L_BLUE);
+    display_player_name(player_ptr);
     display_player_one_line(ENTRY_SEX, sp_ptr->title, TERM_L_BLUE);
     display_player_one_line(ENTRY_RACE, (player_ptr->mimic_form != MimicKindType::NONE ? mimic_info.at(player_ptr->mimic_form).title : rp_ptr->title), TERM_L_BLUE);
     display_player_one_line(ENTRY_CLASS, cp_ptr->title, TERM_L_BLUE);

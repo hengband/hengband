@@ -51,7 +51,7 @@ void building_recharge(PlayerType *player_ptr)
     if (!o_ptr->is_known()) {
         msg_format(_("充填する前に鑑定されている必要があります！", "The item must be identified first!"));
         msg_print(nullptr);
-        if ((player_ptr->au >= 50) && get_check(_("＄50で鑑定しますか？ ", "Identify for 50 gold? "))) {
+        if ((player_ptr->au >= 50) && input_check(_("＄50で鑑定しますか？ ", "Identify for 50 gold? "))) {
             player_ptr->au -= 50;
             identify_item(player_ptr, o_ptr);
             const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
@@ -117,9 +117,9 @@ void building_recharge(PlayerType *player_ptr)
 
     if (tval == ItemKindType::ROD) {
 #ifdef JP
-        if (get_check(format("そのロッドを＄%d で再充填しますか？", price)))
+        if (input_check(format("そのロッドを＄%d で再充填しますか？", price)))
 #else
-        if (get_check(format("Recharge the %s for %d gold? ", ((o_ptr->number > 1) ? "rods" : "rod"), price)))
+        if (input_check(format("Recharge the %s for %d gold? ", ((o_ptr->number > 1) ? "rods" : "rod"), price)))
 #endif
 
         {
@@ -136,7 +136,7 @@ void building_recharge(PlayerType *player_ptr)
         }
 
         const auto mes = _("一回分＄%d で何回分充填しますか？", "Add how many charges for %d gold apiece? ");
-        const auto charges = get_quantity(format(mes, price), std::min(player_ptr->au / price, max_charges));
+        const auto charges = input_quantity(std::min(player_ptr->au / price, max_charges), format(mes, price));
         if (charges < 1) {
             return;
         }
@@ -228,7 +228,7 @@ void building_recharge_all(PlayerType *player_ptr)
         return;
     }
 
-    if (!get_check(format(_("すべてのアイテムを ＄%d で再充填しますか？", "Recharge all items for %d gold? "), total_cost))) {
+    if (!input_check(format(_("すべてのアイテムを ＄%d で再充填しますか？", "Recharge all items for %d gold? "), total_cost))) {
         return;
     }
 

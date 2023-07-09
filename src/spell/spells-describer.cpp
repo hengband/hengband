@@ -1,11 +1,13 @@
 ﻿#include "spell/spells-describer.h"
+#include "locale/language-switcher.h"
+#include "object/tval-types.h"
 
 /*!
  * @brief 領域魔法に応じて技能の名称を返す。
  * @param tval 魔法書のtval
  * @return 領域魔法の技能名称を保管した文字列ポインタ
  */
-concptr spell_category_name(ItemKindType tval)
+std::string spell_category_name(ItemKindType tval)
 {
     switch (tval) {
     case ItemKindType::HISSATSU_BOOK:

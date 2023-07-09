@@ -58,31 +58,31 @@ static errr process_pref_file_aux(PlayerType *player_ptr, const std::filesystem:
     int line = -1;
     errr err = 0;
     bool bypass = false;
-    std::vector<char> file_read__buf(FILE_READ_BUFF_SIZE);
+    std::vector<char> file_read_buf(FILE_READ_BUFF_SIZE);
     std::string error_line;
-    while (angband_fgets(fp, file_read__buf.data(), file_read__buf.size()) == 0) {
+    while (angband_fgets(fp, file_read_buf.data(), file_read_buf.size()) == 0) {
         line++;
-        if (!file_read__buf[0]) {
+        if (!file_read_buf[0]) {
             continue;
         }
 
 #ifdef JP
-        if (!iskanji(file_read__buf[0]))
+        if (!iskanji(file_read_buf[0]))
 #endif
-            if (iswspace(file_read__buf[0])) {
+            if (iswspace(file_read_buf[0])) {
                 continue;
             }
 
-        if (file_read__buf[0] == '#') {
+        if (file_read_buf[0] == '#') {
             continue;
         }
-        error_line = file_read__buf.data();
+        error_line = file_read_buf.data();
 
         /* Process "?:<expr>" */
-        if ((file_read__buf[0] == '?') && (file_read__buf[1] == ':')) {
+        if ((file_read_buf[0] == '?') && (file_read_buf[1] == ':')) {
             char f;
             char *s;
-            s = file_read__buf.data() + 2;
+            s = file_read_buf.data() + 2;
             concptr v = process_pref_file_expr(player_ptr, &s, &f);
             bypass = streq(v, "0");
             continue;
@@ -93,7 +93,7 @@ static errr process_pref_file_aux(PlayerType *player_ptr, const std::filesystem:
         }
 
         /* Process "%:<file>" */
-        if (file_read__buf[0] == '%') {
+        if (file_read_buf[0] == '%') {
             static int depth_count = 0;
             if (depth_count > 20) {
                 continue;
@@ -102,13 +102,13 @@ static errr process_pref_file_aux(PlayerType *player_ptr, const std::filesystem:
             depth_count++;
             switch (preftype) {
             case PREF_TYPE_AUTOPICK:
-                (void)process_autopick_file(player_ptr, file_read__buf.data() + 2);
+                (void)process_autopick_file(player_ptr, file_read_buf.data() + 2);
                 break;
             case PREF_TYPE_HISTPREF:
-                (void)process_histpref_file(player_ptr, file_read__buf.data() + 2);
+                (void)process_histpref_file(player_ptr, file_read_buf.data() + 2);
                 break;
             default:
-                (void)process_pref_file(player_ptr, file_read__buf.data() + 2);
+                (void)process_pref_file(player_ptr, file_read_buf.data() + 2);
                 break;
             }
 
@@ -116,13 +116,13 @@ static errr process_pref_file_aux(PlayerType *player_ptr, const std::filesystem:
             continue;
         }
 
-        err = interpret_pref_file(player_ptr, file_read__buf.data());
+        err = interpret_pref_file(player_ptr, file_read_buf.data());
         if (err != 0) {
             if (preftype != PREF_TYPE_AUTOPICK) {
                 break;
             }
 
-            process_autopick_file_command(file_read__buf.data());
+            process_autopick_file_command(file_read_buf.data());
             err = 0;
         }
     }
@@ -304,7 +304,7 @@ bool read_histpref(PlayerType *player_ptr)
     char *s;
     char histbuf[HISTPREF_LIMIT];
 
-    if (!get_check(_("生い立ち設定ファイルをロードしますか? ", "Load background history preference file? "))) {
+    if (!input_check(_("生い立ち設定ファイルをロードしますか? ", "Load background history preference file? "))) {
         return false;
     }
 

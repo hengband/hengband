@@ -44,7 +44,7 @@ bool activate_escape(PlayerType *player_ptr)
         (void)stair_creation(player_ptr);
         return true;
     default:
-        if (!get_check(_("この階を去りますか？", "Leave this level? "))) {
+        if (!input_check(_("この階を去りますか？", "Leave this level? "))) {
             return true;
         }
 
@@ -59,7 +59,7 @@ bool activate_escape(PlayerType *player_ptr)
 
 bool activate_teleport_level(PlayerType *player_ptr)
 {
-    if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)"))) {
+    if (!input_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)"))) {
         return false;
     }
 

@@ -178,7 +178,7 @@ static void bldg_process_command(PlayerType *player_ptr, building_type *bldg, in
         building_recharge_all(player_ptr);
         break;
     case BACT_IDENTS:
-        if (!get_check(_("持ち物を全て鑑定してよろしいですか？", "Do you pay to identify all your possession? "))) {
+        if (!input_check(_("持ち物を全て鑑定してよろしいですか？", "Do you pay to identify all your possession? "))) {
             break;
         }
         identify_pack(player_ptr);

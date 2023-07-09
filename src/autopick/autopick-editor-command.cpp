@@ -42,7 +42,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
     switch (com_id) {
     case EC_QUIT: {
         if (tb->changed) {
-            if (!get_check(_("全ての変更を破棄してから終了します。よろしいですか？ ", "Discard all changes and quit. Are you sure? "))) {
+            if (!input_check(_("全ての変更を破棄してから終了します。よろしいですか？ ", "Discard all changes and quit. Are you sure? "))) {
                 break;
             }
         }
@@ -52,7 +52,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
     case EC_SAVEQUIT:
         return APE_QUIT_AND_SAVE;
     case EC_REVERT: {
-        if (!get_check(_("全ての変更を破棄して元の状態に戻します。よろしいですか？ ", "Discard all changes and revert to original file. Are you sure? "))) {
+        if (!input_check(_("全ての変更を破棄して元の状態に戻します。よろしいですか？ ", "Discard all changes and revert to original file. Are you sure? "))) {
             break;
         }
 

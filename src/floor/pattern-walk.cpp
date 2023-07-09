@@ -45,7 +45,7 @@ void pattern_teleport(PlayerType *player_ptr)
     auto min_level = 0;
     auto max_level = 99;
     auto current_level = static_cast<short>(player_ptr->current_floor_ptr->dun_level);
-    if (get_check(_("他の階にテレポートしますか？", "Teleport level? "))) {
+    if (input_check(_("他の階にテレポートしますか？", "Teleport level? "))) {
         if (ironman_downward) {
             min_level = current_level;
         }
@@ -70,7 +70,7 @@ void pattern_teleport(PlayerType *player_ptr)
         }
 
         command_arg = input_level.value();
-    } else if (get_check(_("通常テレポート？", "Normal teleport? "))) {
+    } else if (input_check(_("通常テレポート？", "Normal teleport? "))) {
         teleport_player(player_ptr, 200, TELEPORT_SPONTANEOUS);
         return;
     } else {
@@ -190,7 +190,7 @@ bool pattern_seq(PlayerType *player_ptr, POSITION c_y, POSITION c_x, POSITION n_
         auto is_confused = effects->confusion()->is_confused();
         auto is_hallucinated = effects->hallucination()->is_hallucinated();
         if (!is_pattern_tile_cur && !is_confused && !is_stunned && !is_hallucinated) {
-            if (get_check(_("パターンの上を歩き始めると、全てを歩かなければなりません。いいですか？",
+            if (input_check(_("パターンの上を歩き始めると、全てを歩かなければなりません。いいですか？",
                     "If you start walking the Pattern, you must walk the whole way. Ok? "))) {
                 return true;
             } else {

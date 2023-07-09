@@ -684,8 +684,6 @@ static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_b
     TERM_LEN y = 1;
     TERM_LEN x = 10;
     PLAYER_LEVEL plev = player_ptr->lev;
-    char choice;
-    char out_val[160];
     COMMAND_CODE code;
     bool flag, redraw;
     int menu_line = (use_menu ? 1 : 0);
@@ -708,26 +706,31 @@ static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_b
         }
     }
 
+    std::string fmt;
     if (only_browse) {
-        constexpr auto mes = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
-        (void)strnfmt(out_val, 78, mes, p, I2A(0), I2A(num - 1), p);
+        fmt = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
     } else {
-        constexpr auto mes = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
-        (void)strnfmt(out_val, 78, mes, p, I2A(0), I2A(num - 1), p);
+        fmt = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
     }
 
+    const auto prompt = format(fmt.data(), p, I2A(0), I2A(num - 1), p);
     if (use_menu && !only_browse) {
         screen_save();
     }
 
     int elem;
     mind_type spell;
-    choice = (always_show_list || use_menu) ? ESCAPE : 1;
+    auto choice = (always_show_list || use_menu) ? ESCAPE : 1;
     while (!flag) {
         if (choice == ESCAPE) {
             choice = ' ';
-        } else if (!get_com(out_val, &choice, true)) {
-            break;
+        } else {
+            const auto new_choice = input_command(prompt, true);
+            if (!new_choice.has_value()) {
+                break;
+            }
+
+            choice = new_choice.value();
         }
 
         auto should_redraw_cursor = true;
@@ -855,7 +858,7 @@ static bool check_element_mp_sufficiency(PlayerType *player_ptr, int mana_cost)
         return false;
     }
 
-    return get_check(_("それでも挑戦しますか? ", "Attempt it anyway? "));
+    return input_check(_("それでも挑戦しますか? ", "Attempt it anyway? "));
 }
 
 /*!
@@ -1252,7 +1255,7 @@ byte select_element_realm(PlayerType *player_ptr)
         auto realm = i2enum<ElementRealmType>(realm_idx);
         display_wrap_around(element_texts.at(realm), 74, row, 3);
 
-        if (get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y)) {
+        if (input_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), UserCheck::DEFAULT_Y)) {
             break;
         }
 

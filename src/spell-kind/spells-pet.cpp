@@ -35,7 +35,7 @@ void discharge_minion(PlayerType *player_ptr)
     }
 
     if (!okay || player_ptr->riding) {
-        if (!get_check(_("本当に全ペットを爆破しますか？", "You will blast all pets. Are you sure? "))) {
+        if (!input_check(_("本当に全ペットを爆破しますか？", "You will blast all pets. Are you sure? "))) {
             return;
         }
     }

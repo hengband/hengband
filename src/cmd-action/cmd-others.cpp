@@ -147,16 +147,21 @@ static void accept_winner_message(PlayerType *player_ptr)
         return;
     }
 
-    char buf[1024] = "";
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_WINNER);
-    do {
-        while (!get_string(_("*勝利*メッセージ: ", "*Winning* message: "), buf, sizeof(buf))) {
-            ;
+    std::optional<std::string> buf;
+    while (true) {
+        buf = input_string(_("*勝利*メッセージ: ", "*Winning* message: "), 1024);
+        if (!buf.has_value()) {
+            continue;
         }
-    } while (!get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
 
-    if (buf[0]) {
-        player_ptr->last_message = buf;
+        if (!input_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), UserCheck::NO_HISTORY)) {
+            break;
+        }
+    }
+
+    if (!buf->empty()) {
+        player_ptr->last_message = buf.value();
         msg_print(player_ptr->last_message);
     }
 }
@@ -170,11 +175,11 @@ void do_cmd_suicide(PlayerType *player_ptr)
 {
     flush();
     if (w_ptr->total_winner) {
-        if (!get_check_strict(player_ptr, _("引退しますか? ", "Do you want to retire? "), CHECK_NO_HISTORY)) {
+        if (!input_check_strict(player_ptr, _("引退しますか? ", "Do you want to retire? "), UserCheck::NO_HISTORY)) {
             return;
         }
     } else {
-        if (!get_check(_("本当に自殺しますか？", "Do you really want to commit suicide? "))) {
+        if (!input_check(_("本当に自殺しますか？", "Do you really want to commit suicide? "))) {
             return;
         }
     }

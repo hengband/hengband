@@ -16,6 +16,7 @@
 #include "view/display-messages.h"
 #include <sstream>
 #include <string>
+#include <string_view>
 
 /*!
  * @brief ファイル内容の一行をコンソールに出力する
@@ -33,15 +34,15 @@
  * </pre>
  * @todo 表示とそれ以外を分割する
  */
-static void show_file_aux_line(concptr str, int cy, concptr shower)
+static void show_file_aux_line(std::string_view str, int cy, std::string_view shower)
 {
     char lcstr[1024];
     concptr ptr;
     byte textcolor = TERM_WHITE;
     byte focuscolor = TERM_YELLOW;
 
-    if (shower) {
-        strcpy(lcstr, str);
+    if (!shower.empty()) {
+        strcpy(lcstr, str.data());
         str_tolower(lcstr);
 
         ptr = angband_strstr(lcstr, shower);
@@ -54,12 +55,12 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
     static const char tag_str[] = "[[[[";
     byte color = textcolor;
     char in_tag = '\0';
-    for (int i = 0; str[i];) {
+    for (size_t i = 0; i < str.length();) {
         int len = strlen(&str[i]);
         int showercol = len + 1;
         int bracketcol = len + 1;
         int endcol = len;
-        if (shower) {
+        if (!shower.empty()) {
             ptr = angband_strstr(&lcstr[i], shower);
             if (ptr) {
                 showercol = ptr - &lcstr[i];
@@ -81,8 +82,8 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
         cx += endcol;
         i += endcol;
 
-        if (shower && endcol == showercol) {
-            int showerlen = strlen(shower);
+        if (!shower.empty() && (endcol == showercol)) {
+            const auto showerlen = shower.length();
             term_addstr(showerlen, focuscolor, &str[i]);
             cx += showerlen;
             i += showerlen;
@@ -141,8 +142,6 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
     int wid, hgt;
     term_get_size(&wid, &hgt);
 
-    char finder_str[81] = "";
-    char shower_str[81] = "";
     char hook[68][32]{};
     auto stripped_names = str_split(name_with_tag, '#');
     auto &name = stripped_names[0];
@@ -234,8 +233,10 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
 
     term_clear();
 
-    concptr find = nullptr;
-    concptr shower = nullptr;
+    std::string find;
+    std::string finder_str;
+    std::string shower;
+    std::string shower_str;
     while (true) {
         if (line >= size - rows) {
             line = size - rows;
@@ -277,7 +278,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
                 continue;
             }
             next++;
-            if (find && !row_count) {
+            if (!find.empty() && !row_count) {
                 char lc_buf[1024];
                 strcpy(lc_buf, str);
                 str_tolower(lc_buf);
@@ -286,7 +287,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
                 }
             }
 
-            find = nullptr;
+            find.clear();
             show_file_aux_line(str, row_count + 2, shower);
             row_count++;
         }
@@ -296,10 +297,10 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
             row_count++;
         }
 
-        if (find) {
+        if (!find.empty()) {
             bell();
             line = back;
-            find = nullptr;
+            find.clear();
             continue;
         }
 
@@ -331,125 +332,136 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
             if (name != _("jhelpinfo.txt", "helpinfo.txt")) {
                 show_file(player_ptr, true, _("jhelpinfo.txt", "helpinfo.txt"), 0, mode);
             }
+
             break;
-        case '=':
+        case '=': {
             prt(_("強調: ", "Show: "), hgt - 1, 0);
-
-            char back_str[81];
-            strcpy(back_str, shower_str);
-            if (askfor(shower_str, 80)) {
-                if (shower_str[0]) {
-                    str_tolower(shower_str);
-                    shower = shower_str;
-                } else {
-                    shower = nullptr;
-                }
-            } else {
-                strcpy(shower_str, back_str);
+            auto ask_result = askfor(80, shower_str);
+            if (!ask_result) {
+                break;
             }
-            break;
 
-        case '/':
-        case KTRL('s'):
-            prt(_("検索: ", "Find: "), hgt - 1, 0);
-            strcpy(back_str, finder_str);
-            if (askfor(finder_str, 80)) {
-                if (finder_str[0]) {
-                    find = finder_str;
-                    back = line;
-                    line = line + 1;
-                    str_tolower(finder_str);
-                    shower = finder_str;
-                } else {
-                    shower = nullptr;
-                }
-            } else {
-                strcpy(finder_str, back_str);
+            shower_str = *ask_result;
+            if (shower_str.empty()) {
+                shower.clear();
+                break;
             }
-            break;
 
-        case '#': {
-            char tmp[81];
-            prt(_("行: ", "Goto Line: "), hgt - 1, 0);
-            strcpy(tmp, "0");
-
-            if (askfor(tmp, 80)) {
-                line = atoi(tmp);
-            }
+            str_tolower(shower_str.data());
+            shower = shower_str;
             break;
         }
+        case '/':
+        case KTRL('s'): {
+            prt(_("検索: ", "Find: "), hgt - 1, 0);
+            auto ask_result = askfor(80, finder_str);
+            if (!ask_result) {
+                break;
+            }
 
+            finder_str = *ask_result;
+            if (finder_str.empty()) {
+                shower.clear();
+                break;
+            }
+
+            find = finder_str;
+            back = line;
+            line = line + 1;
+            str_tolower(finder_str.data());
+            shower = finder_str;
+            break;
+        }
+        case '#': {
+            prt(_("行: ", "Goto Line: "), hgt - 1, 0);
+            constexpr auto initial_goto = "0";
+            while (true) {
+                const auto ask_result = askfor(10, initial_goto);
+                if (!ask_result) {
+                    break;
+                }
+
+                try {
+                    line = std::stoi(*ask_result);
+                    break;
+                } catch (std::invalid_argument const &) {
+                    prt(_("数値を入力して下さい。", "Please input numeric value."), hgt - 1, 0);
+                } catch (std::out_of_range const &) {
+                    prt(_("入力可能な数値の範囲を超えています。", "Input value overflows the maximum number."), hgt - 1, 0);
+                }
+            }
+
+            break;
+        }
         case SKEY_TOP:
             line = 0;
             break;
-
         case SKEY_BOTTOM:
             line = ((size - 1) / rows) * rows;
             break;
-
         case '%': {
-            char tmp[81];
             prt(_("ファイル・ネーム: ", "Goto File: "), hgt - 1, 0);
-            strcpy(tmp, _("jhelp.hlp", "help.hlp"));
+            const auto ask_result = askfor(80, _("jhelp.hlp", "help.hlp"));
+            if (!ask_result) {
+                break;
+            }
 
-            if (askfor(tmp, 80)) {
-                if (!show_file(player_ptr, true, tmp, 0, mode)) {
-                    skey = 'q';
-                }
+            if (!show_file(player_ptr, true, *ask_result, 0, mode)) {
+                skey = 'q';
             }
 
             break;
         }
-
         case '-':
             line = line + (reverse ? rows : -rows);
             if (line < 0) {
                 line = 0;
             }
-            break;
 
+            break;
         case SKEY_PGUP:
             line = line - rows;
             if (line < 0) {
                 line = 0;
             }
-            break;
 
+            break;
         case '\n':
         case '\r':
             line = line + (reverse ? -1 : 1);
             if (line < 0) {
                 line = 0;
             }
-            break;
 
+            break;
         case '8':
         case SKEY_UP:
             line--;
             if (line < 0) {
                 line = 0;
             }
-            break;
 
+            break;
         case '2':
         case SKEY_DOWN:
             line++;
             break;
-
         case ' ':
             line = line + (reverse ? -rows : rows);
             if (line < 0) {
                 line = 0;
             }
-            break;
 
+            break;
         case SKEY_PGDOWN:
             line = line + rows;
+            break;
+        default:
             break;
         }
 
         if (menu) {
-            int key = -1;
+            auto key = -1;
             if (!(skey & SKEY_MASK) && isalpha(skey)) {
                 key = skey - 'A';
             }
@@ -463,17 +475,15 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
         }
 
         if (skey == '|') {
-            FILE *ffp;
-            char xtmp[81] = "";
-
-            if (!get_string(_("ファイル名: ", "File name: "), xtmp, 80)) {
+            const auto xtmp = input_string(_("ファイル名: ", "File name: "), 80);
+            if (!xtmp.has_value()) {
                 continue;
             }
 
             angband_fclose(fff);
             fff = angband_fopen(path_reopen, FileOpenMode::READ);
-            const auto &path_xtemp = path_build(ANGBAND_DIR_USER, xtmp);
-            ffp = angband_fopen(path_xtemp, FileOpenMode::WRITE);
+            const auto &path_xtemp = path_build(ANGBAND_DIR_USER, xtmp.value());
+            auto *ffp = angband_fopen(path_xtemp, FileOpenMode::WRITE);
 
             if (!(fff && ffp)) {
                 msg_print(_("ファイルを開けません。", "Failed to open file."));

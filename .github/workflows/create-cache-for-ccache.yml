@@ -20,7 +20,6 @@ jobs:
 
   gcc_japanese:
     name: Japanese version with gcc
-    needs: clang_without_pch_japanese
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       cxx: g++-11
@@ -29,7 +28,6 @@ jobs:
 
   gcc_english:
     name: English version with gcc
-    needs: gcc_japanese
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       cxx: g++-11

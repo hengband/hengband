@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-#if defined(WORLD_SCORE)
+#if !defined(DISABLE_NET)
 
 #ifdef WINDOWS
 #define CURL_STATICLIB

@@ -267,12 +267,12 @@ errr angband_fgets(FILE *fff, char *buf, ulong n)
     // Reserve for null termination
     --n;
 
-    std::vector<char> file_read__tmp(FILE_READ_BUFF_SIZE);
-    if (fgets(file_read__tmp.data(), file_read__tmp.size(), fff)) {
+    std::vector<char> file_read_tmp(FILE_READ_BUFF_SIZE);
+    if (fgets(file_read_tmp.data(), file_read_tmp.size(), fff)) {
 #ifdef JP
-        guess_convert_to_system_encoding(file_read__tmp.data(), FILE_READ_BUFF_SIZE);
+        guess_convert_to_system_encoding(file_read_tmp.data(), FILE_READ_BUFF_SIZE);
 #endif
-        for (s = file_read__tmp.data(); *s; s++) {
+        for (s = file_read_tmp.data(); *s; s++) {
             if (*s == '\n') {
                 buf[i] = '\0';
                 return 0;
@@ -351,11 +351,9 @@ errr angband_fputs(FILE *fff, concptr buf, ulong n)
 void fd_kill(const std::filesystem::path &path)
 {
     const auto &parsed_path = path_parse(path);
-    if (!std::filesystem::exists(parsed_path)) {
-        return;
-    }
 
-    std::filesystem::remove(parsed_path);
+    std::error_code ec;
+    std::filesystem::remove(parsed_path, ec);
 }
 
 /*!
@@ -366,17 +364,10 @@ void fd_kill(const std::filesystem::path &path)
 void fd_move(const std::filesystem::path &path_from, const std::filesystem::path &path_to)
 {
     const auto &abs_path_from = path_parse(path_from);
-    if (!std::filesystem::exists(abs_path_from)) {
-        return;
-    }
-
     const auto &abs_path_to = path_parse(path_to);
-    const auto directory = std::filesystem::path(abs_path_to).remove_filename();
-    if (!std::filesystem::exists(directory)) {
-        std::filesystem::create_directory(directory);
-    }
 
-    std::filesystem::rename(abs_path_from, abs_path_to);
+    std::error_code ec;
+    std::filesystem::rename(abs_path_from, abs_path_to, ec);
 }
 
 /*!

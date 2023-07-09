@@ -44,6 +44,7 @@
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <algorithm>
 
 /*!
  * @brief フロア脱出時に出戻りが不可能だった場合に警告を加える処理
@@ -64,7 +65,7 @@ static bool confirm_leave_level(PlayerType *player_ptr, bool down_stair)
 
     if (confirm_quest && inside_quest(player_ptr->current_floor_ptr->quest_number) && caution_in_quest) {
         msg_print(_("この階を一度去ると二度と戻って来られません。", "You can't come back here once you leave this floor."));
-        return get_check(_("本当にこの階を去りますか？", "Really leave this floor? "));
+        return input_check(_("本当にこの階を去りますか？", "Really leave this floor? "));
     }
 
     return true;
@@ -272,7 +273,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
             const auto mes = _("ここには%sの入り口(%d階相当)があります", "There is the entrance of %s (Danger level: %d)");
             const auto &dungeon = dungeons_info[target_dungeon];
             msg_format(mes, dungeon.name.data(), dungeon.mindepth);
-            if (!get_check(_("本当にこのダンジョンに入りますか？", "Do you really get in this dungeon? "))) {
+            if (!input_check(_("本当にこのダンジョンに入りますか？", "Do you really get in this dungeon? "))) {
                 return;
             }
         }
@@ -354,7 +355,7 @@ void do_cmd_walk(PlayerType *player_ptr, bool pickup)
 
     bool more = false;
     DIRECTION dir;
-    if (get_rep_dir(player_ptr, &dir, false)) {
+    if (get_rep_dir(player_ptr, &dir)) {
         PlayerEnergy energy(player_ptr);
         energy.set_player_turn_energy(100);
         if (dir != 5) {
@@ -408,7 +409,7 @@ void do_cmd_run(PlayerType *player_ptr)
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
-    if (get_rep_dir(player_ptr, &dir, false)) {
+    if (get_rep_dir(player_ptr, &dir)) {
         player_ptr->running = (command_arg ? command_arg : 1000);
         run_step(player_ptr, dir);
     }
@@ -439,6 +440,38 @@ void do_cmd_stay(PlayerType *player_ptr, bool pickup)
 }
 
 /*!
+ * @brief 休憩ターン数のコマンド受付
+ */
+static bool input_rest_turns()
+{
+    constexpr auto p = _("休憩 (0-9999, '*' で HP/MP全快, '&' で必要なだけ): ", "Rest (0-9999, '*' for HP/SP, '&' as needed): ");
+    while (true) {
+        const auto rest_turns_opt = input_string(p, 4, "&");
+        if (!rest_turns_opt.has_value()) {
+            return false;
+        }
+
+        const auto &rest_turns = rest_turns_opt.value();
+        if (rest_turns.starts_with('&')) {
+            command_arg = COMMAND_ARG_REST_UNTIL_DONE;
+            return true;
+        }
+
+        if (rest_turns.starts_with('*')) {
+            command_arg = COMMAND_ARG_REST_FULL_HEALING;
+            return true;
+        }
+
+        try {
+            command_arg = static_cast<short>(std::clamp(std::stoi(rest_turns), 0, 9999));
+            return true;
+        } catch (std::invalid_argument const &) {
+            msg_print(_("数値を入力して下さい。", "Please input numeric value."));
+        }
+    }
+}
+
+/*!
  * @brief 「休む」動作コマンドのメインルーチン /
  * Resting allows a player to safely restore his hp	-RAK-
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -459,28 +492,8 @@ void do_cmd_rest(PlayerType *player_ptr)
         (void)spell_hex.stop_all_spells();
     }
 
-    if (command_arg <= 0) {
-        concptr p = _("休憩 (0-9999, '*' で HP/MP全快, '&' で必要なだけ): ", "Rest (0-9999, '*' for HP/SP, '&' as needed): ");
-        char out_val[80];
-        strcpy(out_val, "&");
-        if (!get_string(p, out_val, 4)) {
-            return;
-        }
-
-        if (out_val[0] == '&') {
-            command_arg = COMMAND_ARG_REST_UNTIL_DONE;
-        } else if (out_val[0] == '*') {
-            command_arg = COMMAND_ARG_REST_FULL_HEALING;
-        } else {
-            command_arg = (COMMAND_ARG)atoi(out_val);
-            if (command_arg <= 0) {
-                return;
-            }
-        }
-    }
-
-    if (command_arg > 9999) {
-        command_arg = 9999;
+    if (!input_rest_turns()) {
+        return;
     }
 
     set_superstealth(player_ptr, false);

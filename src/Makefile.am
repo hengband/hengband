@@ -193,6 +193,9 @@ hengband_SOURCES = \
 	effect/effect-processor.cpp effect/effect-processor.h \
 	effect/effect-characteristics.h \
 	\
+	external-lib/include-json.h \
+	external-lib/json.hpp \
+	\
 	flavor/flag-inscriptions-table.cpp flavor/flag-inscriptions-table.h \
 	flavor/flavor-describer.cpp flavor/flavor-describer.h \
 	flavor/flavor-util.cpp flavor/flavor-util.h \
@@ -573,6 +576,7 @@ hengband_SOURCES = \
 	net/curl-easy-session.cpp net/curl-easy-session.h \
 	net/curl-slist.cpp net/curl-slist.h \
 	net/http-client.cpp net/http-client.h \
+	net/report-error.cpp net/report-error.h \
 	\
 	object/item-tester-hooker.cpp object/item-tester-hooker.h \
 	object/object-broken.cpp object/object-broken.h \
@@ -972,6 +976,7 @@ hengband_SOURCES = \
 	util/point-2d.h \
 	util/probability-table.h \
 	util/rng-xoshiro.cpp util/rng-xoshiro.h \
+	util/sha256.cpp util/sha256.h \
 	util/sort.cpp util/sort.h \
 	util/string-processor.cpp util/string-processor.h \
 	\
@@ -1035,6 +1040,7 @@ EXTRA_hengband_SOURCES = \
 	main-win/main-win-bg.cpp main-win/main-win-bg.h \
 	main-win/main-win-cfg-reader.cpp main-win/main-win-cfg-reader.h \
 	main-win/main-win-define.h \
+	main-win/main-win-exception.cpp main-win/main-win-exception.h \
 	main-win/main-win-file-utils.cpp main-win/main-win-file-utils.h \
 	main-win/main-win-mci.cpp main-win/main-win-mci.h \
 	main-win/main-win-menuitem.h \
@@ -1045,6 +1051,7 @@ EXTRA_hengband_SOURCES = \
 	main-win/main-win-tokenizer.cpp main-win/main-win-tokenizer.h \
 	main-win/main-win-utils.cpp main-win/main-win-utils.h \
 	main-win/wav-reader.cpp main-win/wav-reader.h \
+	test/test-sha256.cpp \
 	wall.bmp \
 	stdafx.cpp stdafx.h
 

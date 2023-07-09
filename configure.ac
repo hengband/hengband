@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(hengband, 3.0.0.0)
+AC_INIT(hengband, 3.0.0.87-Alpha)
 
 AC_CONFIG_MACRO_DIRS([m4])
 AC_CONFIG_HEADERS(src/autoconf.h)
@@ -57,6 +57,8 @@ AC_ARG_ENABLE(fontset,
 [  --disable-fontset       disable fontset support], use_fontset=no, use_fontset=yes)
 AC_ARG_ENABLE([xft],
 	AS_HELP_STRING([--enable-xft], [Enable xft support]))
+AC_ARG_ENABLE(net,
+[  --disable-net           disable networking support], use_net=no)
 AC_ARG_ENABLE(worldscore,
 [  --disable-worldscore    disable worldscore support], worldscore=no)
 AC_ARG_ENABLE([pch],
@@ -79,12 +81,18 @@ fi
 
 AC_CHECK_LIB(iconv, iconv_open)
 
+if test "$use_net" = no; then
+  AC_DEFINE(DISABLE_NET, 1, [Disable networking support])
+  worldscore=no;
+else
+  PKG_CHECK_MODULES(libcurl, [libcurl])
+fi
+
 dnl The world score server is currently only available in Japanese.
 if test "$use_japanese" = no; then
   worldscore=no
 fi
 if test "$worldscore" != no; then
-  PKG_CHECK_MODULES(libcurl, [libcurl])
   AC_DEFINE(WORLD_SCORE, 1, [Allow the game to send scores to the score server])
 fi
 

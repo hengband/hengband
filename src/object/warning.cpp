@@ -540,7 +540,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
             msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), item_name.data());
 
             disturb(player_ptr, false, true);
-            return get_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
+            return input_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
         }
     } else {
         old_damage = old_damage / 2;
@@ -563,5 +563,5 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
 
     msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), item_name.data());
     disturb(player_ptr, false, true);
-    return get_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
+    return input_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
 }

@@ -8,7 +8,9 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
+#include "util/finalizer.h"
 #include "util/string-processor.h"
+#include "view/display-player-misc-info.h"
 #include "world/world.h"
 #include <sstream>
 #ifdef SAVEFILE_USE_UID
@@ -119,41 +121,32 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
 }
 
 /*!
- * @brief プレイヤーの名前を変更するコマンドのメインルーチン
- * Gets a name for the character, reacting to name changes.
+ * @brief プレイヤーの名前を変更する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @details
- * <pre>
- * Assumes that "display_player()" has just been called
- * Perhaps we should NOT ask for a name (at "birth()") on
- * Unix machines?  XXX XXX
- * What a horrible name for a global function.
- * </pre>
+ * @details PlayerType::name は32バイトで定義されているが、
+ * スコアファイル（lib/apex/scores.raw）に保存されているプレイヤー名が最大16バイト (ヌル文字含)となっている
+ * このため最大値を16バイトに制限する
  */
 void get_name(PlayerType *player_ptr)
 {
-    char tmp[64];
-    strcpy(tmp, player_ptr->name);
+    const auto finalizer = util::make_finalizer([player_ptr]() {
+        display_player_misc_info(player_ptr);
+    });
 
-    if (get_string(_("キャラクターの名前を入力して下さい: ", "Enter a name for your character: "), tmp, 15)) {
-        strcpy(player_ptr->name, tmp);
+    std::string initial_name(player_ptr->name);
+    const auto max_name_size = 15;
+    const auto copy_size = sizeof(player_ptr->name);
+    constexpr auto prompt = _("キャラクターの名前を入力して下さい: ", "Enter a name for your character: ");
+    const auto name = input_string(prompt, max_name_size, initial_name);
+    if (name.has_value()) {
+        if (!name->empty()) {
+            angband_strcpy(player_ptr->name, name.value(), copy_size);
+        }
+
+        return;
     }
 
-    if (strlen(player_ptr->name) == 0) {
-        strcpy(player_ptr->name, "PLAYER");
+    if (initial_name.empty()) {
+        angband_strcpy(player_ptr->name, "PLAYER", copy_size);
     }
-
-    strcpy(tmp, ap_ptr->title);
-#ifdef JP
-    if (ap_ptr->no == 1) {
-        strcat(tmp, "の");
-    }
-#else
-    strcat(tmp, " ");
-#endif
-    strcat(tmp, player_ptr->name);
-
-    term_erase(34, 1, 255);
-    c_put_str(TERM_L_BLUE, tmp, 1, 34);
-    clear_from(22);
 }

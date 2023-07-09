@@ -41,7 +41,7 @@ static void shuffle_flavors(ItemKindType tval)
  */
 void initialize_items_flavor()
 {
-    const auto state_backup = w_ptr->rng.get_state();
+    const auto rng_backup = w_ptr->rng;
     w_ptr->rng.set_state(w_ptr->seed_flavor);
     for (auto &baseitem : baseitems_info) {
         if (baseitem.flavor_name.empty()) {
@@ -59,7 +59,7 @@ void initialize_items_flavor()
     shuffle_flavors(ItemKindType::FOOD);
     shuffle_flavors(ItemKindType::POTION);
     shuffle_flavors(ItemKindType::SCROLL);
-    w_ptr->rng.set_state(state_backup);
+    w_ptr->rng = rng_backup;
     for (auto &baseitem : baseitems_info) {
         if (baseitem.idx == 0 || baseitem.name.empty()) {
             continue;

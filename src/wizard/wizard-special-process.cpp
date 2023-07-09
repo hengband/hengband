@@ -104,6 +104,7 @@
 #include "world/world.h"
 #include <algorithm>
 #include <optional>
+#include <span>
 #include <sstream>
 #include <tuple>
 #include <vector>
@@ -128,22 +129,22 @@ void wiz_cure_all(PlayerType *player_ptr)
 static std::optional<short> wiz_select_tval()
 {
     short list;
-    char ch;
     for (list = 0; (list < 80) && (tvals[list].tval > ItemKindType::NONE); list++) {
         auto row = 2 + (list % 20);
         auto col = _(32, 24) * (list / 20);
-        ch = listsym[list];
-        prt(format("[%c] %s", ch, tvals[list].desc), row, col);
+        prt(format("[%c] %s", listsym[list], tvals[list].desc), row, col);
     }
 
-    auto max_num = list;
-    if (!get_com(_("アイテム種別を選んで下さい", "Get what type of object? "), &ch, false)) {
+    const auto item_type_opt = input_command(_("アイテム種別を選んで下さい", "Get what type of object? "));
+    if (!item_type_opt.has_value()) {
         return std::nullopt;
     }
 
+    const auto item_type = item_type_opt.value();
     short selection;
+    auto max_num = list;
     for (selection = 0; selection < max_num; selection++) {
-        if (listsym[selection] == ch) {
+        if (listsym[selection] == item_type) {
             break;
         }
     }
@@ -155,11 +156,10 @@ static std::optional<short> wiz_select_tval()
     return selection;
 }
 
-static short wiz_select_sval(const ItemKindType tval, concptr tval_description)
+static short wiz_select_sval(const ItemKindType tval, std::string_view tval_description)
 {
     auto num = 0;
     short choice[80]{};
-    char ch;
     for (const auto &baseitem : baseitems_info) {
         if (num >= 80) {
             break;
@@ -171,17 +171,19 @@ static short wiz_select_sval(const ItemKindType tval, concptr tval_description)
 
         auto row = 2 + (num % 20);
         auto col = _(30, 32) * (num / 20);
-        ch = listsym[num];
         const auto buf = strip_name(baseitem.idx);
-        prt(format("[%c] %s", ch, buf.data()), row, col);
+        prt(format("[%c] %s", listsym[num], buf.data()), row, col);
         choice[num++] = baseitem.idx;
     }
 
     auto max_num = num;
-    if (!get_com(format(_("%s群の具体的なアイテムを選んで下さい", "What Kind of %s? "), tval_description), &ch, false)) {
+    const auto prompt = format(_("%s群の具体的なアイテムを選んで下さい", "What Kind of %s? "), tval_description.data());
+    const auto command = input_command(prompt);
+    if (!command.has_value()) {
         return 0;
     }
 
+    const auto ch = command.value();
     short selection;
     for (selection = 0; selection < max_num; selection++) {
         if (listsym[selection] == ch) {
@@ -306,8 +308,8 @@ static std::optional<FixedArtifactId> wiz_select_named_artifact(PlayerType *play
             put_str(format("-- more (%lu/%lu) --", current_page + 1, page_max), page_item_count + 1, 15);
         }
 
-        char cmd = ESCAPE;
-        get_com("Which artifact: ", &cmd, false);
+        const auto command = input_command("Which artifact: ");
+        const auto cmd = command.value_or(ESCAPE);
         switch (cmd) {
         case ESCAPE:
             screen_load();
@@ -369,8 +371,8 @@ void wiz_create_named_art(PlayerType *player_ptr)
 
     std::optional<FixedArtifactId> create_a_idx;
     while (!create_a_idx.has_value()) {
-        char cmd = ESCAPE;
-        get_com("Kind of artifact: ", &cmd, false);
+        const auto command = input_command("Kind of artifact: ");
+        const auto cmd = command.value_or(ESCAPE);
         switch (cmd) {
         case ESCAPE:
             screen_load();
@@ -397,6 +399,43 @@ void wiz_create_named_art(PlayerType *player_ptr)
     msg_print("Allocated.");
 }
 
+static void wiz_change_status_max(PlayerType *player_ptr)
+{
+    for (auto i = 0; i < A_MAX; ++i) {
+        player_ptr->stat_cur[i] = player_ptr->stat_max_max[i];
+        player_ptr->stat_max[i] = player_ptr->stat_max_max[i];
+    }
+
+    for (auto tval : TV_WEAPON_RANGE) {
+        for (auto &exp : player_ptr->weapon_exp[tval]) {
+            exp = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
+        }
+    }
+    PlayerSkill(player_ptr).limit_weapon_skills_by_max_value();
+
+    for (auto &[type, exp] : player_ptr->skill_exp) {
+        exp = class_skills_info[enum2i(player_ptr->pclass)].s_max[type];
+    }
+
+    const std::span spells_exp_span(player_ptr->spell_exp);
+    for (auto &exp : spells_exp_span.first(32)) {
+        exp = PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER);
+    }
+    for (auto &exp : spells_exp_span.last(32)) {
+        exp = PlayerSkill::spell_exp_at(PlayerSkillRank::EXPERT);
+    }
+
+    player_ptr->au = 999999999;
+
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
+        return;
+    }
+
+    player_ptr->max_exp = 99999999;
+    player_ptr->exp = 99999999;
+    player_ptr->exp_frac = 0;
+}
+
 /*!
  * @brief プレイヤーの現能力値を調整する / Change various "permanent" player variables.
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -407,6 +446,12 @@ void wiz_change_status(PlayerType *player_ptr)
         check_experience(player_ptr);
         do_cmd_redraw(player_ptr);
     });
+
+    constexpr auto msg = _("全てのステータスを最大にしますか？", "Maximize all statuses? ");
+    if (input_check_strict(player_ptr, msg, { UserCheck::NO_ESCAPE, UserCheck::NO_HISTORY })) {
+        wiz_change_status_max(player_ptr);
+        return;
+    }
 
     for (int i = 0; i < A_MAX; i++) {
         const auto max_max_ability_score = player_ptr->stat_max_max[i];
@@ -597,7 +642,7 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
             return;
         }
 
-        if (get_check(("Jump to the ground?"))) {
+        if (input_check(("Jump to the ground?"))) {
             wiz_jump_floor(player_ptr, 0, 0);
         }
 

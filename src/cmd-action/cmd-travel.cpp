@@ -156,7 +156,7 @@ static void travel_flow(PlayerType *player_ptr, POSITION ty, POSITION tx)
 void do_cmd_travel(PlayerType *player_ptr)
 {
     POSITION x, y;
-    if ((travel.x != 0) && (travel.y != 0) && (travel.x != player_ptr->x) && (travel.y != player_ptr->y) && get_check(_("トラベルを継続しますか？", "Do you continue to travel? "))) {
+    if ((travel.x != 0) && (travel.y != 0) && (travel.x != player_ptr->x) && (travel.y != player_ptr->y) && input_check(_("トラベルを継続しますか？", "Do you continue to travel? "))) {
         y = travel.y;
         x = travel.x;
     } else if (!tgt_pt(player_ptr, &x, &y)) {
