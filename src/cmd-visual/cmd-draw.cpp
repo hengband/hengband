@@ -252,14 +252,10 @@ void do_cmd_messages(int num_now)
         switch (skey) {
         case '=': {
             prt(_("強調: ", "Show: "), hgt - 1, 0);
-            char ask[81]{};
-            angband_strcpy(ask, shower_str, 80);
-            const auto back_str(shower_str);
-            if (askfor(ask, 80)) {
-                shower = ask;
-                shower_str = ask;
-            } else {
-                shower_str = back_str;
+            const auto ask_result = askfor(80, shower_str);
+            if (ask_result) {
+                shower = *ask_result;
+                shower_str = *ask_result;
             }
 
             continue;
@@ -267,15 +263,12 @@ void do_cmd_messages(int num_now)
         case '/':
         case KTRL('s'): {
             prt(_("検索: ", "Find: "), hgt - 1, 0);
-            char ask[81]{};
-            angband_strcpy(ask, finder_str, 80);
-            const auto back_str(finder_str);
-            if (!askfor(ask, 80)) {
-                finder_str = back_str;
+            const auto ask_result = askfor(80, finder_str);
+            if (!ask_result) {
                 continue;
             }
 
-            finder_str = ask;
+            finder_str = *ask_result;
             if (finder_str.empty()) {
                 shower = "";
                 continue;

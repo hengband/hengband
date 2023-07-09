@@ -64,9 +64,9 @@ void do_cmd_pref(PlayerType *player_ptr)
  */
 void do_cmd_colors(PlayerType *player_ptr)
 {
-    char tmp[160];
     FILE *auto_dump_stream;
     screen_save();
+    const auto initial_filename = format("%s.prf", player_ptr->base_name);
     while (true) {
         term_clear();
         prt(_("[ カラーの設定 ]", "Interact with Colors"), 2, 0);
@@ -83,12 +83,12 @@ void do_cmd_colors(PlayerType *player_ptr)
         case '1': {
             prt(_("コマンド: ユーザー設定ファイルをロードします", "Command: Load a user pref file"), 8, 0);
             prt(_("ファイル: ", "File: "), 10, 0);
-            strnfmt(tmp, sizeof(tmp), "%s.prf", player_ptr->base_name);
-            if (!askfor(tmp, 70)) {
+            const auto ask_result = askfor(70, initial_filename);
+            if (!ask_result) {
                 continue;
             }
 
-            (void)process_pref_file(player_ptr, tmp, true);
+            (void)process_pref_file(player_ptr, *ask_result, true);
             term_xtra(TERM_XTRA_REACT, 0);
             term_redraw();
             break;
@@ -97,12 +97,12 @@ void do_cmd_colors(PlayerType *player_ptr)
             constexpr auto mark = "Colors";
             prt(_("コマンド: カラーの設定をファイルに書き出します", "Command: Dump colors"), 8, 0);
             prt(_("ファイル: ", "File: "), 10, 0);
-            strnfmt(tmp, sizeof(tmp), "%s.prf", player_ptr->base_name);
-            if (!askfor(tmp, 70)) {
+            const auto ask_result = askfor(70, initial_filename);
+            if (!ask_result) {
                 continue;
             }
 
-            const auto &path = path_build(ANGBAND_DIR_USER, tmp);
+            const auto &path = path_build(ANGBAND_DIR_USER, *ask_result);
             if (!open_auto_dump(&auto_dump_stream, path, mark)) {
                 continue;
             }

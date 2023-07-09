@@ -15,7 +15,7 @@ enum class UserCheck {
 };
 
 class PlayerType;
-bool askfor(char *buf, int len, bool numpad_cursor = true);
+std::optional<std::string> askfor(int len, std::string_view initial_value = "", bool numpad_cursor = true);
 std::optional<std::string> input_string(std::string_view prompt, int len, std::string_view initial_value = "", bool numpad_cursor = true);
 bool input_check(std::string_view prompt);
 bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, UserCheck one_mode);

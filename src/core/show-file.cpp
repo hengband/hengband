@@ -142,8 +142,6 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
     int wid, hgt;
     term_get_size(&wid, &hgt);
 
-    char finder_str[81] = "";
-    char shower_str[81] = "";
     char hook[68][32]{};
     auto stripped_names = str_split(name_with_tag, '#');
     auto &name = stripped_names[0];
@@ -236,7 +234,9 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
     term_clear();
 
     std::string find;
+    std::string finder_str;
     std::string shower;
+    std::string shower_str;
     while (true) {
         if (line >= size - rows) {
             line = size - rows;
@@ -336,33 +336,31 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
             break;
         case '=': {
             prt(_("強調: ", "Show: "), hgt - 1, 0);
-            char back_str[81];
-            strcpy(back_str, shower_str);
-            if (!askfor(shower_str, 80)) {
-                strcpy(shower_str, back_str);
+            auto ask_result = askfor(80, shower_str);
+            if (!ask_result) {
                 break;
             }
 
-            if (!shower_str[0]) {
+            shower_str = *ask_result;
+            if (shower_str.empty()) {
                 shower.clear();
                 break;
             }
 
-            str_tolower(shower_str);
+            str_tolower(shower_str.data());
             shower = shower_str;
             break;
         }
         case '/':
         case KTRL('s'): {
             prt(_("検索: ", "Find: "), hgt - 1, 0);
-            char back_str[81];
-            strcpy(back_str, finder_str);
-            if (!askfor(finder_str, 80)) {
-                strcpy(finder_str, back_str);
+            auto ask_result = askfor(80, finder_str);
+            if (!ask_result) {
                 break;
             }
 
-            if (!finder_str[0]) {
+            finder_str = *ask_result;
+            if (finder_str.empty()) {
                 shower.clear();
                 break;
             }
@@ -370,29 +368,26 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
             find = finder_str;
             back = line;
             line = line + 1;
-            str_tolower(finder_str);
+            str_tolower(finder_str.data());
             shower = finder_str;
             break;
         }
         case '#': {
-            char tmp[81];
             prt(_("行: ", "Goto Line: "), hgt - 1, 0);
             constexpr auto initial_goto = "0";
             while (true) {
-                strcpy(tmp, initial_goto);
-                if (!askfor(tmp, 10)) {
+                const auto ask_result = askfor(10, initial_goto);
+                if (!ask_result) {
                     break;
                 }
 
                 try {
-                    line = std::stoi(tmp);
+                    line = std::stoi(*ask_result);
                     break;
                 } catch (std::invalid_argument const &) {
                     prt(_("数値を入力して下さい。", "Please input numeric value."), hgt - 1, 0);
-                    continue;
                 } catch (std::out_of_range const &) {
                     prt(_("入力可能な数値の範囲を超えています。", "Input value overflows the maximum number."), hgt - 1, 0);
-                    continue;
                 }
             }
 
@@ -406,13 +401,12 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
             break;
         case '%': {
             prt(_("ファイル・ネーム: ", "Goto File: "), hgt - 1, 0);
-            char tmp[81];
-            strcpy(tmp, _("jhelp.hlp", "help.hlp"));
-            if (!askfor(tmp, 80)) {
+            const auto ask_result = askfor(80, _("jhelp.hlp", "help.hlp"));
+            if (!ask_result) {
                 break;
             }
 
-            if (!show_file(player_ptr, true, tmp, 0, mode)) {
+            if (!show_file(player_ptr, true, *ask_result, 0, mode)) {
                 skey = 'q';
             }
 

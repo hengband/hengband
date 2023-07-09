@@ -24,6 +24,15 @@
 #include <stdexcept>
 #include <string>
 
+namespace {
+std::vector<char> clear_buffer(int len, std::string_view initial_value)
+{
+    std::vector<char> buf(len + 1, '\0');
+    initial_value.copy(buf.data(), len);
+    return buf;
+}
+}
+
 /*
  * Get some string input at the cursor location.
  * Assume the buffer is initialized to a default string.
@@ -41,7 +50,7 @@
  * ESCAPE clears the buffer and the window and returns FALSE.
  * RETURN accepts the current buffer contents and returns TRUE.
  */
-bool askfor(char *buf, int len, bool numpad_cursor)
+std::optional<std::string> askfor(int len, std::string_view initial_value, bool numpad_cursor)
 {
     /*
      * Text color
@@ -64,11 +73,11 @@ bool askfor(char *buf, int len, bool numpad_cursor)
         len = MAIN_TERM_MIN_COLS - x;
     }
 
-    buf[len] = '\0';
+    auto buf = clear_buffer(len, initial_value);
     auto pos = 0;
     while (true) {
         term_erase(x, y, len);
-        term_putstr(x, y, -1, color, buf);
+        term_putstr(x, y, -1, color, buf.data());
         term_gotoxy(x + pos, y);
         const auto skey = inkey_special(numpad_cursor);
         switch (skey) {
@@ -122,14 +131,13 @@ bool askfor(char *buf, int len, bool numpad_cursor)
         case SKEY_BOTTOM:
         case KTRL('e'):
             color = TERM_WHITE;
-            pos = std::string_view(buf).length();
+            pos = std::string_view(buf.data()).length();
             break;
         case ESCAPE:
-            buf[0] = '\0';
-            return false;
+            return std::nullopt;
         case '\n':
         case '\r':
-            return true;
+            return buf.data();
         case '\010': {
             auto i = 0;
             color = TERM_WHITE;
@@ -175,18 +183,17 @@ bool askfor(char *buf, int len, bool numpad_cursor)
             break;
         }
         default: {
-            char tmp[100];
             if (skey & SKEY_MASK) {
                 break;
             }
 
             const auto c = static_cast<char>(skey);
             if (color == TERM_YELLOW) {
-                buf[0] = '\0';
+                buf = clear_buffer(len, "");
                 color = TERM_WHITE;
             }
 
-            strcpy(tmp, buf + pos);
+            const auto str_right_cursor = std::string(buf.data()).substr(pos);
 #ifdef JP
             if (iskanji(c)) {
                 inkey_base = true;
@@ -209,7 +216,7 @@ bool askfor(char *buf, int len, bool numpad_cursor)
             }
 
             buf[pos] = '\0';
-            angband_strcat(buf, tmp, len + 1);
+            angband_strcat(buf.data(), str_right_cursor, buf.size());
             break;
         }
         }
@@ -230,15 +237,9 @@ std::optional<std::string> input_string(std::string_view prompt, int len, std::s
 {
     msg_print(nullptr);
     prt(prompt, 0, 0);
-    char buf[1024]{};
-    angband_strcpy(buf, initial_value, sizeof(buf));
-    const auto res = askfor(buf, len, numpad_cursor);
+    const auto ask_result = askfor(len, initial_value, numpad_cursor);
     prt("", 0, 0);
-    if (!res) {
-        return std::nullopt;
-    }
-
-    return buf;
+    return ask_result;
 }
 
 /*
