@@ -17,24 +17,6 @@
 #include "wizard/spoiler-util.h"
 
 /*!
- * @brief
- * @param art_flags 出力するアーティファクトの特性一覧
- * @param definitions 表記対象の特性一覧
- * @return 表記すべき特性一覧
- */
-static std::vector<std::string> extract_spoiler_flags(const TrFlags &art_flags, const std::vector<flag_desc> definitions)
-{
-    std::vector<std::string> descriptions{};
-    for (const auto &definition : definitions) {
-        if (art_flags.has(definition.flag)) {
-            descriptions.push_back(definition.desc);
-        }
-    }
-
-    return descriptions;
-}
-
-/*!
  * @brief アーティファクトの特性一覧を出力する /
  * Write a line to the spoiler file and then "underline" it with hypens
  * @param art_flags アーティファクトのフラグ群
@@ -73,34 +55,6 @@ static concptr *spoiler_flag_aux(const TrFlags &art_flags, const flag_desc *flag
 static std::string analyze_general(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     return describe_flavor(player_ptr, o_ptr, OD_NAME_AND_ENCHANT | OD_STORE | OD_DEBUG);
-}
-
-/*!
- * @brief アーティファクトがプレイヤーに与えるpval修正を構造体に収める /
- * List "player traits" altered by an artifact's pval. These include stats,
- * speed, infravision, tunneling, stealth, searching, and extra attacks.
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param pi_ptr pval修正構造体の参照ポインタ
- */
-static void analyze_pval(ItemEntity *o_ptr, ParameterValueInfo *pi_ptr)
-{
-    if (!o_ptr->pval) {
-        return;
-    }
-
-    auto flags = object_flags(o_ptr);
-    pi_ptr->pval_desc = format("%s%d", o_ptr->pval >= 0 ? "+" : "", o_ptr->pval);
-    std::vector<std::string> pval_descriptions;
-    if (flags.has_all_of(EnumRange(TR_STR, TR_CHR))) {
-        pval_descriptions.push_back(_("全能力", "All stats"));
-    } else if (flags.has_any_of(EnumRange(TR_STR, TR_CHR))) {
-        const auto descriptions_stat = extract_spoiler_flags(flags, stat_flags_desc);
-        pval_descriptions.insert(pval_descriptions.end(), descriptions_stat.begin(), descriptions_stat.end());
-    }
-
-    const auto descriptions_pval1 = extract_spoiler_flags(flags, pval_flags1_desc);
-    pval_descriptions.insert(pval_descriptions.end(), descriptions_pval1.begin(), descriptions_pval1.end());
-    pi_ptr->pval_affects = pval_descriptions;
 }
 
 /*!
@@ -323,9 +277,7 @@ static void analyze_misc(ItemEntity *o_ptr, char *misc_desc, size_t misc_desc_sz
 }
 
 /*!
- * @brief アーティファクトの情報全体を構造体に収める /
- * Fill in an object description structure for a given object
- * and its value in gold pieces
+ * @brief アーティファクトの情報全体を構造体に収める
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param desc_ptr 全アーティファクト情報を収める文字列参照ポインタ
@@ -333,7 +285,7 @@ static void analyze_misc(ItemEntity *o_ptr, char *misc_desc, size_t misc_desc_sz
 void object_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *desc_ptr)
 {
     angband_strcpy(desc_ptr->description, analyze_general(player_ptr, o_ptr), MAX_NLEN);
-    analyze_pval(o_ptr, &desc_ptr->pval_info);
+    desc_ptr->pval_info.analyze(*o_ptr);
     analyze_brand(o_ptr, desc_ptr->brands);
     analyze_slay(o_ptr, desc_ptr->slays);
     analyze_immune(o_ptr, desc_ptr->immunities);
@@ -347,8 +299,7 @@ void object_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *de
 }
 
 /*!
- * @brief ランダムアーティファクト１件を解析する /
- * Fill in an object description structure for a given object
+ * @brief ランダムアーティファクト1件を解析する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
  * @param desc_ptr 記述内容を収める構造体参照ポインタ
@@ -356,7 +307,7 @@ void object_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *de
 void random_artifact_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *desc_ptr)
 {
     angband_strcpy(desc_ptr->description, analyze_general(player_ptr, o_ptr), MAX_NLEN);
-    analyze_pval(o_ptr, &desc_ptr->pval_info);
+    desc_ptr->pval_info.analyze(*o_ptr);
     analyze_brand(o_ptr, desc_ptr->brands);
     analyze_slay(o_ptr, desc_ptr->slays);
     analyze_immune(o_ptr, desc_ptr->immunities);

@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "object-enchant/tr-flags.h"
 #include "system/angband.h"
 #include "wizard/spoiler-table.h"
 #include <string>
@@ -19,6 +20,7 @@ enum class SpoilerOutputResultType {
     FILE_CLOSE_FAILED,
 };
 
+class ItemEntity;
 class ParameterValueInfo {
 public:
     ParameterValueInfo() = default;
@@ -27,6 +29,8 @@ public:
 
     /* A list of various player traits affected by an object's pval such as stats, speed, stealth, etc. */
     std::vector<std::string> pval_affects{};
+
+    void analyze(const ItemEntity &item);
 };
 
 struct obj_desc_list {
@@ -51,6 +55,8 @@ extern const int max_evolution_depth;
 extern concptr spoiler_indent;
 extern FILE *spoiler_file;
 
+struct flag_desc;
+std::vector<std::string> extract_spoiler_flags(const TrFlags &art_flags, const std::vector<flag_desc> &definitions);
 void spoiler_blanklines(int n);
 void spoiler_underline(concptr str);
 void spoil_out(std::string_view sv, bool flush_buffer = false);
