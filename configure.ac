@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(hengband, 3.0.0.0)
+AC_INIT(hengband, 3.0.0.87-Alpha)
 
 AC_CONFIG_MACRO_DIRS([m4])
 AC_CONFIG_HEADERS(src/autoconf.h)
