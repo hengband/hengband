@@ -27,8 +27,17 @@ jobs:
         with:
           submodules: true
 
+      - id: calculate-cache-key
+        name: Calculate cache key for ccache
+        run: |
+          key=$(echo "${{ inputs.cxx }} ${{ inputs.cxx-flags }} ${{ inputs.configure-opts }}" | sha256sum | cut -d' ' -f1)
+          echo "key=$key" >> $GITHUB_OUTPUT
+
       - if: ${{ inputs.use-ccache }}
         uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: ${{ steps.calculate-cache-key.outputs.key }}
+          max-size: "200M"
 
       - name: Configuring ccache to use precompiled headers
         if: ${{ inputs.use-ccache }}
