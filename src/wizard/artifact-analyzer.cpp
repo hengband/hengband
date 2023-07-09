@@ -85,12 +85,11 @@ static std::string analyze_general(PlayerType *player_ptr, ItemEntity *o_ptr)
 static void analyze_pval(ItemEntity *o_ptr, pval_info_type *pi_ptr)
 {
     if (!o_ptr->pval) {
-        pi_ptr->pval_desc[0] = '\0';
         return;
     }
 
     auto flags = object_flags(o_ptr);
-    strnfmt(pi_ptr->pval_desc, sizeof(pi_ptr->pval_desc), "%s%d", o_ptr->pval >= 0 ? "+" : "", o_ptr->pval);
+    pi_ptr->pval_desc = format("%s%d", o_ptr->pval >= 0 ? "+" : "", o_ptr->pval);
     std::vector<std::string> pval_descriptions;
     if (flags.has_all_of(EnumRange(TR_STR, TR_CHR))) {
         pval_descriptions.push_back(_("全能力", "All stats"));

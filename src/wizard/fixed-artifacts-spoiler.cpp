@@ -10,6 +10,7 @@
 #include "view/display-messages.h"
 #include "wizard/artifact-analyzer.h"
 #include "wizard/spoiler-util.h"
+#include <sstream>
 
 /*!
  * @brief フラグ名称を出力する汎用関数
@@ -17,7 +18,7 @@
  * @param descriptions フラグ名リスト
  * @param separator フラグ表示の区切り記号
  */
-void spoiler_outlist(std::string_view header, std::vector<std::string> &descriptions, char separator)
+void spoiler_outlist(std::string_view header, const std::vector<std::string> &descriptions, char separator)
 {
     if (descriptions.empty()) {
         return;
@@ -143,10 +144,12 @@ static bool make_fake_artifact(ItemEntity *o_ptr, FixedArtifactId fixed_artifact
  */
 static void spoiler_print_art(obj_desc_list *art_ptr)
 {
-    pval_info_type *pval_ptr = &art_ptr->pval_info;
+    const auto *pval_ptr = &art_ptr->pval_info;
     fprintf(spoiler_file, "%s\n", art_ptr->description);
-    if (pval_ptr->pval_desc[0]) {
-        spoiler_outlist(std::string(pval_ptr->pval_desc).append(_("の修正:", " to")).data(), pval_ptr->pval_affects, item_separator);
+    if (!pval_ptr->pval_desc.empty()) {
+        std::stringstream ss;
+        ss << pval_ptr->pval_desc << _("の修正:", " to");
+        spoiler_outlist(ss.str(), pval_ptr->pval_affects, item_separator);
     }
 
     spoiler_outlist(_("対:", "Slay"), art_ptr->slays, item_separator);

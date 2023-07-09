@@ -23,7 +23,7 @@ enum class SpoilerOutputResultType {
 struct pval_info_type {
     pval_info_type() = default;
 
-    char pval_desc[12]{}; /* This will contain a string such as "+2", "-10", etc. */
+    std::string pval_desc = ""; /* This will contain a string such as "+2", "-10", etc. */
 
     /* A list of various player traits affected by an object's pval such as stats, speed, stealth, etc. */
     std::vector<std::string> pval_affects{};
