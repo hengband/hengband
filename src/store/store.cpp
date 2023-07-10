@@ -170,11 +170,11 @@ int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j, [[maybe_unused]]
     const auto prompt = format("(Items %c-%c, ESC to exit) %s", lo, hi, pmt);
 #endif
 
-    char command;
+    auto command = ESCAPE;
     while (true) {
         const auto command_opt = input_command(prompt);
         if (!command_opt.has_value()) {
-            continue;
+            break;
         }
 
         command = command_opt.value();
