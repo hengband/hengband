@@ -145,29 +145,28 @@ int store_check_num(ItemEntity *o_ptr, StoreSaleType store_num)
 }
 
 /*!
- * @brief 店舗からアイテムを選択する /
- * Get the ID of a store item and return its value	-RAK-
- * @param com_val 選択IDを返す参照ポインタ
+ * @brief 店舗からアイテムを選択する
  * @param pmt メッセージキャプション
  * @param min 選択範囲の最小値
  * @param max 選択範囲の最大値
- * @return 実際に選択したらTRUE、キャンセルしたらFALSE
+ * @return アイテムを選択したらそのインデックス ('a'等)、キャンセルしたらnullopt
+ * 繰り返しコマンドの時は前回の前回のインデックス
  */
-int input_stock(COMMAND_CODE *com_val, concptr pmt, int min, int max, [[maybe_unused]] StoreSaleType store_num)
+std::optional<short> input_stock(std::string_view fmt, int min, int max, [[maybe_unused]] StoreSaleType store_num)
 {
-    if (repeat_pull(com_val) && (*com_val >= min) && (*com_val <= max)) {
-        return true;
+    short repeat_command;
+    if (repeat_pull(&repeat_command) && (repeat_command >= min) && (repeat_command <= max)) {
+        return repeat_command;
     }
 
     msg_print(nullptr);
-    *com_val = (-1);
     const auto lo = I2A(min);
     const auto hi = (max > 25) ? toupper(I2A(max - 26)) : I2A(max);
 #ifdef JP
     const auto title = (store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM) ? "アイテム" : "商品";
-    const auto prompt = format("(%s:%c-%c, ESCで中断) %s", title, lo, hi, pmt);
+    const auto prompt = format("(%s:%c-%c, ESCで中断) %s", title, lo, hi, fmt.data());
 #else
-    const auto prompt = format("(Items %c-%c, ESC to exit) %s", lo, hi, pmt);
+    const auto prompt = format("(Items %c-%c, ESC to exit) %s", lo, hi, fmt.data());
 #endif
 
     auto command = ESCAPE;
@@ -188,7 +187,7 @@ int input_stock(COMMAND_CODE *com_val, concptr pmt, int min, int max, [[maybe_un
         }
 
         if ((k >= min) && (k <= max)) {
-            *com_val = k;
+            command = k;
             break;
         }
 
@@ -197,11 +196,11 @@ int input_stock(COMMAND_CODE *com_val, concptr pmt, int min, int max, [[maybe_un
 
     prt("", 0, 0);
     if (command == ESCAPE) {
-        return false;
+        return std::nullopt;
     }
 
-    repeat_push(*com_val);
-    return true;
+    repeat_push(command);
+    return command;
 }
 
 /*!
@@ -226,13 +225,14 @@ void store_examine(PlayerType *player_ptr, StoreSaleType store_num)
         i = store_bottom;
     }
 
-    COMMAND_CODE item;
-    if (!input_stock(&item, _("どれを調べますか？", "Which item do you want to examine? "), 0, i - 1, store_num)) {
+    constexpr auto mes = _("どれを調べますか？", "Which item do you want to examine? ");
+    auto item_num_opt = input_stock(mes, 0, i - 1, store_num);
+    if (!item_num_opt) {
         return;
     }
-    item = item + store_top;
-    ItemEntity *o_ptr;
-    o_ptr = &st_ptr->stock[item];
+
+    const auto item_num = *item_num_opt + store_top;
+    auto *o_ptr = &st_ptr->stock[item_num];
     if (!o_ptr->is_fully_known()) {
         msg_print(_("このアイテムについて特に知っていることはない。", "You have no special knowledge about that item."));
         return;
