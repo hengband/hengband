@@ -26,7 +26,7 @@ void museum_remove_object(PlayerType *player_ptr)
     }
 
     COMMAND_CODE item;
-    if (!get_stock(&item, _("どのアイテムの展示をやめさせますか？", "Which item do you want to order to remove? "), 0, i - 1, StoreSaleType::MUSEUM)) {
+    if (!input_stock(&item, _("どのアイテムの展示をやめさせますか？", "Which item do you want to order to remove? "), 0, i - 1, StoreSaleType::MUSEUM)) {
         return;
     }
 

@@ -29,4 +29,4 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
 void store_init(int town_num, StoreSaleType store_num);
 void store_examine(PlayerType *player_ptr, StoreSaleType store_num);
 int store_check_num(ItemEntity *o_ptr, StoreSaleType store_num);
-int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j, StoreSaleType store_num);
+int input_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j, StoreSaleType store_num);

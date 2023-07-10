@@ -153,7 +153,7 @@ int store_check_num(ItemEntity *o_ptr, StoreSaleType store_num)
  * @param j 選択範囲の最大値
  * @return 実際に選択したらTRUE、キャンセルしたらFALSE
  */
-int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j, [[maybe_unused]] StoreSaleType store_num)
+int input_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j, [[maybe_unused]] StoreSaleType store_num)
 {
     if (repeat_pull(com_val) && (*com_val >= i) && (*com_val <= j)) {
         return true;
@@ -227,7 +227,7 @@ void store_examine(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     COMMAND_CODE item;
-    if (!get_stock(&item, _("どれを調べますか？", "Which item do you want to examine? "), 0, i - 1, store_num)) {
+    if (!input_stock(&item, _("どれを調べますか？", "Which item do you want to examine? "), 0, i - 1, store_num)) {
         return;
     }
     item = item + store_top;

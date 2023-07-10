@@ -85,7 +85,7 @@ static bool show_store_select_item(COMMAND_CODE *item, const int i, StoreSaleTyp
         break;
     }
 
-    return get_stock(item, prompt, 0, i - 1, store_num) != 0;
+    return input_stock(item, prompt, 0, i - 1, store_num) != 0;
 }
 
 /*!
