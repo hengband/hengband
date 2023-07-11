@@ -5,7 +5,6 @@
 #include "system/angband.h"
 #include <vector>
 
-#define MAX_RESISTANCE_FLAGS_DESCRIPTION 19
 #define MAX_VULNERABLE_FLAGS_DESCRIPTION 6
 #define MAX_IMMUNITY_FLAGS_DESCRIPTION 4
 #define MAX_SUSTAINER_FLAGS_DESCRIPTION 6
@@ -33,7 +32,7 @@ extern const std::vector<flag_desc> stat_flags_desc;
 extern const std::vector<flag_desc> pval_flags1_desc;
 extern const std::vector<flag_desc> slay_flags_desc;
 extern const std::vector<flag_desc> brand_flags_desc;
-extern const flag_desc resist_flags_desc[MAX_RESISTANCE_FLAGS_DESCRIPTION];
+extern const std::vector<flag_desc> resist_flags_desc;
 extern const flag_desc vulnerable_flags_desc[MAX_VULNERABLE_FLAGS_DESCRIPTION];
 extern const flag_desc immune_flags_desc[MAX_IMMUNITY_FLAGS_DESCRIPTION];
 extern const flag_desc sustain_flags_desc[MAX_SUSTAINER_FLAGS_DESCRIPTION];

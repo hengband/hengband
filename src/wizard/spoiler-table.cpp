@@ -114,7 +114,7 @@ const std::vector<flag_desc> brand_flags_desc = {
     { TR_IMPACT, _("強撃", "Smash hit") },
 };
 
-const flag_desc resist_flags_desc[MAX_RESISTANCE_FLAGS_DESCRIPTION] = {
+const std::vector<flag_desc> resist_flags_desc = {
     { TR_RES_ACID, _("酸", "Acid") },
     { TR_RES_ELEC, _("電撃", "Lightning") },
     { TR_RES_FIRE, _("火炎", "Fire") },

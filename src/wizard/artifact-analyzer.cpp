@@ -87,11 +87,10 @@ static std::vector<std::string> analyze_brand(ItemEntity *o_ptr)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param resist_list 通常耐性構造体の参照ポインタ
  */
-static void analyze_resist(ItemEntity *o_ptr, concptr *resist_list)
+static std::vector<std::string> analyze_resist(ItemEntity *o_ptr)
 {
     auto flags = object_flags(o_ptr);
-    resist_list = spoiler_flag_aux(flags, resist_flags_desc, resist_list, N_ELEMENTS(resist_flags_desc));
-    *resist_list = nullptr;
+    return extract_spoiler_flags(flags, resist_flags_desc);
 }
 
 /*!
@@ -287,7 +286,7 @@ void object_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *de
     desc_ptr->brands = analyze_brand(o_ptr);
     desc_ptr->slays = analyze_slay(o_ptr);
     analyze_immune(o_ptr, desc_ptr->immunities);
-    analyze_resist(o_ptr, desc_ptr->resistances);
+    desc_ptr->resistances = analyze_resist(o_ptr);
     analyze_vulnerable(o_ptr, desc_ptr->vulnerables);
     analyze_sustains(o_ptr, desc_ptr->sustains);
     desc_ptr->misc_magic = analyze_misc_magic(o_ptr);
@@ -309,7 +308,7 @@ void random_artifact_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc
     desc_ptr->brands = analyze_brand(o_ptr);
     desc_ptr->slays = analyze_slay(o_ptr);
     analyze_immune(o_ptr, desc_ptr->immunities);
-    analyze_resist(o_ptr, desc_ptr->resistances);
+    desc_ptr->resistances = analyze_resist(o_ptr);
     analyze_vulnerable(o_ptr, desc_ptr->vulnerables);
     analyze_sustains(o_ptr, desc_ptr->sustains);
     desc_ptr->misc_magic = analyze_misc_magic(o_ptr);
