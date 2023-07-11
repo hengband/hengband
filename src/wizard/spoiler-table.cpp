@@ -136,7 +136,7 @@ const std::vector<flag_desc> resist_flags_desc = {
     { TR_RES_CURSE, _("呪力", "Curse") },
 };
 
-const flag_desc vulnerable_flags_desc[MAX_VULNERABLE_FLAGS_DESCRIPTION] = {
+const std::vector<flag_desc> vulnerable_flags_desc = {
     { TR_VUL_ACID, _("酸", "Acid") },
     { TR_VUL_ELEC, _("電撃", "Lightning") },
     { TR_VUL_FIRE, _("火炎", "Fire") },

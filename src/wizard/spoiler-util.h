@@ -40,7 +40,7 @@ struct obj_desc_list {
     std::vector<std::string> brands{}; /* A list if an object's elemental brands */
     concptr immunities[N_ELEMENTS(immune_flags_desc) + 1]{}; /* A list of immunities granted by an object */
     std::vector<std::string> resistances{}; /* A list of resistances granted by an object */
-    concptr vulnerables[N_ELEMENTS(vulnerable_flags_desc) + 1]{}; /* A list of resistances granted by an object */
+    std::vector<std::string> vulnerabilities{}; /* A list of resistances granted by an object */
     concptr sustains[N_ELEMENTS(sustain_flags_desc) - 1 + 1]{}; /* A list of stats sustained by an object */
     std::vector<std::string> misc_magic{}; // その他の特性 (呪い、光源範囲等)
 
