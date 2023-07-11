@@ -1,4 +1,6 @@
 ﻿#include "wizard/spoiler-util.h"
+#include "object/object-flags.h"
+#include "system/item-entity.h"
 
 const char item_separator = ',';
 const char list_separator = _(',', ';');
@@ -7,6 +9,24 @@ concptr spoiler_indent = "    ";
 
 /* The spoiler file being created */
 FILE *spoiler_file = nullptr;
+
+/*!
+ * @brief 特性フラグ定義から表記すべき特性を抽出する
+ * @param art_flags 出力するアーティファクトの特性一覧
+ * @param definitions 表記対象の特性一覧
+ * @return 表記すべき特性一覧
+ */
+std::vector<std::string> extract_spoiler_flags(const TrFlags &art_flags, const std::vector<flag_desc> &definitions)
+{
+    std::vector<std::string> descriptions{};
+    for (const auto &definition : definitions) {
+        if (art_flags.has(definition.flag)) {
+            descriptions.push_back(definition.desc);
+        }
+    }
+
+    return descriptions;
+}
 
 /*!
  * @brief ファイルポインタ先に同じ文字を複数出力する /
@@ -221,4 +241,23 @@ void spoil_out(std::string_view sv, bool flush_buffer)
 
         *roff_p++ = ch;
     }
+}
+
+void ParameterValueInfo::analyze(const ItemEntity &item)
+{
+    if (item.pval == 0) {
+        return;
+    }
+
+    auto flags = object_flags(&item);
+    this->pval_desc = format("%+d", item.pval);
+    if (flags.has_all_of(EnumRange(TR_STR, TR_CHR))) {
+        this->pval_affects.push_back(_("全能力", "All stats"));
+    } else if (flags.has_any_of(EnumRange(TR_STR, TR_CHR))) {
+        const auto descriptions_stat = extract_spoiler_flags(flags, stat_flags_desc);
+        this->pval_affects.insert(this->pval_affects.end(), descriptions_stat.begin(), descriptions_stat.end());
+    }
+
+    const auto descriptions_pval1 = extract_spoiler_flags(flags, pval_flags1_desc);
+    this->pval_affects.insert(this->pval_affects.end(), descriptions_pval1.begin(), descriptions_pval1.end());
 }

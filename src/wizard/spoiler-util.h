@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "object-enchant/tr-flags.h"
 #include "system/angband.h"
 #include "wizard/spoiler-table.h"
 #include <string>
@@ -19,17 +20,22 @@ enum class SpoilerOutputResultType {
     FILE_CLOSE_FAILED,
 };
 
-/* A special type used just for deailing with pvals */
-struct pval_info_type {
-    char pval_desc[12]; /* This will contain a string such as "+2", "-10", etc. */
+class ItemEntity;
+class ParameterValueInfo {
+public:
+    ParameterValueInfo() = default;
+
+    std::string pval_desc = ""; /* This will contain a string such as "+2", "-10", etc. */
 
     /* A list of various player traits affected by an object's pval such as stats, speed, stealth, etc. */
-    concptr pval_affects[N_ELEMENTS(stat_flags_desc) - 1 + N_ELEMENTS(pval_flags1_desc) + 1];
+    std::vector<std::string> pval_affects{};
+
+    void analyze(const ItemEntity &item);
 };
 
 struct obj_desc_list {
     char description[MAX_NLEN]{}; /* "The Longsword Dragonsmiter (6d4) (+20, +25)" */
-    pval_info_type pval_info{}; /* Description of what is affected by an object's pval */
+    ParameterValueInfo pval_info{}; /* Description of what is affected by an object's pval */
     concptr slays[N_ELEMENTS(slay_flags_desc) + 1]{}; /* A list of an object's slaying preferences */
     concptr brands[N_ELEMENTS(brand_flags_desc) + 1]{}; /* A list if an object's elemental brands */
     concptr immunities[N_ELEMENTS(immune_flags_desc) + 1]{}; /* A list of immunities granted by an object */
@@ -49,6 +55,8 @@ extern const int max_evolution_depth;
 extern concptr spoiler_indent;
 extern FILE *spoiler_file;
 
+struct flag_desc;
+std::vector<std::string> extract_spoiler_flags(const TrFlags &art_flags, const std::vector<flag_desc> &definitions);
 void spoiler_blanklines(int n);
 void spoiler_underline(concptr str);
 void spoil_out(std::string_view sv, bool flush_buffer = false);
