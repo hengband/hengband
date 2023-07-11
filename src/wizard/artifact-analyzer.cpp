@@ -23,7 +23,7 @@
  * @param o_ptr 記述を得たいオブジェクトの参照ポインタ
  * @param desc_ptr 記述内容を返すための文字列参照ポインタ
  */
-static std::string analyze_general(PlayerType *player_ptr, ItemEntity *o_ptr)
+static std::string analyze_general(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
     return describe_flavor(player_ptr, o_ptr, OD_NAME_AND_ENCHANT | OD_STORE | OD_DEBUG);
 }
@@ -34,7 +34,7 @@ static std::string analyze_general(PlayerType *player_ptr, ItemEntity *o_ptr)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param slay_list 種族スレイ構造体の参照ポインタ
  */
-static std::vector<std::string> analyze_slay(ItemEntity *o_ptr)
+static std::vector<std::string> analyze_slay(const ItemEntity *o_ptr)
 {
     auto flags = object_flags(o_ptr);
     return extract_spoiler_flags(flags, slay_flags_desc);
@@ -46,7 +46,7 @@ static std::vector<std::string> analyze_slay(ItemEntity *o_ptr)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param brand_list 属性ブランド構造体の参照ポインタ
  */
-static std::vector<std::string> analyze_brand(ItemEntity *o_ptr)
+static std::vector<std::string> analyze_brand(const ItemEntity *o_ptr)
 {
     auto flags = object_flags(o_ptr);
     return extract_spoiler_flags(flags, brand_flags_desc);
@@ -58,7 +58,7 @@ static std::vector<std::string> analyze_brand(ItemEntity *o_ptr)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param resist_list 通常耐性構造体の参照ポインタ
  */
-static std::vector<std::string> analyze_resist(ItemEntity *o_ptr)
+static std::vector<std::string> analyze_resist(const ItemEntity *o_ptr)
 {
     auto flags = object_flags(o_ptr);
     return extract_spoiler_flags(flags, resist_flags_desc);
@@ -70,7 +70,7 @@ static std::vector<std::string> analyze_resist(ItemEntity *o_ptr)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param immune_list 免疫構造体の参照ポインタ
  */
-static std::vector<std::string> analyze_immune(ItemEntity *o_ptr)
+static std::vector<std::string> analyze_immune(const ItemEntity *o_ptr)
 {
     auto flags = object_flags(o_ptr);
     return extract_spoiler_flags(flags, immune_flags_desc);
@@ -82,7 +82,7 @@ static std::vector<std::string> analyze_immune(ItemEntity *o_ptr)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param immune_list 弱点構造体の参照ポインタ
  */
-static std::vector<std::string> analyze_vulnerable(ItemEntity *o_ptr)
+static std::vector<std::string> analyze_vulnerable(const ItemEntity *o_ptr)
 {
     auto flags = object_flags(o_ptr);
     return extract_spoiler_flags(flags, vulnerable_flags_desc);
@@ -94,7 +94,7 @@ static std::vector<std::string> analyze_vulnerable(ItemEntity *o_ptr)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param sustain_list 維持特性構造体の参照ポインタ
  */
-static std::vector<std::string> analyze_sustains(ItemEntity *o_ptr)
+static std::vector<std::string> analyze_sustains(const ItemEntity *o_ptr)
 {
     auto flags = object_flags(o_ptr);
     if (flags.has_all_of(EnumRange(TR_SUST_STR, TR_SUST_CHR))) {
@@ -115,7 +115,7 @@ static std::vector<std::string> analyze_sustains(ItemEntity *o_ptr)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param misc_list その他の特性構造体の参照ポインタ
  */
-static std::vector<std::string> analyze_misc_magic(ItemEntity *o_ptr)
+static std::vector<std::string> analyze_misc_magic(const ItemEntity *o_ptr)
 {
     std::vector<std::string> descriptions{};
     auto flags = object_flags(o_ptr);
@@ -199,7 +199,7 @@ static std::vector<std::string> analyze_misc_magic(ItemEntity *o_ptr)
  * @param addition 追加ランダム耐性構造体の参照ポインタ
  * @param addition_sz addition に書き込めるバイト数
  */
-static std::string analyze_addition(ItemEntity *o_ptr)
+static std::string analyze_addition(const ItemEntity *o_ptr)
 {
     const auto &artifact = o_ptr->get_fixed_artifact();
     std::stringstream ss;
@@ -239,7 +239,7 @@ static std::string analyze_addition(ItemEntity *o_ptr)
  * @param misc_desc 基本情報を収める文字列参照ポインタ
  * @param misc_desc_sz misc_desc に書き込めるバイト数
  */
-static std::string analyze_misc(ItemEntity *o_ptr)
+static std::string analyze_misc(const ItemEntity *o_ptr)
 {
     const auto &artifact = o_ptr->get_fixed_artifact();
     constexpr auto fmt = _("レベル %d, 希少度 %u, %d.%d kg, ＄%d", "Level %d, Rarity %u, %d.%d lbs, %d Gold");
@@ -254,7 +254,7 @@ static std::string analyze_misc(ItemEntity *o_ptr)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param desc_ptr 全アーティファクト情報を収める文字列参照ポインタ
  */
-void object_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *desc_ptr)
+void object_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr, obj_desc_list *desc_ptr)
 {
     desc_ptr->description = analyze_general(player_ptr, o_ptr);
     desc_ptr->pval_info.analyze(*o_ptr);
@@ -276,7 +276,7 @@ void object_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *de
  * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
  * @param desc_ptr 記述内容を収める構造体参照ポインタ
  */
-void random_artifact_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *desc_ptr)
+void random_artifact_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr, obj_desc_list *desc_ptr)
 {
     desc_ptr->description = analyze_general(player_ptr, o_ptr);
     desc_ptr->pval_info.analyze(*o_ptr);

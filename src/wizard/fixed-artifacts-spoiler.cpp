@@ -57,35 +57,26 @@ void spoiler_outlist(std::string_view header, const std::vector<std::string> &de
 }
 
 /*!
- * @brief アーティファクト情報を出力するためにダミー生成を行う /
- * Hack -- Create a "forged" artifact
- * @param o_ptr 一時生成先を保管するオブジェクト構造体
+ * @brief アーティファクト情報を出力するためにダミー生成を行う
  * @param fixed_artifact_idx 生成するアーティファクトID
- * @return 生成が成功した場合TRUEを返す
+ * @return 生成したアーティファクト (連番で埋まっているので不存在例外は吐かない)
  */
-static bool make_fake_artifact(ItemEntity *o_ptr, FixedArtifactId fixed_artifact_idx)
+static ItemEntity make_fake_artifact(FixedArtifactId fixed_artifact_idx)
 {
     const auto &artifact = ArtifactsInfo::get_instance().get_artifact(fixed_artifact_idx);
-    if (artifact.name.empty()) {
-        return false;
-    }
-
     const auto bi_id = lookup_baseitem_id(artifact.bi_key);
-    if (bi_id == 0) {
-        return false;
-    }
-
-    o_ptr->prep(bi_id);
-    o_ptr->fixed_artifact_idx = fixed_artifact_idx;
-    o_ptr->pval = artifact.pval;
-    o_ptr->ac = artifact.ac;
-    o_ptr->dd = artifact.dd;
-    o_ptr->ds = artifact.ds;
-    o_ptr->to_a = artifact.to_a;
-    o_ptr->to_h = artifact.to_h;
-    o_ptr->to_d = artifact.to_d;
-    o_ptr->weight = artifact.weight;
-    return true;
+    ItemEntity item;
+    item.prep(bi_id);
+    item.fixed_artifact_idx = fixed_artifact_idx;
+    item.pval = artifact.pval;
+    item.ac = artifact.ac;
+    item.dd = artifact.dd;
+    item.ds = artifact.ds;
+    item.to_a = artifact.to_a;
+    item.to_h = artifact.to_h;
+    item.to_d = artifact.to_d;
+    item.weight = artifact.weight;
+    return item;
 }
 
 /*!
@@ -147,11 +138,7 @@ SpoilerOutputResultType spoil_fixed_artifact(concptr fname)
                     continue;
                 }
 
-                ItemEntity item;
-                if (!make_fake_artifact(&item, a_idx)) {
-                    continue;
-                }
-
+                const auto item = make_fake_artifact(a_idx);
                 PlayerType dummy;
                 obj_desc_list artifact_descriptions;
                 object_analyze(&dummy, &item, &artifact_descriptions);
