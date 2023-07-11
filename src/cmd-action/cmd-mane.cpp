@@ -1195,12 +1195,12 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         break;
     }
     case MonsterAbilityType::S_DEAD_UNIQUE: {
-        int k, count = 0;
+        auto count = 0;
         if (!target_set(player_ptr, TARGET_KILL)) {
             return false;
         }
         msg_print(_("特別な強敵を蘇生した！", "You summon special dead opponents!"));
-        for (k = 0; k < 4; k++) {
+        for (auto k = 0; k < 4; k++) {
             if (summon_specific(player_ptr, -1, target_row, target_col, plev, SUMMON_DEAD_UNIQUE, (mode | PM_ALLOW_UNIQUE | PM_CLONE))) {
                 count++;
             }

@@ -271,8 +271,7 @@ static int decide_drop_numbers(PlayerType *player_ptr, monster_death_type *md_pt
         drop_numbers += damroll(4, 2);
     }
 
-    // クローンは、クローン地獄内のユニークモンスター以外はドロップしない
-    if (md_ptr->cloned && !(md_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (player_ptr->current_floor_ptr->quest_number == QuestId::CLONE))) {
+    if (md_ptr->cloned && md_ptr->r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         drop_numbers = 0;
     }
 

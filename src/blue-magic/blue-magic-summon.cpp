@@ -274,19 +274,14 @@ bool cast_blue_summon_unique(PlayerType *player_ptr, bmc_type *bmc_ptr)
 
 bool cast_blue_summon_dead_unique(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    int count = 0;
-    msg_print(_("特別な強敵を蘇らせた！", "You summon a special dead opponent!"));
-    for (int k = 0; k < 1; k++) {
-        if (summon_specific(player_ptr, (bmc_ptr->pet ? -1 : 0), player_ptr->y, player_ptr->x, bmc_ptr->summon_lev, SUMMON_DEAD_UNIQUE,
-                (bmc_ptr->g_mode | bmc_ptr->p_mode | PM_ALLOW_UNIQUE | PM_CLONE))) {
-            count++;
-            if (!bmc_ptr->pet) {
-                msg_print(_("蘇生されたユニーク・モンスターは怒っている！", "The summoned special dead opponent is angry!"));
-            }
-        }
-    }
+    BIT_FLAGS mode = bmc_ptr->g_mode | bmc_ptr->p_mode | PM_ALLOW_UNIQUE | PM_CLONE;
 
-    if (!count) {
+    msg_print(_("特別な強敵を蘇らせた！", "You summon a special dead opponent!"));
+    if (summon_specific(player_ptr, (bmc_ptr->pet ? -1 : 0), player_ptr->y, player_ptr->x, bmc_ptr->summon_lev, SUMMON_DEAD_UNIQUE, mode)) {
+        if (!bmc_ptr->pet) {
+            msg_print(_("蘇生されたユニーク・モンスターは怒っている！", "The summoned special dead opponent is angry!"));
+        }
+    } else {
         bmc_ptr->no_trump = true;
     }
 
