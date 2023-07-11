@@ -251,7 +251,7 @@ static void analyze_misc(ItemEntity *o_ptr, char *misc_desc, size_t misc_desc_sz
  */
 void object_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *desc_ptr)
 {
-    angband_strcpy(desc_ptr->description, analyze_general(player_ptr, o_ptr), MAX_NLEN);
+    desc_ptr->description = analyze_general(player_ptr, o_ptr);
     desc_ptr->pval_info.analyze(*o_ptr);
     desc_ptr->brands = analyze_brand(o_ptr);
     desc_ptr->slays = analyze_slay(o_ptr);
@@ -273,7 +273,7 @@ void object_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *de
  */
 void random_artifact_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *desc_ptr)
 {
-    angband_strcpy(desc_ptr->description, analyze_general(player_ptr, o_ptr), MAX_NLEN);
+    desc_ptr->description = analyze_general(player_ptr, o_ptr);
     desc_ptr->pval_info.analyze(*o_ptr);
     desc_ptr->brands = analyze_brand(o_ptr);
     desc_ptr->slays = analyze_slay(o_ptr);

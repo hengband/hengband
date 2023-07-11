@@ -31,7 +31,7 @@ public:
 };
 
 struct obj_desc_list {
-    char description[MAX_NLEN]{}; /* "The Longsword Dragonsmiter (6d4) (+20, +25)" */
+    std::string description = ""; /* "The Longsword Dragonsmiter (6d4) (+20, +25)" */
     ParameterValueInfo pval_info{}; /* Description of what is affected by an object's pval */
     std::vector<std::string> slays{}; /* A list of an object's slaying preferences */
     std::vector<std::string> brands{}; /* A list if an object's elemental brands */

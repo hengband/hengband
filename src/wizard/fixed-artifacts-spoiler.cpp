@@ -96,7 +96,7 @@ static bool make_fake_artifact(ItemEntity *o_ptr, FixedArtifactId fixed_artifact
 static void spoiler_print_art(obj_desc_list *art_ptr)
 {
     const auto *pval_ptr = &art_ptr->pval_info;
-    fprintf(spoiler_file, "%s\n", art_ptr->description);
+    fprintf(spoiler_file, "%s\n", art_ptr->description.data());
     if (!pval_ptr->pval_desc.empty()) {
         std::stringstream ss;
         ss << pval_ptr->pval_desc << _("の修正:", " to");
