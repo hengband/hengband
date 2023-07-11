@@ -99,7 +99,7 @@ const std::vector<flag_desc> slay_flags_desc = {
 };
 
 /* Elemental brands for weapons */
-flag_desc brand_flags_desc[MAX_BRAND_FLAGS_DESCRIPTION] = {
+const std::vector<flag_desc> brand_flags_desc = {
     { TR_BRAND_ACID, _("溶解", "Acid Brand") },
     { TR_BRAND_ELEC, _("電撃", "Lightning Brand") },
     { TR_BRAND_FIRE, _("焼棄", "Flame Tongue") },

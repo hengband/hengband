@@ -37,7 +37,7 @@ struct obj_desc_list {
     char description[MAX_NLEN]{}; /* "The Longsword Dragonsmiter (6d4) (+20, +25)" */
     ParameterValueInfo pval_info{}; /* Description of what is affected by an object's pval */
     std::vector<std::string> slays{}; /* A list of an object's slaying preferences */
-    concptr brands[N_ELEMENTS(brand_flags_desc) + 1]{}; /* A list if an object's elemental brands */
+    std::vector<std::string> brands{}; /* A list if an object's elemental brands */
     concptr immunities[N_ELEMENTS(immune_flags_desc) + 1]{}; /* A list of immunities granted by an object */
     concptr resistances[N_ELEMENTS(resist_flags_desc) + 1]{}; /* A list of resistances granted by an object */
     concptr vulnerables[N_ELEMENTS(vulnerable_flags_desc) + 1]{}; /* A list of resistances granted by an object */
