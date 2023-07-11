@@ -154,7 +154,7 @@ const flag_desc immune_flags_desc[MAX_IMMUNITY_FLAGS_DESCRIPTION] = {
 };
 
 /* Sustain stats -  these are given their "own" line in the spoiler file, mainly for simplicity */
-const flag_desc sustain_flags_desc[MAX_SUSTAINER_FLAGS_DESCRIPTION] = {
+const std::vector<flag_desc> sustain_flags_desc = {
     { TR_SUST_STR, _("腕力", "STR") },
     { TR_SUST_INT, _("知能", "INT") },
     { TR_SUST_WIS, _("賢さ", "WIS") },

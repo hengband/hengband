@@ -124,16 +124,18 @@ static std::vector<std::string> analyze_vulnerable(ItemEntity *o_ptr)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param sustain_list 維持特性構造体の参照ポインタ
  */
-static void analyze_sustains(ItemEntity *o_ptr, concptr *sustain_list)
+static std::vector<std::string> analyze_sustains(ItemEntity *o_ptr)
 {
     auto flags = object_flags(o_ptr);
     if (flags.has_all_of(EnumRange(TR_SUST_STR, TR_SUST_CHR))) {
-        *sustain_list++ = _("全能力", "All stats");
-    } else if (flags.has_any_of(EnumRange(TR_SUST_STR, TR_SUST_CHR))) {
-        sustain_list = spoiler_flag_aux(flags, sustain_flags_desc, sustain_list, N_ELEMENTS(sustain_flags_desc));
+        return { _("全能力", "All stats") };
     }
 
-    *sustain_list = nullptr;
+    if (flags.has_any_of(EnumRange(TR_SUST_STR, TR_SUST_CHR))) {
+        return extract_spoiler_flags(flags, sustain_flags_desc);
+    }
+
+    return {};
 }
 
 /*!
@@ -287,7 +289,7 @@ void object_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *de
     analyze_immune(o_ptr, desc_ptr->immunities);
     desc_ptr->resistances = analyze_resist(o_ptr);
     desc_ptr->vulnerabilities = analyze_vulnerable(o_ptr);
-    analyze_sustains(o_ptr, desc_ptr->sustains);
+    desc_ptr->sustenances = analyze_sustains(o_ptr);
     desc_ptr->misc_magic = analyze_misc_magic(o_ptr);
     analyze_addition(o_ptr, desc_ptr->addition, sizeof(desc_ptr->addition));
     analyze_misc(o_ptr, desc_ptr->misc_desc, sizeof(desc_ptr->misc_desc));
@@ -309,7 +311,7 @@ void random_artifact_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc
     analyze_immune(o_ptr, desc_ptr->immunities);
     desc_ptr->resistances = analyze_resist(o_ptr);
     desc_ptr->vulnerabilities = analyze_vulnerable(o_ptr);
-    analyze_sustains(o_ptr, desc_ptr->sustains);
+    desc_ptr->sustenances = analyze_sustains(o_ptr);
     desc_ptr->misc_magic = analyze_misc_magic(o_ptr);
     desc_ptr->activation = activation_explanation(o_ptr);
     strnfmt(desc_ptr->misc_desc, sizeof(desc_ptr->misc_desc), _("重さ %d.%d kg", "Weight %d.%d lbs"), _(lb_to_kg_integer(o_ptr->weight), o_ptr->weight / 10),
