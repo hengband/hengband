@@ -75,7 +75,7 @@ const std::vector<flag_desc> pval_flags1_desc = { { TR_MAGIC_MASTERY, _("魔法�
     { TR_SEARCH, _("探索", "Searching") }, { TR_INFRA, _("赤外線視力", "Infravision") }, { TR_TUNNEL, _("採掘", "Tunneling") },
     { TR_BLOWS, _("攻撃回数", "Attacks") }, { TR_SPEED, _("スピード", "Speed") } };
 
-flag_desc slay_flags_desc[MAX_SLAY_FLAGS_DESCRIPTION] = {
+const std::vector<flag_desc> slay_flags_desc = {
     { TR_SLAY_ANIMAL, _("動物", "Animal") },
     { TR_KILL_ANIMAL, _("*動物*", "XAnimal") },
     { TR_SLAY_EVIL, _("邪悪", "Evil") },

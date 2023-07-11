@@ -3,10 +3,8 @@
 #include "object-enchant/tr-types.h"
 #include "object/tval-types.h"
 #include "system/angband.h"
-
 #include <vector>
 
-#define MAX_SLAY_FLAGS_DESCRIPTION 20
 #define MAX_BRAND_FLAGS_DESCRIPTION 12
 #define MAX_RESISTANCE_FLAGS_DESCRIPTION 19
 #define MAX_VULNERABLE_FLAGS_DESCRIPTION 6
@@ -34,7 +32,7 @@ extern const std::vector<grouper> group_item_list;
 extern const std::vector<grouper> group_artifact_list;
 extern const std::vector<flag_desc> stat_flags_desc;
 extern const std::vector<flag_desc> pval_flags1_desc;
-extern flag_desc slay_flags_desc[MAX_SLAY_FLAGS_DESCRIPTION];
+extern const std::vector<flag_desc> slay_flags_desc;
 extern flag_desc brand_flags_desc[MAX_BRAND_FLAGS_DESCRIPTION];
 extern const flag_desc resist_flags_desc[MAX_RESISTANCE_FLAGS_DESCRIPTION];
 extern const flag_desc vulnerable_flags_desc[MAX_VULNERABLE_FLAGS_DESCRIPTION];

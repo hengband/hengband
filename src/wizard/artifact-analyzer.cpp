@@ -63,11 +63,10 @@ static std::string analyze_general(PlayerType *player_ptr, ItemEntity *o_ptr)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param slay_list 種族スレイ構造体の参照ポインタ
  */
-static void analyze_slay(ItemEntity *o_ptr, concptr *slay_list)
+static std::vector<std::string> analyze_slay(ItemEntity *o_ptr)
 {
     auto flags = object_flags(o_ptr);
-    slay_list = spoiler_flag_aux(flags, slay_flags_desc, slay_list, N_ELEMENTS(slay_flags_desc));
-    *slay_list = nullptr;
+    return extract_spoiler_flags(flags, slay_flags_desc);
 }
 
 /*!
@@ -287,7 +286,7 @@ void object_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *de
     angband_strcpy(desc_ptr->description, analyze_general(player_ptr, o_ptr), MAX_NLEN);
     desc_ptr->pval_info.analyze(*o_ptr);
     analyze_brand(o_ptr, desc_ptr->brands);
-    analyze_slay(o_ptr, desc_ptr->slays);
+    desc_ptr->slays = analyze_slay(o_ptr);
     analyze_immune(o_ptr, desc_ptr->immunities);
     analyze_resist(o_ptr, desc_ptr->resistances);
     analyze_vulnerable(o_ptr, desc_ptr->vulnerables);
@@ -309,7 +308,7 @@ void random_artifact_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc
     angband_strcpy(desc_ptr->description, analyze_general(player_ptr, o_ptr), MAX_NLEN);
     desc_ptr->pval_info.analyze(*o_ptr);
     analyze_brand(o_ptr, desc_ptr->brands);
-    analyze_slay(o_ptr, desc_ptr->slays);
+    desc_ptr->slays = analyze_slay(o_ptr);
     analyze_immune(o_ptr, desc_ptr->immunities);
     analyze_resist(o_ptr, desc_ptr->resistances);
     analyze_vulnerable(o_ptr, desc_ptr->vulnerables);
