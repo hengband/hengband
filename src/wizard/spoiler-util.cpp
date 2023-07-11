@@ -250,7 +250,7 @@ void ParameterValueInfo::analyze(const ItemEntity &item)
     }
 
     auto flags = object_flags(&item);
-    this->pval_desc = format("%s%d", item.pval >= 0 ? "+" : "", item.pval);
+    this->pval_desc = format("%+d", item.pval);
     if (flags.has_all_of(EnumRange(TR_STR, TR_CHR))) {
         this->pval_affects.push_back(_("全能力", "All stats"));
     } else if (flags.has_any_of(EnumRange(TR_STR, TR_CHR))) {
