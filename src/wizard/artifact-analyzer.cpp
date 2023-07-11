@@ -15,6 +15,7 @@
 #include "util/enum-range.h"
 #include "util/string-processor.h"
 #include "wizard/spoiler-util.h"
+#include <sstream>
 
 /*!
  * @brief アイテムの特定記述内容を返す /
@@ -198,33 +199,36 @@ static std::vector<std::string> analyze_misc_magic(ItemEntity *o_ptr)
  * @param addition 追加ランダム耐性構造体の参照ポインタ
  * @param addition_sz addition に書き込めるバイト数
  */
-static void analyze_addition(ItemEntity *o_ptr, char *addition, size_t addition_sz)
+static std::string analyze_addition(ItemEntity *o_ptr)
 {
     const auto &artifact = o_ptr->get_fixed_artifact();
-    strcpy(addition, "");
-
+    std::stringstream ss;
     if (artifact.gen_flags.has_all_of({ ItemGenerationTraitType::XTRA_POWER, ItemGenerationTraitType::XTRA_H_RES })) {
-        angband_strcat(addition, _("能力and耐性", "Ability and Resistance"), addition_sz);
+        ss << _("能力and耐性", "Ability and Resistance");
     } else if (artifact.gen_flags.has(ItemGenerationTraitType::XTRA_POWER)) {
-        angband_strcat(addition, _("能力", "Ability"), addition_sz);
+        ss << _("能力", "Ability");
         if (artifact.gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER)) {
-            angband_strcat(addition, _("(1/2でand耐性)", "(plus Resistance about 1/2)"), addition_sz);
+            ss << _("(1/2でand耐性)", "(plus Resistance about 1/2)");
         }
     } else if (artifact.gen_flags.has(ItemGenerationTraitType::XTRA_H_RES)) {
-        angband_strcat(addition, _("耐性", "Resistance"), addition_sz);
+        ss << _("耐性", "Resistance");
         if (artifact.gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER)) {
-            angband_strcat(addition, _("(1/2でand能力)", "(plus Ability about 1/2)"), addition_sz);
+            ss << _("(1/2でand能力)", "(plus Ability about 1/2)");
         }
     } else if (artifact.gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER)) {
-        angband_strcat(addition, _("能力or耐性", "Ability or Resistance"), addition_sz);
+        ss << _("能力or耐性", "Ability or Resistance");
     }
 
-    if (artifact.gen_flags.has(ItemGenerationTraitType::XTRA_DICE)) {
-        if (strlen(addition) > 0) {
-            angband_strcat(addition, _("、", ", "), addition_sz);
-        }
-        angband_strcat(addition, _("ダイス数", "Dice number"), addition_sz);
+    if (artifact.gen_flags.has_not(ItemGenerationTraitType::XTRA_DICE)) {
+        return ss.str();
     }
+
+    if (ss.tellp() > 0) {
+        ss << _("、", ", ");
+    }
+
+    ss << _("ダイス数", "Dice number");
+    return ss.str();
 }
 
 /*!
@@ -260,7 +264,7 @@ void object_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *de
     desc_ptr->vulnerabilities = analyze_vulnerable(o_ptr);
     desc_ptr->sustenances = analyze_sustains(o_ptr);
     desc_ptr->misc_magic = analyze_misc_magic(o_ptr);
-    analyze_addition(o_ptr, desc_ptr->addition, sizeof(desc_ptr->addition));
+    desc_ptr->addition = analyze_addition(o_ptr);
     analyze_misc(o_ptr, desc_ptr->misc_desc, sizeof(desc_ptr->misc_desc));
     desc_ptr->activation = activation_explanation(o_ptr);
 }

@@ -41,7 +41,7 @@ struct obj_desc_list {
     std::vector<std::string> sustenances{}; /* A list of stats sustained by an object */
     std::vector<std::string> misc_magic{}; // その他の特性 (呪い、光源範囲等)
 
-    char addition[80] = ""; /* Additional ability or resistance */
+    std::string addition = ""; /* Additional ability or resistance */
     concptr activation = ""; /* A string describing an artifact's activation */
     char misc_desc[80] = ""; /* "Level 20, Rarity 30, 3.0 lbs, 20000 Gold" */
 };

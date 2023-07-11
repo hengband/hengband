@@ -111,8 +111,8 @@ static void spoiler_print_art(obj_desc_list *art_ptr)
     spoiler_outlist(_("維持:", "Sustain"), art_ptr->sustenances, item_separator);
     spoiler_outlist("", art_ptr->misc_magic, list_separator);
 
-    if (art_ptr->addition[0]) {
-        fprintf(spoiler_file, _("%s追加: %s\n", "%sAdditional %s\n"), spoiler_indent, art_ptr->addition);
+    if (!art_ptr->addition.empty()) {
+        fprintf(spoiler_file, _("%s追加: %s\n", "%sAdditional %s\n"), spoiler_indent, art_ptr->addition.data());
     }
 
     if (art_ptr->activation) {
