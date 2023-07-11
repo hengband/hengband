@@ -43,7 +43,7 @@ struct obj_desc_list {
 
     std::string addition = ""; /* Additional ability or resistance */
     std::string activation = ""; /* A string describing an artifact's activation */
-    char misc_desc[80] = ""; /* "Level 20, Rarity 30, 3.0 lbs, 20000 Gold" */
+    std::string misc_desc = ""; /* "Level 20, Rarity 30, 3.0 lbs, 20000 Gold" */
 };
 
 extern const char item_separator;

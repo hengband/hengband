@@ -239,12 +239,13 @@ static std::string analyze_addition(ItemEntity *o_ptr)
  * @param misc_desc 基本情報を収める文字列参照ポインタ
  * @param misc_desc_sz misc_desc に書き込めるバイト数
  */
-static void analyze_misc(ItemEntity *o_ptr, char *misc_desc, size_t misc_desc_sz)
+static std::string analyze_misc(ItemEntity *o_ptr)
 {
     const auto &artifact = o_ptr->get_fixed_artifact();
-    const auto *mes = _("レベル %d, 希少度 %u, %d.%d kg, ＄%ld", "Level %d, Rarity %u, %d.%d lbs, %ld Gold");
-    strnfmt(misc_desc, misc_desc_sz, mes, (int)artifact.level, artifact.rarity,
-        _(lb_to_kg_integer(artifact.weight), artifact.weight / 10), _(lb_to_kg_fraction(artifact.weight), artifact.weight % 10), (long int)artifact.cost);
+    constexpr auto fmt = _("レベル %d, 希少度 %u, %d.%d kg, ＄%d", "Level %d, Rarity %u, %d.%d lbs, %d Gold");
+    const auto weight_integer = _(lb_to_kg_integer(artifact.weight), artifact.weight / 10);
+    const auto weight_fraction = _(lb_to_kg_fraction(artifact.weight), artifact.weight % 10);
+    return format(fmt, artifact.level, artifact.rarity, weight_integer, weight_fraction, artifact.cost);
 }
 
 /*!
@@ -265,7 +266,7 @@ void object_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *de
     desc_ptr->sustenances = analyze_sustains(o_ptr);
     desc_ptr->misc_magic = analyze_misc_magic(o_ptr);
     desc_ptr->addition = analyze_addition(o_ptr);
-    analyze_misc(o_ptr, desc_ptr->misc_desc, sizeof(desc_ptr->misc_desc));
+    desc_ptr->misc_desc = analyze_misc(o_ptr);
     desc_ptr->activation = activation_explanation(o_ptr);
 }
 
@@ -287,6 +288,8 @@ void random_artifact_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc
     desc_ptr->sustenances = analyze_sustains(o_ptr);
     desc_ptr->misc_magic = analyze_misc_magic(o_ptr);
     desc_ptr->activation = activation_explanation(o_ptr);
-    strnfmt(desc_ptr->misc_desc, sizeof(desc_ptr->misc_desc), _("重さ %d.%d kg", "Weight %d.%d lbs"), _(lb_to_kg_integer(o_ptr->weight), o_ptr->weight / 10),
-        _(lb_to_kg_fraction(o_ptr->weight), o_ptr->weight % 10));
+    constexpr auto weight_mes = _("重さ %d.%d kg", "Weight %d.%d lbs");
+    const auto weight_integer = _(lb_to_kg_integer(o_ptr->weight), o_ptr->weight / 10);
+    const auto weight_fraction = _(lb_to_kg_fraction(o_ptr->weight), o_ptr->weight % 10);
+    desc_ptr->misc_desc = format(weight_mes, weight_integer, weight_fraction);
 }
