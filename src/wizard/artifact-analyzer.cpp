@@ -17,36 +17,6 @@
 #include "wizard/spoiler-util.h"
 
 /*!
- * @brief アーティファクトの特性一覧を出力する /
- * Write a line to the spoiler file and then "underline" it with hypens
- * @param art_flags アーティファクトのフラグ群
- * @param flag_ptr フラグ記述情報の参照ポインタ
- * @param desc_ptr 記述内容を返すための文字列参照ポインタ
- * @param n_elmnts フラグの要素数
- * @return desc_ptrと同じアドレス
- * @details
- * <pre>
- * This function does most of the actual "analysis". Given a set of bit flags
- * (which will be from one of the flags fields from the object in question),
- * a "flag description structure", a "description list", and the number of
- * elements in the "flag description structure", this function sets the
- * "description list" members to the appropriate descriptions contained in
- * the "flag description structure".
- * The possibly updated description pointer is returned.
- * </pre>
- */
-static concptr *spoiler_flag_aux(const TrFlags &art_flags, const flag_desc *flag_ptr, concptr *desc_ptr, const int n_elmnts)
-{
-    for (int i = 0; i < n_elmnts; ++i) {
-        if (art_flags.has(flag_ptr[i].flag)) {
-            *desc_ptr++ = flag_ptr[i].desc;
-        }
-    }
-
-    return desc_ptr;
-}
-
-/*!
  * @brief アイテムの特定記述内容を返す /
  * Acquire a "basic" description "The Cloak of Death [1,+10]"
  * @param o_ptr 記述を得たいオブジェクトの参照ポインタ
@@ -99,11 +69,10 @@ static std::vector<std::string> analyze_resist(ItemEntity *o_ptr)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param immune_list 免疫構造体の参照ポインタ
  */
-static void analyze_immune(ItemEntity *o_ptr, concptr *immune_list)
+static std::vector<std::string> analyze_immune(ItemEntity *o_ptr)
 {
     auto flags = object_flags(o_ptr);
-    immune_list = spoiler_flag_aux(flags, immune_flags_desc, immune_list, N_ELEMENTS(immune_flags_desc));
-    *immune_list = nullptr;
+    return extract_spoiler_flags(flags, immune_flags_desc);
 }
 
 /*!
@@ -286,7 +255,7 @@ void object_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *de
     desc_ptr->pval_info.analyze(*o_ptr);
     desc_ptr->brands = analyze_brand(o_ptr);
     desc_ptr->slays = analyze_slay(o_ptr);
-    analyze_immune(o_ptr, desc_ptr->immunities);
+    desc_ptr->immunities = analyze_immune(o_ptr);
     desc_ptr->resistances = analyze_resist(o_ptr);
     desc_ptr->vulnerabilities = analyze_vulnerable(o_ptr);
     desc_ptr->sustenances = analyze_sustains(o_ptr);
@@ -308,7 +277,7 @@ void random_artifact_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc
     desc_ptr->pval_info.analyze(*o_ptr);
     desc_ptr->brands = analyze_brand(o_ptr);
     desc_ptr->slays = analyze_slay(o_ptr);
-    analyze_immune(o_ptr, desc_ptr->immunities);
+    desc_ptr->immunities = analyze_immune(o_ptr);
     desc_ptr->resistances = analyze_resist(o_ptr);
     desc_ptr->vulnerabilities = analyze_vulnerable(o_ptr);
     desc_ptr->sustenances = analyze_sustains(o_ptr);

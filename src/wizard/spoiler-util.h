@@ -10,9 +10,6 @@
 /* MAX_LINE_LEN specifies when a line should wrap. */
 #define MAX_LINE_LEN 75
 
-/* Given an array, determine how many elements are in the array */
-#define N_ELEMENTS(a) (sizeof(a) / sizeof((a)[0]))
-
 enum class SpoilerOutputResultType {
     CANCELED,
     SUCCESSFUL,
@@ -38,7 +35,7 @@ struct obj_desc_list {
     ParameterValueInfo pval_info{}; /* Description of what is affected by an object's pval */
     std::vector<std::string> slays{}; /* A list of an object's slaying preferences */
     std::vector<std::string> brands{}; /* A list if an object's elemental brands */
-    concptr immunities[N_ELEMENTS(immune_flags_desc) + 1]{}; /* A list of immunities granted by an object */
+    std::vector<std::string> immunities{}; /* A list of immunities granted by an object */
     std::vector<std::string> resistances{}; /* A list of resistances granted by an object */
     std::vector<std::string> vulnerabilities{}; /* A list of resistances granted by an object */
     std::vector<std::string> sustenances{}; /* A list of stats sustained by an object */

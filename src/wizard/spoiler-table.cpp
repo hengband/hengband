@@ -146,7 +146,7 @@ const std::vector<flag_desc> vulnerable_flags_desc = {
 };
 
 /* Elemental immunities (along with poison) */
-const flag_desc immune_flags_desc[MAX_IMMUNITY_FLAGS_DESCRIPTION] = {
+const std::vector<flag_desc> immune_flags_desc = {
     { TR_IM_ACID, _("酸", "Acid") },
     { TR_IM_ELEC, _("電撃", "Lightning") },
     { TR_IM_FIRE, _("火炎", "Fire") },

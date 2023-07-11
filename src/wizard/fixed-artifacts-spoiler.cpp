@@ -57,55 +57,6 @@ void spoiler_outlist(std::string_view header, const std::vector<std::string> &de
 }
 
 /*!
- * @brief フラグ名称を出力する汎用関数
- * @param header ヘッダに出力するフラグ群の名前
- * @param list フラグ名リスト
- * @param separator フラグ表示の区切り記号
- * @todo 固定アーティファクトとランダムアーティファクトで共用、ここに置くべきかは要調整.
- * @todo いずれ上で定義したオーバーロードに吸収合併させてこれは消滅させる予定
- */
-void spoiler_outlist(concptr header, concptr *list, char separator)
-{
-    if (*list == nullptr) {
-        return;
-    }
-
-    std::string line = spoiler_indent;
-    if (header && (header[0])) {
-        line.append(header).append(" ");
-    }
-
-    while (true) {
-        std::string elem = *list;
-        if (list[1]) {
-            elem.push_back(separator);
-            elem.push_back(' ');
-        }
-
-        if (line.length() + elem.length() <= MAX_LINE_LEN) {
-            line.append(elem);
-        } else {
-            if (line.length() > 1 && line[line.length() - 1] == ' ' && line[line.length() - 2] == list_separator) {
-                line[line.length() - 2] = '\0';
-                fprintf(spoiler_file, "%s\n", line.data());
-                line = spoiler_indent;
-                line.append(elem);
-            } else {
-                fprintf(spoiler_file, "%s\n", line.data());
-                line = "      ";
-                line.append(elem);
-            }
-        }
-
-        if (!*++list) {
-            break;
-        }
-    }
-
-    fprintf(spoiler_file, "%s\n", line.data());
-}
-
-/*!
  * @brief アーティファクト情報を出力するためにダミー生成を行う /
  * Hack -- Create a "forged" artifact
  * @param o_ptr 一時生成先を保管するオブジェクト構造体

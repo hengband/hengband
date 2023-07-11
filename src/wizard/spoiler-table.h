@@ -5,8 +5,6 @@
 #include "system/angband.h"
 #include <vector>
 
-#define MAX_IMMUNITY_FLAGS_DESCRIPTION 4
-
 /* A tval grouper */
 struct grouper {
     std::vector<ItemKindType> tval_set;
@@ -32,7 +30,7 @@ extern const std::vector<flag_desc> slay_flags_desc;
 extern const std::vector<flag_desc> brand_flags_desc;
 extern const std::vector<flag_desc> resist_flags_desc;
 extern const std::vector<flag_desc> vulnerable_flags_desc;
-extern const flag_desc immune_flags_desc[MAX_IMMUNITY_FLAGS_DESCRIPTION];
+extern const std::vector<flag_desc> immune_flags_desc;
 extern const std::vector<flag_desc> sustain_flags_desc;
 extern const std::vector<flag_desc> misc_flags2_desc;
 extern const std::vector<flag_desc> misc_flags3_desc;
