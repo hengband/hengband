@@ -42,7 +42,7 @@ struct obj_desc_list {
     std::vector<std::string> misc_magic{}; // その他の特性 (呪い、光源範囲等)
 
     std::string addition = ""; /* Additional ability or resistance */
-    concptr activation = ""; /* A string describing an artifact's activation */
+    std::string activation = ""; /* A string describing an artifact's activation */
     char misc_desc[80] = ""; /* "Level 20, Rarity 30, 3.0 lbs, 20000 Gold" */
 };
 

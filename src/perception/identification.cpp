@@ -26,6 +26,8 @@
 #include "util/buffer-shaper.h"
 #include "util/enum-converter.h"
 #include <algorithm>
+#include <array>
+#include <string>
 
 /*!
  * @brief オブジェクトの*鑑定*内容を詳述して表示する /
@@ -37,7 +39,7 @@
  */
 bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
 {
-    concptr info[128];
+    std::array<std::string, 128> info{};
     int trivial_info = 0;
     auto flags = object_flags(o_ptr);
 
