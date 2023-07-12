@@ -95,7 +95,7 @@ void store_process_command(PlayerType *player_ptr, StoreSaleType store_num)
              * 隠しオプション(powerup_home)がセットされていないときは
              * 我が家では 2 ページまでしか表示しない
              */
-            auto inven_max = store_get_stock_max(StoreSaleType::HOME, powerup_home);
+            auto inven_max = store_get_stock_max(store_num, powerup_home);
             if (store_top >= st_ptr->stock_num || store_top >= inven_max) {
                 store_top = 0;
             }
