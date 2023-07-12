@@ -103,14 +103,14 @@ static void spoiler_print_art(obj_desc_list *art_ptr)
     spoiler_outlist("", art_ptr->misc_magic, list_separator);
 
     if (!art_ptr->addition.empty()) {
-        fprintf(spoiler_file, _("%s追加: %s\n", "%sAdditional %s\n"), spoiler_indent, art_ptr->addition.data());
+        fprintf(spoiler_file, _("%s追加: %s\n", "%sAdditional %s\n"), spoiler_indent.data(), art_ptr->addition.data());
     }
 
     if (!art_ptr->activation.empty()) {
-        fprintf(spoiler_file, _("%s発動: %s\n", "%sActivates for %s\n"), spoiler_indent, art_ptr->activation.data());
+        fprintf(spoiler_file, _("%s発動: %s\n", "%sActivates for %s\n"), spoiler_indent.data(), art_ptr->activation.data());
     }
 
-    fprintf(spoiler_file, "%s%s\n\n", spoiler_indent, art_ptr->misc_desc.data());
+    fprintf(spoiler_file, "%s%s\n\n", spoiler_indent.data(), art_ptr->misc_desc.data());
 }
 
 /*!

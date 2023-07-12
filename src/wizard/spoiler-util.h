@@ -49,7 +49,7 @@ struct obj_desc_list {
 extern const char item_separator;
 extern const char list_separator;
 extern const int max_evolution_depth;
-extern concptr spoiler_indent;
+extern const std::string spoiler_indent;
 extern FILE *spoiler_file;
 
 struct flag_desc;

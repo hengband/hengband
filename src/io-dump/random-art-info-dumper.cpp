@@ -24,12 +24,12 @@
 static void spoiler_print_randart(ItemEntity *o_ptr, obj_desc_list *art_ptr)
 {
     const auto finalizer = util::make_finalizer([art_ptr]() {
-        fprintf(spoiler_file, "%s%s\n\n", spoiler_indent, art_ptr->misc_desc.data());
+        fprintf(spoiler_file, "%s%s\n\n", spoiler_indent.data(), art_ptr->misc_desc.data());
     });
     const auto *pval_ptr = &art_ptr->pval_info;
     fprintf(spoiler_file, "%s\n", art_ptr->description.data());
     if (!o_ptr->is_fully_known()) {
-        fprintf(spoiler_file, _("%s不明\n", "%sUnknown\n"), spoiler_indent);
+        fprintf(spoiler_file, _("%s不明\n", "%sUnknown\n"), spoiler_indent.data());
         return;
     }
 
@@ -46,7 +46,7 @@ static void spoiler_print_randart(ItemEntity *o_ptr, obj_desc_list *art_ptr)
     spoiler_outlist(_("維持:", "Sustain"), art_ptr->sustenances, item_separator);
     spoiler_outlist("", art_ptr->misc_magic, list_separator);
     if (!art_ptr->activation.empty()) {
-        fprintf(spoiler_file, _("%s発動: %s\n", "%sActivates for %s\n"), spoiler_indent, art_ptr->activation.data());
+        fprintf(spoiler_file, _("%s発動: %s\n", "%sActivates for %s\n"), spoiler_indent.data(), art_ptr->activation.data());
     }
 }
 
