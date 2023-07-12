@@ -55,5 +55,5 @@ extern FILE *spoiler_file;
 struct flag_desc;
 std::vector<std::string> extract_spoiler_flags(const TrFlags &art_flags, const std::vector<flag_desc> &definitions);
 void spoiler_blanklines(int n);
-void spoiler_underline(concptr str);
+void spoiler_underline(std::string_view str);
 void spoil_out(std::string_view sv, bool flush_buffer = false);

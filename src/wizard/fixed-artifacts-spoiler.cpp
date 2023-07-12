@@ -124,7 +124,9 @@ SpoilerOutputResultType spoil_fixed_artifact()
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
-    spoiler_underline(std::string("Artifact Spoilers for Hengband Version ").append(get_version()).data());
+    std::stringstream ss;
+    ss << "Artifact Spoilers for Hengband Version " << get_version();
+    spoiler_underline(ss.str());
     for (const auto &[tval_list, name] : group_artifact_list) {
         spoiler_blanklines(2);
         spoiler_underline(name);
