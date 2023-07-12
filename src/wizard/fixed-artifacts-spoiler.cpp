@@ -114,13 +114,11 @@ static void spoiler_print_art(obj_desc_list *art_ptr)
 }
 
 /*!
- * @brief アーティファクト情報のスポイラー出力を行うメインルーチン /
- * Create a spoiler file for artifacts
- * @param fname 生成ファイル名
+ * @brief アーティファクト情報のスポイラー出力を行うメインルーチン
  */
-SpoilerOutputResultType spoil_fixed_artifact(concptr fname)
+SpoilerOutputResultType spoil_fixed_artifact()
 {
-    const auto &path = path_build(ANGBAND_DIR_USER, fname);
+    const auto &path = path_build(ANGBAND_DIR_USER, "artifact.txt");
     spoiler_file = angband_fopen(path, FileOpenMode::WRITE);
     if (!spoiler_file) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
