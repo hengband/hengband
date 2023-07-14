@@ -169,10 +169,11 @@ std::optional<short> input_stock(std::string_view fmt, int min, int max, [[maybe
     const auto prompt = format("(Items %c-%c, ESC to exit) %s", lo, hi, fmt.data());
 #endif
 
-    auto command = ESCAPE;
+    char command;
     while (true) {
         const auto command_opt = input_command(prompt);
         if (!command_opt.has_value()) {
+            command = ESCAPE;
             break;
         }
 
