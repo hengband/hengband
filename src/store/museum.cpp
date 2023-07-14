@@ -25,13 +25,14 @@ void museum_remove_object(PlayerType *player_ptr)
         i = store_bottom;
     }
 
-    COMMAND_CODE item;
-    if (!get_stock(&item, _("どのアイテムの展示をやめさせますか？", "Which item do you want to order to remove? "), 0, i - 1, StoreSaleType::MUSEUM)) {
+    constexpr auto mes = _("どのアイテムの展示をやめさせますか？", "Which item do you want to order to remove? ");
+    auto item_num_opt = input_stock(mes, 0, i - 1, StoreSaleType::MUSEUM);
+    if (!item_num_opt) {
         return;
     }
 
-    item = item + store_top;
-    auto *o_ptr = &st_ptr->stock[item];
+    const short item_num = *item_num_opt + store_top;
+    auto *o_ptr = &st_ptr->stock[item_num];
     const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
     msg_print(_("展示をやめさせたアイテムは二度と見ることはできません！", "Once removed from the Museum, an item will be gone forever!"));
     if (!input_check(format(_("本当に%sの展示をやめさせますか？", "Really order to remove %s from the Museum? "), item_name.data()))) {
@@ -39,8 +40,8 @@ void museum_remove_object(PlayerType *player_ptr)
     }
 
     msg_format(_("%sの展示をやめさせた。", "You ordered to remove %s."), item_name.data());
-    store_item_increase(item, -o_ptr->number);
-    store_item_optimize(item);
+    store_item_increase(item_num, -o_ptr->number);
+    store_item_optimize(item_num);
     (void)combine_and_reorder_home(player_ptr, StoreSaleType::MUSEUM);
     if (st_ptr->stock_num == 0) {
         store_top = 0;

@@ -2,6 +2,8 @@
 
 #include "store/store-util.h"
 #include "system/angband.h"
+#include <optional>
+#include <string_view>
 
 /* Store constants */
 #define STORE_INVEN_MAX 24 /* Max number of discrete objs in inven */
@@ -29,4 +31,4 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
 void store_init(int town_num, StoreSaleType store_num);
 void store_examine(PlayerType *player_ptr, StoreSaleType store_num);
 int store_check_num(ItemEntity *o_ptr, StoreSaleType store_num);
-int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j, StoreSaleType store_num);
+std::optional<short> input_stock(std::string_view fmt, int min, int max, StoreSaleType store_num);

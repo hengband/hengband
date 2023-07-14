@@ -37,6 +37,7 @@
 #include "view/display-store.h"
 #include "world/world.h"
 #include <optional>
+#include <string>
 
 /*!
  * @brief プレイヤーが購入する時の値切り処理メインルーチン /
@@ -62,17 +63,12 @@ static std::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, ItemEntity *o_
 
 /*!
  * @brief 店舗から購入する際のアイテム選択プロンプト
- * @param item 店舗インベントリ番号(アドレス渡し)
  * @param i 店舗インベントリストック数
  * @return 選択したらtrue、しなかったらfalse
- * @details
- * 選択したインベントリ番号はitemに返る。
- * ブラックマーケットの時は別のメッセージ。
  */
-static bool show_store_select_item(COMMAND_CODE *item, const int i, StoreSaleType store_num)
+static std::optional<short> show_store_select_item(const int i, StoreSaleType store_num)
 {
-    concptr prompt;
-
+    std::string prompt;
     switch (store_num) {
     case StoreSaleType::HOME:
         prompt = _("どのアイテムを取りますか? ", "Which item do you want to take? ");
@@ -85,7 +81,7 @@ static bool show_store_select_item(COMMAND_CODE *item, const int i, StoreSaleTyp
         break;
     }
 
-    return get_stock(item, prompt, 0, i - 1, store_num) != 0;
+    return input_stock(prompt, 0, i - 1, store_num);
 }
 
 /*!
@@ -196,14 +192,13 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
         i = store_bottom;
     }
 
-    COMMAND_CODE item;
-    if (!show_store_select_item(&item, i, store_num)) {
+    auto item_num_opt = show_store_select_item(i, store_num);
+    if (!item_num_opt) {
         return;
     }
 
-    item = item + store_top;
-    ItemEntity *o_ptr;
-    o_ptr = &st_ptr->stock[item];
+    const short item_num = *item_num_opt + store_top;
+    auto *o_ptr = &st_ptr->stock[item_num];
 
     ITEM_NUMBER amt = 1;
     ItemEntity forge;
@@ -248,14 +243,14 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     if (store_num == StoreSaleType::HOME) {
-        take_item_from_home(player_ptr, o_ptr, j_ptr, item);
+        take_item_from_home(player_ptr, o_ptr, j_ptr, item_num);
         return;
     }
 
     COMMAND_CODE item_new;
     PRICE price;
     const auto purchased_item_name = describe_flavor(player_ptr, j_ptr, 0);
-    msg_format(_("%s(%c)を購入する。", "Buying %s (%c)."), purchased_item_name.data(), I2A(item));
+    msg_format(_("%s(%c)を購入する。", "Buying %s (%c)."), purchased_item_name.data(), I2A(item_num));
     msg_print(nullptr);
 
     auto res = prompt_to_buy(player_ptr, j_ptr, store_num);
@@ -317,7 +312,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     i = st_ptr->stock_num;
-    store_item_increase(item, -amt);
-    store_item_optimize(item);
-    switch_store_stock(player_ptr, i, item, store_num);
+    store_item_increase(item_num, -amt);
+    store_item_optimize(item_num);
+    switch_store_stock(player_ptr, i, item_num, store_num);
 }
