@@ -670,7 +670,7 @@ void process_command(PlayerType *player_ptr)
         break;
     }
     case KTRL('V'): {
-        spoil_random_artifact(player_ptr, "randifact.txt");
+        spoil_random_artifact(player_ptr);
         break;
     }
     case '`': {

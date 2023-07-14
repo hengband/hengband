@@ -23,13 +23,13 @@
  */
 static void spoiler_print_randart(ItemEntity *o_ptr, obj_desc_list *art_ptr, std::ofstream &ofs)
 {
-    const auto finalizer = util::make_finalizer([art_ptr]() {
-        fprintf(spoiler_file, "%s%s\n\n", spoiler_indent.data(), art_ptr->misc_desc.data());
+    const auto finalizer = util::make_finalizer([art_ptr, &ofs]() {
+        ofs << spoiler_indent << art_ptr->misc_desc << "\n\n";
     });
     const auto *pval_ptr = &art_ptr->pval_info;
-    fprintf(spoiler_file, "%s\n", art_ptr->description.data());
+    ofs << art_ptr->description << '\n';
     if (!o_ptr->is_fully_known()) {
-        fprintf(spoiler_file, _("%s不明\n", "%sUnknown\n"), spoiler_indent.data());
+        ofs << format(_("%s不明\n", "%sUnknown\n"), spoiler_indent.data());
         return;
     }
 
@@ -68,13 +68,12 @@ static void spoil_random_artifact_aux(PlayerType *player_ptr, ItemEntity *o_ptr,
 }
 
 /*!
- * @brief ランダムアーティファクト内容をスポイラー出力するメインルーチン /
- * Create a list file for random artifacts
- * @param fname 出力ファイル名
+ * @brief ランダムアーティファクト内容をスポイラー出力するメインルーチン
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
-void spoil_random_artifact(PlayerType *player_ptr, concptr fname)
+void spoil_random_artifact(PlayerType *player_ptr)
 {
-    const auto &path = path_build(ANGBAND_DIR_USER, fname);
+    const auto &path = path_build(ANGBAND_DIR_USER, "randifact.txt");
     std::ofstream ofs(path);
     if (!ofs) {
         msg_print("Cannot create list file.");
