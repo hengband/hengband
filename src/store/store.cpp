@@ -169,25 +169,23 @@ std::optional<short> input_stock(std::string_view fmt, int min, int max, [[maybe
     const auto prompt = format("(Items %c-%c, ESC to exit) %s", lo, hi, fmt.data());
 #endif
 
-    auto command = ESCAPE;
+    std::optional<char> command;
     while (true) {
         const auto command_opt = input_command(prompt);
         if (!command_opt.has_value()) {
             break;
         }
 
-        command = command_opt.value();
-        short k;
-        if (islower(command)) {
-            k = A2I(command);
-        } else if (isupper(command)) {
-            k = A2I(tolower(command)) + 26;
-        } else {
-            k = -1;
+        const auto command_alpha = command_opt.value();
+        std::optional<int> command_num;
+        if (islower(command_alpha)) {
+            command_num = A2I(command_alpha);
+        } else if (isupper(command_alpha)) {
+            command_num = A2I(tolower(command_alpha)) + 26;
         }
 
-        if ((k >= min) && (k <= max)) {
-            command = k;
+        if (command_num && (*command_num >= min) && (*command_num <= max)) {
+            command = static_cast<short>(*command_num);
             break;
         }
 
@@ -195,11 +193,11 @@ std::optional<short> input_stock(std::string_view fmt, int min, int max, [[maybe
     }
 
     prt("", 0, 0);
-    if (command == ESCAPE) {
+    if (!command) {
         return std::nullopt;
     }
 
-    repeat_push(command);
+    repeat_push(*command);
     return command;
 }
 
