@@ -9,7 +9,7 @@
 class BaseitemKey;
 class ItemEntity;
 class PlayerType;
-std::string activation_explanation(ItemEntity *o_ptr);
+std::string activation_explanation(const ItemEntity *o_ptr);
 char index_to_label(int i);
 int16_t wield_slot(PlayerType *player_ptr, const ItemEntity *o_ptr);
 bool check_book_realm(PlayerType *player_ptr, const BaseitemKey &bi_key);

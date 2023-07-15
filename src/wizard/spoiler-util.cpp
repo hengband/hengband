@@ -5,7 +5,7 @@
 const char item_separator = ',';
 const char list_separator = _(',', ';');
 const int max_evolution_depth = 64;
-concptr spoiler_indent = "    ";
+const std::string spoiler_indent = "    ";
 
 /* The spoiler file being created */
 FILE *spoiler_file = nullptr;
@@ -56,10 +56,10 @@ void spoiler_blanklines(int n)
  * Write a line to the spoiler file and then "underline" it with hypens
  * @param str 出力したい文字列
  */
-void spoiler_underline(concptr str)
+void spoiler_underline(std::string_view str)
 {
-    fprintf(spoiler_file, "%s\n", str);
-    spoiler_out_n_chars(strlen(str), '-');
+    fprintf(spoiler_file, "%s\n", str.data());
+    spoiler_out_n_chars(str.length(), '-');
     fprintf(spoiler_file, "\n");
 }
 
