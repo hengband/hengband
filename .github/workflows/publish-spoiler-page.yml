@@ -25,7 +25,7 @@ jobs:
         run: ./bootstrap
 
       - name: Configuration for Japanese version
-        run: ./configure --disable-worldscore
+        run: ./configure --disable-net
         env:
           CFLAGS: "-pipe"
 
