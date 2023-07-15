@@ -2493,6 +2493,9 @@
     <ClCompile Include="..\..\src\main-win\main-win-exception.cpp">
       <Filter>main-win</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\util\candidate-selector.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5402,6 +5405,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\main-win\main-win-exception.h">
       <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\candidate-selector.h">
+      <Filter>util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

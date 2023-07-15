@@ -624,6 +624,7 @@
     <ClCompile Include="..\..\src\timed-effect\player-poison.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-stun.cpp" />
     <ClCompile Include="..\..\src\timed-effect\timed-effects.cpp" />
+    <ClCompile Include="..\..\src\util\candidate-selector.cpp" />
     <ClCompile Include="..\..\src\util\rng-xoshiro.cpp" />
     <ClCompile Include="..\..\src\util\sha256.cpp" />
     <ClCompile Include="..\..\src\view\display-inventory.cpp" />
@@ -1432,6 +1433,7 @@
     <ClInclude Include="..\..\src\timed-effect\timed-effects.h" />
     <ClInclude Include="..\..\src\util\bit-flags-calculator.h" />
     <ClInclude Include="..\..\src\util\buffer-shaper.h" />
+    <ClInclude Include="..\..\src\util\candidate-selector.h" />
     <ClInclude Include="..\..\src\util\enum-converter.h" />
     <ClInclude Include="..\..\src\util\enum-range.h" />
     <ClInclude Include="..\..\src\util\finalizer.h" />

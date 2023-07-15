@@ -967,6 +967,7 @@ hengband_SOURCES = \
 	util/angband-files.cpp util/angband-files.h \
 	util/buffer-shaper.cpp util/buffer-shaper.h \
 	util/bit-flags-calculator.h \
+	util/candidate-selector.cpp util/candidate-selector.h \
 	util/enum-converter.h \
 	util/enum-range.h \
 	util/finalizer.h \
