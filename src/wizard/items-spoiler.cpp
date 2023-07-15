@@ -113,13 +113,11 @@ static ItemEntity prepare_item_for_obj_desc(short bi_id)
 }
 
 /*!
- * @brief 各ベースアイテムの情報を一行毎に記述する /
- * Create a spoiler file for items
- * @param fname ファイル名
+ * @brief 各ベースアイテムの情報を一行毎に記述する
  */
-SpoilerOutputResultType spoil_obj_desc(concptr fname)
+SpoilerOutputResultType spoil_obj_desc()
 {
-    const auto &path = path_build(ANGBAND_DIR_USER, fname);
+    const auto &path = path_build(ANGBAND_DIR_USER, "obj-desc.txt");
     spoiler_file = angband_fopen(path, FileOpenMode::WRITE);
     if (!spoiler_file) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
