@@ -491,10 +491,10 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
         /* Browse */
         else {
             /* Clear lines, position cursor  (really should use strlen here) */
-            term_erase(7, 23, 255);
-            term_erase(7, 22, 255);
-            term_erase(7, 21, 255);
-            term_erase(7, 20, 255);
+            term_erase(7, 23);
+            term_erase(7, 22);
+            term_erase(7, 21);
+            term_erase(7, 20);
 
             display_wrap_around(baseitems_info[lookup_baseitem_id({ tval, sval })].text, 62, 21, 10);
             continue;

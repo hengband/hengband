@@ -97,7 +97,7 @@ void put_str(std::string_view sv, TERM_LEN row, TERM_LEN col)
  */
 void c_prt(TERM_COLOR attr, std::string_view sv, TERM_LEN row, TERM_LEN col)
 {
-    term_erase(col, row, 255);
+    term_erase(col, row);
     term_addstr(-1, attr, sv);
 }
 
@@ -151,7 +151,7 @@ static std::vector<std::pair<TERM_COLOR, char>> c_roff_wrap(int x, int y, int w,
         }
     }
 
-    term_erase(wrap_col, y, 255);
+    term_erase(wrap_col, y);
     return wrap_chars;
 }
 
@@ -186,7 +186,7 @@ void c_roff(TERM_COLOR a, std::string_view str)
 
         if (*s == '\n') {
             if (y + 1 < h) {
-                term_erase(0, y + 1, 255);
+                term_erase(0, y + 1);
             }
 
             return;
@@ -202,7 +202,7 @@ void c_roff(TERM_COLOR a, std::string_view str)
                 return;
             }
 
-            term_erase(0, y, 255);
+            term_erase(0, y);
             for (const auto &[ca, cv] : wrap_chars) {
                 term_addch(ca, cv);
             }
@@ -238,6 +238,6 @@ void clear_from(int row)
 {
     for (int y = row; y < game_term->hgt; y++) {
         TermOffsetSetter tos(0, std::nullopt);
-        term_erase(0, y, 255);
+        term_erase(0, y);
     }
 }

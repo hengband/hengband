@@ -115,7 +115,7 @@ static void show_file_aux_line(std::string_view str, int cy, std::string_view sh
         i++;
     }
 
-    term_erase(cx, cy, 255);
+    term_erase(cx, cy);
 }
 
 /*!
@@ -293,7 +293,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
         }
 
         while (row_count < rows) {
-            term_erase(0, row_count + 2, 255);
+            term_erase(0, row_count + 2);
             row_count++;
         }
 

@@ -71,7 +71,7 @@ void display_koff(PlayerType *player_ptr)
     }
 
     for (auto y = 0; y < game_term->hgt; y++) {
-        term_erase(0, y, 255);
+        term_erase(0, y);
     }
 
     ItemEntity item;
