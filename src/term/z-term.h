@@ -208,7 +208,7 @@ errr term_add_bigch(TERM_COLOR a, char c);
 errr term_addstr(int n, TERM_COLOR a, std::string_view sv);
 errr term_putch(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
 errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, std::string_view sv);
-errr term_erase(TERM_LEN x, TERM_LEN y, int n);
+errr term_erase(TERM_LEN x, TERM_LEN y, std::optional<int> n_opt = std::nullopt);
 errr term_clear(void);
 errr term_redraw(void);
 errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2);
