@@ -56,7 +56,7 @@ F:%:FLOOR:10:0:395
 
 
 # Cloaker
-F:(:FLOOR:8:243
+F:(:FLOOR:10:243
 # Death sword
 F:|:FLOOR:8:107
 # Killer bee
