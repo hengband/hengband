@@ -1,4 +1,4 @@
-﻿#include "autopick/autopick-pref-processor.h"
+#include "autopick/autopick-pref-processor.h"
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-util.h"
 #include "system/angband.h"

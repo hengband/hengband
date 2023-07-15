@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "game-option/keymap-directory-getter.h"
 #include "system/angband.h"

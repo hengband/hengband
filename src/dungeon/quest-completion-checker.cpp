@@ -1,4 +1,4 @@
-﻿#include "dungeon/quest-completion-checker.h"
+#include "dungeon/quest-completion-checker.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"

@@ -1,4 +1,4 @@
-﻿#include "info-reader/feature-info-tokens-table.h"
+#include "info-reader/feature-info-tokens-table.h"
 
 /*!
  * @brief 地形属性トークンの定義 / Feature info flags

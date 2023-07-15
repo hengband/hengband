@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "artifact/random-art-bias-types.h"
 #include "system/angband.h"

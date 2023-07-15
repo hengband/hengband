@@ -1,4 +1,4 @@
-﻿#include "load/player-class-specific-data-loader.h"
+#include "load/player-class-specific-data-loader.h"
 #include "load/load-util.h"
 #include "player-info/bard-data-type.h"
 #include "player-info/bluemage-data-type.h"

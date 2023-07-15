@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file z-form.cpp
  * @brief Low level text formatting
  * @date 2023/04/30

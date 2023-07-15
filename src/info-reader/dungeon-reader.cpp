@@ -1,4 +1,4 @@
-﻿#include "info-reader/dungeon-reader.h"
+#include "info-reader/dungeon-reader.h"
 #include "grid/feature.h"
 #include "info-reader/dungeon-info-tokens-table.h"
 #include "info-reader/feature-reader.h"

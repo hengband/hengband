@@ -1,4 +1,4 @@
-﻿#include "pet/pet-util.h"
+#include "pet/pet-util.h"
 #include "core/stuff-handler.h"
 #include "grid/grid.h"
 #include "monster-race/monster-race.h"

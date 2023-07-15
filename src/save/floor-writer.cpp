@@ -1,4 +1,4 @@
-﻿#include "save/floor-writer.h"
+#include "save/floor-writer.h"
 #include "core/object-compressor.h"
 #include "floor/floor-events.h"
 #include "floor/floor-save-util.h"

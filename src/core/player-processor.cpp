@@ -1,4 +1,4 @@
-﻿#include "core/player-processor.h"
+#include "core/player-processor.h"
 #include "action/run-execution.h"
 #include "action/travel-execution.h"
 #include "core/disturbance.h"

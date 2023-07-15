@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file action-limited.cpp
  * @brief プレイヤーの行動制約判定定義
  */

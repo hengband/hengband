@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief グリッドの実装 / low level dungeon routines -BEN-
  * @date 2013/12/30
  * @author

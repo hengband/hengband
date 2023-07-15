@@ -1,4 +1,4 @@
-﻿#include "wizard/wizard-item-modifier.h"
+#include "wizard/wizard-item-modifier.h"
 #include "artifact/fixed-art-generator.h"
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"

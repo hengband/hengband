@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 自動破壊の実行
  * @date 2020/04/25
  * @author Hourier

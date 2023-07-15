@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "system/angband-exceptions.h"
 #include "term/z-rand.h"

@@ -1,4 +1,4 @@
-﻿#include "timed-effect/player-hallucination.h"
+#include "timed-effect/player-hallucination.h"
 
 short PlayerHallucination::current() const
 {

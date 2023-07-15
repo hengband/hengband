@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum race_flags1 {
     RF1_UNIQUE = 0x00000001, /*!< モンスター特性: ユニーク / Unique Monster */

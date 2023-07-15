@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file activation-execution.cpp
  * @brief アイテムの発動実行定義
  */

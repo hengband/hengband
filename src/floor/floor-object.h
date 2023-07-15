@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "object/item-tester-hooker.h"
 #include "system/angband.h"

@@ -1,4 +1,4 @@
-﻿#include "market/building-quest.h"
+#include "market/building-quest.h"
 #include "cmd-building/cmd-building.h"
 #include "core/asking-player.h"
 #include "dungeon/quest.h"

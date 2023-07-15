@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class PlayerType;
 void display_player_name(PlayerType *player_ptr, bool name_only = false);

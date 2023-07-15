@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file random-art-activation.cpp
  * @brief ランダムアーティファクトの発動実装定義
  */

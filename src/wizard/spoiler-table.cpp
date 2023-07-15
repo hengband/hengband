@@ -1,4 +1,4 @@
-﻿#include "wizard/spoiler-table.h"
+#include "wizard/spoiler-table.h"
 
 /* The basic items categorized by type */
 const std::vector<grouper> group_item_list = {

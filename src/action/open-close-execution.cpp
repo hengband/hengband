@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file open-close-execution.cpp
  * @brief 扉や箱を開ける処理
  * @date 2020/07/11

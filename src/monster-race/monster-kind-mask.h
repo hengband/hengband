@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "monster-race/race-kind-flags.h"
 #include "system/angband.h"

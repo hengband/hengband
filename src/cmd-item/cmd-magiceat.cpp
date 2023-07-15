@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief プレイヤーのアイテムに関するコマンドの実装2 / Spell/Prayer commands
  * @date 2014/01/27
  * @author

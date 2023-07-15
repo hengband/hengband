@@ -1,4 +1,4 @@
-﻿#include "load/store-loader.h"
+#include "load/store-loader.h"
 #include "avatar/avatar.h"
 #include "floor/floor-town.h"
 #include "load/angband-version-comparer.h"

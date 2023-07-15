@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum class MonsterBrightnessType {
     HAS_LITE_1 = 0, /* Monster carries light */

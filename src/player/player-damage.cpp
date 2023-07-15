@@ -1,4 +1,4 @@
-﻿#include "player/player-damage.h"
+#include "player/player-damage.h"
 #include "autopick/autopick-pref-processor.h"
 #include "avatar/avatar.h"
 #include "blue-magic/blue-magic-checker.h"

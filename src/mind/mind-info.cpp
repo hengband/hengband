@@ -1,4 +1,4 @@
-﻿#include "mind/mind-info.h"
+#include "mind/mind-info.h"
 #include "cmd-action/cmd-spell.h"
 #include "locale/japanese.h"
 #include "mind/mind-force-trainer.h"

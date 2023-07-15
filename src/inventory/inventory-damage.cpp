@@ -1,4 +1,4 @@
-﻿#include "inventory/inventory-damage.h"
+#include "inventory/inventory-damage.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "inventory/inventory-object.h"

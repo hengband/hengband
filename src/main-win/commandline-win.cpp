@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file commandline-win.cpp
  * @brief Windows版固有実装(コマンドライン)
  */

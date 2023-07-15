@@ -1,4 +1,4 @@
-﻿#include "save/save-util.h"
+#include "save/save-util.h"
 
 FILE *saving_savefile; /* Current save "file" */
 byte save_xor_byte; /* Simple encryption */

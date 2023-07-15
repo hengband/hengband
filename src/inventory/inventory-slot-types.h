@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum inventory_slot_type {
     INVEN_PACK = 23, /*!< アイテムスロット…所持品(0～) */

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file blue-magic-util.cpp
  * @brief 青魔法の構造体、初期化処理定義
  */

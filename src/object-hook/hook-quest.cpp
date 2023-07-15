@@ -1,4 +1,4 @@
-﻿#include "object-hook/hook-quest.h"
+#include "object-hook/hook-quest.h"
 #include "artifact/fixed-art-types.h"
 #include "cmd-building/cmd-building.h"
 #include "dungeon/quest.h"

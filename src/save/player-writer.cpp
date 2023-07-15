@@ -1,4 +1,4 @@
-﻿#include "save/player-writer.h"
+#include "save/player-writer.h"
 #include "cmd-building/cmd-building.h"
 #include "game-option/birth-options.h"
 #include "player-base/player-class.h"

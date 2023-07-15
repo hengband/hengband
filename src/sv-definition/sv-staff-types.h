@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /* The "sval" codes for TV_STAFF */
 enum sv_staff_type {

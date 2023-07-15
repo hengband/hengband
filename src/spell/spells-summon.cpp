@@ -1,4 +1,4 @@
-﻿#include "spell/spells-summon.h"
+#include "spell/spells-summon.h"
 #include "avatar/avatar.h"
 #include "effect/spells-effect-util.h"
 #include "floor/floor-object.h"

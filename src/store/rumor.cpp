@@ -1,4 +1,4 @@
-﻿#include "store/rumor.h"
+#include "store/rumor.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-town.h"

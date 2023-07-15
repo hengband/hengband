@@ -1,4 +1,4 @@
-﻿#include "spell/spells-staff-only.h"
+#include "spell/spells-staff-only.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"

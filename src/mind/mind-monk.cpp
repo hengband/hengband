@@ -1,4 +1,4 @@
-﻿#include "mind/mind-monk.h"
+#include "mind/mind-monk.h"
 #include "action/action-limited.h"
 #include "io/input-key-acceptor.h"
 #include "mind/stances-table.h"

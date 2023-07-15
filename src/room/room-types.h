@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "util/enum-converter.h"
 #include "util/enum-range.h"

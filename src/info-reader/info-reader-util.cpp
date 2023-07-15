@@ -1,4 +1,4 @@
-﻿#include "info-reader/info-reader-util.h"
+#include "info-reader/info-reader-util.h"
 #include "artifact/random-art-effects.h"
 #include "main/angband-headers.h"
 #include "object-enchant/activation-info-table.h"

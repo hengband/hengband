@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file main-win-utils.cpp
  * @brief Windows版固有実装(ユーティリティー)
  */

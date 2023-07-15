@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file artifact-info.cpp
  * @brief アーティファクトの発動効果取得関数定義
  */

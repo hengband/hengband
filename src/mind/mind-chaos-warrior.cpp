@@ -1,4 +1,4 @@
-﻿#include "mind/mind-chaos-warrior.h"
+#include "mind/mind-chaos-warrior.h"
 #include "floor/floor-object.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-ego.h"

@@ -1,4 +1,4 @@
-﻿#include "player/player-status-flags.h"
+#include "player/player-status-flags.h"
 #include "artifact/fixed-art-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-elementalist.h"

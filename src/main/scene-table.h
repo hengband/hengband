@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file scene-table.h
  * @brief BGM選曲の基本処理部分ヘッダ

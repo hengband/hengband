@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file blue-magic-summon.cpp
  * @brief 青魔法の召喚系スペル定義
  */

@@ -1,4 +1,4 @@
-﻿#include "player/digestion-processor.h"
+#include "player/digestion-processor.h"
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
 #include "core/speed-table.h"

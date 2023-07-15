@@ -1,4 +1,4 @@
-﻿#include "object-enchant/activation-info-table.h"
+#include "object-enchant/activation-info-table.h"
 #include "artifact/random-art-effects.h"
 
 /*!

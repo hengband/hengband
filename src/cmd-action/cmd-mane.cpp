@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief ものまねの処理実装 / Imitation code
  * @date 2014/01/14
  * @author

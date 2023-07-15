@@ -1,4 +1,4 @@
-﻿#include "floor/tunnel-generator.h"
+#include "floor/tunnel-generator.h"
 #include "floor/cave.h"
 #include "floor/dungeon-tunnel-util.h"
 #include "floor/geometry.h"

@@ -1,4 +1,4 @@
-﻿#include "spell-kind/spells-enchant.h"
+#include "spell-kind/spells-enchant.h"
 #include "artifact/random-art-generator.h"
 #include "avatar/avatar.h"
 #include "flavor/flavor-describer.h"

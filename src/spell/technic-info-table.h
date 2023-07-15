@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "realm/realm-types.h"
 #include "system/angband.h"

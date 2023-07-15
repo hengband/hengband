@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 店の処理 / Store commands
  * @date 2022/03/26
  * @author Hourier

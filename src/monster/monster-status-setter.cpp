@@ -1,4 +1,4 @@
-﻿#include "monster/monster-status-setter.h"
+#include "monster/monster-status-setter.h"
 #include "avatar/avatar.h"
 #include "cmd-visual/cmd-draw.h"
 #include "core/speed-table.h"

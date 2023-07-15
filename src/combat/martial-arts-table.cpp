@@ -1,4 +1,4 @@
-﻿#include "combat/martial-arts-table.h"
+#include "combat/martial-arts-table.h"
 /*!
  * @brief マーシャルアーツ打撃テーブル
  */

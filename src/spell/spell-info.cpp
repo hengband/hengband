@@ -1,4 +1,4 @@
-﻿#include "spell/spell-info.h"
+#include "spell/spell-info.h"
 #include "io/input-key-requester.h"
 #include "monster-race/monster-race.h"
 #include "player-base/player-class.h"

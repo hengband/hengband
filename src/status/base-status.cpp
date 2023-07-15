@@ -1,4 +1,4 @@
-﻿#include "status/base-status.h"
+#include "status/base-status.h"
 #include "avatar/avatar.h"
 #include "core/window-redrawer.h"
 #include "game-option/birth-options.h"

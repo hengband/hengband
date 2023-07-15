@@ -1,4 +1,4 @@
-﻿#include "inventory/item-selection-util.h"
+#include "inventory/item-selection-util.h"
 #include "io/input-key-requester.h"
 #include "object/item-use-flags.h"
 

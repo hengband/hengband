@@ -1,4 +1,4 @@
-﻿#include "status/buff-setter.h"
+#include "status/buff-setter.h"
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
 #include "core/speed-table.h"

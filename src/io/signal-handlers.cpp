@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file signal-handlers.c
  * @brief シグナルハンドラの管理 / Controlling signal handlers
  * @date 2020/02/23

@@ -1,4 +1,4 @@
-﻿#include "view/display-player-middle.h"
+#include "view/display-player-middle.h"
 #include "combat/shoot.h"
 #include "game-option/birth-options.h"
 #include "game-option/special-options.h"

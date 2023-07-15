@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "system/redrawing-flags-updater.h"
 #include "util/flag-group.h"

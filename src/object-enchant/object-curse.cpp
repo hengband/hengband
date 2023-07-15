@@ -1,4 +1,4 @@
-﻿#include "object-enchant/object-curse.h"
+#include "object-enchant/object-curse.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "inventory/inventory-slot-types.h"

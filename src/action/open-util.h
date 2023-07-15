@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file open-util.h
  * @brief 開閉処理関連関数ヘッダ

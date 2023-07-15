@@ -1,4 +1,4 @@
-﻿/*
+/*
  * @brief
  * @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke

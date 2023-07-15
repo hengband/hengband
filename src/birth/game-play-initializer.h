@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class PlayerType;
 void player_wipe_without_name(PlayerType *player_ptr);

@@ -1,4 +1,4 @@
-﻿#include "inventory/item-getter.h"
+#include "inventory/item-getter.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "game-option/input-options.h"

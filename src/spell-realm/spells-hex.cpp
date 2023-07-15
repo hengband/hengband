@@ -1,4 +1,4 @@
-﻿#include "spell-realm/spells-hex.h"
+#include "spell-realm/spells-hex.h"
 #include "core/asking-player.h"
 #include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"

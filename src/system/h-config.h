@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file h-config.h
  * @brief OSごとの差異を吸収してコンパイルするためのプリプロ群
  * The most basic "include" file.

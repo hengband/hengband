@@ -1,4 +1,4 @@
-﻿#include "store/articles-on-sale.h"
+#include "store/articles-on-sale.h"
 #include "object/tval-types.h"
 #include "store/store-owners.h"
 #include "sv-definition/sv-amulet-types.h"

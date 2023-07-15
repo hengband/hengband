@@ -1,4 +1,4 @@
-﻿#include "player-info/resistance-info.h"
+#include "player-info/resistance-info.h"
 #include "player-base/player-race.h"
 #include "player-info/race-info.h"
 #include "player-info/self-info-util.h"

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 疑似鑑定処理
  * @date 2020/05/15
  * @author Hourier

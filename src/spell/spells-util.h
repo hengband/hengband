@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #define DETECT_RAD_DEFAULT 30
 #define DETECT_RAD_MAP 30

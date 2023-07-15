@@ -1,4 +1,4 @@
-﻿#include "spell-realm/spells-song.h"
+#include "spell-realm/spells-song.h"
 #include "core/disturbance.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"

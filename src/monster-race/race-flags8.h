@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum race_flags8 : uint32_t {
     RF8_WILD_ONLY = 0x00000001,

@@ -1,4 +1,4 @@
-﻿#include "io/tokenizer.h"
+#include "io/tokenizer.h"
 
 /*!
  * @brief 各種データテキストをトークン単位に分解する / Extract the first few "tokens" from a buffer

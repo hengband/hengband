@@ -1,4 +1,4 @@
-﻿#include "market/bounty.h"
+#include "market/bounty.h"
 #include "autopick/autopick.h"
 #include "avatar/avatar.h"
 #include "cmd-building/cmd-building.h"

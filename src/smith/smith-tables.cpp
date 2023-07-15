@@ -1,4 +1,4 @@
-﻿#include "smith/smith-tables.h"
+#include "smith/smith-tables.h"
 #include "artifact/random-art-effects.h"
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/tr-types.h"

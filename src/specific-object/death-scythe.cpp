@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 死の大鎌に特有の処理
  * @date 2020/05/23
  * @author Hourier

@@ -1,4 +1,4 @@
-﻿#include "wizard/wizard-messages.h"
+#include "wizard/wizard-messages.h"
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"
 #include "io/write-diary.h"

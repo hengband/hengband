@@ -1,4 +1,4 @@
-﻿#include "birth/initial-equipments-table.h"
+#include "birth/initial-equipments-table.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-bow-types.h"

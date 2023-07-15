@@ -1,4 +1,4 @@
-﻿#include "cmd-item/cmd-zapwand.h"
+#include "cmd-item/cmd-zapwand.h"
 #include "action/action-limited.h"
 #include "avatar/avatar.h"
 #include "core/window-redrawer.h"

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum special_attack_type {
     ATTACK_CONFUSE = 0x00000001, /*!< プレイヤーのステータス:混乱打撃 */

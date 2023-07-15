@@ -1,4 +1,4 @@
-﻿#include "dungeon/quest-monster-placer.h"
+#include "dungeon/quest-monster-placer.h"
 #include "dungeon/quest.h"
 #include "floor/floor-generator-util.h"
 #include "floor/geometry.h"

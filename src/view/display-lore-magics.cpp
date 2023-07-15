@@ -1,4 +1,4 @@
-﻿#include "view/display-lore-magics.h"
+#include "view/display-lore-magics.h"
 #include "lore/lore-util.h"
 #include "monster-race/race-flags2.h"
 #include "system/monster-race-info.h"

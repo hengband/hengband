@@ -1,4 +1,4 @@
-﻿#include "cmd-item/cmd-zaprod.h"
+#include "cmd-item/cmd-zaprod.h"
 #include "action/action-limited.h"
 #include "effect/attribute-types.h"
 #include "floor/floor-object.h"

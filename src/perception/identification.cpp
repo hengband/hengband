@@ -1,4 +1,4 @@
-﻿#include "perception/identification.h"
+#include "perception/identification.h"
 #include "artifact/fixed-art-types.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"

@@ -1,4 +1,4 @@
-﻿#include "player/player-status-table.h"
+#include "player/player-status-table.h"
 
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats

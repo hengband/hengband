@@ -1,4 +1,4 @@
-﻿#include "mspell/monster-power-table.h"
+#include "mspell/monster-power-table.h"
 #include "monster-race/race-ability-flags.h"
 #include "player-ability/player-ability-types.h"
 

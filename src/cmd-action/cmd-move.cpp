@@ -1,4 +1,4 @@
-﻿#include "cmd-action/cmd-move.h"
+#include "cmd-action/cmd-move.h"
 #include "action/action-limited.h"
 #include "action/movement-execution.h"
 #include "action/run-execution.h"

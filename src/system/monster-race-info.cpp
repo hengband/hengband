@@ -1,4 +1,4 @@
-﻿#include "system/monster-race-info.h"
+#include "system/monster-race-info.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/horror-descriptions.h"
 #include <algorithm>

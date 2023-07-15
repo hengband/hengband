@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 突然変異の一覧を出力する
  * @date 2020/04/24
  * @author Hourier

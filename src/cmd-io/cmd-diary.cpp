@@ -1,4 +1,4 @@
-﻿#include "cmd-io/cmd-diary.h"
+#include "cmd-io/cmd-diary.h"
 #include "core/asking-player.h"
 #include "core/show-file.h"
 #include "game-option/play-record-options.h"

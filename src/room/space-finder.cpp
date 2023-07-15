@@ -1,4 +1,4 @@
-﻿#include "room/space-finder.h"
+#include "room/space-finder.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/cave.h"
 #include "grid/grid.h"

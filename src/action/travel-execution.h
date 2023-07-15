@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file travel-execution.h
  * @brief トラベル移動処理ヘッダ

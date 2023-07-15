@@ -1,4 +1,4 @@
-﻿#include "specific-object/chest.h"
+#include "specific-object/chest.h"
 #include "effect/attribute-types.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"

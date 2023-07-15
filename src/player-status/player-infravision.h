@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "player-status/player-status-base.h"
 
 class PlayerInfravision : public PlayerStatusBase {

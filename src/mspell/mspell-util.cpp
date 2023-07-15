@@ -1,4 +1,4 @@
-﻿#include "mspell/mspell-util.h"
+#include "mspell/mspell-util.h"
 #include "core/disturbance.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"

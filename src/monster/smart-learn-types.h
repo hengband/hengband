@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum class MonsterSmartLearnType {
     RES_ACID = 0, /*!< モンスターの学習フラグ: プレイヤーに酸耐性あり */

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 破邪魔法処理
  * @date 2020/06/05
  * @author Hourier

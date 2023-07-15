@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum class MindBerserkerType : int {
     DETECT_MANACE = 0,

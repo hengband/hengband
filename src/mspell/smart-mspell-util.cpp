@@ -1,4 +1,4 @@
-﻿#include "mspell/smart-mspell-util.h"
+#include "mspell/smart-mspell-util.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-flags2.h"

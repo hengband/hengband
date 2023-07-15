@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスター同士の打撃後処理 / Melee post-process.
  * @date 2014/01/17
  * @author

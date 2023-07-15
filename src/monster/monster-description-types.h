@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum monsetr_description_type {
     MD_NONE = 0x00000000,

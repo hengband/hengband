@@ -1,4 +1,4 @@
-﻿#include "spell-kind/spells-equipment.h"
+#include "spell-kind/spells-equipment.h"
 #include "avatar/avatar.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"

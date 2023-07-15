@@ -1,4 +1,4 @@
-﻿#include "game-option/option-types-table.h"
+#include "game-option/option-types-table.h"
 #include "game-option/auto-destruction-options.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"

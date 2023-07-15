@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "object-enchant/protector/abstract-protector-enchanter.h"
 #include "system/angband.h"

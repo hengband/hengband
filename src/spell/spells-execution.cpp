@@ -1,4 +1,4 @@
-﻿#include "spell/spells-execution.h"
+#include "spell/spells-execution.h"
 #include "realm/realm-arcane.h"
 #include "realm/realm-chaos.h"
 #include "realm/realm-craft.h"

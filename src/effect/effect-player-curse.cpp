@@ -1,4 +1,4 @@
-﻿#include "effect/effect-player-curse.h"
+#include "effect/effect-player-curse.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "effect/effect-player.h"
 #include "mind/mind-mirror-master.h"

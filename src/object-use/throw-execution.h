@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file throw-util.h
  * @brief 投擲処理関連ヘッダ

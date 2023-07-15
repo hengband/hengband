@@ -1,4 +1,4 @@
-﻿/*
+/*
  * @brief How an entity of an item is marked (flags in ItemEntity::marked)
  * @date 2020/05/28
  * @author Hourier

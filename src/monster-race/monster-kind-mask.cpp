@@ -1,4 +1,4 @@
-﻿#include "monster-race/monster-kind-mask.h"
+#include "monster-race/monster-kind-mask.h"
 
 const EnumClassFlagGroup<MonsterKindType> alignment_mask = {
     MonsterKindType::GOOD, MonsterKindType::EVIL

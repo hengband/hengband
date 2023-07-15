@@ -1,4 +1,4 @@
-﻿#include "room/vault-builder.h"
+#include "room/vault-builder.h"
 #include "floor/cave.h"
 #include "floor/floor-generator-util.h"
 #include "floor/floor-util.h"

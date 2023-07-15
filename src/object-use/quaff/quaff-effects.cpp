@@ -1,4 +1,4 @@
-﻿/*
+/*
  * @brief 薬を飲んだ時の効果処理
  * @date 2022/03/10
  * @author Hourier

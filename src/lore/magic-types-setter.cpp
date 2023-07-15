@@ -1,4 +1,4 @@
-﻿#include "lore/magic-types-setter.h"
+#include "lore/magic-types-setter.h"
 #include "lore/lore-calculator.h"
 #include "lore/lore-util.h"
 #include "monster-race/race-brightness-mask.h"

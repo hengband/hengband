@@ -1,4 +1,4 @@
-﻿#include "racial/racial-util.h"
+#include "racial/racial-util.h"
 #include "io/input-key-requester.h"
 #include "player-base/player-class.h"
 #include "system/player-type-definition.h"

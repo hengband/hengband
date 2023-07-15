@@ -1,4 +1,4 @@
-﻿#include "object-activation/activation-charm.h"
+#include "object-activation/activation-charm.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-sight.h"
 #include "system/player-type-definition.h"

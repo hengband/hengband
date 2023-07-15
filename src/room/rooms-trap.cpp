@@ -1,4 +1,4 @@
-﻿#include "room/rooms-trap.h"
+#include "room/rooms-trap.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/floor-generator.h"
 #include "game-option/cheat-types.h"

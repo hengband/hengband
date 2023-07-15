@@ -1,4 +1,4 @@
-﻿#include "object-activation/activation-breath.h"
+#include "object-activation/activation-breath.h"
 #include "effect/attribute-types.h"
 #include "object-enchant/dragon-breaths-table.h"
 #include "object/object-flags.h"

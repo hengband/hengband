@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum keymap_mode {
     KEYMAP_MODE_ORIG = 0, /*!< オリジナルキー配置 / Mode for original keyset commands */

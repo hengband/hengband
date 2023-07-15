@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "combat/combat-options-type.h"
 #include "main/sound-definitions-table.h"

@@ -1,4 +1,4 @@
-﻿#include "specific-object/torch.h"
+#include "specific-object/torch.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/cave.h"
 #include "grid/grid.h"

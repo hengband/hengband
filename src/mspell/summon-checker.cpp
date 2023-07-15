@@ -1,4 +1,4 @@
-﻿#include "mspell/summon-checker.h"
+#include "mspell/summon-checker.h"
 #include "monster-attack/monster-attack-table.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"

@@ -1,4 +1,4 @@
-﻿#include "effect/effect-feature.h"
+#include "effect/effect-feature.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h" // 暫定、後で消す.

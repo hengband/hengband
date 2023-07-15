@@ -1,4 +1,4 @@
-﻿#include "target/target-describer.h"
+#include "target/target-describer.h"
 #include "action/travel-execution.h"
 #include "core/stuff-handler.h"
 #include "dungeon/quest.h"

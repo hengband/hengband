@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "main-win/main-win-cfg-reader.h"
 #include <array>

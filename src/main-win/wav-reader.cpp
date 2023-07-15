@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file wav-reader.cpp
  * @brief Windows版固有実装(WAVファイル読込)
  */

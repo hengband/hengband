@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 自動拾いの検索
  * @date 2020/04/26
  * @author Hourier

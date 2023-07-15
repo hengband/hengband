@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class PlayerType;
 bool cleansing_nova(PlayerType *player_ptr, bool magic, bool powerful);

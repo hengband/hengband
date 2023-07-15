@@ -1,4 +1,4 @@
-﻿#include "window/main-window-equipments.h"
+#include "window/main-window-equipments.h"
 #include "flavor/flavor-describer.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"

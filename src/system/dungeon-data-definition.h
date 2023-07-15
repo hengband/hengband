@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "floor/floor-base-definitions.h"
 #include "system/angband.h"

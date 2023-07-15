@@ -1,4 +1,4 @@
-﻿#include "load/player-info-loader.h"
+#include "load/player-info-loader.h"
 #include "cmd-building/cmd-building.h"
 #include "load/angband-version-comparer.h"
 #include "load/birth-loader.h"

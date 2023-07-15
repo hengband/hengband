@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file blue-magic-spirit-curse.cpp
  * @brief 青魔法の呪い系処理定義
  */

@@ -1,4 +1,4 @@
-﻿#include "spell/spells-describer.h"
+#include "spell/spells-describer.h"
 #include "locale/language-switcher.h"
 #include "object/tval-types.h"
 

@@ -1,4 +1,4 @@
-﻿#include "cmd-io/macro-util.h"
+#include "cmd-io/macro-util.h"
 
 /* Current macro action [1024] */
 std::vector<char> macro_buffers;

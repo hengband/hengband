@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file x11-type-string.h
  * @brief X11用の文字列処理ヘッダ

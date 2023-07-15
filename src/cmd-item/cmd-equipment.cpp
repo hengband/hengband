@@ -1,4 +1,4 @@
-﻿#include "cmd-item/cmd-equipment.h"
+#include "cmd-item/cmd-equipment.h"
 #include "action/weapon-shield.h"
 #include "artifact/fixed-art-types.h"
 #include "autopick/autopick.h"

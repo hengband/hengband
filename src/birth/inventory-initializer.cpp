@@ -1,4 +1,4 @@
-﻿#include "birth/inventory-initializer.h"
+#include "birth/inventory-initializer.h"
 #include "autopick/autopick.h"
 #include "birth/initial-equipments-table.h"
 #include "floor/floor-object.h"

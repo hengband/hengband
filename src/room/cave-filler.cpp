@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief fill_data_type構造体を使ってダンジョンを生成/構成する処理
  * @date 2020/07/24
  * @author Hourier

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum class MonsterRaceId : int16_t {
     PLAYER = 0,

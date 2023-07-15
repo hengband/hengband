@@ -1,4 +1,4 @@
-﻿#include "mutation/gain-mutation-switcher.h"
+#include "mutation/gain-mutation-switcher.h"
 #include "mutation/mutation-flag-types.h"
 #include "mutation/mutation-util.h"
 #include "player-base/player-class.h"

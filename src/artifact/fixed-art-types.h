@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file fixed-art-types.h
  * @brief 固定アーティファクトのハードコード処理用ID定義

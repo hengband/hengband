@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file open-util.cpp
  * @brief 開閉処理関連関数
  */

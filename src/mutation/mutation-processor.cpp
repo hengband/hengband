@@ -1,4 +1,4 @@
-﻿#include "mutation/mutation-processor.h"
+#include "mutation/mutation-processor.h"
 #include "core/asking-player.h"
 #include "core/disturbance.h"
 #include "effect/attribute-types.h"

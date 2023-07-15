@@ -1,4 +1,4 @@
-﻿#include "spell-kind/spells-fetcher.h"
+#include "spell-kind/spells-fetcher.h"
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"

@@ -1,4 +1,4 @@
-﻿#include "spell-kind/spells-pet.h"
+#include "spell-kind/spells-pet.h"
 #include "core/asking-player.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"

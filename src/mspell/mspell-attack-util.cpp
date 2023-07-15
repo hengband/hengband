@@ -1,4 +1,4 @@
-﻿#include "mspell/mspell-attack-util.h"
+#include "mspell/mspell-attack-util.h"
 #include "monster-race/monster-race.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"

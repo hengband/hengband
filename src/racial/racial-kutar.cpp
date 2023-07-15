@@ -1,4 +1,4 @@
-﻿#include "racial/racial-kutar.h"
+#include "racial/racial-kutar.h"
 #include "core/disturbance.h"
 #include "core/stuff-handler.h"
 #include "game-option/disturbance-options.h"

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 突然変異の各種計算 / Calculations for mutation
  * @date 2014/01/11
  * @author

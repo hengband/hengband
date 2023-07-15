@@ -1,4 +1,4 @@
-﻿#include "store/home.h"
+#include "store/home.h"
 #include "avatar/avatar.h"
 #include "floor/floor-town.h"
 #include "game-option/birth-options.h"

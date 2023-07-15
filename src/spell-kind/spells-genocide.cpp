@@ -1,4 +1,4 @@
-﻿#include "spell-kind/spells-genocide.h"
+#include "spell-kind/spells-genocide.h"
 #include "avatar/avatar.h"
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"

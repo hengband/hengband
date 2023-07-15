@@ -1,4 +1,4 @@
-﻿#include "effect/effect-monster-oldies.h"
+#include "effect/effect-monster-oldies.h"
 #include "avatar/avatar.h"
 #include "effect/effect-monster-util.h"
 #include "monster-floor/monster-generator.h"

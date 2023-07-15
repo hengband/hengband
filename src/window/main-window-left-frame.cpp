@@ -1,4 +1,4 @@
-﻿#include "window/main-window-left-frame.h"
+#include "window/main-window-left-frame.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "market/arena-info-table.h"

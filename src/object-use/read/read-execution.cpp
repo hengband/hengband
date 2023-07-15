@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 巻物を読んだ際の効果処理
  * @date 2022/02/26
  * @author Hourier

@@ -1,4 +1,4 @@
-﻿#include "player-info/magic-eater-data-type.h"
+#include "player-info/magic-eater-data-type.h"
 #include "sv-definition/sv-rod-types.h"
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-wand-types.h"

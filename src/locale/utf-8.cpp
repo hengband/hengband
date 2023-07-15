@@ -1,4 +1,4 @@
-﻿#include "locale/utf-8.h"
+#include "locale/utf-8.h"
 
 /*!
  * @brief 文字列の最初の文字のUTF-8エンコーディングにおけるバイト長を返す

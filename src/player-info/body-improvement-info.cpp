@@ -1,4 +1,4 @@
-﻿#include "player-info/body-improvement-info.h"
+#include "player-info/body-improvement-info.h"
 #include "player-info/self-info-util.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"

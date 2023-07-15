@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class PlayerType;
 bool do_cmd_riding(PlayerType *player_ptr, bool force);

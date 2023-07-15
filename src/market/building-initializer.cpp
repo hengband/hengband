@@ -1,4 +1,4 @@
-﻿#include "market/building-initializer.h"
+#include "market/building-initializer.h"
 #include "floor/floor-town.h"
 #include "io/files-util.h"
 #include "object/object-kind-hook.h"

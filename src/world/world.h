@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "market/bounty-type-definition.h"
 #include "player-info/class-types.h"

@@ -1,4 +1,4 @@
-﻿#include "racial/racial-draconian.h"
+#include "racial/racial-draconian.h"
 #include "effect/attribute-types.h"
 #include "mind/mind-elementalist.h"
 #include "player/player-status.h"

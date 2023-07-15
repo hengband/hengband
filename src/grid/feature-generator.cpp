@@ -1,4 +1,4 @@
-﻿#include "grid/feature-generator.h"
+#include "grid/feature-generator.h"
 #include "dungeon/dungeon-flag-mask.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"

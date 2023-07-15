@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "room/room-types.h"
 #include "system/angband.h"

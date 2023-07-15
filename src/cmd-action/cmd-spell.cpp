@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 魔法のインターフェイスと発動 / Purpose: Do everything for each spell
  * @date 2013/12/31
  * @author

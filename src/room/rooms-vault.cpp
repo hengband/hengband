@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief Vaultの生成処理
  * @date 2018/09/11
  * @author deskull

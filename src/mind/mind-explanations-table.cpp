@@ -1,4 +1,4 @@
-﻿#include "mind/mind-explanations-table.h"
+#include "mind/mind-explanations-table.h"
 
 /*! 特殊技能の一覧テーブル */
 mind_power const mind_powers[MAX_MINDKINDS] = {

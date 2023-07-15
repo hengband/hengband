@@ -1,4 +1,4 @@
-﻿#include "timed-effect/player-cut.h"
+#include "timed-effect/player-cut.h"
 #include "system/angband-exceptions.h"
 #include "system/angband.h"
 

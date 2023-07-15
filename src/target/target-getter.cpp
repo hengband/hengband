@@ -1,4 +1,4 @@
-﻿#include "target/target-getter.h"
+#include "target/target-getter.h"
 #include "core/asking-player.h"
 #include "effect/spells-effect-util.h"
 #include "floor/geometry.h"

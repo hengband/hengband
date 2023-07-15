@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file graphics-win.h
  * @brief Windows版固有実装(タイル、イメージファイルの読み込み)ヘッダ

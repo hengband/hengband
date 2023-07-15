@@ -1,4 +1,4 @@
-﻿#include "birth/history-editor.h"
+#include "birth/history-editor.h"
 #include "io/input-key-acceptor.h"
 #include "io/read-pref-file.h"
 #include "locale/japanese.h"

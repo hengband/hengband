@@ -1,4 +1,4 @@
-﻿#include "load/player-attack-loader.h"
+#include "load/player-attack-loader.h"
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "load/load-zangband.h"

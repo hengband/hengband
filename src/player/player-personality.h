@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "player/player-personality-types.h"
 #include "system/angband.h"

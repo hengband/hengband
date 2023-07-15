@@ -1,4 +1,4 @@
-﻿#include "specific-object/monster-ball.h"
+#include "specific-object/monster-ball.h"
 #include "effect/spells-effect-util.h"
 #include "floor/geometry.h"
 #include "game-option/input-options.h"

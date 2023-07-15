@@ -1,4 +1,4 @@
-﻿#include "store/sell-order.h"
+#include "store/sell-order.h"
 #include "action/weapon-shield.h"
 #include "autopick/autopick.h"
 #include "avatar/avatar.h"

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 保存された階の管理 / management of the saved floor
  * @date 2014/01/04
  * @author

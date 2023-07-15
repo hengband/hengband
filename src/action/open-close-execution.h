@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file open-close-execution.h
  * @brief 扉や箱を開ける処理のヘッダ

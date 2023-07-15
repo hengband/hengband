@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file random-art-characteristics.cpp
  * @brief ランダムアーティファクトのバイアス付加処理実装
  */

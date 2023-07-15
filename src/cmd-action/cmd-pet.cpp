@@ -1,4 +1,4 @@
-﻿#include "cmd-action/cmd-pet.h"
+#include "cmd-action/cmd-pet.h"
 #include "action/action-limited.h"
 #include "cmd-action/cmd-attack.h"
 #include "cmd-io/cmd-dump.h"

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file blue-magic-status.h
  * @brief 青魔法の状態異常系スペルヘッダ

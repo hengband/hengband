@@ -1,4 +1,4 @@
-﻿#include "player-info/class-ability-info.h"
+#include "player-info/class-ability-info.h"
 #include "player-info/self-info-util.h"
 #include "realm/realm-names-table.h"
 #include "realm/realm-types.h"

@@ -1,4 +1,4 @@
-﻿#include "game-option/runtime-arguments.h"
+#include "game-option/runtime-arguments.h"
 
 bool arg_sound; /* Command arg -- Request special sounds */
 int arg_sound_volume_table_index;

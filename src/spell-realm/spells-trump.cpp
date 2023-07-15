@@ -1,4 +1,4 @@
-﻿#include "spell-realm/spells-trump.h"
+#include "spell-realm/spells-trump.h"
 #include "avatar/avatar.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"

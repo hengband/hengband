@@ -1,4 +1,4 @@
-﻿#include "effect/effect-player-spirit.h"
+#include "effect/effect-player-spirit.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "core/window-redrawer.h"
 #include "effect/effect-player.h"

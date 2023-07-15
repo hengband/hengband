@@ -1,4 +1,4 @@
-﻿#include "inventory/inventory-object.h"
+#include "inventory/inventory-object.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "floor/floor-object.h"

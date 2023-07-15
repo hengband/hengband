@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #define DO_AUTOPICK 0x01
 #define DO_AUTODESTROY 0x02

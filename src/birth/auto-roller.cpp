@@ -1,4 +1,4 @@
-﻿#include "birth/auto-roller.h"
+#include "birth/auto-roller.h"
 #include "birth/birth-stat.h"
 #include "birth/birth-util.h"
 #include "cmd-io/cmd-gameoption.h"

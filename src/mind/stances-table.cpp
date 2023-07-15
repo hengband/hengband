@@ -1,4 +1,4 @@
-﻿#include "mind/stances-table.h"
+#include "mind/stances-table.h"
 
 /*!
  * @brief 修行僧の構え能力テーブル

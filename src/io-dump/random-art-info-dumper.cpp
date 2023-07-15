@@ -1,4 +1,4 @@
-﻿#include "io-dump/random-art-info-dumper.h"
+#include "io-dump/random-art-info-dumper.h"
 #include "floor/floor-town.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"

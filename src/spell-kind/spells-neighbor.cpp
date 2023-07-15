@@ -1,4 +1,4 @@
-﻿#include "spell-kind/spells-neighbor.h"
+#include "spell-kind/spells-neighbor.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"

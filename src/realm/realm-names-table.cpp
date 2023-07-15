@@ -1,4 +1,4 @@
-﻿#include "realm/realm-names-table.h"
+#include "realm/realm-names-table.h"
 
 #ifdef JP
 /*!

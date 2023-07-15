@@ -1,4 +1,4 @@
-﻿#include "grid/stair.h"
+#include "grid/stair.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "game-option/birth-options.h"

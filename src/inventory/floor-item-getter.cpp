@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief オブジェクト選択処理
  * @date 2020/07/02
  * @author Hourier

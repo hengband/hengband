@@ -1,4 +1,4 @@
-﻿#include "monster-floor/monster-summon.h"
+#include "monster-floor/monster-summon.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/geometry.h"
 #include "floor/wild.h"

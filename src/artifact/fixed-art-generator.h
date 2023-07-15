@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file fixed-art-generator.h
  * @brief 固定アーティファクトの生成処理ヘッダ

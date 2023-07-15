@@ -1,4 +1,4 @@
-﻿#include "spell-kind/earthquake.h"
+#include "spell-kind/earthquake.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"

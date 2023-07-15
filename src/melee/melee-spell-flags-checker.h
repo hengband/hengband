@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 struct melee_spell_type;
 class PlayerType;

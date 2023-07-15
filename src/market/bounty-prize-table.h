@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 賞金首の報酬テーブル
  * @author Hourier
  * @date 2022/11/04

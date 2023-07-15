@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "effect/effect-processor.h"
 #include "monster-race/race-ability-flags.h"

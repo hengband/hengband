@@ -1,4 +1,4 @@
-﻿#include "game-option/game-play-options.h"
+#include "game-option/game-play-options.h"
 
 bool stack_force_notes; /* Merge inscriptions when stacking */
 bool stack_force_costs; /* Merge discounts when stacking */

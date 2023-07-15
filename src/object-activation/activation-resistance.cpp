@@ -1,4 +1,4 @@
-﻿#include "object-activation/activation-resistance.h"
+#include "object-activation/activation-resistance.h"
 #include "effect/attribute-types.h"
 #include "hpmp/hp-mp-processor.h"
 #include "spell-kind/spells-launcher.h"

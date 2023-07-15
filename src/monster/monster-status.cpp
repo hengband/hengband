@@ -1,4 +1,4 @@
-﻿#include "monster/monster-status.h"
+#include "monster/monster-status.h"
 #include "autopick/autopick-pref-processor.h"
 #include "core/speed-table.h"
 #include "floor/cave.h"

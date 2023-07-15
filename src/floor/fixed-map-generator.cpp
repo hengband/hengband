@@ -1,4 +1,4 @@
-﻿#include "floor/fixed-map-generator.h"
+#include "floor/fixed-map-generator.h"
 #include "artifact/fixed-art-generator.h"
 #include "artifact/fixed-art-types.h"
 #include "dungeon/quest.h"

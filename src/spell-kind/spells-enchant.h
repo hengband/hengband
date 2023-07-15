@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class PlayerType;
 bool artifact_scroll(PlayerType *player_ptr);

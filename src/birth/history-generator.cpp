@@ -1,4 +1,4 @@
-﻿#include "birth/history-generator.h"
+#include "birth/history-generator.h"
 #include "birth/history.h"
 #include "player-info/race-types.h"
 #include "system/player-type-definition.h"

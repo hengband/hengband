@@ -1,4 +1,4 @@
-﻿#include "inventory/player-inventory.h"
+#include "inventory/player-inventory.h"
 #include "autopick/autopick.h"
 #include "core/asking-player.h"
 #include "core/disturbance.h"

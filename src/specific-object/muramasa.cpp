@@ -1,4 +1,4 @@
-﻿#include "specific-object/muramasa.h"
+#include "specific-object/muramasa.h"
 #include "artifact/fixed-art-types.h"
 #include "core/asking-player.h"
 #include "spell/spells-object.h"

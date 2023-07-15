@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 void rd_version_info(void);
 void rd_randomizer(void);

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum class MonsterAbilityType {
     SHRIEK = 0, /*!< モンスター能力: 叫ぶ / Shriek for help */

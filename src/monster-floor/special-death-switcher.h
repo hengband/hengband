@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "effect/attribute-types.h"
 #include "system/angband.h"
 

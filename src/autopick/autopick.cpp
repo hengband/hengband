@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file autopick.c
  * @brief 自動拾い機能の実装 / Object Auto-picker/Destroyer
  * @date 2014/01/02

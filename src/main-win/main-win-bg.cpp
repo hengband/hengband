@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file main-win-bg.cpp
  * @brief Windows版固有実装(壁紙)
  */

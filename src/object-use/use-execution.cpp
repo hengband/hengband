@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 杖を振る処理
  * @date 2021/09/25
  * @author Hourier

@@ -1,4 +1,4 @@
-﻿#include "view/display-player-misc-info.h"
+#include "view/display-player-misc-info.h"
 #include "player-info/class-info.h"
 #include "player-info/mimic-info-table.h"
 #include "player/player-personality.h"

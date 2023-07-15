@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class PlayerType;
 void do_cmd_hissatsu(PlayerType *player_ptr);

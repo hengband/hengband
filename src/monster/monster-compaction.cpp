@@ -1,4 +1,4 @@
-﻿#include "monster/monster-compaction.h"
+#include "monster/monster-compaction.h"
 #include "core/stuff-handler.h"
 #include "game-option/play-record-options.h"
 #include "io/write-diary.h"

@@ -1,4 +1,4 @@
-﻿#include "object-activation/activation-util.h"
+#include "object-activation/activation-util.h"
 #include "object/object-info.h"
 #include "system/baseitem-info.h"
 #include "system/item-entity.h"

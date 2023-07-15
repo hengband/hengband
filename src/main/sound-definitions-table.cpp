@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file sound-definitions-table.cpp
  * @brief 設定ファイル用の効果音名定義
  */

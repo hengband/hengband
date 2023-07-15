@@ -1,4 +1,4 @@
-﻿#include "mspell/mspell-attack/mspell-ball.h"
+#include "mspell/mspell-attack/mspell-ball.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-processor.h"
 #include "main/sound-of-music.h"

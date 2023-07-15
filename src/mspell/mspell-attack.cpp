@@ -1,4 +1,4 @@
-﻿#include "mspell/mspell-attack.h"
+#include "mspell/mspell-attack.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "core/disturbance.h"
 #include "dungeon/dungeon-flag-types.h"

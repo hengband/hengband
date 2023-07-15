@@ -1,4 +1,4 @@
-﻿#include "melee/melee-spell.h"
+#include "melee/melee-spell.h"
 #include "core/disturbance.h"
 #include "melee/melee-spell-flags-checker.h"
 #include "melee/melee-spell-util.h"

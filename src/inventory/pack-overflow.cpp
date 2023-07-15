@@ -1,4 +1,4 @@
-﻿#include "inventory/pack-overflow.h"
+#include "inventory/pack-overflow.h"
 #include "core/disturbance.h"
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"

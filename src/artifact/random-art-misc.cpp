@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file random-art-misc.cpp
  * @brief ランダムアーティファクト生成のその他特性バイアス付け実装 / Artifact code
  */

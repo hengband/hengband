@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file knowledge-monsters.cpp
  * @brief 既知のモンスターに関する情報を表示する
  * @date 2020/04/24

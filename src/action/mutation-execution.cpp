@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file mutation-execution.cpp
  * @brief プレイヤーの変異能力実行定義
  */

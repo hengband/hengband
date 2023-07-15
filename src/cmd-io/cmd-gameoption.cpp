@@ -1,4 +1,4 @@
-﻿#include "cmd-io/cmd-gameoption.h"
+#include "cmd-io/cmd-gameoption.h"
 #include "autopick/autopick.h"
 #include "cmd-io/cmd-autopick.h"
 #include "cmd-io/cmd-dump.h"

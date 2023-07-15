@@ -1,4 +1,4 @@
-﻿#include "io-dump/dump-util.h"
+#include "io-dump/dump-util.h"
 #include "floor/geometry.h"
 #include "game-option/keymap-directory-getter.h"
 #include "game-option/special-options.h"

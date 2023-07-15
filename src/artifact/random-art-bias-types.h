@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file random-art-bias-types.h
  * @brief ランダムアーティファクトのバイアス定義

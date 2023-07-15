@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file scene-table-monster.h
  * @brief モンスターの遭遇状況に応じたBGM設定処理ヘッダ

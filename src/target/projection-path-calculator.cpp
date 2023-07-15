@@ -1,4 +1,4 @@
-﻿#include "target/projection-path-calculator.h"
+#include "target/projection-path-calculator.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
 #include "floor/cave.h"

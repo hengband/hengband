@@ -1,4 +1,4 @@
-﻿#include "effect/effect-player-resist-hurt.h"
+#include "effect/effect-player-resist-hurt.h"
 #include "artifact/fixed-art-types.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "core/window-redrawer.h"

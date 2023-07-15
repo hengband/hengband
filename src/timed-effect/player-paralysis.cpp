@@ -1,4 +1,4 @@
-﻿#include "timed-effect/player-paralysis.h"
+#include "timed-effect/player-paralysis.h"
 
 short PlayerParalysis::current() const
 {

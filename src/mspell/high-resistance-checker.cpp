@@ -1,4 +1,4 @@
-﻿#include "mspell/high-resistance-checker.h"
+#include "mspell/high-resistance-checker.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/smart-mspell-util.h"

@@ -1,4 +1,4 @@
-﻿#include "system/angband-version.h"
+#include "system/angband-version.h"
 #include "system/angband-exceptions.h"
 #include "system/angband.h"
 

@@ -1,4 +1,4 @@
-﻿#include "load/option-loader.h"
+#include "load/option-loader.h"
 #include "cmd-io/cmd-gameoption.h"
 #include "game-option/cheat-options.h"
 #include "game-option/option-flags.h"

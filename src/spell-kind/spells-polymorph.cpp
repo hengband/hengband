@@ -1,4 +1,4 @@
-﻿#include "spell-kind/spells-polymorph.h"
+#include "spell-kind/spells-polymorph.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-object.h"
 #include "monster-floor/monster-generator.h"

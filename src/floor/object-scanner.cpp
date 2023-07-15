@@ -1,4 +1,4 @@
-﻿#include "floor/object-scanner.h"
+#include "floor/object-scanner.h"
 #include "flavor/flavor-describer.h"
 #include "floor/cave.h"
 #include "game-option/text-display-options.h"

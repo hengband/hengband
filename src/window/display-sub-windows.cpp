@@ -1,4 +1,4 @@
-﻿#include "window/display-sub-windows.h"
+#include "window/display-sub-windows.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "floor/cave.h"

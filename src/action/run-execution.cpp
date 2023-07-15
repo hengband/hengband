@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file run-execution.cpp
  * @brief プレイヤーの走行処理実装
  */

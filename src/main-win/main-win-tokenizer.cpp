@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file main-win-tokenizer.cpp
  * @brief Windows版固有実装(トークン分割)
  */

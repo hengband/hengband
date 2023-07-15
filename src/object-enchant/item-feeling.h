@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /*
  * アイテムの簡易鑑定定義 / Game generated inscription indices. These are stored in the object,

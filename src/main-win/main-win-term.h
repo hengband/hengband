@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file main-win-term.h
  * @brief Windows版固有実装(ターミナル)ヘッダ

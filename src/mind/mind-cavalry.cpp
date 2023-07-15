@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 騎兵のレイシャルパワー処理
  * @date 2020/05/16
  * @author Hourier

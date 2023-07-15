@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file main-win-sound.cpp
  * @brief Windows版固有実装(効果音)
  */

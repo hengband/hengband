@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief プレイヤーのインターフェイスに関するコマンドの実装 / Interface commands
  * @date 2014/01/02
  * @author

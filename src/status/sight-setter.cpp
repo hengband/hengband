@@ -1,4 +1,4 @@
-﻿#include "status/sight-setter.h"
+#include "status/sight-setter.h"
 #include "core/disturbance.h"
 #include "core/stuff-handler.h"
 #include "game-option/disturbance-options.h"

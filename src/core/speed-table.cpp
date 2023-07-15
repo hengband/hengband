@@ -1,4 +1,4 @@
-﻿#include "core/speed-table.h"
+#include "core/speed-table.h"
 #include <vector>
 
 /*!

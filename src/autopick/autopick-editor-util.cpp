@@ -1,4 +1,4 @@
-﻿#include <cstdlib>
+#include <cstdlib>
 
 #include "autopick/autopick-dirty-flags.h"
 #include "autopick/autopick-editor-util.h"

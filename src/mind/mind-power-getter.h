@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "mind/mind-types.h"
 #include "system/angband.h"

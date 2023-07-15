@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /*!
  * @note モンスターの攻撃効果 / New monster blow effects

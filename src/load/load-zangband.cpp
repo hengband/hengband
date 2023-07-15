@@ -1,4 +1,4 @@
-﻿#include "load/load-zangband.h"
+#include "load/load-zangband.h"
 #include "avatar/avatar.h"
 #include "cmd-building/cmd-building.h"
 #include "dungeon/quest.h"

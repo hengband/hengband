@@ -1,4 +1,4 @@
-﻿#include "mutation/mutation-investor-remover.h"
+#include "mutation/mutation-investor-remover.h"
 #include "avatar/avatar.h"
 #include "core/stuff-handler.h"
 #include "mutation/gain-mutation-switcher.h"

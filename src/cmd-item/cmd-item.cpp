@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  *  @brief プレイヤーのアイテムに関するコマンドの実装1 / Inventory and equipment commands
  *  @date 2014/01/02
  *  @author

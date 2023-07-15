@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /*
  * @file game-closer.h

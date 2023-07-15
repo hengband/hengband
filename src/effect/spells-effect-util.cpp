@@ -1,4 +1,4 @@
-﻿#include "effect/spells-effect-util.h"
+#include "effect/spells-effect-util.h"
 #include "monster-race/race-indice-types.h"
 
 int rakubadam_m;

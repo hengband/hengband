@@ -1,4 +1,4 @@
-﻿#include "market/building-util.h"
+#include "market/building-util.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"

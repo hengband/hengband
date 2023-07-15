@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "mspell/mspell-attack/abstract-mspell.h"
 #include "system/angband.h"

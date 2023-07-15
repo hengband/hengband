@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file run-execution.h
  * @brief プレイヤーの走行処理ヘッダ

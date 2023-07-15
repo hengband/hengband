@@ -1,4 +1,4 @@
-﻿#include "spell-kind/spells-lite.h"
+#include "spell-kind/spells-lite.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"

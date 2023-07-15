@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum class SaveDataItemFlagType : unsigned int {
     PVAL = 0x00000001,

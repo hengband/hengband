@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum player_personality_type {
     PERSONALITY_ORDINARY = 0,

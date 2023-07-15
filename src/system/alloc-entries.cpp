@@ -1,4 +1,4 @@
-﻿#include "system/alloc-entries.h"
+#include "system/alloc-entries.h"
 #include "system/baseitem-info.h"
 
 /* The entries in the "race allocator table" */

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief デバッグコマンドの分岐実装
  * @date 2020/08/01
  * @author Hourier

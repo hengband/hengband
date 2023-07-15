@@ -1,4 +1,4 @@
-﻿#include "info-reader/ego-reader.h"
+#include "info-reader/ego-reader.h"
 #include "artifact/random-art-effects.h"
 #include "info-reader/baseitem-tokens-table.h"
 #include "info-reader/info-reader-util.h"

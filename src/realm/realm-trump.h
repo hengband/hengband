@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "spell/spells-util.h"
 #include "system/angband.h"

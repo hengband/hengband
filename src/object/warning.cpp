@@ -1,4 +1,4 @@
-﻿#include "object/warning.h"
+#include "object/warning.h"
 #include "artifact/fixed-art-types.h"
 #include "core/asking-player.h"
 #include "core/disturbance.h"

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 特殊な行動を取るモンスターの具体的な行動定義 (MonsterRaceDefinitionsのSPECIALフラグ)
  * @date 2020/05/16
  * @author Hourier

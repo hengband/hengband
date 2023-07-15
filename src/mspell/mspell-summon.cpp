@@ -1,4 +1,4 @@
-﻿#include "mspell/mspell-summon.h"
+#include "mspell/mspell-summon.h"
 #include "core/disturbance.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
