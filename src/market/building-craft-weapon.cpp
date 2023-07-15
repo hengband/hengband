@@ -1,4 +1,4 @@
-﻿#include "market/building-craft-weapon.h"
+#include "market/building-craft-weapon.h"
 #include "artifact/fixed-art-types.h"
 #include "combat/attack-accuracy.h"
 #include "combat/shoot.h"

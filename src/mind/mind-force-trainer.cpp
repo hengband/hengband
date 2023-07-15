@@ -1,4 +1,4 @@
-﻿#include "mind/mind-force-trainer.h"
+#include "mind/mind-force-trainer.h"
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
 #include "core/stuff-handler.h"

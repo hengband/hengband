@@ -1,4 +1,4 @@
-﻿#include "room/room-info-table.h"
+#include "room/room-info-table.h"
 
 /*!
  * 各部屋タイプの生成比定義

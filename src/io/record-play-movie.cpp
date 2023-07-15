@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 録画・再生機能
  * @date 2014/01/02
  * @author 2014 Deskull rearranged comment for Doxygen.

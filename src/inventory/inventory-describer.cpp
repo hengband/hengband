@@ -1,4 +1,4 @@
-﻿#include "inventory/inventory-describer.h"
+#include "inventory/inventory-describer.h"
 #include "game-option/birth-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "player/player-status-flags.h"

@@ -1,4 +1,4 @@
-﻿#include "floor/floor-leaver.h"
+#include "floor/floor-leaver.h"
 #include "cmd-building/cmd-building.h"
 #include "floor/cave.h"
 #include "floor/floor-events.h"

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file init-error-messages-table.cpp
  * @brief 変愚蛮怒のゲームデータ解析エラー名定義
  */

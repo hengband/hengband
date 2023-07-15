@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file angband-headers.cpp
  * @brief ゲームデータのグローバルヘッダ情報定義
  */

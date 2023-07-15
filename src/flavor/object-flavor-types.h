@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum object_description_type {
     OD_NAME_ONLY = 0x00000001, /* Omit values, pval, inscription */

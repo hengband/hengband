@@ -1,4 +1,4 @@
-﻿#include "room/room-generator.h"
+#include "room/room-generator.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"

@@ -1,4 +1,4 @@
-﻿#include "save/info-writer.h"
+#include "save/info-writer.h"
 #include "birth/quick-start.h"
 #include "game-option/cheat-options.h"
 #include "game-option/option-flags.h"

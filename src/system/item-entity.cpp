@@ -1,4 +1,4 @@
-﻿/*
+/*
  * @file item-entity.cpp
  * @brief アイテム実体とそれにまつわる判定処理群
  * @author Hourier

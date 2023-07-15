@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file learnt-info.cpp
  * @brief 青魔法の情報表示処理定義
  */

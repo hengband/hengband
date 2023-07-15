@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "floor/floor-allocation-types.h"
 #include "system/angband.h"

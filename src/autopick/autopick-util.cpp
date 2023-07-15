@@ -1,4 +1,4 @@
-﻿#include "autopick/autopick-util.h"
+#include "autopick/autopick-util.h"
 #include "autopick/autopick-menu-data-table.h"
 #include "core/window-redrawer.h"
 #include "game-option/input-options.h"

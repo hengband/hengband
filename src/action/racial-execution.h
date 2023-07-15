@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file racial-execution.h
  * @brief レイシャルパワー実行処理ヘッダ

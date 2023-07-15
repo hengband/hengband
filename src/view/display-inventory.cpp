@@ -1,4 +1,4 @@
-﻿#include "view/display-inventory.h"
+#include "view/display-inventory.h"
 #include "flavor/flavor-describer.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"

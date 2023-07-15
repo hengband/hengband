@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*
  * Windowsのコードからは呼ばれない。よってVSからは見えない
  */

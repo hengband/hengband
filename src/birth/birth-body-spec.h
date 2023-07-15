@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class PlayerType;
 void get_height_weight(PlayerType *player_ptr);

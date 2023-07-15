@@ -1,4 +1,4 @@
-﻿#include "realm/realm-trump.h"
+#include "realm/realm-trump.h"
 #include "cmd-action/cmd-spell.h"
 #include "core/asking-player.h"
 #include "effect/attribute-types.h"

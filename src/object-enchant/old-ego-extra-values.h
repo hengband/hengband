@@ -1,4 +1,4 @@
-﻿/*
+/*
  * @brief 変愚ver1.5.0以前に使われていたアイテムの追加特性フラグ / Hack -- special "xtra" object powers
  * @date 2020/05/28
  * @author Hourier

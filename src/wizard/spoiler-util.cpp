@@ -1,4 +1,4 @@
-﻿#include "wizard/spoiler-util.h"
+#include "wizard/spoiler-util.h"
 #include "object/object-flags.h"
 #include "system/item-entity.h"
 

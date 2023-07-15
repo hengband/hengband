@@ -1,4 +1,4 @@
-﻿#include "object/object-index-list.h"
+#include "object/object-index-list.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 

@@ -1,4 +1,4 @@
-﻿#include "game-option/text-display-options.h"
+#include "game-option/text-display-options.h"
 
 bool plain_descriptions; /* Plain object descriptions */
 bool plain_pickup; /* Plain pickup messages(japanese only) */

@@ -1,4 +1,4 @@
-﻿#include "monster-race/race-resistance-mask.h"
+#include "monster-race/race-resistance-mask.h"
 
 const EnumClassFlagGroup<MonsterResistanceType> RFR_EFF_IM_ACID_MASK = {
     MonsterResistanceType::IMMUNE_ACID,

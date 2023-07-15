@@ -1,4 +1,4 @@
-﻿#include "birth/birth-stat.h"
+#include "birth/birth-stat.h"
 #include "birth/auto-roller.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"

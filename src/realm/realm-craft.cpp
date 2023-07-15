@@ -1,4 +1,4 @@
-﻿#include "realm/realm-craft.h"
+#include "realm/realm-craft.h"
 #include "cmd-action/cmd-spell.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"

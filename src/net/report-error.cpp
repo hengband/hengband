@@ -1,4 +1,4 @@
-﻿#include "external-lib/include-json.h"
+#include "external-lib/include-json.h"
 #include "locale/japanese.h"
 #include "net/http-client.h"
 #include "system/angband-version.h"

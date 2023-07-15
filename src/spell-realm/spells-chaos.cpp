@@ -1,4 +1,4 @@
-﻿#include "spell-realm/spells-chaos.h"
+#include "spell-realm/spells-chaos.h"
 #include "core/window-redrawer.h"
 #include "dungeon/quest.h"
 #include "effect/attribute-types.h"

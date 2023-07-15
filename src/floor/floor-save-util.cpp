@@ -1,4 +1,4 @@
-﻿#include "floor/floor-save-util.h"
+#include "floor/floor-save-util.h"
 
 /*
  * Sign for current process used in temporary files.

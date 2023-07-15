@@ -1,4 +1,4 @@
-﻿#include "view/display-store.h"
+#include "view/display-store.h"
 #include "flavor/flavor-describer.h"
 #include "game-option/birth-options.h"
 #include "game-option/special-options.h"

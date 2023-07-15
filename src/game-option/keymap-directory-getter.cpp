@@ -1,4 +1,4 @@
-﻿#include "game-option/keymap-directory-getter.h"
+#include "game-option/keymap-directory-getter.h"
 #include "game-option/input-options.h"
 #include "io/input-key-requester.h"
 #include "system/angband.h"

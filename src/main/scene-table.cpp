@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file scene-table.cpp
  * @brief BGM選曲の基本処理部分実装
  */

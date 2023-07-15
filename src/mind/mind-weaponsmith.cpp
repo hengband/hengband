@@ -1,4 +1,4 @@
-﻿#include "mind/mind-weaponsmith.h"
+#include "mind/mind-weaponsmith.h"
 #include "action/action-limited.h"
 #include "autopick/autopick.h"
 #include "core/asking-player.h"

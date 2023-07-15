@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 記念撮影のセーブとロード
  * @date 2020/04/22
  * @Author Hourier

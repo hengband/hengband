@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "monster/monster-timed-effect-types.h"
 #include <map>

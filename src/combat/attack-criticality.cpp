@@ -1,4 +1,4 @@
-﻿#include "combat/attack-criticality.h"
+#include "combat/attack-criticality.h"
 #include "combat/combat-options-type.h"
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-of-music.h"

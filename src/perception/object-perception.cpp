@@ -1,4 +1,4 @@
-﻿#include "perception/object-perception.h"
+#include "perception/object-perception.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "game-option/play-record-options.h"

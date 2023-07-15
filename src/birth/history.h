@@ -1,4 +1,4 @@
-﻿#include "system/angband.h"
+#include "system/angband.h"
 #include <vector>
 
 /*!

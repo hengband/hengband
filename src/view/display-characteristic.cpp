@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief キャラクタの特性を表示する
  * @date 2020/02/25
  * @author Hourier

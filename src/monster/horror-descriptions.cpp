@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file horror-descriptions.cpp
  * @brief エルドリッチホラーの形容詞テーブル定義
  * @date 2023/04/29

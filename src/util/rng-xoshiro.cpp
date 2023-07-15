@@ -1,4 +1,4 @@
-﻿#include "util/rng-xoshiro.h"
+#include "util/rng-xoshiro.h"
 
 namespace {
 

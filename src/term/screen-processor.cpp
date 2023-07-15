@@ -1,4 +1,4 @@
-﻿#include "term/screen-processor.h"
+#include "term/screen-processor.h"
 #include "io/input-key-acceptor.h"
 #include "locale/japanese.h"
 #include "term/term-color-types.h"

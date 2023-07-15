@@ -1,4 +1,4 @@
-﻿#include "view/object-describer.h"
+#include "view/object-describer.h"
 #include "cmd-action/cmd-spell.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"

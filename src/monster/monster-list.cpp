@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスター処理 / misc code for monsters
  * @date 2014/07/08
  * @author

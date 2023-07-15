@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file main-win-term.cpp
  * @brief Windows版固有実装(ターミナル)
  */

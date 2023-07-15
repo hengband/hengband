@@ -1,4 +1,4 @@
-﻿#include "cmd-io/cmd-lore.h"
+#include "cmd-io/cmd-lore.h"
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "game-option/cheat-options.h"

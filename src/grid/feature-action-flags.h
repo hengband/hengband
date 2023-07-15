@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "grid/feature-flag-types.h"
 #include "system/angband.h"
 

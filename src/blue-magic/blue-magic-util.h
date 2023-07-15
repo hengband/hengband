@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file blue-magic-util.h
  * @brief 青魔法の構造体、初期化処理ヘッダ

@@ -1,4 +1,4 @@
-﻿#include "monster-attack/monster-attack-table.h"
+#include "monster-attack/monster-attack-table.h"
 #include "effect/attribute-types.h"
 #include "monster-attack/monster-attack-effect.h"
 

@@ -1,4 +1,4 @@
-﻿#include "view/display-scores.h"
+#include "view/display-scores.h"
 #include "core/score-util.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"

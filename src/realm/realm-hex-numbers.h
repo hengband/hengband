@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum spell_hex_type {
     /* 1st book */

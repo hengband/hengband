@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file random-art-pval-investor.cpp
  * @brief ランダムアーティファクトにpvalを追加する処理
  * @date 2020/07/14

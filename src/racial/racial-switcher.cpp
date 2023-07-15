@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief レイシャルと突然変異の技能処理 / Racial powers (and mutations)
  * @date 2014/01/08
  * @author

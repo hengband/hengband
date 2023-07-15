@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 struct dt_type {
     int dun_tun_rnd; /*!< ダンジョンの通路方向を掻き回す頻度(一回の試行ごとに%で判定している) */

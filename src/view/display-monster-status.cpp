@@ -1,4 +1,4 @@
-﻿#include "view/display-monster-status.h"
+#include "view/display-monster-status.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-flag-types.h"

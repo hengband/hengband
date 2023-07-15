@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class PlayerType;
 bool get_aim_dir(PlayerType *player_ptr, int *dp);

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file fixed-art-generator.cpp
  * @brief 固定アーティファクトの生成 / Artifact code
  * @date 2020/07/14

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /*
  * Dirty flag for text editor

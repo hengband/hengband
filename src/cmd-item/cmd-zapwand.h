@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class PlayerType;
 bool wand_effect(PlayerType *player_ptr, int sval, int dir, bool powerful, bool magic);

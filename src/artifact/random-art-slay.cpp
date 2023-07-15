@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file random-art-slay.cpp
  * @brief ランダムアーティファクトのスレイ付加処理実装
  */

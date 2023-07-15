@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "object-use/read/read-executor-base.h"
 #include <memory>

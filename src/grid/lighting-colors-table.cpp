@@ -1,4 +1,4 @@
-﻿#include "grid/lighting-colors-table.h"
+#include "grid/lighting-colors-table.h"
 #include "term/term-color-types.h"
 
 /*!

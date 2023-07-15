@@ -1,4 +1,4 @@
-﻿#include "core/show-file.h"
+#include "core/show-file.h"
 #include "core/asking-player.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"

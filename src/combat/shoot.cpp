@@ -1,4 +1,4 @@
-﻿#include "combat/shoot.h"
+#include "combat/shoot.h"
 #include "artifact/fixed-art-types.h"
 #include "avatar/avatar.h"
 #include "combat/attack-criticality.h"

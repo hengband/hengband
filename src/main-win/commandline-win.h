@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file commandline-win.h
  * @brief Windows版固有実装(コマンドライン)ヘッダ

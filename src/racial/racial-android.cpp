@@ -1,4 +1,4 @@
-﻿#include "racial/racial-android.h"
+#include "racial/racial-android.h"
 #include "effect/attribute-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-ego.h"

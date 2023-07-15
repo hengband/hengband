@@ -1,4 +1,4 @@
-﻿#include "mspell/mspell-dispel.h"
+#include "mspell/mspell-dispel.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "core/speed-table.h"
 #include "core/window-redrawer.h"

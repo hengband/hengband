@@ -1,4 +1,4 @@
-﻿#include "object-enchant/object-boost.h"
+#include "object-enchant/object-boost.h"
 #include "artifact/random-art-effects.h"
 #include "object-enchant/tr-types.h"
 #include "player-ability/player-ability-types.h"

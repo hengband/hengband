@@ -1,4 +1,4 @@
-﻿#include "lore/lore-calculator.h"
+#include "lore/lore-calculator.h"
 #include "game-option/cheat-options.h"
 #include "lore/lore-util.h"
 #include "monster-race/monster-race.h"

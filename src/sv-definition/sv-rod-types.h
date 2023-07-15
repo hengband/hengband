@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /* The "sval" codes for TV_ROD */
 enum sv_rod_type {

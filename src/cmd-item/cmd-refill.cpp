@@ -1,4 +1,4 @@
-﻿#include "cmd-item/cmd-refill.h"
+#include "cmd-item/cmd-refill.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /*
  * Copyright (c) 1997 Ben Harrison

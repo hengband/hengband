@@ -1,4 +1,4 @@
-﻿#include "birth/birth-explanations-table.h"
+#include "birth/birth-explanations-table.h"
 #include "system/angband.h"
 
 /*! 種族の解説メッセージテーブル */

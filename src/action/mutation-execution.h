@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file mutation-execution.h
  * @brief プレイヤーの変異能力実行ヘッダ

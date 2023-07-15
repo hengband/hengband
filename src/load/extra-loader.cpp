@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief その他の情報を読み込む処理
  * @date 2020/07/05
  * @author Hourier

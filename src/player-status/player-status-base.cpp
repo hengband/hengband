@@ -1,4 +1,4 @@
-﻿#include "player-status/player-status-base.h"
+#include "player-status/player-status-base.h"
 #include "inventory/inventory-slot-types.h"
 #include "object/object-flags.h"
 #include "player/player-status.h"

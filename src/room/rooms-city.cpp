@@ -1,4 +1,4 @@
-﻿#include "room/rooms-city.h"
+#include "room/rooms-city.h"
 #include "floor/floor-generator.h"
 #include "floor/floor-town.h"
 #include "game-option/cheat-types.h"

@@ -1,4 +1,4 @@
-﻿#include "birth/birth-body-spec.h"
+#include "birth/birth-body-spec.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/race-info.h"

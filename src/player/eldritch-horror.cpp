@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief エルドリッチホラー処理
  * @date 2020/06/07
  * @author Hourier

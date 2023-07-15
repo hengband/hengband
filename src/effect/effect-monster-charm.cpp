@@ -1,4 +1,4 @@
-﻿#include "effect/effect-monster-charm.h"
+#include "effect/effect-monster-charm.h"
 #include "avatar/avatar.h"
 #include "dungeon/quest.h"
 #include "effect/effect-monster-util.h"

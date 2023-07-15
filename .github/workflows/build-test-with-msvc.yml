@@ -1,4 +1,4 @@
-﻿name: Build test with MSVC
+name: Build test with MSVC
 on:
   workflow_call:
 

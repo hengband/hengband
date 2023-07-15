@@ -1,4 +1,4 @@
-﻿#include "player/player-status-resist.h"
+#include "player/player-status-resist.h"
 #include "artifact/fixed-art-types.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"

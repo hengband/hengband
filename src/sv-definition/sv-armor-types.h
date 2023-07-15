@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /* The "sval" codes for TV_SOFT_ARMOR */
 enum sv_soft_armor_type {

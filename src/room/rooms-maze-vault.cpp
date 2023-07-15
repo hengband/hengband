@@ -1,4 +1,4 @@
-﻿#include "room/rooms-maze-vault.h"
+#include "room/rooms-maze-vault.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "game-option/cheat-types.h"
 #include "grid/grid.h"

@@ -1,4 +1,4 @@
-﻿#include "player/player-personality.h"
+#include "player/player-personality.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/trc-types.h"
 

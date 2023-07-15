@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class PlayerType;
 void do_cmd_go_up(PlayerType *player_ptr);

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum class MonsterTemporaryFlagType {
     VIEW = 0, /* Monster is in line of sight */

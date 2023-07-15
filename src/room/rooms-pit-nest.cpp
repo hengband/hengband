@@ -1,4 +1,4 @@
-﻿#include "room/rooms-pit-nest.h"
+#include "room/rooms-pit-nest.h"
 #include "floor/floor-generator.h"
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"

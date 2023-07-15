@@ -1,4 +1,4 @@
-﻿/*
+/*
  * The values for the "tval" field of various objects.
  *
  * This value is the primary means by which items are sorted in the

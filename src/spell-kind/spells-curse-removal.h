@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class PlayerType;
 int remove_curse(PlayerType *player_ptr);

@@ -1,4 +1,4 @@
-﻿#include "wizard/fixed-artifacts-spoiler.h"
+#include "wizard/fixed-artifacts-spoiler.h"
 #include "io/files-util.h"
 #include "object/object-kind-hook.h"
 #include "system/angband-version.h"

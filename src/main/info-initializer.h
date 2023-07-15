@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file info-initializer.h
  * @brief 変愚蛮怒のゲームデータ解析処理ヘッダ

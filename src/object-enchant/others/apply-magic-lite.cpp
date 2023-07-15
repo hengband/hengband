@@ -1,4 +1,4 @@
-﻿#include "object-enchant/others/apply-magic-lite.h"
+#include "object-enchant/others/apply-magic-lite.h"
 #include "artifact/random-art-generator.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-ego.h"

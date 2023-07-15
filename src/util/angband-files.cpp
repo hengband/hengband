@@ -1,4 +1,4 @@
-﻿#include "util/angband-files.h"
+#include "util/angband-files.h"
 #include "locale/japanese.h"
 #include "system/angband-exceptions.h"
 #include "util/string-processor.h"

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file blue-magic-breath.h
  * @brief 青魔法のブレス系呪文ヘッダ

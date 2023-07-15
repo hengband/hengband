@@ -1,4 +1,4 @@
-﻿#include "monster-floor/monster-remover.h"
+#include "monster-floor/monster-remover.h"
 #include "core/stuff-handler.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"

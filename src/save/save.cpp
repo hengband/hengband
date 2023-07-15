@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file save.c
  * @brief セーブファイル書き込み処理 / Purpose: interact with savefiles
  * @date 2014/07/12

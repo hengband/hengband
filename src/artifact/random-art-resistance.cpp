@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file random-art-resistance.cpp
  * @brief ランダムアーティファクトの耐性付加処理実装
  */

@@ -1,4 +1,4 @@
-﻿#include "specific-object/bloody-moon.h"
+#include "specific-object/bloody-moon.h"
 #include "artifact/fixed-art-types.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/tr-types.h"

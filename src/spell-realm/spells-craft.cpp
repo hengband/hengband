@@ -1,4 +1,4 @@
-﻿#include "spell-realm/spells-craft.h"
+#include "spell-realm/spells-craft.h"
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
 #include "core/stuff-handler.h"

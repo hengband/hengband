@@ -1,4 +1,4 @@
-﻿#include "player-status/player-speed.h"
+#include "player-status/player-speed.h"
 #include "artifact/fixed-art-types.h"
 #include "grid/feature-flag-types.h"
 #include "grid/feature.h"

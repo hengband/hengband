@@ -1,4 +1,4 @@
-﻿#include "monster-race/monster-race-hook.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-table.h"
 #include "monster-floor/place-monster-types.h"

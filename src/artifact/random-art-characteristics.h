@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file random-art-characteristics.h
  * @brief ランダムアーティファクトのバイアス付加処理ヘッダ

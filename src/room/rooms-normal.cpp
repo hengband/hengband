@@ -1,4 +1,4 @@
-﻿#include "room/rooms-normal.h"
+#include "room/rooms-normal.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/geometry.h"
 #include "grid/door.h"

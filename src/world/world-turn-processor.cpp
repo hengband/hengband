@@ -1,4 +1,4 @@
-﻿#include "world/world-turn-processor.h"
+#include "world/world-turn-processor.h"
 #include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-save.h"
 #include "core/disturbance.h"

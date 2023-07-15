@@ -1,4 +1,4 @@
-﻿#include "store/museum.h"
+#include "store/museum.h"
 #include "core/asking-player.h"
 #include "flavor/flavor-describer.h"
 #include "store/home.h"

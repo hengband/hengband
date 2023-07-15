@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file game-data-initializer.cpp
  * @brief 変愚蛮怒のゲームデータ初期化定義
  */

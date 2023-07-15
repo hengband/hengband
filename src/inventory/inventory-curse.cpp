@@ -1,4 +1,4 @@
-﻿#include "inventory/inventory-curse.h"
+#include "inventory/inventory-curse.h"
 #include "artifact/fixed-art-types.h"
 #include "core/asking-player.h"
 #include "core/disturbance.h"

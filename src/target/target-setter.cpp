@@ -1,4 +1,4 @@
-﻿#include "target/target-setter.h"
+#include "target/target-setter.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "floor/geometry.h"

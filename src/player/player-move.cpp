@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  *  @brief プレイヤーの移動処理 / Movement commands
  *  @date 2014/01/02
  *  @author

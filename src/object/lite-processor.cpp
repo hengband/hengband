@@ -1,4 +1,4 @@
-﻿#include "object/lite-processor.h"
+#include "object/lite-processor.h"
 #include "core/disturbance.h"
 #include "core/window-redrawer.h"
 #include "game-option/disturbance-options.h"

@@ -1,4 +1,4 @@
-﻿#include "load/dungeon-loader.h"
+#include "load/dungeon-loader.h"
 #include "dungeon/quest.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"

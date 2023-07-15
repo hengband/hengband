@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 struct text_body_type;
 void check_expression_line(text_body_type *tb, int y);

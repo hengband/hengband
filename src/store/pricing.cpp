@@ -1,4 +1,4 @@
-﻿#include "store/pricing.h"
+#include "store/pricing.h"
 #include "object/object-value.h"
 #include "player/player-status-table.h"
 #include "store/gold-magnification-table.h"

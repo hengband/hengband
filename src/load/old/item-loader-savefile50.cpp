@@ -1,4 +1,4 @@
-﻿#include "load/old/item-loader-savefile50.h"
+#include "load/old/item-loader-savefile50.h"
 #include "artifact/fixed-art-types.h"
 #include "game-option/runtime-arguments.h"
 #include "load/angband-version-comparer.h"

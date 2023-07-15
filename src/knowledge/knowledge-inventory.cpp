@@ -1,4 +1,4 @@
-﻿/*
+/*
  * @brief 装備の耐性を表示する
  * @date 2020/04/20
  * @author Hourier

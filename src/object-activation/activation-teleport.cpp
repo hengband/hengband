@@ -1,4 +1,4 @@
-﻿#include "object-activation/activation-teleport.h"
+#include "object-activation/activation-teleport.h"
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
 #include "effect/attribute-types.h"

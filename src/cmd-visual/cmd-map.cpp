@@ -1,4 +1,4 @@
-﻿#include "cmd-visual/cmd-map.h"
+#include "cmd-visual/cmd-map.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-util.h"
 #include "io/input-key-acceptor.h"

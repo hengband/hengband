@@ -1,4 +1,4 @@
-﻿#include "util/string-processor.h"
+#include "util/string-processor.h"
 #include "util/int-char-converter.h"
 
 /*!

@@ -1,4 +1,4 @@
-﻿#include "object-hook/hook-expendable.h"
+#include "object-hook/hook-expendable.h"
 #include "artifact/fixed-art-types.h"
 #include "core/window-redrawer.h"
 #include "monster-race/monster-race.h"

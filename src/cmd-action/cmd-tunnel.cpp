@@ -1,4 +1,4 @@
-﻿#include "cmd-action/cmd-tunnel.h"
+#include "cmd-action/cmd-tunnel.h"
 #include "action/tunnel-execution.h"
 #include "cmd-action/cmd-attack.h"
 #include "core/disturbance.h"

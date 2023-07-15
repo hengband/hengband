@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 各職業の特殊技能実装 / Special magics
  * @date 2014/01/15
  * @author

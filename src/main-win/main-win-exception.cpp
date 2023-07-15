@@ -1,4 +1,4 @@
-﻿#include "main-win/main-win-exception.h"
+#include "main-win/main-win-exception.h"
 #include "main-win/main-win-utils.h"
 #include "net/report-error.h"
 #include <sstream>

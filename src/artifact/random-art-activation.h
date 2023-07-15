@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file random-art-activation.h
  * @brief ランダムアーティファクトの発動実装ヘッダ

@@ -1,4 +1,4 @@
-﻿#include "spell-kind/spells-beam.h"
+#include "spell-kind/spells-beam.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "spell-kind/spells-launcher.h"

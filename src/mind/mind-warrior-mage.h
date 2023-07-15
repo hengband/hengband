@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class PlayerType;
 bool comvert_hp_to_mp(PlayerType *player_ptr);

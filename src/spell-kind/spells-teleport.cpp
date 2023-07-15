@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief テレポート魔法全般
  * @date 2020/06/04
  * @author Hourier

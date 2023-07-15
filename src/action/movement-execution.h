@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file movement-execution.h
  * @brief プレイヤーの歩行処理実行ヘッダ

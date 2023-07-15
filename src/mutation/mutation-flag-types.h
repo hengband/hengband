@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum class PlayerMutationType {
     SPIT_ACID = 0, /*!< 突然変異: 酸の唾 */

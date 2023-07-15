@@ -1,4 +1,4 @@
-﻿#include "core/turn-compensator.h"
+#include "core/turn-compensator.h"
 #include "floor/floor-town.h"
 #include "player-info/race-types.h"
 #include "store/store-owners.h"

@@ -1,4 +1,4 @@
-﻿#include "racial/mutation-racial-selector.h"
+#include "racial/mutation-racial-selector.h"
 #include "cmd-action/cmd-spell.h"
 #include "locale/japanese.h"
 #include "mutation/mutation-flag-types.h"

@@ -1,4 +1,4 @@
-﻿#include "mspell/mspell-attack/abstract-mspell.h"
+#include "mspell/mspell-attack/abstract-mspell.h"
 #include "monster/monster-update.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-util.h"

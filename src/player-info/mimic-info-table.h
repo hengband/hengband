@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "player-info/race-info.h"
 #include <map>

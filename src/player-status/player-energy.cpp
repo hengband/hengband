@@ -1,4 +1,4 @@
-﻿/*
+/*
  * @file player-energy.cpp
  * @brief ゲームターン当たりの行動エネルギー増減処理
  * @author Hourier

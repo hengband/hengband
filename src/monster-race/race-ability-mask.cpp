@@ -1,4 +1,4 @@
-﻿#include "monster-race/race-ability-mask.h"
+#include "monster-race/race-ability-mask.h"
 
 // clang-format off
 /* "summon" spells currently "summon" spells are included in "intelligent" and "indirect" */

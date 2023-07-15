@@ -1,4 +1,4 @@
-﻿#include "effect/effect-player-switcher.h"
+#include "effect/effect-player-switcher.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-player-curse.h"
 #include "effect/effect-player-oldies.h"

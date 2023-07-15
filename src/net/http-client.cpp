@@ -1,4 +1,4 @@
-﻿#include "net/http-client.h"
+#include "net/http-client.h"
 #include "net/curl-easy-session.h"
 #include "net/curl-slist.h"
 #include <fstream>

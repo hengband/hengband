@@ -1,4 +1,4 @@
-﻿#include "dungeon/quest.h"
+#include "dungeon/quest.h"
 #include "artifact/fixed-art-types.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"

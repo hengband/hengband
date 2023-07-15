@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 struct glm_type;
 class PlayerType;

@@ -1,4 +1,4 @@
-﻿#include "io/uid-checker.h"
+#include "io/uid-checker.h"
 #include "system/angband.h"
 #if defined(SET_UID) && defined(SAFE_SETUID) && defined(SAFE_SETUID_POSIX)
 #include "main-unix/unix-user-ids.h"

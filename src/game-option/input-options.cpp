@@ -1,4 +1,4 @@
-﻿#include "game-option/input-options.h"
+#include "game-option/input-options.h"
 
 bool rogue_like_commands; /* Rogue-like commands */
 bool always_pickup; /* Pick things up by default */

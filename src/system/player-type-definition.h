@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/trc-types.h"

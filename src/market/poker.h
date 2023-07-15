@@ -1,3 +1,3 @@
-﻿#pragma once
+#pragma once
 
 int do_poker(void);

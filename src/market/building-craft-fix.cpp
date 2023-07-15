@@ -1,4 +1,4 @@
-﻿#include "market/building-craft-fix.h"
+#include "market/building-craft-fix.h"
 #include "artifact/artifact-info.h"
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"

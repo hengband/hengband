@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 生い立ちメッセージテーブル / Forward declare
  * @date 2002/01/12
  * @author mogami

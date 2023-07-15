@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum class MonsterWildernessType {
     WILD_ONLY = 0,

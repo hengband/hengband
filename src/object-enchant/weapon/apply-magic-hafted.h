@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "object-enchant/weapon/melee-weapon-enchanter.h"
 #include "system/angband.h"

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file angband-initializer.h
  * @brief 変愚蛮怒のシステム初期化処理ヘッダファイル

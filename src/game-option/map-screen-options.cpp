@@ -1,4 +1,4 @@
-﻿#include "game-option/map-screen-options.h"
+#include "game-option/map-screen-options.h"
 
 bool center_player; /* Center map while walking (*slow*) */
 bool center_running; /* Centering even while running */

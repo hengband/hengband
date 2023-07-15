@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /* 旧TRC. 実態に即した名称に変更 */
 enum class CurseTraitType {

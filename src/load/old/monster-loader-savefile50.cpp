@@ -1,4 +1,4 @@
-﻿#include "load/old/monster-loader-savefile50.h"
+#include "load/old/monster-loader-savefile50.h"
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "load/old/load-v1-5-0.h"

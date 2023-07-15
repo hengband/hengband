@@ -1,4 +1,4 @@
-﻿#include "system/floor-type-definition.h"
+#include "system/floor-type-definition.h"
 #include "system/dungeon-info.h"
 
 bool FloorType::is_in_dungeon() const

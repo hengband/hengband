@@ -1,4 +1,4 @@
-﻿#include "locale/english.h"
+#include "locale/english.h"
 #include "system/angband.h"
 #include "util/string-processor.h"
 

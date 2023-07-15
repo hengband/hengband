@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file blue-magic-ball-bolt.cpp
  * @brief 青魔法のボール/ボルト系呪文定義
  */

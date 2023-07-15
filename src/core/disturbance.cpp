@@ -1,4 +1,4 @@
-﻿#include "core/disturbance.h"
+#include "core/disturbance.h"
 #include "action/travel-execution.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"

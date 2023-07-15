@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 指輪を強化生成する処理
  * @date 2021/04/30
  * @author Hourier

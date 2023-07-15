@@ -1,4 +1,4 @@
-﻿#include "core/magic-effects-timeout-reducer.h"
+#include "core/magic-effects-timeout-reducer.h"
 #include "game-option/birth-options.h"
 #include "mind/mind-force-trainer.h"
 #include "mind/mind-magic-resistance.h"

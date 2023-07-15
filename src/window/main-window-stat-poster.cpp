@@ -1,4 +1,4 @@
-﻿#include "window/main-window-stat-poster.h"
+#include "window/main-window-stat-poster.h"
 #include "io/input-key-requester.h"
 #include "mind/stances-table.h"
 #include "monster/monster-status.h"

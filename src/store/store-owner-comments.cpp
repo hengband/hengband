@@ -1,4 +1,4 @@
-﻿#include "store/store-owner-comments.h"
+#include "store/store-owner-comments.h"
 
 concptr comment_1[MAX_COMMENT_1] = {
     _("オーケーだ。", "Okay."),

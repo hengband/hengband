@@ -1,4 +1,4 @@
-﻿#include "player-info/alignment.h"
+#include "player-info/alignment.h"
 #include "artifact/fixed-art-types.h"
 #include "avatar/avatar.h"
 #include "game-option/text-display-options.h"

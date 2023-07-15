@@ -1,4 +1,4 @@
-﻿#include "status/temporary-resistance.h"
+#include "status/temporary-resistance.h"
 #include "core/disturbance.h"
 #include "core/stuff-handler.h"
 #include "game-option/disturbance-options.h"

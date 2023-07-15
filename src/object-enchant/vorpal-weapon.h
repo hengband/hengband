@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 struct player_attack_type;
 class PlayerType;

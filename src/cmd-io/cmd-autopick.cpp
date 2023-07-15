@@ -1,4 +1,4 @@
-﻿#include "cmd-io/cmd-autopick.h"
+#include "cmd-io/cmd-autopick.h"
 #include "autopick/autopick-command-menu.h"
 #include "autopick/autopick-commands-table.h"
 #include "autopick/autopick-dirty-flags.h"

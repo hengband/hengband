@@ -1,4 +1,4 @@
-﻿#include "info-reader/artifact-reader.h"
+#include "info-reader/artifact-reader.h"
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"
 #include "info-reader/baseitem-tokens-table.h"

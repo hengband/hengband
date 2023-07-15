@@ -1,4 +1,4 @@
-﻿#include "monster/monster-describer.h"
+#include "monster/monster-describer.h"
 #include "io/files-util.h"
 #include "locale/english.h"
 #include "monster-race/monster-race.h"

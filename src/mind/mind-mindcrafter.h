@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class PlayerType;
 bool psychometry(PlayerType *player_ptr);

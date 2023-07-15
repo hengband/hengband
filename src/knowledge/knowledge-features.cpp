@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 地形に関する情報を表示する
  * @date 2020/04/24
  * @author Hourier

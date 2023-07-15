@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "term/term-color-types.h"
 #include <string>

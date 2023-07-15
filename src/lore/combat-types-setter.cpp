@@ -1,4 +1,4 @@
-﻿#include "lore/combat-types-setter.h"
+#include "lore/combat-types-setter.h"
 #include "lore/lore-util.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-table.h"

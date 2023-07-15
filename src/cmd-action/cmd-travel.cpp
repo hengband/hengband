@@ -1,4 +1,4 @@
-﻿#include "cmd-action/cmd-travel.h"
+#include "cmd-action/cmd-travel.h"
 #include "action/travel-execution.h"
 #include "core/asking-player.h"
 #include "floor/cave.h"

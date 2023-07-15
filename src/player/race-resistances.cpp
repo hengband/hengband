@@ -1,4 +1,4 @@
-﻿#include "player/race-resistances.h"
+#include "player/race-resistances.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-elementalist.h"
 #include "mutation/mutation-flag-types.h"

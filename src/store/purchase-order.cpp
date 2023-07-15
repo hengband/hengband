@@ -1,4 +1,4 @@
-﻿#include "store/purchase-order.h"
+#include "store/purchase-order.h"
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick-util.h"
 #include "autopick/autopick.h"

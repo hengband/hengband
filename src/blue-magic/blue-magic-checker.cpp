@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file blue-magic-checker.cpp
  * @brief 青魔法の処理実装 / Blue magic
  * @date 2014/01/15

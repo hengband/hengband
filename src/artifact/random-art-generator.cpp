@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file random-art-generator.cpp
  * @brief ランダムアーティファクトの生成メイン定義 / Artifact code
  * @date 2020/07/14

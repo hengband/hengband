@@ -1,4 +1,4 @@
-﻿#include "load/quest-loader.h"
+#include "load/quest-loader.h"
 #include "artifact/fixed-art-types.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"

@@ -1,4 +1,4 @@
-﻿#include "core/score-util.h"
+#include "core/score-util.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"

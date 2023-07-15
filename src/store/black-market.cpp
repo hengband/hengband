@@ -1,4 +1,4 @@
-﻿#include "store/black-market.h"
+#include "store/black-market.h"
 #include "floor/floor-town.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"

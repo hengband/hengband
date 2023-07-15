@@ -1,4 +1,4 @@
-﻿#include "flavor/named-item-describer.h"
+#include "flavor/named-item-describer.h"
 #include "artifact/fixed-art-types.h"
 #include "flavor/flavor-util.h"
 #include "flavor/object-flavor-types.h"

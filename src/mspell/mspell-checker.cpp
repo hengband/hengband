@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスター魔法の実装 / Monster spells (attack player)
  * @date 2014/01/17
  * @author

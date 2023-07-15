@@ -1,4 +1,4 @@
-﻿#include "mind/mind-warrior.h"
+#include "mind/mind-warrior.h"
 #include "cmd-action/cmd-attack.h"
 #include "floor/geometry.h"
 #include "spell-kind/spells-teleport.h"

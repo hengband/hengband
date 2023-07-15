@@ -1,4 +1,4 @@
-﻿#include "realm/realm-demon.h"
+#include "realm/realm-demon.h"
 #include "cmd-action/cmd-spell.h"
 #include "effect/attribute-types.h"
 #include "monster-floor/monster-summon.h"

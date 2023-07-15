@@ -1,4 +1,4 @@
-﻿#include "net/curl-slist.h"
+#include "net/curl-slist.h"
 
 #if !defined(DISABLE_NET)
 

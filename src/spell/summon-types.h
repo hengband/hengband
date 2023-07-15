@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /* summon_specificで取り扱われる、召喚の種別定義 / Legal restrictions for "summon_specific()" */
 enum summon_type : int {

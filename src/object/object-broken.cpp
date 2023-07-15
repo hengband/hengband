@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief アイテム破壊処理
  * @date 2019/03/06
  * @author deskull

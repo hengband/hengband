@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class PlayerType;
 void cast_shuffle(PlayerType *player_ptr);

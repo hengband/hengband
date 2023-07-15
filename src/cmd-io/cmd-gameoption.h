@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "system/angband.h"
 #include "system/game-option-types.h"

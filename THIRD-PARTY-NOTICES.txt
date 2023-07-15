@@ -1,4 +1,4 @@
-﻿THIRD-PARTY SOFTWARE NOTICES AND INFORMATION
+THIRD-PARTY SOFTWARE NOTICES AND INFORMATION
 Do Not Translate or Localize
 
 hengband incorporates third party material from the projects listed below.

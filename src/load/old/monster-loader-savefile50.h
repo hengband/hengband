@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "load/monster/monster-loader-base.h"
 

@@ -1,4 +1,4 @@
-﻿#include "melee/melee-util.h"
+#include "melee/melee-util.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
 #include "melee/melee-switcher.h"

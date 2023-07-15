@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /*
  * Bit flags for the place_monster_???() (etc)

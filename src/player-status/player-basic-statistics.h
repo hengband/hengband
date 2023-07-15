@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "player-ability/player-ability-types.h"
 #include "player-status/player-status-base.h"

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "main-win/main-win-define.h"
 #include <filesystem>

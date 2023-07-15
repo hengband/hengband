@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file weapon-shield.h
  * @brief 手装備持ち替え処理ヘッダ

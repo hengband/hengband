@@ -1,4 +1,4 @@
-﻿#include "info-reader/baseitem-tokens-table.h"
+#include "info-reader/baseitem-tokens-table.h"
 
 // clang-format off
 /*!

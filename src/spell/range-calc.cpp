@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 魔法による距離やエリアの計算
  * @date 2014/07/10
  * @author Ben Harrison, James E. Wilson, Robert A. Koeneke, deskull and Hourier

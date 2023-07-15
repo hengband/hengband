@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file blue-magic-caster.cpp
  * @brief 青魔法のその他系統の呪文定義と詠唱時分岐処理
  */

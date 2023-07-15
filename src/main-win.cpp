@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file main-win.cpp
  * @brief Windows版固有実装(メインエントリポイント含む)
  * @date 2018/03/16

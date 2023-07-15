@@ -1,4 +1,4 @@
-﻿#include "effect/effect-item.h"
+#include "effect/effect-item.h"
 #include "autopick/autopick.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"

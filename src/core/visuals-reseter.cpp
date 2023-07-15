@@ -1,4 +1,4 @@
-﻿#include "core/visuals-reseter.h"
+#include "core/visuals-reseter.h"
 #include "game-option/special-options.h"
 #include "io/read-pref-file.h"
 #include "monster-race/monster-race.h"

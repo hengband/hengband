@@ -1,4 +1,4 @@
-﻿#include "mspell/specified-summon.h"
+#include "mspell/specified-summon.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"

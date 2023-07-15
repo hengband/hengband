@@ -1,4 +1,4 @@
-﻿#include "floor/dungeon-tunnel-util.h"
+#include "floor/dungeon-tunnel-util.h"
 #include "system/angband.h"
 
 /*

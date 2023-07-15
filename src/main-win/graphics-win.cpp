@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file graphics-win.cpp
  * @brief Windows版固有実装(タイル、イメージファイルの読み込み)
  */

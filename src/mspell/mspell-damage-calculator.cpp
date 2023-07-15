@@ -1,4 +1,4 @@
-﻿#include "mspell/mspell-damage-calculator.h"
+#include "mspell/mspell-damage-calculator.h"
 #include "game-option/birth-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"

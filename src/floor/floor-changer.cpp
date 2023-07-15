@@ -1,4 +1,4 @@
-﻿#include "floor/floor-changer.h"
+#include "floor/floor-changer.h"
 #include "action/travel-execution.h"
 #include "dungeon/quest-monster-placer.h"
 #include "dungeon/quest.h"

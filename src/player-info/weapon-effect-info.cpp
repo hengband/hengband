@@ -1,4 +1,4 @@
-﻿#include "player-info/weapon-effect-info.h"
+#include "player-info/weapon-effect-info.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/tr-types.h"
 #include "player-info/self-info-util.h"

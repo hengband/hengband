@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief monster-processのための構造体群初期化処理と共通性の極めて高い処理
  * @date 2020/03/07
  * @author Hourier

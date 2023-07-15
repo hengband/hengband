@@ -1,4 +1,4 @@
-﻿#include "specific-object/ring-of-power.h"
+#include "specific-object/ring-of-power.h"
 #include "effect/attribute-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"

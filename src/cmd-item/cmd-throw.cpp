@@ -1,4 +1,4 @@
-﻿/*
+/*
  * @brief アイテム投擲コマンドの実装
  * @date 2021/08/20
  * @author Hourier

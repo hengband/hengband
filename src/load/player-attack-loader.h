@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class PlayerType;
 void rd_special_attack(PlayerType *player_ptr);

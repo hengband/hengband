@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 extern bool load; /*!<ロード処理中の分岐フラグ*/
 extern bool can_save;

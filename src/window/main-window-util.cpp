@@ -1,4 +1,4 @@
-﻿#include "window/main-window-util.h"
+#include "window/main-window-util.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"

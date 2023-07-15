@@ -1,4 +1,4 @@
-﻿#include "floor/floor-mode-changer.h"
+#include "floor/floor-mode-changer.h"
 #include "system/player-type-definition.h"
 
 /*!

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * @brief Purpose: a generic, efficient, terminal window package -BEN-
  * Copyright (c) 1997 Ben Harrison
  *

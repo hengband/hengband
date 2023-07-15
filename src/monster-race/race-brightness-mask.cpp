@@ -1,4 +1,4 @@
-﻿#include "monster-race/race-brightness-mask.h"
+#include "monster-race/race-brightness-mask.h"
 
 const EnumClassFlagGroup<MonsterBrightnessType> lite_mask = {
     MonsterBrightnessType::HAS_LITE_1,

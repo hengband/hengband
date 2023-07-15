@@ -1,4 +1,4 @@
-﻿#include "cmd-io/cmd-knowledge.h"
+#include "cmd-io/cmd-knowledge.h"
 #include "cmd-visual/cmd-draw.h"
 #include "game-option/birth-options.h"
 #include "grid/feature.h"

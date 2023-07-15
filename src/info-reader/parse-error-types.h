@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum parse_error_type : int {
     PARSE_ERROR_NONE = 0,

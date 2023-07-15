@@ -1,4 +1,4 @@
-﻿#include "mind/mind-hobbit.h"
+#include "mind/mind-hobbit.h"
 #include "floor/floor-object.h"
 #include "object/object-kind-hook.h"
 #include "sv-definition/sv-food-types.h"

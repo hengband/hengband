@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file main-win-mci.cpp
  * @brief Windows版固有実装(BGM再生用のMCI)
  */

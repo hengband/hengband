@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "system/baseitem-info.h"
 #include <vector>

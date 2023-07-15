@@ -1,4 +1,4 @@
-﻿#include "status/body-improvement.h"
+#include "status/body-improvement.h"
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
 #include "core/speed-table.h"

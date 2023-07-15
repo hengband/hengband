@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /* The "sval" codes for TV_SCROLL */
 enum sv_scroll_type {

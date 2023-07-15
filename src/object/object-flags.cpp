@@ -1,4 +1,4 @@
-﻿#include "object/object-flags.h"
+#include "object/object-flags.h"
 #include "mind/mind-weaponsmith.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"

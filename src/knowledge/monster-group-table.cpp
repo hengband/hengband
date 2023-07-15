@@ -1,4 +1,4 @@
-﻿/*
+/*
  * @brief シンボルテキストの配列群
  * @date 2020/03/08
  * @author Hourier

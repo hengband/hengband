@@ -1,4 +1,4 @@
-﻿#include "grid/door.h"
+#include "grid/door.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/cave.h"
 #include "grid/feature.h"

@@ -1,4 +1,4 @@
-﻿#include "player-info/equipment-info.h"
+#include "player-info/equipment-info.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-hook/hook-weapon.h"
 #include "object/tval-types.h"

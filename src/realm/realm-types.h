@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum magic_realm_type {
     REALM_NONE = 0,

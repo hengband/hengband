@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスター死亡時の特殊処理switch (一般的な処理もdefaultで実施)
  * @date 2020/08/21
  * @author Hourier

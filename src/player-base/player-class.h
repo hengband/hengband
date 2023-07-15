@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "object-enchant/tr-flags.h"
 #include "system/player-type-definition.h"

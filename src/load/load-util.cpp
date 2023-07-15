@@ -1,4 +1,4 @@
-﻿#include "load/load-util.h"
+#include "load/load-util.h"
 #include "locale/japanese.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"

@@ -1,4 +1,4 @@
-﻿#include "monster-floor/monster-lite-util.h"
+#include "monster-floor/monster-lite-util.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
 #include "util/bit-flags-calculator.h"

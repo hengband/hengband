@@ -1,4 +1,4 @@
-﻿#include "save/item-writer.h"
+#include "save/item-writer.h"
 #include "artifact/random-art-effects.h"
 #include "load/old/item-flag-types-savefile50.h"
 #include "save/save-util.h"

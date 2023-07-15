@@ -1,4 +1,4 @@
-﻿#include "info-reader/vault-reader.h"
+#include "info-reader/vault-reader.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "main/angband-headers.h"

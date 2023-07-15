@@ -1,4 +1,4 @@
-﻿#include "monster-attack/insults-moans.h"
+#include "monster-attack/insults-moans.h"
 
 /*! モンスターの侮辱行為メッセージテーブル / Hack -- possible "insult" messages */
 concptr desc_insult[MAX_INSULTS] = {

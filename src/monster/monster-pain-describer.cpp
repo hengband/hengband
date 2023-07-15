@@ -1,4 +1,4 @@
-﻿#include "monster/monster-pain-describer.h"
+#include "monster/monster-pain-describer.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "system/floor-type-definition.h"

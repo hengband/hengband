@@ -1,4 +1,4 @@
-﻿#include "effect/effect-processor.h"
+#include "effect/effect-processor.h"
 #include "core/stuff-handler.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"

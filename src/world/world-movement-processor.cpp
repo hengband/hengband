@@ -1,4 +1,4 @@
-﻿#include "world/world-movement-processor.h"
+#include "world/world-movement-processor.h"
 #include "cmd-io/cmd-save.h"
 #include "core/disturbance.h"
 #include "dungeon/quest.h"

@@ -1,4 +1,4 @@
-﻿#include "specific-object/blade-turner.h"
+#include "specific-object/blade-turner.h"
 #include "effect/attribute-types.h"
 #include "hpmp/hp-mp-processor.h"
 #include "spell-kind/spells-launcher.h"

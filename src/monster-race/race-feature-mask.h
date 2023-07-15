@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "monster-race/race-feature-flags.h"
 #include "util/flag-group.h"

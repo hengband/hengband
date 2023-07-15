@@ -1,4 +1,4 @@
-﻿#include "io/pref-file-expressor.h"
+#include "io/pref-file-expressor.h"
 #include "game-option/runtime-arguments.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"

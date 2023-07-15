@@ -1,4 +1,4 @@
-﻿#include "cmd-action/cmd-shoot.h"
+#include "cmd-action/cmd-shoot.h"
 #include "combat/shoot.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-slot-types.h"

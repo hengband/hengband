@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum class MonsterDropType {
     ONLY_GOLD = 0,

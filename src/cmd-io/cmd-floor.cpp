@@ -1,4 +1,4 @@
-﻿#include "cmd-io/cmd-floor.h"
+#include "cmd-io/cmd-floor.h"
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"

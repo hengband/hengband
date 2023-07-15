@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <stdint.h>
 
 /* target_set用関数の利用用途フラグ / Bit flags for the "target_set" function */

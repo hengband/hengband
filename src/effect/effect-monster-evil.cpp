@@ -1,4 +1,4 @@
-﻿#include "effect/effect-monster-evil.h"
+#include "effect/effect-monster-evil.h"
 #include "effect/effect-monster-util.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"

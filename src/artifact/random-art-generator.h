@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file random-art-generator.h
  * @brief ランダムアーティファクトの生成メインヘッダ / Artifact code
