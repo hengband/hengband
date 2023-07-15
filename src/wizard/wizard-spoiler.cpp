@@ -95,11 +95,10 @@ static auto get_mon_evol_roots()
 
 /*!
  * @brief 進化ツリーをスポイラー出力するメインルーチン
- * @param filename 出力ファイル名
  */
-static SpoilerOutputResultType spoil_mon_evol(std::string_view filename)
+static SpoilerOutputResultType spoil_mon_evol()
 {
-    const auto &path = path_build(ANGBAND_DIR_USER, filename);
+    const auto &path = path_build(ANGBAND_DIR_USER, "mon-evol.txt");
     spoiler_file = angband_fopen(path, FileOpenMode::WRITE);
     if (!spoiler_file) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
@@ -267,7 +266,7 @@ void exe_output_spoilers(void)
             status = spoil_mon_info("mon-info.txt");
             break;
         case '6':
-            status = spoil_mon_evol("mon-evol.txt");
+            status = spoil_mon_evol();
             break;
         case '7':
             status = spoil_player_spell("spells.txt");
@@ -326,7 +325,7 @@ SpoilerOutputResultType output_all_spoilers()
         return status;
     }
 
-    status = spoil_mon_evol("mon-evol.txt");
+    status = spoil_mon_evol();
     if (status != SpoilerOutputResultType::SUCCESSFUL) {
         return status;
     }
