@@ -3,6 +3,3 @@ root = true
 [*]
 insert_final_newline = true
 charset = utf-8
-
-[*.{c,cpp,h}]
-charset = utf-8-bom
