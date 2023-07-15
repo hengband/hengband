@@ -286,9 +286,7 @@ static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArt
  */
 static std::optional<FixedArtifactId> wiz_select_named_artifact(PlayerType *player_ptr, const std::vector<FixedArtifactId> &a_idx_list)
 {
-    CandidateSelector cs;
-    cs.prompt = "Which artifact: ";
-    cs.start_col = 15;
+    CandidateSelector cs("Which artifact: ", 15);
 
     auto describe_artifact = [player_ptr](FixedArtifactId a_idx) { return wiz_make_named_artifact_desc(player_ptr, a_idx); };
     const auto it = cs.select(a_idx_list, describe_artifact);

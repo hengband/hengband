@@ -13,9 +13,15 @@ const std::array<char, 62> CandidateSelector::i2sym = {
     // clang-format on
 };
 
-CandidateSelector::CandidateSelector()
-    : prompt(_("選択: ", "Choose: "))
-    , start_col(0)
+/*!
+ * @brief CandidateSelectorクラスのコンストラクタ
+ *
+ * @param prompt 画面最上部に表示する文字列
+ * @param start_col 候補の表示を開始する列
+ */
+CandidateSelector::CandidateSelector(const std::string &prompt, int start_col)
+    : prompt(prompt)
+    , start_col(start_col)
 {
     this->set_max_per_page();
 }

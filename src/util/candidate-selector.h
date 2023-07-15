@@ -37,7 +37,7 @@ concept SizedContainer = requires(T t) {
  */
 class CandidateSelector {
 public:
-    CandidateSelector();
+    CandidateSelector(const std::string &prompt, int start_col = 0);
 
     void set_max_per_page(size_t max_per_page = std::numeric_limits<size_t>::max());
 
@@ -95,9 +95,6 @@ public:
         }
     }
 
-    std::string prompt;
-    int start_col;
-
 private:
     static std::pair<size_t, std::optional<size_t>> process_input(char cmd, size_t current_page, size_t page_max);
 
@@ -126,5 +123,8 @@ private:
     }
 
     static const std::array<char, 62> i2sym;
+
+    std::string prompt;
+    int start_col;
     size_t max_per_page;
 };
