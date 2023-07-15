@@ -92,7 +92,7 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
     }
 
     for (; i < per_page; i++) {
-        term_erase(col, row + i, 255);
+        term_erase(col, row + i);
     }
 }
 

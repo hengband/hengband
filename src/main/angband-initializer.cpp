@@ -107,7 +107,7 @@ void init_file_paths(const std::filesystem::path &libpath)
  */
 static void init_note_term(concptr str)
 {
-    term_erase(0, 23, 255);
+    term_erase(0, 23);
     term_putstr(20, 23, -1, TERM_WHITE, str);
     term_fresh();
 }

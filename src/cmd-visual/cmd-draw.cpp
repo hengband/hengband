@@ -238,7 +238,7 @@ void do_cmd_messages(int num_now)
         }
 
         for (; j < num_lines; j++) {
-            term_erase(0, num_lines + 1 - j, 255);
+            term_erase(0, num_lines + 1 - j);
         }
 
         prt(format(_("以前のメッセージ %d-%d 全部で(%d)", "Message Recall (%d-%d of %d)"), i, i + j - 1, n), 0, 0);

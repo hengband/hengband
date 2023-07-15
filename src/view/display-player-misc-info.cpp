@@ -32,7 +32,7 @@ void display_player_name(PlayerType *player_ptr, bool name_only)
     const auto center_col = (w - length) / 2 - 4; // ヘッダがあるぶん少し左に寄せたほうが見やすい
     constexpr auto row = 1;
 
-    term_erase(0, row, 255);
+    term_erase(0, row);
     term_putstr(center_col, row, -1, TERM_WHITE, header);
     term_putstr(center_col + header.length(), row, -1, TERM_L_BLUE, display_name);
 }

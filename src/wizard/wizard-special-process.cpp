@@ -365,7 +365,7 @@ void wiz_create_named_art(PlayerType *player_ptr)
         const auto &[tval_lit, name] = group_artifact_list[i];
         std::stringstream ss;
         ss << I2A(i) << ") " << name;
-        term_erase(14, i + 1, 255);
+        term_erase(14, i + 1);
         put_str(ss.str(), i + 1, 15);
     }
 

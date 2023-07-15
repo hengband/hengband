@@ -1604,7 +1604,7 @@ errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, std::string_view s
 /*
  * Place cursor at (x,y), and clear the next "n" chars
  */
-errr term_erase(TERM_LEN x, TERM_LEN y, int n)
+errr term_erase(TERM_LEN x, TERM_LEN y, std::optional<int> n_opt)
 {
     TERM_LEN w = game_term->wid;
     /* int h = Term->hgt; */
@@ -1622,6 +1622,8 @@ errr term_erase(TERM_LEN x, TERM_LEN y, int n)
 
     x = game_term->scr->cx;
     y = game_term->scr->cy;
+
+    auto n = n_opt.value_or(w);
 
     /* Force legal size */
     if (x + n > w) {

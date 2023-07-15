@@ -149,7 +149,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, MonsterEntity *m_ptr, int
     MonsterRaceId r_idx = m_ptr->ap_r_idx;
     auto *r_ptr = &monraces_info[r_idx];
 
-    term_erase(0, y, 255);
+    term_erase(0, y);
     term_gotoxy(x, y);
     if (!r_ptr) {
         return;
@@ -231,7 +231,7 @@ void print_monster_list(FloorType *floor_ptr, const std::vector<MONSTER_IDX> &mo
     }
 
     for (; line < max_lines; line++) {
-        term_erase(0, line, 255);
+        term_erase(0, line);
     }
 }
 
@@ -242,7 +242,7 @@ static void print_pet_list_oneline(PlayerType *player_ptr, const MonsterEntity &
     const auto [bar_color, bar_len] = monster.get_hp_bar_data();
     const auto is_visible = monster.ml && !player_ptr->effects()->hallucination()->is_hallucinated();
 
-    term_erase(0, y, 255);
+    term_erase(0, y);
     if (is_visible) {
         term_putstr(x, y, -1, TERM_WHITE, "[----------]");
         term_putstr(x + 1, y, bar_len, bar_color, "**********");
@@ -268,14 +268,14 @@ static void print_pet_list(PlayerType *player_ptr, const std::vector<MONSTER_IDX
         print_pet_list_oneline(player_ptr, monster, x, line, width);
 
         if ((line == height - 2) && (n < pets.size() - 2)) {
-            term_erase(0, line + 1, 255);
+            term_erase(0, line + 1);
             term_putstr(x, line + 1, -1, TERM_WHITE, "-- and more --");
             break;
         }
     }
 
     for (int n = pets.size(); n < height; ++n) {
-        term_erase(0, y + n, 255);
+        term_erase(0, y + n);
     }
 }
 
@@ -345,7 +345,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
         }
 
         int cur_col = 3;
-        term_erase(cur_col, cur_row, 255);
+        term_erase(cur_col, cur_row);
         term_putstr(0, cur_row, cur_col, TERM_WHITE, tmp_val);
 
         std::string item_name;
@@ -389,7 +389,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
     }
 
     for (int i = INVEN_TOTAL - INVEN_MAIN_HAND; i < hgt; i++) {
-        term_erase(0, i, 255);
+        term_erase(0, i);
     }
 }
 
@@ -435,7 +435,7 @@ void fix_message(void)
                 term_putstr(0, (h - 1) - i, -1, (byte)((i < now_message) ? TERM_WHITE : TERM_SLATE), *message_str(i));
                 TERM_LEN x, y;
                 term_locate(&x, &y);
-                term_erase(x, y, 255);
+                term_erase(x, y);
             }
         });
 }
