@@ -569,4 +569,9 @@ void set_summon_types(lore_type *lore_ptr)
         lore_ptr->vp[lore_ptr->vn] = _("ユニーク・モンスター召喚", "summon Unique Monsters");
         lore_ptr->color[lore_ptr->vn++] = TERM_VIOLET;
     }
+
+    if (lore_ptr->ability_flags.has(MonsterAbilityType::S_DEAD_UNIQUE)) {
+        lore_ptr->vp[lore_ptr->vn] = _("ユニーク・モンスター口寄せ", "animate Unique Monsters");
+        lore_ptr->color[lore_ptr->vn++] = TERM_VIOLET;
+    }
 }

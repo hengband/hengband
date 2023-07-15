@@ -22,3 +22,4 @@ bool cast_blue_summon_high_undead(PlayerType *player_ptr, bmc_type *bmc_ptr);
 bool cast_blue_summon_high_dragon(PlayerType *player_ptr, bmc_type *bmc_ptr);
 bool cast_blue_summon_amberite(PlayerType *player_ptr, bmc_type *bmc_ptr);
 bool cast_blue_summon_unique(PlayerType *player_ptr, bmc_type *bmc_ptr);
+bool cast_blue_summon_dead_unique(PlayerType *player_ptr, bmc_type *bmc_ptr);
