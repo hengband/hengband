@@ -113,21 +113,19 @@ static ItemEntity prepare_item_for_obj_desc(short bi_id)
 }
 
 /*!
- * @brief 各ベースアイテムの情報を一行毎に記述する /
- * Create a spoiler file for items
- * @param fname ファイル名
+ * @brief 各ベースアイテムの情報を一行毎に記述する
  */
-SpoilerOutputResultType spoil_obj_desc(concptr fname)
+SpoilerOutputResultType spoil_obj_desc()
 {
-    const auto &path = path_build(ANGBAND_DIR_USER, fname);
-    spoiler_file = angband_fopen(path, FileOpenMode::WRITE);
-    if (!spoiler_file) {
+    const auto &path = path_build(ANGBAND_DIR_USER, "obj-desc.txt");
+    std::ofstream ofs(path);
+    if (!ofs) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
-    fprintf(spoiler_file, "Spoiler File -- Basic Items (%s)\n\n\n", get_version().data());
-    fprintf(spoiler_file, "%-37s%8s%7s%5s %40s%9s\n", "Description", "Dam/AC", "Wgt", "Lev", "Chance", "Cost");
-    fprintf(spoiler_file, "%-37s%8s%7s%5s %40s%9s\n", "-------------------------------------", "------", "---", "---", "----------------", "----");
+    ofs << format("Spoiler File -- Basic Items (%s)\n\n\n", get_version().data());
+    ofs << format("%-37s%8s%7s%5s %40s%9s\n", "Description", "Dam/AC", "Wgt", "Lev", "Chance", "Cost");
+    ofs << format("%-37s%8s%7s%5s %40s%9s\n", "-------------------------------------", "------", "---", "---", "----------------", "----");
 
     for (const auto &[tval_list, name] : group_item_list) {
         std::vector<short> whats;
@@ -150,7 +148,8 @@ SpoilerOutputResultType spoil_obj_desc(concptr fname)
             return (price1 != price2) ? price1 < price2 : depth1 < depth2;
         });
 
-        fprintf(spoiler_file, "\n\n%s\n\n", name);
+        ofs << "\n\n"
+            << name << "\n\n";
         for (const auto &bi_id : whats) {
             PlayerType dummy;
             const auto item = prepare_item_for_obj_desc(bi_id);
@@ -159,12 +158,9 @@ SpoilerOutputResultType spoil_obj_desc(concptr fname)
             const auto dam_or_ac = describe_dam_or_ac(item);
             const auto weight = describe_weight(item);
             const auto chance = describe_chance(item);
-            fprintf(spoiler_file, "  %-35s%8s%7s%5d %-40s%9ld\n", item_name.data(),
-                dam_or_ac.data(), weight.data(), static_cast<int>(depth), chance.data(),
-                static_cast<long>(price));
+            ofs << format("  %-35s%8s%7s%5d %-40s%9d\n", item_name.data(), dam_or_ac.data(), weight.data(), depth, chance.data(), price);
         }
     }
 
-    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SpoilerOutputResultType::FILE_CLOSE_FAILED
-                                                                : SpoilerOutputResultType::SUCCESSFUL;
+    return ofs.good() ? SpoilerOutputResultType::SUCCESSFUL : SpoilerOutputResultType::FILE_CLOSE_FAILED;
 }

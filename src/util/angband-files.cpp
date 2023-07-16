@@ -166,7 +166,8 @@ std::filesystem::path path_build(const std::filesystem::path &path, std::string_
         return file;
     }
 
-    const auto path_ret = std::filesystem::path(path).append(file);
+    auto parsed_path = path_parse(path);
+    const auto &path_ret = parsed_path.append(file);
     constexpr auto max_path_length = 1024;
     const auto path_str = path_ret.string();
     if (path_str.length() > max_path_length) {

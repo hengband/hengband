@@ -252,7 +252,7 @@ void exe_output_spoilers(void)
             screen_load();
             return;
         case '1':
-            status = spoil_obj_desc("obj-desc.txt");
+            status = spoil_obj_desc();
             break;
         case '2':
             status = spoil_fixed_artifact();
@@ -299,9 +299,9 @@ void exe_output_spoilers(void)
  * Create Spoiler files -BEN-
  * @return 成功時SPOILER_OUTPUT_SUCCESS / 失敗時エラー状態
  */
-SpoilerOutputResultType output_all_spoilers(void)
+SpoilerOutputResultType output_all_spoilers()
 {
-    auto status = spoil_obj_desc("obj-desc.txt");
+    auto status = spoil_obj_desc();
     if (status != SpoilerOutputResultType::SUCCESSFUL) {
         return status;
     }

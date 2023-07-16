@@ -3,6 +3,7 @@
 #include "object-enchant/tr-flags.h"
 #include "system/angband.h"
 #include "wizard/spoiler-table.h"
+#include <fstream>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -54,6 +55,6 @@ extern FILE *spoiler_file;
 
 struct flag_desc;
 std::vector<std::string> extract_spoiler_flags(const TrFlags &art_flags, const std::vector<flag_desc> &definitions);
-void spoiler_blanklines(int n);
-void spoiler_underline(std::string_view str);
+void spoiler_blanklines(int n, std::ofstream &ofs);
+void spoiler_underline(std::string_view str, std::ofstream &ofs);
 void spoil_out(std::string_view sv, bool flush_buffer = false);

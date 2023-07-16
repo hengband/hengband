@@ -1,6 +1,7 @@
 #include "wizard/spoiler-util.h"
 #include "object/object-flags.h"
 #include "system/item-entity.h"
+#include <fstream>
 
 const char item_separator = ',';
 const char list_separator = _(',', ';');
@@ -34,10 +35,10 @@ std::vector<std::string> extract_spoiler_flags(const TrFlags &art_flags, const s
  * @param n 出力する数
  * @param c 出力するキャラクタ
  */
-static void spoiler_out_n_chars(int n, char c)
+static void spoiler_out_n_chars(int n, char c, std::ofstream &ofs)
 {
-    while (--n >= 0) {
-        fputc(c, spoiler_file);
+    for (auto i = 0; i < n; i++) {
+        ofs << c;
     }
 }
 
@@ -46,9 +47,9 @@ static void spoiler_out_n_chars(int n, char c)
  * Write out `n' blank lines to the spoiler file
  * @param n 改行を出力する数
  */
-void spoiler_blanklines(int n)
+void spoiler_blanklines(int n, std::ofstream &ofs)
 {
-    spoiler_out_n_chars(n, '\n');
+    spoiler_out_n_chars(n, '\n', ofs);
 }
 
 /*!
@@ -56,11 +57,11 @@ void spoiler_blanklines(int n)
  * Write a line to the spoiler file and then "underline" it with hypens
  * @param str 出力したい文字列
  */
-void spoiler_underline(std::string_view str)
+void spoiler_underline(std::string_view str, std::ofstream &ofs)
 {
-    fprintf(spoiler_file, "%s\n", str.data());
-    spoiler_out_n_chars(str.length(), '-');
-    fprintf(spoiler_file, "\n");
+    ofs << str.data() << '\n';
+    spoiler_out_n_chars(str.length(), '-', ofs);
+    ofs << '\n';
 }
 
 /*!
