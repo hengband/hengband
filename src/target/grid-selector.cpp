@@ -111,7 +111,9 @@ std::unordered_map<int, std::function<bool(grid_type *)>> tgt_pt_symbol_call_bac
 struct tgt_pt_info {
     tgt_pt_info()
     {
-        get_screen_size(&this->width, &this->height);
+        const auto [wid, hgt] = get_screen_size();
+        this->width = wid;
+        this->height = hgt;
     };
 
     int width; //!< 画面サイズ(幅)
