@@ -14,6 +14,7 @@
 #include "util/string-processor.h"
 #include "view/display-lore.h"
 #include "view/display-messages.h"
+#include "wizard/spoiler-util.h"
 
 /*!
  * @brief シンボル職の記述名を返す /
@@ -156,7 +157,7 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
 static void roff_func(TERM_COLOR attr, std::string_view str)
 {
     (void)attr;
-    spoil_out(str.data());
+    spoil_out(str);
 }
 
 /*!
