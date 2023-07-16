@@ -95,6 +95,8 @@ static auto get_mon_evol_roots()
 
 /*!
  * @brief 進化ツリーをスポイラー出力するメインルーチン
+ *
+ * fprintf() に'%' (壁)を渡すとフォーマット指定子扱いされるので、関数の外でフォーマットしてはいけない.
  */
 static SpoilerOutputResultType spoil_mon_evol()
 {
@@ -110,14 +112,14 @@ static SpoilerOutputResultType spoil_mon_evol()
     spoil_out("------------------------------------------\n\n");
     for (auto r_idx : get_mon_evol_roots()) {
         auto r_ptr = &monraces_info[r_idx];
-        fprintf(spoiler_file, _("[%d]: %s (レベル%d, '%c')\n", "[%d]: %s (Level %d, '%c')\n"), enum2i(r_idx), r_ptr->name.data(), (int)r_ptr->level, r_ptr->d_char);
-
+        constexpr auto fmt_before = _("[%d]: %s (レベル%d, '%c')\n", "[%d]: %s (Level %d, '%c')\n");
+        fprintf(spoiler_file, fmt_before, enum2i(r_idx), r_ptr->name.data(), (int)r_ptr->level, r_ptr->d_char);
         for (auto n = 1; MonsterRace(r_ptr->next_r_idx).is_valid(); n++) {
             fprintf(spoiler_file, "%*s-(%d)-> ", n * 2, "", r_ptr->next_exp);
             fprintf(spoiler_file, "[%d]: ", enum2i(r_ptr->next_r_idx));
             r_ptr = &monraces_info[r_ptr->next_r_idx];
-
-            fprintf(spoiler_file, _("%s (レベル%d, '%c')\n", "%s (Level %d, '%c')\n"), r_ptr->name.data(), (int)r_ptr->level, r_ptr->d_char);
+            constexpr auto fmt_after = _("%s (レベル%d, '%c')\n", "%s (Level %d, '%c')\n");
+            fprintf(spoiler_file, fmt_after, r_ptr->name.data(), (int)r_ptr->level, r_ptr->d_char);
         }
 
         fputc('\n', spoiler_file);
@@ -173,9 +175,9 @@ static SpoilerOutputResultType spoil_categorized_mon_desc()
     return status;
 }
 
-static SpoilerOutputResultType spoil_player_spell(concptr fname)
+static SpoilerOutputResultType spoil_player_spell()
 {
-    const auto &path = path_build(ANGBAND_DIR_USER, fname);
+    const auto &path = path_build(ANGBAND_DIR_USER, "spells.txt");
     spoiler_file = angband_fopen(path, FileOpenMode::WRITE);
     if (!spoiler_file) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
@@ -263,13 +265,13 @@ void exe_output_spoilers(void)
             status = spoil_categorized_mon_desc();
             break;
         case '5':
-            status = spoil_mon_info("mon-info.txt");
+            status = spoil_mon_info();
             break;
         case '6':
             status = spoil_mon_evol();
             break;
         case '7':
-            status = spoil_player_spell("spells.txt");
+            status = spoil_player_spell();
             break;
         default:
             bell();
@@ -320,7 +322,7 @@ SpoilerOutputResultType output_all_spoilers()
         return status;
     }
 
-    status = spoil_mon_info("mon-info.txt");
+    status = spoil_mon_info();
     if (status != SpoilerOutputResultType::SUCCESSFUL) {
         return status;
     }

@@ -73,11 +73,11 @@ static concptr attr_to_text(MonsterRaceInfo *r_ptr)
     return _("変な色の", "Icky");
 }
 
-SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const MonsterRaceInfo *)> filter_monster)
+SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<bool(const MonsterRaceInfo *)> filter_monster)
 {
     PlayerType dummy;
     uint16_t why = 2;
-    const auto &path = path_build(ANGBAND_DIR_USER, fname);
+    const auto &path = path_build(ANGBAND_DIR_USER, filename);
     spoiler_file = angband_fopen(path, FileOpenMode::WRITE);
     if (!spoiler_file) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
@@ -164,10 +164,10 @@ static void roff_func(TERM_COLOR attr, std::string_view str)
  * Create a spoiler file for monsters (-SHAWN-)
  * @param fname ファイル名
  */
-SpoilerOutputResultType spoil_mon_info(concptr fname)
+SpoilerOutputResultType spoil_mon_info()
 {
     PlayerType dummy;
-    const auto &path = path_build(ANGBAND_DIR_USER, fname);
+    const auto &path = path_build(ANGBAND_DIR_USER, "mon-info.txt");
     spoiler_file = angband_fopen(path, FileOpenMode::WRITE);
     if (!spoiler_file) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
