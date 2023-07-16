@@ -294,8 +294,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
 {
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, std::nullopt);
 
-    TERM_LEN wid, hgt;
-    term_get_size(&wid, &hgt);
+    const auto [wid, hgt] = term_get_size();
     std::vector<MonsterRaceId> r_idx_list;
     std::vector<IDX> grp_idx;
 

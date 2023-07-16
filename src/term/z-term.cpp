@@ -1856,11 +1856,9 @@ errr term_get_cursor(int *v)
 /*
  * Extract the current window size
  */
-errr term_get_size(TERM_LEN *w, TERM_LEN *h)
+std::pair<int, int> term_get_size()
 {
-    (*w) = game_term->centered_wid.value_or(game_term->wid);
-    (*h) = game_term->centered_hgt.value_or(game_term->hgt);
-    return 0;
+    return { game_term->centered_wid.value_or(game_term->wid), game_term->centered_hgt.value_or(game_term->hgt) };
 }
 
 /*

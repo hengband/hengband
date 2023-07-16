@@ -174,9 +174,7 @@ void print_gold(PlayerType *player_ptr)
 void print_depth(PlayerType *player_ptr)
 {
     TERM_COLOR attr = TERM_WHITE;
-
-    TERM_LEN wid, hgt;
-    term_get_size(&wid, &hgt);
+    const auto [wid, hgt] = term_get_size();
     TERM_LEN col_depth = wid + COL_DEPTH;
     TERM_LEN row_depth = hgt + ROW_DEPTH;
 
@@ -371,11 +369,9 @@ void print_health(PlayerType *player_ptr, bool riding)
         col = COL_INFO;
     }
 
-    const int max_width = 12; // 表示幅
-
-    TERM_LEN width, height;
-    term_get_size(&width, &height);
-    const auto extra_line_count = riding ? 0 : height - MAIN_TERM_MIN_ROWS;
+    const auto max_width = 12; // 表示幅
+    const auto [wid, hgt] = term_get_size();
+    const auto extra_line_count = riding ? 0 : hgt - MAIN_TERM_MIN_ROWS;
     for (auto y = row; y < row + extra_line_count + 1; ++y) {
         term_erase(col, y, max_width);
     }

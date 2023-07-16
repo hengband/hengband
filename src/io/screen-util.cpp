@@ -92,8 +92,7 @@ void resize_map()
  */
 std::pair<int, int> get_screen_size()
 {
-    int width, height;
-    term_get_size(&width, &height);
+    auto [width, height] = term_get_size();
     height -= ROW_MAP + 2;
     width -= COL_MAP + 2;
     if (use_bigtile) {

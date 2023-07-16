@@ -255,10 +255,9 @@ void print_state(PlayerType *player_ptr)
  */
 void print_speed(PlayerType *player_ptr)
 {
-    TERM_LEN wid, hgt;
-    term_get_size(&wid, &hgt);
-    TERM_LEN col_speed = wid + COL_SPEED;
-    TERM_LEN row_speed = hgt + ROW_SPEED;
+    const auto [wid, hgt] = term_get_size();
+    auto col_speed = wid + COL_SPEED;
+    auto row_speed = hgt + ROW_SPEED;
 
     const auto speed = player_ptr->pspeed - STANDARD_SPEED;
     auto *floor_ptr = player_ptr->current_floor_ptr;
@@ -317,11 +316,9 @@ void print_speed(PlayerType *player_ptr)
  */
 void print_study(PlayerType *player_ptr)
 {
-    TERM_LEN wid, hgt;
-    term_get_size(&wid, &hgt);
-    TERM_LEN col_study = wid + COL_STUDY;
-    TERM_LEN row_study = hgt + ROW_STUDY;
-
+    const auto [wid, hgt] = term_get_size();
+    const auto col_study = wid + COL_STUDY;
+    const auto row_study = hgt + ROW_STUDY;
     if (player_ptr->new_spells) {
         put_str(_("学習", "Stud"), row_study, col_study);
     } else {
@@ -335,11 +332,9 @@ void print_study(PlayerType *player_ptr)
  */
 void print_imitation(PlayerType *player_ptr)
 {
-    TERM_LEN wid, hgt;
-    term_get_size(&wid, &hgt);
-    TERM_LEN col_study = wid + COL_STUDY;
-    TERM_LEN row_study = hgt + ROW_STUDY;
-
+    const auto [wid, hgt] = term_get_size();
+    const auto col_study = wid + COL_STUDY;
+    const auto row_study = hgt + ROW_STUDY;
     PlayerClass pc(player_ptr);
     if (!pc.equals(PlayerClassType::IMITATOR)) {
         return;
@@ -450,16 +445,11 @@ static void add_hex_status_flags(PlayerType *player_ptr, BIT_FLAGS *bar_flags)
  */
 void print_status(PlayerType *player_ptr)
 {
-    TERM_LEN wid, hgt;
-    term_get_size(&wid, &hgt);
-    TERM_LEN row_statbar = hgt + ROW_STATBAR;
-    TERM_LEN max_col_statbar = wid + MAX_COL_STATBAR;
-
+    const auto [wid, hgt] = term_get_size();
+    const auto row_statbar = hgt + ROW_STATBAR;
+    const auto max_col_statbar = wid + MAX_COL_STATBAR;
     term_erase(0, row_statbar, max_col_statbar);
-
-    BIT_FLAGS bar_flags[3];
-    bar_flags[0] = bar_flags[1] = bar_flags[2] = 0L;
-
+    BIT_FLAGS bar_flags[3]{};
     auto effects = player_ptr->effects();
     if (player_ptr->tsuyoshi) {
         ADD_BAR_FLAG(BAR_TSUYOSHI);

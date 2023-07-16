@@ -119,8 +119,7 @@ void do_cmd_equip(PlayerType *player_ptr)
         return;
     }
 
-    TERM_LEN wid, hgt;
-    term_get_size(&wid, &hgt);
+    const auto [wid, hgt] = term_get_size();
     command_new = 0;
     command_gap = wid - 30;
 }

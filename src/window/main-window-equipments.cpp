@@ -35,15 +35,14 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     int j, k, l;
     ItemEntity *o_ptr;
     char tmp_val[80];
-    COMMAND_CODE out_index[23];
-    TERM_COLOR out_color[23];
+    COMMAND_CODE out_index[23]{};
+    TERM_COLOR out_color[23]{};
     std::array<std::string, 23> out_desc{};
     COMMAND_CODE target_item_label = 0;
-    TERM_LEN wid, hgt;
     char equip_label[52 + 1];
-    int col = command_gap;
-    term_get_size(&wid, &hgt);
-    int len = wid - col - 1;
+    auto col = command_gap;
+    const auto [wid, hgt] = term_get_size();
+    auto len = wid - col - 1;
     for (k = 0, i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
         auto only_slot = !(player_ptr->select_ring_slot ? is_ring_slot(i) : (item_tester.okay(o_ptr) || any_bits(mode, USE_FULL)));
