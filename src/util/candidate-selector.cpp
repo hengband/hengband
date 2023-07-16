@@ -60,8 +60,6 @@ std::pair<size_t, std::optional<size_t>> CandidateSelector::process_input(char c
  */
 void CandidateSelector::set_max_per_page(size_t max)
 {
-    TERM_LEN term_w, term_h;
-    term_get_size(&term_w, &term_h);
-
-    this->max_per_page = std::min<size_t>(max, term_h - 2);
+    const auto [wid, hgt] = term_get_size();
+    this->max_per_page = std::min<size_t>(max, hgt - 2);
 }

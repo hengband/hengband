@@ -71,9 +71,7 @@ void print_field(concptr info, TERM_LEN row, TERM_LEN col)
  */
 void print_map(PlayerType *player_ptr)
 {
-    TERM_LEN wid, hgt;
-    term_get_size(&wid, &hgt);
-
+    auto [wid, hgt] = term_get_size();
     wid -= COL_MAP + 2;
     hgt -= ROW_MAP + 2;
 
@@ -180,9 +178,8 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
     bool old_view_special_lite = view_special_lite;
     bool old_view_granite_lite = view_granite_lite;
 
-    TERM_LEN border_width = use_bigtile ? 2 : 1; //!< @note 枠線幅
-    TERM_LEN hgt, wid, yrat, xrat;
-    term_get_size(&wid, &hgt);
+    auto border_width = use_bigtile ? 2 : 1; //!< @note 枠線幅
+    auto [wid, hgt] = term_get_size();
     hgt -= 2;
     wid -= 12 + border_width * 2; //!< @note 描画桁数(枠線抜)
     if (use_bigtile) {
@@ -190,8 +187,8 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
     }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    yrat = (floor_ptr->height + hgt - 1) / hgt;
-    xrat = (floor_ptr->width + wid - 1) / wid;
+    const auto yrat = (floor_ptr->height + hgt - 1) / hgt;
+    const auto xrat = (floor_ptr->width + wid - 1) / wid;
     view_special_lite = false;
     view_granite_lite = false;
 

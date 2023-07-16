@@ -88,26 +88,25 @@ void resize_map()
 }
 
 /*!
- * @brief 現在のコンソール表示の縦横を返す。 /
- * Get term size and calculate screen size
- * @param wid_p コンソールの表示幅文字数を返す
- * @param hgt_p コンソールの表示行数を返す
+ * @brief 現在のコンソール表示の縦横を返す
  */
-void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p)
+std::pair<int, int> get_screen_size()
 {
-    term_get_size(wid_p, hgt_p);
-    *hgt_p -= ROW_MAP + 2;
-    *wid_p -= COL_MAP + 2;
+    auto [width, height] = term_get_size();
+    height -= ROW_MAP + 2;
+    width -= COL_MAP + 2;
     if (use_bigtile) {
-        *wid_p /= 2;
+        width /= 2;
     }
+
+    return { width, height };
 }
 
 /*
  * Determines if a map location is currently "on screen" -RAK-
  * Note that "panel_contains(Y,X)" always implies "in_bounds2(Y,X)".
  */
-bool panel_contains(POSITION y, POSITION x)
+bool panel_contains(int y, int x)
 {
     return (y >= panel_row_min) && (y <= panel_row_max) && (x >= panel_col_min) && (x <= panel_col_max);
 }

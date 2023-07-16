@@ -24,8 +24,7 @@ void do_cmd_view_map(PlayerType *player_ptr)
     int cy, cx;
     display_map(player_ptr, &cy, &cx);
     if (autopick_list.empty() || player_ptr->wild_mode) {
-        int wid, hgt;
-        term_get_size(&wid, &hgt);
+        const auto [wid, hgt] = term_get_size();
         constexpr auto msg = _("何かキーを押すとゲームに戻ります", "Hit any key to continue");
         const auto center_x = (wid - std::string_view(msg).length()) / 2;
         put_str(msg, hgt - 1, center_x);
@@ -37,8 +36,7 @@ void do_cmd_view_map(PlayerType *player_ptr)
 
     display_autopick = ITEM_DISPLAY;
     while (true) {
-        int wid, hgt;
-        term_get_size(&wid, &hgt);
+        const auto [wid, hgt] = term_get_size();
         int row_message = hgt - 1;
         put_str(_("何かキーを押してください('M':拾う 'N':放置 'D':M+N 'K':壊すアイテムを表示)",
                     " Hit M, N(for ~), K(for !), or D(same as M+N) to display auto-picker items."),

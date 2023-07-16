@@ -48,17 +48,16 @@ void redraw_window()
  */
 static void print_dungeon(PlayerType *player_ptr)
 {
-    TERM_LEN width, height;
-    term_get_size(&width, &height);
+    const auto [wid, hgt] = term_get_size();
 
-    c_put_str(TERM_WHITE, "             ", height + ROW_DUNGEON, COL_DUNGEON);
+    c_put_str(TERM_WHITE, "             ", hgt + ROW_DUNGEON, COL_DUNGEON);
     const auto dungeon_name = map_name(player_ptr);
     TERM_LEN col = COL_DUNGEON + 6 - dungeon_name.length() / 2;
     if (col < 0) {
         col = 0;
     }
 
-    c_put_str(TERM_L_UMBER, dungeon_name, height + ROW_DUNGEON, col);
+    c_put_str(TERM_L_UMBER, dungeon_name, hgt + ROW_DUNGEON, col);
 }
 
 /*!

@@ -26,6 +26,7 @@
 #include "util/string-processor.h"
 #include "window/display-sub-windows.h"
 #include "window/main-window-util.h"
+#include <tuple>
 #include <vector>
 
 // "interesting" な座標たちを記録する配列。
@@ -59,7 +60,7 @@ static ts_type *initialize_target_set_type(PlayerType *player_ptr, ts_type *ts_p
     ts_ptr->x = player_ptr->x;
     ts_ptr->done = false;
     ts_ptr->flag = true;
-    get_screen_size(&ts_ptr->wid, &ts_ptr->hgt);
+    std::tie(ts_ptr->wid, ts_ptr->hgt) = get_screen_size();
     ts_ptr->m = 0;
     return ts_ptr;
 }
@@ -77,9 +78,9 @@ static ts_type *initialize_target_set_type(PlayerType *player_ptr, ts_type *ts_p
  */
 static bool change_panel_xy(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    POSITION dy = 0, dx = 0;
-    TERM_LEN wid, hgt;
-    get_screen_size(&wid, &hgt);
+    auto dy = 0;
+    auto dx = 0;
+    [[maybe_unused]] const auto [wid, hgt] = get_screen_size();
     if (y < panel_row_min) {
         dy = -1;
     }

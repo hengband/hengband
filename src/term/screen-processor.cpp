@@ -171,13 +171,11 @@ static std::vector<std::pair<TERM_COLOR, char>> c_roff_wrap(int x, int y, int w,
  */
 void c_roff(TERM_COLOR a, std::string_view str)
 {
-    int w, h;
-    (void)term_get_size(&w, &h);
-
+    const auto [wid, hgt] = term_get_size();
     int x, y;
     (void)term_locate(&x, &y);
 
-    if (y == h - 1 && x > w - 3) {
+    if (y == hgt - 1 && x > wid - 3) {
         return;
     }
 
@@ -185,7 +183,7 @@ void c_roff(TERM_COLOR a, std::string_view str)
         const auto is_kanji = _(iskanji(*s), false);
 
         if (*s == '\n') {
-            if (y + 1 < h) {
+            if (y + 1 < hgt) {
                 term_erase(0, y + 1);
             }
 
@@ -194,11 +192,11 @@ void c_roff(TERM_COLOR a, std::string_view str)
 
         const auto ch = (is_kanji || isprint(*s)) ? *s : ' ';
 
-        if ((x >= ((is_kanji) ? w - 2 : w - 1)) && (ch != ' ')) {
-            const auto wrap_chars = c_roff_wrap(x, y, w, &*s);
+        if ((x >= ((is_kanji) ? wid - 2 : wid - 1)) && (ch != ' ')) {
+            const auto wrap_chars = c_roff_wrap(x, y, wid, &*s);
 
             y++;
-            if (y == h) {
+            if (y == hgt) {
                 return;
             }
 
@@ -216,8 +214,8 @@ void c_roff(TERM_COLOR a, std::string_view str)
             term_addch((a | 0x20), *s);
         }
 
-        if (++x > w) {
-            x = w;
+        if (++x > wid) {
+            x = wid;
         }
     }
 }

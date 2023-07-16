@@ -118,9 +118,7 @@ static void handle_signal_simple(int sig)
  */
 static void handle_signal_abort(int sig)
 {
-    int wid, hgt;
-    term_get_size(&wid, &hgt);
-
+    const auto [wid, hgt] = term_get_size();
     (void)signal(sig, SIG_IGN);
     if (!w_ptr->character_generated || w_ptr->character_saved) {
         quit(nullptr);

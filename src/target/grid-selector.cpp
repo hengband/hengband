@@ -111,11 +111,11 @@ std::unordered_map<int, std::function<bool(grid_type *)>> tgt_pt_symbol_call_bac
 struct tgt_pt_info {
     tgt_pt_info()
     {
-        get_screen_size(&this->wid, &this->hgt);
+        std::tie(this->width, this->height) = get_screen_size();
     };
 
-    TERM_LEN wid; //!< 画面サイズ(幅)
-    TERM_LEN hgt; //!< 画面サイズ(高さ)
+    int width; //!< 画面サイズ(幅)
+    int height; //!< 画面サイズ(高さ)
     POSITION y = 0; //!< 現在の指定位置(Y)
     POSITION x = 0; //!< 現在の指定位置(X)
     std::vector<POSITION> ys{}; //!< "interesting" な座標たちを記録する配列(Y)
@@ -171,8 +171,8 @@ void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
     } else {
         this->y = this->ys[this->n];
         this->x = this->xs[this->n];
-        dy = 2 * (this->y - cy) / this->hgt;
-        dx = 2 * (this->x - cx) / this->wid;
+        dy = 2 * (this->y - cy) / this->height;
+        dx = 2 * (this->x - cx) / this->width;
         if (dy || dx) {
             change_panel(player_ptr, dy, dx);
         }
@@ -266,7 +266,7 @@ bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
             int dx = ddx[d];
             int dy = ddy[d];
             if (move_fast) {
-                int mag = std::min(info.wid / 2, info.hgt / 2);
+                int mag = std::min(info.width / 2, info.height / 2);
                 info.x += dx * mag;
                 info.y += dy * mag;
             } else {
@@ -274,15 +274,15 @@ bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
                 info.y += dy;
             }
 
-            if (((info.x < panel_col_min + info.wid / 2) && (dx > 0)) || ((info.x > panel_col_min + info.wid / 2) && (dx < 0))) {
+            if (((info.x < panel_col_min + info.width / 2) && (dx > 0)) || ((info.x > panel_col_min + info.width / 2) && (dx < 0))) {
                 dx = 0;
             }
 
-            if (((info.y < panel_row_min + info.hgt / 2) && (dy > 0)) || ((info.y > panel_row_min + info.hgt / 2) && (dy < 0))) {
+            if (((info.y < panel_row_min + info.height / 2) && (dy > 0)) || ((info.y > panel_row_min + info.height / 2) && (dy < 0))) {
                 dy = 0;
             }
 
-            if ((info.y >= panel_row_min + info.hgt) || (info.y < panel_row_min) || (info.x >= panel_col_min + info.wid) || (info.x < panel_col_min)) {
+            if ((info.y >= panel_row_min + info.height) || (info.y < panel_row_min) || (info.x >= panel_col_min + info.width) || (info.x < panel_col_min)) {
                 change_panel(player_ptr, dy, dx);
             }
 

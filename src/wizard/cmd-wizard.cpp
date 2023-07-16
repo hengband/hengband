@@ -293,13 +293,11 @@ bool exe_cmd_debug(PlayerType *player_ptr, char cmd)
  */
 void do_cmd_debug(PlayerType *player_ptr)
 {
-    TERM_LEN hgt, wid;
-    term_get_size(&wid, &hgt);
-
-    size_t max_line = debug_menu_table.size();
-    int page_size = hgt - 5;
-    int max_page = max_line / page_size + 1;
-    int page = 0;
+    const auto [wid, hgt] = term_get_size();
+    const auto max_line = debug_menu_table.size();
+    const auto page_size = hgt - 5;
+    const auto max_page = max_line / page_size + 1;
+    auto page = 0;
     while (true) {
         screen_save();
         display_debug_menu(page, max_page, page_size, max_line);

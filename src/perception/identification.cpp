@@ -790,9 +790,7 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
     }
 
     screen_save();
-    int wid, hgt;
-    term_get_size(&wid, &hgt);
-
+    const auto [wid, hgt] = term_get_size();
     std::string item_name;
     if (!(mode & SCROBJ_FAKE_OBJECT)) {
         item_name = describe_flavor(player_ptr, o_ptr, 0);

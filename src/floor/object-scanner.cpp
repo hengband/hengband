@@ -106,18 +106,17 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
     COMMAND_CODE i, m;
     int j, k, l;
     ItemEntity *o_ptr;
-    char tmp_val[80];
-    COMMAND_CODE out_index[23];
-    TERM_COLOR out_color[23];
+    char tmp_val[80]{};
+    COMMAND_CODE out_index[23]{};
+    TERM_COLOR out_color[23]{};
     std::array<std::string, 23> descriptions{};
     COMMAND_CODE target_item_label = 0;
-    OBJECT_IDX floor_list[23];
+    OBJECT_IDX floor_list[23]{};
     ITEM_NUMBER floor_num;
-    TERM_LEN wid, hgt;
-    char floor_label[52 + 1];
-    bool dont_need_to_show_weights = true;
-    term_get_size(&wid, &hgt);
-    int len = std::max((*min_width), 20);
+    char floor_label[52 + 1]{};
+    auto dont_need_to_show_weights = true;
+    const auto [wid, hgt] = term_get_size();
+    auto len = std::max((*min_width), 20);
     floor_num = scan_floor_items(player_ptr, floor_list, y, x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
     auto *floor_ptr = player_ptr->current_floor_ptr;
     for (k = 0, i = 0; i < floor_num && i < 23; i++) {

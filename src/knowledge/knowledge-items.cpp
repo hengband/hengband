@@ -245,7 +245,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, std::nullopt);
 
     short object_old, object_top;
-    short grp_idx[100];
+    short grp_idx[100]{};
     int object_cnt;
 
     bool visual_list = false;
@@ -253,10 +253,8 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
     byte char_left = 0;
     byte mode;
 
-    TERM_LEN wid, hgt;
-    term_get_size(&wid, &hgt);
-
-    int browser_rows = hgt - 8;
+    const auto [wid, hgt] = term_get_size();
+    auto browser_rows = hgt - 8;
     std::vector<short> object_idx(baseitems_info.size());
 
     int len;

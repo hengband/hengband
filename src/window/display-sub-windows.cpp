@@ -1,5 +1,4 @@
 #include "window/display-sub-windows.h"
-#include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "floor/cave.h"
 #include "game-option/option-flags.h"
@@ -7,7 +6,6 @@
 #include "game-option/text-display-options.h"
 #include "grid/feature.h"
 #include "inventory/inventory-describer.h"
-#include "inventory/inventory-slot-types.h"
 #include "inventory/inventory-util.h"
 #include "locale/japanese.h"
 #include "main/sound-of-music.h"
@@ -16,45 +14,29 @@
 #include "mind/mind-sniper.h"
 #include "mind/mind-types.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "monster/monster-flag-types.h"
-#include "monster/monster-info.h"
-#include "monster/monster-status.h"
 #include "object/item-tester-hooker.h"
 #include "object/object-info.h"
-#include "object/object-mark-types.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"
 #include "realm/realm-names-table.h"
-#include "spell-kind/magic-item-recharger.h"
 #include "spell/spells-execution.h"
-#include "spell/technic-info-table.h"
-#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
-#include "system/player-type-definition.h"
-#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
-#include "target/target-describer.h"
 #include "target/target-preparation.h"
-#include "target/target-setter.h"
-#include "target/target-types.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
-#include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
-#include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "view/display-lore.h"
 #include "view/display-map.h"
@@ -290,10 +272,9 @@ void fix_monster_list(PlayerType *player_ptr)
 
     display_sub_windows(SubWindowRedrawingFlag::SIGHT_MONSTERS,
         [player_ptr, &once] {
-            int w, h;
-            term_get_size(&w, &h);
+            const auto [wid, hgt] = term_get_size();
             std::call_once(once, target_sensing_monsters_prepare, player_ptr, monster_list);
-            print_monster_list(player_ptr->current_floor_ptr, monster_list, 0, 0, h);
+            print_monster_list(player_ptr->current_floor_ptr, monster_list, 0, 0, hgt);
         });
 
     if (use_music && has_monster_music) {
@@ -309,10 +290,9 @@ void fix_pet_list(PlayerType *player_ptr)
 {
     display_sub_windows(SubWindowRedrawingFlag::PETS,
         [player_ptr] {
-            int w, h;
-            term_get_size(&w, &h);
+            const auto [wid, hgt] = term_get_size();
             const auto pets = target_pets_prepare(player_ptr);
-            print_pet_list(player_ptr, pets, 0, 0, w, h);
+            print_pet_list(player_ptr, pets, 0, 0, wid, hgt);
         });
 }
 
@@ -326,8 +306,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
         return;
     }
 
-    TERM_LEN wid, hgt;
-    term_get_size(&wid, &hgt);
+    const auto [wid, hgt] = term_get_size();
     byte attr = TERM_WHITE;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         int cur_row = i - INVEN_MAIN_HAND;
@@ -429,10 +408,9 @@ void fix_message(void)
 {
     display_sub_windows(SubWindowRedrawingFlag::MESSAGE,
         [] {
-            TERM_LEN w, h;
-            term_get_size(&w, &h);
-            for (short i = 0; i < h; i++) {
-                term_putstr(0, (h - 1) - i, -1, (byte)((i < now_message) ? TERM_WHITE : TERM_SLATE), *message_str(i));
+            const auto [wid, hgt] = term_get_size();
+            for (short i = 0; i < hgt; i++) {
+                term_putstr(0, (hgt - 1) - i, -1, (byte)((i < now_message) ? TERM_WHITE : TERM_SLATE), *message_str(i));
                 TERM_LEN x, y;
                 term_locate(&x, &y);
                 term_erase(x, y);
@@ -452,8 +430,7 @@ void fix_overhead(PlayerType *player_ptr)
 {
     display_sub_windows(SubWindowRedrawingFlag::OVERHEAD,
         [player_ptr] {
-            TERM_LEN wid, hgt;
-            term_get_size(&wid, &hgt);
+            const auto [wid, hgt] = term_get_size();
             if (wid > COL_MAP + 2 && hgt > ROW_MAP + 2) {
                 int cy, cx;
                 display_map(player_ptr, &cy, &cx);
@@ -570,13 +547,8 @@ static const MonsterEntity *monster_on_floor_items(FloorType *floor_ptr, const g
  */
 static void display_floor_item_list(PlayerType *player_ptr, const int y, const int x)
 {
-    // Term の行数を取得。
-    TERM_LEN term_h;
-    {
-        TERM_LEN term_w;
-        term_get_size(&term_w, &term_h);
-    }
-    if (term_h <= 0) {
+    const auto [wid, hgt] = term_get_size();
+    if (hgt <= 0) {
         return;
     }
 
@@ -624,7 +596,7 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
         }
 
         // 途中で行数が足りなくなったら最終行にその旨追記して終了。
-        if (term_y >= term_h) {
+        if (term_y >= hgt) {
             term_addstr(-1, TERM_WHITE, "-- more --");
             break;
         }
@@ -660,12 +632,8 @@ void fix_floor_item_list(PlayerType *player_ptr, const int y, const int x)
  */
 static void display_found_item_list(PlayerType *player_ptr)
 {
-    // Term の行数を取得。
-    TERM_LEN term_h;
-    TERM_LEN term_w;
-    term_get_size(&term_w, &term_h);
-
-    if (term_h <= 0) {
+    const auto [wid, hgt] = term_get_size();
+    if (hgt <= 0) {
         return;
     }
 
@@ -703,7 +671,7 @@ static void display_found_item_list(PlayerType *player_ptr)
     TERM_LEN term_y = 1;
     for (auto item : found_item_list) {
         // 途中で行数が足りなくなったら終了。
-        if (term_y >= term_h) {
+        if (term_y >= hgt) {
             break;
         }
 
@@ -721,7 +689,7 @@ static void display_found_item_list(PlayerType *player_ptr)
 
         // アイテム座標表示
         const auto item_location = format("(X:%3d Y:%3d)", item->ix, item->iy);
-        prt(item_location, term_y, term_w - item_location.length() - 1);
+        prt(item_location, term_y, wid - item_location.length() - 1);
 
         ++term_y;
     }
