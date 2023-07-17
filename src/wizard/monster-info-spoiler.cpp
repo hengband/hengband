@@ -79,15 +79,15 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
     PlayerType dummy;
     uint16_t why = 2;
     const auto &path = path_build(ANGBAND_DIR_USER, filename);
-    spoiler_file = angband_fopen(path, FileOpenMode::WRITE);
-    if (!spoiler_file) {
+    std::ofstream ofs(path);
+    if (!ofs) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
-    fprintf(spoiler_file, "Monster Spoilers for %s\n", get_version().data());
-    fprintf(spoiler_file, "------------------------------------------\n\n");
-    fprintf(spoiler_file, "%-45.45s%4s %4s %4s %7s %7s  %19.19s\n", "Name", "Lev", "Rar", "Spd", "Hp", "Ac", "Visual Info");
-    fprintf(spoiler_file, "%-45.45s%4s %4s %4s %7s %7s  %4.19s\n",
+    ofs << format("Monster Spoilers for %s\n", get_version().data());
+    ofs << "------------------------------------------\n\n";
+    ofs << format("%-45.45s%4s %4s %4s %7s %7s  %19.19s\n", "Name", "Lev", "Rar", "Spd", "Hp", "Ac", "Visual Info");
+    ofs << format("%-45.45s%4s %4s %4s %7s %7s  %4.19s\n",
         "---------------------------------------------"
         "----"
         "----------",
@@ -134,18 +134,17 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
         }
 
         const auto symbol = format("%s '%c'", attr_to_text(r_ptr), r_ptr->d_char);
-        fprintf(spoiler_file, "%-45.45s%4s %4s %4s %7s %7s  %19.19s\n",
+        ofs << format("%-45.45s%4s %4s %4s %7s %7s  %19.19s\n",
             nam.data(), lev.data(), rar.data(), spd.data(), hp.data(),
             ac.data(), symbol.data());
 
         for (auto i = 1U; i < name.size(); ++i) {
-            fprintf(spoiler_file, "    %s\n", name[i].data());
+            ofs << format("    %s\n", name[i].data());
         }
     }
 
-    fprintf(spoiler_file, "\n");
-    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SpoilerOutputResultType::FILE_CLOSE_FAILED
-                                                                : SpoilerOutputResultType::SUCCESSFUL;
+    ofs << '\n';
+    return ofs.good() ? SpoilerOutputResultType::SUCCESSFUL : SpoilerOutputResultType::FILE_CLOSE_FAILED;
 }
 
 /*!
