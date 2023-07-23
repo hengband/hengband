@@ -1,4 +1,4 @@
-﻿#include "room/rooms-pit-nest.h"
+#include "room/rooms-pit-nest.h"
 #include "floor/floor-generator.h"
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"
@@ -255,7 +255,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
         auto select_r_idx = [player_ptr, floor_ptr, &align]() -> std::optional<MonsterRaceId> {
             for (auto attempts = 100; attempts > 0; attempts--) {
                 /* Get a (hard) monster type */
-                auto r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level + 11, 0);
+                auto r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level + 11, PM_NONE);
                 auto *r_ptr = &monraces_info[r_idx];
 
                 /* Decline incorrect alignment */
@@ -502,7 +502,7 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
         while (attempts--) {
             /* Get a (hard) monster type */
-            r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level + 11, 0);
+            r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level + 11, PM_NONE);
             r_ptr = &monraces_info[r_idx];
 
             /* Decline incorrect alignment */
@@ -817,7 +817,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
         while (attempts--) {
             /* Get a (hard) monster type */
-            r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level + 0, 0);
+            r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level + 0, PM_NONE);
             r_ptr = &monraces_info[r_idx];
 
             /* Decline incorrect alignment */

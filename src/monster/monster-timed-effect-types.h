@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum monster_timed_effect_type {
     MTIMED_CSLEEP = 0, /* Monster is sleeping */

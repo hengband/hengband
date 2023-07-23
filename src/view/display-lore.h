@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "lore/lore-util.h"
 #include "system/angband.h"

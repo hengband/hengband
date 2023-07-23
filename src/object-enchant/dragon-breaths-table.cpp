@@ -1,4 +1,4 @@
-﻿#include "object-enchant/dragon-breaths-table.h"
+#include "object-enchant/dragon-breaths-table.h"
 #include "effect/attribute-types.h"
 
 /*!

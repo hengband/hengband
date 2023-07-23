@@ -1,4 +1,4 @@
-﻿#include "view/display-util.h"
+#include "view/display-util.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/buffer-shaper.h"

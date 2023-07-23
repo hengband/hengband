@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief ものまねの処理実装 / Imitation code
  * @date 2014/01/14
  * @author
@@ -1191,6 +1191,19 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         }
         for (k = count; k < 4; k++) {
             summon_specific(player_ptr, -1, target_row, target_col, plev, SUMMON_HI_UNDEAD, (mode | u_mode));
+        }
+        break;
+    }
+    case MonsterAbilityType::S_DEAD_UNIQUE: {
+        auto count = 0;
+        if (!target_set(player_ptr, TARGET_KILL)) {
+            return false;
+        }
+        msg_print(_("特別な強敵を蘇生した！", "You summon special dead opponents!"));
+        for (auto k = 0; k < 4; k++) {
+            if (summon_specific(player_ptr, -1, target_row, target_col, plev, SUMMON_DEAD_UNIQUE, (mode | PM_ALLOW_UNIQUE | PM_CLONE))) {
+                count++;
+            }
         }
         break;
     }

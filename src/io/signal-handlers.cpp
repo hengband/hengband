@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file signal-handlers.c
  * @brief シグナルハンドラの管理 / Controlling signal handlers
  * @date 2020/02/23
@@ -89,7 +89,7 @@ static void handle_signal_simple(int sig)
         quit(_("強制終了", "interrupt"));
     } else if (signal_count >= 4) {
         term_xtra(TERM_XTRA_NOISE, 0);
-        term_erase(0, 0, 255);
+        term_erase(0, 0);
         term_putstr(0, 0, -1, TERM_WHITE, _("熟慮の上の自殺！", "Contemplating suicide!"));
         term_fresh();
     } else if (signal_count >= 2) {
@@ -118,9 +118,7 @@ static void handle_signal_simple(int sig)
  */
 static void handle_signal_abort(int sig)
 {
-    int wid, hgt;
-    term_get_size(&wid, &hgt);
-
+    const auto [wid, hgt] = term_get_size();
     (void)signal(sig, SIG_IGN);
     if (!w_ptr->character_generated || w_ptr->character_saved) {
         quit(nullptr);
@@ -130,7 +128,7 @@ static void handle_signal_abort(int sig)
     forget_view(p_ptr->current_floor_ptr);
     clear_mon_lite(p_ptr->current_floor_ptr);
 
-    term_erase(0, hgt - 1, 255);
+    term_erase(0, hgt - 1);
     term_putstr(0, hgt - 1, -1, TERM_RED, _("恐ろしいソフトのバグが飛びかかってきた！", "A gruesome software bug LEAPS out at you!"));
 
     term_putstr(45, hgt - 1, -1, TERM_RED, _("緊急セーブ...", "Panic save..."));

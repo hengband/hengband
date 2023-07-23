@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum class MonsterAbilityType {
     SHRIEK = 0, /*!< モンスター能力: 叫ぶ / Shriek for help */
@@ -99,6 +99,7 @@ enum class MonsterAbilityType {
     S_HI_DRAGON = 93, /* Summon Ancient Dragon */
     S_AMBERITES = 94, /* Summon Amberites */
     S_UNIQUE = 95, /* Summon Unique Monster */
+    S_DEAD_UNIQUE = 96, /* Summon Dead Unique Monster */
     BO_VOID = 97, /*!< モンスター能力: ヴォイド・ボルト / Void Bolt */
     BO_ABYSS = 98, /*!< モンスター能力: アビス・ボルト / Abyss Bolt */
     BR_VOID = 99, /*!< モンスター能力: 虚無のブレス / Breathe Void */

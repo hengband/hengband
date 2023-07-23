@@ -1,4 +1,4 @@
-﻿#include "cmd-item/cmd-usestaff.h"
+#include "cmd-item/cmd-usestaff.h"
 #include "action/action-limited.h"
 #include "floor/floor-object.h"
 #include "monster-floor/monster-summon.h"

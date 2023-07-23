@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /* summon_specificで取り扱われる、召喚の種別定義 / Legal restrictions for "summon_specific()" */
 enum summon_type : int {
@@ -53,4 +53,5 @@ enum summon_type : int {
     SUMMON_APOCRYPHA_DRAGONS = 69, /*!< 召喚タイプ: 強力な古代ドラゴン */
     SUMMON_VESPOID = 70, /*!< 召喚タイプ: ランゴスタ */
     SUMMON_ANTI_TIGERS = 71, /*!< 召喚タイプ: トラ以外 */
+    SUMMON_DEAD_UNIQUE = 72, /*!< 召喚タイプ: 撃破済みユニーク */
 };

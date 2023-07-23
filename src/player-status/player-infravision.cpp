@@ -1,4 +1,4 @@
-﻿#include "player-status/player-infravision.h"
+#include "player-status/player-infravision.h"
 #include "mutation/mutation-flag-types.h"
 #include "player-base/player-race.h"
 #include "player-info/mimic-info-table.h"

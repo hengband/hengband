@@ -1,4 +1,4 @@
-﻿#include "io-dump/dump-remover.h"
+#include "io-dump/dump-remover.h"
 #include "io-dump/dump-util.h"
 #include "io/read-pref-file.h"
 #include "term/z-form.h"

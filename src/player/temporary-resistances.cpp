@@ -1,4 +1,4 @@
-﻿#include "player/temporary-resistances.h"
+#include "player/temporary-resistances.h"
 #include "object-enchant/tr-types.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"

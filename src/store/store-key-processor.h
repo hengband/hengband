@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 extern bool leave_store;
 

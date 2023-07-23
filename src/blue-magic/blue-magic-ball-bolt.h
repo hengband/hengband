@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file blue-magic-ball-bolt.h
  * @brief 青魔法のボール/ボルト系呪文ヘッダ

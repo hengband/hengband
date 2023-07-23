@@ -1,4 +1,4 @@
-﻿#include "combat/attack-accuracy.h"
+#include "combat/attack-accuracy.h"
 #include "combat/combat-options-type.h"
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"

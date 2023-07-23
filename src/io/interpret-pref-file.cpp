@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief prefファイルの内容を解釈しメモリに展開する
  * @date 2020/03/01
  * @author Hourier

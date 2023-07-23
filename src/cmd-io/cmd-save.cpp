@@ -1,4 +1,4 @@
-﻿#include "cmd-io/cmd-save.h"
+#include "cmd-io/cmd-save.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/disturbance.h"
 #include "core/stuff-handler.h"

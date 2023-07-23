@@ -1,4 +1,4 @@
-﻿/*
+/*
  * @brief プレイヤーのインターフェイスに関するコマンドの実装 / Interface commands
  * @date 2023/04/30
  * @author Mogami & Hourier

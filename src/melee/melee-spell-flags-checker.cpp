@@ -1,4 +1,4 @@
-﻿#include "melee/melee-spell-flags-checker.h"
+#include "melee/melee-spell-flags-checker.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "effect/effect-characteristics.h"
 #include "floor/geometry.h"

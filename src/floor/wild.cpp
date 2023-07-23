@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 荒野マップの生成とルール管理 / Wilderness generation
  * @date 2014/02/13
  * @author

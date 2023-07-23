@@ -1,4 +1,4 @@
-﻿#include "hpmp/hp-mp-regenerator.h"
+#include "hpmp/hp-mp-regenerator.h"
 #include "cmd-item/cmd-magiceat.h"
 #include "core/window-redrawer.h"
 #include "inventory/inventory-slot-types.h"

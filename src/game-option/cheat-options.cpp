@@ -1,4 +1,4 @@
-﻿#include "game-option/cheat-options.h"
+#include "game-option/cheat-options.h"
 
 bool cheat_peek; /* Peek into object creation */
 bool cheat_hear; /* Peek into monster creation */

@@ -1,4 +1,4 @@
-﻿#include "realm/realm-sorcery.h"
+#include "realm/realm-sorcery.h"
 #include "avatar/avatar.h"
 #include "cmd-action/cmd-spell.h"
 #include "core/asking-player.h"

@@ -1,4 +1,4 @@
-﻿#include "io/command-repeater.h"
+#include "io/command-repeater.h"
 #include "io/input-key-requester.h"
 #include "util/int-char-converter.h"
 

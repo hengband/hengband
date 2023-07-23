@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 bool kind_is_cloak(short bi_id);
 bool kind_is_polearm(short bi_id);

@@ -1,4 +1,4 @@
-﻿#include "mspell/monster-power-table.h"
+#include "mspell/monster-power-table.h"
 #include "monster-race/race-ability-flags.h"
 #include "player-ability/player-ability-types.h"
 
@@ -112,6 +112,7 @@ const std::map<MonsterAbilityType, const monster_power> monster_powers = {
     { MonsterAbilityType::S_HI_DRAGON, { 46, 90, 85, 0, 45, A_INT, _("古代ドラゴンの召喚", "summon Ancient Dragon") } },
     { MonsterAbilityType::S_AMBERITES, { 48, 120, 90, 0, 50, A_INT, _("アンバーの王族の召喚", "summon Lords of Amber") } },
     { MonsterAbilityType::S_UNIQUE, { 50, 150, 95, 0, 50, A_INT, _("ユニークモンスターの召喚", "summon Unique Monsters") } },
+    { MonsterAbilityType::S_DEAD_UNIQUE, { 50, 150, 95, 0, 50, A_INT, _("ユニークモンスターの口寄せ", "summon Dead Unique Monsters") } },
 };
 
 /*!
@@ -222,4 +223,5 @@ const std::map<MonsterAbilityType, concptr> monster_powers_short = {
     { MonsterAbilityType::S_HI_DRAGON, _("古代ドラゴン", "Ancient Dragon") },
     { MonsterAbilityType::S_AMBERITES, _("アンバーの王族", "Lords of Amber") },
     { MonsterAbilityType::S_UNIQUE, _("ユニーク", "Unique monsters") },
+    { MonsterAbilityType::S_DEAD_UNIQUE, _("黄泉のユニーク", "Dead unique monsters") },
 };

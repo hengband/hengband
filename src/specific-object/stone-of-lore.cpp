@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 知識の石を発動させる処理
  * @date 2021/09/24
  * @author Hourier

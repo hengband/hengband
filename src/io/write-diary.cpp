@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 日記へのメッセージ追加処理
  * @date 2020/03/08
  * @author Hourier

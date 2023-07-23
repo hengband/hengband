@@ -1,4 +1,4 @@
-﻿#include "mspell/mspell-summon.h"
+#include "mspell/mspell-summon.h"
 #include "core/disturbance.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
@@ -958,6 +958,52 @@ MonsterSpellResult spell_RF6_S_UNIQUE(PlayerType *player_ptr, POSITION y, POSITI
     if (player_ptr->effects()->blindness()->is_blind() && count && mon_to_player) {
         msg_format(_("多くの%sが間近に現れた音が聞こえる。", "You hear many %s appear nearby."),
             uniques_are_summoned ? _("力強いもの", "powerful things") : _("もの", "things"));
+    }
+
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon) {
+        floor_ptr->monster_noise = true;
+    }
+
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = target_type == MONSTER_TO_PLAYER;
+
+    return res;
+}
+
+/*!
+ * @brief RF6_S_DEAD_UNIQUEの処理。撃破済みユニーク・モンスターをクローンとして召喚。 /
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param y 対象の地点のy座標
+ * @param x 対象の地点のx座標
+ * @param m_idx 呪文を唱えるモンスターID
+ * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ *
+ * プレイヤーが対象ならラーニング可。
+ */
+MonsterSpellResult spell_RF6_S_DEAD_UNIQUE(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
+{
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto rlev = monster_level_idx(floor_ptr, m_idx);
+    auto mon_to_mon = (target_type == MONSTER_TO_MONSTER);
+    auto mon_to_player = (target_type == MONSTER_TO_PLAYER);
+    auto see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
+    auto known = monster_near_player(floor_ptr, m_idx, t_idx);
+
+    mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%s^が魔法で特別な強敵を蘇らせた！", "%^s magically animates special opponents!"),
+        _("%s^が魔法で特別な強敵を蘇らせた！", "%^s magically animates special opponents!"));
+
+    monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
+    summon_disturb(player_ptr, target_type, known, see_either);
+
+    auto count = 0;
+    for (auto k = 0; k < S_NUM_4; k++) {
+        count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_DEAD_UNIQUE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_CLONE));
+    }
+
+    if (player_ptr->effects()->blindness()->is_blind() && count && mon_to_player) {
+        msg_format(_("多くの力強いものが間近に蘇った音が聞こえる。", "You hear many powerful things animate nearby."));
     }
 
     if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon) {

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief Index of spell type names
  */
 

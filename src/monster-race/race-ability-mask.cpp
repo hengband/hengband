@@ -1,4 +1,4 @@
-﻿#include "monster-race/race-ability-mask.h"
+#include "monster-race/race-ability-mask.h"
 
 // clang-format off
 /* "summon" spells currently "summon" spells are included in "intelligent" and "indirect" */
@@ -7,6 +7,7 @@ const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_SUMMON_MASK = {
     MonsterAbilityType::S_ANT, MonsterAbilityType::S_SPIDER, MonsterAbilityType::S_HOUND, MonsterAbilityType::S_HYDRA,
     MonsterAbilityType::S_ANGEL, MonsterAbilityType::S_DEMON, MonsterAbilityType::S_UNDEAD, MonsterAbilityType::S_DRAGON,
     MonsterAbilityType::S_HI_UNDEAD, MonsterAbilityType::S_HI_DRAGON, MonsterAbilityType::S_AMBERITES, MonsterAbilityType::S_UNIQUE,
+    MonsterAbilityType::S_DEAD_UNIQUE,
 };
 
 /* Choose "intelligent" spells when desperate Including "summon" spells */

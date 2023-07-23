@@ -1,4 +1,4 @@
-﻿#include "flavor/flavor-util.h"
+#include "flavor/flavor-util.h"
 #include "flavor/flag-inscriptions-table.h"
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/tr-types.h"

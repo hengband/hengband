@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file main-win-cfg-reader.cpp
  * @brief Windows版固有実装(.cfgファイル処理)
  */

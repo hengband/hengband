@@ -1,4 +1,4 @@
-﻿#include "system/dungeon-info.h"
+#include "system/dungeon-info.h"
 #include "dungeon/dungeon-flag-mask.h"
 
 /*

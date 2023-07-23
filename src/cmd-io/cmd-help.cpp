@@ -1,4 +1,4 @@
-﻿#include "cmd-io/cmd-help.h"
+#include "cmd-io/cmd-help.h"
 #include "core/show-file.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"

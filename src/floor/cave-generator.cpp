@@ -1,4 +1,4 @@
-﻿#include "floor/cave-generator.h"
+#include "floor/cave-generator.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest-monster-placer.h"
 #include "floor/dungeon-tunnel-util.h"

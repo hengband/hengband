@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 吸血処理
  * @date 2020/05/23
  * @author Hourier

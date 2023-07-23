@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "object-enchant/object-ego.h"
 #include "system/angband.h"

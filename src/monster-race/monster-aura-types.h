@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /*!
  * @brief モンスターがまとっているオーラ定義.

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file travel-execution.cpp
  * @brief トラベル移動処理実装
  */

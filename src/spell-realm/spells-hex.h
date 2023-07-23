@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "realm/realm-hex-numbers.h"
 #include "system/angband.h"

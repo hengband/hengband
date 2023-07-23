@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "player/player-status-flags.h"
 #include "system/angband.h"
 

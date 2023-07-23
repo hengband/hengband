@@ -1,4 +1,4 @@
-﻿#include "realm/realm-life.h"
+#include "realm/realm-life.h"
 #include "cmd-action/cmd-spell.h"
 #include "effect/attribute-types.h"
 #include "player/digestion-processor.h"

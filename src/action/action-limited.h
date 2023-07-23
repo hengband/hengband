@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file action-limited.h
  * @brief プレイヤーの行動制約判定ヘッダ

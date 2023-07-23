@@ -1,9 +1,10 @@
-﻿#include "birth/inventory-initializer.h"
+#include "birth/inventory-initializer.h"
 #include "autopick/autopick.h"
 #include "birth/initial-equipments-table.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
+#include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
@@ -103,7 +104,7 @@ static void decide_initial_items(PlayerType *player_ptr, ItemEntity *q_ptr)
         get_mon_num_prep(player_ptr, monster_hook_human, nullptr);
         for (int i = rand_range(3, 4); i > 0; i--) {
             q_ptr->prep(lookup_baseitem_id({ ItemKindType::CORPSE, SV_CORPSE }));
-            q_ptr->pval = enum2i(get_mon_num(player_ptr, 0, 2, 0));
+            q_ptr->pval = enum2i(get_mon_num(player_ptr, 0, 2, PM_NONE));
             if (q_ptr->pval) {
                 q_ptr->number = 1;
                 add_outfit(player_ptr, q_ptr);

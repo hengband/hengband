@@ -1,4 +1,4 @@
-﻿#include "core/asking-player.h"
+#include "core/asking-player.h"
 #include "cmd-io/macro-util.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"

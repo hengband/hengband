@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスターの特殊技能とターン経過処理 (移動等)/ Monster spells and movement for passaging a turn
  * @date 2014/01/17
  * @author

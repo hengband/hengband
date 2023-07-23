@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file scene-table-floor.cpp
  * @brief フロアの状況に応じたBGM設定処理実装
  */

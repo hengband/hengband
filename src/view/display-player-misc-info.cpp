@@ -1,4 +1,4 @@
-﻿#include "view/display-player-misc-info.h"
+#include "view/display-player-misc-info.h"
 #include "player-info/class-info.h"
 #include "player-info/mimic-info-table.h"
 #include "player/player-personality.h"
@@ -27,12 +27,11 @@ void display_player_name(PlayerType *player_ptr, bool name_only)
     constexpr std::string_view header = _("名前  : ", "Name  : ");
     const auto length = header.length() + display_name.length();
 
-    int w, h;
-    term_get_size(&w, &h);
-    const auto center_col = (w - length) / 2 - 4; // ヘッダがあるぶん少し左に寄せたほうが見やすい
+    const auto [wid, hgt] = term_get_size();
+    const auto center_col = (wid - length) / 2 - 4; // ヘッダがあるぶん少し左に寄せたほうが見やすい
     constexpr auto row = 1;
 
-    term_erase(0, row, 255);
+    term_erase(0, row);
     term_putstr(center_col, row, -1, TERM_WHITE, header);
     term_putstr(center_col + header.length(), row, -1, TERM_L_BLUE, display_name);
 }

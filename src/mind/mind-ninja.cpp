@@ -1,4 +1,4 @@
-﻿#include "mind/mind-ninja.h"
+#include "mind/mind-ninja.h"
 #include "cmd-action/cmd-attack.h"
 #include "cmd-item/cmd-throw.h"
 #include "combat/combat-options-type.h"

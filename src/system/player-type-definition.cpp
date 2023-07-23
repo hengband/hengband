@@ -1,4 +1,4 @@
-﻿#include "system/player-type-definition.h"
+#include "system/player-type-definition.h"
 #include "market/arena-info-table.h"
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-blindness.h"

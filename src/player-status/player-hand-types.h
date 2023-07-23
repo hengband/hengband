@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /*!< Empty hand status */
 enum empty_hand_status {

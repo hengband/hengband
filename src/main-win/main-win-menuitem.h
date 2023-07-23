@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /*
  * Menu constants -- see "ang_jp.rc", "ang_eng.rc"

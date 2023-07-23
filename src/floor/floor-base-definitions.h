@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /*!
  * @brief ダンジョンの最深層 / Maximum dungeon level.

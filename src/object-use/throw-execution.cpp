@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file throw-util.cpp
  * @brief 投擲処理関連クラス
  * @date 2021/08/20

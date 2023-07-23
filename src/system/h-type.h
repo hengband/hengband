@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /*!
  * @file h-type.h

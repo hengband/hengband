@@ -1,4 +1,4 @@
-﻿#include "net/curl-easy-session.h"
+#include "net/curl-easy-session.h"
 
 #if !defined(DISABLE_NET)
 

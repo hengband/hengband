@@ -1,4 +1,4 @@
-﻿#include "spell-kind/spells-grid.h"
+#include "spell-kind/spells-grid.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"

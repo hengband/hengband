@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスターの思い出を表示する処理
  * @date 2020/06/09
  * @author Hourier
@@ -49,7 +49,7 @@ void roff_top(MonsterRaceId r_idx)
     TERM_COLOR a1 = r_ptr->d_attr;
     TERM_COLOR a2 = r_ptr->x_attr;
 
-    term_erase(0, 0, 255);
+    term_erase(0, 0);
     term_gotoxy(0, 0);
 
 #ifdef JP
@@ -85,7 +85,7 @@ void roff_top(MonsterRaceId r_idx)
 void screen_roff(PlayerType *player_ptr, MonsterRaceId r_idx, monster_lore_mode mode)
 {
     msg_erase();
-    term_erase(0, 1, 255);
+    term_erase(0, 1);
     hook_c_roff = c_roff;
     process_monster_lore(player_ptr, r_idx, mode);
     roff_top(r_idx);
@@ -99,7 +99,7 @@ void screen_roff(PlayerType *player_ptr, MonsterRaceId r_idx, monster_lore_mode 
 void display_roff(PlayerType *player_ptr)
 {
     for (int y = 0; y < game_term->hgt; y++) {
-        term_erase(0, y, 255);
+        term_erase(0, y);
     }
 
     term_gotoxy(0, 1);

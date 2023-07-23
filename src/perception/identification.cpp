@@ -1,4 +1,4 @@
-﻿#include "perception/identification.h"
+#include "perception/identification.h"
 #include "artifact/fixed-art-types.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -26,6 +26,8 @@
 #include "util/buffer-shaper.h"
 #include "util/enum-converter.h"
 #include <algorithm>
+#include <array>
+#include <string>
 
 /*!
  * @brief オブジェクトの*鑑定*内容を詳述して表示する /
@@ -37,7 +39,7 @@
  */
 bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
 {
-    concptr info[128];
+    std::array<std::string, 128> info{};
     int trivial_info = 0;
     auto flags = object_flags(o_ptr);
 
@@ -788,9 +790,7 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
     }
 
     screen_save();
-    int wid, hgt;
-    term_get_size(&wid, &hgt);
-
+    const auto [wid, hgt] = term_get_size();
     std::string item_name;
     if (!(mode & SCROBJ_FAKE_OBJECT)) {
         item_name = describe_flavor(player_ptr, o_ptr, 0);

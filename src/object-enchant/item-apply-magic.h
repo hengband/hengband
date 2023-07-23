@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /*
  * Bit flags for apply_magic()

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file status-first-page.c
  * @brief キャラ基本情報及び技能値の表示
  * @date 2020/02/23

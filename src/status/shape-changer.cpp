@@ -1,4 +1,4 @@
-﻿#include "status/shape-changer.h"
+#include "status/shape-changer.h"
 #include "autopick/autopick-reader-writer.h"
 #include "avatar/avatar.h"
 #include "birth/birth-body-spec.h"

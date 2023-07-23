@@ -1,4 +1,4 @@
-﻿#include "object-use/item-use-checker.h"
+#include "object-use/item-use-checker.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"

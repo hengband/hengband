@@ -1,4 +1,4 @@
-﻿#include "object/object-value.h"
+#include "object/object-value.h"
 #include "monster-race/monster-race.h"
 #include "object/object-flags.h"
 #include "object/object-value-calc.h"

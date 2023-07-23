@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "dungeon/quest.h"
 #include "system/angband.h"

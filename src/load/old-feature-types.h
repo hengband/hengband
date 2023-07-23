@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /*** Terrain Feature Index (see "lib/edit/TerrainDefinitions.txt") ***/
 enum old_feature_type {

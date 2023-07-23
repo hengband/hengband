@@ -1,4 +1,4 @@
-﻿#include "info-reader/general-parser.h"
+#include "info-reader/general-parser.h"
 #include "artifact/fixed-art-types.h"
 #include "dungeon/quest.h"
 #include "grid/feature.h"

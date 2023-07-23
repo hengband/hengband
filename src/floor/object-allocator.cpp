@@ -1,4 +1,4 @@
-﻿#include "floor/object-allocator.h"
+#include "floor/object-allocator.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/dungeon-tunnel-util.h"

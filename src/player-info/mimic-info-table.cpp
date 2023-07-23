@@ -1,4 +1,4 @@
-﻿#include "player-info/mimic-info-table.h"
+#include "player-info/mimic-info-table.h"
 #include "player-info/race-info.h"
 
 #ifdef JP

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief エゴアイテムに関する処理
  * @date 2019/05/02
  * @author deskull

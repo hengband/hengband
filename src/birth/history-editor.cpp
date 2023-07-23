@@ -1,4 +1,4 @@
-﻿#include "birth/history-editor.h"
+#include "birth/history-editor.h"
 #include "io/input-key-acceptor.h"
 #include "io/read-pref-file.h"
 #include "locale/japanese.h"
@@ -110,8 +110,8 @@ void edit_history(PlayerType *player_ptr)
             }
 #endif
         } else if (c == '\r' || c == '\n') {
-            term_erase(0, 11, 255);
-            term_erase(0, 17, 255);
+            term_erase(0, 11);
+            term_erase(0, 17);
             put_str(_("(キャラクターの生い立ち - 編集済み)", "(Character Background - Edited)"), 11, 20);
             break;
         } else if (c == ESCAPE) {

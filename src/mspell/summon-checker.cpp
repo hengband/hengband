@@ -1,4 +1,4 @@
-﻿#include "mspell/summon-checker.h"
+#include "mspell/summon-checker.h"
 #include "monster-attack/monster-attack-table.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
@@ -152,6 +152,9 @@ bool check_summon_specific(PlayerType *player_ptr, MonsterRaceId summoner_idx, M
         is_match |= (r_idx == MonsterRaceId::LION) || (r_idx == MonsterRaceId::BUFFALO) || (r_idx == MonsterRaceId::FIGHTER) || (r_idx == MonsterRaceId::GOLDEN_EAGLE);
         is_match |= (r_idx == MonsterRaceId::SHALLOW_PUDDLE) || (r_idx == MonsterRaceId::DEEP_PUDDLE) || (r_idx == MonsterRaceId::SKY_WHALE);
         return is_match;
+    }
+    case SUMMON_DEAD_UNIQUE: {
+        return monrace.kind_flags.has(MonsterKindType::UNIQUE) && monrace.max_num == 0;
     }
     default:
         return false;

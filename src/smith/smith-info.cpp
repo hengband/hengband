@@ -1,4 +1,4 @@
-﻿#include "smith/smith-info.h"
+#include "smith/smith-info.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "object/tval-types.h"

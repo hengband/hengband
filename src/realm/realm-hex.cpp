@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 呪術の処理実装 / Hex code
  * @date 2014/01/14
  * @author

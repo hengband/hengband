@@ -1,4 +1,4 @@
-﻿#include "load/floor-loader.h"
+#include "load/floor-loader.h"
 #include "floor/floor-generator.h"
 #include "floor/floor-object.h"
 #include "floor/floor-save-util.h"

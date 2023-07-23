@@ -1,4 +1,4 @@
-﻿#include "cmd-action/cmd-open-close.h"
+#include "cmd-action/cmd-open-close.h"
 #include "action/open-close-execution.h"
 #include "action/open-util.h"
 #include "cmd-action/cmd-attack.h"

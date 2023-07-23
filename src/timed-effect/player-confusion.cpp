@@ -1,4 +1,4 @@
-﻿#include "timed-effect/player-confusion.h"
+#include "timed-effect/player-confusion.h"
 
 short PlayerConfusion::current() const
 {

@@ -1,4 +1,4 @@
-﻿#include "game-option/disturbance-options.h"
+#include "game-option/disturbance-options.h"
 
 bool find_ignore_stairs; /* Run past stairs */
 bool find_ignore_doors; /* Run through open doors */

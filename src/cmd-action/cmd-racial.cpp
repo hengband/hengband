@@ -1,4 +1,4 @@
-﻿/*
+/*
  * @brief クラス、種族、突然変異に関するコマンド処理
  * @author Hourier
  * @date 2022/02/24
@@ -302,12 +302,12 @@ static void racial_power_display_explanation(PlayerType *player_ptr, rc_type *rc
 {
     auto &rpi = rc_ptr->power_desc[rc_ptr->command_code];
 
-    term_erase(12, 21, 255);
-    term_erase(12, 20, 255);
-    term_erase(12, 19, 255);
-    term_erase(12, 18, 255);
-    term_erase(12, 17, 255);
-    term_erase(12, 16, 255);
+    term_erase(12, 21);
+    term_erase(12, 20);
+    term_erase(12, 19);
+    term_erase(12, 18);
+    term_erase(12, 17);
+    term_erase(12, 16);
     display_wrap_around(rpi.text, 62, 17, 15);
 
     prt(_("何かキーを押して下さい。", "Hit any key."), 0, 0);

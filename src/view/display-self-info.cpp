@@ -1,4 +1,4 @@
-﻿#include "view/display-self-info.h"
+#include "view/display-self-info.h"
 #include "avatar/avatar.h"
 #include "io/input-key-acceptor.h"
 #include "player-info/alignment.h"

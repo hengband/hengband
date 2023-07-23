@@ -1,4 +1,4 @@
-﻿#include "view/display-lore-drops.h"
+#include "view/display-lore-drops.h"
 #include "lore/lore-util.h"
 #include "monster-race/race-flags1.h"
 #include "util/bit-flags-calculator.h"

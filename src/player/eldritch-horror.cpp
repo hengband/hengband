@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief エルドリッチホラー処理
  * @date 2020/06/07
  * @author Hourier
@@ -7,6 +7,7 @@
 #include "player/eldritch-horror.h"
 #include "core/stuff-handler.h"
 #include "locale/english.h"
+#include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -143,7 +144,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
         }
     } else if (!necro) {
         get_mon_num_prep(player_ptr, get_nightmare, nullptr);
-        auto *r_ptr = &monraces_info[get_mon_num(player_ptr, 0, MAX_DEPTH, 0)];
+        auto *r_ptr = &monraces_info[get_mon_num(player_ptr, 0, MAX_DEPTH, PM_NONE)];
         power = r_ptr->level + 10;
         const auto &desc = r_ptr->name;
         get_mon_num_prep(player_ptr, nullptr, nullptr);

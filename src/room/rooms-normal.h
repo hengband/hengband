@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 struct dun_data_type;
 class PlayerType;

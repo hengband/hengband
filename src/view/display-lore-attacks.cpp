@@ -1,4 +1,4 @@
-﻿#include "view/display-lore-attacks.h"
+#include "view/display-lore-attacks.h"
 #include "locale/japanese.h"
 #include "lore/combat-types-setter.h"
 #include "lore/lore-calculator.h"

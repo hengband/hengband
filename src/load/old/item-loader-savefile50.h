@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "load/item/item-loader-base.h"
 

@@ -1,4 +1,4 @@
-﻿#include "melee/melee-spell-util.h"
+#include "melee/melee-spell-util.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"

@@ -1,4 +1,4 @@
-﻿#include "game-option/auto-destruction-options.h"
+#include "game-option/auto-destruction-options.h"
 
 bool destroy_items; /* Use easy auto-destroyer */
 bool destroy_feeling; /* Apply auto-destroy as sense feeling */

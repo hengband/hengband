@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  *  @file japanese.cpp
  *  @brief 日本語処理関数
  *  @date 2014/07/07

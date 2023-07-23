@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #ifndef JP
 void plural_aux(char *Name);

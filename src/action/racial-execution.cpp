@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file racial-execution.cpp
  * @brief レイシャルパワー実行処理実装
  */

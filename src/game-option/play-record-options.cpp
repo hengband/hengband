@@ -1,4 +1,4 @@
-﻿#include "game-option/play-record-options.h"
+#include "game-option/play-record-options.h"
 
 bool record_fix_art; /* Record fixed artifacts */
 bool record_rand_art; /* Record random artifacts */

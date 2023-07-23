@@ -1,4 +1,4 @@
-﻿#include "birth/birth-wizard.h"
+#include "birth/birth-wizard.h"
 #include "avatar/avatar.h"
 #include "birth/auto-roller.h"
 #include "birth/birth-body-spec.h"

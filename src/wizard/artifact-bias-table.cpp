@@ -1,4 +1,4 @@
-﻿#include "wizard/artifact-bias-table.h"
+#include "wizard/artifact-bias-table.h"
 
 /*!
  * @brief ランダムアーティファクトのバイアス名称テーブル

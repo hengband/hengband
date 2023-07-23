@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class PlayerType;
 bool activate_teleport_away(PlayerType *player_ptr);

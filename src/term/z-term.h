@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /*
  * Copyright (c) 1997 Ben Harrison
@@ -14,6 +14,7 @@
 #include <optional>
 #include <stack>
 #include <string_view>
+#include <utility>
 #include <vector>
 
 /*!
@@ -190,7 +191,6 @@ private:
 /**** Available Variables ****/
 extern term_type *game_term;
 
-errr term_win_nuke(term_win *s, TERM_LEN w, TERM_LEN h);
 errr term_user(int n);
 errr term_xtra(int n, int v);
 
@@ -208,13 +208,13 @@ errr term_add_bigch(TERM_COLOR a, char c);
 errr term_addstr(int n, TERM_COLOR a, std::string_view sv);
 errr term_putch(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
 errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, std::string_view sv);
-errr term_erase(TERM_LEN x, TERM_LEN y, int n);
+errr term_erase(TERM_LEN x, TERM_LEN y, std::optional<int> n_opt = std::nullopt);
 errr term_clear(void);
 errr term_redraw(void);
 errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2);
 
 errr term_get_cursor(int *v);
-errr term_get_size(TERM_LEN *w, TERM_LEN *h);
+std::pair<int, int> term_get_size();
 errr term_locate(TERM_LEN *x, TERM_LEN *y);
 errr term_what(TERM_LEN x, TERM_LEN y, TERM_COLOR *a, char *c);
 

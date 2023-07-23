@@ -1,4 +1,4 @@
-﻿#include "flavor/flag-inscriptions-table.h"
+#include "flavor/flag-inscriptions-table.h"
 #include "object-enchant/tr-types.h"
 
 #ifdef JP

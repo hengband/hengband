@@ -1,4 +1,4 @@
-﻿#include "cmd-item/cmd-destroy.h"
+#include "cmd-item/cmd-destroy.h"
 #include "autopick/autopick-registry.h"
 #include "autopick/autopick.h"
 #include "avatar/avatar.h"

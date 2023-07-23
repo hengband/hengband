@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file sound-of-music.cpp
  * @brief BGM及び効果音のterm出力処理実装
  */

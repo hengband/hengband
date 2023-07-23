@@ -1,4 +1,4 @@
-﻿#include "wizard/tval-descriptions-table.h"
+#include "wizard/tval-descriptions-table.h"
 #include "object/tval-types.h"
 
 /*!

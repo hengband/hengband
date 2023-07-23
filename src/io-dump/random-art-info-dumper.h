@@ -1,6 +1,4 @@
-﻿#pragma once
-
-#include "system/angband.h"
+#pragma once
 
 class PlayerType;
-void spoil_random_artifact(PlayerType *player_ptr, concptr fname);
+void spoil_random_artifact(PlayerType *player_ptr);

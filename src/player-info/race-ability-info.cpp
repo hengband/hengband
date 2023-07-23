@@ -1,4 +1,4 @@
-﻿#include "player-info/race-ability-info.h"
+#include "player-info/race-ability-info.h"
 #include "player-info/self-info-util.h"
 #include "system/player-type-definition.h"
 #include "term/z-form.h"

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file x11-gamma-builder.cpp
  * @brief X11環境 (の中でもmaid-x11を必要とする特殊な環境)でガンマ値を調整する
  * @date 2020/05/16

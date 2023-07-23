@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief ウィザードモードの処理(特別処理中心) / Wizard commands
  * @date 2014/09/07
  * @author
@@ -92,6 +92,7 @@
 #include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
+#include "util/candidate-selector.h"
 #include "util/enum-converter.h"
 #include "util/finalizer.h"
 #include "util/int-char-converter.h"
@@ -285,53 +286,11 @@ static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArt
  */
 static std::optional<FixedArtifactId> wiz_select_named_artifact(PlayerType *player_ptr, const std::vector<FixedArtifactId> &a_idx_list)
 {
-    constexpr auto MAX_PER_PAGE = 20UL;
-    const auto page_max = (a_idx_list.size() - 1) / MAX_PER_PAGE + 1;
-    auto current_page = 0UL;
+    CandidateSelector cs("Which artifact: ", 15);
 
-    screen_save();
-
-    std::optional<FixedArtifactId> selected_a_idx;
-
-    while (!selected_a_idx.has_value()) {
-        const auto page_base_idx = current_page * MAX_PER_PAGE;
-        for (auto i = 0U; i < MAX_PER_PAGE + 1; ++i) {
-            term_erase(14, i + 1, 255);
-        }
-        const auto page_item_count = std::min(MAX_PER_PAGE, a_idx_list.size() - page_base_idx);
-        for (auto i = 0U; i < page_item_count; ++i) {
-            std::stringstream ss;
-            ss << I2A(i) << ") " << wiz_make_named_artifact_desc(player_ptr, a_idx_list[page_base_idx + i]);
-            put_str(ss.str(), i + 1, 15);
-        }
-        if (page_max > 1) {
-            put_str(format("-- more (%lu/%lu) --", current_page + 1, page_max), page_item_count + 1, 15);
-        }
-
-        const auto command = input_command("Which artifact: ");
-        const auto cmd = command.value_or(ESCAPE);
-        switch (cmd) {
-        case ESCAPE:
-            screen_load();
-            return selected_a_idx;
-        case ' ':
-            current_page++;
-            if (current_page >= page_max) {
-                current_page = 0;
-            }
-            break;
-        default:
-            const auto select_idx = A2I(cmd) + page_base_idx;
-            if (select_idx < a_idx_list.size()) {
-                selected_a_idx = a_idx_list[select_idx];
-            }
-            break;
-        }
-    }
-
-    screen_load();
-
-    return selected_a_idx;
+    auto describe_artifact = [player_ptr](FixedArtifactId a_idx) { return wiz_make_named_artifact_desc(player_ptr, a_idx); };
+    const auto it = cs.select(a_idx_list, describe_artifact);
+    return (it != a_idx_list.end()) ? std::make_optional(*it) : std::nullopt;
 }
 
 /**
@@ -365,26 +324,25 @@ void wiz_create_named_art(PlayerType *player_ptr)
         const auto &[tval_lit, name] = group_artifact_list[i];
         std::stringstream ss;
         ss << I2A(i) << ") " << name;
-        term_erase(14, i + 1, 255);
+        term_erase(14, i + 1);
         put_str(ss.str(), i + 1, 15);
     }
 
     std::optional<FixedArtifactId> create_a_idx;
-    while (!create_a_idx.has_value()) {
+    while (!create_a_idx) {
         const auto command = input_command("Kind of artifact: ");
-        const auto cmd = command.value_or(ESCAPE);
-        switch (cmd) {
-        case ESCAPE:
+        if (!command) {
             screen_load();
             return;
-        default:
-            if (auto idx = A2I(cmd); idx < group_artifact_list.size()) {
-                const auto &a_idx_list = wiz_collect_group_a_idx(group_artifact_list[idx]);
-                create_a_idx = wiz_select_named_artifact(player_ptr, a_idx_list);
-            }
-
-            break;
         }
+
+        const auto idx = A2I(*command);
+        if (idx >= group_artifact_list.size()) {
+            continue;
+        }
+
+        const auto a_idx_list = wiz_collect_group_a_idx(group_artifact_list[idx]);
+        create_a_idx = wiz_select_named_artifact(player_ptr, a_idx_list);
     }
 
     screen_load();

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief スナイパー技能の実装 / Sniping
  * @date 2014/01/18
  * @author
@@ -320,7 +320,7 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
                 /* Dump the spells */
                 for (i = 0; i < MAX_SNIPE_POWERS; i++) {
                     term_color_type tcol = TERM_WHITE;
-                    term_erase(x, y + i + 1, 255);
+                    term_erase(x, y + i + 1);
 
                     /* Access the spell */
                     spell = snipe_powers[i];
@@ -654,11 +654,11 @@ void do_cmd_snipe_browse(PlayerType *player_ptr)
         }
 
         /* Clear lines, position cursor  (really should use strlen here) */
-        term_erase(12, 22, 255);
-        term_erase(12, 21, 255);
-        term_erase(12, 20, 255);
-        term_erase(12, 19, 255);
-        term_erase(12, 18, 255);
+        term_erase(12, 22);
+        term_erase(12, 21);
+        term_erase(12, 20);
+        term_erase(12, 19);
+        term_erase(12, 18);
 
         display_wrap_around(snipe_tips[n], 62, 19, 15);
     }

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief セーブファイル読み込み処理 / Purpose: support for loading savefiles -BEN-
  * @date 2014/07/07
  * @author

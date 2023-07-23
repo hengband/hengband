@@ -1,4 +1,4 @@
-﻿#include "store/say-comments.h"
+#include "store/say-comments.h"
 #include "avatar/avatar.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"

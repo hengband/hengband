@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class PlayerType;
 void check_random_quest_auto_failure(PlayerType *player_ptr);

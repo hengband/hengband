@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file tunnel-execution.h
  * @brief 掘削処理ヘッダ

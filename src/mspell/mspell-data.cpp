@@ -1,4 +1,4 @@
-﻿#include "mspell/mspell-data.h"
+#include "mspell/mspell-data.h"
 #include "effect/attribute-types.h"
 #include "monster/monster-update.h"
 #include "mspell/mspell-util.h"

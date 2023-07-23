@@ -1,4 +1,4 @@
-﻿#include "mind/mind-weaponsmith.h"
+#include "mind/mind-weaponsmith.h"
 #include "action/action-limited.h"
 #include "autopick/autopick.h"
 #include "core/asking-player.h"
@@ -667,12 +667,12 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
             }
 
             if (only_browse) {
-                term_erase(14, 21, 255);
-                term_erase(14, 20, 255);
-                term_erase(14, 19, 255);
-                term_erase(14, 18, 255);
-                term_erase(14, 17, 255);
-                term_erase(14, 16, 255);
+                term_erase(14, 21);
+                term_erase(14, 20);
+                term_erase(14, 19);
+                term_erase(14, 18);
+                term_erase(14, 17);
+                term_erase(14, 16);
                 if (mode > 0) {
                     display_wrap_around(kaji_tips[mode - 1], 62, 17, 15);
                 }

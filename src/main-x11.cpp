@@ -1,4 +1,4 @@
-﻿/* File: main-x11.c */
+/* File: main-x11.c */
 
 /*
  * Copyright (c) 1997 Ben Harrison, and others

@@ -1,4 +1,4 @@
-﻿#include "room/rooms-special.h"
+#include "room/rooms-special.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor//geometry.h"
 #include "floor/floor-generator.h"

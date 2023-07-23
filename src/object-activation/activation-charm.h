@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class PlayerType;
 bool activate_charm_animal(PlayerType *player_ptr);

@@ -1,4 +1,4 @@
-﻿#include "object-enchant/weapon/abstract-weapon-enchanter.h"
+#include "object-enchant/weapon/abstract-weapon-enchanter.h"
 #include "object-enchant/object-boost.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-weapon-types.h"

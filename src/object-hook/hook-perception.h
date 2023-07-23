@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class ItemEntity;
 bool object_is_nameless_weapon_armour(const ItemEntity *o_ptr);

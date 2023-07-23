@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum class SaveDataMonsterFlagType {
     AP_R_IDX = 0x00000001,

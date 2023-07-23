@@ -1,4 +1,4 @@
-﻿#include "system/redrawing-flags-updater.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/enum-range.h"
 
 RedrawingFlagsUpdater RedrawingFlagsUpdater::instance{};

@@ -1,4 +1,4 @@
-﻿#include "specific-object/death-crimson.h"
+#include "specific-object/death-crimson.h"
 #include "artifact/fixed-art-types.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"

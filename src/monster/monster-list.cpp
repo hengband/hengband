@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスター処理 / misc code for monsters
  * @date 2014/07/08
  * @author
@@ -20,6 +20,7 @@
 #include "game-option/cheat-options.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-summon.h"
+#include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-kind-mask.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-brightness-mask.h"
@@ -42,6 +43,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "util/bit-flags-calculator.h"
 #include "util/probability-table.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -92,7 +94,7 @@ MONSTER_IDX m_pop(FloorType *floor_ptr)
  * @return 選択されたモンスター生成種族
  * @details nasty生成 (ゲーム内経過日数に応じて、現在フロアより深いフロアのモンスターを出現させる仕様)は
  */
-MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_level, BIT_FLAGS option)
+MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_level, BIT_FLAGS mode)
 {
     /* town max_level : same delay as 10F, no nasty mons till day18 */
     auto delay = static_cast<int>(std::sqrt(max_level * 10000)) + (max_level * 5);
@@ -128,7 +130,7 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
     }
 
     /* Boost the max_level */
-    if ((option & GMN_ARENA) || dungeon.flags.has_not(DungeonFeatureType::BEGINNER)) {
+    if (any_bits(mode, PM_ARENA) || dungeon.flags.has_not(DungeonFeatureType::BEGINNER)) {
         /* Nightmare mode allows more out-of depth monsters */
         if (ironman_nightmare && !randint0(chance_nasty)) {
             /* What a bizarre calculation */
@@ -155,8 +157,8 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
         } // sorted by depth array,
         auto r_idx = i2enum<MonsterRaceId>(entry.index);
         auto r_ptr = &monraces_info[r_idx];
-        if (!(option & GMN_ARENA) && !chameleon_change_m_idx) {
-            if ((r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) && (r_ptr->cur_num >= r_ptr->max_num)) {
+        if (none_bits(mode, PM_ARENA) && !chameleon_change_m_idx) {
+            if ((r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) && (r_ptr->cur_num >= r_ptr->max_num) && none_bits(mode, PM_CLONE)) {
                 continue;
             }
 

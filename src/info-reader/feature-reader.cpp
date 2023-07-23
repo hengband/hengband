@@ -1,4 +1,4 @@
-﻿#include "info-reader/feature-reader.h"
+#include "info-reader/feature-reader.h"
 #include "floor/wild.h"
 #include "grid/feature.h"
 #include "grid/grid.h"

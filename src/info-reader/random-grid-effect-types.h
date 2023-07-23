@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /* Random dungeon grid effects */
 enum rdge_type {

@@ -1,4 +1,4 @@
-﻿#include "monster-floor/monster-summon.h"
+#include "monster-floor/monster-summon.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/geometry.h"
 #include "floor/wild.h"
@@ -145,7 +145,7 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX who, POSITION y1, POSIT
     get_mon_num_prep(player_ptr, summon_specific_okay, get_monster_hook2(player_ptr, y, x));
 
     DEPTH dlev = get_dungeon_or_wilderness_level(player_ptr);
-    MonsterRaceId r_idx = get_mon_num(player_ptr, 0, (dlev + lev) / 2 + 5, 0);
+    MonsterRaceId r_idx = get_mon_num(player_ptr, 0, (dlev + lev) / 2 + 5, mode);
     if (!MonsterRace(r_idx).is_valid()) {
         summon_specific_type = SUMMON_NONE;
         return false;

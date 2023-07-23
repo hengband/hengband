@@ -1,4 +1,4 @@
-﻿#include "object-activation/activation-bolt-ball.h"
+#include "object-activation/activation-bolt-ball.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"

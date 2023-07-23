@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 地形に関する情報を表示する
  * @date 2020/04/24
  * @author Hourier
@@ -92,7 +92,7 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
     }
 
     for (; i < per_page; i++) {
-        term_erase(col, row + i, 255);
+        term_erase(col, row + i);
     }
 }
 
@@ -106,9 +106,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     TERM_COLOR attr_old[F_LIT_MAX] = {};
     char char_old[F_LIT_MAX] = {};
 
-    TERM_LEN wid, hgt;
-    term_get_size(&wid, &hgt);
-
+    const auto [wid, hgt] = term_get_size();
     std::vector<FEAT_IDX> feat_idx(terrains_info.size());
 
     concptr feature_group_text[] = { "terrains", nullptr };

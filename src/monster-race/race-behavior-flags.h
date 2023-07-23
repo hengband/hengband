@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum class MonsterBehaviorType {
     NEVER_BLOW = 0,

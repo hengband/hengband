@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスターをフロアに1体配置する処理
  * @date 2020/06/13
  * @author Hourier
@@ -102,7 +102,7 @@ static MonsterRaceId initial_r_appearance(PlayerType *player_ptr, MonsterRaceId 
     int attempts = 1000;
     DEPTH min = std::min(floor_ptr->base_level - 5, 50);
     while (--attempts) {
-        auto ap_r_idx = get_mon_num(player_ptr, 0, floor_ptr->base_level + 10, 0);
+        auto ap_r_idx = get_mon_num(player_ptr, 0, floor_ptr->base_level + 10, PM_NONE);
         if (monraces_info[ap_r_idx].level >= min) {
             return ap_r_idx;
         }
@@ -117,9 +117,13 @@ static MonsterRaceId initial_r_appearance(PlayerType *player_ptr, MonsterRaceId 
  * @param r_idx 生成モンスター種族
  * @return ユニークの生成が不可能な条件ならFALSE、それ以外はTRUE
  */
-static bool check_unique_placeable(PlayerType *player_ptr, MonsterRaceId r_idx)
+static bool check_unique_placeable(PlayerType *player_ptr, MonsterRaceId r_idx, BIT_FLAGS mode)
 {
     if (player_ptr->phase_out) {
+        return true;
+    }
+
+    if (any_bits(mode, PM_CLONE)) {
         return true;
     }
 
@@ -277,7 +281,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
         return false;
     }
 
-    if (!check_unique_placeable(player_ptr, r_idx) || !check_quest_placeable(floor, r_idx) || !check_procection_rune(player_ptr, r_idx, y, x)) {
+    if (!check_unique_placeable(player_ptr, r_idx, mode) || !check_quest_placeable(floor, r_idx) || !check_procection_rune(player_ptr, r_idx, y, x)) {
         return false;
     }
 

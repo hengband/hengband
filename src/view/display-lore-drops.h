@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 struct lore_type;
 void display_monster_drop_quantity(lore_type *lore_ptr);

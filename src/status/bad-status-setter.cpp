@@ -1,4 +1,4 @@
-﻿#include "status/bad-status-setter.h"
+#include "status/bad-status-setter.h"
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
 #include "core/stuff-handler.h"

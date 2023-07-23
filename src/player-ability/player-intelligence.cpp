@@ -1,4 +1,4 @@
-﻿#include "player-ability/player-intelligence.h"
+#include "player-ability/player-intelligence.h"
 #include "mutation/mutation-flag-types.h"
 #include "object/object-flags.h"
 #include "player-base/player-class.h"

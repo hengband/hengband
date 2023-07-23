@@ -1,4 +1,4 @@
-﻿#include "mind/mind-magic-eater.h"
+#include "mind/mind-magic-eater.h"
 #include "flavor/flavor-describer.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"

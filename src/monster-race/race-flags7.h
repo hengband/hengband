@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum race_flags7 {
     RF7_AQUATIC = 0x00000001, /* Aquatic monster */

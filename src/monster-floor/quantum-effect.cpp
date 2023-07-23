@@ -1,4 +1,4 @@
-﻿#include "monster-floor/quantum-effect.h"
+#include "monster-floor/quantum-effect.h"
 #include "effect/attribute-types.h"
 #include "floor/line-of-sight.h"
 #include "monster-floor/monster-death.h"

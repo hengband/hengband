@@ -1,4 +1,4 @@
-﻿#include "player/player-status.h"
+#include "player/player-status.h"
 #include "artifact/fixed-art-types.h"
 #include "autopick/autopick-reader-writer.h"
 #include "autopick/autopick.h"

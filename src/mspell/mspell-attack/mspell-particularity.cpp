@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief ボルトでもボールでもブレスでもなく、ダメージを与える特殊なスペルの実行 /
  * Performing special spells that take damage, not bolts, balls or breaths
  * @date 2020/05/16

@@ -1,4 +1,4 @@
-﻿#include "market/building-recharger.h"
+#include "market/building-recharger.h"
 #include "autopick/autopick.h"
 #include "core/asking-player.h"
 #include "core/window-redrawer.h"

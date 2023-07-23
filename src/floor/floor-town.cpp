@@ -1,4 +1,4 @@
-﻿#include "floor/floor-town.h"
+#include "floor/floor-town.h"
 #include "system/item-entity.h"
 
 /* The towns [towns_info.size()] */

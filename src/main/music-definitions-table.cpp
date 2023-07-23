@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file music-definitions-table.cpp
  * @brief 設定ファイル用のBGM名定義
  */

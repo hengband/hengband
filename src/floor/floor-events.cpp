@@ -1,4 +1,4 @@
-﻿#include "floor/floor-events.h"
+#include "floor/floor-events.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/disturbance.h"
 #include "core/window-redrawer.h"

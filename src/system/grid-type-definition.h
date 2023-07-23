@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "object/object-index-list.h"
 #include "system/angband.h"

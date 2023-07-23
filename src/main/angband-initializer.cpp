@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file angband-initializer.cpp
  * @brief 変愚蛮怒のシステム初期化
  * @date 2014/01/28
@@ -107,7 +107,7 @@ void init_file_paths(const std::filesystem::path &libpath)
  */
 static void init_note_term(concptr str)
 {
-    term_erase(0, 23, 255);
+    term_erase(0, 23);
     term_putstr(20, 23, -1, TERM_WHITE, str);
     term_fresh();
 }

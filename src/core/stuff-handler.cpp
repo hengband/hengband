@@ -1,4 +1,4 @@
-﻿#include "core/stuff-handler.h"
+#include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "player/player-status.h"
 #include "system/player-type-definition.h"

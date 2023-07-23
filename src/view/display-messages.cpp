@@ -1,4 +1,4 @@
-﻿#include "view/display-messages.h"
+#include "view/display-messages.h"
 #include "core/window-redrawer.h"
 #include "game-option/cheat-options.h"
 #include "game-option/input-options.h"
@@ -253,7 +253,7 @@ static void msg_flush(PlayerType *player_ptr, int x)
         }
     }
 
-    term_erase(0, 0, 255);
+    term_erase(0, 0);
 }
 
 void msg_erase(void)
@@ -331,7 +331,7 @@ void msg_print(std::string_view msg)
     }
 
     if (!msg_flag) {
-        term_erase(0, 0, 255);
+        term_erase(0, 0);
         msg_head_pos = 0;
     }
 
@@ -380,7 +380,7 @@ void msg_print(std::nullptr_t)
     }
 
     if (!msg_flag) {
-        term_erase(0, 0, 255);
+        term_erase(0, 0);
         msg_head_pos = 0;
     }
 

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "system/angband.h"
 
 //! モンスターが魔法を使った際の結果。

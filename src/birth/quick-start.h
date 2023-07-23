@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "player-info/class-types.h"
 #include "player-info/race-types.h"

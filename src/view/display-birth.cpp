@@ -1,4 +1,4 @@
-﻿#include "view/display-birth.h"
+#include "view/display-birth.h"
 #include "birth/auto-roller.h"
 #include "birth/birth-stat.h"
 #include "game-option/birth-options.h"

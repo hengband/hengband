@@ -1,4 +1,4 @@
-﻿#include "market/bounty-prize-table.h"
+#include "market/bounty-prize-table.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-potion-types.h"
 #include "sv-definition/sv-scroll-types.h"

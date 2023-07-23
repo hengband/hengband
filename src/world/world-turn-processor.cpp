@@ -1,4 +1,4 @@
-﻿#include "world/world-turn-processor.h"
+#include "world/world-turn-processor.h"
 #include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-save.h"
 #include "core/disturbance.h"
@@ -103,9 +103,8 @@ void WorldTurnProcessor::process_world()
  */
 void WorldTurnProcessor::print_time()
 {
-    TERM_LEN width, height;
-    term_get_size(&width, &height);
-    const auto row = height + ROW_DAY;
+    const auto [wid, hgt] = term_get_size();
+    const auto row = hgt + ROW_DAY;
 
     int day;
     c_put_str(TERM_WHITE, "             ", row, COL_DAY);

@@ -1,4 +1,4 @@
-﻿/* File: z-rand.h */
+/* File: z-rand.h */
 
 /*
  * Copyright (c) 1997 Ben Harrison, and others

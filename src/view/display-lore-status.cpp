@@ -1,4 +1,4 @@
-﻿#include "view/display-lore-status.h"
+#include "view/display-lore-status.h"
 #include "locale/japanese.h"
 #include "lore/lore-calculator.h"
 #include "lore/lore-util.h"

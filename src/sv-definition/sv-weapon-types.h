@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /* The "sval" values for TV_HAFTED */
 enum sv_hafted_type {

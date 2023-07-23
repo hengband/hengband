@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file blue-magic-breath.cpp
  * @brief 青魔法のブレス系呪文定義
  */

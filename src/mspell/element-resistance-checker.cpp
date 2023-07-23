@@ -1,4 +1,4 @@
-﻿#include "mspell/element-resistance-checker.h"
+#include "mspell/element-resistance-checker.h"
 #include "game-option/birth-options.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster/smart-learn-types.h"

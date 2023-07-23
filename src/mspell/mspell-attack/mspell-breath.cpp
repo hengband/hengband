@@ -1,4 +1,4 @@
-﻿#include "mspell/mspell-attack/mspell-breath.h"
+#include "mspell/mspell-attack/mspell-breath.h"
 #include "core/disturbance.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-processor.h"

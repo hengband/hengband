@@ -1,4 +1,4 @@
-﻿#include "io-dump/character-dump.h"
+#include "io-dump/character-dump.h"
 #include "artifact/fixed-art-types.h"
 #include "avatar/avatar.h"
 #include "cmd-building/cmd-building.h"

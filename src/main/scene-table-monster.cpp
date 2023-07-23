@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file scene-table-monster.cpp
  * @brief モンスターの遭遇状況に応じたBGM設定処理実装
  */

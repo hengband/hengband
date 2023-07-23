@@ -1,4 +1,4 @@
-﻿#include "view/display-map.h"
+#include "view/display-map.h"
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-util.h"

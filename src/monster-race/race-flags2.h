@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum race_flags2 {
     RF2_STUPID = 0x00000001, /*!< モンスター特性: 愚かな行動を取る / Monster is stupid */

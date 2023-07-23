@@ -1,4 +1,4 @@
-﻿#include "cmd-building/cmd-inn.h"
+#include "cmd-building/cmd-inn.h"
 #include "cmd-item/cmd-magiceat.h"
 #include "core/turn-compensator.h"
 #include "game-option/birth-options.h"

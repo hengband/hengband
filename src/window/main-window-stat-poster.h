@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class PlayerType;
 void print_stat(PlayerType *player_ptr, int stat);

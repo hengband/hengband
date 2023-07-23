@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file blue-magic-status.cpp
  * @brief 青魔法の状態異常系スペル定義
  */

@@ -1,6 +1,7 @@
-﻿#include "monster-race/monster-race-hook.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-table.h"
+#include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster-race/race-flags-resistance.h"
@@ -37,7 +38,7 @@ EnumClassFlagGroup<MonsterAbilityType> vault_aux_dragon_mask4;
 void vault_prep_clone(PlayerType *player_ptr)
 {
     get_mon_num_prep(player_ptr, vault_aux_simple, nullptr);
-    vault_aux_race = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, 0);
+    vault_aux_race = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
     get_mon_num_prep(player_ptr, nullptr, nullptr);
 }
 
@@ -48,7 +49,7 @@ void vault_prep_clone(PlayerType *player_ptr)
 void vault_prep_symbol(PlayerType *player_ptr)
 {
     get_mon_num_prep(player_ptr, vault_aux_simple, nullptr);
-    MonsterRaceId r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, 0);
+    MonsterRaceId r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
     get_mon_num_prep(player_ptr, nullptr, nullptr);
     vault_aux_char = monraces_info[r_idx].d_char;
 }

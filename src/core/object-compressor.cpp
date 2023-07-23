@@ -1,4 +1,4 @@
-﻿#include "core/object-compressor.h"
+#include "core/object-compressor.h"
 #include "core/window-redrawer.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"

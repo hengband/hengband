@@ -1,4 +1,4 @@
-﻿#include "object-hook/hook-armor.h"
+#include "object-hook/hook-armor.h"
 #include "inventory/inventory-slot-types.h"
 #include "object/object-info.h"
 #include "player/player-sex.h"

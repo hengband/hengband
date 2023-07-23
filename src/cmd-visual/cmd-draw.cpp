@@ -1,4 +1,4 @@
-﻿#include "cmd-visual/cmd-draw.h"
+#include "cmd-visual/cmd-draw.h"
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
@@ -205,8 +205,7 @@ void do_cmd_messages(int num_now)
     std::string shower_str("");
     std::string finder_str("");
     std::string shower("");
-    int wid, hgt;
-    term_get_size(&wid, &hgt);
+    const auto [wid, hgt] = term_get_size();
     auto num_lines = hgt - 4;
     auto n = message_num();
     auto i = 0;
@@ -238,7 +237,7 @@ void do_cmd_messages(int num_now)
         }
 
         for (; j < num_lines; j++) {
-            term_erase(0, num_lines + 1 - j, 255);
+            term_erase(0, num_lines + 1 - j);
         }
 
         prt(format(_("以前のメッセージ %d-%d 全部で(%d)", "Message Recall (%d-%d of %d)"), i, i + j - 1, n), 0, 0);

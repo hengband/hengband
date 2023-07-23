@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class PlayerType;
 void do_cmd_save_game(PlayerType *player_ptr, int is_autosave);

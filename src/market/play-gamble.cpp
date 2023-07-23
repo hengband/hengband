@@ -1,4 +1,4 @@
-﻿#include "market/play-gamble.h"
+#include "market/play-gamble.h"
 #include "avatar/avatar.h"
 #include "core/asking-player.h"
 #include "core/show-file.h"

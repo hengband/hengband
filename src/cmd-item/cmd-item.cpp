@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  *  @brief プレイヤーのアイテムに関するコマンドの実装1 / Inventory and equipment commands
  *  @date 2014/01/02
  *  @author
@@ -99,8 +99,7 @@ void do_cmd_inven(PlayerType *player_ptr)
         return;
     }
 
-    TERM_LEN wid, hgt;
-    term_get_size(&wid, &hgt);
+    const auto [wid, hgt] = term_get_size();
     command_new = 0;
     command_gap = wid - 30;
 }

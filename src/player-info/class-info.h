@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /* 人畜無害なenumヘッダを先に読み込む */
 #include "system/angband.h"

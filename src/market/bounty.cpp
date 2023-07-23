@@ -1,4 +1,4 @@
-﻿#include "market/bounty.h"
+#include "market/bounty.h"
 #include "autopick/autopick.h"
 #include "avatar/avatar.h"
 #include "cmd-building/cmd-building.h"
@@ -11,6 +11,7 @@
 #include "io/input-key-acceptor.h"
 #include "market/bounty-prize-table.h"
 #include "market/building-util.h"
+#include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -288,7 +289,7 @@ void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
     get_mon_num_prep_bounty(player_ptr);
 
     while (true) {
-        w_ptr->today_mon = get_mon_num(player_ptr, std::min(max_dl / 2, 40), max_dl, GMN_ARENA);
+        w_ptr->today_mon = get_mon_num(player_ptr, std::min(max_dl / 2, 40), max_dl, PM_ARENA);
         MonsterRaceInfo *r_ptr;
         r_ptr = &monraces_info[w_ptr->today_mon];
 
@@ -337,7 +338,7 @@ void determine_bounty_uniques(PlayerType *player_ptr)
     // 賞金首とするモンスターの種族IDのリストを生成
     std::vector<MonsterRaceId> bounty_r_idx_list;
     while (bounty_r_idx_list.size() < std::size(w_ptr->bounties)) {
-        auto r_idx = get_mon_num(player_ptr, 0, MAX_DEPTH - 1, GMN_ARENA);
+        auto r_idx = get_mon_num(player_ptr, 0, MAX_DEPTH - 1, PM_ARENA);
         if (!is_suitable_for_bounty(r_idx)) {
             continue;
         }

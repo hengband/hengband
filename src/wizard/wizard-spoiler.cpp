@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief スポイラー出力処理 (行数の都合でモンスター進化ツリーもここに入っている)
  * @date 2014/02/17
  * @author
@@ -47,6 +47,7 @@
 #include <set>
 #include <sstream>
 #include <string>
+#include <string_view>
 
 static constexpr std::array<std::string_view, 6> wiz_spell_stat = { {
     _("腕力", "STR"),
@@ -62,7 +63,7 @@ static constexpr std::array<std::string_view, 6> wiz_spell_stat = { {
  *
  * @return 進化ツリーの一番根元となるモンスターのIDのリスト(std::setで、evol_root_sortによりソートされている)
  */
-static auto get_mon_evol_roots(void)
+static auto get_mon_evol_roots()
 {
     std::set<MonsterRaceId> evol_parents;
     std::set<MonsterRaceId> evol_children;
@@ -93,13 +94,12 @@ static auto get_mon_evol_roots(void)
 }
 
 /*!
- * @brief 進化ツリーをスポイラー出力するメインルーチン /
- * Print monsters' evolution information to file
- * @param fname 出力ファイル名
+ * @brief 進化ツリーをスポイラー出力するメインルーチン
+ * @param filename 出力ファイル名
  */
-static SpoilerOutputResultType spoil_mon_evol(concptr fname)
+static SpoilerOutputResultType spoil_mon_evol(std::string_view filename)
 {
-    const auto &path = path_build(ANGBAND_DIR_USER, fname);
+    const auto &path = path_build(ANGBAND_DIR_USER, filename);
     spoiler_file = angband_fopen(path, FileOpenMode::WRITE);
     if (!spoiler_file) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
@@ -252,10 +252,10 @@ void exe_output_spoilers(void)
             screen_load();
             return;
         case '1':
-            status = spoil_obj_desc("obj-desc.txt");
+            status = spoil_obj_desc();
             break;
         case '2':
-            status = spoil_fixed_artifact("artifact.txt");
+            status = spoil_fixed_artifact();
             break;
         case '3':
             status = spoil_mon_desc("mon-desc.txt");
@@ -299,14 +299,14 @@ void exe_output_spoilers(void)
  * Create Spoiler files -BEN-
  * @return 成功時SPOILER_OUTPUT_SUCCESS / 失敗時エラー状態
  */
-SpoilerOutputResultType output_all_spoilers(void)
+SpoilerOutputResultType output_all_spoilers()
 {
-    auto status = spoil_obj_desc("obj-desc.txt");
+    auto status = spoil_obj_desc();
     if (status != SpoilerOutputResultType::SUCCESSFUL) {
         return status;
     }
 
-    status = spoil_fixed_artifact("artifact.txt");
+    status = spoil_fixed_artifact();
     if (status != SpoilerOutputResultType::SUCCESSFUL) {
         return status;
     }

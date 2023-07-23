@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 鏡使いの鏡魔法効果処理
  * @date 2022/03/07
  * @author Hourier

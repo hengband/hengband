@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file artifact-info.h
  * @brief アーティファクトの発動効果取得関数ヘッダ
  */

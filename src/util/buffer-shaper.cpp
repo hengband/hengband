@@ -1,4 +1,4 @@
-﻿#include "util/buffer-shaper.h"
+#include "util/buffer-shaper.h"
 #include "locale/japanese.h"
 #include <algorithm>
 #include <array>

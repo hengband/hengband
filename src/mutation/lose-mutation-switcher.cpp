@@ -1,4 +1,4 @@
-﻿#include "mutation/lose-mutation-switcher.h"
+#include "mutation/lose-mutation-switcher.h"
 #include "mutation/mutation-flag-types.h"
 #include "mutation/mutation-util.h"
 #include "system/player-type-definition.h"

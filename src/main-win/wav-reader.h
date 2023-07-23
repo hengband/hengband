@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file wav-reader.h
  * @brief Windows版固有実装(WAVファイル読込)ヘッダ

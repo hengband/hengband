@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief UNIX用ユーザID定義
  * @author Hourier
  * @date 2023/05/27

@@ -1,4 +1,4 @@
-﻿#include "birth/game-play-initializer.h"
+#include "birth/game-play-initializer.h"
 #include "dungeon/quest.h"
 #include "floor/floor-util.h"
 #include "game-option/birth-options.h"

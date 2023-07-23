@@ -1,4 +1,4 @@
-﻿#include "timed-effect/player-stun.h"
+#include "timed-effect/player-stun.h"
 #include "system/angband-exceptions.h"
 #include "system/angband.h"
 

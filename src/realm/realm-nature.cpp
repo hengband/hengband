@@ -1,4 +1,4 @@
-﻿#include "realm/realm-nature.h"
+#include "realm/realm-nature.h"
 #include "avatar/avatar.h"
 #include "cmd-action/cmd-spell.h"
 #include "effect/attribute-types.h"

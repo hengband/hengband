@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief オブジェクトの実装 / Object code, part 1
  * @date 2014/01/10
  * @author
@@ -40,7 +40,7 @@
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return std::string 発動名称を返す文字列ポインタ
  */
-static std::string item_activation_dragon_breath(ItemEntity *o_ptr)
+static std::string item_activation_dragon_breath(const ItemEntity *o_ptr)
 {
     std::string desc = _("", "breathe ");
     int n = 0;
@@ -67,7 +67,7 @@ static std::string item_activation_dragon_breath(ItemEntity *o_ptr)
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-static concptr item_activation_aux(ItemEntity *o_ptr)
+static concptr item_activation_aux(const ItemEntity *o_ptr)
 {
     static std::string activation_detail;
     auto tmp_act_ptr = find_activation_info(o_ptr);
@@ -185,7 +185,7 @@ static concptr item_activation_aux(ItemEntity *o_ptr)
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-concptr activation_explanation(ItemEntity *o_ptr)
+std::string activation_explanation(const ItemEntity *o_ptr)
 {
     auto flags = object_flags(o_ptr);
     if (flags.has_not(TR_ACTIVATE)) {

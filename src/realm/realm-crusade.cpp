@@ -1,4 +1,4 @@
-﻿#include "realm/realm-crusade.h"
+#include "realm/realm-crusade.h"
 #include "cmd-action/cmd-spell.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"

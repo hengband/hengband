@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum cheat_type {
     CHEAT_OBJECT = 0,

@@ -1,4 +1,4 @@
-﻿#include "timed-effect/player-fear.h"
+#include "timed-effect/player-fear.h"
 
 short PlayerFear::current() const
 {

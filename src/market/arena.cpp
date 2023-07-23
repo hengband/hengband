@@ -1,4 +1,4 @@
-﻿#include "market/arena.h"
+#include "market/arena.h"
 #include "cmd-building/cmd-building.h"
 #include "core/asking-player.h"
 #include "core/show-file.h"
@@ -10,6 +10,7 @@
 #include "market/arena-info-table.h"
 #include "market/building-actions-table.h"
 #include "market/building-util.h"
+#include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
@@ -202,7 +203,7 @@ void update_gambling_monsters(PlayerType *player_ptr)
             int j;
             while (true) {
                 get_mon_num_prep(player_ptr, monster_can_entry_arena, nullptr);
-                r_idx = get_mon_num(player_ptr, 0, mon_level, GMN_ARENA);
+                r_idx = get_mon_num(player_ptr, 0, mon_level, PM_ARENA);
                 if (!MonsterRace(r_idx).is_valid()) {
                     continue;
                 }

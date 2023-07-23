@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief ベースアイテム情報の構造体 / Information about object "kinds", including player knowledge.
  * @date 2019/05/01
  * @author deskull

@@ -1,4 +1,4 @@
-﻿#include "io/input-key-requester.h"
+#include "io/input-key-requester.h"
 #include "cmd-io/cmd-menu-content-table.h"
 #include "cmd-io/macro-util.h"
 #include "core/asking-player.h" //!< @todo 相互依存している、後で何とかする.

@@ -1,4 +1,4 @@
-﻿#include "game-option/option-flags.h"
+#include "game-option/option-flags.h"
 #include "system/redrawing-flags-updater.h"
 
 std::array<uint32_t, MAX_WINDOW_ENTITIES> g_option_flags = {};

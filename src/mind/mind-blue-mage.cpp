@@ -1,4 +1,4 @@
-﻿#include "mind/mind-blue-mage.h"
+#include "mind/mind-blue-mage.h"
 #include "action/action-limited.h"
 #include "avatar/avatar.h"
 #include "blue-magic/blue-magic-caster.h"

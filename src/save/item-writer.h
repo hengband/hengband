@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class ItemEntity;
 void wr_item(ItemEntity *o_ptr);

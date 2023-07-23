@@ -1,4 +1,4 @@
-﻿#include "realm/realm-chaos.h"
+#include "realm/realm-chaos.h"
 #include "cmd-action/cmd-spell.h"
 #include "core/asking-player.h"
 #include "effect/attribute-types.h"

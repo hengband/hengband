@@ -1,4 +1,4 @@
-﻿#include "racial/racial-vampire.h"
+#include "racial/racial-vampire.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/geometry.h"
 #include "hpmp/hp-mp-processor.h"

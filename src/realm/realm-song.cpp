@@ -1,4 +1,4 @@
-﻿#include "cmd-action/cmd-spell.h"
+#include "cmd-action/cmd-spell.h"
 #include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"

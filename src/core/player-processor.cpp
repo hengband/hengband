@@ -1,4 +1,4 @@
-﻿#include "core/player-processor.h"
+#include "core/player-processor.h"
 #include "action/run-execution.h"
 #include "action/travel-execution.h"
 #include "core/disturbance.h"
@@ -79,7 +79,7 @@ static void process_fishing(PlayerType *player_ptr)
         auto *floor_ptr = player_ptr->current_floor_ptr;
         const auto wild_level = wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].level;
         const auto level = floor_ptr->is_in_dungeon() ? floor_ptr->dun_level : wild_level;
-        const auto r_idx = get_mon_num(player_ptr, 0, level, 0);
+        const auto r_idx = get_mon_num(player_ptr, 0, level, PM_NONE);
         msg_print(nullptr);
         if (MonsterRace(r_idx).is_valid() && one_in_(2)) {
             POSITION y, x;

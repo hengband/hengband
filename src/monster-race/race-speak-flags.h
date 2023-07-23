@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum class MonsterSpeakType {
     SPEAK_ALL = 0, /* SPEAK_BATTLE, SPEAK_FEAR, SPEAK_FRIEND, SPEAK_DEATH */

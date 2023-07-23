@@ -1,4 +1,4 @@
-﻿/*
+/*
  * @file game-closer.cpp
  * @brief ゲーム終了処理
  * @author Hourier

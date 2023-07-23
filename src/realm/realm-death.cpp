@@ -1,4 +1,4 @@
-﻿#include "realm/realm-death.h"
+#include "realm/realm-death.h"
 #include "avatar/avatar.h"
 #include "cmd-action/cmd-spell.h"
 #include "effect/effect-characteristics.h"

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file scores.c
  * @brief ハイスコア処理 / Highscores handling
  * @date 2014/07/14

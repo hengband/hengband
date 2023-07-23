@@ -18889,7 +18889,7 @@ S:BO_PLAS | BO_ICEE | MISSILE | BLIND | CONF | SLOW | HOLD | HASTE | HAND_DOOM |
 S:HEAL | INVULNER | BLINK | TPORT | WORLD | TELE_TO | TELE_AWAY | TELE_LEVEL |
 S:PSY_SPEAR | DARKNESS | TRAPS | FORGET | ANIM_DEAD | S_KIN | S_CYBER | S_MONSTER |
 S:S_MONSTERS | S_ANT | S_SPIDER | S_HOUND | S_HYDRA | S_DEMON | S_UNDEAD |
-S:S_DRAGON | S_HI_UNDEAD | S_AMBERITES | S_UNIQUE | BA_LITE
+S:S_DRAGON | S_HI_UNDEAD | S_AMBERITES | S_UNIQUE | BA_LITE | S_DEAD_UNIQUE
 V:133
 D:$You don't know what it is.
 D:それは何が何だか分からない。
@@ -26719,3 +26719,27 @@ S:1_IN_6 | BR_ABYSS
 V:150
 D:$It's a abyssal whirlpool.
 D:深淵の渦巻きだ。
+
+N:1353:破壊と憎悪の化身『サルーイン』
+E:Saruin, The avatar of destruction and hatred
+G:P:w
+I:125:90d100:100:175:0
+W:79:3:0:66666:0:0
+B:HIT:HURT:11d13
+B:HIT:HURT:11d13
+B:HIT:HURT:11d13
+B:HIT:HURT:11d13
+F:UNIQUE | MALE | DROP_CORPSE | NONLIVING |
+F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GREAT |
+F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | SMART |
+F:OPEN_DOOR | BASH_DOOR |
+F:EVIL | IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS |
+F:RES_WATE | RES_SHAR | RES_LITE | RES_DARK |
+F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN | RES_TELE
+S:1_IN_3 | S_DEAD_UNIQUE |
+S:BA_FIRE | BA_WATE | BA_ACID | ROCKET | DISPEL | BLIND | BO_MANA |
+S:HOLD | HEAL | HASTE | CONF | BRAIN_SMASH
+D:$He was born from the heart of Sayva, the goddess of destruction.
+D:$  Apparently, some foolish adventurer had given away all the Destiny Stones.
+D:破壊の女神サイヴァの心臓から生まれた存在だ。
+D:どうやら愚かなる冒険者がすべてのデステニィストーンを捧げてしまったらしい。

@@ -1,4 +1,4 @@
-﻿#include "mspell/mspell-attack/mspell-bolt.h"
+#include "mspell/mspell-attack/mspell-bolt.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-processor.h"
 #include "main/sound-definitions-table.h"

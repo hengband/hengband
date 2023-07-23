@@ -1,4 +1,4 @@
-﻿#include "io-dump/player-status-dump.h"
+#include "io-dump/player-status-dump.h"
 #include "view/display-player.h"
 
 /*!

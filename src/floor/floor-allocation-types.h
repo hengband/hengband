@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /* Dungeon allocation "places" */
 enum dap_type : int {

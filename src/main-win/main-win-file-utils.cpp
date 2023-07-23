@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file main-win-file-utils.cpp
  * @brief Windows版固有実装(ファイル関連処理)
  */

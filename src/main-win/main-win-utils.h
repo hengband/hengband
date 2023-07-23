@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file main-win-utils.h
  * @brief Windows版固有実装(ユーティリティー)ヘッダ

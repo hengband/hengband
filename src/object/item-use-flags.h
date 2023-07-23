@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /*
  * get_item()関数でアイテムの選択を行うフラグ / Bit flags for the "get_item" function

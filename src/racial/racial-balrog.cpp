@@ -1,4 +1,4 @@
-﻿#include "racial/racial-balrog.h"
+#include "racial/racial-balrog.h"
 #include "effect/attribute-types.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"

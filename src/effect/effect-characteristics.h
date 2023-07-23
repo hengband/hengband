@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /*
  * project()関数に用いられる、遠隔攻撃特性ビットフラグ / Bit flags for the "project()" function

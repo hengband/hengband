@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file x11-type-string.cpp
  * @brief X11用の文字列処理
  * @date 2020/06/14

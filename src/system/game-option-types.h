@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum game_option_types {
     OPT_PAGE_INPUT,

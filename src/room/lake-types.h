@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /* 池型地形の生成ID / Room types for generate_lake() */
 enum lake_type {

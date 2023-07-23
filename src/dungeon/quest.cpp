@@ -1,4 +1,4 @@
-﻿#include "dungeon/quest.h"
+#include "dungeon/quest.h"
 #include "artifact/fixed-art-types.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
@@ -12,6 +12,7 @@
 #include "locale/english.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -184,7 +185,7 @@ void determine_random_questor(PlayerType *player_ptr, QuestType *q_ptr)
     get_mon_num_prep(player_ptr, mon_hook_quest, nullptr);
     MonsterRaceId r_idx;
     while (true) {
-        r_idx = get_mon_num(player_ptr, 0, q_ptr->level + 5 + randint1(q_ptr->level / 10), GMN_ARENA);
+        r_idx = get_mon_num(player_ptr, 0, q_ptr->level + 5 + randint1(q_ptr->level / 10), PM_ARENA);
         const auto &monrace = monraces_info[r_idx];
         if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
             continue;

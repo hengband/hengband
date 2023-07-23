@@ -1,4 +1,4 @@
-﻿#include "player/race-info-table.h"
+#include "player/race-info-table.h"
 
 #ifdef JP
 #define N(JAPANESE, ENGLISH) JAPANESE, ENGLISH

@@ -1,4 +1,4 @@
-﻿#include "room/rooms-fractal.h"
+#include "room/rooms-fractal.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/floor-generator.h"
 #include "room/cave-filler.h"

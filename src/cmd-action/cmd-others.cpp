@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief その他の小さなコマンド処理群 (探索、汎用グリッド処理、自殺/引退/切腹)
  * @date 2014/01/02
  * @author
@@ -155,7 +155,7 @@ static void accept_winner_message(PlayerType *player_ptr)
             continue;
         }
 
-        if (!input_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), UserCheck::NO_HISTORY)) {
+        if (input_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), UserCheck::NO_HISTORY)) {
             break;
         }
     }

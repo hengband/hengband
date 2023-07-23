@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum class MindKindType {
     MINDCRAFTER = 0, /*!< 特殊能力: 超能力 */

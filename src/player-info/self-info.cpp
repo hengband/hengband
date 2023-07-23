@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 自己分析処理/ Self knowledge
  * @date 2018/09/07
  * @author deskull

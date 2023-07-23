@@ -1,4 +1,4 @@
-﻿#include "player/player-realm.h"
+#include "player/player-realm.h"
 #include "object/tval-types.h"
 #include "system/player-type-definition.h"
 

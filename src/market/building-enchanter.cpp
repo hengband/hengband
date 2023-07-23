@@ -1,4 +1,4 @@
-﻿#include "market/building-enchanter.h"
+#include "market/building-enchanter.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"

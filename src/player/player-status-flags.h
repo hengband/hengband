@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/tr-types.h"

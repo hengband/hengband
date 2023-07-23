@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file learnt-power-getter.cpp
  * @brief 青魔法の処理実行定義
  */

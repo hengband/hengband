@@ -1,4 +1,4 @@
-﻿#include "load/inventory-loader.h"
+#include "load/inventory-loader.h"
 #include "inventory/inventory-slot-types.h"
 #include "load/item/item-loader-factory.h"
 #include "load/load-util.h"

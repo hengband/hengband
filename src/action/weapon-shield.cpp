@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file weapon-shield.cpp
  * @brief 手装備持ち替え処理実装
  */

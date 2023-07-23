@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 魔法のインターフェイスと発動 / Purpose: Do everything for each spell
  * @date 2013/12/31
  * @author
@@ -661,10 +661,10 @@ void do_cmd_browse(PlayerType *player_ptr)
         }
 
         /* Clear lines, position cursor  (really should use strlen here) */
-        term_erase(14, 14, 255);
-        term_erase(14, 13, 255);
-        term_erase(14, 12, 255);
-        term_erase(14, 11, 255);
+        term_erase(14, 14);
+        term_erase(14, 13);
+        term_erase(14, 12);
+        term_erase(14, 11);
 
         const auto spell_desc = exe_spell(player_ptr, use_realm, spell, SpellProcessType::DESCRIPTION);
         display_wrap_around(spell_desc.value(), 62, 11, 15);

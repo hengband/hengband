@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file blue-magic-caster.cpp
  * @brief 青魔法のその他系統の呪文定義と詠唱時分岐処理
  */
@@ -404,6 +404,8 @@ static bool switch_cast_blue_magic(PlayerType *player_ptr, bmc_type *bmc_ptr, Mo
         return cast_blue_summon_amberite(player_ptr, bmc_ptr);
     case MonsterAbilityType::S_UNIQUE:
         return cast_blue_summon_unique(player_ptr, bmc_ptr);
+    case MonsterAbilityType::S_DEAD_UNIQUE:
+        return cast_blue_summon_dead_unique(player_ptr, bmc_ptr);
     default:
         msg_print("hoge?");
         return true;

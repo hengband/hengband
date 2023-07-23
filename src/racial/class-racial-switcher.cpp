@@ -1,4 +1,4 @@
-﻿#include "racial/class-racial-switcher.h"
+#include "racial/class-racial-switcher.h"
 #include "cmd-action/cmd-spell.h"
 #include "mind/mind-elementalist.h"
 #include "racial/racial-util.h"

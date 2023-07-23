@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file movement-execution.cpp
  * @brief プレイヤーの歩行勝利実行定義
  */

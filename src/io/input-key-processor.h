@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class PlayerType;
 bool enter_wizard_mode(PlayerType *player_ptr);

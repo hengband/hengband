@@ -1,4 +1,4 @@
-﻿#include "player-info/base-status-info.h"
+#include "player-info/base-status-info.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"

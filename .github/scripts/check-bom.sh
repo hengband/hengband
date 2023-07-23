@@ -6,8 +6,8 @@ STATUS=0
 
 for file in $SRC_FILES; do
     file $file | grep "BOM" >/dev/null
-    if [ $? != 0 ]; then
-        echo "$file: BOM does not exists."
+    if [ $? == 0 ]; then
+        echo "$file: BOM exists."
         STATUS=1
     fi
 done

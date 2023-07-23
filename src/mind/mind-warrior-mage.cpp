@@ -1,4 +1,4 @@
-﻿#include "mind/mind-warrior-mage.h"
+#include "mind/mind-warrior-mage.h"
 #include "hpmp/hp-mp-processor.h"
 #include "player/player-damage.h"
 #include "system/player-type-definition.h"

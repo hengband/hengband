@@ -1,4 +1,4 @@
-﻿#include "market/arena-info-table.h"
+#include "market/arena-info-table.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "object/tval-types.h"

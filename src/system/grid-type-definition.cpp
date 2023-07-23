@@ -1,4 +1,4 @@
-﻿#include "system/grid-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "monster-race/race-flags7.h"
 #include "system/monster-race-info.h"
 #include "system/terrain-type-definition.h"

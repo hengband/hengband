@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 /*! APE means AutoPickEditor*/
 enum ape_quittance {

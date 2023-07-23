@@ -1,4 +1,4 @@
-﻿#include "game-option/special-options.h"
+#include "game-option/special-options.h"
 
 byte hitpoint_warn; /* Hitpoint warning (0 to 9) */
 byte mana_warn; /* Mana color (0 to 9) */

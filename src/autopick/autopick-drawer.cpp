@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 自動拾いエディタを表示させる
  * @date 2020/04/26
  * @author Hourier
@@ -14,6 +14,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-util.h"
+#include <tuple>
 
 #define DESCRIPT_HGT 3
 
@@ -66,7 +67,7 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
 {
     int by1 = 0, by2 = 0;
 
-    term_get_size(&tb->wid, &tb->hgt);
+    std::tie(tb->wid, tb->hgt) = term_get_size();
 
     /*
      * Top line (-1), description line (-3), separator (-1)

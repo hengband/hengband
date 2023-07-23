@@ -1,4 +1,4 @@
-﻿#include "spell-kind/spells-sight.h"
+#include "spell-kind/spells-sight.h"
 #include "avatar/avatar.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
@@ -470,7 +470,7 @@ bool probing(PlayerType *player_ptr)
         handle_stuff(player_ptr);
         move_cursor_relative(m_ptr->fy, m_ptr->fx);
         inkey();
-        term_erase(0, 0, 255);
+        term_erase(0, 0);
         if (lore_do_probe(player_ptr, m_ptr->r_idx)) {
 #ifdef JP
             msg_format("%sについてさらに詳しくなった気がする。", r_ptr->name.data());

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum special_defence {
     DEFENSE_ACID = 0x00000001, /*!< プレイヤーのステータス:酸免疫 */

@@ -1,4 +1,4 @@
-﻿#include "mspell/mspell-damage-calculator.h"
+#include "mspell/mspell-damage-calculator.h"
 #include "game-option/birth-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
@@ -427,6 +427,8 @@ static int monspell_damage_base(
     case MonsterAbilityType::S_AMBERITES:
         return -1;
     case MonsterAbilityType::S_UNIQUE:
+        return -1;
+    case MonsterAbilityType::S_DEAD_UNIQUE:
         return -1;
     case MonsterAbilityType::MAX:
         return -1;

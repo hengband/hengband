@@ -1,4 +1,4 @@
-﻿#include "mind/mind-berserker.h"
+#include "mind/mind-berserker.h"
 #include "action/movement-execution.h"
 #include "cmd-action/cmd-attack.h"
 #include "floor/geometry.h"

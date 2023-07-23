@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスターが詠唱する魔法を選択する処理
  * @date 2020/07/23
  * @author Hourier
@@ -155,7 +155,7 @@ static bool spell_annoy(MonsterAbilityType spell)
  */
 static bool spell_summon(MonsterAbilityType spell)
 {
-    return spell_in_between(spell, MonsterAbilityType::S_KIN, MonsterAbilityType::S_UNIQUE);
+    return spell_in_between(spell, MonsterAbilityType::S_KIN, MonsterAbilityType::S_DEAD_UNIQUE);
 }
 
 /*!

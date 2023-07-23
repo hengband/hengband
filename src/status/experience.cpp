@@ -1,4 +1,4 @@
-﻿#include "status/experience.h"
+#include "status/experience.h"
 #include "player-base/player-race.h"
 #include "player/player-status.h"
 #include "system/player-type-definition.h"

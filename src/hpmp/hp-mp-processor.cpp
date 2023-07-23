@@ -1,4 +1,4 @@
-﻿#include "hpmp/hp-mp-processor.h"
+#include "hpmp/hp-mp-processor.h"
 #include "avatar/avatar.h"
 #include "cmd-action/cmd-pet.h"
 #include "core/window-redrawer.h"

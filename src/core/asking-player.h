@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "util/flag-group.h"
 #include <optional>

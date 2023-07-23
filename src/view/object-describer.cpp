@@ -1,4 +1,4 @@
-﻿#include "view/object-describer.h"
+#include "view/object-describer.h"
 #include "cmd-action/cmd-spell.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -71,7 +71,7 @@ void display_koff(PlayerType *player_ptr)
     }
 
     for (auto y = 0; y < game_term->hgt; y++) {
-        term_erase(0, y, 255);
+        term_erase(0, y);
     }
 
     ItemEntity item;

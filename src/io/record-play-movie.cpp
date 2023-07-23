@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 録画・再生機能
  * @date 2014/01/02
  * @author 2014 Deskull rearranged comment for Doxygen.
@@ -499,9 +499,8 @@ static bool get_nextbuf(char *buf)
 /* プレイホストのマップが大きいときクライアントのマップもリサイズする */
 static void update_term_size(int x, int y, int len)
 {
-    int ox, oy;
     int nx, ny;
-    term_get_size(&ox, &oy);
+    const auto [ox, oy] = term_get_size();
     nx = ox;
     ny = oy;
 

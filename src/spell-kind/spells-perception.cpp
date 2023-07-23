@@ -1,4 +1,4 @@
-﻿#include "spell-kind/spells-perception.h"
+#include "spell-kind/spells-perception.h"
 #include "autopick/autopick.h"
 #include "avatar/avatar.h"
 #include "core/stuff-handler.h"

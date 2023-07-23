@@ -1,4 +1,4 @@
-﻿#include "monster-floor/monster-death.h"
+#include "monster-floor/monster-death.h"
 #include "artifact/fixed-art-generator.h"
 #include "artifact/fixed-art-types.h"
 #include "cmd-building/cmd-building.h"

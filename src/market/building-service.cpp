@@ -1,4 +1,4 @@
-﻿#include "market/building-service.h"
+#include "market/building-service.h"
 #include "cmd-building/cmd-building.h"
 #include "player-base/player-class.h"
 #include "realm/realm-names-table.h"

@@ -1,4 +1,4 @@
-﻿#include "birth/quick-start.h"
+#include "birth/quick-start.h"
 #include "birth/birth-stat.h"
 #include "birth/birth-util.h"
 #include "birth/game-play-initializer.h"

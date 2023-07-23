@@ -1,4 +1,4 @@
-﻿#include "effect/effect-monster-resist-hurt.h"
+#include "effect/effect-monster-resist-hurt.h"
 #include "effect/effect-monster-util.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-brightness-flags.h"

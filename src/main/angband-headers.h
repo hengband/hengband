@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
  * @file angband-headers.h
  * @brief ゲームデータのグローバルヘッダ情報ヘッダ

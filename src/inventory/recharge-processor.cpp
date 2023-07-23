@@ -1,4 +1,4 @@
-﻿#include "inventory/recharge-processor.h"
+#include "inventory/recharge-processor.h"
 #include "core/disturbance.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"

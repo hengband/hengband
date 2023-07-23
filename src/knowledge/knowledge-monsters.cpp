@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file knowledge-monsters.cpp
  * @brief 既知のモンスターに関する情報を表示する
  * @date 2020/04/24
@@ -266,7 +266,7 @@ static void display_monster_list(int col, int row, int per_page, const std::vect
             c_prt(attr, format("%d", enum2i(r_idx)), row + i, 62);
         }
 
-        term_erase(69, row + i, 255);
+        term_erase(69, row + i);
         term_queue_bigchar(use_bigtile ? 69 : 70, row + i, r_ptr->x_attr, r_ptr->x_char, 0, 0);
         if (!visual_only) {
             if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
@@ -278,7 +278,7 @@ static void display_monster_list(int col, int row, int per_page, const std::vect
     }
 
     for (; i < per_page; i++) {
-        term_erase(col, row + i, 255);
+        term_erase(col, row + i);
     }
 }
 
@@ -294,8 +294,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
 {
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, std::nullopt);
 
-    TERM_LEN wid, hgt;
-    term_get_size(&wid, &hgt);
+    const auto [wid, hgt] = term_get_size();
     std::vector<MonsterRaceId> r_idx_list;
     std::vector<IDX> grp_idx;
 

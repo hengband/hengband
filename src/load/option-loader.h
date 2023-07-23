@@ -1,3 +1,3 @@
-﻿#pragma once
+#pragma once
 
 void rd_options();

@@ -1,4 +1,4 @@
-﻿#include "cmd-visual/cmd-visuals.h"
+#include "cmd-visual/cmd-visuals.h"
 #include "cmd-visual/cmd-draw.h"
 #include "core/asking-player.h"
 #include "core/visuals-reseter.h"

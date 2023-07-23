@@ -1,4 +1,4 @@
-﻿#include "object-use/read/read-executor-factory.h"
+#include "object-use/read/read-executor-factory.h"
 #include "artifact/fixed-art-types.h"
 #include "object-use/read/gbh-shirt-read-executor.h"
 #include "object-use/read/parchment-read-executor.h"

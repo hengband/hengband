@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 自動拾いの検索
  * @date 2020/04/26
  * @author Hourier
@@ -115,7 +115,7 @@ byte get_string_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concpt
     int pos = 0;
     while (true) {
         bool back = false;
-        term_erase(col, 0, 255);
+        term_erase(col, 0);
         term_putstr(col, 0, -1, color, buf);
         term_gotoxy(col + pos, 0);
 

@@ -1,4 +1,4 @@
-﻿#include "load/old/load-v1-7-0.h"
+#include "load/old/load-v1-7-0.h"
 #include "game-option/birth-options.h"
 #include "load/load-util.h"
 #include "load/old/load-v1-5-0.h"

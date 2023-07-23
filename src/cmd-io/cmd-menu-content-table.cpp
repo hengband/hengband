@@ -1,4 +1,4 @@
-﻿#include "cmd-io/cmd-menu-content-table.h"
+#include "cmd-io/cmd-menu-content-table.h"
 #include "player-info/class-types.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
