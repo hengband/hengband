@@ -26,8 +26,8 @@
  */
 bool artifact_scroll(PlayerType *player_ptr)
 {
-    concptr q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
-    concptr s = _("強化できるアイテムがない。", "You have nothing to enchant.");
+    constexpr auto q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
+    constexpr auto s = _("強化できるアイテムがない。", "You have nothing to enchant.");
     ItemEntity *o_ptr;
     OBJECT_IDX item;
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), FuncItemTester(object_is_nameless_weapon_armour));
@@ -128,8 +128,8 @@ bool mundane_spell(PlayerType *player_ptr, bool only_equip)
 
     OBJECT_IDX item;
     ItemEntity *o_ptr;
-    concptr q = _("どのアイテムを凡庸化しますか？", "Mundanify which item? ");
-    concptr s = _("凡庸化できるアイテムがない。", "You have nothing to mundanify.");
+    constexpr auto q = _("どのアイテムを凡庸化しますか？", "Mundanify which item? ");
+    constexpr auto s = _("凡庸化できるアイテムがない。", "You have nothing to mundanify.");
 
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
     if (!o_ptr) {

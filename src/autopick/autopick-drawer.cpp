@@ -26,7 +26,7 @@ static void process_dirty_expression(PlayerType *player_ptr, text_body_type *tb)
 
     byte state = 0;
     for (int y = 0; tb->lines_list[y]; y++) {
-        concptr s = tb->lines_list[y];
+        auto s = tb->lines_list[y];
         tb->states[y] = state;
 
         if (*s++ != '?') {

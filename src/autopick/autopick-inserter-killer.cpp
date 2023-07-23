@@ -15,7 +15,7 @@
  */
 void check_expression_line(text_body_type *tb, int y)
 {
-    concptr s = tb->lines_list[y];
+    auto s = tb->lines_list[y];
 
     if ((s[0] == '?' && s[1] == ':') || (tb->states[y] & LSTAT_BYPASS)) {
         tb->dirty_flags |= DIRTY_EXPRESSION;
@@ -221,7 +221,7 @@ void insert_single_letter(text_body_type *tb, int key)
  */
 void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool whole)
 {
-    concptr s = tb->lines_list[y];
+    auto s = tb->lines_list[y];
     if (whole && x0 == 0 && s[x1] == '\0' && tb->lines_list[y + 1]) {
         string_free(tb->lines_list[y]);
 

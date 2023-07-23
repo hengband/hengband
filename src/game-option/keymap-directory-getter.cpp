@@ -28,7 +28,7 @@ int get_keymap_dir(char ch)
 
         concptr act = keymap_act[mode][(byte)(ch)];
         if (act) {
-            for (concptr s = act; *s; ++s) {
+            for (auto s = act; *s; ++s) {
                 if (isdigit(*s)) {
                     d = D2I(*s);
                 }

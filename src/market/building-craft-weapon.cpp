@@ -363,12 +363,12 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
     auto *i_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
     (&orig_weapon)->copy_from(i_ptr);
 
-    concptr q = _("第一の武器は？", "What is your first weapon? ");
-    concptr s = _("比べるものがありません。", "You have nothing to compare.");
+    constexpr auto first_q = _("第一の武器は？", "What is your first weapon? ");
+    constexpr auto first_s = _("比べるものがありません。", "You have nothing to compare.");
 
     OBJECT_IDX item;
     constexpr auto options = USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT;
-    o_ptr[0] = choose_object(player_ptr, &item, q, s, options, FuncItemTester(&ItemEntity::is_orthodox_melee_weapons));
+    o_ptr[0] = choose_object(player_ptr, &item, first_q, first_s, options, FuncItemTester(&ItemEntity::is_orthodox_melee_weapons));
     if (!o_ptr[0]) {
         screen_load();
         return 0;
@@ -420,8 +420,8 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
             continue;
         }
 
-        q = _("第二の武器は？", "What is your second weapon? ");
-        s = _("比べるものがありません。", "You have nothing to compare.");
+        constexpr auto q = _("第二の武器は？", "What is your second weapon? ");
+        constexpr auto s = _("比べるものがありません。", "You have nothing to compare.");
         OBJECT_IDX item2;
         ItemEntity *i2_ptr = choose_object(player_ptr, &item2, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), FuncItemTester(&ItemEntity::is_orthodox_melee_weapons));
         if (!i2_ptr) {
