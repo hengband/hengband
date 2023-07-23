@@ -341,7 +341,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
         while (!flag) {
             std::string prompt;
             if (page_max > 1) {
-                std::string page_str = format("%d/%d", page + 1, page_max);
+                const auto page_str = format("%d/%d", page + 1, page_max);
                 prompt = format(_("(SPACEで次ページ, ESCで中断) どの能力を付加しますか？ %s", "(SPACE=next, ESC=exit) Add which ability? %s"), page_str.data());
             } else {
                 prompt = format(_("(ESCで中断) どの能力を付加しますか？", "(ESC=exit) Add which ability? "));

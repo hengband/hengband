@@ -680,8 +680,8 @@ void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr 
                 a = TERM_L_BLUE;
             }
 
-            std::string label = format("%-48s: %s (%.19s)", option_info[opt[i]].o_desc, (*option_info[opt[i]].o_var ? _("はい  ", "yes") : _("いいえ", "no ")),
-                option_info[opt[i]].o_text);
+            const auto reply = *option_info[opt[i]].o_var ? _("はい  ", "yes") : _("いいえ", "no ");
+            const auto label = format("%-48s: %s (%.19s)", option_info[opt[i]].o_desc, reply, option_info[opt[i]].o_text);
             if ((page == OPT_PAGE_AUTODESTROY) && i > 2) {
                 c_prt(a, label, i + 5, 0);
             } else {

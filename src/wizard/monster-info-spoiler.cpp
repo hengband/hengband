@@ -121,10 +121,10 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const M
         }
         nam.append(name.front());
 
-        std::string lev = format("%d", (int)r_ptr->level);
-        std::string rar = format("%d", (int)r_ptr->rarity);
-        std::string spd = format("%+d", r_ptr->speed - STANDARD_SPEED);
-        std::string ac = format("%d", r_ptr->ac);
+        const auto lev = format("%d", r_ptr->level);
+        const auto rar = format("%d", (int)r_ptr->rarity);
+        const auto spd = format("%+d", r_ptr->speed - STANDARD_SPEED);
+        const auto ac = format("%d", r_ptr->ac);
         std::string hp;
         if (any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) || (r_ptr->hside == 1)) {
             hp = format("%d", r_ptr->hdice * r_ptr->hside);
@@ -132,7 +132,7 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const M
             hp = format("%dd%d", r_ptr->hdice, r_ptr->hside);
         }
 
-        std::string symbol = format("%s '%c'", attr_to_text(r_ptr), r_ptr->d_char);
+        const auto symbol = format("%s '%c'", attr_to_text(r_ptr), r_ptr->d_char);
         fprintf(spoiler_file, "%-45.45s%4s %4s %4s %7s %7s  %19.19s\n",
             nam.data(), lev.data(), rar.data(), spd.data(), hp.data(),
             ac.data(), symbol.data());
