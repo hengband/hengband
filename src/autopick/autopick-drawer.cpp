@@ -120,7 +120,7 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
     }
 
     if (tb->dirty_flags & DIRTY_MODE) {
-        char buf[MAX_LINELEN];
+        char buf[MAX_LINELEN]{};
         int sepa_length = tb->wid;
         int j = 0;
         for (; j < sepa_length; j++) {
