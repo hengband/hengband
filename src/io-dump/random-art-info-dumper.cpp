@@ -58,13 +58,12 @@ static void spoiler_print_randart(ItemEntity *o_ptr, const ArtifactsDumpInfo *ar
  */
 static void spoil_random_artifact_aux(PlayerType *player_ptr, ItemEntity *o_ptr, ItemKindType tval, std::ofstream &ofs)
 {
-    ArtifactsDumpInfo artifact;
     if (!o_ptr->is_known() || !o_ptr->is_random_artifact() || (o_ptr->bi_key.tval() != tval)) {
         return;
     }
 
-    random_artifact_analyze(player_ptr, o_ptr, &artifact);
-    spoiler_print_randart(o_ptr, &artifact, ofs);
+    const auto artifacts_list = random_artifact_analyze(player_ptr, o_ptr);
+    spoiler_print_randart(o_ptr, &artifacts_list, ofs);
 }
 
 /*!
