@@ -10,8 +10,8 @@ License: unknown
 Group: Amusements/Games
 Url: https://hengband.github.io
 Source: hengband-%{version}.tar.gz
-Requires: ncurses-libs libstdc++ libcurl
-BuildRequires: autoconf automake gcc-c++ ncurses-devel libcurl-devel nkf
+Requires: ncurses-libs libstdc++ libcurl libX11
+BuildRequires: autoconf automake gcc-c++ ncurses-devel libcurl-devel nkf libX11-devel
 
 %description
 Hengband is a variant of ZAngband.
@@ -96,6 +96,9 @@ exit 0
 %license lib/help/jlicense.txt
 
 %changelog
+
+* Mon Jul 24 2023 Shiro Hara <white@vx-xv.com>
+- Enable X11
 
 * Sun Jul 23 2023 Shiro Hara <white@vx-xv.com>
 - hengband RPM 3.0.0.88(Alpha)
