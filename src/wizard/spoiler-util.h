@@ -8,9 +8,6 @@
 #include <string_view>
 #include <vector>
 
-/* MAX_LINE_LEN specifies when a line should wrap. */
-#define MAX_LINE_LEN 75
-
 enum class SpoilerOutputResultType {
     CANCELED,
     SUCCESSFUL,
