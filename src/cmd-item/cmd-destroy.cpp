@@ -97,8 +97,8 @@ static bool check_destory_item(PlayerType *player_ptr, destroy_type *destroy_ptr
 
 static bool select_destroying_item(PlayerType *player_ptr, destroy_type *destroy_ptr)
 {
-    concptr q = _("どのアイテムを壊しますか? ", "Destroy which item? ");
-    concptr s = _("壊せるアイテムを持っていない。", "You have nothing to destroy.");
+    constexpr auto q = _("どのアイテムを壊しますか? ", "Destroy which item? ");
+    constexpr auto s = _("壊せるアイテムを持っていない。", "You have nothing to destroy.");
     destroy_ptr->o_ptr = choose_object(player_ptr, &destroy_ptr->item, q, s, USE_INVEN | USE_FLOOR);
     if (destroy_ptr->o_ptr == nullptr) {
         return false;

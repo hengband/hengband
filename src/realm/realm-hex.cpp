@@ -164,8 +164,8 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
         }
 
         if (cast) {
-            const auto q = _("どれを呪いますか？", "Which weapon do you curse?");
-            const auto s = _("武器を装備していない。", "You're not wielding a weapon.");
+            constexpr auto q = _("どれを呪いますか？", "Which weapon do you curse?");
+            constexpr auto s = _("武器を装備していない。", "You're not wielding a weapon.");
             short item;
             auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(&ItemEntity::is_melee_weapon));
             if (o_ptr == nullptr) {
@@ -518,8 +518,8 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
             return _("装備している防具に呪いをかける。", "Curse a piece of armour that you are wielding.");
         }
         if (cast) {
-            const auto q = _("どれを呪いますか？", "Which piece of armour do you curse?");
-            const auto s = _("防具を装備していない。", "You're not wearing any armor.");
+            constexpr auto q = _("どれを呪いますか？", "Which piece of armour do you curse?");
+            constexpr auto s = _("防具を装備していない。", "You're not wearing any armor.");
             OBJECT_IDX item;
             auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(&ItemEntity::is_protector));
             if (!o_ptr) {

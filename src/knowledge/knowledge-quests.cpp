@@ -207,8 +207,7 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, Quest
         }
     }
 
-    std::string playtime_str = format("%02d:%02d:%02d", quest.comptime / (60 * 60), (quest.comptime / 60) % 60, quest.comptime % 60);
-
+    const auto playtime_str = format("%02d:%02d:%02d", quest.comptime / (60 * 60), (quest.comptime / 60) % 60, quest.comptime % 60);
     auto fputs_name_remain = [fff](const auto &name) {
         for (auto i = 1U; i < name.size(); ++i) {
             fprintf(fff, "  %s\n", name[i].data());

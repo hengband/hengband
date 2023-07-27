@@ -25,8 +25,8 @@
  */
 bool bless_weapon(PlayerType *player_ptr)
 {
-    concptr q = _("どのアイテムを祝福しますか？", "Bless which weapon? ");
-    concptr s = _("祝福できる武器がありません。", "You have no weapon to bless.");
+    constexpr auto q = _("どのアイテムを祝福しますか？", "Bless which weapon? ");
+    constexpr auto s = _("祝福できる武器がありません。", "You have no weapon to bless.");
 
     OBJECT_IDX item;
     constexpr BIT_FLAGS options = USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT;

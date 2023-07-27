@@ -757,8 +757,8 @@ void do_cmd_study(PlayerType *player_ptr)
     /* Restrict choices to "useful" books */
     auto item_tester = get_learnable_spellbook_tester(player_ptr);
 
-    const auto q = _("どの本から学びますか? ", "Study which book? ");
-    const auto s = _("読める本がない。", "You have no books that you can read.");
+    constexpr auto q = _("どの本から学びますか? ", "Study which book? ");
+    constexpr auto s = _("読める本がない。", "You have no books that you can read.");
 
     short item;
     const auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), item_tester);
@@ -987,8 +987,8 @@ bool do_cmd_cast(PlayerType *player_ptr)
     }
 
     const auto prayer = spell_category_name(mp_ptr->spell_book);
-    const auto q = _("どの呪文書を使いますか? ", "Use which book? ");
-    const auto s = _("呪文書がない！", "You have no spell books!");
+    constexpr auto q = _("どの呪文書を使いますか? ", "Use which book? ");
+    constexpr auto s = _("呪文書がない！", "You have no spell books!");
     auto item_tester = get_castable_spellbook_tester(player_ptr);
     const auto options = USE_INVEN | USE_FLOOR | (pc.equals(PlayerClassType::FORCETRAINER) ? USE_FORCE : 0);
     short item;

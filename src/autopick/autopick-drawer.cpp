@@ -26,7 +26,7 @@ static void process_dirty_expression(PlayerType *player_ptr, text_body_type *tb)
 
     byte state = 0;
     for (int y = 0; tb->lines_list[y]; y++) {
-        concptr s = tb->lines_list[y];
+        auto s = tb->lines_list[y];
         tb->states[y] = state;
 
         if (*s++ != '?') {
@@ -120,7 +120,7 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
     }
 
     if (tb->dirty_flags & DIRTY_MODE) {
-        char buf[MAX_LINELEN];
+        char buf[MAX_LINELEN]{};
         int sepa_length = tb->wid;
         int j = 0;
         for (; j < sepa_length; j++) {

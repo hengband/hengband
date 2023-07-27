@@ -233,7 +233,7 @@ static void do_cmd_options_win(PlayerType *player_ptr)
         prt(_("ウィンドウ・フラグ (<方向>で移動, 't'でON/OFF,'s'でON(他窓OFF), ESC)", "Window Flags (<dir>, <t>oggle, <s>et, ESC) "), 0, 0);
         for (j = 0; j < 8; j++) {
             byte a = TERM_WHITE;
-            concptr s = angband_term_name[j];
+            auto s = angband_term_name[j];
             if (j == x) {
                 a = TERM_L_BLUE;
             }
@@ -651,7 +651,7 @@ void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr 
 {
     char ch;
     int i, k = 0, n = 0, l;
-    int opt[MAIN_TERM_MIN_ROWS];
+    int opt[MAIN_TERM_MIN_ROWS]{};
     bool browse_only = (page == OPT_PAGE_BIRTH) && w_ptr->character_generated && (!w_ptr->wizard || !allow_debug_opts);
 
     for (i = 0; i < MAIN_TERM_MIN_ROWS; i++) {
@@ -680,8 +680,8 @@ void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr 
                 a = TERM_L_BLUE;
             }
 
-            std::string label = format("%-48s: %s (%.19s)", option_info[opt[i]].o_desc, (*option_info[opt[i]].o_var ? _("はい  ", "yes") : _("いいえ", "no ")),
-                option_info[opt[i]].o_text);
+            const auto reply = *option_info[opt[i]].o_var ? _("はい  ", "yes") : _("いいえ", "no ");
+            const auto label = format("%-48s: %s (%.19s)", option_info[opt[i]].o_desc, reply, option_info[opt[i]].o_text);
             if ((page == OPT_PAGE_AUTODESTROY) && i > 2) {
                 c_prt(a, label, i + 5, 0);
             } else {

@@ -341,7 +341,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
         while (!flag) {
             std::string prompt;
             if (page_max > 1) {
-                std::string page_str = format("%d/%d", page + 1, page_max);
+                const auto page_str = format("%d/%d", page + 1, page_max);
                 prompt = format(_("(SPACEで次ページ, ESCで中断) どの能力を付加しますか？ %s", "(SPACE=next, ESC=exit) Add which ability? %s"), page_str.data());
             } else {
                 prompt = format(_("(ESCで中断) どの能力を付加しますか？", "(ESC=exit) Add which ability? "));
@@ -527,8 +527,8 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
  */
 static void erase_essence(PlayerType *player_ptr)
 {
-    const auto q = _("どのアイテムのエッセンスを消去しますか？", "Remove from which item? ");
-    const auto s = _("エッセンスを付加したアイテムがありません。", "You have nothing with added essence to remove.");
+    constexpr auto q = _("どのアイテムのエッセンスを消去しますか？", "Remove from which item? ");
+    constexpr auto s = _("エッセンスを付加したアイテムがありません。", "You have nothing with added essence to remove.");
     OBJECT_IDX item;
     auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::is_smith));
     if (!o_ptr) {
