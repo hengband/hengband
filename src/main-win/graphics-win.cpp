@@ -137,7 +137,7 @@ graphics_mode change_graphics(graphics_mode arg)
     infGraph.OffsetX = ox;
     infGraph.OffsetY = oy;
 
-    if (name_mask.empty()) {
+    if (!name_mask.empty()) {
         const auto &path_mask = path_build(ANGBAND_DIR_XTRA_GRAF, name_mask);
         const auto &filename_mask = path_mask.string();
         infGraph.hBitmapMask = read_graphic(filename_mask.data());
