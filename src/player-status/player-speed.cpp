@@ -7,7 +7,6 @@
 #include "monster/monster-status.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
-#include "object/object-flags.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/equipment-info.h"

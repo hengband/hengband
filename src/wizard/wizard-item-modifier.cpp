@@ -20,7 +20,6 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object/item-use-flags.h"
-#include "object/object-flags.h"
 #include "object/object-info.h"
 #include "object/object-kind-hook.h"
 #include "object/object-mark-types.h"
@@ -381,7 +380,7 @@ static void prt_binary(BIT_FLAGS flags, const int row, int col)
  */
 static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    auto flags = object_flags(o_ptr);
+    auto flags = o_ptr->get_flags();
     auto get_seq_32bits = [](const TrFlags &flags, uint start) {
         BIT_FLAGS result = 0U;
         for (auto i = 0U; i < 32 && start + i < flags.size(); i++) {

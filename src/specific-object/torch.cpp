@@ -6,7 +6,6 @@
 #include "mind/mind-ninja.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
-#include "object/object-flags.h"
 #include "object/tval-types.h"
 #include "player/special-defense-types.h"
 #include "sv-definition/sv-lite-types.h"
@@ -92,7 +91,7 @@ void update_lite_radius(PlayerType *player_ptr)
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
-        auto flags = object_flags(o_ptr);
+        auto flags = o_ptr->get_flags();
 
         if (!o_ptr->is_valid()) {
             continue;

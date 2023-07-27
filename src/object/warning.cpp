@@ -21,7 +21,6 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
-#include "object/object-flags.h"
 #include "player-base/player-race.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-resist.h"
@@ -59,7 +58,7 @@ ItemEntity *choose_warning_item(PlayerType *player_ptr)
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
 
-        auto flags = object_flags(o_ptr);
+        auto flags = o_ptr->get_flags();
         if (flags.has(TR_WARNING)) {
             candidates.push_back(i);
         }

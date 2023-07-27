@@ -32,7 +32,6 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/vorpal-weapon.h"
 #include "object-hook/hook-weapon.h"
-#include "object/object-flags.h"
 #include "object/tval-types.h"
 #include "player-attack/attack-chaos-effect.h"
 #include "player-attack/blood-sucking-processor.h"
@@ -487,7 +486,7 @@ static void apply_actual_attack(
     sound(SOUND_HIT);
     print_surprise_attack(pa_ptr);
 
-    pa_ptr->flags = object_flags(o_ptr);
+    pa_ptr->flags = o_ptr->get_flags();
     pa_ptr->chaos_effect = select_chaotic_effect(player_ptr, pa_ptr);
     pa_ptr->magical_effect = select_magical_brand_effect(player_ptr, pa_ptr);
     decide_blood_sucking(player_ptr, pa_ptr);

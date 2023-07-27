@@ -39,7 +39,6 @@
 #include "object-hook/hook-armor.h"
 #include "object/item-tester-hooker.h"
 #include "object/object-broken.h"
-#include "object/object-flags.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"
@@ -107,7 +106,7 @@ static bool acid_minus_ac(PlayerType *player_ptr)
     }
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
-    auto item_flags = object_flags(o_ptr);
+    auto item_flags = o_ptr->get_flags();
     if (o_ptr->ac + o_ptr->to_a <= 0) {
         msg_format(_("%sは既にボロボロだ！", "Your %s is already fully corroded!"), item_name.data());
         return false;

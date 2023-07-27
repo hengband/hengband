@@ -2,7 +2,6 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags3.h"
 #include "object-enchant/tr-types.h"
-#include "object/object-flags.h"
 #include "object/object-value.h"
 #include "object/tval-types.h"
 #include "store/store-util.h"
@@ -23,7 +22,7 @@
  */
 static bool is_blessed_item(const ItemEntity *item_ptr)
 {
-    auto flags = object_flags(item_ptr);
+    auto flags = item_ptr->get_flags();
     return flags.has(TR_BLESSED);
 }
 

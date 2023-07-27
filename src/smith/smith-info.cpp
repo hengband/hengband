@@ -1,6 +1,5 @@
 #include "smith/smith-info.h"
 #include "object-enchant/tr-types.h"
-#include "object/object-flags.h"
 #include "object/tval-types.h"
 #include "smith/smith-types.h"
 #include "sv-definition/sv-weapon-types.h"
@@ -39,7 +38,7 @@ bool BasicSmithInfo::add_essence(PlayerType *, ItemEntity *o_ptr, int) const
 void BasicSmithInfo::erase_essence(ItemEntity *o_ptr) const
 {
     o_ptr->smith_effect = std::nullopt;
-    auto flags = object_flags(o_ptr);
+    auto flags = o_ptr->get_flags();
     if (flags.has_none_of(TR_PVAL_FLAG_MASK)) {
         o_ptr->pval = 0;
     }

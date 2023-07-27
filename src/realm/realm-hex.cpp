@@ -26,7 +26,6 @@
 #include "object-hook/hook-armor.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-flags.h"
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
@@ -173,7 +172,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
             }
 
             const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
-            auto f = object_flags(o_ptr);
+            auto f = o_ptr->get_flags();
 
             if (!input_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really?"), item_name.data()))) {
                 return "";
@@ -528,7 +527,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
 
             o_ptr = &player_ptr->inventory_list[item];
             const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
-            auto f = object_flags(o_ptr);
+            auto f = o_ptr->get_flags();
 
             if (!input_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really?"), item_name.data()))) {
                 return "";
@@ -757,7 +756,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                 return "";
             }
 
-            auto f = object_flags(o_ptr);
+            auto f = o_ptr->get_flags();
 
             player_ptr->csp += (player_ptr->lev / 5) + randint1(player_ptr->lev / 5);
             if (f.has(TR_TY_CURSE) || o_ptr->curse_flags.has(CurseTraitType::TY_CURSE)) {

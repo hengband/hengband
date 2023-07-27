@@ -12,7 +12,6 @@
 #include "monster-race/monster-race.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/special-object-flags.h"
-#include "object/object-flags.h"
 #include "object/object-value.h"
 #include "object/tval-types.h"
 #include "smith/object-smith.h"
@@ -493,7 +492,7 @@ bool ItemEntity::is_activatable() const
         return false;
     }
 
-    auto flags = object_flags(this);
+    auto flags = this->get_flags();
     return flags.has(TR_ACTIVATE);
 }
 

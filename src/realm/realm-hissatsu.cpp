@@ -28,7 +28,6 @@
 #include "monster/monster-info.h"
 #include "monster/monster-update.h"
 #include "object-enchant/tr-types.h"
-#include "object/object-flags.h"
 #include "player-info/equipment-info.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"
@@ -748,7 +747,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
                 basedam = (o_ptr->dd * (o_ptr->ds + 1)) * 50;
                 damage = o_ptr->to_d * 100;
-                auto flags = object_flags(o_ptr);
+                auto flags = o_ptr->get_flags();
 
                 // @todo ヴォーパルの多重定義.
                 if (o_ptr->is_specific_artifact(FixedArtifactId::VORPAL_BLADE) || o_ptr->is_specific_artifact(FixedArtifactId::CHAINSWORD)) {
@@ -1065,7 +1064,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
                 basedam = (o_ptr->dd * (o_ptr->ds + 1)) * 50;
                 damage = o_ptr->to_d * 100;
-                auto flags = object_flags(o_ptr);
+                auto flags = o_ptr->get_flags();
 
                 // @todo ヴォーパルの多重定義.
                 if (o_ptr->is_specific_artifact(FixedArtifactId::VORPAL_BLADE) || o_ptr->is_specific_artifact(FixedArtifactId::CHAINSWORD)) {

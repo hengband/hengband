@@ -5,7 +5,6 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
-#include "object/object-flags.h"
 #include "object/object-info.h"
 #include "system/artifact-type-definition.h"
 #include "system/item-entity.h"
@@ -36,7 +35,7 @@ static std::string analyze_general(PlayerType *player_ptr, const ItemEntity *o_p
  */
 static std::vector<std::string> analyze_slay(const ItemEntity *o_ptr)
 {
-    auto flags = object_flags(o_ptr);
+    auto flags = o_ptr->get_flags();
     return extract_spoiler_flags(flags, slay_flags_desc);
 }
 
@@ -48,7 +47,7 @@ static std::vector<std::string> analyze_slay(const ItemEntity *o_ptr)
  */
 static std::vector<std::string> analyze_brand(const ItemEntity *o_ptr)
 {
-    auto flags = object_flags(o_ptr);
+    auto flags = o_ptr->get_flags();
     return extract_spoiler_flags(flags, brand_flags_desc);
 }
 
@@ -60,7 +59,7 @@ static std::vector<std::string> analyze_brand(const ItemEntity *o_ptr)
  */
 static std::vector<std::string> analyze_resist(const ItemEntity *o_ptr)
 {
-    auto flags = object_flags(o_ptr);
+    auto flags = o_ptr->get_flags();
     return extract_spoiler_flags(flags, resist_flags_desc);
 }
 
@@ -72,7 +71,7 @@ static std::vector<std::string> analyze_resist(const ItemEntity *o_ptr)
  */
 static std::vector<std::string> analyze_immune(const ItemEntity *o_ptr)
 {
-    auto flags = object_flags(o_ptr);
+    auto flags = o_ptr->get_flags();
     return extract_spoiler_flags(flags, immune_flags_desc);
 }
 
@@ -84,7 +83,7 @@ static std::vector<std::string> analyze_immune(const ItemEntity *o_ptr)
  */
 static std::vector<std::string> analyze_vulnerable(const ItemEntity *o_ptr)
 {
-    auto flags = object_flags(o_ptr);
+    auto flags = o_ptr->get_flags();
     return extract_spoiler_flags(flags, vulnerable_flags_desc);
 }
 
@@ -96,7 +95,7 @@ static std::vector<std::string> analyze_vulnerable(const ItemEntity *o_ptr)
  */
 static std::vector<std::string> analyze_sustains(const ItemEntity *o_ptr)
 {
-    auto flags = object_flags(o_ptr);
+    auto flags = o_ptr->get_flags();
     if (flags.has_all_of(EnumRange(TR_SUST_STR, TR_SUST_CHR))) {
         return { _("全能力", "All stats") };
     }
@@ -118,7 +117,7 @@ static std::vector<std::string> analyze_sustains(const ItemEntity *o_ptr)
 static std::vector<std::string> analyze_misc_magic(const ItemEntity *o_ptr)
 {
     std::vector<std::string> descriptions{};
-    auto flags = object_flags(o_ptr);
+    auto flags = o_ptr->get_flags();
     const auto &flags2_descriptions = extract_spoiler_flags(flags, misc_flags2_desc);
     descriptions.insert(descriptions.end(), flags2_descriptions.begin(), flags2_descriptions.end());
     const auto &flags3_descriptions = extract_spoiler_flags(flags, misc_flags3_desc);

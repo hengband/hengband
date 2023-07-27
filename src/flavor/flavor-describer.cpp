@@ -20,7 +20,6 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trg-types.h"
 #include "object-hook/hook-quest.h"
-#include "object/object-flags.h"
 #include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
@@ -112,7 +111,7 @@ static bool should_show_ac_bonus(const ItemEntity &item)
 
 static bool should_show_slaying_bonus(const ItemEntity &item)
 {
-    if (object_flags(&item).has(TR_SHOW_MODS)) {
+    if (item.get_flags().has(TR_SHOW_MODS)) {
         return true;
     }
 
@@ -154,7 +153,7 @@ static std::string describe_weapon_dice(PlayerType *player_ptr, const ItemEntity
 static std::string describe_bow_power(PlayerType *player_ptr, const ItemEntity &item, const describe_option_type &opt)
 {
     auto power = item.get_arrow_magnification();
-    const auto tr_flags = object_flags(&item);
+    const auto tr_flags = item.get_flags();
     if (tr_flags.has(TR_XTRA_MIGHT)) {
         power++;
     }
@@ -355,7 +354,7 @@ static std::string describe_charges_rod(const ItemEntity &item)
 
 static std::string describe_pval_type(const ItemEntity &item)
 {
-    const auto tr_flags = object_flags(&item);
+    const auto tr_flags = item.get_flags();
     if (tr_flags.has(TR_HIDE_TYPE)) {
         return "";
     }
@@ -385,7 +384,7 @@ static std::string describe_pval_type(const ItemEntity &item)
 
 static std::string describe_pval(const ItemEntity &item)
 {
-    const auto tr_flags = object_flags(&item);
+    const auto tr_flags = item.get_flags();
     if (tr_flags.has_none_of(TR_PVAL_FLAG_MASK)) {
         return "";
     }

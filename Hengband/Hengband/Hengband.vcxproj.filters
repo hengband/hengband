@@ -1001,9 +1001,6 @@
     <ClCompile Include="..\..\src\core\visuals-reseter.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\object-flags.cpp">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\object\object-info.cpp">
       <Filter>object</Filter>
     </ClCompile>
@@ -3637,9 +3634,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\trg-types.h">
       <Filter>object-enchant</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\object-flags.h">
-      <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-info.h">
       <Filter>object</Filter>
