@@ -86,7 +86,7 @@ static ItemEntity make_fake_artifact(FixedArtifactId fixed_artifact_idx)
  * Create a spoiler file entry for an artifact
  * @param art_ptr アーティファクト情報をまとめた構造体の参照ポインタ
  */
-static void spoiler_print_art(obj_desc_list *art_ptr, std::ofstream &ofs)
+static void spoiler_print_art(ArtifactsDumpInfo *art_ptr, std::ofstream &ofs)
 {
     const auto *pval_ptr = &art_ptr->pval_info;
     ofs << art_ptr->description << '\n';
@@ -143,7 +143,7 @@ SpoilerOutputResultType spoil_fixed_artifact()
 
                 const auto item = make_fake_artifact(a_idx);
                 PlayerType dummy;
-                obj_desc_list artifact_descriptions;
+                ArtifactsDumpInfo artifact_descriptions;
                 object_analyze(&dummy, &item, &artifact_descriptions);
                 spoiler_print_art(&artifact_descriptions, ofs);
             }

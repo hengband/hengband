@@ -254,7 +254,7 @@ static std::string analyze_misc(const ItemEntity *o_ptr)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param desc_ptr 全アーティファクト情報を収める文字列参照ポインタ
  */
-void object_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr, obj_desc_list *desc_ptr)
+void object_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr, ArtifactsDumpInfo *desc_ptr)
 {
     desc_ptr->description = analyze_general(player_ptr, o_ptr);
     desc_ptr->pval_info.analyze(*o_ptr);
@@ -276,7 +276,7 @@ void object_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr, obj_desc_li
  * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
  * @param desc_ptr 記述内容を収める構造体参照ポインタ
  */
-void random_artifact_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr, obj_desc_list *desc_ptr)
+void random_artifact_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr, ArtifactsDumpInfo *desc_ptr)
 {
     desc_ptr->description = analyze_general(player_ptr, o_ptr);
     desc_ptr->pval_info.analyze(*o_ptr);
