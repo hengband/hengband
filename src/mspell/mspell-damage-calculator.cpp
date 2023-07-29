@@ -243,6 +243,11 @@ static int monspell_damage_base(
         dice_num = 10;
         dice_side = 10;
         break;
+    case MonsterAbilityType::BA_METEOR:
+        dam = 50 + rlev / 2;
+        dice_num = rlev * 5 / 2;
+        dice_side = 2;
+        break;
     case MonsterAbilityType::DRAIN_MANA:
         dam = rlev;
         div = 1;
