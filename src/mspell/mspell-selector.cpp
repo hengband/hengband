@@ -65,7 +65,7 @@ static bool spell_attack(MonsterAbilityType spell)
     if (spell_in_between(spell, MonsterAbilityType::CAUSE_1, MonsterAbilityType::MISSILE)) {
         return true;
     }
-    if (spell_in_between(spell, MonsterAbilityType::BO_VOID, MonsterAbilityType::BO_ABYSS)) {
+    if (spell_in_between(spell, MonsterAbilityType::BO_VOID, MonsterAbilityType::BO_METEOR)) {
         return true;
     }
 
