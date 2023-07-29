@@ -275,6 +275,8 @@ static bool switch_cast_blue_magic(PlayerType *player_ptr, bmc_type *bmc_ptr, Mo
         return cast_blue_ball_void(player_ptr, bmc_ptr);
     case MonsterAbilityType::BA_ABYSS:
         return cast_blue_ball_abyss(player_ptr, bmc_ptr);
+    case MonsterAbilityType::BA_METEOR:
+        return cast_blue_ball_meteor(player_ptr, bmc_ptr);
     case MonsterAbilityType::DRAIN_MANA:
         return cast_blue_drain_mana(player_ptr, bmc_ptr);
     case MonsterAbilityType::MIND_BLAST:

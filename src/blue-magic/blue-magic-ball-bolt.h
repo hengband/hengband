@@ -20,6 +20,7 @@ bool cast_blue_ball_dark_storm(PlayerType *player_ptr, bmc_type *bmc_ptr);
 bool cast_blue_ball_mana_storm(PlayerType *player_ptr, bmc_type *bmc_ptr);
 bool cast_blue_ball_void(PlayerType *player_ptr, bmc_type *bmc_ptr);
 bool cast_blue_ball_abyss(PlayerType *player_ptr, bmc_type *bmc_ptr);
+bool cast_blue_ball_meteor(PlayerType *player_ptr, bmc_type *bmc_ptr);
 
 bool cast_blue_bolt_acid(PlayerType *player_ptr, bmc_type *bmc_ptr);
 bool cast_blue_bolt_elec(PlayerType *player_ptr, bmc_type *bmc_ptr);

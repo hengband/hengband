@@ -91,6 +91,7 @@ std::string learnt_info(PlayerType *player_ptr, MonsterAbilityType power)
     case MonsterAbilityType::BA_WATE:
     case MonsterAbilityType::BA_VOID:
     case MonsterAbilityType::BA_ABYSS:
+    case MonsterAbilityType::BA_METEOR:
         return set_bluemage_damage(player_ptr, power, plev, KWD_DAM);
     case MonsterAbilityType::DRAIN_MANA:
         return set_bluemage_damage(player_ptr, power, plev, KWD_HEAL);

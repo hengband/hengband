@@ -188,6 +188,18 @@ bool cast_blue_ball_abyss(PlayerType *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
+bool cast_blue_ball_meteor(PlayerType *player_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
+        return false;
+    }
+
+    msg_print(_("メテオスウォームの呪文を念じた。", "You invoke a meteor swarm."));
+    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BA_METEOR, bmc_ptr->plev, DAM_ROLL);
+    fire_ball(player_ptr, AttributeType::METEOR, bmc_ptr->dir, bmc_ptr->damage, 4);
+    return true;
+}
+
 bool cast_blue_bolt_acid(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
