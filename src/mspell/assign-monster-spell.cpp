@@ -108,6 +108,7 @@ static MonsterSpellResult monspell_to_player_impl(PlayerType *player_ptr, Monste
     case MonsterAbilityType::BO_ICEE:
     case MonsterAbilityType::BO_VOID:
     case MonsterAbilityType::BO_ABYSS:
+    case MonsterAbilityType::BO_METEOR:
     case MonsterAbilityType::MISSILE: 
         return MSpellBolt(player_ptr, m_idx, ms_type, MONSTER_TO_PLAYER).shoot(y,x);
 
@@ -241,6 +242,7 @@ static MonsterSpellResult monspell_to_monster_impl(
     case MonsterAbilityType::BO_ICEE:
     case MonsterAbilityType::BO_VOID:
     case MonsterAbilityType::BO_ABYSS:
+    case MonsterAbilityType::BO_METEOR:
     case MonsterAbilityType::MISSILE: 
          return MSpellBolt(player_ptr, m_idx, t_idx, ms_type, MONSTER_TO_MONSTER).shoot(y, x);
 

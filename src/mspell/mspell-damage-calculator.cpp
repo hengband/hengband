@@ -342,6 +342,11 @@ static int monspell_damage_base(
         dice_num = 13;
         dice_side = 14;
         break;
+    case MonsterAbilityType::BO_METEOR:
+        dam = 30 + rlev * 2;
+        dice_num = 1;
+        dice_side = rlev;
+        break;
     case MonsterAbilityType::MISSILE:
         dam = (rlev / 3);
         dice_num = 2;
