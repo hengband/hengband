@@ -343,3 +343,15 @@ bool cast_blue_bolt_void(PlayerType *player_ptr, bmc_type *bmc_ptr)
     fire_bolt(player_ptr, AttributeType::VOID_MAGIC, bmc_ptr->dir, bmc_ptr->damage);
     return true;
 }
+
+bool cast_blue_bolt_meteor(PlayerType *player_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
+        return false;
+    }
+
+    msg_print(_("メテオストライクの呪文を唱えた。", "You cast a meteor strike."));
+    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BO_METEOR, bmc_ptr->plev, DAM_ROLL);
+    fire_bolt(player_ptr, AttributeType::METEOR, bmc_ptr->dir, bmc_ptr->damage);
+    return true;
+}
