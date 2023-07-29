@@ -327,6 +327,8 @@ const std::unordered_map<std::string_view, MonsterResistanceType> r_info_flagsr 
     { "RES_ABYSS", MonsterResistanceType::RESIST_ABYSS },
     { "HURT_VOID", MonsterResistanceType::HURT_VOID_MAGIC },
     { "RES_VOID", MonsterResistanceType::RESIST_VOID_MAGIC },
+    { "HURT_METEOR", MonsterResistanceType::HURT_METEOR },
+    { "RES_METEOR", MonsterResistanceType::RESIST_METEOR },
 };
 
 const std::unordered_map<std::string_view, MonsterAuraType> r_info_aura_flags = {

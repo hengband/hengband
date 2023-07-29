@@ -772,3 +772,23 @@ ProcessResult effect_monster_abyss(PlayerType *player_ptr, EffectMonster *em_ptr
 
     return ProcessResult::PROCESS_CONTINUE;
 }
+
+ProcessResult effect_monster_meteor(PlayerType *player_ptr, EffectMonster *em_ptr)
+{
+    if (em_ptr->seen) {
+        em_ptr->obvious = true;
+    }
+
+    if (em_ptr->r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_METEOR)) {
+        return ProcessResult::PROCESS_CONTINUE;
+    }
+
+    em_ptr->note = _("には耐性がある！", " resists!");
+    em_ptr->dam *= 3;
+    em_ptr->dam /= randint1(6) + 6;
+    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+        em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_METEOR);
+    }
+
+    return ProcessResult::PROCESS_CONTINUE;
+}

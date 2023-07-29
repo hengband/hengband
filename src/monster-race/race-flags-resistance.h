@@ -52,5 +52,7 @@ enum class MonsterResistanceType {
     RESIST_ABYSS = 48, /* Resist abyss */
     HURT_VOID_MAGIC = 49, /* Hurt badly by void */
     RESIST_VOID_MAGIC = 50, /* Resist void */
+    HURT_METEOR = 51, /* Hurt badly by meteor */
+    RESIST_METEOR = 52, /* Resist meteor */
     MAX, /* Max of Resistances */
 };

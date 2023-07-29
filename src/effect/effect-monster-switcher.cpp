@@ -330,7 +330,6 @@ ProcessResult switch_effects_monster(PlayerType *player_ptr, EffectMonster *em_p
     case AttributeType::MISSILE:
     case AttributeType::DEBUG:
     case AttributeType::MANA:
-    case AttributeType::METEOR:
     case AttributeType::BLOOD_CURSE:
     case AttributeType::SEEKER:
     case AttributeType::SUPER_RAY:
@@ -497,6 +496,8 @@ ProcessResult switch_effects_monster(PlayerType *player_ptr, EffectMonster *em_p
         return effect_monster_void(player_ptr, em_ptr);
     case AttributeType::ABYSS:
         return effect_monster_abyss(player_ptr, em_ptr);
+    case AttributeType::METEOR:
+        return effect_monster_meteor(player_ptr, em_ptr);
     default: {
         em_ptr->skipped = true;
         em_ptr->dam = 0;
