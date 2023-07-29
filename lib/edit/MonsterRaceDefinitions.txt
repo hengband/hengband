@@ -26743,3 +26743,24 @@ D:$He was born from the heart of Sayva, the goddess of destruction.
 D:$  Apparently, some foolish adventurer had given away all the Destiny Stones.
 D:破壊の女神サイヴァの心臓から生まれた存在だ。
 D:どうやら愚かなる冒険者がすべてのデステニィストーンを捧げてしまったらしい。
+
+N:1354:赤チォコヴォLv99
+E:Lv.99 Red Chiokovo
+G:B:R
+I:135:80d100:30:150:10
+W:99:6:80000:0:0:0
+B:CLAW:HURT:10d10
+B:CRUSH:HURT:8d13
+B:KICK:HURT:30d5
+B:CLAW:HURT:10d10
+F:CAN_SWIM | RIDING | POWERFUL | ANIMAL | EVIL |
+F:DROP_2D2 | DROP_GREAT |
+F:FORCE_MAXHP | UNIQUE2 |
+F:NO_CONF | NO_SLEEP | NO_FEAR |
+F:IM_FIRE | IM_COLD | IM_POIS | RES_CHAO | RES_LITE | RES_INER | RES_ABYSS | RES_GRAV | RES_METEOR
+S:1_IN_3
+S:BA_METEOR | BO_METEOR | BA_FIRE | BA_LITE | BLIND | HOLD | CONF | HEAL |
+D:$It is found seldom. But a greatly formidable.
+D:$You'll be defeated without a complete preparation.
+D:それはめったに出会えないが、恐ろしく強力な力を持っている。
+D:生半可な態勢で挑めばあっという間に返り討ちにされるだろう。
