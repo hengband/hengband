@@ -50,7 +50,7 @@ const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_BEAM_MASK = {
  */
 const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_BIG_BALL_MASK = {
     MonsterAbilityType::BA_CHAO, MonsterAbilityType::BA_LITE, MonsterAbilityType::BA_DARK, MonsterAbilityType::BA_WATE,
-    MonsterAbilityType::BA_MANA, MonsterAbilityType::BA_VOID, MonsterAbilityType::BA_ABYSS,
+    MonsterAbilityType::BA_MANA, MonsterAbilityType::BA_VOID, MonsterAbilityType::BA_ABYSS,MonsterAbilityType::BA_METEOR,
 };
 
 /*
