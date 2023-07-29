@@ -206,6 +206,7 @@ const std::unordered_map<std::string_view, MonsterAbilityType> r_info_ability_fl
 	{"BO_ICEE", MonsterAbilityType::BO_ICEE },
 	{"BO_VOID", MonsterAbilityType::BO_VOID },
 	{"BO_ABYSS", MonsterAbilityType::BO_ABYSS },
+	{"BO_METEOR", MonsterAbilityType::BO_METEOR },
 	{"MISSILE", MonsterAbilityType::MISSILE },
 	{"SCARE", MonsterAbilityType::SCARE },
 	{"BLIND", MonsterAbilityType::BLIND },
