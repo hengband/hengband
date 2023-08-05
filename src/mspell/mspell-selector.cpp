@@ -79,38 +79,7 @@ static bool spell_escape(MonsterAbilityType spell)
  */
 static bool spell_annoy(MonsterAbilityType spell)
 {
-    /* Shriek */
-    if (spell == MonsterAbilityType::SHRIEK) {
-        return true;
-    }
-
-    /* Brain smash, et al (added curses) */
-    if (spell_in_between(spell, MonsterAbilityType::DRAIN_MANA, MonsterAbilityType::CAUSE_4)) {
-        return true;
-    }
-
-    /* Scare, confuse, blind, slow, paralyze */
-    if (spell_in_between(spell, MonsterAbilityType::SCARE, MonsterAbilityType::HOLD)) {
-        return true;
-    }
-
-    /* Teleport to */
-    if (spell == MonsterAbilityType::TELE_TO) {
-        return true;
-    }
-
-    /* Teleport level */
-    if (spell == MonsterAbilityType::TELE_LEVEL) {
-        return true;
-    }
-
-    /* Darkness, make traps, cause amnesia */
-    if (spell_in_between(spell, MonsterAbilityType::TRAPS, MonsterAbilityType::RAISE_DEAD)) {
-        return true;
-    }
-
-    /* Doesn't annoy */
-    return false;
+    return RF_ABILITY_ANNOY_SPELLS_MASK.has(spell);
 }
 
 /*!
