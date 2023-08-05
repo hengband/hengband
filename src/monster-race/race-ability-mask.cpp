@@ -99,3 +99,15 @@ const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_NOMAGIC_MASK =
     EnumClassFlagGroup<MonsterAbilityType>(RF_ABILITY_BREATH_MASK).set({
     MonsterAbilityType::SHRIEK, MonsterAbilityType::ROCKET, MonsterAbilityType::SHOOT, MonsterAbilityType::SPECIAL,
 });
+
+const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_ATTACK_SPELLS_MASK =
+    (RF_ABILITY_BALL_MASK |
+        RF_ABILITY_BEAM_MASK |
+        RF_ABILITY_BOLT_MASK)
+        .set(/* "Cause wounds" spells */
+            {
+                MonsterAbilityType::CAUSE_1,
+                MonsterAbilityType::CAUSE_2,
+                MonsterAbilityType::CAUSE_3,
+                MonsterAbilityType::CAUSE_4,
+                MonsterAbilityType::HAND_DOOM });
