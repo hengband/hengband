@@ -8,6 +8,7 @@
 #include "mspell/mspell-selector.h"
 #include "floor/geometry.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-ability-mask.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
@@ -45,42 +46,7 @@ static bool spell_in_between(MonsterAbilityType spell, MonsterAbilityType start,
  */
 static bool spell_attack(MonsterAbilityType spell)
 {
-    /* All RF4 spells hurt (except for shriek and dispel) */
-    if (spell_in_between(spell, MonsterAbilityType::ROCKET, MonsterAbilityType::BR_DISI)) {
-        return true;
-    }
-    if (spell_in_between(spell, MonsterAbilityType::BR_VOID, MonsterAbilityType::BR_ABYSS)) {
-        return true;
-    }
-
-    /* Various "ball" spells */
-    if (spell_in_between(spell, MonsterAbilityType::BA_ACID, MonsterAbilityType::BA_DARK)) {
-        return true;
-    }
-    if (spell_in_between(spell, MonsterAbilityType::BA_VOID, MonsterAbilityType::BA_ABYSS)) {
-        return true;
-    }
-
-    /* "Cause wounds" and "bolt" spells */
-    if (spell_in_between(spell, MonsterAbilityType::CAUSE_1, MonsterAbilityType::MISSILE)) {
-        return true;
-    }
-    if (spell_in_between(spell, MonsterAbilityType::BO_VOID, MonsterAbilityType::BO_METEOR)) {
-        return true;
-    }
-
-    /* Hand of Doom */
-    if (spell == MonsterAbilityType::HAND_DOOM) {
-        return true;
-    }
-
-    /* Psycho-Spear */
-    if (spell == MonsterAbilityType::PSY_SPEAR) {
-        return true;
-    }
-
-    /* Doesn't hurt */
-    return false;
+    return RF_ABILITY_ATTACK_SPELLS_MASK.has(spell);
 }
 
 /*!
