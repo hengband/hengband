@@ -15,3 +15,4 @@ extern const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_ATTACK_MASK;
 extern const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_INDIRECT_MASK;
 extern const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_NOMAGIC_MASK;
 extern const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_ATTACK_SPELLS_MASK;
+extern const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_ANNOY_SPELLS_MASK;

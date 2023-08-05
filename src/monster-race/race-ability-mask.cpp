@@ -111,3 +111,24 @@ const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_ATTACK_SPELLS_MASK =
                 MonsterAbilityType::CAUSE_3,
                 MonsterAbilityType::CAUSE_4,
                 MonsterAbilityType::HAND_DOOM });
+
+const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_ANNOY_SPELLS_MASK = {
+    MonsterAbilityType::SHRIEK,
+    MonsterAbilityType::DRAIN_MANA,
+    MonsterAbilityType::MIND_BLAST,
+    MonsterAbilityType::BRAIN_SMASH,
+    MonsterAbilityType::CAUSE_1,
+    MonsterAbilityType::CAUSE_2,
+    MonsterAbilityType::CAUSE_3,
+    MonsterAbilityType::CAUSE_4,
+    MonsterAbilityType::SCARE,
+    MonsterAbilityType::BLIND,
+    MonsterAbilityType::CONF,
+    MonsterAbilityType::SLOW,
+    MonsterAbilityType::HOLD,
+    MonsterAbilityType::TELE_TO,
+    MonsterAbilityType::TELE_LEVEL,
+    MonsterAbilityType::TRAPS,
+    MonsterAbilityType::FORGET,
+    MonsterAbilityType::RAISE_DEAD,
+};
