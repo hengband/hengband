@@ -23,22 +23,6 @@
 #include "world/world.h"
 
 /*!
- * @brief 指定したID値が指定した範囲内のIDかどうかを返す
- *
- * enum値に対して範囲で判定するのはあまり好ましくないが、歴史的経緯により仕方がない
- *
- * @param spell 判定対象のID
- * @param start 範囲の開始ID
- * @param end 範囲の終了ID(このIDも含む)
- * @return IDが start <= spell <= end なら true、そうでなければ false
- */
-static bool spell_in_between(MonsterAbilityType spell, MonsterAbilityType start, MonsterAbilityType end)
-{
-    auto spell_int = enum2i(spell);
-    return enum2i(start) <= spell_int && spell_int <= enum2i(end);
-}
-
-/*!
  * @brief ID値が攻撃魔法のIDかどうかを返す /
  * Return TRUE if a spell is good for hurting the player (directly).
  * @param spell 判定対象のID
