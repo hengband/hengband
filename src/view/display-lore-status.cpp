@@ -312,6 +312,11 @@ void display_monster_concrete_resistances(lore_type *lore_ptr)
         lore_ptr->color[lore_ptr->vn++] = TERM_SLATE;
     }
 
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_METEOR)) {
+        lore_ptr->vp[lore_ptr->vn] = _("隕石", "meteor");
+        lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
+    }
+
     if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
         lore_ptr->vp[lore_ptr->vn] = _("あらゆる攻撃", "all");
         lore_ptr->color[lore_ptr->vn++] = TERM_YELLOW;

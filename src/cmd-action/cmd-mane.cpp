@@ -695,6 +695,15 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
 
         fire_ball(player_ptr, AttributeType::ABYSS, dir, damage, 4);
         break;
+    case MonsterAbilityType::BA_METEOR:
+        if (!get_aim_dir(player_ptr, &dir)) {
+            return false;
+        } else {
+            msg_print(_("メテオスウォームの呪文を念じた。", "You cast a meteor swarm."));
+        }
+
+        fire_ball(player_ptr, AttributeType::METEOR, dir, damage, 4);
+        break;
     case MonsterAbilityType::DRAIN_MANA:
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
@@ -844,6 +853,15 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         }
 
         fire_bolt(player_ptr, AttributeType::ABYSS, dir, damage);
+        break;
+    case MonsterAbilityType::BO_METEOR:
+        if (!get_aim_dir(player_ptr, &dir)) {
+            return false;
+        } else {
+            msg_print(_("メテオストライクの呪文を唱えた。", "You cast a meteor strike."));
+        }
+
+        fire_bolt(player_ptr, AttributeType::METEOR, dir, damage);
         break;
     case MonsterAbilityType::MISSILE:
         if (!get_aim_dir(player_ptr, &dir)) {
