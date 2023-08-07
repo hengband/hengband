@@ -140,7 +140,7 @@ std::filesystem::path path_parse(const std::filesystem::path &path)
  */
 static errr path_temp(char *buf, int max)
 {
-    concptr s = tmpnam(nullptr);
+    auto s = tmpnam(nullptr);
     if (!s) {
         return -1;
     }

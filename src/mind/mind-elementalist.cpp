@@ -799,8 +799,8 @@ static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_b
                         desc = format("  %c) ", I2A(i));
                     }
 
-                    concptr s = get_element_name(player_ptr->element, elem);
-                    std::string name = format(spell.name, s);
+                    const auto s = get_element_name(player_ptr->element, elem);
+                    const auto name = format(spell.name, s);
                     desc.append(format("%-30s%2d %4d %3d%%%s", name.data(), spell.min_lev, mana_cost, chance, comment.data()));
                     prt(desc, y + i + 1, x);
                 }
@@ -1170,7 +1170,7 @@ static int get_element_realm(PlayerType *player_ptr, int is, int n)
     int os = cs;
     int k;
 
-    std::string buf = format(_("領域を選んで下さい(%c-%c) ('='初期オプション設定): ", "Choose a realm (%c-%c) ('=' for options): "), I2A(0), I2A(n - 1));
+    const auto buf = format(_("領域を選んで下さい(%c-%c) ('='初期オプション設定): ", "Choose a realm (%c-%c) ('=' for options): "), I2A(0), I2A(n - 1));
 
     while (true) {
         display_realm_cursor(os, n, TERM_WHITE);

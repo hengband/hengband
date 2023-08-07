@@ -26724,7 +26724,7 @@ N:1353:破壊と憎悪の化身『サルーイン』
 E:Saruin, The avatar of destruction and hatred
 G:P:w
 I:125:90d100:100:175:0
-W:79:3:0:66666:0:0
+W:79:3:66666:0:0
 B:HIT:HURT:11d13
 B:HIT:HURT:11d13
 B:HIT:HURT:11d13

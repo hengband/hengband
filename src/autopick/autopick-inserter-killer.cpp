@@ -15,7 +15,7 @@
  */
 void check_expression_line(text_body_type *tb, int y)
 {
-    concptr s = tb->lines_list[y];
+    auto s = tb->lines_list[y];
 
     if ((s[0] == '?' && s[1] == ':') || (tb->states[y] & LSTAT_BYPASS)) {
         tb->dirty_flags |= DIRTY_EXPRESSION;
@@ -40,7 +40,7 @@ bool can_insert_line(text_body_type *tb, int add_num)
  */
 bool insert_return_code(text_body_type *tb)
 {
-    char buf[MAX_LINELEN];
+    char buf[MAX_LINELEN]{};
     int i, j, num_lines;
 
     num_lines = count_line(tb);
@@ -85,7 +85,7 @@ bool insert_macro_line(text_body_type *tb)
     flush();
     inkey_base = true;
     i = inkey();
-    char buf[1024];
+    char buf[1024]{};
     while (i) {
         buf[n++] = (char)i;
         inkey_base = true;
@@ -137,7 +137,7 @@ bool insert_keymap_line(text_body_type *tb)
     }
 
     flush();
-    char buf[2];
+    char buf[2]{};
     buf[0] = inkey();
     buf[1] = '\0';
 
@@ -171,7 +171,7 @@ bool insert_keymap_line(text_body_type *tb)
 void insert_single_letter(text_body_type *tb, int key)
 {
     int i, j, len;
-    char buf[MAX_LINELEN];
+    char buf[MAX_LINELEN]{};
 
     for (i = j = 0; tb->lines_list[tb->cy][i] && i < tb->cx; i++) {
         buf[j++] = tb->lines_list[tb->cy][i];
@@ -221,7 +221,7 @@ void insert_single_letter(text_body_type *tb, int key)
  */
 void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool whole)
 {
-    concptr s = tb->lines_list[y];
+    auto s = tb->lines_list[y];
     if (whole && x0 == 0 && s[x1] == '\0' && tb->lines_list[y + 1]) {
         string_free(tb->lines_list[y]);
 
@@ -240,7 +240,7 @@ void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool whole)
         return;
     }
 
-    char buf[MAX_LINELEN];
+    char buf[MAX_LINELEN]{};
     char *d = buf;
     for (int x = 0; x < x0; x++) {
         *(d++) = s[x];

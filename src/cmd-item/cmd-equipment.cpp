@@ -138,9 +138,9 @@ void do_cmd_wield(PlayerType *player_ptr)
     OBJECT_IDX need_switch_wielding = 0;
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
-    concptr q = _("どれを装備しますか? ", "Wear/Wield which item? ");
-    concptr s = _("装備可能なアイテムがない。", "You have nothing you can wear or wield.");
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(item_tester_hook_wear, player_ptr));
+    constexpr auto selection_q = _("どれを装備しますか? ", "Wear/Wield which item? ");
+    constexpr auto selection_s = _("装備可能なアイテムがない。", "You have nothing you can wear or wield.");
+    o_ptr = choose_object(player_ptr, &item, selection_q, selection_s, (USE_INVEN | USE_FLOOR), FuncItemTester(item_tester_hook_wear, player_ptr));
     if (!o_ptr) {
         return;
     }
@@ -155,8 +155,8 @@ void do_cmd_wield(PlayerType *player_ptr)
     case ItemKindType::SHIELD:
     case ItemKindType::CARD:
         if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
-            q = _("どちらの武器と取り替えますか?", "Replace which weapon? ");
-            s = _("おっと。", "Oops.");
+            constexpr auto q = _("どちらの武器と取り替えますか?", "Replace which weapon? ");
+            constexpr auto s = _("おっと。", "Oops.");
             if (!choose_object(player_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), FuncItemTester(&ItemEntity::is_melee_weapon))) {
                 return;
             }
@@ -168,8 +168,8 @@ void do_cmd_wield(PlayerType *player_ptr)
             slot = INVEN_MAIN_HAND;
         } else if (o_ptr_mh->is_valid() && o_ptr_sh->is_valid() &&
                    ((tval == ItemKindType::CAPTURE) || (!o_ptr_mh->is_melee_weapon() && !o_ptr_sh->is_melee_weapon()))) {
-            q = _("どちらの手に装備しますか?", "Equip which hand? ");
-            s = _("おっと。", "Oops.");
+            constexpr auto q = _("どちらの手に装備しますか?", "Equip which hand? ");
+            constexpr auto s = _("おっと。", "Oops.");
             if (!choose_object(player_ptr, &slot, q, s, (USE_EQUIP), FuncItemTester(&ItemEntity::is_wieldable_in_etheir_hand))) {
                 return;
             }
@@ -189,8 +189,8 @@ void do_cmd_wield(PlayerType *player_ptr)
                 slot = INVEN_SUB_HAND;
             }
         } else if (o_ptr_mh->is_valid() && o_ptr_sh->is_valid()) {
-            q = _("どちらの手に装備しますか?", "Equip which hand? ");
-            s = _("おっと。", "Oops.");
+            constexpr auto q = _("どちらの手に装備しますか?", "Equip which hand? ");
+            constexpr auto s = _("おっと。", "Oops.");
             if (!choose_object(player_ptr, &slot, q, s, (USE_EQUIP), FuncItemTester(&ItemEntity::is_wieldable_in_etheir_hand))) {
                 return;
             }
@@ -201,23 +201,24 @@ void do_cmd_wield(PlayerType *player_ptr)
         }
 
         break;
-    case ItemKindType::RING:
+    case ItemKindType::RING: {
+        std::string q;
         if (player_ptr->inventory_list[INVEN_SUB_RING].is_valid() && player_ptr->inventory_list[INVEN_MAIN_RING].is_valid()) {
             q = _("どちらの指輪と取り替えますか?", "Replace which ring? ");
         } else {
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
         }
 
-        s = _("おっと。", "Oops.");
+        constexpr auto s = _("おっと。", "Oops.");
         player_ptr->select_ring_slot = true;
-        if (!choose_object(player_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT))) {
+        if (!choose_object(player_ptr, &slot, q.data(), s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT))) {
             player_ptr->select_ring_slot = false;
             return;
         }
 
         player_ptr->select_ring_slot = false;
         break;
-
+    }
     default:
         break;
     }
@@ -374,8 +375,8 @@ void do_cmd_takeoff(PlayerType *player_ptr)
     PlayerClass pc(player_ptr);
     pc.break_samurai_stance({ SamuraiStanceType::MUSOU });
 
-    concptr q = _("どれを装備からはずしますか? ", "Take off which item? ");
-    concptr s = _("はずせる装備がない。", "You are not wearing anything to take off.");
+    constexpr auto q = _("どれを装備からはずしますか? ", "Take off which item? ");
+    constexpr auto s = _("はずせる装備がない。", "You are not wearing anything to take off.");
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT));
     if (!o_ptr) {
         return;

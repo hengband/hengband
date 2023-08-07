@@ -14,6 +14,7 @@
 #include "util/string-processor.h"
 #include "view/display-lore.h"
 #include "view/display-messages.h"
+#include "wizard/spoiler-util.h"
 
 /*!
  * @brief シンボル職の記述名を返す /
@@ -73,20 +74,20 @@ static concptr attr_to_text(MonsterRaceInfo *r_ptr)
     return _("変な色の", "Icky");
 }
 
-SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const MonsterRaceInfo *)> filter_monster)
+SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<bool(const MonsterRaceInfo *)> filter_monster)
 {
     PlayerType dummy;
     uint16_t why = 2;
-    const auto &path = path_build(ANGBAND_DIR_USER, fname);
-    spoiler_file = angband_fopen(path, FileOpenMode::WRITE);
-    if (!spoiler_file) {
+    const auto &path = path_build(ANGBAND_DIR_USER, filename);
+    std::ofstream ofs(path);
+    if (!ofs) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
-    fprintf(spoiler_file, "Monster Spoilers for %s\n", get_version().data());
-    fprintf(spoiler_file, "------------------------------------------\n\n");
-    fprintf(spoiler_file, "%-45.45s%4s %4s %4s %7s %7s  %19.19s\n", "Name", "Lev", "Rar", "Spd", "Hp", "Ac", "Visual Info");
-    fprintf(spoiler_file, "%-45.45s%4s %4s %4s %7s %7s  %4.19s\n",
+    ofs << format("Monster Spoilers for %s\n", get_version().data());
+    ofs << "------------------------------------------\n\n";
+    ofs << format("%-45.45s%4s %4s %4s %7s %7s  %19.19s\n", "Name", "Lev", "Rar", "Spd", "Hp", "Ac", "Visual Info");
+    ofs << format("%-45.45s%4s %4s %4s %7s %7s  %4.19s\n",
         "---------------------------------------------"
         "----"
         "----------",
@@ -121,10 +122,10 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const M
         }
         nam.append(name.front());
 
-        std::string lev = format("%d", (int)r_ptr->level);
-        std::string rar = format("%d", (int)r_ptr->rarity);
-        std::string spd = format("%+d", r_ptr->speed - STANDARD_SPEED);
-        std::string ac = format("%d", r_ptr->ac);
+        const auto lev = format("%d", r_ptr->level);
+        const auto rar = format("%d", (int)r_ptr->rarity);
+        const auto spd = format("%+d", r_ptr->speed - STANDARD_SPEED);
+        const auto ac = format("%d", r_ptr->ac);
         std::string hp;
         if (any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) || (r_ptr->hside == 1)) {
             hp = format("%d", r_ptr->hdice * r_ptr->hside);
@@ -132,19 +133,18 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const M
             hp = format("%dd%d", r_ptr->hdice, r_ptr->hside);
         }
 
-        std::string symbol = format("%s '%c'", attr_to_text(r_ptr), r_ptr->d_char);
-        fprintf(spoiler_file, "%-45.45s%4s %4s %4s %7s %7s  %19.19s\n",
+        const auto symbol = format("%s '%c'", attr_to_text(r_ptr), r_ptr->d_char);
+        ofs << format("%-45.45s%4s %4s %4s %7s %7s  %19.19s\n",
             nam.data(), lev.data(), rar.data(), spd.data(), hp.data(),
             ac.data(), symbol.data());
 
         for (auto i = 1U; i < name.size(); ++i) {
-            fprintf(spoiler_file, "    %s\n", name[i].data());
+            ofs << format("    %s\n", name[i].data());
         }
     }
 
-    fprintf(spoiler_file, "\n");
-    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SpoilerOutputResultType::FILE_CLOSE_FAILED
-                                                                : SpoilerOutputResultType::SUCCESSFUL;
+    ofs << '\n';
+    return ofs.good() ? SpoilerOutputResultType::SUCCESSFUL : SpoilerOutputResultType::FILE_CLOSE_FAILED;
 }
 
 /*!
@@ -156,7 +156,7 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const M
 static void roff_func(TERM_COLOR attr, std::string_view str)
 {
     (void)attr;
-    spoil_out(str.data());
+    spoil_out(str);
 }
 
 /*!
@@ -164,10 +164,10 @@ static void roff_func(TERM_COLOR attr, std::string_view str)
  * Create a spoiler file for monsters (-SHAWN-)
  * @param fname ファイル名
  */
-SpoilerOutputResultType spoil_mon_info(concptr fname)
+SpoilerOutputResultType spoil_mon_info()
 {
     PlayerType dummy;
-    const auto &path = path_build(ANGBAND_DIR_USER, fname);
+    const auto &path = path_build(ANGBAND_DIR_USER, "mon-info.txt");
     spoiler_file = angband_fopen(path, FileOpenMode::WRITE);
     if (!spoiler_file) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;

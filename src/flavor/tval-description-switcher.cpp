@@ -36,7 +36,7 @@ static std::pair<std::string, std::string> describe_monster_ball(const ItemEntit
     }
 
 #ifdef JP
-    std::string modstr = format(" (%s)", r_ptr->name.data());
+    const auto modstr = format(" (%s)", r_ptr->name.data());
 #else
     std::string modstr;
     if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {

@@ -290,8 +290,8 @@ bool choose_ele_immune(PlayerType *player_ptr, TIME_EFFECT immune_turn)
  */
 bool pulish_shield(PlayerType *player_ptr)
 {
-    const auto q = _("どの盾を磨きますか？", "Polish which shield? ");
-    const auto s = _("磨く盾がありません。", "You have no shield to polish.");
+    constexpr auto q = _("どの盾を磨きますか？", "Polish which shield? ");
+    constexpr auto s = _("磨く盾がありません。", "You have no shield to polish.");
     const auto options = USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT;
     short item;
     auto *o_ptr = choose_object(player_ptr, &item, q, s, options, TvalItemTester(ItemKindType::SHIELD));

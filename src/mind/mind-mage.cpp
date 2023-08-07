@@ -29,8 +29,8 @@
 bool eat_magic(PlayerType *player_ptr, int power)
 {
     byte fail_type = 1;
-    const auto q = _("どのアイテムから魔力を吸収しますか？", "Drain which item? ");
-    const auto s = _("魔力を吸収できるアイテムがありません。", "You have nothing to drain.");
+    constexpr auto q = _("どのアイテムから魔力を吸収しますか？", "Drain which item? ");
+    constexpr auto s = _("魔力を吸収できるアイテムがありません。", "You have nothing to drain.");
     short item;
     auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::can_recharge));
     if (o_ptr == nullptr) {

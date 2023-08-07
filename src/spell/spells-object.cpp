@@ -485,8 +485,8 @@ bool enchant_spell(PlayerType *player_ptr, HIT_PROB num_hit, int num_dam, ARMOUR
         item_tester = FuncItemTester(&ItemEntity::is_protector);
     }
 
-    const auto q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
-    const auto s = _("強化できるアイテムがない。", "You have nothing to enchant.");
+    constexpr auto q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
+    constexpr auto s = _("強化できるアイテムがない。", "You have nothing to enchant.");
     short item;
     const auto options = USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT;
     auto *o_ptr = choose_object(player_ptr, &item, q, s, options, item_tester);
@@ -537,8 +537,8 @@ bool enchant_spell(PlayerType *player_ptr, HIT_PROB num_hit, int num_dam, ARMOUR
  */
 void brand_weapon(PlayerType *player_ptr, int brand_type)
 {
-    const auto q = _("どの武器を強化しますか? ", "Enchant which weapon? ");
-    const auto s = _("強化できる武器がない。", "You have nothing to enchant.");
+    constexpr auto q = _("どの武器を強化しますか? ", "Enchant which weapon? ");
+    constexpr auto s = _("強化できる武器がない。", "You have nothing to enchant.");
     short item;
     const auto options = USE_EQUIP | IGNORE_BOTHHAND_SLOT;
     auto *o_ptr = choose_object(player_ptr, &item, q, s, options, FuncItemTester(&ItemEntity::allow_enchant_melee_weapon));

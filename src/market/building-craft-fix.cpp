@@ -146,8 +146,8 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     }
 
     display_reparing_weapon(player_ptr, o_ptr, row);
-    const auto q = _("材料となる武器は？", "Which weapon for material? ");
-    const auto s = _("材料となる武器がありません。", "You have no material for the repair.");
+    constexpr auto q = _("材料となる武器は？", "Which weapon for material? ");
+    constexpr auto s = _("材料となる武器がありません。", "You have no material for the repair.");
     short mater;
     auto *mo_ptr = choose_object(player_ptr, &mater, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&ItemEntity::is_orthodox_melee_weapons));
     if (!mo_ptr) {

@@ -1,11 +1,9 @@
 #pragma once
 
-#include "system/angband.h"
-#include "wizard/spoiler-util.h"
-
 #include <functional>
+#include <string_view>
 
+enum class SpoilerOutputResultType;
 class MonsterRaceInfo;
-SpoilerOutputResultType spoil_mon_desc_all(concptr fname);
-SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const MonsterRaceInfo *)> filter_monster = nullptr);
-SpoilerOutputResultType spoil_mon_info(concptr fname);
+SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<bool(const MonsterRaceInfo *)> filter_monster = nullptr);
+SpoilerOutputResultType spoil_mon_info();
