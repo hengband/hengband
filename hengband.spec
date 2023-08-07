@@ -1,4 +1,4 @@
-%define version 3.0.0.88
+%define version 3.0.0.89
 %define release 1
 %global debug_package %{nil}
 
