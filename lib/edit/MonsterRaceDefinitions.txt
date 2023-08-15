@@ -26760,7 +26760,7 @@ F:NO_CONF | NO_SLEEP | NO_FEAR |
 F:IM_FIRE | IM_COLD | IM_POIS | RES_CHAO | RES_LITE | RES_INER | RES_ABYSS | RES_GRAV | RES_METEOR
 S:1_IN_3
 S:BA_METEOR | BO_METEOR | BA_FIRE | BA_LITE | BLIND | HOLD | CONF | HEAL |
-D:$It is found seldom. But a greatly formidable.
-D:$You'll be defeated without a complete preparation.
+D:$It is seldom found but greatly formidable.
+D:$  You'll be defeated without complete preparation.
 D:それはめったに出会えないが、恐ろしく強力な力を持っている。
 D:生半可な態勢で挑めばあっという間に返り討ちにされるだろう。
