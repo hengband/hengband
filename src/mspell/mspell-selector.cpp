@@ -8,6 +8,7 @@
 #include "mspell/mspell-selector.h"
 #include "floor/geometry.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-ability-mask.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
@@ -22,22 +23,6 @@
 #include "world/world.h"
 
 /*!
- * @brief 指定したID値が指定した範囲内のIDかどうかを返す
- *
- * enum値に対して範囲で判定するのはあまり好ましくないが、歴史的経緯により仕方がない
- *
- * @param spell 判定対象のID
- * @param start 範囲の開始ID
- * @param end 範囲の終了ID(このIDも含む)
- * @return IDが start <= spell <= end なら true、そうでなければ false
- */
-static bool spell_in_between(MonsterAbilityType spell, MonsterAbilityType start, MonsterAbilityType end)
-{
-    auto spell_int = enum2i(spell);
-    return enum2i(start) <= spell_int && spell_int <= enum2i(end);
-}
-
-/*!
  * @brief ID値が攻撃魔法のIDかどうかを返す /
  * Return TRUE if a spell is good for hurting the player (directly).
  * @param spell 判定対象のID
@@ -45,42 +30,7 @@ static bool spell_in_between(MonsterAbilityType spell, MonsterAbilityType start,
  */
 static bool spell_attack(MonsterAbilityType spell)
 {
-    /* All RF4 spells hurt (except for shriek and dispel) */
-    if (spell_in_between(spell, MonsterAbilityType::ROCKET, MonsterAbilityType::BR_DISI)) {
-        return true;
-    }
-    if (spell_in_between(spell, MonsterAbilityType::BR_VOID, MonsterAbilityType::BR_ABYSS)) {
-        return true;
-    }
-
-    /* Various "ball" spells */
-    if (spell_in_between(spell, MonsterAbilityType::BA_ACID, MonsterAbilityType::BA_DARK)) {
-        return true;
-    }
-    if (spell_in_between(spell, MonsterAbilityType::BA_VOID, MonsterAbilityType::BA_ABYSS)) {
-        return true;
-    }
-
-    /* "Cause wounds" and "bolt" spells */
-    if (spell_in_between(spell, MonsterAbilityType::CAUSE_1, MonsterAbilityType::MISSILE)) {
-        return true;
-    }
-    if (spell_in_between(spell, MonsterAbilityType::BO_VOID, MonsterAbilityType::BO_METEOR)) {
-        return true;
-    }
-
-    /* Hand of Doom */
-    if (spell == MonsterAbilityType::HAND_DOOM) {
-        return true;
-    }
-
-    /* Psycho-Spear */
-    if (spell == MonsterAbilityType::PSY_SPEAR) {
-        return true;
-    }
-
-    /* Doesn't hurt */
-    return false;
+    return RF_ABILITY_ATTACK_SPELLS_MASK.has(spell);
 }
 
 /*!
@@ -113,38 +63,7 @@ static bool spell_escape(MonsterAbilityType spell)
  */
 static bool spell_annoy(MonsterAbilityType spell)
 {
-    /* Shriek */
-    if (spell == MonsterAbilityType::SHRIEK) {
-        return true;
-    }
-
-    /* Brain smash, et al (added curses) */
-    if (spell_in_between(spell, MonsterAbilityType::DRAIN_MANA, MonsterAbilityType::CAUSE_4)) {
-        return true;
-    }
-
-    /* Scare, confuse, blind, slow, paralyze */
-    if (spell_in_between(spell, MonsterAbilityType::SCARE, MonsterAbilityType::HOLD)) {
-        return true;
-    }
-
-    /* Teleport to */
-    if (spell == MonsterAbilityType::TELE_TO) {
-        return true;
-    }
-
-    /* Teleport level */
-    if (spell == MonsterAbilityType::TELE_LEVEL) {
-        return true;
-    }
-
-    /* Darkness, make traps, cause amnesia */
-    if (spell_in_between(spell, MonsterAbilityType::TRAPS, MonsterAbilityType::RAISE_DEAD)) {
-        return true;
-    }
-
-    /* Doesn't annoy */
-    return false;
+    return RF_ABILITY_ANNOY_SPELLS_MASK.has(spell);
 }
 
 /*!
@@ -155,7 +74,7 @@ static bool spell_annoy(MonsterAbilityType spell)
  */
 static bool spell_summon(MonsterAbilityType spell)
 {
-    return spell_in_between(spell, MonsterAbilityType::S_KIN, MonsterAbilityType::S_DEAD_UNIQUE);
+    return RF_ABILITY_SUMMON_MASK.has(spell);
 }
 
 /*!
