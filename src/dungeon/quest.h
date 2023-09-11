@@ -100,7 +100,7 @@ class ArtifactType;
 class QuestType {
 public:
     QuestType() = default;
-    virtual ~QuestType() = default;
+
     QuestStatusType status{}; /*!< クエストの進行ステータス / Is the quest taken, completed, finished? */
     QuestKindType type{}; /*!< クエストの種別 / The quest type */
 
