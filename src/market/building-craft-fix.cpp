@@ -39,8 +39,8 @@
  */
 static void give_one_ability_of_object(ItemEntity *to_ptr, ItemEntity *from_ptr)
 {
-    auto to_flags = to_ptr->get_flags();
-    auto from_flags = from_ptr->get_flags();
+    const auto to_flags = to_ptr->get_flags();
+    const auto from_flags = from_ptr->get_flags();
 
     std::vector<tr_type> candidates;
     for (int i = 0; i < TR_FLAG_MAX; i++) {

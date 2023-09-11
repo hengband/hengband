@@ -14,7 +14,7 @@ void set_equipment_influence(PlayerType *player_ptr, self_info_type *self_ptr)
             continue;
         }
 
-        auto tflags = o_ptr->get_flags();
+        const auto tflags = o_ptr->get_flags();
         self_ptr->flags.set(tflags);
     }
 

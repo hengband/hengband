@@ -89,7 +89,7 @@ static void choise_cursed_item(CurseTraitType flag, ItemEntity *o_ptr, int *choi
     }
 
     tr_type cf = TR_STR;
-    auto flags = o_ptr->get_flags();
+    const auto flags = o_ptr->get_flags();
     switch (flag) {
     case CurseTraitType::ADD_L_CURSE:
         cf = TR_ADD_L_CURSE;
@@ -200,7 +200,7 @@ static void curse_teleport(PlayerType *player_ptr)
             continue;
         }
 
-        auto flags = o_ptr->get_flags();
+        const auto flags = o_ptr->get_flags();
 
         if (flags.has_not(TR_TELEPORT)) {
             continue;

@@ -44,7 +44,7 @@ static std::string item_activation_dragon_breath(const ItemEntity *o_ptr)
     std::string desc = _("", "breathe ");
     int n = 0;
 
-    auto flags = o_ptr->get_flags();
+    const auto flags = o_ptr->get_flags();
 
     for (int i = 0; dragonbreath_info[i].flag != 0; i++) {
         if (flags.has(dragonbreath_info[i].flag)) {
@@ -186,7 +186,7 @@ static concptr item_activation_aux(const ItemEntity *o_ptr)
  */
 std::string activation_explanation(const ItemEntity *o_ptr)
 {
-    auto flags = o_ptr->get_flags();
+    const auto flags = o_ptr->get_flags();
     if (flags.has_not(TR_ACTIVATE)) {
         return _("なし", "nothing");
     }

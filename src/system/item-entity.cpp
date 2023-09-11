@@ -492,7 +492,7 @@ bool ItemEntity::is_activatable() const
         return false;
     }
 
-    auto flags = this->get_flags();
+    const auto flags = this->get_flags();
     return flags.has(TR_ACTIVATE);
 }
 

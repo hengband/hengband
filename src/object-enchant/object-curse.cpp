@@ -74,7 +74,7 @@ void curse_equipment(PlayerType *player_ptr, PERCENTAGE chance, PERCENTAGE heavy
         return;
     }
 
-    auto oflags = o_ptr->get_flags();
+    const auto oflags = o_ptr->get_flags();
     const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
     /* Extra, biased saving throw for blessed items */

@@ -28,7 +28,7 @@ bool activate_dragon_breath(PlayerType *player_ptr, ItemEntity *o_ptr)
         return false;
     }
 
-    auto resistance_flags = o_ptr->get_flags();
+    const auto resistance_flags = o_ptr->get_flags();
 
     AttributeType type[20];
     int n = 0;

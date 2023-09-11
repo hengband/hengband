@@ -364,7 +364,7 @@ Smith::DrainEssenceResult Smith::drain_essence(ItemEntity *o_ptr)
     object_aware(player_ptr, o_ptr);
     object_known(o_ptr);
 
-    auto new_flags = o_ptr->get_flags();
+    const auto new_flags = o_ptr->get_flags();
 
     std::unordered_map<SmithEssenceType, int> drain_values;
 

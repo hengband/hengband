@@ -44,9 +44,7 @@
 static bool weakening_artifact(ItemEntity *o_ptr)
 {
     const auto &baseitem = o_ptr->get_baseitem();
-    auto flags = o_ptr->get_flags();
-
-    if (flags.has(TR_KILL_EVIL)) {
+    if (o_ptr->get_flags().has(TR_KILL_EVIL)) {
         o_ptr->art_flags.reset(TR_KILL_EVIL);
         o_ptr->art_flags.set(TR_SLAY_EVIL);
         return true;

@@ -22,8 +22,7 @@
  */
 static bool is_blessed_item(const ItemEntity *item_ptr)
 {
-    auto flags = item_ptr->get_flags();
-    return flags.has(TR_BLESSED);
+    return item_ptr->get_flags().has(TR_BLESSED);
 }
 
 static bool check_store_general(const ItemEntity &item)

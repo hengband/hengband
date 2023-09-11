@@ -43,7 +43,7 @@ PRICE object_value_real(const ItemEntity *o_ptr)
     }
 
     PRICE value = baseitem.cost;
-    auto flags = o_ptr->get_flags();
+    const auto flags = o_ptr->get_flags();
     if (o_ptr->is_fixed_artifact()) {
         const auto &artifact = o_ptr->get_fixed_artifact();
         if (!artifact.cost) {

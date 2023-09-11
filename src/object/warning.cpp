@@ -56,10 +56,8 @@ ItemEntity *choose_warning_item(PlayerType *player_ptr)
     /* Search Inventory */
     std::vector<int> candidates;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        auto *o_ptr = &player_ptr->inventory_list[i];
-
-        auto flags = o_ptr->get_flags();
-        if (flags.has(TR_WARNING)) {
+        const auto *o_ptr = &player_ptr->inventory_list[i];
+        if (o_ptr->get_flags().has(TR_WARNING)) {
             candidates.push_back(i);
         }
     }
