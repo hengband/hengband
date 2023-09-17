@@ -357,6 +357,10 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return true;
     }
 
+    if ((player_ptr->special_attack & ATTACK_HOLY) && r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
+        return true;
+    }
+
     if ((player_ptr->pspeed < 145) && is_fast(player_ptr)) {
         return true;
     }
