@@ -10,6 +10,7 @@
 #include "monster-floor/place-monster-types.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
+#include "player/attack-defense-types.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-curse-removal.h"
 #include "spell-kind/spells-detection.h"
@@ -18,6 +19,7 @@
 #include "spell-kind/spells-neighbor.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell-realm/spells-craft.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell/spells-diceroll.h"
 #include "spell/spells-object.h"
@@ -505,12 +507,13 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
             return _("聖なる刃", "Holy Blade");
         }
         if (desc) {
-            return _("通常の武器に滅邪の属性をつける。", "Makes current weapon especially deadly against evil monsters.");
+            return _("自身と通常の武器に滅邪の属性をつける。", "Makes yourself and current weapon especially deadly against evil monsters.");
         }
 
         {
             if (cast) {
-                brand_weapon(player_ptr, 13);
+                set_ele_attack(player_ptr, ATTACK_HOLY, player_ptr->lev / 2 + randint1(player_ptr->lev / 2));
+                brand_weapon(player_ptr, BrandType::KILL_EVIL);
             }
         }
         break;

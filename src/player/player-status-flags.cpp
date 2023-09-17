@@ -192,6 +192,17 @@ BIT_FLAGS player_flags_brand_cold(PlayerType *player_ptr)
     return result;
 }
 
+BIT_FLAGS player_flags_slay_evil(PlayerType *player_ptr)
+{
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_SLAY_EVIL);
+
+    if (player_ptr->special_attack & ATTACK_HOLY) {
+        set_bits(result, FLAG_CAUSE_MAGIC_TIME_EFFECT);
+    }
+
+    return result;
+}
+
 /*!
  * @brief プレイヤーの所持するフラグのうち、tr_flagに対応するものを返す
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -231,7 +242,6 @@ BIT_FLAGS get_player_flags(PlayerType *player_ptr, tr_type tr_flag)
     case TR_CHAOTIC:
     case TR_VAMPIRIC:
     case TR_SLAY_ANIMAL:
-    case TR_SLAY_EVIL:
     case TR_SLAY_UNDEAD:
     case TR_SLAY_DEMON:
     case TR_SLAY_ORC:
@@ -241,6 +251,8 @@ BIT_FLAGS get_player_flags(PlayerType *player_ptr, tr_type tr_flag)
     case TR_KILL_DRAGON:
     case TR_VORPAL:
         return check_equipment_flags(player_ptr, tr_flag);
+    case TR_SLAY_EVIL:
+        return player_flags_slay_evil(player_ptr);
     case TR_EARTHQUAKE:
         return has_earthquake(player_ptr);
     case TR_BRAND_POIS:

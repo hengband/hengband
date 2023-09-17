@@ -544,7 +544,7 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             if (cast) {
-                brand_weapon(player_ptr, 5);
+                brand_weapon(player_ptr, BrandType::TRUMP);
             }
         }
         break;
