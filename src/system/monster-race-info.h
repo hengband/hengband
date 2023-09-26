@@ -16,6 +16,8 @@
 #include "monster-race/race-wilderness-flags.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
+#include <map>
+#include <set>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -140,5 +142,22 @@ public:
     bool has_living_flag() const;
     bool is_explodable() const;
     std::string get_died_message() const;
-    bool no_suitable_questor_bounty() const;
+};
+
+class MonraceList {
+public:
+    MonraceList(MonraceList &&) = delete;
+    MonraceList(const MonraceList &) = delete;
+    MonraceList &operator=(const MonraceList &) = delete;
+    MonraceList &operator=(MonraceList &&) = delete;
+
+    static MonraceList &get_instance();
+    bool can_unify_separate(const MonsterRaceId r_idx) const;
+
+private:
+    MonraceList() = default;
+
+    static MonraceList instance;
+
+    const static std::map<MonsterRaceId, std::set<MonsterRaceId>> unified_uniques;
 };

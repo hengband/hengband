@@ -51,20 +51,28 @@ std::string MonsterRaceInfo::get_died_message() const
     return is_explodable ? _("は爆発して粉々になった。", " explodes into tiny shreds.") : _("を倒した。", " is destroyed.");
 }
 
-/*!
- * @brief モンスターが特殊能力上、賞金首から排除する必要があるかどうかを返す
- * @return 賞金首から排除するか否か
- * @details 実質バーノール＝ルパート用
- * @todo idxに依存している。monraces_info が既にmapなのでMonsterRaceList クラスのオブジェクトメソッドに移す
- */
-bool MonsterRaceInfo::no_suitable_questor_bounty() const
+const std::map<MonsterRaceId, std::set<MonsterRaceId>> MonraceList::unified_uniques = {
+    { MonsterRaceId::BANORLUPART, { MonsterRaceId::BANOR, MonsterRaceId::LUPART } },
+};
+
+MonraceList MonraceList::instance{};
+
+MonraceList &MonraceList::get_instance()
 {
-    switch (this->idx) {
-    case MonsterRaceId::BANORLUPART:
-    case MonsterRaceId::BANOR:
-    case MonsterRaceId::LUPART:
+    return instance;
+}
+
+/*!
+ * @brief 合体/分離ユニーク判定
+ * @param r_idx 調査対象のモンスター種族ID
+ * @return 合体/分離ユニークか否か
+ * @details 合体/分離ユニークは、賞金首にもランダムクエスト討伐対象にもならない.
+ */
+bool MonraceList::can_unify_separate(const MonsterRaceId r_idx) const
+{
+    if (unified_uniques.contains(r_idx)) {
         return true;
-    default:
-        return false;
     }
+
+    return std::any_of(unified_uniques.begin(), unified_uniques.end(), [&r_idx](const auto &x) { return x.second.contains(r_idx); });
 }
