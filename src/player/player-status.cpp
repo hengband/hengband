@@ -1974,27 +1974,22 @@ int16_t calc_double_weapon_penalty(PlayerType *player_ptr, INVENTORY_IDX slot)
 
 static bool is_riding_two_hands(PlayerType *player_ptr)
 {
-    if (!player_ptr->riding) {
+    if (!player_ptr->riding || none_bits(player_ptr->pet_extra_flags, PF_TWO_HANDS)) {
         return false;
     }
 
     if (has_two_handed_weapons(player_ptr) || (empty_hands(player_ptr, false) == EMPTY_HAND_NONE)) {
         return true;
-    } else if (any_bits(player_ptr->pet_extra_flags, PF_TWO_HANDS)) {
-        switch (player_ptr->pclass) {
-        case PlayerClassType::MONK:
-        case PlayerClassType::FORCETRAINER:
-        case PlayerClassType::BERSERKER:
-            if ((empty_hands(player_ptr, false) != EMPTY_HAND_NONE) && !has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
-                return true;
-            }
-
-        default:
-            break;
-        }
     }
 
-    return false;
+    switch (player_ptr->pclass) {
+    case PlayerClassType::MONK:
+    case PlayerClassType::FORCETRAINER:
+    case PlayerClassType::BERSERKER:
+        return (empty_hands(player_ptr, false) != EMPTY_HAND_NONE) && !has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND);
+    default:
+        return false;
+    }
 }
 
 static int16_t calc_riding_bow_penalty(PlayerType *player_ptr)
