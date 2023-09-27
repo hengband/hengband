@@ -151,12 +151,14 @@ public:
     MonraceList &operator=(const MonraceList &) = delete;
     MonraceList &operator=(MonraceList &&) = delete;
 
+    static const std::map<MonsterRaceId, std::set<MonsterRaceId>> &get_unified_uniques();
     static MonraceList &get_instance();
     bool can_unify_separate(const MonsterRaceId r_idx) const;
     void kill_unified_unique(const MonsterRaceId r_idx);
     bool is_selectable(const MonsterRaceId r_idx) const;
     void defeat_separated_uniques();
     bool is_unified(const MonsterRaceId r_idx) const;
+    bool exists_separates(const MonsterRaceId r_idx) const;
 
 private:
     MonraceList() = default;

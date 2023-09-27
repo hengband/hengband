@@ -58,6 +58,11 @@ const std::map<MonsterRaceId, std::set<MonsterRaceId>> MonraceList::unified_uniq
 
 MonraceList MonraceList::instance{};
 
+const std::map<MonsterRaceId, std::set<MonsterRaceId>> &MonraceList::get_unified_uniques()
+{
+    return unified_uniques;
+}
+
 MonraceList &MonraceList::get_instance()
 {
     return instance;
@@ -164,4 +169,14 @@ void MonraceList::defeat_separated_uniques()
 bool MonraceList::is_unified(const MonsterRaceId r_idx) const
 {
     return unified_uniques.contains(r_idx);
+}
+
+/*!
+ * @brief 合体ユニークの各分離ユニークが全員フロアにいるかをチェックする
+ * @return 全員が現在フロアに生成されているか
+ */
+bool MonraceList::exists_separates(const MonsterRaceId r_idx) const
+{
+    const auto &separates = unified_uniques.at(r_idx);
+    return std::all_of(separates.begin(), separates.end(), [](const auto x) { return monraces_info[x].cur_num > 0; });
 }

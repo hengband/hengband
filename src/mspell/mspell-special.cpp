@@ -38,6 +38,8 @@
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
+#include <algorithm>
+#include <sstream>
 
 /*!
  * @brief ユニークの分離・合体処理
@@ -54,35 +56,43 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
         disturb(player_ptr, true, true);
     }
 
-    switch (m_ptr->r_idx) {
-    case MonsterRaceId::BANORLUPART: {
-        const auto separated_hp = (m_ptr->hp + 1) / 2;
-        const auto separated_maxhp = m_ptr->maxhp / 2;
-        if (floor_ptr->inside_arena || player_ptr->phase_out || !summon_possible(player_ptr, m_ptr->fy, m_ptr->fx)) {
+    const auto &monraces = MonraceList::get_instance();
+    const auto &unified_uniques = MonraceList::get_unified_uniques();
+    for (const auto &[unified_unique, separates] : unified_uniques) {
+        if ((m_ptr->r_idx != unified_unique) && !separates.contains(m_ptr->r_idx)) {
+            continue;
+        }
+
+        if (m_ptr->r_idx == unified_unique) {
+            const int separates_size = separates.size();
+            const auto separated_hp = (m_ptr->hp + 1) / separates_size;
+            const auto separated_maxhp = m_ptr->maxhp / separates_size;
+            if (floor_ptr->inside_arena || player_ptr->phase_out || !summon_possible(player_ptr, m_ptr->fy, m_ptr->fx)) {
+                return MonsterSpellResult::make_invalid();
+            }
+
+            delete_monster_idx(player_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
+            for (const auto separate : separates) {
+                summon_named_creature(player_ptr, 0, dummy_y, dummy_x, separate, MD_NONE);
+                floor_ptr->m_list[hack_m_idx_ii].hp = separated_hp;
+                floor_ptr->m_list[hack_m_idx_ii].maxhp = separated_maxhp;
+            }
+
+            const auto &m_name = monraces_info[unified_unique].name;
+            const auto fmt = _("%sが分裂した！", "%s splits into two persons!");
+            msg_print(format(fmt, m_name.data()));
+            return MonsterSpellResult::make_valid();
+        }
+
+        if (!monraces.exists_separates(unified_unique)) {
             return MonsterSpellResult::make_invalid();
         }
 
-        delete_monster_idx(player_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
-        summon_named_creature(player_ptr, 0, dummy_y, dummy_x, MonsterRaceId::BANOR, MD_NONE);
-        floor_ptr->m_list[hack_m_idx_ii].hp = separated_hp;
-        floor_ptr->m_list[hack_m_idx_ii].maxhp = separated_maxhp;
-        summon_named_creature(player_ptr, 0, dummy_y, dummy_x, MonsterRaceId::LUPART, MD_NONE);
-        floor_ptr->m_list[hack_m_idx_ii].hp = separated_hp;
-        floor_ptr->m_list[hack_m_idx_ii].maxhp = separated_maxhp;
-        msg_print(_("『バーノール・ルパート』が分裂した！", "Banor=Rupart splits into two persons!"));
-        break;
-    }
-    case MonsterRaceId::BANOR:
-    case MonsterRaceId::LUPART: {
         auto unified_hp = 0;
         auto unified_maxhp = 0;
-        if ((monraces_info[MonsterRaceId::BANOR].cur_num == 0) || (monraces_info[MonsterRaceId::LUPART].cur_num == 0)) {
-            return MonsterSpellResult::make_invalid();
-        }
-
-        for (auto k = 1; k < floor_ptr->m_max; k++) {
+        for (short k = 1; k < floor_ptr->m_max; k++) {
             const auto &monster = floor_ptr->m_list[k];
-            if ((monster.r_idx != MonsterRaceId::BANOR) && (monster.r_idx != MonsterRaceId::LUPART)) {
+            if (!separates.contains(monster.r_idx)) {
                 continue;
             }
 
@@ -96,14 +106,26 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
             delete_monster_idx(player_ptr, k);
         }
 
-        summon_named_creature(player_ptr, 0, dummy_y, dummy_x, MonsterRaceId::BANORLUPART, MD_NONE);
+        summon_named_creature(player_ptr, 0, dummy_y, dummy_x, unified_unique, MD_NONE);
         floor_ptr->m_list[hack_m_idx_ii].hp = unified_hp;
         floor_ptr->m_list[hack_m_idx_ii].maxhp = unified_maxhp;
-        msg_print(_("『バーノール』と『ルパート』が合体した！", "Banor and Rupart combine into one!"));
-        break;
-    }
-    default:
-        break;
+        std::vector<std::string> m_names;
+        for (const auto &separate : separates) {
+            const auto &monrace = monraces_info[separate];
+            m_names.push_back(monrace.name);
+        }
+
+        std::stringstream ss;
+        ss << *m_names.begin();
+        for (size_t i = 1; i < m_names.size(); i++) { // @todo clang v14 はstd::views::drop() 非対応
+            const auto &m_name = m_names[i];
+            ss << _("と", " and ");
+            ss << m_name;
+        }
+
+        const auto fmt = _("%sが合体した！", "%s combine into one!");
+        msg_print(format(fmt, ss.str().data()));
+        return MonsterSpellResult::make_valid();
     }
 
     return MonsterSpellResult::make_valid();
