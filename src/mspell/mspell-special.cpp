@@ -48,62 +48,60 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    int dummy_hp, dummy_maxhp;
-    POSITION dummy_y = m_ptr->fy;
-    POSITION dummy_x = m_ptr->fx;
-    BIT_FLAGS mode = 0L;
-
+    auto dummy_y = m_ptr->fy;
+    auto dummy_x = m_ptr->fx;
     if (see_monster(player_ptr, m_idx) && monster_near_player(floor_ptr, m_idx, 0)) {
         disturb(player_ptr, true, true);
     }
 
     switch (m_ptr->r_idx) {
-    case MonsterRaceId::BANORLUPART:
-        dummy_hp = (m_ptr->hp + 1) / 2;
-        dummy_maxhp = m_ptr->maxhp / 2;
-
+    case MonsterRaceId::BANORLUPART: {
+        const auto separated_hp = (m_ptr->hp + 1) / 2;
+        const auto separated_maxhp = m_ptr->maxhp / 2;
         if (floor_ptr->inside_arena || player_ptr->phase_out || !summon_possible(player_ptr, m_ptr->fy, m_ptr->fx)) {
             return MonsterSpellResult::make_invalid();
         }
 
         delete_monster_idx(player_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
-        summon_named_creature(player_ptr, 0, dummy_y, dummy_x, MonsterRaceId::BANOR, mode);
-        floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
-        floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
-        summon_named_creature(player_ptr, 0, dummy_y, dummy_x, MonsterRaceId::LUPART, mode);
-        floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
-        floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
-
+        summon_named_creature(player_ptr, 0, dummy_y, dummy_x, MonsterRaceId::BANOR, MD_NONE);
+        floor_ptr->m_list[hack_m_idx_ii].hp = separated_hp;
+        floor_ptr->m_list[hack_m_idx_ii].maxhp = separated_maxhp;
+        summon_named_creature(player_ptr, 0, dummy_y, dummy_x, MonsterRaceId::LUPART, MD_NONE);
+        floor_ptr->m_list[hack_m_idx_ii].hp = separated_hp;
+        floor_ptr->m_list[hack_m_idx_ii].maxhp = separated_maxhp;
         msg_print(_("『バーノール・ルパート』が分裂した！", "Banor=Rupart splits into two persons!"));
         break;
-
+    }
     case MonsterRaceId::BANOR:
-    case MonsterRaceId::LUPART:
-        dummy_hp = 0;
-        dummy_maxhp = 0;
-
-        if (!monraces_info[MonsterRaceId::BANOR].cur_num || !monraces_info[MonsterRaceId::LUPART].cur_num) {
+    case MonsterRaceId::LUPART: {
+        auto unified_hp = 0;
+        auto unified_maxhp = 0;
+        if ((monraces_info[MonsterRaceId::BANOR].cur_num == 0) || (monraces_info[MonsterRaceId::LUPART].cur_num == 0)) {
             return MonsterSpellResult::make_invalid();
         }
 
-        for (MONSTER_IDX k = 1; k < floor_ptr->m_max; k++) {
-            if (floor_ptr->m_list[k].r_idx == MonsterRaceId::BANOR || floor_ptr->m_list[k].r_idx == MonsterRaceId::LUPART) {
-                dummy_hp += floor_ptr->m_list[k].hp;
-                dummy_maxhp += floor_ptr->m_list[k].maxhp;
-                if (floor_ptr->m_list[k].r_idx != m_ptr->r_idx) {
-                    dummy_y = floor_ptr->m_list[k].fy;
-                    dummy_x = floor_ptr->m_list[k].fx;
-                }
-                delete_monster_idx(player_ptr, k);
+        for (auto k = 1; k < floor_ptr->m_max; k++) {
+            const auto &monster = floor_ptr->m_list[k];
+            if ((monster.r_idx != MonsterRaceId::BANOR) && (monster.r_idx != MonsterRaceId::LUPART)) {
+                continue;
             }
-        }
-        summon_named_creature(player_ptr, 0, dummy_y, dummy_x, MonsterRaceId::BANORLUPART, mode);
-        floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
-        floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
 
+            unified_hp += monster.hp;
+            unified_maxhp += monster.maxhp;
+            if (monster.r_idx != m_ptr->r_idx) {
+                dummy_y = monster.fy;
+                dummy_x = monster.fx;
+            }
+
+            delete_monster_idx(player_ptr, k);
+        }
+
+        summon_named_creature(player_ptr, 0, dummy_y, dummy_x, MonsterRaceId::BANORLUPART, MD_NONE);
+        floor_ptr->m_list[hack_m_idx_ii].hp = unified_hp;
+        floor_ptr->m_list[hack_m_idx_ii].maxhp = unified_maxhp;
         msg_print(_("『バーノール』と『ルパート』が合体した！", "Banor and Rupart combine into one!"));
         break;
-
+    }
     default:
         break;
     }
