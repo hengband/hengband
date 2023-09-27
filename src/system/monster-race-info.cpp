@@ -173,10 +173,50 @@ bool MonraceList::is_unified(const MonsterRaceId r_idx) const
 
 /*!
  * @brief 合体ユニークの各分離ユニークが全員フロアにいるかをチェックする
+ * @param r_idx 合体ユニークの種族ID
  * @return 全員が現在フロアに生成されているか
  */
 bool MonraceList::exists_separates(const MonsterRaceId r_idx) const
 {
     const auto &separates = unified_uniques.at(r_idx);
     return std::all_of(separates.begin(), separates.end(), [](const auto x) { return monraces_info[x].cur_num > 0; });
+}
+
+/*!
+ * @brief 与えられたIDが分離ユニークのいずれかに一致するかをチェックする
+ * @param r_idx 調査対象のモンスター種族ID
+ */
+bool MonraceList::is_separated(const MonsterRaceId r_idx) const
+{
+    if (unified_uniques.contains(r_idx)) {
+        return false;
+    }
+
+    return std::any_of(unified_uniques.begin(), unified_uniques.end(), [&r_idx](const auto &x) { return x.second.contains(r_idx); });
+}
+
+/*!
+ * @brief 合体ユニークが分離魔法を唱えられるかをチェックする
+ * @param r_idx 分離ユニークの種族ID
+ * @param hp 分離ユニークの現在HP
+ * @param maxhp 分離ユニークの最大HP (衰弱を含)
+ */
+bool MonraceList::can_select_separate(const MonsterRaceId r_idx, const int hp, const int maxhp) const
+{
+    if (unified_uniques.contains(r_idx)) {
+        return false;
+    }
+
+    const auto end = unified_uniques.end();
+    const auto it = std::find_if(unified_uniques.begin(), end, [&r_idx](const auto &x) { return x.second.contains(r_idx); });
+    if (it == end) {
+        return false;
+    }
+
+    auto &found_separates = it->second;
+    if (hp >= (maxhp / static_cast<int>(found_separates.size()))) {
+        return false;
+    }
+
+    return std::all_of(found_separates.begin(), found_separates.end(), [](const auto x) { return monraces_info[x].max_num > 0; });
 }

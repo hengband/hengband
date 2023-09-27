@@ -159,6 +159,8 @@ public:
     void defeat_separated_uniques();
     bool is_unified(const MonsterRaceId r_idx) const;
     bool exists_separates(const MonsterRaceId r_idx) const;
+    bool is_separated(const MonsterRaceId r_idx) const;
+    bool can_select_separate(const MonsterRaceId r_idx, const int hp, const int maxhp) const;
 
 private:
     MonraceList() = default;

@@ -182,6 +182,28 @@ static bool spell_dispel(MonsterAbilityType spell)
 }
 
 /*!
+ * @brief 特殊魔法を使用する確率の判定
+ * @param r_idx モンスター種族ID
+ * @return 特殊魔法を使用するか否か
+ * @details 分離/合体ユニークは常に使用しない (その前に判定済のため).
+ */
+static bool decide_select_special(MonsterRaceId r_idx)
+{
+    if (MonraceList::get_instance().is_separated(r_idx)) {
+        return false;
+    }
+
+    switch (r_idx) {
+    case MonsterRaceId::OHMU:
+        return false;
+    case MonsterRaceId::ROLENTO:
+        return randint0(100) < 40;
+    default:
+        return randint0(100) < 50;
+    }
+}
+
+/*!
  * @brief モンスターの魔法選択ルーチン
  * Have a monster choose a spell from a list of "useful" spells.
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -282,22 +304,9 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
         return rand_choice(world);
     }
 
-    if (!special.empty()) {
-        bool success = false;
-        switch (m_ptr->r_idx) {
-        case MonsterRaceId::BANOR:
-        case MonsterRaceId::LUPART:
-            if ((m_ptr->hp < m_ptr->maxhp / 2) && monraces_info[MonsterRaceId::BANOR].max_num && monraces_info[MonsterRaceId::LUPART].max_num) {
-                success = true;
-            }
-            break;
-        default:
-            break;
-        }
-
-        if (success) {
-            return rand_choice(special);
-        }
+    const auto &monrace_list = MonraceList::get_instance();
+    if (!special.empty() && monrace_list.can_select_separate(m_ptr->r_idx, m_ptr->hp, m_ptr->maxhp)) {
+        return rand_choice(special);
     }
 
     if (m_ptr->hp < m_ptr->maxhp / 3 && one_in_(2)) {
@@ -314,27 +323,10 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
 
     if (!special.empty()) {
         const auto r_idx = m_ptr->r_idx;
-        if (MonraceList::get_instance().is_unified(r_idx) && (randint0(100) < 70)) {
+        auto should_select_special = monrace_list.is_unified(r_idx) && (randint0(100) < 70);
+        should_select_special |= decide_select_special(r_idx);
+        if (should_select_special) {
             return rand_choice(special);
-        }
-
-        switch (r_idx) {
-        case MonsterRaceId::OHMU:
-        case MonsterRaceId::BANOR:
-        case MonsterRaceId::LUPART:
-            break;
-        case MonsterRaceId::ROLENTO:
-            if (randint0(100) < 40) {
-                return rand_choice(special);
-            }
-
-            break;
-        default:
-            if (randint0(100) < 50) {
-                return rand_choice(special);
-            }
-
-            break;
         }
     }
 
