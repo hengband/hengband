@@ -116,3 +116,21 @@ void MonraceList::kill_unified_unique(const MonsterRaceId r_idx)
         }
     }
 }
+
+/*!
+ * @brief 合体ユニークの生成可能確認
+ * @param r_idx 生成しようとしているモンスターの種族ID
+ * @return 合体後ユニークが生成可能か否か
+ * @details 分離も合体もしないならば常にtrue
+ * 分離ユニークもtrueだが、通常レアリティ255のためこのメソッドとは別処理で生成不能
+ * 分離/合体が A = B + C + D という図式の時、B・C・Dのいずれか1体がフロア内に生成済の場合、Aの生成を抑制する
+ */
+bool MonraceList::is_selectable(const MonsterRaceId r_idx) const
+{
+    const auto it = unified_uniques.find(r_idx);
+    if (it == unified_uniques.end()) {
+        return true;
+    }
+
+    return std::all_of(it->second.begin(), it->second.end(), [](const auto x) { return monraces_info[x].cur_num == 0; });
+}
