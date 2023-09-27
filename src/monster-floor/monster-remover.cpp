@@ -105,34 +105,13 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
 }
 
 /*!
- * @brief プレイヤーのフロア離脱に伴う全モンスター配列の消去 / Delete/Remove all the monsters when the player leaves the level
+ * @brief プレイヤーのフロア離脱に伴う全モンスター配列の消去
  * @param player_ptr プレイヤーへの参照ポインタ
- * @details
- * This is an efficient method of simulating multiple calls to the
- * "delete_monster()" function, with no visual effects.
+ * @details 視覚効果なしでdelete_monster() をフロア全体に対して呼び出す.
  */
 void wipe_monsters_list(PlayerType *player_ptr)
 {
-    if (!monraces_info[MonsterRaceId::BANORLUPART].max_num) {
-        if (monraces_info[MonsterRaceId::BANOR].max_num) {
-            monraces_info[MonsterRaceId::BANOR].max_num = 0;
-            monraces_info[MonsterRaceId::BANOR].r_pkills++;
-            monraces_info[MonsterRaceId::BANOR].r_akills++;
-            if (monraces_info[MonsterRaceId::BANOR].r_tkills < MAX_SHORT) {
-                monraces_info[MonsterRaceId::BANOR].r_tkills++;
-            }
-        }
-
-        if (monraces_info[MonsterRaceId::LUPART].max_num) {
-            monraces_info[MonsterRaceId::LUPART].max_num = 0;
-            monraces_info[MonsterRaceId::LUPART].r_pkills++;
-            monraces_info[MonsterRaceId::LUPART].r_akills++;
-            if (monraces_info[MonsterRaceId::LUPART].r_tkills < MAX_SHORT) {
-                monraces_info[MonsterRaceId::LUPART].r_tkills++;
-            }
-        }
-    }
-
+    MonraceList::get_instance().defeat_separated_uniques();
     auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = floor_ptr->m_max - 1; i >= 1; i--) {
         auto *m_ptr = &floor_ptr->m_list[i];

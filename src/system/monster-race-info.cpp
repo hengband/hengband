@@ -134,3 +134,29 @@ bool MonraceList::is_selectable(const MonsterRaceId r_idx) const
 
     return std::all_of(it->second.begin(), it->second.end(), [](const auto x) { return monraces_info[x].cur_num == 0; });
 }
+
+/*!
+ * @brief 合体ユニークが撃破済の状態でフロアから離脱した時に、各分離ユニークも撃破済状態へと変更する
+ */
+void MonraceList::defeat_separated_uniques()
+{
+    for (const auto &[unified_unique, separates] : unified_uniques) {
+        if (monraces_info[unified_unique].max_num > 0) {
+            continue;
+        }
+
+        for (const auto separate : separates) {
+            auto &monrace = monraces_info[separate];
+            if (monrace.max_num == 0) {
+                continue;
+            }
+
+            monrace.max_num = 0;
+            monrace.r_pkills++;
+            monrace.r_akills++;
+            if (monrace.r_tkills < MAX_SHORT) {
+                monrace.r_tkills++;
+            }
+        }
+    }
+}
