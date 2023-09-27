@@ -40,11 +40,11 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief バーノール・ルパートのRF6_SPECIALの処理。分裂・合体。 /
+ * @brief ユニークの分離・合体処理
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
  */
-static MonsterSpellResult spell_RF6_SPECIAL_BANORLUPART(PlayerType *player_ptr, MONSTER_IDX m_idx)
+static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
@@ -246,29 +246,24 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
  */
 MonsterSpellResult spell_RF6_SPECIAL(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monster = floor.m_list[m_idx];
+    const auto &monrace = monster.get_monrace();
+    const auto r_idx = monster.r_idx;
+    if (MonraceList::get_instance().can_unify_separate(r_idx)) {
+        return spell_RF6_SPECIAL_UNIFICATION(player_ptr, m_idx);
+    }
 
-    switch (m_ptr->r_idx) {
+    switch (r_idx) {
     case MonsterRaceId::OHMU:
         return MonsterSpellResult::make_invalid();
-
-    case MonsterRaceId::BANORLUPART:
-    case MonsterRaceId::BANOR:
-    case MonsterRaceId::LUPART:
-        return spell_RF6_SPECIAL_BANORLUPART(player_ptr, m_idx);
-
     case MonsterRaceId::ROLENTO:
         return spell_RF6_SPECIAL_ROLENTO(player_ptr, y, x, m_idx, t_idx, target_type);
-        break;
-
     default:
-        if (r_ptr->d_char == 'B') {
+        if (monrace.d_char == 'B') {
             return spell_RF6_SPECIAL_B(player_ptr, y, x, m_idx, t_idx, target_type);
-            break;
-        } else {
-            return MonsterSpellResult::make_invalid();
         }
+
+        return MonsterSpellResult::make_invalid();
     }
 }
