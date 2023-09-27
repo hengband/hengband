@@ -338,10 +338,13 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
         }
     }
 
-    if ((distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx) < 4) && (!attack.empty() || r_ptr->ability_flags.has(MonsterAbilityType::TRAPS)) && (randint0(100) < 75) && !w_ptr->timewalk_m_idx) {
-        if (!tactic.empty()) {
-            return rand_choice(tactic);
-        }
+    auto should_select_tactic = distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx) < 4;
+    should_select_tactic &= !attack.empty() || r_ptr->ability_flags.has(MonsterAbilityType::TRAPS);
+    should_select_tactic &= randint0(100) < 75;
+    should_select_tactic &= w_ptr->timewalk_m_idx == 0;
+    should_select_tactic &= !tactic.empty();
+    if (should_select_tactic) {
+        return rand_choice(tactic);
     }
 
     if (!summon.empty() && (randint0(100) < 40)) {
