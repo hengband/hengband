@@ -313,30 +313,28 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
     }
 
     if (!special.empty()) {
-        bool success = false;
-        switch (m_ptr->r_idx) {
+        const auto r_idx = m_ptr->r_idx;
+        if (MonraceList::get_instance().is_unified(r_idx) && (randint0(100) < 70)) {
+            return rand_choice(special);
+        }
+
+        switch (r_idx) {
         case MonsterRaceId::OHMU:
         case MonsterRaceId::BANOR:
         case MonsterRaceId::LUPART:
             break;
-        case MonsterRaceId::BANORLUPART:
-            if (randint0(100) < 70) {
-                success = true;
-            }
-            break;
         case MonsterRaceId::ROLENTO:
             if (randint0(100) < 40) {
-                success = true;
+                return rand_choice(special);
             }
+
             break;
         default:
             if (randint0(100) < 50) {
-                success = true;
+                return rand_choice(special);
             }
+
             break;
-        }
-        if (success) {
-            return rand_choice(special);
         }
     }
 

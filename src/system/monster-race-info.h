@@ -156,6 +156,7 @@ public:
     void kill_unified_unique(const MonsterRaceId r_idx);
     bool is_selectable(const MonsterRaceId r_idx) const;
     void defeat_separated_uniques();
+    bool is_unified(const MonsterRaceId r_idx) const;
 
 private:
     MonraceList() = default;

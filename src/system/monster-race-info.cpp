@@ -160,3 +160,8 @@ void MonraceList::defeat_separated_uniques()
         }
     }
 }
+
+bool MonraceList::is_unified(const MonsterRaceId r_idx) const
+{
+    return unified_uniques.contains(r_idx);
+}
