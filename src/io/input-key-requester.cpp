@@ -5,6 +5,7 @@
 #include "core/player-processor.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
+#include "dungeon/quest.h"
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
 #include "game-option/map-screen-options.h"

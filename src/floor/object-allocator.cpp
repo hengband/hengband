@@ -93,7 +93,7 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
             shaft_num = (randint1(num + 1)) / 2;
         }
     } else if (f_ptr->flags.has(TerrainCharacteristics::MORE)) {
-        auto q_idx = quest_number(floor, floor.dun_level);
+        auto q_idx = floor.get_quest_id();
         const auto &quest_list = QuestList::get_instance();
         if (floor.dun_level > 1 && inside_quest(q_idx)) {
             auto *r_ptr = &monraces_info[quest_list[q_idx].r_idx];
@@ -106,7 +106,7 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
             return true;
         }
 
-        if ((floor.dun_level < dungeon.maxdepth - 1) && !inside_quest(quest_number(floor, floor.dun_level + 1))) {
+        if ((floor.dun_level < dungeon.maxdepth - 1) && !inside_quest(floor.get_quest_id(1))) {
             shaft_num = (randint1(num) + 1) / 2;
         }
     } else {

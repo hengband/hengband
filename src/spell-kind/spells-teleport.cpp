@@ -8,6 +8,7 @@
 #include "avatar/avatar.h"
 #include "core/asking-player.h"
 #include "core/speed-table.h"
+#include "dungeon/quest.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"

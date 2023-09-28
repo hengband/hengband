@@ -1,6 +1,15 @@
 #include "system/floor-type-definition.h"
+#include "dungeon/quest.h"
 #include "system/dungeon-info.h"
+#include "system/grid-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
 #include "util/enum-range.h"
+
+FloorType::FloorType()
+    : quest_number(QuestId::NONE)
+{
+}
 
 bool FloorType::is_in_dungeon() const
 {
@@ -48,4 +57,35 @@ QuestId FloorType::get_random_quest_id(std::optional<int> level_opt) const
     }
 
     return QuestId::NONE;
+}
+
+/*!
+ * @brief 新しく入ったダンジョンの階層に固定されている一般のクエストを探し出しIDを返す.
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param bonus 検索対象になる階へのボーナス。通常0
+ * @return クエストIDを返す。該当がない場合0を返す。
+ */
+QuestId FloorType::get_quest_id(const int bonus) const
+{
+    const auto &quest_list = QuestList::get_instance();
+    if (inside_quest(this->quest_number)) {
+        return this->quest_number;
+    }
+
+    const auto level = this->dun_level + bonus;
+    for (const auto &[q_idx, quest] : quest_list) {
+        if (quest.status != QuestStatusType::TAKEN) {
+            continue;
+        }
+
+        auto depth_quest = (quest.type == QuestKindType::KILL_LEVEL);
+        depth_quest &= !(quest.flags & QUEST_FLAG_PRESET);
+        depth_quest &= (quest.level == level);
+        depth_quest &= (quest.dungeon == this->dungeon_idx);
+        if (depth_quest) {
+            return q_idx;
+        }
+    }
+
+    return this->get_random_quest_id(level);
 }

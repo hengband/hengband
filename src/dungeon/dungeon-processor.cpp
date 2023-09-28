@@ -116,7 +116,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     health_track(player_ptr, 0);
 
     disturb(player_ptr, true, true);
-    auto quest_num = quest_number(floor, floor.dun_level);
+    auto quest_num = floor.get_quest_id();
     const auto &quest_list = QuestList::get_instance();
     auto *questor_ptr = &monraces_info[quest_list[quest_num].r_idx];
     if (inside_quest(quest_num)) {

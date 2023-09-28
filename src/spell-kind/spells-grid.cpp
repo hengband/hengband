@@ -71,7 +71,7 @@ void stair_creation(PlayerType *player_ptr)
 
     bool down = true;
     auto &floor = *player_ptr->current_floor_ptr;
-    if (inside_quest(quest_number(floor, floor.dun_level)) || (floor.dun_level >= floor.get_dungeon_definition().maxdepth)) {
+    if (inside_quest(floor.get_quest_id()) || (floor.dun_level >= floor.get_dungeon_definition().maxdepth)) {
         down = false;
     }
 

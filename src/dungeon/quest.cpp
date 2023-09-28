@@ -341,37 +341,6 @@ void quest_discovery(QuestId q_idx)
 }
 
 /*!
- * @brief 新しく入ったダンジョンの階層に固定されている一般のクエストを探し出しIDを返す。
- * / Hack -- Check if a level is a "quest" level
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param level 検索対象になる階
- * @return クエストIDを返す。該当がない場合0を返す。
- */
-QuestId quest_number(const FloorType &floor, DEPTH level)
-{
-    const auto &quest_list = QuestList::get_instance();
-    if (inside_quest(floor.quest_number)) {
-        return floor.quest_number;
-    }
-
-    for (const auto &[q_idx, quest] : quest_list) {
-        if (quest.status != QuestStatusType::TAKEN) {
-            continue;
-        }
-
-        auto depth_quest = (quest.type == QuestKindType::KILL_LEVEL);
-        depth_quest &= !(quest.flags & QUEST_FLAG_PRESET);
-        depth_quest &= (quest.level == level);
-        depth_quest &= (quest.dungeon == floor.dungeon_idx);
-        if (depth_quest) {
-            return q_idx;
-        }
-    }
-
-    return floor.get_random_quest_id(level);
-}
-
-/*!
  * @brief クエスト階層から離脱する際の処理
  * @param player_ptr プレイヤーへの参照ポインタ
  */

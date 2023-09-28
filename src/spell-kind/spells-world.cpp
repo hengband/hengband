@@ -57,7 +57,7 @@ bool is_teleport_level_ineffective(PlayerType *player_ptr, MONSTER_IDX idx)
     is_special_floor |= player_ptr->phase_out;
     is_special_floor |= inside_quest(floor.quest_number) && !inside_quest(floor.get_random_quest_id());
     auto is_invalid_floor = idx <= 0;
-    is_invalid_floor &= inside_quest(quest_number(floor, floor.dun_level)) || (floor.dun_level >= floor.get_dungeon_definition().maxdepth);
+    is_invalid_floor &= inside_quest(floor.get_quest_id()) || (floor.dun_level >= floor.get_dungeon_definition().maxdepth);
     is_invalid_floor &= floor.dun_level >= 1;
     is_invalid_floor &= ironman_downward;
     return is_special_floor || is_invalid_floor;
@@ -145,7 +145,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
             player_ptr->leaving = true;
         }
-    } else if (inside_quest(quest_number(floor, floor.dun_level)) || (floor.dun_level >= dungeon.maxdepth)) {
+    } else if (inside_quest(floor.get_quest_id()) || (floor.dun_level >= dungeon.maxdepth)) {
 #ifdef JP
         if (see_m) {
             msg_format("%s^は天井を突き破って宙へ浮いていく。", m_name.data());

@@ -157,7 +157,7 @@ void execute_floor_reset(PlayerType *player_ptr)
     }
 
     disturb(player_ptr, false, true);
-    if (!inside_quest(quest_number(floor, floor.dun_level)) && floor.dun_level) {
+    if (!inside_quest(floor.get_quest_id()) && floor.dun_level) {
         msg_print(_("世界が変わった！", "The world changes!"));
 
         /*

@@ -294,7 +294,7 @@ void update_dungeon_feeling(PlayerType *player_ptr)
         return;
     }
 
-    auto quest_num = quest_number(floor, floor.dun_level);
+    auto quest_num = floor.get_quest_id();
     const auto &quest_list = QuestList::get_instance();
 
     auto dungeon_quest = (quest_num == QuestId::OBERON);

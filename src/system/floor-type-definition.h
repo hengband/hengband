@@ -1,6 +1,5 @@
 #pragma once
 
-#include "dungeon/quest.h"
 #include "floor/floor-base-definitions.h"
 #include "monster/monster-timed-effect-types.h"
 #include "system/angband.h"
@@ -34,13 +33,14 @@ constexpr auto VIEW_MAX = 1536;
  */
 constexpr auto REDRAW_MAX = 2298;
 
+enum class QuestId : short;
 struct dungeon_type;
 struct grid_type;
 class MonsterEntity;
 class ItemEntity;
 class FloorType {
 public:
-    FloorType() = default;
+    FloorType();
     short dungeon_idx = 0;
     std::vector<std::vector<grid_type>> grid_array;
     DEPTH dun_level = 0; /*!< 現在の実ダンジョン階層 base_level の参照元となる / Current dungeon level */
@@ -81,7 +81,7 @@ public:
     std::array<POSITION, REDRAW_MAX> redraw_x{};
 
     bool monster_noise = false;
-    QuestId quest_number = QuestId::NONE; /* Inside quest level */
+    QuestId quest_number;
     bool inside_arena = false; /* Is character inside on_defeat_arena_monster? */
 
     bool is_in_dungeon() const;
@@ -89,4 +89,5 @@ public:
     void reset_dungeon_index();
     dungeon_type &get_dungeon_definition() const;
     QuestId get_random_quest_id(std::optional<int> level_opt = std::nullopt) const;
+    QuestId get_quest_id(const int bonus = 0) const;
 };

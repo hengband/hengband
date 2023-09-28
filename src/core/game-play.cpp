@@ -25,6 +25,7 @@
 #include "core/visuals-reseter.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-processor.h"
+#include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-changer.h"
 #include "floor/floor-events.h"
