@@ -178,8 +178,9 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     }
 
     if (!inside_quest(floor.quest_number) && (floor.dungeon_idx == DUNGEON_ANGBAND)) {
-        quest_discovery(random_quest_number(floor, floor.dun_level));
-        floor.quest_number = random_quest_number(floor, floor.dun_level);
+        const auto random_quest_id = floor.get_random_quest_id();
+        quest_discovery(random_quest_id);
+        floor.quest_number = random_quest_id;
     }
 
     const auto &dungeon = floor.get_dungeon_definition();

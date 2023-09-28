@@ -5,6 +5,7 @@
 #include "monster/monster-timed-effect-types.h"
 #include "system/angband.h"
 #include <array>
+#include <optional>
 #include <vector>
 
 /*!
@@ -87,4 +88,5 @@ public:
     void set_dungeon_index(short dungeon_idx_); /*!< @todo 後でenum class にする */
     void reset_dungeon_index();
     dungeon_type &get_dungeon_definition() const;
+    QuestId get_random_quest_id(std::optional<int> level_opt = std::nullopt) const;
 };
