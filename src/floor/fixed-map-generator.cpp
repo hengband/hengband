@@ -160,7 +160,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             if (randint0(100) < 75) {
                 place_object(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, 0L);
             } else {
-                place_trap(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
+                place_trap(floor_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
             }
 
             floor_ptr->object_level = floor_ptr->base_level;
@@ -176,7 +176,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
 
             floor_ptr->object_level = floor_ptr->base_level;
         } else if (random & RANDOM_TRAP) {
-            place_trap(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
+            place_trap(floor_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
         } else if (letter[idx].trap) {
             g_ptr->mimic = g_ptr->feat;
             g_ptr->feat = conv_dungeon_feat(floor_ptr, letter[idx].trap);

@@ -153,45 +153,31 @@ void init_normal_traps(void)
 }
 
 /*!
- * @brief 基本トラップをランダムに選択する /
- * Get random trap
+ * @brief 基本トラップをランダムに選択する
+ * @param floor_ptr 現在フロアへの参照ポインタ
  * @return 選択したトラップのID
- * @details
- * This routine should be redone to reflect trap "level".\n
- * That is, it does not make sense to have spiked pits at 50 feet.\n
- * Actually, it is not this routine, but the "trap instantiation"\n
- * code, which should also check for "trap doors" on quest levels.\n
- * @todo 引数はFloorType に差し替え可能
+ * @details トラップドアでないならばそのID.
+ * トラップドアは、アリーナ・クエスト・ダンジョンの最下層には設置しない.
  */
-FEAT_IDX choose_random_trap(PlayerType *player_ptr)
+short choose_random_trap(FloorType *floor_ptr)
 {
-    FEAT_IDX feat;
-
-    /* Pick a trap */
     const auto &terrains = TerrainList::get_instance();
-    const auto &floor = *player_ptr->current_floor_ptr;
     while (true) {
-        feat = rand_choice(normal_traps);
-
-        /* Accept non-trapdoors */
-        if (terrains[feat].flags.has_not(TerrainCharacteristics::MORE)) {
-            break;
+        const auto terrain_id = rand_choice(normal_traps);
+        if (terrains[terrain_id].flags.has_not(TerrainCharacteristics::MORE)) {
+            return terrain_id;
         }
 
-        /* Hack -- no trap doors on special levels */
-        if (floor.inside_arena || inside_quest(floor.get_quest_id())) {
+        if (floor_ptr->inside_arena || inside_quest(floor_ptr->get_quest_id())) {
             continue;
         }
 
-        /* Hack -- no trap doors on the deepest level */
-        if (floor.dun_level >= floor.get_dungeon_definition().maxdepth) {
+        if (floor_ptr->dun_level >= floor_ptr->get_dungeon_definition().maxdepth) {
             continue;
         }
 
-        break;
+        return terrain_id;
     }
-
-    return feat;
 }
 
 /*!
@@ -227,9 +213,8 @@ void disclose_grid(PlayerType *player_ptr, POSITION y, POSITION x)
  * when they are "discovered" (by detecting them or setting them off),\n
  * the trap is "instantiated" as a visible, "typed", trap.\n
  */
-void place_trap(PlayerType *player_ptr, POSITION y, POSITION x)
+void place_trap(FloorType *floor_ptr, POSITION y, POSITION x)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
 
     /* Paranoia -- verify location */
@@ -244,7 +229,7 @@ void place_trap(PlayerType *player_ptr, POSITION y, POSITION x)
 
     /* Place an invisible trap */
     g_ptr->mimic = g_ptr->feat;
-    g_ptr->feat = choose_random_trap(player_ptr);
+    g_ptr->feat = choose_random_trap(floor_ptr);
 }
 
 /*!
