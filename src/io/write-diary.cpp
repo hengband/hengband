@@ -270,7 +270,7 @@ void exe_write_diary(PlayerType *player_ptr, DiaryKind dk, int num, std::string_
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto [q_idx, note_level] = write_floor(floor);
+    const auto &[q_idx, note_level] = write_floor(floor);
     auto do_level = true;
     switch (dk) {
     case DiaryKind::DIALY:

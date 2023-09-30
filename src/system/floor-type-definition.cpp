@@ -16,6 +16,11 @@ bool FloorType::is_in_dungeon() const
     return this->dun_level > 0;
 }
 
+bool FloorType::is_in_quest() const
+{
+    return this->quest_number != QuestId::NONE;
+}
+
 void FloorType::set_dungeon_index(short dungeon_idx_)
 {
     this->dungeon_idx = dungeon_idx_;
@@ -68,7 +73,7 @@ QuestId FloorType::get_random_quest_id(std::optional<int> level_opt) const
 QuestId FloorType::get_quest_id(const int bonus) const
 {
     const auto &quest_list = QuestList::get_instance();
-    if (inside_quest(this->quest_number)) {
+    if (this->is_in_quest()) {
         return this->quest_number;
     }
 

@@ -127,7 +127,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         player_ptr->max_plv = player_ptr->lev;
     }
 
-    if ((max_dlv[floor.dungeon_idx] < floor.dun_level) && !inside_quest(floor.quest_number)) {
+    if ((max_dlv[floor.dungeon_idx] < floor.dun_level) && !floor.is_in_quest()) {
         max_dlv[floor.dungeon_idx] = floor.dun_level;
         if (record_maxdepth) {
             exe_write_diary(player_ptr, DiaryKind::MAXDEAPTH, floor.dun_level);
@@ -177,7 +177,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         return;
     }
 
-    if (!inside_quest(floor.quest_number) && (floor.dungeon_idx == DUNGEON_ANGBAND)) {
+    if (!floor.is_in_quest() && (floor.dungeon_idx == DUNGEON_ANGBAND)) {
         const auto random_quest_id = floor.get_random_quest_id();
         quest_discovery(random_quest_id);
         floor.quest_number = random_quest_id;

@@ -75,7 +75,7 @@ void stair_creation(PlayerType *player_ptr)
         down = false;
     }
 
-    if (!floor.dun_level || (!up && !down) || (inside_quest(floor.quest_number) && QuestType::is_fixed(floor.quest_number)) || floor.inside_arena || player_ptr->phase_out) {
+    if (!floor.dun_level || (!up && !down) || (floor.is_in_quest() && QuestType::is_fixed(floor.quest_number)) || floor.inside_arena || player_ptr->phase_out) {
         msg_print(_("効果がありません！", "There is no effect!"));
         return;
     }

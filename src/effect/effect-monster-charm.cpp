@@ -444,7 +444,7 @@ ProcessResult effect_monster_capture(PlayerType *player_ptr, EffectMonster *em_p
     const auto &quest_list = QuestList::get_instance();
     auto *floor_ptr = player_ptr->current_floor_ptr;
 
-    auto quest_monster = inside_quest(floor_ptr->quest_number);
+    auto quest_monster = floor_ptr->is_in_quest();
     quest_monster &= (quest_list[floor_ptr->quest_number].type == QuestKindType::KILL_ALL);
     quest_monster &= !em_ptr->m_ptr->is_pet();
 

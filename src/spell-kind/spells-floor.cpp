@@ -280,7 +280,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
 {
     /* Prevent destruction of quest levels and town */
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((inside_quest(floor_ptr->quest_number) && QuestType::is_fixed(floor_ptr->quest_number)) || !floor_ptr->dun_level) {
+    if ((floor_ptr->is_in_quest() && QuestType::is_fixed(floor_ptr->quest_number)) || !floor_ptr->dun_level) {
         return false;
     }
 

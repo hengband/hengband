@@ -175,7 +175,7 @@ void print_gold(PlayerType *player_ptr)
 void print_depth(PlayerType *player_ptr)
 {
     TERM_COLOR attr = TERM_WHITE;
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     TERM_LEN col_depth = wid + COL_DEPTH;
     TERM_LEN row_depth = hgt + ROW_DEPTH;
 
@@ -185,7 +185,7 @@ void print_depth(PlayerType *player_ptr)
         return;
     }
 
-    if (inside_quest(floor_ptr->quest_number) && !floor_ptr->dungeon_idx) {
+    if (floor_ptr->is_in_quest() && !floor_ptr->dungeon_idx) {
         c_prt(attr, format("%7s", _("地上", "Quest")), row_depth, col_depth);
         return;
     }

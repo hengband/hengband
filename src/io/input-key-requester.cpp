@@ -372,7 +372,7 @@ std::string InputKeyRequestor::switch_special_menu_condition(const SpecialMenuCo
         return "";
     case SpecialMenuType::WILD: {
         auto floor_ptr = this->player_ptr->current_floor_ptr;
-        if ((floor_ptr->dun_level > 0) || floor_ptr->inside_arena || inside_quest(floor_ptr->quest_number)) {
+        if ((floor_ptr->dun_level > 0) || floor_ptr->inside_arena || floor_ptr->is_in_quest()) {
             return "";
         }
 
