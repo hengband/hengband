@@ -39,7 +39,7 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     char inven_label[52 + 1];
 
     auto col = command_gap;
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     auto len = wid - col - 1;
     for (i = 0; i < INVEN_PACK; i++) {
         o_ptr = &player_ptr->inventory_list[i];
@@ -145,7 +145,7 @@ void display_inventory(PlayerType *player_ptr, const ItemTester &item_tester)
         return;
     }
 
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     for (i = 0; i < INVEN_PACK; i++) {
         auto o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->is_valid()) {

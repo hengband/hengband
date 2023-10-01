@@ -103,7 +103,7 @@ void WorldTurnProcessor::process_world()
  */
 void WorldTurnProcessor::print_time()
 {
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     const auto row = hgt + ROW_DAY;
 
     int day;

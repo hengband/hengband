@@ -188,7 +188,7 @@ int exe_write_diary_quest(PlayerType *player_ptr, DiaryKind dk, QuestId num)
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
     floor.quest_number = old_quest;
 
-    const auto [q_idx, note_level] = write_floor(floor);
+    const auto &[q_idx, note_level] = write_floor(floor);
 
     FILE *fff = nullptr;
     if (!open_diary_file(&fff, &disable_diary)) {
@@ -270,7 +270,7 @@ void exe_write_diary(PlayerType *player_ptr, DiaryKind dk, int num, std::string_
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto [q_idx, note_level] = write_floor(floor);
+    const auto &[q_idx, note_level] = write_floor(floor);
     auto do_level = true;
     switch (dk) {
     case DiaryKind::DIALY:
