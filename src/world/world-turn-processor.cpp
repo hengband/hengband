@@ -3,6 +3,7 @@
 #include "cmd-io/cmd-save.h"
 #include "core/disturbance.h"
 #include "core/magic-effects-timeout-reducer.h"
+#include "dungeon/quest.h"
 #include "floor/floor-events.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/wild.h"
@@ -220,7 +221,7 @@ void WorldTurnProcessor::decide_auto_save()
 void WorldTurnProcessor::process_change_daytime_night()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    if (!floor_ptr->dun_level && !inside_quest(floor_ptr->quest_number) && !this->player_ptr->phase_out && !floor_ptr->inside_arena) {
+    if (!floor_ptr->dun_level && !floor_ptr->is_in_quest() && !this->player_ptr->phase_out && !floor_ptr->inside_arena) {
         if (!(w_ptr->game_turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2))) {
             auto dawn = w_ptr->game_turn % (TURNS_PER_TICK * TOWN_DAWN) == 0;
             if (dawn) {
@@ -234,7 +235,7 @@ void WorldTurnProcessor::process_change_daytime_night()
     }
 
     auto is_in_dungeon = vanilla_town;
-    is_in_dungeon |= lite_town && (!inside_quest(floor_ptr->quest_number)) && !this->player_ptr->phase_out && !floor_ptr->inside_arena;
+    is_in_dungeon |= lite_town && !floor_ptr->is_in_quest() && !this->player_ptr->phase_out && !floor_ptr->inside_arena;
     is_in_dungeon &= floor_ptr->dun_level != 0;
     if (!is_in_dungeon) {
         return;
@@ -306,7 +307,7 @@ void WorldTurnProcessor::decide_alloc_monster()
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto should_alloc = one_in_(floor_ptr->get_dungeon_definition().max_m_alloc_chance);
     should_alloc &= !floor_ptr->inside_arena;
-    should_alloc &= !inside_quest(floor_ptr->quest_number);
+    should_alloc &= !floor_ptr->is_in_quest();
     should_alloc &= !this->player_ptr->phase_out;
     if (should_alloc) {
         (void)alloc_monster(this->player_ptr, MAX_PLAYER_SIGHT + 5, 0, summon_specific);

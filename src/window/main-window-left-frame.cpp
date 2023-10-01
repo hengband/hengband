@@ -1,4 +1,5 @@
 #include "window/main-window-left-frame.h"
+#include "dungeon/quest.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "market/arena-info-table.h"
@@ -184,7 +185,7 @@ void print_depth(PlayerType *player_ptr)
         return;
     }
 
-    if (inside_quest(floor_ptr->quest_number) && !floor_ptr->dungeon_idx) {
+    if (floor_ptr->is_in_quest() && !floor_ptr->dungeon_idx) {
         c_prt(attr, format("%7s", _("地上", "Quest")), row_depth, col_depth);
         return;
     }

@@ -275,7 +275,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         leave_quest_check(player_ptr);
         floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
         floor_ptr->dun_level = 0;
-        if (!inside_quest(floor_ptr->quest_number)) {
+        if (!floor_ptr->is_in_quest()) {
             player_ptr->word_recall = 0;
         }
         player_ptr->oldpx = 0;

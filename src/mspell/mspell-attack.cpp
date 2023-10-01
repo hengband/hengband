@@ -57,7 +57,10 @@ static void set_no_magic_mask(msa_type *msa_ptr)
 static void check_mspell_stupid(PlayerType *player_ptr, msa_type *msa_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    msa_ptr->in_no_magic_dungeon = floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::NO_MAGIC) && floor_ptr->dun_level && (!inside_quest(floor_ptr->quest_number) || QuestType::is_fixed(floor_ptr->quest_number));
+    auto is_in_no_magic_dungeon = floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::NO_MAGIC);
+    is_in_no_magic_dungeon &= floor_ptr->is_in_dungeon();
+    is_in_no_magic_dungeon &= !floor_ptr->is_in_quest() || QuestType::is_fixed(floor_ptr->quest_number);
+    msa_ptr->in_no_magic_dungeon = is_in_no_magic_dungeon;
     if (!msa_ptr->in_no_magic_dungeon || (msa_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))) {
         return;
     }

@@ -79,7 +79,7 @@ static bool open_diary_file(FILE **fff, bool *disable_diary)
  */
 static std::pair<QuestId, std::string> write_floor(const FloorType &floor)
 {
-    auto q_idx = quest_number(floor, floor.dun_level);
+    auto q_idx = floor.get_quest_id();
     if (!write_level) {
         return std::make_pair(q_idx, std::string());
     }

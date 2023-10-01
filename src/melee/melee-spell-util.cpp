@@ -24,6 +24,6 @@ melee_spell_type::melee_spell_type(PlayerType *player_ptr, MONSTER_IDX m_idx)
     this->pet = this->m_ptr->is_pet();
     const auto &dungeon = floor_ptr->get_dungeon_definition();
     const auto is_in_dungeon = floor_ptr->is_in_dungeon();
-    const auto is_in_random_quest = inside_quest(floor_ptr->quest_number) && !QuestType::is_fixed(floor_ptr->quest_number);
+    const auto is_in_random_quest = floor_ptr->is_in_quest() && !QuestType::is_fixed(floor_ptr->quest_number);
     this->in_no_magic_dungeon = dungeon.flags.has(DungeonFeatureType::NO_MAGIC) && is_in_dungeon && !is_in_random_quest;
 }

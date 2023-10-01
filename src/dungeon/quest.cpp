@@ -29,7 +29,7 @@
 #include "player/player-status.h"
 #include "system/artifact-type-definition.h"
 #include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/floor-type-definition.h" // @todo 相互参照、将来的に削除する.
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
@@ -338,64 +338,6 @@ void quest_discovery(QuestId q_idx)
 
     msg_print(_("この階は以前は誰かによって守られていたようだ…。", "It seems that this level was protected by someone before..."));
     record_quest_final_status(q_ptr, 0, QuestStatusType::FINISHED);
-}
-
-/*!
- * @brief 新しく入ったダンジョンの階層に固定されている一般のクエストを探し出しIDを返す。
- * / Hack -- Check if a level is a "quest" level
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param level 検索対象になる階
- * @return クエストIDを返す。該当がない場合0を返す。
- */
-QuestId quest_number(const FloorType &floor, DEPTH level)
-{
-    const auto &quest_list = QuestList::get_instance();
-    if (inside_quest(floor.quest_number)) {
-        return floor.quest_number;
-    }
-
-    for (const auto &[q_idx, quest] : quest_list) {
-        if (quest.status != QuestStatusType::TAKEN) {
-            continue;
-        }
-
-        auto depth_quest = (quest.type == QuestKindType::KILL_LEVEL);
-        depth_quest &= !(quest.flags & QUEST_FLAG_PRESET);
-        depth_quest &= (quest.level == level);
-        depth_quest &= (quest.dungeon == floor.dungeon_idx);
-        if (depth_quest) {
-            return q_idx;
-        }
-    }
-
-    return random_quest_number(floor, level);
-}
-
-/*!
- * @brief 新しく入ったダンジョンの階層に固定されているランダムクエストを探し出しIDを返す。
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param level 検索対象になる階
- * @return クエストIDを返す。該当がない場合0を返す。
- */
-QuestId random_quest_number(const FloorType &floor, DEPTH level)
-{
-    if (floor.dungeon_idx != DUNGEON_ANGBAND) {
-        return QuestId::NONE;
-    }
-
-    const auto &quest_list = QuestList::get_instance();
-    for (auto q_idx : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
-        const auto &quest = quest_list[q_idx];
-        auto is_random_quest = (quest.type == QuestKindType::RANDOM);
-        is_random_quest &= (quest.status == QuestStatusType::TAKEN);
-        is_random_quest &= (quest.level == level);
-        is_random_quest &= (quest.dungeon == DUNGEON_ANGBAND);
-        if (is_random_quest) {
-            return q_idx;
-        }
-    }
-
-    return QuestId::NONE;
 }
 
 /*!

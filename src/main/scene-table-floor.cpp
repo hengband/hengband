@@ -44,7 +44,7 @@ static bool scene_basic(PlayerType *player_ptr, scene_type *value)
 static bool scene_quest(PlayerType *player_ptr, scene_type *value)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    const QuestId quest_id = quest_number(floor, floor.dun_level);
+    const auto quest_id = floor.get_quest_id();
     const bool enable = (inside_quest(quest_id));
     if (enable) {
         value->type = TERM_XTRA_MUSIC_QUEST;
@@ -57,7 +57,7 @@ static bool scene_quest(PlayerType *player_ptr, scene_type *value)
 static bool scene_quest_basic(PlayerType *player_ptr, scene_type *value)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    const QuestId quest_id = quest_number(floor, floor.dun_level);
+    const auto quest_id = floor.get_quest_id();
     const bool enable = (inside_quest(quest_id));
     if (enable) {
         value->type = TERM_XTRA_MUSIC_BASIC;

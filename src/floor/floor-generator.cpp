@@ -504,7 +504,7 @@ void generate_floor(PlayerType *player_ptr)
             generate_challenge_arena(player_ptr);
         } else if (player_ptr->phase_out) {
             generate_gambling_arena(player_ptr);
-        } else if (inside_quest(floor_ptr->quest_number)) {
+        } else if (floor_ptr->is_in_quest()) {
             generate_fixed_floor(player_ptr);
         } else if (!floor_ptr->dun_level) {
             if (player_ptr->wild_mode) {
@@ -528,7 +528,7 @@ void generate_floor(PlayerType *player_ptr)
         // 狂戦士でのプレイに支障をきたしうるので再生成する。
         // 地上、荒野マップ、クエストでは連結性判定は行わない。
         // TODO: 本来はダンジョン生成アルゴリズム自身で連結性を保証するのが理想ではある。
-        const bool check_conn = okay && floor_ptr->dun_level > 0 && !inside_quest(floor_ptr->quest_number);
+        const bool check_conn = okay && floor_ptr->dun_level > 0 && !floor_ptr->is_in_quest();
         if (check_conn && !floor_is_connected(floor_ptr, is_permanent_blocker)) {
             // 一定回数試しても連結にならないなら諦める。
             if (num >= 1000) {

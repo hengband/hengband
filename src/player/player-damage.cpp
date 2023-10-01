@@ -389,7 +389,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                 exe_write_diary(player_ptr, DiaryKind::ARENA, -1 - player_ptr->arena_number, m_name);
             }
         } else {
-            const auto q_idx = quest_number(floor, floor.dun_level);
+            const auto q_idx = floor.get_quest_id();
             const auto seppuku = hit_from == "Seppuku";
             const auto winning_seppuku = w_ptr->total_winner && seppuku;
 

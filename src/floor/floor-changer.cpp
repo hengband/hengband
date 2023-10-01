@@ -347,7 +347,7 @@ static void update_new_floor_feature(PlayerType *player_ptr, saved_floor_type *s
     }
 
     auto *g_ptr = &floor.grid_array[player_ptr->y][player_ptr->x];
-    if ((player_ptr->change_floor_mode & CFM_UP) && !inside_quest(quest_number(floor, floor.dun_level))) {
+    if ((player_ptr->change_floor_mode & CFM_UP) && !inside_quest(floor.get_quest_id())) {
         g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(&floor, feat_down_stair, TerrainCharacteristics::SHAFT) : feat_down_stair;
     } else if ((player_ptr->change_floor_mode & CFM_DOWN) && !ironman_downward) {
         g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(&floor, feat_up_stair, TerrainCharacteristics::SHAFT) : feat_up_stair;

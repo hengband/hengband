@@ -178,7 +178,7 @@ FEAT_IDX choose_random_trap(PlayerType *player_ptr)
         }
 
         /* Hack -- no trap doors on special levels */
-        if (floor.inside_arena || inside_quest(quest_number(floor, floor.dun_level))) {
+        if (floor.inside_arena || inside_quest(floor.get_quest_id())) {
             continue;
         }
 

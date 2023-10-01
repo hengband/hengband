@@ -160,12 +160,12 @@ static bool check_unique_placeable(PlayerType *player_ptr, MonsterRaceId r_idx, 
  */
 static bool check_quest_placeable(const FloorType &floor, MonsterRaceId r_idx)
 {
-    if (!inside_quest(quest_number(floor, floor.dun_level))) {
+    if (!inside_quest(floor.get_quest_id())) {
         return true;
     }
 
     const auto &quest_list = QuestList::get_instance();
-    QuestId number = quest_number(floor, floor.dun_level);
+    QuestId number = floor.get_quest_id();
     const auto *q_ptr = &quest_list[number];
     if ((q_ptr->type != QuestKindType::KILL_LEVEL) && (q_ptr->type != QuestKindType::RANDOM)) {
         return true;

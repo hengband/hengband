@@ -55,9 +55,9 @@ bool is_teleport_level_ineffective(PlayerType *player_ptr, MONSTER_IDX idx)
     const auto &floor = *player_ptr->current_floor_ptr;
     auto is_special_floor = floor.inside_arena;
     is_special_floor |= player_ptr->phase_out;
-    is_special_floor |= inside_quest(floor.quest_number) && !inside_quest(random_quest_number(floor, floor.dun_level));
+    is_special_floor |= floor.is_in_quest() && !inside_quest(floor.get_random_quest_id());
     auto is_invalid_floor = idx <= 0;
-    is_invalid_floor &= inside_quest(quest_number(floor, floor.dun_level)) || (floor.dun_level >= floor.get_dungeon_definition().maxdepth);
+    is_invalid_floor &= inside_quest(floor.get_quest_id()) || (floor.dun_level >= floor.get_dungeon_definition().maxdepth);
     is_invalid_floor &= floor.dun_level >= 1;
     is_invalid_floor &= ironman_downward;
     return is_special_floor || is_invalid_floor;
@@ -145,7 +145,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
             player_ptr->leaving = true;
         }
-    } else if (inside_quest(quest_number(floor, floor.dun_level)) || (floor.dun_level >= dungeon.maxdepth)) {
+    } else if (inside_quest(floor.get_quest_id()) || (floor.dun_level >= dungeon.maxdepth)) {
 #ifdef JP
         if (see_m) {
             msg_format("%s^は天井を突き破って宙へ浮いていく。", m_name.data());
@@ -461,7 +461,7 @@ bool recall_player(PlayerType *player_ptr, TIME_EFFECT turns)
 
     bool is_special_floor = floor.is_in_dungeon();
     is_special_floor &= max_dlv[floor.dungeon_idx] > floor.dun_level;
-    is_special_floor &= !inside_quest(floor.quest_number);
+    is_special_floor &= !floor.is_in_quest();
     is_special_floor &= !player_ptr->word_recall;
     if (is_special_floor) {
         if (input_check(_("ここは最深到達階より浅い階です。この階に戻って来ますか？ ", "Reset recall depth? "))) {

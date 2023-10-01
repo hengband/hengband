@@ -6,6 +6,7 @@
 #include "action/mutation-execution.h"
 #include "cmd-item/cmd-throw.h"
 #include "core/asking-player.h"
+#include "dungeon/quest.h"
 #include "effect/attribute-types.h"
 #include "effect/spells-effect-util.h"
 #include "floor/geometry.h"
@@ -259,7 +260,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         can_banish &= none_bits(monrace.flags1, RF1_QUESTOR);
         can_banish &= monrace.kind_flags.has_not(MonsterKindType::UNIQUE);
         can_banish &= !floor.inside_arena;
-        can_banish &= !inside_quest(floor.quest_number);
+        can_banish &= !floor.is_in_quest();
         can_banish &= (monrace.level < randint1(player_ptr->lev + 50));
         can_banish &= monster.mflag2.has_not(MonsterConstantFlagType::NOGENO);
         if (can_banish) {

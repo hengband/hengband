@@ -8,6 +8,7 @@
 #include "avatar/avatar.h"
 #include "core/asking-player.h"
 #include "core/speed-table.h"
+#include "dungeon/quest.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
@@ -165,7 +166,7 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
             if (!cave_monster_teleportable_bold(player_ptr, m_idx, ny, nx, mode)) {
                 continue;
             }
-            if (!(inside_quest(player_ptr->current_floor_ptr->quest_number) || player_ptr->current_floor_ptr->inside_arena)) {
+            if (!(player_ptr->current_floor_ptr->is_in_quest() || player_ptr->current_floor_ptr->inside_arena)) {
                 if (player_ptr->current_floor_ptr->grid_array[ny][nx].is_icky()) {
                     continue;
                 }
