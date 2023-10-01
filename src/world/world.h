@@ -11,7 +11,9 @@ constexpr auto MAX_BOUNTY = 20;
 /*!
  * @brief 世界情報構造体
  */
-struct world_type {
+class AngbandWorld {
+public:
+    AngbandWorld() = default;
 
     POSITION max_wild_x{}; /*!< Maximum size of the wilderness */
     POSITION max_wild_y{}; /*!< Maximum size of the wilderness */
@@ -69,7 +71,7 @@ struct world_type {
     MONSTER_IDX max_m_idx = 1024; /*!< 1フロアに存在可能な最大モンスター数 */
 };
 
-extern world_type *w_ptr;
+extern AngbandWorld *w_ptr;
 
 class PlayerType;
 bool is_daytime(void);
