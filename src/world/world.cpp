@@ -7,6 +7,24 @@ AngbandWorld world;
 AngbandWorld *w_ptr = &world;
 
 /*!
+ * @brief アリーナへの入場/退出状態を更新する
+ * @param 入場ならばtrue、退出ならばfalse
+ */
+void AngbandWorld::set_arena(const bool new_status)
+{
+    this->is_out_arena = new_status;
+}
+
+/*!
+ * @brief アリーナへの入場/退出状態を取得する
+ * @return アリーナ状態
+ */
+bool AngbandWorld::get_arena() const
+{
+    return this->is_out_arena;
+}
+
+/*!
  * @brief ゲーム時間が日中かどうかを返す /
  * Whether daytime or not
  * @return 日中ならばTRUE、夜ならばFALSE

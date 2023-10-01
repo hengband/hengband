@@ -69,6 +69,12 @@ public:
 
     OBJECT_IDX max_o_idx = 1024; /*!< 1フロアに存在可能な最大アイテム数 */
     MONSTER_IDX max_m_idx = 1024; /*!< 1フロアに存在可能な最大モンスター数 */
+
+    void set_arena(const bool new_status);
+    bool get_arena() const;
+
+private:
+    bool is_out_arena = false; // アリーナ外部にいる時だけtrue.
 };
 
 extern AngbandWorld *w_ptr;
