@@ -106,7 +106,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     TERM_COLOR attr_old[F_LIT_MAX] = {};
     char char_old[F_LIT_MAX] = {};
 
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     std::vector<FEAT_IDX> feat_idx(terrains_info.size());
 
     concptr feature_group_text[] = { "terrains", nullptr };

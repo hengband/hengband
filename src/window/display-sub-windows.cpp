@@ -272,7 +272,7 @@ void fix_monster_list(PlayerType *player_ptr)
 
     display_sub_windows(SubWindowRedrawingFlag::SIGHT_MONSTERS,
         [player_ptr, &once] {
-            const auto [wid, hgt] = term_get_size();
+            const auto &[wid, hgt] = term_get_size();
             std::call_once(once, target_sensing_monsters_prepare, player_ptr, monster_list);
             print_monster_list(player_ptr->current_floor_ptr, monster_list, 0, 0, hgt);
         });
@@ -290,7 +290,7 @@ void fix_pet_list(PlayerType *player_ptr)
 {
     display_sub_windows(SubWindowRedrawingFlag::PETS,
         [player_ptr] {
-            const auto [wid, hgt] = term_get_size();
+            const auto &[wid, hgt] = term_get_size();
             const auto pets = target_pets_prepare(player_ptr);
             print_pet_list(player_ptr, pets, 0, 0, wid, hgt);
         });
@@ -306,7 +306,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
         return;
     }
 
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     byte attr = TERM_WHITE;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         int cur_row = i - INVEN_MAIN_HAND;
@@ -408,7 +408,7 @@ void fix_message(void)
 {
     display_sub_windows(SubWindowRedrawingFlag::MESSAGE,
         [] {
-            const auto [wid, hgt] = term_get_size();
+            const auto &[wid, hgt] = term_get_size();
             for (short i = 0; i < hgt; i++) {
                 term_putstr(0, (hgt - 1) - i, -1, (byte)((i < now_message) ? TERM_WHITE : TERM_SLATE), *message_str(i));
                 TERM_LEN x, y;
@@ -430,7 +430,7 @@ void fix_overhead(PlayerType *player_ptr)
 {
     display_sub_windows(SubWindowRedrawingFlag::OVERHEAD,
         [player_ptr] {
-            const auto [wid, hgt] = term_get_size();
+            const auto &[wid, hgt] = term_get_size();
             if (wid > COL_MAP + 2 && hgt > ROW_MAP + 2) {
                 int cy, cx;
                 display_map(player_ptr, &cy, &cx);
@@ -547,7 +547,7 @@ static const MonsterEntity *monster_on_floor_items(FloorType *floor_ptr, const g
  */
 static void display_floor_item_list(PlayerType *player_ptr, const int y, const int x)
 {
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     if (hgt <= 0) {
         return;
     }
@@ -632,7 +632,7 @@ void fix_floor_item_list(PlayerType *player_ptr, const int y, const int x)
  */
 static void display_found_item_list(PlayerType *player_ptr)
 {
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     if (hgt <= 0) {
         return;
     }
