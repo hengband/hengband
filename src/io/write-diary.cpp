@@ -81,25 +81,28 @@ static std::pair<QuestId, std::string> write_floor(const FloorType &floor)
 {
     auto q_idx = quest_number(floor, floor.dun_level);
     if (!write_level) {
-        return make_pair(q_idx, std::string());
+        return std::make_pair(q_idx, std::string());
     }
 
     if (floor.inside_arena) {
-        return make_pair(q_idx, std::string(_("アリーナ:", "Arena:")));
-    } else if (!floor.dun_level) {
-        return make_pair(q_idx, std::string(_("地上:", "Surface:")));
-    } else if (inside_quest(q_idx) && QuestType::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT))) {
-        return make_pair(q_idx, std::string(_("クエスト:", "Quest:")));
-    } else {
-        char desc[40];
-        const auto &dungeon = floor.get_dungeon_definition();
-#ifdef JP
-        strnfmt(desc, sizeof(desc), "%d階(%s):", (int)floor.dun_level, dungeon.name.data());
-#else
-        strnfmt(desc, sizeof(desc), "%s L%d:", dungeon.name.data(), (int)floor.dun_level);
-#endif
-        return make_pair(q_idx, std::string(desc));
+        return std::make_pair(q_idx, std::string(_("アリーナ:", "Arena:")));
     }
+
+    if (!floor.dun_level) {
+        return std::make_pair(q_idx, std::string(_("地上:", "Surface:")));
+    }
+
+    if (inside_quest(q_idx) && QuestType::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT))) {
+        return std::make_pair(q_idx, std::string(_("クエスト:", "Quest:")));
+    }
+
+    const auto &dungeon = floor.get_dungeon_definition();
+#ifdef JP
+    const auto desc = format("%d階(%s):", floor.dun_level, dungeon.name.data());
+#else
+    const auto desc = format("%s L%d:", dungeon.name.data(), floor.dun_level);
+#endif
+    return std::make_pair(q_idx, desc);
 }
 
 /*!
