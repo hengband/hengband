@@ -183,6 +183,17 @@ static void check_melee_spell_distance(PlayerType *player_ptr, melee_spell_type 
         return;
     }
 
+    auto ball_when_powerful_rad4 = {
+        MonsterAbilityType::BA_ACID,
+        MonsterAbilityType::BA_ELEC,
+        MonsterAbilityType::BA_FIRE,
+        MonsterAbilityType::BA_COLD
+    };
+    auto *r_ptr = &monraces_info[ms_ptr->m_ptr->r_idx];
+    if (any_bits(r_ptr->flags2, RF2_POWERFUL)) {
+        ms_ptr->ability_flags.reset(ball_when_powerful_rad4);
+    };
+
     ms_ptr->ability_flags.reset(RF_ABILITY_BIG_BALL_MASK);
 }
 
