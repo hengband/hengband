@@ -118,7 +118,7 @@ static MonsterRaceInfo &set_pet_params(PlayerType *player_ptr, const int current
     m_ptr->mtimed[MTIMED_CSLEEP] = 0;
     m_ptr->hold_o_idx_list.clear();
     m_ptr->target_y = 0;
-    auto &r_ref = m_ptr->get_real_r_ref();
+    auto &r_ref = m_ptr->get_real_monrace();
     if (r_ref.behavior_flags.has(MonsterBehaviorType::PREVENT_SUDDEN_MAGIC) && !ironman_nightmare) {
         m_ptr->mflag.set(MonsterTemporaryFlagType::PREVENT_MAGIC);
     }
@@ -150,7 +150,7 @@ static void place_pet(PlayerType *player_ptr)
             }
         } else {
             auto *m_ptr = &party_mon[current_monster];
-            auto &r_ref = m_ptr->get_real_r_ref();
+            auto &r_ref = m_ptr->get_real_monrace();
             msg_format(_("%sとはぐれてしまった。", "You have lost sight of %s."), monster_desc(player_ptr, m_ptr, 0).data());
             if (record_named_pet && m_ptr->is_named()) {
                 exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE));
@@ -182,7 +182,7 @@ static void update_unique_artifact(FloorType *floor_ptr, int16_t cur_floor_id)
             continue;
         }
 
-        auto &r_ref = m_ref.get_real_r_ref();
+        auto &r_ref = m_ref.get_real_monrace();
         if (r_ref.kind_flags.has(MonsterKindType::UNIQUE) || (r_ref.population_flags.has(MonsterPopulationType::NAZGUL))) {
             r_ref.floor_id = cur_floor_id;
         }
@@ -268,7 +268,7 @@ static void reset_unique_by_floor_change(PlayerType *player_ptr)
             (void)set_monster_invulner(player_ptr, i, 0, false);
         }
 
-        const auto &r_ref = m_ptr->get_real_r_ref();
+        const auto &r_ref = m_ptr->get_real_monrace();
         if (r_ref.kind_flags.has_not(MonsterKindType::UNIQUE) && r_ref.population_flags.has_not(MonsterPopulationType::NAZGUL)) {
             continue;
         }

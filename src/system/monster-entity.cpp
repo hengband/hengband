@@ -74,23 +74,23 @@ bool MonsterEntity::is_valid() const
     return MonsterRace(this->r_idx).is_valid();
 }
 
-MonsterRaceId MonsterEntity::get_real_r_idx() const
+MonsterRaceId MonsterEntity::get_real_monrace_id() const
 {
-    const auto &r_ref = monraces_info[this->r_idx];
+    const auto &monrace = monraces_info[this->r_idx];
     if (this->mflag2.has_not(MonsterConstantFlagType::CHAMELEON)) {
         return this->r_idx;
     }
 
-    return r_ref.kind_flags.has(MonsterKindType::UNIQUE) ? MonsterRaceId::CHAMELEON_K : MonsterRaceId::CHAMELEON;
+    return monrace.kind_flags.has(MonsterKindType::UNIQUE) ? MonsterRaceId::CHAMELEON_K : MonsterRaceId::CHAMELEON;
 }
 
 /*!
- * @brief モンスターの真の種族を返す / Extract monster race pointer of a monster's true form
- * @return 本当のモンスター種族参照ポインタ
+ * @brief モンスターの真の種族定義を返す (CHAMAELEONフラグ専用)
+ * @return 真のモンスター種族参照
  */
-MonsterRaceInfo &MonsterEntity::get_real_r_ref() const
+MonsterRaceInfo &MonsterEntity::get_real_monrace() const
 {
-    return monraces_info[this->get_real_r_idx()];
+    return monraces_info[this->get_real_monrace_id()];
 }
 
 short MonsterEntity::get_remaining_sleep() const

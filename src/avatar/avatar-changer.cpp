@@ -37,7 +37,7 @@ void AvatarChanger::change_virtue()
 {
     this->change_virtue_non_beginner();
     this->change_virtue_unique();
-    const auto &r_ref = this->m_ptr->get_real_r_ref();
+    const auto &r_ref = this->m_ptr->get_real_monrace();
     if (m_ptr->r_idx == MonsterRaceId::BEGGAR || m_ptr->r_idx == MonsterRaceId::LEPER) {
         chg_virtue(this->player_ptr, Virtue::COMPASSION, -1);
     }

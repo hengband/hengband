@@ -130,7 +130,7 @@ static std::string get_describing_monster_name(const MonsterEntity &monster, con
 {
     const auto &monrace = monraces_info[monster.ap_r_idx];
     if (!is_hallucinated || any_bits(mode, MD_IGNORE_HALLU)) {
-        return any_bits(mode, MD_TRUE_NAME) ? monster.get_real_r_ref().name : monrace.name;
+        return any_bits(mode, MD_TRUE_NAME) ? monster.get_real_monrace().name : monrace.name;
     }
 
     if (one_in_(2)) {
