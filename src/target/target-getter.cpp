@@ -220,7 +220,7 @@ bool get_rep_dir(PlayerType *player_ptr, int *dp, bool under)
         }
     } else if (player_ptr->riding) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-        auto *r_ptr = &monraces_info[m_ptr->r_idx];
+        auto *r_ptr = &m_ptr->get_monrace();
         if (m_ptr->is_confused()) {
             if (randint0(100) < 75) {
                 dir = ddd[randint0(8)];

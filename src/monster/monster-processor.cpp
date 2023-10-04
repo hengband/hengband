@@ -115,7 +115,7 @@ bool decide_process_continue(PlayerType *player_ptr, MonsterEntity *m_ptr);
 void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     turn_flags tmp_flags;
     turn_flags *turn_flags_ptr = init_turn_flags(player_ptr->riding, m_idx, &tmp_flags);
     turn_flags_ptr->see_m = is_seen(player_ptr, m_ptr);
@@ -123,7 +123,7 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
     decide_drop_from_monster(player_ptr, m_idx, turn_flags_ptr->is_riding_mon);
     if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && one_in_(13) && !m_ptr->is_asleep()) {
         choose_new_monster(player_ptr, m_idx, false, MonsterRace::empty_id());
-        r_ptr = &monraces_info[m_ptr->r_idx];
+        r_ptr = &m_ptr->get_monrace();
     }
 
     turn_flags_ptr->aware = process_stealth(player_ptr, m_idx);
@@ -224,7 +224,7 @@ bool process_stealth(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     int tmp = player_ptr->lev * 6 + (player_ptr->skill_stl + 10) * 4;
     if (player_ptr->monlite) {
         tmp /= 3;
@@ -250,7 +250,7 @@ bool process_stealth(PlayerType *player_ptr, MONSTER_IDX m_idx)
 void decide_drop_from_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool is_riding_mon)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (!is_riding_mon || ((r_ptr->flags7 & RF7_RIDING) != 0)) {
         return;
     }
@@ -308,7 +308,7 @@ bool vanish_summoned_children(PlayerType *player_ptr, MONSTER_IDX m_idx, bool se
 bool awake_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (!m_ptr->is_asleep()) {
         return true;
     }
@@ -339,7 +339,7 @@ bool awake_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     bool gets_angry = false;
     if (m_ptr->is_friendly() && has_aggravate(player_ptr)) {
         gets_angry = true;
@@ -402,7 +402,7 @@ bool explode_grenade(PlayerType *player_ptr, MONSTER_IDX m_idx)
 void process_special(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (r_ptr->ability_flags.has_not(MonsterAbilityType::SPECIAL) || (m_ptr->r_idx != MonsterRaceId::OHMU) || player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out || (r_ptr->freq_spell == 0) || (randint1(100) > r_ptr->freq_spell)) {
         return;
     }
@@ -435,7 +435,7 @@ void process_special(PlayerType *player_ptr, MONSTER_IDX m_idx)
 bool decide_monster_multiplication(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (((r_ptr->flags2 & RF2_MULTIPLY) == 0) || (player_ptr->current_floor_ptr->num_repro >= MAX_REPRODUCTION)) {
         return false;
     }
@@ -481,7 +481,7 @@ bool decide_monster_multiplication(PlayerType *player_ptr, MONSTER_IDX m_idx, PO
 bool cast_spell(PlayerType *player_ptr, MONSTER_IDX m_idx, bool aware)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if ((r_ptr->freq_spell == 0) || (randint1(100) > r_ptr->freq_spell)) {
         return false;
     }
@@ -640,7 +640,7 @@ void sweep_monster_process(PlayerType *player_ptr)
 bool decide_process_continue(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
     MonsterRaceInfo *r_ptr;
-    r_ptr = &monraces_info[m_ptr->r_idx];
+    r_ptr = &m_ptr->get_monrace();
     if (!player_ptr->no_flowed) {
         m_ptr->mflag2.reset(MonsterConstantFlagType::NOFLOW);
     }

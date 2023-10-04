@@ -269,7 +269,7 @@ std::string monster_desc(PlayerType *player_ptr, const MonsterEntity *m_ptr, BIT
 
     ss << add_cameleon_name(*m_ptr, mode);
     if (any_bits(mode, MD_IGNORE_HALLU) && !m_ptr->is_original_ap()) {
-        ss << "(" << monraces_info[m_ptr->r_idx].name << ")";
+        ss << "(" << m_ptr->get_monrace().name << ")";
     }
 
     if (any_bits(mode, MD_POSSESSIVE)) {

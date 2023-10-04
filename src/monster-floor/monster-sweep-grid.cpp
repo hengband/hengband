@@ -52,7 +52,7 @@ bool MonsterSweepGrid::get_movable_grid()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     POSITION y = 0;
     POSITION x = 0;
     auto y2 = this->player_ptr->y;
@@ -98,7 +98,7 @@ bool MonsterSweepGrid::get_movable_grid()
 bool MonsterSweepGrid::mon_will_run()
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (m_ptr->is_pet()) {
         return (this->player_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - this->player_ptr->pet_follow_distance));
     }
@@ -138,7 +138,7 @@ void MonsterSweepGrid::check_hiding_grid(POSITION *y, POSITION *x, POSITION *y2,
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (this->done || this->will_run || !m_ptr->is_hostile() || none_bits(r_ptr->flags1, RF1_FRIENDS)) {
         return;
     }
@@ -253,7 +253,7 @@ void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_fl
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (!this->check_movable_grid(yp, xp, no_flow)) {
         return;
     }
@@ -317,7 +317,7 @@ bool MonsterSweepGrid::sweep_ranged_attack_grid(POSITION *yp, POSITION *xp)
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     auto y1 = m_ptr->fy;
     auto x1 = m_ptr->fx;
     if (projectable(this->player_ptr, y1, x1, this->player_ptr->y, this->player_ptr->x)) {
@@ -406,7 +406,7 @@ bool MonsterSweepGrid::sweep_runnable_away_grid(POSITION *yp, POSITION *xp)
     auto gx = 0;
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     auto fy = m_ptr->fy;
     auto fx = m_ptr->fx;
     auto y1 = fy - *yp;

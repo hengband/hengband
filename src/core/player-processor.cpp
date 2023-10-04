@@ -183,7 +183,7 @@ void process_player(PlayerType *player_ptr)
     const auto effects = player_ptr->effects();
     if (player_ptr->riding && !effects->confusion()->is_confused() && !effects->blindness()->is_blind()) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-        auto *r_ptr = &monraces_info[m_ptr->r_idx];
+        auto *r_ptr = &m_ptr->get_monrace();
         if (m_ptr->is_asleep()) {
             const auto m_name = monster_desc(player_ptr, m_ptr, 0);
             (void)set_monster_csleep(player_ptr, player_ptr->riding, 0);

@@ -353,7 +353,7 @@ bool detect_monsters_normal(PlayerType *player_ptr, POSITION range)
     bool flag = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
         auto *m_ptr = &floor.m_list[i];
-        auto *r_ptr = &monraces_info[m_ptr->r_idx];
+        auto *r_ptr = &m_ptr->get_monrace();
         if (!m_ptr->is_valid()) {
             continue;
         }
@@ -398,7 +398,7 @@ bool detect_monsters_invis(PlayerType *player_ptr, POSITION range)
     auto flag = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
         auto *m_ptr = &floor.m_list[i];
-        auto *r_ptr = &monraces_info[m_ptr->r_idx];
+        auto *r_ptr = &m_ptr->get_monrace();
 
         if (!m_ptr->is_valid()) {
             continue;
@@ -449,7 +449,7 @@ bool detect_monsters_evil(PlayerType *player_ptr, POSITION range)
     auto flag = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
         auto *m_ptr = &floor.m_list[i];
-        auto *r_ptr = &monraces_info[m_ptr->r_idx];
+        auto *r_ptr = &m_ptr->get_monrace();
         if (!m_ptr->is_valid()) {
             continue;
         }
@@ -544,7 +544,7 @@ bool detect_monsters_mind(PlayerType *player_ptr, POSITION range)
     auto flag = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
         auto *m_ptr = &floor.m_list[i];
-        auto *r_ptr = &monraces_info[m_ptr->r_idx];
+        auto *r_ptr = &m_ptr->get_monrace();
         if (!m_ptr->is_valid()) {
             continue;
         }
@@ -592,7 +592,7 @@ bool detect_monsters_string(PlayerType *player_ptr, POSITION range, concptr Matc
     auto flag = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
         auto *m_ptr = &floor.m_list[i];
-        auto *r_ptr = &monraces_info[m_ptr->r_idx];
+        auto *r_ptr = &m_ptr->get_monrace();
         if (!m_ptr->is_valid()) {
             continue;
         }

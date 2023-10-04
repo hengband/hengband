@@ -170,7 +170,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
     bool can_move = true;
     bool do_past = false;
     if (g_ptr->m_idx && (m_ptr->ml || p_can_enter || p_can_kill_walls)) {
-        auto *r_ptr = &monraces_info[m_ptr->r_idx];
+        auto *r_ptr = &m_ptr->get_monrace();
         auto effects = player_ptr->effects();
         auto is_stunned = effects->stun()->is_stunned();
         auto can_cast = !effects->confusion()->is_confused();

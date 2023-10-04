@@ -353,7 +353,7 @@ void SpellHex::store_vengeful_damage(int dam)
 bool SpellHex::check_hex_barrier(MONSTER_IDX m_idx, spell_hex_type type) const
 {
     const auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[m_idx];
-    const auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    const auto *r_ptr = &m_ptr->get_monrace();
     return this->is_spelling_specific(type) && ((this->player_ptr->lev * 3 / 2) >= randint1(r_ptr->level));
 }
 

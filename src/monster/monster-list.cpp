@@ -218,7 +218,7 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *r_ptr = &monraces_info[r_idx];
     auto *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
-    MonsterRaceInfo *old_r_ptr = &monraces_info[m_ptr->r_idx];
+    MonsterRaceInfo *old_r_ptr = &m_ptr->get_monrace();
 
     if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return false;
@@ -263,7 +263,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *r_ptr = &monraces_info[r_idx];
     auto *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
-    MonsterRaceInfo *old_r_ptr = &monraces_info[m_ptr->r_idx];
+    MonsterRaceInfo *old_r_ptr = &m_ptr->get_monrace();
 
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         return false;
@@ -317,7 +317,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
     MonsterRaceInfo *r_ptr;
 
     bool old_unique = false;
-    if (monraces_info[m_ptr->r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
+    if (m_ptr->get_monrace().kind_flags.has(MonsterKindType::UNIQUE)) {
         old_unique = true;
     }
     if (old_unique && (r_idx == MonsterRaceId::CHAMELEON)) {

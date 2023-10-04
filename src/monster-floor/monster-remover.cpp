@@ -31,7 +31,7 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[i];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
 
     POSITION y = m_ptr->fy;
     POSITION x = m_ptr->fx;

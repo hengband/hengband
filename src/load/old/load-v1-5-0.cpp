@@ -369,7 +369,7 @@ void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
     }
 
     if (h_older_than(1, 0, 14)) {
-        auto *r_ptr = &monraces_info[m_ptr->r_idx];
+        auto *r_ptr = &m_ptr->get_monrace();
 
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
         if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {

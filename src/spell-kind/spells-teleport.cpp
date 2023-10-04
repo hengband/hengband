@@ -84,7 +84,7 @@ bool teleport_swap(PlayerType *player_ptr, DIRECTION dir)
     MonsterEntity *m_ptr;
     MonsterRaceInfo *r_ptr;
     m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-    r_ptr = &monraces_info[m_ptr->r_idx];
+    r_ptr = &m_ptr->get_monrace();
 
     (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
 
@@ -195,7 +195,7 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
     lite_spot(player_ptr, oy, ox);
     lite_spot(player_ptr, ny, nx);
 
-    if (monraces_info[m_ptr->r_idx].brightness_flags.has_any_of(ld_mask)) {
+    if (m_ptr->get_monrace().brightness_flags.has_any_of(ld_mask)) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 
@@ -276,7 +276,7 @@ void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty,
     lite_spot(player_ptr, oy, ox);
     lite_spot(player_ptr, ny, nx);
 
-    if (monraces_info[m_ptr->r_idx].brightness_flags.has_any_of(ld_mask)) {
+    if (m_ptr->get_monrace().brightness_flags.has_any_of(ld_mask)) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 }
@@ -422,7 +422,7 @@ void teleport_player(PlayerType *player_ptr, POSITION dis, BIT_FLAGS mode)
             MONSTER_IDX tmp_m_idx = player_ptr->current_floor_ptr->grid_array[oy + yy][ox + xx].m_idx;
             if (tmp_m_idx && (player_ptr->riding != tmp_m_idx)) {
                 auto *m_ptr = &player_ptr->current_floor_ptr->m_list[tmp_m_idx];
-                auto *r_ptr = &monraces_info[m_ptr->r_idx];
+                auto *r_ptr = &m_ptr->get_monrace();
 
                 bool can_follow = r_ptr->ability_flags.has(MonsterAbilityType::TPORT);
                 can_follow &= r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT);
@@ -467,7 +467,7 @@ void teleport_player_away(MONSTER_IDX m_idx, PlayerType *player_ptr, POSITION di
             }
 
             auto *m_ptr = &player_ptr->current_floor_ptr->m_list[tmp_m_idx];
-            auto *r_ptr = &monraces_info[m_ptr->r_idx];
+            auto *r_ptr = &m_ptr->get_monrace();
 
             bool can_follow = r_ptr->ability_flags.has(MonsterAbilityType::TPORT);
             can_follow &= r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT);

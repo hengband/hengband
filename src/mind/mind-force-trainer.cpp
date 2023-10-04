@@ -220,7 +220,7 @@ bool shock_power(PlayerType *player_ptr)
     POSITION oy = y, ox = x;
     MONSTER_IDX m_idx = player_ptr->current_floor_ptr->grid_array[y][x].m_idx;
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     const auto m_name = monster_desc(player_ptr, m_ptr, 0);
 
     if (randint1(r_ptr->level * 3 / 2) > randint0(dam / 2) + dam / 2) {

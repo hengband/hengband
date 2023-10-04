@@ -38,7 +38,7 @@ void set_pet(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
     QuestCompletionChecker(player_ptr, m_ptr).complete();
     m_ptr->mflag2.set(MonsterConstantFlagType::PET);
-    if (monraces_info[m_ptr->r_idx].kind_flags.has_none_of(alignment_mask)) {
+    if (m_ptr->get_monrace().kind_flags.has_none_of(alignment_mask)) {
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
     }
 }
@@ -134,7 +134,7 @@ bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
         }
     }
 
-    if (monraces_info[m_ptr->r_idx].brightness_flags.has_any_of(has_ld_mask)) {
+    if (m_ptr->get_monrace().brightness_flags.has_any_of(has_ld_mask)) {
         rfu.set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 

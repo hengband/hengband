@@ -601,7 +601,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
  */
 static void process_aura_damage(MonsterEntity *m_ptr, PlayerType *player_ptr, bool immune, MonsterAuraType aura_flag, dam_func dam_func, concptr message)
 {
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (r_ptr->aura_flags.has_not(aura_flag) || immune) {
         return;
     }

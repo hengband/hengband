@@ -38,7 +38,7 @@ void exe_monster_attack_to_player(PlayerType *player_ptr, turn_flags *turn_flags
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto *m_ptr = &floor.m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (!turn_flags_ptr->do_move || !player_bold(player_ptr, ny, nx)) {
         return;
     }
@@ -80,7 +80,7 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto *m_ptr = &floor.m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     MonsterEntity *y_ptr;
     y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
     if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
@@ -126,7 +126,7 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
 bool process_monster_attack_to_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, grid_type *g_ptr, bool can_cross)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     MonsterEntity *y_ptr;
     y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
     if (!turn_flags_ptr->do_move || (g_ptr->m_idx == 0)) {

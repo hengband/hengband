@@ -432,7 +432,7 @@ void MonsterDamageProcessor::show_bounty_message(std::string_view m_name)
  */
 void MonsterDamageProcessor::get_exp_from_mon(MonsterEntity *m_ptr, int exp_dam)
 {
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (!m_ptr->is_valid() || m_ptr->is_pet() || this->player_ptr->phase_out) {
         return;
     }
@@ -560,7 +560,7 @@ void MonsterDamageProcessor::add_monster_fear()
         }
     }
 
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (m_ptr->is_fearful() || any_bits(r_ptr->flags3, RF3_NO_FEAR)) {
         return;
     }

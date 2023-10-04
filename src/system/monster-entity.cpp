@@ -93,6 +93,11 @@ MonsterRaceInfo &MonsterEntity::get_real_monrace() const
     return monraces_info[this->get_real_monrace_id()];
 }
 
+MonsterRaceInfo &MonsterEntity::get_monrace() const
+{
+    return monraces_info[this->r_idx];
+}
+
 short MonsterEntity::get_remaining_sleep() const
 {
     return this->mtimed[MTIMED_CSLEEP];
