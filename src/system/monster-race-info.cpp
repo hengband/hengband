@@ -52,6 +52,20 @@ std::string MonsterRaceInfo::get_died_message() const
     return is_explodable ? _("は爆発して粉々になった。", " explodes into tiny shreds.") : _("を倒した。", " is destroyed.");
 }
 
+/*!
+ * @brief ユニークモンスターの撃破状態を更新する
+ * @todo 状態変更はモンスター「定義」ではないので将来的に別クラスへ分離する
+ */
+void MonsterRaceInfo::kill_unique()
+{
+    this->max_num = 0;
+    this->r_pkills++;
+    this->r_akills++;
+    if (this->r_tkills < MAX_SHORT) {
+        this->r_tkills++;
+    }
+}
+
 const std::map<MonsterRaceId, std::set<MonsterRaceId>> MonraceList::unified_uniques = {
     { MonsterRaceId::BANORLUPART, { MonsterRaceId::BANOR, MonsterRaceId::LUPART } },
 };
@@ -66,6 +80,28 @@ const std::map<MonsterRaceId, std::set<MonsterRaceId>> &MonraceList::get_unified
 MonraceList &MonraceList::get_instance()
 {
     return instance;
+}
+
+/*!
+ * @bried モンスター定義を種族IDから直接得る
+ * @param モンスター種族ID
+ * @return モンスター定義への参照
+ * @details モンスター実体からモンスター定義を得るためには使用しないこと
+ */
+MonsterRaceInfo &MonraceList::operator[](const MonsterRaceId r_idx)
+{
+    return monraces_info.at(r_idx);
+}
+
+/*!
+ * @bried モンスター定義を種族IDから直接得る
+ * @param モンスター種族ID
+ * @return モンスター定義への参照
+ * @details モンスター実体からモンスター定義を得るためには使用しないこと
+ */
+const MonsterRaceInfo &MonraceList::operator[](const MonsterRaceId r_idx) const
+{
+    return monraces_info.at(r_idx);
 }
 
 /*!
@@ -92,21 +128,11 @@ bool MonraceList::can_unify_separate(const MonsterRaceId r_idx) const
  */
 void MonraceList::kill_unified_unique(const MonsterRaceId r_idx)
 {
-    auto kill_monrace = [](MonsterRaceId r_idx) {
-        auto &monrace = monraces_info[r_idx];
-        monrace.max_num = 0;
-        monrace.r_pkills++;
-        monrace.r_akills++;
-        if (monrace.r_tkills < MAX_SHORT) {
-            monrace.r_tkills++;
-        }
-    };
-
     const auto it_unique = unified_uniques.find(r_idx);
     if (it_unique != unified_uniques.end()) {
-        kill_monrace(it_unique->first);
+        (*this)[it_unique->first].kill_unique();
         for (const auto separate : it_unique->second) {
-            kill_monrace(separate);
+            (*this)[separate].kill_unique();
         }
 
         return;
@@ -115,8 +141,8 @@ void MonraceList::kill_unified_unique(const MonsterRaceId r_idx)
     for (const auto &[unified_unique, separates] : unified_uniques) {
         const auto it_separate = separates.find(r_idx);
         if (it_separate != separates.end()) {
-            kill_monrace(*it_separate);
-            kill_monrace(unified_unique);
+            (*this)[*it_separate].kill_unique();
+            (*this)[unified_unique].kill_unique();
             return;
         }
     }
@@ -137,7 +163,7 @@ bool MonraceList::is_selectable(const MonsterRaceId r_idx) const
         return true;
     }
 
-    return std::all_of(it->second.begin(), it->second.end(), [](const auto x) { return monraces_info[x].cur_num == 0; });
+    return std::all_of(it->second.begin(), it->second.end(), [&](const auto x) { return (*this)[x].cur_num == 0; });
 }
 
 /*!
@@ -146,22 +172,17 @@ bool MonraceList::is_selectable(const MonsterRaceId r_idx) const
 void MonraceList::defeat_separated_uniques()
 {
     for (const auto &[unified_unique, separates] : unified_uniques) {
-        if (monraces_info[unified_unique].max_num > 0) {
+        if ((*this)[unified_unique].max_num > 0) {
             continue;
         }
 
         for (const auto separate : separates) {
-            auto &monrace = monraces_info[separate];
+            auto &monrace = (*this)[separate];
             if (monrace.max_num == 0) {
                 continue;
             }
 
-            monrace.max_num = 0;
-            monrace.r_pkills++;
-            monrace.r_akills++;
-            if (monrace.r_tkills < MAX_SHORT) {
-                monrace.r_tkills++;
-            }
+            monrace.kill_unique();
         }
     }
 }
@@ -179,7 +200,7 @@ bool MonraceList::is_unified(const MonsterRaceId r_idx) const
 bool MonraceList::exists_separates(const MonsterRaceId r_idx) const
 {
     const auto &separates = unified_uniques.at(r_idx);
-    return std::all_of(separates.begin(), separates.end(), [](const auto x) { return monraces_info[x].cur_num > 0; });
+    return std::all_of(separates.begin(), separates.end(), [&](const auto x) { return (*this)[x].cur_num > 0; });
 }
 
 /*!
@@ -218,5 +239,5 @@ bool MonraceList::can_select_separate(const MonsterRaceId r_idx, const int hp, c
         return false;
     }
 
-    return std::all_of(found_separates.begin(), found_separates.end(), [](const auto x) { return monraces_info[x].max_num > 0; });
+    return std::all_of(found_separates.begin(), found_separates.end(), [&](const auto x) { return (*this)[x].max_num > 0; });
 }

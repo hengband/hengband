@@ -142,6 +142,7 @@ public:
     bool has_living_flag() const;
     bool is_explodable() const;
     std::string get_died_message() const;
+    void kill_unique();
 };
 
 class MonraceList {
@@ -150,6 +151,8 @@ public:
     MonraceList(const MonraceList &) = delete;
     MonraceList &operator=(const MonraceList &) = delete;
     MonraceList &operator=(MonraceList &&) = delete;
+    MonsterRaceInfo &operator[](const MonsterRaceId r_idx);
+    const MonsterRaceInfo &operator[](const MonsterRaceId r_idx) const;
 
     static const std::map<MonsterRaceId, std::set<MonsterRaceId>> &get_unified_uniques();
     static MonraceList &get_instance();
