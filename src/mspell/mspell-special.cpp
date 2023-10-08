@@ -58,30 +58,30 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
 
     const auto &monraces = MonraceList::get_instance();
     const auto &unified_uniques = MonraceList::get_unified_uniques();
-    for (const auto &[unified_unique, separates] : unified_uniques) {
-        if ((m_ptr->r_idx != unified_unique) && !separates.contains(m_ptr->r_idx)) {
-            continue;
+    if (const auto it_unified = unified_uniques.find(m_ptr->r_idx); it_unified != unified_uniques.end()) {
+        const int separates_size = it_unified->second.size();
+        const auto separated_hp = (m_ptr->hp + 1) / separates_size;
+        const auto separated_maxhp = m_ptr->maxhp / separates_size;
+        if (floor_ptr->inside_arena || player_ptr->phase_out || !summon_possible(player_ptr, m_ptr->fy, m_ptr->fx)) {
+            return MonsterSpellResult::make_invalid();
         }
 
-        if (m_ptr->r_idx == unified_unique) {
-            const int separates_size = separates.size();
-            const auto separated_hp = (m_ptr->hp + 1) / separates_size;
-            const auto separated_maxhp = m_ptr->maxhp / separates_size;
-            if (floor_ptr->inside_arena || player_ptr->phase_out || !summon_possible(player_ptr, m_ptr->fy, m_ptr->fx)) {
-                return MonsterSpellResult::make_invalid();
-            }
+        delete_monster_idx(player_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
+        for (const auto separate : it_unified->second) {
+            summon_named_creature(player_ptr, 0, dummy_y, dummy_x, separate, MD_NONE);
+            floor_ptr->m_list[hack_m_idx_ii].hp = separated_hp;
+            floor_ptr->m_list[hack_m_idx_ii].maxhp = separated_maxhp;
+        }
 
-            delete_monster_idx(player_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
-            for (const auto separate : separates) {
-                summon_named_creature(player_ptr, 0, dummy_y, dummy_x, separate, MD_NONE);
-                floor_ptr->m_list[hack_m_idx_ii].hp = separated_hp;
-                floor_ptr->m_list[hack_m_idx_ii].maxhp = separated_maxhp;
-            }
+        const auto &m_name = monraces[it_unified->first].name;
+        const auto fmt = _("%sが分裂した！", "%s splits into two persons!");
+        msg_print(format(fmt, m_name.data()));
+        return MonsterSpellResult::make_valid();
+    }
 
-            const auto &m_name = monraces_info[unified_unique].name;
-            const auto fmt = _("%sが分裂した！", "%s splits into two persons!");
-            msg_print(format(fmt, m_name.data()));
-            return MonsterSpellResult::make_valid();
+    for (const auto &[unified_unique, separates] : unified_uniques) {
+        if (!separates.contains(m_ptr->r_idx)) {
+            continue;
         }
 
         if (!monraces.exists_separates(unified_unique)) {
@@ -111,7 +111,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
         floor_ptr->m_list[hack_m_idx_ii].maxhp = unified_maxhp;
         std::vector<std::string> m_names;
         for (const auto &separate : separates) {
-            const auto &monrace = monraces_info[separate];
+            const auto &monrace = monraces[separate];
             m_names.push_back(monrace.name);
         }
 
