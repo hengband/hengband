@@ -74,8 +74,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
         }
 
         const auto &m_name = monraces[it_unified->first].name;
-        const auto fmt = _("%sが分裂した！", "%s splits into two persons!");
-        msg_print(format(fmt, m_name.data()));
+        msg_format(_("%sが分離した！", "%s splits!"), m_name.data());
         return MonsterSpellResult::make_valid();
     }
 
