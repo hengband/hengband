@@ -221,7 +221,7 @@ static void print_pet_list_oneline(PlayerType *player_ptr, const MonsterEntity &
 {
     const auto &monrace = monraces_info[monster.ap_r_idx];
     const auto name = monster_desc(player_ptr, &monster, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE | MD_NO_OWNER);
-    const auto [bar_color, bar_len] = monster.get_hp_bar_data();
+    const auto &[bar_color, bar_len] = monster.get_hp_bar_data();
     const auto is_visible = monster.ml && !player_ptr->effects()->hallucination()->is_hallucinated();
 
     term_erase(0, y);
