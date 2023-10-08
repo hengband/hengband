@@ -319,7 +319,7 @@ void PlayerSkill::gain_riding_skill_exp_on_range_attack()
 
     const auto *floor_ptr = this->player_ptr->current_floor_ptr;
     const auto &monster = floor_ptr->m_list[this->player_ptr->riding];
-    const auto &monrace = monraces_info[monster.r_idx];
+    const auto &monrace = monster.get_monrace();
     if (((this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] - (RIDING_EXP_BEGINNER * 2)) / 200 < monrace.level) && one_in_(2)) {
         this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] += 1;
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
