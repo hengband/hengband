@@ -129,7 +129,9 @@ static bool check_unique_placeable(PlayerType *player_ptr, MonsterRaceId r_idx, 
     }
 
     auto *r_ptr = &monraces_info[r_idx];
-    if ((r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) && (r_ptr->cur_num >= r_ptr->max_num)) {
+    auto is_unique = r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->population_flags.has(MonsterPopulationType::NAZGUL);
+    is_unique &= r_ptr->cur_num >= r_ptr->max_num;
+    if (is_unique) {
         return false;
     }
 
@@ -141,7 +143,9 @@ static bool check_unique_placeable(PlayerType *player_ptr, MonsterRaceId r_idx, 
         return false;
     }
 
-    if (any_bits(r_ptr->flags1, RF1_FORCE_DEPTH) && (player_ptr->current_floor_ptr->dun_level < r_ptr->level) && (!ironman_nightmare || any_bits(r_ptr->flags1, RF1_QUESTOR))) {
+    const auto is_deep = any_bits(r_ptr->flags1, RF1_FORCE_DEPTH) && (player_ptr->current_floor_ptr->dun_level < r_ptr->level);
+    const auto is_questor = !ironman_nightmare || any_bits(r_ptr->flags1, RF1_QUESTOR);
+    if (is_deep && is_questor) {
         return false;
     }
 

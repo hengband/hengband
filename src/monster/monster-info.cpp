@@ -206,11 +206,7 @@ bool are_enemies(PlayerType *player_ptr, const MonsterEntity &monster1, const Mo
         }
     }
 
-    if (monster1.is_hostile() != monster2.is_hostile()) {
-        return true;
-    }
-
-    return false;
+    return monster1.is_hostile() != monster2.is_hostile();
 }
 
 /*!

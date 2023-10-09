@@ -46,25 +46,25 @@ static void decide_melee_spell_target(PlayerType *player_ptr, melee_spell_type *
 
 static void decide_indirection_melee_spell(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
-    const auto &m_ref = *ms_ptr->m_ptr;
-    if ((ms_ptr->target_idx != 0) || (m_ref.target_y == 0)) {
+    const auto &monster_from = *ms_ptr->m_ptr;
+    if ((ms_ptr->target_idx != 0) || (monster_from.target_y == 0)) {
         return;
     }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    ms_ptr->target_idx = floor_ptr->grid_array[m_ref.target_y][m_ref.target_x].m_idx;
+    ms_ptr->target_idx = floor_ptr->grid_array[monster_from.target_y][monster_from.target_x].m_idx;
     if (ms_ptr->target_idx == 0) {
         return;
     }
 
     ms_ptr->t_ptr = &floor_ptr->m_list[ms_ptr->target_idx];
-    const auto &t_ref = *ms_ptr->t_ptr;
-    if ((ms_ptr->m_idx == ms_ptr->target_idx) || ((ms_ptr->target_idx != player_ptr->pet_t_m_idx) && !are_enemies(player_ptr, m_ref, t_ref))) {
+    const auto &monster_to = *ms_ptr->t_ptr;
+    if ((ms_ptr->m_idx == ms_ptr->target_idx) || ((ms_ptr->target_idx != player_ptr->pet_t_m_idx) && !are_enemies(player_ptr, monster_from, monster_to))) {
         ms_ptr->target_idx = 0;
         return;
     }
 
-    if (projectable(player_ptr, m_ref.fy, m_ref.fx, t_ref.fy, t_ref.fx)) {
+    if (projectable(player_ptr, monster_from.fy, monster_from.fx, monster_to.fy, monster_to.fx)) {
         return;
     }
 
