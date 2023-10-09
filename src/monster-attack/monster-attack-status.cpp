@@ -52,7 +52,7 @@ void process_terrify_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_p
         return;
     }
 
-    auto *r_ptr = &monraces_info[monap_ptr->m_ptr->r_idx];
+    auto *r_ptr = &monap_ptr->m_ptr->get_monrace();
     if (has_resist_fear(player_ptr)) {
         msg_print(_("しかし恐怖に侵されなかった！", "You stand your ground!"));
         monap_ptr->obvious = true;
@@ -76,7 +76,7 @@ void process_paralyze_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_
         return;
     }
 
-    auto *r_ptr = &monraces_info[monap_ptr->m_ptr->r_idx];
+    auto *r_ptr = &monap_ptr->m_ptr->get_monrace();
     if (player_ptr->free_act) {
         msg_print(_("しかし効果がなかった！", "You are unaffected!"));
         monap_ptr->obvious = true;
@@ -128,7 +128,7 @@ void process_stun_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         return;
     }
 
-    auto *r_ptr = &monraces_info[monap_ptr->m_ptr->r_idx];
+    auto *r_ptr = &monap_ptr->m_ptr->get_monrace();
     if (BadStatusSetter(player_ptr).mod_stun(10 + randint1(r_ptr->level / 4))) {
         monap_ptr->obvious = true;
     }

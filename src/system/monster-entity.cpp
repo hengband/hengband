@@ -56,7 +56,7 @@ bool MonsterEntity::is_mimicry() const
         return true;
     }
 
-    const auto &r_ref = monraces_info[this->ap_r_idx];
+    const auto &r_ref = this->get_real_monrace();
     const auto mimic_symbols = "/|\\()[]=$,.!?&`#%<>+~";
     if (angband_strchr(mimic_symbols, r_ref.d_char) == nullptr) {
         return false;
@@ -76,7 +76,7 @@ bool MonsterEntity::is_valid() const
 
 MonsterRaceId MonsterEntity::get_real_monrace_id() const
 {
-    const auto &monrace = monraces_info[this->r_idx];
+    const auto &monrace = this->get_monrace();
     if (this->mflag2.has_not(MonsterConstantFlagType::CHAMELEON)) {
         return this->r_idx;
     }
@@ -202,19 +202,19 @@ byte MonsterEntity::get_temporary_speed() const
  */
 bool MonsterEntity::has_living_flag(bool is_apperance) const
 {
-    const auto &monrace = monraces_info[is_apperance ? this->ap_r_idx : this->r_idx];
+    const auto &monrace = is_apperance ? this->get_real_monrace() : this->get_monrace();
     return monrace.has_living_flag();
 }
 
 bool MonsterEntity::is_explodable() const
 {
-    const auto &monrace = monraces_info[this->r_idx];
+    const auto &monrace = this->get_monrace();
     return monrace.is_explodable();
 }
 
 std::string MonsterEntity::get_died_message() const
 {
-    const auto &monrace = monraces_info[this->r_idx];
+    const auto &monrace = this->get_monrace();
     return monrace.get_died_message();
 }
 
