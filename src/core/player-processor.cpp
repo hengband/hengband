@@ -345,7 +345,7 @@ void process_player(PlayerType *player_ptr)
                     continue;
                 }
 
-                r_ptr = &monraces_info[m_ptr->ap_r_idx];
+                r_ptr = &m_ptr->get_real_monrace();
 
                 // モンスターのシンボル/カラーの更新
                 if (m_ptr->ml && r_ptr->visual_flags.has_any_of({ MonsterVisualType::MULTI_COLOR, MonsterVisualType::SHAPECHANGER })) {

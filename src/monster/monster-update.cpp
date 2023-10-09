@@ -406,7 +406,7 @@ static bool check_cold_blood(PlayerType *player_ptr, um_type *um_ptr, const POSI
         return false;
     }
 
-    auto *r_ptr = &monraces_info[um_ptr->m_ptr->r_idx];
+    auto *r_ptr = &um_ptr->m_ptr->get_monrace();
     if (any_bits(r_ptr->flags2, RF2_COLD_BLOOD) && r_ptr->aura_flags.has_not(MonsterAuraType::FIRE)) {
         return false;
     }
@@ -422,7 +422,7 @@ static bool check_invisible(PlayerType *player_ptr, um_type *um_ptr)
         return false;
     }
 
-    auto *r_ptr = &monraces_info[um_ptr->m_ptr->r_idx];
+    auto *r_ptr = &um_ptr->m_ptr->get_monrace();
     if (r_ptr->flags2 & RF2_INVISIBLE) {
         if (player_ptr->see_inv) {
             um_ptr->easy = true;
@@ -519,7 +519,7 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
         }
     }
 
-    if (w_ptr->is_loading_now && w_ptr->character_dungeon && !player_ptr->phase_out && monraces_info[m_ptr->ap_r_idx].flags2 & RF2_ELDRITCH_HORROR) {
+    if (w_ptr->is_loading_now && w_ptr->character_dungeon && !player_ptr->phase_out && m_ptr->get_real_monrace().flags2 & RF2_ELDRITCH_HORROR) {
         m_ptr->mflag.set(MonsterTemporaryFlagType::SANITY_BLAST);
     }
 
@@ -581,7 +581,7 @@ void update_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool full)
     um_type tmp_um;
     um_type *um_ptr = initialize_um_type(player_ptr, &tmp_um, m_idx, full);
     if (disturb_high) {
-        MonsterRaceInfo *ap_r_ptr = &monraces_info[um_ptr->m_ptr->ap_r_idx];
+        auto *ap_r_ptr = &um_ptr->m_ptr->get_real_monrace();
         if (ap_r_ptr->r_tkills && ap_r_ptr->level >= player_ptr->lev) {
             um_ptr->do_disturb = true;
         }

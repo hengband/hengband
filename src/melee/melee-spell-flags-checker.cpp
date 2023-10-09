@@ -189,7 +189,7 @@ static void check_melee_spell_distance(PlayerType *player_ptr, melee_spell_type 
         MonsterAbilityType::BA_FIRE,
         MonsterAbilityType::BA_COLD
     };
-    auto *r_ptr = &monraces_info[ms_ptr->m_ptr->r_idx];
+    auto *r_ptr = &ms_ptr->m_ptr->get_monrace();
     if (any_bits(r_ptr->flags2, RF2_POWERFUL)) {
         ms_ptr->ability_flags.reset(ball_when_powerful_rad4);
     };

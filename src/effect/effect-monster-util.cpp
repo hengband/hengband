@@ -44,11 +44,11 @@ EffectMonster::EffectMonster(PlayerType *player_ptr, MONSTER_IDX who, POSITION r
     this->g_ptr = &floor_ptr->grid_array[this->y][this->x];
     this->m_ptr = &floor_ptr->m_list[this->g_ptr->m_idx];
     this->m_caster_ptr = (this->who > 0) ? &floor_ptr->m_list[this->who] : nullptr;
-    this->r_ptr = &monraces_info[this->m_ptr->r_idx];
+    this->r_ptr = &this->m_ptr->get_monrace();
     this->seen = this->m_ptr->ml;
     this->seen_msg = is_seen(player_ptr, this->m_ptr);
     this->slept = this->m_ptr->is_asleep();
     this->known = ((this->m_ptr->cdis <= MAX_PLAYER_SIGHT) || player_ptr->phase_out);
     this->note_dies = this->m_ptr->get_died_message();
-    this->caster_lev = (this->who > 0) ? monraces_info[this->m_caster_ptr->r_idx].level : (player_ptr->lev * 2);
+    this->caster_lev = (this->who > 0) ? this->m_caster_ptr->get_monrace().level : (player_ptr->lev * 2);
 }
