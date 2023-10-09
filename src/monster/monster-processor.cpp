@@ -199,7 +199,8 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    update_player_type(player_ptr, turn_flags_ptr, r_ptr);
+    update_map_flags(turn_flags_ptr);
+    update_lite_flags(turn_flags_ptr, r_ptr);
     update_monster_race_flags(player_ptr, turn_flags_ptr, m_ptr);
 
     if (!process_monster_fear(player_ptr, turn_flags_ptr, m_idx)) {
