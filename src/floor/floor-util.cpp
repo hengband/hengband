@@ -64,8 +64,8 @@ void update_smell(FloorType *floor_ptr, PlayerType *player_ptr)
     };
 
     if (++scent_when == 254) {
-        for (POSITION y = 0; y < floor_ptr->height; y++) {
-            for (POSITION x = 0; x < floor_ptr->width; x++) {
+        for (auto y = 0; y < floor_ptr->height; y++) {
+            for (auto x = 0; x < floor_ptr->width; x++) {
                 int w = floor_ptr->grid_array[y][x].when;
                 floor_ptr->grid_array[y][x].when = (w > 128) ? (w - 128) : 0;
             }
@@ -74,27 +74,22 @@ void update_smell(FloorType *floor_ptr, PlayerType *player_ptr)
         scent_when = 126;
     }
 
-    for (POSITION i = 0; i < 5; i++) {
-        for (POSITION j = 0; j < 5; j++) {
-            grid_type *g_ptr;
-            POSITION y = i + player_ptr->y - 2;
-            POSITION x = j + player_ptr->x - 2;
-            if (!in_bounds(floor_ptr, y, x)) {
+    for (auto i = 0; i < 5; i++) {
+        for (auto j = 0; j < 5; j++) {
+            const Pos2D pos(i + player_ptr->y - 2, j + player_ptr->x - 2);
+            if (!in_bounds(floor_ptr, pos.y, pos.x)) {
                 continue;
             }
 
-            g_ptr = &floor_ptr->grid_array[y][x];
-            if (!g_ptr->cave_has_flag(TerrainCharacteristics::MOVE) && !is_closed_door(player_ptr, g_ptr->feat)) {
-                continue;
-            }
-            if (!player_has_los_bold(player_ptr, y, x)) {
-                continue;
-            }
-            if (scent_adjust[i][j] == -1) {
+            auto &grid = floor_ptr->get_grid(pos);
+            auto update_when = !grid.cave_has_flag(TerrainCharacteristics::MOVE) && !is_closed_door(player_ptr, grid.feat);
+            update_when |= !grid.has_los();
+            update_when |= scent_adjust[i][j] == -1;
+            if (update_when) {
                 continue;
             }
 
-            g_ptr->when = scent_when + scent_adjust[i][j];
+            grid.when = scent_when + scent_adjust[i][j];
         }
     }
 }

@@ -29,7 +29,6 @@
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/monster-runaway.h"
 #include "monster-floor/monster-summon.h"
-#include "system/angband-system.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-floor/quantum-effect.h"
 #include "monster-race/monster-race.h"
@@ -60,6 +59,7 @@
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/summon-types.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
@@ -647,17 +647,18 @@ void sweep_monster_process(PlayerType *player_ptr)
  */
 bool decide_process_continue(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
-    MonsterRaceInfo *r_ptr;
-    r_ptr = &m_ptr->get_monrace();
+    const auto &monrace = m_ptr->get_monrace();
     if (!player_ptr->no_flowed) {
         m_ptr->mflag2.reset(MonsterConstantFlagType::NOFLOW);
     }
 
-    if (m_ptr->cdis <= (m_ptr->is_pet() ? (r_ptr->aaf > MAX_PLAYER_SIGHT ? MAX_PLAYER_SIGHT : r_ptr->aaf) : r_ptr->aaf)) {
+    if (m_ptr->cdis <= (m_ptr->is_pet() ? (monrace.aaf > MAX_PLAYER_SIGHT ? MAX_PLAYER_SIGHT : monrace.aaf) : monrace.aaf)) {
         return true;
     }
 
-    if ((m_ptr->cdis <= MAX_PLAYER_SIGHT || AngbandSystem::get_instance().is_watching()) && (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) || has_aggravate(player_ptr))) {
+    auto should_continue = (m_ptr->cdis <= MAX_PLAYER_SIGHT) || AngbandSystem::get_instance().is_watching();
+    should_continue &= player_ptr->current_floor_ptr->has_los({ m_ptr->fy, m_ptr->fx }) || has_aggravate(player_ptr);
+    if (should_continue) {
         return true;
     }
 

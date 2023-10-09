@@ -4,11 +4,22 @@
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
+#include "util/bit-flags-calculator.h"
 #include "util/enum-range.h"
 
 FloorType::FloorType()
     : quest_number(QuestId::NONE)
 {
+}
+
+grid_type &FloorType::get_grid(const Pos2D pos)
+{
+    return this->grid_array[pos.y][pos.x];
+}
+
+const grid_type &FloorType::get_grid(const Pos2D pos) const
+{
+    return this->grid_array[pos.y][pos.x];
 }
 
 bool FloorType::is_in_dungeon() const
@@ -93,4 +104,14 @@ QuestId FloorType::get_quest_id(const int bonus) const
     }
 
     return this->get_random_quest_id(level);
+}
+
+/*
+ * @brief 与えられた座標のグリッドがLOSフラグを持つかを調べる
+ * @param pos 座標
+ * @return LOSフラグを持つか否か
+ */
+bool FloorType::has_los(const Pos2D pos) const
+{
+    return this->get_grid(pos).has_los();
 }

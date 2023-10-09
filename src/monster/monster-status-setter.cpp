@@ -5,7 +5,6 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "dungeon/quest-completion-checker.h"
-#include "floor/cave.h"
 #include "monster-floor/monster-move.h"
 #include "monster-race/monster-kind-mask.h"
 #include "monster-race/monster-race.h"
@@ -385,7 +384,8 @@ bool set_monster_invulner(PlayerType *player_ptr, MONSTER_IDX m_idx, int v, bool
  */
 bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId who, bool vs_player)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[hack_m_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor.m_list[hack_m_idx];
     if (w_ptr->timewalk_m_idx) {
         return false;
     }
@@ -439,7 +439,9 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId who, bo
     };
     rfu.set_flags(flags);
     w_ptr->timewalk_m_idx = 0;
-    if (vs_player || (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) && projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx))) {
+    auto should_output_message = floor.has_los({ m_ptr->fy, m_ptr->fx });
+    should_output_message &= projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
+    if (vs_player || should_output_message) {
         std::string mes;
         switch (who) {
         case MonsterRaceId::DIAVOLO:

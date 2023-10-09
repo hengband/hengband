@@ -89,6 +89,7 @@ public:
     bool is_symbol(const int ch) const;
     void reset_costs();
     void reset_dists();
+    bool has_los() const;
 
 private:
     flow_type get_grid_flow_type(MonsterRaceInfo *r_ptr) const;

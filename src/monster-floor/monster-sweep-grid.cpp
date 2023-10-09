@@ -251,27 +251,29 @@ void MonsterSweepGrid::search_pet_runnable_grid(POSITION *y, POSITION *x, bool n
  */
 void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_flow)
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
+    auto &floor = *this->player_ptr->current_floor_ptr;
+    auto &monster = floor.m_list[this->m_idx];
+    auto &monrace = monster.get_monrace();
     if (!this->check_movable_grid(yp, xp, no_flow)) {
         return;
     }
 
-    auto y1 = m_ptr->fy;
-    auto x1 = m_ptr->fx;
-    auto *g_ptr = &floor_ptr->grid_array[y1][x1];
-    if (player_has_los_bold(this->player_ptr, y1, x1) && projectable(this->player_ptr, this->player_ptr->y, this->player_ptr->x, y1, x1)) {
-        if ((distance(y1, x1, this->player_ptr->y, this->player_ptr->x) == 1) || (r_ptr->freq_spell > 0) || (g_ptr->get_cost(r_ptr) > 5)) {
+    auto y1 = monster.fy;
+    auto x1 = monster.fx;
+    const Pos2D pos(y1, x1);
+    const auto &grid = floor.get_grid(pos);
+    if (grid.has_los() && projectable(this->player_ptr, this->player_ptr->y, this->player_ptr->x, y1, x1)) {
+        if ((distance(y1, x1, this->player_ptr->y, this->player_ptr->x) == 1) || (monrace.freq_spell > 0) || (grid.get_cost(&monrace) > 5)) {
             return;
         }
     }
 
     auto use_scent = false;
-    if (g_ptr->get_cost(r_ptr)) {
+    if (grid.get_cost(&monrace)) {
         this->best = 999;
-    } else if (g_ptr->when) {
-        if (floor_ptr->grid_array[this->player_ptr->y][this->player_ptr->x].when - g_ptr->when > 127) {
+    } else if (grid.when) {
+        const Pos2D p_pos(this->player_ptr->y, this->player_ptr->x);
+        if (floor.get_grid(p_pos).when - grid.when > 127) {
             return;
         }
 

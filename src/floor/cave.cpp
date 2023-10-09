@@ -72,17 +72,9 @@ bool is_cave_empty_bold2(PlayerType *player_ptr, int y, int x)
     return is_empty_grid;
 }
 
-bool cave_has_flag_bold(FloorType *floor_ptr, int y, int x, TerrainCharacteristics f_idx)
+bool cave_has_flag_bold(const FloorType *floor_ptr, int y, int x, TerrainCharacteristics f_idx)
 {
     return terrains_info[floor_ptr->grid_array[y][x].feat].flags.has(f_idx);
-}
-
-/*
- * Determine if a "legal" grid is within "los" of the player
- */
-bool player_has_los_bold(PlayerType *player_ptr, int y, int x)
-{
-    return ((player_ptr->current_floor_ptr->grid_array[y][x].info & CAVE_VIEW) != 0) || AngbandSystem::get_instance().is_watching();
 }
 
 /*
@@ -119,7 +111,7 @@ bool cave_los_bold(FloorType *floor_ptr, int y, int x)
 /*
  * Determine if a "feature" supports "los"
  */
-bool feat_supports_los(FEAT_IDX f_idx)
+bool feat_supports_los(short f_idx)
 {
     return terrains_info[f_idx].flags.has(TerrainCharacteristics::LOS);
 }

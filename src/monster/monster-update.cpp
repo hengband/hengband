@@ -8,7 +8,6 @@
 #include "core/disturbance.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "floor/cave.h"
 #include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "game-option/disturbance-options.h"
@@ -468,7 +467,7 @@ static void decide_sight_invisible_monster(PlayerType *player_ptr, um_type *um_p
         update_specific_race_telepathy(player_ptr, um_ptr);
     }
 
-    if (!player_has_los_bold(player_ptr, um_ptr->fy, um_ptr->fx) || player_ptr->effects()->blindness()->is_blind()) {
+    if (!player_ptr->current_floor_ptr->has_los({ um_ptr->fy, um_ptr->fx }) || player_ptr->effects()->blindness()->is_blind()) {
         return;
     }
 

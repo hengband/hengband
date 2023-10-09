@@ -7,7 +7,6 @@
 #include "monster-floor/monster-object.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
-#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
 #include "monster-race/monster-race.h"
@@ -131,12 +130,13 @@ static void update_object_flags(const TrFlags &flags, EnumClassFlagGroup<Monster
 static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MONSTER_IDX m_idx, ItemEntity *o_ptr, const bool is_unpickable_object,
     const POSITION ny, const POSITION nx, std::string_view m_name, std::string_view o_name, const OBJECT_IDX this_o_idx)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &monster = floor.m_list[m_idx];
+    const auto &monrace = monster.get_monrace();
     if (is_unpickable_object) {
-        if (turn_flags_ptr->do_take && r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID)) {
+        if (turn_flags_ptr->do_take && monrace.behavior_flags.has(MonsterBehaviorType::STUPID)) {
             turn_flags_ptr->did_take_item = true;
-            if (m_ptr->ml && player_can_see_bold(player_ptr, ny, nx)) {
+            if (monster.ml && player_can_see_bold(player_ptr, ny, nx)) {
                 msg_format(_("%s^は%sを拾おうとしたが、だめだった。", "%s^ tries to pick up %s, but fails."), m_name.data(), o_name.data());
             }
         }
@@ -155,17 +155,17 @@ static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags
         o_ptr->marked &= { OmType::TOUCHED };
         o_ptr->iy = o_ptr->ix = 0;
         o_ptr->held_m_idx = m_idx;
-        m_ptr->hold_o_idx_list.add(player_ptr->current_floor_ptr, this_o_idx);
+        monster.hold_o_idx_list.add(player_ptr->current_floor_ptr, this_o_idx);
         RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::FOUND_ITEMS);
         return;
     }
 
-    if (m_ptr->is_pet()) {
+    if (monster.is_pet()) {
         return;
     }
 
     turn_flags_ptr->did_kill_item = true;
-    if (player_has_los_bold(player_ptr, ny, nx)) {
+    if (floor.has_los({ ny, nx })) {
         msg_format(_("%s^が%sを破壊した。", "%s^ destroys %s."), m_name.data(), o_name.data());
     }
 

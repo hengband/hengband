@@ -4,6 +4,7 @@
 #include <utility>
 #include <vector>
 
+// @todo pairをPos2Dとして再定義する.
 class PlayerType;
 class projection_path {
 public:

@@ -8,7 +8,6 @@
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
 #include "dungeon/quest-completion-checker.h"
-#include "floor/cave.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-town.h"
 #include "floor/geometry.h"
@@ -242,27 +241,28 @@ bool teleport_level_other(PlayerType *player_ptr)
     if (!target_set(player_ptr, TARGET_KILL)) {
         return false;
     }
-    MONSTER_IDX target_m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
+
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const Pos2D pos(target_row, target_col);
+    const auto &grid = floor.get_grid(pos);
+    const auto target_m_idx = grid.m_idx;
     if (!target_m_idx) {
         return true;
     }
-    if (!player_has_los_bold(player_ptr, target_row, target_col)) {
+    if (!grid.has_los()) {
         return true;
     }
     if (!projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
         return true;
     }
 
-    MonsterEntity *m_ptr;
-    MonsterRaceInfo *r_ptr;
-    m_ptr = &player_ptr->current_floor_ptr->m_list[target_m_idx];
-    r_ptr = &m_ptr->get_monrace();
-    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+    const auto &monster = floor.m_list[target_m_idx];
+    const auto &monrace = monster.get_monrace();
+    const auto m_name = monster_desc(player_ptr, &monster, 0);
     msg_format(_("%s^の足を指さした。", "You gesture at %s^'s feet."), m_name.data());
 
-    auto has_immune = r_ptr->resistance_flags.has_any_of(RFR_EFF_RESIST_NEXUS_MASK) || r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT);
-
-    if (has_immune || (r_ptr->flags1 & RF1_QUESTOR) || (r_ptr->level + randint1(50) > player_ptr->lev + randint1(60))) {
+    auto has_immune = monrace.resistance_flags.has_any_of(RFR_EFF_RESIST_NEXUS_MASK) || monrace.resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT);
+    if (has_immune || (monrace.flags1 & RF1_QUESTOR) || (monrace.level + randint1(50) > player_ptr->lev + randint1(60))) {
         msg_print(_("しかし効果がなかった！", format("%s^ is unaffected!", m_name.data())));
     } else {
         teleport_level(player_ptr, target_m_idx);

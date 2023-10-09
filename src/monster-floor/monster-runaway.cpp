@@ -7,7 +7,6 @@
 #include "monster-floor/monster-runaway.h"
 #include "core/disturbance.h"
 #include "dungeon/quest-completion-checker.h"
-#include "floor/cave.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-race/monster-race.h"
@@ -65,7 +64,7 @@ static void escape_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, M
 
         auto speak = m_ptr->get_monrace().speak_flags.has_any_of(flags);
         speak &= !is_acting_monster(m_ptr->r_idx);
-        speak &= player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx);
+        speak &= player_ptr->current_floor_ptr->has_los({ m_ptr->fy, m_ptr->fx });
         speak &= projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x);
         if (speak) {
             msg_format(_("%s^「ピンチだ！退却させてもらう！」", "%s^ says 'It is the pinch! I will retreat'."), m_name);
