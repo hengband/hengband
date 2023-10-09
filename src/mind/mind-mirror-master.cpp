@@ -38,6 +38,7 @@
 #include "status/body-improvement.h"
 #include "status/buff-setter.h"
 #include "status/sight-setter.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -77,6 +78,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
     monster_target_y = player_ptr->y;
     monster_target_x = player_ptr->x;
 
+    const auto max_range = AngbandSystem::get_instance().get_max_range();
     for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
         for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
             if (!player_ptr->current_floor_ptr->grid_array[y][x].is_mirror()) {
@@ -85,7 +87,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
 
             const auto dist = distance(player_ptr->y, player_ptr->x, y, x);
             const auto is_projectable = projectable(player_ptr, player_ptr->y, player_ptr->x, y, x);
-            if ((dist == 0) || (dist > get_max_range(player_ptr)) || !player_has_los_bold(player_ptr, y, x) || !is_projectable) {
+            if ((dist == 0) || (dist > max_range) || !player_has_los_bold(player_ptr, y, x) || !is_projectable) {
                 continue;
             }
 

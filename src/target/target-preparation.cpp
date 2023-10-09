@@ -8,6 +8,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "object/object-mark-types.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -128,10 +129,11 @@ void target_set_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, std::
 {
     POSITION min_hgt, max_hgt, min_wid, max_wid;
     if (mode & TARGET_KILL) {
-        min_hgt = std::max((player_ptr->y - get_max_range(player_ptr)), 0);
-        max_hgt = std::min((player_ptr->y + get_max_range(player_ptr)), player_ptr->current_floor_ptr->height - 1);
-        min_wid = std::max((player_ptr->x - get_max_range(player_ptr)), 0);
-        max_wid = std::min((player_ptr->x + get_max_range(player_ptr)), player_ptr->current_floor_ptr->width - 1);
+        const auto max_range = AngbandSystem::get_instance().get_max_range();
+        min_hgt = std::max((player_ptr->y - max_range), 0);
+        max_hgt = std::min((player_ptr->y + max_range), player_ptr->current_floor_ptr->height - 1);
+        min_wid = std::max((player_ptr->x - max_range), 0);
+        max_wid = std::min((player_ptr->x + max_range), player_ptr->current_floor_ptr->width - 1);
     } else {
         min_hgt = panel_row_min;
         max_hgt = panel_row_max;

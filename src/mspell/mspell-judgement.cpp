@@ -31,6 +31,7 @@
 #include "realm/realm-song-numbers.h"
 #include "spell-realm/spells-song.h"
 #include "spell/range-calc.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -53,7 +54,7 @@
 bool direct_beam(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, MonsterEntity *m_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    projection_path grid_g(player_ptr, get_max_range(player_ptr), y1, x1, y2, x2, PROJECT_THRU);
+    projection_path grid_g(player_ptr, AngbandSystem::get_instance().get_max_range(), y1, x1, y2, x2, PROJECT_THRU);
     if (grid_g.path_num()) {
         return false;
     }
@@ -107,7 +108,7 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
         break;
     }
 
-    projection_path grid_g(player_ptr, get_max_range(player_ptr), y1, x1, y2, x2, flg);
+    projection_path grid_g(player_ptr, AngbandSystem::get_instance().get_max_range(), y1, x1, y2, x2, flg);
     auto path_n = 0;
     POSITION y = y1;
     POSITION x = x1;
@@ -196,7 +197,7 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
  */
 void get_project_point(PlayerType *player_ptr, POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg)
 {
-    projection_path path_g(player_ptr, get_max_range(player_ptr), sy, sx, *ty, *tx, flg);
+    projection_path path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), sy, sx, *ty, *tx, flg);
     *ty = sy;
     *tx = sx;
     for (const auto &[y, x] : path_g) {

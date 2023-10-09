@@ -16,3 +16,12 @@ bool AngbandSystem::is_watching() const
 {
     return this->watch_stat;
 }
+
+/*!
+ * @brief プレイヤーの攻撃射程
+ * @return 射程
+ */
+int AngbandSystem::get_max_range() const
+{
+    return this->watch_stat ? 36 : 18;
+}

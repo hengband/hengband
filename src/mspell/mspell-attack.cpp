@@ -322,7 +322,7 @@ bool make_attack_spell(PlayerType *player_ptr, MONSTER_IDX m_idx)
     const auto &m_ref = *msa_ptr->m_ptr;
     auto should_prevent = m_ref.mflag.has(MonsterTemporaryFlagType::PREVENT_MAGIC);
     should_prevent |= !m_ref.is_hostile();
-    should_prevent |= (m_ref.cdis > get_max_range(player_ptr)) && !m_ref.target_y;
+    should_prevent |= (m_ref.cdis > AngbandSystem::get_instance().get_max_range()) && !m_ref.target_y;
     if (should_prevent) {
         return false;
     }

@@ -17,6 +17,7 @@
 #include "monster/monster-update.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-launcher.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -233,7 +234,7 @@ static void cave_temp_room_aux(
         if (!in_bounds2(floor_ptr, y, x)) {
             return;
         }
-        if (distance(player_ptr->y, player_ptr->x, y, x) > get_max_range(player_ptr)) {
+        if (distance(player_ptr->y, player_ptr->x, y, x) > AngbandSystem::get_instance().get_max_range()) {
             return;
         }
 

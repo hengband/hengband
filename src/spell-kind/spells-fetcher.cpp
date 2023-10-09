@@ -12,6 +12,7 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-update.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -46,11 +47,12 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
 
     POSITION ty, tx;
     grid_type *g_ptr;
+    const auto &system = AngbandSystem::get_instance();
     if (dir == 5 && target_okay(player_ptr)) {
         tx = target_col;
         ty = target_row;
 
-        if (distance(player_ptr->y, player_ptr->x, ty, tx) > get_max_range(player_ptr)) {
+        if (distance(player_ptr->y, player_ptr->x, ty, tx) > system.get_max_range()) {
             msg_print(_("そんなに遠くにある物は取れません！", "You can't fetch something that far away!"));
             return;
         }
@@ -85,7 +87,7 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
             ty += ddy[dir];
             tx += ddx[dir];
             g_ptr = &floor_ptr->grid_array[ty][tx];
-            if ((distance(player_ptr->y, player_ptr->x, ty, tx) > get_max_range(player_ptr))) {
+            if ((distance(player_ptr->y, player_ptr->x, ty, tx) > system.get_max_range())) {
                 return;
             }
 
@@ -137,7 +139,7 @@ bool fetch_monster(PlayerType *player_ptr)
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     const auto m_name = monster_desc(player_ptr, m_ptr, 0);
     msg_format(_("%sを引き戻した。", "You pull back %s."), m_name.data());
-    projection_path path_g(player_ptr, get_max_range(player_ptr), target_row, target_col, player_ptr->y, player_ptr->x, 0);
+    projection_path path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), target_row, target_col, player_ptr->y, player_ptr->x, 0);
     auto ty = target_row, tx = target_col;
     for (const auto &[ny, nx] : path_g) {
         auto *g_ptr = &floor_ptr->grid_array[ny][nx];

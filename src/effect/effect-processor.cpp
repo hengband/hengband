@@ -28,6 +28,7 @@
 #include "player/player-status.h"
 #include "spell-class/spells-mirror-master.h"
 #include "spell/range-calc.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
@@ -136,7 +137,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     }
 
     /* Calculate the projection path */
-    projection_path path_g(player_ptr, (project_length ? project_length : get_max_range(player_ptr)), y1, x1, y2, x2, flag);
+    const auto &system = AngbandSystem::get_instance();
+    projection_path path_g(player_ptr, (project_length ? project_length : system.get_max_range()), y1, x1, y2, x2, flag);
     handle_stuff(player_ptr);
 
     int k = 0;
@@ -207,7 +209,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     project_length = 0;
 
     /* If we found a "target", explode there */
-    if (path_n <= get_max_range(player_ptr)) {
+    if (path_n <= system.get_max_range()) {
         if ((flag & (PROJECT_BEAM)) && (grids > 0)) {
             grids--;
         }

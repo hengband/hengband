@@ -10,6 +10,7 @@ public:
     static AngbandSystem &get_instance();
     void set_watch(bool new_status);
     bool is_watching() const;
+    int get_max_range() const;
 
 private:
     AngbandSystem() = default;

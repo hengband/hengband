@@ -19,6 +19,7 @@
 #include "mspell/mspell-judgement.h"
 #include "player-base/player-class.h"
 #include "spell/range-calc.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -118,8 +119,9 @@ static void feature_projection(FloorType *floor_ptr, msa_type *msa_ptr)
 
 static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
 {
+    const auto &system = AngbandSystem::get_instance();
     auto light_by_disintegration = msa_ptr->ability_flags.has(MonsterAbilityType::BR_DISI);
-    light_by_disintegration &= msa_ptr->m_ptr->cdis < get_max_range(player_ptr) / 2;
+    light_by_disintegration &= msa_ptr->m_ptr->cdis < system.get_max_range() / 2;
     light_by_disintegration &= in_disintegration_range(player_ptr->current_floor_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x);
     light_by_disintegration &= one_in_(10) || (projectable(player_ptr, msa_ptr->y, msa_ptr->x, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx) && one_in_(2));
     if (light_by_disintegration) {
@@ -129,7 +131,7 @@ static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
     }
 
     auto light_by_lite = msa_ptr->ability_flags.has(MonsterAbilityType::BR_LITE);
-    light_by_lite &= msa_ptr->m_ptr->cdis < get_max_range(player_ptr) / 2;
+    light_by_lite &= msa_ptr->m_ptr->cdis < system.get_max_range() / 2;
     light_by_lite &= los(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x);
     light_by_lite &= one_in_(5);
     if (light_by_lite) {
@@ -138,7 +140,7 @@ static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
         return;
     }
 
-    if (msa_ptr->ability_flags.has_not(MonsterAbilityType::BA_LITE) || (msa_ptr->m_ptr->cdis > get_max_range(player_ptr))) {
+    if (msa_ptr->ability_flags.has_not(MonsterAbilityType::BA_LITE) || (msa_ptr->m_ptr->cdis > system.get_max_range())) {
         return;
     }
 
@@ -166,7 +168,7 @@ static void decide_lite_breath(PlayerType *player_ptr, msa_type *msa_ptr)
 
     auto should_set = msa_ptr->y_br_lite == 0;
     should_set |= msa_ptr->x_br_lite == 0;
-    should_set |= msa_ptr->m_ptr->cdis > get_max_range(player_ptr) / 2;
+    should_set |= msa_ptr->m_ptr->cdis > AngbandSystem::get_instance().get_max_range() / 2;
     should_set |= !one_in_(5);
     if (should_set) {
         return;

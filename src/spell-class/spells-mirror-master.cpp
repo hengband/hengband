@@ -26,6 +26,7 @@
 #include "monster/monster-update.h"
 #include "pet/pet-util.h"
 #include "spell-kind/spells-teleport.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -297,9 +298,9 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
     project_m_x = 0;
     project_m_y = 0;
     auto visual = false;
-
+    const auto max_range = AngbandSystem::get_instance().get_max_range();
     while (true) {
-        projection_path path_g(this->player_ptr, (project_length ? project_length : get_max_range(this->player_ptr)), y1, x1, y2, x2, flag);
+        projection_path path_g(this->player_ptr, (project_length ? project_length : max_range), y1, x1, y2, x2, flag);
 
         if (path_g.path_num() == 0) {
             break;
@@ -470,7 +471,8 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     }
 
     /* Calculate the projection path */
-    projection_path path_g(this->player_ptr, (project_length ? project_length : get_max_range(this->player_ptr)), y1, x1, y2, x2, flag);
+    const auto &system = AngbandSystem::get_instance();
+    projection_path path_g(this->player_ptr, (project_length ? project_length : system.get_max_range()), y1, x1, y2, x2, flag);
     std::vector<projection_path> second_path_g_list;
     handle_stuff(this->player_ptr);
 
@@ -522,7 +524,7 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
             auto project_flag = flag;
             reset_bits(project_flag, PROJECT_MIRROR);
 
-            const auto length = project_length ? project_length : get_max_range(this->player_ptr);
+            const auto length = project_length ? project_length : system.get_max_range();
             for (auto i : cdd) {
                 const auto dy = ddy[i];
                 const auto dx = ddx[i];
