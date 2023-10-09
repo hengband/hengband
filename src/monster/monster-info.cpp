@@ -227,7 +227,7 @@ bool are_enemies(PlayerType *player_ptr, const MonsterEntity &monster1, const Mo
  * @details
  * If user is player, m_ptr == nullptr.
  */
-bool monster_has_hostile_align(PlayerType *player_ptr, MonsterEntity *m_ptr, int pa_good, int pa_evil, MonsterRaceInfo *r_ptr)
+bool monster_has_hostile_align(PlayerType *player_ptr, MonsterEntity *m_ptr, int pa_good, int pa_evil, const MonsterRaceInfo *r_ptr)
 {
     byte sub_align1 = SUB_ALIGN_NEUTRAL;
     byte sub_align2 = SUB_ALIGN_NEUTRAL;

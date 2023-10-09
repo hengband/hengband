@@ -164,12 +164,15 @@ static void check_melee_spell_distance(PlayerType *player_ptr, melee_spell_type 
         return;
     }
 
-    POSITION real_y = ms_ptr->y;
-    POSITION real_x = ms_ptr->x;
+    auto real_y = ms_ptr->y;
+    auto real_x = ms_ptr->x;
     get_project_point(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, &real_y, &real_x, 0L);
-    if (!projectable(player_ptr, real_y, real_x, player_ptr->y, player_ptr->x) && ms_ptr->ability_flags.has(MonsterAbilityType::BA_LITE) && (distance(real_y, real_x, player_ptr->y, player_ptr->x) <= 4) && los(player_ptr, real_y, real_x, player_ptr->y, player_ptr->x)) {
+    auto should_preserve = !projectable(player_ptr, real_y, real_x, player_ptr->y, player_ptr->x);
+    should_preserve &= ms_ptr->ability_flags.has(MonsterAbilityType::BA_LITE);
+    should_preserve &= distance(real_y, real_x, player_ptr->y, player_ptr->x) <= 4;
+    should_preserve &= los(player_ptr, real_y, real_x, player_ptr->y, player_ptr->x);
+    if (should_preserve) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::BA_LITE);
-
         return;
     }
 
@@ -192,7 +195,7 @@ static void check_melee_spell_distance(PlayerType *player_ptr, melee_spell_type 
     auto *r_ptr = &ms_ptr->m_ptr->get_monrace();
     if (any_bits(r_ptr->flags2, RF2_POWERFUL)) {
         ms_ptr->ability_flags.reset(ball_when_powerful_rad4);
-    };
+    }
 
     ms_ptr->ability_flags.reset(RF_ABILITY_BIG_BALL_MASK);
 }

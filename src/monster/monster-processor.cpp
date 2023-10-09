@@ -338,14 +338,14 @@ bool awake_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
  */
 void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-    bool gets_angry = false;
-    if (m_ptr->is_friendly() && has_aggravate(player_ptr)) {
-        gets_angry = true;
-    }
-
-    if (m_ptr->is_pet() && (((r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL))) && monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr)) || r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL))) {
+    auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto &monrace = monster.get_monrace();
+    auto gets_angry = monster.is_friendly() && has_aggravate(player_ptr);
+    const auto should_aggravate = monster.is_pet();
+    auto has_hostile = monrace.kind_flags.has(MonsterKindType::UNIQUE) || (monrace.population_flags.has(MonsterPopulationType::NAZGUL));
+    has_hostile &= monster_has_hostile_align(player_ptr, nullptr, 10, -10, &monrace);
+    const auto has_resist_all = monrace.resistance_flags.has(MonsterResistanceType::RESIST_ALL);
+    if (should_aggravate && (has_hostile || has_resist_all)) {
         gets_angry = true;
     }
 
@@ -353,7 +353,7 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
         return;
     }
 
-    const auto m_name = monster_desc(player_ptr, m_ptr, m_ptr->is_pet() ? MD_ASSUME_VISIBLE : 0);
+    const auto m_name = monster_desc(player_ptr, &monster, monster.is_pet() ? MD_ASSUME_VISIBLE : 0);
 
     /* When riding a hostile alignment pet */
     if (player_ptr->riding == m_idx) {
@@ -369,11 +369,11 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
         msg_format(_("あなたは振り落とされた。", "You have fallen."));
     }
 
-    if (m_ptr->is_pet() || see_m) {
+    if (monster.is_pet() || see_m) {
         msg_format(_("%s^は突然敵にまわった！", "%s^ suddenly becomes hostile!"), m_name.data());
     }
 
-    set_hostile(player_ptr, m_ptr);
+    set_hostile(player_ptr, &monster);
 }
 
 /*!
@@ -403,7 +403,13 @@ void process_special(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &m_ptr->get_monrace();
-    if (r_ptr->ability_flags.has_not(MonsterAbilityType::SPECIAL) || (m_ptr->r_idx != MonsterRaceId::OHMU) || player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out || (r_ptr->freq_spell == 0) || (randint1(100) > r_ptr->freq_spell)) {
+    auto can_do_special = r_ptr->ability_flags.has(MonsterAbilityType::SPECIAL);
+    can_do_special &= m_ptr->r_idx == MonsterRaceId::OHMU;
+    can_do_special &= !player_ptr->current_floor_ptr->inside_arena;
+    can_do_special &= !player_ptr->phase_out;
+    can_do_special &= r_ptr->freq_spell != 0;
+    can_do_special &= randint1(100) <= r_ptr->freq_spell;
+    if (!can_do_special) {
         return;
     }
 

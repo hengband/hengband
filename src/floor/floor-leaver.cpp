@@ -63,15 +63,16 @@ static bool check_pet_preservation_conditions(PlayerType *player_ptr, MonsterEnt
         return true;
     }
 
-    if (m_ptr->is_named() && ((player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) && projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx)) || (los(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x) && projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x)))) {
-        if (dis > 3) {
-            return true;
-        }
-    } else if (dis > 1) {
-        return true;
+    const auto should_preserve = m_ptr->is_named();
+    auto sight_from_player = player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx);
+    sight_from_player &= projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
+    auto sight_from_monster = los(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x);
+    sight_from_monster &= projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x);
+    if (should_preserve && (sight_from_player || sight_from_monster)) {
+        return dis > 3;
     }
-
-    return false;
+    
+    return dis > 1;
 }
 
 static void sweep_preserving_pet(PlayerType *player_ptr)
