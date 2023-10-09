@@ -20,6 +20,7 @@
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
 #include "spell-kind/spells-world.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -28,7 +29,6 @@
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
-
 #include <iterator>
 
 static void decide_melee_spell_target(PlayerType *player_ptr, melee_spell_type *ms_ptr)
@@ -80,7 +80,7 @@ static bool check_melee_spell_projection(PlayerType *player_ptr, melee_spell_typ
     int start;
     int plus = 1;
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (player_ptr->phase_out) {
+    if (AngbandSystem::get_instance().is_watching()) {
         start = randint1(floor_ptr->m_max - 1) + floor_ptr->m_max;
         if (randint0(2)) {
             plus = -1;
@@ -146,7 +146,7 @@ static void check_stupid(melee_spell_type *ms_ptr)
 
 static void check_arena(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
-    if (!player_ptr->current_floor_ptr->inside_arena && !player_ptr->phase_out) {
+    if (!player_ptr->current_floor_ptr->inside_arena && !AngbandSystem::get_instance().is_watching()) {
         return;
     }
 
@@ -391,7 +391,7 @@ bool check_melee_spell_set(PlayerType *player_ptr, melee_spell_type *ms_ptr)
     check_darkness(player_ptr, ms_ptr);
     check_stupid(ms_ptr);
     check_arena(player_ptr, ms_ptr);
-    if (player_ptr->phase_out && !one_in_(3)) {
+    if (AngbandSystem::get_instance().is_watching() && !one_in_(3)) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::HEAL);
     }
 

@@ -26,6 +26,7 @@
 #include "monster-race/race-flags1.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -54,7 +55,7 @@ bool is_teleport_level_ineffective(PlayerType *player_ptr, MONSTER_IDX idx)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     auto is_special_floor = floor.inside_arena;
-    is_special_floor |= player_ptr->phase_out;
+    is_special_floor |= AngbandSystem::get_instance().is_watching();
     is_special_floor |= floor.is_in_quest() && !inside_quest(floor.get_random_quest_id());
     auto is_invalid_floor = idx <= 0;
     is_invalid_floor &= inside_quest(floor.get_quest_id()) || (floor.dun_level >= floor.get_dungeon_definition().maxdepth);
@@ -282,7 +283,7 @@ bool tele_town(PlayerType *player_ptr)
         return false;
     }
 
-    if (player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out) {
+    if (player_ptr->current_floor_ptr->inside_arena || AngbandSystem::get_instance().is_watching()) {
         msg_print(_("この魔法は外でしか使えない！", "This spell can only be used outside!"));
         return false;
     }

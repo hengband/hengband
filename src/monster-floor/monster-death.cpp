@@ -35,6 +35,7 @@
 #include "player/patron.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-scroll-types.h"
+#include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
@@ -121,7 +122,7 @@ static void drop_corpse(PlayerType *player_ptr, monster_death_type *md_ptr)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_drop_corpse = one_in_(md_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) ? 1 : 4);
     is_drop_corpse &= md_ptr->r_ptr->drop_flags.has_any_of({ MonsterDropType::DROP_CORPSE, MonsterDropType::DROP_SKELETON });
-    is_drop_corpse &= !(floor_ptr->inside_arena || player_ptr->phase_out || md_ptr->cloned || ((md_ptr->m_ptr->r_idx == w_ptr->today_mon) && md_ptr->m_ptr->is_pet()));
+    is_drop_corpse &= !(floor_ptr->inside_arena || AngbandSystem::get_instance().is_watching() || md_ptr->cloned || ((md_ptr->m_ptr->r_idx == w_ptr->today_mon) && md_ptr->m_ptr->is_pet()));
     if (!is_drop_corpse) {
         return;
     }
@@ -275,7 +276,7 @@ static int decide_drop_numbers(PlayerType *player_ptr, monster_death_type *md_pt
         drop_numbers = 0;
     }
 
-    if (md_ptr->m_ptr->is_pet() || player_ptr->phase_out || player_ptr->current_floor_ptr->inside_arena) {
+    if (md_ptr->m_ptr->is_pet() || AngbandSystem::get_instance().is_watching() || player_ptr->current_floor_ptr->inside_arena) {
         drop_numbers = 0;
     }
 
@@ -415,7 +416,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
     auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->object_level = (floor_ptr->dun_level + md_ptr->r_ptr->level) / 2;
     drop_items_golds(player_ptr, md_ptr, drop_numbers);
-    if (((md_ptr->r_ptr->flags1 & RF1_QUESTOR) == 0) || player_ptr->phase_out || (md_ptr->m_ptr->r_idx != MonsterRaceId::SERPENT) || md_ptr->cloned) {
+    if (((md_ptr->r_ptr->flags1 & RF1_QUESTOR) == 0) || AngbandSystem::get_instance().is_watching() || (md_ptr->m_ptr->r_idx != MonsterRaceId::SERPENT) || md_ptr->cloned) {
         return;
     }
 

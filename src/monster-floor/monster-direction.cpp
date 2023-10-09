@@ -16,6 +16,7 @@
 #include "pet/pet-util.h"
 #include "player/player-status-flags.h"
 #include "spell/range-calc.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -125,7 +126,7 @@ bool get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx, int *mm)
     } else {
         int start;
         int plus = 1;
-        if (player_ptr->phase_out) {
+        if (AngbandSystem::get_instance().is_watching()) {
             start = randint1(floor_ptr->m_max - 1) + floor_ptr->m_max;
             if (randint0(2)) {
                 plus = -1;

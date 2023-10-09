@@ -27,6 +27,7 @@
 #include "player/attack-defense-types.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
@@ -85,7 +86,7 @@ static void check_mspell_smart(PlayerType *player_ptr, msa_type *msa_ptr)
 
 static void check_mspell_arena(PlayerType *player_ptr, msa_type *msa_ptr)
 {
-    if (!player_ptr->current_floor_ptr->inside_arena && !player_ptr->phase_out) {
+    if (!player_ptr->current_floor_ptr->inside_arena && !AngbandSystem::get_instance().is_watching()) {
         return;
     }
 

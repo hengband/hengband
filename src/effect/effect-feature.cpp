@@ -15,6 +15,7 @@
 #include "player/special-defense-types.h"
 #include "room/door-definition.h"
 #include "spell-class/spells-mirror-master.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -365,7 +366,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
     case AttributeType::DARK_WEAK:
     case AttributeType::DARK:
     case AttributeType::ABYSS: {
-        bool do_dark = !player_ptr->phase_out && !g_ptr->is_mirror();
+        auto do_dark = !AngbandSystem::get_instance().is_watching() && !g_ptr->is_mirror();
         if (!do_dark) {
             break;
         }

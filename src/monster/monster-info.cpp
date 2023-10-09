@@ -26,6 +26,7 @@
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
 #include "player/player-status-flags.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
@@ -185,11 +186,8 @@ static bool check_hostile_align(byte sub_align1, byte sub_align2)
  */
 bool are_enemies(PlayerType *player_ptr, const MonsterEntity &monster1, const MonsterEntity &monster2)
 {
-    if (player_ptr->phase_out) {
-        if (monster1.is_pet() || monster2.is_pet()) {
-            return false;
-        }
-        return true;
+    if (AngbandSystem::get_instance().is_watching()) {
+        return !monster1.is_pet() && !monster2.is_pet();
     }
 
     const auto &monrace1 = monster1.get_monrace();

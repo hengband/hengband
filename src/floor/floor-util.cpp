@@ -14,6 +14,7 @@
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
 #include "perception/object-perception.h"
+#include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
@@ -206,7 +207,7 @@ std::string map_name(PlayerType *player_ptr)
         return _("地上", "Surface");
     } else if (floor_ptr->inside_arena) {
         return _("アリーナ", "Arena");
-    } else if (player_ptr->phase_out) {
+    } else if (AngbandSystem::get_instance().is_watching()) {
         return _("闘技場", "Monster Arena");
     } else if (!floor_ptr->dun_level && player_ptr->town_num) {
         return towns_info[player_ptr->town_num].name;

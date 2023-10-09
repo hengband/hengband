@@ -8,6 +8,7 @@
 
 #include "floor/cave.h"
 #include "grid/grid.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -81,7 +82,7 @@ bool cave_has_flag_bold(FloorType *floor_ptr, POSITION y, POSITION x, TerrainCha
  */
 bool player_has_los_bold(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    return ((player_ptr->current_floor_ptr->grid_array[y][x].info & CAVE_VIEW) != 0) || player_ptr->phase_out;
+    return ((player_ptr->current_floor_ptr->grid_array[y][x].info & CAVE_VIEW) != 0) || AngbandSystem::get_instance().is_watching();
 }
 
 /*

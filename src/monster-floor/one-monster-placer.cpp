@@ -38,6 +38,7 @@
 #include "monster/monster-util.h"
 #include "object/warning.h"
 #include "player/player-status.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-info.h"
@@ -119,7 +120,7 @@ static MonsterRaceId initial_r_appearance(PlayerType *player_ptr, MonsterRaceId 
  */
 static bool check_unique_placeable(PlayerType *player_ptr, MonsterRaceId r_idx, BIT_FLAGS mode)
 {
-    if (player_ptr->phase_out) {
+    if (AngbandSystem::get_instance().is_watching()) {
         return true;
     }
 

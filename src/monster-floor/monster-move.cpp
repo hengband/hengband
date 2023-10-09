@@ -33,6 +33,7 @@
 #include "monster/monster-update.h"
 #include "pet/pet-util.h"
 #include "player/player-status-flags.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
@@ -544,7 +545,7 @@ static std::string_view get_speak_filename(MonsterEntity *m_ptr)
  */
 void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware)
 {
-    if (player_ptr->phase_out) {
+    if (AngbandSystem::get_instance().is_watching()) {
         return;
     }
 

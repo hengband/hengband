@@ -19,6 +19,7 @@
 #include "monster/monster-status.h" //!< @todo 相互依存. 後で何とかする.
 #include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -50,7 +51,7 @@ void set_pet(PlayerType *player_ptr, MonsterEntity *m_ptr)
  */
 void set_hostile(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
-    if (player_ptr->phase_out) {
+    if (AngbandSystem::get_instance().is_watching()) {
         return;
     }
 
@@ -64,7 +65,7 @@ void set_hostile(PlayerType *player_ptr, MonsterEntity *m_ptr)
  */
 void anger_monster(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
-    if (player_ptr->phase_out || !m_ptr->is_friendly()) {
+    if (AngbandSystem::get_instance().is_watching() || !m_ptr->is_friendly()) {
         return;
     }
 

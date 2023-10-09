@@ -29,6 +29,7 @@
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/monster-runaway.h"
 #include "monster-floor/monster-summon.h"
+#include "system/angband-system.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-floor/quantum-effect.h"
 #include "monster-race/monster-race.h"
@@ -349,7 +350,7 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
         gets_angry = true;
     }
 
-    if (player_ptr->phase_out || !gets_angry) {
+    if (AngbandSystem::get_instance().is_watching() || !gets_angry) {
         return;
     }
 
@@ -406,7 +407,7 @@ void process_special(PlayerType *player_ptr, MONSTER_IDX m_idx)
     auto can_do_special = r_ptr->ability_flags.has(MonsterAbilityType::SPECIAL);
     can_do_special &= m_ptr->r_idx == MonsterRaceId::OHMU;
     can_do_special &= !player_ptr->current_floor_ptr->inside_arena;
-    can_do_special &= !player_ptr->phase_out;
+    can_do_special &= !AngbandSystem::get_instance().is_watching();
     can_do_special &= r_ptr->freq_spell != 0;
     can_do_special &= randint1(100) <= r_ptr->freq_spell;
     if (!can_do_special) {
@@ -655,7 +656,7 @@ bool decide_process_continue(PlayerType *player_ptr, MonsterEntity *m_ptr)
         return true;
     }
 
-    if ((m_ptr->cdis <= MAX_PLAYER_SIGHT || player_ptr->phase_out) && (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) || has_aggravate(player_ptr))) {
+    if ((m_ptr->cdis <= MAX_PLAYER_SIGHT || AngbandSystem::get_instance().is_watching()) && (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) || has_aggravate(player_ptr))) {
         return true;
     }
 

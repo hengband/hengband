@@ -35,6 +35,7 @@
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
@@ -73,7 +74,7 @@ static BIT_FLAGS dead_mode(monster_death_type *md_ptr)
 static void summon_self(PlayerType *player_ptr, monster_death_type *md_ptr, summon_type type, int probability, POSITION radius, concptr message)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->inside_arena || player_ptr->phase_out || one_in_(probability)) {
+    if (floor_ptr->inside_arena || AngbandSystem::get_instance().is_watching() || one_in_(probability)) {
         return;
     }
 
@@ -97,7 +98,7 @@ static void summon_self(PlayerType *player_ptr, monster_death_type *md_ptr, summ
 
 static void on_dead_pink_horror(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
-    if (player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out) {
+    if (player_ptr->current_floor_ptr->inside_arena || AngbandSystem::get_instance().is_watching()) {
         return;
     }
 
@@ -239,7 +240,7 @@ static void on_dead_can_angel(PlayerType *player_ptr, monster_death_type *md_ptr
 
 static void on_dead_aqua_illusion(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
-    if (player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out) {
+    if (player_ptr->current_floor_ptr->inside_arena || AngbandSystem::get_instance().is_watching()) {
         return;
     }
 
@@ -274,7 +275,7 @@ static void on_dead_totem_moai(PlayerType *player_ptr, monster_death_type *md_pt
 
 static void on_dead_dragon_centipede(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
-    if (player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out) {
+    if (player_ptr->current_floor_ptr->inside_arena || AngbandSystem::get_instance().is_watching()) {
         return;
     }
 
@@ -390,7 +391,7 @@ static void drop_specific_item_on_dead(PlayerType *player_ptr, monster_death_typ
 
 static void on_dead_chest_mimic(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
-    if (player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out) {
+    if (player_ptr->current_floor_ptr->inside_arena || AngbandSystem::get_instance().is_watching()) {
         return;
     }
 

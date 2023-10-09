@@ -15,6 +15,7 @@
 #include "mspell/mspell-attack-util.h"
 #include "mspell/mspell-judgement.h"
 #include "player/player-status.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -141,7 +142,7 @@ static bool spell_world(MonsterAbilityType spell)
  */
 static bool spell_special(PlayerType *player_ptr, MonsterAbilityType spell)
 {
-    if (player_ptr->phase_out) {
+    if (AngbandSystem::get_instance().is_watching()) {
         return false;
     }
 

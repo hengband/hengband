@@ -19,6 +19,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-processor-util.h"
 #include "pet/pet-fall-off.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -93,7 +94,7 @@ bool runaway_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER
     auto *r_ptr = &m_ptr->get_monrace();
     bool can_runaway = m_ptr->is_pet() || m_ptr->is_friendly();
     can_runaway &= (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) || (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL));
-    can_runaway &= !player_ptr->phase_out;
+    can_runaway &= !AngbandSystem::get_instance().is_watching();
     if (!can_runaway) {
         return false;
     }

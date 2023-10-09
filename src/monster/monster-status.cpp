@@ -17,6 +17,7 @@
 #include "monster/monster-list.h"
 #include "monster/monster-status-setter.h" //!< @todo 相互依存. 後で何とかする.
 #include "monster/monster-update.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -28,7 +29,6 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
 #if JP
 #else
 #include "monster/monster-description-types.h"
@@ -404,7 +404,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     auto *r_ptr = &m_ptr->get_monrace();
     auto *s_ptr = &monraces_info[s_idx];
 
-    if (player_ptr->phase_out || (r_ptr->next_exp == 0)) {
+    if (AngbandSystem::get_instance().is_watching() || (r_ptr->next_exp == 0)) {
         return;
     }
 

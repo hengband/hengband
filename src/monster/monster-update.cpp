@@ -34,6 +34,7 @@
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "status/element-resistance.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -117,7 +118,7 @@ void update_player_type(PlayerType *player_ptr, turn_flags *turn_flags_ptr, Mons
     }
 
     const auto has_lite = r_ptr->brightness_flags.has_any_of({ Mbt::HAS_LITE_1, Mbt::HAS_LITE_2 });
-    if (turn_flags_ptr->do_move && (r_ptr->brightness_flags.has_any_of(except_has_lite) || (has_lite && !player_ptr->phase_out))) {
+    if (turn_flags_ptr->do_move && (r_ptr->brightness_flags.has_any_of(except_has_lite) || (has_lite && !AngbandSystem::get_instance().is_watching()))) {
         rfu.set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 }
@@ -519,7 +520,7 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
         }
     }
 
-    if (w_ptr->is_loading_now && w_ptr->character_dungeon && !player_ptr->phase_out && m_ptr->get_appearance_monrace().flags2 & RF2_ELDRITCH_HORROR) {
+    if (w_ptr->is_loading_now && w_ptr->character_dungeon && !AngbandSystem::get_instance().is_watching() && m_ptr->get_appearance_monrace().flags2 & RF2_ELDRITCH_HORROR) {
         m_ptr->mflag.set(MonsterTemporaryFlagType::SANITY_BLAST);
     }
 

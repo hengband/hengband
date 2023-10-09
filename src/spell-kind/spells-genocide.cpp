@@ -23,6 +23,7 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "player/player-damage.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -36,7 +37,7 @@ static bool is_in_special_floor(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     auto is_in_fixed_quest = floor.is_in_quest();
     is_in_fixed_quest &= !inside_quest(floor.get_random_quest_id());
-    return is_in_fixed_quest || floor.inside_arena || player_ptr->phase_out;
+    return is_in_fixed_quest || floor.inside_arena || AngbandSystem::get_instance().is_watching();
 }
 
 /*!
@@ -131,7 +132,7 @@ bool symbol_genocide(PlayerType *player_ptr, int power, bool player_cast)
     auto &floor = *player_ptr->current_floor_ptr;
     bool is_special_floor = floor.is_in_quest() && !inside_quest(floor.get_random_quest_id());
     is_special_floor |= floor.inside_arena;
-    is_special_floor |= player_ptr->phase_out;
+    is_special_floor |= AngbandSystem::get_instance().is_watching();
     if (is_special_floor) {
         msg_print(_("何も起きないようだ……", "Nothing seems to happen..."));
         return false;
@@ -178,7 +179,7 @@ bool mass_genocide(PlayerType *player_ptr, int power, bool player_cast)
     auto &floor = *player_ptr->current_floor_ptr;
     bool is_special_floor = floor.is_in_quest() && !inside_quest(floor.get_random_quest_id());
     is_special_floor |= floor.inside_arena;
-    is_special_floor |= player_ptr->phase_out;
+    is_special_floor |= AngbandSystem::get_instance().is_watching();
     if (is_special_floor) {
         return false;
     }
@@ -215,7 +216,7 @@ bool mass_genocide_undead(PlayerType *player_ptr, int power, bool player_cast)
     auto &floor = *player_ptr->current_floor_ptr;
     bool is_special_floor = floor.is_in_quest() && !inside_quest(floor.get_random_quest_id());
     is_special_floor |= floor.inside_arena;
-    is_special_floor |= player_ptr->phase_out;
+    is_special_floor |= AngbandSystem::get_instance().is_watching();
     if (is_special_floor) {
         return false;
     }

@@ -22,6 +22,7 @@
 #include "pet/pet-util.h"
 #include "save/floor-writer.h"
 #include "spell-class/spells-mirror-master.h"
+#include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
@@ -58,7 +59,7 @@ static bool check_pet_preservation_conditions(PlayerType *player_ptr, MonsterEnt
         return false;
     }
 
-    POSITION dis = distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
+    auto dis = distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
     if (m_ptr->is_confused() || m_ptr->is_stunned() || m_ptr->is_asleep() || (m_ptr->parent_m_idx != 0)) {
         return true;
     }
@@ -77,7 +78,7 @@ static bool check_pet_preservation_conditions(PlayerType *player_ptr, MonsterEnt
 
 static void sweep_preserving_pet(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode || player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out) {
+    if (player_ptr->wild_mode || player_ptr->current_floor_ptr->inside_arena || AngbandSystem::get_instance().is_watching()) {
         return;
     }
 

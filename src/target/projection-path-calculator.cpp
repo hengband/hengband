@@ -4,6 +4,7 @@
 #include "floor/cave.h"
 #include "grid/feature-flag-types.h"
 #include "spell-class/spells-mirror-master.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -297,7 +298,7 @@ bool projectable(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, 
  */
 int get_max_range(PlayerType *player_ptr)
 {
-    return player_ptr->phase_out ? 36 : 18;
+    return AngbandSystem::get_instance().is_watching() ? 36 : 18;
 }
 
 /*

@@ -3,6 +3,7 @@
 #include "game-option/text-display-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
@@ -253,7 +254,7 @@ void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POS
 bool is_seen(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
     bool is_inside_view = !ignore_unview;
-    is_inside_view |= player_ptr->phase_out;
+    is_inside_view |= AngbandSystem::get_instance().is_watching();
     is_inside_view |= player_can_see_bold(player_ptr, m_ptr->fy, m_ptr->fx) && projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
     return m_ptr->ml && is_inside_view;
 }
