@@ -140,7 +140,7 @@ static bool spell_world(MonsterAbilityType spell)
  * @param spell 判定対象のID
  * @return 特別効果魔法のIDならばTRUEを返す。
  */
-static bool spell_special(PlayerType *player_ptr, MonsterAbilityType spell)
+static bool spell_special(MonsterAbilityType spell)
 {
     if (AngbandSystem::get_instance().is_watching()) {
         return false;
@@ -280,7 +280,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
             world.push_back(msa_ptr->mspells[i]);
         }
 
-        if (spell_special(player_ptr, msa_ptr->mspells[i])) {
+        if (spell_special(msa_ptr->mspells[i])) {
             special.push_back(msa_ptr->mspells[i]);
         }
 
