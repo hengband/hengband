@@ -153,7 +153,7 @@ static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
     }
 }
 
-static void decide_lite_breath(PlayerType *player_ptr, msa_type *msa_ptr)
+static void decide_lite_breath(msa_type *msa_ptr)
 {
     if (msa_ptr->success) {
         return;
@@ -198,7 +198,7 @@ bool decide_lite_projection(PlayerType *player_ptr, msa_type *msa_ptr)
         msa_ptr->success = adjacent_grid_check(player_ptr, msa_ptr->m_ptr, &msa_ptr->y, &msa_ptr->x, TerrainCharacteristics::PROJECT, projectable);
     }
 
-    decide_lite_breath(player_ptr, msa_ptr);
+    decide_lite_breath(msa_ptr);
     return msa_ptr->success;
 }
 
