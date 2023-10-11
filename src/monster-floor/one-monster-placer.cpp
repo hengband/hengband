@@ -118,7 +118,7 @@ static MonsterRaceId initial_r_appearance(PlayerType *player_ptr, MonsterRaceId 
  * @param r_idx 生成モンスター種族
  * @return ユニークの生成が不可能な条件ならFALSE、それ以外はTRUE
  */
-static bool check_unique_placeable(PlayerType *player_ptr, MonsterRaceId r_idx, BIT_FLAGS mode)
+static bool check_unique_placeable(const FloorType &floor, MonsterRaceId r_idx, BIT_FLAGS mode)
 {
     if (AngbandSystem::get_instance().is_watching()) {
         return true;
@@ -143,13 +143,9 @@ static bool check_unique_placeable(PlayerType *player_ptr, MonsterRaceId r_idx, 
         return false;
     }
 
-    const auto is_deep = any_bits(r_ptr->flags1, RF1_FORCE_DEPTH) && (player_ptr->current_floor_ptr->dun_level < r_ptr->level);
+    const auto is_deep = any_bits(r_ptr->flags1, RF1_FORCE_DEPTH) && (floor.dun_level < r_ptr->level);
     const auto is_questor = !ironman_nightmare || any_bits(r_ptr->flags1, RF1_QUESTOR);
-    if (is_deep && is_questor) {
-        return false;
-    }
-
-    return true;
+    return !is_deep || !is_questor;
 }
 
 /*!
@@ -281,7 +277,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
         return false;
     }
 
-    if (!check_unique_placeable(player_ptr, r_idx, mode) || !check_quest_placeable(floor, r_idx) || !check_procection_rune(player_ptr, r_idx, y, x)) {
+    if (!check_unique_placeable(floor, r_idx, mode) || !check_quest_placeable(floor, r_idx) || !check_procection_rune(player_ptr, r_idx, y, x)) {
         return false;
     }
 
