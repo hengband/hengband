@@ -144,9 +144,9 @@ static void check_stupid(melee_spell_type *ms_ptr)
     ms_ptr->ability_flags &= RF_ABILITY_NOMAGIC_MASK;
 }
 
-static void check_arena(PlayerType *player_ptr, melee_spell_type *ms_ptr)
+static void check_arena(const FloorType &floor, melee_spell_type *ms_ptr)
 {
-    if (!player_ptr->current_floor_ptr->inside_arena && !AngbandSystem::get_instance().is_watching()) {
+    if (!floor.inside_arena && !AngbandSystem::get_instance().is_watching()) {
         return;
     }
 
@@ -390,7 +390,7 @@ bool check_melee_spell_set(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 
     check_darkness(player_ptr, ms_ptr);
     check_stupid(ms_ptr);
-    check_arena(player_ptr, ms_ptr);
+    check_arena(*player_ptr->current_floor_ptr, ms_ptr);
     if (AngbandSystem::get_instance().is_watching() && !one_in_(3)) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::HEAL);
     }
