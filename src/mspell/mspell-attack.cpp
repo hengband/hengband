@@ -84,9 +84,9 @@ static void check_mspell_smart(PlayerType *player_ptr, msa_type *msa_ptr)
     }
 }
 
-static void check_mspell_arena(PlayerType *player_ptr, msa_type *msa_ptr)
+static void check_mspell_arena(const FloorType &floor, msa_type *msa_ptr)
 {
-    if (!player_ptr->current_floor_ptr->inside_arena && !AngbandSystem::get_instance().is_watching()) {
+    if (!floor.inside_arena && !AngbandSystem::get_instance().is_watching()) {
         return;
     }
 
@@ -168,7 +168,7 @@ static bool check_mspell_continuation(PlayerType *player_ptr, msa_type *msa_ptr)
     }
 
     remove_bad_spells(msa_ptr->m_idx, player_ptr, msa_ptr->ability_flags);
-    check_mspell_arena(player_ptr, msa_ptr);
+    check_mspell_arena(*player_ptr->current_floor_ptr, msa_ptr);
     if (msa_ptr->ability_flags.none() || !check_mspell_non_stupid(player_ptr, msa_ptr)) {
         return false;
     }
