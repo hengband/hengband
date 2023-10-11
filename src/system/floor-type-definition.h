@@ -95,4 +95,5 @@ public:
     QuestId get_random_quest_id(std::optional<int> level_opt = std::nullopt) const;
     QuestId get_quest_id(const int bonus = 0) const;
     bool has_los(const Pos2D pos) const;
+    bool is_special() const;
 };

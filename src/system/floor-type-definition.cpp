@@ -1,5 +1,6 @@
 #include "system/floor-type-definition.h"
 #include "dungeon/quest.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -114,4 +115,15 @@ QuestId FloorType::get_quest_id(const int bonus) const
 bool FloorType::has_los(const Pos2D pos) const
 {
     return this->get_grid(pos).has_los();
+}
+
+/*!
+ * @brief 特別なフロアにいるかを判定する
+ * @return 固定クエスト、アリーナ、モンスター闘技場のいずれかならばtrue
+ */
+bool FloorType::is_special() const
+{
+    auto is_in_fixed_quest = this->is_in_quest();
+    is_in_fixed_quest &= !inside_quest(this->get_random_quest_id());
+    return is_in_fixed_quest || this->inside_arena || AngbandSystem::get_instance().is_watching();
 }

@@ -31,14 +31,6 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-static bool is_in_special_floor(PlayerType *player_ptr)
-{
-    auto &floor = *player_ptr->current_floor_ptr;
-    auto is_in_fixed_quest = floor.is_in_quest();
-    is_in_fixed_quest &= !inside_quest(floor.get_random_quest_id());
-    return is_in_fixed_quest || floor.inside_arena || AngbandSystem::get_instance().is_watching();
-}
-
 /*!
  * @brief モンスターへの単体抹殺処理サブルーチン / Delete a non-unique/non-quest monster
  * @param m_idx 抹殺するモンスターID
@@ -64,7 +56,7 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
         resist = true;
     } else if (m_idx == player_ptr->riding) {
         resist = true;
-    } else if (is_in_special_floor(player_ptr)) {
+    } else if (floor.is_special()) {
         resist = true;
     } else if (player_cast && (monrace.level > randint0(power))) {
         resist = true;
