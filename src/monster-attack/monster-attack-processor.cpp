@@ -125,30 +125,27 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
  */
 bool process_monster_attack_to_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, grid_type *g_ptr, bool can_cross)
 {
-    const auto &monster_from = player_ptr->current_floor_ptr->m_list[m_idx];
-    const auto &monrace_from = monster_from.get_monrace();
     if (!turn_flags_ptr->do_move || (g_ptr->m_idx == 0)) {
         return false;
     }
 
+    turn_flags_ptr->do_move = false;
+    const auto &monster_from = player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto &monrace_from = monster_from.get_monrace();
     const auto &monster_to = player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
     const auto &monrace_to = monster_to.get_monrace();
-    turn_flags_ptr->do_move = false;
-
-    bool do_kill_body = monrace_from.behavior_flags.has(MonsterBehaviorType::KILL_BODY) && monrace_from.behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW);
+    auto do_kill_body = monrace_from.behavior_flags.has(MonsterBehaviorType::KILL_BODY) && monrace_from.behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW);
     do_kill_body &= (monrace_from.mexp * monrace_from.level > monrace_to.mexp * monrace_to.level);
     do_kill_body &= (g_ptr->m_idx != player_ptr->riding);
-
-    if (do_kill_body || are_enemies(player_ptr, monster_from, monster_to) || monster_from.is_confused()) {
+    if (do_kill_body || monster_from.is_hostile_to_melee(monster_to) || monster_from.is_confused()) {
         return exe_monster_attack_to_monster(player_ptr, m_idx, g_ptr);
     }
 
-    bool do_move_body = monrace_from.behavior_flags.has(MonsterBehaviorType::MOVE_BODY) && monrace_from.behavior_flags.has_not(MonsterBehaviorType::NEVER_MOVE);
+    auto do_move_body = monrace_from.behavior_flags.has(MonsterBehaviorType::MOVE_BODY) && monrace_from.behavior_flags.has_not(MonsterBehaviorType::NEVER_MOVE);
     do_move_body &= (monrace_from.mexp > monrace_to.mexp);
     do_move_body &= can_cross;
     do_move_body &= (g_ptr->m_idx != player_ptr->riding);
     do_move_body &= monster_can_cross_terrain(player_ptr, player_ptr->current_floor_ptr->grid_array[monster_from.fy][monster_from.fx].feat, &monrace_to, 0);
-
     if (do_move_body) {
         turn_flags_ptr->do_move = true;
         turn_flags_ptr->did_move_body = true;

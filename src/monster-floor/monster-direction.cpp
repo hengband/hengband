@@ -70,8 +70,7 @@ static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m
         }
 
         MONSTER_IDX t_idx = dummy;
-        MonsterEntity *t_ptr;
-        t_ptr = &floor_ptr->m_list[t_idx];
+        auto *t_ptr = &floor_ptr->m_list[t_idx];
         if (t_ptr == m_ptr) {
             continue;
         }
@@ -81,7 +80,7 @@ static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m
         if (decide_pet_approch_direction(player_ptr, m_ptr, t_ptr)) {
             continue;
         }
-        if (!are_enemies(player_ptr, *m_ptr, *t_ptr)) {
+        if (!m_ptr->is_hostile_to_melee(*t_ptr)) {
             continue;
         }
 

@@ -19,7 +19,6 @@
 #include "main/sound-definitions-table.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
-#include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
@@ -53,19 +52,19 @@
  */
 bool direct_beam(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, MonsterEntity *m_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
     projection_path grid_g(player_ptr, AngbandSystem::get_instance().get_max_range(), y1, x1, y2, x2, PROJECT_THRU);
     if (grid_g.path_num()) {
         return false;
     }
 
-    bool hit2 = false;
-    bool is_friend = m_ptr->is_pet();
+    auto hit2 = false;
+    auto is_friend = m_ptr->is_pet();
     for (const auto &[y, x] : grid_g) {
-        const auto &g_ref = floor_ptr->grid_array[y][x];
+        const auto &grid = floor.get_grid({ y, x });
         if (y == y2 && x == x2) {
             hit2 = true;
-        } else if (is_friend && g_ref.m_idx > 0 && !are_enemies(player_ptr, *m_ptr, floor_ptr->m_list[g_ref.m_idx])) {
+        } else if (is_friend && grid.m_idx > 0 && !m_ptr->is_hostile_to_melee(floor.m_list[grid.m_idx])) {
             return false;
         }
 
@@ -74,10 +73,7 @@ bool direct_beam(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, 
         }
     }
 
-    if (!hit2) {
-        return false;
-    }
-    return true;
+    return hit2;
 }
 
 /*!

@@ -50,25 +50,27 @@ MonsterSweepGrid::MonsterSweepGrid(PlayerType *player_ptr, MONSTER_IDX m_idx, DI
  */
 bool MonsterSweepGrid::get_movable_grid()
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-    POSITION y = 0;
-    POSITION x = 0;
+    auto &floor = *this->player_ptr->current_floor_ptr;
+    const auto &monster_from = floor.m_list[this->m_idx];
+    auto &monrace = monster_from.get_monrace();
+    auto y = 0;
+    auto x = 0;
     auto y2 = this->player_ptr->y;
     auto x2 = this->player_ptr->x;
     this->will_run = this->mon_will_run();
-    const auto no_flow = m_ptr->mflag2.has(MonsterConstantFlagType::NOFLOW) && (floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].get_cost(r_ptr) > 2);
-    this->can_pass_wall = r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL) && ((this->m_idx != this->player_ptr->riding) || has_pass_wall(this->player_ptr));
-    if (!this->will_run && m_ptr->target_y) {
-        int t_m_idx = floor_ptr->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
+    Pos2D pos_monster_from(monster_from.fy, monster_from.fx);
+    const auto no_flow = monster_from.mflag2.has(MonsterConstantFlagType::NOFLOW) && (floor.get_grid(pos_monster_from).get_cost(&monrace) > 2);
+    this->can_pass_wall = monrace.feature_flags.has(MonsterFeatureType::PASS_WALL) && ((this->m_idx != this->player_ptr->riding) || has_pass_wall(this->player_ptr));
+    if (!this->will_run && monster_from.target_y) {
+        Pos2D pos_target(monster_from.target_y, monster_from.target_x);
+        int t_m_idx = floor.get_grid(pos_target).m_idx;
         if (t_m_idx > 0) {
-            const auto is_enemies = are_enemies(this->player_ptr, *m_ptr, floor_ptr->m_list[t_m_idx]);
-            const auto is_los = los(this->player_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x);
-            const auto is_projectable = projectable(this->player_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x);
+            const auto is_enemies = monster_from.is_hostile_to_melee(floor.m_list[t_m_idx]);
+            const auto is_los = los(this->player_ptr, monster_from.fy, monster_from.fx, monster_from.target_y, monster_from.target_x);
+            const auto is_projectable = projectable(this->player_ptr, monster_from.fy, monster_from.fx, monster_from.target_y, monster_from.target_x);
             if (is_enemies && is_los && is_projectable) {
-                y = m_ptr->fy - m_ptr->target_y;
-                x = m_ptr->fx - m_ptr->target_x;
+                y = monster_from.fy - monster_from.target_y;
+                x = monster_from.fx - monster_from.target_x;
                 this->done = true;
             }
         }
@@ -77,8 +79,8 @@ bool MonsterSweepGrid::get_movable_grid()
     this->check_hiding_grid(&y, &x, &y2, &x2);
     if (!this->done) {
         this->sweep_movable_grid(&y2, &x2, no_flow);
-        y = m_ptr->fy - y2;
-        x = m_ptr->fx - x2;
+        y = monster_from.fy - y2;
+        x = monster_from.fx - x2;
     }
 
     this->search_pet_runnable_grid(&y, &x, no_flow);

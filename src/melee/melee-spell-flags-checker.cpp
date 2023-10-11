@@ -12,7 +12,6 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
-#include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "mspell/mspell-checker.h"
 #include "mspell/mspell-judgement.h"
@@ -59,7 +58,7 @@ static void decide_indirection_melee_spell(PlayerType *player_ptr, melee_spell_t
 
     ms_ptr->t_ptr = &floor_ptr->m_list[ms_ptr->target_idx];
     const auto &monster_to = *ms_ptr->t_ptr;
-    if ((ms_ptr->m_idx == ms_ptr->target_idx) || ((ms_ptr->target_idx != player_ptr->pet_t_m_idx) && !are_enemies(player_ptr, monster_from, monster_to))) {
+    if ((ms_ptr->m_idx == ms_ptr->target_idx) || ((ms_ptr->target_idx != player_ptr->pet_t_m_idx) && !monster_from.is_hostile_to_melee(monster_to))) {
         ms_ptr->target_idx = 0;
         return;
     }
@@ -97,11 +96,11 @@ static bool check_melee_spell_projection(PlayerType *player_ptr, melee_spell_typ
 
         ms_ptr->target_idx = dummy;
         ms_ptr->t_ptr = &floor_ptr->m_list[ms_ptr->target_idx];
-        const auto &m_ref = *ms_ptr->m_ptr;
-        const auto &t_ref = *ms_ptr->t_ptr;
-        const auto is_enemies = are_enemies(player_ptr, m_ref, t_ref);
-        const auto is_projectable = projectable(player_ptr, m_ref.fy, m_ref.fx, t_ref.fy, t_ref.fx);
-        if (!t_ref.is_valid() || (ms_ptr->m_idx == ms_ptr->target_idx) || !is_enemies || !is_projectable) {
+        const auto &monster_from = *ms_ptr->m_ptr;
+        const auto &monster_to = *ms_ptr->t_ptr;
+        const auto is_enemies = monster_from.is_hostile_to_melee(monster_to);
+        const auto is_projectable = projectable(player_ptr, monster_from.fy, monster_from.fx, monster_to.fy, monster_to.fx);
+        if (!monster_to.is_valid() || (ms_ptr->m_idx == ms_ptr->target_idx) || !is_enemies || !is_projectable) {
             continue;
         }
 

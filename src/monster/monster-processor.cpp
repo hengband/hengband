@@ -488,18 +488,20 @@ bool decide_monster_multiplication(PlayerType *player_ptr, MONSTER_IDX m_idx, PO
  */
 bool cast_spell(PlayerType *player_ptr, MONSTER_IDX m_idx, bool aware)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-    if ((r_ptr->freq_spell == 0) || (randint1(100) > r_ptr->freq_spell)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monster_from = floor.m_list[m_idx];
+    const auto &monrace = monster_from.get_monrace();
+    if ((monrace.freq_spell == 0) || (randint1(100) > monrace.freq_spell)) {
         return false;
     }
 
     bool counterattack = false;
-    if (m_ptr->target_y) {
-        MONSTER_IDX t_m_idx = player_ptr->current_floor_ptr->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
-        const auto &target_ref = player_ptr->current_floor_ptr->m_list[t_m_idx];
-        const auto is_projectable = projectable(player_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x);
-        if (t_m_idx && are_enemies(player_ptr, *m_ptr, target_ref) && is_projectable) {
+    if (monster_from.target_y) {
+        Pos2D pos(monster_from.target_y, monster_from.target_x);
+        const auto t_m_idx = floor.get_grid(pos).m_idx;
+        const auto &monster_to = floor.m_list[t_m_idx];
+        const auto is_projectable = projectable(player_ptr, monster_from.fy, monster_from.fx, monster_from.target_y, monster_from.target_x);
+        if (t_m_idx && monster_from.is_hostile_to_melee(monster_to) && is_projectable) {
             counterattack = true;
         }
     }
