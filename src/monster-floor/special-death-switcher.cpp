@@ -50,7 +50,7 @@
  * @param md_ptr モンスター撃破構造体への参照ポインタ
  * @return 撃破モンスターがPETであればPM_FORCE_PETを、CLONEであればPM_CLONEを立てる
  */
-static BIT_FLAGS dead_mode(monster_death_type *md_ptr)
+static BIT_FLAGS dead_mode(MonsterDeath *md_ptr)
 {
     bool pet = md_ptr->m_ptr->is_pet();
     bool clone = md_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::CLONED);
@@ -71,7 +71,7 @@ static BIT_FLAGS dead_mode(monster_death_type *md_ptr)
  * @param radius 召喚半径 (モンスターが死亡した座標から半径何マス以内に召喚させるか)
  * @param message 召喚時のメッセージ
  */
-static void summon_self(PlayerType *player_ptr, monster_death_type *md_ptr, summon_type type, int probability, POSITION radius, concptr message)
+static void summon_self(PlayerType *player_ptr, MonsterDeath *md_ptr, summon_type type, int probability, POSITION radius, concptr message)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->inside_arena || AngbandSystem::get_instance().is_watching() || one_in_(probability)) {
@@ -96,7 +96,7 @@ static void summon_self(PlayerType *player_ptr, monster_death_type *md_ptr, summ
     }
 }
 
-static void on_dead_pink_horror(PlayerType *player_ptr, monster_death_type *md_ptr)
+static void on_dead_pink_horror(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
     if (player_ptr->current_floor_ptr->inside_arena || AngbandSystem::get_instance().is_watching()) {
         return;
@@ -120,7 +120,7 @@ static void on_dead_pink_horror(PlayerType *player_ptr, monster_death_type *md_p
     }
 }
 
-static void on_dead_bloodletter(PlayerType *player_ptr, monster_death_type *md_ptr)
+static void on_dead_bloodletter(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
     if (!md_ptr->drop_chosen_item || (randint1(100) >= 15)) {
         return;
@@ -133,7 +133,7 @@ static void on_dead_bloodletter(PlayerType *player_ptr, monster_death_type *md_p
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
-static void on_dead_raal(PlayerType *player_ptr, monster_death_type *md_ptr)
+static void on_dead_raal(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!md_ptr->drop_chosen_item || (floor_ptr->dun_level <= 9)) {
@@ -158,12 +158,12 @@ static void on_dead_raal(PlayerType *player_ptr, monster_death_type *md_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param md_ptr モンスター撃破構造体への参照ポインタ
  */
-static void on_dead_dawn(PlayerType *player_ptr, monster_death_type *md_ptr)
+static void on_dead_dawn(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
     summon_self(player_ptr, md_ptr, SUMMON_DAWN, 7, 20, _("新たな戦士が現れた！", "A new warrior steps forth!"));
 }
 
-static void on_dead_sacred_treasures(PlayerType *player_ptr, monster_death_type *md_ptr)
+static void on_dead_sacred_treasures(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
     if ((player_ptr->ppersonality != PERSONALITY_LAZY) || !md_ptr->drop_chosen_item) {
         return;
@@ -190,7 +190,7 @@ static void on_dead_sacred_treasures(PlayerType *player_ptr, monster_death_type 
     create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x);
 }
 
-static void on_dead_serpent(PlayerType *player_ptr, monster_death_type *md_ptr)
+static void on_dead_serpent(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
     if (!md_ptr->drop_chosen_item) {
         return;
@@ -209,7 +209,7 @@ static void on_dead_serpent(PlayerType *player_ptr, monster_death_type *md_ptr)
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
-static void on_dead_death_sword(PlayerType *player_ptr, monster_death_type *md_ptr)
+static void on_dead_death_sword(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
     if (!md_ptr->drop_chosen_item) {
         return;
@@ -221,7 +221,7 @@ static void on_dead_death_sword(PlayerType *player_ptr, monster_death_type *md_p
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
-static void on_dead_can_angel(PlayerType *player_ptr, monster_death_type *md_ptr)
+static void on_dead_can_angel(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
     bool is_drop_can = md_ptr->drop_chosen_item;
     bool is_silver = md_ptr->m_ptr->r_idx == MonsterRaceId::A_SILVER;
@@ -238,7 +238,7 @@ static void on_dead_can_angel(PlayerType *player_ptr, monster_death_type *md_ptr
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
-static void on_dead_aqua_illusion(PlayerType *player_ptr, monster_death_type *md_ptr)
+static void on_dead_aqua_illusion(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
     if (player_ptr->current_floor_ptr->inside_arena || AngbandSystem::get_instance().is_watching()) {
         return;
@@ -268,12 +268,12 @@ static void on_dead_aqua_illusion(PlayerType *player_ptr, monster_death_type *md
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param md_ptr モンスター撃破構造体への参照ポインタ
  */
-static void on_dead_totem_moai(PlayerType *player_ptr, monster_death_type *md_ptr)
+static void on_dead_totem_moai(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
     summon_self(player_ptr, md_ptr, SUMMON_TOTEM_MOAI, 8, 5, _("新たなモアイが現れた！", "A new moai steps forth!"));
 }
 
-static void on_dead_dragon_centipede(PlayerType *player_ptr, monster_death_type *md_ptr)
+static void on_dead_dragon_centipede(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
     if (player_ptr->current_floor_ptr->inside_arena || AngbandSystem::get_instance().is_watching()) {
         return;
@@ -330,7 +330,7 @@ static bool make_equipment(PlayerType *player_ptr, ItemEntity *q_ptr, const BIT_
  * 最初のアイテム生成でいきなり☆が生成された場合を除き、中途半端な☆ (例：呪われている)は生成しない.
  * このルーチンで★は生成されないので、★生成フラグのキャンセルも不要
  */
-static void on_dead_random_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, bool (*object_hook_pf)(short bi_id))
+static void on_dead_random_artifact(PlayerType *player_ptr, MonsterDeath *md_ptr, bool (*object_hook_pf)(short bi_id))
 {
     ItemEntity forge;
     auto *q_ptr = &forge;
@@ -370,7 +370,7 @@ static void on_dead_random_artifact(PlayerType *player_ptr, monster_death_type *
  * @brief マニマニのあくま撃破時メッセージ
  * @todo 死亡時の特殊メッセージを表示するだけの処理を複数作るなら、switch/case文に分けられるように汎用化すること
  */
-static void on_dead_manimani(PlayerType *player_ptr, monster_death_type *md_ptr)
+static void on_dead_manimani(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
     if (!is_seen(player_ptr, md_ptr->m_ptr)) {
         return;
@@ -379,7 +379,7 @@ static void on_dead_manimani(PlayerType *player_ptr, monster_death_type *md_ptr)
     msg_print(_("どこからか声が聞こえる…「ハロー！　そして…グッドバイ！」", "Heard a voice from somewhere... 'Hello! And... good bye!'"));
 }
 
-static void drop_specific_item_on_dead(PlayerType *player_ptr, monster_death_type *md_ptr, bool (*object_hook_pf)(short bi_id))
+static void drop_specific_item_on_dead(PlayerType *player_ptr, MonsterDeath *md_ptr, bool (*object_hook_pf)(short bi_id))
 {
     ItemEntity forge;
     auto *q_ptr = &forge;
@@ -389,7 +389,7 @@ static void drop_specific_item_on_dead(PlayerType *player_ptr, monster_death_typ
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
-static void on_dead_chest_mimic(PlayerType *player_ptr, monster_death_type *md_ptr)
+static void on_dead_chest_mimic(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
     if (player_ptr->current_floor_ptr->inside_arena || AngbandSystem::get_instance().is_watching()) {
         return;
@@ -432,7 +432,7 @@ static void on_dead_chest_mimic(PlayerType *player_ptr, monster_death_type *md_p
     }
 }
 
-static void on_dead_mimics(PlayerType *player_ptr, monster_death_type *md_ptr)
+static void on_dead_mimics(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
     if (!md_ptr->drop_chosen_item) {
         return;
@@ -486,7 +486,7 @@ static void on_dead_mimics(PlayerType *player_ptr, monster_death_type *md_ptr)
     }
 }
 
-static void on_dead_swordfish(PlayerType *player_ptr, monster_death_type *md_ptr, AttributeFlags attribute_flags)
+static void on_dead_swordfish(PlayerType *player_ptr, MonsterDeath *md_ptr, AttributeFlags attribute_flags)
 {
     if (attribute_flags.has_not(AttributeType::COLD) || !md_ptr->drop_chosen_item || (randint1(100) >= 10)) {
         return;
@@ -495,7 +495,7 @@ static void on_dead_swordfish(PlayerType *player_ptr, monster_death_type *md_ptr
     drop_single_artifact(player_ptr, md_ptr, FixedArtifactId::FROZEN_SWORDFISH);
 }
 
-void switch_special_death(PlayerType *player_ptr, monster_death_type *md_ptr, AttributeFlags attribute_flags)
+void switch_special_death(PlayerType *player_ptr, MonsterDeath *md_ptr, AttributeFlags attribute_flags)
 {
     switch (md_ptr->m_ptr->r_idx) {
     case MonsterRaceId::PINK_HORROR:
