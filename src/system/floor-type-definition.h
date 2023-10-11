@@ -96,4 +96,5 @@ public:
     QuestId get_quest_id(const int bonus = 0) const;
     bool has_los(const Pos2D pos) const;
     bool is_special() const;
+    bool can_teleport_level(bool to_player = false) const;
 };

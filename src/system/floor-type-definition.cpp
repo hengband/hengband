@@ -1,5 +1,6 @@
 #include "system/floor-type-definition.h"
 #include "dungeon/quest.h"
+#include "game-option/birth-options.h"
 #include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/grid-type-definition.h"
@@ -126,4 +127,18 @@ bool FloorType::is_special() const
     auto is_in_fixed_quest = this->is_in_quest();
     is_in_fixed_quest &= !inside_quest(this->get_random_quest_id());
     return is_in_fixed_quest || this->inside_arena || AngbandSystem::get_instance().is_watching();
+}
+
+/*!
+ * @brief テレポート・レベル無効フロアの判定
+ * @param to_player プレイヤーを対象としているか否か
+ * @return テレポート・レベルが不可能ならばtrue
+ */
+bool FloorType::can_teleport_level(bool to_player) const
+{
+    auto is_invalid_floor = to_player;
+    is_invalid_floor &= inside_quest(this->get_quest_id()) || (this->dun_level >= this->get_dungeon_definition().maxdepth);
+    is_invalid_floor &= this->dun_level >= 1;
+    is_invalid_floor &= ironman_downward;
+    return this->is_special() || is_invalid_floor;
 }

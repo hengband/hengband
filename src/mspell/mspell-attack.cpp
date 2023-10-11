@@ -69,7 +69,7 @@ static void check_mspell_stupid(PlayerType *player_ptr, msa_type *msa_ptr)
     msa_ptr->ability_flags &= RF_ABILITY_NOMAGIC_MASK;
 }
 
-static void check_mspell_smart(PlayerType *player_ptr, msa_type *msa_ptr)
+static void check_mspell_smart(const FloorType &floor, msa_type *msa_ptr)
 {
     if (msa_ptr->r_ptr->behavior_flags.has_not(MonsterBehaviorType::SMART)) {
         return;
@@ -79,7 +79,7 @@ static void check_mspell_smart(PlayerType *player_ptr, msa_type *msa_ptr)
         msa_ptr->ability_flags &= RF_ABILITY_INT_MASK;
     }
 
-    if (msa_ptr->ability_flags.has(MonsterAbilityType::TELE_LEVEL) && is_teleport_level_ineffective(player_ptr, 0)) {
+    if (msa_ptr->ability_flags.has(MonsterAbilityType::TELE_LEVEL) && floor.can_teleport_level()) {
         msa_ptr->ability_flags.reset(MonsterAbilityType::TELE_LEVEL);
     }
 }
@@ -337,7 +337,7 @@ bool make_attack_spell(PlayerType *player_ptr, MONSTER_IDX m_idx)
     set_no_magic_mask(msa_ptr);
     decide_lite_area(player_ptr, msa_ptr);
     check_mspell_stupid(player_ptr, msa_ptr);
-    check_mspell_smart(player_ptr, msa_ptr);
+    check_mspell_smart(*player_ptr->current_floor_ptr, msa_ptr);
     if (!check_mspell_continuation(player_ptr, msa_ptr)) {
         return false;
     }

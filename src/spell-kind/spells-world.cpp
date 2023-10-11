@@ -45,25 +45,6 @@
 #include <algorithm>
 
 /*!
- * @brief テレポート・レベルが効かないモンスターであるかどうかを判定する
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param idx テレポート・レベル対象のモンスター
- * @todo 変数名が実態と合っているかどうかは要確認
- */
-bool is_teleport_level_ineffective(PlayerType *player_ptr, MONSTER_IDX idx)
-{
-    const auto &floor = *player_ptr->current_floor_ptr;
-    auto is_special_floor = floor.inside_arena;
-    is_special_floor |= AngbandSystem::get_instance().is_watching();
-    is_special_floor |= floor.is_in_quest() && !inside_quest(floor.get_random_quest_id());
-    auto is_invalid_floor = idx <= 0;
-    is_invalid_floor &= inside_quest(floor.get_quest_id()) || (floor.dun_level >= floor.get_dungeon_definition().maxdepth);
-    is_invalid_floor &= floor.dun_level >= 1;
-    is_invalid_floor &= ironman_downward;
-    return is_special_floor || is_invalid_floor;
-}
-
-/*!
  * @brief プレイヤー及びモンスターをレベルテレポートさせる /
  * Teleport the player one level up or down (random when legal)
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -83,7 +64,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
         see_m = is_seen(player_ptr, m_ptr);
     }
 
-    if (is_teleport_level_ineffective(player_ptr, m_idx)) {
+    if (floor.can_teleport_level(m_idx != 0)) {
         if (see_m) {
             msg_print(_("効果がなかった。", "There is no effect."));
         }

@@ -346,7 +346,8 @@ static void check_smart(PlayerType *player_ptr, melee_spell_type *ms_ptr)
         ms_ptr->ability_flags &= RF_ABILITY_INT_MASK;
     }
 
-    if (ms_ptr->ability_flags.has(MonsterAbilityType::TELE_LEVEL) && is_teleport_level_ineffective(player_ptr, (ms_ptr->target_idx == player_ptr->riding) ? 0 : ms_ptr->target_idx)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (ms_ptr->ability_flags.has(MonsterAbilityType::TELE_LEVEL) && floor.can_teleport_level((ms_ptr->target_idx != player_ptr->riding) ? ms_ptr->target_idx != 0 : false)) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::TELE_LEVEL);
     }
 }
