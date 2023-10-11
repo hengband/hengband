@@ -245,7 +245,7 @@ static void decide_drop_quality(monster_death_type *md_ptr)
     }
 }
 
-static int decide_drop_numbers(PlayerType *player_ptr, monster_death_type *md_ptr, const bool drop_item)
+static int decide_drop_numbers(monster_death_type *md_ptr, const bool drop_item, const bool inside_arena)
 {
     int drop_numbers = 0;
     if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_60) && (randint0(100) < 60)) {
@@ -276,7 +276,7 @@ static int decide_drop_numbers(PlayerType *player_ptr, monster_death_type *md_pt
         drop_numbers = 0;
     }
 
-    if (md_ptr->m_ptr->is_pet() || AngbandSystem::get_instance().is_watching() || player_ptr->current_floor_ptr->inside_arena) {
+    if (md_ptr->m_ptr->is_pet() || AngbandSystem::get_instance().is_watching() || inside_arena) {
         drop_numbers = 0;
     }
 
@@ -411,10 +411,10 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
     decide_drop_quality(md_ptr);
     switch_special_death(player_ptr, md_ptr, attribute_flags);
     drop_artifacts(player_ptr, md_ptr);
-    int drop_numbers = decide_drop_numbers(player_ptr, md_ptr, drop_item);
+    auto &floor = *player_ptr->current_floor_ptr;
+    int drop_numbers = decide_drop_numbers(md_ptr, drop_item, floor.inside_arena);
     coin_type = md_ptr->force_coin;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    floor_ptr->object_level = (floor_ptr->dun_level + md_ptr->r_ptr->level) / 2;
+    floor.object_level = (floor.dun_level + md_ptr->r_ptr->level) / 2;
     drop_items_golds(player_ptr, md_ptr, drop_numbers);
     if (((md_ptr->r_ptr->flags1 & RF1_QUESTOR) == 0) || AngbandSystem::get_instance().is_watching() || (md_ptr->m_ptr->r_idx != MonsterRaceId::SERPENT) || md_ptr->cloned) {
         return;
