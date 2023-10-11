@@ -13,7 +13,6 @@
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
-#include "monster/monster-info.h"
 #include "monster/monster-processor.h"
 #include "monster/monster-status.h" //!< @todo 相互依存. 後で何とかする.
 #include "monster/monster-util.h"
@@ -44,20 +43,6 @@ void set_pet(PlayerType *player_ptr, MonsterEntity *m_ptr)
 }
 
 /*!
- * @brief モンスターを敵に回す
- * Makes the monster hostile towards the player
- * @param m_ptr モンスター情報構造体の参照ポインタ
- */
-void set_hostile(PlayerType *player_ptr, MonsterEntity *m_ptr)
-{
-    if (AngbandSystem::get_instance().is_watching()) {
-        return;
-    }
-
-    m_ptr->mflag2.reset({ MonsterConstantFlagType::PET, MonsterConstantFlagType::FRIENDLY });
-}
-
-/*!
  * @brief モンスターを怒らせる
  * Anger the monster
  * @param m_ptr モンスター情報構造体の参照ポインタ
@@ -70,7 +55,7 @@ void anger_monster(PlayerType *player_ptr, MonsterEntity *m_ptr)
 
     const auto m_name = monster_desc(player_ptr, m_ptr, 0);
     msg_format(_("%s^は怒った！", "%s^ gets angry!"), m_name.data());
-    set_hostile(player_ptr, m_ptr);
+    m_ptr->set_hostile();
     chg_virtue(player_ptr, Virtue::INDIVIDUALISM, 1);
     chg_virtue(player_ptr, Virtue::HONOUR, -1);
     chg_virtue(player_ptr, Virtue::JUSTICE, -1);

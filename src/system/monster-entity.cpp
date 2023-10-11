@@ -317,3 +317,15 @@ std::pair<TERM_COLOR, int> MonsterEntity::get_hp_bar_data() const
     }
     return { TERM_RED, len };
 }
+
+/*!
+ * @brief モンスターを敵に回す
+ */
+void MonsterEntity::set_hostile()
+{
+    if (AngbandSystem::get_instance().is_watching()) {
+        return;
+    }
+
+    this->mflag2.reset({ MonsterConstantFlagType::PET, MonsterConstantFlagType::FRIENDLY });
+}

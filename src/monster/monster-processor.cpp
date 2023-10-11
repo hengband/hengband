@@ -375,7 +375,7 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
         msg_format(_("%s^は突然敵にまわった！", "%s^ suddenly becomes hostile!"), m_name.data());
     }
 
-    set_hostile(player_ptr, &monster);
+    monster.set_hostile();
 }
 
 /*!
