@@ -87,28 +87,29 @@ static void give_one_ability_of_object(ItemEntity *to_ptr, ItemEntity *from_ptr)
     }
 }
 
-static std::pair<bool, ItemEntity *> select_repairing_broken_weapon(PlayerType *player_ptr, const int row, short *item)
+static std::pair<short, ItemEntity *> select_repairing_broken_weapon(PlayerType *player_ptr, const int row)
 {
     prt(_("修復には材料となるもう1つの武器が必要です。", "Hand one material weapon to repair a broken weapon."), row, 2);
     prt(_("材料に使用した武器はなくなります！", "The material weapon will disappear after repairing!!"), row + 1, 2);
     constexpr auto q = _("どの折れた武器を修復しますか？", "Repair which broken weapon? ");
     constexpr auto s = _("修復できる折れた武器がありません。", "You have no broken weapon to repair.");
-    auto *o_ptr = choose_object(player_ptr, item, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&ItemEntity::is_broken_weapon));
+    short i_idx;
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&ItemEntity::is_broken_weapon));
     if (o_ptr == nullptr) {
-        return { false, nullptr };
+        return { i_idx, nullptr };
     }
 
     if (!o_ptr->is_ego() && !o_ptr->is_fixed_or_random_artifact()) {
         msg_format(_("それは直してもしょうがないぜ。", "It is worthless to repair."));
-        return { false, o_ptr };
+        return { i_idx, o_ptr };
     }
 
     if (o_ptr->number > 1) {
         msg_format(_("一度に複数を修復することはできません！", "They are too many to repair at once!"));
-        return { false, o_ptr };
+        return { i_idx, o_ptr };
     }
 
-    return { true, o_ptr };
+    return { i_idx, o_ptr };
 }
 
 static void display_reparing_weapon(PlayerType *player_ptr, ItemEntity *o_ptr, const int row)
@@ -138,9 +139,8 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
 {
     clear_bldg(0, 22);
     auto row = 7;
-    short item;
-    const auto &[selection, o_ptr] = select_repairing_broken_weapon(player_ptr, row, &item);
-    if (!selection) {
+    const auto &[i_idx, o_ptr] = select_repairing_broken_weapon(player_ptr, row);
+    if (o_ptr == nullptr) {
         return 0;
     }
 
@@ -153,7 +153,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         return 0;
     }
 
-    if (mater == item) {
+    if (mater == i_idx) {
         msg_print(_("クラインの壷じゃない！", "This is not a Klein bottle!"));
         return 0;
     }
