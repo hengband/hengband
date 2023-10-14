@@ -11,4 +11,4 @@ int critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus
 int calc_crit_ratio_shot(PlayerType *player_ptr, int plus_ammo, int plus_bow);
 int calc_expect_crit_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, int dam);
 int calc_expect_crit(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, int16_t meichuu, bool dokubari, bool impact);
-void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPELL_IDX snipe_type);
+void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SPELL_IDX snipe_type);

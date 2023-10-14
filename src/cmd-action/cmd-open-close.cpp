@@ -371,10 +371,10 @@ void do_cmd_spike(PlayerType *player_ptr)
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     FEAT_IDX feat = g_ptr->get_feat_mimic();
-    INVENTORY_IDX item;
+    INVENTORY_IDX i_idx;
     if (terrains_info[feat].flags.has_not(TerrainCharacteristics::SPIKE)) {
         msg_print(_("そこにはくさびを打てるものが見当たらない。", "You see nothing there to spike."));
-    } else if (!get_spike(player_ptr, &item)) {
+    } else if (!get_spike(player_ptr, &i_idx)) {
         msg_print(_("くさびを持っていない！", "You have no spikes!"));
     } else if (g_ptr->m_idx) {
         PlayerEnergy(player_ptr).set_player_turn_energy(100);
@@ -384,6 +384,6 @@ void do_cmd_spike(PlayerType *player_ptr)
         PlayerEnergy(player_ptr).set_player_turn_energy(100);
         msg_format(_("%sにくさびを打ち込んだ。", "You jam the %s with a spike."), terrains_info[feat].name.data());
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::SPIKE);
-        vary_item(player_ptr, item, -1);
+        vary_item(player_ptr, i_idx, -1);
     }
 }

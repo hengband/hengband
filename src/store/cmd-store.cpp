@@ -156,8 +156,8 @@ void do_cmd_store(PlayerType *player_ptr)
         w_ptr->character_icky_depth = 1;
         handle_stuff(player_ptr);
         if (player_ptr->inventory_list[INVEN_PACK].bi_id) {
-            INVENTORY_IDX item = INVEN_PACK;
-            auto *o_ptr = &player_ptr->inventory_list[item];
+            INVENTORY_IDX i_idx = INVEN_PACK;
+            auto *o_ptr = &player_ptr->inventory_list[i_idx];
             if (store_num != StoreSaleType::HOME) {
                 if (store_num == StoreSaleType::MUSEUM) {
                     msg_print(_("ザックからアイテムがあふれそうなので、あわてて博物館から出た...", "Your pack is so full that you flee the Museum..."));
@@ -177,8 +177,8 @@ void do_cmd_store(PlayerType *player_ptr)
                 q_ptr = &forge;
                 q_ptr->copy_from(o_ptr);
                 const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
-                msg_format(_("%sが落ちた。(%c)", "You drop %s (%c)."), item_name.data(), index_to_label(item));
-                vary_item(player_ptr, item, -255);
+                msg_format(_("%sが落ちた。(%c)", "You drop %s (%c)."), item_name.data(), index_to_label(i_idx));
+                vary_item(player_ptr, i_idx, -255);
                 handle_stuff(player_ptr);
 
                 item_pos = home_carry(player_ptr, q_ptr, store_num);
