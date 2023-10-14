@@ -46,3 +46,24 @@ public:
 };
 
 extern std::vector<TerrainType> terrains_info;
+
+class TerrainList {
+public:
+    TerrainList(const TerrainList &) = delete;
+    TerrainList(TerrainList &&) = delete;
+    TerrainList operator=(const TerrainList &) = delete;
+    TerrainList operator=(TerrainList &&) = delete;
+    TerrainType &operator[](short terrain_id);
+    const TerrainType &operator[](short terrain_id) const;
+
+    static TerrainList &get_instance();
+    std::vector<TerrainType>::iterator begin();
+    const std::vector<TerrainType>::const_iterator begin() const;
+    std::vector<TerrainType>::iterator end();
+    const std::vector<TerrainType>::const_iterator end() const;
+
+private:
+    TerrainList() = default;
+
+    static TerrainList instance;
+};
