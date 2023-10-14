@@ -43,6 +43,8 @@ public:
     char d_char[F_LIT_MAX]{}; /*!< デフォルトの地形シンボルアルファベット / Default feature character */
     TERM_COLOR x_attr[F_LIT_MAX]{}; /*!< 設定変更後の地形シンボルカラー / Desired feature attribute */
     char x_char[F_LIT_MAX]{}; /*!< 設定変更後の地形シンボルアルファベット / Desired feature character */
+
+    bool is_permanent_wall() const;
 };
 
 extern std::vector<TerrainType> terrains_info;

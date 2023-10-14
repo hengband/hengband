@@ -39,7 +39,7 @@ void call_the_void(PlayerType *player_ptr)
         auto *g_ptr = &floor_ptr->grid_array[player_ptr->y + ddy_ddd[i]][player_ptr->x + ddx_ddd[i]];
 
         if (!g_ptr->cave_has_flag(TerrainCharacteristics::PROJECT)) {
-            if (!g_ptr->mimic || terrains_info[g_ptr->mimic].flags.has_not(TerrainCharacteristics::PROJECT) || !permanent_wall(&terrains_info[g_ptr->feat])) {
+            if (!g_ptr->mimic || terrains_info[g_ptr->mimic].flags.has_not(TerrainCharacteristics::PROJECT) || !terrains_info[g_ptr->feat].is_permanent_wall()) {
                 do_call = false;
                 break;
             }

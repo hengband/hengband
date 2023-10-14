@@ -175,14 +175,6 @@ bool is_ascii_graphics(char x)
     return (x & 0x80) == 0;
 }
 
-/*
- * Determine if a "feature" is "permanent wall"
- */
-bool permanent_wall(TerrainType *f_ptr)
-{
-    return f_ptr->flags.has_all_of({ TerrainCharacteristics::WALL, TerrainCharacteristics::PERMANENT });
-}
-
 FEAT_IDX feat_locked_door_random(int door_type)
 {
     const auto &door = feat_door[door_type];

@@ -8,6 +8,11 @@
 
 std::vector<TerrainType> terrains_info;
 
+bool TerrainType::is_permanent_wall() const
+{
+    return this->flags.has_all_of({ TerrainCharacteristics::WALL, TerrainCharacteristics::PERMANENT });
+}
+
 TerrainList TerrainList::instance{};
 
 TerrainList &TerrainList::get_instance()
