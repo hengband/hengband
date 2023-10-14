@@ -87,7 +87,7 @@ bool ObjectThrowEntity::check_can_throw()
         return false;
     }
 
-    if (this->o_ptr->is_cursed() && (this->item >= INVEN_MAIN_HAND)) {
+    if (this->o_ptr->is_cursed() && (this->i_idx >= INVEN_MAIN_HAND)) {
         msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
         return false;
     }
@@ -157,18 +157,18 @@ void ObjectThrowEntity::reflect_inventory_by_throw()
         this->return_when_thrown = true;
     }
 
-    if (this->item < 0) {
-        floor_item_increase(this->player_ptr, 0 - this->item, -1);
-        floor_item_optimize(this->player_ptr, 0 - this->item);
+    if (this->i_idx < 0) {
+        floor_item_increase(this->player_ptr, 0 - this->i_idx, -1);
+        floor_item_optimize(this->player_ptr, 0 - this->i_idx);
         return;
     }
 
-    inven_item_increase(this->player_ptr, this->item, -1);
+    inven_item_increase(this->player_ptr, this->i_idx, -1);
     if (!this->return_when_thrown) {
-        inven_item_describe(this->player_ptr, this->item);
+        inven_item_describe(this->player_ptr, this->i_idx);
     }
 
-    inven_item_optimize(this->player_ptr, this->item);
+    inven_item_optimize(this->player_ptr, this->i_idx);
 }
 
 void ObjectThrowEntity::set_class_specific_throw_params()
@@ -298,13 +298,13 @@ void ObjectThrowEntity::check_boomerang_throw()
 void ObjectThrowEntity::process_boomerang_back()
 {
     if (this->come_back) {
-        if ((this->item != INVEN_MAIN_HAND) && (this->item != INVEN_SUB_HAND)) {
+        if ((this->i_idx != INVEN_MAIN_HAND) && (this->i_idx != INVEN_SUB_HAND)) {
             store_item_to_inventory(this->player_ptr, this->q_ptr);
             this->do_drop = false;
             return;
         }
 
-        this->o_ptr = &player_ptr->inventory_list[this->item];
+        this->o_ptr = &player_ptr->inventory_list[this->i_idx];
         this->o_ptr->copy_from(this->q_ptr);
         this->player_ptr->equip_cnt++;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
@@ -320,7 +320,7 @@ void ObjectThrowEntity::process_boomerang_back()
     }
 
     if (this->equiped_item) {
-        verify_equip_slot(this->player_ptr, this->item);
+        verify_equip_slot(this->player_ptr, this->i_idx);
         calc_android_exp(this->player_ptr);
     }
 }
@@ -340,8 +340,8 @@ void ObjectThrowEntity::drop_thrown_item()
 bool ObjectThrowEntity::check_what_throw()
 {
     if (this->shuriken >= 0) {
-        this->item = this->shuriken;
-        this->o_ptr = &this->player_ptr->inventory_list[this->item];
+        this->i_idx = this->shuriken;
+        this->o_ptr = &this->player_ptr->inventory_list[this->i_idx];
         return true;
     }
 
@@ -349,10 +349,9 @@ bool ObjectThrowEntity::check_what_throw()
         return this->check_throw_boomerang();
     }
 
-    concptr q, s;
-    q = _("どのアイテムを投げますか? ", "Throw which item? ");
-    s = _("投げるアイテムがない。", "You have nothing to throw.");
-    this->o_ptr = choose_object(this->player_ptr, &this->item, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP);
+    constexpr auto q = _("どのアイテムを投げますか? ", "Throw which item? ");
+    constexpr auto s = _("投げるアイテムがない。", "You have nothing to throw.");
+    this->o_ptr = choose_object(this->player_ptr, &this->i_idx, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP);
     if (!this->o_ptr) {
         flush();
         return false;
@@ -367,7 +366,7 @@ bool ObjectThrowEntity::check_throw_boomerang()
         concptr q, s;
         q = _("どの武器を投げますか? ", "Throw which item? ");
         s = _("投げる武器がない。", "You have nothing to throw.");
-        this->o_ptr = choose_object(this->player_ptr, &this->item, q, s, USE_EQUIP, FuncItemTester(&ItemEntity::is_throwable));
+        this->o_ptr = choose_object(this->player_ptr, &this->i_idx, q, s, USE_EQUIP, FuncItemTester(&ItemEntity::is_throwable));
         if (!this->o_ptr) {
             flush();
             return false;
@@ -377,13 +376,13 @@ bool ObjectThrowEntity::check_throw_boomerang()
     }
 
     if (has_melee_weapon(this->player_ptr, INVEN_SUB_HAND)) {
-        this->item = INVEN_SUB_HAND;
-        this->o_ptr = &this->player_ptr->inventory_list[this->item];
+        this->i_idx = INVEN_SUB_HAND;
+        this->o_ptr = &this->player_ptr->inventory_list[this->i_idx];
         return true;
     }
 
-    this->item = INVEN_MAIN_HAND;
-    this->o_ptr = &this->player_ptr->inventory_list[this->item];
+    this->i_idx = INVEN_MAIN_HAND;
+    this->o_ptr = &this->player_ptr->inventory_list[this->i_idx];
     return true;
 }
 
@@ -500,7 +499,7 @@ void ObjectThrowEntity::calc_racial_power_damage()
     this->tdam = critical_shot(this->player_ptr, this->q_ptr->weight, this->q_ptr->to_h, 0, this->tdam);
     this->tdam += (this->q_ptr->to_d > 0 ? 1 : -1) * this->q_ptr->to_d;
     if (this->boomerang) {
-        this->tdam *= (this->mult + this->player_ptr->num_blow[this->item - INVEN_MAIN_HAND]);
+        this->tdam *= (this->mult + this->player_ptr->num_blow[this->i_idx - INVEN_MAIN_HAND]);
         this->tdam += this->player_ptr->to_d_m;
     } else if (this->obj_flags.has(TR_THROW)) {
         this->tdam *= (3 + this->mult);
@@ -553,13 +552,13 @@ void ObjectThrowEntity::process_boomerang_throw()
 void ObjectThrowEntity::display_boomerang_throw()
 {
     const auto is_blind = this->player_ptr->effects()->blindness()->is_blind();
-    if ((this->back_chance > 37) && !is_blind && (this->item >= 0)) {
+    if ((this->back_chance > 37) && !is_blind && (this->i_idx >= 0)) {
         msg_format(_("%sが手元に返ってきた。", "%s comes back to you."), this->o2_name.data());
         this->come_back = true;
         return;
     }
 
-    auto back_message = this->item >= 0 ? _("%sを受け損ねた！", "%s comes back, but you can't catch!") : _("%sが返ってきた。", "%s comes back.");
+    auto back_message = this->i_idx >= 0 ? _("%sを受け損ねた！", "%s comes back, but you can't catch!") : _("%sが返ってきた。", "%s comes back.");
     msg_format(back_message, this->o2_name.data());
     this->y = this->player_ptr->y;
     this->x = this->player_ptr->x;

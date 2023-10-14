@@ -109,19 +109,18 @@ void do_cmd_inven(PlayerType *player_ptr)
  */
 void do_cmd_drop(PlayerType *player_ptr)
 {
-    OBJECT_IDX item;
     int amt = 1;
-    ItemEntity *o_ptr;
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     constexpr auto q = _("どのアイテムを落としますか? ", "Drop which item? ");
     constexpr auto s = _("落とせるアイテムを持っていない。", "You have nothing to drop.");
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT));
+    short i_idx;
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT));
     if (!o_ptr) {
         return;
     }
 
-    if ((item >= INVEN_MAIN_HAND) && o_ptr->is_cursed()) {
+    if ((i_idx >= INVEN_MAIN_HAND) && o_ptr->is_cursed()) {
         msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
         return;
     }
@@ -134,9 +133,9 @@ void do_cmd_drop(PlayerType *player_ptr)
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(50);
-    drop_from_inventory(player_ptr, item, amt);
-    if (item >= INVEN_MAIN_HAND) {
-        verify_equip_slot(player_ptr, item);
+    drop_from_inventory(player_ptr, i_idx, amt);
+    if (i_idx >= INVEN_MAIN_HAND) {
+        verify_equip_slot(player_ptr, i_idx);
         calc_android_exp(player_ptr);
     }
 
@@ -148,10 +147,10 @@ void do_cmd_drop(PlayerType *player_ptr)
  */
 void do_cmd_observe(PlayerType *player_ptr)
 {
-    OBJECT_IDX item;
     constexpr auto q = _("どのアイテムを調べますか? ", "Examine which item? ");
     constexpr auto s = _("調べられるアイテムがない。", "You have nothing to examine.");
-    auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+    short i_idx;
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
     if (!o_ptr) {
         return;
     }
@@ -174,11 +173,10 @@ void do_cmd_observe(PlayerType *player_ptr)
  */
 void do_cmd_uninscribe(PlayerType *player_ptr)
 {
-    OBJECT_IDX item;
-    ItemEntity *o_ptr;
     constexpr auto q = _("どのアイテムの銘を消しますか? ", "Un-inscribe which item? ");
     constexpr auto s = _("銘を消せるアイテムがない。", "You have nothing to un-inscribe.");
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+    short i_idx;
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
     if (!o_ptr) {
         return;
     }
@@ -211,10 +209,10 @@ void do_cmd_uninscribe(PlayerType *player_ptr)
  */
 void do_cmd_inscribe(PlayerType *player_ptr)
 {
-    OBJECT_IDX item;
     constexpr auto q = _("どのアイテムに銘を刻みますか? ", "Inscribe which item? ");
     constexpr auto s = _("銘を刻めるアイテムがない。", "You have nothing to inscribe.");
-    auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+    short i_idx;
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
     if (!o_ptr) {
         return;
     }
@@ -260,8 +258,8 @@ void do_cmd_use(PlayerType *player_ptr)
     constexpr auto q = _("どれを使いますか？", "Use which item? ");
     constexpr auto s = _("使えるものがありません。", "You have nothing to use.");
     const auto options = USE_INVEN | USE_EQUIP | USE_FLOOR | IGNORE_BOTHHAND_SLOT;
-    short item;
-    const auto *o_ptr = choose_object(player_ptr, &item, q, s, options, FuncItemTester(item_tester_hook_use, player_ptr));
+    short i_idx;
+    const auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, options, FuncItemTester(item_tester_hook_use, player_ptr));
     if (o_ptr == nullptr) {
         return;
     }
@@ -271,34 +269,34 @@ void do_cmd_use(PlayerType *player_ptr)
         do_cmd_spike(player_ptr);
         break;
     case ItemKindType::FOOD:
-        exe_eat_food(player_ptr, item);
+        exe_eat_food(player_ptr, i_idx);
         break;
     case ItemKindType::WAND:
-        ObjectZapWandEntity(player_ptr).execute(item);
+        ObjectZapWandEntity(player_ptr).execute(i_idx);
         break;
     case ItemKindType::STAFF:
-        ObjectUseEntity(player_ptr, item).execute();
+        ObjectUseEntity(player_ptr, i_idx).execute();
         break;
     case ItemKindType::ROD:
-        ObjectZapRodEntity(player_ptr).execute(item);
+        ObjectZapRodEntity(player_ptr).execute(i_idx);
         break;
     case ItemKindType::POTION:
-        ObjectQuaffEntity(player_ptr).execute(item);
+        ObjectQuaffEntity(player_ptr).execute(i_idx);
         break;
     case ItemKindType::SCROLL:
         if (cmd_limit_blind(player_ptr) || cmd_limit_confused(player_ptr)) {
             return;
         }
 
-        ObjectReadEntity(player_ptr, item).execute(true);
+        ObjectReadEntity(player_ptr, i_idx).execute(true);
         break;
     case ItemKindType::SHOT:
     case ItemKindType::ARROW:
     case ItemKindType::BOLT:
-        exe_fire(player_ptr, item, &player_ptr->inventory_list[INVEN_BOW], SP_NONE);
+        exe_fire(player_ptr, i_idx, &player_ptr->inventory_list[INVEN_BOW], SP_NONE);
         break;
     default:
-        exe_activate(player_ptr, item);
+        exe_activate(player_ptr, i_idx);
         break;
     }
 }
@@ -309,18 +307,17 @@ void do_cmd_use(PlayerType *player_ptr)
  */
 void do_cmd_activate(PlayerType *player_ptr)
 {
-    OBJECT_IDX item;
     if (player_ptr->wild_mode || cmd_limit_arena(player_ptr)) {
         return;
     }
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU, SamuraiStanceType::KOUKIJIN });
-
     constexpr auto q = _("どのアイテムを始動させますか? ", "Activate which item? ");
     constexpr auto s = _("始動できるアイテムを装備していない。", "You have nothing to activate.");
-    if (!choose_object(player_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), FuncItemTester(&ItemEntity::is_activatable))) {
+    short i_idx;
+    if (!choose_object(player_ptr, &i_idx, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), FuncItemTester(&ItemEntity::is_activatable))) {
         return;
     }
 
-    exe_activate(player_ptr, item);
+    exe_activate(player_ptr, i_idx);
 }

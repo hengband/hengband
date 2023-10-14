@@ -346,17 +346,13 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
  */
 void do_cmd_eat_food(PlayerType *player_ptr)
 {
-    OBJECT_IDX item;
-    concptr q, s;
-
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU, SamuraiStanceType::KOUKIJIN });
-
-    q = _("どれを食べますか? ", "Eat which item? ");
-    s = _("食べ物がない。", "You have nothing to eat.");
-
-    if (!choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(item_tester_hook_eatable, player_ptr))) {
+    constexpr auto q = _("どれを食べますか? ", "Eat which item? ");
+    constexpr auto s = _("食べ物がない。", "You have nothing to eat.");
+    short i_idx;
+    if (!choose_object(player_ptr, &i_idx, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(item_tester_hook_eatable, player_ptr))) {
         return;
     }
 
-    exe_eat_food(player_ptr, item);
+    exe_eat_food(player_ptr, i_idx);
 }

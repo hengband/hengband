@@ -90,14 +90,14 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
         break;
     }
 
-    short item_index;
+    short i_idx;
     const auto options = USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT;
-    auto *o_ptr = choose_object(player_ptr, &item_index, q, s_none, options, FuncItemTester(store_will_buy, player_ptr, store_num));
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s_none, options, FuncItemTester(store_will_buy, player_ptr, store_num));
     if (o_ptr == nullptr) {
         return;
     }
 
-    if ((item_index >= INVEN_MAIN_HAND) && o_ptr->is_cursed()) {
+    if ((i_idx >= INVEN_MAIN_HAND) && o_ptr->is_cursed()) {
         msg_print(_("ふーむ、どうやらそれは呪われているようだね。", "Hmmm, it seems to be cursed."));
         return;
     }
@@ -132,7 +132,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
     bool placed = false;
     if ((store_num != StoreSaleType::HOME) && (store_num != StoreSaleType::MUSEUM)) {
         const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
-        msg_format(_("%s(%c)を売却する。", "Selling %s (%c)."), item_name.data(), index_to_label(item_index));
+        msg_format(_("%s(%c)を売却する。", "Selling %s (%c)."), item_name.data(), index_to_label(i_idx));
         msg_print(nullptr);
 
         auto res = prompt_to_sell(player_ptr, q_ptr, store_num);
@@ -179,13 +179,13 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
 
             distribute_charges(o_ptr, q_ptr, amt);
             q_ptr->timeout = 0;
-            inven_item_increase(player_ptr, item_index, -amt);
-            inven_item_describe(player_ptr, item_index);
+            inven_item_increase(player_ptr, i_idx, -amt);
+            inven_item_describe(player_ptr, i_idx);
             if (o_ptr->number > 0) {
-                autopick_alter_item(player_ptr, item_index, false);
+                autopick_alter_item(player_ptr, i_idx, false);
             }
 
-            inven_item_optimize(player_ptr, item_index);
+            inven_item_optimize(player_ptr, i_idx);
             int item_pos = store_carry(q_ptr);
             if (item_pos >= 0) {
                 store_top = (item_pos / store_bottom) * store_bottom;
@@ -208,10 +208,10 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
         q_ptr->ident |= IDENT_FULL_KNOWN;
 
         distribute_charges(o_ptr, q_ptr, amt);
-        msg_format(_("%sを置いた。(%c)", "You drop %s (%c)."), museum_item_name.data(), index_to_label(item_index));
+        msg_format(_("%sを置いた。(%c)", "You drop %s (%c)."), museum_item_name.data(), index_to_label(i_idx));
         placed = true;
 
-        vary_item(player_ptr, item_index, -amt);
+        vary_item(player_ptr, i_idx, -amt);
 
         int item_pos = home_carry(player_ptr, q_ptr, store_num);
         if (item_pos >= 0) {
@@ -221,9 +221,9 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
     } else {
         distribute_charges(o_ptr, q_ptr, amt);
         const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
-        msg_format(_("%sを置いた。(%c)", "You drop %s (%c)."), item_name.data(), index_to_label(item_index));
+        msg_format(_("%sを置いた。(%c)", "You drop %s (%c)."), item_name.data(), index_to_label(i_idx));
         placed = true;
-        vary_item(player_ptr, item_index, -amt);
+        vary_item(player_ptr, i_idx, -amt);
         int item_pos = home_carry(player_ptr, q_ptr, store_num);
         if (item_pos >= 0) {
             store_top = (item_pos / store_bottom) * store_bottom;
@@ -236,8 +236,8 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
     rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     handle_stuff(player_ptr);
 
-    if (placed && (item_index >= INVEN_MAIN_HAND)) {
+    if (placed && (i_idx >= INVEN_MAIN_HAND)) {
         calc_android_exp(player_ptr);
-        verify_equip_slot(player_ptr, item_index);
+        verify_equip_slot(player_ptr, i_idx);
     }
 }

@@ -129,23 +129,21 @@ void do_cmd_equip(PlayerType *player_ptr)
  */
 void do_cmd_wield(PlayerType *player_ptr)
 {
-    OBJECT_IDX item, slot;
     ItemEntity forge;
     ItemEntity *q_ptr;
-    ItemEntity *o_ptr;
     concptr act;
     OBJECT_IDX need_switch_wielding = 0;
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     constexpr auto selection_q = _("どれを装備しますか? ", "Wear/Wield which item? ");
     constexpr auto selection_s = _("装備可能なアイテムがない。", "You have nothing you can wear or wield.");
-    o_ptr = choose_object(player_ptr, &item, selection_q, selection_s, (USE_INVEN | USE_FLOOR), FuncItemTester(item_tester_hook_wear, player_ptr));
+    short i_idx;
+    auto *o_ptr = choose_object(player_ptr, &i_idx, selection_q, selection_s, (USE_INVEN | USE_FLOOR), FuncItemTester(item_tester_hook_wear, player_ptr));
     if (!o_ptr) {
         return;
     }
 
-    slot = wield_slot(player_ptr, o_ptr);
-
+    auto slot = wield_slot(player_ptr, o_ptr);
     const auto o_ptr_mh = &player_ptr->inventory_list[INVEN_MAIN_HAND];
     const auto o_ptr_sh = &player_ptr->inventory_list[INVEN_SUB_HAND];
     const auto tval = o_ptr->bi_key.tval();
@@ -274,19 +272,19 @@ void do_cmd_wield(PlayerType *player_ptr)
     check_find_art_quest_completion(player_ptr, o_ptr);
     if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
         identify_item(player_ptr, o_ptr);
-        autopick_alter_item(player_ptr, item, false);
+        autopick_alter_item(player_ptr, i_idx, false);
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
     q_ptr->number = 1;
-    if (item >= 0) {
-        inven_item_increase(player_ptr, item, -1);
-        inven_item_optimize(player_ptr, item);
+    if (i_idx >= 0) {
+        inven_item_increase(player_ptr, i_idx, -1);
+        inven_item_optimize(player_ptr, i_idx);
     } else {
-        floor_item_increase(player_ptr, 0 - item, -1);
-        floor_item_optimize(player_ptr, 0 - item);
+        floor_item_increase(player_ptr, 0 - i_idx, -1);
+        floor_item_optimize(player_ptr, 0 - i_idx);
     }
 
     o_ptr = &player_ptr->inventory_list[slot];
@@ -369,14 +367,13 @@ void do_cmd_wield(PlayerType *player_ptr)
  */
 void do_cmd_takeoff(PlayerType *player_ptr)
 {
-    OBJECT_IDX item;
-    ItemEntity *o_ptr;
     PlayerClass pc(player_ptr);
     pc.break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     constexpr auto q = _("どれを装備からはずしますか? ", "Take off which item? ");
     constexpr auto s = _("はずせる装備がない。", "You are not wearing anything to take off.");
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT));
+    short i_idx;
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT));
     if (!o_ptr) {
         return;
     }
@@ -406,8 +403,8 @@ void do_cmd_takeoff(PlayerType *player_ptr)
 
     sound(SOUND_TAKE_OFF);
     energy.set_player_turn_energy(50);
-    (void)inven_takeoff(player_ptr, item, 255);
-    verify_equip_slot(player_ptr, item);
+    (void)inven_takeoff(player_ptr, i_idx, 255);
+    verify_equip_slot(player_ptr, i_idx);
     calc_android_exp(player_ptr);
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,

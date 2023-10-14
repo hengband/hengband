@@ -633,29 +633,28 @@ void floor_item_describe(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 }
 
 /*
- * Choose an item and get auto-picker entry from it.
+ * @brief Choose an item and get auto-picker entry from it.
+ * @todo initial_i_idx をポインタではなく値に変え、戻り値をstd::pairに変える
  */
-ItemEntity *choose_object(PlayerType *player_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, const ItemTester &item_tester)
+ItemEntity *choose_object(PlayerType *player_ptr, short *initial_i_idx, concptr q, concptr s, BIT_FLAGS option, const ItemTester &item_tester)
 {
-    OBJECT_IDX item;
-
-    if (idx) {
-        *idx = INVEN_NONE;
+    if (initial_i_idx) {
+        *initial_i_idx = INVEN_NONE;
     }
 
     FixItemTesterSetter setter(item_tester);
-
-    if (!get_item(player_ptr, &item, q, s, option, item_tester)) {
+    short i_idx;
+    if (!get_item(player_ptr, &i_idx, q, s, option, item_tester)) {
         return nullptr;
     }
 
-    if (idx) {
-        *idx = item;
+    if (initial_i_idx) {
+        *initial_i_idx = i_idx;
     }
 
-    if (item == INVEN_FORCE) {
+    if (i_idx == INVEN_FORCE) {
         return nullptr;
     }
 
-    return ref_item(player_ptr, item);
+    return ref_item(player_ptr, i_idx);
 }
