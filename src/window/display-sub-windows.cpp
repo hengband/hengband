@@ -452,9 +452,9 @@ static void display_dungeon(PlayerType *player_ptr)
             TERM_COLOR a;
             char c;
             if (!in_bounds2(player_ptr->current_floor_ptr, y, x)) {
-                auto *f_ptr = &terrains_info[feat_none];
-                a = f_ptr->x_attr[F_LIT_STANDARD];
-                c = f_ptr->x_char[F_LIT_STANDARD];
+                const auto &terrain = TerrainList::get_instance()[feat_none];
+                a = terrain.x_attr[F_LIT_STANDARD];
+                c = terrain.x_char[F_LIT_STANDARD];
                 term_queue_char(x - player_ptr->x + game_term->wid / 2 - 1, y - player_ptr->y + game_term->hgt / 2 - 1, a, c, ta, tc);
                 continue;
             }

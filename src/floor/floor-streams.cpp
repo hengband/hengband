@@ -103,6 +103,7 @@ static void recursive_river(FloorType *floor_ptr, POSITION x1, POSITION y1, POSI
         }
     } else {
         /* Actually build the river */
+        const auto &terrains = TerrainList::get_instance();
         for (l = 0; l < length; l++) {
             x = x1 + l * (x2 - x1) / length;
             y = y1 + l * (y2 - y1) / length;
@@ -148,7 +149,7 @@ static void recursive_river(FloorType *floor_ptr, POSITION x1, POSITION y1, POSI
                         g_ptr->mimic = 0;
 
                         /* Lava terrain glows */
-                        if (terrains_info[feat1].flags.has(TerrainCharacteristics::LAVA)) {
+                        if (terrains[feat1].flags.has(TerrainCharacteristics::LAVA)) {
                             if (floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS)) {
                                 g_ptr->info |= CAVE_GLOW;
                             }
@@ -216,11 +217,11 @@ void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
     }
 
     if (feat1) {
-        auto *f_ptr = &terrains_info[feat1];
+        const auto &terrain = TerrainList::get_instance()[feat1];
         auto is_lava = dd_ptr->laketype == LAKE_T_LAVA;
-        is_lava &= f_ptr->flags.has(TerrainCharacteristics::LAVA);
+        is_lava &= terrain.flags.has(TerrainCharacteristics::LAVA);
         auto is_water = dd_ptr->laketype == LAKE_T_WATER;
-        is_water &= f_ptr->flags.has(TerrainCharacteristics::WATER);
+        is_water &= terrain.flags.has(TerrainCharacteristics::WATER);
         const auto should_add_river = !is_lava && !is_water && (dd_ptr->laketype != 0);
         if (should_add_river) {
             return;
@@ -295,9 +296,9 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
     grid_type *g_ptr;
     TerrainType *f_ptr;
 
-    TerrainType *streamer_ptr = &terrains_info[feat];
-    bool streamer_is_wall = streamer_ptr->flags.has(TerrainCharacteristics::WALL) && streamer_ptr->flags.has_not(TerrainCharacteristics::PERMANENT);
-    bool streamer_may_have_gold = streamer_ptr->flags.has(TerrainCharacteristics::MAY_HAVE_GOLD);
+    const auto &streamer = TerrainList::get_instance()[feat];
+    bool streamer_is_wall = streamer.flags.has(TerrainCharacteristics::WALL) && streamer.flags.has_not(TerrainCharacteristics::PERMANENT);
+    bool streamer_may_have_gold = streamer.flags.has(TerrainCharacteristics::MAY_HAVE_GOLD);
 
     /* Hack -- Choose starting point */
     auto *floor_ptr = player_ptr->current_floor_ptr;
@@ -349,12 +350,12 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
             }
 
             auto *r_ptr = &monraces_info[floor_ptr->m_list[g_ptr->m_idx].r_idx];
-            if (g_ptr->m_idx && !(streamer_ptr->flags.has(TerrainCharacteristics::PLACE) && monster_can_cross_terrain(player_ptr, feat, r_ptr, 0))) {
+            if (g_ptr->m_idx && !(streamer.flags.has(TerrainCharacteristics::PLACE) && monster_can_cross_terrain(player_ptr, feat, r_ptr, 0))) {
                 /* Delete the monster (if any) */
                 delete_monster(player_ptr, ty, tx);
             }
 
-            if (!g_ptr->o_idx_list.empty() && streamer_ptr->flags.has_not(TerrainCharacteristics::DROP)) {
+            if (!g_ptr->o_idx_list.empty() && streamer.flags.has_not(TerrainCharacteristics::DROP)) {
 
                 /* Scan all objects in the grid */
                 for (const auto this_o_idx : g_ptr->o_idx_list) {

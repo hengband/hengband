@@ -44,7 +44,7 @@ int16_t old_town_num = 0;
 int16_t inner_town_num = 0;
 
 /* We store the current "store feat" here so everyone can access it */
-int cur_store_feat;
+short cur_store_feat;
 
 /* Enable "increments" */
 bool allow_inc = false;
