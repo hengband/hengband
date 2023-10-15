@@ -10,7 +10,6 @@
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-flags.h"
 #include "racial/racial-android.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
@@ -36,7 +35,7 @@ bool bless_weapon(PlayerType *player_ptr)
     }
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
-    auto item_flags = object_flags(o_ptr);
+    const auto item_flags = o_ptr->get_flags();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (o_ptr->is_cursed()) {
         auto can_disturb_blessing = o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE) && (randint1(100) < 33);

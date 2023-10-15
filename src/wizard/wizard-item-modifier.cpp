@@ -20,7 +20,6 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object/item-use-flags.h"
-#include "object/object-flags.h"
 #include "object/object-info.h"
 #include "object/object-kind-hook.h"
 #include "object/object-mark-types.h"
@@ -381,7 +380,6 @@ static void prt_binary(BIT_FLAGS flags, const int row, int col)
  */
 static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    auto flags = object_flags(o_ptr);
     auto get_seq_32bits = [](const TrFlags &flags, uint start) {
         BIT_FLAGS result = 0U;
         for (auto i = 0U; i < 32 && start + i < flags.size(); i++) {
@@ -413,6 +411,7 @@ static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     prt(format("cursed  = %-4lX  captured_monster_speed = %-4d", o_ptr->curse_flags.to_ulong(), o_ptr->captured_monster_speed), ++line, j);
     prt(format("captured_monster_max_hp = %-4d  captured_monster_max_hp = %-4d", o_ptr->captured_monster_current_hp, o_ptr->captured_monster_max_hp), ++line, j);
 
+    const auto flags = o_ptr->get_flags();
     prt("+------------FLAGS1------------+", ++line, j);
     prt("AFFECT........SLAY........BRAND.", ++line, j);
     prt("      mf      cvae      xsqpaefc", ++line, j);

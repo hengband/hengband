@@ -44,7 +44,6 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-broken.h"
-#include "object/object-flags.h"
 #include "object/object-info.h"
 #include "object/object-stack.h"
 #include "player-base/player-class.h"
@@ -106,7 +105,7 @@ bool ObjectThrowEntity::check_can_throw()
 void ObjectThrowEntity::calc_throw_range()
 {
     this->q_ptr->copy_from(this->o_ptr);
-    this->obj_flags = object_flags(this->q_ptr);
+    this->obj_flags = this->q_ptr->get_flags();
     torch_flags(this->q_ptr, this->obj_flags);
     distribute_charges(this->o_ptr, this->q_ptr, 1);
     this->q_ptr->number = 1;

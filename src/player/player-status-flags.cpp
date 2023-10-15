@@ -10,7 +10,6 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-hook/hook-weapon.h"
-#include "object/object-flags.h"
 #include "player-ability/player-charisma.h"
 #include "player-ability/player-constitution.h"
 #include "player-ability/player-dexterity.h"
@@ -128,7 +127,7 @@ BIT_FLAGS check_equipment_flags(PlayerType *player_ptr, tr_type tr_flag)
             continue;
         }
 
-        auto flags = object_flags(o_ptr);
+        const auto flags = o_ptr->get_flags();
 
         if (flags.has(tr_flag)) {
             set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
@@ -802,7 +801,7 @@ BIT_FLAGS has_warning(PlayerType *player_ptr)
             continue;
         }
 
-        auto flags = object_flags(o_ptr);
+        const auto flags = o_ptr->get_flags();
 
         if (flags.has(TR_WARNING)) {
             if (!o_ptr->is_inscribed() || !angband_strchr(o_ptr->inscription->data(), '$')) {
@@ -1071,7 +1070,7 @@ void update_curses(PlayerType *player_ptr)
         if (!o_ptr->is_valid()) {
             continue;
         }
-        auto flags = object_flags(o_ptr);
+        const auto flags = o_ptr->get_flags();
         if (flags.has(TR_AGGRAVATE)) {
             player_ptr->cursed.set(CurseTraitType::AGGRAVATE);
         }
@@ -1182,7 +1181,7 @@ void update_extra_blows(PlayerType *player_ptr)
             continue;
         }
 
-        auto flags = object_flags(o_ptr);
+        const auto flags = o_ptr->get_flags();
         if (flags.has(TR_BLOWS)) {
             if ((i == INVEN_MAIN_HAND || i == INVEN_MAIN_RING) && !two_handed) {
                 player_ptr->extra_blows[0] += o_ptr->pval;
@@ -1485,7 +1484,7 @@ BIT_FLAGS has_vuln_curse(PlayerType *player_ptr)
             continue;
         }
 
-        auto flags = object_flags(o_ptr);
+        const auto flags = o_ptr->get_flags();
 
         if (flags.has(TR_VUL_CURSE) || o_ptr->curse_flags.has(CurseTraitType::VUL_CURSE)) {
             set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
@@ -1510,7 +1509,7 @@ BIT_FLAGS has_heavy_vuln_curse(PlayerType *player_ptr)
             continue;
         }
 
-        auto flags = object_flags(o_ptr);
+        const auto flags = o_ptr->get_flags();
 
         if ((flags.has(TR_VUL_CURSE) || o_ptr->curse_flags.has(CurseTraitType::VUL_CURSE)) && o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
             set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
@@ -1726,8 +1725,8 @@ bool has_disable_two_handed_bonus(PlayerType *player_ptr, int i)
  */
 bool is_wielding_icky_weapon(PlayerType *player_ptr, int i)
 {
-    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
-    auto flags = object_flags(o_ptr);
+    const auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
+    const auto flags = o_ptr->get_flags();
 
     const auto tval = o_ptr->bi_key.tval();
     const auto has_no_weapon = (tval == ItemKindType::NONE) || (tval == ItemKindType::SHIELD);
@@ -1754,8 +1753,8 @@ bool is_wielding_icky_weapon(PlayerType *player_ptr, int i)
  */
 bool is_wielding_icky_riding_weapon(PlayerType *player_ptr, int i)
 {
-    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
-    auto flags = object_flags(o_ptr);
+    const auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
+    const auto flags = o_ptr->get_flags();
     const auto tval = o_ptr->bi_key.tval();
     const auto has_no_weapon = (tval == ItemKindType::NONE) || (tval == ItemKindType::SHIELD);
     const auto is_suitable = o_ptr->is_lance() || flags.has(TR_RIDING);

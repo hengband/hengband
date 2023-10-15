@@ -12,7 +12,6 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
-#include "object/object-flags.h"
 #include "perception/object-perception.h"
 #include "player/permanent-resistances.h"
 #include "player/race-resistances.h"
@@ -110,7 +109,7 @@ static void process_cursed_equipment_characteristics(PlayerType *player_ptr, uin
         auto *o_ptr = &player_ptr->inventory_list[i];
         auto is_known = o_ptr->is_known();
         auto is_sensed = is_known || o_ptr->ident & IDENT_SENSE;
-        auto flags = object_flags_known(o_ptr);
+        auto flags = o_ptr->get_flags_known();
 
         if (flags.has(TR_ADD_L_CURSE) || flags.has(TR_ADD_H_CURSE)) {
             if (is_known) {
@@ -157,7 +156,7 @@ static void process_light_equipment_characteristics(PlayerType *player_ptr, all_
     int max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
     for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        auto flags = object_flags_known(o_ptr);
+        auto flags = o_ptr->get_flags_known();
 
         auto b = false;
         for (auto flg : lite_flags) {
@@ -206,7 +205,7 @@ static void process_inventory_characteristic(PlayerType *player_ptr, tr_type fla
     int max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
     for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        auto flags = object_flags_known(o_ptr);
+        auto flags = o_ptr->get_flags_known();
 
         auto f_imm = flag_to_greater_flag.find(flag);
         if (f_imm != flag_to_greater_flag.end()) {

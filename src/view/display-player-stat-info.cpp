@@ -10,7 +10,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
-#include "object/object-flags.h"
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player-info/mimic-info-table.h"
@@ -209,7 +208,7 @@ static void display_equipments_compensation(PlayerType *player_ptr, int row, int
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
-        auto flags = object_flags_known(o_ptr);
+        auto flags = o_ptr->get_flags_known();
         for (int stat = 0; stat < A_MAX; stat++) {
             TERM_COLOR a = TERM_SLATE;
             char c = '.';

@@ -7,7 +7,6 @@
 #include "object-hook/hook-expendable.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-flags.h"
 #include "player-base/player-class.h"
 #include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
@@ -37,11 +36,11 @@ static void do_cmd_refill_lamp(PlayerType *player_ptr)
         return;
     }
 
-    auto flags = object_flags(o_ptr);
+    const auto flags = o_ptr->get_flags();
 
     PlayerEnergy(player_ptr).set_player_turn_energy(50);
     j_ptr = &player_ptr->inventory_list[INVEN_LITE];
-    auto flags2 = object_flags(j_ptr);
+    const auto flags2 = j_ptr->get_flags();
     j_ptr->fuel += o_ptr->fuel;
     msg_print(_("ランプに油を注いだ。", "You fuel your lamp."));
     if (flags.has(TR_DARK_SOURCE) && (j_ptr->fuel > 0)) {
@@ -75,11 +74,11 @@ static void do_cmd_refill_torch(PlayerType *player_ptr)
         return;
     }
 
-    auto flags = object_flags(o_ptr);
+    const auto flags = o_ptr->get_flags();
 
     PlayerEnergy(player_ptr).set_player_turn_energy(50);
     j_ptr = &player_ptr->inventory_list[INVEN_LITE];
-    auto flags2 = object_flags(j_ptr);
+    const auto flags2 = j_ptr->get_flags();
     j_ptr->fuel += o_ptr->fuel + 5;
     msg_print(_("松明を結合した。", "You combine the torches."));
     if (flags.has(TR_DARK_SOURCE) && (j_ptr->fuel > 0)) {

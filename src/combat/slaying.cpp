@@ -10,7 +10,6 @@
 #include "monster-race/race-resistance-mask.h"
 #include "monster/monster-info.h"
 #include "object-enchant/tr-types.h"
-#include "object/object-flags.h"
 #include "object/tval-types.h"
 #include "player-base/player-class.h"
 #include "player/attack-defense-types.h"
@@ -152,7 +151,7 @@ MULTIPLY mult_brand(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flags,
  */
 int calc_attack_damage_with_slay(PlayerType *player_ptr, ItemEntity *o_ptr, int tdam, MonsterEntity *m_ptr, combat_options mode, bool thrown)
 {
-    auto flags = object_flags(o_ptr);
+    auto flags = o_ptr->get_flags();
     torch_flags(o_ptr, flags); /* torches has secret flags */
 
     if (!thrown) {
@@ -244,7 +243,7 @@ AttributeFlags melee_attribute(PlayerType *player_ptr, ItemEntity *o_ptr, combat
         }
     }
 
-    auto flags = object_flags(o_ptr);
+    auto flags = o_ptr->get_flags();
 
     if (player_ptr->special_attack & (ATTACK_ACID)) {
         flags.set(TR_BRAND_ACID);

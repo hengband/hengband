@@ -15,7 +15,6 @@
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-flags.h"
 #include "object/object-kind-hook.h"
 #include "object/object-value.h"
 #include "racial/racial-android.h"
@@ -40,8 +39,8 @@
  */
 static void give_one_ability_of_object(ItemEntity *to_ptr, ItemEntity *from_ptr)
 {
-    auto to_flags = object_flags(to_ptr);
-    auto from_flags = object_flags(from_ptr);
+    const auto to_flags = to_ptr->get_flags();
+    const auto from_flags = from_ptr->get_flags();
 
     std::vector<tr_type> candidates;
     for (int i = 0; i < TR_FLAG_MAX; i++) {

@@ -3,7 +3,6 @@
 #include "mind/mind-elementalist.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
-#include "object/object-flags.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/race-info.h"
@@ -87,7 +86,7 @@ void known_obj_immunity(PlayerType *player_ptr, TrFlags &flags)
             continue;
         }
 
-        auto o_flags = object_flags_known(o_ptr);
+        auto o_flags = o_ptr->get_flags_known();
         if (o_flags.has(TR_IM_ACID)) {
             flags.set(TR_RES_ACID);
         }

@@ -10,7 +10,6 @@
 #include "io/input-key-acceptor.h"
 #include "object-enchant/object-ego.h"
 #include "object/item-use-flags.h"
-#include "object/object-flags.h"
 #include "player-info/equipment-info.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"

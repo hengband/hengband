@@ -43,7 +43,6 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "object/object-broken.h"
-#include "object/object-flags.h"
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "player-base/player-class.h"
@@ -84,11 +83,9 @@ AttributeFlags shot_attribute(PlayerType *player_ptr, ItemEntity *bow_ptr, ItemE
     AttributeFlags attribute_flags{};
     attribute_flags.set(AttributeType::PLAYER_SHOOT);
 
-    TrFlags flags{};
-    auto arrow_flags = object_flags(arrow_ptr);
-    auto bow_flags = object_flags(bow_ptr);
-
-    flags = bow_flags | arrow_flags;
+    const auto arrow_flags = arrow_ptr->get_flags();
+    const auto bow_flags = bow_ptr->get_flags();
+    const auto flags = bow_flags | arrow_flags;
 
     static const struct snipe_convert_table_t {
         SPELL_IDX snipe_type;
@@ -158,11 +155,9 @@ static MULTIPLY calc_shot_damage_with_slay(
 
     MonsterRaceInfo *race_ptr = &monraces_info[monster_ptr->r_idx];
 
-    TrFlags flags{};
-    auto arrow_flags = object_flags(arrow_ptr);
-    auto bow_flags = object_flags(bow_ptr);
-
-    flags = bow_flags | arrow_flags;
+    const auto arrow_flags = arrow_ptr->get_flags();
+    const auto bow_flags = bow_ptr->get_flags();
+    const auto flags = bow_flags | arrow_flags;
 
     /* Some "weapons" and "ammo" do extra damage */
     switch (arrow_ptr->bi_key.tval()) {

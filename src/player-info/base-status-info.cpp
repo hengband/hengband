@@ -1,7 +1,6 @@
 #include "player-info/base-status-info.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/tr-types.h"
-#include "object/object-flags.h"
 #include "player-info/self-info-util.h"
 #include "player/player-status-flags.h"
 #include "system/player-type-definition.h"
@@ -15,7 +14,7 @@ void set_equipment_influence(PlayerType *player_ptr, self_info_type *self_ptr)
             continue;
         }
 
-        auto tflags = object_flags(o_ptr);
+        const auto tflags = o_ptr->get_flags();
         self_ptr->flags.set(tflags);
     }
 

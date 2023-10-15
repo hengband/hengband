@@ -13,7 +13,6 @@
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-flags.h"
 #include "player-base/player-class.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-hex.h"
@@ -133,7 +132,7 @@ static void compare_weapon_aux(PlayerType *player_ptr, ItemEntity *o_ptr, int co
     int vorpal_div = 1;
     int dmg_bonus = o_ptr->to_d + player_ptr->to_d[0];
 
-    auto flags = object_flags(o_ptr);
+    const auto flags = o_ptr->get_flags();
     if (o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) {
         dokubari = true;
     }

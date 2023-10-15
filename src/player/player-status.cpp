@@ -46,7 +46,6 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-hook/hook-armor.h"
-#include "object/object-flags.h"
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
@@ -834,8 +833,8 @@ static void update_max_mana(PlayerType *player_ptr)
 
     if (any_bits(mp_ptr->spell_xtra, extra_magic_glove_reduce_mana)) {
         player_ptr->cumber_glove = false;
-        auto *o_ptr = &player_ptr->inventory_list[INVEN_ARMS];
-        auto flags = object_flags(o_ptr);
+        const auto *o_ptr = &player_ptr->inventory_list[INVEN_ARMS];
+        const auto flags = o_ptr->get_flags();
         auto should_mp_decrease = o_ptr->is_valid();
         should_mp_decrease &= flags.has_not(TR_FREE_ACT);
         should_mp_decrease &= flags.has_not(TR_DEC_MANA);
@@ -1060,14 +1059,12 @@ short calc_num_fire(PlayerType *player_ptr, const ItemEntity *o_ptr)
             continue;
         }
 
-        auto flags = object_flags(q_ptr);
-        if (flags.has(TR_XTRA_SHOTS)) {
+        if (q_ptr->get_flags().has(TR_XTRA_SHOTS)) {
             extra_shots++;
         }
     }
 
-    auto flags = object_flags(o_ptr);
-    if (flags.has(TR_XTRA_SHOTS)) {
+    if (o_ptr->get_flags().has(TR_XTRA_SHOTS)) {
         extra_shots++;
     }
 
@@ -1177,8 +1174,8 @@ static ACTION_SKILL_POWER calc_device_ability(PlayerType *player_ptr)
         if (!o_ptr->is_valid()) {
             continue;
         }
-        auto flags = object_flags(o_ptr);
-        if (flags.has(TR_MAGIC_MASTERY)) {
+
+        if (o_ptr->get_flags().has(TR_MAGIC_MASTERY)) {
             pow += 8 * o_ptr->pval;
         }
     }
@@ -1306,8 +1303,8 @@ static ACTION_SKILL_POWER calc_search(PlayerType *player_ptr)
         if (!o_ptr->is_valid()) {
             continue;
         }
-        auto flags = object_flags(o_ptr);
-        if (flags.has(TR_SEARCH)) {
+
+        if (o_ptr->get_flags().has(TR_SEARCH)) {
             pow += (o_ptr->pval * 5);
         }
     }
@@ -1357,8 +1354,8 @@ static ACTION_SKILL_POWER calc_search_freq(PlayerType *player_ptr)
         if (!o_ptr->is_valid()) {
             continue;
         }
-        auto flags = object_flags(o_ptr);
-        if (flags.has(TR_SEARCH)) {
+
+        if (o_ptr->get_flags().has(TR_SEARCH)) {
             pow += (o_ptr->pval * 5);
         }
     }
@@ -1495,8 +1492,8 @@ static ACTION_SKILL_POWER calc_skill_dig(PlayerType *player_ptr)
         if (!o_ptr->is_valid()) {
             continue;
         }
-        auto flags = object_flags(o_ptr);
-        if (flags.has(TR_TUNNEL)) {
+
+        if (o_ptr->get_flags().has(TR_TUNNEL)) {
             pow += (o_ptr->pval * 20);
         }
     }
@@ -1537,11 +1534,9 @@ static bool is_heavy_wield(PlayerType *player_ptr, int i)
 
 static int16_t calc_num_blow(PlayerType *player_ptr, int i)
 {
-    ItemEntity *o_ptr;
     int16_t num_blow = 1;
 
-    o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
-    auto flags = object_flags(o_ptr);
+    const auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
     PlayerClass pc(player_ptr);
     if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i)) {
         if (o_ptr->is_valid() && !player_ptr->heavy_wield[i]) {
@@ -1553,7 +1548,7 @@ static int16_t calc_num_blow(PlayerType *player_ptr, int i)
             wgt = info.wgt;
             mul = info.mul;
 
-            if (pc.equals(PlayerClassType::CAVALRY) && player_ptr->riding && flags.has(TR_RIDING)) {
+            if (pc.equals(PlayerClassType::CAVALRY) && player_ptr->riding && o_ptr->get_flags().has(TR_RIDING)) {
                 num = 5;
                 wgt = 70;
                 mul = 4;
@@ -1786,9 +1781,8 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
     }
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        ItemEntity *o_ptr;
-        o_ptr = &player_ptr->inventory_list[i];
-        auto flags = object_flags(o_ptr);
+        const auto *o_ptr = &player_ptr->inventory_list[i];
+        const auto flags = o_ptr->get_flags();
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -1796,7 +1790,7 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
             ac += o_ptr->to_a;
         }
 
-        if (o_ptr->curse_flags.has(CurseTraitType::LOW_AC) || object_flags(o_ptr).has(TR_LOW_AC)) {
+        if (o_ptr->curse_flags.has(CurseTraitType::LOW_AC) || flags.has(TR_LOW_AC)) {
             if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
                 if (is_real_value || o_ptr->is_fully_known()) {
                     ac -= 30;
@@ -1944,7 +1938,7 @@ int16_t calc_double_weapon_penalty(PlayerType *player_ptr, INVENTORY_IDX slot)
     int penalty = 0;
 
     if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
-        auto flags = object_flags(&player_ptr->inventory_list[INVEN_SUB_HAND]);
+        const auto flags = player_ptr->inventory_list[INVEN_SUB_HAND].get_flags();
 
         penalty = ((100 - player_ptr->skill_exp[PlayerSkillKindType::TWO_WEAPON] / 160) - (130 - player_ptr->inventory_list[slot].weight) / 8);
         if (set_quick_and_tiny(player_ptr) || set_icing_and_twinkle(player_ptr) || set_anubis_and_chariot(player_ptr)) {
@@ -2121,9 +2115,7 @@ static bool is_bare_knuckle(PlayerType *player_ptr)
 
 static short calc_to_damage(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_real_value)
 {
-    auto *o_ptr = &player_ptr->inventory_list[slot];
-    auto flags = object_flags(o_ptr);
-
+    const auto *o_ptr = &player_ptr->inventory_list[slot];
     player_hand calc_hand = PLAYER_HAND_OTHER;
     if (slot == INVEN_MAIN_HAND) {
         calc_hand = PLAYER_HAND_MAIN;
@@ -2143,7 +2135,7 @@ static short calc_to_damage(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_
     damage -= player_stun->get_damage_penalty();
     PlayerClass pc(player_ptr);
     const auto tval = o_ptr->bi_key.tval();
-    if (pc.equals(PlayerClassType::PRIEST) && (flags.has_not(TR_BLESSED)) && ((tval == ItemKindType::SWORD) || (tval == ItemKindType::POLEARM))) {
+    if (pc.equals(PlayerClassType::PRIEST) && (o_ptr->get_flags().has_not(TR_BLESSED)) && ((tval == ItemKindType::SWORD) || (tval == ItemKindType::POLEARM))) {
         damage -= 2;
     } else if (pc.equals(PlayerClassType::BERSERKER)) {
         damage += player_ptr->lev / 6;
@@ -2338,8 +2330,7 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
     /* Bonuses and penalties by weapon */
     PlayerClass pc(player_ptr);
     if (has_melee_weapon(player_ptr, slot)) {
-        auto *o_ptr = &player_ptr->inventory_list[slot];
-        auto flags = object_flags(o_ptr);
+        const auto *o_ptr = &player_ptr->inventory_list[slot];
 
         /* Traind bonuses */
         const auto tval = o_ptr->bi_key.tval();
@@ -2361,6 +2352,7 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
         }
 
         /* Riding bonus and penalty */
+        const auto flags = o_ptr->get_flags();
         if (player_ptr->riding > 0) {
             if (o_ptr->is_lance()) {
                 hit += 15;

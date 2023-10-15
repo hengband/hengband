@@ -26,7 +26,6 @@
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-flags.h"
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
@@ -76,7 +75,7 @@ static void do_curse_on_equip(OBJECT_IDX slot, ItemEntity *o_ptr, PlayerType *pl
         return;
     }
 
-    auto should_curse = object_flags(o_ptr).has(TR_PERSISTENT_CURSE) || o_ptr->curse_flags.has(CurseTraitType::PERSISTENT_CURSE);
+    auto should_curse = o_ptr->get_flags().has(TR_PERSISTENT_CURSE) || o_ptr->curse_flags.has(CurseTraitType::PERSISTENT_CURSE);
     should_curse &= o_ptr->curse_flags.has_not(CurseTraitType::HEAVY_CURSE);
     if (!should_curse) {
         return;

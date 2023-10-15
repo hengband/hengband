@@ -9,7 +9,6 @@
 #include "io/files-util.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
-#include "object/object-flags.h"
 #include "player-base/player-class.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
@@ -164,7 +163,7 @@ std::string get_random_name(const ItemEntity &item, bool armour, int power)
 /*対邪平均ダメージの計算処理*/
 static int calc_arm_avgdamage(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    auto flags = object_flags(o_ptr);
+    const auto flags = o_ptr->get_flags();
     int base, forced, vorpal;
     int s_evil = forced = vorpal = 0;
     int dam = base = (o_ptr->dd * o_ptr->ds + o_ptr->dd) / 2;
@@ -196,7 +195,7 @@ static int calc_arm_avgdamage(PlayerType *player_ptr, ItemEntity *o_ptr)
 
 bool has_extreme_damage_rate(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    auto flags = object_flags(o_ptr);
+    const auto flags = o_ptr->get_flags();
     if (flags.has(TR_VAMPIRIC)) {
         if (flags.has(TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(player_ptr, o_ptr) > 52)) {
             return true;

@@ -11,7 +11,6 @@
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-expendable.h"
 #include "object/object-broken.h"
-#include "object/object-flags.h"
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
 #include "spell-kind/spells-perception.h"
@@ -64,7 +63,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
 #else
         bool plural = (o_ptr->number > 1);
 #endif
-        auto flags = object_flags(o_ptr);
+        const auto flags = o_ptr->get_flags();
         bool is_fixed_or_random_artifact = o_ptr->is_fixed_or_random_artifact();
         switch (typ) {
         case AttributeType::ACID: {
