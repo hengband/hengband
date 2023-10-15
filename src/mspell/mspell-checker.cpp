@@ -160,7 +160,7 @@ bool clean_shot(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, P
         return false;
     }
 
-    const auto [last_y, last_x] = grid_g.back();
+    const auto &[last_y, last_x] = grid_g.back();
     if ((last_y != y2) || (last_x != x2)) {
         return false;
     }

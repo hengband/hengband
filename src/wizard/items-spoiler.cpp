@@ -154,7 +154,7 @@ SpoilerOutputResultType spoil_obj_desc()
             PlayerType dummy;
             const auto item = prepare_item_for_obj_desc(bi_id);
             const auto item_name = describe_flavor(&dummy, &item, OD_NAME_ONLY | OD_STORE);
-            const auto [depth, price] = get_info(item);
+            const auto &[depth, price] = get_info(item);
             const auto dam_or_ac = describe_dam_or_ac(item);
             const auto weight = describe_weight(item);
             const auto chance = describe_chance(item);

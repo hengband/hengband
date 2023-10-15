@@ -107,7 +107,7 @@ bool SpellHex::stop_spells_with_selection()
     constexpr auto fmt = _("どの呪文の詠唱を中断しますか？(呪文 %c-%c, 'l'全て, ESC)", "Which spell do you stop casting? (Spell %c-%c, 'l' to all, ESC)");
     const auto prompt = format(fmt, I2A(0), I2A(casting_num - 1));
     screen_save();
-    const auto [is_all, choice] = select_spell_stopping(prompt);
+    const auto &[is_all, choice] = select_spell_stopping(prompt);
     if (is_all) {
         return true;
     }

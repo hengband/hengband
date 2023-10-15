@@ -63,7 +63,7 @@ void do_cmd_locate(PlayerType *player_ptr)
         { { _("南西", " southwest of"), _("南", " south of"), _("南東", " southeast of") } },
     } };
     POSITION y1, x1;
-    const auto [wid, hgt] = get_screen_size();
+    const auto &[wid, hgt] = get_screen_size();
     POSITION y2 = y1 = panel_row_min;
     POSITION x2 = x1 = panel_col_min;
     constexpr auto fmt = _("マップ位置 [%d(%02d),%d(%02d)] (プレイヤーの%s)  方向?", "Map sector [%d(%02d),%d(%02d)], which is%s your sector.  Direction?");
