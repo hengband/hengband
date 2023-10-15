@@ -39,7 +39,7 @@ void call_the_void(PlayerType *player_ptr)
         auto *g_ptr = &floor_ptr->grid_array[player_ptr->y + ddy_ddd[i]][player_ptr->x + ddx_ddd[i]];
 
         if (!g_ptr->cave_has_flag(TerrainCharacteristics::PROJECT)) {
-            if (!g_ptr->mimic || terrains_info[g_ptr->mimic].flags.has_not(TerrainCharacteristics::PROJECT) || !permanent_wall(&terrains_info[g_ptr->feat])) {
+            if (!g_ptr->mimic || terrains_info[g_ptr->mimic].flags.has_not(TerrainCharacteristics::PROJECT) || !terrains_info[g_ptr->feat].is_permanent_wall()) {
                 do_call = false;
                 break;
             }
@@ -68,7 +68,7 @@ void call_the_void(PlayerType *player_ptr)
         return;
     }
 
-    bool is_special_fllor = inside_quest(floor_ptr->quest_number) && QuestType::is_fixed(floor_ptr->quest_number);
+    auto is_special_fllor = floor_ptr->is_in_quest() && QuestType::is_fixed(floor_ptr->quest_number);
     is_special_fllor |= floor_ptr->dun_level == 0;
     if (is_special_fllor) {
         msg_print(_("地面が揺れた。", "The ground trembles."));
@@ -109,7 +109,7 @@ void call_the_void(PlayerType *player_ptr)
 bool vanish_dungeon(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    bool is_special_floor = inside_quest(floor_ptr->quest_number) && QuestType::is_fixed(floor_ptr->quest_number);
+    bool is_special_floor = floor_ptr->is_in_quest() && QuestType::is_fixed(floor_ptr->quest_number);
     is_special_floor |= (floor_ptr->dun_level == 0);
     if (is_special_floor) {
         return false;

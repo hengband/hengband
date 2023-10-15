@@ -27,7 +27,7 @@ void display_player_name(PlayerType *player_ptr, bool name_only)
     constexpr std::string_view header = _("名前  : ", "Name  : ");
     const auto length = header.length() + display_name.length();
 
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     const auto center_col = (wid - length) / 2 - 4; // ヘッダがあるぶん少し左に寄せたほうが見やすい
     constexpr auto row = 1;
 

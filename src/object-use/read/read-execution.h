@@ -6,14 +6,14 @@ class ItemEntity;
 class PlayerType;
 class ObjectReadEntity {
 public:
-    ObjectReadEntity(PlayerType *player_ptr, INVENTORY_IDX item);
+    ObjectReadEntity(PlayerType *player_ptr, INVENTORY_IDX i_idx);
     virtual ~ObjectReadEntity() = default;
 
     void execute(bool known);
 
 private:
     PlayerType *player_ptr;
-    INVENTORY_IDX item;
+    INVENTORY_IDX i_idx;
 
     bool can_read() const;
     void change_virtue_as_read(ItemEntity &o_ref);

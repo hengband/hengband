@@ -91,7 +91,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
 
     int power = 100;
     if (!necro && m_ptr) {
-        auto *r_ptr = &monraces_info[m_ptr->ap_r_idx];
+        auto *r_ptr = &m_ptr->get_real_monrace();
         const auto m_name = monster_desc(player_ptr, m_ptr, 0);
         power = r_ptr->level / 2;
         if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {

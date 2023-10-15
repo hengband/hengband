@@ -65,12 +65,12 @@ bool can_get_item(PlayerType *player_ptr, const ItemTester &item_tester)
  */
 static bool py_pickup_floor_aux(PlayerType *player_ptr)
 {
-    OBJECT_IDX this_o_idx;
-    OBJECT_IDX item;
+    short this_o_idx;
+    short i_idx;
     constexpr auto q = _("どれを拾いますか？", "Get which item? ");
     constexpr auto s = _("もうザックには床にあるどのアイテムも入らない。", "You no longer have any room for the objects on the floor.");
-    if (choose_object(player_ptr, &item, q, s, (USE_FLOOR), FuncItemTester(check_store_item_to_inventory, player_ptr))) {
-        this_o_idx = 0 - item;
+    if (choose_object(player_ptr, &i_idx, q, s, (USE_FLOOR), FuncItemTester(check_store_item_to_inventory, player_ptr))) {
+        this_o_idx = 0 - i_idx;
     } else {
         return false;
     }

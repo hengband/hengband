@@ -94,7 +94,7 @@ bool show_gold_on_floor = false;
  */
 static std::string evaluate_monster_exp(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
-    MonsterRaceInfo *ap_r_ptr = &monraces_info[m_ptr->ap_r_idx];
+    MonsterRaceInfo *ap_r_ptr = &m_ptr->get_real_monrace();
     if ((player_ptr->lev >= PY_MAX_LEVEL) || PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
         return "**";
     }
@@ -221,11 +221,11 @@ static void describe_grid_monster(PlayerType *player_ptr, GridExamination *ge_pt
 
 static void describe_monster_person(GridExamination *ge_ptr)
 {
-    MonsterRaceInfo *ap_r_ptr = &monraces_info[ge_ptr->m_ptr->ap_r_idx];
+    const auto &monrace = ge_ptr->m_ptr->get_real_monrace();
     ge_ptr->s1 = _("それは", "It is ");
-    if (ap_r_ptr->flags1 & RF1_FEMALE) {
+    if (monrace.flags1 & RF1_FEMALE) {
         ge_ptr->s1 = _("彼女は", "She is ");
-    } else if (ap_r_ptr->flags1 & RF1_MALE) {
+    } else if (monrace.flags1 & RF1_MALE) {
         ge_ptr->s1 = _("彼は", "He is ");
     }
 

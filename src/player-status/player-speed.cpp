@@ -7,7 +7,6 @@
 #include "monster/monster-status.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
-#include "object/object-flags.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/equipment-info.h"
@@ -306,9 +305,9 @@ int16_t PlayerSpeed::inventory_weight_bonus()
     int16_t bonus = 0;
     auto weight = calc_inventory_weight(this->player_ptr);
     if (this->player_ptr->riding) {
-        auto *riding_m_ptr = &(this->player_ptr)->current_floor_ptr->m_list[this->player_ptr->riding];
-        auto *riding_r_ptr = &monraces_info[riding_m_ptr->r_idx];
-        auto count = 1500 + riding_r_ptr->level * 25;
+        const auto &monster = this->player_ptr->current_floor_ptr->m_list[this->player_ptr->riding];
+        const auto &monrace = monster.get_monrace();
+        auto count = 1500 + monrace.level * 25;
         if (weight > count) {
             bonus -= ((weight - count) / (count / 5));
         }

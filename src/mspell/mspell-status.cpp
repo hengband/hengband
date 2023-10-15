@@ -254,7 +254,7 @@ MonsterSpellResult spell_RF5_SCARE(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
-    MonsterRaceInfo *tr_ptr = &monraces_info[t_ptr->r_idx];
+    MonsterRaceInfo *tr_ptr = &t_ptr->get_monrace();
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     bool resist, saving_throw;
 
@@ -311,7 +311,7 @@ MonsterSpellResult spell_RF5_BLIND(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
-    MonsterRaceInfo *tr_ptr = &monraces_info[t_ptr->r_idx];
+    MonsterRaceInfo *tr_ptr = &t_ptr->get_monrace();
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     bool resist, saving_throw;
 
@@ -376,7 +376,7 @@ MonsterSpellResult spell_RF5_CONF(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
-    MonsterRaceInfo *tr_ptr = &monraces_info[t_ptr->r_idx];
+    MonsterRaceInfo *tr_ptr = &t_ptr->get_monrace();
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     bool resist, saving_throw;
 
@@ -434,7 +434,7 @@ MonsterSpellResult spell_RF5_HOLD(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
-    MonsterRaceInfo *tr_ptr = &monraces_info[t_ptr->r_idx];
+    MonsterRaceInfo *tr_ptr = &t_ptr->get_monrace();
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     bool resist, saving_throw;
 
@@ -522,7 +522,7 @@ MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
-    MonsterRaceInfo *tr_ptr = &monraces_info[t_ptr->r_idx];
+    MonsterRaceInfo *tr_ptr = &t_ptr->get_monrace();
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     bool resist, saving_throw;
 

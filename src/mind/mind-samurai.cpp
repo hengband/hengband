@@ -323,7 +323,7 @@ static void hissatsu_keiun_kininken(PlayerType *player_ptr, samurai_slaying_type
  */
 MULTIPLY mult_hissatsu(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flags, MonsterEntity *m_ptr, combat_options mode)
 {
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     samurai_slaying_type tmp_slaying(mult, flags, m_ptr, mode, r_ptr);
     samurai_slaying_type *samurai_slaying_ptr = &tmp_slaying;
     hissatsu_burning_strike(player_ptr, samurai_slaying_ptr);
@@ -501,7 +501,7 @@ void mineuchi(PlayerType *player_ptr, player_attack_type *pa_ptr)
     pa_ptr->attack_damage = 0;
     anger_monster(player_ptr, pa_ptr->m_ptr);
 
-    auto *r_ptr = &monraces_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &pa_ptr->m_ptr->get_monrace();
     if ((r_ptr->flags3 & (RF3_NO_STUN))) {
         msg_format(_("%s には効果がなかった。", "%s is not effected."), pa_ptr->m_name);
         return;

@@ -181,8 +181,8 @@ MonsterSpellResult spell_RF6_TELE_TO(PlayerType *player_ptr, MONSTER_IDX m_idx, 
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
-    MonsterRaceInfo *tr_ptr = &monraces_info[t_ptr->r_idx];
+    auto *t_ptr = &floor_ptr->m_list[t_idx];
+    auto *tr_ptr = &t_ptr->get_monrace();
 
     mspell_cast_msg_simple msg(_("%s^があなたを引き戻した。", "%s^ commands you to return."),
         _("%s^が%sを引き戻した。", "%s^ commands %s to return."));
@@ -252,7 +252,7 @@ MonsterSpellResult spell_RF6_TELE_AWAY(PlayerType *player_ptr, MONSTER_IDX m_idx
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
-    MonsterRaceInfo *tr_ptr = &monraces_info[t_ptr->r_idx];
+    MonsterRaceInfo *tr_ptr = &t_ptr->get_monrace();
 
     mspell_cast_msg_simple msg(_("%s^にテレポートさせられた。", "%s^ teleports you away."),
         _("%s^は%sをテレポートさせた。", "%s^ teleports %s away."));
@@ -331,7 +331,7 @@ MonsterSpellResult spell_RF6_TELE_LEVEL(PlayerType *player_ptr, MONSTER_IDX m_id
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
-    MonsterRaceInfo *tr_ptr = &monraces_info[t_ptr->r_idx];
+    MonsterRaceInfo *tr_ptr = &t_ptr->get_monrace();
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     bool resist, saving_throw;
 
@@ -389,7 +389,7 @@ MonsterSpellResult spell_RF6_DARKNESS(PlayerType *player_ptr, POSITION y, POSITI
     concptr msg_done;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     bool can_use_lite_area = false;
     bool monster_to_monster = target_type == MONSTER_TO_MONSTER;
     bool monster_to_player = target_type == MONSTER_TO_PLAYER;

@@ -8,7 +8,6 @@
 #include "load/savedata-old-flag-types.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
-#include "object/object-flags.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-lite-types.h"
 #include "system/angband.h"

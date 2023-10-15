@@ -34,11 +34,11 @@
 /*!
  * @brief コンストラクタ
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param item 使うオブジェクトの所持品ID
+ * @param i_idx 使うオブジェクトの所持品ID
  */
-ObjectUseEntity::ObjectUseEntity(PlayerType *player_ptr, INVENTORY_IDX item)
+ObjectUseEntity::ObjectUseEntity(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     : player_ptr(player_ptr)
-    , item(item)
+    , i_idx(i_idx)
 {
 }
 
@@ -48,8 +48,8 @@ ObjectUseEntity::ObjectUseEntity(PlayerType *player_ptr, INVENTORY_IDX item)
 void ObjectUseEntity::execute()
 {
     auto use_charge = true;
-    auto *o_ptr = ref_item(this->player_ptr, this->item);
-    if ((this->item < 0) && (o_ptr->number > 1)) {
+    auto *o_ptr = ref_item(this->player_ptr, this->i_idx);
+    if ((this->i_idx < 0) && (o_ptr->number > 1)) {
         msg_print(_("まずは杖を拾わなければ。", "You must first pick up the staffs."));
         return;
     }
@@ -137,21 +137,21 @@ void ObjectUseEntity::execute()
     }
 
     o_ptr->pval--;
-    if ((this->item >= 0) && (o_ptr->number > 1)) {
+    if ((this->i_idx >= 0) && (o_ptr->number > 1)) {
         ItemEntity forge;
         auto *q_ptr = &forge;
         q_ptr->copy_from(o_ptr);
         q_ptr->number = 1;
         o_ptr->pval++;
         o_ptr->number--;
-        this->item = store_item_to_inventory(this->player_ptr, q_ptr);
+        this->i_idx = store_item_to_inventory(this->player_ptr, q_ptr);
         msg_print(_("杖をまとめなおした。", "You unstack your staff."));
     }
 
-    if (this->item >= 0) {
-        inven_item_charges(this->player_ptr->inventory_list[this->item]);
+    if (this->i_idx >= 0) {
+        inven_item_charges(this->player_ptr->inventory_list[this->i_idx]);
     } else {
-        floor_item_charges(this->player_ptr->current_floor_ptr, 0 - this->item);
+        floor_item_charges(this->player_ptr->current_floor_ptr, 0 - this->i_idx);
     }
 }
 

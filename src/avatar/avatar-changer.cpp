@@ -37,7 +37,7 @@ void AvatarChanger::change_virtue()
 {
     this->change_virtue_non_beginner();
     this->change_virtue_unique();
-    const auto &r_ref = this->m_ptr->get_real_r_ref();
+    const auto &r_ref = this->m_ptr->get_real_monrace();
     if (m_ptr->r_idx == MonsterRaceId::BEGGAR || m_ptr->r_idx == MonsterRaceId::LEPER) {
         chg_virtue(this->player_ptr, Virtue::COMPASSION, -1);
     }
@@ -62,7 +62,7 @@ void AvatarChanger::change_virtue()
 void AvatarChanger::change_virtue_non_beginner()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::BEGINNER)) {
         return;
     }
@@ -89,7 +89,7 @@ void AvatarChanger::change_virtue_non_beginner()
  */
 void AvatarChanger::change_virtue_unique()
 {
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return;
     }
@@ -115,7 +115,7 @@ void AvatarChanger::change_virtue_unique()
 void AvatarChanger::change_virtue_good_evil()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (r_ptr->kind_flags.has(MonsterKindType::GOOD) && ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100))) {
         chg_virtue(this->player_ptr, Virtue::UNLIFE, 1);
     }
@@ -146,7 +146,7 @@ void AvatarChanger::change_virtue_good_evil()
 void AvatarChanger::change_virtue_revenge()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (r_ptr->r_deaths == 0) {
         return;
     }
@@ -167,7 +167,7 @@ void AvatarChanger::change_virtue_revenge()
 void AvatarChanger::change_virtue_wild_thief()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     auto innocent = true;
     auto thief = false;
     for (const auto &blow : r_ptr->blows) {
@@ -207,7 +207,7 @@ void AvatarChanger::change_virtue_wild_thief()
  */
 void AvatarChanger::change_virtue_good_animal()
 {
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     auto magic_ability_flags = r_ptr->ability_flags;
     magic_ability_flags.reset(RF_ABILITY_NOMAGIC_MASK);
     if (r_ptr->kind_flags.has_not(MonsterKindType::ANIMAL) || r_ptr->kind_flags.has(MonsterKindType::EVIL) || magic_ability_flags.any()) {

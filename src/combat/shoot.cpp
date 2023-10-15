@@ -43,7 +43,6 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "object/object-broken.h"
-#include "object/object-flags.h"
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "player-base/player-class.h"
@@ -84,11 +83,9 @@ AttributeFlags shot_attribute(PlayerType *player_ptr, ItemEntity *bow_ptr, ItemE
     AttributeFlags attribute_flags{};
     attribute_flags.set(AttributeType::PLAYER_SHOOT);
 
-    TrFlags flags{};
-    auto arrow_flags = object_flags(arrow_ptr);
-    auto bow_flags = object_flags(bow_ptr);
-
-    flags = bow_flags | arrow_flags;
+    const auto arrow_flags = arrow_ptr->get_flags();
+    const auto bow_flags = bow_ptr->get_flags();
+    const auto flags = bow_flags | arrow_flags;
 
     static const struct snipe_convert_table_t {
         SPELL_IDX snipe_type;
@@ -156,148 +153,146 @@ static MULTIPLY calc_shot_damage_with_slay(
 {
     MULTIPLY mult = 10;
 
-    MonsterRaceInfo *race_ptr = &monraces_info[monster_ptr->r_idx];
+    auto &monrace = monster_ptr->get_monrace();
 
-    TrFlags flags{};
-    auto arrow_flags = object_flags(arrow_ptr);
-    auto bow_flags = object_flags(bow_ptr);
-
-    flags = bow_flags | arrow_flags;
+    const auto arrow_flags = arrow_ptr->get_flags();
+    const auto bow_flags = bow_ptr->get_flags();
+    const auto flags = bow_flags | arrow_flags;
 
     /* Some "weapons" and "ammo" do extra damage */
     switch (arrow_ptr->bi_key.tval()) {
     case ItemKindType::SHOT:
     case ItemKindType::ARROW:
     case ItemKindType::BOLT: {
-        if ((flags.has(TR_SLAY_ANIMAL)) && race_ptr->kind_flags.has(MonsterKindType::ANIMAL)) {
+        if ((flags.has(TR_SLAY_ANIMAL)) && monrace.kind_flags.has(MonsterKindType::ANIMAL)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                race_ptr->r_kind_flags.set(MonsterKindType::ANIMAL);
+                monrace.r_kind_flags.set(MonsterKindType::ANIMAL);
             }
             if (mult < 17) {
                 mult = 17;
             }
         }
 
-        if ((flags.has(TR_KILL_ANIMAL)) && race_ptr->kind_flags.has(MonsterKindType::ANIMAL)) {
+        if ((flags.has(TR_KILL_ANIMAL)) && monrace.kind_flags.has(MonsterKindType::ANIMAL)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                race_ptr->r_kind_flags.set(MonsterKindType::ANIMAL);
+                monrace.r_kind_flags.set(MonsterKindType::ANIMAL);
             }
             if (mult < 27) {
                 mult = 27;
             }
         }
 
-        if ((flags.has(TR_SLAY_EVIL)) && race_ptr->kind_flags.has(MonsterKindType::EVIL)) {
+        if ((flags.has(TR_SLAY_EVIL)) && monrace.kind_flags.has(MonsterKindType::EVIL)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                race_ptr->r_kind_flags.set(MonsterKindType::EVIL);
+                monrace.r_kind_flags.set(MonsterKindType::EVIL);
             }
             if (mult < 15) {
                 mult = 15;
             }
         }
 
-        if ((flags.has(TR_KILL_EVIL)) && race_ptr->kind_flags.has(MonsterKindType::EVIL)) {
+        if ((flags.has(TR_KILL_EVIL)) && monrace.kind_flags.has(MonsterKindType::EVIL)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                race_ptr->r_kind_flags.set(MonsterKindType::EVIL);
+                monrace.r_kind_flags.set(MonsterKindType::EVIL);
             }
             if (mult < 25) {
                 mult = 25;
             }
         }
 
-        if ((flags.has(TR_SLAY_GOOD)) && race_ptr->kind_flags.has(MonsterKindType::GOOD)) {
+        if ((flags.has(TR_SLAY_GOOD)) && monrace.kind_flags.has(MonsterKindType::GOOD)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                race_ptr->r_kind_flags.set(MonsterKindType::GOOD);
+                monrace.r_kind_flags.set(MonsterKindType::GOOD);
             }
             if (mult < 15) {
                 mult = 15;
             }
         }
 
-        if ((flags.has(TR_KILL_GOOD)) && race_ptr->kind_flags.has(MonsterKindType::GOOD)) {
+        if ((flags.has(TR_KILL_GOOD)) && monrace.kind_flags.has(MonsterKindType::GOOD)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                race_ptr->r_kind_flags.set(MonsterKindType::GOOD);
+                monrace.r_kind_flags.set(MonsterKindType::GOOD);
             }
             if (mult < 25) {
                 mult = 25;
             }
         }
 
-        if ((flags.has(TR_SLAY_HUMAN)) && race_ptr->kind_flags.has(MonsterKindType::HUMAN)) {
+        if ((flags.has(TR_SLAY_HUMAN)) && monrace.kind_flags.has(MonsterKindType::HUMAN)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                race_ptr->r_kind_flags.set(MonsterKindType::HUMAN);
+                monrace.r_kind_flags.set(MonsterKindType::HUMAN);
             }
             if (mult < 17) {
                 mult = 17;
             }
         }
 
-        if ((flags.has(TR_KILL_HUMAN)) && race_ptr->kind_flags.has(MonsterKindType::HUMAN)) {
+        if ((flags.has(TR_KILL_HUMAN)) && monrace.kind_flags.has(MonsterKindType::HUMAN)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                race_ptr->r_kind_flags.set(MonsterKindType::HUMAN);
+                monrace.r_kind_flags.set(MonsterKindType::HUMAN);
             }
             if (mult < 27) {
                 mult = 27;
             }
         }
 
-        if ((flags.has(TR_SLAY_UNDEAD)) && race_ptr->kind_flags.has(MonsterKindType::UNDEAD)) {
+        if ((flags.has(TR_SLAY_UNDEAD)) && monrace.kind_flags.has(MonsterKindType::UNDEAD)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                race_ptr->r_kind_flags.set(MonsterKindType::UNDEAD);
+                monrace.r_kind_flags.set(MonsterKindType::UNDEAD);
             }
             if (mult < 20) {
                 mult = 20;
             }
         }
 
-        if ((flags.has(TR_KILL_UNDEAD)) && race_ptr->kind_flags.has(MonsterKindType::UNDEAD)) {
+        if ((flags.has(TR_KILL_UNDEAD)) && monrace.kind_flags.has(MonsterKindType::UNDEAD)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                race_ptr->r_kind_flags.set(MonsterKindType::UNDEAD);
+                monrace.r_kind_flags.set(MonsterKindType::UNDEAD);
             }
             if (mult < 30) {
                 mult = 30;
             }
         }
 
-        if ((flags.has(TR_SLAY_DEMON)) && race_ptr->kind_flags.has(MonsterKindType::DEMON)) {
+        if ((flags.has(TR_SLAY_DEMON)) && monrace.kind_flags.has(MonsterKindType::DEMON)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                race_ptr->r_kind_flags.set(MonsterKindType::DEMON);
+                monrace.r_kind_flags.set(MonsterKindType::DEMON);
             }
             if (mult < 20) {
                 mult = 20;
             }
         }
 
-        if ((flags.has(TR_KILL_DEMON)) && race_ptr->kind_flags.has(MonsterKindType::DEMON)) {
+        if ((flags.has(TR_KILL_DEMON)) && monrace.kind_flags.has(MonsterKindType::DEMON)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                race_ptr->r_kind_flags.set(MonsterKindType::DEMON);
+                monrace.r_kind_flags.set(MonsterKindType::DEMON);
             }
             if (mult < 30) {
                 mult = 30;
             }
         }
 
-        if ((flags.has(TR_SLAY_ORC)) && race_ptr->kind_flags.has(MonsterKindType::ORC)) {
+        if ((flags.has(TR_SLAY_ORC)) && monrace.kind_flags.has(MonsterKindType::ORC)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                race_ptr->r_kind_flags.set(MonsterKindType::ORC);
+                monrace.r_kind_flags.set(MonsterKindType::ORC);
             }
             if (mult < 20) {
                 mult = 20;
             }
         }
 
-        if ((flags.has(TR_KILL_ORC)) && race_ptr->kind_flags.has(MonsterKindType::ORC)) {
+        if ((flags.has(TR_KILL_ORC)) && monrace.kind_flags.has(MonsterKindType::ORC)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                race_ptr->r_kind_flags.set(MonsterKindType::ORC);
+                monrace.r_kind_flags.set(MonsterKindType::ORC);
             }
             if (mult < 30) {
                 mult = 30;
             }
         }
 
-        if ((flags.has(TR_SLAY_TROLL)) && race_ptr->kind_flags.has(MonsterKindType::TROLL)) {
+        if ((flags.has(TR_SLAY_TROLL)) && monrace.kind_flags.has(MonsterKindType::TROLL)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                race_ptr->r_kind_flags.set(MonsterKindType::TROLL);
+                monrace.r_kind_flags.set(MonsterKindType::TROLL);
             }
 
             if (mult < 20) {
@@ -305,45 +300,45 @@ static MULTIPLY calc_shot_damage_with_slay(
             }
         }
 
-        if ((flags.has(TR_KILL_TROLL)) && race_ptr->kind_flags.has(MonsterKindType::TROLL)) {
+        if ((flags.has(TR_KILL_TROLL)) && monrace.kind_flags.has(MonsterKindType::TROLL)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                race_ptr->r_kind_flags.set(MonsterKindType::TROLL);
+                monrace.r_kind_flags.set(MonsterKindType::TROLL);
             }
             if (mult < 30) {
                 mult = 30;
             }
         }
 
-        if ((flags.has(TR_SLAY_GIANT)) && race_ptr->kind_flags.has(MonsterKindType::GIANT)) {
+        if ((flags.has(TR_SLAY_GIANT)) && monrace.kind_flags.has(MonsterKindType::GIANT)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                race_ptr->r_kind_flags.set(MonsterKindType::GIANT);
+                monrace.r_kind_flags.set(MonsterKindType::GIANT);
             }
             if (mult < 20) {
                 mult = 20;
             }
         }
 
-        if ((flags.has(TR_KILL_GIANT)) && race_ptr->kind_flags.has(MonsterKindType::GIANT)) {
+        if ((flags.has(TR_KILL_GIANT)) && monrace.kind_flags.has(MonsterKindType::GIANT)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                race_ptr->r_kind_flags.set(MonsterKindType::GIANT);
+                monrace.r_kind_flags.set(MonsterKindType::GIANT);
             }
             if (mult < 30) {
                 mult = 30;
             }
         }
 
-        if ((flags.has(TR_SLAY_DRAGON)) && race_ptr->kind_flags.has(MonsterKindType::DRAGON)) {
+        if ((flags.has(TR_SLAY_DRAGON)) && monrace.kind_flags.has(MonsterKindType::DRAGON)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                race_ptr->r_kind_flags.set(MonsterKindType::DRAGON);
+                monrace.r_kind_flags.set(MonsterKindType::DRAGON);
             }
             if (mult < 20) {
                 mult = 20;
             }
         }
 
-        if ((flags.has(TR_KILL_DRAGON)) && race_ptr->kind_flags.has(MonsterKindType::DRAGON)) {
+        if ((flags.has(TR_KILL_DRAGON)) && monrace.kind_flags.has(MonsterKindType::DRAGON)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                race_ptr->r_kind_flags.set(MonsterKindType::DRAGON);
+                monrace.r_kind_flags.set(MonsterKindType::DRAGON);
             }
             if (mult < 30) {
                 mult = 30;
@@ -359,9 +354,9 @@ static MULTIPLY calc_shot_damage_with_slay(
 
         if (flags.has(TR_BRAND_ACID)) {
             /* Notice immunity */
-            if (race_ptr->resistance_flags.has_any_of(RFR_EFF_IM_ACID_MASK)) {
+            if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_ACID_MASK)) {
                 if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                    race_ptr->r_resistance_flags.set(race_ptr->resistance_flags & RFR_EFF_IM_ACID_MASK);
+                    monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_ACID_MASK);
                 }
             } else {
                 if (mult < 17) {
@@ -372,9 +367,9 @@ static MULTIPLY calc_shot_damage_with_slay(
 
         if (flags.has(TR_BRAND_ELEC)) {
             /* Notice immunity */
-            if (race_ptr->resistance_flags.has_any_of(RFR_EFF_IM_ELEC_MASK)) {
+            if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_ELEC_MASK)) {
                 if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                    race_ptr->r_resistance_flags.set(race_ptr->resistance_flags & RFR_EFF_IM_ELEC_MASK);
+                    monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_ELEC_MASK);
                 }
             } else {
                 if (mult < 17) {
@@ -385,19 +380,19 @@ static MULTIPLY calc_shot_damage_with_slay(
 
         if (flags.has(TR_BRAND_FIRE)) {
             /* Notice immunity */
-            if (race_ptr->resistance_flags.has_any_of(RFR_EFF_IM_FIRE_MASK)) {
+            if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_FIRE_MASK)) {
                 if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                    race_ptr->r_resistance_flags.set(race_ptr->resistance_flags & RFR_EFF_IM_FIRE_MASK);
+                    monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_FIRE_MASK);
                 }
             }
             /* Otherwise, take the damage */
             else {
-                if (race_ptr->resistance_flags.has(MonsterResistanceType::HURT_FIRE)) {
+                if (monrace.resistance_flags.has(MonsterResistanceType::HURT_FIRE)) {
                     if (mult < 25) {
                         mult = 25;
                     }
                     if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                        race_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_FIRE);
+                        monrace.r_resistance_flags.set(MonsterResistanceType::HURT_FIRE);
                     }
                 } else if (mult < 17) {
                     mult = 17;
@@ -407,19 +402,19 @@ static MULTIPLY calc_shot_damage_with_slay(
 
         if (flags.has(TR_BRAND_COLD)) {
             /* Notice immunity */
-            if (race_ptr->resistance_flags.has_any_of(RFR_EFF_IM_COLD_MASK)) {
+            if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_COLD_MASK)) {
                 if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                    race_ptr->r_resistance_flags.set(race_ptr->resistance_flags & RFR_EFF_IM_COLD_MASK);
+                    monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_COLD_MASK);
                 }
             }
             /* Otherwise, take the damage */
             else {
-                if (race_ptr->resistance_flags.has(MonsterResistanceType::HURT_COLD)) {
+                if (monrace.resistance_flags.has(MonsterResistanceType::HURT_COLD)) {
                     if (mult < 25) {
                         mult = 25;
                     }
                     if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                        race_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_COLD);
+                        monrace.r_resistance_flags.set(MonsterResistanceType::HURT_COLD);
                     }
                 } else if (mult < 17) {
                     mult = 17;
@@ -429,9 +424,9 @@ static MULTIPLY calc_shot_damage_with_slay(
 
         if (flags.has(TR_BRAND_POIS)) {
             /* Notice immunity */
-            if (race_ptr->resistance_flags.has_any_of(RFR_EFF_IM_POISON_MASK)) {
+            if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_POISON_MASK)) {
                 if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                    race_ptr->r_resistance_flags.set(race_ptr->resistance_flags & RFR_EFF_IM_POISON_MASK);
+                    monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_POISON_MASK);
                 }
             }
             /* Otherwise, take the damage */
@@ -464,29 +459,11 @@ static MULTIPLY calc_shot_damage_with_slay(
 }
 
 /*!
- * @brief 射撃処理実行 /
- * Fire an object from the pack or floor.
- * @param item 射撃するオブジェクトの所持ID
+ * @brief 射撃処理実行
+ * @param i_idx 射撃するオブジェクトの所持ID
  * @param bow_ptr 射撃武器のオブジェクト参照ポインタ
- * @details
- * <pre>
- * You may only fire items that "match" your missile launcher.
- * You must use slings + pebbles/shots, bows + arrows, xbows + bolts.
- * See "calc_bonuses()" for more calculations and such.
- * Note that "firing" a missile is MUCH better than "throwing" it.
- * Note: "unseen" monsters are very hard to hit.
- * Objects are more likely to break if they "attempt" to hit a monster.
- * Rangers (with Bows) and Anyone (with "Extra Shots") get extra shots.
- * The "extra shot" code works by decreasing the amount of energy
- * required to make each shot, spreading the shots out over time.
- * Note that when firing missiles, the launcher multiplier is applied
- * after all the bonuses are added in, making multipliers very useful.
- * Note that Bows of "Extra Might" get extra range and an extra bonus
- * for the damage multiplier.
- * Note that Bows of "Extra Shots" give an extra shot.
- * </pre>
  */
-void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPELL_IDX snipe_type)
+void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SPELL_IDX snipe_type)
 {
     POSITION y, x, ny, nx, ty, tx, prev_y, prev_x;
     ItemEntity forge;
@@ -501,10 +478,10 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
 
     /* Access the item (if in the pack) */
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (item >= 0) {
-        o_ptr = &player_ptr->inventory_list[item];
+    if (i_idx >= 0) {
+        o_ptr = &player_ptr->inventory_list[i_idx];
     } else {
-        o_ptr = &floor_ptr->o_list[0 - item];
+        o_ptr = &floor_ptr->o_list[0 - i_idx];
     }
 
     /* Sniper - Cannot shot a single arrow twice */
@@ -630,7 +607,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
         /* Single object */
         q_ptr->number = 1;
 
-        vary_item(player_ptr, item, -1);
+        vary_item(player_ptr, i_idx, -1);
 
         sound(SOUND_SHOOT);
         handle_stuff(player_ptr);
@@ -746,7 +723,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                 grid_type *c_mon_ptr = &floor_ptr->grid_array[y][x];
 
                 auto *m_ptr = &floor_ptr->m_list[c_mon_ptr->m_idx];
-                auto *r_ptr = &monraces_info[m_ptr->r_idx];
+                auto *r_ptr = &m_ptr->get_monrace();
 
                 /* Check the visibility */
                 auto visible = m_ptr->ml;
@@ -1010,7 +987,7 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, MonsterEntity *m_ptr, int
 {
     int k;
     ARMOUR_CLASS ac;
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
 
     /* Percentile dice */
     k = randint1(100);

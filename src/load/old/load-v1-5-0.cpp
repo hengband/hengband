@@ -369,7 +369,7 @@ void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
     }
 
     if (h_older_than(1, 0, 14)) {
-        auto *r_ptr = &monraces_info[m_ptr->r_idx];
+        auto *r_ptr = &m_ptr->get_monrace();
 
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
         if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
@@ -765,7 +765,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
         monster_loader->rd_monster(m_ptr);
         auto *g_ptr = &floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
         g_ptr->m_idx = m_idx;
-        m_ptr->get_real_r_ref().cur_num++;
+        m_ptr->get_real_monrace().cur_num++;
     }
 
     if (h_older_than(0, 3, 13) && !floor_ptr->dun_level && !floor_ptr->inside_arena) {

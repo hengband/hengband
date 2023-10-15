@@ -140,7 +140,8 @@ static void shuffle_store(PlayerType *player_ptr, StoreSaleType store_num)
     store_shuffle(player_ptr, store_num);
     prt("", 3, 0);
     put_str(format("%s (%s)", ot_ptr->owner_name, race_info[enum2i(ot_ptr->owner_race)].title), 3, 10);
-    prt(format("%s (%ld)", terrains_info[cur_store_feat].name.data(), (long)(ot_ptr->max_cost)), 3, 50);
+    const auto &terrains = TerrainList::get_instance();
+    prt(format("%s (%d)", terrains[cur_store_feat].name.data(), ot_ptr->max_cost), 3, 50);
 }
 
 static void switch_store_stock(PlayerType *player_ptr, const int i, const COMMAND_CODE item, StoreSaleType store_num)

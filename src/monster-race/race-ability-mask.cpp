@@ -33,7 +33,7 @@ const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_BOLT_MASK = {
     MonsterAbilityType::ROCKET, MonsterAbilityType::SHOOT, MonsterAbilityType::BO_ACID, MonsterAbilityType::BO_ELEC,
     MonsterAbilityType::BO_FIRE, MonsterAbilityType::BO_COLD, MonsterAbilityType::BO_NETH, MonsterAbilityType::BO_WATE,
     MonsterAbilityType::BO_MANA, MonsterAbilityType::BO_PLAS, MonsterAbilityType::BO_ICEE, MonsterAbilityType::BO_VOID,
-    MonsterAbilityType::BO_ABYSS, MonsterAbilityType::MISSILE,
+    MonsterAbilityType::BO_ABYSS, MonsterAbilityType::BO_METEOR, MonsterAbilityType::MISSILE,
 };
 
 /*
@@ -50,7 +50,7 @@ const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_BEAM_MASK = {
  */
 const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_BIG_BALL_MASK = {
     MonsterAbilityType::BA_CHAO, MonsterAbilityType::BA_LITE, MonsterAbilityType::BA_DARK, MonsterAbilityType::BA_WATE,
-    MonsterAbilityType::BA_MANA, MonsterAbilityType::BA_VOID, MonsterAbilityType::BA_ABYSS,
+    MonsterAbilityType::BA_MANA, MonsterAbilityType::BA_VOID, MonsterAbilityType::BA_ABYSS,MonsterAbilityType::BA_METEOR,
 };
 
 /*
@@ -99,3 +99,36 @@ const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_NOMAGIC_MASK =
     EnumClassFlagGroup<MonsterAbilityType>(RF_ABILITY_BREATH_MASK).set({
     MonsterAbilityType::SHRIEK, MonsterAbilityType::ROCKET, MonsterAbilityType::SHOOT, MonsterAbilityType::SPECIAL,
 });
+
+const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_ATTACK_SPELLS_MASK =
+    (RF_ABILITY_BALL_MASK |
+        RF_ABILITY_BEAM_MASK |
+        RF_ABILITY_BOLT_MASK)
+        .set(/* "Cause wounds" spells */
+            {
+                MonsterAbilityType::CAUSE_1,
+                MonsterAbilityType::CAUSE_2,
+                MonsterAbilityType::CAUSE_3,
+                MonsterAbilityType::CAUSE_4,
+                MonsterAbilityType::HAND_DOOM });
+
+const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_ANNOY_SPELLS_MASK = {
+    MonsterAbilityType::SHRIEK,
+    MonsterAbilityType::DRAIN_MANA,
+    MonsterAbilityType::MIND_BLAST,
+    MonsterAbilityType::BRAIN_SMASH,
+    MonsterAbilityType::CAUSE_1,
+    MonsterAbilityType::CAUSE_2,
+    MonsterAbilityType::CAUSE_3,
+    MonsterAbilityType::CAUSE_4,
+    MonsterAbilityType::SCARE,
+    MonsterAbilityType::BLIND,
+    MonsterAbilityType::CONF,
+    MonsterAbilityType::SLOW,
+    MonsterAbilityType::HOLD,
+    MonsterAbilityType::TELE_TO,
+    MonsterAbilityType::TELE_LEVEL,
+    MonsterAbilityType::TRAPS,
+    MonsterAbilityType::FORGET,
+    MonsterAbilityType::RAISE_DEAD,
+};

@@ -138,19 +138,22 @@ graphics_mode change_graphics(graphics_mode arg)
     infGraph.OffsetY = oy;
 
     if (name_mask.empty()) {
-        const auto &path_mask = path_build(ANGBAND_DIR_XTRA_GRAF, name_mask);
-        const auto &filename_mask = path_mask.string();
-        infGraph.hBitmapMask = read_graphic(filename_mask.data());
-        if (!infGraph.hBitmapMask) {
-            plog_fmt(_("ビットマップ '%s' を読み込めません。", "Cannot read bitmap file '%s'"), name_mask.data());
-            ANGBAND_GRAF = "ascii";
-            current_graphics_mode = graphics_mode::GRAPHICS_NONE;
-            return current_graphics_mode;
-        }
+        current_graphics_mode = arg;
+        return arg;
     }
 
-    current_graphics_mode = arg;
-    return arg;
+    const auto &path_mask = path_build(ANGBAND_DIR_XTRA_GRAF, name_mask);
+    const auto &filename_mask = path_mask.string();
+    infGraph.hBitmapMask = read_graphic(filename_mask.data());
+    if (infGraph.hBitmapMask) {
+        current_graphics_mode = arg;
+        return arg;
+    }
+
+    plog_fmt(_("ビットマップ '%s' を読み込めません。", "Cannot read bitmap file '%s'"), name_mask.data());
+    ANGBAND_GRAF = "ascii";
+    current_graphics_mode = graphics_mode::GRAPHICS_NONE;
+    return current_graphics_mode;
 }
 }
 

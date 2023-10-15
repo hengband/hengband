@@ -61,7 +61,7 @@ bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
     }
 
     ote.reflect_inventory_by_throw();
-    if (ote.item >= INVEN_MAIN_HAND) {
+    if (ote.i_idx >= INVEN_MAIN_HAND) {
         ote.equiped_item = true;
         RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::EQUIPPY);
     }

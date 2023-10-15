@@ -13,7 +13,6 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
-#include "object/object-flags.h"
 #include "perception/object-perception.h"
 #include "player-base/player-race.h"
 #include "player-info/race-types.h"
@@ -90,7 +89,7 @@ static void choise_cursed_item(CurseTraitType flag, ItemEntity *o_ptr, int *choi
     }
 
     tr_type cf = TR_STR;
-    auto flags = object_flags(o_ptr);
+    const auto flags = o_ptr->get_flags();
     switch (flag) {
     case CurseTraitType::ADD_L_CURSE:
         cf = TR_ADD_L_CURSE;
@@ -201,7 +200,7 @@ static void curse_teleport(PlayerType *player_ptr)
             continue;
         }
 
-        auto flags = object_flags(o_ptr);
+        const auto flags = o_ptr->get_flags();
 
         if (flags.has_not(TR_TELEPORT)) {
             continue;

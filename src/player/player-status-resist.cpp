@@ -10,7 +10,6 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-hook/hook-weapon.h"
-#include "object/object-flags.h"
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"

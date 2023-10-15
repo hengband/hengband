@@ -396,7 +396,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
     on_dead_explosion(player_ptr, md_ptr);
     if (md_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
         choose_new_monster(player_ptr, m_idx, true, MonsterRaceId::CHAMELEON);
-        md_ptr->r_ptr = &monraces_info[md_ptr->m_ptr->r_idx];
+        md_ptr->r_ptr = &md_ptr->m_ptr->get_monrace();
     }
 
     QuestCompletionChecker(player_ptr, md_ptr->m_ptr).complete();

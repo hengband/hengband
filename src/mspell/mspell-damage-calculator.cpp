@@ -243,6 +243,11 @@ static int monspell_damage_base(
         dice_num = 10;
         dice_side = 10;
         break;
+    case MonsterAbilityType::BA_METEOR:
+        dam = 50 + rlev / 2;
+        dice_num = rlev * 5 / 2;
+        dice_side = 2;
+        break;
     case MonsterAbilityType::DRAIN_MANA:
         dam = rlev;
         div = 1;
@@ -336,6 +341,11 @@ static int monspell_damage_base(
         dam = 10 + (rlev * 3 / (powerful ? 2 : 3));
         dice_num = 13;
         dice_side = 14;
+        break;
+    case MonsterAbilityType::BO_METEOR:
+        dam = 30 + rlev * 2;
+        dice_num = 1;
+        dice_side = rlev;
         break;
     case MonsterAbilityType::MISSILE:
         dam = (rlev / 3);
@@ -485,7 +495,7 @@ int monspell_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, MONSTER_
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     int hp = (TYPE == DAM_ROLL) ? m_ptr->hp : m_ptr->max_maxhp;
     int shoot_dd, shoot_ds;

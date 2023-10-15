@@ -44,9 +44,9 @@ void inven_item_charges(const ItemEntity &item)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 残量を表示したいプレイヤーのアイテム所持スロット
  */
-void inven_item_describe(PlayerType *player_ptr, short item)
+void inven_item_describe(PlayerType *player_ptr, short i_idx)
 {
-    auto *o_ptr = &player_ptr->inventory_list[item];
+    auto *o_ptr = &player_ptr->inventory_list[i_idx];
     const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
 #ifdef JP
     if (o_ptr->number <= 0) {

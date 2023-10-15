@@ -1,7 +1,6 @@
 #include "object-hook/hook-magic.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/tr-types.h"
-#include "object/object-flags.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
@@ -41,11 +40,8 @@ bool item_tester_hook_use(PlayerType *player_ptr, const ItemEntity *o_ptr)
         }
 
         for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-            if (&player_ptr->inventory_list[i] == o_ptr) {
-                auto flags = object_flags(o_ptr);
-                if (flags.has(TR_ACTIVATE)) {
-                    return true;
-                }
+            if ((&player_ptr->inventory_list[i] == o_ptr) && o_ptr->get_flags().has(TR_ACTIVATE)) {
+                return true;
             }
         }
 

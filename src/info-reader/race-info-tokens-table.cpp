@@ -186,6 +186,7 @@ const std::unordered_map<std::string_view, MonsterAbilityType> r_info_ability_fl
 	{"BA_DARK", MonsterAbilityType::BA_DARK },
 	{"BA_VOID", MonsterAbilityType::BA_VOID },
 	{"BA_ABYSS", MonsterAbilityType::BA_ABYSS },
+	{"BA_METEOR", MonsterAbilityType::BA_METEOR },
 	{"DRAIN_MANA", MonsterAbilityType::DRAIN_MANA },
 	{"MIND_BLAST", MonsterAbilityType::MIND_BLAST },
 	{"BRAIN_SMASH", MonsterAbilityType::BRAIN_SMASH },
@@ -205,6 +206,7 @@ const std::unordered_map<std::string_view, MonsterAbilityType> r_info_ability_fl
 	{"BO_ICEE", MonsterAbilityType::BO_ICEE },
 	{"BO_VOID", MonsterAbilityType::BO_VOID },
 	{"BO_ABYSS", MonsterAbilityType::BO_ABYSS },
+	{"BO_METEOR", MonsterAbilityType::BO_METEOR },
 	{"MISSILE", MonsterAbilityType::MISSILE },
 	{"SCARE", MonsterAbilityType::SCARE },
 	{"BLIND", MonsterAbilityType::BLIND },
@@ -325,6 +327,8 @@ const std::unordered_map<std::string_view, MonsterResistanceType> r_info_flagsr 
     { "RES_ABYSS", MonsterResistanceType::RESIST_ABYSS },
     { "HURT_VOID", MonsterResistanceType::HURT_VOID_MAGIC },
     { "RES_VOID", MonsterResistanceType::RESIST_VOID_MAGIC },
+    { "HURT_METEOR", MonsterResistanceType::HURT_METEOR },
+    { "RES_METEOR", MonsterResistanceType::RESIST_METEOR },
 };
 
 const std::unordered_map<std::string_view, MonsterAuraType> r_info_aura_flags = {

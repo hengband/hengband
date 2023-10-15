@@ -219,9 +219,9 @@ void print_monster_list(FloorType *floor_ptr, const std::vector<MONSTER_IDX> &mo
 
 static void print_pet_list_oneline(PlayerType *player_ptr, const MonsterEntity &monster, TERM_LEN x, TERM_LEN y, TERM_LEN width)
 {
-    const auto &monrace = monraces_info[monster.ap_r_idx];
+    const auto &monrace = monster.get_real_monrace();
     const auto name = monster_desc(player_ptr, &monster, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE | MD_NO_OWNER);
-    const auto [bar_color, bar_len] = monster.get_hp_bar_data();
+    const auto &[bar_color, bar_len] = monster.get_hp_bar_data();
     const auto is_visible = monster.ml && !player_ptr->effects()->hallucination()->is_hallucinated();
 
     term_erase(0, y);
@@ -272,7 +272,7 @@ void fix_monster_list(PlayerType *player_ptr)
 
     display_sub_windows(SubWindowRedrawingFlag::SIGHT_MONSTERS,
         [player_ptr, &once] {
-            const auto [wid, hgt] = term_get_size();
+            const auto &[wid, hgt] = term_get_size();
             std::call_once(once, target_sensing_monsters_prepare, player_ptr, monster_list);
             print_monster_list(player_ptr->current_floor_ptr, monster_list, 0, 0, hgt);
         });
@@ -290,7 +290,7 @@ void fix_pet_list(PlayerType *player_ptr)
 {
     display_sub_windows(SubWindowRedrawingFlag::PETS,
         [player_ptr] {
-            const auto [wid, hgt] = term_get_size();
+            const auto &[wid, hgt] = term_get_size();
             const auto pets = target_pets_prepare(player_ptr);
             print_pet_list(player_ptr, pets, 0, 0, wid, hgt);
         });
@@ -306,7 +306,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
         return;
     }
 
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     byte attr = TERM_WHITE;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         int cur_row = i - INVEN_MAIN_HAND;
@@ -408,7 +408,7 @@ void fix_message(void)
 {
     display_sub_windows(SubWindowRedrawingFlag::MESSAGE,
         [] {
-            const auto [wid, hgt] = term_get_size();
+            const auto &[wid, hgt] = term_get_size();
             for (short i = 0; i < hgt; i++) {
                 term_putstr(0, (hgt - 1) - i, -1, (byte)((i < now_message) ? TERM_WHITE : TERM_SLATE), *message_str(i));
                 TERM_LEN x, y;
@@ -430,7 +430,7 @@ void fix_overhead(PlayerType *player_ptr)
 {
     display_sub_windows(SubWindowRedrawingFlag::OVERHEAD,
         [player_ptr] {
-            const auto [wid, hgt] = term_get_size();
+            const auto &[wid, hgt] = term_get_size();
             if (wid > COL_MAP + 2 && hgt > ROW_MAP + 2) {
                 int cy, cx;
                 display_map(player_ptr, &cy, &cx);
@@ -452,9 +452,9 @@ static void display_dungeon(PlayerType *player_ptr)
             TERM_COLOR a;
             char c;
             if (!in_bounds2(player_ptr->current_floor_ptr, y, x)) {
-                auto *f_ptr = &terrains_info[feat_none];
-                a = f_ptr->x_attr[F_LIT_STANDARD];
-                c = f_ptr->x_char[F_LIT_STANDARD];
+                const auto &terrain = TerrainList::get_instance()[feat_none];
+                a = terrain.x_attr[F_LIT_STANDARD];
+                c = terrain.x_char[F_LIT_STANDARD];
                 term_queue_char(x - player_ptr->x + game_term->wid / 2 - 1, y - player_ptr->y + game_term->hgt / 2 - 1, a, c, ta, tc);
                 continue;
             }
@@ -547,7 +547,7 @@ static const MonsterEntity *monster_on_floor_items(FloorType *floor_ptr, const g
  */
 static void display_floor_item_list(PlayerType *player_ptr, const int y, const int x)
 {
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     if (hgt <= 0) {
         return;
     }
@@ -567,7 +567,7 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
         if (is_hallucinated) {
             line = format(_("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), x, y);
         } else {
-            const MonsterRaceInfo *const r_ptr = &monraces_info[m_ptr->ap_r_idx];
+            const MonsterRaceInfo *const r_ptr = &m_ptr->get_real_monrace();
             line = format(_("(X:%03d Y:%03d) %sの足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under %s"), x, y, r_ptr->name.data());
         }
     } else {
@@ -632,7 +632,7 @@ void fix_floor_item_list(PlayerType *player_ptr, const int y, const int x)
  */
 static void display_found_item_list(PlayerType *player_ptr)
 {
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     if (hgt <= 0) {
         return;
     }

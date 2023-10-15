@@ -147,6 +147,7 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
     ProbabilityTable<int> prob_table;
 
     /* Process probabilities */
+    const auto &monraces = MonraceList::get_instance();
     for (auto i = 0U; i < alloc_race_table.size(); i++) {
         const auto &entry = alloc_race_table[i];
         if (entry.level < min_level) {
@@ -166,13 +167,8 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
                 continue;
             }
 
-            if (r_idx == MonsterRaceId::BANORLUPART) {
-                if (monraces_info[MonsterRaceId::BANOR].cur_num > 0) {
-                    continue;
-                }
-                if (monraces_info[MonsterRaceId::LUPART].cur_num > 0) {
-                    continue;
-                }
+            if (!monraces.is_selectable(r_idx)) {
+                continue;
             }
         }
 
@@ -218,7 +214,7 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *r_ptr = &monraces_info[r_idx];
     auto *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
-    MonsterRaceInfo *old_r_ptr = &monraces_info[m_ptr->r_idx];
+    MonsterRaceInfo *old_r_ptr = &m_ptr->get_monrace();
 
     if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return false;
@@ -263,7 +259,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *r_ptr = &monraces_info[r_idx];
     auto *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
-    MonsterRaceInfo *old_r_ptr = &monraces_info[m_ptr->r_idx];
+    MonsterRaceInfo *old_r_ptr = &m_ptr->get_monrace();
 
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         return false;
@@ -317,7 +313,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
     MonsterRaceInfo *r_ptr;
 
     bool old_unique = false;
-    if (monraces_info[m_ptr->r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
+    if (m_ptr->get_monrace().kind_flags.has(MonsterKindType::UNIQUE)) {
         old_unique = true;
     }
     if (old_unique && (r_idx == MonsterRaceId::CHAMELEON)) {

@@ -306,8 +306,8 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
         }
 
         for (auto path_g_ite = path_g.begin(); path_g_ite != path_g.end(); path_g_ite++) {
-            const auto [oy, ox] = *(path_g_ite == path_g.begin() ? path_g.begin() : path_g_ite - 1);
-            const auto [ny, nx] = *path_g_ite;
+            const auto &[oy, ox] = *(path_g_ite == path_g.begin() ? path_g.begin() : path_g_ite - 1);
+            const auto &[ny, nx] = *path_g_ite;
 
             if (delay_factor > 0 && !this->player_ptr->effects()->blindness()->is_blind()) {
                 if (panel_contains(ny, nx) && player_has_los_bold(this->player_ptr, ny, nx)) {
@@ -347,7 +347,7 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
             (void)affect_feature(this->player_ptr, 0, 0, py, px, dam, typ);
         }
 
-        const auto [y, x] = path_g.back();
+        const auto &[y, x] = path_g.back();
 
         if (!floor_ptr->grid_array[y][x].is_mirror()) {
             break;
@@ -384,8 +384,8 @@ static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std:
         std::vector<std::pair<int, int>> drawn_last_pos_list;
 
         for (const auto &it : pos_list) {
-            const auto [y, x] = (n == 1) ? center : *std::next(it, -1);
-            const auto [ny, nx] = *it;
+            const auto &[y, x] = (n == 1) ? center : *std::next(it, -1);
+            const auto &[ny, nx] = *it;
 
             if (panel_contains(y, x) && player_has_los_bold(player_ptr, y, x)) {
                 print_bolt_pict(player_ptr, y, x, y, x, typ);
@@ -516,7 +516,7 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     }
 
     {
-        const auto [y, x] = path_g.back();
+        const auto &[y, x] = path_g.back();
         if (floor_ptr->grid_array[y][x].is_mirror()) {
             this->remove_mirror(y, x);
             auto project_flag = flag;
@@ -539,8 +539,8 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     std::map<int, std::vector<projection_path::const_iterator>> pos_list_map;
     for (const auto &second_path_g : second_path_g_list) {
         for (auto it = second_path_g.begin(); it != second_path_g.end(); ++it) {
-            const auto [o_y, o_x] = path_g.back();
-            const auto [y, x] = *it;
+            const auto &[o_y, o_x] = path_g.back();
+            const auto &[y, x] = *it;
             auto d = distance(o_y, o_x, y, x);
             pos_list_map[d].push_back(it);
         }
@@ -552,7 +552,7 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
         rand_shuffle(pos_list.begin(), pos_list.end());
 
         for (const auto &it : pos_list) {
-            const auto [y, x] = *it;
+            const auto &[y, x] = *it;
             res.notice |= activate_super_ray_effect(player_ptr, y, x, dam, flag);
         }
     }

@@ -28,9 +28,8 @@ bool artifact_scroll(PlayerType *player_ptr)
 {
     constexpr auto q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
     constexpr auto s = _("強化できるアイテムがない。", "You have nothing to enchant.");
-    ItemEntity *o_ptr;
-    OBJECT_IDX item;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), FuncItemTester(object_is_nameless_weapon_armour));
+    short i_idx;
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), FuncItemTester(object_is_nameless_weapon_armour));
     if (!o_ptr) {
         return false;
     }
@@ -39,7 +38,7 @@ bool artifact_scroll(PlayerType *player_ptr)
 #ifdef JP
     msg_format("%s は眩い光を発した！", item_name.data());
 #else
-    msg_format("%s %s radiate%s a blinding light!", ((item >= 0) ? "Your" : "The"), item_name.data(), ((o_ptr->number > 1) ? "" : "s"));
+    msg_format("%s %s radiate%s a blinding light!", ((i_idx >= 0) ? "Your" : "The"), item_name.data(), ((o_ptr->number > 1) ? "" : "s"));
 #endif
 
     bool okay = false;
@@ -72,10 +71,10 @@ bool artifact_scroll(PlayerType *player_ptr)
             msg_format("%d of your %s %s destroyed!", (o_ptr->number) - 1, item_name.data(), (o_ptr->number > 2 ? "were" : "was"));
 #endif
 
-            if (item >= 0) {
-                inven_item_increase(player_ptr, item, 1 - (o_ptr->number));
+            if (i_idx >= 0) {
+                inven_item_increase(player_ptr, i_idx, 1 - (o_ptr->number));
             } else {
-                floor_item_increase(player_ptr, 0 - item, 1 - (o_ptr->number));
+                floor_item_increase(player_ptr, 0 - i_idx, 1 - (o_ptr->number));
             }
         }
 
@@ -126,12 +125,10 @@ bool mundane_spell(PlayerType *player_ptr, bool only_equip)
         item_tester = std::make_unique<FuncItemTester>(&ItemEntity::is_weapon_armour_ammo);
     }
 
-    OBJECT_IDX item;
-    ItemEntity *o_ptr;
     constexpr auto q = _("どのアイテムを凡庸化しますか？", "Mundanify which item? ");
     constexpr auto s = _("凡庸化できるアイテムがない。", "You have nothing to mundanify.");
-
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
+    short i_idx;
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
     if (!o_ptr) {
         return false;
     }

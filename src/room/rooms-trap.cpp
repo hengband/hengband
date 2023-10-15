@@ -89,7 +89,7 @@ bool build_type14(PlayerType *player_ptr, dun_data_type *dd_ptr)
     g_ptr = &floor_ptr->grid_array[rand_spread(yval, ysize / 4)][rand_spread(xval, xsize / 4)];
     g_ptr->mimic = g_ptr->feat;
     g_ptr->feat = trap;
-
-    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("%sの部屋が生成されました。", "Room of %s was generated."), terrains_info[trap].name.data());
+    constexpr auto fmt = _("%sの部屋が生成されました。", "Room of %s was generated.");
+    msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt, TerrainList::get_instance()[trap].name.data());
     return true;
 }

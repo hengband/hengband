@@ -297,12 +297,12 @@ void do_cmd_zap_rod(PlayerType *player_ptr)
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU, SamuraiStanceType::KOUKIJIN });
 
-    auto q = _("どのロッドを振りますか? ", "Zap which rod? ");
-    auto s = _("使えるロッドがない。", "You have no rod to zap.");
-    OBJECT_IDX item;
-    if (!choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(ItemKindType::ROD))) {
+    constexpr auto q = _("どのロッドを振りますか? ", "Zap which rod? ");
+    constexpr auto s = _("使えるロッドがない。", "You have no rod to zap.");
+    short i_idx;
+    if (!choose_object(player_ptr, &i_idx, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(ItemKindType::ROD))) {
         return;
     }
 
-    ObjectZapRodEntity(player_ptr).execute(item);
+    ObjectZapRodEntity(player_ptr).execute(i_idx);
 }

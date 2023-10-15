@@ -21,7 +21,7 @@
  * @param art_ptr 記述内容を収めた構造体参照ポインタ
  * Fill in an object description structure for a given object
  */
-static void spoiler_print_randart(ItemEntity *o_ptr, obj_desc_list *art_ptr, std::ofstream &ofs)
+static void spoiler_print_randart(ItemEntity *o_ptr, const ArtifactsDumpInfo *art_ptr, std::ofstream &ofs)
 {
     const auto finalizer = util::make_finalizer([art_ptr, &ofs]() {
         ofs << spoiler_indent << art_ptr->misc_desc << "\n\n";
@@ -58,13 +58,12 @@ static void spoiler_print_randart(ItemEntity *o_ptr, obj_desc_list *art_ptr, std
  */
 static void spoil_random_artifact_aux(PlayerType *player_ptr, ItemEntity *o_ptr, ItemKindType tval, std::ofstream &ofs)
 {
-    obj_desc_list artifact;
     if (!o_ptr->is_known() || !o_ptr->is_random_artifact() || (o_ptr->bi_key.tval() != tval)) {
         return;
     }
 
-    random_artifact_analyze(player_ptr, o_ptr, &artifact);
-    spoiler_print_randart(o_ptr, &artifact, ofs);
+    const auto artifacts_list = random_artifact_analyze(player_ptr, o_ptr);
+    spoiler_print_randart(o_ptr, &artifacts_list, ofs);
 }
 
 /*!

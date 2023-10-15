@@ -546,12 +546,18 @@ void switch_special_death(PlayerType *player_ptr, monster_death_type *md_ptr, At
         on_dead_dragon_centipede(player_ptr, md_ptr);
         return;
     case MonsterRaceId::CAIT_SITH:
+        if (player_ptr->current_floor_ptr->dun_level <= 0) {
+            return;
+        }
         drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_boots);
         return;
     case MonsterRaceId::YENDOR_WIZARD_1:
         on_dead_random_artifact(player_ptr, md_ptr, kind_is_amulet);
         return;
     case MonsterRaceId::YENDOR_WIZARD_2:
+        if (player_ptr->current_floor_ptr->dun_level <= 0) {
+            return;
+        }
         drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_amulet);
         return;
     case MonsterRaceId::MANIMANI:

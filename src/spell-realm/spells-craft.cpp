@@ -10,7 +10,6 @@
 #include "io/input-key-acceptor.h"
 #include "object-enchant/object-ego.h"
 #include "object/item-use-flags.h"
-#include "object/object-flags.h"
 #include "player-info/equipment-info.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
@@ -293,8 +292,8 @@ bool pulish_shield(PlayerType *player_ptr)
     constexpr auto q = _("どの盾を磨きますか？", "Polish which shield? ");
     constexpr auto s = _("磨く盾がありません。", "You have no shield to polish.");
     const auto options = USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT;
-    short item;
-    auto *o_ptr = choose_object(player_ptr, &item, q, s, options, TvalItemTester(ItemKindType::SHIELD));
+    short i_idx;
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, options, TvalItemTester(ItemKindType::SHIELD));
     if (o_ptr == nullptr) {
         return false;
     }
@@ -307,7 +306,7 @@ bool pulish_shield(PlayerType *player_ptr)
 #ifdef JP
         msg_format("%sは輝いた！", item_name.data());
 #else
-        msg_format("%s %s shine%s!", ((item >= 0) ? "Your" : "The"), item_name.data(), ((o_ptr->number > 1) ? "" : "s"));
+        msg_format("%s %s shine%s!", ((i_idx >= 0) ? "Your" : "The"), item_name.data(), ((o_ptr->number > 1) ? "" : "s"));
 #endif
         o_ptr->ego_idx = EgoType::REFLECTION;
         enchant_equipment(o_ptr, randint0(3) + 4, ENCH_TOAC);

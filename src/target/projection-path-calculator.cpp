@@ -282,7 +282,7 @@ bool projectable(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, 
         return true;
     }
 
-    const auto [y, x] = grid_g.back();
+    const auto &[y, x] = grid_g.back();
     if ((y != y2) || (x != x2)) {
         return false;
     }

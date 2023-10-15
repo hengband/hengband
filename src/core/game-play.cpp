@@ -25,6 +25,7 @@
 #include "core/visuals-reseter.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-processor.h"
+#include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-changer.h"
 #include "floor/floor-events.h"
@@ -238,7 +239,7 @@ static void reset_world_info(PlayerType *player_ptr)
 static void generate_wilderness(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->dun_level == 0) && inside_quest(floor_ptr->quest_number)) {
+    if ((floor_ptr->dun_level == 0) && floor_ptr->is_in_quest()) {
         return;
     }
 

@@ -126,7 +126,7 @@ static bool decide_attack_hit(PlayerType *player_ptr, player_attack_type *pa_ptr
 {
     bool success_hit = false;
     auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
-    auto *r_ptr = &monraces_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &pa_ptr->m_ptr->get_monrace();
     if ((o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) || (pa_ptr->mode == HISSATSU_KYUSHO)) {
         int n = 1;
 

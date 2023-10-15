@@ -252,7 +252,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
             msg_print(_("そのモンスターはペットではありません。", "That monster is not a pet."));
             return false;
         }
-        if (!(monraces_info[m_ptr->r_idx].flags7 & RF7_RIDING)) {
+        if (!(m_ptr->get_monrace().flags7 & RF7_RIDING)) {
             msg_print(_("そのモンスターには乗れなさそうだ。", "This monster doesn't seem suitable for riding."));
             return false;
         }
@@ -275,7 +275,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
 
             return false;
         }
-        if (monraces_info[m_ptr->r_idx].level > randint1((player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 50 + player_ptr->lev / 2 + 20))) {
+        if (m_ptr->get_monrace().level > randint1((player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 50 + player_ptr->lev / 2 + 20))) {
             msg_print(_("うまく乗れなかった。", "You failed to ride."));
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
             return false;
@@ -343,7 +343,7 @@ static void do_name_pet(PlayerType *player_ptr)
         return;
     }
 
-    if (monraces_info[m_ptr->r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
+    if (m_ptr->get_monrace().kind_flags.has(MonsterKindType::UNIQUE)) {
         msg_print(_("そのモンスターの名前は変えられない！", "You cannot change the name of this monster!"));
         return;
     }

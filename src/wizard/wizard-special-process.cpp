@@ -490,7 +490,7 @@ void wiz_create_feature(PlayerType *player_ptr)
     }
 
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    const int max = terrains_info.size() - 1;
+    const int max = TerrainList::get_instance().size() - 1;
     const auto f_val1 = input_numerics(_("実地形ID", "FeatureID"), 0, max, g_ptr->feat);
     if (!f_val1.has_value()) {
         return;
