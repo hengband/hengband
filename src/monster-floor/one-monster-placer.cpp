@@ -136,13 +136,8 @@ static bool check_unique_placeable(PlayerType *player_ptr, MonsterRaceId r_idx, 
         return false;
     }
 
-    if (r_idx == MonsterRaceId::BANORLUPART) {
-        if (monraces_info[MonsterRaceId::BANOR].cur_num > 0) {
-            return false;
-        }
-        if (monraces_info[MonsterRaceId::LUPART].cur_num > 0) {
-            return false;
-        }
+    if (!MonraceList::get_instance().is_selectable(r_idx)) {
+        return false;
     }
 
     if (any_bits(r_ptr->flags1, RF1_FORCE_DEPTH) && (player_ptr->current_floor_ptr->dun_level < r_ptr->level) && (!ironman_nightmare || any_bits(r_ptr->flags1, RF1_QUESTOR))) {

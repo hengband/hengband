@@ -219,73 +219,9 @@ void MonsterDamageProcessor::death_special_flag_monster()
 void MonsterDamageProcessor::death_unique_monster(MonsterRaceId r_idx)
 {
     monraces_info[r_idx].max_num = 0;
-    std::vector<MonsterRaceId> combined_unique_vec;
-    if (!check_combined_unique(r_idx, &combined_unique_vec)) {
-        return;
-    }
-
-    combined_uniques uniques;
-    const int one_unit = 3;
-    for (auto i = 0U; i < combined_unique_vec.size(); i += one_unit) {
-        auto unique = std::make_tuple(combined_unique_vec[i], combined_unique_vec[i + 1], combined_unique_vec[i + 2]);
-        uniques.push_back(unique);
-    }
-
-    this->death_combined_uniques(r_idx, uniques);
-}
-
-/*
- * @brief 死亡したモンスターが分裂/合体を行う特殊ユニークか否かの判定処理
- * @param r_idx 死亡したモンスターの種族番号
- * @param united_uniques 分裂/合体を行う特殊ユニーク
- * @details 合体後、合体前1、合体前2 の順にpush_backすること
- */
-bool MonsterDamageProcessor::check_combined_unique(const MonsterRaceId r_idx, std::vector<MonsterRaceId> *combined_unique_vec)
-{
-    combined_unique_vec->push_back(MonsterRaceId::BANORLUPART);
-    combined_unique_vec->push_back(MonsterRaceId::BANOR);
-    combined_unique_vec->push_back(MonsterRaceId::LUPART);
-
-    for (const auto &unique : *combined_unique_vec) {
-        if (r_idx == unique) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-/*!
- * @brief 分裂/合体を行う特殊ユニークの死亡処理
- * @details 分裂/合体が A = B + C という図式の時、Aが死亡した場合BとCも死亡処理を行う。
- * BもしくはCが死亡した場合、Aの死亡処理を行う。
- * @param r_idx 実際に死亡したモンスターの種族ID
- * @param combined_uniques 分裂/合体を行う特殊ユニークのリスト
- */
-void MonsterDamageProcessor::death_combined_uniques(const MonsterRaceId r_idx, const combined_uniques &combined_uniques)
-{
-    auto death_r_idx = [](MonsterRaceId r_idx) {
-        auto &r_ref = monraces_info[r_idx];
-        r_ref.max_num = 0;
-        r_ref.r_pkills++;
-        r_ref.r_akills++;
-        if (r_ref.r_tkills < MAX_SHORT) {
-            r_ref.r_tkills++;
-        }
-    };
-
-    for (auto [united, split1, split2] : combined_uniques) {
-        if ((r_idx == split1) || (r_idx == split2)) {
-            death_r_idx(united);
-            continue;
-        }
-
-        if (r_idx != united) {
-            continue;
-        }
-
-        death_r_idx(split1);
-        death_r_idx(split2);
+    auto &monraces = MonraceList::get_instance();
+    if (monraces.can_unify_separate(r_idx)) {
+        monraces.kill_unified_unique(r_idx);
     }
 }
 

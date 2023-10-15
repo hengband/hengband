@@ -215,7 +215,7 @@ void determine_random_questor(PlayerType *player_ptr, QuestType *q_ptr)
             continue;
         }
 
-        if (monrace.no_suitable_questor_bounty()) {
+        if (MonraceList::get_instance().can_unify_separate(r_idx)) {
             continue;
         }
 

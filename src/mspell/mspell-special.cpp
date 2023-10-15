@@ -38,74 +38,93 @@
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
+#include <algorithm>
+#include <sstream>
 
 /*!
- * @brief バーノール・ルパートのRF6_SPECIALの処理。分裂・合体。 /
+ * @brief ユニークの分離・合体処理
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
  */
-static MonsterSpellResult spell_RF6_SPECIAL_BANORLUPART(PlayerType *player_ptr, MONSTER_IDX m_idx)
+static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    int dummy_hp, dummy_maxhp;
-    POSITION dummy_y = m_ptr->fy;
-    POSITION dummy_x = m_ptr->fx;
-    BIT_FLAGS mode = 0L;
-
+    auto dummy_y = m_ptr->fy;
+    auto dummy_x = m_ptr->fx;
     if (see_monster(player_ptr, m_idx) && monster_near_player(floor_ptr, m_idx, 0)) {
         disturb(player_ptr, true, true);
     }
 
-    switch (m_ptr->r_idx) {
-    case MonsterRaceId::BANORLUPART:
-        dummy_hp = (m_ptr->hp + 1) / 2;
-        dummy_maxhp = m_ptr->maxhp / 2;
-
+    const auto &monraces = MonraceList::get_instance();
+    const auto &unified_uniques = MonraceList::get_unified_uniques();
+    if (const auto it_unified = unified_uniques.find(m_ptr->r_idx); it_unified != unified_uniques.end()) {
+        const int separates_size = it_unified->second.size();
+        const auto separated_hp = (m_ptr->hp + 1) / separates_size;
+        const auto separated_maxhp = m_ptr->maxhp / separates_size;
         if (floor_ptr->inside_arena || player_ptr->phase_out || !summon_possible(player_ptr, m_ptr->fy, m_ptr->fx)) {
             return MonsterSpellResult::make_invalid();
         }
 
         delete_monster_idx(player_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
-        summon_named_creature(player_ptr, 0, dummy_y, dummy_x, MonsterRaceId::BANOR, mode);
-        floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
-        floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
-        summon_named_creature(player_ptr, 0, dummy_y, dummy_x, MonsterRaceId::LUPART, mode);
-        floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
-        floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
+        for (const auto separate : it_unified->second) {
+            summon_named_creature(player_ptr, 0, dummy_y, dummy_x, separate, MD_NONE);
+            floor_ptr->m_list[hack_m_idx_ii].hp = separated_hp;
+            floor_ptr->m_list[hack_m_idx_ii].maxhp = separated_maxhp;
+        }
 
-        msg_print(_("『バーノール・ルパート』が分裂した！", "Banor=Rupart splits into two persons!"));
-        break;
+        const auto &m_name = monraces[it_unified->first].name;
+        msg_format(_("%sが分離した！", "%s splits!"), m_name.data());
+        return MonsterSpellResult::make_valid();
+    }
 
-    case MonsterRaceId::BANOR:
-    case MonsterRaceId::LUPART:
-        dummy_hp = 0;
-        dummy_maxhp = 0;
+    for (const auto &[unified_unique, separates] : unified_uniques) {
+        if (!separates.contains(m_ptr->r_idx)) {
+            continue;
+        }
 
-        if (!monraces_info[MonsterRaceId::BANOR].cur_num || !monraces_info[MonsterRaceId::LUPART].cur_num) {
+        if (!monraces.exists_separates(unified_unique)) {
             return MonsterSpellResult::make_invalid();
         }
 
-        for (MONSTER_IDX k = 1; k < floor_ptr->m_max; k++) {
-            if (floor_ptr->m_list[k].r_idx == MonsterRaceId::BANOR || floor_ptr->m_list[k].r_idx == MonsterRaceId::LUPART) {
-                dummy_hp += floor_ptr->m_list[k].hp;
-                dummy_maxhp += floor_ptr->m_list[k].maxhp;
-                if (floor_ptr->m_list[k].r_idx != m_ptr->r_idx) {
-                    dummy_y = floor_ptr->m_list[k].fy;
-                    dummy_x = floor_ptr->m_list[k].fx;
-                }
-                delete_monster_idx(player_ptr, k);
+        auto unified_hp = 0;
+        auto unified_maxhp = 0;
+        for (short k = 1; k < floor_ptr->m_max; k++) {
+            const auto &monster = floor_ptr->m_list[k];
+            if (!separates.contains(monster.r_idx)) {
+                continue;
             }
+
+            unified_hp += monster.hp;
+            unified_maxhp += monster.maxhp;
+            if (monster.r_idx != m_ptr->r_idx) {
+                dummy_y = monster.fy;
+                dummy_x = monster.fx;
+            }
+
+            delete_monster_idx(player_ptr, k);
         }
-        summon_named_creature(player_ptr, 0, dummy_y, dummy_x, MonsterRaceId::BANORLUPART, mode);
-        floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
-        floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
 
-        msg_print(_("『バーノール』と『ルパート』が合体した！", "Banor and Rupart combine into one!"));
-        break;
+        summon_named_creature(player_ptr, 0, dummy_y, dummy_x, unified_unique, MD_NONE);
+        floor_ptr->m_list[hack_m_idx_ii].hp = unified_hp;
+        floor_ptr->m_list[hack_m_idx_ii].maxhp = unified_maxhp;
+        std::vector<std::string> m_names;
+        for (const auto &separate : separates) {
+            const auto &monrace = monraces[separate];
+            m_names.push_back(monrace.name);
+        }
 
-    default:
-        break;
+        std::stringstream ss;
+        ss << *m_names.begin();
+        for (size_t i = 1; i < m_names.size(); i++) { // @todo clang v14 はstd::views::drop() 非対応
+            const auto &m_name = m_names[i];
+            ss << _("と", " and ");
+            ss << m_name;
+        }
+
+        const auto fmt = _("%sが合体した！", "%s combine into one!");
+        msg_print(format(fmt, ss.str().data()));
+        return MonsterSpellResult::make_valid();
     }
 
     return MonsterSpellResult::make_valid();
@@ -246,29 +265,24 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
  */
 MonsterSpellResult spell_RF6_SPECIAL(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monster = floor.m_list[m_idx];
+    const auto &monrace = monster.get_monrace();
+    const auto r_idx = monster.r_idx;
+    if (MonraceList::get_instance().can_unify_separate(r_idx)) {
+        return spell_RF6_SPECIAL_UNIFICATION(player_ptr, m_idx);
+    }
 
-    switch (m_ptr->r_idx) {
+    switch (r_idx) {
     case MonsterRaceId::OHMU:
         return MonsterSpellResult::make_invalid();
-
-    case MonsterRaceId::BANORLUPART:
-    case MonsterRaceId::BANOR:
-    case MonsterRaceId::LUPART:
-        return spell_RF6_SPECIAL_BANORLUPART(player_ptr, m_idx);
-
     case MonsterRaceId::ROLENTO:
         return spell_RF6_SPECIAL_ROLENTO(player_ptr, y, x, m_idx, t_idx, target_type);
-        break;
-
     default:
-        if (r_ptr->d_char == 'B') {
+        if (monrace.d_char == 'B') {
             return spell_RF6_SPECIAL_B(player_ptr, y, x, m_idx, t_idx, target_type);
-            break;
-        } else {
-            return MonsterSpellResult::make_invalid();
         }
+
+        return MonsterSpellResult::make_invalid();
     }
 }

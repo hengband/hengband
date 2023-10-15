@@ -147,6 +147,7 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
     ProbabilityTable<int> prob_table;
 
     /* Process probabilities */
+    const auto &monraces = MonraceList::get_instance();
     for (auto i = 0U; i < alloc_race_table.size(); i++) {
         const auto &entry = alloc_race_table[i];
         if (entry.level < min_level) {
@@ -166,13 +167,8 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
                 continue;
             }
 
-            if (r_idx == MonsterRaceId::BANORLUPART) {
-                if (monraces_info[MonsterRaceId::BANOR].cur_num > 0) {
-                    continue;
-                }
-                if (monraces_info[MonsterRaceId::LUPART].cur_num > 0) {
-                    continue;
-                }
+            if (!monraces.is_selectable(r_idx)) {
+                continue;
             }
         }
 
