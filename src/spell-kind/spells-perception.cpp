@@ -127,8 +127,8 @@ bool ident_spell(PlayerType *player_ptr, bool only_equip)
     }
 
     constexpr auto s = _("鑑定するべきアイテムがない。", "You have nothing to identify.");
-    OBJECT_IDX item;
-    auto o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
+    short i_idx;
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
     if (!o_ptr) {
         return false;
     }
@@ -136,15 +136,15 @@ bool ident_spell(PlayerType *player_ptr, bool only_equip)
     auto old_known = identify_item(player_ptr, o_ptr);
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
-    if (item >= INVEN_MAIN_HAND) {
-        msg_format(_("%s^: %s(%c)。", "%s^: %s (%c)."), describe_use(player_ptr, item), item_name.data(), index_to_label(item));
-    } else if (item >= 0) {
-        msg_format(_("ザック中: %s(%c)。", "In your pack: %s (%c)."), item_name.data(), index_to_label(item));
+    if (i_idx >= INVEN_MAIN_HAND) {
+        msg_format(_("%s^: %s(%c)。", "%s^: %s (%c)."), describe_use(player_ptr, i_idx), item_name.data(), index_to_label(i_idx));
+    } else if (i_idx >= 0) {
+        msg_format(_("ザック中: %s(%c)。", "In your pack: %s (%c)."), item_name.data(), index_to_label(i_idx));
     } else {
         msg_format(_("床上: %s。", "On the ground: %s."), item_name.data());
     }
 
-    autopick_alter_item(player_ptr, item, (bool)(destroy_identify && !old_known));
+    autopick_alter_item(player_ptr, i_idx, (bool)(destroy_identify && !old_known));
     return true;
 }
 
@@ -176,8 +176,8 @@ bool identify_fully(PlayerType *player_ptr, bool only_equip)
 
     constexpr auto s = _("*鑑定*するべきアイテムがない。", "You have nothing to *identify*.");
 
-    OBJECT_IDX item;
-    auto o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
+    short i_idx;
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
     if (!o_ptr) {
         return false;
     }
@@ -189,15 +189,15 @@ bool identify_fully(PlayerType *player_ptr, bool only_equip)
     window_stuff(player_ptr);
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
-    if (item >= INVEN_MAIN_HAND) {
-        msg_format(_("%s^: %s(%c)。", "%s^: %s (%c)."), describe_use(player_ptr, item), item_name.data(), index_to_label(item));
-    } else if (item >= 0) {
-        msg_format(_("ザック中: %s(%c)。", "In your pack: %s (%c)."), item_name.data(), index_to_label(item));
+    if (i_idx >= INVEN_MAIN_HAND) {
+        msg_format(_("%s^: %s(%c)。", "%s^: %s (%c)."), describe_use(player_ptr, i_idx), item_name.data(), index_to_label(i_idx));
+    } else if (i_idx >= 0) {
+        msg_format(_("ザック中: %s(%c)。", "In your pack: %s (%c)."), item_name.data(), index_to_label(i_idx));
     } else {
         msg_format(_("床上: %s。", "On the ground: %s."), item_name.data());
     }
 
     (void)screen_object(player_ptr, o_ptr, 0L);
-    autopick_alter_item(player_ptr, item, (bool)(destroy_identify && !old_known));
+    autopick_alter_item(player_ptr, i_idx, (bool)(destroy_identify && !old_known));
     return true;
 }

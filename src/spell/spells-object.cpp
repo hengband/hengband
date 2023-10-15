@@ -487,9 +487,9 @@ bool enchant_spell(PlayerType *player_ptr, HIT_PROB num_hit, int num_dam, ARMOUR
 
     constexpr auto q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
     constexpr auto s = _("強化できるアイテムがない。", "You have nothing to enchant.");
-    short item;
+    short i_idx;
     const auto options = USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT;
-    auto *o_ptr = choose_object(player_ptr, &item, q, s, options, item_tester);
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, options, item_tester);
     if (!o_ptr) {
         return false;
     }
@@ -498,7 +498,7 @@ bool enchant_spell(PlayerType *player_ptr, HIT_PROB num_hit, int num_dam, ARMOUR
 #ifdef JP
     msg_format("%s は明るく輝いた！", item_name.data());
 #else
-    msg_format("%s %s glow%s brightly!", ((item >= 0) ? "Your" : "The"), item_name.data(), ((o_ptr->number > 1) ? "" : "s"));
+    msg_format("%s %s glow%s brightly!", ((i_idx >= 0) ? "Your" : "The"), item_name.data(), ((o_ptr->number > 1) ? "" : "s"));
 #endif
 
     auto is_enchant_successful = false;
@@ -539,9 +539,9 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
 {
     constexpr auto q = _("どの武器を強化しますか? ", "Enchant which weapon? ");
     constexpr auto s = _("強化できる武器がない。", "You have nothing to enchant.");
-    short item;
+    short i_idx;
     const auto options = USE_EQUIP | IGNORE_BOTHHAND_SLOT;
-    auto *o_ptr = choose_object(player_ptr, &item, q, s, options, FuncItemTester(&ItemEntity::allow_enchant_melee_weapon));
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, options, FuncItemTester(&ItemEntity::allow_enchant_melee_weapon));
     if (o_ptr == nullptr) {
         return;
     }

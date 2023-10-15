@@ -165,8 +165,8 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
         if (cast) {
             constexpr auto q = _("どれを呪いますか？", "Which weapon do you curse?");
             constexpr auto s = _("武器を装備していない。", "You're not wielding a weapon.");
-            short item;
-            auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(&ItemEntity::is_melee_weapon));
+            short i_idx;
+            auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_EQUIP), FuncItemTester(&ItemEntity::is_melee_weapon));
             if (o_ptr == nullptr) {
                 return "";
             }
@@ -517,13 +517,13 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
         if (cast) {
             constexpr auto q = _("どれを呪いますか？", "Which piece of armour do you curse?");
             constexpr auto s = _("防具を装備していない。", "You're not wearing any armor.");
-            OBJECT_IDX item;
-            auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(&ItemEntity::is_protector));
+            short i_idx;
+            auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_EQUIP), FuncItemTester(&ItemEntity::is_protector));
             if (!o_ptr) {
                 return "";
             }
 
-            o_ptr = &player_ptr->inventory_list[item];
+            o_ptr = &player_ptr->inventory_list[i_idx];
             const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
             if (!input_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really?"), item_name.data()))) {
                 return "";
@@ -740,14 +740,10 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
             return _("呪われた装備品の呪いを吸収して魔力を回復する。", "Drains curse on your equipment and heals SP a little.");
         }
         if (cast) {
-            OBJECT_IDX item;
-            concptr s, q;
-            ItemEntity *o_ptr;
-
-            q = _("どの装備品から吸収しますか？", "Which cursed equipment do you drain mana from?");
-            s = _("呪われたアイテムを装備していない。", "You have no cursed equipment.");
-
-            o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(&ItemEntity::is_cursed));
+            constexpr auto q = _("どの装備品から吸収しますか？", "Which cursed equipment do you drain mana from?");
+            constexpr auto s = _("呪われたアイテムを装備していない。", "You have no cursed equipment.");
+            short i_idx;
+            auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_EQUIP), FuncItemTester(&ItemEntity::is_cursed));
             if (!o_ptr) {
                 return "";
             }

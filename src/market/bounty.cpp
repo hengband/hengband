@@ -159,7 +159,7 @@ bool exchange_cash(PlayerType *player_ptr)
                 continue;
             }
 
-            INVENTORY_IDX item_new;
+            INVENTORY_IDX inventory_new;
             ItemEntity forge;
 
             const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
@@ -187,11 +187,11 @@ bool exchange_cash(PlayerType *player_ptr)
              * Since a corpse is handed at first,
              * there is at least one empty slot.
              */
-            item_new = store_item_to_inventory(player_ptr, &forge);
+            inventory_new = store_item_to_inventory(player_ptr, &forge);
             const auto got_item_name = describe_flavor(player_ptr, &forge, 0);
-            msg_format(_("%s(%c)を貰った。", "You get %s (%c). "), got_item_name.data(), index_to_label(item_new));
+            msg_format(_("%s(%c)を貰った。", "You get %s (%c). "), got_item_name.data(), index_to_label(inventory_new));
 
-            autopick_alter_item(player_ptr, item_new, false);
+            autopick_alter_item(player_ptr, inventory_new, false);
             handle_stuff(player_ptr);
             change = true;
         }

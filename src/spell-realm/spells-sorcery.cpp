@@ -30,8 +30,8 @@ bool alchemy(PlayerType *player_ptr)
 
     constexpr auto q = _("どのアイテムを金に変えますか？", "Turn which item to gold? ");
     constexpr auto s = _("金に変えられる物がありません。", "You have nothing to turn to gold.");
-    short item;
-    auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR));
+    short i_idx;
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_INVEN | USE_FLOOR));
     if (!o_ptr) {
         return false;
     }
@@ -67,7 +67,7 @@ bool alchemy(PlayerType *player_ptr)
     auto price = object_value_real(o_ptr);
     if (price <= 0) {
         msg_format(_("%sをニセの金に変えた。", "You turn %s to fool's gold."), item_name.data());
-        vary_item(player_ptr, item, -amt);
+        vary_item(player_ptr, i_idx, -amt);
         return true;
     }
 
@@ -86,6 +86,6 @@ bool alchemy(PlayerType *player_ptr)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::GOLD);
     rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
-    vary_item(player_ptr, item, -amt);
+    vary_item(player_ptr, i_idx, -amt);
     return true;
 }

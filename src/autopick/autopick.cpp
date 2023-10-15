@@ -38,19 +38,19 @@
 /*!
  * @brief Auto-destroy marked item
  */
-static void autopick_delayed_alter_aux(PlayerType *player_ptr, INVENTORY_IDX item)
+static void autopick_delayed_alter_aux(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 {
-    const auto *o_ptr = ref_item(player_ptr, item);
+    const auto *o_ptr = ref_item(player_ptr, i_idx);
     if (!o_ptr->is_valid() || o_ptr->marked.has_not(OmType::AUTODESTROY)) {
         return;
     }
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
-    if (item >= 0) {
-        inven_item_increase(player_ptr, item, -(o_ptr->number));
-        inven_item_optimize(player_ptr, item);
+    if (i_idx >= 0) {
+        inven_item_increase(player_ptr, i_idx, -(o_ptr->number));
+        inven_item_optimize(player_ptr, i_idx);
     } else {
-        delete_object_idx(player_ptr, 0 - item);
+        delete_object_idx(player_ptr, 0 - i_idx);
     }
 
     msg_format(_("%sを自動破壊します。", "Auto-destroying %s."), item_name.data());
@@ -64,14 +64,14 @@ static void autopick_delayed_alter_aux(PlayerType *player_ptr, INVENTORY_IDX ite
  */
 void autopick_delayed_alter(PlayerType *player_ptr)
 {
-    for (INVENTORY_IDX item = INVEN_TOTAL - 1; item >= 0; item--) {
-        autopick_delayed_alter_aux(player_ptr, item);
+    for (INVENTORY_IDX i_idx = INVEN_TOTAL - 1; i_idx >= 0; i_idx--) {
+        autopick_delayed_alter_aux(player_ptr, i_idx);
     }
 
     auto &grid = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     for (auto it = grid.o_idx_list.begin(); it != grid.o_idx_list.end();) {
-        INVENTORY_IDX item = *it++;
-        autopick_delayed_alter_aux(player_ptr, -item);
+        INVENTORY_IDX i_idx = *it++;
+        autopick_delayed_alter_aux(player_ptr, -i_idx);
     }
 
     // PW_FLOOR_ITEM_LISTは遅れるので即時更新
@@ -84,13 +84,13 @@ void autopick_delayed_alter(PlayerType *player_ptr)
  * Auto-destroyer works only on inventory or on floor stack only when
  * requested.
  */
-void autopick_alter_item(PlayerType *player_ptr, INVENTORY_IDX item, bool destroy)
+void autopick_alter_item(PlayerType *player_ptr, INVENTORY_IDX i_idx, bool destroy)
 {
     ItemEntity *o_ptr;
-    o_ptr = ref_item(player_ptr, item);
+    o_ptr = ref_item(player_ptr, i_idx);
     int idx = find_autopick_list(player_ptr, o_ptr);
     auto_inscribe_item(o_ptr, idx);
-    if (destroy && item <= INVEN_PACK) {
+    if (destroy && i_idx <= INVEN_PACK) {
         auto_destroy_item(player_ptr, o_ptr, idx);
     }
 }

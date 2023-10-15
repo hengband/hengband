@@ -247,8 +247,8 @@ void wiz_modify_item_activation(PlayerType *player_ptr)
 {
     constexpr auto q = _("どのアイテムの発動を変更しますか？ ", "Which item? ");
     constexpr auto s = _("発動を変更するアイテムがない。", "Nothing to do with.");
-    short item;
-    auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT);
+    short i_idx;
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT);
     if (!o_ptr) {
         return;
     }
@@ -734,8 +734,8 @@ void wiz_modify_item(PlayerType *player_ptr)
 {
     constexpr auto q = "Play with which object? ";
     constexpr auto s = "You have nothing to play with.";
-    short item;
-    auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT);
+    short i_idx;
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT);
     if (!o_ptr) {
         return;
     }

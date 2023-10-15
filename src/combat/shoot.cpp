@@ -459,29 +459,11 @@ static MULTIPLY calc_shot_damage_with_slay(
 }
 
 /*!
- * @brief 射撃処理実行 /
- * Fire an object from the pack or floor.
- * @param item 射撃するオブジェクトの所持ID
+ * @brief 射撃処理実行
+ * @param i_idx 射撃するオブジェクトの所持ID
  * @param bow_ptr 射撃武器のオブジェクト参照ポインタ
- * @details
- * <pre>
- * You may only fire items that "match" your missile launcher.
- * You must use slings + pebbles/shots, bows + arrows, xbows + bolts.
- * See "calc_bonuses()" for more calculations and such.
- * Note that "firing" a missile is MUCH better than "throwing" it.
- * Note: "unseen" monsters are very hard to hit.
- * Objects are more likely to break if they "attempt" to hit a monster.
- * Rangers (with Bows) and Anyone (with "Extra Shots") get extra shots.
- * The "extra shot" code works by decreasing the amount of energy
- * required to make each shot, spreading the shots out over time.
- * Note that when firing missiles, the launcher multiplier is applied
- * after all the bonuses are added in, making multipliers very useful.
- * Note that Bows of "Extra Might" get extra range and an extra bonus
- * for the damage multiplier.
- * Note that Bows of "Extra Shots" give an extra shot.
- * </pre>
  */
-void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPELL_IDX snipe_type)
+void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SPELL_IDX snipe_type)
 {
     POSITION y, x, ny, nx, ty, tx, prev_y, prev_x;
     ItemEntity forge;
@@ -496,10 +478,10 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
 
     /* Access the item (if in the pack) */
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (item >= 0) {
-        o_ptr = &player_ptr->inventory_list[item];
+    if (i_idx >= 0) {
+        o_ptr = &player_ptr->inventory_list[i_idx];
     } else {
-        o_ptr = &floor_ptr->o_list[0 - item];
+        o_ptr = &floor_ptr->o_list[0 - i_idx];
     }
 
     /* Sniper - Cannot shot a single arrow twice */
@@ -625,7 +607,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
         /* Single object */
         q_ptr->number = 1;
 
-        vary_item(player_ptr, item, -1);
+        vary_item(player_ptr, i_idx, -1);
 
         sound(SOUND_SHOOT);
         handle_stuff(player_ptr);
