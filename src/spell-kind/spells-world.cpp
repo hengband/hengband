@@ -255,7 +255,7 @@ bool teleport_level_other(PlayerType *player_ptr)
     MonsterEntity *m_ptr;
     MonsterRaceInfo *r_ptr;
     m_ptr = &player_ptr->current_floor_ptr->m_list[target_m_idx];
-    r_ptr = &monraces_info[m_ptr->r_idx];
+    r_ptr = &m_ptr->get_monrace();
     const auto m_name = monster_desc(player_ptr, m_ptr, 0);
     msg_format(_("%s^の足を指さした。", "You gesture at %s^'s feet."), m_name.data());
 

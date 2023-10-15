@@ -344,7 +344,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
 
     if (any_bits(r_ptr->flags7, RF7_CHAMELEON)) {
         choose_new_monster(player_ptr, g_ptr->m_idx, true, MonsterRace::empty_id());
-        r_ptr = &monraces_info[m_ptr->r_idx];
+        r_ptr = &m_ptr->get_monrace();
         m_ptr->mflag2.set(MonsterConstantFlagType::CHAMELEON);
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (who <= 0)) {
             m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
@@ -425,14 +425,14 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
 
     update_monster(player_ptr, g_ptr->m_idx, true);
 
-    m_ptr->get_real_r_ref().cur_num++;
+    m_ptr->get_real_monrace().cur_num++;
 
     /*
      * Memorize location of the unique monster in saved floors.
      * A unique monster move from old saved floor.
      */
     if (w_ptr->character_dungeon && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->population_flags.has(MonsterPopulationType::NAZGUL))) {
-        m_ptr->get_real_r_ref().floor_id = player_ptr->floor_id;
+        m_ptr->get_real_monrace().floor_id = player_ptr->floor_id;
     }
 
     if (any_bits(r_ptr->flags2, RF2_MULTIPLY)) {

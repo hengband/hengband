@@ -55,7 +55,7 @@ void set_friendly(MonsterEntity *m_ptr)
  * @param mode オプション
  * @return 踏破可能ならばTRUEを返す
  */
-bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, MonsterRaceInfo *r_ptr, BIT_FLAGS16 mode)
+bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, const MonsterRaceInfo *r_ptr, BIT_FLAGS16 mode)
 {
     auto *f_ptr = &terrains_info[feat];
 
@@ -180,36 +180,36 @@ static bool check_hostile_align(byte sub_align1, byte sub_align2)
 /*!
  * @brief モンスターの属性の基づいた敵対関係の有無を返す
  * Check if two monsters are enemies
- * @param m_ptr モンスター1の構造体参照ポインタ
- * @param n_ptr モンスター2の構造体参照ポインタ
+ * @param monster1 モンスター1への参照
+ * @param monster2 モンスター2への参照
  * @return 敵対関係にあるならばTRUEを返す
  */
-bool are_enemies(PlayerType *player_ptr, const MonsterEntity &m1_ref, const MonsterEntity &m2_ref)
+bool are_enemies(PlayerType *player_ptr, const MonsterEntity &monster1, const MonsterEntity &monster2)
 {
     if (player_ptr->phase_out) {
-        if (m1_ref.is_pet() || m2_ref.is_pet()) {
+        if (monster1.is_pet() || monster2.is_pet()) {
             return false;
         }
         return true;
     }
 
-    const auto &r1_ref = monraces_info[m1_ref.r_idx];
-    const auto &r2_ref = monraces_info[m2_ref.r_idx];
-    const auto is_m1_wild = r1_ref.wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
-    const auto is_m2_wild = r2_ref.wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
+    const auto &monrace1 = monster1.get_monrace();
+    const auto &monrace2 = monster2.get_monrace();
+    const auto is_m1_wild = monrace1.wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
+    const auto is_m2_wild = monrace2.wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
     if (is_m1_wild && is_m2_wild) {
-        if (!m1_ref.is_pet() && !m2_ref.is_pet()) {
+        if (!monster1.is_pet() && !monster2.is_pet()) {
             return false;
         }
     }
 
-    if (check_hostile_align(m1_ref.sub_align, m2_ref.sub_align)) {
-        if (m1_ref.mflag2.has_not(MonsterConstantFlagType::CHAMELEON) || m2_ref.mflag2.has_not(MonsterConstantFlagType::CHAMELEON)) {
+    if (check_hostile_align(monster1.sub_align, monster2.sub_align)) {
+        if (monster1.mflag2.has_not(MonsterConstantFlagType::CHAMELEON) || monster2.mflag2.has_not(MonsterConstantFlagType::CHAMELEON)) {
             return true;
         }
     }
 
-    if (m1_ref.is_hostile() != m2_ref.is_hostile()) {
+    if (monster1.is_hostile() != monster2.is_hostile()) {
         return true;
     }
 

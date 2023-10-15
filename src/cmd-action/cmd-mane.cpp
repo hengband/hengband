@@ -965,7 +965,7 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
 
         const auto &grid = floor_ptr->grid_array[target_row][target_col];
         auto *m_ptr = &floor_ptr->m_list[grid.m_idx];
-        auto *r_ptr = &monraces_info[m_ptr->r_idx];
+        auto *r_ptr = &m_ptr->get_monrace();
         const auto m_name = monster_desc(player_ptr, m_ptr, 0);
         if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
             if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {

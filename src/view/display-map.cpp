@@ -309,7 +309,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
         return;
     }
 
-    auto *r_ptr = &monraces_info[m_ptr->ap_r_idx];
+    auto *r_ptr = &m_ptr->get_real_monrace();
     feat_priority = 30;
     if (is_hallucinated) {
         if (r_ptr->visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {

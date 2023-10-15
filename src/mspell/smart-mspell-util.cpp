@@ -12,7 +12,7 @@ msr_type::msr_type(PlayerType *player_ptr, short m_idx, const EnumClassFlagGroup
     : ability_flags(ability_flags)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    this->r_ptr = &monraces_info[m_ptr->r_idx];
+    this->r_ptr = &m_ptr->get_monrace();
 }
 
 /*!

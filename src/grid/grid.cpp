@@ -880,7 +880,7 @@ bool cave_monster_teleportable_bold(PlayerType *player_ptr, MONSTER_IDX m_idx, P
     }
 
     if (!(mode & TELEPORT_PASSIVE)) {
-        if (!monster_can_cross_terrain(player_ptr, g_ptr->feat, &monraces_info[m_ptr->r_idx], 0)) {
+        if (!monster_can_cross_terrain(player_ptr, g_ptr->feat, &m_ptr->get_monrace(), 0)) {
             return false;
         }
     }
