@@ -165,7 +165,7 @@ static errr interpret_f_token(char *buf)
     }
 
     int i = (int)strtol(zz[0], nullptr, 0);
-    if (i >= static_cast<int>(terrains_info.size())) {
+    if (i >= static_cast<int>(TerrainList::get_instance().size())) {
         return 1;
     }
 

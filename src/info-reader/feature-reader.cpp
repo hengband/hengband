@@ -78,7 +78,7 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
         if (i < error_idx) {
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
-        if (i >= static_cast<int>(terrains_info.size())) {
+        if (i >= static_cast<int>(TerrainList::get_instance().size())) {
             terrains_info.resize(i + 1);
         }
 

@@ -411,7 +411,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     std::optional<short> new_terrain_id(std::nullopt);
                     const auto previous_terrain_id = terrain_id;
                     while (true) {
-                        new_terrain_id = input_new_visual_id(ch, terrain_id, static_cast<short>(terrains_info.size()));
+                        new_terrain_id = input_new_visual_id(ch, terrain_id, static_cast<short>(TerrainList::get_instance().size()));
                         if (!new_terrain_id.has_value()) {
                             terrain_id = previous_terrain_id;
                             break;

@@ -63,6 +63,7 @@ public:
     const std::vector<TerrainType>::const_iterator begin() const;
     std::vector<TerrainType>::iterator end();
     const std::vector<TerrainType>::const_iterator end() const;
+    size_t size() const;
 
 private:
     TerrainList() = default;

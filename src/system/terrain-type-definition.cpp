@@ -49,3 +49,8 @@ const std::vector<TerrainType>::const_iterator TerrainList::end() const
 {
     return terrains_info.end();
 }
+
+size_t TerrainList::size() const
+{
+    return terrains_info.size();
+}
