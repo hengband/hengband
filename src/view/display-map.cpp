@@ -95,7 +95,6 @@ static void image_random(TERM_COLOR *ap, char *cp)
 /*!
  * @brief マップに表示されるべき地形(壁)かどうかを判定する
  * @param floor_ptr 階の情報への参照ポインタ
- * @param f_ptr 地形の情報への参照ポインタ
  * @param y グリッドy座標
  * @param x グリッドx座標
  * @return 表示されるべきならtrue、そうでないならfalse
@@ -103,42 +102,47 @@ static void image_random(TERM_COLOR *ap, char *cp)
  * 周り全てが壁に囲まれている壁についてはオプション状態による。
  * 1か所でも空きがあるか、壁ではない地形、金を含む地形、永久岩は表示。
  */
-static bool is_revealed_wall(FloorType *floor_ptr, TerrainType *f_ptr, POSITION y, POSITION x)
+static bool is_revealed_wall(FloorType *floor_ptr, int y, int x)
 {
+    const auto &grid = floor_ptr->grid_array[y][x];
     if (view_hidden_walls) {
         if (view_unsafe_walls) {
             return true;
         }
-        if (none_bits(floor_ptr->grid_array[y][x].info, CAVE_UNSAFE)) {
+        if (none_bits(grid.info, CAVE_UNSAFE)) {
             return true;
         }
     }
 
-    if (f_ptr->flags.has_not(TerrainCharacteristics::WALL) || f_ptr->flags.has(TerrainCharacteristics::HAS_GOLD)) {
+    const auto feat = grid.get_feat_mimic();
+    const auto &terrain = terrains_info[feat]; // @todo grid_typeのオブジェクトメソッドとして定義
+    if (terrain.flags.has_not(TerrainCharacteristics::WALL) || terrain.flags.has(TerrainCharacteristics::HAS_GOLD)) {
         return true;
     }
 
-    if (in_bounds(floor_ptr, y, x) && f_ptr->flags.has(TerrainCharacteristics::PERMANENT)) {
+    if (in_bounds(floor_ptr, y, x) && terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
         return true;
     }
 
-    int n = 0;
-    for (int i = 0; i < 8; i++) {
-        int dy = y + ddy_cdd[i];
-        int dx = x + ddx_cdd[i];
+    constexpr auto neighbors = 8;
+    const auto &terrains = TerrainList::get_instance();
+    auto n = 0;
+    for (auto i = 0; i < neighbors; i++) {
+        const auto dy = y + ddy_cdd[i];
+        const auto dx = x + ddx_cdd[i];
         if (!in_bounds(floor_ptr, dy, dx)) {
             n++;
             continue;
         }
 
-        FEAT_IDX f_idx = floor_ptr->grid_array[dy][dx].feat;
-        TerrainType *n_ptr = &terrains_info[f_idx];
-        if (n_ptr->flags.has(TerrainCharacteristics::WALL)) {
+        const auto terrain_id = floor_ptr->grid_array[dy][dx].feat;
+        const auto &terrain_neighbor = terrains[terrain_id];
+        if (terrain_neighbor.flags.has(TerrainCharacteristics::WALL)) {
             n++;
         }
     }
 
-    return n != 8;
+    return n != neighbors;
 }
 
 /*!
@@ -200,7 +204,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
             c = f_ptr->x_char[F_LIT_STANDARD];
         }
     } else {
-        if (g_ptr->is_mark() && is_revealed_wall(floor_ptr, f_ptr, y, x)) {
+        if (g_ptr->is_mark() && is_revealed_wall(floor_ptr, y, x)) {
             a = f_ptr->x_attr[F_LIT_STANDARD];
             c = f_ptr->x_char[F_LIT_STANDARD];
             const auto is_blind = player_ptr->effects()->blindness()->is_blind();

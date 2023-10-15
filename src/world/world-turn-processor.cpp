@@ -277,24 +277,24 @@ void WorldTurnProcessor::shuffle_shopkeeper()
     }
 
     int n;
-    do {
+    while (true) {
         n = randint0(MAX_STORES);
         if ((n == enum2i(StoreSaleType::HOME)) || (n == enum2i(StoreSaleType::MUSEUM))) {
             break;
         }
-    } while (true);
+    }
 
-    for (const auto &f_ref : terrains_info) {
-        if (f_ref.name.empty() || f_ref.flags.has_not(TerrainCharacteristics::STORE)) {
+    for (const auto &terrain : TerrainList::get_instance()) {
+        if (terrain.name.empty() || terrain.flags.has_not(TerrainCharacteristics::STORE)) {
             continue;
         }
 
-        if (f_ref.subtype != n) {
+        if (terrain.subtype != n) {
             continue;
         }
 
         if (cheat_xtra) {
-            msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), f_ref.name.data());
+            msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), terrain.name.data());
         }
 
         store_shuffle(this->player_ptr, i2enum<StoreSaleType>(n));

@@ -62,8 +62,8 @@
  */
 static bool boundary_floor(grid_type *g_ptr, TerrainType *f_ptr, TerrainType *mimic_f_ptr)
 {
-    bool is_boundary_floor = g_ptr->mimic > 0;
-    is_boundary_floor &= permanent_wall(f_ptr);
+    auto is_boundary_floor = g_ptr->mimic > 0;
+    is_boundary_floor &= f_ptr->is_permanent_wall();
     is_boundary_floor &= mimic_f_ptr->flags.has_any_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY });
     is_boundary_floor &= mimic_f_ptr->flags.has(TerrainCharacteristics::PROJECT);
     is_boundary_floor &= mimic_f_ptr->flags.has_not(TerrainCharacteristics::OPEN);

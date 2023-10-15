@@ -57,9 +57,8 @@ void set_friendly(MonsterEntity *m_ptr)
  */
 bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, const MonsterRaceInfo *r_ptr, BIT_FLAGS16 mode)
 {
-    auto *f_ptr = &terrains_info[feat];
-
-    if (f_ptr->flags.has(TerrainCharacteristics::PATTERN)) {
+    const auto &terrain = TerrainList::get_instance()[feat];
+    if (terrain.flags.has(TerrainCharacteristics::PATTERN)) {
         if (!(mode & CEM_RIDING)) {
             if (r_ptr->feature_flags.has_not(MonsterFeatureType::CAN_FLY)) {
                 return false;
@@ -71,29 +70,29 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, const Mons
         }
     }
 
-    if (f_ptr->flags.has(TerrainCharacteristics::CAN_FLY) && r_ptr->feature_flags.has(MonsterFeatureType::CAN_FLY)) {
+    if (terrain.flags.has(TerrainCharacteristics::CAN_FLY) && r_ptr->feature_flags.has(MonsterFeatureType::CAN_FLY)) {
         return true;
     }
-    if (f_ptr->flags.has(TerrainCharacteristics::CAN_SWIM) && r_ptr->feature_flags.has(MonsterFeatureType::CAN_SWIM)) {
+    if (terrain.flags.has(TerrainCharacteristics::CAN_SWIM) && r_ptr->feature_flags.has(MonsterFeatureType::CAN_SWIM)) {
         return true;
     }
-    if (f_ptr->flags.has(TerrainCharacteristics::CAN_PASS)) {
+    if (terrain.flags.has(TerrainCharacteristics::CAN_PASS)) {
         if (r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL) && (!(mode & CEM_RIDING) || has_pass_wall(player_ptr))) {
             return true;
         }
     }
 
-    if (f_ptr->flags.has_not(TerrainCharacteristics::MOVE)) {
+    if (terrain.flags.has_not(TerrainCharacteristics::MOVE)) {
         return false;
     }
 
-    if (f_ptr->flags.has(TerrainCharacteristics::MOUNTAIN) && (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN))) {
+    if (terrain.flags.has(TerrainCharacteristics::MOUNTAIN) && (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN))) {
         return true;
     }
 
-    if (f_ptr->flags.has(TerrainCharacteristics::WATER)) {
+    if (terrain.flags.has(TerrainCharacteristics::WATER)) {
         if (r_ptr->feature_flags.has_not(MonsterFeatureType::AQUATIC)) {
-            if (f_ptr->flags.has(TerrainCharacteristics::DEEP)) {
+            if (terrain.flags.has(TerrainCharacteristics::DEEP)) {
                 return false;
             } else if (r_ptr->aura_flags.has(MonsterAuraType::FIRE)) {
                 return false;
@@ -103,31 +102,31 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, const Mons
         return false;
     }
 
-    if (f_ptr->flags.has(TerrainCharacteristics::LAVA)) {
+    if (terrain.flags.has(TerrainCharacteristics::LAVA)) {
         if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_FIRE_MASK)) {
             return false;
         }
     }
 
-    if (f_ptr->flags.has(TerrainCharacteristics::COLD_PUDDLE)) {
+    if (terrain.flags.has(TerrainCharacteristics::COLD_PUDDLE)) {
         if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_COLD_MASK)) {
             return false;
         }
     }
 
-    if (f_ptr->flags.has(TerrainCharacteristics::ELEC_PUDDLE)) {
+    if (terrain.flags.has(TerrainCharacteristics::ELEC_PUDDLE)) {
         if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_ELEC_MASK)) {
             return false;
         }
     }
 
-    if (f_ptr->flags.has(TerrainCharacteristics::ACID_PUDDLE)) {
+    if (terrain.flags.has(TerrainCharacteristics::ACID_PUDDLE)) {
         if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_ACID_MASK)) {
             return false;
         }
     }
 
-    if (f_ptr->flags.has(TerrainCharacteristics::POISON_PUDDLE)) {
+    if (terrain.flags.has(TerrainCharacteristics::POISON_PUDDLE)) {
         if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_POISON_MASK)) {
             return false;
         }

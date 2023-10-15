@@ -187,18 +187,18 @@ void do_cmd_visuals(PlayerType *player_ptr)
             }
 
             auto_dump_printf(auto_dump_stream, _("\n# 地形の[色/文字]の設定\n\n", "\n# Feature attr/char definitions\n\n"));
-            for (const auto &f_ref : terrains_info) {
-                if (f_ref.name.empty()) {
+            for (const auto &terrain : TerrainList::get_instance()) {
+                if (terrain.name.empty()) {
                     continue;
                 }
-                if (f_ref.mimic != f_ref.idx) {
+                if (terrain.mimic != terrain.idx) {
                     continue;
                 }
 
-                auto_dump_printf(auto_dump_stream, "# %s\n", (f_ref.name.data()));
-                auto_dump_printf(auto_dump_stream, "F:%d:0x%02X/0x%02X:0x%02X/0x%02X:0x%02X/0x%02X\n\n", f_ref.idx, (byte)(f_ref.x_attr[F_LIT_STANDARD]),
-                    (byte)(f_ref.x_char[F_LIT_STANDARD]), (byte)(f_ref.x_attr[F_LIT_LITE]), (byte)(f_ref.x_char[F_LIT_LITE]),
-                    (byte)(f_ref.x_attr[F_LIT_DARK]), (byte)(f_ref.x_char[F_LIT_DARK]));
+                auto_dump_printf(auto_dump_stream, "# %s\n", (terrain.name.data()));
+                auto_dump_printf(auto_dump_stream, "F:%d:0x%02X/0x%02X:0x%02X/0x%02X:0x%02X/0x%02X\n\n", terrain.idx, (byte)(terrain.x_attr[F_LIT_STANDARD]),
+                    (byte)(terrain.x_char[F_LIT_STANDARD]), (byte)(terrain.x_attr[F_LIT_LITE]), (byte)(terrain.x_char[F_LIT_LITE]),
+                    (byte)(terrain.x_attr[F_LIT_DARK]), (byte)(terrain.x_char[F_LIT_DARK]));
             }
 
             close_auto_dump(&auto_dump_stream, mark);
@@ -371,17 +371,18 @@ void do_cmd_visuals(PlayerType *player_ptr)
             static short terrain_id = 0;
             static short lighting_level = F_LIT_STANDARD;
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
+            auto &terrains = TerrainList::get_instance();
             while (true) {
-                auto *f_ptr = &terrains_info[terrain_id];
+                auto &terrain = terrains[terrain_id];
                 int c;
-                TERM_COLOR da = f_ptr->d_attr[lighting_level];
-                byte dc = f_ptr->d_char[lighting_level];
-                TERM_COLOR ca = f_ptr->x_attr[lighting_level];
-                byte cc = f_ptr->x_char[lighting_level];
+                TERM_COLOR da = terrain.d_attr[lighting_level];
+                byte dc = terrain.d_char[lighting_level];
+                TERM_COLOR ca = terrain.x_attr[lighting_level];
+                byte cc = terrain.x_char[lighting_level];
 
                 prt("", 17, 5);
                 term_putstr(5, 17, -1, TERM_WHITE,
-                    format(_("地形 = %d, 名前 = %s, 明度 = %s", "Terrain = %d, Name = %s, Lighting = %s"), terrain_id, (f_ptr->name.data()),
+                    format(_("地形 = %d, 名前 = %s, 明度 = %s", "Terrain = %d, Name = %s, Lighting = %s"), terrain_id, (terrain.name.data()),
                         lighting_level_str[lighting_level]));
                 term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
@@ -410,7 +411,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     std::optional<short> new_terrain_id(std::nullopt);
                     const auto previous_terrain_id = terrain_id;
                     while (true) {
-                        new_terrain_id = input_new_visual_id(ch, terrain_id, static_cast<short>(terrains_info.size()));
+                        new_terrain_id = input_new_visual_id(ch, terrain_id, static_cast<short>(TerrainList::get_instance().size()));
                         if (!new_terrain_id.has_value()) {
                             terrain_id = previous_terrain_id;
                             break;
@@ -425,22 +426,22 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'a': {
-                    const auto visual_id = input_new_visual_id(ch, f_ptr->x_attr[lighting_level], 256);
+                    const auto visual_id = input_new_visual_id(ch, terrain.x_attr[lighting_level], 256);
                     if (!visual_id.has_value()) {
                         break;
                     }
 
-                    f_ptr->x_attr[lighting_level] = visual_id.value();
+                    terrain.x_attr[lighting_level] = visual_id.value();
                     need_redraw = true;
                     break;
                 }
                 case 'c': {
-                    const auto visual_id = input_new_visual_id(ch, f_ptr->x_char[lighting_level], 256);
+                    const auto visual_id = input_new_visual_id(ch, terrain.x_char[lighting_level], 256);
                     if (!visual_id.has_value()) {
                         break;
                     }
 
-                    f_ptr->x_char[lighting_level] = visual_id.value();
+                    terrain.x_char[lighting_level] = visual_id.value();
                     need_redraw = true;
                     break;
                 }
@@ -454,7 +455,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'd':
-                    apply_default_feat_lighting(f_ptr->x_attr, f_ptr->x_char);
+                    apply_default_feat_lighting(terrain.x_attr, terrain.x_char);
                     need_redraw = true;
                     break;
                 case 'v':

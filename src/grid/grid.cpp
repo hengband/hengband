@@ -772,21 +772,20 @@ void update_flow(PlayerType *player_ptr)
  */
 FEAT_IDX feat_state(FloorType *floor_ptr, FEAT_IDX feat, TerrainCharacteristics action)
 {
-    auto *f_ptr = &terrains_info[feat];
-    int i;
+    const auto &terrain = TerrainList::get_instance()[feat];
 
     /* Get the new feature */
-    for (i = 0; i < MAX_FEAT_STATES; i++) {
-        if (f_ptr->state[i].action == action) {
-            return conv_dungeon_feat(floor_ptr, f_ptr->state[i].result);
+    for (auto i = 0; i < MAX_FEAT_STATES; i++) {
+        if (terrain.state[i].action == action) {
+            return conv_dungeon_feat(floor_ptr, terrain.state[i].result);
         }
     }
 
-    if (f_ptr->flags.has(TerrainCharacteristics::PERMANENT)) {
+    if (terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
         return feat;
     }
 
-    return (terrain_action_flags[enum2i(action)] & FAF_DESTROY) ? conv_dungeon_feat(floor_ptr, f_ptr->destroyed) : feat;
+    return (terrain_action_flags[enum2i(action)] & FAF_DESTROY) ? conv_dungeon_feat(floor_ptr, terrain.destroyed) : feat;
 }
 
 /*
@@ -809,21 +808,21 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
 
     /* Set the new feature */
     cave_set_feat(player_ptr, y, x, newfeat);
-
+    const auto &terrains = TerrainList::get_instance();
     if (!(terrain_action_flags[enum2i(action)] & FAF_NO_DROP)) {
-        TerrainType *old_f_ptr = &terrains_info[oldfeat];
-        auto *f_ptr = &terrains_info[newfeat];
+        const auto &old_terrain = terrains[oldfeat];
+        const auto &new_terrain = terrains[newfeat];
         bool found = false;
 
         /* Handle gold */
-        if (old_f_ptr->flags.has(TerrainCharacteristics::HAS_GOLD) && f_ptr->flags.has_not(TerrainCharacteristics::HAS_GOLD)) {
+        if (old_terrain.flags.has(TerrainCharacteristics::HAS_GOLD) && new_terrain.flags.has_not(TerrainCharacteristics::HAS_GOLD)) {
             /* Place some gold */
             place_gold(player_ptr, y, x);
             found = true;
         }
 
         /* Handle item */
-        if (old_f_ptr->flags.has(TerrainCharacteristics::HAS_ITEM) && f_ptr->flags.has_not(TerrainCharacteristics::HAS_ITEM) && (randint0(100) < (15 - floor_ptr->dun_level / 2))) {
+        if (old_terrain.flags.has(TerrainCharacteristics::HAS_ITEM) && new_terrain.flags.has_not(TerrainCharacteristics::HAS_ITEM) && (randint0(100) < (15 - floor_ptr->dun_level / 2))) {
             /* Place object */
             place_object(player_ptr, y, x, 0L);
             found = true;
@@ -835,9 +834,8 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
     }
 
     if (terrain_action_flags[enum2i(action)] & FAF_CRASH_GLASS) {
-        TerrainType *old_f_ptr = &terrains_info[oldfeat];
-
-        if (old_f_ptr->flags.has(TerrainCharacteristics::GLASS) && w_ptr->character_dungeon) {
+        const auto &old_terrain = terrains[oldfeat];
+        if (old_terrain.flags.has(TerrainCharacteristics::GLASS) && w_ptr->character_dungeon) {
             project(player_ptr, PROJECT_WHO_GLASS_SHARDS, 1, y, x, std::min(floor_ptr->dun_level, 100) / 4, AttributeType::SHARDS,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }
@@ -955,7 +953,8 @@ bool cave_player_teleportable_bold(PlayerType *player_ptr, POSITION y, POSITION 
  */
 bool is_open(PlayerType *player_ptr, FEAT_IDX feat)
 {
-    return terrains_info[feat].flags.has(TerrainCharacteristics::CLOSE) && (feat != feat_state(player_ptr->current_floor_ptr, feat, TerrainCharacteristics::CLOSE));
+    const auto &terrain = TerrainList::get_instance()[feat];
+    return terrain.flags.has(TerrainCharacteristics::CLOSE) && (feat != feat_state(player_ptr->current_floor_ptr, feat, TerrainCharacteristics::CLOSE));
 }
 
 /*!
@@ -966,30 +965,29 @@ bool is_open(PlayerType *player_ptr, FEAT_IDX feat)
  */
 bool player_can_enter(PlayerType *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mode)
 {
-    auto *f_ptr = &terrains_info[feature];
-
+    const auto &terrain = TerrainList::get_instance()[feature];
     if (player_ptr->riding) {
         return monster_can_cross_terrain(
             player_ptr, feature, &monraces_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx], mode | CEM_RIDING);
     }
 
-    if (f_ptr->flags.has(TerrainCharacteristics::PATTERN)) {
+    if (terrain.flags.has(TerrainCharacteristics::PATTERN)) {
         if (!(mode & CEM_P_CAN_ENTER_PATTERN)) {
             return false;
         }
     }
 
-    if (f_ptr->flags.has(TerrainCharacteristics::CAN_FLY) && player_ptr->levitation) {
+    if (terrain.flags.has(TerrainCharacteristics::CAN_FLY) && player_ptr->levitation) {
         return true;
     }
-    if (f_ptr->flags.has(TerrainCharacteristics::CAN_SWIM) && player_ptr->can_swim) {
+    if (terrain.flags.has(TerrainCharacteristics::CAN_SWIM) && player_ptr->can_swim) {
         return true;
     }
-    if (f_ptr->flags.has(TerrainCharacteristics::CAN_PASS) && has_pass_wall(player_ptr)) {
+    if (terrain.flags.has(TerrainCharacteristics::CAN_PASS) && has_pass_wall(player_ptr)) {
         return true;
     }
 
-    if (f_ptr->flags.has_not(TerrainCharacteristics::MOVE)) {
+    if (terrain.flags.has_not(TerrainCharacteristics::MOVE)) {
         return false;
     }
 
@@ -1036,8 +1034,8 @@ void place_grid(PlayerType *player_ptr, grid_type *g_ptr, grid_bold_type gb_type
         break;
     }
     case GB_OUTER_NOPERM: {
-        auto *f_ptr = &terrains_info[feat_wall_outer];
-        if (permanent_wall(f_ptr)) {
+        const auto &terrain = TerrainList::get_instance()[feat_wall_outer];
+        if (terrain.is_permanent_wall()) {
             g_ptr->feat = (int16_t)feat_state(player_ptr->current_floor_ptr, feat_wall_outer, TerrainCharacteristics::UNPERM);
         } else {
             g_ptr->feat = feat_wall_outer;
@@ -1060,8 +1058,8 @@ void place_grid(PlayerType *player_ptr, grid_type *g_ptr, grid_bold_type gb_type
         break;
     }
     case GB_SOLID_NOPERM: {
-        auto *f_ptr = &terrains_info[feat_wall_solid];
-        if ((g_ptr->info & CAVE_VAULT) && permanent_wall(f_ptr)) {
+        const auto &terrain = TerrainList::get_instance()[feat_wall_solid];
+        if ((g_ptr->info & CAVE_VAULT) && terrain.is_permanent_wall()) {
             g_ptr->feat = (int16_t)feat_state(player_ptr->current_floor_ptr, feat_wall_solid, TerrainCharacteristics::UNPERM);
         } else {
             g_ptr->feat = feat_wall_solid;

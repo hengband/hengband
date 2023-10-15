@@ -32,15 +32,15 @@
 static FEAT_IDX collect_features(FEAT_IDX *feat_idx, BIT_FLAGS8 mode)
 {
     FEAT_IDX feat_cnt = 0;
-    for (const auto &f_ref : terrains_info) {
-        if (f_ref.name.empty()) {
+    for (const auto &terrain : TerrainList::get_instance()) {
+        if (terrain.name.empty()) {
             continue;
         }
-        if (f_ref.mimic != f_ref.idx) {
+        if (terrain.mimic != terrain.idx) {
             continue;
         }
 
-        feat_idx[feat_cnt++] = f_ref.idx;
+        feat_idx[feat_cnt++] = terrain.idx;
         if (mode & 0x01) {
             break;
         }
@@ -63,23 +63,24 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
         lit_col[i] = lit_col[F_LIT_STANDARD] + 2 + (i - F_LIT_NS_BEGIN) * 2 + (use_bigtile ? i : 0);
     }
 
+    const auto &terrains = TerrainList::get_instance();
     for (i = 0; i < per_page && (feat_idx[feat_top + i] >= 0); i++) {
         TERM_COLOR attr;
-        FEAT_IDX f_idx = feat_idx[feat_top + i];
-        auto *f_ptr = &terrains_info[f_idx];
+        auto terrain_id = feat_idx[feat_top + i];
+        const auto &terrain = terrains[terrain_id];
         int row_i = row + i;
         attr = ((i + feat_top == feat_cur) ? TERM_L_BLUE : TERM_WHITE);
-        c_prt(attr, f_ptr->name.data(), row_i, col);
+        c_prt(attr, terrain.name.data(), row_i, col);
         if (per_page == 1) {
-            c_prt(attr, format("(%s)", lighting_level_str[lighting_level]), row_i, col + 1 + f_ptr->name.size());
-            c_prt(attr, format("%02x/%02x", f_ptr->x_attr[lighting_level], (unsigned char)f_ptr->x_char[lighting_level]), row_i,
+            c_prt(attr, format("(%s)", lighting_level_str[lighting_level]), row_i, col + 1 + terrain.name.size());
+            c_prt(attr, format("%02x/%02x", terrain.x_attr[lighting_level], (unsigned char)terrain.x_char[lighting_level]), row_i,
                 f_idx_col - ((w_ptr->wizard || visual_only) ? 6 : 2));
         }
         if (w_ptr->wizard || visual_only) {
-            c_prt(attr, format("%d", f_idx), row_i, f_idx_col);
+            c_prt(attr, format("%d", terrain_id), row_i, f_idx_col);
         }
 
-        term_queue_bigchar(lit_col[F_LIT_STANDARD], row_i, f_ptr->x_attr[F_LIT_STANDARD], f_ptr->x_char[F_LIT_STANDARD], 0, 0);
+        term_queue_bigchar(lit_col[F_LIT_STANDARD], row_i, terrain.x_attr[F_LIT_STANDARD], terrain.x_char[F_LIT_STANDARD], 0, 0);
         term_putch(lit_col[F_LIT_NS_BEGIN], row_i, TERM_SLATE, '(');
         for (int j = F_LIT_NS_BEGIN + 1; j < F_LIT_MAX; j++) {
             term_putch(lit_col[j], row_i, TERM_SLATE, '/');
@@ -87,7 +88,7 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
 
         term_putch(lit_col[F_LIT_MAX - 1] + (use_bigtile ? 3 : 2), row_i, TERM_SLATE, ')');
         for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
-            term_queue_bigchar(lit_col[j] + 1, row_i, f_ptr->x_attr[j], f_ptr->x_char[j], 0, 0);
+            term_queue_bigchar(lit_col[j] + 1, row_i, terrain.x_attr[j], terrain.x_char[j], 0, 0);
         }
     }
 
@@ -107,7 +108,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     char char_old[F_LIT_MAX] = {};
 
     const auto &[wid, hgt] = term_get_size();
-    std::vector<FEAT_IDX> feat_idx(terrains_info.size());
+    std::vector<FEAT_IDX> feat_idx(TerrainList::get_instance().size());
 
     concptr feature_group_text[] = { "terrains", nullptr };
     int len;
@@ -133,18 +134,18 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
 
         feat_cnt = 0;
     } else {
-        auto *f_ptr = &terrains_info[direct_f_idx];
+        auto &terrain = TerrainList::get_instance()[direct_f_idx];
 
         feat_idx[0] = direct_f_idx;
         feat_cnt = 1;
         feat_idx[1] = -1;
 
-        (void)visual_mode_command('v', &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &f_ptr->x_attr[*lighting_level],
-            &f_ptr->x_char[*lighting_level], need_redraw);
+        (void)visual_mode_command('v', &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &terrain.x_attr[*lighting_level],
+            &terrain.x_char[*lighting_level], need_redraw);
 
         for (FEAT_IDX i = 0; i < F_LIT_MAX; i++) {
-            attr_old[i] = f_ptr->x_attr[i];
-            char_old[i] = f_ptr->x_char[i];
+            attr_old[i] = terrain.x_attr[i];
+            char_old[i] = terrain.x_char[i];
         }
     }
 
@@ -160,10 +161,9 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     bool redraw = true;
     TERM_COLOR *cur_attr_ptr;
     char *cur_char_ptr;
+    auto &terrains = TerrainList::get_instance();
     while (!flag) {
         char ch;
-        TerrainType *f_ptr;
-
         if (redraw) {
             clear_from(0);
 
@@ -233,9 +233,9 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                 (attr_idx || char_idx) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
             hgt - 1, 0);
 
-        f_ptr = &terrains_info[feat_idx[feat_cur]];
-        cur_attr_ptr = &f_ptr->x_attr[*lighting_level];
-        cur_char_ptr = &f_ptr->x_char[*lighting_level];
+        auto &terrain = terrains[feat_idx[feat_cur]];
+        cur_attr_ptr = &terrain.x_attr[*lighting_level];
+        cur_char_ptr = &terrain.x_char[*lighting_level];
 
         if (visual_list) {
             place_visual_list_cursor(max + 3, 7, *cur_attr_ptr, *cur_char_ptr, attr_top, char_left);
@@ -263,28 +263,28 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                 }
             }
 
-            if (f_ptr->x_attr[prev_lighting_level] != f_ptr->x_attr[*lighting_level]) {
-                attr_top = std::max<int8_t>(0, (f_ptr->x_attr[*lighting_level] & 0x7f) - 5);
+            if (terrain.x_attr[prev_lighting_level] != terrain.x_attr[*lighting_level]) {
+                attr_top = std::max<int8_t>(0, (terrain.x_attr[*lighting_level] & 0x7f) - 5);
             }
 
-            if (f_ptr->x_char[prev_lighting_level] != f_ptr->x_char[*lighting_level]) {
-                char_left = std::max<int8_t>(0, f_ptr->x_char[*lighting_level] - 10);
+            if (terrain.x_char[prev_lighting_level] != terrain.x_char[*lighting_level]) {
+                char_left = std::max<int8_t>(0, terrain.x_char[*lighting_level] - 10);
             }
 
             continue;
         } else if ((ch == 'D') || (ch == 'd')) {
-            TERM_COLOR prev_x_attr = f_ptr->x_attr[*lighting_level];
-            byte prev_x_char = f_ptr->x_char[*lighting_level];
+            TERM_COLOR prev_x_attr = terrain.x_attr[*lighting_level];
+            byte prev_x_char = terrain.x_char[*lighting_level];
 
-            apply_default_feat_lighting(f_ptr->x_attr, f_ptr->x_char);
+            apply_default_feat_lighting(terrain.x_attr, terrain.x_char);
 
             if (visual_list) {
-                if (prev_x_attr != f_ptr->x_attr[*lighting_level]) {
-                    attr_top = std::max<int8_t>(0, (f_ptr->x_attr[*lighting_level] & 0x7f) - 5);
+                if (prev_x_attr != terrain.x_attr[*lighting_level]) {
+                    attr_top = std::max<int8_t>(0, (terrain.x_attr[*lighting_level] & 0x7f) - 5);
                 }
 
-                if (prev_x_char != f_ptr->x_char[*lighting_level]) {
-                    char_left = std::max<int8_t>(0, f_ptr->x_char[*lighting_level] - 10);
+                if (prev_x_char != terrain.x_char[*lighting_level]) {
+                    char_left = std::max<int8_t>(0, terrain.x_char[*lighting_level] - 10);
                 }
             } else {
                 *need_redraw = true;
@@ -295,8 +295,8 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             switch (ch) {
             case ESCAPE:
                 for (FEAT_IDX i = 0; i < F_LIT_MAX; i++) {
-                    f_ptr->x_attr[i] = attr_old[i];
-                    f_ptr->x_char[i] = char_old[i];
+                    terrain.x_attr[i] = attr_old[i];
+                    terrain.x_char[i] = char_old[i];
                 }
 
                 [[fallthrough]];
@@ -311,8 +311,8 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             case 'V':
             case 'v':
                 for (FEAT_IDX i = 0; i < F_LIT_MAX; i++) {
-                    attr_old[i] = f_ptr->x_attr[i];
-                    char_old[i] = f_ptr->x_char[i];
+                    attr_old[i] = terrain.x_attr[i];
+                    char_old[i] = terrain.x_char[i];
                 }
                 *lighting_level = F_LIT_STANDARD;
                 break;
@@ -321,8 +321,8 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             case 'c':
                 if (!visual_list) {
                     for (FEAT_IDX i = 0; i < F_LIT_MAX; i++) {
-                        attr_idx_feat[i] = f_ptr->x_attr[i];
-                        char_idx_feat[i] = f_ptr->x_char[i];
+                        attr_idx_feat[i] = terrain.x_attr[i];
+                        char_idx_feat[i] = terrain.x_char[i];
                     }
                 }
                 break;
@@ -332,10 +332,10 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                 if (!visual_list) {
                     for (FEAT_IDX i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) {
                         if (attr_idx_feat[i] || (!(char_idx_feat[i] & 0x80) && char_idx_feat[i])) {
-                            f_ptr->x_attr[i] = attr_idx_feat[i];
+                            terrain.x_attr[i] = attr_idx_feat[i];
                         }
                         if (char_idx_feat[i]) {
-                            f_ptr->x_char[i] = char_idx_feat[i];
+                            terrain.x_char[i] = char_idx_feat[i];
                         }
                     }
                 }

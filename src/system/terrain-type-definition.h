@@ -43,6 +43,30 @@ public:
     char d_char[F_LIT_MAX]{}; /*!< デフォルトの地形シンボルアルファベット / Default feature character */
     TERM_COLOR x_attr[F_LIT_MAX]{}; /*!< 設定変更後の地形シンボルカラー / Desired feature attribute */
     char x_char[F_LIT_MAX]{}; /*!< 設定変更後の地形シンボルアルファベット / Desired feature character */
+
+    bool is_permanent_wall() const;
 };
 
 extern std::vector<TerrainType> terrains_info;
+
+class TerrainList {
+public:
+    TerrainList(const TerrainList &) = delete;
+    TerrainList(TerrainList &&) = delete;
+    TerrainList operator=(const TerrainList &) = delete;
+    TerrainList operator=(TerrainList &&) = delete;
+    TerrainType &operator[](short terrain_id);
+    const TerrainType &operator[](short terrain_id) const;
+
+    static TerrainList &get_instance();
+    std::vector<TerrainType>::iterator begin();
+    const std::vector<TerrainType>::const_iterator begin() const;
+    std::vector<TerrainType>::iterator end();
+    const std::vector<TerrainType>::const_iterator end() const;
+    size_t size() const;
+
+private:
+    TerrainList() = default;
+
+    static TerrainList instance;
+};
