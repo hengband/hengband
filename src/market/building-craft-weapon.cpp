@@ -13,6 +13,7 @@
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
+#include "object/object-flags.h"
 #include "player-base/player-class.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-hex.h"
@@ -132,7 +133,7 @@ static void compare_weapon_aux(PlayerType *player_ptr, ItemEntity *o_ptr, int co
     int vorpal_div = 1;
     int dmg_bonus = o_ptr->to_d + player_ptr->to_d[0];
 
-    const auto flags = o_ptr->get_flags();
+    auto flags = object_flags(o_ptr);
     if (o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) {
         dokubari = true;
     }
@@ -365,9 +366,9 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
     constexpr auto first_q = _("第一の武器は？", "What is your first weapon? ");
     constexpr auto first_s = _("比べるものがありません。", "You have nothing to compare.");
 
-    short i_idx_first;
+    OBJECT_IDX item;
     constexpr auto options = USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT;
-    o_ptr[0] = choose_object(player_ptr, &i_idx_first, first_q, first_s, options, FuncItemTester(&ItemEntity::is_orthodox_melee_weapons));
+    o_ptr[0] = choose_object(player_ptr, &item, first_q, first_s, options, FuncItemTester(&ItemEntity::is_orthodox_melee_weapons));
     if (!o_ptr[0]) {
         screen_load();
         return 0;
@@ -421,8 +422,8 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
 
         constexpr auto q = _("第二の武器は？", "What is your second weapon? ");
         constexpr auto s = _("比べるものがありません。", "You have nothing to compare.");
-        short i_idx_second;
-        auto *i2_ptr = choose_object(player_ptr, &i_idx_second, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), FuncItemTester(&ItemEntity::is_orthodox_melee_weapons));
+        OBJECT_IDX item2;
+        ItemEntity *i2_ptr = choose_object(player_ptr, &item2, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), FuncItemTester(&ItemEntity::is_orthodox_melee_weapons));
         if (!i2_ptr) {
             continue;
         }

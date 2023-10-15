@@ -17,29 +17,30 @@
 #include "view/display-messages.h"
 #include "view/object-describer.h"
 
-void vary_item(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBER num)
+void vary_item(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 {
-    if (i_idx >= 0) {
-        inven_item_increase(player_ptr, i_idx, num);
-        inven_item_describe(player_ptr, i_idx);
-        inven_item_optimize(player_ptr, i_idx);
+    if (item >= 0) {
+        inven_item_increase(player_ptr, item, num);
+        inven_item_describe(player_ptr, item);
+        inven_item_optimize(player_ptr, item);
         return;
     }
 
-    floor_item_increase(player_ptr, 0 - i_idx, num);
-    floor_item_describe(player_ptr, 0 - i_idx);
-    floor_item_optimize(player_ptr, 0 - i_idx);
+    floor_item_increase(player_ptr, 0 - item, num);
+    floor_item_describe(player_ptr, 0 - item);
+    floor_item_optimize(player_ptr, 0 - item);
 }
 
 /*!
- * @brief アイテムを増減させ残り所持数メッセージを表示する
+ * @brief アイテムを増減させ残り所持数メッセージを表示する /
+ * Increase the "number" of an item in the inventory
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param i_idx 所持数を増やしたいプレイヤーのアイテム所持スロット
+ * @param item 所持数を増やしたいプレイヤーのアイテム所持スロット
  * @param num 増やしたい量
  */
-void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBER num)
+void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 {
-    auto *o_ptr = &player_ptr->inventory_list[i_idx];
+    auto *o_ptr = &player_ptr->inventory_list[item];
     num += o_ptr->number;
     if (num > 255) {
         num = 255;
@@ -69,11 +70,11 @@ void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBE
         return;
     }
 
-    if (!(i_idx == INVEN_MAIN_HAND) && !(i_idx == INVEN_SUB_HAND)) {
+    if (!(item == INVEN_MAIN_HAND) && !(item == INVEN_SUB_HAND)) {
         return;
     }
 
-    if (has_melee_weapon(player_ptr, enum2i(INVEN_MAIN_HAND + INVEN_SUB_HAND) - i_idx)) {
+    if (has_melee_weapon(player_ptr, enum2i(INVEN_MAIN_HAND + INVEN_SUB_HAND) - item)) {
         return;
     }
 
@@ -81,13 +82,14 @@ void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBE
 }
 
 /*!
- * @brief 所持アイテムスロットから所持数のなくなったアイテムを消去する
+ * @brief 所持アイテムスロットから所持数のなくなったアイテムを消去する /
+ * Erase an inventory slot if it has no more items
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param i_idx 消去したいプレイヤーのアイテム所持スロット
+ * @param item 消去したいプレイヤーのアイテム所持スロット
  */
-void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
+void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
 {
-    auto *o_ptr = &player_ptr->inventory_list[i_idx];
+    auto *o_ptr = &player_ptr->inventory_list[item];
     if (!o_ptr->is_valid()) {
         return;
     }
@@ -96,9 +98,9 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (i_idx >= INVEN_MAIN_HAND) {
+    if (item >= INVEN_MAIN_HAND) {
         player_ptr->equip_cnt--;
-        (&player_ptr->inventory_list[i_idx])->wipe();
+        (&player_ptr->inventory_list[item])->wipe();
         static constexpr auto flags_srf = {
             StatusRecalculatingFlag::BONUS,
             StatusRecalculatingFlag::TORCH,
@@ -115,7 +117,7 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 
     player_ptr->inven_cnt--;
     int i;
-    for (i = i_idx; i < INVEN_PACK; i++) {
+    for (i = item; i < INVEN_PACK; i++) {
         player_ptr->inventory_list[i] = player_ptr->inventory_list[i + 1];
     }
 
@@ -128,16 +130,19 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 }
 
 /*!
- * @brief 所持スロットから床下にオブジェクトを落とすメインルーチン
+ * @brief 所持スロットから床下にオブジェクトを落とすメインルーチン /
+ * Drop (some of) a non-cursed inventory/equipment item
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param i_idx 所持テーブルのID
+ * @param item 所持テーブルのID
  * @param amt 落としたい個数
+ * @details
+ * The object will be dropped "near" the current location
  */
-void drop_from_inventory(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBER amt)
+void drop_from_inventory(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER amt)
 {
     ItemEntity forge;
     ItemEntity *q_ptr;
-    auto *o_ptr = &player_ptr->inventory_list[i_idx];
+    auto *o_ptr = &player_ptr->inventory_list[item];
     if (amt <= 0) {
         return;
     }
@@ -146,9 +151,9 @@ void drop_from_inventory(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBE
         amt = o_ptr->number;
     }
 
-    if (i_idx >= INVEN_MAIN_HAND) {
-        i_idx = inven_takeoff(player_ptr, i_idx, amt);
-        o_ptr = &player_ptr->inventory_list[i_idx];
+    if (item >= INVEN_MAIN_HAND) {
+        item = inven_takeoff(player_ptr, item, amt);
+        o_ptr = &player_ptr->inventory_list[item];
     }
 
     q_ptr = &forge;
@@ -157,9 +162,9 @@ void drop_from_inventory(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBE
 
     q_ptr->number = amt;
     const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
-    msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), item_name.data(), index_to_label(i_idx));
+    msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), item_name.data(), index_to_label(item));
     (void)drop_near(player_ptr, q_ptr, 0, player_ptr->y, player_ptr->x);
-    vary_item(player_ptr, i_idx, -amt);
+    vary_item(player_ptr, item, -amt);
 }
 
 /*!
@@ -293,10 +298,24 @@ void reorder_pack(PlayerType *player_ptr)
 }
 
 /*!
- * @brief オブジェクトをプレイヤーが拾って所持スロットに納めるメインルーチン
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @brief オブジェクトをプレイヤーが拾って所持スロットに納めるメインルーチン /
+ * Add an item to the players inventory, and return the slot used.
  * @param o_ptr 拾うオブジェクトの構造体参照ポインタ
  * @return 収められた所持スロットのID、拾うことができなかった場合-1を返す。
+ * @details
+ * If the new item can combine with an existing item in the inventory,\n
+ * it will do so, using "object_similar()" and "object_absorb()", else,\n
+ * the item will be placed into the "proper" location in the inventory.\n
+ *\n
+ * This function can be used to "over-fill" the player's pack, but only\n
+ * once, and such an action must trigger the "overflow" code immediately.\n
+ * Note that when the pack is being "over-filled", the new item must be\n
+ * placed into the "overflow" slot, and the "overflow" must take place\n
+ * before the pack is reordered, but (optionally) after the pack is\n
+ * combined.  This may be tricky.  See "dungeon.c" for info.\n
+ *\n
+ * Note that this code must remove any location/stack information\n
+ * from the object once it is placed into the inventory.\n
  */
 int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
@@ -397,20 +416,26 @@ bool check_store_item_to_inventory(PlayerType *player_ptr, const ItemEntity *o_p
 }
 
 /*!
- * @brief 装備スロットから装備を外すメインルーチン
+ * @brief 装備スロットからオブジェクトを外すメインルーチン /
+ * Take off (some of) a non-cursed equipment item
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param i_idx 装備を外したいインベントリのID
+ * @param item オブジェクトを外したい所持テーブルのID
  * @param amt 外したい個数
  * @return 収められた所持スロットのID、拾うことができなかった場合-1を返す。
+ * @details
+ * Note that only one item at a time can be wielded per slot.\n
+ * Note that taking off an item when "full" may cause that item\n
+ * to fall to the ground.\n
+ * Return the inventory slot into which the item is placed.\n
  */
-INVENTORY_IDX inven_takeoff(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBER amt)
+INVENTORY_IDX inven_takeoff(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER amt)
 {
     INVENTORY_IDX slot;
     ItemEntity forge;
     ItemEntity *q_ptr;
     ItemEntity *o_ptr;
     concptr act;
-    o_ptr = &player_ptr->inventory_list[i_idx];
+    o_ptr = &player_ptr->inventory_list[item];
     if (amt <= 0) {
         return -1;
     }
@@ -422,18 +447,18 @@ INVENTORY_IDX inven_takeoff(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NU
     q_ptr->copy_from(o_ptr);
     q_ptr->number = amt;
     const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
-    if (((i_idx == INVEN_MAIN_HAND) || (i_idx == INVEN_SUB_HAND)) && o_ptr->is_melee_weapon()) {
+    if (((item == INVEN_MAIN_HAND) || (item == INVEN_SUB_HAND)) && o_ptr->is_melee_weapon()) {
         act = _("を装備からはずした", "You were wielding");
-    } else if (i_idx == INVEN_BOW) {
+    } else if (item == INVEN_BOW) {
         act = _("を装備からはずした", "You were holding");
-    } else if (i_idx == INVEN_LITE) {
+    } else if (item == INVEN_LITE) {
         act = _("を光源からはずした", "You were holding");
     } else {
         act = _("を装備からはずした", "You were wearing");
     }
 
-    inven_item_increase(player_ptr, i_idx, -amt);
-    inven_item_optimize(player_ptr, i_idx);
+    inven_item_increase(player_ptr, item, -amt);
+    inven_item_optimize(player_ptr, item);
 
     slot = store_item_to_inventory(player_ptr, q_ptr);
 #ifdef JP

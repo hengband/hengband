@@ -125,9 +125,9 @@ static void drain_essence(PlayerType *player_ptr)
     auto q = _("どのアイテムから抽出しますか？", "Extract from which item? ");
     auto s = _("抽出できるアイテムがありません。", "You have nothing you can extract from.");
 
-    short i_idx;
+    OBJECT_IDX item;
     constexpr auto options = USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT;
-    auto o_ptr = choose_object(player_ptr, &i_idx, q, s, options, FuncItemTester(&ItemEntity::is_weapon_armour_ammo));
+    auto o_ptr = choose_object(player_ptr, &item, q, s, options, FuncItemTester(&ItemEntity::is_weapon_armour_ammo));
     if (!o_ptr) {
         return;
     }
@@ -156,7 +156,7 @@ static void drain_essence(PlayerType *player_ptr)
     }
 
     /* Apply autodestroy/inscription to the drained item */
-    autopick_alter_item(player_ptr, i_idx, true);
+    autopick_alter_item(player_ptr, item, true);
     set_smith_redrawing_flags();
 }
 
@@ -316,6 +316,10 @@ static void display_smith_effect_list(const Smith &smith, const std::vector<Smit
  */
 static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
 {
+    OBJECT_IDX item;
+    bool flag;
+    concptr q, s;
+    ItemEntity *o_ptr;
     int menu_line = (use_menu ? 1 : 0);
 
     Smith smith(player_ptr);
@@ -328,7 +332,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
 
     COMMAND_CODE i = -1;
     COMMAND_CODE effect_idx;
-    bool flag;
+
     if (!repeat_pull(&effect_idx) || effect_idx < 0 || effect_idx >= smith_effect_list_max) {
         flag = false;
 
@@ -446,10 +450,10 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
 
     auto item_tester = Smith::get_item_tester(effect);
 
-    constexpr auto q = _("どのアイテムを改良しますか？", "Improve which item? ");
-    constexpr auto s = _("改良できるアイテムがありません。", "You have nothing to improve.");
-    short i_idx;
-    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
+    q = _("どのアイテムを改良しますか？", "Improve which item? ");
+    s = _("改良できるアイテムがありません。", "You have nothing to improve.");
+
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
     if (!o_ptr) {
         return;
     }
@@ -525,8 +529,8 @@ static void erase_essence(PlayerType *player_ptr)
 {
     constexpr auto q = _("どのアイテムのエッセンスを消去しますか？", "Remove from which item? ");
     constexpr auto s = _("エッセンスを付加したアイテムがありません。", "You have nothing with added essence to remove.");
-    short i_idx;
-    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::is_smith));
+    OBJECT_IDX item;
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::is_smith));
     if (!o_ptr) {
         return;
     }

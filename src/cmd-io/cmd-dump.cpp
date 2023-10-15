@@ -238,7 +238,7 @@ void do_cmd_feeling(PlayerType *player_ptr)
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.is_in_quest() && !inside_quest(floor.get_random_quest_id())) {
+    if (inside_quest(floor.quest_number) && !inside_quest(random_quest_number(floor, floor.dun_level))) {
         msg_print(_("典型的なクエストのダンジョンのようだ。", "Looks like a typical quest level."));
         return;
     }

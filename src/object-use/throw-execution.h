@@ -22,7 +22,7 @@ public:
     virtual ~ObjectThrowEntity() = default;
 
     ItemEntity *q_ptr;
-    OBJECT_IDX i_idx{};
+    OBJECT_IDX item{};
     POSITION y{};
     POSITION x{};
     POSITION prev_y{};

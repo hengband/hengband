@@ -2,6 +2,7 @@
 #include "flavor/flag-inscriptions-table.h"
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/tr-types.h"
+#include "object/object-flags.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-food-types.h"
 #include "system/artifact-type-definition.h"
@@ -67,7 +68,7 @@ static bool has_flag_of(const std::vector<flag_insc_table> &fi_vec, const TrFlag
  */
 std::string get_ability_abbreviation(const ItemEntity &item, bool is_kanji, bool all)
 {
-    auto flags = item.get_flags();
+    auto flags = object_flags(&item);
     if (!all) {
         const auto &baseitem = item.get_baseitem();
         flags.reset(baseitem.flags);

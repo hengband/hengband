@@ -1,5 +1,6 @@
 #include "object/object-value.h"
 #include "monster-race/monster-race.h"
+#include "object/object-flags.h"
 #include "object/object-value-calc.h"
 #include "object/tval-types.h"
 #include "system/artifact-type-definition.h"
@@ -43,7 +44,7 @@ PRICE object_value_real(const ItemEntity *o_ptr)
     }
 
     PRICE value = baseitem.cost;
-    const auto flags = o_ptr->get_flags();
+    auto flags = object_flags(o_ptr);
     if (o_ptr->is_fixed_artifact()) {
         const auto &artifact = o_ptr->get_fixed_artifact();
         if (!artifact.cost) {

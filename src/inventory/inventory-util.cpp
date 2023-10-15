@@ -192,22 +192,24 @@ bool get_item_okay(PlayerType *player_ptr, OBJECT_IDX i, const ItemTester &item_
 }
 
 /*!
- * @brief 選択したアイテムの確認処理のメインルーチン
+ * @brief 選択したアイテムの確認処理のメインルーチン /
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param i_idx 選択アイテムID
+ * @param item 選択アイテムID
  * @return 確認がYesならTRUEを返す。
+ * @details The item can be negative to mean "item on floor".
+ * Hack -- allow user to "prevent" certain choices
  */
-bool get_item_allow(PlayerType *player_ptr, INVENTORY_IDX i_idx)
+bool get_item_allow(PlayerType *player_ptr, INVENTORY_IDX item)
 {
     if (!command_cmd) {
         return true;
     }
 
     ItemEntity *o_ptr;
-    if (i_idx >= 0) {
-        o_ptr = &player_ptr->inventory_list[i_idx];
+    if (item >= 0) {
+        o_ptr = &player_ptr->inventory_list[item];
     } else {
-        o_ptr = &player_ptr->current_floor_ptr->o_list[0 - i_idx];
+        o_ptr = &player_ptr->current_floor_ptr->o_list[0 - item];
     }
 
     if (!o_ptr->is_inscribed()) {
@@ -217,7 +219,7 @@ bool get_item_allow(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     auto s = angband_strchr(o_ptr->inscription->data(), '!');
     while (s) {
         if ((s[1] == command_cmd) || (s[1] == '*')) {
-            if (!verify(player_ptr, _("本当に", "Really try"), i_idx)) {
+            if (!verify(player_ptr, _("本当に", "Really try"), item)) {
                 return false;
             }
         }
@@ -273,19 +275,21 @@ INVENTORY_IDX label_to_inventory(PlayerType *player_ptr, int c)
 }
 
 /*!
- * @brief 選択したアイテムの確認処理の補助
+ * @brief 選択したアイテムの確認処理の補助 /
+ * Verify the choice of an item.
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param prompt メッセージ表示の一部
- * @param i_idx 選択アイテムID
+ * @param item 選択アイテムID
  * @return 確認がYesならTRUEを返す。
+ * @details The item can be negative to mean "item on floor".
  */
-bool verify(PlayerType *player_ptr, concptr prompt, INVENTORY_IDX i_idx)
+bool verify(PlayerType *player_ptr, concptr prompt, INVENTORY_IDX item)
 {
     ItemEntity *o_ptr;
-    if (i_idx >= 0) {
-        o_ptr = &player_ptr->inventory_list[i_idx];
+    if (item >= 0) {
+        o_ptr = &player_ptr->inventory_list[item];
     } else {
-        o_ptr = &player_ptr->current_floor_ptr->o_list[0 - i_idx];
+        o_ptr = &player_ptr->current_floor_ptr->o_list[0 - item];
     }
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, 0);

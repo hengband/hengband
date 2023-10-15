@@ -168,18 +168,17 @@ FEAT_IDX choose_random_trap(PlayerType *player_ptr)
     FEAT_IDX feat;
 
     /* Pick a trap */
-    const auto &terrains = TerrainList::get_instance();
     const auto &floor = *player_ptr->current_floor_ptr;
     while (true) {
         feat = rand_choice(normal_traps);
 
         /* Accept non-trapdoors */
-        if (terrains[feat].flags.has_not(TerrainCharacteristics::MORE)) {
+        if (terrains_info[feat].flags.has_not(TerrainCharacteristics::MORE)) {
             break;
         }
 
         /* Hack -- no trap doors on special levels */
-        if (floor.inside_arena || inside_quest(floor.get_quest_id())) {
+        if (floor.inside_arena || inside_quest(quest_number(floor, floor.dun_level))) {
             continue;
         }
 

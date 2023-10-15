@@ -7,6 +7,7 @@
 #include "object-enchant/trc-types.h"
 #include "object-hook/hook-armor.h"
 #include "object-hook/hook-weapon.h"
+#include "object/object-flags.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -74,7 +75,7 @@ void curse_equipment(PlayerType *player_ptr, PERCENTAGE chance, PERCENTAGE heavy
         return;
     }
 
-    const auto oflags = o_ptr->get_flags();
+    auto oflags = object_flags(o_ptr);
     const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
     /* Extra, biased saving throw for blessed items */

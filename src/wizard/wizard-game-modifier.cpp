@@ -128,7 +128,7 @@ void wiz_enter_quest(PlayerType *player_ptr)
  */
 void wiz_complete_quest(PlayerType *player_ptr)
 {
-    if (!player_ptr->current_floor_ptr->is_in_quest()) {
+    if (!inside_quest(player_ptr->current_floor_ptr->quest_number)) {
         msg_print("No current quest");
         msg_print(nullptr);
         return;

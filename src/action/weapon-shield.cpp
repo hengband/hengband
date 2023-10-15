@@ -18,13 +18,13 @@
 /*!
  * @brief 持ち替え処理
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param i_idx 持ち替えを行いたい装備部位ID
+ * @param item 持ち替えを行いたい装備部位ID
  */
-void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX i_idx)
+void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX item)
 {
     ItemEntity *o_ptr, *new_o_ptr;
     std::string item_name;
-    if (i_idx == INVEN_MAIN_HAND) {
+    if (item == INVEN_MAIN_HAND) {
         if (!has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
             return;
         }
@@ -52,7 +52,7 @@ void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX i_idx)
         return;
     }
 
-    if (i_idx != INVEN_SUB_HAND) {
+    if (item != INVEN_SUB_HAND) {
         return;
     }
 

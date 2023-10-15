@@ -1,6 +1,5 @@
 #include "floor/floor-leaver.h"
 #include "cmd-building/cmd-building.h"
-#include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-events.h"
 #include "floor/floor-mode-changer.h"
@@ -270,7 +269,7 @@ static void preserve_info(PlayerType *player_ptr)
             continue;
         }
 
-        const auto &r_ref = m_ptr->get_real_monrace();
+        const auto &r_ref = m_ptr->get_real_r_ref();
         if (r_ref.kind_flags.has(MonsterKindType::UNIQUE) || (r_ref.population_flags.has(MonsterPopulationType::NAZGUL))) {
             continue;
         }

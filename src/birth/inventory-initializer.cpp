@@ -41,9 +41,9 @@
 void wield_all(PlayerType *player_ptr)
 {
     ItemEntity ObjectType_body;
-    for (INVENTORY_IDX i_idx = INVEN_PACK - 1; i_idx >= 0; i_idx--) {
+    for (INVENTORY_IDX item = INVEN_PACK - 1; item >= 0; item--) {
         ItemEntity *o_ptr;
-        o_ptr = &player_ptr->inventory_list[i_idx];
+        o_ptr = &player_ptr->inventory_list[item];
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -64,12 +64,12 @@ void wield_all(PlayerType *player_ptr)
         i_ptr->copy_from(o_ptr);
         i_ptr->number = 1;
 
-        if (i_idx >= 0) {
-            inven_item_increase(player_ptr, i_idx, -1);
-            inven_item_optimize(player_ptr, i_idx);
+        if (item >= 0) {
+            inven_item_increase(player_ptr, item, -1);
+            inven_item_optimize(player_ptr, item);
         } else {
-            floor_item_increase(player_ptr, 0 - i_idx, -1);
-            floor_item_optimize(player_ptr, 0 - i_idx);
+            floor_item_increase(player_ptr, 0 - item, -1);
+            floor_item_optimize(player_ptr, 0 - item);
         }
 
         o_ptr = &player_ptr->inventory_list[slot];

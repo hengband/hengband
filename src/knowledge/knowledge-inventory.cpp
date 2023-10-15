@@ -14,6 +14,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-weapon.h"
+#include "object/object-flags.h"
 #include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "store/store-util.h"
@@ -109,7 +110,7 @@ static bool check_item_knowledge(ItemEntity *o_ptr, ItemKindType tval)
  */
 static void display_identified_resistances_flag(ItemEntity *o_ptr, FILE *fff)
 {
-    auto flags = o_ptr->get_flags_known();
+    auto flags = object_flags_known(o_ptr);
 
     print_im_or_res_flag(TR_IM_ACID, TR_RES_ACID, flags, fff);
     print_im_or_res_flag(TR_IM_ELEC, TR_RES_ELEC, flags, fff);

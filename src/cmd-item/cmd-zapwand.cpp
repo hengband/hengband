@@ -325,6 +325,9 @@ bool wand_effect(PlayerType *player_ptr, int sval, int dir, bool powerful, bool 
  */
 void do_cmd_aim_wand(PlayerType *player_ptr)
 {
+    OBJECT_IDX item;
+    concptr q, s;
+
     if (player_ptr->wild_mode) {
         return;
     }
@@ -333,12 +336,11 @@ void do_cmd_aim_wand(PlayerType *player_ptr)
     }
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU, SamuraiStanceType::KOUKIJIN });
 
-    constexpr auto q = _("どの魔法棒で狙いますか? ", "Aim which wand? ");
-    constexpr auto s = _("使える魔法棒がない。", "You have no wand to aim.");
-    short i_idx;
-    if (!choose_object(player_ptr, &i_idx, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(ItemKindType::WAND))) {
+    q = _("どの魔法棒で狙いますか? ", "Aim which wand? ");
+    s = _("使える魔法棒がない。", "You have no wand to aim.");
+    if (!choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(ItemKindType::WAND))) {
         return;
     }
 
-    ObjectZapWandEntity(player_ptr).execute(i_idx);
+    ObjectZapWandEntity(player_ptr).execute(item);
 }

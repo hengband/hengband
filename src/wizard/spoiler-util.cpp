@@ -1,4 +1,5 @@
 #include "wizard/spoiler-util.h"
+#include "object/object-flags.h"
 #include "system/item-entity.h"
 #include <fstream>
 
@@ -249,7 +250,7 @@ void ParameterValueInfo::analyze(const ItemEntity &item)
         return;
     }
 
-    const auto flags = item.get_flags();
+    auto flags = object_flags(&item);
     this->pval_desc = format("%+d", item.pval);
     if (flags.has_all_of(EnumRange(TR_STR, TR_CHR))) {
         this->pval_affects.push_back(_("全能力", "All stats"));

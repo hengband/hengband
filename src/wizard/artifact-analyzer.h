@@ -1,7 +1,7 @@
 #pragma once
 
 class ItemEntity;
-class ArtifactsDumpInfo;
+struct obj_desc_list;
 class PlayerType;
-ArtifactsDumpInfo object_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr);
-ArtifactsDumpInfo random_artifact_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr);
+void object_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr, obj_desc_list *desc_ptr);
+void random_artifact_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr, obj_desc_list *desc_ptr);

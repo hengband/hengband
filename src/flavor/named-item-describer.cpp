@@ -9,6 +9,7 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
+#include "object/object-flags.h"
 #include "perception/object-perception.h"
 #include "system/artifact-type-definition.h"
 #include "system/item-entity.h"
@@ -26,7 +27,7 @@
 
 static std::string get_fullname_if_set(const ItemEntity &item, const describe_option_type &opt)
 {
-    if (!opt.aware || item.get_flags().has_not(TR_FULL_NAME)) {
+    if (!opt.aware || object_flags(&item).has_not(TR_FULL_NAME)) {
         return "";
     }
 
@@ -106,7 +107,7 @@ static std::string describe_unique_name_before_body_ja(const ItemEntity &item, c
         }
     }
 
-    if (item.is_fixed_artifact() && item.get_flags().has_not(TR_FULL_NAME)) {
+    if (item.is_fixed_artifact() && object_flags(&item).has_not(TR_FULL_NAME)) {
         const auto &artifact = item.get_fixed_artifact();
         /* '『' から始まらない伝説のアイテムの名前は最初に付加する */
         if (artifact.name.find("『", 0, 2) != 0) {
@@ -279,7 +280,7 @@ static std::string describe_item_count_or_definite_article_en(const ItemEntity &
 
 static std::string describe_unique_name_after_body_en(const ItemEntity &item, const describe_option_type &opt)
 {
-    if (!opt.known || item.get_flags().has(TR_FULL_NAME) || any_bits(opt.mode, OD_BASE_NAME)) {
+    if (!opt.known || object_flags(&item).has(TR_FULL_NAME) || any_bits(opt.mode, OD_BASE_NAME)) {
         return "";
     }
 

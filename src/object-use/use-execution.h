@@ -5,14 +5,14 @@
 class PlayerType;
 class ObjectUseEntity {
 public:
-    ObjectUseEntity(PlayerType *player_ptr, INVENTORY_IDX i_idx);
+    ObjectUseEntity(PlayerType *player_ptr, INVENTORY_IDX item);
     virtual ~ObjectUseEntity() = default;
 
     void execute();
 
 private:
     PlayerType *player_ptr;
-    INVENTORY_IDX i_idx;
+    INVENTORY_IDX item;
 
     bool check_can_use();
 };

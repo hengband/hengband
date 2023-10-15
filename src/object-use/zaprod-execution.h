@@ -8,7 +8,7 @@ public:
     ObjectZapRodEntity(PlayerType *player_ptr);
     virtual ~ObjectZapRodEntity() = default;
 
-    void execute(INVENTORY_IDX i_idx);
+    void execute(INVENTORY_IDX item);
 
 private:
     PlayerType *player_ptr;

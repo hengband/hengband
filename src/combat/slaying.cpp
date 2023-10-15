@@ -10,6 +10,7 @@
 #include "monster-race/race-resistance-mask.h"
 #include "monster/monster-info.h"
 #include "object-enchant/tr-types.h"
+#include "object/object-flags.h"
 #include "object/tval-types.h"
 #include "player-base/player-class.h"
 #include "player/attack-defense-types.h"
@@ -60,7 +61,7 @@ MULTIPLY mult_slaying(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flag
         { TR_KILL_DRAGON, MonsterKindType::DRAGON, 50 },
     };
 
-    auto *r_ptr = &m_ptr->get_monrace();
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
     for (size_t i = 0; i < sizeof(slay_table) / sizeof(slay_table[0]); ++i) {
         const struct slay_table_t *p = &slay_table[i];
 
@@ -100,7 +101,7 @@ MULTIPLY mult_brand(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flags,
         { TR_BRAND_POIS, RFR_EFF_IM_POISON_MASK, MonsterResistanceType::MAX },
     };
 
-    auto *r_ptr = &m_ptr->get_monrace();
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
     for (size_t i = 0; i < sizeof(brand_table) / sizeof(brand_table[0]); ++i) {
         const struct brand_table_t *p = &brand_table[i];
 
@@ -151,7 +152,7 @@ MULTIPLY mult_brand(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flags,
  */
 int calc_attack_damage_with_slay(PlayerType *player_ptr, ItemEntity *o_ptr, int tdam, MonsterEntity *m_ptr, combat_options mode, bool thrown)
 {
-    auto flags = o_ptr->get_flags();
+    auto flags = object_flags(o_ptr);
     torch_flags(o_ptr, flags); /* torches has secret flags */
 
     if (!thrown) {
@@ -243,7 +244,7 @@ AttributeFlags melee_attribute(PlayerType *player_ptr, ItemEntity *o_ptr, combat
         }
     }
 
-    auto flags = o_ptr->get_flags();
+    auto flags = object_flags(o_ptr);
 
     if (player_ptr->special_attack & (ATTACK_ACID)) {
         flags.set(TR_BRAND_ACID);
