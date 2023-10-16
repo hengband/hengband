@@ -1,4 +1,4 @@
-%define version 3.0.0.89
+%define version 3.0.0.90
 %define release 1
 %global debug_package %{nil}
 
@@ -96,6 +96,12 @@ exit 0
 %license lib/help/jlicense.txt
 
 %changelog
+
+* Mon Oct 16 2023 Shiro Hara <white@vx-xv.com>
+- hengband RPM 3.0.0.90(Alpha)
+
+* Mon Aug 8 2023 Shiro Hara <white@vx-xv.com>
+- hengband RPM 3.0.0.89(Alpha)
 
 * Mon Jul 24 2023 Shiro Hara <white@vx-xv.com>
 - Enable X11
