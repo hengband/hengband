@@ -695,7 +695,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
                 } else if (g_ptr->info & CAVE_TRAP) {
                     g_ptr->info &= ~CAVE_TRAP;
                     g_ptr->mimic = g_ptr->feat;
-                    g_ptr->feat = choose_random_trap(player_ptr);
+                    g_ptr->feat = choose_random_trap(floor_ptr);
                 } else if (g_ptr->feat == OLD_FEAT_INVIS) {
                     g_ptr->mimic = feat_floor;
                     g_ptr->feat = feat_trap_open;
