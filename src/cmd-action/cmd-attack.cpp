@@ -71,7 +71,7 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
 {
     WEIGHT n_weight = 0;
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
 
     int dice_num, dice_side;
     concptr atk_desc;
@@ -173,7 +173,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     auto &floor = *player_ptr->current_floor_ptr;
     auto *g_ptr = &floor.grid_array[y][x];
     auto *m_ptr = &floor.m_list[g_ptr->m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
 
     const auto mutation_attack_methods = {
         PlayerMutationType::HORNS,

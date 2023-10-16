@@ -277,7 +277,7 @@ void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt, IDX *list_c
 
     if ((ddx[d] > 0) && ddy[d]) {
         int browser_rows;
-        const auto [wid, hgt] = term_get_size();
+        const auto &[wid, hgt] = term_get_size();
         browser_rows = hgt - 8;
         if (!col) {
             int old_grp = grp;

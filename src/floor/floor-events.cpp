@@ -147,7 +147,7 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
             continue;
         }
 
-        r_ptr = &monraces_info[m_ptr->r_idx];
+        r_ptr = &m_ptr->get_monrace();
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             if (r_ptr->level + 10 > floor_ptr->dun_level) {
                 delta += (r_ptr->level + 10 - floor_ptr->dun_level) * 2 * base;
@@ -294,7 +294,7 @@ void update_dungeon_feeling(PlayerType *player_ptr)
         return;
     }
 
-    auto quest_num = quest_number(floor, floor.dun_level);
+    auto quest_num = floor.get_quest_id();
     const auto &quest_list = QuestList::get_instance();
 
     auto dungeon_quest = (quest_num == QuestId::OBERON);

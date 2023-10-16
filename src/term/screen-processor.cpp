@@ -171,7 +171,7 @@ static std::vector<std::pair<TERM_COLOR, char>> c_roff_wrap(int x, int y, int w,
  */
 void c_roff(TERM_COLOR a, std::string_view str)
 {
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     int x, y;
     (void)term_locate(&x, &y);
 

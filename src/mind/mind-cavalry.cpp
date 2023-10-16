@@ -38,7 +38,7 @@ bool rodeo(PlayerType *player_ptr)
     }
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     const auto m_name = monster_desc(player_ptr, m_ptr, 0);
     msg_format(_("%sに乗った。", "You ride on %s."), m_name.data());
 

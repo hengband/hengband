@@ -23,8 +23,8 @@ bool import_magic_device(PlayerType *player_ptr)
 {
     constexpr auto q = _("どのアイテムの魔力を取り込みますか? ", "Gain power of which item? ");
     constexpr auto s = _("魔力を取り込めるアイテムがない。", "There's nothing with power to absorb.");
-    OBJECT_IDX item;
-    auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ItemEntity::can_recharge));
+    short i_idx;
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ItemEntity::can_recharge));
     if (o_ptr == nullptr) {
         return false;
     }
@@ -76,7 +76,7 @@ bool import_magic_device(PlayerType *player_ptr)
     const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
     msg_format(_("%sの魔力を取り込んだ。", "You absorb magic of %s."), item_name.data());
 
-    vary_item(player_ptr, item, -999);
+    vary_item(player_ptr, i_idx, -999);
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     return true;
 }

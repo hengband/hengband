@@ -532,7 +532,7 @@ static void effect_damage_makes_polymorph(PlayerType *player_ptr, EffectMonster 
     }
 
     em_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[em_ptr->g_ptr->m_idx];
-    em_ptr->r_ptr = &monraces_info[em_ptr->m_ptr->r_idx];
+    em_ptr->r_ptr = &em_ptr->m_ptr->get_monrace();
 }
 
 /*!

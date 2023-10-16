@@ -80,7 +80,7 @@ static bool change_panel_xy(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     auto dy = 0;
     auto dx = 0;
-    [[maybe_unused]] const auto [wid, hgt] = get_screen_size();
+    [[maybe_unused]] const auto &[wid, hgt] = get_screen_size();
     if (y < panel_row_min) {
         dy = -1;
     }

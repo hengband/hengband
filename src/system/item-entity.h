@@ -140,9 +140,12 @@ public:
     BaseitemInfo &get_baseitem() const;
     EgoItemDefinition &get_ego() const;
     ArtifactType &get_fixed_artifact() const;
+    TrFlags get_flags() const;
+    TrFlags get_flags_known() const;
 
 private:
     int get_baseitem_price() const;
     int calc_figurine_value() const;
     int calc_capture_value() const;
+    void modify_ego_lite_flags(TrFlags &flags) const;
 };

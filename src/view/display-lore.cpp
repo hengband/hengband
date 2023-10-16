@@ -536,11 +536,18 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
 
 #ifdef JP
 #else
-    hooked_roff(" contain ");
+    hooked_roff(" contain");
+    auto max_idx = lore_ptr->r_ptr->reinforces.size() - 1;
+    auto idx = 0 * max_idx;
 #endif
 
     for (auto [r_idx, dd, ds] : lore_ptr->r_ptr->reinforces) {
         auto is_reinforced = MonsterRace(r_idx).is_valid();
+#ifndef JP
+        const char *prefix = (idx == 0) ? " " : (idx == max_idx) ? " and "
+                                                                 : ", ";
+        ++idx;
+#endif
         is_reinforced &= dd > 0;
         is_reinforced &= ds > 0;
         if (!is_reinforced) {
@@ -549,7 +556,7 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
 
         const auto *rf_ptr = &monraces_info[r_idx];
         if (rf_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            hooked_roff(format(_("、%s", ", %s"), rf_ptr->name.data()));
+            hooked_roff(format("%s%s", _("、", prefix), rf_ptr->name.data()));
             continue;
         }
 
@@ -562,11 +569,11 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
         if (plural) {
             plural_aux(name);
         }
-        hooked_roff(format(",%dd%d %s", dd, ds, name));
+        hooked_roff(format("%s%dd%d %s", prefix, dd, ds, name));
 #endif
     }
 
-    hooked_roff(_("で成り立っている。", "."));
+    hooked_roff(_("で成り立っている。", ".  "));
 }
 
 void display_monster_collective(lore_type *lore_ptr)

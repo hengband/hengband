@@ -78,7 +78,7 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
         if (i < error_idx) {
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
-        if (i >= static_cast<int>(terrains_info.size())) {
+        if (i >= static_cast<int>(TerrainList::get_instance().size())) {
             terrains_info.resize(i + 1);
         }
 
@@ -412,8 +412,9 @@ errr init_feat_variables(void)
  */
 FEAT_IDX f_tag_to_index(std::string_view str)
 {
-    for (size_t i = 0; i < terrains_header.info_num; i++) {
-        if (terrains_info[i].tag == str) {
+    const auto &terrains = TerrainList::get_instance();
+    for (short i = 0; i < terrains_header.info_num; i++) {
+        if (terrains[i].tag == str) {
             return (FEAT_IDX)i;
         }
     }
@@ -449,8 +450,9 @@ static FEAT_IDX search_real_feat(std::string feat)
         return -1;
     }
 
-    for (FEAT_IDX i = 0; i < terrains_header.info_num; i++) {
-        if (feat.compare(terrains_info[i].tag) == 0) {
+    const auto &terrains = TerrainList::get_instance();
+    for (short i = 0; i < terrains_header.info_num; i++) {
+        if (feat == terrains[i].tag) {
             return i;
         }
     }
@@ -465,15 +467,16 @@ static FEAT_IDX search_real_feat(std::string feat)
  */
 void retouch_terrains_info(angband_header *head)
 {
-    for (int i = 0; i < head->info_num; i++) {
-        auto *f_ptr = &terrains_info[i];
-        FEAT_IDX k = search_real_feat(f_ptr->mimic_tag);
-        f_ptr->mimic = k < 0 ? f_ptr->mimic : k;
-        k = search_real_feat(f_ptr->destroyed_tag);
-        f_ptr->destroyed = k < 0 ? f_ptr->destroyed : k;
+    auto &terrains = TerrainList::get_instance();
+    for (short i = 0; i < head->info_num; i++) {
+        auto &terrain = terrains[i];
+        FEAT_IDX k = search_real_feat(terrain.mimic_tag);
+        terrain.mimic = k < 0 ? terrain.mimic : k;
+        k = search_real_feat(terrain.destroyed_tag);
+        terrain.destroyed = k < 0 ? terrain.destroyed : k;
         for (FEAT_IDX j = 0; j < MAX_FEAT_STATES; j++) {
-            k = search_real_feat(f_ptr->state[j].result_tag);
-            f_ptr->state[j].result = k < 0 ? f_ptr->state[j].result : k;
+            k = search_real_feat(terrain.state[j].result_tag);
+            terrain.state[j].result = k < 0 ? terrain.state[j].result : k;
         }
     }
 }

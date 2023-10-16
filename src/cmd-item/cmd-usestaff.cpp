@@ -307,9 +307,6 @@ int staff_effect(PlayerType *player_ptr, int sval, bool *use_charge, bool powerf
  */
 void do_cmd_use_staff(PlayerType *player_ptr)
 {
-    OBJECT_IDX item;
-    concptr q, s;
-
     if (player_ptr->wild_mode) {
         return;
     }
@@ -319,12 +316,12 @@ void do_cmd_use_staff(PlayerType *player_ptr)
     }
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU, SamuraiStanceType::KOUKIJIN });
-
-    q = _("どの杖を使いますか? ", "Use which staff? ");
-    s = _("使える杖がない。", "You have no staff to use.");
-    if (!choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(ItemKindType::STAFF))) {
+    constexpr auto q = _("どの杖を使いますか? ", "Use which staff? ");
+    constexpr auto s = _("使える杖がない。", "You have no staff to use.");
+    short i_idx;
+    if (!choose_object(player_ptr, &i_idx, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(ItemKindType::STAFF))) {
         return;
     }
 
-    ObjectUseEntity(player_ptr, item).execute();
+    ObjectUseEntity(player_ptr, i_idx).execute();
 }

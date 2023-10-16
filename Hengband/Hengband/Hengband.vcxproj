@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.3\build\Microsoft.CodeAnalysis.NetAnalyzers.props" Condition="Exists('..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.3\build\Microsoft.CodeAnalysis.NetAnalyzers.props')" />
+  <Import Project="..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.4\build\Microsoft.CodeAnalysis.NetAnalyzers.props" Condition="Exists('..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.4\build\Microsoft.CodeAnalysis.NetAnalyzers.props')" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -658,7 +658,6 @@
     <ClCompile Include="..\..\src\mspell\summon-checker.cpp" />
     <ClCompile Include="..\..\src\object-enchant\activation-info-table.cpp" />
     <ClCompile Include="..\..\src\object-enchant\dragon-breaths-table.cpp" />
-    <ClCompile Include="..\..\src\object\object-flags.cpp" />
     <ClCompile Include="..\..\src\perception\identification.cpp" />
     <ClCompile Include="..\..\src\player-attack\attack-chaos-effect.cpp" />
     <ClCompile Include="..\..\src\combat\attack-criticality.cpp" />
@@ -1476,7 +1475,6 @@
     <ClInclude Include="..\..\src\object-enchant\dragon-breaths-table.h" />
     <ClInclude Include="..\..\src\artifact\random-art-bias-types.h" />
     <ClInclude Include="..\..\src\object-enchant\trg-types.h" />
-    <ClInclude Include="..\..\src\object\object-flags.h" />
     <ClInclude Include="..\..\src\perception\identification.h" />
     <ClInclude Include="..\..\src\player-attack\attack-chaos-effect.h" />
     <ClInclude Include="..\..\src\combat\attack-criticality.h" />
@@ -2038,13 +2036,13 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.3\build\Microsoft.CodeAnalysis.NetAnalyzers.targets" Condition="Exists('..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.3\build\Microsoft.CodeAnalysis.NetAnalyzers.targets')" />
+    <Import Project="..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.4\build\Microsoft.CodeAnalysis.NetAnalyzers.targets" Condition="Exists('..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.4\build\Microsoft.CodeAnalysis.NetAnalyzers.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>このプロジェクトは、このコンピューター上にない NuGet パッケージを参照しています。それらのパッケージをダウンロードするには、[NuGet パッケージの復元] を使用します。詳細については、http://go.microsoft.com/fwlink/?LinkID=322105 を参照してください。見つからないファイルは {0} です。</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.3\build\Microsoft.CodeAnalysis.NetAnalyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.3\build\Microsoft.CodeAnalysis.NetAnalyzers.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.3\build\Microsoft.CodeAnalysis.NetAnalyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.3\build\Microsoft.CodeAnalysis.NetAnalyzers.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.4\build\Microsoft.CodeAnalysis.NetAnalyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.4\build\Microsoft.CodeAnalysis.NetAnalyzers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.4\build\Microsoft.CodeAnalysis.NetAnalyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.4\build\Microsoft.CodeAnalysis.NetAnalyzers.targets'))" />
   </Target>
 </Project>

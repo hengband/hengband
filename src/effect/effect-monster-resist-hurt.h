@@ -31,3 +31,4 @@ ProcessResult effect_monster_disintegration(PlayerType *player_ptr, EffectMonste
 ProcessResult effect_monster_icee_bolt(PlayerType *player_ptr, EffectMonster *em_ptr);
 ProcessResult effect_monster_void(PlayerType *player_ptr, EffectMonster *em_ptr);
 ProcessResult effect_monster_abyss(PlayerType *player_ptr, EffectMonster *em_ptr);
+ProcessResult effect_monster_meteor(PlayerType *player_ptr, EffectMonster *em_ptr);

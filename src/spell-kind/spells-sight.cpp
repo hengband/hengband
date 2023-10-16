@@ -446,7 +446,7 @@ bool probing(PlayerType *player_ptr)
     auto probe = false;
     for (int i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        auto *r_ptr = &monraces_info[m_ptr->r_idx];
+        auto *r_ptr = &m_ptr->get_monrace();
         if (!m_ptr->is_valid()) {
             continue;
         }

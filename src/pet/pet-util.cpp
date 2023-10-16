@@ -76,7 +76,7 @@ PERCENTAGE calculate_upkeep(PlayerType *player_ptr)
         if (!m_ptr->is_valid()) {
             continue;
         }
-        auto *r_ptr = &monraces_info[m_ptr->r_idx];
+        auto *r_ptr = &m_ptr->get_monrace();
 
         if (!m_ptr->is_pet()) {
             continue;
@@ -95,7 +95,7 @@ PERCENTAGE calculate_upkeep(PlayerType *player_ptr)
 
         if (player_ptr->riding == m_idx) {
             total_friend_levels += (r_ptr->level + 5) * 2;
-        } else if (!has_a_unique && any_bits(monraces_info[m_ptr->r_idx].flags7, RF7_RIDING)) {
+        } else if (!has_a_unique && any_bits(m_ptr->get_monrace().flags7, RF7_RIDING)) {
             total_friend_levels += (r_ptr->level + 5) * 7 / 2;
         } else {
             total_friend_levels += (r_ptr->level + 5) * 10;

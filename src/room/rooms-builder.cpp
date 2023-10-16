@@ -383,7 +383,7 @@ void add_outer_wall(PlayerType *player_ptr, POSITION x, POSITION y, int light, P
         return;
     }
 
-    if (permanent_wall(f_ptr)) {
+    if (f_ptr->is_permanent_wall()) {
         if (light) {
             g_ptr->info |= CAVE_GLOW;
         }

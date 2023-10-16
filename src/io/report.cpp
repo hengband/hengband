@@ -145,7 +145,7 @@ concptr make_screen_dump(PlayerType *player_ptr)
         "</pre>\n"
         "</body>\n</html>\n";
 
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     std::stringstream screen_ss;
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();

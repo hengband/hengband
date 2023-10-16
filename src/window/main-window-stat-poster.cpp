@@ -255,7 +255,7 @@ void print_state(PlayerType *player_ptr)
  */
 void print_speed(PlayerType *player_ptr)
 {
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     auto col_speed = wid + COL_SPEED;
     auto row_speed = hgt + ROW_SPEED;
 
@@ -316,7 +316,7 @@ void print_speed(PlayerType *player_ptr)
  */
 void print_study(PlayerType *player_ptr)
 {
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     const auto col_study = wid + COL_STUDY;
     const auto row_study = hgt + ROW_STUDY;
     if (player_ptr->new_spells) {
@@ -332,7 +332,7 @@ void print_study(PlayerType *player_ptr)
  */
 void print_imitation(PlayerType *player_ptr)
 {
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     const auto col_study = wid + COL_STUDY;
     const auto row_study = hgt + ROW_STUDY;
     PlayerClass pc(player_ptr);
@@ -445,7 +445,7 @@ static void add_hex_status_flags(PlayerType *player_ptr, BIT_FLAGS *bar_flags)
  */
 void print_status(PlayerType *player_ptr)
 {
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     const auto row_statbar = hgt + ROW_STATBAR;
     const auto max_col_statbar = wid + MAX_COL_STATBAR;
     term_erase(0, row_statbar, max_col_statbar);

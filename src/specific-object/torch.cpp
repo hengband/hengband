@@ -6,7 +6,6 @@
 #include "mind/mind-ninja.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
-#include "object/object-flags.h"
 #include "object/tval-types.h"
 #include "player/special-defense-types.h"
 #include "sv-definition/sv-lite-types.h"
@@ -90,10 +89,7 @@ void update_lite_radius(PlayerType *player_ptr)
 {
     player_ptr->cur_lite = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        ItemEntity *o_ptr;
-        o_ptr = &player_ptr->inventory_list[i];
-        auto flags = object_flags(o_ptr);
-
+        const auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -102,6 +98,7 @@ void update_lite_radius(PlayerType *player_ptr)
             player_ptr->cur_lite++;
         }
 
+        const auto flags = o_ptr->get_flags();
         if (flags.has_not(TR_DARK_SOURCE)) {
             if (o_ptr->bi_key.tval() == ItemKindType::LITE) {
                 const auto sval = o_ptr->bi_key.sval();

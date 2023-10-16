@@ -106,5 +106,7 @@ enum class MonsterAbilityType {
     BR_ABYSS = 100, /*!< モンスター能力: 深淵のブレス / Breathe Abyss */
     BA_VOID = 101, /*!< モンスター能力: 虚無のボール / Void Ball */
     BA_ABYSS = 102, /*!< モンスター能力: 深淵のボール / Abyss Ball */
+    BA_METEOR = 103, /*!< モンスター能力: 隕石のボール / Meteor Ball */
+    BO_METEOR = 104, /*!< モンスター能力: 隕石のボルト / Meteor Bolt */
     MAX,
 };

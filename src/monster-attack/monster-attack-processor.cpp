@@ -38,7 +38,7 @@ void exe_monster_attack_to_player(PlayerType *player_ptr, turn_flags *turn_flags
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto *m_ptr = &floor.m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (!turn_flags_ptr->do_move || !player_bold(player_ptr, ny, nx)) {
         return;
     }
@@ -80,7 +80,7 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto *m_ptr = &floor.m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     MonsterEntity *y_ptr;
     y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
     if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
@@ -125,30 +125,29 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
  */
 bool process_monster_attack_to_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, grid_type *g_ptr, bool can_cross)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
-    MonsterEntity *y_ptr;
-    y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+    const auto &monster_from = player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto &monrace_from = monster_from.get_monrace();
     if (!turn_flags_ptr->do_move || (g_ptr->m_idx == 0)) {
         return false;
     }
 
-    MonsterRaceInfo *z_ptr = &monraces_info[y_ptr->r_idx];
+    const auto &monster_to = player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+    const auto &monrace_to = monster_to.get_monrace();
     turn_flags_ptr->do_move = false;
 
-    bool do_kill_body = r_ptr->behavior_flags.has(MonsterBehaviorType::KILL_BODY) && r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW);
-    do_kill_body &= (r_ptr->mexp * r_ptr->level > z_ptr->mexp * z_ptr->level);
+    bool do_kill_body = monrace_from.behavior_flags.has(MonsterBehaviorType::KILL_BODY) && monrace_from.behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW);
+    do_kill_body &= (monrace_from.mexp * monrace_from.level > monrace_to.mexp * monrace_to.level);
     do_kill_body &= (g_ptr->m_idx != player_ptr->riding);
 
-    if (do_kill_body || are_enemies(player_ptr, *m_ptr, *y_ptr) || m_ptr->is_confused()) {
+    if (do_kill_body || are_enemies(player_ptr, monster_from, monster_to) || monster_from.is_confused()) {
         return exe_monster_attack_to_monster(player_ptr, m_idx, g_ptr);
     }
 
-    bool do_move_body = r_ptr->behavior_flags.has(MonsterBehaviorType::MOVE_BODY) && r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_MOVE);
-    do_move_body &= (r_ptr->mexp > z_ptr->mexp);
+    bool do_move_body = monrace_from.behavior_flags.has(MonsterBehaviorType::MOVE_BODY) && monrace_from.behavior_flags.has_not(MonsterBehaviorType::NEVER_MOVE);
+    do_move_body &= (monrace_from.mexp > monrace_to.mexp);
     do_move_body &= can_cross;
     do_move_body &= (g_ptr->m_idx != player_ptr->riding);
-    do_move_body &= monster_can_cross_terrain(player_ptr, player_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, z_ptr, 0);
+    do_move_body &= monster_can_cross_terrain(player_ptr, player_ptr->current_floor_ptr->grid_array[monster_from.fy][monster_from.fx].feat, &monrace_to, 0);
 
     if (do_move_body) {
         turn_flags_ptr->do_move = true;

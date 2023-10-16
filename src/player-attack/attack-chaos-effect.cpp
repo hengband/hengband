@@ -306,7 +306,7 @@ void change_monster_stat(PlayerType *player_ptr, player_attack_type *pa_ptr, con
         attack_teleport_away(player_ptr, pa_ptr, num);
     }
 
-    if (pa_ptr->chaos_effect == CE_POLYMORPH && (randint1(90) > monraces_info[pa_ptr->m_ptr->r_idx].level)) {
+    if (pa_ptr->chaos_effect == CE_POLYMORPH && (randint1(90) > pa_ptr->m_ptr->get_monrace().level)) {
         attack_polymorph(player_ptr, pa_ptr, y, x);
     }
 

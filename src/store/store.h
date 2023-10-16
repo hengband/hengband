@@ -21,7 +21,7 @@ extern const owner_type *ot_ptr;
 extern int16_t old_town_num;
 extern int16_t inner_town_num;
 
-extern int cur_store_feat;
+extern short cur_store_feat;
 extern bool allow_inc;
 
 class PlayerType;

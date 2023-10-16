@@ -218,9 +218,8 @@ bool cast_summon_greater_demon(PlayerType *player_ptr)
 {
     constexpr auto q = _("どの死体を捧げますか? ", "Sacrifice which corpse? ");
     constexpr auto s = _("捧げられる死体を持っていない。", "You have nothing to sacrifice.");
-    OBJECT_IDX item;
-    ItemEntity *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::is_offerable));
+    short i_idx;
+    const auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::is_offerable));
     if (!o_ptr) {
         return false;
     }
@@ -232,7 +231,7 @@ bool cast_summon_greater_demon(PlayerType *player_ptr)
     if (summon_specific(player_ptr, -1, player_ptr->y, player_ptr->x, summon_lev, SUMMON_HI_DEMON, (PM_ALLOW_GROUP | PM_FORCE_PET))) {
         msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
         msg_print(_("「ご用でございますか、ご主人様」", "'What is thy bidding... Master?'"));
-        vary_item(player_ptr, item, -1);
+        vary_item(player_ptr, i_idx, -1);
     } else {
         msg_print(_("悪魔は現れなかった。", "No Greater Demon arrives."));
     }

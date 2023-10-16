@@ -8,6 +8,7 @@
 #include "mspell/mspell-selector.h"
 #include "floor/geometry.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-ability-mask.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
@@ -22,22 +23,6 @@
 #include "world/world.h"
 
 /*!
- * @brief 指定したID値が指定した範囲内のIDかどうかを返す
- *
- * enum値に対して範囲で判定するのはあまり好ましくないが、歴史的経緯により仕方がない
- *
- * @param spell 判定対象のID
- * @param start 範囲の開始ID
- * @param end 範囲の終了ID(このIDも含む)
- * @return IDが start <= spell <= end なら true、そうでなければ false
- */
-static bool spell_in_between(MonsterAbilityType spell, MonsterAbilityType start, MonsterAbilityType end)
-{
-    auto spell_int = enum2i(spell);
-    return enum2i(start) <= spell_int && spell_int <= enum2i(end);
-}
-
-/*!
  * @brief ID値が攻撃魔法のIDかどうかを返す /
  * Return TRUE if a spell is good for hurting the player (directly).
  * @param spell 判定対象のID
@@ -45,42 +30,7 @@ static bool spell_in_between(MonsterAbilityType spell, MonsterAbilityType start,
  */
 static bool spell_attack(MonsterAbilityType spell)
 {
-    /* All RF4 spells hurt (except for shriek and dispel) */
-    if (spell_in_between(spell, MonsterAbilityType::ROCKET, MonsterAbilityType::BR_DISI)) {
-        return true;
-    }
-    if (spell_in_between(spell, MonsterAbilityType::BR_VOID, MonsterAbilityType::BR_ABYSS)) {
-        return true;
-    }
-
-    /* Various "ball" spells */
-    if (spell_in_between(spell, MonsterAbilityType::BA_ACID, MonsterAbilityType::BA_DARK)) {
-        return true;
-    }
-    if (spell_in_between(spell, MonsterAbilityType::BA_VOID, MonsterAbilityType::BA_ABYSS)) {
-        return true;
-    }
-
-    /* "Cause wounds" and "bolt" spells */
-    if (spell_in_between(spell, MonsterAbilityType::CAUSE_1, MonsterAbilityType::MISSILE)) {
-        return true;
-    }
-    if (spell_in_between(spell, MonsterAbilityType::BO_VOID, MonsterAbilityType::BO_ABYSS)) {
-        return true;
-    }
-
-    /* Hand of Doom */
-    if (spell == MonsterAbilityType::HAND_DOOM) {
-        return true;
-    }
-
-    /* Psycho-Spear */
-    if (spell == MonsterAbilityType::PSY_SPEAR) {
-        return true;
-    }
-
-    /* Doesn't hurt */
-    return false;
+    return RF_ABILITY_ATTACK_SPELLS_MASK.has(spell);
 }
 
 /*!
@@ -113,38 +63,7 @@ static bool spell_escape(MonsterAbilityType spell)
  */
 static bool spell_annoy(MonsterAbilityType spell)
 {
-    /* Shriek */
-    if (spell == MonsterAbilityType::SHRIEK) {
-        return true;
-    }
-
-    /* Brain smash, et al (added curses) */
-    if (spell_in_between(spell, MonsterAbilityType::DRAIN_MANA, MonsterAbilityType::CAUSE_4)) {
-        return true;
-    }
-
-    /* Scare, confuse, blind, slow, paralyze */
-    if (spell_in_between(spell, MonsterAbilityType::SCARE, MonsterAbilityType::HOLD)) {
-        return true;
-    }
-
-    /* Teleport to */
-    if (spell == MonsterAbilityType::TELE_TO) {
-        return true;
-    }
-
-    /* Teleport level */
-    if (spell == MonsterAbilityType::TELE_LEVEL) {
-        return true;
-    }
-
-    /* Darkness, make traps, cause amnesia */
-    if (spell_in_between(spell, MonsterAbilityType::TRAPS, MonsterAbilityType::RAISE_DEAD)) {
-        return true;
-    }
-
-    /* Doesn't annoy */
-    return false;
+    return RF_ABILITY_ANNOY_SPELLS_MASK.has(spell);
 }
 
 /*!
@@ -155,7 +74,7 @@ static bool spell_annoy(MonsterAbilityType spell)
  */
 static bool spell_summon(MonsterAbilityType spell)
 {
-    return spell_in_between(spell, MonsterAbilityType::S_KIN, MonsterAbilityType::S_DEAD_UNIQUE);
+    return RF_ABILITY_SUMMON_MASK.has(spell);
 }
 
 /*!
@@ -263,6 +182,28 @@ static bool spell_dispel(MonsterAbilityType spell)
 }
 
 /*!
+ * @brief 特殊魔法を使用する確率の判定
+ * @param r_idx モンスター種族ID
+ * @return 特殊魔法を使用するか否か
+ * @details 分離/合体ユニークは常に使用しない (その前に判定済のため).
+ */
+static bool decide_select_special(MonsterRaceId r_idx)
+{
+    if (MonraceList::get_instance().is_separated(r_idx)) {
+        return false;
+    }
+
+    switch (r_idx) {
+    case MonsterRaceId::OHMU:
+        return false;
+    case MonsterRaceId::ROLENTO:
+        return randint0(100) < 40;
+    default:
+        return randint0(100) < 50;
+    }
+}
+
+/*!
  * @brief モンスターの魔法選択ルーチン
  * Have a monster choose a spell from a list of "useful" spells.
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -300,7 +241,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
     std::vector<MonsterAbilityType> dispel;
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[msa_ptr->m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (r_ptr->flags2 & RF2_STUPID) {
         return rand_choice(msa_ptr->mspells);
     }
@@ -363,22 +304,9 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
         return rand_choice(world);
     }
 
-    if (!special.empty()) {
-        bool success = false;
-        switch (m_ptr->r_idx) {
-        case MonsterRaceId::BANOR:
-        case MonsterRaceId::LUPART:
-            if ((m_ptr->hp < m_ptr->maxhp / 2) && monraces_info[MonsterRaceId::BANOR].max_num && monraces_info[MonsterRaceId::LUPART].max_num) {
-                success = true;
-            }
-            break;
-        default:
-            break;
-        }
-
-        if (success) {
-            return rand_choice(special);
-        }
+    const auto &monrace_list = MonraceList::get_instance();
+    if (!special.empty() && monrace_list.can_select_separate(m_ptr->r_idx, m_ptr->hp, m_ptr->maxhp)) {
+        return rand_choice(special);
     }
 
     if (m_ptr->hp < m_ptr->maxhp / 3 && one_in_(2)) {
@@ -394,37 +322,21 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
     }
 
     if (!special.empty()) {
-        bool success = false;
-        switch (m_ptr->r_idx) {
-        case MonsterRaceId::OHMU:
-        case MonsterRaceId::BANOR:
-        case MonsterRaceId::LUPART:
-            break;
-        case MonsterRaceId::BANORLUPART:
-            if (randint0(100) < 70) {
-                success = true;
-            }
-            break;
-        case MonsterRaceId::ROLENTO:
-            if (randint0(100) < 40) {
-                success = true;
-            }
-            break;
-        default:
-            if (randint0(100) < 50) {
-                success = true;
-            }
-            break;
-        }
-        if (success) {
+        const auto r_idx = m_ptr->r_idx;
+        auto should_select_special = monrace_list.is_unified(r_idx) && (randint0(100) < 70);
+        should_select_special |= decide_select_special(r_idx);
+        if (should_select_special) {
             return rand_choice(special);
         }
     }
 
-    if ((distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx) < 4) && (!attack.empty() || r_ptr->ability_flags.has(MonsterAbilityType::TRAPS)) && (randint0(100) < 75) && !w_ptr->timewalk_m_idx) {
-        if (!tactic.empty()) {
-            return rand_choice(tactic);
-        }
+    auto should_select_tactic = distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx) < 4;
+    should_select_tactic &= !attack.empty() || r_ptr->ability_flags.has(MonsterAbilityType::TRAPS);
+    should_select_tactic &= randint0(100) < 75;
+    should_select_tactic &= w_ptr->timewalk_m_idx == 0;
+    should_select_tactic &= !tactic.empty();
+    if (should_select_tactic) {
+        return rand_choice(tactic);
     }
 
     if (!summon.empty() && (randint0(100) < 40)) {

@@ -15,20 +15,14 @@
 store_type *st_ptr = nullptr;
 
 /*!
- * @brief 店舗のオブジェクト数を増やす /
- * Add the item "o_ptr" to a real stores inventory.
- * @param item 増やしたいアイテムのID
+ * @brief 店舗のオブジェクト数を増やす
+ * @param i_idx 増やしたいアイテムのインベントリID
  * @param num 増やしたい数
- * @details
- * <pre>
- * Increase, by a given amount, the number of a certain item
- * in a certain store.	This can result in zero items.
- * </pre>
  */
-void store_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
+void store_item_increase(INVENTORY_IDX i_idx, ITEM_NUMBER num)
 {
     ItemEntity *o_ptr;
-    o_ptr = &st_ptr->stock[item];
+    o_ptr = &st_ptr->stock[i_idx];
     int cnt = o_ptr->number + num;
     if (cnt > 255) {
         cnt = 255;
@@ -41,19 +35,18 @@ void store_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
 }
 
 /*!
- * @brief 店舗のオブジェクト数を削除する /
- * Remove a slot if it is empty
- * @param item 削除したいアイテムのID
+ * @brief 店舗のオブジェクト数を削除する
+ * @param i_idx 削除したいアイテムのID
  */
-void store_item_optimize(INVENTORY_IDX item)
+void store_item_optimize(INVENTORY_IDX i_idx)
 {
-    const auto *o_ptr = &st_ptr->stock[item];
+    const auto *o_ptr = &st_ptr->stock[i_idx];
     if (!o_ptr->is_valid() || (o_ptr->number != 0)) {
         return;
     }
 
     st_ptr->stock_num--;
-    for (int j = item; j < st_ptr->stock_num; j++) {
+    for (int j = i_idx; j < st_ptr->stock_num; j++) {
         st_ptr->stock[j] = st_ptr->stock[j + 1];
     }
 

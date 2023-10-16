@@ -240,6 +240,7 @@ static void cave_fill(PlayerType *player_ptr, const POSITION y, const POSITION x
     que.emplace(y, x);
 
     while (!que.empty()) {
+        // 参照で受けるとダングリング状態になるのでコピーする.
         const auto [y_cur, x_cur] = que.front();
         que.pop();
 

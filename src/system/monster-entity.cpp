@@ -56,7 +56,7 @@ bool MonsterEntity::is_mimicry() const
         return true;
     }
 
-    const auto &r_ref = monraces_info[this->ap_r_idx];
+    const auto &r_ref = this->get_real_monrace();
     const auto mimic_symbols = "/|\\()[]=$,.!?&`#%<>+~";
     if (angband_strchr(mimic_symbols, r_ref.d_char) == nullptr) {
         return false;
@@ -74,23 +74,28 @@ bool MonsterEntity::is_valid() const
     return MonsterRace(this->r_idx).is_valid();
 }
 
-MonsterRaceId MonsterEntity::get_real_r_idx() const
+MonsterRaceId MonsterEntity::get_real_monrace_id() const
 {
-    const auto &r_ref = monraces_info[this->r_idx];
+    const auto &monrace = this->get_monrace();
     if (this->mflag2.has_not(MonsterConstantFlagType::CHAMELEON)) {
         return this->r_idx;
     }
 
-    return r_ref.kind_flags.has(MonsterKindType::UNIQUE) ? MonsterRaceId::CHAMELEON_K : MonsterRaceId::CHAMELEON;
+    return monrace.kind_flags.has(MonsterKindType::UNIQUE) ? MonsterRaceId::CHAMELEON_K : MonsterRaceId::CHAMELEON;
 }
 
 /*!
- * @brief モンスターの真の種族を返す / Extract monster race pointer of a monster's true form
- * @return 本当のモンスター種族参照ポインタ
+ * @brief モンスターの真の種族定義を返す (CHAMAELEONフラグ専用)
+ * @return 真のモンスター種族参照
  */
-MonsterRaceInfo &MonsterEntity::get_real_r_ref() const
+MonsterRaceInfo &MonsterEntity::get_real_monrace() const
 {
-    return monraces_info[this->get_real_r_idx()];
+    return monraces_info[this->get_real_monrace_id()];
+}
+
+MonsterRaceInfo &MonsterEntity::get_monrace() const
+{
+    return monraces_info[this->r_idx];
 }
 
 short MonsterEntity::get_remaining_sleep() const
@@ -197,19 +202,19 @@ byte MonsterEntity::get_temporary_speed() const
  */
 bool MonsterEntity::has_living_flag(bool is_apperance) const
 {
-    const auto &monrace = monraces_info[is_apperance ? this->ap_r_idx : this->r_idx];
+    const auto &monrace = is_apperance ? this->get_real_monrace() : this->get_monrace();
     return monrace.has_living_flag();
 }
 
 bool MonsterEntity::is_explodable() const
 {
-    const auto &monrace = monraces_info[this->r_idx];
+    const auto &monrace = this->get_monrace();
     return monrace.is_explodable();
 }
 
 std::string MonsterEntity::get_died_message() const
 {
-    const auto &monrace = monraces_info[this->r_idx];
+    const auto &monrace = this->get_monrace();
     return monrace.get_died_message();
 }
 

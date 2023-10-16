@@ -74,7 +74,7 @@ void execute_recall(PlayerType *player_ptr)
 
     disturb(player_ptr, false, true);
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->dun_level || inside_quest(floor_ptr->quest_number) || player_ptr->enter_dungeon) {
+    if (floor_ptr->dun_level || floor_ptr->is_in_quest() || player_ptr->enter_dungeon) {
         msg_print(_("上に引っ張りあげられる感じがする！", "You feel yourself yanked upwards!"));
         if (floor_ptr->dungeon_idx) {
             player_ptr->recall_dungeon = floor_ptr->dungeon_idx;
@@ -157,7 +157,7 @@ void execute_floor_reset(PlayerType *player_ptr)
     }
 
     disturb(player_ptr, false, true);
-    if (!inside_quest(quest_number(floor, floor.dun_level)) && floor.dun_level) {
+    if (!inside_quest(floor.get_quest_id()) && floor.dun_level) {
         msg_print(_("世界が変わった！", "The world changes!"));
 
         /*

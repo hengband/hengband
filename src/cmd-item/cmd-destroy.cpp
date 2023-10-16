@@ -40,7 +40,7 @@
 #include "view/display-messages.h"
 
 struct destroy_type {
-    OBJECT_IDX item = 0;
+    short i_idx = 0;
     QUANTITY amt = 0;
     QUANTITY old_number = 0;
     bool force = false;
@@ -88,7 +88,7 @@ static bool check_destory_item(PlayerType *player_ptr, destroy_type *destroy_ptr
         }
 
         if (autopick_autoregister(player_ptr, destroy_ptr->o_ptr)) {
-            autopick_alter_item(player_ptr, destroy_ptr->item, true);
+            autopick_alter_item(player_ptr, destroy_ptr->i_idx, true);
         }
 
         return false;
@@ -99,7 +99,7 @@ static bool select_destroying_item(PlayerType *player_ptr, destroy_type *destroy
 {
     constexpr auto q = _("どのアイテムを壊しますか? ", "Destroy which item? ");
     constexpr auto s = _("壊せるアイテムを持っていない。", "You have nothing to destroy.");
-    destroy_ptr->o_ptr = choose_object(player_ptr, &destroy_ptr->item, q, s, USE_INVEN | USE_FLOOR);
+    destroy_ptr->o_ptr = choose_object(player_ptr, &destroy_ptr->i_idx, q, s, USE_INVEN | USE_FLOOR);
     if (destroy_ptr->o_ptr == nullptr) {
         return false;
     }
@@ -205,13 +205,13 @@ static void exe_destroy_item(PlayerType *player_ptr, destroy_type *destroy_ptr)
     msg_format(_("%sを壊した。", "You destroy %s."), destroy_ptr->item_name.data());
     sound(SOUND_DESTITEM);
     reduce_charges(destroy_ptr->o_ptr, destroy_ptr->amt);
-    vary_item(player_ptr, destroy_ptr->item, -destroy_ptr->amt);
+    vary_item(player_ptr, destroy_ptr->i_idx, -destroy_ptr->amt);
     process_destroy_magic_book(player_ptr, destroy_ptr);
     if ((destroy_ptr->q_ptr->to_a != 0) || (destroy_ptr->q_ptr->to_d != 0) || (destroy_ptr->q_ptr->to_h != 0)) {
         chg_virtue(player_ptr, Virtue::HARMONY, 1);
     }
 
-    if (destroy_ptr->item >= INVEN_MAIN_HAND) {
+    if (destroy_ptr->i_idx >= INVEN_MAIN_HAND) {
         calc_android_exp(player_ptr);
     }
 }

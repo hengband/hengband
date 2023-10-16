@@ -9,7 +9,6 @@
 #include "effect/effect-processor.h"
 #include "mind/snipe-types.h"
 #include "object-enchant/tr-types.h"
-#include "object/object-flags.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-potion-types.h"
 #include "system/baseitem-info.h"
@@ -172,8 +171,7 @@ bool ObjectBreaker::can_destroy(ItemEntity *o_ptr) const
         return false;
     }
 
-    auto flags = object_flags(o_ptr);
-    return flags.has_not(this->ignore_flg);
+    return o_ptr->get_flags().has_not(this->ignore_flg);
 }
 
 /*!

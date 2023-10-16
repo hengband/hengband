@@ -32,7 +32,6 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/vorpal-weapon.h"
 #include "object-hook/hook-weapon.h"
-#include "object/object-flags.h"
 #include "object/tval-types.h"
 #include "player-attack/attack-chaos-effect.h"
 #include "player-attack/blood-sucking-processor.h"
@@ -80,7 +79,7 @@ player_attack_type::player_attack_type(FloorType &floor, POSITION y, POSITION x,
     this->m_idx = this->g_ptr->m_idx;
     this->m_ptr = &floor.m_list[this->g_ptr->m_idx];
     this->r_idx = this->m_ptr->r_idx;
-    this->r_ptr = &monraces_info[this->m_ptr->r_idx];
+    this->r_ptr = &this->m_ptr->get_monrace();
     this->ma_ptr = &ma_blows[0];
 }
 
@@ -115,7 +114,7 @@ static void attack_classify(PlayerType *player_ptr, player_attack_type *pa_ptr)
  */
 static void get_bare_knuckle_exp(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    auto *r_ptr = &monraces_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &pa_ptr->m_ptr->get_monrace();
     if ((r_ptr->level + 10) <= player_ptr->lev) {
         return;
     }
@@ -142,7 +141,7 @@ static void get_weapon_exp(PlayerType *player_ptr, player_attack_type *pa_ptr)
  */
 static void get_attack_exp(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    auto *r_ptr = &monraces_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &pa_ptr->m_ptr->get_monrace();
     auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
     if (!o_ptr->is_valid()) {
         get_bare_knuckle_exp(player_ptr, pa_ptr);
@@ -414,7 +413,7 @@ static void apply_damage_negative_effect(player_attack_type *pa_ptr, bool is_zan
         pa_ptr->attack_damage = 0;
     }
 
-    auto *r_ptr = &monraces_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &pa_ptr->m_ptr->get_monrace();
     if ((pa_ptr->mode == HISSATSU_ZANMA) && !(!pa_ptr->m_ptr->has_living_flag() && r_ptr->kind_flags.has(MonsterKindType::EVIL))) {
         pa_ptr->attack_damage = 0;
     }
@@ -487,7 +486,7 @@ static void apply_actual_attack(
     sound(SOUND_HIT);
     print_surprise_attack(pa_ptr);
 
-    pa_ptr->flags = object_flags(o_ptr);
+    pa_ptr->flags = o_ptr->get_flags();
     pa_ptr->chaos_effect = select_chaotic_effect(player_ptr, pa_ptr);
     pa_ptr->magical_effect = select_magical_brand_effect(player_ptr, pa_ptr);
     decide_blood_sucking(player_ptr, pa_ptr);

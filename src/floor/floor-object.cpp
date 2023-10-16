@@ -214,14 +214,14 @@ void delete_all_items_from_floor(PlayerType *player_ptr, POSITION y, POSITION x)
  * @brief 床上のアイテムの数を増やす /
  * Increase the "number" of an item on the floor
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param item 増やしたいアイテムの所持スロット
+ * @param i_idx 増やしたいアイテムの所持スロット
  * @param num 増やしたいアイテムの数
  */
-void floor_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
+void floor_item_increase(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBER num)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
 
-    auto *o_ptr = &floor_ptr->o_list[item];
+    auto *o_ptr = &floor_ptr->o_list[i_idx];
     num += o_ptr->number;
     if (num > 255) {
         num = 255;
@@ -242,11 +242,11 @@ void floor_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
  * @brief 床上の数の無くなったアイテムスロットを消去する /
  * Optimize an item on the floor (destroy "empty" items)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param item 消去したいアイテムの所持スロット
+ * @param i_idx 消去したいアイテムの所持スロット
  */
-void floor_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
+void floor_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 {
-    auto *o_ptr = &player_ptr->current_floor_ptr->o_list[item];
+    auto *o_ptr = &player_ptr->current_floor_ptr->o_list[i_idx];
     if (!o_ptr->is_valid()) {
         return;
     }
@@ -254,7 +254,7 @@ void floor_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
         return;
     }
 
-    delete_object_idx(player_ptr, item);
+    delete_object_idx(player_ptr, i_idx);
     static constexpr auto flags = {
         SubWindowRedrawingFlag::FLOOR_ITEMS,
         SubWindowRedrawingFlag::FOUND_ITEMS,
@@ -585,14 +585,13 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
 }
 
 /*!
- * @brief 床上の魔道具の残り残量メッセージを表示する /
- * Describe the charges on an item on the floor.
+ * @brief 床上の魔道具の残り残量メッセージを表示する
  * @param floo_ptr 現在フロアへの参照ポインタ
- * @param item メッセージの対象にしたいアイテム所持スロット
+ * @param i_idx メッセージの対象にしたいアイテム所持スロット
  */
-void floor_item_charges(FloorType *floor_ptr, INVENTORY_IDX inventory)
+void floor_item_charges(FloorType *floor_ptr, INVENTORY_IDX i_idx)
 {
-    const auto &item = floor_ptr->o_list[inventory];
+    const auto &item = floor_ptr->o_list[i_idx];
     if (!item.is_wand_staff() || !item.is_known()) {
         return;
     }
@@ -616,11 +615,11 @@ void floor_item_charges(FloorType *floor_ptr, INVENTORY_IDX inventory)
  * @brief 床上のアイテムの残り数メッセージを表示する /
  * Describe the charges on an item on the floor.
  * @param floo_ptr 現在フロアへの参照ポインタ
- * @param item メッセージの対象にしたいアイテム所持スロット
+ * @param i_idx メッセージの対象にしたいアイテム所持スロット
  */
-void floor_item_describe(PlayerType *player_ptr, INVENTORY_IDX item)
+void floor_item_describe(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 {
-    auto *o_ptr = &player_ptr->current_floor_ptr->o_list[item];
+    auto *o_ptr = &player_ptr->current_floor_ptr->o_list[i_idx];
     const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
 #ifdef JP
     if (o_ptr->number <= 0) {
@@ -634,29 +633,28 @@ void floor_item_describe(PlayerType *player_ptr, INVENTORY_IDX item)
 }
 
 /*
- * Choose an item and get auto-picker entry from it.
+ * @brief Choose an item and get auto-picker entry from it.
+ * @todo initial_i_idx をポインタではなく値に変え、戻り値をstd::pairに変える
  */
-ItemEntity *choose_object(PlayerType *player_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, const ItemTester &item_tester)
+ItemEntity *choose_object(PlayerType *player_ptr, short *initial_i_idx, concptr q, concptr s, BIT_FLAGS option, const ItemTester &item_tester)
 {
-    OBJECT_IDX item;
-
-    if (idx) {
-        *idx = INVEN_NONE;
+    if (initial_i_idx) {
+        *initial_i_idx = INVEN_NONE;
     }
 
     FixItemTesterSetter setter(item_tester);
-
-    if (!get_item(player_ptr, &item, q, s, option, item_tester)) {
+    short i_idx;
+    if (!get_item(player_ptr, &i_idx, q, s, option, item_tester)) {
         return nullptr;
     }
 
-    if (idx) {
-        *idx = item;
+    if (initial_i_idx) {
+        *initial_i_idx = i_idx;
     }
 
-    if (item == INVEN_FORCE) {
+    if (i_idx == INVEN_FORCE) {
         return nullptr;
     }
 
-    return ref_item(player_ptr, item);
+    return ref_item(player_ptr, i_idx);
 }

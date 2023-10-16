@@ -24,38 +24,45 @@ void spoiler_outlist(std::string_view header, const std::vector<std::string> &de
         return;
     }
 
-    std::string line = spoiler_indent;
+    std::stringstream line;
+    line << spoiler_indent;
     if (!header.empty()) {
-        line.append(header).append(" ");
+        line << header << " ";
     }
 
     std::stringstream ss;
     ss << list_separator << ' ';
     const auto last_separator = ss.str();
     for (size_t i = 0; i < descriptions.size(); i++) {
-        auto elem = descriptions[i];
+        std::stringstream element;
+        element << descriptions[i];
         if (i < descriptions.size() - 1) {
-            elem.push_back(separator);
-            elem.push_back(' ');
+            element << separator << ' ';
         }
 
-        if (line.length() + elem.length() <= MAX_LINE_LEN) {
-            line.append(elem);
+        const auto element_str = element.str();
+        const int line_length = line.tellp();
+        constexpr auto max_line_length = 75;
+        if (line_length + element_str.length() <= max_line_length) {
+            line << element_str;
             continue;
         }
 
-        if (line.length() > 1 && line.ends_with(last_separator)) {
-            ofs << std::string_view(line).substr(0, line.length() - 2) << '\n';
-            line = spoiler_indent;
-            line.append(elem);
+        const auto line_str = line.str();
+        if (line_str.ends_with(last_separator)) {
+            ofs << std::string_view(line_str).substr(0, line_str.length() - 2) << '\n';
+            line.str("");
+            line.clear(std::stringstream::goodbit);
+            line << spoiler_indent << element_str;
         } else {
-            ofs << line << '\n';
-            line = "      ";
-            line.append(elem);
+            ofs << line_str << '\n';
+            line.str("");
+            line.clear(std::stringstream::goodbit);
+            line << "      " << element_str;
         }
     }
 
-    ofs << line << '\n';
+    ofs << line.str() << '\n';
 }
 
 /*!
@@ -86,7 +93,7 @@ static ItemEntity make_fake_artifact(FixedArtifactId fixed_artifact_idx)
  * Create a spoiler file entry for an artifact
  * @param art_ptr アーティファクト情報をまとめた構造体の参照ポインタ
  */
-static void spoiler_print_art(obj_desc_list *art_ptr, std::ofstream &ofs)
+static void spoiler_print_art(const ArtifactsDumpInfo *art_ptr, std::ofstream &ofs)
 {
     const auto *pval_ptr = &art_ptr->pval_info;
     ofs << art_ptr->description << '\n';
@@ -143,9 +150,8 @@ SpoilerOutputResultType spoil_fixed_artifact()
 
                 const auto item = make_fake_artifact(a_idx);
                 PlayerType dummy;
-                obj_desc_list artifact_descriptions;
-                object_analyze(&dummy, &item, &artifact_descriptions);
-                spoiler_print_art(&artifact_descriptions, ofs);
+                const auto artifacts_list = object_analyze(&dummy, &item);
+                spoiler_print_art(&artifacts_list, ofs);
             }
         }
     }
