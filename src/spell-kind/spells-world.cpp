@@ -264,7 +264,7 @@ bool tele_town(PlayerType *player_ptr)
         return false;
     }
 
-    if (player_ptr->current_floor_ptr->inside_arena || AngbandSystem::get_instance().is_watching()) {
+    if (player_ptr->current_floor_ptr->inside_arena || AngbandSystem::get_instance().is_phase_out()) {
         msg_print(_("この魔法は外でしか使えない！", "This spell can only be used outside!"));
         return false;
     }

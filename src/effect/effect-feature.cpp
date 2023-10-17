@@ -367,7 +367,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
     case AttributeType::DARK_WEAK:
     case AttributeType::DARK:
     case AttributeType::ABYSS: {
-        auto do_dark = !AngbandSystem::get_instance().is_watching() && !grid.is_mirror();
+        auto do_dark = !AngbandSystem::get_instance().is_phase_out() && !grid.is_mirror();
         if (!do_dark) {
             break;
         }

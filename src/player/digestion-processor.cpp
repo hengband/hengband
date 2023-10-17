@@ -29,7 +29,7 @@
  */
 void starve_player(PlayerType *player_ptr)
 {
-    if (AngbandSystem::get_instance().is_watching()) {
+    if (AngbandSystem::get_instance().is_phase_out()) {
         return;
     }
 

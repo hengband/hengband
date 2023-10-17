@@ -347,10 +347,10 @@ void do_cmd_building(PlayerType *player_ptr)
     }
 
     auto &system = AngbandSystem::get_instance();
-    if (system.is_watching()) {
+    if (system.is_phase_out()) {
         prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_NO_RETURN);
         player_ptr->leaving = true;
-        system.set_watch(false);
+        system.set_phase_out(false);
         command_new = SPECIAL_KEY_BUILDING;
         energy.reset_player_turn();
         return;
@@ -382,7 +382,7 @@ void do_cmd_building(PlayerType *player_ptr)
         if (command == ESCAPE) {
             player_ptr->leave_bldg = true;
             player_ptr->current_floor_ptr->inside_arena = false;
-            system.set_watch(false);
+            system.set_phase_out(false);
             break;
         }
 

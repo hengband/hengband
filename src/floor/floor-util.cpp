@@ -202,7 +202,7 @@ std::string map_name(PlayerType *player_ptr)
         return _("地上", "Surface");
     } else if (floor_ptr->inside_arena) {
         return _("アリーナ", "Arena");
-    } else if (AngbandSystem::get_instance().is_watching()) {
+    } else if (AngbandSystem::get_instance().is_phase_out()) {
         return _("闘技場", "Monster Arena");
     } else if (!floor_ptr->dun_level && player_ptr->town_num) {
         return towns_info[player_ptr->town_num].name;

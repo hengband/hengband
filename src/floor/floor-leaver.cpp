@@ -78,7 +78,7 @@ static bool check_pet_preservation_conditions(PlayerType *player_ptr, MonsterEnt
 
 static void sweep_preserving_pet(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode || player_ptr->current_floor_ptr->inside_arena || AngbandSystem::get_instance().is_watching()) {
+    if (player_ptr->wild_mode || player_ptr->current_floor_ptr->inside_arena || AngbandSystem::get_instance().is_phase_out()) {
         return;
     }
 

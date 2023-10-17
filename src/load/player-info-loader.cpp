@@ -261,9 +261,9 @@ static void rd_phase_out(PlayerType *player_ptr)
     player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(quest_number);
     auto &system = AngbandSystem::get_instance();
     if (h_older_than(0, 3, 5)) {
-        system.set_watch(false);
+        system.set_phase_out(false);
     } else {
-        system.set_watch(rd_s16b() != 0);
+        system.set_phase_out(rd_s16b() != 0);
     }
 }
 

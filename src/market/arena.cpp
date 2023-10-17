@@ -350,7 +350,7 @@ bool monster_arena_comm(PlayerType *player_ptr)
     reset_tim_flags(player_ptr);
 
     prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
-    AngbandSystem::get_instance().set_watch(true);
+    AngbandSystem::get_instance().set_phase_out(true);
     player_ptr->leaving = true;
     player_ptr->leave_bldg = true;
 

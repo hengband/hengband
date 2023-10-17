@@ -7,14 +7,14 @@ AngbandSystem &AngbandSystem::get_instance()
     return instance;
 }
 
-void AngbandSystem::set_watch(bool new_status)
+void AngbandSystem::set_phase_out(bool new_status)
 {
-    this->watch_stat = new_status;
+    this->phase_out_stat = new_status;
 }
 
-bool AngbandSystem::is_watching() const
+bool AngbandSystem::is_phase_out() const
 {
-    return this->watch_stat;
+    return this->phase_out_stat;
 }
 
 /*!
@@ -23,5 +23,5 @@ bool AngbandSystem::is_watching() const
  */
 int AngbandSystem::get_max_range() const
 {
-    return this->watch_stat ? 36 : 18;
+    return this->phase_out_stat ? 36 : 18;
 }

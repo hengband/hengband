@@ -361,7 +361,7 @@ void print_health(PlayerType *player_ptr, bool riding)
         col = COL_RIDING_INFO;
     } else {
         // ウィザードモードで闘技場観戦時の表示
-        if (w_ptr->wizard && AngbandSystem::get_instance().is_watching()) {
+        if (w_ptr->wizard && AngbandSystem::get_instance().is_phase_out()) {
             print_health_monster_in_arena_for_wizard(player_ptr);
             return;
         }

@@ -53,5 +53,5 @@ MonsterDeath::MonsterDeath(FloorType &floor, MONSTER_IDX m_idx, bool drop_item)
     this->do_item |= this->r_ptr->drop_flags.has_any_of({ MonsterDropType::DROP_GOOD, MonsterDropType::DROP_GREAT });
     this->cloned = this->m_ptr->mflag2.has(MonsterConstantFlagType::CLONED);
     this->force_coin = get_coin_type(this->m_ptr->r_idx);
-    this->drop_chosen_item = drop_item && !this->cloned && !floor.inside_arena && !AngbandSystem::get_instance().is_watching() && !this->m_ptr->is_pet();
+    this->drop_chosen_item = drop_item && !this->cloned && !floor.inside_arena && !AngbandSystem::get_instance().is_phase_out() && !this->m_ptr->is_pet();
 }

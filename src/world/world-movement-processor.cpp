@@ -63,7 +63,7 @@ void execute_recall(PlayerType *player_ptr)
         return;
     }
 
-    if (autosave_l && (player_ptr->word_recall == 1) && !AngbandSystem::get_instance().is_watching()) {
+    if (autosave_l && (player_ptr->word_recall == 1) && !AngbandSystem::get_instance().is_phase_out()) {
         do_cmd_save_game(player_ptr, true);
     }
 
@@ -147,7 +147,7 @@ void execute_floor_reset(PlayerType *player_ptr)
         return;
     }
 
-    if (autosave_l && (player_ptr->alter_reality == 1) && !AngbandSystem::get_instance().is_watching()) {
+    if (autosave_l && (player_ptr->alter_reality == 1) && !AngbandSystem::get_instance().is_phase_out()) {
         do_cmd_save_game(player_ptr, true);
     }
 

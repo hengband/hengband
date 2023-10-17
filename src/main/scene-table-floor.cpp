@@ -33,7 +33,7 @@ static bool scene_basic(PlayerType *player_ptr, scene_type *value)
         return true;
     }
 
-    if (AngbandSystem::get_instance().is_watching()) {
+    if (AngbandSystem::get_instance().is_phase_out()) {
         value->type = TERM_XTRA_MUSIC_BASIC;
         value->val = MUSIC_BASIC_BATTLE;
         return true;

@@ -125,7 +125,7 @@ bool get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx, int *mm)
     } else {
         int start;
         int plus = 1;
-        if (AngbandSystem::get_instance().is_watching()) {
+        if (AngbandSystem::get_instance().is_phase_out()) {
             start = randint1(floor_ptr->m_max - 1) + floor_ptr->m_max;
             if (randint0(2)) {
                 plus = -1;

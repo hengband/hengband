@@ -79,7 +79,7 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
     bool targeted = target_who == g_ptr->m_idx;
     bool health_tracked = player_ptr->health_who == g_ptr->m_idx;
 
-    if (floor_ptr->inside_arena || AngbandSystem::get_instance().is_watching()) {
+    if (floor_ptr->inside_arena || AngbandSystem::get_instance().is_phase_out()) {
         return false;
     }
     if ((player_ptr->riding == g_ptr->m_idx) || m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {

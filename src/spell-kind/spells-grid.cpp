@@ -76,7 +76,7 @@ void stair_creation(PlayerType *player_ptr)
         down = false;
     }
 
-    if (!floor.dun_level || (!up && !down) || (floor.is_in_quest() && QuestType::is_fixed(floor.quest_number)) || floor.inside_arena || AngbandSystem::get_instance().is_watching()) {
+    if (!floor.dun_level || (!up && !down) || (floor.is_in_quest() && QuestType::is_fixed(floor.quest_number)) || floor.inside_arena || AngbandSystem::get_instance().is_phase_out()) {
         msg_print(_("効果がありません！", "There is no effect!"));
         return;
     }

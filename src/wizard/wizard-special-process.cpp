@@ -842,7 +842,7 @@ void cheat_death(PlayerType *player_ptr)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dun_level = 0;
     floor_ptr->inside_arena = false;
-    AngbandSystem::get_instance().set_watch(false);
+    AngbandSystem::get_instance().set_phase_out(false);
     leaving_quest = QuestId::NONE;
     floor_ptr->quest_number = QuestId::NONE;
     if (floor_ptr->dungeon_idx) {

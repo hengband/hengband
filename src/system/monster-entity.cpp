@@ -56,7 +56,7 @@ bool MonsterEntity::is_hostile() const
  */
 bool MonsterEntity::is_hostile_to_melee(const MonsterEntity &other) const
 {
-    if (AngbandSystem::get_instance().is_watching()) {
+    if (AngbandSystem::get_instance().is_phase_out()) {
         return !this->is_pet() && !other.is_pet();
     }
 
@@ -323,7 +323,7 @@ std::pair<TERM_COLOR, int> MonsterEntity::get_hp_bar_data() const
  */
 void MonsterEntity::set_hostile()
 {
-    if (AngbandSystem::get_instance().is_watching()) {
+    if (AngbandSystem::get_instance().is_phase_out()) {
         return;
     }
 

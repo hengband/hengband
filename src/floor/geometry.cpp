@@ -253,7 +253,7 @@ void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POS
 bool is_seen(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
     bool is_inside_view = !ignore_unview;
-    is_inside_view |= AngbandSystem::get_instance().is_watching();
+    is_inside_view |= AngbandSystem::get_instance().is_phase_out();
     is_inside_view |= player_can_see_bold(player_ptr, m_ptr->fy, m_ptr->fx) && projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
     return m_ptr->ml && is_inside_view;
 }

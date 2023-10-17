@@ -49,7 +49,7 @@ void set_pet(PlayerType *player_ptr, MonsterEntity *m_ptr)
  */
 void anger_monster(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
-    if (AngbandSystem::get_instance().is_watching() || !m_ptr->is_friendly()) {
+    if (AngbandSystem::get_instance().is_phase_out() || !m_ptr->is_friendly()) {
         return;
     }
 

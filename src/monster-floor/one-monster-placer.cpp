@@ -120,7 +120,7 @@ static MonsterRaceId initial_r_appearance(PlayerType *player_ptr, MonsterRaceId 
  */
 static bool check_unique_placeable(const FloorType &floor, MonsterRaceId r_idx, BIT_FLAGS mode)
 {
-    if (AngbandSystem::get_instance().is_watching()) {
+    if (AngbandSystem::get_instance().is_phase_out()) {
         return true;
     }
 

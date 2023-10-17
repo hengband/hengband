@@ -126,7 +126,7 @@ bool FloorType::is_special() const
 {
     auto is_in_fixed_quest = this->is_in_quest();
     is_in_fixed_quest &= !inside_quest(this->get_random_quest_id());
-    return is_in_fixed_quest || this->inside_arena || AngbandSystem::get_instance().is_watching();
+    return is_in_fixed_quest || this->inside_arena || AngbandSystem::get_instance().is_phase_out();
 }
 
 /*!

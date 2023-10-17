@@ -86,7 +86,7 @@ static void check_mspell_smart(const FloorType &floor, msa_type *msa_ptr)
 
 static void check_mspell_arena(const FloorType &floor, msa_type *msa_ptr)
 {
-    if (!floor.inside_arena && !AngbandSystem::get_instance().is_watching()) {
+    if (!floor.inside_arena && !AngbandSystem::get_instance().is_phase_out()) {
         return;
     }
 

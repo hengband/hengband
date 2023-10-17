@@ -181,7 +181,7 @@ static std::optional<std::string> get_fake_monster_name(const PlayerType &player
         return _(replace_monster_name_undefined(name), format("%s?", name.data()));
     }
 
-    if (AngbandSystem::get_instance().is_watching() && !(player.riding && (&player.current_floor_ptr->m_list[player.riding] == &monster))) {
+    if (AngbandSystem::get_instance().is_phase_out() && !(player.riding && (&player.current_floor_ptr->m_list[player.riding] == &monster))) {
         return format(_("%sもどき", "fake %s"), name.data());
     }
 

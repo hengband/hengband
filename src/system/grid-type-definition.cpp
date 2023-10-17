@@ -148,5 +148,5 @@ void grid_type::reset_dists()
 
 bool grid_type::has_los() const
 {
-    return any_bits(this->info, CAVE_VIEW) || AngbandSystem::get_instance().is_watching();
+    return any_bits(this->info, CAVE_VIEW) || AngbandSystem::get_instance().is_phase_out();
 }

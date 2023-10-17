@@ -188,7 +188,7 @@ static void init_world_floor_info(PlayerType *player_ptr)
     floor_ptr->dun_level = 0;
     floor_ptr->quest_number = QuestId::NONE;
     floor_ptr->inside_arena = false;
-    AngbandSystem::get_instance().set_watch(false);
+    AngbandSystem::get_instance().set_phase_out(false);
     write_level = true;
     w_ptr->seed_flavor = randint0(0x10000000);
     w_ptr->seed_town = randint0(0x10000000);

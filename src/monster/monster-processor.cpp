@@ -351,7 +351,7 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
         gets_angry = true;
     }
 
-    if (AngbandSystem::get_instance().is_watching() || !gets_angry) {
+    if (AngbandSystem::get_instance().is_phase_out() || !gets_angry) {
         return;
     }
 
@@ -408,7 +408,7 @@ void process_special(PlayerType *player_ptr, MONSTER_IDX m_idx)
     auto can_do_special = r_ptr->ability_flags.has(MonsterAbilityType::SPECIAL);
     can_do_special &= m_ptr->r_idx == MonsterRaceId::OHMU;
     can_do_special &= !player_ptr->current_floor_ptr->inside_arena;
-    can_do_special &= !AngbandSystem::get_instance().is_watching();
+    can_do_special &= !AngbandSystem::get_instance().is_phase_out();
     can_do_special &= r_ptr->freq_spell != 0;
     can_do_special &= randint1(100) <= r_ptr->freq_spell;
     if (!can_do_special) {
@@ -658,7 +658,7 @@ bool decide_process_continue(PlayerType *player_ptr, MonsterEntity *m_ptr)
         return true;
     }
 
-    auto should_continue = (m_ptr->cdis <= MAX_PLAYER_SIGHT) || AngbandSystem::get_instance().is_watching();
+    auto should_continue = (m_ptr->cdis <= MAX_PLAYER_SIGHT) || AngbandSystem::get_instance().is_phase_out();
     should_continue &= player_ptr->current_floor_ptr->has_los({ m_ptr->fy, m_ptr->fx }) || has_aggravate(player_ptr);
     if (should_continue) {
         return true;

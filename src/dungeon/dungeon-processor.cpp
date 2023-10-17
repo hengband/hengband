@@ -160,7 +160,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         do_cmd_feeling(player_ptr);
     }
 
-    const auto is_watching = AngbandSystem::get_instance().is_watching();
+    const auto is_watching = AngbandSystem::get_instance().is_phase_out();
     if (is_watching) {
         if (load_game) {
             player_ptr->energy_need = 0;

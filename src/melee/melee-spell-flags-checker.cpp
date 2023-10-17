@@ -79,7 +79,7 @@ static bool check_melee_spell_projection(PlayerType *player_ptr, melee_spell_typ
     int start;
     int plus = 1;
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (AngbandSystem::get_instance().is_watching()) {
+    if (AngbandSystem::get_instance().is_phase_out()) {
         start = randint1(floor_ptr->m_max - 1) + floor_ptr->m_max;
         if (randint0(2)) {
             plus = -1;
@@ -145,7 +145,7 @@ static void check_stupid(melee_spell_type *ms_ptr)
 
 static void check_arena(const FloorType &floor, melee_spell_type *ms_ptr)
 {
-    if (!floor.inside_arena && !AngbandSystem::get_instance().is_watching()) {
+    if (!floor.inside_arena && !AngbandSystem::get_instance().is_phase_out()) {
         return;
     }
 
@@ -391,7 +391,7 @@ bool check_melee_spell_set(PlayerType *player_ptr, melee_spell_type *ms_ptr)
     check_darkness(player_ptr, ms_ptr);
     check_stupid(ms_ptr);
     check_arena(*player_ptr->current_floor_ptr, ms_ptr);
-    if (AngbandSystem::get_instance().is_watching() && !one_in_(3)) {
+    if (AngbandSystem::get_instance().is_phase_out() && !one_in_(3)) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::HEAL);
     }
 

@@ -503,7 +503,7 @@ void generate_floor(PlayerType *player_ptr)
         player_ptr->x = player_ptr->y = 0;
         if (floor_ptr->inside_arena) {
             generate_challenge_arena(player_ptr);
-        } else if (AngbandSystem::get_instance().is_watching()) {
+        } else if (AngbandSystem::get_instance().is_phase_out()) {
             generate_gambling_arena(player_ptr);
         } else if (floor_ptr->is_in_quest()) {
             generate_fixed_floor(player_ptr);

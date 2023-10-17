@@ -197,7 +197,7 @@ void update_mon_lite(PlayerType *player_ptr)
             TerrainCharacteristics f_flag;
             if (rad > 0) {
                 auto should_lite = r_ptr->brightness_flags.has_none_of({ MonsterBrightnessType::SELF_LITE_1, MonsterBrightnessType::SELF_LITE_2 });
-                should_lite &= (m_ptr->is_asleep() || (!floor_ptr->dun_level && is_daytime()) || AngbandSystem::get_instance().is_watching());
+                should_lite &= (m_ptr->is_asleep() || (!floor_ptr->dun_level && is_daytime()) || AngbandSystem::get_instance().is_phase_out());
                 if (should_lite) {
                     continue;
                 }

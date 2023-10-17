@@ -142,7 +142,7 @@ static bool spell_world(MonsterAbilityType spell)
  */
 static bool spell_special(MonsterAbilityType spell)
 {
-    if (AngbandSystem::get_instance().is_watching()) {
+    if (AngbandSystem::get_instance().is_phase_out()) {
         return false;
     }
 

@@ -286,7 +286,7 @@ void update_dungeon_feeling(PlayerType *player_ptr)
         return;
     }
 
-    if (AngbandSystem::get_instance().is_watching()) {
+    if (AngbandSystem::get_instance().is_phase_out()) {
         return;
     }
 

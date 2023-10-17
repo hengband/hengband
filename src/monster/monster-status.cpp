@@ -404,7 +404,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     auto *r_ptr = &m_ptr->get_monrace();
     auto *s_ptr = &monraces_info[s_idx];
 
-    if (AngbandSystem::get_instance().is_watching() || (r_ptr->next_exp == 0)) {
+    if (AngbandSystem::get_instance().is_phase_out() || (r_ptr->next_exp == 0)) {
         return;
     }
 

@@ -128,7 +128,7 @@ void process_player(PlayerType *player_ptr)
     }
 
     const auto &system = AngbandSystem::get_instance();
-    if (system.is_watching()) {
+    if (system.is_phase_out()) {
         for (MONSTER_IDX m_idx = 1; m_idx < player_ptr->current_floor_ptr->m_max; m_idx++) {
             auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
             if (!m_ptr->is_valid()) {
@@ -281,7 +281,7 @@ void process_player(PlayerType *player_ptr)
         energy.reset_player_turn();
         auto is_knocked_out = effects->stun()->is_knocked_out();
         auto is_paralyzed = effects->paralysis()->is_paralyzed();
-        if (system.is_watching()) {
+        if (system.is_phase_out()) {
             move_cursor_relative(player_ptr->y, player_ptr->x);
             command_cmd = SPECIAL_KEY_BUILDING;
             process_command(player_ptr);

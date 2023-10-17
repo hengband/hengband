@@ -445,7 +445,7 @@ void teleport_player(PlayerType *player_ptr, POSITION dis, BIT_FLAGS mode)
  */
 void teleport_player_away(MONSTER_IDX m_idx, PlayerType *player_ptr, POSITION dis, bool is_quantum_effect)
 {
-    if (AngbandSystem::get_instance().is_watching()) {
+    if (AngbandSystem::get_instance().is_phase_out()) {
         return;
     }
 
@@ -546,7 +546,7 @@ void teleport_away_followable(PlayerType *player_ptr, MONSTER_IDX m_idx)
     bool is_followable = old_ml;
     is_followable &= old_cdis <= MAX_PLAYER_SIGHT;
     is_followable &= w_ptr->timewalk_m_idx == 0;
-    is_followable &= !AngbandSystem::get_instance().is_watching();
+    is_followable &= !AngbandSystem::get_instance().is_phase_out();
     is_followable &= los(player_ptr, player_ptr->y, player_ptr->x, oldfy, oldfx);
     if (!is_followable) {
         return;

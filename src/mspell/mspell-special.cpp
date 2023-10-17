@@ -63,7 +63,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
         const int separates_size = it_unified->second.size();
         const auto separated_hp = (m_ptr->hp + 1) / separates_size;
         const auto separated_maxhp = m_ptr->maxhp / separates_size;
-        if (floor_ptr->inside_arena || AngbandSystem::get_instance().is_watching() || !summon_possible(player_ptr, m_ptr->fy, m_ptr->fx)) {
+        if (floor_ptr->inside_arena || AngbandSystem::get_instance().is_phase_out() || !summon_possible(player_ptr, m_ptr->fy, m_ptr->fx)) {
             return MonsterSpellResult::make_invalid();
         }
 

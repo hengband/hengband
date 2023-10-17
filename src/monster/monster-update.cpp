@@ -126,7 +126,7 @@ void update_lite_flags(turn_flags *turn_flags_ptr, MonsterRaceInfo *r_ptr)
     using Mbt = MonsterBrightnessType;
     const auto has_lite = r_ptr->brightness_flags.has_any_of({ Mbt::HAS_LITE_1, Mbt::HAS_LITE_2 });
     const auto &except_has_lite = EnumClassFlagGroup<Mbt>(self_ld_mask).set({ Mbt::HAS_DARK_1, Mbt::HAS_DARK_2 });
-    if (turn_flags_ptr->do_move && (r_ptr->brightness_flags.has_any_of(except_has_lite) || (has_lite && !AngbandSystem::get_instance().is_watching()))) {
+    if (turn_flags_ptr->do_move && (r_ptr->brightness_flags.has_any_of(except_has_lite) || (has_lite && !AngbandSystem::get_instance().is_phase_out()))) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 }
@@ -528,7 +528,7 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
         }
     }
 
-    if (w_ptr->is_loading_now && w_ptr->character_dungeon && !AngbandSystem::get_instance().is_watching() && m_ptr->get_appearance_monrace().flags2 & RF2_ELDRITCH_HORROR) {
+    if (w_ptr->is_loading_now && w_ptr->character_dungeon && !AngbandSystem::get_instance().is_phase_out() && m_ptr->get_appearance_monrace().flags2 & RF2_ELDRITCH_HORROR) {
         m_ptr->mflag.set(MonsterTemporaryFlagType::SANITY_BLAST);
     }
 
