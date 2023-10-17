@@ -467,7 +467,7 @@ bool cast_mirror_spell(PlayerType *player_ptr, MindMirrorMasterType spell)
             return false;
         }
 
-        SpellsMirrorMaster(player_ptr).super_ray(dir, damroll(11 + (plev - 5) / 4, 8));
+        SpellsMirrorMaster(player_ptr).super_ray(dir, 150 + randint1(2 * plev));
         break;
     case MindMirrorMasterType::ILLUSION_LIGHT:
         tmp = g_ptr->is_mirror() ? 4 : 3;
