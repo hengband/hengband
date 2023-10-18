@@ -1,4 +1,4 @@
-%define version 3.0.0.90
+%define version 3.0.0.91
 %define release 1
 %global debug_package %{nil}
 
@@ -97,10 +97,13 @@ exit 0
 
 %changelog
 
+* Wed Oct 18 2023 Shiro Hara <white@vx-xv.com>
+- hengband RPM 3.0.0.91(Alpha)
+
 * Mon Oct 16 2023 Shiro Hara <white@vx-xv.com>
 - hengband RPM 3.0.0.90(Alpha)
 
-* Mon Aug 8 2023 Shiro Hara <white@vx-xv.com>
+* Tue Aug 8 2023 Shiro Hara <white@vx-xv.com>
 - hengband RPM 3.0.0.89(Alpha)
 
 * Mon Jul 24 2023 Shiro Hara <white@vx-xv.com>
