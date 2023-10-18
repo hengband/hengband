@@ -88,8 +88,8 @@ static bool is_high_rate(PlayerType *player_ptr, MONSTER_IDX m_idx1, MONSTER_IDX
     auto floor_ptr = player_ptr->current_floor_ptr;
     auto m_ptr1 = &floor_ptr->m_list[m_idx1];
     auto m_ptr2 = &floor_ptr->m_list[m_idx2];
-    auto ap_r_ptr1 = &m_ptr1->get_real_monrace();
-    auto ap_r_ptr2 = &m_ptr2->get_real_monrace();
+    auto ap_r_ptr1 = &m_ptr1->get_appearance_monrace();
+    auto ap_r_ptr2 = &m_ptr2->get_appearance_monrace();
 
     /* Unique monsters first */
     if (ap_r_ptr1->kind_flags.has(MonsterKindType::UNIQUE) != ap_r_ptr2->kind_flags.has(MonsterKindType::UNIQUE)) {
@@ -140,7 +140,7 @@ static void update_target_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
         if (do_dwap) {
             auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-            auto *ap_r_ptr = &m_ptr->get_real_monrace();
+            auto *ap_r_ptr = &m_ptr->get_appearance_monrace();
             scene_target_monster.m_idx = m_idx;
             scene_target_monster.ap_r_ptr = ap_r_ptr;
             scene_target_monster.last_seen = get_game_turn();
@@ -245,7 +245,7 @@ void refresh_scene_monster(PlayerType *player_ptr, const std::vector<MONSTER_IDX
                 clear_scene_target_monster();
             } else {
                 auto *m_ptr = &player_ptr->current_floor_ptr->m_list[scene_target_monster.m_idx];
-                auto *ap_r_ptr = &m_ptr->get_real_monrace();
+                auto *ap_r_ptr = &m_ptr->get_appearance_monrace();
                 if (ap_r_ptr != scene_target_monster.ap_r_ptr) {
                     // 死亡、チェンジモンスター、etc.
                     clear_scene_target_monster();
