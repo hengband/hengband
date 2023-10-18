@@ -56,7 +56,7 @@ bool MonsterEntity::is_mimicry() const
         return true;
     }
 
-    const auto &r_ref = this->get_real_monrace();
+    const auto &r_ref = this->get_appearance_monrace();
     const auto mimic_symbols = "/|\\()[]=$,.!?&`#%<>+~";
     if (angband_strchr(mimic_symbols, r_ref.d_char) == nullptr) {
         return false;
@@ -91,6 +91,11 @@ MonsterRaceId MonsterEntity::get_real_monrace_id() const
 MonsterRaceInfo &MonsterEntity::get_real_monrace() const
 {
     return monraces_info[this->get_real_monrace_id()];
+}
+
+MonsterRaceInfo &MonsterEntity::get_appearance_monrace() const
+{
+    return monraces_info[this->ap_r_idx];
 }
 
 MonsterRaceInfo &MonsterEntity::get_monrace() const
@@ -202,7 +207,7 @@ byte MonsterEntity::get_temporary_speed() const
  */
 bool MonsterEntity::has_living_flag(bool is_apperance) const
 {
-    const auto &monrace = is_apperance ? this->get_real_monrace() : this->get_monrace();
+    const auto &monrace = is_apperance ? this->get_appearance_monrace() : this->get_monrace();
     return monrace.has_living_flag();
 }
 

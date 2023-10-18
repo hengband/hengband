@@ -222,7 +222,7 @@ void alloc_object(PlayerType *player_ptr, dap_type set, dungeon_allocation_type 
             floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
             break;
         case ALLOC_TYP_TRAP:
-            place_trap(player_ptr, y, x);
+            place_trap(floor_ptr, y, x);
             floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
             break;
         case ALLOC_TYP_GOLD:

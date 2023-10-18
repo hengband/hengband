@@ -219,7 +219,7 @@ void print_monster_list(FloorType *floor_ptr, const std::vector<MONSTER_IDX> &mo
 
 static void print_pet_list_oneline(PlayerType *player_ptr, const MonsterEntity &monster, TERM_LEN x, TERM_LEN y, TERM_LEN width)
 {
-    const auto &monrace = monster.get_real_monrace();
+    const auto &monrace = monster.get_appearance_monrace();
     const auto name = monster_desc(player_ptr, &monster, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE | MD_NO_OWNER);
     const auto &[bar_color, bar_len] = monster.get_hp_bar_data();
     const auto is_visible = monster.ml && !player_ptr->effects()->hallucination()->is_hallucinated();
@@ -567,7 +567,7 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
         if (is_hallucinated) {
             line = format(_("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), x, y);
         } else {
-            const MonsterRaceInfo *const r_ptr = &m_ptr->get_real_monrace();
+            const MonsterRaceInfo *const r_ptr = &m_ptr->get_appearance_monrace();
             line = format(_("(X:%03d Y:%03d) %sの足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under %s"), x, y, r_ptr->name.data());
         }
     } else {
