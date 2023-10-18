@@ -468,7 +468,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
             break;
         }
 
-        const auto &ap_r_ref = m_ptr->get_real_monrace();
+        const auto &ap_r_ref = m_ptr->get_appearance_monrace();
         const auto is_projectable = projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
         const auto can_see = disturb_near && m_ptr->mflag.has(MonsterTemporaryFlagType::VIEW) && is_projectable;
         const auto is_high_level = disturb_high && (ap_r_ref.r_tkills > 0) && (ap_r_ref.level >= player_ptr->lev);
@@ -513,7 +513,7 @@ static bool can_speak(const MonsterRaceInfo &ap_r_ref, MonsterSpeakType mon_spea
 
 static std::string_view get_speak_filename(MonsterEntity *m_ptr)
 {
-    const auto &ap_r_ref = m_ptr->get_real_monrace();
+    const auto &ap_r_ref = m_ptr->get_appearance_monrace();
     if (m_ptr->is_fearful() && can_speak(ap_r_ref, MonsterSpeakType::SPEAK_FEAR)) {
         return _("monfear_j.txt", "monfear.txt");
     }
@@ -557,7 +557,7 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
         msg_print(_("重厚な足音が聞こえた。", "You hear heavy steps."));
     }
 
-    auto can_speak = m_ptr->get_real_monrace().speak_flags.any();
+    auto can_speak = m_ptr->get_appearance_monrace().speak_flags.any();
     constexpr auto chance_speak = 8;
     if (!can_speak || !aware || !one_in_(chance_speak) || !player_has_los_bold(player_ptr, oy, ox) || !projectable(player_ptr, oy, ox, player_ptr->y, player_ptr->x)) {
         return;

@@ -65,6 +65,7 @@ public:
     bool is_valid() const;
     MonsterRaceId get_real_monrace_id() const;
     MonsterRaceInfo &get_real_monrace() const;
+    MonsterRaceInfo &get_appearance_monrace() const;
     MonsterRaceInfo &get_monrace() const;
     short get_remaining_sleep() const;
     short get_remaining_acceleration() const;
