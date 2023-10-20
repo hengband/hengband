@@ -38,9 +38,9 @@ bool common_saving_throw_charm(PlayerType *player_ptr, int pow, MonsterEntity *m
         return true;
     }
 
-    if (r_ptr->flags3 & RF3_NO_CONF) {
+    if (r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) {
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-            r_ptr->r_flags3 |= (RF3_NO_CONF);
+            r_ptr->resistance_flags.set(MonsterResistanceType::NO_CONF);
         }
         return true;
     }

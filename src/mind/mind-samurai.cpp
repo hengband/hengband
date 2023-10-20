@@ -502,7 +502,7 @@ void mineuchi(PlayerType *player_ptr, player_attack_type *pa_ptr)
     anger_monster(player_ptr, pa_ptr->m_ptr);
 
     auto *r_ptr = &pa_ptr->m_ptr->get_monrace();
-    if ((r_ptr->flags3 & (RF3_NO_STUN))) {
+    if (r_ptr->resistance_flags.has(MonsterResistanceType::NO_STUN)) {
         msg_format(_("%s には効果がなかった。", "%s is not effected."), pa_ptr->m_name);
         return;
     }

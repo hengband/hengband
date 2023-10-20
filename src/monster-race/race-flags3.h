@@ -29,8 +29,8 @@ enum race_flags3 {
     RF3_XXX25 = 0x02000000, /*!< モンスター特性: 未使用 / XXX */
     RF3_XXX26 = 0x04000000, /*!< モンスター特性: 未使用 / XXX */
     RF3_XXX27 = 0x08000000, /*!< モンスター特性: 未使用 / XXX */
-    RF3_NO_FEAR = 0x10000000, /*!< モンスター特性: 恐怖しない / Cannot be scared */
-    RF3_NO_STUN = 0x20000000, /*!< モンスター特性: 朦朧としない / Cannot be stunned */
-    RF3_NO_CONF = 0x40000000, /*!< モンスター特性: 混乱しない / Cannot be confused and resist confusion */
-    RF3_NO_SLEEP = 0x80000000, /*!< モンスター特性: 眠らない / Cannot be slept */
+    RF3_XXX28 = 0x10000000, /*!< モンスター特性: 未使用 / XXX */
+    RF3_XXX29 = 0x20000000, /*!< モンスター特性: 未使用 / XXX */
+    RF3_XXX30 = 0x40000000, /*!< モンスター特性: 未使用 / XXX */
+    RF3_XXX31 = 0x80000000, /*!< モンスター特性: 未使用 / XXX */
 };

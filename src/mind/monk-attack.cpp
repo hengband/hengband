@@ -51,15 +51,15 @@ static int calc_stun_resistance(player_attack_type *pa_ptr)
         resist_stun += 88;
     }
 
-    if (r_ptr->flags3 & RF3_NO_STUN) {
+    if (r_ptr->resistance_flags.has(MonsterResistanceType::NO_STUN)) {
         resist_stun += 66;
     }
 
-    if (r_ptr->flags3 & RF3_NO_CONF) {
+    if (r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) {
         resist_stun += 33;
     }
 
-    if (r_ptr->flags3 & RF3_NO_SLEEP) {
+    if (r_ptr->resistance_flags.has(MonsterResistanceType::NO_SLEEP)) {
         resist_stun += 33;
     }
 
