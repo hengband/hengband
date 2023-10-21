@@ -28,10 +28,6 @@ static bool grab_one_basic_flag(MonsterRaceInfo *r_ptr, std::string_view what)
         return true;
     }
 
-    if (info_grab_one_flag(r_ptr->flags3, r_info_flags3, what)) {
-        return true;
-    }
-
     if (info_grab_one_flag(r_ptr->flags7, r_info_flags7, what)) {
         return true;
     }

@@ -123,14 +123,6 @@ const std::unordered_map<std::string_view, race_flags2> r_info_flags2 = {
 };
 
 /*!
- * モンスター特性トークンの定義3 /
- * Monster race flags
- */
-const std::unordered_map<std::string_view, race_flags3> r_info_flags3 = {
-    { "FLAGS3_XX10", RF3_XX10 },
-};
-
-/*!
  * モンスター特性トークン (発動型能力) /
  * Monster race flags
  */

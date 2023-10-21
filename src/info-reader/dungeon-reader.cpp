@@ -45,10 +45,6 @@ static bool grab_one_basic_monster_flag(dungeon_type *d_ptr, std::string_view wh
         return true;
     }
 
-    if (info_grab_one_flag(d_ptr->mflags3, r_info_flags3, what)) {
-        return true;
-    }
-
     if (info_grab_one_flag(d_ptr->mflags7, r_info_flags7, what)) {
         return true;
     }
