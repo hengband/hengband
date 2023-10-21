@@ -107,6 +107,27 @@ static void migrate_old_drop_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_flags1)
     }
 }
 
+static void migrate_old_no_debuff_flags(MonsterRaceInfo *r_ptr)
+{
+    struct flag_list_ver19 {
+        SavedataLoreOlderThan19FlagType_No_Debuff old_flag;
+        MonsterResistanceType flag;
+    };
+
+    const std::vector<flag_list_ver19> flag_list = {
+        { SavedataLoreOlderThan19FlagType_No_Debuff::RF3_NO_FEAR, MonsterResistanceType::NO_FEAR },
+        { SavedataLoreOlderThan19FlagType_No_Debuff::RF3_NO_STUN, MonsterResistanceType::NO_STUN },
+        { SavedataLoreOlderThan19FlagType_No_Debuff::RF3_NO_CONF, MonsterResistanceType::NO_CONF },
+        { SavedataLoreOlderThan19FlagType_No_Debuff::RF3_NO_SLEEP, MonsterResistanceType::NO_SLEEP },
+    };
+
+    for (const auto &l : flag_list) {
+        if (any_bits(r_ptr->r_flags3, l.old_flag)) {
+            r_ptr->r_resistance_flags.set(l.flag);
+        }
+    }
+}
+
 static void rd_r_drop_flags(MonsterRaceInfo *r_ptr)
 {
     if (loading_savefile_version_is_older_than(18)) {
@@ -307,6 +328,7 @@ static void rd_lore(MonsterRaceInfo *r_ptr, const MonsterRaceId r_idx)
     r_ptr->r_flags1 = rd_u32b();
     r_ptr->r_flags2 = rd_u32b();
     r_ptr->r_flags3 = rd_u32b();
+    migrate_old_no_debuff_flags(r_ptr);
     migrate_old_aura_flags(r_ptr);
     rd_r_ability_flags(r_ptr, r_idx);
     rd_r_aura_flags(r_ptr);

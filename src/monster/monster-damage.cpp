@@ -497,7 +497,7 @@ void MonsterDamageProcessor::add_monster_fear()
     }
 
     auto *r_ptr = &m_ptr->get_monrace();
-    if (m_ptr->is_fearful() || any_bits(r_ptr->flags3, RF3_NO_FEAR)) {
+    if (m_ptr->is_fearful() || r_ptr->resistance_flags.has(MonsterResistanceType::NO_FEAR)) {
         return;
     }
 

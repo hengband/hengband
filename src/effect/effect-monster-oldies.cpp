@@ -252,13 +252,13 @@ ProcessResult effect_monster_old_sleep(PlayerType *player_ptr, EffectMonster *em
     }
 
     bool has_resistance = em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
-    has_resistance |= any_bits(em_ptr->r_ptr->flags3, RF3_NO_SLEEP);
+    has_resistance |= em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_SLEEP);
     has_resistance |= (em_ptr->r_ptr->level > randint1(std::max(1, em_ptr->dam - 10)) + 10);
 
     if (has_resistance) {
-        if (em_ptr->r_ptr->flags3 & RF3_NO_SLEEP) {
+        if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_SLEEP)) {
             if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
-                em_ptr->r_ptr->r_flags3 |= (RF3_NO_SLEEP);
+                em_ptr->r_ptr->resistance_flags.set(MonsterResistanceType::NO_SLEEP);
             }
         }
 
@@ -286,12 +286,12 @@ ProcessResult effect_monster_old_conf(PlayerType *player_ptr, EffectMonster *em_
     em_ptr->do_conf = damroll(3, (em_ptr->dam / 2)) + 1;
 
     bool has_resistance = em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
-    has_resistance |= any_bits(em_ptr->r_ptr->flags3, RF3_NO_CONF);
+    has_resistance |= em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF);
     has_resistance |= (em_ptr->r_ptr->level > randint1(std::max(1, em_ptr->dam - 10)) + 10);
     if (has_resistance) {
-        if (em_ptr->r_ptr->flags3 & (RF3_NO_CONF)) {
+        if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) {
             if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
-                em_ptr->r_ptr->r_flags3 |= (RF3_NO_CONF);
+                em_ptr->r_ptr->resistance_flags.set(MonsterResistanceType::NO_CONF);
             }
         }
 

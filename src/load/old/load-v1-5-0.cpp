@@ -532,7 +532,7 @@ void set_old_lore(MonsterRaceInfo *r_ptr, BIT_FLAGS f4, const MonsterRaceId r_id
     move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_WALL, MonsterResistanceType::RESIST_FORCE);
 
     if (f4 & RF4_BR_CONF) {
-        r_ptr->r_flags3 |= RF3_NO_CONF;
+        r_ptr->r_resistance_flags.set(MonsterResistanceType::NO_CONF);
     }
 
     if (r_idx == MonsterRaceId::STORMBRINGER) {

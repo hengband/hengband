@@ -413,7 +413,7 @@ static void effect_damage_piles_stun(PlayerType *player_ptr, EffectMonster *em_p
     const auto *r_ptr = em_ptr->r_ptr;
     auto can_avoid_stun = em_ptr->do_stun == 0;
     can_avoid_stun |= r_ptr->resistance_flags.has_any_of({ MonsterResistanceType::RESIST_SOUND, MonsterResistanceType::RESIST_FORCE });
-    can_avoid_stun |= any_bits(r_ptr->flags3, RF3_NO_STUN);
+    can_avoid_stun |= r_ptr->resistance_flags.has(MonsterResistanceType::NO_STUN);
     if (can_avoid_stun) {
         return;
     }
@@ -443,7 +443,7 @@ static void effect_damage_piles_stun(PlayerType *player_ptr, EffectMonster *em_p
  */
 static void effect_damage_piles_confusion(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
-    if ((em_ptr->do_conf == 0) || (em_ptr->r_ptr->flags3 & RF3_NO_CONF) || em_ptr->r_ptr->resistance_flags.has_any_of(RFR_EFF_RESIST_CHAOS_MASK)) {
+    if ((em_ptr->do_conf == 0) || (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) || em_ptr->r_ptr->resistance_flags.has_any_of(RFR_EFF_RESIST_CHAOS_MASK)) {
         return;
     }
 
@@ -474,7 +474,7 @@ static void effect_damage_piles_confusion(PlayerType *player_ptr, EffectMonster 
  */
 static void effect_damage_piles_fear(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
-    if (em_ptr->do_fear == 0 || any_bits(em_ptr->r_ptr->flags3, RF3_NO_FEAR)) {
+    if (em_ptr->do_fear == 0 || em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_FEAR)) {
         return;
     }
 

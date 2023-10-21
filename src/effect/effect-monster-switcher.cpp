@@ -215,10 +215,10 @@ ProcessResult effect_monster_engetsu(PlayerType *player_ptr, EffectMonster *em_p
             }
             break;
         case 2:
-            if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(em_ptr->r_ptr->flags3, RF3_NO_CONF)) {
-                if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_CONF)) {
+            if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) {
+                if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) {
                     if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
-                        set_bits(em_ptr->r_ptr->r_flags3, RF3_NO_CONF);
+                        em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::NO_CONF);
                     }
                 }
                 em_ptr->do_conf = 0;
@@ -230,10 +230,10 @@ ProcessResult effect_monster_engetsu(PlayerType *player_ptr, EffectMonster *em_p
             }
             break;
         default:
-            if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(em_ptr->r_ptr->flags3, RF3_NO_SLEEP)) {
-                if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_SLEEP)) {
+            if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_SLEEP)) {
+                if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_SLEEP)) {
                     if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
-                        set_bits(em_ptr->r_ptr->r_flags3, RF3_NO_SLEEP);
+                        em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::NO_SLEEP);
                     }
                 }
                 em_ptr->do_sleep = 0;

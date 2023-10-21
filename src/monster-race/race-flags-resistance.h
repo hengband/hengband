@@ -54,5 +54,9 @@ enum class MonsterResistanceType {
     RESIST_VOID_MAGIC = 50, /* Resist void */
     HURT_METEOR = 51, /* Hurt badly by meteor */
     RESIST_METEOR = 52, /* Resist meteor */
+    NO_FEAR = 53, /* Cannot be scared */
+    NO_STUN = 54, /* Cannot be stunned */
+    NO_CONF = 55, /* Cannot be confused and resist confusion */
+    NO_SLEEP = 56, /* Cannot be slept */
     MAX, /* Max of Resistances */
 };
