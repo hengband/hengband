@@ -52,13 +52,13 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX i_idx)
         return;
     }
 
-    const auto &o_ref = this->copy_object(i_idx);
+    auto item = this->copy_object(i_idx);
     vary_item(this->player_ptr, i_idx, -1);
     sound(SOUND_QUAFF);
-    auto ident = QuaffEffects(this->player_ptr).influence(o_ref);
+    auto ident = QuaffEffects(this->player_ptr).influence(item);
     if (PlayerRace(this->player_ptr).equals(PlayerRaceType::SKELETON)) {
         msg_print(_("液体の一部はあなたのアゴを素通りして落ちた！", "Some of the fluid falls through your jaws!"));
-        (void)potion_smash_effect(this->player_ptr, 0, this->player_ptr->y, this->player_ptr->x, o_ref.bi_id);
+        (void)potion_smash_effect(this->player_ptr, 0, this->player_ptr->y, this->player_ptr->x, item.bi_id);
     }
 
     static constexpr auto flags_srf = {
@@ -67,11 +67,11 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX i_idx)
     };
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flags(flags_srf);
-    this->change_virtue_as_quaff(o_ref);
-    object_tried(&o_ref);
-    if (ident && !o_ref.is_aware()) {
-        object_aware(this->player_ptr, &o_ref);
-        gain_exp(this->player_ptr, (o_ref.get_baseitem().level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
+    this->change_virtue_as_quaff(item);
+    item.mark_as_tried();
+    if (ident && !item.is_aware()) {
+        object_aware(this->player_ptr, &item);
+        gain_exp(this->player_ptr, (item.get_baseitem().level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
     static constexpr auto flags = {
@@ -84,7 +84,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX i_idx)
         return;
     }
 
-    this->moisten(o_ref);
+    this->moisten(item);
 }
 
 bool ObjectQuaffEntity::can_influence()

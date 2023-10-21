@@ -45,13 +45,3 @@ void object_aware(PlayerType *player_ptr, const ItemEntity *o_ptr)
     const auto item_name = describe_flavor(player_ptr, q_ptr, OD_NAME_ONLY);
     exe_write_diary(player_ptr, DiaryKind::FOUND, 0, item_name);
 }
-
-/*!
- * @brief オブジェクトを試行済にする /
- * Something has been "sampled"
- * @param o_ptr 試行済にするオブジェクトの構造体参照ポインタ
- */
-void object_tried(const ItemEntity *o_ptr)
-{
-    o_ptr->get_baseitem().tried = true;
-}

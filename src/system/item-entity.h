@@ -144,6 +144,7 @@ public:
     TrFlags get_flags_known() const;
 
     void mark_as_known();
+    void mark_as_tried();
 
 private:
     int get_baseitem_price() const;

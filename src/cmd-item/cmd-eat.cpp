@@ -261,7 +261,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     /* We have tried it */
     const auto tval = bi_key.tval();
     if (tval == ItemKindType::FOOD) {
-        object_tried(o_ptr);
+        o_ptr->mark_as_tried();
     }
 
     /* The player is now aware of the object */

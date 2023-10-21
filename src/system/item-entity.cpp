@@ -900,6 +900,14 @@ void ItemEntity::mark_as_known()
 }
 
 /*!
+ * @brief オブジェクトを試行済にする
+ */
+void ItemEntity::mark_as_tried()
+{
+    this->get_baseitem().mark_as_tried();
+}
+
+/*!
  * @brief エゴ光源のフラグを修正する
  *
  * 寿命のある光源で寿命が0ターンの時、光源エゴアイテムに起因するフラグは

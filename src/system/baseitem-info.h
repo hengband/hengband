@@ -125,6 +125,8 @@ public:
     IDX flavor{}; /*!< 未鑑定名の何番目を当てるか(0は未鑑定名なし) / Special object flavor (or zero) */
     bool aware{}; /*!< ベースアイテムが鑑定済かどうか /  The player is "aware" of the item's effects */
     bool tried{}; /*!< ベースアイテムを未鑑定のまま試したことがあるか /  The player has "tried" one of the items */
+
+    void mark_as_tried();
 };
 
 extern std::vector<BaseitemInfo> baseitems_info;
