@@ -335,7 +335,7 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
 
     for (POSITION y = 0; y < floor_ptr->height; y++) {
         for (POSITION x = 0; x < floor_ptr->width; x++) {
-            grid_type *g_ptr;
+            Grid *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
             if (terrains_info[g_ptr->get_feat_mimic()].flags.has_not(TerrainCharacteristics::GLOW)) {
                 continue;
@@ -393,7 +393,7 @@ void forget_view(FloorType *floor_ptr)
     for (int i = 0; i < floor_ptr->view_n; i++) {
         POSITION y = floor_ptr->view_y[i];
         POSITION x = floor_ptr->view_x[i];
-        grid_type *g_ptr;
+        Grid *g_ptr;
         g_ptr = &floor_ptr->grid_array[y][x];
         g_ptr->info &= ~(CAVE_VIEW);
     }

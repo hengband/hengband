@@ -70,7 +70,7 @@ bool teleport_swap(PlayerType *player_ptr, DIRECTION dir)
         return false;
     }
 
-    grid_type *g_ptr;
+    Grid *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[ty][tx];
     if (!g_ptr->m_idx || (g_ptr->m_idx == player_ptr->riding)) {
         msg_print(_("それとは場所を交換できません。", "You can't trade places with that!"));

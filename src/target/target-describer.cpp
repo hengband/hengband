@@ -67,7 +67,7 @@ public:
     char out_val[MAX_NLEN + 80]{};
     OBJECT_IDX floor_list[23]{};
     ITEM_NUMBER floor_num = 0;
-    grid_type *g_ptr;
+    Grid *g_ptr;
     MonsterEntity *m_ptr;
     OBJECT_IDX next_o_idx = 0;
     FEAT_IDX feat = 0;

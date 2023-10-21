@@ -30,8 +30,8 @@
 static bool update_view_aux(PlayerType *player_ptr, POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g1_c_ptr;
-    grid_type *g2_c_ptr;
+    Grid *g1_c_ptr;
+    Grid *g2_c_ptr;
     g1_c_ptr = &floor_ptr->grid_array[y1][x1];
     g2_c_ptr = &floor_ptr->grid_array[y2][x2];
     bool f1 = (feat_supports_los(g1_c_ptr->feat));
@@ -46,7 +46,7 @@ static bool update_view_aux(PlayerType *player_ptr, POSITION y, POSITION x, POSI
         return true;
     }
 
-    grid_type *g_ptr;
+    Grid *g_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
     bool wall = (!feat_supports_los(g_ptr->feat));
     bool z1 = (v1 && (g1_c_ptr->info & CAVE_XTRA));
@@ -114,7 +114,7 @@ void update_view(PlayerType *player_ptr)
     POSITION y_max = floor_ptr->height - 1;
     POSITION x_max = floor_ptr->width - 1;
 
-    grid_type *g_ptr;
+    Grid *g_ptr;
     if (view_reduce_view && !floor_ptr->dun_level) {
         full = MAX_PLAYER_SIGHT / 2;
         over = MAX_PLAYER_SIGHT * 3 / 4;

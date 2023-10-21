@@ -76,7 +76,7 @@ void exe_monster_attack_to_player(PlayerType *player_ptr, turn_flags *turn_flags
  * @param m_idx モンスターID
  * @param g_ptr グリッドへの参照ポインタ
  */
-static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, grid_type *g_ptr)
+static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, Grid *g_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto *m_ptr = &floor.m_list[m_idx];
@@ -123,7 +123,7 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
  * @param can_cross モンスターが地形を踏破できるならばTRUE
  * @return ターン消費が発生したらTRUE
  */
-bool process_monster_attack_to_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, grid_type *g_ptr, bool can_cross)
+bool process_monster_attack_to_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, Grid *g_ptr, bool can_cross)
 {
     if (!turn_flags_ptr->do_move || (g_ptr->m_idx == 0)) {
         return false;

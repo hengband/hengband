@@ -590,7 +590,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
         }
 
         for (int i = count; i > 0; i--) {
-            grid_type *g_ptr;
+            Grid *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
             g_ptr->info = info;
             if (++x >= xmax) {
@@ -606,7 +606,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
         auto count = rd_byte();
         auto tmp8u = rd_byte();
         for (int i = count; i > 0; i--) {
-            grid_type *g_ptr;
+            Grid *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
             g_ptr->feat = (int16_t)tmp8u;
             if (++x >= xmax) {
@@ -622,7 +622,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
         auto count = rd_byte();
         auto tmp8u = rd_byte();
         for (int i = count; i > 0; i--) {
-            grid_type *g_ptr;
+            Grid *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
             g_ptr->mimic = (int16_t)tmp8u;
             if (++x >= xmax) {
@@ -638,7 +638,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
         auto count = rd_byte();
         auto tmp16s = rd_s16b();
         for (int i = count; i > 0; i--) {
-            grid_type *g_ptr;
+            Grid *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
             g_ptr->special = tmp16s;
             if (++x >= xmax) {
@@ -661,7 +661,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
     if (h_older_than(1, 1, 1, 0)) {
         for (int y = 0; y < ymax; y++) {
             for (int x = 0; x < xmax; x++) {
-                grid_type *g_ptr;
+                Grid *g_ptr;
                 g_ptr = &floor_ptr->grid_array[y][x];
 
                 /* Very old */
@@ -682,7 +682,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
     if (h_older_than(1, 3, 1, 0)) {
         for (int y = 0; y < ymax; y++) {
             for (int x = 0; x < xmax; x++) {
-                grid_type *g_ptr;
+                Grid *g_ptr;
                 g_ptr = &floor_ptr->grid_array[y][x];
 
                 /* Old CAVE_IN_MIRROR flag */
@@ -708,7 +708,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
     if (!vanilla_town) {
         for (int y = 0; y < ymax; y++) {
             for (int x = 0; x < xmax; x++) {
-                grid_type *g_ptr;
+                Grid *g_ptr;
                 g_ptr = &floor_ptr->grid_array[y][x];
 
                 if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !floor_ptr->dun_level) {

@@ -330,7 +330,7 @@ static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flag
 static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, POSITION ny, POSITION nx)
 {
     auto *r_ptr = &m_ptr->get_monrace();
-    grid_type *g_ptr;
+    Grid *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
     TerrainType *f_ptr;
     f_ptr = &terrains_info[g_ptr->feat];
@@ -396,7 +396,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
             continue;
         }
 
-        grid_type *g_ptr;
+        Grid *g_ptr;
         g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
         auto *r_ptr = &m_ptr->get_monrace();

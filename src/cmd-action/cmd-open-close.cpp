@@ -128,7 +128,7 @@ void do_cmd_open(PlayerType *player_ptr)
 
     if (get_rep_dir(player_ptr, &dir, true)) {
         FEAT_IDX feat;
-        grid_type *g_ptr;
+        Grid *g_ptr;
         y = player_ptr->y + ddy[dir];
         x = player_ptr->x + ddx[dir];
         g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
@@ -180,7 +180,7 @@ void do_cmd_close(PlayerType *player_ptr)
     }
 
     if (get_rep_dir(player_ptr, &dir)) {
-        grid_type *g_ptr;
+        Grid *g_ptr;
         FEAT_IDX feat;
         y = player_ptr->y + ddy[dir];
         x = player_ptr->x + ddx[dir];
@@ -236,7 +236,7 @@ void do_cmd_disarm(PlayerType *player_ptr)
     }
 
     if (get_rep_dir(player_ptr, &dir, true)) {
-        grid_type *g_ptr;
+        Grid *g_ptr;
         FEAT_IDX feat;
         y = player_ptr->y + ddy[dir];
         x = player_ptr->x + ddx[dir];
@@ -281,7 +281,7 @@ void do_cmd_bash(PlayerType *player_ptr)
 {
     POSITION y, x;
     DIRECTION dir;
-    grid_type *g_ptr;
+    Grid *g_ptr;
     bool more = false;
     if (player_ptr->wild_mode) {
         return;
@@ -368,7 +368,7 @@ void do_cmd_spike(PlayerType *player_ptr)
 
     POSITION y = player_ptr->y + ddy[dir];
     POSITION x = player_ptr->x + ddx[dir];
-    grid_type *g_ptr;
+    Grid *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     FEAT_IDX feat = g_ptr->get_feat_mimic();
     INVENTORY_IDX i_idx;

@@ -121,8 +121,8 @@ bool ang_sort_comp_importance(PlayerType *player_ptr, vptr u, vptr v, int a, int
 {
     POSITION *x = (POSITION *)(u);
     POSITION *y = (POSITION *)(v);
-    grid_type *ca_ptr = &player_ptr->current_floor_ptr->grid_array[y[a]][x[a]];
-    grid_type *cb_ptr = &player_ptr->current_floor_ptr->grid_array[y[b]][x[b]];
+    Grid *ca_ptr = &player_ptr->current_floor_ptr->grid_array[y[a]][x[a]];
+    Grid *cb_ptr = &player_ptr->current_floor_ptr->grid_array[y[b]][x[b]];
     MonsterEntity *ma_ptr = &player_ptr->current_floor_ptr->m_list[ca_ptr->m_idx];
     MonsterEntity *mb_ptr = &player_ptr->current_floor_ptr->m_list[cb_ptr->m_idx];
     MonsterRaceInfo *ap_ra_ptr, *ap_rb_ptr;

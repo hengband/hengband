@@ -105,7 +105,7 @@ bool raise_possible(PlayerType *player_ptr, MonsterEntity *m_ptr)
     POSITION x = m_ptr->fx;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION xx = x - 5; xx <= x + 5; xx++) {
-        grid_type *g_ptr;
+        Grid *g_ptr;
         for (POSITION yy = y - 5; yy <= y + 5; yy++) {
             if (distance(y, x, yy, xx) > 5) {
                 continue;

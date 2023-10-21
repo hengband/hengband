@@ -98,7 +98,7 @@ void autopick_alter_item(PlayerType *player_ptr, INVENTORY_IDX i_idx, bool destr
 /*!
  * @brief Automatically pickup/destroy items in this grid.
  */
-void autopick_pickup_items(PlayerType *player_ptr, grid_type *g_ptr)
+void autopick_pickup_items(PlayerType *player_ptr, Grid *g_ptr)
 {
     for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
         OBJECT_IDX this_o_idx = *it++;

@@ -110,7 +110,7 @@ void build_maze_vault(PlayerType *player_ptr, POSITION x0, POSITION y0, POSITION
     POSITION x2 = x0 + dx;
     for (POSITION y = y1 - 1; y <= y2 + 1; y++) {
         for (POSITION x = x1 - 1; x <= x2 + 1; x++) {
-            grid_type *g_ptr;
+            Grid *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
             g_ptr->info |= CAVE_ROOM;
             if (is_vault) {

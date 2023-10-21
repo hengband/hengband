@@ -16,7 +16,7 @@
 /*
  * Grid based version of "creature_bold()"
  */
-static bool player_grid(PlayerType *player_ptr, grid_type *g_ptr)
+static bool player_grid(PlayerType *player_ptr, Grid *g_ptr)
 {
     return g_ptr == &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
 }
@@ -24,7 +24,7 @@ static bool player_grid(PlayerType *player_ptr, grid_type *g_ptr)
 /*
  * Grid based version of "cave_empty_bold()"
  */
-static bool is_cave_empty_grid(PlayerType *player_ptr, grid_type *g_ptr)
+static bool is_cave_empty_grid(PlayerType *player_ptr, Grid *g_ptr)
 {
     bool is_empty_grid = g_ptr->cave_has_flag(TerrainCharacteristics::PLACE);
     is_empty_grid &= g_ptr->m_idx == 0;
@@ -49,7 +49,7 @@ void vault_monsters(PlayerType *player_ptr, POSITION y1, POSITION x1, int num)
             int d = 1;
             POSITION y, x;
             scatter(player_ptr, &y, &x, y1, x1, d, 0);
-            grid_type *g_ptr;
+            Grid *g_ptr;
             g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
             if (!is_cave_empty_grid(player_ptr, g_ptr)) {
                 continue;
@@ -92,7 +92,7 @@ void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
                 msg_print(_("警告！地下室のアイテムを配置できません！", "Warning! Could not place vault object!"));
             }
 
-            grid_type *g_ptr;
+            Grid *g_ptr;
             g_ptr = &floor_ptr->grid_array[j][k];
             if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty()) {
                 continue;
@@ -120,7 +120,7 @@ void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
  */
 static void vault_trap_aux(FloorType *floor_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd)
 {
-    grid_type *g_ptr;
+    Grid *g_ptr;
     int y1 = y, x1 = x;
     int dummy = 0;
     for (int count = 0; count <= 5; count++) {

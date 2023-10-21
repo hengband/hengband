@@ -43,12 +43,12 @@ enum grid_bold_type {
 };
 
 class FloorType;
-struct grid_type;
+class Grid;
 class PlayerType;
 class MonsterRaceInfo;
 enum class TerrainCharacteristics;
 bool new_player_spot(PlayerType *player_ptr);
-bool is_hidden_door(PlayerType *player_ptr, grid_type *g_ptr);
+bool is_hidden_door(PlayerType *player_ptr, Grid *g_ptr);
 bool player_can_enter(PlayerType *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mode);
 bool feat_uses_special(FEAT_IDX f_idx);
 void update_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x);
@@ -64,8 +64,8 @@ bool is_open(PlayerType *player_ptr, FEAT_IDX feat);
 bool check_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x);
 bool cave_monster_teleportable_bold(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, teleport_flags mode);
 bool cave_player_teleportable_bold(PlayerType *player_ptr, POSITION y, POSITION x, teleport_flags mode);
-void place_grid(PlayerType *player_ptr, grid_type *g_ptr, grid_bold_type pg_type);
-bool darkened_grid(PlayerType *player_ptr, grid_type *g_ptr);
+void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type pg_type);
+bool darkened_grid(PlayerType *player_ptr, Grid *g_ptr);
 void delete_monster(PlayerType *player_ptr, POSITION y, POSITION x);
 void place_bold(PlayerType *player_ptr, POSITION y, POSITION x, grid_bold_type gh_type);
 void set_cave_feat(FloorType *floor_ptr, POSITION y, POSITION x, FEAT_IDX feature_idx);

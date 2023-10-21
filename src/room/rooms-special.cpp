@@ -34,7 +34,7 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
     POSITION y1, x1, xsize, ysize;
     bool light;
 
-    grid_type *g_ptr;
+    Grid *g_ptr;
 
     /* Pick a room size */
     xsize = rand_range(9, 13);

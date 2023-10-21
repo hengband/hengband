@@ -54,7 +54,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
                 POSITION y = 0;
                 int l;
                 for (l = SAFE_MAX_ATTEMPTS; l > 0; l--) {
-                    grid_type *g_ptr;
+                    Grid *g_ptr;
                     TerrainType *f_ptr;
                     y = randint0(floor_ptr->height);
                     x = randint0(floor_ptr->width);

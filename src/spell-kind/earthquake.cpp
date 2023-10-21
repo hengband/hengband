@@ -82,7 +82,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            grid_type *g_ptr;
+            Grid *g_ptr;
             g_ptr = &floor_ptr->grid_array[yy][xx];
             g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY | CAVE_UNSAFE);
             g_ptr->info &= ~(CAVE_GLOW | CAVE_MARK | CAVE_KNOWN);
@@ -180,7 +180,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            grid_type *gg_ptr;
+            Grid *gg_ptr;
             gg_ptr = &floor_ptr->grid_array[yy][xx];
             if (gg_ptr->m_idx == player_ptr->riding) {
                 continue;
@@ -342,7 +342,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            grid_type *cc_ptr;
+            Grid *cc_ptr;
             for (DIRECTION ii = 0; ii < 9; ii++) {
                 POSITION yyy = yy + ddy_ddd[ii];
                 POSITION xxx = xx + ddx_ddd[ii];

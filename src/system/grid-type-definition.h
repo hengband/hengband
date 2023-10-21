@@ -46,7 +46,7 @@ enum flow_type {
 
 class MonsterRaceInfo;
 enum class TerrainCharacteristics;
-struct grid_type {
+class Grid {
 public:
     BIT_FLAGS info{}; /* Hack -- grid flags */
 

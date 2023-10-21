@@ -26,7 +26,7 @@ bool build_type14(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     bool light;
 
-    grid_type *g_ptr;
+    Grid *g_ptr;
     int16_t trap;
 
     /* Pick a room size */

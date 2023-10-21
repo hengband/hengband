@@ -115,7 +115,7 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
 
     for (int i = 0; i < num; i++) {
         while (true) {
-            grid_type *g_ptr;
+            Grid *g_ptr;
             int candidates = 0;
             const POSITION max_x = floor.width - 1;
             for (POSITION y = 1; y < floor.height - 1; y++) {
@@ -186,7 +186,7 @@ void alloc_object(PlayerType *player_ptr, dap_type set, dungeon_allocation_type 
     POSITION y = 0;
     POSITION x = 0;
     int dummy = 0;
-    grid_type *g_ptr;
+    Grid *g_ptr;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     num = num * floor_ptr->height * floor_ptr->width / (MAX_HGT * MAX_WID) + 1;
     for (int k = 0; k < num; k++) {

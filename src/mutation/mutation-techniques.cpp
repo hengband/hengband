@@ -35,7 +35,7 @@ bool eat_rock(PlayerType *player_ptr)
 
     POSITION y = player_ptr->y + ddy[dir];
     POSITION x = player_ptr->x + ddx[dir];
-    grid_type *g_ptr;
+    Grid *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     TerrainType *f_ptr, *mimic_f_ptr;
     f_ptr = &terrains_info[g_ptr->feat];

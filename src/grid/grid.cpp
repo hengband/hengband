@@ -77,7 +77,7 @@ bool new_player_spot(PlayerType *player_ptr)
     POSITION y = 0, x = 0;
     int max_attempts = 10000;
 
-    grid_type *g_ptr;
+    Grid *g_ptr;
     TerrainType *f_ptr;
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
@@ -147,7 +147,7 @@ bool new_player_spot(PlayerType *player_ptr)
  * @param g_ptr マス構造体の参照ポインタ
  * @return 隠されたドアがあるならTRUEを返す。
  */
-bool is_hidden_door(PlayerType *player_ptr, grid_type *g_ptr)
+bool is_hidden_door(PlayerType *player_ptr, Grid *g_ptr)
 {
     if ((g_ptr->mimic || g_ptr->cave_has_flag(TerrainCharacteristics::SECRET)) && is_closed_door(player_ptr, g_ptr->feat)) {
         return true;
@@ -996,7 +996,7 @@ bool player_can_enter(PlayerType *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mode
     return true;
 }
 
-void place_grid(PlayerType *player_ptr, grid_type *g_ptr, grid_bold_type gb_type)
+void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
 {
     switch (gb_type) {
     case GB_FLOOR: {
@@ -1086,14 +1086,14 @@ void place_grid(PlayerType *player_ptr, grid_type *g_ptr, grid_bold_type gb_type
  * @param g_ptr グリッドへの参照ポインタ
  * @return 照明が消されている地形ならばTRUE
  */
-bool darkened_grid(PlayerType *player_ptr, grid_type *g_ptr)
+bool darkened_grid(PlayerType *player_ptr, Grid *g_ptr)
 {
     return ((g_ptr->info & (CAVE_VIEW | CAVE_LITE | CAVE_MNLT | CAVE_MNDK)) == (CAVE_VIEW | CAVE_MNDK)) && !player_ptr->see_nocto;
 }
 
 void place_bold(PlayerType *player_ptr, POSITION y, POSITION x, grid_bold_type gb_type)
 {
-    grid_type *const g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    Grid *const g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     place_grid(player_ptr, g_ptr, gb_type);
 }
 
@@ -1117,7 +1117,7 @@ int count_dt(PlayerType *player_ptr, POSITION *y, POSITION *x, bool (*test)(Play
 {
     int count = 0;
     for (DIRECTION d = 0; d < 9; d++) {
-        grid_type *g_ptr;
+        Grid *g_ptr;
         FEAT_IDX feat;
         if ((d == 8) && !under) {
             continue;

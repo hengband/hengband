@@ -34,7 +34,7 @@
 static void update_monster_lite(
     PlayerType *const player_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x, const monster_lite_type *const ml_ptr)
 {
-    grid_type *g_ptr;
+    Grid *g_ptr;
     int dpf, d;
     POSITION midpoint;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
@@ -93,7 +93,7 @@ static void update_monster_lite(
 static void update_monster_dark(
     PlayerType *const player_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x, const monster_lite_type *const ml_ptr)
 {
-    grid_type *g_ptr;
+    Grid *g_ptr;
     int midpoint, dpf, d;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     if ((g_ptr->info & (CAVE_LITE | CAVE_MNLT | CAVE_MNDK | CAVE_VIEW)) != CAVE_VIEW) {
@@ -157,7 +157,7 @@ void update_mon_lite(PlayerType *player_ptr)
     const auto &dungeon = floor_ptr->get_dungeon_definition();
     auto dis_lim = (dungeon.flags.has(DungeonFeatureType::DARKNESS) && !player_ptr->see_nocto) ? (MAX_PLAYER_SIGHT / 2 + 1) : (MAX_PLAYER_SIGHT + 3);
     for (int i = 0; i < floor_ptr->mon_lite_n; i++) {
-        grid_type *g_ptr;
+        Grid *g_ptr;
         g_ptr = &floor_ptr->grid_array[floor_ptr->mon_lite_y[i]][floor_ptr->mon_lite_x[i]];
         g_ptr->info |= (g_ptr->info & CAVE_MNLT) ? CAVE_TEMP : CAVE_XTRA;
         g_ptr->info &= ~(CAVE_MNLT | CAVE_MNDK);
@@ -233,7 +233,7 @@ void update_mon_lite(PlayerType *player_ptr)
                 continue;
             }
 
-            grid_type *g_ptr;
+            Grid *g_ptr;
             if (cave_has_flag_bold(player_ptr->current_floor_ptr, ml_ptr->mon_fy + 1, ml_ptr->mon_fx, f_flag)) {
                 add_mon_lite(player_ptr, points, ml_ptr->mon_fy + 2, ml_ptr->mon_fx + 1, ml_ptr);
                 add_mon_lite(player_ptr, points, ml_ptr->mon_fy + 2, ml_ptr->mon_fx, ml_ptr);
@@ -308,7 +308,7 @@ void update_mon_lite(PlayerType *player_ptr)
     for (int i = 0; i < floor_ptr->mon_lite_n; i++) {
         POSITION fx = floor_ptr->mon_lite_x[i];
         POSITION fy = floor_ptr->mon_lite_y[i];
-        grid_type *g_ptr;
+        Grid *g_ptr;
         g_ptr = &floor_ptr->grid_array[fy][fx];
         if (g_ptr->info & CAVE_TEMP) {
             if ((g_ptr->info & (CAVE_VIEW | CAVE_MNLT)) == CAVE_VIEW) {
@@ -325,7 +325,7 @@ void update_mon_lite(PlayerType *player_ptr)
     for (size_t i = 0; i < end_temp; i++) {
         const auto &[fy, fx] = points[i];
 
-        grid_type *const g_ptr = &floor_ptr->grid_array[fy][fx];
+        Grid *const g_ptr = &floor_ptr->grid_array[fy][fx];
         if (g_ptr->info & CAVE_MNLT) {
             if ((g_ptr->info & (CAVE_VIEW | CAVE_TEMP)) == CAVE_VIEW) {
                 cave_note_and_redraw_later(floor_ptr, fy, fx);
@@ -373,7 +373,7 @@ void update_mon_lite(PlayerType *player_ptr)
 void clear_mon_lite(FloorType *floor_ptr)
 {
     for (int i = 0; i < floor_ptr->mon_lite_n; i++) {
-        grid_type *g_ptr;
+        Grid *g_ptr;
         g_ptr = &floor_ptr->grid_array[floor_ptr->mon_lite_y[i]][floor_ptr->mon_lite_x[i]];
         g_ptr->info &= ~(CAVE_MNLT | CAVE_MNDK);
     }

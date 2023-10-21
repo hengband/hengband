@@ -45,7 +45,7 @@ struct ts_type {
     bool flag; // 移動コマンド入力時、"interesting" な座標へ飛ぶかどうか
     char query;
     char info[80];
-    grid_type *g_ptr;
+    Grid *g_ptr;
     TERM_LEN wid, hgt;
     int m; // "interesting" な座標たちのうち現在ターゲットしているもののインデックス
     int distance; // カーソルの移動方向 (1,2,3,4,6,7,8,9)

@@ -39,7 +39,7 @@
  * この関数は、セーブデータの互換性を保つために多くのデータ改変処理を備えている。
  * 現在確認している処理は以下の通り、
  * <ul>
- * <li>1.7.0.2で8bitだったgrid_typeのfeat,mimicのID値を16bitに拡張する処理。</li>
+ * <li>1.7.0.2で8bitだったGridのfeat,mimicのID値を16bitに拡張する処理。</li>
  * <li>1.7.0.8までに廃止、IDなどを差し替えたクエスト番号を置換する処理。</li>
  * </ul>
  * The monsters/objects must be loaded in the same order

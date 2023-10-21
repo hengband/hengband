@@ -11,67 +11,67 @@
  * @param X 指定X座標
  * @return FLOOR属性を持っているならばTRUE
  */
-bool grid_type::is_floor() const
+bool Grid::is_floor() const
 {
     return any_bits(this->info, CAVE_FLOOR);
 }
 
-bool grid_type::is_room() const
+bool Grid::is_room() const
 {
     return any_bits(this->info, CAVE_ROOM);
 }
 
-bool grid_type::is_extra() const
+bool Grid::is_extra() const
 {
     return any_bits(this->info, CAVE_EXTRA);
 }
 
-bool grid_type::is_inner() const
+bool Grid::is_inner() const
 {
     return any_bits(this->info, CAVE_INNER);
 }
 
-bool grid_type::is_outer() const
+bool Grid::is_outer() const
 {
     return any_bits(this->info, CAVE_OUTER);
 }
 
-bool grid_type::is_solid() const
+bool Grid::is_solid() const
 {
     return any_bits(this->info, CAVE_SOLID);
 }
 
-bool grid_type::is_icky() const
+bool Grid::is_icky() const
 {
     return any_bits(this->info, CAVE_ICKY);
 }
 
-bool grid_type::is_lite() const
+bool Grid::is_lite() const
 {
     return any_bits(this->info, CAVE_LITE);
 }
 
-bool grid_type::is_redraw() const
+bool Grid::is_redraw() const
 {
     return any_bits(this->info, CAVE_REDRAW);
 }
 
-bool grid_type::is_view() const
+bool Grid::is_view() const
 {
     return any_bits(this->info, CAVE_VIEW);
 }
 
-bool grid_type::is_object() const
+bool Grid::is_object() const
 {
     return any_bits(this->info, CAVE_OBJECT);
 }
 
-bool grid_type::is_mark() const
+bool Grid::is_mark() const
 {
     return any_bits(this->info, CAVE_MARK);
 }
 
-bool grid_type::is_mirror() const
+bool Grid::is_mirror() const
 {
     return this->is_object() && terrains_info[this->mimic].flags.has(TerrainCharacteristics::MIRROR);
 }
@@ -79,7 +79,7 @@ bool grid_type::is_mirror() const
 /*
  *  @brief 守りのルーンで守られているかを返す
  */
-bool grid_type::is_rune_protection() const
+bool Grid::is_rune_protection() const
 {
     return this->is_object() && terrains_info[this->mimic].flags.has(TerrainCharacteristics::RUNE_PROTECTION);
 }
@@ -87,22 +87,22 @@ bool grid_type::is_rune_protection() const
 /*
  *  @brief 爆発のルーンが仕掛けられているかを返す
  */
-bool grid_type::is_rune_explosion() const
+bool Grid::is_rune_explosion() const
 {
     return this->is_object() && terrains_info[this->mimic].flags.has(TerrainCharacteristics::RUNE_EXPLOSION);
 }
 
-byte grid_type::get_cost(const MonsterRaceInfo *r_ptr) const
+byte Grid::get_cost(const MonsterRaceInfo *r_ptr) const
 {
     return this->costs[get_grid_flow_type(r_ptr)];
 }
 
-byte grid_type::get_distance(const MonsterRaceInfo *r_ptr) const
+byte Grid::get_distance(const MonsterRaceInfo *r_ptr) const
 {
     return this->dists[get_grid_flow_type(r_ptr)];
 }
 
-flow_type grid_type::get_grid_flow_type(const MonsterRaceInfo *r_ptr) const
+flow_type Grid::get_grid_flow_type(const MonsterRaceInfo *r_ptr) const
 {
     return r_ptr->feature_flags.has(MonsterFeatureType::CAN_FLY) ? FLOW_CAN_FLY : FLOW_NORMAL;
 }
@@ -112,12 +112,12 @@ flow_type grid_type::get_grid_flow_type(const MonsterRaceInfo *r_ptr) const
  * @param g_ptr グリッドへの参照ポインタ
  * @return 地形情報
  */
-FEAT_IDX grid_type::get_feat_mimic() const
+FEAT_IDX Grid::get_feat_mimic() const
 {
     return terrains_info[this->mimic ? this->mimic : this->feat].mimic;
 }
 
-bool grid_type::cave_has_flag(TerrainCharacteristics feature_flags) const
+bool Grid::cave_has_flag(TerrainCharacteristics feature_flags) const
 {
     return terrains_info[this->feat].flags.has(feature_flags);
 }
@@ -127,26 +127,26 @@ bool grid_type::cave_has_flag(TerrainCharacteristics feature_flags) const
  * @param ch 指定するシンボル文字
  * @return シンボルが指定した記号か否か
  */
-bool grid_type::is_symbol(const int ch) const
+bool Grid::is_symbol(const int ch) const
 {
     return terrains_info[this->feat].x_char[0] == ch;
 }
 
-void grid_type::reset_costs()
+void Grid::reset_costs()
 {
     for (auto &cost : this->costs) {
         cost = 0;
     }
 }
 
-void grid_type::reset_dists()
+void Grid::reset_dists()
 {
     for (auto &dist : this->dists) {
         dist = 0;
     }
 }
 
-bool grid_type::has_los() const
+bool Grid::has_los() const
 {
     return any_bits(this->info, CAVE_VIEW) || AngbandSystem::get_instance().is_phase_out();
 }

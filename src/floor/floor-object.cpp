@@ -192,7 +192,7 @@ bool make_gold(PlayerType *player_ptr, ItemEntity *j_ptr)
  */
 void delete_all_items_from_floor(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    grid_type *g_ptr;
+    Grid *g_ptr;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!in_bounds(floor_ptr, y, x)) {
         return;
@@ -349,7 +349,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
     POSITION dy, dx;
     POSITION ty, tx = 0;
     OBJECT_IDX o_idx = 0;
-    grid_type *g_ptr;
+    Grid *g_ptr;
     bool flag = false;
     bool done = false;
 #ifdef JP

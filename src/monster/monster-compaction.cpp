@@ -36,7 +36,7 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
 
     POSITION y = m_ptr->fy;
     POSITION x = m_ptr->fx;
-    grid_type *g_ptr;
+    Grid *g_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
     g_ptr->m_idx = i2;
 

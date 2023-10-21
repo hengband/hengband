@@ -350,7 +350,7 @@ void add_outer_wall(PlayerType *player_ptr, POSITION x, POSITION y, int light, P
         return;
     }
 
-    grid_type *g_ptr;
+    Grid *g_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
     if (g_ptr->is_room()) {
         return;

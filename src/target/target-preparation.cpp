@@ -86,7 +86,7 @@ static bool target_set_accept(PlayerType *player_ptr, POSITION y, POSITION x)
         return false;
     }
 
-    grid_type *g_ptr;
+    Grid *g_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
     if (g_ptr->m_idx) {
         auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];

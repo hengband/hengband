@@ -501,7 +501,7 @@ void wilderness_gen(PlayerType *player_ptr)
     floor_ptr->grid_array[MAX_HGT - 1][MAX_WID - 1].mimic = border.south_east;
     for (y = 0; y < floor_ptr->height; y++) {
         for (x = 0; x < floor_ptr->width; x++) {
-            grid_type *g_ptr;
+            Grid *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
             if (is_daytime()) {
                 g_ptr->info |= CAVE_GLOW;
@@ -539,7 +539,7 @@ void wilderness_gen(PlayerType *player_ptr)
     if (player_ptr->teleport_town) {
         for (y = 0; y < floor_ptr->height; y++) {
             for (x = 0; x < floor_ptr->width; x++) {
-                grid_type *g_ptr;
+                Grid *g_ptr;
                 g_ptr = &floor_ptr->grid_array[y][x];
                 TerrainType *f_ptr;
                 f_ptr = &terrains_info[g_ptr->feat];
@@ -564,7 +564,7 @@ void wilderness_gen(PlayerType *player_ptr)
     } else if (player_ptr->leaving_dungeon) {
         for (y = 0; y < floor_ptr->height; y++) {
             for (x = 0; x < floor_ptr->width; x++) {
-                grid_type *g_ptr;
+                Grid *g_ptr;
                 g_ptr = &floor_ptr->grid_array[y][x];
                 if (!g_ptr->cave_has_flag(TerrainCharacteristics::ENTRANCE)) {
                     continue;

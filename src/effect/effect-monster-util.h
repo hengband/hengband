@@ -4,7 +4,7 @@
 #include <string>
 
 enum class AttributeType;
-struct grid_type;
+class Grid;
 class MonsterEntity;
 class MonsterRaceInfo;
 class PlayerType;
@@ -38,7 +38,7 @@ public:
     BIT_FLAGS flag;
     bool see_s_msg;
 
-    grid_type *g_ptr;
+    Grid *g_ptr;
     MonsterEntity *m_ptr;
     MonsterEntity *m_caster_ptr;
     MonsterRaceInfo *r_ptr;

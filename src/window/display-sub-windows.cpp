@@ -525,7 +525,7 @@ void fix_object(PlayerType *player_ptr)
  * @details
  * Lookコマンドでカーソルを合わせた場合に合わせてミミックは考慮しない。
  */
-static const MonsterEntity *monster_on_floor_items(FloorType *floor_ptr, const grid_type *g_ptr)
+static const MonsterEntity *monster_on_floor_items(FloorType *floor_ptr, const Grid *g_ptr)
 {
     if (g_ptr->m_idx == 0) {
         return nullptr;

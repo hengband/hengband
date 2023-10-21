@@ -376,7 +376,7 @@ bool build_tunnel2(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION x1, P
     POSITION x3, y3, dx, dy;
     POSITION changex, changey;
     bool retval, firstsuccede;
-    grid_type *g_ptr;
+    Grid *g_ptr;
 
     int length = distance(x1, y1, x2, y2);
     auto *floor_ptr = player_ptr->current_floor_ptr;

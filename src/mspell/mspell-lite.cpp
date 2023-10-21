@@ -59,7 +59,7 @@ bool adjacent_grid_check(PlayerType *player_ptr, MonsterEntity *m_ptr, POSITION 
     for (int i = 0; i < 8; i++) {
         int next_x = *xp + tonari_x[next][i];
         int next_y = *yp + tonari_y[next][i];
-        grid_type *g_ptr;
+        Grid *g_ptr;
         g_ptr = &player_ptr->current_floor_ptr->grid_array[next_y][next_x];
         if (!g_ptr->cave_has_flag(f_flag)) {
             continue;

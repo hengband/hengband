@@ -1,7 +1,6 @@
 #pragma once
 
 class FloorType;
-struct grid_type;
 class PlayerType;
 enum class TerrainCharacteristics;
 bool in_bounds(FloorType *floor_ptr, int y, int x);

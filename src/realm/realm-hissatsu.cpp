@@ -808,7 +808,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 POSITION y, x;
                 POSITION ny, nx;
                 MONSTER_IDX m_idx;
-                grid_type *g_ptr;
+                Grid *g_ptr;
                 MonsterEntity *m_ptr;
 
                 y = player_ptr->y + ddy[dir];
