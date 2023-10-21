@@ -138,7 +138,7 @@ static void describe_scan_result(PlayerType *player_ptr, GridExamination *ge_ptr
 
 static void describe_target(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
-    if (!player_bold(player_ptr, ge_ptr->y, ge_ptr->x)) {
+    if (!player_ptr->is_located_at({ ge_ptr->y, ge_ptr->x })) {
         ge_ptr->s1 = _("ターゲット:", "Target:");
         return;
     }

@@ -211,7 +211,7 @@ bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
         case ' ':
         case 't':
         case '.':
-            if (player_bold(player_ptr, info.y, info.x)) {
+            if (player_ptr->is_located_at({ info.y, info.x })) {
                 info.ch = 0;
             } else {
                 success = true;
@@ -245,7 +245,7 @@ bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
                 }
             } else {
                 if (info.ch == '5' || info.ch == '0') {
-                    if (player_bold(player_ptr, info.y, info.x)) {
+                    if (player_ptr->is_located_at({ info.y, info.x })) {
                         info.ch = 0;
                     } else {
                         success = true;

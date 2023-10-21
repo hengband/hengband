@@ -39,7 +39,7 @@ void exe_monster_attack_to_player(PlayerType *player_ptr, turn_flags *turn_flags
     auto &floor = *player_ptr->current_floor_ptr;
     auto *m_ptr = &floor.m_list[m_idx];
     auto *r_ptr = &m_ptr->get_monrace();
-    if (!turn_flags_ptr->do_move || !player_bold(player_ptr, ny, nx)) {
+    if (!turn_flags_ptr->do_move || !player_ptr->is_located_at({ ny, nx })) {
         return;
     }
 

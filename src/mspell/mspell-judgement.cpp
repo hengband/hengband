@@ -61,14 +61,15 @@ bool direct_beam(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, 
     auto hit2 = false;
     auto is_friend = m_ptr->is_pet();
     for (const auto &[y, x] : grid_g) {
-        const auto &grid = floor.get_grid({ y, x });
+        const Pos2D pos(y, x);
+        const auto &grid = floor.get_grid(pos);
         if (y == y2 && x == x2) {
             hit2 = true;
         } else if (is_friend && grid.m_idx > 0 && !m_ptr->is_hostile_to_melee(floor.m_list[grid.m_idx])) {
             return false;
         }
 
-        if (is_friend && player_bold(player_ptr, y, x)) {
+        if (is_friend && player_ptr->is_located_at(pos)) {
             return false;
         }
     }
@@ -160,12 +161,11 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
         POSITION gm_rad = rad;
         breath_shape(player_ptr, grid_g, path_n, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y, x, typ);
         for (auto i = 0; i < grids; i++) {
-            y = gy[i];
-            x = gx[i];
-            if ((y == y2) && (x == x2)) {
+            const Pos2D pos(gy[i], gx[i]);
+            if ((pos.y == y2) && (pos.x == x2)) {
                 hit2 = true;
             }
-            if (player_bold(player_ptr, y, x)) {
+            if (player_ptr->is_located_at(pos)) {
                 hityou = true;
             }
         }

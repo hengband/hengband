@@ -576,7 +576,7 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
                 if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT)) {
                     continue;
                 }
-                if (!player_bold(player_ptr, y, x)) {
+                if (!player_ptr->is_located_at({ y, x })) {
                     break;
                 }
             }

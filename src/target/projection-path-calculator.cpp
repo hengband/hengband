@@ -96,36 +96,38 @@ static void set_asxy(projection_path_type *pp_ptr)
 static bool project_stop(PlayerType *player_ptr, projection_path_type *pp_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-
-    if (none_bits(pp_ptr->flag, PROJECT_THRU) && (pp_ptr->x == pp_ptr->x2) && (pp_ptr->y == pp_ptr->y2)) {
+    const Pos2D pos(pp_ptr->y, pp_ptr->x);
+    const Pos2D pos2(pp_ptr->y2, pp_ptr->x2);
+    if (none_bits(pp_ptr->flag, PROJECT_THRU) && (pos == pos2)) {
         return true;
     }
 
     if (any_bits(pp_ptr->flag, PROJECT_DISI)) {
-        if (!pp_ptr->position->empty() && cave_stop_disintegration(floor_ptr, pp_ptr->y, pp_ptr->x)) {
+        if (!pp_ptr->position->empty() && cave_stop_disintegration(floor_ptr, pos.y, pos.x)) {
             return true;
         }
     } else if (any_bits(pp_ptr->flag, PROJECT_LOS)) {
-        if (!pp_ptr->position->empty() && !cave_los_bold(floor_ptr, pp_ptr->y, pp_ptr->x)) {
+        if (!pp_ptr->position->empty() && !cave_los_bold(floor_ptr, pos.y, pos.x)) {
             return true;
         }
     } else if (none_bits(pp_ptr->flag, PROJECT_PATH)) {
-        if (!pp_ptr->position->empty() && !cave_has_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, TerrainCharacteristics::PROJECT)) {
+        if (!pp_ptr->position->empty() && !cave_has_flag_bold(floor_ptr, pos.y, pos.x, TerrainCharacteristics::PROJECT)) {
             return true;
         }
     }
 
+    const auto &grid = floor_ptr->get_grid(pos);
     if (any_bits(pp_ptr->flag, PROJECT_MIRROR)) {
-        if (!pp_ptr->position->empty() && floor_ptr->grid_array[pp_ptr->y][pp_ptr->x].is_mirror()) {
+        if (!pp_ptr->position->empty() && grid.is_mirror()) {
             return true;
         }
     }
 
-    if (any_bits(pp_ptr->flag, PROJECT_STOP) && !pp_ptr->position->empty() && (player_bold(player_ptr, pp_ptr->y, pp_ptr->x) || floor_ptr->grid_array[pp_ptr->y][pp_ptr->x].m_idx != 0)) {
+    if (any_bits(pp_ptr->flag, PROJECT_STOP) && !pp_ptr->position->empty() && (player_ptr->is_located_at(pos) || grid.m_idx != 0)) {
         return true;
     }
 
-    if (!in_bounds(floor_ptr, pp_ptr->y, pp_ptr->x)) {
+    if (!in_bounds(floor_ptr, pos.y, pos.x)) {
         return true;
     }
 

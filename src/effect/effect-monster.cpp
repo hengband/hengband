@@ -14,7 +14,6 @@
 #include "effect/effect-monster-switcher.h"
 #include "effect/effect-monster-util.h"
 #include "effect/spells-effect-util.h"
-#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "game-option/play-record-options.h"
 #include "grid/grid.h"
@@ -655,7 +654,7 @@ static void postprocess_by_effected_pet(PlayerType *player_ptr, EffectMonster *e
     }
 
     const auto &m_caster_ref = *em_ptr->m_caster_ptr;
-    if ((em_ptr->who > 0) && m_caster_ref.is_pet() && !player_bold(player_ptr, m_ptr->target_y, m_ptr->target_x)) {
+    if ((em_ptr->who > 0) && m_caster_ref.is_pet() && !player_ptr->is_located_at({ m_ptr->target_y, m_ptr->target_x })) {
         set_target(m_ptr, m_caster_ref.fy, m_caster_ref.fx);
     }
 }

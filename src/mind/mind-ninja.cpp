@@ -167,20 +167,19 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
         return true;
     }
 
-    ty = player_ptr->y;
-    tx = player_ptr->x;
-    bool tmp_mdeath = false;
-    bool moved = false;
+    auto y = player_ptr->y;
+    auto x = player_ptr->x;
+    auto tmp_mdeath = false;
+    auto moved = false;
     for (const auto &[ny, nx] : path_g) {
-        MonsterEntity *m_ptr;
-
-        if (is_cave_empty_bold(player_ptr, ny, nx) && player_can_enter(player_ptr, floor_ptr->grid_array[ny][nx].feat, 0)) {
-            ty = ny;
-            tx = nx;
+        const auto &grid_new = floor_ptr->get_grid({ ny, nx });
+        if (is_cave_empty_bold(player_ptr, ny, nx) && player_can_enter(player_ptr, grid_new.feat, 0)) {
+            y = ny;
+            x = nx;
             continue;
         }
 
-        if (!floor_ptr->grid_array[ny][nx].m_idx) {
+        if (!grid_new.m_idx) {
             if (tm_idx) {
                 msg_print(_("失敗！", "Failed!"));
             } else {
@@ -190,25 +189,26 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
             break;
         }
 
-        if (!player_bold(player_ptr, ty, tx)) {
-            teleport_player_to(player_ptr, ty, tx, TELEPORT_NONMAGICAL);
+        const Pos2D p_pos(y, x);
+        if (!player_ptr->is_located_at(p_pos)) {
+            teleport_player_to(player_ptr, y, x, TELEPORT_NONMAGICAL);
         }
-        update_monster(player_ptr, floor_ptr->grid_array[ny][nx].m_idx, true);
 
-        m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[ny][nx].m_idx];
-        if (tm_idx != floor_ptr->grid_array[ny][nx].m_idx) {
+        update_monster(player_ptr, grid_new.m_idx, true);
+        const auto *m_ptr = &floor_ptr->m_list[grid_new.m_idx];
+        if (tm_idx != grid_new.m_idx) {
 #ifdef JP
             msg_format("%s%sが立ちふさがっている！", tm_idx ? "別の" : "", m_ptr->ml ? "モンスター" : "何か");
 #else
             msg_format("There is %s in the way!", m_ptr->ml ? (tm_idx ? "another monster" : "a monster") : "someone");
 #endif
-        } else if (!player_bold(player_ptr, ty, tx)) {
+        } else if (!player_ptr->is_located_at(p_pos)) {
             const auto m_name = monster_desc(player_ptr, m_ptr, 0);
             msg_format(_("素早く%sの懐に入り込んだ！", "You quickly jump in and attack %s!"), m_name.data());
         }
 
-        if (!player_bold(player_ptr, ty, tx)) {
-            teleport_player_to(player_ptr, ty, tx, TELEPORT_NONMAGICAL);
+        if (!player_ptr->is_located_at(p_pos)) {
+            teleport_player_to(player_ptr, y, x, TELEPORT_NONMAGICAL);
         }
         moved = true;
         tmp_mdeath = do_cmd_attack(player_ptr, ny, nx, HISSATSU_NYUSIN);
@@ -216,8 +216,8 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
         break;
     }
 
-    if (!moved && !player_bold(player_ptr, ty, tx)) {
-        teleport_player_to(player_ptr, ty, tx, TELEPORT_NONMAGICAL);
+    if (!moved && !player_ptr->is_located_at({ y, x })) {
+        teleport_player_to(player_ptr, y, x, TELEPORT_NONMAGICAL);
     }
 
     if (mdeath) {
@@ -510,7 +510,7 @@ bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
             int attempts = 1000;
             while (attempts--) {
                 scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
-                if (!player_bold(player_ptr, y, x)) {
+                if (!player_ptr->is_located_at({ y, x })) {
                     break;
                 }
             }

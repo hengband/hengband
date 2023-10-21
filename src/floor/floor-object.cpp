@@ -569,7 +569,8 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
     lite_spot(player_ptr, by, bx);
     sound(SOUND_DROP);
 
-    if (player_bold(player_ptr, by, bx)) {
+    const auto is_located = player_ptr->is_located_at({ by, bx });
+    if (is_located) {
         static constexpr auto flags = {
             SubWindowRedrawingFlag::FLOOR_ITEMS,
             SubWindowRedrawingFlag::FOUND_ITEMS,
@@ -577,7 +578,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
         RedrawingFlagsUpdater::get_instance().set_flags(flags);
     }
 
-    if (chance && player_bold(player_ptr, by, bx)) {
+    if (chance && is_located) {
         msg_print(_("何かが足下に転がってきた。", "You feel something roll beneath your feet."));
     }
 

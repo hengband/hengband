@@ -123,9 +123,9 @@ static bool process_bolt_reflection(PlayerType *player_ptr, EffectPlayerType *ep
  * @param x 目標X座標
  * @return 当たらなかったらFALSE、反射したらTRUE、当たったらCONTINUE
  */
-static ProcessResult check_continue_player_effect(PlayerType *player_ptr, EffectPlayerType *ep_ptr, POSITION y, POSITION x, project_func project)
+static ProcessResult check_continue_player_effect(PlayerType *player_ptr, EffectPlayerType *ep_ptr, const Pos2D &pos, project_func project)
 {
-    if (!player_bold(player_ptr, y, x)) {
+    if (!player_ptr->is_located_at(pos)) {
         return ProcessResult::PROCESS_FALSE;
     }
 
@@ -197,7 +197,7 @@ bool affect_player(MONSTER_IDX who, PlayerType *player_ptr, concptr who_name, in
 {
     EffectPlayerType tmp_effect(who, dam, attribute, flag);
     auto *ep_ptr = &tmp_effect;
-    auto check_result = check_continue_player_effect(player_ptr, ep_ptr, y, x, project);
+    auto check_result = check_continue_player_effect(player_ptr, ep_ptr, { y, x }, project);
     if (check_result != ProcessResult::PROCESS_CONTINUE) {
         return check_result == ProcessResult::PROCESS_TRUE;
     }

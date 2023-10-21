@@ -361,15 +361,15 @@ bool teleport_player_aux(PlayerType *player_ptr, POSITION dis, bool is_quantum_e
     auto pick = randint1(cur_candidates);
 
     /* Search again the choosen location */
-    auto yy = top;
-    auto xx = 0;
-    for (; yy <= bottom; yy++) {
-        for (xx = left; xx <= right; xx++) {
-            if (!cave_player_teleportable_bold(player_ptr, yy, xx, mode)) {
+    auto y = top;
+    auto x = 0;
+    for (; y <= bottom; y++) {
+        for (x = left; x <= right; x++) {
+            if (!cave_player_teleportable_bold(player_ptr, y, x, mode)) {
                 continue;
             }
 
-            int d = distance(player_ptr->y, player_ptr->x, yy, xx);
+            int d = distance(player_ptr->y, player_ptr->x, y, x);
             if (d > dis) {
                 continue;
             }
@@ -388,7 +388,8 @@ bool teleport_player_aux(PlayerType *player_ptr, POSITION dis, bool is_quantum_e
         }
     }
 
-    if (player_bold(player_ptr, yy, xx)) {
+    const Pos2D pos(y, x);
+    if (player_ptr->is_located_at(pos)) {
         return false;
     }
 
@@ -398,7 +399,7 @@ bool teleport_player_aux(PlayerType *player_ptr, POSITION dis, bool is_quantum_e
         msg_format("『こっちだぁ、%s』", player_ptr->name);
     }
 #endif
-    (void)move_player_effect(player_ptr, yy, xx, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+    (void)move_player_effect(player_ptr, pos.y, pos.x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
     return true;
 }
 

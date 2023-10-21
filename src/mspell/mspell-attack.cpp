@@ -219,8 +219,7 @@ static bool check_thrown_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
     msa_ptr->can_remember = is_original_ap_and_seen(player_ptr, msa_ptr->m_ptr);
 
     // ターゲットがプレイヤー位置なら直接射線が通っているので常に届く。
-    bool direct = player_bold(player_ptr, msa_ptr->y, msa_ptr->x);
-    if (direct) {
+    if (player_ptr->is_located_at({ msa_ptr->y, msa_ptr->x })) {
         return true;
     }
 

@@ -392,23 +392,24 @@ bool starlight(PlayerType *player_ptr, bool magic)
     }
 
     int num = damroll(5, 3);
-    int attempts;
-    POSITION y = 0, x = 0;
+    auto y = 0;
+    auto x = 0;
     for (int k = 0; k < num; k++) {
-        attempts = 1000;
-
+        auto attempts = 1000;
         while (attempts--) {
             scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_LOS);
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT)) {
+            const Pos2D pos(y, x);
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, pos.y, pos.x, TerrainCharacteristics::PROJECT)) {
                 continue;
             }
-            if (!player_bold(player_ptr, y, x)) {
+
+            if (!player_ptr->is_located_at(pos)) {
                 break;
             }
         }
 
-        project(player_ptr, 0, 0, y, x, damroll(6 + player_ptr->lev / 8, 10), AttributeType::LITE_WEAK,
-            (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL | PROJECT_LOS));
+        constexpr uint flags = PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL | PROJECT_LOS;
+        project(player_ptr, 0, 0, y, x, damroll(6 + player_ptr->lev / 8, 10), AttributeType::LITE_WEAK, flags);
     }
 
     return true;
