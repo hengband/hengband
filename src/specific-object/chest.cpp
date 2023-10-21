@@ -9,7 +9,6 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "object-enchant/item-apply-magic.h"
-#include "perception/object-perception.h"
 #include "player-info/class-info.h"
 #include "player/player-damage.h"
 #include "player/player-status-flags.h"
@@ -137,8 +136,7 @@ void Chest::chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
     /* Empty */
     o_ptr->pval = 0;
 
-    /* Known */
-    object_known(o_ptr);
+    o_ptr->mark_as_known();
 }
 
 /*!

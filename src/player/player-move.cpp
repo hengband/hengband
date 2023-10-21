@@ -96,7 +96,7 @@ static void discover_hidden_things(PlayerType *player_ptr, POSITION y, POSITION 
 
         if (!o_ptr->is_known()) {
             msg_print(_("箱に仕掛けられたトラップを発見した！", "You have discovered a trap on the chest!"));
-            object_known(o_ptr);
+            o_ptr->mark_as_known();
             disturb(player_ptr, false, false);
         }
     }

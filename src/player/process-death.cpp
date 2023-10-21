@@ -243,7 +243,7 @@ static void inventory_aware(PlayerType *player_ptr)
         }
 
         object_aware(player_ptr, o_ptr);
-        object_known(o_ptr);
+        o_ptr->mark_as_known();
     }
 }
 
@@ -262,7 +262,7 @@ static void home_aware(PlayerType *player_ptr)
             }
 
             object_aware(player_ptr, o_ptr);
-            object_known(o_ptr);
+            o_ptr->mark_as_known();
         }
     }
 }

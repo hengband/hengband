@@ -362,7 +362,7 @@ Smith::DrainEssenceResult Smith::drain_essence(ItemEntity *o_ptr)
 
     o_ptr->ident |= (IDENT_FULL_KNOWN);
     object_aware(player_ptr, o_ptr);
-    object_known(o_ptr);
+    o_ptr->mark_as_known();
 
     const auto new_flags = o_ptr->get_flags();
 

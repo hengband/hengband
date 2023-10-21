@@ -173,7 +173,7 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
 
         if (known) {
             object_aware(player_ptr, &item);
-            object_known(&item);
+            item.mark_as_known();
         }
 
         (void)drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);

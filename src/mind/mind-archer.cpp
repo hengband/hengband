@@ -130,7 +130,7 @@ bool create_ammo(PlayerType *player_ptr)
         q_ptr->prep(lookup_baseitem_id({ ItemKindType::SHOT, m_bonus(1, player_ptr->lev) + 1 }));
         q_ptr->number = (byte)rand_range(15, 30);
         object_aware(player_ptr, q_ptr);
-        object_known(q_ptr);
+        q_ptr->mark_as_known();
         ItemMagicApplier(player_ptr, q_ptr, player_ptr->lev, AM_NO_FIXED_ART).execute();
         q_ptr->discount = 99;
         int16_t slot = store_item_to_inventory(player_ptr, q_ptr);
@@ -158,7 +158,7 @@ bool create_ammo(PlayerType *player_ptr)
         q_ptr->prep(lookup_baseitem_id({ ItemKindType::ARROW, static_cast<short>(m_bonus(1, player_ptr->lev) + 1) }));
         q_ptr->number = (byte)rand_range(5, 10);
         object_aware(player_ptr, q_ptr);
-        object_known(q_ptr);
+        q_ptr->mark_as_known();
         ItemMagicApplier(player_ptr, q_ptr, player_ptr->lev, AM_NO_FIXED_ART).execute();
         q_ptr->discount = 99;
         const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
@@ -185,7 +185,7 @@ bool create_ammo(PlayerType *player_ptr)
         q_ptr->prep(lookup_baseitem_id({ ItemKindType::BOLT, static_cast<short>(m_bonus(1, player_ptr->lev) + 1) }));
         q_ptr->number = (byte)rand_range(4, 8);
         object_aware(player_ptr, q_ptr);
-        object_known(q_ptr);
+        q_ptr->mark_as_known();
         ItemMagicApplier(player_ptr, q_ptr, player_ptr->lev, AM_NO_FIXED_ART).execute();
         q_ptr->discount = 99;
         const auto item_name = describe_flavor(player_ptr, q_ptr, 0);

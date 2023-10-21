@@ -143,6 +143,8 @@ public:
     TrFlags get_flags() const;
     TrFlags get_flags_known() const;
 
+    void mark_as_known();
+
 private:
     int get_baseitem_price() const;
     int calc_figurine_value() const;

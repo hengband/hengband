@@ -86,7 +86,7 @@ void wield_all(PlayerType *player_ptr)
 void add_outfit(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     object_aware(player_ptr, o_ptr);
-    object_known(o_ptr);
+    o_ptr->mark_as_known();
     int16_t slot = store_item_to_inventory(player_ptr, o_ptr);
     autopick_alter_item(player_ptr, slot, false);
     wield_all(player_ptr);

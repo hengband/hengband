@@ -74,7 +74,7 @@ static errr get_obj_index_prep(void)
 static void object_mention(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     object_aware(player_ptr, o_ptr);
-    object_known(o_ptr);
+    o_ptr->mark_as_known();
 
     o_ptr->ident |= (IDENT_FULL_KNOWN);
     const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
