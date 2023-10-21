@@ -14,6 +14,16 @@ struct Point2D {
         , x(x)
     {
     }
+
+    constexpr bool operator==(const Point2D &other) const
+    {
+        return (this->y == other.y) && (this->x == other.x);
+    }
+
+    constexpr bool operator!=(const Point2D &other) const
+    {
+        return !(*this == other);
+    }
 };
 
 //! ゲームの平面マップ上の座標位置を表す構造体
