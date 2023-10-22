@@ -372,9 +372,9 @@ void load_lore(void)
     for (size_t i = loading_max_r_idx; i < monraces_info.size(); i++) {
         auto monrace_id = i2enum<MonsterRaceId>(i);
         auto &monrace = monraces_info[monrace_id];
-        auto max_num = 100;
+        auto max_num = MAX_MONSTER_NUM;
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || any_bits(monrace.flags1, RF7_UNIQUE2)) {
-            max_num = 1;
+            max_num = MAX_UNIQUE_NUM;
         } else if (monrace.population_flags.has(MonsterPopulationType::NAZGUL)) {
             max_num = MAX_NAZGUL_NUM;
         }
