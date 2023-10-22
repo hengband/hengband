@@ -2587,7 +2587,7 @@ errr init_x11(int argc, char *argv[])
             use_graphics = true;
             pict_wid = pict_hgt = 8;
             ANGBAND_GRAF = "old";
-            strcpy(filename, path.string().c_str());
+            angband_strcpy(filename, path.string().data(), sizeof(filename));
         }
         break;
     }
@@ -2597,7 +2597,7 @@ errr init_x11(int argc, char *argv[])
             use_graphics = true;
             pict_wid = pict_hgt = 16;
             ANGBAND_GRAF = "new";
-            strcpy(filename, path.string().c_str());
+            angband_strcpy(filename, path.string().data(), sizeof(filename));
         }
         break;
     }
