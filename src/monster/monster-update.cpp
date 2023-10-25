@@ -222,11 +222,11 @@ static POSITION decide_updated_distance(PlayerType *player_ptr, um_type *um_ptr)
 
 static void update_smart_stupid_flags(MonsterRaceInfo *r_ptr)
 {
-    if (r_ptr->r_behavior_flags.has(MonsterBehaviorType::SMART)) {
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::SMART)) {
         r_ptr->r_behavior_flags.set(MonsterBehaviorType::SMART);
     }
 
-    if (r_ptr->r_behavior_flags.has(MonsterBehaviorType::STUPID)) {
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID)) {
         r_ptr->r_behavior_flags.set(MonsterBehaviorType::STUPID);
     }
 }
