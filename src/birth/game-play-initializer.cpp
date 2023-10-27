@@ -87,9 +87,9 @@ void player_wipe_without_name(PlayerType *player_ptr)
             continue;
         }
         r_ref.cur_num = 0;
-        r_ref.max_num = 100;
+        r_ref.max_num = MAX_MONSTER_NUM;
         if (r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
-            r_ref.max_num = 1;
+            r_ref.max_num = MAX_UNIQUE_NUM;
         } else if (r_ref.population_flags.has(MonsterPopulationType::NAZGUL)) {
             r_ref.max_num = MAX_NAZGUL_NUM;
         }

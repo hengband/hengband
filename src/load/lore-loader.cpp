@@ -11,6 +11,7 @@
 #include "monster-race/race-flags7.h"
 #include "system/angband.h"
 #include "system/monster-race-info.h"
+#include "system/system-variables.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 
@@ -366,6 +367,19 @@ void load_lore(void)
         auto r_idx = static_cast<MonsterRaceId>(i);
         auto *r_ptr = i < monraces_info.size() ? &monraces_info[r_idx] : &dummy;
         rd_lore(r_ptr, r_idx);
+    }
+
+    for (size_t i = loading_max_r_idx; i < monraces_info.size(); i++) {
+        auto monrace_id = i2enum<MonsterRaceId>(i);
+        auto &monrace = monraces_info[monrace_id];
+        auto max_num = MAX_MONSTER_NUM;
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || any_bits(monrace.flags1, RF7_UNIQUE2)) {
+            max_num = MAX_UNIQUE_NUM;
+        } else if (monrace.population_flags.has(MonsterPopulationType::NAZGUL)) {
+            max_num = MAX_NAZGUL_NUM;
+        }
+
+        monrace.max_num = max_num;
     }
 
     load_note(_("モンスターの思い出をロードしました", "Loaded Monster Memory"));

@@ -152,20 +152,20 @@ void wiz_restore_monster_max_num(MonsterRaceId r_idx)
     }
 
     auto *r_ptr = &monraces_info[r_idx];
-    auto n = 0;
+    std::optional<int> max_num;
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-        n = 1;
+        max_num = MAX_UNIQUE_NUM;
     } else if (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) {
-        n = MAX_NAZGUL_NUM;
+        max_num = MAX_NAZGUL_NUM;
     }
 
-    if (n == 0) {
+    if (!max_num) {
         msg_print(_("出現数に制限がないモンスターです。", "This monster can appear any time."));
         msg_print(nullptr);
         return;
     }
 
-    r_ptr->max_num = n;
+    r_ptr->max_num = *max_num;
     r_ptr->r_pkills = 0;
     r_ptr->r_akills = 0;
 
