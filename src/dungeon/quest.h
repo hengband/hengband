@@ -11,7 +11,7 @@
 /*
  * Quest constants
  */
-enum class QuestId : int16_t{
+enum class QuestId : short{
 	NONE = 0, /* クエストなし */
 	THIEF = 1, /*<! 盗賊の隠れ家 */
 	SEWER = 2, /*<! 下水道 */
