@@ -2831,7 +2831,8 @@ bool player_place(PlayerType *player_ptr, POSITION y, POSITION x)
 void wreck_the_pattern(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    int pattern_type = terrains_info[floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat].subtype;
+    const auto p_pos = player_ptr->get_position();
+    int pattern_type = terrains_info[floor_ptr->get_grid(p_pos).feat].subtype;
     if (pattern_type == PATTERN_TILE_WRECKED) {
         return;
     }
@@ -2843,13 +2844,14 @@ void wreck_the_pattern(PlayerType *player_ptr)
         take_hit(player_ptr, DAMAGE_NOESCAPE, damroll(10, 8), _("パターン損壊", "corrupting the Pattern"));
     }
 
-    int to_ruin = randint1(45) + 35;
+    auto to_ruin = randint1(45) + 35;
     while (to_ruin--) {
-        POSITION r_y, r_x;
-        scatter(player_ptr, &r_y, &r_x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
-
-        if (pattern_tile(floor_ptr, r_y, r_x) && (terrains_info[floor_ptr->grid_array[r_y][r_x].feat].subtype != PATTERN_TILE_WRECKED)) {
-            cave_set_feat(player_ptr, r_y, r_x, feat_pattern_corrupted);
+        int y;
+        int x;
+        scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
+        const Pos2D pos(y, x);
+        if (pattern_tile(floor_ptr, pos.y, pos.x) && (terrains_info[floor_ptr->get_grid(pos).feat].subtype != PATTERN_TILE_WRECKED)) {
+            cave_set_feat(player_ptr, pos.y, pos.x, feat_pattern_corrupted);
         }
     }
 

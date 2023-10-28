@@ -174,10 +174,8 @@ static void recursive_river(FloorType *floor_ptr, POSITION x1, POSITION y1, POSI
  */
 void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
 {
-    POSITION y2, x2;
-    POSITION y1 = 0, x1 = 0;
-    POSITION wid;
-    FEAT_IDX feat1 = 0, feat2 = 0;
+    short feat1 = 0;
+    short feat2 = 0;
 
     const auto &dungeon = floor_ptr->get_dungeon_definition();
 
@@ -187,10 +185,9 @@ void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
         feat2 = feat_shallow_water;
     } else /* others */
     {
-        FEAT_IDX select_deep_feat[10];
-        FEAT_IDX select_shallow_feat[10];
-        int select_id_max = 0, selected;
-
+        short select_deep_feat[10]{};
+        short select_shallow_feat[10]{};
+        auto select_id_max = 0;
         if (dungeon.flags.has(DungeonFeatureType::LAVA_RIVER)) {
             select_deep_feat[select_id_max] = feat_deep_lava;
             select_shallow_feat[select_id_max] = feat_shallow_lava;
@@ -208,7 +205,7 @@ void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
         }
 
         if (select_id_max > 0) {
-            selected = randint0(select_id_max);
+            const auto selected = randint0(select_id_max);
             feat1 = select_deep_feat[selected];
             feat2 = select_shallow_feat[selected];
         } else {
@@ -229,10 +226,12 @@ void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
     }
 
     /* Hack -- Choose starting point */
-    y2 = randint1(floor_ptr->height / 2 - 2) + floor_ptr->height / 2;
-    x2 = randint1(floor_ptr->width / 2 - 2) + floor_ptr->width / 2;
+    const auto y2 = randint1(floor_ptr->height / 2 - 2) + floor_ptr->height / 2;
+    const auto x2 = randint1(floor_ptr->width / 2 - 2) + floor_ptr->width / 2;
 
     /* Hack -- Choose ending point somewhere on boundary */
+    auto y1 = 0;
+    auto x1 = 0;
     switch (randint1(4)) {
     case 1: {
         /* top boundary */
@@ -261,7 +260,7 @@ void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
     }
 
     constexpr auto width_rivers = 2;
-    wid = randint1(width_rivers);
+    const auto wid = randint1(width_rivers);
     recursive_river(floor_ptr, x1, y1, x2, y2, feat1, feat2, wid);
 
     /* Hack - Save the location as a "room" */

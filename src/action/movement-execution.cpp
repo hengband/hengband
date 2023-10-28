@@ -233,7 +233,9 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
             can_move = false;
             disturb(player_ptr, false, true);
         } else if (terrain.flags.has_not(TerrainCharacteristics::WATER) && riding_r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC)) {
-            msg_print(_(format("%sから上がれない。", terrains_info[floor.grid_array[player_ptr->y][player_ptr->x].get_feat_mimic()].name.data()), "Can't land."));
+            constexpr auto fmt = _("%sから上がれない。", "Can't land from %s.");
+            const auto p_pos = player_ptr->get_position();
+            msg_format(fmt, terrains_info[floor.get_grid(p_pos).get_feat_mimic()].name.data());
             energy.reset_player_turn();
             can_move = false;
             disturb(player_ptr, false, true);
