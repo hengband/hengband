@@ -107,20 +107,19 @@ bool create_ammo(PlayerType *player_ptr)
 
     switch (ext) {
     case AMMO_SHOT: {
-        DIRECTION dir;
+        int dir;
         if (!get_rep_dir(player_ptr, &dir)) {
             return false;
         }
 
-        POSITION y = player_ptr->y + ddy[dir];
-        POSITION x = player_ptr->x + ddx[dir];
-        auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-        if (terrains_info[g_ptr->get_feat_mimic()].flags.has_not(TerrainCharacteristics::CAN_DIG)) {
+        const Pos2D pos(player_ptr->y + ddy[dir], player_ptr->x + ddx[dir]);
+        const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+        if (terrains_info[grid.get_feat_mimic()].flags.has_not(TerrainCharacteristics::CAN_DIG)) {
             msg_print(_("そこには岩石がない。", "You need a pile of rubble."));
             return false;
         }
 
-        if (!g_ptr->cave_has_flag(TerrainCharacteristics::CAN_DIG) || !g_ptr->cave_has_flag(TerrainCharacteristics::HURT_ROCK)) {
+        if (!grid.cave_has_flag(TerrainCharacteristics::CAN_DIG) || !grid.cave_has_flag(TerrainCharacteristics::HURT_ROCK)) {
             msg_print(_("硬すぎて崩せなかった。", "You failed to make ammo."));
             return true;
         }
@@ -140,7 +139,7 @@ bool create_ammo(PlayerType *player_ptr)
             autopick_alter_item(player_ptr, slot, false);
         }
 
-        cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_ROCK);
+        cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::HURT_ROCK);
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
         return true;
     }
