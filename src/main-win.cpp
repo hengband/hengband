@@ -359,7 +359,7 @@ static void save_prefs_aux(int i)
     wsprintfA(buf, "%d", td->tile_hgt);
     WritePrivateProfileStringA(sec_name, "TileHgt", buf, ini_file);
 
-    WINDOWPLACEMENT lpwndpl;
+    WINDOWPLACEMENT lpwndpl{};
     lpwndpl.length = sizeof(WINDOWPLACEMENT);
     GetWindowPlacement(td->w, &lpwndpl);
 
@@ -1022,7 +1022,7 @@ static errr term_curs_win(int x, int y)
     tile_wid = td->tile_wid;
     tile_hgt = td->tile_hgt;
 
-    RECT rc;
+    RECT rc{};
     rc.left = x * tile_wid + td->size_ow1;
     rc.right = rc.left + tile_wid;
     rc.top = y * tile_hgt + td->size_oh1;
@@ -1046,7 +1046,7 @@ static errr term_bigcurs_win(int x, int y)
     tile_wid = td->tile_wid;
     tile_hgt = td->tile_hgt;
 
-    RECT rc;
+    RECT rc{};
     rc.left = x * tile_wid + td->size_ow1;
     rc.right = rc.left + 2 * tile_wid;
     rc.top = y * tile_hgt + td->size_oh1;
@@ -1066,7 +1066,7 @@ static errr term_bigcurs_win(int x, int y)
 static errr term_wipe_win(int x, int y, int n)
 {
     term_data *td = (term_data *)(game_term->data);
-    RECT rc;
+    RECT rc{};
     rc.left = x * td->tile_wid + td->size_ow1;
     rc.right = rc.left + n * td->tile_wid;
     rc.top = y * td->tile_hgt + td->size_oh1;
