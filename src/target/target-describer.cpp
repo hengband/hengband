@@ -561,7 +561,7 @@ char examine_grid(PlayerType *player_ptr, const POSITION y, const POSITION x, ta
         ge_ptr->feat = feat_none;
     }
 
-    ge_ptr->terrain_ptr = &terrains_info[ge_ptr->feat];
+    ge_ptr->terrain_ptr = &TerrainList::get_instance()[ge_ptr->feat];
     if (!ge_ptr->boring && ge_ptr->terrain_ptr->flags.has_not(TerrainCharacteristics::REMEMBER)) {
         return (ge_ptr->query != '\r') && (ge_ptr->query != '\n') ? ge_ptr->query : 0;
     }

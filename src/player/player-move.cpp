@@ -138,9 +138,8 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid_new = floor.get_grid(pos_new);
     auto &grid_old = floor.get_grid(pos_old);
-    const auto &terrain_new = terrains_info[grid_new.feat];
-    const auto &terrain_old = terrains_info[grid_old.feat];
-
+    const auto &terrain_new = grid_new.get_terrain();
+    const auto &terrain_old = grid_old.get_terrain();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (!(mpe_mode & MPE_STAYING)) {
         const auto om_idx = grid_old.m_idx;

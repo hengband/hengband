@@ -45,6 +45,7 @@ enum flow_type {
 };
 
 class MonsterRaceInfo;
+class TerrainType;
 enum class TerrainCharacteristics;
 class Grid {
 public:
@@ -90,6 +91,8 @@ public:
     void reset_costs();
     void reset_dists();
     bool has_los() const;
+    TerrainType &get_terrain();
+    const TerrainType &get_terrain() const;
 
 private:
     flow_type get_grid_flow_type(const MonsterRaceInfo *r_ptr) const;

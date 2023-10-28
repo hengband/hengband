@@ -133,7 +133,7 @@ static void make_tunnels(PlayerType *player_ptr, dun_data_type *dd_ptr)
         dd_ptr->tunnel_y = dd_ptr->tunn[i].y;
         dd_ptr->tunnel_x = dd_ptr->tunn[i].x;
         auto &grid = player_ptr->current_floor_ptr->grid_array[dd_ptr->tunnel_y][dd_ptr->tunnel_x];
-        const auto &terrain = terrains_info[grid.feat];
+        const auto &terrain = grid.get_terrain();
         if (terrain.flags.has_not(TerrainCharacteristics::MOVE) || terrain.flags.has_none_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::LAVA })) {
             grid.mimic = 0;
             place_grid(player_ptr, &grid, GB_FLOOR);
@@ -292,7 +292,7 @@ static void place_bound_perm_wall(PlayerType *player_ptr, Grid &grid)
         return;
     }
 
-    const auto &terrain = terrains_info[grid.feat];
+    const auto &terrain = grid.get_terrain();
     if (terrain.flags.has_any_of({ TerrainCharacteristics::HAS_GOLD, TerrainCharacteristics::HAS_ITEM }) && terrain.flags.has_not(TerrainCharacteristics::SECRET)) {
         grid.feat = feat_state(player_ptr->current_floor_ptr, grid.feat, TerrainCharacteristics::ENSECRET);
     }

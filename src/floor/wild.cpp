@@ -542,7 +542,7 @@ void wilderness_gen(PlayerType *player_ptr)
         for (auto y = 0; y < floor.height; y++) {
             for (auto x = 0; x < floor.width; x++) {
                 auto &grid = floor.get_grid({ y, x });
-                const auto &terrain = terrains_info[grid.feat];
+                const auto &terrain = grid.get_terrain();
                 if (terrain.flags.has_not(TerrainCharacteristics::BLDG)) {
                     continue;
                 }

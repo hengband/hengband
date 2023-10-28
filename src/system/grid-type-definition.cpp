@@ -119,7 +119,7 @@ FEAT_IDX Grid::get_feat_mimic() const
 
 bool Grid::cave_has_flag(TerrainCharacteristics feature_flags) const
 {
-    return terrains_info[this->feat].flags.has(feature_flags);
+    return this->get_terrain().flags.has(feature_flags);
 }
 
 /*!
@@ -129,7 +129,7 @@ bool Grid::cave_has_flag(TerrainCharacteristics feature_flags) const
  */
 bool Grid::is_symbol(const int ch) const
 {
-    return terrains_info[this->feat].x_char[0] == ch;
+    return this->get_terrain().x_char[0] == ch;
 }
 
 void Grid::reset_costs()
@@ -149,4 +149,14 @@ void Grid::reset_dists()
 bool Grid::has_los() const
 {
     return any_bits(this->info, CAVE_VIEW) || AngbandSystem::get_instance().is_phase_out();
+}
+
+TerrainType &Grid::get_terrain()
+{
+    return TerrainList::get_instance()[this->feat];
+}
+
+const TerrainType &Grid::get_terrain() const
+{
+    return TerrainList::get_instance()[this->feat];
 }

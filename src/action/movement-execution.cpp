@@ -161,7 +161,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
         is_stormbringer = true;
     }
 
-    auto &terrain = terrains_info[grid.feat];
+    auto &terrain = grid.get_terrain();
     auto p_can_kill_walls = has_kill_wall(player_ptr);
     p_can_kill_walls &= terrain.flags.has(TerrainCharacteristics::HURT_DISI);
     p_can_kill_walls &= !p_can_enter || terrain.flags.has_not(TerrainCharacteristics::LOS);

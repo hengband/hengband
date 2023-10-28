@@ -214,11 +214,13 @@ bool ang_sort_comp_importance(PlayerType *player_ptr, vptr u, vptr v, int a, int
     }
 
     /* Priority from the terrain */
-    if (terrains_info[grid_a.feat].priority > terrains_info[grid_b.feat].priority) {
+    const auto &terrain_a = grid_a.get_terrain();
+    const auto &terrain_b = grid_b.get_terrain();
+    if (terrain_a.priority > terrain_b.priority) {
         return true;
     }
 
-    if (terrains_info[grid_a.feat].priority < terrains_info[grid_b.feat].priority) {
+    if (terrain_a.priority < terrain_b.priority) {
         return false;
     }
 

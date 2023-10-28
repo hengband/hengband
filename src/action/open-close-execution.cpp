@@ -46,7 +46,7 @@ bool exe_open(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     const Pos2D pos(y, x);
     const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
-    auto &terrain = terrains_info[grid.feat];
+    auto &terrain = grid.get_terrain();
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     if (terrain.flags.has_not(TerrainCharacteristics::OPEN)) {
         msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), terrains_info[grid.get_feat_mimic()].name.data());
@@ -110,12 +110,15 @@ bool exe_close(PlayerType *player_ptr, POSITION y, POSITION x)
     const auto terrain_id = grid.feat;
     auto more = false;
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    if (terrains_info[terrain_id].flags.has_not(TerrainCharacteristics::CLOSE)) {
+    if (grid.get_terrain().flags.has_not(TerrainCharacteristics::CLOSE)) {
         return more;
     }
 
     const auto closed_feat = feat_state(player_ptr->current_floor_ptr, terrain_id, TerrainCharacteristics::CLOSE);
-    if ((!grid.o_idx_list.empty() || grid.is_object()) && (closed_feat != terrain_id) && terrains_info[closed_feat].flags.has_not(TerrainCharacteristics::DROP)) {
+    auto is_preventing = !grid.o_idx_list.empty() || grid.is_object();
+    is_preventing &= closed_feat != terrain_id;
+    is_preventing &= TerrainList::get_instance()[closed_feat].flags.has_not(TerrainCharacteristics::DROP);
+    if (is_preventing) {
         msg_print(_("何かがつっかえて閉まらない。", "Something prevents it from closing."));
         return more;
     }
@@ -148,7 +151,7 @@ bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     const Pos2D pos(y, x);
     const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
-    const auto &terrain = terrains_info[grid.feat];
+    const auto &terrain = grid.get_terrain();
     if (!is_closed_door(player_ptr, grid.feat)) {
         return false;
     }
@@ -272,7 +275,7 @@ bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
 {
     const Pos2D pos(y, x);
     const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
-    const auto &terrain = terrains_info[grid.feat];
+    const auto &terrain = grid.get_terrain();
     const auto &name = terrain.name;
     int power = terrain.power;
     int i = player_ptr->skill_dis;
@@ -331,7 +334,7 @@ bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
     const auto &floor = *player_ptr->current_floor_ptr;
     const Pos2D pos(y, x);
     const auto &grid = floor.get_grid(pos);
-    const auto &terrain = terrains_info[grid.feat];
+    const auto &terrain = grid.get_terrain();
     int bash = adj_str_blow[player_ptr->stat_index[A_STR]];
     int power = terrain.power;
     concptr name = terrains_info[grid.get_feat_mimic()].name.data();

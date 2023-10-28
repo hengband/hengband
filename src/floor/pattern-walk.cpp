@@ -119,7 +119,7 @@ bool pattern_effect(PlayerType *player_ptr)
         wreck_the_pattern(player_ptr);
     }
 
-    int pattern_type = terrains_info[floor_ptr->get_grid(p_pos).feat].subtype;
+    int pattern_type = floor_ptr->get_grid(p_pos).get_terrain().subtype;
     switch (pattern_type) {
     case PATTERN_TILE_END:
         (void)BadStatusSetter(player_ptr).hallucination(0);
@@ -178,8 +178,8 @@ bool pattern_seq(PlayerType *player_ptr, POSITION c_y, POSITION c_x, POSITION n_
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid_current = floor.get_grid({ c_y, c_x });
     const auto &grid_new = floor.get_grid({ n_y, n_x });
-    const auto &terrain_current = terrains_info[grid_current.feat];
-    const auto &terrain_new = terrains_info[grid_new.feat];
+    const auto &terrain_current = grid_current.get_terrain();
+    const auto &terrain_new = grid_new.get_terrain();
     const auto is_pattern_tile_cur = terrain_current.flags.has(TerrainCharacteristics::PATTERN);
     const auto is_pattern_tile_new = terrain_new.flags.has(TerrainCharacteristics::PATTERN);
     if (!is_pattern_tile_cur && !is_pattern_tile_new) {

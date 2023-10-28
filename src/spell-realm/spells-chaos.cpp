@@ -39,7 +39,7 @@ void call_the_void(PlayerType *player_ptr)
         const Pos2D p_pos_neighbor(player_ptr->y + ddy_ddd[i], player_ptr->x + ddx_ddd[i]);
         const auto &grid = floor.get_grid(p_pos_neighbor);
         if (!grid.cave_has_flag(TerrainCharacteristics::PROJECT)) {
-            if (!grid.mimic || terrains_info[grid.mimic].flags.has_not(TerrainCharacteristics::PROJECT) || !terrains_info[grid.feat].is_permanent_wall()) {
+            if (!grid.mimic || terrains_info[grid.mimic].flags.has_not(TerrainCharacteristics::PROJECT) || !grid.get_terrain().is_permanent_wall()) {
                 do_call = false;
                 break;
             }
@@ -159,7 +159,7 @@ bool vanish_dungeon(PlayerType *player_ptr)
         for (auto x = 1; x < floor.width - 1; x++) {
             const Pos2D pos(y, x);
             auto &grid = floor.get_grid(pos);
-            const auto &terrrain = terrains_info[grid.feat];
+            const auto &terrrain = grid.get_terrain();
             grid.info &= ~(CAVE_ROOM | CAVE_ICKY);
             const auto &monster = floor.m_list[grid.m_idx];
             if (grid.m_idx && monster.is_asleep()) {
