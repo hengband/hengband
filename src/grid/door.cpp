@@ -82,7 +82,8 @@ void place_secret_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
     if (type != DOOR_CURTAIN) {
         grid.mimic = feat_wall_inner;
         if (feat_supports_los(grid.mimic) && !feat_supports_los(grid.feat)) {
-            if (terrains_info[grid.mimic].flags.has(TerrainCharacteristics::MOVE) || terrains_info[grid.mimic].flags.has(TerrainCharacteristics::CAN_FLY)) {
+            const auto &terrain_mimic = terrains_info[grid.mimic];
+            if (terrain_mimic.flags.has(TerrainCharacteristics::MOVE) || terrain_mimic.flags.has(TerrainCharacteristics::CAN_FLY)) {
                 grid.feat = one_in_(2) ? grid.mimic : rand_choice(feat_ground_type);
             }
 

@@ -258,7 +258,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
 
         if (!can_player_ride_pet(player_ptr, &grid, true)) {
             /* Feature code (applying "mimic" field) */
-            const auto &terrain = terrains_info[grid.get_feat_mimic()];
+            const auto &terrain = grid.get_terrain_mimic();
             using Tc = TerrainCharacteristics;
 #ifdef JP
             msg_format("そのモンスターは%sの%sにいる。", terrain.name.data(),

@@ -93,6 +93,8 @@ public:
     bool has_los() const;
     TerrainType &get_terrain();
     const TerrainType &get_terrain() const;
+    TerrainType &get_terrain_mimic();
+    const TerrainType &get_terrain_mimic() const;
 
 private:
     flow_type get_grid_flow_type(const MonsterRaceInfo *r_ptr) const;

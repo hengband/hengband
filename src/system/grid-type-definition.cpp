@@ -73,7 +73,7 @@ bool Grid::is_mark() const
 
 bool Grid::is_mirror() const
 {
-    return this->is_object() && terrains_info[this->mimic].flags.has(TerrainCharacteristics::MIRROR);
+    return this->is_object() && TerrainList::get_instance()[this->mimic].flags.has(TerrainCharacteristics::MIRROR);
 }
 
 /*
@@ -81,7 +81,7 @@ bool Grid::is_mirror() const
  */
 bool Grid::is_rune_protection() const
 {
-    return this->is_object() && terrains_info[this->mimic].flags.has(TerrainCharacteristics::RUNE_PROTECTION);
+    return this->is_object() && TerrainList::get_instance()[this->mimic].flags.has(TerrainCharacteristics::RUNE_PROTECTION);
 }
 
 /*
@@ -89,7 +89,7 @@ bool Grid::is_rune_protection() const
  */
 bool Grid::is_rune_explosion() const
 {
-    return this->is_object() && terrains_info[this->mimic].flags.has(TerrainCharacteristics::RUNE_EXPLOSION);
+    return this->is_object() && TerrainList::get_instance()[this->mimic].flags.has(TerrainCharacteristics::RUNE_EXPLOSION);
 }
 
 byte Grid::get_cost(const MonsterRaceInfo *r_ptr) const
@@ -114,7 +114,7 @@ flow_type Grid::get_grid_flow_type(const MonsterRaceInfo *r_ptr) const
  */
 FEAT_IDX Grid::get_feat_mimic() const
 {
-    return terrains_info[this->mimic ? this->mimic : this->feat].mimic;
+    return TerrainList::get_instance()[this->mimic ? this->mimic : this->feat].mimic;
 }
 
 bool Grid::cave_has_flag(TerrainCharacteristics feature_flags) const
@@ -159,4 +159,14 @@ TerrainType &Grid::get_terrain()
 const TerrainType &Grid::get_terrain() const
 {
     return TerrainList::get_instance()[this->feat];
+}
+
+TerrainType &Grid::get_terrain_mimic()
+{
+    return TerrainList::get_instance()[this->get_feat_mimic()];
+}
+
+const TerrainType &Grid::get_terrain_mimic() const
+{
+    return TerrainList::get_instance()[this->get_feat_mimic()];
 }

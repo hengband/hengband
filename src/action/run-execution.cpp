@@ -68,9 +68,9 @@ static bool see_wall(PlayerType *player_ptr, DIRECTION dir, POSITION y, POSITION
         return false;
     }
 
-    const auto feat = grid.get_feat_mimic();
-    const auto &terrain = terrains_info[feat];
-    if (!player_can_enter(player_ptr, feat, 0)) {
+    const auto terrain_id = grid.get_feat_mimic();
+    const auto &terrain = grid.get_terrain_mimic();
+    if (!player_can_enter(player_ptr, terrain_id, 0)) {
         return terrain.flags.has_not(TerrainCharacteristics::DOOR);
     }
 
@@ -226,7 +226,6 @@ static bool run_test(PlayerType *player_ptr)
         int new_dir = cycle[chome[prev_dir] + i];
         const Pos2D pos(player_ptr->y + ddy[new_dir], player_ptr->x + ddx[new_dir]);
         const auto &grid = floor.get_grid(pos);
-        const auto &terrain = terrains_info[grid.get_feat_mimic()];
         if (grid.m_idx) {
             const auto &monster = floor.m_list[grid.m_idx];
             if (monster.ml) {
@@ -243,6 +242,7 @@ static bool run_test(PlayerType *player_ptr)
 
         auto inv = true;
         if (grid.is_mark()) {
+            const auto &terrain = grid.get_terrain_mimic();
             auto notice = terrain.flags.has(TerrainCharacteristics::NOTICE);
             if (notice && terrain.flags.has(TerrainCharacteristics::MOVE)) {
                 if (find_ignore_doors && terrain.flags.has_all_of({ TerrainCharacteristics::DOOR, TerrainCharacteristics::CLOSE })) {

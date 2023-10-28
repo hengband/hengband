@@ -362,7 +362,7 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
     /* Hack -- memorize grids */
     if (!grid.is_mark()) {
         /* Feature code (applying "mimic" field) */
-        const auto &terrain = terrains_info[grid.get_feat_mimic()];
+        const auto &terrain = grid.get_terrain_mimic();
 
         /* Memorize some "boring" grids */
         if (terrain.flags.has_not(TerrainCharacteristics::REMEMBER)) {

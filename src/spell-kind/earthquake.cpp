@@ -340,7 +340,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 }
 
                 const auto &grid_neighbor = floor_ptr->get_grid(pos_neighbor);
-                if (terrains_info[grid_neighbor.get_feat_mimic()].flags.has(TerrainCharacteristics::GLOW)) {
+                if (grid_neighbor.get_terrain_mimic().flags.has(TerrainCharacteristics::GLOW)) {
                     grid.info |= CAVE_GLOW;
                     break;
                 }

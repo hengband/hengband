@@ -114,8 +114,7 @@ static bool is_revealed_wall(FloorType *floor_ptr, int y, int x)
         }
     }
 
-    const auto feat = grid.get_feat_mimic();
-    const auto &terrain = terrains_info[feat]; // @todo grid_typeのオブジェクトメソッドとして定義
+    const auto &terrain = grid.get_terrain_mimic();
     if (terrain.flags.has_not(TerrainCharacteristics::WALL) || terrain.flags.has(TerrainCharacteristics::HAS_GOLD)) {
         return true;
     }
@@ -161,8 +160,8 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
     auto &floor = *player_ptr->current_floor_ptr;
     const Pos2D pos(y, x);
     auto &grid = floor.get_grid(pos);
-    const auto mimic_terrain_id = grid.get_feat_mimic();
-    const auto *terrain_mimic_ptr = &terrains_info[mimic_terrain_id];
+    auto &terrains = TerrainList::get_instance();
+    auto *terrain_mimic_ptr = &grid.get_terrain_mimic();
     TERM_COLOR a;
     char c;
     if (terrain_mimic_ptr->flags.has_not(TerrainCharacteristics::REMEMBER)) {
@@ -180,7 +179,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
                 }
             } else if (darkened_grid(player_ptr, &grid)) {
                 const auto unsafe_terrain_id = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
-                terrain_mimic_ptr = &terrains_info[unsafe_terrain_id];
+                terrain_mimic_ptr = &terrains[unsafe_terrain_id];
                 a = terrain_mimic_ptr->x_attr[F_LIT_STANDARD];
                 c = terrain_mimic_ptr->x_char[F_LIT_STANDARD];
             } else if (view_special_lite) {
@@ -201,7 +200,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
             }
         } else {
             const auto unsafe_terrain_id = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
-            terrain_mimic_ptr = &terrains_info[unsafe_terrain_id];
+            terrain_mimic_ptr = &terrains[unsafe_terrain_id];
             a = terrain_mimic_ptr->x_attr[F_LIT_STANDARD];
             c = terrain_mimic_ptr->x_char[F_LIT_STANDARD];
         }
@@ -218,7 +217,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
             } else if (darkened_grid(player_ptr, &grid) && !is_blind) {
                 if (terrain_mimic_ptr->flags.has_all_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::PROJECT })) {
                     const auto unsafe_terrain_id = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
-                    terrain_mimic_ptr = &terrains_info[unsafe_terrain_id];
+                    terrain_mimic_ptr = &terrains[unsafe_terrain_id];
                     a = terrain_mimic_ptr->x_attr[F_LIT_STANDARD];
                     c = terrain_mimic_ptr->x_char[F_LIT_STANDARD];
                 } else if (view_granite_lite && view_bright_lite) {
@@ -249,7 +248,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
             }
         } else {
             const auto unsafe_terrain_id = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
-            terrain_mimic_ptr = &terrains_info[unsafe_terrain_id];
+            terrain_mimic_ptr = &terrains[unsafe_terrain_id];
             a = terrain_mimic_ptr->x_attr[F_LIT_STANDARD];
             c = terrain_mimic_ptr->x_char[F_LIT_STANDARD];
         }

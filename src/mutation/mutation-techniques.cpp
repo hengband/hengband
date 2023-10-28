@@ -36,7 +36,7 @@ bool eat_rock(PlayerType *player_ptr)
     const Pos2D pos(player_ptr->y + ddy[dir], player_ptr->x + ddx[dir]);
     const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
     const auto &terrain = grid.get_terrain();
-    const auto &terrain_mimic = terrains_info[grid.get_feat_mimic()];
+    const auto &terrain_mimic = grid.get_terrain_mimic();
 
     stop_mouth(player_ptr);
     if (terrain_mimic.flags.has_not(TerrainCharacteristics::HURT_ROCK)) {

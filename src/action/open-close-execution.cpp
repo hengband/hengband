@@ -49,7 +49,8 @@ bool exe_open(PlayerType *player_ptr, POSITION y, POSITION x)
     auto &terrain = grid.get_terrain();
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     if (terrain.flags.has_not(TerrainCharacteristics::OPEN)) {
-        msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), terrains_info[grid.get_feat_mimic()].name.data());
+        constexpr auto fmt = _("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck.");
+        msg_format(fmt, grid.get_terrain_mimic().name.data());
         return false;
     }
 
@@ -157,7 +158,8 @@ bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     if (terrain.flags.has_not(TerrainCharacteristics::OPEN)) {
-        msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), terrains_info[grid.get_feat_mimic()].name.data());
+        constexpr auto fmt = _("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck.");
+        msg_format(fmt, grid.get_terrain_mimic().name.data());
     } else if (terrain.power) {
         auto power_disarm = player_ptr->skill_dis;
         const auto effects = player_ptr->effects();
@@ -337,9 +339,9 @@ bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
     const auto &terrain = grid.get_terrain();
     int bash = adj_str_blow[player_ptr->stat_index[A_STR]];
     int power = terrain.power;
-    concptr name = terrains_info[grid.get_feat_mimic()].name.data();
+    const auto &name = grid.get_terrain_mimic().name;
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    msg_format(_("%sに体当たりをした！", "You smash into the %s!"), name);
+    msg_format(_("%sに体当たりをした！", "You smash into the %s!"), name.data());
     power = (bash - (power * 10));
     if (PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER)) {
         power *= 2;
@@ -351,7 +353,7 @@ bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
 
     auto more = false;
     if (randint0(100) < power) {
-        msg_format(_("%sを壊した！", "The %s crashes open!"), name);
+        msg_format(_("%sを壊した！", "The %s crashes open!"), name.data());
         sound(terrain.flags.has(TerrainCharacteristics::GLASS) ? SOUND_GLASS : SOUND_OPENDOOR);
         if ((randint0(100) < 50) || (feat_state(player_ptr->current_floor_ptr, grid.feat, TerrainCharacteristics::OPEN) == grid.feat) || terrain.flags.has(TerrainCharacteristics::GLASS)) {
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::BASH);
@@ -361,7 +363,7 @@ bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
 
         exe_movement(player_ptr, dir, false, false);
     } else if (randint0(100) < adj_dex_safe[player_ptr->stat_index[A_DEX]] + player_ptr->lev) {
-        msg_format(_("この%sは頑丈だ。", "The %s holds firm."), name);
+        msg_format(_("この%sは頑丈だ。", "The %s holds firm."), name.data());
         more = true;
     } else {
         msg_print(_("体のバランスをくずしてしまった。", "You are off-balance."));
