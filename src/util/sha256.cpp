@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @brief SHA-256ハッシュ値計算クラスの定義
  *
  * RFC 6234のリファレンス実装を参考にC++20で実装
@@ -142,7 +142,7 @@ void SHA256::update(const std::byte *message_array, size_t length)
  */
 void SHA256::update(std::string_view message)
 {
-    const auto message_as_byte = std::as_bytes(std::span(message));
+    const auto message_as_byte = std::as_bytes(std::span(message.begin(), message.end()));
     this->update(message_as_byte.data(), message_as_byte.size_bytes());
 }
 
