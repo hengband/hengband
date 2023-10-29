@@ -286,7 +286,7 @@ static std::string describe_unique_name_after_body_en(const ItemEntity &item, co
     std::stringstream ss;
 
     if (item.is_random_artifact()) {
-        ss << ' ' << item.randart_name.value();
+        ss << ' ' << *item.randart_name;
         return ss.str();
     }
 

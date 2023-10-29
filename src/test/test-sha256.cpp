@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
                 continue;
             }
 
-            std::cout << util::to_string(hash.value()) << "  " << arg << std::endl;
+            std::cout << util::to_string(*hash) << "  " << arg << std::endl;
         }
         return 0;
     }

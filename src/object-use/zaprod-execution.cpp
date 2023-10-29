@@ -122,7 +122,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
     }
 
     sound(SOUND_ZAP);
-    auto ident = rod_effect(this->player_ptr, o_ptr->bi_key.sval().value(), dir, &use_charge, false);
+    auto ident = rod_effect(this->player_ptr, *o_ptr->bi_key.sval(), dir, &use_charge, false);
     if (use_charge) {
         o_ptr->timeout += baseitem.pval;
     }

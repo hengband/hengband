@@ -597,18 +597,17 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
         return;
     }
 
-    const auto level_opt = select_debugging_floor(floor, *dungeon_id);
-    if (!level_opt) {
+    const auto level = select_debugging_floor(floor, *dungeon_id);
+    if (!level) {
         return;
     }
 
-    const auto level = level_opt.value();
-    msg_format("You jump to dungeon level %d.", level);
+    msg_format("You jump to dungeon level %d.", *level);
     if (autosave_l) {
         do_cmd_save_game(player_ptr, true);
     }
 
-    wiz_jump_floor(player_ptr, *dungeon_id, level);
+    wiz_jump_floor(player_ptr, *dungeon_id, *level);
 }
 
 /*!
