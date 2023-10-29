@@ -61,7 +61,7 @@ bool get_aim_dir(PlayerType *player_ptr, int *dp)
             break;
         }
 
-        auto command = command_opt.value();
+        auto command = *command_opt;
         if (use_menu && (command == '\r')) {
             command = 't';
         }
@@ -131,8 +131,7 @@ bool get_direction(PlayerType *player_ptr, int *dp)
             return false;
         }
 
-        const auto ch = command.value();
-        dir = get_keymap_dir(ch);
+        dir = get_keymap_dir(*command);
         if (dir == 0) {
             bell();
         }
@@ -196,13 +195,12 @@ bool get_rep_dir(PlayerType *player_ptr, int *dp, bool under)
             return false;
         }
 
-        const auto ch = command.value();
-        if (under && ((ch == '5') || (ch == '-') || (ch == '.'))) {
+        if (under && ((command == '5') || (command == '-') || (command == '.'))) {
             dir = 5;
             break;
         }
 
-        dir = get_keymap_dir(ch);
+        dir = get_keymap_dir(*command);
         if (dir == 0) {
             bell();
         }

@@ -481,7 +481,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
 
             angband_fclose(fff);
             fff = angband_fopen(path_reopen, FileOpenMode::READ);
-            const auto &path_xtemp = path_build(ANGBAND_DIR_USER, xtmp.value());
+            const auto &path_xtemp = path_build(ANGBAND_DIR_USER, *xtmp);
             auto *ffp = angband_fopen(path_xtemp, FileOpenMode::WRITE);
 
             if (!(fff && ffp)) {
