@@ -226,7 +226,7 @@ void do_cmd_inscribe(PlayerType *player_ptr)
         return;
     }
 
-    o_ptr->inscription.emplace(input_inscription.value());
+    o_ptr->inscription.emplace(*input_inscription);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::COMBINATION,

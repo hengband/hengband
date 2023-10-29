@@ -116,7 +116,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
                 break;
             }
 
-            choice = new_choice.value();
+            choice = *new_choice;
         }
 
         auto should_redraw_cursor = true;

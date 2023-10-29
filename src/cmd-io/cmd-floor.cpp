@@ -77,7 +77,7 @@ void do_cmd_locate(PlayerType *player_ptr)
                 break;
             }
 
-            dir = get_keymap_dir(command.value());
+            dir = get_keymap_dir(*command);
             if (dir == 0) {
                 bell();
             }

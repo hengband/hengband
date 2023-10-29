@@ -156,7 +156,7 @@ void OtherItemsEnchanter::generate_corpse()
             continue;
         }
 
-        if ((r_ref.rarity == 0) || (match.find(sval.value()) != match.end() && r_ref.drop_flags.has_not(match.at(sval.value()))) || (randint0(check) > 0)) {
+        if ((r_ref.rarity == 0) || (match.find(*sval) != match.end() && r_ref.drop_flags.has_not(match.at(*sval))) || (randint0(check) > 0)) {
             continue;
         }
 

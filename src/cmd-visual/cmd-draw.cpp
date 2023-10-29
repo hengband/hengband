@@ -112,7 +112,7 @@ static std::optional<int> input_status_command(PlayerType *player_ptr, int page)
             return page;
         }
 
-        const auto &filename = str_ltrim(input_filename.value());
+        const auto &filename = str_ltrim(*input_filename);
         if (!filename.empty()) {
             update_playtime();
             file_character(player_ptr, filename);

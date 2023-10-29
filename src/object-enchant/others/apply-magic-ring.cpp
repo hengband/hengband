@@ -72,7 +72,7 @@ void RingEnchanter::sval_enchant()
         return;
     }
 
-    switch (sval.value()) {
+    switch (*sval) {
     case SV_RING_ATTACKS:
         this->o_ptr->pval = (PARAMETER_VALUE)m_bonus(2, this->level);
         if (one_in_(15)) {
@@ -410,7 +410,7 @@ void RingEnchanter::give_high_ego_index()
         return;
     }
 
-    switch (sval.value()) {
+    switch (*sval) {
     case SV_RING_SPEED:
         if (!one_in_(3)) {
             break;

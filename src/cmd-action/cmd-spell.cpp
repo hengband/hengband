@@ -392,7 +392,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view pro
                 break;
             }
 
-            choice = new_choice.value();
+            choice = *new_choice;
         }
 
         auto should_redraw_cursor = true;
@@ -667,7 +667,7 @@ void do_cmd_browse(PlayerType *player_ptr)
         term_erase(14, 11);
 
         const auto spell_desc = exe_spell(player_ptr, use_realm, spell, SpellProcessType::DESCRIPTION);
-        display_wrap_around(spell_desc.value(), 62, 11, 15);
+        display_wrap_around(*spell_desc, 62, 11, 15);
     }
     screen_load();
 }

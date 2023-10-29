@@ -73,7 +73,7 @@ void AmuletEnchanter::sval_enchant()
         return;
     }
 
-    switch (sval.value()) {
+    switch (*sval) {
     case SV_AMULET_INTELLIGENCE:
     case SV_AMULET_WISDOM:
     case SV_AMULET_CHARISMA:
@@ -269,7 +269,7 @@ void AmuletEnchanter::give_high_ego_index()
         return;
     }
 
-    switch (sval.value()) {
+    switch (*sval) {
     case SV_AMULET_TELEPORT:
         if (m_bonus(10, this->level) > 9) {
             this->o_ptr->ego_idx = EgoType::AMU_D_DOOR;
