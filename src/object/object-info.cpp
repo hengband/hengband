@@ -74,7 +74,7 @@ static concptr item_activation_aux(const ItemEntity *o_ptr)
         return _("未定義", "something undefined");
     }
 
-    auto *act_ptr = tmp_act_ptr.value();
+    auto *act_ptr = *tmp_act_ptr;
     concptr desc = act_ptr->desc;
     std::string dragon_breath;
     switch (act_ptr->index) {

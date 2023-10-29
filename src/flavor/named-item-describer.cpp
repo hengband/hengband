@@ -193,7 +193,7 @@ static std::string describe_unique_name_after_body_ja(const ItemEntity &item, co
     }
 
     if (auto body = describe_random_artifact_name_after_body_ja(item); body) {
-        return body.value();
+        return *body;
     }
 
     if (item.is_fixed_artifact()) {

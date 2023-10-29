@@ -328,7 +328,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                             break;
                         }
 
-                        bi_id = new_baseitem_id.value();
+                        bi_id = *new_baseitem_id;
                         if (!baseitems_info[bi_id].name.empty()) {
                             break;
                         }

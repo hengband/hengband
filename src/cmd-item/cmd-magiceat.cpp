@@ -550,7 +550,7 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
         energy.reset_player_turn();
         return false;
     }
-    auto &bi_key = result.value();
+    auto &bi_key = *result;
 
     const auto bi_id = lookup_baseitem_id(bi_key);
     const auto &baseitem = baseitems_info[bi_id];

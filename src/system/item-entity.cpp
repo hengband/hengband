@@ -838,7 +838,7 @@ TrFlags ItemEntity::get_flags() const
 
     flags.set(this->art_flags);
     if (auto effect = Smith::object_effect(this); effect) {
-        auto tr_flags = Smith::get_effect_tr_flags(effect.value());
+        auto tr_flags = Smith::get_effect_tr_flags(*effect);
         flags.set(tr_flags);
     }
 
@@ -877,7 +877,7 @@ TrFlags ItemEntity::get_flags_known() const
     }
 
     if (auto effect = Smith::object_effect(this); effect) {
-        auto tr_flags = Smith::get_effect_tr_flags(effect.value());
+        auto tr_flags = Smith::get_effect_tr_flags(*effect);
         flags.set(tr_flags);
     }
 

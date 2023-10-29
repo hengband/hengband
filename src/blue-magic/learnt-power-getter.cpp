@@ -500,14 +500,14 @@ std::optional<MonsterAbilityType> get_learned_power(PlayerType *player_ptr)
         return std::nullopt;
     }
 
-    auto spells = sweep_learnt_spells(*bluemage_data, type.value());
+    auto spells = sweep_learnt_spells(*bluemage_data, *type);
     if (!spells || spells->empty()) {
         return std::nullopt;
     }
 
     auto selected_spell = (use_menu)
-                              ? select_learnt_spells_by_menu(player_ptr, *bluemage_data, spells.value())
-                              : select_learnt_spells_by_symbol(player_ptr, *bluemage_data, spells.value());
+                              ? select_learnt_spells_by_menu(player_ptr, *bluemage_data, *spells)
+                              : select_learnt_spells_by_symbol(player_ptr, *bluemage_data, *spells);
 
     RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
     handle_stuff(player_ptr);
@@ -516,6 +516,6 @@ std::optional<MonsterAbilityType> get_learned_power(PlayerType *player_ptr)
         return std::nullopt;
     }
 
-    repeat_push(static_cast<COMMAND_CODE>(selected_spell.value()));
+    repeat_push(static_cast<COMMAND_CODE>(*selected_spell));
     return selected_spell;
 }

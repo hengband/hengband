@@ -206,7 +206,7 @@ std::optional<std::string> get_random_line_ja_only(concptr file_name, int entry,
         }
 
         auto is_kanji = false;
-        for (const auto c : line.value()) {
+        for (const auto c : *line) {
             is_kanji |= iskanji(c);
         }
 

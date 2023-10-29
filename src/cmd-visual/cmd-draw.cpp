@@ -154,7 +154,7 @@ void do_cmd_player_status(PlayerType *player_ptr)
             break;
         }
 
-        page = next_page.value();
+        page = *next_page;
         msg_erase();
     }
 
