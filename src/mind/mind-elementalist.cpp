@@ -730,7 +730,7 @@ static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_b
                 break;
             }
 
-            choice = new_choice.value();
+            choice = *new_choice;
         }
 
         auto should_redraw_cursor = true;

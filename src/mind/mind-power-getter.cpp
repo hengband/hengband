@@ -153,7 +153,7 @@ bool MindPowerGetter::decide_mind_choice(std::string_view prompt, const bool onl
                 break;
             }
 
-            this->choice = command.value();
+            this->choice = *command;
         }
 
         if (!interpret_mind_key_input(only_browse)) {
