@@ -357,7 +357,7 @@ static void decide_arena_death(PlayerType *player_ptr)
     player_ptr->is_dead = false;
     player_ptr->chp = 0;
     player_ptr->chp_frac = 0;
-    player_ptr->exit_bldg = true;
+    w_ptr->set_arena(true);
     reset_tim_flags(player_ptr);
     prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_RAND_CONNECT);
     leave_floor(player_ptr);

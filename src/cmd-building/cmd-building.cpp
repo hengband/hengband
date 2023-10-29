@@ -338,7 +338,7 @@ void do_cmd_building(PlayerType *player_ptr)
     }
 
     if ((which == 2) && player_ptr->current_floor_ptr->inside_arena) {
-        if (!player_ptr->exit_bldg && player_ptr->current_floor_ptr->m_cnt > 0) {
+        if (w_ptr->get_arena() && player_ptr->current_floor_ptr->m_cnt > 0) {
             prt(_("ゲートは閉まっている。モンスターがあなたを待っている！", "The gates are closed.  The monster awaits!"), 0, 0);
         } else {
             prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_NO_RETURN);

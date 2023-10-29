@@ -87,7 +87,7 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, MonsterDeath *md_ptr
         return;
     }
 
-    player_ptr->exit_bldg = true;
+    w_ptr->set_arena(true);
     if (player_ptr->arena_number > MAX_ARENA_MONS) {
         msg_print(_("素晴らしい！君こそ真の勝利者だ。", "You are a Genuine Champion!"));
     } else {
