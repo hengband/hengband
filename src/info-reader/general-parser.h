@@ -4,6 +4,7 @@
 #include "system/angband.h"
 #include <functional>
 #include <string_view>
+#include <tuple>
 
 enum class FixedArtifactId : short;
 enum parse_error_type : int;
@@ -26,6 +27,6 @@ struct angband_header;
 class FloorType;
 
 using Parser = std::function<errr(std::string_view, angband_header *)>;
-errr init_info_txt(FILE *fp, char *buf, angband_header *head, Parser parse_info_txt_line);
+std::tuple<errr, int> init_info_txt(FILE *fp, char *buf, angband_header *head, Parser parse_info_txt_line);
 parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf);
 parse_error_type parse_line_building(char *buf);

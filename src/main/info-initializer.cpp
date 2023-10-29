@@ -109,14 +109,14 @@ static errr init_info(std::string_view filename, angband_header &head, InfoType 
     }
 
     char buf[1024]{};
-    const auto err = init_info_txt(fp, buf, &head, parser);
+    const auto &[error_code, error_line] = init_info_txt(fp, buf, &head, parser);
     angband_fclose(fp);
-    if (err) {
-        const auto oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : _("未知の", "unknown"));
+    if (error_code != PARSE_ERROR_NONE) {
+        const auto oops = (((error_code > 0) && (error_code < PARSE_ERROR_MAX)) ? err_str[error_code] : _("未知の", "unknown"));
 #ifdef JP
         msg_format("'%s'ファイルの %d 行目にエラー。", filename.data(), error_line);
 #else
-        msg_format("Error %d at line %d of '%s'.", err, error_line, filename.data());
+        msg_format("Error %d at line %d of '%s'.", error_code, error_line, filename.data());
 #endif
         msg_format(_("レコード %d は '%s' エラーがあります。", "Record %d contains a '%s' error."), error_idx, oops);
         msg_format(_("構文 '%s'。", "Parsing '%s'."), buf);

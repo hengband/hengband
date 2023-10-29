@@ -10,7 +10,6 @@
  * Size of memory reserved for initialization of some arrays
  */
 extern int error_idx; //!< エラーが発生したinfo ID
-extern int error_line; //!< エラーが発生した行
 
 enum class RandomArtActType : short;
 RandomArtActType grab_one_activation_flag(concptr what);
