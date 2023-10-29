@@ -156,7 +156,7 @@ std::string get_random_name(const ItemEntity &item, bool armour, int power)
 
     return get_table_name();
 #else
-    return random_artifact_name.value();
+    return *random_artifact_name;
 #endif
 }
 

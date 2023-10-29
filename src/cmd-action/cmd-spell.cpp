@@ -616,7 +616,7 @@ void do_cmd_browse(PlayerType *player_ptr)
 
     /* Access the item's sval */
     const auto tval = o_ptr->bi_key.tval();
-    const auto sval = o_ptr->bi_key.sval().value();
+    const auto sval = *o_ptr->bi_key.sval();
     short use_realm = tval2realm(tval);
 
     /* Track the object kind */
@@ -767,7 +767,7 @@ void do_cmd_study(PlayerType *player_ptr)
     }
 
     const auto tval = o_ptr->bi_key.tval();
-    const auto sval = o_ptr->bi_key.sval().value();
+    const auto sval = *o_ptr->bi_key.sval();
     if (tval == get_realm2_book(player_ptr)) {
         increment = 32;
     } else if (tval != get_realm1_book(player_ptr)) {
@@ -1003,7 +1003,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
     }
 
     const auto tval = o_ptr->bi_key.tval();
-    const auto sval = o_ptr->bi_key.sval().value();
+    const auto sval = *o_ptr->bi_key.sval();
     if (!is_every_magic && (tval == get_realm2_book(player_ptr))) {
         increment = 32;
     }

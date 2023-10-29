@@ -47,7 +47,7 @@ bool import_magic_device(PlayerType *player_ptr)
 
     auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
     const auto tval = bi_key.tval();
-    auto &target_item = magic_eater_data->get_item_group(tval)[bi_key.sval().value()];
+    auto &target_item = magic_eater_data->get_item_group(tval)[*bi_key.sval()];
     auto pval = o_ptr->pval;
     if (tval == ItemKindType::ROD) {
         target_item.count = std::min<byte>(target_item.count + o_ptr->number, 99);

@@ -297,7 +297,7 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, const autopick
     // @details このタイミングでは、svalは絶対にnulloptにならない、はず.
     const auto &bi_key = o_ptr->bi_key;
     const auto tval = bi_key.tval();
-    const auto sval = bi_key.sval().value();
+    const auto sval = *bi_key.sval();
     const auto r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
     if (entry.has(FLG_UNIQUE) && ((tval != ItemKindType::CORPSE && tval != ItemKindType::STATUE) || monraces_info[r_idx].kind_flags.has_not(MonsterKindType::UNIQUE))) {
         return false;

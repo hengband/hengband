@@ -344,7 +344,7 @@ std::string describe_count_with_counter_suffix(const ItemEntity &item)
         break;
 
     case ItemKindType::FOOD:
-        if (item.bi_key.sval().value() == SV_FOOD_JERKY) {
+        if (item.bi_key.sval() == SV_FOOD_JERKY) {
             ss << "切れ";
             break;
         }

@@ -21,7 +21,7 @@ bool object_is_favorite(PlayerType *player_ptr, const ItemEntity *o_ptr)
 
     /* Favorite weapons are varied depend on the class */
     const auto tval = o_ptr->bi_key.tval();
-    const auto sval = o_ptr->bi_key.sval().value();
+    const auto sval = *o_ptr->bi_key.sval();
     switch (player_ptr->pclass) {
     case PlayerClassType::PRIEST: {
         const auto flags = o_ptr->get_flags_known();
