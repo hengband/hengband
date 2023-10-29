@@ -16,7 +16,6 @@
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
-#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/text-display-options.h"
@@ -316,21 +315,20 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         break;
 
     case MonsterAbilityType::DISPEL: {
-        MONSTER_IDX m_idx;
-
         if (!target_set(player_ptr, TARGET_KILL)) {
             return false;
         }
-        m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
-        if (!m_idx) {
+
+        const Pos2D pos(target_row, target_col);
+        const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+        const auto m_idx = grid.m_idx;
+        auto should_dispel = m_idx == 0;
+        should_dispel &= grid.has_los();
+        should_dispel &= projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col);
+        if (!should_dispel) {
             break;
         }
-        if (!player_has_los_bold(player_ptr, target_row, target_col)) {
-            break;
-        }
-        if (!projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
-            break;
-        }
+
         dispel_monster_status(player_ptr, m_idx);
         break;
     }
@@ -952,32 +950,30 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
             return false;
         }
 
-        auto *floor_ptr = player_ptr->current_floor_ptr;
-        if (!floor_ptr->grid_array[target_row][target_col].m_idx) {
-            break;
-        }
-        if (!player_has_los_bold(player_ptr, target_row, target_col)) {
-            break;
-        }
-        if (!projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
+        const auto &floor = *player_ptr->current_floor_ptr;
+        const Pos2D pos(target_row, target_col);
+        const auto &grid_target = floor.get_grid(pos);
+        auto should_teleport = grid_target.m_idx == 0;
+        should_teleport &= grid_target.has_los();
+        should_teleport &= projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col);
+        if (!should_teleport) {
             break;
         }
 
-        const auto &grid = floor_ptr->grid_array[target_row][target_col];
-        auto *m_ptr = &floor_ptr->m_list[grid.m_idx];
-        auto *r_ptr = &m_ptr->get_monrace();
-        const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
-            if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
-                if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-                    r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
+        const auto &monster = floor.m_list[grid_target.m_idx];
+        auto &monrace = monster.get_monrace();
+        const auto m_name = monster_desc(player_ptr, &monster, 0);
+        if (monrace.resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
+            if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || monrace.resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
+                if (is_original_ap_and_seen(player_ptr, &monster)) {
+                    monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
                 }
                 msg_format(_("%sには効果がなかった！", "%s is unaffected!"), m_name.data());
 
                 break;
-            } else if (r_ptr->level > randint1(100)) {
-                if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-                    r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
+            } else if (monrace.level > randint1(100)) {
+                if (is_original_ap_and_seen(player_ptr, &monster)) {
+                    monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
                 }
                 msg_format(_("%sには耐性がある！", "%s resists!"), m_name.data());
 
@@ -986,7 +982,7 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         }
         msg_format(_("%sを引き戻した。", "You command %s to return."), m_name.data());
 
-        teleport_monster_to(player_ptr, grid.m_idx, player_ptr->y, player_ptr->x, 100, TELEPORT_PASSIVE);
+        teleport_monster_to(player_ptr, grid_target.m_idx, player_ptr->y, player_ptr->x, 100, TELEPORT_PASSIVE);
         break;
     }
     case MonsterAbilityType::TELE_AWAY:

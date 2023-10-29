@@ -6,6 +6,7 @@
 #include "main/scene-table-floor.h"
 #include "dungeon/quest.h"
 #include "main/music-definitions-table.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
@@ -32,7 +33,7 @@ static bool scene_basic(PlayerType *player_ptr, scene_type *value)
         return true;
     }
 
-    if (player_ptr->phase_out) {
+    if (AngbandSystem::get_instance().is_phase_out()) {
         value->type = TERM_XTRA_MUSIC_BASIC;
         value->val = MUSIC_BASIC_BATTLE;
         return true;

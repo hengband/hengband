@@ -28,6 +28,7 @@
 #include "player/player-status.h"
 #include "spell-class/spells-mirror-master.h"
 #include "spell/range-calc.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
@@ -136,7 +137,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     }
 
     /* Calculate the projection path */
-    projection_path path_g(player_ptr, (project_length ? project_length : get_max_range(player_ptr)), y1, x1, y2, x2, flag);
+    const auto &system = AngbandSystem::get_instance();
+    projection_path path_g(player_ptr, (project_length ? project_length : system.get_max_range()), y1, x1, y2, x2, flag);
     handle_stuff(player_ptr);
 
     int k = 0;
@@ -146,17 +148,19 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     POSITION gm_rad = rad;
     bool see_s_msg = true;
     const auto is_blind = player_ptr->effects()->blindness()->is_blind();
+    auto &floor = *player_ptr->current_floor_ptr;
     for (const auto &[ny, nx] : path_g) {
+        const Pos2D pos(ny, nx);
         if (flag & PROJECT_DISI) {
             if (cave_stop_disintegration(player_ptr->current_floor_ptr, ny, nx) && (rad > 0)) {
                 break;
             }
         } else if (flag & PROJECT_LOS) {
-            if (!cave_los_bold(player_ptr->current_floor_ptr, ny, nx) && (rad > 0)) {
+            if (!cave_los_bold(&floor, ny, nx) && (rad > 0)) {
                 break;
             }
         } else {
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, TerrainCharacteristics::PROJECT) && (rad > 0)) {
+            if (!cave_has_flag_bold(&floor, ny, nx, TerrainCharacteristics::PROJECT) && (rad > 0)) {
                 break;
             }
         }
@@ -168,7 +172,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
 
         if (delay_factor > 0) {
             if (!is_blind && !(flag & (PROJECT_HIDE | PROJECT_FAST))) {
-                if (panel_contains(ny, nx) && player_has_los_bold(player_ptr, ny, nx)) {
+                if (panel_contains(ny, nx) && floor.has_los(pos)) {
                     print_bolt_pict(player_ptr, oy, ox, ny, nx, typ);
                     move_cursor_relative(ny, nx);
                     term_fresh();
@@ -207,7 +211,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     project_length = 0;
 
     /* If we found a "target", explode there */
-    if (path_n <= get_max_range(player_ptr)) {
+    if (path_n <= system.get_max_range()) {
         if ((flag & (PROJECT_BEAM)) && (grids > 0)) {
             grids--;
         }
@@ -273,11 +277,10 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
         auto drawn = false;
         for (int t = 0; t <= gm_rad; t++) {
             for (int i = gm[t]; i < gm[t + 1]; i++) {
-                auto y = gy[i];
-                auto x = gx[i];
-                if (panel_contains(y, x) && player_has_los_bold(player_ptr, y, x)) {
+                const Pos2D pos(gy[i], gx[i]);
+                if (panel_contains(pos.y, pos.x) && floor.has_los(pos)) {
                     drawn = true;
-                    print_bolt_pict(player_ptr, y, x, y, x, typ);
+                    print_bolt_pict(player_ptr, pos.y, pos.x, pos.y, pos.x, typ);
                 }
             }
 
@@ -290,10 +293,9 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
 
         if (drawn) {
             for (int i = 0; i < grids; i++) {
-                auto y = gy[i];
-                auto x = gx[i];
-                if (panel_contains(y, x) && player_has_los_bold(player_ptr, y, x)) {
-                    lite_spot(player_ptr, y, x);
+                const Pos2D pos(gy[i], gx[i]);
+                if (panel_contains(pos.y, pos.x) && floor.has_los(pos)) {
+                    lite_spot(player_ptr, pos.y, pos.x);
                 }
             }
 

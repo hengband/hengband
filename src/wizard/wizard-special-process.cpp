@@ -76,6 +76,7 @@
 #include "spell/spells-summon.h"
 #include "status/bad-status-setter.h"
 #include "status/experience.h"
+#include "system/angband-system.h"
 #include "system/angband-version.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info.h"
@@ -841,7 +842,7 @@ void cheat_death(PlayerType *player_ptr)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dun_level = 0;
     floor_ptr->inside_arena = false;
-    player_ptr->phase_out = false;
+    AngbandSystem::get_instance().set_phase_out(false);
     leaving_quest = QuestId::NONE;
     floor_ptr->quest_number = QuestId::NONE;
     if (floor_ptr->dungeon_idx) {

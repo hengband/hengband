@@ -8,6 +8,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/stair.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -75,7 +76,7 @@ void stair_creation(PlayerType *player_ptr)
         down = false;
     }
 
-    if (!floor.dun_level || (!up && !down) || (floor.is_in_quest() && QuestType::is_fixed(floor.quest_number)) || floor.inside_arena || player_ptr->phase_out) {
+    if (!floor.dun_level || (!up && !down) || (floor.is_in_quest() && QuestType::is_fixed(floor.quest_number)) || floor.inside_arena || AngbandSystem::get_instance().is_phase_out()) {
         msg_print(_("効果がありません！", "There is no effect!"));
         return;
     }

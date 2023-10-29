@@ -8,7 +8,6 @@
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
 #include "dungeon/quest-completion-checker.h"
-#include "floor/cave.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-town.h"
 #include "floor/geometry.h"
@@ -26,6 +25,7 @@
 #include "monster-race/race-flags1.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -43,25 +43,6 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
-
-/*!
- * @brief テレポート・レベルが効かないモンスターであるかどうかを判定する
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param idx テレポート・レベル対象のモンスター
- * @todo 変数名が実態と合っているかどうかは要確認
- */
-bool is_teleport_level_ineffective(PlayerType *player_ptr, MONSTER_IDX idx)
-{
-    const auto &floor = *player_ptr->current_floor_ptr;
-    auto is_special_floor = floor.inside_arena;
-    is_special_floor |= player_ptr->phase_out;
-    is_special_floor |= floor.is_in_quest() && !inside_quest(floor.get_random_quest_id());
-    auto is_invalid_floor = idx <= 0;
-    is_invalid_floor &= inside_quest(floor.get_quest_id()) || (floor.dun_level >= floor.get_dungeon_definition().maxdepth);
-    is_invalid_floor &= floor.dun_level >= 1;
-    is_invalid_floor &= ironman_downward;
-    return is_special_floor || is_invalid_floor;
-}
 
 /*!
  * @brief プレイヤー及びモンスターをレベルテレポートさせる /
@@ -83,7 +64,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
         see_m = is_seen(player_ptr, m_ptr);
     }
 
-    if (is_teleport_level_ineffective(player_ptr, m_idx)) {
+    if (floor.can_teleport_level(m_idx != 0)) {
         if (see_m) {
             msg_print(_("効果がなかった。", "There is no effect."));
         }
@@ -241,27 +222,28 @@ bool teleport_level_other(PlayerType *player_ptr)
     if (!target_set(player_ptr, TARGET_KILL)) {
         return false;
     }
-    MONSTER_IDX target_m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
+
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const Pos2D pos(target_row, target_col);
+    const auto &grid = floor.get_grid(pos);
+    const auto target_m_idx = grid.m_idx;
     if (!target_m_idx) {
         return true;
     }
-    if (!player_has_los_bold(player_ptr, target_row, target_col)) {
+    if (!grid.has_los()) {
         return true;
     }
     if (!projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
         return true;
     }
 
-    MonsterEntity *m_ptr;
-    MonsterRaceInfo *r_ptr;
-    m_ptr = &player_ptr->current_floor_ptr->m_list[target_m_idx];
-    r_ptr = &m_ptr->get_monrace();
-    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+    const auto &monster = floor.m_list[target_m_idx];
+    const auto &monrace = monster.get_monrace();
+    const auto m_name = monster_desc(player_ptr, &monster, 0);
     msg_format(_("%s^の足を指さした。", "You gesture at %s^'s feet."), m_name.data());
 
-    auto has_immune = r_ptr->resistance_flags.has_any_of(RFR_EFF_RESIST_NEXUS_MASK) || r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT);
-
-    if (has_immune || (r_ptr->flags1 & RF1_QUESTOR) || (r_ptr->level + randint1(50) > player_ptr->lev + randint1(60))) {
+    auto has_immune = monrace.resistance_flags.has_any_of(RFR_EFF_RESIST_NEXUS_MASK) || monrace.resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT);
+    if (has_immune || (monrace.flags1 & RF1_QUESTOR) || (monrace.level + randint1(50) > player_ptr->lev + randint1(60))) {
         msg_print(_("しかし効果がなかった！", format("%s^ is unaffected!", m_name.data())));
     } else {
         teleport_level(player_ptr, target_m_idx);
@@ -282,7 +264,7 @@ bool tele_town(PlayerType *player_ptr)
         return false;
     }
 
-    if (player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out) {
+    if (player_ptr->current_floor_ptr->inside_arena || AngbandSystem::get_instance().is_phase_out()) {
         msg_print(_("この魔法は外でしか使えない！", "This spell can only be used outside!"));
         return false;
     }

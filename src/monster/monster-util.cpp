@@ -12,6 +12,7 @@
 #include "monster-race/race-indice-types.h"
 #include "spell/summon-types.h"
 #include "system/alloc-entries.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -251,6 +252,7 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
     int prob2_total = 0; // 重みの総和
 
     // モンスター生成テーブルの各要素について重みを修正する。
+    const auto &system = AngbandSystem::get_instance();
     for (auto i = 0U; i < alloc_race_table.size(); i++) {
         alloc_entry *const entry = &alloc_race_table[i];
         const auto entry_r_idx = i2enum<MonsterRaceId>(entry->index);
@@ -271,7 +273,7 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
         }
 
         // 原則生成禁止するものたち(フェイズアウト状態 / カメレオンの変身先 / ダンジョンの主召喚 は例外)。
-        if (!player_ptr->phase_out && !chameleon_change_m_idx && summon_specific_type != SUMMON_GUARDIANS) {
+        if (!system.is_phase_out() && !chameleon_change_m_idx && summon_specific_type != SUMMON_GUARDIANS) {
             // クエストモンスターは生成禁止。
             if (r_ptr->flags1 & RF1_QUESTOR) {
                 continue;
@@ -304,7 +306,7 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
             //   * 1階かそれより深いところにいる
             //   * ランダムクエスト中でない
             const bool in_random_quest = floor_ptr->is_in_quest() && !QuestType::is_fixed(floor_ptr->quest_number);
-            const bool cond = !player_ptr->phase_out && floor_ptr->dun_level > 0 && !in_random_quest;
+            const bool cond = !system.is_phase_out() && floor_ptr->dun_level > 0 && !in_random_quest;
 
             if (cond && !restrict_monster_to_dungeon(floor_ptr, entry_r_idx)) {
                 // ダンジョンによる制約に掛かった場合、重みを special_div/64 倍する。

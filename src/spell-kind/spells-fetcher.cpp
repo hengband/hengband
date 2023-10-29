@@ -12,6 +12,7 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-update.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -38,24 +39,26 @@
  */
 void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list.empty()) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    const Pos2D p_pos(player_ptr->y, player_ptr->x);
+    if (!floor.get_grid(p_pos).o_idx_list.empty()) {
         msg_print(_("自分の足の下にある物は取れません。", "You can't fetch when you're already standing on something."));
         return;
     }
 
     POSITION ty, tx;
     grid_type *g_ptr;
+    const auto &system = AngbandSystem::get_instance();
     if (dir == 5 && target_okay(player_ptr)) {
         tx = target_col;
         ty = target_row;
-
-        if (distance(player_ptr->y, player_ptr->x, ty, tx) > get_max_range(player_ptr)) {
+        const Pos2D pos(ty, tx);
+        if (distance(p_pos.y, p_pos.x, ty, tx) > system.get_max_range()) {
             msg_print(_("そんなに遠くにある物は取れません！", "You can't fetch something that far away!"));
             return;
         }
 
-        g_ptr = &floor_ptr->grid_array[ty][tx];
+        g_ptr = &floor.get_grid(pos);
         if (g_ptr->o_idx_list.empty()) {
             msg_print(_("そこには何もありません。", "There is no object there."));
             return;
@@ -67,35 +70,35 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
         }
 
         if (require_los) {
-            if (!player_has_los_bold(player_ptr, ty, tx)) {
+            if (!floor.has_los(pos)) {
                 msg_print(_("そこはあなたの視界に入っていません。", "You have no direct line of sight to that location."));
                 return;
-            } else if (!projectable(player_ptr, player_ptr->y, player_ptr->x, ty, tx)) {
+            } else if (!projectable(player_ptr, p_pos.y, p_pos.x, ty, tx)) {
                 msg_print(_("そこは壁の向こうです。", "You have no direct line of sight to that location."));
                 return;
             }
         }
     } else {
-        ty = player_ptr->y;
-        tx = player_ptr->x;
+        ty = p_pos.y;
+        tx = p_pos.x;
         bool is_first_loop = true;
-        g_ptr = &floor_ptr->grid_array[ty][tx];
+        g_ptr = &floor.grid_array[ty][tx];
         while (is_first_loop || g_ptr->o_idx_list.empty()) {
             is_first_loop = false;
             ty += ddy[dir];
             tx += ddx[dir];
-            g_ptr = &floor_ptr->grid_array[ty][tx];
-            if ((distance(player_ptr->y, player_ptr->x, ty, tx) > get_max_range(player_ptr))) {
+            g_ptr = &floor.grid_array[ty][tx];
+            if ((distance(p_pos.y, p_pos.x, ty, tx) > system.get_max_range())) {
                 return;
             }
 
-            if (!cave_has_flag_bold(floor_ptr, ty, tx, TerrainCharacteristics::PROJECT)) {
+            if (!cave_has_flag_bold(&floor, ty, tx, TerrainCharacteristics::PROJECT)) {
                 return;
             }
         }
     }
 
-    auto *o_ptr = &floor_ptr->o_list[g_ptr->o_idx_list.front()];
+    auto *o_ptr = &floor.o_list[g_ptr->o_idx_list.front()];
     if (o_ptr->weight > wgt) {
         msg_print(_("そのアイテムは重過ぎます。", "The object is too heavy."));
         return;
@@ -103,13 +106,13 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
 
     OBJECT_IDX i = g_ptr->o_idx_list.front();
     g_ptr->o_idx_list.pop_front();
-    floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list.add(floor_ptr, i); /* 'move' it */
-    o_ptr->iy = player_ptr->y;
-    o_ptr->ix = player_ptr->x;
+    floor.grid_array[p_pos.y][p_pos.x].o_idx_list.add(&floor, i); /* 'move' it */
+    o_ptr->iy = p_pos.y;
+    o_ptr->ix = p_pos.x;
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
     msg_format(_("%s^があなたの足元に飛んできた。", "%s^ flies through the air to your feet."), item_name.data());
-    note_spot(player_ptr, player_ptr->y, player_ptr->x);
+    note_spot(player_ptr, p_pos.y, p_pos.x);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MAP);
 }
 
@@ -119,50 +122,52 @@ bool fetch_monster(PlayerType *player_ptr)
         return false;
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto m_idx = floor_ptr->grid_array[target_row][target_col].m_idx;
+    auto &floor = *player_ptr->current_floor_ptr;
+    const Pos2D pos(target_row, target_col);
+    auto m_idx = floor.get_grid(pos).m_idx;
     if (!m_idx) {
         return false;
     }
     if (m_idx == player_ptr->riding) {
         return false;
     }
-    if (!player_has_los_bold(player_ptr, target_row, target_col)) {
+    if (!floor.has_los(pos)) {
         return false;
     }
     if (!projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
         return false;
     }
 
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
-    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+    auto &monster = floor.m_list[m_idx];
+    const auto m_name = monster_desc(player_ptr, &monster, 0);
     msg_format(_("%sを引き戻した。", "You pull back %s."), m_name.data());
-    projection_path path_g(player_ptr, get_max_range(player_ptr), target_row, target_col, player_ptr->y, player_ptr->x, 0);
+    projection_path path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), target_row, target_col, player_ptr->y, player_ptr->x, 0);
     auto ty = target_row, tx = target_col;
     for (const auto &[ny, nx] : path_g) {
-        auto *g_ptr = &floor_ptr->grid_array[ny][nx];
+        const Pos2D pos_path(ny, nx);
+        auto *g_ptr = &floor.get_grid(pos_path);
 
-        if (in_bounds(floor_ptr, ny, nx) && is_cave_empty_bold(player_ptr, ny, nx) && !g_ptr->is_object() && !pattern_tile(floor_ptr, ny, nx)) {
+        if (in_bounds(&floor, ny, nx) && is_cave_empty_bold(player_ptr, ny, nx) && !g_ptr->is_object() && !pattern_tile(&floor, ny, nx)) {
             ty = ny;
             tx = nx;
         }
     }
 
-    floor_ptr->grid_array[target_row][target_col].m_idx = 0;
-    floor_ptr->grid_array[ty][tx].m_idx = m_idx;
-    m_ptr->fy = ty;
-    m_ptr->fx = tx;
+    floor.get_grid(pos).m_idx = 0;
+    floor.get_grid({ ty, tx }).m_idx = m_idx;
+    monster.fy = ty;
+    monster.fx = tx;
     (void)set_monster_csleep(player_ptr, m_idx, 0);
     update_monster(player_ptr, m_idx, true);
     lite_spot(player_ptr, target_row, target_col);
     lite_spot(player_ptr, ty, tx);
-    if (m_ptr->get_monrace().brightness_flags.has_any_of(ld_mask)) {
+    if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 
-    if (m_ptr->ml) {
+    if (monster.ml) {
         if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
-            monster_race_track(player_ptr, m_ptr->ap_r_idx);
+            monster_race_track(player_ptr, monster.ap_r_idx);
         }
 
         health_track(player_ptr, m_idx);

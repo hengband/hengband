@@ -45,6 +45,7 @@
 #include "spell-kind/spells-polymorph.h"
 #include "spell-kind/spells-teleport.h"
 #include "sv-definition/sv-other-types.h"
+#include "system/angband-system.h"
 #include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -397,7 +398,7 @@ static void affected_monster_prevents_bad_status(PlayerType *player_ptr, EffectM
     auto should_alive = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     should_alive |= any_bits(r_ptr->flags1, RF1_QUESTOR);
     should_alive |= r_ptr->population_flags.has(MonsterPopulationType::NAZGUL);
-    if (should_alive && !player_ptr->phase_out && (em_ptr->who > 0) && (em_ptr->dam > em_ptr->m_ptr->hp)) {
+    if (should_alive && !AngbandSystem::get_instance().is_phase_out() && (em_ptr->who > 0) && (em_ptr->dam > em_ptr->m_ptr->hp)) {
         em_ptr->dam = em_ptr->m_ptr->hp;
     }
 }
@@ -624,7 +625,7 @@ static void exe_affect_monster_by_damage(PlayerType *player_ptr, EffectMonster *
  */
 static void update_phase_out_stat(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
-    if (!player_ptr->phase_out) {
+    if (!AngbandSystem::get_instance().is_phase_out()) {
         return;
     }
 

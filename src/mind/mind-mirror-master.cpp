@@ -15,7 +15,6 @@
 #include "effect/effect-monster.h"
 #include "effect/effect-processor.h"
 #include "effect/spells-effect-util.h"
-#include "floor/cave.h"
 #include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
@@ -38,6 +37,7 @@
 #include "status/body-improvement.h"
 #include "status/buff-setter.h"
 #include "status/sight-setter.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -66,26 +66,32 @@ bool check_multishadow(PlayerType *player_ptr)
  */
 bool binding_field(PlayerType *player_ptr, int dam)
 {
-    POSITION mirror_x[10], mirror_y[10]; /* 鏡はもっと少ない */
+    /* 鏡はもっと少ない */
+    int mirror_x[10]{};
+    int mirror_y[10]{};
     int mirror_num = 0; /* 鏡の数 */
 
     /* 三角形の頂点 */
-    POSITION point_x[3];
-    POSITION point_y[3];
+    int point_x[3]{};
+    int point_y[3]{};
 
     /* Default target of monsterspell is player */
     monster_target_y = player_ptr->y;
     monster_target_x = player_ptr->x;
 
-    for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
-        for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
-            if (!player_ptr->current_floor_ptr->grid_array[y][x].is_mirror()) {
+    const auto max_range = AngbandSystem::get_instance().get_max_range();
+    const auto &floor = *player_ptr->current_floor_ptr;
+    for (auto x = 0; x < floor.width; x++) {
+        for (auto y = 0; y < floor.height; y++) {
+            const Pos2D pos(y, x);
+            const auto &grid = floor.get_grid(pos);
+            if (!grid.is_mirror()) {
                 continue;
             }
 
-            const auto dist = distance(player_ptr->y, player_ptr->x, y, x);
-            const auto is_projectable = projectable(player_ptr, player_ptr->y, player_ptr->x, y, x);
-            if ((dist == 0) || (dist > get_max_range(player_ptr)) || !player_has_los_bold(player_ptr, y, x) || !is_projectable) {
+            const auto dist = distance(player_ptr->y, player_ptr->x, pos.y, pos.x);
+            const auto is_projectable = projectable(player_ptr, player_ptr->y, player_ptr->x, pos.y, pos.x);
+            if ((dist == 0) || (dist > max_range) || !grid.has_los() || !is_projectable) {
                 continue;
             }
 
@@ -131,6 +137,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
 
     for (y = y1; y <= y2; y++) {
         for (x = x1; x <= x2; x++) {
+            const Pos2D pos(y, x);
             if ((centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) < 0)) {
                 continue;
             }
@@ -143,7 +150,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
                 continue;
             }
 
-            if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
+            if (floor.has_los(pos) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
                 if (!(player_ptr->effects()->blindness()->is_blind()) && panel_contains(y, x)) {
                     print_bolt_pict(player_ptr, y, x, y, x, AttributeType::MANA);
                     move_cursor_relative(y, x);
@@ -156,6 +163,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
 
     for (y = y1; y <= y2; y++) {
         for (x = x1; x <= x2; x++) {
+            const Pos2D pos(y, x);
             if (centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) < 0) {
                 continue;
             }
@@ -168,7 +176,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
                 continue;
             }
 
-            if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
+            if (floor.has_los(pos) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
                 (void)affect_feature(player_ptr, 0, 0, y, x, dam, AttributeType::MANA);
             }
         }
@@ -176,6 +184,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
 
     for (y = y1; y <= y2; y++) {
         for (x = x1; x <= x2; x++) {
+            const Pos2D pos(y, x);
             if (centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) < 0) {
                 continue;
             }
@@ -188,7 +197,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
                 continue;
             }
 
-            if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
+            if (floor.has_los(pos) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
                 (void)affect_item(player_ptr, 0, 0, y, x, dam, AttributeType::MANA);
             }
         }
@@ -196,6 +205,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
 
     for (y = y1; y <= y2; y++) {
         for (x = x1; x <= x2; x++) {
+            const Pos2D pos(y, x);
             if (centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) < 0) {
                 continue;
             }
@@ -208,7 +218,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
                 continue;
             }
 
-            if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
+            if (floor.has_los(pos) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
                 constexpr auto flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP;
                 (void)affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::MANA, flags, true);
             }

@@ -15,6 +15,7 @@
 #include "mspell/mspell-attack-util.h"
 #include "mspell/mspell-judgement.h"
 #include "player/player-status.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -139,9 +140,9 @@ static bool spell_world(MonsterAbilityType spell)
  * @param spell 判定対象のID
  * @return 特別効果魔法のIDならばTRUEを返す。
  */
-static bool spell_special(PlayerType *player_ptr, MonsterAbilityType spell)
+static bool spell_special(MonsterAbilityType spell)
 {
-    if (player_ptr->phase_out) {
+    if (AngbandSystem::get_instance().is_phase_out()) {
         return false;
     }
 
@@ -279,7 +280,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
             world.push_back(msa_ptr->mspells[i]);
         }
 
-        if (spell_special(player_ptr, msa_ptr->mspells[i])) {
+        if (spell_special(msa_ptr->mspells[i])) {
             special.push_back(msa_ptr->mspells[i]);
         }
 

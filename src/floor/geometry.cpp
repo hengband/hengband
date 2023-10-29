@@ -3,6 +3,7 @@
 #include "game-option/text-display-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
@@ -152,22 +153,21 @@ DIRECTION coords_to_dir(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 bool player_can_see_bold(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    grid_type *g_ptr;
-
     /* Blind players see nothing */
     if (player_ptr->effects()->blindness()->is_blind()) {
         return false;
     }
 
-    g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    const Pos2D pos(y, x);
+    const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
 
     /* Note that "torch-lite" yields "illumination" */
-    if (g_ptr->info & (CAVE_LITE | CAVE_MNLT)) {
+    if (grid.info & (CAVE_LITE | CAVE_MNLT)) {
         return true;
     }
 
     /* Require line of sight to the grid */
-    if (!player_has_los_bold(player_ptr, y, x)) {
+    if (!grid.has_los()) {
         return false;
     }
 
@@ -177,13 +177,13 @@ bool player_can_see_bold(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     /* Require "perma-lite" of the grid */
-    if ((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) {
+    if ((grid.info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) {
         return false;
     }
 
     /* Feature code (applying "mimic" field) */
     /* Floors are simple */
-    if (feat_supports_los(g_ptr->get_feat_mimic())) {
+    if (feat_supports_los(grid.get_feat_mimic())) {
         return true;
     }
 
@@ -253,7 +253,7 @@ void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POS
 bool is_seen(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
     bool is_inside_view = !ignore_unview;
-    is_inside_view |= player_ptr->phase_out;
+    is_inside_view |= AngbandSystem::get_instance().is_phase_out();
     is_inside_view |= player_can_see_bold(player_ptr, m_ptr->fy, m_ptr->fx) && projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
     return m_ptr->ml && is_inside_view;
 }

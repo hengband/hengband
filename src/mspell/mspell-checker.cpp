@@ -45,6 +45,7 @@
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/range-calc.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -155,7 +156,7 @@ bool raise_possible(PlayerType *player_ptr, MonsterEntity *m_ptr)
 bool clean_shot(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    projection_path grid_g(player_ptr, get_max_range(player_ptr), y1, x1, y2, x2, 0);
+    projection_path grid_g(player_ptr, AngbandSystem::get_instance().get_max_range(), y1, x1, y2, x2, 0);
     if (grid_g.path_num() == 0) {
         return false;
     }

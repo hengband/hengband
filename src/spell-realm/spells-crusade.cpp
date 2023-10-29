@@ -16,6 +16,7 @@
 #include "grid/feature-flag-types.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell/range-calc.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -58,7 +59,7 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
         ny = y;
         nx = x;
         mmove2(&ny, &nx, player_ptr->y, player_ptr->x, ty, tx);
-        if (get_max_range(player_ptr) <= distance(player_ptr->y, player_ptr->x, ny, nx)) {
+        if (AngbandSystem::get_instance().get_max_range() <= distance(player_ptr->y, player_ptr->x, ny, nx)) {
             break;
         }
         if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, TerrainCharacteristics::PROJECT)) {

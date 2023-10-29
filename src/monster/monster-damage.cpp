@@ -37,6 +37,7 @@
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-random.h"
 #include "status/experience.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -369,7 +370,7 @@ void MonsterDamageProcessor::show_bounty_message(std::string_view m_name)
 void MonsterDamageProcessor::get_exp_from_mon(MonsterEntity *m_ptr, int exp_dam)
 {
     auto *r_ptr = &m_ptr->get_monrace();
-    if (!m_ptr->is_valid() || m_ptr->is_pet() || this->player_ptr->phase_out) {
+    if (!m_ptr->is_valid() || m_ptr->is_pet() || AngbandSystem::get_instance().is_phase_out()) {
         return;
     }
 
@@ -451,7 +452,7 @@ void MonsterDamageProcessor::summon_special_unique()
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     bool is_special_summon = m_ptr->r_idx == MonsterRaceId::IKETA;
     is_special_summon |= m_ptr->r_idx == MonsterRaceId::DOPPIO;
-    if (!is_special_summon || this->player_ptr->current_floor_ptr->inside_arena || this->player_ptr->phase_out) {
+    if (!is_special_summon || this->player_ptr->current_floor_ptr->inside_arena || AngbandSystem::get_instance().is_phase_out()) {
         delete_monster_idx(this->player_ptr, this->m_idx);
         return;
     }

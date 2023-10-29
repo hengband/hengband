@@ -37,6 +37,7 @@
 #include "player-info/class-info.h"
 #include "player-info/race-types.h"
 #include "player/player-personality-types.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -193,7 +194,7 @@ static bool check_monster_hp(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
     auto is_like_unique = monrace.kind_flags.has(MonsterKindType::UNIQUE);
     is_like_unique |= any_bits(monrace.flags1, RF1_QUESTOR);
     is_like_unique |= monrace.population_flags.has(MonsterPopulationType::NAZGUL);
-    if (is_like_unique && !player_ptr->phase_out) {
+    if (is_like_unique && !AngbandSystem::get_instance().is_phase_out()) {
         mam_pp_ptr->m_ptr->hp = 1;
         return false;
     }

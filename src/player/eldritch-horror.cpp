@@ -26,6 +26,7 @@
 #include "player/player-status.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -85,7 +86,7 @@ static bool process_mod_hallucination(PlayerType *player_ptr, std::string_view m
  */
 void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
 {
-    if (player_ptr->phase_out || !w_ptr->character_dungeon) {
+    if (AngbandSystem::get_instance().is_phase_out() || !w_ptr->character_dungeon) {
         return;
     }
 

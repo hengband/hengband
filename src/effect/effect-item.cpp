@@ -2,7 +2,6 @@
 #include "autopick/autopick.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-summon.h"
@@ -38,14 +37,16 @@
  */
 bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, int dam, AttributeType typ)
 {
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const Pos2D pos(y, x);
+    const auto &grid = floor.get_grid(pos);
 
-    bool is_item_affected = false;
-    bool known = player_has_los_bold(player_ptr, y, x);
+    auto is_item_affected = false;
+    const auto known = grid.has_los();
     who = who ? who : 0;
     dam = (dam + r) / (r + 1);
     std::set<OBJECT_IDX> processed_list;
-    for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
+    for (auto it = grid.o_idx_list.begin(); it != grid.o_idx_list.end();) {
         const OBJECT_IDX this_o_idx = *it++;
 
         if (auto pit = processed_list.find(this_o_idx); pit != processed_list.end()) {
@@ -277,15 +278,15 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
             msg_format(_("%sは%s", "The %s%s"), item_name.data(), note_kill);
         }
 
-        short bi_id = o_ptr->bi_id;
-        bool is_potion = o_ptr->is_potion();
+        const auto bi_id = o_ptr->bi_id;
+        const auto is_potion = o_ptr->is_potion();
         delete_object_idx(player_ptr, this_o_idx);
         if (is_potion) {
             (void)potion_smash_effect(player_ptr, who, y, x, bi_id);
 
             // 薬の破壊効果によりリストの次のアイテムが破壊された可能性があるのでリストの最初から処理をやり直す
             // 処理済みのアイテムは processed_list に登録されており、スキップされる
-            it = g_ptr->o_idx_list.begin();
+            it = grid.o_idx_list.begin();
         }
 
         lite_spot(player_ptr, y, x);

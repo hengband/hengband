@@ -14,7 +14,6 @@ class MonsterEntity;
 class PlayerType;
 bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, const MonsterRaceInfo *r_ptr, BIT_FLAGS16 mode);
 bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, MonsterRaceInfo *r_ptr, BIT_FLAGS16 mode);
-bool are_enemies(PlayerType *player_ptr, const MonsterEntity &m1_ref, const MonsterEntity &m2_ref);
-bool monster_has_hostile_align(PlayerType *player_ptr, MonsterEntity *m_ptr, int pa_good, int pa_evil, MonsterRaceInfo *r_ptr);
+bool monster_has_hostile_align(PlayerType *player_ptr, MonsterEntity *m_ptr, int pa_good, int pa_evil, const MonsterRaceInfo *r_ptr);
 bool is_original_ap_and_seen(PlayerType *player_ptr, const MonsterEntity *m_ptr);
 std::string monster_name(PlayerType *player_ptr, MONSTER_IDX m_idx);

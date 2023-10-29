@@ -26,6 +26,7 @@
 #include "monster/monster-update.h"
 #include "pet/pet-util.h"
 #include "spell-kind/spells-teleport.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -266,25 +267,21 @@ void SpellsMirrorMaster::next_mirror(int *next_y, int *next_x, int cury, int cur
 
 void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
 {
-    POSITION y1;
-    POSITION x1;
-    POSITION y2;
-    POSITION x2;
     constexpr auto typ = AttributeType::SEEKER;
     BIT_FLAGS flag = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM | PROJECT_THRU | PROJECT_MIRROR;
     rakubadam_p = 0;
     rakubadam_m = 0;
     monster_target_y = this->player_ptr->y;
     monster_target_x = this->player_ptr->x;
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    auto &floor = *this->player_ptr->current_floor_ptr;
 
     ProjectResult res;
 
-    x1 = this->player_ptr->x;
-    y1 = this->player_ptr->y;
+    auto x1 = this->player_ptr->x;
+    auto y1 = this->player_ptr->y;
 
-    y2 = target_y;
-    x2 = target_x;
+    auto y2 = target_y;
+    auto x2 = target_x;
 
     if ((x1 == x2) && (y1 == y2)) {
         reset_bits(flag, PROJECT_THRU);
@@ -297,9 +294,9 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
     project_m_x = 0;
     project_m_y = 0;
     auto visual = false;
-
+    const auto max_range = AngbandSystem::get_instance().get_max_range();
     while (true) {
-        projection_path path_g(this->player_ptr, (project_length ? project_length : get_max_range(this->player_ptr)), y1, x1, y2, x2, flag);
+        projection_path path_g(this->player_ptr, (project_length ? project_length : max_range), y1, x1, y2, x2, flag);
 
         if (path_g.path_num() == 0) {
             break;
@@ -310,7 +307,7 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
             const auto &[ny, nx] = *path_g_ite;
 
             if (delay_factor > 0 && !this->player_ptr->effects()->blindness()->is_blind()) {
-                if (panel_contains(ny, nx) && player_has_los_bold(this->player_ptr, ny, nx)) {
+                if (panel_contains(ny, nx) && floor.has_los({ ny, nx })) {
                     print_bolt_pict(this->player_ptr, oy, ox, ny, nx, typ);
                     move_cursor_relative(ny, nx);
                     term_fresh();
@@ -335,13 +332,13 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
             if (affect_monster(this->player_ptr, 0, 0, py, px, dam, typ, flag, true)) {
                 res.notice = true;
             }
-            auto *g_ptr = &floor_ptr->grid_array[project_m_y][project_m_x];
-            auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-            if (project_m_n == 1 && g_ptr->m_idx > 0 && m_ptr->ml) {
+            const auto &grid = floor.grid_array[project_m_y][project_m_x];
+            const auto &monster = floor.m_list[grid.m_idx];
+            if (project_m_n == 1 && grid.m_idx > 0 && monster.ml) {
                 if (!this->player_ptr->effects()->hallucination()->is_hallucinated()) {
-                    monster_race_track(this->player_ptr, m_ptr->ap_r_idx);
+                    monster_race_track(this->player_ptr, monster.ap_r_idx);
                 }
-                health_track(this->player_ptr, g_ptr->m_idx);
+                health_track(this->player_ptr, grid.m_idx);
             }
 
             (void)affect_feature(this->player_ptr, 0, 0, py, px, dam, typ);
@@ -349,7 +346,7 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
 
         const auto &[y, x] = path_g.back();
 
-        if (!floor_ptr->grid_array[y][x].is_mirror()) {
+        if (!floor.get_grid({ y, x }).is_mirror()) {
             break;
         }
 
@@ -379,6 +376,7 @@ static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std:
     // スーパーレイの描画を行った座標のリスト。スーパーレイの全ての描画完了後に描画を消去するのに使用する。
     std::vector<std::pair<int, int>> drawn_pos_list;
 
+    const auto &floor = *player_ptr->current_floor_ptr;
     for (const auto &[n, pos_list] : pos_list_map) {
         // スーパーレイの最終到達点の座標の描画を行った座標のリスト。最終到達点の描画を '*' で上書きするのに使用する。
         std::vector<std::pair<int, int>> drawn_last_pos_list;
@@ -387,11 +385,11 @@ static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std:
             const auto &[y, x] = (n == 1) ? center : *std::next(it, -1);
             const auto &[ny, nx] = *it;
 
-            if (panel_contains(y, x) && player_has_los_bold(player_ptr, y, x)) {
+            if (panel_contains(y, x) && floor.has_los({ y, x })) {
                 print_bolt_pict(player_ptr, y, x, y, x, typ);
                 drawn_pos_list.emplace_back(y, x);
             }
-            if (panel_contains(ny, nx) && player_has_los_bold(player_ptr, ny, nx)) {
+            if (panel_contains(ny, nx) && floor.has_los({ ny, nx })) {
                 print_bolt_pict(player_ptr, y, x, ny, nx, typ);
                 if (std::find(last_pos_list.begin(), last_pos_list.end(), *it) != last_pos_list.end()) {
                     drawn_last_pos_list.emplace_back(ny, nx);
@@ -402,7 +400,7 @@ static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std:
         term_xtra(TERM_XTRA_DELAY, delay_factor);
 
         for (const auto &[y, x] : drawn_last_pos_list) {
-            if (panel_contains(y, x) && player_has_los_bold(player_ptr, y, x)) {
+            if (panel_contains(y, x) && floor.has_los({ y, x })) {
                 print_bolt_pict(player_ptr, y, x, y, x, typ);
                 drawn_pos_list.emplace_back(y, x);
             }
@@ -455,7 +453,7 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     rakubadam_m = 0;
     monster_target_y = this->player_ptr->y;
     monster_target_x = this->player_ptr->x;
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    const auto &floor = *this->player_ptr->current_floor_ptr;
 
     ProjectResult res;
 
@@ -470,7 +468,8 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     }
 
     /* Calculate the projection path */
-    projection_path path_g(this->player_ptr, (project_length ? project_length : get_max_range(this->player_ptr)), y1, x1, y2, x2, flag);
+    const auto &system = AngbandSystem::get_instance();
+    projection_path path_g(this->player_ptr, (project_length ? project_length : system.get_max_range()), y1, x1, y2, x2, flag);
     std::vector<projection_path> second_path_g_list;
     handle_stuff(this->player_ptr);
 
@@ -487,7 +486,7 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     std::vector<std::pair<int, int>> drawn_pos_list;
     for (const auto &[ny, nx] : path_g) {
         if (delay_factor > 0) {
-            if (panel_contains(ny, nx) && player_has_los_bold(this->player_ptr, ny, nx)) {
+            if (panel_contains(ny, nx) && floor.has_los({ ny, nx })) {
                 print_bolt_pict(this->player_ptr, oy, ox, ny, nx, typ);
                 move_cursor_relative(ny, nx);
                 term_fresh();
@@ -504,7 +503,7 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
             }
         }
 
-        if (!cave_has_flag_bold(floor_ptr, ny, nx, TerrainCharacteristics::PROJECT)) {
+        if (!cave_has_flag_bold(&floor, ny, nx, TerrainCharacteristics::PROJECT)) {
             break;
         }
         oy = ny;
@@ -517,12 +516,12 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
 
     {
         const auto &[y, x] = path_g.back();
-        if (floor_ptr->grid_array[y][x].is_mirror()) {
+        if (floor.get_grid({ y, x }).is_mirror()) {
             this->remove_mirror(y, x);
             auto project_flag = flag;
             reset_bits(project_flag, PROJECT_MIRROR);
 
-            const auto length = project_length ? project_length : get_max_range(this->player_ptr);
+            const auto length = project_length ? project_length : system.get_max_range();
             for (auto i : cdd) {
                 const auto dy = ddy[i];
                 const auto dx = ddx[i];

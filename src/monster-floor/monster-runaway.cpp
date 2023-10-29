@@ -7,7 +7,6 @@
 #include "monster-floor/monster-runaway.h"
 #include "core/disturbance.h"
 #include "dungeon/quest-completion-checker.h"
-#include "floor/cave.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-race/monster-race.h"
@@ -19,6 +18,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-processor-util.h"
 #include "pet/pet-fall-off.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -64,7 +64,7 @@ static void escape_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, M
 
         auto speak = m_ptr->get_monrace().speak_flags.has_any_of(flags);
         speak &= !is_acting_monster(m_ptr->r_idx);
-        speak &= player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx);
+        speak &= player_ptr->current_floor_ptr->has_los({ m_ptr->fy, m_ptr->fx });
         speak &= projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x);
         if (speak) {
             msg_format(_("%s^「ピンチだ！退却させてもらう！」", "%s^ says 'It is the pinch! I will retreat'."), m_name);
@@ -93,7 +93,7 @@ bool runaway_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER
     auto *r_ptr = &m_ptr->get_monrace();
     bool can_runaway = m_ptr->is_pet() || m_ptr->is_friendly();
     can_runaway &= (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) || (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL));
-    can_runaway &= !player_ptr->phase_out;
+    can_runaway &= !AngbandSystem::get_instance().is_phase_out();
     if (!can_runaway) {
         return false;
     }

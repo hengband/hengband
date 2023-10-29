@@ -30,6 +30,7 @@
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -137,7 +138,7 @@ void WorldTurnProcessor::process_downward()
 
 void WorldTurnProcessor::process_monster_arena()
 {
-    if (!this->player_ptr->phase_out || this->player_ptr->leaving) {
+    if (!AngbandSystem::get_instance().is_phase_out() || this->player_ptr->leaving) {
         return;
     }
 
@@ -211,7 +212,7 @@ void WorldTurnProcessor::decide_auto_save()
     }
 
     auto should_save = autosave_t;
-    should_save &= !this->player_ptr->phase_out;
+    should_save &= !AngbandSystem::get_instance().is_phase_out();
     should_save &= w_ptr->game_turn % ((int32_t)autosave_freq * TURNS_PER_TICK) == 0;
     if (should_save) {
         do_cmd_save_game(this->player_ptr, true);
@@ -221,7 +222,7 @@ void WorldTurnProcessor::decide_auto_save()
 void WorldTurnProcessor::process_change_daytime_night()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    if (!floor_ptr->dun_level && !floor_ptr->is_in_quest() && !this->player_ptr->phase_out && !floor_ptr->inside_arena) {
+    if (!floor_ptr->dun_level && !floor_ptr->is_in_quest() && !AngbandSystem::get_instance().is_phase_out() && !floor_ptr->inside_arena) {
         if (!(w_ptr->game_turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2))) {
             auto dawn = w_ptr->game_turn % (TURNS_PER_TICK * TOWN_DAWN) == 0;
             if (dawn) {
@@ -235,7 +236,7 @@ void WorldTurnProcessor::process_change_daytime_night()
     }
 
     auto is_in_dungeon = vanilla_town;
-    is_in_dungeon |= lite_town && !floor_ptr->is_in_quest() && !this->player_ptr->phase_out && !floor_ptr->inside_arena;
+    is_in_dungeon |= lite_town && !floor_ptr->is_in_quest() && !AngbandSystem::get_instance().is_phase_out() && !floor_ptr->inside_arena;
     is_in_dungeon &= floor_ptr->dun_level != 0;
     if (!is_in_dungeon) {
         return;
@@ -251,7 +252,7 @@ void WorldTurnProcessor::process_change_daytime_night()
 void WorldTurnProcessor::process_world_monsters()
 {
     decide_alloc_monster();
-    if (!(w_ptr->game_turn % (TURNS_PER_TICK * 10)) && !this->player_ptr->phase_out) {
+    if (!(w_ptr->game_turn % (TURNS_PER_TICK * 10)) && !AngbandSystem::get_instance().is_phase_out()) {
         regenerate_monsters(this->player_ptr);
     }
 
@@ -308,7 +309,7 @@ void WorldTurnProcessor::decide_alloc_monster()
     auto should_alloc = one_in_(floor_ptr->get_dungeon_definition().max_m_alloc_chance);
     should_alloc &= !floor_ptr->inside_arena;
     should_alloc &= !floor_ptr->is_in_quest();
-    should_alloc &= !this->player_ptr->phase_out;
+    should_alloc &= !AngbandSystem::get_instance().is_phase_out();
     if (should_alloc) {
         (void)alloc_monster(this->player_ptr, MAX_PLAYER_SIGHT + 5, 0, summon_specific);
     }

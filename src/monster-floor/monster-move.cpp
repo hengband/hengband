@@ -33,6 +33,7 @@
 #include "monster/monster-update.h"
 #include "pet/pet-util.h"
 #include "player/player-status-flags.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
@@ -511,23 +512,23 @@ static bool can_speak(const MonsterRaceInfo &ap_r_ref, MonsterSpeakType mon_spea
     return can_speak_all || can_speak_specific;
 }
 
-static std::string_view get_speak_filename(MonsterEntity *m_ptr)
+static std::string_view get_speak_filename(const MonsterEntity &monster)
 {
-    const auto &ap_r_ref = m_ptr->get_appearance_monrace();
-    if (m_ptr->is_fearful() && can_speak(ap_r_ref, MonsterSpeakType::SPEAK_FEAR)) {
+    const auto &ap_monrace = monster.get_appearance_monrace();
+    if (monster.is_fearful() && can_speak(ap_monrace, MonsterSpeakType::SPEAK_FEAR)) {
         return _("monfear_j.txt", "monfear.txt");
     }
 
     constexpr auto monspeak_txt(_("monspeak_j.txt", "monspeak.txt"));
-    if (m_ptr->is_pet() && can_speak(ap_r_ref, MonsterSpeakType::SPEAK_BATTLE)) {
+    if (monster.is_pet() && can_speak(ap_monrace, MonsterSpeakType::SPEAK_BATTLE)) {
         return monspeak_txt;
     }
 
-    if (m_ptr->is_friendly() && can_speak(ap_r_ref, MonsterSpeakType::SPEAK_FRIEND)) {
+    if (monster.is_friendly() && can_speak(ap_monrace, MonsterSpeakType::SPEAK_FRIEND)) {
         return _("monfrien_j.txt", "monfrien.txt");
     }
 
-    if (can_speak(ap_r_ref, MonsterSpeakType::SPEAK_BATTLE)) {
+    if (can_speak(ap_monrace, MonsterSpeakType::SPEAK_BATTLE)) {
         return monspeak_txt;
     }
 
@@ -544,32 +545,33 @@ static std::string_view get_speak_filename(MonsterEntity *m_ptr)
  */
 void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware)
 {
-    if (player_ptr->phase_out) {
+    if (AngbandSystem::get_instance().is_phase_out()) {
         return;
     }
 
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monster = floor.m_list[m_idx];
     constexpr auto chance_noise = 20;
-    if (m_ptr->ap_r_idx == MonsterRaceId::CYBER && one_in_(chance_noise) && !m_ptr->ml && (m_ptr->cdis <= MAX_PLAYER_SIGHT)) {
+    if (monster.ap_r_idx == MonsterRaceId::CYBER && one_in_(chance_noise) && !monster.ml && (monster.cdis <= MAX_PLAYER_SIGHT)) {
         if (disturb_minor) {
             disturb(player_ptr, false, false);
         }
         msg_print(_("重厚な足音が聞こえた。", "You hear heavy steps."));
     }
 
-    auto can_speak = m_ptr->get_appearance_monrace().speak_flags.any();
+    const auto can_speak = monster.get_appearance_monrace().speak_flags.any();
     constexpr auto chance_speak = 8;
-    if (!can_speak || !aware || !one_in_(chance_speak) || !player_has_los_bold(player_ptr, oy, ox) || !projectable(player_ptr, oy, ox, player_ptr->y, player_ptr->x)) {
+    if (!can_speak || !aware || !one_in_(chance_speak) || !floor.has_los({ oy, ox }) || !projectable(player_ptr, oy, ox, player_ptr->y, player_ptr->x)) {
         return;
     }
 
-    const auto m_name = m_ptr->ml ? monster_desc(player_ptr, m_ptr, 0) : std::string(_("それ", "It"));
-    auto filename = get_speak_filename(m_ptr);
+    const auto m_name = monster.ml ? monster_desc(player_ptr, &monster, 0) : std::string(_("それ", "It"));
+    auto filename = get_speak_filename(monster);
     if (filename.empty()) {
         return;
     }
 
-    const auto monmessage = get_random_line(filename.data(), enum2i(m_ptr->ap_r_idx));
+    const auto monmessage = get_random_line(filename.data(), enum2i(monster.ap_r_idx));
     if (monmessage.has_value()) {
         msg_format(_("%s^%s", "%s^ %s"), m_name.data(), monmessage->data());
     }
