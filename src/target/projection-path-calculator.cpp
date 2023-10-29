@@ -4,6 +4,7 @@
 #include "floor/cave.h"
 #include "grid/feature-flag-types.h"
 #include "spell-class/spells-mirror-master.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -277,7 +278,7 @@ projection_path::projection_path(PlayerType *player_ptr, POSITION range, POSITIO
  */
 bool projectable(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-    projection_path grid_g(player_ptr, (project_length ? project_length : get_max_range(player_ptr)), y1, x1, y2, x2, 0);
+    projection_path grid_g(player_ptr, (project_length ? project_length : AngbandSystem::get_instance().get_max_range()), y1, x1, y2, x2, 0);
     if (grid_g.path_num() == 0) {
         return true;
     }
@@ -288,16 +289,6 @@ bool projectable(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, 
     }
 
     return true;
-}
-
-/*!
- * @briefプレイヤーの攻撃射程(マス) / Maximum range (spells, etc)
- * @param player_ptr プレイヤーへの参照ポインタ
- * @return 射程
- */
-int get_max_range(PlayerType *player_ptr)
-{
-    return player_ptr->phase_out ? 36 : 18;
 }
 
 /*

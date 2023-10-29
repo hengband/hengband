@@ -186,11 +186,13 @@ bool check_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 static void update_local_illumination_aux(PlayerType *player_ptr, int y, int x)
 {
-    if (!player_has_los_bold(player_ptr, y, x)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const Pos2D pos(y, x);
+    const auto &grid = floor.get_grid(pos);
+    if (!grid.has_los()) {
         return;
     }
 
-    const auto &grid = player_ptr->current_floor_ptr->grid_array[y][x];
     if (grid.m_idx > 0) {
         update_monster(player_ptr, grid.m_idx, false);
     }

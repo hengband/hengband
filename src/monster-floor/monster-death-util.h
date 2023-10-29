@@ -2,9 +2,13 @@
 
 #include "system/angband.h"
 
+// @todo PlayerType に依存するオブジェクトメソッドを追加予定.
+class FloorType;
 class MonsterEntity;
 class MonsterRaceInfo;
-struct monster_death_type {
+class MonsterDeath {
+public:
+    MonsterDeath(FloorType &floor, MONSTER_IDX m_idx, bool drop_item);
     MONSTER_IDX m_idx;
     MonsterEntity *m_ptr;
     MonsterRaceInfo *r_ptr;
@@ -13,10 +17,7 @@ struct monster_death_type {
     bool cloned;
     int force_coin;
     bool drop_chosen_item;
-    POSITION md_y;
-    POSITION md_x;
-    uint32_t mo_mode;
+    POSITION md_y = 0;
+    POSITION md_x = 0;
+    uint32_t mo_mode = 0;
 };
-
-class PlayerType;
-monster_death_type *initialize_monster_death_type(PlayerType *player_ptr, monster_death_type *md_ptr, MONSTER_IDX m_idx, bool drop_item);

@@ -20,6 +20,7 @@
 #include "monster/monster-util.h"
 #include "player-base/player-class.h"
 #include "status/buff-setter.h"
+#include "system/angband-system.h"
 #include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
@@ -349,8 +350,7 @@ bool monster_arena_comm(PlayerType *player_ptr)
     reset_tim_flags(player_ptr);
 
     prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
-
-    player_ptr->phase_out = true;
+    AngbandSystem::get_instance().set_phase_out(true);
     player_ptr->leaving = true;
     player_ptr->leave_bldg = true;
 

@@ -270,7 +270,8 @@ void ObjectThrowEntity::display_potion_throw()
 
     const auto angry_m_name = monster_desc(this->player_ptr, angry_m_ptr, 0);
     msg_format(_("%sは怒った！", "%s^ gets angry!"), angry_m_name.data());
-    set_hostile(this->player_ptr, &floor_ptr->m_list[floor_ptr->grid_array[this->y][this->x].m_idx]);
+    const auto &grid = floor_ptr->get_grid({ this->y, this->x });
+    floor_ptr->m_list[grid.m_idx].set_hostile();
     this->do_drop = false;
 }
 

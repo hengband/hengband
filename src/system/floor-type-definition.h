@@ -3,6 +3,7 @@
 #include "floor/floor-base-definitions.h"
 #include "monster/monster-timed-effect-types.h"
 #include "system/angband.h"
+#include "util/point-2d.h"
 #include <array>
 #include <optional>
 #include <vector>
@@ -84,6 +85,8 @@ public:
     QuestId quest_number;
     bool inside_arena = false; /* Is character inside on_defeat_arena_monster? */
 
+    grid_type &get_grid(const Pos2D pos);
+    const grid_type &get_grid(const Pos2D pos) const;
     bool is_in_dungeon() const;
     bool is_in_quest() const;
     void set_dungeon_index(short dungeon_idx_); /*!< @todo 後でenum class にする */
@@ -91,4 +94,7 @@ public:
     dungeon_type &get_dungeon_definition() const;
     QuestId get_random_quest_id(std::optional<int> level_opt = std::nullopt) const;
     QuestId get_quest_id(const int bonus = 0) const;
+    bool has_los(const Pos2D pos) const;
+    bool is_special() const;
+    bool can_teleport_level(bool to_player = false) const;
 };

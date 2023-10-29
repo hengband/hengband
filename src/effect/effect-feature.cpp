@@ -15,6 +15,7 @@
 #include "player/special-defense-types.h"
 #include "room/door-definition.h"
 #include "spell-class/spells-mirror-master.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -68,17 +69,18 @@ static bool cave_naked_bold(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, int dam, AttributeType typ)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *g_ptr = &floor_ptr->grid_array[y][x];
-    auto *f_ptr = &terrains_info[g_ptr->feat];
+    const Pos2D pos(y, x);
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &grid = floor.get_grid(pos);
+    const auto &terrain = terrains_info[grid.feat];
 
-    bool obvious = false;
-    bool known = player_has_los_bold(player_ptr, y, x);
+    auto obvious = false;
+    auto known = grid.has_los();
 
     who = who ? who : 0;
     dam = (dam + r) / (r + 1);
 
-    if (f_ptr->flags.has(TerrainCharacteristics::TREE)) {
+    if (terrain.flags.has(TerrainCharacteristics::TREE)) {
         concptr message;
         switch (typ) {
         case AttributeType::POIS:
@@ -127,7 +129,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
             cave_set_feat(player_ptr, y, x, one_in_(3) ? feat_brake : feat_grass);
 
             /* Observe */
-            if (g_ptr->is_mark()) {
+            if (grid.is_mark()) {
                 obvious = true;
             }
         }
@@ -169,14 +171,14 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         break;
     }
     case AttributeType::KILL_TRAP: {
-        if (is_hidden_door(player_ptr, g_ptr)) {
+        if (is_hidden_door(player_ptr, &grid)) {
             disclose_grid(player_ptr, y, x);
             if (known) {
                 obvious = true;
             }
         }
 
-        if (is_trap(player_ptr, g_ptr->feat)) {
+        if (is_trap(player_ptr, grid.feat)) {
             if (known) {
                 msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
                 obvious = true;
@@ -185,26 +187,26 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::DISARM);
         }
 
-        if (is_closed_door(player_ptr, g_ptr->feat) && f_ptr->power && f_ptr->flags.has(TerrainCharacteristics::OPEN)) {
-            FEAT_IDX old_feat = g_ptr->feat;
+        if (is_closed_door(player_ptr, grid.feat) && terrain.power && terrain.flags.has(TerrainCharacteristics::OPEN)) {
+            FEAT_IDX old_feat = grid.feat;
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::DISARM);
-            if (known && (old_feat != g_ptr->feat)) {
+            if (known && (old_feat != grid.feat)) {
                 msg_print(_("カチッと音がした！", "Click!"));
                 obvious = true;
             }
         }
 
-        if (player_ptr->effects()->blindness()->is_blind() || !player_has_los_bold(player_ptr, y, x)) {
+        if (player_ptr->effects()->blindness()->is_blind() || !grid.has_los()) {
             break;
         }
 
-        g_ptr->info &= ~(CAVE_UNSAFE);
+        grid.info &= ~(CAVE_UNSAFE);
         lite_spot(player_ptr, y, x);
         obvious = true;
         break;
     }
     case AttributeType::KILL_DOOR: {
-        if (is_trap(player_ptr, g_ptr->feat) || f_ptr->flags.has(TerrainCharacteristics::DOOR)) {
+        if (is_trap(player_ptr, grid.feat) || terrain.flags.has(TerrainCharacteristics::DOOR)) {
             if (known) {
                 msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
                 obvious = true;
@@ -213,25 +215,25 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::TUNNEL);
         }
 
-        if (player_ptr->effects()->blindness()->is_blind() || !player_has_los_bold(player_ptr, y, x)) {
+        if (player_ptr->effects()->blindness()->is_blind() || !grid.has_los()) {
             break;
         }
 
-        g_ptr->info &= ~(CAVE_UNSAFE);
+        grid.info &= ~(CAVE_UNSAFE);
         lite_spot(player_ptr, y, x);
         obvious = true;
         break;
     }
     case AttributeType::JAM_DOOR: {
-        if (f_ptr->flags.has_not(TerrainCharacteristics::SPIKE)) {
+        if (terrain.flags.has_not(TerrainCharacteristics::SPIKE)) {
             break;
         }
 
-        int16_t old_mimic = g_ptr->mimic;
-        TerrainType *mimic_f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
+        int16_t old_mimic = grid.mimic;
+        TerrainType *mimic_f_ptr = &terrains_info[grid.get_feat_mimic()];
 
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::SPIKE);
-        g_ptr->mimic = old_mimic;
+        grid.mimic = old_mimic;
 
         note_spot(player_ptr, y, x);
         lite_spot(player_ptr, y, x);
@@ -245,12 +247,12 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         break;
     }
     case AttributeType::KILL_WALL: {
-        if (f_ptr->flags.has_not(TerrainCharacteristics::HURT_ROCK)) {
+        if (terrain.flags.has_not(TerrainCharacteristics::HURT_ROCK)) {
             break;
         }
 
-        if (known && g_ptr->is_mark()) {
-            msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), terrains_info[g_ptr->get_feat_mimic()].name.data());
+        if (known && grid.is_mark()) {
+            msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), terrains_info[grid.get_feat_mimic()].name.data());
             obvious = true;
         }
 
@@ -266,13 +268,13 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
             break;
         }
         cave_set_feat(player_ptr, y, x, feat_door[DOOR_DOOR].closed);
-        if (g_ptr->is_mark()) {
+        if (grid.is_mark()) {
             obvious = true;
         }
         break;
     }
     case AttributeType::MAKE_TRAP: {
-        place_trap(floor_ptr, y, x);
+        place_trap(&floor, y, x);
         break;
     }
     case AttributeType::MAKE_TREE: {
@@ -283,7 +285,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
             break;
         }
         cave_set_feat(player_ptr, y, x, feat_tree);
-        if (g_ptr->is_mark()) {
+        if (grid.is_mark()) {
             obvious = true;
         }
         break;
@@ -292,8 +294,8 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         if (!cave_naked_bold(player_ptr, y, x)) {
             break;
         }
-        g_ptr->info |= CAVE_OBJECT;
-        g_ptr->mimic = feat_rune_protection;
+        grid.info |= CAVE_OBJECT;
+        grid.mimic = feat_rune_protection;
         note_spot(player_ptr, y, x);
         lite_spot(player_ptr, y, x);
         break;
@@ -309,11 +311,11 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         break;
     }
     case AttributeType::LAVA_FLOW: {
-        if (f_ptr->flags.has(TerrainCharacteristics::PERMANENT)) {
+        if (terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
             break;
         }
         if (dam == 1) {
-            if (f_ptr->flags.has_not(TerrainCharacteristics::FLOOR)) {
+            if (terrain.flags.has_not(TerrainCharacteristics::FLOOR)) {
                 break;
             }
             cave_set_feat(player_ptr, y, x, feat_shallow_lava);
@@ -324,11 +326,11 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         break;
     }
     case AttributeType::WATER_FLOW: {
-        if (f_ptr->flags.has(TerrainCharacteristics::PERMANENT)) {
+        if (terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
             break;
         }
         if (dam == 1) {
-            if (f_ptr->flags.has_not(TerrainCharacteristics::FLOOR)) {
+            if (terrain.flags.has_not(TerrainCharacteristics::FLOOR)) {
                 break;
             }
             cave_set_feat(player_ptr, y, x, feat_shallow_water);
@@ -340,11 +342,11 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
     }
     case AttributeType::LITE_WEAK:
     case AttributeType::LITE: {
-        if (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
+        if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
             break;
         }
 
-        g_ptr->info |= (CAVE_GLOW);
+        grid.info |= (CAVE_GLOW);
         note_spot(player_ptr, y, x);
         lite_spot(player_ptr, y, x);
         update_local_illumination(player_ptr, y, x);
@@ -352,8 +354,8 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         if (player_can_see_bold(player_ptr, y, x)) {
             obvious = true;
         }
-        if (g_ptr->m_idx) {
-            update_monster(player_ptr, g_ptr->m_idx, false);
+        if (grid.m_idx) {
+            update_monster(player_ptr, grid.m_idx, false);
         }
 
         if (player_bold(player_ptr, y, x)) {
@@ -365,22 +367,20 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
     case AttributeType::DARK_WEAK:
     case AttributeType::DARK:
     case AttributeType::ABYSS: {
-        bool do_dark = !player_ptr->phase_out && !g_ptr->is_mirror();
+        auto do_dark = !AngbandSystem::get_instance().is_phase_out() && !grid.is_mirror();
         if (!do_dark) {
             break;
         }
 
-        if ((floor_ptr->dun_level > 0) || !is_daytime()) {
+        if ((floor.dun_level > 0) || !is_daytime()) {
             for (int j = 0; j < 9; j++) {
-                int by = y + ddy_ddd[j];
-                int bx = x + ddx_ddd[j];
-
-                if (!in_bounds2(floor_ptr, by, bx)) {
+                const Pos2D pos_neighbor(y + ddy_ddd[j], x + ddx_ddd[j]);
+                if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
                     continue;
                 }
 
-                grid_type *cc_ptr = &floor_ptr->grid_array[by][bx];
-                if (terrains_info[cc_ptr->get_feat_mimic()].flags.has(TerrainCharacteristics::GLOW)) {
+                const auto &grid_neighbor = floor.get_grid(pos_neighbor);
+                if (terrains_info[grid_neighbor.get_feat_mimic()].flags.has(TerrainCharacteristics::GLOW)) {
                     do_dark = false;
                     break;
                 }
@@ -391,12 +391,12 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
             }
         }
 
-        g_ptr->info &= ~(CAVE_GLOW);
+        grid.info &= ~(CAVE_GLOW);
 
         /* Hack -- Forget "boring" grids */
-        if (f_ptr->flags.has_not(TerrainCharacteristics::REMEMBER) || has_element_resist(player_ptr, ElementRealmType::DARKNESS, 1)) {
+        if (terrain.flags.has_not(TerrainCharacteristics::REMEMBER) || has_element_resist(player_ptr, ElementRealmType::DARKNESS, 1)) {
             /* Forget */
-            g_ptr->info &= ~(CAVE_MARK);
+            grid.info &= ~(CAVE_MARK);
             note_spot(player_ptr, y, x);
         }
 
@@ -407,15 +407,15 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         if (player_can_see_bold(player_ptr, y, x)) {
             obvious = true;
         }
-        if (g_ptr->m_idx) {
-            update_monster(player_ptr, g_ptr->m_idx, false);
+        if (grid.m_idx) {
+            update_monster(player_ptr, grid.m_idx, false);
         }
 
         break;
     }
     case AttributeType::SHARDS:
     case AttributeType::ROCKET: {
-        if (g_ptr->is_mirror()) {
+        if (grid.is_mirror()) {
             msg_print(_("鏡が割れた！", "The mirror was shattered!"));
             sound(SOUND_GLASS);
             SpellsMirrorMaster(player_ptr).remove_mirror(y, x);
@@ -423,12 +423,12 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }
 
-        if (f_ptr->flags.has_not(TerrainCharacteristics::GLASS) || f_ptr->flags.has(TerrainCharacteristics::PERMANENT) || (dam < 50)) {
+        if (terrain.flags.has_not(TerrainCharacteristics::GLASS) || terrain.flags.has(TerrainCharacteristics::PERMANENT) || (dam < 50)) {
             break;
         }
 
-        if (known && (g_ptr->is_mark())) {
-            msg_format(_("%sが割れた！", "The %s crumbled!"), terrains_info[g_ptr->get_feat_mimic()].name.data());
+        if (known && (grid.is_mark())) {
+            msg_format(_("%sが割れた！", "The %s crumbled!"), terrains_info[grid.get_feat_mimic()].name.data());
             sound(SOUND_GLASS);
         }
 
@@ -437,7 +437,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         break;
     }
     case AttributeType::SOUND: {
-        if (g_ptr->is_mirror() && player_ptr->lev < 40) {
+        if (grid.is_mirror() && player_ptr->lev < 40) {
             msg_print(_("鏡が割れた！", "The mirror was shattered!"));
             sound(SOUND_GLASS);
             SpellsMirrorMaster(player_ptr).remove_mirror(y, x);
@@ -445,12 +445,12 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }
 
-        if (f_ptr->flags.has_not(TerrainCharacteristics::GLASS) || f_ptr->flags.has(TerrainCharacteristics::PERMANENT) || (dam < 200)) {
+        if (terrain.flags.has_not(TerrainCharacteristics::GLASS) || terrain.flags.has(TerrainCharacteristics::PERMANENT) || (dam < 200)) {
             break;
         }
 
-        if (known && (g_ptr->is_mark())) {
-            msg_format(_("%sが割れた！", "The %s crumbled!"), terrains_info[g_ptr->get_feat_mimic()].name.data());
+        if (known && (grid.is_mark())) {
+            msg_format(_("%sが割れた！", "The %s crumbled!"), terrains_info[grid.get_feat_mimic()].name.data());
             sound(SOUND_GLASS);
         }
 
@@ -459,11 +459,11 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         break;
     }
     case AttributeType::DISINTEGRATE: {
-        if (g_ptr->is_mirror() || g_ptr->is_rune_protection() || g_ptr->is_rune_explosion()) {
+        if (grid.is_mirror() || grid.is_rune_protection() || grid.is_rune_explosion()) {
             SpellsMirrorMaster(player_ptr).remove_mirror(y, x);
         }
 
-        if (f_ptr->flags.has_not(TerrainCharacteristics::HURT_DISI) || f_ptr->flags.has(TerrainCharacteristics::PERMANENT)) {
+        if (terrain.flags.has_not(TerrainCharacteristics::HURT_DISI) || terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
             break;
         }
 

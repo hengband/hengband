@@ -12,7 +12,6 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
-#include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "mspell/mspell-checker.h"
 #include "mspell/mspell-judgement.h"
@@ -20,6 +19,7 @@
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
 #include "spell-kind/spells-world.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -28,7 +28,6 @@
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
-
 #include <iterator>
 
 static void decide_melee_spell_target(PlayerType *player_ptr, melee_spell_type *ms_ptr)
@@ -46,25 +45,25 @@ static void decide_melee_spell_target(PlayerType *player_ptr, melee_spell_type *
 
 static void decide_indirection_melee_spell(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
-    const auto &m_ref = *ms_ptr->m_ptr;
-    if ((ms_ptr->target_idx != 0) || (m_ref.target_y == 0)) {
+    const auto &monster_from = *ms_ptr->m_ptr;
+    if ((ms_ptr->target_idx != 0) || (monster_from.target_y == 0)) {
         return;
     }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    ms_ptr->target_idx = floor_ptr->grid_array[m_ref.target_y][m_ref.target_x].m_idx;
+    ms_ptr->target_idx = floor_ptr->grid_array[monster_from.target_y][monster_from.target_x].m_idx;
     if (ms_ptr->target_idx == 0) {
         return;
     }
 
     ms_ptr->t_ptr = &floor_ptr->m_list[ms_ptr->target_idx];
-    const auto &t_ref = *ms_ptr->t_ptr;
-    if ((ms_ptr->m_idx == ms_ptr->target_idx) || ((ms_ptr->target_idx != player_ptr->pet_t_m_idx) && !are_enemies(player_ptr, m_ref, t_ref))) {
+    const auto &monster_to = *ms_ptr->t_ptr;
+    if ((ms_ptr->m_idx == ms_ptr->target_idx) || ((ms_ptr->target_idx != player_ptr->pet_t_m_idx) && !monster_from.is_hostile_to_melee(monster_to))) {
         ms_ptr->target_idx = 0;
         return;
     }
 
-    if (projectable(player_ptr, m_ref.fy, m_ref.fx, t_ref.fy, t_ref.fx)) {
+    if (projectable(player_ptr, monster_from.fy, monster_from.fx, monster_to.fy, monster_to.fx)) {
         return;
     }
 
@@ -80,7 +79,7 @@ static bool check_melee_spell_projection(PlayerType *player_ptr, melee_spell_typ
     int start;
     int plus = 1;
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (player_ptr->phase_out) {
+    if (AngbandSystem::get_instance().is_phase_out()) {
         start = randint1(floor_ptr->m_max - 1) + floor_ptr->m_max;
         if (randint0(2)) {
             plus = -1;
@@ -97,11 +96,11 @@ static bool check_melee_spell_projection(PlayerType *player_ptr, melee_spell_typ
 
         ms_ptr->target_idx = dummy;
         ms_ptr->t_ptr = &floor_ptr->m_list[ms_ptr->target_idx];
-        const auto &m_ref = *ms_ptr->m_ptr;
-        const auto &t_ref = *ms_ptr->t_ptr;
-        const auto is_enemies = are_enemies(player_ptr, m_ref, t_ref);
-        const auto is_projectable = projectable(player_ptr, m_ref.fy, m_ref.fx, t_ref.fy, t_ref.fx);
-        if (!t_ref.is_valid() || (ms_ptr->m_idx == ms_ptr->target_idx) || !is_enemies || !is_projectable) {
+        const auto &monster_from = *ms_ptr->m_ptr;
+        const auto &monster_to = *ms_ptr->t_ptr;
+        const auto is_enemies = monster_from.is_hostile_to_melee(monster_to);
+        const auto is_projectable = projectable(player_ptr, monster_from.fy, monster_from.fx, monster_to.fy, monster_to.fx);
+        if (!monster_to.is_valid() || (ms_ptr->m_idx == ms_ptr->target_idx) || !is_enemies || !is_projectable) {
             continue;
         }
 
@@ -144,9 +143,9 @@ static void check_stupid(melee_spell_type *ms_ptr)
     ms_ptr->ability_flags &= RF_ABILITY_NOMAGIC_MASK;
 }
 
-static void check_arena(PlayerType *player_ptr, melee_spell_type *ms_ptr)
+static void check_arena(const FloorType &floor, melee_spell_type *ms_ptr)
 {
-    if (!player_ptr->current_floor_ptr->inside_arena && !player_ptr->phase_out) {
+    if (!floor.inside_arena && !AngbandSystem::get_instance().is_phase_out()) {
         return;
     }
 
@@ -164,12 +163,15 @@ static void check_melee_spell_distance(PlayerType *player_ptr, melee_spell_type 
         return;
     }
 
-    POSITION real_y = ms_ptr->y;
-    POSITION real_x = ms_ptr->x;
+    auto real_y = ms_ptr->y;
+    auto real_x = ms_ptr->x;
     get_project_point(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, &real_y, &real_x, 0L);
-    if (!projectable(player_ptr, real_y, real_x, player_ptr->y, player_ptr->x) && ms_ptr->ability_flags.has(MonsterAbilityType::BA_LITE) && (distance(real_y, real_x, player_ptr->y, player_ptr->x) <= 4) && los(player_ptr, real_y, real_x, player_ptr->y, player_ptr->x)) {
+    auto should_preserve = !projectable(player_ptr, real_y, real_x, player_ptr->y, player_ptr->x);
+    should_preserve &= ms_ptr->ability_flags.has(MonsterAbilityType::BA_LITE);
+    should_preserve &= distance(real_y, real_x, player_ptr->y, player_ptr->x) <= 4;
+    should_preserve &= los(player_ptr, real_y, real_x, player_ptr->y, player_ptr->x);
+    if (should_preserve) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::BA_LITE);
-
         return;
     }
 
@@ -192,7 +194,7 @@ static void check_melee_spell_distance(PlayerType *player_ptr, melee_spell_type 
     auto *r_ptr = &ms_ptr->m_ptr->get_monrace();
     if (any_bits(r_ptr->flags2, RF2_POWERFUL)) {
         ms_ptr->ability_flags.reset(ball_when_powerful_rad4);
-    };
+    }
 
     ms_ptr->ability_flags.reset(RF_ABILITY_BIG_BALL_MASK);
 }
@@ -344,7 +346,8 @@ static void check_smart(PlayerType *player_ptr, melee_spell_type *ms_ptr)
         ms_ptr->ability_flags &= RF_ABILITY_INT_MASK;
     }
 
-    if (ms_ptr->ability_flags.has(MonsterAbilityType::TELE_LEVEL) && is_teleport_level_ineffective(player_ptr, (ms_ptr->target_idx == player_ptr->riding) ? 0 : ms_ptr->target_idx)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (ms_ptr->ability_flags.has(MonsterAbilityType::TELE_LEVEL) && floor.can_teleport_level((ms_ptr->target_idx != player_ptr->riding) ? ms_ptr->target_idx != 0 : false)) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::TELE_LEVEL);
     }
 }
@@ -387,8 +390,8 @@ bool check_melee_spell_set(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 
     check_darkness(player_ptr, ms_ptr);
     check_stupid(ms_ptr);
-    check_arena(player_ptr, ms_ptr);
-    if (player_ptr->phase_out && !one_in_(3)) {
+    check_arena(*player_ptr->current_floor_ptr, ms_ptr);
+    if (AngbandSystem::get_instance().is_phase_out() && !one_in_(3)) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::HEAL);
     }
 

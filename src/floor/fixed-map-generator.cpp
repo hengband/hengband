@@ -135,7 +135,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
 
             if (r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
                 r_ref.cur_num = 0;
-                r_ref.max_num = 1;
+                r_ref.max_num = MAX_UNIQUE_NUM;
             } else if (r_ref.population_flags.has(MonsterPopulationType::NAZGUL)) {
                 if (r_ref.cur_num == r_ref.max_num) {
                     r_ref.max_num++;

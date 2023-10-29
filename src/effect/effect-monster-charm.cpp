@@ -241,7 +241,7 @@ static void effect_monster_domination_corrupted_addition(PlayerType *player_ptr,
         (void)bss.mod_confusion(em_ptr->dam / 2);
         return;
     default:
-        if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_FEAR)) {
+        if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_FEAR)) {
             em_ptr->note = _("には効果がなかった。", " is unaffected.");
         } else {
             (void)bss.mod_fear(static_cast<TIME_EFFECT>(em_ptr->dam));
@@ -299,10 +299,10 @@ ProcessResult effect_monster_domination(PlayerType *player_ptr, EffectMonster *e
 
     const auto is_unique = em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     const auto is_questor = any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR);
-    const auto is_no_confusion = any_bits(em_ptr->r_ptr->flags3, RF3_NO_CONF);
+    const auto is_no_confusion = em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF);
     if (is_unique || is_questor || is_no_confusion || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
-        if (((em_ptr->r_ptr->flags3 & RF3_NO_CONF) != 0) && is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
-            em_ptr->r_ptr->r_flags3 |= (RF3_NO_CONF);
+        if ((em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) && is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+            em_ptr->r_ptr->resistance_flags.set(MonsterResistanceType::NO_CONF);
         }
 
         em_ptr->do_conf = 0;
@@ -329,7 +329,7 @@ static bool effect_monster_crusade_domination(PlayerType *player_ptr, EffectMons
         return false;
     }
 
-    if (em_ptr->r_ptr->flags3 & RF3_NO_CONF) {
+    if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) {
         em_ptr->dam -= 50;
     }
     if (em_ptr->dam < 1) {
@@ -377,10 +377,10 @@ ProcessResult effect_monster_crusade(PlayerType *player_ptr, EffectMonster *em_p
         return ProcessResult::PROCESS_CONTINUE;
     }
 
-    if ((em_ptr->r_ptr->flags3 & RF3_NO_FEAR) == 0) {
+    if (em_ptr->r_ptr->resistance_flags.has_not(MonsterResistanceType::NO_FEAR)) {
         em_ptr->do_fear = randint1(90) + 10;
     } else if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
-        em_ptr->r_ptr->r_flags3 |= RF3_NO_FEAR;
+        em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::NO_FEAR);
     }
 
     em_ptr->dam = 0;

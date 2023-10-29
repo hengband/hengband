@@ -4,6 +4,7 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
 #include "monster/smart-learn-types.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -38,16 +39,19 @@ static int get_coin_type(MonsterRaceId r_idx)
     }
 }
 
-monster_death_type *initialize_monster_death_type(PlayerType *player_ptr, monster_death_type *md_ptr, MONSTER_IDX m_idx, bool drop_item)
+MonsterDeath::MonsterDeath(FloorType &floor, MONSTER_IDX m_idx, bool drop_item)
+    : m_idx(m_idx)
+    , m_ptr(&floor.m_list[m_idx])
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    md_ptr->m_idx = m_idx;
-    md_ptr->m_ptr = &floor_ptr->m_list[m_idx];
-    md_ptr->r_ptr = &md_ptr->m_ptr->get_monrace();
-    md_ptr->do_gold = (md_ptr->r_ptr->drop_flags.has_none_of({ MonsterDropType::ONLY_ITEM, MonsterDropType::DROP_GOOD, MonsterDropType::DROP_GREAT }));
-    md_ptr->do_item = (md_ptr->r_ptr->drop_flags.has_not(MonsterDropType::ONLY_GOLD) || md_ptr->r_ptr->drop_flags.has_any_of({ MonsterDropType::DROP_GOOD, MonsterDropType::DROP_GREAT }));
-    md_ptr->cloned = md_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::CLONED);
-    md_ptr->force_coin = get_coin_type(md_ptr->m_ptr->r_idx);
-    md_ptr->drop_chosen_item = drop_item && !md_ptr->cloned && !floor_ptr->inside_arena && !player_ptr->phase_out && !md_ptr->m_ptr->is_pet();
-    return md_ptr;
+    this->r_ptr = &this->m_ptr->get_monrace();
+    this->do_gold = this->r_ptr->drop_flags.has_none_of({
+        MonsterDropType::ONLY_ITEM,
+        MonsterDropType::DROP_GOOD,
+        MonsterDropType::DROP_GREAT,
+    });
+    this->do_item = this->r_ptr->drop_flags.has_not(MonsterDropType::ONLY_GOLD);
+    this->do_item |= this->r_ptr->drop_flags.has_any_of({ MonsterDropType::DROP_GOOD, MonsterDropType::DROP_GREAT });
+    this->cloned = this->m_ptr->mflag2.has(MonsterConstantFlagType::CLONED);
+    this->force_coin = get_coin_type(this->m_ptr->r_idx);
+    this->drop_chosen_item = drop_item && !this->cloned && !floor.inside_arena && !AngbandSystem::get_instance().is_phase_out() && !this->m_ptr->is_pet();
 }

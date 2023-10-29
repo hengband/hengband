@@ -1,14 +1,27 @@
 #include "system/floor-type-definition.h"
 #include "dungeon/quest.h"
+#include "game-option/birth-options.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
+#include "util/bit-flags-calculator.h"
 #include "util/enum-range.h"
 
 FloorType::FloorType()
     : quest_number(QuestId::NONE)
 {
+}
+
+grid_type &FloorType::get_grid(const Pos2D pos)
+{
+    return this->grid_array[pos.y][pos.x];
+}
+
+const grid_type &FloorType::get_grid(const Pos2D pos) const
+{
+    return this->grid_array[pos.y][pos.x];
 }
 
 bool FloorType::is_in_dungeon() const
@@ -93,4 +106,39 @@ QuestId FloorType::get_quest_id(const int bonus) const
     }
 
     return this->get_random_quest_id(level);
+}
+
+/*
+ * @brief 与えられた座標のグリッドがLOSフラグを持つかを調べる
+ * @param pos 座標
+ * @return LOSフラグを持つか否か
+ */
+bool FloorType::has_los(const Pos2D pos) const
+{
+    return this->get_grid(pos).has_los();
+}
+
+/*!
+ * @brief 特別なフロアにいるかを判定する
+ * @return 固定クエスト、アリーナ、モンスター闘技場のいずれかならばtrue
+ */
+bool FloorType::is_special() const
+{
+    auto is_in_fixed_quest = this->is_in_quest();
+    is_in_fixed_quest &= !inside_quest(this->get_random_quest_id());
+    return is_in_fixed_quest || this->inside_arena || AngbandSystem::get_instance().is_phase_out();
+}
+
+/*!
+ * @brief テレポート・レベル無効フロアの判定
+ * @param to_player プレイヤーを対象としているか否か
+ * @return テレポート・レベルが不可能ならばtrue
+ */
+bool FloorType::can_teleport_level(bool to_player) const
+{
+    auto is_invalid_floor = to_player;
+    is_invalid_floor &= inside_quest(this->get_quest_id()) || (this->dun_level >= this->get_dungeon_definition().maxdepth);
+    is_invalid_floor &= this->dun_level >= 1;
+    is_invalid_floor &= ironman_downward;
+    return this->is_special() || is_invalid_floor;
 }

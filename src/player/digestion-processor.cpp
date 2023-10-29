@@ -15,6 +15,7 @@
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "status/bad-status-setter.h"
+#include "system/angband-system.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-paralysis.h"
@@ -28,7 +29,7 @@
  */
 void starve_player(PlayerType *player_ptr)
 {
-    if (player_ptr->phase_out) {
+    if (AngbandSystem::get_instance().is_phase_out()) {
         return;
     }
 

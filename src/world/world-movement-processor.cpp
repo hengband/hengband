@@ -11,6 +11,7 @@
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-info.h"
@@ -62,7 +63,7 @@ void execute_recall(PlayerType *player_ptr)
         return;
     }
 
-    if (autosave_l && (player_ptr->word_recall == 1) && !player_ptr->phase_out) {
+    if (autosave_l && (player_ptr->word_recall == 1) && !AngbandSystem::get_instance().is_phase_out()) {
         do_cmd_save_game(player_ptr, true);
     }
 
@@ -146,7 +147,7 @@ void execute_floor_reset(PlayerType *player_ptr)
         return;
     }
 
-    if (autosave_l && (player_ptr->alter_reality == 1) && !player_ptr->phase_out) {
+    if (autosave_l && (player_ptr->alter_reality == 1) && !AngbandSystem::get_instance().is_phase_out()) {
         do_cmd_save_game(player_ptr, true);
     }
 

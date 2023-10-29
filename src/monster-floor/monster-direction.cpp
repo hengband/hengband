@@ -16,6 +16,7 @@
 #include "pet/pet-util.h"
 #include "player/player-status-flags.h"
 #include "spell/range-calc.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -69,8 +70,7 @@ static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m
         }
 
         MONSTER_IDX t_idx = dummy;
-        MonsterEntity *t_ptr;
-        t_ptr = &floor_ptr->m_list[t_idx];
+        auto *t_ptr = &floor_ptr->m_list[t_idx];
         if (t_ptr == m_ptr) {
             continue;
         }
@@ -80,7 +80,7 @@ static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m
         if (decide_pet_approch_direction(player_ptr, m_ptr, t_ptr)) {
             continue;
         }
-        if (!are_enemies(player_ptr, *m_ptr, *t_ptr)) {
+        if (!m_ptr->is_hostile_to_melee(*t_ptr)) {
             continue;
         }
 
@@ -125,7 +125,7 @@ bool get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx, int *mm)
     } else {
         int start;
         int plus = 1;
-        if (player_ptr->phase_out) {
+        if (AngbandSystem::get_instance().is_phase_out()) {
             start = randint1(floor_ptr->m_max - 1) + floor_ptr->m_max;
             if (randint0(2)) {
                 plus = -1;

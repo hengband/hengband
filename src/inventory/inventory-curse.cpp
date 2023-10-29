@@ -24,6 +24,7 @@
 #include "spell/summon-types.h"
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
@@ -448,7 +449,7 @@ static void occur_curse_effects(PlayerType *player_ptr)
 {
     auto is_cursed = player_ptr->cursed.has_any_of(TRC_P_FLAG_MASK);
     is_cursed |= player_ptr->cursed_special.has_any_of(TRCS_P_FLAG_MASK);
-    if (!is_cursed || player_ptr->phase_out || player_ptr->wild_mode) {
+    if (!is_cursed || AngbandSystem::get_instance().is_phase_out() || player_ptr->wild_mode) {
         return;
     }
 

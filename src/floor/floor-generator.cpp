@@ -38,6 +38,7 @@
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
 #include "player/player-status.h"
+#include "system/angband-system.h"
 #include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
@@ -502,7 +503,7 @@ void generate_floor(PlayerType *player_ptr)
         player_ptr->x = player_ptr->y = 0;
         if (floor_ptr->inside_arena) {
             generate_challenge_arena(player_ptr);
-        } else if (player_ptr->phase_out) {
+        } else if (AngbandSystem::get_instance().is_phase_out()) {
             generate_gambling_arena(player_ptr);
         } else if (floor_ptr->is_in_quest()) {
             generate_fixed_floor(player_ptr);

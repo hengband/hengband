@@ -80,13 +80,13 @@ ProcessResult effect_monster_mind_blast(PlayerType *player_ptr, EffectMonster *e
     }
 
     bool has_immute = em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
-    has_immute |= any_bits(em_ptr->r_ptr->flags3, RF3_NO_CONF);
+    has_immute |= em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF);
     has_immute |= (em_ptr->r_ptr->level > randint1(std::max(1, em_ptr->caster_lev - 10)) + 10);
 
     if (has_immute) {
-        if (em_ptr->r_ptr->flags3 & (RF3_NO_CONF)) {
+        if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) {
             if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
-                em_ptr->r_ptr->r_flags3 |= (RF3_NO_CONF);
+                em_ptr->r_ptr->resistance_flags.set(MonsterResistanceType::NO_CONF);
             }
         }
 
@@ -128,13 +128,13 @@ ProcessResult effect_monster_brain_smash(PlayerType *player_ptr, EffectMonster *
     }
 
     bool has_immute = em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
-    has_immute |= any_bits(em_ptr->r_ptr->flags3, RF3_NO_CONF);
+    has_immute |= em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF);
     has_immute |= (em_ptr->r_ptr->level > randint1(std::max(1, em_ptr->caster_lev - 10)) + 10);
 
     if (has_immute) {
-        if (em_ptr->r_ptr->flags3 & (RF3_NO_CONF)) {
+        if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) {
             if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
-                em_ptr->r_ptr->r_flags3 |= (RF3_NO_CONF);
+                em_ptr->r_ptr->resistance_flags.set(MonsterResistanceType::NO_CONF);
             }
         }
 

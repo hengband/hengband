@@ -80,6 +80,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/angband-system.h"
 #include "system/angband-version.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
@@ -187,7 +188,7 @@ static void init_world_floor_info(PlayerType *player_ptr)
     floor_ptr->dun_level = 0;
     floor_ptr->quest_number = QuestId::NONE;
     floor_ptr->inside_arena = false;
-    player_ptr->phase_out = false;
+    AngbandSystem::get_instance().set_phase_out(false);
     write_level = true;
     w_ptr->seed_flavor = randint0(0x10000000);
     w_ptr->seed_town = randint0(0x10000000);

@@ -159,63 +159,6 @@ bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, MonsterRa
 }
 
 /*!
- * @brief モンスターの属性の基づいた敵対関係の有無を返す（サブルーチン）
- * Check if this monster has "hostile" alignment (aux)
- * @param sub_align1 モンスター1のサブフラグ
- * @param sub_align2 モンスター2のサブフラグ
- * @return 敵対関係にあるならばTRUEを返す
- */
-static bool check_hostile_align(byte sub_align1, byte sub_align2)
-{
-    if (sub_align1 != sub_align2) {
-        if (((sub_align1 & SUB_ALIGN_EVIL) && (sub_align2 & SUB_ALIGN_GOOD)) || ((sub_align1 & SUB_ALIGN_GOOD) && (sub_align2 & SUB_ALIGN_EVIL))) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-/*!
- * @brief モンスターの属性の基づいた敵対関係の有無を返す
- * Check if two monsters are enemies
- * @param monster1 モンスター1への参照
- * @param monster2 モンスター2への参照
- * @return 敵対関係にあるならばTRUEを返す
- */
-bool are_enemies(PlayerType *player_ptr, const MonsterEntity &monster1, const MonsterEntity &monster2)
-{
-    if (player_ptr->phase_out) {
-        if (monster1.is_pet() || monster2.is_pet()) {
-            return false;
-        }
-        return true;
-    }
-
-    const auto &monrace1 = monster1.get_monrace();
-    const auto &monrace2 = monster2.get_monrace();
-    const auto is_m1_wild = monrace1.wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
-    const auto is_m2_wild = monrace2.wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
-    if (is_m1_wild && is_m2_wild) {
-        if (!monster1.is_pet() && !monster2.is_pet()) {
-            return false;
-        }
-    }
-
-    if (check_hostile_align(monster1.sub_align, monster2.sub_align)) {
-        if (monster1.mflag2.has_not(MonsterConstantFlagType::CHAMELEON) || monster2.mflag2.has_not(MonsterConstantFlagType::CHAMELEON)) {
-            return true;
-        }
-    }
-
-    if (monster1.is_hostile() != monster2.is_hostile()) {
-        return true;
-    }
-
-    return false;
-}
-
-/*!
  * @brief モンスターがプレイヤーに対して敵意を抱くかどうかを返す
  * Check if this monster race has "hostile" alignment
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -227,7 +170,7 @@ bool are_enemies(PlayerType *player_ptr, const MonsterEntity &monster1, const Mo
  * @details
  * If user is player, m_ptr == nullptr.
  */
-bool monster_has_hostile_align(PlayerType *player_ptr, MonsterEntity *m_ptr, int pa_good, int pa_evil, MonsterRaceInfo *r_ptr)
+bool monster_has_hostile_align(PlayerType *player_ptr, MonsterEntity *m_ptr, int pa_good, int pa_evil, const MonsterRaceInfo *r_ptr)
 {
     byte sub_align1 = SUB_ALIGN_NEUTRAL;
     byte sub_align2 = SUB_ALIGN_NEUTRAL;
@@ -253,11 +196,7 @@ bool monster_has_hostile_align(PlayerType *player_ptr, MonsterEntity *m_ptr, int
         sub_align2 |= SUB_ALIGN_GOOD;
     }
 
-    if (check_hostile_align(sub_align1, sub_align2)) {
-        return true;
-    }
-
-    return false;
+    return MonsterEntity::check_sub_alignments(sub_align1, sub_align2);
 }
 
 bool is_original_ap_and_seen(PlayerType *player_ptr, const MonsterEntity *m_ptr)

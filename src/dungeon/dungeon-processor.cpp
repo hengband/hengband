@@ -32,6 +32,7 @@
 #include "realm/realm-song-numbers.h"
 #include "realm/realm-song.h"
 #include "spell-realm/spells-song.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-info.h"
@@ -159,7 +160,8 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         do_cmd_feeling(player_ptr);
     }
 
-    if (player_ptr->phase_out) {
+    const auto is_watching = AngbandSystem::get_instance().is_phase_out();
+    if (is_watching) {
         if (load_game) {
             player_ptr->energy_need = 0;
             update_gambling_monsters(player_ptr);
@@ -203,7 +205,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     floor.monster_level = floor.base_level;
     floor.object_level = floor.base_level;
     w_ptr->is_loading_now = true;
-    if (player_ptr->energy_need > 0 && !player_ptr->phase_out && (floor.dun_level || player_ptr->leaving_dungeon || floor.inside_arena)) {
+    if (player_ptr->energy_need > 0 && !is_watching && (floor.dun_level || player_ptr->leaving_dungeon || floor.inside_arena)) {
         player_ptr->energy_need = 0;
     }
 
@@ -211,11 +213,11 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     mproc_init(&floor);
 
     while (true) {
-        if ((floor.m_cnt + 32 > w_ptr->max_m_idx) && !player_ptr->phase_out) {
+        if ((floor.m_cnt + 32 > w_ptr->max_m_idx) && !is_watching) {
             compact_monsters(player_ptr, 64);
         }
 
-        if ((floor.m_cnt + 32 < floor.m_max) && !player_ptr->phase_out) {
+        if ((floor.m_cnt + 32 < floor.m_max) && !is_watching) {
             compact_monsters(player_ptr, 0);
         }
 

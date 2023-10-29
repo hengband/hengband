@@ -55,9 +55,13 @@ public:
     EnumClassFlagGroup<MonsterSmartLearnType> smart{}; /*!< モンスターのプレイヤーに対する学習状態 / Field for "smart_learn" - Some bit-flags for the "smart" field */
     MONSTER_IDX parent_m_idx{}; /*!< 召喚主のモンスターID */
 
+    static bool check_sub_alignments(const byte sub_align1, const byte sub_align2);
+
     bool is_friendly() const;
     bool is_pet() const;
     bool is_hostile() const;
+    bool is_hostile_to_melee(const MonsterEntity &other) const;
+    bool is_hostile_align(const byte other_sub_align) const;
     bool is_named() const;
     bool is_named_pet() const;
     bool is_original_ap() const;
@@ -87,4 +91,6 @@ public:
     bool is_explodable() const;
     std::string get_died_message() const;
     std::pair<TERM_COLOR, int> get_hp_bar_data() const;
+
+    void set_hostile();
 };

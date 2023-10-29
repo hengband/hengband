@@ -11,6 +11,7 @@
 #include "monster-race/race-flags7.h"
 #include "system/angband.h"
 #include "system/monster-race-info.h"
+#include "system/system-variables.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 
@@ -103,6 +104,27 @@ static void migrate_old_drop_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_flags1)
     for (const auto &l : flag_list) {
         if (any_bits(old_flags1, enum2i(l.old_flag))) {
             r_ptr->r_drop_flags.set(l.flag);
+        }
+    }
+}
+
+static void migrate_old_no_debuff_flags(MonsterRaceInfo *r_ptr)
+{
+    struct flag_list_ver19 {
+        SavedataLoreOlderThan19FlagType_No_Debuff old_flag;
+        MonsterResistanceType flag;
+    };
+
+    const std::vector<flag_list_ver19> flag_list = {
+        { SavedataLoreOlderThan19FlagType_No_Debuff::RF3_NO_FEAR, MonsterResistanceType::NO_FEAR },
+        { SavedataLoreOlderThan19FlagType_No_Debuff::RF3_NO_STUN, MonsterResistanceType::NO_STUN },
+        { SavedataLoreOlderThan19FlagType_No_Debuff::RF3_NO_CONF, MonsterResistanceType::NO_CONF },
+        { SavedataLoreOlderThan19FlagType_No_Debuff::RF3_NO_SLEEP, MonsterResistanceType::NO_SLEEP },
+    };
+
+    for (const auto &l : flag_list) {
+        if (any_bits(r_ptr->r_flags3, l.old_flag)) {
+            r_ptr->r_resistance_flags.set(l.flag);
         }
     }
 }
@@ -307,6 +329,7 @@ static void rd_lore(MonsterRaceInfo *r_ptr, const MonsterRaceId r_idx)
     r_ptr->r_flags1 = rd_u32b();
     r_ptr->r_flags2 = rd_u32b();
     r_ptr->r_flags3 = rd_u32b();
+    migrate_old_no_debuff_flags(r_ptr);
     migrate_old_aura_flags(r_ptr);
     rd_r_ability_flags(r_ptr, r_idx);
     rd_r_aura_flags(r_ptr);
@@ -344,6 +367,19 @@ void load_lore(void)
         auto r_idx = static_cast<MonsterRaceId>(i);
         auto *r_ptr = i < monraces_info.size() ? &monraces_info[r_idx] : &dummy;
         rd_lore(r_ptr, r_idx);
+    }
+
+    for (size_t i = loading_max_r_idx; i < monraces_info.size(); i++) {
+        auto monrace_id = i2enum<MonsterRaceId>(i);
+        auto &monrace = monraces_info[monrace_id];
+        auto max_num = MAX_MONSTER_NUM;
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || any_bits(monrace.flags1, RF7_UNIQUE2)) {
+            max_num = MAX_UNIQUE_NUM;
+        } else if (monrace.population_flags.has(MonsterPopulationType::NAZGUL)) {
+            max_num = MAX_NAZGUL_NUM;
+        }
+
+        monrace.max_num = max_num;
     }
 
     load_note(_("モンスターの思い出をロードしました", "Loaded Monster Memory"));

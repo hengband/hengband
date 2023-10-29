@@ -38,6 +38,7 @@
 #include "monster/monster-util.h"
 #include "object/warning.h"
 #include "player/player-status.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-info.h"
@@ -117,9 +118,9 @@ static MonsterRaceId initial_r_appearance(PlayerType *player_ptr, MonsterRaceId 
  * @param r_idx 生成モンスター種族
  * @return ユニークの生成が不可能な条件ならFALSE、それ以外はTRUE
  */
-static bool check_unique_placeable(PlayerType *player_ptr, MonsterRaceId r_idx, BIT_FLAGS mode)
+static bool check_unique_placeable(const FloorType &floor, MonsterRaceId r_idx, BIT_FLAGS mode)
 {
-    if (player_ptr->phase_out) {
+    if (AngbandSystem::get_instance().is_phase_out()) {
         return true;
     }
 
@@ -128,7 +129,9 @@ static bool check_unique_placeable(PlayerType *player_ptr, MonsterRaceId r_idx, 
     }
 
     auto *r_ptr = &monraces_info[r_idx];
-    if ((r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) && (r_ptr->cur_num >= r_ptr->max_num)) {
+    auto is_unique = r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->population_flags.has(MonsterPopulationType::NAZGUL);
+    is_unique &= r_ptr->cur_num >= r_ptr->max_num;
+    if (is_unique) {
         return false;
     }
 
@@ -140,11 +143,9 @@ static bool check_unique_placeable(PlayerType *player_ptr, MonsterRaceId r_idx, 
         return false;
     }
 
-    if (any_bits(r_ptr->flags1, RF1_FORCE_DEPTH) && (player_ptr->current_floor_ptr->dun_level < r_ptr->level) && (!ironman_nightmare || any_bits(r_ptr->flags1, RF1_QUESTOR))) {
-        return false;
-    }
-
-    return true;
+    const auto is_deep = any_bits(r_ptr->flags1, RF1_FORCE_DEPTH) && (floor.dun_level < r_ptr->level);
+    const auto is_questor = !ironman_nightmare || any_bits(r_ptr->flags1, RF1_QUESTOR);
+    return !is_deep || !is_questor;
 }
 
 /*!
@@ -276,7 +277,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
         return false;
     }
 
-    if (!check_unique_placeable(player_ptr, r_idx, mode) || !check_quest_placeable(floor, r_idx) || !check_procection_rune(player_ptr, r_idx, y, x)) {
+    if (!check_unique_placeable(floor, r_idx, mode) || !check_quest_placeable(floor, r_idx) || !check_procection_rune(player_ptr, r_idx, y, x)) {
         return false;
     }
 

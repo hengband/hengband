@@ -29,6 +29,7 @@
 #include "player/player-damage.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-crusade.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
@@ -62,7 +63,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
         const int separates_size = it_unified->second.size();
         const auto separated_hp = (m_ptr->hp + 1) / separates_size;
         const auto separated_maxhp = m_ptr->maxhp / separates_size;
-        if (floor_ptr->inside_arena || player_ptr->phase_out || !summon_possible(player_ptr, m_ptr->fy, m_ptr->fx)) {
+        if (floor_ptr->inside_arena || AngbandSystem::get_instance().is_phase_out() || !summon_possible(player_ptr, m_ptr->fy, m_ptr->fx)) {
             return MonsterSpellResult::make_invalid();
         }
 

@@ -1,7 +1,6 @@
 #include "monster/monster-status.h"
 #include "autopick/autopick-pref-processor.h"
 #include "core/speed-table.h"
-#include "floor/cave.h"
 #include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "game-option/text-display-options.h"
@@ -17,6 +16,7 @@
 #include "monster/monster-list.h"
 #include "monster/monster-status-setter.h" //!< @todo 相互依存. 後で何とかする.
 #include "monster/monster-update.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -28,7 +28,6 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
 #if JP
 #else
 #include "monster/monster-description-types.h"
@@ -164,7 +163,8 @@ void mproc_init(FloorType *floor_ptr)
  */
 static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int mtimed_idx)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor.m_list[m_idx];
     switch (mtimed_idx) {
     case MTIMED_CSLEEP: {
         auto *r_ptr = &m_ptr->get_monrace();
@@ -176,7 +176,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
             }
 
             /* Handle "sight" and "aggravation" */
-            else if ((m_ptr->cdis <= MAX_PLAYER_SIGHT) && (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx))) {
+            else if ((m_ptr->cdis <= MAX_PLAYER_SIGHT) && floor.has_los({ m_ptr->fy, m_ptr->fx })) {
                 is_wakeup = true;
             }
         }
@@ -404,7 +404,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     auto *r_ptr = &m_ptr->get_monrace();
     auto *s_ptr = &monraces_info[s_idx];
 
-    if (player_ptr->phase_out || (r_ptr->next_exp == 0)) {
+    if (AngbandSystem::get_instance().is_phase_out() || (r_ptr->next_exp == 0)) {
         return;
     }
 
