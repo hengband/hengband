@@ -5,12 +5,14 @@
 #include "system/angband.h"
 #include "util/flag-group.h"
 #include "util/rng-xoshiro.h"
+#include <tuple>
 
 constexpr auto MAX_BOUNTY = 20;
 
 /*!
  * @brief 世界情報構造体
  */
+enum class PlayerRaceType;
 class AngbandWorld {
 public:
     AngbandWorld() = default;
@@ -72,6 +74,7 @@ public:
 
     void set_arena(const bool new_status);
     bool get_arena() const;
+    std::tuple<int, int, int> extract_date_time(PlayerRaceType start_race) const;
 
 private:
     bool is_out_arena = false; // アリーナ外部にいる時だけtrue.
@@ -81,7 +84,6 @@ extern AngbandWorld *w_ptr;
 
 class PlayerType;
 bool is_daytime(void);
-void extract_day_hour_min(PlayerType *player_ptr, int *day, int *hour, int *min);
 void update_playtime(void);
 void add_winner_class(PlayerClassType c);
 void add_retired_class(PlayerClassType c);

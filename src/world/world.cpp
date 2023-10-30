@@ -40,31 +40,30 @@ bool is_daytime(void)
 }
 
 /*!
- * @brief 現在の日数、時刻を返す /
- * Extract day, hour, min
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param day 日数を返すための参照ポインタ
- * @param hour 時数を返すための参照ポインタ
- * @param min 分数を返すための参照ポインタ
+ * @brief プレイ開始からの経過時間を計算する
+ * @param start_race 開始時のプレイヤー種族
+ * @return 日数、時間、分
  */
-void extract_day_hour_min(PlayerType *player_ptr, int *day, int *hour, int *min)
+std::tuple<int, int, int> AngbandWorld::extract_date_time(PlayerRaceType start_race) const
 {
-    const int32_t A_DAY = TURNS_PER_TICK * TOWN_DAWN;
-    int32_t turn_in_today = (w_ptr->game_turn + A_DAY / 4) % A_DAY;
-
-    switch (player_ptr->start_race) {
+    const auto a_day = TURNS_PER_TICK * TOWN_DAWN;
+    const auto turn_in_today = (this->game_turn + a_day / 4) % a_day;
+    int day;
+    switch (start_race) {
     case PlayerRaceType::VAMPIRE:
     case PlayerRaceType::SKELETON:
     case PlayerRaceType::ZOMBIE:
     case PlayerRaceType::SPECTRE:
-        *day = (w_ptr->game_turn - A_DAY * 3 / 4) / A_DAY + 1;
+        day = (this->game_turn - a_day * 3 / 4) / a_day + 1;
         break;
     default:
-        *day = (w_ptr->game_turn + A_DAY / 4) / A_DAY + 1;
+        day = (this->game_turn + a_day / 4) / a_day + 1;
         break;
     }
-    *hour = (24 * turn_in_today / A_DAY) % 24;
-    *min = (1440 * turn_in_today / A_DAY) % 60;
+
+    auto hour = (24 * turn_in_today / a_day) % 24;
+    auto min = (1440 * turn_in_today / a_day) % 60;
+    return { day, hour, min };
 }
 
 /*!
