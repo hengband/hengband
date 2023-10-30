@@ -1,5 +1,5 @@
-%define version 3.0.0.91
-%define release 2
+%define version 3.0.1.0
+%define release 1
 
 Summary: hengband %{version}
 Name: hengband
@@ -96,6 +96,9 @@ exit 0
 
 %changelog
 
+* Mon Oct 30 2023 Shiro Hara <white@vx-xv.com>
+- hengband RPM 3.0.1.0(Beta)
+
 * Sun Oct 22 2023 Shiro Hara <white@vx-xv.com>
 - Fix the graphic mode is not available on X11
 
@@ -170,4 +173,3 @@ exit 0
 
 * Sun Jun 16 2002 Takahiro MIZUNO <tow@plum.freemail.ne.jp> 
 - hengband RPM 1.0.0 release 1
-
