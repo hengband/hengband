@@ -29,12 +29,12 @@ dungeon_grid letter[255];
  * @param buf 読み取りに使うバッファ領域
  * @param head ヘッダ構造体
  * @param parse_info_txt_line パース関数
- * @return エラーコード
+ * @return エラーコード, エラー行番号
  */
-errr init_info_txt(FILE *fp, char *buf, angband_header *head, Parser parse_info_txt_line)
+std::tuple<errr, int> init_info_txt(FILE *fp, char *buf, angband_header *head, Parser parse_info_txt_line)
 {
     error_idx = -1;
-    error_line = 0;
+    auto error_line = 0;
 
     util::SHA256 sha256;
 
@@ -46,7 +46,7 @@ errr init_info_txt(FILE *fp, char *buf, angband_header *head, Parser parse_info_
         }
 
         if (!line.substr(1).starts_with(':')) {
-            return PARSE_ERROR_GENERIC;
+            return { PARSE_ERROR_GENERIC, error_line };
         }
 
         if (line.starts_with('V')) {
@@ -60,13 +60,13 @@ errr init_info_txt(FILE *fp, char *buf, angband_header *head, Parser parse_info_
         }
 
         if (auto err = parse_info_txt_line(line, head); err != 0) {
-            return err;
+            return { err, error_line };
         }
     }
 
     head->digest = sha256.digest();
 
-    return 0;
+    return { PARSE_ERROR_NONE, error_line };
 }
 
 /*!
