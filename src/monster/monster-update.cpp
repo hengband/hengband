@@ -8,7 +8,6 @@
 #include "core/disturbance.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "floor/cave.h"
 #include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "game-option/disturbance-options.h"
@@ -34,6 +33,7 @@
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "status/element-resistance.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -98,27 +98,36 @@ bool update_riding_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, M
 }
 
 /*!
- * @brief updateフィールドを更新する
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @brief マップ及びミニマップの更新フラグをセットする
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  */
-void update_player_type(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterRaceInfo *r_ptr)
+void update_map_flags(turn_flags *turn_flags_ptr)
 {
-    using Mbt = MonsterBrightnessType;
-    const auto except_has_lite = EnumClassFlagGroup<Mbt>(self_ld_mask).set({ Mbt::HAS_DARK_1, Mbt::HAS_DARK_2 });
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (turn_flags_ptr->do_view) {
-        rfu.set_flag(StatusRecalculatingFlag::FLOW);
-        static constexpr auto flags = {
-            SubWindowRedrawingFlag::OVERHEAD,
-            SubWindowRedrawingFlag::DUNGEON,
-        };
-        rfu.set_flags(flags);
+    if (!turn_flags_ptr->do_view) {
+        return;
     }
 
+    rfu.set_flag(StatusRecalculatingFlag::FLOW);
+    static constexpr auto flags = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    rfu.set_flags(flags);
+}
+
+/*!
+ * @brief モンスターの光源フラグに基づいてフロアの光源状態更新フラグをセットする
+ * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
+ * @param r_ptr モンスター種族への参照ポインタ
+ */
+void update_lite_flags(turn_flags *turn_flags_ptr, MonsterRaceInfo *r_ptr)
+{
+    using Mbt = MonsterBrightnessType;
     const auto has_lite = r_ptr->brightness_flags.has_any_of({ Mbt::HAS_LITE_1, Mbt::HAS_LITE_2 });
-    if (turn_flags_ptr->do_move && (r_ptr->brightness_flags.has_any_of(except_has_lite) || (has_lite && !player_ptr->phase_out))) {
-        rfu.set_flag(StatusRecalculatingFlag::MONSTER_LITE);
+    const auto &except_has_lite = EnumClassFlagGroup<Mbt>(self_ld_mask).set({ Mbt::HAS_DARK_1, Mbt::HAS_DARK_2 });
+    if (turn_flags_ptr->do_move && (r_ptr->brightness_flags.has_any_of(except_has_lite) || (has_lite && !AngbandSystem::get_instance().is_phase_out()))) {
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 }
 
@@ -130,7 +139,7 @@ void update_player_type(PlayerType *player_ptr, turn_flags *turn_flags_ptr, Mons
  */
 void update_monster_race_flags(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr)
 {
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (!is_original_ap_and_seen(player_ptr, m_ptr)) {
         return;
     }
@@ -222,11 +231,11 @@ static POSITION decide_updated_distance(PlayerType *player_ptr, um_type *um_ptr)
 
 static void update_smart_stupid_flags(MonsterRaceInfo *r_ptr)
 {
-    if (r_ptr->r_behavior_flags.has(MonsterBehaviorType::SMART)) {
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::SMART)) {
         r_ptr->r_behavior_flags.set(MonsterBehaviorType::SMART);
     }
 
-    if (r_ptr->r_behavior_flags.has(MonsterBehaviorType::STUPID)) {
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID)) {
         r_ptr->r_behavior_flags.set(MonsterBehaviorType::STUPID);
     }
 }
@@ -241,7 +250,7 @@ static void update_smart_stupid_flags(MonsterRaceInfo *r_ptr)
 static bool update_weird_telepathy(PlayerType *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = um_ptr->m_ptr;
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if ((r_ptr->flags2 & RF2_WEIRD_MIND) == 0) {
         return false;
     }
@@ -263,7 +272,7 @@ static bool update_weird_telepathy(PlayerType *player_ptr, um_type *um_ptr, MONS
 static void update_telepathy_sight(PlayerType *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = um_ptr->m_ptr;
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
@@ -301,7 +310,7 @@ static void update_telepathy_sight(PlayerType *player_ptr, um_type *um_ptr, MONS
 static void update_specific_race_telepathy(PlayerType *player_ptr, um_type *um_ptr)
 {
     auto *m_ptr = um_ptr->m_ptr;
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
     if ((player_ptr->esp_animal) && r_ptr->kind_flags.has(MonsterKindType::ANIMAL)) {
         um_ptr->flag = true;
@@ -406,7 +415,7 @@ static bool check_cold_blood(PlayerType *player_ptr, um_type *um_ptr, const POSI
         return false;
     }
 
-    auto *r_ptr = &monraces_info[um_ptr->m_ptr->r_idx];
+    auto *r_ptr = &um_ptr->m_ptr->get_monrace();
     if (any_bits(r_ptr->flags2, RF2_COLD_BLOOD) && r_ptr->aura_flags.has_not(MonsterAuraType::FIRE)) {
         return false;
     }
@@ -422,7 +431,7 @@ static bool check_invisible(PlayerType *player_ptr, um_type *um_ptr)
         return false;
     }
 
-    auto *r_ptr = &monraces_info[um_ptr->m_ptr->r_idx];
+    auto *r_ptr = &um_ptr->m_ptr->get_monrace();
     if (r_ptr->flags2 & RF2_INVISIBLE) {
         if (player_ptr->see_inv) {
             um_ptr->easy = true;
@@ -445,7 +454,7 @@ static void decide_sight_invisible_monster(PlayerType *player_ptr, um_type *um_p
 {
     POSITION distance = decide_updated_distance(player_ptr, um_ptr);
     auto *m_ptr = um_ptr->m_ptr;
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
 
     m_ptr->mflag.reset(MonsterTemporaryFlagType::ESP);
 
@@ -458,7 +467,7 @@ static void decide_sight_invisible_monster(PlayerType *player_ptr, um_type *um_p
         update_specific_race_telepathy(player_ptr, um_ptr);
     }
 
-    if (!player_has_los_bold(player_ptr, um_ptr->fy, um_ptr->fx) || player_ptr->effects()->blindness()->is_blind()) {
+    if (!player_ptr->current_floor_ptr->has_los({ um_ptr->fy, um_ptr->fx }) || player_ptr->effects()->blindness()->is_blind()) {
         return;
     }
 
@@ -511,7 +520,7 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
     }
 
     if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
-        auto *r_ptr = &monraces_info[m_ptr->r_idx];
+        auto *r_ptr = &m_ptr->get_monrace();
         if ((m_ptr->ap_r_idx == MonsterRaceId::KAGE) && (monraces_info[MonsterRaceId::KAGE].r_sights < MAX_SHORT)) {
             monraces_info[MonsterRaceId::KAGE].r_sights++;
         } else if (m_ptr->is_original_ap() && (r_ptr->r_sights < MAX_SHORT)) {
@@ -519,7 +528,7 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
         }
     }
 
-    if (w_ptr->is_loading_now && w_ptr->character_dungeon && !player_ptr->phase_out && monraces_info[m_ptr->ap_r_idx].flags2 & RF2_ELDRITCH_HORROR) {
+    if (w_ptr->is_loading_now && w_ptr->character_dungeon && !AngbandSystem::get_instance().is_phase_out() && m_ptr->get_appearance_monrace().flags2 & RF2_ELDRITCH_HORROR) {
         m_ptr->mflag.set(MonsterTemporaryFlagType::SANITY_BLAST);
     }
 
@@ -581,7 +590,7 @@ void update_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool full)
     um_type tmp_um;
     um_type *um_ptr = initialize_um_type(player_ptr, &tmp_um, m_idx, full);
     if (disturb_high) {
-        MonsterRaceInfo *ap_r_ptr = &monraces_info[um_ptr->m_ptr->ap_r_idx];
+        auto *ap_r_ptr = &um_ptr->m_ptr->get_appearance_monrace();
         if (ap_r_ptr->r_tkills && ap_r_ptr->level >= player_ptr->lev) {
             um_ptr->do_disturb = true;
         }
@@ -635,7 +644,7 @@ void update_monsters(PlayerType *player_ptr, bool full)
 void update_smart_learn(PlayerType *player_ptr, MONSTER_IDX m_idx, int what)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (!smart_learn || (r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID)) || ((r_ptr->behavior_flags.has_not(MonsterBehaviorType::SMART)) && (randint0(100) < 50))) {
         return;
     }

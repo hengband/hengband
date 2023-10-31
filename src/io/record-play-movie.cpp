@@ -499,10 +499,9 @@ static bool get_nextbuf(char *buf)
 /* プレイホストのマップが大きいときクライアントのマップもリサイズする */
 static void update_term_size(int x, int y, int len)
 {
-    int nx, ny;
-    const auto [ox, oy] = term_get_size();
-    nx = ox;
-    ny = oy;
+    const auto &[ox, oy] = term_get_size();
+    auto nx = ox;
+    auto ny = oy;
 
     /* 横方向のチェック */
     if (x + len > ox) {

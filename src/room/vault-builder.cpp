@@ -118,10 +118,9 @@ void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
  * @details
  * Only really called by some of the "vault" routines.
  */
-static void vault_trap_aux(PlayerType *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd)
+static void vault_trap_aux(FloorType *floor_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd)
 {
     grid_type *g_ptr;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
     int y1 = y, x1 = x;
     int dummy = 0;
     for (int count = 0; count <= 5; count++) {
@@ -144,7 +143,7 @@ static void vault_trap_aux(PlayerType *player_ptr, POSITION y, POSITION x, POSIT
             continue;
         }
 
-        place_trap(player_ptr, y1, x1);
+        place_trap(floor_ptr, y1, x1);
         break;
     }
 }
@@ -161,9 +160,9 @@ static void vault_trap_aux(PlayerType *player_ptr, POSITION y, POSITION x, POSIT
  * Only really called by some of the "vault" routines.
  * @todo rooms-normal からしか呼ばれていない、要調整
  */
-void vault_traps(PlayerType *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num)
+void vault_traps(FloorType *floor_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num)
 {
     for (int i = 0; i < num; i++) {
-        vault_trap_aux(player_ptr, y, x, yd, xd);
+        vault_trap_aux(floor_ptr, y, x, yd, xd);
     }
 }

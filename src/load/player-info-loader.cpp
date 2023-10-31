@@ -20,6 +20,7 @@
 #include "player/player-skill.h"
 #include "spell-realm/spells-song.h"
 #include "system/angband-exceptions.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
@@ -258,10 +259,11 @@ static void rd_phase_out(PlayerType *player_ptr)
         }
     }
     player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(quest_number);
+    auto &system = AngbandSystem::get_instance();
     if (h_older_than(0, 3, 5)) {
-        player_ptr->phase_out = false;
+        system.set_phase_out(false);
     } else {
-        player_ptr->phase_out = rd_s16b() != 0;
+        system.set_phase_out(rd_s16b() != 0);
     }
 }
 

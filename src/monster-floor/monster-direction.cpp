@@ -16,6 +16,7 @@
 #include "pet/pet-util.h"
 #include "player/player-status-flags.h"
 #include "spell/range-calc.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -32,7 +33,7 @@
  */
 static bool decide_pet_approch_direction(PlayerType *player_ptr, MonsterEntity *m_ptr, MonsterEntity *t_ptr)
 {
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (!m_ptr->is_pet()) {
         return false;
     }
@@ -61,7 +62,7 @@ static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     for (int i = start; ((i < start + floor_ptr->m_max) && (i > start - floor_ptr->m_max)); i += plus) {
         MONSTER_IDX dummy = (i % floor_ptr->m_max);
         if (dummy == 0) {
@@ -69,8 +70,7 @@ static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m
         }
 
         MONSTER_IDX t_idx = dummy;
-        MonsterEntity *t_ptr;
-        t_ptr = &floor_ptr->m_list[t_idx];
+        auto *t_ptr = &floor_ptr->m_list[t_idx];
         if (t_ptr == m_ptr) {
             continue;
         }
@@ -80,7 +80,7 @@ static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m
         if (decide_pet_approch_direction(player_ptr, m_ptr, t_ptr)) {
             continue;
         }
-        if (!are_enemies(player_ptr, *m_ptr, *t_ptr)) {
+        if (!m_ptr->is_hostile_to_melee(*t_ptr)) {
             continue;
         }
 
@@ -125,7 +125,7 @@ bool get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx, int *mm)
     } else {
         int start;
         int plus = 1;
-        if (player_ptr->phase_out) {
+        if (AngbandSystem::get_instance().is_phase_out()) {
             start = randint1(floor_ptr->m_max - 1) + floor_ptr->m_max;
             if (randint0(2)) {
                 plus = -1;
@@ -158,7 +158,7 @@ bool get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx, int *mm)
  */
 static bool random_walk(PlayerType *player_ptr, DIRECTION *mm, MonsterEntity *m_ptr)
 {
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (r_ptr->behavior_flags.has_all_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 }) && (randint0(100) < 75)) {
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
             r_ptr->r_behavior_flags.set({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 });
@@ -236,7 +236,7 @@ static bool decide_pet_movement_direction(MonsterSweepGrid *msd)
 bool decide_monster_movement_direction(PlayerType *player_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
 
     if (m_ptr->is_confused() || !aware) {
         mm[0] = mm[1] = mm[2] = mm[3] = 5;

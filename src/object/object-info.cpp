@@ -19,7 +19,6 @@
 #include "object-enchant/activation-info-table.h"
 #include "object-enchant/dragon-breaths-table.h"
 #include "object-enchant/object-ego.h"
-#include "object/object-flags.h"
 #include "player-base/player-class.h"
 #include "player/player-realm.h"
 #include "realm/realm-names-table.h"
@@ -45,7 +44,7 @@ static std::string item_activation_dragon_breath(const ItemEntity *o_ptr)
     std::string desc = _("", "breathe ");
     int n = 0;
 
-    auto flags = object_flags(o_ptr);
+    const auto flags = o_ptr->get_flags();
 
     for (int i = 0; dragonbreath_info[i].flag != 0; i++) {
         if (flags.has(dragonbreath_info[i].flag)) {
@@ -187,7 +186,7 @@ static concptr item_activation_aux(const ItemEntity *o_ptr)
  */
 std::string activation_explanation(const ItemEntity *o_ptr)
 {
-    auto flags = object_flags(o_ptr);
+    const auto flags = o_ptr->get_flags();
     if (flags.has_not(TR_ACTIVATE)) {
         return _("なし", "nothing");
     }
@@ -310,8 +309,8 @@ bool check_book_realm(PlayerType *player_ptr, const BaseitemKey &bi_key)
     return (get_realm1_book(player_ptr) == tval) || (get_realm2_book(player_ptr) == tval);
 }
 
-ItemEntity *ref_item(PlayerType *player_ptr, INVENTORY_IDX item)
+ItemEntity *ref_item(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    return item >= 0 ? &player_ptr->inventory_list[item] : &(floor_ptr->o_list[0 - item]);
+    return i_idx >= 0 ? &player_ptr->inventory_list[i_idx] : &(floor_ptr->o_list[0 - i_idx]);
 }

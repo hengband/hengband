@@ -11,7 +11,6 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-hook/hook-weapon.h"
-#include "object/object-flags.h"
 #include "object/object-info.h"
 #include "sv-definition/sv-amulet-types.h"
 #include "sv-definition/sv-other-types.h"
@@ -41,7 +40,7 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
 {
     std::array<std::string, 128> info{};
     int trivial_info = 0;
-    auto flags = object_flags(o_ptr);
+    const auto flags = o_ptr->get_flags();
 
     const auto item_text = o_ptr->is_fixed_artifact() ? o_ptr->get_fixed_artifact().text.data() : o_ptr->get_baseitem().text.data();
     const auto item_text_lines = shape_buffer(item_text, 77 - 15);
@@ -790,7 +789,7 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
     }
 
     screen_save();
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     std::string item_name;
     if (!(mode & SCROBJ_FAKE_OBJECT)) {
         item_name = describe_flavor(player_ptr, o_ptr, 0);

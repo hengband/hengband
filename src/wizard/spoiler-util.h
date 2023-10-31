@@ -8,9 +8,6 @@
 #include <string_view>
 #include <vector>
 
-/* MAX_LINE_LEN specifies when a line should wrap. */
-#define MAX_LINE_LEN 75
-
 enum class SpoilerOutputResultType {
     CANCELED,
     SUCCESSFUL,
@@ -31,7 +28,9 @@ public:
     void analyze(const ItemEntity &item);
 };
 
-struct obj_desc_list {
+class ArtifactsDumpInfo {
+public:
+    ArtifactsDumpInfo() = default;
     std::string description = ""; /* "The Longsword Dragonsmiter (6d4) (+20, +25)" */
     ParameterValueInfo pval_info{}; /* Description of what is affected by an object's pval */
     std::vector<std::string> slays{}; /* A list of an object's slaying preferences */

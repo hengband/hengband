@@ -1,6 +1,5 @@
-%define version 3.0.0.88
-%define release 1
-%global debug_package %{nil}
+%define version 3.0.0.91
+%define release 2
 
 Summary: hengband %{version}
 Name: hengband
@@ -44,7 +43,7 @@ rm -rf %{buildroot}
 %install
 mkdir -p %{buildroot}/%{_bindir}
 mkdir -p %{buildroot}/%{_datadir}/games/hengband
-%makeinstall
+%make_install bindir=%{_bindir}
 cp -R lib/ -p %{buildroot}/%{_datadir}/games/hengband/
 find %{buildroot}/%{_datadir}/games/hengband/ -type f -name "Makefile*" -exec rm {} \;
 find %{buildroot}/%{_datadir}/games/hengband/ -type f -name "delete.me*" -exec rm {} \;
@@ -96,6 +95,18 @@ exit 0
 %license lib/help/jlicense.txt
 
 %changelog
+
+* Sun Oct 22 2023 Shiro Hara <white@vx-xv.com>
+- Fix the graphic mode is not available on X11
+
+* Wed Oct 18 2023 Shiro Hara <white@vx-xv.com>
+- hengband RPM 3.0.0.91(Alpha)
+
+* Mon Oct 16 2023 Shiro Hara <white@vx-xv.com>
+- hengband RPM 3.0.0.90(Alpha)
+
+* Tue Aug 8 2023 Shiro Hara <white@vx-xv.com>
+- hengband RPM 3.0.0.89(Alpha)
 
 * Mon Jul 24 2023 Shiro Hara <white@vx-xv.com>
 - Enable X11

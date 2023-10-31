@@ -4,6 +4,7 @@
 #include <utility>
 #include <vector>
 
+// @todo pairをPos2Dとして再定義する.
 class PlayerType;
 class projection_path {
 public:
@@ -21,6 +22,5 @@ private:
     std::vector<std::pair<int, int>> position;
 };
 bool projectable(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
-int get_max_range(PlayerType *player_ptr);
 POSITION get_grid_y(uint16_t grid);
 POSITION get_grid_x(uint16_t grid);

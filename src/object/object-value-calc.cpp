@@ -4,7 +4,6 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
-#include "object/object-flags.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info.h"
 #include "system/item-entity.h"
@@ -21,7 +20,7 @@
 PRICE flag_cost(const ItemEntity *o_ptr, int plusses)
 {
     PRICE total = 0;
-    auto flags = object_flags(o_ptr);
+    auto flags = o_ptr->get_flags();
     const auto &baseitem = o_ptr->get_baseitem();
     flags.reset(baseitem.flags);
 

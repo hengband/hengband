@@ -550,7 +550,7 @@ bool PlayerClass::has_ninja_speed() const
  */
 std::span<const std::string> PlayerClass::get_subtitle_candidates() const
 {
-    static const std::span<const std::string> candidates(diary_subtitles);
+    static const std::span<const std::string> candidates(diary_subtitles.begin(), diary_subtitles.end());
     const auto max = diary_subtitles.size();
     if (this->is_tough()) {
         return candidates.subspan(0, max - 1);

@@ -159,7 +159,7 @@ bool exchange_cash(PlayerType *player_ptr)
                 continue;
             }
 
-            INVENTORY_IDX item_new;
+            INVENTORY_IDX inventory_new;
             ItemEntity forge;
 
             const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
@@ -187,11 +187,11 @@ bool exchange_cash(PlayerType *player_ptr)
              * Since a corpse is handed at first,
              * there is at least one empty slot.
              */
-            item_new = store_item_to_inventory(player_ptr, &forge);
+            inventory_new = store_item_to_inventory(player_ptr, &forge);
             const auto got_item_name = describe_flavor(player_ptr, &forge, 0);
-            msg_format(_("%s(%c)を貰った。", "You get %s (%c). "), got_item_name.data(), index_to_label(item_new));
+            msg_format(_("%s(%c)を貰った。", "You get %s (%c). "), got_item_name.data(), index_to_label(inventory_new));
 
-            autopick_alter_item(player_ptr, item_new, false);
+            autopick_alter_item(player_ptr, inventory_new, false);
             handle_stuff(player_ptr);
             change = true;
         }
@@ -325,13 +325,13 @@ void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
 void determine_bounty_uniques(PlayerType *player_ptr)
 {
     get_mon_num_prep_bounty(player_ptr);
-
-    auto is_suitable_for_bounty = [](MonsterRaceId r_idx) {
-        const auto &monrace = monraces_info[r_idx];
-        bool is_suitable = monrace.kind_flags.has(MonsterKindType::UNIQUE);
+    const auto &monraces = MonraceList::get_instance();
+    auto is_suitable_for_bounty = [&monraces](MonsterRaceId r_idx) {
+        const auto &monrace = monraces[r_idx];
+        auto is_suitable = monrace.kind_flags.has(MonsterKindType::UNIQUE);
         is_suitable &= monrace.drop_flags.has_any_of({ MonsterDropType::DROP_CORPSE, MonsterDropType::DROP_SKELETON });
         is_suitable &= monrace.rarity <= 100;
-        is_suitable &= !monrace.no_suitable_questor_bounty();
+        is_suitable &= !monraces.can_unify_separate(r_idx);
         return is_suitable;
     };
 

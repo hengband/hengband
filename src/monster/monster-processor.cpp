@@ -59,6 +59,7 @@
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/summon-types.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
@@ -115,7 +116,7 @@ bool decide_process_continue(PlayerType *player_ptr, MonsterEntity *m_ptr);
 void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     turn_flags tmp_flags;
     turn_flags *turn_flags_ptr = init_turn_flags(player_ptr->riding, m_idx, &tmp_flags);
     turn_flags_ptr->see_m = is_seen(player_ptr, m_ptr);
@@ -123,7 +124,7 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
     decide_drop_from_monster(player_ptr, m_idx, turn_flags_ptr->is_riding_mon);
     if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && one_in_(13) && !m_ptr->is_asleep()) {
         choose_new_monster(player_ptr, m_idx, false, MonsterRace::empty_id());
-        r_ptr = &monraces_info[m_ptr->r_idx];
+        r_ptr = &m_ptr->get_monrace();
     }
 
     turn_flags_ptr->aware = process_stealth(player_ptr, m_idx);
@@ -198,7 +199,8 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    update_player_type(player_ptr, turn_flags_ptr, r_ptr);
+    update_map_flags(turn_flags_ptr);
+    update_lite_flags(turn_flags_ptr, r_ptr);
     update_monster_race_flags(player_ptr, turn_flags_ptr, m_ptr);
 
     if (!process_monster_fear(player_ptr, turn_flags_ptr, m_idx)) {
@@ -224,7 +226,7 @@ bool process_stealth(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     int tmp = player_ptr->lev * 6 + (player_ptr->skill_stl + 10) * 4;
     if (player_ptr->monlite) {
         tmp /= 3;
@@ -250,7 +252,7 @@ bool process_stealth(PlayerType *player_ptr, MONSTER_IDX m_idx)
 void decide_drop_from_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool is_riding_mon)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (!is_riding_mon || ((r_ptr->flags7 & RF7_RIDING) != 0)) {
         return;
     }
@@ -308,7 +310,7 @@ bool vanish_summoned_children(PlayerType *player_ptr, MONSTER_IDX m_idx, bool se
 bool awake_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (!m_ptr->is_asleep()) {
         return true;
     }
@@ -338,22 +340,22 @@ bool awake_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
  */
 void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
-    bool gets_angry = false;
-    if (m_ptr->is_friendly() && has_aggravate(player_ptr)) {
+    auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto &monrace = monster.get_monrace();
+    auto gets_angry = monster.is_friendly() && has_aggravate(player_ptr);
+    const auto should_aggravate = monster.is_pet();
+    auto has_hostile = monrace.kind_flags.has(MonsterKindType::UNIQUE) || (monrace.population_flags.has(MonsterPopulationType::NAZGUL));
+    has_hostile &= monster_has_hostile_align(player_ptr, nullptr, 10, -10, &monrace);
+    const auto has_resist_all = monrace.resistance_flags.has(MonsterResistanceType::RESIST_ALL);
+    if (should_aggravate && (has_hostile || has_resist_all)) {
         gets_angry = true;
     }
 
-    if (m_ptr->is_pet() && (((r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL))) && monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr)) || r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL))) {
-        gets_angry = true;
-    }
-
-    if (player_ptr->phase_out || !gets_angry) {
+    if (AngbandSystem::get_instance().is_phase_out() || !gets_angry) {
         return;
     }
 
-    const auto m_name = monster_desc(player_ptr, m_ptr, m_ptr->is_pet() ? MD_ASSUME_VISIBLE : 0);
+    const auto m_name = monster_desc(player_ptr, &monster, monster.is_pet() ? MD_ASSUME_VISIBLE : 0);
 
     /* When riding a hostile alignment pet */
     if (player_ptr->riding == m_idx) {
@@ -369,11 +371,11 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
         msg_format(_("あなたは振り落とされた。", "You have fallen."));
     }
 
-    if (m_ptr->is_pet() || see_m) {
+    if (monster.is_pet() || see_m) {
         msg_format(_("%s^は突然敵にまわった！", "%s^ suddenly becomes hostile!"), m_name.data());
     }
 
-    set_hostile(player_ptr, m_ptr);
+    monster.set_hostile();
 }
 
 /*!
@@ -402,8 +404,14 @@ bool explode_grenade(PlayerType *player_ptr, MONSTER_IDX m_idx)
 void process_special(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
-    if (r_ptr->ability_flags.has_not(MonsterAbilityType::SPECIAL) || (m_ptr->r_idx != MonsterRaceId::OHMU) || player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out || (r_ptr->freq_spell == 0) || (randint1(100) > r_ptr->freq_spell)) {
+    auto *r_ptr = &m_ptr->get_monrace();
+    auto can_do_special = r_ptr->ability_flags.has(MonsterAbilityType::SPECIAL);
+    can_do_special &= m_ptr->r_idx == MonsterRaceId::OHMU;
+    can_do_special &= !player_ptr->current_floor_ptr->inside_arena;
+    can_do_special &= !AngbandSystem::get_instance().is_phase_out();
+    can_do_special &= r_ptr->freq_spell != 0;
+    can_do_special &= randint1(100) <= r_ptr->freq_spell;
+    if (!can_do_special) {
         return;
     }
 
@@ -435,7 +443,7 @@ void process_special(PlayerType *player_ptr, MONSTER_IDX m_idx)
 bool decide_monster_multiplication(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (((r_ptr->flags2 & RF2_MULTIPLY) == 0) || (player_ptr->current_floor_ptr->num_repro >= MAX_REPRODUCTION)) {
         return false;
     }
@@ -480,18 +488,20 @@ bool decide_monster_multiplication(PlayerType *player_ptr, MONSTER_IDX m_idx, PO
  */
 bool cast_spell(PlayerType *player_ptr, MONSTER_IDX m_idx, bool aware)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
-    if ((r_ptr->freq_spell == 0) || (randint1(100) > r_ptr->freq_spell)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monster_from = floor.m_list[m_idx];
+    const auto &monrace = monster_from.get_monrace();
+    if ((monrace.freq_spell == 0) || (randint1(100) > monrace.freq_spell)) {
         return false;
     }
 
     bool counterattack = false;
-    if (m_ptr->target_y) {
-        MONSTER_IDX t_m_idx = player_ptr->current_floor_ptr->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
-        const auto &target_ref = player_ptr->current_floor_ptr->m_list[t_m_idx];
-        const auto is_projectable = projectable(player_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x);
-        if (t_m_idx && are_enemies(player_ptr, *m_ptr, target_ref) && is_projectable) {
+    if (monster_from.target_y) {
+        Pos2D pos(monster_from.target_y, monster_from.target_x);
+        const auto t_m_idx = floor.get_grid(pos).m_idx;
+        const auto &monster_to = floor.m_list[t_m_idx];
+        const auto is_projectable = projectable(player_ptr, monster_from.fy, monster_from.fx, monster_from.target_y, monster_from.target_x);
+        if (t_m_idx && monster_from.is_hostile_to_melee(monster_to) && is_projectable) {
             counterattack = true;
         }
     }
@@ -639,17 +649,18 @@ void sweep_monster_process(PlayerType *player_ptr)
  */
 bool decide_process_continue(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
-    MonsterRaceInfo *r_ptr;
-    r_ptr = &monraces_info[m_ptr->r_idx];
+    const auto &monrace = m_ptr->get_monrace();
     if (!player_ptr->no_flowed) {
         m_ptr->mflag2.reset(MonsterConstantFlagType::NOFLOW);
     }
 
-    if (m_ptr->cdis <= (m_ptr->is_pet() ? (r_ptr->aaf > MAX_PLAYER_SIGHT ? MAX_PLAYER_SIGHT : r_ptr->aaf) : r_ptr->aaf)) {
+    if (m_ptr->cdis <= (m_ptr->is_pet() ? (monrace.aaf > MAX_PLAYER_SIGHT ? MAX_PLAYER_SIGHT : monrace.aaf) : monrace.aaf)) {
         return true;
     }
 
-    if ((m_ptr->cdis <= MAX_PLAYER_SIGHT || player_ptr->phase_out) && (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) || has_aggravate(player_ptr))) {
+    auto should_continue = (m_ptr->cdis <= MAX_PLAYER_SIGHT) || AngbandSystem::get_instance().is_phase_out();
+    should_continue &= player_ptr->current_floor_ptr->has_los({ m_ptr->fy, m_ptr->fx }) || has_aggravate(player_ptr);
+    if (should_continue) {
         return true;
     }
 

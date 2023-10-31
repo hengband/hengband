@@ -220,6 +220,6 @@ void precalc_cur_num_of_pet(PlayerType *player_ptr)
             continue;
         }
 
-        m_ptr->get_real_r_ref().cur_num++;
+        m_ptr->get_real_monrace().cur_num++;
     }
 }

@@ -45,6 +45,7 @@
 #include "spell-kind/spells-polymorph.h"
 #include "spell-kind/spells-teleport.h"
 #include "sv-definition/sv-other-types.h"
+#include "system/angband-system.h"
 #include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -397,7 +398,7 @@ static void affected_monster_prevents_bad_status(PlayerType *player_ptr, EffectM
     auto should_alive = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     should_alive |= any_bits(r_ptr->flags1, RF1_QUESTOR);
     should_alive |= r_ptr->population_flags.has(MonsterPopulationType::NAZGUL);
-    if (should_alive && !player_ptr->phase_out && (em_ptr->who > 0) && (em_ptr->dam > em_ptr->m_ptr->hp)) {
+    if (should_alive && !AngbandSystem::get_instance().is_phase_out() && (em_ptr->who > 0) && (em_ptr->dam > em_ptr->m_ptr->hp)) {
         em_ptr->dam = em_ptr->m_ptr->hp;
     }
 }
@@ -413,7 +414,7 @@ static void effect_damage_piles_stun(PlayerType *player_ptr, EffectMonster *em_p
     const auto *r_ptr = em_ptr->r_ptr;
     auto can_avoid_stun = em_ptr->do_stun == 0;
     can_avoid_stun |= r_ptr->resistance_flags.has_any_of({ MonsterResistanceType::RESIST_SOUND, MonsterResistanceType::RESIST_FORCE });
-    can_avoid_stun |= any_bits(r_ptr->flags3, RF3_NO_STUN);
+    can_avoid_stun |= r_ptr->resistance_flags.has(MonsterResistanceType::NO_STUN);
     if (can_avoid_stun) {
         return;
     }
@@ -443,7 +444,7 @@ static void effect_damage_piles_stun(PlayerType *player_ptr, EffectMonster *em_p
  */
 static void effect_damage_piles_confusion(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
-    if ((em_ptr->do_conf == 0) || (em_ptr->r_ptr->flags3 & RF3_NO_CONF) || em_ptr->r_ptr->resistance_flags.has_any_of(RFR_EFF_RESIST_CHAOS_MASK)) {
+    if ((em_ptr->do_conf == 0) || (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) || em_ptr->r_ptr->resistance_flags.has_any_of(RFR_EFF_RESIST_CHAOS_MASK)) {
         return;
     }
 
@@ -474,7 +475,7 @@ static void effect_damage_piles_confusion(PlayerType *player_ptr, EffectMonster 
  */
 static void effect_damage_piles_fear(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
-    if (em_ptr->do_fear == 0 || any_bits(em_ptr->r_ptr->flags3, RF3_NO_FEAR)) {
+    if (em_ptr->do_fear == 0 || em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_FEAR)) {
         return;
     }
 
@@ -532,7 +533,7 @@ static void effect_damage_makes_polymorph(PlayerType *player_ptr, EffectMonster 
     }
 
     em_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[em_ptr->g_ptr->m_idx];
-    em_ptr->r_ptr = &monraces_info[em_ptr->m_ptr->r_idx];
+    em_ptr->r_ptr = &em_ptr->m_ptr->get_monrace();
 }
 
 /*!
@@ -624,7 +625,7 @@ static void exe_affect_monster_by_damage(PlayerType *player_ptr, EffectMonster *
  */
 static void update_phase_out_stat(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
-    if (!player_ptr->phase_out) {
+    if (!AngbandSystem::get_instance().is_phase_out()) {
         return;
     }
 

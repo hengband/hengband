@@ -110,7 +110,7 @@ static void decide_summon_kin_caster(
             msg_format(_("%s^が何かをつぶやいた。", "%s^ mumbles."), m_name);
         }
     } else if (mon_to_player || (mon_to_mon && known && see_either)) {
-        auto *r_ptr = &monraces_info[m_ptr->r_idx];
+        auto *r_ptr = &m_ptr->get_monrace();
 #ifdef JP
         (void)m_poss;
 #endif
@@ -579,7 +579,7 @@ MonsterSpellResult spell_RF6_S_ANGEL(PlayerType *player_ptr, POSITION y, POSITIO
     summon_disturb(player_ptr, target_type, known, see_either);
 
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     int num = 1;
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         num += r_ptr->level / 40;

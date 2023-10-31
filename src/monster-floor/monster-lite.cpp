@@ -11,6 +11,7 @@
 #include "player-base/player-class.h"
 #include "player-info/ninja-data-type.h"
 #include "player/special-defense-types.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -167,7 +168,7 @@ void update_mon_lite(PlayerType *player_ptr)
         MonsterRaceInfo *r_ptr;
         for (int i = 1; i < floor_ptr->m_max; i++) {
             m_ptr = &floor_ptr->m_list[i];
-            r_ptr = &monraces_info[m_ptr->r_idx];
+            r_ptr = &m_ptr->get_monrace();
             if (!m_ptr->is_valid() || (m_ptr->cdis > dis_lim)) {
                 continue;
             }
@@ -195,7 +196,9 @@ void update_mon_lite(PlayerType *player_ptr)
 
             TerrainCharacteristics f_flag;
             if (rad > 0) {
-                if (r_ptr->brightness_flags.has_none_of({ MonsterBrightnessType::SELF_LITE_1, MonsterBrightnessType::SELF_LITE_2 }) && (m_ptr->is_asleep() || (!floor_ptr->dun_level && is_daytime()) || player_ptr->phase_out)) {
+                auto should_lite = r_ptr->brightness_flags.has_none_of({ MonsterBrightnessType::SELF_LITE_1, MonsterBrightnessType::SELF_LITE_2 });
+                should_lite &= (m_ptr->is_asleep() || (!floor_ptr->dun_level && is_daytime()) || AngbandSystem::get_instance().is_phase_out());
+                if (should_lite) {
                     continue;
                 }
 

@@ -576,7 +576,6 @@ static FuncItemTester get_learnable_spellbook_tester(PlayerType *player_ptr)
  */
 void do_cmd_browse(PlayerType *player_ptr)
 {
-    OBJECT_IDX item;
     SPELL_IDX spell = -1;
     int num = 0;
 
@@ -604,9 +603,10 @@ void do_cmd_browse(PlayerType *player_ptr)
     constexpr auto q = _("どの本を読みますか? ", "Browse which book? ");
     constexpr auto s = _("読める本がない。", "You have no books that you can read.");
     constexpr auto options = USE_INVEN | USE_FLOOR;
-    const auto *o_ptr = choose_object(player_ptr, &item, q, s, options | (pc.equals(PlayerClassType::FORCETRAINER) ? USE_FORCE : 0), item_tester);
+    short i_idx;
+    const auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, options | (pc.equals(PlayerClassType::FORCETRAINER) ? USE_FORCE : 0), item_tester);
     if (o_ptr == nullptr) {
-        if (item == INVEN_FORCE) /* the_force */
+        if (i_idx == INVEN_FORCE) /* the_force */
         {
             do_cmd_mind_browse(player_ptr);
             return;
@@ -760,8 +760,8 @@ void do_cmd_study(PlayerType *player_ptr)
     constexpr auto q = _("どの本から学びますか? ", "Study which book? ");
     constexpr auto s = _("読める本がない。", "You have no books that you can read.");
 
-    short item;
-    const auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), item_tester);
+    short i_idx;
+    const auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_INVEN | USE_FLOOR), item_tester);
     if (o_ptr == nullptr) {
         return;
     }
@@ -991,10 +991,10 @@ bool do_cmd_cast(PlayerType *player_ptr)
     constexpr auto s = _("呪文書がない！", "You have no spell books!");
     auto item_tester = get_castable_spellbook_tester(player_ptr);
     const auto options = USE_INVEN | USE_FLOOR | (pc.equals(PlayerClassType::FORCETRAINER) ? USE_FORCE : 0);
-    short item;
-    const auto *o_ptr = choose_object(player_ptr, &item, q, s, options, item_tester);
+    short i_idx;
+    const auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, options, item_tester);
     if (o_ptr == nullptr) {
-        if (item == INVEN_FORCE) {
+        if (i_idx == INVEN_FORCE) {
             do_cmd_mind(player_ptr);
             return true; //!< 錬気キャンセル時の処理がない
         }

@@ -32,8 +32,8 @@ bool enchant_item(PlayerType *player_ptr, PRICE cost, HIT_PROB to_hit, int to_da
     constexpr auto q = _("どのアイテムを改良しますか？", "Improve which item? ");
     constexpr auto s = _("改良できるものがありません。", "You have nothing to improve.");
 
-    OBJECT_IDX item;
-    auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP | IGNORE_BOTHHAND_SLOT), item_tester);
+    short i_idx;
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_INVEN | USE_EQUIP | IGNORE_BOTHHAND_SLOT), item_tester);
     if (!o_ptr) {
         return false;
     }
@@ -83,7 +83,7 @@ bool enchant_item(PlayerType *player_ptr, PRICE cost, HIT_PROB to_hit, int to_da
 #endif
 
     player_ptr->au -= total_cost;
-    if (item >= INVEN_MAIN_HAND) {
+    if (i_idx >= INVEN_MAIN_HAND) {
         calc_android_exp(player_ptr);
     }
     return true;

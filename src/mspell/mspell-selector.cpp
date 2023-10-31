@@ -15,6 +15,7 @@
 #include "mspell/mspell-attack-util.h"
 #include "mspell/mspell-judgement.h"
 #include "player/player-status.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -139,9 +140,9 @@ static bool spell_world(MonsterAbilityType spell)
  * @param spell 判定対象のID
  * @return 特別効果魔法のIDならばTRUEを返す。
  */
-static bool spell_special(PlayerType *player_ptr, MonsterAbilityType spell)
+static bool spell_special(MonsterAbilityType spell)
 {
-    if (player_ptr->phase_out) {
+    if (AngbandSystem::get_instance().is_phase_out()) {
         return false;
     }
 
@@ -182,6 +183,28 @@ static bool spell_dispel(MonsterAbilityType spell)
 }
 
 /*!
+ * @brief 特殊魔法を使用する確率の判定
+ * @param r_idx モンスター種族ID
+ * @return 特殊魔法を使用するか否か
+ * @details 分離/合体ユニークは常に使用しない (その前に判定済のため).
+ */
+static bool decide_select_special(MonsterRaceId r_idx)
+{
+    if (MonraceList::get_instance().is_separated(r_idx)) {
+        return false;
+    }
+
+    switch (r_idx) {
+    case MonsterRaceId::OHMU:
+        return false;
+    case MonsterRaceId::ROLENTO:
+        return randint0(100) < 40;
+    default:
+        return randint0(100) < 50;
+    }
+}
+
+/*!
  * @brief モンスターの魔法選択ルーチン
  * Have a monster choose a spell from a list of "useful" spells.
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -219,7 +242,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
     std::vector<MonsterAbilityType> dispel;
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[msa_ptr->m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (r_ptr->flags2 & RF2_STUPID) {
         return rand_choice(msa_ptr->mspells);
     }
@@ -257,7 +280,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
             world.push_back(msa_ptr->mspells[i]);
         }
 
-        if (spell_special(player_ptr, msa_ptr->mspells[i])) {
+        if (spell_special(msa_ptr->mspells[i])) {
             special.push_back(msa_ptr->mspells[i]);
         }
 
@@ -282,22 +305,9 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
         return rand_choice(world);
     }
 
-    if (!special.empty()) {
-        bool success = false;
-        switch (m_ptr->r_idx) {
-        case MonsterRaceId::BANOR:
-        case MonsterRaceId::LUPART:
-            if ((m_ptr->hp < m_ptr->maxhp / 2) && monraces_info[MonsterRaceId::BANOR].max_num && monraces_info[MonsterRaceId::LUPART].max_num) {
-                success = true;
-            }
-            break;
-        default:
-            break;
-        }
-
-        if (success) {
-            return rand_choice(special);
-        }
+    const auto &monrace_list = MonraceList::get_instance();
+    if (!special.empty() && monrace_list.can_select_separate(m_ptr->r_idx, m_ptr->hp, m_ptr->maxhp)) {
+        return rand_choice(special);
     }
 
     if (m_ptr->hp < m_ptr->maxhp / 3 && one_in_(2)) {
@@ -313,37 +323,21 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
     }
 
     if (!special.empty()) {
-        bool success = false;
-        switch (m_ptr->r_idx) {
-        case MonsterRaceId::OHMU:
-        case MonsterRaceId::BANOR:
-        case MonsterRaceId::LUPART:
-            break;
-        case MonsterRaceId::BANORLUPART:
-            if (randint0(100) < 70) {
-                success = true;
-            }
-            break;
-        case MonsterRaceId::ROLENTO:
-            if (randint0(100) < 40) {
-                success = true;
-            }
-            break;
-        default:
-            if (randint0(100) < 50) {
-                success = true;
-            }
-            break;
-        }
-        if (success) {
+        const auto r_idx = m_ptr->r_idx;
+        auto should_select_special = monrace_list.is_unified(r_idx) && (randint0(100) < 70);
+        should_select_special |= decide_select_special(r_idx);
+        if (should_select_special) {
             return rand_choice(special);
         }
     }
 
-    if ((distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx) < 4) && (!attack.empty() || r_ptr->ability_flags.has(MonsterAbilityType::TRAPS)) && (randint0(100) < 75) && !w_ptr->timewalk_m_idx) {
-        if (!tactic.empty()) {
-            return rand_choice(tactic);
-        }
+    auto should_select_tactic = distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx) < 4;
+    should_select_tactic &= !attack.empty() || r_ptr->ability_flags.has(MonsterAbilityType::TRAPS);
+    should_select_tactic &= randint0(100) < 75;
+    should_select_tactic &= w_ptr->timewalk_m_idx == 0;
+    should_select_tactic &= !tactic.empty();
+    if (should_select_tactic) {
+        return rand_choice(tactic);
     }
 
     if (!summon.empty() && (randint0(100) < 40)) {

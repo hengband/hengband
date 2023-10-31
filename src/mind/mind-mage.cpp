@@ -31,8 +31,8 @@ bool eat_magic(PlayerType *player_ptr, int power)
     byte fail_type = 1;
     constexpr auto q = _("どのアイテムから魔力を吸収しますか？", "Drain which item? ");
     constexpr auto s = _("魔力を吸収できるアイテムがありません。", "You have nothing to drain.");
-    short item;
-    auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::can_recharge));
+    short i_idx;
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::can_recharge));
     if (o_ptr == nullptr) {
         return false;
     }
@@ -67,7 +67,7 @@ bool eat_magic(PlayerType *player_ptr, int power)
                 player_ptr->csp += lev / 2;
                 o_ptr->pval--;
 
-                if ((tval == ItemKindType::STAFF) && (item >= 0) && (o_ptr->number > 1)) {
+                if ((tval == ItemKindType::STAFF) && (i_idx >= 0) && (o_ptr->number > 1)) {
                     ItemEntity forge;
                     ItemEntity *q_ptr;
                     q_ptr = &forge;
@@ -76,7 +76,7 @@ bool eat_magic(PlayerType *player_ptr, int power)
                     q_ptr->number = 1;
                     o_ptr->pval++;
                     o_ptr->number--;
-                    item = store_item_to_inventory(player_ptr, q_ptr);
+                    i_idx = store_item_to_inventory(player_ptr, q_ptr);
 
                     msg_print(_("杖をまとめなおした。", "You unstack your staff."));
                 }
@@ -184,7 +184,7 @@ bool eat_magic(PlayerType *player_ptr, int power)
             msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), item_name.data());
         }
 
-        vary_item(player_ptr, item, -1);
+        vary_item(player_ptr, i_idx, -1);
     }
 
     if (fail_type == 3) {
@@ -194,7 +194,7 @@ bool eat_magic(PlayerType *player_ptr, int power)
             msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), item_name.data());
         }
 
-        vary_item(player_ptr, item, -999);
+        vary_item(player_ptr, i_idx, -999);
     }
 
     return redraw_player(player_ptr);

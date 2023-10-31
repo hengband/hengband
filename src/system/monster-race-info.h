@@ -16,6 +16,8 @@
 #include "monster-race/race-wilderness-flags.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
+#include <map>
+#include <set>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -140,5 +142,33 @@ public:
     bool has_living_flag() const;
     bool is_explodable() const;
     std::string get_died_message() const;
-    bool no_suitable_questor_bounty() const;
+    void kill_unique();
+};
+
+class MonraceList {
+public:
+    MonraceList(MonraceList &&) = delete;
+    MonraceList(const MonraceList &) = delete;
+    MonraceList &operator=(const MonraceList &) = delete;
+    MonraceList &operator=(MonraceList &&) = delete;
+    MonsterRaceInfo &operator[](const MonsterRaceId r_idx);
+    const MonsterRaceInfo &operator[](const MonsterRaceId r_idx) const;
+
+    static const std::map<MonsterRaceId, std::set<MonsterRaceId>> &get_unified_uniques();
+    static MonraceList &get_instance();
+    bool can_unify_separate(const MonsterRaceId r_idx) const;
+    void kill_unified_unique(const MonsterRaceId r_idx);
+    bool is_selectable(const MonsterRaceId r_idx) const;
+    void defeat_separated_uniques();
+    bool is_unified(const MonsterRaceId r_idx) const;
+    bool exists_separates(const MonsterRaceId r_idx) const;
+    bool is_separated(const MonsterRaceId r_idx) const;
+    bool can_select_separate(const MonsterRaceId r_idx, const int hp, const int maxhp) const;
+
+private:
+    MonraceList() = default;
+
+    static MonraceList instance;
+
+    const static std::map<MonsterRaceId, std::set<MonsterRaceId>> unified_uniques;
 };

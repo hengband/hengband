@@ -43,7 +43,7 @@ void verify_panel(PlayerType *player_ptr)
 {
     POSITION y = player_ptr->y;
     POSITION x = player_ptr->x;
-    const auto [wid, hgt] = get_screen_size();
+    const auto &[wid, hgt] = get_screen_size();
     int max_prow_min = player_ptr->current_floor_ptr->height - hgt;
     int max_pcol_min = player_ptr->current_floor_ptr->width - wid;
     if (max_prow_min < 0) {

@@ -21,7 +21,6 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
-#include "object/object-flags.h"
 #include "player-base/player-race.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-resist.h"
@@ -57,10 +56,8 @@ ItemEntity *choose_warning_item(PlayerType *player_ptr)
     /* Search Inventory */
     std::vector<int> candidates;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        auto *o_ptr = &player_ptr->inventory_list[i];
-
-        auto flags = object_flags(o_ptr);
-        if (flags.has(TR_WARNING)) {
+        const auto *o_ptr = &player_ptr->inventory_list[i];
+        if (o_ptr->get_flags().has(TR_WARNING)) {
             candidates.push_back(i);
         }
     }
@@ -79,7 +76,7 @@ ItemEntity *choose_warning_item(PlayerType *player_ptr)
  */
 static void spell_damcalc(PlayerType *player_ptr, MonsterEntity *m_ptr, AttributeType typ, int dam, int *max)
 {
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     int rlev = r_ptr->level;
     bool ignore_wraith_form = false;
 
@@ -383,7 +380,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
                 continue;
             }
 
-            auto *r_ptr = &monraces_info[m_ptr->r_idx];
+            auto *r_ptr = &m_ptr->get_monrace();
 
             /* Monster spells (only powerful ones)*/
             if (projectable(player_ptr, my, mx, yy, xx)) {

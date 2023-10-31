@@ -61,7 +61,6 @@ public:
 #else
     Patron(const char *name, std::vector<patron_reward> reward_table, const player_ability_type boost_stat);
 #endif
-    virtual ~Patron() = default;
 
     // @note C4458 クラスメンバーの隠蔽 への対応として末尾に「_」を付ける.
     void gain_level_reward(PlayerType *player_ptr_, int chosen_reward);

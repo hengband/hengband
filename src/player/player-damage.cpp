@@ -39,7 +39,6 @@
 #include "object-hook/hook-armor.h"
 #include "object/item-tester-hooker.h"
 #include "object/object-broken.h"
-#include "object/object-flags.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"
@@ -107,7 +106,7 @@ static bool acid_minus_ac(PlayerType *player_ptr)
     }
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
-    auto item_flags = object_flags(o_ptr);
+    const auto item_flags = o_ptr->get_flags();
     if (o_ptr->ac + o_ptr->to_a <= 0) {
         msg_format(_("%sは既にボロボロだ！", "Your %s is already fully corroded!"), item_name.data());
         return false;
@@ -389,7 +388,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                 exe_write_diary(player_ptr, DiaryKind::ARENA, -1 - player_ptr->arena_number, m_name);
             }
         } else {
-            const auto q_idx = quest_number(floor, floor.dun_level);
+            const auto q_idx = floor.get_quest_id();
             const auto seppuku = hit_from == "Seppuku";
             const auto winning_seppuku = w_ptr->total_winner && seppuku;
 
@@ -602,7 +601,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
  */
 static void process_aura_damage(MonsterEntity *m_ptr, PlayerType *player_ptr, bool immune, MonsterAuraType aura_flag, dam_func dam_func, concptr message)
 {
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     if (r_ptr->aura_flags.has_not(aura_flag) || immune) {
         return;
     }

@@ -205,7 +205,7 @@ void do_cmd_messages(int num_now)
     std::string shower_str("");
     std::string finder_str("");
     std::string shower("");
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     auto num_lines = hgt - 4;
     auto n = message_num();
     auto i = 0;

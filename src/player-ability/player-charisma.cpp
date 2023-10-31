@@ -1,6 +1,5 @@
 #include "player-ability/player-charisma.h"
 #include "mutation/mutation-flag-types.h"
-#include "object/object-flags.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/mimic-info-table.h"

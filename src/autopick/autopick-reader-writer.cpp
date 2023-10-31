@@ -18,25 +18,43 @@
  */
 void autopick_load_pref(PlayerType *player_ptr, bool disp_mes)
 {
-    GAME_TEXT buf[80];
     init_autopick();
-    angband_strcpy(buf, pickpref_filename(player_ptr, PT_WITH_PNAME), sizeof(buf));
-    errr err = process_autopick_file(player_ptr, buf);
-    if (err == 0 && disp_mes) {
-        msg_format(_("%sを読み込みました。", "Loaded '%s'."), buf);
-    }
 
-    if (err < 0) {
-        angband_strcpy(buf, pickpref_filename(player_ptr, PT_DEFAULT), sizeof(buf));
-        err = process_autopick_file(player_ptr, buf);
-        if (err == 0 && disp_mes) {
-            msg_format(_("%sを読み込みました。", "Loaded '%s'."), buf);
+    const auto path = search_pickpref_path(player_ptr);
+    if (!path.empty()) {
+        const auto pickpref_filename = path.filename().string();
+        if (process_autopick_file(player_ptr, pickpref_filename) == 0) {
+            if (disp_mes) {
+                msg_format(_("%sを読み込みました。", "Loaded '%s'."), pickpref_filename.data());
+            }
+            return;
         }
     }
 
-    if (err && disp_mes) {
+    if (disp_mes) {
         msg_print(_("自動拾い設定ファイルの読み込みに失敗しました。", "Failed to reload autopick preference."));
     }
+}
+
+/*!
+ * @brief 自動拾い設定ファイルのパスを返す
+ *
+ * ユーザディレクトリを "picktype-プレイヤー名.prf"、"picktype.prf" の順にファイルが存在するかどうかを確認し、
+ * 存在した場合はそのパスを返す。どちらも存在しない場合は空のパスを返す。
+ *
+ * @return 見つかった自動拾い設定ファイルのパス。見つからなかった場合は空のパス。
+ */
+std::filesystem::path search_pickpref_path(PlayerType *player_ptr)
+{
+    for (const auto filename_mode : { PT_WITH_PNAME, PT_DEFAULT }) {
+        const auto filename = pickpref_filename(player_ptr, filename_mode);
+        const auto path = path_build(ANGBAND_DIR_USER, filename);
+        if (std::filesystem::exists(path)) {
+            return path;
+        }
+    }
+
+    return {};
 }
 
 /*!

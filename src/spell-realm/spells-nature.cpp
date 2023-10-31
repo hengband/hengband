@@ -21,9 +21,9 @@ bool rustproof(PlayerType *player_ptr)
 {
     constexpr auto q = _("どの防具に錆止めをしますか？", "Rustproof which piece of armour? ");
     constexpr auto s = _("錆止めできるものがありません。", "You have nothing to rustproof.");
-    OBJECT_IDX item;
+    short i_idx;
     const auto options = USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT;
-    auto *o_ptr = choose_object(player_ptr, &item, q, s, options, FuncItemTester(&ItemEntity::is_protector));
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, options, FuncItemTester(&ItemEntity::is_protector));
     if (o_ptr == nullptr) {
         return false;
     }
@@ -34,7 +34,7 @@ bool rustproof(PlayerType *player_ptr)
 #ifdef JP
         msg_format("%sは新品同様になった！", item_name.data());
 #else
-        msg_format("%s %s look%s as good as new!", ((item >= 0) ? "Your" : "The"), item_name.data(), ((o_ptr->number > 1) ? "" : "s"));
+        msg_format("%s %s look%s as good as new!", ((i_idx >= 0) ? "Your" : "The"), item_name.data(), ((o_ptr->number > 1) ? "" : "s"));
 #endif
         o_ptr->to_a = 0;
     }
@@ -42,7 +42,7 @@ bool rustproof(PlayerType *player_ptr)
 #ifdef JP
     msg_format("%sは腐食しなくなった。", item_name.data());
 #else
-    msg_format("%s %s %s now protected against corrosion.", ((item >= 0) ? "Your" : "The"), item_name.data(), ((o_ptr->number > 1) ? "are" : "is"));
+    msg_format("%s %s %s now protected against corrosion.", ((i_idx >= 0) ? "Your" : "The"), item_name.data(), ((o_ptr->number > 1) ? "are" : "is"));
 #endif
     calc_android_exp(player_ptr);
     return true;

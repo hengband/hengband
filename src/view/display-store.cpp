@@ -167,12 +167,12 @@ void display_store(PlayerType *player_ptr, StoreSaleType store_num)
         return;
     }
 
-    concptr store_name = terrains_info[cur_store_feat].name.data();
-    concptr owner_name = (ot_ptr->owner_name);
-    concptr race_name = race_info[enum2i(ot_ptr->owner_race)].title;
+    const auto &store_name = TerrainList::get_instance()[cur_store_feat].name;
+    const auto owner_name = ot_ptr->owner_name;
+    const auto race_name = race_info[enum2i(ot_ptr->owner_race)].title;
     put_str(format("%s (%s)", owner_name, race_name), 3, 10);
 
-    prt(format("%s (%ld)", store_name, (long)(ot_ptr->max_cost)), 3, 50);
+    prt(format("%s (%d)", store_name.data(), ot_ptr->max_cost), 3, 50);
 
     put_str(_("商品の一覧", "Item Description"), 5, 5);
     if (show_weights) {

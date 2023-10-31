@@ -24,7 +24,6 @@
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-armor.h"
 #include "object-hook/hook-weapon.h"
-#include "object/object-flags.h"
 #include "object/object-kind-hook.h"
 #include "object/object-value-calc.h"
 #include "object/tval-types.h"
@@ -45,9 +44,7 @@
 static bool weakening_artifact(ItemEntity *o_ptr)
 {
     const auto &baseitem = o_ptr->get_baseitem();
-    auto flags = object_flags(o_ptr);
-
-    if (flags.has(TR_KILL_EVIL)) {
+    if (o_ptr->get_flags().has(TR_KILL_EVIL)) {
         o_ptr->art_flags.reset(TR_KILL_EVIL);
         o_ptr->art_flags.set(TR_SLAY_EVIL);
         return true;

@@ -80,13 +80,23 @@ void file_character(PlayerType *player_ptr, std::string_view filename)
         fff = angband_fopen(path, FileOpenMode::WRITE);
     }
 
+    constexpr auto error_msg = _("キャラクタ情報のファイルへの書き出しに失敗しました！", "Character dump failed!");
     if (!fff) {
-        THROW_EXCEPTION(std::runtime_error, _("キャラクタ情報のファイルへの書き出しに失敗しました！", "Character dump failed!"));
+        msg_print(error_msg);
+        msg_print(nullptr);
+        return;
     }
 
     screen_save();
     make_character_dump(player_ptr, fff);
     screen_load();
+
+    if (ferror(fff)) {
+        angband_fclose(fff);
+        msg_print(error_msg);
+        msg_print(nullptr);
+        return;
+    }
 
     angband_fclose(fff);
     msg_print(_("キャラクタ情報のファイルへの書き出しに成功しました。", "Character dump successful."));

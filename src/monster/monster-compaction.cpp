@@ -113,7 +113,7 @@ void compact_monsters(PlayerType *player_ptr, int size)
         int cur_dis = 5 * (20 - cnt);
         for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
             auto *m_ptr = &floor_ptr->m_list[i];
-            auto *r_ptr = &monraces_info[m_ptr->r_idx];
+            auto *r_ptr = &m_ptr->get_monrace();
             if (!m_ptr->is_valid()) {
                 continue;
             }

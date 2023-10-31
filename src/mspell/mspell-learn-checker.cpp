@@ -1,5 +1,4 @@
 #include "mspell/mspell-learn-checker.h"
-#include "floor/cave.h"
 #include "grid/grid.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
@@ -18,8 +17,9 @@
  */
 bool spell_learnable(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    const auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    const auto seen = (!player_ptr->effects()->blindness()->is_blind() && m_ptr->ml);
-    const auto maneable = player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monster = floor.m_list[m_idx];
+    const auto seen = (!player_ptr->effects()->blindness()->is_blind() && monster.ml);
+    const auto maneable = floor.has_los({ monster.fy, monster.fx });
     return seen && maneable && (w_ptr->timewalk_m_idx == 0);
 }

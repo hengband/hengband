@@ -39,7 +39,7 @@ void place_random_stairs(PlayerType *player_ptr, POSITION y, POSITION x)
         down_stairs = false;
     }
 
-    if (inside_quest(quest_number(floor, floor.dun_level)) && (floor.dun_level > 1)) {
+    if (inside_quest(floor.get_quest_id()) && (floor.dun_level > 1)) {
         down_stairs = false;
     }
 

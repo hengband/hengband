@@ -1,7 +1,6 @@
 #include "object-activation/activation-breath.h"
 #include "effect/attribute-types.h"
 #include "object-enchant/dragon-breaths-table.h"
-#include "object/object-flags.h"
 #include "object/tval-types.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
@@ -29,7 +28,7 @@ bool activate_dragon_breath(PlayerType *player_ptr, ItemEntity *o_ptr)
         return false;
     }
 
-    auto resistance_flags = object_flags(o_ptr);
+    const auto resistance_flags = o_ptr->get_flags();
 
     AttributeType type[20];
     int n = 0;

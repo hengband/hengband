@@ -28,13 +28,11 @@ static const char autoregister_header[] = "?:$AUTOREGISTER";
  */
 static bool clear_auto_register(PlayerType *player_ptr)
 {
-    auto path_pref = path_build(ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_WITH_PNAME));
-    auto *pref_fff = angband_fopen(path_pref, FileOpenMode::READ);
-    if (!pref_fff) {
-        path_pref = path_build(ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_DEFAULT));
-        pref_fff = angband_fopen(path_pref, FileOpenMode::READ);
+    const auto path_pref = search_pickpref_path(player_ptr);
+    if (path_pref.empty()) {
+        return true;
     }
-
+    auto *pref_fff = angband_fopen(path_pref, FileOpenMode::READ);
     if (!pref_fff) {
         return true;
     }
@@ -138,12 +136,8 @@ bool autopick_autoregister(PlayerType *player_ptr, ItemEntity *o_ptr)
         }
     }
 
-    const auto path_pref = path_build(ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_WITH_PNAME));
-    auto *pref_fff = angband_fopen(path_pref, FileOpenMode::READ);
-    if (!pref_fff) {
-        path_build(ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_DEFAULT));
-        pref_fff = angband_fopen(path_pref, FileOpenMode::READ);
-    }
+    const auto path_pref = search_pickpref_path(player_ptr);
+    auto *pref_fff = !path_pref.empty() ? angband_fopen(path_pref, FileOpenMode::READ) : nullptr;
 
     if (pref_fff) {
         while (true) {

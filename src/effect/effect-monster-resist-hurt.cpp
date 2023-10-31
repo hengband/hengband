@@ -404,7 +404,7 @@ ProcessResult effect_monster_confusion(PlayerType *player_ptr, EffectMonster *em
         em_ptr->obvious = true;
     }
 
-    if ((em_ptr->r_ptr->flags3 & RF3_NO_CONF) == 0) {
+    if (em_ptr->r_ptr->resistance_flags.has_not(MonsterResistanceType::NO_CONF)) {
         em_ptr->do_conf = (10 + randint1(15) + em_ptr->r) / (em_ptr->r + 1);
         return ProcessResult::PROCESS_CONTINUE;
     }
@@ -413,7 +413,7 @@ ProcessResult effect_monster_confusion(PlayerType *player_ptr, EffectMonster *em
     em_ptr->dam *= 3;
     em_ptr->dam /= randint1(6) + 6;
     if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
-        em_ptr->r_ptr->r_flags3 |= (RF3_NO_CONF);
+        em_ptr->r_ptr->resistance_flags.set(MonsterResistanceType::NO_CONF);
     }
 
     return ProcessResult::PROCESS_CONTINUE;
