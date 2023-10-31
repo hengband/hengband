@@ -70,7 +70,7 @@ void ObjectReadEntity::execute(bool known)
 
     rfu.reset_flags(flags_srf);
     this->change_virtue_as_read(*o_ptr);
-    object_tried(o_ptr);
+    o_ptr->mark_as_tried();
     this->gain_exp_from_item_use(o_ptr, executor->is_identified());
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,

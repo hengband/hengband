@@ -35,10 +35,10 @@
  * Line 2 -- forbid monsters
  * Line 3 -- forbid the player
  */
-static bool cave_naked_bold(PlayerType *player_ptr, POSITION y, POSITION x)
+static bool cave_naked_bold(PlayerType *player_ptr, const Pos2D &pos)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    return cave_clean_bold(floor_ptr, y, x) && (floor_ptr->grid_array[y][x].m_idx == 0) && !player_bold(player_ptr, y, x);
+    return cave_clean_bold(floor_ptr, pos.y, pos.x) && (floor_ptr->get_grid(pos).m_idx == 0) && !player_ptr->is_located_at(pos);
 }
 
 /*!
@@ -261,10 +261,10 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         break;
     }
     case AttributeType::MAKE_DOOR: {
-        if (!cave_naked_bold(player_ptr, y, x)) {
+        if (!cave_naked_bold(player_ptr, pos)) {
             break;
         }
-        if (player_bold(player_ptr, y, x)) {
+        if (player_ptr->is_located_at(pos)) {
             break;
         }
         cave_set_feat(player_ptr, y, x, feat_door[DOOR_DOOR].closed);
@@ -278,10 +278,10 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         break;
     }
     case AttributeType::MAKE_TREE: {
-        if (!cave_naked_bold(player_ptr, y, x)) {
+        if (!cave_naked_bold(player_ptr, pos)) {
             break;
         }
-        if (player_bold(player_ptr, y, x)) {
+        if (player_ptr->is_located_at(pos)) {
             break;
         }
         cave_set_feat(player_ptr, y, x, feat_tree);
@@ -291,7 +291,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         break;
     }
     case AttributeType::MAKE_RUNE_PROTECTION: {
-        if (!cave_naked_bold(player_ptr, y, x)) {
+        if (!cave_naked_bold(player_ptr, pos)) {
             break;
         }
         grid.info |= CAVE_OBJECT;
@@ -301,10 +301,10 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         break;
     }
     case AttributeType::STONE_WALL: {
-        if (!cave_naked_bold(player_ptr, y, x)) {
+        if (!cave_naked_bold(player_ptr, pos)) {
             break;
         }
-        if (player_bold(player_ptr, y, x)) {
+        if (player_ptr->is_located_at(pos)) {
             break;
         }
         cave_set_feat(player_ptr, y, x, feat_granite);
@@ -358,7 +358,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
             update_monster(player_ptr, grid.m_idx, false);
         }
 
-        if (player_bold(player_ptr, y, x)) {
+        if (player_ptr->is_located_at(pos)) {
             set_superstealth(player_ptr, false);
         }
 

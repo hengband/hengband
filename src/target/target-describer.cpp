@@ -67,7 +67,7 @@ public:
     char out_val[MAX_NLEN + 80]{};
     OBJECT_IDX floor_list[23]{};
     ITEM_NUMBER floor_num = 0;
-    grid_type *g_ptr;
+    Grid *g_ptr;
     MonsterEntity *m_ptr;
     OBJECT_IDX next_o_idx = 0;
     FEAT_IDX feat = 0;
@@ -138,7 +138,7 @@ static void describe_scan_result(PlayerType *player_ptr, GridExamination *ge_ptr
 
 static void describe_target(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
-    if (!player_bold(player_ptr, ge_ptr->y, ge_ptr->x)) {
+    if (!player_ptr->is_located_at({ ge_ptr->y, ge_ptr->x })) {
         ge_ptr->s1 = _("ターゲット:", "Target:");
         return;
     }

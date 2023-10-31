@@ -64,7 +64,7 @@ static bool see_wall(PlayerType *player_ptr, DIRECTION dir, POSITION y, POSITION
         return false;
     }
 
-    grid_type *g_ptr;
+    Grid *g_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
     if (!g_ptr->is_mark()) {
         return false;
@@ -225,7 +225,7 @@ static bool run_test(PlayerType *player_ptr)
         DIRECTION new_dir = cycle[chome[prev_dir] + i];
         int row = player_ptr->y + ddy[new_dir];
         int col = player_ptr->x + ddx[new_dir];
-        grid_type *g_ptr;
+        Grid *g_ptr;
         g_ptr = &floor_ptr->grid_array[row][col];
         FEAT_IDX feat = g_ptr->get_feat_mimic();
         TerrainType *f_ptr;
@@ -403,7 +403,7 @@ void run_step(PlayerType *player_ptr, DIRECTION dir)
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     exe_movement(player_ptr, find_current, false, false);
-    if (player_bold(player_ptr, player_ptr->run_py, player_ptr->run_px)) {
+    if (player_ptr->is_located_at_running_destination()) {
         player_ptr->run_py = 0;
         player_ptr->run_px = 0;
         disturb(player_ptr, false, false);

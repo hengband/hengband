@@ -105,7 +105,7 @@ bool raise_possible(PlayerType *player_ptr, MonsterEntity *m_ptr)
     POSITION x = m_ptr->fx;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION xx = x - 5; xx <= x + 5; xx++) {
-        grid_type *g_ptr;
+        Grid *g_ptr;
         for (POSITION yy = y - 5; yy <= y + 5; yy++) {
             if (distance(y, x, yy, xx) > 5) {
                 continue;
@@ -167,14 +167,16 @@ bool clean_shot(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, P
     }
 
     for (const auto &[y, x] : grid_g) {
-        if ((floor_ptr->grid_array[y][x].m_idx > 0) && (y != y2 || x != x2)) {
-            auto *m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx];
+        const Pos2D pos(y, x);
+        const auto &grid = floor_ptr->get_grid(pos);
+        if ((grid.m_idx > 0) && (y != y2 || x != x2)) {
+            auto *m_ptr = &floor_ptr->m_list[grid.m_idx];
             if (is_friend == m_ptr->is_pet()) {
                 return false;
             }
         }
 
-        if (player_bold(player_ptr, y, x) && is_friend) {
+        if (player_ptr->is_located_at(pos) && is_friend) {
             return false;
         }
     }

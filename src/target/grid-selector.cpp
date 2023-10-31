@@ -87,20 +87,20 @@ static void tgt_pt_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, st
 /*!
  * @brief 指定したシンボルのマスかどうかを判定するための条件式コールバック
  */
-std::unordered_map<int, std::function<bool(grid_type *)>> tgt_pt_symbol_call_back = {
-    { '<', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STAIRS) && g_ptr->cave_has_flag(TerrainCharacteristics::LESS); } },
-    { '>', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STAIRS) && g_ptr->cave_has_flag(TerrainCharacteristics::MORE); } },
-    { '+', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::BLDG); } },
-    { '0', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STORE) && g_ptr->is_symbol('0'); } },
-    { '!', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STORE) && g_ptr->is_symbol('1'); } },
-    { '"', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STORE) && g_ptr->is_symbol('2'); } },
-    { '#', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STORE) && g_ptr->is_symbol('3'); } },
-    { '$', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STORE) && g_ptr->is_symbol('4'); } },
-    { '%', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STORE) && g_ptr->is_symbol('5'); } },
-    { '&', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STORE) && g_ptr->is_symbol('6'); } },
-    { '\'', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STORE) && g_ptr->is_symbol('7'); } },
-    { '(', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STORE) && g_ptr->is_symbol('8'); } },
-    { ')', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STORE) && g_ptr->is_symbol('9'); } },
+std::unordered_map<int, std::function<bool(Grid *)>> tgt_pt_symbol_call_back = {
+    { '<', [](Grid *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STAIRS) && g_ptr->cave_has_flag(TerrainCharacteristics::LESS); } },
+    { '>', [](Grid *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STAIRS) && g_ptr->cave_has_flag(TerrainCharacteristics::MORE); } },
+    { '+', [](Grid *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::BLDG); } },
+    { '0', [](Grid *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STORE) && g_ptr->is_symbol('0'); } },
+    { '!', [](Grid *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STORE) && g_ptr->is_symbol('1'); } },
+    { '"', [](Grid *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STORE) && g_ptr->is_symbol('2'); } },
+    { '#', [](Grid *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STORE) && g_ptr->is_symbol('3'); } },
+    { '$', [](Grid *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STORE) && g_ptr->is_symbol('4'); } },
+    { '%', [](Grid *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STORE) && g_ptr->is_symbol('5'); } },
+    { '&', [](Grid *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STORE) && g_ptr->is_symbol('6'); } },
+    { '\'', [](Grid *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STORE) && g_ptr->is_symbol('7'); } },
+    { '(', [](Grid *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STORE) && g_ptr->is_symbol('8'); } },
+    { ')', [](Grid *g_ptr) { return g_ptr->cave_has_flag(TerrainCharacteristics::STORE) && g_ptr->is_symbol('9'); } },
 };
 
 /*!
@@ -123,7 +123,7 @@ struct tgt_pt_info {
     size_t n = 0; //<! シンボル配列の何番目か
     char ch = '\0'; //<! 入力キー
     char prev_ch = '\0'; //<! 前回入力キー
-    std::function<bool(grid_type *)> callback{}; //<! 条件判定コールバック
+    std::function<bool(Grid *)> callback{}; //<! 条件判定コールバック
 
     void move_to_symbol(PlayerType *player_ptr);
 };
@@ -211,7 +211,7 @@ bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
         case ' ':
         case 't':
         case '.':
-            if (player_bold(player_ptr, info.y, info.x)) {
+            if (player_ptr->is_located_at({ info.y, info.x })) {
                 info.ch = 0;
             } else {
                 success = true;
@@ -245,7 +245,7 @@ bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
                 }
             } else {
                 if (info.ch == '5' || info.ch == '0') {
-                    if (player_bold(player_ptr, info.y, info.x)) {
+                    if (player_ptr->is_located_at({ info.y, info.x })) {
                         info.ch = 0;
                     } else {
                         success = true;

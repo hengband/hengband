@@ -213,14 +213,17 @@ static void restore_world_floor_info(PlayerType *player_ptr)
     constexpr auto mes = _("                            ----ゲーム再開----", "                            --- Restarted Game ---");
     exe_write_diary(player_ptr, DiaryKind::GAMESTART, 1, mes);
 
-    if (player_ptr->riding == -1) {
-        player_ptr->riding = 0;
-        auto *floor_ptr = player_ptr->current_floor_ptr;
-        for (MONSTER_IDX i = floor_ptr->m_max; i > 0; i--) {
-            if (player_bold(player_ptr, floor_ptr->m_list[i].fy, floor_ptr->m_list[i].fx)) {
-                player_ptr->riding = i;
-                break;
-            }
+    if (player_ptr->riding != -1) {
+        return;
+    }
+
+    player_ptr->riding = 0;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    for (short i = floor_ptr->m_max; i > 0; i--) {
+        const auto &monster = floor_ptr->m_list[i];
+        if (player_ptr->is_located_at({ monster.fy, monster.fx })) {
+            player_ptr->riding = i;
+            break;
         }
     }
 }

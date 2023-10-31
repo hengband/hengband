@@ -68,7 +68,7 @@ POSITION temp2_y[MAX_SHORT];
  */
 static void discover_hidden_things(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    grid_type *g_ptr;
+    Grid *g_ptr;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
     if (g_ptr->mimic && is_trap(player_ptr, g_ptr->feat)) {
@@ -96,7 +96,7 @@ static void discover_hidden_things(PlayerType *player_ptr, POSITION y, POSITION 
 
         if (!o_ptr->is_known()) {
             msg_print(_("箱に仕掛けられたトラップを発見した！", "You have discovered a trap on the chest!"));
-            object_known(o_ptr);
+            o_ptr->mark_as_known();
             disturb(player_ptr, false, false);
         }
     }
@@ -139,7 +139,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
     POSITION ox = player_ptr->x;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[ny][nx];
-    grid_type *oc_ptr = &floor_ptr->grid_array[oy][ox];
+    Grid *oc_ptr = &floor_ptr->grid_array[oy][ox];
     auto *f_ptr = &terrains_info[g_ptr->feat];
     TerrainType *of_ptr = &terrains_info[oc_ptr->feat];
 
@@ -223,10 +223,11 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         }
     }
 
+    const Pos2D pos(ny, nx);
     if (mpe_mode & MPE_ENERGY_USE) {
         if (music_singing(player_ptr, MUSIC_WALL)) {
             (void)project(player_ptr, 0, 0, player_ptr->y, player_ptr->x, (60 + player_ptr->lev), AttributeType::DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM);
-            if (!player_bold(player_ptr, ny, nx) || player_ptr->is_dead || player_ptr->leaving) {
+            if (!player_ptr->is_located_at(pos) || player_ptr->is_dead || player_ptr->leaving) {
                 return false;
             }
         }
@@ -289,7 +290,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         }
 
         hit_trap(player_ptr, any_bits(mpe_mode, MPE_BREAK_TRAP));
-        if (!player_bold(player_ptr, ny, nx) || player_ptr->is_dead || player_ptr->leaving) {
+        if (!player_ptr->is_located_at(pos) || player_ptr->is_dead || player_ptr->leaving) {
             return false;
         }
     }
@@ -307,7 +308,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         }
     }
 
-    return player_bold(player_ptr, ny, nx) && !player_ptr->is_dead && !player_ptr->leaving;
+    return player_ptr->is_located_at(pos) && !player_ptr->is_dead && !player_ptr->leaving;
 }
 
 /*!

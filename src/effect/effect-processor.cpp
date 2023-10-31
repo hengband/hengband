@@ -69,9 +69,9 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     bool old_hide = false;
     int path_n = 0;
     int grids = 0;
-    POSITION gx[1024];
-    POSITION gy[1024];
-    POSITION gm[32];
+    POSITION gx[1024]{};
+    POSITION gy[1024]{};
+    POSITION gm[32]{};
     rakubadam_p = 0;
     rakubadam_m = 0;
     monster_target_y = player_ptr->y;
@@ -366,19 +366,19 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                 dist++;
             }
 
-            auto y = gy[i];
-            auto x = gx[i];
+            const Pos2D pos(gy[i], gx[i]);
+            const auto &grid = floor.get_grid(pos);
             if (grids <= 1) {
-                auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[y][x].m_idx];
+                auto *m_ptr = &floor.m_list[grid.m_idx];
                 MonsterRaceInfo *ref_ptr = &m_ptr->get_monrace();
-                if ((flag & PROJECT_REFLECTABLE) && player_ptr->current_floor_ptr->grid_array[y][x].m_idx && (ref_ptr->flags2 & RF2_REFLECTING) && ((player_ptr->current_floor_ptr->grid_array[y][x].m_idx != player_ptr->riding) || !(flag & PROJECT_PLAYER)) && (!who || path_n > 1) && !one_in_(10)) {
+                if ((flag & PROJECT_REFLECTABLE) && grid.m_idx && (ref_ptr->flags2 & RF2_REFLECTING) && ((grid.m_idx != player_ptr->riding) || !(flag & PROJECT_PLAYER)) && (!who || path_n > 1) && !one_in_(10)) {
                     POSITION t_y, t_x;
                     int max_attempts = 10;
                     do {
                         t_y = y1 - 1 + randint1(3);
                         t_x = x1 - 1 + randint1(3);
                         max_attempts--;
-                    } while (max_attempts && in_bounds2u(player_ptr->current_floor_ptr, t_y, t_x) && !projectable(player_ptr, y, x, t_y, t_x));
+                    } while (max_attempts && in_bounds2u(player_ptr->current_floor_ptr, t_y, t_x) && !projectable(player_ptr, pos.y, pos.x, t_y, t_x));
 
                     if (max_attempts < 1) {
                         t_y = y1;
@@ -402,25 +402,25 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                         ref_ptr->r_flags2 |= RF2_REFLECTING;
                     }
 
-                    if (player_bold(player_ptr, y, x) || one_in_(2)) {
+                    if (player_ptr->is_located_at(pos) || one_in_(2)) {
                         flag &= ~(PROJECT_PLAYER);
                     } else {
                         flag |= PROJECT_PLAYER;
                     }
 
-                    project(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].m_idx, 0, t_y, t_x, dam, typ, flag);
+                    project(player_ptr, grid.m_idx, 0, t_y, t_x, dam, typ, flag);
                     continue;
                 }
             }
 
             /* Find the closest point in the blast */
             if (breath) {
-                effective_dist = dist_to_line(y, x, y1, x1, by, bx);
+                effective_dist = dist_to_line(pos.y, pos.x, y1, x1, by, bx);
             } else {
                 effective_dist = dist;
             }
 
-            if (player_ptr->riding && player_bold(player_ptr, y, x)) {
+            if (player_ptr->riding && player_ptr->is_located_at(pos)) {
                 if (flag & PROJECT_PLAYER) {
                     if (flag & (PROJECT_BEAM | PROJECT_REFLECTABLE | PROJECT_AIMED)) {
                         /*
@@ -442,7 +442,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                  * This grid is the original target.
                  * Or aimed on your horse.
                  */
-                else if (((y == y2) && (x == x2)) || (flag & PROJECT_AIMED)) {
+                else if (((pos.y == y2) && (pos.x == x2)) || (flag & PROJECT_AIMED)) {
                     /* Hit the mount with full damage */
                 }
 
@@ -475,22 +475,22 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                 }
             }
 
-            if (affect_monster(player_ptr, who, effective_dist, y, x, dam, typ, flag, see_s_msg, cap_mon_ptr)) {
+            if (affect_monster(player_ptr, who, effective_dist, pos.y, pos.x, dam, typ, flag, see_s_msg, cap_mon_ptr)) {
                 res.notice = true;
             }
         }
         /* Player affected one monster (without "jumping") */
         if (!who && (project_m_n == 1) && none_bits(flag, PROJECT_JUMP)) {
-            auto x = project_m_x;
-            auto y = project_m_y;
-            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0) {
-                auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[y][x].m_idx];
-                if (m_ptr->ml) {
+            const Pos2D pos_project(project_m_y, project_m_x);
+            const auto &grid = floor.get_grid(pos_project);
+            if (grid.m_idx > 0) {
+                auto &monster = floor.m_list[grid.m_idx];
+                if (monster.ml) {
                     if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
-                        monster_race_track(player_ptr, m_ptr->ap_r_idx);
+                        monster_race_track(player_ptr, monster.ap_r_idx);
                     }
 
-                    health_track(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].m_idx);
+                    health_track(player_ptr, grid.m_idx);
                 }
             }
         }
@@ -504,15 +504,14 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                 dist++;
             }
 
-            auto y = gy[i];
-            auto x = gx[i];
-            if (!player_bold(player_ptr, y, x)) {
+            const Pos2D pos(gy[i], gx[i]);
+            if (!player_ptr->is_located_at(pos)) {
                 continue;
             }
 
             /* Find the closest point in the blast */
             if (breath) {
-                effective_dist = dist_to_line(y, x, y1, x1, by, bx);
+                effective_dist = dist_to_line(pos.y, pos.x, y1, x1, by, bx);
             } else {
                 effective_dist = dist;
             }
@@ -551,10 +550,10 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
 
             std::string who_name;
             if (who > 0) {
-                who_name = monster_desc(player_ptr, &player_ptr->current_floor_ptr->m_list[who], MD_WRONGDOER_NAME);
+                who_name = monster_desc(player_ptr, &floor.m_list[who], MD_WRONGDOER_NAME);
             }
 
-            if (affect_player(who, player_ptr, who_name.data(), effective_dist, y, x, dam, typ, flag, project)) {
+            if (affect_player(who, player_ptr, who_name.data(), effective_dist, pos.y, pos.x, dam, typ, flag, project)) {
                 res.notice = true;
                 res.affected_player = true;
             }
@@ -562,7 +561,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     }
 
     if (player_ptr->riding) {
-        const auto m_name = monster_desc(player_ptr, &player_ptr->current_floor_ptr->m_list[player_ptr->riding], 0);
+        const auto m_name = monster_desc(player_ptr, &floor.m_list[player_ptr->riding], 0);
         if (rakubadam_m > 0) {
             if (process_fall_off_horse(player_ptr, rakubadam_m, false)) {
                 msg_format(_("%s^に振り落とされた！", "%s^ has thrown you off!"), m_name.data());

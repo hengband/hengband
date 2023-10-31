@@ -10,6 +10,7 @@
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"
 #include "monster-race/monster-race.h"
+#include "object-enchant/item-feeling.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-value.h"
@@ -885,6 +886,25 @@ TrFlags ItemEntity::get_flags_known() const
     }
 
     return flags;
+}
+
+/*!
+ * @brief オブジェクトを鑑定済にする
+ */
+void ItemEntity::mark_as_known()
+{
+    this->feeling = FEEL_NONE;
+    this->ident &= ~(IDENT_SENSE);
+    this->ident &= ~(IDENT_EMPTY);
+    this->ident |= (IDENT_KNOWN);
+}
+
+/*!
+ * @brief オブジェクトを試行済にする
+ */
+void ItemEntity::mark_as_tried()
+{
+    this->get_baseitem().mark_as_tried();
 }
 
 /*!

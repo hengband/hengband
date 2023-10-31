@@ -54,19 +54,19 @@
 
 /*!
  * Determine if a "boundary" grid is "floor mimic"
- * @param grid_type *g_ptr
- * @param TerrainType *f_ptr
- * @param TerrainType  *mimic_f_ptr
+ * @param g_ptr グリッドへの参照ポインタ
+ * @param t_ptr 地形特性への参照ポインタ
+ * @param mimic_t_ptr ミミック地形特性への参照ポインタ
  * @return 移動不能であればTRUE
  * @todo 負論理なので反転させたい
  */
-static bool boundary_floor(grid_type *g_ptr, TerrainType *f_ptr, TerrainType *mimic_f_ptr)
+static bool boundary_floor(Grid *g_ptr, TerrainType *t_ptr, TerrainType *mimic_t_ptr)
 {
     auto is_boundary_floor = g_ptr->mimic > 0;
-    is_boundary_floor &= f_ptr->is_permanent_wall();
-    is_boundary_floor &= mimic_f_ptr->flags.has_any_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY });
-    is_boundary_floor &= mimic_f_ptr->flags.has(TerrainCharacteristics::PROJECT);
-    is_boundary_floor &= mimic_f_ptr->flags.has_not(TerrainCharacteristics::OPEN);
+    is_boundary_floor &= t_ptr->is_permanent_wall();
+    is_boundary_floor &= mimic_t_ptr->flags.has_any_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY });
+    is_boundary_floor &= mimic_t_ptr->flags.has(TerrainCharacteristics::PROJECT);
+    is_boundary_floor &= mimic_t_ptr->flags.has_not(TerrainCharacteristics::OPEN);
     return is_boundary_floor;
 }
 

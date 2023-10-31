@@ -108,7 +108,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
             POSITION y = player_ptr->y + ddy_ddd[i];
             POSITION x = player_ptr->x + ddx_ddd[i];
 
-            grid_type *g_ptr;
+            Grid *g_ptr;
             g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
             if (g_ptr->m_idx) {

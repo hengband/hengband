@@ -130,7 +130,7 @@ static bool decide_tunnel_planned_site(PlayerType *player_ptr, dun_data_type *dd
 static void make_tunnels(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     for (int j = 0; j < dd_ptr->tunn_n; j++) {
-        grid_type *g_ptr;
+        Grid *g_ptr;
         TerrainType *f_ptr;
         dd_ptr->tunnel_y = dd_ptr->tunn[j].y;
         dd_ptr->tunnel_x = dd_ptr->tunn[j].x;
@@ -146,7 +146,7 @@ static void make_tunnels(PlayerType *player_ptr, dun_data_type *dd_ptr)
 static void make_walls(PlayerType *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr, dt_type *dt_ptr)
 {
     for (int j = 0; j < dd_ptr->wall_n; j++) {
-        grid_type *g_ptr;
+        Grid *g_ptr;
         dd_ptr->tunnel_y = dd_ptr->wall[j].y;
         dd_ptr->tunnel_x = dd_ptr->wall[j].x;
         g_ptr = &player_ptr->current_floor_ptr->grid_array[dd_ptr->tunnel_y][dd_ptr->tunnel_x];
@@ -286,7 +286,7 @@ static void make_aqua_streams(PlayerType *player_ptr, dun_data_type *dd_ptr, dun
  * @brief マスにフロア端用の永久壁を配置する / Set boundary mimic and add "solid" perma-wall
  * @param g_ptr 永久壁を配置したいマス構造体の参照ポインタ
  */
-static void place_bound_perm_wall(PlayerType *player_ptr, grid_type *g_ptr)
+static void place_bound_perm_wall(PlayerType *player_ptr, Grid *g_ptr)
 {
     if (bound_walls_perm) {
         g_ptr->mimic = 0;

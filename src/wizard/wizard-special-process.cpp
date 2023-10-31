@@ -275,7 +275,7 @@ static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArt
     ItemEntity item;
     item.prep(lookup_baseitem_id(artifact.bi_key));
     item.fixed_artifact_idx = a_idx;
-    object_known(&item);
+    item.mark_as_known();
     return describe_flavor(player_ptr, &item, OD_NAME_ONLY);
 }
 

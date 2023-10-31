@@ -314,7 +314,7 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
 
 void set_term_color(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, char *cp)
 {
-    if (!player_bold(player_ptr, y, x)) {
+    if (!player_ptr->is_located_at({ y, x })) {
         return;
     }
 

@@ -306,7 +306,7 @@ void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *
     make_monster_fear(player_ptr, mam_pp_ptr);
     if ((dam > 0) && !m_ptr->is_pet() && !m_ptr->is_friendly() && (mam_pp_ptr->who != m_idx)) {
         const auto &m_ref = floor_ptr->m_list[who];
-        if (m_ref.is_pet() && !player_bold(player_ptr, m_ptr->target_y, m_ptr->target_x)) {
+        if (m_ref.is_pet() && !player_ptr->is_located_at({ m_ptr->target_y, m_ptr->target_x })) {
             set_target(m_ptr, m_ref.fy, m_ref.fx);
         }
     }

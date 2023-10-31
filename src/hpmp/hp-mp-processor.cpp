@@ -63,7 +63,7 @@
  * @details
  * ダメージを受けた場合、自然回復できない。
  */
-static bool deal_damege_by_feat(PlayerType *player_ptr, grid_type *g_ptr, concptr msg_levitation, concptr msg_normal,
+static bool deal_damege_by_feat(PlayerType *player_ptr, Grid *g_ptr, concptr msg_levitation, concptr msg_normal,
     std::function<PERCENTAGE(PlayerType *)> damage_rate, std::function<void(PlayerType *, int)> additional_effect)
 {
     auto *f_ptr = &terrains_info[g_ptr->feat];

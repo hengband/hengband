@@ -47,7 +47,7 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
     }
 
     POSITION ty, tx;
-    grid_type *g_ptr;
+    Grid *g_ptr;
     const auto &system = AngbandSystem::get_instance();
     if (dir == 5 && target_okay(player_ptr)) {
         tx = target_col;

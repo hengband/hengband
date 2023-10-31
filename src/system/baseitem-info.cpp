@@ -615,4 +615,12 @@ void BaseitemInfo::decide_easy_know()
     }
 }
 
+/*!
+ * @brief オブジェクトを試行済にする
+ */
+void BaseitemInfo::mark_as_tried()
+{
+    this->tried = true;
+}
+
 std::vector<BaseitemInfo> baseitems_info;

@@ -180,7 +180,7 @@ bool exchange_cash(PlayerType *player_ptr)
             ItemMagicApplier(player_ptr, &forge, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART).execute();
 
             object_aware(player_ptr, &forge);
-            object_known(&forge);
+            forge.mark_as_known();
 
             /*
              * Hand it --- Assume there is an empty slot.

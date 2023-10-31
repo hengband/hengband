@@ -36,14 +36,14 @@ constexpr auto REDRAW_MAX = 2298;
 
 enum class QuestId : short;
 struct dungeon_type;
-struct grid_type;
+class Grid;
 class MonsterEntity;
 class ItemEntity;
 class FloorType {
 public:
     FloorType();
     short dungeon_idx = 0;
-    std::vector<std::vector<grid_type>> grid_array;
+    std::vector<std::vector<Grid>> grid_array;
     DEPTH dun_level = 0; /*!< 現在の実ダンジョン階層 base_level の参照元となる / Current dungeon level */
     DEPTH base_level = 0; /*!< 基本生成レベル、後述のobject_level, monster_levelの参照元となる / Base dungeon level */
     DEPTH object_level = 0; /*!< アイテムの生成レベル、 base_level を起点に一時変更する時に参照 / Current object creation level */
@@ -85,8 +85,8 @@ public:
     QuestId quest_number;
     bool inside_arena = false; /* Is character inside on_defeat_arena_monster? */
 
-    grid_type &get_grid(const Pos2D pos);
-    const grid_type &get_grid(const Pos2D pos) const;
+    Grid &get_grid(const Pos2D pos);
+    const Grid &get_grid(const Pos2D pos) const;
     bool is_in_dungeon() const;
     bool is_in_quest() const;
     void set_dungeon_index(short dungeon_idx_); /*!< @todo 後でenum class にする */

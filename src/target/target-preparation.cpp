@@ -71,14 +71,14 @@ bool target_able(PlayerType *player_ptr, MONSTER_IDX m_idx)
 /*
  * Determine if a given location is "interesting"
  */
-static bool target_set_accept(PlayerType *player_ptr, POSITION y, POSITION x)
+static bool target_set_accept(PlayerType *player_ptr, const Pos2D &pos)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!(in_bounds(floor_ptr, y, x))) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (!(in_bounds(&floor, pos.y, pos.x))) {
         return false;
     }
 
-    if (player_bold(player_ptr, y, x)) {
+    if (player_ptr->is_located_at(pos)) {
         return true;
     }
 
@@ -86,34 +86,30 @@ static bool target_set_accept(PlayerType *player_ptr, POSITION y, POSITION x)
         return false;
     }
 
-    grid_type *g_ptr;
-    g_ptr = &floor_ptr->grid_array[y][x];
-    if (g_ptr->m_idx) {
-        auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-        if (m_ptr->ml) {
+    const auto &grid = floor.get_grid(pos);
+    if (grid.m_idx) {
+        auto &monster = floor.m_list[grid.m_idx];
+        if (monster.ml) {
             return true;
         }
     }
 
-    for (const auto this_o_idx : g_ptr->o_idx_list) {
-        ItemEntity *o_ptr;
-        o_ptr = &floor_ptr->o_list[this_o_idx];
-        if (o_ptr->marked.has(OmType::FOUND)) {
+    for (const auto this_o_idx : grid.o_idx_list) {
+        const auto &item = floor.o_list[this_o_idx];
+        if (item.marked.has(OmType::FOUND)) {
             return true;
         }
     }
 
-    if (g_ptr->is_mark()) {
-        if (g_ptr->is_object()) {
-            return true;
-        }
-
-        if (terrains_info[g_ptr->get_feat_mimic()].flags.has(TerrainCharacteristics::NOTICE)) {
-            return true;
-        }
+    if (!grid.is_mark()) {
+        return false;
     }
 
-    return false;
+    if (grid.is_object()) {
+        return true;
+    }
+
+    return terrains_info[grid.get_feat_mimic()].flags.has(TerrainCharacteristics::NOTICE);
 }
 
 /*!
@@ -143,20 +139,21 @@ void target_set_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, std::
 
     ys.clear();
     xs.clear();
-
-    for (POSITION y = min_hgt; y <= max_hgt; y++) {
-        for (POSITION x = min_wid; x <= max_wid; x++) {
-            if (!target_set_accept(player_ptr, y, x)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    for (auto y = min_hgt; y <= max_hgt; y++) {
+        for (auto x = min_wid; x <= max_wid; x++) {
+            const Pos2D pos(y, x);
+            if (!target_set_accept(player_ptr, pos)) {
                 continue;
             }
 
-            const auto &g_ref = player_ptr->current_floor_ptr->grid_array[y][x];
-            if ((mode & (TARGET_KILL)) && !target_able(player_ptr, g_ref.m_idx)) {
+            const auto &grid = floor.get_grid(pos);
+            if ((mode & (TARGET_KILL)) && !target_able(player_ptr, grid.m_idx)) {
                 continue;
             }
 
-            const auto &m_ref = player_ptr->current_floor_ptr->m_list[g_ref.m_idx];
-            if ((mode & (TARGET_KILL)) && !target_pet && m_ref.is_pet()) {
+            const auto &monster = floor.m_list[grid.m_idx];
+            if ((mode & (TARGET_KILL)) && !target_pet && monster.is_pet()) {
                 continue;
             }
 

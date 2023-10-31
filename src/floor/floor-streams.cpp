@@ -61,7 +61,7 @@ static void recursive_river(FloorType *floor_ptr, POSITION x1, POSITION y1, POSI
     POSITION changex, changey;
     POSITION ty, tx;
     bool done;
-    grid_type *g_ptr;
+    Grid *g_ptr;
 
     length = distance(x1, y1, x2, y2);
 
@@ -293,7 +293,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
     DIRECTION dir;
     int dummy = 0;
 
-    grid_type *g_ptr;
+    Grid *g_ptr;
     TerrainType *f_ptr;
 
     const auto &streamer = TerrainList::get_instance()[feat];
@@ -434,7 +434,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
 void place_trees(PlayerType *player_ptr, POSITION x, POSITION y)
 {
     int i, j;
-    grid_type *g_ptr;
+    Grid *g_ptr;
 
     /* place trees/ rubble in ovalish distribution */
     auto *floor_ptr = player_ptr->current_floor_ptr;

@@ -153,7 +153,7 @@ void wipe_monsters_list(PlayerType *player_ptr)
  */
 void delete_monster(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    grid_type *g_ptr;
+    Grid *g_ptr;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!in_bounds(floor_ptr, y, x)) {
         return;

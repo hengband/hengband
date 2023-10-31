@@ -67,7 +67,7 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     object_aware(player_ptr, o_ptr);
-    object_known(o_ptr);
+    o_ptr->mark_as_known();
     o_ptr->marked.set(OmType::TOUCHED);
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();

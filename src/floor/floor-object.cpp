@@ -74,7 +74,7 @@ static errr get_obj_index_prep(void)
 static void object_mention(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     object_aware(player_ptr, o_ptr);
-    object_known(o_ptr);
+    o_ptr->mark_as_known();
 
     o_ptr->ident |= (IDENT_FULL_KNOWN);
     const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
@@ -192,7 +192,7 @@ bool make_gold(PlayerType *player_ptr, ItemEntity *j_ptr)
  */
 void delete_all_items_from_floor(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    grid_type *g_ptr;
+    Grid *g_ptr;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!in_bounds(floor_ptr, y, x)) {
         return;
@@ -349,7 +349,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
     POSITION dy, dx;
     POSITION ty, tx = 0;
     OBJECT_IDX o_idx = 0;
-    grid_type *g_ptr;
+    Grid *g_ptr;
     bool flag = false;
     bool done = false;
 #ifdef JP
@@ -569,7 +569,8 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
     lite_spot(player_ptr, by, bx);
     sound(SOUND_DROP);
 
-    if (player_bold(player_ptr, by, bx)) {
+    const auto is_located = player_ptr->is_located_at({ by, bx });
+    if (is_located) {
         static constexpr auto flags = {
             SubWindowRedrawingFlag::FLOOR_ITEMS,
             SubWindowRedrawingFlag::FOUND_ITEMS,
@@ -577,7 +578,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
         RedrawingFlagsUpdater::get_instance().set_flags(flags);
     }
 
-    if (chance && player_bold(player_ptr, by, bx)) {
+    if (chance && is_located) {
         msg_print(_("何かが足下に転がってきた。", "You feel something roll beneath your feet."));
     }
 

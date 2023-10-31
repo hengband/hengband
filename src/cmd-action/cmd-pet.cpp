@@ -201,7 +201,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
 {
     POSITION x, y;
     DIRECTION dir = 0;
-    grid_type *g_ptr;
+    Grid *g_ptr;
     MonsterEntity *m_ptr;
 
     if (!get_direction(player_ptr, &dir)) {

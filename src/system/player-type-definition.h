@@ -11,6 +11,7 @@
 #include "system/angband.h"
 #include "system/system-variables.h"
 #include "util/flag-group.h"
+#include "util/point-2d.h"
 #include <array>
 #include <map>
 #include <string>
@@ -404,6 +405,9 @@ public:
     bool is_fully_healthy() const;
     std::string decrease_ability_random();
     std::string decrease_ability_all();
+    Pos2D get_position() const;
+    bool is_located_at_running_destination() const;
+    bool is_located_at(const Pos2D &pos) const;
 
 private:
     std::shared_ptr<TimedEffects> timed_effects;

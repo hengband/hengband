@@ -56,7 +56,7 @@ void init_other(PlayerType *player_ptr)
     }
 
     max_dlv.assign(dungeons_info.size(), {});
-    floor_ptr->grid_array.assign(MAX_HGT, std::vector<grid_type>(MAX_WID));
+    floor_ptr->grid_array.assign(MAX_HGT, std::vector<Grid>(MAX_WID));
     init_gf_colors();
 
     macro_patterns.assign(MACRO_MAX, {});

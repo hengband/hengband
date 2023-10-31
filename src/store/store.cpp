@@ -20,7 +20,6 @@
 #include "object/object-value.h"
 #include "object/tval-types.h"
 #include "perception/identification.h"
-#include "perception/object-perception.h"
 #include "store/black-market.h"
 #include "store/service-checker.h"
 #include "store/store-owners.h"
@@ -365,7 +364,7 @@ static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType 
             }
         }
 
-        object_known(q_ptr);
+        q_ptr->mark_as_known();
         q_ptr->ident |= IDENT_STORE;
         if (tval == ItemKindType::CHEST) {
             continue;

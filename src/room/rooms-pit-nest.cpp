@@ -196,7 +196,7 @@ std::vector<nest_pit_type> nest_types = {
 /*!
  * @todo intをenumに変更する
  */
-static void add_cave_info(grid_type *g_ptr, int cave_mask)
+static void add_cave_info(Grid *g_ptr, int cave_mask)
 {
     g_ptr->info |= cave_mask;
 }
@@ -229,7 +229,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     MonsterEntity align;
 
-    grid_type *g_ptr;
+    Grid *g_ptr;
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     int cur_nest_type = pick_vault_type(floor_ptr, nest_types, floor_ptr->get_dungeon_definition().nest);
@@ -473,7 +473,7 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     MonsterEntity align;
 
-    grid_type *g_ptr;
+    Grid *g_ptr;
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     int cur_pit_type = pick_vault_type(floor_ptr, pit_types, floor_ptr->get_dungeon_definition().pit);
@@ -783,7 +783,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     MonsterEntity align;
 
-    grid_type *g_ptr;
+    Grid *g_ptr;
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     int cur_pit_type = pick_vault_type(floor_ptr, pit_types, floor_ptr->get_dungeon_definition().pit);

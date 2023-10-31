@@ -117,7 +117,7 @@ void ObjectUseEntity::execute()
     }
 
     rfu.reset_flags(flags_srf);
-    object_tried(o_ptr);
+    o_ptr->mark_as_tried();
     if (ident && !o_ptr->is_aware()) {
         object_aware(this->player_ptr, o_ptr);
         gain_exp(this->player_ptr, (lev + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
