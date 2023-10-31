@@ -6,6 +6,7 @@
 #include "main/scene-table-floor.h"
 #include "dungeon/quest.h"
 #include "main/music-definitions-table.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
@@ -32,7 +33,7 @@ static bool scene_basic(PlayerType *player_ptr, scene_type *value)
         return true;
     }
 
-    if (player_ptr->phase_out) {
+    if (AngbandSystem::get_instance().is_phase_out()) {
         value->type = TERM_XTRA_MUSIC_BASIC;
         value->val = MUSIC_BASIC_BATTLE;
         return true;
@@ -44,7 +45,7 @@ static bool scene_basic(PlayerType *player_ptr, scene_type *value)
 static bool scene_quest(PlayerType *player_ptr, scene_type *value)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    const QuestId quest_id = quest_number(floor, floor.dun_level);
+    const auto quest_id = floor.get_quest_id();
     const bool enable = (inside_quest(quest_id));
     if (enable) {
         value->type = TERM_XTRA_MUSIC_QUEST;
@@ -57,7 +58,7 @@ static bool scene_quest(PlayerType *player_ptr, scene_type *value)
 static bool scene_quest_basic(PlayerType *player_ptr, scene_type *value)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    const QuestId quest_id = quest_number(floor, floor.dun_level);
+    const auto quest_id = floor.get_quest_id();
     const bool enable = (inside_quest(quest_id));
     if (enable) {
         value->type = TERM_XTRA_MUSIC_BASIC;

@@ -4,10 +4,35 @@
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-kind-flags.h"
 #include "monster/monster-status.h"
+#include "system/angband-system.h"
 #include "system/monster-race-info.h"
 #include "term/term-color-types.h"
+#include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include <algorithm>
+
+/*!
+ * @brief モンスターの属性に基づいた敵対関係の有無を返す
+ * @param sub_align1 モンスター1のサブフラグ
+ * @param sub_align2 モンスター2のサブフラグ
+ * @return 敵対関係にあるか否か
+ */
+bool MonsterEntity::check_sub_alignments(const byte sub_align1, const byte sub_align2)
+{
+    if (sub_align1 == sub_align2) {
+        return false;
+    }
+
+    auto this_evil = any_bits(sub_align1, SUB_ALIGN_EVIL);
+    this_evil &= any_bits(sub_align2, SUB_ALIGN_GOOD);
+    if (this_evil) {
+        return true;
+    }
+
+    auto this_good = any_bits(sub_align1, SUB_ALIGN_GOOD);
+    this_good &= any_bits(sub_align2, SUB_ALIGN_EVIL);
+    return this_good;
+}
 
 bool MonsterEntity::is_friendly() const
 {
@@ -22,6 +47,46 @@ bool MonsterEntity::is_pet() const
 bool MonsterEntity::is_hostile() const
 {
     return !this->is_friendly() && !this->is_pet();
+}
+
+/*!
+ * @brief モンスターの属性の基づいた敵対関係の有無を返す
+ * @param other 比較対象モンスターへの参照
+ * @return 敵対関係にあるか否か
+ */
+bool MonsterEntity::is_hostile_to_melee(const MonsterEntity &other) const
+{
+    if (AngbandSystem::get_instance().is_phase_out()) {
+        return !this->is_pet() && !other.is_pet();
+    }
+
+    const auto &monrace1 = monraces_info[this->r_idx];
+    const auto &monrace2 = monraces_info[other.r_idx];
+    const auto is_m1_wild = monrace1.wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
+    const auto is_m2_wild = monrace2.wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
+    if (is_m1_wild && is_m2_wild) {
+        if (!this->is_pet() && !other.is_pet()) {
+            return false;
+        }
+    }
+
+    if (this->is_hostile_align(other.sub_align)) {
+        if (this->mflag2.has_not(MonsterConstantFlagType::CHAMELEON) || other.mflag2.has_not(MonsterConstantFlagType::CHAMELEON)) {
+            return true;
+        }
+    }
+
+    return this->is_hostile() != other.is_hostile();
+}
+
+/*!
+ * @brief モンスターの属性の基づいた敵対関係の有無を返す
+ * @param other 比較対象のサブフラグ
+ * @return 敵対関係にあるか否か
+ */
+bool MonsterEntity::is_hostile_align(const byte other_sub_align) const
+{
+    return MonsterEntity::check_sub_alignments(this->sub_align, other_sub_align);
 }
 
 bool MonsterEntity::is_named() const
@@ -56,7 +121,7 @@ bool MonsterEntity::is_mimicry() const
         return true;
     }
 
-    const auto &r_ref = monraces_info[this->ap_r_idx];
+    const auto &r_ref = this->get_appearance_monrace();
     const auto mimic_symbols = "/|\\()[]=$,.!?&`#%<>+~";
     if (angband_strchr(mimic_symbols, r_ref.d_char) == nullptr) {
         return false;
@@ -74,23 +139,33 @@ bool MonsterEntity::is_valid() const
     return MonsterRace(this->r_idx).is_valid();
 }
 
-MonsterRaceId MonsterEntity::get_real_r_idx() const
+MonsterRaceId MonsterEntity::get_real_monrace_id() const
 {
-    const auto &r_ref = monraces_info[this->r_idx];
+    const auto &monrace = this->get_monrace();
     if (this->mflag2.has_not(MonsterConstantFlagType::CHAMELEON)) {
         return this->r_idx;
     }
 
-    return r_ref.kind_flags.has(MonsterKindType::UNIQUE) ? MonsterRaceId::CHAMELEON_K : MonsterRaceId::CHAMELEON;
+    return monrace.kind_flags.has(MonsterKindType::UNIQUE) ? MonsterRaceId::CHAMELEON_K : MonsterRaceId::CHAMELEON;
 }
 
 /*!
- * @brief モンスターの真の種族を返す / Extract monster race pointer of a monster's true form
- * @return 本当のモンスター種族参照ポインタ
+ * @brief モンスターの真の種族定義を返す (CHAMAELEONフラグ専用)
+ * @return 真のモンスター種族参照
  */
-MonsterRaceInfo &MonsterEntity::get_real_r_ref() const
+MonsterRaceInfo &MonsterEntity::get_real_monrace() const
 {
-    return monraces_info[this->get_real_r_idx()];
+    return monraces_info[this->get_real_monrace_id()];
+}
+
+MonsterRaceInfo &MonsterEntity::get_appearance_monrace() const
+{
+    return monraces_info[this->ap_r_idx];
+}
+
+MonsterRaceInfo &MonsterEntity::get_monrace() const
+{
+    return monraces_info[this->r_idx];
 }
 
 short MonsterEntity::get_remaining_sleep() const
@@ -197,19 +272,19 @@ byte MonsterEntity::get_temporary_speed() const
  */
 bool MonsterEntity::has_living_flag(bool is_apperance) const
 {
-    const auto &monrace = monraces_info[is_apperance ? this->ap_r_idx : this->r_idx];
+    const auto &monrace = is_apperance ? this->get_appearance_monrace() : this->get_monrace();
     return monrace.has_living_flag();
 }
 
 bool MonsterEntity::is_explodable() const
 {
-    const auto &monrace = monraces_info[this->r_idx];
+    const auto &monrace = this->get_monrace();
     return monrace.is_explodable();
 }
 
 std::string MonsterEntity::get_died_message() const
 {
-    const auto &monrace = monraces_info[this->r_idx];
+    const auto &monrace = this->get_monrace();
     return monrace.get_died_message();
 }
 
@@ -241,4 +316,16 @@ std::pair<TERM_COLOR, int> MonsterEntity::get_hp_bar_data() const
         return { TERM_L_RED, len };
     }
     return { TERM_RED, len };
+}
+
+/*!
+ * @brief モンスターを敵に回す
+ */
+void MonsterEntity::set_hostile()
+{
+    if (AngbandSystem::get_instance().is_phase_out()) {
+        return;
+    }
+
+    this->mflag2.reset({ MonsterConstantFlagType::PET, MonsterConstantFlagType::FRIENDLY });
 }

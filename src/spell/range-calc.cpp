@@ -212,7 +212,7 @@ void breath_shape(PlayerType *player_ptr, const projection_path &path, int dist,
     auto *floor_ptr = player_ptr->current_floor_ptr;
     while (bdis <= mdis) {
         if ((0 < dist) && (path_n < dist)) {
-            const auto [ny, nx] = path[path_n];
+            const auto &[ny, nx] = path[path_n];
             POSITION nd = distance(ny, nx, y1, x1);
 
             if (bdis >= nd) {

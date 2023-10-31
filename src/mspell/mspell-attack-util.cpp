@@ -13,7 +13,7 @@ msa_type::msa_type(PlayerType *player_ptr, MONSTER_IDX m_idx)
     , do_spell(DO_SPELL_NONE)
     , thrown_spell(MonsterAbilityType::MAX)
 {
-    this->r_ptr = &monraces_info[this->m_ptr->r_idx];
+    this->r_ptr = &this->m_ptr->get_monrace();
     this->no_inate = randint0(100) >= (this->r_ptr->freq_spell * 2);
     this->ability_flags = this->r_ptr->ability_flags;
 }

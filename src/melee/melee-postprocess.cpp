@@ -37,6 +37,7 @@
 #include "player-info/class-info.h"
 #include "player-info/race-types.h"
 #include "player/player-personality-types.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -117,7 +118,7 @@ static bool process_invulnerability(mam_pp_type *mam_pp_ptr)
  */
 static bool process_all_resistances(mam_pp_type *mam_pp_ptr)
 {
-    auto *r_ptr = &monraces_info[mam_pp_ptr->m_ptr->r_idx];
+    auto *r_ptr = &mam_pp_ptr->m_ptr->get_monrace();
     if (r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_ALL)) {
         return false;
     }
@@ -185,7 +186,7 @@ static void print_monster_dead_by_monster(PlayerType *player_ptr, mam_pp_type *m
  */
 static bool check_monster_hp(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
 {
-    const auto &monrace = monraces_info[mam_pp_ptr->m_ptr->r_idx];
+    const auto &monrace = mam_pp_ptr->m_ptr->get_monrace();
     if (mam_pp_ptr->m_ptr->hp < 0) {
         return false;
     }
@@ -193,7 +194,7 @@ static bool check_monster_hp(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
     auto is_like_unique = monrace.kind_flags.has(MonsterKindType::UNIQUE);
     is_like_unique |= any_bits(monrace.flags1, RF1_QUESTOR);
     is_like_unique |= monrace.population_flags.has(MonsterPopulationType::NAZGUL);
-    if (is_like_unique && !player_ptr->phase_out) {
+    if (is_like_unique && !AngbandSystem::get_instance().is_phase_out()) {
         mam_pp_ptr->m_ptr->hp = 1;
         return false;
     }
@@ -230,8 +231,8 @@ static void cancel_fear_by_pain(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
  */
 static void make_monster_fear(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
 {
-    auto *r_ptr = &monraces_info[mam_pp_ptr->m_ptr->r_idx];
-    if (mam_pp_ptr->m_ptr->is_fearful() || ((r_ptr->flags3 & RF3_NO_FEAR) == 0)) {
+    auto *r_ptr = &mam_pp_ptr->m_ptr->get_monrace();
+    if (mam_pp_ptr->m_ptr->is_fearful() || (r_ptr->resistance_flags.has_not(MonsterResistanceType::NO_FEAR))) {
         return;
     }
 

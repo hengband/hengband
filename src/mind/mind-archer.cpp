@@ -147,8 +147,8 @@ bool create_ammo(PlayerType *player_ptr)
     case AMMO_ARROW: {
         constexpr auto q = _("どのアイテムから作りますか？ ", "Convert which item? ");
         constexpr auto s = _("材料を持っていない。", "You have no item to convert.");
-        OBJECT_IDX item;
-        auto *q_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ItemEntity::is_convertible));
+        short i_idx;
+        auto *q_ptr = choose_object(player_ptr, &i_idx, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ItemEntity::is_convertible));
         if (!q_ptr) {
             return false;
         }
@@ -163,7 +163,7 @@ bool create_ammo(PlayerType *player_ptr)
         q_ptr->discount = 99;
         const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
         msg_print(_(format("%sを作った。", item_name.data()), "You make some ammo."));
-        vary_item(player_ptr, item, -1);
+        vary_item(player_ptr, i_idx, -1);
         int16_t slot = store_item_to_inventory(player_ptr, q_ptr);
         if (slot >= 0) {
             autopick_alter_item(player_ptr, slot, false);
@@ -174,8 +174,8 @@ bool create_ammo(PlayerType *player_ptr)
     case AMMO_BOLT: {
         constexpr auto q = _("どのアイテムから作りますか？ ", "Convert which item? ");
         constexpr auto s = _("材料を持っていない。", "You have no item to convert.");
-        OBJECT_IDX item;
-        auto *q_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::is_convertible));
+        short i_idx;
+        auto *q_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::is_convertible));
         if (!q_ptr) {
             return false;
         }
@@ -190,7 +190,7 @@ bool create_ammo(PlayerType *player_ptr)
         q_ptr->discount = 99;
         const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
         msg_print(_(format("%sを作った。", item_name.data()), "You make some ammo."));
-        vary_item(player_ptr, item, -1);
+        vary_item(player_ptr, i_idx, -1);
         int16_t slot = store_item_to_inventory(player_ptr, q_ptr);
         if (slot >= 0) {
             autopick_alter_item(player_ptr, slot, false);

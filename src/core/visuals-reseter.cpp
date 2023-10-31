@@ -13,10 +13,10 @@
  */
 void reset_visuals(PlayerType *player_ptr)
 {
-    for (auto &f_ref : terrains_info) {
+    for (auto &terrain : TerrainList::get_instance()) {
         for (int j = 0; j < F_LIT_MAX; j++) {
-            f_ref.x_attr[j] = f_ref.d_attr[j];
-            f_ref.x_char[j] = f_ref.d_char[j];
+            terrain.x_attr[j] = terrain.d_attr[j];
+            terrain.x_char[j] = terrain.d_char[j];
         }
     }
 

@@ -24,7 +24,7 @@
  */
 bool common_saving_throw_charm(PlayerType *player_ptr, int pow, MonsterEntity *m_ptr)
 {
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
 
     if (player_ptr->current_floor_ptr->inside_arena) {
         return true;
@@ -38,9 +38,9 @@ bool common_saving_throw_charm(PlayerType *player_ptr, int pow, MonsterEntity *m
         return true;
     }
 
-    if (r_ptr->flags3 & RF3_NO_CONF) {
+    if (r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) {
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-            r_ptr->r_flags3 |= (RF3_NO_CONF);
+            r_ptr->resistance_flags.set(MonsterResistanceType::NO_CONF);
         }
         return true;
     }
@@ -64,7 +64,7 @@ bool common_saving_throw_charm(PlayerType *player_ptr, int pow, MonsterEntity *m
  */
 bool common_saving_throw_control(PlayerType *player_ptr, int pow, MonsterEntity *m_ptr)
 {
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
 
     if (player_ptr->current_floor_ptr->inside_arena) {
         return true;

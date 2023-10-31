@@ -203,7 +203,7 @@ static void write_html_footer(FILE *tmpfff, FILE *fff)
 
 void exe_cmd_save_screen_html(const std::filesystem::path &path, bool need_message)
 {
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     auto *fff = angband_fopen(path, FileOpenMode::WRITE);
     if (!check_screen_html_can_open(fff, path, need_message)) {
         return;
@@ -375,7 +375,7 @@ void do_cmd_save_screen(PlayerType *player_ptr)
         return;
     }
 
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     const auto old_use_graphics = update_use_graphics(player_ptr);
 
     if (html_dump) {
@@ -487,7 +487,7 @@ static void draw_colored_characters(FILE *fff, int wid, int hgt, bool okay)
  */
 void do_cmd_load_screen(void)
 {
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     const auto path = path_build(ANGBAND_DIR_USER, "dump.txt");
     auto *fff = angband_fopen(path, FileOpenMode::READ);
     if (!fff) {

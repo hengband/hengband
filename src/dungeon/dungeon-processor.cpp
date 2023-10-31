@@ -32,6 +32,7 @@
 #include "realm/realm-song-numbers.h"
 #include "realm/realm-song.h"
 #include "spell-realm/spells-song.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-info.h"
@@ -116,7 +117,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     health_track(player_ptr, 0);
 
     disturb(player_ptr, true, true);
-    auto quest_num = quest_number(floor, floor.dun_level);
+    auto quest_num = floor.get_quest_id();
     const auto &quest_list = QuestList::get_instance();
     auto *questor_ptr = &monraces_info[quest_list[quest_num].r_idx];
     if (inside_quest(quest_num)) {
@@ -127,7 +128,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         player_ptr->max_plv = player_ptr->lev;
     }
 
-    if ((max_dlv[floor.dungeon_idx] < floor.dun_level) && !inside_quest(floor.quest_number)) {
+    if ((max_dlv[floor.dungeon_idx] < floor.dun_level) && !floor.is_in_quest()) {
         max_dlv[floor.dungeon_idx] = floor.dun_level;
         if (record_maxdepth) {
             exe_write_diary(player_ptr, DiaryKind::MAXDEAPTH, floor.dun_level);
@@ -159,7 +160,8 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         do_cmd_feeling(player_ptr);
     }
 
-    if (player_ptr->phase_out) {
+    const auto is_watching = AngbandSystem::get_instance().is_phase_out();
+    if (is_watching) {
         if (load_game) {
             player_ptr->energy_need = 0;
             update_gambling_monsters(player_ptr);
@@ -177,9 +179,10 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         return;
     }
 
-    if (!inside_quest(floor.quest_number) && (floor.dungeon_idx == DUNGEON_ANGBAND)) {
-        quest_discovery(random_quest_number(floor, floor.dun_level));
-        floor.quest_number = random_quest_number(floor, floor.dun_level);
+    if (!floor.is_in_quest() && (floor.dungeon_idx == DUNGEON_ANGBAND)) {
+        const auto random_quest_id = floor.get_random_quest_id();
+        quest_discovery(random_quest_id);
+        floor.quest_number = random_quest_id;
     }
 
     const auto &dungeon = floor.get_dungeon_definition();
@@ -202,7 +205,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     floor.monster_level = floor.base_level;
     floor.object_level = floor.base_level;
     w_ptr->is_loading_now = true;
-    if (player_ptr->energy_need > 0 && !player_ptr->phase_out && (floor.dun_level || player_ptr->leaving_dungeon || floor.inside_arena)) {
+    if (player_ptr->energy_need > 0 && !is_watching && (floor.dun_level || player_ptr->leaving_dungeon || floor.inside_arena)) {
         player_ptr->energy_need = 0;
     }
 
@@ -210,11 +213,11 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     mproc_init(&floor);
 
     while (true) {
-        if ((floor.m_cnt + 32 > w_ptr->max_m_idx) && !player_ptr->phase_out) {
+        if ((floor.m_cnt + 32 > w_ptr->max_m_idx) && !is_watching) {
             compact_monsters(player_ptr, 64);
         }
 
-        if ((floor.m_cnt + 32 < floor.m_max) && !player_ptr->phase_out) {
+        if ((floor.m_cnt + 32 < floor.m_max) && !is_watching) {
             compact_monsters(player_ptr, 0);
         }
 

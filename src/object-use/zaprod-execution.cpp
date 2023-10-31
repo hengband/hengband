@@ -43,12 +43,12 @@ ObjectZapRodEntity::ObjectZapRodEntity(PlayerType *player_ptr)
 /*!
  * @brief ロッドを使う
  */
-void ObjectZapRodEntity::execute(INVENTORY_IDX item)
+void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
 {
     DIRECTION dir = 0;
     auto use_charge = true;
-    auto *o_ptr = ref_item(this->player_ptr, item);
-    if ((item < 0) && (o_ptr->number > 1)) {
+    auto *o_ptr = ref_item(this->player_ptr, i_idx);
+    if ((i_idx < 0) && (o_ptr->number > 1)) {
         msg_print(_("まずはロッドを拾わなければ。", "You must first pick up the rods."));
         return;
     }

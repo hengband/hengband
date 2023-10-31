@@ -1,4 +1,5 @@
 #include "monster-race/monster-race-hook.h"
+#include "dungeon/quest.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-table.h"
 #include "monster-floor/place-monster-types.h"
@@ -128,7 +129,7 @@ bool mon_hook_quest(PlayerType *player_ptr, MonsterRaceId r_idx)
 bool mon_hook_dungeon(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (!floor.is_in_dungeon() && !inside_quest(floor.quest_number)) {
+    if (!floor.is_in_dungeon() && !floor.is_in_quest()) {
         return true;
     }
 
@@ -930,5 +931,11 @@ bool item_monster_okay(PlayerType *player_ptr, MonsterRaceId r_idx)
  */
 bool vault_monster_okay(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
-    return mon_hook_dungeon(player_ptr, r_idx) && monraces_info[r_idx].kind_flags.has_not(MonsterKindType::UNIQUE) && none_bits(monraces_info[r_idx].flags7, RF7_UNIQUE2) && monraces_info[r_idx].resistance_flags.has_not(MonsterResistanceType::RESIST_ALL) && monraces_info[r_idx].feature_flags.has_not(MonsterFeatureType::AQUATIC);
+    const auto &monrace = monraces_info[r_idx];
+    auto is_valid = mon_hook_dungeon(player_ptr, r_idx);
+    is_valid &= monrace.kind_flags.has_not(MonsterKindType::UNIQUE);
+    is_valid &= none_bits(monrace.flags7, RF7_UNIQUE2);
+    is_valid &= monrace.resistance_flags.has_not(MonsterResistanceType::RESIST_ALL);
+    is_valid &= monrace.feature_flags.has_not(MonsterFeatureType::AQUATIC);
+    return is_valid;
 }

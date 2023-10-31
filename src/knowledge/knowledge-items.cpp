@@ -253,7 +253,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
     byte char_left = 0;
     byte mode;
 
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     auto browser_rows = hgt - 8;
     std::vector<short> object_idx(baseitems_info.size());
 

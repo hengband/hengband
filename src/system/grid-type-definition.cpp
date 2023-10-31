@@ -1,5 +1,6 @@
 #include "system/grid-type-definition.h"
 #include "monster-race/race-flags7.h"
+#include "system/angband-system.h"
 #include "system/monster-race-info.h"
 #include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -91,17 +92,17 @@ bool grid_type::is_rune_explosion() const
     return this->is_object() && terrains_info[this->mimic].flags.has(TerrainCharacteristics::RUNE_EXPLOSION);
 }
 
-byte grid_type::get_cost(MonsterRaceInfo *r_ptr) const
+byte grid_type::get_cost(const MonsterRaceInfo *r_ptr) const
 {
     return this->costs[get_grid_flow_type(r_ptr)];
 }
 
-byte grid_type::get_distance(MonsterRaceInfo *r_ptr) const
+byte grid_type::get_distance(const MonsterRaceInfo *r_ptr) const
 {
     return this->dists[get_grid_flow_type(r_ptr)];
 }
 
-flow_type grid_type::get_grid_flow_type(MonsterRaceInfo *r_ptr) const
+flow_type grid_type::get_grid_flow_type(const MonsterRaceInfo *r_ptr) const
 {
     return r_ptr->feature_flags.has(MonsterFeatureType::CAN_FLY) ? FLOW_CAN_FLY : FLOW_NORMAL;
 }
@@ -143,4 +144,9 @@ void grid_type::reset_dists()
     for (auto &dist : this->dists) {
         dist = 0;
     }
+}
+
+bool grid_type::has_los() const
+{
+    return any_bits(this->info, CAVE_VIEW) || AngbandSystem::get_instance().is_phase_out();
 }

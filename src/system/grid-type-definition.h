@@ -82,14 +82,15 @@ public:
     bool is_mirror() const;
     bool is_rune_protection() const;
     bool is_rune_explosion() const;
-    byte get_cost(MonsterRaceInfo *r_ptr) const;
-    byte get_distance(MonsterRaceInfo *r_ptr) const;
+    byte get_cost(const MonsterRaceInfo *r_ptr) const;
+    byte get_distance(const MonsterRaceInfo *r_ptr) const;
     FEAT_IDX get_feat_mimic() const;
     bool cave_has_flag(TerrainCharacteristics feature_flags) const;
     bool is_symbol(const int ch) const;
     void reset_costs();
     void reset_dists();
+    bool has_los() const;
 
 private:
-    flow_type get_grid_flow_type(MonsterRaceInfo *r_ptr) const;
+    flow_type get_grid_flow_type(const MonsterRaceInfo *r_ptr) const;
 };

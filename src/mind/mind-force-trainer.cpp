@@ -220,7 +220,7 @@ bool shock_power(PlayerType *player_ptr)
     POSITION oy = y, ox = x;
     MONSTER_IDX m_idx = player_ptr->current_floor_ptr->grid_array[y][x].m_idx;
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *r_ptr = &m_ptr->get_monrace();
     const auto m_name = monster_desc(player_ptr, m_ptr, 0);
 
     if (randint1(r_ptr->level * 3 / 2) > randint0(dam / 2) + dam / 2) {
@@ -335,9 +335,11 @@ bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
             return false;
         }
 
-        MONSTER_IDX m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
+        const Pos2D pos(target_row, target_col);
+        const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+        const auto m_idx = grid.m_idx;
         const auto is_projectable = projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col);
-        if ((m_idx == 0) || !player_has_los_bold(player_ptr, target_row, target_col) || !is_projectable) {
+        if ((m_idx == 0) || !grid.has_los() || !is_projectable) {
             break;
         }
 

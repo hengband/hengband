@@ -120,7 +120,7 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
                 letter[index].artifact = i2enum<FixedArtifactId>(atoi(zz[6] + 1));
             }
         } else if (zz[6][0] == '!') {
-            if (inside_quest(floor_ptr->quest_number)) {
+            if (floor_ptr->is_in_quest()) {
                 const auto &quest_list = QuestList::get_instance();
                 letter[index].artifact = quest_list[floor_ptr->quest_number].reward_artifact_idx;
             }
@@ -145,7 +145,7 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
                 letter[index].object = (OBJECT_IDX)atoi(zz[4] + 1);
             }
         } else if (zz[4][0] == '!') {
-            if (inside_quest(floor_ptr->quest_number)) {
+            if (floor_ptr->is_in_quest()) {
                 const auto &quest = QuestList::get_instance()[floor_ptr->quest_number];
                 if (quest.has_reward()) {
                     const auto &artifact = quest.get_reward();

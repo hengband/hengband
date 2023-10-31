@@ -10,7 +10,6 @@
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-flags.h"
 #include "racial/racial-android.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
@@ -28,15 +27,15 @@ bool bless_weapon(PlayerType *player_ptr)
     constexpr auto q = _("どのアイテムを祝福しますか？", "Bless which weapon? ");
     constexpr auto s = _("祝福できる武器がありません。", "You have no weapon to bless.");
 
-    OBJECT_IDX item;
+    short i_idx;
     constexpr BIT_FLAGS options = USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT;
-    auto *o_ptr = choose_object(player_ptr, &item, q, s, options, FuncItemTester(&ItemEntity::is_weapon));
+    auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, options, FuncItemTester(&ItemEntity::is_weapon));
     if (!o_ptr) {
         return false;
     }
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
-    auto item_flags = object_flags(o_ptr);
+    const auto item_flags = o_ptr->get_flags();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (o_ptr->is_cursed()) {
         auto can_disturb_blessing = o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE) && (randint1(100) < 33);
@@ -48,7 +47,7 @@ bool bless_weapon(PlayerType *player_ptr)
 #ifdef JP
             msg_format("%sを覆う黒いオーラは祝福を跳ね返した！", item_name.data());
 #else
-            msg_format("The black aura on %s %s disrupts the blessing!", ((item >= 0) ? "your" : "the"), item_name.data());
+            msg_format("The black aura on %s %s disrupts the blessing!", ((i_idx >= 0) ? "your" : "the"), item_name.data());
 #endif
 
             return true;
@@ -57,7 +56,7 @@ bool bless_weapon(PlayerType *player_ptr)
 #ifdef JP
         msg_format("%s から邪悪なオーラが消えた。", item_name.data());
 #else
-        msg_format("A malignant aura leaves %s %s.", ((item >= 0) ? "your" : "the"), item_name.data());
+        msg_format("A malignant aura leaves %s %s.", ((i_idx >= 0) ? "your" : "the"), item_name.data());
 #endif
         o_ptr->curse_flags.clear();
         set_bits(o_ptr->ident, IDENT_SENSE);
@@ -83,7 +82,7 @@ bool bless_weapon(PlayerType *player_ptr)
 #ifdef JP
         msg_format("%s は既に祝福されている。", item_name.data());
 #else
-        msg_format("%s %s %s blessed already.", ((item >= 0) ? "Your" : "The"), item_name.data(), ((o_ptr->number > 1) ? "were" : "was"));
+        msg_format("%s %s %s blessed already.", ((i_idx >= 0) ? "Your" : "The"), item_name.data(), ((o_ptr->number > 1) ? "were" : "was"));
 #endif
         return true;
     }
@@ -92,7 +91,7 @@ bool bless_weapon(PlayerType *player_ptr)
 #ifdef JP
         msg_format("%sは輝いた！", item_name.data());
 #else
-        msg_format("%s %s shine%s!", ((item >= 0) ? "Your" : "The"), item_name.data(), ((o_ptr->number > 1) ? "" : "s"));
+        msg_format("%s %s shine%s!", ((i_idx >= 0) ? "Your" : "The"), item_name.data(), ((o_ptr->number > 1) ? "" : "s"));
 #endif
         o_ptr->art_flags.set(TR_BLESSED);
         o_ptr->discount = 99;
@@ -136,7 +135,7 @@ bool bless_weapon(PlayerType *player_ptr)
 #ifdef JP
             msg_format("%s は劣化した！", item_name.data());
 #else
-            msg_format("%s %s %s disenchanted!", ((item >= 0) ? "Your" : "The"), item_name.data(), ((o_ptr->number > 1) ? "were" : "was"));
+            msg_format("%s %s %s disenchanted!", ((i_idx >= 0) ? "Your" : "The"), item_name.data(), ((o_ptr->number > 1) ? "were" : "was"));
 #endif
         }
     }

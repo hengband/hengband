@@ -12,7 +12,6 @@
 #include "monster-race/monster-race.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/special-object-flags.h"
-#include "object/object-flags.h"
 #include "object/object-value.h"
 #include "object/tval-types.h"
 #include "smith/object-smith.h"
@@ -493,7 +492,7 @@ bool ItemEntity::is_activatable() const
         return false;
     }
 
-    auto flags = object_flags(this);
+    const auto flags = this->get_flags();
     return flags.has(TR_ACTIVATE);
 }
 
@@ -819,4 +818,104 @@ EgoItemDefinition &ItemEntity::get_ego() const
 ArtifactType &ItemEntity::get_fixed_artifact() const
 {
     return ArtifactsInfo::get_instance().get_artifact(this->fixed_artifact_idx);
+}
+
+TrFlags ItemEntity::get_flags() const
+{
+    const auto &baseitem = this->get_baseitem();
+    auto flags = baseitem.flags;
+
+    if (this->is_fixed_artifact()) {
+        flags = this->get_fixed_artifact().flags;
+    }
+
+    if (this->is_ego()) {
+        const auto &ego = this->get_ego();
+        flags.set(ego.flags);
+        this->modify_ego_lite_flags(flags);
+    }
+
+    flags.set(this->art_flags);
+    if (auto effect = Smith::object_effect(this); effect.has_value()) {
+        auto tr_flags = Smith::get_effect_tr_flags(effect.value());
+        flags.set(tr_flags);
+    }
+
+    if (Smith::object_activation(this).has_value()) {
+        flags.set(TR_ACTIVATE);
+    }
+
+    return flags;
+}
+
+TrFlags ItemEntity::get_flags_known() const
+{
+    TrFlags flags{};
+    if (!this->is_aware()) {
+        return flags;
+    }
+
+    const auto &baseitem = this->get_baseitem();
+    flags = baseitem.flags;
+    if (!this->is_known()) {
+        return flags;
+    }
+
+    if (this->is_ego()) {
+        const auto &ego = this->get_ego();
+        flags.set(ego.flags);
+        this->modify_ego_lite_flags(flags);
+    }
+
+    if (this->is_fully_known()) {
+        if (this->is_fixed_artifact()) {
+            flags = this->get_fixed_artifact().flags;
+        }
+
+        flags.set(this->art_flags);
+    }
+
+    if (auto effect = Smith::object_effect(this); effect.has_value()) {
+        auto tr_flags = Smith::get_effect_tr_flags(effect.value());
+        flags.set(tr_flags);
+    }
+
+    if (Smith::object_activation(this).has_value()) {
+        flags.set(TR_ACTIVATE);
+    }
+
+    return flags;
+}
+
+/*!
+ * @brief エゴ光源のフラグを修正する
+ *
+ * 寿命のある光源で寿命が0ターンの時、光源エゴアイテムに起因するフラグは
+ * 灼熱エゴの火炎耐性を除き付与されないようにする。
+ *
+ * @param flags フラグ情報を受け取る配列
+ */
+void ItemEntity::modify_ego_lite_flags(TrFlags &flags) const
+{
+    if (this->bi_key.tval() != ItemKindType::LITE) {
+        return;
+    }
+
+    if (!this->is_lite_requiring_fuel() || this->fuel != 0) {
+        return;
+    }
+
+    switch (this->ego_idx) {
+    case EgoType::LITE_AURA_FIRE:
+        flags.reset(TR_SH_FIRE);
+        return;
+    case EgoType::LITE_INFRA:
+        flags.reset(TR_INFRA);
+        return;
+    case EgoType::LITE_EYE:
+        flags.reset({ TR_RES_BLIND, TR_SEE_INVIS });
+        return;
+    default:
+        return;
+    }
 }

@@ -62,8 +62,8 @@
  */
 static bool boundary_floor(grid_type *g_ptr, TerrainType *f_ptr, TerrainType *mimic_f_ptr)
 {
-    bool is_boundary_floor = g_ptr->mimic > 0;
-    is_boundary_floor &= permanent_wall(f_ptr);
+    auto is_boundary_floor = g_ptr->mimic > 0;
+    is_boundary_floor &= f_ptr->is_permanent_wall();
     is_boundary_floor &= mimic_f_ptr->flags.has_any_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY });
     is_boundary_floor &= mimic_f_ptr->flags.has(TerrainCharacteristics::PROJECT);
     is_boundary_floor &= mimic_f_ptr->flags.has_not(TerrainCharacteristics::OPEN);
@@ -170,7 +170,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
     bool can_move = true;
     bool do_past = false;
     if (g_ptr->m_idx && (m_ptr->ml || p_can_enter || p_can_kill_walls)) {
-        auto *r_ptr = &monraces_info[m_ptr->r_idx];
+        auto *r_ptr = &m_ptr->get_monrace();
         auto effects = player_ptr->effects();
         auto is_stunned = effects->stun()->is_stunned();
         auto can_cast = !effects->confusion()->is_confused();

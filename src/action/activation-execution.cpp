@@ -227,23 +227,15 @@ static bool activate_whistle(PlayerType *player_ptr, ae_type *ae_ptr)
 }
 
 /*!
- * @brief 装備を発動するコマンドのサブルーチン /
- * Activate a wielded object.  Wielded objects never stack.
- * And even if they did, activatable objects never stack.
- * @param item 発動するオブジェクトの所持品ID
- * @details
- * <pre>
- * Currently, only (some) artifacts, and Dragon Scale Mail, can be activated.
- * But one could, for example, easily make an activatable "Ring of Plasma".
- * Note that it always takes a turn to activate an artifact, even if
- * the user hits "escape" at the "direction" prompt.
- * </pre>
+ * @brief 装備を発動するコマンドのサブルーチン
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param i_idx 発動するオブジェクトの所持品ID
  */
-void exe_activate(PlayerType *player_ptr, INVENTORY_IDX item)
+void exe_activate(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 {
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     ae_type tmp_ae;
-    ae_type *ae_ptr = initialize_ae_type(player_ptr, &tmp_ae, item);
+    ae_type *ae_ptr = initialize_ae_type(player_ptr, &tmp_ae, i_idx);
     decide_activation_level(ae_ptr);
     decide_chance_fail(player_ptr, ae_ptr);
     if (cmd_limit_time_walk(player_ptr)) {

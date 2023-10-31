@@ -5,7 +5,6 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
-#include "object/object-flags.h"
 #include "object/object-info.h"
 #include "system/artifact-type-definition.h"
 #include "system/item-entity.h"
@@ -36,7 +35,7 @@ static std::string analyze_general(PlayerType *player_ptr, const ItemEntity *o_p
  */
 static std::vector<std::string> analyze_slay(const ItemEntity *o_ptr)
 {
-    auto flags = object_flags(o_ptr);
+    const auto flags = o_ptr->get_flags();
     return extract_spoiler_flags(flags, slay_flags_desc);
 }
 
@@ -48,7 +47,7 @@ static std::vector<std::string> analyze_slay(const ItemEntity *o_ptr)
  */
 static std::vector<std::string> analyze_brand(const ItemEntity *o_ptr)
 {
-    auto flags = object_flags(o_ptr);
+    const auto flags = o_ptr->get_flags();
     return extract_spoiler_flags(flags, brand_flags_desc);
 }
 
@@ -60,7 +59,7 @@ static std::vector<std::string> analyze_brand(const ItemEntity *o_ptr)
  */
 static std::vector<std::string> analyze_resist(const ItemEntity *o_ptr)
 {
-    auto flags = object_flags(o_ptr);
+    const auto flags = o_ptr->get_flags();
     return extract_spoiler_flags(flags, resist_flags_desc);
 }
 
@@ -72,7 +71,7 @@ static std::vector<std::string> analyze_resist(const ItemEntity *o_ptr)
  */
 static std::vector<std::string> analyze_immune(const ItemEntity *o_ptr)
 {
-    auto flags = object_flags(o_ptr);
+    const auto flags = o_ptr->get_flags();
     return extract_spoiler_flags(flags, immune_flags_desc);
 }
 
@@ -84,7 +83,7 @@ static std::vector<std::string> analyze_immune(const ItemEntity *o_ptr)
  */
 static std::vector<std::string> analyze_vulnerable(const ItemEntity *o_ptr)
 {
-    auto flags = object_flags(o_ptr);
+    const auto flags = o_ptr->get_flags();
     return extract_spoiler_flags(flags, vulnerable_flags_desc);
 }
 
@@ -96,7 +95,7 @@ static std::vector<std::string> analyze_vulnerable(const ItemEntity *o_ptr)
  */
 static std::vector<std::string> analyze_sustains(const ItemEntity *o_ptr)
 {
-    auto flags = object_flags(o_ptr);
+    const auto flags = o_ptr->get_flags();
     if (flags.has_all_of(EnumRange(TR_SUST_STR, TR_SUST_CHR))) {
         return { _("全能力", "All stats") };
     }
@@ -118,7 +117,7 @@ static std::vector<std::string> analyze_sustains(const ItemEntity *o_ptr)
 static std::vector<std::string> analyze_misc_magic(const ItemEntity *o_ptr)
 {
     std::vector<std::string> descriptions{};
-    auto flags = object_flags(o_ptr);
+    const auto flags = o_ptr->get_flags();
     const auto &flags2_descriptions = extract_spoiler_flags(flags, misc_flags2_desc);
     descriptions.insert(descriptions.end(), flags2_descriptions.begin(), flags2_descriptions.end());
     const auto &flags3_descriptions = extract_spoiler_flags(flags, misc_flags3_desc);
@@ -252,22 +251,23 @@ static std::string analyze_misc(const ItemEntity *o_ptr)
  * @brief アーティファクトの情報全体を構造体に収める
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param desc_ptr 全アーティファクト情報を収める文字列参照ポインタ
  */
-void object_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr, obj_desc_list *desc_ptr)
+ArtifactsDumpInfo object_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
-    desc_ptr->description = analyze_general(player_ptr, o_ptr);
-    desc_ptr->pval_info.analyze(*o_ptr);
-    desc_ptr->brands = analyze_brand(o_ptr);
-    desc_ptr->slays = analyze_slay(o_ptr);
-    desc_ptr->immunities = analyze_immune(o_ptr);
-    desc_ptr->resistances = analyze_resist(o_ptr);
-    desc_ptr->vulnerabilities = analyze_vulnerable(o_ptr);
-    desc_ptr->sustenances = analyze_sustains(o_ptr);
-    desc_ptr->misc_magic = analyze_misc_magic(o_ptr);
-    desc_ptr->addition = analyze_addition(o_ptr);
-    desc_ptr->misc_desc = analyze_misc(o_ptr);
-    desc_ptr->activation = activation_explanation(o_ptr);
+    ArtifactsDumpInfo info{};
+    info.description = analyze_general(player_ptr, o_ptr);
+    info.pval_info.analyze(*o_ptr);
+    info.brands = analyze_brand(o_ptr);
+    info.slays = analyze_slay(o_ptr);
+    info.immunities = analyze_immune(o_ptr);
+    info.resistances = analyze_resist(o_ptr);
+    info.vulnerabilities = analyze_vulnerable(o_ptr);
+    info.sustenances = analyze_sustains(o_ptr);
+    info.misc_magic = analyze_misc_magic(o_ptr);
+    info.addition = analyze_addition(o_ptr);
+    info.misc_desc = analyze_misc(o_ptr);
+    info.activation = activation_explanation(o_ptr);
+    return info;
 }
 
 /*!
@@ -276,20 +276,22 @@ void object_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr, obj_desc_li
  * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
  * @param desc_ptr 記述内容を収める構造体参照ポインタ
  */
-void random_artifact_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr, obj_desc_list *desc_ptr)
+ArtifactsDumpInfo random_artifact_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
-    desc_ptr->description = analyze_general(player_ptr, o_ptr);
-    desc_ptr->pval_info.analyze(*o_ptr);
-    desc_ptr->brands = analyze_brand(o_ptr);
-    desc_ptr->slays = analyze_slay(o_ptr);
-    desc_ptr->immunities = analyze_immune(o_ptr);
-    desc_ptr->resistances = analyze_resist(o_ptr);
-    desc_ptr->vulnerabilities = analyze_vulnerable(o_ptr);
-    desc_ptr->sustenances = analyze_sustains(o_ptr);
-    desc_ptr->misc_magic = analyze_misc_magic(o_ptr);
-    desc_ptr->activation = activation_explanation(o_ptr);
+    ArtifactsDumpInfo info{};
+    info.description = analyze_general(player_ptr, o_ptr);
+    info.pval_info.analyze(*o_ptr);
+    info.brands = analyze_brand(o_ptr);
+    info.slays = analyze_slay(o_ptr);
+    info.immunities = analyze_immune(o_ptr);
+    info.resistances = analyze_resist(o_ptr);
+    info.vulnerabilities = analyze_vulnerable(o_ptr);
+    info.sustenances = analyze_sustains(o_ptr);
+    info.misc_magic = analyze_misc_magic(o_ptr);
+    info.activation = activation_explanation(o_ptr);
     constexpr auto weight_mes = _("重さ %d.%d kg", "Weight %d.%d lbs");
     const auto weight_integer = _(lb_to_kg_integer(o_ptr->weight), o_ptr->weight / 10);
     const auto weight_fraction = _(lb_to_kg_fraction(o_ptr->weight), o_ptr->weight % 10);
-    desc_ptr->misc_desc = format(weight_mes, weight_integer, weight_fraction);
+    info.misc_desc = format(weight_mes, weight_integer, weight_fraction);
+    return info;
 }

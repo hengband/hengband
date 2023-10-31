@@ -135,7 +135,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
 
             if (r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
                 r_ref.cur_num = 0;
-                r_ref.max_num = 1;
+                r_ref.max_num = MAX_UNIQUE_NUM;
             } else if (r_ref.population_flags.has(MonsterPopulationType::NAZGUL)) {
                 if (r_ref.cur_num == r_ref.max_num) {
                     r_ref.max_num++;
@@ -160,7 +160,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             if (randint0(100) < 75) {
                 place_object(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, 0L);
             } else {
-                place_trap(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
+                place_trap(floor_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
             }
 
             floor_ptr->object_level = floor_ptr->base_level;
@@ -176,7 +176,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
 
             floor_ptr->object_level = floor_ptr->base_level;
         } else if (random & RANDOM_TRAP) {
-            place_trap(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
+            place_trap(floor_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
         } else if (letter[idx].trap) {
             g_ptr->mimic = g_ptr->feat;
             g_ptr->feat = conv_dungeon_feat(floor_ptr, letter[idx].trap);
@@ -369,7 +369,7 @@ static bool parse_qtw_P(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char **zz)
     floor_ptr->width = panels_x * SCREEN_WID;
     panel_row_min = floor_ptr->height;
     panel_col_min = floor_ptr->width;
-    if (inside_quest(floor_ptr->quest_number)) {
+    if (floor_ptr->is_in_quest()) {
         POSITION py = atoi(zz[0]);
         POSITION px = atoi(zz[1]);
         player_ptr->y = py;

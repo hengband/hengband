@@ -48,6 +48,7 @@
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
 #include "status/action-setter.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -126,7 +127,8 @@ void process_player(PlayerType *player_ptr)
         player_ptr->invoking_midnight_curse = false;
     }
 
-    if (player_ptr->phase_out) {
+    const auto &system = AngbandSystem::get_instance();
+    if (system.is_phase_out()) {
         for (MONSTER_IDX m_idx = 1; m_idx < player_ptr->current_floor_ptr->m_max; m_idx++) {
             auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
             if (!m_ptr->is_valid()) {
@@ -183,7 +185,7 @@ void process_player(PlayerType *player_ptr)
     const auto effects = player_ptr->effects();
     if (player_ptr->riding && !effects->confusion()->is_confused() && !effects->blindness()->is_blind()) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-        auto *r_ptr = &monraces_info[m_ptr->r_idx];
+        auto *r_ptr = &m_ptr->get_monrace();
         if (m_ptr->is_asleep()) {
             const auto m_name = monster_desc(player_ptr, m_ptr, 0);
             (void)set_monster_csleep(player_ptr, player_ptr->riding, 0);
@@ -279,7 +281,7 @@ void process_player(PlayerType *player_ptr)
         energy.reset_player_turn();
         auto is_knocked_out = effects->stun()->is_knocked_out();
         auto is_paralyzed = effects->paralysis()->is_paralyzed();
-        if (player_ptr->phase_out) {
+        if (system.is_phase_out()) {
             move_cursor_relative(player_ptr->y, player_ptr->x);
             command_cmd = SPECIAL_KEY_BUILDING;
             process_command(player_ptr);
@@ -345,7 +347,7 @@ void process_player(PlayerType *player_ptr)
                     continue;
                 }
 
-                r_ptr = &monraces_info[m_ptr->ap_r_idx];
+                r_ptr = &m_ptr->get_appearance_monrace();
 
                 // モンスターのシンボル/カラーの更新
                 if (m_ptr->ml && r_ptr->visual_flags.has_any_of({ MonsterVisualType::MULTI_COLOR, MonsterVisualType::SHAPECHANGER })) {

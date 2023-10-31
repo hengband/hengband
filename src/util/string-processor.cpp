@@ -810,7 +810,7 @@ static std::pair<size_t, size_t> adjust_substr_pos(std::string_view sv, size_t p
  */
 std::string str_substr(std::string_view sv, size_t pos, size_t n)
 {
-    const auto [mb_pos, mb_n] = adjust_substr_pos(sv, pos, n);
+    const auto &[mb_pos, mb_n] = adjust_substr_pos(sv, pos, n);
     return std::string(sv.substr(mb_pos, mb_n));
 }
 
@@ -829,7 +829,7 @@ std::string str_substr(std::string_view sv, size_t pos, size_t n)
  */
 std::string str_substr(std::string &&str, size_t pos, size_t n)
 {
-    const auto [mb_pos, mb_n] = adjust_substr_pos(str, pos, n);
+    const auto &[mb_pos, mb_n] = adjust_substr_pos(str, pos, n);
     str.erase(mb_pos + mb_n);
     str.erase(0, mb_pos);
     return std::move(str);

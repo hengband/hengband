@@ -123,18 +123,6 @@ const std::unordered_map<std::string_view, race_flags2> r_info_flags2 = {
 };
 
 /*!
- * モンスター特性トークンの定義3 /
- * Monster race flags
- */
-const std::unordered_map<std::string_view, race_flags3> r_info_flags3 = {
-    { "FLAGS3_XX10", RF3_XX10 },
-    { "NO_FEAR", RF3_NO_FEAR },
-    { "NO_STUN", RF3_NO_STUN },
-    { "NO_CONF", RF3_NO_CONF },
-    { "NO_SLEEP", RF3_NO_SLEEP }
-};
-
-/*!
  * モンスター特性トークン (発動型能力) /
  * Monster race flags
  */
@@ -329,6 +317,10 @@ const std::unordered_map<std::string_view, MonsterResistanceType> r_info_flagsr 
     { "RES_VOID", MonsterResistanceType::RESIST_VOID_MAGIC },
     { "HURT_METEOR", MonsterResistanceType::HURT_METEOR },
     { "RES_METEOR", MonsterResistanceType::RESIST_METEOR },
+    { "NO_FEAR", MonsterResistanceType::NO_FEAR },
+    { "NO_STUN", MonsterResistanceType::NO_STUN },
+    { "NO_CONF", MonsterResistanceType::NO_CONF },
+    { "NO_SLEEP", MonsterResistanceType::NO_SLEEP }
 };
 
 const std::unordered_map<std::string_view, MonsterAuraType> r_info_aura_flags = {

@@ -25,6 +25,7 @@
 #include "core/visuals-reseter.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-processor.h"
+#include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-changer.h"
 #include "floor/floor-events.h"
@@ -79,6 +80,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/angband-system.h"
 #include "system/angband-version.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
@@ -186,7 +188,7 @@ static void init_world_floor_info(PlayerType *player_ptr)
     floor_ptr->dun_level = 0;
     floor_ptr->quest_number = QuestId::NONE;
     floor_ptr->inside_arena = false;
-    player_ptr->phase_out = false;
+    AngbandSystem::get_instance().set_phase_out(false);
     write_level = true;
     w_ptr->seed_flavor = randint0(0x10000000);
     w_ptr->seed_town = randint0(0x10000000);
@@ -238,7 +240,7 @@ static void reset_world_info(PlayerType *player_ptr)
 static void generate_wilderness(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->dun_level == 0) && inside_quest(floor_ptr->quest_number)) {
+    if ((floor_ptr->dun_level == 0) && floor_ptr->is_in_quest()) {
         return;
     }
 

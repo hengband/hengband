@@ -373,22 +373,22 @@ void display_monster_evolution(lore_type *lore_ptr)
 
 void display_monster_concrete_immunities(lore_type *lore_ptr)
 {
-    if (lore_ptr->flags3 & RF3_NO_STUN) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::NO_STUN)) {
         lore_ptr->vp[lore_ptr->vn] = _("朦朧としない", "stunned");
         lore_ptr->color[lore_ptr->vn++] = TERM_ORANGE;
     }
 
-    if (lore_ptr->flags3 & RF3_NO_FEAR) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::NO_FEAR)) {
         lore_ptr->vp[lore_ptr->vn] = _("恐怖を感じない", "frightened");
         lore_ptr->color[lore_ptr->vn++] = TERM_SLATE;
     }
 
-    if (lore_ptr->flags3 & RF3_NO_CONF) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) {
         lore_ptr->vp[lore_ptr->vn] = _("混乱しない", "confused");
         lore_ptr->color[lore_ptr->vn++] = TERM_L_UMBER;
     }
 
-    if (lore_ptr->flags3 & RF3_NO_SLEEP) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::NO_SLEEP)) {
         lore_ptr->vp[lore_ptr->vn] = _("眠らされない", "slept");
         lore_ptr->color[lore_ptr->vn++] = TERM_BLUE;
     }

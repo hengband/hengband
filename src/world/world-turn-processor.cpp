@@ -3,6 +3,7 @@
 #include "cmd-io/cmd-save.h"
 #include "core/disturbance.h"
 #include "core/magic-effects-timeout-reducer.h"
+#include "dungeon/quest.h"
 #include "floor/floor-events.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/wild.h"
@@ -29,6 +30,7 @@
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -103,7 +105,7 @@ void WorldTurnProcessor::process_world()
  */
 void WorldTurnProcessor::print_time()
 {
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
     const auto row = hgt + ROW_DAY;
 
     int day;
@@ -136,7 +138,7 @@ void WorldTurnProcessor::process_downward()
 
 void WorldTurnProcessor::process_monster_arena()
 {
-    if (!this->player_ptr->phase_out || this->player_ptr->leaving) {
+    if (!AngbandSystem::get_instance().is_phase_out() || this->player_ptr->leaving) {
         return;
     }
 
@@ -210,7 +212,7 @@ void WorldTurnProcessor::decide_auto_save()
     }
 
     auto should_save = autosave_t;
-    should_save &= !this->player_ptr->phase_out;
+    should_save &= !AngbandSystem::get_instance().is_phase_out();
     should_save &= w_ptr->game_turn % ((int32_t)autosave_freq * TURNS_PER_TICK) == 0;
     if (should_save) {
         do_cmd_save_game(this->player_ptr, true);
@@ -220,7 +222,7 @@ void WorldTurnProcessor::decide_auto_save()
 void WorldTurnProcessor::process_change_daytime_night()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    if (!floor_ptr->dun_level && !inside_quest(floor_ptr->quest_number) && !this->player_ptr->phase_out && !floor_ptr->inside_arena) {
+    if (!floor_ptr->dun_level && !floor_ptr->is_in_quest() && !AngbandSystem::get_instance().is_phase_out() && !floor_ptr->inside_arena) {
         if (!(w_ptr->game_turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2))) {
             auto dawn = w_ptr->game_turn % (TURNS_PER_TICK * TOWN_DAWN) == 0;
             if (dawn) {
@@ -234,7 +236,7 @@ void WorldTurnProcessor::process_change_daytime_night()
     }
 
     auto is_in_dungeon = vanilla_town;
-    is_in_dungeon |= lite_town && (!inside_quest(floor_ptr->quest_number)) && !this->player_ptr->phase_out && !floor_ptr->inside_arena;
+    is_in_dungeon |= lite_town && !floor_ptr->is_in_quest() && !AngbandSystem::get_instance().is_phase_out() && !floor_ptr->inside_arena;
     is_in_dungeon &= floor_ptr->dun_level != 0;
     if (!is_in_dungeon) {
         return;
@@ -250,7 +252,7 @@ void WorldTurnProcessor::process_change_daytime_night()
 void WorldTurnProcessor::process_world_monsters()
 {
     decide_alloc_monster();
-    if (!(w_ptr->game_turn % (TURNS_PER_TICK * 10)) && !this->player_ptr->phase_out) {
+    if (!(w_ptr->game_turn % (TURNS_PER_TICK * 10)) && !AngbandSystem::get_instance().is_phase_out()) {
         regenerate_monsters(this->player_ptr);
     }
 
@@ -276,24 +278,24 @@ void WorldTurnProcessor::shuffle_shopkeeper()
     }
 
     int n;
-    do {
+    while (true) {
         n = randint0(MAX_STORES);
         if ((n == enum2i(StoreSaleType::HOME)) || (n == enum2i(StoreSaleType::MUSEUM))) {
             break;
         }
-    } while (true);
+    }
 
-    for (const auto &f_ref : terrains_info) {
-        if (f_ref.name.empty() || f_ref.flags.has_not(TerrainCharacteristics::STORE)) {
+    for (const auto &terrain : TerrainList::get_instance()) {
+        if (terrain.name.empty() || terrain.flags.has_not(TerrainCharacteristics::STORE)) {
             continue;
         }
 
-        if (f_ref.subtype != n) {
+        if (terrain.subtype != n) {
             continue;
         }
 
         if (cheat_xtra) {
-            msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), f_ref.name.data());
+            msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), terrain.name.data());
         }
 
         store_shuffle(this->player_ptr, i2enum<StoreSaleType>(n));
@@ -306,8 +308,8 @@ void WorldTurnProcessor::decide_alloc_monster()
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto should_alloc = one_in_(floor_ptr->get_dungeon_definition().max_m_alloc_chance);
     should_alloc &= !floor_ptr->inside_arena;
-    should_alloc &= !inside_quest(floor_ptr->quest_number);
-    should_alloc &= !this->player_ptr->phase_out;
+    should_alloc &= !floor_ptr->is_in_quest();
+    should_alloc &= !AngbandSystem::get_instance().is_phase_out();
     if (should_alloc) {
         (void)alloc_monster(this->player_ptr, MAX_PLAYER_SIGHT + 5, 0, summon_specific);
     }

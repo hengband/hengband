@@ -39,6 +39,7 @@
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -126,7 +127,7 @@ static int get_hack_dir(PlayerType *player_ptr)
  */
 void process_world_aux_mutation(PlayerType *player_ptr)
 {
-    if (player_ptr->muta.none() || player_ptr->phase_out || player_ptr->wild_mode) {
+    if (player_ptr->muta.none() || AngbandSystem::get_instance().is_phase_out() || player_ptr->wild_mode) {
         return;
     }
 
@@ -429,7 +430,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
         int danger_amount = 0;
         for (MONSTER_IDX monster = 0; monster < player_ptr->current_floor_ptr->m_max; monster++) {
             auto *m_ptr = &player_ptr->current_floor_ptr->m_list[monster];
-            auto *r_ptr = &monraces_info[m_ptr->r_idx];
+            auto *r_ptr = &m_ptr->get_monrace();
             if (!m_ptr->is_valid()) {
                 continue;
             }

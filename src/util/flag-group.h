@@ -4,6 +4,7 @@
 #include <concepts>
 #include <iterator>
 #include <optional>
+#include <stdint.h>
 #include <type_traits>
 
 template <typename T>

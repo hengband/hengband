@@ -97,33 +97,31 @@ static errr interpret_k_token(char *buf)
  */
 static errr decide_feature_type(int i, int num, char **zz)
 {
-    TerrainType *f_ptr;
-    f_ptr = &terrains_info[i];
-
+    auto &terrain = TerrainList::get_instance()[static_cast<short>(i)];
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
     auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
     if (n1 || (!(n2 & 0x80) && n2)) {
-        f_ptr->x_attr[F_LIT_STANDARD] = n1;
+        terrain.x_attr[F_LIT_STANDARD] = n1;
     } /* Allow TERM_DARK text */
     if (n2) {
-        f_ptr->x_char[F_LIT_STANDARD] = n2;
+        terrain.x_char[F_LIT_STANDARD] = n2;
     }
 
     switch (num) {
     case 3: {
         /* No lighting support */
-        n1 = f_ptr->x_attr[F_LIT_STANDARD];
-        n2 = f_ptr->x_char[F_LIT_STANDARD];
+        n1 = terrain.x_attr[F_LIT_STANDARD];
+        n2 = terrain.x_char[F_LIT_STANDARD];
         for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
-            f_ptr->x_attr[j] = n1;
-            f_ptr->x_char[j] = n2;
+            terrain.x_attr[j] = n1;
+            terrain.x_char[j] = n2;
         }
 
         return 0;
     }
     case 4: {
         /* Use default lighting */
-        apply_default_feat_lighting(f_ptr->x_attr, f_ptr->x_char);
+        apply_default_feat_lighting(terrain.x_attr, terrain.x_char);
         return 0;
     }
     case F_LIT_MAX * 2 + 1: {
@@ -132,10 +130,10 @@ static errr decide_feature_type(int i, int num, char **zz)
             n1 = (TERM_COLOR)strtol(zz[j * 2 + 1], nullptr, 0);
             n2 = static_cast<char>(strtol(zz[j * 2 + 2], nullptr, 0));
             if (n1 || (!(n2 & 0x80) && n2)) {
-                f_ptr->x_attr[j] = n1;
+                terrain.x_attr[j] = n1;
             } /* Allow TERM_DARK text */
             if (n2) {
-                f_ptr->x_char[j] = n2;
+                terrain.x_char[j] = n2;
             }
         }
 
@@ -167,7 +165,7 @@ static errr interpret_f_token(char *buf)
     }
 
     int i = (int)strtol(zz[0], nullptr, 0);
-    if (i >= static_cast<int>(terrains_info.size())) {
+    if (i >= static_cast<int>(TerrainList::get_instance().size())) {
         return 1;
     }
 

@@ -12,7 +12,6 @@
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
 #include "game-option/special-options.h"
 #include "hpmp/hp-mp-processor.h"
 #include "mind/mind-archer.h"
@@ -176,7 +175,7 @@ bool activate_unique_detection(PlayerType *player_ptr)
             continue;
         }
 
-        r_ptr = &monraces_info[m_ptr->r_idx];
+        r_ptr = &m_ptr->get_monrace();
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             msg_format(_("%s． ", "%s. "), r_ptr->name.data());
         }
@@ -436,12 +435,14 @@ bool activate_dispel_magic(PlayerType *player_ptr)
         return false;
     }
 
-    auto m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const Pos2D pos(target_row, target_col);
+    const auto m_idx = floor.get_grid(pos).m_idx;
     if (m_idx == 0) {
         return true;
     }
 
-    if (!player_has_los_bold(player_ptr, target_row, target_col) || !projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
+    if (!floor.has_los(pos) || !projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
         return true;
     }
 

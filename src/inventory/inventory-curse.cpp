@@ -13,7 +13,6 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
-#include "object/object-flags.h"
 #include "perception/object-perception.h"
 #include "player-base/player-race.h"
 #include "player-info/race-types.h"
@@ -25,6 +24,7 @@
 #include "spell/summon-types.h"
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
@@ -90,7 +90,7 @@ static void choise_cursed_item(CurseTraitType flag, ItemEntity *o_ptr, int *choi
     }
 
     tr_type cf = TR_STR;
-    auto flags = object_flags(o_ptr);
+    const auto flags = o_ptr->get_flags();
     switch (flag) {
     case CurseTraitType::ADD_L_CURSE:
         cf = TR_ADD_L_CURSE;
@@ -201,7 +201,7 @@ static void curse_teleport(PlayerType *player_ptr)
             continue;
         }
 
-        auto flags = object_flags(o_ptr);
+        const auto flags = o_ptr->get_flags();
 
         if (flags.has_not(TR_TELEPORT)) {
             continue;
@@ -449,7 +449,7 @@ static void occur_curse_effects(PlayerType *player_ptr)
 {
     auto is_cursed = player_ptr->cursed.has_any_of(TRC_P_FLAG_MASK);
     is_cursed |= player_ptr->cursed_special.has_any_of(TRCS_P_FLAG_MASK);
-    if (!is_cursed || player_ptr->phase_out || player_ptr->wild_mode) {
+    if (!is_cursed || AngbandSystem::get_instance().is_phase_out() || player_ptr->wild_mode) {
         return;
     }
 

@@ -14,7 +14,6 @@
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
-#include "object/object-flags.h"
 #include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
@@ -276,7 +275,7 @@ static void calc_two_hands(PlayerType *player_ptr, int *damage, int *to_h)
         }
 
         basedam = ((o_ptr->dd + player_ptr->to_dd[i]) * (o_ptr->ds + player_ptr->to_ds[i] + 1)) * 50;
-        auto flags = object_flags_known(o_ptr);
+        auto flags = o_ptr->get_flags_known();
 
         bool impact = player_ptr->impact != 0;
         basedam = calc_expect_crit(player_ptr, o_ptr->weight, to_h[i], basedam, player_ptr->dis_to_h[i], poison_needle, impact);

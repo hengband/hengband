@@ -1016,7 +1016,7 @@ bool is_elemental_genocide_effective(MonsterRaceInfo *r_ptr, AttributeType type)
         }
         break;
     case AttributeType::CONFUSION:
-        if (any_bits(r_ptr->flags3, RF3_NO_CONF)) {
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) {
             return false;
         }
         break;

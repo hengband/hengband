@@ -14,7 +14,12 @@ class PlayerType;
  */
 class ItemTester {
 public:
+    ItemTester(const ItemTester &) = default;
+    ItemTester(ItemTester &&) = default;
+    ItemTester &operator=(const ItemTester &) = default;
+    ItemTester &operator=(ItemTester &&) = default;
     virtual ~ItemTester() = default;
+
     bool okay(const ItemEntity *o_ptr) const;
     virtual std::unique_ptr<ItemTester> clone() const = 0;
 

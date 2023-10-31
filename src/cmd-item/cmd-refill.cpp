@@ -7,7 +7,6 @@
 #include "object-hook/hook-expendable.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-flags.h"
 #include "player-base/player-class.h"
 #include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
@@ -27,21 +26,19 @@
  */
 static void do_cmd_refill_lamp(PlayerType *player_ptr)
 {
-    OBJECT_IDX item;
-    ItemEntity *o_ptr;
-    ItemEntity *j_ptr;
     constexpr auto q = _("どの油つぼから注ぎますか? ", "Refill with which flask? ");
     constexpr auto s = _("油つぼがない。", "You have no flasks of oil.");
-    o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ItemEntity::can_refill_lantern));
+    short i_idx;
+    const auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ItemEntity::can_refill_lantern));
     if (!o_ptr) {
         return;
     }
 
-    auto flags = object_flags(o_ptr);
+    const auto flags = o_ptr->get_flags();
 
     PlayerEnergy(player_ptr).set_player_turn_energy(50);
-    j_ptr = &player_ptr->inventory_list[INVEN_LITE];
-    auto flags2 = object_flags(j_ptr);
+    auto *j_ptr = &player_ptr->inventory_list[INVEN_LITE];
+    const auto flags2 = j_ptr->get_flags();
     j_ptr->fuel += o_ptr->fuel;
     msg_print(_("ランプに油を注いだ。", "You fuel your lamp."));
     if (flags.has(TR_DARK_SOURCE) && (j_ptr->fuel > 0)) {
@@ -55,7 +52,7 @@ static void do_cmd_refill_lamp(PlayerType *player_ptr)
         msg_print(_("ランプの油は一杯だ。", "Your lamp is full."));
     }
 
-    vary_item(player_ptr, item, -1);
+    vary_item(player_ptr, i_idx, -1);
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::TORCH);
 }
 
@@ -65,21 +62,19 @@ static void do_cmd_refill_lamp(PlayerType *player_ptr)
  */
 static void do_cmd_refill_torch(PlayerType *player_ptr)
 {
-    OBJECT_IDX item;
-    ItemEntity *o_ptr;
-    ItemEntity *j_ptr;
     constexpr auto q = _("どの松明で明かりを強めますか? ", "Refuel with which torch? ");
     constexpr auto s = _("他に松明がない。", "You have no extra torches.");
-    o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ItemEntity::can_refill_torch));
+    short i_idx;
+    const auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ItemEntity::can_refill_torch));
     if (!o_ptr) {
         return;
     }
 
-    auto flags = object_flags(o_ptr);
+    const auto flags = o_ptr->get_flags();
 
     PlayerEnergy(player_ptr).set_player_turn_energy(50);
-    j_ptr = &player_ptr->inventory_list[INVEN_LITE];
-    auto flags2 = object_flags(j_ptr);
+    auto *j_ptr = &player_ptr->inventory_list[INVEN_LITE];
+    const auto flags2 = j_ptr->get_flags();
     j_ptr->fuel += o_ptr->fuel + 5;
     msg_print(_("松明を結合した。", "You combine the torches."));
     if (flags.has(TR_DARK_SOURCE) && (j_ptr->fuel > 0)) {
@@ -95,7 +90,7 @@ static void do_cmd_refill_torch(PlayerType *player_ptr)
         msg_print(_("松明はいっそう明るく輝いた。", "Your torch glows more brightly."));
     }
 
-    vary_item(player_ptr, item, -1);
+    vary_item(player_ptr, i_idx, -1);
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::TORCH);
 }
 

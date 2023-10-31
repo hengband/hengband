@@ -8,6 +8,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "object/object-mark-types.h"
+#include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -128,10 +129,11 @@ void target_set_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, std::
 {
     POSITION min_hgt, max_hgt, min_wid, max_wid;
     if (mode & TARGET_KILL) {
-        min_hgt = std::max((player_ptr->y - get_max_range(player_ptr)), 0);
-        max_hgt = std::min((player_ptr->y + get_max_range(player_ptr)), player_ptr->current_floor_ptr->height - 1);
-        min_wid = std::max((player_ptr->x - get_max_range(player_ptr)), 0);
-        max_wid = std::min((player_ptr->x + get_max_range(player_ptr)), player_ptr->current_floor_ptr->width - 1);
+        const auto max_range = AngbandSystem::get_instance().get_max_range();
+        min_hgt = std::max((player_ptr->y - max_range), 0);
+        max_hgt = std::min((player_ptr->y + max_range), player_ptr->current_floor_ptr->height - 1);
+        min_wid = std::max((player_ptr->x - max_range), 0);
+        max_wid = std::min((player_ptr->x + max_range), player_ptr->current_floor_ptr->width - 1);
     } else {
         min_hgt = panel_row_min;
         max_hgt = panel_row_max;
@@ -204,33 +206,33 @@ void target_sensing_monsters_prepare(PlayerType *player_ptr, std::vector<MONSTER
     }
 
     auto comp_importance = [floor_ptr = player_ptr->current_floor_ptr](MONSTER_IDX idx1, MONSTER_IDX idx2) {
-        auto m_ptr1 = &floor_ptr->m_list[idx1];
-        auto m_ptr2 = &floor_ptr->m_list[idx2];
-        auto ap_r_ptr1 = &monraces_info[m_ptr1->ap_r_idx];
-        auto ap_r_ptr2 = &monraces_info[m_ptr2->ap_r_idx];
+        const auto &monster1 = floor_ptr->m_list[idx1];
+        const auto &monster2 = floor_ptr->m_list[idx2];
+        const auto &monrace1 = monraces_info[monster1.ap_r_idx];
+        const auto &monrace2 = monraces_info[monster2.ap_r_idx];
 
         /* Unique monsters first */
-        if (ap_r_ptr1->kind_flags.has(MonsterKindType::UNIQUE) != ap_r_ptr2->kind_flags.has(MonsterKindType::UNIQUE)) {
-            return ap_r_ptr1->kind_flags.has(MonsterKindType::UNIQUE);
+        if (monrace1.kind_flags.has(MonsterKindType::UNIQUE) != monrace2.kind_flags.has(MonsterKindType::UNIQUE)) {
+            return monrace1.kind_flags.has(MonsterKindType::UNIQUE);
         }
 
         /* Shadowers first (あやしい影) */
-        if (m_ptr1->mflag2.has(MonsterConstantFlagType::KAGE) != m_ptr2->mflag2.has(MonsterConstantFlagType::KAGE)) {
-            return m_ptr1->mflag2.has(MonsterConstantFlagType::KAGE);
+        if (monster1.mflag2.has(MonsterConstantFlagType::KAGE) != monster2.mflag2.has(MonsterConstantFlagType::KAGE)) {
+            return monster1.mflag2.has(MonsterConstantFlagType::KAGE);
         }
 
         /* Unknown monsters first */
-        if ((ap_r_ptr1->r_tkills == 0) != (ap_r_ptr2->r_tkills == 0)) {
-            return ap_r_ptr1->r_tkills == 0;
+        if ((monrace1.r_tkills == 0) != (monrace2.r_tkills == 0)) {
+            return monrace1.r_tkills == 0;
         }
 
         /* Higher level monsters first (if known) */
-        if (ap_r_ptr1->r_tkills && ap_r_ptr2->r_tkills && ap_r_ptr1->level != ap_r_ptr2->level) {
-            return ap_r_ptr1->level > ap_r_ptr2->level;
+        if (monrace1.r_tkills && monrace2.r_tkills && monrace1.level != monrace2.level) {
+            return monrace1.level > monrace2.level;
         }
 
         /* Sort by index if all conditions are same */
-        return m_ptr1->ap_r_idx > m_ptr2->ap_r_idx;
+        return monster1.ap_r_idx > monster2.ap_r_idx;
     };
 
     std::sort(monster_list.begin(), monster_list.end(), comp_importance);

@@ -16,7 +16,6 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
-#include "object/object-flags.h"
 #include "object/tval-types.h"
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
@@ -149,7 +148,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
 
         ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[INVEN_LITE];
-        auto flags = object_flags(o_ptr);
+        const auto flags = o_ptr->get_flags();
 
         if ((player_ptr->inventory_list[INVEN_LITE].bi_key.tval() != ItemKindType::NONE) && flags.has_not(TR_DARK_SOURCE) && !has_resist_lite(player_ptr)) {
             const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));

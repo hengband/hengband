@@ -48,7 +48,7 @@ void redraw_window()
  */
 static void print_dungeon(PlayerType *player_ptr)
 {
-    const auto [wid, hgt] = term_get_size();
+    const auto &[wid, hgt] = term_get_size();
 
     c_put_str(TERM_WHITE, "             ", hgt + ROW_DUNGEON, COL_DUNGEON);
     const auto dungeon_name = map_name(player_ptr);
