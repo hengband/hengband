@@ -61,16 +61,16 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
     }
 
     bool map[32][32]{};
-    for (POSITION y = 0; y < 32; y++) {
-        for (POSITION x = 0; x < 32; x++) {
+    for (auto y = 0; y < 32; y++) {
+        for (auto x = 0; x < 32; x++) {
             map[y][x] = false;
         }
     }
 
-    int damage = 0;
-    bool hurt = false;
-    for (POSITION dy = -r; dy <= r; dy++) {
-        for (POSITION dx = -r; dx <= r; dx++) {
+    auto damage = 0;
+    auto hurt = false;
+    for (auto dy = -r; dy <= r; dy++) {
+        for (auto dx = -r; dx <= r; dx++) {
             const Pos2D pos(cy + dy, cx + dx);
             if (!in_bounds(floor_ptr, pos.y, pos.x)) {
                 continue;
@@ -101,9 +101,9 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
     auto sn = 0;
     Pos2D p_pos_new(0, 0); // 落石を避けた後のプレイヤー座標
     if (hurt && !has_pass_wall(player_ptr) && !has_kill_wall(player_ptr)) {
-        for (DIRECTION i = 0; i < 8; i++) {
-            POSITION y = player_ptr->y + ddy_ddd[i];
-            POSITION x = player_ptr->x + ddx_ddd[i];
+        for (auto i = 0; i < 8; i++) {
+            auto y = player_ptr->y + ddy_ddd[i];
+            auto x = player_ptr->x + ddx_ddd[i];
             if (!is_cave_empty_bold(player_ptr, y, x)) {
                 continue;
             }
@@ -168,8 +168,8 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
         }
     }
 
-    for (POSITION dy = -r; dy <= r; dy++) {
-        for (POSITION dx = -r; dx <= r; dx++) {
+    for (auto dy = -r; dy <= r; dy++) {
+        for (auto dx = -r; dx <= r; dx++) {
             const Pos2D pos(cy + dy, cx + dx);
             if (!map[16 + pos.y - cy][16 + pos.x - cx]) {
                 continue;
@@ -279,10 +279,10 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
     }
 
     clear_mon_lite(floor_ptr);
-    for (POSITION dy = -r; dy <= r; dy++) {
-        for (POSITION dx = -r; dx <= r; dx++) {
-            POSITION yy = cy + dy;
-            POSITION xx = cx + dx;
+    for (auto dy = -r; dy <= r; dy++) {
+        for (auto dx = -r; dx <= r; dx++) {
+            auto yy = cy + dy;
+            auto xx = cx + dx;
             if (!map[16 + yy - cy][16 + xx - cx]) {
                 continue;
             }
@@ -312,21 +312,20 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
         }
     }
 
-    for (POSITION dy = -r; dy <= r; dy++) {
-        for (POSITION dx = -r; dx <= r; dx++) {
-            POSITION yy = cy + dy;
-            POSITION xx = cx + dx;
-            if (!in_bounds(floor_ptr, yy, xx)) {
+    for (auto dy = -r; dy <= r; dy++) {
+        for (auto dx = -r; dx <= r; dx++) {
+            const Pos2D pos(cy + dy, cx + dx);
+            if (!in_bounds(floor_ptr, pos.y, pos.x)) {
                 continue;
             }
 
-            if (distance(cy, cx, yy, xx) > r) {
+            if (distance(cy, cx, pos.y, pos.x) > r) {
                 continue;
             }
 
-            auto *g_ptr = &floor_ptr->grid_array[yy][xx];
-            if (g_ptr->is_mirror()) {
-                g_ptr->info |= CAVE_GLOW;
+            auto &grid = floor_ptr->get_grid(pos);
+            if (grid.is_mirror()) {
+                grid.info |= CAVE_GLOW;
                 continue;
             }
 
@@ -334,16 +333,15 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            Grid *cc_ptr;
-            for (DIRECTION ii = 0; ii < 9; ii++) {
-                POSITION yyy = yy + ddy_ddd[ii];
-                POSITION xxx = xx + ddx_ddd[ii];
-                if (!in_bounds2(floor_ptr, yyy, xxx)) {
+            for (auto j = 0; j < 9; j++) {
+                const Pos2D pos_neighbor(pos.y + ddy_ddd[j], pos.x + ddx_ddd[j]);
+                if (!in_bounds2(floor_ptr, pos_neighbor.y, pos_neighbor.x)) {
                     continue;
                 }
-                cc_ptr = &floor_ptr->grid_array[yyy][xxx];
-                if (terrains_info[cc_ptr->get_feat_mimic()].flags.has(TerrainCharacteristics::GLOW)) {
-                    g_ptr->info |= CAVE_GLOW;
+
+                const auto &grid_neighbor = floor_ptr->get_grid(pos_neighbor);
+                if (terrains_info[grid_neighbor.get_feat_mimic()].flags.has(TerrainCharacteristics::GLOW)) {
+                    grid.info |= CAVE_GLOW;
                     break;
                 }
             }

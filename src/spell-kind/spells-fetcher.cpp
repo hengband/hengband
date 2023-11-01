@@ -40,7 +40,7 @@
 void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    const Pos2D p_pos(player_ptr->y, player_ptr->x);
+    const auto p_pos = player_ptr->get_position();
     if (!floor.get_grid(p_pos).o_idx_list.empty()) {
         msg_print(_("自分の足の下にある物は取れません。", "You can't fetch when you're already standing on something."));
         return;
