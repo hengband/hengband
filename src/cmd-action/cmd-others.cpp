@@ -67,37 +67,34 @@ static bool exe_alter(PlayerType *player_ptr)
         return false;
     }
 
-    POSITION y = player_ptr->y + ddy[dir];
-    POSITION x = player_ptr->x + ddx[dir];
-    Grid *g_ptr;
-    g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    FEAT_IDX feat = g_ptr->get_feat_mimic();
-    TerrainType *f_ptr;
-    f_ptr = &terrains_info[feat];
+    const Pos2D pos(player_ptr->y + ddy[dir], player_ptr->x + ddx[dir]);
+    const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    auto feat = grid.get_feat_mimic();
+    const auto &terrain = terrains_info[feat];
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    if (g_ptr->m_idx) {
-        do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
+    if (grid.m_idx) {
+        do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
         return false;
     }
 
-    if (f_ptr->flags.has(TerrainCharacteristics::OPEN)) {
-        return exe_open(player_ptr, y, x);
+    if (terrain.flags.has(TerrainCharacteristics::OPEN)) {
+        return exe_open(player_ptr, pos.y, pos.x);
     }
 
-    if (f_ptr->flags.has(TerrainCharacteristics::BASH)) {
-        return exe_bash(player_ptr, y, x, dir);
+    if (terrain.flags.has(TerrainCharacteristics::BASH)) {
+        return exe_bash(player_ptr, pos.y, pos.x, dir);
     }
 
-    if (f_ptr->flags.has(TerrainCharacteristics::TUNNEL)) {
-        return exe_tunnel(player_ptr, y, x);
+    if (terrain.flags.has(TerrainCharacteristics::TUNNEL)) {
+        return exe_tunnel(player_ptr, pos.y, pos.x);
     }
 
-    if (f_ptr->flags.has(TerrainCharacteristics::CLOSE)) {
-        return exe_close(player_ptr, y, x);
+    if (terrain.flags.has(TerrainCharacteristics::CLOSE)) {
+        return exe_close(player_ptr, pos.y, pos.x);
     }
 
-    if (f_ptr->flags.has(TerrainCharacteristics::DISARM)) {
-        return exe_disarm(player_ptr, y, x, dir);
+    if (terrain.flags.has(TerrainCharacteristics::DISARM)) {
+        return exe_disarm(player_ptr, pos.y, pos.x, dir);
     }
 
     msg_print(_("何もない空中を攻撃した。", "You attack the empty air."));

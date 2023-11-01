@@ -99,16 +99,14 @@ static bool exe_open_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJEC
  */
 void do_cmd_open(PlayerType *player_ptr)
 {
-    POSITION y, x;
-    DIRECTION dir;
-    OBJECT_IDX o_idx;
-    bool more = false;
+    auto more = false;
     if (player_ptr->wild_mode) {
         return;
     }
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
-
+    int y;
+    int x;
     if (easy_open) {
         int num_doors = count_dt(player_ptr, &y, &x, is_closed_door, false);
         int num_chests = count_chests(player_ptr, &y, &x, false);
@@ -126,17 +124,16 @@ void do_cmd_open(PlayerType *player_ptr)
         command_arg = 0;
     }
 
+    int dir;
     if (get_rep_dir(player_ptr, &dir, true)) {
-        FEAT_IDX feat;
-        Grid *g_ptr;
         y = player_ptr->y + ddy[dir];
         x = player_ptr->x + ddx[dir];
-        g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-        feat = g_ptr->get_feat_mimic();
-        o_idx = chest_check(player_ptr->current_floor_ptr, y, x, false);
+        const auto &grid = player_ptr->current_floor_ptr->grid_array[y][x];
+        auto feat = grid.get_feat_mimic();
+        const auto o_idx = chest_check(player_ptr->current_floor_ptr, y, x, false);
         if (terrains_info[feat].flags.has_not(TerrainCharacteristics::OPEN) && !o_idx) {
             msg_print(_("そこには開けるものが見当たらない。", "You see nothing there to open."));
-        } else if (g_ptr->m_idx && player_ptr->riding != g_ptr->m_idx) {
+        } else if (grid.m_idx && player_ptr->riding != grid.m_idx) {
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
             do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
@@ -160,15 +157,13 @@ void do_cmd_open(PlayerType *player_ptr)
  */
 void do_cmd_close(PlayerType *player_ptr)
 {
-    POSITION y, x;
-    DIRECTION dir;
-    bool more = false;
     if (player_ptr->wild_mode) {
         return;
     }
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
-
+    int y;
+    int x;
     if (easy_open && (count_dt(player_ptr, &y, &x, is_open, false) == 1)) {
         command_dir = coords_to_dir(player_ptr, y, x);
     }
@@ -179,21 +174,20 @@ void do_cmd_close(PlayerType *player_ptr)
         command_arg = 0;
     }
 
+    auto more = false;
+    int dir;
     if (get_rep_dir(player_ptr, &dir)) {
-        Grid *g_ptr;
-        FEAT_IDX feat;
-        y = player_ptr->y + ddy[dir];
-        x = player_ptr->x + ddx[dir];
-        g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-        feat = g_ptr->get_feat_mimic();
+        const Pos2D pos(player_ptr->y + ddy[dir], player_ptr->x + ddx[dir]);
+        const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+        auto feat = grid.get_feat_mimic();
         if (terrains_info[feat].flags.has_not(TerrainCharacteristics::CLOSE)) {
             msg_print(_("そこには閉じるものが見当たらない。", "You see nothing there to close."));
-        } else if (g_ptr->m_idx) {
+        } else if (grid.m_idx) {
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
-            do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
+            do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
         } else {
-            more = exe_close(player_ptr, y, x);
+            more = exe_close(player_ptr, pos.y, pos.x);
         }
     }
 
@@ -208,21 +202,18 @@ void do_cmd_close(PlayerType *player_ptr)
  */
 void do_cmd_disarm(PlayerType *player_ptr)
 {
-    POSITION y, x;
-    DIRECTION dir;
-    OBJECT_IDX o_idx;
-    bool more = false;
     if (player_ptr->wild_mode) {
         return;
     }
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
-
     if (easy_disarm) {
-        int num_traps = count_dt(player_ptr, &y, &x, is_trap, true);
-        int num_chests = count_chests(player_ptr, &y, &x, true);
+        int y;
+        int x;
+        auto num_traps = count_dt(player_ptr, &y, &x, is_trap, true);
+        auto num_chests = count_chests(player_ptr, &y, &x, true);
         if (num_traps || num_chests) {
-            bool too_many = (num_traps && num_chests) || (num_traps > 1) || (num_chests > 1);
+            auto too_many = (num_traps && num_chests) || (num_traps > 1) || (num_chests > 1);
             if (!too_many) {
                 command_dir = coords_to_dir(player_ptr, y, x);
             }
@@ -235,23 +226,22 @@ void do_cmd_disarm(PlayerType *player_ptr)
         command_arg = 0;
     }
 
+    int dir;
+    auto more = false;
     if (get_rep_dir(player_ptr, &dir, true)) {
-        Grid *g_ptr;
-        FEAT_IDX feat;
-        y = player_ptr->y + ddy[dir];
-        x = player_ptr->x + ddx[dir];
-        g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-        feat = g_ptr->get_feat_mimic();
-        o_idx = chest_check(player_ptr->current_floor_ptr, y, x, true);
+        const Pos2D pos(player_ptr->y + ddy[dir], player_ptr->x + ddx[dir]);
+        const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+        const auto feat = grid.get_feat_mimic();
+        const auto o_idx = chest_check(player_ptr->current_floor_ptr, pos.y, pos.x, true);
         if (!is_trap(player_ptr, feat) && !o_idx) {
             msg_print(_("そこには解除するものが見当たらない。", "You see nothing there to disarm."));
-        } else if (g_ptr->m_idx && player_ptr->riding != g_ptr->m_idx) {
+        } else if (grid.m_idx && player_ptr->riding != grid.m_idx) {
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
-            do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
+            do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
         } else if (o_idx) {
-            more = exe_disarm_chest(player_ptr, y, x, o_idx);
+            more = exe_disarm_chest(player_ptr, pos.y, pos.x, o_idx);
         } else {
-            more = exe_disarm(player_ptr, y, x, dir);
+            more = exe_disarm(player_ptr, pos.y, pos.x, dir);
         }
     }
 
@@ -279,10 +269,7 @@ void do_cmd_disarm(PlayerType *player_ptr)
  */
 void do_cmd_bash(PlayerType *player_ptr)
 {
-    POSITION y, x;
-    DIRECTION dir;
-    Grid *g_ptr;
-    bool more = false;
+    auto more = false;
     if (player_ptr->wild_mode) {
         return;
     }
@@ -295,20 +282,19 @@ void do_cmd_bash(PlayerType *player_ptr)
         command_arg = 0;
     }
 
+    int dir;
     if (get_rep_dir(player_ptr, &dir)) {
-        FEAT_IDX feat;
-        y = player_ptr->y + ddy[dir];
-        x = player_ptr->x + ddx[dir];
-        g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-        feat = g_ptr->get_feat_mimic();
+        const Pos2D pos(player_ptr->y + ddy[dir], player_ptr->x + ddx[dir]);
+        const Grid &grid = player_ptr->current_floor_ptr->get_grid(pos);
+        const auto feat = grid.get_feat_mimic();
         if (terrains_info[feat].flags.has_not(TerrainCharacteristics::BASH)) {
             msg_print(_("そこには体当たりするものが見当たらない。", "You see nothing there to bash."));
-        } else if (g_ptr->m_idx) {
+        } else if (grid.m_idx) {
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
-            do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
+            do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
         } else {
-            more = exe_bash(player_ptr, y, x, dir);
+            more = exe_bash(player_ptr, pos.y, pos.x, dir);
         }
     }
 
@@ -366,24 +352,22 @@ void do_cmd_spike(PlayerType *player_ptr)
         return;
     }
 
-    POSITION y = player_ptr->y + ddy[dir];
-    POSITION x = player_ptr->x + ddx[dir];
-    Grid *g_ptr;
-    g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    FEAT_IDX feat = g_ptr->get_feat_mimic();
+    const Pos2D pos(player_ptr->y + ddy[dir], player_ptr->x + ddx[dir]);
+    const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    const auto feat = grid.get_feat_mimic();
     INVENTORY_IDX i_idx;
     if (terrains_info[feat].flags.has_not(TerrainCharacteristics::SPIKE)) {
         msg_print(_("そこにはくさびを打てるものが見当たらない。", "You see nothing there to spike."));
     } else if (!get_spike(player_ptr, &i_idx)) {
         msg_print(_("くさびを持っていない！", "You have no spikes!"));
-    } else if (g_ptr->m_idx) {
+    } else if (grid.m_idx) {
         PlayerEnergy(player_ptr).set_player_turn_energy(100);
         msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
-        do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
+        do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
     } else {
         PlayerEnergy(player_ptr).set_player_turn_energy(100);
         msg_format(_("%sにくさびを打ち込んだ。", "You jam the %s with a spike."), terrains_info[feat].name.data());
-        cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::SPIKE);
+        cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::SPIKE);
         vary_item(player_ptr, i_idx, -1);
     }
 }
