@@ -186,11 +186,36 @@ public:
     /**
      * @brief フラグ集合に含まれるフラグをすべてOFFにする
      *
-     * @return *thisを返す
+     * @return *thisの参照を返す
      */
-    FlagGroup<FlagType, MAX> &clear() noexcept
+    FlagGroup<FlagType, MAX> &clear() &noexcept
     {
         bs_.reset();
+        return *this;
+    }
+
+    /**
+     * @brief フラグ集合に含まれるフラグをすべてOFFにする
+     *
+     * @return *thisを返す
+     */
+    FlagGroup<FlagType, MAX> clear() &&noexcept
+    {
+        this->clear();
+        return std::move(*this);
+    }
+
+    /**
+     * @brief 指定したフラグを指定した値にセットする
+     *
+     * @param flag 値をセットするフラグを指定する
+     * @param val セットする値。trueならフラグをON、falseならフラグをOFFにする。
+     *            引数を省略した場合はフラグをONにする。
+     * @return *thisの参照を返す
+     */
+    FlagGroup<FlagType, MAX> &set(FlagType flag, bool val = true) &
+    {
+        bs_.set(static_cast<size_t>(flag), val);
         return *this;
     }
 
@@ -202,10 +227,24 @@ public:
      *            引数を省略した場合はフラグをONにする。
      * @return *thisを返す
      */
-    FlagGroup<FlagType, MAX> &set(FlagType flag, bool val = true)
+    FlagGroup<FlagType, MAX> set(FlagType flag, bool val = true) &&
     {
-        bs_.set(static_cast<size_t>(flag), val);
-        return *this;
+        this->set(flag, val);
+        return std::move(*this);
+    }
+
+    /**
+     * @brief 入力イテレータで指定した範囲のリストに含まれるフラグをONにする
+     *
+     * @tparam InputIter 入力イテレータの型
+     * @param first 範囲の開始位置を示す入力イテレータ
+     * @param last 範囲の終了位置を示す入力イテレータ
+     * @return *thisの参照を返す
+     */
+    template <flag_group::FlagIter<FlagType> InputIter>
+    FlagGroup<FlagType, MAX> &set(InputIter first, InputIter last) &
+    {
+        return set(FlagGroup(first, last));
     }
 
     /**
@@ -217,9 +256,22 @@ public:
      * @return *thisを返す
      */
     template <flag_group::FlagIter<FlagType> InputIter>
-    FlagGroup<FlagType, MAX> &set(InputIter first, InputIter last)
+    FlagGroup<FlagType, MAX> set(InputIter first, InputIter last) &&
     {
-        return set(FlagGroup(first, last));
+        this->set(first, last);
+        return std::move(*this);
+    }
+
+    /**
+     * @brief 指定したFlagGroupのインスンタンスのONになっているフラグをONにする
+     *
+     * @param rhs ONにするフラグがONになっているFlagGroupのインスタンス
+     * @return *thisの参照を返す
+     */
+    FlagGroup<FlagType, MAX> &set(const FlagGroup<FlagType, MAX> &rhs) &
+    {
+        bs_ |= rhs.bs_;
+        return *this;
     }
 
     /**
@@ -228,9 +280,21 @@ public:
      * @param rhs ONにするフラグがONになっているFlagGroupのインスタンス
      * @return *thisを返す
      */
-    FlagGroup<FlagType, MAX> &set(const FlagGroup<FlagType, MAX> &rhs)
+    FlagGroup<FlagType, MAX> set(const FlagGroup<FlagType, MAX> &rhs) &&
     {
-        bs_ |= rhs.bs_;
+        this->set(rhs);
+        return std::move(*this);
+    }
+
+    /**
+     * @brief 指定したフラグをOFFにする
+     *
+     * @param flag OFFにするフラグを指定する
+     * @return *thisの参照を返す
+     */
+    FlagGroup<FlagType, MAX> &reset(FlagType flag) &
+    {
+        bs_.reset(static_cast<size_t>(flag));
         return *this;
     }
 
@@ -240,10 +304,24 @@ public:
      * @param flag OFFにするフラグを指定する
      * @return *thisを返す
      */
-    FlagGroup<FlagType, MAX> &reset(FlagType flag)
+    FlagGroup<FlagType, MAX> reset(FlagType flag) &&
     {
-        bs_.reset(static_cast<size_t>(flag));
-        return *this;
+        this->reset(flag);
+        return std::move(*this);
+    }
+
+    /**
+     * @brief 入力イテレータで指定した範囲のリストに含まれるフラグをOFFにする
+     *
+     * @tparam InputIter 入力イテレータの型
+     * @param first 範囲の開始位置を示す入力イテレータ
+     * @param last 範囲の終了位置を示す入力イテレータ
+     * @return *thisの参照を返す
+     */
+    template <flag_group::FlagIter<FlagType> InputIter>
+    FlagGroup<FlagType, MAX> &reset(InputIter first, InputIter last) &
+    {
+        return reset(FlagGroup(first, last));
     }
 
     /**
@@ -255,9 +333,22 @@ public:
      * @return *thisを返す
      */
     template <flag_group::FlagIter<FlagType> InputIter>
-    FlagGroup<FlagType, MAX> &reset(InputIter first, InputIter last)
+    FlagGroup<FlagType, MAX> reset(InputIter first, InputIter last) &&
     {
-        return reset(FlagGroup(first, last));
+        this->reset(first, last);
+        return std::move(*this);
+    }
+
+    /**
+     * @brief 指定したFlagGroupのインスンタンスのONになっているフラグをOFFにする
+     *
+     * @param rhs OFFにするフラグがONになっているFlagGroupのインスタンス
+     * @return *thisの参照を返す
+     */
+    FlagGroup<FlagType, MAX> &reset(const FlagGroup<FlagType, MAX> &rhs) &
+    {
+        bs_ &= ~rhs.bs_;
+        return *this;
     }
 
     /**
@@ -266,10 +357,10 @@ public:
      * @param rhs OFFにするフラグがONになっているFlagGroupのインスタンス
      * @return *thisを返す
      */
-    FlagGroup<FlagType, MAX> &reset(const FlagGroup<FlagType, MAX> &rhs)
+    FlagGroup<FlagType, MAX> reset(const FlagGroup<FlagType, MAX> &rhs) &&
     {
-        bs_ &= ~rhs.bs_;
-        return *this;
+        this->reset(rhs);
+        return std::move(*this);
     }
 
     /**
