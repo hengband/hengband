@@ -147,13 +147,9 @@ bool new_player_spot(PlayerType *player_ptr)
  * @param g_ptr マス構造体の参照ポインタ
  * @return 隠されたドアがあるならTRUEを返す。
  */
-bool is_hidden_door(PlayerType *player_ptr, Grid *g_ptr)
+bool is_hidden_door(PlayerType *player_ptr, const Grid &grid)
 {
-    if ((g_ptr->mimic || g_ptr->cave_has_flag(TerrainCharacteristics::SECRET)) && is_closed_door(player_ptr, g_ptr->feat)) {
-        return true;
-    } else {
-        return false;
-    }
+    return (grid.mimic || grid.cave_has_flag(TerrainCharacteristics::SECRET)) && is_closed_door(player_ptr, grid.feat);
 }
 
 /*!

@@ -48,7 +48,7 @@ class PlayerType;
 class MonsterRaceInfo;
 enum class TerrainCharacteristics;
 bool new_player_spot(PlayerType *player_ptr);
-bool is_hidden_door(PlayerType *player_ptr, Grid *g_ptr);
+bool is_hidden_door(PlayerType *player_ptr, const Grid &grid);
 bool player_can_enter(PlayerType *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mode);
 bool feat_uses_special(FEAT_IDX f_idx);
 void update_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x);

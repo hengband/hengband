@@ -66,37 +66,35 @@ POSITION temp2_y[MAX_SHORT];
  * @param y 対象となるマスのY座標
  * @param x 対象となるマスのX座標
  */
-static void discover_hidden_things(PlayerType *player_ptr, POSITION y, POSITION x)
+static void discover_hidden_things(PlayerType *player_ptr, const Pos2D &pos)
 {
-    Grid *g_ptr;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    g_ptr = &floor_ptr->grid_array[y][x];
-    if (g_ptr->mimic && is_trap(player_ptr, g_ptr->feat)) {
-        disclose_grid(player_ptr, y, x);
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto &grid = floor.get_grid(pos);
+    if (grid.mimic && is_trap(player_ptr, grid.feat)) {
+        disclose_grid(player_ptr, pos.y, pos.x);
         msg_print(_("トラップを発見した。", "You have found a trap."));
         disturb(player_ptr, false, true);
     }
 
-    if (is_hidden_door(player_ptr, g_ptr)) {
+    if (is_hidden_door(player_ptr, grid)) {
         msg_print(_("隠しドアを発見した。", "You have found a secret door."));
-        disclose_grid(player_ptr, y, x);
+        disclose_grid(player_ptr, pos.y, pos.x);
         disturb(player_ptr, false, false);
     }
 
-    for (const auto this_o_idx : g_ptr->o_idx_list) {
-        ItemEntity *o_ptr;
-        o_ptr = &floor_ptr->o_list[this_o_idx];
-        if (o_ptr->bi_key.tval() != ItemKindType::CHEST) {
+    for (const auto this_o_idx : grid.o_idx_list) {
+        auto &item = floor.o_list[this_o_idx];
+        if (item.bi_key.tval() != ItemKindType::CHEST) {
             continue;
         }
 
-        if (o_ptr->pval <= 0 || chest_traps[o_ptr->pval].none()) {
+        if (item.pval <= 0 || chest_traps[item.pval].none()) {
             continue;
         }
 
-        if (!o_ptr->is_known()) {
+        if (!item.is_known()) {
             msg_print(_("箱に仕掛けられたトラップを発見した！", "You have discovered a trap on the chest!"));
-            o_ptr->mark_as_known();
+            item.mark_as_known();
             disturb(player_ptr, false, false);
         }
     }
@@ -120,7 +118,7 @@ void search(PlayerType *player_ptr)
 
     for (DIRECTION i = 0; i < 9; ++i) {
         if (randint0(100) < chance) {
-            discover_hidden_things(player_ptr, player_ptr->y + ddy_ddd[i], player_ptr->x + ddx_ddd[i]);
+            discover_hidden_things(player_ptr, { player_ptr->y + ddy_ddd[i], player_ptr->x + ddx_ddd[i] });
         }
     }
 }
