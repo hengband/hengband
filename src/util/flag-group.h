@@ -1,5 +1,6 @@
 #pragma once
 
+#include "info-reader/info-reader-util.h"
 #include <bitset>
 #include <concepts>
 #include <iterator>
@@ -592,13 +593,12 @@ public:
     template <typename Map>
     static bool grab_one_flag(FlagGroup<FlagType, MAX> &fg, const Map &dict, std::string_view what)
     {
-        auto it = dict.find(what);
-        if (it == dict.end()) {
-            return false;
+        auto val = info_get_const<FlagType>(dict, what);
+        if (val) {
+            fg.set(*val);
+            return true;
         }
-
-        fg.set(it->second);
-        return true;
+        return false;
     }
 
 private:
