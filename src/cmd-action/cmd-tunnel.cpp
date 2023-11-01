@@ -34,7 +34,6 @@
  */
 void do_cmd_tunnel(PlayerType *player_ptr)
 {
-    bool more = false;
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     if (command_arg) {
@@ -43,30 +42,26 @@ void do_cmd_tunnel(PlayerType *player_ptr)
         command_arg = 0;
     }
 
-    DIRECTION dir;
+    int dir;
     if (!get_rep_dir(player_ptr, &dir)) {
-        if (!more) {
-            disturb(player_ptr, false, false);
-        }
-
+        disturb(player_ptr, false, false);
         return;
     }
 
-    POSITION y = player_ptr->y + ddy[dir];
-    POSITION x = player_ptr->x + ddx[dir];
-    Grid *g_ptr;
-    g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    FEAT_IDX feat = g_ptr->get_feat_mimic();
+    auto more = false;
+    const Pos2D pos(player_ptr->y + ddy[dir], player_ptr->x + ddx[dir]);
+    const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    const auto feat = grid.get_feat_mimic();
     if (terrains_info[feat].flags.has(TerrainCharacteristics::DOOR)) {
         msg_print(_("ドアは掘れない。", "You cannot tunnel through doors."));
     } else if (terrains_info[feat].flags.has_not(TerrainCharacteristics::TUNNEL)) {
         msg_print(_("そこは掘れない。", "You can't tunnel through that."));
-    } else if (g_ptr->m_idx) {
+    } else if (grid.m_idx) {
         PlayerEnergy(player_ptr).set_player_turn_energy(100);
         msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
-        do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
+        do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
     } else {
-        more = exe_tunnel(player_ptr, y, x);
+        more = exe_tunnel(player_ptr, pos.y, pos.x);
     }
 
     if (!more) {
