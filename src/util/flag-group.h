@@ -674,17 +674,16 @@ public:
      * @brief 文字列からフラグへのマップを指定した検索キーで検索し、
      *        見つかった場合はフラグ集合に該当するフラグをセットする
      *
-     * @tparam Map std::map<string_view, FlagType> もしくは std::unordered_map<string_view, FlagType>
      * @param fg フラグをセットするフラグ集合
      * @param dict 文字列からフラグへのマップ
      * @param what マップの検索キー
      * @return 検索キーでフラグが見つかり、フラグをセットした場合 true
      *         見つからなかった場合 false
      */
-    template <typename Map>
-    static bool grab_one_flag(FlagGroup<FlagType, MAX> &fg, const Map &dict, std::string_view what)
+    template <typename Key, DictIndexedBy<Key> Dict>
+    static bool grab_one_flag(FlagGroup<FlagType, MAX> &fg, const Dict &dict, Key &&what)
     {
-        auto val = info_get_const<FlagType>(dict, what);
+        auto val = info_get_const(dict, std::forward<Key>(what));
         if (val) {
             fg.set(*val);
             return true;
