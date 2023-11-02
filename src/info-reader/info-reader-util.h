@@ -3,6 +3,7 @@
 #include "monster-race/race-ability-flags.h"
 #include "system/angband.h"
 #include "util/bit-flags-calculator.h"
+#include <concepts>
 #include <map>
 #include <optional>
 #include <string>
@@ -21,16 +22,32 @@ RandomArtActType grab_one_activation_flag(concptr what);
 void append_english_text(std::string &text, std::string_view add);
 #endif
 
+/// @note clang-formatによるconceptの整形が安定していないので抑制しておく
+// clang-format off
+/*!
+ * @brief 型Keyをキーとして持つような連想配列型のコンセプト
+ * std::mapやstd::unordered_mapなどが該当する
+ */
+template <typename T, typename Key>
+concept DictIndexedBy = requires(T t, Key k) {
+    std::same_as<typename T::key_type, Key>;
+    typename T::mapped_type;
+    { t.find(k) } -> std::same_as<typename T::iterator>;
+    { t.find(k)->second } -> std::convertible_to<typename T::mapped_type>;
+    { t.end() } -> std::same_as<typename T::iterator>;
+};
+// clang-format on
+
 /*!
  * @brief info文字列から定数を取得し、それを返す
- * @param names 文字列辞書
+ * @param dict 文字列辞書
  * @param what 文字列
  * @return 見つけたら定数を返す。見つからなければnulloptを返す
  */
-template <typename T, typename Map>
-std::optional<T> info_get_const(const Map &names, std::string_view what)
+template <typename Key, DictIndexedBy<Key> Dict>
+std::optional<typename Dict::mapped_type> info_get_const(const Dict &dict, Key &&what)
 {
-    if (auto it = names.find(what); it != names.end()) {
+    if (auto it = dict.find(what); it != dict.end()) {
         return it->second;
     }
     return std::nullopt;
@@ -39,14 +56,14 @@ std::optional<T> info_get_const(const Map &names, std::string_view what)
 /*!
  * @brief infoフラグ文字列をフラグビットに変換する
  * @param flags ビットフラグ変数
- * @param names フラグ文字列変換表
+ * @param dict フラグ文字列変換表
  * @param what フラグ文字列
  * @return 見つけたらtrue
  */
-template <typename T>
-bool info_grab_one_flag(uint32_t &flags, const std::unordered_map<std::string_view, T> &names, std::string_view what)
+template <typename Key, DictIndexedBy<Key> Dict>
+bool info_grab_one_flag(uint32_t &flags, const Dict &dict, Key &&what)
 {
-    if (auto it = names.find(what); it != names.end()) {
+    if (auto it = dict.find(what); it != dict.end()) {
         set_bits(flags, it->second);
         return true;
     }
@@ -56,14 +73,14 @@ bool info_grab_one_flag(uint32_t &flags, const std::unordered_map<std::string_vi
 /*!
  * @brief info文字列を定数に変換する
  * @param buf 格納変数
- * @param names 定数文字列変換表
+ * @param dict 定数文字列変換表
  * @param what 定数文字列
  * @return 見つけたらtrue
  */
-template <typename T>
-bool info_grab_one_const(uint32_t &buf, const std::unordered_map<std::string_view, T> &names, std::string_view what)
+template <typename Key, DictIndexedBy<Key> Dict>
+bool info_grab_one_const(uint32_t &buf, const Dict &dict, Key &&what)
 {
-    auto val = info_get_const<T>(names, what);
+    auto val = info_get_const(dict, std::forward<Key>(what));
     if (val) {
         buf = static_cast<uint32_t>(*val);
         return true;
