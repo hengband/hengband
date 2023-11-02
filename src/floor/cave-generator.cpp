@@ -129,16 +129,14 @@ static bool decide_tunnel_planned_site(PlayerType *player_ptr, dun_data_type *dd
 
 static void make_tunnels(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
-    for (int j = 0; j < dd_ptr->tunn_n; j++) {
-        Grid *g_ptr;
-        TerrainType *f_ptr;
-        dd_ptr->tunnel_y = dd_ptr->tunn[j].y;
-        dd_ptr->tunnel_x = dd_ptr->tunn[j].x;
-        g_ptr = &player_ptr->current_floor_ptr->grid_array[dd_ptr->tunnel_y][dd_ptr->tunnel_x];
-        f_ptr = &terrains_info[g_ptr->feat];
-        if (f_ptr->flags.has_not(TerrainCharacteristics::MOVE) || f_ptr->flags.has_none_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::LAVA })) {
-            g_ptr->mimic = 0;
-            place_grid(player_ptr, g_ptr, GB_FLOOR);
+    for (auto i = 0; i < dd_ptr->tunn_n; i++) {
+        dd_ptr->tunnel_y = dd_ptr->tunn[i].y;
+        dd_ptr->tunnel_x = dd_ptr->tunn[i].x;
+        auto &grid = player_ptr->current_floor_ptr->grid_array[dd_ptr->tunnel_y][dd_ptr->tunnel_x];
+        const auto &terrain = terrains_info[grid.feat];
+        if (terrain.flags.has_not(TerrainCharacteristics::MOVE) || terrain.flags.has_none_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::LAVA })) {
+            grid.mimic = 0;
+            place_grid(player_ptr, &grid, GB_FLOOR);
         }
     }
 }
@@ -294,8 +292,8 @@ static void place_bound_perm_wall(PlayerType *player_ptr, Grid *g_ptr)
         return;
     }
 
-    auto *f_ptr = &terrains_info[g_ptr->feat];
-    if (f_ptr->flags.has_any_of({ TerrainCharacteristics::HAS_GOLD, TerrainCharacteristics::HAS_ITEM }) && f_ptr->flags.has_not(TerrainCharacteristics::SECRET)) {
+    const auto &terrain = terrains_info[g_ptr->feat];
+    if (terrain.flags.has_any_of({ TerrainCharacteristics::HAS_GOLD, TerrainCharacteristics::HAS_ITEM }) && terrain.flags.has_not(TerrainCharacteristics::SECRET)) {
         g_ptr->feat = feat_state(player_ptr->current_floor_ptr, g_ptr->feat, TerrainCharacteristics::ENSECRET);
     }
 

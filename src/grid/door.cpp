@@ -63,10 +63,11 @@ void add_door(PlayerType *player_ptr, POSITION x, POSITION y)
  */
 void place_secret_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto &dungeon = floor_ptr->get_dungeon_definition();
+    auto &floor = *player_ptr->current_floor_ptr;
+    const Pos2D pos(y, x);
+    const auto &dungeon = floor.get_dungeon_definition();
     if (dungeon.flags.has(DungeonFeatureType::NO_DOORS)) {
-        place_bold(player_ptr, y, x, GB_FLOOR);
+        place_bold(player_ptr, pos.y, pos.x, GB_FLOOR);
         return;
     }
 
@@ -76,21 +77,21 @@ void place_secret_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
                    : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
     }
 
-    place_closed_door(player_ptr, y, x, type);
-    auto *g_ptr = &floor_ptr->grid_array[y][x];
+    place_closed_door(player_ptr, pos.y, pos.x, type);
+    auto &grid = floor.get_grid(pos);
     if (type != DOOR_CURTAIN) {
-        g_ptr->mimic = feat_wall_inner;
-        if (feat_supports_los(g_ptr->mimic) && !feat_supports_los(g_ptr->feat)) {
-            if (terrains_info[g_ptr->mimic].flags.has(TerrainCharacteristics::MOVE) || terrains_info[g_ptr->mimic].flags.has(TerrainCharacteristics::CAN_FLY)) {
-                g_ptr->feat = one_in_(2) ? g_ptr->mimic : rand_choice(feat_ground_type);
+        grid.mimic = feat_wall_inner;
+        if (feat_supports_los(grid.mimic) && !feat_supports_los(grid.feat)) {
+            if (terrains_info[grid.mimic].flags.has(TerrainCharacteristics::MOVE) || terrains_info[grid.mimic].flags.has(TerrainCharacteristics::CAN_FLY)) {
+                grid.feat = one_in_(2) ? grid.mimic : rand_choice(feat_ground_type);
             }
 
-            g_ptr->mimic = 0;
+            grid.mimic = 0;
         }
     }
 
-    g_ptr->info &= ~(CAVE_FLOOR);
-    delete_monster(player_ptr, y, x);
+    grid.info &= ~(CAVE_FLOOR);
+    delete_monster(player_ptr, pos.y, pos.x);
 }
 
 /*!
@@ -122,10 +123,11 @@ void place_locked_door(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *g_ptr = &floor_ptr->grid_array[y][x];
-    g_ptr->mimic = 0;
-    const auto &dungeon = floor_ptr->get_dungeon_definition();
+    const Pos2D pos(y, x);
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &grid = floor.get_grid(pos);
+    grid.mimic = 0;
+    const auto &dungeon = floor.get_dungeon_definition();
     if (dungeon.flags.has(DungeonFeatureType::NO_DOORS)) {
         place_bold(player_ptr, y, x, GB_FLOOR);
         return;
@@ -143,14 +145,14 @@ void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room
         feat = feat_door[type].broken;
     } else if (tmp < 600) {
         place_closed_door(player_ptr, y, x, type);
-
         if (type != DOOR_CURTAIN) {
-            g_ptr->mimic = room ? feat_wall_outer : rand_choice(feat_wall_type);
-            if (feat_supports_los(g_ptr->mimic) && !feat_supports_los(g_ptr->feat)) {
-                if (terrains_info[g_ptr->mimic].flags.has(TerrainCharacteristics::MOVE) || terrains_info[g_ptr->mimic].flags.has(TerrainCharacteristics::CAN_FLY)) {
-                    g_ptr->feat = one_in_(2) ? g_ptr->mimic : rand_choice(feat_ground_type);
+            grid.mimic = room ? feat_wall_outer : rand_choice(feat_wall_type);
+            if (feat_supports_los(grid.mimic) && !feat_supports_los(grid.feat)) {
+                const auto &terrain_mimic = terrains_info[grid.mimic];
+                if (terrain_mimic.flags.has(TerrainCharacteristics::MOVE) || terrain_mimic.flags.has(TerrainCharacteristics::CAN_FLY)) {
+                    grid.feat = one_in_(2) ? grid.mimic : rand_choice(feat_ground_type);
                 }
-                g_ptr->mimic = 0;
+                grid.mimic = 0;
             }
         }
     } else {
@@ -165,7 +167,7 @@ void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room
     if (feat == feat_none) {
         place_bold(player_ptr, y, x, GB_FLOOR);
     } else {
-        set_cave_feat(floor_ptr, y, x, feat);
+        set_cave_feat(&floor, y, x, feat);
     }
 
     delete_monster(player_ptr, y, x);

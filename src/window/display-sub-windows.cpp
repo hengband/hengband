@@ -555,15 +555,15 @@ static void display_floor_item_list(PlayerType *player_ptr, const Pos2D &pos)
     term_clear();
     term_gotoxy(0, 0);
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto *g_ptr = &floor_ptr->get_grid(pos);
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto &grid = floor.get_grid(pos);
     std::string line;
 
     // 先頭行を書く。
     auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
     if (player_ptr->is_located_at(pos)) {
         line = format(_("(X:%03d Y:%03d) あなたの足元のアイテム一覧", "Items at (%03d,%03d) under you"), pos.x, pos.y);
-    } else if (const auto *m_ptr = monster_on_floor_items(floor_ptr, g_ptr); m_ptr != nullptr) {
+    } else if (const auto *m_ptr = monster_on_floor_items(&floor, &grid); m_ptr != nullptr) {
         if (is_hallucinated) {
             line = format(_("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), pos.x, pos.y);
         } else {
@@ -571,27 +571,27 @@ static void display_floor_item_list(PlayerType *player_ptr, const Pos2D &pos)
             line = format(_("(X:%03d Y:%03d) %sの足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under %s"), pos.x, pos.y, r_ptr->name.data());
         }
     } else {
-        const TerrainType *const f_ptr = &terrains_info[g_ptr->feat];
-        concptr fn = f_ptr->name.data();
+        const auto &terrain = terrains_info[grid.feat];
+        const auto fn = terrain.name.data();
         std::string buf;
-
-        if (f_ptr->flags.has(TerrainCharacteristics::STORE) || (f_ptr->flags.has(TerrainCharacteristics::BLDG) && !floor_ptr->inside_arena)) {
+        if (terrain.flags.has(TerrainCharacteristics::STORE) || (terrain.flags.has(TerrainCharacteristics::BLDG) && !floor.inside_arena)) {
             buf = format(_("%sの入口", "on the entrance of %s"), fn);
-        } else if (f_ptr->flags.has(TerrainCharacteristics::WALL)) {
+        } else if (terrain.flags.has(TerrainCharacteristics::WALL)) {
             buf = format(_("%sの中", "in %s"), fn);
         } else {
             buf = format(_("%s", "on %s"), fn);
         }
+
         line = format(_("(X:%03d Y:%03d) %sの上の発見済みアイテム一覧", "Found items at (X:%03d Y:%03d) %s"), pos.x, pos.y, buf.data());
     }
     term_addstr(-1, TERM_WHITE, line);
 
     // (y,x) のアイテムを1行に1個ずつ書く。
     TERM_LEN term_y = 1;
-    for (const auto o_idx : g_ptr->o_idx_list) {
-        auto *const o_ptr = &floor_ptr->o_list[o_idx];
-        const auto tval = o_ptr->bi_key.tval();
-        if (o_ptr->marked.has_not(OmType::FOUND) || tval == ItemKindType::GOLD) {
+    for (const auto o_idx : grid.o_idx_list) {
+        const auto &item = floor.o_list[o_idx];
+        const auto tval = item.bi_key.tval();
+        if (item.marked.has_not(OmType::FOUND) || tval == ItemKindType::GOLD) {
             continue;
         }
 
@@ -606,7 +606,7 @@ static void display_floor_item_list(PlayerType *player_ptr, const Pos2D &pos)
         if (is_hallucinated) {
             term_addstr(-1, TERM_WHITE, _("何か奇妙な物", "something strange"));
         } else {
-            const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+            const auto item_name = describe_flavor(player_ptr, &item, 0);
             TERM_COLOR attr = tval_to_attr[enum2i(tval) % 128];
             term_addstr(-1, attr, item_name);
         }
@@ -716,7 +716,7 @@ void fix_found_item_list(PlayerType *player_ptr)
 static void display_spell_list(PlayerType *player_ptr)
 {
     TERM_LEN y, x;
-    int m[9];
+    int m[9]{};
     const magic_type *s_ptr;
     GAME_TEXT name[MAX_NLEN];
 

@@ -89,7 +89,7 @@ static int16_t conv_terrain2feat[MAX_WILDERNESS];
  */
 static void set_floor_and_wall_aux(int16_t feat_type[100], const std::array<feat_prob, DUNGEON_FEAT_PROB_NUM> &prob)
 {
-    int lim[DUNGEON_FEAT_PROB_NUM];
+    std::array<int, DUNGEON_FEAT_PROB_NUM> lim{};
     lim[0] = prob[0].percent;
     for (int i = 1; i < DUNGEON_FEAT_PROB_NUM; i++) {
         lim[i] = lim[i - 1] + prob[i].percent;

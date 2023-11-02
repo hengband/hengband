@@ -60,9 +60,9 @@ void do_cmd_store(PlayerType *player_ptr)
     xtra_stock = std::min(14 + 26, ((hgt > MAIN_TERM_MIN_ROWS) ? (hgt - MAIN_TERM_MIN_ROWS) : 0));
     store_bottom = MIN_STOCK + xtra_stock;
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto *g_ptr = &floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-    if (!g_ptr->cave_has_flag(TerrainCharacteristics::STORE)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto &grid = floor.get_grid(player_ptr->get_position());
+    if (!grid.cave_has_flag(TerrainCharacteristics::STORE)) {
         msg_print(_("ここには店がありません。", "You see no store here."));
         return;
     }
@@ -74,13 +74,13 @@ void do_cmd_store(PlayerType *player_ptr)
     //   inner_town_num は、施設内で C コマンドなどを使ったときにそのままでは現在地の偽装がバレる
     //   ため、それを糊塗するためのグローバル変数。
     //   この辺はリファクタしたい。
-    StoreSaleType store_num = i2enum<StoreSaleType>(terrains_info[g_ptr->feat].subtype);
+    const auto store_num = i2enum<StoreSaleType>(terrains_info[grid.feat].subtype);
     old_town_num = player_ptr->town_num;
     if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM)) {
         player_ptr->town_num = 1;
     }
 
-    if (floor_ptr->is_in_dungeon()) {
+    if (floor.is_in_dungeon()) {
         player_ptr->town_num = VALID_TOWNS;
     }
 
@@ -103,14 +103,14 @@ void do_cmd_store(PlayerType *player_ptr)
         store.last_visit = w_ptr->game_turn;
     }
 
-    forget_lite(floor_ptr);
-    forget_view(floor_ptr);
+    forget_lite(&floor);
+    forget_view(&floor);
     w_ptr->character_icky_depth = 1;
     command_arg = 0;
     command_rep = 0;
     command_new = 0;
     get_com_no_macros = true;
-    cur_store_feat = g_ptr->feat;
+    cur_store_feat = grid.feat;
     st_ptr = &towns_info[player_ptr->town_num].stores[store_num];
     ot_ptr = &owners.at(store_num)[st_ptr->owner];
     store_top = 0;

@@ -412,13 +412,14 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     const auto previous_terrain_id = terrain_id;
                     while (true) {
                         new_terrain_id = input_new_visual_id(ch, terrain_id, static_cast<short>(TerrainList::get_instance().size()));
-                        if (!new_terrain_id.has_value()) {
+                        if (!new_terrain_id) {
                             terrain_id = previous_terrain_id;
                             break;
                         }
 
-                        terrain_id = new_terrain_id.value();
-                        if (!terrains_info[terrain_id].name.empty() && (terrains_info[terrain_id].mimic == terrain_id)) {
+                        terrain_id = *new_terrain_id;
+                        const auto &new_terrain = terrains[terrain_id];
+                        if (!new_terrain.name.empty() && (new_terrain.mimic == terrain_id)) {
                             break;
                         }
                     }

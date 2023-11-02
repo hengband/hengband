@@ -171,7 +171,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         break;
     }
     case AttributeType::KILL_TRAP: {
-        if (is_hidden_door(player_ptr, &grid)) {
+        if (is_hidden_door(player_ptr, grid)) {
             disclose_grid(player_ptr, y, x);
             if (known) {
                 obvious = true;

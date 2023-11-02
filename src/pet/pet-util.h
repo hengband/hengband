@@ -44,5 +44,5 @@ extern int total_friends;
 
 class Grid;
 class PlayerType;
-bool can_player_ride_pet(PlayerType *player_ptr, Grid *g_ptr, bool now_riding);
+bool can_player_ride_pet(PlayerType *player_ptr, const Grid *g_ptr, bool now_riding);
 PERCENTAGE calculate_upkeep(PlayerType *player_ptr);

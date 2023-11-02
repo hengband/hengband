@@ -24,7 +24,7 @@ int total_friends = 0;
  * @param now_riding trueなら下馬処理、falseならば騎乗処理
  * @return 可能ならばtrueを返す
  */
-bool can_player_ride_pet(PlayerType *player_ptr, Grid *g_ptr, bool now_riding)
+bool can_player_ride_pet(PlayerType *player_ptr, const Grid *g_ptr, bool now_riding)
 {
     bool old_character_xtra = w_ptr->character_xtra;
     MONSTER_IDX old_riding = player_ptr->riding;

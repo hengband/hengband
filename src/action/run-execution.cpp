@@ -57,31 +57,29 @@ static bool find_breakleft;
  */
 static bool see_wall(PlayerType *player_ptr, DIRECTION dir, POSITION y, POSITION x)
 {
-    y += ddy[dir];
-    x += ddx[dir];
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!in_bounds2(floor_ptr, y, x)) {
+    const Pos2D pos(y + ddy[dir], x + ddx[dir]);
+    if (!in_bounds2(floor_ptr, pos.y, pos.x)) {
         return false;
     }
 
-    Grid *g_ptr;
-    g_ptr = &floor_ptr->grid_array[y][x];
-    if (!g_ptr->is_mark()) {
+    const auto &grid = floor_ptr->get_grid(pos);
+    if (!grid.is_mark()) {
         return false;
     }
 
-    int16_t feat = g_ptr->get_feat_mimic();
-    auto *f_ptr = &terrains_info[feat];
+    int16_t feat = grid.get_feat_mimic();
+    const auto &terrain = terrains_info[feat];
     if (!player_can_enter(player_ptr, feat, 0)) {
-        return f_ptr->flags.has_not(TerrainCharacteristics::DOOR);
+        return terrain.flags.has_not(TerrainCharacteristics::DOOR);
     }
 
-    if (f_ptr->flags.has(TerrainCharacteristics::AVOID_RUN) && !ignore_avoid_run) {
+    if (terrain.flags.has(TerrainCharacteristics::AVOID_RUN) && !ignore_avoid_run) {
         return true;
     }
 
-    if (f_ptr->flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY })) {
-        return f_ptr->flags.has_not(TerrainCharacteristics::DOOR);
+    if (terrain.flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY })) {
+        return terrain.flags.has_not(TerrainCharacteristics::DOOR);
     }
 
     return false;
@@ -228,8 +226,7 @@ static bool run_test(PlayerType *player_ptr)
         Grid *g_ptr;
         g_ptr = &floor_ptr->grid_array[row][col];
         FEAT_IDX feat = g_ptr->get_feat_mimic();
-        TerrainType *f_ptr;
-        f_ptr = &terrains_info[feat];
+        const auto &terrain = terrains_info[feat];
         if (g_ptr->m_idx) {
             auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
             if (m_ptr->ml) {
@@ -247,15 +244,15 @@ static bool run_test(PlayerType *player_ptr)
 
         bool inv = true;
         if (g_ptr->is_mark()) {
-            bool notice = f_ptr->flags.has(TerrainCharacteristics::NOTICE);
-            if (notice && f_ptr->flags.has(TerrainCharacteristics::MOVE)) {
-                if (find_ignore_doors && f_ptr->flags.has_all_of({ TerrainCharacteristics::DOOR, TerrainCharacteristics::CLOSE })) {
+            bool notice = terrain.flags.has(TerrainCharacteristics::NOTICE);
+            if (notice && terrain.flags.has(TerrainCharacteristics::MOVE)) {
+                if (find_ignore_doors && terrain.flags.has_all_of({ TerrainCharacteristics::DOOR, TerrainCharacteristics::CLOSE })) {
                     notice = false;
-                } else if (find_ignore_stairs && f_ptr->flags.has(TerrainCharacteristics::STAIRS)) {
+                } else if (find_ignore_stairs && terrain.flags.has(TerrainCharacteristics::STAIRS)) {
                     notice = false;
-                } else if (f_ptr->flags.has(TerrainCharacteristics::LAVA) && (has_immune_fire(player_ptr) || is_invuln(player_ptr))) {
+                } else if (terrain.flags.has(TerrainCharacteristics::LAVA) && (has_immune_fire(player_ptr) || is_invuln(player_ptr))) {
                     notice = false;
-                } else if (f_ptr->flags.has_all_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::DEEP }) && (player_ptr->levitation || player_ptr->can_swim || (calc_inventory_weight(player_ptr) <= calc_weight_limit(player_ptr)))) {
+                } else if (terrain.flags.has_all_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::DEEP }) && (player_ptr->levitation || player_ptr->can_swim || (calc_inventory_weight(player_ptr) <= calc_weight_limit(player_ptr)))) {
                     notice = false;
                 }
             }

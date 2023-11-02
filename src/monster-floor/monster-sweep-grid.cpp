@@ -274,7 +274,7 @@ void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_fl
     if (grid.get_cost(&monrace)) {
         this->best = 999;
     } else if (grid.when) {
-        const Pos2D p_pos(this->player_ptr->y, this->player_ptr->x);
+        const auto p_pos = this->player_ptr->get_position();
         if (floor.get_grid(p_pos).when - grid.when > 127) {
             return;
         }

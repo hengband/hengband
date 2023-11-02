@@ -26,15 +26,14 @@
  * @param x 対象を行うマスのX座標
  * @return
  */
-static bool do_cmd_tunnel_test(FloorType *floor_ptr, POSITION y, POSITION x)
+static bool do_cmd_tunnel_test(const Grid &grid)
 {
-    auto *g_ptr = &floor_ptr->grid_array[y][x];
-    if (!g_ptr->is_mark()) {
+    if (!grid.is_mark()) {
         msg_print(_("そこには何も見当たらない。", "You see nothing there."));
         return false;
     }
 
-    if (!g_ptr->cave_has_flag(TerrainCharacteristics::TUNNEL)) {
+    if (!grid.cave_has_flag(TerrainCharacteristics::TUNNEL)) {
         msg_print(_("そこには掘るものが見当たらない。", "You see nothing there to tunnel."));
         return false;
     }
@@ -55,52 +54,50 @@ static bool do_cmd_tunnel_test(FloorType *floor_ptr, POSITION y, POSITION x)
  */
 bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    Grid *g_ptr;
-    TerrainType *f_ptr, *mimic_f_ptr;
-    int power;
-    concptr name;
-    bool more = false;
-    if (!do_cmd_tunnel_test(player_ptr->current_floor_ptr, y, x)) {
+    auto more = false;
+    const Pos2D pos(y, x);
+    const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    if (!do_cmd_tunnel_test(grid)) {
         return false;
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    f_ptr = &terrains_info[g_ptr->feat];
-    power = f_ptr->power;
-    mimic_f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
-    name = mimic_f_ptr->name.data();
+    const auto &terrain = terrains_info[grid.feat];
+    const auto power = terrain.power;
+    const auto &terrain_mimic = terrains_info[grid.get_feat_mimic()];
+    const auto &name = terrain_mimic.name;
     if (command_rep == 0) {
         sound(SOUND_DIG);
     }
-    if (f_ptr->flags.has(TerrainCharacteristics::PERMANENT)) {
-        if (mimic_f_ptr->flags.has(TerrainCharacteristics::PERMANENT)) {
+
+    if (terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
+        if (terrain_mimic.flags.has(TerrainCharacteristics::PERMANENT)) {
             msg_print(_("この岩は硬すぎて掘れないようだ。", "This seems to be permanent rock."));
         } else {
             msg_print(_("そこは掘れない!", "You can't tunnel through that!"));
         }
-    } else if (f_ptr->flags.has(TerrainCharacteristics::CAN_DIG)) {
+    } else if (terrain.flags.has(TerrainCharacteristics::CAN_DIG)) {
         if (player_ptr->skill_dig > randint0(20 * power)) {
             sound(SOUND_DIG_THROUGH);
-            msg_format(_("%sをくずした。", "You have removed the %s."), name);
+            msg_format(_("%sをくずした。", "You have removed the %s."), name.data());
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::TUNNEL);
             RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
         } else {
-            msg_format(_("%sをくずしている。", "You dig into the %s."), name);
+            msg_format(_("%sをくずしている。", "You dig into the %s."), name.data());
             more = true;
         }
     } else {
-        bool tree = mimic_f_ptr->flags.has(TerrainCharacteristics::TREE);
+        bool tree = terrain_mimic.flags.has(TerrainCharacteristics::TREE);
         if (player_ptr->skill_dig > power + randint0(40 * power)) {
             sound(SOUND_DIG_THROUGH);
             if (tree) {
-                msg_format(_("%sを切り払った。", "You have cleared away the %s."), name);
+                msg_format(_("%sを切り払った。", "You have cleared away the %s."), name.data());
             } else {
                 msg_print(_("穴を掘り終えた。", "You have finished the tunnel."));
                 RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
             }
 
-            if (f_ptr->flags.has(TerrainCharacteristics::GLASS)) {
+            if (terrain.flags.has(TerrainCharacteristics::GLASS)) {
                 sound(SOUND_GLASS);
             }
 
@@ -109,19 +106,19 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
             chg_virtue(player_ptr, Virtue::NATURE, -1);
         } else {
             if (tree) {
-                msg_format(_("%sを切っている。", "You chop away at the %s."), name);
+                msg_format(_("%sを切っている。", "You chop away at the %s."), name.data());
                 if (randint0(100) < 25) {
                     search(player_ptr);
                 }
             } else {
-                msg_format(_("%sに穴を掘っている。", "You tunnel into the %s."), name);
+                msg_format(_("%sに穴を掘っている。", "You tunnel into the %s."), name.data());
             }
 
             more = true;
         }
     }
 
-    if (is_hidden_door(player_ptr, g_ptr) && (randint0(100) < 25)) {
+    if (is_hidden_door(player_ptr, grid) && (randint0(100) < 25)) {
         search(player_ptr);
     }
 
