@@ -74,56 +74,53 @@
  */
 bool new_player_spot(PlayerType *player_ptr)
 {
-    POSITION y = 0, x = 0;
-    int max_attempts = 10000;
-
-    Grid *g_ptr;
-    TerrainType *f_ptr;
-
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto max_attempts = 10000;
+    auto y = 0;
+    auto x = 0;
+    auto &floor = *player_ptr->current_floor_ptr;
     while (max_attempts--) {
         /* Pick a legal spot */
-        y = (POSITION)rand_range(1, floor_ptr->height - 2);
-        x = (POSITION)rand_range(1, floor_ptr->width - 2);
+        y = (POSITION)rand_range(1, floor.height - 2);
+        x = (POSITION)rand_range(1, floor.width - 2);
 
-        g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+        const auto &grid = player_ptr->current_floor_ptr->get_grid({ y, x });
 
         /* Must be a "naked" floor grid */
-        if (g_ptr->m_idx) {
+        if (grid.m_idx) {
             continue;
         }
-        if (floor_ptr->is_in_dungeon()) {
-            f_ptr = &terrains_info[g_ptr->feat];
+        if (floor.is_in_dungeon()) {
+            const auto &terrain = terrains_info[grid.feat];
 
             if (max_attempts > 5000) /* Rule 1 */
             {
-                if (f_ptr->flags.has_not(TerrainCharacteristics::FLOOR)) {
+                if (terrain.flags.has_not(TerrainCharacteristics::FLOOR)) {
                     continue;
                 }
             } else /* Rule 2 */
             {
-                if (f_ptr->flags.has_not(TerrainCharacteristics::MOVE)) {
+                if (terrain.flags.has_not(TerrainCharacteristics::MOVE)) {
                     continue;
                 }
-                if (f_ptr->flags.has(TerrainCharacteristics::HIT_TRAP)) {
+                if (terrain.flags.has(TerrainCharacteristics::HIT_TRAP)) {
                     continue;
                 }
             }
 
             /* Refuse to start on anti-teleport grids in dungeon */
-            if (f_ptr->flags.has_not(TerrainCharacteristics::TELEPORTABLE)) {
+            if (terrain.flags.has_not(TerrainCharacteristics::TELEPORTABLE)) {
                 continue;
             }
         }
-        if (!player_can_enter(player_ptr, g_ptr->feat, 0)) {
+        if (!player_can_enter(player_ptr, grid.feat, 0)) {
             continue;
         }
-        if (!in_bounds(floor_ptr, y, x)) {
+        if (!in_bounds(&floor, y, x)) {
             continue;
         }
 
         /* Refuse to start on anti-teleport grids */
-        if (g_ptr->is_icky()) {
+        if (grid.is_icky()) {
             continue;
         }
 
@@ -887,53 +884,54 @@ bool cave_monster_teleportable_bold(PlayerType *player_ptr, MONSTER_IDX m_idx, P
  */
 bool cave_player_teleportable_bold(PlayerType *player_ptr, POSITION y, POSITION x, teleport_flags mode)
 {
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    auto *f_ptr = &terrains_info[g_ptr->feat];
+    const Pos2D pos(y, x);
+    const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    const auto &terrain = terrains_info[grid.feat];
 
     /* Require "teleportable" space */
-    if (f_ptr->flags.has_not(TerrainCharacteristics::TELEPORTABLE)) {
+    if (terrain.flags.has_not(TerrainCharacteristics::TELEPORTABLE)) {
         return false;
     }
 
     /* No magical teleporting into vaults and such */
-    if (!(mode & TELEPORT_NONMAGICAL) && g_ptr->is_icky()) {
+    if (!(mode & TELEPORT_NONMAGICAL) && grid.is_icky()) {
         return false;
     }
 
-    if (g_ptr->m_idx && (g_ptr->m_idx != player_ptr->riding)) {
+    if (grid.m_idx && (grid.m_idx != player_ptr->riding)) {
         return false;
     }
 
     /* don't teleport on a trap. */
-    if (f_ptr->flags.has(TerrainCharacteristics::HIT_TRAP)) {
+    if (terrain.flags.has(TerrainCharacteristics::HIT_TRAP)) {
         return false;
     }
 
-    if (!(mode & TELEPORT_PASSIVE)) {
-        if (!player_can_enter(player_ptr, g_ptr->feat, 0)) {
+    if (any_bits(mode, TELEPORT_PASSIVE)) {
+        return true;
+    }
+
+    if (!player_can_enter(player_ptr, grid.feat, 0)) {
+        return false;
+    }
+
+    if (terrain.flags.has_all_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::DEEP })) {
+        if (!player_ptr->levitation && !player_ptr->can_swim) {
             return false;
-        }
-
-        if (f_ptr->flags.has_all_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::DEEP })) {
-            if (!player_ptr->levitation && !player_ptr->can_swim) {
-                return false;
-            }
-        }
-
-        if (f_ptr->flags.has(TerrainCharacteristics::LAVA) && !has_immune_fire(player_ptr) && !is_invuln(player_ptr)) {
-            /* Always forbid deep lava */
-            if (f_ptr->flags.has(TerrainCharacteristics::DEEP)) {
-                return false;
-            }
-
-            /* Forbid shallow lava when the player don't have levitation */
-            if (!player_ptr->levitation) {
-                return false;
-            }
         }
     }
 
-    return true;
+    if (terrain.flags.has_not(TerrainCharacteristics::LAVA) || has_immune_fire(player_ptr) || is_invuln(player_ptr)) {
+        return true;
+    }
+
+    /* Always forbid deep lava */
+    if (terrain.flags.has(TerrainCharacteristics::DEEP)) {
+        return false;
+    }
+
+    /* Forbid shallow lava when the player don't have levitation */
+    return player_ptr->levitation != 0;
 }
 
 /*!

@@ -284,34 +284,34 @@ static void make_aqua_streams(PlayerType *player_ptr, dun_data_type *dd_ptr, dun
  * @brief マスにフロア端用の永久壁を配置する / Set boundary mimic and add "solid" perma-wall
  * @param g_ptr 永久壁を配置したいマス構造体の参照ポインタ
  */
-static void place_bound_perm_wall(PlayerType *player_ptr, Grid *g_ptr)
+static void place_bound_perm_wall(PlayerType *player_ptr, Grid &grid)
 {
     if (bound_walls_perm) {
-        g_ptr->mimic = 0;
-        place_grid(player_ptr, g_ptr, GB_SOLID_PERM);
+        grid.mimic = 0;
+        place_grid(player_ptr, &grid, GB_SOLID_PERM);
         return;
     }
 
-    const auto &terrain = terrains_info[g_ptr->feat];
+    const auto &terrain = terrains_info[grid.feat];
     if (terrain.flags.has_any_of({ TerrainCharacteristics::HAS_GOLD, TerrainCharacteristics::HAS_ITEM }) && terrain.flags.has_not(TerrainCharacteristics::SECRET)) {
-        g_ptr->feat = feat_state(player_ptr->current_floor_ptr, g_ptr->feat, TerrainCharacteristics::ENSECRET);
+        grid.feat = feat_state(player_ptr->current_floor_ptr, grid.feat, TerrainCharacteristics::ENSECRET);
     }
 
-    g_ptr->mimic = g_ptr->feat;
-    place_grid(player_ptr, g_ptr, GB_SOLID_PERM);
+    grid.mimic = grid.feat;
+    place_grid(player_ptr, &grid, GB_SOLID_PERM);
 }
 
 static void make_perm_walls(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (POSITION x = 0; x < floor_ptr->width; x++) {
-        place_bound_perm_wall(player_ptr, &floor_ptr->grid_array[0][x]);
-        place_bound_perm_wall(player_ptr, &floor_ptr->grid_array[floor_ptr->height - 1][x]);
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (POSITION x = 0; x < floor.width; x++) {
+        place_bound_perm_wall(player_ptr, floor.get_grid({ 0, x }));
+        place_bound_perm_wall(player_ptr, floor.get_grid({ floor.height - 1, x }));
     }
 
-    for (POSITION y = 1; y < (floor_ptr->height - 1); y++) {
-        place_bound_perm_wall(player_ptr, &floor_ptr->grid_array[y][0]);
-        place_bound_perm_wall(player_ptr, &floor_ptr->grid_array[y][floor_ptr->width - 1]);
+    for (POSITION y = 1; y < (floor.height - 1); y++) {
+        place_bound_perm_wall(player_ptr, floor.get_grid({ y, 0 }));
+        place_bound_perm_wall(player_ptr, floor.get_grid({ y, floor.width - 1 }));
     }
 }
 

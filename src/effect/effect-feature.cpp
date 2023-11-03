@@ -230,7 +230,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         int16_t old_mimic = grid.mimic;
-        TerrainType *mimic_f_ptr = &terrains_info[grid.get_feat_mimic()];
+        const auto &terrain_mimic = terrains_info[grid.get_feat_mimic()];
 
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::SPIKE);
         grid.mimic = old_mimic;
@@ -238,11 +238,11 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         note_spot(player_ptr, y, x);
         lite_spot(player_ptr, y, x);
 
-        if (!known || mimic_f_ptr->flags.has_not(TerrainCharacteristics::OPEN)) {
+        if (!known || terrain_mimic.flags.has_not(TerrainCharacteristics::OPEN)) {
             break;
         }
 
-        msg_format(_("%sに何かがつっかえて開かなくなった。", "The %s seems stuck."), mimic_f_ptr->name.data());
+        msg_format(_("%sに何かがつっかえて開かなくなった。", "The %s seems stuck."), terrain_mimic.name.data());
         obvious = true;
         break;
     }
