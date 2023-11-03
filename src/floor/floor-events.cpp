@@ -90,24 +90,25 @@ void day_break(PlayerType *player_ptr)
 void night_falls(PlayerType *player_ptr)
 {
     msg_print(_("日が沈んだ。", "The sun has fallen."));
-    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (player_ptr->wild_mode) {
         update_sun_light(player_ptr);
         return;
     }
 
-    for (auto y = 0; y < floor_ptr->height; y++) {
-        for (auto x = 0; x < floor_ptr->width; x++) {
-            auto *g_ptr = &floor_ptr->grid_array[y][x];
-            auto *f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (auto y = 0; y < floor.height; y++) {
+        for (auto x = 0; x < floor.width; x++) {
+            const Pos2D pos(y, x);
+            auto &grid = floor.get_grid(pos);
+            auto &terrain = terrains_info[grid.get_feat_mimic()];
             using Tc = TerrainCharacteristics;
-            if (g_ptr->is_mirror() || f_ptr->flags.has(Tc::QUEST_ENTER) || f_ptr->flags.has(Tc::ENTRANCE)) {
+            if (grid.is_mirror() || terrain.flags.has(Tc::QUEST_ENTER) || terrain.flags.has(Tc::ENTRANCE)) {
                 continue;
             }
 
-            g_ptr->info &= ~(CAVE_GLOW);
-            if (f_ptr->flags.has_not(Tc::REMEMBER)) {
-                g_ptr->info &= ~(CAVE_MARK);
+            grid.info &= ~(CAVE_GLOW);
+            if (terrain.flags.has_not(Tc::REMEMBER)) {
+                grid.info &= ~(CAVE_MARK);
                 note_spot(player_ptr, y, x);
             }
         }
@@ -328,27 +329,25 @@ void update_dungeon_feeling(PlayerType *player_ptr)
  */
 void glow_deep_lava_and_bldg(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
         return;
     }
 
-    for (POSITION y = 0; y < floor_ptr->height; y++) {
-        for (POSITION x = 0; x < floor_ptr->width; x++) {
-            Grid *g_ptr;
-            g_ptr = &floor_ptr->grid_array[y][x];
-            if (terrains_info[g_ptr->get_feat_mimic()].flags.has_not(TerrainCharacteristics::GLOW)) {
+    for (auto y = 0; y < floor.height; y++) {
+        for (auto x = 0; x < floor.width; x++) {
+            const auto &grid = floor.get_grid({ y, x });
+            if (terrains_info[grid.get_feat_mimic()].flags.has_not(TerrainCharacteristics::GLOW)) {
                 continue;
             }
 
-            for (DIRECTION i = 0; i < 9; i++) {
-                POSITION yy = y + ddy_ddd[i];
-                POSITION xx = x + ddx_ddd[i];
-                if (!in_bounds2(floor_ptr, yy, xx)) {
+            for (auto i = 0; i < 9; i++) {
+                const Pos2D pos(y + ddy_ddd[i], x + ddx_ddd[i]);
+                if (!in_bounds2(&floor, pos.y, pos.x)) {
                     continue;
                 }
 
-                floor_ptr->grid_array[yy][xx].info |= CAVE_GLOW;
+                floor.get_grid(pos).info |= CAVE_GLOW;
             }
         }
     }

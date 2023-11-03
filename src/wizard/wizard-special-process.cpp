@@ -490,9 +490,10 @@ void wiz_create_feature(PlayerType *player_ptr)
         return;
     }
 
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    const Pos2D pos(y, x);
+    auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
     const int max = TerrainList::get_instance().size() - 1;
-    const auto f_val1 = input_numerics(_("実地形ID", "FeatureID"), 0, max, g_ptr->feat);
+    const auto f_val1 = input_numerics(_("実地形ID", "FeatureID"), 0, max, grid.feat);
     if (!f_val1.has_value()) {
         return;
     }
@@ -503,12 +504,12 @@ void wiz_create_feature(PlayerType *player_ptr)
     }
 
     cave_set_feat(player_ptr, y, x, f_val1.value());
-    g_ptr->mimic = f_val2.value();
-    auto *f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
-    if (f_ptr->flags.has(TerrainCharacteristics::RUNE_PROTECTION) || f_ptr->flags.has(TerrainCharacteristics::RUNE_EXPLOSION)) {
-        g_ptr->info |= CAVE_OBJECT;
-    } else if (f_ptr->flags.has(TerrainCharacteristics::MIRROR)) {
-        g_ptr->info |= CAVE_GLOW | CAVE_OBJECT;
+    grid.mimic = f_val2.value();
+    const auto &terrain = terrains_info[grid.get_feat_mimic()];
+    if (terrain.flags.has(TerrainCharacteristics::RUNE_PROTECTION) || terrain.flags.has(TerrainCharacteristics::RUNE_EXPLOSION)) {
+        grid.info |= CAVE_OBJECT;
+    } else if (terrain.flags.has(TerrainCharacteristics::MIRROR)) {
+        grid.info |= CAVE_GLOW | CAVE_OBJECT;
     }
 
     note_spot(player_ptr, y, x);

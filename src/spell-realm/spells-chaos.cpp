@@ -33,13 +33,13 @@
  */
 void call_the_void(PlayerType *player_ptr)
 {
-    bool do_call = true;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto do_call = true;
+    const auto &floor = *player_ptr->current_floor_ptr;
     for (int i = 0; i < 9; i++) {
-        auto *g_ptr = &floor_ptr->grid_array[player_ptr->y + ddy_ddd[i]][player_ptr->x + ddx_ddd[i]];
-
-        if (!g_ptr->cave_has_flag(TerrainCharacteristics::PROJECT)) {
-            if (!g_ptr->mimic || terrains_info[g_ptr->mimic].flags.has_not(TerrainCharacteristics::PROJECT) || !terrains_info[g_ptr->feat].is_permanent_wall()) {
+        const Pos2D p_pos_neighbor(player_ptr->y + ddy_ddd[i], player_ptr->x + ddx_ddd[i]);
+        const auto &grid = floor.get_grid(p_pos_neighbor);
+        if (!grid.cave_has_flag(TerrainCharacteristics::PROJECT)) {
+            if (!grid.mimic || terrains_info[grid.mimic].flags.has_not(TerrainCharacteristics::PROJECT) || !terrains_info[grid.feat].is_permanent_wall()) {
                 do_call = false;
                 break;
             }
@@ -68,8 +68,8 @@ void call_the_void(PlayerType *player_ptr)
         return;
     }
 
-    auto is_special_fllor = floor_ptr->is_in_quest() && QuestType::is_fixed(floor_ptr->quest_number);
-    is_special_fllor |= floor_ptr->dun_level == 0;
+    auto is_special_fllor = floor.is_in_quest() && QuestType::is_fixed(floor.quest_number);
+    is_special_fllor |= floor.dun_level == 0;
     if (is_special_fllor) {
         msg_print(_("地面が揺れた。", "The ground trembles."));
         return;
@@ -100,6 +100,46 @@ void call_the_void(PlayerType *player_ptr)
 }
 
 /*!
+ * @brief 与えられたグリッドを壁から床にする
+ * @param floor フロアへの参照
+ * @param pos グリッドの座標
+ * @todo FloorType/Grid のオブジェクトメソッドへ繰り込む
+ */
+static void erase_wall(FloorType &floor, const Pos2D &pos)
+{
+    auto &grid = floor.get_grid(pos);
+    const auto &terrain = terrains_info[grid.mimic];
+    grid.info &= ~(CAVE_ROOM | CAVE_ICKY);
+    if ((grid.mimic == 0) || terrain.flags.has_not(TerrainCharacteristics::HURT_DISI)) {
+        return;
+    }
+
+    grid.mimic = feat_state(&floor, grid.mimic, TerrainCharacteristics::HURT_DISI);
+    const auto &terrain_changed = terrains_info[grid.mimic];
+    if (terrain_changed.flags.has_not(TerrainCharacteristics::REMEMBER)) {
+        grid.info &= ~(CAVE_MARK);
+    }
+}
+
+/*!
+ * @brief フロアの全てを床にする
+ * @param floor フロアへの参照
+ * @todo FloorType のオブジェクトメソッドへ繰り込む
+ */
+static void erase_all_walls(FloorType &floor)
+{
+    for (auto x = 0; x < floor.width; x++) {
+        erase_wall(floor, { 0, x });
+        erase_wall(floor, { floor.height - 1, x });
+    }
+
+    for (auto y = 1; y < (floor.height - 1); y++) {
+        erase_wall(floor, { y, 0 });
+        erase_wall(floor, { y, floor.width - 1 });
+    }
+}
+
+/*!
  * @brief 虚無招来によるフロア中の全壁除去処理 /
  * Vanish all walls in this floor
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -108,83 +148,35 @@ void call_the_void(PlayerType *player_ptr)
  */
 bool vanish_dungeon(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    bool is_special_floor = floor_ptr->is_in_quest() && QuestType::is_fixed(floor_ptr->quest_number);
-    is_special_floor |= (floor_ptr->dun_level == 0);
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto is_special_floor = floor.is_in_quest() && QuestType::is_fixed(floor.quest_number);
+    is_special_floor |= (floor.dun_level == 0);
     if (is_special_floor) {
         return false;
     }
 
-    for (POSITION y = 1; y < floor_ptr->height - 1; y++) {
-        for (POSITION x = 1; x < floor_ptr->width - 1; x++) {
-            auto *g_ptr = &floor_ptr->grid_array[y][x];
-
-            auto *f_ptr = &terrains_info[g_ptr->feat];
-            g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
-            auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-            if (g_ptr->m_idx && m_ptr->is_asleep()) {
-                (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
-                if (m_ptr->ml) {
-                    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+    for (auto y = 1; y < floor.height - 1; y++) {
+        for (auto x = 1; x < floor.width - 1; x++) {
+            const Pos2D pos(y, x);
+            auto &grid = floor.get_grid(pos);
+            const auto &terrrain = terrains_info[grid.feat];
+            grid.info &= ~(CAVE_ROOM | CAVE_ICKY);
+            const auto &monster = floor.m_list[grid.m_idx];
+            if (grid.m_idx && monster.is_asleep()) {
+                (void)set_monster_csleep(player_ptr, grid.m_idx, 0);
+                if (monster.ml) {
+                    const auto m_name = monster_desc(player_ptr, &monster, 0);
                     msg_format(_("%s^が目を覚ました。", "%s^ wakes up."), m_name.data());
                 }
             }
 
-            if (f_ptr->flags.has(TerrainCharacteristics::HURT_DISI)) {
+            if (terrrain.flags.has(TerrainCharacteristics::HURT_DISI)) {
                 cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_DISI);
             }
         }
     }
 
-    for (POSITION x = 0; x < floor_ptr->width; x++) {
-        auto *g_ptr = &floor_ptr->grid_array[0][x];
-        auto *f_ptr = &terrains_info[g_ptr->mimic];
-        g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
-
-        if (g_ptr->mimic && f_ptr->flags.has(TerrainCharacteristics::HURT_DISI)) {
-            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, TerrainCharacteristics::HURT_DISI);
-            if (terrains_info[g_ptr->mimic].flags.has_not(TerrainCharacteristics::REMEMBER)) {
-                g_ptr->info &= ~(CAVE_MARK);
-            }
-        }
-
-        g_ptr = &floor_ptr->grid_array[floor_ptr->height - 1][x];
-        f_ptr = &terrains_info[g_ptr->mimic];
-        g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
-
-        if (g_ptr->mimic && f_ptr->flags.has(TerrainCharacteristics::HURT_DISI)) {
-            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, TerrainCharacteristics::HURT_DISI);
-            if (terrains_info[g_ptr->mimic].flags.has_not(TerrainCharacteristics::REMEMBER)) {
-                g_ptr->info &= ~(CAVE_MARK);
-            }
-        }
-    }
-
-    /* Special boundary walls -- Left and right */
-    for (POSITION y = 1; y < (floor_ptr->height - 1); y++) {
-        auto *g_ptr = &floor_ptr->grid_array[y][0];
-        auto *f_ptr = &terrains_info[g_ptr->mimic];
-        g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
-
-        if (g_ptr->mimic && f_ptr->flags.has(TerrainCharacteristics::HURT_DISI)) {
-            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, TerrainCharacteristics::HURT_DISI);
-            if (terrains_info[g_ptr->mimic].flags.has_not(TerrainCharacteristics::REMEMBER)) {
-                g_ptr->info &= ~(CAVE_MARK);
-            }
-        }
-
-        g_ptr = &floor_ptr->grid_array[y][floor_ptr->width - 1];
-        f_ptr = &terrains_info[g_ptr->mimic];
-        g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
-
-        if (g_ptr->mimic && f_ptr->flags.has(TerrainCharacteristics::HURT_DISI)) {
-            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, TerrainCharacteristics::HURT_DISI);
-            if (terrains_info[g_ptr->mimic].flags.has_not(TerrainCharacteristics::REMEMBER)) {
-                g_ptr->info &= ~(CAVE_MARK);
-            }
-        }
-    }
-
+    erase_all_walls(floor);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::UN_VIEW,

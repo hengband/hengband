@@ -385,16 +385,14 @@ static void hit_trap_slow(PlayerType *player_ptr)
  */
 void hit_trap(PlayerType *player_ptr, bool break_trap)
 {
-    int i, num, dam;
-    POSITION x = player_ptr->x, y = player_ptr->y;
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    auto *f_ptr = &terrains_info[g_ptr->feat];
-    TrapType trap_feat_type = f_ptr->flags.has(TerrainCharacteristics::TRAP) ? i2enum<TrapType>(f_ptr->subtype) : TrapType::NOT_TRAP;
-    concptr name = _("トラップ", "a trap");
+    const Pos2D p_pos(player_ptr->y, player_ptr->x);
+    const auto &grid = player_ptr->current_floor_ptr->get_grid(p_pos);
+    const auto &terrain = terrains_info[grid.feat];
+    TrapType trap_feat_type = terrain.flags.has(TerrainCharacteristics::TRAP) ? i2enum<TrapType>(terrain.subtype) : TrapType::NOT_TRAP;
 
     disturb(player_ptr, false, true);
 
-    cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HIT_TRAP);
+    cave_alter_feat(player_ptr, p_pos.y, p_pos.x, TerrainCharacteristics::HIT_TRAP);
 
     /* Analyze */
     switch (trap_feat_type) {
@@ -410,8 +408,8 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
             }
 
             sound(SOUND_FALL);
-            dam = damroll(2, 8);
-            name = _("落とし戸", "a trap door");
+            const auto dam = damroll(2, 8);
+            constexpr auto name = _("落とし戸", "a trap door");
 
             take_hit(player_ptr, DAMAGE_NOESCAPE, dam, name);
 
@@ -436,9 +434,9 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
 
     case TrapType::TY_CURSE: {
         msg_print(_("何かがピカッと光った！", "There is a flash of shimmering light!"));
-        num = 2 + randint1(3);
-        for (i = 0; i < num; i++) {
-            (void)summon_specific(player_ptr, 0, y, x, player_ptr->current_floor_ptr->dun_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+        const auto num = 2 + randint1(3);
+        for (auto i = 0; i < num; i++) {
+            (void)summon_specific(player_ptr, 0, p_pos.y, p_pos.x, player_ptr->current_floor_ptr->dun_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
         }
 
         if (player_ptr->current_floor_ptr->dun_level > randint1(100)) /* No nasty effect for low levels */
@@ -461,14 +459,14 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
 
     case TrapType::FIRE: {
         msg_print(_("炎に包まれた！", "You are enveloped in flames!"));
-        dam = damroll(4, 6);
+        const auto dam = damroll(4, 6);
         (void)fire_dam(player_ptr, dam, _("炎のトラップ", "a fire trap"), false);
         break;
     }
 
     case TrapType::ACID: {
         msg_print(_("酸が吹きかけられた！", "You are splashed with acid!"));
-        dam = damroll(4, 6);
+        const auto dam = damroll(4, 6);
         (void)acid_dam(player_ptr, dam, _("酸のトラップ", "an acid trap"), false);
         break;
     }
@@ -537,7 +535,7 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
     case TrapType::TRAPS: {
         msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
         /* Make some new traps */
-        project(player_ptr, 0, 1, y, x, 0, AttributeType::MAKE_TRAP, PROJECT_HIDE | PROJECT_JUMP | PROJECT_GRID);
+        project(player_ptr, 0, 1, p_pos.y, p_pos.x, 0, AttributeType::MAKE_TRAP, PROJECT_HIDE | PROJECT_JUMP | PROJECT_GRID);
 
         break;
     }
@@ -552,9 +550,9 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
 
     case TrapType::OPEN: {
         msg_print(_("大音響と共にまわりの壁が崩れた！", "Suddenly, surrounding walls are opened!"));
-        (void)project(player_ptr, 0, 3, y, x, 0, AttributeType::DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
-        (void)project(player_ptr, 0, 3, y, x - 4, 0, AttributeType::DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
-        (void)project(player_ptr, 0, 3, y, x + 4, 0, AttributeType::DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
+        (void)project(player_ptr, 0, 3, p_pos.y, p_pos.x, 0, AttributeType::DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
+        (void)project(player_ptr, 0, 3, p_pos.y, p_pos.x - 4, 0, AttributeType::DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
+        (void)project(player_ptr, 0, 3, p_pos.y, p_pos.x + 4, 0, AttributeType::DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
         aggravate_monsters(player_ptr, 0);
 
         break;
@@ -569,10 +567,10 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
 
         /* Summon Demons and Angels */
         for (lev = player_ptr->current_floor_ptr->dun_level; lev >= 20; lev -= 1 + lev / 16) {
-            num = levs[std::min(lev / 10, 9)];
-            for (i = 0; i < num; i++) {
-                POSITION x1 = rand_spread(x, 7);
-                POSITION y1 = rand_spread(y, 5);
+            const auto num = levs[std::min(lev / 10, 9)];
+            for (auto i = 0; i < num; i++) {
+                POSITION x1 = rand_spread(p_pos.x, 7);
+                POSITION y1 = rand_spread(p_pos.y, 5);
 
                 if (!in_bounds(player_ptr->current_floor_ptr, y1, x1)) {
                     continue;
@@ -613,9 +611,9 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
         fire_ball_hide(player_ptr, AttributeType::WATER_FLOW, 0, 1, 10);
 
         /* Summon Piranhas */
-        num = 1 + player_ptr->current_floor_ptr->dun_level / 20;
-        for (i = 0; i < num; i++) {
-            (void)summon_specific(player_ptr, 0, y, x, player_ptr->current_floor_ptr->dun_level, SUMMON_PIRANHAS, (PM_ALLOW_GROUP | PM_NO_PET));
+        const auto num = 1 + player_ptr->current_floor_ptr->dun_level / 20;
+        for (auto i = 0; i < num; i++) {
+            (void)summon_specific(player_ptr, 0, p_pos.y, p_pos.x, player_ptr->current_floor_ptr->dun_level, SUMMON_PIRANHAS, (PM_ALLOW_GROUP | PM_NO_PET));
         }
         break;
     }
@@ -624,8 +622,8 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
         break;
     }
 
-    if (break_trap && is_trap(player_ptr, g_ptr->feat)) {
-        cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::DISARM);
+    if (break_trap && is_trap(player_ptr, grid.feat)) {
+        cave_alter_feat(player_ptr, p_pos.y, p_pos.x, TerrainCharacteristics::DISARM);
         msg_print(_("トラップを粉砕した。", "You destroyed the trap."));
     }
 }
