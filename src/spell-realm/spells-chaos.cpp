@@ -100,6 +100,28 @@ void call_the_void(PlayerType *player_ptr)
 }
 
 /*!
+ * @brief 与えられたグリッドを壁から床にする
+ * @param floor フロアへの参照
+ * @param pos グリッドの座標
+ * @todo FloorType/Grid のオブジェクトメソッドへ繰り込む
+ */
+static void erase_wall(FloorType &floor, const Pos2D &pos)
+{
+    auto &grid = floor.get_grid(pos);
+    const auto &terrain = terrains_info[grid.mimic];
+    grid.info &= ~(CAVE_ROOM | CAVE_ICKY);
+    if ((grid.mimic == 0) || terrain.flags.has_not(TerrainCharacteristics::HURT_DISI)) {
+        return;
+    }
+
+    grid.mimic = feat_state(&floor, grid.mimic, TerrainCharacteristics::HURT_DISI);
+    const auto &terrain_changed = terrains_info[grid.mimic];
+    if (terrain_changed.flags.has_not(TerrainCharacteristics::REMEMBER)) {
+        grid.info &= ~(CAVE_MARK);
+    }
+}
+
+/*!
  * @brief 虚無招来によるフロア中の全壁除去処理 /
  * Vanish all walls in this floor
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -136,49 +158,15 @@ bool vanish_dungeon(PlayerType *player_ptr)
         }
     }
 
-    for (POSITION x = 0; x < floor.width; x++) {
-        auto &grid_north_top = floor.get_grid({ 0, x });
-        const auto &terrain_north_top = terrains_info[grid_north_top.mimic];
-        grid_north_top.info &= ~(CAVE_ROOM | CAVE_ICKY);
-        if (grid_north_top.mimic && terrain_north_top.flags.has(TerrainCharacteristics::HURT_DISI)) {
-            grid_north_top.mimic = feat_state(&floor, grid_north_top.mimic, TerrainCharacteristics::HURT_DISI);
-            if (terrain_north_top.flags.has_not(TerrainCharacteristics::REMEMBER)) {
-                grid_north_top.info &= ~(CAVE_MARK);
-            }
-        }
-
-        auto &grid_south_top = floor.get_grid({ floor.height - 1, x });
-        const auto &terrain_south_top = terrains_info[grid_south_top.mimic];
-        grid_south_top.info &= ~(CAVE_ROOM | CAVE_ICKY);
-        if (grid_south_top.mimic && terrain_south_top.flags.has(TerrainCharacteristics::HURT_DISI)) {
-            grid_south_top.mimic = feat_state(&floor, grid_south_top.mimic, TerrainCharacteristics::HURT_DISI);
-            if (terrain_south_top.flags.has_not(TerrainCharacteristics::REMEMBER)) {
-                grid_south_top.info &= ~(CAVE_MARK);
-            }
-        }
+    for (auto x = 0; x < floor.width; x++) {
+        erase_wall(floor, { 0, x });
+        erase_wall(floor, { floor.height - 1, x });
     }
 
     /* Special boundary walls -- Left and right */
-    for (POSITION y = 1; y < (floor.height - 1); y++) {
-        auto &grid_west_top = floor.get_grid({ y, 0 });
-        const auto &terrain_west_top = terrains_info[grid_west_top.mimic];
-        grid_west_top.info &= ~(CAVE_ROOM | CAVE_ICKY);
-        if (grid_west_top.mimic && terrain_west_top.flags.has(TerrainCharacteristics::HURT_DISI)) {
-            grid_west_top.mimic = feat_state(&floor, grid_west_top.mimic, TerrainCharacteristics::HURT_DISI);
-            if (terrain_west_top.flags.has_not(TerrainCharacteristics::REMEMBER)) {
-                grid_west_top.info &= ~(CAVE_MARK);
-            }
-        }
-
-        auto &grid_east_top = floor.get_grid({ y, floor.width - 1 });
-        const auto &terrain_east_top = terrains_info[grid_east_top.mimic];
-        grid_east_top.info &= ~(CAVE_ROOM | CAVE_ICKY);
-        if (grid_east_top.mimic && terrain_east_top.flags.has(TerrainCharacteristics::HURT_DISI)) {
-            grid_east_top.mimic = feat_state(&floor, grid_east_top.mimic, TerrainCharacteristics::HURT_DISI);
-            if (terrain_east_top.flags.has_not(TerrainCharacteristics::REMEMBER)) {
-                grid_east_top.info &= ~(CAVE_MARK);
-            }
-        }
+    for (auto y = 1; y < (floor.height - 1); y++) {
+        erase_wall(floor, { y, 0 });
+        erase_wall(floor, { y, floor.width - 1 });
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
