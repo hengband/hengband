@@ -71,7 +71,7 @@ public:
     MonsterEntity *m_ptr;
     OBJECT_IDX next_o_idx = 0;
     FEAT_IDX feat = 0;
-    TerrainType *f_ptr = nullptr;
+    TerrainType *terrain_ptr = nullptr;
     std::string name = "";
 };
 
@@ -449,7 +449,7 @@ static int16_t sweep_footing_items(PlayerType *player_ptr, GridExamination *ge_p
 static std::string decide_target_floor(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (ge_ptr->f_ptr->flags.has(TerrainCharacteristics::QUEST_ENTER)) {
+    if (ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::QUEST_ENTER)) {
         QuestId old_quest = floor_ptr->quest_number;
         const auto &quest_list = QuestList::get_instance();
         const QuestId number = i2enum<QuestId>(ge_ptr->g_ptr->special);
@@ -467,16 +467,16 @@ static std::string decide_target_floor(PlayerType *player_ptr, GridExamination *
         return format(msg.data(), q_ptr->name.data(), q_ptr->level);
     }
 
-    if (ge_ptr->f_ptr->flags.has(TerrainCharacteristics::BLDG) && !floor_ptr->inside_arena) {
-        return buildings[ge_ptr->f_ptr->subtype].name;
+    if (ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::BLDG) && !floor_ptr->inside_arena) {
+        return buildings[ge_ptr->terrain_ptr->subtype].name;
     }
 
-    if (ge_ptr->f_ptr->flags.has(TerrainCharacteristics::ENTRANCE)) {
+    if (ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::ENTRANCE)) {
         const auto &dungeon = dungeons_info[ge_ptr->g_ptr->special];
         return format(_("%s(%d階相当)", "%s(level %d)"), dungeon.text.data(), dungeon.mindepth);
     }
 
-    if (ge_ptr->f_ptr->flags.has(TerrainCharacteristics::TOWN)) {
+    if (ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::TOWN)) {
         return towns_info[ge_ptr->g_ptr->special].name;
     }
 
@@ -484,7 +484,7 @@ static std::string decide_target_floor(PlayerType *player_ptr, GridExamination *
         return _("道", "road");
     }
 
-    return ge_ptr->f_ptr->name;
+    return ge_ptr->terrain_ptr->name;
 }
 
 static void describe_grid_monster_all(GridExamination *ge_ptr)
@@ -561,8 +561,8 @@ char examine_grid(PlayerType *player_ptr, const POSITION y, const POSITION x, ta
         ge_ptr->feat = feat_none;
     }
 
-    ge_ptr->f_ptr = &terrains_info[ge_ptr->feat];
-    if (!ge_ptr->boring && ge_ptr->f_ptr->flags.has_not(TerrainCharacteristics::REMEMBER)) {
+    ge_ptr->terrain_ptr = &terrains_info[ge_ptr->feat];
+    if (!ge_ptr->boring && ge_ptr->terrain_ptr->flags.has_not(TerrainCharacteristics::REMEMBER)) {
         return (ge_ptr->query != '\r') && (ge_ptr->query != '\n') ? ge_ptr->query : 0;
     }
 
@@ -571,27 +571,27 @@ char examine_grid(PlayerType *player_ptr, const POSITION y, const POSITION x, ta
      * 安全を確保できたら構造体から外すことも検討する
      */
     ge_ptr->name = decide_target_floor(player_ptr, ge_ptr);
-    auto is_in = ge_ptr->f_ptr->flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY });
-    is_in |= ge_ptr->f_ptr->flags.has_none_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::TREE });
-    is_in |= ge_ptr->f_ptr->flags.has(TerrainCharacteristics::TOWN);
+    auto is_in = ge_ptr->terrain_ptr->flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY });
+    is_in |= ge_ptr->terrain_ptr->flags.has_none_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::TREE });
+    is_in |= ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::TOWN);
     if (*ge_ptr->s2 && is_in) {
         ge_ptr->s2 = _("の中", "in ");
     }
 
-    auto is_entrance = ge_ptr->f_ptr->flags.has(TerrainCharacteristics::STORE);
-    is_entrance |= ge_ptr->f_ptr->flags.has(TerrainCharacteristics::QUEST_ENTER);
-    is_entrance |= ge_ptr->f_ptr->flags.has(TerrainCharacteristics::BLDG) && !player_ptr->current_floor_ptr->inside_arena;
-    is_entrance |= ge_ptr->f_ptr->flags.has(TerrainCharacteristics::ENTRANCE);
+    auto is_entrance = ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::STORE);
+    is_entrance |= ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::QUEST_ENTER);
+    is_entrance |= ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::BLDG) && !player_ptr->current_floor_ptr->inside_arena;
+    is_entrance |= ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::ENTRANCE);
     if (is_entrance) {
         ge_ptr->s2 = _("の入口", "");
     }
 #ifdef JP
 #else
     else {
-        auto is_normal_terrain = ge_ptr->f_ptr->flags.has(TerrainCharacteristics::FLOOR);
-        is_normal_terrain |= ge_ptr->f_ptr->flags.has(TerrainCharacteristics::TOWN);
-        is_normal_terrain |= ge_ptr->f_ptr->flags.has(TerrainCharacteristics::SHALLOW);
-        is_normal_terrain |= ge_ptr->f_ptr->flags.has(TerrainCharacteristics::DEEP);
+        auto is_normal_terrain = ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::FLOOR);
+        is_normal_terrain |= ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::TOWN);
+        is_normal_terrain |= ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::SHALLOW);
+        is_normal_terrain |= ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::DEEP);
         if (is_normal_terrain) {
             ge_ptr->s3 = "";
         } else {
