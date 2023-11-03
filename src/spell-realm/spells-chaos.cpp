@@ -122,6 +122,24 @@ static void erase_wall(FloorType &floor, const Pos2D &pos)
 }
 
 /*!
+ * @brief フロアの全てを床にする
+ * @param floor フロアへの参照
+ * @todo FloorType のオブジェクトメソッドへ繰り込む
+ */
+static void erase_all_walls(FloorType &floor)
+{
+    for (auto x = 0; x < floor.width; x++) {
+        erase_wall(floor, { 0, x });
+        erase_wall(floor, { floor.height - 1, x });
+    }
+
+    for (auto y = 1; y < (floor.height - 1); y++) {
+        erase_wall(floor, { y, 0 });
+        erase_wall(floor, { y, floor.width - 1 });
+    }
+}
+
+/*!
  * @brief 虚無招来によるフロア中の全壁除去処理 /
  * Vanish all walls in this floor
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -158,17 +176,7 @@ bool vanish_dungeon(PlayerType *player_ptr)
         }
     }
 
-    for (auto x = 0; x < floor.width; x++) {
-        erase_wall(floor, { 0, x });
-        erase_wall(floor, { floor.height - 1, x });
-    }
-
-    /* Special boundary walls -- Left and right */
-    for (auto y = 1; y < (floor.height - 1); y++) {
-        erase_wall(floor, { y, 0 });
-        erase_wall(floor, { y, floor.width - 1 });
-    }
-
+    erase_all_walls(floor);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::UN_VIEW,
