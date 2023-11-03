@@ -418,141 +418,141 @@ static void generate_wild_monsters(PlayerType *player_ptr)
  */
 void wilderness_gen(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    floor_ptr->height = MAX_HGT;
-    floor_ptr->width = MAX_WID;
-    panel_row_min = floor_ptr->height;
-    panel_col_min = floor_ptr->width;
+    auto &floor = *player_ptr->current_floor_ptr;
+    floor.height = MAX_HGT;
+    floor.width = MAX_WID;
+    panel_row_min = floor.height;
+    panel_col_min = floor.width;
     parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, w_ptr->max_wild_y, w_ptr->max_wild_x);
-    POSITION x = player_ptr->wilderness_x;
-    POSITION y = player_ptr->wilderness_y;
+    const auto wild_y = player_ptr->wilderness_y;
+    const auto wild_x = player_ptr->wilderness_x;
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), nullptr);
 
     /* North border */
-    generate_area(player_ptr, y - 1, x, true, false);
+    generate_area(player_ptr, wild_y - 1, wild_x, true, false);
     for (int i = 1; i < MAX_WID - 1; i++) {
-        border.north[i] = floor_ptr->grid_array[MAX_HGT - 2][i].feat;
+        border.north[i] = floor.grid_array[MAX_HGT - 2][i].feat;
     }
 
     /* South border */
-    generate_area(player_ptr, y + 1, x, true, false);
+    generate_area(player_ptr, wild_y + 1, wild_x, true, false);
     for (int i = 1; i < MAX_WID - 1; i++) {
-        border.south[i] = floor_ptr->grid_array[1][i].feat;
+        border.south[i] = floor.grid_array[1][i].feat;
     }
 
     /* West border */
-    generate_area(player_ptr, y, x - 1, true, false);
+    generate_area(player_ptr, wild_y, wild_x - 1, true, false);
     for (int i = 1; i < MAX_HGT - 1; i++) {
-        border.west[i] = floor_ptr->grid_array[i][MAX_WID - 2].feat;
+        border.west[i] = floor.grid_array[i][MAX_WID - 2].feat;
     }
 
     /* East border */
-    generate_area(player_ptr, y, x + 1, true, false);
+    generate_area(player_ptr, wild_y, wild_x + 1, true, false);
     for (int i = 1; i < MAX_HGT - 1; i++) {
-        border.east[i] = floor_ptr->grid_array[i][1].feat;
+        border.east[i] = floor.grid_array[i][1].feat;
     }
 
     /* North west corner */
-    generate_area(player_ptr, y - 1, x - 1, false, true);
-    border.north_west = floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat;
+    generate_area(player_ptr, wild_y - 1, wild_x - 1, false, true);
+    border.north_west = floor.grid_array[MAX_HGT - 2][MAX_WID - 2].feat;
 
     /* North east corner */
-    generate_area(player_ptr, y - 1, x + 1, false, true);
-    border.north_east = floor_ptr->grid_array[MAX_HGT - 2][1].feat;
+    generate_area(player_ptr, wild_y - 1, wild_x + 1, false, true);
+    border.north_east = floor.grid_array[MAX_HGT - 2][1].feat;
 
     /* South west corner */
-    generate_area(player_ptr, y + 1, x - 1, false, true);
-    border.south_west = floor_ptr->grid_array[1][MAX_WID - 2].feat;
+    generate_area(player_ptr, wild_y + 1, wild_x - 1, false, true);
+    border.south_west = floor.grid_array[1][MAX_WID - 2].feat;
 
     /* South east corner */
-    generate_area(player_ptr, y + 1, x + 1, false, true);
-    border.south_east = floor_ptr->grid_array[1][1].feat;
+    generate_area(player_ptr, wild_y + 1, wild_x + 1, false, true);
+    border.south_east = floor.grid_array[1][1].feat;
 
     /* Create terrain of the current area */
-    generate_area(player_ptr, y, x, false, false);
+    generate_area(player_ptr, wild_y, wild_x, false, false);
 
     /* Special boundary walls -- North */
-    for (int i = 0; i < MAX_WID; i++) {
-        floor_ptr->grid_array[0][i].feat = feat_permanent;
-        floor_ptr->grid_array[0][i].mimic = border.north[i];
+    for (auto i = 0; i < MAX_WID; i++) {
+        auto &grid = floor.get_grid({ 0, i });
+        grid.feat = feat_permanent;
+        grid.mimic = border.north[i];
     }
 
     /* Special boundary walls -- South */
-    for (int i = 0; i < MAX_WID; i++) {
-        floor_ptr->grid_array[MAX_HGT - 1][i].feat = feat_permanent;
-        floor_ptr->grid_array[MAX_HGT - 1][i].mimic = border.south[i];
+    for (auto i = 0; i < MAX_WID; i++) {
+        auto &grid = floor.get_grid({ MAX_HGT - 1, i });
+        grid.feat = feat_permanent;
+        grid.mimic = border.south[i];
     }
 
     /* Special boundary walls -- West */
-    for (int i = 0; i < MAX_HGT; i++) {
-        floor_ptr->grid_array[i][0].feat = feat_permanent;
-        floor_ptr->grid_array[i][0].mimic = border.west[i];
+    for (auto i = 0; i < MAX_HGT; i++) {
+        auto &grid = floor.get_grid({ i, 0 });
+        grid.feat = feat_permanent;
+        grid.mimic = border.west[i];
     }
 
     /* Special boundary walls -- East */
-    for (int i = 0; i < MAX_HGT; i++) {
-        floor_ptr->grid_array[i][MAX_WID - 1].feat = feat_permanent;
-        floor_ptr->grid_array[i][MAX_WID - 1].mimic = border.east[i];
+    for (auto i = 0; i < MAX_HGT; i++) {
+        auto &grid = floor.get_grid({ i, MAX_WID - 1 });
+        grid.feat = feat_permanent;
+        grid.mimic = border.east[i];
     }
 
-    floor_ptr->grid_array[0][0].mimic = border.north_west;
-    floor_ptr->grid_array[0][MAX_WID - 1].mimic = border.north_east;
-    floor_ptr->grid_array[MAX_HGT - 1][0].mimic = border.south_west;
-    floor_ptr->grid_array[MAX_HGT - 1][MAX_WID - 1].mimic = border.south_east;
-    for (y = 0; y < floor_ptr->height; y++) {
-        for (x = 0; x < floor_ptr->width; x++) {
-            Grid *g_ptr;
-            g_ptr = &floor_ptr->grid_array[y][x];
+    floor.get_grid({ 0, 0 }).mimic = border.north_west;
+    floor.get_grid({ 0, MAX_WID - 1 }).mimic = border.north_east;
+    floor.get_grid({ MAX_HGT - 1, 0 }).mimic = border.south_west;
+    floor.get_grid({ MAX_HGT - 1, MAX_WID - 1 }).mimic = border.south_east;
+    for (auto y = 0; y < floor.height; y++) {
+        for (auto x = 0; x < floor.width; x++) {
+            auto &grid = floor.get_grid({ y, x });
             if (is_daytime()) {
-                g_ptr->info |= CAVE_GLOW;
+                grid.info |= CAVE_GLOW;
                 if (view_perma_grids) {
-                    g_ptr->info |= CAVE_MARK;
+                    grid.info |= CAVE_MARK;
                 }
 
                 continue;
             }
 
-            TerrainType *f_ptr;
-            f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
-            auto can_darken = !g_ptr->is_mirror();
-            can_darken &= f_ptr->flags.has_none_of({ TerrainCharacteristics::QUEST_ENTER, TerrainCharacteristics::ENTRANCE });
+            const auto &terrain = terrains_info[grid.get_feat_mimic()];
+            auto can_darken = !grid.is_mirror();
+            can_darken &= terrain.flags.has_none_of({ TerrainCharacteristics::QUEST_ENTER, TerrainCharacteristics::ENTRANCE });
             if (can_darken) {
-                g_ptr->info &= ~(CAVE_GLOW);
-                if (f_ptr->flags.has_not(TerrainCharacteristics::REMEMBER)) {
-                    g_ptr->info &= ~(CAVE_MARK);
+                grid.info &= ~(CAVE_GLOW);
+                if (terrain.flags.has_not(TerrainCharacteristics::REMEMBER)) {
+                    grid.info &= ~(CAVE_MARK);
                 }
 
                 continue;
             }
 
-            if (f_ptr->flags.has_not(TerrainCharacteristics::ENTRANCE)) {
+            if (terrain.flags.has_not(TerrainCharacteristics::ENTRANCE)) {
                 continue;
             }
 
-            g_ptr->info |= CAVE_GLOW;
+            grid.info |= CAVE_GLOW;
             if (view_perma_grids) {
-                g_ptr->info |= CAVE_MARK;
+                grid.info |= CAVE_MARK;
             }
         }
     }
 
     if (player_ptr->teleport_town) {
-        for (y = 0; y < floor_ptr->height; y++) {
-            for (x = 0; x < floor_ptr->width; x++) {
-                Grid *g_ptr;
-                g_ptr = &floor_ptr->grid_array[y][x];
-                TerrainType *f_ptr;
-                f_ptr = &terrains_info[g_ptr->feat];
-                if (f_ptr->flags.has_not(TerrainCharacteristics::BLDG)) {
+        for (auto y = 0; y < floor.height; y++) {
+            for (auto x = 0; x < floor.width; x++) {
+                auto &grid = floor.get_grid({ y, x });
+                const auto &terrain = terrains_info[grid.feat];
+                if (terrain.flags.has_not(TerrainCharacteristics::BLDG)) {
                     continue;
                 }
 
-                if ((f_ptr->subtype != 4) && !((player_ptr->town_num == 1) && (f_ptr->subtype == 0))) {
+                if ((terrain.subtype != 4) && !((player_ptr->town_num == 1) && (terrain.subtype == 0))) {
                     continue;
                 }
 
-                if (g_ptr->m_idx != 0) {
-                    delete_monster_idx(player_ptr, g_ptr->m_idx);
+                if (grid.m_idx != 0) {
+                    delete_monster_idx(player_ptr, grid.m_idx);
                 }
 
                 player_ptr->oldpy = y;
@@ -562,16 +562,15 @@ void wilderness_gen(PlayerType *player_ptr)
 
         player_ptr->teleport_town = false;
     } else if (player_ptr->leaving_dungeon) {
-        for (y = 0; y < floor_ptr->height; y++) {
-            for (x = 0; x < floor_ptr->width; x++) {
-                Grid *g_ptr;
-                g_ptr = &floor_ptr->grid_array[y][x];
-                if (!g_ptr->cave_has_flag(TerrainCharacteristics::ENTRANCE)) {
+        for (auto y = 0; y < floor.height; y++) {
+            for (auto x = 0; x < floor.width; x++) {
+                auto &grid = floor.get_grid({ y, x });
+                if (!grid.cave_has_flag(TerrainCharacteristics::ENTRANCE)) {
                     continue;
                 }
 
-                if (g_ptr->m_idx != 0) {
-                    delete_monster_idx(player_ptr, g_ptr->m_idx);
+                if (grid.m_idx != 0) {
+                    delete_monster_idx(player_ptr, grid.m_idx);
                 }
 
                 player_ptr->oldpy = y;
