@@ -327,7 +327,9 @@ void print_bolt_pict(PlayerType *player_ptr, POSITION y, POSITION x, POSITION ny
  */
 void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    const Pos2D pos(y, x);
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &grid = floor.get_grid(pos);
 
     /* Blind players see nothing */
     if (player_ptr->effects()->blindness()->is_blind()) {
@@ -335,14 +337,14 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     /* Analyze non-torch-lit grids */
-    if (!(g_ptr->info & (CAVE_LITE | CAVE_MNLT))) {
+    if (!(grid.info & (CAVE_LITE | CAVE_MNLT))) {
         /* Require line of sight to the grid */
-        if (!(g_ptr->info & (CAVE_VIEW))) {
+        if (!(grid.info & (CAVE_VIEW))) {
             return;
         }
 
         /* Require "perma-lite" of the grid */
-        if ((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) {
+        if ((grid.info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) {
             /* Not Ninja */
             if (!player_ptr->see_nocto) {
                 return;
@@ -351,55 +353,53 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     /* Hack -- memorize objects */
-    for (const auto this_o_idx : g_ptr->o_idx_list) {
-        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-
-        /* Memorize objects */
-        o_ptr->marked.set(OmType::FOUND);
+    for (const auto this_o_idx : grid.o_idx_list) {
+        auto &item = floor.o_list[this_o_idx];
+        item.marked.set(OmType::FOUND);
         RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::FOUND_ITEMS);
     }
 
     /* Hack -- memorize grids */
-    if (!g_ptr->is_mark()) {
+    if (!grid.is_mark()) {
         /* Feature code (applying "mimic" field) */
-        auto *f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
+        const auto &terrain = terrains_info[grid.get_feat_mimic()];
 
         /* Memorize some "boring" grids */
-        if (f_ptr->flags.has_not(TerrainCharacteristics::REMEMBER)) {
+        if (terrain.flags.has_not(TerrainCharacteristics::REMEMBER)) {
             /* Option -- memorize all torch-lit floors */
-            if (view_torch_grids && ((g_ptr->info & (CAVE_LITE | CAVE_MNLT)) || player_ptr->see_nocto)) {
-                g_ptr->info |= (CAVE_MARK);
+            if (view_torch_grids && ((grid.info & (CAVE_LITE | CAVE_MNLT)) || player_ptr->see_nocto)) {
+                grid.info |= (CAVE_MARK);
             }
 
             /* Option -- memorize all perma-lit floors */
-            else if (view_perma_grids && ((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)) {
-                g_ptr->info |= (CAVE_MARK);
+            else if (view_perma_grids && ((grid.info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)) {
+                grid.info |= (CAVE_MARK);
             }
         }
 
         /* Memorize normal grids */
-        else if (f_ptr->flags.has(TerrainCharacteristics::LOS)) {
-            g_ptr->info |= (CAVE_MARK);
+        else if (terrain.flags.has(TerrainCharacteristics::LOS)) {
+            grid.info |= (CAVE_MARK);
         }
 
         /* Memorize torch-lit walls */
-        else if (g_ptr->info & (CAVE_LITE | CAVE_MNLT)) {
-            g_ptr->info |= (CAVE_MARK);
+        else if (grid.info & (CAVE_LITE | CAVE_MNLT)) {
+            grid.info |= (CAVE_MARK);
         }
 
         /* Memorize walls seen by noctovision of Ninja */
         else if (player_ptr->see_nocto) {
-            g_ptr->info |= (CAVE_MARK);
+            grid.info |= (CAVE_MARK);
         }
 
         /* Memorize certain non-torch-lit wall grids */
         else if (check_local_illumination(player_ptr, y, x)) {
-            g_ptr->info |= (CAVE_MARK);
+            grid.info |= (CAVE_MARK);
         }
     }
 
     /* Memorize terrain of the grid */
-    g_ptr->info |= (CAVE_KNOWN);
+    grid.info |= (CAVE_KNOWN);
 }
 
 /*
