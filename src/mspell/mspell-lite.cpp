@@ -84,8 +84,9 @@ void decide_lite_range(PlayerType *player_ptr, msa_type *msa_ptr)
     msa_ptr->y_br_lite = msa_ptr->y;
     msa_ptr->x_br_lite = msa_ptr->x;
     if (los(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y_br_lite, msa_ptr->x_br_lite)) {
-        auto *f_ptr = &terrains_info[player_ptr->current_floor_ptr->grid_array[msa_ptr->y_br_lite][msa_ptr->x_br_lite].feat];
-        if (f_ptr->flags.has_not(TerrainCharacteristics::LOS) && f_ptr->flags.has(TerrainCharacteristics::PROJECT) && one_in_(2)) {
+        const Pos2D pos(msa_ptr->y_br_lite, msa_ptr->x_br_lite);
+        const auto &terrain = terrains_info[player_ptr->current_floor_ptr->get_grid(pos).feat];
+        if (terrain.flags.has_not(TerrainCharacteristics::LOS) && terrain.flags.has(TerrainCharacteristics::PROJECT) && one_in_(2)) {
             msa_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);
         }
     } else if (!adjacent_grid_check(player_ptr, msa_ptr->m_ptr, &msa_ptr->y_br_lite, &msa_ptr->x_br_lite, TerrainCharacteristics::LOS, los)) {
@@ -100,19 +101,20 @@ void decide_lite_range(PlayerType *player_ptr, msa_type *msa_ptr)
     msa_ptr->x_br_lite = 0;
 }
 
-static void feature_projection(FloorType *floor_ptr, msa_type *msa_ptr)
+static void feature_projection(const FloorType &floor, msa_type *msa_ptr)
 {
-    auto *f_ptr = &terrains_info[floor_ptr->grid_array[msa_ptr->y][msa_ptr->x].feat];
-    if (f_ptr->flags.has(TerrainCharacteristics::PROJECT)) {
+    const Pos2D pos(msa_ptr->y, msa_ptr->x);
+    const auto &terrain = terrains_info[floor.get_grid(pos).feat];
+    if (terrain.flags.has(TerrainCharacteristics::PROJECT)) {
         return;
     }
 
-    if (msa_ptr->ability_flags.has(MonsterAbilityType::BR_DISI) && f_ptr->flags.has(TerrainCharacteristics::HURT_DISI) && one_in_(2)) {
+    if (msa_ptr->ability_flags.has(MonsterAbilityType::BR_DISI) && terrain.flags.has(TerrainCharacteristics::HURT_DISI) && one_in_(2)) {
         msa_ptr->do_spell = DO_SPELL_BR_DISI;
         return;
     }
 
-    if (msa_ptr->ability_flags.has(MonsterAbilityType::BR_LITE) && f_ptr->flags.has(TerrainCharacteristics::LOS) && one_in_(2)) {
+    if (msa_ptr->ability_flags.has(MonsterAbilityType::BR_LITE) && terrain.flags.has(TerrainCharacteristics::LOS) && one_in_(2)) {
         msa_ptr->do_spell = DO_SPELL_BR_LITE;
     }
 }
@@ -188,7 +190,7 @@ static void decide_lite_breath(msa_type *msa_ptr)
 bool decide_lite_projection(PlayerType *player_ptr, msa_type *msa_ptr)
 {
     if (projectable(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x)) {
-        feature_projection(player_ptr->current_floor_ptr, msa_ptr);
+        feature_projection(*player_ptr->current_floor_ptr, msa_ptr);
         return true;
     }
 

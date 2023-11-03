@@ -218,12 +218,12 @@ monsterrace_hook_type get_monster_hook(PlayerType *player_ptr)
  */
 monsterrace_hook_type get_monster_hook2(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    auto *f_ptr = &terrains_info[player_ptr->current_floor_ptr->grid_array[y][x].feat];
-    if (f_ptr->flags.has(TerrainCharacteristics::WATER)) {
-        return f_ptr->flags.has(TerrainCharacteristics::DEEP) ? (monsterrace_hook_type)mon_hook_deep_water : (monsterrace_hook_type)mon_hook_shallow_water;
+    const auto &terrain = terrains_info[player_ptr->current_floor_ptr->grid_array[y][x].feat];
+    if (terrain.flags.has(TerrainCharacteristics::WATER)) {
+        return terrain.flags.has(TerrainCharacteristics::DEEP) ? (monsterrace_hook_type)mon_hook_deep_water : (monsterrace_hook_type)mon_hook_shallow_water;
     }
 
-    if (f_ptr->flags.has(TerrainCharacteristics::LAVA)) {
+    if (terrain.flags.has(TerrainCharacteristics::LAVA)) {
         return (monsterrace_hook_type)mon_hook_lava;
     }
 
