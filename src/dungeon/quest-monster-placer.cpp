@@ -54,13 +54,11 @@ bool place_quest_monsters(PlayerType *player_ptr)
                 POSITION y = 0;
                 int l;
                 for (l = SAFE_MAX_ATTEMPTS; l > 0; l--) {
-                    Grid *g_ptr;
-                    TerrainType *f_ptr;
                     y = randint0(floor_ptr->height);
                     x = randint0(floor_ptr->width);
-                    g_ptr = &floor_ptr->grid_array[y][x];
-                    f_ptr = &terrains_info[g_ptr->feat];
-                    if (f_ptr->flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY })) {
+                    const auto &grid = floor_ptr->get_grid({ y, x });
+                    const auto &terrain = terrains_info[grid.feat];
+                    if (terrain.flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY })) {
                         continue;
                     }
 
@@ -72,7 +70,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
                         continue;
                     }
 
-                    if (g_ptr->is_icky()) {
+                    if (grid.is_icky()) {
                         continue;
                     } else {
                         break;
