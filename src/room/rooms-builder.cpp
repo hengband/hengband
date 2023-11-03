@@ -345,27 +345,27 @@ void build_recursive_room(PlayerType *player_ptr, POSITION x1, POSITION y1, POSI
  */
 void add_outer_wall(PlayerType *player_ptr, POSITION x, POSITION y, int light, POSITION x1, POSITION y1, POSITION x2, POSITION y2)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!in_bounds(floor_ptr, y, x)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    const Pos2D pos(y, x);
+    if (!in_bounds(&floor, pos.y, pos.x)) {
         return;
     }
 
-    Grid *g_ptr;
-    g_ptr = &floor_ptr->grid_array[y][x];
-    if (g_ptr->is_room()) {
+    auto &grid = floor.get_grid(pos);
+    if (grid.is_room()) {
         return;
     }
 
-    g_ptr->info |= CAVE_ROOM;
-    TerrainType *f_ptr;
-    f_ptr = &terrains_info[g_ptr->feat];
-    if (g_ptr->is_floor()) {
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                if ((x + i >= x1) && (x + i <= x2) && (y + j >= y1) && (y + j <= y2)) {
-                    add_outer_wall(player_ptr, x + i, y + j, light, x1, y1, x2, y2);
+    grid.info |= CAVE_ROOM;
+    const auto &terrain = terrains_info[grid.feat];
+    if (grid.is_floor()) {
+        for (auto i = -1; i <= 1; i++) {
+            for (auto j = -1; j <= 1; j++) {
+                const Pos2D pos_sweep(pos.y + j, pos.x + i);
+                if ((pos_sweep.x >= x1) && (pos_sweep.x <= x2) && (pos_sweep.y >= y1) && (pos_sweep.y <= y2)) {
+                    add_outer_wall(player_ptr, pos_sweep.x, pos_sweep.y, light, x1, y1, x2, y2);
                     if (light) {
-                        g_ptr->info |= CAVE_GLOW;
+                        grid.info |= CAVE_GLOW;
                     }
                 }
             }
@@ -374,18 +374,18 @@ void add_outer_wall(PlayerType *player_ptr, POSITION x, POSITION y, int light, P
         return;
     }
 
-    if (g_ptr->is_extra()) {
-        place_bold(player_ptr, y, x, GB_OUTER);
+    if (grid.is_extra()) {
+        place_bold(player_ptr, pos.y, pos.x, GB_OUTER);
         if (light) {
-            g_ptr->info |= CAVE_GLOW;
+            grid.info |= CAVE_GLOW;
         }
 
         return;
     }
 
-    if (f_ptr->is_permanent_wall()) {
+    if (terrain.is_permanent_wall()) {
         if (light) {
-            g_ptr->info |= CAVE_GLOW;
+            grid.info |= CAVE_GLOW;
         }
     }
 }

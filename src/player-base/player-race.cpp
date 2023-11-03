@@ -149,9 +149,9 @@ int16_t PlayerRace::speed() const
     }
 
     if (this->equals(PlayerRaceType::MERFOLK)) {
-        auto *floor_ptr = this->player_ptr->current_floor_ptr;
-        auto *f_ptr = &terrains_info[floor_ptr->grid_array[this->player_ptr->y][this->player_ptr->x].feat];
-        if (f_ptr->flags.has(TerrainCharacteristics::WATER)) {
+        const auto &floor = *this->player_ptr->current_floor_ptr;
+        const auto &terrain = terrains_info[floor.get_grid(this->player_ptr->get_position()).feat];
+        if (terrain.flags.has(TerrainCharacteristics::WATER)) {
             result += (2 + this->player_ptr->lev / 10);
         } else if (!this->player_ptr->levitation) {
             result -= 2;
