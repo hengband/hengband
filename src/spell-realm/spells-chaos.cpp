@@ -33,13 +33,13 @@
  */
 void call_the_void(PlayerType *player_ptr)
 {
-    bool do_call = true;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto do_call = true;
+    const auto &floor = *player_ptr->current_floor_ptr;
     for (int i = 0; i < 9; i++) {
-        auto *g_ptr = &floor_ptr->grid_array[player_ptr->y + ddy_ddd[i]][player_ptr->x + ddx_ddd[i]];
-
-        if (!g_ptr->cave_has_flag(TerrainCharacteristics::PROJECT)) {
-            if (!g_ptr->mimic || terrains_info[g_ptr->mimic].flags.has_not(TerrainCharacteristics::PROJECT) || !terrains_info[g_ptr->feat].is_permanent_wall()) {
+        const Pos2D p_pos_neighbor(player_ptr->y + ddy_ddd[i], player_ptr->x + ddx_ddd[i]);
+        const auto &grid = floor.get_grid(p_pos_neighbor);
+        if (!grid.cave_has_flag(TerrainCharacteristics::PROJECT)) {
+            if (!grid.mimic || terrains_info[grid.mimic].flags.has_not(TerrainCharacteristics::PROJECT) || !terrains_info[grid.feat].is_permanent_wall()) {
                 do_call = false;
                 break;
             }
@@ -68,8 +68,8 @@ void call_the_void(PlayerType *player_ptr)
         return;
     }
 
-    auto is_special_fllor = floor_ptr->is_in_quest() && QuestType::is_fixed(floor_ptr->quest_number);
-    is_special_fllor |= floor_ptr->dun_level == 0;
+    auto is_special_fllor = floor.is_in_quest() && QuestType::is_fixed(floor.quest_number);
+    is_special_fllor |= floor.dun_level == 0;
     if (is_special_fllor) {
         msg_print(_("地面が揺れた。", "The ground trembles."));
         return;
@@ -108,79 +108,75 @@ void call_the_void(PlayerType *player_ptr)
  */
 bool vanish_dungeon(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    bool is_special_floor = floor_ptr->is_in_quest() && QuestType::is_fixed(floor_ptr->quest_number);
-    is_special_floor |= (floor_ptr->dun_level == 0);
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto is_special_floor = floor.is_in_quest() && QuestType::is_fixed(floor.quest_number);
+    is_special_floor |= (floor.dun_level == 0);
     if (is_special_floor) {
         return false;
     }
 
-    for (POSITION y = 1; y < floor_ptr->height - 1; y++) {
-        for (POSITION x = 1; x < floor_ptr->width - 1; x++) {
-            auto *g_ptr = &floor_ptr->grid_array[y][x];
-
-            auto *f_ptr = &terrains_info[g_ptr->feat];
-            g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
-            auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-            if (g_ptr->m_idx && m_ptr->is_asleep()) {
-                (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
-                if (m_ptr->ml) {
-                    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+    for (auto y = 1; y < floor.height - 1; y++) {
+        for (auto x = 1; x < floor.width - 1; x++) {
+            const Pos2D pos(y, x);
+            auto &grid = floor.get_grid(pos);
+            const auto &terrrain = terrains_info[grid.feat];
+            grid.info &= ~(CAVE_ROOM | CAVE_ICKY);
+            const auto &monster = floor.m_list[grid.m_idx];
+            if (grid.m_idx && monster.is_asleep()) {
+                (void)set_monster_csleep(player_ptr, grid.m_idx, 0);
+                if (monster.ml) {
+                    const auto m_name = monster_desc(player_ptr, &monster, 0);
                     msg_format(_("%s^が目を覚ました。", "%s^ wakes up."), m_name.data());
                 }
             }
 
-            if (f_ptr->flags.has(TerrainCharacteristics::HURT_DISI)) {
+            if (terrrain.flags.has(TerrainCharacteristics::HURT_DISI)) {
                 cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_DISI);
             }
         }
     }
 
-    for (POSITION x = 0; x < floor_ptr->width; x++) {
-        auto *g_ptr = &floor_ptr->grid_array[0][x];
-        auto *f_ptr = &terrains_info[g_ptr->mimic];
-        g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
-
-        if (g_ptr->mimic && f_ptr->flags.has(TerrainCharacteristics::HURT_DISI)) {
-            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, TerrainCharacteristics::HURT_DISI);
-            if (terrains_info[g_ptr->mimic].flags.has_not(TerrainCharacteristics::REMEMBER)) {
-                g_ptr->info &= ~(CAVE_MARK);
+    for (POSITION x = 0; x < floor.width; x++) {
+        auto &grid_north_top = floor.get_grid({ 0, x });
+        const auto &terrain_north_top = terrains_info[grid_north_top.mimic];
+        grid_north_top.info &= ~(CAVE_ROOM | CAVE_ICKY);
+        if (grid_north_top.mimic && terrain_north_top.flags.has(TerrainCharacteristics::HURT_DISI)) {
+            grid_north_top.mimic = feat_state(&floor, grid_north_top.mimic, TerrainCharacteristics::HURT_DISI);
+            if (terrain_north_top.flags.has_not(TerrainCharacteristics::REMEMBER)) {
+                grid_north_top.info &= ~(CAVE_MARK);
             }
         }
 
-        g_ptr = &floor_ptr->grid_array[floor_ptr->height - 1][x];
-        f_ptr = &terrains_info[g_ptr->mimic];
-        g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
-
-        if (g_ptr->mimic && f_ptr->flags.has(TerrainCharacteristics::HURT_DISI)) {
-            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, TerrainCharacteristics::HURT_DISI);
-            if (terrains_info[g_ptr->mimic].flags.has_not(TerrainCharacteristics::REMEMBER)) {
-                g_ptr->info &= ~(CAVE_MARK);
+        auto &grid_south_top = floor.get_grid({ floor.height - 1, x });
+        const auto &terrain_south_top = terrains_info[grid_south_top.mimic];
+        grid_south_top.info &= ~(CAVE_ROOM | CAVE_ICKY);
+        if (grid_south_top.mimic && terrain_south_top.flags.has(TerrainCharacteristics::HURT_DISI)) {
+            grid_south_top.mimic = feat_state(&floor, grid_south_top.mimic, TerrainCharacteristics::HURT_DISI);
+            if (terrain_south_top.flags.has_not(TerrainCharacteristics::REMEMBER)) {
+                grid_south_top.info &= ~(CAVE_MARK);
             }
         }
     }
 
     /* Special boundary walls -- Left and right */
-    for (POSITION y = 1; y < (floor_ptr->height - 1); y++) {
-        auto *g_ptr = &floor_ptr->grid_array[y][0];
-        auto *f_ptr = &terrains_info[g_ptr->mimic];
-        g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
-
-        if (g_ptr->mimic && f_ptr->flags.has(TerrainCharacteristics::HURT_DISI)) {
-            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, TerrainCharacteristics::HURT_DISI);
-            if (terrains_info[g_ptr->mimic].flags.has_not(TerrainCharacteristics::REMEMBER)) {
-                g_ptr->info &= ~(CAVE_MARK);
+    for (POSITION y = 1; y < (floor.height - 1); y++) {
+        auto &grid_west_top = floor.get_grid({ y, 0 });
+        const auto &terrain_west_top = terrains_info[grid_west_top.mimic];
+        grid_west_top.info &= ~(CAVE_ROOM | CAVE_ICKY);
+        if (grid_west_top.mimic && terrain_west_top.flags.has(TerrainCharacteristics::HURT_DISI)) {
+            grid_west_top.mimic = feat_state(&floor, grid_west_top.mimic, TerrainCharacteristics::HURT_DISI);
+            if (terrain_west_top.flags.has_not(TerrainCharacteristics::REMEMBER)) {
+                grid_west_top.info &= ~(CAVE_MARK);
             }
         }
 
-        g_ptr = &floor_ptr->grid_array[y][floor_ptr->width - 1];
-        f_ptr = &terrains_info[g_ptr->mimic];
-        g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
-
-        if (g_ptr->mimic && f_ptr->flags.has(TerrainCharacteristics::HURT_DISI)) {
-            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, TerrainCharacteristics::HURT_DISI);
-            if (terrains_info[g_ptr->mimic].flags.has_not(TerrainCharacteristics::REMEMBER)) {
-                g_ptr->info &= ~(CAVE_MARK);
+        auto &grid_east_top = floor.get_grid({ y, floor.width - 1 });
+        const auto &terrain_east_top = terrains_info[grid_east_top.mimic];
+        grid_east_top.info &= ~(CAVE_ROOM | CAVE_ICKY);
+        if (grid_east_top.mimic && terrain_east_top.flags.has(TerrainCharacteristics::HURT_DISI)) {
+            grid_east_top.mimic = feat_state(&floor, grid_east_top.mimic, TerrainCharacteristics::HURT_DISI);
+            if (terrain_east_top.flags.has_not(TerrainCharacteristics::REMEMBER)) {
+                grid_east_top.info &= ~(CAVE_MARK);
             }
         }
     }
