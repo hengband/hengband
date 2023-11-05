@@ -57,17 +57,15 @@ static bool check_hp_for_terrain_destruction(const TerrainType &terrain, const M
  * @brief モンスターによる壁の透過・破壊を行う
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param monster モンスターへの参照
- * @param ny モンスターのY座標
- * @param nx モンスターのX座標
+ * @param pos モンスターの移動先座標
  * @param can_cross モンスターが地形を踏破できるならばTRUE
  * @return 透過も破壊もしなかった場合はFALSE、それ以外はTRUE
  */
-static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MonsterEntity &monster, POSITION ny, POSITION nx, bool can_cross)
+static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MonsterEntity &monster, const Pos2D &pos, bool can_cross)
 {
-    const Pos2D pos(ny, nx);
     const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
     const auto &terrain = terrains_info[grid.feat];
-    if (player_ptr->is_located_at({ ny, nx })) {
+    if (player_ptr->is_located_at(pos)) {
         turn_flags_ptr->do_move = true;
         return true;
     }
@@ -237,13 +235,11 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, con
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
- * @param ny モンスターのY座標
- * @param nx モンスターのX座標
+ * @param pos モンスターの移動先座標
  * @return ルーンに侵入できるか否か
  */
-static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, POSITION ny, POSITION nx)
+static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, const Pos2D &pos)
 {
-    const Pos2D pos(ny, nx);
     auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
     const auto &monrace = m_ptr->get_monrace();
     auto can_enter = turn_flags_ptr->do_move;
@@ -266,7 +262,7 @@ static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_fla
     grid.info &= ~(CAVE_OBJECT);
     grid.mimic = 0;
     turn_flags_ptr->do_move = true;
-    note_spot(player_ptr, ny, nx);
+    note_spot(player_ptr, pos.y, pos.x);
     return true;
 }
 
@@ -275,13 +271,11 @@ static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_fla
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
- * @param ny モンスターのY座標
- * @param nx モンスターのX座標
+ * @param pos モンスターの移動先座標
  * @return モンスターが死亡した場合のみFALSE
  */
-static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, POSITION ny, POSITION nx)
+static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, const Pos2D &pos)
 {
-    const Pos2D pos(ny, nx);
     auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
     const auto &monrace = m_ptr->get_monrace();
     auto should_explode = turn_flags_ptr->do_move;
@@ -300,7 +294,7 @@ static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flag
         if (grid.info & CAVE_MARK) {
             msg_print(_("ルーンが爆発した！", "The rune explodes!"));
             BIT_FLAGS project_flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI;
-            project(player_ptr, 0, 2, ny, nx, 2 * (player_ptr->lev + damroll(7, 7)), AttributeType::MANA, project_flags);
+            project(player_ptr, 0, 2, pos.y, pos.x, 2 * (player_ptr->lev + damroll(7, 7)), AttributeType::MANA, project_flags);
         }
     } else {
         msg_print(_("爆発のルーンは解除された。", "An explosive rune was disarmed."));
@@ -310,8 +304,8 @@ static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flag
     grid.info &= ~(CAVE_OBJECT);
     grid.mimic = 0;
 
-    note_spot(player_ptr, ny, nx);
-    lite_spot(player_ptr, ny, nx);
+    note_spot(player_ptr, pos.y, pos.x);
+    lite_spot(player_ptr, pos.y, pos.x);
 
     if (!m_ptr->is_valid()) {
         return false;
@@ -326,7 +320,7 @@ static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flag
  * @param player_ptr プレイヤーへの参照ポインタ
  * @turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param monster モンスターへの参照
- * @param モンスターの移動先座標
+ * @param pos モンスターの移動先座標
  * @return モンスターが死亡した場合のみFALSE
  */
 static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MonsterEntity &monster, const Pos2D &pos)
@@ -375,13 +369,12 @@ static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_idx モンスターID
  * @param mm モンスターの移動方向
- * @param oy 移動前の、モンスターのY座標
- * @param ox 移動前の、モンスターのX座標
+ * @param pos モンスターの移動前座標
  * @param count 移動回数 (のはず todo)
  * @return 移動が阻害される何か (ドア等)があったらFALSE
  * @todo 少し長いが、これといってブロックとしてまとまった部分もないので暫定でこのままとする
  */
-bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, DIRECTION *mm, POSITION oy, POSITION ox, int *count)
+bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, DIRECTION *mm, const Pos2D &pos, int *count)
 {
     for (int i = 0; mm[i]; i++) {
         int d = mm[i];
@@ -389,29 +382,29 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
             d = ddd[randint0(8)];
         }
 
-        const Pos2D pos(oy + ddy[d], ox + ddx[d]);
-        if (!in_bounds2(player_ptr->current_floor_ptr, pos.y, pos.x)) {
+        const Pos2D pos_neighbor(pos.y + ddy[d], pos.x + ddx[d]);
+        if (!in_bounds2(player_ptr->current_floor_ptr, pos_neighbor.y, pos_neighbor.x)) {
             continue;
         }
 
-        auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+        auto &grid = player_ptr->current_floor_ptr->get_grid(pos_neighbor);
         auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
         auto &monrace = monster.get_monrace();
         bool can_cross = monster_can_cross_terrain(player_ptr, grid.feat, &monrace, turn_flags_ptr->is_riding_mon ? CEM_RIDING : 0);
 
-        if (!process_wall(player_ptr, turn_flags_ptr, monster, pos.y, pos.x, can_cross)) {
-            if (!process_door(player_ptr, turn_flags_ptr, monster, pos)) {
+        if (!process_wall(player_ptr, turn_flags_ptr, monster, pos_neighbor, can_cross)) {
+            if (!process_door(player_ptr, turn_flags_ptr, monster, pos_neighbor)) {
                 return false;
             }
         }
 
-        if (!process_protection_rune(player_ptr, turn_flags_ptr, &monster, pos.y, pos.x)) {
-            if (!process_explosive_rune(player_ptr, turn_flags_ptr, &monster, pos.y, pos.x)) {
+        if (!process_protection_rune(player_ptr, turn_flags_ptr, &monster, pos_neighbor)) {
+            if (!process_explosive_rune(player_ptr, turn_flags_ptr, &monster, pos_neighbor)) {
                 return false;
             }
         }
 
-        exe_monster_attack_to_player(player_ptr, turn_flags_ptr, m_idx, pos.y, pos.x);
+        exe_monster_attack_to_player(player_ptr, turn_flags_ptr, m_idx, pos_neighbor);
         if (process_monster_attack_to_monster(player_ptr, turn_flags_ptr, m_idx, &grid, can_cross)) {
             return false;
         }
@@ -423,7 +416,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
             }
         }
 
-        if (!process_post_dig_wall(player_ptr, turn_flags_ptr, monster, pos)) {
+        if (!process_post_dig_wall(player_ptr, turn_flags_ptr, monster, pos_neighbor)) {
             return false;
         }
 
@@ -462,7 +455,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
             monster.energy_need += ENERGY_NEED();
         }
 
-        if (!update_riding_monster(player_ptr, turn_flags_ptr, m_idx, oy, ox, pos.y, pos.x)) {
+        if (!update_riding_monster(player_ptr, turn_flags_ptr, m_idx, pos.y, pos.x, pos_neighbor.y, pos_neighbor.x)) {
             break;
         }
 
@@ -491,7 +484,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
             continue;
         }
 
-        update_object_by_monster_movement(player_ptr, turn_flags_ptr, m_idx, pos.y, pos.x);
+        update_object_by_monster_movement(player_ptr, turn_flags_ptr, m_idx, pos_neighbor.y, pos_neighbor.x);
         if (turn_flags_ptr->do_turn) {
             break;
         }
