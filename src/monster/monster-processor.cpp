@@ -179,7 +179,7 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     int count = 0;
-    if (!process_monster_movement(player_ptr, turn_flags_ptr, m_idx, mm, oy, ox, &count)) {
+    if (!process_monster_movement(player_ptr, turn_flags_ptr, m_idx, mm, { oy, ox }, &count)) {
         return;
     }
 

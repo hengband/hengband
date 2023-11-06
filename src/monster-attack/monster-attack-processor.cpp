@@ -29,17 +29,16 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_idx モンスターID
- * @param ny 移動後の、モンスターのY座標
- * @param nx 移動後の、モンスターのX座標
+ * @param pos モンスターの移動先座標
  * @details
  * 反攻撃の洞窟など、直接攻撃ができない場所では処理をスキップする
  */
-void exe_monster_attack_to_player(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx)
+void exe_monster_attack_to_player(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, const Pos2D &pos)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto *m_ptr = &floor.m_list[m_idx];
     auto *r_ptr = &m_ptr->get_monrace();
-    if (!turn_flags_ptr->do_move || !player_ptr->is_located_at({ ny, nx })) {
+    if (!turn_flags_ptr->do_move || !player_ptr->is_located_at(pos)) {
         return;
     }
 
