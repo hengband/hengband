@@ -435,24 +435,22 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
     }
 
     /* Process "re-glowing" */
-    for (POSITION y = (y1 - r); y <= (y1 + r); y++) {
-        for (POSITION x = (x1 - r); x <= (x1 + r); x++) {
-            if (!in_bounds(&floor, y, x)) {
+    for (auto y = (y1 - r); y <= (y1 + r); y++) {
+        for (auto x = (x1 - r); x <= (x1 + r); x++) {
+            const Pos2D pos(y, x);
+            if (!in_bounds(&floor, pos.y, pos.x)) {
                 continue;
             }
 
-            /* Extract the distance */
-            int k = distance(y1, x1, y, x);
-
             /* Stay in the circle of death */
+            auto k = distance(y1, x1, pos.y, pos.x);
             if (k > r) {
                 continue;
             }
-            Grid *g_ptr;
-            g_ptr = &floor.grid_array[y][x];
 
-            if (g_ptr->is_mirror()) {
-                g_ptr->info |= CAVE_GLOW;
+            auto &grid = floor.get_grid(pos);
+            if (grid.is_mirror()) {
+                grid.info |= CAVE_GLOW;
                 continue;
             }
 
@@ -460,19 +458,15 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                 continue;
             }
 
-            DIRECTION i;
-            POSITION yy, xx;
-            Grid *cc_ptr;
-
-            for (i = 0; i < 9; i++) {
-                yy = y + ddy_ddd[i];
-                xx = x + ddx_ddd[i];
-                if (!in_bounds2(&floor, yy, xx)) {
+            for (auto i = 0; i < 9; i++) {
+                const Pos2D pos_neighbor(pos.y + ddy_ddd[i], pos.x + ddx_ddd[i]);
+                if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
                     continue;
                 }
-                cc_ptr = &floor.grid_array[yy][xx];
-                if (terrains_info[cc_ptr->get_feat_mimic()].flags.has(TerrainCharacteristics::GLOW)) {
-                    g_ptr->info |= CAVE_GLOW;
+
+                const auto &grid_neighbor = floor.get_grid(pos_neighbor);
+                if (terrains_info[grid_neighbor.get_feat_mimic()].flags.has(TerrainCharacteristics::GLOW)) {
+                    grid.info |= CAVE_GLOW;
                     break;
                 }
             }
