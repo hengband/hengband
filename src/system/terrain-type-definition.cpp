@@ -54,3 +54,13 @@ size_t TerrainList::size() const
 {
     return terrains_info.size();
 }
+
+bool TerrainList::empty() const
+{
+    return terrains_info.empty();
+}
+
+void TerrainList::resize(size_t new_size)
+{
+    terrains_info.resize(new_size);
+}
