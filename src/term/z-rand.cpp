@@ -158,7 +158,7 @@ int32_t Rand_external(int32_t m)
 
     static std::optional<Xoshiro128StarStar> urbg_external;
 
-    if (!urbg_external.has_value()) {
+    if (!urbg_external) {
         /* Initialize with new seed */
         auto seed = static_cast<uint32_t>(time(nullptr));
         urbg_external = Xoshiro128StarStar(seed);

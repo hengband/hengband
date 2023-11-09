@@ -57,7 +57,7 @@ bool get_aim_dir(PlayerType *player_ptr, int *dp)
         }
 
         const auto command_opt = input_command(prompt, true);
-        if (!command_opt.has_value()) {
+        if (!command_opt) {
             break;
         }
 
@@ -127,7 +127,7 @@ bool get_direction(PlayerType *player_ptr, int *dp)
     constexpr auto prompt = _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
     while (dir == 0) {
         const auto command = input_command(prompt, true);
-        if (!command.has_value()) {
+        if (!command) {
             return false;
         }
 
@@ -192,7 +192,7 @@ bool get_rep_dir(PlayerType *player_ptr, int *dp, bool under)
                               : _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
     while (dir == 0) {
         const auto command = input_command(prompt, true);
-        if (!command.has_value()) {
+        if (!command) {
             return false;
         }
 
