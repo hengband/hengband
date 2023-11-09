@@ -36,7 +36,7 @@ bool research_mon(PlayerType *player_ptr)
     constexpr auto prompt = _("モンスターの文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^M名前):",
         "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): ");
     const auto sym_opt = input_command(prompt, false);
-    if (!sym_opt.has_value()) {
+    if (!sym_opt) {
         screen_load();
         return false;
     }
@@ -63,7 +63,7 @@ bool research_mon(PlayerType *player_ptr)
     } else if (sym == KTRL('M')) {
         all = true;
         const auto monster_name_opt = input_string(_("名前(英語の場合小文字で可)", "Enter name:"), MAX_MONSTER_NAME);
-        if (!monster_name_opt.has_value()) {
+        if (!monster_name_opt) {
             screen_load();
             return false;
         }

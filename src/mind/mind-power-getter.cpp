@@ -149,7 +149,7 @@ bool MindPowerGetter::decide_mind_choice(std::string_view prompt, const bool onl
             this->choice = ' ';
         } else {
             const auto command = input_command(prompt, true);
-            if (!command.has_value()) {
+            if (!command) {
                 break;
             }
 
