@@ -57,7 +57,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
                     y = randint0(floor_ptr->height);
                     x = randint0(floor_ptr->width);
                     const auto &grid = floor_ptr->get_grid({ y, x });
-                    const auto &terrain = terrains_info[grid.feat];
+                    const auto &terrain = grid.get_terrain();
                     if (terrain.flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY })) {
                         continue;
                     }

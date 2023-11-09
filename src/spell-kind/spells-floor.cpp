@@ -465,7 +465,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                 }
 
                 const auto &grid_neighbor = floor.get_grid(pos_neighbor);
-                if (terrains_info[grid_neighbor.get_feat_mimic()].flags.has(TerrainCharacteristics::GLOW)) {
+                if (grid_neighbor.get_terrain_mimic().flags.has(TerrainCharacteristics::GLOW)) {
                     grid.info |= CAVE_GLOW;
                     break;
                 }

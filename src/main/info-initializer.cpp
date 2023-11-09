@@ -205,7 +205,8 @@ errr init_terrains_info()
     init_header(&terrains_header);
     auto *parser = parse_terrains_info;
     auto *retoucher = retouch_terrains_info;
-    return init_info("TerrainDefinitions.txt", terrains_header, terrains_info, parser, retoucher);
+    auto &terrains = TerrainList::get_instance();
+    return init_info("TerrainDefinitions.txt", terrains_header, terrains.get_raw_vector(), parser, retoucher);
 }
 
 /*!

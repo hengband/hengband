@@ -28,7 +28,7 @@ static int travel_flow_cost(PlayerType *player_ptr, POSITION y, POSITION x)
     int cost = 1;
     const Pos2D pos(y, x);
     const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
-    const auto &terrain = terrains_info[grid.feat];
+    const auto &terrain = grid.get_terrain();
     if (terrain.flags.has(TerrainCharacteristics::AVOID_RUN)) {
         cost += 1;
     }
@@ -79,7 +79,7 @@ static void travel_flow_aux(PlayerType *player_ptr, const Pos2D pos, int n, bool
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
-    auto &terrain = terrains_info[grid.feat];
+    auto &terrain = grid.get_terrain();
     if (!in_bounds(&floor, pos.y, pos.x)) {
         return;
     }
@@ -134,7 +134,7 @@ static void travel_flow_aux(PlayerType *player_ptr, const Pos2D pos, int n, bool
 static void travel_flow(PlayerType *player_ptr, const Pos2D pos)
 {
     flow_head = flow_tail = 0;
-    const auto &terrain = terrains_info[player_ptr->current_floor_ptr->get_grid(player_ptr->get_position()).feat];
+    const auto &terrain = player_ptr->current_floor_ptr->get_grid(player_ptr->get_position()).get_terrain();
     auto wall = terrain.flags.has(TerrainCharacteristics::MOVE);
 
     travel_flow_aux(player_ptr, pos, 0, wall);
@@ -174,7 +174,7 @@ void do_cmd_travel(PlayerType *player_ptr)
 
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(pos);
-    const auto &terrain = terrains_info[grid.feat];
+    const auto &terrain = grid.get_terrain();
     const auto is_marked = any_bits(grid.info, CAVE_MARK);
     const auto is_wall = terrain.flags.has_any_of({ TerrainCharacteristics::WALL, TerrainCharacteristics::CAN_DIG });
     const auto is_door = terrain.flags.has(TerrainCharacteristics::DOOR) && (grid.mimic > 0);

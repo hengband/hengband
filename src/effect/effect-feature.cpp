@@ -72,7 +72,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
     const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
-    const auto &terrain = terrains_info[grid.feat];
+    const auto &terrain = grid.get_terrain();
 
     auto obvious = false;
     auto known = grid.has_los();
@@ -230,7 +230,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         int16_t old_mimic = grid.mimic;
-        const auto &terrain_mimic = terrains_info[grid.get_feat_mimic()];
+        const auto &terrain_mimic = grid.get_terrain_mimic();
 
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::SPIKE);
         grid.mimic = old_mimic;
@@ -252,7 +252,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         if (known && grid.is_mark()) {
-            msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), terrains_info[grid.get_feat_mimic()].name.data());
+            msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), grid.get_terrain_mimic().name.data());
             obvious = true;
         }
 
@@ -380,7 +380,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
                 }
 
                 const auto &grid_neighbor = floor.get_grid(pos_neighbor);
-                if (terrains_info[grid_neighbor.get_feat_mimic()].flags.has(TerrainCharacteristics::GLOW)) {
+                if (grid_neighbor.get_terrain_mimic().flags.has(TerrainCharacteristics::GLOW)) {
                     do_dark = false;
                     break;
                 }
@@ -428,7 +428,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         if (known && (grid.is_mark())) {
-            msg_format(_("%sが割れた！", "The %s crumbled!"), terrains_info[grid.get_feat_mimic()].name.data());
+            msg_format(_("%sが割れた！", "The %s crumbled!"), grid.get_terrain_mimic().name.data());
             sound(SOUND_GLASS);
         }
 
@@ -450,7 +450,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         if (known && (grid.is_mark())) {
-            msg_format(_("%sが割れた！", "The %s crumbled!"), terrains_info[grid.get_feat_mimic()].name.data());
+            msg_format(_("%sが割れた！", "The %s crumbled!"), grid.get_terrain_mimic().name.data());
             sound(SOUND_GLASS);
         }
 

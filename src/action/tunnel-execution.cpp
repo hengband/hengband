@@ -62,9 +62,9 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    const auto &terrain = terrains_info[grid.feat];
+    const auto &terrain = grid.get_terrain();
     const auto power = terrain.power;
-    const auto &terrain_mimic = terrains_info[grid.get_feat_mimic()];
+    const auto &terrain_mimic = grid.get_terrain_mimic();
     const auto &name = terrain_mimic.name;
     if (command_rep == 0) {
         sound(SOUND_DIG);

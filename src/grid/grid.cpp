@@ -90,7 +90,7 @@ bool new_player_spot(PlayerType *player_ptr)
             continue;
         }
         if (floor.is_in_dungeon()) {
-            const auto &terrain = terrains_info[grid.feat];
+            const auto &terrain = grid.get_terrain();
 
             if (max_attempts > 5000) /* Rule 1 */
             {
@@ -362,7 +362,7 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
     /* Hack -- memorize grids */
     if (!grid.is_mark()) {
         /* Feature code (applying "mimic" field) */
-        const auto &terrain = terrains_info[grid.get_feat_mimic()];
+        const auto &terrain = grid.get_terrain_mimic();
 
         /* Memorize some "boring" grids */
         if (terrain.flags.has_not(TerrainCharacteristics::REMEMBER)) {
@@ -844,7 +844,7 @@ bool cave_monster_teleportable_bold(PlayerType *player_ptr, MONSTER_IDX m_idx, P
     const Pos2D pos(y, x);
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(pos);
-    const auto &terrain = terrains_info[grid.feat];
+    const auto &terrain = grid.get_terrain();
 
     /* Require "teleportable" space */
     if (terrain.flags.has_not(TerrainCharacteristics::TELEPORTABLE)) {
@@ -886,7 +886,7 @@ bool cave_player_teleportable_bold(PlayerType *player_ptr, POSITION y, POSITION 
 {
     const Pos2D pos(y, x);
     const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
-    const auto &terrain = terrains_info[grid.feat];
+    const auto &terrain = grid.get_terrain();
 
     /* Require "teleportable" space */
     if (terrain.flags.has_not(TerrainCharacteristics::TELEPORTABLE)) {
@@ -1135,7 +1135,7 @@ int count_dt(PlayerType *player_ptr, POSITION *y, POSITION *x, bool (*test)(Play
  */
 bool feat_uses_special(FEAT_IDX f_idx)
 {
-    return terrains_info[(f_idx)].flags.has(TerrainCharacteristics::SPECIAL);
+    return TerrainList::get_instance()[(f_idx)].flags.has(TerrainCharacteristics::SPECIAL);
 }
 
 /*

@@ -320,7 +320,7 @@ void do_cmd_building(PlayerType *player_ptr)
 
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
 
-    int which = terrains_info[player_ptr->current_floor_ptr->get_grid(p_pos).feat].subtype;
+    int which = player_ptr->current_floor_ptr->get_grid(p_pos).get_terrain().subtype;
 
     building_type *bldg;
     bldg = &buildings[which];

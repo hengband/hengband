@@ -153,7 +153,7 @@ static void locate_connected_stairs(PlayerType *player_ptr, FloorType *floor_ptr
     for (POSITION y = 0; y < floor_ptr->height; y++) {
         for (POSITION x = 0; x < floor_ptr->width; x++) {
             const auto &grid = floor_ptr->get_grid({ y, x });
-            const auto &terrain = terrains_info[grid.feat];
+            const auto &terrain = grid.get_terrain();
             auto ok = false;
             if (floor_mode & CFM_UP) {
                 if (terrain.flags.has_all_of({ TerrainCharacteristics::LESS, TerrainCharacteristics::STAIRS }) && terrain.flags.has_not(TerrainCharacteristics::SPECIAL)) {
@@ -299,7 +299,7 @@ static Grid *set_grid_by_leaving_floor(PlayerType *player_ptr)
     }
 
     auto *g_ptr = &player_ptr->current_floor_ptr->get_grid(player_ptr->get_position());
-    const auto &terrain = terrains_info[g_ptr->feat];
+    const auto &terrain = g_ptr->get_terrain();
     if (g_ptr->special && terrain.flags.has_not(TerrainCharacteristics::SPECIAL) && get_sf_ptr(g_ptr->special)) {
         new_floor_id = g_ptr->special;
     }

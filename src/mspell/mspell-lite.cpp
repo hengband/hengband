@@ -85,7 +85,7 @@ void decide_lite_range(PlayerType *player_ptr, msa_type *msa_ptr)
     msa_ptr->x_br_lite = msa_ptr->x;
     if (los(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y_br_lite, msa_ptr->x_br_lite)) {
         const Pos2D pos(msa_ptr->y_br_lite, msa_ptr->x_br_lite);
-        const auto &terrain = terrains_info[player_ptr->current_floor_ptr->get_grid(pos).feat];
+        const auto &terrain = player_ptr->current_floor_ptr->get_grid(pos).get_terrain();
         if (terrain.flags.has_not(TerrainCharacteristics::LOS) && terrain.flags.has(TerrainCharacteristics::PROJECT) && one_in_(2)) {
             msa_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);
         }
@@ -104,7 +104,7 @@ void decide_lite_range(PlayerType *player_ptr, msa_type *msa_ptr)
 static void feature_projection(const FloorType &floor, msa_type *msa_ptr)
 {
     const Pos2D pos(msa_ptr->y, msa_ptr->x);
-    const auto &terrain = terrains_info[floor.get_grid(pos).feat];
+    const auto &terrain = floor.get_grid(pos).get_terrain();
     if (terrain.flags.has(TerrainCharacteristics::PROJECT)) {
         return;
     }

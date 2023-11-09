@@ -322,7 +322,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
             }
 
             auto &grid = floor.get_grid(pos);
-            const auto &terrain = terrains_info[grid.feat];
+            const auto &terrain = grid.get_terrain();
             if (terrain.flags.has(TerrainCharacteristics::MOVE) && terrain.flags.has_any_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::LAVA })) {
                 continue;
             }

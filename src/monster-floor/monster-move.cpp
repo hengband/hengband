@@ -64,7 +64,7 @@ static bool check_hp_for_terrain_destruction(const TerrainType &terrain, const M
 static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MonsterEntity &monster, const Pos2D &pos, bool can_cross)
 {
     const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
-    const auto &terrain = terrains_info[grid.feat];
+    const auto &terrain = grid.get_terrain();
     if (player_ptr->is_located_at(pos)) {
         turn_flags_ptr->do_move = true;
         return true;
@@ -118,7 +118,7 @@ static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr,
 {
     const auto &monrace = monster.get_monrace();
     const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
-    const auto &terrain = terrains_info[grid.feat];
+    const auto &terrain = grid.get_terrain();
     turn_flags_ptr->do_move = false;
     using Tc = TerrainCharacteristics;
     auto can_bash = monrace.behavior_flags.has_not(MonsterBehaviorType::OPEN_DOOR);
@@ -198,7 +198,7 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, con
         return true;
     }
 
-    auto &terrain = terrains_info[grid.feat];
+    auto &terrain = grid.get_terrain();
     auto may_bash = bash_normal_door(player_ptr, turn_flags_ptr, monster, pos);
     bash_glass_door(player_ptr, turn_flags_ptr, monster, terrain, may_bash);
     if (!turn_flags_ptr->did_open_door && !turn_flags_ptr->did_bash_door) {
@@ -327,7 +327,7 @@ static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags
 {
     auto &monrace = monster.get_monrace();
     const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
-    const auto &terrain = terrains_info[grid.feat];
+    const auto &terrain = grid.get_terrain();
     if (!turn_flags_ptr->did_kill_wall || !turn_flags_ptr->do_move) {
         return true;
     }
@@ -447,7 +447,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
         }
 
         turn_flags_ptr->do_turn = true;
-        const auto &terrain = terrains_info[grid.feat];
+        const auto &terrain = grid.get_terrain();
         auto can_recover_energy = terrain.flags.has(TerrainCharacteristics::TREE);
         can_recover_energy &= monrace.feature_flags.has_not(MonsterFeatureType::CAN_FLY);
         can_recover_energy &= monrace.wilderness_flags.has_not(MonsterWildernessType::WILD_WOOD);
