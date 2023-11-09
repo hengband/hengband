@@ -304,7 +304,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
     byte char_left = 0;
     monster_lore_mode mode;
     const int browser_rows = hgt - 8;
-    if (!direct_r_idx.has_value()) {
+    if (!direct_r_idx) {
         mode = visual_only ? MONSTER_LORE_DEBUG : MONSTER_LORE_NORMAL;
         int len;
         for (IDX i = 0; monster_group_text[i] != nullptr; i++) {
@@ -338,7 +338,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
         if (redraw) {
             clear_from(0);
             prt(format(_("%s - モンスター", "%s - monsters"), !visual_only ? _("知識", "Knowledge") : _("表示", "Visuals")), 2, 0);
-            if (!direct_r_idx.has_value()) {
+            if (!direct_r_idx) {
                 prt(_("グループ", "Group"), 4, 0);
             }
             prt(_("名前", "Name"), 4, max + 3);
@@ -354,7 +354,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
                 term_putch(i, 5, TERM_WHITE, '=');
             }
 
-            if (!direct_r_idx.has_value()) {
+            if (!direct_r_idx) {
                 for (IDX i = 0; i < browser_rows; i++) {
                     term_putch(max + 1, 6 + i, TERM_WHITE, '|');
                 }
@@ -363,7 +363,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
             redraw = false;
         }
 
-        if (!direct_r_idx.has_value()) {
+        if (!direct_r_idx) {
             if (grp_cur < grp_top) {
                 grp_top = grp_cur;
             }
@@ -426,7 +426,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
 
         char ch = inkey();
         if (visual_mode_command(ch, &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, attr_ptr, char_ptr, need_redraw)) {
-            if (direct_r_idx.has_value()) {
+            if (direct_r_idx) {
                 switch (ch) {
                 case '\n':
                 case '\r':

@@ -240,7 +240,7 @@ static void occur_chainsword_effect(PlayerType *player_ptr)
     }
 
     const auto noise = get_random_line(_("chainswd_j.txt", "chainswd.txt"), 0);
-    if (noise.has_value()) {
+    if (noise) {
         msg_print(noise.value());
     }
 

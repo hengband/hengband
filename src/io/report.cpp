@@ -81,7 +81,7 @@ static bool post_score_to_score_server(PlayerType *player_ptr, const std::string
         term_fresh();
 
         const auto res = client.post(SCORE_POST_URL, score_data, get_score_content_type());
-        if (res.has_value() && (res->status == 200)) {
+        if (res && (res->status == 200)) {
             return true;
         }
 

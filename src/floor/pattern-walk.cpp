@@ -65,7 +65,7 @@ void pattern_teleport(PlayerType *player_ptr)
 
         constexpr auto prompt = _("テレポート先", "Teleport to level");
         const auto input_level = input_numerics(prompt, min_level, max_level, current_level);
-        if (!input_level.has_value()) {
+        if (!input_level) {
             return;
         }
 

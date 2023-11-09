@@ -84,7 +84,7 @@ static void object_mention(PlayerType *player_ptr, ItemEntity *o_ptr)
 static int get_base_floor(FloorType *floor_ptr, BIT_FLAGS mode, std::optional<int> rq_mon_level)
 {
     if (any_bits(mode, AM_GREAT)) {
-        if (rq_mon_level.has_value()) {
+        if (rq_mon_level) {
             return rq_mon_level.value() + 10 + randint1(10);
         } else {
             return floor_ptr->object_level + 15;
