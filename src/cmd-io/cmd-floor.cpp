@@ -73,7 +73,7 @@ void do_cmd_locate(PlayerType *player_ptr)
         auto dir = 0;
         while (dir == 0) {
             const auto command = input_command(prompt, true);
-            if (!command.has_value()) {
+            if (!command) {
                 break;
             }
 

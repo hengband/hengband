@@ -354,7 +354,7 @@ static void do_name_pet(PlayerType *player_ptr)
     }
 
     const auto new_name = input_string(_("名前: ", "Name: "), 15, initial_name);
-    if (!new_name.has_value()) {
+    if (!new_name) {
         return;
     }
 
@@ -563,7 +563,7 @@ void do_cmd_pet(PlayerType *player_ptr)
                 choice = ' ';
             } else {
                 const auto new_choice = input_command(prompt, true);
-                if (!new_choice.has_value()) {
+                if (!new_choice) {
                     break;
                 }
 

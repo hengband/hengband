@@ -475,7 +475,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
 
         if (skey == '|') {
             const auto xtmp = input_string(_("ファイル名: ", "File name: "), 80);
-            if (!xtmp.has_value()) {
+            if (!xtmp) {
                 continue;
             }
 

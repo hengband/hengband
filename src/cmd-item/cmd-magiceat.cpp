@@ -143,7 +143,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
     auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
 
     if (auto result = check_magic_eater_spell_repeat(magic_eater_data.get());
-        result.has_value()) {
+        result) {
         return result;
     }
 
@@ -204,7 +204,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
     } else {
         while (true) {
             const auto new_choice = input_command(_("[A] 杖, [B] 魔法棒, [C] ロッド:", "[A] staff, [B] wand, [C] rod:"), true);
-            if (!new_choice.has_value()) {
+            if (!new_choice) {
                 return std::nullopt;
             }
 
@@ -357,7 +357,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
         }
 
         const auto choice_opt = input_command(prompt);
-        if (!choice_opt.has_value()) {
+        if (!choice_opt) {
             break;
         }
 
@@ -546,7 +546,7 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
 
     auto result = select_magic_eater(player_ptr, only_browse);
     PlayerEnergy energy(player_ptr);
-    if (!result.has_value()) {
+    if (!result) {
         energy.reset_player_turn();
         return false;
     }
@@ -590,7 +590,7 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
         switch (bi_key.tval()) {
         case ItemKindType::ROD: {
             const auto sval = bi_key.sval();
-            if (!sval.has_value()) {
+            if (!sval) {
                 return false;
             }
 
@@ -607,7 +607,7 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
         }
         case ItemKindType::WAND: {
             const auto sval = bi_key.sval();
-            if (!sval.has_value()) {
+            if (!sval) {
                 return false;
             }
 
@@ -620,7 +620,7 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
         }
         default:
             const auto sval = bi_key.sval();
-            if (!sval.has_value()) {
+            if (!sval) {
                 return false;
             }
 
@@ -639,7 +639,7 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
 
     auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
     const auto opt_sval = bi_key.sval();
-    if (!opt_sval.has_value()) {
+    if (!opt_sval) {
         return false;
     }
 

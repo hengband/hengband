@@ -41,7 +41,7 @@ static std::optional<T> input_new_visual_id(int i, T initial_visual_id, int max)
 {
     if (iscntrl(i)) {
         const auto new_visual_id = input_integer("Input new number", 0, max - 1, initial_visual_id);
-        if (!new_visual_id.has_value()) {
+        if (!new_visual_id) {
             return std::nullopt;
         }
 
@@ -242,7 +242,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 switch (c) {
                 case 'n': {
                     const auto new_monrace_id_opt = input_new_visual_id(ch, num, static_cast<short>(monraces_info.size()));
-                    if (!new_monrace_id_opt.has_value()) {
+                    if (!new_monrace_id_opt) {
                         break;
                     }
 
@@ -253,7 +253,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 }
                 case 'a': {
                     const auto visual_id = input_new_visual_id(ch, r_ptr->x_attr, 256);
-                    if (!visual_id.has_value()) {
+                    if (!visual_id) {
                         break;
                     }
 
@@ -263,7 +263,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 }
                 case 'c': {
                     const auto visual_id = input_new_visual_id(ch, r_ptr->x_char, 256);
-                    if (!visual_id.has_value()) {
+                    if (!visual_id) {
                         break;
                     }
 
@@ -323,7 +323,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     const auto previous_bi_id = bi_id;
                     while (true) {
                         new_baseitem_id = input_new_visual_id(ch, bi_id, static_cast<short>(baseitems_info.size()));
-                        if (!new_baseitem_id.has_value()) {
+                        if (!new_baseitem_id) {
                             bi_id = previous_bi_id;
                             break;
                         }
@@ -338,7 +338,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 }
                 case 'a': {
                     const auto visual_id = input_new_visual_id(ch, baseitem.x_attr, 256);
-                    if (!visual_id.has_value()) {
+                    if (!visual_id) {
                         break;
                     }
 
@@ -348,7 +348,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 }
                 case 'c': {
                     const auto visual_id = input_new_visual_id(ch, baseitem.x_char, 256);
-                    if (!visual_id.has_value()) {
+                    if (!visual_id) {
                         break;
                     }
 
@@ -428,7 +428,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 }
                 case 'a': {
                     const auto visual_id = input_new_visual_id(ch, terrain.x_attr[lighting_level], 256);
-                    if (!visual_id.has_value()) {
+                    if (!visual_id) {
                         break;
                     }
 
@@ -438,7 +438,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 }
                 case 'c': {
                     const auto visual_id = input_new_visual_id(ch, terrain.x_char[lighting_level], 256);
-                    if (!visual_id.has_value()) {
+                    if (!visual_id) {
                         break;
                     }
 
@@ -448,7 +448,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 }
                 case 'l': {
                     const auto visual_id = input_new_visual_id(ch, lighting_level, F_LIT_MAX);
-                    if (!visual_id.has_value()) {
+                    if (!visual_id) {
                         break;
                     }
 

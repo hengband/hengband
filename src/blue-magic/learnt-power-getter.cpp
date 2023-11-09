@@ -69,7 +69,7 @@ static std::optional<BlueMagicType> select_blue_magic_type_by_menu()
 
     screen_save();
 
-    while (!type.has_value()) {
+    while (!type) {
         prt(format(_(" %s ボルト", " %s bolt"), (menu_line == 1) ? _("》", "> ") : "  "), 2, 14);
         prt(format(_(" %s ボール", " %s ball"), (menu_line == 2) ? _("》", "> ") : "  "), 3, 14);
         prt(format(_(" %s ブレス", " %s breath"), (menu_line == 3) ? _("》", "> ") : "  "), 4, 14);
@@ -124,7 +124,7 @@ static std::optional<BlueMagicType> select_blue_magic_kind_by_symbol()
         "[A] bolt, [B] ball, [C] breath, [D] summoning, [E] others:");
     while (true) {
         const auto command = input_command(candidate_desc, true);
-        if (!command.has_value()) {
+        if (!command) {
             return std::nullopt;
         }
 
@@ -368,11 +368,11 @@ static std::optional<MonsterAbilityType> select_learnt_spells_by_symbol(PlayerTy
     auto show_list = false;
     std::optional<MonsterAbilityType> selected_spell;
 
-    while (!selected_spell.has_value()) {
+    while (!selected_spell) {
         auto choice = '\0';
         if (!first_show_list) {
             const auto choice_opt = input_command(prompt, true);
-            if (!choice_opt.has_value()) {
+            if (!choice_opt) {
                 break;
             }
 
@@ -432,11 +432,11 @@ static std::optional<MonsterAbilityType> select_learnt_spells_by_menu(PlayerType
 
     screen_save();
 
-    while (!selected_spell.has_value()) {
+    while (!selected_spell) {
         describe_blue_magic_name(player_ptr, menu_line, bluemage_data, spells);
 
         const auto choice_opt = input_command(prompt, true);
-        if (!choice_opt.has_value()) {
+        if (!choice_opt) {
             break;
         }
 
@@ -489,19 +489,19 @@ std::optional<MonsterAbilityType> get_learned_power(PlayerType *player_ptr)
     }
 
     if (auto repeat_spell = check_blue_magic_repeat();
-        repeat_spell.has_value()) {
+        repeat_spell) {
         return repeat_spell;
     }
 
     auto type = (use_menu)
                     ? select_blue_magic_type_by_menu()
                     : select_blue_magic_kind_by_symbol();
-    if (!type.has_value()) {
+    if (!type) {
         return std::nullopt;
     }
 
     auto spells = sweep_learnt_spells(*bluemage_data, type.value());
-    if (!spells.has_value() || spells->empty()) {
+    if (!spells || spells->empty()) {
         return std::nullopt;
     }
 
@@ -512,7 +512,7 @@ std::optional<MonsterAbilityType> get_learned_power(PlayerType *player_ptr)
     RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
     handle_stuff(player_ptr);
 
-    if (!selected_spell.has_value()) {
+    if (!selected_spell) {
         return std::nullopt;
     }
 

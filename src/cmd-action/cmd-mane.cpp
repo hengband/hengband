@@ -169,7 +169,7 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
             choice = ' ';
         } else {
             const auto new_choice = input_command(prompt, true);
-            if (!new_choice.has_value()) {
+            if (!new_choice) {
                 break;
             }
 

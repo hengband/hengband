@@ -139,7 +139,7 @@ static bool cast_blue_teleport_back(PlayerType *player_ptr)
     }
 
     const auto m_name = exe_blue_teleport_back(player_ptr);
-    if (!m_name.has_value()) {
+    if (!m_name) {
         return true;
     }
 

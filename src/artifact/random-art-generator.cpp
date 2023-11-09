@@ -399,7 +399,7 @@ static std::string name_unnatural_random_artifact(PlayerType *player_ptr, ItemEn
         return ss.str();
     };
     const auto new_name = input_string(prompt, 160);
-    if (new_name.has_value() && !new_name->empty()) {
+    if (new_name && !new_name->empty()) {
         return wrap_name(new_name.value());
     }
 
