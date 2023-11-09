@@ -67,7 +67,7 @@ std::optional<int> BaseitemKey::sval() const
  */
 ItemKindType BaseitemKey::get_arrow_kind() const
 {
-    if ((this->type_value != ItemKindType::BOW) || !this->subtype_value.has_value()) {
+    if ((this->type_value != ItemKindType::BOW) || !this->subtype_value) {
         THROW_EXCEPTION(std::logic_error, ITEM_NOT_BOW);
     }
 
@@ -343,7 +343,7 @@ bool BaseitemKey::is_broken_weapon() const
         return false;
     }
 
-    if (!this->subtype_value.has_value()) {
+    if (!this->subtype_value) {
         return false;
     }
 
@@ -401,7 +401,7 @@ bool BaseitemKey::is_rare() const
         { ItemKindType::DRAG_ARMOR, { /* Any */ } },
     };
 
-    if (!this->subtype_value.has_value()) {
+    if (!this->subtype_value) {
         return false;
     }
 
@@ -415,7 +415,7 @@ bool BaseitemKey::is_rare() const
 
 short BaseitemKey::get_bow_energy() const
 {
-    if ((this->type_value != ItemKindType::BOW) || !this->subtype_value.has_value()) {
+    if ((this->type_value != ItemKindType::BOW) || !this->subtype_value) {
         THROW_EXCEPTION(std::logic_error, ITEM_NOT_BOW);
     }
 
@@ -435,7 +435,7 @@ short BaseitemKey::get_bow_energy() const
 
 int BaseitemKey::get_arrow_magnification() const
 {
-    if ((this->type_value != ItemKindType::BOW) || !this->subtype_value.has_value()) {
+    if ((this->type_value != ItemKindType::BOW) || !this->subtype_value) {
         THROW_EXCEPTION(std::logic_error, ITEM_NOT_BOW);
     }
 
@@ -456,7 +456,7 @@ int BaseitemKey::get_arrow_magnification() const
 
 bool BaseitemKey::is_aiming_rod() const
 {
-    if ((this->type_value != ItemKindType::ROD) || !this->subtype_value.has_value()) {
+    if ((this->type_value != ItemKindType::ROD) || !this->subtype_value) {
         THROW_EXCEPTION(std::logic_error, ITEM_NOT_ROD);
     }
 
@@ -485,7 +485,7 @@ bool BaseitemKey::is_aiming_rod() const
 
 bool BaseitemKey::is_lite_requiring_fuel() const
 {
-    if ((this->type_value != ItemKindType::LITE) || !this->subtype_value.has_value()) {
+    if ((this->type_value != ItemKindType::LITE) || !this->subtype_value) {
         THROW_EXCEPTION(std::logic_error, ITEM_NOT_LITE);
     }
 
@@ -525,7 +525,7 @@ bool BaseitemKey::is_armour() const
 
 bool BaseitemKey::is_cross_bow() const
 {
-    if ((this->type_value != ItemKindType::BOW) || !this->subtype_value.has_value()) {
+    if ((this->type_value != ItemKindType::BOW) || !this->subtype_value) {
         return false;
     }
 
@@ -540,7 +540,7 @@ bool BaseitemKey::is_cross_bow() const
 
 bool BaseitemKey::is_mushrooms() const
 {
-    if (!this->subtype_value.has_value()) {
+    if (!this->subtype_value) {
         return false;
     }
 

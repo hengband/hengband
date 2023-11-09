@@ -129,7 +129,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
         return;
     }
 
-    bool placed = false;
+    auto placed = false;
     if ((store_num != StoreSaleType::HOME) && (store_num != StoreSaleType::MUSEUM)) {
         const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
         msg_format(_("%s(%c)を売却する。", "Selling %s (%c)."), item_name.data(), index_to_label(i_idx));

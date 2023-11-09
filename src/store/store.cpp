@@ -171,7 +171,7 @@ std::optional<short> input_stock(std::string_view fmt, int min, int max, [[maybe
     std::optional<char> command;
     while (true) {
         const auto command_opt = input_command(prompt);
-        if (!command_opt.has_value()) {
+        if (!command_opt) {
             break;
         }
 

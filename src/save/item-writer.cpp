@@ -216,13 +216,13 @@ static void write_item_info(ItemEntity *o_ptr, const BIT_FLAGS flags)
     }
 
     if (any_bits(flags, SaveDataItemFlagType::SMITH)) {
-        if (o_ptr->smith_effect.has_value()) {
+        if (o_ptr->smith_effect) {
             wr_s16b(enum2i(o_ptr->smith_effect.value()));
         } else {
             wr_s16b(0);
         }
 
-        if (o_ptr->smith_act_idx.has_value()) {
+        if (o_ptr->smith_act_idx) {
             wr_s16b(enum2i(o_ptr->smith_act_idx.value()));
         } else {
             wr_s16b(0);
