@@ -152,7 +152,7 @@ void OtherItemsEnchanter::generate_corpse()
         auto &r_ref = monraces_info[r_idx];
         auto check = (floor_ptr->dun_level < r_ref.level) ? (r_ref.level - floor_ptr->dun_level) : 0;
         const auto sval = this->o_ptr->bi_key.sval();
-        if (!sval.has_value()) {
+        if (!sval) {
             continue;
         }
 

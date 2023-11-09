@@ -275,7 +275,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
         };
 
         const auto r_idx = select_r_idx();
-        if (!r_idx.has_value()) {
+        if (!r_idx) {
             return false;
         }
 

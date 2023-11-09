@@ -12,7 +12,7 @@ LiteEnchanter::LiteEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, int powe
     , power(power)
 {
     const auto sval = this->o_ptr->bi_key.sval();
-    if (!sval.has_value()) {
+    if (!sval) {
         return;
     }
 
@@ -86,7 +86,7 @@ void LiteEnchanter::give_cursed()
 void LiteEnchanter::add_dark_flag()
 {
     const auto sval = this->o_ptr->bi_key.sval();
-    if (!sval.has_value()) {
+    if (!sval) {
         return;
     }
 

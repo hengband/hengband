@@ -69,7 +69,7 @@ void AmuletEnchanter::apply_magic()
 void AmuletEnchanter::sval_enchant()
 {
     const auto sval = this->o_ptr->bi_key.sval();
-    if (!sval.has_value()) {
+    if (!sval) {
         return;
     }
 
@@ -265,7 +265,7 @@ void AmuletEnchanter::give_ego_index()
 void AmuletEnchanter::give_high_ego_index()
 {
     const auto sval = this->o_ptr->bi_key.sval();
-    if (!sval.has_value()) {
+    if (!sval) {
         return;
     }
 
