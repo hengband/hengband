@@ -95,6 +95,8 @@ public:
     const TerrainType &get_terrain() const;
     TerrainType &get_terrain_mimic();
     const TerrainType &get_terrain_mimic() const;
+    TerrainType &get_terrain_mimic_raw();
+    const TerrainType &get_terrain_mimic_raw() const;
 
 private:
     flow_type get_grid_flow_type(const MonsterRaceInfo *r_ptr) const;

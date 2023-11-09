@@ -170,3 +170,13 @@ const TerrainType &Grid::get_terrain_mimic() const
 {
     return TerrainList::get_instance()[this->get_feat_mimic()];
 }
+
+TerrainType &Grid::get_terrain_mimic_raw()
+{
+    return TerrainList::get_instance()[this->mimic];
+}
+
+const TerrainType &Grid::get_terrain_mimic_raw() const
+{
+    return TerrainList::get_instance()[this->mimic];
+}
