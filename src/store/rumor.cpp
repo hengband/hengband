@@ -98,7 +98,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
     auto opt_rumor = get_random_line("rumors.txt", section);
 #endif
     std::string rumor;
-    if (opt_rumor.has_value()) {
+    if (opt_rumor) {
         rumor = std::move(opt_rumor.value());
     } else {
         rumor = _("嘘の噂もある。", "Some rumors are wrong.");

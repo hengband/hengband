@@ -1604,7 +1604,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
             ofn.nFilterIndex = 1;
             ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR | OFN_HIDEREADONLY;
             const auto &filename = get_open_filename(&ofn, ANGBAND_DIR_SAVE, savefile, MAIN_WIN_MAX_PATH);
-            if (filename.has_value()) {
+            if (filename) {
                 savefile = filename.value();
                 validate_file(savefile);
                 game_in_progress = true;
@@ -1674,7 +1674,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
             ofn.nFilterIndex = 1;
             ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
             const auto &filename = get_open_filename(&ofn, ANGBAND_DIR_USER, savefile, MAIN_WIN_MAX_PATH);
-            if (filename.has_value()) {
+            if (filename) {
                 savefile = filename.value();
                 prepare_browse_movie_without_path_build(savefile);
                 movie_in_progress = true;
@@ -1961,7 +1961,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
         ofn.lpstrTitle = _(L"壁紙を選んでね。", L"Choose wall paper.");
         ofn.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
         const auto &filename = get_open_filename(&ofn, "", wallpaper_path, MAIN_WIN_MAX_PATH);
-        if (filename.has_value()) {
+        if (filename) {
             wallpaper_path = filename.value();
             change_bg_mode(bg_mode::BG_ONE, true, true);
         }

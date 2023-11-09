@@ -296,7 +296,7 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
             choice = ' ';
         } else {
             const auto new_choice = input_command(prompt);
-            if (!new_choice.has_value()) {
+            if (!new_choice) {
                 break;
             }
 

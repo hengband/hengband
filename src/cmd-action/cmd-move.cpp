@@ -447,7 +447,7 @@ static bool input_rest_turns()
     constexpr auto p = _("休憩 (0-9999, '*' で HP/MP全快, '&' で必要なだけ): ", "Rest (0-9999, '*' for HP/SP, '&' as needed): ");
     while (true) {
         const auto rest_turns_opt = input_string(p, 4, "&");
-        if (!rest_turns_opt.has_value()) {
+        if (!rest_turns_opt) {
             return false;
         }
 

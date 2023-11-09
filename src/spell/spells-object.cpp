@@ -145,14 +145,14 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
         std::optional<FixedArtifactId> opt_a_idx(std::nullopt);
         if (insta_art || fixed_art) {
             opt_a_idx = sweep_amusement_artifact(insta_art, bi_id);
-            if (!opt_a_idx.has_value()) {
+            if (!opt_a_idx) {
                 continue;
             }
         }
 
         ItemEntity item;
         item.prep(bi_id);
-        if (opt_a_idx.has_value()) {
+        if (opt_a_idx) {
             item.fixed_artifact_idx = opt_a_idx.value();
         }
 

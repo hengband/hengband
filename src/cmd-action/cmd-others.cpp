@@ -147,7 +147,7 @@ static void accept_winner_message(PlayerType *player_ptr)
     std::optional<std::string> buf;
     while (true) {
         buf = input_string(_("*勝利*メッセージ: ", "*Winning* message: "), 1024);
-        if (!buf.has_value()) {
+        if (!buf) {
             continue;
         }
 

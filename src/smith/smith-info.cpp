@@ -55,7 +55,7 @@ bool BasicSmithInfo::can_give_smith_effect(const ItemEntity *o_ptr) const
      * 残る具体的な絞り込みは BasicSmithInfo::can_give_smith_effect_impl およびその派生クラスで
      * オーバーライドした関数にて行う
      */
-    if (o_ptr->is_fixed_or_random_artifact() || o_ptr->smith_effect.has_value()) {
+    if (o_ptr->is_fixed_or_random_artifact() || o_ptr->smith_effect) {
         return false;
     }
 
@@ -109,7 +109,7 @@ void ActivationSmithInfo::erase_essence(ItemEntity *o_ptr) const
 
 bool ActivationSmithInfo::can_give_smith_effect(const ItemEntity *o_ptr) const
 {
-    if (o_ptr->is_fixed_or_random_artifact() || o_ptr->smith_act_idx.has_value()) {
+    if (o_ptr->is_fixed_or_random_artifact() || o_ptr->smith_act_idx) {
         return false;
     }
 

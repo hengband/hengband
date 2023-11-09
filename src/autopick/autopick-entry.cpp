@@ -327,12 +327,12 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
     }
 #endif
     else if (*ptr == '\0') {
-        if (!previous_flag.has_value()) {
+        if (!previous_flag) {
             entry->add(FLG_ITEMS);
             previous_flag = FLG_ITEMS;
         }
     } else {
-        if (previous_flag.has_value()) {
+        if (previous_flag) {
             entry->remove(previous_flag.value());
             ptr = prev_ptr;
         }

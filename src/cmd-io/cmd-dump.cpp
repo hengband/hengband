@@ -51,7 +51,7 @@
 void do_cmd_pref(PlayerType *player_ptr)
 {
     const auto input_str = input_string(_("設定変更コマンド: ", "Pref: "), 80);
-    if (!input_str.has_value()) {
+    if (!input_str) {
         return;
     }
 
@@ -211,7 +211,7 @@ void do_cmd_colors(PlayerType *player_ptr)
 void do_cmd_note(void)
 {
     const auto note_opt = input_string(_("メモ: ", "Note: "), 60);
-    if (!note_opt.has_value() || note_opt->empty()) {
+    if (!note_opt || note_opt->empty()) {
         return;
     }
 

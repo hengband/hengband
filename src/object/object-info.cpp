@@ -70,7 +70,7 @@ static concptr item_activation_aux(const ItemEntity *o_ptr)
 {
     static std::string activation_detail;
     auto tmp_act_ptr = find_activation_info(o_ptr);
-    if (!tmp_act_ptr.has_value()) {
+    if (!tmp_act_ptr) {
         return _("未定義", "something undefined");
     }
 

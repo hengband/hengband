@@ -235,7 +235,7 @@ void exe_cmd_save_screen_html(const std::filesystem::path &path, bool need_messa
 static void exe_cmd_save_screen_html_with_naming()
 {
     const auto filename = input_string(_("ファイル名: ", "File name: "), 80, "screen.html");
-    if (!filename.has_value()) {
+    if (!filename) {
         return;
     }
 

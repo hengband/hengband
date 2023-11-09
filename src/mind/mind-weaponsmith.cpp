@@ -232,7 +232,7 @@ static COMMAND_CODE choose_essence(void)
             }
 
             const auto new_choice = input_command(_("何を付加しますか:", "Command :"), true);
-            if (!new_choice.has_value()) {
+            if (!new_choice) {
                 screen_load();
                 return 0;
             }
@@ -347,7 +347,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
 
             const auto page_effect_num = std::min<int>(effect_num_per_page, smith_effect_list.size() - (page * effect_num_per_page));
             const auto command = input_command(prompt);
-            if (!command.has_value()) {
+            if (!command) {
                 break;
             }
 
@@ -480,7 +480,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
         } else if (o_ptr->pval == 0) {
             const auto limit = std::min(5, smith.get_addable_count(effect, o_ptr));
             const auto num_enchants = input_numerics<short>(prompt, 1, limit, 1);
-            if (!num_enchants.has_value()) {
+            if (!num_enchants) {
                 return;
             }
 
@@ -491,7 +491,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
     } else if (effect == SmithEffectType::SLAY_GLOVE) {
         const auto max_val = player_ptr->lev / 7 + 3;
         const auto num_enchants = input_numerics(prompt, 1, max_val, 1);
-        if (!num_enchants.has_value()) {
+        if (!num_enchants) {
             return;
         }
 
@@ -631,7 +631,7 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
                     prt(_("  e) 武器/防具強化", "  e) Enchant weapon/armor"), 6, 14);
                     std::string prompt = _(format("どの能力を%sますか:", only_browse ? "調べ" : "使い"), "Command :");
                     const auto command = input_command(prompt, true);
-                    if (!command.has_value()) {
+                    if (!command) {
                         screen_load();
                         return;
                     }

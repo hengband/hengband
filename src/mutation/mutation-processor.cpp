@@ -66,7 +66,7 @@ static int get_hack_dir(PlayerType *player_ptr)
                            ? _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ")
                            : _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
         const auto command_opt = input_command(p, true);
-        if (!command_opt.has_value()) {
+        if (!command_opt) {
             break;
         }
 

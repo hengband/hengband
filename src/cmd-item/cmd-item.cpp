@@ -222,7 +222,7 @@ void do_cmd_inscribe(PlayerType *player_ptr)
     msg_print(nullptr);
     const auto initial_inscription = o_ptr->is_inscribed() ? o_ptr->inscription.value() : "";
     const auto input_inscription = input_string(_("銘: ", "Inscription: "), MAX_INSCRIPTION, initial_inscription);
-    if (!input_inscription.has_value()) {
+    if (!input_inscription) {
         return;
     }
 

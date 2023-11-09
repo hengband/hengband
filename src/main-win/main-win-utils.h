@@ -40,7 +40,7 @@ public:
 
     WCHAR *wc_str()
     {
-        return buf.has_value() ? (*buf).data() : NULL;
+        return buf ? (*buf).data() : NULL;
     }
 
 protected:
@@ -75,7 +75,7 @@ public:
 
     char *c_str()
     {
-        return buf.has_value() ? (*buf).data() : NULL;
+        return buf ? (*buf).data() : NULL;
     }
 
 protected:

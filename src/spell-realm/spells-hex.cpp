@@ -113,9 +113,8 @@ bool SpellHex::stop_spells_with_selection()
     }
 
     screen_load();
-    const auto is_selected = choice.has_value();
-    if (is_selected) {
-        auto n = this->casting_spells[A2I(choice.value())];
+    if (choice) {
+        auto n = this->casting_spells[A2I(*choice)];
         exe_spell(this->player_ptr, REALM_HEX, n, SpellProcessType::STOP);
         this->reset_casting_flag(i2enum<spell_hex_type>(n));
     }
@@ -134,7 +133,7 @@ bool SpellHex::stop_spells_with_selection()
         MainWindowRedrawingFlag::MP,
     };
     rfu.set_flags(flags_mwrf);
-    return is_selected;
+    return choice.has_value();
 }
 
 /*!
@@ -150,7 +149,7 @@ std::pair<bool, std::optional<char>> SpellHex::select_spell_stopping(std::string
     while (true) {
         this->display_casting_spells_list();
         const auto choice_opt = input_command(prompt, true);
-        if (!choice_opt.has_value()) {
+        if (!choice_opt) {
             return { false, std::nullopt };
         }
 

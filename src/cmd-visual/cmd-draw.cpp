@@ -108,7 +108,7 @@ static std::optional<int> input_status_command(PlayerType *player_ptr, int page)
     case 'f': {
         const auto initial_filename = format("%s.txt", player_ptr->base_name);
         const auto input_filename = input_string(_("ファイル名: ", "File name: "), 80, initial_filename);
-        if (!input_filename.has_value()) {
+        if (!input_filename) {
             return page;
         }
 
@@ -150,7 +150,7 @@ void do_cmd_player_status(PlayerType *player_ptr)
 
         term_putstr(2, 23, -1, TERM_WHITE, prompt);
         auto next_page = input_status_command(player_ptr, page);
-        if (!next_page.has_value()) {
+        if (!next_page) {
             break;
         }
 

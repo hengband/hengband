@@ -36,7 +36,7 @@ bool do_cmd_cast_learned(PlayerType *player_ptr)
     }
 
     auto selected_spell = get_learned_power(player_ptr);
-    if (!selected_spell.has_value()) {
+    if (!selected_spell) {
         return false;
     }
 

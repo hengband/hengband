@@ -62,7 +62,7 @@ static const std::vector<debug_spell_command> debug_spell_commands_list = {
 void wiz_debug_spell(PlayerType *player_ptr)
 {
     const auto spell = input_string("SPELL: ", 50);
-    if (!spell.has_value()) {
+    if (!spell) {
         return;
     }
 
@@ -77,7 +77,7 @@ void wiz_debug_spell(PlayerType *player_ptr)
             return;
         case 3: {
             const auto power = input_integer("POWER", -MAX_INT, MAX_INT);
-            if (!power.has_value()) {
+            if (!power) {
                 return;
             }
 
@@ -225,7 +225,7 @@ void wiz_summon_specific_monster(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     if (!MonsterRace(r_idx).is_valid()) {
         const auto new_monrace_id = input_numerics("MonsterID", 1, monraces_info.size() - 1, MonsterRaceId::FILTHY_URCHIN);
-        if (!new_monrace_id.has_value()) {
+        if (!new_monrace_id) {
             return;
         }
 
@@ -246,7 +246,7 @@ void wiz_summon_pet(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     if (!MonsterRace(r_idx).is_valid()) {
         const auto new_monrace_id = input_numerics("MonsterID", 1, monraces_info.size() - 1, MonsterRaceId::FILTHY_URCHIN);
-        if (!new_monrace_id.has_value()) {
+        if (!new_monrace_id) {
             return;
         }
 
@@ -268,7 +268,7 @@ void wiz_kill_target(PlayerType *player_ptr, int initial_dam, AttributeType effe
     auto dam = initial_dam;
     if (dam <= 0) {
         const auto input_dam = input_integer("Damage", 1, 1000000, 1000000);
-        if (!input_dam.has_value()) {
+        if (!input_dam) {
             return;
         }
 
@@ -291,7 +291,7 @@ void wiz_kill_target(PlayerType *player_ptr, int initial_dam, AttributeType effe
         }
 
         const auto input_effect_id = input_numerics("EffectID", 1, max - 1, idx);
-        if (!input_effect_id.has_value()) {
+        if (!input_effect_id) {
             screen_load();
             return;
         }

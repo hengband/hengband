@@ -250,7 +250,7 @@ static short exe_lookup(const BaseitemKey &key)
 short lookup_baseitem_id(const BaseitemKey &key)
 {
     const auto sval = key.sval();
-    if (sval.has_value()) {
+    if (sval) {
         return exe_lookup(key);
     }
 

@@ -97,7 +97,7 @@ concptr Smith::get_essence_name(SmithEssenceType essence)
 concptr Smith::get_effect_name(SmithEffectType effect)
 {
     auto info = find_smith_info(effect);
-    if (!info.has_value()) {
+    if (!info) {
         return _("不明", "Unknown");
     }
 
@@ -113,7 +113,7 @@ concptr Smith::get_effect_name(SmithEffectType effect)
 std::string Smith::get_need_essences_desc(SmithEffectType effect)
 {
     auto info = find_smith_info(effect);
-    if (!info.has_value() || info.value()->need_essences.empty()) {
+    if (!info || info.value()->need_essences.empty()) {
         return _("不明", "Unknown");
     }
 
@@ -138,7 +138,7 @@ std::string Smith::get_need_essences_desc(SmithEffectType effect)
 std::vector<SmithEssenceType> Smith::get_need_essences(SmithEffectType effect)
 {
     auto info = find_smith_info(effect);
-    if (!info.has_value()) {
+    if (!info) {
         return {};
     }
 
@@ -157,7 +157,7 @@ std::vector<SmithEssenceType> Smith::get_need_essences(SmithEffectType effect)
 int Smith::get_essence_consumption(SmithEffectType effect, const ItemEntity *o_ptr)
 {
     auto info = find_smith_info(effect);
-    if (!info.has_value()) {
+    if (!info) {
         return 0;
     }
 
@@ -184,7 +184,7 @@ int Smith::get_essence_consumption(SmithEffectType effect, const ItemEntity *o_p
 std::unique_ptr<ItemTester> Smith::get_item_tester(SmithEffectType effect)
 {
     auto info = find_smith_info(effect);
-    if (!info.has_value()) {
+    if (!info) {
         return std::make_unique<TvalItemTester>(ItemKindType::NONE);
     }
 
@@ -203,7 +203,7 @@ std::unique_ptr<ItemTester> Smith::get_item_tester(SmithEffectType effect)
 TrFlags Smith::get_effect_tr_flags(SmithEffectType effect)
 {
     auto info = find_smith_info(effect);
-    if (!info.has_value()) {
+    if (!info) {
         return {};
     }
 
@@ -263,7 +263,7 @@ std::vector<SmithEffectType> Smith::get_effect_list(SmithCategoryType category)
 int Smith::get_addable_count(SmithEffectType effect, const ItemEntity *o_ptr) const
 {
     auto info = find_smith_info(effect);
-    if (!info.has_value()) {
+    if (!info) {
         return 0;
     }
 
@@ -437,7 +437,7 @@ Smith::DrainEssenceResult Smith::drain_essence(ItemEntity *o_ptr)
 bool Smith::add_essence(SmithEffectType effect, ItemEntity *o_ptr, int number)
 {
     auto info = find_smith_info(effect);
-    if (!info.has_value()) {
+    if (!info) {
         return false;
     }
 
@@ -459,11 +459,11 @@ void Smith::erase_essence(ItemEntity *o_ptr) const
     o_ptr->smith_act_idx = std::nullopt;
 
     auto effect = Smith::object_effect(o_ptr);
-    if (!effect.has_value()) {
+    if (!effect) {
         return;
     }
     auto info = find_smith_info(effect.value());
-    if (!info.has_value()) {
+    if (!info) {
         return;
     }
 
