@@ -7,9 +7,11 @@
  */
 
 #include "system/item-entity.h"
+#include "artifact/artifact-info.h" // 暫定的インクルード.
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"
 #include "monster-race/monster-race.h"
+#include "object-enchant/activation-info-table.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/special-object-flags.h"
@@ -804,6 +806,23 @@ bool ItemEntity::is_cross_bow() const
 bool ItemEntity::is_inscribed() const
 {
     return this->inscription != std::nullopt;
+}
+
+/*!
+ * @brief オブジェクトから発動効果構造体を取得する。
+ * @return 発動効果構造体 (なかったら無効イテレータ)
+ */
+std::vector<activation_type>::const_iterator ItemEntity::find_activation_info() const
+{
+    const auto index = activation_index(this);
+    const auto end = activation_info.end();
+    for (auto it = activation_info.begin(); it != end; it++) {
+        if (it->index == index) {
+            return it;
+        }
+    }
+
+    return end;
 }
 
 BaseitemInfo &ItemEntity::get_baseitem() const

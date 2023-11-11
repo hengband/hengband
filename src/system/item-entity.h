@@ -16,6 +16,7 @@
 #include "system/system-variables.h"
 #include "util/flag-group.h"
 #include <optional>
+#include <vector>
 
 enum class FixedArtifactId : short;
 enum class ItemKindType : short;
@@ -25,6 +26,7 @@ enum class RandomArtActType : short;
 class ArtifactType;
 class EgoItemDefinition;
 class BaseitemInfo;
+struct activation_type;
 class ItemEntity {
 public:
     ItemEntity();
@@ -136,6 +138,7 @@ public:
     bool is_armour() const;
     bool is_cross_bow() const;
     bool is_inscribed() const;
+    std::vector<activation_type>::const_iterator find_activation_info() const;
 
     BaseitemInfo &get_baseitem() const;
     EgoItemDefinition &get_ego() const;

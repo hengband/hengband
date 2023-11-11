@@ -51,21 +51,3 @@ RandomArtActType activation_index(const ItemEntity *o_ptr)
 
     return o_ptr->activation_id;
 }
-
-/*!
- * @brief オブジェクトから発動効果構造体のポインタを取得する。
- * @details activation_index() 関数の結果から参照する。
- * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return 発動効果構造体のポインタを返す
- */
-std::optional<const activation_type *> find_activation_info(const ItemEntity *o_ptr)
-{
-    const auto index = activation_index(o_ptr);
-    for (const auto &p : activation_info) {
-        if (p.index == index) {
-            return &p;
-        }
-    }
-
-    return std::nullopt;
-}
