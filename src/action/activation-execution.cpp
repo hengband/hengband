@@ -5,7 +5,6 @@
 
 #include "action/activation-execution.h"
 #include "action/action-limited.h"
-#include "artifact/artifact-info.h"
 #include "artifact/random-art-effects.h"
 #include "core/window-redrawer.h"
 #include "effect/attribute-types.h"
@@ -248,7 +247,7 @@ void exe_activate(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 
     msg_print(_("始動させた...", "You activate it..."));
     sound(SOUND_ZAP);
-    if (activation_index(ae_ptr->o_ptr) > RandomArtActType::NONE) {
+    if (ae_ptr->o_ptr->has_activation()) {
         (void)activate_artifact(player_ptr, ae_ptr->o_ptr);
         static constexpr auto flags = {
             SubWindowRedrawingFlag::INVENTORY,

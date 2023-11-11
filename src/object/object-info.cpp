@@ -11,7 +11,6 @@
  */
 
 #include "object/object-info.h"
-#include "artifact/artifact-info.h"
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"
 #include "inventory/inventory-slot-types.h"
@@ -190,7 +189,7 @@ std::string activation_explanation(const ItemEntity *o_ptr)
         return _("なし", "nothing");
     }
 
-    if (activation_index(o_ptr) > RandomArtActType::NONE) {
+    if (o_ptr->has_activation()) {
         return item_activation_aux(o_ptr);
     }
 

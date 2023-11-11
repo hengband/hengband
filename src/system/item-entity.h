@@ -139,6 +139,7 @@ public:
     bool is_cross_bow() const;
     bool is_inscribed() const;
     std::vector<activation_type>::const_iterator find_activation_info() const;
+    bool has_activation() const;
 
     BaseitemInfo &get_baseitem() const;
     EgoItemDefinition &get_ego() const;
@@ -154,4 +155,5 @@ private:
     int calc_figurine_value() const;
     int calc_capture_value() const;
     void modify_ego_lite_flags(TrFlags &flags) const;
+    RandomArtActType get_activation_index() const;
 };
