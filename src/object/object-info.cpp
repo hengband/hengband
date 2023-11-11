@@ -65,16 +65,14 @@ static std::string item_activation_dragon_breath(const ItemEntity *o_ptr)
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-static concptr item_activation_aux(const ItemEntity *o_ptr)
+static std::string item_activation_aux(const ItemEntity *o_ptr)
 {
-    static std::string activation_detail;
     const auto it = o_ptr->find_activation_info();
     if (it == activation_info.end()) {
         return _("未定義", "something undefined");
     }
 
-    concptr desc = it->desc;
-    std::string dragon_breath;
+    std::string desc(it->desc);
     switch (it->index) {
     case RandomArtActType::NONE:
         break;
@@ -89,8 +87,7 @@ static concptr item_activation_aux(const ItemEntity *o_ptr)
         }
         break;
     case RandomArtActType::BR_DRAGON:
-        dragon_breath = item_activation_dragon_breath(o_ptr);
-        desc = dragon_breath.data();
+        desc = item_activation_dragon_breath(o_ptr);
         break;
     case RandomArtActType::AGGRAVATE:
         if (o_ptr->is_specific_artifact(FixedArtifactId::HYOUSIGI)) {
@@ -133,8 +130,8 @@ static concptr item_activation_aux(const ItemEntity *o_ptr)
 
     /* Timeout description */
     std::stringstream timeout;
-    int constant = it->timeout.constant;
-    int dice = it->timeout.dice;
+    const auto constant = it->timeout.constant;
+    const auto dice = it->timeout.dice;
     if (constant == 0 && dice == 0) {
         /* We can activate it every turn */
         timeout << _("いつでも", "every turn");
@@ -171,9 +168,9 @@ static concptr item_activation_aux(const ItemEntity *o_ptr)
         timeout << _(" ターン毎", " turns");
     }
 
-    activation_detail = desc;
-    activation_detail.append(_(" : ", " ")).append(timeout.str());
-    return activation_detail.data();
+    std::stringstream ss;
+    ss << desc << _(" : ", " ") << timeout.str();
+    return ss.str();
 }
 
 /*!

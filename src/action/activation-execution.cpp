@@ -59,9 +59,9 @@ static void decide_activation_level(ae_type *ae_ptr)
     }
 
     if (ae_ptr->o_ptr->is_random_artifact()) {
-        const auto act_ptr = ae_ptr->o_ptr->find_activation_info();
-        if (act_ptr != activation_info.end()) {
-            ae_ptr->lev = act_ptr->level;
+        const auto it_activation = ae_ptr->o_ptr->find_activation_info();
+        if (it_activation != activation_info.end()) {
+            ae_ptr->lev = it_activation->level;
         }
 
         return;

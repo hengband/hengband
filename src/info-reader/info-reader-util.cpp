@@ -16,24 +16,20 @@ int error_line; /*!< データ読み込み/初期化時に汎用的にエラー�
  * @param what 参照元の文字列ポインタ
  * @return 発動能力ID
  */
-RandomArtActType grab_one_activation_flag(concptr what)
+RandomArtActType grab_one_activation_flag(std::string_view what)
 {
-    for (auto i = 0;; i++) {
-        if (activation_info[i].flag == nullptr) {
-            break;
-        }
-
-        if (streq(what, activation_info[i].flag)) {
-            return activation_info[i].index;
+    for (const auto &activation : activation_info) {
+        if (what == activation.flag) {
+            return activation.index;
         }
     }
 
-    auto j = atoi(what);
+    auto j = std::stoi(what.data());
     if (j > 0) {
         return i2enum<RandomArtActType>(j);
     }
 
-    msg_format(_("未知の発動・フラグ '%s'。", "Unknown activation flag '%s'."), what);
+    msg_format(_("未知の発動・フラグ '%s'。", "Unknown activation flag '%s'."), what.data());
     return RandomArtActType::NONE;
 }
 

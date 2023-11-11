@@ -1,7 +1,5 @@
 #pragma once
 
-#include "monster-race/race-ability-flags.h"
-#include "system/angband.h"
 #include "util/bit-flags-calculator.h"
 #include <concepts>
 #include <map>
@@ -16,7 +14,7 @@
 extern int error_idx; //!< エラーが発生したinfo ID
 
 enum class RandomArtActType : short;
-RandomArtActType grab_one_activation_flag(concptr what);
+RandomArtActType grab_one_activation_flag(std::string_view what);
 
 #ifndef JP
 void append_english_text(std::string &text, std::string_view add);
