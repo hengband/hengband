@@ -41,11 +41,10 @@
 #include "timed-effect/player-acceleration.h"
 #include "view/display-messages.h"
 
-bool switch_activation(PlayerType *player_ptr, ItemEntity **o_ptr_ptr, const activation_type *const act_ptr, concptr name)
+bool switch_activation(PlayerType *player_ptr, ItemEntity **o_ptr_ptr, const RandomArtActType index, std::string_view name)
 {
-    auto *o_ptr = (*o_ptr_ptr);
-
-    switch (act_ptr->index) {
+    auto *o_ptr = *o_ptr_ptr;
+    switch (index) {
     case RandomArtActType::SUNLIGHT:
         return activate_sunlight(player_ptr);
     case RandomArtActType::BO_MISS_1:
@@ -222,11 +221,11 @@ bool switch_activation(PlayerType *player_ptr, ItemEntity **o_ptr_ptr, const act
         (void)cure_critical_wounds(player_ptr, 1000);
         return true;
     case RandomArtActType::CURING:
-        msg_format(_("%sの優しさに癒される...", "the %s cures you affectionately ..."), name);
+        msg_format(_("%sの優しさに癒される...", "the %s cures you affectionately ..."), name.data());
         true_healing(player_ptr, 0);
         return true;
     case RandomArtActType::CURE_MANA_FULL:
-        msg_format(_("%sが青白く光った．．．", "The %s glows palely..."), name);
+        msg_format(_("%sが青白く光った．．．", "The %s glows palely..."), name.data());
         restore_mana(player_ptr, true);
         return true;
     case RandomArtActType::ESP:
@@ -236,7 +235,7 @@ bool switch_activation(PlayerType *player_ptr, ItemEntity **o_ptr_ptr, const act
         (void)berserk(player_ptr, randint1(25) + 25);
         return true;
     case RandomArtActType::PROT_EVIL:
-        msg_format(_("%sから鋭い音が流れ出た...", "The %s lets out a shrill wail..."), name);
+        msg_format(_("%sから鋭い音が流れ出た...", "The %s lets out a shrill wail..."), name.data());
         (void)set_protevil(player_ptr, randint1(25) + player_ptr->lev * 3, false);
         return true;
     case RandomArtActType::RESIST_ALL:
@@ -332,7 +331,7 @@ bool switch_activation(PlayerType *player_ptr, ItemEntity **o_ptr_ptr, const act
     case RandomArtActType::DISP_CURSE_XTRA:
         return activate_dispel_curse(player_ptr, name);
     case RandomArtActType::BRAND_FIRE_BOLTS:
-        msg_format(_("%sが深紅に輝いた...", "Your %s glows deep red..."), name);
+        msg_format(_("%sが深紅に輝いた...", "Your %s glows deep red..."), name.data());
         brand_bolts(player_ptr);
         return true;
     case RandomArtActType::RECHARGE_XTRA:
@@ -361,7 +360,7 @@ bool switch_activation(PlayerType *player_ptr, ItemEntity **o_ptr_ptr, const act
     case RandomArtActType::TELEPORT_LEVEL:
         return activate_teleport_level(player_ptr);
     case RandomArtActType::STRAIN_HASTE:
-        msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name);
+        msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name.data());
         take_hit(player_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("加速した疲労", "the strain of haste"));
         (void)mod_acceleration(player_ptr, 25 + randint1(25), false);
         return true;
@@ -385,7 +384,7 @@ bool switch_activation(PlayerType *player_ptr, ItemEntity **o_ptr_ptr, const act
     case RandomArtActType::DISPEL_MAGIC:
         return activate_dispel_magic(player_ptr);
     default:
-        msg_format(_("Unknown activation effect: %d.", "Unknown activation effect: %d."), enum2i(act_ptr->index));
+        msg_format(_("Unknown activation effect: %d.", "Unknown activation effect: %d."), enum2i(index));
         return false;
     }
 }
