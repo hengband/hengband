@@ -34,18 +34,16 @@
 #include <sstream>
 
 /*!
- * @brief オブジェクトの発動効果名称を返す（サブルーチン/ブレス）
- * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
- * @return std::string 発動名称を返す文字列ポインタ
+ * @brief アイテムの発動効果名称を返す（サブルーチン/ブレス）
+ * @param item アイテムへの参照
+ * @return std::string 発動名称
  */
-static std::string item_activation_dragon_breath(const ItemEntity *o_ptr)
+static std::string item_activation_dragon_breath(const ItemEntity &item)
 {
     std::string desc = _("", "breathe ");
-    int n = 0;
-
-    const auto flags = o_ptr->get_flags();
-
-    for (int i = 0; dragonbreath_info[i].flag != 0; i++) {
+    auto n = 0;
+    const auto flags = item.get_flags();
+    for (auto i = 0; dragonbreath_info[i].flag != 0; i++) {
         if (flags.has(dragonbreath_info[i].flag)) {
             if (n > 0) {
                 desc.append(_("、", ", "));
@@ -60,6 +58,56 @@ static std::string item_activation_dragon_breath(const ItemEntity *o_ptr)
     return desc;
 }
 
+static std::string build_activation_description(const activation_type &act, const ItemEntity &item)
+{
+    switch (act.index) {
+    case RandomArtActType::NONE:
+        return act.desc;
+    case RandomArtActType::BR_FIRE:
+        if (item.bi_key == BaseitemKey(ItemKindType::RING, SV_RING_FLAMES)) {
+            return _("火炎のブレス (200) と火への耐性", "breathe fire (200) and resist fire");
+        }
+
+        return act.desc;
+    case RandomArtActType::BR_COLD:
+        if (item.bi_key == BaseitemKey(ItemKindType::RING, SV_RING_ICE)) {
+            return _("冷気のブレス (200) と冷気への耐性", "breathe cold (200) and resist cold");
+        }
+
+        return act.desc;
+    case RandomArtActType::BR_DRAGON:
+        return item_activation_dragon_breath(item);
+    case RandomArtActType::AGGRAVATE:
+        if (item.is_specific_artifact(FixedArtifactId::HYOUSIGI)) {
+            return _("拍子木を打ちならす", "beat wooden clappers");
+        }
+
+        return act.desc;
+    case RandomArtActType::ACID_BALL_AND_RESISTANCE:
+        return _("アシッド・ボール (100) と酸への耐性", "ball of acid (100) and resist acid");
+    case RandomArtActType::FIRE_BALL_AND_RESISTANCE:
+        return _("ファイア・ボール (100) と火への耐性", "ball of fire (100) and resist fire");
+    case RandomArtActType::COLD_BALL_AND_RESISTANCE:
+        return _("アイス・ボール (100) と冷気への耐性", "ball of cold (100) and resist cold");
+    case RandomArtActType::ELEC_BALL_AND_RESISTANCE:
+        return _("サンダー・ボール (100) と電撃への耐性", "ball of elec (100) and resist elec");
+    case RandomArtActType::POIS_BALL_AND_RESISTANCE:
+        return _("ポイズン・ボール (100) と毒への耐性", "ball of poison (100) and resist elec");
+    case RandomArtActType::RESIST_ACID:
+        return _("一時的な酸への耐性", "temporary resist acid");
+    case RandomArtActType::RESIST_FIRE:
+        return _("一時的な火への耐性", "temporary resist fire");
+    case RandomArtActType::RESIST_COLD:
+        return _("一時的な冷気への耐性", "temporary resist cold");
+    case RandomArtActType::RESIST_ELEC:
+        return _("一時的な電撃への耐性", "temporary resist elec");
+    case RandomArtActType::RESIST_POIS:
+        return _("一時的な毒への耐性", "temporary resist elec");
+    default:
+        return act.desc;
+    }
+}
+
 /*!
  * @brief オブジェクトの発動効果名称を返す（サブルーチン/汎用）
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
@@ -72,61 +120,7 @@ static std::string item_activation_aux(const ItemEntity *o_ptr)
         return _("未定義", "something undefined");
     }
 
-    std::string desc(it->desc);
-    switch (it->index) {
-    case RandomArtActType::NONE:
-        break;
-    case RandomArtActType::BR_FIRE:
-        if (o_ptr->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_FLAMES)) {
-            desc = _("火炎のブレス (200) と火への耐性", "breathe fire (200) and resist fire");
-        }
-        break;
-    case RandomArtActType::BR_COLD:
-        if (o_ptr->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_ICE)) {
-            desc = _("冷気のブレス (200) と冷気への耐性", "breathe cold (200) and resist cold");
-        }
-        break;
-    case RandomArtActType::BR_DRAGON:
-        desc = item_activation_dragon_breath(o_ptr);
-        break;
-    case RandomArtActType::AGGRAVATE:
-        if (o_ptr->is_specific_artifact(FixedArtifactId::HYOUSIGI)) {
-            desc = _("拍子木を打ちならす", "beat wooden clappers");
-        }
-        break;
-    case RandomArtActType::ACID_BALL_AND_RESISTANCE:
-        desc = _("アシッド・ボール (100) と酸への耐性", "ball of acid (100) and resist acid");
-        break;
-    case RandomArtActType::FIRE_BALL_AND_RESISTANCE:
-        desc = _("ファイア・ボール (100) と火への耐性", "ball of fire (100) and resist fire");
-        break;
-    case RandomArtActType::COLD_BALL_AND_RESISTANCE:
-        desc = _("アイス・ボール (100) と冷気への耐性", "ball of cold (100) and resist cold");
-        break;
-    case RandomArtActType::ELEC_BALL_AND_RESISTANCE:
-        desc = _("サンダー・ボール (100) と電撃への耐性", "ball of elec (100) and resist elec");
-        break;
-    case RandomArtActType::POIS_BALL_AND_RESISTANCE:
-        desc = _("ポイズン・ボール (100) と毒への耐性", "ball of poison (100) and resist elec");
-        break;
-    case RandomArtActType::RESIST_ACID:
-        desc = _("一時的な酸への耐性", "temporary resist acid");
-        break;
-    case RandomArtActType::RESIST_FIRE:
-        desc = _("一時的な火への耐性", "temporary resist fire");
-        break;
-    case RandomArtActType::RESIST_COLD:
-        desc = _("一時的な冷気への耐性", "temporary resist cold");
-        break;
-    case RandomArtActType::RESIST_ELEC:
-        desc = _("一時的な電撃への耐性", "temporary resist elec");
-        break;
-    case RandomArtActType::RESIST_POIS:
-        desc = _("一時的な毒への耐性", "temporary resist elec");
-        break;
-    default:
-        break;
-    }
+    const auto desc = build_activation_description(*it, *o_ptr);
 
     /* Timeout description */
     std::stringstream timeout;
