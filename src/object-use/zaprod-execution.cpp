@@ -139,7 +139,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
         chg_virtue(this->player_ptr, Virtue::KNOWLEDGE, -1);
     }
 
-    object_tried(o_ptr);
+    o_ptr->mark_as_tried();
     if ((ident != 0) && !o_ptr->is_aware()) {
         object_aware(this->player_ptr, o_ptr);
         gain_exp(this->player_ptr, (lev + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);

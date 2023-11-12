@@ -71,7 +71,7 @@ static bool precalc_ugarcade(int town_hgt, int town_wid, int n, std::vector<ugbl
 /* Create a new floor room with optional light */
 static void generate_room_floor(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int light)
 {
-    grid_type *g_ptr;
+    Grid *g_ptr;
     for (POSITION y = y1; y <= y2; y++) {
         for (POSITION x = x1; x <= x2; x++) {
             g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];

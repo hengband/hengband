@@ -425,7 +425,7 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
 
     auto r_idx = select_horde_leader_r_idx(player_ptr);
-    if (!r_idx.has_value()) {
+    if (!r_idx) {
         return false;
     }
 

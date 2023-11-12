@@ -115,7 +115,7 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
 
     for (int i = 0; i < num; i++) {
         while (true) {
-            grid_type *g_ptr;
+            Grid *g_ptr;
             int candidates = 0;
             const POSITION max_x = floor.width - 1;
             for (POSITION y = 1; y < floor.height - 1; y++) {
@@ -186,7 +186,6 @@ void alloc_object(PlayerType *player_ptr, dap_type set, dungeon_allocation_type 
     POSITION y = 0;
     POSITION x = 0;
     int dummy = 0;
-    grid_type *g_ptr;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     num = num * floor_ptr->height * floor_ptr->width / (MAX_HGT * MAX_WID) + 1;
     for (int k = 0; k < num; k++) {
@@ -194,16 +193,17 @@ void alloc_object(PlayerType *player_ptr, dap_type set, dungeon_allocation_type 
             dummy++;
             y = randint0(floor_ptr->height);
             x = randint0(floor_ptr->width);
-            g_ptr = &floor_ptr->grid_array[y][x];
-            if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty() || g_ptr->m_idx) {
+            const Pos2D pos(y, x);
+            const auto &grid = floor_ptr->get_grid(pos);
+            if (!grid.is_floor() || !grid.o_idx_list.empty() || grid.m_idx) {
                 continue;
             }
 
-            if (player_bold(player_ptr, y, x)) {
+            if (player_ptr->is_located_at(pos)) {
                 continue;
             }
 
-            auto is_room = floor_ptr->grid_array[y][x].is_room();
+            auto is_room = grid.is_room();
             if (((set == ALLOC_SET_CORR) && is_room) || ((set == ALLOC_SET_ROOM) && !is_room)) {
                 continue;
             }

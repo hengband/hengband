@@ -125,7 +125,7 @@ void update_lite_flags(turn_flags *turn_flags_ptr, MonsterRaceInfo *r_ptr)
 {
     using Mbt = MonsterBrightnessType;
     const auto has_lite = r_ptr->brightness_flags.has_any_of({ Mbt::HAS_LITE_1, Mbt::HAS_LITE_2 });
-    const auto &except_has_lite = EnumClassFlagGroup<Mbt>(self_ld_mask).set({ Mbt::HAS_DARK_1, Mbt::HAS_DARK_2 });
+    const auto except_has_lite = EnumClassFlagGroup<Mbt>(self_ld_mask).set({ Mbt::HAS_DARK_1, Mbt::HAS_DARK_2 });
     if (turn_flags_ptr->do_move && (r_ptr->brightness_flags.has_any_of(except_has_lite) || (has_lite && !AngbandSystem::get_instance().is_phase_out()))) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }

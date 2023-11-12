@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
     if (argc > 1) {
         for (auto arg : std::span(argv, argc).subspan(1)) {
             auto hash = util::SHA256::compute_filehash(arg);
-            if (!hash.has_value()) {
+            if (!hash) {
                 std::cout << "cannot open file: " << arg << std::endl;
                 continue;
             }

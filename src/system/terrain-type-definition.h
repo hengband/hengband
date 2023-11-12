@@ -47,8 +47,6 @@ public:
     bool is_permanent_wall() const;
 };
 
-extern std::vector<TerrainType> terrains_info;
-
 class TerrainList {
 public:
     TerrainList(const TerrainList &) = delete;
@@ -59,14 +57,18 @@ public:
     const TerrainType &operator[](short terrain_id) const;
 
     static TerrainList &get_instance();
+    std::vector<TerrainType> &get_raw_vector();
     std::vector<TerrainType>::iterator begin();
     const std::vector<TerrainType>::const_iterator begin() const;
     std::vector<TerrainType>::iterator end();
     const std::vector<TerrainType>::const_iterator end() const;
     size_t size() const;
+    bool empty() const;
+    void resize(size_t new_size);
 
 private:
     TerrainList() = default;
 
     static TerrainList instance;
+    std::vector<TerrainType> terrains{};
 };

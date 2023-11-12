@@ -66,37 +66,35 @@ POSITION temp2_y[MAX_SHORT];
  * @param y 対象となるマスのY座標
  * @param x 対象となるマスのX座標
  */
-static void discover_hidden_things(PlayerType *player_ptr, POSITION y, POSITION x)
+static void discover_hidden_things(PlayerType *player_ptr, const Pos2D &pos)
 {
-    grid_type *g_ptr;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    g_ptr = &floor_ptr->grid_array[y][x];
-    if (g_ptr->mimic && is_trap(player_ptr, g_ptr->feat)) {
-        disclose_grid(player_ptr, y, x);
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto &grid = floor.get_grid(pos);
+    if (grid.mimic && is_trap(player_ptr, grid.feat)) {
+        disclose_grid(player_ptr, pos.y, pos.x);
         msg_print(_("トラップを発見した。", "You have found a trap."));
         disturb(player_ptr, false, true);
     }
 
-    if (is_hidden_door(player_ptr, g_ptr)) {
+    if (is_hidden_door(player_ptr, grid)) {
         msg_print(_("隠しドアを発見した。", "You have found a secret door."));
-        disclose_grid(player_ptr, y, x);
+        disclose_grid(player_ptr, pos.y, pos.x);
         disturb(player_ptr, false, false);
     }
 
-    for (const auto this_o_idx : g_ptr->o_idx_list) {
-        ItemEntity *o_ptr;
-        o_ptr = &floor_ptr->o_list[this_o_idx];
-        if (o_ptr->bi_key.tval() != ItemKindType::CHEST) {
+    for (const auto this_o_idx : grid.o_idx_list) {
+        auto &item = floor.o_list[this_o_idx];
+        if (item.bi_key.tval() != ItemKindType::CHEST) {
             continue;
         }
 
-        if (o_ptr->pval <= 0 || chest_traps[o_ptr->pval].none()) {
+        if (item.pval <= 0 || chest_traps[item.pval].none()) {
             continue;
         }
 
-        if (!o_ptr->is_known()) {
+        if (!item.is_known()) {
             msg_print(_("箱に仕掛けられたトラップを発見した！", "You have discovered a trap on the chest!"));
-            object_known(o_ptr);
+            item.mark_as_known();
             disturb(player_ptr, false, false);
         }
     }
@@ -120,7 +118,7 @@ void search(PlayerType *player_ptr)
 
     for (DIRECTION i = 0; i < 9; ++i) {
         if (randint0(100) < chance) {
-            discover_hidden_things(player_ptr, player_ptr->y + ddy_ddd[i], player_ptr->x + ddx_ddd[i]);
+            discover_hidden_things(player_ptr, { player_ptr->y + ddy_ddd[i], player_ptr->x + ddx_ddd[i] });
         }
     }
 }
@@ -135,43 +133,42 @@ void search(PlayerType *player_ptr)
  */
 bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 {
-    POSITION oy = player_ptr->y;
-    POSITION ox = player_ptr->x;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *g_ptr = &floor_ptr->grid_array[ny][nx];
-    grid_type *oc_ptr = &floor_ptr->grid_array[oy][ox];
-    auto *f_ptr = &terrains_info[g_ptr->feat];
-    TerrainType *of_ptr = &terrains_info[oc_ptr->feat];
-
+    const Pos2D pos_new(ny, nx);
+    const Pos2D pos_old(player_ptr->y, player_ptr->x);
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &grid_new = floor.get_grid(pos_new);
+    auto &grid_old = floor.get_grid(pos_old);
+    const auto &terrain_new = grid_new.get_terrain();
+    const auto &terrain_old = grid_old.get_terrain();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (!(mpe_mode & MPE_STAYING)) {
-        MONSTER_IDX om_idx = oc_ptr->m_idx;
-        MONSTER_IDX nm_idx = g_ptr->m_idx;
-        player_ptr->y = ny;
-        player_ptr->x = nx;
+        const auto om_idx = grid_old.m_idx;
+        const auto nm_idx = grid_new.m_idx;
+        player_ptr->y = pos_new.y;
+        player_ptr->x = pos_new.x;
         if (!(mpe_mode & MPE_DONT_SWAP_MON)) {
-            g_ptr->m_idx = om_idx;
-            oc_ptr->m_idx = nm_idx;
+            grid_new.m_idx = om_idx;
+            grid_old.m_idx = nm_idx;
             if (om_idx > 0) {
-                MonsterEntity *om_ptr = &floor_ptr->m_list[om_idx];
-                om_ptr->fy = ny;
-                om_ptr->fx = nx;
+                MonsterEntity *om_ptr = &floor.m_list[om_idx];
+                om_ptr->fy = pos_new.y;
+                om_ptr->fx = pos_new.x;
                 update_monster(player_ptr, om_idx, true);
             }
 
             if (nm_idx > 0) {
-                MonsterEntity *nm_ptr = &floor_ptr->m_list[nm_idx];
-                nm_ptr->fy = oy;
-                nm_ptr->fx = ox;
+                MonsterEntity *nm_ptr = &floor.m_list[nm_idx];
+                nm_ptr->fy = pos_old.y;
+                nm_ptr->fx = pos_old.x;
                 update_monster(player_ptr, nm_idx, true);
             }
         }
 
-        lite_spot(player_ptr, oy, ox);
-        lite_spot(player_ptr, ny, nx);
+        lite_spot(player_ptr, pos_old.y, pos_old.x);
+        lite_spot(player_ptr, pos_new.y, pos_new.x);
         verify_panel(player_ptr);
         if (mpe_mode & MPE_FORGET_FLOW) {
-            forget_flow(floor_ptr);
+            forget_flow(&floor);
             rfu.set_flag(StatusRecalculatingFlag::UN_VIEW);
             rfu.set_flag(MainWindowRedrawingFlag::MAP);
         }
@@ -189,11 +186,11 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
             SubWindowRedrawingFlag::DUNGEON,
         };
         rfu.set_flags(flags_swrf);
-        if ((!player_ptr->effects()->blindness()->is_blind() && !no_lite(player_ptr)) || !is_trap(player_ptr, g_ptr->feat)) {
-            g_ptr->info &= ~(CAVE_UNSAFE);
+        if ((!player_ptr->effects()->blindness()->is_blind() && !no_lite(player_ptr)) || !is_trap(player_ptr, grid_new.feat)) {
+            grid_new.info &= ~(CAVE_UNSAFE);
         }
 
-        if (floor_ptr->dun_level && floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::FORGET)) {
+        if (floor.dun_level && floor.get_dungeon_definition().flags.has(DungeonFeatureType::FORGET)) {
             wiz_dark(player_ptr);
         }
 
@@ -202,7 +199,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         }
 
         if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA)) {
-            if (g_ptr->info & (CAVE_GLOW)) {
+            if (grid_new.info & (CAVE_GLOW)) {
                 set_superstealth(player_ptr, false);
             } else if (player_ptr->cur_lite <= 0) {
                 set_superstealth(player_ptr, true);
@@ -210,23 +207,24 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         }
 
         using Tc = TerrainCharacteristics;
-        if ((player_ptr->action == ACTION_HAYAGAKE) && (f_ptr->flags.has_not(Tc::PROJECT) || (!player_ptr->levitation && f_ptr->flags.has(Tc::DEEP)))) {
+        if ((player_ptr->action == ACTION_HAYAGAKE) && (terrain_new.flags.has_not(Tc::PROJECT) || (!player_ptr->levitation && terrain_new.flags.has(Tc::DEEP)))) {
             msg_print(_("ここでは素早く動けない。", "You cannot run in here."));
             set_action(player_ptr, ACTION_NONE);
         }
 
         if (PlayerRace(player_ptr).equals(PlayerRaceType::MERFOLK)) {
-            if (f_ptr->flags.has(Tc::WATER) ^ of_ptr->flags.has(Tc::WATER)) {
+            if (terrain_new.flags.has(Tc::WATER) ^ terrain_old.flags.has(Tc::WATER)) {
                 rfu.set_flag(StatusRecalculatingFlag::BONUS);
                 update_creature(player_ptr);
             }
         }
     }
 
+    const Pos2D pos(ny, nx);
     if (mpe_mode & MPE_ENERGY_USE) {
         if (music_singing(player_ptr, MUSIC_WALL)) {
             (void)project(player_ptr, 0, 0, player_ptr->y, player_ptr->x, (60 + player_ptr->lev), AttributeType::DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM);
-            if (!player_bold(player_ptr, ny, nx) || player_ptr->is_dead || player_ptr->leaving) {
+            if (!player_ptr->is_located_at(pos) || player_ptr->is_dead || player_ptr->leaving) {
                 return false;
             }
         }
@@ -255,48 +253,48 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
     }
 
     PlayerEnergy energy(player_ptr);
-    if (f_ptr->flags.has(TerrainCharacteristics::STORE)) {
+    if (terrain_new.flags.has(TerrainCharacteristics::STORE)) {
         disturb(player_ptr, false, true);
         energy.reset_player_turn();
         command_new = SPECIAL_KEY_STORE;
-    } else if (f_ptr->flags.has(TerrainCharacteristics::BLDG)) {
+    } else if (terrain_new.flags.has(TerrainCharacteristics::BLDG)) {
         disturb(player_ptr, false, true);
         energy.reset_player_turn();
         command_new = SPECIAL_KEY_BUILDING;
-    } else if (f_ptr->flags.has(TerrainCharacteristics::QUEST_ENTER)) {
+    } else if (terrain_new.flags.has(TerrainCharacteristics::QUEST_ENTER)) {
         disturb(player_ptr, false, true);
         energy.reset_player_turn();
         command_new = SPECIAL_KEY_QUEST;
-    } else if (f_ptr->flags.has(TerrainCharacteristics::QUEST_EXIT)) {
+    } else if (terrain_new.flags.has(TerrainCharacteristics::QUEST_EXIT)) {
         const auto &quest_list = QuestList::get_instance();
-        if (quest_list[floor_ptr->quest_number].type == QuestKindType::FIND_EXIT) {
-            complete_quest(player_ptr, floor_ptr->quest_number);
+        if (quest_list[floor.quest_number].type == QuestKindType::FIND_EXIT) {
+            complete_quest(player_ptr, floor.quest_number);
         }
         leave_quest_check(player_ptr);
-        floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
-        floor_ptr->dun_level = 0;
-        if (!floor_ptr->is_in_quest()) {
+        floor.quest_number = i2enum<QuestId>(grid_new.special);
+        floor.dun_level = 0;
+        if (!floor.is_in_quest()) {
             player_ptr->word_recall = 0;
         }
         player_ptr->oldpx = 0;
         player_ptr->oldpy = 0;
         player_ptr->leaving = true;
-    } else if (f_ptr->flags.has(TerrainCharacteristics::HIT_TRAP) && !(mpe_mode & MPE_STAYING)) {
+    } else if (terrain_new.flags.has(TerrainCharacteristics::HIT_TRAP) && !(mpe_mode & MPE_STAYING)) {
         disturb(player_ptr, false, true);
-        if (g_ptr->mimic || f_ptr->flags.has(TerrainCharacteristics::SECRET)) {
+        if (grid_new.mimic || terrain_new.flags.has(TerrainCharacteristics::SECRET)) {
             msg_print(_("トラップだ！", "You found a trap!"));
             disclose_grid(player_ptr, player_ptr->y, player_ptr->x);
         }
 
         hit_trap(player_ptr, any_bits(mpe_mode, MPE_BREAK_TRAP));
-        if (!player_bold(player_ptr, ny, nx) || player_ptr->is_dead || player_ptr->leaving) {
+        if (!player_ptr->is_located_at(pos) || player_ptr->is_dead || player_ptr->leaving) {
             return false;
         }
     }
 
-    if (!(mpe_mode & MPE_STAYING) && (disturb_trap_detect || alert_trap_detect) && player_ptr->dtrap && !(g_ptr->info & CAVE_IN_DETECT)) {
+    if (!(mpe_mode & MPE_STAYING) && (disturb_trap_detect || alert_trap_detect) && player_ptr->dtrap && !(grid_new.info & CAVE_IN_DETECT)) {
         player_ptr->dtrap = false;
-        if (!(g_ptr->info & CAVE_UNSAFE)) {
+        if (!(grid_new.info & CAVE_UNSAFE)) {
             if (alert_trap_detect) {
                 msg_print(_("* 注意:この先はトラップの感知範囲外です！ *", "*Leaving trap detect region!*"));
             }
@@ -307,7 +305,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         }
     }
 
-    return player_bold(player_ptr, ny, nx) && !player_ptr->is_dead && !player_ptr->leaving;
+    return player_ptr->is_located_at(pos) && !player_ptr->is_dead && !player_ptr->leaving;
 }
 
 /*!

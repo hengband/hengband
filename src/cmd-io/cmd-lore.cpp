@@ -48,7 +48,7 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
     constexpr auto prompt = _("知りたい文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^R乗馬,^M名前): ",
         "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): ");
     const auto sym_opt = input_command(prompt);
-    if (!sym_opt.has_value()) {
+    if (!sym_opt) {
         return;
     }
 
@@ -77,7 +77,7 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
     } else if (sym == KTRL('M')) {
         all = true;
         const auto monster_name_opt = input_string(_("名前(英語の場合小文字で可)", "Enter name:"), MAX_MONSTER_NAME);
-        if (!monster_name_opt.has_value()) {
+        if (!monster_name_opt) {
             return;
         }
 

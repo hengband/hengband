@@ -388,7 +388,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view pro
             choice = ' ';
         } else {
             const auto new_choice = input_command(prompt, true);
-            if (!new_choice.has_value()) {
+            if (!new_choice) {
                 break;
             }
 

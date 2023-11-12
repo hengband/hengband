@@ -11,7 +11,6 @@
 #include "object-hook/hook-expendable.h"
 #include "object/object-broken.h"
 #include "object/object-mark-types.h"
-#include "perception/object-perception.h"
 #include "spell-kind/spells-perception.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-scroll-types.h"
@@ -214,7 +213,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
             }
 
             o_ptr->pval = (0 - o_ptr->pval);
-            object_known(o_ptr);
+            o_ptr->mark_as_known();
             if (known && o_ptr->marked.has(OmType::FOUND)) {
                 msg_print(_("カチッと音がした！", "Click!"));
                 is_item_affected = true;

@@ -45,7 +45,7 @@ bool sword_dancing(PlayerType *player_ptr)
 {
     DIRECTION dir;
     POSITION y = 0, x = 0;
-    grid_type *g_ptr;
+    Grid *g_ptr;
     for (int i = 0; i < 6; i++) {
         dir = randint0(8);
         y = player_ptr->y + ddy_ddd[dir];

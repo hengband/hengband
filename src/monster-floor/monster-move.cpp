@@ -45,45 +45,44 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-static bool check_hp_for_terrain_destruction(TerrainType *f_ptr, MonsterEntity *m_ptr)
+static bool check_hp_for_terrain_destruction(const TerrainType &terrain, const MonsterEntity &monster)
 {
-    auto can_destroy = f_ptr->flags.has_not(TerrainCharacteristics::GLASS);
-    can_destroy |= m_ptr->get_monrace().behavior_flags.has(MonsterBehaviorType::STUPID);
-    can_destroy |= m_ptr->hp >= std::max(m_ptr->maxhp / 3, 200);
+    auto can_destroy = terrain.flags.has_not(TerrainCharacteristics::GLASS);
+    can_destroy |= monster.get_monrace().behavior_flags.has(MonsterBehaviorType::STUPID);
+    can_destroy |= monster.hp >= std::max(monster.maxhp / 3, 200);
     return can_destroy;
 }
 
 /*!
  * @brief モンスターによる壁の透過・破壊を行う
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param m_ptr モンスターへの参照ポインタ
- * @param ny モンスターのY座標
- * @param nx モンスターのX座標
+ * @param monster モンスターへの参照
+ * @param pos モンスターの移動先座標
  * @param can_cross モンスターが地形を踏破できるならばTRUE
  * @return 透過も破壊もしなかった場合はFALSE、それ以外はTRUE
  */
-static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, POSITION ny, POSITION nx, bool can_cross)
+static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MonsterEntity &monster, const Pos2D &pos, bool can_cross)
 {
-    auto *r_ptr = &m_ptr->get_monrace();
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
-    auto *f_ptr = &terrains_info[g_ptr->feat];
-    if (player_bold(player_ptr, ny, nx)) {
+    const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    const auto &terrain = grid.get_terrain();
+    if (player_ptr->is_located_at(pos)) {
         turn_flags_ptr->do_move = true;
         return true;
     }
 
-    if (g_ptr->m_idx > 0) {
+    if (grid.m_idx > 0) {
         turn_flags_ptr->do_move = true;
         return true;
     }
 
     using Mft = MonsterFeatureType;
     using Tc = TerrainCharacteristics;
-    auto can_kill_wall = r_ptr->feature_flags.has(Mft::KILL_WALL);
-    can_kill_wall &= can_cross ? f_ptr->flags.has_not(Tc::LOS) : !turn_flags_ptr->is_riding_mon;
-    can_kill_wall &= f_ptr->flags.has(Tc::HURT_DISI);
-    can_kill_wall &= f_ptr->flags.has_not(Tc::PERMANENT);
-    can_kill_wall &= check_hp_for_terrain_destruction(f_ptr, m_ptr);
+    const auto &monrace = monster.get_monrace();
+    auto can_kill_wall = monrace.feature_flags.has(Mft::KILL_WALL);
+    can_kill_wall &= can_cross ? terrain.flags.has_not(Tc::LOS) : !turn_flags_ptr->is_riding_mon;
+    can_kill_wall &= terrain.flags.has(Tc::HURT_DISI);
+    can_kill_wall &= terrain.flags.has_not(Tc::PERMANENT);
+    can_kill_wall &= check_hp_for_terrain_destruction(terrain, monster);
     if (can_kill_wall) {
         turn_flags_ptr->do_move = true;
         if (!can_cross) {
@@ -99,7 +98,7 @@ static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, Mon
     }
 
     turn_flags_ptr->do_move = true;
-    if ((r_ptr->feature_flags.has(Mft::PASS_WALL)) && (!turn_flags_ptr->is_riding_mon || has_pass_wall(player_ptr)) && f_ptr->flags.has(Tc::CAN_PASS)) {
+    if ((monrace.feature_flags.has(Mft::PASS_WALL)) && (!turn_flags_ptr->is_riding_mon || has_pass_wall(player_ptr)) && terrain.flags.has(Tc::CAN_PASS)) {
         turn_flags_ptr->did_pass_wall = true;
     }
 
@@ -110,33 +109,33 @@ static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, Mon
  * @brief モンスターが普通のドアを開ける処理
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
- * @param m_ptr モンスターへの参照ポインタ
- * @param ny モンスターのY座標
- * @param nx モンスターのX座標
- * @return ここではドアを開けず、ガラスのドアを開ける可能性があるならTRUE
+ * @param monster モンスターへの参照
+ * @param pos モンスターの移動先座標
+ * @return ドアを打ち破るならここでの処理は実行せずtrue、開けるだけなら開けてfalseを返す
+ * @todo 関数名と処理内容が不一致、後で直す
  */
-static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, POSITION ny, POSITION nx)
+static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MonsterEntity &monster, const Pos2D &pos)
 {
-    auto *r_ptr = &m_ptr->get_monrace();
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
-    auto *f_ptr = &terrains_info[g_ptr->feat];
+    const auto &monrace = monster.get_monrace();
+    const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    const auto &terrain = grid.get_terrain();
     turn_flags_ptr->do_move = false;
     using Tc = TerrainCharacteristics;
-    auto can_bash = r_ptr->behavior_flags.has_not(MonsterBehaviorType::OPEN_DOOR);
-    can_bash |= f_ptr->flags.has_not(Tc::OPEN);
-    can_bash |= m_ptr->is_pet() && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0);
+    auto can_bash = monrace.behavior_flags.has_not(MonsterBehaviorType::OPEN_DOOR);
+    can_bash |= terrain.flags.has_not(Tc::OPEN);
+    can_bash |= monster.is_pet() && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0);
     if (can_bash) {
         return true;
     }
 
-    if (f_ptr->power == 0) {
+    if (terrain.power == 0) {
         turn_flags_ptr->did_open_door = true;
         turn_flags_ptr->do_turn = true;
         return false;
     }
 
-    if (randint0(m_ptr->hp / 10) > f_ptr->power) {
-        cave_alter_feat(player_ptr, ny, nx, Tc::DISARM);
+    if (randint0(monster.hp / 10) > terrain.power) {
+        cave_alter_feat(player_ptr, pos.y, pos.x, Tc::DISARM);
         turn_flags_ptr->do_turn = true;
         return false;
     }
@@ -148,26 +147,27 @@ static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr,
  * @brief モンスターがガラスのドアを開ける処理
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
- * @param m_ptr モンスターへの参照ポインタ
- * @param g_ptr グリッドへの参照ポインタ
- * @param f_ptr 地形への参照ポインタ
+ * @param monster モンスターへの参照
+ * @param terrain 地形への参照
+ * @param may_bash ドアを打ち破るならtrue、開けるだけならfalse
+ * @todo 関数名と処理内容が不一致、後で直す
  */
-static void bash_glass_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, TerrainType *f_ptr, bool may_bash)
+static void bash_glass_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MonsterEntity &monster, const TerrainType &terrain, bool may_bash)
 {
-    auto *r_ptr = &m_ptr->get_monrace();
+    const auto &monrace = monster.get_monrace();
     auto can_bash = may_bash;
-    can_bash &= r_ptr->behavior_flags.has(MonsterBehaviorType::BASH_DOOR);
-    can_bash &= f_ptr->flags.has(TerrainCharacteristics::BASH);
-    can_bash &= !m_ptr->is_pet() || any_bits(player_ptr->pet_extra_flags, PF_OPEN_DOORS);
+    can_bash &= monrace.behavior_flags.has(MonsterBehaviorType::BASH_DOOR);
+    can_bash &= terrain.flags.has(TerrainCharacteristics::BASH);
+    can_bash &= !monster.is_pet() || any_bits(player_ptr->pet_extra_flags, PF_OPEN_DOORS);
     if (!can_bash) {
         return;
     }
 
-    if (!check_hp_for_terrain_destruction(f_ptr, m_ptr) || (randint0(m_ptr->hp / 10) <= f_ptr->power)) {
+    if (!check_hp_for_terrain_destruction(terrain, monster) || (randint0(monster.hp / 10) <= terrain.power)) {
         return;
     }
 
-    if (f_ptr->flags.has(TerrainCharacteristics::GLASS)) {
+    if (terrain.flags.has(TerrainCharacteristics::GLASS)) {
         msg_print(_("ガラスが砕ける音がした！", "You hear glass breaking!"));
     } else {
         msg_print(_("ドアを叩き開ける音がした！", "You hear a door burst open!"));
@@ -186,30 +186,29 @@ static void bash_glass_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, 
  * @brief モンスターによるドアの開放・破壊を行う
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
- * @param m_ptr モンスターへの参照ポインタ
- * @param ny モンスターのY座標
- * @param nx モンスターのX座標
+ * @param monster モンスターへの参照
+ * @param pos モンスターの移動先座標
  * @return モンスターが死亡した場合のみFALSE
  */
-static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, POSITION ny, POSITION nx)
+static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MonsterEntity &monster, const Pos2D &pos)
 {
-    auto *r_ptr = &m_ptr->get_monrace();
-    const auto &g_ref = player_ptr->current_floor_ptr->grid_array[ny][nx];
-    if (!is_closed_door(player_ptr, g_ref.feat)) {
+    auto &monrace = monster.get_monrace();
+    const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    if (!is_closed_door(player_ptr, grid.feat)) {
         return true;
     }
 
-    auto *terrain_ptr = &terrains_info[g_ref.feat];
-    auto may_bash = bash_normal_door(player_ptr, turn_flags_ptr, m_ptr, ny, nx);
-    bash_glass_door(player_ptr, turn_flags_ptr, m_ptr, terrain_ptr, may_bash);
+    auto &terrain = grid.get_terrain();
+    auto may_bash = bash_normal_door(player_ptr, turn_flags_ptr, monster, pos);
+    bash_glass_door(player_ptr, turn_flags_ptr, monster, terrain, may_bash);
     if (!turn_flags_ptr->did_open_door && !turn_flags_ptr->did_bash_door) {
         return true;
     }
 
-    const auto is_open = feat_state(player_ptr->current_floor_ptr, g_ref.feat, TerrainCharacteristics::OPEN) == g_ref.feat;
-    if (turn_flags_ptr->did_bash_door && ((randint0(100) < 50) || is_open || terrain_ptr->flags.has(TerrainCharacteristics::GLASS))) {
-        cave_alter_feat(player_ptr, ny, nx, TerrainCharacteristics::BASH);
-        if (!m_ptr->is_valid()) {
+    const auto is_open = feat_state(player_ptr->current_floor_ptr, grid.feat, TerrainCharacteristics::OPEN) == grid.feat;
+    if (turn_flags_ptr->did_bash_door && ((randint0(100) < 50) || is_open || terrain.flags.has(TerrainCharacteristics::GLASS))) {
+        cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::BASH);
+        if (!monster.is_valid()) {
             auto &rfu = RedrawingFlagsUpdater::get_instance();
             rfu.set_flag(StatusRecalculatingFlag::FLOW);
             static constexpr auto flags = {
@@ -217,14 +216,14 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, Mon
                 SubWindowRedrawingFlag::DUNGEON,
             };
             rfu.set_flags(flags);
-            if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-                r_ptr->r_behavior_flags.set(MonsterBehaviorType::BASH_DOOR);
+            if (is_original_ap_and_seen(player_ptr, &monster)) {
+                monrace.r_behavior_flags.set(MonsterBehaviorType::BASH_DOOR);
             }
 
             return false;
         }
     } else {
-        cave_alter_feat(player_ptr, ny, nx, TerrainCharacteristics::OPEN);
+        cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::OPEN);
     }
 
     turn_flags_ptr->do_view = true;
@@ -236,35 +235,34 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, Mon
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
- * @param ny モンスターのY座標
- * @param nx モンスターのX座標
+ * @param pos モンスターの移動先座標
  * @return ルーンに侵入できるか否か
  */
-static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, POSITION ny, POSITION nx)
+static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, const Pos2D &pos)
 {
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
-    auto *r_ptr = &m_ptr->get_monrace();
+    auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    const auto &monrace = m_ptr->get_monrace();
     auto can_enter = turn_flags_ptr->do_move;
-    can_enter &= g_ptr->is_rune_protection();
-    can_enter &= (r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW)) || !player_bold(player_ptr, ny, nx);
+    can_enter &= grid.is_rune_protection();
+    can_enter &= (monrace.behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW)) || !player_ptr->is_located_at(pos);
     if (!can_enter) {
         return false;
     }
 
     turn_flags_ptr->do_move = false;
-    if (m_ptr->is_pet() || (randint1(BREAK_RUNE_PROTECTION) >= r_ptr->level)) {
+    if (m_ptr->is_pet() || (randint1(BREAK_RUNE_PROTECTION) >= monrace.level)) {
         return true;
     }
 
-    if (g_ptr->is_mark()) {
+    if (grid.is_mark()) {
         msg_print(_("守りのルーンが壊れた！", "The rune of protection is broken!"));
     }
 
-    g_ptr->info &= ~(CAVE_MARK);
-    g_ptr->info &= ~(CAVE_OBJECT);
-    g_ptr->mimic = 0;
+    grid.info &= ~(CAVE_MARK);
+    grid.info &= ~(CAVE_OBJECT);
+    grid.mimic = 0;
     turn_flags_ptr->do_move = true;
-    note_spot(player_ptr, ny, nx);
+    note_spot(player_ptr, pos.y, pos.x);
     return true;
 }
 
@@ -273,17 +271,16 @@ static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_fla
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
- * @param ny モンスターのY座標
- * @param nx モンスターのX座標
+ * @param pos モンスターの移動先座標
  * @return モンスターが死亡した場合のみFALSE
  */
-static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, POSITION ny, POSITION nx)
+static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, const Pos2D &pos)
 {
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
-    auto *r_ptr = &m_ptr->get_monrace();
+    auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    const auto &monrace = m_ptr->get_monrace();
     auto should_explode = turn_flags_ptr->do_move;
-    should_explode &= g_ptr->is_rune_explosion();
-    should_explode &= (r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW)) || !player_bold(player_ptr, ny, nx);
+    should_explode &= grid.is_rune_explosion();
+    should_explode &= (monrace.behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW)) || !player_ptr->is_located_at(pos);
     if (!should_explode) {
         return true;
     }
@@ -293,22 +290,22 @@ static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flag
         return true;
     }
 
-    if (randint1(BREAK_RUNE_EXPLOSION) > r_ptr->level) {
-        if (g_ptr->info & CAVE_MARK) {
+    if (randint1(BREAK_RUNE_EXPLOSION) > monrace.level) {
+        if (grid.info & CAVE_MARK) {
             msg_print(_("ルーンが爆発した！", "The rune explodes!"));
             BIT_FLAGS project_flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI;
-            project(player_ptr, 0, 2, ny, nx, 2 * (player_ptr->lev + damroll(7, 7)), AttributeType::MANA, project_flags);
+            project(player_ptr, 0, 2, pos.y, pos.x, 2 * (player_ptr->lev + damroll(7, 7)), AttributeType::MANA, project_flags);
         }
     } else {
         msg_print(_("爆発のルーンは解除された。", "An explosive rune was disarmed."));
     }
 
-    g_ptr->info &= ~(CAVE_MARK);
-    g_ptr->info &= ~(CAVE_OBJECT);
-    g_ptr->mimic = 0;
+    grid.info &= ~(CAVE_MARK);
+    grid.info &= ~(CAVE_OBJECT);
+    grid.mimic = 0;
 
-    note_spot(player_ptr, ny, nx);
-    lite_spot(player_ptr, ny, nx);
+    note_spot(player_ptr, pos.y, pos.x);
+    lite_spot(player_ptr, pos.y, pos.x);
 
     if (!m_ptr->is_valid()) {
         return false;
@@ -322,34 +319,31 @@ static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flag
  * @brief モンスターが壁を掘った後続処理を実行する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @turn_flags_ptr ターン経過処理フラグへの参照ポインタ
- * @param m_ptr モンスターへの参照ポインタ
- * @param ny モンスターのY座標
- * @param nx モンスターのX座標
+ * @param monster モンスターへの参照
+ * @param pos モンスターの移動先座標
  * @return モンスターが死亡した場合のみFALSE
  */
-static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, POSITION ny, POSITION nx)
+static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MonsterEntity &monster, const Pos2D &pos)
 {
-    auto *r_ptr = &m_ptr->get_monrace();
-    grid_type *g_ptr;
-    g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
-    TerrainType *f_ptr;
-    f_ptr = &terrains_info[g_ptr->feat];
+    auto &monrace = monster.get_monrace();
+    const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    const auto &terrain = grid.get_terrain();
     if (!turn_flags_ptr->did_kill_wall || !turn_flags_ptr->do_move) {
         return true;
     }
 
     constexpr auto chance_sound = 20;
     if (one_in_(chance_sound)) {
-        if (f_ptr->flags.has(TerrainCharacteristics::GLASS)) {
+        if (terrain.flags.has(TerrainCharacteristics::GLASS)) {
             msg_print(_("何かの砕ける音が聞こえる。", "There is a crashing sound."));
         } else {
             msg_print(_("ギシギシいう音が聞こえる。", "There is a grinding sound."));
         }
     }
 
-    cave_alter_feat(player_ptr, ny, nx, TerrainCharacteristics::HURT_DISI);
+    cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::HURT_DISI);
 
-    if (!m_ptr->is_valid()) {
+    if (!monster.is_valid()) {
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(StatusRecalculatingFlag::FLOW);
         static constexpr auto flags = {
@@ -357,14 +351,13 @@ static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags
             SubWindowRedrawingFlag::DUNGEON,
         };
         rfu.set_flags(flags);
-        if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-            r_ptr->r_feature_flags.set(MonsterFeatureType::KILL_WALL);
+        if (is_original_ap_and_seen(player_ptr, &monster)) {
+            monrace.r_feature_flags.set(MonsterFeatureType::KILL_WALL);
         }
 
         return false;
     }
 
-    f_ptr = &terrains_info[g_ptr->feat];
     turn_flags_ptr->do_view = true;
     turn_flags_ptr->do_turn = true;
     return true;
@@ -376,13 +369,12 @@ static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_idx モンスターID
  * @param mm モンスターの移動方向
- * @param oy 移動前の、モンスターのY座標
- * @param ox 移動前の、モンスターのX座標
+ * @param pos モンスターの移動前座標
  * @param count 移動回数 (のはず todo)
  * @return 移動が阻害される何か (ドア等)があったらFALSE
  * @todo 少し長いが、これといってブロックとしてまとまった部分もないので暫定でこのままとする
  */
-bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, DIRECTION *mm, POSITION oy, POSITION ox, int *count)
+bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, DIRECTION *mm, const Pos2D &pos, int *count)
 {
     for (int i = 0; mm[i]; i++) {
         int d = mm[i];
@@ -390,48 +382,46 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
             d = ddd[randint0(8)];
         }
 
-        POSITION ny = oy + ddy[d];
-        POSITION nx = ox + ddx[d];
-        if (!in_bounds2(player_ptr->current_floor_ptr, ny, nx)) {
+        const Pos2D pos_neighbor(pos.y + ddy[d], pos.x + ddx[d]);
+        if (!in_bounds2(player_ptr->current_floor_ptr, pos_neighbor.y, pos_neighbor.x)) {
             continue;
         }
 
-        grid_type *g_ptr;
-        g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-        auto *r_ptr = &m_ptr->get_monrace();
-        bool can_cross = monster_can_cross_terrain(player_ptr, g_ptr->feat, r_ptr, turn_flags_ptr->is_riding_mon ? CEM_RIDING : 0);
+        auto &grid = player_ptr->current_floor_ptr->get_grid(pos_neighbor);
+        auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+        auto &monrace = monster.get_monrace();
+        bool can_cross = monster_can_cross_terrain(player_ptr, grid.feat, &monrace, turn_flags_ptr->is_riding_mon ? CEM_RIDING : 0);
 
-        if (!process_wall(player_ptr, turn_flags_ptr, m_ptr, ny, nx, can_cross)) {
-            if (!process_door(player_ptr, turn_flags_ptr, m_ptr, ny, nx)) {
+        if (!process_wall(player_ptr, turn_flags_ptr, monster, pos_neighbor, can_cross)) {
+            if (!process_door(player_ptr, turn_flags_ptr, monster, pos_neighbor)) {
                 return false;
             }
         }
 
-        if (!process_protection_rune(player_ptr, turn_flags_ptr, m_ptr, ny, nx)) {
-            if (!process_explosive_rune(player_ptr, turn_flags_ptr, m_ptr, ny, nx)) {
+        if (!process_protection_rune(player_ptr, turn_flags_ptr, &monster, pos_neighbor)) {
+            if (!process_explosive_rune(player_ptr, turn_flags_ptr, &monster, pos_neighbor)) {
                 return false;
             }
         }
 
-        exe_monster_attack_to_player(player_ptr, turn_flags_ptr, m_idx, ny, nx);
-        if (process_monster_attack_to_monster(player_ptr, turn_flags_ptr, m_idx, g_ptr, can_cross)) {
+        exe_monster_attack_to_player(player_ptr, turn_flags_ptr, m_idx, pos_neighbor);
+        if (process_monster_attack_to_monster(player_ptr, turn_flags_ptr, m_idx, &grid, can_cross)) {
             return false;
         }
 
         if (turn_flags_ptr->is_riding_mon) {
-            const auto &m_ref = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-            if (!player_ptr->riding_ryoute && !m_ref.is_fearful()) {
+            const auto &monster_riding = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+            if (!player_ptr->riding_ryoute && !monster_riding.is_fearful()) {
                 turn_flags_ptr->do_move = false;
             }
         }
 
-        if (!process_post_dig_wall(player_ptr, turn_flags_ptr, m_ptr, ny, nx)) {
+        if (!process_post_dig_wall(player_ptr, turn_flags_ptr, monster, pos_neighbor)) {
             return false;
         }
 
-        if (turn_flags_ptr->must_alter_to_move && r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC)) {
-            if (!monster_can_cross_terrain(player_ptr, g_ptr->feat, r_ptr, turn_flags_ptr->is_riding_mon ? CEM_RIDING : 0)) {
+        if (turn_flags_ptr->must_alter_to_move && monrace.feature_flags.has(MonsterFeatureType::AQUATIC)) {
+            if (!monster_can_cross_terrain(player_ptr, grid.feat, &monrace, turn_flags_ptr->is_riding_mon ? CEM_RIDING : 0)) {
                 turn_flags_ptr->do_move = false;
             }
         }
@@ -440,9 +430,9 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
             turn_flags_ptr->do_move = false;
         }
 
-        if (turn_flags_ptr->do_move && r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_MOVE)) {
-            if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-                r_ptr->r_behavior_flags.set(MonsterBehaviorType::NEVER_MOVE);
+        if (turn_flags_ptr->do_move && monrace.behavior_flags.has(MonsterBehaviorType::NEVER_MOVE)) {
+            if (is_original_ap_and_seen(player_ptr, &monster)) {
+                monrace.r_behavior_flags.set(MonsterBehaviorType::NEVER_MOVE);
             }
 
             turn_flags_ptr->do_move = false;
@@ -457,35 +447,35 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
         }
 
         turn_flags_ptr->do_turn = true;
-        const auto &terrain_ref = terrains_info[g_ptr->feat];
-        auto can_recover_energy = terrain_ref.flags.has(TerrainCharacteristics::TREE);
-        can_recover_energy &= r_ptr->feature_flags.has_not(MonsterFeatureType::CAN_FLY);
-        can_recover_energy &= r_ptr->wilderness_flags.has_not(MonsterWildernessType::WILD_WOOD);
+        const auto &terrain = grid.get_terrain();
+        auto can_recover_energy = terrain.flags.has(TerrainCharacteristics::TREE);
+        can_recover_energy &= monrace.feature_flags.has_not(MonsterFeatureType::CAN_FLY);
+        can_recover_energy &= monrace.wilderness_flags.has_not(MonsterWildernessType::WILD_WOOD);
         if (can_recover_energy) {
-            m_ptr->energy_need += ENERGY_NEED();
+            monster.energy_need += ENERGY_NEED();
         }
 
-        if (!update_riding_monster(player_ptr, turn_flags_ptr, m_idx, oy, ox, ny, nx)) {
+        if (!update_riding_monster(player_ptr, turn_flags_ptr, m_idx, pos.y, pos.x, pos_neighbor.y, pos_neighbor.x)) {
             break;
         }
 
-        const auto &ap_r_ref = m_ptr->get_appearance_monrace();
-        const auto is_projectable = projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
-        const auto can_see = disturb_near && m_ptr->mflag.has(MonsterTemporaryFlagType::VIEW) && is_projectable;
+        const auto &ap_r_ref = monster.get_appearance_monrace();
+        const auto is_projectable = projectable(player_ptr, player_ptr->y, player_ptr->x, monster.fy, monster.fx);
+        const auto can_see = disturb_near && monster.mflag.has(MonsterTemporaryFlagType::VIEW) && is_projectable;
         const auto is_high_level = disturb_high && (ap_r_ref.r_tkills > 0) && (ap_r_ref.level >= player_ptr->lev);
-        if (m_ptr->ml && (disturb_move || can_see || is_high_level)) {
-            if (m_ptr->is_hostile()) {
+        if (monster.ml && (disturb_move || can_see || is_high_level)) {
+            if (monster.is_hostile()) {
                 disturb(player_ptr, false, true);
             }
         }
 
-        bool is_takable_or_killable = !g_ptr->o_idx_list.empty();
-        is_takable_or_killable &= r_ptr->behavior_flags.has_any_of({ MonsterBehaviorType::TAKE_ITEM, MonsterBehaviorType::KILL_ITEM });
+        bool is_takable_or_killable = !grid.o_idx_list.empty();
+        is_takable_or_killable &= monrace.behavior_flags.has_any_of({ MonsterBehaviorType::TAKE_ITEM, MonsterBehaviorType::KILL_ITEM });
 
         bool is_pickup_items = (player_ptr->pet_extra_flags & PF_PICKUP_ITEMS) != 0;
-        is_pickup_items &= r_ptr->behavior_flags.has(MonsterBehaviorType::TAKE_ITEM);
+        is_pickup_items &= monrace.behavior_flags.has(MonsterBehaviorType::TAKE_ITEM);
 
-        is_takable_or_killable &= !m_ptr->is_pet() || is_pickup_items;
+        is_takable_or_killable &= !monster.is_pet() || is_pickup_items;
         if (!is_takable_or_killable) {
             if (turn_flags_ptr->do_turn) {
                 break;
@@ -494,7 +484,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
             continue;
         }
 
-        update_object_by_monster_movement(player_ptr, turn_flags_ptr, m_idx, ny, nx);
+        update_object_by_monster_movement(player_ptr, turn_flags_ptr, m_idx, pos_neighbor.y, pos_neighbor.x);
         if (turn_flags_ptr->do_turn) {
             break;
         }
@@ -572,7 +562,7 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
     }
 
     const auto monmessage = get_random_line(filename.data(), enum2i(monster.ap_r_idx));
-    if (monmessage.has_value()) {
+    if (monmessage) {
         msg_format(_("%s^%s", "%s^ %s"), m_name.data(), monmessage->data());
     }
 }

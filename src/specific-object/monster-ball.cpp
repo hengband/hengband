@@ -29,7 +29,7 @@ static void inscribe_nickname(ItemEntity &item, const CapturedMonsterType &cap_m
     }
 
     auto &insc = item.inscription;
-    if (!insc.has_value()) {
+    if (!insc) {
         insc = "";
     }
 

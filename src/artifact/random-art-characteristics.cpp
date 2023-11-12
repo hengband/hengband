@@ -150,7 +150,7 @@ std::string get_random_name(const ItemEntity &item, bool armour, int power)
     auto filename = get_random_art_filename(armour, power);
     auto random_artifact_name = get_random_line(filename.data(), item.artifact_bias);
 #ifdef JP
-    if (random_artifact_name.has_value()) {
+    if (random_artifact_name) {
         return random_artifact_name.value();
     }
 

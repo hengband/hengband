@@ -535,7 +535,7 @@ bool reset_recall(PlayerType *player_ptr)
     const auto min_level = dungeons_info[select_dungeon].mindepth;
     const auto max_level = max_dlv[select_dungeon];
     const auto reset_level_opt = input_numerics(prompt, min_level, max_level, player_ptr->current_floor_ptr->dun_level);
-    if (!reset_level_opt.has_value()) {
+    if (!reset_level_opt) {
         return false;
     }
 

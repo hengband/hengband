@@ -525,7 +525,7 @@ void fix_object(PlayerType *player_ptr)
  * @details
  * Lookコマンドでカーソルを合わせた場合に合わせてミミックは考慮しない。
  */
-static const MonsterEntity *monster_on_floor_items(FloorType *floor_ptr, const grid_type *g_ptr)
+static const MonsterEntity *monster_on_floor_items(FloorType *floor_ptr, const Grid *g_ptr)
 {
     if (g_ptr->m_idx == 0) {
         return nullptr;
@@ -545,7 +545,7 @@ static const MonsterEntity *monster_on_floor_items(FloorType *floor_ptr, const g
  * @param y 参照する座標グリッドのy座標
  * @param x 参照する座標グリッドのx座標
  */
-static void display_floor_item_list(PlayerType *player_ptr, const int y, const int x)
+static void display_floor_item_list(PlayerType *player_ptr, const Pos2D &pos)
 {
     const auto &[wid, hgt] = term_get_size();
     if (hgt <= 0) {
@@ -555,43 +555,43 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
     term_clear();
     term_gotoxy(0, 0);
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto *g_ptr = &floor_ptr->grid_array[y][x];
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto &grid = floor.get_grid(pos);
     std::string line;
 
     // 先頭行を書く。
     auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
-    if (player_bold(player_ptr, y, x)) {
-        line = format(_("(X:%03d Y:%03d) あなたの足元のアイテム一覧", "Items at (%03d,%03d) under you"), x, y);
-    } else if (const auto *m_ptr = monster_on_floor_items(floor_ptr, g_ptr); m_ptr != nullptr) {
+    if (player_ptr->is_located_at(pos)) {
+        line = format(_("(X:%03d Y:%03d) あなたの足元のアイテム一覧", "Items at (%03d,%03d) under you"), pos.x, pos.y);
+    } else if (const auto *m_ptr = monster_on_floor_items(&floor, &grid); m_ptr != nullptr) {
         if (is_hallucinated) {
-            line = format(_("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), x, y);
+            line = format(_("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), pos.x, pos.y);
         } else {
             const MonsterRaceInfo *const r_ptr = &m_ptr->get_appearance_monrace();
-            line = format(_("(X:%03d Y:%03d) %sの足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under %s"), x, y, r_ptr->name.data());
+            line = format(_("(X:%03d Y:%03d) %sの足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under %s"), pos.x, pos.y, r_ptr->name.data());
         }
     } else {
-        const TerrainType *const f_ptr = &terrains_info[g_ptr->feat];
-        concptr fn = f_ptr->name.data();
+        const auto &terrain = grid.get_terrain();
+        const auto fn = terrain.name.data();
         std::string buf;
-
-        if (f_ptr->flags.has(TerrainCharacteristics::STORE) || (f_ptr->flags.has(TerrainCharacteristics::BLDG) && !floor_ptr->inside_arena)) {
+        if (terrain.flags.has(TerrainCharacteristics::STORE) || (terrain.flags.has(TerrainCharacteristics::BLDG) && !floor.inside_arena)) {
             buf = format(_("%sの入口", "on the entrance of %s"), fn);
-        } else if (f_ptr->flags.has(TerrainCharacteristics::WALL)) {
+        } else if (terrain.flags.has(TerrainCharacteristics::WALL)) {
             buf = format(_("%sの中", "in %s"), fn);
         } else {
             buf = format(_("%s", "on %s"), fn);
         }
-        line = format(_("(X:%03d Y:%03d) %sの上の発見済みアイテム一覧", "Found items at (X:%03d Y:%03d) %s"), x, y, buf.data());
+
+        line = format(_("(X:%03d Y:%03d) %sの上の発見済みアイテム一覧", "Found items at (X:%03d Y:%03d) %s"), pos.x, pos.y, buf.data());
     }
     term_addstr(-1, TERM_WHITE, line);
 
     // (y,x) のアイテムを1行に1個ずつ書く。
     TERM_LEN term_y = 1;
-    for (const auto o_idx : g_ptr->o_idx_list) {
-        auto *const o_ptr = &floor_ptr->o_list[o_idx];
-        const auto tval = o_ptr->bi_key.tval();
-        if (o_ptr->marked.has_not(OmType::FOUND) || tval == ItemKindType::GOLD) {
+    for (const auto o_idx : grid.o_idx_list) {
+        const auto &item = floor.o_list[o_idx];
+        const auto tval = item.bi_key.tval();
+        if (item.marked.has_not(OmType::FOUND) || tval == ItemKindType::GOLD) {
             continue;
         }
 
@@ -606,7 +606,7 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
         if (is_hallucinated) {
             term_addstr(-1, TERM_WHITE, _("何か奇妙な物", "something strange"));
         } else {
-            const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+            const auto item_name = describe_flavor(player_ptr, &item, 0);
             TERM_COLOR attr = tval_to_attr[enum2i(tval) % 128];
             term_addstr(-1, attr, item_name);
         }
@@ -622,7 +622,7 @@ void fix_floor_item_list(PlayerType *player_ptr, const int y, const int x)
 {
     display_sub_windows(SubWindowRedrawingFlag::FLOOR_ITEMS,
         [player_ptr, y, x] {
-            display_floor_item_list(player_ptr, y, x);
+            display_floor_item_list(player_ptr, { y, x });
         });
 }
 
@@ -716,7 +716,7 @@ void fix_found_item_list(PlayerType *player_ptr)
 static void display_spell_list(PlayerType *player_ptr)
 {
     TERM_LEN y, x;
-    int m[9];
+    int m[9]{};
     const magic_type *s_ptr;
     GAME_TEXT name[MAX_NLEN];
 

@@ -274,7 +274,7 @@ void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_fl
     if (grid.get_cost(&monrace)) {
         this->best = 999;
     } else if (grid.when) {
-        const Pos2D p_pos(this->player_ptr->y, this->player_ptr->x);
+        const auto p_pos = this->player_ptr->get_position();
         if (floor.get_grid(p_pos).when - grid.when > 127) {
             return;
         }
@@ -338,19 +338,18 @@ bool MonsterSweepGrid::sweep_ranged_attack_grid(POSITION *yp, POSITION *xp)
     }
 
     for (auto i = 7; i >= 0; i--) {
-        auto y = y1 + ddy_ddd[i];
-        auto x = x1 + ddx_ddd[i];
-        if (!in_bounds2(floor_ptr, y, x)) {
+        const Pos2D pos(y1 + ddy_ddd[i], x1 + ddx_ddd[i]);
+        if (!in_bounds2(floor_ptr, pos.y, pos.x)) {
             continue;
         }
 
-        if (player_bold(this->player_ptr, y, x)) {
+        if (this->player_ptr->is_located_at(pos)) {
             return false;
         }
 
-        auto *g_ptr = &floor_ptr->grid_array[y][x];
-        this->cost = (int)g_ptr->get_cost(r_ptr);
-        if (!this->is_best_cost(y, x, now_cost)) {
+        const auto &grid = floor_ptr->get_grid(pos);
+        this->cost = grid.get_cost(r_ptr);
+        if (!this->is_best_cost(pos.y, pos.x, now_cost)) {
             continue;
         }
 

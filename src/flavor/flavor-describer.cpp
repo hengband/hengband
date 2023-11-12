@@ -46,7 +46,7 @@ static std::string describe_chest_trap(const ItemEntity &item)
     }
 
     auto trap_kind = trap_kinds.first();
-    if (!trap_kind.has_value()) {
+    if (!trap_kind) {
         return _("(施錠)", " (Locked)");
     }
 

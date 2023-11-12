@@ -345,7 +345,7 @@ void prepare_movie_hooks(PlayerType *player_ptr)
     auto initial_movie_filename = ss.str();
     constexpr auto prompt = _("ムービー記録ファイル: ", "Movie file name: ");
     const auto movie_filename = input_string(prompt, 80, initial_movie_filename.data());
-    if (!movie_filename.has_value()) {
+    if (!movie_filename) {
         return;
     }
 

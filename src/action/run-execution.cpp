@@ -57,31 +57,29 @@ static bool find_breakleft;
  */
 static bool see_wall(PlayerType *player_ptr, DIRECTION dir, POSITION y, POSITION x)
 {
-    y += ddy[dir];
-    x += ddx[dir];
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!in_bounds2(floor_ptr, y, x)) {
+    const Pos2D pos(y + ddy[dir], x + ddx[dir]);
+    if (!in_bounds2(floor_ptr, pos.y, pos.x)) {
         return false;
     }
 
-    grid_type *g_ptr;
-    g_ptr = &floor_ptr->grid_array[y][x];
-    if (!g_ptr->is_mark()) {
+    const auto &grid = floor_ptr->get_grid(pos);
+    if (!grid.is_mark()) {
         return false;
     }
 
-    int16_t feat = g_ptr->get_feat_mimic();
-    auto *f_ptr = &terrains_info[feat];
-    if (!player_can_enter(player_ptr, feat, 0)) {
-        return f_ptr->flags.has_not(TerrainCharacteristics::DOOR);
+    const auto terrain_id = grid.get_feat_mimic();
+    const auto &terrain = grid.get_terrain_mimic();
+    if (!player_can_enter(player_ptr, terrain_id, 0)) {
+        return terrain.flags.has_not(TerrainCharacteristics::DOOR);
     }
 
-    if (f_ptr->flags.has(TerrainCharacteristics::AVOID_RUN) && !ignore_avoid_run) {
+    if (terrain.flags.has(TerrainCharacteristics::AVOID_RUN) && !ignore_avoid_run) {
         return true;
     }
 
-    if (f_ptr->flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY })) {
-        return f_ptr->flags.has_not(TerrainCharacteristics::DOOR);
+    if (terrain.flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY })) {
+        return terrain.flags.has_not(TerrainCharacteristics::DOOR);
     }
 
     return false;
@@ -202,12 +200,14 @@ static bool see_nothing(PlayerType *player_ptr, DIRECTION dir, POSITION y, POSIT
  */
 static bool run_test(PlayerType *player_ptr)
 {
-    DIRECTION prev_dir = find_prevdir;
-    int max = (prev_dir & 0x01) + 1;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((disturb_trap_detect || alert_trap_detect) && player_ptr->dtrap && !(floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_IN_DETECT)) {
+    const auto prev_dir = find_prevdir;
+    const auto max = (prev_dir & 0x01) + 1;
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto p_pos = player_ptr->get_position();
+    const auto &p_grid = floor.get_grid(p_pos);
+    if ((disturb_trap_detect || alert_trap_detect) && player_ptr->dtrap && !(p_grid.info & CAVE_IN_DETECT)) {
         player_ptr->dtrap = false;
-        if (!(floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_UNSAFE)) {
+        if (!(p_grid.info & CAVE_UNSAFE)) {
             if (alert_trap_detect) {
                 msg_print(_("* 注意:この先はトラップの感知範囲外です！ *", "*Leaving trap detect region!*"));
             }
@@ -219,43 +219,39 @@ static bool run_test(PlayerType *player_ptr)
         }
     }
 
-    DIRECTION check_dir = 0;
-    int option = 0, option2 = 0;
-    for (int i = -max; i <= max; i++) {
-        DIRECTION new_dir = cycle[chome[prev_dir] + i];
-        int row = player_ptr->y + ddy[new_dir];
-        int col = player_ptr->x + ddx[new_dir];
-        grid_type *g_ptr;
-        g_ptr = &floor_ptr->grid_array[row][col];
-        FEAT_IDX feat = g_ptr->get_feat_mimic();
-        TerrainType *f_ptr;
-        f_ptr = &terrains_info[feat];
-        if (g_ptr->m_idx) {
-            auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-            if (m_ptr->ml) {
+    auto check_dir = 0;
+    auto option = 0;
+    auto option2 = 0;
+    for (auto i = -max; i <= max; i++) {
+        int new_dir = cycle[chome[prev_dir] + i];
+        const Pos2D pos(player_ptr->y + ddy[new_dir], player_ptr->x + ddx[new_dir]);
+        const auto &grid = floor.get_grid(pos);
+        if (grid.m_idx) {
+            const auto &monster = floor.m_list[grid.m_idx];
+            if (monster.ml) {
                 return true;
             }
         }
 
-        for (const auto this_o_idx : g_ptr->o_idx_list) {
-            ItemEntity *o_ptr;
-            o_ptr = &floor_ptr->o_list[this_o_idx];
-            if (o_ptr->marked.has(OmType::FOUND)) {
+        for (const auto this_o_idx : grid.o_idx_list) {
+            const auto &item = floor.o_list[this_o_idx];
+            if (item.marked.has(OmType::FOUND)) {
                 return true;
             }
         }
 
-        bool inv = true;
-        if (g_ptr->is_mark()) {
-            bool notice = f_ptr->flags.has(TerrainCharacteristics::NOTICE);
-            if (notice && f_ptr->flags.has(TerrainCharacteristics::MOVE)) {
-                if (find_ignore_doors && f_ptr->flags.has_all_of({ TerrainCharacteristics::DOOR, TerrainCharacteristics::CLOSE })) {
+        auto inv = true;
+        if (grid.is_mark()) {
+            const auto &terrain = grid.get_terrain_mimic();
+            auto notice = terrain.flags.has(TerrainCharacteristics::NOTICE);
+            if (notice && terrain.flags.has(TerrainCharacteristics::MOVE)) {
+                if (find_ignore_doors && terrain.flags.has_all_of({ TerrainCharacteristics::DOOR, TerrainCharacteristics::CLOSE })) {
                     notice = false;
-                } else if (find_ignore_stairs && f_ptr->flags.has(TerrainCharacteristics::STAIRS)) {
+                } else if (find_ignore_stairs && terrain.flags.has(TerrainCharacteristics::STAIRS)) {
                     notice = false;
-                } else if (f_ptr->flags.has(TerrainCharacteristics::LAVA) && (has_immune_fire(player_ptr) || is_invuln(player_ptr))) {
+                } else if (terrain.flags.has(TerrainCharacteristics::LAVA) && (has_immune_fire(player_ptr) || is_invuln(player_ptr))) {
                     notice = false;
-                } else if (f_ptr->flags.has_all_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::DEEP }) && (player_ptr->levitation || player_ptr->can_swim || (calc_inventory_weight(player_ptr) <= calc_weight_limit(player_ptr)))) {
+                } else if (terrain.flags.has_all_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::DEEP }) && (player_ptr->levitation || player_ptr->can_swim || (calc_inventory_weight(player_ptr) <= calc_weight_limit(player_ptr)))) {
                     notice = false;
                 }
             }
@@ -267,7 +263,7 @@ static bool run_test(PlayerType *player_ptr)
             inv = false;
         }
 
-        if (!inv && see_wall(player_ptr, 0, row, col)) {
+        if (!inv && see_wall(player_ptr, 0, pos.y, pos.x)) {
             if (find_openarea) {
                 if (i < 0) {
                     find_breakright = true;
@@ -403,7 +399,7 @@ void run_step(PlayerType *player_ptr, DIRECTION dir)
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     exe_movement(player_ptr, find_current, false, false);
-    if (player_bold(player_ptr, player_ptr->run_py, player_ptr->run_px)) {
+    if (player_ptr->is_located_at_running_destination()) {
         player_ptr->run_py = 0;
         player_ptr->run_px = 0;
         disturb(player_ptr, false, false);

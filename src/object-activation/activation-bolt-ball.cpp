@@ -345,7 +345,7 @@ bool activate_ball_lite(PlayerType *player_ptr, concptr name)
                 continue;
             }
 
-            if (!player_bold(player_ptr, y, x)) {
+            if (!player_ptr->is_located_at({ y, x })) {
                 break;
             }
         }

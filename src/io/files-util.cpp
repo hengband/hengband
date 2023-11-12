@@ -201,7 +201,7 @@ std::optional<std::string> get_random_line_ja_only(concptr file_name, int entry,
     std::optional<std::string> line;
     for (auto i = 0; i < count; i++) {
         line = get_random_line(file_name, entry);
-        if (!line.has_value()) {
+        if (!line) {
             return std::nullopt;
         }
 

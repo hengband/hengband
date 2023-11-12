@@ -231,7 +231,7 @@ void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx
     }
 
     const auto input_artifact_id = input_numerics("Artifact ID", 1, max_a_idx, FixedArtifactId::GALADRIEL_PHIAL);
-    if (!input_artifact_id.has_value()) {
+    if (!input_artifact_id) {
         return;
     }
 
@@ -256,7 +256,7 @@ void wiz_modify_item_activation(PlayerType *player_ptr)
     constexpr auto min = enum2i(RandomArtActType::NONE);
     constexpr auto max = enum2i(RandomArtActType::MAX) - 1;
     const auto act_id = input_numerics<RandomArtActType>("Activation ID", min, max);
-    if (!act_id.has_value()) {
+    if (!act_id) {
         return;
     }
 
@@ -468,7 +468,7 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
     while (true) {
         wiz_display_item(player_ptr, o_ptr);
         const auto command = input_command(prompt);
-        if (!command.has_value()) {
+        if (!command) {
             break;
         }
 
@@ -490,7 +490,7 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
 
         constexpr auto p = "Enter number of items to roll: ";
         const auto rolls_opt = input_numerics(p, 0, MAX_INT, rolls);
-        if (rolls_opt.has_value()) {
+        if (rolls_opt) {
             rolls = rolls_opt.value();
         }
 
@@ -570,7 +570,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     while (true) {
         wiz_display_item(player_ptr, q_ptr);
         const auto command = input_command(prompt);
-        if (!command.has_value()) {
+        if (!command) {
             if (q_ptr->is_fixed_artifact()) {
                 q_ptr->get_fixed_artifact().is_generated = false;
                 q_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
@@ -670,28 +670,28 @@ static void wiz_tweak_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     const auto pval = input_numerics("Enter new 'pval' setting: ", -MAX_SHORT, MAX_SHORT, o_ptr->pval);
-    if (!pval.has_value()) {
+    if (!pval) {
         return;
     }
 
     o_ptr->pval = pval.value();
     wiz_display_item(player_ptr, o_ptr);
     const auto bonus_ac = input_numerics("Enter new AC Bonus setting: ", -MAX_SHORT, MAX_SHORT, o_ptr->to_a);
-    if (!bonus_ac.has_value()) {
+    if (!bonus_ac) {
         return;
     }
 
     o_ptr->to_a = bonus_ac.value();
     wiz_display_item(player_ptr, o_ptr);
     const auto bonus_hit = input_numerics("Enter new Hit Bonus setting: ", -MAX_SHORT, MAX_SHORT, o_ptr->to_h);
-    if (!bonus_hit.has_value()) {
+    if (!bonus_hit) {
         return;
     }
 
     o_ptr->to_h = bonus_hit.value();
     wiz_display_item(player_ptr, o_ptr);
     const auto bonus_damage = input_numerics("Enter new Damage Bonus setting: ", -MAX_SHORT, MAX_SHORT, o_ptr->to_d);
-    if (!bonus_damage.has_value()) {
+    if (!bonus_damage) {
         return;
     }
 
@@ -710,7 +710,7 @@ static void wiz_quantity_item(ItemEntity *o_ptr)
     }
 
     const auto quantity_opt = input_numerics("Quantity: ", 1, 99, o_ptr->number);
-    if (!quantity_opt.has_value()) {
+    if (!quantity_opt) {
         return;
     }
 
@@ -750,7 +750,7 @@ void wiz_modify_item(PlayerType *player_ptr)
     while (true) {
         wiz_display_item(player_ptr, q_ptr);
         const auto command = input_command(prompt);
-        if (!command.has_value()) {
+        if (!command) {
             changed = false;
             break;
         }
@@ -873,7 +873,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     std::string pray;
     while (true) {
         const auto pray_opt = input_string(_("何をお望み？ ", "For what do you wish?"), MAX_NLEN);
-        if (pray_opt.has_value()) {
+        if (pray_opt) {
             pray = pray_opt.value();
             break;
         }

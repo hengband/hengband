@@ -573,7 +573,7 @@ void do_cmd_options(PlayerType *player_ptr)
             prt(format(_("現在ウェイト量(msec): %d", "Current Delay Factor(msec): %d"), delay_factor), 19, 0);
             constexpr auto prompt = _("コマンド: ウェイト量(msec)", "Command: Delay Factor(msec)");
             const auto new_delay_factor = input_integer(prompt, 0, 1000, delay_factor);
-            if (new_delay_factor.has_value()) {
+            if (new_delay_factor) {
                 delay_factor = new_delay_factor.value();
             }
 

@@ -43,7 +43,7 @@ static coordinate_candidate sweep_safe_coordinate(PlayerType *player_ptr, MONSTE
         }
 
         auto *r_ptr = &m_ptr->get_monrace();
-        grid_type *g_ptr;
+        Grid *g_ptr;
         g_ptr = &floor_ptr->grid_array[y][x];
 
         BIT_FLAGS16 riding_mode = (m_idx == player_ptr->riding) ? CEM_RIDING : 0;

@@ -61,7 +61,7 @@ static void decide_activation_level(ae_type *ae_ptr)
 
     if (ae_ptr->o_ptr->is_random_artifact()) {
         auto act_ptr = find_activation_info(ae_ptr->o_ptr);
-        if (act_ptr.has_value()) {
+        if (act_ptr) {
             ae_ptr->lev = act_ptr.value()->level;
         }
 
@@ -156,7 +156,7 @@ static bool check_activation_conditions(PlayerType *player_ptr, ae_type *ae_ptr)
 static bool activate_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     auto tmp_act_ptr = find_activation_info(o_ptr);
-    if (!tmp_act_ptr.has_value()) {
+    if (!tmp_act_ptr) {
         msg_print("Activation information is not found.");
         return false;
     }

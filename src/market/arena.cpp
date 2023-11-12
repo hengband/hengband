@@ -330,7 +330,7 @@ bool monster_arena_comm(PlayerType *player_ptr)
     maxbet = std::min(maxbet, player_ptr->au);
     constexpr auto prompt = _("賭け金？", "Your wager? ");
     const auto wager_opt = input_integer(prompt, 1, maxbet, 1);
-    if (!wager_opt.has_value()) {
+    if (!wager_opt) {
         screen_load();
         return false;
     }

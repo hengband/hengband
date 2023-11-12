@@ -30,7 +30,7 @@ std::optional<T> input_numerics(std::string_view prompt, int min, int max, T ini
     requires std::is_integral_v<T> || std::is_enum_v<T>
 {
     auto result = input_integer(prompt, min, max, static_cast<int>(initial_value));
-    if (!result.has_value()) {
+    if (!result) {
         return std::nullopt;
     }
 

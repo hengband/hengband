@@ -61,11 +61,11 @@ static bool grab_one_feat_action(TerrainType *f_ptr, std::string_view what, int 
  */
 errr parse_terrains_info(std::string_view buf, angband_header *)
 {
-    static TerrainType *f_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 10);
+    auto &terrains = TerrainList::get_instance();
 
+    // N:index:tag
     if (tokens[0] == "N") {
-        // N:index:tag
         if (tokens.size() < 3) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
@@ -74,44 +74,62 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_GENERIC;
         }
 
-        auto i = std::stoi(tokens[1]);
+        const auto i = std::stoi(tokens[1]);
         if (i < error_idx) {
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
+
         if (i >= static_cast<int>(TerrainList::get_instance().size())) {
-            terrains_info.resize(i + 1);
+            terrains.resize(i + 1);
         }
 
         error_idx = i;
-        f_ptr = &terrains_info[i];
-        f_ptr->idx = static_cast<FEAT_IDX>(i);
-        f_ptr->tag = tokens[2];
+        const auto s = static_cast<short>(i);
+        auto &terrain = terrains[s];
+        terrain.idx = s;
+        terrain.tag = tokens[2];
 
-        f_ptr->mimic = (FEAT_IDX)i;
-        f_ptr->destroyed = (FEAT_IDX)i;
-        for (i = 0; i < MAX_FEAT_STATES; i++) {
-            f_ptr->state[i].action = TerrainCharacteristics::MAX;
+        terrain.mimic = s;
+        terrain.destroyed = s;
+        for (auto j = 0; j < MAX_FEAT_STATES; j++) {
+            terrain.state[j].action = TerrainCharacteristics::MAX;
         }
 
-    } else if (!f_ptr) {
+        return PARSE_ERROR_NONE;
+    }
+
+    if (terrains.empty()) {
         return PARSE_ERROR_MISSING_RECORD_HEADER;
-    } else if (tokens[0] == _("J", "E")) {
-        // J:name_ja
-        // E:name_en
+    }
+
+    // J:name_ja, E:name_en
+    auto &terrain = *(terrains.end() - 1);
+    if (tokens[0] == _("J", "E")) {
         if (tokens.size() < 2 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
-        f_ptr->name = tokens[1];
-    } else if (tokens[0] == _("E", "J")) {
-        // pass
-    } else if (tokens[0] == "M") {
-        // M:mimic_tag
+
+        terrain.name = tokens[1];
+        return PARSE_ERROR_NONE;
+    }
+
+    // pass
+    if (tokens[0] == _("E", "J")) {
+        return PARSE_ERROR_NONE;
+    }
+
+    // M:mimic_tag
+    if (tokens[0] == "M") {
         if (tokens.size() < 2 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
-        f_ptr->mimic_tag = tokens[1];
-    } else if (tokens[0] == "G") {
-        // G:symbol:color:lite:lite_symbol:lite_color:dark_symbol:dark_color
+
+        terrain.mimic_tag = tokens[1];
+        return PARSE_ERROR_NONE;
+    }
+
+    // G:symbol:color:lite:lite_symbol:lite_color:dark_symbol:dark_color
+    if (tokens[0] == "G") {
         if (tokens.size() < 3) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
@@ -137,44 +155,54 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_GENERIC;
         }
 
-        f_ptr->d_char[F_LIT_STANDARD] = s_char;
-        f_ptr->d_attr[F_LIT_STANDARD] = s_attr;
+        terrain.d_char[F_LIT_STANDARD] = s_char;
+        terrain.d_attr[F_LIT_STANDARD] = s_attr;
         if (tokens.size() == n) {
             for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
-                f_ptr->d_char[j] = s_char;
-                f_ptr->d_attr[j] = s_attr;
+                terrain.d_char[j] = s_char;
+                terrain.d_attr[j] = s_attr;
             }
-        } else if (tokens[n++] == "LIT") {
-            apply_default_feat_lighting(f_ptr->d_attr, f_ptr->d_char);
 
-            for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
+            return PARSE_ERROR_NONE;
+        }
+
+        if (tokens[n++] == "LIT") {
+            apply_default_feat_lighting(terrain.d_attr, terrain.d_char);
+            for (auto j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
                 auto c_idx = n + (j - F_LIT_NS_BEGIN) * 2;
                 auto a_idx = c_idx + 1;
                 if (tokens.size() <= (size_t)a_idx) {
                     continue;
                 }
+
                 if (tokens[c_idx].size() != 1 || tokens[a_idx].size() != 1) {
                     continue;
                 }
 
-                f_ptr->d_char[j] = tokens[c_idx][0];
-
+                terrain.d_char[j] = tokens[c_idx][0];
                 if (tokens[a_idx] == "*") {
-                    // pass
-                } else if (tokens[a_idx] == "-") {
-                    f_ptr->d_attr[j] = s_attr;
-                } else {
-                    f_ptr->d_attr[j] = color_char_to_attr(tokens[a_idx][0]);
-                    if (f_ptr->d_attr[j] > 127) {
-                        return PARSE_ERROR_GENERIC;
-                    }
+                    continue;
+                }
+
+                if (tokens[a_idx] == "-") {
+                    terrain.d_attr[j] = s_attr;
+                    continue;
+                }
+
+                terrain.d_attr[j] = color_char_to_attr(tokens[a_idx][0]);
+                if (terrain.d_attr[j] > 127) {
+                    return PARSE_ERROR_GENERIC;
                 }
             }
-        } else {
-            return PARSE_ERROR_GENERIC;
+
+            return PARSE_ERROR_NONE;
         }
-    } else if (tokens[0] == "F") {
-        // F:flags
+
+        return PARSE_ERROR_GENERIC;
+    }
+
+    // F:flags
+    if (tokens[0] == "F") {
         if (tokens.size() < 2 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
@@ -188,36 +216,47 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
             const auto &f_tokens = str_split(f, '_', false, 2);
             if (f_tokens.size() == 2) {
                 if (f_tokens[0] == "SUBTYPE") {
-                    info_set_value(f_ptr->subtype, f_tokens[1]);
+                    info_set_value(terrain.subtype, f_tokens[1]);
                     continue;
-                } else if (f_tokens[0] == "POWER") {
-                    info_set_value(f_ptr->power, f_tokens[1]);
+                }
+
+                if (f_tokens[0] == "POWER") {
+                    info_set_value(terrain.power, f_tokens[1]);
                     continue;
                 }
             }
 
-            if (!grab_one_feat_flag(f_ptr, f)) {
+            if (!grab_one_feat_flag(&terrain, f)) {
                 return PARSE_ERROR_INVALID_FLAG;
             }
         }
-    } else if (tokens[0] == "W") {
-        // W:priority
+
+        return PARSE_ERROR_NONE;
+    }
+
+    // W:priority
+    if (tokens[0] == "W") {
         if (tokens.size() < 2 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
-        info_set_value(f_ptr->priority, tokens[1]);
-    } else if (tokens[0] == "K") {
-        // K:state:feat
+
+        info_set_value(terrain.priority, tokens[1]);
+        return PARSE_ERROR_NONE;
+    }
+
+    // K:state:feat
+    if (tokens[0] == "K") {
         if (tokens.size() < 3) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
+
         if (tokens[1].size() == 0 || tokens[2].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        int i = 0;
+        auto i = 0;
         for (; i < MAX_FEAT_STATES; i++) {
-            if (f_ptr->state[i].action == TerrainCharacteristics::MAX) {
+            if (terrain.state[i].action == TerrainCharacteristics::MAX) {
                 break;
             }
         }
@@ -227,19 +266,19 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
         }
 
         if (tokens[1] == "DESTROYED") {
-            f_ptr->destroyed_tag = tokens[2];
-        } else {
-            if (!grab_one_feat_action(f_ptr, tokens[1], i)) {
-                return PARSE_ERROR_INVALID_FLAG;
-            }
-
-            f_ptr->state[i].result_tag = tokens[2];
+            terrain.destroyed_tag = tokens[2];
+            return PARSE_ERROR_NONE;
         }
-    } else {
-        return PARSE_ERROR_UNDEFINED_DIRECTIVE;
+
+        if (!grab_one_feat_action(&terrain, tokens[1], i)) {
+            return PARSE_ERROR_INVALID_FLAG;
+        }
+
+        terrain.state[i].result_tag = tokens[2];
+        return PARSE_ERROR_NONE;
     }
 
-    return PARSE_ERROR_NONE;
+    return PARSE_ERROR_UNDEFINED_DIRECTIVE;
 }
 
 /*!

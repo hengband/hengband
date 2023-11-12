@@ -26,7 +26,7 @@ bool build_type1(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     bool light;
 
-    grid_type *g_ptr;
+    Grid *g_ptr;
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     const auto &dungeon = floor_ptr->get_dungeon_definition();
@@ -204,7 +204,7 @@ bool build_type2(PlayerType *player_ptr, dun_data_type *dd_ptr)
     POSITION y1a, x1a, y2a, x2a;
     POSITION y1b, x1b, y2b, x2b;
     bool light;
-    grid_type *g_ptr;
+    Grid *g_ptr;
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
     auto *floor_ptr = player_ptr->current_floor_ptr;
@@ -318,7 +318,7 @@ bool build_type3(PlayerType *player_ptr, dun_data_type *dd_ptr)
     POSITION y1b, x1b, y2b, x2b;
     POSITION yval, xval;
     bool light;
-    grid_type *g_ptr;
+    Grid *g_ptr;
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
     auto *floor_ptr = player_ptr->current_floor_ptr;
@@ -558,7 +558,7 @@ bool build_type4(PlayerType *player_ptr, dun_data_type *dd_ptr)
     POSITION y, x, y1, x1;
     POSITION y2, x2, tmp, yval, xval;
     bool light;
-    grid_type *g_ptr;
+    Grid *g_ptr;
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
     auto *floor_ptr = player_ptr->current_floor_ptr;

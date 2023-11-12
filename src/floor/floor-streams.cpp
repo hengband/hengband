@@ -61,7 +61,7 @@ static void recursive_river(FloorType *floor_ptr, POSITION x1, POSITION y1, POSI
     POSITION changex, changey;
     POSITION ty, tx;
     bool done;
-    grid_type *g_ptr;
+    Grid *g_ptr;
 
     length = distance(x1, y1, x2, y2);
 
@@ -174,10 +174,8 @@ static void recursive_river(FloorType *floor_ptr, POSITION x1, POSITION y1, POSI
  */
 void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
 {
-    POSITION y2, x2;
-    POSITION y1 = 0, x1 = 0;
-    POSITION wid;
-    FEAT_IDX feat1 = 0, feat2 = 0;
+    short feat1 = 0;
+    short feat2 = 0;
 
     const auto &dungeon = floor_ptr->get_dungeon_definition();
 
@@ -187,10 +185,9 @@ void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
         feat2 = feat_shallow_water;
     } else /* others */
     {
-        FEAT_IDX select_deep_feat[10];
-        FEAT_IDX select_shallow_feat[10];
-        int select_id_max = 0, selected;
-
+        short select_deep_feat[10]{};
+        short select_shallow_feat[10]{};
+        auto select_id_max = 0;
         if (dungeon.flags.has(DungeonFeatureType::LAVA_RIVER)) {
             select_deep_feat[select_id_max] = feat_deep_lava;
             select_shallow_feat[select_id_max] = feat_shallow_lava;
@@ -208,7 +205,7 @@ void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
         }
 
         if (select_id_max > 0) {
-            selected = randint0(select_id_max);
+            const auto selected = randint0(select_id_max);
             feat1 = select_deep_feat[selected];
             feat2 = select_shallow_feat[selected];
         } else {
@@ -229,10 +226,12 @@ void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
     }
 
     /* Hack -- Choose starting point */
-    y2 = randint1(floor_ptr->height / 2 - 2) + floor_ptr->height / 2;
-    x2 = randint1(floor_ptr->width / 2 - 2) + floor_ptr->width / 2;
+    const auto y2 = randint1(floor_ptr->height / 2 - 2) + floor_ptr->height / 2;
+    const auto x2 = randint1(floor_ptr->width / 2 - 2) + floor_ptr->width / 2;
 
     /* Hack -- Choose ending point somewhere on boundary */
+    auto y1 = 0;
+    auto x1 = 0;
     switch (randint1(4)) {
     case 1: {
         /* top boundary */
@@ -261,7 +260,7 @@ void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
     }
 
     constexpr auto width_rivers = 2;
-    wid = randint1(width_rivers);
+    const auto wid = randint1(width_rivers);
     recursive_river(floor_ptr, x1, y1, x2, y2, feat1, feat2, wid);
 
     /* Hack - Save the location as a "room" */
@@ -288,78 +287,72 @@ void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
  */
 void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
 {
-    int i;
-    POSITION y, x, tx, ty;
-    DIRECTION dir;
-    int dummy = 0;
-
-    grid_type *g_ptr;
-    TerrainType *f_ptr;
-
     const auto &streamer = TerrainList::get_instance()[feat];
     bool streamer_is_wall = streamer.flags.has(TerrainCharacteristics::WALL) && streamer.flags.has_not(TerrainCharacteristics::PERMANENT);
     bool streamer_may_have_gold = streamer.flags.has(TerrainCharacteristics::MAY_HAVE_GOLD);
 
     /* Hack -- Choose starting point */
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    y = rand_spread(floor_ptr->height / 2, floor_ptr->height / 6);
-    x = rand_spread(floor_ptr->width / 2, floor_ptr->width / 6);
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto y = rand_spread(floor.height / 2, floor.height / 6);
+    auto x = rand_spread(floor.width / 2, floor.width / 6);
 
     /* Choose a random compass direction */
-    dir = randint0(8);
+    auto dir = randint0(8);
 
     /* Place streamer into dungeon */
+    auto dummy = 0;
     while (dummy < SAFE_MAX_ATTEMPTS) {
         dummy++;
 
         /* One grid per density */
         constexpr auto stream_density = 5;
-        for (i = 0; i < stream_density; i++) {
+        for (auto i = 0; i < stream_density; i++) {
             constexpr auto stream_width = 5;
             int d = stream_width;
 
             /* Pick a nearby grid */
+            Pos2D pos(y, x);
             while (true) {
-                ty = rand_spread(y, d);
-                tx = rand_spread(x, d);
-                if (!in_bounds2(floor_ptr, ty, tx)) {
+                pos.y = rand_spread(y, d);
+                pos.x = rand_spread(x, d);
+                if (!in_bounds2(&floor, pos.y, pos.x)) {
                     continue;
                 }
                 break;
             }
-            g_ptr = &floor_ptr->grid_array[ty][tx];
-            f_ptr = &terrains_info[g_ptr->feat];
 
-            if (f_ptr->flags.has(TerrainCharacteristics::MOVE) && f_ptr->flags.has_any_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::LAVA })) {
+            auto &grid = floor.get_grid(pos);
+            const auto &terrain = grid.get_terrain();
+            if (terrain.flags.has(TerrainCharacteristics::MOVE) && terrain.flags.has_any_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::LAVA })) {
                 continue;
             }
 
             /* Do not convert permanent features */
-            if (f_ptr->flags.has(TerrainCharacteristics::PERMANENT)) {
+            if (terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
                 continue;
             }
 
             /* Only convert "granite" walls */
             if (streamer_is_wall) {
-                if (!g_ptr->is_extra() && !g_ptr->is_inner() && !g_ptr->is_outer() && !g_ptr->is_solid()) {
+                if (!grid.is_extra() && !grid.is_inner() && !grid.is_outer() && !grid.is_solid()) {
                     continue;
                 }
-                if (is_closed_door(player_ptr, g_ptr->feat)) {
+                if (is_closed_door(player_ptr, grid.feat)) {
                     continue;
                 }
             }
 
-            auto *r_ptr = &monraces_info[floor_ptr->m_list[g_ptr->m_idx].r_idx];
-            if (g_ptr->m_idx && !(streamer.flags.has(TerrainCharacteristics::PLACE) && monster_can_cross_terrain(player_ptr, feat, r_ptr, 0))) {
+            auto *r_ptr = &monraces_info[floor.m_list[grid.m_idx].r_idx];
+            if (grid.m_idx && !(streamer.flags.has(TerrainCharacteristics::PLACE) && monster_can_cross_terrain(player_ptr, feat, r_ptr, 0))) {
                 /* Delete the monster (if any) */
-                delete_monster(player_ptr, ty, tx);
+                delete_monster(player_ptr, pos.y, pos.x);
             }
 
-            if (!g_ptr->o_idx_list.empty() && streamer.flags.has_not(TerrainCharacteristics::DROP)) {
+            if (!grid.o_idx_list.empty() && streamer.flags.has_not(TerrainCharacteristics::DROP)) {
 
                 /* Scan all objects in the grid */
-                for (const auto this_o_idx : g_ptr->o_idx_list) {
-                    auto *o_ptr = &floor_ptr->o_list[this_o_idx];
+                for (const auto this_o_idx : grid.o_idx_list) {
+                    auto *o_ptr = &floor.o_list[this_o_idx];
 
                     /* Hack -- Preserve unknown artifacts */
                     if (o_ptr->is_fixed_artifact()) {
@@ -373,25 +366,25 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
                     }
                 }
 
-                delete_all_items_from_floor(player_ptr, ty, tx);
+                delete_all_items_from_floor(player_ptr, pos.y, pos.x);
             }
 
             /* Clear previous contents, add proper vein type */
-            g_ptr->feat = feat;
+            grid.feat = feat;
 
             /* Paranoia: Clear mimic field */
-            g_ptr->mimic = 0;
+            grid.mimic = 0;
 
             if (streamer_may_have_gold) {
                 /* Hack -- Add some known treasure */
                 if (one_in_(chance)) {
-                    cave_alter_feat(player_ptr, ty, tx, TerrainCharacteristics::MAY_HAVE_GOLD);
+                    cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::MAY_HAVE_GOLD);
                 }
 
                 /* Hack -- Add some hidden treasure */
                 else if (one_in_(chance / 4)) {
-                    cave_alter_feat(player_ptr, ty, tx, TerrainCharacteristics::MAY_HAVE_GOLD);
-                    cave_alter_feat(player_ptr, ty, tx, TerrainCharacteristics::ENSECRET);
+                    cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::MAY_HAVE_GOLD);
+                    cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::ENSECRET);
                 }
             }
         }
@@ -414,7 +407,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
         }
 
         /* Quit before leaving the dungeon */
-        if (!in_bounds(floor_ptr, y, x)) {
+        if (!in_bounds(&floor, y, x)) {
             break;
         }
     }
@@ -434,7 +427,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
 void place_trees(PlayerType *player_ptr, POSITION x, POSITION y)
 {
     int i, j;
-    grid_type *g_ptr;
+    Grid *g_ptr;
 
     /* place trees/ rubble in ovalish distribution */
     auto *floor_ptr = player_ptr->current_floor_ptr;

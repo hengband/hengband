@@ -63,7 +63,7 @@ static bool select_ammo_creation_type(ammo_creation_type &type, PLAYER_LEVEL ple
 
     while (type == AMMO_NONE) {
         const auto command = input_command(prompt, true);
-        if (!command.has_value()) {
+        if (!command) {
             return false;
         }
 
@@ -107,20 +107,19 @@ bool create_ammo(PlayerType *player_ptr)
 
     switch (ext) {
     case AMMO_SHOT: {
-        DIRECTION dir;
+        int dir;
         if (!get_rep_dir(player_ptr, &dir)) {
             return false;
         }
 
-        POSITION y = player_ptr->y + ddy[dir];
-        POSITION x = player_ptr->x + ddx[dir];
-        auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-        if (terrains_info[g_ptr->get_feat_mimic()].flags.has_not(TerrainCharacteristics::CAN_DIG)) {
+        const Pos2D pos(player_ptr->y + ddy[dir], player_ptr->x + ddx[dir]);
+        const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+        if (grid.get_terrain_mimic().flags.has_not(TerrainCharacteristics::CAN_DIG)) {
             msg_print(_("そこには岩石がない。", "You need a pile of rubble."));
             return false;
         }
 
-        if (!g_ptr->cave_has_flag(TerrainCharacteristics::CAN_DIG) || !g_ptr->cave_has_flag(TerrainCharacteristics::HURT_ROCK)) {
+        if (!grid.cave_has_flag(TerrainCharacteristics::CAN_DIG) || !grid.cave_has_flag(TerrainCharacteristics::HURT_ROCK)) {
             msg_print(_("硬すぎて崩せなかった。", "You failed to make ammo."));
             return true;
         }
@@ -130,7 +129,7 @@ bool create_ammo(PlayerType *player_ptr)
         q_ptr->prep(lookup_baseitem_id({ ItemKindType::SHOT, m_bonus(1, player_ptr->lev) + 1 }));
         q_ptr->number = (byte)rand_range(15, 30);
         object_aware(player_ptr, q_ptr);
-        object_known(q_ptr);
+        q_ptr->mark_as_known();
         ItemMagicApplier(player_ptr, q_ptr, player_ptr->lev, AM_NO_FIXED_ART).execute();
         q_ptr->discount = 99;
         int16_t slot = store_item_to_inventory(player_ptr, q_ptr);
@@ -140,7 +139,7 @@ bool create_ammo(PlayerType *player_ptr)
             autopick_alter_item(player_ptr, slot, false);
         }
 
-        cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_ROCK);
+        cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::HURT_ROCK);
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
         return true;
     }
@@ -158,7 +157,7 @@ bool create_ammo(PlayerType *player_ptr)
         q_ptr->prep(lookup_baseitem_id({ ItemKindType::ARROW, static_cast<short>(m_bonus(1, player_ptr->lev) + 1) }));
         q_ptr->number = (byte)rand_range(5, 10);
         object_aware(player_ptr, q_ptr);
-        object_known(q_ptr);
+        q_ptr->mark_as_known();
         ItemMagicApplier(player_ptr, q_ptr, player_ptr->lev, AM_NO_FIXED_ART).execute();
         q_ptr->discount = 99;
         const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
@@ -185,7 +184,7 @@ bool create_ammo(PlayerType *player_ptr)
         q_ptr->prep(lookup_baseitem_id({ ItemKindType::BOLT, static_cast<short>(m_bonus(1, player_ptr->lev) + 1) }));
         q_ptr->number = (byte)rand_range(4, 8);
         object_aware(player_ptr, q_ptr);
-        object_known(q_ptr);
+        q_ptr->mark_as_known();
         ItemMagicApplier(player_ptr, q_ptr, player_ptr->lev, AM_NO_FIXED_ART).execute();
         q_ptr->discount = 99;
         const auto item_name = describe_flavor(player_ptr, q_ptr, 0);

@@ -14,7 +14,7 @@ namespace {
 
     void setup_http_option(libcurl::EasySession &session, const std::optional<std::string> &user_agent)
     {
-        if (user_agent.has_value()) {
+        if (user_agent) {
             session.setopt(CURLOPT_USERAGENT, user_agent->data());
         }
 

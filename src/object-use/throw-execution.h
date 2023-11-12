@@ -10,7 +10,7 @@
 #include "util/flag-group.h"
 #include <string>
 
-struct grid_type;
+class Grid;
 class MonsterEntity;
 class ItemEntity;
 class PlayerType;
@@ -66,7 +66,7 @@ private:
     TrFlags obj_flags{};
     bool come_back = false;
     bool do_drop = true;
-    grid_type *g_ptr{};
+    Grid *g_ptr{};
     MonsterEntity *m_ptr{};
     std::string m_name{};
     int back_chance{};

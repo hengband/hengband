@@ -620,7 +620,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
         /* Travel until stopped */
         for (auto cur_dis = 0; cur_dis <= tdis;) {
-            grid_type *g_ptr;
+            Grid *g_ptr;
 
             /* Hack -- Stop at the target */
             if ((y == ty) && (x == tx)) {
@@ -720,7 +720,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             /* Monster here, Try to hit it */
             if (floor_ptr->grid_array[y][x].m_idx) {
                 sound(SOUND_SHOOT_HIT);
-                grid_type *c_mon_ptr = &floor_ptr->grid_array[y][x];
+                Grid *c_mon_ptr = &floor_ptr->grid_array[y][x];
 
                 auto *m_ptr = &floor_ptr->m_list[c_mon_ptr->m_idx];
                 auto *r_ptr = &m_ptr->get_monrace();

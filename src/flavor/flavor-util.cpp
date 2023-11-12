@@ -31,7 +31,7 @@ static std::string inscribe_flags_aux(const std::vector<flag_insc_table> &fi_vec
     std::stringstream ss;
 
     for (const auto &fi : fi_vec) {
-        if (flags.has(fi.flag) && (!fi.except_flag.has_value() || flags.has_not(fi.except_flag.value()))) {
+        if (flags.has(fi.flag) && (!fi.except_flag || flags.has_not(fi.except_flag.value()))) {
             const auto flag_str = _(is_kanji ? fi.japanese : fi.english, fi.english);
             ss << flag_str;
         }
@@ -50,7 +50,7 @@ static std::string inscribe_flags_aux(const std::vector<flag_insc_table> &fi_vec
 static bool has_flag_of(const std::vector<flag_insc_table> &fi_vec, const TrFlags &flags)
 {
     for (const auto &fi : fi_vec) {
-        if (flags.has(fi.flag) && (!fi.except_flag.has_value() || flags.has_not(fi.except_flag.value()))) {
+        if (flags.has(fi.flag) && (!fi.except_flag || flags.has_not(fi.except_flag.value()))) {
             return true;
         }
     }

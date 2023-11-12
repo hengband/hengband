@@ -48,7 +48,7 @@ void SoftArmorEnchanter::apply_magic()
 void SoftArmorEnchanter::sval_enchant()
 {
     const auto sval = this->o_ptr->bi_key.sval();
-    if (!sval.has_value()) {
+    if (!sval) {
         return;
     }
 

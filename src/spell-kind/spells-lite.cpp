@@ -93,42 +93,30 @@ static void cave_temp_room_lite(PlayerType *player_ptr, const std::vector<Pos2D>
 /*!
  * @brief 指定した座標全てを暗くする。
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param points 暗くすべき座標たち
- * @details
- * <pre>
- * This routine clears the entire "temp" set.
- * This routine will "darken" all "temp" grids.
- * In addition, some of these grids will be "unmarked".
- * This routine is used (only) by "unlite_room()"
- * Also, process all affected monsters
- * </pre>
- * @todo この辺、xとyが引数になっているが、player_ptr->xとplayer_ptr->yで全て置き換えが効くはず……
+ * @param points 暗くすべき座標群
  */
 static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2D> &points)
 {
+    auto &floor = *player_ptr->current_floor_ptr;
     for (const auto &point : points) {
-        const POSITION y = point.y;
-        const POSITION x = point.x;
-
-        auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-        bool do_dark = !g_ptr->is_mirror();
-        g_ptr->info &= ~(CAVE_TEMP);
+        auto &grid = floor.get_grid(point);
+        auto do_dark = !grid.is_mirror();
+        grid.info &= ~(CAVE_TEMP);
         if (!do_dark) {
             continue;
         }
 
-        if (player_ptr->current_floor_ptr->dun_level || !is_daytime()) {
+        if (floor.dun_level || !is_daytime()) {
             for (int j = 0; j < 9; j++) {
-                POSITION by = y + ddy_ddd[j];
-                POSITION bx = x + ddx_ddd[j];
+                const Pos2D pos_neighbor(point.y + ddy_ddd[j], point.x + ddx_ddd[j]);
+                if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
+                    continue;
+                }
 
-                if (in_bounds2(player_ptr->current_floor_ptr, by, bx)) {
-                    grid_type *cc_ptr = &player_ptr->current_floor_ptr->grid_array[by][bx];
-
-                    if (terrains_info[cc_ptr->get_feat_mimic()].flags.has(TerrainCharacteristics::GLOW)) {
-                        do_dark = false;
-                        break;
-                    }
+                const auto &grid_neighbor = floor.get_grid(pos_neighbor);
+                if (grid_neighbor.get_terrain_mimic().flags.has(TerrainCharacteristics::GLOW)) {
+                    do_dark = false;
+                    break;
                 }
             }
 
@@ -137,20 +125,20 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
             }
         }
 
-        g_ptr->info &= ~(CAVE_GLOW);
-        if (terrains_info[g_ptr->get_feat_mimic()].flags.has_not(TerrainCharacteristics::REMEMBER)) {
+        grid.info &= ~(CAVE_GLOW);
+        if (grid.get_terrain_mimic().flags.has_not(TerrainCharacteristics::REMEMBER)) {
             if (!view_torch_grids) {
-                g_ptr->info &= ~(CAVE_MARK);
+                grid.info &= ~(CAVE_MARK);
             }
-            note_spot(player_ptr, y, x);
+            note_spot(player_ptr, point.y, point.x);
         }
 
-        if (g_ptr->m_idx) {
-            update_monster(player_ptr, g_ptr->m_idx, false);
+        if (grid.m_idx) {
+            update_monster(player_ptr, grid.m_idx, false);
         }
 
-        lite_spot(player_ptr, y, x);
-        update_local_illumination(player_ptr, y, x);
+        lite_spot(player_ptr, point.y, point.x);
+        update_local_illumination(player_ptr, point.y, point.x);
     }
 }
 
@@ -392,23 +380,24 @@ bool starlight(PlayerType *player_ptr, bool magic)
     }
 
     int num = damroll(5, 3);
-    int attempts;
-    POSITION y = 0, x = 0;
+    auto y = 0;
+    auto x = 0;
     for (int k = 0; k < num; k++) {
-        attempts = 1000;
-
+        auto attempts = 1000;
         while (attempts--) {
             scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_LOS);
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT)) {
+            const Pos2D pos(y, x);
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, pos.y, pos.x, TerrainCharacteristics::PROJECT)) {
                 continue;
             }
-            if (!player_bold(player_ptr, y, x)) {
+
+            if (!player_ptr->is_located_at(pos)) {
                 break;
             }
         }
 
-        project(player_ptr, 0, 0, y, x, damroll(6 + player_ptr->lev / 8, 10), AttributeType::LITE_WEAK,
-            (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL | PROJECT_LOS));
+        constexpr uint flags = PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL | PROJECT_LOS;
+        project(player_ptr, 0, 0, y, x, damroll(6 + player_ptr->lev / 8, 10), AttributeType::LITE_WEAK, flags);
     }
 
     return true;

@@ -688,7 +688,7 @@ void process_command(PlayerType *player_ptr)
         if (one_in_(2)) {
             sound(SOUND_ILLEGAL);
             const auto error_mes = get_random_line(_("error_j.txt", "error.txt"), 0);
-            if (error_mes.has_value()) {
+            if (error_mes) {
                 msg_print(error_mes.value());
             }
         } else {

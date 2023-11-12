@@ -35,7 +35,7 @@ enum class MagicalBrandEffectType { NONE = 0,
  * @todo fear とmdeath はポインタである必要はないはず
  */
 enum class MonsterRaceId : short;
-struct grid_type;
+class Grid;
 class FloorType;
 class MonsterRaceInfo;
 class MonsterEntity;
@@ -60,7 +60,7 @@ struct player_attack_type {
     bool *fear; //!< 恐怖したかどうか
     bool *mdeath; //!< 死んだかどうか
     int drain_left; //!< 吸血できる残量(最大MAX_VAMPIRIC_DRAIN)
-    grid_type *g_ptr; //!< ターゲットのいる地形情報
+    Grid *g_ptr; //!< ターゲットのいる地形情報
     chaotic_effect chaos_effect; //!< カオス効果
     MagicalBrandEffectType magical_effect; //!< 魔術効果
 

@@ -11,7 +11,6 @@
 #include "object-enchant/trc-types.h"
 #include "object/object-value.h"
 #include "object/tval-types.h"
-#include "perception/object-perception.h"
 #include "smith/object-smith.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/baseitem-info.h"
@@ -262,7 +261,7 @@ void object_absorb(ItemEntity *o_ptr, ItemEntity *j_ptr)
 
     o_ptr->number = (total > max_num) ? max_num : total;
     if (j_ptr->is_known()) {
-        object_known(o_ptr);
+        o_ptr->mark_as_known();
     }
 
     if (((o_ptr->ident & IDENT_STORE) || (j_ptr->ident & IDENT_STORE)) && (!((o_ptr->ident & IDENT_STORE) && (j_ptr->ident & IDENT_STORE)))) {

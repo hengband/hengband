@@ -10,6 +10,7 @@
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"
 #include "monster-race/monster-race.h"
+#include "object-enchant/item-feeling.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-value.h"
@@ -318,7 +319,7 @@ bool ItemEntity::is_ego() const
  */
 bool ItemEntity::is_smith() const
 {
-    return Smith::object_effect(this).has_value() || Smith::object_activation(this).has_value();
+    return Smith::object_effect(this) || Smith::object_activation(this);
 }
 
 /*!
@@ -328,7 +329,7 @@ bool ItemEntity::is_smith() const
  */
 bool ItemEntity::is_fixed_or_random_artifact() const
 {
-    return this->is_fixed_artifact() || this->randart_name.has_value();
+    return this->is_fixed_artifact() || this->randart_name;
 }
 
 /*!
@@ -836,12 +837,12 @@ TrFlags ItemEntity::get_flags() const
     }
 
     flags.set(this->art_flags);
-    if (auto effect = Smith::object_effect(this); effect.has_value()) {
+    if (auto effect = Smith::object_effect(this); effect) {
         auto tr_flags = Smith::get_effect_tr_flags(effect.value());
         flags.set(tr_flags);
     }
 
-    if (Smith::object_activation(this).has_value()) {
+    if (Smith::object_activation(this)) {
         flags.set(TR_ACTIVATE);
     }
 
@@ -875,16 +876,35 @@ TrFlags ItemEntity::get_flags_known() const
         flags.set(this->art_flags);
     }
 
-    if (auto effect = Smith::object_effect(this); effect.has_value()) {
+    if (auto effect = Smith::object_effect(this); effect) {
         auto tr_flags = Smith::get_effect_tr_flags(effect.value());
         flags.set(tr_flags);
     }
 
-    if (Smith::object_activation(this).has_value()) {
+    if (Smith::object_activation(this)) {
         flags.set(TR_ACTIVATE);
     }
 
     return flags;
+}
+
+/*!
+ * @brief オブジェクトを鑑定済にする
+ */
+void ItemEntity::mark_as_known()
+{
+    this->feeling = FEEL_NONE;
+    this->ident &= ~(IDENT_SENSE);
+    this->ident &= ~(IDENT_EMPTY);
+    this->ident |= (IDENT_KNOWN);
+}
+
+/*!
+ * @brief オブジェクトを試行済にする
+ */
+void ItemEntity::mark_as_tried()
+{
+    this->get_baseitem().mark_as_tried();
 }
 
 /*!

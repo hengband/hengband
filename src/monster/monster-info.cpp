@@ -147,15 +147,16 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, const Mons
  */
 bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, MonsterRaceInfo *r_ptr, BIT_FLAGS16 mode)
 {
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    if (player_bold(player_ptr, y, x)) {
+    const Pos2D pos(y, x);
+    auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    if (player_ptr->is_located_at(pos)) {
         return false;
     }
-    if (g_ptr->m_idx) {
+    if (grid.m_idx) {
         return false;
     }
 
-    return monster_can_cross_terrain(player_ptr, g_ptr->feat, r_ptr, mode);
+    return monster_can_cross_terrain(player_ptr, grid.feat, r_ptr, mode);
 }
 
 /*!

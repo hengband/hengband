@@ -455,7 +455,7 @@ std::optional<int> input_integer(std::string_view prompt, int min, int max, int 
     auto digit = std::max(std::to_string(min).length(), std::to_string(max).length());
     while (true) {
         const auto input_str = input_string(ss.str(), digit, std::to_string(initial_value), false);
-        if (!input_str.has_value()) {
+        if (!input_str) {
             return std::nullopt;
         }
 

@@ -55,7 +55,7 @@ static DIRECTION travel_test(PlayerType *player_ptr, DIRECTION prev_dir)
     }
 
     int max = (prev_dir & 0x01) + 1;
-    const grid_type *g_ptr;
+    const Grid *g_ptr;
     for (int i = -max; i <= max; i++) {
         DIRECTION dir = cycle[chome[prev_dir] + i];
         POSITION row = player_ptr->y + ddy[dir];

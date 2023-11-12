@@ -379,7 +379,7 @@ void print_health(PlayerType *player_ptr, bool riding)
         term_erase(col, y, max_width);
     }
 
-    if (!monster_idx.has_value()) {
+    if (!monster_idx) {
         return;
     }
 

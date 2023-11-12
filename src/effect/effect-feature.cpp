@@ -35,10 +35,10 @@
  * Line 2 -- forbid monsters
  * Line 3 -- forbid the player
  */
-static bool cave_naked_bold(PlayerType *player_ptr, POSITION y, POSITION x)
+static bool cave_naked_bold(PlayerType *player_ptr, const Pos2D &pos)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    return cave_clean_bold(floor_ptr, y, x) && (floor_ptr->grid_array[y][x].m_idx == 0) && !player_bold(player_ptr, y, x);
+    return cave_clean_bold(floor_ptr, pos.y, pos.x) && (floor_ptr->get_grid(pos).m_idx == 0) && !player_ptr->is_located_at(pos);
 }
 
 /*!
@@ -72,7 +72,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
     const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
-    const auto &terrain = terrains_info[grid.feat];
+    const auto &terrain = grid.get_terrain();
 
     auto obvious = false;
     auto known = grid.has_los();
@@ -171,7 +171,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         break;
     }
     case AttributeType::KILL_TRAP: {
-        if (is_hidden_door(player_ptr, &grid)) {
+        if (is_hidden_door(player_ptr, grid)) {
             disclose_grid(player_ptr, y, x);
             if (known) {
                 obvious = true;
@@ -230,7 +230,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         int16_t old_mimic = grid.mimic;
-        TerrainType *mimic_f_ptr = &terrains_info[grid.get_feat_mimic()];
+        const auto &terrain_mimic = grid.get_terrain_mimic();
 
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::SPIKE);
         grid.mimic = old_mimic;
@@ -238,11 +238,11 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         note_spot(player_ptr, y, x);
         lite_spot(player_ptr, y, x);
 
-        if (!known || mimic_f_ptr->flags.has_not(TerrainCharacteristics::OPEN)) {
+        if (!known || terrain_mimic.flags.has_not(TerrainCharacteristics::OPEN)) {
             break;
         }
 
-        msg_format(_("%sに何かがつっかえて開かなくなった。", "The %s seems stuck."), mimic_f_ptr->name.data());
+        msg_format(_("%sに何かがつっかえて開かなくなった。", "The %s seems stuck."), terrain_mimic.name.data());
         obvious = true;
         break;
     }
@@ -252,7 +252,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         if (known && grid.is_mark()) {
-            msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), terrains_info[grid.get_feat_mimic()].name.data());
+            msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), grid.get_terrain_mimic().name.data());
             obvious = true;
         }
 
@@ -261,10 +261,10 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         break;
     }
     case AttributeType::MAKE_DOOR: {
-        if (!cave_naked_bold(player_ptr, y, x)) {
+        if (!cave_naked_bold(player_ptr, pos)) {
             break;
         }
-        if (player_bold(player_ptr, y, x)) {
+        if (player_ptr->is_located_at(pos)) {
             break;
         }
         cave_set_feat(player_ptr, y, x, feat_door[DOOR_DOOR].closed);
@@ -278,10 +278,10 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         break;
     }
     case AttributeType::MAKE_TREE: {
-        if (!cave_naked_bold(player_ptr, y, x)) {
+        if (!cave_naked_bold(player_ptr, pos)) {
             break;
         }
-        if (player_bold(player_ptr, y, x)) {
+        if (player_ptr->is_located_at(pos)) {
             break;
         }
         cave_set_feat(player_ptr, y, x, feat_tree);
@@ -291,7 +291,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         break;
     }
     case AttributeType::MAKE_RUNE_PROTECTION: {
-        if (!cave_naked_bold(player_ptr, y, x)) {
+        if (!cave_naked_bold(player_ptr, pos)) {
             break;
         }
         grid.info |= CAVE_OBJECT;
@@ -301,10 +301,10 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         break;
     }
     case AttributeType::STONE_WALL: {
-        if (!cave_naked_bold(player_ptr, y, x)) {
+        if (!cave_naked_bold(player_ptr, pos)) {
             break;
         }
-        if (player_bold(player_ptr, y, x)) {
+        if (player_ptr->is_located_at(pos)) {
             break;
         }
         cave_set_feat(player_ptr, y, x, feat_granite);
@@ -358,7 +358,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
             update_monster(player_ptr, grid.m_idx, false);
         }
 
-        if (player_bold(player_ptr, y, x)) {
+        if (player_ptr->is_located_at(pos)) {
             set_superstealth(player_ptr, false);
         }
 
@@ -380,7 +380,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
                 }
 
                 const auto &grid_neighbor = floor.get_grid(pos_neighbor);
-                if (terrains_info[grid_neighbor.get_feat_mimic()].flags.has(TerrainCharacteristics::GLOW)) {
+                if (grid_neighbor.get_terrain_mimic().flags.has(TerrainCharacteristics::GLOW)) {
                     do_dark = false;
                     break;
                 }
@@ -428,7 +428,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         if (known && (grid.is_mark())) {
-            msg_format(_("%sが割れた！", "The %s crumbled!"), terrains_info[grid.get_feat_mimic()].name.data());
+            msg_format(_("%sが割れた！", "The %s crumbled!"), grid.get_terrain_mimic().name.data());
             sound(SOUND_GLASS);
         }
 
@@ -450,7 +450,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         if (known && (grid.is_mark())) {
-            msg_format(_("%sが割れた！", "The %s crumbled!"), terrains_info[grid.get_feat_mimic()].name.data());
+            msg_format(_("%sが割れた！", "The %s crumbled!"), grid.get_terrain_mimic().name.data());
             sound(SOUND_GLASS);
         }
 

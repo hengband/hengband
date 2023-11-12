@@ -112,7 +112,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
             choice = ' ';
         } else {
             const auto new_choice = input_command(prompt);
-            if (!new_choice.has_value()) {
+            if (!new_choice) {
                 break;
             }
 

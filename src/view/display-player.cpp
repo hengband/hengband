@@ -244,7 +244,7 @@ static std::optional<std::string> decide_death_in_quest(PlayerType *player_ptr)
 static std::string decide_current_floor(PlayerType *player_ptr)
 {
     if (auto death_cause = search_death_cause(player_ptr);
-        death_cause.has_value() || !w_ptr->character_dungeon) {
+        death_cause || !w_ptr->character_dungeon) {
         return death_cause.value_or("");
     }
 
@@ -253,7 +253,7 @@ static std::string decide_current_floor(PlayerType *player_ptr)
         return format(_("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name(player_ptr).data());
     }
 
-    if (auto decision = decide_death_in_quest(player_ptr); decision.has_value()) {
+    if (auto decision = decide_death_in_quest(player_ptr); decision) {
         return decision.value();
     }
 

@@ -116,7 +116,7 @@ bool get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx, int *mm)
     auto *m_ptr = &floor_ptr->m_list[m_idx];
 
     POSITION x = 0, y = 0;
-    if (player_ptr->riding_t_m_idx && player_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
+    if (player_ptr->riding_t_m_idx && player_ptr->is_located_at({ m_ptr->fy, m_ptr->fx })) {
         y = floor_ptr->m_list[player_ptr->riding_t_m_idx].fy;
         x = floor_ptr->m_list[player_ptr->riding_t_m_idx].fx;
     } else if (m_ptr->is_pet() && player_ptr->pet_t_m_idx) {

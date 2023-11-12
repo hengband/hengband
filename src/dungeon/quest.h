@@ -25,6 +25,7 @@ enum class QuestId : short{
 	SORCERER = 10, /*<! 仙術エネルギー特異点 */
 	CHAOS = 11, /*<! カオスの特異点 */
 	NATURE = 12, /*<! 自然魔術の特異点 */
+	ARCANE = 13, /*<! 秘術の特異点 */
 	WARG = 14, /*<! ワーグを殲滅せよ */
 	ERIC = 15, /*<! エリックの要塞 */
 	MONSALVAT = 16, /*<! モンサルヴァト城への侵攻 */

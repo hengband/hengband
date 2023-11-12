@@ -65,7 +65,7 @@ void pattern_teleport(PlayerType *player_ptr)
 
         constexpr auto prompt = _("テレポート先", "Teleport to level");
         const auto input_level = input_numerics(prompt, min_level, max_level, current_level);
-        if (!input_level.has_value()) {
+        if (!input_level) {
             return;
         }
 
@@ -109,7 +109,8 @@ void pattern_teleport(PlayerType *player_ptr)
 bool pattern_effect(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!pattern_tile(floor_ptr, player_ptr->y, player_ptr->x)) {
+    const auto p_pos = player_ptr->get_position();
+    if (!pattern_tile(floor_ptr, p_pos.y, p_pos.x)) {
         return false;
     }
 
@@ -118,7 +119,7 @@ bool pattern_effect(PlayerType *player_ptr)
         wreck_the_pattern(player_ptr);
     }
 
-    int pattern_type = terrains_info[floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat].subtype;
+    int pattern_type = floor_ptr->get_grid(p_pos).get_terrain().subtype;
     switch (pattern_type) {
     case PATTERN_TILE_END:
         (void)BadStatusSetter(player_ptr).hallucination(0);
@@ -174,40 +175,39 @@ bool pattern_effect(PlayerType *player_ptr)
  */
 bool pattern_seq(PlayerType *player_ptr, POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x)
 {
-    TerrainType *cur_f_ptr = &terrains_info[player_ptr->current_floor_ptr->grid_array[c_y][c_x].feat];
-    TerrainType *new_f_ptr = &terrains_info[player_ptr->current_floor_ptr->grid_array[n_y][n_x].feat];
-    bool is_pattern_tile_cur = cur_f_ptr->flags.has(TerrainCharacteristics::PATTERN);
-    bool is_pattern_tile_new = new_f_ptr->flags.has(TerrainCharacteristics::PATTERN);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &grid_current = floor.get_grid({ c_y, c_x });
+    const auto &grid_new = floor.get_grid({ n_y, n_x });
+    const auto &terrain_current = grid_current.get_terrain();
+    const auto &terrain_new = grid_new.get_terrain();
+    const auto is_pattern_tile_cur = terrain_current.flags.has(TerrainCharacteristics::PATTERN);
+    const auto is_pattern_tile_new = terrain_new.flags.has(TerrainCharacteristics::PATTERN);
     if (!is_pattern_tile_cur && !is_pattern_tile_new) {
         return true;
     }
 
-    int pattern_type_cur = is_pattern_tile_cur ? cur_f_ptr->subtype : NOT_PATTERN_TILE;
-    int pattern_type_new = is_pattern_tile_new ? new_f_ptr->subtype : NOT_PATTERN_TILE;
+    int pattern_type_cur = is_pattern_tile_cur ? terrain_current.subtype : NOT_PATTERN_TILE;
+    int pattern_type_new = is_pattern_tile_new ? terrain_new.subtype : NOT_PATTERN_TILE;
     if (pattern_type_new == PATTERN_TILE_START) {
-        auto effects = player_ptr->effects();
-        auto is_stunned = effects->stun()->is_stunned();
-        auto is_confused = effects->confusion()->is_confused();
-        auto is_hallucinated = effects->hallucination()->is_hallucinated();
-        if (!is_pattern_tile_cur && !is_confused && !is_stunned && !is_hallucinated) {
-            if (input_check(_("パターンの上を歩き始めると、全てを歩かなければなりません。いいですか？",
-                    "If you start walking the Pattern, you must walk the whole way. Ok? "))) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
+        const auto effects = player_ptr->effects();
+        const auto is_stunned = effects->stun()->is_stunned();
+        const auto is_confused = effects->confusion()->is_confused();
+        const auto is_hallucinated = effects->hallucination()->is_hallucinated();
+        if (is_pattern_tile_cur || is_confused || is_stunned || is_hallucinated) {
             return true;
         }
+
+        return input_check(_("パターンの上を歩き始めると、全てを歩かなければなりません。いいですか？",
+            "If you start walking the Pattern, you must walk the whole way. Ok? "));
     }
 
     if ((pattern_type_new == PATTERN_TILE_OLD) || (pattern_type_new == PATTERN_TILE_END) || (pattern_type_new == PATTERN_TILE_WRECKED)) {
         if (is_pattern_tile_cur) {
             return true;
-        } else {
-            msg_print(_("パターンの上を歩くにはスタート地点から歩き始めなくてはなりません。", "You must start walking the Pattern from the startpoint."));
-            return false;
         }
+
+        msg_print(_("パターンの上を歩くにはスタート地点から歩き始めなくてはなりません。", "You must start walking the Pattern from the startpoint."));
+        return false;
     }
 
     if ((pattern_type_new == PATTERN_TILE_TELEPORT) || (pattern_type_cur == PATTERN_TILE_TELEPORT)) {
@@ -217,24 +217,23 @@ bool pattern_seq(PlayerType *player_ptr, POSITION c_y, POSITION c_x, POSITION n_
     if (pattern_type_cur == PATTERN_TILE_START) {
         if (is_pattern_tile_new) {
             return true;
-        } else {
-            msg_print(_("パターンの上は正しい順序で歩かねばなりません。", "You must walk the Pattern in correct order."));
-            return false;
         }
+
+        msg_print(_("パターンの上は正しい順序で歩かねばなりません。", "You must walk the Pattern in correct order."));
+        return false;
     }
 
     if ((pattern_type_cur == PATTERN_TILE_OLD) || (pattern_type_cur == PATTERN_TILE_END) || (pattern_type_cur == PATTERN_TILE_WRECKED)) {
-        if (!is_pattern_tile_new) {
-            msg_print(_("パターンを踏み外してはいけません。", "You may not step off from the Pattern."));
-            return false;
-        } else {
+        if (is_pattern_tile_new) {
             return true;
         }
+
+        msg_print(_("パターンを踏み外してはいけません。", "You may not step off from the Pattern."));
+        return false;
     }
 
     if (!is_pattern_tile_cur) {
         msg_print(_("パターンの上を歩くにはスタート地点から歩き始めなくてはなりません。", "You must start walking the Pattern from the startpoint."));
-
         return false;
     }
 

@@ -334,7 +334,7 @@ static bool racial_power_process_input(PlayerType *player_ptr, rc_type *rc_ptr)
             rc_ptr->choice = ' ';
         } else {
             const auto choice = input_command(rc_ptr->out_val);
-            if (!choice.has_value()) {
+            if (!choice) {
                 return false;
             }
 

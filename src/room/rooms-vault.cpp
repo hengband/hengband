@@ -319,7 +319,7 @@ static void build_vault(
 {
     POSITION dx, dy, x, y, i, j;
     concptr t;
-    grid_type *g_ptr;
+    Grid *g_ptr;
 
     /* Place dungeon features and objects */
     auto *floor_ptr = player_ptr->current_floor_ptr;

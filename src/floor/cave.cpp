@@ -54,7 +54,7 @@ bool is_cave_empty_bold(PlayerType *player_ptr, int y, int x)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_empty_grid = cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PLACE);
     is_empty_grid &= !(floor_ptr->grid_array[y][x].m_idx);
-    is_empty_grid &= !player_bold(player_ptr, y, x);
+    is_empty_grid &= !player_ptr->is_located_at({ y, x });
     return is_empty_grid;
 }
 
@@ -74,15 +74,8 @@ bool is_cave_empty_bold2(PlayerType *player_ptr, int y, int x)
 
 bool cave_has_flag_bold(const FloorType *floor_ptr, int y, int x, TerrainCharacteristics f_idx)
 {
-    return terrains_info[floor_ptr->grid_array[y][x].feat].flags.has(f_idx);
-}
-
-/*
- * Determine if player is on this grid
- */
-bool player_bold(PlayerType *player_ptr, int y, int x)
-{
-    return (y == player_ptr->y) && (x == player_ptr->x);
+    const Pos2D pos(y, x);
+    return floor_ptr->get_grid(pos).get_terrain().flags.has(f_idx);
 }
 
 /*
@@ -113,7 +106,7 @@ bool cave_los_bold(FloorType *floor_ptr, int y, int x)
  */
 bool feat_supports_los(short f_idx)
 {
-    return terrains_info[f_idx].flags.has(TerrainCharacteristics::LOS);
+    return TerrainList::get_instance()[f_idx].flags.has(TerrainCharacteristics::LOS);
 }
 
 /*
