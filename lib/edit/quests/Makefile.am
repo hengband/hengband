@@ -7,6 +7,7 @@ angband_files = \
 	007_TheTower_3.txt 008_Oberon.txt \
 	009_SerpentOfChaos.txt 010_NodeOfSorcery.txt \
 	011_NodeOfChaos.txt 012_NodeOfNature.txt \
+	013_NodeOfArcane.txt \
 	014_WargProblem.txt 015_EricStronghold.txt \
 	016_AssaultOnMontsalvat.txt 018_WaterCave.txt \
 	019_DoomQuest1.txt 020_VaporQuest.txt \

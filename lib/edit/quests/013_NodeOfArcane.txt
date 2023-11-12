@@ -1,0 +1,123 @@
+# File: 013_NodeOfArcane.txt
+
+# Created by daradarach
+
+# Name
+Q:$13:N:Node of Arcane
+Q:13:N:秘術の特異点
+
+# Definition
+Q:$13:Q:6:0:0:0:65:0:0:0:6
+Q:13:Q:6:0:0:0:65:0:0:0:6
+
+# Description for quest
+?:[LEQ $QUEST13 2]
+Q:$13:T:Tourists who reached the summit of the mystery confirmed the presence of a burning element singularity in the nearby forest.
+Q:$13:T:You must find the location of the singularity and pump up the flammable element.
+Q:13:T:秘術の頂に至った観光客たちが、近くの森に燃素の特異点の存在を確認した。
+Q:13:T:おまえはその特異点の場所を見つけ燃素を汲み上げてくるのだ。
+?:1
+
+# Description for quest reward
+?:[EQU $QUEST13 3]
+Q:$13:T:You have done well. A powerful spellbook awaits you outside.
+Q:13:T:よくやった。強力な魔法書を外に置いておいた。
+?:1
+
+# Description for quest failed
+?:[EQU $QUEST13 5]
+Q:$13:T:Walk away, you incompetent, no better than a tourist!
+Q:$13:T:The fuel element, which should have been a permanent institution, has vanished and been lost forever!
+Q:$13:T:You have squandered your chance.
+Q:13:T:立ち去れ、観光客にも劣る無能め！
+Q:13:T:永久機関となるべき燃素は消え去って永遠に失われたのだぞ！
+Q:13:T:お前はせっかくのチャンスを棒にふったのだ。
+?:1
+
+# Grass
+F:.:GRASS:8
+
+# Floor with Air spirit
+F:a:GRASS:8:227
+# Floor with Water spirit
+F:b:GRASS:8:303
+# Floor with Earth spirit
+F:c:GRASS:8:305
+# Floor with Fire spirit
+F:d:GRASS:8:306
+# Floor with Fire elemental
+F:e:GRASS:8:510
+# Floor with Water elemental
+F:f:GRASS:8:512
+# Floor with Night stalker
+F:g:GRASS:8:514
+# Floor with Earth elemental
+F:h:GRASS:8:525
+# Floor with Air elemental
+F:i:GRASS:8:526
+# Floor with Smoke elemental
+F:j:GRASS:8:537
+# Floor with Ooze elemental
+F:k:GRASS:8:545
+# Floor with Ice elemental
+F:l:GRASS:8:570
+# Floor with Time elemental
+F:m:GRASS:8:579
+# Floor with Will o' the wisp
+F:n:GRASS:8:582
+# Floor with Magma elemental
+F:o:GRASS:8:584
+# Floor with Shambler
+F:p:GRASS:8:786
+# Floor with Caaws
+F:q:GRASS:8:866
+# Floor with Elder air elemental
+F:r:GRASS:8:1141
+# Floor with Elder magma elemental
+F:s:GRASS:8:1142
+# Floor with Elder fire elemental
+F:t:GRASS:8:1143
+# Floor with Elder ice elemental
+F:u:GRASS:8:1144
+# Floor with Elder ooze elemental
+F:v:GRASS:8:1145
+# Floor with Beast in wheat fields
+F:w:GRASS:8:1310
+
+# Mountain
+F:y:MOUNTAIN_WALL
+# Tree
+F:z:TREE:8
+
+# Node of Arcane layout 
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+D:XzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzX
+D:Xzzzzzz...................zzzzzzX
+D:Xzzzz..........z.z..........zzzzX
+D:Xzzz......zzzzzdddzzzzz......zzzX
+D:Xzz...zzzzyyyyz...zyyyyzzzz...zzX
+D:Xz...zyyyzzzzz..z..zzzzzyyyz...zX
+D:Xz..zyyyznnn...zyz...nnnzyyyz..zX
+D:Xz..zyyznmw...zyyyz..dwmnzyyz..zX
+D:Xz..zyyznwzzzzzzzzzzzzzwnzyyz..zX
+D:Xz..zyz.nzyz...ete...zyzn.zyz..zX
+D:Xz.zyyz..zz..fqzzzqf..zz..zyyz.zX
+D:Xzazyyz..z...izzpzzk...z..zyyzczX
+D:Xzazyyz.hsj..rzpppzv..jsh.zyyzczX
+D:Xzazyyz..z...izzpzzk...z..zyyzczX
+D:Xz.zyyz..zz..fqzzzqf..zz..zyyz.zX
+D:Xz..zyz.nzyz...lul...zyzn.zyz..zX
+D:Xz..zyyznwzzz.......zzzwnzyyz..zX
+D:Xz..zyyznmw...........wmnzyyz..zX
+D:Xz...zyyznnn.zzzzzzz.nnnzyyz...zX
+D:Xz...zyyyzzzzyyyyyyyzzzzyyyz...zX
+D:Xzz...zzyyyyyyyyyyyyyyyyyzz...zzX
+D:Xzz.....zzzzyyyyyyyyyzzzz.....zzX
+D:Xz..........zzzzzzzzz.......zzzzX
+D:Xz<............bbb.........zzzzzX
+D:XzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzX
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+# Starting position
+P:24:2
+

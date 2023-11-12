@@ -53,8 +53,9 @@
 ?:[EQU $QUEST_NUMBER 12]
 %:quests/012_NodeOfNature.txt
 
-# Quest #13 is still unfinished
-# 欠番、おそらく『海底都市』だったもの
+# 秘術の特異点
+?:[EQU $QUEST_NUMBER 13]
+%:quests/013_NodeOfArcane.txt
 
 # ワーグを殱滅せよ
 ?:[EQU $QUEST_NUMBER 14]
