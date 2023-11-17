@@ -1,4 +1,4 @@
-%define version 3.0.1.0
+%define version 3.0.1.1
 %define release 1
 
 Summary: hengband %{version}
@@ -95,6 +95,9 @@ exit 0
 %license lib/help/jlicense.txt
 
 %changelog
+
+* Fri Nov 17 2023 Shiro Hara <white@vx-xv.com>
+- hengband RPM 3.0.1.1(Beta)
 
 * Mon Oct 30 2023 Shiro Hara <white@vx-xv.com>
 - hengband RPM 3.0.1.0(Beta)
