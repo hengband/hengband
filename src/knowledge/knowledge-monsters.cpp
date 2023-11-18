@@ -318,10 +318,10 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
             }
         }
     } else {
-        r_idx_list.push_back(direct_r_idx.value());
-
-        (void)visual_mode_command('v', &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &monraces_info[direct_r_idx.value()].x_attr,
-            &monraces_info[direct_r_idx.value()].x_char, need_redraw);
+        r_idx_list.push_back(*direct_r_idx);
+        auto &monrace = monraces_info[*direct_r_idx];
+        (void)visual_mode_command('v', &visual_list, browser_rows - 1, wid - (max + 3),
+            &attr_top, &char_left, &monrace.x_attr, &monrace.x_char, need_redraw);
     }
 
     grp_idx.push_back(-1); // Sentinel

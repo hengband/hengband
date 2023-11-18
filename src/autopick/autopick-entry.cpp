@@ -333,7 +333,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
         }
     } else {
         if (previous_flag) {
-            entry->remove(previous_flag.value());
+            entry->remove(*previous_flag);
             ptr = prev_ptr;
         }
     }

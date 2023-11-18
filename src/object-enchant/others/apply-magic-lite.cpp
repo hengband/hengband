@@ -16,7 +16,7 @@ LiteEnchanter::LiteEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, int powe
         return;
     }
 
-    switch (sval.value()) {
+    switch (*sval) {
     case SV_LITE_TORCH:
         o_ptr->fuel = randint1(FUEL_TORCH / 2);
         return;
@@ -90,7 +90,7 @@ void LiteEnchanter::add_dark_flag()
         return;
     }
 
-    switch (sval.value()) {
+    switch (*sval) {
     case SV_LITE_TORCH:
         this->o_ptr->art_flags.set(TR_LITE_M1);
         return;

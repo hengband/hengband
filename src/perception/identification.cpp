@@ -728,7 +728,7 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
     }
 
     if (mode & SCROBJ_FAKE_OBJECT) {
-        const auto sval = o_ptr->bi_key.sval().value();
+        const auto sval = *o_ptr->bi_key.sval();
         switch (o_ptr->bi_key.tval()) {
         case ItemKindType::RING:
             switch (sval) {

@@ -65,7 +65,7 @@ static bool exe_eat_food_type_object(PlayerType *player_ptr, const BaseitemKey &
     }
 
     BadStatusSetter bss(player_ptr);
-    switch (bi_key.sval().value()) {
+    switch (*bi_key.sval()) {
     case SV_FOOD_POISON:
         return (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr))) && bss.mod_poison(randint0(10) + 10);
     case SV_FOOD_BLINDNESS:

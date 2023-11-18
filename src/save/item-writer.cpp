@@ -217,13 +217,13 @@ static void write_item_info(ItemEntity *o_ptr, const BIT_FLAGS flags)
 
     if (any_bits(flags, SaveDataItemFlagType::SMITH)) {
         if (o_ptr->smith_effect) {
-            wr_s16b(enum2i(o_ptr->smith_effect.value()));
+            wr_s16b(enum2i(*o_ptr->smith_effect));
         } else {
             wr_s16b(0);
         }
 
         if (o_ptr->smith_act_idx) {
-            wr_s16b(enum2i(o_ptr->smith_act_idx.value()));
+            wr_s16b(enum2i(*o_ptr->smith_act_idx));
         } else {
             wr_s16b(0);
         }
@@ -259,11 +259,11 @@ void wr_item(ItemEntity *o_ptr)
 
     write_item_info(o_ptr, flags);
     if (any_bits(flags, SaveDataItemFlagType::INSCRIPTION)) {
-        wr_string(o_ptr->inscription.value());
+        wr_string(*o_ptr->inscription);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::ART_NAME)) {
-        wr_string(o_ptr->randart_name.value());
+        wr_string(*o_ptr->randart_name);
     }
 }
 

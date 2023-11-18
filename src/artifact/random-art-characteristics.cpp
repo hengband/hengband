@@ -151,12 +151,12 @@ std::string get_random_name(const ItemEntity &item, bool armour, int power)
     auto random_artifact_name = get_random_line(filename.data(), item.artifact_bias);
 #ifdef JP
     if (random_artifact_name) {
-        return random_artifact_name.value();
+        return *random_artifact_name;
     }
 
     return get_table_name();
 #else
-    return random_artifact_name.value();
+    return *random_artifact_name;
 #endif
 }
 

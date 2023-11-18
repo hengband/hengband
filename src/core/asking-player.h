@@ -34,5 +34,5 @@ std::optional<T> input_numerics(std::string_view prompt, int min, int max, T ini
         return std::nullopt;
     }
 
-    return std::make_optional(static_cast<T>(result.value()));
+    return std::make_optional(static_cast<T>(*result));
 }

@@ -246,7 +246,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                         break;
                     }
 
-                    const auto new_monrace_id = new_monrace_id_opt.value();
+                    const auto new_monrace_id = *new_monrace_id_opt;
                     monrace_id = i2enum<MonsterRaceId>(new_monrace_id);
                     num = new_monrace_id;
                     break;
@@ -257,7 +257,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                         break;
                     }
 
-                    r_ptr->x_attr = visual_id.value();
+                    r_ptr->x_attr = *visual_id;
                     need_redraw = true;
                     break;
                 }
@@ -267,7 +267,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                         break;
                     }
 
-                    r_ptr->x_char = visual_id.value();
+                    r_ptr->x_char = *visual_id;
                     need_redraw = true;
                     break;
                 }
@@ -328,7 +328,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                             break;
                         }
 
-                        bi_id = new_baseitem_id.value();
+                        bi_id = *new_baseitem_id;
                         if (!baseitems_info[bi_id].name.empty()) {
                             break;
                         }
@@ -342,7 +342,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                         break;
                     }
 
-                    baseitem.x_attr = visual_id.value();
+                    baseitem.x_attr = *visual_id;
                     need_redraw = true;
                     break;
                 }
@@ -352,7 +352,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                         break;
                     }
 
-                    baseitem.x_char = visual_id.value();
+                    baseitem.x_char = *visual_id;
                     need_redraw = true;
                     break;
                 }
@@ -432,7 +432,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                         break;
                     }
 
-                    terrain.x_attr[lighting_level] = visual_id.value();
+                    terrain.x_attr[lighting_level] = *visual_id;
                     need_redraw = true;
                     break;
                 }
@@ -442,7 +442,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                         break;
                     }
 
-                    terrain.x_char[lighting_level] = visual_id.value();
+                    terrain.x_char[lighting_level] = *visual_id;
                     need_redraw = true;
                     break;
                 }
@@ -452,7 +452,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                         break;
                     }
 
-                    lighting_level = visual_id.value();
+                    lighting_level = *visual_id;
                     break;
                 }
                 case 'd':

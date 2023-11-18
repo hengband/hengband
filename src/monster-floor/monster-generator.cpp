@@ -424,7 +424,7 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
 {
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
 
-    auto r_idx = select_horde_leader_r_idx(player_ptr);
+    const auto r_idx = select_horde_leader_r_idx(player_ptr);
     if (!r_idx) {
         return false;
     }
@@ -434,7 +434,7 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
             return false;
         }
 
-        if (place_specific_monster(player_ptr, 0, y, x, r_idx.value(), 0L)) {
+        if (place_specific_monster(player_ptr, 0, y, x, *r_idx, 0L)) {
             break;
         }
     }

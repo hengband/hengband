@@ -233,7 +233,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
 
             for (int i = 0; i < o_ptr->number; i++) {
                 auto corpse_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-                const auto sval = o_ptr->bi_key.sval().value();
+                const auto sval = *o_ptr->bi_key.sval();
                 if (((sval == SV_CORPSE) && (randint1(100) > 80)) || ((sval == SV_SKELETON) && (randint1(100) > 60))) {
                     if (!note_kill) {
                         note_kill = _("灰になった。", (plural ? " become dust." : " becomes dust."));

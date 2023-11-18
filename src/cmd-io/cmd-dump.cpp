@@ -55,7 +55,7 @@ void do_cmd_pref(PlayerType *player_ptr)
         return;
     }
 
-    auto buf(input_str.value());
+    auto buf(*input_str);
     (void)interpret_pref_file(player_ptr, buf.data());
 }
 
@@ -210,13 +210,12 @@ void do_cmd_colors(PlayerType *player_ptr)
  */
 void do_cmd_note(void)
 {
-    const auto note_opt = input_string(_("メモ: ", "Note: "), 60);
-    if (!note_opt || note_opt->empty()) {
+    const auto note = input_string(_("メモ: ", "Note: "), 60);
+    if (!note || note->empty()) {
         return;
     }
 
-    const auto note(note_opt.value());
-    msg_format(_("メモ: %s", "Note: %s"), note.data());
+    msg_format(_("メモ: %s", "Note: %s"), (*note).data());
 }
 
 /*

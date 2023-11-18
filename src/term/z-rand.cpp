@@ -165,5 +165,5 @@ int32_t Rand_external(int32_t m)
     }
 
     std::uniform_int_distribution<> d(0, m - 1);
-    return d(urbg_external.value());
+    return d(*urbg_external);
 }

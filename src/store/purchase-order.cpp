@@ -249,7 +249,6 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     COMMAND_CODE item_new;
-    PRICE price;
     const auto purchased_item_name = describe_flavor(player_ptr, j_ptr, 0);
     msg_format(_("%s(%c)を購入する。", "Buying %s (%c)."), purchased_item_name.data(), I2A(item_num));
     msg_print(nullptr);
@@ -262,7 +261,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
         return;
     }
 
-    price = res.value();
+    const auto price = *res;
 
     if (player_ptr->au < price) {
         msg_print(_("お金が足りません。", "You do not have enough gold."));

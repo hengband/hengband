@@ -392,7 +392,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view pro
                 break;
             }
 
-            choice = new_choice.value();
+            choice = *new_choice;
         }
 
         auto should_redraw_cursor = true;
@@ -616,7 +616,7 @@ void do_cmd_browse(PlayerType *player_ptr)
 
     /* Access the item's sval */
     const auto tval = o_ptr->bi_key.tval();
-    const auto sval = o_ptr->bi_key.sval().value();
+    const auto sval = *o_ptr->bi_key.sval();
     short use_realm = tval2realm(tval);
 
     /* Track the object kind */
@@ -667,7 +667,7 @@ void do_cmd_browse(PlayerType *player_ptr)
         term_erase(14, 11);
 
         const auto spell_desc = exe_spell(player_ptr, use_realm, spell, SpellProcessType::DESCRIPTION);
-        display_wrap_around(spell_desc.value(), 62, 11, 15);
+        display_wrap_around(*spell_desc, 62, 11, 15);
     }
     screen_load();
 }
@@ -767,7 +767,7 @@ void do_cmd_study(PlayerType *player_ptr)
     }
 
     const auto tval = o_ptr->bi_key.tval();
-    const auto sval = o_ptr->bi_key.sval().value();
+    const auto sval = *o_ptr->bi_key.sval();
     if (tval == get_realm2_book(player_ptr)) {
         increment = 32;
     } else if (tval != get_realm1_book(player_ptr)) {
@@ -1003,7 +1003,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
     }
 
     const auto tval = o_ptr->bi_key.tval();
-    const auto sval = o_ptr->bi_key.sval().value();
+    const auto sval = *o_ptr->bi_key.sval();
     if (!is_every_magic && (tval == get_realm2_book(player_ptr))) {
         increment = 32;
     }

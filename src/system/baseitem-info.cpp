@@ -71,7 +71,7 @@ ItemKindType BaseitemKey::get_arrow_kind() const
         THROW_EXCEPTION(std::logic_error, ITEM_NOT_BOW);
     }
 
-    switch (this->subtype_value.value()) {
+    switch (*this->subtype_value) {
     case SV_SLING:
         return ItemKindType::SHOT;
     case SV_SHORT_BOW:
@@ -347,7 +347,7 @@ bool BaseitemKey::is_broken_weapon() const
         return false;
     }
 
-    switch (this->subtype_value.value()) {
+    switch (*this->subtype_value) {
     case SV_BROKEN_DAGGER:
     case SV_BROKEN_SWORD:
         return true;
@@ -407,7 +407,7 @@ bool BaseitemKey::is_rare() const
 
     if (auto it = rare_table.find(this->type_value); it != rare_table.end()) {
         const auto &svals = it->second;
-        return svals.empty() || (svals.find(this->subtype_value.value()) != svals.end());
+        return svals.empty() || (svals.find(*this->subtype_value) != svals.end());
     }
 
     return false;
@@ -419,7 +419,7 @@ short BaseitemKey::get_bow_energy() const
         THROW_EXCEPTION(std::logic_error, ITEM_NOT_BOW);
     }
 
-    switch (this->subtype_value.value()) {
+    switch (*this->subtype_value) {
     case SV_SLING:
         return 8000;
     case SV_NAMAKE_BOW:
@@ -439,7 +439,7 @@ int BaseitemKey::get_arrow_magnification() const
         THROW_EXCEPTION(std::logic_error, ITEM_NOT_BOW);
     }
 
-    switch (this->subtype_value.value()) {
+    switch (*this->subtype_value) {
     case SV_SLING:
     case SV_SHORT_BOW:
         return 2;
@@ -460,7 +460,7 @@ bool BaseitemKey::is_aiming_rod() const
         THROW_EXCEPTION(std::logic_error, ITEM_NOT_ROD);
     }
 
-    switch (this->subtype_value.value()) {
+    switch (*this->subtype_value) {
     case SV_ROD_TELEPORT_AWAY:
     case SV_ROD_DISARMING:
     case SV_ROD_LITE:
@@ -489,7 +489,7 @@ bool BaseitemKey::is_lite_requiring_fuel() const
         THROW_EXCEPTION(std::logic_error, ITEM_NOT_LITE);
     }
 
-    switch (this->subtype_value.value()) {
+    switch (*this->subtype_value) {
     case SV_LITE_TORCH:
     case SV_LITE_LANTERN:
         return true;
@@ -529,7 +529,7 @@ bool BaseitemKey::is_cross_bow() const
         return false;
     }
 
-    switch (this->subtype_value.value()) {
+    switch (*this->subtype_value) {
     case SV_LIGHT_XBOW:
     case SV_HEAVY_XBOW:
         return true;
@@ -544,7 +544,7 @@ bool BaseitemKey::is_mushrooms() const
         return false;
     }
 
-    switch (this->subtype_value.value()) {
+    switch (*this->subtype_value) {
     case SV_FOOD_POISON:
     case SV_FOOD_BLINDNESS:
     case SV_FOOD_PARANOIA:

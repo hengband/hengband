@@ -52,7 +52,7 @@ void SoftArmorEnchanter::sval_enchant()
         return;
     }
 
-    switch (sval.value()) {
+    switch (*sval) {
     case SV_KUROSHOUZOKU:
         this->o_ptr->pval = randint1(4);
         return;

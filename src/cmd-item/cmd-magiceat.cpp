@@ -203,12 +203,11 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
         screen_load();
     } else {
         while (true) {
-            const auto new_choice = input_command(_("[A] 杖, [B] 魔法棒, [C] ロッド:", "[A] staff, [B] wand, [C] rod:"), true);
-            if (!new_choice) {
+            const auto choice = input_command(_("[A] 杖, [B] 魔法棒, [C] ロッド:", "[A] staff, [B] wand, [C] rod:"), true);
+            if (!choice) {
                 return std::nullopt;
             }
 
-            const auto choice = new_choice.value();
             if (choice == 'A' || choice == 'a') {
                 tval = ItemKindType::STAFF;
                 break;
@@ -356,15 +355,14 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
             }
         }
 
-        const auto choice_opt = input_command(prompt);
-        if (!choice_opt) {
+        const auto choice = input_command(prompt);
+        if (!choice) {
             break;
         }
 
-        const auto choice = choice_opt.value();
         auto should_redraw_cursor = true;
         if (use_menu && choice != ' ') {
-            switch (choice) {
+            switch (*choice) {
             case '0': {
                 screen_load();
                 return std::nullopt;
@@ -458,10 +456,10 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
         }
 
         if (!use_menu) {
-            if (isalpha(choice)) {
-                sval = A2I(choice);
+            if (isalpha(*choice)) {
+                sval = A2I(*choice);
             } else {
-                sval = choice - '0' + 26;
+                sval = *choice - '0' + 26;
             }
         }
 
@@ -550,7 +548,7 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
         energy.reset_player_turn();
         return false;
     }
-    auto &bi_key = result.value();
+    auto &bi_key = *result;
 
     const auto bi_id = lookup_baseitem_id(bi_key);
     const auto &baseitem = baseitems_info[bi_id];
@@ -598,7 +596,7 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
                 return false;
             }
 
-            (void)rod_effect(player_ptr, sval.value(), dir, &use_charge, powerful);
+            (void)rod_effect(player_ptr, *sval, dir, &use_charge, powerful);
             if (!use_charge) {
                 return false;
             }
@@ -615,7 +613,7 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
                 return false;
             }
 
-            (void)wand_effect(player_ptr, sval.value(), dir, powerful, true);
+            (void)wand_effect(player_ptr, *sval, dir, powerful, true);
             break;
         }
         default:
@@ -624,7 +622,7 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
                 return false;
             }
 
-            (void)staff_effect(player_ptr, sval.value(), &use_charge, powerful, true, true);
+            (void)staff_effect(player_ptr, *sval, &use_charge, powerful, true, true);
             if (!use_charge) {
                 return false;
             }
@@ -638,14 +636,13 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
     }
 
     auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
-    const auto opt_sval = bi_key.sval();
-    if (!opt_sval) {
+    const auto sval = bi_key.sval();
+    if (!sval) {
         return false;
     }
 
     const auto tval = bi_key.tval();
-    const auto sval = opt_sval.value();
-    auto &item = magic_eater_data->get_item_group(tval)[sval];
+    auto &item = magic_eater_data->get_item_group(tval)[*sval];
 
     energy.set_player_turn_energy(100);
     if (tval == ItemKindType::ROD) {

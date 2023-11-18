@@ -239,7 +239,7 @@ static void exe_cmd_save_screen_html_with_naming()
         return;
     }
 
-    auto path = path_build(ANGBAND_DIR_USER, filename.value());
+    auto path = path_build(ANGBAND_DIR_USER, *filename);
     msg_print(nullptr);
     exe_cmd_save_screen_html(path, true);
 }

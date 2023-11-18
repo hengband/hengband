@@ -460,7 +460,7 @@ std::optional<int> input_integer(std::string_view prompt, int min, int max, int 
         }
 
         try {
-            auto val = std::stoi(input_str.value());
+            auto val = std::stoi(*input_str);
             if ((val < min) || (val > max)) {
                 msg_format(_("%dから%dの間で指定して下さい。", "It must be between %d to %d."), min, max);
                 continue;

@@ -338,7 +338,7 @@ static bool racial_power_process_input(PlayerType *player_ptr, rc_type *rc_ptr)
                 return false;
             }
 
-            rc_ptr->choice = choice.value();
+            rc_ptr->choice = *choice;
         }
 
         if (!racial_power_select_by_menu(player_ptr, rc_ptr)) {

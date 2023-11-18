@@ -40,7 +40,7 @@
 
 static std::string describe_chest_trap(const ItemEntity &item)
 {
-    auto trap_kinds = chest_traps[item.pval];
+    auto &trap_kinds = chest_traps[item.pval];
     if (trap_kinds.count() >= 2) {
         return _("(マルチ・トラップ)", " (Multiple Traps)");
     }
@@ -50,7 +50,7 @@ static std::string describe_chest_trap(const ItemEntity &item)
         return _("(施錠)", " (Locked)");
     }
 
-    switch (trap_kind.value()) {
+    switch (*trap_kind) {
     case ChestTrapType::LOSE_STR:
         return _("(毒針)", " (Poison Needle)");
     case ChestTrapType::LOSE_CON:

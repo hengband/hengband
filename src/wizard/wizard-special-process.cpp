@@ -217,8 +217,8 @@ static short wiz_create_itemtype()
         return 0;
     }
 
-    auto tval = tvals[selection.value()].tval;
-    auto tval_description = tvals[selection.value()].desc;
+    auto tval = tvals[*selection].tval;
+    auto tval_description = tvals[*selection].desc;
     term_clear();
     return wiz_select_sval(tval, tval_description);
 }
@@ -347,7 +347,7 @@ void wiz_create_named_art(PlayerType *player_ptr)
     }
 
     screen_load();
-    const auto a_idx = create_a_idx.value();
+    const auto a_idx = *create_a_idx;
     const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
     if (artifact.is_generated) {
         msg_print("It's already allocated.");

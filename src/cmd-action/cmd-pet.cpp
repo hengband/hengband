@@ -359,7 +359,7 @@ static void do_name_pet(PlayerType *player_ptr)
     }
 
     if (!new_name->empty()) {
-        m_ptr->nickname = new_name.value();
+        m_ptr->nickname = *new_name;
         if (record_named_pet) {
             exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_NAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE));
         }
@@ -555,7 +555,7 @@ void do_cmd_pet(PlayerType *player_ptr)
             prompt = format(fmt, I2A(0), I2A(num - 1));
         }
 
-        choice = (always_show_list || use_menu) ? ESCAPE : 1;
+        choice = (always_show_list || use_menu) ? ESCAPE : '\1';
 
         /* Get a command from the user */
         while (!flag) {
@@ -567,7 +567,7 @@ void do_cmd_pet(PlayerType *player_ptr)
                     break;
                 }
 
-                choice = new_choice.value();
+                choice = *new_choice;
             }
 
             auto should_redraw_cursor = true;

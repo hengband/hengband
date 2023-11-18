@@ -530,7 +530,7 @@ PRICE flag_cost(const ItemEntity *o_ptr, int plusses)
     if (o_ptr->is_random_artifact() && o_ptr->art_flags.has(TR_ACTIVATE)) {
         auto act_ptr = find_activation_info(o_ptr);
         if (act_ptr) {
-            total += act_ptr.value()->value;
+            total += (*act_ptr)->value;
         }
     }
 

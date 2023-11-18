@@ -60,7 +60,7 @@ void Chest::chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
     auto *o_ptr = &floor_ptr->o_list[o_idx];
 
     /* Small chests often hold "gold" */
-    const auto sval = o_ptr->bi_key.sval().value();
+    const auto sval = *o_ptr->bi_key.sval();
     auto small = sval < SV_CHEST_MIN_LARGE;
 
     /* Determine how much to drop (see above) */

@@ -25,7 +25,7 @@
 RandomArtActType activation_index(const ItemEntity *o_ptr)
 {
     if (auto act_idx = Smith::object_activation(o_ptr); act_idx) {
-        return act_idx.value();
+        return *act_idx;
     }
 
     if (o_ptr->is_fixed_artifact()) {

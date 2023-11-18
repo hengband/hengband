@@ -99,7 +99,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
 #endif
     std::string rumor;
     if (opt_rumor) {
-        rumor = std::move(opt_rumor.value());
+        rumor = std::move(*opt_rumor);
     } else {
         rumor = _("嘘の噂もある。", "Some rumors are wrong.");
     }

@@ -193,7 +193,7 @@ static std::string describe_unique_name_after_body_ja(const ItemEntity &item, co
     }
 
     if (auto body = describe_random_artifact_name_after_body_ja(item); body) {
-        return body.value();
+        return *body;
     }
 
     if (item.is_fixed_artifact()) {
@@ -427,7 +427,7 @@ std::string describe_named_item(PlayerType *player_ptr, const ItemEntity &item, 
 #endif
     if (item.is_spell_book()) {
         // svalは0から数えているので表示用に+1している
-        ss << format("Lv%d ", item.bi_key.sval().value() + 1);
+        ss << format("Lv%d ", *item.bi_key.sval() + 1);
     }
 
     ss << describe_body(item, opt, basename_sv, modstr);
