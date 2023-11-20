@@ -45,10 +45,10 @@
  * @details
  * Assume there is no monster blocking the destination
  */
-static bool exe_open_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_idx)
+static bool exe_open_chest(PlayerType *player_ptr, const Pos2D &pos, OBJECT_IDX o_idx)
 {
-    bool flag = true;
-    bool more = false;
+    auto flag = true;
+    auto more = false;
     auto *o_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     if (o_ptr->pval > 0) {
@@ -84,8 +84,8 @@ static bool exe_open_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJEC
 
     if (flag) {
         Chest chest(player_ptr);
-        chest.chest_trap(y, x, o_idx);
-        chest.chest_death(false, y, x, o_idx);
+        chest.fire_trap(pos, o_idx);
+        chest.open(false, pos, o_idx);
     }
 
     return more;
@@ -137,7 +137,7 @@ void do_cmd_open(PlayerType *player_ptr)
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
             do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
         } else if (o_idx) {
-            more = exe_open_chest(player_ptr, y, x, o_idx);
+            more = exe_open_chest(player_ptr, { y, x }, o_idx);
         } else {
             more = exe_open(player_ptr, y, x);
         }
