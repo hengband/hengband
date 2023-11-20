@@ -46,7 +46,7 @@ TrFlags PlayerRace::tr_flags() const
             continue;
         }
         if (cond.pclass) {
-            auto is_class_equal = PlayerClass(this->player_ptr).equals(cond.pclass.value());
+            auto is_class_equal = PlayerClass(this->player_ptr).equals(*cond.pclass);
             if (cond.not_class && is_class_equal) {
                 continue;
             }

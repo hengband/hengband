@@ -292,8 +292,8 @@ bool ang_sort_art_comp(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     /* Sort by monster level */
     if (*why >= 2) {
         /* Extract levels */
-        z1 = artifact_w1.bi_key.sval().value();
-        z2 = artifact_w2.bi_key.sval().value();
+        z1 = *artifact_w1.bi_key.sval();
+        z2 = *artifact_w2.bi_key.sval();
 
         /* Compare levels */
         if (z1 < z2) {

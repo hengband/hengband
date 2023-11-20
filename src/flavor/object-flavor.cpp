@@ -52,8 +52,8 @@ std::string get_table_name_aux()
 {
     std::stringstream ss;
 #ifdef JP
-    ss << get_random_line("aname_j.txt", 1).value();
-    ss << get_random_line("aname_j.txt", 2).value();
+    ss << *get_random_line("aname_j.txt", 1);
+    ss << *get_random_line("aname_j.txt", 2);
     return ss.str();
 #else
     static const std::vector<std::string_view> syllables = {
@@ -75,7 +75,7 @@ std::string get_table_name_aux()
     } else {
         testcounter = randint1(2) + 1;
         while (testcounter--) {
-            ss << get_random_line("elvish.txt", 0).value();
+            ss << *get_random_line("elvish.txt", 0);
         }
     }
 
@@ -103,8 +103,8 @@ std::string get_table_name()
 std::string get_table_sindarin_aux()
 {
     std::stringstream ss;
-    ss << get_random_line("sname.txt", 1).value();
-    ss << get_random_line("sname.txt", 2).value();
+    ss << *get_random_line("sname.txt", 1);
+    ss << *get_random_line("sname.txt", 2);
     auto name = ss.str();
     return _(sindarin_to_kana(name), name);
 }

@@ -235,7 +235,7 @@ void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx
         return;
     }
 
-    artifacts.get_artifact(input_artifact_id.value()).is_generated = aware;
+    artifacts.get_artifact(*input_artifact_id).is_generated = aware;
     msg_print(message);
 }
 
@@ -260,7 +260,7 @@ void wiz_modify_item_activation(PlayerType *player_ptr)
         return;
     }
 
-    auto act_idx = act_id.value();
+    auto act_idx = *act_id;
     o_ptr->art_flags.set(TR_ACTIVATE);
     o_ptr->activation_id = act_idx;
 }
@@ -401,7 +401,7 @@ static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     auto line = 4;
     const auto &bi_key = o_ptr->bi_key;
     const auto item_level = o_ptr->get_baseitem().level;
-    prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->bi_id, item_level, enum2i(bi_key.tval()), bi_key.sval().value()), line, j);
+    prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->bi_id, item_level, enum2i(bi_key.tval()), *bi_key.sval()), line, j);
     prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), ++line, j);
     prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), ++line, j);
     prt(format("fixed_artifact_idx = %-4d  ego_idx = %-4d  cost = %d", enum2i(o_ptr->fixed_artifact_idx), enum2i(o_ptr->ego_idx), object_value_real(o_ptr)), ++line, j);
@@ -472,16 +472,15 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
             break;
         }
 
-        const auto ch = command.value();
         BIT_FLAGS mode;
         std::string quality;
-        if (ch == 'n' || ch == 'N') {
+        if (command == 'n' || command == 'N') {
             mode = 0L;
             quality = "normal";
-        } else if (ch == 'g' || ch == 'G') {
+        } else if (command == 'g' || command == 'G') {
             mode = AM_GOOD;
             quality = "good";
-        } else if (ch == 'e' || ch == 'E') {
+        } else if (command == 'e' || command == 'E') {
             mode = AM_GOOD | AM_GREAT;
             quality = "excellent";
         } else {
@@ -491,7 +490,7 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
         constexpr auto p = "Enter number of items to roll: ";
         const auto rolls_opt = input_numerics(p, 0, MAX_INT, rolls);
         if (rolls_opt) {
-            rolls = rolls_opt.value();
+            rolls = *rolls_opt;
         }
 
         constexpr auto q = "Rolls: %d  Correct: %d  Matches: %d  Better: %d  Worse: %d  Other: %d";
@@ -580,8 +579,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
             break;
         }
 
-        const auto ch = command.value();
-        if (ch == 'A' || ch == 'a') {
+        if (command == 'A' || command == 'a') {
             changed = true;
             break;
         }
@@ -591,7 +589,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
             q_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
         }
 
-        switch (tolower(ch)) {
+        switch (tolower(*command)) {
         /* Apply bad magic, but first clear object */
         case 'w':
             q_ptr->prep(o_ptr->bi_id);
@@ -674,28 +672,28 @@ static void wiz_tweak_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         return;
     }
 
-    o_ptr->pval = pval.value();
+    o_ptr->pval = *pval;
     wiz_display_item(player_ptr, o_ptr);
     const auto bonus_ac = input_numerics("Enter new AC Bonus setting: ", -MAX_SHORT, MAX_SHORT, o_ptr->to_a);
     if (!bonus_ac) {
         return;
     }
 
-    o_ptr->to_a = bonus_ac.value();
+    o_ptr->to_a = *bonus_ac;
     wiz_display_item(player_ptr, o_ptr);
     const auto bonus_hit = input_numerics("Enter new Hit Bonus setting: ", -MAX_SHORT, MAX_SHORT, o_ptr->to_h);
     if (!bonus_hit) {
         return;
     }
 
-    o_ptr->to_h = bonus_hit.value();
+    o_ptr->to_h = *bonus_hit;
     wiz_display_item(player_ptr, o_ptr);
     const auto bonus_damage = input_numerics("Enter new Damage Bonus setting: ", -MAX_SHORT, MAX_SHORT, o_ptr->to_d);
     if (!bonus_damage) {
         return;
     }
 
-    o_ptr->to_d = bonus_damage.value();
+    o_ptr->to_d = *bonus_damage;
     wiz_display_item(player_ptr, o_ptr);
 }
 
@@ -709,15 +707,14 @@ static void wiz_quantity_item(ItemEntity *o_ptr)
         return;
     }
 
-    const auto quantity_opt = input_numerics("Quantity: ", 1, 99, o_ptr->number);
-    if (!quantity_opt) {
+    const auto quantity = input_numerics("Quantity: ", 1, 99, o_ptr->number);
+    if (!quantity) {
         return;
     }
 
-    const auto quantity = quantity_opt.value();
-    o_ptr->number = quantity;
+    o_ptr->number = *quantity;
     if (o_ptr->bi_key.tval() == ItemKindType::ROD) {
-        o_ptr->pval = o_ptr->pval * o_ptr->number / quantity;
+        o_ptr->pval = o_ptr->pval * o_ptr->number / *quantity;
     }
 }
 
@@ -755,25 +752,24 @@ void wiz_modify_item(PlayerType *player_ptr)
             break;
         }
 
-        const auto ch = command.value();
-        if (ch == 'A' || ch == 'a') {
+        if (command == 'A' || command == 'a') {
             changed = true;
             break;
         }
 
-        if (ch == 's' || ch == 'S') {
+        if (command == 's' || command == 'S') {
             wiz_statistics(player_ptr, q_ptr);
         }
 
-        if (ch == 'r' || ch == 'R') {
+        if (command == 'r' || command == 'R') {
             wiz_reroll_item(player_ptr, q_ptr);
         }
 
-        if (ch == 't' || ch == 'T') {
+        if (command == 't' || command == 'T') {
             wiz_tweak_item(player_ptr, q_ptr);
         }
 
-        if (ch == 'q' || ch == 'Q') {
+        if (command == 'q' || command == 'Q') {
             wiz_quantity_item(q_ptr);
         }
     }
@@ -874,7 +870,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     while (true) {
         const auto pray_opt = input_string(_("何をお望み？ ", "For what do you wish?"), MAX_NLEN);
         if (pray_opt) {
-            pray = pray_opt.value();
+            pray = *pray_opt;
             break;
         }
 

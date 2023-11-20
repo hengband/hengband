@@ -511,7 +511,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     if (tval == ItemKindType::NONE) {
         chance = (player_ptr->skill_thb + ((weapon_exps[0] - median_skill_exp) / bow_magnification + bonus) * BTH_PLUS_ADJ);
     } else {
-        const auto sval = j_ptr->bi_key.sval().value();
+        const auto sval = *j_ptr->bi_key.sval();
         if (j_ptr->is_cross_bow()) {
             chance = (player_ptr->skill_thb + (weapon_exps[sval] / xbow_magnification + bonus) * BTH_PLUS_ADJ);
         } else {
@@ -1063,7 +1063,7 @@ int critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus
     if (tval == ItemKindType::NONE) {
         power = player_ptr->skill_thb + ((weapon_exps[0] - median_skill_exp) / bow_magnification + bonus) * BTH_PLUS_ADJ;
     } else {
-        const auto sval = item.bi_key.sval().value();
+        const auto sval = *item.bi_key.sval();
         const auto weapon_exp = weapon_exps[sval];
         if (player_ptr->tval_ammo == ItemKindType::BOLT) {
             power = (player_ptr->skill_thb + (weapon_exp / xbow_magnification + bonus) * BTH_PLUS_ADJ);
@@ -1118,7 +1118,7 @@ int calc_crit_ratio_shot(PlayerType *player_ptr, int plus_ammo, int plus_bow)
     /* Extract "shot" power */
     auto i = player_ptr->to_h_b + plus_ammo;
     const auto tval = j_ptr->bi_key.tval();
-    const auto sval = j_ptr->bi_key.sval().value();
+    const auto sval = *j_ptr->bi_key.sval();
     if (player_ptr->tval_ammo == ItemKindType::BOLT) {
         i = (player_ptr->skill_thb + (player_ptr->weapon_exp[tval][sval] / 400 + i) * BTH_PLUS_ADJ);
     } else {

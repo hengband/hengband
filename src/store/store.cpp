@@ -170,17 +170,16 @@ std::optional<short> input_stock(std::string_view fmt, int min, int max, [[maybe
 
     std::optional<char> command;
     while (true) {
-        const auto command_opt = input_command(prompt);
-        if (!command_opt) {
+        const auto command_alpha = input_command(prompt);
+        if (!command_alpha) {
             break;
         }
 
-        const auto command_alpha = command_opt.value();
         std::optional<int> command_num;
-        if (islower(command_alpha)) {
-            command_num = A2I(command_alpha);
-        } else if (isupper(command_alpha)) {
-            command_num = A2I(tolower(command_alpha)) + 26;
+        if (islower(*command_alpha)) {
+            command_num = A2I(*command_alpha);
+        } else if (isupper(*command_alpha)) {
+            command_num = A2I(tolower(*command_alpha)) + 26;
         }
 
         if (command_num && (*command_num >= min) && (*command_num <= max)) {

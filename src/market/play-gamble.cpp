@@ -39,14 +39,13 @@ void gamble_comm(PlayerType *player_ptr, int cmd)
     auto maxbet = player_ptr->lev * 200;
     maxbet = std::min(maxbet, player_ptr->au);
     constexpr auto prompt = _("賭け金？", "Your wager ?");
-    const auto wager_opt = input_integer(prompt, 1, maxbet, 1);
-    if (!wager_opt) {
+    const auto wager = input_integer(prompt, 1, maxbet, 1);
+    if (!wager) {
         msg_print(nullptr);
         screen_load();
         return;
     }
 
-    auto wager = wager_opt.value();
     if (wager > player_ptr->au) {
         msg_print(_("おい！金が足りないじゃないか！出ていけ！", "Hey! You don't have the gold - get out of here!"));
         msg_print(nullptr);
@@ -59,9 +58,9 @@ void gamble_comm(PlayerType *player_ptr, int cmd)
     auto odds = 0;
     auto oldgold = player_ptr->au;
     prt(format(_("ゲーム前の所持金: %9d", "Gold before game: %9d"), oldgold), 20, 2);
-    prt(format(_("現在の掛け金:     %9d", "Current Wager:    %9d"), wager), 21, 2);
+    prt(format(_("現在の掛け金:     %9d", "Current Wager:    %9d"), *wager), 21, 2);
     while (true) {
-        player_ptr->au -= wager;
+        player_ptr->au -= *wager;
         switch (cmd) {
         case BACT_IN_BETWEEN: {
             c_put_str(TERM_GREEN, _("イン・ビトイーン", "In Between"), 5, 2);
@@ -120,12 +119,11 @@ void gamble_comm(PlayerType *player_ptr, int cmd)
             prt("0  1  2  3  4  5  6  7  8  9", 7, 5);
             prt("--------------------------------", 8, 3);
             while (true) {
-                const auto choice_opt = input_integer(_("何番？", "Pick a number"), 0, 9);
-                if (!choice_opt) {
+                const auto choice = input_integer(_("何番？", "Pick a number"), 0, 9);
+                if (!choice) {
                     continue;
                 }
 
-                auto choice = choice_opt.value();
                 msg_print(nullptr);
                 auto roll1 = randint0(10);
                 prt(format(_("ルーレットは回り、止まった。勝者は %d番だ。", "The wheel spins to a stop and the winner is %d"), roll1), 13, 3);
@@ -228,7 +226,7 @@ void gamble_comm(PlayerType *player_ptr, int cmd)
 
         if (win) {
             prt(_("あなたの勝ち", "YOU WON"), 16, 37);
-            player_ptr->au += odds * wager;
+            player_ptr->au += odds * *wager;
             prt(format(_("倍率: %d", "Payoff: %d"), odds), 17, 37);
         } else {
             prt(_("あなたの負け", "You Lost"), 16, 37);

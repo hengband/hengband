@@ -45,7 +45,7 @@ static std::optional<T> input_new_visual_id(int i, T initial_visual_id, int max)
             return std::nullopt;
         }
 
-        return static_cast<T>(new_visual_id.value());
+        return static_cast<T>(*new_visual_id);
     }
 
     if (isupper(i)) {

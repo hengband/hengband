@@ -32,7 +32,7 @@ bool ParchmentReadExecutor::read()
 {
     screen_save();
     std::stringstream ss;
-    ss << "book-" << std::setfill('0') << std::right << std::setw(3) << this->o_ptr->bi_key.sval().value();
+    ss << "book-" << std::setfill('0') << std::right << std::setw(3) << *this->o_ptr->bi_key.sval();
     ss << "_" << _("jp", "en") << ".txt";
     const auto item_name = describe_flavor(this->player_ptr, this->o_ptr, OD_NAME_ONLY);
     auto path = path_build(ANGBAND_DIR_FILE, "books");

@@ -197,7 +197,7 @@ static const std::map<ItemKindType, std::vector<int>> &create_baseitems_cache()
             continue;
         }
 
-        cache[tval].push_back(bi_key.sval().value());
+        cache[tval].push_back(*bi_key.sval());
     }
 
     return cache;

@@ -455,7 +455,7 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
         return true;
     }
 
-    auto *r_ptr = &monraces_info[r_idx.value()];
+    auto *r_ptr = &monraces_info[*r_idx];
     if (floor_ptr->m_list[m_idx].mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
         r_ptr = &monraces_info[floor_ptr->m_list[m_idx].r_idx];
     }

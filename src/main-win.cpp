@@ -1605,7 +1605,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
             ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR | OFN_HIDEREADONLY;
             const auto &filename = get_open_filename(&ofn, ANGBAND_DIR_SAVE, savefile, MAIN_WIN_MAX_PATH);
             if (filename) {
-                savefile = filename.value();
+                savefile = *filename;
                 validate_file(savefile);
                 game_in_progress = true;
             }
@@ -1675,7 +1675,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
             ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
             const auto &filename = get_open_filename(&ofn, ANGBAND_DIR_USER, savefile, MAIN_WIN_MAX_PATH);
             if (filename) {
-                savefile = filename.value();
+                savefile = *filename;
                 prepare_browse_movie_without_path_build(savefile);
                 movie_in_progress = true;
             }
@@ -1962,7 +1962,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
         ofn.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
         const auto &filename = get_open_filename(&ofn, "", wallpaper_path, MAIN_WIN_MAX_PATH);
         if (filename) {
-            wallpaper_path = filename.value();
+            wallpaper_path = *filename;
             change_bg_mode(bg_mode::BG_ONE, true, true);
         }
         break;

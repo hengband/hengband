@@ -300,7 +300,7 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
                 break;
             }
 
-            choice = new_choice.value();
+            choice = *new_choice;
         }
 
         /* Request redraw */

@@ -106,7 +106,7 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
     }
 
     sound(SOUND_ZAP);
-    auto ident = wand_effect(this->player_ptr, sval.value(), dir, false, false);
+    auto ident = wand_effect(this->player_ptr, *sval, dir, false, false);
     using Srf = StatusRecalculatingFlag;
     EnumClassFlagGroup<Srf> flags_srf = { Srf::COMBINATION, Srf::REORDER };
     if (rfu.has(Srf::AUTO_DESTRUCTION)) {
@@ -114,7 +114,7 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
     }
 
     rfu.reset_flags(flags_srf);
-    if (!(o_ptr->is_aware())) {
+    if (!o_ptr->is_aware()) {
         chg_virtue(this->player_ptr, Virtue::PATIENCE, -1);
         chg_virtue(this->player_ptr, Virtue::CHANCE, 1);
         chg_virtue(this->player_ptr, Virtue::KNOWLEDGE, -1);

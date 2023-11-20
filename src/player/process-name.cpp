@@ -140,7 +140,7 @@ void get_name(PlayerType *player_ptr)
     const auto name = input_string(prompt, max_name_size, initial_name);
     if (name) {
         if (!name->empty()) {
-            angband_strcpy(player_ptr->name, name.value(), copy_size);
+            angband_strcpy(player_ptr->name, *name, copy_size);
         }
 
         return;
