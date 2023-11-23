@@ -108,53 +108,50 @@ static void check_room_boundary(PlayerType *player_ptr, const Pos2D &pos1, const
 }
 
 /*!
- * @brief
- * find_space()の予備処理として部屋の生成が可能かを判定する /
- * Helper function for find_space(). Is this a good location?
+ * @brief find_space()の予備処理として部屋の生成が可能かを判定する
  * @param blocks_high 範囲の高さ
  * @param blocks_wide 範囲の幅
  * @param block_y 範囲の上端
  * @param block_x 範囲の左端
  */
-static bool find_space_aux(dun_data_type *dd_ptr, POSITION blocks_high, POSITION blocks_wide, POSITION block_y, POSITION block_x)
+static bool find_space_aux(dun_data_type *dd_ptr, const Pos2D &max_block_size, const Pos2D &block)
 {
-    if (blocks_wide < 3) {
-        if ((blocks_wide == 2) && (block_x % 3) == 2) {
+    if (max_block_size.x < 3) {
+        if ((max_block_size.x == 2) && (block.x % 3) == 2) {
             return false;
         }
-    } else if ((blocks_wide % 3) == 0) {
-        if ((block_x % 3) != 0) {
+    } else if ((max_block_size.x % 3) == 0) {
+        if ((block.x % 3) != 0) {
             return false;
         }
     } else {
-        if (block_x + (blocks_wide / 2) <= dd_ptr->col_rooms / 2) {
-            if (((block_x % 3) == 2) && ((blocks_wide % 3) == 2)) {
+        if (block.x + (max_block_size.x / 2) <= dd_ptr->col_rooms / 2) {
+            if (((block.x % 3) == 2) && ((max_block_size.x % 3) == 2)) {
                 return false;
             }
-            if ((block_x % 3) == 1) {
+            if ((block.x % 3) == 1) {
                 return false;
             }
         } else {
-            if (((block_x % 3) == 2) && ((blocks_wide % 3) == 2)) {
+            if (((block.x % 3) == 2) && ((max_block_size.x % 3) == 2)) {
                 return false;
             }
-            if ((block_x % 3) == 1) {
+            if ((block.x % 3) == 1) {
                 return false;
             }
         }
     }
 
-    POSITION by1 = block_y;
-    POSITION bx1 = block_x;
-    POSITION by2 = block_y + blocks_high;
-    POSITION bx2 = block_x + blocks_wide;
-
+    const auto by1 = block.y;
+    const auto bx1 = block.x;
+    const auto by2 = block.y + max_block_size.y;
+    const auto bx2 = block.x + max_block_size.x;
     if ((by1 < 0) || (by2 > dd_ptr->row_rooms) || (bx1 < 0) || (bx2 > dd_ptr->col_rooms)) {
         return false;
     }
 
-    for (POSITION by = by1; by < by2; by++) {
-        for (POSITION bx = bx1; bx < bx2; bx++) {
+    for (auto by = by1; by < by2; by++) {
+        for (auto bx = bx1; bx < bx2; bx++) {
             if (dd_ptr->room_map[by][bx]) {
                 return false;
             }
@@ -199,7 +196,7 @@ bool find_space(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION *y, POSI
     int candidates = 0;
     for (block_y = dd_ptr->row_rooms - blocks_high; block_y >= 0; block_y--) {
         for (block_x = dd_ptr->col_rooms - blocks_wide; block_x >= 0; block_x--) {
-            if (find_space_aux(dd_ptr, blocks_high, blocks_wide, block_y, block_x)) {
+            if (find_space_aux(dd_ptr, { blocks_high, blocks_wide }, { block_y, block_x })) {
                 /* Find a valid place */
                 candidates++;
             }
@@ -218,7 +215,7 @@ bool find_space(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION *y, POSI
 
     for (block_y = dd_ptr->row_rooms - blocks_high; block_y >= 0; block_y--) {
         for (block_x = dd_ptr->col_rooms - blocks_wide; block_x >= 0; block_x--) {
-            if (find_space_aux(dd_ptr, blocks_high, blocks_wide, block_y, block_x)) {
+            if (find_space_aux(dd_ptr, { blocks_high, blocks_wide }, { block_y, block_x })) {
                 pick--;
                 if (!pick) {
                     break;
