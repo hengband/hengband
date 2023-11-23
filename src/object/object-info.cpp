@@ -28,7 +28,7 @@
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return 発動名称
  */
-static std::string item_activation_aux(const ItemEntity *o_ptr)
+static std::string build_activation_description(const ItemEntity *o_ptr)
 {
     const auto it = o_ptr->find_activation_info();
     if (it == activation_info.end()) {
@@ -55,7 +55,7 @@ std::string activation_explanation(const ItemEntity *o_ptr)
     }
 
     if (o_ptr->has_activation()) {
-        return item_activation_aux(o_ptr);
+        return build_activation_description(o_ptr);
     }
 
     const auto tval = o_ptr->bi_key.tval();
