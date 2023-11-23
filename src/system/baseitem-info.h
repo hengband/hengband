@@ -12,7 +12,12 @@
 enum class ItemKindType : short;
 class BaseitemKey {
 public:
-    BaseitemKey(const ItemKindType type_value, const std::optional<int> &subtype_value = std::nullopt);
+    constexpr BaseitemKey(const ItemKindType type_value, const std::optional<int> &subtype_value = std::nullopt)
+        : type_value(type_value)
+        , subtype_value(subtype_value)
+    {
+    }
+
     bool operator==(const BaseitemKey &other) const;
     bool operator!=(const BaseitemKey &other) const
     {

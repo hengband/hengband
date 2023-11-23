@@ -26,12 +26,6 @@ constexpr auto ITEM_NOT_ROD = "This item is not a rod!";
 constexpr auto ITEM_NOT_LITE = "This item is not a lite!";
 }
 
-BaseitemKey::BaseitemKey(const ItemKindType type_value, const std::optional<int> &subtype_value)
-    : type_value(type_value)
-    , subtype_value(subtype_value)
-{
-}
-
 bool BaseitemKey::operator==(const BaseitemKey &other) const
 {
     return (this->type_value == other.type_value) && (this->subtype_value == other.subtype_value);
