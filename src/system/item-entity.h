@@ -147,7 +147,7 @@ public:
     ArtifactType &get_fixed_artifact() const;
     TrFlags get_flags() const;
     TrFlags get_flags_known() const;
-    std::string build_activation_description_dragon_breath() const;
+    std::string build_activation_description(const activation_type &act) const;
 
     void mark_as_known();
     void mark_as_tried();
@@ -158,4 +158,5 @@ private:
     int calc_capture_value() const;
     void modify_ego_lite_flags(TrFlags &flags) const;
     RandomArtActType get_activation_index() const;
+    std::string build_activation_description_dragon_breath() const;
 };

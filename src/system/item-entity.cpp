@@ -20,6 +20,7 @@
 #include "smith/object-smith.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
+#include "sv-definition/sv-ring-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info.h"
@@ -906,29 +907,54 @@ TrFlags ItemEntity::get_flags_known() const
     return flags;
 }
 
-/*!
- * @brief アイテムの発動効果名称を返す (ドラゴンブレス)
- * @return 発動名称
- */
-std::string ItemEntity::build_activation_description_dragon_breath() const
+std::string ItemEntity::build_activation_description(const activation_type &act) const
 {
-    std::stringstream ss;
-    ss << _("", "breathe ");
-    auto n = 0;
-    const auto flags = this->get_flags();
-    for (auto i = 0; dragonbreath_info[i].flag != 0; i++) {
-        if (flags.has(dragonbreath_info[i].flag)) {
-            if (n > 0) {
-                ss << _("、", ", ");
-            }
-
-            ss << dragonbreath_info[i].name;
-            n++;
+    switch (act.index) {
+    case RandomArtActType::NONE:
+        return act.desc;
+    case RandomArtActType::BR_FIRE:
+        if (this->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_FLAMES)) {
+            return _("火炎のブレス (200) と火への耐性", "breathe fire (200) and resist fire");
         }
-    }
 
-    ss << _("のブレス(250)", " (250)");
-    return ss.str();
+        return act.desc;
+    case RandomArtActType::BR_COLD:
+        if (this->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_ICE)) {
+            return _("冷気のブレス (200) と冷気への耐性", "breathe cold (200) and resist cold");
+        }
+
+        return act.desc;
+    case RandomArtActType::BR_DRAGON:
+        return this->build_activation_description_dragon_breath();
+    case RandomArtActType::AGGRAVATE:
+        if (this->is_specific_artifact(FixedArtifactId::HYOUSIGI)) {
+            return _("拍子木を打ちならす", "beat wooden clappers");
+        }
+
+        return act.desc;
+    case RandomArtActType::ACID_BALL_AND_RESISTANCE:
+        return _("アシッド・ボール (100) と酸への耐性", "ball of acid (100) and resist acid");
+    case RandomArtActType::FIRE_BALL_AND_RESISTANCE:
+        return _("ファイア・ボール (100) と火への耐性", "ball of fire (100) and resist fire");
+    case RandomArtActType::COLD_BALL_AND_RESISTANCE:
+        return _("アイス・ボール (100) と冷気への耐性", "ball of cold (100) and resist cold");
+    case RandomArtActType::ELEC_BALL_AND_RESISTANCE:
+        return _("サンダー・ボール (100) と電撃への耐性", "ball of elec (100) and resist elec");
+    case RandomArtActType::POIS_BALL_AND_RESISTANCE:
+        return _("ポイズン・ボール (100) と毒への耐性", "ball of poison (100) and resist elec");
+    case RandomArtActType::RESIST_ACID:
+        return _("一時的な酸への耐性", "temporary resist acid");
+    case RandomArtActType::RESIST_FIRE:
+        return _("一時的な火への耐性", "temporary resist fire");
+    case RandomArtActType::RESIST_COLD:
+        return _("一時的な冷気への耐性", "temporary resist cold");
+    case RandomArtActType::RESIST_ELEC:
+        return _("一時的な電撃への耐性", "temporary resist elec");
+    case RandomArtActType::RESIST_POIS:
+        return _("一時的な毒への耐性", "temporary resist elec");
+    default:
+        return act.desc;
+    }
 }
 
 /*!
@@ -1018,4 +1044,29 @@ RandomArtActType ItemEntity::get_activation_index() const
     }
 
     return this->activation_id;
+}
+
+/*!
+ * @brief アイテムの発動効果名称を返す (ドラゴンブレス)
+ * @return 発動名称
+ */
+std::string ItemEntity::build_activation_description_dragon_breath() const
+{
+    std::stringstream ss;
+    ss << _("", "breathe ");
+    auto n = 0;
+    const auto flags = this->get_flags();
+    for (auto i = 0; dragonbreath_info[i].flag != 0; i++) {
+        if (flags.has(dragonbreath_info[i].flag)) {
+            if (n > 0) {
+                ss << _("、", ", ");
+            }
+
+            ss << dragonbreath_info[i].name;
+            n++;
+        }
+    }
+
+    ss << _("のブレス(250)", " (250)");
+    return ss.str();
 }
