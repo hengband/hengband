@@ -17,6 +17,8 @@
 #include "object/object-index-list.h"
 #include "spell/spells-util.h"
 #include "system/angband.h"
+#include "util/point-2d.h"
+#include <utility>
 
 enum class AttributeType;
 
@@ -69,7 +71,7 @@ bool darkened_grid(PlayerType *player_ptr, Grid *g_ptr);
 void delete_monster(PlayerType *player_ptr, POSITION y, POSITION x);
 void place_bold(PlayerType *player_ptr, POSITION y, POSITION x, grid_bold_type gh_type);
 void set_cave_feat(FloorType *floor_ptr, POSITION y, POSITION x, FEAT_IDX feature_idx);
-int count_dt(PlayerType *player_ptr, POSITION *y, POSITION *x, bool (*test)(PlayerType *, FEAT_IDX), bool under);
+std::pair<int, Pos2D> count_dt(PlayerType *player_ptr, bool (*test)(PlayerType *, short), bool under);
 void cave_lite_hack(FloorType *floor_ptr, POSITION y, POSITION x);
 void cave_redraw_later(FloorType *floor_ptr, POSITION y, POSITION x);
 void cave_note_and_redraw_later(FloorType *floor_ptr, POSITION y, POSITION x);

@@ -106,16 +106,13 @@ void do_cmd_open(PlayerType *player_ptr)
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
     if (easy_open) {
-        int y;
-        int x;
-        const auto num_doors = count_dt(player_ptr, &y, &x, is_closed_door, false);
-        const auto &[num_chests, pos] = count_chests(player_ptr, false);
+        const auto &[num_doors, pos_door] = count_dt(player_ptr, is_closed_door, false);
+        const auto &[num_chests, pos_chest] = count_chests(player_ptr, false);
         if ((num_doors > 0) || (num_chests > 0)) {
-            y = pos.y;
-            x = pos.x;
+            const auto pos = pos_chest == Pos2D(0, 0) ? pos_door : pos_chest;
             const auto too_many = (num_doors && num_chests) || (num_doors > 1) || (num_chests > 1);
             if (!too_many) {
-                command_dir = coords_to_dir(player_ptr, y, x);
+                command_dir = coords_to_dir(player_ptr, pos.y, pos.x);
             }
         }
     }
@@ -162,10 +159,11 @@ void do_cmd_close(PlayerType *player_ptr)
     }
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
-    int y;
-    int x;
-    if (easy_open && (count_dt(player_ptr, &y, &x, is_open, false) == 1)) {
-        command_dir = coords_to_dir(player_ptr, y, x);
+    if (easy_open) {
+        const auto &[num_doors, pos] = count_dt(player_ptr, is_open, false);
+        if (num_doors == 1) {
+            command_dir = coords_to_dir(player_ptr, pos.y, pos.x);
+        }
     }
 
     if (command_arg) {
@@ -207,16 +205,13 @@ void do_cmd_disarm(PlayerType *player_ptr)
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
     if (easy_disarm) {
-        int y;
-        int x;
-        const auto num_traps = count_dt(player_ptr, &y, &x, is_trap, true);
-        const auto &[num_chests, pos] = count_chests(player_ptr, true);
+        const auto &[num_traps, pos_trap] = count_dt(player_ptr, is_trap, true);
+        const auto &[num_chests, pos_chest] = count_chests(player_ptr, true);
         if ((num_traps > 0) || (num_chests > 0)) {
-            y = pos.y;
-            x = pos.x;
+            const auto pos = pos_chest == Pos2D(0, 0) ? pos_trap : pos_chest;
             const auto too_many = (num_traps && num_chests) || (num_traps > 1) || (num_chests > 1);
             if (!too_many) {
-                command_dir = coords_to_dir(player_ptr, y, x);
+                command_dir = coords_to_dir(player_ptr, pos.y, pos.x);
             }
         }
     }
