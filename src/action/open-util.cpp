@@ -20,9 +20,9 @@
  * @param trapped TRUEならばトラップが存在する箱のみ、FALSEならば空でない箱全てを対象にする
  * @return 箱が存在する場合そのオブジェクトID、存在しない場合0を返す。
  */
-OBJECT_IDX chest_check(FloorType *floor_ptr, POSITION y, POSITION x, bool trapped)
+short chest_check(FloorType *floor_ptr, const Pos2D &pos, bool trapped)
 {
-    auto *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *g_ptr = &floor_ptr->get_grid(pos);
     for (const auto this_o_idx : g_ptr->o_idx_list) {
         const auto &item = floor_ptr->o_list[this_o_idx];
         const auto is_empty = trapped || (item.pval == 0);
@@ -47,28 +47,26 @@ OBJECT_IDX chest_check(FloorType *floor_ptr, POSITION y, POSITION x, bool trappe
  */
 int count_chests(PlayerType *player_ptr, POSITION *y, POSITION *x, bool trapped)
 {
-    int count = 0;
+    auto count = 0;
     for (DIRECTION d = 0; d < 9; d++) {
-        POSITION yy = player_ptr->y + ddy_ddd[d];
-        POSITION xx = player_ptr->x + ddx_ddd[d];
-        OBJECT_IDX o_idx = chest_check(player_ptr->current_floor_ptr, yy, xx, false);
-        if (!o_idx) {
+        const Pos2D pos_neighbor(player_ptr->y + ddy_ddd[d], player_ptr->x + ddx_ddd[d]);
+        const auto o_idx = chest_check(player_ptr->current_floor_ptr, pos_neighbor, false);
+        if (o_idx == 0) {
             continue;
         }
 
-        ItemEntity *o_ptr;
-        o_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
-        if (o_ptr->pval == 0) {
+        const auto &item = player_ptr->current_floor_ptr->o_list[o_idx];
+        if (item.pval == 0) {
             continue;
         }
 
-        if (trapped && (!o_ptr->is_known() || ((o_ptr->pval > 0) && chest_traps[o_ptr->pval].none()))) {
+        if (trapped && (!item.is_known() || ((item.pval > 0) && chest_traps[item.pval].none()))) {
             continue;
         }
 
         ++count;
-        *y = yy;
-        *x = xx;
+        *y = pos_neighbor.y;
+        *x = pos_neighbor.x;
     }
 
     return count;

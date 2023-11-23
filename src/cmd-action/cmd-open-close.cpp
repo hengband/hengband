@@ -105,13 +105,13 @@ void do_cmd_open(PlayerType *player_ptr)
     }
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
-    int y;
-    int x;
     if (easy_open) {
-        int num_doors = count_dt(player_ptr, &y, &x, is_closed_door, false);
-        int num_chests = count_chests(player_ptr, &y, &x, false);
+        int y;
+        int x;
+        const auto num_doors = count_dt(player_ptr, &y, &x, is_closed_door, false);
+        const auto num_chests = count_chests(player_ptr, &y, &x, false);
         if (num_doors || num_chests) {
-            bool too_many = (num_doors && num_chests) || (num_doors > 1) || (num_chests > 1);
+            const auto too_many = (num_doors && num_chests) || (num_doors > 1) || (num_chests > 1);
             if (!too_many) {
                 command_dir = coords_to_dir(player_ptr, y, x);
             }
@@ -126,20 +126,19 @@ void do_cmd_open(PlayerType *player_ptr)
 
     int dir;
     if (get_rep_dir(player_ptr, &dir, true)) {
-        y = player_ptr->y + ddy[dir];
-        x = player_ptr->x + ddx[dir];
-        const auto &grid = player_ptr->current_floor_ptr->grid_array[y][x];
-        const auto o_idx = chest_check(player_ptr->current_floor_ptr, y, x, false);
+        const Pos2D pos(player_ptr->y + ddy[dir], player_ptr->x + ddx[dir]);
+        const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+        const auto o_idx = chest_check(player_ptr->current_floor_ptr, pos, false);
         if (grid.get_terrain_mimic().flags.has_not(TerrainCharacteristics::OPEN) && !o_idx) {
             msg_print(_("そこには開けるものが見当たらない。", "You see nothing there to open."));
         } else if (grid.m_idx && player_ptr->riding != grid.m_idx) {
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
-            do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
+            do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
         } else if (o_idx) {
-            more = exe_open_chest(player_ptr, { y, x }, o_idx);
+            more = exe_open_chest(player_ptr, pos, o_idx);
         } else {
-            more = exe_open(player_ptr, y, x);
+            more = exe_open(player_ptr, pos.y, pos.x);
         }
     }
 
@@ -230,7 +229,7 @@ void do_cmd_disarm(PlayerType *player_ptr)
         const Pos2D pos(player_ptr->y + ddy[dir], player_ptr->x + ddx[dir]);
         const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
         const auto feat = grid.get_feat_mimic();
-        const auto o_idx = chest_check(player_ptr->current_floor_ptr, pos.y, pos.x, true);
+        const auto o_idx = chest_check(player_ptr->current_floor_ptr, pos, true);
         if (!is_trap(player_ptr, feat) && !o_idx) {
             msg_print(_("そこには解除するものが見当たらない。", "You see nothing there to disarm."));
         } else if (grid.m_idx && player_ptr->riding != grid.m_idx) {
