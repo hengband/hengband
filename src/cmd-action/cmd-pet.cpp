@@ -216,7 +216,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
             return false;
         }
 
-        if (!pattern_seq(player_ptr, player_ptr->y, player_ptr->x, pos.y, pos.x)) {
+        if (!pattern_seq(player_ptr, pos)) {
             return false;
         }
 
@@ -252,7 +252,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
             return false;
         }
 
-        if (!pattern_seq(player_ptr, player_ptr->y, player_ptr->x, pos.y, pos.x)) {
+        if (!pattern_seq(player_ptr, pos)) {
             return false;
         }
 

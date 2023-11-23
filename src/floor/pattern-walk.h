@@ -1,8 +1,8 @@
 #pragma once
 
-#include "system/angband.h"
+#include "util/point-2d.h"
 
 class PlayerType;
 bool pattern_effect(PlayerType *player_ptr);
-bool pattern_seq(PlayerType *player_ptr, POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x);
+bool pattern_seq(PlayerType *player_ptr, const Pos2D &pos);
 void pattern_teleport(PlayerType *player_ptr);

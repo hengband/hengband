@@ -167,17 +167,14 @@ bool pattern_effect(PlayerType *player_ptr)
 /*!
  * @brief パターンによる移動制限処理
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param c_y プレイヤーの移動元Y座標
- * @param c_x プレイヤーの移動元X座標
- * @param n_y プレイヤーの移動先Y座標
- * @param n_x プレイヤーの移動先X座標
+ * @param pos プレイヤーの移動先座標
  * @return 移動処理が可能である場合（可能な場合に選択した場合）TRUEを返す。
  */
-bool pattern_seq(PlayerType *player_ptr, POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x)
+bool pattern_seq(PlayerType *player_ptr, const Pos2D &pos)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto &grid_current = floor.get_grid({ c_y, c_x });
-    const auto &grid_new = floor.get_grid({ n_y, n_x });
+    const auto &grid_current = floor.get_grid(player_ptr->get_position());
+    const auto &grid_new = floor.get_grid(pos);
     const auto &terrain_current = grid_current.get_terrain();
     const auto &terrain_new = grid_new.get_terrain();
     const auto is_pattern_tile_cur = terrain_current.flags.has(TerrainCharacteristics::PATTERN);
