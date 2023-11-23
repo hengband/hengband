@@ -16,6 +16,7 @@
 #include "system/system-variables.h"
 #include "util/flag-group.h"
 #include <optional>
+#include <string>
 #include <vector>
 
 enum class FixedArtifactId : short;
@@ -146,6 +147,7 @@ public:
     ArtifactType &get_fixed_artifact() const;
     TrFlags get_flags() const;
     TrFlags get_flags_known() const;
+    std::string build_activation_description_dragon_breath() const;
 
     void mark_as_known();
     void mark_as_tried();

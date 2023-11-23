@@ -16,7 +16,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
 #include "object-enchant/activation-info-table.h"
-#include "object-enchant/dragon-breaths-table.h"
 #include "object-enchant/object-ego.h"
 #include "player-base/player-class.h"
 #include "player/player-realm.h"
@@ -32,31 +31,6 @@
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include <sstream>
-
-/*!
- * @brief アイテムの発動効果名称を返す（サブルーチン/ブレス）
- * @param item アイテムへの参照
- * @return std::string 発動名称
- */
-static std::string item_activation_dragon_breath(const ItemEntity &item)
-{
-    std::string desc = _("", "breathe ");
-    auto n = 0;
-    const auto flags = item.get_flags();
-    for (auto i = 0; dragonbreath_info[i].flag != 0; i++) {
-        if (flags.has(dragonbreath_info[i].flag)) {
-            if (n > 0) {
-                desc.append(_("、", ", "));
-            }
-
-            desc.append(dragonbreath_info[i].name);
-            n++;
-        }
-    }
-
-    desc.append(_("のブレス(250)", " (250)"));
-    return desc;
-}
 
 static std::string build_activation_description(const activation_type &act, const ItemEntity &item)
 {
@@ -76,7 +50,7 @@ static std::string build_activation_description(const activation_type &act, cons
 
         return act.desc;
     case RandomArtActType::BR_DRAGON:
-        return item_activation_dragon_breath(item);
+        return item.build_activation_description_dragon_breath();
     case RandomArtActType::AGGRAVATE:
         if (item.is_specific_artifact(FixedArtifactId::HYOUSIGI)) {
             return _("拍子木を打ちならす", "beat wooden clappers");
