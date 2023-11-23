@@ -957,6 +957,49 @@ std::string ItemEntity::build_activation_description(const activation_type &act)
     }
 }
 
+std::string ItemEntity::build_timeout_description(const activation_type &act) const
+{
+    const auto constant = act.timeout.constant;
+    const auto dice = act.timeout.dice;
+    if (constant == 0 && dice == 0) {
+        return _("いつでも", "every turn");
+    }
+
+    if (constant >= 0) {
+        std::stringstream ss;
+        ss << _("", "every ");
+        if (constant > 0) {
+            ss << constant;
+            if (dice > 0) {
+                ss << '+';
+            }
+        }
+
+        if (dice > 0) {
+            ss << 'd' << dice;
+        }
+
+        ss << _(" ターン毎", " turns");
+        return ss.str();
+    }
+
+    std::stringstream ss;
+    switch (act.index) {
+    case RandomArtActType::BR_FIRE:
+        ss << _("", "every ") << (this->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_FLAMES) ? 200 : 250) << _(" ターン毎", " turns");
+        return ss.str();
+    case RandomArtActType::BR_COLD:
+        ss << _("", "every ") << (this->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_ICE) ? 200 : 250) << _(" ターン毎", " turns");
+        return ss.str();
+    case RandomArtActType::TERROR:
+        return _("3*(レベル+10) ターン毎", "every 3 * (level+10) turns");
+    case RandomArtActType::MURAMASA:
+        return _("確率50%で壊れる", "(destroyed 50%)");
+    default:
+        return "undefined";
+    }
+}
+
 /*!
  * @brief オブジェクトを鑑定済にする
  */

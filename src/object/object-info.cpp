@@ -23,53 +23,10 @@
 #include "util/int-char-converter.h"
 #include <sstream>
 
-static std::string build_timeout_description(const activation_type &act, const ItemEntity &item)
-{
-    const auto constant = act.timeout.constant;
-    const auto dice = act.timeout.dice;
-    if (constant == 0 && dice == 0) {
-        return _("いつでも", "every turn");
-    }
-
-    if (constant >= 0) {
-        std::stringstream ss;
-        ss << _("", "every ");
-        if (constant > 0) {
-            ss << constant;
-            if (dice > 0) {
-                ss << '+';
-            }
-        }
-
-        if (dice > 0) {
-            ss << 'd' << dice;
-        }
-
-        ss << _(" ターン毎", " turns");
-        return ss.str();
-    }
-
-    std::stringstream ss;
-    switch (act.index) {
-    case RandomArtActType::BR_FIRE:
-        ss << _("", "every ") << (item.bi_key == BaseitemKey(ItemKindType::RING, SV_RING_FLAMES) ? 200 : 250) << _(" ターン毎", " turns");
-        return ss.str();
-    case RandomArtActType::BR_COLD:
-        ss << _("", "every ") << (item.bi_key == BaseitemKey(ItemKindType::RING, SV_RING_ICE) ? 200 : 250) << _(" ターン毎", " turns");
-        return ss.str();
-    case RandomArtActType::TERROR:
-        return _("3*(レベル+10) ターン毎", "every 3 * (level+10) turns");
-    case RandomArtActType::MURAMASA:
-        return _("確率50%で壊れる", "(destroyed 50%)");
-    default:
-        return "undefined";
-    }
-}
-
 /*!
  * @brief オブジェクトの発動効果名称を返す（サブルーチン/汎用）
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
- * @return concptr 発動名称を返す文字列ポインタ
+ * @return 発動名称
  */
 static std::string item_activation_aux(const ItemEntity *o_ptr)
 {
@@ -79,17 +36,16 @@ static std::string item_activation_aux(const ItemEntity *o_ptr)
     }
 
     const auto desc = o_ptr->build_activation_description(*it);
-    const auto timeout = build_timeout_description(*it, *o_ptr);
+    const auto timeout = o_ptr->build_timeout_description(*it);
     std::stringstream ss;
     ss << desc << _(" : ", " ") << timeout;
     return ss.str();
 }
 
 /*!
- * @brief オブジェクトの発動効果名称を返す（メインルーチン） /
- * Determine the "Activation" (if any) for an artifact Return a string, or nullptr for "no activation"
+ * @brief オブジェクトの発動効果名称を返す (メインルーチン)
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
- * @return concptr 発動名称を返す文字列ポインタ
+ * @return 発動名称
  */
 std::string activation_explanation(const ItemEntity *o_ptr)
 {
