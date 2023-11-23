@@ -36,19 +36,15 @@ short chest_check(FloorType *floor_ptr, const Pos2D &pos, bool trapped)
 }
 
 /*!
- * @brief プレイヤーの周辺9マスに箱のあるマスがいくつあるかを返す /
- * Return the number of chests around (or under) the character.
- * @param y 該当するマスの中から1つのY座標を返す参照ポインタ
- * @param x 該当するマスの中から1つのX座標を返す参照ポインタ
+ * @brief プレイヤーの周辺9マスに箱のあるマスがいくつあるかを返す
  * @param trapped TRUEならばトラップの存在が判明している箱のみ対象にする
- * @return 該当する地形の数
- * @details
- * If requested, count only trapped chests.
+ * @return 該当する地形の数と、該当するマスの中から1つの座標
  */
-int count_chests(PlayerType *player_ptr, POSITION *y, POSITION *x, bool trapped)
+std::pair<int, Pos2D> count_chests(PlayerType *player_ptr, bool trapped)
 {
+    Pos2D pos(0, 0);
     auto count = 0;
-    for (DIRECTION d = 0; d < 9; d++) {
+    for (auto d = 0; d < 9; d++) {
         const Pos2D pos_neighbor(player_ptr->y + ddy_ddd[d], player_ptr->x + ddx_ddd[d]);
         const auto o_idx = chest_check(player_ptr->current_floor_ptr, pos_neighbor, false);
         if (o_idx == 0) {
@@ -65,9 +61,8 @@ int count_chests(PlayerType *player_ptr, POSITION *y, POSITION *x, bool trapped)
         }
 
         ++count;
-        *y = pos_neighbor.y;
-        *x = pos_neighbor.x;
+        pos = pos_neighbor;
     }
 
-    return count;
+    return { count, pos };
 }

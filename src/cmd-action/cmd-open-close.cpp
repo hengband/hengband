@@ -109,8 +109,10 @@ void do_cmd_open(PlayerType *player_ptr)
         int y;
         int x;
         const auto num_doors = count_dt(player_ptr, &y, &x, is_closed_door, false);
-        const auto num_chests = count_chests(player_ptr, &y, &x, false);
-        if (num_doors || num_chests) {
+        const auto &[num_chests, pos] = count_chests(player_ptr, false);
+        if ((num_doors > 0) || (num_chests > 0)) {
+            y = pos.y;
+            x = pos.x;
             const auto too_many = (num_doors && num_chests) || (num_doors > 1) || (num_chests > 1);
             if (!too_many) {
                 command_dir = coords_to_dir(player_ptr, y, x);
@@ -207,10 +209,12 @@ void do_cmd_disarm(PlayerType *player_ptr)
     if (easy_disarm) {
         int y;
         int x;
-        auto num_traps = count_dt(player_ptr, &y, &x, is_trap, true);
-        auto num_chests = count_chests(player_ptr, &y, &x, true);
-        if (num_traps || num_chests) {
-            auto too_many = (num_traps && num_chests) || (num_traps > 1) || (num_chests > 1);
+        const auto num_traps = count_dt(player_ptr, &y, &x, is_trap, true);
+        const auto &[num_chests, pos] = count_chests(player_ptr, true);
+        if ((num_traps > 0) || (num_chests > 0)) {
+            y = pos.y;
+            x = pos.x;
+            const auto too_many = (num_traps && num_chests) || (num_traps > 1) || (num_chests > 1);
             if (!too_many) {
                 command_dir = coords_to_dir(player_ptr, y, x);
             }
