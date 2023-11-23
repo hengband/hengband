@@ -36,60 +36,48 @@
  */
 bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
 {
-    DIRECTION dir;
+    int dir;
     if (!get_aim_dir(player_ptr, &dir)) {
         return false;
     }
 
-    POSITION tx = player_ptr->x + 99 * ddx[dir];
-    POSITION ty = player_ptr->y + 99 * ddy[dir];
+    Pos2D pos_target(player_ptr->y + 99 * ddy[dir], player_ptr->x + 99 * ddx[dir]);
     if ((dir == 5) && target_okay(player_ptr)) {
-        tx = target_col;
-        ty = target_row;
+        pos_target.x = target_col;
+        pos_target.y = target_row;
     }
 
-    POSITION x = player_ptr->x;
-    POSITION y = player_ptr->y;
-    POSITION nx, ny;
+    Pos2D pos = player_ptr->get_position();
+    auto &floor = *player_ptr->current_floor_ptr;
     while (true) {
-        if ((y == ty) && (x == tx)) {
+        if (pos == pos_target) {
             break;
         }
 
-        ny = y;
-        nx = x;
-        mmove2(&ny, &nx, player_ptr->y, player_ptr->x, ty, tx);
-        if (AngbandSystem::get_instance().get_max_range() <= distance(player_ptr->y, player_ptr->x, ny, nx)) {
+        const auto pos_to = mmove2(pos, player_ptr->get_position(), pos_target);
+        if (AngbandSystem::get_instance().get_max_range() <= distance(player_ptr->y, player_ptr->x, pos_to.y, pos_to.x)) {
             break;
         }
-        if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, TerrainCharacteristics::PROJECT)) {
+        if (!cave_has_flag_bold(&floor, pos_to.y, pos_to.x, TerrainCharacteristics::PROJECT)) {
             break;
         }
-        if ((dir != 5) && player_ptr->current_floor_ptr->grid_array[ny][nx].m_idx != 0) {
+        if ((dir != 5) && floor.get_grid(pos_to).m_idx != 0) {
             break;
         }
 
-        x = nx;
-        y = ny;
+        pos = pos_to;
     }
 
-    tx = x;
-    ty = y;
-
-    int b = 10 + randint1(10);
-    for (int i = 0; i < b; i++) {
-        int count = 20, d = 0;
-
+    pos_target = pos;
+    const auto b = 10 + randint1(10);
+    for (auto i = 0; i < b; i++) {
+        auto count = 20;
         while (count--) {
-            int dx, dy;
-
-            x = tx - 5 + randint0(11);
-            y = ty - 5 + randint0(11);
-
-            dx = (tx > x) ? (tx - x) : (x - tx);
-            dy = (ty > y) ? (ty - y) : (y - ty);
-
-            d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
+            const auto x = pos_target.x - 5 + randint0(11);
+            const auto y = pos_target.y - 5 + randint0(11);
+            const auto dx = (pos_target.x > x) ? (pos_target.x - x) : (x - pos_target.x);
+            const auto dy = (pos_target.y > y) ? (pos_target.y - y) : (y - pos_target.y);
+            const auto d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
             if (d < 5) {
                 break;
             }
@@ -99,11 +87,15 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
             continue;
         }
 
-        if (!in_bounds(player_ptr->current_floor_ptr, y, x) || cave_stop_disintegration(player_ptr->current_floor_ptr, y, x) || !in_disintegration_range(player_ptr->current_floor_ptr, ty, tx, y, x)) {
+        auto should_cast = in_bounds(&floor, pos.y, pos.x);
+        should_cast &= !cave_stop_disintegration(&floor, pos.y, pos.x);
+        should_cast &= in_disintegration_range(&floor, pos_target.y, pos_target.x, pos.y, pos.x);
+        if (!should_cast) {
             continue;
         }
 
-        project(player_ptr, 0, rad, y, x, dam, AttributeType::DISINTEGRATE, PROJECT_JUMP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
+        constexpr auto mode = PROJECT_JUMP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+        project(player_ptr, 0, rad, pos.y, pos.x, dam, AttributeType::DISINTEGRATE, mode);
     }
 
     return true;

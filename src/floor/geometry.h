@@ -1,6 +1,7 @@
 #pragma once
 
 #include "system/angband.h"
+#include "util/point-2d.h"
 
 /*!
  * @brief 視界及び光源の過渡処理配列サイズ / Maximum size of the "temp" array
@@ -19,19 +20,19 @@ struct pos_list {
     POSITION x[TEMP_MAX];
 };
 
-extern const POSITION ddd[9];
-extern const POSITION ddx[10];
-extern const POSITION ddy[10];
-extern const POSITION ddx_ddd[9];
-extern const POSITION ddy_ddd[9];
-extern const POSITION cdd[8];
-extern const POSITION ddx_cdd[8];
-extern const POSITION ddy_cdd[8];
+extern const int ddd[9];
+extern const int ddx[10];
+extern const int ddy[10];
+extern const int ddx_ddd[9];
+extern const int ddy_ddd[9];
+extern const int cdd[8];
+extern const int ddx_cdd[8];
+extern const int ddy_cdd[8];
 
 class PlayerType;
 DIRECTION coords_to_dir(PlayerType *player_ptr, POSITION y, POSITION x);
 POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
-void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
+Pos2D mmove2(const Pos2D &pos_orig, const Pos2D &pos1, const Pos2D &pos2);
 bool player_can_see_bold(PlayerType *player_ptr, POSITION y, POSITION x);
 
 class MonsterEntity;
