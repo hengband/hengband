@@ -9,18 +9,17 @@
 #include "system/player-type-definition.h"
 
 /*!
- * @brief 指定のマスが床系地形であるかを返す / Function that sees if a square is a floor.  (Includes range checking.)
- * @param x チェックするマスのX座標
- * @param y チェックするマスのY座標
- * @return 床系地形ならばTRUE
+ * @brief 指定のマスが床系地形であるかを返す
+ * @param pos チェックするマスの座標
+ * @return 床系地形か否か
  */
-static bool get_is_floor(FloorType *floor_ptr, POSITION x, POSITION y)
+static bool get_is_floor(FloorType *floor_ptr, const Pos2D &pos)
 {
-    if (!in_bounds(floor_ptr, y, x)) {
+    if (!in_bounds(floor_ptr, pos.y, pos.x)) {
         return false;
     }
 
-    if (floor_ptr->grid_array[y][x].is_floor()) {
+    if (floor_ptr->get_grid(pos).is_floor()) {
         return true;
     }
 
@@ -28,49 +27,41 @@ static bool get_is_floor(FloorType *floor_ptr, POSITION x, POSITION y)
 }
 
 /*!
- * @brief 指定のマスを床地形に変える / Set a square to be floor.  (Includes range checking.)
+ * @brief 指定のマスを床地形に変える
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param x 地形を変えたいマスのX座標
- * @param y 地形を変えたいマスのY座標
+ * @param pos 地形を変えたいマスの座標
  */
-static void set_floor(PlayerType *player_ptr, POSITION x, POSITION y)
+static void set_floor(PlayerType *player_ptr, const Pos2D &pos)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!in_bounds(floor_ptr, y, x)) {
+    if (!in_bounds(floor_ptr, pos.y, pos.x)) {
         return;
     }
 
-    auto *g_ptr = &floor_ptr->grid_array[y][x];
-    if (g_ptr->is_room()) {
+    auto &grid = floor_ptr->get_grid(pos);
+    if (grid.is_room()) {
         return;
     }
 
-    if (g_ptr->is_extra()) {
-        place_bold(player_ptr, y, x, GB_FLOOR);
+    if (grid.is_extra()) {
+        place_bold(player_ptr, pos.y, pos.x, GB_FLOOR);
     }
 }
 
 /*!
- * @brief
- * 指定範囲に通路が通っていることを確認した上で床で埋める
- * This function tunnels around a room if it will cut off part of a grid system.
+ * @brief 指定範囲に通路が通っていることを確認した上で床で埋める
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param x1 範囲の左端
- * @param y1 範囲の上端
- * @param x2 範囲の右端
- * @param y2 範囲の下端
+ * @param pos1 範囲の左上端
+ * @param pos2 範囲の右下端
  */
-static void check_room_boundary(PlayerType *player_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2)
+static void check_room_boundary(PlayerType *player_ptr, const Pos2D &pos1, const Pos2D &pos2)
 {
-    bool old_is_floor;
-    bool new_is_floor;
-    int count = 0;
-
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    old_is_floor = get_is_floor(floor_ptr, x1 - 1, y1);
-
-    for (POSITION x = x1; x <= x2; x++) {
-        new_is_floor = get_is_floor(floor_ptr, x, y1 - 1);
+    auto count = 0;
+    auto old_is_floor = get_is_floor(floor_ptr, { pos1.y, pos1.x - 1 });
+    bool new_is_floor;
+    for (auto x = pos1.x; x <= pos2.x; x++) {
+        new_is_floor = get_is_floor(floor_ptr, { pos1.y - 1, x });
         if (new_is_floor != old_is_floor) {
             count++;
         }
@@ -78,8 +69,8 @@ static void check_room_boundary(PlayerType *player_ptr, POSITION x1, POSITION y1
         old_is_floor = new_is_floor;
     }
 
-    for (POSITION y = y1; y <= y2; y++) {
-        new_is_floor = get_is_floor(floor_ptr, x2 + 1, y);
+    for (auto y = pos1.y; y <= pos2.y; y++) {
+        new_is_floor = get_is_floor(floor_ptr, { y, pos2.x + 1 });
         if (new_is_floor != old_is_floor) {
             count++;
         }
@@ -87,8 +78,8 @@ static void check_room_boundary(PlayerType *player_ptr, POSITION x1, POSITION y1
         old_is_floor = new_is_floor;
     }
 
-    for (POSITION x = x2; x >= x1; x--) {
-        new_is_floor = get_is_floor(floor_ptr, x, y2 + 1);
+    for (auto x = pos2.x; x >= pos1.x; x--) {
+        new_is_floor = get_is_floor(floor_ptr, { pos2.y + 1, x });
         if (new_is_floor != old_is_floor) {
             count++;
         }
@@ -96,8 +87,8 @@ static void check_room_boundary(PlayerType *player_ptr, POSITION x1, POSITION y1
         old_is_floor = new_is_floor;
     }
 
-    for (POSITION y = y2; y >= y1; y--) {
-        new_is_floor = get_is_floor(floor_ptr, x1 - 1, y);
+    for (auto y = pos2.y; y >= pos1.y; y--) {
+        new_is_floor = get_is_floor(floor_ptr, { y, pos1.x - 1 });
         if (new_is_floor != old_is_floor) {
             count++;
         }
@@ -109,9 +100,9 @@ static void check_room_boundary(PlayerType *player_ptr, POSITION x1, POSITION y1
         return;
     }
 
-    for (POSITION y = y1; y <= y2; y++) {
-        for (POSITION x = x1; x <= x2; x++) {
-            set_floor(player_ptr, x, y);
+    for (auto y = pos1.y; y <= pos2.y; y++) {
+        for (auto x = pos1.x; x <= pos2.x; x++) {
+            set_floor(player_ptr, { y, x });
         }
     }
 }
@@ -262,6 +253,6 @@ bool find_space(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION *y, POSI
         }
     }
 
-    check_room_boundary(player_ptr, *x - width / 2 - 1, *y - height / 2 - 1, *x + (width - 1) / 2 + 1, *y + (height - 1) / 2 + 1);
+    check_room_boundary(player_ptr, { *y - height / 2 - 1, *x - width / 2 - 1 }, { *y + (height - 1) / 2 + 1, *x + (width - 1) / 2 + 1 });
     return true;
 }
