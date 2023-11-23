@@ -58,6 +58,10 @@ void Chest::chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
     BIT_FLAGS mode = AM_GOOD | AM_FORBID_CHEST;
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *o_ptr = &floor_ptr->o_list[o_idx];
+    if (!o_ptr->is_valid()) {
+        msg_print(_("箱は既に壊れてしまっている…", "The chest was broken and you couldn't open it..."));
+        return;
+    }
 
     /* Small chests often hold "gold" */
     const auto sval = *o_ptr->bi_key.sval();
