@@ -153,7 +153,7 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
         ItemEntity item;
         item.prep(bi_id);
         if (opt_a_idx) {
-            item.fixed_artifact_idx = opt_a_idx.value();
+            item.fixed_artifact_idx = *opt_a_idx;
         }
 
         ItemMagicApplier(player_ptr, &item, 1, AM_NO_FIXED_ART).execute();

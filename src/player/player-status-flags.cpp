@@ -1760,7 +1760,7 @@ bool has_not_ninja_weapon(PlayerType *player_ptr, int i)
 
     const auto &item = player_ptr->inventory_list[INVEN_MAIN_HAND + i];
     const auto tval = item.bi_key.tval();
-    const auto sval = item.bi_key.sval().value();
+    const auto sval = *item.bi_key.sval();
     return PlayerClass(player_ptr).equals(PlayerClassType::NINJA) &&
            !((player_ptr->weapon_exp_max[tval][sval] > PlayerSkill::weapon_exp_at(PlayerSkillRank::BEGINNER)) &&
                (player_ptr->inventory_list[INVEN_SUB_HAND - i].bi_key.tval() != ItemKindType::SHIELD));
@@ -1774,7 +1774,7 @@ bool has_not_monk_weapon(PlayerType *player_ptr, int i)
 
     const auto &item = player_ptr->inventory_list[INVEN_MAIN_HAND + i];
     const auto tval = item.bi_key.tval();
-    const auto sval = item.bi_key.sval().value();
+    const auto sval = *item.bi_key.sval();
     PlayerClass pc(player_ptr);
     return pc.is_martial_arts_pro() && (player_ptr->weapon_exp_max[tval][sval] == PlayerSkill::weapon_exp_at(PlayerSkillRank::UNSKILLED));
 }

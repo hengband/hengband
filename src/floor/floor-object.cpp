@@ -85,10 +85,10 @@ static int get_base_floor(FloorType *floor_ptr, BIT_FLAGS mode, std::optional<in
 {
     if (any_bits(mode, AM_GREAT)) {
         if (rq_mon_level) {
-            return rq_mon_level.value() + 10 + randint1(10);
-        } else {
-            return floor_ptr->object_level + 15;
+            return *rq_mon_level + 10 + randint1(10);
         }
+
+        return floor_ptr->object_level + 15;
     }
 
     if (any_bits(mode, AM_GOOD)) {

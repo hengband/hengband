@@ -64,7 +64,7 @@ static void print_chainsword_noise(ItemEntity *o_ptr)
 
     const auto chainsword_noise = get_random_line(_("chainswd_j.txt", "chainswd.txt"), 0);
     if (chainsword_noise) {
-        msg_print(chainsword_noise.value());
+        msg_print(*chainsword_noise);
     }
 }
 

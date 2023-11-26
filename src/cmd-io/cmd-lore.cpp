@@ -47,46 +47,45 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
 
     constexpr auto prompt = _("知りたい文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^R乗馬,^M名前): ",
         "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): ");
-    const auto sym_opt = input_command(prompt);
-    if (!sym_opt) {
+    const auto symbol = input_command(prompt);
+    if (!symbol) {
         return;
     }
 
-    const auto sym = sym_opt.value();
     int ident_i;
     for (ident_i = 0; ident_info[ident_i]; ++ident_i) {
-        if (sym == ident_info[ident_i][0]) {
+        if (symbol == ident_info[ident_i][0]) {
             break;
         }
     }
 
     std::string buf;
     std::string monster_name("");
-    if (sym == KTRL('A')) {
+    if (symbol == KTRL('A')) {
         all = true;
         buf = _("全モンスターのリスト", "Full monster list.");
-    } else if (sym == KTRL('U')) {
+    } else if (symbol == KTRL('U')) {
         all = uniq = true;
         buf = _("ユニーク・モンスターのリスト", "Unique monster list.");
-    } else if (sym == KTRL('N')) {
+    } else if (symbol == KTRL('N')) {
         all = norm = true;
         buf = _("ユニーク外モンスターのリスト", "Non-unique monster list.");
-    } else if (sym == KTRL('R')) {
+    } else if (symbol == KTRL('R')) {
         all = ride = true;
         buf = _("乗馬可能モンスターのリスト", "Ridable monster list.");
-    } else if (sym == KTRL('M')) {
+    } else if (symbol == KTRL('M')) {
         all = true;
         const auto monster_name_opt = input_string(_("名前(英語の場合小文字で可)", "Enter name:"), MAX_MONSTER_NAME);
         if (!monster_name_opt) {
             return;
         }
 
-        monster_name = monster_name_opt.value();
+        monster_name = *monster_name_opt;
         buf = format(_("名前:%sにマッチ", "Monsters' names with \"%s\""), monster_name.data());
     } else if (ident_info[ident_i]) {
-        buf = format("%c - %s.", sym, ident_info[ident_i] + 2);
+        buf = format("%c - %s.", *symbol, ident_info[ident_i] + 2);
     } else {
-        buf = format("%c - %s", sym, _("無効な文字", "Unknown Symbol"));
+        buf = format("%c - %s", *symbol, _("無効な文字", "Unknown Symbol"));
     }
 
     prt(buf, 0, 0);
@@ -140,7 +139,7 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
                 monraces.push_back(monrace_id);
         }
 
-        else if (all || (monrace.d_char == sym)) {
+        else if (all || (monrace.d_char == symbol)) {
             monraces.push_back(monrace_id);
         }
     }

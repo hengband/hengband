@@ -349,7 +349,7 @@ void prepare_movie_hooks(PlayerType *player_ptr)
         return;
     }
 
-    const auto &path = path_build(ANGBAND_DIR_USER, movie_filename.value());
+    const auto &path = path_build(ANGBAND_DIR_USER, *movie_filename);
     auto fd = fd_open(path, O_RDONLY);
     if (fd >= 0) {
         const auto &filename = path.string();

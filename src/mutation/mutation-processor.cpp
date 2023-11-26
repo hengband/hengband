@@ -70,7 +70,7 @@ static int get_hack_dir(PlayerType *player_ptr)
             break;
         }
 
-        auto command = command_opt.value();
+        auto command = *command_opt;
         if (use_menu && (command == '\r')) {
             command = 't';
         }

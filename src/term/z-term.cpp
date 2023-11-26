@@ -55,10 +55,10 @@ TermOffsetSetter::TermOffsetSetter(std::optional<TERM_LEN> x, std::optional<TERM
     }
 
     if (x) {
-        this->term->offset_x = (x.value() > 0) ? x.value() : 0;
+        this->term->offset_x = (*x > 0) ? *x : 0;
     }
     if (y) {
-        this->term->offset_y = (y.value() > 0) ? y.value() : 0;
+        this->term->offset_y = (*y > 0) ? *y : 0;
     }
 }
 
@@ -92,8 +92,8 @@ TermCenteredOffsetSetter::TermCenteredOffsetSetter(std::optional<TERM_LEN> width
         return;
     }
 
-    const auto offset_x = width ? (game_term->wid - width.value()) / 2 : 0;
-    const auto offset_y = height ? (game_term->hgt - height.value()) / 2 : 0;
+    const auto offset_x = width ? (game_term->wid - *width) / 2 : 0;
+    const auto offset_y = height ? (game_term->hgt - *height) / 2 : 0;
     this->tos.emplace(offset_x, offset_y);
 
     game_term->centered_wid = (width < game_term->wid) ? width : std::nullopt;

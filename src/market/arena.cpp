@@ -329,13 +329,12 @@ bool monster_arena_comm(PlayerType *player_ptr)
     auto maxbet = player_ptr->lev * 200;
     maxbet = std::min(maxbet, player_ptr->au);
     constexpr auto prompt = _("賭け金？", "Your wager? ");
-    const auto wager_opt = input_integer(prompt, 1, maxbet, 1);
-    if (!wager_opt) {
+    const auto wager = input_integer(prompt, 1, maxbet, 1);
+    if (!wager) {
         screen_load();
         return false;
     }
 
-    auto wager = wager_opt.value();
     if (wager > player_ptr->au) {
         msg_print(_("おい！金が足りないじゃないか！出ていけ！", "Hey! You don't have the gold - get out of here!"));
         msg_print(nullptr);
@@ -344,9 +343,9 @@ bool monster_arena_comm(PlayerType *player_ptr)
     }
 
     msg_print(nullptr);
-    battle_odds = std::max(wager + 1, wager * battle_odds / 100);
-    kakekin = wager;
-    player_ptr->au -= wager;
+    battle_odds = std::max(*wager + 1, *wager * battle_odds / 100);
+    kakekin = *wager;
+    player_ptr->au -= *wager;
     reset_tim_flags(player_ptr);
 
     prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);

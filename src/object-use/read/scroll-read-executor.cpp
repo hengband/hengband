@@ -59,7 +59,7 @@ bool ScrollReadExecutor::read()
 {
     auto used_up = true;
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    switch (this->o_ptr->bi_key.sval().value()) {
+    switch (*this->o_ptr->bi_key.sval()) {
     case SV_SCROLL_DARKNESS:
         if (!has_resist_blind(this->player_ptr) && !has_resist_dark(this->player_ptr)) {
             (void)BadStatusSetter(this->player_ptr).mod_blindness(3 + randint1(5));

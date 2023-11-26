@@ -2334,7 +2334,7 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
 
         /* Traind bonuses */
         const auto tval = o_ptr->bi_key.tval();
-        const auto sval = o_ptr->bi_key.sval().value();
+        const auto sval = *o_ptr->bi_key.sval();
         hit += (player_ptr->weapon_exp[tval][sval] - PlayerSkill::weapon_exp_at(PlayerSkillRank::BEGINNER)) / 200;
 
         /* Weight penalty */

@@ -93,7 +93,7 @@ static std::string describe_unique_name_before_body_ja(const ItemEntity &item, c
     }
 
     if (item.is_random_artifact()) {
-        const std::string_view name_sv = item.randart_name.value();
+        const std::string_view name_sv = *item.randart_name;
 
         /* '『' から始まらない伝説のアイテムの名前は最初に付加する */
         /* 英語版のセーブファイルから来た 'of XXX' は,「XXXの」と表示する */
@@ -102,7 +102,7 @@ static std::string describe_unique_name_before_body_ja(const ItemEntity &item, c
             ss << name_sv.substr(3) << "の";
             return ss.str();
         } else if (!name_sv.starts_with("『") && !name_sv.starts_with("《") && !name_sv.starts_with('\'')) {
-            return item.randart_name.value();
+            return *item.randart_name;
         }
     }
 
@@ -129,7 +129,7 @@ static std::optional<std::string> describe_random_artifact_name_after_body_ja(co
         return std::nullopt;
     }
 
-    const std::string_view name_sv = item.randart_name.value();
+    const std::string_view name_sv = *item.randart_name;
     if (name_sv.starts_with("『") || name_sv.starts_with("《")) {
         return item.randart_name;
     }
@@ -193,7 +193,7 @@ static std::string describe_unique_name_after_body_ja(const ItemEntity &item, co
     }
 
     if (auto body = describe_random_artifact_name_after_body_ja(item); body) {
-        return body.value();
+        return *body;
     }
 
     if (item.is_fixed_artifact()) {
@@ -286,7 +286,7 @@ static std::string describe_unique_name_after_body_en(const ItemEntity &item, co
     std::stringstream ss;
 
     if (item.is_random_artifact()) {
-        ss << ' ' << item.randart_name.value();
+        ss << ' ' << *item.randart_name;
         return ss.str();
     }
 
@@ -427,7 +427,7 @@ std::string describe_named_item(PlayerType *player_ptr, const ItemEntity &item, 
 #endif
     if (item.is_spell_book()) {
         // svalは0から数えているので表示用に+1している
-        ss << format("Lv%d ", item.bi_key.sval().value() + 1);
+        ss << format("Lv%d ", *item.bi_key.sval() + 1);
     }
 
     ss << describe_body(item, opt, basename_sv, modstr);

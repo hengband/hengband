@@ -468,7 +468,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                     death_message_opt = get_random_line(_("death_j.txt", "death.txt"), 0);
                 }
 
-                auto &death_message = death_message_opt.value();
+                auto &death_message = *death_message_opt;
                 constexpr auto max_last_words = 1024;
                 const auto prompt = winning_seppuku ? _("辞世の句: ", "Haiku: ") : _("断末魔の叫び: ", "Last words: ");
                 while (true) {
@@ -478,7 +478,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                     }
 
                     if (input_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), UserCheck::NO_HISTORY)) {
-                        death_message = input_last_words.value();
+                        death_message = *input_last_words;
                         break;
                     }
                 }

@@ -534,21 +534,20 @@ bool reset_recall(PlayerType *player_ptr)
     constexpr auto prompt = _("何階にセットしますか？", "Reset to which level?");
     const auto min_level = dungeons_info[select_dungeon].mindepth;
     const auto max_level = max_dlv[select_dungeon];
-    const auto reset_level_opt = input_numerics(prompt, min_level, max_level, player_ptr->current_floor_ptr->dun_level);
-    if (!reset_level_opt) {
+    const auto reset_level = input_numerics(prompt, min_level, max_level, player_ptr->current_floor_ptr->dun_level);
+    if (!reset_level) {
         return false;
     }
 
-    const auto reset_level = reset_level_opt.value();
-    max_dlv[select_dungeon] = reset_level;
+    max_dlv[select_dungeon] = *reset_level;
     if (record_maxdepth) {
         constexpr auto note = _("フロア・リセットで", "using a scroll of reset recall");
         exe_write_diary(player_ptr, DiaryKind::TRUMP, select_dungeon, note);
     }
 #ifdef JP
-    msg_format("%sの帰還レベルを %d 階にセット。", dungeons_info[select_dungeon].name.data(), reset_level);
+    msg_format("%sの帰還レベルを %d 階にセット。", dungeons_info[select_dungeon].name.data(), *reset_level);
 #else
-    msg_format("Recall depth set to level %d (%d').", reset_level, reset_level * 50);
+    msg_format("Recall depth set to level %d (%d').", *reset_level, *reset_level * 50);
 #endif
     return true;
 }

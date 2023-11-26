@@ -157,7 +157,7 @@ static void accept_winner_message(PlayerType *player_ptr)
     }
 
     if (!buf->empty()) {
-        player_ptr->last_message = buf.value();
+        player_ptr->last_message = *buf;
         msg_print(player_ptr->last_message);
     }
 }

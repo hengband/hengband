@@ -128,7 +128,7 @@ static std::optional<BlueMagicType> select_blue_magic_kind_by_symbol()
             return std::nullopt;
         }
 
-        switch (command.value()) {
+        switch (*command) {
         case 'A':
         case 'a':
             return BlueMagicType::BOLT;
@@ -376,7 +376,7 @@ static std::optional<MonsterAbilityType> select_learnt_spells_by_symbol(PlayerTy
                 break;
             }
 
-            choice = choice_opt.value();
+            choice = *choice_opt;
         }
 
         if (first_show_list || (choice == ' ') || (choice == '*') || (choice == '?')) {
@@ -435,17 +435,16 @@ static std::optional<MonsterAbilityType> select_learnt_spells_by_menu(PlayerType
     while (!selected_spell) {
         describe_blue_magic_name(player_ptr, menu_line, bluemage_data, spells);
 
-        const auto choice_opt = input_command(prompt, true);
-        if (!choice_opt) {
+        const auto choice = input_command(prompt, true);
+        if (!choice) {
             break;
         }
 
-        const auto choice = choice_opt.value();
         if (choice == '0') {
             break;
         }
 
-        if (!switch_blue_magic_choice(choice, menu_line, bluemage_data, spells)) {
+        if (!switch_blue_magic_choice(*choice, menu_line, bluemage_data, spells)) {
             continue;
         }
 
@@ -500,14 +499,14 @@ std::optional<MonsterAbilityType> get_learned_power(PlayerType *player_ptr)
         return std::nullopt;
     }
 
-    auto spells = sweep_learnt_spells(*bluemage_data, type.value());
+    auto spells = sweep_learnt_spells(*bluemage_data, *type);
     if (!spells || spells->empty()) {
         return std::nullopt;
     }
 
     auto selected_spell = (use_menu)
-                              ? select_learnt_spells_by_menu(player_ptr, *bluemage_data, spells.value())
-                              : select_learnt_spells_by_symbol(player_ptr, *bluemage_data, spells.value());
+                              ? select_learnt_spells_by_menu(player_ptr, *bluemage_data, *spells)
+                              : select_learnt_spells_by_symbol(player_ptr, *bluemage_data, *spells);
 
     RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
     handle_stuff(player_ptr);
@@ -516,6 +515,6 @@ std::optional<MonsterAbilityType> get_learned_power(PlayerType *player_ptr)
         return std::nullopt;
     }
 
-    repeat_push(static_cast<COMMAND_CODE>(selected_spell.value()));
+    repeat_push(static_cast<COMMAND_CODE>(*selected_spell));
     return selected_spell;
 }

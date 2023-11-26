@@ -254,7 +254,7 @@ static std::string decide_current_floor(PlayerType *player_ptr)
     }
 
     if (auto decision = decide_death_in_quest(player_ptr); decision) {
-        return decision.value();
+        return *decision;
     }
 
     constexpr auto mes = _("…あなたは現在、 %s の %d 階で探索している。", "...Now, you are exploring level %d of %s.");

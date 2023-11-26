@@ -40,7 +40,7 @@ bool do_cmd_cast_learned(PlayerType *player_ptr)
         return false;
     }
 
-    const auto &spell = monster_powers.at(selected_spell.value());
+    const auto &spell = monster_powers.at(*selected_spell);
     const auto need_mana = mod_need_mana(player_ptr, spell.smana, 0, REALM_NONE);
     if (need_mana > player_ptr->csp) {
         msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
@@ -62,12 +62,12 @@ bool do_cmd_cast_learned(PlayerType *player_ptr)
 
         msg_print(_("魔法をうまく唱えられなかった。", "You failed to concentrate hard enough!"));
         sound(SOUND_FAIL);
-        if (RF_ABILITY_SUMMON_MASK.has(selected_spell.value())) {
-            cast_learned_spell(player_ptr, selected_spell.value(), false);
+        if (RF_ABILITY_SUMMON_MASK.has(*selected_spell)) {
+            cast_learned_spell(player_ptr, *selected_spell, false);
         }
     } else {
         sound(SOUND_ZAP);
-        if (!cast_learned_spell(player_ptr, selected_spell.value(), true)) {
+        if (!cast_learned_spell(player_ptr, *selected_spell, true)) {
             return false;
         }
     }

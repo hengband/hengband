@@ -48,7 +48,7 @@ static void add_diary_note(PlayerType *player_ptr)
 {
     const auto input_str = input_string(_("内容: ", "diary note: "), 1000);
     if (input_str) {
-        exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, input_str.value());
+        exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, *input_str);
     }
 }
 

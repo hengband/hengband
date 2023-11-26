@@ -279,7 +279,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
             return false;
         }
 
-        const auto *r_ptr = &monraces_info[r_idx.value()];
+        const auto *r_ptr = &monraces_info[*r_idx];
 
         /* Note the alignment */
         if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
@@ -289,7 +289,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
             align.sub_align |= SUB_ALIGN_GOOD;
         }
 
-        nest_mon_info[i].r_idx = r_idx.value();
+        nest_mon_info[i].r_idx = *r_idx;
         nest_mon_info[i].used = false;
     }
 

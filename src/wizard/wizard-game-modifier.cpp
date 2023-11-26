@@ -112,7 +112,7 @@ void wiz_enter_quest(PlayerType *player_ptr)
         return;
     }
 
-    auto q_idx = quest_num.value();
+    auto q_idx = *quest_num;
     init_flags = i2enum<init_flags_type>(INIT_SHOW_TEXT | INIT_ASSIGN);
     player_ptr->current_floor_ptr->quest_number = q_idx;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
@@ -148,7 +148,7 @@ void wiz_restore_monster_max_num(MonsterRaceId r_idx)
             return;
         }
 
-        r_idx = restore_monrace_id.value();
+        r_idx = *restore_monrace_id;
     }
 
     auto *r_ptr = &monraces_info[r_idx];

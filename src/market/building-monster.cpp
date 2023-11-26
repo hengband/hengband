@@ -35,13 +35,12 @@ bool research_mon(PlayerType *player_ptr)
     screen_save();
     constexpr auto prompt = _("モンスターの文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^M名前):",
         "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): ");
-    const auto sym_opt = input_command(prompt, false);
-    if (!sym_opt) {
+    const auto sym = input_command(prompt, false);
+    if (!sym) {
         screen_load();
         return false;
     }
 
-    const auto sym = sym_opt.value();
     IDX ident_i;
     for (ident_i = 0; ident_info[ident_i]; ++ident_i) {
         if (sym == ident_info[ident_i][0]) {
@@ -68,12 +67,12 @@ bool research_mon(PlayerType *player_ptr)
             return false;
         }
 
-        monster_name = monster_name_opt.value();
+        monster_name = *monster_name_opt;
         buf = format(_("名前:%sにマッチ", "Monsters' names with \"%s\""), monster_name.data());
     } else if (ident_info[ident_i]) {
-        buf = format("%c - %s.", sym, ident_info[ident_i] + 2);
+        buf = format("%c - %s.", *sym, ident_info[ident_i] + 2);
     } else {
-        buf = format("%c - %s", sym, _("無効な文字", "Unknown Symbol"));
+        buf = format("%c - %s", *sym, _("無効な文字", "Unknown Symbol"));
     }
 
     prt(buf, 16, 10);
@@ -159,7 +158,7 @@ bool research_mon(PlayerType *player_ptr)
                 handle_stuff(player_ptr);
                 screen_roff(player_ptr, r_idx, MONSTER_LORE_RESEARCH);
                 notpicked = false;
-                old_sym = sym;
+                old_sym = *sym;
                 old_i = i;
             }
 

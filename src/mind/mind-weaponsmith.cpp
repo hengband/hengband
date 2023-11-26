@@ -237,7 +237,7 @@ static COMMAND_CODE choose_essence(void)
                 return 0;
             }
 
-            choice = new_choice.value();
+            choice = *new_choice;
             if (isupper(choice)) {
                 choice = (char)tolower(choice);
             }
@@ -346,15 +346,14 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
             display_smith_effect_list(smith, smith_effect_list, menu_line, page * effect_num_per_page, effect_num_per_page);
 
             const auto page_effect_num = std::min<int>(effect_num_per_page, smith_effect_list.size() - (page * effect_num_per_page));
-            const auto command = input_command(prompt);
-            if (!command) {
+            const auto choice = input_command(prompt);
+            if (!choice) {
                 break;
             }
 
-            const auto choice = command.value();
             auto should_redraw_cursor = true;
             if (use_menu) {
-                switch (choice) {
+                switch (*choice) {
                 case '0': {
                     screen_load();
                     return;
@@ -419,7 +418,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
             }
 
             if (!use_menu) {
-                i = A2I(choice);
+                i = A2I(*choice);
             }
 
             effect_idx = page * effect_num_per_page + i;
@@ -484,7 +483,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
                 return;
             }
 
-            o_ptr->pval = num_enchants.value();
+            o_ptr->pval = *num_enchants;
         }
 
         add_essence_count = o_ptr->pval;
@@ -495,7 +494,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
             return;
         }
 
-        add_essence_count = num_enchants.value();
+        add_essence_count = *num_enchants;
     }
 
     msg_format(_("エッセンスを%d個使用します。", "It will take %d essences."), use_essence * add_essence_count);
@@ -630,14 +629,13 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
                     prt(_("  d) エッセンス付加", "  d) Add essence"), 5, 14);
                     prt(_("  e) 武器/防具強化", "  e) Enchant weapon/armor"), 6, 14);
                     std::string prompt = _(format("どの能力を%sますか:", only_browse ? "調べ" : "使い"), "Command :");
-                    const auto command = input_command(prompt, true);
-                    if (!command) {
+                    const auto choice = input_command(prompt, true);
+                    if (!choice) {
                         screen_load();
                         return;
                     }
 
-                    const auto choice = command.value();
-                    switch (choice) {
+                    switch (*choice) {
                     case 'A':
                     case 'a':
                         mode = 1;

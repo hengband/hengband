@@ -446,24 +446,23 @@ static bool input_rest_turns()
 {
     constexpr auto p = _("休憩 (0-9999, '*' で HP/MP全快, '&' で必要なだけ): ", "Rest (0-9999, '*' for HP/SP, '&' as needed): ");
     while (true) {
-        const auto rest_turns_opt = input_string(p, 4, "&");
-        if (!rest_turns_opt) {
+        const auto rest_turns = input_string(p, 4, "&");
+        if (!rest_turns) {
             return false;
         }
 
-        const auto &rest_turns = rest_turns_opt.value();
-        if (rest_turns.starts_with('&')) {
+        if (rest_turns->starts_with('&')) {
             command_arg = COMMAND_ARG_REST_UNTIL_DONE;
             return true;
         }
 
-        if (rest_turns.starts_with('*')) {
+        if (rest_turns->starts_with('*')) {
             command_arg = COMMAND_ARG_REST_FULL_HEALING;
             return true;
         }
 
         try {
-            command_arg = static_cast<short>(std::clamp(std::stoi(rest_turns), 0, 9999));
+            command_arg = static_cast<short>(std::clamp(std::stoi(*rest_turns), 0, 9999));
             return true;
         } catch (std::invalid_argument const &) {
             msg_print(_("数値を入力して下さい。", "Please input numeric value."));

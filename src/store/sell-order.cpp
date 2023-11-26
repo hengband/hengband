@@ -138,7 +138,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
         auto res = prompt_to_sell(player_ptr, q_ptr, store_num);
         placed = res.has_value();
         if (placed) {
-            const auto price = res.value();
+            const auto price = *res;
             store_owner_says_comment(player_ptr, store_num);
 
             sound(SOUND_SELL);

@@ -62,12 +62,11 @@ static bool select_ammo_creation_type(ammo_creation_type &type, PLAYER_LEVEL ple
     }
 
     while (type == AMMO_NONE) {
-        const auto command = input_command(prompt, true);
-        if (!command) {
+        const auto ch = input_command(prompt, true);
+        if (!ch) {
             return false;
         }
 
-        const auto ch = command.value();
         if (ch == 'S' || ch == 's') {
             type = AMMO_SHOT;
             break;
