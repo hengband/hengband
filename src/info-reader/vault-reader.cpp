@@ -41,7 +41,7 @@ errr parse_vaults_info(std::string_view buf, angband_header *)
         return PARSE_ERROR_MISSING_RECORD_HEADER;
     } else if (tokens[0] == "D") {
         // D:MapText
-        if (tokens.size() < 2 || tokens[1].size() == 0) {
+        if (tokens.size() < 2 || buf.length() < 3) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
