@@ -53,10 +53,10 @@ static void exe_ring_of_power(PlayerType *player_ptr, DIRECTION dir)
     }
 }
 
-bool activate_ring_of_power(PlayerType *player_ptr, concptr name)
+bool activate_ring_of_power(PlayerType *player_ptr, std::string_view name)
 {
     DIRECTION dir;
-    msg_format(_("%sは漆黒に輝いた...", "The %s glows intensely black..."), name);
+    msg_format(_("%sは漆黒に輝いた...", "The %s glows intensely black..."), name.data());
     if (!get_aim_dir(player_ptr, &dir)) {
         return false;
     }

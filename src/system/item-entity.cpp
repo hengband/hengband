@@ -10,6 +10,7 @@
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"
 #include "monster-race/monster-race.h"
+#include "object-enchant/activation-info-table.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/special-object-flags.h"
@@ -806,6 +807,21 @@ bool ItemEntity::is_inscribed() const
     return this->inscription != std::nullopt;
 }
 
+/*!
+ * @brief オブジェクトから発動効果構造体を取得する。
+ * @return 発動効果構造体 (なかったら無効イテレータ)
+ */
+std::vector<activation_type>::const_iterator ItemEntity::find_activation_info() const
+{
+    const auto index = this->get_activation_index();
+    return std::find_if(activation_info.begin(), activation_info.end(), [index](const auto &x) { return x.index == index; });
+}
+
+bool ItemEntity::has_activation() const
+{
+    return this->get_activation_index() != RandomArtActType::NONE;
+}
+
 BaseitemInfo &ItemEntity::get_baseitem() const
 {
     return baseitems_info[this->bi_id];
@@ -938,4 +954,41 @@ void ItemEntity::modify_ego_lite_flags(TrFlags &flags) const
     default:
         return;
     }
+}
+
+/*!
+ * @brief オブジェクトから能力発動IDを取得する。
+ * @details いくつかのケースで定義されている発動効果から、
+ * 鍛冶師による付与＞固定アーティファクト＞エゴ＞ランダムアーティファクト＞ベースアイテムの優先順位で走査していく。
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return 発動効果のIDを返す
+ */
+RandomArtActType ItemEntity::get_activation_index() const
+{
+    if (auto act_idx = Smith::object_activation(this); act_idx) {
+        return *act_idx;
+    }
+
+    if (this->is_fixed_artifact()) {
+        const auto &artifact = this->get_fixed_artifact();
+        if (artifact.flags.has(TR_ACTIVATE)) {
+            return artifact.act_idx;
+        }
+    }
+
+    if (this->is_ego()) {
+        const auto &ego = this->get_ego();
+        if (ego.flags.has(TR_ACTIVATE)) {
+            return ego.act_idx;
+        }
+    }
+
+    if (!this->is_random_artifact()) {
+        const auto &baseitem = this->get_baseitem();
+        if (baseitem.flags.has(TR_ACTIVATE)) {
+            return baseitem.act_idx;
+        }
+    }
+
+    return this->activation_id;
 }

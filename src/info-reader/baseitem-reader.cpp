@@ -186,7 +186,7 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         if (tokens.size() < 2 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
-        auto n = grab_one_activation_flag(tokens[1].data());
+        auto n = grab_one_activation_flag(tokens[1]);
         if (n <= RandomArtActType::NONE) {
             return PARSE_ERROR_INVALID_FLAG;
         }

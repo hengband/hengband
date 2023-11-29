@@ -11,7 +11,6 @@
  */
 
 #include "object/object-info.h"
-#include "artifact/artifact-info.h"
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"
 #include "inventory/inventory-slot-types.h"
@@ -66,18 +65,15 @@ static std::string item_activation_dragon_breath(const ItemEntity *o_ptr)
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-static concptr item_activation_aux(const ItemEntity *o_ptr)
+static std::string item_activation_aux(const ItemEntity *o_ptr)
 {
-    static std::string activation_detail;
-    auto tmp_act_ptr = find_activation_info(o_ptr);
-    if (!tmp_act_ptr) {
+    const auto it = o_ptr->find_activation_info();
+    if (it == activation_info.end()) {
         return _("未定義", "something undefined");
     }
 
-    auto *act_ptr = *tmp_act_ptr;
-    concptr desc = act_ptr->desc;
-    std::string dragon_breath;
-    switch (act_ptr->index) {
+    std::string desc(it->desc);
+    switch (it->index) {
     case RandomArtActType::NONE:
         break;
     case RandomArtActType::BR_FIRE:
@@ -91,8 +87,7 @@ static concptr item_activation_aux(const ItemEntity *o_ptr)
         }
         break;
     case RandomArtActType::BR_DRAGON:
-        dragon_breath = item_activation_dragon_breath(o_ptr);
-        desc = dragon_breath.data();
+        desc = item_activation_dragon_breath(o_ptr);
         break;
     case RandomArtActType::AGGRAVATE:
         if (o_ptr->is_specific_artifact(FixedArtifactId::HYOUSIGI)) {
@@ -135,14 +130,14 @@ static concptr item_activation_aux(const ItemEntity *o_ptr)
 
     /* Timeout description */
     std::stringstream timeout;
-    int constant = act_ptr->timeout.constant;
-    int dice = act_ptr->timeout.dice;
+    const auto constant = it->timeout.constant;
+    const auto dice = it->timeout.dice;
     if (constant == 0 && dice == 0) {
         /* We can activate it every turn */
         timeout << _("いつでも", "every turn");
     } else if (constant < 0) {
         /* Activations that have special timeout */
-        switch (act_ptr->index) {
+        switch (it->index) {
         case RandomArtActType::BR_FIRE:
             timeout << _("", "every ") << (o_ptr->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_FLAMES) ? 200 : 250) << _(" ターン毎", " turns");
             break;
@@ -173,9 +168,9 @@ static concptr item_activation_aux(const ItemEntity *o_ptr)
         timeout << _(" ターン毎", " turns");
     }
 
-    activation_detail = desc;
-    activation_detail.append(_(" : ", " ")).append(timeout.str());
-    return activation_detail.data();
+    std::stringstream ss;
+    ss << desc << _(" : ", " ") << timeout.str();
+    return ss.str();
 }
 
 /*!
@@ -191,7 +186,7 @@ std::string activation_explanation(const ItemEntity *o_ptr)
         return _("なし", "nothing");
     }
 
-    if (activation_index(o_ptr) > RandomArtActType::NONE) {
+    if (o_ptr->has_activation()) {
         return item_activation_aux(o_ptr);
     }
 

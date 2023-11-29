@@ -1,5 +1,4 @@
 #include "market/building-craft-fix.h"
-#include "artifact/artifact-info.h"
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"
 #include "core/asking-player.h"
@@ -280,7 +279,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         }
 
         give_one_ability_of_object(o_ptr, mo_ptr);
-        if (activation_index(o_ptr) == RandomArtActType::NONE) {
+        if (!o_ptr->has_activation()) {
             one_activation(o_ptr);
         }
 

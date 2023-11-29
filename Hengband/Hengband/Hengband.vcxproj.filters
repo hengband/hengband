@@ -1559,9 +1559,6 @@
     <ClCompile Include="..\..\src\artifact\fixed-art-generator.cpp">
       <Filter>artifact</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\artifact\artifact-info.cpp">
-      <Filter>artifact</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\system\artifact-type-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
@@ -4302,9 +4299,6 @@
       <Filter>artifact</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\artifact\fixed-art-generator.h">
-      <Filter>artifact</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\artifact\artifact-info.h">
       <Filter>artifact</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\artifact-type-definition.h">
