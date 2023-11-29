@@ -29,6 +29,7 @@ EXTRA_DIST = \
 	readme.md \
 	readme_angband \
 	readme-eng.md \
+	THIRD-PARTY-NOTICES.txt \
 	hengband.spec \
 	$(visual_studio_files)
 
