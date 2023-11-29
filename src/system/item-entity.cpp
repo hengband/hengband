@@ -1001,6 +1001,24 @@ std::string ItemEntity::build_timeout_description(const activation_type &act) co
 }
 
 /*!
+ * @brief オブジェクトの発動効果名称を返す（サブルーチン/汎用）
+ * @return 発動名称
+ */
+std::string ItemEntity::build_activation_description() const
+{
+    const auto it = this->find_activation_info();
+    if (it == activation_info.end()) {
+        return _("未定義", "something undefined");
+    }
+
+    const auto activation_description = this->build_activation_description(*it);
+    const auto timeout_description = this->build_timeout_description(*it);
+    std::stringstream ss;
+    ss << activation_description << _(" : ", " ") << timeout_description;
+    return ss.str();
+}
+
+/*!
  * @brief オブジェクトを鑑定済にする
  */
 void ItemEntity::mark_as_known()

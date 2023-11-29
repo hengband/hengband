@@ -149,6 +149,7 @@ public:
     TrFlags get_flags_known() const;
     std::string build_activation_description(const activation_type &act) const;
     std::string build_timeout_description(const activation_type &act) const;
+    std::string build_activation_description() const;
 
     void mark_as_known();
     void mark_as_tried();

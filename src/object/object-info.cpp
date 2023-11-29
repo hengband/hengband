@@ -11,36 +11,13 @@
  */
 
 #include "object/object-info.h"
-#include "artifact/random-art-effects.h"
 #include "inventory/inventory-slot-types.h"
-#include "object-enchant/activation-info-table.h"
 #include "player-base/player-class.h"
 #include "player/player-realm.h"
 #include "realm/realm-names-table.h"
-#include "sv-definition/sv-ring-types.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "util/int-char-converter.h"
-#include <sstream>
-
-/*!
- * @brief オブジェクトの発動効果名称を返す（サブルーチン/汎用）
- * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
- * @return 発動名称
- */
-static std::string build_activation_description(const ItemEntity *o_ptr)
-{
-    const auto it = o_ptr->find_activation_info();
-    if (it == activation_info.end()) {
-        return _("未定義", "something undefined");
-    }
-
-    const auto desc = o_ptr->build_activation_description(*it);
-    const auto timeout = o_ptr->build_timeout_description(*it);
-    std::stringstream ss;
-    ss << desc << _(" : ", " ") << timeout;
-    return ss.str();
-}
 
 /*!
  * @brief オブジェクトの発動効果名称を返す (メインルーチン)
@@ -55,7 +32,7 @@ std::string activation_explanation(const ItemEntity *o_ptr)
     }
 
     if (o_ptr->has_activation()) {
-        return build_activation_description(o_ptr);
+        return o_ptr->build_activation_description();
     }
 
     const auto tval = o_ptr->bi_key.tval();
