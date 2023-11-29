@@ -907,54 +907,31 @@ TrFlags ItemEntity::get_flags_known() const
     return flags;
 }
 
-std::string ItemEntity::build_activation_description(const activation_type &act) const
+/*!
+ * @brief オブジェクトの発動効果名称を返す (メインルーチン)
+ * @return 発動名称
+ */
+std::string ItemEntity::explain_activation() const
 {
-    switch (act.index) {
-    case RandomArtActType::NONE:
-        return act.desc;
-    case RandomArtActType::BR_FIRE:
-        if (this->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_FLAMES)) {
-            return _("火炎のブレス (200) と火への耐性", "breathe fire (200) and resist fire");
-        }
-
-        return act.desc;
-    case RandomArtActType::BR_COLD:
-        if (this->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_ICE)) {
-            return _("冷気のブレス (200) と冷気への耐性", "breathe cold (200) and resist cold");
-        }
-
-        return act.desc;
-    case RandomArtActType::BR_DRAGON:
-        return this->build_activation_description_dragon_breath();
-    case RandomArtActType::AGGRAVATE:
-        if (this->is_specific_artifact(FixedArtifactId::HYOUSIGI)) {
-            return _("拍子木を打ちならす", "beat wooden clappers");
-        }
-
-        return act.desc;
-    case RandomArtActType::ACID_BALL_AND_RESISTANCE:
-        return _("アシッド・ボール (100) と酸への耐性", "ball of acid (100) and resist acid");
-    case RandomArtActType::FIRE_BALL_AND_RESISTANCE:
-        return _("ファイア・ボール (100) と火への耐性", "ball of fire (100) and resist fire");
-    case RandomArtActType::COLD_BALL_AND_RESISTANCE:
-        return _("アイス・ボール (100) と冷気への耐性", "ball of cold (100) and resist cold");
-    case RandomArtActType::ELEC_BALL_AND_RESISTANCE:
-        return _("サンダー・ボール (100) と電撃への耐性", "ball of elec (100) and resist elec");
-    case RandomArtActType::POIS_BALL_AND_RESISTANCE:
-        return _("ポイズン・ボール (100) と毒への耐性", "ball of poison (100) and resist elec");
-    case RandomArtActType::RESIST_ACID:
-        return _("一時的な酸への耐性", "temporary resist acid");
-    case RandomArtActType::RESIST_FIRE:
-        return _("一時的な火への耐性", "temporary resist fire");
-    case RandomArtActType::RESIST_COLD:
-        return _("一時的な冷気への耐性", "temporary resist cold");
-    case RandomArtActType::RESIST_ELEC:
-        return _("一時的な電撃への耐性", "temporary resist elec");
-    case RandomArtActType::RESIST_POIS:
-        return _("一時的な毒への耐性", "temporary resist elec");
-    default:
-        return act.desc;
+    const auto flags = this->get_flags();
+    if (flags.has_not(TR_ACTIVATE)) {
+        return _("なし", "nothing");
     }
+
+    if (this->has_activation()) {
+        return this->build_activation_description();
+    }
+
+    const auto tval = this->bi_key.tval();
+    if (tval == ItemKindType::WHISTLE) {
+        return _("ペット呼び寄せ : 100+d100ターン毎", "call pet every 100+d100 turns");
+    }
+
+    if (tval == ItemKindType::CAPTURE) {
+        return _("モンスターを捕える、又は解放する。", "captures or releases a monster.");
+    }
+
+    return _("何も起きない", "Nothing");
 }
 
 std::string ItemEntity::build_timeout_description(const activation_type &act) const
@@ -998,33 +975,6 @@ std::string ItemEntity::build_timeout_description(const activation_type &act) co
     default:
         return "undefined";
     }
-}
-
-/*!
- * @brief オブジェクトの発動効果名称を返す (メインルーチン)
- * @return 発動名称
- */
-std::string ItemEntity::activation_explanation() const
-{
-    const auto flags = this->get_flags();
-    if (flags.has_not(TR_ACTIVATE)) {
-        return _("なし", "nothing");
-    }
-
-    if (this->has_activation()) {
-        return this->build_activation_description();
-    }
-
-    const auto tval = this->bi_key.tval();
-    if (tval == ItemKindType::WHISTLE) {
-        return _("ペット呼び寄せ : 100+d100ターン毎", "call pet every 100+d100 turns");
-    }
-
-    if (tval == ItemKindType::CAPTURE) {
-        return _("モンスターを捕える、又は解放する。", "captures or releases a monster.");
-    }
-
-    return _("何も起きない", "Nothing");
 }
 
 /*!
@@ -1132,6 +1082,56 @@ RandomArtActType ItemEntity::get_activation_index() const
     }
 
     return this->activation_id;
+}
+
+std::string ItemEntity::build_activation_description(const activation_type &act) const
+{
+    switch (act.index) {
+    case RandomArtActType::NONE:
+        return act.desc;
+    case RandomArtActType::BR_FIRE:
+        if (this->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_FLAMES)) {
+            return _("火炎のブレス (200) と火への耐性", "breathe fire (200) and resist fire");
+        }
+
+        return act.desc;
+    case RandomArtActType::BR_COLD:
+        if (this->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_ICE)) {
+            return _("冷気のブレス (200) と冷気への耐性", "breathe cold (200) and resist cold");
+        }
+
+        return act.desc;
+    case RandomArtActType::BR_DRAGON:
+        return this->build_activation_description_dragon_breath();
+    case RandomArtActType::AGGRAVATE:
+        if (this->is_specific_artifact(FixedArtifactId::HYOUSIGI)) {
+            return _("拍子木を打ちならす", "beat wooden clappers");
+        }
+
+        return act.desc;
+    case RandomArtActType::ACID_BALL_AND_RESISTANCE:
+        return _("アシッド・ボール (100) と酸への耐性", "ball of acid (100) and resist acid");
+    case RandomArtActType::FIRE_BALL_AND_RESISTANCE:
+        return _("ファイア・ボール (100) と火への耐性", "ball of fire (100) and resist fire");
+    case RandomArtActType::COLD_BALL_AND_RESISTANCE:
+        return _("アイス・ボール (100) と冷気への耐性", "ball of cold (100) and resist cold");
+    case RandomArtActType::ELEC_BALL_AND_RESISTANCE:
+        return _("サンダー・ボール (100) と電撃への耐性", "ball of elec (100) and resist elec");
+    case RandomArtActType::POIS_BALL_AND_RESISTANCE:
+        return _("ポイズン・ボール (100) と毒への耐性", "ball of poison (100) and resist elec");
+    case RandomArtActType::RESIST_ACID:
+        return _("一時的な酸への耐性", "temporary resist acid");
+    case RandomArtActType::RESIST_FIRE:
+        return _("一時的な火への耐性", "temporary resist fire");
+    case RandomArtActType::RESIST_COLD:
+        return _("一時的な冷気への耐性", "temporary resist cold");
+    case RandomArtActType::RESIST_ELEC:
+        return _("一時的な電撃への耐性", "temporary resist elec");
+    case RandomArtActType::RESIST_POIS:
+        return _("一時的な毒への耐性", "temporary resist elec");
+    default:
+        return act.desc;
+    }
 }
 
 /*!
