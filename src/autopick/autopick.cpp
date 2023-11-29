@@ -68,14 +68,15 @@ void autopick_delayed_alter(PlayerType *player_ptr)
         autopick_delayed_alter_aux(player_ptr, i_idx);
     }
 
-    auto &grid = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
+    const auto p_pos = player_ptr->get_position();
+    auto &grid = player_ptr->current_floor_ptr->get_grid(p_pos);
     for (auto it = grid.o_idx_list.begin(); it != grid.o_idx_list.end();) {
         INVENTORY_IDX i_idx = *it++;
         autopick_delayed_alter_aux(player_ptr, -i_idx);
     }
 
     // PW_FLOOR_ITEM_LISTは遅れるので即時更新
-    fix_floor_item_list(player_ptr, player_ptr->y, player_ptr->x);
+    fix_floor_item_list(player_ptr, p_pos);
 }
 
 /*!

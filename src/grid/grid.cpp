@@ -141,7 +141,7 @@ bool new_player_spot(PlayerType *player_ptr)
 /*!
  * @brief マスに隠されたドアがあるかの判定を行う。 / Return TRUE if the given grid is a hidden closed door
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param g_ptr マス構造体の参照ポインタ
+ * @param grid マス構造体の参照ポインタ
  * @return 隠されたドアがあるならTRUEを返す。
  */
 bool is_hidden_door(PlayerType *player_ptr, const Grid &grid)
@@ -1070,7 +1070,7 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
 /*!
  * モンスターにより照明が消されている地形か否かを判定する。 / Is this grid "darkened" by monster?
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param g_ptr グリッドへの参照ポインタ
+ * @param grid グリッドへの参照ポインタ
  * @return 照明が消されている地形ならばTRUE
  */
 bool darkened_grid(PlayerType *player_ptr, Grid *g_ptr)
@@ -1090,44 +1090,37 @@ void set_cave_feat(FloorType *floor_ptr, POSITION y, POSITION x, FEAT_IDX featur
 }
 
 /*!
- * @brief プレイヤーの周辺9マスに該当する地形がいくつあるかを返す /
- * Attempt to open the given chest at the given location
- * @param y 該当する地形の中から1つのY座標を返す参照ポインタ
- * @param x 該当する地形の中から1つのX座標を返す参照ポインタ
+ * @brief プレイヤーの周辺9マスに該当する地形がいくつあるかを返す
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param test 地形条件を判定するための関数ポインタ
  * @param under TRUEならばプレイヤーの直下の座標も走査対象にする
- * @return 該当する地形の数
- * @details Return the number of features around (or under) the character.
- * Usually look for doors and floor traps.
+ * @return 該当する地形の数と、該当する地形の中から1つの座標
  */
-int count_dt(PlayerType *player_ptr, POSITION *y, POSITION *x, bool (*test)(PlayerType *, FEAT_IDX), bool under)
+std::pair<int, Pos2D> count_dt(PlayerType *player_ptr, bool (*test)(PlayerType *, short), bool under)
 {
-    int count = 0;
-    for (DIRECTION d = 0; d < 9; d++) {
-        Grid *g_ptr;
-        FEAT_IDX feat;
+    auto count = 0;
+    Pos2D pos(0, 0);
+    for (auto d = 0; d < 9; d++) {
         if ((d == 8) && !under) {
             continue;
         }
 
-        POSITION yy = player_ptr->y + ddy_ddd[d];
-        POSITION xx = player_ptr->x + ddx_ddd[d];
-        g_ptr = &player_ptr->current_floor_ptr->grid_array[yy][xx];
-        if (!g_ptr->is_mark()) {
+        Pos2D pos_neighbor(player_ptr->y + ddy_ddd[d], player_ptr->x + ddx_ddd[d]);
+        const auto &grid = player_ptr->current_floor_ptr->get_grid(pos_neighbor);
+        if (!grid.is_mark()) {
             continue;
         }
 
-        feat = g_ptr->get_feat_mimic();
+        const auto feat = grid.get_feat_mimic();
         if (!((*test)(player_ptr, feat))) {
             continue;
         }
 
         ++count;
-        *y = yy;
-        *x = xx;
+        pos = pos_neighbor;
     }
 
-    return count;
+    return { count, pos };
 }
 
 /*!

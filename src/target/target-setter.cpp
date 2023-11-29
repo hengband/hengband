@@ -396,7 +396,7 @@ static bool set_target_grid(PlayerType *player_ptr, ts_type *ts_ptr)
     }
 
     describe_projectablity(player_ptr, ts_ptr);
-    fix_floor_item_list(player_ptr, ts_ptr->y, ts_ptr->x);
+    fix_floor_item_list(player_ptr, { ts_ptr->y, ts_ptr->x });
 
     while (true) {
         ts_ptr->query = examine_grid(player_ptr, ts_ptr->y, ts_ptr->x, ts_ptr->mode, ts_ptr->info);
@@ -569,7 +569,7 @@ static void sweep_target_grids(PlayerType *player_ptr, ts_type *ts_ptr)
         ts_ptr->g_ptr = &player_ptr->current_floor_ptr->grid_array[ts_ptr->y][ts_ptr->x];
         strcpy(ts_ptr->info, _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>"));
         describe_grid_wizard(player_ptr, ts_ptr);
-        fix_floor_item_list(player_ptr, ts_ptr->y, ts_ptr->x);
+        fix_floor_item_list(player_ptr, { ts_ptr->y, ts_ptr->x });
 
         /* Describe and Prompt (enable "TARGET_LOOK") */
         const auto target = i2enum<target_type>(ts_ptr->mode | TARGET_LOOK);

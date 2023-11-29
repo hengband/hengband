@@ -618,11 +618,11 @@ static void display_floor_item_list(PlayerType *player_ptr, const Pos2D &pos)
 /*!
  * @brief (y,x) のアイテム一覧をサブウィンドウに表示する / display item at (y,x) in sub-windows
  */
-void fix_floor_item_list(PlayerType *player_ptr, const int y, const int x)
+void fix_floor_item_list(PlayerType *player_ptr, const Pos2D &pos)
 {
     display_sub_windows(SubWindowRedrawingFlag::FLOOR_ITEMS,
-        [player_ptr, y, x] {
-            display_floor_item_list(player_ptr, { y, x });
+        [player_ptr, pos] {
+            display_floor_item_list(player_ptr, pos);
         });
 }
 
