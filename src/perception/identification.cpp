@@ -55,7 +55,7 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
 
     if (flags.has(TR_ACTIVATE)) {
         info[i++] = _("始動したときの効果...", "It can be activated for...");
-        info[i++] = activation_explanation(o_ptr);
+        info[i++] = o_ptr->explain_activation();
         info[i++] = _("...ただし装備していなければならない。", "...if it is being worn.");
     }
 

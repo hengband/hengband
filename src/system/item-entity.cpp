@@ -1001,6 +1001,33 @@ std::string ItemEntity::build_timeout_description(const activation_type &act) co
 }
 
 /*!
+ * @brief オブジェクトの発動効果名称を返す (メインルーチン)
+ * @return 発動名称
+ */
+std::string ItemEntity::activation_explanation() const
+{
+    const auto flags = this->get_flags();
+    if (flags.has_not(TR_ACTIVATE)) {
+        return _("なし", "nothing");
+    }
+
+    if (this->has_activation()) {
+        return this->build_activation_description();
+    }
+
+    const auto tval = this->bi_key.tval();
+    if (tval == ItemKindType::WHISTLE) {
+        return _("ペット呼び寄せ : 100+d100ターン毎", "call pet every 100+d100 turns");
+    }
+
+    if (tval == ItemKindType::CAPTURE) {
+        return _("モンスターを捕える、又は解放する。", "captures or releases a monster.");
+    }
+
+    return _("何も起きない", "Nothing");
+}
+
+/*!
  * @brief オブジェクトの発動効果名称を返す（サブルーチン/汎用）
  * @return 発動名称
  */

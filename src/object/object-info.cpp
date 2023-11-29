@@ -20,34 +20,6 @@
 #include "util/int-char-converter.h"
 
 /*!
- * @brief オブジェクトの発動効果名称を返す (メインルーチン)
- * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
- * @return 発動名称
- */
-std::string activation_explanation(const ItemEntity *o_ptr)
-{
-    const auto flags = o_ptr->get_flags();
-    if (flags.has_not(TR_ACTIVATE)) {
-        return _("なし", "nothing");
-    }
-
-    if (o_ptr->has_activation()) {
-        return o_ptr->build_activation_description();
-    }
-
-    const auto tval = o_ptr->bi_key.tval();
-    if (tval == ItemKindType::WHISTLE) {
-        return _("ペット呼び寄せ : 100+d100ターン毎", "call pet every 100+d100 turns");
-    }
-
-    if (tval == ItemKindType::CAPTURE) {
-        return _("モンスターを捕える、又は解放する。", "captures or releases a monster.");
-    }
-
-    return _("何も起きない", "Nothing");
-}
-
-/*!
  * @brief オブジェクト選択時の選択アルファベットラベルを返す /
  * Convert an inventory index into a one character label
  * @param i プレイヤーの所持/装備オブジェクトID

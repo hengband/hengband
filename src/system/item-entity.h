@@ -147,6 +147,7 @@ public:
     ArtifactType &get_fixed_artifact() const;
     TrFlags get_flags() const;
     TrFlags get_flags_known() const;
+    std::string activation_explanation() const;
     std::string build_activation_description(const activation_type &act) const;
     std::string build_timeout_description(const activation_type &act) const;
     std::string build_activation_description() const;
