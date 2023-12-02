@@ -882,28 +882,9 @@ std::string ItemEntity::explain_activation() const
 
 std::string ItemEntity::build_timeout_description(const ActivationType &act) const
 {
-    const auto constant = act.constant;
-    const auto dice = act.dice;
-    if (constant == 0 && dice == 0) {
-        return _("いつでも", "every turn");
-    }
-
-    if (constant) {
-        std::stringstream ss;
-        ss << _("", "every ");
-        if (constant > 0) {
-            ss << *constant;
-            if (dice > 0) {
-                ss << '+';
-            }
-        }
-
-        if (dice > 0) {
-            ss << 'd' << dice;
-        }
-
-        ss << _(" ターン毎", " turns");
-        return ss.str();
+    const auto description = act.build_timeout_description();
+    if (description) {
+        return *description;
     }
 
     std::stringstream ss;
