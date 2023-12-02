@@ -556,6 +556,13 @@ bool BaseitemKey::is_lance() const
     return is_lance;
 }
 
+bool BaseitemKey::is_readable() const
+{
+    auto can_read = this->is(ItemKindType::SCROLL);
+    can_read |= this->is(ItemKindType::PARCHMENT);
+    return can_read;
+}
+
 bool BaseitemKey::is_mushrooms() const
 {
     if (!this->subtype_value) {

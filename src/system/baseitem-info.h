@@ -76,6 +76,7 @@ public:
     bool is_convertible() const;
     bool is_fuel() const;
     bool is_lance() const;
+    bool is_readable() const;
 
 private:
     ItemKindType type_value;
