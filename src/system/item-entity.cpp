@@ -1009,7 +1009,7 @@ void ItemEntity::mark_as_known()
 /*!
  * @brief オブジェクトを試行済にする
  */
-void ItemEntity::mark_as_tried()
+void ItemEntity::mark_as_tried() const
 {
     this->get_baseitem().mark_as_tried();
 }
