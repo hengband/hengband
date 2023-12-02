@@ -214,7 +214,7 @@ bool ItemEntity::is_wieldable_in_etheir_hand() const
  */
 bool ItemEntity::refuse_enchant_weapon() const
 {
-    return this->bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE);
+    return this->bi_key.refuse_enchant_weapon();
 }
 
 /*!

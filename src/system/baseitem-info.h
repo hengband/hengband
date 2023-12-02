@@ -70,6 +70,7 @@ public:
     bool is_junk() const;
     bool is_armour() const;
     bool is_cross_bow() const;
+    bool refuse_enchant_weapon() const;
 
 private:
     ItemKindType type_value;

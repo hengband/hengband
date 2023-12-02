@@ -507,6 +507,11 @@ bool BaseitemKey::is_cross_bow() const
     }
 }
 
+bool BaseitemKey::refuse_enchant_weapon() const
+{
+    return *this == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE);
+}
+
 bool BaseitemKey::is_mushrooms() const
 {
     if (!this->subtype_value) {
