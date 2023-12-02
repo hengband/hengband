@@ -89,7 +89,6 @@ public:
     bool is_broken_weapon() const;
     bool is_throwable() const;
     bool is_wieldable_in_etheir_hand() const;
-    bool refuse_enchant_weapon() const;
     bool allow_enchant_weapon() const;
     bool allow_enchant_melee_weapon() const;
     bool allow_two_hands_wielding() const;
@@ -158,6 +157,7 @@ private:
     int get_baseitem_price() const;
     int calc_figurine_value() const;
     int calc_capture_value() const;
+    bool should_refuse_enchant() const;
     void modify_ego_lite_flags(TrFlags &flags) const;
     RandomArtActType get_activation_index() const;
     std::string build_activation_description() const;

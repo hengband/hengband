@@ -213,21 +213,12 @@ bool ItemEntity::is_wieldable_in_etheir_hand() const
 }
 
 /*!
- * @brief 強化不能武器であるかを判定する
- * @return 強化不能か否か
- */
-bool ItemEntity::refuse_enchant_weapon() const
-{
-    return this->bi_key.refuse_enchant_weapon();
-}
-
-/*!
  * @brief 強化可能武器であるかを判定する
  * @return 強化可能か否か
  */
 bool ItemEntity::allow_enchant_weapon() const
 {
-    return this->is_weapon_ammo() && !this->refuse_enchant_weapon();
+    return this->is_weapon_ammo() && !this->should_refuse_enchant();
 }
 
 /*!
@@ -236,7 +227,7 @@ bool ItemEntity::allow_enchant_weapon() const
  */
 bool ItemEntity::allow_enchant_melee_weapon() const
 {
-    return this->is_melee_weapon() && !this->refuse_enchant_weapon();
+    return this->is_melee_weapon() && !this->should_refuse_enchant();
 }
 
 /*!
@@ -698,6 +689,15 @@ int ItemEntity::calc_capture_value() const
 {
     const auto r_idx = i2enum<MonsterRaceId>(this->pval);
     return MonraceList::get_instance().calc_capture_value(r_idx);
+}
+
+/*!
+ * @brief 強化不能武器であるかを判定する
+ * @return 強化不能か否か
+ */
+bool ItemEntity::should_refuse_enchant() const
+{
+    return this->bi_key.should_refuse_enchant();
 }
 
 bool ItemEntity::is_specific_artifact(FixedArtifactId id) const

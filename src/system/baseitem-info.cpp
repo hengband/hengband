@@ -513,7 +513,7 @@ bool BaseitemKey::is_cross_bow() const
     }
 }
 
-bool BaseitemKey::refuse_enchant_weapon() const
+bool BaseitemKey::should_refuse_enchant() const
 {
     return *this == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE);
 }
