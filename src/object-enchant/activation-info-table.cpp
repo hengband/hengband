@@ -3,10 +3,9 @@
 #include "locale/language-switcher.h"
 
 /*!
- * @brief アイテムの発動効果テーブル /
- * Define flags, levels, values of activations
+ * @brief アイテムの発動効果テーブル
  */
-const std::vector<activation_type> activation_info = {
+const std::vector<ActivationType> activation_info = {
     { "SUNLIGHT", RandomArtActType::SUNLIGHT, 10, 250, 10, 0, _("太陽光線", "beam of sunlight") },
     { "BO_MISS_1", RandomArtActType::BO_MISS_1, 10, 250, 2, 0, _("マジック・ミサイル(2d6)", "magic missile (2d6)") },
     { "BA_POIS_1", RandomArtActType::BA_POIS_1, 10, 300, 4, 0, _("悪臭雲(12)", "stinking cloud (12)") },
@@ -48,13 +47,13 @@ const std::vector<activation_type> activation_info = {
     { "CAST_BA_STAR", RandomArtActType::CAST_BA_STAR, 70, 7500, 100, 0, _("スター・ボール・ダスト(150)", "cast star balls (150)") },
     { "BLADETURNER", RandomArtActType::BLADETURNER, 80, 20000, 80, 0,
         _("エレメントのブレス(300), 士気高揚、祝福、耐性", "breathe elements (300), hero, bless, and resistance") },
-    { "BR_FIRE", RandomArtActType::BR_FIRE, 50, 5000, -1, 0, _("火炎のブレス (200)", "fire breath (200)") },
-    { "BR_COLD", RandomArtActType::BR_COLD, 50, 5000, -1, 0, _("冷気のブレス (200)", "cold breath (200)") },
+    { "BR_FIRE", RandomArtActType::BR_FIRE, 50, 5000, std::nullopt, 0, _("火炎のブレス (200)", "fire breath (200)") },
+    { "BR_COLD", RandomArtActType::BR_COLD, 50, 5000, std::nullopt, 0, _("冷気のブレス (200)", "cold breath (200)") },
     { "BR_DRAGON", RandomArtActType::BR_DRAGON, 70, 10000, 30, 0, "" /* built by item_activation_dragon_breath() */ },
     { "CONFUSE", RandomArtActType::CONFUSE, 10, 500, 10, 0, _("パニック・モンスター", "confuse monster") },
     { "SLEEP", RandomArtActType::SLEEP, 10, 750, 15, 0, _("周囲のモンスターを眠らせる", "sleep nearby monsters") },
     { "QUAKE", RandomArtActType::QUAKE, 30, 600, 20, 0, _("地震", "earthquake") },
-    { "TERROR", RandomArtActType::TERROR, 20, 2500, -1, 0, _("恐慌", "terror") },
+    { "TERROR", RandomArtActType::TERROR, 20, 2500, std::nullopt, 0, _("恐慌", "terror") },
     { "TELE_AWAY", RandomArtActType::TELE_AWAY, 20, 2000, 15, 0, _("テレポート・アウェイ", "teleport away") },
     { "BANISH_EVIL", RandomArtActType::BANISH_EVIL, 40, 2000, 250, 0, _("邪悪消滅", "banish evil") },
     { "GENOCIDE", RandomArtActType::GENOCIDE, 50, 10000, 500, 0, _("抹殺", "genocide") },
@@ -138,7 +137,7 @@ const std::vector<activation_type> activation_info = {
     { "CAST_OFF", RandomArtActType::CAST_OFF, 30, 15000, 100, 0, _("脱衣と小宇宙燃焼", "cast it off and cosmic heroism") },
     { "FISHING", RandomArtActType::FISHING, 0, 100, 0, 0, _("釣りをする", "fishing") },
     { "INROU", RandomArtActType::INROU, 40, 15000, 150, 150, _("例のアレ", "reveal your identity") },
-    { "MURAMASA", RandomArtActType::MURAMASA, 0, 0, -1, 0, _("腕力の上昇", "increase STR") },
+    { "MURAMASA", RandomArtActType::MURAMASA, 0, 0, std::nullopt, 0, _("腕力の上昇", "increase STR") },
     { "BLOODY_MOON", RandomArtActType::BLOODY_MOON, 0, 0, 3333, 0, _("属性変更", "change zokusei") },
 
     { "CRIMSON", RandomArtActType::CRIMSON, 0, 50000, 15, 0, _("ファイア！", "fire!") },

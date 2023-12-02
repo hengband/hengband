@@ -773,7 +773,7 @@ bool ItemEntity::is_inscribed() const
  * @brief オブジェクトから発動効果構造体を取得する。
  * @return 発動効果構造体 (なかったら無効イテレータ)
  */
-std::vector<activation_type>::const_iterator ItemEntity::find_activation_info() const
+std::vector<ActivationType>::const_iterator ItemEntity::find_activation_info() const
 {
     const auto index = this->get_activation_index();
     return std::find_if(activation_info.begin(), activation_info.end(), [index](const auto &x) { return x.index == index; });
@@ -884,7 +884,7 @@ std::string ItemEntity::explain_activation() const
     return this->bi_key.explain_activation();
 }
 
-std::string ItemEntity::build_timeout_description(const activation_type &act) const
+std::string ItemEntity::build_timeout_description(const ActivationType &act) const
 {
     const auto constant = act.constant;
     const auto dice = act.dice;
@@ -892,11 +892,11 @@ std::string ItemEntity::build_timeout_description(const activation_type &act) co
         return _("いつでも", "every turn");
     }
 
-    if (constant >= 0) {
+    if (constant) {
         std::stringstream ss;
         ss << _("", "every ");
         if (constant > 0) {
-            ss << constant;
+            ss << *constant;
             if (dice > 0) {
                 ss << '+';
             }
@@ -1033,7 +1033,7 @@ RandomArtActType ItemEntity::get_activation_index() const
     return this->activation_id;
 }
 
-std::string ItemEntity::build_activation_description(const activation_type &act) const
+std::string ItemEntity::build_activation_description(const ActivationType &act) const
 {
     switch (act.index) {
     case RandomArtActType::NONE:

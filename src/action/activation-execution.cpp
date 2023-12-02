@@ -165,10 +165,10 @@ static bool activate_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
         return false;
     }
 
-    if (it_activation->constant >= 0) {
-        o_ptr->timeout = static_cast<short>(it_activation->constant);
+    if (it_activation->constant) {
+        o_ptr->timeout = static_cast<short>(*it_activation->constant);
         if (it_activation->dice > 0) {
-            o_ptr->timeout += randint1(it_activation->dice);
+            o_ptr->timeout += static_cast<short>(randint1(it_activation->dice));
         }
 
         return true;

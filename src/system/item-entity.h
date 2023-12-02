@@ -24,10 +24,10 @@ enum class ItemKindType : short;
 enum class SmithEffectType : int16_t;
 enum class RandomArtActType : short;
 
+class ActivationType;
 class ArtifactType;
-class EgoItemDefinition;
 class BaseitemInfo;
-struct activation_type;
+class EgoItemDefinition;
 class ItemEntity {
 public:
     ItemEntity();
@@ -140,7 +140,7 @@ public:
     bool is_armour() const;
     bool is_cross_bow() const;
     bool is_inscribed() const;
-    std::vector<activation_type>::const_iterator find_activation_info() const;
+    std::vector<ActivationType>::const_iterator find_activation_info() const;
     bool has_activation() const;
 
     BaseitemInfo &get_baseitem() const;
@@ -160,7 +160,7 @@ private:
     void modify_ego_lite_flags(TrFlags &flags) const;
     RandomArtActType get_activation_index() const;
     std::string build_activation_description() const;
-    std::string build_timeout_description(const activation_type &act) const;
-    std::string build_activation_description(const activation_type &act) const;
+    std::string build_timeout_description(const ActivationType &act) const;
+    std::string build_activation_description(const ActivationType &act) const;
     std::string build_activation_description_dragon_breath() const;
 };
