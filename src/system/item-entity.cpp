@@ -886,8 +886,8 @@ std::string ItemEntity::explain_activation() const
 
 std::string ItemEntity::build_timeout_description(const activation_type &act) const
 {
-    const auto constant = act.timeout.constant;
-    const auto dice = act.timeout.dice;
+    const auto constant = act.constant;
+    const auto dice = act.dice;
     if (constant == 0 && dice == 0) {
         return _("いつでも", "every turn");
     }

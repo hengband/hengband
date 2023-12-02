@@ -9,10 +9,8 @@ struct activation_type {
     RandomArtActType index;
     int level;
     int value;
-    struct {
-        int constant;
-        int dice;
-    } timeout;
+    int constant; // 発動間隔の最低ターン数
+    int dice; // 発動間隔の追加ターン数
     std::string desc;
 };
 
