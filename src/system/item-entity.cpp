@@ -705,12 +705,8 @@ int ItemEntity::calc_figurine_value() const
 
 int ItemEntity::calc_capture_value() const
 {
-    auto capture_r_idx = i2enum<MonsterRaceId>(this->pval);
-    if (!MonsterRace(capture_r_idx).is_valid()) {
-        return 1000;
-    }
-
-    return (monraces_info[capture_r_idx].level) * 50 + 1000;
+    const auto r_idx = i2enum<MonsterRaceId>(this->pval);
+    return MonraceList::get_instance().calc_capture_value(r_idx);
 }
 
 bool ItemEntity::is_specific_artifact(FixedArtifactId id) const

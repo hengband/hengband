@@ -263,3 +263,12 @@ int MonraceList::calc_figurine_value(const MonsterRaceId r_idx) const
 
     return 14000 + (level - 50) * 2000;
 }
+
+int MonraceList::calc_capture_value(const MonsterRaceId r_idx) const
+{
+    if (r_idx == MonsterRaceId::PLAYER) {
+        return 1000;
+    }
+
+    return (*this)[r_idx].level * 50 + 1000;
+}

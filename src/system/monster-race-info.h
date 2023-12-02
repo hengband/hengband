@@ -165,6 +165,7 @@ public:
     bool is_separated(const MonsterRaceId r_idx) const;
     bool can_select_separate(const MonsterRaceId r_idx, const int hp, const int maxhp) const;
     int calc_figurine_value(const MonsterRaceId r_idx) const;
+    int calc_capture_value(const MonsterRaceId r_idx) const;
 
 private:
     MonraceList() = default;
