@@ -241,3 +241,34 @@ bool MonraceList::can_select_separate(const MonsterRaceId r_idx, const int hp, c
 
     return std::all_of(found_separates.begin(), found_separates.end(), [&](const auto x) { return (*this)[x].max_num > 0; });
 }
+
+int MonraceList::calc_figurine_value(const MonsterRaceId r_idx) const
+{
+    const auto level = (*this)[r_idx].level;
+    if (level < 20) {
+        return level * 50;
+    }
+
+    if (level < 30) {
+        return 1000 + (level - 20) * 150;
+    }
+
+    if (level < 40) {
+        return 2500 + (level - 30) * 350;
+    }
+
+    if (level < 50) {
+        return 6000 + (level - 40) * 800;
+    }
+
+    return 14000 + (level - 50) * 2000;
+}
+
+int MonraceList::calc_capture_value(const MonsterRaceId r_idx) const
+{
+    if (r_idx == MonsterRaceId::PLAYER) {
+        return 1000;
+    }
+
+    return (*this)[r_idx].level * 50 + 1000;
+}

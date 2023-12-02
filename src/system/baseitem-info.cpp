@@ -13,6 +13,7 @@
 #include "sv-definition/sv-bow-types.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-lite-types.h"
+#include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-rod-types.h"
 #include "sv-definition/sv-weapon-types.h"
@@ -53,6 +54,11 @@ ItemKindType BaseitemKey::tval() const
 std::optional<int> BaseitemKey::sval() const
 {
     return this->subtype_value;
+}
+
+bool BaseitemKey::is(ItemKindType tval) const
+{
+    return this->type_value == tval;
 }
 
 /*!
@@ -272,32 +278,7 @@ bool BaseitemKey::is_weapon() const
 
 bool BaseitemKey::is_equipement() const
 {
-    switch (this->type_value) {
-    case ItemKindType::SHOT:
-    case ItemKindType::ARROW:
-    case ItemKindType::BOLT:
-    case ItemKindType::BOW:
-    case ItemKindType::DIGGING:
-    case ItemKindType::HAFTED:
-    case ItemKindType::POLEARM:
-    case ItemKindType::SWORD:
-    case ItemKindType::BOOTS:
-    case ItemKindType::GLOVES:
-    case ItemKindType::HELM:
-    case ItemKindType::CROWN:
-    case ItemKindType::SHIELD:
-    case ItemKindType::CLOAK:
-    case ItemKindType::SOFT_ARMOR:
-    case ItemKindType::HARD_ARMOR:
-    case ItemKindType::DRAG_ARMOR:
-    case ItemKindType::LITE:
-    case ItemKindType::AMULET:
-    case ItemKindType::RING:
-    case ItemKindType::CARD:
-        return true;
-    default:
-        return false;
-    }
+    return this->is_wearable() || this->is_ammo();
 }
 
 bool BaseitemKey::is_melee_ammo() const
@@ -530,6 +511,42 @@ bool BaseitemKey::is_cross_bow() const
     default:
         return false;
     }
+}
+
+bool BaseitemKey::refuse_enchant_weapon() const
+{
+    return *this == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE);
+}
+
+/*!
+ * @brief ベースアイテムが発動効果を持つ時、その記述を生成する
+ * @return 発動効果
+ */
+std::string BaseitemKey::explain_activation() const
+{
+    switch (this->type_value) {
+    case ItemKindType::WHISTLE:
+        return _("ペット呼び寄せ : 100+d100ターン毎", "call pet every 100+d100 turns");
+    case ItemKindType::CAPTURE:
+        return _("モンスターを捕える、又は解放する。", "captures or releases a monster.");
+    default:
+        return _("何も起きない", "Nothing");
+    }
+}
+
+bool BaseitemKey::is_convertible() const
+{
+    auto is_convertible = this->is(ItemKindType::JUNK) || this->is(ItemKindType::SKELETON);
+    is_convertible |= *this == BaseitemKey(ItemKindType::CORPSE, SV_SKELETON);
+    return is_convertible;
+}
+
+bool BaseitemKey::is_fuel() const
+{
+    auto is_fuel = *this == BaseitemKey(ItemKindType::LITE, SV_LITE_TORCH);
+    is_fuel |= *this == BaseitemKey(ItemKindType::LITE, SV_LITE_LANTERN);
+    is_fuel |= *this == BaseitemKey(ItemKindType::FLASK, SV_FLASK_OIL);
+    return is_fuel;
 }
 
 bool BaseitemKey::is_mushrooms() const
