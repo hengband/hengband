@@ -699,25 +699,8 @@ int ItemEntity::get_baseitem_price() const
 
 int ItemEntity::calc_figurine_value() const
 {
-    auto figure_r_idx = i2enum<MonsterRaceId>(this->pval);
-    auto level = monraces_info[figure_r_idx].level;
-    if (level < 20) {
-        return level * 50L;
-    }
-
-    if (level < 30) {
-        return 1000 + (level - 20) * 150;
-    }
-
-    if (level < 40) {
-        return 2500 + (level - 30) * 350;
-    }
-
-    if (level < 50) {
-        return 6000 + (level - 40) * 800;
-    }
-
-    return 14000 + (level - 50) * 2000;
+    const auto r_idx = i2enum<MonsterRaceId>(this->pval);
+    return MonraceList::get_instance().calc_figurine_value(r_idx);
 }
 
 int ItemEntity::calc_capture_value() const
