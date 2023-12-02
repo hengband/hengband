@@ -459,7 +459,7 @@ bool ItemEntity::can_recharge() const
  */
 bool ItemEntity::is_offerable() const
 {
-    if (!this->bi_key.is_corpse()) {
+    if (!this->is_corpse()) {
         return false;
     }
 
@@ -603,7 +603,7 @@ TERM_COLOR ItemEntity::get_color() const
     }
 
     auto has_attr = this->is_valid();
-    has_attr &= this->bi_key.is_corpse();
+    has_attr &= this->is_corpse();
     has_attr &= baseitem.x_attr == TERM_DARK;
     if (!has_attr) {
         return baseitem.x_attr;
@@ -758,6 +758,11 @@ bool ItemEntity::is_armour() const
 bool ItemEntity::is_cross_bow() const
 {
     return this->bi_key.is_cross_bow();
+}
+
+bool ItemEntity::is_corpse() const
+{
+    return this->bi_key.is_corpse();
 }
 
 bool ItemEntity::is_inscribed() const
