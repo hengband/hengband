@@ -75,6 +75,7 @@ public:
     std::string explain_activation() const;
     bool is_convertible() const;
     bool is_fuel() const;
+    bool is_lance() const;
 
 private:
     ItemKindType type_value;

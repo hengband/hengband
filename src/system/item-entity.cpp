@@ -269,9 +269,7 @@ bool ItemEntity::is_convertible() const
 
 bool ItemEntity::is_lance() const
 {
-    auto is_lance = this->bi_key == BaseitemKey(ItemKindType::POLEARM, SV_LANCE);
-    is_lance |= this->bi_key == BaseitemKey(ItemKindType::POLEARM, SV_HEAVY_LANCE);
-    return is_lance;
+    return this->bi_key.is_lance();
 }
 
 /*!

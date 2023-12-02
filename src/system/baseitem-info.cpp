@@ -549,6 +549,13 @@ bool BaseitemKey::is_fuel() const
     return is_fuel;
 }
 
+bool BaseitemKey::is_lance() const
+{
+    auto is_lance = *this == BaseitemKey(ItemKindType::POLEARM, SV_LANCE);
+    is_lance |= *this == BaseitemKey(ItemKindType::POLEARM, SV_HEAVY_LANCE);
+    return is_lance;
+}
+
 bool BaseitemKey::is_mushrooms() const
 {
     if (!this->subtype_value) {
