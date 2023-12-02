@@ -1,13 +1,11 @@
 #pragma once
 
-#include "system/angband.h"
-
 #include <array>
 
 /*!
  * @todo TRが何の略か分かる人、補足求む
  */
-enum tr_type : int32_t {
+enum tr_type : int {
     TR_STR = 0, /* STR += "pval" */
     TR_INT = 1, /* INT += "pval" */
     TR_WIS = 2, /* WIS += "pval" */

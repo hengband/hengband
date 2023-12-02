@@ -1,13 +1,13 @@
 #pragma once
 
-#include "effect/attribute-types.h"
-#include "object-enchant/tr-types.h"
-#include "system/angband.h"
+#include <vector>
 
+enum tr_type : int;
+enum class AttributeType;
 struct dragonbreath_type {
     tr_type flag;
     AttributeType type;
-    concptr name;
+    std::string name;
 };
 
-extern const dragonbreath_type dragonbreath_info[];
+extern const std::vector<dragonbreath_type> dragonbreath_info;

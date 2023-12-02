@@ -1,11 +1,13 @@
 #include "object-enchant/dragon-breaths-table.h"
 #include "effect/attribute-types.h"
+#include "locale/language-switcher.h"
+#include "object-enchant/tr-types.h"
 
 /*!
  * @brief 装備耐性に準じたブレス効果の選択テーブル /
  * Define flags, effect type, name for dragon breath activation
  */
-const dragonbreath_type dragonbreath_info[] = {
+const std::vector<dragonbreath_type> dragonbreath_info = {
     { TR_RES_ACID, AttributeType::ACID, _("酸", "acid") },
     { TR_RES_ELEC, AttributeType::ELEC, _("電撃", "lightning") },
     { TR_RES_FIRE, AttributeType::FIRE, _("火炎", "fire") },
@@ -20,5 +22,4 @@ const dragonbreath_type dragonbreath_info[] = {
     { TR_RES_NETHER, AttributeType::NETHER, _("地獄", "nether") },
     { TR_RES_CHAOS, AttributeType::CHAOS, _("カオス", "chaos") },
     { TR_RES_DISEN, AttributeType::DISENCHANT, _("劣化", "disenchantment") },
-    { TR_STR, AttributeType::NONE, nullptr }
 };
