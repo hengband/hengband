@@ -264,9 +264,7 @@ bool ItemEntity::is_ammo() const
  */
 bool ItemEntity::is_convertible() const
 {
-    auto is_convertible = this->is(ItemKindType::JUNK) || this->is(ItemKindType::SKELETON);
-    is_convertible |= this->bi_key == BaseitemKey(ItemKindType::CORPSE, SV_SKELETON);
-    return is_convertible;
+    return this->bi_key.is_convertible();
 }
 
 bool ItemEntity::is_lance() const

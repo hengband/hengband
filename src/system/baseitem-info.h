@@ -73,6 +73,7 @@ public:
     bool is_cross_bow() const;
     bool refuse_enchant_weapon() const;
     std::string explain_activation() const;
+    bool is_convertible() const;
 
 private:
     ItemKindType type_value;

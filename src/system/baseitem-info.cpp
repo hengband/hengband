@@ -13,6 +13,7 @@
 #include "sv-definition/sv-bow-types.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-lite-types.h"
+#include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-rod-types.h"
 #include "sv-definition/sv-weapon-types.h"
@@ -531,6 +532,13 @@ std::string BaseitemKey::explain_activation() const
     default:
         return _("何も起きない", "Nothing");
     }
+}
+
+bool BaseitemKey::is_convertible() const
+{
+    auto is_convertible = this->is(ItemKindType::JUNK) || this->is(ItemKindType::SKELETON);
+    is_convertible |= *this == BaseitemKey(ItemKindType::CORPSE, SV_SKELETON);
+    return is_convertible;
 }
 
 bool BaseitemKey::is_mushrooms() const
