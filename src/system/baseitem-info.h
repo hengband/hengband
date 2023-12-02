@@ -74,6 +74,7 @@ public:
     bool refuse_enchant_weapon() const;
     std::string explain_activation() const;
     bool is_convertible() const;
+    bool is_fuel() const;
 
 private:
     ItemKindType type_value;

@@ -490,10 +490,7 @@ bool ItemEntity::is_activatable() const
  */
 bool ItemEntity::is_fuel() const
 {
-    auto is_fuel = this->bi_key == BaseitemKey(ItemKindType::LITE, SV_LITE_TORCH);
-    is_fuel |= this->bi_key == BaseitemKey(ItemKindType::LITE, SV_LITE_LANTERN);
-    is_fuel |= this->bi_key == BaseitemKey(ItemKindType::FLASK, SV_FLASK_OIL);
-    return is_fuel;
+    return this->bi_key.is_fuel();
 }
 
 /*!

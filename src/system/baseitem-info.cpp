@@ -541,6 +541,14 @@ bool BaseitemKey::is_convertible() const
     return is_convertible;
 }
 
+bool BaseitemKey::is_fuel() const
+{
+    auto is_fuel = *this == BaseitemKey(ItemKindType::LITE, SV_LITE_TORCH);
+    is_fuel |= *this == BaseitemKey(ItemKindType::LITE, SV_LITE_LANTERN);
+    is_fuel |= *this == BaseitemKey(ItemKindType::FLASK, SV_FLASK_OIL);
+    return is_fuel;
+}
+
 bool BaseitemKey::is_mushrooms() const
 {
     if (!this->subtype_value) {
