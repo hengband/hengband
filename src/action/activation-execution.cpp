@@ -214,7 +214,7 @@ static bool activate_whistle(PlayerType *player_ptr, ae_type *ae_ptr)
         }
     }
 
-    uint16_t dummy_why;
+    short dummy_why = 0;
     ang_sort(player_ptr, who.data(), &dummy_why, who.size(), ang_sort_comp_pet, ang_sort_swap_hook);
     for (auto pet_ctr : who) {
         teleport_monster_to(player_ptr, pet_ctr, player_ptr->y, player_ptr->x, 100, TELEPORT_PASSIVE);
