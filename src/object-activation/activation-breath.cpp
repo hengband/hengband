@@ -31,13 +31,7 @@ bool activate_dragon_breath(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     const auto flags = o_ptr->get_flags();
-    std::vector<std::pair<AttributeType, std::string>> breaths;
-    for (const auto &dragon_breath : dragonbreath_info) {
-        if (flags.has(dragon_breath.flag)) {
-            breaths.push_back({ dragon_breath.type, dragon_breath.name });
-        }
-    }
-
+    const auto breaths = DragonBreaths::get_breaths(flags);
     if (breaths.empty()) {
         return false;
     }
@@ -50,9 +44,9 @@ bool activate_dragon_breath(PlayerType *player_ptr, ItemEntity *o_ptr)
         (void)SpellHex(player_ptr).stop_all_spells();
     }
 
-    const auto t = randint0(breaths.size());
-    msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), breaths[t].second.data());
-    fire_breath(player_ptr, breaths[t].first, dir, 250, 4);
+    const auto &breath = rand_choice(breaths);
+    msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), breath.second.data());
+    fire_breath(player_ptr, breath.first, dir, 250, 4);
     return true;
 }
 

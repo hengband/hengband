@@ -1067,22 +1067,5 @@ std::string ItemEntity::build_activation_description(const ActivationType &act) 
 std::string ItemEntity::build_activation_description_dragon_breath() const
 {
     const auto flags = this->get_flags();
-    std::stringstream ss;
-    ss << _("", "breathe ");
-    auto has_multi_breaths = false;
-    for (const auto &dragon_breath : dragonbreath_info) {
-        if (flags.has_not(dragon_breath.flag)) {
-            continue;
-        }
-
-        if (has_multi_breaths) {
-            ss << _("、", ", ");
-        }
-
-        ss << dragon_breath.name;
-        has_multi_breaths = true;
-    }
-
-    ss << _("のブレス(250)", " (250)");
-    return ss.str();
+    return DragonBreaths::build_description(flags);
 }
