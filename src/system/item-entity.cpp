@@ -19,7 +19,6 @@
 #include "object/tval-types.h"
 #include "smith/object-smith.h"
 #include "sv-definition/sv-lite-types.h"
-#include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-ring-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/artifact-type-definition.h"
@@ -460,7 +459,7 @@ bool ItemEntity::can_recharge() const
  */
 bool ItemEntity::is_offerable() const
 {
-    if (this->bi_key != BaseitemKey(ItemKindType::CORPSE, SV_CORPSE)) {
+    if (!this->bi_key.is_corpse()) {
         return false;
     }
 
@@ -603,10 +602,10 @@ TERM_COLOR ItemEntity::get_color() const
         return baseitems_info[flavor].x_attr;
     }
 
-    auto has_attr = !this->is_valid();
-    has_attr |= this->bi_key != BaseitemKey(ItemKindType::CORPSE, SV_CORPSE);
-    has_attr |= baseitem.x_attr != TERM_DARK;
-    if (has_attr) {
+    auto has_attr = this->is_valid();
+    has_attr &= this->bi_key.is_corpse();
+    has_attr &= baseitem.x_attr == TERM_DARK;
+    if (!has_attr) {
         return baseitem.x_attr;
     }
 

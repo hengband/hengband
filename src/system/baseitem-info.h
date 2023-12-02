@@ -77,6 +77,7 @@ public:
     bool is_fuel() const;
     bool is_lance() const;
     bool is_readable() const;
+    bool is_corpse() const;
 
 private:
     ItemKindType type_value;

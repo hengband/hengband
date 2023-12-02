@@ -563,6 +563,11 @@ bool BaseitemKey::is_readable() const
     return can_read;
 }
 
+bool BaseitemKey::is_corpse() const
+{
+    return *this == BaseitemKey(ItemKindType::CORPSE, SV_CORPSE);
+}
+
 bool BaseitemKey::is_mushrooms() const
 {
     if (!this->subtype_value) {
