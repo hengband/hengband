@@ -55,6 +55,11 @@ std::optional<int> BaseitemKey::sval() const
     return this->subtype_value;
 }
 
+bool BaseitemKey::is(ItemKindType tval) const
+{
+    return this->type_value == tval;
+}
+
 /*!
  * @brief 射撃武器に対応する矢/弾薬のベースアイテムIDを返す
  * @return 対応する矢/弾薬のベースアイテムID

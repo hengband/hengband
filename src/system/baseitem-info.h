@@ -42,6 +42,7 @@ public:
 
     ItemKindType tval() const;
     std::optional<int> sval() const;
+    bool is(ItemKindType tval) const;
 
     ItemKindType get_arrow_kind() const;
     bool is_spell_book() const;

@@ -109,6 +109,11 @@ void ItemEntity::prep(short new_bi_id)
     }
 }
 
+bool ItemEntity::is(ItemKindType tval) const
+{
+    return this->bi_key.is(tval);
+}
+
 /*!
  * @brief 武器か否かを判定する
  * @return 武器か否か
@@ -241,7 +246,7 @@ bool ItemEntity::allow_enchant_melee_weapon() const
  */
 bool ItemEntity::allow_two_hands_wielding() const
 {
-    return this->is_melee_weapon() && ((this->weight > 99) || (this->bi_key.tval() == ItemKindType::POLEARM));
+    return this->is_melee_weapon() && ((this->weight > 99) || this->is(ItemKindType::POLEARM));
 }
 
 /*!
@@ -259,8 +264,7 @@ bool ItemEntity::is_ammo() const
  */
 bool ItemEntity::is_convertible() const
 {
-    const auto tval = this->bi_key.tval();
-    auto is_convertible = (tval == ItemKindType::JUNK) || (tval == ItemKindType::SKELETON);
+    auto is_convertible = this->is(ItemKindType::JUNK) || this->is(ItemKindType::SKELETON);
     is_convertible |= this->bi_key == BaseitemKey(ItemKindType::CORPSE, SV_SKELETON);
     return is_convertible;
 }
@@ -412,7 +416,7 @@ bool ItemEntity::is_tried() const
  */
 bool ItemEntity::is_potion() const
 {
-    return this->bi_key.tval() == ItemKindType::POTION;
+    return this->bi_key.is(ItemKindType::POTION);
 }
 
 /*!
@@ -421,9 +425,8 @@ bool ItemEntity::is_potion() const
  */
 bool ItemEntity::is_readable() const
 {
-    const auto tval = this->bi_key.tval();
-    auto can_read = tval == ItemKindType::SCROLL;
-    can_read |= tval == ItemKindType::PARCHMENT;
+    auto can_read = this->is(ItemKindType::SCROLL);
+    can_read |= this->is(ItemKindType::PARCHMENT);
     can_read |= this->is_specific_artifact(FixedArtifactId::GHB);
     can_read |= this->is_specific_artifact(FixedArtifactId::POWER);
     return can_read;
@@ -435,8 +438,7 @@ bool ItemEntity::is_readable() const
  */
 bool ItemEntity::can_refill_lantern() const
 {
-    const auto tval = this->bi_key.tval();
-    return (tval == ItemKindType::FLASK) || (this->bi_key == BaseitemKey(ItemKindType::LITE, SV_LITE_LANTERN));
+    return this->is(ItemKindType::FLASK) || (this->bi_key == BaseitemKey(ItemKindType::LITE, SV_LITE_LANTERN));
 }
 
 /*!
@@ -1007,7 +1009,7 @@ void ItemEntity::mark_as_tried()
  */
 void ItemEntity::modify_ego_lite_flags(TrFlags &flags) const
 {
-    if (this->bi_key.tval() != ItemKindType::LITE) {
+    if (!this->bi_key.is(ItemKindType::LITE)) {
         return;
     }
 

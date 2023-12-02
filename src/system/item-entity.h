@@ -77,6 +77,7 @@ public:
     void wipe();
     void copy_from(const ItemEntity *j_ptr);
     void prep(short new_bi_id);
+    bool is(ItemKindType tval) const;
     bool is_weapon() const;
     bool is_weapon_ammo() const;
     bool is_weapon_armour_ammo() const;
