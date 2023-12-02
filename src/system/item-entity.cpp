@@ -907,16 +907,7 @@ std::string ItemEntity::explain_activation() const
         return this->build_activation_description();
     }
 
-    const auto tval = this->bi_key.tval();
-    if (tval == ItemKindType::WHISTLE) {
-        return _("ペット呼び寄せ : 100+d100ターン毎", "call pet every 100+d100 turns");
-    }
-
-    if (tval == ItemKindType::CAPTURE) {
-        return _("モンスターを捕える、又は解放する。", "captures or releases a monster.");
-    }
-
-    return _("何も起きない", "Nothing");
+    return this->bi_key.explain_activation();
 }
 
 std::string ItemEntity::build_timeout_description(const activation_type &act) const

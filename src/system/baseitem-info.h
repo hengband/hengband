@@ -72,6 +72,7 @@ public:
     bool is_armour() const;
     bool is_cross_bow() const;
     bool refuse_enchant_weapon() const;
+    std::string explain_activation() const;
 
 private:
     ItemKindType type_value;

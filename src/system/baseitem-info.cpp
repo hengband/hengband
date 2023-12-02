@@ -517,6 +517,22 @@ bool BaseitemKey::refuse_enchant_weapon() const
     return *this == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE);
 }
 
+/*!
+ * @brief ベースアイテムが発動効果を持つ時、その記述を生成する
+ * @return 発動効果
+ */
+std::string BaseitemKey::explain_activation() const
+{
+    switch (this->type_value) {
+    case ItemKindType::WHISTLE:
+        return _("ペット呼び寄せ : 100+d100ターン毎", "call pet every 100+d100 turns");
+    case ItemKindType::CAPTURE:
+        return _("モンスターを捕える、又は解放する。", "captures or releases a monster.");
+    default:
+        return _("何も起きない", "Nothing");
+    }
+}
+
 bool BaseitemKey::is_mushrooms() const
 {
     if (!this->subtype_value) {
