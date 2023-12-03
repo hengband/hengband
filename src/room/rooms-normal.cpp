@@ -861,40 +861,35 @@ bool build_type11(PlayerType *player_ptr, dun_data_type *dd_ptr)
  */
 bool build_type12(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
-    POSITION rad, x, y, x0, y0;
-    int light = false;
-    bool emptyflag = true;
-
     /* Make a random metric */
-    POSITION h1, h2, h3, h4;
-    h1 = randint1(32) - 16;
-    h2 = randint1(16);
-    h3 = randint1(32);
-    h4 = randint1(32) - 16;
+    const auto h1 = randint1(32) - 16;
+    const auto h2 = randint1(16);
+    const auto h3 = randint1(32);
+    const auto h4 = randint1(32) - 16;
 
     /* Occasional light */
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((randint1(floor_ptr->dun_level) <= 5) && floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS)) {
-        light = true;
-    }
-
-    rad = randint1(9);
+    const auto should_brighten = (randint1(floor_ptr->dun_level) <= 5) && floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS);
+    const auto rad = randint1(9);
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
-    if (!find_space(player_ptr, dd_ptr, &y0, &x0, rad * 2 + 3, rad * 2 + 3)) {
+    int yval;
+    int xval;
+    const auto is_pos_found = find_space(player_ptr, dd_ptr, &yval, &xval, rad * 2 + 3, rad * 2 + 3);
+    if (!is_pos_found) {
         return false;
     }
 
     /* Make floor */
-    for (x = x0 - rad; x <= x0 + rad; x++) {
-        for (y = y0 - rad; y <= y0 + rad; y++) {
+    for (auto x = xval - rad; x <= xval + rad; x++) {
+        for (auto y = yval - rad; y <= yval + rad; y++) {
             /* clear room flag */
             floor_ptr->grid_array[y][x].info &= ~(CAVE_ROOM);
 
-            if (dist2(y0, x0, y, x, h1, h2, h3, h4) <= rad - 1) {
+            if (dist2(yval, xval, y, x, h1, h2, h3, h4) <= rad - 1) {
                 /* inside - so is floor */
                 place_bold(player_ptr, y, x, GB_FLOOR);
-            } else if (distance(y0, x0, y, x) < 3) {
+            } else if (distance(yval, xval, y, x) < 3) {
                 place_bold(player_ptr, y, x, GB_FLOOR);
             } else {
                 /* make granite outside so on_defeat_arena_monster works */
@@ -902,37 +897,42 @@ bool build_type12(PlayerType *player_ptr, dun_data_type *dd_ptr)
             }
 
             /* proper boundary for on_defeat_arena_monster */
-            if (((y + rad) == y0) || ((y - rad) == y0) || ((x + rad) == x0) || ((x - rad) == x0)) {
+            if (((y + rad) == yval) || ((y - rad) == yval) || ((x + rad) == xval) || ((x - rad) == xval)) {
                 place_bold(player_ptr, y, x, GB_EXTRA);
             }
         }
     }
 
     /* Find visible outer walls and set to be FEAT_OUTER */
-    add_outer_wall(player_ptr, x0, y0, light, x0 - rad - 1, y0 - rad - 1, x0 + rad + 1, y0 + rad + 1);
+    add_outer_wall(player_ptr, xval, yval, should_brighten, xval - rad - 1, yval - rad - 1, xval + rad + 1, yval + rad + 1);
 
     /* Check to see if there is room for an inner vault */
-    for (x = x0 - 2; x <= x0 + 2; x++) {
-        for (y = y0 - 2; y <= y0 + 2; y++) {
-            if (!floor_ptr->grid_array[y][x].is_floor()) {
-                /* Wall in the way */
-                emptyflag = false;
+    auto is_empty = true;
+    for (auto x = xval - 2; x <= xval + 2; x++) {
+        if (!is_empty) {
+            break;
+        }
+
+        for (auto y = yval - 2; y <= yval + 2; y++) {
+            if (!floor_ptr->get_grid({ y, x }).is_floor()) {
+                is_empty = false;
+                break;
             }
         }
     }
 
-    if (emptyflag && one_in_(2)) {
+    if (is_empty && one_in_(2)) {
         /* Build the vault */
-        build_small_room(player_ptr, x0, y0);
+        build_small_room(player_ptr, xval, yval);
 
         /* Place a treasure in the vault */
-        place_object(player_ptr, y0, x0, 0L);
+        place_object(player_ptr, yval, xval, 0);
 
         /* Let's guard the treasure well */
-        vault_monsters(player_ptr, y0, x0, randint0(2) + 3);
+        vault_monsters(player_ptr, yval, xval, randint0(2) + 3);
 
         /* Traps naturally */
-        vault_traps(floor_ptr, y0, x0, 4, 4, randint0(3) + 2);
+        vault_traps(floor_ptr, yval, xval, 4, 4, randint0(3) + 2);
     }
 
     return true;
