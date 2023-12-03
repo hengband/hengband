@@ -21,28 +21,23 @@
  */
 bool build_type1(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
-    POSITION y, x, y2, x2, yval, xval;
-    POSITION y1, x1, xsize, ysize;
-
-    bool light;
-
-    Grid *g_ptr;
-
     auto *floor_ptr = player_ptr->current_floor_ptr;
     const auto &dungeon = floor_ptr->get_dungeon_definition();
-    bool curtain = (dungeon.flags.has(DungeonFeatureType::CURTAIN)) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 48 : 512);
+    const auto is_curtain = dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 48 : 512);
 
     /* Pick a room size */
-    y1 = randint1(4);
-    x1 = randint1(11);
-    y2 = randint1(3);
-    x2 = randint1(11);
-
-    xsize = x1 + x2 + 1;
-    ysize = y1 + y2 + 1;
+    auto y1 = randint1(4);
+    auto x1 = randint1(11);
+    auto y2 = randint1(3);
+    auto x2 = randint1(11);
+    auto xsize = x1 + x2 + 1;
+    auto ysize = y1 + y2 + 1;
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
-    if (!find_space(player_ptr, dd_ptr, &yval, &xval, ysize + 2, xsize + 2)) {
+    int yval;
+    int xval;
+    auto is_pos_found = find_space(player_ptr, dd_ptr, &yval, &xval, ysize + 2, xsize + 2);
+    if (!is_pos_found) {
         /* Limit to the minimum room size, and retry */
         y1 = 1;
         x1 = 1;
@@ -53,13 +48,14 @@ bool build_type1(PlayerType *player_ptr, dun_data_type *dd_ptr)
         ysize = y1 + y2 + 1;
 
         /* Find and reserve some space in the dungeon.  Get center of room. */
-        if (!find_space(player_ptr, dd_ptr, &yval, &xval, ysize + 2, xsize + 2)) {
+        is_pos_found = find_space(player_ptr, dd_ptr, &yval, &xval, ysize + 2, xsize + 2);
+        if (!is_pos_found) {
             return false;
         }
     }
 
     /* Choose lite or dark */
-    light = ((floor_ptr->dun_level <= randint1(25)) && dungeon.flags.has_not(DungeonFeatureType::DARKNESS));
+    const auto should_brighten = ((floor_ptr->dun_level <= randint1(25)) && dungeon.flags.has_not(DungeonFeatureType::DARKNESS));
 
     /* Get corner values */
     y1 = yval - ysize / 2;
@@ -68,57 +64,57 @@ bool build_type1(PlayerType *player_ptr, dun_data_type *dd_ptr)
     x2 = xval + (xsize - 1) / 2;
 
     /* Place a full floor under the room */
-    for (y = y1 - 1; y <= y2 + 1; y++) {
-        for (x = x1 - 1; x <= x2 + 1; x++) {
-            g_ptr = &floor_ptr->grid_array[y][x];
-            place_grid(player_ptr, g_ptr, GB_FLOOR);
-            g_ptr->info |= (CAVE_ROOM);
-            if (light) {
-                g_ptr->info |= (CAVE_GLOW);
+    for (auto y = y1 - 1; y <= y2 + 1; y++) {
+        for (auto x = x1 - 1; x <= x2 + 1; x++) {
+            auto &grid = floor_ptr->get_grid({ y, x });
+            place_grid(player_ptr, &grid, GB_FLOOR);
+            grid.info |= (CAVE_ROOM);
+            if (should_brighten) {
+                grid.info |= (CAVE_GLOW);
             }
         }
     }
 
     /* Walls around the room */
-    for (y = y1 - 1; y <= y2 + 1; y++) {
-        g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
-        g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
+    for (auto y = y1 - 1; y <= y2 + 1; y++) {
+        auto &grid1 = floor_ptr->get_grid({ y, x1 - 1 });
+        place_grid(player_ptr, &grid1, GB_OUTER);
+        auto &grid2 = floor_ptr->get_grid({ y, x2 + 1 });
+        place_grid(player_ptr, &grid2, GB_OUTER);
     }
-    for (x = x1 - 1; x <= x2 + 1; x++) {
-        g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
-        g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
+    for (auto x = x1 - 1; x <= x2 + 1; x++) {
+        auto &grid1 = floor_ptr->get_grid({ y1 - 1, x });
+        place_grid(player_ptr, &grid1, GB_OUTER);
+        auto &grid2 = floor_ptr->get_grid({ y2 + 1, x });
+        place_grid(player_ptr, &grid2, GB_OUTER);
     }
 
     /* Hack -- Occasional curtained room */
-    if (curtain && (y2 - y1 > 2) && (x2 - x1 > 2)) {
-        for (y = y1; y <= y2; y++) {
-            g_ptr = &floor_ptr->grid_array[y][x1];
-            g_ptr->feat = feat_door[DOOR_CURTAIN].closed;
-            g_ptr->info &= ~(CAVE_MASK);
-            g_ptr = &floor_ptr->grid_array[y][x2];
-            g_ptr->feat = feat_door[DOOR_CURTAIN].closed;
-            g_ptr->info &= ~(CAVE_MASK);
+    if (is_curtain && (y2 - y1 > 2) && (x2 - x1 > 2)) {
+        for (auto y = y1; y <= y2; y++) {
+            auto &grid1 = floor_ptr->get_grid({ y, x1 });
+            grid1.feat = feat_door[DOOR_CURTAIN].closed;
+            grid1.info &= ~(CAVE_MASK);
+            auto &grid2 = floor_ptr->get_grid({ y, x2 });
+            grid2.feat = feat_door[DOOR_CURTAIN].closed;
+            grid2.info &= ~(CAVE_MASK);
         }
-        for (x = x1; x <= x2; x++) {
-            g_ptr = &floor_ptr->grid_array[y1][x];
-            g_ptr->feat = feat_door[DOOR_CURTAIN].closed;
-            g_ptr->info &= ~(CAVE_MASK);
-            g_ptr = &floor_ptr->grid_array[y2][x];
-            g_ptr->feat = feat_door[DOOR_CURTAIN].closed;
-            g_ptr->info &= ~(CAVE_MASK);
+        for (auto x = x1; x <= x2; x++) {
+            auto &grid1 = floor_ptr->get_grid({ y1, x });
+            grid1.feat = feat_door[DOOR_CURTAIN].closed;
+            grid1.info &= ~(CAVE_MASK);
+            auto &grid2 = floor_ptr->get_grid({ y2, x });
+            grid2.feat = feat_door[DOOR_CURTAIN].closed;
+            grid2.info &= ~(CAVE_MASK);
         }
     }
 
     /* Hack -- Occasional pillar room */
     if (one_in_(20)) {
-        for (y = y1; y <= y2; y += 2) {
-            for (x = x1; x <= x2; x += 2) {
-                g_ptr = &floor_ptr->grid_array[y][x];
-                place_grid(player_ptr, g_ptr, GB_INNER);
+        for (auto y = y1; y <= y2; y += 2) {
+            for (auto x = x1; x <= x2; x += 2) {
+                auto &grid = floor_ptr->get_grid({ y, x });
+                place_grid(player_ptr, &grid, GB_INNER);
             }
         }
     }
@@ -126,45 +122,33 @@ bool build_type1(PlayerType *player_ptr, dun_data_type *dd_ptr)
     /* Hack -- Occasional room with four pillars */
     else if (one_in_(20)) {
         if ((y1 + 4 < y2) && (x1 + 4 < x2)) {
-            g_ptr = &floor_ptr->grid_array[y1 + 1][x1 + 1];
-            place_grid(player_ptr, g_ptr, GB_INNER);
-
-            g_ptr = &floor_ptr->grid_array[y1 + 1][x2 - 1];
-            place_grid(player_ptr, g_ptr, GB_INNER);
-
-            g_ptr = &floor_ptr->grid_array[y2 - 1][x1 + 1];
-            place_grid(player_ptr, g_ptr, GB_INNER);
-
-            g_ptr = &floor_ptr->grid_array[y2 - 1][x2 - 1];
-            place_grid(player_ptr, g_ptr, GB_INNER);
+            place_grid(player_ptr, &floor_ptr->get_grid({ y1 + 1, x1 + 1 }), GB_INNER);
+            place_grid(player_ptr, &floor_ptr->get_grid({ y1 + 1, x2 - 1 }), GB_INNER);
+            place_grid(player_ptr, &floor_ptr->get_grid({ y2 - 1, x1 + 1 }), GB_INNER);
+            place_grid(player_ptr, &floor_ptr->get_grid({ y2 - 1, x2 - 1 }), GB_INNER);
         }
     }
 
     /* Hack -- Occasional ragged-edge room */
     else if (one_in_(50)) {
-        for (y = y1 + 2; y <= y2 - 2; y += 2) {
-            g_ptr = &floor_ptr->grid_array[y][x1];
-            place_grid(player_ptr, g_ptr, GB_INNER);
-            g_ptr = &floor_ptr->grid_array[y][x2];
-            place_grid(player_ptr, g_ptr, GB_INNER);
+        for (auto y = y1 + 2; y <= y2 - 2; y += 2) {
+            place_grid(player_ptr, &floor_ptr->get_grid({ y, x1 }), GB_INNER);
+            place_grid(player_ptr, &floor_ptr->get_grid({ y, x2 }), GB_INNER);
         }
-        for (x = x1 + 2; x <= x2 - 2; x += 2) {
-            g_ptr = &floor_ptr->grid_array[y1][x];
-            place_grid(player_ptr, g_ptr, GB_INNER);
-            g_ptr = &floor_ptr->grid_array[y2][x];
-            place_grid(player_ptr, g_ptr, GB_INNER);
+        for (auto x = x1 + 2; x <= x2 - 2; x += 2) {
+            place_grid(player_ptr, &floor_ptr->get_grid({ y1, x }), GB_INNER);
+            place_grid(player_ptr, &floor_ptr->get_grid({ y2, x }), GB_INNER);
         }
     }
     /* Hack -- Occasional divided room */
     else if (one_in_(50)) {
-        bool curtain2 = (dungeon.flags.has(DungeonFeatureType::CURTAIN)) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 2 : 128);
-
+        const auto should_close_curtain = (dungeon.flags.has(DungeonFeatureType::CURTAIN)) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 2 : 128);
         if (randint1(100) < 50) {
             /* Horizontal wall */
-            for (x = x1; x <= x2; x++) {
+            for (auto x = x1; x <= x2; x++) {
                 place_bold(player_ptr, yval, x, GB_INNER);
-                if (curtain2) {
-                    floor_ptr->grid_array[yval][x].feat = feat_door[DOOR_CURTAIN].closed;
+                if (should_close_curtain) {
+                    floor_ptr->get_grid({ yval, x }).feat = feat_door[DOOR_CURTAIN].closed;
                 }
             }
 
@@ -173,10 +157,10 @@ bool build_type1(PlayerType *player_ptr, dun_data_type *dd_ptr)
             place_bold(player_ptr, yval, x2 + 1, GB_SOLID);
         } else {
             /* Vertical wall */
-            for (y = y1; y <= y2; y++) {
+            for (auto y = y1; y <= y2; y++) {
                 place_bold(player_ptr, y, xval, GB_INNER);
-                if (curtain2) {
-                    floor_ptr->grid_array[y][xval].feat = feat_door[DOOR_CURTAIN].closed;
+                if (should_close_curtain) {
+                    floor_ptr->get_grid({ y, xval }).feat = feat_door[DOOR_CURTAIN].closed;
                 }
             }
 
@@ -186,8 +170,8 @@ bool build_type1(PlayerType *player_ptr, dun_data_type *dd_ptr)
         }
 
         place_random_door(player_ptr, yval, xval, true);
-        if (curtain2) {
-            floor_ptr->grid_array[yval][xval].feat = feat_door[DOOR_CURTAIN].closed;
+        if (should_close_curtain) {
+            floor_ptr->get_grid({ yval, xval }).feat = feat_door[DOOR_CURTAIN].closed;
         }
     }
 
