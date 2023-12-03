@@ -819,29 +819,26 @@ bool build_type4(PlayerType *player_ptr, dun_data_type *dd_ptr)
  */
 bool build_type11(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
-    POSITION rad, x, y, x0, y0;
-    int light = false;
-
     /* Occasional light */
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((randint1(floor_ptr->dun_level) <= 15) && floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS)) {
-        light = true;
-    }
-
-    rad = randint0(9);
+    const auto should_brighten = (randint1(floor_ptr->dun_level) <= 15) && floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS);
+    const auto rad = randint0(9);
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
-    if (!find_space(player_ptr, dd_ptr, &y0, &x0, rad * 2 + 1, rad * 2 + 1)) {
+    int yval;
+    int xval;
+    const auto is_pos_found = find_space(player_ptr, dd_ptr, &yval, &xval, rad * 2 + 1, rad * 2 + 1);
+    if (!is_pos_found) {
         return false;
     }
 
     /* Make circular floor */
-    for (x = x0 - rad; x <= x0 + rad; x++) {
-        for (y = y0 - rad; y <= y0 + rad; y++) {
-            if (distance(y0, x0, y, x) <= rad - 1) {
+    for (auto x = xval - rad; x <= xval + rad; x++) {
+        for (auto y = yval - rad; y <= yval + rad; y++) {
+            if (distance(yval, xval, y, x) <= rad - 1) {
                 /* inside- so is floor */
                 place_bold(player_ptr, y, x, GB_FLOOR);
-            } else if (distance(y0, x0, y, x) <= rad + 1) {
+            } else if (distance(yval, xval, y, x) <= rad + 1) {
                 /* make granite outside so on_defeat_arena_monster works */
                 place_bold(player_ptr, y, x, GB_EXTRA);
             }
@@ -849,8 +846,7 @@ bool build_type11(PlayerType *player_ptr, dun_data_type *dd_ptr)
     }
 
     /* Find visible outer walls and set to be FEAT_OUTER */
-    add_outer_wall(player_ptr, x0, y0, light, x0 - rad, y0 - rad, x0 + rad, y0 + rad);
-
+    add_outer_wall(player_ptr, xval, yval, should_brighten, xval - rad, yval - rad, xval + rad, yval + rad);
     return true;
 }
 
