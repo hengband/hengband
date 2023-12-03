@@ -284,109 +284,96 @@ bool build_type2(PlayerType *player_ptr, dun_data_type *dd_ptr)
  */
 bool build_type3(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
-    POSITION y, x, dy, dx, wy, wx;
-    POSITION y1a, x1a, y2a, x2a;
-    POSITION y1b, x1b, y2b, x2b;
-    POSITION yval, xval;
-    bool light;
-    Grid *g_ptr;
-
     /* Find and reserve some space in the dungeon.  Get center of room. */
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25)) {
+    int yval;
+    int xval;
+    const auto is_pos_found = find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25);
+    if (!is_pos_found) {
         return false;
     }
 
     /* Choose lite or dark */
     const auto &dungeon = floor_ptr->get_dungeon_definition();
-    light = ((floor_ptr->dun_level <= randint1(25)) && dungeon.flags.has_not(DungeonFeatureType::DARKNESS));
+    const auto should_brighten = ((floor_ptr->dun_level <= randint1(25)) && dungeon.flags.has_not(DungeonFeatureType::DARKNESS));
 
     /* For now, always 3x3 */
-    wx = wy = 1;
+    auto wx = 1;
+    auto wy = 1;
 
     /* Pick max vertical size (at most 4) */
-    dy = rand_range(3, 4);
+    auto dy = rand_range(3, 4);
 
     /* Pick max horizontal size (at most 15) */
-    dx = rand_range(3, 11);
+    auto dx = rand_range(3, 11);
 
     /* Determine extents of the north/south room */
-    y1a = yval - dy;
-    y2a = yval + dy;
-    x1a = xval - wx;
-    x2a = xval + wx;
+    auto y1a = yval - dy;
+    auto y2a = yval + dy;
+    auto x1a = xval - wx;
+    auto x2a = xval + wx;
 
     /* Determine extents of the east/west room */
-    y1b = yval - wy;
-    y2b = yval + wy;
-    x1b = xval - dx;
-    x2b = xval + dx;
+    auto y1b = yval - wy;
+    auto y2b = yval + wy;
+    auto x1b = xval - dx;
+    auto x2b = xval + dx;
 
     /* Place a full floor for room "a" */
-    for (y = y1a - 1; y <= y2a + 1; y++) {
-        for (x = x1a - 1; x <= x2a + 1; x++) {
-            g_ptr = &floor_ptr->grid_array[y][x];
-            place_grid(player_ptr, g_ptr, GB_FLOOR);
-            g_ptr->info |= (CAVE_ROOM);
-            if (light) {
-                g_ptr->info |= (CAVE_GLOW);
+    for (auto y = y1a - 1; y <= y2a + 1; y++) {
+        for (auto x = x1a - 1; x <= x2a + 1; x++) {
+            auto &grid = floor_ptr->get_grid({ y, x });
+            place_grid(player_ptr, &grid, GB_FLOOR);
+            grid.info |= (CAVE_ROOM);
+            if (should_brighten) {
+                grid.info |= (CAVE_GLOW);
             }
         }
     }
 
     /* Place a full floor for room "b" */
-    for (y = y1b - 1; y <= y2b + 1; y++) {
-        for (x = x1b - 1; x <= x2b + 1; x++) {
-            g_ptr = &floor_ptr->grid_array[y][x];
-            place_grid(player_ptr, g_ptr, GB_FLOOR);
-            g_ptr->info |= (CAVE_ROOM);
-            if (light) {
-                g_ptr->info |= (CAVE_GLOW);
+    for (auto y = y1b - 1; y <= y2b + 1; y++) {
+        for (auto x = x1b - 1; x <= x2b + 1; x++) {
+            auto &grid = floor_ptr->get_grid({ y, x });
+            place_grid(player_ptr, &grid, GB_FLOOR);
+            grid.info |= (CAVE_ROOM);
+            if (should_brighten) {
+                grid.info |= (CAVE_GLOW);
             }
         }
     }
 
     /* Place the walls around room "a" */
-    for (y = y1a - 1; y <= y2a + 1; y++) {
-        g_ptr = &floor_ptr->grid_array[y][x1a - 1];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
-        g_ptr = &floor_ptr->grid_array[y][x2a + 1];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
+    for (auto y = y1a - 1; y <= y2a + 1; y++) {
+        place_grid(player_ptr, &floor_ptr->get_grid({ y, x1a - 1 }), GB_OUTER);
+        place_grid(player_ptr, &floor_ptr->get_grid({ y, x2a + 1 }), GB_OUTER);
     }
-    for (x = x1a - 1; x <= x2a + 1; x++) {
-        g_ptr = &floor_ptr->grid_array[y1a - 1][x];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
-        g_ptr = &floor_ptr->grid_array[y2a + 1][x];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
+    for (auto x = x1a - 1; x <= x2a + 1; x++) {
+        place_grid(player_ptr, &floor_ptr->get_grid({ y1a - 1, x }), GB_OUTER);
+        place_grid(player_ptr, &floor_ptr->get_grid({ y2a + 1, x }), GB_OUTER);
     }
 
     /* Place the walls around room "b" */
-    for (y = y1b - 1; y <= y2b + 1; y++) {
-        g_ptr = &floor_ptr->grid_array[y][x1b - 1];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
-        g_ptr = &floor_ptr->grid_array[y][x2b + 1];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
+    for (auto y = y1b - 1; y <= y2b + 1; y++) {
+        place_grid(player_ptr, &floor_ptr->get_grid({ y, x1b - 1 }), GB_OUTER);
+        place_grid(player_ptr, &floor_ptr->get_grid({ y, x2b + 1 }), GB_OUTER);
     }
-    for (x = x1b - 1; x <= x2b + 1; x++) {
-        g_ptr = &floor_ptr->grid_array[y1b - 1][x];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
-        g_ptr = &floor_ptr->grid_array[y2b + 1][x];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
+    for (auto x = x1b - 1; x <= x2b + 1; x++) {
+        place_grid(player_ptr, &floor_ptr->get_grid({ y1b - 1, x }), GB_OUTER);
+        place_grid(player_ptr, &floor_ptr->get_grid({ y2b + 1, x }), GB_OUTER);
     }
 
     /* Replace the floor for room "a" */
-    for (y = y1a; y <= y2a; y++) {
-        for (x = x1a; x <= x2a; x++) {
-            g_ptr = &floor_ptr->grid_array[y][x];
-            place_grid(player_ptr, g_ptr, GB_FLOOR);
+    for (auto y = y1a; y <= y2a; y++) {
+        for (auto x = x1a; x <= x2a; x++) {
+            place_grid(player_ptr, &floor_ptr->get_grid({ y, x }), GB_FLOOR);
         }
     }
 
     /* Replace the floor for room "b" */
-    for (y = y1b; y <= y2b; y++) {
-        for (x = x1b; x <= x2b; x++) {
-            g_ptr = &floor_ptr->grid_array[y][x];
-            place_grid(player_ptr, g_ptr, GB_FLOOR);
+    for (auto y = y1b; y <= y2b; y++) {
+        for (auto x = x1b; x <= x2b; x++) {
+            place_grid(player_ptr, &floor_ptr->get_grid({ y, x }), GB_FLOOR);
         }
     }
 
@@ -394,10 +381,9 @@ bool build_type3(PlayerType *player_ptr, dun_data_type *dd_ptr)
     switch (randint0(4)) {
         /* Large solid middle pillar */
     case 1: {
-        for (y = y1b; y <= y2b; y++) {
-            for (x = x1a; x <= x2a; x++) {
-                g_ptr = &floor_ptr->grid_array[y][x];
-                place_grid(player_ptr, g_ptr, GB_INNER);
+        for (auto y = y1b; y <= y2b; y++) {
+            for (auto x = x1a; x <= x2a; x++) {
+                place_grid(player_ptr, &floor_ptr->get_grid({ y, x }), GB_INNER);
             }
         }
         break;
@@ -406,17 +392,13 @@ bool build_type3(PlayerType *player_ptr, dun_data_type *dd_ptr)
     /* Inner treasure vault */
     case 2: {
         /* Build the vault */
-        for (y = y1b; y <= y2b; y++) {
-            g_ptr = &floor_ptr->grid_array[y][x1a];
-            place_grid(player_ptr, g_ptr, GB_INNER);
-            g_ptr = &floor_ptr->grid_array[y][x2a];
-            place_grid(player_ptr, g_ptr, GB_INNER);
+        for (auto y = y1b; y <= y2b; y++) {
+            place_grid(player_ptr, &floor_ptr->get_grid({ y, x1a }), GB_INNER);
+            place_grid(player_ptr, &floor_ptr->get_grid({ y, x2a }), GB_INNER);
         }
-        for (x = x1a; x <= x2a; x++) {
-            g_ptr = &floor_ptr->grid_array[y1b][x];
-            place_grid(player_ptr, g_ptr, GB_INNER);
-            g_ptr = &floor_ptr->grid_array[y2b][x];
-            place_grid(player_ptr, g_ptr, GB_INNER);
+        for (auto x = x1a; x <= x2a; x++) {
+            place_grid(player_ptr, &floor_ptr->get_grid({ y1b, x }), GB_INNER);
+            place_grid(player_ptr, &floor_ptr->get_grid({ y1b, x }), GB_INNER);
         }
 
         /* Place a secret door on the inner room */
@@ -436,7 +418,7 @@ bool build_type3(PlayerType *player_ptr, dun_data_type *dd_ptr)
         }
 
         /* Place a treasure in the vault */
-        place_object(player_ptr, yval, xval, 0L);
+        place_object(player_ptr, yval, xval, 0);
 
         /* Let's guard the treasure well */
         vault_monsters(player_ptr, yval, xval, randint0(2) + 3);
@@ -452,25 +434,23 @@ bool build_type3(PlayerType *player_ptr, dun_data_type *dd_ptr)
         /* Occasionally pinch the center shut */
         if (one_in_(3)) {
             /* Pinch the east/west sides */
-            for (y = y1b; y <= y2b; y++) {
+            for (auto y = y1b; y <= y2b; y++) {
                 if (y == yval) {
                     continue;
                 }
-                g_ptr = &floor_ptr->grid_array[y][x1a - 1];
-                place_grid(player_ptr, g_ptr, GB_INNER);
-                g_ptr = &floor_ptr->grid_array[y][x2a + 1];
-                place_grid(player_ptr, g_ptr, GB_INNER);
+
+                place_grid(player_ptr, &floor_ptr->get_grid({ y, x1a - 1 }), GB_INNER);
+                place_grid(player_ptr, &floor_ptr->get_grid({ y, x2a + 1 }), GB_INNER);
             }
 
             /* Pinch the north/south sides */
-            for (x = x1a; x <= x2a; x++) {
+            for (auto x = x1a; x <= x2a; x++) {
                 if (x == xval) {
                     continue;
                 }
-                g_ptr = &floor_ptr->grid_array[y1b - 1][x];
-                place_grid(player_ptr, g_ptr, GB_INNER);
-                g_ptr = &floor_ptr->grid_array[y2b + 1][x];
-                place_grid(player_ptr, g_ptr, GB_INNER);
+
+                place_grid(player_ptr, &floor_ptr->grid_array[y1b - 1][x], GB_INNER);
+                place_grid(player_ptr, &floor_ptr->grid_array[y2b + 1][x], GB_INNER);
             }
 
             /* Sometimes shut using secret doors */
@@ -488,22 +468,16 @@ bool build_type3(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
         /* Occasionally put a "plus" in the center */
         else if (one_in_(3)) {
-            g_ptr = &floor_ptr->grid_array[yval][xval];
-            place_grid(player_ptr, g_ptr, GB_INNER);
-            g_ptr = &floor_ptr->grid_array[y1b][xval];
-            place_grid(player_ptr, g_ptr, GB_INNER);
-            g_ptr = &floor_ptr->grid_array[y2b][xval];
-            place_grid(player_ptr, g_ptr, GB_INNER);
-            g_ptr = &floor_ptr->grid_array[yval][x1a];
-            place_grid(player_ptr, g_ptr, GB_INNER);
-            g_ptr = &floor_ptr->grid_array[yval][x2a];
-            place_grid(player_ptr, g_ptr, GB_INNER);
+            place_grid(player_ptr, &floor_ptr->get_grid({ yval, xval }), GB_INNER);
+            place_grid(player_ptr, &floor_ptr->get_grid({ y1b, xval }), GB_INNER);
+            place_grid(player_ptr, &floor_ptr->get_grid({ y2b, xval }), GB_INNER);
+            place_grid(player_ptr, &floor_ptr->get_grid({ yval, x1a }), GB_INNER);
+            place_grid(player_ptr, &floor_ptr->get_grid({ yval, x2a }), GB_INNER);
         }
 
         /* Occasionally put a pillar in the center */
         else if (one_in_(3)) {
-            g_ptr = &floor_ptr->grid_array[yval][xval];
-            place_grid(player_ptr, g_ptr, GB_INNER);
+            place_grid(player_ptr, &floor_ptr->get_grid({ yval, xval }), GB_INNER);
         }
 
         break;
