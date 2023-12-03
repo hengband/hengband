@@ -500,71 +500,60 @@ bool build_type3(PlayerType *player_ptr, dun_data_type *dd_ptr)
  */
 bool build_type4(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
-    POSITION y, x, y1, x1;
-    POSITION y2, x2, tmp, yval, xval;
-    bool light;
-    Grid *g_ptr;
-
     /* Find and reserve some space in the dungeon.  Get center of room. */
     auto *floor_ptr = player_ptr->current_floor_ptr;
     const auto &dungeon = floor_ptr->get_dungeon_definition();
-    if (!find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25)) {
+    int yval;
+    int xval;
+    const auto is_pos_found = find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25);
+    if (!is_pos_found) {
         return false;
     }
 
     /* Choose lite or dark */
-    light = ((floor_ptr->dun_level <= randint1(25)) && dungeon.flags.has_not(DungeonFeatureType::DARKNESS));
+    const auto should_brighten = ((floor_ptr->dun_level <= randint1(25)) && dungeon.flags.has_not(DungeonFeatureType::DARKNESS));
 
     /* Large room */
-    y1 = yval - 4;
-    y2 = yval + 4;
-    x1 = xval - 11;
-    x2 = xval + 11;
+    const auto y1_outer = yval - 4;
+    const auto y2_outer = yval + 4;
+    const auto x1_outer = xval - 11;
+    const auto x2_outer = xval + 11;
 
     /* Place a full floor under the room */
-    for (y = y1 - 1; y <= y2 + 1; y++) {
-        for (x = x1 - 1; x <= x2 + 1; x++) {
-            g_ptr = &floor_ptr->grid_array[y][x];
-            place_grid(player_ptr, g_ptr, GB_FLOOR);
-            g_ptr->info |= (CAVE_ROOM);
-            if (light) {
-                g_ptr->info |= (CAVE_GLOW);
+    for (auto y = y1_outer - 1; y <= y2_outer + 1; y++) {
+        for (auto x = x1_outer - 1; x <= x2_outer + 1; x++) {
+            auto &grid = floor_ptr->get_grid({ y, x });
+            place_grid(player_ptr, &grid, GB_FLOOR);
+            grid.info |= (CAVE_ROOM);
+            if (should_brighten) {
+                grid.info |= (CAVE_GLOW);
             }
         }
     }
 
     /* Outer Walls */
-    for (y = y1 - 1; y <= y2 + 1; y++) {
-        g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
-        g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
+    for (auto y = y1_outer - 1; y <= y2_outer + 1; y++) {
+        place_grid(player_ptr, &floor_ptr->get_grid({ y, x1_outer - 1 }), GB_OUTER);
+        place_grid(player_ptr, &floor_ptr->get_grid({ y, x2_outer + 1 }), GB_OUTER);
     }
-    for (x = x1 - 1; x <= x2 + 1; x++) {
-        g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
-        g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
+    for (auto x = x1_outer - 1; x <= x2_outer + 1; x++) {
+        place_grid(player_ptr, &floor_ptr->get_grid({ y1_outer - 1, x }), GB_OUTER);
+        place_grid(player_ptr, &floor_ptr->get_grid({ y2_outer + 1, x }), GB_OUTER);
     }
 
-    /* The inner room */
-    y1 = y1 + 2;
-    y2 = y2 - 2;
-    x1 = x1 + 2;
-    x2 = x2 - 2;
+    const auto y1_inner = y1_outer + 2;
+    const auto y2_inner = y2_outer - 2;
+    const auto x1_inner = x1_outer + 2;
+    const auto x2_inner = x2_outer - 2;
 
     /* The inner walls */
-    for (y = y1 - 1; y <= y2 + 1; y++) {
-        g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-        place_grid(player_ptr, g_ptr, GB_INNER);
-        g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-        place_grid(player_ptr, g_ptr, GB_INNER);
+    for (auto y = y1_inner - 1; y <= y2_inner + 1; y++) {
+        place_grid(player_ptr, &floor_ptr->get_grid({ y, x1_inner - 1 }), GB_INNER);
+        place_grid(player_ptr, &floor_ptr->get_grid({ y, x2_inner + 1 }), GB_INNER);
     }
-    for (x = x1 - 1; x <= x2 + 1; x++) {
-        g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-        place_grid(player_ptr, g_ptr, GB_INNER);
-        g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-        place_grid(player_ptr, g_ptr, GB_INNER);
+    for (auto x = x1_inner - 1; x <= x2_inner + 1; x++) {
+        place_grid(player_ptr, &floor_ptr->get_grid({ y1_inner - 1, x }), GB_INNER);
+        place_grid(player_ptr, &floor_ptr->get_grid({ y2_inner + 1, x }), GB_INNER);
     }
 
     /* Inner room variations */
@@ -574,16 +563,16 @@ bool build_type4(PlayerType *player_ptr, dun_data_type *dd_ptr)
         /* Place a secret door */
         switch (randint1(4)) {
         case 1:
-            place_secret_door(player_ptr, y1 - 1, xval, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y1_inner - 1, xval, DOOR_DEFAULT);
             break;
         case 2:
-            place_secret_door(player_ptr, y2 + 1, xval, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y2_inner + 1, xval, DOOR_DEFAULT);
             break;
         case 3:
-            place_secret_door(player_ptr, yval, x1 - 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, yval, x1_inner - 1, DOOR_DEFAULT);
             break;
         case 4:
-            place_secret_door(player_ptr, yval, x2 + 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, yval, x2_inner + 1, DOOR_DEFAULT);
             break;
         }
 
@@ -598,27 +587,27 @@ bool build_type4(PlayerType *player_ptr, dun_data_type *dd_ptr)
         /* Place a secret door */
         switch (randint1(4)) {
         case 1:
-            place_secret_door(player_ptr, y1 - 1, xval, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y1_inner - 1, xval, DOOR_DEFAULT);
             break;
         case 2:
-            place_secret_door(player_ptr, y2 + 1, xval, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y2_inner + 1, xval, DOOR_DEFAULT);
             break;
         case 3:
-            place_secret_door(player_ptr, yval, x1 - 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, yval, x1_inner - 1, DOOR_DEFAULT);
             break;
         case 4:
-            place_secret_door(player_ptr, yval, x2 + 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, yval, x2_inner + 1, DOOR_DEFAULT);
             break;
         }
 
         /* Place another inner room */
-        for (y = yval - 1; y <= yval + 1; y++) {
-            for (x = xval - 1; x <= xval + 1; x++) {
+        for (auto y = yval - 1; y <= yval + 1; y++) {
+            for (auto x = xval - 1; x <= xval + 1; x++) {
                 if ((x == xval) && (y == yval)) {
                     continue;
                 }
-                g_ptr = &floor_ptr->grid_array[y][x];
-                place_grid(player_ptr, g_ptr, GB_INNER);
+
+                place_grid(player_ptr, &floor_ptr->get_grid({ y, x }), GB_INNER);
             }
         }
 
@@ -662,38 +651,36 @@ bool build_type4(PlayerType *player_ptr, dun_data_type *dd_ptr)
         /* Place a secret door */
         switch (randint1(4)) {
         case 1:
-            place_secret_door(player_ptr, y1 - 1, xval, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y1_inner - 1, xval, DOOR_DEFAULT);
             break;
         case 2:
-            place_secret_door(player_ptr, y2 + 1, xval, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y2_inner + 1, xval, DOOR_DEFAULT);
             break;
         case 3:
-            place_secret_door(player_ptr, yval, x1 - 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, yval, x1_inner - 1, DOOR_DEFAULT);
             break;
         case 4:
-            place_secret_door(player_ptr, yval, x2 + 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, yval, x2_inner + 1, DOOR_DEFAULT);
             break;
         }
 
         /* Large Inner Pillar */
-        for (y = yval - 1; y <= yval + 1; y++) {
-            for (x = xval - 1; x <= xval + 1; x++) {
-                g_ptr = &floor_ptr->grid_array[y][x];
-                place_grid(player_ptr, g_ptr, GB_INNER);
+        for (auto y = yval - 1; y <= yval + 1; y++) {
+            for (auto x = xval - 1; x <= xval + 1; x++) {
+                place_grid(player_ptr, &floor_ptr->get_grid({ y, x }), GB_INNER);
             }
         }
 
         /* Occasionally, two more Large Inner Pillars */
         if (one_in_(2)) {
-            tmp = randint1(2);
-            for (y = yval - 1; y <= yval + 1; y++) {
-                for (x = xval - 5 - tmp; x <= xval - 3 - tmp; x++) {
-                    g_ptr = &floor_ptr->grid_array[y][x];
-                    place_grid(player_ptr, g_ptr, GB_INNER);
+            const auto tmp = randint1(2);
+            for (auto y = yval - 1; y <= yval + 1; y++) {
+                for (auto x = xval - 5 - tmp; x <= xval - 3 - tmp; x++) {
+                    place_grid(player_ptr, &floor_ptr->get_grid({ y, x }), GB_INNER);
                 }
-                for (x = xval + 3 + tmp; x <= xval + 5 + tmp; x++) {
-                    g_ptr = &floor_ptr->grid_array[y][x];
-                    place_grid(player_ptr, g_ptr, GB_INNER);
+
+                for (auto x = xval + 3 + tmp; x <= xval + 5 + tmp; x++) {
+                    place_grid(player_ptr, &floor_ptr->get_grid({ y, x }), GB_INNER);
                 }
             }
         }
@@ -705,18 +692,14 @@ bool build_type4(PlayerType *player_ptr, dun_data_type *dd_ptr)
                                 : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
             /* Long horizontal walls */
-            for (x = xval - 5; x <= xval + 5; x++) {
-                g_ptr = &floor_ptr->grid_array[yval - 1][x];
-                place_grid(player_ptr, g_ptr, GB_INNER);
-                g_ptr = &floor_ptr->grid_array[yval + 1][x];
-                place_grid(player_ptr, g_ptr, GB_INNER);
+            for (auto x = xval - 5; x <= xval + 5; x++) {
+                place_grid(player_ptr, &floor_ptr->get_grid({ yval - 1, x }), GB_INNER);
+                place_grid(player_ptr, &floor_ptr->get_grid({ yval + 1, x }), GB_INNER);
             }
 
             /* Close off the left/right edges */
-            g_ptr = &floor_ptr->grid_array[yval][xval - 5];
-            place_grid(player_ptr, g_ptr, GB_INNER);
-            g_ptr = &floor_ptr->grid_array[yval][xval + 5];
-            place_grid(player_ptr, g_ptr, GB_INNER);
+            place_grid(player_ptr, &floor_ptr->get_grid({ yval, xval - 5 }), GB_INNER);
+            place_grid(player_ptr, &floor_ptr->get_grid({ yval, xval + 5 }), GB_INNER);
 
             /* Secret doors (random top/bottom) */
             place_secret_door(player_ptr, yval - 3 + (randint1(2) * 2), xval - 3, door_type);
@@ -743,25 +726,24 @@ bool build_type4(PlayerType *player_ptr, dun_data_type *dd_ptr)
         /* Place a secret door */
         switch (randint1(4)) {
         case 1:
-            place_secret_door(player_ptr, y1 - 1, xval, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y1_inner - 1, xval, DOOR_DEFAULT);
             break;
         case 2:
-            place_secret_door(player_ptr, y2 + 1, xval, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y2_inner + 1, xval, DOOR_DEFAULT);
             break;
         case 3:
-            place_secret_door(player_ptr, yval, x1 - 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, yval, x1_inner - 1, DOOR_DEFAULT);
             break;
         case 4:
-            place_secret_door(player_ptr, yval, x2 + 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, yval, x2_inner + 1, DOOR_DEFAULT);
             break;
         }
 
         /* Maze (really a checkerboard) */
-        for (y = y1; y <= y2; y++) {
-            for (x = x1; x <= x2; x++) {
+        for (auto y = y1_inner; y <= y2_inner; y++) {
+            for (auto x = x1_inner; x <= x2_inner; x++) {
                 if (0x1 & (x + y)) {
-                    g_ptr = &floor_ptr->grid_array[y][x];
-                    place_grid(player_ptr, g_ptr, GB_INNER);
+                    place_grid(player_ptr, &floor_ptr->get_grid({ y, x }), GB_INNER);
                 }
             }
         }
@@ -787,28 +769,27 @@ bool build_type4(PlayerType *player_ptr, dun_data_type *dd_ptr)
                             : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
         /* Inner "cross" */
-        for (y = y1; y <= y2; y++) {
-            g_ptr = &floor_ptr->grid_array[y][xval];
-            place_grid(player_ptr, g_ptr, GB_INNER);
+        for (auto y = y1_inner; y <= y2_inner; y++) {
+            place_grid(player_ptr, &floor_ptr->get_grid({ y, xval }), GB_INNER);
         }
-        for (x = x1; x <= x2; x++) {
-            g_ptr = &floor_ptr->grid_array[yval][x];
-            place_grid(player_ptr, g_ptr, GB_INNER);
+
+        for (auto x = x1_inner; x <= x2_inner; x++) {
+            place_grid(player_ptr, &floor_ptr->get_grid({ yval, x }), GB_INNER);
         }
 
         /* Doors into the rooms */
         if (randint0(100) < 50) {
             int i = randint1(10);
-            place_secret_door(player_ptr, y1 - 1, xval - i, door_type);
-            place_secret_door(player_ptr, y1 - 1, xval + i, door_type);
-            place_secret_door(player_ptr, y2 + 1, xval - i, door_type);
-            place_secret_door(player_ptr, y2 + 1, xval + i, door_type);
+            place_secret_door(player_ptr, y1_inner - 1, xval - i, door_type);
+            place_secret_door(player_ptr, y1_inner - 1, xval + i, door_type);
+            place_secret_door(player_ptr, y2_inner + 1, xval - i, door_type);
+            place_secret_door(player_ptr, y2_inner + 1, xval + i, door_type);
         } else {
             int i = randint1(3);
-            place_secret_door(player_ptr, yval + i, x1 - 1, door_type);
-            place_secret_door(player_ptr, yval - i, x1 - 1, door_type);
-            place_secret_door(player_ptr, yval + i, x2 + 1, door_type);
-            place_secret_door(player_ptr, yval - i, x2 + 1, door_type);
+            place_secret_door(player_ptr, yval + i, x1_inner - 1, door_type);
+            place_secret_door(player_ptr, yval - i, x1_inner - 1, door_type);
+            place_secret_door(player_ptr, yval + i, x2_inner + 1, door_type);
+            place_secret_door(player_ptr, yval - i, x2_inner + 1, door_type);
         }
 
         /* Treasure, centered at the center of the cross */
