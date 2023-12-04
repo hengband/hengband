@@ -1,11 +1,15 @@
 #include "object-enchant/dragon-breaths-table.h"
 #include "effect/attribute-types.h"
+#include "locale/language-switcher.h"
+#include "object-enchant/tr-types.h"
+#include <sstream>
 
 /*!
  * @brief 装備耐性に準じたブレス効果の選択テーブル /
  * Define flags, effect type, name for dragon breath activation
  */
-const dragonbreath_type dragonbreath_info[] = {
+namespace {
+const std::vector<DragonBreathType> dragon_breaths_info = {
     { TR_RES_ACID, AttributeType::ACID, _("酸", "acid") },
     { TR_RES_ELEC, AttributeType::ELEC, _("電撃", "lightning") },
     { TR_RES_FIRE, AttributeType::FIRE, _("火炎", "fire") },
@@ -20,5 +24,39 @@ const dragonbreath_type dragonbreath_info[] = {
     { TR_RES_NETHER, AttributeType::NETHER, _("地獄", "nether") },
     { TR_RES_CHAOS, AttributeType::CHAOS, _("カオス", "chaos") },
     { TR_RES_DISEN, AttributeType::DISENCHANT, _("劣化", "disenchantment") },
-    { TR_STR, AttributeType::NONE, nullptr }
 };
+}
+
+std::vector<std::pair<AttributeType, std::string>> DragonBreaths::get_breaths(const TrFlags &flags)
+{
+    std::vector<std::pair<AttributeType, std::string>> breaths;
+    for (const auto &dragon_breath : dragon_breaths_info) {
+        if (flags.has(dragon_breath.flag)) {
+            breaths.push_back({ dragon_breath.type, dragon_breath.name });
+        }
+    }
+
+    return breaths;
+}
+
+std::string DragonBreaths::build_description(const TrFlags &flags)
+{
+    std::stringstream ss;
+    ss << _("", "breathe ");
+    auto has_multi_breaths = false;
+    for (const auto &dragon_breath : dragon_breaths_info) {
+        if (flags.has_not(dragon_breath.flag)) {
+            continue;
+        }
+
+        if (has_multi_breaths) {
+            ss << _("、", ", ");
+        }
+
+        ss << dragon_breath.name;
+        has_multi_breaths = true;
+    }
+
+    ss << _("のブレス(250)", " (250)");
+    return ss.str();
+}

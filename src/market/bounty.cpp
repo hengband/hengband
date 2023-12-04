@@ -72,7 +72,7 @@ bool exchange_cash(PlayerType *player_ptr)
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         const auto item_ptr = &player_ptr->inventory_list[i];
         const auto r_idx_of_item = static_cast<MonsterRaceId>(item_ptr->pval);
-        if ((item_ptr->bi_key != BaseitemKey(ItemKindType::CORPSE, SV_CORPSE)) || (r_idx_of_item != MonsterRaceId::TSUCHINOKO)) {
+        if (!item_ptr->is_corpse() || (r_idx_of_item != MonsterRaceId::TSUCHINOKO)) {
             continue;
         }
 
@@ -110,7 +110,7 @@ bool exchange_cash(PlayerType *player_ptr)
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         const auto item_ptr = &player_ptr->inventory_list[i];
         const auto r_idx_of_item = static_cast<MonsterRaceId>(item_ptr->pval);
-        if ((item_ptr->bi_key != BaseitemKey(ItemKindType::CORPSE, SV_CORPSE)) || (monraces_info[r_idx_of_item].name != monraces_info[w_ptr->today_mon].name)) {
+        if (!item_ptr->is_corpse() || (monraces_info[r_idx_of_item].name != monraces_info[w_ptr->today_mon].name)) {
             continue;
         }
 

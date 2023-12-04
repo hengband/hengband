@@ -13,6 +13,8 @@
 #include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <utility>
+#include <vector>
 
 /*!
  * @brief 発動によるブレスの属性をアイテムの耐性から選択し、実行を処理する。/ Dragon breath activation
@@ -28,20 +30,9 @@ bool activate_dragon_breath(PlayerType *player_ptr, ItemEntity *o_ptr)
         return false;
     }
 
-    const auto resistance_flags = o_ptr->get_flags();
-
-    AttributeType type[20];
-    int n = 0;
-    concptr name[20];
-    for (int i = 0; dragonbreath_info[i].flag != 0; i++) {
-        if (resistance_flags.has(dragonbreath_info[i].flag)) {
-            type[n] = dragonbreath_info[i].type;
-            name[n] = dragonbreath_info[i].name;
-            n++;
-        }
-    }
-
-    if (n == 0) {
+    const auto flags = o_ptr->get_flags();
+    const auto breaths = DragonBreaths::get_breaths(flags);
+    if (breaths.empty()) {
         return false;
     }
 
@@ -53,9 +44,9 @@ bool activate_dragon_breath(PlayerType *player_ptr, ItemEntity *o_ptr)
         (void)SpellHex(player_ptr).stop_all_spells();
     }
 
-    int t = randint0(n);
-    msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), name[t]);
-    fire_breath(player_ptr, type[t], dir, 250, 4);
+    const auto &breath = rand_choice(breaths);
+    msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), breath.second.data());
+    fire_breath(player_ptr, breath.first, dir, 250, 4);
     return true;
 }
 

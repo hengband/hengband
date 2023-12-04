@@ -1,6 +1,7 @@
 #include "object-enchant/activation-info-table.h"
 #include "artifact/random-art-effects.h"
 #include "locale/language-switcher.h"
+#include <sstream>
 
 /*!
  * @brief アイテムの発動効果テーブル
@@ -153,3 +154,30 @@ const std::vector<ActivationType> activation_info = {
     { "CREATE_AMMO", RandomArtActType::CREATE_AMMO, 10, 30000, 200, 0, _("弾/矢の製造", "Create Ammo") },
     { "DISPEL_MAGIC", RandomArtActType::DISPEL_MAGIC, 10, 10000, 50, 50, _("魔力消去", "Dispel Magic") },
 };
+
+std::optional<std::string> ActivationType::build_timeout_description() const
+{
+    if ((this->constant == 0) && (this->dice == 0)) {
+        return _("いつでも", "every turn");
+    }
+
+    if (!this->constant) {
+        return std::nullopt;
+    }
+
+    std::stringstream ss;
+    ss << _("", "every ");
+    if (this->constant > 0) {
+        ss << *this->constant;
+        if (this->dice > 0) {
+            ss << '+';
+        }
+    }
+
+    if (this->dice > 0) {
+        ss << 'd' << this->dice;
+    }
+
+    ss << _(" ターン毎", " turns");
+    return ss.str();
+}

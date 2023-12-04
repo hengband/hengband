@@ -19,7 +19,6 @@
 #include "object/tval-types.h"
 #include "smith/object-smith.h"
 #include "sv-definition/sv-lite-types.h"
-#include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-ring-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/artifact-type-definition.h"
@@ -214,21 +213,12 @@ bool ItemEntity::is_wieldable_in_etheir_hand() const
 }
 
 /*!
- * @brief 強化不能武器であるかを判定する
- * @return 強化不能か否か
- */
-bool ItemEntity::refuse_enchant_weapon() const
-{
-    return this->bi_key.refuse_enchant_weapon();
-}
-
-/*!
  * @brief 強化可能武器であるかを判定する
  * @return 強化可能か否か
  */
 bool ItemEntity::allow_enchant_weapon() const
 {
-    return this->is_weapon_ammo() && !this->refuse_enchant_weapon();
+    return this->is_weapon_ammo() && !this->should_refuse_enchant();
 }
 
 /*!
@@ -237,7 +227,7 @@ bool ItemEntity::allow_enchant_weapon() const
  */
 bool ItemEntity::allow_enchant_melee_weapon() const
 {
-    return this->is_melee_weapon() && !this->refuse_enchant_weapon();
+    return this->is_melee_weapon() && !this->should_refuse_enchant();
 }
 
 /*!
@@ -269,9 +259,7 @@ bool ItemEntity::is_convertible() const
 
 bool ItemEntity::is_lance() const
 {
-    auto is_lance = this->bi_key == BaseitemKey(ItemKindType::POLEARM, SV_LANCE);
-    is_lance |= this->bi_key == BaseitemKey(ItemKindType::POLEARM, SV_HEAVY_LANCE);
-    return is_lance;
+    return this->bi_key.is_lance();
 }
 
 /*!
@@ -423,8 +411,7 @@ bool ItemEntity::is_potion() const
  */
 bool ItemEntity::is_readable() const
 {
-    auto can_read = this->is(ItemKindType::SCROLL);
-    can_read |= this->is(ItemKindType::PARCHMENT);
+    auto can_read = this->bi_key.is_readable();
     can_read |= this->is_specific_artifact(FixedArtifactId::GHB);
     can_read |= this->is_specific_artifact(FixedArtifactId::POWER);
     return can_read;
@@ -463,7 +450,7 @@ bool ItemEntity::can_recharge() const
  */
 bool ItemEntity::is_offerable() const
 {
-    if (this->bi_key != BaseitemKey(ItemKindType::CORPSE, SV_CORPSE)) {
+    if (!this->is_corpse()) {
         return false;
     }
 
@@ -606,10 +593,10 @@ TERM_COLOR ItemEntity::get_color() const
         return baseitems_info[flavor].x_attr;
     }
 
-    auto has_attr = !this->is_valid();
-    has_attr |= this->bi_key != BaseitemKey(ItemKindType::CORPSE, SV_CORPSE);
-    has_attr |= baseitem.x_attr != TERM_DARK;
-    if (has_attr) {
+    auto has_attr = this->is_valid();
+    has_attr &= this->is_corpse();
+    has_attr &= baseitem.x_attr == TERM_DARK;
+    if (!has_attr) {
         return baseitem.x_attr;
     }
 
@@ -704,6 +691,15 @@ int ItemEntity::calc_capture_value() const
     return MonraceList::get_instance().calc_capture_value(r_idx);
 }
 
+/*!
+ * @brief 強化不能武器であるかを判定する
+ * @return 強化不能か否か
+ */
+bool ItemEntity::should_refuse_enchant() const
+{
+    return this->bi_key.should_refuse_enchant();
+}
+
 bool ItemEntity::is_specific_artifact(FixedArtifactId id) const
 {
     return this->fixed_artifact_idx == id;
@@ -762,6 +758,11 @@ bool ItemEntity::is_armour() const
 bool ItemEntity::is_cross_bow() const
 {
     return this->bi_key.is_cross_bow();
+}
+
+bool ItemEntity::is_corpse() const
+{
+    return this->bi_key.is_corpse();
 }
 
 bool ItemEntity::is_inscribed() const
@@ -886,28 +887,9 @@ std::string ItemEntity::explain_activation() const
 
 std::string ItemEntity::build_timeout_description(const ActivationType &act) const
 {
-    const auto constant = act.constant;
-    const auto dice = act.dice;
-    if (constant == 0 && dice == 0) {
-        return _("いつでも", "every turn");
-    }
-
-    if (constant) {
-        std::stringstream ss;
-        ss << _("", "every ");
-        if (constant > 0) {
-            ss << *constant;
-            if (dice > 0) {
-                ss << '+';
-            }
-        }
-
-        if (dice > 0) {
-            ss << 'd' << dice;
-        }
-
-        ss << _(" ターン毎", " turns");
-        return ss.str();
+    const auto description = act.build_timeout_description();
+    if (description) {
+        return *description;
     }
 
     std::stringstream ss;
@@ -1089,21 +1071,6 @@ std::string ItemEntity::build_activation_description(const ActivationType &act) 
  */
 std::string ItemEntity::build_activation_description_dragon_breath() const
 {
-    std::stringstream ss;
-    ss << _("", "breathe ");
-    auto n = 0;
     const auto flags = this->get_flags();
-    for (auto i = 0; dragonbreath_info[i].flag != 0; i++) {
-        if (flags.has(dragonbreath_info[i].flag)) {
-            if (n > 0) {
-                ss << _("、", ", ");
-            }
-
-            ss << dragonbreath_info[i].name;
-            n++;
-        }
-    }
-
-    ss << _("のブレス(250)", " (250)");
-    return ss.str();
+    return DragonBreaths::build_description(flags);
 }

@@ -513,7 +513,7 @@ bool BaseitemKey::is_cross_bow() const
     }
 }
 
-bool BaseitemKey::refuse_enchant_weapon() const
+bool BaseitemKey::should_refuse_enchant() const
 {
     return *this == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE);
 }
@@ -547,6 +547,25 @@ bool BaseitemKey::is_fuel() const
     is_fuel |= *this == BaseitemKey(ItemKindType::LITE, SV_LITE_LANTERN);
     is_fuel |= *this == BaseitemKey(ItemKindType::FLASK, SV_FLASK_OIL);
     return is_fuel;
+}
+
+bool BaseitemKey::is_lance() const
+{
+    auto is_lance = *this == BaseitemKey(ItemKindType::POLEARM, SV_LANCE);
+    is_lance |= *this == BaseitemKey(ItemKindType::POLEARM, SV_HEAVY_LANCE);
+    return is_lance;
+}
+
+bool BaseitemKey::is_readable() const
+{
+    auto can_read = this->is(ItemKindType::SCROLL);
+    can_read |= this->is(ItemKindType::PARCHMENT);
+    return can_read;
+}
+
+bool BaseitemKey::is_corpse() const
+{
+    return *this == BaseitemKey(ItemKindType::CORPSE, SV_CORPSE);
 }
 
 bool BaseitemKey::is_mushrooms() const
