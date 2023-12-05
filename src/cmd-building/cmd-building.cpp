@@ -98,165 +98,171 @@ static void bldg_process_command(PlayerType *player_ptr, building_type *bldg, in
 {
     msg_flag = false;
     msg_erase();
-
-    PRICE bcost;
-    if (is_owner(player_ptr, bldg)) {
-        bcost = bldg->member_costs[i];
-    } else {
-        bcost = bldg->other_costs[i];
-    }
-
-    /* action restrictions */
     const auto can_be_owner = is_owner(player_ptr, bldg);
+    const auto building_cost = can_be_owner ? bldg->member_costs[i] : bldg->other_costs[i];
     if (((bldg->action_restr[i] == 1) && !is_member(player_ptr, bldg)) || ((bldg->action_restr[i] == 2) && !can_be_owner)) {
         msg_print(_("それを選択する権利はありません！", "You have no right to choose that!"));
         return;
     }
 
-    auto bact = bldg->actions[i];
-    if ((bact != BACT_RECHARGE) && (((bldg->member_costs[i] > player_ptr->au) && can_be_owner) || ((bldg->other_costs[i] > player_ptr->au) && !can_be_owner))) {
+    const auto building_action = bldg->actions[i];
+    if ((building_action != BACT_RECHARGE) && (((bldg->member_costs[i] > player_ptr->au) && can_be_owner) || ((bldg->other_costs[i] > player_ptr->au) && !can_be_owner))) {
         msg_print(_("お金が足りません！", "You do not have the gold!"));
         return;
     }
 
-    bool paid = false;
-    switch (bact) {
+    switch (building_action) {
     case BACT_NOTHING:
         /* Do nothing */
-        break;
+        return;
     case BACT_RESEARCH_ITEM:
-        paid = identify_fully(player_ptr, false);
-        break;
+        if (identify_fully(player_ptr, false)) {
+            player_ptr->au -= building_cost;
+        }
+
+        return;
     case BACT_TOWN_HISTORY:
         town_history(player_ptr);
-        break;
+        return;
     case BACT_RACE_LEGENDS:
         race_legends(player_ptr);
-        break;
+        return;
     case BACT_QUEST:
         castle_quest(player_ptr);
-        break;
+        return;
     case BACT_KING_LEGENDS:
     case BACT_ARENA_LEGENDS:
     case BACT_LEGENDS:
         show_highclass(player_ptr);
-        break;
+        return;
     case BACT_POSTER:
     case BACT_ARENA_RULES:
     case BACT_ARENA:
-        arena_comm(player_ptr, bact);
-        break;
+        arena_comm(player_ptr, building_action);
+        return;
     case BACT_IN_BETWEEN:
     case BACT_CRAPS:
     case BACT_SPIN_WHEEL:
     case BACT_DICE_SLOTS:
     case BACT_GAMBLE_RULES:
     case BACT_POKER:
-        gamble_comm(player_ptr, bact);
-        break;
+        gamble_comm(player_ptr, building_action);
+        return;
     case BACT_REST:
     case BACT_RUMORS:
     case BACT_FOOD:
-        paid = inn_comm(player_ptr, bact);
-        break;
+        if (inn_comm(player_ptr, building_action)) {
+            player_ptr->au -= building_cost;
+        }
+
+        return;
     case BACT_RESEARCH_MONSTER:
-        paid = research_mon(player_ptr);
-        break;
+        if (research_mon(player_ptr)) {
+            player_ptr->au -= building_cost;
+        }
+
+        return;
     case BACT_COMPARE_WEAPONS:
-        paid = true;
-        bcost = compare_weapons(player_ptr, bcost);
-        break;
+        player_ptr->au -= compare_weapons(player_ptr, building_cost);
+        return;
     case BACT_ENCHANT_WEAPON:
-        enchant_item(player_ptr, bcost, 1, 1, 0, FuncItemTester(&ItemEntity::allow_enchant_melee_weapon));
-        break;
+        enchant_item(player_ptr, building_cost, 1, 1, 0, FuncItemTester(&ItemEntity::allow_enchant_melee_weapon));
+        return;
     case BACT_ENCHANT_ARMOR:
-        enchant_item(player_ptr, bcost, 0, 0, 1, FuncItemTester(&ItemEntity::is_protector));
-        break;
+        enchant_item(player_ptr, building_cost, 0, 0, 1, FuncItemTester(&ItemEntity::is_protector));
+        return;
     case BACT_RECHARGE:
         building_recharge(player_ptr);
-        break;
+        return;
     case BACT_RECHARGE_ALL:
         building_recharge_all(player_ptr);
-        break;
+        return;
     case BACT_IDENTS:
         if (!input_check(_("持ち物を全て鑑定してよろしいですか？", "Do you pay to identify all your possession? "))) {
-            break;
+            return;
         }
+
         identify_pack(player_ptr);
         msg_print(_(" 持ち物全てが鑑定されました。", "Your possessions have been identified."));
-        paid = true;
-        break;
+        player_ptr->au -= building_cost;
+        return;
     case BACT_IDENT_ONE:
-        paid = ident_spell(player_ptr, false);
-        break;
+        if (ident_spell(player_ptr, false)) {
+            player_ptr->au -= building_cost;
+        }
+
+        return;
     case BACT_LEARN:
         do_cmd_study(player_ptr);
-        break;
+        return;
     case BACT_HEALING:
-        paid = cure_critical_wounds(player_ptr, 200);
-        break;
-    case BACT_RESTORE:
-        paid = restore_all_status(player_ptr);
-        break;
-    case BACT_ENCHANT_ARROWS:
-        enchant_item(player_ptr, bcost, 1, 1, 0, FuncItemTester(&ItemEntity::is_ammo));
-        break;
-    case BACT_ENCHANT_BOW:
-        enchant_item(player_ptr, bcost, 1, 1, 0, TvalItemTester(ItemKindType::BOW));
-        break;
+        if (cure_critical_wounds(player_ptr, 200)) {
+            player_ptr->au -= building_cost;
+        }
 
+        return;
+    case BACT_RESTORE:
+        if (restore_all_status(player_ptr)) {
+            player_ptr->au -= building_cost;
+        }
+
+        return;
+    case BACT_ENCHANT_ARROWS:
+        enchant_item(player_ptr, building_cost, 1, 1, 0, FuncItemTester(&ItemEntity::is_ammo));
+        return;
+    case BACT_ENCHANT_BOW:
+        enchant_item(player_ptr, building_cost, 1, 1, 0, TvalItemTester(ItemKindType::BOW));
+        return;
     case BACT_RECALL:
         if (recall_player(player_ptr, 1)) {
-            paid = true;
+            player_ptr->au -= building_cost;
         }
-        break;
 
+        return;
     case BACT_TELEPORT_LEVEL:
         screen_save();
         clear_bldg(4, 20);
-        paid = free_level_recall(player_ptr);
-        screen_load();
-        break;
+        if (free_level_recall(player_ptr)) {
+            player_ptr->au -= building_cost;
+        }
 
+        screen_load();
+        return;
     case BACT_LOSE_MUTATION: {
         auto muta = player_ptr->muta;
         if (player_ptr->ppersonality == PERSONALITY_LUCKY) {
             // ラッキーマンの白オーラは突然変異治療の対象外
             muta.reset(PlayerMutationType::GOOD_LUCK);
         }
+
         if (muta.any()) {
             while (!lose_mutation(player_ptr, 0)) {
                 ;
             }
-            paid = true;
-            break;
+
+            player_ptr->au -= building_cost;
+            return;
         }
 
         msg_print(_("治すべき突然変異が無い。", "You have no mutations."));
         msg_print(nullptr);
-        break;
+        return;
     }
-
     case BACT_BATTLE:
         monster_arena_comm(player_ptr);
-        break;
-
+        return;
     case BACT_TSUCHINOKO:
         tsuchinoko();
-        break;
-
+        return;
     case BACT_BOUNTY:
         show_bounty();
-        break;
-
+        return;
     case BACT_TARGET:
         today_target(player_ptr);
-        break;
-
+        return;
     case BACT_KANKIN:
         exchange_cash(player_ptr);
-        break;
-
+        return;
     case BACT_HEIKOUKA:
         msg_print(_("平衡化の儀式を行なった。", "You received an equalization ritual."));
         set_virtue(player_ptr, Virtue::COMPASSION, 0);
@@ -278,25 +284,23 @@ static void bldg_process_command(PlayerType *player_ptr, building_type *bldg, in
         set_virtue(player_ptr, Virtue::VALOUR, 0);
         set_virtue(player_ptr, Virtue::INDIVIDUALISM, 0);
         initialize_virtues(player_ptr);
-        paid = true;
-        break;
-
+        player_ptr->au -= building_cost;
+        return;
     case BACT_TELE_TOWN:
-        paid = tele_town(player_ptr);
-        break;
+        if (tele_town(player_ptr)) {
+            player_ptr->au -= building_cost;
+        }
 
+        return;
     case BACT_EVAL_AC:
-        paid = eval_ac(player_ptr->dis_ac + player_ptr->dis_to_a);
-        break;
+        if (eval_ac(player_ptr->dis_ac + player_ptr->dis_to_a)) {
+            player_ptr->au -= building_cost;
+        }
 
+        return;
     case BACT_BROKEN_WEAPON:
-        paid = true;
-        bcost = repair_broken_weapon(player_ptr, bcost);
-        break;
-    }
-
-    if (paid) {
-        player_ptr->au -= bcost;
+        player_ptr->au -= repair_broken_weapon(player_ptr, building_cost);
+        return;
     }
 }
 
