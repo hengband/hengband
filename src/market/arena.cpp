@@ -20,6 +20,7 @@
 #include "monster/monster-util.h"
 #include "player-base/player-class.h"
 #include "status/buff-setter.h"
+#include "system/angband-exceptions.h"
 #include "system/angband-system.h"
 #include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
@@ -34,6 +35,14 @@
 #include "world/world.h"
 #include <algorithm>
 #include <numeric>
+
+namespace {
+enum class ArenaRecord {
+    FENGFUANG,
+    POWER_WYRM,
+    METAL_BABBLE,
+};
+}
 
 /*!
  * @brief 優勝時のメッセージを表示し、賞金を与える
@@ -61,27 +70,30 @@ static bool process_ostensible_arena_victory(PlayerType *player_ptr)
 }
 
 /*!
- * @brief はぐれメタルとの対戦
+ * @brief 対戦相手の確認
  * @param player_ptr プレイヤーへの参照ポインタ
- * @return まだパワー・ワイアーム以下を倒していないならFALSE、倒していたらTRUE
+ * @return 最後に倒した対戦相手 (鳳凰以下は一律で鳳凰)
  */
-static bool battle_metal_babble(PlayerType *player_ptr)
+static ArenaRecord check_arena_record(PlayerType *player_ptr)
 {
     if (player_ptr->arena_number <= MAX_ARENA_MONS) {
-        return false;
+        return ArenaRecord::FENGFUANG;
     }
 
-    if (player_ptr->arena_number >= MAX_ARENA_MONS + 2) {
-        msg_print(_("あなたはアリーナに入り、しばらくの間栄光にひたった。", "You enter the arena briefly and bask in your glory."));
-        msg_print(nullptr);
-        return true;
+    if (player_ptr->arena_number < MAX_ARENA_MONS + 2) {
+        return ArenaRecord::POWER_WYRM;
     }
 
+    return ArenaRecord::METAL_BABBLE;
+}
+
+static bool check_battle_metal_babble(PlayerType *player_ptr)
+{
     msg_print(_("君のために最強の挑戦者を用意しておいた。", "The strongest challenger is waiting for you."));
     msg_print(nullptr);
     if (!input_check(_("挑戦するかね？", "Do you fight? "))) {
         msg_print(_("残念だ。", "We are disappointed."));
-        return true;
+        return false;
     }
 
     msg_print(_("死ぬがよい。", "Die, maggots."));
@@ -95,24 +107,35 @@ static bool battle_metal_babble(PlayerType *player_ptr)
 
     player_ptr->current_floor_ptr->inside_arena = true;
     player_ptr->leaving = true;
-    player_ptr->leave_bldg = true;
     return true;
 }
 
-static void go_to_arena(PlayerType *player_ptr)
+/*!
+ * @brief アリーナへの入場処理
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return アリーナへ入場するか否か
+ */
+static bool go_to_arena(PlayerType *player_ptr)
 {
     if (process_ostensible_arena_victory(player_ptr)) {
-        return;
+        return false;
     }
 
-    if (battle_metal_babble(player_ptr)) {
-        return;
+    const auto arena_record = check_arena_record(player_ptr);
+    if (arena_record == ArenaRecord::METAL_BABBLE) {
+        msg_print(_("あなたはアリーナに入り、しばらくの間栄光にひたった。", "You enter the arena briefly and bask in your glory."));
+        msg_print(nullptr);
+        return false;
+    }
+
+    if ((arena_record == ArenaRecord::POWER_WYRM) && !check_battle_metal_babble(player_ptr)) {
+        return false;
     }
 
     if (player_ptr->riding && !PlayerClass(player_ptr).is_tamer()) {
         msg_print(_("ペットに乗ったままではアリーナへ入れさせてもらえなかった。", "You don't have permission to enter with pet."));
         msg_print(nullptr);
-        return;
+        return false;
     }
 
     player_ptr->exit_bldg = false;
@@ -121,7 +144,7 @@ static void go_to_arena(PlayerType *player_ptr)
 
     player_ptr->current_floor_ptr->inside_arena = true;
     player_ptr->leaving = true;
-    player_ptr->leave_bldg = true;
+    return true;
 }
 
 static void see_arena_poster(PlayerType *player_ptr)
@@ -148,22 +171,21 @@ static void see_arena_poster(PlayerType *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param cmd 闘技場処理のID
  */
-void arena_comm(PlayerType *player_ptr, int cmd)
+bool arena_comm(PlayerType *player_ptr, int cmd)
 {
     switch (cmd) {
     case BACT_ARENA:
-        go_to_arena(player_ptr);
-        return;
+        return go_to_arena(player_ptr);
     case BACT_POSTER:
         see_arena_poster(player_ptr);
-        return;
+        return false;
     case BACT_ARENA_RULES:
         screen_save();
-
-        /* Peruse the on_defeat_arena_monster help file */
         (void)show_file(player_ptr, true, _("arena_j.txt", "arena.txt"), 0, 0);
         screen_load();
-        break;
+        return false;
+    default:
+        THROW_EXCEPTION(std::logic_error, "Invalid building action is specified!");
     }
 }
 
@@ -351,8 +373,6 @@ bool monster_arena_comm(PlayerType *player_ptr)
     prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
     AngbandSystem::get_instance().set_phase_out(true);
     player_ptr->leaving = true;
-    player_ptr->leave_bldg = true;
-
     screen_load();
     return true;
 }
