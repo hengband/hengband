@@ -234,7 +234,6 @@ public:
 
     bool monk_notify_aux{};
 
-    byte leave_bldg{};
     byte exit_bldg{}; /* Goal obtained in on_defeat_arena_monster? -KMW- */
 
     bool leaving_dungeon{}; /* True if player is leaving the dungeon */

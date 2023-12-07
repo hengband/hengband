@@ -325,7 +325,6 @@ bool tele_town(PlayerType *player_ptr)
     }
 
     player_ptr->leaving = true;
-    player_ptr->leave_bldg = true;
     player_ptr->teleport_town = true;
     screen_load();
     return true;
