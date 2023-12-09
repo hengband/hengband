@@ -317,8 +317,8 @@ bool save_player(PlayerType *player_ptr, SaveType type)
         std::filesystem::create_directory(debug_save_dir, ec);
     }
     safe_setuid_drop();
-    update_playtime();
-    bool result = false;
+    w_ptr->update_playtime();
+    auto result = false;
     if (save_player_aux(player_ptr, savefile_new.data(), type)) {
         std::stringstream ss_old;
         ss_old << savefile.string() << ".old";

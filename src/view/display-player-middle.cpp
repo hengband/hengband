@@ -280,20 +280,15 @@ static void display_player_exp(PlayerType *player_ptr)
 /*!
  * @brief ゲーム内の経過時間を表示する
  * @param player_ptr プレイヤーへの参照ポインタ
+ * @details fmt をstring で受けているのはClang対策
  */
 static void display_playtime_in_game(PlayerType *player_ptr)
 {
-    int day, hour, min;
-    extract_day_hour_min(player_ptr, &day, &hour, &min);
-
-    std::string buf;
-    if (day < MAX_DAYS) {
-        buf = format(_("%d日目 %2d:%02d", "Day %d %2d:%02d"), day, hour, min);
-    } else {
-        buf = format(_("*****日目 %2d:%02d", "Day ***** %2d:%02d"), hour, min);
-    }
-
-    display_player_one_line(ENTRY_DAY, buf, TERM_L_GREEN);
+    const auto &[day, hour, min] = w_ptr->extract_date_time(player_ptr->start_race);
+    const auto is_days_countable = day < MAX_DAYS;
+    const std::string fmt = is_days_countable ? _("%d日目 %2d:%02d", "Day %d %2d:%02d") : _("*****日目 %2d:%02d", "Day ***** %2d:%02d");
+    const auto mes = is_days_countable ? format(fmt.data(), day, hour, min) : format(fmt.data(), hour, min);
+    display_player_one_line(ENTRY_DAY, mes, TERM_L_GREEN);
 
     if (player_ptr->chp >= player_ptr->mhp) {
         display_player_one_line(ENTRY_HP, format("%4d/%4d", player_ptr->chp, player_ptr->mhp), TERM_L_GREEN);

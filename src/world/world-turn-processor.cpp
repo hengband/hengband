@@ -57,12 +57,10 @@ WorldTurnProcessor::WorldTurnProcessor(PlayerType *player_ptr)
  */
 void WorldTurnProcessor::process_world()
 {
-    const int32_t a_day = TURNS_PER_TICK * TOWN_DAWN;
-    int32_t prev_turn_in_today = ((w_ptr->game_turn - TURNS_PER_TICK) % a_day + a_day / 4) % a_day;
-    int prev_min = (1440 * prev_turn_in_today / a_day) % 60;
-
-    int dummy_day;
-    extract_day_hour_min(this->player_ptr, &dummy_day, &this->hour, &this->min);
+    const int a_day = TURNS_PER_TICK * TOWN_DAWN;
+    const int prev_turn_in_today = ((w_ptr->game_turn - TURNS_PER_TICK) % a_day + a_day / 4) % a_day;
+    const int prev_min = (1440 * prev_turn_in_today / a_day) % 60;
+    std::tie(std::ignore, this->hour, this->min) = w_ptr->extract_date_time(this->player_ptr->start_race);
     update_dungeon_feeling(this->player_ptr);
     process_downward();
     process_monster_arena();
@@ -78,7 +76,7 @@ void WorldTurnProcessor::process_world()
 
     process_change_daytime_night();
     process_world_monsters();
-    if (!this->hour && !this->min) {
+    if ((this->hour == 0) && (this->min == 0)) {
         if (this->min != prev_min) {
             exe_write_diary(this->player_ptr, DiaryKind::DIALY, 0);
             determine_daily_bounty(this->player_ptr, false);
@@ -108,9 +106,9 @@ void WorldTurnProcessor::print_time()
     const auto &[wid, hgt] = term_get_size();
     const auto row = hgt + ROW_DAY;
 
-    int day;
     c_put_str(TERM_WHITE, "             ", row, COL_DAY);
-    extract_day_hour_min(this->player_ptr, &day, &this->hour, &this->min);
+    auto day = 0;
+    std::tie(day, this->hour, this->min) = w_ptr->extract_date_time(this->player_ptr->start_race);
     if (day < 1000) {
         c_put_str(TERM_WHITE, format(_("%2d日目", "Day%3d"), day), row, COL_DAY);
     } else {

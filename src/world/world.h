@@ -5,13 +5,18 @@
 #include "system/angband.h"
 #include "util/flag-group.h"
 #include "util/rng-xoshiro.h"
+#include <tuple>
 
 constexpr auto MAX_BOUNTY = 20;
 
 /*!
  * @brief 世界情報構造体
  */
-struct world_type {
+enum term_color_type : unsigned char;
+enum class PlayerRaceType;
+class AngbandWorld {
+public:
+    AngbandWorld() = default;
 
     POSITION max_wild_x{}; /*!< Maximum size of the wilderness */
     POSITION max_wild_y{}; /*!< Maximum size of the wilderness */
@@ -67,15 +72,21 @@ struct world_type {
 
     OBJECT_IDX max_o_idx = 1024; /*!< 1フロアに存在可能な最大アイテム数 */
     MONSTER_IDX max_m_idx = 1024; /*!< 1フロアに存在可能な最大モンスター数 */
+
+    void set_arena(const bool new_status);
+    bool get_arena() const;
+    std::tuple<int, int, int> extract_date_time(PlayerRaceType start_race) const;
+    bool is_daytime() const;
+    void update_playtime();
+    void add_winner_class(PlayerClassType c);
+    void add_retired_class(PlayerClassType c);
+    term_color_type get_birth_class_color(PlayerClassType c) const;
+
+private:
+    bool is_out_arena = false; // アリーナ外部にいる時だけtrue.
+
+    bool is_winner_class(PlayerClassType c) const;
+    bool is_retired_class(PlayerClassType c) const;
 };
 
-extern world_type *w_ptr;
-
-class PlayerType;
-bool is_daytime(void);
-void extract_day_hour_min(PlayerType *player_ptr, int *day, int *hour, int *min);
-void update_playtime(void);
-void add_winner_class(PlayerClassType c);
-void add_retired_class(PlayerClassType c);
-bool is_winner_class(PlayerClassType c);
-bool is_retired_class(PlayerClassType c);
+extern AngbandWorld *w_ptr;

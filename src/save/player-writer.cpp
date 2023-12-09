@@ -132,7 +132,7 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(player_ptr->current_floor_ptr->inside_arena);
     wr_s16b(enum2i(player_ptr->current_floor_ptr->quest_number));
     wr_s16b(AngbandSystem::get_instance().is_phase_out());
-    wr_byte(player_ptr->exit_bldg);
+    wr_byte(w_ptr->get_arena());
     wr_byte(0); /* Unused */
 
     wr_s16b((int16_t)player_ptr->oldpx);

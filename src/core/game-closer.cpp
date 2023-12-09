@@ -168,7 +168,7 @@ void close_game(PlayerType *player_ptr)
 
     auto do_send = true;
     if (!cheat_save || input_check(_("死んだデータをセーブしますか？ ", "Save death? "))) {
-        update_playtime();
+        w_ptr->update_playtime();
         w_ptr->sf_play_time += w_ptr->play_time;
 
         if (!save_player(player_ptr, SaveType::CLOSE_GAME)) {

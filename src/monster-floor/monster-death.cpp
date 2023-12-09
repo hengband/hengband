@@ -87,7 +87,7 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, MonsterDeath *md_ptr
         return;
     }
 
-    player_ptr->exit_bldg = true;
+    w_ptr->set_arena(true);
     if (player_ptr->arena_number > MAX_ARENA_MONS) {
         msg_print(_("素晴らしい！君こそ真の勝利者だ。", "You are a Genuine Champion!"));
     } else {
@@ -332,7 +332,7 @@ static void drop_items_golds(PlayerType *player_ptr, MonsterDeath *md_ptr, int d
 static void on_defeat_last_boss(PlayerType *player_ptr)
 {
     w_ptr->total_winner = true;
-    add_winner_class(player_ptr->pclass);
+    w_ptr->add_winner_class(player_ptr->pclass);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TITLE);
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FINAL_QUEST_CLEAR);
     exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, _("見事に変愚蛮怒の勝利者となった！", "finally became *WINNER* of Hengband!"));
@@ -385,7 +385,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
 
     // プレイヤーしかユニークを倒せないのでここで時間を記録
     if (md_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && md_ptr->m_ptr->mflag2.has_not(MonsterConstantFlagType::CLONED)) {
-        update_playtime();
+        w_ptr->update_playtime();
         md_ptr->r_ptr->defeat_time = w_ptr->play_time;
         md_ptr->r_ptr->defeat_level = player_ptr->lev;
     }

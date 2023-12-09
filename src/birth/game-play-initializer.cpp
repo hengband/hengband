@@ -147,7 +147,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
 
     player_ptr->max_plv = player_ptr->lev = 1;
     player_ptr->arena_number = 0;
-    player_ptr->exit_bldg = true;
+    w_ptr->set_arena(true);
     player_ptr->knows_daily_bounty = false;
     update_gambling_monsters(player_ptr);
     player_ptr->muta.clear();
