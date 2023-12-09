@@ -212,7 +212,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     mproc_init(&floor);
 
     while (true) {
-        if ((floor.m_cnt + 32 > w_ptr->max_m_idx) && !is_watching) {
+        if ((floor.m_cnt + 32 > MAX_FLOOR_MONSTERS) && !is_watching) {
             compact_monsters(player_ptr, 64);
         }
 
@@ -220,7 +220,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
             compact_monsters(player_ptr, 0);
         }
 
-        if (floor.o_cnt + 32 > w_ptr->max_o_idx) {
+        if (floor.o_cnt + 32 > MAX_FLOOR_ITEMS) {
             compact_objects(player_ptr, 64);
         }
 

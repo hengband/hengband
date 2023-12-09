@@ -21,6 +21,8 @@ constexpr auto MAX_MONSTER_SENSING = 100; /*!< モンスターの最大感知グ
 constexpr auto CHANCE_ABILITY_SCORE_DECREASE = 16; /*!< 属性攻撃を受けた際に能力値低下を起こす確率(1/n) */
 constexpr auto CHANCE_STRENGTHENING = 12; /*!< ランダムアーティファクトにバイアス外の耐性がつき、4を超えるpvalを許可する確率 */
 constexpr auto STANDARD_SPEED = 110; /* プレイヤー/モンスターの標準速度 (加速0) */
+constexpr short MAX_FLOOR_ITEMS = 1024; /*!< 1フロアに存在可能な最大アイテム数 */
+constexpr short MAX_FLOOR_MONSTERS = 1024; /*!< 1フロアに存在可能な最大モンスター数 */
 
 /*!
  * @brief 1フロアに存在可能な、増殖フラグ付きモンスター実体の最大数

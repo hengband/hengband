@@ -726,7 +726,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
 
     uint16_t limit;
     limit = rd_u16b();
-    if (limit > w_ptr->max_o_idx) {
+    if (limit > MAX_FLOOR_ITEMS) {
         load_note(format(_("アイテムの配列が大きすぎる(%d)！", "Too many (%d) object entries!"), limit));
         return 151;
     }
@@ -746,7 +746,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
     }
 
     limit = rd_u16b();
-    if (limit > w_ptr->max_m_idx) {
+    if (limit > MAX_FLOOR_MONSTERS) {
         load_note(format(_("モンスターの配列が大きすぎる(%d)！", "Too many (%d) monster entries!"), limit));
         return 161;
     }
