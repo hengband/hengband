@@ -173,7 +173,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
             a = terrain_mimic_ptr->x_attr[F_LIT_STANDARD];
             c = terrain_mimic_ptr->x_char[F_LIT_STANDARD];
             if (player_ptr->wild_mode) {
-                if (view_special_lite && !is_daytime()) {
+                if (view_special_lite && !w_ptr->is_daytime()) {
                     a = terrain_mimic_ptr->x_attr[F_LIT_DARK];
                     c = terrain_mimic_ptr->x_char[F_LIT_DARK];
                 }
@@ -210,7 +210,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
             c = terrain_mimic_ptr->x_char[F_LIT_STANDARD];
             const auto is_blind = player_ptr->effects()->blindness()->is_blind();
             if (player_ptr->wild_mode) {
-                if (view_granite_lite && (is_blind || !is_daytime())) {
+                if (view_granite_lite && (is_blind || !w_ptr->is_daytime())) {
                     a = terrain_mimic_ptr->x_attr[F_LIT_DARK];
                     c = terrain_mimic_ptr->x_char[F_LIT_DARK];
                 }

@@ -75,6 +75,7 @@ public:
     void set_arena(const bool new_status);
     bool get_arena() const;
     std::tuple<int, int, int> extract_date_time(PlayerRaceType start_race) const;
+    bool is_daytime() const;
 
 private:
     bool is_out_arena = false; // アリーナ外部にいる時だけtrue.
@@ -83,7 +84,6 @@ private:
 extern AngbandWorld *w_ptr;
 
 class PlayerType;
-bool is_daytime(void);
 void update_playtime(void);
 void add_winner_class(PlayerClassType c);
 void add_retired_class(PlayerClassType c);

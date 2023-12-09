@@ -25,18 +25,13 @@ bool AngbandWorld::get_arena() const
 }
 
 /*!
- * @brief ゲーム時間が日中かどうかを返す /
- * Whether daytime or not
+ * @brief ゲーム時間が日中かどうかを返す
  * @return 日中ならばTRUE、夜ならばFALSE
  */
-bool is_daytime(void)
+bool AngbandWorld::is_daytime() const
 {
-    int32_t len = TURNS_PER_TICK * TOWN_DAWN;
-    if ((w_ptr->game_turn % len) < (len / 2)) {
-        return true;
-    } else {
-        return false;
-    }
+    int a_day = TURNS_PER_TICK * TOWN_DAWN;
+    return (this->game_turn % a_day) < (a_day / 2);
 }
 
 /*!
