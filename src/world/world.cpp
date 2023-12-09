@@ -78,10 +78,10 @@ void AngbandWorld::update_playtime()
 /*!
  * @brief 勝利したクラスを追加する
  */
-void add_winner_class(PlayerClassType c)
+void AngbandWorld::add_winner_class(PlayerClassType c)
 {
-    if (!w_ptr->noscore) {
-        w_ptr->sf_winner.set(c);
+    if (!this->noscore) {
+        this->sf_winner.set(c);
     }
 }
 
