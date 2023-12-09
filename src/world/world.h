@@ -80,11 +80,10 @@ public:
     void add_winner_class(PlayerClassType c);
     void add_retired_class(PlayerClassType c);
     bool is_winner_class(PlayerClassType c) const;
+    bool is_retired_class(PlayerClassType c) const;
 
 private:
     bool is_out_arena = false; // アリーナ外部にいる時だけtrue.
 };
 
 extern AngbandWorld *w_ptr;
-
-bool is_retired_class(PlayerClassType c);

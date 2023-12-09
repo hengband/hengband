@@ -18,7 +18,7 @@ static TERM_COLOR birth_class_color(PlayerClassType cs)
         return TERM_WHITE;
     }
 
-    if (is_retired_class(cs)) {
+    if (w_ptr->is_retired_class(cs)) {
         return TERM_L_DARK;
     }
 

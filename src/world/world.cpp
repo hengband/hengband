@@ -110,10 +110,11 @@ bool AngbandWorld::is_winner_class(PlayerClassType c) const
 /*!
  * @brief 引退したクラスか判定する
  */
-bool is_retired_class(PlayerClassType c)
+bool AngbandWorld::is_retired_class(PlayerClassType c) const
 {
     if (c == PlayerClassType::MAX) {
         return false;
     }
-    return w_ptr->sf_retired.has(c);
+
+    return this->sf_retired.has(c);
 }
