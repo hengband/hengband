@@ -12,6 +12,7 @@ constexpr auto MAX_BOUNTY = 20;
 /*!
  * @brief 世界情報構造体
  */
+enum term_color_type : unsigned char;
 enum class PlayerRaceType;
 class AngbandWorld {
 public:
@@ -79,11 +80,13 @@ public:
     void update_playtime();
     void add_winner_class(PlayerClassType c);
     void add_retired_class(PlayerClassType c);
-    bool is_winner_class(PlayerClassType c) const;
-    bool is_retired_class(PlayerClassType c) const;
+    term_color_type get_birth_class_color(PlayerClassType c) const;
 
 private:
     bool is_out_arena = false; // アリーナ外部にいる時だけtrue.
+
+    bool is_winner_class(PlayerClassType c) const;
+    bool is_retired_class(PlayerClassType c) const;
 };
 
 extern AngbandWorld *w_ptr;

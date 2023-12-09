@@ -1,6 +1,7 @@
 #include "world/world.h"
 #include "player-info/race-types.h"
 #include "system/player-type-definition.h"
+#include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
 
 AngbandWorld world;
@@ -93,6 +94,19 @@ void AngbandWorld::add_retired_class(PlayerClassType c)
     if (!this->noscore) {
         this->sf_retired.set(c);
     }
+}
+
+term_color_type AngbandWorld::get_birth_class_color(PlayerClassType c) const
+{
+    if (c >= PlayerClassType::MAX) {
+        return TERM_WHITE;
+    }
+
+    if (this->is_retired_class(c)) {
+        return TERM_L_DARK;
+    }
+
+    return this->is_winner_class(c) ? TERM_SLATE : TERM_WHITE;
 }
 
 /*!
