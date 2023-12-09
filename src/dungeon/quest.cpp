@@ -241,7 +241,7 @@ void record_quest_final_status(QuestType *q_ptr, PLAYER_LEVEL lev, QuestStatusTy
 {
     q_ptr->status = stat;
     q_ptr->complev = lev;
-    update_playtime();
+    w_ptr->update_playtime();
     q_ptr->comptime = w_ptr->play_time;
 }
 
@@ -410,7 +410,7 @@ void leave_tower_check(PlayerType *player_ptr)
     }
     tower1.status = QuestStatusType::FAILED;
     tower1.complev = player_ptr->lev;
-    update_playtime();
+    w_ptr->update_playtime();
     tower1.comptime = w_ptr->play_time;
 }
 

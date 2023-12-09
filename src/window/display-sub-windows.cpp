@@ -392,7 +392,7 @@ void fix_equip(PlayerType *player_ptr)
  */
 void fix_player(PlayerType *player_ptr)
 {
-    update_playtime();
+    w_ptr->update_playtime();
     display_sub_windows(SubWindowRedrawingFlag::PLAYER,
         [player_ptr] {
             display_player(player_ptr, 0);

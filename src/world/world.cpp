@@ -64,13 +64,15 @@ std::tuple<int, int, int> AngbandWorld::extract_date_time(PlayerRaceType start_r
 /*!
  * @brief 実ゲームプレイ時間を更新する
  */
-void update_playtime(void)
+void AngbandWorld::update_playtime()
 {
-    if (w_ptr->start_time != 0) {
-        uint32_t tmp = (uint32_t)time(nullptr);
-        w_ptr->play_time += (tmp - w_ptr->start_time);
-        w_ptr->start_time = tmp;
+    if (this->start_time == 0) {
+        return;
     }
+
+    const auto current_time = static_cast<uint32_t>(time(nullptr));
+    this->play_time += (current_time - this->start_time);
+    this->start_time = current_time;
 }
 
 /*!

@@ -78,7 +78,7 @@ void do_cmd_redraw(PlayerType *player_ptr)
         SubWindowRedrawingFlag::ITEM_KNOWLEDGE,
     };
     rfu.set_flags(flags_swrf);
-    update_playtime();
+    w_ptr->update_playtime();
     handle_stuff(player_ptr);
     if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
         calc_android_exp(player_ptr);
@@ -114,7 +114,7 @@ static std::optional<int> input_status_command(PlayerType *player_ptr, int page)
 
         const auto &filename = str_ltrim(*input_filename);
         if (!filename.empty()) {
-            update_playtime();
+            w_ptr->update_playtime();
             file_character(player_ptr, filename);
         }
 
@@ -141,7 +141,7 @@ void do_cmd_player_status(PlayerType *player_ptr)
     while (true) {
         TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
 
-        update_playtime();
+        w_ptr->update_playtime();
         (void)display_player(player_ptr, page);
         if (page == 5) {
             page = 0;
