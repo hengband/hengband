@@ -70,9 +70,6 @@ public:
 
     bool wizard{}; /* This world under wizard mode */
 
-    OBJECT_IDX max_o_idx = 1024; /*!< 1フロアに存在可能な最大アイテム数 */
-    MONSTER_IDX max_m_idx = 1024; /*!< 1フロアに存在可能な最大モンスター数 */
-
     void set_arena(const bool new_status);
     bool get_arena() const;
     std::tuple<int, int, int> extract_date_time(PlayerRaceType start_race) const;

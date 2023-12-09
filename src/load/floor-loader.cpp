@@ -163,7 +163,7 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     }
 
     limit = rd_u16b();
-    if (limit > w_ptr->max_o_idx) {
+    if (limit > MAX_FLOOR_ITEMS) {
         return 151;
     }
 
@@ -181,7 +181,7 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     }
 
     limit = rd_u16b();
-    if (limit > w_ptr->max_m_idx) {
+    if (limit > MAX_FLOOR_MONSTERS) {
         return 161;
     }
 

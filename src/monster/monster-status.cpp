@@ -27,7 +27,6 @@
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-#include "world/world.h"
 #if JP
 #else
 #include "monster/monster-description-types.h"
@@ -122,7 +121,7 @@ int get_mproc_idx(FloorType *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
  */
 void mproc_add(FloorType *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
 {
-    if (floor_ptr->mproc_max[mproc_type] < w_ptr->max_m_idx) {
+    if (floor_ptr->mproc_max[mproc_type] < MAX_FLOOR_MONSTERS) {
         floor_ptr->mproc_list[mproc_type][floor_ptr->mproc_max[mproc_type]++] = (int16_t)m_idx;
     }
 }
