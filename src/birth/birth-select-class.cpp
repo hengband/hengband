@@ -14,32 +14,33 @@
 
 static TERM_COLOR birth_class_color(PlayerClassType cs)
 {
-    if (cs < PlayerClassType::MAX) {
-        if (is_retired_class(cs)) {
-            return TERM_L_DARK;
-        }
-        if (is_winner_class(cs)) {
-            return TERM_SLATE;
-        }
+    if (cs >= PlayerClassType::MAX) {
+        return TERM_WHITE;
     }
-    return TERM_WHITE;
+
+    if (is_retired_class(cs)) {
+        return TERM_L_DARK;
+    }
+
+    return w_ptr->is_winner_class(cs) ? TERM_SLATE : TERM_WHITE;
 }
 
 static std::string birth_class_label(int cs, concptr sym)
 {
-    const char p2 = ')';
+    constexpr auto p2 = ')';
     std::stringstream ss;
-
     if (cs < 0 || cs >= PLAYER_CLASS_TYPE_MAX) {
         ss << '*' << p2 << _("ランダム", "Random");
-    } else {
-        ss << sym[cs] << p2;
-        if (!(rp_ptr->choice & (1UL << cs))) {
-            ss << '(' << class_info[cs].title << ')';
-        } else {
-            ss << class_info[cs].title;
-        }
+        return ss.str();
     }
+
+    ss << sym[cs] << p2;
+    if (!(rp_ptr->choice & (1UL << cs))) {
+        ss << '(' << class_info[cs].title << ')';
+    } else {
+        ss << class_info[cs].title;
+    }
+
     return ss.str();
 }
 

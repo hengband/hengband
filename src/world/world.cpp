@@ -98,12 +98,13 @@ void AngbandWorld::add_retired_class(PlayerClassType c)
 /*!
  * @brief 勝利したクラスか判定する
  */
-bool is_winner_class(PlayerClassType c)
+bool AngbandWorld::is_winner_class(PlayerClassType c) const
 {
     if (c == PlayerClassType::MAX) {
         return false;
     }
-    return w_ptr->sf_winner.has(c);
+
+    return this->sf_winner.has(c);
 }
 
 /*!
