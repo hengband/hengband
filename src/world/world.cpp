@@ -88,10 +88,10 @@ void AngbandWorld::add_winner_class(PlayerClassType c)
 /*!
  * @brief 引退したクラスを追加する
  */
-void add_retired_class(PlayerClassType c)
+void AngbandWorld::add_retired_class(PlayerClassType c)
 {
-    if (!w_ptr->noscore) {
-        w_ptr->sf_retired.set(c);
+    if (!this->noscore) {
+        this->sf_retired.set(c);
     }
 }
 
