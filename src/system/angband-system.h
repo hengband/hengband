@@ -15,6 +15,8 @@ public:
     uint8_t version_patch{}; //!< 変愚蛮怒バージョン(パッチ番号)
     uint8_t version_extra{}; //!< 変愚蛮怒バージョン(エクストラ番号)
 
+    uint8_t savefile_key{}; //!< セーブファイルエンコードキー(XOR)
+
     void set_phase_out(bool new_status);
     bool is_phase_out() const;
     int get_max_range() const;
