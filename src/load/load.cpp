@@ -41,6 +41,7 @@
 #include "player/player-sex.h"
 #include "player/race-info-table.h"
 #include "system/angband-exceptions.h"
+#include "system/angband-system.h"
 #include "system/angband-version.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
@@ -441,8 +442,9 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
     }
 
     if (err) {
-        msg_format(_("エラー(%s)がバージョン %d.%d.%d.%d 用セーブファイル読み込み中に発生。", "Error (%s) reading %d.%d.%d.%d savefile."), what,
-            w_ptr->h_ver_major, w_ptr->h_ver_minor, w_ptr->h_ver_patch, w_ptr->h_ver_extra);
+        auto &system = AngbandSystem::get_instance();
+        constexpr auto fmt = _("エラー(%s)がバージョン %d.%d.%d.%d 用セーブファイル読み込み中に発生。", "Error (%s) reading %d.%d.%d.%d savefile.");
+        msg_format(fmt, what, system.h_ver_major, system.h_ver_minor, system.h_ver_patch, system.h_ver_extra);
         msg_print(nullptr);
         return false;
     }

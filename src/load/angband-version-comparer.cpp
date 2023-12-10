@@ -1,6 +1,6 @@
 #include "load/angband-version-comparer.h"
+#include "system/angband-system.h"
 #include "system/angband-version.h"
-#include "world/world.h"
 
 /*!
  * @brief 変愚蛮怒のバージョン比較処理 / This function determines if the version of the savefile currently being read is older than version
@@ -17,31 +17,36 @@ bool h_older_than(byte major, byte minor, byte patch, byte extra)
         return false;
     }
 
-    if (w_ptr->h_ver_major < major) {
+    const auto &system = AngbandSystem::get_instance();
+    if (system.h_ver_major < major) {
         return true;
     }
-    if (w_ptr->h_ver_major > major) {
+
+    if (system.h_ver_major > major) {
         return false;
     }
 
-    if (w_ptr->h_ver_minor < minor) {
+    if (system.h_ver_minor < minor) {
         return true;
     }
-    if (w_ptr->h_ver_minor > minor) {
+
+    if (system.h_ver_minor > minor) {
         return false;
     }
 
-    if (w_ptr->h_ver_patch < patch) {
+    if (system.h_ver_patch < patch) {
         return true;
     }
-    if (w_ptr->h_ver_patch > patch) {
+
+    if (system.h_ver_patch > patch) {
         return false;
     }
 
-    if (w_ptr->h_ver_extra < extra) {
+    if (system.h_ver_extra < extra) {
         return true;
     }
-    if (w_ptr->h_ver_extra > extra) {
+
+    if (system.h_ver_extra > extra) {
         return false;
     }
 
@@ -63,24 +68,28 @@ bool h_older_than(byte major, byte minor, byte patch)
         return false;
     }
 
-    if (w_ptr->h_ver_major < major) {
+    const auto &system = AngbandSystem::get_instance();
+    if (system.h_ver_major < major) {
         return true;
     }
-    if (w_ptr->h_ver_major > major) {
+
+    if (system.h_ver_major > major) {
         return false;
     }
 
-    if (w_ptr->h_ver_minor < minor) {
+    if (system.h_ver_minor < minor) {
         return true;
     }
-    if (w_ptr->h_ver_minor > minor) {
+
+    if (system.h_ver_minor > minor) {
         return false;
     }
 
-    if (w_ptr->h_ver_patch < patch) {
+    if (system.h_ver_patch < patch) {
         return true;
     }
-    if (w_ptr->h_ver_patch > patch) {
+
+    if (system.h_ver_patch > patch) {
         return false;
     }
 
