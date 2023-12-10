@@ -9,6 +9,7 @@
 #include "save/save-util.h"
 #include "save/save.h"
 #include "store/store-util.h"
+#include "system/angband-system.h"
 #include "system/angband.h"
 #include "system/item-entity.h"
 #include "util/enum-converter.h"
@@ -40,7 +41,7 @@ void wr_randomizer(void)
 {
     wr_u16b(0);
     wr_u16b(0);
-    const auto &state = w_ptr->rng.get_state();
+    const auto &state = AngbandSystem::get_instance().rng.get_state();
     for (const auto s : state) {
         wr_u32b(s);
     }

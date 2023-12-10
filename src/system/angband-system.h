@@ -1,5 +1,6 @@
 #pragma once
 
+#include "util/rng-xoshiro.h"
 #include <stdint.h>
 
 class AngbandSystem {
@@ -16,6 +17,10 @@ public:
     uint8_t version_extra{}; //!< 変愚蛮怒バージョン(エクストラ番号)
 
     uint8_t savefile_key{}; //!< セーブファイルエンコードキー(XOR)
+
+    Xoshiro128StarStar rng; //!< Uniform random bit generator for <random>
+    uint32_t seed_flavor{}; /* アイテム未鑑定名をシャッフルするための乱数シード */
+    uint32_t seed_town{}; /* ランダム生成される町をレイアウトするための乱数シード */
 
     void set_phase_out(bool new_status);
     bool is_phase_out() const;

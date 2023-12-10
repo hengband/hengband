@@ -6,8 +6,8 @@
 
 #include "item-info/flavor-initializer.h"
 #include "object/tval-types.h"
+#include "system/angband-system.h"
 #include "system/baseitem-info.h"
-#include "world/world.h"
 
 /*!
  * @brief ベースアイテムの未確定名を共通tval間でシャッフルする / Shuffle flavor indices of a group of objects with given tval
@@ -41,8 +41,9 @@ static void shuffle_flavors(ItemKindType tval)
  */
 void initialize_items_flavor()
 {
-    const auto rng_backup = w_ptr->rng;
-    w_ptr->rng.set_state(w_ptr->seed_flavor);
+    auto &system = AngbandSystem::get_instance();
+    const auto rng_backup = system.rng;
+    system.rng.set_state(system.seed_flavor);
     for (auto &baseitem : baseitems_info) {
         if (baseitem.flavor_name.empty()) {
             continue;
@@ -59,7 +60,7 @@ void initialize_items_flavor()
     shuffle_flavors(ItemKindType::FOOD);
     shuffle_flavors(ItemKindType::POTION);
     shuffle_flavors(ItemKindType::SCROLL);
-    w_ptr->rng = rng_backup;
+    system.rng = rng_backup;
     for (auto &baseitem : baseitems_info) {
         if (baseitem.idx == 0 || baseitem.name.empty()) {
             continue;

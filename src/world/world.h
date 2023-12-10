@@ -4,7 +4,6 @@
 #include "player-info/class-types.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
-#include "util/rng-xoshiro.h"
 #include <tuple>
 
 constexpr auto MAX_BOUNTY = 20;
@@ -35,11 +34,6 @@ public:
     MonsterRaceId today_mon{}; //!< 実際の日替わり賞金首
 
     uint32_t play_time{}; /*!< 実プレイ時間 */
-
-    Xoshiro128StarStar rng; //!< Uniform random bit generator for <random>
-
-    uint32_t seed_flavor{}; /* Hack -- consistent object colors */
-    uint32_t seed_town{}; /* Hack -- consistent town layout */
 
     bool is_loading_now{}; /*!< ロード処理中フラグ...ロード直後にcalc_bonus()時の徳変化、及びsanity_blast()による異常を抑止する */
 

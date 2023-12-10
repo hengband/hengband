@@ -72,13 +72,12 @@ void rd_version_info(void)
 void rd_randomizer(void)
 {
     strip_bytes(4);
-
     Xoshiro128StarStar::state_type state{};
     for (auto &s : state) {
         s = rd_u32b();
     }
-    w_ptr->rng.set_state(state);
 
+    AngbandSystem::get_instance().rng.set_state(state);
     strip_bytes(4 * (RAND_DEG - state.size()));
 }
 
