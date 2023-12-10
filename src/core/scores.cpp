@@ -187,7 +187,7 @@ bool send_world_score(PlayerType *player_ptr, bool do_send)
 errr top_twenty(PlayerType *player_ptr)
 {
     high_score the_score = {};
-    snprintf(the_score.what, sizeof(the_score.what), "%u.%u.%u", H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH);
+    snprintf(the_score.what, sizeof(the_score.what), "%u.%u.%u", H_VER_MAJOR, H_VER_MINOR, H_VER_STATE);
     snprintf(the_score.pts, sizeof(the_score.pts), "%9ld", (long)calc_score(player_ptr));
     the_score.pts[9] = '\0';
 
@@ -252,7 +252,7 @@ errr predict_score(PlayerType *player_ptr)
         return 0;
     }
 
-    snprintf(the_score.what, sizeof(the_score.what), "%u.%u.%u", H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH);
+    snprintf(the_score.what, sizeof(the_score.what), "%u.%u.%u", H_VER_MAJOR, H_VER_MINOR, H_VER_STATE);
     snprintf(the_score.pts, sizeof(the_score.pts), "%9ld", (long)calc_score(player_ptr));
     snprintf(the_score.gold, sizeof(the_score.gold), "%9lu", (long)player_ptr->au);
     snprintf(the_score.turns, sizeof(the_score.turns), "%9lu", (long)turn_real(player_ptr, w_ptr->game_turn));
