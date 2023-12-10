@@ -393,6 +393,7 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
         // v0.0.X～v3.0.0 Alpha51までは、セーブデータの第1バイトがFAKE_MAJOR_VERというZangbandと互換性を取ったバージョン番号フィールドだった.
         // v3.0.0 Alpha52以降は、バリアント名の長さフィールドとして再定義した.
         // 10～13はその名残。変愚蛮怒から更にバリアントを切ったらこの評価は不要.
+        auto &system = AngbandSystem::get_instance();
         auto tmp_major = tmp_ver[0];
         auto is_old_ver = (10 <= tmp_major) && (tmp_major <= 13);
         if (tmp_major == variant_length) {
@@ -400,10 +401,10 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
                 throw(_("セーブデータのバリアントは変愚蛮怒以外です", "The variant of save data is other than Hengband!"));
             }
 
-            w_ptr->sf_extra = tmp_ver[version_length - 1];
+            system.savefile_key = tmp_ver[version_length - 1];
             (void)fd_close(fd);
         } else if (is_old_ver) {
-            w_ptr->sf_extra = tmp_ver[3];
+            system.savefile_key = tmp_ver[3];
             (void)fd_close(fd);
         } else {
             (void)fd_close(fd);

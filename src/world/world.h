@@ -43,8 +43,6 @@ public:
 
     bool is_loading_now{}; /*!< ロード処理中フラグ...ロード直後にcalc_bonus()時の徳変化、及びsanity_blast()による異常を抑止する */
 
-    byte sf_extra{}; //!< セーブファイルエンコードキー(XOR)
-
     uint32_t sf_system{}; //!< OS情報 / OS information
     uint32_t sf_when{}; //!< 作成日時 / Created Date
     uint16_t sf_lives{}; //!< このセーブファイルで何人プレイしたか / Number of past "lives" with this file

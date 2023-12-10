@@ -35,7 +35,7 @@ void rd_version_info(void)
         throw("Invalid version is detected!");
     }
 
-    load_xor_byte = w_ptr->sf_extra;
+    load_xor_byte = system.savefile_key;
     v_check = 0L;
     x_check = 0L;
 
