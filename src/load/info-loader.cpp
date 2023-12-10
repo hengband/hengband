@@ -24,10 +24,10 @@ void rd_version_info(void)
     if (tmp_major == variant_length) {
         strip_bytes(variant_length);
         load_xor_byte = 0;
-        system.h_ver_major = rd_byte();
-        system.h_ver_minor = rd_byte();
-        system.h_ver_patch = rd_byte();
-        system.h_ver_extra = rd_byte();
+        system.version_major = rd_byte();
+        system.version_minor = rd_byte();
+        system.version_patch = rd_byte();
+        system.version_extra = rd_byte();
         strip_bytes(1);
     } else if (is_old_ver) {
         strip_bytes(3);
@@ -41,10 +41,10 @@ void rd_version_info(void)
 
     if (is_old_ver) {
         /* Old savefile will be version 0.0.0.3 */
-        system.h_ver_extra = rd_byte();
-        system.h_ver_patch = rd_byte();
-        system.h_ver_minor = rd_byte();
-        system.h_ver_major = rd_byte();
+        system.version_extra = rd_byte();
+        system.version_patch = rd_byte();
+        system.version_minor = rd_byte();
+        system.version_major = rd_byte();
     }
 
     w_ptr->sf_system = rd_u32b();
@@ -57,13 +57,13 @@ void rd_version_info(void)
     /* h_ver_majorがfake_ver_majorと同じだったころへの対策 */
     if (loading_savefile_version_is_older_than(10)) {
         constexpr auto fake_ver_plus = 10;
-        if (tmp_major - system.h_ver_major < fake_ver_plus) {
-            system.h_ver_major -= fake_ver_plus;
+        if (tmp_major - system.version_major < fake_ver_plus) {
+            system.version_major -= fake_ver_plus;
         }
     }
 
     constexpr auto fmt = _("バージョン %d.%d.%d のセーブデータ(SAVE%u形式)をロード中...", "Loading a version %d.%d.%d savefile (SAVE%u format)...");
-    load_note(format(fmt, system.h_ver_major, system.h_ver_minor, system.h_ver_patch, loading_savefile_version));
+    load_note(format(fmt, system.version_major, system.version_minor, system.version_patch, loading_savefile_version));
 }
 
 /*!

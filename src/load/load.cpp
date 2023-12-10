@@ -444,7 +444,7 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
     if (err) {
         auto &system = AngbandSystem::get_instance();
         constexpr auto fmt = _("エラー(%s)がバージョン %d.%d.%d.%d 用セーブファイル読み込み中に発生。", "Error (%s) reading %d.%d.%d.%d savefile.");
-        msg_format(fmt, what, system.h_ver_major, system.h_ver_minor, system.h_ver_patch, system.h_ver_extra);
+        msg_format(fmt, what, system.version_major, system.version_minor, system.version_patch, system.version_extra);
         msg_print(nullptr);
         return false;
     }
