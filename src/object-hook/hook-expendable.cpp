@@ -37,7 +37,7 @@ bool item_tester_hook_eatable(PlayerType *player_ptr, const ItemEntity *o_ptr)
         }
     } else if (food_type == PlayerRaceFoodType::CORPSE) {
         auto corpse_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-        if ((o_ptr->bi_key == BaseitemKey(ItemKindType::CORPSE, SV_CORPSE)) && angband_strchr("pht", monraces_info[corpse_r_idx].d_char)) {
+        if (o_ptr->is_corpse() && angband_strchr("pht", monraces_info[corpse_r_idx].d_char)) {
             return true;
         }
     }

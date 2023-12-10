@@ -144,7 +144,7 @@ static void generate_challenge_arena(PlayerType *player_ptr)
         return;
     }
 
-    player_ptr->exit_bldg = true;
+    w_ptr->set_arena(true);
     player_ptr->arena_number++;
     msg_print(_("相手は欠場した。あなたの不戦勝だ。", "The enemy is unable to appear. You won by default."));
 }

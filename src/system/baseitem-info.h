@@ -42,6 +42,7 @@ public:
 
     ItemKindType tval() const;
     std::optional<int> sval() const;
+    bool is(ItemKindType tval) const;
 
     ItemKindType get_arrow_kind() const;
     bool is_spell_book() const;
@@ -70,6 +71,13 @@ public:
     bool is_junk() const;
     bool is_armour() const;
     bool is_cross_bow() const;
+    bool should_refuse_enchant() const;
+    std::string explain_activation() const;
+    bool is_convertible() const;
+    bool is_fuel() const;
+    bool is_lance() const;
+    bool is_readable() const;
+    bool is_corpse() const;
 
 private:
     ItemKindType type_value;

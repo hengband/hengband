@@ -93,17 +93,20 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
     } else if (tokens[0] == "D") {
         // D:text_ja
         // D:$text_en
-        if (tokens.size() < 2 || tokens[1].size() == 0) {
+        if (tokens.size() < 2 || buf.length() < 3) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 #ifdef JP
-        if (tokens[1][0] == '$') {
+        if (buf[2] == '$') {
             return PARSE_ERROR_NONE;
         }
         bii_ptr->text.append(buf.substr(2));
 #else
-        if (tokens[1][0] != '$') {
+        if (buf[2] != '$') {
             return PARSE_ERROR_NONE;
+        }
+        if (buf.length() == 3) {
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
         append_english_text(bii_ptr->text, buf.substr(3));
 #endif
@@ -183,7 +186,7 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         if (tokens.size() < 2 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
-        auto n = grab_one_activation_flag(tokens[1].data());
+        auto n = grab_one_activation_flag(tokens[1]);
         if (n <= RandomArtActType::NONE) {
             return PARSE_ERROR_INVALID_FLAG;
         }

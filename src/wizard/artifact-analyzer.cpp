@@ -266,7 +266,7 @@ ArtifactsDumpInfo object_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr
     info.misc_magic = analyze_misc_magic(o_ptr);
     info.addition = analyze_addition(o_ptr);
     info.misc_desc = analyze_misc(o_ptr);
-    info.activation = activation_explanation(o_ptr);
+    info.activation = o_ptr->explain_activation();
     return info;
 }
 
@@ -288,7 +288,7 @@ ArtifactsDumpInfo random_artifact_analyze(PlayerType *player_ptr, const ItemEnti
     info.vulnerabilities = analyze_vulnerable(o_ptr);
     info.sustenances = analyze_sustains(o_ptr);
     info.misc_magic = analyze_misc_magic(o_ptr);
-    info.activation = activation_explanation(o_ptr);
+    info.activation = o_ptr->explain_activation();
     constexpr auto weight_mes = _("重さ %d.%d kg", "Weight %d.%d lbs");
     const auto weight_integer = _(lb_to_kg_integer(o_ptr->weight), o_ptr->weight / 10);
     const auto weight_fraction = _(lb_to_kg_fraction(o_ptr->weight), o_ptr->weight % 10);

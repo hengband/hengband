@@ -628,9 +628,9 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             }
 
             /* Calculate the new location (see "project()") */
-            ny = y;
-            nx = x;
-            mmove2(&ny, &nx, player_ptr->y, player_ptr->x, ty, tx);
+            const auto pos = mmove2({ y, x }, player_ptr->get_position(), { ty, tx });
+            ny = pos.y;
+            nx = pos.x;
 
             /* Shatter Arrow */
             if (snipe_type == SP_KILL_WALL) {
@@ -877,7 +877,9 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                                 }
 
                                 /* Calculate the new location (see "project()") */
-                                mmove2(&ny, &nx, player_ptr->y, player_ptr->x, ty, tx);
+                                const auto pos_to = mmove2({ ny, nx }, player_ptr->get_position(), { ty, tx });
+                                ny = pos_to.y;
+                                nx = pos_to.x;
 
                                 /* Stopped by wilderness boundary */
                                 if (!in_bounds2(floor_ptr, ny, nx)) {

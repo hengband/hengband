@@ -1,19 +1,21 @@
 #pragma once
 
-#include "system/angband.h"
+#include <optional>
+#include <string>
 #include <vector>
 
 enum class RandomArtActType : short;
-struct activation_type {
-    concptr flag;
+class ActivationType {
+public:
+    std::string flag;
     RandomArtActType index;
-    byte level;
-    int32_t value;
-    struct {
-        int constant;
-        DICE_NUMBER dice;
-    } timeout;
-    concptr desc;
+    int level;
+    int value;
+    std::optional<int> constant; // 発動間隔の最低ターン数
+    int dice; // 発動間隔の追加ターン数
+    std::string desc;
+
+    std::optional<std::string> build_timeout_description() const;
 };
 
-extern const std::vector<activation_type> activation_info;
+extern const std::vector<ActivationType> activation_info;

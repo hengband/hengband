@@ -506,7 +506,7 @@ void wilderness_gen(PlayerType *player_ptr)
     for (auto y = 0; y < floor.height; y++) {
         for (auto x = 0; x < floor.width; x++) {
             auto &grid = floor.get_grid({ y, x });
-            if (is_daytime()) {
+            if (w_ptr->is_daytime()) {
                 grid.info |= CAVE_GLOW;
                 if (view_perma_grids) {
                     grid.info |= CAVE_MARK;

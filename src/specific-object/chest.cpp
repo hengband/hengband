@@ -35,36 +35,23 @@ Chest::Chest(PlayerType *player_ptr)
 }
 
 /*!
- * @brief 箱からアイテムを引き出す /
- * Allocates objects upon opening a chest    -BEN-
+ * @brief 箱からアイテムを引き出す
  * @param scatter TRUEならばトラップによるアイテムの拡散処理
- * @param y 箱の存在するマスのY座標
- * @param x 箱の存在するマスのX座標
- * @param o_idx 箱のオブジェクトID
- * @return なし
- * @details
- * <pre>
- * Disperse treasures from the given chest, centered at (x,y).
- *
- * Small chests often contain "gold", while Large chests always contain
- * items.  Wooden chests contain 2 items, Iron chests contain 4 items,
- * and Steel chests contain 6 items.  The "value" of the items in a
- * chest is based on the "power" of the chest, which is in turn based
- * on the level on which the chest is generated.
- * </pre>
+ * @param pos 箱の座標
+ * @param item_idx フロア内アイテムID
  */
-void Chest::chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
+void Chest::open(bool scatter, const Pos2D &pos, short item_idx)
 {
     BIT_FLAGS mode = AM_GOOD | AM_FORBID_CHEST;
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *o_ptr = &floor_ptr->o_list[o_idx];
-    if (!o_ptr->is_valid()) {
+    auto &floor = *this->player_ptr->current_floor_ptr;
+    auto &item = floor.o_list[item_idx];
+    if (!item.is_valid()) {
         msg_print(_("箱は既に壊れてしまっている…", "The chest was broken and you couldn't open it..."));
         return;
     }
 
     /* Small chests often hold "gold" */
-    const auto sval = *o_ptr->bi_key.sval();
+    const auto sval = *item.bi_key.sval();
     auto small = sval < SV_CHEST_MIN_LARGE;
 
     /* Determine how much to drop (see above) */
@@ -74,14 +61,12 @@ void Chest::chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
         number = 5;
         small = false;
         mode |= AM_GREAT;
-        floor_ptr->object_level = o_ptr->chest_level;
+        floor.object_level = item.chest_level;
     } else {
-        /* Determine the "value" of the items */
-        floor_ptr->object_level = std::abs(o_ptr->pval) + 10;
+        floor.object_level = std::abs(item.pval) + 10;
     }
 
-    /* Zero pval means empty chest */
-    if (!o_ptr->pval) {
+    if (item.pval == 0) {
         number = 0;
     }
 
@@ -110,11 +95,10 @@ void Chest::chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 
         /* If chest scatters its contents, pick any floor square. */
         if (scatter) {
-            int i;
-            for (i = 0; i < 200; i++) {
+            for (auto i = 0; i < 200; i++) {
                 /* Pick a totally random spot. */
-                y = randint0(MAX_HGT);
-                x = randint0(MAX_WID);
+                const auto y = randint0(MAX_HGT);
+                const auto x = randint0(MAX_WID);
 
                 /* Must be an empty floor. */
                 if (!is_cave_empty_bold(this->player_ptr, y, x)) {
@@ -130,37 +114,24 @@ void Chest::chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
         }
         /* Normally, drop object near the chest. */
         else {
-            (void)drop_near(this->player_ptr, q_ptr, -1, y, x);
+            (void)drop_near(this->player_ptr, q_ptr, -1, pos.y, pos.x);
         }
     }
 
-    /* Reset the object level */
-    floor_ptr->object_level = floor_ptr->base_level;
-
-    /* Empty */
-    o_ptr->pval = 0;
-
-    o_ptr->mark_as_known();
+    floor.object_level = floor.base_level;
+    item.pval = 0;
+    item.mark_as_known();
 }
 
 /*!
- * @brief 箱のトラップ処理 /
- * Chests have traps too.
- * @param y 箱の存在するマスのY座標
+ * @brief 箱のトラップ処理
+ * @param pos 箱の座標
  * @param x 箱の存在するマスのX座標
- * @param o_idx 箱のオブジェクトID
- * @return なし
- * @details
- * <pre>
- * Exploding chest destroys contents (and traps).
- * Note that the chest itself is never destroyed.
- * </pre>
+ * @param item_idx 箱のオブジェクトID
  */
-void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
+void Chest::fire_trap(const Pos2D &pos, short item_idx)
 {
-    int i;
-
-    auto *o_ptr = &this->player_ptr->current_floor_ptr->o_list[o_idx];
+    auto *o_ptr = &this->player_ptr->current_floor_ptr->o_list[item_idx];
 
     int mon_level = o_ptr->chest_level;
 
@@ -169,8 +140,7 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
         return;
     }
 
-    /* Obtain the traps */
-    auto trap = chest_traps[o_ptr->pval];
+    const auto &trap = chest_traps[o_ptr->pval];
 
     /* Lose strength */
     if (trap.has(ChestTrapType::LOSE_STR)) {
@@ -206,11 +176,11 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
     if (trap.has(ChestTrapType::SUMMON)) {
         int num = 2 + randint1(3);
         msg_print(_("突如吹き出した煙に包み込まれた！", "You are enveloped in a cloud of smoke!"));
-        for (i = 0; i < num; i++) {
+        for (auto i = 0; i < num; i++) {
             if (randint1(100) < this->player_ptr->current_floor_ptr->dun_level) {
                 activate_hi_summon(this->player_ptr, this->player_ptr->y, this->player_ptr->x, false);
             } else {
-                (void)summon_specific(this->player_ptr, 0, y, x, mon_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+                (void)summon_specific(this->player_ptr, 0, pos.y, pos.x, mon_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
             }
         }
     }
@@ -218,8 +188,8 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
     /* Elemental summon. */
     if (trap.has(ChestTrapType::E_SUMMON)) {
         msg_print(_("宝を守るためにエレメンタルが現れた！", "Elemental beings appear to protect their treasures!"));
-        for (i = 0; i < randint1(3) + 5; i++) {
-            (void)summon_specific(this->player_ptr, 0, y, x, mon_level, SUMMON_ELEMENTAL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+        for (auto i = 0; i < randint1(3) + 5; i++) {
+            (void)summon_specific(this->player_ptr, 0, pos.y, pos.x, mon_level, SUMMON_ELEMENTAL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
         }
     }
 
@@ -227,12 +197,12 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
     if (trap.has(ChestTrapType::BIRD_STORM)) {
         msg_print(_("鳥の群れがあなたを取り巻いた！", "A storm of birds swirls around you!"));
 
-        for (i = 0; i < randint1(3) + 3; i++) {
-            (void)fire_meteor(this->player_ptr, -1, AttributeType::FORCE, y, x, o_ptr->pval / 5, 7);
+        for (auto i = 0; i < randint1(3) + 3; i++) {
+            (void)fire_meteor(this->player_ptr, -1, AttributeType::FORCE, pos.y, pos.x, o_ptr->pval / 5, 7);
         }
 
-        for (i = 0; i < randint1(5) + o_ptr->pval / 5; i++) {
-            (void)summon_specific(this->player_ptr, 0, y, x, mon_level, SUMMON_BIRD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+        for (auto i = 0; i < randint1(5) + o_ptr->pval / 5; i++) {
+            (void)summon_specific(this->player_ptr, 0, pos.y, pos.x, mon_level, SUMMON_BIRD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
         }
     }
 
@@ -241,33 +211,33 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
         /* Summon demons. */
         if (one_in_(4)) {
             msg_print(_("炎と硫黄の雲の中に悪魔が姿を現した！", "Demons materialize in clouds of fire and brimstone!"));
-            for (i = 0; i < randint1(3) + 2; i++) {
-                (void)fire_meteor(this->player_ptr, -1, AttributeType::FIRE, y, x, 10, 5);
-                (void)summon_specific(this->player_ptr, 0, y, x, mon_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+            for (auto i = 0; i < randint1(3) + 2; i++) {
+                (void)fire_meteor(this->player_ptr, -1, AttributeType::FIRE, pos.y, pos.x, 10, 5);
+                (void)summon_specific(this->player_ptr, 0, pos.y, pos.x, mon_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
             }
         }
 
         /* Summon dragons. */
         else if (one_in_(3)) {
             msg_print(_("暗闇にドラゴンの影がぼんやりと現れた！", "Draconic forms loom out of the darkness!"));
-            for (i = 0; i < randint1(3) + 2; i++) {
-                (void)summon_specific(this->player_ptr, 0, y, x, mon_level, SUMMON_DRAGON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+            for (auto i = 0; i < randint1(3) + 2; i++) {
+                (void)summon_specific(this->player_ptr, 0, pos.y, pos.x, mon_level, SUMMON_DRAGON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
             }
         }
 
         /* Summon hybrids. */
         else if (one_in_(2)) {
             msg_print(_("奇妙な姿の怪物が襲って来た！", "Creatures strange and twisted assault you!"));
-            for (i = 0; i < randint1(5) + 3; i++) {
-                (void)summon_specific(this->player_ptr, 0, y, x, mon_level, SUMMON_HYBRID, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+            for (auto i = 0; i < randint1(5) + 3; i++) {
+                (void)summon_specific(this->player_ptr, 0, pos.y, pos.x, mon_level, SUMMON_HYBRID, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
             }
         }
 
         /* Summon vortices (scattered) */
         else {
             msg_print(_("渦巻が合体し、破裂した！", "Vortices coalesce and wreak destruction!"));
-            for (i = 0; i < randint1(3) + 2; i++) {
-                (void)summon_specific(this->player_ptr, 0, y, x, mon_level, SUMMON_VORTEX, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+            for (auto i = 0; i < randint1(3) + 2; i++) {
+                (void)summon_specific(this->player_ptr, 0, pos.y, pos.x, mon_level, SUMMON_VORTEX, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
             }
         }
     }
@@ -316,7 +286,7 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
                 continue;
             }
 
-            (void)fire_meteor(this->player_ptr, -1, AttributeType::NETHER, y, x, 150, 1);
+            (void)fire_meteor(this->player_ptr, -1, AttributeType::NETHER, pos.y, pos.x, 150, 1);
         }
     }
 
@@ -337,7 +307,7 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
     /* Scatter contents. */
     if ((trap.has(ChestTrapType::SCATTER)) && o_ptr->is_valid()) {
         msg_print(_("宝箱の中身はダンジョンじゅうに散乱した！", "The contents of the chest scatter all over the dungeon!"));
-        this->chest_death(true, y, x, o_idx);
+        this->open(true, pos, item_idx);
         o_ptr->pval = 0;
     }
 }

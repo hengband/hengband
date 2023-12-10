@@ -236,10 +236,7 @@ static bool load_floor_aux(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     }
 
     auto n_x_check = x_check;
-    if (rd_u32b() != n_x_check) {
-        return false;
-    }
-    return true;
+    return rd_u32b() == n_x_check;
 }
 
 /*!

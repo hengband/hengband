@@ -389,9 +389,9 @@ bool ObjectThrowEntity::check_throw_boomerang()
 
 bool ObjectThrowEntity::check_racial_target_bold()
 {
-    this->ny[this->cur_dis] = this->y;
-    this->nx[this->cur_dis] = this->x;
-    mmove2(&this->ny[this->cur_dis], &this->nx[this->cur_dis], this->player_ptr->y, this->player_ptr->x, this->ty, this->tx);
+    const auto pos = mmove2({ this->y, this->x }, this->player_ptr->get_position(), { this->ty, this->tx });
+    this->ny[this->cur_dis] = pos.y;
+    this->nx[this->cur_dis] = pos.x;
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     if (cave_has_flag_bold(floor_ptr, this->ny[this->cur_dis], this->nx[this->cur_dis], TerrainCharacteristics::PROJECT)) {
         return false;

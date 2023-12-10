@@ -272,9 +272,7 @@ void do_cmd_feeling(PlayerType *player_ptr)
  */
 void do_cmd_time(PlayerType *player_ptr)
 {
-    int day, hour, min;
-    extract_day_hour_min(player_ptr, &day, &hour, &min);
-    std::string desc = _("変な時刻だ。", "It is a strange time.");
+    const auto &[day, hour, min] = w_ptr->extract_date_time(player_ptr->start_race);
     std::string day_buf = (day < MAX_DAYS) ? std::to_string(day) : "*****";
     constexpr auto mes = _("%s日目, 時刻は%d:%02d %sです。", "This is day %s. The time is %d:%02d %s.");
     msg_format(mes, day_buf.data(), (hour % 12 == 0) ? 12 : (hour % 12), min, (hour < 12) ? "AM" : "PM");
@@ -290,6 +288,7 @@ void do_cmd_time(PlayerType *player_ptr)
         return;
     }
 
+    std::string desc = _("変な時刻だ。", "It is a strange time.");
     auto full = hour * 100 + min;
     auto start = 9999;
     auto end = -9999;

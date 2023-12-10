@@ -369,7 +369,7 @@ static char describe_footing_many_items(PlayerType *player_ptr, GridExamination 
         ge_ptr->g_ptr->o_idx_list.rotate(player_ptr->current_floor_ptr);
 
         // ターゲットしている床の座標を渡す必要があるので、window_stuff経由ではなく直接呼び出す
-        fix_floor_item_list(player_ptr, ge_ptr->y, ge_ptr->x);
+        fix_floor_item_list(player_ptr, { ge_ptr->y, ge_ptr->x });
     }
 }
 

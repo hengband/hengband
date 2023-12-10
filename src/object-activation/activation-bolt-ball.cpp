@@ -96,10 +96,10 @@ bool activate_bolt_cold_1(PlayerType *player_ptr)
     return true;
 }
 
-bool activate_bolt_hypodynamia_1(PlayerType *player_ptr, concptr name)
+bool activate_bolt_hypodynamia_1(PlayerType *player_ptr, std::string_view name)
 {
     DIRECTION dir;
-    msg_format(_("あなたは%sに敵を締め殺すよう命じた。", "You order the %s to strangle your opponent."), name);
+    msg_format(_("あなたは%sに敵を締め殺すよう命じた。", "You order the %s to strangle your opponent."), name.data());
     if (!get_aim_dir(player_ptr, &dir)) {
         return false;
     }
@@ -152,10 +152,10 @@ bool activate_bolt_drain_2(PlayerType *player_ptr)
     return true;
 }
 
-bool activate_bolt_mana(PlayerType *player_ptr, concptr name)
+bool activate_bolt_mana(PlayerType *player_ptr, std::string_view name)
 {
     DIRECTION dir;
-    msg_format(_("%sに魔法のトゲが現れた...", "The %s grows magical spikes..."), name);
+    msg_format(_("%sに魔法のトゲが現れた...", "The %s grows magical spikes..."), name.data());
     if (!get_aim_dir(player_ptr, &dir)) {
         return false;
     }
@@ -224,10 +224,10 @@ bool activate_ball_fire_1(PlayerType *player_ptr)
     return true;
 }
 
-bool activate_ball_fire_2(PlayerType *player_ptr, concptr name)
+bool activate_ball_fire_2(PlayerType *player_ptr, std::string_view name)
 {
     DIRECTION dir;
-    msg_format(_("%sから炎が吹き出した...", "The %s rages in fire..."), name);
+    msg_format(_("%sから炎が吹き出した...", "The %s rages in fire..."), name.data());
     if (!get_aim_dir(player_ptr, &dir)) {
         return false;
     }
@@ -320,10 +320,10 @@ bool activate_rocket(PlayerType *player_ptr)
     return true;
 }
 
-bool activate_ball_water(PlayerType *player_ptr, concptr name)
+bool activate_ball_water(PlayerType *player_ptr, std::string_view name)
 {
     DIRECTION dir;
-    msg_format(_("%sが深い青色に鼓動している...", "The %s throbs deep blue..."), name);
+    msg_format(_("%sが深い青色に鼓動している...", "The %s throbs deep blue..."), name.data());
     if (!get_aim_dir(player_ptr, &dir)) {
         return false;
     }
@@ -332,11 +332,11 @@ bool activate_ball_water(PlayerType *player_ptr, concptr name)
     return true;
 }
 
-bool activate_ball_lite(PlayerType *player_ptr, concptr name)
+bool activate_ball_lite(PlayerType *player_ptr, std::string_view name)
 {
     int num = damroll(5, 3);
     POSITION y = 0, x = 0;
-    msg_format(_("%sが稲妻で覆われた...", "The %s is surrounded by lightning..."), name);
+    msg_format(_("%sが稲妻で覆われた...", "The %s is surrounded by lightning..."), name.data());
     for (int k = 0; k < num; k++) {
         int attempts = 1000;
         while (attempts--) {
@@ -356,10 +356,10 @@ bool activate_ball_lite(PlayerType *player_ptr, concptr name)
     return true;
 }
 
-bool activate_ball_dark(PlayerType *player_ptr, concptr name)
+bool activate_ball_dark(PlayerType *player_ptr, std::string_view name)
 {
     DIRECTION dir;
-    msg_format(_("%sが深い闇に覆われた...", "The %s is covered in pitch-darkness..."), name);
+    msg_format(_("%sが深い闇に覆われた...", "The %s is covered in pitch-darkness..."), name.data());
     if (!get_aim_dir(player_ptr, &dir)) {
         return false;
     }
@@ -368,10 +368,10 @@ bool activate_ball_dark(PlayerType *player_ptr, concptr name)
     return true;
 }
 
-bool activate_ball_mana(PlayerType *player_ptr, concptr name)
+bool activate_ball_mana(PlayerType *player_ptr, std::string_view name)
 {
     DIRECTION dir;
-    msg_format(_("%sが青白く光った．．．", "The %s becomes pale..."), name);
+    msg_format(_("%sが青白く光った．．．", "The %s becomes pale..."), name.data());
     if (!get_aim_dir(player_ptr, &dir)) {
         return false;
     }

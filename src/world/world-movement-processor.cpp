@@ -43,7 +43,7 @@ void check_random_quest_auto_failure(PlayerType *player_ptr)
 
         quest.status = QuestStatusType::FAILED;
         quest.complev = (byte)player_ptr->lev;
-        update_playtime();
+        w_ptr->update_playtime();
         quest.comptime = w_ptr->play_time;
         monraces_info[quest.r_idx].flags1 &= ~(RF1_QUESTOR);
     }

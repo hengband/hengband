@@ -173,11 +173,8 @@ static void write_diary_pet(FILE *fff, int num, std::string_view note)
  */
 int exe_write_diary_quest(PlayerType *player_ptr, DiaryKind dk, QuestId num)
 {
-    static bool disable_diary = false;
-
-    int day, hour, min;
-    extract_day_hour_min(player_ptr, &day, &hour, &min);
-
+    static auto disable_diary = false;
+    const auto &[day, hour, min] = w_ptr->extract_date_time(player_ptr->start_race);
     if (disable_diary) {
         return -1;
     }
@@ -198,8 +195,7 @@ int exe_write_diary_quest(PlayerType *player_ptr, DiaryKind dk, QuestId num)
         return -1;
     }
 
-    bool do_level = true;
-
+    auto do_level = true;
     switch (dk) {
     case DiaryKind::FIX_QUEST_C: {
         if (any_bits(quest.flags, QUEST_FLAG_SILENT)) {
@@ -258,11 +254,8 @@ int exe_write_diary_quest(PlayerType *player_ptr, DiaryKind dk, QuestId num)
  */
 void exe_write_diary(PlayerType *player_ptr, DiaryKind dk, int num, std::string_view note)
 {
-    static bool disable_diary = false;
-
-    int day, hour, min;
-    extract_day_hour_min(player_ptr, &day, &hour, &min);
-
+    static auto disable_diary = false;
+    const auto &[day, hour, min] = w_ptr->extract_date_time(player_ptr->start_race);
     if (disable_diary) {
         return;
     }

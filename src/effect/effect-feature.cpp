@@ -372,7 +372,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
             break;
         }
 
-        if ((floor.dun_level > 0) || !is_daytime()) {
+        if ((floor.dun_level > 0) || !w_ptr->is_daytime()) {
             for (int j = 0; j < 9; j++) {
                 const Pos2D pos_neighbor(y + ddy_ddd[j], x + ddx_ddd[j]);
                 if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {

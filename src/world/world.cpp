@@ -1,104 +1,134 @@
 #include "world/world.h"
 #include "player-info/race-types.h"
 #include "system/player-type-definition.h"
+#include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
 
-world_type world;
-world_type *w_ptr = &world;
+AngbandWorld world;
+AngbandWorld *w_ptr = &world;
 
 /*!
- * @brief ゲーム時間が日中かどうかを返す /
- * Whether daytime or not
- * @return 日中ならばTRUE、夜ならばFALSE
+ * @brief アリーナへの入場/退出状態を更新する
+ * @param 入場ならばtrue、退出ならばfalse
  */
-bool is_daytime(void)
+void AngbandWorld::set_arena(const bool new_status)
 {
-    int32_t len = TURNS_PER_TICK * TOWN_DAWN;
-    if ((w_ptr->game_turn % len) < (len / 2)) {
-        return true;
-    } else {
-        return false;
-    }
+    this->is_out_arena = new_status;
 }
 
 /*!
- * @brief 現在の日数、時刻を返す /
- * Extract day, hour, min
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param day 日数を返すための参照ポインタ
- * @param hour 時数を返すための参照ポインタ
- * @param min 分数を返すための参照ポインタ
+ * @brief アリーナへの入場/退出状態を取得する
+ * @return アリーナ状態
  */
-void extract_day_hour_min(PlayerType *player_ptr, int *day, int *hour, int *min)
+bool AngbandWorld::get_arena() const
 {
-    const int32_t A_DAY = TURNS_PER_TICK * TOWN_DAWN;
-    int32_t turn_in_today = (w_ptr->game_turn + A_DAY / 4) % A_DAY;
+    return this->is_out_arena;
+}
 
-    switch (player_ptr->start_race) {
+/*!
+ * @brief ゲーム時間が日中かどうかを返す
+ * @return 日中ならばTRUE、夜ならばFALSE
+ */
+bool AngbandWorld::is_daytime() const
+{
+    int a_day = TURNS_PER_TICK * TOWN_DAWN;
+    return (this->game_turn % a_day) < (a_day / 2);
+}
+
+/*!
+ * @brief プレイ開始からの経過時間を計算する
+ * @param start_race 開始時のプレイヤー種族
+ * @return 日数、時間、分
+ */
+std::tuple<int, int, int> AngbandWorld::extract_date_time(PlayerRaceType start_race) const
+{
+    const auto a_day = TURNS_PER_TICK * TOWN_DAWN;
+    const auto turn_in_today = (this->game_turn + a_day / 4) % a_day;
+    int day;
+    switch (start_race) {
     case PlayerRaceType::VAMPIRE:
     case PlayerRaceType::SKELETON:
     case PlayerRaceType::ZOMBIE:
     case PlayerRaceType::SPECTRE:
-        *day = (w_ptr->game_turn - A_DAY * 3 / 4) / A_DAY + 1;
+        day = (this->game_turn - a_day * 3 / 4) / a_day + 1;
         break;
     default:
-        *day = (w_ptr->game_turn + A_DAY / 4) / A_DAY + 1;
+        day = (this->game_turn + a_day / 4) / a_day + 1;
         break;
     }
-    *hour = (24 * turn_in_today / A_DAY) % 24;
-    *min = (1440 * turn_in_today / A_DAY) % 60;
+
+    auto hour = (24 * turn_in_today / a_day) % 24;
+    auto min = (1440 * turn_in_today / a_day) % 60;
+    return { day, hour, min };
 }
 
 /*!
  * @brief 実ゲームプレイ時間を更新する
  */
-void update_playtime(void)
+void AngbandWorld::update_playtime()
 {
-    if (w_ptr->start_time != 0) {
-        uint32_t tmp = (uint32_t)time(nullptr);
-        w_ptr->play_time += (tmp - w_ptr->start_time);
-        w_ptr->start_time = tmp;
+    if (this->start_time == 0) {
+        return;
     }
+
+    const auto current_time = static_cast<uint32_t>(time(nullptr));
+    this->play_time += (current_time - this->start_time);
+    this->start_time = current_time;
 }
 
 /*!
  * @brief 勝利したクラスを追加する
  */
-void add_winner_class(PlayerClassType c)
+void AngbandWorld::add_winner_class(PlayerClassType c)
 {
-    if (!w_ptr->noscore) {
-        w_ptr->sf_winner.set(c);
+    if (!this->noscore) {
+        this->sf_winner.set(c);
     }
 }
 
 /*!
  * @brief 引退したクラスを追加する
  */
-void add_retired_class(PlayerClassType c)
+void AngbandWorld::add_retired_class(PlayerClassType c)
 {
-    if (!w_ptr->noscore) {
-        w_ptr->sf_retired.set(c);
+    if (!this->noscore) {
+        this->sf_retired.set(c);
     }
+}
+
+term_color_type AngbandWorld::get_birth_class_color(PlayerClassType c) const
+{
+    if (c >= PlayerClassType::MAX) {
+        return TERM_WHITE;
+    }
+
+    if (this->is_retired_class(c)) {
+        return TERM_L_DARK;
+    }
+
+    return this->is_winner_class(c) ? TERM_SLATE : TERM_WHITE;
 }
 
 /*!
  * @brief 勝利したクラスか判定する
  */
-bool is_winner_class(PlayerClassType c)
+bool AngbandWorld::is_winner_class(PlayerClassType c) const
 {
     if (c == PlayerClassType::MAX) {
         return false;
     }
-    return w_ptr->sf_winner.has(c);
+
+    return this->sf_winner.has(c);
 }
 
 /*!
  * @brief 引退したクラスか判定する
  */
-bool is_retired_class(PlayerClassType c)
+bool AngbandWorld::is_retired_class(PlayerClassType c) const
 {
     if (c == PlayerClassType::MAX) {
         return false;
     }
-    return w_ptr->sf_retired.has(c);
+
+    return this->sf_retired.has(c);
 }

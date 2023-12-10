@@ -318,7 +318,7 @@ void window_stuff(PlayerType *player_ptr)
     if (window_flags.has(SubWindowRedrawingFlag::FLOOR_ITEMS)) {
         rfu.reset_flag(SubWindowRedrawingFlag::FLOOR_ITEMS);
         // ウィンドウサイズ変更に対応できず。カーソル位置を取る必要がある。
-        fix_floor_item_list(player_ptr, player_ptr->y, player_ptr->x);
+        fix_floor_item_list(player_ptr, player_ptr->get_position());
     }
 
     if (window_flags.has(SubWindowRedrawingFlag::FOUND_ITEMS)) {

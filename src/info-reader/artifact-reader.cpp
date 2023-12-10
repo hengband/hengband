@@ -86,25 +86,28 @@ errr parse_artifacts_info(std::string_view buf, angband_header *)
     if (tokens[0] == "D") {
         // D:JapaneseText
         // D:$EnglishText
-        if (tokens.size() < 2 || tokens[1].size() == 0) {
+        if (tokens.size() < 2 || buf.length() < 3) {
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
 #ifdef JP
-        if (tokens[1][0] == '$') {
+        if (buf[2] == '$') {
             return PARSE_ERROR_NONE;
         }
 
         const auto it = artifacts_info.rbegin();
         auto &artifact = it->second;
-        artifact.text.append(tokens[1]);
+        artifact.text.append(buf.substr(2));
 #else
-        if (tokens[1][0] != '$') {
+        if (buf[2] != '$') {
             return PARSE_ERROR_NONE;
+        }
+        if (buf.length() == 3) {
+            return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
 
         const auto it = artifacts_info.rbegin();
         auto &artifact = it->second;
-        append_english_text(artifact.text, tokens[1].substr(1));
+        append_english_text(artifact.text, buf.substr(3));
 #endif
         return PARSE_ERROR_NONE;
     }
@@ -168,7 +171,7 @@ errr parse_artifacts_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        auto n = grab_one_activation_flag(tokens[1].data());
+        auto n = grab_one_activation_flag(tokens[1]);
         if (n <= RandomArtActType::NONE) {
             return PARSE_ERROR_INVALID_FLAG;
         }

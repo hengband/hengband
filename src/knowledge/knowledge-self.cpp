@@ -148,7 +148,7 @@ void do_cmd_knowledge_stat(PlayerType *player_ptr)
         return;
     }
 
-    update_playtime();
+    w_ptr->update_playtime();
     uint32_t play_time = w_ptr->play_time;
     uint32_t all_time = w_ptr->sf_play_time + play_time;
     fprintf(fff, _("現在のプレイ時間 : %d:%02d:%02d\n", "Current Play Time is %d:%02d:%02d\n"), play_time / (60 * 60), (play_time / 60) % 60, play_time % 60);

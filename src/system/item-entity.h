@@ -16,15 +16,18 @@
 #include "system/system-variables.h"
 #include "util/flag-group.h"
 #include <optional>
+#include <string>
+#include <vector>
 
 enum class FixedArtifactId : short;
 enum class ItemKindType : short;
 enum class SmithEffectType : int16_t;
 enum class RandomArtActType : short;
 
+class ActivationType;
 class ArtifactType;
-class EgoItemDefinition;
 class BaseitemInfo;
+class EgoItemDefinition;
 class ItemEntity {
 public:
     ItemEntity();
@@ -74,6 +77,7 @@ public:
     void wipe();
     void copy_from(const ItemEntity *j_ptr);
     void prep(short new_bi_id);
+    bool is(ItemKindType tval) const;
     bool is_weapon() const;
     bool is_weapon_ammo() const;
     bool is_weapon_armour_ammo() const;
@@ -85,7 +89,6 @@ public:
     bool is_broken_weapon() const;
     bool is_throwable() const;
     bool is_wieldable_in_etheir_hand() const;
-    bool refuse_enchant_weapon() const;
     bool allow_enchant_weapon() const;
     bool allow_enchant_melee_weapon() const;
     bool allow_two_hands_wielding() const;
@@ -135,20 +138,30 @@ public:
     bool is_junk() const;
     bool is_armour() const;
     bool is_cross_bow() const;
+    bool is_corpse() const;
     bool is_inscribed() const;
+    std::vector<ActivationType>::const_iterator find_activation_info() const;
+    bool has_activation() const;
 
     BaseitemInfo &get_baseitem() const;
     EgoItemDefinition &get_ego() const;
     ArtifactType &get_fixed_artifact() const;
     TrFlags get_flags() const;
     TrFlags get_flags_known() const;
+    std::string explain_activation() const;
 
     void mark_as_known();
-    void mark_as_tried();
+    void mark_as_tried() const;
 
 private:
     int get_baseitem_price() const;
     int calc_figurine_value() const;
     int calc_capture_value() const;
+    bool should_refuse_enchant() const;
     void modify_ego_lite_flags(TrFlags &flags) const;
+    RandomArtActType get_activation_index() const;
+    std::string build_activation_description() const;
+    std::string build_timeout_description(const ActivationType &act) const;
+    std::string build_activation_description(const ActivationType &act) const;
+    std::string build_activation_description_dragon_breath() const;
 };

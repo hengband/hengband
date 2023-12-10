@@ -144,17 +144,20 @@ errr parse_monraces_info(std::string_view buf, angband_header *)
     } else if (tokens[0] == "D") {
         // D:text_ja
         // D:$text_en
-        if (tokens.size() < 2 || tokens[1].size() == 0) {
+        if (tokens.size() < 2 || buf.length() < 3) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 #ifdef JP
-        if (tokens[1][0] == '$') {
+        if (buf[2] == '$') {
             return PARSE_ERROR_NONE;
         }
         r_ptr->text.append(buf.substr(2));
 #else
-        if (tokens[1][0] != '$') {
+        if (buf[2] != '$') {
             return PARSE_ERROR_NONE;
+        }
+        if (buf.length() == 3) {
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
         append_english_text(r_ptr->text, buf.substr(3));
 #endif

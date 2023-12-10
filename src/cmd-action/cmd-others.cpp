@@ -190,7 +190,7 @@ void do_cmd_suicide(PlayerType *player_ptr)
     player_ptr->leaving = true;
     if (w_ptr->total_winner) {
         accept_winner_message(player_ptr);
-        add_retired_class(player_ptr->pclass);
+        w_ptr->add_retired_class(player_ptr->pclass);
     } else {
         play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_GAMEOVER);
         exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, _("ダンジョンの探索に絶望して自殺した。", "gave up all hope to commit suicide."));
