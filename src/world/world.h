@@ -4,7 +4,6 @@
 #include "player-info/class-types.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
-#include "util/rng-xoshiro.h"
 #include <tuple>
 
 constexpr auto MAX_BOUNTY = 20;
@@ -36,19 +35,7 @@ public:
 
     uint32_t play_time{}; /*!< 実プレイ時間 */
 
-    Xoshiro128StarStar rng; //!< Uniform random bit generator for <random>
-
-    uint32_t seed_flavor{}; /* Hack -- consistent object colors */
-    uint32_t seed_town{}; /* Hack -- consistent town layout */
-
     bool is_loading_now{}; /*!< ロード処理中フラグ...ロード直後にcalc_bonus()時の徳変化、及びsanity_blast()による異常を抑止する */
-
-    byte h_ver_major{}; //!< 変愚蛮怒バージョン(メジャー番号) / Hengband version (major ver.)
-    byte h_ver_minor{}; //!< 変愚蛮怒バージョン(マイナー番号) / Hengband version (minor ver.)
-    byte h_ver_patch{}; //!< 変愚蛮怒バージョン(パッチ番号) / Hengband version (patch ver.)
-    byte h_ver_extra{}; //!< 変愚蛮怒バージョン(エクストラ番号) / Hengband version (extra ver.)
-
-    byte sf_extra{}; //!< セーブファイルエンコードキー(XOR)
 
     uint32_t sf_system{}; //!< OS情報 / OS information
     uint32_t sf_when{}; //!< 作成日時 / Created Date
@@ -69,9 +56,6 @@ public:
     bool creating_savefile{}; /* New savefile is currently created */
 
     bool wizard{}; /* This world under wizard mode */
-
-    OBJECT_IDX max_o_idx = 1024; /*!< 1フロアに存在可能な最大アイテム数 */
-    MONSTER_IDX max_m_idx = 1024; /*!< 1フロアに存在可能な最大モンスター数 */
 
     void set_arena(const bool new_status);
     bool get_arena() const;

@@ -24,7 +24,6 @@
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-#include "world/world.h"
 #include <algorithm>
 
 /*!
@@ -49,10 +48,10 @@ void init_other(PlayerType *player_ptr)
 {
     player_ptr->current_floor_ptr = &floor_info; // TODO:本当はこんなところで初期化したくない
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    floor_ptr->o_list.assign(w_ptr->max_o_idx, {});
-    floor_ptr->m_list.assign(w_ptr->max_m_idx, {});
+    floor_ptr->o_list.assign(MAX_FLOOR_ITEMS, {});
+    floor_ptr->m_list.assign(MAX_FLOOR_MONSTERS, {});
     for (auto &list : floor_ptr->mproc_list) {
-        list.assign(w_ptr->max_m_idx, {});
+        list.assign(MAX_FLOOR_MONSTERS, {});
     }
 
     max_dlv.assign(dungeons_info.size(), {});

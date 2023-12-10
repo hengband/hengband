@@ -73,8 +73,8 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
     save_xor_byte = 0;
     wr_byte(H_VER_MAJOR);
     wr_byte(H_VER_MINOR);
-    wr_byte(H_VER_PATCH);
-    wr_byte(H_VER_EXTRA);
+    wr_byte(H_VER_STATE);
+    wr_byte(H_VER_BUILD);
 
     byte tmp8u = (byte)Rand_external(256);
     wr_byte(tmp8u);

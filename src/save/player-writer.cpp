@@ -250,8 +250,9 @@ void wr_player(PlayerType *player_ptr)
     wr_u32b(0L);
     wr_u32b(0L);
 
-    wr_u32b(w_ptr->seed_flavor);
-    wr_u32b(w_ptr->seed_town);
+    const auto &system = AngbandSystem::get_instance();
+    wr_u32b(system.get_seed_flavor());
+    wr_u32b(system.get_seed_town());
     wr_u16b(player_ptr->panic_save);
     wr_u16b(w_ptr->total_winner);
     wr_u16b(w_ptr->noscore);

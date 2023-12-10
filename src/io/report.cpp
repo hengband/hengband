@@ -71,7 +71,7 @@ static constexpr auto get_score_content_type()
 static bool post_score_to_score_server(PlayerType *player_ptr, const std::string &score_data)
 {
     http::Client client;
-    client.user_agent = format("Hengband %d.%d.%d", H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH);
+    client.user_agent = format("Hengband %d.%d.%d", H_VER_MAJOR, H_VER_MINOR, H_VER_STATE);
 
     term_clear();
 
