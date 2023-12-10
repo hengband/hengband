@@ -19,6 +19,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
 #include "save/floor-writer.h"
+#include "system/angband-system.h"
 #include "system/angband-version.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -28,7 +29,6 @@
 #include "term/z-form.h"
 #include "util/angband-files.h"
 #include "world/world-object.h"
-#include "world/world.h"
 
 /*!
  * @brief 保存されたフロアを読み込む / Read the saved floor
@@ -216,10 +216,11 @@ static bool load_floor_aux(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     v_check = 0L;
     x_check = 0L;
 
-    w_ptr->h_ver_extra = H_VER_EXTRA;
-    w_ptr->h_ver_patch = H_VER_PATCH;
-    w_ptr->h_ver_minor = H_VER_MINOR;
-    w_ptr->h_ver_major = H_VER_MAJOR;
+    auto &system = AngbandSystem::get_instance();
+    system.h_ver_extra = H_VER_EXTRA;
+    system.h_ver_patch = H_VER_PATCH;
+    system.h_ver_minor = H_VER_MINOR;
+    system.h_ver_major = H_VER_MAJOR;
     loading_savefile_version = SAVEFILE_VERSION;
 
     if (saved_floor_file_sign != rd_u32b()) {
@@ -272,15 +273,16 @@ bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
     byte old_h_ver_patch = 0;
     byte old_h_ver_extra = 0;
     uint32_t old_loading_savefile_version = 0;
+    auto &system = AngbandSystem::get_instance();
     if (mode & SLF_SECOND) {
         old_fff = loading_savefile;
         old_xor_byte = load_xor_byte;
         old_v_check = v_check;
         old_x_check = x_check;
-        old_h_ver_major = w_ptr->h_ver_major;
-        old_h_ver_minor = w_ptr->h_ver_minor;
-        old_h_ver_patch = w_ptr->h_ver_patch;
-        old_h_ver_extra = w_ptr->h_ver_extra;
+        old_h_ver_major = system.h_ver_major;
+        old_h_ver_minor = system.h_ver_minor;
+        old_h_ver_patch = system.h_ver_patch;
+        old_h_ver_extra = system.h_ver_extra;
         old_loading_savefile_version = loading_savefile_version;
     }
 
@@ -318,10 +320,10 @@ bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
         load_xor_byte = old_xor_byte;
         v_check = old_v_check;
         x_check = old_x_check;
-        w_ptr->h_ver_major = old_h_ver_major;
-        w_ptr->h_ver_minor = old_h_ver_minor;
-        w_ptr->h_ver_patch = old_h_ver_patch;
-        w_ptr->h_ver_extra = old_h_ver_extra;
+        system.h_ver_major = old_h_ver_major;
+        system.h_ver_minor = old_h_ver_minor;
+        system.h_ver_patch = old_h_ver_patch;
+        system.h_ver_extra = old_h_ver_extra;
         loading_savefile_version = old_loading_savefile_version;
     }
 
