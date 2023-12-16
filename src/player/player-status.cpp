@@ -1968,7 +1968,7 @@ int16_t calc_double_weapon_penalty(PlayerType *player_ptr, INVENTORY_IDX slot)
 
 static bool is_riding_two_hands(PlayerType *player_ptr)
 {
-    if (!player_ptr->riding || none_bits(player_ptr->pet_extra_flags, PF_TWO_HANDS)) {
+    if (!player_ptr->riding) {
         return false;
     }
 
