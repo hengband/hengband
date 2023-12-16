@@ -1975,14 +1975,16 @@ static bool is_riding_two_hands(PlayerType *player_ptr)
     if (has_two_handed_weapons(player_ptr) || (empty_hands(player_ptr, false) == EMPTY_HAND_NONE)) {
         return true;
     }
-
-    switch (player_ptr->pclass) {
-    case PlayerClassType::MONK:
-    case PlayerClassType::FORCETRAINER:
-    case PlayerClassType::BERSERKER:
-        return (empty_hands(player_ptr, false) != EMPTY_HAND_NONE) && !has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND);
-    default:
-        return false;
+ 
+    if (any_bits(player_ptr->pet_extra_flags, PF_TWO_HANDS)) { 
+        switch (player_ptr->pclass) {
+        case PlayerClassType::MONK:
+        case PlayerClassType::FORCETRAINER:
+        case PlayerClassType::BERSERKER:
+            return (empty_hands(player_ptr, false) != EMPTY_HAND_NONE) && !has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND);
+        default:
+            return false;
+        }
     }
 }
 
