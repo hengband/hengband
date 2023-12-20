@@ -14,7 +14,7 @@ jobs:
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       cxx: clang++-14
-      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -Wno-unused-const-variable -Wno-invalid-source-encoding"
+      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -Wno-unused-const-variable -Wno-invalid-source-encoding -stdlib=libc++"
       configure-opts: "--disable-pch"
       use-ccache: true
 
