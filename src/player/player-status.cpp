@@ -1931,7 +1931,7 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
  * * EASY2_WEAPONによる軽減
  * * SUPPORTIVEを左に装備した場合の軽減
  * * 武蔵セットによる免除
- * * 竿状武器による増加 
+ * * 竿状武器による増加
  */
 int16_t calc_double_weapon_penalty(PlayerType *player_ptr, INVENTORY_IDX slot)
 {
@@ -1983,9 +1983,10 @@ static bool is_riding_two_hands(PlayerType *player_ptr)
         case PlayerClassType::BERSERKER:
             return (empty_hands(player_ptr, false) != EMPTY_HAND_NONE) && !has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND);
         default:
-            return false;
+            break;
         }
     }
+    return false;
 }
 
 static int16_t calc_riding_bow_penalty(PlayerType *player_ptr)
