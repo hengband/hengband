@@ -1931,7 +1931,7 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
  * * EASY2_WEAPONによる軽減
  * * SUPPORTIVEを左に装備した場合の軽減
  * * 武蔵セットによる免除
- * * 竿状武器による増加
+ * * 竿状武器による増加 
  */
 int16_t calc_double_weapon_penalty(PlayerType *player_ptr, INVENTORY_IDX slot)
 {
