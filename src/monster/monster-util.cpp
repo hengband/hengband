@@ -138,6 +138,8 @@ static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonsterRaceI
             is_possible_monster_and(r_ptr->population_flags, d_ptr->mon_population_flags),
             is_possible_monster_and(r_ptr->speak_flags, d_ptr->mon_speak_flags),
             is_possible_monster_and(r_ptr->brightness_flags, d_ptr->mon_brightness_flags),
+            is_male(d_ptr->mon_sex) ? is_male(r_ptr->sex) : true,
+            is_female(d_ptr->mon_sex) ? is_female(r_ptr->sex) : true,
         };
 
         auto result = std::all_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });
@@ -163,6 +165,8 @@ static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonsterRaceI
             is_possible_monster_or(r_ptr->population_flags, d_ptr->mon_population_flags),
             is_possible_monster_or(r_ptr->speak_flags, d_ptr->mon_speak_flags),
             is_possible_monster_or(r_ptr->brightness_flags, d_ptr->mon_brightness_flags),
+            is_male(d_ptr->mon_sex) ? is_male(r_ptr->sex) : true,
+            is_female(d_ptr->mon_sex) ? is_female(r_ptr->sex) : true,
         };
 
         auto result = std::any_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });
