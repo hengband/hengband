@@ -206,7 +206,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
 
     auto is_confused = effects->confusion()->is_confused();
     auto is_stunned = effects->stun()->is_stunned();
-    if (any_bits(r_ptr->flags1, RF1_FEMALE) && !(is_stunned || is_confused || is_hallucinated || !m_ptr->ml)) {
+    if (is_female(*r_ptr) && !(is_stunned || is_confused || is_hallucinated || !m_ptr->ml)) {
         // @todo 「特定の武器を装備している」旨のメソッドを別途作る
         constexpr auto zantetsu = FixedArtifactId::ZANTETSU;
         const auto is_main_hand_zantetsu = player_ptr->inventory_list[INVEN_MAIN_HAND].is_specific_artifact(zantetsu);

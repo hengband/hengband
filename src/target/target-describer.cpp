@@ -223,9 +223,9 @@ static void describe_monster_person(GridExamination *ge_ptr)
 {
     const auto &monrace = ge_ptr->m_ptr->get_appearance_monrace();
     ge_ptr->s1 = _("それは", "It is ");
-    if (monrace.flags1 & RF1_FEMALE) {
+    if (monrace.sex == MonsterSex::FEMALE) {
         ge_ptr->s1 = _("彼女は", "She is ");
-    } else if (monrace.flags1 & RF1_MALE) {
+    } else if (monrace.sex == MonsterSex::MALE) {
         ge_ptr->s1 = _("彼は", "He is ");
     }
 
