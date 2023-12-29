@@ -18,6 +18,7 @@
 #include "monster-race/race-population-flags.h"
 #include "monster-race/race-sex-const.h"
 #include "monster-race/race-speak-flags.h"
+#include "monster-race/race-special-flags.h"
 #include "monster-race/race-visual-flags.h"
 #include "monster-race/race-wilderness-flags.h"
 #include "system/angband.h"
@@ -46,3 +47,4 @@ extern const std::unordered_map<std::string_view, MonsterPopulationType> r_info_
 extern const std::unordered_map<std::string_view, MonsterSpeakType> r_info_speak_flags;
 extern const std::unordered_map<std::string_view, MonsterBrightnessType> r_info_brightness_flags;
 extern const std::unordered_map<std::string_view, MonsterSex> r_info_sex;
+extern const std::unordered_map<std::string_view, MonsterSpecialType> r_info_special_flags;

@@ -275,6 +275,7 @@ old_race_flags::old_race_flags(MonsterRaceId monrace_id)
     this->old_r_resistance_flags = monrace.r_resistance_flags;
     this->old_r_drop_flags = monrace.r_drop_flags;
     this->old_r_feature_flags = monrace.r_feature_flags;
+    this->old_r_special_flags = monrace.r_special_flags;
 
     this->old_r_blows0 = monrace.r_blows[0];
     this->old_r_blows1 = monrace.r_blows[1];
