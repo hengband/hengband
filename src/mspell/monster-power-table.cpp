@@ -75,6 +75,7 @@ const std::map<MonsterAbilityType, const monster_power> monster_powers = {
     { MonsterAbilityType::BO_VOID, { 35, 31, 80, 342, 70, A_INT, _("ヴォイド・ボルト", "void bolt") } },
     { MonsterAbilityType::BO_ABYSS, { 35, 33, 80, 342, 70, A_INT, _("アビス・ボルト", "abyss bolt") } },
     { MonsterAbilityType::BO_METEOR, { 30, 28, 90, 400, 80, A_INT, _("メテオストライク", "meteor strike") } },
+    { MonsterAbilityType::BO_LITE, { 20, 25, 75, 300, 65, A_INT, _("スターライトアロー", "starlight arrow") } },
     { MonsterAbilityType::MISSILE, { 3, 1, 25, 12, 20, A_INT, _("マジック・ミサイル", "magic missile") } },
     { MonsterAbilityType::SCARE, { 5, 3, 35, 0, 20, A_INT, _("恐慌", "scare") } },
     { MonsterAbilityType::BLIND, { 10, 5, 40, 0, 20, A_INT, _("盲目", "blind") } },

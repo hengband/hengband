@@ -31,9 +31,9 @@ const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_RIDING_MASK = {
  */
 const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_BOLT_MASK = {
     MonsterAbilityType::ROCKET, MonsterAbilityType::SHOOT, MonsterAbilityType::BO_ACID, MonsterAbilityType::BO_ELEC,
-    MonsterAbilityType::BO_FIRE, MonsterAbilityType::BO_COLD, MonsterAbilityType::BO_NETH, MonsterAbilityType::BO_WATE,
-    MonsterAbilityType::BO_MANA, MonsterAbilityType::BO_PLAS, MonsterAbilityType::BO_ICEE, MonsterAbilityType::BO_VOID,
-    MonsterAbilityType::BO_ABYSS, MonsterAbilityType::BO_METEOR, MonsterAbilityType::MISSILE,
+    MonsterAbilityType::BO_FIRE, MonsterAbilityType::BO_COLD, MonsterAbilityType::BO_NETH, MonsterAbilityType::BO_LITE,
+    MonsterAbilityType::BO_WATE, MonsterAbilityType::BO_MANA, MonsterAbilityType::BO_PLAS, MonsterAbilityType::BO_ICEE,
+    MonsterAbilityType::BO_VOID, MonsterAbilityType::BO_ABYSS, MonsterAbilityType::BO_METEOR, MonsterAbilityType::MISSILE,
 };
 
 /*
