@@ -197,4 +197,6 @@ enum class MonsterRaceId : int16_t {
     CHEST_MIMIC_03 = 1338,
     CHEST_MIMIC_04 = 1339,
     CHEST_MIMIC_11 = 1340,
+    LAFFEY_II = 1356,
+    BUNBUN_STRIKERS = 1357,
 };
