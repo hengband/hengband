@@ -11,6 +11,7 @@
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
+#include "monster-race/race-special-flags.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
@@ -77,6 +78,16 @@ int mon_damage_mod(PlayerType *player_ptr, MonsterEntity *m_ptr, int dam, bool i
         dam /= 100;
         if ((dam == 0) && one_in_(3)) {
             dam = 1;
+        }
+    }
+
+    auto &race_info = m_ptr->get_monrace();
+
+    if (race_info.special_flags.has(MonsterSpecialType::DIMINISH_MAX_DAMAGE)) {
+        race_info.r_special_flags.set(MonsterSpecialType::DIMINISH_MAX_DAMAGE);
+        if (dam > m_ptr->hp / 10) {
+            dam = std::max(m_ptr->hp / 10, m_ptr->maxhp * 7 / 500);
+            msg_format(_("%s^は致命的なダメージを抑えた！", "%s^ resisted a critical damage!"), monster_desc(player_ptr, m_ptr, 0).data());
         }
     }
 
