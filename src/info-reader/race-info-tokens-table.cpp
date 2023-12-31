@@ -320,7 +320,8 @@ const std::unordered_map<std::string_view, MonsterResistanceType> r_info_flagsr 
     { "NO_FEAR", MonsterResistanceType::NO_FEAR },
     { "NO_STUN", MonsterResistanceType::NO_STUN },
     { "NO_CONF", MonsterResistanceType::NO_CONF },
-    { "NO_SLEEP", MonsterResistanceType::NO_SLEEP }
+    { "NO_SLEEP", MonsterResistanceType::NO_SLEEP },
+    { "NO_INSTANTLY_DEATH", MonsterResistanceType::NO_INSTANTLY_DEATH }
 };
 
 const std::unordered_map<std::string_view, MonsterAuraType> r_info_aura_flags = {
@@ -433,6 +434,7 @@ const std::unordered_map<std::string_view, MonsterFeatureType> r_info_feature_fl
 
 const std::unordered_map<std::string_view, MonsterPopulationType> r_info_population_flags = {
     { "NAZGUL", MonsterPopulationType::NAZGUL },
+    { "ONLY_ONE", MonsterPopulationType::ONLY_ONE },
 };
 
 const std::unordered_map<std::string_view, MonsterSpeakType> r_info_speak_flags = {
