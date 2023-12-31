@@ -244,7 +244,6 @@ const std::unordered_map<std::string_view, MonsterAbilityType> r_info_ability_fl
  * HOGE は、MonsterRaceDefinitions で定義したモンスター種族ID
  */
 const std::unordered_map<std::string_view, race_flags7> r_info_flags7 = {
-    { "UNIQUE2", RF7_UNIQUE2 },
     { "RIDING", RF7_RIDING },
     { "KAGE", RF7_KAGE },
     { "CHAMELEON", RF7_CHAMELEON },

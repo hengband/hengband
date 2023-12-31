@@ -47,12 +47,11 @@ ProcessResult effect_monster_old_clone(PlayerType *player_ptr, EffectMonster *em
         em_ptr->obvious = true;
     }
 
-    bool has_resistance = (player_ptr->current_floor_ptr->inside_arena);
+    auto has_resistance = (player_ptr->current_floor_ptr->inside_arena);
     has_resistance |= em_ptr->m_ptr->is_pet();
     has_resistance |= em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     has_resistance |= any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR);
-    has_resistance |= em_ptr->r_ptr->population_flags.has(MonsterPopulationType::NAZGUL);
-    has_resistance |= any_bits(em_ptr->r_ptr->flags7, RF7_UNIQUE2);
+    has_resistance |= em_ptr->r_ptr->population_flags.has_none_of({ MonsterPopulationType::NAZGUL, MonsterPopulationType::ONLY_ONE });
 
     if (has_resistance) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
