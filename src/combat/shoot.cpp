@@ -791,6 +791,9 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                             base_dam = tdam;
                             msg_format(_("%sの急所に突き刺さった！", "Your shot hit a fatal spot of %s!"), m_name.data());
                         } else {
+                            if (no_instantly_death) {
+                                r_ptr->r_resistance_flags.set(MonsterResistanceType::NO_INSTANTLY_DEATH);
+                            }
                             tdam = 1;
                             base_dam = tdam;
                         }

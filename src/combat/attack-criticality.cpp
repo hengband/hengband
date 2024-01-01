@@ -108,6 +108,9 @@ static void ninja_critical(PlayerType *player_ptr, player_attack_type *pa_ptr)
     }
 
     if (is_unique || !is_weaken) {
+        if (no_instantly_death) {
+            r_ptr->r_resistance_flags.set(MonsterResistanceType::NO_INSTANTLY_DEATH);
+        }
         pa_ptr->attack_damage = std::max(pa_ptr->attack_damage * 5, pa_ptr->m_ptr->hp / 2);
         pa_ptr->drain_result *= 2;
         msg_format(_("%sに致命傷を負わせた！", "You fatally injured %s!"), pa_ptr->m_name);
@@ -126,11 +129,15 @@ void critical_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
     auto *r_ptr = &pa_ptr->m_ptr->get_monrace();
+    const auto no_instantly_death = r_ptr->resistance_flags.has(MonsterResistanceType::NO_INSTANTLY_DEATH);
     if ((o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) || (pa_ptr->mode == HISSATSU_KYUSHO)) {
-        if ((randint1(randint1(r_ptr->level / 7) + 5) == 1) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && r_ptr->resistance_flags.has_not(MonsterResistanceType::NO_INSTANTLY_DEATH)) {
+        if ((randint1(randint1(r_ptr->level / 7) + 5) == 1) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && !no_instantly_death) {
             pa_ptr->attack_damage = pa_ptr->m_ptr->hp + 1;
             msg_format(_("%sの急所を突き刺した！", "You hit %s on a fatal spot!"), pa_ptr->m_name);
         } else {
+            if (no_instantly_death) {
+                r_ptr->r_resistance_flags.set(MonsterResistanceType::NO_INSTANTLY_DEATH);
+            }
             pa_ptr->attack_damage = 1;
         }
 

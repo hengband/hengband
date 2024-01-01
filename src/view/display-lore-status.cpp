@@ -397,6 +397,11 @@ void display_monster_concrete_immunities(lore_type *lore_ptr)
         lore_ptr->vp[lore_ptr->vn] = _("テレポートされない", "teleported");
         lore_ptr->color[lore_ptr->vn++] = TERM_ORANGE;
     }
+
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::NO_INSTANTLY_DEATH) || lore_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
+        lore_ptr->vp[lore_ptr->vn] = _("即死しない", "instantly killed");
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
+    }
 }
 
 void display_monster_immunities(lore_type *lore_ptr)
