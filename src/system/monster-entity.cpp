@@ -329,3 +329,8 @@ void MonsterEntity::set_hostile()
 
     this->mflag2.reset({ MonsterConstantFlagType::PET, MonsterConstantFlagType::FRIENDLY });
 }
+
+std::string MonsterEntity::get_pronoun_of_summoned_kin() const
+{
+    return this->get_monrace().get_pronoun_of_summoned_kin();
+}

@@ -91,6 +91,7 @@ public:
     bool is_explodable() const;
     std::string get_died_message() const;
     std::pair<TERM_COLOR, int> get_hp_bar_data() const;
+    std::string get_pronoun_of_summoned_kin() const;
 
     void set_hostile();
 };
