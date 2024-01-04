@@ -1975,8 +1975,8 @@ static bool is_riding_two_hands(PlayerType *player_ptr)
     if (has_two_handed_weapons(player_ptr) || (empty_hands(player_ptr, false) == EMPTY_HAND_NONE)) {
         return true;
     }
- 
-    if (any_bits(player_ptr->pet_extra_flags, PF_TWO_HANDS)) { 
+
+    if (any_bits(player_ptr->pet_extra_flags, PF_TWO_HANDS)) {
         switch (player_ptr->pclass) {
         case PlayerClassType::MONK:
         case PlayerClassType::FORCETRAINER:
