@@ -1986,6 +1986,7 @@ static bool is_riding_two_hands(PlayerType *player_ptr)
             break;
         }
     }
+
     return false;
 }
 
