@@ -144,7 +144,7 @@
 # N: serial number : monster name
 # G: symbol : color
 # I: speed : hit points : vision : armor class : alertness
-# W: depth : rarity : 0 : exp : next_exp : next_mon
+# W: depth : rarity : exp : next_exp : next_mon
 # B: attack method : attack effect : damage
 # S: spell frequency |
 # S: spell type | spell type | etc
@@ -167,8 +167,8 @@
 # from 0 (ever vigilant for intruders) to 255 (prefers to ignore
 # intruders).
 
-# 'W' is for more information - level, rarity, and experience for
-# killing. The third slot is unused.
+# 'W' is for more information - level, rarity, experience for
+# killing, required experience to evolve, and evolution target.
 
 # 'B' is for blows - method of attack, effect of attack, and damage
 # from attack. There may be up to four of these lines; effect and
