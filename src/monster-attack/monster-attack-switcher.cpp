@@ -6,6 +6,7 @@
  */
 
 #include "monster-attack/monster-attack-switcher.h"
+#include "dungeon/quest.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/drs-types.h"
 #include "mind/mind-mirror-master.h"
@@ -16,16 +17,19 @@
 #include "monster-attack/monster-eating.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
+#include "mutation/mutation-investor-remover.h"
 #include "player/player-damage.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-resist.h"
 #include "player/player-status.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-equipment.h"
+#include "spell-kind/spells-teleport.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "status/element-resistance.h"
 #include "status/experience.h"
+#include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
@@ -533,6 +537,73 @@ void switch_monster_blow_to_player(PlayerType *player_ptr, MonsterAttackPlayer *
     case RaceBlowEffectType::HUNGRY:
         calc_blow_hungry(player_ptr, monap_ptr);
         break;
+    case RaceBlowEffectType::CHAOS: {
+        update_smart_learn(player_ptr, monap_ptr->m_idx, DRS_CHAOS);
+        monap_ptr->damage = monap_ptr->damage * calc_chaos_damage_rate(player_ptr, CALC_RAND) / 100;
+        monap_ptr->get_damage += take_hit(player_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
+
+        const auto has_chaos_resist = has_resist_chaos(player_ptr);
+
+        if (!has_chaos_resist) {
+            monap_ptr->obvious = true;
+        }
+        if (randint1(5) < 3) {
+            monap_ptr->obvious = true;
+            if (!has_chaos_resist) {
+                if (player_ptr->is_dead || check_multishadow(player_ptr)) {
+                    return;
+                }
+
+                int32_t d = damroll(60, 6) + (player_ptr->exp / 100) * MON_DRAIN_LIFE;
+
+                bool resist_drain = check_drain_hp(player_ptr, d);
+                process_drain_life(player_ptr, monap_ptr, resist_drain);
+            }
+            break;
+        }
+        if (one_in_(250)) {
+            monap_ptr->obvious = true;
+            const auto *floor_ptr = player_ptr->current_floor_ptr;
+            if (floor_ptr->is_in_dungeon() && (!floor_ptr->is_in_quest() || !QuestType::is_fixed(floor_ptr->quest_number))) {
+                msg_print(_("カオスの力でダンジョンが崩れ始める！", "The dungeon tumbles by the chaotic power!"));
+                if (monap_ptr->damage > 23 || monap_ptr->explode) {
+                    earthquake(player_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, 8, monap_ptr->m_idx);
+                    break;
+                }
+            }
+        }
+        if (!one_in_(10)) {
+            if (player_ptr->is_dead) {
+                return;
+            }
+            monap_ptr->obvious = true;
+
+            if (!has_chaos_resist && !has_resist_conf(player_ptr) && !check_multishadow(player_ptr) && BadStatusSetter(player_ptr).mod_confusion(3 + randint1(monap_ptr->rlev))) {
+                monap_ptr->obvious = true;
+            }
+            break;
+        }
+
+        if (one_in_(2)) {
+            if (player_ptr->is_dead) {
+                return;
+            }
+            monap_ptr->obvious = true;
+
+            if (!has_chaos_resist && player_ptr->anti_tele == 0) {
+                msg_print(_("突然体が浮きだした！", "Your body floats suddenly!"));
+                teleport_player(player_ptr, 50, TELEPORT_PASSIVE);
+            }
+        } else if (!has_chaos_resist) {
+            if (player_ptr->is_dead) {
+                return;
+            }
+            monap_ptr->obvious = true;
+
+            msg_print(_("あなたの身体はカオスの力で捻じ曲げられた！", "Your body is twisted by chaos!"));
+            (void)gain_mutation(player_ptr, 0);
+        }
+    } break;
 
     case RaceBlowEffectType::MAX:
         break;

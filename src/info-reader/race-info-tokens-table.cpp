@@ -85,6 +85,7 @@ const std::unordered_map<std::string_view, RaceBlowEffectType> r_info_blow_effec
     { "INERTIA", RaceBlowEffectType::INERTIA },
     { "STUN", RaceBlowEffectType::STUN },
     { "HUNGRY", RaceBlowEffectType::HUNGRY },
+    { "CHAOS", RaceBlowEffectType::CHAOS },
     { "FLAVOR", RaceBlowEffectType::FLAVOR },
 };
 
