@@ -135,7 +135,7 @@ static bool check_unique_placeable(const FloorType &floor, MonsterRaceId r_idx, 
         return false;
     }
 
-    if (any_bits(r_ptr->flags7, RF7_UNIQUE2) && (r_ptr->cur_num >= 1)) {
+    if (r_ptr->population_flags.has(MonsterPopulationType::ONLY_ONE) && (r_ptr->cur_num >= 1)) {
         return false;
     }
 

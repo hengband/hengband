@@ -326,6 +326,16 @@ errr parse_monraces_info(std::string_view buf, angband_header *)
         info_set_value(a_idx, tokens[1]);
         info_set_value(chance, tokens[2]);
         r_ptr->drop_artifacts.emplace_back(a_idx, chance);
+    } else if (tokens[0] == "X") {
+        if (tokens.size() < 2) {
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        }
+        uint32_t sex;
+        if (!info_grab_one_const(sex, r_info_sex, tokens[1])) {
+            return PARSE_ERROR_INVALID_FLAG;
+        }
+        r_ptr->sex = static_cast<MonsterSex>(sex);
+
     } else if (tokens[0] == "V") {
         // V:arena_odds
         if (tokens.size() < 2) {

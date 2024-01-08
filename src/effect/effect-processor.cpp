@@ -145,7 +145,6 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     auto oy = y1;
     auto ox = x1;
     auto visual = false;
-    POSITION gm_rad = rad;
     bool see_s_msg = true;
     const auto is_blind = player_ptr->effects()->blindness()->is_blind();
     auto &floor = *player_ptr->current_floor_ptr;
@@ -200,7 +199,6 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     POSITION bx = ox;
     if (breath && !path_n) {
         breath = false;
-        gm_rad = rad;
         if (!old_hide) {
             flag &= ~(PROJECT_HIDE);
         }
@@ -210,6 +208,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     gm[1] = grids;
     project_length = 0;
 
+    POSITION gm_rad = rad;
     /* If we found a "target", explode there */
     if (path_n <= system.get_max_range()) {
         if ((flag & (PROJECT_BEAM)) && (grids > 0)) {

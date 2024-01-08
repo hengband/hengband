@@ -45,6 +45,7 @@ constexpr auto DUNGEON_FEAT_PROB_NUM = 3;
 
 enum class FixedArtifactId : short;
 enum class MonsterRaceId : int16_t;
+enum class MonsterSex;
 
 struct feat_prob {
     FEAT_IDX feat{}; /* Feature tile */
@@ -97,6 +98,7 @@ struct dungeon_type {
     EnumClassFlagGroup<MonsterPopulationType> mon_population_flags;
     EnumClassFlagGroup<MonsterSpeakType> mon_speak_flags;
     EnumClassFlagGroup<MonsterBrightnessType> mon_brightness_flags;
+    MonsterSex mon_sex{};
 
     std::vector<char> r_chars; /* Monster symbols allowed */
     short final_object{}; /* The object you'll find at the bottom */

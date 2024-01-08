@@ -6,13 +6,43 @@
 
 #include "melee/melee-switcher.h"
 #include "core/disturbance.h"
+#include "dungeon/quest.h"
 #include "melee/melee-util.h"
 #include "monster-attack/monster-attack-effect.h"
+#include "monster-race/monster-race.h"
+#include "monster-race/race-flags-resistance.h"
+#include "monster-race/race-kind-flags.h"
+#include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
 #include "spell-kind/earthquake.h"
+#include "spell-kind/spells-polymorph.h"
+#include "spell-kind/spells-teleport.h"
+#include "spell/spells-util.h"
+#include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
+
+/*!
+ * @brief モンスターがカオス属性へ耐性を示すかどうか
+ */
+static bool monster_has_chaos_resist(PlayerType *player_ptr, MonsterEntity *m_ptr)
+{
+    auto r_info = m_ptr->get_monrace();
+    if (r_info.resistance_flags.has(MonsterResistanceType::RESIST_CHAOS)) {
+        if (is_original_ap_and_seen(player_ptr, m_ptr)) {
+            r_info.r_resistance_flags.set(MonsterResistanceType::RESIST_CHAOS);
+        }
+        return true;
+    } else if (r_info.kind_flags.has(MonsterKindType::DEMON) && one_in_(3)) {
+        if (is_original_ap_and_seen(player_ptr, m_ptr)) {
+            r_info.r_kind_flags.set(MonsterKindType::DEMON);
+        }
+        return true;
+    }
+    return false;
+}
 
 void describe_melee_method(PlayerType *player_ptr, mam_type *mam_ptr)
 {
@@ -244,6 +274,45 @@ void decide_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr)
     case RaceBlowEffectType::HUNGRY:
         mam_ptr->pt = AttributeType::HUNGRY;
         break;
+    case RaceBlowEffectType::CHAOS: {
+        const auto has_resist = monster_has_chaos_resist(player_ptr, mam_ptr->t_ptr);
+        if (has_resist) {
+            mam_ptr->damage *= 3;
+            mam_ptr->damage /= randint1(6) + 6;
+        }
+
+        if (randint1(5) < 3) {
+            mam_ptr->pt = AttributeType::HYPODYNAMIA;
+            mam_ptr->attribute = BlowEffectType::HEAL;
+            break;
+        }
+        if (one_in_(250)) {
+            const auto *floor_ptr = player_ptr->current_floor_ptr;
+            if (floor_ptr->is_in_dungeon() && (!floor_ptr->is_in_quest() || !QuestType::is_fixed(floor_ptr->quest_number))) {
+                msg_print(_("カオスの力でダンジョンが崩れ始める！", "The dungeon tumbles by the chaotic power!"));
+                if (mam_ptr->damage > 23) {
+                    earthquake(player_ptr, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, 8, mam_ptr->m_idx);
+                }
+            }
+        }
+        if (!one_in_(10)) {
+            if (!has_resist) {
+                mam_ptr->pt = AttributeType::CONFUSION;
+            }
+            break;
+        }
+
+        if (!has_resist) {
+            if (one_in_(2)) {
+                msg_format(_(("%s^はどこかへ消えていった！"), ("%s^ disappears!")), mam_ptr->t_name);
+                teleport_away(player_ptr, mam_ptr->t_idx, 50, TELEPORT_PASSIVE);
+            } else {
+                if (polymorph_monster(player_ptr, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx)) {
+                    msg_format(_("%s^は変化した！", "%s^ changes!"), mam_ptr->t_name);
+                }
+            }
+        }
+    } break;
     case RaceBlowEffectType::FLAVOR:
         // フレーバー打撃には何の効果もない。
         mam_ptr->pt = AttributeType::NONE;

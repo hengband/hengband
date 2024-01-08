@@ -11,6 +11,7 @@
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-kind-flags.h"
 #include "monster-race/race-population-flags.h"
+#include "monster-race/race-sex-const.h"
 #include "monster-race/race-speak-flags.h"
 #include "monster-race/race-visual-flags.h"
 #include "monster-race/race-wilderness-flags.h"
@@ -75,6 +76,7 @@ public:
     byte speed{}; //!< 加速(110で+0) / Speed (normally 110)
     EXP mexp{}; //!< 殺害時基本経験値 / Exp value for kill
     RARITY freq_spell{}; //!< 魔法＆特殊能力仕様頻度(1/n) /  Spell frequency
+    MonsterSex sex{}; //!< 性別 / Sex
     BIT_FLAGS flags1{}; //!< Flags 1 (general)
     BIT_FLAGS flags2{}; //!< Flags 2 (abilities)
     BIT_FLAGS flags3{}; //!< Flags 3 (race/resist)
