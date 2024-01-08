@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 enum class MonsterResistanceType {
     RESIST_ALL = 0, /* Resist all */
@@ -58,5 +58,6 @@ enum class MonsterResistanceType {
     NO_STUN = 54, /* Cannot be stunned */
     NO_CONF = 55, /* Cannot be confused and resist confusion */
     NO_SLEEP = 56, /* Cannot be slept */
+    NO_INSTANTLY_DEATH = 57, /*Cannot be instantly kill*/
     MAX, /* Max of Resistances */
 };

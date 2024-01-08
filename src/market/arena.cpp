@@ -231,7 +231,7 @@ void update_gambling_monsters(PlayerType *player_ptr)
                     continue;
                 }
 
-                if (monraces_info[r_idx].kind_flags.has(MonsterKindType::UNIQUE) || (monraces_info[r_idx].flags7 & RF7_UNIQUE2)) {
+                if (monraces_info[r_idx].kind_flags.has(MonsterKindType::UNIQUE) || monraces_info[r_idx].population_flags.has(MonsterPopulationType::ONLY_ONE)) {
                     if ((monraces_info[r_idx].level + 10) > mon_level) {
                         continue;
                     }

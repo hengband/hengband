@@ -782,7 +782,8 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                     if (snipe_type == SP_NEEDLE) {
                         const auto is_unique = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
                         const auto fatality = randint1(r_ptr->level / (3 + sniper_concent)) + (8 - sniper_concent);
-                        if ((randint1(fatality) == 1) && !is_unique && none_bits(r_ptr->flags7, RF7_UNIQUE2)) {
+                        const auto no_instantly_death = r_ptr->resistance_flags.has(MonsterResistanceType::NO_INSTANTLY_DEATH);
+                        if ((randint1(fatality) == 1) && !is_unique && !no_instantly_death) {
                             /* Get "the monster" or "it" */
                             const auto m_name = monster_desc(player_ptr, m_ptr, 0);
 
@@ -790,6 +791,9 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                             base_dam = tdam;
                             msg_format(_("%sの急所に突き刺さった！", "Your shot hit a fatal spot of %s!"), m_name.data());
                         } else {
+                            if (no_instantly_death) {
+                                r_ptr->r_resistance_flags.set(MonsterResistanceType::NO_INSTANTLY_DEATH);
+                            }
                             tdam = 1;
                             base_dam = tdam;
                         }
