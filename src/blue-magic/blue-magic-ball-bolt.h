@@ -34,4 +34,5 @@ bool cast_blue_bolt_icee(PlayerType *player_ptr, bmc_type *bmc_ptr);
 bool cast_blue_bolt_void(PlayerType *player_ptr, bmc_type *bmc_ptr);
 bool cast_blue_bolt_abyss(PlayerType *player_ptr, bmc_type *bmc_ptr);
 bool cast_blue_bolt_meteor(PlayerType *player_ptr, bmc_type *bmc_ptr);
+bool cast_blue_bolt_lite(PlayerType *player_ptr, bmc_type *bmc_ptr);
 bool cast_blue_bolt_missile(PlayerType *player_ptr, bmc_type *bmc_ptr);

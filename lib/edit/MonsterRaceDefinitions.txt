@@ -14794,7 +14794,7 @@ S:1_IN_2 |
 S:TELE_TO | BLIND | 
 S:BO_MANA | BA_FIRE |
 S:BR_FIRE | BR_MANA | INVULNER | BO_PLAS | BR_PLAS |
-S:S_ANGEL | PSY_SPEAR | HEAL | BA_LITE
+S:S_ANGEL | PSY_SPEAR | HEAL | BA_LITE | BO_LITE
 D:$A creature of godly appearance, you dare not challenge Uriel's supremacy.  
 D:$Those who stood against him before are but a memory, cremated by his 
 D:$mastery of elemental fire.
@@ -14826,7 +14826,7 @@ S:1_IN_2 |
 S:TELE_TO | BLIND | 
 S:BO_MANA | BA_NETH |
 S:BR_NETH | PSY_SPEAR | S_MONSTERS | HEAL |
-S:S_ANGEL | BR_MANA | BR_COLD | S_DRAGON | INVULNER | BA_LITE
+S:S_ANGEL | BR_MANA | BR_COLD | S_DRAGON | INVULNER | BA_LITE | BO_LITE
 D:$Azriel commands awesome power, his visage holy enough to shrivel your 
 D:$soul.  You shriek with disbelief as his mastery of death draws you to your 
 D:$grave.  It is truly beyond all but the mightiest of warriors to stand 
@@ -14950,7 +14950,7 @@ F:NO_CONF | NO_SLEEP |
 S:1_IN_2 |
 S:TELE_TO | BLIND | BO_MANA | S_ANGEL | S_KIN | INVULNER | DISPEL | PSY_SPEAR
 S:BR_MANA | BR_LITE | BR_ELEC | BA_MANA | HAND_DOOM | S_HI_DRAGON |
-S:BRAIN_SMASH | S_MONSTERS | HEAL | BR_DISE | BA_LITE
+S:BRAIN_SMASH | S_MONSTERS | HEAL | BR_DISE | BA_LITE | BO_LITE
 V:133
 D:$Commanding a legion of angels, Raphael will destroy you for your sins.  He 
 D:$will crush you like the pitiful insignificant being he sees you to be.  
@@ -19109,6 +19109,7 @@ S:BR_SOUN | BR_CHAO | BR_DISE | BR_NEXU | BR_TIME | BR_INER | BR_GRAV | BR_SHAR 
 S:BR_PLAS | BR_FORC | BR_MANA | BA_NUKE | BR_NUKE | BA_CHAO | BR_DISI | BA_ACID |
 S:BA_ELEC | BA_FIRE | BA_COLD | BA_POIS | BA_NETH | BA_WATE | BA_MANA | BA_DARK |
 S:BA_ABYSS | BA_VOID | BR_ABYSS | BR_VOID | BO_ABYSS | BO_VOID | BA_METEOR | BO_METEOR |
+S:BO_LITE |
 S:DRAIN_MANA | MIND_BLAST| BRAIN_SMASH | CAUSE_1 | CAUSE_2 | CAUSE_3 | CAUSE_4 |
 S:BO_ACID | BO_ELEC | BO_FIRE | BO_COLD | BO_NETH | BO_WATE | BO_MANA |
 S:BO_PLAS | BO_ICEE | MISSILE | BLIND | CONF | SLOW | HOLD | HASTE | HAND_DOOM |
@@ -19424,7 +19425,7 @@ F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_LITE |
 F:NO_CONF | NO_SLEEP | NO_FEAR | CAN_FLY | ANGEL
 S:1_IN_3 | 
 S:TELE_TO | BLIND | SCARE | CAUSE_4 | BO_MANA | PSY_SPEAR | INVULNER
-S:S_ANGEL | S_DRAGON | BA_LITE | HEAL | DISPEL
+S:S_ANGEL | S_DRAGON | BA_LITE | HEAL | DISPEL | BO_LITE
 D:$Never a more heavenly being have you seen.  The very holiness of its 
 D:$presence makes you deeply respect it.  Few creatures can match the powers 
 D:$of a Solar; fewer still live to tell the tale after attacking one.

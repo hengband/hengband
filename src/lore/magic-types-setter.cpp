@@ -381,6 +381,12 @@ void set_bolt_types(PlayerType *player_ptr, lore_type *lore_ptr)
         lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
     }
 
+    if (lore_ptr->ability_flags.has(MonsterAbilityType::BO_LITE)) {
+        set_damage(player_ptr, lore_ptr, MonsterAbilityType::BO_LITE, _("スターライトアロー%s", "produce starlight arrow%s"));
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_YELLOW;
+    }
+
     if (lore_ptr->ability_flags.has(MonsterAbilityType::MISSILE)) {
         set_damage(player_ptr, lore_ptr, MonsterAbilityType::MISSILE, _("マジックミサイル%s", "produce magic missiles%s"));
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];

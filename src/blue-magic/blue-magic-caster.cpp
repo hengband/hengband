@@ -316,6 +316,8 @@ static bool switch_cast_blue_magic(PlayerType *player_ptr, bmc_type *bmc_ptr, Mo
         return cast_blue_bolt_void(player_ptr, bmc_ptr);
     case MonsterAbilityType::BO_METEOR:
         return cast_blue_bolt_meteor(player_ptr, bmc_ptr);
+    case MonsterAbilityType::BO_LITE:
+        return cast_blue_bolt_lite(player_ptr, bmc_ptr);
     case MonsterAbilityType::MISSILE:
         return cast_blue_bolt_missile(player_ptr, bmc_ptr);
     case MonsterAbilityType::SCARE:

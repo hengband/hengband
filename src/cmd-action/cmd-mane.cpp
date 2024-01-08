@@ -863,6 +863,15 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
 
         fire_bolt(player_ptr, AttributeType::METEOR, dir, damage);
         break;
+    case MonsterAbilityType::BO_LITE:
+        if (!get_aim_dir(player_ptr, &dir)) {
+            return false;
+        } else {
+            msg_print(_("スターライトアローの呪文を唱えた。", "You cast a starlight arrow."));
+        }
+
+        fire_bolt(player_ptr, AttributeType::LITE, dir, damage);
+        break;
     case MonsterAbilityType::MISSILE:
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;

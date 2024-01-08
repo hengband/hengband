@@ -347,6 +347,11 @@ static int monspell_damage_base(
         dice_num = 1;
         dice_side = rlev;
         break;
+    case MonsterAbilityType::BO_LITE:
+        dam = powerful ? 60 : 40;
+        dice_num = 1;
+        dice_side = powerful ? rlev * 4 : rlev * 2;
+        break;
     case MonsterAbilityType::MISSILE:
         dam = (rlev / 3);
         dice_num = 2;
