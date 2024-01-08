@@ -136,11 +136,11 @@ std::optional<std::string> get_random_line(concptr file_name, int entry)
         }
 
         if (buf[2] == 'M') {
-            if (monraces_info[i2enum<MonsterRaceId>(entry)].flags1 & RF1_MALE) {
+            if (is_male(monraces_info[i2enum<MonsterRaceId>(entry)])) {
                 break;
             }
         } else if (buf[2] == 'F') {
-            if (monraces_info[i2enum<MonsterRaceId>(entry)].flags1 & RF1_FEMALE) {
+            if (is_female(monraces_info[i2enum<MonsterRaceId>(entry)])) {
                 break;
             }
         } else if (sscanf(&(buf[2]), "%d", &test) != EOF) {

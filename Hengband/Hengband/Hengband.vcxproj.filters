@@ -2493,6 +2493,9 @@
     <ClCompile Include="..\..\src\system\angband-system.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster-race\race-sex-const.cpp">
+      <Filter>monster-race</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5402,6 +5405,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\angband-system.h">
       <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\race-sex-const.h">
+      <Filter>monster-race</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

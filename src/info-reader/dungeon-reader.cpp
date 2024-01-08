@@ -298,6 +298,17 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
         }
     } else if (tokens[0] == "M") {
         // M:monsterflags
+        if (tokens[1] == "X") {
+            if (tokens.size() < 3) {
+                return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+            }
+            uint32_t sex;
+            if (!info_grab_one_const(sex, r_info_sex, tokens[2])) {
+                return PARSE_ERROR_INVALID_FLAG;
+            }
+            d_ptr->mon_sex = static_cast<MonsterSex>(sex);
+            return 0;
+        }
         if (tokens.size() < 2) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
