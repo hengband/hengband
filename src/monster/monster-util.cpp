@@ -294,9 +294,13 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
                 continue;
             }
 
-            // クエスト内でRES_ALLの生成を禁止する (殲滅系クエストの詰み防止)
-            if (player_ptr->current_floor_ptr->is_in_quest() && r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
-                continue;
+            // クエスト内でRES_ALL及び指定階未満でのDIMINISH_MAX_DAMAGEの生成を禁止する (殲滅系クエストの詰み防止)
+            if (player_ptr->current_floor_ptr->is_in_quest()) {
+                auto is_indefeatable = r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL);
+                is_indefeatable |= r_ptr->special_flags.has(MonsterSpecialType::DIMINISH_MAX_DAMAGE) && r_ptr->level > floor_ptr->dun_level;
+                if (is_indefeatable) {
+                    continue;
+                }
             }
         }
 
