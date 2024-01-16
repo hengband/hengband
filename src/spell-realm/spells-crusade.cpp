@@ -72,6 +72,7 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
     const auto b = 10 + randint1(10);
     for (auto i = 0; i < b; i++) {
         auto count = 20;
+        Pos2D pos_explode(pos_target.x, pos_target.y);
         while (count--) {
             const auto x = pos_target.x - 5 + randint0(11);
             const auto y = pos_target.y - 5 + randint0(11);
@@ -79,6 +80,8 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
             const auto dy = (pos_target.y > y) ? (pos_target.y - y) : (y - pos_target.y);
             const auto d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
             if (d < 5) {
+                pos_explode.x = x;
+                pos_explode.y = y;
                 break;
             }
         }
@@ -87,15 +90,15 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
             continue;
         }
 
-        auto should_cast = in_bounds(&floor, pos.y, pos.x);
-        should_cast &= !cave_stop_disintegration(&floor, pos.y, pos.x);
-        should_cast &= in_disintegration_range(&floor, pos_target.y, pos_target.x, pos.y, pos.x);
+        auto should_cast = in_bounds(&floor, pos_explode.y, pos_explode.x);
+        should_cast &= !cave_stop_disintegration(&floor, pos_explode.y, pos_explode.x);
+        should_cast &= in_disintegration_range(&floor, pos_target.y, pos_target.x, pos_explode.y, pos_explode.x);
         if (!should_cast) {
             continue;
         }
 
         constexpr auto mode = PROJECT_JUMP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-        project(player_ptr, 0, rad, pos.y, pos.x, dam, AttributeType::DISINTEGRATE, mode);
+        project(player_ptr, 0, rad, pos_explode.y, pos_explode.x, dam, AttributeType::DISINTEGRATE, mode);
     }
 
     return true;
