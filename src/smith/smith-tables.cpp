@@ -332,7 +332,7 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_EASY2_WEAPON, { SmithEssenceType::EASY2_WEAPON }, 10 },
     { TR_DOWN_SAVING, {}, -1 },
     { TR_NO_AC, {}, -1 },
-    { TR_HEAVY_SPELL, {}, -1 },
+    { TR_XXX_142, {}, -1 },
     { TR_RES_TIME, { SmithEssenceType::RES_TIME }, 10 },
     { TR_RES_WATER, { SmithEssenceType::RES_WATER }, 10 },
     { TR_INVULN_ARROW, {}, 0 },
