@@ -147,10 +147,6 @@ void set_body_improvement_info_3(PlayerType *player_ptr, self_info_type *self_pt
         self_ptr->info[self_ptr->line++] = _("あなたは低い失敗率で魔法を唱えることができる。", "Your magic fails less often.");
     }
 
-    if (player_ptr->heavy_spell) {
-        self_ptr->info[self_ptr->line++] = _("あなたは高い失敗率で魔法を唱えなければいけない。", "Your magic fails more often.");
-    }
-
     if (player_ptr->mighty_throw) {
         self_ptr->info[self_ptr->line++] = _("あなたは強く物を投げる。", "You can throw objects powerfully.");
     }

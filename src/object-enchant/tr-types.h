@@ -152,7 +152,7 @@ enum tr_type : int {
     TR_EASY2_WEAPON = 139,
     TR_DOWN_SAVING = 140,
     TR_NO_AC = 141,
-    TR_HEAVY_SPELL = 142,
+    TR_XXX_142 = 142, //!< 未使用 / Unused
     TR_RES_TIME = 143,
     TR_RES_WATER = 144,
     TR_INVULN_ARROW = 145,
