@@ -565,8 +565,8 @@ void switch_monster_blow_to_player(PlayerType *player_ptr, MonsterAttackPlayer *
             monap_ptr->obvious = true;
             const auto *floor_ptr = player_ptr->current_floor_ptr;
             if (floor_ptr->is_in_dungeon() && (!floor_ptr->is_in_quest() || !QuestType::is_fixed(floor_ptr->quest_number))) {
-                msg_print(_("カオスの力でダンジョンが崩れ始める！", "The dungeon tumbles by the chaotic power!"));
                 if (monap_ptr->damage > 23 || monap_ptr->explode) {
+                    msg_print(_("カオスの力でダンジョンが崩れ始める！", "The dungeon tumbles by the chaotic power!"));
                     earthquake(player_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, 8, monap_ptr->m_idx);
                     break;
                 }
