@@ -154,7 +154,6 @@ const std::unordered_map<std::string_view, tr_type> baseitem_flags = {
     { "EASY2_WEAPON", TR_EASY2_WEAPON },
     { "DOWN_SAVING", TR_DOWN_SAVING },
     { "NO_AC", TR_NO_AC },
-    { "HEAVY_SPELL", TR_HEAVY_SPELL },
     { "RES_TIME", TR_RES_TIME },
     { "RES_WATER", TR_RES_WATER },
     { "INVULN_ARROW", TR_INVULN_ARROW },

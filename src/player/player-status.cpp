@@ -306,7 +306,7 @@ static void update_bonuses(PlayerType *player_ptr)
     player_ptr->anti_magic = has_anti_magic(player_ptr);
     player_ptr->anti_tele = has_anti_tele(player_ptr);
     player_ptr->easy_spell = has_easy_spell(player_ptr);
-    player_ptr->heavy_spell = has_heavy_spell(player_ptr);
+    player_ptr->hard_spell = has_hard_spell(player_ptr);
     player_ptr->hold_exp = has_hold_exp(player_ptr);
     player_ptr->see_inv = has_see_inv(player_ptr);
     player_ptr->free_act = has_free_act(player_ptr);

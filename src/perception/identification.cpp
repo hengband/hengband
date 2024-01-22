@@ -93,10 +93,6 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは魔法の難易度を下げる。", "It affects your ability to cast spells.");
     }
 
-    if (flags.has(TR_HEAVY_SPELL)) {
-        info[i++] = _("それは魔法の難易度を上げる。", "It interferes with casting spells.");
-    }
-
     if (flags.has(TR_MIGHTY_THROW)) {
         info[i++] = _("それは物を強く投げることを可能にする。", "It provides great strength when you throw an item.");
     }

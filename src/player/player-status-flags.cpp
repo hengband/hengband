@@ -428,7 +428,9 @@ BIT_FLAGS get_player_flags(PlayerType *player_ptr, tr_type tr_flag)
     case TR_COWARDICE:
     case TR_LOW_MELEE:
     case TR_LOW_AC:
+        return check_equipment_flags(player_ptr, tr_flag);
     case TR_HARD_SPELL:
+        return has_hard_spell(player_ptr);
     case TR_FAST_DIGEST:
     case TR_SLOW_REGEN:
         return check_equipment_flags(player_ptr, tr_flag);
@@ -440,8 +442,8 @@ BIT_FLAGS get_player_flags(PlayerType *player_ptr, tr_type tr_flag)
         return has_down_saving(player_ptr);
     case TR_NO_AC:
         return has_no_ac(player_ptr);
-    case TR_HEAVY_SPELL:
-        return has_heavy_spell(player_ptr);
+    case TR_XXX_142:
+        return check_equipment_flags(player_ptr, tr_flag);
     case TR_INVULN_ARROW:
         return has_invuln_arrow(player_ptr);
     case TR_DARK_SOURCE:
@@ -862,9 +864,9 @@ BIT_FLAGS has_easy_spell(PlayerType *player_ptr)
     return common_cause_flags(player_ptr, TR_EASY_SPELL);
 }
 
-BIT_FLAGS has_heavy_spell(PlayerType *player_ptr)
+BIT_FLAGS has_hard_spell(PlayerType *player_ptr)
 {
-    return common_cause_flags(player_ptr, TR_HEAVY_SPELL);
+    return common_cause_flags(player_ptr, TR_HARD_SPELL);
 }
 
 BIT_FLAGS has_hold_exp(PlayerType *player_ptr)

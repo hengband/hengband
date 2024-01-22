@@ -335,7 +335,7 @@ public:
     BIT_FLAGS earthquake{}; //!< 地震を起こす装備をしている / Earthquake blows
     BIT_FLAGS dec_mana{};
     BIT_FLAGS easy_spell{};
-    BIT_FLAGS heavy_spell{};
+    BIT_FLAGS hard_spell{};
     BIT_FLAGS warning{};
     BIT_FLAGS mighty_throw{};
     BIT_FLAGS see_nocto{}; /* Noctovision */

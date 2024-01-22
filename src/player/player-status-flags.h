@@ -84,7 +84,7 @@ BIT_FLAGS has_sh_fire(PlayerType *player_ptr);
 BIT_FLAGS has_sh_elec(PlayerType *player_ptr);
 BIT_FLAGS has_sh_cold(PlayerType *player_ptr);
 BIT_FLAGS has_easy_spell(PlayerType *player_ptr);
-BIT_FLAGS has_heavy_spell(PlayerType *player_ptr);
+BIT_FLAGS has_hard_spell(PlayerType *player_ptr);
 BIT_FLAGS has_hold_exp(PlayerType *player_ptr);
 BIT_FLAGS has_see_inv(PlayerType *player_ptr);
 BIT_FLAGS has_magic_mastery(PlayerType *player_ptr);

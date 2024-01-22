@@ -428,7 +428,8 @@ static void save_prefs(void)
     const auto path_length = angband_dir_str.length() - 4; // "\lib" を除く.
     angband_dir_str = angband_dir_str.substr(0, path_length);
     const auto savefile_str = savefile.string();
-    if (angband_dir_str == savefile_str) {
+    const auto savefile_dir_str = savefile_str.substr(0, path_length);
+    if (angband_dir_str == savefile_dir_str) {
         const auto relative_path = format(".\\%s", (savefile_str.data() + path_length));
         WritePrivateProfileStringA("Angband", "SaveFile", relative_path.data(), ini_file);
     } else {

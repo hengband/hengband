@@ -73,7 +73,7 @@ PERCENTAGE mod_spell_chance_1(PlayerType *player_ptr, PERCENTAGE chance)
 {
     chance += player_ptr->to_m_chance;
 
-    if (player_ptr->heavy_spell) {
+    if (player_ptr->hard_spell) {
         chance += 20;
     }
 
@@ -105,7 +105,7 @@ PERCENTAGE mod_spell_chance_2(PlayerType *player_ptr, PERCENTAGE chance)
     if (player_ptr->dec_mana) {
         chance--;
     }
-    if (player_ptr->heavy_spell) {
+    if (player_ptr->hard_spell) {
         chance += 5;
     }
     return std::max(chance, 0);

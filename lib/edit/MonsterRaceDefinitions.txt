@@ -18816,7 +18816,7 @@ N:915:初級修験者
 E:Elementary mystic
 G:p:o
 I:115:35d10:30:50:5
-W:33:3:600:5000:916
+W:33:3:700:5000:916
 B:KICK:HURT:9d2
 B:KICK:HURT:9d2
 B:KICK:HURT:9d2
@@ -18837,7 +18837,7 @@ E:Medium mystic
 G:p:o
 G:p:o
 I:120:35d15:30:50:5
-W:38:3:500:10000:917
+W:38:3:900:10000:917
 B:KICK:HURT:10d2
 B:KICK:HURT:10d2
 B:KICK:HURT:10d2
@@ -27130,7 +27130,7 @@ B:CRUSH:HURT:8d13
 B:KICK:HURT:30d5
 B:CLAW:HURT:10d10
 F:CAN_SWIM | RIDING | POWERFUL | ANIMAL | EVIL |
-F:DROP_2D2 | DROP_GREAT |
+F:DROP_4D2 | DROP_GREAT |
 F:FORCE_MAXHP | ONLY_ONE | NO_INSTANTLY_DEATH |
 F:NO_CONF | NO_SLEEP | NO_FEAR |
 F:IM_FIRE | IM_COLD | IM_POIS | RES_CHAO | RES_LITE | RES_INER | RES_ABYSS | RES_GRAV | RES_METEOR
@@ -27140,3 +27140,26 @@ D:$It is seldom found but greatly formidable.
 D:$  You'll be defeated without complete preparation.
 D:それはめったに出会えないが、恐ろしく強力な力を持っている。
 D:生半可な態勢で挑めばあっという間に返り討ちにされるだろう。
+
+N:1355:バグピエロ『カフモ』
+E:Kaufmo, the abstracted clown
+G:q:v
+I:120:30d40:20:100:0
+W:35:3:6000:0:0
+B:CRUSH:CHAOS:12d6
+B:HIT:CHAOS:7d6
+B:HIT:CHAOS:7d6
+B:HIT:CHAOS:7d6
+X:MALE
+F:UNIQUE | ELDRITCH_HORROR | QUANTUM | FORCE_MAXHP | GIANT |
+F:RES_CHAO |
+F:KILL_BODY | BASH_DOOR | COLD_BLOOD | WEIRD_MIND
+F:ATTR_MULTI
+F:DROP_4D2 | DROP_GOOD | ONLY_ITEM
+F:NO_CONF | NO_SLEEP
+D:アメイジング・デジタル・サーカスで出口を求め続け限界を迎えた者の末路だ。
+D:地下室に送られてもなお徘徊しており、
+D:彼に触れられバグる者の姿も時々見える。
+D:$This is the fate of those who continue to seek an exit from the Amazing Digital Circus and reach their breaking point.
+D:$  He is crawling yet after being sent into the cellar.
+D:$  All touched by him start abstracting.
