@@ -11,7 +11,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 int critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, int dam);
 int calc_crit_ratio_shot(PlayerType *player_ptr, int plus_ammo, int plus_bow);
 int calc_expect_crit_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, int dam);
-int calc_expect_crit(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, int16_t meichuu, bool dokubari, bool impact);
+int calc_expect_crit(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, int16_t meichuu, bool dokubari, bool impact, int mult = 1);
 uint32_t calc_expect_dice(
     PlayerType *player_ptr, uint32_t dam, int16_t to_h, ItemEntity *o_ptr);
 uint32_t calc_expect_dice(

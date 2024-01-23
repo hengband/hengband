@@ -1200,9 +1200,10 @@ int calc_expect_crit_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, 
  * @param meichuu 武器以外の命中修正
  * @param dokubari 毒針処理か否か
  * @param impact 強撃かどうか
+ * @param mult 期待値計算時のdam倍率
  * @return ダメージ期待値
  */
-int calc_expect_crit(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, int16_t meichuu, bool dokubari, bool impact)
+int calc_expect_crit(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, int16_t meichuu, bool dokubari, bool impact, int mult)
 {
     if (dokubari) {
         return dam;
@@ -1214,11 +1215,11 @@ int calc_expect_crit(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, i
     }
 
     // 通常ダメージdam、武器重量weightでクリティカルが発生した時のクリティカルダメージ期待値
-    auto calc_weight_expect_dam = [](int dam, WEIGHT weight) {
+    auto calc_weight_expect_dam = [](int dam, WEIGHT weight, int mult) {
         int sum = 0;
         for (int d = 1; d <= 650; ++d) {
             int k = weight + d;
-            sum += std::get<0>(apply_critical_norm_damage(k, dam));
+            sum += std::get<0>(apply_critical_norm_damage(k, dam, mult));
         }
         return sum / 650;
     };
@@ -1227,11 +1228,11 @@ int calc_expect_crit(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, i
 
     if (impact) {
         for (int d = 1; d <= 650; ++d) {
-            num += calc_weight_expect_dam(dam, weight + d);
+            num += calc_weight_expect_dam(dam, weight + d, mult);
         }
         num /= 650;
     } else {
-        num += calc_weight_expect_dam(dam, weight);
+        num += calc_weight_expect_dam(dam, weight, mult);
     }
 
     int pow = PlayerClass(player_ptr).equals(PlayerClassType::NINJA) ? 4444 : 5000;
