@@ -52,6 +52,7 @@ lore_type::lore_type(MonsterRaceId r_idx, monster_lore_mode mode)
     this->feature_flags = (this->r_ptr->feature_flags & this->r_ptr->r_feature_flags);
     this->brightness_flags = this->r_ptr->brightness_flags;
     this->special_flags = (this->r_ptr->special_flags & this->r_ptr->r_special_flags);
+    this->misc_flags = (this->r_ptr->misc_flags & this->r_ptr->r_misc_flags);
 }
 
 /*!

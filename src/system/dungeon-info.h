@@ -8,6 +8,7 @@
 #include "monster-race/race-feature-flags.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-kind-flags.h"
+#include "monster-race/race-misc-flags.h"
 #include "monster-race/race-population-flags.h"
 #include "monster-race/race-resistance-mask.h"
 #include "monster-race/race-speak-flags.h"
@@ -100,6 +101,7 @@ struct dungeon_type {
     EnumClassFlagGroup<MonsterSpeakType> mon_speak_flags;
     EnumClassFlagGroup<MonsterBrightnessType> mon_brightness_flags;
     EnumClassFlagGroup<MonsterSpecialType> mon_special_flags;
+    EnumClassFlagGroup<MonsterMiscType> mon_misc_flags;
     MonsterSex mon_sex{};
 
     std::vector<char> r_chars; /* Monster symbols allowed */
