@@ -518,7 +518,6 @@ hengband_SOURCES = \
 	monster-race/race-brightness-mask.h monster-race/race-brightness-mask.cpp \
 	monster-race/race-drop-flags.h \
 	monster-race/race-feature-flags.h \
-	monster-race/race-feature-mask.cpp monster-race/race-feature-mask.h \
 	monster-race/race-flags-resistance.h \
 	monster-race/race-flags1.h monster-race/race-flags2.h \
 	monster-race/race-flags3.h \
