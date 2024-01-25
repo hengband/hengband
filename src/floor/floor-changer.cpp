@@ -200,9 +200,14 @@ static void update_unique_artifact(FloorType *floor_ptr, int16_t cur_floor_id)
     }
 }
 
+static bool is_visited_floor(saved_floor_type *sf_ptr)
+{
+    return sf_ptr->last_visit != 0;
+}
+
 static void check_visited_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, bool *loaded)
 {
-    if ((sf_ptr->last_visit == 0) || !load_floor(player_ptr, sf_ptr, 0)) {
+    if (!is_visited_floor(sf_ptr) || !load_floor(player_ptr, sf_ptr, 0)) {
         return;
     }
 
@@ -317,7 +322,7 @@ static void new_floor_allocation(PlayerType *player_ptr, saved_floor_type *sf_pt
 
 static void check_dead_end(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    if (sf_ptr->last_visit == 0) {
+    if (!is_visited_floor(sf_ptr)) {
         generate_floor(player_ptr);
         return;
     }
