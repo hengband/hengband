@@ -188,7 +188,7 @@ void regenerate_monsters(PlayerType *player_ptr)
                 }
             }
 
-            if (r_ptr->flags2 & RF2_REGENERATE) {
+            if (r_ptr->misc_flags.has(MonsterMiscType::REGENERATE)) {
                 frac *= 2;
             }
 
@@ -239,7 +239,7 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
                 }
             }
 
-            if (r_ptr->flags2 & RF2_REGENERATE) {
+            if (r_ptr->misc_flags.has(MonsterMiscType::REGENERATE)) {
                 frac *= 2;
             }
 

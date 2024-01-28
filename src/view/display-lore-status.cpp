@@ -156,7 +156,7 @@ void display_monster_constitutions(lore_type *lore_ptr)
         hook_c_roff(TERM_L_UMBER, format(_("%s^は爆発的に増殖する。", "%s^ breeds explosively.  "), Who::who(lore_ptr->msex)));
     }
 
-    if (lore_ptr->flags2 & RF2_REGENERATE) {
+    if (lore_ptr->misc_flags.has(MonsterMiscType::REGENERATE)) {
         hook_c_roff(TERM_L_WHITE, format(_("%s^は素早く体力を回復する。", "%s^ regenerates quickly.  "), Who::who(lore_ptr->msex)));
     }
 
