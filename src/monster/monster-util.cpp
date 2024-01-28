@@ -286,7 +286,7 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
             }
 
             // ダンジョンの主は生成禁止。
-            if (r_ptr->flags7 & RF7_GUARDIAN) {
+            if (r_ptr->misc_flags.has(MonsterMiscType::GUARDIAN)) {
                 continue;
             }
 

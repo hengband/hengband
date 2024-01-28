@@ -116,7 +116,7 @@ bool check_summon_specific(PlayerType *player_ptr, MonsterRaceId summoner_idx, M
     case SUMMON_LOUSE:
         return r_idx == MonsterRaceId::LOUSE;
     case SUMMON_GUARDIANS:
-        return any_bits(monrace.flags7, RF7_GUARDIAN);
+        return monrace.misc_flags.has(MonsterMiscType::GUARDIAN);
     case SUMMON_KNIGHTS: {
         auto is_match = r_idx == MonsterRaceId::NOV_PALADIN;
         is_match |= r_idx == MonsterRaceId::NOV_PALADIN_G;
