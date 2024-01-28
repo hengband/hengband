@@ -521,7 +521,7 @@ int monspell_race_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, Mon
 {
     auto *r_ptr = &monraces_info[r_idx];
     DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-    bool powerful = any_bits(r_ptr->flags2, RF2_POWERFUL);
+    bool powerful = r_ptr->misc_flags.has(MonsterMiscType::POWERFUL);
     int hp = r_ptr->hdice * (ironman_nightmare ? 2 : 1) * r_ptr->hside;
     int shoot_dd, shoot_ds;
 

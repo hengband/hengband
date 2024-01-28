@@ -274,7 +274,7 @@ ProjectResult breath(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX
     }
 
     if (rad < 1) {
-        rad = (r_ptr->flags2 & (RF2_POWERFUL)) ? 3 : 2;
+        rad = r_ptr->misc_flags.has(MonsterMiscType::POWERFUL) ? 3 : 2;
     }
 
     return project(player_ptr, m_idx, rad, y, x, dam_hp, typ, flg);

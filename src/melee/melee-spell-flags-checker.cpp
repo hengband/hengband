@@ -192,7 +192,7 @@ static void check_melee_spell_distance(PlayerType *player_ptr, melee_spell_type 
         MonsterAbilityType::BA_COLD
     };
     auto *r_ptr = &ms_ptr->m_ptr->get_monrace();
-    if (any_bits(r_ptr->flags2, RF2_POWERFUL)) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::POWERFUL)) {
         ms_ptr->ability_flags.reset(ball_when_powerful_rad4);
     }
 
@@ -228,7 +228,7 @@ static void check_melee_spell_breath(PlayerType *player_ptr, melee_spell_type *m
         return;
     }
 
-    POSITION rad = (ms_ptr->r_ptr->flags2 & RF2_POWERFUL) ? 3 : 2;
+    POSITION rad = ms_ptr->r_ptr->misc_flags.has(MonsterMiscType::POWERFUL) ? 3 : 2;
     if (!breath_direct(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, AttributeType::NONE, true)) {
         ms_ptr->ability_flags.reset(RF_ABILITY_BREATH_MASK);
         return;

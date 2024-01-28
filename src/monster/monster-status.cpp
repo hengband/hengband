@@ -46,7 +46,7 @@ bool monster_is_powerful(FloorType *floor_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     auto *r_ptr = &m_ptr->get_monrace();
-    return any_bits(r_ptr->flags2, RF2_POWERFUL);
+    return r_ptr->misc_flags.has(MonsterMiscType::POWERFUL);
 }
 
 /*!
