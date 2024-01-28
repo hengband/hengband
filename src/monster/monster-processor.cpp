@@ -253,7 +253,7 @@ void decide_drop_from_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool is
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &m_ptr->get_monrace();
-    if (!is_riding_mon || ((r_ptr->flags7 & RF7_RIDING) != 0)) {
+    if (!is_riding_mon || r_ptr->misc_flags.has(MonsterMiscType::RIDING)) {
         return;
     }
 

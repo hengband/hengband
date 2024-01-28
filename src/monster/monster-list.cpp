@@ -380,7 +380,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
 
     if (m_idx == player_ptr->riding) {
         msg_format(_("突然%sが変身した。", "Suddenly, %s transforms!"), old_m_name.data());
-        if (!(r_ptr->flags7 & RF7_RIDING)) {
+        if (r_ptr->misc_flags.has_not(MonsterMiscType::RIDING)) {
             if (process_fall_off_horse(player_ptr, 0, true)) {
                 const auto m_name = monster_desc(player_ptr, m_ptr, 0);
                 msg_print(_("地面に落とされた。", format("You have fallen from %s.", m_name.data())));

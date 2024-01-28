@@ -160,7 +160,7 @@ void display_monster_constitutions(lore_type *lore_ptr)
         hook_c_roff(TERM_L_WHITE, format(_("%s^は素早く体力を回復する。", "%s^ regenerates quickly.  "), Who::who(lore_ptr->msex)));
     }
 
-    if (lore_ptr->flags7 & RF7_RIDING) {
+    if (lore_ptr->misc_flags.has(MonsterMiscType::RIDING)) {
         hook_c_roff(TERM_SLATE, format(_("%s^に乗ることができる。", "%s^ is suitable for riding.  "), Who::who(lore_ptr->msex)));
     }
 }
