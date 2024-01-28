@@ -92,24 +92,6 @@ const std::unordered_map<std::string_view, RaceBlowEffectType> r_info_blow_effec
 };
 
 /*!
- * モンスター特性トークンの定義1 /
- * Monster race flags
- */
-const std::unordered_map<std::string_view, race_flags1> r_info_flags1 = {
-    { "FORCE_EXTRA", RF1_FORCE_EXTRA },
-};
-
-/*!
- * モンスター特性トークンの定義2 /
- * Monster race flags
- */
-const std::unordered_map<std::string_view, race_flags2> r_info_flags2 = {
-    { "CHAR_MULTI", RF2_CHAR_MULTI },
-    { "FLAGS2_XX14", RF2_XX14 },
-    { "FLAGS2_XX15", RF2_XX15 },
-};
-
-/*!
  * モンスター特性トークン (発動型能力) /
  * Monster race flags
  */
@@ -225,19 +207,6 @@ const std::unordered_map<std::string_view, MonsterAbilityType> r_info_ability_fl
 	{"S_DEAD_UNIQUE", MonsterAbilityType::S_DEAD_UNIQUE },
 };
 /* clang-format on */
-
-/*!
- * @brief モンスター特性トークンの定義7
- * @details ダンジョンの主は、DungeonDefinitions の FINAL_GUARDIAN_HOGE にて自動指定
- * HOGE は、MonsterRaceDefinitions で定義したモンスター種族ID
- */
-const std::unordered_map<std::string_view, race_flags7> r_info_flags7 = {};
-
-/*!
- * モンスター特性トークンの定義8 /
- * Monster race flags
- */
-const std::unordered_map<std::string_view, race_flags8> r_info_flags8 = {};
 
 /*!
  * モンスター特性トークンの定義R(耐性) /
