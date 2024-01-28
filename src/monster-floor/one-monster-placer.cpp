@@ -96,7 +96,7 @@ static MonsterRaceId initial_r_appearance(PlayerType *player_ptr, MonsterRaceId 
         return MonsterRaceId::ALIEN_JURAL;
     }
 
-    if (none_bits(monraces_info[r_idx].flags7, RF7_TANUKI)) {
+    if (monraces_info[r_idx].misc_flags.has_not(MonsterMiscType::TANUKI)) {
         return r_idx;
     }
 

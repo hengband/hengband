@@ -181,7 +181,7 @@ void MonsterDamageProcessor::death_special_flag_monster()
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto r_idx = m_ptr->r_idx;
     auto *r_ptr = &monraces_info[r_idx];
-    if (any_bits(monraces_info[r_idx].flags7, RF7_TANUKI)) {
+    if (monraces_info[r_idx].misc_flags.has(MonsterMiscType::TANUKI)) {
         r_ptr = &monraces_info[r_idx];
         m_ptr->ap_r_idx = r_idx;
         if (r_ptr->r_sights < MAX_SHORT) {
