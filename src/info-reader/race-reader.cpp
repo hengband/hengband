@@ -83,6 +83,9 @@ static bool grab_one_basic_flag(MonsterRaceInfo *r_ptr, std::string_view what)
     if (EnumClassFlagGroup<MonsterSpecialType>::grab_one_flag(r_ptr->special_flags, r_info_special_flags, what)) {
         return true;
     }
+    if (EnumClassFlagGroup<MonsterMiscType>::grab_one_flag(r_ptr->misc_flags, r_info_misc_flags, what)) {
+        return true;
+    }
 
     msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what.data());
     return false;

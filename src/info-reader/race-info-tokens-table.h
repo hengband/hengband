@@ -15,6 +15,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
 #include "monster-race/race-kind-flags.h"
+#include "monster-race/race-misc-flags.h"
 #include "monster-race/race-population-flags.h"
 #include "monster-race/race-sex-const.h"
 #include "monster-race/race-speak-flags.h"
@@ -48,3 +49,4 @@ extern const std::unordered_map<std::string_view, MonsterSpeakType> r_info_speak
 extern const std::unordered_map<std::string_view, MonsterBrightnessType> r_info_brightness_flags;
 extern const std::unordered_map<std::string_view, MonsterSex> r_info_sex;
 extern const std::unordered_map<std::string_view, MonsterSpecialType> r_info_special_flags;
+extern const std::unordered_map<std::string_view, MonsterMiscType> r_info_misc_flags;
