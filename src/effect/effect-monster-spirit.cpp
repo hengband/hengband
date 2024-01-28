@@ -98,9 +98,9 @@ ProcessResult effect_monster_mind_blast(PlayerType *player_ptr, EffectMonster *e
         }
         em_ptr->note = _("には完全な耐性がある！", " is immune.");
         em_ptr->dam = 0;
-    } else if (em_ptr->r_ptr->flags2 & RF2_WEIRD_MIND) {
+    } else if (em_ptr->r_ptr->misc_flags.has(MonsterMiscType::WEIRD_MIND)) {
         if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
-            em_ptr->r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
+            em_ptr->r_ptr->r_misc_flags.set(MonsterMiscType::WEIRD_MIND);
         }
         em_ptr->note = _("には耐性がある。", " resists.");
         em_ptr->dam /= 3;
@@ -147,9 +147,9 @@ ProcessResult effect_monster_brain_smash(PlayerType *player_ptr, EffectMonster *
 
         em_ptr->note = _("には完全な耐性がある！", " is immune.");
         em_ptr->dam = 0;
-    } else if (em_ptr->r_ptr->flags2 & RF2_WEIRD_MIND) {
+    } else if (em_ptr->r_ptr->misc_flags.has(MonsterMiscType::WEIRD_MIND)) {
         if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
-            em_ptr->r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
+            em_ptr->r_ptr->r_misc_flags.set(MonsterMiscType::WEIRD_MIND);
         }
 
         em_ptr->note = _("には耐性がある！", " resists!");

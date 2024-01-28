@@ -148,7 +148,7 @@ void display_monster_constitutions(lore_type *lore_ptr)
 
     if (lore_ptr->misc_flags.has(MonsterMiscType::EMPTY_MIND)) {
         hooked_roff(format(_("%s^はテレパシーでは感知できない。", "%s^ is not detected by telepathy.  "), Who::who(lore_ptr->msex)));
-    } else if (lore_ptr->flags2 & RF2_WEIRD_MIND) {
+    } else if (lore_ptr->misc_flags.has(MonsterMiscType::WEIRD_MIND)) {
         hooked_roff(format(_("%s^はまれにテレパシーで感知できる。", "%s^ is rarely detected by telepathy.  "), Who::who(lore_ptr->msex)));
     }
 

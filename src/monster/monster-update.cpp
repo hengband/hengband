@@ -252,7 +252,7 @@ static bool update_weird_telepathy(PlayerType *player_ptr, um_type *um_ptr, MONS
 {
     auto *m_ptr = um_ptr->m_ptr;
     auto *r_ptr = &m_ptr->get_monrace();
-    if ((r_ptr->flags2 & RF2_WEIRD_MIND) == 0) {
+    if (r_ptr->misc_flags.has_not(MonsterMiscType::WEIRD_MIND)) {
         return false;
     }
 
@@ -263,7 +263,7 @@ static bool update_weird_telepathy(PlayerType *player_ptr, um_type *um_ptr, MONS
     um_ptr->flag = true;
     m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
     if (m_ptr->is_original_ap() && !player_ptr->effects()->hallucination()->is_hallucinated()) {
-        r_ptr->r_flags2 |= RF2_WEIRD_MIND;
+        r_ptr->r_misc_flags.set(MonsterMiscType::WEIRD_MIND);
         update_smart_stupid_flags(r_ptr);
     }
 
