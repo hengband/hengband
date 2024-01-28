@@ -215,6 +215,7 @@ void wr_lore(MonsterRaceId r_idx)
     wr_FlagGroup(r_ptr->r_drop_flags, wr_byte);
     wr_FlagGroup(r_ptr->r_feature_flags, wr_byte);
     wr_FlagGroup(r_ptr->r_special_flags, wr_byte);
+    wr_FlagGroup(r_ptr->r_misc_flags, wr_byte);
 
     wr_byte((byte)r_ptr->max_num);
     wr_s16b(r_ptr->floor_id);
