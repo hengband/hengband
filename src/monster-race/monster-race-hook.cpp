@@ -103,7 +103,7 @@ bool mon_hook_quest(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if (any_bits(r_ptr->flags2, RF2_MULTIPLY)) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::MULTIPLY)) {
         return false;
     }
 
@@ -861,7 +861,7 @@ bool monster_can_entry_arena(PlayerType *player_ptr, MonsterRaceId r_idx)
     int dam = 0;
     const auto &monrace = monraces_info[r_idx];
     bool unselectable = monrace.behavior_flags.has(MonsterBehaviorType::NEVER_MOVE);
-    unselectable |= any_bits(monrace.flags2, RF2_MULTIPLY);
+    unselectable |= monrace.misc_flags.has(MonsterMiscType::MULTIPLY);
     unselectable |= monrace.kind_flags.has(MonsterKindType::QUANTUM) && monrace.kind_flags.has_not(MonsterKindType::UNIQUE);
     unselectable |= monrace.feature_flags.has(MonsterFeatureType::AQUATIC);
     unselectable |= monrace.misc_flags.has(MonsterMiscType::CHAMELEON);

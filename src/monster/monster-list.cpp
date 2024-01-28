@@ -264,7 +264,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx)
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         return false;
     }
-    if (r_ptr->flags2 & RF2_MULTIPLY) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::MULTIPLY)) {
         return false;
     }
     if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY) || (r_ptr->misc_flags.has(MonsterMiscType::CHAMELEON))) {

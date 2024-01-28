@@ -152,7 +152,7 @@ static void place_pet(PlayerType *player_ptr)
             auto &r_ref = set_pet_params(player_ptr, current_monster, m_idx, cy, cx);
             update_monster(player_ptr, m_idx, true);
             lite_spot(player_ptr, cy, cx);
-            if (any_bits(r_ref.flags2, RF2_MULTIPLY)) {
+            if (r_ref.misc_flags.has(MonsterMiscType::MULTIPLY)) {
                 player_ptr->current_floor_ptr->num_repro++;
             }
         } else {

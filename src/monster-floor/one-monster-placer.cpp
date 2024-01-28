@@ -70,7 +70,7 @@ static bool monster_hook_tanuki(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     const auto &monrace = monraces_info[r_idx];
     bool unselectable = monrace.kind_flags.has(MonsterKindType::UNIQUE);
-    unselectable |= any_bits(monrace.flags2, RF2_MULTIPLY);
+    unselectable |= monrace.misc_flags.has(MonsterMiscType::MULTIPLY);
     unselectable |= monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY);
     unselectable |= monrace.feature_flags.has(MonsterFeatureType::AQUATIC);
     unselectable |= monrace.misc_flags.has(MonsterMiscType::CHAMELEON);
@@ -432,7 +432,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
         m_ptr->get_real_monrace().floor_id = player_ptr->floor_id;
     }
 
-    if (any_bits(r_ptr->flags2, RF2_MULTIPLY)) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::MULTIPLY)) {
         floor.num_repro++;
     }
 

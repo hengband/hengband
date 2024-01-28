@@ -401,7 +401,7 @@ void MonsterDamageProcessor::get_exp_from_mon(MonsterEntity *m_ptr, int exp_dam)
     s64b_div(&new_exp, &new_exp_frac, div_h, div_l);
 
     /* Special penalty for mutiply-monster */
-    if (any_bits(r_ptr->flags2, RF2_MULTIPLY) || (m_ptr->r_idx == MonsterRaceId::DAWN)) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::MULTIPLY) || (m_ptr->r_idx == MonsterRaceId::DAWN)) {
         int monnum_penarty = r_ptr->r_akills / 400;
         if (monnum_penarty > 8) {
             monnum_penarty = 8;

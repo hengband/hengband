@@ -81,7 +81,7 @@ bool check_summon_specific(PlayerType *player_ptr, MonsterRaceId summoner_idx, M
         is_match &= monrace.kind_flags.has_not(MonsterKindType::EVIL);
         is_match &= monrace.kind_flags.has_not(MonsterKindType::UNDEAD);
         is_match &= monrace.kind_flags.has_not(MonsterKindType::DEMON);
-        is_match &= none_bits(monrace.flags2, RF2_MULTIPLY);
+        is_match &= monrace.misc_flags.has_not(MonsterMiscType::MULTIPLY);
         is_match &= monrace.ability_flags.none();
         return is_match;
     }

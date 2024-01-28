@@ -48,7 +48,7 @@ void AvatarChanger::change_virtue()
     }
 
     this->change_virtue_revenge();
-    if (any_bits(r_ref.flags2, RF2_MULTIPLY) && (r_ref.r_akills > 1000) && one_in_(10)) {
+    if (r_ref.misc_flags.has(MonsterMiscType::MULTIPLY) && (r_ref.r_akills > 1000) && one_in_(10)) {
         chg_virtue(this->player_ptr, Virtue::VALOUR, -1);
     }
 

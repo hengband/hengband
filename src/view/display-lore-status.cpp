@@ -152,7 +152,7 @@ void display_monster_constitutions(lore_type *lore_ptr)
         hooked_roff(format(_("%s^はまれにテレパシーで感知できる。", "%s^ is rarely detected by telepathy.  "), Who::who(lore_ptr->msex)));
     }
 
-    if (lore_ptr->flags2 & RF2_MULTIPLY) {
+    if (lore_ptr->misc_flags.has(MonsterMiscType::MULTIPLY)) {
         hook_c_roff(TERM_L_UMBER, format(_("%s^は爆発的に増殖する。", "%s^ breeds explosively.  "), Who::who(lore_ptr->msex)));
     }
 
