@@ -374,7 +374,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
         (void)set_monster_csleep(player_ptr, g_ptr->m_idx, (val * 2) + randint1(val * 10));
     }
 
-    if (any_bits(r_ptr->flags1, RF1_FORCE_MAXHP)) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
         m_ptr->max_maxhp = maxroll(r_ptr->hdice, r_ptr->hside);
     } else {
         m_ptr->max_maxhp = damroll(r_ptr->hdice, r_ptr->hside);

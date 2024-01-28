@@ -119,8 +119,8 @@ static void set_race_flags(lore_type *lore_ptr)
         lore_ptr->misc_flags.set(MonsterMiscType::FORCE_DEPTH);
     }
 
-    if (lore_ptr->r_ptr->flags1 & RF1_FORCE_MAXHP) {
-        lore_ptr->flags1 |= (RF1_FORCE_MAXHP);
+    if (lore_ptr->r_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
+        lore_ptr->misc_flags.set(MonsterMiscType::FORCE_MAXHP);
     }
 }
 

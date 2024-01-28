@@ -391,7 +391,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
     m_ptr->mspeed = get_mspeed(floor_ptr, r_ptr);
 
     int oldmaxhp = m_ptr->max_maxhp;
-    if (r_ptr->flags1 & RF1_FORCE_MAXHP) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
         m_ptr->max_maxhp = maxroll(r_ptr->hdice, r_ptr->hside);
     } else {
         m_ptr->max_maxhp = damroll(r_ptr->hdice, r_ptr->hside);

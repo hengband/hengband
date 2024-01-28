@@ -385,7 +385,7 @@ void MonsterDamageProcessor::get_exp_from_mon(MonsterEntity *m_ptr, int exp_dam)
     auto div_l = (uint)((this->player_ptr->max_plv + 2) * speed_to_energy(r_ptr->speed));
 
     /* Use (average maxhp * 2) as a denominator */
-    auto compensation = any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) ? r_ptr->hside * 2 : r_ptr->hside + 1;
+    auto compensation = r_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP) ? r_ptr->hside * 2 : r_ptr->hside + 1;
     s64b_mul(&div_h, &div_l, 0, r_ptr->hdice * (ironman_nightmare ? 2 : 1) * compensation);
 
     /* Special penalty in the wilderness */
