@@ -138,7 +138,7 @@ void display_monster_constitutions(lore_type *lore_ptr)
         hook_c_roff(TERM_L_DARK, format(_("%s^は暗黒に包まれている。", "%s^ is surrounded by darkness.  "), Who::who(lore_ptr->msex)));
     }
 
-    if (lore_ptr->flags2 & RF2_INVISIBLE) {
+    if (lore_ptr->misc_flags.has(MonsterMiscType::INVISIBLE)) {
         hooked_roff(format(_("%s^は透明で目に見えない。", "%s^ is invisible.  "), Who::who(lore_ptr->msex)));
     }
 

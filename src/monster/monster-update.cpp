@@ -433,7 +433,7 @@ static bool check_invisible(PlayerType *player_ptr, um_type *um_ptr)
     }
 
     auto *r_ptr = &um_ptr->m_ptr->get_monrace();
-    if (r_ptr->flags2 & RF2_INVISIBLE) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::INVISIBLE)) {
         if (player_ptr->see_inv) {
             um_ptr->easy = true;
             um_ptr->flag = true;
@@ -485,7 +485,7 @@ static void decide_sight_invisible_monster(PlayerType *player_ptr, um_type *um_p
     }
 
     if (do_invisible) {
-        r_ptr->r_flags2 |= RF2_INVISIBLE;
+        r_ptr->r_misc_flags.set(MonsterMiscType::INVISIBLE);
     }
 
     if (do_cold_blood) {

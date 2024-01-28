@@ -364,7 +364,7 @@ bool detect_monsters_normal(PlayerType *player_ptr, POSITION range)
             continue;
         }
 
-        if (!(r_ptr->flags2 & RF2_INVISIBLE) || player_ptr->see_inv) {
+        if (r_ptr->misc_flags.has_not(MonsterMiscType::INVISIBLE) || player_ptr->see_inv) {
             m_ptr->mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, i, false);
             flag = true;
@@ -411,7 +411,7 @@ bool detect_monsters_invis(PlayerType *player_ptr, POSITION range)
             continue;
         }
 
-        if (r_ptr->flags2 & RF2_INVISIBLE) {
+        if (r_ptr->misc_flags.has(MonsterMiscType::INVISIBLE)) {
             if (player_ptr->monster_race_idx == m_ptr->r_idx) {
                 rfu.set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
             }
