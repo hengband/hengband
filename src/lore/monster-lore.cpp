@@ -48,8 +48,8 @@ static void set_flags1(lore_type *lore_ptr)
         lore_ptr->flags1 |= (RF1_QUESTOR);
     }
 
-    if (lore_ptr->r_ptr->flags1 & RF1_FRIENDS) {
-        lore_ptr->flags1 |= (RF1_FRIENDS);
+    if (lore_ptr->r_ptr->misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
+        lore_ptr->misc_flags.set(MonsterMiscType::HAS_FRIENDS);
     }
 
     if (lore_ptr->r_ptr->flags1 & RF1_ESCORT) {

@@ -581,7 +581,7 @@ void display_monster_collective(lore_type *lore_ptr)
     if ((lore_ptr->flags1 & RF1_ESCORT) || (lore_ptr->flags1 & RF1_ESCORTS) || lore_ptr->reinforce) {
         hooked_roff(format(_("%s^は通常護衛を伴って現れる。", "%s^ usually appears with escorts.  "), Who::who(lore_ptr->msex)));
         display_monster_escort_contents(lore_ptr);
-    } else if (lore_ptr->flags1 & RF1_FRIENDS) {
+    } else if (lore_ptr->misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
         hooked_roff(format(_("%s^は通常集団で現れる。", "%s^ usually appears in groups.  "), Who::who(lore_ptr->msex)));
     }
 }

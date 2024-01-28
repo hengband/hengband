@@ -330,7 +330,7 @@ bool place_specific_monster(PlayerType *player_ptr, MONSTER_IDX who, POSITION y,
         }
     }
 
-    if (r_ptr->flags1 & (RF1_FRIENDS)) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
         (void)place_monster_group(player_ptr, who, y, x, r_idx, mode);
     }
 
@@ -354,7 +354,7 @@ bool place_specific_monster(PlayerType *player_ptr, MONSTER_IDX who, POSITION y,
         }
 
         (void)place_monster_one(player_ptr, place_monster_m_idx, ny, nx, z, mode);
-        if ((monraces_info[z].flags1 & RF1_FRIENDS) || (r_ptr->flags1 & RF1_ESCORTS)) {
+        if (monraces_info[z].misc_flags.has(MonsterMiscType::HAS_FRIENDS) || (r_ptr->flags1 & RF1_ESCORTS)) {
             (void)place_monster_group(player_ptr, place_monster_m_idx, ny, nx, z, mode);
         }
     }

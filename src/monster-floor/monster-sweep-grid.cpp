@@ -141,7 +141,7 @@ void MonsterSweepGrid::check_hiding_grid(POSITION *y, POSITION *x, POSITION *y2,
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];
     auto *r_ptr = &m_ptr->get_monrace();
-    if (this->done || this->will_run || !m_ptr->is_hostile() || none_bits(r_ptr->flags1, RF1_FRIENDS)) {
+    if (this->done || this->will_run || !m_ptr->is_hostile() || r_ptr->misc_flags.has_not(MonsterMiscType::HAS_FRIENDS)) {
         return;
     }
 

@@ -96,7 +96,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
         const auto m_name = monster_desc(player_ptr, m_ptr, 0);
         power = r_ptr->level / 2;
         if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-            if (r_ptr->flags1 & RF1_FRIENDS) {
+            if (r_ptr->misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
                 power /= 2;
             }
         } else {
@@ -160,7 +160,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
         m_name.append(desc);
 
         if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-            if (r_ptr->flags1 & RF1_FRIENDS) {
+            if (r_ptr->misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
                 power /= 2;
             }
         } else {
