@@ -107,7 +107,7 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
             continue;
         }
 
-        if (any_bits(r_ptr->flags7, RF7_KAGE)) {
+        if (r_ptr->misc_flags.has(MonsterMiscType::KAGE)) {
             continue;
         }
 

@@ -898,7 +898,7 @@ bool item_monster_okay(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if (any_bits(r_ptr->flags7, RF7_KAGE)) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::KAGE)) {
         return false;
     }
 
