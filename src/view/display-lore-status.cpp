@@ -142,7 +142,7 @@ void display_monster_constitutions(lore_type *lore_ptr)
         hooked_roff(format(_("%s^は透明で目に見えない。", "%s^ is invisible.  "), Who::who(lore_ptr->msex)));
     }
 
-    if (lore_ptr->flags2 & RF2_COLD_BLOOD) {
+    if (lore_ptr->misc_flags.has(MonsterMiscType::COLD_BLOOD)) {
         hooked_roff(format(_("%s^は冷血動物である。", "%s^ is cold blooded.  "), Who::who(lore_ptr->msex)));
     }
 

@@ -417,7 +417,7 @@ static bool check_cold_blood(PlayerType *player_ptr, um_type *um_ptr, const POSI
     }
 
     auto *r_ptr = &um_ptr->m_ptr->get_monrace();
-    if (any_bits(r_ptr->flags2, RF2_COLD_BLOOD) && r_ptr->aura_flags.has_not(MonsterAuraType::FIRE)) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::COLD_BLOOD) && r_ptr->aura_flags.has_not(MonsterAuraType::FIRE)) {
         return false;
     }
 
@@ -489,7 +489,7 @@ static void decide_sight_invisible_monster(PlayerType *player_ptr, um_type *um_p
     }
 
     if (do_cold_blood) {
-        r_ptr->r_flags2 |= RF2_COLD_BLOOD;
+        r_ptr->r_misc_flags.set(MonsterMiscType::COLD_BLOOD);
     }
 }
 
