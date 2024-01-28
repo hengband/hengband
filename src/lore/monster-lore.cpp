@@ -52,8 +52,8 @@ static void set_flags1(lore_type *lore_ptr)
         lore_ptr->misc_flags.set(MonsterMiscType::HAS_FRIENDS);
     }
 
-    if (lore_ptr->r_ptr->flags1 & RF1_ESCORT) {
-        lore_ptr->flags1 |= (RF1_ESCORT);
+    if (lore_ptr->r_ptr->misc_flags.has(MonsterMiscType::ESCORT)) {
+        lore_ptr->misc_flags.set(MonsterMiscType::ESCORT);
     }
 
     if (lore_ptr->r_ptr->flags1 & RF1_ESCORTS) {

@@ -334,7 +334,7 @@ bool place_specific_monster(PlayerType *player_ptr, MONSTER_IDX who, POSITION y,
         (void)place_monster_group(player_ptr, who, y, x, r_idx, mode);
     }
 
-    if (!(r_ptr->flags1 & (RF1_ESCORT))) {
+    if (r_ptr->misc_flags.has_not(MonsterMiscType::ESCORT)) {
         return true;
     }
 
