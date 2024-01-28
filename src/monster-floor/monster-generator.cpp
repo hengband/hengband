@@ -361,7 +361,6 @@ bool place_specific_monster(PlayerType *player_ptr, MONSTER_IDX who, POSITION y,
 
     return true;
 }
-
 /*!
  * @brief フロア相当のモンスターを1体生成する
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -376,8 +375,7 @@ bool place_random_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FL
     MonsterRaceId r_idx;
     do {
         r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->monster_level, PM_NONE);
-    } while ((mode & PM_NO_QUEST) && (monraces_info[r_idx].flags8 & RF8_NO_QUEST));
-
+    } while ((mode & PM_NO_QUEST) && monraces_info[r_idx].misc_flags.has(MonsterMiscType::NO_QUEST));
     if (!MonsterRace(r_idx).is_valid()) {
         return false;
     }

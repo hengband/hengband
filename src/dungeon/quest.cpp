@@ -191,7 +191,7 @@ void determine_random_questor(PlayerType *player_ptr, QuestType *q_ptr)
             continue;
         }
 
-        if (monrace.flags8 & RF8_NO_QUEST) {
+        if (monrace.misc_flags.has(MonsterMiscType::NO_QUEST)) {
             continue;
         }
 
