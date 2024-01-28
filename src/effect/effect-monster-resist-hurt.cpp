@@ -758,7 +758,7 @@ ProcessResult effect_monster_abyss(PlayerType *player_ptr, EffectMonster *em_ptr
         }
     }
 
-    if (em_ptr->r_ptr->misc_flags.has(MonsterMiscType::ELDRITCH_HORROR) || any_bits(em_ptr->r_ptr->flags2, RF2_EMPTY_MIND)) {
+    if (em_ptr->r_ptr->misc_flags.has(MonsterMiscType::ELDRITCH_HORROR) || em_ptr->r_ptr->misc_flags.has(MonsterMiscType::EMPTY_MIND)) {
         return ProcessResult::PROCESS_CONTINUE;
     }
 

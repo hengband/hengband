@@ -556,7 +556,7 @@ bool detect_monsters_mind(PlayerType *player_ptr, POSITION range)
             continue;
         }
 
-        if (!(r_ptr->flags2 & RF2_EMPTY_MIND)) {
+        if (r_ptr->misc_flags.has_not(MonsterMiscType::EMPTY_MIND)) {
             if (player_ptr->monster_race_idx == m_ptr->r_idx) {
                 rfu.set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
             }

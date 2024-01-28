@@ -146,7 +146,7 @@ void display_monster_constitutions(lore_type *lore_ptr)
         hooked_roff(format(_("%s^は冷血動物である。", "%s^ is cold blooded.  "), Who::who(lore_ptr->msex)));
     }
 
-    if (lore_ptr->flags2 & RF2_EMPTY_MIND) {
+    if (lore_ptr->misc_flags.has(MonsterMiscType::EMPTY_MIND)) {
         hooked_roff(format(_("%s^はテレパシーでは感知できない。", "%s^ is not detected by telepathy.  "), Who::who(lore_ptr->msex)));
     } else if (lore_ptr->flags2 & RF2_WEIRD_MIND) {
         hooked_roff(format(_("%s^はまれにテレパシーで感知できる。", "%s^ is rarely detected by telepathy.  "), Who::who(lore_ptr->msex)));

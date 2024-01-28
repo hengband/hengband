@@ -289,9 +289,9 @@ static void update_telepathy_sight(PlayerType *player_ptr, um_type *um_ptr, MONS
     }
 
     auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
-    if (r_ptr->flags2 & RF2_EMPTY_MIND) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::EMPTY_MIND)) {
         if (m_ptr->is_original_ap() && !is_hallucinated) {
-            r_ptr->r_flags2 |= RF2_EMPTY_MIND;
+            r_ptr->r_misc_flags.set(MonsterMiscType::EMPTY_MIND);
         }
 
         return;
