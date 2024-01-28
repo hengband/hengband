@@ -49,7 +49,7 @@ static void see_eldritch_horror(std::string_view m_name, MonsterRaceInfo *r_ptr)
 {
     const auto &horror_message = r_ptr->decide_horror_message();
     msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), horror_message.data(), m_name.data());
-    r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
+    r_ptr->r_misc_flags.set(MonsterMiscType::ELDRITCH_HORROR);
 }
 
 /*!
@@ -61,7 +61,7 @@ static void feel_eldritch_horror(std::string_view desc, MonsterRaceInfo *r_ptr)
 {
     const auto &horror_message = r_ptr->decide_horror_message();
     msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), horror_message.data(), desc.data());
-    r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
+    r_ptr->r_misc_flags.set(MonsterMiscType::ELDRITCH_HORROR);
 }
 
 static bool process_mod_hallucination(PlayerType *player_ptr, std::string_view m_name, const MonsterRaceInfo &monrace)
@@ -111,7 +111,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
             return;
         }
 
-        if (!(r_ptr->flags2 & RF2_ELDRITCH_HORROR)) {
+        if (r_ptr->misc_flags.has_not(MonsterMiscType::ELDRITCH_HORROR)) {
             return;
         }
 

@@ -752,7 +752,7 @@ bool vault_aux_cthulhu(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if (!(r_ptr->flags2 & (RF2_ELDRITCH_HORROR))) {
+    if (r_ptr->misc_flags.has_not(MonsterMiscType::ELDRITCH_HORROR)) {
         return false;
     }
 
@@ -817,7 +817,7 @@ bool monster_hook_human(PlayerType *player_ptr, MonsterRaceId r_idx)
 bool get_nightmare(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     auto *r_ptr = &monraces_info[r_idx];
-    if (none_bits(r_ptr->flags2, RF2_ELDRITCH_HORROR)) {
+    if (r_ptr->misc_flags.has_not(MonsterMiscType::ELDRITCH_HORROR)) {
         return false;
     }
 
