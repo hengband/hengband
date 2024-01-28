@@ -12,6 +12,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
 #include "monster-race/race-indice-types.h"
+#include "monster-race/race-misc-flags.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "player/player-status.h"
@@ -909,7 +910,7 @@ bool item_monster_okay(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if (any_bits(r_ptr->flags1, RF1_FORCE_DEPTH)) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::FORCE_DEPTH)) {
         return false;
     }
 

@@ -10,6 +10,7 @@
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
+#include "monster-race/race-misc-flags.h"
 #include "spell/summon-types.h"
 #include "system/alloc-entries.h"
 #include "system/angband-system.h"
@@ -289,8 +290,8 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
                 continue;
             }
 
-            // RF1_FORCE_DEPTH フラグ持ちは指定階未満では生成禁止。
-            if ((r_ptr->flags1 & RF1_FORCE_DEPTH) && (r_ptr->level > floor_ptr->dun_level)) {
+            // FORCE_DEPTH フラグ持ちは指定階未満では生成禁止。
+            if (r_ptr->misc_flags.has(MonsterMiscType::FORCE_DEPTH) && (r_ptr->level > floor_ptr->dun_level)) {
                 continue;
             }
 
