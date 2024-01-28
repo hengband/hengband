@@ -679,7 +679,7 @@ void display_monster_sometimes(lore_type *lore_ptr)
 
 void display_monster_guardian(lore_type *lore_ptr)
 {
-    bool is_kingpin = (lore_ptr->flags1 & RF1_QUESTOR) != 0;
+    bool is_kingpin = lore_ptr->misc_flags.has(MonsterMiscType::QUESTOR);
     is_kingpin &= lore_ptr->r_ptr->r_sights > 0;
     is_kingpin &= lore_ptr->r_ptr->max_num > 0;
     is_kingpin &= (lore_ptr->r_idx == MonsterRaceId::OBERON) || (lore_ptr->r_idx == MonsterRaceId::SERPENT);

@@ -56,7 +56,7 @@ bool rodeo(PlayerType *player_ptr)
         rlev = 60 + (rlev - 60) / 2;
     }
     if ((randint1(player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 120 + player_ptr->lev * 2 / 3) > rlev) && one_in_(2) &&
-        !player_ptr->current_floor_ptr->inside_arena && !AngbandSystem::get_instance().is_phase_out() && !(r_ptr->flags7 & (RF7_GUARDIAN)) && !(r_ptr->flags1 & (RF1_QUESTOR)) &&
+        !player_ptr->current_floor_ptr->inside_arena && !AngbandSystem::get_instance().is_phase_out() && !(r_ptr->flags7 & (RF7_GUARDIAN)) && r_ptr->misc_flags.has_not(MonsterMiscType::QUESTOR) &&
         (rlev < player_ptr->lev * 3 / 2 + randint0(player_ptr->lev / 5))) {
         msg_format(_("%sを手なずけた。", "You tame %s."), m_name.data());
         set_pet(player_ptr, m_ptr);

@@ -229,7 +229,7 @@ static bool parse_qtw_QQ(QuestType *q_ptr, char **zz, int num)
 
     auto &r_ref = monraces_info[q_ptr->r_idx];
     if (r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
-        r_ref.flags1 |= RF1_QUESTOR;
+        r_ref.misc_flags.set(MonsterMiscType::QUESTOR);
     }
 
     if (a_idx == FixedArtifactId::NONE) {

@@ -230,7 +230,7 @@ static void attack_teleport_away(PlayerType *player_ptr, player_attack_type *pa_
 static void attack_polymorph(PlayerType *player_ptr, player_attack_type *pa_ptr, POSITION y, POSITION x)
 {
     auto *r_ptr = pa_ptr->r_ptr;
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags1, RF1_QUESTOR) || r_ptr->resistance_flags.has_any_of(RFR_EFF_RESIST_CHAOS_MASK)) {
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->misc_flags.has(MonsterMiscType::QUESTOR) || r_ptr->resistance_flags.has_any_of(RFR_EFF_RESIST_CHAOS_MASK)) {
         return;
     }
 

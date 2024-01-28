@@ -180,7 +180,7 @@ void analyze_quests(PlayerType *player_ptr, const uint16_t max_quests_load, cons
 
         if (q_ptr->status == QuestStatusType::TAKEN || q_ptr->status == QuestStatusType::UNTAKEN) {
             if (monraces_info[q_ptr->r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
-                monraces_info[q_ptr->r_idx].flags1 |= RF1_QUESTOR;
+                monraces_info[q_ptr->r_idx].misc_flags.set(MonsterMiscType::QUESTOR);
             }
         }
     }

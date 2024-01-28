@@ -192,7 +192,7 @@ static bool check_monster_hp(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
     }
 
     auto is_like_unique = monrace.kind_flags.has(MonsterKindType::UNIQUE);
-    is_like_unique |= any_bits(monrace.flags1, RF1_QUESTOR);
+    is_like_unique |= monrace.misc_flags.has(MonsterMiscType::QUESTOR);
     is_like_unique |= monrace.population_flags.has(MonsterPopulationType::NAZGUL);
     if (is_like_unique && !AngbandSystem::get_instance().is_phase_out()) {
         mam_pp_ptr->m_ptr->hp = 1;

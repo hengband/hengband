@@ -145,7 +145,7 @@ static bool check_unique_placeable(const FloorType &floor, MonsterRaceId r_idx, 
     }
 
     const auto is_deep = r_ptr->misc_flags.has(MonsterMiscType::FORCE_DEPTH) && (floor.dun_level < r_ptr->level);
-    const auto is_questor = !ironman_nightmare || any_bits(r_ptr->flags1, RF1_QUESTOR);
+    const auto is_questor = !ironman_nightmare || r_ptr->misc_flags.has(MonsterMiscType::QUESTOR);
     return !is_deep || !is_questor;
 }
 

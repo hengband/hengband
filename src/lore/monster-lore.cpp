@@ -44,8 +44,8 @@ static void set_flags1(lore_type *lore_ptr)
         lore_ptr->kind_flags.set(MonsterKindType::UNIQUE);
     }
 
-    if (lore_ptr->r_ptr->flags1 & RF1_QUESTOR) {
-        lore_ptr->flags1 |= (RF1_QUESTOR);
+    if (lore_ptr->r_ptr->misc_flags.has(MonsterMiscType::QUESTOR)) {
+        lore_ptr->misc_flags.set(MonsterMiscType::QUESTOR);
     }
 
     if (lore_ptr->r_ptr->misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {

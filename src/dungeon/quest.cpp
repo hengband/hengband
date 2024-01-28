@@ -195,7 +195,7 @@ void determine_random_questor(PlayerType *player_ptr, QuestType *q_ptr)
             continue;
         }
 
-        if (monrace.flags1 & RF1_QUESTOR) {
+        if (monrace.misc_flags.has(MonsterMiscType::QUESTOR)) {
             continue;
         }
 
@@ -370,7 +370,7 @@ void leave_quest_check(PlayerType *player_ptr)
         q_ptr->get_reward().gen_flags.reset(ItemGenerationTraitType::QUESTITEM);
         break;
     case QuestKindType::RANDOM:
-        monraces_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);
+        monraces_info[q_ptr->r_idx].misc_flags.reset(MonsterMiscType::QUESTOR);
         prepare_change_floor_mode(player_ptr, CFM_NO_RETURN);
         break;
     default:

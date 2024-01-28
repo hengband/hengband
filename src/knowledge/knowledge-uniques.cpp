@@ -52,7 +52,7 @@ static bool sweep_uniques(MonsterRaceInfo *r_ptr, bool is_alive)
         return false;
     }
 
-    bool is_except_arena = is_alive ? (r_ptr->rarity > 100) && ((r_ptr->flags1 & RF1_QUESTOR) == 0) : false;
+    bool is_except_arena = is_alive ? (r_ptr->rarity > 100) && (r_ptr->misc_flags.has_not(MonsterMiscType::QUESTOR)) : false;
     if (!r_ptr->rarity || is_except_arena) {
         return false;
     }
