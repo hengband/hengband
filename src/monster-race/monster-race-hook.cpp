@@ -849,7 +849,7 @@ bool monster_is_fishing_target(PlayerType *player_ptr, MonsterRaceId r_idx)
 /*!
  * @brief モンスター闘技場に参加できるモンスターの判定
  * @param r_idx モンスターＩＤ
- * @details 基準はNEVER_MOVE MULTIPLY QUANTUM AQUATIC RF7_CHAMELEONのいずれも持たず、
+ * @details 基準はNEVER_MOVE MULTIPLY QUANTUM AQUATIC CHAMELEONのいずれも持たず、
  * 自爆以外のなんらかのHP攻撃手段を持っていること。
  * @return 参加できるか否か
  */
@@ -864,7 +864,7 @@ bool monster_can_entry_arena(PlayerType *player_ptr, MonsterRaceId r_idx)
     unselectable |= any_bits(monrace.flags2, RF2_MULTIPLY);
     unselectable |= monrace.kind_flags.has(MonsterKindType::QUANTUM) && monrace.kind_flags.has_not(MonsterKindType::UNIQUE);
     unselectable |= monrace.feature_flags.has(MonsterFeatureType::AQUATIC);
-    unselectable |= any_bits(monrace.flags7, RF7_CHAMELEON);
+    unselectable |= monrace.misc_flags.has(MonsterMiscType::CHAMELEON);
     unselectable |= monrace.is_explodable();
     if (unselectable) {
         return false;

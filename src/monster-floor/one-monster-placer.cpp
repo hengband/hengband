@@ -73,7 +73,7 @@ static bool monster_hook_tanuki(PlayerType *player_ptr, MonsterRaceId r_idx)
     unselectable |= any_bits(monrace.flags2, RF2_MULTIPLY);
     unselectable |= monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY);
     unselectable |= monrace.feature_flags.has(MonsterFeatureType::AQUATIC);
-    unselectable |= any_bits(monrace.flags7, RF7_CHAMELEON);
+    unselectable |= monrace.misc_flags.has(MonsterMiscType::CHAMELEON);
     unselectable |= monrace.is_explodable();
     if (unselectable) {
         return false;
@@ -339,7 +339,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
         m_ptr->parent_m_idx = 0;
     }
 
-    if (any_bits(r_ptr->flags7, RF7_CHAMELEON)) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::CHAMELEON)) {
         choose_new_monster(player_ptr, g_ptr->m_idx, true, MonsterRace::empty_id());
         r_ptr = &m_ptr->get_monrace();
         m_ptr->mflag2.set(MonsterConstantFlagType::CHAMELEON);

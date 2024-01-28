@@ -219,7 +219,7 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_
     if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return false;
     }
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY) || (r_ptr->flags7 & RF7_CHAMELEON)) {
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY) || r_ptr->misc_flags.has(MonsterMiscType::CHAMELEON)) {
         return false;
     }
 
@@ -235,7 +235,7 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_
         return false;
     }
 
-    if (!(old_r_ptr->flags7 & RF7_CHAMELEON)) {
+    if (old_r_ptr->misc_flags.has_not(MonsterMiscType::CHAMELEON)) {
         if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, r_ptr)) {
             return false;
         }
@@ -267,7 +267,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx)
     if (r_ptr->flags2 & RF2_MULTIPLY) {
         return false;
     }
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY) || (r_ptr->flags7 & RF7_CHAMELEON)) {
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY) || (r_ptr->misc_flags.has(MonsterMiscType::CHAMELEON))) {
         return false;
     }
 
@@ -279,7 +279,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if (!(old_r_ptr->flags7 & RF7_CHAMELEON)) {
+    if (old_r_ptr->misc_flags.has_not(MonsterMiscType::CHAMELEON)) {
         if (old_r_ptr->kind_flags.has(MonsterKindType::GOOD) && r_ptr->kind_flags.has_not(MonsterKindType::GOOD)) {
             return false;
         }

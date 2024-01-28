@@ -273,7 +273,7 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MonsterRaceId r_idx
         }
     }
 
-    if ((r_ptr->flags7 & RF7_CHAMELEON) && !(z_ptr->flags7 & RF7_CHAMELEON)) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::CHAMELEON) && z_ptr->misc_flags.has_not(MonsterMiscType::CHAMELEON)) {
         return false;
     }
 
