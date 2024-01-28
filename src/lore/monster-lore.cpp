@@ -189,7 +189,7 @@ void process_monster_lore(PlayerType *player_ptr, MonsterRaceId r_idx, monster_l
         hook_c_roff(TERM_RED, _("致命的な威力の攻撃に対して大きな耐性を持っている。", "has the strong resistance for a critical damage.  "));
     }
     display_monster_aura(lore_ptr);
-    if (lore_ptr->flags2 & RF2_REFLECTING) {
+    if (lore_ptr->misc_flags.has(MonsterMiscType::REFLECTING)) {
         hooked_roff(format(_("%s^は矢の呪文を跳ね返す。", "%s^ reflects bolt spells.  "), Who::who(lore_ptr->msex)));
     }
 
