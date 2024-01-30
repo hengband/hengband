@@ -195,7 +195,7 @@ bool wr_dungeon(PlayerType *player_ptr)
 
     for (int i = 0; i < MAX_SAVED_FLOORS; i++) {
         saved_floor_type *sf_ptr = &saved_floors[i];
-        if (!sf_ptr->floor_id) {
+        if (!is_saved_floor(sf_ptr)) {
             continue;
         }
         if (!load_floor(player_ptr, sf_ptr, (SLF_SECOND | SLF_NO_KILL))) {

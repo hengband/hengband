@@ -62,7 +62,7 @@ static errr rd_dungeon(PlayerType *player_ptr)
 
         for (int i = 0; i < num; i++) {
             saved_floor_type *sf_ptr = &saved_floors[i];
-            if (!sf_ptr->floor_id) {
+            if (!is_saved_floor(sf_ptr)) {
                 continue;
             }
             if (rd_byte() != 0) {
