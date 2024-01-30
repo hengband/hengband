@@ -395,7 +395,7 @@ static void update_floor(PlayerType *player_ptr)
     }
 
     if (new_floor_id == 0) {
-        new_floor_id = get_new_floor_id(player_ptr);
+        new_floor_id = get_unused_floor_id(player_ptr);
     }
 
     saved_floor_type *sf_ptr;

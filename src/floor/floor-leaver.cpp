@@ -385,7 +385,7 @@ static void refresh_new_floor_id(PlayerType *player_ptr, Grid *g_ptr)
         return;
     }
 
-    new_floor_id = get_new_floor_id(player_ptr);
+    new_floor_id = get_unused_floor_id(player_ptr);
     if ((g_ptr != nullptr) && !feat_uses_special(g_ptr->feat)) {
         g_ptr->special = new_floor_id;
     }

@@ -165,13 +165,13 @@ static FLOOR_IDX find_oldest_floor_idx(PlayerType *player_ptr)
 }
 
 /*!
- * @brief 新規に利用可能な保存フロアを返す / Initialize new saved floor and get its floor id.
+ * @brief 新規に利用可能なフロアIDを返す / Initialize new floor and get its floor id.
  * @param player_ptr プレイヤーへの参照ポインタ
- * @return 利用可能な保存フロアID
+ * @return 利用可能なフロアID
  * @details
  * If number of saved floors are already MAX_SAVED_FLOORS, kill the oldest one.
  */
-FLOOR_IDX get_new_floor_id(PlayerType *player_ptr)
+FLOOR_IDX get_unused_floor_id(PlayerType *player_ptr)
 {
     saved_floor_type *sf_ptr = nullptr;
     FLOOR_IDX fl_idx;
