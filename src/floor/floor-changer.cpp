@@ -327,6 +327,24 @@ static void new_floor_allocation(PlayerType *player_ptr, saved_floor_type *sf_pt
     }
 }
 
+/*!
+ * @brief プレイヤー足元に階段を設置する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ */
+static void set_stairs(PlayerType *player_ptr)
+{
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor.grid_array[player_ptr->y][player_ptr->x];
+    if ((player_ptr->change_floor_mode & CFM_UP) && !inside_quest(floor.get_quest_id())) {
+        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(&floor, feat_down_stair, TerrainCharacteristics::SHAFT) : feat_down_stair;
+    } else if ((player_ptr->change_floor_mode & CFM_DOWN) && !ironman_downward) {
+        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(&floor, feat_up_stair, TerrainCharacteristics::SHAFT) : feat_up_stair;
+    }
+
+    g_ptr->mimic = 0;
+    g_ptr->special = player_ptr->floor_id;
+}
+
 static void update_new_floor_feature(PlayerType *player_ptr, saved_floor_type *sf_ptr, const bool loaded)
 {
     if (loaded) {
@@ -347,15 +365,7 @@ static void update_new_floor_feature(PlayerType *player_ptr, saved_floor_type *s
         return;
     }
 
-    auto *g_ptr = &floor.grid_array[player_ptr->y][player_ptr->x];
-    if ((player_ptr->change_floor_mode & CFM_UP) && !inside_quest(floor.get_quest_id())) {
-        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(&floor, feat_down_stair, TerrainCharacteristics::SHAFT) : feat_down_stair;
-    } else if ((player_ptr->change_floor_mode & CFM_DOWN) && !ironman_downward) {
-        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(&floor, feat_up_stair, TerrainCharacteristics::SHAFT) : feat_up_stair;
-    }
-
-    g_ptr->mimic = 0;
-    g_ptr->special = player_ptr->floor_id;
+    set_stairs(player_ptr);
 }
 
 static void cut_off_the_upstair(PlayerType *player_ptr)
