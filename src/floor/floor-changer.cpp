@@ -54,8 +54,9 @@
 /*!
  * @brief 階段移動先のフロアが生成できない時に簡単な行き止まりマップを作成する / Builds the dead end
  */
-static void build_dead_end(PlayerType *player_ptr)
+static void build_dead_end(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
+    msg_print(_("階段は行き止まりだった。", "The staircases come to a dead end..."));
     clear_cave(player_ptr);
     player_ptr->x = player_ptr->y = 0;
     set_floor_and_wall(0);
@@ -71,6 +72,12 @@ static void build_dead_end(PlayerType *player_ptr)
     player_ptr->x = player_ptr->current_floor_ptr->width / 2;
     place_bold(player_ptr, player_ptr->y, player_ptr->x, GB_FLOOR);
     wipe_generate_random_floor_flags(player_ptr->current_floor_ptr);
+
+    if (player_ptr->change_floor_mode & CFM_UP) {
+        sf_ptr->upper_floor_id = 0;
+    } else if (player_ptr->change_floor_mode & CFM_DOWN) {
+        sf_ptr->lower_floor_id = 0;
+    }
 }
 
 static MONSTER_IDX decide_pet_index(PlayerType *player_ptr, const int current_monster, POSITION *cy, POSITION *cx)
@@ -320,22 +327,6 @@ static void new_floor_allocation(PlayerType *player_ptr, saved_floor_type *sf_pt
     }
 }
 
-static void check_dead_end(PlayerType *player_ptr, saved_floor_type *sf_ptr)
-{
-    if (!is_visited_floor(sf_ptr)) {
-        generate_floor(player_ptr);
-        return;
-    }
-
-    msg_print(_("階段は行き止まりだった。", "The staircases come to a dead end..."));
-    build_dead_end(player_ptr);
-    if (player_ptr->change_floor_mode & CFM_UP) {
-        sf_ptr->upper_floor_id = 0;
-    } else if (player_ptr->change_floor_mode & CFM_DOWN) {
-        sf_ptr->lower_floor_id = 0;
-    }
-}
-
 static void update_new_floor_feature(PlayerType *player_ptr, saved_floor_type *sf_ptr, const bool loaded)
 {
     if (loaded) {
@@ -343,7 +334,12 @@ static void update_new_floor_feature(PlayerType *player_ptr, saved_floor_type *s
         return;
     }
 
-    check_dead_end(player_ptr, sf_ptr);
+    if (!is_visited_floor(sf_ptr)) {
+        generate_floor(player_ptr);
+    } else {
+        build_dead_end(player_ptr, sf_ptr);
+    }
+
     sf_ptr->last_visit = w_ptr->game_turn;
     auto &floor = *player_ptr->current_floor_ptr;
     sf_ptr->dun_level = floor.dun_level;
