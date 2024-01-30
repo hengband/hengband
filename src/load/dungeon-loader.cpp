@@ -33,7 +33,7 @@ static errr rd_dungeon(PlayerType *player_ptr)
     if (h_older_than(1, 5, 0, 0)) {
         err = rd_dungeon_old(player_ptr);
         if (floor.dungeon_idx) {
-            player_ptr->floor_id = get_new_floor_id(player_ptr);
+            player_ptr->floor_id = get_unused_floor_id(player_ptr);
             get_sf_ptr(player_ptr->floor_id)->dun_level = floor.dun_level;
         }
 
@@ -62,7 +62,7 @@ static errr rd_dungeon(PlayerType *player_ptr)
 
         for (int i = 0; i < num; i++) {
             saved_floor_type *sf_ptr = &saved_floors[i];
-            if (!sf_ptr->floor_id) {
+            if (!is_saved_floor(sf_ptr)) {
                 continue;
             }
             if (rd_byte() != 0) {

@@ -167,7 +167,7 @@ bool wr_dungeon(PlayerType *player_ptr)
     RedrawingFlagsUpdater::get_instance().set_flags(flags);
     wr_s16b(max_floor_id);
     wr_byte((byte)player_ptr->current_floor_ptr->dungeon_idx);
-    if (!player_ptr->floor_id) {
+    if (!player_ptr->in_saved_floor()) {
         /* No array elements */
         wr_byte(0);
         wr_saved_floor(player_ptr, nullptr);
@@ -195,7 +195,7 @@ bool wr_dungeon(PlayerType *player_ptr)
 
     for (int i = 0; i < MAX_SAVED_FLOORS; i++) {
         saved_floor_type *sf_ptr = &saved_floors[i];
-        if (!sf_ptr->floor_id) {
+        if (!is_saved_floor(sf_ptr)) {
             continue;
         }
         if (!load_floor(player_ptr, sf_ptr, (SLF_SECOND | SLF_NO_KILL))) {

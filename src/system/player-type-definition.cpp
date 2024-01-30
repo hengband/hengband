@@ -124,3 +124,8 @@ bool PlayerType::is_located_at(const Pos2D &pos) const
 {
     return (this->y == pos.y) && (this->x == pos.x);
 }
+
+bool PlayerType::in_saved_floor() const
+{
+    return this->floor_id != 0;
+}

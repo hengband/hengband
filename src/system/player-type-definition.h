@@ -405,6 +405,7 @@ public:
     Pos2D get_position() const;
     bool is_located_at_running_destination() const;
     bool is_located_at(const Pos2D &pos) const;
+    bool in_saved_floor() const;
 
 private:
     std::shared_ptr<TimedEffects> timed_effects;
