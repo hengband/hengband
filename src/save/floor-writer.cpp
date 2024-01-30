@@ -167,7 +167,7 @@ bool wr_dungeon(PlayerType *player_ptr)
     RedrawingFlagsUpdater::get_instance().set_flags(flags);
     wr_s16b(max_floor_id);
     wr_byte((byte)player_ptr->current_floor_ptr->dungeon_idx);
-    if (!player_ptr->floor_id) {
+    if (!player_ptr->in_saved_floor()) {
         /* No array elements */
         wr_byte(0);
         wr_saved_floor(player_ptr, nullptr);

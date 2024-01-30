@@ -230,7 +230,7 @@ static void check_visited_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr
 
 static void update_floor_id(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    if (player_ptr->floor_id == 0) {
+    if (!player_ptr->in_saved_floor()) {
         if (player_ptr->change_floor_mode & CFM_UP) {
             sf_ptr->lower_floor_id = 0;
         } else if (player_ptr->change_floor_mode & CFM_DOWN) {
