@@ -290,7 +290,7 @@ static void reset_unique_by_floor_change(PlayerType *player_ptr)
     }
 }
 
-static void new_floor_allocation(PlayerType *player_ptr, saved_floor_type *sf_ptr)
+static void allocate_loaded_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
     GAME_TURN tmp_last_visit = sf_ptr->last_visit;
     const auto &floor = *player_ptr->current_floor_ptr;
@@ -347,7 +347,7 @@ static void set_stairs(PlayerType *player_ptr)
 static void update_new_floor_feature(PlayerType *player_ptr, saved_floor_type *sf_ptr, const bool loaded)
 {
     if (loaded) {
-        new_floor_allocation(player_ptr, sf_ptr);
+        allocate_loaded_floor(player_ptr, sf_ptr);
         return;
     }
 
