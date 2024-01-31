@@ -212,13 +212,12 @@ static bool is_visited_floor(saved_floor_type *sf_ptr)
     return sf_ptr->last_visit != 0;
 }
 
-static void check_visited_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, bool *loaded)
+/*!
+ * @brief フロア読込時にプレイヤー足元の地形に必要な情報を設定する
+ * @params player_ptr プレイヤーへの参照ポインタ
+ */
+static void set_player_grid(PlayerType *player_ptr)
 {
-    if (!is_visited_floor(sf_ptr) || !load_floor(player_ptr, sf_ptr, 0)) {
-        return;
-    }
-
-    *loaded = true;
     if ((player_ptr->change_floor_mode & CFM_NO_RETURN) == 0) {
         return;
     }
@@ -399,9 +398,9 @@ static void update_floor(PlayerType *player_ptr)
     }
 
     saved_floor_type *sf_ptr;
-    bool loaded = false;
     sf_ptr = get_sf_ptr(new_floor_id);
-    check_visited_floor(player_ptr, sf_ptr, &loaded);
+    const bool loaded = is_visited_floor(sf_ptr) && load_floor(player_ptr, sf_ptr, 0);
+    set_player_grid(player_ptr);
     update_floor_id(player_ptr, sf_ptr);
     update_new_floor_feature(player_ptr, sf_ptr, loaded);
     cut_off_the_upstair(player_ptr);
