@@ -528,6 +528,7 @@ hengband_SOURCES = \
 	monster-race/race-resistance-mask.cpp monster-race/race-resistance-mask.h \
 	monster-race/race-sex-const.cpp monster-race/race-sex-const.h \
 	monster-race/race-speak-flags.h \
+	monster-race/race-special-flags.h \
 	monster-race/race-visual-flags.h \
 	monster-race/race-wilderness-flags.h \
 	\

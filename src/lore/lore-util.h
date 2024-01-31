@@ -9,6 +9,7 @@
 #include "monster-race/race-feature-flags.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-kind-flags.h"
+#include "monster-race/race-special-flags.h"
 #include "monster-race/race-visual-flags.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
@@ -81,6 +82,7 @@ struct lore_type {
     EnumClassFlagGroup<MonsterDropType> drop_flags;
     EnumClassFlagGroup<MonsterFeatureType> feature_flags;
     EnumClassFlagGroup<MonsterBrightnessType> brightness_flags;
+    EnumClassFlagGroup<MonsterSpecialType> special_flags;
 };
 
 using hook_c_roff_pf = void (*)(TERM_COLOR attr, std::string_view str);

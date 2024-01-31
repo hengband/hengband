@@ -9,6 +9,7 @@
 #include "monster-race/race-population-flags.h"
 #include "monster-race/race-sex-const.h"
 #include "monster-race/race-speak-flags.h"
+#include "monster-race/race-special-flags.h"
 #include "monster-race/race-visual-flags.h"
 #include "monster-race/race-wilderness-flags.h"
 
@@ -461,4 +462,8 @@ const std::unordered_map<std::string_view, MonsterSex> r_info_sex = {
     { "NONE", MonsterSex::NONE },
     { "MALE", MonsterSex::MALE },
     { "FEMALE", MonsterSex::FEMALE },
+};
+
+const std::unordered_map<std::string_view, MonsterSpecialType> r_info_special_flags = {
+    { "DIMINISH_MAX_DAMAGE", MonsterSpecialType::DIMINISH_MAX_DAMAGE },
 };
