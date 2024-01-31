@@ -11,6 +11,7 @@
 #include "combat/shoot.h"
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-slot-types.h"
+#include "mind/monk-attack.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
@@ -97,6 +98,11 @@ static bool calc_weapon_damage_limit(PlayerType *player_ptr, int hand, int *dama
     } else {
         *basedam = monk_ave_damage[level][0];
     }
+    bool impact = player_ptr->impact != 0;
+    WEIGHT weight = player_ptr->lev * calc_monk_attack_weight(player_ptr);
+    int to_h = player_ptr->lev * 7 / 10; // 命中計算が煩雑なのでおよその値を使用する
+
+    *basedam = calc_expect_crit(player_ptr, weight, to_h, *basedam, player_ptr->to_h[0], false, impact, 100);
 
     damage[hand] += *basedam;
     if (o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) {
@@ -134,40 +140,6 @@ static bool calc_weapon_one_hand(ItemEntity *o_ptr, int hand, int *damage, int *
     }
 
     return true;
-}
-
-/*!
- * @brief ヴォーパル武器等によるダメージ強化
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param o_ptr 装備中の武器への参照ポインタ
- * @param basedam 素手における直接攻撃のダメージ
- * @param flags オブジェクトフラグ群
- * @return 強化後の素手ダメージ
- * @todo ヴォーパル計算処理が building-craft-weapon::compare_weapon_aux() と多重実装.
- */
-static int strengthen_basedam(PlayerType *player_ptr, ItemEntity *o_ptr, int basedam, const TrFlags &flags)
-{
-    const auto is_vorpal_blade = o_ptr->is_specific_artifact(FixedArtifactId::VORPAL_BLADE);
-    const auto is_chainsword = o_ptr->is_specific_artifact(FixedArtifactId::CHAINSWORD);
-    if (o_ptr->is_fully_known() && (is_vorpal_blade || is_chainsword)) {
-        /* vorpal blade */
-        basedam *= 5;
-        basedam /= 3;
-    } else if (flags.has(TR_VORPAL)) {
-        /* vorpal flag only */
-        basedam *= 11;
-        basedam /= 9;
-    }
-
-    // 理力
-    bool is_force = !PlayerClass(player_ptr).equals(PlayerClassType::SAMURAI);
-    is_force &= flags.has(TR_FORCE_WEAPON);
-    is_force &= player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5);
-    if (is_force) {
-        basedam = basedam * 7 / 2;
-    }
-
-    return basedam;
 }
 
 /*!
@@ -264,23 +236,19 @@ static void calc_two_hands(PlayerType *player_ptr, int *damage, int *to_h)
         }
 
         to_h[i] = 0;
-        auto poison_needle = false;
-        if (o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) {
-            poison_needle = true;
-        }
 
         if (o_ptr->is_known()) {
             damage[i] += o_ptr->to_d * 100;
             to_h[i] += o_ptr->to_h;
         }
 
-        basedam = ((o_ptr->dd + player_ptr->to_dd[i]) * (o_ptr->ds + player_ptr->to_ds[i] + 1)) * 50;
-        auto flags = o_ptr->get_flags_known();
+        int mindice = (o_ptr->dd + player_ptr->to_dd[i]);
+        int maxdice = (o_ptr->dd + player_ptr->to_dd[i]) * (o_ptr->ds + player_ptr->to_ds[i]);
 
-        bool impact = player_ptr->impact != 0;
-        basedam = calc_expect_crit(player_ptr, o_ptr->weight, to_h[i], basedam, player_ptr->dis_to_h[i], poison_needle, impact);
-        basedam = strengthen_basedam(player_ptr, o_ptr, basedam, flags);
-        damage[i] += basedam;
+        basedam = calc_expect_dice(player_ptr, mindice, p_ptr->to_h[i], o_ptr);
+        basedam += calc_expect_dice(player_ptr, maxdice, p_ptr->to_h[i], o_ptr);
+        damage[i] += basedam * 50; // x100 for display
+
         if (o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) {
             damage[i] = 1;
         }
