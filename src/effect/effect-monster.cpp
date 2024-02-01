@@ -613,7 +613,7 @@ static void exe_affect_monster_by_damage(PlayerType *player_ptr, EffectMonster *
     effect_damage_gives_bad_status(player_ptr, em_ptr);
     deal_effect_damage_to_monster(player_ptr, em_ptr);
     if ((em_ptr->attribute == AttributeType::BLOOD_CURSE) && one_in_(4)) {
-        blood_curse_to_enemy(player_ptr, em_ptr->who);
+        blood_curse_to_enemy(player_ptr, em_ptr->g_ptr->m_idx);
     }
 }
 
