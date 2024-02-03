@@ -613,7 +613,7 @@ static void exe_affect_monster_by_damage(PlayerType *player_ptr, EffectMonster *
     effect_damage_gives_bad_status(player_ptr, em_ptr);
     deal_effect_damage_to_monster(player_ptr, em_ptr);
     if ((em_ptr->attribute == AttributeType::BLOOD_CURSE) && one_in_(4)) {
-        blood_curse_to_enemy(player_ptr, em_ptr->who);
+        blood_curse_to_enemy(player_ptr, em_ptr->g_ptr->m_idx);
     }
 }
 
@@ -737,10 +737,11 @@ bool affect_monster(
 {
     EffectMonster tmp_effect(player_ptr, who, r, y, x, dam, attribute, flag, see_s_msg);
     auto *em_ptr = &tmp_effect;
+    auto target_m_idx = em_ptr->g_ptr->m_idx;
 
     make_description_of_affecred_monster(player_ptr, em_ptr);
 
-    if (player_ptr->riding && (em_ptr->g_ptr->m_idx == player_ptr->riding)) {
+    if (player_ptr->riding && (target_m_idx == player_ptr->riding)) {
         disturb(player_ptr, true, true);
     }
 
@@ -758,7 +759,7 @@ bool affect_monster(
     update_phase_out_stat(player_ptr, em_ptr);
     const auto monster_is_valid = MonsterRace(em_ptr->m_ptr->r_idx).is_valid();
     if (monster_is_valid) {
-        update_monster(player_ptr, em_ptr->g_ptr->m_idx, false);
+        update_monster(player_ptr, target_m_idx, false);
     }
 
     lite_spot(player_ptr, em_ptr->y, em_ptr->x);
