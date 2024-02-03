@@ -19,6 +19,7 @@
 #include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
+#include "monster/monster-util.h"
 #include "player-base/player-class.h"
 #include "player-info/samurai-data-type.h"
 #include "player/player-status-flags.h"
@@ -92,7 +93,7 @@ static bool process_bolt_reflection(PlayerType *player_ptr, EffectPlayerType *ep
     msg_print(mes);
     POSITION t_y;
     POSITION t_x;
-    if (ep_ptr->src_idx > 0) {
+    if (is_monster(ep_ptr->src_idx)) {
         auto *floor_ptr = player_ptr->current_floor_ptr;
         auto *m_ptr = &floor_ptr->m_list[ep_ptr->src_idx];
         do {
@@ -131,13 +132,13 @@ static ProcessResult check_continue_player_effect(PlayerType *player_ptr, Effect
 
     auto is_effective = ep_ptr->dam > 0;
     is_effective &= randint0(55) < (player_ptr->lev * 3 / 5 + 20);
-    is_effective &= ep_ptr->src_idx > 0;
+    is_effective &= is_monster(ep_ptr->src_idx);
     is_effective &= ep_ptr->src_idx != player_ptr->riding;
     if (is_effective && kawarimi(player_ptr, true)) {
         return ProcessResult::PROCESS_FALSE;
     }
 
-    if ((ep_ptr->src_idx == 0) || (ep_ptr->src_idx == player_ptr->riding)) {
+    if (is_player(ep_ptr->src_idx) || (ep_ptr->src_idx == player_ptr->riding)) {
         return ProcessResult::PROCESS_FALSE;
     }
 
@@ -156,7 +157,7 @@ static ProcessResult check_continue_player_effect(PlayerType *player_ptr, Effect
  */
 static void describe_effect_source(PlayerType *player_ptr, EffectPlayerType *ep_ptr, concptr src_name)
 {
-    if (ep_ptr->src_idx > 0) {
+    if (is_monster(ep_ptr->src_idx)) {
         ep_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[ep_ptr->src_idx];
         ep_ptr->rlev = ep_ptr->m_ptr->get_monrace().level >= 1 ? ep_ptr->m_ptr->get_monrace().level : 1;
         angband_strcpy(ep_ptr->m_name, monster_desc(player_ptr, ep_ptr->m_ptr, 0), sizeof(ep_ptr->m_name));
@@ -211,7 +212,7 @@ bool affect_player(MONSTER_IDX src_idx, PlayerType *player_ptr, concptr src_name
     switch_effects_player(player_ptr, ep_ptr);
 
     SpellHex(player_ptr).store_vengeful_damage(ep_ptr->get_damage);
-    if ((player_ptr->tim_eyeeye || SpellHex(player_ptr).is_spelling_specific(HEX_EYE_FOR_EYE)) && (ep_ptr->get_damage > 0) && !player_ptr->is_dead && (ep_ptr->src_idx > 0)) {
+    if ((player_ptr->tim_eyeeye || SpellHex(player_ptr).is_spelling_specific(HEX_EYE_FOR_EYE)) && (ep_ptr->get_damage > 0) && !player_ptr->is_dead && is_monster(ep_ptr->src_idx)) {
         const auto m_name_self = monster_desc(player_ptr, ep_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
         msg_print(_(format("攻撃が%s自身を傷つけた！", ep_ptr->m_name), format("The attack of %s has wounded %s!", ep_ptr->m_name, m_name_self.data())));
         (*project)(player_ptr, 0, 0, ep_ptr->m_ptr->fy, ep_ptr->m_ptr->fx, ep_ptr->get_damage, AttributeType::MISSILE, PROJECT_KILL, std::nullopt);

@@ -4,6 +4,7 @@
 #include "grid/grid.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-flag-types.h"
+#include "monster/monster-util.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -137,14 +138,14 @@ bool ang_sort_comp_importance(PlayerType *player_ptr, vptr u, vptr v, int a, int
 
     /* Extract monster race */
     MonsterRaceInfo *ap_r_ptr_a;
-    if (grid_a.m_idx && monster_a.ml) {
+    if (is_monster(grid_a.m_idx) && monster_a.ml) {
         ap_r_ptr_a = &monster_a.get_appearance_monrace();
     } else {
         ap_r_ptr_a = nullptr;
     }
 
     MonsterRaceInfo *ap_r_ptr_b;
-    if (grid_b.m_idx && monster_b.ml) {
+    if (is_monster(grid_b.m_idx) && monster_b.ml) {
         ap_r_ptr_b = &monster_b.get_appearance_monrace();
     } else {
         ap_r_ptr_b = nullptr;

@@ -7,6 +7,7 @@
 #include "game-option/special-options.h"
 #include "grid/feature.h"
 #include "io/screen-util.h"
+#include "monster/monster-util.h"
 #include "player/player-status.h"
 #include "system/angband-system.h"
 #include "system/floor-type-definition.h"
@@ -57,7 +58,7 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
             TERM_COLOR ta = default_color;
             auto tc = '*';
 
-            if (g_ptr->m_idx && floor_ptr->m_list[g_ptr->m_idx].ml) {
+            if (is_monster(g_ptr->m_idx) && floor_ptr->m_list[g_ptr->m_idx].ml) {
                 map_info(player_ptr, ny, nx, &a, &c, &ta, &tc);
 
                 if (!is_ascii_graphics(a)) {

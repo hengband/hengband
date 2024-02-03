@@ -25,6 +25,7 @@
 #include "main/sound-of-music.h"
 #include "mind/mind-force-trainer.h"
 #include "monster/monster-describer.h"
+#include "monster/monster-util.h"
 #include "object/object-kind-hook.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
@@ -546,7 +547,7 @@ bool fishing(PlayerType *player_ptr)
         return false;
     }
 
-    if (floor_ptr->grid_array[y][x].m_idx) {
+    if (is_monster(floor_ptr->grid_array[y][x].m_idx)) {
         const auto m_name = monster_desc(player_ptr, &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx], 0);
         msg_format(_("%sが邪魔だ！", "%s^ is standing in your way."), m_name.data());
         PlayerEnergy(player_ptr).reset_player_turn();

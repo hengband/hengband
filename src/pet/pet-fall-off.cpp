@@ -13,6 +13,7 @@
 #include "monster-attack/monster-attack-player.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
+#include "monster/monster-util.h"
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
 #include "player/player-damage.h"
@@ -111,7 +112,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
             Grid *g_ptr;
             g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
-            if (g_ptr->m_idx) {
+            if (is_monster(g_ptr->m_idx)) {
                 continue;
             }
 

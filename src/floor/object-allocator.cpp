@@ -11,6 +11,7 @@
 #include "grid/object-placer.h"
 #include "grid/trap.h"
 #include "monster-race/monster-race.h"
+#include "monster/monster-util.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -62,7 +63,7 @@ static bool alloc_stairs_aux(PlayerType *player_ptr, POSITION y, POSITION x, int
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
-    if (!g_ptr->is_floor() || pattern_tile(floor_ptr, y, x) || !g_ptr->o_idx_list.empty() || (g_ptr->m_idx != 0) || next_to_walls(floor_ptr, y, x) < walls) {
+    if (!g_ptr->is_floor() || pattern_tile(floor_ptr, y, x) || !g_ptr->o_idx_list.empty() || is_monster(g_ptr->m_idx) || next_to_walls(floor_ptr, y, x) < walls) {
         return false;
     }
 
@@ -194,7 +195,7 @@ void alloc_object(PlayerType *player_ptr, dap_type set, dungeon_allocation_type 
             x = randint0(floor_ptr->width);
             const Pos2D pos(y, x);
             const auto &grid = floor_ptr->get_grid(pos);
-            if (!grid.is_floor() || !grid.o_idx_list.empty() || grid.m_idx) {
+            if (!grid.is_floor() || !grid.o_idx_list.empty() || is_monster(grid.m_idx)) {
                 continue;
             }
 

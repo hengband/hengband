@@ -14,6 +14,7 @@
 #include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
 #include "grid/feature-flag-types.h"
+#include "monster/monster-util.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell/range-calc.h"
 #include "system/angband-system.h"
@@ -61,7 +62,7 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
         if (!cave_has_flag_bold(&floor, pos_to.y, pos_to.x, TerrainCharacteristics::PROJECT)) {
             break;
         }
-        if ((dir != 5) && floor.get_grid(pos_to).m_idx != 0) {
+        if ((dir != 5) && is_monster(floor.get_grid(pos_to).m_idx)) {
             break;
         }
 

@@ -37,6 +37,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
+#include "monster/monster-util.h"
 #include "object/item-tester-hooker.h"
 #include "object/object-mark-types.h"
 #include "player-info/class-info.h"
@@ -84,7 +85,7 @@ bool new_player_spot(PlayerType *player_ptr)
         const auto &grid = player_ptr->current_floor_ptr->get_grid({ y, x });
 
         /* Must be a "naked" floor grid */
-        if (grid.m_idx) {
+        if (is_monster(grid.m_idx)) {
             continue;
         }
         if (floor.is_in_dungeon()) {
@@ -184,7 +185,7 @@ static void update_local_illumination_aux(PlayerType *player_ptr, int y, int x)
         return;
     }
 
-    if (grid.m_idx > 0) {
+    if (is_monster(grid.m_idx)) {
         update_monster(player_ptr, grid.m_idx, false);
     }
 
@@ -849,7 +850,7 @@ bool cave_monster_teleportable_bold(PlayerType *player_ptr, MONSTER_IDX m_idx, P
         return false;
     }
 
-    if (grid.m_idx && (grid.m_idx != m_idx)) {
+    if (is_monster(grid.m_idx) && (grid.m_idx != m_idx)) {
         return false;
     }
     if (player_ptr->is_located_at(pos)) {
@@ -896,7 +897,7 @@ bool cave_player_teleportable_bold(PlayerType *player_ptr, POSITION y, POSITION 
         return false;
     }
 
-    if (grid.m_idx && (grid.m_idx != player_ptr->riding)) {
+    if (is_monster(grid.m_idx) && (grid.m_idx != player_ptr->riding)) {
         return false;
     }
 
@@ -1060,7 +1061,7 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
         return;
     }
 
-    if (g_ptr->m_idx > 0) {
+    if (is_monster(g_ptr->m_idx)) {
         delete_monster_idx(player_ptr, g_ptr->m_idx);
     }
 }

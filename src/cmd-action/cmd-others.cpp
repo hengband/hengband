@@ -23,6 +23,7 @@
 #include "io/write-diary.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "monster/monster-util.h"
 #include "player-base/player-class.h"
 #include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
@@ -71,7 +72,7 @@ static bool exe_alter(PlayerType *player_ptr)
     const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
     const auto &terrain = grid.get_terrain_mimic();
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    if (grid.m_idx) {
+    if (is_monster(grid.m_idx)) {
         do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
         return false;
     }

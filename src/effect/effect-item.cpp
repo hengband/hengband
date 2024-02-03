@@ -7,6 +7,7 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster/monster-info.h"
+#include "monster/monster-util.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-expendable.h"
 #include "object/object-broken.h"
@@ -42,7 +43,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
 
     auto is_item_affected = false;
     const auto known = grid.has_los();
-    src_idx = src_idx ? src_idx : 0;
+    src_idx = is_monster(src_idx) ? src_idx : 0;
     dam = (dam + r) / (r + 1);
     std::set<OBJECT_IDX> processed_list;
     for (auto it = grid.o_idx_list.begin(); it != grid.o_idx_list.end();) {
@@ -227,7 +228,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
             }
 
             BIT_FLAGS mode = 0L;
-            if (!src_idx || player_ptr->current_floor_ptr->m_list[src_idx].is_pet()) {
+            if (is_monster(src_idx) || player_ptr->current_floor_ptr->m_list[src_idx].is_pet()) {
                 mode |= PM_FORCE_PET;
             }
 

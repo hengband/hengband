@@ -2,6 +2,7 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/geometry.h"
 #include "hpmp/hp-mp-processor.h"
+#include "monster/monster-util.h"
 #include "player/digestion-processor.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-specific-bolt.h"
@@ -29,7 +30,7 @@ bool vampirism(PlayerType *player_ptr)
     POSITION x = player_ptr->x + ddx[dir];
     const auto *g_ptr = &floor.grid_array[y][x];
     stop_mouth(player_ptr);
-    if (!(g_ptr->m_idx)) {
+    if (!is_monster(g_ptr->m_idx)) {
         msg_print(_("何もない場所に噛みついた！", "You bite into thin air!"));
         return false;
     }

@@ -6,6 +6,7 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
+#include "monster/monster-util.h"
 #include "object/object-mark-types.h"
 #include "system/angband-system.h"
 #include "system/floor-type-definition.h"
@@ -86,7 +87,7 @@ static bool target_set_accept(PlayerType *player_ptr, const Pos2D &pos)
     }
 
     const auto &grid = floor.get_grid(pos);
-    if (grid.m_idx) {
+    if (is_monster(grid.m_idx)) {
         auto &monster = floor.m_list[grid.m_idx];
         if (monster.ml) {
             return true;

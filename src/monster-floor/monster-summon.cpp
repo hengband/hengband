@@ -161,7 +161,7 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y1, P
     summon_specific_type = SUMMON_NONE;
 
     bool notice = false;
-    if (src_idx <= 0) {
+    if (!is_monster(src_idx)) {
         notice = true;
     } else {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[src_idx];

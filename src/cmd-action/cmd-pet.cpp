@@ -28,6 +28,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
+#include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
 #include "object-hook/hook-weapon.h"
 #include "pet/pet-util.h"
@@ -218,7 +219,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
             return false;
         }
 
-        if (grid.m_idx) {
+        if (is_monster(grid.m_idx)) {
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
@@ -237,7 +238,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
 
         const auto *m_ptr = &player_ptr->current_floor_ptr->m_list[grid.m_idx];
 
-        if (!grid.m_idx || !m_ptr->ml) {
+        if (!is_monster(grid.m_idx) || !m_ptr->ml) {
             msg_print(_("その場所にはモンスターはいません。", "There is no monster here."));
             return false;
         }
@@ -326,7 +327,7 @@ static void do_name_pet(PlayerType *player_ptr)
     target_pet = old_target_pet;
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.grid_array[target_row][target_col];
-    if (grid.m_idx == 0) {
+    if (!is_monster(grid.m_idx)) {
         return;
     }
 
@@ -703,7 +704,7 @@ void do_cmd_pet(PlayerType *player_ptr)
             player_ptr->pet_t_m_idx = 0;
         } else {
             auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[target_row][target_col];
-            if (g_ptr->m_idx && (player_ptr->current_floor_ptr->m_list[g_ptr->m_idx].ml)) {
+            if (is_monster(g_ptr->m_idx) && (player_ptr->current_floor_ptr->m_list[g_ptr->m_idx].ml)) {
                 player_ptr->pet_t_m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
                 player_ptr->pet_follow_distance = PET_DESTROY_DIST;
             } else {

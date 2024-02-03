@@ -11,6 +11,7 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
+#include "monster/monster-util.h"
 #include "player-info/class-info.h"
 #include "player/player-damage.h"
 #include "spell-kind/spells-floor.h"
@@ -162,7 +163,7 @@ bool vanish_dungeon(PlayerType *player_ptr)
             const auto &terrrain = grid.get_terrain();
             grid.info &= ~(CAVE_ROOM | CAVE_ICKY);
             const auto &monster = floor.m_list[grid.m_idx];
-            if (grid.m_idx && monster.is_asleep()) {
+            if (is_monster(grid.m_idx) && monster.is_asleep()) {
                 (void)set_monster_csleep(player_ptr, grid.m_idx, 0);
                 if (monster.ml) {
                     const auto m_name = monster_desc(player_ptr, &monster, 0);

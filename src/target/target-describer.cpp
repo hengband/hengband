@@ -20,6 +20,7 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
+#include "monster/monster-util.h"
 #include "object/item-tester-hooker.h"
 #include "object/object-mark-types.h"
 #include "player-base/player-race.h"
@@ -270,7 +271,7 @@ static bool within_char_util(const short input)
 
 static short describe_grid(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
-    if ((ge_ptr->g_ptr->m_idx == 0) || !player_ptr->current_floor_ptr->m_list[ge_ptr->g_ptr->m_idx].ml) {
+    if (!is_monster(ge_ptr->g_ptr->m_idx) || !player_ptr->current_floor_ptr->m_list[ge_ptr->g_ptr->m_idx].ml) {
         return CONTINUOUS_DESCRIPTION;
     }
 

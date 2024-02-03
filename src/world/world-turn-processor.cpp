@@ -22,6 +22,7 @@
 #include "monster-floor/monster-summon.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-status.h"
+#include "monster/monster-util.h"
 #include "mutation/mutation-processor.h"
 #include "object/lite-processor.h"
 #include "perception/simple-perception.h"
@@ -146,7 +147,7 @@ void WorldTurnProcessor::process_monster_arena()
     for (auto x = 0; x < floor_ptr->width; ++x) {
         for (auto y = 0; y < floor_ptr->height; y++) {
             auto *g_ptr = &floor_ptr->grid_array[y][x];
-            if ((g_ptr->m_idx > 0) && (g_ptr->m_idx != this->player_ptr->riding)) {
+            if (is_monster(g_ptr->m_idx) && (g_ptr->m_idx != this->player_ptr->riding)) {
                 number_mon++;
                 win_m_idx = g_ptr->m_idx;
             }

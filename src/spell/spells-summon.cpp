@@ -12,6 +12,7 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
+#include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
@@ -270,7 +271,7 @@ int summon_cyber(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, POSITI
     /* Summoned by a monster */
     BIT_FLAGS mode = PM_ALLOW_GROUP;
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (src_idx > 0) {
+    if (is_monster(src_idx)) {
         auto *m_ptr = &floor_ptr->m_list[src_idx];
         if (m_ptr->is_pet()) {
             mode |= PM_FORCE_PET;

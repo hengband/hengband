@@ -35,6 +35,7 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
+#include "monster/monster-util.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-kind-hook.h"
 #include "spell-kind/blood-curse.h"
@@ -63,10 +64,10 @@
  */
 static ProcessResult is_affective(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
-    if (!em_ptr->g_ptr->m_idx) {
+    if (!is_monster(em_ptr->g_ptr->m_idx)) {
         return ProcessResult::PROCESS_FALSE;
     }
-    if (em_ptr->src_idx && (em_ptr->g_ptr->m_idx == em_ptr->src_idx)) {
+    if (is_monster(em_ptr->src_idx) && (em_ptr->g_ptr->m_idx == em_ptr->src_idx)) {
         return ProcessResult::PROCESS_FALSE;
     }
     if (sukekaku && ((em_ptr->m_ptr->r_idx == MonsterRaceId::SUKE) || (em_ptr->m_ptr->r_idx == MonsterRaceId::KAKU))) {
@@ -75,7 +76,7 @@ static ProcessResult is_affective(PlayerType *player_ptr, EffectMonster *em_ptr)
     if (em_ptr->m_ptr->hp < 0) {
         return ProcessResult::PROCESS_FALSE;
     }
-    if (em_ptr->src_idx || em_ptr->g_ptr->m_idx != player_ptr->riding) {
+    if (is_monster(em_ptr->src_idx) || em_ptr->g_ptr->m_idx != player_ptr->riding) {
         return ProcessResult::PROCESS_TRUE;
     }
 
@@ -188,7 +189,7 @@ static void effect_damage_killed_pet(PlayerType *player_ptr, EffectMonster *em_p
         }
     }
 
-    if (em_ptr->src_idx > 0) {
+    if (is_monster(em_ptr->src_idx)) {
         monster_gain_exp(player_ptr, em_ptr->src_idx, em_ptr->m_ptr->r_idx);
     }
 
@@ -232,7 +233,7 @@ static void effect_damage_makes_sleep(PlayerType *player_ptr, EffectMonster *em_
  */
 static bool deal_effect_damage_from_monster(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
-    if (em_ptr->src_idx <= 0) {
+    if (!is_monster(em_ptr->src_idx)) {
         return false;
     }
 
@@ -364,7 +365,7 @@ static void deal_effect_damage_to_monster(PlayerType *player_ptr, EffectMonster 
  */
 static void effect_makes_change_virtues(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
-    if ((em_ptr->src_idx > 0) || !em_ptr->slept) {
+    if (is_monster(em_ptr->src_idx) || !em_ptr->slept) {
         return;
     }
 
@@ -394,7 +395,7 @@ static void affected_monster_prevents_bad_status(PlayerType *player_ptr, EffectM
     auto should_alive = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     should_alive |= r_ptr->misc_flags.has(MonsterMiscType::QUESTOR);
     should_alive |= r_ptr->population_flags.has(MonsterPopulationType::NAZGUL);
-    if (should_alive && !AngbandSystem::get_instance().is_phase_out() && (em_ptr->src_idx > 0) && (em_ptr->dam > em_ptr->m_ptr->hp)) {
+    if (should_alive && !AngbandSystem::get_instance().is_phase_out() && is_monster(em_ptr->src_idx) && (em_ptr->dam > em_ptr->m_ptr->hp)) {
         em_ptr->dam = em_ptr->m_ptr->hp;
     }
 }
@@ -549,11 +550,11 @@ static void effect_damage_makes_teleport(PlayerType *player_ptr, EffectMonster *
 
     em_ptr->note = _("が消え去った！", " disappears!");
 
-    if (!em_ptr->src_idx) {
+    if (is_monster(em_ptr->src_idx)) {
         chg_virtue(player_ptr, Virtue::VALOUR, -1);
     }
 
-    teleport_flags tflag = i2enum<teleport_flags>((!em_ptr->src_idx ? TELEPORT_DEC_VALOUR : TELEPORT_SPONTANEOUS) | TELEPORT_PASSIVE);
+    teleport_flags tflag = i2enum<teleport_flags>((is_monster(em_ptr->src_idx) ? TELEPORT_DEC_VALOUR : TELEPORT_SPONTANEOUS) | TELEPORT_PASSIVE);
     teleport_away(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_dist, tflag);
 
     em_ptr->y = em_ptr->m_ptr->fy;
@@ -642,7 +643,7 @@ static void postprocess_by_effected_pet(PlayerType *player_ptr, EffectMonster *e
         return;
     }
 
-    if (em_ptr->src_idx == 0) {
+    if (is_player(em_ptr->src_idx)) {
         if (!(em_ptr->flag & PROJECT_NO_HANGEKI)) {
             set_target(m_ptr, monster_target_y, monster_target_x);
         }
@@ -651,7 +652,7 @@ static void postprocess_by_effected_pet(PlayerType *player_ptr, EffectMonster *e
     }
 
     const auto &m_caster_ref = *em_ptr->m_caster_ptr;
-    if ((em_ptr->src_idx > 0) && m_caster_ref.is_pet() && !player_ptr->is_located_at({ m_ptr->target_y, m_ptr->target_x })) {
+    if (is_monster(em_ptr->src_idx) && m_caster_ref.is_pet() && !player_ptr->is_located_at({ m_ptr->target_y, m_ptr->target_x })) {
         set_target(m_ptr, m_caster_ref.fy, m_caster_ref.fx);
     }
 }

@@ -3,6 +3,7 @@
 #include "effect/spells-effect-util.h"
 #include "floor/cave.h"
 #include "grid/feature-flag-types.h"
+#include "monster/monster-util.h"
 #include "spell-class/spells-mirror-master.h"
 #include "system/angband-system.h"
 #include "system/floor-type-definition.h"
@@ -123,7 +124,7 @@ static bool project_stop(PlayerType *player_ptr, projection_path_type *pp_ptr)
         }
     }
 
-    if (any_bits(pp_ptr->flag, PROJECT_STOP) && !pp_ptr->position->empty() && (player_ptr->is_located_at(pos) || grid.m_idx != 0)) {
+    if (any_bits(pp_ptr->flag, PROJECT_STOP) && !pp_ptr->position->empty() && (player_ptr->is_located_at(pos) || is_monster(grid.m_idx))) {
         return true;
     }
 

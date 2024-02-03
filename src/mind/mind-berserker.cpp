@@ -6,6 +6,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "mind/mind-numbers.h"
+#include "monster/monster-util.h"
 #include "player-attack/player-attack.h"
 #include "player/player-move.h"
 #include "spell-kind/earthquake.h"
@@ -42,7 +43,7 @@ bool cast_berserk_spell(PlayerType *player_ptr, MindBerserkerType spell)
 
         y = player_ptr->y + ddy[dir];
         x = player_ptr->x + ddx[dir];
-        if (!player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
+        if (!is_monster(player_ptr->current_floor_ptr->grid_array[y][x].m_idx)) {
             msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
             return false;
         }
@@ -54,7 +55,7 @@ bool cast_berserk_spell(PlayerType *player_ptr, MindBerserkerType spell)
 
         y += ddy[dir];
         x += ddx[dir];
-        if (player_can_enter(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat, 0) && !is_trap(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat) && !player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
+        if (player_can_enter(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat, 0) && !is_trap(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat) && !is_monster(player_ptr->current_floor_ptr->grid_array[y][x].m_idx)) {
             msg_print(nullptr);
             (void)move_player_effect(player_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
         }

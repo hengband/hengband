@@ -5,6 +5,7 @@
 #include "floor/geometry.h"
 #include "grid/grid.h"
 #include "io/input-key-requester.h"
+#include "monster/monster-util.h"
 #include "player-base/player-class.h"
 #include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
@@ -56,7 +57,7 @@ void do_cmd_tunnel(PlayerType *player_ptr)
         msg_print(_("ドアは掘れない。", "You cannot tunnel through doors."));
     } else if (terrain_mimic.flags.has_not(TerrainCharacteristics::TUNNEL)) {
         msg_print(_("そこは掘れない。", "You can't tunnel through that."));
-    } else if (grid.m_idx) {
+    } else if (is_monster(grid.m_idx)) {
         PlayerEnergy(player_ptr).set_player_turn_energy(100);
         msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
         do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);

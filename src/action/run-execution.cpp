@@ -13,6 +13,7 @@
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "monster/monster-util.h"
 #include "object/object-mark-types.h"
 #include "player-status/player-energy.h"
 #include "player/player-status-flags.h"
@@ -226,7 +227,7 @@ static bool run_test(PlayerType *player_ptr)
         int new_dir = cycle[chome[prev_dir] + i];
         const Pos2D pos(player_ptr->y + ddy[new_dir], player_ptr->x + ddx[new_dir]);
         const auto &grid = floor.get_grid(pos);
-        if (grid.m_idx) {
+        if (is_monster(grid.m_idx)) {
             const auto &monster = floor.m_list[grid.m_idx];
             if (monster.ml) {
                 return true;

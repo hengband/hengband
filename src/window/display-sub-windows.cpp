@@ -16,6 +16,7 @@
 #include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
+#include "monster/monster-util.h"
 #include "object/item-tester-hooker.h"
 #include "object/object-info.h"
 #include "player-base/player-class.h"
@@ -527,7 +528,7 @@ void fix_object(PlayerType *player_ptr)
  */
 static const MonsterEntity *monster_on_floor_items(FloorType *floor_ptr, const Grid *g_ptr)
 {
-    if (g_ptr->m_idx == 0) {
+    if (!is_monster(g_ptr->m_idx)) {
         return nullptr;
     }
 

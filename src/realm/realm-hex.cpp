@@ -20,6 +20,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-requester.h"
 #include "monster-race/monster-race.h"
+#include "monster/monster-util.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
@@ -841,7 +842,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                     if (dir == 5) {
                         continue;
                     }
-                    if (floor_ptr->grid_array[dy][dx].m_idx) {
+                    if (is_monster(floor_ptr->grid_array[dy][dx].m_idx)) {
                         flag = true;
                     }
                 }

@@ -12,6 +12,7 @@
 #include "mind/mind-elementalist.h"
 #include "mind/mind-ninja.h"
 #include "monster/monster-update.h"
+#include "monster/monster-util.h"
 #include "player/special-defense-types.h"
 #include "room/door-definition.h"
 #include "spell-class/spells-mirror-master.h"
@@ -77,7 +78,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
     auto obvious = false;
     auto known = grid.has_los();
 
-    src_idx = src_idx ? src_idx : 0;
+    src_idx = is_monster(src_idx) ? src_idx : 0;
     dam = (dam + r) / (r + 1);
 
     if (terrain.flags.has(TerrainCharacteristics::TREE)) {
@@ -354,7 +355,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         if (player_can_see_bold(player_ptr, y, x)) {
             obvious = true;
         }
-        if (grid.m_idx) {
+        if (is_monster(grid.m_idx)) {
             update_monster(player_ptr, grid.m_idx, false);
         }
 
@@ -407,7 +408,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         if (player_can_see_bold(player_ptr, y, x)) {
             obvious = true;
         }
-        if (grid.m_idx) {
+        if (is_monster(grid.m_idx)) {
             update_monster(player_ptr, grid.m_idx, false);
         }
 

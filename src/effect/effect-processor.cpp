@@ -23,6 +23,7 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
+#include "monster/monster-util.h"
 #include "pet/pet-fall-off.h"
 #include "player/player-status.h"
 #include "spell-class/spells-mirror-master.h"
@@ -81,10 +82,10 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
     if (any_bits(flag, PROJECT_JUMP)) {
         x1 = target_x;
         y1 = target_y;
-    } else if (src_idx <= 0) {
+    } else if (!is_monster(src_idx)) {
         x1 = player_ptr->x;
         y1 = player_ptr->y;
-    } else if (src_idx > 0) {
+    } else if (is_monster(src_idx)) {
         x1 = player_ptr->current_floor_ptr->m_list[src_idx].fx;
         y1 = player_ptr->current_floor_ptr->m_list[src_idx].fy;
     } else {
@@ -305,8 +306,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
     update_creature(player_ptr);
 
     if (flag & PROJECT_KILL) {
-        see_s_msg = (src_idx > 0) ? is_seen(player_ptr, &player_ptr->current_floor_ptr->m_list[src_idx])
-                                  : (!src_idx ? true : (player_can_see_bold(player_ptr, y1, x1) && projectable(player_ptr, player_ptr->y, player_ptr->x, y1, x1)));
+        see_s_msg = is_monster(src_idx) ? is_seen(player_ptr, &player_ptr->current_floor_ptr->m_list[src_idx])
+                                        : (is_player(src_idx) ? true : (player_can_see_bold(player_ptr, y1, x1) && projectable(player_ptr, player_ptr->y, player_ptr->x, y1, x1)));
     }
 
     if (flag & (PROJECT_GRID)) {
@@ -393,7 +394,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                         } else {
                             msg_print(_("攻撃は跳ね返った！", "The attack bounces!"));
                         }
-                    } else if (src_idx <= 0) {
+                    } else if (!is_monster(src_idx)) {
                         sound(SOUND_REFLECT);
                     }
 
@@ -482,7 +483,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
         if (!src_idx && (project_m_n == 1) && none_bits(flag, PROJECT_JUMP)) {
             const Pos2D pos_project(project_m_y, project_m_x);
             const auto &grid = floor.get_grid(pos_project);
-            if (grid.m_idx > 0) {
+            if (is_monster(grid.m_idx)) {
                 auto &monster = floor.m_list[grid.m_idx];
                 if (monster.ml) {
                     if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
@@ -548,7 +549,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
             }
 
             std::string who_name;
-            if (src_idx > 0) {
+            if (is_monster(src_idx)) {
                 who_name = monster_desc(player_ptr, &floor.m_list[src_idx], MD_WRONGDOER_NAME);
             }
 

@@ -34,6 +34,7 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-update.h"
+#include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
 #include "mutation/mutation-calculator.h"
 #include "mutation/mutation-flag-types.h"
@@ -173,7 +174,7 @@ static void delayed_visual_update(PlayerType *player_ptr)
         }
 
         lite_spot(player_ptr, y, x);
-        if (g_ptr->m_idx) {
+        if (is_monster(g_ptr->m_idx)) {
             update_monster(player_ptr, g_ptr->m_idx, false);
         }
 
@@ -2816,7 +2817,7 @@ bool player_has_no_spellbooks(PlayerType *player_ptr)
  */
 bool player_place(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx != 0) {
+    if (is_monster(player_ptr->current_floor_ptr->grid_array[y][x].m_idx)) {
         return false;
     }
 
