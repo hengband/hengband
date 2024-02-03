@@ -211,9 +211,9 @@ bool crusade(PlayerType *player_ptr)
 /*!
  * @brief 視界内モンスターを怒らせる処理 / Wake up all monsters, and speed up "los" monsters.
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param who 怒らせる原因を起こしたモンスター(0ならばプレイヤー)
+ * @param src_idx 怒らせる原因を起こしたモンスター(0ならばプレイヤー)
  */
-void aggravate_monsters(PlayerType *player_ptr, MONSTER_IDX who)
+void aggravate_monsters(PlayerType *player_ptr, MONSTER_IDX src_idx)
 {
     auto sleep = false;
     auto speed = false;
@@ -223,7 +223,7 @@ void aggravate_monsters(PlayerType *player_ptr, MONSTER_IDX who)
         if (!monster.is_valid()) {
             continue;
         }
-        if (i == who) {
+        if (i == src_idx) {
             continue;
         }
 

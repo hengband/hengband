@@ -252,14 +252,14 @@ static void warn_unique_generation(PlayerType *player_ptr, MonsterRaceId r_idx)
 /*!
  * @brief モンスターを一体生成する / Attempt to place a monster of the given race at the given location.
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param who 召喚を行ったモンスターID
+ * @param src_idx 召喚を行ったモンスターID
  * @param y 生成位置y座標
  * @param x 生成位置x座標
  * @param r_idx 生成モンスター種族
  * @param mode 生成オプション
  * @return 成功したらtrue
  */
-bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode)
+bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto *g_ptr = &floor.grid_array[y][x];
@@ -296,15 +296,15 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
 
     m_ptr->mflag.clear();
     m_ptr->mflag2.clear();
-    if (any_bits(mode, PM_MULTIPLY) && (who > 0) && !floor.m_list[who].is_original_ap()) {
-        m_ptr->ap_r_idx = floor.m_list[who].ap_r_idx;
-        if (floor.m_list[who].mflag2.has(MonsterConstantFlagType::KAGE)) {
+    if (any_bits(mode, PM_MULTIPLY) && (src_idx > 0) && !floor.m_list[src_idx].is_original_ap()) {
+        m_ptr->ap_r_idx = floor.m_list[src_idx].ap_r_idx;
+        if (floor.m_list[src_idx].mflag2.has(MonsterConstantFlagType::KAGE)) {
             m_ptr->mflag2.set(MonsterConstantFlagType::KAGE);
         }
     }
 
-    if ((who > 0) && r_ptr->kind_flags.has_none_of(alignment_mask)) {
-        m_ptr->sub_align = floor.m_list[who].sub_align;
+    if ((src_idx > 0) && r_ptr->kind_flags.has_none_of(alignment_mask)) {
+        m_ptr->sub_align = floor.m_list[src_idx].sub_align;
     } else {
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
         if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
@@ -328,9 +328,9 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
     m_ptr->nickname.clear();
     m_ptr->exp = 0;
 
-    if (who > 0 && floor.m_list[who].is_pet()) {
+    if (src_idx > 0 && floor.m_list[src_idx].is_pet()) {
         set_bits(mode, PM_FORCE_PET);
-        m_ptr->parent_m_idx = who;
+        m_ptr->parent_m_idx = src_idx;
     } else {
         m_ptr->parent_m_idx = 0;
     }
@@ -339,7 +339,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
         choose_new_monster(player_ptr, g_ptr->m_idx, true, MonsterRace::empty_id());
         r_ptr = &m_ptr->get_monrace();
         m_ptr->mflag2.set(MonsterConstantFlagType::CHAMELEON);
-        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (who <= 0)) {
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (src_idx <= 0)) {
             m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
         }
     } else if (any_bits(mode, PM_KAGE) && none_bits(mode, PM_FORCE_PET)) {
@@ -358,7 +358,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
     m_ptr->ml = false;
     if (any_bits(mode, PM_FORCE_PET)) {
         set_pet(player_ptr, m_ptr);
-    } else if (((who == 0) && r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY)) || is_friendly_idx(player_ptr, who) || any_bits(mode, PM_FORCE_FRIENDLY)) {
+    } else if (((src_idx == 0) && r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY)) || is_friendly_idx(player_ptr, src_idx) || any_bits(mode, PM_FORCE_FRIENDLY)) {
         if (!monster_has_hostile_align(player_ptr, nullptr, 0, -1, r_ptr) && !player_ptr->current_floor_ptr->inside_arena) {
             set_friendly(m_ptr);
         }

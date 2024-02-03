@@ -43,7 +43,7 @@
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系処理のルーチン Generic
  * "beam"/"bolt"/"ball" projection routine.
- * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source"
+ * @param src_idx 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source"
  * monster (zero for "player")
  * @param rad 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion
  * (0 = beam/bolt, 1 to 9 = ball)
@@ -57,7 +57,7 @@
  * @todo 似たような処理が山ほど並んでいる、何とかならないものか
  * @todo 引数にそのまま再代入していてカオスすぎる。直すのは簡単ではない
  */
-ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION rad, const POSITION target_y, const POSITION target_x, const int dam,
+ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITION rad, const POSITION target_y, const POSITION target_x, const int dam,
     const AttributeType typ, BIT_FLAGS flag, std::optional<CapturedMonsterType *> cap_mon_ptr)
 {
     POSITION y1;
@@ -81,12 +81,12 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     if (any_bits(flag, PROJECT_JUMP)) {
         x1 = target_x;
         y1 = target_y;
-    } else if (who <= 0) {
+    } else if (src_idx <= 0) {
         x1 = player_ptr->x;
         y1 = player_ptr->y;
-    } else if (who > 0) {
-        x1 = player_ptr->current_floor_ptr->m_list[who].fx;
-        y1 = player_ptr->current_floor_ptr->m_list[who].fy;
+    } else if (src_idx > 0) {
+        x1 = player_ptr->current_floor_ptr->m_list[src_idx].fx;
+        y1 = player_ptr->current_floor_ptr->m_list[src_idx].fy;
     } else {
         x1 = target_x;
         y1 = target_y;
@@ -305,8 +305,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     update_creature(player_ptr);
 
     if (flag & PROJECT_KILL) {
-        see_s_msg = (who > 0) ? is_seen(player_ptr, &player_ptr->current_floor_ptr->m_list[who])
-                              : (!who ? true : (player_can_see_bold(player_ptr, y1, x1) && projectable(player_ptr, player_ptr->y, player_ptr->x, y1, x1)));
+        see_s_msg = (src_idx > 0) ? is_seen(player_ptr, &player_ptr->current_floor_ptr->m_list[src_idx])
+                                  : (!src_idx ? true : (player_can_see_bold(player_ptr, y1, x1) && projectable(player_ptr, player_ptr->y, player_ptr->x, y1, x1)));
     }
 
     if (flag & (PROJECT_GRID)) {
@@ -319,11 +319,11 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             auto x = gx[i];
             if (breath) {
                 int d = dist_to_line(y, x, y1, x1, by, bx);
-                if (affect_feature(player_ptr, who, d, y, x, dam, typ)) {
+                if (affect_feature(player_ptr, src_idx, d, y, x, dam, typ)) {
                     res.notice = true;
                 }
             } else {
-                if (affect_feature(player_ptr, who, dist, y, x, dam, typ)) {
+                if (affect_feature(player_ptr, src_idx, dist, y, x, dam, typ)) {
                     res.notice = true;
                 }
             }
@@ -342,11 +342,11 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             auto x = gx[i];
             if (breath) {
                 int d = dist_to_line(y, x, y1, x1, by, bx);
-                if (affect_item(player_ptr, who, d, y, x, dam, typ)) {
+                if (affect_item(player_ptr, src_idx, d, y, x, dam, typ)) {
                     res.notice = true;
                 }
             } else {
-                if (affect_item(player_ptr, who, dist, y, x, dam, typ)) {
+                if (affect_item(player_ptr, src_idx, dist, y, x, dam, typ)) {
                     res.notice = true;
                 }
             }
@@ -369,7 +369,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             if (grids <= 1) {
                 auto *m_ptr = &floor.m_list[grid.m_idx];
                 MonsterRaceInfo *ref_ptr = &m_ptr->get_monrace();
-                if ((flag & PROJECT_REFLECTABLE) && grid.m_idx && ref_ptr->misc_flags.has(MonsterMiscType::REFLECTING) && ((grid.m_idx != player_ptr->riding) || !(flag & PROJECT_PLAYER)) && (!who || path_n > 1) && !one_in_(10)) {
+                if ((flag & PROJECT_REFLECTABLE) && grid.m_idx && ref_ptr->misc_flags.has(MonsterMiscType::REFLECTING) && ((grid.m_idx != player_ptr->riding) || !(flag & PROJECT_PLAYER)) && (!src_idx || path_n > 1) && !one_in_(10)) {
+
                     POSITION t_y, t_x;
                     int max_attempts = 10;
                     do {
@@ -392,7 +393,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                         } else {
                             msg_print(_("攻撃は跳ね返った！", "The attack bounces!"));
                         }
-                    } else if (who <= 0) {
+                    } else if (src_idx <= 0) {
                         sound(SOUND_REFLECT);
                     }
 
@@ -473,12 +474,12 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                 }
             }
 
-            if (affect_monster(player_ptr, who, effective_dist, pos.y, pos.x, dam, typ, flag, see_s_msg, cap_mon_ptr)) {
+            if (affect_monster(player_ptr, src_idx, effective_dist, pos.y, pos.x, dam, typ, flag, see_s_msg, cap_mon_ptr)) {
                 res.notice = true;
             }
         }
         /* Player affected one monster (without "jumping") */
-        if (!who && (project_m_n == 1) && none_bits(flag, PROJECT_JUMP)) {
+        if (!src_idx && (project_m_n == 1) && none_bits(flag, PROJECT_JUMP)) {
             const Pos2D pos_project(project_m_y, project_m_x);
             const auto &grid = floor.get_grid(pos_project);
             if (grid.m_idx > 0) {
@@ -547,11 +548,11 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             }
 
             std::string who_name;
-            if (who > 0) {
-                who_name = monster_desc(player_ptr, &floor.m_list[who], MD_WRONGDOER_NAME);
+            if (src_idx > 0) {
+                who_name = monster_desc(player_ptr, &floor.m_list[src_idx], MD_WRONGDOER_NAME);
             }
 
-            if (affect_player(who, player_ptr, who_name.data(), effective_dist, pos.y, pos.x, dam, typ, flag, project)) {
+            if (affect_player(src_idx, player_ptr, who_name.data(), effective_dist, pos.y, pos.x, dam, typ, flag, project)) {
                 res.notice = true;
                 res.affected_player = true;
             }

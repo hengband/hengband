@@ -131,7 +131,7 @@ bool fire_ball_hide(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, in
 /*!
  * @brief メテオ系スペルの発動 / Cast a meteor spell
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param who スぺル詠唱者のモンスターID(0=プレイヤー)
+ * @param src_idx スぺル詠唱者のモンスターID(0=プレイヤー)
  * @param typ 効果属性
  * @param dam 威力
  * @param rad 半径
@@ -147,10 +147,10 @@ bool fire_ball_hide(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, in
  * Option to hurt the player.
  * </pre>
  */
-bool fire_meteor(PlayerType *player_ptr, MONSTER_IDX who, AttributeType typ, POSITION y, POSITION x, int dam, POSITION rad)
+bool fire_meteor(PlayerType *player_ptr, MONSTER_IDX src_idx, AttributeType typ, POSITION y, POSITION x, int dam, POSITION rad)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-    return project(player_ptr, who, rad, y, x, dam, typ, flg).notice;
+    return project(player_ptr, src_idx, rad, y, x, dam, typ, flg).notice;
 }
 
 /*!

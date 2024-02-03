@@ -47,27 +47,27 @@
 
 // Melee-post-process-type
 struct mam_pp_type {
-    mam_pp_type(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *dead, bool *fear, std::string_view note, MONSTER_IDX who);
+    mam_pp_type(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *dead, bool *fear, std::string_view note, MONSTER_IDX src_idx);
     MONSTER_IDX m_idx;
     MonsterEntity *m_ptr;
     int dam;
     bool *dead;
     bool *fear;
     std::string note;
-    MONSTER_IDX who;
+    MONSTER_IDX src_idx;
     bool seen;
     bool known; /* Can the player be aware of this attack? */
     std::string m_name;
 };
 
-mam_pp_type::mam_pp_type(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *dead, bool *fear, std::string_view note, MONSTER_IDX who)
+mam_pp_type::mam_pp_type(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *dead, bool *fear, std::string_view note, MONSTER_IDX src_idx)
     : m_idx(m_idx)
     , m_ptr(&player_ptr->current_floor_ptr->m_list[m_idx])
     , dam(dam)
     , dead(dead)
     , fear(fear)
     , note(note)
-    , who(who)
+    , src_idx(src_idx)
 {
     this->seen = is_seen(player_ptr, this->m_ptr);
     this->known = this->m_ptr->cdis <= MAX_PLAYER_SIGHT;
@@ -198,7 +198,7 @@ static bool check_monster_hp(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
 
     *(mam_pp_ptr->dead) = true;
     print_monster_dead_by_monster(player_ptr, mam_pp_ptr);
-    monster_gain_exp(player_ptr, mam_pp_ptr->who, mam_pp_ptr->m_ptr->r_idx);
+    monster_gain_exp(player_ptr, mam_pp_ptr->src_idx, mam_pp_ptr->m_ptr->r_idx);
     monster_death(player_ptr, mam_pp_ptr->m_idx, false, AttributeType::NONE);
     delete_monster_idx(player_ptr, mam_pp_ptr->m_idx);
     *(mam_pp_ptr->fear) = false;
@@ -273,14 +273,14 @@ static void fall_off_horse_by_melee(PlayerType *player_ptr, mam_pp_type *mam_pp_
  * @param dead 目標となったモンスターの死亡状態を返す参照ポインタ
  * @param fear 目標となったモンスターの恐慌状態を返す参照ポインタ
  * @param note 目標モンスターが死亡した場合の特別メッセージ(nullptrならば標準表示を行う)
- * @param who 打撃を行ったモンスターの参照ID
+ * @param src_idx 打撃を行ったモンスターの参照ID
  * @todo 打撃が当たった時の後処理 (爆発持ちのモンスターを爆発させる等)なので、関数名を変更する必要あり
  */
-void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *dead, bool *fear, std::string_view note, MONSTER_IDX who)
+void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *dead, bool *fear, std::string_view note, MONSTER_IDX src_idx)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    mam_pp_type tmp_mam_pp(player_ptr, m_idx, dam, dead, fear, note, who);
+    mam_pp_type tmp_mam_pp(player_ptr, m_idx, dam, dead, fear, note, src_idx);
     mam_pp_type *mam_pp_ptr = &tmp_mam_pp;
     prepare_redraw(player_ptr, mam_pp_ptr);
     (void)set_monster_csleep(player_ptr, m_idx, 0);
@@ -301,8 +301,8 @@ void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *
     *dead = false;
     cancel_fear_by_pain(player_ptr, mam_pp_ptr);
     make_monster_fear(player_ptr, mam_pp_ptr);
-    if ((dam > 0) && !m_ptr->is_pet() && !m_ptr->is_friendly() && (mam_pp_ptr->who != m_idx)) {
-        const auto &m_ref = floor_ptr->m_list[who];
+    if ((dam > 0) && !m_ptr->is_pet() && !m_ptr->is_friendly() && (mam_pp_ptr->src_idx != m_idx)) {
+        const auto &m_ref = floor_ptr->m_list[src_idx];
         if (m_ref.is_pet() && !player_ptr->is_located_at({ m_ptr->target_y, m_ptr->target_x })) {
             set_target(m_ptr, m_ref.fy, m_ref.fx);
         }

@@ -26,7 +26,7 @@ void effect_player_drain_mana(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         return;
     }
 
-    if (ep_ptr->who > 0) {
+    if (ep_ptr->src_idx > 0) {
         msg_format(_("%s^に精神エネルギーを吸い取られてしまった！", "%s^ draws psychic energy from you!"), ep_ptr->m_name);
     } else {
         msg_print(_("精神エネルギーを吸い取られてしまった！", "Your psychic energy is drained!"));
@@ -48,7 +48,7 @@ void effect_player_drain_mana(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     };
     rfu.set_flags(flags);
 
-    if ((ep_ptr->who <= 0) || (ep_ptr->m_ptr->hp >= ep_ptr->m_ptr->maxhp)) {
+    if ((ep_ptr->src_idx <= 0) || (ep_ptr->m_ptr->hp >= ep_ptr->m_ptr->maxhp)) {
         ep_ptr->dam = 0;
         return;
     }
@@ -58,10 +58,10 @@ void effect_player_drain_mana(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         ep_ptr->m_ptr->hp = ep_ptr->m_ptr->maxhp;
     }
 
-    if (player_ptr->health_who == ep_ptr->who) {
+    if (player_ptr->health_who == ep_ptr->src_idx) {
         rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
     }
-    if (player_ptr->riding == ep_ptr->who) {
+    if (player_ptr->riding == ep_ptr->src_idx) {
         rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 

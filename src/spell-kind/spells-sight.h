@@ -11,7 +11,7 @@ bool project_all_los(PlayerType *player_ptr, AttributeType typ, int dam);
 bool speed_monsters(PlayerType *player_ptr);
 bool slow_monsters(PlayerType *player_ptr, int power);
 bool sleep_monsters(PlayerType *player_ptr, int power);
-void aggravate_monsters(PlayerType *player_ptr, MONSTER_IDX who);
+void aggravate_monsters(PlayerType *player_ptr, MONSTER_IDX src_idx);
 bool banish_evil(PlayerType *player_ptr, int dist);
 bool turn_undead(PlayerType *player_ptr);
 bool dispel_evil(PlayerType *player_ptr, int dam);

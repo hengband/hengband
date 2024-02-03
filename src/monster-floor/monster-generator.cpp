@@ -165,14 +165,14 @@ bool multiply_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool clone, BIT
 
 /*!
  * @brief モンスターを目標地点に集団生成する / Attempt to place a "group" of monsters around the given location
- * @param who 召喚主のモンスター情報ID
+ * @param src_idx 召喚主のモンスター情報ID
  * @param y 中心生成位置y座標
  * @param x 中心生成位置x座標
  * @param r_idx 生成モンスター種族
  * @param mode 生成オプション
  * @return 成功したらtrue
  */
-static bool place_monster_group(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode)
+static bool place_monster_group(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode)
 {
     auto *r_ptr = &monraces_info[r_idx];
     auto total = randint1(10);
@@ -218,7 +218,7 @@ static bool place_monster_group(PlayerType *player_ptr, MONSTER_IDX who, POSITIO
                 continue;
             }
 
-            if (place_monster_one(player_ptr, who, my, mx, r_idx, mode)) {
+            if (place_monster_one(player_ptr, src_idx, my, mx, r_idx, mode)) {
                 hack_y[hack_n] = my;
                 hack_x[hack_n] = mx;
                 hack_n++;
@@ -280,7 +280,7 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MonsterRaceId r_idx
 /*!
  * @brief 特定モンスターを生成する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param who 召喚主のモンスター情報ID
+ * @param src_idx 召喚主のモンスター情報ID
  * @param y 生成地点y座標
  * @param x 生成地点x座標
  * @param r_idx 生成するモンスターの種族ID
@@ -288,7 +288,7 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MonsterRaceId r_idx
  * @return 生成に成功したらtrue
  * @details 護衛も一緒に生成する
  */
-bool place_specific_monster(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode)
+bool place_specific_monster(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode)
 {
     auto *r_ptr = &monraces_info[r_idx];
 
@@ -296,7 +296,7 @@ bool place_specific_monster(PlayerType *player_ptr, MONSTER_IDX who, POSITION y,
         mode |= PM_KAGE;
     }
 
-    if (!place_monster_one(player_ptr, who, y, x, r_idx, mode)) {
+    if (!place_monster_one(player_ptr, src_idx, y, x, r_idx, mode)) {
         return false;
     }
     if (!(mode & PM_ALLOW_GROUP)) {
@@ -328,7 +328,7 @@ bool place_specific_monster(PlayerType *player_ptr, MONSTER_IDX who, POSITION y,
     }
 
     if (r_ptr->misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
-        (void)place_monster_group(player_ptr, who, y, x, r_idx, mode);
+        (void)place_monster_group(player_ptr, src_idx, y, x, r_idx, mode);
     }
 
     if (r_ptr->misc_flags.has_not(MonsterMiscType::ESCORT)) {

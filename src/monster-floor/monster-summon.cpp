@@ -117,7 +117,7 @@ DEPTH get_dungeon_or_wilderness_level(PlayerType *player_ptr)
 /*!
  * @brief モンスターを召喚により配置する / Place a monster (of the specified "type") near the given location. Return TRUE if a monster was actually summoned.
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param who 召喚主のモンスター情報ID
+ * @param src_idx 召喚主のモンスター情報ID
  * @param y1 目標地点y座標
  * @param x1 目標地点x座標
  * @param lev 相当生成階
@@ -125,7 +125,7 @@ DEPTH get_dungeon_or_wilderness_level(PlayerType *player_ptr)
  * @param mode 生成オプション
  * @return 召喚できたらtrueを返す
  */
-bool summon_specific(PlayerType *player_ptr, MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, summon_type type, BIT_FLAGS mode)
+bool summon_specific(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y1, POSITION x1, DEPTH lev, summon_type type, BIT_FLAGS mode)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->inside_arena) {
@@ -137,7 +137,7 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX who, POSITION y1, POSIT
         return false;
     }
 
-    summon_specific_who = who;
+    summon_specific_who = src_idx;
     summon_specific_type = type;
     summon_unique_okay = (mode & PM_ALLOW_UNIQUE) != 0;
     get_mon_num_prep(player_ptr, summon_specific_okay, get_monster_hook2(player_ptr, y, x));
@@ -153,7 +153,7 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX who, POSITION y1, POSIT
         mode |= PM_NO_KAGE;
     }
 
-    if (!place_specific_monster(player_ptr, who, y, x, r_idx, mode)) {
+    if (!place_specific_monster(player_ptr, src_idx, y, x, r_idx, mode)) {
         summon_specific_type = SUMMON_NONE;
         return false;
     }
@@ -161,10 +161,10 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX who, POSITION y1, POSIT
     summon_specific_type = SUMMON_NONE;
 
     bool notice = false;
-    if (who <= 0) {
+    if (src_idx <= 0) {
         notice = true;
     } else {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[who];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[src_idx];
         if (m_ptr->is_pet()) {
             notice = true;
         } else if (is_seen(player_ptr, m_ptr)) {
@@ -184,14 +184,14 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX who, POSITION y1, POSIT
 /*!
  * @brief 特定モンスター種族を召喚により生成する / A "dangerous" function, creates a pet of the specified type
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param who 召喚主のモンスター情報ID
+ * @param src_idx 召喚主のモンスター情報ID
  * @param oy 目標地点y座標
  * @param ox 目標地点x座標
  * @param r_idx 生成するモンスター種族ID
  * @param mode 生成オプション
  * @return 召喚できたらtrueを返す
  */
-bool summon_named_creature(PlayerType *player_ptr, MONSTER_IDX who, POSITION oy, POSITION ox, MonsterRaceId r_idx, BIT_FLAGS mode)
+bool summon_named_creature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION oy, POSITION ox, MonsterRaceId r_idx, BIT_FLAGS mode)
 {
     if (!MonsterRace(r_idx).is_valid() || (r_idx >= static_cast<MonsterRaceId>(monraces_info.size()))) {
         return false;
@@ -202,5 +202,5 @@ bool summon_named_creature(PlayerType *player_ptr, MONSTER_IDX who, POSITION oy,
         return false;
     }
 
-    return place_specific_monster(player_ptr, who, y, x, r_idx, (mode | PM_NO_KAGE));
+    return place_specific_monster(player_ptr, src_idx, y, x, r_idx, (mode | PM_NO_KAGE));
 }

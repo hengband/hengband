@@ -44,7 +44,7 @@ static bool cave_naked_bold(PlayerType *player_ptr, const Pos2D &pos)
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系による地形効果処理 / We are called from "project()" to "damage" terrain features
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
+ * @param src_idx 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
  * @param r 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
  * @param y 目標Y座標 / Target y location (or location to travel "towards")
  * @param x 目標X座標 / Target x location (or location to travel "towards")
@@ -67,7 +67,7 @@ static bool cave_naked_bold(PlayerType *player_ptr, const Pos2D &pos)
  * Perhaps we should affect doors?
  * </pre>
  */
-bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, int dam, AttributeType typ)
+bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITION y, POSITION x, int dam, AttributeType typ)
 {
     const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
@@ -77,7 +77,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
     auto obvious = false;
     auto known = grid.has_los();
 
-    who = who ? who : 0;
+    src_idx = src_idx ? src_idx : 0;
     dam = (dam + r) / (r + 1);
 
     if (terrain.flags.has(TerrainCharacteristics::TREE)) {

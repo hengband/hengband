@@ -32,7 +32,7 @@ ProcessResult effect_monster_drain_mana(PlayerType *player_ptr, EffectMonster *e
         return ProcessResult::PROCESS_CONTINUE;
     }
 
-    if (em_ptr->who <= 0) {
+    if (em_ptr->src_idx <= 0) {
         msg_format(_("%sから精神エネルギーを吸いとった。", "You draw psychic energy from %s."), em_ptr->m_name);
         (void)hp_player(player_ptr, em_ptr->dam);
         em_ptr->dam = 0;
@@ -50,11 +50,11 @@ ProcessResult effect_monster_drain_mana(PlayerType *player_ptr, EffectMonster *e
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (player_ptr->health_who == em_ptr->who) {
+    if (player_ptr->health_who == em_ptr->src_idx) {
         rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
     }
 
-    if (player_ptr->riding == em_ptr->who) {
+    if (player_ptr->riding == em_ptr->src_idx) {
         rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
@@ -72,7 +72,7 @@ ProcessResult effect_monster_mind_blast(PlayerType *player_ptr, EffectMonster *e
     if (em_ptr->seen) {
         em_ptr->obvious = true;
     }
-    if (!em_ptr->who) {
+    if (!em_ptr->src_idx) {
         msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), em_ptr->m_name);
     }
 
@@ -105,7 +105,7 @@ ProcessResult effect_monster_mind_blast(PlayerType *player_ptr, EffectMonster *e
         em_ptr->note = _("は精神攻撃を食らった。", " is blasted by psionic energy.");
         em_ptr->note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
 
-        if (em_ptr->who > 0) {
+        if (em_ptr->src_idx > 0) {
             em_ptr->do_conf = randint0(4) + 4;
         } else {
             em_ptr->do_conf = randint0(8) + 8;
@@ -120,7 +120,7 @@ ProcessResult effect_monster_brain_smash(PlayerType *player_ptr, EffectMonster *
     if (em_ptr->seen) {
         em_ptr->obvious = true;
     }
-    if (!em_ptr->who) {
+    if (!em_ptr->src_idx) {
         msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), em_ptr->m_name);
     }
 
@@ -154,7 +154,7 @@ ProcessResult effect_monster_brain_smash(PlayerType *player_ptr, EffectMonster *
     } else {
         em_ptr->note = _("は精神攻撃を食らった。", " is blasted by psionic energy.");
         em_ptr->note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
-        if (em_ptr->who > 0) {
+        if (em_ptr->src_idx > 0) {
             em_ptr->do_conf = randint0(4) + 4;
             em_ptr->do_stun = randint0(4) + 4;
         } else {
