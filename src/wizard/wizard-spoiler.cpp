@@ -131,7 +131,7 @@ static SpoilerOutputResultType spoil_mon_evol()
 
 static SpoilerOutputResultType spoil_categorized_mon_desc()
 {
-    auto status = spoil_mon_desc("mon-desc-ridable.txt", [](const MonsterRaceInfo *r_ptr) { return any_bits(r_ptr->flags7, RF7_RIDING); });
+    auto status = spoil_mon_desc("mon-desc-ridable.txt", [](const MonsterRaceInfo *r_ptr) { return r_ptr->misc_flags.has(MonsterMiscType::RIDING); });
     if (status == SpoilerOutputResultType::SUCCESSFUL) {
         status = spoil_mon_desc("mon-desc-wildonly.txt", [](const MonsterRaceInfo *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_ONLY); });
     }

@@ -21,23 +21,24 @@
  *
  * @param k クリティカルの強度を決定する値
  * @param base_dam クリティカル適用前のダメージ
+ * @param mult 期待値計算時のdam倍率
  * @return クリティカルを適用したダメージと、クリティカル発生時に表示するメッセージと、クリティカル効果音のタプルを返す
  */
-std::tuple<int, concptr, sound_type> apply_critical_norm_damage(int k, int base_dam)
+std::tuple<int, concptr, sound_type> apply_critical_norm_damage(int k, int base_dam, int mult)
 {
     if (k < 400) {
-        return { 2 * base_dam + 5, _("手ごたえがあった！", "It was a good hit!"), SOUND_GOOD_HIT };
+        return { 2 * base_dam + 5 * mult, _("手ごたえがあった！", "It was a good hit!"), SOUND_GOOD_HIT };
     }
     if (k < 700) {
-        return { 2 * base_dam + 10, _("かなりの手ごたえがあった！", "It was a great hit!"), SOUND_GREAT_HIT };
+        return { 2 * base_dam + 10 * mult, _("かなりの手ごたえがあった！", "It was a great hit!"), SOUND_GREAT_HIT };
     }
     if (k < 900) {
-        return { 3 * base_dam + 15, _("会心の一撃だ！", "It was a superb hit!"), SOUND_SUPERB_HIT };
+        return { 3 * base_dam + 15 * mult, _("会心の一撃だ！", "It was a superb hit!"), SOUND_SUPERB_HIT };
     }
     if (k < 1300) {
-        return { 3 * base_dam + 20, _("最高の会心の一撃だ！", "It was a *GREAT* hit!"), SOUND_STAR_GREAT_HIT };
+        return { 3 * base_dam + 20 * mult, _("最高の会心の一撃だ！", "It was a *GREAT* hit!"), SOUND_STAR_GREAT_HIT };
     }
-    return { ((7 * base_dam) / 2) + 25, _("比類なき最高の会心の一撃だ！", "It was a *SUPERB* hit!"), SOUND_STAR_SUPERB_HIT };
+    return { ((7 * base_dam) / 2) + 25 * mult, _("比類なき最高の会心の一撃だ！", "It was a *SUPERB* hit!"), SOUND_STAR_SUPERB_HIT };
 }
 
 /*!

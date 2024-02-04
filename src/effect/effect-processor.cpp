@@ -370,7 +370,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             if (grids <= 1) {
                 auto *m_ptr = &floor.m_list[grid.m_idx];
                 MonsterRaceInfo *ref_ptr = &m_ptr->get_monrace();
-                if ((flag & PROJECT_REFLECTABLE) && grid.m_idx && (ref_ptr->flags2 & RF2_REFLECTING) && ((grid.m_idx != player_ptr->riding) || !(flag & PROJECT_PLAYER)) && (!who || path_n > 1) && !one_in_(10)) {
+                if ((flag & PROJECT_REFLECTABLE) && grid.m_idx && ref_ptr->misc_flags.has(MonsterMiscType::REFLECTING) && ((grid.m_idx != player_ptr->riding) || !(flag & PROJECT_PLAYER)) && (!who || path_n > 1) && !one_in_(10)) {
                     POSITION t_y, t_x;
                     int max_attempts = 10;
                     do {
@@ -398,7 +398,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                     }
 
                     if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-                        ref_ptr->r_flags2 |= RF2_REFLECTING;
+                        ref_ptr->r_misc_flags.set(MonsterMiscType::REFLECTING);
                     }
 
                     if (player_ptr->is_located_at(pos) || one_in_(2)) {

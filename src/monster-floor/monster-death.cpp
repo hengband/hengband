@@ -217,7 +217,7 @@ static void drop_artifacts(PlayerType *player_ptr, MonsterDeath *md_ptr)
     drop_artifact_from_unique(player_ptr, md_ptr);
     const auto *floor_ptr = player_ptr->current_floor_ptr;
     const auto &dungeon = floor_ptr->get_dungeon_definition();
-    if (((md_ptr->r_ptr->flags7 & RF7_GUARDIAN) == 0) || (dungeon.final_guardian != md_ptr->m_ptr->r_idx)) {
+    if (md_ptr->r_ptr->misc_flags.has_not(MonsterMiscType::GUARDIAN) || (dungeon.final_guardian != md_ptr->m_ptr->r_idx)) {
         return;
     }
 
@@ -284,7 +284,7 @@ static int decide_drop_numbers(MonsterDeath *md_ptr, const bool drop_item, const
         drop_numbers = 0;
     }
 
-    if ((md_ptr->r_ptr->flags2 & (RF2_MULTIPLY)) && (md_ptr->r_ptr->r_akills > 1024)) {
+    if (md_ptr->r_ptr->misc_flags.has(MonsterMiscType::MULTIPLY) && (md_ptr->r_ptr->r_akills > 1024)) {
         drop_numbers = 0;
     }
 
@@ -416,7 +416,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
     coin_type = md_ptr->force_coin;
     floor.object_level = (floor.dun_level + md_ptr->r_ptr->level) / 2;
     drop_items_golds(player_ptr, md_ptr, drop_numbers);
-    if (((md_ptr->r_ptr->flags1 & RF1_QUESTOR) == 0) || AngbandSystem::get_instance().is_phase_out() || (md_ptr->m_ptr->r_idx != MonsterRaceId::SERPENT) || md_ptr->cloned) {
+    if ((md_ptr->r_ptr->misc_flags.has_not(MonsterMiscType::QUESTOR)) || AngbandSystem::get_instance().is_phase_out() || (md_ptr->m_ptr->r_idx != MonsterRaceId::SERPENT) || md_ptr->cloned) {
         return;
     }
 

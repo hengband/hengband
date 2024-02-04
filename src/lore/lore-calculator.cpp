@@ -168,4 +168,6 @@ void set_flags_for_full_knowledge(lore_type *lore_ptr)
     lore_ptr->resistance_flags = lore_ptr->r_ptr->resistance_flags;
     lore_ptr->feature_flags = lore_ptr->r_ptr->feature_flags;
     lore_ptr->drop_flags = lore_ptr->r_ptr->drop_flags;
+    lore_ptr->special_flags = lore_ptr->r_ptr->special_flags;
+    lore_ptr->misc_flags = lore_ptr->r_ptr->misc_flags;
 }

@@ -92,7 +92,7 @@ void clear_saved_floor_files(PlayerType *player_ptr)
 {
     for (int i = 0; i < MAX_SAVED_FLOORS; i++) {
         saved_floor_type *sf_ptr = &saved_floors[i];
-        if ((sf_ptr->floor_id == 0) || (sf_ptr->floor_id == player_ptr->floor_id)) {
+        if (!is_saved_floor(sf_ptr) || (sf_ptr->floor_id == player_ptr->floor_id)) {
             continue;
         }
 
@@ -130,7 +130,7 @@ saved_floor_type *get_sf_ptr(FLOOR_IDX floor_id)
  */
 void kill_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    if (!sf_ptr || (sf_ptr->floor_id == 0)) {
+    if (!sf_ptr || !is_saved_floor(sf_ptr)) {
         return;
     }
 
@@ -165,19 +165,19 @@ static FLOOR_IDX find_oldest_floor_idx(PlayerType *player_ptr)
 }
 
 /*!
- * @brief 新規に利用可能な保存フロアを返す / Initialize new saved floor and get its floor id.
+ * @brief 新規に利用可能なフロアIDを返す / Initialize new floor and get its floor id.
  * @param player_ptr プレイヤーへの参照ポインタ
- * @return 利用可能な保存フロアID
+ * @return 利用可能なフロアID
  * @details
  * If number of saved floors are already MAX_SAVED_FLOORS, kill the oldest one.
  */
-FLOOR_IDX get_new_floor_id(PlayerType *player_ptr)
+FLOOR_IDX get_unused_floor_id(PlayerType *player_ptr)
 {
     saved_floor_type *sf_ptr = nullptr;
     FLOOR_IDX fl_idx;
     for (fl_idx = 0; fl_idx < MAX_SAVED_FLOORS; fl_idx++) {
         sf_ptr = &saved_floors[fl_idx];
-        if (!sf_ptr->floor_id) {
+        if (!is_saved_floor(sf_ptr)) {
             break;
         }
     }

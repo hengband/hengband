@@ -219,7 +219,7 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_
     if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return false;
     }
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY) || (r_ptr->flags7 & RF7_CHAMELEON)) {
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY) || r_ptr->misc_flags.has(MonsterMiscType::CHAMELEON)) {
         return false;
     }
 
@@ -235,7 +235,7 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_
         return false;
     }
 
-    if (!(old_r_ptr->flags7 & RF7_CHAMELEON)) {
+    if (old_r_ptr->misc_flags.has_not(MonsterMiscType::CHAMELEON)) {
         if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, r_ptr)) {
             return false;
         }
@@ -264,10 +264,10 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx)
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         return false;
     }
-    if (r_ptr->flags2 & RF2_MULTIPLY) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::MULTIPLY)) {
         return false;
     }
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY) || (r_ptr->flags7 & RF7_CHAMELEON)) {
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY) || (r_ptr->misc_flags.has(MonsterMiscType::CHAMELEON))) {
         return false;
     }
 
@@ -279,7 +279,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if (!(old_r_ptr->flags7 & RF7_CHAMELEON)) {
+    if (old_r_ptr->misc_flags.has_not(MonsterMiscType::CHAMELEON)) {
         if (old_r_ptr->kind_flags.has(MonsterKindType::GOOD) && r_ptr->kind_flags.has_not(MonsterKindType::GOOD)) {
             return false;
         }
@@ -380,7 +380,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
 
     if (m_idx == player_ptr->riding) {
         msg_format(_("突然%sが変身した。", "Suddenly, %s transforms!"), old_m_name.data());
-        if (!(r_ptr->flags7 & RF7_RIDING)) {
+        if (r_ptr->misc_flags.has_not(MonsterMiscType::RIDING)) {
             if (process_fall_off_horse(player_ptr, 0, true)) {
                 const auto m_name = monster_desc(player_ptr, m_ptr, 0);
                 msg_print(_("地面に落とされた。", format("You have fallen from %s.", m_name.data())));
@@ -391,7 +391,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
     m_ptr->mspeed = get_mspeed(floor_ptr, r_ptr);
 
     int oldmaxhp = m_ptr->max_maxhp;
-    if (r_ptr->flags1 & RF1_FORCE_MAXHP) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
         m_ptr->max_maxhp = maxroll(r_ptr->hdice, r_ptr->hside);
     } else {
         m_ptr->max_maxhp = damroll(r_ptr->hdice, r_ptr->hside);

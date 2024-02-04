@@ -10,6 +10,7 @@
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
+#include "monster-race/race-misc-flags.h"
 #include "spell/summon-types.h"
 #include "system/alloc-entries.h"
 #include "system/angband-system.h"
@@ -280,23 +281,27 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
         // 原則生成禁止するものたち(フェイズアウト状態 / カメレオンの変身先 / ダンジョンの主召喚 は例外)。
         if (!system.is_phase_out() && !chameleon_change_m_idx && summon_specific_type != SUMMON_GUARDIANS) {
             // クエストモンスターは生成禁止。
-            if (r_ptr->flags1 & RF1_QUESTOR) {
+            if (r_ptr->misc_flags.has(MonsterMiscType::QUESTOR)) {
                 continue;
             }
 
             // ダンジョンの主は生成禁止。
-            if (r_ptr->flags7 & RF7_GUARDIAN) {
+            if (r_ptr->misc_flags.has(MonsterMiscType::GUARDIAN)) {
                 continue;
             }
 
-            // RF1_FORCE_DEPTH フラグ持ちは指定階未満では生成禁止。
-            if ((r_ptr->flags1 & RF1_FORCE_DEPTH) && (r_ptr->level > floor_ptr->dun_level)) {
+            // FORCE_DEPTH フラグ持ちは指定階未満では生成禁止。
+            if (r_ptr->misc_flags.has(MonsterMiscType::FORCE_DEPTH) && (r_ptr->level > floor_ptr->dun_level)) {
                 continue;
             }
 
-            // クエスト内でRES_ALLの生成を禁止する (殲滅系クエストの詰み防止)
-            if (player_ptr->current_floor_ptr->is_in_quest() && r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
-                continue;
+            // クエスト内でRES_ALL及び指定階未満でのDIMINISH_MAX_DAMAGEの生成を禁止する (殲滅系クエストの詰み防止)
+            if (player_ptr->current_floor_ptr->is_in_quest()) {
+                auto is_indefeatable = r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL);
+                is_indefeatable |= r_ptr->special_flags.has(MonsterSpecialType::DIMINISH_MAX_DAMAGE) && r_ptr->level > floor_ptr->dun_level;
+                if (is_indefeatable) {
+                    continue;
+                }
             }
         }
 

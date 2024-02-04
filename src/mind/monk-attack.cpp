@@ -174,7 +174,7 @@ static int process_monk_additional_effect(player_attack_type *pa_ptr, int *stun_
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 重さ
  */
-static WEIGHT calc_monk_attack_weight(PlayerType *player_ptr)
+WEIGHT calc_monk_attack_weight(PlayerType *player_ptr)
 {
     WEIGHT weight = 8;
     PlayerClass pc(player_ptr);

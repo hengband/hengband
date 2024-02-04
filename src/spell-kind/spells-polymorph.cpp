@@ -33,7 +33,7 @@
 static MonsterRaceId poly_r_idx(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     auto *r_ptr = &monraces_info[r_idx];
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags1, RF1_QUESTOR)) {
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->misc_flags.has(MonsterMiscType::QUESTOR)) {
         return r_idx;
     }
 

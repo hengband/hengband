@@ -23,3 +23,4 @@ extern FLOOR_IDX max_floor_id;
 extern FLOOR_IDX new_floor_id;
 extern uint32_t latest_visit_mark;
 extern MonsterEntity party_mon[MAX_PARTY_MON];
+extern bool is_saved_floor(saved_floor_type *sf_ptr);

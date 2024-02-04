@@ -54,8 +54,9 @@
 /*!
  * @brief 階段移動先のフロアが生成できない時に簡単な行き止まりマップを作成する / Builds the dead end
  */
-static void build_dead_end(PlayerType *player_ptr)
+static void build_dead_end(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
+    msg_print(_("階段は行き止まりだった。", "The staircases come to a dead end..."));
     clear_cave(player_ptr);
     player_ptr->x = player_ptr->y = 0;
     set_floor_and_wall(0);
@@ -71,6 +72,12 @@ static void build_dead_end(PlayerType *player_ptr)
     player_ptr->x = player_ptr->current_floor_ptr->width / 2;
     place_bold(player_ptr, player_ptr->y, player_ptr->x, GB_FLOOR);
     wipe_generate_random_floor_flags(player_ptr->current_floor_ptr);
+
+    if (player_ptr->change_floor_mode & CFM_UP) {
+        sf_ptr->upper_floor_id = 0;
+    } else if (player_ptr->change_floor_mode & CFM_DOWN) {
+        sf_ptr->lower_floor_id = 0;
+    }
 }
 
 static MONSTER_IDX decide_pet_index(PlayerType *player_ptr, const int current_monster, POSITION *cy, POSITION *cx)
@@ -145,7 +152,7 @@ static void place_pet(PlayerType *player_ptr)
             auto &r_ref = set_pet_params(player_ptr, current_monster, m_idx, cy, cx);
             update_monster(player_ptr, m_idx, true);
             lite_spot(player_ptr, cy, cx);
-            if (any_bits(r_ref.flags2, RF2_MULTIPLY)) {
+            if (r_ref.misc_flags.has(MonsterMiscType::MULTIPLY)) {
                 player_ptr->current_floor_ptr->num_repro++;
             }
         } else {
@@ -200,13 +207,17 @@ static void update_unique_artifact(FloorType *floor_ptr, int16_t cur_floor_id)
     }
 }
 
-static void check_visited_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, bool *loaded)
+static bool is_visited_floor(saved_floor_type *sf_ptr)
 {
-    if ((sf_ptr->last_visit == 0) || !load_floor(player_ptr, sf_ptr, 0)) {
-        return;
-    }
+    return sf_ptr->last_visit != 0;
+}
 
-    *loaded = true;
+/*!
+ * @brief フロア読込時にプレイヤー足元の地形に必要な情報を設定する
+ * @params player_ptr プレイヤーへの参照ポインタ
+ */
+static void set_player_grid(PlayerType *player_ptr)
+{
     if ((player_ptr->change_floor_mode & CFM_NO_RETURN) == 0) {
         return;
     }
@@ -225,7 +236,7 @@ static void check_visited_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr
 
 static void update_floor_id(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    if (player_ptr->floor_id == 0) {
+    if (!player_ptr->in_saved_floor()) {
         if (player_ptr->change_floor_mode & CFM_UP) {
             sf_ptr->lower_floor_id = 0;
         } else if (player_ptr->change_floor_mode & CFM_DOWN) {
@@ -279,7 +290,7 @@ static void reset_unique_by_floor_change(PlayerType *player_ptr)
     }
 }
 
-static void new_floor_allocation(PlayerType *player_ptr, saved_floor_type *sf_ptr)
+static void allocate_loaded_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
     GAME_TURN tmp_last_visit = sf_ptr->last_visit;
     const auto &floor = *player_ptr->current_floor_ptr;
@@ -315,37 +326,13 @@ static void new_floor_allocation(PlayerType *player_ptr, saved_floor_type *sf_pt
     }
 }
 
-static void check_dead_end(PlayerType *player_ptr, saved_floor_type *sf_ptr)
+/*!
+ * @brief プレイヤー足元に階段を設置する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ */
+static void set_stairs(PlayerType *player_ptr)
 {
-    if (sf_ptr->last_visit == 0) {
-        generate_floor(player_ptr);
-        return;
-    }
-
-    msg_print(_("階段は行き止まりだった。", "The staircases come to a dead end..."));
-    build_dead_end(player_ptr);
-    if (player_ptr->change_floor_mode & CFM_UP) {
-        sf_ptr->upper_floor_id = 0;
-    } else if (player_ptr->change_floor_mode & CFM_DOWN) {
-        sf_ptr->lower_floor_id = 0;
-    }
-}
-
-static void update_new_floor_feature(PlayerType *player_ptr, saved_floor_type *sf_ptr, const bool loaded)
-{
-    if (loaded) {
-        new_floor_allocation(player_ptr, sf_ptr);
-        return;
-    }
-
-    check_dead_end(player_ptr, sf_ptr);
-    sf_ptr->last_visit = w_ptr->game_turn;
     auto &floor = *player_ptr->current_floor_ptr;
-    sf_ptr->dun_level = floor.dun_level;
-    if ((player_ptr->change_floor_mode & CFM_NO_RETURN) != 0) {
-        return;
-    }
-
     auto *g_ptr = &floor.grid_array[player_ptr->y][player_ptr->x];
     if ((player_ptr->change_floor_mode & CFM_UP) && !inside_quest(floor.get_quest_id())) {
         g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(&floor, feat_down_stair, TerrainCharacteristics::SHAFT) : feat_down_stair;
@@ -355,6 +342,29 @@ static void update_new_floor_feature(PlayerType *player_ptr, saved_floor_type *s
 
     g_ptr->mimic = 0;
     g_ptr->special = player_ptr->floor_id;
+}
+
+/*!
+ * @brief 保存済フロア読込不可時の新規フロア生成を行う。
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @params sf_ptr 保存済フロアへの参照ポインタ
+ */
+static void generate_new_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
+{
+    if (!is_visited_floor(sf_ptr)) {
+        generate_floor(player_ptr);
+    } else {
+        build_dead_end(player_ptr, sf_ptr);
+    }
+
+    sf_ptr->last_visit = w_ptr->game_turn;
+    auto &floor = *player_ptr->current_floor_ptr;
+    sf_ptr->dun_level = floor.dun_level;
+    if ((player_ptr->change_floor_mode & CFM_NO_RETURN) != 0) {
+        return;
+    }
+
+    set_stairs(player_ptr);
 }
 
 static void cut_off_the_upstair(PlayerType *player_ptr)
@@ -384,15 +394,21 @@ static void update_floor(PlayerType *player_ptr)
     }
 
     if (new_floor_id == 0) {
-        new_floor_id = get_new_floor_id(player_ptr);
+        new_floor_id = get_unused_floor_id(player_ptr);
     }
 
     saved_floor_type *sf_ptr;
-    bool loaded = false;
     sf_ptr = get_sf_ptr(new_floor_id);
-    check_visited_floor(player_ptr, sf_ptr, &loaded);
+    const bool loaded = is_visited_floor(sf_ptr) && load_floor(player_ptr, sf_ptr, 0);
+    set_player_grid(player_ptr);
     update_floor_id(player_ptr, sf_ptr);
-    update_new_floor_feature(player_ptr, sf_ptr, loaded);
+
+    if (loaded) {
+        allocate_loaded_floor(player_ptr, sf_ptr);
+    } else {
+        generate_new_floor(player_ptr, sf_ptr);
+    }
+
     cut_off_the_upstair(player_ptr);
     sf_ptr->visit_mark = latest_visit_mark++;
 }

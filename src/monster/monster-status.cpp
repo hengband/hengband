@@ -11,6 +11,7 @@
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
+#include "monster-race/race-special-flags.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
@@ -45,7 +46,7 @@ bool monster_is_powerful(FloorType *floor_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     auto *r_ptr = &m_ptr->get_monrace();
-    return any_bits(r_ptr->flags2, RF2_POWERFUL);
+    return r_ptr->misc_flags.has(MonsterMiscType::POWERFUL);
 }
 
 /*!
@@ -77,6 +78,16 @@ int mon_damage_mod(PlayerType *player_ptr, MonsterEntity *m_ptr, int dam, bool i
         dam /= 100;
         if ((dam == 0) && one_in_(3)) {
             dam = 1;
+        }
+    }
+
+    auto &race_info = m_ptr->get_monrace();
+
+    if (race_info.special_flags.has(MonsterSpecialType::DIMINISH_MAX_DAMAGE)) {
+        race_info.r_special_flags.set(MonsterSpecialType::DIMINISH_MAX_DAMAGE);
+        if (dam > m_ptr->hp / 10) {
+            dam = std::max(m_ptr->hp / 10, m_ptr->maxhp * 7 / 500);
+            msg_format(_("%s^は致命的なダメージを抑えた！", "%s^ resisted a critical damage!"), monster_desc(player_ptr, m_ptr, 0).data());
         }
     }
 
@@ -448,7 +459,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     m_ptr->ap_r_idx = m_ptr->r_idx;
     r_ptr = &m_ptr->get_monrace();
 
-    m_ptr->max_maxhp = any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) ? maxroll(r_ptr->hdice, r_ptr->hside) : damroll(r_ptr->hdice, r_ptr->hside);
+    m_ptr->max_maxhp = r_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP) ? maxroll(r_ptr->hdice, r_ptr->hside) : damroll(r_ptr->hdice, r_ptr->hside);
     if (ironman_nightmare) {
         auto hp = m_ptr->max_maxhp * 2;
         m_ptr->max_maxhp = std::min(MONSTER_MAXHP, hp);

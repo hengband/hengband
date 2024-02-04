@@ -107,7 +107,7 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
             continue;
         }
 
-        if (any_bits(r_ptr->flags7, RF7_KAGE)) {
+        if (r_ptr->misc_flags.has(MonsterMiscType::KAGE)) {
             continue;
         }
 
@@ -127,7 +127,7 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
         const auto spd = format("%+d", r_ptr->speed - STANDARD_SPEED);
         const auto ac = format("%d", r_ptr->ac);
         std::string hp;
-        if (any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) || (r_ptr->hside == 1)) {
+        if (r_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP) || (r_ptr->hside == 1)) {
             hp = format("%d", r_ptr->hdice * r_ptr->hside);
         } else {
             hp = format("%dd%d", r_ptr->hdice, r_ptr->hside);
@@ -201,7 +201,7 @@ SpoilerOutputResultType spoil_mon_info()
         spoil_out(format("Lev:%d  ", (int)r_ptr->level));
         spoil_out(format("Rar:%d  ", r_ptr->rarity));
         spoil_out(format("Spd:%+d  ", r_ptr->speed - STANDARD_SPEED));
-        if (any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) || (r_ptr->hside == 1)) {
+        if (r_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP) || (r_ptr->hside == 1)) {
             spoil_out(format("Hp:%d  ", r_ptr->hdice * r_ptr->hside));
         } else {
             spoil_out(format("Hp:%dd%d  ", r_ptr->hdice, r_ptr->hside));

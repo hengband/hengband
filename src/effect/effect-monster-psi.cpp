@@ -32,14 +32,14 @@
  */
 static bool resisted_psi_because_empty_mind(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
-    if (none_bits(em_ptr->r_ptr->flags2, RF2_EMPTY_MIND)) {
+    if (em_ptr->r_ptr->misc_flags.has_not(MonsterMiscType::EMPTY_MIND)) {
         return false;
     }
 
     em_ptr->dam = 0;
     em_ptr->note = _("には完全な耐性がある！", " is immune.");
     if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
-        set_bits(em_ptr->r_ptr->r_flags2, RF2_EMPTY_MIND);
+        em_ptr->r_ptr->r_misc_flags.set(MonsterMiscType::EMPTY_MIND);
     }
 
     return true;
@@ -58,7 +58,7 @@ static bool resisted_psi_because_empty_mind(PlayerType *player_ptr, EffectMonste
 static bool resisted_psi_because_weird_mind_or_powerful(EffectMonster *em_ptr)
 {
     bool has_resistance = em_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID);
-    has_resistance |= any_bits(em_ptr->r_ptr->flags2, RF2_WEIRD_MIND);
+    has_resistance |= em_ptr->r_ptr->misc_flags.has(MonsterMiscType::WEIRD_MIND);
     has_resistance |= em_ptr->r_ptr->kind_flags.has(MonsterKindType::ANIMAL);
     has_resistance |= (em_ptr->r_ptr->level > randint1(3 * em_ptr->dam));
     if (!has_resistance) {

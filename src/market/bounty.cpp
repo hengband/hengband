@@ -303,7 +303,7 @@ void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
         if (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL) || r_ptr->population_flags.has(MonsterPopulationType::ONLY_ONE)) {
             continue;
         }
-        if (r_ptr->flags2 & RF2_MULTIPLY) {
+        if (r_ptr->misc_flags.has(MonsterMiscType::MULTIPLY)) {
             continue;
         }
         if (!r_ptr->drop_flags.has_all_of({ MonsterDropType::DROP_CORPSE, MonsterDropType::DROP_SKELETON })) {

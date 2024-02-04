@@ -69,7 +69,7 @@ static std::vector<MonsterRaceId> collect_monsters(PlayerType *player_ptr, IDX g
                 continue;
             }
         } else if (grp_riding) {
-            if (none_bits(monrace.flags7, RF7_RIDING)) {
+            if (monrace.misc_flags.has_not(MonsterMiscType::RIDING)) {
                 continue;
             }
         } else if (grp_wanted) {

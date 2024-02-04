@@ -298,7 +298,7 @@ ProcessResult effect_monster_domination(PlayerType *player_ptr, EffectMonster *e
     }
 
     const auto is_unique = em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
-    const auto is_questor = any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR);
+    const auto is_questor = em_ptr->r_ptr->misc_flags.has(MonsterMiscType::QUESTOR);
     const auto is_no_confusion = em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF);
     if (is_unique || is_questor || is_no_confusion || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
         if ((em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) && is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
@@ -342,7 +342,7 @@ static bool effect_monster_crusade_domination(PlayerType *player_ptr, EffectMons
         return true;
     }
 
-    bool failed = any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR);
+    bool failed = em_ptr->r_ptr->misc_flags.has(MonsterMiscType::QUESTOR);
     failed |= em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     failed |= em_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::NOPET);
     failed |= has_aggravate(player_ptr);
@@ -450,7 +450,7 @@ ProcessResult effect_monster_capture(PlayerType *player_ptr, EffectMonster *em_p
 
     auto cannot_capture = quest_monster;
     cannot_capture |= em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
-    cannot_capture |= any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR);
+    cannot_capture |= em_ptr->r_ptr->misc_flags.has(MonsterMiscType::QUESTOR);
     cannot_capture |= em_ptr->r_ptr->population_flags.has(MonsterPopulationType::NAZGUL);
     cannot_capture |= em_ptr->r_ptr->population_flags.has(MonsterPopulationType::ONLY_ONE);
     cannot_capture |= (em_ptr->m_ptr->parent_m_idx != 0);

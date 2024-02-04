@@ -247,7 +247,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
             msg_print(_("そのモンスターはペットではありません。", "That monster is not a pet."));
             return false;
         }
-        if (!(m_ptr->get_monrace().flags7 & RF7_RIDING)) {
+        if (m_ptr->get_monrace().misc_flags.has_not(MonsterMiscType::RIDING)) {
             msg_print(_("そのモンスターには乗れなさそうだ。", "This monster doesn't seem suitable for riding."));
             return false;
         }

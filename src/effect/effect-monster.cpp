@@ -388,14 +388,14 @@ static void affected_monster_prevents_bad_status(PlayerType *player_ptr, EffectM
 {
     const auto *r_ptr = em_ptr->r_ptr;
     auto can_avoid_polymorph = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
-    can_avoid_polymorph |= any_bits(r_ptr->flags1, RF1_QUESTOR);
+    can_avoid_polymorph |= r_ptr->misc_flags.has(MonsterMiscType::QUESTOR);
     can_avoid_polymorph |= (player_ptr->riding != 0) && (em_ptr->g_ptr->m_idx == player_ptr->riding);
     if (can_avoid_polymorph) {
         em_ptr->do_polymorph = false;
     }
 
     auto should_alive = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
-    should_alive |= any_bits(r_ptr->flags1, RF1_QUESTOR);
+    should_alive |= r_ptr->misc_flags.has(MonsterMiscType::QUESTOR);
     should_alive |= r_ptr->population_flags.has(MonsterPopulationType::NAZGUL);
     if (should_alive && !AngbandSystem::get_instance().is_phase_out() && (em_ptr->who > 0) && (em_ptr->dam > em_ptr->m_ptr->hp)) {
         em_ptr->dam = em_ptr->m_ptr->hp;
@@ -613,7 +613,7 @@ static void exe_affect_monster_by_damage(PlayerType *player_ptr, EffectMonster *
     effect_damage_gives_bad_status(player_ptr, em_ptr);
     deal_effect_damage_to_monster(player_ptr, em_ptr);
     if ((em_ptr->attribute == AttributeType::BLOOD_CURSE) && one_in_(4)) {
-        blood_curse_to_enemy(player_ptr, em_ptr->who);
+        blood_curse_to_enemy(player_ptr, em_ptr->g_ptr->m_idx);
     }
 }
 
@@ -737,10 +737,11 @@ bool affect_monster(
 {
     EffectMonster tmp_effect(player_ptr, who, r, y, x, dam, attribute, flag, see_s_msg);
     auto *em_ptr = &tmp_effect;
+    auto target_m_idx = em_ptr->g_ptr->m_idx;
 
     make_description_of_affecred_monster(player_ptr, em_ptr);
 
-    if (player_ptr->riding && (em_ptr->g_ptr->m_idx == player_ptr->riding)) {
+    if (player_ptr->riding && (target_m_idx == player_ptr->riding)) {
         disturb(player_ptr, true, true);
     }
 
@@ -758,7 +759,7 @@ bool affect_monster(
     update_phase_out_stat(player_ptr, em_ptr);
     const auto monster_is_valid = MonsterRace(em_ptr->m_ptr->r_idx).is_valid();
     if (monster_is_valid) {
-        update_monster(player_ptr, em_ptr->g_ptr->m_idx, false);
+        update_monster(player_ptr, target_m_idx, false);
     }
 
     lite_spot(player_ptr, em_ptr->y, em_ptr->x);

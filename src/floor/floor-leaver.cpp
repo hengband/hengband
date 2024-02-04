@@ -385,7 +385,7 @@ static void refresh_new_floor_id(PlayerType *player_ptr, Grid *g_ptr)
         return;
     }
 
-    new_floor_id = get_new_floor_id(player_ptr);
+    new_floor_id = get_unused_floor_id(player_ptr);
     if ((g_ptr != nullptr) && !feat_uses_special(g_ptr->feat)) {
         g_ptr->special = new_floor_id;
     }
@@ -410,7 +410,7 @@ static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     jump_floors(player_ptr);
     exit_to_wilderness(player_ptr);
     kill_saved_floors(player_ptr, sf_ptr);
-    if (player_ptr->floor_id == 0) {
+    if (!player_ptr->in_saved_floor()) {
         return;
     }
 

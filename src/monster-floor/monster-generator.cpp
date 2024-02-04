@@ -273,7 +273,7 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MonsterRaceId r_idx
         }
     }
 
-    if ((r_ptr->flags7 & RF7_CHAMELEON) && !(z_ptr->flags7 & RF7_CHAMELEON)) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::CHAMELEON) && z_ptr->misc_flags.has_not(MonsterMiscType::CHAMELEON)) {
         return false;
     }
 
@@ -330,11 +330,11 @@ bool place_specific_monster(PlayerType *player_ptr, MONSTER_IDX who, POSITION y,
         }
     }
 
-    if (r_ptr->flags1 & (RF1_FRIENDS)) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
         (void)place_monster_group(player_ptr, who, y, x, r_idx, mode);
     }
 
-    if (!(r_ptr->flags1 & (RF1_ESCORT))) {
+    if (r_ptr->misc_flags.has_not(MonsterMiscType::ESCORT)) {
         return true;
     }
 
@@ -354,14 +354,13 @@ bool place_specific_monster(PlayerType *player_ptr, MONSTER_IDX who, POSITION y,
         }
 
         (void)place_monster_one(player_ptr, place_monster_m_idx, ny, nx, z, mode);
-        if ((monraces_info[z].flags1 & RF1_FRIENDS) || (r_ptr->flags1 & RF1_ESCORTS)) {
+        if (monraces_info[z].misc_flags.has(MonsterMiscType::HAS_FRIENDS) || r_ptr->misc_flags.has(MonsterMiscType::MORE_ESCORT)) {
             (void)place_monster_group(player_ptr, place_monster_m_idx, ny, nx, z, mode);
         }
     }
 
     return true;
 }
-
 /*!
  * @brief フロア相当のモンスターを1体生成する
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -376,8 +375,7 @@ bool place_random_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FL
     MonsterRaceId r_idx;
     do {
         r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->monster_level, PM_NONE);
-    } while ((mode & PM_NO_QUEST) && (monraces_info[r_idx].flags8 & RF8_NO_QUEST));
-
+    } while ((mode & PM_NO_QUEST) && monraces_info[r_idx].misc_flags.has(MonsterMiscType::NO_QUEST));
     if (!MonsterRace(r_idx).is_valid()) {
         return false;
     }

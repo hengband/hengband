@@ -51,7 +51,7 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
     }
 
     auto resist = false;
-    if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || any_bits(monrace.flags1, RF1_QUESTOR)) {
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || monrace.misc_flags.has(MonsterMiscType::QUESTOR)) {
         resist = true;
     } else if (monrace.resistance_flags.has(MonsterResistanceType::NO_INSTANTLY_DEATH)) {
         monrace.r_resistance_flags.set(MonsterResistanceType::NO_INSTANTLY_DEATH);

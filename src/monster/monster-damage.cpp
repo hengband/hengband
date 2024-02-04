@@ -181,7 +181,7 @@ void MonsterDamageProcessor::death_special_flag_monster()
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto r_idx = m_ptr->r_idx;
     auto *r_ptr = &monraces_info[r_idx];
-    if (any_bits(monraces_info[r_idx].flags7, RF7_TANUKI)) {
+    if (monraces_info[r_idx].misc_flags.has(MonsterMiscType::TANUKI)) {
         r_ptr = &monraces_info[r_idx];
         m_ptr->ap_r_idx = r_idx;
         if (r_ptr->r_sights < MAX_SHORT) {
@@ -385,7 +385,7 @@ void MonsterDamageProcessor::get_exp_from_mon(MonsterEntity *m_ptr, int exp_dam)
     auto div_l = (uint)((this->player_ptr->max_plv + 2) * speed_to_energy(r_ptr->speed));
 
     /* Use (average maxhp * 2) as a denominator */
-    auto compensation = any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) ? r_ptr->hside * 2 : r_ptr->hside + 1;
+    auto compensation = r_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP) ? r_ptr->hside * 2 : r_ptr->hside + 1;
     s64b_mul(&div_h, &div_l, 0, r_ptr->hdice * (ironman_nightmare ? 2 : 1) * compensation);
 
     /* Special penalty in the wilderness */
@@ -401,7 +401,7 @@ void MonsterDamageProcessor::get_exp_from_mon(MonsterEntity *m_ptr, int exp_dam)
     s64b_div(&new_exp, &new_exp_frac, div_h, div_l);
 
     /* Special penalty for mutiply-monster */
-    if (any_bits(r_ptr->flags2, RF2_MULTIPLY) || (m_ptr->r_idx == MonsterRaceId::DAWN)) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::MULTIPLY) || (m_ptr->r_idx == MonsterRaceId::DAWN)) {
         int monnum_penarty = r_ptr->r_akills / 400;
         if (monnum_penarty > 8) {
             monnum_penarty = 8;

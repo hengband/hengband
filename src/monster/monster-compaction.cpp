@@ -128,7 +128,7 @@ void compact_monsters(PlayerType *player_ptr, int size)
             }
 
             int chance = 90;
-            if ((r_ptr->flags1 & (RF1_QUESTOR)) && (cnt < 1000)) {
+            if (r_ptr->misc_flags.has(MonsterMiscType::QUESTOR) && (cnt < 1000)) {
                 chance = 100;
             }
 

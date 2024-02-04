@@ -78,6 +78,24 @@ enum class SavedataLoreOlderThan19FlagType_No_Debuff : uint32_t {
     RF3_NO_SLEEP = 0x80000000, /*!< モンスター特性: 眠らない / Cannot be slept */
 };
 
+enum class SavedataLoreOlderThan20FlagType {
+    RF1_QUESTOR = 0x00000002, /*!< モンスター特性: クエストモンスター / Quest Monster */
+    RF1_FORCE_DEPTH = 0x00000100, /*!< モンスター特性: 指定階未満では生成されない / Start at "correct" depth */
+    RF1_FORCE_MAXHP = 0x00000200, /*!< モンスター特性: 通常生成時必ずHPがダイス最大値になる / Start with max hitpoints */
+    RF1_FRIENDS = 0x00002000, /*!< モンスター特性: 同種の友軍を用意している / Arrive with some friends */
+    RF1_ESCORT = 0x00004000, /*!< モンスター特性: 護衛を用意している/ Arrive with an escort */
+    RF1_ESCORTS = 0x00008000, /*!< モンスター特性: さらに大量の護衛を用意している / Arrive with some escorts */
+    RF2_REFLECTING = 0x00000008, /*!< モンスター特性: 矢やボルト魔法を反射する / Reflects bolts */
+    RF2_INVISIBLE = 0x00000010, /*!< モンスター特性: 透明視力がないと見えない / Monster avoids vision */
+    RF2_COLD_BLOOD = 0x00000020, /*!< モンスター特性: 冷血動物である / Monster avoids infra */
+    RF2_EMPTY_MIND = 0x00000040, /*!< モンスター特性: 知性を持たない(テレパシー回避) / Monster avoids telepathy */
+    RF2_WEIRD_MIND = 0x00000080, /*!< モンスター特性: 異質な知性(テレパシーで感知づらい) / Monster avoids telepathy? */
+    RF2_MULTIPLY = 0x00000100, /*!< モンスター特性: 増殖する / Monster reproduces */
+    RF2_REGENERATE = 0x00000200, /*!< モンスター特性: 急激に回復する / Monster regenerates */
+    RF2_POWERFUL = 0x00001000, /*!< モンスター特性: 強力に魔法をあやつる / Monster has strong breath */
+    RF2_ELDRITCH_HORROR = 0x00002000, /*!< モンスター特性: 狂気を呼び起こす / Sanity-blasting horror    */
+};
+
 enum class OldQuestId15 {
     CITY_SEA = 17,
 };
