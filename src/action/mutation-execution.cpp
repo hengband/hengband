@@ -257,7 +257,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         auto &monster = floor.m_list[grid.m_idx];
         const auto &monrace = monster.get_monrace();
         auto can_banish = monrace.kind_flags.has(MonsterKindType::EVIL);
-        can_banish &= none_bits(monrace.flags1, RF1_QUESTOR);
+        can_banish &= monrace.misc_flags.has_not(MonsterMiscType::QUESTOR);
         can_banish &= monrace.kind_flags.has_not(MonsterKindType::UNIQUE);
         can_banish &= !floor.inside_arena;
         can_banish &= !floor.is_in_quest();

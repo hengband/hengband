@@ -46,7 +46,7 @@ bool monster_is_powerful(FloorType *floor_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     auto *r_ptr = &m_ptr->get_monrace();
-    return any_bits(r_ptr->flags2, RF2_POWERFUL);
+    return r_ptr->misc_flags.has(MonsterMiscType::POWERFUL);
 }
 
 /*!
@@ -459,7 +459,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     m_ptr->ap_r_idx = m_ptr->r_idx;
     r_ptr = &m_ptr->get_monrace();
 
-    m_ptr->max_maxhp = any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) ? maxroll(r_ptr->hdice, r_ptr->hside) : damroll(r_ptr->hdice, r_ptr->hside);
+    m_ptr->max_maxhp = r_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP) ? maxroll(r_ptr->hdice, r_ptr->hside) : damroll(r_ptr->hdice, r_ptr->hside);
     if (ironman_nightmare) {
         auto hp = m_ptr->max_maxhp * 2;
         m_ptr->max_maxhp = std::min(MONSTER_MAXHP, hp);

@@ -158,7 +158,7 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
             delta += (r_ptr->level - floor_ptr->dun_level) * base;
         }
 
-        if (r_ptr->flags1 & RF1_FRIENDS) {
+        if (r_ptr->misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
             if (5 <= get_monster_crowd_number(floor_ptr, i)) {
                 delta += 1;
             }

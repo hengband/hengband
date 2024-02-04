@@ -45,7 +45,7 @@ void check_random_quest_auto_failure(PlayerType *player_ptr)
         quest.complev = (byte)player_ptr->lev;
         w_ptr->update_playtime();
         quest.comptime = w_ptr->play_time;
-        monraces_info[quest.r_idx].flags1 &= ~(RF1_QUESTOR);
+        monraces_info[quest.r_idx].misc_flags.reset(MonsterMiscType::QUESTOR);
     }
 }
 

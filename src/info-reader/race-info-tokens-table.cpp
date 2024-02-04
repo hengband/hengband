@@ -6,6 +6,7 @@
 #include "monster-race/race-drop-flags.h"
 #include "monster-race/race-feature-flags.h"
 #include "monster-race/race-kind-flags.h"
+#include "monster-race/race-misc-flags.h"
 #include "monster-race/race-population-flags.h"
 #include "monster-race/race-sex-const.h"
 #include "monster-race/race-speak-flags.h"
@@ -88,39 +89,6 @@ const std::unordered_map<std::string_view, RaceBlowEffectType> r_info_blow_effec
     { "HUNGRY", RaceBlowEffectType::HUNGRY },
     { "CHAOS", RaceBlowEffectType::CHAOS },
     { "FLAVOR", RaceBlowEffectType::FLAVOR },
-};
-
-/*!
- * モンスター特性トークンの定義1 /
- * Monster race flags
- */
-const std::unordered_map<std::string_view, race_flags1> r_info_flags1 = {
-    { "QUESTOR", RF1_QUESTOR },
-    { "FORCE_DEPTH", RF1_FORCE_DEPTH },
-    { "FORCE_MAXHP", RF1_FORCE_MAXHP },
-    { "FORCE_EXTRA", RF1_FORCE_EXTRA },
-    { "FRIENDS", RF1_FRIENDS },
-    { "ESCORT", RF1_ESCORT },
-    { "ESCORTS", RF1_ESCORTS },
-};
-
-/*!
- * モンスター特性トークンの定義2 /
- * Monster race flags
- */
-const std::unordered_map<std::string_view, race_flags2> r_info_flags2 = {
-    { "REFLECTING", RF2_REFLECTING },
-    { "INVISIBLE", RF2_INVISIBLE },
-    { "COLD_BLOOD", RF2_COLD_BLOOD },
-    { "EMPTY_MIND", RF2_EMPTY_MIND },
-    { "WEIRD_MIND", RF2_WEIRD_MIND },
-    { "MULTIPLY", RF2_MULTIPLY },
-    { "REGENERATE", RF2_REGENERATE },
-    { "CHAR_MULTI", RF2_CHAR_MULTI },
-    { "POWERFUL", RF2_POWERFUL },
-    { "ELDRITCH_HORROR", RF2_ELDRITCH_HORROR },
-    { "FLAGS2_XX14", RF2_XX14 },
-    { "FLAGS2_XX15", RF2_XX15 },
 };
 
 /*!
@@ -239,26 +207,6 @@ const std::unordered_map<std::string_view, MonsterAbilityType> r_info_ability_fl
 	{"S_DEAD_UNIQUE", MonsterAbilityType::S_DEAD_UNIQUE },
 };
 /* clang-format on */
-
-/*!
- * @brief モンスター特性トークンの定義7
- * @details ダンジョンの主は、DungeonDefinitions の FINAL_GUARDIAN_HOGE にて自動指定
- * HOGE は、MonsterRaceDefinitions で定義したモンスター種族ID
- */
-const std::unordered_map<std::string_view, race_flags7> r_info_flags7 = {
-    { "RIDING", RF7_RIDING },
-    { "KAGE", RF7_KAGE },
-    { "CHAMELEON", RF7_CHAMELEON },
-    { "TANUKI", RF7_TANUKI },
-};
-
-/*!
- * モンスター特性トークンの定義8 /
- * Monster race flags
- */
-const std::unordered_map<std::string_view, race_flags8> r_info_flags8 = {
-    { "NO_QUEST", RF8_NO_QUEST },
-};
 
 /*!
  * モンスター特性トークンの定義R(耐性) /
@@ -456,6 +404,29 @@ const std::unordered_map<std::string_view, MonsterBrightnessType> r_info_brightn
     { "SELF_DARK_1", MonsterBrightnessType::SELF_DARK_1 },
     { "HAS_DARK_2", MonsterBrightnessType::HAS_DARK_2 },
     { "SELF_DARK_2", MonsterBrightnessType::SELF_DARK_2 },
+};
+
+const std::unordered_map<std::string_view, MonsterMiscType> r_info_misc_flags = {
+    { "FORCE_DEPTH", MonsterMiscType::FORCE_DEPTH },
+    { "FORCE_MAXHP", MonsterMiscType::FORCE_MAXHP },
+    { "FRIENDS", MonsterMiscType::HAS_FRIENDS },
+    { "ESCORT", MonsterMiscType::ESCORT },
+    { "ESCORTS", MonsterMiscType::MORE_ESCORT },
+    { "RIDING", MonsterMiscType::RIDING },
+    { "INVISIBLE", MonsterMiscType::INVISIBLE },
+    { "COLD_BLOOD", MonsterMiscType::COLD_BLOOD },
+    { "KAGE", MonsterMiscType::KAGE },
+    { "CHAMELEON", MonsterMiscType::CHAMELEON },
+    { "TANUKI", MonsterMiscType::TANUKI },
+    { "NO_QUEST", MonsterMiscType::NO_QUEST },
+    { "ELDRITCH_HORROR", MonsterMiscType::ELDRITCH_HORROR },
+    { "MULTIPLY", MonsterMiscType::MULTIPLY },
+    { "REGENERATE", MonsterMiscType::REGENERATE },
+    { "POWERFUL", MonsterMiscType::POWERFUL },
+    { "REFLECTING", MonsterMiscType::REFLECTING },
+    { "QUESTOR", MonsterMiscType::QUESTOR },
+    { "EMPTY_MIND", MonsterMiscType::EMPTY_MIND },
+    { "WEIRD_MIND", MonsterMiscType::WEIRD_MIND },
 };
 
 const std::unordered_map<std::string_view, MonsterSex> r_info_sex = {

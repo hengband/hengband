@@ -29,6 +29,7 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
+#include "monster-race/race-misc-flags.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
@@ -69,10 +70,10 @@ static bool monster_hook_tanuki(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     const auto &monrace = monraces_info[r_idx];
     bool unselectable = monrace.kind_flags.has(MonsterKindType::UNIQUE);
-    unselectable |= any_bits(monrace.flags2, RF2_MULTIPLY);
+    unselectable |= monrace.misc_flags.has(MonsterMiscType::MULTIPLY);
     unselectable |= monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY);
     unselectable |= monrace.feature_flags.has(MonsterFeatureType::AQUATIC);
-    unselectable |= any_bits(monrace.flags7, RF7_CHAMELEON);
+    unselectable |= monrace.misc_flags.has(MonsterMiscType::CHAMELEON);
     unselectable |= monrace.is_explodable();
     if (unselectable) {
         return false;
@@ -95,7 +96,7 @@ static MonsterRaceId initial_r_appearance(PlayerType *player_ptr, MonsterRaceId 
         return MonsterRaceId::ALIEN_JURAL;
     }
 
-    if (none_bits(monraces_info[r_idx].flags7, RF7_TANUKI)) {
+    if (monraces_info[r_idx].misc_flags.has_not(MonsterMiscType::TANUKI)) {
         return r_idx;
     }
 
@@ -143,8 +144,8 @@ static bool check_unique_placeable(const FloorType &floor, MonsterRaceId r_idx, 
         return false;
     }
 
-    const auto is_deep = any_bits(r_ptr->flags1, RF1_FORCE_DEPTH) && (floor.dun_level < r_ptr->level);
-    const auto is_questor = !ironman_nightmare || any_bits(r_ptr->flags1, RF1_QUESTOR);
+    const auto is_deep = r_ptr->misc_flags.has(MonsterMiscType::FORCE_DEPTH) && (floor.dun_level < r_ptr->level);
+    const auto is_questor = !ironman_nightmare || r_ptr->misc_flags.has(MonsterMiscType::QUESTOR);
     return !is_deep || !is_questor;
 }
 
@@ -338,7 +339,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
         m_ptr->parent_m_idx = 0;
     }
 
-    if (any_bits(r_ptr->flags7, RF7_CHAMELEON)) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::CHAMELEON)) {
         choose_new_monster(player_ptr, g_ptr->m_idx, true, MonsterRace::empty_id());
         r_ptr = &m_ptr->get_monrace();
         m_ptr->mflag2.set(MonsterConstantFlagType::CHAMELEON);
@@ -373,7 +374,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
         (void)set_monster_csleep(player_ptr, g_ptr->m_idx, (val * 2) + randint1(val * 10));
     }
 
-    if (any_bits(r_ptr->flags1, RF1_FORCE_MAXHP)) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
         m_ptr->max_maxhp = maxroll(r_ptr->hdice, r_ptr->hside);
     } else {
         m_ptr->max_maxhp = damroll(r_ptr->hdice, r_ptr->hside);
@@ -431,7 +432,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
         m_ptr->get_real_monrace().floor_id = player_ptr->floor_id;
     }
 
-    if (any_bits(r_ptr->flags2, RF2_MULTIPLY)) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::MULTIPLY)) {
         floor.num_repro++;
     }
 

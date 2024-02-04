@@ -103,7 +103,7 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
             continue;
         }
 
-        if (ride && !(monrace.flags7 & (RF7_RIDING))) {
+        if (ride && monrace.misc_flags.has_not(MonsterMiscType::RIDING)) {
             continue;
         }
 

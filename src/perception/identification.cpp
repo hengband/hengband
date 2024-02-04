@@ -102,7 +102,7 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
         auto *r_ptr = &monraces_info[statue_r_idx];
         if (statue_r_idx == MonsterRaceId::BULLGATES) {
             info[i++] = _("それは部屋に飾ると恥ずかしい。", "It is shameful.");
-        } else if (r_ptr->flags2 & (RF2_ELDRITCH_HORROR)) {
+        } else if (r_ptr->misc_flags.has(MonsterMiscType::ELDRITCH_HORROR)) {
             info[i++] = _("それは部屋に飾ると恐い。", "It is fearful.");
         } else {
             info[i++] = _("それは部屋に飾ると楽しい。", "It is cheerful.");

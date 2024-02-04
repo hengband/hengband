@@ -15,6 +15,49 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 
+static void migrate_old_misc_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_flags1, BIT_FLAGS old_flags2)
+{
+    constexpr auto SIZE_OF_RF1 = 6;
+    struct flag_list_ver20 {
+        SavedataLoreOlderThan20FlagType old_flag;
+        MonsterMiscType flag;
+    };
+    const std::vector<flag_list_ver20> flag_list = {
+        { SavedataLoreOlderThan20FlagType::RF1_QUESTOR, MonsterMiscType::QUESTOR },
+        { SavedataLoreOlderThan20FlagType::RF1_FORCE_DEPTH, MonsterMiscType::FORCE_DEPTH },
+        { SavedataLoreOlderThan20FlagType::RF1_FORCE_MAXHP, MonsterMiscType::FORCE_MAXHP },
+        { SavedataLoreOlderThan20FlagType::RF1_FRIENDS, MonsterMiscType::HAS_FRIENDS },
+        { SavedataLoreOlderThan20FlagType::RF1_ESCORT, MonsterMiscType::ESCORT },
+        { SavedataLoreOlderThan20FlagType::RF1_ESCORTS, MonsterMiscType::MORE_ESCORT },
+        { SavedataLoreOlderThan20FlagType::RF2_REFLECTING, MonsterMiscType::REFLECTING },
+        { SavedataLoreOlderThan20FlagType::RF2_INVISIBLE, MonsterMiscType::INVISIBLE },
+        { SavedataLoreOlderThan20FlagType::RF2_COLD_BLOOD, MonsterMiscType::COLD_BLOOD },
+        { SavedataLoreOlderThan20FlagType::RF2_EMPTY_MIND, MonsterMiscType::EMPTY_MIND },
+        { SavedataLoreOlderThan20FlagType::RF2_WEIRD_MIND, MonsterMiscType::WEIRD_MIND },
+        { SavedataLoreOlderThan20FlagType::RF2_MULTIPLY, MonsterMiscType::MULTIPLY },
+        { SavedataLoreOlderThan20FlagType::RF2_REGENERATE, MonsterMiscType::REGENERATE },
+        { SavedataLoreOlderThan20FlagType::RF2_POWERFUL, MonsterMiscType::POWERFUL },
+        { SavedataLoreOlderThan20FlagType::RF2_ELDRITCH_HORROR, MonsterMiscType::ELDRITCH_HORROR },
+    };
+
+    if (old_flags1 == 0 && old_flags2 == 0) {
+        return;
+    }
+
+    for (uint16_t i = 0; i < flag_list.size(); i++) {
+        const auto &f = flag_list[i];
+        if (i < SIZE_OF_RF1) {
+            if (any_bits(old_flags1, f.old_flag)) {
+                r_ptr->r_misc_flags.set(f.flag);
+            }
+        } else {
+            if (any_bits(old_flags2, f.old_flag)) {
+                r_ptr->r_misc_flags.set(f.flag);
+            }
+        }
+    }
+}
+
 static void migrate_old_feature_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_flags)
 {
     if (any_bits(old_flags, enum2i(SavedataLoreOlderThan19FlagType::RF2_PASS_WALL))) {
@@ -287,6 +330,15 @@ static void rd_r_feature_flags(MonsterRaceInfo *r_ptr)
     rd_FlagGroup(r_ptr->r_feature_flags, rd_byte);
 }
 
+static void rd_r_misc_flags(MonsterRaceInfo *r_ptr)
+{
+    if (loading_savefile_version_is_older_than(20)) {
+        migrate_old_misc_flags(r_ptr, r_ptr->r_flags1, r_ptr->r_flags2);
+        return;
+    }
+    rd_FlagGroup(r_ptr->r_misc_flags, rd_byte);
+}
+
 /*!
  * @brief モンスターの思い出を読み込む / Read the monster lore
  * @param r_ptr 読み込み先モンスター種族情報へのポインタ
@@ -340,6 +392,7 @@ static void rd_lore(MonsterRaceInfo *r_ptr, const MonsterRaceId r_idx)
     if (!loading_savefile_version_is_older_than(20)) {
         rd_FlagGroup(r_ptr->special_flags, rd_byte);
     }
+    rd_r_misc_flags(r_ptr);
     r_ptr->max_num = rd_byte();
     r_ptr->floor_id = rd_s16b();
 
@@ -361,6 +414,7 @@ static void rd_lore(MonsterRaceInfo *r_ptr, const MonsterRaceId r_idx)
     r_ptr->r_kind_flags &= r_ptr->kind_flags;
     r_ptr->r_feature_flags &= r_ptr->feature_flags;
     r_ptr->r_special_flags &= r_ptr->special_flags;
+    r_ptr->r_misc_flags &= r_ptr->misc_flags;
 }
 
 void load_lore(void)

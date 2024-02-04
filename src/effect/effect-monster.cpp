@@ -388,14 +388,14 @@ static void affected_monster_prevents_bad_status(PlayerType *player_ptr, EffectM
 {
     const auto *r_ptr = em_ptr->r_ptr;
     auto can_avoid_polymorph = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
-    can_avoid_polymorph |= any_bits(r_ptr->flags1, RF1_QUESTOR);
+    can_avoid_polymorph |= r_ptr->misc_flags.has(MonsterMiscType::QUESTOR);
     can_avoid_polymorph |= (player_ptr->riding != 0) && (em_ptr->g_ptr->m_idx == player_ptr->riding);
     if (can_avoid_polymorph) {
         em_ptr->do_polymorph = false;
     }
 
     auto should_alive = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
-    should_alive |= any_bits(r_ptr->flags1, RF1_QUESTOR);
+    should_alive |= r_ptr->misc_flags.has(MonsterMiscType::QUESTOR);
     should_alive |= r_ptr->population_flags.has(MonsterPopulationType::NAZGUL);
     if (should_alive && !AngbandSystem::get_instance().is_phase_out() && (em_ptr->who > 0) && (em_ptr->dam > em_ptr->m_ptr->hp)) {
         em_ptr->dam = em_ptr->m_ptr->hp;

@@ -43,7 +43,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
         }
 
         mode = PM_NO_KAGE | PM_NO_PET;
-        if (!(r_ptr->flags1 & RF1_FRIENDS)) {
+        if (r_ptr->misc_flags.has_not(MonsterMiscType::HAS_FRIENDS)) {
             mode |= PM_ALLOW_GROUP;
         }
 

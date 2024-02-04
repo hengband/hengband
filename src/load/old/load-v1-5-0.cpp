@@ -266,7 +266,7 @@ void rd_item_old(ItemEntity *o_ptr)
 
         if (tval == ItemKindType::CAPTURE) {
             const auto &r_ref = monraces_info[i2enum<MonsterRaceId>(o_ptr->pval)];
-            if (r_ref.flags1 & RF1_FORCE_MAXHP) {
+            if (r_ref.misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
                 o_ptr->captured_monster_max_hp = maxroll(r_ref.hdice, r_ref.hside);
             } else {
                 o_ptr->captured_monster_max_hp = damroll(r_ref.hdice, r_ref.hside);

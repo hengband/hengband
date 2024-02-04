@@ -20,7 +20,7 @@ void display_monster_hp_ac(lore_type *lore_ptr)
     }
 
     hooked_roff(format(_("%s^は AC%d の防御力と", "%s^ has an armor rating of %d"), Who::who(lore_ptr->msex), lore_ptr->r_ptr->ac));
-    if ((lore_ptr->flags1 & RF1_FORCE_MAXHP) || (lore_ptr->r_ptr->hside == 1)) {
+    if (lore_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP) || (lore_ptr->r_ptr->hside == 1)) {
         auto hp = lore_ptr->r_ptr->hdice * (lore_ptr->nightmare ? 2 : 1) * lore_ptr->r_ptr->hside;
         hooked_roff(format(_(" %d の体力がある。", " and a life rating of %d.  "), std::min(MONSTER_MAXHP, hp)));
     } else {
@@ -138,29 +138,29 @@ void display_monster_constitutions(lore_type *lore_ptr)
         hook_c_roff(TERM_L_DARK, format(_("%s^は暗黒に包まれている。", "%s^ is surrounded by darkness.  "), Who::who(lore_ptr->msex)));
     }
 
-    if (lore_ptr->flags2 & RF2_INVISIBLE) {
+    if (lore_ptr->misc_flags.has(MonsterMiscType::INVISIBLE)) {
         hooked_roff(format(_("%s^は透明で目に見えない。", "%s^ is invisible.  "), Who::who(lore_ptr->msex)));
     }
 
-    if (lore_ptr->flags2 & RF2_COLD_BLOOD) {
+    if (lore_ptr->misc_flags.has(MonsterMiscType::COLD_BLOOD)) {
         hooked_roff(format(_("%s^は冷血動物である。", "%s^ is cold blooded.  "), Who::who(lore_ptr->msex)));
     }
 
-    if (lore_ptr->flags2 & RF2_EMPTY_MIND) {
+    if (lore_ptr->misc_flags.has(MonsterMiscType::EMPTY_MIND)) {
         hooked_roff(format(_("%s^はテレパシーでは感知できない。", "%s^ is not detected by telepathy.  "), Who::who(lore_ptr->msex)));
-    } else if (lore_ptr->flags2 & RF2_WEIRD_MIND) {
+    } else if (lore_ptr->misc_flags.has(MonsterMiscType::WEIRD_MIND)) {
         hooked_roff(format(_("%s^はまれにテレパシーで感知できる。", "%s^ is rarely detected by telepathy.  "), Who::who(lore_ptr->msex)));
     }
 
-    if (lore_ptr->flags2 & RF2_MULTIPLY) {
+    if (lore_ptr->misc_flags.has(MonsterMiscType::MULTIPLY)) {
         hook_c_roff(TERM_L_UMBER, format(_("%s^は爆発的に増殖する。", "%s^ breeds explosively.  "), Who::who(lore_ptr->msex)));
     }
 
-    if (lore_ptr->flags2 & RF2_REGENERATE) {
+    if (lore_ptr->misc_flags.has(MonsterMiscType::REGENERATE)) {
         hook_c_roff(TERM_L_WHITE, format(_("%s^は素早く体力を回復する。", "%s^ regenerates quickly.  "), Who::who(lore_ptr->msex)));
     }
 
-    if (lore_ptr->flags7 & RF7_RIDING) {
+    if (lore_ptr->misc_flags.has(MonsterMiscType::RIDING)) {
         hook_c_roff(TERM_SLATE, format(_("%s^に乗ることができる。", "%s^ is suitable for riding.  "), Who::who(lore_ptr->msex)));
     }
 }

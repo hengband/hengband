@@ -14,6 +14,7 @@
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-indice-types.h"
+#include "monster-race/race-misc-flags.h"
 #include "monster-race/race-sex-const.h"
 #include "player-ability/player-ability-types.h"
 #include "system/angband.h"
@@ -43,20 +44,20 @@ static void set_flags1(lore_type *lore_ptr)
         lore_ptr->kind_flags.set(MonsterKindType::UNIQUE);
     }
 
-    if (lore_ptr->r_ptr->flags1 & RF1_QUESTOR) {
-        lore_ptr->flags1 |= (RF1_QUESTOR);
+    if (lore_ptr->r_ptr->misc_flags.has(MonsterMiscType::QUESTOR)) {
+        lore_ptr->misc_flags.set(MonsterMiscType::QUESTOR);
     }
 
-    if (lore_ptr->r_ptr->flags1 & RF1_FRIENDS) {
-        lore_ptr->flags1 |= (RF1_FRIENDS);
+    if (lore_ptr->r_ptr->misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
+        lore_ptr->misc_flags.set(MonsterMiscType::HAS_FRIENDS);
     }
 
-    if (lore_ptr->r_ptr->flags1 & RF1_ESCORT) {
-        lore_ptr->flags1 |= (RF1_ESCORT);
+    if (lore_ptr->r_ptr->misc_flags.has(MonsterMiscType::ESCORT)) {
+        lore_ptr->misc_flags.set(MonsterMiscType::ESCORT);
     }
 
-    if (lore_ptr->r_ptr->flags1 & RF1_ESCORTS) {
-        lore_ptr->flags1 |= (RF1_ESCORTS);
+    if (lore_ptr->r_ptr->misc_flags.has(MonsterMiscType::MORE_ESCORT)) {
+        lore_ptr->misc_flags.set(MonsterMiscType::MORE_ESCORT);
     }
 }
 
@@ -114,12 +115,12 @@ static void set_race_flags(lore_type *lore_ptr)
         lore_ptr->kind_flags.set(MonsterKindType::QUANTUM);
     }
 
-    if (lore_ptr->r_ptr->flags1 & RF1_FORCE_DEPTH) {
-        lore_ptr->flags1 |= (RF1_FORCE_DEPTH);
+    if (lore_ptr->r_ptr->misc_flags.has(MonsterMiscType::FORCE_DEPTH)) {
+        lore_ptr->misc_flags.set(MonsterMiscType::FORCE_DEPTH);
     }
 
-    if (lore_ptr->r_ptr->flags1 & RF1_FORCE_MAXHP) {
-        lore_ptr->flags1 |= (RF1_FORCE_MAXHP);
+    if (lore_ptr->r_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
+        lore_ptr->misc_flags.set(MonsterMiscType::FORCE_MAXHP);
     }
 }
 
@@ -188,7 +189,7 @@ void process_monster_lore(PlayerType *player_ptr, MonsterRaceId r_idx, monster_l
         hook_c_roff(TERM_RED, _("致命的な威力の攻撃に対して大きな耐性を持っている。", "has the strong resistance for a critical damage.  "));
     }
     display_monster_aura(lore_ptr);
-    if (lore_ptr->flags2 & RF2_REFLECTING) {
+    if (lore_ptr->misc_flags.has(MonsterMiscType::REFLECTING)) {
         hooked_roff(format(_("%s^は矢の呪文を跳ね返す。", "%s^ reflects bolt spells.  "), Who::who(lore_ptr->msex)));
     }
 

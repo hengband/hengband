@@ -252,7 +252,7 @@ static bool update_weird_telepathy(PlayerType *player_ptr, um_type *um_ptr, MONS
 {
     auto *m_ptr = um_ptr->m_ptr;
     auto *r_ptr = &m_ptr->get_monrace();
-    if ((r_ptr->flags2 & RF2_WEIRD_MIND) == 0) {
+    if (r_ptr->misc_flags.has_not(MonsterMiscType::WEIRD_MIND)) {
         return false;
     }
 
@@ -263,7 +263,7 @@ static bool update_weird_telepathy(PlayerType *player_ptr, um_type *um_ptr, MONS
     um_ptr->flag = true;
     m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
     if (m_ptr->is_original_ap() && !player_ptr->effects()->hallucination()->is_hallucinated()) {
-        r_ptr->r_flags2 |= RF2_WEIRD_MIND;
+        r_ptr->r_misc_flags.set(MonsterMiscType::WEIRD_MIND);
         update_smart_stupid_flags(r_ptr);
     }
 
@@ -289,9 +289,9 @@ static void update_telepathy_sight(PlayerType *player_ptr, um_type *um_ptr, MONS
     }
 
     auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
-    if (r_ptr->flags2 & RF2_EMPTY_MIND) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::EMPTY_MIND)) {
         if (m_ptr->is_original_ap() && !is_hallucinated) {
-            r_ptr->r_flags2 |= RF2_EMPTY_MIND;
+            r_ptr->r_misc_flags.set(MonsterMiscType::EMPTY_MIND);
         }
 
         return;
@@ -417,7 +417,7 @@ static bool check_cold_blood(PlayerType *player_ptr, um_type *um_ptr, const POSI
     }
 
     auto *r_ptr = &um_ptr->m_ptr->get_monrace();
-    if (any_bits(r_ptr->flags2, RF2_COLD_BLOOD) && r_ptr->aura_flags.has_not(MonsterAuraType::FIRE)) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::COLD_BLOOD) && r_ptr->aura_flags.has_not(MonsterAuraType::FIRE)) {
         return false;
     }
 
@@ -433,7 +433,7 @@ static bool check_invisible(PlayerType *player_ptr, um_type *um_ptr)
     }
 
     auto *r_ptr = &um_ptr->m_ptr->get_monrace();
-    if (r_ptr->flags2 & RF2_INVISIBLE) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::INVISIBLE)) {
         if (player_ptr->see_inv) {
             um_ptr->easy = true;
             um_ptr->flag = true;
@@ -485,11 +485,11 @@ static void decide_sight_invisible_monster(PlayerType *player_ptr, um_type *um_p
     }
 
     if (do_invisible) {
-        r_ptr->r_flags2 |= RF2_INVISIBLE;
+        r_ptr->r_misc_flags.set(MonsterMiscType::INVISIBLE);
     }
 
     if (do_cold_blood) {
-        r_ptr->r_flags2 |= RF2_COLD_BLOOD;
+        r_ptr->r_misc_flags.set(MonsterMiscType::COLD_BLOOD);
     }
 }
 
@@ -529,7 +529,7 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
         }
     }
 
-    if (w_ptr->is_loading_now && w_ptr->character_dungeon && !AngbandSystem::get_instance().is_phase_out() && m_ptr->get_appearance_monrace().flags2 & RF2_ELDRITCH_HORROR) {
+    if (w_ptr->is_loading_now && w_ptr->character_dungeon && !AngbandSystem::get_instance().is_phase_out() && m_ptr->get_appearance_monrace().misc_flags.has(MonsterMiscType::ELDRITCH_HORROR)) {
         m_ptr->mflag.set(MonsterTemporaryFlagType::SANITY_BLAST);
     }
 

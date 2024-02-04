@@ -15,6 +15,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
 #include "monster-race/race-kind-flags.h"
+#include "monster-race/race-misc-flags.h"
 #include "monster-race/race-population-flags.h"
 #include "monster-race/race-sex-const.h"
 #include "monster-race/race-speak-flags.h"
@@ -30,11 +31,7 @@ enum class MonsterAbilityType;
 
 extern const std::unordered_map<std::string_view, RaceBlowMethodType> r_info_blow_method;
 extern const std::unordered_map<std::string_view, RaceBlowEffectType> r_info_blow_effect;
-extern const std::unordered_map<std::string_view, race_flags1> r_info_flags1;
-extern const std::unordered_map<std::string_view, race_flags2> r_info_flags2;
 extern const std::unordered_map<std::string_view, MonsterAbilityType> r_info_ability_flags;
-extern const std::unordered_map<std::string_view, race_flags7> r_info_flags7;
-extern const std::unordered_map<std::string_view, race_flags8> r_info_flags8;
 extern const std::unordered_map<std::string_view, MonsterResistanceType> r_info_flagsr;
 extern const std::unordered_map<std::string_view, MonsterAuraType> r_info_aura_flags;
 extern const std::unordered_map<std::string_view, MonsterBehaviorType> r_info_behavior_flags;
@@ -48,3 +45,4 @@ extern const std::unordered_map<std::string_view, MonsterSpeakType> r_info_speak
 extern const std::unordered_map<std::string_view, MonsterBrightnessType> r_info_brightness_flags;
 extern const std::unordered_map<std::string_view, MonsterSex> r_info_sex;
 extern const std::unordered_map<std::string_view, MonsterSpecialType> r_info_special_flags;
+extern const std::unordered_map<std::string_view, MonsterMiscType> r_info_misc_flags;

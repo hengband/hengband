@@ -5403,6 +5403,9 @@
     <ClInclude Include="..\..\src\monster-race\race-sex-const.h">
       <Filter>monster-race</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\race-misc-flags.h">
+      <Filter>monster-race</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

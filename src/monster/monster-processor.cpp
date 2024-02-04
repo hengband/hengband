@@ -253,7 +253,7 @@ void decide_drop_from_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool is
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &m_ptr->get_monrace();
-    if (!is_riding_mon || ((r_ptr->flags7 & RF7_RIDING) != 0)) {
+    if (!is_riding_mon || r_ptr->misc_flags.has(MonsterMiscType::RIDING)) {
         return;
     }
 
@@ -444,7 +444,7 @@ bool decide_monster_multiplication(PlayerType *player_ptr, MONSTER_IDX m_idx, PO
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &m_ptr->get_monrace();
-    if (((r_ptr->flags2 & RF2_MULTIPLY) == 0) || (player_ptr->current_floor_ptr->num_repro >= MAX_REPRODUCTION)) {
+    if (r_ptr->misc_flags.has_not(MonsterMiscType::MULTIPLY) || (player_ptr->current_floor_ptr->num_repro >= MAX_REPRODUCTION)) {
         return false;
     }
 
@@ -469,7 +469,7 @@ bool decide_monster_multiplication(PlayerType *player_ptr, MONSTER_IDX m_idx, PO
     if ((k < 4) && (!k || !randint0(k * chance_reproduction))) {
         if (multiply_monster(player_ptr, m_idx, false, (m_ptr->is_pet() ? PM_FORCE_PET : 0))) {
             if (player_ptr->current_floor_ptr->m_list[hack_m_idx_ii].ml && is_original_ap_and_seen(player_ptr, m_ptr)) {
-                r_ptr->r_flags2 |= RF2_MULTIPLY;
+                r_ptr->r_misc_flags.set(MonsterMiscType::MULTIPLY);
             }
 
             return true;

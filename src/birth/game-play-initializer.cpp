@@ -183,7 +183,7 @@ void init_dungeon_quests(PlayerType *player_ptr)
         q_ptr->status = QuestStatusType::TAKEN;
         determine_random_questor(player_ptr, q_ptr);
         quest_r_ptr = &monraces_info[q_ptr->r_idx];
-        quest_r_ptr->flags1 |= RF1_QUESTOR;
+        quest_r_ptr->misc_flags.set(MonsterMiscType::QUESTOR);
         q_ptr->max_num = 1;
     }
 

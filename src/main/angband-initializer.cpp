@@ -246,7 +246,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
 
     for (const auto &d_ref : dungeons_info) {
         if (d_ref.idx > 0 && MonsterRace(d_ref.final_guardian).is_valid()) {
-            monraces_info[d_ref.final_guardian].flags7 |= RF7_GUARDIAN;
+            monraces_info[d_ref.final_guardian].misc_flags.set(MonsterMiscType::GUARDIAN);
         }
     }
 

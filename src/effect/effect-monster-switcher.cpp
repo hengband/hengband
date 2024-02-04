@@ -169,12 +169,12 @@ ProcessResult effect_monster_engetsu(PlayerType *player_ptr, EffectMonster *em_p
         em_ptr->obvious = true;
     }
 
-    if (any_bits(em_ptr->r_ptr->flags2, RF2_EMPTY_MIND)) {
+    if (em_ptr->r_ptr->misc_flags.has(MonsterMiscType::EMPTY_MIND)) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->dam = 0;
         em_ptr->skipped = true;
         if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
-            set_bits(em_ptr->r_ptr->r_flags2, RF2_EMPTY_MIND);
+            em_ptr->r_ptr->r_misc_flags.set(MonsterMiscType::EMPTY_MIND);
         }
         return ProcessResult::PROCESS_CONTINUE;
     }

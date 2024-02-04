@@ -45,7 +45,7 @@ bool common_saving_throw_charm(PlayerType *player_ptr, int pow, MonsterEntity *m
         return true;
     }
 
-    if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2.has(MonsterConstantFlagType::NOPET)) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::QUESTOR) || m_ptr->mflag2.has(MonsterConstantFlagType::NOPET)) {
         return true;
     }
 
@@ -78,7 +78,7 @@ bool common_saving_throw_control(PlayerType *player_ptr, int pow, MonsterEntity 
         return true;
     }
 
-    if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2.has(MonsterConstantFlagType::NOPET)) {
+    if (r_ptr->misc_flags.has(MonsterMiscType::QUESTOR) || m_ptr->mflag2.has(MonsterConstantFlagType::NOPET)) {
         return true;
     }
 
