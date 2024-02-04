@@ -212,13 +212,12 @@ static bool is_visited_floor(saved_floor_type *sf_ptr)
     return sf_ptr->last_visit != 0;
 }
 
-static void check_visited_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, bool *loaded)
+/*!
+ * @brief フロア読込時にプレイヤー足元の地形に必要な情報を設定する
+ * @params player_ptr プレイヤーへの参照ポインタ
+ */
+static void set_player_grid(PlayerType *player_ptr)
 {
-    if (!is_visited_floor(sf_ptr) || !load_floor(player_ptr, sf_ptr, 0)) {
-        return;
-    }
-
-    *loaded = true;
     if ((player_ptr->change_floor_mode & CFM_NO_RETURN) == 0) {
         return;
     }
@@ -291,7 +290,7 @@ static void reset_unique_by_floor_change(PlayerType *player_ptr)
     }
 }
 
-static void new_floor_allocation(PlayerType *player_ptr, saved_floor_type *sf_ptr)
+static void allocate_loaded_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
     GAME_TURN tmp_last_visit = sf_ptr->last_visit;
     const auto &floor = *player_ptr->current_floor_ptr;
@@ -345,13 +344,13 @@ static void set_stairs(PlayerType *player_ptr)
     g_ptr->special = player_ptr->floor_id;
 }
 
-static void update_new_floor_feature(PlayerType *player_ptr, saved_floor_type *sf_ptr, const bool loaded)
+/*!
+ * @brief 保存済フロア読込不可時の新規フロア生成を行う。
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @params sf_ptr 保存済フロアへの参照ポインタ
+ */
+static void generate_new_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    if (loaded) {
-        new_floor_allocation(player_ptr, sf_ptr);
-        return;
-    }
-
     if (!is_visited_floor(sf_ptr)) {
         generate_floor(player_ptr);
     } else {
@@ -399,11 +398,17 @@ static void update_floor(PlayerType *player_ptr)
     }
 
     saved_floor_type *sf_ptr;
-    bool loaded = false;
     sf_ptr = get_sf_ptr(new_floor_id);
-    check_visited_floor(player_ptr, sf_ptr, &loaded);
+    const bool loaded = is_visited_floor(sf_ptr) && load_floor(player_ptr, sf_ptr, 0);
+    set_player_grid(player_ptr);
     update_floor_id(player_ptr, sf_ptr);
-    update_new_floor_feature(player_ptr, sf_ptr, loaded);
+
+    if (loaded) {
+        allocate_loaded_floor(player_ptr, sf_ptr);
+    } else {
+        generate_new_floor(player_ptr, sf_ptr);
+    }
+
     cut_off_the_upstair(player_ptr);
     sf_ptr->visit_mark = latest_visit_mark++;
 }
