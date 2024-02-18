@@ -29,6 +29,41 @@ enum class SavedataLoreOlderThan10FlagType {
     AURA_ELEC_OLD = 0x00008000,
 };
 
+enum class SavedataLoreOlderThan11FlagType : uint32_t {
+    RF1_NEVER_BLOW = 0x00010000, /*!< モンスター特性: 打撃を一切行わない / Never make physical blow */
+    RF1_NEVER_MOVE = 0x00020000, /*!< モンスター特性: 移動を一切行わない / Never make physical move */
+    RF1_RAND_25 = 0x00040000, /*!< モンスター特性: ランダムに移動する確率+25%/ Moves randomly (25%) */
+    RF1_RAND_50 = 0x00080000, /*!< モンスター特性: ランダムに移動する確率+50%/ Moves randomly (50%) */
+    RF2_STUPID = 0x00000001, /*!< モンスター特性: 愚かな行動を取る / Monster is stupid */
+    RF2_SMART = 0x00000002, /*!< モンスター特性: 賢い行動を取る / Monster is smart */
+    RF2_OPEN_DOOR = 0x00010000, /*!< モンスター特性: ドアを開けることができる / Monster can open doors */
+    RF2_BASH_DOOR = 0x00020000, /*!< モンスター特性: ドアを破壊することができる / Monster can bash doors */
+    RF2_PASS_WALL = 0x00040000, /*!< モンスター特性: 壁を抜けることができる / Monster can pass walls */
+    RF2_KILL_WALL = 0x00080000, /*!< モンスター特性: 壁を破壊して進む / Monster can destroy walls */
+    RF2_MOVE_BODY = 0x00100000, /*!< モンスター特性: 道中の弱いモンスターを押しのけることができる / Monster can move monsters */
+    RF2_KILL_BODY = 0x00200000, /*!< モンスター特性: 道中の弱いモンスターを殺して進む / Monster can kill monsters */
+    RF2_TAKE_ITEM = 0x00400000, /*!< モンスター特性: 道中のアイテムを拾う / Monster can pick up items */
+    RF2_KILL_ITEM = 0x00800000, /*!< モンスター特性: 道中のアイテムを破壊する / Monster can crush items */
+};
+
+enum class SavedataLoreOlderThan12FlagType : uint32_t {
+    RF1_UNIQUE = 0x00000001, /*!< モンスター特性: ユニーク / Unique Monster */
+    RF1_QUESTOR = 0x00000002, /*!< モンスター特性: クエストモンスター / Quest Monster */
+    RF2_HUMAN = 0x40000000, /*!< モンスター特性: 人間 / Human */
+    RF2_QUANTUM = 0x80000000, /*!< モンスター特性: 量子的な振る舞いをする / Monster has quantum behavior */
+    RF3_ORC = 0x00000001, /*!< モンスター特性: オーク / Orc */
+    RF3_TROLL = 0x00000002, /*!< モンスター特性: トロル / Troll */
+    RF3_GIANT = 0x00000004, /*!< モンスター特性: 巨人 / Giant */
+    RF3_DRAGON = 0x00000008, /*!< モンスター特性: ドラゴン / Dragon */
+    RF3_DEMON = 0x00000010, /*!< モンスター特性: 悪魔 / Demon */
+    RF3_UNDEAD = 0x00000020, /*!< モンスター特性: アンデッド / Undead */
+    RF3_EVIL = 0x00000040, /*!< モンスター特性: 邪悪 / Evil */
+    RF3_ANIMAL = 0x00000080, /*!< モンスター特性: 動物 / Animal */
+    RF3_AMBERITE = 0x00000100, /*!< モンスター特性: アンバーの血族 / TY: Amberite */
+    RF3_GOOD = 0x00000200, /*!< モンスター特性: 善良 / Good */
+    RF3_ANGEL = 0x00010000, /*!< モンスター特性: 天使 / ANGEL */
+};
+
 enum class SavedataLoreOlderThan14FlagType {
     RFR_IM_ACID = 0x00000001, /* Immunity acid */
     RFR_IM_ELEC = 0x00000002, /* Immunity elec */

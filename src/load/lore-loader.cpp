@@ -5,10 +5,6 @@
 #include "load/old/load-v1-5-0.h"
 #include "load/savedata-old-flag-types.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
-#include "monster-race/race-flags2.h"
-#include "monster-race/race-flags3.h"
-#include "monster-race/race-flags7.h"
 #include "system/angband.h"
 #include "system/monster-race-info.h"
 #include "system/system-variables.h"
@@ -237,32 +233,32 @@ static void migrate_old_kind_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_flags1,
     }
 
     struct flag_list_ver12 {
-        BIT_FLAGS check_flag;
+        SavedataLoreOlderThan12FlagType check_flag;
         MonsterKindType flag;
     };
 
     const std::vector<flag_list_ver12> flag1 = {
-        { RF1_UNIQUE, MonsterKindType::UNIQUE },
+        { SavedataLoreOlderThan12FlagType::RF1_UNIQUE, MonsterKindType::UNIQUE },
     };
 
     const std::vector<flag_list_ver12> flag2 = {
-        { static_cast<BIT_FLAGS>(RF2_HUMAN), MonsterKindType::HUMAN },
-        { static_cast<BIT_FLAGS>(RF2_QUANTUM), MonsterKindType::QUANTUM },
+        { SavedataLoreOlderThan12FlagType::RF2_HUMAN, MonsterKindType::HUMAN },
+        { SavedataLoreOlderThan12FlagType::RF2_QUANTUM, MonsterKindType::QUANTUM },
     };
 
     const std::vector<flag_list_ver12> flag3 = {
-        { RF3_ORC, MonsterKindType::ORC },
-        { RF3_TROLL, MonsterKindType::TROLL },
-        { RF3_GIANT, MonsterKindType::GIANT },
-        { RF3_DRAGON, MonsterKindType::DRAGON },
-        { RF3_DEMON, MonsterKindType::DEMON },
-        { RF3_AMBERITE, MonsterKindType::AMBERITE },
-        { RF3_ANGEL, MonsterKindType::ANGEL },
-        { RF3_DRAGON, MonsterKindType::DRAGON },
-        { RF3_EVIL, MonsterKindType::EVIL },
-        { RF3_GOOD, MonsterKindType::GOOD },
-        { RF3_ANIMAL, MonsterKindType::ANIMAL },
-        { RF3_UNDEAD, MonsterKindType::UNDEAD },
+        { SavedataLoreOlderThan12FlagType::RF3_ORC, MonsterKindType::ORC },
+        { SavedataLoreOlderThan12FlagType::RF3_TROLL, MonsterKindType::TROLL },
+        { SavedataLoreOlderThan12FlagType::RF3_GIANT, MonsterKindType::GIANT },
+        { SavedataLoreOlderThan12FlagType::RF3_DRAGON, MonsterKindType::DRAGON },
+        { SavedataLoreOlderThan12FlagType::RF3_DEMON, MonsterKindType::DEMON },
+        { SavedataLoreOlderThan12FlagType::RF3_AMBERITE, MonsterKindType::AMBERITE },
+        { SavedataLoreOlderThan12FlagType::RF3_ANGEL, MonsterKindType::ANGEL },
+        { SavedataLoreOlderThan12FlagType::RF3_DRAGON, MonsterKindType::DRAGON },
+        { SavedataLoreOlderThan12FlagType::RF3_EVIL, MonsterKindType::EVIL },
+        { SavedataLoreOlderThan12FlagType::RF3_GOOD, MonsterKindType::GOOD },
+        { SavedataLoreOlderThan12FlagType::RF3_ANIMAL, MonsterKindType::ANIMAL },
+        { SavedataLoreOlderThan12FlagType::RF3_UNDEAD, MonsterKindType::UNDEAD },
 
     };
 
@@ -293,26 +289,26 @@ static void migrate_old_behavior_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_fla
     }
 
     struct flag_list_ver11 {
-        BIT_FLAGS check_flag;
+        SavedataLoreOlderThan11FlagType check_flag;
         MonsterBehaviorType flag;
     };
 
     const std::vector<flag_list_ver11> flag1 = {
-        { RF1_NEVER_BLOW, MonsterBehaviorType::NEVER_BLOW },
-        { RF1_NEVER_MOVE, MonsterBehaviorType::NEVER_MOVE },
-        { RF1_RAND_25, MonsterBehaviorType::RAND_MOVE_25 },
-        { RF1_RAND_50, MonsterBehaviorType::RAND_MOVE_50 },
+        { SavedataLoreOlderThan11FlagType::RF1_NEVER_BLOW, MonsterBehaviorType::NEVER_BLOW },
+        { SavedataLoreOlderThan11FlagType::RF1_NEVER_MOVE, MonsterBehaviorType::NEVER_MOVE },
+        { SavedataLoreOlderThan11FlagType::RF1_RAND_25, MonsterBehaviorType::RAND_MOVE_25 },
+        { SavedataLoreOlderThan11FlagType::RF1_RAND_50, MonsterBehaviorType::RAND_MOVE_50 },
     };
 
     const std::vector<flag_list_ver11> flag2 = {
-        { RF2_OPEN_DOOR, MonsterBehaviorType::OPEN_DOOR },
-        { RF2_BASH_DOOR, MonsterBehaviorType::BASH_DOOR },
-        { RF2_MOVE_BODY, MonsterBehaviorType::MOVE_BODY },
-        { RF2_KILL_BODY, MonsterBehaviorType::KILL_BODY },
-        { RF2_TAKE_ITEM, MonsterBehaviorType::TAKE_ITEM },
-        { RF2_KILL_ITEM, MonsterBehaviorType::KILL_ITEM },
-        { RF2_STUPID, MonsterBehaviorType::STUPID },
-        { RF2_SMART, MonsterBehaviorType::SMART },
+        { SavedataLoreOlderThan11FlagType::RF2_OPEN_DOOR, MonsterBehaviorType::OPEN_DOOR },
+        { SavedataLoreOlderThan11FlagType::RF2_BASH_DOOR, MonsterBehaviorType::BASH_DOOR },
+        { SavedataLoreOlderThan11FlagType::RF2_MOVE_BODY, MonsterBehaviorType::MOVE_BODY },
+        { SavedataLoreOlderThan11FlagType::RF2_KILL_BODY, MonsterBehaviorType::KILL_BODY },
+        { SavedataLoreOlderThan11FlagType::RF2_TAKE_ITEM, MonsterBehaviorType::TAKE_ITEM },
+        { SavedataLoreOlderThan11FlagType::RF2_KILL_ITEM, MonsterBehaviorType::KILL_ITEM },
+        { SavedataLoreOlderThan11FlagType::RF2_STUPID, MonsterBehaviorType::STUPID },
+        { SavedataLoreOlderThan11FlagType::RF2_SMART, MonsterBehaviorType::SMART },
     };
 
     for (const auto &f : flag1) {
