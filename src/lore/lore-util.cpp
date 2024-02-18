@@ -44,7 +44,6 @@ lore_type::lore_type(MonsterRaceId r_idx, monster_lore_mode mode)
     this->aura_flags = (this->r_ptr->aura_flags & this->r_ptr->r_aura_flags);
     this->behavior_flags = (this->r_ptr->behavior_flags & this->r_ptr->r_behavior_flags);
     this->drop_flags = (this->r_ptr->drop_flags & this->r_ptr->r_drop_flags);
-    this->flags7 = (this->r_ptr->flags7 & this->r_ptr->flags7);
     this->resistance_flags = (this->r_ptr->resistance_flags & this->r_ptr->r_resistance_flags);
     this->feature_flags = (this->r_ptr->feature_flags & this->r_ptr->r_feature_flags);
     this->brightness_flags = this->r_ptr->brightness_flags;
