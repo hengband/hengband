@@ -40,9 +40,6 @@ lore_type::lore_type(MonsterRaceId r_idx, monster_lore_mode mode)
     this->speed = this->nightmare ? this->r_ptr->speed + 5 : this->r_ptr->speed;
     this->drop_gold = this->r_ptr->r_drop_gold;
     this->drop_item = this->r_ptr->r_drop_item;
-    this->flags1 = (this->r_ptr->flags1 & this->r_ptr->r_flags1);
-    this->flags2 = (this->r_ptr->flags2 & this->r_ptr->r_flags2);
-    this->flags3 = (this->r_ptr->flags3 & this->r_ptr->r_flags3);
     this->ability_flags = (this->r_ptr->ability_flags & this->r_ptr->r_ability_flags);
     this->aura_flags = (this->r_ptr->aura_flags & this->r_ptr->r_aura_flags);
     this->behavior_flags = (this->r_ptr->behavior_flags & this->r_ptr->r_behavior_flags);

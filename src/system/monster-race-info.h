@@ -130,9 +130,6 @@ public:
     ITEM_NUMBER r_drop_item{}; //!< これまでに撃破時に落としたアイテムの数 / Max number of item dropped at once
     byte r_cast_spell{}; //!< 使った魔法/ブレスの種類数 /  Max unique number of spells seen
     byte r_blows[MAX_NUM_BLOWS]{}; //!< 受けた打撃 /  Number of times each blow type was seen
-    uint32_t r_flags1{}; //!< Observed racial flags
-    uint32_t r_flags2{}; //!< Observed racial flags
-    uint32_t r_flags3{}; //!< Observed racial flags
     EnumClassFlagGroup<MonsterAbilityType> r_ability_flags; //!< 見た能力フラグ(魔法/ブレス) / Observed racial ability flags
     EnumClassFlagGroup<MonsterAuraType> r_aura_flags; //!< 見た能力フラグ(オーラ) / Observed aura flags
     EnumClassFlagGroup<MonsterBehaviorType> r_behavior_flags; //!< 見た能力フラグ（習性） / Observed racial attr flags

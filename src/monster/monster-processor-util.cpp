@@ -266,9 +266,6 @@ old_race_flags::old_race_flags(MonsterRaceId monrace_id)
 
     const auto &monrace = monraces_info[monrace_id];
 
-    this->old_r_flags1 = monrace.r_flags1;
-    this->old_r_flags2 = monrace.r_flags2;
-    this->old_r_flags3 = monrace.r_flags3;
     this->old_r_ability_flags = monrace.r_ability_flags;
     this->old_r_behavior_flags = monrace.r_behavior_flags;
     this->old_r_kind_flags = monrace.r_kind_flags;
