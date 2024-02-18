@@ -1,7 +1,6 @@
 #include "mspell/improper-mspell-remover.h"
 #include "game-option/birth-options.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags2.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/element-resistance-checker.h"
 #include "mspell/high-resistance-checker.h"

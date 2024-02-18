@@ -9,7 +9,6 @@
 #include "floor/geometry.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-mask.h"
-#include "monster-race/race-flags2.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
 #include "mspell/mspell-attack-util.h"

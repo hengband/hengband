@@ -17,8 +17,6 @@
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags7.h"
-#include "monster-race/race-flags8.h"
 #include "object/object-kind-hook.h"
 #include "player-info/class-info.h"
 #include "realm/realm-names-table.h"

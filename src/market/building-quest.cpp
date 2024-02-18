@@ -5,7 +5,6 @@
 #include "info-reader/fixed-map-parser.h"
 #include "market/building-util.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
 #include "monster/monster-list.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"

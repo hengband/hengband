@@ -3,7 +3,6 @@
 #include "lore/lore-util.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-flags.h"
-#include "monster-race/race-flags1.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"

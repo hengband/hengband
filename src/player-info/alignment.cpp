@@ -4,7 +4,6 @@
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags3.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "player-info/equipment-info.h"

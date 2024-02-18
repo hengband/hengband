@@ -9,7 +9,6 @@
 #include "game-option/cheat-options.h"
 #include "io-dump/dump-util.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/z-form.h"

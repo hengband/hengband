@@ -10,8 +10,6 @@
 #include "melee/monster-attack-monster.h"
 #include "monster-attack/monster-attack-player.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
-#include "monster-race/race-flags2.h"
 #include "monster/monster-info.h"
 #include "monster/monster-processor-util.h"
 #include "monster/monster-status-setter.h"
