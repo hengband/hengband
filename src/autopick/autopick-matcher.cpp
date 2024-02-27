@@ -11,7 +11,6 @@
 #include "autopick/autopick-util.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-armor.h"

@@ -2,8 +2,6 @@
 #include "lore/lore-calculator.h"
 #include "lore/lore-util.h"
 #include "monster-race/race-brightness-mask.h"
-#include "monster-race/race-flags3.h"
-#include "monster-race/race-flags7.h"
 #include "player-base/player-class.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"

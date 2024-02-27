@@ -16,8 +16,6 @@
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
-#include "monster-race/race-flags7.h"
 #include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
 #include "object-enchant/item-apply-magic.h"

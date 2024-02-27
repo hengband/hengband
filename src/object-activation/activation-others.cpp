@@ -16,7 +16,6 @@
 #include "hpmp/hp-mp-processor.h"
 #include "mind/mind-archer.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
 #include "player-attack/player-attack.h"

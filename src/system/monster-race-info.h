@@ -79,11 +79,6 @@ public:
     EXP mexp{}; //!< 殺害時基本経験値 / Exp value for kill
     RARITY freq_spell{}; //!< 魔法＆特殊能力仕様頻度(1/n) /  Spell frequency
     MonsterSex sex{}; //!< 性別 / Sex
-    BIT_FLAGS flags1{}; //!< Flags 1 (general)
-    BIT_FLAGS flags2{}; //!< Flags 2 (abilities)
-    BIT_FLAGS flags3{}; //!< Flags 3 (race/resist)
-    BIT_FLAGS flags7{}; //!< Flags 7 (movement related abilities)
-    BIT_FLAGS flags8{}; //!< Flags 8 (wilderness info)
     EnumClassFlagGroup<MonsterAbilityType> ability_flags; //!< 能力フラグ(魔法/ブレス) / Ability Flags
     EnumClassFlagGroup<MonsterAuraType> aura_flags; //!< オーラフラグ / Aura Flags
     EnumClassFlagGroup<MonsterBehaviorType> behavior_flags; //!< 能力フラグ（習性）
@@ -130,9 +125,6 @@ public:
     ITEM_NUMBER r_drop_item{}; //!< これまでに撃破時に落としたアイテムの数 / Max number of item dropped at once
     byte r_cast_spell{}; //!< 使った魔法/ブレスの種類数 /  Max unique number of spells seen
     byte r_blows[MAX_NUM_BLOWS]{}; //!< 受けた打撃 /  Number of times each blow type was seen
-    uint32_t r_flags1{}; //!< Observed racial flags
-    uint32_t r_flags2{}; //!< Observed racial flags
-    uint32_t r_flags3{}; //!< Observed racial flags
     EnumClassFlagGroup<MonsterAbilityType> r_ability_flags; //!< 見た能力フラグ(魔法/ブレス) / Observed racial ability flags
     EnumClassFlagGroup<MonsterAuraType> r_aura_flags; //!< 見た能力フラグ(オーラ) / Observed aura flags
     EnumClassFlagGroup<MonsterBehaviorType> r_behavior_flags; //!< 見た能力フラグ（習性） / Observed racial attr flags

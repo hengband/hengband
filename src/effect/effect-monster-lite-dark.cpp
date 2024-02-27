@@ -2,7 +2,6 @@
 #include "effect/effect-monster-util.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
-#include "monster-race/race-flags3.h"
 #include "monster/monster-info.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"

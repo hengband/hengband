@@ -9,7 +9,6 @@
 #include "floor/geometry.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-mask.h"
-#include "monster-race/race-flags2.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
 #include "mspell/mspell-attack-util.h"
@@ -243,7 +242,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[msa_ptr->m_idx];
     auto *r_ptr = &m_ptr->get_monrace();
-    if (r_ptr->flags2 & RF2_STUPID) {
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID)) {
         return rand_choice(msa_ptr->mspells);
     }
 

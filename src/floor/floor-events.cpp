@@ -15,7 +15,6 @@
 #include "main/sound-of-music.h"
 #include "mind/mind-ninja.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
 #include "monster/monster-status.h"

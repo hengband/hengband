@@ -3,7 +3,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-flags.h"
-#include "monster-race/race-flags2.h"
 #include "monster/monster-status.h"
 #include "player-info/equipment-info.h"
 #include "system/floor-type-definition.h"

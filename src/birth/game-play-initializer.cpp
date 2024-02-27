@@ -7,8 +7,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "market/arena.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
-#include "monster-race/race-flags7.h"
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"

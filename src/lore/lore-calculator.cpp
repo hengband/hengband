@@ -3,7 +3,6 @@
 #include "lore/lore-util.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-flags.h"
-#include "monster-race/race-flags1.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -159,9 +158,6 @@ void set_flags_for_full_knowledge(lore_type *lore_ptr)
         lore_ptr->drop_gold = 0;
     }
 
-    lore_ptr->flags1 = lore_ptr->r_ptr->flags1;
-    lore_ptr->flags2 = lore_ptr->r_ptr->flags2;
-    lore_ptr->flags3 = lore_ptr->r_ptr->flags3;
     lore_ptr->ability_flags = lore_ptr->r_ptr->ability_flags;
     lore_ptr->aura_flags = lore_ptr->r_ptr->aura_flags;
     lore_ptr->behavior_flags = lore_ptr->r_ptr->behavior_flags;

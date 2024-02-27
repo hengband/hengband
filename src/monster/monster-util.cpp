@@ -7,8 +7,6 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster-race/race-flags-resistance.h"
-#include "monster-race/race-flags1.h"
-#include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-misc-flags.h"
 #include "spell/summon-types.h"
@@ -124,11 +122,6 @@ static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonsterRaceI
     case DUNGEON_MODE_AND:
     case DUNGEON_MODE_NAND: {
         std::vector<bool> is_possible = {
-            all_bits(r_ptr->flags1, d_ptr->mflags1),
-            all_bits(r_ptr->flags2, d_ptr->mflags2),
-            all_bits(r_ptr->flags3, d_ptr->mflags3),
-            all_bits(r_ptr->flags7, d_ptr->mflags7),
-            all_bits(r_ptr->flags8, d_ptr->mflags8),
             is_possible_monster_and(r_ptr->ability_flags, d_ptr->mon_ability_flags),
             is_possible_monster_and(r_ptr->behavior_flags, d_ptr->mon_behavior_flags),
             is_possible_monster_and(r_ptr->resistance_flags, d_ptr->mon_resistance_flags),
@@ -151,11 +144,6 @@ static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonsterRaceI
     case DUNGEON_MODE_OR:
     case DUNGEON_MODE_NOR: {
         std::vector<bool> is_possible = {
-            any_bits(r_ptr->flags1, d_ptr->mflags1),
-            any_bits(r_ptr->flags2, d_ptr->mflags2),
-            any_bits(r_ptr->flags3, d_ptr->mflags3),
-            any_bits(r_ptr->flags7, d_ptr->mflags7),
-            any_bits(r_ptr->flags8, d_ptr->mflags8),
             is_possible_monster_or(r_ptr->ability_flags, d_ptr->mon_ability_flags),
             is_possible_monster_or(r_ptr->behavior_flags, d_ptr->mon_behavior_flags),
             is_possible_monster_or(r_ptr->resistance_flags, d_ptr->mon_resistance_flags),

@@ -6,7 +6,6 @@
 #include "monster-floor/monster-lite-util.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-brightness-flags.h"
-#include "monster-race/race-flags7.h"
 #include "monster/monster-status.h"
 #include "player-base/player-class.h"
 #include "player-info/ninja-data-type.h"

@@ -34,8 +34,6 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-brightness-flags.h"
 #include "monster-race/race-flags-resistance.h"
-#include "monster-race/race-flags3.h"
-#include "monster-race/race-flags7.h"
 #include "monster/monster-describer.h"
 #include "player-base/player-class.h"
 #include "player-info/equipment-info.h"

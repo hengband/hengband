@@ -18,7 +18,6 @@
 #ifdef JP
 #else
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
 #include "object/tval-types.h"
 #include "system/monster-race-info.h"
 #endif
