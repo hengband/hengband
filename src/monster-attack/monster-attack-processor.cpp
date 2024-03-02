@@ -14,7 +14,6 @@
 #include "monster/monster-processor-util.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
-#include "monster/monster-util.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -123,7 +122,7 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
  */
 bool process_monster_attack_to_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, Grid *g_ptr, bool can_cross)
 {
-    if (!turn_flags_ptr->do_move || !is_monster(g_ptr->m_idx)) {
+    if (!turn_flags_ptr->do_move || !g_ptr->has_monster()) {
         return false;
     }
 

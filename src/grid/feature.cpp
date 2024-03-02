@@ -7,7 +7,6 @@
 #include "grid/lighting-colors-table.h"
 #include "mind/mind-ninja.h"
 #include "monster/monster-update.h"
-#include "monster/monster-util.h"
 #include "player/special-defense-types.h"
 #include "room/door-definition.h"
 #include "system/dungeon-info.h"
@@ -235,7 +234,7 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
         g_ptr->info &= ~(CAVE_MARK);
     }
 
-    if (is_monster(g_ptr->m_idx)) {
+    if (g_ptr->has_monster()) {
         update_monster(player_ptr, g_ptr->m_idx, false);
     }
 
@@ -265,7 +264,7 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
         auto *cc_ptr = &floor_ptr->grid_array[yy][xx];
         cc_ptr->info |= CAVE_GLOW;
         if (cc_ptr->is_view()) {
-            if (is_monster(cc_ptr->m_idx)) {
+            if (cc_ptr->has_monster()) {
                 update_monster(player_ptr, cc_ptr->m_idx, false);
             }
 

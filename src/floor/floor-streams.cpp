@@ -28,7 +28,6 @@
 #include "grid/grid.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
-#include "monster/monster-util.h"
 #include "room/lake-types.h"
 #include "spell-kind/spells-floor.h"
 #include "system/artifact-type-definition.h"
@@ -344,7 +343,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
             }
 
             auto *r_ptr = &monraces_info[floor.m_list[grid.m_idx].r_idx];
-            if (is_monster(grid.m_idx) && !(streamer.flags.has(TerrainCharacteristics::PLACE) && monster_can_cross_terrain(player_ptr, feat, r_ptr, 0))) {
+            if (grid.has_monster() && !(streamer.flags.has(TerrainCharacteristics::PLACE) && monster_can_cross_terrain(player_ptr, feat, r_ptr, 0))) {
                 /* Delete the monster (if any) */
                 delete_monster(player_ptr, pos.y, pos.x);
             }

@@ -23,7 +23,6 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
-#include "monster/monster-util.h"
 #include "object-enchant/trc-types.h"
 #include "object/object-kind-hook.h"
 #include "player-attack/player-attack.h"
@@ -180,7 +179,7 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
             continue;
         }
 
-        if (!is_monster(grid_new.m_idx)) {
+        if (!grid_new.has_monster()) {
             if (tm_idx) {
                 msg_print(_("失敗！", "Failed!"));
             } else {

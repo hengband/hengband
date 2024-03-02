@@ -8,7 +8,6 @@
 #include "grid/trap.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster/monster-util.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -28,7 +27,7 @@ static bool player_grid(PlayerType *player_ptr, Grid *g_ptr)
 static bool is_cave_empty_grid(PlayerType *player_ptr, Grid *g_ptr)
 {
     bool is_empty_grid = g_ptr->cave_has_flag(TerrainCharacteristics::PLACE);
-    is_empty_grid &= !is_monster(g_ptr->m_idx);
+    is_empty_grid &= !g_ptr->has_monster();
     is_empty_grid &= !player_grid(player_ptr, g_ptr);
     return is_empty_grid;
 }
@@ -140,7 +139,7 @@ static void vault_trap_aux(FloorType *floor_ptr, POSITION y, POSITION x, POSITIO
         }
 
         g_ptr = &floor_ptr->grid_array[y1][x1];
-        if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty() || is_monster(g_ptr->m_idx)) {
+        if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty() || g_ptr->has_monster()) {
             continue;
         }
 

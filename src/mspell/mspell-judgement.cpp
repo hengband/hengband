@@ -20,7 +20,6 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster/monster-status.h"
-#include "monster/monster-util.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/race-info.h"
@@ -66,7 +65,7 @@ bool direct_beam(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, 
         const auto &grid = floor.get_grid(pos);
         if (y == y2 && x == x2) {
             hit2 = true;
-        } else if (is_friend && is_monster(grid.m_idx) && !m_ptr->is_hostile_to_melee(floor.m_list[grid.m_idx])) {
+        } else if (is_friend && grid.has_monster() && !m_ptr->is_hostile_to_melee(floor.m_list[grid.m_idx])) {
             return false;
         }
 

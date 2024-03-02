@@ -27,7 +27,6 @@
 #include "monster/monster-processor-util.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
-#include "monster/monster-util.h"
 #include "pet/pet-util.h"
 #include "player/player-status-flags.h"
 #include "system/angband-system.h"
@@ -67,7 +66,7 @@ static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, con
         return true;
     }
 
-    if (is_monster(grid.m_idx)) {
+    if (grid.has_monster()) {
         turn_flags_ptr->do_move = true;
         return true;
     }

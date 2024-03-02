@@ -20,7 +20,6 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-update.h"
-#include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"
@@ -111,7 +110,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            if (is_monster(floor_ptr->grid_array[y][x].m_idx)) {
+            if (floor_ptr->grid_array[y][x].has_monster()) {
                 continue;
             }
 
@@ -179,7 +178,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            if (!is_monster(grid.m_idx)) {
+            if (!grid.has_monster()) {
                 continue;
             }
 
@@ -219,7 +218,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                         continue;
                     }
 
-                    if (is_monster(grid_neighbor.m_idx)) {
+                    if (grid_neighbor.has_monster()) {
                         continue;
                     }
 
@@ -250,7 +249,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                     msg_format(_("%s^は岩石に埋もれてしまった！", "%s^ is embedded in the rock!"), m_name.data());
                 }
 
-                if (is_monster(grid.m_idx)) {
+                if (grid.has_monster()) {
                     const auto &m_ref = floor_ptr->m_list[grid.m_idx];
                     if (record_named_pet && m_ref.is_named_pet()) {
                         const auto m2_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);

@@ -167,7 +167,7 @@ bool clean_shot(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, P
     for (const auto &[y, x] : grid_g) {
         const Pos2D pos(y, x);
         const auto &grid = floor_ptr->get_grid(pos);
-        if (is_monster(grid.m_idx) && (y != y2 || x != x2)) {
+        if (grid.has_monster() && (y != y2 || x != x2)) {
             auto *m_ptr = &floor_ptr->m_list[grid.m_idx];
             if (is_friend == m_ptr->is_pet()) {
                 return false;

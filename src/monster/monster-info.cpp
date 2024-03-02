@@ -19,7 +19,6 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
-#include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
 #include "player/player-status-flags.h"
 #include "system/floor-type-definition.h"
@@ -148,7 +147,7 @@ bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, MonsterRa
     if (player_ptr->is_located_at(pos)) {
         return false;
     }
-    if (is_monster(grid.m_idx)) {
+    if (grid.has_monster()) {
         return false;
     }
 

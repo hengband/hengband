@@ -64,7 +64,7 @@
  */
 static ProcessResult is_affective(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
-    if (!is_monster(em_ptr->g_ptr->m_idx)) {
+    if (!em_ptr->g_ptr->has_monster()) {
         return ProcessResult::PROCESS_FALSE;
     }
     if (is_monster(em_ptr->src_idx) && (em_ptr->g_ptr->m_idx == em_ptr->src_idx)) {

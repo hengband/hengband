@@ -33,7 +33,6 @@
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
-#include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-mark-types.h"
@@ -336,7 +335,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                 continue;
             }
 
-            if (is_monster(grid.m_idx)) {
+            if (grid.has_monster()) {
                 auto &monster = floor.m_list[grid.m_idx];
                 auto &monrace = monster.get_monrace();
 

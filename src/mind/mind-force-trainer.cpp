@@ -17,7 +17,6 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
-#include "monster/monster-util.h"
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
@@ -212,7 +211,7 @@ bool shock_power(PlayerType *player_ptr)
     PLAYER_LEVEL plev = player_ptr->lev;
     int dam = damroll(8 + ((plev - 5) / 4) + boost / 12, 8);
     fire_beam(player_ptr, AttributeType::MISSILE, dir, dam);
-    if (!is_monster(player_ptr->current_floor_ptr->grid_array[y][x].m_idx)) {
+    if (!player_ptr->current_floor_ptr->grid_array[y][x].has_monster()) {
         return true;
     }
 

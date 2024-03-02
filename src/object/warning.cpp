@@ -17,7 +17,6 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
-#include "monster/monster-util.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
@@ -367,7 +366,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
 
             const auto *g_ptr = &floor.grid_array[my][mx];
 
-            if (!is_monster(g_ptr->m_idx)) {
+            if (!g_ptr->has_monster()) {
                 continue;
             }
 

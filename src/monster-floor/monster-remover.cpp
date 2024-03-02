@@ -9,7 +9,6 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
-#include "monster/monster-util.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -159,7 +158,7 @@ void delete_monster(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     g_ptr = &floor_ptr->grid_array[y][x];
-    if (is_monster(g_ptr->m_idx)) {
+    if (g_ptr->has_monster()) {
         delete_monster_idx(player_ptr, g_ptr->m_idx);
     }
 }

@@ -355,7 +355,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         if (player_can_see_bold(player_ptr, y, x)) {
             obvious = true;
         }
-        if (is_monster(grid.m_idx)) {
+        if (grid.has_monster()) {
             update_monster(player_ptr, grid.m_idx, false);
         }
 
@@ -408,7 +408,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         if (player_can_see_bold(player_ptr, y, x)) {
             obvious = true;
         }
-        if (is_monster(grid.m_idx)) {
+        if (grid.has_monster()) {
             update_monster(player_ptr, grid.m_idx, false);
         }
 

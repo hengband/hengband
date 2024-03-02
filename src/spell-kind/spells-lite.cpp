@@ -14,7 +14,6 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
-#include "monster/monster-util.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-launcher.h"
 #include "system/angband-system.h"
@@ -63,7 +62,7 @@ static void cave_temp_room_lite(PlayerType *player_ptr, const std::vector<Pos2D>
         auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
         g_ptr->info &= ~(CAVE_TEMP);
         g_ptr->info |= (CAVE_GLOW);
-        if (is_monster(g_ptr->m_idx)) {
+        if (g_ptr->has_monster()) {
             PERCENTAGE chance = 25;
             auto *m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
             auto *r_ptr = &m_ptr->get_monrace();
@@ -133,7 +132,7 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
             note_spot(player_ptr, point.y, point.x);
         }
 
-        if (is_monster(grid.m_idx)) {
+        if (grid.has_monster()) {
             update_monster(player_ptr, grid.m_idx, false);
         }
 

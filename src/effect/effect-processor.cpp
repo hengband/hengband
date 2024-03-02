@@ -483,7 +483,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
         if (!src_idx && (project_m_n == 1) && none_bits(flag, PROJECT_JUMP)) {
             const Pos2D pos_project(project_m_y, project_m_x);
             const auto &grid = floor.get_grid(pos_project);
-            if (is_monster(grid.m_idx)) {
+            if (grid.has_monster()) {
                 auto &monster = floor.m_list[grid.m_idx];
                 if (monster.ml) {
                     if (!player_ptr->effects()->hallucination()->is_hallucinated()) {

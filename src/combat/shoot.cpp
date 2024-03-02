@@ -38,7 +38,6 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
-#include "monster/monster-util.h"
 #include "object/object-broken.h"
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
@@ -633,7 +632,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             if (snipe_type == SP_KILL_WALL) {
                 g_ptr = &floor_ptr->grid_array[ny][nx];
 
-                if (g_ptr->cave_has_flag(TerrainCharacteristics::HURT_ROCK) && !is_monster(g_ptr->m_idx)) {
+                if (g_ptr->cave_has_flag(TerrainCharacteristics::HURT_ROCK) && !g_ptr->has_monster()) {
                     if (any_bits(g_ptr->info, (CAVE_MARK))) {
                         msg_print(_("岩が砕け散った。", "Wall rocks were shattered."));
                     }
@@ -656,7 +655,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             }
 
             /* Stopped by walls/doors */
-            if (!cave_has_flag_bold(floor_ptr, ny, nx, TerrainCharacteristics::PROJECT) && !is_monster(floor_ptr->grid_array[ny][nx].m_idx)) {
+            if (!cave_has_flag_bold(floor_ptr, ny, nx, TerrainCharacteristics::PROJECT) && !floor_ptr->grid_array[ny][nx].has_monster()) {
                 break;
             }
 
@@ -715,7 +714,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             y = ny;
 
             /* Monster here, Try to hit it */
-            if (is_monster(floor_ptr->grid_array[y][x].m_idx)) {
+            if (floor_ptr->grid_array[y][x].has_monster()) {
                 sound(SOUND_SHOOT_HIT);
                 Grid *c_mon_ptr = &floor_ptr->grid_array[y][x];
 

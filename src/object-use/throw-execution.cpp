@@ -38,7 +38,6 @@
 #include "monster/monster-pain-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
-#include "monster/monster-util.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-expendable.h"
 #include "object-hook/hook-weapon.h"
@@ -264,7 +263,7 @@ void ObjectThrowEntity::display_potion_throw()
 
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *angry_m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[this->y][this->x].m_idx];
-    if (!is_monster(floor_ptr->grid_array[this->y][this->x].m_idx) || !angry_m_ptr->is_friendly() || angry_m_ptr->is_invulnerable()) {
+    if (!floor_ptr->grid_array[this->y][this->x].has_monster() || !angry_m_ptr->is_friendly() || angry_m_ptr->is_invulnerable()) {
         this->do_drop = false;
         return;
     }

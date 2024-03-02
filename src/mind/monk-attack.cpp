@@ -18,7 +18,6 @@
 #include "monster-race/monster-race.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
-#include "monster/monster-util.h"
 #include "player-attack/player-attack.h"
 #include "player-base/player-class.h"
 #include "player-info/monk-data-type.h"
@@ -273,7 +272,7 @@ bool double_attack(PlayerType *player_ptr)
     }
     POSITION y = player_ptr->y + ddy[dir];
     POSITION x = player_ptr->x + ddx[dir];
-    if (!is_monster(player_ptr->current_floor_ptr->grid_array[y][x].m_idx)) {
+    if (!player_ptr->current_floor_ptr->grid_array[y][x].has_monster()) {
         msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
         msg_print(nullptr);
         return true;
@@ -288,7 +287,7 @@ bool double_attack(PlayerType *player_ptr)
     }
 
     do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
-    if (is_monster(player_ptr->current_floor_ptr->grid_array[y][x].m_idx)) {
+    if (player_ptr->current_floor_ptr->grid_array[y][x].has_monster()) {
         handle_stuff(player_ptr);
         do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
     }

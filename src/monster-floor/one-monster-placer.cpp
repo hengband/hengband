@@ -169,7 +169,7 @@ static bool check_quest_placeable(const FloorType &floor, MonsterRaceId r_idx)
     int number_mon = 0;
     for (int i2 = 0; i2 < floor.width; ++i2) {
         for (int j2 = 0; j2 < floor.height; j2++) {
-            auto quest_monster = is_monster(floor.grid_array[j2][i2].m_idx);
+            auto quest_monster = floor.grid_array[j2][i2].has_monster();
             quest_monster &= (floor.m_list[floor.grid_array[j2][i2].m_idx].r_idx == q_ptr->r_idx);
             if (quest_monster) {
                 number_mon++;
@@ -285,7 +285,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, 
 
     g_ptr->m_idx = m_pop(&floor);
     hack_m_idx_ii = g_ptr->m_idx;
-    if (!is_monster(g_ptr->m_idx)) {
+    if (!g_ptr->has_monster()) {
         return false;
     }
 

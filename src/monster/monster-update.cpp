@@ -21,7 +21,6 @@
 #include "monster/monster-info.h"
 #include "monster/monster-processor-util.h"
 #include "monster/monster-status.h"
-#include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
 #include "player-base/player-class.h"
 #include "player-info/samurai-data-type.h"
@@ -78,7 +77,7 @@ bool update_riding_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, M
     }
 
     player_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = g_ptr->m_idx;
-    if (is_monster(g_ptr->m_idx)) {
+    if (g_ptr->has_monster()) {
         y_ptr->fy = oy;
         y_ptr->fx = ox;
         update_monster(player_ptr, g_ptr->m_idx, true);
