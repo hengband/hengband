@@ -334,3 +334,21 @@ MONSTER_NUMBER summon_PLASMA(PlayerType *player_ptr, POSITION y, POSITION x, int
     msg_print(_("プーラーズーマーッ！！", "P--la--s--ma--!!"));
     return count;
 }
+
+/*!
+ * @brief ウサウサストライカー召喚の処理。 /
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param y 対象の地点のy座標
+ * @param x 対象の地点のx座標
+ * @param m_idx 呪文を唱えるモンスターID
+ * @return 召喚したモンスターの数を返す。
+ */
+MONSTER_NUMBER summon_LAFFEY_II(PlayerType *player_ptr, const Pos2D &position, MONSTER_IDX m_idx)
+{
+    auto count = 0;
+    constexpr auto summon_num = 2;
+    for (auto k = 0; k < summon_num; k++) {
+        count += summon_named_creature(player_ptr, m_idx, position.y, position.x, MonsterRaceId::BUNBUN_STRIKERS, PM_NONE);
+    }
+    return count;
+}

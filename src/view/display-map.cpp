@@ -9,8 +9,6 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
-#include "monster-race/race-flags2.h"
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "system/baseitem-info.h"
@@ -303,7 +301,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
         break;
     }
 
-    if (grid.m_idx && display_autopick != 0) {
+    if (grid.has_monster() && display_autopick != 0) {
         set_term_color(player_ptr, y, x, ap, cp);
         return;
     }

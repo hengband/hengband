@@ -41,10 +41,6 @@ struct turn_flags {
 struct old_race_flags {
     old_race_flags(MonsterRaceId monrace_id);
 
-    BIT_FLAGS old_r_flags1 = 0;
-    BIT_FLAGS old_r_flags2 = 0;
-    BIT_FLAGS old_r_flags3 = 0;
-    BIT_FLAGS old_r_flagsr = 0;
     EnumClassFlagGroup<MonsterAbilityType> old_r_ability_flags{};
     EnumClassFlagGroup<MonsterBehaviorType> old_r_behavior_flags{};
     EnumClassFlagGroup<MonsterKindType> old_r_kind_flags{};

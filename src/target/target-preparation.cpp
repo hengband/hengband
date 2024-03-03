@@ -3,7 +3,6 @@
 #include "game-option/input-options.h"
 #include "grid/grid.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
@@ -87,7 +86,7 @@ static bool target_set_accept(PlayerType *player_ptr, const Pos2D &pos)
     }
 
     const auto &grid = floor.get_grid(pos);
-    if (grid.m_idx) {
+    if (grid.has_monster()) {
         auto &monster = floor.m_list[grid.m_idx];
         if (monster.ml) {
             return true;

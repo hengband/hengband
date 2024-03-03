@@ -14,7 +14,6 @@
 #include "monster-attack/monster-attack-table.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-flags.h"
-#include "monster-race/race-flags1.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
@@ -367,7 +366,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
 
             const auto *g_ptr = &floor.grid_array[my][mx];
 
-            if (!g_ptr->m_idx) {
+            if (!g_ptr->has_monster()) {
                 continue;
             }
 

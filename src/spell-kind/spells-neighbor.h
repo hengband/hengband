@@ -11,5 +11,5 @@ bool wall_stone(PlayerType *player_ptr);
 bool destroy_doors_touch(PlayerType *player_ptr);
 bool disarm_traps_touch(PlayerType *player_ptr);
 bool sleep_monsters_touch(PlayerType *player_ptr);
-bool animate_dead(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x);
+bool animate_dead(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, POSITION x);
 void wall_breaker(PlayerType *player_ptr);

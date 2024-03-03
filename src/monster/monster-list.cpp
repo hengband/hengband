@@ -24,10 +24,6 @@
 #include "monster-race/monster-kind-mask.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-brightness-mask.h"
-#include "monster-race/race-flags1.h"
-#include "monster-race/race-flags2.h"
-#include "monster-race/race-flags3.h"
-#include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
@@ -453,7 +449,7 @@ int get_monster_crowd_number(FloorType *floor_ptr, MONSTER_IDX m_idx)
         if (!in_bounds(floor_ptr, ay, ax)) {
             continue;
         }
-        if (floor_ptr->grid_array[ay][ax].m_idx > 0) {
+        if (floor_ptr->grid_array[ay][ax].has_monster()) {
             count++;
         }
     }

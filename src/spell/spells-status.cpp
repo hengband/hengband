@@ -546,7 +546,7 @@ bool fishing(PlayerType *player_ptr)
         return false;
     }
 
-    if (floor_ptr->grid_array[y][x].m_idx) {
+    if (floor_ptr->grid_array[y][x].has_monster()) {
         const auto m_name = monster_desc(player_ptr, &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx], 0);
         msg_format(_("%sが邪魔だ！", "%s^ is standing in your way."), m_name.data());
         PlayerEnergy(player_ptr).reset_player_turn();

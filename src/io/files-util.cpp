@@ -17,7 +17,6 @@
 #include "io/input-key-acceptor.h"
 #include "io/uid-checker.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
 #include "system/angband-exceptions.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"

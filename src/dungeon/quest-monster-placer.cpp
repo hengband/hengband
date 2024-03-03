@@ -5,7 +5,6 @@
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
 #include "monster/monster-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"

@@ -19,8 +19,6 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
-#include "monster-race/race-flags3.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
@@ -249,7 +247,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         const auto y = player_ptr->y + ddy[dir];
         const auto x = player_ptr->x + ddx[dir];
         const auto &grid = floor.grid_array[y][x];
-        if (!grid.m_idx) {
+        if (!grid.has_monster()) {
             msg_print(_("邪悪な存在を感じとれません！", "You sense no evil there!"));
             return true;
         }
@@ -289,7 +287,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         const auto y = player_ptr->y + ddy[dir];
         const auto x = player_ptr->x + ddx[dir];
         auto &grid = floor.grid_array[y][x];
-        if (!grid.m_idx) {
+        if (!grid.has_monster()) {
             msg_print(_("あなたは何もない場所で手を振った。", "You wave your hands in the air."));
             return true;
         }

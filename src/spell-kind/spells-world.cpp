@@ -22,7 +22,6 @@
 #include "market/building-util.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "system/angband-system.h"

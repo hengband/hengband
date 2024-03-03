@@ -66,6 +66,19 @@ void MonsterRaceInfo::kill_unique()
     }
 }
 
+std::string MonsterRaceInfo::get_pronoun_of_summoned_kin() const
+{
+    if (this->kind_flags.has(MonsterKindType::UNIQUE)) {
+        return _("手下", "minions");
+    }
+    switch (this->idx) {
+    case MonsterRaceId::LAFFEY_II:
+        return _("ウサウサストライカー", "Bunbun Strikers");
+    default:
+        return _("仲間", "kin");
+    }
+}
+
 const std::map<MonsterRaceId, std::set<MonsterRaceId>> MonraceList::unified_uniques = {
     { MonsterRaceId::BANORLUPART, { MonsterRaceId::BANOR, MonsterRaceId::LUPART } },
 };

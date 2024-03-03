@@ -70,10 +70,6 @@ struct lore_type {
     byte speed;
     ITEM_NUMBER drop_gold;
     ITEM_NUMBER drop_item;
-    BIT_FLAGS flags1;
-    BIT_FLAGS flags2;
-    BIT_FLAGS flags3;
-    BIT_FLAGS flags7;
     EnumClassFlagGroup<MonsterAbilityType> ability_flags;
     EnumClassFlagGroup<MonsterAuraType> aura_flags;
     EnumClassFlagGroup<MonsterBehaviorType> behavior_flags;

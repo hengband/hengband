@@ -20,10 +20,6 @@
 #include "monster-attack/monster-attack-processor.h"
 #include "monster-floor/monster-object.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
-#include "monster-race/race-flags2.h"
-#include "monster-race/race-flags7.h"
-#include "monster-race/race-flags8.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-flag-types.h"
@@ -70,7 +66,7 @@ static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, con
         return true;
     }
 
-    if (grid.m_idx > 0) {
+    if (grid.has_monster()) {
         turn_flags_ptr->do_move = true;
         return true;
     }

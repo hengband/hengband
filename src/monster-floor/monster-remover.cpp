@@ -5,8 +5,6 @@
 #include "grid/grid.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-brightness-mask.h"
-#include "monster-race/race-flags2.h"
-#include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
@@ -160,7 +158,7 @@ void delete_monster(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     g_ptr = &floor_ptr->grid_array[y][x];
-    if (g_ptr->m_idx) {
+    if (g_ptr->has_monster()) {
         delete_monster_idx(player_ptr, g_ptr->m_idx);
     }
 }

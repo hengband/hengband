@@ -33,9 +33,6 @@
 #include "monster-floor/quantum-effect.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
-#include "monster-race/race-flags1.h"
-#include "monster-race/race-flags2.h"
-#include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
@@ -455,7 +452,7 @@ bool decide_monster_multiplication(PlayerType *player_ptr, MONSTER_IDX m_idx, PO
                 continue;
             }
 
-            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
+            if (player_ptr->current_floor_ptr->grid_array[y][x].has_monster()) {
                 k++;
             }
         }

@@ -62,7 +62,7 @@ void SpellsMirrorMaster::remove_mirror(int y, int x)
             reset_bits(g_ptr->info, CAVE_MARK);
         }
 
-        if (g_ptr->m_idx) {
+        if (g_ptr->has_monster()) {
             update_monster(this->player_ptr, g_ptr->m_idx, false);
         }
 
@@ -196,7 +196,7 @@ void SpellsMirrorMaster::seal_of_mirror(const int dam)
                 continue;
             }
 
-            if (g_ref.m_idx == 0) {
+            if (!g_ref.has_monster()) {
                 this->remove_mirror(y, x);
             }
         }
@@ -334,7 +334,7 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
             }
             const auto &grid = floor.grid_array[project_m_y][project_m_x];
             const auto &monster = floor.m_list[grid.m_idx];
-            if (project_m_n == 1 && grid.m_idx > 0 && monster.ml) {
+            if (project_m_n == 1 && grid.has_monster() && monster.ml) {
                 if (!this->player_ptr->effects()->hallucination()->is_hallucinated()) {
                     monster_race_track(this->player_ptr, monster.ap_r_idx);
                 }
@@ -431,7 +431,7 @@ static bool activate_super_ray_effect(PlayerType *player_ptr, int y, int x, int 
     const auto *floor_ptr = player_ptr->current_floor_ptr;
     const auto *g_ptr = &floor_ptr->grid_array[project_m_y][project_m_x];
     const auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-    if (project_m_n == 1 && g_ptr->m_idx > 0 && m_ptr->ml) {
+    if (project_m_n == 1 && g_ptr->has_monster() && m_ptr->ml) {
         if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
             monster_race_track(player_ptr, m_ptr->ap_r_idx);
         }

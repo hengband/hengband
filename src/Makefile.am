@@ -519,9 +519,6 @@ hengband_SOURCES = \
 	monster-race/race-drop-flags.h \
 	monster-race/race-feature-flags.h \
 	monster-race/race-flags-resistance.h \
-	monster-race/race-flags1.h monster-race/race-flags2.h \
-	monster-race/race-flags3.h \
-	monster-race/race-flags7.h monster-race/race-flags8.h \
 	monster-race/race-indice-types.h \
 	monster-race/race-kind-flags.h \
 	monster-race/race-misc-flags.h \

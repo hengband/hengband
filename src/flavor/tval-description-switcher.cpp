@@ -18,7 +18,6 @@
 #include "util/enum-converter.h"
 #ifdef JP
 #else
-#include "monster-race/race-flags1.h"
 #include "player-info/class-info.h"
 #endif
 

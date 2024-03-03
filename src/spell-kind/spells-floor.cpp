@@ -29,7 +29,6 @@
 #include "mind/mind-ninja.h"
 #include "monster-floor/monster-lite.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
@@ -336,7 +335,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                 continue;
             }
 
-            if (grid.m_idx) {
+            if (grid.has_monster()) {
                 auto &monster = floor.m_list[grid.m_idx];
                 auto &monrace = monster.get_monrace();
 

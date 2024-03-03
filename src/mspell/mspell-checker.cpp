@@ -23,15 +23,13 @@
 #include "monster-floor/monster-move.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-mask.h"
-#include "monster-race/race-flags2.h"
-#include "monster-race/race-flags3.h"
-#include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
+#include "monster/monster-util.h"
 #include "mspell/assign-monster-spell.h"
 #include "mspell/improper-mspell-remover.h"
 #include "mspell/mspell-judgement.h"
@@ -169,7 +167,7 @@ bool clean_shot(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, P
     for (const auto &[y, x] : grid_g) {
         const Pos2D pos(y, x);
         const auto &grid = floor_ptr->get_grid(pos);
-        if ((grid.m_idx > 0) && (y != y2 || x != x2)) {
+        if (grid.has_monster() && (y != y2 || x != x2)) {
             auto *m_ptr = &floor_ptr->m_list[grid.m_idx];
             if (is_friend == m_ptr->is_pet()) {
                 return false;

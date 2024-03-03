@@ -10,7 +10,7 @@ class MonsterRaceInfo;
 class PlayerType;
 class EffectMonster {
 public:
-    EffectMonster(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, int dam, AttributeType attribute, BIT_FLAGS flag, bool see_s_msg);
+    EffectMonster(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITION y, POSITION x, int dam, AttributeType attribute, BIT_FLAGS flag, bool see_s_msg);
 
     char killer[MAX_MONSTER_NAME]{};
     bool obvious = false;
@@ -29,7 +29,7 @@ public:
     short photo = 0;
     std::string note = "";
 
-    MONSTER_IDX who;
+    MONSTER_IDX src_idx;
     POSITION r;
     POSITION y;
     POSITION x;

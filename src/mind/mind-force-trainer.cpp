@@ -14,7 +14,6 @@
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-brightness-mask.h"
-#include "monster-race/race-flags7.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
@@ -212,7 +211,7 @@ bool shock_power(PlayerType *player_ptr)
     PLAYER_LEVEL plev = player_ptr->lev;
     int dam = damroll(8 + ((plev - 5) / 4) + boost / 12, 8);
     fire_beam(player_ptr, AttributeType::MISSILE, dir, dam);
-    if (!player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
+    if (!player_ptr->current_floor_ptr->grid_array[y][x].has_monster()) {
         return true;
     }
 

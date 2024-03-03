@@ -1,6 +1,5 @@
 #include "store/service-checker.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags3.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-value.h"
 #include "object/tval-types.h"

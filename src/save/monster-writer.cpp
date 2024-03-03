@@ -204,9 +204,6 @@ void wr_lore(MonsterRaceId r_idx)
     wr_byte(r_ptr->r_blows[2]);
     wr_byte(r_ptr->r_blows[3]);
 
-    wr_u32b(r_ptr->r_flags1);
-    wr_u32b(r_ptr->r_flags2);
-    wr_u32b(r_ptr->r_flags3);
     wr_FlagGroup(r_ptr->r_resistance_flags, wr_byte);
     wr_FlagGroup(r_ptr->r_ability_flags, wr_byte);
     wr_FlagGroup(r_ptr->r_aura_flags, wr_byte);

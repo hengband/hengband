@@ -6,8 +6,6 @@
 #include "io/input-key-acceptor.h"
 #include "lore/lore-util.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
-#include "monster-race/race-flags7.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"

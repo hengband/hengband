@@ -141,19 +141,19 @@ bool set_ele_immune(PlayerType *player_ptr, uint32_t immune_type, TIME_EFFECT v)
         player_ptr->ele_immune = v;
         std::string element;
         switch (immune_type) {
-        case ATTACK_ACID:
+        case DEFENSE_ACID:
             element = _("酸", "acid!");
             break;
-        case ATTACK_ELEC:
+        case DEFENSE_ELEC:
             element = _("電撃", "electricity!");
             break;
-        case ATTACK_FIRE:
+        case DEFENSE_FIRE:
             element = _("火炎", "fire!");
             break;
-        case ATTACK_COLD:
+        case DEFENSE_COLD:
             element = _("冷気", "cold!");
             break;
-        case ATTACK_POIS:
+        case DEFENSE_POIS:
             element = _("毒", "poison!");
             break;
         default: // @todo 本来はruntime_error を飛ばすべきだが、既存コードと同じように動くことを優先した.

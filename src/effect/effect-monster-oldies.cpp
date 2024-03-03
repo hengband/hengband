@@ -3,13 +3,11 @@
 #include "effect/effect-monster-util.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
-#include "monster-race/race-flags3.h"
-#include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
+#include "monster/monster-util.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
@@ -103,7 +101,7 @@ ProcessResult effect_monster_star_heal(PlayerType *player_ptr, EffectMonster *em
 // who == 0ならばプレイヤーなので、それの判定.
 static void effect_monster_old_heal_check_player(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
-    if (em_ptr->who != 0) {
+    if (is_monster(em_ptr->src_idx)) {
         return;
     }
 
@@ -173,7 +171,7 @@ ProcessResult effect_monster_old_heal(PlayerType *player_ptr, EffectMonster *em_
     effect_monster_old_heal_check_player(player_ptr, em_ptr);
     if (em_ptr->m_ptr->r_idx == MonsterRaceId::LEPER) {
         em_ptr->heal_leper = true;
-        if (!em_ptr->who) {
+        if (is_player(em_ptr->src_idx)) {
             chg_virtue(player_ptr, Virtue::COMPASSION, 5);
         }
     }
@@ -202,7 +200,7 @@ ProcessResult effect_monster_old_speed(PlayerType *player_ptr, EffectMonster *em
         em_ptr->note = _("の動きが速くなった。", " starts moving faster.");
     }
 
-    if (!em_ptr->who) {
+    if (is_player(em_ptr->src_idx)) {
         if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             chg_virtue(player_ptr, Virtue::INDIVIDUALISM, 1);
         }

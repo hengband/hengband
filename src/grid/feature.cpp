@@ -234,7 +234,7 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
         g_ptr->info &= ~(CAVE_MARK);
     }
 
-    if (g_ptr->m_idx) {
+    if (g_ptr->has_monster()) {
         update_monster(player_ptr, g_ptr->m_idx, false);
     }
 
@@ -264,7 +264,7 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
         auto *cc_ptr = &floor_ptr->grid_array[yy][xx];
         cc_ptr->info |= CAVE_GLOW;
         if (cc_ptr->is_view()) {
-            if (cc_ptr->m_idx) {
+            if (cc_ptr->has_monster()) {
                 update_monster(player_ptr, cc_ptr->m_idx, false);
             }
 
