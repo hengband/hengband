@@ -3,6 +3,7 @@
 #include "core/window-redrawer.h"
 #include "effect/effect-player.h"
 #include "mind/mind-mirror-master.h"
+#include "monster/monster-util.h"
 #include "player/player-damage.h"
 #include "player/player-status-flags.h"
 #include "status/bad-status-setter.h"
@@ -26,7 +27,7 @@ void effect_player_drain_mana(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         return;
     }
 
-    if (ep_ptr->who > 0) {
+    if (is_monster(ep_ptr->src_idx)) {
         msg_format(_("%s^に精神エネルギーを吸い取られてしまった！", "%s^ draws psychic energy from you!"), ep_ptr->m_name);
     } else {
         msg_print(_("精神エネルギーを吸い取られてしまった！", "Your psychic energy is drained!"));
@@ -48,7 +49,7 @@ void effect_player_drain_mana(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     };
     rfu.set_flags(flags);
 
-    if ((ep_ptr->who <= 0) || (ep_ptr->m_ptr->hp >= ep_ptr->m_ptr->maxhp)) {
+    if (!is_monster(ep_ptr->src_idx) || (ep_ptr->m_ptr->hp >= ep_ptr->m_ptr->maxhp)) {
         ep_ptr->dam = 0;
         return;
     }
@@ -58,10 +59,10 @@ void effect_player_drain_mana(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         ep_ptr->m_ptr->hp = ep_ptr->m_ptr->maxhp;
     }
 
-    if (player_ptr->health_who == ep_ptr->who) {
+    if (player_ptr->health_who == ep_ptr->src_idx) {
         rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
     }
-    if (player_ptr->riding == ep_ptr->who) {
+    if (player_ptr->riding == ep_ptr->src_idx) {
         rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 

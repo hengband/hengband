@@ -99,7 +99,7 @@ static std::optional<std::string> exe_blue_teleport_back(PlayerType *player_ptr)
     const auto &floor = *player_ptr->current_floor_ptr;
     const Pos2D pos(target_row, target_col);
     const auto &grid = floor.get_grid(pos);
-    if ((grid.m_idx == 0) || !grid.has_los() || !projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
+    if (!grid.has_monster() || !grid.has_los() || !projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
         return std::nullopt;
     }
 

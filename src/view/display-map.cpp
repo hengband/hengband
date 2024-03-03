@@ -301,7 +301,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
         break;
     }
 
-    if (grid.m_idx && display_autopick != 0) {
+    if (grid.has_monster() && display_autopick != 0) {
         set_term_color(player_ptr, y, x, ap, cp);
         return;
     }

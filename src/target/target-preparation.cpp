@@ -86,7 +86,7 @@ static bool target_set_accept(PlayerType *player_ptr, const Pos2D &pos)
     }
 
     const auto &grid = floor.get_grid(pos);
-    if (grid.m_idx) {
+    if (grid.has_monster()) {
         auto &monster = floor.m_list[grid.m_idx];
         if (monster.ml) {
             return true;

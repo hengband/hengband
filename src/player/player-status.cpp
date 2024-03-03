@@ -173,7 +173,7 @@ static void delayed_visual_update(PlayerType *player_ptr)
         }
 
         lite_spot(player_ptr, y, x);
-        if (g_ptr->m_idx) {
+        if (g_ptr->has_monster()) {
             update_monster(player_ptr, g_ptr->m_idx, false);
         }
 
@@ -2816,7 +2816,7 @@ bool player_has_no_spellbooks(PlayerType *player_ptr)
  */
 bool player_place(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx != 0) {
+    if (player_ptr->current_floor_ptr->grid_array[y][x].has_monster()) {
         return false;
     }
 

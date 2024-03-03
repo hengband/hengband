@@ -137,14 +137,14 @@ bool ang_sort_comp_importance(PlayerType *player_ptr, vptr u, vptr v, int a, int
 
     /* Extract monster race */
     MonsterRaceInfo *ap_r_ptr_a;
-    if (grid_a.m_idx && monster_a.ml) {
+    if (grid_a.has_monster() && monster_a.ml) {
         ap_r_ptr_a = &monster_a.get_appearance_monrace();
     } else {
         ap_r_ptr_a = nullptr;
     }
 
     MonsterRaceInfo *ap_r_ptr_b;
-    if (grid_b.m_idx && monster_b.ml) {
+    if (grid_b.has_monster() && monster_b.ml) {
         ap_r_ptr_b = &monster_b.get_appearance_monrace();
     } else {
         ap_r_ptr_b = nullptr;

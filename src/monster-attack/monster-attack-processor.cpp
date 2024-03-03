@@ -122,7 +122,7 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
  */
 bool process_monster_attack_to_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, Grid *g_ptr, bool can_cross)
 {
-    if (!turn_flags_ptr->do_move || (g_ptr->m_idx == 0)) {
+    if (!turn_flags_ptr->do_move || !g_ptr->has_monster()) {
         return false;
     }
 

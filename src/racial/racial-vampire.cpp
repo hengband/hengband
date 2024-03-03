@@ -29,7 +29,7 @@ bool vampirism(PlayerType *player_ptr)
     POSITION x = player_ptr->x + ddx[dir];
     const auto *g_ptr = &floor.grid_array[y][x];
     stop_mouth(player_ptr);
-    if (!(g_ptr->m_idx)) {
+    if (!g_ptr->has_monster()) {
         msg_print(_("何もない場所に噛みついた！", "You bite into thin air!"));
         return false;
     }

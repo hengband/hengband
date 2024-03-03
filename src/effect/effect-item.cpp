@@ -7,6 +7,7 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster/monster-info.h"
+#include "monster/monster-util.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-expendable.h"
 #include "object/object-broken.h"
@@ -26,7 +27,7 @@
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系によるアイテムオブジェクトへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
+ * @param src_idx 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
  * @param r 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
  * @param y 目標Y座標 / Target y location (or location to travel "towards")
  * @param x 目標X座標 / Target x location (or location to travel "towards")
@@ -34,7 +35,7 @@
  * @param typ 効果属性 / Type of damage to apply to monsters (and objects)
  * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
  */
-bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, int dam, AttributeType typ)
+bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITION y, POSITION x, int dam, AttributeType typ)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const Pos2D pos(y, x);
@@ -42,7 +43,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
 
     auto is_item_affected = false;
     const auto known = grid.has_los();
-    who = who ? who : 0;
+    src_idx = is_monster(src_idx) ? src_idx : 0;
     dam = (dam + r) / (r + 1);
     std::set<OBJECT_IDX> processed_list;
     for (auto it = grid.o_idx_list.begin(); it != grid.o_idx_list.end();) {
@@ -227,7 +228,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
             }
 
             BIT_FLAGS mode = 0L;
-            if (!who || player_ptr->current_floor_ptr->m_list[who].is_pet()) {
+            if (is_monster(src_idx) || player_ptr->current_floor_ptr->m_list[src_idx].is_pet()) {
                 mode |= PM_FORCE_PET;
             }
 
@@ -240,7 +241,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
                     }
 
                     continue;
-                } else if (summon_named_creature(player_ptr, who, y, x, corpse_r_idx, mode)) {
+                } else if (summon_named_creature(player_ptr, src_idx, y, x, corpse_r_idx, mode)) {
                     note_kill = _("生き返った。", " revived.");
                 } else if (!note_kill) {
                     note_kill = _("灰になった。", (plural ? " become dust." : " becomes dust."));
@@ -281,7 +282,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
         const auto is_potion = o_ptr->is_potion();
         delete_object_idx(player_ptr, this_o_idx);
         if (is_potion) {
-            (void)potion_smash_effect(player_ptr, who, y, x, bi_id);
+            (void)potion_smash_effect(player_ptr, src_idx, y, x, bi_id);
 
             // 薬の破壊効果によりリストの次のアイテムが破壊された可能性があるのでリストの最初から処理をやり直す
             // 処理済みのアイテムは processed_list に登録されており、スキップされる

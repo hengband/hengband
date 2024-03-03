@@ -1,4 +1,5 @@
 #include "system/grid-type-definition.h"
+#include "monster/monster-util.h"
 #include "system/angband-system.h"
 #include "system/monster-race-info.h"
 #include "system/terrain-type-definition.h"
@@ -89,6 +90,11 @@ bool Grid::is_rune_protection() const
 bool Grid::is_rune_explosion() const
 {
     return this->is_object() && TerrainList::get_instance()[this->mimic].flags.has(TerrainCharacteristics::RUNE_EXPLOSION);
+}
+
+bool Grid::has_monster() const
+{
+    return is_monster(this->m_idx);
 }
 
 byte Grid::get_cost(const MonsterRaceInfo *r_ptr) const

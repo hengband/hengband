@@ -960,7 +960,7 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         const auto &floor = *player_ptr->current_floor_ptr;
         const Pos2D pos(target_row, target_col);
         const auto &grid_target = floor.get_grid(pos);
-        auto should_teleport = grid_target.m_idx == 0;
+        auto should_teleport = grid_target.has_monster();
         should_teleport &= grid_target.has_los();
         should_teleport &= projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col);
         if (!should_teleport) {

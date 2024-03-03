@@ -43,7 +43,7 @@ bool eat_rock(PlayerType *player_ptr)
         msg_print(_("この地形は食べられない。", "You cannot eat this feature."));
     } else if (terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
         msg_format(_("いてっ！この%sはあなたの歯より硬い！", "Ouch!  This %s is harder than your teeth!"), terrain_mimic.name.data());
-    } else if (grid.m_idx) {
+    } else if (grid.has_monster()) {
         const auto &monster = player_ptr->current_floor_ptr->m_list[grid.m_idx];
         msg_print(_("何かが邪魔しています！", "There's something in the way!"));
         if (!monster.ml || !monster.is_pet()) {

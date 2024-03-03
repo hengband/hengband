@@ -335,7 +335,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                 continue;
             }
 
-            if (grid.m_idx) {
+            if (grid.has_monster()) {
                 auto &monster = floor.m_list[grid.m_idx];
                 auto &monrace = monster.get_monrace();
 

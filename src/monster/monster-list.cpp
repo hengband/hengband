@@ -449,7 +449,7 @@ int get_monster_crowd_number(FloorType *floor_ptr, MONSTER_IDX m_idx)
         if (!in_bounds(floor_ptr, ay, ax)) {
             continue;
         }
-        if (floor_ptr->grid_array[ay][ax].m_idx > 0) {
+        if (floor_ptr->grid_array[ay][ax].has_monster()) {
             count++;
         }
     }

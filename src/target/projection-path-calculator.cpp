@@ -123,7 +123,7 @@ static bool project_stop(PlayerType *player_ptr, projection_path_type *pp_ptr)
         }
     }
 
-    if (any_bits(pp_ptr->flag, PROJECT_STOP) && !pp_ptr->position->empty() && (player_ptr->is_located_at(pos) || grid.m_idx != 0)) {
+    if (any_bits(pp_ptr->flag, PROJECT_STOP) && !pp_ptr->position->empty() && (player_ptr->is_located_at(pos) || grid.has_monster())) {
         return true;
     }
 

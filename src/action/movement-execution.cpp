@@ -165,7 +165,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
     std::string m_name;
     bool can_move = true;
     bool do_past = false;
-    if (grid.m_idx && (m_ptr->ml || p_can_enter || p_can_kill_walls)) {
+    if (grid.has_monster() && (m_ptr->ml || p_can_enter || p_can_kill_walls)) {
         auto *r_ptr = &m_ptr->get_monrace();
         auto effects = player_ptr->effects();
         auto is_stunned = effects->stun()->is_stunned();

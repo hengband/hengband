@@ -452,7 +452,7 @@ bool decide_monster_multiplication(PlayerType *player_ptr, MONSTER_IDX m_idx, PO
                 continue;
             }
 
-            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
+            if (player_ptr->current_floor_ptr->grid_array[y][x].has_monster()) {
                 k++;
             }
         }

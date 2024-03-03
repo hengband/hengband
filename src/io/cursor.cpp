@@ -57,7 +57,7 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
             TERM_COLOR ta = default_color;
             auto tc = '*';
 
-            if (g_ptr->m_idx && floor_ptr->m_list[g_ptr->m_idx].ml) {
+            if (g_ptr->has_monster() && floor_ptr->m_list[g_ptr->m_idx].ml) {
                 map_info(player_ptr, ny, nx, &a, &c, &ta, &tc);
 
                 if (!is_ascii_graphics(a)) {

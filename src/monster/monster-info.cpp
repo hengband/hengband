@@ -147,7 +147,7 @@ bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, MonsterRa
     if (player_ptr->is_located_at(pos)) {
         return false;
     }
-    if (grid.m_idx) {
+    if (grid.has_monster()) {
         return false;
     }
 

@@ -247,7 +247,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         const auto y = player_ptr->y + ddy[dir];
         const auto x = player_ptr->x + ddx[dir];
         const auto &grid = floor.grid_array[y][x];
-        if (!grid.m_idx) {
+        if (!grid.has_monster()) {
             msg_print(_("邪悪な存在を感じとれません！", "You sense no evil there!"));
             return true;
         }
@@ -287,7 +287,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         const auto y = player_ptr->y + ddy[dir];
         const auto x = player_ptr->x + ddx[dir];
         auto &grid = floor.grid_array[y][x];
-        if (!grid.m_idx) {
+        if (!grid.has_monster()) {
             msg_print(_("あなたは何もない場所で手を振った。", "You wave your hands in the air."));
             return true;
         }

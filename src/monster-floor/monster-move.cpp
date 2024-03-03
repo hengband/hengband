@@ -66,7 +66,7 @@ static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, con
         return true;
     }
 
-    if (grid.m_idx > 0) {
+    if (grid.has_monster()) {
         turn_flags_ptr->do_move = true;
         return true;
     }

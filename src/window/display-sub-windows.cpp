@@ -527,7 +527,7 @@ void fix_object(PlayerType *player_ptr)
  */
 static const MonsterEntity *monster_on_floor_items(FloorType *floor_ptr, const Grid *g_ptr)
 {
-    if (g_ptr->m_idx == 0) {
+    if (!g_ptr->has_monster()) {
         return nullptr;
     }
 

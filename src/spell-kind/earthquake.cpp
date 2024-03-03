@@ -110,7 +110,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            if (floor_ptr->grid_array[y][x].m_idx) {
+            if (floor_ptr->grid_array[y][x].has_monster()) {
                 continue;
             }
 
@@ -178,7 +178,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            if (!grid.m_idx) {
+            if (!grid.has_monster()) {
                 continue;
             }
 
@@ -218,7 +218,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                         continue;
                     }
 
-                    if (grid_neighbor.m_idx) {
+                    if (grid_neighbor.has_monster()) {
                         continue;
                     }
 
@@ -249,7 +249,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                     msg_format(_("%s^は岩石に埋もれてしまった！", "%s^ is embedded in the rock!"), m_name.data());
                 }
 
-                if (grid.m_idx) {
+                if (grid.has_monster()) {
                     const auto &m_ref = floor_ptr->m_list[grid.m_idx];
                     if (record_named_pet && m_ref.is_named_pet()) {
                         const auto m2_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);

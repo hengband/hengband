@@ -28,6 +28,7 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
+#include "monster/monster-util.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/vorpal-weapon.h"
 #include "object-hook/hook-weapon.h"
@@ -519,7 +520,7 @@ static void cause_earthquake(PlayerType *player_ptr, player_attack_type *pa_ptr,
     }
 
     earthquake(player_ptr, player_ptr->y, player_ptr->x, 10, 0);
-    if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx == 0) {
+    if (!player_ptr->current_floor_ptr->grid_array[y][x].has_monster()) {
         *(pa_ptr->mdeath) = true;
     }
 }
@@ -612,7 +613,7 @@ void massacre(PlayerType *player_ptr)
         POSITION x = player_ptr->x + ddx_ddd[dir];
         g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
         m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-        if (g_ptr->m_idx && (m_ptr->ml || cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT))) {
+        if (g_ptr->has_monster() && (m_ptr->ml || cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT))) {
             do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
         }
     }

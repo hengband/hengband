@@ -77,7 +77,7 @@ bool update_riding_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, M
     }
 
     player_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = g_ptr->m_idx;
-    if (g_ptr->m_idx) {
+    if (g_ptr->has_monster()) {
         y_ptr->fy = oy;
         y_ptr->fx = ox;
         update_monster(player_ptr, g_ptr->m_idx, true);

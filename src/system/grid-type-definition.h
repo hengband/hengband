@@ -83,6 +83,7 @@ public:
     bool is_mirror() const;
     bool is_rune_protection() const;
     bool is_rune_explosion() const;
+    bool has_monster() const;
     byte get_cost(const MonsterRaceInfo *r_ptr) const;
     byte get_distance(const MonsterRaceInfo *r_ptr) const;
     FEAT_IDX get_feat_mimic() const;

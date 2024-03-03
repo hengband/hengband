@@ -841,7 +841,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                     if (dir == 5) {
                         continue;
                     }
-                    if (floor_ptr->grid_array[dy][dx].m_idx) {
+                    if (floor_ptr->grid_array[dy][dx].has_monster()) {
                         flag = true;
                     }
                 }

@@ -366,7 +366,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
 
             const auto *g_ptr = &floor.grid_array[my][mx];
 
-            if (!g_ptr->m_idx) {
+            if (!g_ptr->has_monster()) {
                 continue;
             }
 

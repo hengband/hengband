@@ -65,7 +65,7 @@ bool direct_beam(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, 
         const auto &grid = floor.get_grid(pos);
         if (y == y2 && x == x2) {
             hit2 = true;
-        } else if (is_friend && grid.m_idx > 0 && !m_ptr->is_hostile_to_melee(floor.m_list[grid.m_idx])) {
+        } else if (is_friend && grid.has_monster() && !m_ptr->is_hostile_to_melee(floor.m_list[grid.m_idx])) {
             return false;
         }
 

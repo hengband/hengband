@@ -111,7 +111,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
             Grid *g_ptr;
             g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
-            if (g_ptr->m_idx) {
+            if (g_ptr->has_monster()) {
                 continue;
             }
 

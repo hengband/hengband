@@ -71,7 +71,7 @@ bool teleport_swap(PlayerType *player_ptr, DIRECTION dir)
 
     Grid *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[ty][tx];
-    if (!g_ptr->m_idx || (g_ptr->m_idx == player_ptr->riding)) {
+    if (!g_ptr->has_monster() || (g_ptr->m_idx == player_ptr->riding)) {
         msg_print(_("それとは場所を交換できません。", "You can't trade places with that!"));
         return false;
     }
@@ -514,7 +514,7 @@ void teleport_player_to(PlayerType *player_ptr, POSITION ny, POSITION nx, telepo
 
         bool is_anywhere = w_ptr->wizard;
         is_anywhere &= (mode & TELEPORT_PASSIVE) == 0;
-        is_anywhere &= (player_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0) || player_ptr->current_floor_ptr->grid_array[y][x].m_idx == player_ptr->riding;
+        is_anywhere &= player_ptr->current_floor_ptr->grid_array[y][x].has_monster() || player_ptr->current_floor_ptr->grid_array[y][x].m_idx == player_ptr->riding;
         if (is_anywhere) {
             break;
         }

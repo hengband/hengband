@@ -361,3 +361,13 @@ errr get_mon_num_prep_bounty(PlayerType *player_ptr)
 {
     return do_get_mon_num_prep(player_ptr, nullptr, nullptr, false);
 }
+
+bool is_player(MONSTER_IDX m_idx)
+{
+    return m_idx == 0;
+}
+
+bool is_monster(MONSTER_IDX m_idx)
+{
+    return m_idx > 0;
+}

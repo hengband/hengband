@@ -179,7 +179,7 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
             continue;
         }
 
-        if (!grid_new.m_idx) {
+        if (!grid_new.has_monster()) {
             if (tm_idx) {
                 msg_print(_("失敗！", "Failed!"));
             } else {

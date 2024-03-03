@@ -71,7 +71,7 @@ static bool exe_alter(PlayerType *player_ptr)
     const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
     const auto &terrain = grid.get_terrain_mimic();
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    if (grid.m_idx) {
+    if (grid.has_monster()) {
         do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
         return false;
     }

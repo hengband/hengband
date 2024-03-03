@@ -130,7 +130,7 @@ void do_cmd_open(PlayerType *player_ptr)
         const auto o_idx = chest_check(player_ptr->current_floor_ptr, pos, false);
         if (grid.get_terrain_mimic().flags.has_not(TerrainCharacteristics::OPEN) && !o_idx) {
             msg_print(_("そこには開けるものが見当たらない。", "You see nothing there to open."));
-        } else if (grid.m_idx && player_ptr->riding != grid.m_idx) {
+        } else if (grid.has_monster() && player_ptr->riding != grid.m_idx) {
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
             do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
@@ -179,7 +179,7 @@ void do_cmd_close(PlayerType *player_ptr)
         const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
         if (grid.get_terrain_mimic().flags.has_not(TerrainCharacteristics::CLOSE)) {
             msg_print(_("そこには閉じるものが見当たらない。", "You see nothing there to close."));
-        } else if (grid.m_idx) {
+        } else if (grid.has_monster()) {
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
             do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
@@ -231,7 +231,7 @@ void do_cmd_disarm(PlayerType *player_ptr)
         const auto o_idx = chest_check(player_ptr->current_floor_ptr, pos, true);
         if (!is_trap(player_ptr, feat) && !o_idx) {
             msg_print(_("そこには解除するものが見当たらない。", "You see nothing there to disarm."));
-        } else if (grid.m_idx && player_ptr->riding != grid.m_idx) {
+        } else if (grid.has_monster() && player_ptr->riding != grid.m_idx) {
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
             do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
         } else if (o_idx) {
@@ -284,7 +284,7 @@ void do_cmd_bash(PlayerType *player_ptr)
         const Grid &grid = player_ptr->current_floor_ptr->get_grid(pos);
         if (grid.get_terrain_mimic().flags.has_not(TerrainCharacteristics::BASH)) {
             msg_print(_("そこには体当たりするものが見当たらない。", "You see nothing there to bash."));
-        } else if (grid.m_idx) {
+        } else if (grid.has_monster()) {
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
             do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
@@ -355,7 +355,7 @@ void do_cmd_spike(PlayerType *player_ptr)
         msg_print(_("そこにはくさびを打てるものが見当たらない。", "You see nothing there to spike."));
     } else if (!get_spike(player_ptr, &i_idx)) {
         msg_print(_("くさびを持っていない！", "You have no spikes!"));
-    } else if (grid.m_idx) {
+    } else if (grid.has_monster()) {
         PlayerEnergy(player_ptr).set_player_turn_energy(100);
         msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
         do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
