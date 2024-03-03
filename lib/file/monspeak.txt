@@ -901,6 +901,13 @@ says, 'Let's talk meaningfully.'
 says, 'If you want, I can introduce you to Lord Lucifer.'
 says, 'Do you feel like ending your life in such a dimly-lit dungeon?'
 
+N:1355:Laffey II
+says, 'Connection established. Deploying...!'
+says, 'As long as I can shoot, I won't give up...'
+says, 'First things first, we gotta beat baddies... Yep, hurry...'
+says, 'Located a target, I'll begin to eliminate...!'
+says, '"The Ship That Would Not Die" won't go down that easy...'
+
 N:*:Default lines
 cackles evilly.
 cackles diabolically.

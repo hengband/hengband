@@ -143,6 +143,7 @@ public:
     bool is_explodable() const;
     std::string get_died_message() const;
     void kill_unique();
+    std::string get_pronoun_of_summoned_kin() const;
 };
 
 class MonraceList {
