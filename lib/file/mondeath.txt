@@ -89,7 +89,7 @@ says, 'Why... my plasma power loses... even though I remodeled my whole body...'
 N:1345:GREAT THING, the Huge Battle Ship
 is destroyed.  FINAL ZONE IS OVER.
 
-N:1355:Laffey II
+N:1356:Laffey II
 says, 'My battle... isn't over yet... Nope.'
 
 N:*:Default
