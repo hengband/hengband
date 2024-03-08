@@ -62,7 +62,7 @@ static void migrate_old_misc_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_flags1,
 static void migrate_old_feature_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_flags)
 {
     if (!loading_savefile_version_is_older_than(19)) {
-        rd_FlagGroup(r_ptr->feature_flags, rd_byte);
+        rd_FlagGroup(r_ptr->r_feature_flags, rd_byte);
         return;
     }
 
