@@ -14,7 +14,7 @@ enum summon_type : int;
 
 monsterrace_hook_type get_monster_hook(PlayerType *player_ptr);
 monsterrace_hook_type get_monster_hook2(PlayerType *player_ptr, POSITION y, POSITION x);
-errr get_mon_num_prep(PlayerType *player_ptr, monsterrace_hook_type hook1, monsterrace_hook_type hook2);
+errr get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, const monsterrace_hook_type &hook2);
 errr get_mon_num_prep_bounty(PlayerType *player_ptr);
 bool is_player(MONSTER_IDX m_idx);
 bool is_monster(MONSTER_IDX m_idx);

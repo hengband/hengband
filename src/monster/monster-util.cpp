@@ -235,7 +235,7 @@ monsterrace_hook_type get_monster_hook2(PlayerType *player_ptr, POSITION y, POSI
  * モンスター生成テーブル alloc_race_table の各要素の基本重み prob1 を指定条件
  * に従って変更し、結果を prob2 に書き込む。
  */
-static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type hook1, const monsterrace_hook_type hook2, const bool restrict_to_dungeon)
+static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, const monsterrace_hook_type &hook2, const bool restrict_to_dungeon)
 {
     const FloorType *const floor_ptr = player_ptr->current_floor_ptr;
 
@@ -346,7 +346,7 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
  *
  * get_mon_num() を呼ぶ前に get_mon_num_prep() 系関数のいずれかを呼ぶこと。
  */
-errr get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type hook1, const monsterrace_hook_type hook2)
+errr get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, const monsterrace_hook_type &hook2)
 {
     return do_get_mon_num_prep(player_ptr, hook1, hook2, true);
 }
