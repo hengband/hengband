@@ -177,31 +177,31 @@ monsterrace_hook_type get_monster_hook(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     if ((floor.dun_level > 0) || (floor.is_in_quest())) {
-        return (monsterrace_hook_type)mon_hook_dungeon;
+        return mon_hook_dungeon;
     }
 
     switch (wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].terrain) {
     case TERRAIN_TOWN:
-        return (monsterrace_hook_type)mon_hook_town;
+        return mon_hook_town;
     case TERRAIN_DEEP_WATER:
-        return (monsterrace_hook_type)mon_hook_ocean;
+        return mon_hook_ocean;
     case TERRAIN_SHALLOW_WATER:
     case TERRAIN_SWAMP:
-        return (monsterrace_hook_type)mon_hook_shore;
+        return mon_hook_shore;
     case TERRAIN_DIRT:
     case TERRAIN_DESERT:
-        return (monsterrace_hook_type)mon_hook_waste;
+        return mon_hook_waste;
     case TERRAIN_GRASS:
-        return (monsterrace_hook_type)mon_hook_grass;
+        return mon_hook_grass;
     case TERRAIN_TREES:
-        return (monsterrace_hook_type)mon_hook_wood;
+        return mon_hook_wood;
     case TERRAIN_SHALLOW_LAVA:
     case TERRAIN_DEEP_LAVA:
-        return (monsterrace_hook_type)mon_hook_volcano;
+        return mon_hook_volcano;
     case TERRAIN_MOUNTAIN:
-        return (monsterrace_hook_type)mon_hook_mountain;
+        return mon_hook_mountain;
     default:
-        return (monsterrace_hook_type)mon_hook_dungeon;
+        return mon_hook_dungeon;
     }
 }
 
@@ -214,14 +214,14 @@ monsterrace_hook_type get_monster_hook2(PlayerType *player_ptr, POSITION y, POSI
     const Pos2D pos(y, x);
     const auto &terrain = player_ptr->current_floor_ptr->get_grid(pos).get_terrain();
     if (terrain.flags.has(TerrainCharacteristics::WATER)) {
-        return terrain.flags.has(TerrainCharacteristics::DEEP) ? (monsterrace_hook_type)mon_hook_deep_water : (monsterrace_hook_type)mon_hook_shallow_water;
+        return terrain.flags.has(TerrainCharacteristics::DEEP) ? mon_hook_deep_water : mon_hook_shallow_water;
     }
 
     if (terrain.flags.has(TerrainCharacteristics::LAVA)) {
-        return (monsterrace_hook_type)mon_hook_lava;
+        return mon_hook_lava;
     }
 
-    return (monsterrace_hook_type)mon_hook_floor;
+    return mon_hook_floor;
 }
 
 /*!
