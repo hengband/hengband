@@ -1,4 +1,4 @@
-%define version 3.0.1.8
+%define version 3.0.1.9
 %define release 1
 
 Summary: hengband %{version}
@@ -11,6 +11,18 @@ Url: https://hengband.github.io
 Source: hengband-%{version}.tar.gz
 Requires: ncurses-libs libstdc++ libcurl libX11
 BuildRequires: autoconf automake gcc-c++ ncurses-devel libcurl-devel nkf libX11-devel
+
+Requires: %{name}-data
+
+%package data
+
+Summary: %{name}-data %{version}
+
+%package en
+
+Requires: ncurses-libs libstdc++ libcurl libX11
+Requires: %{name}-data
+Summary: %{name}-en %{version}
 
 %description
 Hengband is a variant of ZAngband.
@@ -32,6 +44,37 @@ https://hengband.github.io
 詳しくは /usr/share/doc/hengband/readme.md を参照。
 このパッケージは日本語版です。
 
+%description data
+Hengband is a variant of ZAngband.
+
+Official page is this,
+https://hengband.github.io
+
+More infomation is /usr/share/doc/hengband/readme-eng.md
+This packages contains common data files.
+
+Summary(ja): 変愚蛮怒 %{version}
+
+%description data -l ja
+変愚蛮怒は Angband のバリアントです。
+
+本ソフトウェアの最新版は以下の場所から入手できます。
+https://hengband.github.io
+
+詳しくは /usr/share/doc/hengband/readme.md を参照。
+このパッケージはゲーム用データです。
+
+%description en
+Hengband is a variant of ZAngband.
+
+Official page is this,
+https://hengband.github.io
+
+More infomation is /usr/share/doc/hengband/readme-eng.md
+This is a English version.
+
+Summary(ja): 変愚蛮怒 %{version}
+
 %prep
 rm -rf %{buildroot}
 
@@ -39,6 +82,9 @@ rm -rf %{buildroot}
 ./bootstrap
 
 %build
+%configure --with-libpath=%{_datadir}/games/%{name}/lib --disable-japanese
+%make_build
+cp src/hengband src/hengband-en
 %configure --with-libpath=%{_datadir}/games/%{name}/lib
 %make_build
 
@@ -46,6 +92,7 @@ rm -rf %{buildroot}
 mkdir -p %{buildroot}/%{_bindir}
 mkdir -p %{buildroot}/%{_datadir}/games/%{name}
 %make_install bindir=%{_bindir}
+cp src/hengband-en %{buildroot}/%{_bindir}
 cp -R lib/ -p %{buildroot}/%{_datadir}/games/%{name}/
 find %{buildroot}/%{_datadir}/games/%{name}/ -type f -name "Makefile*" -exec rm {} \;
 find %{buildroot}/%{_datadir}/games/%{name}/ -type f -name "delete.me*" -exec rm {} \;
@@ -66,6 +113,12 @@ exit 0
 %files
 %defattr(-,root,root)
 %attr(2755,root,games) %{_bindir}/%{name}
+
+%files en
+%defattr(-,root,root)
+%attr(2755,root,games) %{_bindir}/%{name}-en
+
+%files data
 %dir %{_datadir}/games/%{name}/lib
 %attr(775,root,games) %dir %{_datadir}/games/%{name}/lib/apex
 %attr(775,root,games) %dir %{_datadir}/games/%{name}/lib/bone
@@ -97,6 +150,10 @@ exit 0
 %license lib/help/jlicense.txt
 
 %changelog
+* Sun Mar 10 2024 Shiro Hara <white@vx-xv.com>
+- Add en(English version), data(common data files) subpakages
+- hengband RPM 3.0.1.9(Beta)
+
 * Mon Mar 04 2024 Shiro Hara <white@vx-xv.com>
 - hengband RPM 3.0.1.8(Beta)
 
