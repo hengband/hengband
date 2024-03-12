@@ -76,7 +76,7 @@ static bool monster_hook_tanuki(PlayerType *player_ptr, MonsterRaceId r_idx)
     }
 
     auto hook_pf = get_monster_hook(player_ptr);
-    return (*hook_pf)(player_ptr, r_idx);
+    return hook_pf(player_ptr, r_idx);
 }
 
 /*!
@@ -257,9 +257,10 @@ static void warn_unique_generation(PlayerType *player_ptr, MonsterRaceId r_idx)
  * @param x 生成位置x座標
  * @param r_idx 生成モンスター種族
  * @param mode 生成オプション
+ * @param summoner_m_idx モンスターの召喚による場合、召喚主のモンスターID
  * @return 成功したらtrue
  */
-bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode)
+bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto *g_ptr = &floor.grid_array[y][x];
@@ -336,7 +337,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, 
     }
 
     if (r_ptr->misc_flags.has(MonsterMiscType::CHAMELEON)) {
-        choose_new_monster(player_ptr, g_ptr->m_idx, true, MonsterRace::empty_id());
+        choose_new_monster(player_ptr, g_ptr->m_idx, true, MonsterRace::empty_id(), summoner_m_idx);
         r_ptr = &m_ptr->get_monrace();
         m_ptr->mflag2.set(MonsterConstantFlagType::CHAMELEON);
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (!is_monster(src_idx))) {

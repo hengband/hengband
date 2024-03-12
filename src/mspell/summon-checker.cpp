@@ -17,10 +17,10 @@
  * @return 召喚条件が一致するならtrue
  * @details
  */
-bool check_summon_specific(PlayerType *player_ptr, MonsterRaceId summoner_idx, MonsterRaceId r_idx)
+bool check_summon_specific(PlayerType *player_ptr, MonsterRaceId summoner_idx, MonsterRaceId r_idx, summon_type type)
 {
     const auto &monrace = monraces_info[r_idx];
-    switch (summon_specific_type) {
+    switch (type) {
     case SUMMON_ANT:
         return monrace.d_char == 'a';
     case SUMMON_SPIDER:
