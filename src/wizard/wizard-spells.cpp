@@ -257,6 +257,25 @@ void wiz_summon_pet(PlayerType *player_ptr, MonsterRaceId r_idx)
 }
 
 /*!
+ * @brief モンスターを種族IDを指定してクローン召喚（口寄せ）する /
+ * Summon a creature of the specified type
+ * @param r_idx モンスター種族ID（回数指定コマンド'0'で指定した回数がIDになる）
+ */
+void wiz_summon_clone(PlayerType *player_ptr, MonsterRaceId r_idx)
+{
+    if (!MonsterRace(r_idx).is_valid()) {
+        const auto new_monrace_id = input_numerics("MonsterID", 1, monraces_info.size() - 1, MonsterRaceId::FILTHY_URCHIN);
+        if (!new_monrace_id) {
+            return;
+        }
+
+        r_idx = *new_monrace_id;
+    }
+
+    (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, r_idx, PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_CLONE);
+}
+
+/*!
  * @brief ターゲットを指定して指定ダメージ・指定属性・半径0のボールを放つ
  * @param dam ダメージ量
  * @param effect_idx 属性ID
