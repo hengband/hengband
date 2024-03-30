@@ -110,7 +110,13 @@ void display_debug_menu(int page, int max_page, int page_size, int max_line)
 
         std::stringstream ss;
         const auto &[symbol, desc] = debug_menu_table[pos];
-        ss << symbol << ") " << desc;
+        std::stringstream debug_cmd;
+        if (!(symbol & ~0x1F)) { // CTRL+Ch = Ch & 0x1F のため0x1Fが含まれていなければCTRLと組み合わせたキー
+            debug_cmd << '^' << static_cast<char>(symbol | ('A' & ~KTRL('A'))); // 大文字はAからZで順番通りに並んでいるためこの式で変換する
+        } else {
+            debug_cmd << ' ' << symbol;
+        }
+        ss << debug_cmd.str() << ") " << desc;
         put_str(ss.str(), r++, c);
     }
     if (max_page > 1) {
