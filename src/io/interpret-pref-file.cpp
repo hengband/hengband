@@ -40,7 +40,6 @@ static errr interpret_r_token(char *buf)
         return 1;
     }
 
-    MonsterRaceInfo *r_ptr;
     int i = (int)strtol(zz[0], nullptr, 0);
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
     auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
@@ -48,7 +47,7 @@ static errr interpret_r_token(char *buf)
         return 1;
     }
 
-    r_ptr = &monraces_info[i2enum<MonsterRaceId>(i)];
+    auto *r_ptr = &monraces_info[i2enum<MonsterRaceId>(i)];
     if (n1 || (!(n2 & 0x80) && n2)) {
         r_ptr->x_attr = n1;
     } /* Allow TERM_DARK text */
