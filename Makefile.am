@@ -31,7 +31,6 @@ EXTRA_DIST = \
 	readme-eng.md \
 	THIRD-PARTY-NOTICES.txt \
 	hengband.spec \
-	hengband-en.spec \
 	$(visual_studio_files)
 
 SUBDIRS = src lib

@@ -128,7 +128,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             auto_dump_printf(auto_dump_stream, _("\n# モンスターの[色/文字]の設定\n\n", "\n# Monster attr/char definitions\n\n"));
             for (const auto &[monrace_id, monrace] : monraces_info) {
                 auto_dump_printf(auto_dump_stream, "# %s\n", monrace.name.data());
-                auto_dump_printf(auto_dump_stream, "R:%d:0x%02X/0x%02X\n\n", enum2i(monrace_id), monrace.x_attr, monrace.x_char);
+                auto_dump_printf(auto_dump_stream, "R:%d:0x%02X/0x%02X\n\n", enum2i(monrace_id), monrace.x_attr, static_cast<byte>(monrace.x_char));
             }
 
             close_auto_dump(&auto_dump_stream, mark);
