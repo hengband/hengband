@@ -228,7 +228,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
             }
 
             BIT_FLAGS mode = 0L;
-            if (is_monster(src_idx) || player_ptr->current_floor_ptr->m_list[src_idx].is_pet()) {
+            if (is_player(src_idx) || player_ptr->current_floor_ptr->m_list[src_idx].is_pet()) {
                 mode |= PM_FORCE_PET;
             }
 
