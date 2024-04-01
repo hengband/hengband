@@ -1,4 +1,4 @@
-%define version 3.0.1.9
+%define version 3.0.1.10
 %define release 1
 
 Summary: hengband %{version}
@@ -150,6 +150,9 @@ exit 0
 %license lib/help/jlicense.txt
 
 %changelog
+* Mon Apr 01 2024 Shiro Hara <white@vx-xv.com>
+- hengband RPM 3.0.1.10(Beta)
+
 * Sun Mar 10 2024 Shiro Hara <white@vx-xv.com>
 - Add en(English version), data(common data files) subpakages
 - hengband RPM 3.0.1.9(Beta)
