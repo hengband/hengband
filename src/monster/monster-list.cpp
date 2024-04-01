@@ -203,9 +203,10 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
  * @param player_ptr プレイヤーへの参照ポインタ
  * @brief カメレオンの王の変身対象となるモンスターかどうか判定する / Hack -- the index of the summoning monster
  * @param r_idx モンスター種族ID
+ * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
  * @return 対象にできるならtrueを返す
  */
-static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_idx)
+static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_idx, std::optional<MONSTER_IDX> summoner_m_idx)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *r_ptr = &monraces_info[r_idx];
@@ -235,10 +236,8 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_
         if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, r_ptr)) {
             return false;
         }
-    } else if (summon_specific_who > 0) {
-        if (monster_has_hostile_align(player_ptr, &floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr)) {
-            return false;
-        }
+    } else if (summoner_m_idx && monster_has_hostile_align(player_ptr, &floor_ptr->m_list[*summoner_m_idx], 0, 0, r_ptr)) {
+        return false;
     }
 
     return true;
@@ -247,10 +246,11 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_
 /*!
  * @brief カメレオンの変身対象となるモンスターかどうか判定する / Hack -- the index of the summoning monster
  * @param r_idx モンスター種族ID
+ * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
  * @return 対象にできるならtrueを返す
  * @todo グローバル変数対策の上 monster_hook.cへ移す。
  */
-static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx)
+static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx, std::optional<MONSTER_IDX> summoner_m_idx)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *r_ptr = &monraces_info[r_idx];
@@ -285,14 +285,12 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx)
         if (old_r_ptr->kind_flags.has_none_of(alignment_mask)) {
             return false;
         }
-    } else if (summon_specific_who > 0) {
-        if (monster_has_hostile_align(player_ptr, &floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr)) {
-            return false;
-        }
+    } else if (summoner_m_idx && monster_has_hostile_align(player_ptr, &floor_ptr->m_list[*summoner_m_idx], 0, 0, r_ptr)) {
+        return false;
     }
 
     auto hook_pf = get_monster_hook(player_ptr);
-    return (*hook_pf)(player_ptr, r_idx);
+    return hook_pf(player_ptr, r_idx);
 }
 
 /*!
@@ -301,8 +299,9 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx)
  * @param m_idx 変身処理を受けるモンスター情報のID
  * @param born 生成時の初変身先指定ならばtrue
  * @param r_idx 旧モンスター種族のID
+ * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
  */
-void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, MonsterRaceId r_idx)
+void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, MonsterRaceId r_idx, std::optional<MONSTER_IDX> summoner_m_idx)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
@@ -324,9 +323,11 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
 
         chameleon_change_m_idx = m_idx;
         if (old_unique) {
-            get_mon_num_prep(player_ptr, monster_hook_chameleon_lord, nullptr);
+            auto hook = [summoner_m_idx](PlayerType *player_ptr, MonsterRaceId r_idx) { return monster_hook_chameleon_lord(player_ptr, r_idx, summoner_m_idx); };
+            get_mon_num_prep(player_ptr, std::move(hook), nullptr);
         } else {
-            get_mon_num_prep(player_ptr, monster_hook_chameleon, nullptr);
+            auto hook = [summoner_m_idx](PlayerType *player_ptr, MonsterRaceId r_idx) { return monster_hook_chameleon(player_ptr, r_idx, summoner_m_idx); };
+            get_mon_num_prep(player_ptr, std::move(hook), nullptr);
         }
 
         if (old_unique) {
