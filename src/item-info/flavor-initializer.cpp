@@ -42,8 +42,9 @@ static void shuffle_flavors(ItemKindType tval)
 void initialize_items_flavor()
 {
     auto &system = AngbandSystem::get_instance();
-    const auto rng_backup = system.rng;
-    system.rng.set_state(system.seed_flavor);
+    const Xoshiro128StarStar rng_backup = system.get_rng();
+    Xoshiro128StarStar flavor_rng(system.get_seed_flavor());
+    system.set_rng(flavor_rng);
     for (auto &baseitem : baseitems_info) {
         if (baseitem.flavor_name.empty()) {
             continue;
@@ -60,7 +61,7 @@ void initialize_items_flavor()
     shuffle_flavors(ItemKindType::FOOD);
     shuffle_flavors(ItemKindType::POTION);
     shuffle_flavors(ItemKindType::SCROLL);
-    system.rng = rng_backup;
+    system.set_rng(rng_backup);
     for (auto &baseitem : baseitems_info) {
         if (baseitem.idx == 0 || baseitem.name.empty()) {
             continue;

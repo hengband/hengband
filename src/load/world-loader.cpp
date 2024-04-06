@@ -150,8 +150,8 @@ void rd_visited_towns(PlayerType *player_ptr)
 void rd_global_configurations(PlayerType *player_ptr)
 {
     auto &system = AngbandSystem::get_instance();
-    system.seed_flavor = rd_u32b();
-    system.seed_town = rd_u32b();
+    system.set_seed_flavor(rd_u32b());
+    system.set_seed_town(rd_u32b());
 
     player_ptr->panic_save = rd_u16b();
     w_ptr->total_winner = rd_u16b();

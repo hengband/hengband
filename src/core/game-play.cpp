@@ -191,8 +191,8 @@ static void init_world_floor_info(PlayerType *player_ptr)
     AngbandSystem::get_instance().set_phase_out(false);
     write_level = true;
     auto &system = AngbandSystem::get_instance();
-    system.seed_flavor = randint0(0x10000000);
-    system.seed_town = randint0(0x10000000);
+    system.set_seed_flavor(randint0(0x10000000));
+    system.set_seed_town(randint0(0x10000000));
     player_birth(player_ptr);
     counts_write(player_ptr, 2, 0);
     player_ptr->count = 0;

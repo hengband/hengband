@@ -77,7 +77,9 @@ void rd_randomizer(void)
         s = rd_u32b();
     }
 
-    AngbandSystem::get_instance().rng.set_state(state);
+    Xoshiro128StarStar game_rng;
+    game_rng.set_state(state);
+    AngbandSystem::get_instance().set_rng(game_rng);
     strip_bytes(4 * (RAND_DEG - state.size()));
 }
 

@@ -221,7 +221,7 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
         v = tmp.data();
     } else if (prefix(b + 1, "RANDOM")) {
         const auto &system = AngbandSystem::get_instance();
-        tmp = std::to_string((int)(system.seed_town % std::stoi(b + 7)));
+        tmp = std::to_string((static_cast<int>(system.get_seed_town()) % std::stoi(b + 7)));
         v = tmp.data();
     } else if (streq(b + 1, "VARIANT")) {
         v = variant;
