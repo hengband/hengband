@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 #include "util/point-2d.h"
+#include <array>
 
 /*!
  * @brief 視界及び光源の過渡処理配列サイズ / Maximum size of the "temp" array
@@ -20,14 +21,14 @@ struct pos_list {
     POSITION x[TEMP_MAX];
 };
 
-extern const int ddd[9];
-extern const int ddx[10];
-extern const int ddy[10];
-extern const int ddx_ddd[9];
-extern const int ddy_ddd[9];
-extern const int cdd[8];
-extern const int ddx_cdd[8];
-extern const int ddy_cdd[8];
+constexpr std::array<int, 9> ddd = { { 2, 8, 6, 4, 3, 1, 9, 7, 5 } }; //!< キーパッドの方向 (南から反時計回り順).
+constexpr std::array<int, 10> ddx = { { 0, -1, 0, 1, -1, 0, 1, -1, 0, 1 } }; //!< dddで定義した順にベクトルのX軸成分.
+constexpr std::array<int, 10> ddy = { { 0, 1, 1, 1, 0, 0, 0, -1, -1, -1 } }; //!< dddで定義した順にベクトルのY軸成分.
+constexpr std::array<int, 9> ddx_ddd = { { 0, 0, 1, -1, 1, -1, 1, -1, 0 } }; //!< ddd越しにベクトルのX軸成分.
+constexpr std::array<int, 9> ddy_ddd = { { 1, -1, 0, 0, 1, 1, -1, -1, 0 } }; //!< ddd越しにベクトルのY軸成分.
+constexpr std::array<int, 8> cdd = { { 2, 3, 6, 9, 8, 7, 4, 1 } }; //!< キーパッドの円環状方向配列. */
+constexpr std::array<int, 8> ddx_cdd = { { 0, 1, 1, 1, 0, -1, -1, -1 } }; //!< cdd越しにベクトルのX軸成分.
+constexpr std::array<int, 8> ddy_cdd = { { 1, 1, 0, -1, -1, -1, 0, 1 } }; //!< cdd越しにベクトルのY軸成分.
 
 class PlayerType;
 DIRECTION coords_to_dir(PlayerType *player_ptr, POSITION y, POSITION x);
