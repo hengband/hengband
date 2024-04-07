@@ -29,7 +29,7 @@ bool cast_berserk_spell(PlayerType *player_ptr, MindBerserkerType spell)
     switch (spell) {
     case MindBerserkerType::DETECT_MANACE:
         detect_monsters_mind(player_ptr, DETECT_RAD_DEFAULT);
-        break;
+        return true;
     case MindBerserkerType::CHARGE: {
         if (player_ptr->riding) {
             msg_print(_("乗馬中には無理だ。", "You cannot do it when riding."));
@@ -49,7 +49,7 @@ bool cast_berserk_spell(PlayerType *player_ptr, MindBerserkerType spell)
 
         do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
         if (!player_can_enter(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat, 0) || is_trap(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat)) {
-            break;
+            return true;
         }
 
         y += ddy[dir];
@@ -59,28 +59,24 @@ bool cast_berserk_spell(PlayerType *player_ptr, MindBerserkerType spell)
             (void)move_player_effect(player_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
         }
 
-        break;
+        return true;
     }
     case MindBerserkerType::SMASH_TRAP: {
         if (!get_direction(player_ptr, &dir)) {
             return false;
         }
 
-        y = player_ptr->y + ddy[dir];
-        x = player_ptr->x + ddx[dir];
         exe_movement(player_ptr, dir, easy_disarm, true);
-        break;
+        return true;
     }
     case MindBerserkerType::QUAKE:
         earthquake(player_ptr, player_ptr->y, player_ptr->x, 8 + randint0(5), 0);
-        break;
+        return true;
     case MindBerserkerType::MASSACRE:
         massacre(player_ptr);
-        break;
+        return true;
     default:
         msg_print(_("なに？", "Zap?"));
-        break;
+        return true;
     }
-
-    return true;
 }
