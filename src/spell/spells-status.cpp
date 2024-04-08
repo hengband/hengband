@@ -537,17 +537,18 @@ bool fishing(PlayerType *player_ptr)
     if (!get_direction(player_ptr, &dir)) {
         return false;
     }
-    POSITION y = player_ptr->y + ddy[dir];
-    POSITION x = player_ptr->x + ddx[dir];
+
+    const auto pos = player_ptr->get_neighbor(dir);
     player_ptr->fishing_dir = dir;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::WATER)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (!cave_has_flag_bold(&floor, pos.y, pos.x, TerrainCharacteristics::WATER)) {
         msg_print(_("そこは水辺ではない。", "You can't fish here."));
         return false;
     }
 
-    if (floor_ptr->grid_array[y][x].has_monster()) {
-        const auto m_name = monster_desc(player_ptr, &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx], 0);
+    const auto &grid = floor.get_grid(pos);
+    if (grid.has_monster()) {
+        const auto m_name = monster_desc(player_ptr, &floor.m_list[grid.m_idx], 0);
         msg_format(_("%sが邪魔だ！", "%s^ is standing in your way."), m_name.data());
         PlayerEnergy(player_ptr).reset_player_turn();
         return false;

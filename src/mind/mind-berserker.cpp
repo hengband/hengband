@@ -24,8 +24,6 @@
  */
 bool cast_berserk_spell(PlayerType *player_ptr, MindBerserkerType spell)
 {
-    POSITION y, x;
-    DIRECTION dir;
     switch (spell) {
     case MindBerserkerType::DETECT_MANACE:
         detect_monsters_mind(player_ptr, DETECT_RAD_DEFAULT);
@@ -36,32 +34,35 @@ bool cast_berserk_spell(PlayerType *player_ptr, MindBerserkerType spell)
             return false;
         }
 
+        DIRECTION dir;
         if (!get_direction(player_ptr, &dir) || (dir == 5)) {
             return false;
         }
 
-        y = player_ptr->y + ddy[dir];
-        x = player_ptr->x + ddx[dir];
-        if (!player_ptr->current_floor_ptr->grid_array[y][x].has_monster()) {
+        const auto pos = player_ptr->get_neighbor(dir);
+        const auto &floor = *player_ptr->current_floor_ptr;
+        const auto &grid = floor.get_grid(pos);
+        if (!grid.has_monster()) {
             msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
             return false;
         }
 
-        do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
-        if (!player_can_enter(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat, 0) || is_trap(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat)) {
+        do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
+        if (!player_can_enter(player_ptr, grid.feat, 0) || is_trap(player_ptr, grid.feat)) {
             return true;
         }
 
-        y += ddy[dir];
-        x += ddx[dir];
-        if (player_can_enter(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat, 0) && !is_trap(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat) && !player_ptr->current_floor_ptr->grid_array[y][x].has_monster()) {
+        const Pos2D pos_new(pos.y + ddy[dir], pos.x + ddx[dir]);
+        const auto &grid_new = floor.get_grid(pos_new);
+        if (player_can_enter(player_ptr, grid_new.feat, 0) && !is_trap(player_ptr, grid_new.feat) && !grid_new.has_monster()) {
             msg_print(nullptr);
-            (void)move_player_effect(player_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+            (void)move_player_effect(player_ptr, pos_new.y, pos_new.x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
         }
 
         return true;
     }
     case MindBerserkerType::SMASH_TRAP: {
+        DIRECTION dir;
         if (!get_direction(player_ptr, &dir)) {
             return false;
         }

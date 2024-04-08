@@ -25,11 +25,10 @@ bool vampirism(PlayerType *player_ptr)
         return false;
     }
 
-    POSITION y = player_ptr->y + ddy[dir];
-    POSITION x = player_ptr->x + ddx[dir];
-    const auto *g_ptr = &floor.grid_array[y][x];
+    const auto pos = player_ptr->get_neighbor(dir);
+    const auto &grid = floor.get_grid(pos);
     stop_mouth(player_ptr);
-    if (!g_ptr->has_monster()) {
+    if (!grid.has_monster()) {
         msg_print(_("何もない場所に噛みついた！", "You bite into thin air!"));
         return false;
     }
