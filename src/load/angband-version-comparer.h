@@ -1,6 +1,6 @@
 #pragma once
 
-#include "system/angband.h"
+#include <stdint.h>
 
-bool h_older_than(byte major, byte minor, byte patch, byte extra);
-bool h_older_than(byte major, byte minor, byte patch);
+bool h_older_than(uint8_t major, uint8_t minor, uint8_t patch, uint8_t extra);
+bool h_older_than(uint8_t major, uint8_t minor, uint8_t patch);

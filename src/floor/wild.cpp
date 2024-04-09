@@ -37,6 +37,7 @@
 #include "realm/realm-names-table.h"
 #include "spell-realm/spells-hex.h"
 #include "status/action-setter.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -255,8 +256,10 @@ static void generate_wilderness_area(FloorType *floor_ptr, int terrain, uint32_t
         return;
     }
 
-    const auto rng_backup = w_ptr->rng;
-    w_ptr->rng.set_state(seed);
+    auto &system = AngbandSystem::get_instance();
+    const Xoshiro128StarStar rng_backup = system.get_rng();
+    Xoshiro128StarStar wilderness_rng(seed);
+    system.set_rng(wilderness_rng);
     int table_size = sizeof(terrain_table[0]) / sizeof(int16_t);
     if (!corner) {
         for (POSITION y1 = 0; y1 < MAX_HGT; y1++) {
@@ -275,7 +278,7 @@ static void generate_wilderness_area(FloorType *floor_ptr, int terrain, uint32_t
         floor_ptr->grid_array[MAX_HGT - 2][1].feat = terrain_table[terrain][floor_ptr->grid_array[MAX_HGT - 2][1].feat];
         floor_ptr->grid_array[1][MAX_WID - 2].feat = terrain_table[terrain][floor_ptr->grid_array[1][MAX_WID - 2].feat];
         floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat = terrain_table[terrain][floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat];
-        w_ptr->rng = rng_backup;
+        system.set_rng(rng_backup);
         return;
     }
 
@@ -295,7 +298,7 @@ static void generate_wilderness_area(FloorType *floor_ptr, int terrain, uint32_t
         }
     }
 
-    w_ptr->rng = rng_backup;
+    system.set_rng(rng_backup);
 }
 
 /*!
@@ -379,13 +382,15 @@ static void generate_area(PlayerType *player_ptr, POSITION y, POSITION x, bool i
         return;
     }
 
-    const auto rng_backup = w_ptr->rng;
-    w_ptr->rng.set_state(wilderness[y][x].seed);
+    auto &system = AngbandSystem::get_instance();
+    const Xoshiro128StarStar rng_backup = system.get_rng();
+    Xoshiro128StarStar wilderness_rng(wilderness[y][x].seed);
+    system.set_rng(wilderness_rng);
     int dy = rand_range(6, floor_ptr->height - 6);
     int dx = rand_range(6, floor_ptr->width - 6);
     floor_ptr->grid_array[dy][dx].feat = feat_entrance;
     floor_ptr->grid_array[dy][dx].special = wilderness[y][x].entrance;
-    w_ptr->rng = rng_backup;
+    system.set_rng(rng_backup);
 }
 
 /*!

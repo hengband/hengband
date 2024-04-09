@@ -58,20 +58,20 @@
 MONSTER_IDX m_pop(FloorType *floor_ptr)
 {
     /* Normal allocation */
-    if (floor_ptr->m_max < w_ptr->max_m_idx) {
-        MONSTER_IDX i = floor_ptr->m_max;
+    if (floor_ptr->m_max < MAX_FLOOR_MONSTERS) {
+        const auto i = floor_ptr->m_max;
         floor_ptr->m_max++;
         floor_ptr->m_cnt++;
         return i;
     }
 
     /* Recycle dead monsters */
-    for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
-        MonsterEntity *m_ptr;
-        m_ptr = &floor_ptr->m_list[i];
-        if (MonsterRace(m_ptr->r_idx).is_valid()) {
+    for (short i = 1; i < floor_ptr->m_max; i++) {
+        const auto &monster = floor_ptr->m_list[i];
+        if (MonsterRace(monster.r_idx).is_valid()) {
             continue;
         }
+
         floor_ptr->m_cnt++;
         return i;
     }
@@ -79,6 +79,7 @@ MONSTER_IDX m_pop(FloorType *floor_ptr)
     if (w_ptr->character_dungeon) {
         msg_print(_("モンスターが多すぎる！", "Too many monsters!"));
     }
+
     return 0;
 }
 
