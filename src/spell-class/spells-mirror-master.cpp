@@ -205,26 +205,14 @@ void SpellsMirrorMaster::seal_of_mirror(const int dam)
 
 void SpellsMirrorMaster::seeker_ray(int dir, int dam)
 {
-    POSITION tx = this->player_ptr->x + ddx[dir];
-    POSITION ty = this->player_ptr->y + ddy[dir];
-    if ((dir == 5) && target_okay(this->player_ptr)) {
-        tx = target_col;
-        ty = target_row;
-    }
-
-    project_seeker_ray(tx, ty, dam);
+    const auto pos = ((dir == 5) && target_okay(this->player_ptr)) ? Pos2D(target_row, target_col) : this->player_ptr->get_neighbor(dir);
+    project_seeker_ray(pos.x, pos.y, dam);
 }
 
 void SpellsMirrorMaster::super_ray(int dir, int dam)
 {
-    POSITION tx = this->player_ptr->x + ddx[dir];
-    POSITION ty = this->player_ptr->y + ddy[dir];
-    if ((dir == 5) && target_okay(this->player_ptr)) {
-        tx = target_col;
-        ty = target_row;
-    }
-
-    project_super_ray(tx, ty, dam);
+    const auto pos = ((dir == 5) && target_okay(this->player_ptr)) ? Pos2D(target_row, target_col) : this->player_ptr->get_neighbor(dir);
+    project_super_ray(pos.x, pos.y, dam);
 }
 
 /*!

@@ -55,49 +55,38 @@
  */
 bool teleport_swap(PlayerType *player_ptr, DIRECTION dir)
 {
-    POSITION tx, ty;
-    if ((dir == 5) && target_okay(player_ptr)) {
-        tx = target_col;
-        ty = target_row;
-    } else {
-        tx = player_ptr->x + ddx[dir];
-        ty = player_ptr->y + ddy[dir];
-    }
-
+    const auto pos = ((dir == 5) && target_okay(player_ptr)) ? Pos2D(target_row, target_col) : player_ptr->get_neighbor(dir);
     if (player_ptr->anti_tele) {
         msg_print(_("不思議な力がテレポートを防いだ！", "A mysterious force prevents you from teleporting!"));
         return false;
     }
 
-    Grid *g_ptr;
-    g_ptr = &player_ptr->current_floor_ptr->grid_array[ty][tx];
-    if (!g_ptr->has_monster() || (g_ptr->m_idx == player_ptr->riding)) {
+    const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    if (!grid.has_monster() || (grid.m_idx == player_ptr->riding)) {
         msg_print(_("それとは場所を交換できません。", "You can't trade places with that!"));
         return false;
     }
 
-    if ((g_ptr->is_icky()) || (distance(ty, tx, player_ptr->y, player_ptr->x) > player_ptr->lev * 3 / 2 + 10)) {
+    if ((grid.is_icky()) || (distance(pos.y, pos.x, player_ptr->y, player_ptr->x) > player_ptr->lev * 3 / 2 + 10)) {
         msg_print(_("失敗した。", "Failed to swap."));
         return false;
     }
 
-    MonsterEntity *m_ptr;
-    MonsterRaceInfo *r_ptr;
-    m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-    r_ptr = &m_ptr->get_monrace();
+    const auto &monster = player_ptr->current_floor_ptr->m_list[grid.m_idx];
+    auto &monrace = monster.get_monrace();
 
-    (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
+    (void)set_monster_csleep(player_ptr, grid.m_idx, 0);
 
-    if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
+    if (monrace.resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
         msg_print(_("テレポートを邪魔された！", "Your teleportation is blocked!"));
-        if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-            r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
+        if (is_original_ap_and_seen(player_ptr, &monster)) {
+            monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
         }
         return false;
     }
 
     sound(SOUND_TELEPORT);
-    (void)move_player_effect(player_ptr, ty, tx, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+    (void)move_player_effect(player_ptr, pos.y, pos.x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
     return true;
 }
 

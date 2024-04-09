@@ -67,7 +67,7 @@ static bool exe_alter(PlayerType *player_ptr)
         return false;
     }
 
-    const Pos2D pos(player_ptr->y + ddy[dir], player_ptr->x + ddx[dir]);
+    const auto pos = player_ptr->get_neighbor(dir);
     const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
     const auto &terrain = grid.get_terrain_mimic();
     PlayerEnergy(player_ptr).set_player_turn_energy(100);

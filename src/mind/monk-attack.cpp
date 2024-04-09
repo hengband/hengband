@@ -270,9 +270,11 @@ bool double_attack(PlayerType *player_ptr)
     if (!get_rep_dir(player_ptr, &dir)) {
         return false;
     }
-    POSITION y = player_ptr->y + ddy[dir];
-    POSITION x = player_ptr->x + ddx[dir];
-    if (!player_ptr->current_floor_ptr->grid_array[y][x].has_monster()) {
+
+    const auto pos = player_ptr->get_neighbor(dir);
+    const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    const auto has_monster = grid.has_monster();
+    if (!has_monster) {
         msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
         msg_print(nullptr);
         return true;
@@ -286,10 +288,10 @@ bool double_attack(PlayerType *player_ptr)
         msg_print(_("オラオラオラオラオラオラオラオラオラオラオラオラ！！！", "Oraoraoraoraoraoraoraoraoraoraoraoraoraoraoraoraora!!!!"));
     }
 
-    do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
-    if (player_ptr->current_floor_ptr->grid_array[y][x].has_monster()) {
+    do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
+    if (has_monster) {
         handle_stuff(player_ptr);
-        do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
+        do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
     }
 
     player_ptr->energy_need += ENERGY_NEED();
