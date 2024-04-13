@@ -216,41 +216,33 @@ void SpellsMirrorMaster::super_ray(int dir, int dam)
 }
 
 /*!
- * @brief 配置した鏡リストの次を取得する /
- * Get another mirror. for SEEKER
- * @param next_y 次の鏡のy座標を返す参照ポインタ
- * @param next_x 次の鏡のx座標を返す参照ポインタ
- * @param cury 現在の鏡のy座標
- * @param curx 現在の鏡のx座標
+ * @brief 配置した鏡リストの次を取得する
+ * @param pos_current 現在の鏡位置
+ * @return 次の鏡位置
  */
-void SpellsMirrorMaster::next_mirror(int *next_y, int *next_x, int cury, int curx)
+Pos2D SpellsMirrorMaster::get_next_mirror_position(const Pos2D &pos_current) const
 {
-    POSITION mirror_x[10], mirror_y[10]; /* 鏡はもっと少ない */
-    int mirror_num = 0; /* 鏡の数 */
-
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-
-    for (POSITION x = 0; x < floor_ptr->width; x++) {
-        for (POSITION y = 0; y < floor_ptr->height; y++) {
-            if (floor_ptr->grid_array[y][x].is_mirror()) {
-                mirror_y[mirror_num] = y;
-                mirror_x[mirror_num] = x;
-                mirror_num++;
+    std::vector<Pos2D> mirror_positions;
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    for (auto x = 0; x < floor.width; x++) {
+        for (auto y = 0; y < floor.height; y++) {
+            const Pos2D pos(y, x);
+            if (floor.get_grid(pos).is_mirror()) {
+                mirror_positions.push_back(pos);
             }
         }
     }
 
-    if (mirror_num) {
-        int num = randint0(mirror_num);
-        *next_y = mirror_y[num];
-        *next_x = mirror_x[num];
-        return;
+    if (!mirror_positions.empty()) {
+        return rand_choice(mirror_positions);
     }
 
-    do {
-        *next_y = cury + randint0(5) - 2;
-        *next_x = curx + randint0(5) - 2;
-    } while ((*next_y == cury) && (*next_x == curx));
+    while (true) {
+        const Pos2D next_mirror(pos_current.y + randint0(5) - 2, pos_current.x + randint0(5) - 2);
+        if (next_mirror != pos_current) {
+            return next_mirror;
+        }
+    }
 }
 
 void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
@@ -341,7 +333,9 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
         monster_target_y = y;
         monster_target_x = x;
         this->remove_mirror(y, x);
-        this->next_mirror(&y2, &x2, y, x);
+        const auto pos = this->get_next_mirror_position({ y, x });
+        y2 = pos.y;
+        x2 = pos.x;
         y1 = y;
         x1 = x;
     }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "util/point-2d.h"
+
 class PlayerType;
 struct ProjectResult;
 class SpellsMirrorMaster {
@@ -16,7 +18,7 @@ public:
 
 private:
     PlayerType *player_ptr;
-    void next_mirror(int *next_y, int *next_x, int cury, int curx);
+    Pos2D get_next_mirror_position(const Pos2D &pos_current) const;
     void project_seeker_ray(int target_x, int target_y, int dam);
     void project_super_ray(int target_x, int target_y, int dam);
 };
