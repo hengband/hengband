@@ -3169,7 +3169,7 @@ N:191:グリズリー
 E:Grizzly bear
 G:q:u
 I:110:12d12:10:35:10
-W:10:1:25:300:1028
+W:10:1:25:300:547
 B:CLAW:HURT:1d5
 B:CLAW:HURT:1d5
 B:BITE:HURT:1d10
@@ -9668,19 +9668,18 @@ D:$darkest black hue.  Acid drips from its body.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
 D:まだ柔らかいその鱗は深い黒色をしている。体からは酸が滴り落ちている。
 
-#J0#
-N:547:ムーマク
-E:Mumak
-G:q:s
-I:110:90d10:20:55:100
-W:35:3:2100:50000:716
-B:BUTT:HURT:4d6
-B:BUTT:HURT:4d6
-B:CRUSH:SUPERHURT:4d6
-F:BASH_DOOR | DROP_CORPSE
-F:ANIMAL | RIDING
-D:$A massive elephantine form with eyes twisted by madness.
-D:巨大な象のような姿で、その目は狂気に歪んでいる。
+N:547:凶熊
+E:Mad bear
+G:q:D
+I:110:18d10:10:35:10
+W:15:1:70:200:673
+B:CLAW:HURT:2d5
+B:CLAW:HURT:2d5
+B:BITE:HURT:3d6
+F:WEIRD_MIND | BASH_DOOR | FRIENDS | DROP_SKELETON | DROP_CORPSE
+F:ANIMAL | EVIL | WILD_WOOD | WILD_MOUNTAIN
+D:$This bear is a follower of Red Helm.
+D:『赤カブト』の配下の熊だ。
 
 #J0#
 N:548:巨大火アリ
@@ -12411,18 +12410,19 @@ D:$blood is fire. It charges at you ignoring everything else.
 D:巨大な悪意に満ちた獣で、肉体は鉄、血は炎でできている。
 D:他の全てを無視してあなたに突進してくるだろう。
 
-#J0#
-N:673:ムーマク
-E:Mumak
-G:q:s
-I:110:90d10:20:55:100
-W:43:2:2100:50000:716
-B:BUTT:HURT:4d6
-B:BUTT:HURT:4d6
-B:CRUSH:SUPERHURT:4d6
-F:FRIENDS | DROP_CORPSE | BASH_DOOR | ANIMAL | RIDING
-D:$A massive elephantine form with eyes twisted by madness.
-D:巨大な象のような姿で、その目は狂気に歪んでいる。
+N:673:白熊
+E:Polar bear
+G:q:W
+I:115:18d15:15:40:5
+W:17:1:120:800:1028
+B:CLAW:HURT:1d15
+B:CLAW:HURT:1d15
+B:BITE:HURT:3d8
+F:ANIMAL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR | WEIRD_MIND | IM_COLD
+D:$This is very big and white bear.
+D:$  Even adventurer won't return to home without injury if located by this.
+D:非常に大きく白い熊だ。
+D:冒険者でもこいつに目を付けられたら無傷では帰れないだろう。
 
 #JZ#
 N:674:闇の審判『フィアー』
@@ -13529,26 +13529,18 @@ D:グラウルングは全てのドラゴン族の祖であり、長きに渡っ
 D:る。彼は自分の一族にはどんな命令でも与えることができ、好きなときに召喚する
 D:こともできる。彼の吐く火炎こそが、本物のドラゴンの火炎なのである。
 
-#JZ#
-#JZ#旧約聖書「ヨブ記」で言及される怪物です。
-#JZ#象の頭をして腹の出た姿で描かれます。 by 久留さん
-#JZ#FFシリーズ等で広まった読み方にしました。 by 板倉
-N:716:ベヒーモス
-E:Behemoth
-G:H:g
-I:125:50d100:25:180:30
-W:64:3:24000:0:0
-B:BITE:FIRE:8d8
-B:BITE:FIRE:8d8
-B:CRUSH:SUPERHURT:5d15
-B:CRUSH:SUPERHURT:5d15
-F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | CAN_SWIM | ANIMAL
-F:IM_FIRE | IM_ACID | IM_COLD | IM_POIS | DROP_CORPSE
-F:NO_CONF | NO_SLEEP | NO_FEAR | RIDING
-S:1_IN_9
-S:BR_FIRE
-D:$A great water-beast, with an almost unpenetrable skin.
-D:巨大な海獣で、その表皮はほとんど貫通不能だ。
+#J0#
+N:716:ムーマク
+E:Mumak
+G:q:s
+I:110:90d10:20:55:100
+W:43:2:2100:50000:XXXX
+B:BUTT:HURT:4d6
+B:BUTT:HURT:4d6
+B:CRUSH:SUPERHURT:4d6
+F:FRIENDS | DROP_CORPSE | BASH_DOOR | ANIMAL | RIDING
+D:$A massive elephantine form with eyes twisted by madness.
+D:巨大な象のような姿で、その目は狂気に歪んでいる。
 
 #JZ#
 #JZ#地獄の番犬ガルム
@@ -20953,18 +20945,19 @@ D:$He is king of the mad bears.  He has built his stronghold at Hutago
 D:$ mountain and reigns from there.
 D:二子峠に己の牙城を築き上げ君臨する凶熊どもの王だ。
 
-N:1028:凶熊
-E:Mad bear
-G:q:D
-I:110:18d10:10:35:10
-W:15:1:70:1000:547
-B:CLAW:HURT:2d5
-B:CLAW:HURT:2d5
-B:BITE:HURT:3d6
-F:WEIRD_MIND | BASH_DOOR | FRIENDS | DROP_SKELETON | DROP_CORPSE
-F:ANIMAL | EVIL | WILD_WOOD | WILD_MOUNTAIN
-D:$This bear is a follower of Red Helm.
-D:『赤カブト』の配下の熊だ。
+#J0#
+N:1028:ムーマク
+E:Mumak
+G:q:s
+I:110:90d10:20:55:100
+W:35:3:2100:50000:XXXX
+B:BUTT:HURT:4d6
+B:BUTT:HURT:4d6
+B:CRUSH:SUPERHURT:4d6
+F:BASH_DOOR | DROP_CORPSE
+F:ANIMAL | RIDING
+D:$A massive elephantine form with eyes twisted by madness.
+D:巨大な象のような姿で、その目は狂気に歪んでいる。
 
 N:1029:ベビーサタン
 E:Demonite
@@ -27210,3 +27203,24 @@ D:$It is a part of Laffey II's rigging: a bunny-looking, propeller-less, futuris
 D:$  It can project light bolts that burn a hole through a target.
 D:ラフィーIIの艤装の一部で、兎を模したプロペラのない未来的なドローンだ。
 D:光の矢が放たれるようになっており、それが通ったものには風穴が空く。
+
+#JZ#
+#JZ#旧約聖書「ヨブ記」で言及される怪物です。
+#JZ#象の頭をして腹の出た姿で描かれます。 by 久留さん
+#JZ#FFシリーズ等で広まった読み方にしました。 by 板倉
+N:XXXX:ベヒーモス
+E:Behemoth
+G:H:g
+I:125:50d100:25:180:30
+W:64:3:24000:0:0
+B:BITE:FIRE:8d8
+B:BITE:FIRE:8d8
+B:CRUSH:SUPERHURT:5d15
+B:CRUSH:SUPERHURT:5d15
+F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | CAN_SWIM | ANIMAL
+F:IM_FIRE | IM_ACID | IM_COLD | IM_POIS | DROP_CORPSE
+F:NO_CONF | NO_SLEEP | NO_FEAR | RIDING
+S:1_IN_9
+S:BR_FIRE
+D:$A great water-beast, with an almost unpenetrable skin.
+D:巨大な海獣で、その表皮はほとんど貫通不能だ。
