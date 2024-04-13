@@ -55,6 +55,14 @@ static const std::vector<debug_spell_command> debug_spell_commands_list = {
     { 5, "pattern teleport", { .spell5 = { pattern_teleport } } },
 };
 
+static std::optional<MonsterRaceId> input_monster_race_id(const MonsterRaceId r_idx)
+{
+    if (MonsterRace(r_idx).is_valid()) {
+        return r_idx;
+    }
+    return input_numerics("MonsterID", 1, monraces_info.size() - 1, MonsterRaceId::FILTHY_URCHIN);
+}
+
 /*!
  * @brief コマンド入力により任意にスペル効果を起こす / Wizard spells
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -221,18 +229,14 @@ void wiz_summon_random_monster(PlayerType *player_ptr, int num)
  * @details
  * This function is rather dangerous
  */
-void wiz_summon_specific_monster(PlayerType *player_ptr, MonsterRaceId r_idx)
+void wiz_summon_specific_monster(PlayerType *player_ptr, const MonsterRaceId r_idx)
 {
-    if (!MonsterRace(r_idx).is_valid()) {
-        const auto new_monrace_id = input_numerics("MonsterID", 1, monraces_info.size() - 1, MonsterRaceId::FILTHY_URCHIN);
-        if (!new_monrace_id) {
-            return;
-        }
-
-        r_idx = *new_monrace_id;
+    const auto new_monrace_id = input_monster_race_id(r_idx);
+    if (!new_monrace_id) {
+        return;
     }
 
-    (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, r_idx, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
+    (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, *new_monrace_id, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
 }
 
 /*!
@@ -242,20 +246,30 @@ void wiz_summon_specific_monster(PlayerType *player_ptr, MonsterRaceId r_idx)
  * @details
  * This function is rather dangerous
  */
-void wiz_summon_pet(PlayerType *player_ptr, MonsterRaceId r_idx)
+void wiz_summon_pet(PlayerType *player_ptr, const MonsterRaceId r_idx)
 {
-    if (!MonsterRace(r_idx).is_valid()) {
-        const auto new_monrace_id = input_numerics("MonsterID", 1, monraces_info.size() - 1, MonsterRaceId::FILTHY_URCHIN);
-        if (!new_monrace_id) {
-            return;
-        }
-
-        r_idx = *new_monrace_id;
+    const auto new_monrace_id = input_monster_race_id(r_idx);
+    if (!new_monrace_id) {
+        return;
     }
 
-    (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, r_idx, PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_FORCE_PET);
+    (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, *new_monrace_id, PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_FORCE_PET);
 }
 
+/*!
+ * @brief モンスターを種族IDを指定してクローン召喚（口寄せ）する /
+ * Summon a creature of the specified type
+ * @param r_idx モンスター種族ID（回数指定コマンド'0'で指定した回数がIDになる）
+ */
+void wiz_summon_clone(PlayerType *player_ptr, const MonsterRaceId r_idx)
+{
+    const auto new_monrace_id = input_monster_race_id(r_idx);
+    if (!new_monrace_id) {
+        return;
+    }
+
+    (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, *new_monrace_id, PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_CLONE);
+}
 /*!
  * @brief ターゲットを指定して指定ダメージ・指定属性・半径0のボールを放つ
  * @param dam ダメージ量

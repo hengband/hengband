@@ -66,6 +66,7 @@ constexpr std::array debug_menu_table = {
     std::make_tuple('m', _("魔法の地図", "Magic mapping")),
     std::make_tuple('n', _("指定モンスター生成", "Summon target monster")),
     std::make_tuple('N', _("指定モンスターをペットとして生成", "Summon target monster as pet")),
+    std::make_tuple(KTRL('N'), _("指定モンスターをクローンとして生成", "Summon target monster as clone")),
     std::make_tuple('o', _("オブジェクトの能力変更", "Modift object abilities")),
     std::make_tuple('O', _("オプション設定をダンプ", "Dump current options")),
     std::make_tuple('p', _("ショート・テレポート", "Phase door")),
@@ -110,7 +111,13 @@ void display_debug_menu(int page, int max_page, int page_size, int max_line)
 
         std::stringstream ss;
         const auto &[symbol, desc] = debug_menu_table[pos];
-        ss << symbol << ") " << desc;
+        std::stringstream debug_cmd;
+        if (!(symbol & ~0x1F)) { // CTRL+Ch = Ch & 0x1F のため0x1Fが含まれていなければCTRLと組み合わせたキー
+            debug_cmd << '^' << static_cast<char>(symbol | ('A' & ~KTRL('A'))); // 大文字はAからZで順番通りに並んでいるためこの式で変換する
+        } else {
+            debug_cmd << ' ' << symbol;
+        }
+        ss << debug_cmd.str() << ") " << desc;
         put_str(ss.str(), r++, c);
     }
     if (max_page > 1) {
@@ -202,6 +209,9 @@ bool exe_cmd_debug(PlayerType *player_ptr, char cmd)
         return true;
     case 'N':
         wiz_summon_pet(player_ptr, i2enum<MonsterRaceId>(command_arg));
+        return true;
+    case KTRL('N'):
+        wiz_summon_clone(player_ptr, i2enum<MonsterRaceId>(command_arg));
         return true;
     case 'o':
         wiz_modify_item(player_ptr);
