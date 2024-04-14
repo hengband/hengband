@@ -2301,8 +2301,8 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
         if (macro_running()) {
             return 0;
         }
-        mousex = std::min(LOWORD(lParam) / td->tile_wid, td->cols - 1);
-        mousey = std::min(HIWORD(lParam) / td->tile_hgt, td->rows - 1);
+        mousex = std::min<int>(LOWORD(lParam) / td->tile_wid, td->cols - 1);
+        mousey = std::min<int>(HIWORD(lParam) / td->tile_hgt, td->rows - 1);
         mouse_down = true;
         oldx = mousex;
         oldy = mousey;
@@ -2390,8 +2390,8 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
         }
 
         int dx, dy;
-        int cx = std::min(LOWORD(lParam) / td->tile_wid, td->cols - 1);
-        int cy = std::min(HIWORD(lParam) / td->tile_hgt, td->rows - 1);
+        auto cx = std::min<int>(LOWORD(lParam) / td->tile_wid, td->cols - 1);
+        auto cy = std::min<int>(HIWORD(lParam) / td->tile_hgt, td->rows - 1);
         int ox, oy;
 
         if (paint_rect) {

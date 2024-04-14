@@ -2,9 +2,6 @@
 
 #include "system/angband.h"
 
-extern int summon_specific_who;
-extern bool summon_unique_okay;
-
 enum summon_type : int;
 enum class MonsterRaceId : int16_t;
 class PlayerType;
