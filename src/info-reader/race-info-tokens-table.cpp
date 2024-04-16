@@ -384,6 +384,7 @@ const std::unordered_map<std::string_view, MonsterFeatureType> r_info_feature_fl
 const std::unordered_map<std::string_view, MonsterPopulationType> r_info_population_flags = {
     { "NAZGUL", MonsterPopulationType::NAZGUL },
     { "ONLY_ONE", MonsterPopulationType::ONLY_ONE },
+    { "BUNBUN_STRIKER", MonsterPopulationType::BUNBUN_STRIKER },
 };
 
 const std::unordered_map<std::string_view, MonsterSpeakType> r_info_speak_flags = {

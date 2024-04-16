@@ -909,7 +909,7 @@ bool item_monster_okay(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if (r_ptr->population_flags.has(MonsterPopulationType::ONLY_ONE)) {
+    if (r_ptr->population_flags.has_any_of({ MonsterPopulationType::ONLY_ONE, MonsterPopulationType::BUNBUN_STRIKER })) {
         return false;
     }
 

@@ -39,6 +39,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "system/system-variables.h"
 #include "util/bit-flags-calculator.h"
 #include "util/probability-table.h"
 #include "view/display-messages.h"
@@ -161,6 +162,10 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
             }
 
             if (r_ptr->population_flags.has(MonsterPopulationType::ONLY_ONE) && (r_ptr->cur_num >= 1)) {
+                continue;
+            }
+
+            if (r_ptr->population_flags.has(MonsterPopulationType::BUNBUN_STRIKER) && (r_ptr->cur_num >= MAX_BUNBUN_NUM)) {
                 continue;
             }
 
