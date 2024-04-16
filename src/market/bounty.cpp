@@ -302,7 +302,7 @@ void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
             continue;
         }
 
-        if (monrace.population_flags.has(MonsterPopulationType::NAZGUL) || monrace.population_flags.has(MonsterPopulationType::ONLY_ONE)) {
+        if (monrace.population_flags.has_any_of({ MonsterPopulationType::NAZGUL, MonsterPopulationType::ONLY_ONE, MonsterPopulationType::BUNBUN_STRIKER })) {
             continue;
         }
 
