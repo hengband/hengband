@@ -183,7 +183,7 @@ void process_monster_lore(PlayerType *player_ptr, MonsterRaceId r_idx, monster_l
     display_lore_this(player_ptr, lore_ptr);
     if (lore_ptr->special_flags.has(MonsterSpecialType::DIMINISH_MAX_DAMAGE)) {
         hooked_roff(format(_("%s^は", "%s^ "), Who::who(lore_ptr->msex)));
-        hook_c_roff(TERM_RED, _("致命的な威力の攻撃に対して大きな耐性を持っている。", "has the strong resistance for a critical damage.  "));
+        hook_c_roff(TERM_RED, _("一度に受けるダメージを常に自身の身体のごく一部に抑える。", "always diminishes a damage per time to a small portion of the body.  "));
     }
     display_monster_aura(lore_ptr);
     if (lore_ptr->misc_flags.has(MonsterMiscType::REFLECTING)) {
