@@ -518,3 +518,16 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
         rfu.set_flag(StatusRecalculatingFlag::BONUS);
     }
 }
+
+std::pair<int, int> get_damage_cap(int hp, int maxhp)
+{
+    const int damage_cap_normal = hp / 10;
+    const int damage_cap_min = maxhp * 7 / 500;
+    return std::make_pair(damage_cap_min, damage_cap_normal);
+}
+std::tuple<int, int, int> get_damage_cap_contains_max(int hp, int maxhp)
+{
+    const auto &[damage_cap_normal, damage_cap_min] = get_damage_cap(hp, maxhp);
+    const int damage_cap_max = maxhp / 10;
+    return std::make_tuple(damage_cap_normal, damage_cap_min, damage_cap_max);
+}

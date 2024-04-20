@@ -19,3 +19,6 @@ void process_monsters_mtimed(PlayerType *player_ptr, int mtimed_idx);
 int get_mproc_idx(FloorType *floor_ptr, MONSTER_IDX m_idx, int mproc_type);
 void mproc_init(FloorType *floor_ptr);
 void mproc_add(FloorType *floor_ptr, MONSTER_IDX m_idx, int mproc_type);
+
+std::pair<int, int> get_damage_cap(int hp, int maxhp);
+std::tuple<int, int, int> get_damage_cap_contains_max(int hp, int maxhp);
