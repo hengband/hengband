@@ -25,6 +25,7 @@ namespace {
 constexpr auto ITEM_NOT_BOW = "This item is not a bow!";
 constexpr auto ITEM_NOT_ROD = "This item is not a rod!";
 constexpr auto ITEM_NOT_LITE = "This item is not a lite!";
+constexpr auto INVALID_BI_ID_FORMAT = "Invalid Baseitem ID is specified! %d";
 }
 
 bool BaseitemKey::operator==(const BaseitemKey &other) const
@@ -666,3 +667,28 @@ void BaseitemInfo::mark_as_tried()
 }
 
 std::vector<BaseitemInfo> baseitems_info;
+
+BaseitemList BaseitemList::instance{};
+
+BaseitemList &BaseitemList::get_instance()
+{
+    return instance;
+}
+
+BaseitemInfo &BaseitemList::get_baseitem(const short bi_id)
+{
+    if ((bi_id < 0) || (bi_id >= static_cast<short>(this->baseitems.size()))) {
+        THROW_EXCEPTION(std::logic_error, format(INVALID_BI_ID_FORMAT, bi_id));
+    }
+
+    return this->baseitems[bi_id];
+}
+
+const BaseitemInfo &BaseitemList::get_baseitem(const short bi_id) const
+{
+    if ((bi_id < 0) || (bi_id >= static_cast<short>(this->baseitems.size()))) {
+        THROW_EXCEPTION(std::logic_error, format(INVALID_BI_ID_FORMAT, bi_id));
+    }
+
+    return this->baseitems[bi_id];
+}

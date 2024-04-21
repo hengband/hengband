@@ -144,3 +144,22 @@ public:
 };
 
 extern std::vector<BaseitemInfo> baseitems_info;
+
+class BaseitemList {
+public:
+    BaseitemList(BaseitemList &&) = delete;
+    BaseitemList(const BaseitemList &) = delete;
+    BaseitemList &operator=(const BaseitemList &) = delete;
+    BaseitemList &operator=(BaseitemList &&) = delete;
+    ~BaseitemList() = default;
+
+    static BaseitemList &get_instance();
+    BaseitemInfo &get_baseitem(const short bi_id);
+    const BaseitemInfo &get_baseitem(const short bi_id) const;
+
+private:
+    BaseitemList() = default;
+
+    static BaseitemList instance;
+    std::vector<BaseitemInfo> baseitems{};
+};
