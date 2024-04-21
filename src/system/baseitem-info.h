@@ -128,6 +128,7 @@ public:
     bool easy_know{}; /*!< ベースアイテムが初期からベース名を判断可能かどうか / This object is always known (if aware) */
     RandomArtActType act_idx{}; /*!< 発動能力のID /  Activative ability index */
 
+    bool is_valid() const;
     void decide_easy_know();
 
     /* @todo ここから下はk_info.txt に依存しないミュータブルなフィールド群なので、将来的に分離予定 */
