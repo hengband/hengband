@@ -693,6 +693,11 @@ const BaseitemInfo &BaseitemList::get_baseitem(const short bi_id) const
     return this->baseitems[bi_id];
 }
 
+std::vector<BaseitemInfo> &BaseitemList::get_raw_vector()
+{
+    return this->baseitems;
+}
+
 std::vector<BaseitemInfo>::iterator BaseitemList::begin()
 {
     return this->baseitems.begin();
@@ -711,4 +716,39 @@ std::vector<BaseitemInfo>::iterator BaseitemList::end()
 std::vector<BaseitemInfo>::const_iterator BaseitemList::end() const
 {
     return this->baseitems.end();
+}
+
+std::vector<BaseitemInfo>::reverse_iterator BaseitemList::rbegin()
+{
+    return this->baseitems.rbegin();
+}
+
+std::vector<BaseitemInfo>::const_reverse_iterator BaseitemList::rbegin() const
+{
+    return this->baseitems.rbegin();
+}
+
+std::vector<BaseitemInfo>::reverse_iterator BaseitemList::rend()
+{
+    return this->baseitems.rend();
+}
+
+std::vector<BaseitemInfo>::const_reverse_iterator BaseitemList::rend() const
+{
+    return this->baseitems.rend();
+}
+
+size_t BaseitemList::size() const
+{
+    return this->baseitems.size();
+}
+
+bool BaseitemList::empty() const
+{
+    return this->baseitems.empty();
+}
+
+void BaseitemList::resize(size_t new_size)
+{
+    this->baseitems.resize(new_size);
 }
