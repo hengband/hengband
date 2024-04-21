@@ -52,16 +52,17 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
     static BaseitemInfo *bii_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 10);
 
+    // N:index:name_ja
     if (tokens[0] == "N") {
-        // N:index:name_ja
         if (tokens.size() < 3 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        auto i = std::stoi(tokens[1]);
+        const auto i = std::stoi(tokens[1]);
         if (i < error_idx) {
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
+
         if (i >= static_cast<int>(baseitems_info.size())) {
             baseitems_info.resize(i + 1);
         }
@@ -76,55 +77,73 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             bii_ptr->flavor_name = tokens[3];
         }
 
-    } else if (!bii_ptr) {
+        return PARSE_ERROR_NONE;
+    }
+
+    if (!bii_ptr) {
         return PARSE_ERROR_MISSING_RECORD_HEADER;
-    } else if (tokens[0] == "E") {
-        // E:name_en
+    }
+
+    // E:name_en
+    if (tokens[0] == "E") {
 #ifndef JP
         if (tokens.size() < 2 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
-        bii_ptr->name = tokens[1];
 
+        bii_ptr->name = tokens[1];
         if (tokens.size() > 2) {
             bii_ptr->flavor_name = tokens[2];
         }
 #endif
-    } else if (tokens[0] == "D") {
-        // D:text_ja
-        // D:$text_en
+        return PARSE_ERROR_NONE;
+    }
+
+    // D:text_ja
+    // D:$text_en
+    if (tokens[0] == "D") {
         if (tokens.size() < 2 || buf.length() < 3) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
+
 #ifdef JP
         if (buf[2] == '$') {
             return PARSE_ERROR_NONE;
         }
+
         bii_ptr->text.append(buf.substr(2));
 #else
         if (buf[2] != '$') {
             return PARSE_ERROR_NONE;
         }
+
         if (buf.length() == 3) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
+
         append_english_text(bii_ptr->text, buf.substr(3));
 #endif
-    } else if (tokens[0] == "G") {
-        // G:color:symbol
+        return PARSE_ERROR_NONE;
+    }
+
+    // G:color:symbol
+    if (tokens[0] == "G") {
         if (tokens.size() < 3 || tokens[1].size() == 0 || tokens[2].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        auto a = color_char_to_attr(tokens[2][0]);
+        const auto a = color_char_to_attr(tokens[2][0]);
         if (a > 127) {
             return PARSE_ERROR_GENERIC;
         }
 
         bii_ptr->d_attr = a;
         bii_ptr->d_char = tokens[1][0];
-    } else if (tokens[0] == "I") {
-        // I:tval:sval:pval
+        return PARSE_ERROR_NONE;
+    }
+
+    // I:tval:sval:pval
+    if (tokens[0] == "I") {
         if (tokens.size() < 4) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
@@ -137,8 +156,12 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         if ((tval == ItemKindType::ROD) && (bii_ptr->pval <= 0)) {
             return PAESE_ERROR_INVALID_PVAL;
         }
-    } else if (tokens[0] == "W") {
-        // W:level:weight:cost
+
+        return PARSE_ERROR_NONE;
+    }
+
+    // W:level:weight:cost
+    if (tokens[0] == "W") {
         if (tokens.size() < 4) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
@@ -146,8 +169,11 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         info_set_value(bii_ptr->level, tokens[1]);
         info_set_value(bii_ptr->weight, tokens[2]);
         info_set_value(bii_ptr->cost, tokens[3]);
-    } else if (tokens[0] == "A") {
-        // A:level/chance(:level/chance:level/chance:level/chance)
+        return PARSE_ERROR_NONE;
+    }
+
+    // A:level/chance(:level/chance:level/chance:level/chance)
+    if (tokens[0] == "A") {
         if (tokens.size() < 2 || tokens.size() > 5) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
@@ -164,8 +190,12 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             info_set_value(table.chance, rarity[1]);
             i++;
         }
-    } else if (tokens[0] == "P") {
-        // P:ac:dd:ds:to_h:to_d:to_a
+
+        return PARSE_ERROR_NONE;
+    }
+
+    // P:ac:dd:ds:to_h:to_d:to_a
+    if (tokens[0] == "P") {
         if (tokens.size() < 6) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
@@ -181,19 +211,26 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         info_set_value(bii_ptr->to_h, tokens[3]);
         info_set_value(bii_ptr->to_d, tokens[4]);
         info_set_value(bii_ptr->to_a, tokens[5]);
-    } else if (tokens[0] == "U") {
-        // U:activation_flag
+        return PARSE_ERROR_NONE;
+    }
+
+    // U:activation_flag
+    if (tokens[0] == "U") {
         if (tokens.size() < 2 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
-        auto n = grab_one_activation_flag(tokens[1]);
+
+        const auto n = grab_one_activation_flag(tokens[1]);
         if (n <= RandomArtActType::NONE) {
             return PARSE_ERROR_INVALID_FLAG;
         }
 
         bii_ptr->act_idx = n;
-    } else if (tokens[0] == "F") {
-        // F:flags
+        return PARSE_ERROR_NONE;
+    }
+
+    // F:flags
+    if (tokens[0] == "F") {
         if (tokens.size() < 2 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
@@ -203,13 +240,14 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             if (f.size() == 0) {
                 continue;
             }
+
             if (!grab_one_baseitem_flag(bii_ptr, f)) {
                 return PARSE_ERROR_INVALID_FLAG;
             }
         }
-    } else {
-        return PARSE_ERROR_UNDEFINED_DIRECTIVE;
+
+        return PARSE_ERROR_NONE;
     }
 
-    return PARSE_ERROR_NONE;
+    return PARSE_ERROR_UNDEFINED_DIRECTIVE;
 }
