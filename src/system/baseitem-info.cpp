@@ -692,3 +692,23 @@ const BaseitemInfo &BaseitemList::get_baseitem(const short bi_id) const
 
     return this->baseitems[bi_id];
 }
+
+std::vector<BaseitemInfo>::iterator BaseitemList::begin()
+{
+    return this->baseitems.begin();
+}
+
+std::vector<BaseitemInfo>::const_iterator BaseitemList::begin() const
+{
+    return this->baseitems.begin();
+}
+
+std::vector<BaseitemInfo>::iterator BaseitemList::end()
+{
+    return this->baseitems.end();
+}
+
+std::vector<BaseitemInfo>::const_iterator BaseitemList::end() const
+{
+    return this->baseitems.end();
+}
