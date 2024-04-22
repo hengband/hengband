@@ -1,5 +1,7 @@
 #include "system/player-type-definition.h"
+#include "floor/geometry.h"
 #include "market/arena-info-table.h"
+#include "system/angband-exceptions.h"
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
@@ -113,6 +115,24 @@ std::string PlayerType::decrease_ability_all()
 Pos2D PlayerType::get_position() const
 {
     return Pos2D(this->y, this->x);
+}
+
+/*!
+ * @brief 現在地の隣 (瞬時値)または現在地を返す
+ * @param dir 隣を表す方向番号
+ * @details プレイヤーが移動する前後の文脈で使用すると不整合を起こすので注意
+ * 方向番号による位置取りは以下の通り. 0と5は現在地.
+ * 123 ...
+ * 456 .@.
+ * 789 ...
+ */
+Pos2D PlayerType::get_neighbor(int dir) const
+{
+    if ((dir < 0) || (dir >= static_cast<int>(std::size(ddx)))) {
+        THROW_EXCEPTION(std::logic_error, "Invalid direction is specified!");
+    }
+
+    return Pos2D(this->y + ddy[dir], this->x + ddx[dir]);
 }
 
 bool PlayerType::is_located_at_running_destination() const

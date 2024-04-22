@@ -19,10 +19,10 @@ bool hit_and_away(PlayerType *player_ptr)
     if (!get_direction(player_ptr, &dir)) {
         return false;
     }
-    POSITION y = player_ptr->y + ddy[dir];
-    POSITION x = player_ptr->x + ddx[dir];
-    if (player_ptr->current_floor_ptr->grid_array[y][x].has_monster()) {
-        do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
+
+    const auto pos = player_ptr->get_neighbor(dir);
+    if (player_ptr->current_floor_ptr->get_grid(pos).has_monster()) {
+        do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
         if (randint0(player_ptr->skill_dis) < 7) {
             msg_print(_("うまく逃げられなかった。", "You failed to run away."));
         } else {
@@ -43,18 +43,12 @@ bool hit_and_away(PlayerType *player_ptr)
  */
 bool sword_dancing(PlayerType *player_ptr)
 {
-    DIRECTION dir;
-    POSITION y = 0, x = 0;
-    Grid *g_ptr;
-    for (int i = 0; i < 6; i++) {
-        dir = randint0(8);
-        y = player_ptr->y + ddy_ddd[dir];
-        x = player_ptr->x + ddx_ddd[dir];
-        g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-
-        /* Hack -- attack monsters */
-        if (g_ptr->has_monster()) {
-            do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
+    for (auto i = 0; i < 6; i++) {
+        const auto dir = randint0(8);
+        const Pos2D pos(player_ptr->y + ddy_ddd[dir], player_ptr->x + ddx_ddd[dir]);
+        const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+        if (grid.has_monster()) {
+            do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
         } else {
             msg_print(_("攻撃が空をきった。", "You attack the empty air."));
         }
