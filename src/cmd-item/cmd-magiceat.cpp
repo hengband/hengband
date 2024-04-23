@@ -111,12 +111,16 @@ static std::optional<BaseitemKey> check_magic_eater_spell_repeat(magic_eater_dat
     auto &item = item_group[sval];
     /* Verify the spell */
     switch (tval) {
-    case ItemKindType::ROD:
-        if (item.charge <= baseitems_info[lookup_baseitem_id({ ItemKindType::ROD, sval })].pval * (item.count - 1) * EATER_ROD_CHARGE) {
+    case ItemKindType::ROD: {
+        const auto &baseitems = BaseitemList::get_instance();
+        const auto bi_id = lookup_baseitem_id({ ItemKindType::ROD, sval });
+        const auto &baseitem = baseitems.get_baseitem(bi_id);
+        if (item.charge <= baseitem.pval * (item.count - 1) * EATER_ROD_CHARGE) {
             return BaseitemKey(tval, sval);
         }
 
         return std::nullopt;
+    }
     case ItemKindType::STAFF:
     case ItemKindType::WAND:
         if (item.charge >= EATER_CHARGE) {
@@ -253,6 +257,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
 
     const int item_group_size = item_group.size();
     auto sval = 0;
+    const auto &baseitems = BaseitemList::get_instance();
     while (!flag) {
         /* Show the list */
         if (request_list || use_menu) {
@@ -309,7 +314,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
                 }
                 x1 = ((sval_ctr < item_group_size / 2) ? x : x + 40);
                 y1 = ((sval_ctr < item_group_size / 2) ? y + sval_ctr : y + sval_ctr - item_group_size / 2);
-                const auto &baseitem = baseitems_info[bi_id];
+                const auto &baseitem = baseitems.get_baseitem(bi_id);
                 level = (tval == ItemKindType::ROD ? baseitem.level * 5 / 6 - 5 : baseitem.level);
                 chance = level * 4 / 5 + 20;
                 chance -= 3 * (adj_mag_stat[player_ptr->stat_index[mp_ptr->spell_stat]] - 1);
@@ -471,7 +476,9 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
         if (!only_browse) {
             auto &item = item_group[sval];
             if (tval == ItemKindType::ROD) {
-                if (item.charge > baseitems_info[lookup_baseitem_id({ tval, sval })].pval * (item.count - 1) * EATER_ROD_CHARGE) {
+                const auto bi_id = lookup_baseitem_id({ tval, sval });
+                const auto &baseitem = baseitems.get_baseitem(bi_id);
+                if (item.charge > baseitem.pval * (item.count - 1) * EATER_ROD_CHARGE) {
                     msg_print(_("その魔法はまだ充填している最中だ。", "The magic is still charging."));
                     msg_print(nullptr);
                     continue;
@@ -492,8 +499,9 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
             term_erase(7, 22);
             term_erase(7, 21);
             term_erase(7, 20);
-
-            display_wrap_around(baseitems_info[lookup_baseitem_id({ tval, sval })].text, 62, 21, 10);
+            const auto bi_id = lookup_baseitem_id({ tval, sval });
+            const auto &baseitem = baseitems.get_baseitem(bi_id);
+            display_wrap_around(baseitem.text, 62, 21, 10);
             continue;
         }
 
@@ -550,7 +558,7 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
     auto &bi_key = *result;
 
     const auto bi_id = lookup_baseitem_id(bi_key);
-    const auto &baseitem = baseitems_info[bi_id];
+    const auto &baseitem = BaseitemList::get_instance().get_baseitem(bi_id);
     auto level = (bi_key.tval() == ItemKindType::ROD ? baseitem.level * 5 / 6 - 5 : baseitem.level);
     auto chance = level * 4 / 5 + 20;
     chance -= 3 * (adj_mag_stat[player_ptr->stat_index[mp_ptr->spell_stat]] - 1);

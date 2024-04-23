@@ -119,7 +119,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
         wr_lore(i2enum<MonsterRaceId>(r_idx));
     }
 
-    tmp16u = static_cast<uint16_t>(baseitems_info.size());
+    tmp16u = static_cast<uint16_t>(BaseitemList::get_instance().size());
     wr_u16b(tmp16u);
     for (short bi_id = 0; bi_id < tmp16u; bi_id++) {
         wr_perception(bi_id);

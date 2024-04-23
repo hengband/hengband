@@ -143,8 +143,6 @@ public:
     void mark_as_aware();
 };
 
-extern std::vector<BaseitemInfo> baseitems_info;
-
 class BaseitemList {
 public:
     BaseitemList(BaseitemList &&) = delete;

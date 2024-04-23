@@ -138,7 +138,7 @@ static std::optional<tval_desc> wiz_select_tval()
 static std::optional<short> wiz_select_sval(const tval_desc &td)
 {
     std::vector<short> bi_ids;
-    for (const auto &baseitem : baseitems_info) {
+    for (const auto &baseitem : BaseitemList::get_instance()) {
         if (!baseitem.is_valid() || baseitem.bi_key.tval() != td.tval) {
             continue;
         }
@@ -149,8 +149,9 @@ static std::optional<short> wiz_select_sval(const tval_desc &td)
     const auto prompt = format(_("%s群の具体的なアイテムを選んで下さい", "What Kind of %s? "), td.desc);
 
     CandidateSelector cs(prompt, 15);
+    const auto &baseitems = BaseitemList::get_instance();
     const auto choice = cs.select(bi_ids,
-        [](short bi_id) { return baseitems_info[bi_id].stripped_name(); });
+        [&baseitems](short bi_id) { return baseitems.get_baseitem(bi_id).stripped_name(); });
     return (choice != bi_ids.end()) ? std::make_optional(*choice) : std::nullopt;
 }
 
@@ -193,7 +194,7 @@ void wiz_create_item(PlayerType *player_ptr)
         return;
     }
 
-    const auto &baseitem = baseitems_info[*bi_id];
+    const auto &baseitem = BaseitemList::get_instance().get_baseitem(*bi_id);
     if (baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
         for (const auto &[a_idx, artifact] : artifacts_info) {
             if ((a_idx == FixedArtifactId::NONE) || (artifact.bi_key != baseitem.bi_key)) {
@@ -568,7 +569,7 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
  */
 void wiz_learn_items_all(PlayerType *player_ptr)
 {
-    for (const auto &baseitem : baseitems_info) {
+    for (const auto &baseitem : BaseitemList::get_instance()) {
         if (baseitem.is_valid() && baseitem.level <= command_arg) {
             ItemEntity item;
             item.prep(baseitem.idx);

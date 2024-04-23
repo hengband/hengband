@@ -33,7 +33,7 @@
  */
 static void reset_baseitem_idenditication_flags()
 {
-    for (auto &baseitem : baseitems_info) {
+    for (auto &baseitem : BaseitemList::get_instance()) {
         baseitem.tried = false;
         baseitem.aware = false;
     }

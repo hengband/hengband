@@ -49,6 +49,7 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
 {
     (void)head;
     const auto &tokens = str_split(buf, ':', false, 10);
+    auto &baseitems = BaseitemList::get_instance();
 
     // N:index:name_ja
     if (tokens[0] == "N") {
@@ -61,13 +62,14 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
 
-        if (i >= static_cast<int>(baseitems_info.size())) {
-            baseitems_info.resize(i + 1);
+        if (i >= static_cast<int>(baseitems.size())) {
+            baseitems.resize(i + 1);
         }
 
         error_idx = i;
-        auto &baseitem = baseitems_info[i];
-        baseitem.idx = static_cast<short>(i);
+        const short s = static_cast<short>(i);
+        auto &baseitem = baseitems.get_baseitem(s);
+        baseitem.idx = s;
 #ifdef JP
         baseitem.name = tokens[2];
 #endif
@@ -78,7 +80,7 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         return PARSE_ERROR_NONE;
     }
 
-    if (baseitems_info.empty()) {
+    if (baseitems.empty()) {
         return PARSE_ERROR_MISSING_RECORD_HEADER;
     }
 
@@ -89,7 +91,7 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        auto &baseitem = *baseitems_info.rbegin();
+        auto &baseitem = *baseitems.rbegin();
         baseitem.name = tokens[1];
         if (tokens.size() > 2) {
             baseitem.flavor_name = tokens[2];
@@ -105,7 +107,7 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        auto &baseitem = *baseitems_info.rbegin();
+        auto &baseitem = *baseitems.rbegin();
 #ifdef JP
         if (buf[2] == '$') {
             return PARSE_ERROR_NONE;
@@ -137,7 +139,7 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             return PARSE_ERROR_GENERIC;
         }
 
-        auto &baseitem = *baseitems_info.rbegin();
+        auto &baseitem = *baseitems.rbegin();
         baseitem.cc_def = ColoredChar(color, tokens[1][0]);
         return PARSE_ERROR_NONE;
     }
@@ -151,7 +153,7 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         constexpr auto base = 10;
         const auto tval = i2enum<ItemKindType>(std::stoi(tokens[1], nullptr, base));
         const auto sval = std::stoi(tokens[2], nullptr, base);
-        auto &baseitem = *baseitems_info.rbegin();
+        auto &baseitem = *baseitems.rbegin();
         baseitem.bi_key = { tval, sval };
         info_set_value(baseitem.pval, tokens[3]);
         if ((tval == ItemKindType::ROD) && (baseitem.pval <= 0)) {
@@ -167,7 +169,7 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        auto &baseitem = *baseitems_info.rbegin();
+        auto &baseitem = *baseitems.rbegin();
         info_set_value(baseitem.level, tokens[1]);
         info_set_value(baseitem.weight, tokens[2]);
         info_set_value(baseitem.cost, tokens[3]);
@@ -187,7 +189,7 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
                 return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
             }
 
-            auto &baseitem = *baseitems_info.rbegin();
+            auto &baseitem = *baseitems.rbegin();
             auto &table = baseitem.alloc_tables[i];
             info_set_value(table.level, rarity[0]);
             info_set_value(table.chance, rarity[1]);
@@ -208,7 +210,7 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
 
-        auto &baseitem = *baseitems_info.rbegin();
+        auto &baseitem = *baseitems.rbegin();
         info_set_value(baseitem.ac, tokens[1]);
         info_set_value(baseitem.dd, dice[0]);
         info_set_value(baseitem.ds, dice[1]);
@@ -229,7 +231,7 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             return PARSE_ERROR_INVALID_FLAG;
         }
 
-        auto &baseitem = *baseitems_info.rbegin();
+        auto &baseitem = *baseitems.rbegin();
         baseitem.act_idx = n;
         return PARSE_ERROR_NONE;
     }
@@ -246,7 +248,7 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
                 continue;
             }
 
-            auto &baseitem = *baseitems_info.rbegin();
+            auto &baseitem = *baseitems.rbegin();
             if (!grab_one_baseitem_flag(baseitem, f)) {
                 return PARSE_ERROR_INVALID_FLAG;
             }

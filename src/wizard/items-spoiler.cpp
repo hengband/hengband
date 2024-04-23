@@ -130,7 +130,7 @@ SpoilerOutputResultType spoil_obj_desc()
     for (const auto &[tval_list, name] : group_item_list) {
         std::vector<short> whats;
         for (auto tval : tval_list) {
-            for (const auto &baseitem : baseitems_info) {
+            for (const auto &baseitem : BaseitemList::get_instance()) {
                 if ((baseitem.bi_key.tval() == tval) && baseitem.gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {
                     whats.push_back(baseitem.idx);
                 }

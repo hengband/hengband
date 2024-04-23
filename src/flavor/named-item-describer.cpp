@@ -216,7 +216,7 @@ static std::string describe_vowel(const ItemEntity &item, std::string_view basen
         vowel = is_a_vowel(modstr[0]);
         break;
     case '%':
-        vowel = is_a_vowel(baseitems_info[item.bi_id].name[0]);
+        vowel = is_a_vowel(item.get_baseitem().name[0]);
         break;
     default:
         vowel = is_a_vowel(basename[0]);

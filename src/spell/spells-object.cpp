@@ -95,6 +95,7 @@ static const std::array<AmuseDefinition, 13> amuse_info = { {
 
 static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_art, const short bi_id)
 {
+    const auto &baseitems = BaseitemList::get_instance();
     for (const auto &[a_idx, artifact] : artifacts_info) {
         if (a_idx == FixedArtifactId::NONE) {
             continue;
@@ -104,7 +105,7 @@ static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_
             continue;
         }
 
-        if (artifact.bi_key != baseitems_info[bi_id].bi_key) {
+        if (artifact.bi_key != baseitems.get_baseitem(bi_id).bi_key) {
             continue;
         }
 
@@ -131,6 +132,7 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
         pt.entry_item(&am_ref, am_ref.prob);
     }
 
+    const auto &baseitems = BaseitemList::get_instance();
     for (auto i = 0; i < num; i++) {
         auto am_ptr = pt.pick_one_at_random();
         const auto bi_id = lookup_baseitem_id(am_ptr->key);
@@ -138,7 +140,7 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
             continue;
         }
 
-        const auto insta_art = baseitems_info[bi_id].gen_flags.has(ItemGenerationTraitType::INSTA_ART);
+        const auto insta_art = baseitems.get_baseitem(bi_id).gen_flags.has(ItemGenerationTraitType::INSTA_ART);
         const auto flag = am_ptr->flag;
         const auto fixed_art = flag == AmusementFlagType::FIXED_ART;
         std::optional<FixedArtifactId> opt_a_idx;

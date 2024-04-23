@@ -207,7 +207,7 @@ bool potion_smash_effect(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y
     auto dt = AttributeType::NONE;
     auto dam = 0;
     auto angry = false;
-    const auto &baseitem = baseitems_info[bi_id];
+    const auto &baseitem = BaseitemList::get_instance().get_baseitem(bi_id);
     switch (*baseitem.bi_key.sval()) {
     case SV_POTION_SALT_WATER:
     case SV_POTION_SLIME_MOLD:

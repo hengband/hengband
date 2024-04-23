@@ -171,10 +171,11 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     }
 
     short bi_id;
+    const auto &baseitems = BaseitemList::get_instance();
     if (o_ptr->bi_key.sval() == SV_BROKEN_DAGGER) {
         auto n = 1;
         bi_id = 0;
-        for (const auto &baseitem : baseitems_info) {
+        for (const auto &baseitem : baseitems) {
             if (baseitem.bi_key.tval() != ItemKindType::SWORD) {
                 continue;
             }
@@ -197,7 +198,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         auto tval = (one_in_(5) ? mo_ptr->bi_key.tval() : ItemKindType::SWORD);
         while (true) {
             bi_id = lookup_baseitem_id({ tval });
-            const auto &baseitem = baseitems_info[bi_id];
+            const auto &baseitem = baseitems.get_baseitem(bi_id);
             const auto sval = baseitem.bi_key.sval();
             if (tval == ItemKindType::SWORD) {
                 if ((sval == SV_BROKEN_DAGGER) || (sval == SV_BROKEN_SWORD) || (sval == SV_DIAMOND_EDGE) || (sval == SV_POISON_NEEDLE)) {
@@ -228,7 +229,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     dd_bonus += mo_ptr->dd - baseitem_mo.dd;
     ds_bonus += mo_ptr->ds - baseitem_mo.ds;
 
-    const auto &baseitem = baseitems_info[bi_id];
+    const auto &baseitem = baseitems.get_baseitem(bi_id);
     o_ptr->bi_id = bi_id;
     o_ptr->weight = baseitem.weight;
     o_ptr->bi_key = baseitem.bi_key;

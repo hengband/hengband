@@ -150,7 +150,7 @@ static short collect_objects(int grp_cur, std::vector<short> &object_idx, BIT_FL
 {
     short object_cnt = 0;
     const auto group_tval = object_group_tval[grp_cur];
-    for (const auto &baseitem : baseitems_info) {
+    for (const auto &baseitem : BaseitemList::get_instance()) {
         if (baseitem.name.empty() || !check_baseitem_chance(mode, baseitem)) {
             continue;
         }
@@ -182,13 +182,14 @@ static short collect_objects(int grp_cur, std::vector<short> &object_idx, BIT_FL
  */
 static void display_object_list(int col, int row, int per_page, const std::vector<short> &object_idx, int object_cur, int object_top, bool visual_only)
 {
+    const auto &baseitems = BaseitemList::get_instance();
     int i;
     for (i = 0; i < per_page && (object_idx[object_top + i] >= 0); i++) {
         const short bi_id = object_idx[object_top + i];
-        const auto &baseitem = baseitems_info[bi_id];
+        const auto &baseitem = baseitems.get_baseitem(bi_id);
         TERM_COLOR attr = ((baseitem.aware || visual_only) ? TERM_WHITE : TERM_SLATE);
         byte cursor = ((baseitem.aware || visual_only) ? TERM_L_BLUE : TERM_BLUE);
-        const auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems_info[baseitem.flavor] : baseitem;
+        const auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems.get_baseitem(baseitem.flavor) : baseitem;
 
         attr = ((i + object_top == object_cur) ? cursor : attr);
         const auto is_flavor_only = (baseitem.flavor != 0) && (visual_only || !baseitem.aware);
@@ -251,7 +252,8 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
 
     const auto &[wid, hgt] = term_get_size();
     auto browser_rows = hgt - 8;
-    std::vector<short> object_idx(baseitems_info.size());
+    auto &baseitems = BaseitemList::get_instance();
+    std::vector<short> object_idx(baseitems.size());
 
     int len;
     int max = 0;
@@ -272,8 +274,8 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         object_old = -1;
         object_cnt = 0;
     } else {
-        auto &baseitem = baseitems_info[direct_k_idx];
-        auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems_info[baseitem.flavor] : baseitem;
+        auto &baseitem = baseitems.get_baseitem(direct_k_idx);
+        auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems.get_baseitem(baseitem.flavor) : baseitem;
         object_idx[0] = direct_k_idx;
         object_old = direct_k_idx;
         object_cnt = 1;
@@ -370,8 +372,8 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             display_visual_list(max + 3, 7, browser_rows - 1, wid - (max + 3), attr_top, char_left);
         }
 
-        auto &baseitem = baseitems_info[object_idx[object_cur]];
-        auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems_info[baseitem.flavor] : baseitem;
+        auto &baseitem = baseitems.get_baseitem(object_idx[object_cur]);
+        auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems.get_baseitem(baseitem.flavor) : baseitem;
 
 #ifdef JP
         prt(format("<方向>%s%s%s, ESC", (!visual_list && !visual_only) ? ", 'r'で詳細を見る" : "", visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更",

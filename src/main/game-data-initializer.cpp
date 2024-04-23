@@ -127,7 +127,8 @@ void init_items_alloc()
 {
     short num[MAX_DEPTH]{};
     auto alloc_kind_size = 0;
-    for (const auto &baseitem : baseitems_info) {
+    const auto &baseitems = BaseitemList::get_instance();
+    for (const auto &baseitem : baseitems) {
         for (const auto &[level, chance] : baseitem.alloc_tables) {
             if (chance != 0) {
                 alloc_kind_size++;
@@ -146,7 +147,7 @@ void init_items_alloc()
 
     alloc_kind_table.assign(alloc_kind_size, {});
     short aux[MAX_DEPTH]{};
-    for (const auto &baseitem : baseitems_info) {
+    for (const auto &baseitem : baseitems) {
         for (const auto &[level, chance] : baseitem.alloc_tables) {
             if (chance == 0) {
                 continue;

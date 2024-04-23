@@ -59,7 +59,7 @@ void ItemEntity::copy_from(const ItemEntity *j_ptr)
  */
 void ItemEntity::prep(short new_bi_id)
 {
-    const auto &baseitem = baseitems_info[new_bi_id];
+    const auto &baseitem = BaseitemList::get_instance().get_baseitem(new_bi_id);
     auto old_stack_idx = this->stack_idx;
     this->wipe();
     this->stack_idx = old_stack_idx;
@@ -590,7 +590,7 @@ TERM_COLOR ItemEntity::get_color() const
     const auto &baseitem = this->get_baseitem();
     const auto flavor = baseitem.flavor;
     if (flavor != 0) {
-        return baseitems_info[flavor].cc_config.color;
+        return BaseitemList::get_instance().get_baseitem(flavor).cc_config.color;
     }
 
     const auto &cc_config = baseitem.cc_config;
@@ -614,7 +614,7 @@ char ItemEntity::get_symbol() const
 {
     const auto &baseitem = this->get_baseitem();
     const auto flavor = baseitem.flavor;
-    return flavor ? baseitems_info[flavor].cc_config.character : baseitem.cc_config.character;
+    return flavor ? BaseitemList::get_instance().get_baseitem(flavor).cc_config.character : baseitem.cc_config.character;
 }
 
 /*!
@@ -788,7 +788,7 @@ bool ItemEntity::has_activation() const
 
 BaseitemInfo &ItemEntity::get_baseitem() const
 {
-    return baseitems_info[this->bi_id];
+    return BaseitemList::get_instance().get_baseitem(this->bi_id);
 }
 
 EgoItemDefinition &ItemEntity::get_ego() const
