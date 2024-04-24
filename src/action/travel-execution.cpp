@@ -55,15 +55,13 @@ static DIRECTION travel_test(PlayerType *player_ptr, DIRECTION prev_dir)
     }
 
     int max = (prev_dir & 0x01) + 1;
-    const Grid *g_ptr;
     for (int i = -max; i <= max; i++) {
         DIRECTION dir = cycle[chome[prev_dir] + i];
-        POSITION row = player_ptr->y + ddy[dir];
-        POSITION col = player_ptr->x + ddx[dir];
-        g_ptr = &floor_ptr->grid_array[row][col];
-        if (g_ptr->has_monster()) {
-            auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-            if (m_ptr->ml) {
+        const auto pos = player_ptr->get_neighbor(dir);
+        const auto &grid = floor_ptr->get_grid(pos);
+        if (grid.has_monster()) {
+            const auto &monster = floor_ptr->m_list[grid.m_idx];
+            if (monster.ml) {
                 return 0;
             }
         }
@@ -83,12 +81,13 @@ static DIRECTION travel_test(PlayerType *player_ptr, DIRECTION prev_dir)
         return 0;
     }
 
-    g_ptr = &floor_ptr->grid_array[player_ptr->y + ddy[new_dir]][player_ptr->x + ddx[new_dir]];
-    if (!easy_open && is_closed_door(player_ptr, g_ptr->feat)) {
+    const auto pos_new = player_ptr->get_neighbor(new_dir);
+    const auto &grid = floor_ptr->get_grid(pos_new);
+    if (!easy_open && is_closed_door(player_ptr, grid.feat)) {
         return 0;
     }
 
-    if (!g_ptr->mimic && !trap_can_be_ignored(player_ptr, g_ptr->feat)) {
+    if (!grid.mimic && !trap_can_be_ignored(player_ptr, grid.feat)) {
         return 0;
     }
 
