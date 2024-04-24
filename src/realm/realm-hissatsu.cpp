@@ -265,23 +265,24 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 return std::nullopt;
             }
 
-            const auto pos = player_ptr->get_neighbor(dir);
+            const auto pos_target = player_ptr->get_neighbor(dir);
             const auto &floor = *player_ptr->current_floor_ptr;
-            const auto &grid = floor.get_grid(pos);
-            if (!grid.has_monster()) {
+            const auto &grid_target = floor.get_grid(pos_target);
+            if (!grid_target.has_monster()) {
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return std::nullopt;
             }
 
-            do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
-            if (!player_can_enter(player_ptr, grid.feat, 0) || is_trap(player_ptr, grid.feat)) {
+            do_cmd_attack(player_ptr, pos_target.y, pos_target.x, HISSATSU_NONE);
+            if (!player_can_enter(player_ptr, grid_target.feat, 0) || is_trap(player_ptr, grid_target.feat)) {
                 break;
             }
 
-            const Pos2D pos_neighbor(pos.y + ddy[dir], pos.x + ddx[dir]);
-            if (player_can_enter(player_ptr, grid.feat, 0) && !is_trap(player_ptr, grid.feat) && !grid.m_idx) {
+            const Pos2D pos_opposite(pos_target.y + ddy[dir], pos_target.x + ddx[dir]);
+            const auto &grid_opposite = floor.get_grid(pos_opposite);
+            if (player_can_enter(player_ptr, grid_opposite.feat, 0) && !is_trap(player_ptr, grid_opposite.feat) && !grid_opposite.m_idx) {
                 msg_print(nullptr);
-                (void)move_player_effect(player_ptr, pos_neighbor.y, pos_neighbor.x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+                (void)move_player_effect(player_ptr, pos_opposite.y, pos_opposite.x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
             }
         }
         break;
