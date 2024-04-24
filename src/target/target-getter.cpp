@@ -18,6 +18,7 @@
 #include "target/target-types.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/timed-effects.h"
+#include "util/finalizer.h"
 #include "view/display-messages.h"
 #include <string>
 
@@ -136,26 +137,29 @@ std::optional<int> get_direction(PlayerType *player_ptr)
     }
 
     command_dir = dir;
-    auto is_confused = player_ptr->effects()->confusion()->is_confused();
+    const auto finalizer = util::make_finalizer([] {
+        repeat_push(static_cast<short>(command_dir));
+    });
+    const auto is_confused = player_ptr->effects()->confusion()->is_confused();
     if (is_confused && (randint0(100) < 75)) {
         dir = ddd[randint0(8)];
     }
 
-    if (command_dir != dir) {
-        if (is_confused) {
-            msg_print(_("あなたは混乱している。", "You are confused."));
-        } else {
-            auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-            if (m_ptr->is_confused()) {
-                msg_format(_("%sは混乱している。", "%s^ is confused."), m_name.data());
-            } else {
-                msg_format(_("%sは思い通りに動いてくれない。", "You cannot control %s."), m_name.data());
-            }
-        }
+    if (command_dir == dir) {
+        return dir;
     }
 
-    repeat_push(static_cast<short>(command_dir));
+    if (is_confused) {
+        msg_print(_("あなたは混乱している。", "You are confused."));
+        return dir;
+    }
+
+    const auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+    const auto m_name = monster_desc(player_ptr, &monster, 0);
+    const auto fmt = monster.is_confused()
+                         ? _("%sは混乱している。", "%s^ is confused.")
+                         : _("%sは思い通りに動いてくれない。", "You cannot control %s.");
+    msg_format(fmt, m_name.data());
     return dir;
 }
 
