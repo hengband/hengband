@@ -533,13 +533,13 @@ bool restore_all_status(PlayerType *player_ptr)
 
 bool fishing(PlayerType *player_ptr)
 {
-    DIRECTION dir;
-    if (!get_direction(player_ptr, &dir)) {
+    const auto dir = get_direction(player_ptr);
+    if (!dir) {
         return false;
     }
 
-    const auto pos = player_ptr->get_neighbor(dir);
-    player_ptr->fishing_dir = dir;
+    const auto pos = player_ptr->get_neighbor(*dir);
+    player_ptr->fishing_dir = *dir;
     const auto &floor = *player_ptr->current_floor_ptr;
     if (!cave_has_flag_bold(&floor, pos.y, pos.x, TerrainCharacteristics::WATER)) {
         msg_print(_("そこは水辺ではない。", "You can't fish here."));

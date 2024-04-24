@@ -142,12 +142,12 @@ bool exe_monster_capture(PlayerType *player_ptr, ItemEntity &item)
         return true;
     }
 
-    DIRECTION dir;
-    if (!get_direction(player_ptr, &dir)) {
+    const auto dir = get_direction(player_ptr);
+    if (!dir) {
         return true;
     }
 
-    if (!release_monster(player_ptr, item, dir)) {
+    if (!release_monster(player_ptr, item, *dir)) {
         msg_print(_("おっと、解放に失敗した。", "Oops.  You failed to release your pet."));
     }
 

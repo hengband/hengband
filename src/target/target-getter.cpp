@@ -114,7 +114,7 @@ bool get_aim_dir(PlayerType *player_ptr, int *dp)
     return true;
 }
 
-bool get_direction(PlayerType *player_ptr, int *dp)
+std::optional<int> get_direction(PlayerType *player_ptr)
 {
     auto dir = command_dir;
     short code;
@@ -122,12 +122,11 @@ bool get_direction(PlayerType *player_ptr, int *dp)
         dir = code;
     }
 
-    *dp = code;
     constexpr auto prompt = _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
     while (dir == 0) {
         const auto command = input_command(prompt, true);
         if (!command) {
-            return false;
+            return std::nullopt;
         }
 
         dir = get_keymap_dir(*command);
@@ -156,9 +155,8 @@ bool get_direction(PlayerType *player_ptr, int *dp)
         }
     }
 
-    *dp = dir;
     repeat_push(static_cast<short>(command_dir));
-    return true;
+    return dir;
 }
 
 /*

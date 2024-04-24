@@ -34,12 +34,12 @@ bool cast_berserk_spell(PlayerType *player_ptr, MindBerserkerType spell)
             return false;
         }
 
-        DIRECTION dir;
-        if (!get_direction(player_ptr, &dir) || (dir == 5)) {
+        const auto dir = get_direction(player_ptr);
+        if (!dir || (dir == 5)) {
             return false;
         }
 
-        const auto pos = player_ptr->get_neighbor(dir);
+        const auto pos = player_ptr->get_neighbor(*dir);
         const auto &floor = *player_ptr->current_floor_ptr;
         const auto &grid = floor.get_grid(pos);
         if (!grid.has_monster()) {
@@ -52,7 +52,7 @@ bool cast_berserk_spell(PlayerType *player_ptr, MindBerserkerType spell)
             return true;
         }
 
-        const Pos2D pos_new(pos.y + ddy[dir], pos.x + ddx[dir]);
+        const Pos2D pos_new(pos.y + ddy[*dir], pos.x + ddx[*dir]);
         const auto &grid_new = floor.get_grid(pos_new);
         if (player_can_enter(player_ptr, grid_new.feat, 0) && !is_trap(player_ptr, grid_new.feat) && !grid_new.has_monster()) {
             msg_print(nullptr);
@@ -62,12 +62,12 @@ bool cast_berserk_spell(PlayerType *player_ptr, MindBerserkerType spell)
         return true;
     }
     case MindBerserkerType::SMASH_TRAP: {
-        DIRECTION dir;
-        if (!get_direction(player_ptr, &dir)) {
+        const auto dir = get_direction(player_ptr);
+        if (!dir) {
             return false;
         }
 
-        exe_movement(player_ptr, dir, easy_disarm, true);
+        exe_movement(player_ptr, *dir, easy_disarm, true);
         return true;
     }
     case MindBerserkerType::QUAKE:
