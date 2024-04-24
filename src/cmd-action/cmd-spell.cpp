@@ -577,9 +577,6 @@ static FuncItemTester get_learnable_spellbook_tester(PlayerType *player_ptr)
 void do_cmd_browse(PlayerType *player_ptr)
 {
     SPELL_IDX spell = -1;
-    int num = 0;
-
-    SPELL_IDX spells[64];
 
     /* Warriors are illiterate */
     PlayerClass pc(player_ptr);
@@ -624,11 +621,12 @@ void do_cmd_browse(PlayerType *player_ptr)
     handle_stuff(player_ptr);
 
     /* Extract spells */
+    std::vector<SPELL_IDX> spells;
     for (spell = 0; spell < 32; spell++) {
         /* Check for this spell */
         if ((fake_spell_flags[sval] & (1UL << spell))) {
             /* Collect this spell */
-            spells[num++] = spell;
+            spells.push_back(spell);
         }
     }
 
@@ -645,7 +643,7 @@ void do_cmd_browse(PlayerType *player_ptr)
             }
 
             /* Display a list of spells */
-            print_spells(player_ptr, 0, spells, num, 1, 15, use_realm);
+            print_spells(player_ptr, 0, spells.data(), spells.size(), 1, 15, use_realm);
 
             /* Notify that there's nothing to see, and wait. */
             if (use_realm == REALM_HISSATSU) {
