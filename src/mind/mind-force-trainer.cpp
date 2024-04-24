@@ -237,7 +237,7 @@ bool shock_power(PlayerType *player_ptr)
         }
     }
 
-    if (pos_target != pos_origin) {
+    if (pos_target == pos_origin) {
         return true;
     }
 
