@@ -24,6 +24,7 @@
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
+#include "view/colored-char.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
 #include <span>
@@ -302,13 +303,17 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
     }
 
     if (grid.has_monster() && display_autopick != 0) {
-        set_term_color(player_ptr, y, x, ap, cp);
+        const auto cc = set_term_color(player_ptr, { y, x }, { *ap, *cp });
+        *ap = cc.color;
+        *cp = cc.character;
         return;
     }
 
     auto *m_ptr = &floor.m_list[grid.m_idx];
     if (!m_ptr->ml) {
-        set_term_color(player_ptr, y, x, ap, cp);
+        const auto cc = set_term_color(player_ptr, { y, x }, { *ap, *cp });
+        *ap = cc.color;
+        *cp = cc.character;
         return;
     }
 
@@ -321,21 +326,25 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
             image_monster(ap, cp);
         }
 
-        set_term_color(player_ptr, y, x, ap, cp);
+        const auto cc = set_term_color(player_ptr, { y, x }, { *ap, *cp });
+        *ap = cc.color;
+        *cp = cc.character;
         return;
     }
 
     a = r_ptr->x_attr;
     c = r_ptr->x_char;
     if (r_ptr->visual_flags.has_none_of({ MonsterVisualType::CLEAR, MonsterVisualType::SHAPECHANGER, MonsterVisualType::CLEAR_COLOR, MonsterVisualType::MULTI_COLOR, MonsterVisualType::RANDOM_COLOR })) {
-        *ap = a;
-        *cp = c;
-        set_term_color(player_ptr, y, x, ap, cp);
+        const auto cc = set_term_color(player_ptr, { y, x }, { a, c });
+        *ap = cc.color;
+        *cp = cc.character;
         return;
     }
 
     if (r_ptr->visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {
-        set_term_color(player_ptr, y, x, ap, cp);
+        const auto cc = set_term_color(player_ptr, { y, x }, { *ap, *cp });
+        *ap = cc.color;
+        *cp = cc.character;
         return;
     }
 
@@ -364,24 +373,29 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
     }
 
     if (r_ptr->visual_flags.has(MonsterVisualType::CLEAR) && (*cp != ' ') && !use_graphics) {
-        set_term_color(player_ptr, y, x, ap, cp);
+        const auto cc = set_term_color(player_ptr, { y, x }, { *ap, *cp });
+        *ap = cc.color;
+        *cp = cc.character;
         return;
     }
 
     if (r_ptr->visual_flags.has(MonsterVisualType::SHAPECHANGER)) {
         if (use_graphics) {
             auto r_idx = MonsterRace::pick_one_at_random();
-            MonsterRaceInfo *tmp_r_ptr = &monraces_info[r_idx];
-            *cp = tmp_r_ptr->x_char;
-            *ap = tmp_r_ptr->x_attr;
+            const auto &monrace = monraces_info[r_idx];
+            *cp = monrace.x_char;
+            *ap = monrace.x_attr;
         } else {
             *cp = one_in_(25) ? rand_choice(image_objects) : rand_choice(image_monsters);
         }
 
-        set_term_color(player_ptr, y, x, ap, cp);
+        const auto cc = set_term_color(player_ptr, { y, x }, { *ap, *cp });
+        *ap = cc.color;
+        *cp = cc.character;
         return;
     }
 
-    *cp = c;
-    set_term_color(player_ptr, y, x, ap, cp);
+    const auto cc = set_term_color(player_ptr, { y, x }, { *ap, c });
+    *ap = cc.color;
+    *cp = cc.character;
 }
