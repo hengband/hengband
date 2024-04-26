@@ -28,12 +28,12 @@
  */
 bool eat_rock(PlayerType *player_ptr)
 {
-    DIRECTION dir;
-    if (!get_direction(player_ptr, &dir)) {
+    const auto dir = get_direction(player_ptr);
+    if (!dir) {
         return false;
     }
 
-    const auto pos = player_ptr->get_neighbor(dir);
+    const auto pos = player_ptr->get_neighbor(*dir);
     const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
     const auto &terrain = grid.get_terrain();
     const auto &terrain_mimic = grid.get_terrain_mimic();

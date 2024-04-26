@@ -72,19 +72,10 @@
  */
 void do_cmd_pet_dismiss(PlayerType *player_ptr)
 {
-    MonsterEntity *m_ptr;
-    bool all_pets = false;
-    int Dismissed = 0;
-
-    uint16_t dummy_why;
-    bool cu, cv;
-
-    cu = game_term->scr->cu;
-    cv = game_term->scr->cv;
-    game_term->scr->cu = 0;
-    game_term->scr->cv = 1;
-
-    /* Allocate the "who" array */
+    auto cu = game_term->scr->cu;
+    auto cv = game_term->scr->cv;
+    game_term->scr->cu = false;
+    game_term->scr->cv = true;
     std::vector<MONSTER_IDX> who;
 
     /* Process the monsters (backwards) */
@@ -95,35 +86,32 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
         }
     }
 
+    uint16_t dummy_why = 0;
     ang_sort(player_ptr, who.data(), &dummy_why, who.size(), ang_sort_comp_pet_dismiss, ang_sort_swap_hook);
 
     /* Process the monsters (backwards) */
+    auto all_pets = false;
+    auto num_dismissed = 0;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     for (auto i = 0U; i < who.size(); i++) {
-        auto pet_ctr = who[i];
-        m_ptr = &player_ptr->current_floor_ptr->m_list[pet_ctr];
-
+        const auto pet_ctr = who[i];
+        const auto &monster = player_ptr->current_floor_ptr->m_list[pet_ctr];
         auto delete_this = false;
-        auto should_ask = (pet_ctr == player_ptr->riding) || m_ptr->is_named();
-        const auto friend_name = monster_desc(player_ptr, m_ptr, MD_ASSUME_VISIBLE);
-
+        const auto should_ask = (pet_ctr == player_ptr->riding) || monster.is_named();
+        const auto friend_name = monster_desc(player_ptr, &monster, MD_ASSUME_VISIBLE);
         if (!all_pets) {
-            /* Hack -- health bar for this monster */
             health_track(player_ptr, pet_ctr);
             handle_stuff(player_ptr);
             constexpr auto mes = _("%sを放しますか？ [Yes/No/Unnamed (%lu体)]", "Dismiss %s? [Yes/No/Unnamed (%lu remain)]");
             msg_format(mes, friend_name.data(), who.size() - i);
-
-            if (m_ptr->ml) {
-                move_cursor_relative(m_ptr->fy, m_ptr->fx);
+            if (monster.ml) {
+                move_cursor_relative(monster.fy, monster.fx);
             }
 
             while (true) {
-                char ch = inkey();
-
+                auto ch = inkey();
                 if (ch == 'Y' || ch == 'y') {
                     delete_this = true;
-
                     if (should_ask) {
                         msg_format(_("本当によろしいですか？ (%s) ", "Are you sure? (%s) "), friend_name.data());
                         ch = inkey();
@@ -131,6 +119,7 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
                             delete_this = false;
                         }
                     }
+
                     break;
                 }
 
@@ -148,14 +137,13 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
         }
 
         if ((all_pets && !should_ask) || (!all_pets && delete_this)) {
-            if (record_named_pet && m_ptr->is_named()) {
-                const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
+            if (record_named_pet && monster.is_named()) {
+                const auto m_name = monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE);
                 exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_DISMISS, m_name);
             }
 
             if (pet_ctr == player_ptr->riding) {
                 msg_format(_("%sから降りた。", "You dismount from %s. "), friend_name.data());
-
                 player_ptr->riding = 0;
                 rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
                 static constexpr auto flags = {
@@ -168,9 +156,8 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
             msg_format(_("%s を放した。", "Dismissed %s."), friend_name.data());
             rfu.set_flag(StatusRecalculatingFlag::BONUS);
             rfu.set_flag(SubWindowRedrawingFlag::MESSAGE);
-
             delete_monster_idx(player_ptr, pet_ctr);
-            Dismissed++;
+            num_dismissed++;
         }
     }
 
@@ -179,11 +166,11 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
     term_fresh();
 
 #ifdef JP
-    msg_format("%d 体のペットを放しました。", Dismissed);
+    msg_format("%d 体のペットを放しました。", num_dismissed);
 #else
-    msg_format("You have dismissed %d pet%s.", Dismissed, (Dismissed == 1 ? "" : "s"));
+    msg_format("You have dismissed %d pet%s.", num_dismissed, (num_dismissed == 1 ? "" : "s"));
 #endif
-    if (Dismissed == 0 && all_pets) {
+    if ((num_dismissed == 0) && all_pets) {
         msg_print(_("'U'nnamed は、乗馬以外の名前のないペットだけを全て解放します。", "'U'nnamed means all your pets except named pets and your mount."));
     }
 
@@ -197,12 +184,12 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
  */
 bool do_cmd_riding(PlayerType *player_ptr, bool force)
 {
-    int dir;
-    if (!get_direction(player_ptr, &dir)) {
+    const auto dir = get_direction(player_ptr);
+    if (!dir) {
         return false;
     }
 
-    const auto pos = player_ptr->get_neighbor(dir);
+    const auto pos = player_ptr->get_neighbor(*dir);
     auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
