@@ -26,8 +26,8 @@ jobs:
     name: Build Japanese version with clang (without using pre-compiled headers)
     uses: ./.github/workflows/build-with-autotools.yml
     with:
-      cxx: clang++-14
-      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -Wno-unused-const-variable -Wno-invalid-source-encoding -stdlib=libc++"
+      cxx: clang++-15
+      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -Wno-unused-const-variable -Wno-invalid-source-encoding -stdlib=libc++ -std=c++20"
       configure-opts: "--disable-pch"
       use-ccache: true
 
@@ -35,16 +35,16 @@ jobs:
     name: Build Japanese version with gcc
     uses: ./.github/workflows/build-with-autotools.yml
     with:
-      cxx: g++-11
-      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
+      cxx: g++-13
+      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -std=c++20"
       use-ccache: true
 
   build_test_english:
     name: Build English version with gcc
     uses: ./.github/workflows/build-with-autotools.yml
     with:
-      cxx: g++-11
-      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
+      cxx: g++-13
+      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -std=c++20"
       configure-opts: "--disable-japanese"
       distcheck: true
       use-ccache: true
