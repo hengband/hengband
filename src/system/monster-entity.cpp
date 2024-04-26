@@ -286,6 +286,10 @@ bool MonsterEntity::is_explodable() const
     return monrace.is_explodable();
 }
 
+/*!
+ * @brief モンスターを撃破した際の述語メッセージを返す
+ * @return 撃破されたモンスターの述語
+ */
 std::string MonsterEntity::get_died_message() const
 {
     const auto &monrace = this->get_monrace();
