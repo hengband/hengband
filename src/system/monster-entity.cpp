@@ -276,12 +276,20 @@ bool MonsterEntity::has_living_flag(bool is_apperance) const
     return monrace.has_living_flag();
 }
 
+/*!
+ * @brief モンスターが自爆するか否か
+ * @return 自爆するならtrue
+ */
 bool MonsterEntity::is_explodable() const
 {
     const auto &monrace = this->get_monrace();
     return monrace.is_explodable();
 }
 
+/*!
+ * @brief モンスターを撃破した際の述語メッセージを返す
+ * @return 撃破されたモンスターの述語
+ */
 std::string MonsterEntity::get_died_message() const
 {
     const auto &monrace = this->get_monrace();
