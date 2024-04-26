@@ -616,13 +616,11 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
  */
 void wiz_learn_items_all(PlayerType *player_ptr)
 {
-    ItemEntity forge;
-    ItemEntity *q_ptr;
     for (const auto &baseitem : baseitems_info) {
-        if (baseitem.idx > 0 && baseitem.level <= command_arg) {
-            q_ptr = &forge;
-            q_ptr->prep(baseitem.idx);
-            object_aware(player_ptr, q_ptr);
+        if (baseitem.is_valid() && baseitem.level <= command_arg) {
+            ItemEntity item;
+            item.prep(baseitem.idx);
+            object_aware(player_ptr, &item);
         }
     }
 }
