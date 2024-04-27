@@ -108,8 +108,8 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
         /* Place fixed lite berathers */
         for (auto dir1 = 4; dir1 < 8; dir1++) {
             const auto monrace_id = get_mon_num(player_ptr, 0, floor.dun_level, 0);
-            auto y = yval + 2 * ddy_ddd[dir1];
-            auto x = xval + 2 * ddx_ddd[dir1];
+            const auto y = yval + 2 * ddy_ddd[dir1];
+            const auto x = xval + 2 * ddx_ddd[dir1];
             if (MonsterRace(monrace_id).is_valid()) {
                 place_specific_monster(player_ptr, 0, y, x, monrace_id, PM_ALLOW_SLEEP);
             }
@@ -127,9 +127,9 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
         }
 
         /* Glass door */
-        auto dir1 = randint0(4);
-        auto y = yval + 2 * ddy_ddd[dir1];
-        auto x = xval + 2 * ddx_ddd[dir1];
+        const auto dir1 = randint0(4);
+        const auto y = yval + 2 * ddy_ddd[dir1];
+        const auto x = xval + 2 * ddx_ddd[dir1];
         place_secret_door(player_ptr, y, x, DOOR_GLASS_DOOR);
         auto &grid = floor.get_grid({ y, x });
         if (is_closed_door(player_ptr, grid.feat)) {
@@ -199,8 +199,8 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
         /* Place shard berathers */
         for (auto dir1 = 4; dir1 < 8; dir1++) {
             const auto monrace_id = get_mon_num(player_ptr, 0, floor.dun_level, 0);
-            auto y = yval + ddy_ddd[dir1];
-            auto x = xval + ddx_ddd[dir1];
+            const auto y = yval + ddy_ddd[dir1];
+            const auto x = xval + ddx_ddd[dir1];
             if (MonsterRace(monrace_id).is_valid()) {
                 place_specific_monster(player_ptr, 0, y, x, monrace_id, 0L);
             }
