@@ -504,10 +504,8 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
             reset_bits(project_flag, PROJECT_MIRROR);
 
             const auto length = project_length ? project_length : system.get_max_range();
-            for (auto i : cdd) {
-                const auto dy = ddy[i];
-                const auto dx = ddx[i];
-                second_path_g_list.emplace_back(this->player_ptr, length, y, x, y + dy, x + dx, project_flag);
+            for (const auto &dd : CCW_DD) {
+                second_path_g_list.emplace_back(this->player_ptr, length, y, x, y + dd.y, x + dd.x, project_flag);
             }
         }
     }

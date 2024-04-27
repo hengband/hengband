@@ -395,8 +395,8 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
         }
 
         /* Advance the streamer */
-        y += ddy[cdd[dir]];
-        x += ddx[cdd[dir]];
+        y += CCW_DD[dir].y;
+        x += CCW_DD[dir].x;
 
         if (one_in_(10)) {
             if (one_in_(2)) {

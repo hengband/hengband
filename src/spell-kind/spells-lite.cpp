@@ -153,10 +153,10 @@ static int next_to_open(FloorType *floor_ptr, const POSITION cy, const POSITION 
 {
     int len = 0;
     int blen = 0;
+    const Pos2D pos_center(cy, cx);
     for (int i = 0; i < 16; i++) {
-        POSITION y = cy + ddy_cdd[i % 8];
-        POSITION x = cx + ddx_cdd[i % 8];
-        if (!pass_bold(floor_ptr, y, x)) {
+        const auto pos = pos_center + CCW_DD[i % 8];
+        if (!pass_bold(floor_ptr, pos.y, pos.x)) {
             if (len > blen) {
                 blen = len;
             }

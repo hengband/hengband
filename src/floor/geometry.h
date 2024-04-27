@@ -26,9 +26,11 @@ constexpr std::array<int, 10> ddx = { { 0, -1, 0, 1, -1, 0, 1, -1, 0, 1 } }; //!
 constexpr std::array<int, 10> ddy = { { 0, 1, 1, 1, 0, 0, 0, -1, -1, -1 } }; //!< dddで定義した順にベクトルのY軸成分.
 constexpr std::array<int, 9> ddx_ddd = { { 0, 0, 1, -1, 1, -1, 1, -1, 0 } }; //!< ddd越しにベクトルのX軸成分.
 constexpr std::array<int, 9> ddy_ddd = { { 1, -1, 0, 0, 1, 1, -1, -1, 0 } }; //!< ddd越しにベクトルのY軸成分.
-constexpr std::array<int, 8> cdd = { { 2, 3, 6, 9, 8, 7, 4, 1 } }; //!< キーパッドの円環状方向配列. */
-constexpr std::array<int, 8> ddx_cdd = { { 0, 1, 1, 1, 0, -1, -1, -1 } }; //!< cdd越しにベクトルのX軸成分.
-constexpr std::array<int, 8> ddy_cdd = { { 1, 1, 0, -1, -1, -1, 0, 1 } }; //!< cdd越しにベクトルのY軸成分.
+
+//! 下方向から反時計回りに8方向への方向ベクトル配列
+constexpr std::array<Pos2DVec, 8> CCW_DD = {
+    { { 1, 0 }, { 1, 1 }, { 0, 1 }, { -1, 1 }, { -1, 0 }, { -1, -1 }, { 0, -1 }, { 1, -1 } }
+};
 
 class PlayerType;
 DIRECTION coords_to_dir(PlayerType *player_ptr, POSITION y, POSITION x);
