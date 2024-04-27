@@ -25,9 +25,9 @@ void reset_visuals(PlayerType *player_ptr)
         baseitem.x_char = baseitem.d_char;
     }
 
-    for (auto &[r_idx, r_ref] : monraces_info) {
-        r_ref.x_attr = r_ref.d_attr;
-        r_ref.x_char = r_ref.d_char;
+    for (auto &[monrace_id, monrace] : monraces_info) {
+        monrace.x_attr = monrace.d_attr;
+        monrace.x_char = monrace.d_char;
     }
 
     concptr pref_file = use_graphics ? "graf.prf" : "font.prf";
