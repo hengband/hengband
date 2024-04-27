@@ -71,8 +71,7 @@ static void dump_magic_eater(PlayerType *player_ptr, FILE *fff)
                 continue;
             }
 
-            char buf[128];
-            snprintf(buf, sizeof(buf), "%23s (%2d)", baseitems_info[bi_id].name.data(), item.count);
+            const auto buf = format("%23s (%2d)", baseitems_info[bi_id].name.data(), item.count);
             desc_list.emplace_back(buf);
         }
 

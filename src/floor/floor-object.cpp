@@ -154,32 +154,29 @@ bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, std:
 
 /*!
  * @brief 生成階に応じた財宝オブジェクトの生成を行う。
- * Make a treasure object
- * @param floor_ptr 現在フロアへの参照ポインタ
- * @param j_ptr 生成結果を収めたいオブジェクト構造体の参照ポインタ
+ * @param floor 現在フロアへの参照
+ * @param j_ptr 生成結果を収めたいアイテムの参照ポインタ
  * @return 生成に成功したらTRUEを返す。
- * @details
- * The location must be a legal, clean, floor grid.
  */
 bool make_gold(PlayerType *player_ptr, ItemEntity *j_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    int i = ((randint1(floor_ptr->object_level + 2) + 2) / 2) - 1;
+    const auto &floor = *player_ptr->current_floor_ptr;
+    auto i = ((randint1(floor.object_level + 2) + 2) / 2) - 1;
     if (one_in_(CHANCE_BASEITEM_LEVEL_BOOST)) {
-        i += randint1(floor_ptr->object_level + 1);
+        i += randint1(floor.object_level + 1);
     }
 
     if (coin_type) {
         i = coin_type;
     }
+
     if (i >= MAX_GOLD) {
         i = MAX_GOLD - 1;
     }
+
     j_ptr->prep(OBJ_GOLD_LIST + i);
-
-    int32_t base = baseitems_info[OBJ_GOLD_LIST + i].cost;
+    const auto base = baseitems_info[OBJ_GOLD_LIST + i].cost;
     j_ptr->pval = (base + (8L * randint1(base)) + randint1(8));
-
     return true;
 }
 
@@ -330,7 +327,7 @@ ObjectIndexList &get_o_idx_list_contains(FloorType *floor_ptr, OBJECT_IDX o_idx)
  * @param x 配置したいフロアのX座標
  * @return 生成に成功したらオブジェクトのIDを返す。
  * @details
- * The initial location is assumed to be "in_bounds(floor_ptr, )".\n
+ * The initial location is assumed to be "in_bounds(floor, )".\n
  *\n
  * This function takes a parameter "chance".  This is the percentage\n
  * chance that the item will "disappear" instead of drop.  If the object\n
