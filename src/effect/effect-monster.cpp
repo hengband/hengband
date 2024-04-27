@@ -211,8 +211,8 @@ static void effect_damage_makes_sleep(PlayerType *player_ptr, EffectMonster *em_
         msg_format("%s^%s", em_ptr->m_name, em_ptr->note.data());
     } else if (em_ptr->see_s_msg) {
         const auto pain_message = MonsterPainDescriber(player_ptr, em_ptr->g_ptr->m_idx).describe(em_ptr->dam);
-        if (!pain_message.empty()) {
-            msg_print(pain_message);
+        if (pain_message) {
+            msg_print(*pain_message);
         }
     } else {
         player_ptr->current_floor_ptr->monster_noise = true;
@@ -306,8 +306,8 @@ static bool deal_effect_damage_from_player(PlayerType *player_ptr, EffectMonster
         msg_format(_("%s%s", "%s^%s"), em_ptr->m_name, em_ptr->note.data());
     } else if (em_ptr->known && (em_ptr->dam || !em_ptr->do_fear)) {
         const auto pain_message = MonsterPainDescriber(player_ptr, em_ptr->g_ptr->m_idx).describe(em_ptr->dam);
-        if (!pain_message.empty()) {
-            msg_print(pain_message);
+        if (pain_message) {
+            msg_print(*pain_message);
         }
     }
 
