@@ -425,17 +425,16 @@ static errr decide_template_modifier(int tok, char **zz)
  */
 static errr interpret_macro_keycodes(int tok, char **zz)
 {
-    char buf_aux[MAX_MACRO_CHARS];
-    char *t, *s;
+    char buf_aux[MAX_MACRO_CHARS]{};
     if (max_macrotrigger >= MAX_MACRO_TRIG) {
         msg_print(_("マクロトリガーの設定が多すぎます!", "Too many macro triggers!"));
         return 1;
     }
 
-    int m = max_macrotrigger;
+    auto m = max_macrotrigger;
     max_macrotrigger++;
-    t = buf_aux;
-    s = zz[0];
+    auto *t = buf_aux;
+    auto *s = zz[0];
     while (*s) {
         if ('\\' == *s) {
             s++;
