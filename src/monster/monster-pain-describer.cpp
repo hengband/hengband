@@ -193,9 +193,9 @@ MonsterPainDescriber::MonsterPainDescriber(PlayerType *player_ptr, MONSTER_IDX m
 /*!
  * @brief ダメージを受けたモンスターの様子を記述する
  * @param dam モンスターが受けたダメージ
- * @return std::string ダメージを受けたモンスターの様子を表す文字列。表示すべき様子が無い場合は空文字列。
+ * @return std::string ダメージを受けたモンスターの様子を表す文字列。表示すべき様子が無い場合はnullopt。
  */
-std::string MonsterPainDescriber::describe(int dam)
+std::optional<std::string> MonsterPainDescriber::describe(int dam)
 {
     const auto m_name = monster_desc(player_ptr, this->m_ptr, 0);
 
@@ -203,7 +203,7 @@ std::string MonsterPainDescriber::describe(int dam)
         if (this->m_ptr->ml) {
             return format(_("%s^はダメージを受けていない。", "%s^ is unharmed."), m_name.data());
         }
-        return "";
+        return std::nullopt;
     }
 
     const auto newhp = m_ptr->hp;
@@ -219,5 +219,5 @@ std::string MonsterPainDescriber::describe(int dam)
         return format("%s^%s", m_name.data(), msg);
     }
 
-    return "";
+    return std::nullopt;
 }
