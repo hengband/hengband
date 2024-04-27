@@ -88,7 +88,6 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
         auto &terrain = terrains[s];
         terrain.idx = s;
         terrain.tag = tokens[2];
-
         terrain.mimic = s;
         terrain.destroyed = s;
         for (auto j = 0; j < MAX_FEAT_STATES; j++) {
@@ -103,12 +102,12 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
     }
 
     // J:name_ja, E:name_en
-    auto &terrain = *(terrains.end() - 1);
     if (tokens[0] == _("J", "E")) {
         if (tokens.size() < 2 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
+        auto &terrain = *terrains.rbegin();
         terrain.name = tokens[1];
         return PARSE_ERROR_NONE;
     }
@@ -124,6 +123,7 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
+        auto &terrain = *terrains.rbegin();
         terrain.mimic_tag = tokens[1];
         return PARSE_ERROR_NONE;
     }
@@ -155,6 +155,7 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_GENERIC;
         }
 
+        auto &terrain = *terrains.rbegin();
         terrain.d_char[F_LIT_STANDARD] = s_char;
         terrain.d_attr[F_LIT_STANDARD] = s_attr;
         if (tokens.size() == n) {
@@ -214,6 +215,7 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
             }
 
             const auto &f_tokens = str_split(f, '_', false, 2);
+            auto &terrain = *terrains.rbegin();
             if (f_tokens.size() == 2) {
                 if (f_tokens[0] == "SUBTYPE") {
                     info_set_value(terrain.subtype, f_tokens[1]);
@@ -240,6 +242,7 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
+        auto &terrain = *terrains.rbegin();
         info_set_value(terrain.priority, tokens[1]);
         return PARSE_ERROR_NONE;
     }
@@ -254,6 +257,7 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
+        auto &terrain = *terrains.rbegin();
         auto i = 0;
         for (; i < MAX_FEAT_STATES; i++) {
             if (terrain.state[i].action == TerrainCharacteristics::MAX) {

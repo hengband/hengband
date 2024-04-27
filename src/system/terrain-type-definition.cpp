@@ -43,6 +43,16 @@ const std::vector<TerrainType>::const_iterator TerrainList::begin() const
     return this->terrains.begin();
 }
 
+std::vector<TerrainType>::reverse_iterator TerrainList::rbegin()
+{
+    return this->terrains.rbegin();
+}
+
+std::vector<TerrainType>::const_reverse_iterator TerrainList::rbegin() const
+{
+    return this->terrains.rbegin();
+}
+
 std::vector<TerrainType>::iterator TerrainList::end()
 {
     return this->terrains.end();
@@ -51,6 +61,16 @@ std::vector<TerrainType>::iterator TerrainList::end()
 const std::vector<TerrainType>::const_iterator TerrainList::end() const
 {
     return this->terrains.end();
+}
+
+std::vector<TerrainType>::reverse_iterator TerrainList::rend()
+{
+    return this->terrains.rend();
+}
+
+std::vector<TerrainType>::const_reverse_iterator TerrainList::rend() const
+{
+    return this->terrains.rend();
 }
 
 size_t TerrainList::size() const
