@@ -81,9 +81,14 @@ int mon_damage_mod(PlayerType *player_ptr, MonsterEntity *m_ptr, int dam, bool i
 
     if (race_info.special_flags.has(MonsterSpecialType::DIMINISH_MAX_DAMAGE)) {
         race_info.r_special_flags.set(MonsterSpecialType::DIMINISH_MAX_DAMAGE);
-        if (dam > m_ptr->hp / 10) {
-            dam = std::max(m_ptr->hp / 10, m_ptr->maxhp * 7 / 500);
-            msg_format(_("%s^は致命的なダメージを抑えた！", "%s^ resisted a critical damage!"), monster_desc(player_ptr, m_ptr, 0).data());
+        const auto &[damage_cap_normal, damage_cap_min, damage_cap_max] = get_damage_cap_contains_max(m_ptr->hp, m_ptr->maxhp);
+        if (dam > damage_cap_normal) {
+            dam = std::max(damage_cap_normal, damage_cap_min);
+            if (m_ptr->hp <= damage_cap_min * (m_ptr->maxhp / damage_cap_max / 2)) {
+                msg_format(_("%s^は致命的なダメージを抑えたが痛手のようだ！", "%s^ resisted a critical damage, but the damage seems extensive!"), monster_desc(player_ptr, m_ptr, 0).data());
+            } else {
+                msg_format(_("%s^は致命的なダメージを抑えた！", "%s^ resisted a critical damage!"), monster_desc(player_ptr, m_ptr, 0).data());
+            }
         }
     }
 
@@ -517,4 +522,17 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     if (m_idx == player_ptr->riding) {
         rfu.set_flag(StatusRecalculatingFlag::BONUS);
     }
+}
+
+std::pair<int, int> get_damage_cap(int hp, int maxhp)
+{
+    const int damage_cap_normal = hp / 10;
+    const int damage_cap_min = maxhp * 7 / 500;
+    return std::make_pair(damage_cap_normal, damage_cap_min);
+}
+std::tuple<int, int, int> get_damage_cap_contains_max(int hp, int maxhp)
+{
+    const auto &[damage_cap_normal, damage_cap_min] = get_damage_cap(hp, maxhp);
+    const int damage_cap_max = maxhp / 10;
+    return std::make_tuple(damage_cap_normal, damage_cap_min, damage_cap_max);
 }

@@ -15,4 +15,7 @@ public:
 private:
     PlayerType *player_ptr;
     const MonsterEntity *m_ptr;
+
+    std::string describe_normal(int dam, std::string m_name);
+    std::string describe_diminisher(int dam, std::string m_name);
 };

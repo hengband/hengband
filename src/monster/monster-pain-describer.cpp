@@ -2,6 +2,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
+#include "monster/monster-status.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -18,6 +19,16 @@ struct pain_message_type {
     // percentage, message のペアのリスト
     // (ダメージを受けた後のHP / ダメージを受ける前のHP)[%]が percentage 以上ならそのメッセージが選択される
     std::map<int, concptr, std::greater<int>> message_table;
+};
+
+struct pain_message_type_of_diminisher {
+    // message_table を選択するかどうかを判定する関数
+    std::function<bool(const MonsterEntity &)> pred;
+
+    // percentage, message のペアのリスト
+    // (最大HP / ダメージを受ける前のHP)[%]が percentage1 以上、
+    // （ダメージキャップ / 受けたダメージ)[%]が percentage2 以上ならそのメッセージが選択される
+    std::map<int, std::map<int, concptr, std::greater<int>>, std::greater<int>> message_table;
 };
 
 /*!
@@ -179,6 +190,45 @@ static const std::vector<pain_message_type>
         { [](const MonsterEntity &) { return true; }, pain_messages_common },
     };
 
+static const std::vector<pain_message_type_of_diminisher>
+    pain_massages_of_diminisher{
+        { [](const MonsterEntity &) { return true; }, {
+                                                          { 80, {
+                                                                    { 0, _("は余裕そうな表情を見せている。", " has usual expression.") },
+                                                                } },
+                                                          { 50, {
+                                                                    { 75, _("は痛みで声を漏らした。", " gasps by pain.") },
+                                                                    { 0, _("は攻撃を気にとめていない。", " ignores the attack.") },
+                                                                } },
+                                                          { 25, {
+                                                                    { 50, _("は痛みでうなった。", " grunts with pain.") },
+                                                                    { 0, _("は怒った。", " angers.") },
+                                                                } },
+                                                          { 15, {
+                                                                    { 75, _("は半泣きでもだえた。", " is doubled over with close to crying.") },
+                                                                    { 30, _("は痛みでうめいた。", " groans with pain.") },
+                                                                    { 0, _("は息を荒げながら怒った。", " angers in a pant.") },
+                                                                } },
+                                                          { 10, {
+                                                                    { 30, _("は目に涙を浮かべながら怒った。", " angers with tear-filled eyes.") },
+                                                                    { 0, _("は息を切らしながら怒った。", " angers in a gasp.") },
+                                                                } },
+                                                          { 6, {
+                                                                   { 30, _("は痛みで叫んだ。", " cries out in pain.") },
+                                                                   { 0, _("は目に涙を浮かべながらうめいた。", " groans with tear-filled eyes.") },
+                                                               } },
+                                                          { 3, {
+                                                                   { 50, _("は苦痛のあまり絶叫した。", "shrieks in agony.") },
+                                                                   { 30, _("は痛みで絶叫した。", "shrieks in pain.") },
+                                                                   { 0, _("は目に涙を浮かべながら怒った。", " angers with tear-filled eyes.") },
+                                                               } },
+                                                          { 0, {
+                                                                   { 10, _("は弱々しく叫んだ。", "cries out feebly.") },
+                                                                   { 0, _("は苦痛に満ちた表情でフラフラしている。", " staggers with expression in agony.") },
+                                                               } },
+                                                      } },
+    };
+
 MonsterPainDescriber::MonsterPainDescriber(PlayerType *player_ptr, const MonsterEntity *m_ptr)
     : player_ptr(player_ptr)
     , m_ptr(m_ptr)
@@ -188,6 +238,57 @@ MonsterPainDescriber::MonsterPainDescriber(PlayerType *player_ptr, const Monster
 MonsterPainDescriber::MonsterPainDescriber(PlayerType *player_ptr, MONSTER_IDX m_idx)
     : MonsterPainDescriber(player_ptr, &player_ptr->current_floor_ptr->m_list[m_idx])
 {
+}
+
+/*!
+ * @brief ダメージを受けたモンスターの様子を記述する
+ * @param dam モンスターが受けたダメージ
+ * @return std::string ダメージを受けたモンスターの様子を表す文字列。表示すべき様子が無い場合は空文字列。
+ */
+std::string MonsterPainDescriber::describe_normal(int dam, std::string m_name)
+{
+    const auto newhp = m_ptr->hp;
+    const auto oldhp = newhp + dam;
+    const auto percentage = std::max((newhp * 100) / oldhp, 0);
+
+    for (const auto &[pred, table] : pain_messages) {
+        if (!pred(*this->m_ptr)) {
+            continue;
+        }
+
+        const auto msg = table.lower_bound(percentage)->second;
+        return format("%s^%s", m_name.data(), msg);
+    }
+
+    return "";
+}
+
+/*!
+ * @brief ダメージを受けたモンスターの様子を記述する（ダメージキャップ持ち）
+ * @details ダメージキャップ持ちは（ダメージを受けた後のHP / ダメージを受ける前のHP)[%]だとほぼ機能しないため、判定を特殊にしている
+ * @param dam モンスターが受けたダメージ
+ * @return std::string ダメージを受けたモンスターの様子を表す文字列。表示すべき様子が無い場合は空文字列。
+ */
+std::string MonsterPainDescriber::describe_diminisher(int dam, std::string m_name)
+{
+    const auto oldhp = m_ptr->hp + dam;
+    const auto &[damage_cap_normal, damage_cap_min] = get_damage_cap(oldhp, m_ptr->maxhp);
+    const auto damage_cap = std::max(damage_cap_normal, damage_cap_min);
+    const auto percentage = std::max((oldhp * 100) / m_ptr->maxhp, 0);
+    const auto percentage_damage_cap = std::max((dam * 100) / damage_cap, 0);
+
+    for (const auto &[pred, table] : pain_massages_of_diminisher) {
+        if (!pred(*this->m_ptr)) {
+            continue;
+        }
+
+        const auto &table2 = table.lower_bound(percentage)->second;
+        const auto msg = table2.lower_bound(percentage_damage_cap)->second;
+
+        return format("%s^%s", m_name.data(), msg);
+    }
+
+    return "";
 }
 
 /*!
@@ -206,18 +307,10 @@ std::string MonsterPainDescriber::describe(int dam)
         return "";
     }
 
-    const auto newhp = m_ptr->hp;
-    const auto oldhp = newhp + dam;
-    const auto percentage = std::max((newhp * 100) / oldhp, 0);
-
-    for (const auto &[pred, table] : pain_messages) {
-        if (!pred(*this->m_ptr)) {
-            continue;
-        }
-
-        const auto msg = table.lower_bound(percentage)->second;
-        return format("%s^%s", m_name.data(), msg);
+    const auto &monrace = m_ptr->get_real_monrace();
+    if (monrace.special_flags.has(MonsterSpecialType::DIMINISH_MAX_DAMAGE)) {
+        return this->describe_diminisher(dam, m_name);
+    } else {
+        return this->describe_normal(dam, m_name);
     }
-
-    return "";
 }
