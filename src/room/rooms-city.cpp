@@ -96,20 +96,14 @@ void generate_fill_perm_bold(PlayerType *player_ptr, POSITION y1, POSITION x1, P
 void build_stores(PlayerType *player_ptr, const Pos2D &pos_ug, const std::vector<UndergroundBuilding> &underground_buildings)
 {
     for (const auto &ug_building : underground_buildings) {
-        const auto y1 = pos_ug.y + ug_building.get_north_west().y - 2;
-        const auto x1 = pos_ug.x + ug_building.get_north_west().x - 2;
-        const auto y2 = pos_ug.y + ug_building.get_south_east().y + 2;
-        const auto x2 = pos_ug.x + ug_building.get_south_east().x + 2;
-        generate_room_floor(player_ptr, y1, x1, y2, x2, false);
+        const auto &[north_west, south_east] = ug_building.get_room_positions(pos_ug);
+        generate_room_floor(player_ptr, north_west.y, north_west.x, south_east.y, south_east.x, false);
     }
 
     for (auto i = 0; i < std::ssize(underground_buildings); i++) {
         const auto &ug_building = underground_buildings[i];
-        const auto y1 = pos_ug.y + ug_building.get_north_west().y;
-        const auto x1 = pos_ug.x + ug_building.get_north_west().x;
-        const auto y2 = pos_ug.y + ug_building.get_south_east().y;
-        const auto x2 = pos_ug.x + ug_building.get_south_east().x;
-        generate_fill_perm_bold(player_ptr, y1, x1, y2, x2);
+        const auto &[north_west, south_east] = ug_building.get_inner_room_positions(pos_ug);
+        generate_fill_perm_bold(player_ptr, north_west.y, north_west.x, south_east.y, south_east.x);
         const auto pos = ug_building.pick_door_direction();
         const auto &terrains = TerrainList::get_instance();
         const auto end = terrains.end();
@@ -149,16 +143,6 @@ Pos2D UndergroundBuilding::pick_door_direction() const
     }
 }
 
-const Pos2D &UndergroundBuilding::get_north_west() const
-{
-    return this->north_west;
-}
-
-const Pos2D &UndergroundBuilding::get_south_east() const
-{
-    return this->south_east;
-}
-
 void UndergroundBuilding::set_area(int height, int width, int max_height, int max_width)
 {
     const Pos2D center(rand_range(2, height - 3), rand_range(2, width - 3));
@@ -195,6 +179,24 @@ void UndergroundBuilding::reserve_area(std::vector<std::vector<bool>> &ugarcade_
             ugarcade_used[y][x] = true;
         }
     }
+}
+
+std::pair<Pos2D, Pos2D> UndergroundBuilding::get_room_positions(const Pos2D &pos_ug) const
+{
+    const auto y1 = pos_ug.y + this->north_west.y - 2;
+    const auto x1 = pos_ug.x + this->north_west.x - 2;
+    const auto y2 = pos_ug.y + this->south_east.y + 2;
+    const auto x2 = pos_ug.x + this->south_east.x + 2;
+    return { { y1, x1 }, { y2, x2 } };
+}
+
+std::pair<Pos2D, Pos2D> UndergroundBuilding::get_inner_room_positions(const Pos2D &pos_ug) const
+{
+    const auto y1 = pos_ug.y + this->north_west.y;
+    const auto x1 = pos_ug.x + this->north_west.x;
+    const auto y2 = pos_ug.y + this->south_east.y;
+    const auto x2 = pos_ug.x + this->south_east.x;
+    return { { y1, x1 }, { y2, x2 } };
 }
 
 /*!
