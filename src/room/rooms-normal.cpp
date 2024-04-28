@@ -16,13 +16,14 @@
 #include "system/player-type-definition.h"
 
 /*!
- * @brief タイプ1の部屋…通常可変長方形の部屋を生成する / Type 1 -- normal rectangular rooms
+ * @brief タイプ1の部屋…通常可変長方形の部屋を生成する
  * @param player_ptr プレイヤーへの参照ポインタ
+ * @return 部屋の配置スペースを確保できたか否か
  */
 bool build_type1(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto &dungeon = floor_ptr->get_dungeon_definition();
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto &dungeon = floor.get_dungeon_definition();
     const auto is_curtain = dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 48 : 512);
 
     /* Pick a room size */
@@ -55,7 +56,7 @@ bool build_type1(PlayerType *player_ptr, dun_data_type *dd_ptr)
     }
 
     /* Choose lite or dark */
-    const auto should_brighten = ((floor_ptr->dun_level <= randint1(25)) && dungeon.flags.has_not(DungeonFeatureType::DARKNESS));
+    const auto should_brighten = ((floor.dun_level <= randint1(25)) && dungeon.flags.has_not(DungeonFeatureType::DARKNESS));
 
     /* Get corner values */
     y1 = yval - ysize / 2;
@@ -66,7 +67,7 @@ bool build_type1(PlayerType *player_ptr, dun_data_type *dd_ptr)
     /* Place a full floor under the room */
     for (auto y = y1 - 1; y <= y2 + 1; y++) {
         for (auto x = x1 - 1; x <= x2 + 1; x++) {
-            auto &grid = floor_ptr->get_grid({ y, x });
+            auto &grid = floor.get_grid({ y, x });
             place_grid(player_ptr, &grid, GB_FLOOR);
             grid.info |= (CAVE_ROOM);
             if (should_brighten) {
@@ -77,33 +78,31 @@ bool build_type1(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     /* Walls around the room */
     for (auto y = y1 - 1; y <= y2 + 1; y++) {
-        auto &grid1 = floor_ptr->get_grid({ y, x1 - 1 });
-        place_grid(player_ptr, &grid1, GB_OUTER);
-        auto &grid2 = floor_ptr->get_grid({ y, x2 + 1 });
-        place_grid(player_ptr, &grid2, GB_OUTER);
+        place_grid(player_ptr, &floor.get_grid({ y, x1 - 1 }), GB_OUTER);
+        place_grid(player_ptr, &floor.get_grid({ y, x2 + 1 }), GB_OUTER);
     }
+
     for (auto x = x1 - 1; x <= x2 + 1; x++) {
-        auto &grid1 = floor_ptr->get_grid({ y1 - 1, x });
-        place_grid(player_ptr, &grid1, GB_OUTER);
-        auto &grid2 = floor_ptr->get_grid({ y2 + 1, x });
-        place_grid(player_ptr, &grid2, GB_OUTER);
+        place_grid(player_ptr, &floor.get_grid({ y1 - 1, x }), GB_OUTER);
+        place_grid(player_ptr, &floor.get_grid({ y2 + 1, x }), GB_OUTER);
     }
 
     /* Hack -- Occasional curtained room */
     if (is_curtain && (y2 - y1 > 2) && (x2 - x1 > 2)) {
         for (auto y = y1; y <= y2; y++) {
-            auto &grid1 = floor_ptr->get_grid({ y, x1 });
+            auto &grid1 = floor.get_grid({ y, x1 });
             grid1.feat = feat_door[DOOR_CURTAIN].closed;
             grid1.info &= ~(CAVE_MASK);
-            auto &grid2 = floor_ptr->get_grid({ y, x2 });
+            auto &grid2 = floor.get_grid({ y, x2 });
             grid2.feat = feat_door[DOOR_CURTAIN].closed;
             grid2.info &= ~(CAVE_MASK);
         }
+
         for (auto x = x1; x <= x2; x++) {
-            auto &grid1 = floor_ptr->get_grid({ y1, x });
+            auto &grid1 = floor.get_grid({ y1, x });
             grid1.feat = feat_door[DOOR_CURTAIN].closed;
             grid1.info &= ~(CAVE_MASK);
-            auto &grid2 = floor_ptr->get_grid({ y2, x });
+            auto &grid2 = floor.get_grid({ y2, x });
             grid2.feat = feat_door[DOOR_CURTAIN].closed;
             grid2.info &= ~(CAVE_MASK);
         }
@@ -113,66 +112,76 @@ bool build_type1(PlayerType *player_ptr, dun_data_type *dd_ptr)
     if (one_in_(20)) {
         for (auto y = y1; y <= y2; y += 2) {
             for (auto x = x1; x <= x2; x += 2) {
-                auto &grid = floor_ptr->get_grid({ y, x });
+                auto &grid = floor.get_grid({ y, x });
                 place_grid(player_ptr, &grid, GB_INNER);
             }
         }
+
+        return true;
     }
 
     /* Hack -- Occasional room with four pillars */
-    else if (one_in_(20)) {
+    if (one_in_(20)) {
         if ((y1 + 4 < y2) && (x1 + 4 < x2)) {
-            place_grid(player_ptr, &floor_ptr->get_grid({ y1 + 1, x1 + 1 }), GB_INNER);
-            place_grid(player_ptr, &floor_ptr->get_grid({ y1 + 1, x2 - 1 }), GB_INNER);
-            place_grid(player_ptr, &floor_ptr->get_grid({ y2 - 1, x1 + 1 }), GB_INNER);
-            place_grid(player_ptr, &floor_ptr->get_grid({ y2 - 1, x2 - 1 }), GB_INNER);
+            place_grid(player_ptr, &floor.get_grid({ y1 + 1, x1 + 1 }), GB_INNER);
+            place_grid(player_ptr, &floor.get_grid({ y1 + 1, x2 - 1 }), GB_INNER);
+            place_grid(player_ptr, &floor.get_grid({ y2 - 1, x1 + 1 }), GB_INNER);
+            place_grid(player_ptr, &floor.get_grid({ y2 - 1, x2 - 1 }), GB_INNER);
         }
+
+        return true;
     }
 
     /* Hack -- Occasional ragged-edge room */
-    else if (one_in_(50)) {
+    if (one_in_(50)) {
         for (auto y = y1 + 2; y <= y2 - 2; y += 2) {
-            place_grid(player_ptr, &floor_ptr->get_grid({ y, x1 }), GB_INNER);
-            place_grid(player_ptr, &floor_ptr->get_grid({ y, x2 }), GB_INNER);
+            place_grid(player_ptr, &floor.get_grid({ y, x1 }), GB_INNER);
+            place_grid(player_ptr, &floor.get_grid({ y, x2 }), GB_INNER);
         }
+
         for (auto x = x1 + 2; x <= x2 - 2; x += 2) {
-            place_grid(player_ptr, &floor_ptr->get_grid({ y1, x }), GB_INNER);
-            place_grid(player_ptr, &floor_ptr->get_grid({ y2, x }), GB_INNER);
+            place_grid(player_ptr, &floor.get_grid({ y1, x }), GB_INNER);
+            place_grid(player_ptr, &floor.get_grid({ y2, x }), GB_INNER);
         }
+
+        return true;
     }
+
+    if (!one_in_(50)) {
+        return true;
+    }
+
     /* Hack -- Occasional divided room */
-    else if (one_in_(50)) {
-        const auto should_close_curtain = (dungeon.flags.has(DungeonFeatureType::CURTAIN)) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 2 : 128);
-        if (randint1(100) < 50) {
-            /* Horizontal wall */
-            for (auto x = x1; x <= x2; x++) {
-                place_bold(player_ptr, yval, x, GB_INNER);
-                if (should_close_curtain) {
-                    floor_ptr->get_grid({ yval, x }).feat = feat_door[DOOR_CURTAIN].closed;
-                }
+    const auto should_close_curtain = (dungeon.flags.has(DungeonFeatureType::CURTAIN)) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 2 : 128);
+    if (randint1(100) < 50) {
+        /* Horizontal wall */
+        for (auto x = x1; x <= x2; x++) {
+            place_bold(player_ptr, yval, x, GB_INNER);
+            if (should_close_curtain) {
+                floor.get_grid({ yval, x }).feat = feat_door[DOOR_CURTAIN].closed;
             }
-
-            /* Prevent edge of wall from being tunneled */
-            place_bold(player_ptr, yval, x1 - 1, GB_SOLID);
-            place_bold(player_ptr, yval, x2 + 1, GB_SOLID);
-        } else {
-            /* Vertical wall */
-            for (auto y = y1; y <= y2; y++) {
-                place_bold(player_ptr, y, xval, GB_INNER);
-                if (should_close_curtain) {
-                    floor_ptr->get_grid({ y, xval }).feat = feat_door[DOOR_CURTAIN].closed;
-                }
-            }
-
-            /* Prevent edge of wall from being tunneled */
-            place_bold(player_ptr, y1 - 1, xval, GB_SOLID);
-            place_bold(player_ptr, y2 + 1, xval, GB_SOLID);
         }
 
-        place_random_door(player_ptr, yval, xval, true);
-        if (should_close_curtain) {
-            floor_ptr->get_grid({ yval, xval }).feat = feat_door[DOOR_CURTAIN].closed;
+        /* Prevent edge of wall from being tunneled */
+        place_bold(player_ptr, yval, x1 - 1, GB_SOLID);
+        place_bold(player_ptr, yval, x2 + 1, GB_SOLID);
+    } else {
+        /* Vertical wall */
+        for (auto y = y1; y <= y2; y++) {
+            place_bold(player_ptr, y, xval, GB_INNER);
+            if (should_close_curtain) {
+                floor.get_grid({ y, xval }).feat = feat_door[DOOR_CURTAIN].closed;
+            }
         }
+
+        /* Prevent edge of wall from being tunneled */
+        place_bold(player_ptr, y1 - 1, xval, GB_SOLID);
+        place_bold(player_ptr, y2 + 1, xval, GB_SOLID);
+    }
+
+    place_random_door(player_ptr, yval, xval, true);
+    if (should_close_curtain) {
+        floor.get_grid({ yval, xval }).feat = feat_door[DOOR_CURTAIN].closed;
     }
 
     return true;
