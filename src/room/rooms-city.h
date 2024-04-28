@@ -1,6 +1,6 @@
 #pragma once
 
-#include "system/angband.h"
+#include "util/point-2d.h"
 
 /* Minimum & maximum town size */
 #define MIN_TOWN_WID ((MAX_WID / 3) / 2)
@@ -8,10 +8,12 @@
 #define MAX_TOWN_WID ((MAX_WID / 3) * 2 / 3)
 #define MAX_TOWN_HGT ((MAX_HGT / 3) * 2 / 3)
 
-/* Struct for build underground buildings */
-struct ugbldg_type {
-    POSITION y0, x0; /* North-west corner (relative) */
-    POSITION y1, x1; /* South-east corner (relative) */
+class UndergroundBuilding {
+public:
+    UndergroundBuilding();
+    Pos2D north_west; // 地下店舗左上座標.
+    Pos2D south_east; // 地下店舗右下座標.
+    Pos2D pick_door_direction() const;
 };
 
 struct dun_data_type;

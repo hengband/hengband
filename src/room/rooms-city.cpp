@@ -31,10 +31,10 @@ const std::vector<StoreSaleType> stores = {
 /*
  * Precalculate buildings' location of underground arcade
  */
-std::optional<std::vector<ugbldg_type>> precalc_ugarcade(int town_hgt, int town_wid)
+std::optional<std::vector<UndergroundBuilding>> precalc_ugarcade(int town_hgt, int town_wid)
 {
     const auto n = std::ssize(stores);
-    std::vector<ugbldg_type> underground_buildings(n);
+    std::vector<UndergroundBuilding> underground_buildings(n);
     const auto max_buildings_height = 3 * town_hgt / MAX_TOWN_HGT;
     const auto max_buildings_width = 5 * town_wid / MAX_TOWN_WID;
     std::vector<std::vector<bool>> ugarcade_used(town_hgt, std::vector<bool>(town_wid));
@@ -42,21 +42,20 @@ std::optional<std::vector<ugbldg_type>> precalc_ugarcade(int town_hgt, int town_
     auto attempt = 10000;
     auto should_abort = false;
     for (i = 0; i < n; i++) {
-        auto &cur_ugbldg = underground_buildings[i];
+        auto &underground_building = underground_buildings[i];
         do {
             const auto center_y = rand_range(2, town_hgt - 3);
             const auto center_x = rand_range(2, town_wid - 3);
-            auto tmp = center_y - randint1(max_buildings_height);
-            cur_ugbldg.y0 = std::max(tmp, 1);
-            tmp = center_x - randint1(max_buildings_width);
-            cur_ugbldg.x0 = std::max(tmp, 1);
-            tmp = center_y + randint1(max_buildings_height);
-            cur_ugbldg.y1 = std::min(tmp, town_hgt - 2);
-            tmp = center_x + randint1(max_buildings_width);
-            cur_ugbldg.x1 = std::min(tmp, town_wid - 2);
+            auto tmp_y = center_y - randint1(max_buildings_height);
+            auto tmp_x = center_x - randint1(max_buildings_width);
+            underground_building.north_west = { std::max(tmp_y, 1), std::max(tmp_x, 1) };
+
+            tmp_y = center_y + randint1(max_buildings_height);
+            tmp_x = center_x + randint1(max_buildings_width);
+            underground_building.south_east = { std::min(tmp_y, town_hgt - 2), std::min(tmp_x, town_wid - 2) };
             should_abort = false;
-            for (auto y = cur_ugbldg.y0; (y <= cur_ugbldg.y1) && !should_abort; y++) {
-                for (auto x = cur_ugbldg.x0; x <= cur_ugbldg.x1; x++) {
+            for (auto y = underground_building.north_west.y; (y <= underground_building.south_east.y) && !should_abort; y++) {
+                for (auto x = underground_building.north_west.x; x <= underground_building.south_east.x; x++) {
                     if (ugarcade_used[y][x]) {
                         should_abort = true;
                         break;
@@ -71,8 +70,8 @@ std::optional<std::vector<ugbldg_type>> precalc_ugarcade(int town_hgt, int town_
             break;
         }
 
-        for (auto y = cur_ugbldg.y0 - 1; y <= cur_ugbldg.y1 + 1; y++) {
-            for (auto x = cur_ugbldg.x0 - 1; x <= cur_ugbldg.x1 + 1; x++) {
+        for (auto y = underground_building.north_west.y - 1; y <= underground_building.south_east.y + 1; y++) {
+            for (auto x = underground_building.north_west.x - 1; x <= underground_building.south_east.x + 1; x++) {
                 ugarcade_used[y][x] = true;
             }
         }
@@ -109,38 +108,22 @@ void generate_fill_perm_bold(PlayerType *player_ptr, POSITION y1, POSITION x1, P
     }
 }
 
-Pos2D pick_door_direction(const ugbldg_type &cur_ugbldg)
-{
-    switch (randint0(4)) {
-    case 0: // South
-        return { cur_ugbldg.y1, rand_range(cur_ugbldg.x0, cur_ugbldg.x1) };
-    case 1: // North
-        return { cur_ugbldg.y0, rand_range(cur_ugbldg.x0, cur_ugbldg.x1) };
-    case 2: // East
-        return { rand_range(cur_ugbldg.y0, cur_ugbldg.y1), cur_ugbldg.x1 };
-    case 3: // West
-        return { rand_range(cur_ugbldg.y0, cur_ugbldg.y1), cur_ugbldg.x0 };
-    default:
-        THROW_EXCEPTION(std::logic_error, "RNG is broken!");
-    }
-}
-
 /*!
  * @brief タイプ16の部屋…地下都市生成のサブルーチン / Actually create buildings
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param pos_ug 地下都市エリアの左上座標
  * @param underground_buildings 生成する店舗のリスト
  */
-void build_stores(PlayerType *player_ptr, const Pos2D &pos_ug, const std::vector<ugbldg_type> &underground_buildings)
+void build_stores(PlayerType *player_ptr, const Pos2D &pos_ug, const std::vector<UndergroundBuilding> &underground_buildings)
 {
     for (const auto &ug_building : underground_buildings) {
-        generate_room_floor(player_ptr, pos_ug.y + ug_building.y0 - 2, pos_ug.x + ug_building.x0 - 2, pos_ug.y + ug_building.y1 + 2, pos_ug.x + ug_building.x1 + 2, false);
+        generate_room_floor(player_ptr, pos_ug.y + ug_building.north_west.y - 2, pos_ug.x + ug_building.north_west.x - 2, pos_ug.y + ug_building.south_east.y + 2, pos_ug.x + ug_building.south_east.x + 2, false);
     }
 
     for (auto i = 0; i < std::ssize(underground_buildings); i++) {
         const auto &ug_building = underground_buildings[i];
-        generate_fill_perm_bold(player_ptr, pos_ug.y + ug_building.y0, pos_ug.x + ug_building.x0, pos_ug.y + ug_building.y1, pos_ug.x + ug_building.x1);
-        const auto pos = pick_door_direction(ug_building);
+        generate_fill_perm_bold(player_ptr, pos_ug.y + ug_building.north_west.y, pos_ug.x + ug_building.north_west.x, pos_ug.y + ug_building.south_east.y, pos_ug.x + ug_building.south_east.x);
+        const auto pos = ug_building.pick_door_direction();
         const auto &terrains = TerrainList::get_instance();
         const auto end = terrains.end();
         const auto it = std::find_if(terrains.begin(), end,
@@ -155,6 +138,28 @@ void build_stores(PlayerType *player_ptr, const Pos2D &pos_ug, const std::vector
         store_init(VALID_TOWNS, stores[i]);
     }
 }
+}
+
+UndergroundBuilding::UndergroundBuilding()
+    : north_west(Pos2D(0, 0))
+    , south_east(Pos2D(0, 0))
+{
+}
+
+Pos2D UndergroundBuilding::pick_door_direction() const
+{
+    switch (randint0(4)) {
+    case 0: // South
+        return { this->south_east.y, rand_range(this->north_west.x, this->south_east.x) };
+    case 1: // North
+        return { this->north_west.y, rand_range(this->north_west.x, this->south_east.x) };
+    case 2: // East
+        return { rand_range(this->north_west.y, this->south_east.y), this->south_east.x };
+    case 3: // West
+        return { rand_range(this->north_west.y, this->south_east.y), this->north_west.x };
+    default:
+        THROW_EXCEPTION(std::logic_error, "RNG is broken!");
+    }
 }
 
 /*!
