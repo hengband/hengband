@@ -37,58 +37,51 @@ const std::string image_objects = R"(?/|\"!$()_-=[]{},~)";
 
 /* 一般的にモンスターシンボルとして扱われる記号を定義する(幻覚処理向け) / Hack -- Legal monster codes */
 const std::string image_monsters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-}
 
 /*!
- * @brief オブジェクトの表示を幻覚状態に差し替える / Hallucinatory object
- * @param ap 本来の色
- * @param cp 本来のシンボル
+ * @brief オブジェクトの表示を幻覚状態に差し替える
+ * @return 差し替えたシンボルと色
  */
-static void image_object(TERM_COLOR *ap, char *cp)
+ColoredChar image_object()
 {
     if (use_graphics) {
         std::span<BaseitemInfo> candidates(baseitems_info.begin() + 1, baseitems_info.end());
         const auto &baseitem = rand_choice(candidates);
-        *cp = baseitem.x_char;
-        *ap = baseitem.x_attr;
-        return;
+        return { baseitem.x_attr, baseitem.x_char };
     }
 
-    *cp = rand_choice(image_objects);
-    *ap = randnum1<uint8_t>(15);
+    return { randnum1<uint8_t>(15), rand_choice(image_objects) };
 }
 
 /*!
- * @brief モンスターの表示を幻覚状態に差し替える / Mega-Hack -- Hallucinatory monster
- * @param ap 本来の色
- * @param cp 本来のシンボル
+ * @brief モンスターの表示を幻覚状態に差し替える
+ * @return 差し替えたシンボルと色
  */
-static void image_monster(TERM_COLOR *ap, char *cp)
+ColoredChar image_monster()
 {
     if (use_graphics) {
-        auto r_idx = MonsterRace::pick_one_at_random();
-        auto *r_ptr = &monraces_info[r_idx];
-        *cp = r_ptr->x_char;
-        *ap = r_ptr->x_attr;
-        return;
+        const auto monrace_id = MonsterRace::pick_one_at_random();
+        const auto &monrace = monraces_info[monrace_id];
+        return { monrace.x_attr, monrace.x_char };
     }
 
-    *cp = one_in_(25) ? rand_choice(image_objects) : rand_choice(image_monsters);
-    *ap = randnum1<uint8_t>(15);
+    auto color = randnum1<uint8_t>(15);
+    auto character = one_in_(25) ? rand_choice(image_objects) : rand_choice(image_monsters);
+    return { color, character };
 }
 
 /*!
- * @brief オブジェクト＆モンスターの表示を幻覚状態に差し替える / Hack -- Random hallucination
- * @param ap 本来の色
- * @param cp 本来のシンボル
+ * @brief オブジェクト＆モンスターの表示を幻覚状態に差し替える
+ * @return 差し替えたシンボルと色
  */
-static void image_random(TERM_COLOR *ap, char *cp)
+ColoredChar image_random()
 {
     if (randint0(100) < 75) {
-        image_monster(ap, cp);
+        return image_monster();
     } else {
-        image_object(ap, cp);
+        return image_object();
     }
+}
 }
 
 /*!
@@ -264,7 +257,9 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
 
     auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
     if (is_hallucinated && one_in_(256)) {
-        image_random(ap, cp);
+        const auto cc = image_random();
+        *ap = cc.color;
+        *cp = cc.character;
     }
 
     for (const auto this_o_idx : grid.o_idx_list) {
@@ -296,7 +291,9 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
         *ap = o_ptr->get_color();
         feat_priority = 20;
         if (is_hallucinated) {
-            image_object(ap, cp);
+            const auto cc = image_object();
+            *ap = cc.color;
+            *cp = cc.character;
         }
 
         break;
@@ -323,7 +320,9 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
         if (r_ptr->visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {
             /* Do nothing */
         } else {
-            image_monster(ap, cp);
+            const auto cc = image_monster();
+            *ap = cc.color;
+            *cp = cc.character;
         }
 
         const auto cc = set_term_color(player_ptr, { y, x }, { *ap, *cp });
