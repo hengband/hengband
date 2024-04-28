@@ -44,18 +44,12 @@ std::optional<std::vector<UndergroundBuilding>> precalc_ugarcade(int town_hgt, i
     for (i = 0; i < n; i++) {
         auto &underground_building = underground_buildings[i];
         do {
-            const auto center_y = rand_range(2, town_hgt - 3);
-            const auto center_x = rand_range(2, town_wid - 3);
-            auto tmp_y = center_y - randint1(max_buildings_height);
-            auto tmp_x = center_x - randint1(max_buildings_width);
-            underground_building.north_west = { std::max(tmp_y, 1), std::max(tmp_x, 1) };
-
-            tmp_y = center_y + randint1(max_buildings_height);
-            tmp_x = center_x + randint1(max_buildings_width);
-            underground_building.south_east = { std::min(tmp_y, town_hgt - 2), std::min(tmp_x, town_wid - 2) };
+            underground_building.set_area(town_hgt, town_wid, max_buildings_height, max_buildings_width);
             should_abort = false;
-            for (auto y = underground_building.north_west.y; (y <= underground_building.south_east.y) && !should_abort; y++) {
-                for (auto x = underground_building.north_west.x; x <= underground_building.south_east.x; x++) {
+            const auto &north_west = underground_building.get_north_west();
+            const auto &south_east = underground_building.get_south_east();
+            for (auto y = north_west.y; (y <= south_east.y) && !should_abort; y++) {
+                for (auto x = north_west.x; x <= south_east.x; x++) {
                     if (ugarcade_used[y][x]) {
                         should_abort = true;
                         break;
@@ -70,8 +64,10 @@ std::optional<std::vector<UndergroundBuilding>> precalc_ugarcade(int town_hgt, i
             break;
         }
 
-        for (auto y = underground_building.north_west.y - 1; y <= underground_building.south_east.y + 1; y++) {
-            for (auto x = underground_building.north_west.x - 1; x <= underground_building.south_east.x + 1; x++) {
+        const auto &north_west = underground_building.get_north_west();
+        const auto &south_east = underground_building.get_south_east();
+        for (auto y = north_west.y - 1; y <= south_east.y + 1; y++) {
+            for (auto x = north_west.x - 1; x <= south_east.x + 1; x++) {
                 ugarcade_used[y][x] = true;
             }
         }
@@ -117,12 +113,20 @@ void generate_fill_perm_bold(PlayerType *player_ptr, POSITION y1, POSITION x1, P
 void build_stores(PlayerType *player_ptr, const Pos2D &pos_ug, const std::vector<UndergroundBuilding> &underground_buildings)
 {
     for (const auto &ug_building : underground_buildings) {
-        generate_room_floor(player_ptr, pos_ug.y + ug_building.north_west.y - 2, pos_ug.x + ug_building.north_west.x - 2, pos_ug.y + ug_building.south_east.y + 2, pos_ug.x + ug_building.south_east.x + 2, false);
+        const auto y1 = pos_ug.y + ug_building.get_north_west().y - 2;
+        const auto x1 = pos_ug.x + ug_building.get_north_west().x - 2;
+        const auto y2 = pos_ug.y + ug_building.get_south_east().y + 2;
+        const auto x2 = pos_ug.x + ug_building.get_south_east().x + 2;
+        generate_room_floor(player_ptr, y1, x1, y2, x2, false);
     }
 
     for (auto i = 0; i < std::ssize(underground_buildings); i++) {
         const auto &ug_building = underground_buildings[i];
-        generate_fill_perm_bold(player_ptr, pos_ug.y + ug_building.north_west.y, pos_ug.x + ug_building.north_west.x, pos_ug.y + ug_building.south_east.y, pos_ug.x + ug_building.south_east.x);
+        const auto y1 = pos_ug.y + ug_building.get_north_west().y;
+        const auto x1 = pos_ug.x + ug_building.get_north_west().x;
+        const auto y2 = pos_ug.y + ug_building.get_south_east().y;
+        const auto x2 = pos_ug.x + ug_building.get_south_east().x;
+        generate_fill_perm_bold(player_ptr, y1, x1, y2, x2);
         const auto pos = ug_building.pick_door_direction();
         const auto &terrains = TerrainList::get_instance();
         const auto end = terrains.end();
@@ -160,6 +164,32 @@ Pos2D UndergroundBuilding::pick_door_direction() const
     default:
         THROW_EXCEPTION(std::logic_error, "RNG is broken!");
     }
+}
+
+const Pos2D &UndergroundBuilding::get_north_west() const
+{
+    return this->north_west;
+}
+
+const Pos2D &UndergroundBuilding::get_south_east() const
+{
+    return this->south_east;
+}
+
+void UndergroundBuilding::set_area(int height, int width, int max_height, int max_width)
+{
+    const Pos2D center(rand_range(2, height - 3), rand_range(2, width - 3));
+    auto north_west_y = center.y - randint1(max_height);
+    north_west_y = std::max(north_west_y, 1);
+    auto north_west_x = center.x - randint1(max_width);
+    north_west_x = std::max(north_west_x, 1);
+    this->north_west = { north_west_y, north_west_x };
+
+    auto south_east_y = center.y + randint1(max_height);
+    south_east_y = std::min(south_east_y, height - 2);
+    auto south_east_x = center.x + randint1(max_width);
+    south_east_x = std::min(south_east_x, width - 2);
+    this->south_east = { south_east_y, south_east_x };
 }
 
 /*!

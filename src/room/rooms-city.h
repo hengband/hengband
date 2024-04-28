@@ -11,9 +11,14 @@
 class UndergroundBuilding {
 public:
     UndergroundBuilding();
+    Pos2D pick_door_direction() const;
+    const Pos2D &get_north_west() const;
+    const Pos2D &get_south_east() const;
+    void set_area(int height, int width, int max_height, int max_width);
+
+private:
     Pos2D north_west; // 地下店舗左上座標.
     Pos2D south_east; // 地下店舗右下座標.
-    Pos2D pick_door_direction() const;
 };
 
 struct dun_data_type;
