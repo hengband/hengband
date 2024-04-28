@@ -185,11 +185,6 @@ MonsterPainDescriber::MonsterPainDescriber(PlayerType *player_ptr, const Monster
 {
 }
 
-MonsterPainDescriber::MonsterPainDescriber(PlayerType *player_ptr, MONSTER_IDX m_idx)
-    : MonsterPainDescriber(player_ptr, &player_ptr->current_floor_ptr->m_list[m_idx])
-{
-}
-
 /*!
  * @brief ダメージを受けたモンスターの様子を記述する
  * @param dam モンスターが受けたダメージ

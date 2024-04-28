@@ -845,7 +845,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                             msg_format(_("%sは%sに突き刺さった！", "%s^ is stuck in %s!"), item_name.data(), m_name.data());
                         }
 
-                        const auto pain_message = MonsterPainDescriber(player_ptr, c_mon_ptr->m_idx).describe(tdam);
+                        const auto pain_message = MonsterPainDescriber(player_ptr, m_ptr).describe(tdam);
                         if (pain_message) {
                             msg_print(*pain_message);
                         }
