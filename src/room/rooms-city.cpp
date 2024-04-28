@@ -45,18 +45,7 @@ std::optional<std::vector<UndergroundBuilding>> precalc_ugarcade(int town_hgt, i
         auto &underground_building = underground_buildings[i];
         do {
             underground_building.set_area(town_hgt, town_wid, max_buildings_height, max_buildings_width);
-            should_abort = false;
-            const auto &north_west = underground_building.get_north_west();
-            const auto &south_east = underground_building.get_south_east();
-            for (auto y = north_west.y; (y <= south_east.y) && !should_abort; y++) {
-                for (auto x = north_west.x; x <= south_east.x; x++) {
-                    if (ugarcade_used[y][x]) {
-                        should_abort = true;
-                        break;
-                    }
-                }
-            }
-
+            should_abort = underground_building.is_area_used(ugarcade_used);
             attempt--;
         } while (should_abort && (attempt > 0));
 
@@ -64,13 +53,7 @@ std::optional<std::vector<UndergroundBuilding>> precalc_ugarcade(int town_hgt, i
             break;
         }
 
-        const auto &north_west = underground_building.get_north_west();
-        const auto &south_east = underground_building.get_south_east();
-        for (auto y = north_west.y - 1; y <= south_east.y + 1; y++) {
-            for (auto x = north_west.x - 1; x <= south_east.x + 1; x++) {
-                ugarcade_used[y][x] = true;
-            }
-        }
+        underground_building.reserve_area(ugarcade_used);
     }
 
     if (i != n) {
@@ -190,6 +173,28 @@ void UndergroundBuilding::set_area(int height, int width, int max_height, int ma
     auto south_east_x = center.x + randint1(max_width);
     south_east_x = std::min(south_east_x, width - 2);
     this->south_east = { south_east_y, south_east_x };
+}
+
+bool UndergroundBuilding::is_area_used(const std::vector<std::vector<bool>> &ugarcade_used) const
+{
+    for (auto y = this->north_west.y; (y <= this->south_east.y); y++) {
+        for (auto x = this->north_west.x; x <= this->south_east.x; x++) {
+            if (ugarcade_used[y][x]) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+void UndergroundBuilding::reserve_area(std::vector<std::vector<bool>> &ugarcade_used) const
+{
+    for (auto y = this->north_west.y - 1; y <= this->south_east.y + 1; y++) {
+        for (auto x = this->north_west.x - 1; x <= this->south_east.x + 1; x++) {
+            ugarcade_used[y][x] = true;
+        }
+    }
 }
 
 /*!
