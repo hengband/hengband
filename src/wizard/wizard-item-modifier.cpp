@@ -952,7 +952,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     if (exam_base) {
         auto max_len = 0;
         for (const auto &baseitem : baseitems_info) {
-            if (baseitem.idx == 0 || baseitem.name.empty()) {
+            if (!baseitem.is_valid()) {
                 continue;
             }
 

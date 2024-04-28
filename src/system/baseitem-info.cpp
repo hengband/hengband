@@ -606,6 +606,13 @@ BaseitemInfo::BaseitemInfo()
 {
 }
 
+/*!
+ * @brief 正常なベースアイテムかを判定する
+ * @return 正常なベースアイテムか否か
+ * @details ID 0は「何か」という異常アイテム
+ * その他、ベースアイテムIDは歴史的事情により歯抜けが多数あり、それらは名前が空欄になるようにオブジェクトを生成している
+ * @todo v3.1以降で歯抜けを埋めるようにベースアイテムを追加していきたい (詳細未定)
+ */
 bool BaseitemInfo::is_valid() const
 {
     return (this->idx > 0) && !this->name.empty();

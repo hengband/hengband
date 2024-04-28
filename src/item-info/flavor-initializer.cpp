@@ -63,7 +63,7 @@ void initialize_items_flavor()
     shuffle_flavors(ItemKindType::SCROLL);
     system.set_rng(rng_backup);
     for (auto &baseitem : baseitems_info) {
-        if (baseitem.idx == 0 || baseitem.name.empty()) {
+        if (!baseitem.is_valid()) {
             continue;
         }
 
