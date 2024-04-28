@@ -7,6 +7,7 @@
 #include "room/space-finder.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/angband-exceptions.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -26,12 +27,11 @@ const std::vector<StoreSaleType> stores = {
     StoreSaleType::BLACK,
     StoreSaleType::BOOK,
 };
-}
 
 /*
  * Precalculate buildings' location of underground arcade
  */
-static std::optional<std::vector<ugbldg_type>> precalc_ugarcade(int town_hgt, int town_wid)
+std::optional<std::vector<ugbldg_type>> precalc_ugarcade(int town_hgt, int town_wid)
 {
     const auto n = std::ssize(stores);
     std::vector<ugbldg_type> underground_buildings(n);
@@ -86,7 +86,7 @@ static std::optional<std::vector<ugbldg_type>> precalc_ugarcade(int town_hgt, in
 }
 
 /* Create a new floor room with optional light */
-static void generate_room_floor(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int light)
+void generate_room_floor(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int light)
 {
     for (auto y = y1; y <= y2; y++) {
         for (auto x = x1; x <= x2; x++) {
@@ -100,12 +100,28 @@ static void generate_room_floor(PlayerType *player_ptr, POSITION y1, POSITION x1
     }
 }
 
-static void generate_fill_perm_bold(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+void generate_fill_perm_bold(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
     for (auto y = y1; y <= y2; y++) {
         for (auto x = x1; x <= x2; x++) {
             place_bold(player_ptr, y, x, GB_INNER_PERM);
         }
+    }
+}
+
+Pos2D pick_door_direction(const ugbldg_type &cur_ugbldg)
+{
+    switch (randint0(4)) {
+    case 0: // South
+        return { cur_ugbldg.y1, rand_range(cur_ugbldg.x0, cur_ugbldg.x1) };
+    case 1: // North
+        return { cur_ugbldg.y0, rand_range(cur_ugbldg.x0, cur_ugbldg.x1) };
+    case 2: // East
+        return { rand_range(cur_ugbldg.y0, cur_ugbldg.y1), cur_ugbldg.x1 };
+    case 3: // West
+        return { rand_range(cur_ugbldg.y0, cur_ugbldg.y1), cur_ugbldg.x0 };
+    default:
+        THROW_EXCEPTION(std::logic_error, "RNG is broken!");
     }
 }
 
@@ -115,7 +131,7 @@ static void generate_fill_perm_bold(PlayerType *player_ptr, POSITION y1, POSITIO
  * @param pos_ug 地下都市エリアの左上座標
  * @param underground_buildings 生成する店舗のリスト
  */
-static void build_stores(PlayerType *player_ptr, const Pos2D &pos_ug, const std::vector<ugbldg_type> &underground_buildings)
+void build_stores(PlayerType *player_ptr, const Pos2D &pos_ug, const std::vector<ugbldg_type> &underground_buildings)
 {
     for (const auto &ug_building : underground_buildings) {
         generate_room_floor(player_ptr, pos_ug.y + ug_building.y0 - 2, pos_ug.x + ug_building.x0 - 2, pos_ug.y + ug_building.y1 + 2, pos_ug.x + ug_building.x1 + 2, false);
@@ -124,24 +140,7 @@ static void build_stores(PlayerType *player_ptr, const Pos2D &pos_ug, const std:
     for (auto i = 0; i < std::ssize(underground_buildings); i++) {
         const auto &ug_building = underground_buildings[i];
         generate_fill_perm_bold(player_ptr, pos_ug.y + ug_building.y0, pos_ug.x + ug_building.x0, pos_ug.y + ug_building.y1, pos_ug.x + ug_building.x1);
-
-        /* Pick a door direction (S,N,E,W) */
-        Pos2D pos(0, 0);
-        switch (randint0(4)) {
-        case 0: // Bottom side
-            pos = { ug_building.y1, rand_range(ug_building.x0, ug_building.x1) };
-            break;
-        case 1: // Top side
-            pos = { ug_building.y0, rand_range(ug_building.x0, ug_building.x1) };
-            break;
-        case 2: // Right side
-            pos = { rand_range(ug_building.y0, ug_building.y1), ug_building.x1 };
-            break;
-        case 3: // Left side
-            pos = { rand_range(ug_building.y0, ug_building.y1), ug_building.x0 };
-            break;
-        }
-
+        const auto pos = pick_door_direction(ug_building);
         const auto &terrains = TerrainList::get_instance();
         const auto end = terrains.end();
         const auto it = std::find_if(terrains.begin(), end,
@@ -155,6 +154,7 @@ static void build_stores(PlayerType *player_ptr, const Pos2D &pos_ug, const std:
         cave_set_feat(player_ptr, pos_ug.y + pos.y, pos_ug.x + pos.x, it->idx);
         store_init(VALID_TOWNS, stores[i]);
     }
+}
 }
 
 /*!
