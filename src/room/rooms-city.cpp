@@ -31,8 +31,10 @@ const std::vector<StoreSaleType> stores = {
 /*
  * Precalculate buildings' location of underground arcade
  */
-static bool precalc_ugarcade(int town_hgt, int town_wid, int n, std::vector<ugbldg_type> &ugbldg)
+static std::optional<std::vector<ugbldg_type>> precalc_ugarcade(int town_hgt, int town_wid)
 {
+    const auto n = std::ssize(stores);
+    std::vector<ugbldg_type> underground_buildings(n);
     const auto max_buildings_height = 3 * town_hgt / MAX_TOWN_HGT;
     const auto max_buildings_width = 5 * town_wid / MAX_TOWN_WID;
     std::vector<std::vector<bool>> ugarcade_used(town_hgt, std::vector<bool>(town_wid));
@@ -40,22 +42,21 @@ static bool precalc_ugarcade(int town_hgt, int town_wid, int n, std::vector<ugbl
     auto attempt = 10000;
     auto should_abort = false;
     for (i = 0; i < n; i++) {
-        auto *cur_ugbldg = &ugbldg[i];
-        *cur_ugbldg = {};
+        auto &cur_ugbldg = underground_buildings[i];
         do {
             const auto center_y = rand_range(2, town_hgt - 3);
             const auto center_x = rand_range(2, town_wid - 3);
             auto tmp = center_y - randint1(max_buildings_height);
-            cur_ugbldg->y0 = std::max(tmp, 1);
+            cur_ugbldg.y0 = std::max(tmp, 1);
             tmp = center_x - randint1(max_buildings_width);
-            cur_ugbldg->x0 = std::max(tmp, 1);
+            cur_ugbldg.x0 = std::max(tmp, 1);
             tmp = center_y + randint1(max_buildings_height);
-            cur_ugbldg->y1 = std::min(tmp, town_hgt - 2);
+            cur_ugbldg.y1 = std::min(tmp, town_hgt - 2);
             tmp = center_x + randint1(max_buildings_width);
-            cur_ugbldg->x1 = std::min(tmp, town_wid - 2);
+            cur_ugbldg.x1 = std::min(tmp, town_wid - 2);
             should_abort = false;
-            for (auto y = cur_ugbldg->y0; (y <= cur_ugbldg->y1) && !should_abort; y++) {
-                for (auto x = cur_ugbldg->x0; x <= cur_ugbldg->x1; x++) {
+            for (auto y = cur_ugbldg.y0; (y <= cur_ugbldg.y1) && !should_abort; y++) {
+                for (auto x = cur_ugbldg.x0; x <= cur_ugbldg.x1; x++) {
                     if (ugarcade_used[y][x]) {
                         should_abort = true;
                         break;
@@ -70,14 +71,18 @@ static bool precalc_ugarcade(int town_hgt, int town_wid, int n, std::vector<ugbl
             break;
         }
 
-        for (auto y = cur_ugbldg->y0 - 1; y <= cur_ugbldg->y1 + 1; y++) {
-            for (auto x = cur_ugbldg->x0 - 1; x <= cur_ugbldg->x1 + 1; x++) {
+        for (auto y = cur_ugbldg.y0 - 1; y <= cur_ugbldg.y1 + 1; y++) {
+            for (auto x = cur_ugbldg.x0 - 1; x <= cur_ugbldg.x1 + 1; x++) {
                 ugarcade_used[y][x] = true;
             }
         }
     }
 
-    return i == n;
+    if (i != n) {
+        return std::nullopt;
+    }
+
+    return underground_buildings;
 }
 
 /* Create a new floor room with optional light */
@@ -107,52 +112,48 @@ static void generate_fill_perm_bold(PlayerType *player_ptr, POSITION y1, POSITIO
 /*!
  * @brief タイプ16の部屋…地下都市生成のサブルーチン / Actually create buildings
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param ltcy 生成基準Y座標
- * @param ltcx 生成基準X座標
- * @param stotes[] 生成する店舗のリスト
- * @param n 生成する店舗の数
- * @note
- * Note: ltcy and ltcx indicate "left top corner".
+ * @param pos_ug 地下都市エリアの左上座標
+ * @param underground_buildings 生成する店舗のリスト
  */
-static void build_stores(PlayerType *player_ptr, POSITION ltcy, POSITION ltcx, int n, const std::vector<ugbldg_type> &ugbldg)
+static void build_stores(PlayerType *player_ptr, const Pos2D &pos_ug, const std::vector<ugbldg_type> &underground_buildings)
 {
-    const ugbldg_type *cur_ugbldg;
-    for (auto i = 0; i < n; i++) {
-        cur_ugbldg = &ugbldg[i];
-        generate_room_floor(player_ptr, ltcy + cur_ugbldg->y0 - 2, ltcx + cur_ugbldg->x0 - 2, ltcy + cur_ugbldg->y1 + 2, ltcx + cur_ugbldg->x1 + 2, false);
+    for (const auto &ug_building : underground_buildings) {
+        generate_room_floor(player_ptr, pos_ug.y + ug_building.y0 - 2, pos_ug.x + ug_building.x0 - 2, pos_ug.y + ug_building.y1 + 2, pos_ug.x + ug_building.x1 + 2, false);
     }
 
-    for (auto i = 0; i < n; i++) {
-        cur_ugbldg = &ugbldg[i];
-        generate_fill_perm_bold(player_ptr, ltcy + cur_ugbldg->y0, ltcx + cur_ugbldg->x0, ltcy + cur_ugbldg->y1, ltcx + cur_ugbldg->x1);
+    for (auto i = 0; i < std::ssize(underground_buildings); i++) {
+        const auto &ug_building = underground_buildings[i];
+        generate_fill_perm_bold(player_ptr, pos_ug.y + ug_building.y0, pos_ug.x + ug_building.x0, pos_ug.y + ug_building.y1, pos_ug.x + ug_building.x1);
 
         /* Pick a door direction (S,N,E,W) */
         Pos2D pos(0, 0);
         switch (randint0(4)) {
         case 0: // Bottom side
-            pos = { cur_ugbldg->y1, rand_range(cur_ugbldg->x0, cur_ugbldg->x1) };
+            pos = { ug_building.y1, rand_range(ug_building.x0, ug_building.x1) };
             break;
         case 1: // Top side
-            pos = { cur_ugbldg->y0, rand_range(cur_ugbldg->x0, cur_ugbldg->x1) };
+            pos = { ug_building.y0, rand_range(ug_building.x0, ug_building.x1) };
             break;
         case 2: // Right side
-            pos = { rand_range(cur_ugbldg->y0, cur_ugbldg->y1), cur_ugbldg->x1 };
+            pos = { rand_range(ug_building.y0, ug_building.y1), ug_building.x1 };
             break;
         case 3: // Left side
-            pos = { rand_range(cur_ugbldg->y0, cur_ugbldg->y1), cur_ugbldg->x0 };
+            pos = { rand_range(ug_building.y0, ug_building.y1), ug_building.x0 };
             break;
         }
 
         const auto &terrains = TerrainList::get_instance();
         const auto end = terrains.end();
-        if (auto it = std::find_if(terrains.begin(), end,
-                [subtype = stores[i]](const TerrainType &terrain) {
-                    return terrain.flags.has(TerrainCharacteristics::STORE) && (i2enum<StoreSaleType>(static_cast<int>(terrain.subtype)) == subtype);
-                });
-            it != end) {
-            cave_set_feat(player_ptr, ltcy + pos.y, ltcx + pos.x, it->idx);
-            store_init(VALID_TOWNS, stores[i]);
+        const auto it = std::find_if(terrains.begin(), end,
+            [subtype = stores[i]](const TerrainType &terrain) {
+                return terrain.flags.has(TerrainCharacteristics::STORE) && (i2enum<StoreSaleType>(static_cast<int>(terrain.subtype)) == subtype);
+            });
+        if (it == end) {
+            continue;
         }
+
+        cave_set_feat(player_ptr, pos_ug.y + pos.y, pos_ug.x + pos.x, it->idx);
+        store_init(VALID_TOWNS, stores[i]);
     }
 }
 
@@ -171,12 +172,10 @@ static void build_stores(PlayerType *player_ptr, POSITION ltcy, POSITION ltcx, i
  */
 bool build_type16(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
-    const auto n = std::ssize(stores);
     const auto town_hgt = rand_range(MIN_TOWN_HGT, MAX_TOWN_HGT);
     const auto town_wid = rand_range(MIN_TOWN_WID, MAX_TOWN_WID);
-
-    std::vector<ugbldg_type> ugbldg(n);
-    if (!precalc_ugarcade(town_hgt, town_wid, n, ugbldg)) {
+    const auto underground_buildings = precalc_ugarcade(town_hgt, town_wid);
+    if (!underground_buildings) {
         return false;
     }
 
@@ -186,10 +185,9 @@ bool build_type16(PlayerType *player_ptr, dun_data_type *dd_ptr)
         return false;
     }
 
-    const auto y1 = yval - (town_hgt / 2);
-    const auto x1 = xval - (town_wid / 2);
-    generate_room_floor(player_ptr, y1 + town_hgt / 3, x1 + town_wid / 3, y1 + town_hgt * 2 / 3, x1 + town_wid * 2 / 3, false);
-    build_stores(player_ptr, y1, x1, n, ugbldg);
+    const Pos2D pos(yval - (town_hgt / 2), xval - (town_wid / 2));
+    generate_room_floor(player_ptr, pos.y + town_hgt / 3, pos.x + town_wid / 3, pos.y + town_hgt * 2 / 3, pos.x + town_wid * 2 / 3, false);
+    build_stores(player_ptr, pos, *underground_buildings);
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("地下街を生成しました", "Underground arcade was generated."));
     return true;
 }
