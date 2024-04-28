@@ -1,5 +1,6 @@
 #include "system/grid-type-definition.h"
 #include "monster/monster-util.h"
+#include "room/door-definition.h"
 #include "system/angband-system.h"
 #include "system/monster-race-info.h"
 #include "system/terrain-type-definition.h"
@@ -184,4 +185,10 @@ TerrainType &Grid::get_terrain_mimic_raw()
 const TerrainType &Grid::get_terrain_mimic_raw() const
 {
     return TerrainList::get_instance()[this->mimic];
+}
+
+void Grid::place_closed_curtain()
+{
+    this->feat = feat_door[DOOR_CURTAIN].closed;
+    this->info &= ~(CAVE_MASK);
 }

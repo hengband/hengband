@@ -90,21 +90,13 @@ bool build_type1(PlayerType *player_ptr, dun_data_type *dd_ptr)
     /* Hack -- Occasional curtained room */
     if (is_curtain && (y2 - y1 > 2) && (x2 - x1 > 2)) {
         for (auto y = y1; y <= y2; y++) {
-            auto &grid1 = floor.get_grid({ y, x1 });
-            grid1.feat = feat_door[DOOR_CURTAIN].closed;
-            grid1.info &= ~(CAVE_MASK);
-            auto &grid2 = floor.get_grid({ y, x2 });
-            grid2.feat = feat_door[DOOR_CURTAIN].closed;
-            grid2.info &= ~(CAVE_MASK);
+            floor.get_grid({ y, x1 }).place_closed_curtain();
+            floor.get_grid({ y, x2 }).place_closed_curtain();
         }
 
         for (auto x = x1; x <= x2; x++) {
-            auto &grid1 = floor.get_grid({ y1, x });
-            grid1.feat = feat_door[DOOR_CURTAIN].closed;
-            grid1.info &= ~(CAVE_MASK);
-            auto &grid2 = floor.get_grid({ y2, x });
-            grid2.feat = feat_door[DOOR_CURTAIN].closed;
-            grid2.info &= ~(CAVE_MASK);
+            floor.get_grid({ y1, x }).place_closed_curtain();
+            floor.get_grid({ y2, x }).place_closed_curtain();
         }
     }
 
