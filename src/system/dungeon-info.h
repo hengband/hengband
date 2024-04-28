@@ -43,7 +43,8 @@ constexpr auto DUNGEON_FEAT_PROB_NUM = 3;
 #define DUNGEON_NO_MELEE 17
 #define DUNGEON_CHAMELEON 18
 #define DUNGEON_DARKNESS 19
-#define DUNGEON_MAX 19
+#define DUNGEON_GLASS 20
+#define DUNGEON_MAX 20
 
 enum class FixedArtifactId : short;
 enum class MonsterRaceId : int16_t;
