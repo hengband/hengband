@@ -342,8 +342,8 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
                 }
             }
 
-            auto *r_ptr = &monraces_info[floor.m_list[grid.m_idx].r_idx];
-            if (grid.has_monster() && !(streamer.flags.has(TerrainCharacteristics::PLACE) && monster_can_cross_terrain(player_ptr, feat, r_ptr, 0))) {
+            const auto &monrace = floor.m_list[grid.m_idx].get_monrace();
+            if (grid.has_monster() && !(streamer.flags.has(TerrainCharacteristics::PLACE) && monster_can_cross_terrain(player_ptr, feat, &monrace, 0))) {
                 /* Delete the monster (if any) */
                 delete_monster(player_ptr, pos.y, pos.x);
             }
