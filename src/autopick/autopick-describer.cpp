@@ -571,7 +571,7 @@ void describe_autopick_en(char *buff, const autopick_type &entry, autopick_descr
 void describe_autopick(char *buff, const autopick_type &entry)
 {
     //! @note autopick_describer::str は non-nullable、autopick_describer::insc は nullable という制約がある
-    autopick_describer describer;
+    autopick_describer describer{};
     describer.str = entry.name.data();
     describer.act = entry.action;
     describer.insc = entry.insc.empty() ? nullptr : entry.insc.data();
