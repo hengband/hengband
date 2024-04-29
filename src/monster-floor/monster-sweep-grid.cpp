@@ -177,8 +177,8 @@ void MonsterSweepGrid::check_hiding_grid(POSITION *y, POSITION *x, POSITION *y2,
 void MonsterSweepGrid::search_room_to_run(POSITION *y, POSITION *x)
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *r_ptr = &monraces_info[floor_ptr->m_list[this->m_idx].r_idx];
-    if (r_ptr->kind_flags.has_not(MonsterKindType::ANIMAL) || this->can_pass_wall || r_ptr->feature_flags.has(MonsterFeatureType::KILL_WALL)) {
+    const auto &monrace = floor_ptr->m_list[this->m_idx].get_monrace();
+    if (monrace.kind_flags.has_not(MonsterKindType::ANIMAL) || this->can_pass_wall || monrace.feature_flags.has(MonsterFeatureType::KILL_WALL)) {
         return;
     }
 
@@ -191,7 +191,7 @@ void MonsterSweepGrid::search_room_to_run(POSITION *y, POSITION *x)
         }
 
         auto *g_ptr = &floor_ptr->grid_array[yy][xx];
-        if (monster_can_cross_terrain(this->player_ptr, g_ptr->feat, r_ptr, 0)) {
+        if (monster_can_cross_terrain(this->player_ptr, g_ptr->feat, &monrace, 0)) {
             room++;
         }
     }
@@ -200,7 +200,7 @@ void MonsterSweepGrid::search_room_to_run(POSITION *y, POSITION *x)
         room -= 2;
     }
 
-    if (r_ptr->ability_flags.none()) {
+    if (monrace.ability_flags.none()) {
         room -= 2;
     }
 
@@ -287,8 +287,8 @@ void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_fl
 
 bool MonsterSweepGrid::check_movable_grid(POSITION *yp, POSITION *xp, const bool no_flow)
 {
-    auto *r_ptr = &monraces_info[this->player_ptr->current_floor_ptr->m_list[this->m_idx].r_idx];
-    if ((r_ptr->ability_flags.has_any_of(RF_ABILITY_ATTACK_MASK)) && (sweep_ranged_attack_grid(yp, xp))) {
+    const auto &monrace = this->player_ptr->current_floor_ptr->m_list[this->m_idx].get_monrace();
+    if ((monrace.ability_flags.has_any_of(RF_ABILITY_ATTACK_MASK)) && (sweep_ranged_attack_grid(yp, xp))) {
         return false;
     }
 
@@ -296,11 +296,11 @@ bool MonsterSweepGrid::check_movable_grid(POSITION *yp, POSITION *xp, const bool
         return false;
     }
 
-    if (r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL) && ((this->m_idx != this->player_ptr->riding) || has_pass_wall(this->player_ptr))) {
+    if (monrace.feature_flags.has(MonsterFeatureType::PASS_WALL) && ((this->m_idx != this->player_ptr->riding) || has_pass_wall(this->player_ptr))) {
         return false;
     }
 
-    if (r_ptr->feature_flags.has(MonsterFeatureType::KILL_WALL) && (this->m_idx != this->player_ptr->riding)) {
+    if (monrace.feature_flags.has(MonsterFeatureType::KILL_WALL) && (this->m_idx != this->player_ptr->riding)) {
         return false;
     }
 
@@ -361,9 +361,9 @@ bool MonsterSweepGrid::sweep_ranged_attack_grid(POSITION *yp, POSITION *xp)
 bool MonsterSweepGrid::is_best_cost(const POSITION y, const POSITION x, const int now_cost)
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *r_ptr = &monraces_info[floor_ptr->m_list[this->m_idx].r_idx];
+    const auto &monrace = floor_ptr->m_list[this->m_idx].get_monrace();
     auto is_riding = this->m_idx == this->player_ptr->riding;
-    if ((r_ptr->feature_flags.has_not(MonsterFeatureType::PASS_WALL) || (is_riding && !has_pass_wall(this->player_ptr))) && (r_ptr->feature_flags.has_not(MonsterFeatureType::KILL_WALL) || is_riding)) {
+    if ((monrace.feature_flags.has_not(MonsterFeatureType::PASS_WALL) || (is_riding && !has_pass_wall(this->player_ptr))) && (monrace.feature_flags.has_not(MonsterFeatureType::KILL_WALL) || is_riding)) {
         if (this->cost == 0) {
             return false;
         }
@@ -462,8 +462,8 @@ void MonsterSweepGrid::determine_when_cost(POSITION *yp, POSITION *xp, POSITION 
 
             this->best = when;
         } else {
-            auto *r_ptr = &monraces_info[floor_ptr->m_list[this->m_idx].r_idx];
-            this->cost = r_ptr->behavior_flags.has_any_of({ MonsterBehaviorType::BASH_DOOR, MonsterBehaviorType::OPEN_DOOR }) ? g_ptr->get_distance(r_ptr) : g_ptr->get_cost(r_ptr);
+            const auto &monrace = floor_ptr->m_list[this->m_idx].get_monrace();
+            this->cost = monrace.behavior_flags.has_any_of({ MonsterBehaviorType::BASH_DOOR, MonsterBehaviorType::OPEN_DOOR }) ? g_ptr->get_distance(&monrace) : g_ptr->get_cost(&monrace);
             if ((this->cost == 0) || (this->best < this->cost)) {
                 continue;
             }
