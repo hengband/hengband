@@ -264,8 +264,8 @@ std::vector<MONSTER_IDX> target_pets_prepare(PlayerType *player_ptr)
     auto comp_importance = [riding_idx = player_ptr->riding, &floor](MONSTER_IDX idx1, MONSTER_IDX idx2) {
         const auto &monster1 = floor.m_list[idx1];
         const auto &monster2 = floor.m_list[idx2];
-        const auto &ap_monrace1 = monraces_info[monster1.ap_r_idx];
-        const auto &ap_monrace2 = monraces_info[monster2.ap_r_idx];
+        const auto &ap_monrace1 = monster1.get_appearance_monrace();
+        const auto &ap_monrace2 = monster2.get_appearance_monrace();
 
         if ((riding_idx == idx1) != (riding_idx == idx2)) {
             return riding_idx == idx1;

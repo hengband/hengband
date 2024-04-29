@@ -387,8 +387,8 @@ bool ang_sort_comp_pet(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
 
     const auto &monster1 = player_ptr->current_floor_ptr->m_list[w1];
     const auto &monster2 = player_ptr->current_floor_ptr->m_list[w2];
-    const auto &monrace1 = monraces_info[monster1.r_idx];
-    const auto &monrace2 = monraces_info[monster2.r_idx];
+    const auto &monrace1 = monster1.get_monrace();
+    const auto &monrace2 = monster2.get_monrace();
 
     if (monster1.is_named() && !monster2.is_named()) {
         return true;
@@ -594,8 +594,8 @@ bool ang_sort_comp_pet_dismiss(PlayerType *player_ptr, vptr u, vptr v, int a, in
 
     const auto &monster1 = player_ptr->current_floor_ptr->m_list[w1];
     const auto &monster2 = player_ptr->current_floor_ptr->m_list[w2];
-    const auto &monrace1 = monraces_info[monster1.r_idx];
-    const auto &monrace2 = monraces_info[monster2.r_idx];
+    const auto &monrace1 = monster1.get_monrace();
+    const auto &monrace2 = monster2.get_monrace();
 
     if (w1 == player_ptr->riding) {
         return true;
