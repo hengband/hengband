@@ -60,8 +60,8 @@ bool MonsterEntity::is_hostile_to_melee(const MonsterEntity &other) const
         return !this->is_pet() && !other.is_pet();
     }
 
-    const auto &monrace1 = monraces_info[this->r_idx];
-    const auto &monrace2 = monraces_info[other.r_idx];
+    const auto &monrace1 = this->get_monrace();
+    const auto &monrace2 = other.get_monrace();
     const auto is_m1_wild = monrace1.wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
     const auto is_m2_wild = monrace2.wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
     if (is_m1_wild && is_m2_wild) {
