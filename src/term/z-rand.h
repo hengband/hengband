@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include "system/angband-exceptions.h"
 #include "system/h-basic.h"
 #include <initializer_list>
 #include <iterator>
@@ -36,7 +37,24 @@ int rand_range(int a, int b);
  * The integer X falls along a uniform distribution.
  * For example, if M is 100, you get "percentile dice"
  */
-#define randint0(M) (rand_range(0, (M)-1))
+template <typename T, typename U>
+T randnum0(U initial_max)
+    requires(std::is_integral_v<T> || std::is_enum_v<T>) && (std::is_integral_v<U> || std::is_enum_v<U>)
+{
+    const auto max = static_cast<int>(initial_max);
+    if (max <= 0) {
+        THROW_EXCEPTION(std::logic_error, "Max number must be 1 or greater!");
+    }
+
+    return static_cast<T>(rand_range(0, max - 1));
+}
+
+template <typename T>
+int randint0(T max)
+    requires std::is_integral_v<T> || std::is_enum_v<T>
+{
+    return randnum0<int>(static_cast<int>(max));
+}
 
 /*
  * Generate a random long integer X where A-D<=X<=A+D
@@ -49,7 +67,24 @@ int rand_range(int a, int b);
  * Generate a random long integer X where 1<=X<=M
  * Also, "correctly" handle the case of M<=1
  */
-#define randint1(M) (randint0(M) + 1)
+template <typename T, typename U>
+T randnum1(U initial_max)
+    requires(std::is_integral_v<T> || std::is_enum_v<T>) && (std::is_integral_v<U> || std::is_enum_v<U>)
+{
+    const auto max = static_cast<int>(initial_max);
+    if (max <= 0) {
+        THROW_EXCEPTION(std::logic_error, "Max number must be 1 or greater!");
+    }
+
+    return static_cast<T>(rand_range(1, max));
+}
+
+template <typename T>
+int randint1(T max)
+    requires std::is_integral_v<T> || std::is_enum_v<T>
+{
+    return randnum1<int>(static_cast<int>(max));
+}
 
 /*
  * Evaluate to TRUE "P" percent of the time

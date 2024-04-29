@@ -144,7 +144,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             msg_print(msg);
             if (is_damaged) {
                 damage = damroll(10, 4);
-                BadStatusSetter(player_ptr).mod_stun(randint1(50));
+                BadStatusSetter(player_ptr).mod_stun(randnum1<short>(50));
             }
 
             (void)move_player_effect(player_ptr, p_pos_new.y, p_pos_new.x, MPE_DONT_PICKUP);

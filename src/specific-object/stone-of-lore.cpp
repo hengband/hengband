@@ -37,7 +37,7 @@ bool StoneOfLore::perilous_secrets()
     auto dam_source = _("危険な秘密", "perilous secrets");
     take_hit(this->player_ptr, DAMAGE_LOSELIFE, damroll(1, 12), dam_source);
     if (one_in_(5)) {
-        (void)BadStatusSetter(this->player_ptr).mod_confusion(randint1(10));
+        (void)BadStatusSetter(this->player_ptr).mod_confusion(randnum1<short>(10));
     }
 
     if (one_in_(20)) {
@@ -65,7 +65,7 @@ void StoneOfLore::consume_mp()
     this->player_ptr->csp_frac = 0;
     msg_print(_("石を制御できない！", "You are too weak to control the stone!"));
     BadStatusSetter bss(this->player_ptr);
-    (void)bss.mod_paralysis(randint1(5 * oops + 1));
-    (void)bss.mod_confusion(randint1(5 * oops + 1));
+    (void)bss.mod_paralysis(randnum1<short>(5 * oops + 1));
+    (void)bss.mod_confusion(randnum1<short>(5 * oops + 1));
     rfu.set_flag(MainWindowRedrawingFlag::MP);
 }

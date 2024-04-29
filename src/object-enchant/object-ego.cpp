@@ -233,20 +233,20 @@ void ego_invest_extra_attack(ItemEntity *o_ptr, const EgoItemDefinition &ego, DE
     }
 
     if (o_ptr->ego_idx == EgoType::ATTACKS) {
-        o_ptr->pval = randint1(ego.max_pval * lev / 100 + 1);
+        o_ptr->pval = randnum1<short>(ego.max_pval * lev / 100 + 1);
         if (o_ptr->pval > 3) {
             o_ptr->pval = 3;
         }
 
         if (o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_HAYABUSA)) {
-            o_ptr->pval += randint1(2);
+            o_ptr->pval += randnum1<short>(2);
         }
 
         return;
     }
 
     if (ego_has_flag(o_ptr, ego, TR_EARTHQUAKE)) {
-        o_ptr->pval += randint1(ego.max_pval);
+        o_ptr->pval += randnum1<short>(ego.max_pval);
         return;
     }
 
@@ -258,7 +258,7 @@ void ego_invest_extra_attack(ItemEntity *o_ptr, const EgoItemDefinition &ego, DE
         return;
     }
 
-    o_ptr->pval += randint1(2);
+    o_ptr->pval += randnum1<short>(2);
 }
 
 /*!
@@ -293,16 +293,16 @@ void apply_ego(ItemEntity *o_ptr, DEPTH lev)
     auto is_cursed = (o_ptr->is_cursed() || o_ptr->is_broken()) && !is_powerful;
     if (is_cursed) {
         if (ego.max_to_h) {
-            o_ptr->to_h -= randint1(ego.max_to_h);
+            o_ptr->to_h -= randnum1<short>(ego.max_to_h);
         }
         if (ego.max_to_d) {
             o_ptr->to_d -= randint1(ego.max_to_d);
         }
         if (ego.max_to_a) {
-            o_ptr->to_a -= randint1(ego.max_to_a);
+            o_ptr->to_a -= randnum1<short>(ego.max_to_a);
         }
         if (ego.max_pval) {
-            o_ptr->pval -= randint1(ego.max_pval);
+            o_ptr->pval -= randnum1<short>(ego.max_pval);
         }
     } else {
         if (is_powerful) {
@@ -343,25 +343,25 @@ void apply_ego(ItemEntity *o_ptr, DEPTH lev)
 
         if (ego.max_pval) {
             if (o_ptr->ego_idx == EgoType::BAT) {
-                o_ptr->pval = randint1(ego.max_pval);
+                o_ptr->pval = randnum1<short>(ego.max_pval);
                 if (o_ptr->bi_key.sval() == SV_ELVEN_CLOAK) {
-                    o_ptr->pval += randint1(2);
+                    o_ptr->pval += randnum1<short>(2);
                 }
             } else {
                 if (ego_has_flag(o_ptr, ego, TR_BLOWS)) {
                     ego_invest_extra_attack(o_ptr, ego, lev);
                 } else {
                     if (ego.max_pval > 0) {
-                        o_ptr->pval += randint1(ego.max_pval);
+                        o_ptr->pval += randnum1<short>(ego.max_pval);
                     } else if (ego.max_pval < 0) {
-                        o_ptr->pval -= randint1(0 - ego.max_pval);
+                        o_ptr->pval -= randnum1<short>(0 - ego.max_pval);
                     }
                 }
             }
         }
 
         if ((o_ptr->ego_idx == EgoType::SPEED) && (lev < 50)) {
-            o_ptr->pval = randint1(o_ptr->pval);
+            o_ptr->pval = randnum1<short>(o_ptr->pval);
         }
 
         if ((o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_HAYABUSA)) && (o_ptr->pval > 2) && (o_ptr->ego_idx != EgoType::ATTACKS)) {

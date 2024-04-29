@@ -54,7 +54,7 @@ void SoftArmorEnchanter::sval_enchant()
 
     switch (*sval) {
     case SV_KUROSHOUZOKU:
-        this->o_ptr->pval = randint1(4);
+        this->o_ptr->pval = randnum1<short>(4);
         return;
     case SV_ABUNAI_MIZUGI:
         if (this->player_ptr->ppersonality != PERSONALITY_SEXY) {

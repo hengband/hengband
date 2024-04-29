@@ -77,6 +77,6 @@ void do_cmd_fire(PlayerType *player_ptr, SPELL_IDX snipe_type)
         msg_print(_("射撃の反動が体を襲った。", "The weapon's recoil stuns you. "));
         BadStatusSetter bss(player_ptr);
         (void)bss.mod_deceleration(randint0(7) + 7, false);
-        (void)bss.mod_stun(randint1(25));
+        (void)bss.mod_stun(randnum1<short>(25));
     }
 }
