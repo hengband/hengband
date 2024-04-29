@@ -53,7 +53,7 @@ bool object_is_quest_target(QuestId quest_idx, const ItemEntity *o_ptr)
     }
 
     const auto &quest = QuestList::get_instance()[quest_idx];
-    if (quest.has_reward()) {
+    if (!quest.has_reward()) {
         return false;
     }
 
