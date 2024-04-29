@@ -169,9 +169,9 @@ static void invest_misc_string_esp(ItemEntity *o_ptr)
     }
 }
 
-static void switch_investment_weak_esps(ItemEntity *o_ptr, const int *idx, const int n)
+static void switch_investment_weak_esps(ItemEntity *o_ptr, const int num_esp)
 {
-    switch (idx[n]) {
+    switch (num_esp) {
     case 1:
         o_ptr->art_flags.set(TR_ESP_ANIMAL);
         if (!o_ptr->artifact_bias && one_in_(4)) {
@@ -229,14 +229,13 @@ static void switch_investment_weak_esps(ItemEntity *o_ptr, const int *idx, const
 
 static void invest_misc_weak_esps(ItemEntity *o_ptr)
 {
-    int idx[3];
-    idx[0] = randint1(10);
-    idx[1] = randint1(9);
+    std::vector<int> idx{
+        randint1(10), randint1(9), randint1(8)
+    };
     if (idx[1] >= idx[0]) {
         idx[1]++;
     }
 
-    idx[2] = randint1(8);
     if (idx[2] >= idx[0]) {
         idx[2]++;
     }
@@ -245,9 +244,9 @@ static void invest_misc_weak_esps(ItemEntity *o_ptr)
         idx[2]++;
     }
 
-    int n = randint1(3);
+    auto n = randint1(std::ssize(idx));
     while (n--) {
-        switch_investment_weak_esps(o_ptr, idx, n);
+        switch_investment_weak_esps(o_ptr, idx[n]);
     }
 }
 
