@@ -129,7 +129,7 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y1, P
     auto summon_specific_hook = [src_idx, type, is_unique_allowed = (mode & PM_ALLOW_UNIQUE) != 0](PlayerType *player_ptr, MonsterRaceId r_idx) {
         return summon_specific_okay(player_ptr, r_idx, src_idx, type, is_unique_allowed);
     };
-    get_mon_num_prep(player_ptr, std::move(summon_specific_hook), get_monster_hook2(player_ptr, y, x));
+    get_mon_num_prep(player_ptr, std::move(summon_specific_hook), get_monster_hook2(player_ptr, y, x), type);
 
     DEPTH dlev = get_dungeon_or_wilderness_level(player_ptr);
     MonsterRaceId r_idx = get_mon_num(player_ptr, 0, (dlev + lev) / 2 + 5, mode);
