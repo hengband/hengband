@@ -40,13 +40,6 @@ MONSTER_IDX hack_m_idx_ii = 0;
  */
 int chameleon_change_m_idx = 0;
 
-/*!
- * @var summon_specific_type
- * @brief 召喚条件を指定するグローバル変数 / Hack -- the "type" of the current "summon specific"
- * @todo summon_specific_typeグローバル変数の除去と関数引数への代替を行う
- */
-summon_type summon_specific_type = SUMMON_NONE;
-
 /**
  * @brief モンスターがダンジョンに出現できる条件を満たしているかのフラグ判定関数(AND)
  *
@@ -77,9 +70,10 @@ static bool is_possible_monster_or(const EnumClassFlagGroup<T> &r_flags, const E
  * @brief 指定されたモンスター種族がダンジョンの制限にかかるかどうかをチェックする / Some dungeon types restrict the possible monsters.
  * @param floor_ptr フロアへの参照ポインタ
  * @param r_idx チェックするモンスター種族ID
+ * @param summon_specific_type summon_specific() によるものの場合、召喚種別を指定する
  * @return 召喚条件が一致するならtrue / Return TRUE is the monster is OK and FALSE otherwise
  */
-static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonsterRaceId r_idx)
+static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonsterRaceId r_idx, std::optional<summon_type> summon_specific_type)
 {
     const auto *d_ptr = &floor_ptr->get_dungeon_definition();
     const auto *r_ptr = &monraces_info[r_idx];
@@ -230,12 +224,13 @@ monsterrace_hook_type get_monster_hook2(PlayerType *player_ptr, POSITION y, POSI
  * @param hook1 生成制約関数1 (nullptr の場合、制約なし)
  * @param hook2 生成制約関数2 (nullptr の場合、制約なし)
  * @param restrict_to_dungeon 現在プレイヤーのいるダンジョンの制約を適用するか
+ * @param summon_specific_type summon_specific によるものの場合、召喚種別を指定する
  * @return 常に 0
  *
  * モンスター生成テーブル alloc_race_table の各要素の基本重み prob1 を指定条件
  * に従って変更し、結果を prob2 に書き込む。
  */
-static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, const monsterrace_hook_type &hook2, const bool restrict_to_dungeon)
+static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, const monsterrace_hook_type &hook2, const bool restrict_to_dungeon, std::optional<summon_type> summon_specific_type)
 {
     const FloorType *const floor_ptr = player_ptr->current_floor_ptr;
 
@@ -306,7 +301,7 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
             const bool in_random_quest = floor_ptr->is_in_quest() && !QuestType::is_fixed(floor_ptr->quest_number);
             const bool cond = !system.is_phase_out() && floor_ptr->dun_level > 0 && !in_random_quest;
 
-            if (cond && !restrict_monster_to_dungeon(floor_ptr, entry_r_idx)) {
+            if (cond && !restrict_monster_to_dungeon(floor_ptr, entry_r_idx, summon_specific_type)) {
                 // ダンジョンによる制約に掛かった場合、重みを special_div/64 倍する。
                 // 丸めは確率的に行う。
                 const int numer = entry->prob2 * floor_ptr->get_dungeon_definition().special_div;
@@ -342,13 +337,14 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
  * @param player_ptr
  * @param hook1 生成制約関数1 (nullptr の場合、制約なし)
  * @param hook2 生成制約関数2 (nullptr の場合、制約なし)
+ * @param summon_specific_type summon_specific によるものの場合、召喚種別を指定する
  * @return 常に 0
  *
  * get_mon_num() を呼ぶ前に get_mon_num_prep() 系関数のいずれかを呼ぶこと。
  */
-errr get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, const monsterrace_hook_type &hook2)
+errr get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, const monsterrace_hook_type &hook2, std::optional<summon_type> summon_specific_type)
 {
-    return do_get_mon_num_prep(player_ptr, hook1, hook2, true);
+    return do_get_mon_num_prep(player_ptr, hook1, hook2, true, summon_specific_type);
 }
 
 /*!
@@ -359,7 +355,7 @@ errr get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1
  */
 errr get_mon_num_prep_bounty(PlayerType *player_ptr)
 {
-    return do_get_mon_num_prep(player_ptr, nullptr, nullptr, false);
+    return do_get_mon_num_prep(player_ptr, nullptr, nullptr, false, std::nullopt);
 }
 
 bool is_player(MONSTER_IDX m_idx)
