@@ -318,7 +318,7 @@ static void hit_trap_pit(PlayerType *player_ptr, TrapType trap_feat_type)
     msg_format(_("%sが刺さった！", "You are impaled on %s!"), spike_name);
     dam = dam * 2;
     BadStatusSetter bss(player_ptr);
-    (void)bss.mod_cut(randint1(dam));
+    (void)bss.mod_cut(randnum1<short>(dam));
     if (trap_feat_type != TrapType::POISON_PIT) {
         take_hit(player_ptr, DAMAGE_NOESCAPE, dam, trap_name);
         return;
@@ -331,7 +331,7 @@ static void hit_trap_pit(PlayerType *player_ptr, TrapType trap_feat_type)
     }
 
     dam = dam * 2;
-    (void)bss.mod_poison(randint1(dam));
+    (void)bss.mod_poison(randnum1<short>(dam));
     take_hit(player_ptr, DAMAGE_NOESCAPE, dam, trap_name);
 }
 

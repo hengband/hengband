@@ -72,15 +72,15 @@ short PlayerCut::get_accumulation(int total, int damage)
     case 0:
         return 0;
     case 1:
-        return randint1(5);
+        return randnum1<short>(5);
     case 2:
-        return randint1(5) + 5;
+        return randnum1<short>(5) + 5;
     case 3:
-        return randint1(20) + 20;
+        return randnum1<short>(20) + 20;
     case 4:
-        return randint1(50) + 50;
+        return randnum1<short>(50) + 50;
     case 5:
-        return randint1(100) + 100;
+        return randnum1<short>(100) + 100;
     case 6:
         return 300;
     default: // 7 or more.

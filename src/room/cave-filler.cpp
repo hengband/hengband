@@ -128,7 +128,7 @@ void generate_hmap(FloorType *floor_ptr, POSITION y0, POSITION x0, POSITION xsiz
                 }
 
                 if (xhstep2 > grd) {
-                    store_height(floor_ptr, ii, jj, randint1(maxsize));
+                    store_height(floor_ptr, ii, jj, randnum1<short>(maxsize));
                     continue;
                 }
 
@@ -146,7 +146,7 @@ void generate_hmap(FloorType *floor_ptr, POSITION y0, POSITION x0, POSITION xsiz
                 }
 
                 if (xhstep2 > grd) {
-                    store_height(floor_ptr, ii, jj, randint1(maxsize));
+                    store_height(floor_ptr, ii, jj, randnum1<short>(maxsize));
                     continue;
                 }
 
@@ -164,7 +164,7 @@ void generate_hmap(FloorType *floor_ptr, POSITION y0, POSITION x0, POSITION xsiz
                 }
 
                 if (xhstep2 > grd) {
-                    store_height(floor_ptr, ii, jj, randint1(maxsize));
+                    store_height(floor_ptr, ii, jj, randnum1<short>(maxsize));
                     continue;
                 }
 

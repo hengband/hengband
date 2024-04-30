@@ -30,7 +30,7 @@ CloakEnchanter::CloakEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH 
 void CloakEnchanter::apply_magic()
 {
     if (this->o_ptr->bi_key.sval() == SV_ELVEN_CLOAK) {
-        this->o_ptr->pval = randint1(4);
+        this->o_ptr->pval = randnum1<short>(4);
     }
 
     if (this->power > 1) {

@@ -933,7 +933,7 @@ void do_cmd_element(PlayerType *player_ptr)
         player_ptr->csp = 0;
         player_ptr->csp_frac = 0;
         msg_print(_("精神を集中しすぎて気を失ってしまった！", "You faint from the effort!"));
-        (void)BadStatusSetter(player_ptr).mod_paralysis(randint1(5 * oops + 1));
+        (void)BadStatusSetter(player_ptr).mod_paralysis(randnum1<short>(5 * oops + 1));
         chg_virtue(player_ptr, Virtue::KNOWLEDGE, -10);
         if (randint0(100) < 50) {
             bool perm = (randint0(100) < 25);

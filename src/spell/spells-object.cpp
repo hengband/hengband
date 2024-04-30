@@ -626,7 +626,7 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
     case 5:
         act = _("は非常に不安定になったようだ。", "seems very unstable now.");
         o_ptr->ego_idx = EgoType::TRUMP;
-        o_ptr->pval = randint1(2);
+        o_ptr->pval = randnum1<short>(2);
         break;
     case 4:
         act = _("は血を求めている！", "thirsts for blood!");

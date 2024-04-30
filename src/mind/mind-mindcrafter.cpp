@@ -275,7 +275,7 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, MindMindcrafterType spell)
 
         dam = damroll(plev / 2, 6);
         if (fire_ball(player_ptr, AttributeType::PSI_DRAIN, dir, dam, 0)) {
-            player_ptr->energy_need += randint1(150);
+            player_ptr->energy_need += randnum1<short>(150);
         }
 
         break;

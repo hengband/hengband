@@ -236,7 +236,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     o_ptr->ds = baseitem.ds;
     o_ptr->art_flags.set(baseitem.flags);
     if (baseitem.pval) {
-        o_ptr->pval = std::max<short>(o_ptr->pval, randint1(baseitem.pval));
+        o_ptr->pval = std::max(o_ptr->pval, randnum1<short>(baseitem.pval));
     }
 
     if (baseitem.flags.has(TR_ACTIVATE)) {

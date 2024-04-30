@@ -205,7 +205,7 @@ void OtherItemsEnchanter::generate_chest()
         return;
     }
 
-    this->o_ptr->pval = randint1(obj_level);
+    this->o_ptr->pval = randnum1<short>(obj_level);
     if (this->o_ptr->bi_key.sval() == SV_CHEST_KANDUME) {
         this->o_ptr->pval = 6;
     }

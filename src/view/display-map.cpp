@@ -54,7 +54,7 @@ static void image_object(TERM_COLOR *ap, char *cp)
     }
 
     *cp = rand_choice(image_objects);
-    *ap = randint1(15);
+    *ap = randnum1<uint8_t>(15);
 }
 
 /*!
@@ -73,7 +73,7 @@ static void image_monster(TERM_COLOR *ap, char *cp)
     }
 
     *cp = one_in_(25) ? rand_choice(image_objects) : rand_choice(image_monsters);
-    *ap = randint1(15);
+    *ap = randnum1<uint8_t>(15);
 }
 
 /*!
@@ -343,7 +343,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
         /* Do nothing */
     } else if (r_ptr->visual_flags.has(MonsterVisualType::MULTI_COLOR) && !use_graphics) {
         if (r_ptr->visual_flags.has(MonsterVisualType::ANY_COLOR)) {
-            *ap = randint1(15);
+            *ap = randnum1<uint8_t>(15);
         } else {
             constexpr static auto colors = {
                 TERM_RED,

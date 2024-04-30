@@ -251,7 +251,7 @@ static void invest_powers(PlayerType *player_ptr, ItemEntity *o_ptr, int *powers
 static void strengthen_pval(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_BLOWS)) {
-        o_ptr->pval = randint1(2);
+        o_ptr->pval = randnum1<short>(2);
         if (o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_HAYABUSA)) {
             o_ptr->pval++;
         }
@@ -274,7 +274,7 @@ static void strengthen_pval(ItemEntity *o_ptr)
 static void invest_positive_modified_value(ItemEntity *o_ptr)
 {
     if (o_ptr->is_protector()) {
-        o_ptr->to_a += randint1(o_ptr->to_a > 19 ? 1 : 20 - o_ptr->to_a);
+        o_ptr->to_a += randnum1<short>(o_ptr->to_a > 19 ? 1 : 20 - o_ptr->to_a);
         return;
     }
 
@@ -282,8 +282,8 @@ static void invest_positive_modified_value(ItemEntity *o_ptr)
         return;
     }
 
-    o_ptr->to_h += randint1(o_ptr->to_h > 19 ? 1 : 20 - o_ptr->to_h);
-    o_ptr->to_d += randint1(o_ptr->to_d > 19 ? 1 : 20 - o_ptr->to_d);
+    o_ptr->to_h += randnum1<short>(o_ptr->to_h > 19 ? 1 : 20 - o_ptr->to_h);
+    o_ptr->to_d += randnum1<short>(o_ptr->to_d > 19 ? 1 : 20 - o_ptr->to_d);
     if ((o_ptr->art_flags.has(TR_WIS)) && (o_ptr->pval > 0)) {
         o_ptr->art_flags.set(TR_BLESSED);
     }
