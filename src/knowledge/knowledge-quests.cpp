@@ -70,11 +70,9 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
         }
 
         const auto old_quest = player_ptr->current_floor_ptr->quest_number;
-        for (int j = 0; j < 10; j++) {
-            quest_text[j][0] = '\0';
-        }
 
-        quest_text_line = 0;
+        quest_text_lines.clear();
+
         player_ptr->current_floor_ptr->quest_number = q_idx;
         init_flags = INIT_SHOW_TEXT;
         parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
@@ -144,10 +142,8 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                 continue;
             }
 
-            int k = 0;
-            while (quest_text[k][0] && k < 10) {
-                fprintf(fff, "    %s\n", quest_text[k]);
-                k++;
+            for (const auto &line : quest_text_lines) {
+                fprintf(fff, "    %s\n", line.data());
             }
 
             continue;

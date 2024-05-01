@@ -159,9 +159,10 @@ private:
     ~QuestList() = default;
 };
 
-extern char quest_text[10][80];
-extern int quest_text_line;
+extern std::vector<std::string> quest_text_lines;
 extern QuestId leaving_quest;
+
+constexpr auto QUEST_TEST_LINES_MAX = 10;
 
 class FloorType;
 class ItemEntity;
