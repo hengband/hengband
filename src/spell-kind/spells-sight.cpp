@@ -474,10 +474,7 @@ bool probing(PlayerType *player_ptr)
 #ifdef JP
             msg_format("%sについてさらに詳しくなった気がする。", monrace.name.data());
 #else
-            std::string nm = monrace.name;
-            /* Leave room for making it plural. */
-            nm.resize(monrace.name.length() + 16);
-            plural_aux(nm.data());
+            const auto nm = pluralize(monrace.name);
             msg_format("You now know more about %s.", nm.data());
 #endif
             msg_print(nullptr);

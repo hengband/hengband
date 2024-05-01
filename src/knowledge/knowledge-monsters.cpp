@@ -222,10 +222,8 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
                 fprintf(fff, "     1 %s\n", r_ptr->name.data());
             }
         } else {
-            char ToPlural[80];
-            strcpy(ToPlural, r_ptr->name.data());
-            plural_aux(ToPlural);
-            fprintf(fff, "     %d %s\n", this_monster, ToPlural);
+            const auto name = pluralize(r_ptr->name);
+            fprintf(fff, "     %d %s\n", this_monster, name.data());
         }
 #endif
         total += this_monster;

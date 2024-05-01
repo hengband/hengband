@@ -1,86 +1,126 @@
 #include "locale/english.h"
+#include "system/angband-exceptions.h"
 #include "system/angband.h"
 #include "util/string-processor.h"
 
 #ifndef JP
 
+namespace {
+std::string replace_tail(std::string_view name, size_t replace_num, std::string_view replace_str)
+{
+    if (name.length() < replace_num) {
+        THROW_EXCEPTION(std::logic_error, "replace_num is too large");
+    }
+
+    std::string result(name.substr(0, name.length() - replace_num));
+    result.append(replace_str);
+    return result;
+}
+}
+
 /*!
  * @brief 英単語、句、説を複数形を変換する / Pluralize a monster name
- * @param Name 変換したい文字列の参照ポインタ
+ * @param name 変換する文字列
  */
-void plural_aux(char *Name)
+std::string pluralize(std::string_view name)
 {
-    int NameLen = strlen(Name);
+    /// @note 英語版のみの処理なのでマルチバイト文字は考慮しなくてよい
+    /// contains() はC++23以降
 
-    if (angband_strstr(Name, "Disembodied hand")) {
-        strcpy(Name, "Disembodied hands that strangled people");
-    } else if (angband_strstr(Name, "Colour out of space")) {
-        strcpy(Name, "Colours out of space");
-    } else if (angband_strstr(Name, "stairway to hell")) {
-        strcpy(Name, "stairways to hell");
-    } else if (angband_strstr(Name, "Dweller on the threshold")) {
-        strcpy(Name, "Dwellers on the threshold");
-    } else if (angband_strstr(Name, " of ")) {
-        concptr aider = angband_strstr(Name, " of ");
-        char dummy[80];
-        int i = 0;
-        concptr ctr = Name;
-
-        while (ctr < aider) {
-            dummy[i] = *ctr;
-            ctr++;
-            i++;
-        }
-
-        if (dummy[i - 1] == 's') {
-            strcpy(&(dummy[i]), "es");
-            i++;
-        } else {
-            strcpy(&(dummy[i]), "s");
-        }
-
-        strcpy(&(dummy[i + 1]), aider);
-        strcpy(Name, dummy);
-    } else if (angband_strstr(Name, "coins")) {
-        char dummy[80];
-        strcpy(dummy, "piles of ");
-        strcat(dummy, Name);
-        strcpy(Name, dummy);
-    } else if (angband_strstr(Name, "Manes")) {
-        return;
-    } else if (suffix(Name, "y") && !(NameLen >= 2 && is_a_vowel(Name[NameLen - 2]))) {
-        strcpy(&(Name[NameLen - 1]), "ies");
-    } else if (suffix(Name, "ouse")) {
-        strcpy(&(Name[NameLen - 4]), "ice");
-    } else if (suffix(Name, "ous")) {
-        strcpy(&(Name[NameLen - 3]), "i");
-    } else if (suffix(Name, "us")) {
-        strcpy(&(Name[NameLen - 2]), "i");
-    } else if (suffix(Name, "kelman")) {
-        strcpy(&(Name[NameLen - 6]), "kelmen");
-    } else if (suffix(Name, "wordsman")) {
-        strcpy(&(Name[NameLen - 8]), "wordsmen");
-    } else if (suffix(Name, "oodsman")) {
-        strcpy(&(Name[NameLen - 7]), "oodsmen");
-    } else if (suffix(Name, "eastman")) {
-        strcpy(&(Name[NameLen - 7]), "eastmen");
-    } else if (suffix(Name, "izardman")) {
-        strcpy(&(Name[NameLen - 8]), "izardmen");
-    } else if (suffix(Name, "geist")) {
-        strcpy(&(Name[NameLen - 5]), "geister");
-    } else if (suffix(Name, "ex")) {
-        strcpy(&(Name[NameLen - 2]), "ices");
-    } else if (suffix(Name, "lf")) {
-        strcpy(&(Name[NameLen - 2]), "lves");
-    } else if (suffix(Name, "ch") ||
-               suffix(Name, "sh") ||
-               suffix(Name, "nx") ||
-               suffix(Name, "s") ||
-               suffix(Name, "o")) {
-        strcpy(&(Name[NameLen]), "es");
-    } else {
-        strcpy(&(Name[NameLen]), "s");
+    if (name.find("Disembodied hand") != std::string_view::npos) {
+        return "Disembodied hands that strangled people";
     }
+
+    if (name.find("Colour out of space") != std::string_view::npos) {
+        return "Colours out of space";
+    }
+
+    if (name.find("stairway to hell") != std::string_view::npos) {
+        return "stairways to hell";
+    }
+
+    if (name.find("Dweller on the threshold") != std::string_view::npos) {
+        return "Dwellers on the threshold";
+    }
+
+    if (auto it = name.find(" of "); it != std::string_view::npos) {
+        std::string formar_part(name.begin(), name.begin() + it);
+        std::string latter_part(name.begin() + it, name.end());
+
+        if (formar_part.back() == 's') {
+            formar_part.append("es");
+        } else {
+            formar_part.push_back('s');
+        }
+
+        return formar_part + latter_part;
+    }
+
+    if (name.find("coins") != std::string_view::npos) {
+        return std::string("piles of ").append(name);
+    }
+
+    if (name.find("Manes") != std::string_view::npos) {
+        return std::string(name);
+    }
+
+    if (name.ends_with("y") && !(name.length() >= 2 && is_a_vowel(name[name.length() - 2]))) {
+        return replace_tail(name, 1, "ies");
+    }
+
+    if (name.ends_with("ouse")) {
+        return replace_tail(name, 4, "ice");
+    }
+
+    if (name.ends_with("ous")) {
+        return replace_tail(name, 3, "i");
+    }
+
+    if (name.ends_with("us")) {
+        return replace_tail(name, 2, "i");
+    }
+
+    if (name.ends_with("kelman")) {
+        return replace_tail(name, 6, "kelmen");
+    }
+
+    if (name.ends_with("wordsman")) {
+        return replace_tail(name, 8, "wordsmen");
+    }
+
+    if (name.ends_with("oodsman")) {
+        return replace_tail(name, 7, "oodsmen");
+    }
+
+    if (name.ends_with("eastman")) {
+        return replace_tail(name, 7, "eastmen");
+    }
+
+    if (name.ends_with("izardman")) {
+        return replace_tail(name, 8, "izardmen");
+    }
+
+    if (name.ends_with("geist")) {
+        return replace_tail(name, 5, "geister");
+    }
+
+    if (name.ends_with("ex")) {
+        return replace_tail(name, 2, "ices");
+    }
+
+    if (name.ends_with("lf")) {
+        return replace_tail(name, 2, "lves");
+    }
+
+    if (name.ends_with("ch") ||
+        name.ends_with("sh") ||
+        name.ends_with("nx") ||
+        name.ends_with("s") ||
+        name.ends_with("o")) {
+        return std::string(name).append("es");
+    }
+
+    return std::string(name).append("s");
 }
 
 /*
