@@ -69,7 +69,7 @@ void Rand_state_init(void)
 
 int rand_range(int a, int b)
 {
-    if (a > b) {
+    if (a >= b) {
         return a;
     }
     std::uniform_int_distribution<> d(a, b);

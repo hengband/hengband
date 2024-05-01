@@ -42,10 +42,6 @@ T randnum0(U initial_max)
     requires(std::is_integral_v<T> || std::is_enum_v<T>) && (std::is_integral_v<U> || std::is_enum_v<U>)
 {
     const auto max = static_cast<int>(initial_max);
-    if (max == 0) {
-        return static_cast<T>(0);
-    }
-
     return max > 0 ? static_cast<T>(rand_range(0, max - 1)) : -static_cast<T>(rand_range(0, -max - 1));
 }
 
