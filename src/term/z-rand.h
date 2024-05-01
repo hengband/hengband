@@ -32,21 +32,18 @@
  */
 int rand_range(int a, int b);
 
-/*
- * Generates a random long integer X where O<=X<M.
- * The integer X falls along a uniform distribution.
- * For example, if M is 100, you get "percentile dice"
+/*!
+ * @brief 0以上/以下の一様乱数を返す
+ * @param 最大値 (負ならば最小値)
+ * @return 乱数出力
+ * @details max > 0 ならば0以上max未満、max < 0 ならばmaxを超え0以下、0ならば0
  */
 template <typename T, typename U>
 T randnum0(U initial_max)
     requires(std::is_integral_v<T> || std::is_enum_v<T>) && (std::is_integral_v<U> || std::is_enum_v<U>)
 {
     const auto max = static_cast<int>(initial_max);
-    if (max <= 0) {
-        THROW_EXCEPTION(std::logic_error, "Max number must be 1 or greater!");
-    }
-
-    return static_cast<T>(rand_range(0, max - 1));
+    return max > 0 ? static_cast<T>(rand_range(0, max - 1)) : -static_cast<T>(rand_range(0, -max - 1));
 }
 
 template <typename T>
@@ -63,20 +60,22 @@ int randint0(T max)
  */
 #define rand_spread(A, D) ((A) + (randint0(1 + (D) + (D))) - (D))
 
-/*
- * Generate a random long integer X where 1<=X<=M
- * Also, "correctly" handle the case of M<=1
+/*!
+ * @brief 1以上/-1以下の一様乱数を返す
+ * @return 最大値 (負ならば最小値)
+ * @return 乱数出力
+ * @details max > 1 ならば1以上max以下、max < -1 ならばmax以上-1以下、-1は入力値、0～+1は1
  */
 template <typename T, typename U>
 T randnum1(U initial_max)
     requires(std::is_integral_v<T> || std::is_enum_v<T>) && (std::is_integral_v<U> || std::is_enum_v<U>)
 {
     const auto max = static_cast<int>(initial_max);
-    if (max <= 0) {
-        THROW_EXCEPTION(std::logic_error, "Max number must be 1 or greater!");
+    if (max == 0) {
+        return static_cast<T>(1);
     }
 
-    return static_cast<T>(rand_range(1, max));
+    return max > 0 ? static_cast<T>(rand_range(1, max)) : static_cast<T>(-rand_range(1, -max));
 }
 
 template <typename T>
