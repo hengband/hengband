@@ -184,23 +184,6 @@ static void ego_interpret_extra_abilities(ItemEntity *o_ptr, const EgoItemDefini
 }
 
 /*!
- * @brief 0 および負数に対応した randint1()
- * @param n
- *
- * n == 0 のとき、常に 0 を返す。
- * n >  0 のとき、[1, n] の乱数を返す。
- * n <  0 のとき、[n,-1] の乱数を返す。
- */
-static int randint1_signed(const int n)
-{
-    if (n == 0) {
-        return 0;
-    }
-
-    return n > 0 ? randint1(n) : -randint1(-n);
-}
-
-/*!
  * @brief 追加込みでエゴがフラグを保持しているか判定する
  * @param o_ptr オブジェクト情報への参照ポインタ
  * @param ego エゴアイテム情報への参照
@@ -228,7 +211,7 @@ static bool ego_has_flag(ItemEntity *o_ptr, const EgoItemDefinition &ego, tr_typ
 void ego_invest_extra_attack(ItemEntity *o_ptr, const EgoItemDefinition &ego, DEPTH lev)
 {
     if (!o_ptr->is_weapon()) {
-        o_ptr->pval = ego.max_pval >= 0 ? 1 : randint1_signed(ego.max_pval);
+        o_ptr->pval = ego.max_pval >= 0 ? 1 : randnum1<short>(ego.max_pval);
         return;
     }
 
@@ -317,9 +300,9 @@ void apply_ego(ItemEntity *o_ptr, DEPTH lev)
             }
         }
 
-        o_ptr->to_h += (HIT_PROB)randint1_signed(ego.max_to_h);
-        o_ptr->to_d += (int)randint1_signed(ego.max_to_d);
-        o_ptr->to_a += (ARMOUR_CLASS)randint1_signed(ego.max_to_a);
+        o_ptr->to_h += ego.max_to_h == 0 ? 0 : randnum1<short>(ego.max_to_h);
+        o_ptr->to_d += ego.max_to_d == 0 ? 0 : randint1(ego.max_to_d);
+        o_ptr->to_a += ego.max_to_a == 0 ? 0 : randnum1<short>(ego.max_to_a);
 
         if (gen_flags.has(ItemGenerationTraitType::MOD_ACCURACY)) {
             while (o_ptr->to_h < o_ptr->to_d + 10) {
