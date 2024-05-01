@@ -42,11 +42,11 @@ T randnum0(U initial_max)
     requires(std::is_integral_v<T> || std::is_enum_v<T>) && (std::is_integral_v<U> || std::is_enum_v<U>)
 {
     const auto max = static_cast<int>(initial_max);
-    if (max <= 0) {
-        THROW_EXCEPTION(std::logic_error, "Max number must be 1 or greater!");
+    if (max == 0) {
+        return static_cast<T>(0);
     }
 
-    return static_cast<T>(rand_range(0, max - 1));
+    return max > 0 ? static_cast<T>(rand_range(0, max - 1)) : -static_cast<T>(rand_range(0, -max - 1));
 }
 
 template <typename T>
@@ -72,11 +72,11 @@ T randnum1(U initial_max)
     requires(std::is_integral_v<T> || std::is_enum_v<T>) && (std::is_integral_v<U> || std::is_enum_v<U>)
 {
     const auto max = static_cast<int>(initial_max);
-    if (max <= 0) {
-        THROW_EXCEPTION(std::logic_error, "Max number must be 1 or greater!");
+    if (max == 0) {
+        return static_cast<T>(1);
     }
 
-    return static_cast<T>(rand_range(1, max));
+    return max > 0 ? static_cast<T>(rand_range(1, max)) : static_cast<T>(-rand_range(1, -max));
 }
 
 template <typename T>
