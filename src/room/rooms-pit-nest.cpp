@@ -18,6 +18,7 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
+#include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -214,39 +215,30 @@ std::vector<nest_pit_type> nest_types = {
  */
 bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
-    POSITION y, x, y1, x1, y2, x2, xval, yval;
-    int i;
-    nest_mon_info_type nest_mon_info[NUM_NEST_MON_TYPE];
-
-    MonsterEntity align;
-
-    Grid *g_ptr;
-
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    int cur_nest_type = pick_vault_type(floor_ptr, nest_types, floor_ptr->get_dungeon_definition().nest);
-    nest_pit_type *n_ptr;
-
-    /* No type available */
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto cur_nest_type = pick_vault_type(&floor, nest_types, floor.get_dungeon_definition().nest);
     if (cur_nest_type < 0) {
         return false;
     }
 
-    n_ptr = &nest_types[cur_nest_type];
+    const auto n_ptr = &nest_types[cur_nest_type];
 
     /* Process a preparation function if necessary */
     if (n_ptr->prep_func) {
         (*(n_ptr->prep_func))(player_ptr);
     }
-    get_mon_num_prep(player_ptr, n_ptr->hook_func, nullptr);
 
+    get_mon_num_prep(player_ptr, n_ptr->hook_func, nullptr);
+    MonsterEntity align;
     align.sub_align = SUB_ALIGN_NEUTRAL;
 
     /* Pick some monster types */
-    for (i = 0; i < NUM_NEST_MON_TYPE; i++) {
-        auto select_r_idx = [player_ptr, floor_ptr, &align]() -> std::optional<MonsterRaceId> {
+    nest_mon_info_type nest_mon_info[NUM_NEST_MON_TYPE]{};
+    for (auto i = 0; i < NUM_NEST_MON_TYPE; i++) {
+        auto select_r_idx = [player_ptr, floor, &align]() -> std::optional<MonsterRaceId> {
             for (auto attempts = 100; attempts > 0; attempts--) {
                 /* Get a (hard) monster type */
-                auto r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level + 11, PM_NONE);
+                auto r_idx = get_mon_num(player_ptr, 0, floor.dun_level + 11, PM_NONE);
                 auto *r_ptr = &monraces_info[r_idx];
 
                 /* Decline incorrect alignment */
@@ -276,6 +268,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
         if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
             align.sub_align |= SUB_ALIGN_EVIL;
         }
+
         if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
             align.sub_align |= SUB_ALIGN_GOOD;
         }
@@ -285,36 +278,39 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     }
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
+    int xval;
+    int yval;
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25)) {
         return false;
     }
 
     /* Large room */
-    y1 = yval - 4;
-    y2 = yval + 4;
-    x1 = xval - 11;
-    x2 = xval + 11;
+    auto y1 = yval - 4;
+    auto y2 = yval + 4;
+    auto x1 = xval - 11;
+    auto x2 = xval + 11;
 
     /* Place the floor area */
-    for (y = y1 - 1; y <= y2 + 1; y++) {
-        for (x = x1 - 1; x <= x2 + 1; x++) {
-            g_ptr = &floor_ptr->grid_array[y][x];
+    for (auto y = y1 - 1; y <= y2 + 1; y++) {
+        for (auto x = x1 - 1; x <= x2 + 1; x++) {
+            auto *g_ptr = &floor.grid_array[y][x];
             place_grid(player_ptr, g_ptr, GB_FLOOR);
             g_ptr->info |= (CAVE_ROOM);
         }
     }
 
     /* Place the outer walls */
-    for (y = y1 - 1; y <= y2 + 1; y++) {
-        g_ptr = &floor_ptr->grid_array[y][x1 - 1];
+    for (auto y = y1 - 1; y <= y2 + 1; y++) {
+        auto *g_ptr = &floor.grid_array[y][x1 - 1];
         place_grid(player_ptr, g_ptr, GB_OUTER);
-        g_ptr = &floor_ptr->grid_array[y][x2 + 1];
+        g_ptr = &floor.grid_array[y][x2 + 1];
         place_grid(player_ptr, g_ptr, GB_OUTER);
     }
-    for (x = x1 - 1; x <= x2 + 1; x++) {
-        g_ptr = &floor_ptr->grid_array[y1 - 1][x];
+
+    for (auto x = x1 - 1; x <= x2 + 1; x++) {
+        auto *g_ptr = &floor.grid_array[y1 - 1][x];
         place_grid(player_ptr, g_ptr, GB_OUTER);
-        g_ptr = &floor_ptr->grid_array[y2 + 1][x];
+        g_ptr = &floor.grid_array[y2 + 1][x];
         place_grid(player_ptr, g_ptr, GB_OUTER);
     }
 
@@ -325,22 +321,23 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     x2 = x2 - 2;
 
     /* The inner walls */
-    for (y = y1 - 1; y <= y2 + 1; y++) {
-        g_ptr = &floor_ptr->grid_array[y][x1 - 1];
+    for (auto y = y1 - 1; y <= y2 + 1; y++) {
+        auto *g_ptr = &floor.grid_array[y][x1 - 1];
         place_grid(player_ptr, g_ptr, GB_INNER);
-        g_ptr = &floor_ptr->grid_array[y][x2 + 1];
+        g_ptr = &floor.grid_array[y][x2 + 1];
         place_grid(player_ptr, g_ptr, GB_INNER);
     }
 
-    for (x = x1 - 1; x <= x2 + 1; x++) {
-        g_ptr = &floor_ptr->grid_array[y1 - 1][x];
+    for (auto x = x1 - 1; x <= x2 + 1; x++) {
+        auto *g_ptr = &floor.grid_array[y1 - 1][x];
         place_grid(player_ptr, g_ptr, GB_INNER);
-        g_ptr = &floor_ptr->grid_array[y2 + 1][x];
+        g_ptr = &floor.grid_array[y2 + 1][x];
         place_grid(player_ptr, g_ptr, GB_INNER);
     }
-    for (y = y1; y <= y2; y++) {
-        for (x = x1; x <= x2; x++) {
-            floor_ptr->grid_array[y][x].add_info(CAVE_ICKY);
+
+    for (auto y = y1; y <= y2; y++) {
+        for (auto x = x1; x <= x2; x++) {
+            floor.grid_array[y][x].add_info(CAVE_ICKY);
         }
     }
 
@@ -364,12 +361,10 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
         player_ptr, CHEAT_DUNGEON, _("モンスター部屋(nest)(%s%s)を生成します。", "Monster nest (%s%s)"), n_ptr->name, pit_subtype_string(cur_nest_type, true).data());
 
     /* Place some monsters */
-    for (y = yval - 2; y <= yval + 2; y++) {
-        for (x = xval - 9; x <= xval + 9; x++) {
-            MonsterRaceId r_idx;
-
-            i = randint0(NUM_NEST_MON_TYPE);
-            r_idx = nest_mon_info[i].r_idx;
+    for (auto y = yval - 2; y <= yval + 2; y++) {
+        for (auto x = xval - 9; x <= xval + 9; x++) {
+            const auto i = randint0(NUM_NEST_MON_TYPE);
+            const auto r_idx = nest_mon_info[i].r_idx;
 
             /* Place that "random" monster (no groups) */
             (void)place_specific_monster(player_ptr, 0, y, x, r_idx, 0L);
@@ -382,7 +377,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
         ang_sort(player_ptr, nest_mon_info, nullptr, NUM_NEST_MON_TYPE, ang_sort_comp_nest_mon_info, ang_sort_swap_nest_mon_info);
 
         /* Dump the entries (prevent multi-printing) */
-        for (i = 0; i < NUM_NEST_MON_TYPE; i++) {
+        for (auto i = 0; i < NUM_NEST_MON_TYPE; i++) {
             if (!nest_mon_info[i].used) {
                 break;
             }
@@ -390,6 +385,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
                 if (nest_mon_info[i].r_idx != nest_mon_info[i + 1].r_idx) {
                     break;
                 }
+
                 if (!nest_mon_info[i + 1].used) {
                     break;
                 }
