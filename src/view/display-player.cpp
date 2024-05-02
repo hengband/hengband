@@ -225,12 +225,9 @@ static std::optional<std::string> decide_death_in_quest(PlayerType *player_ptr)
         return std::nullopt;
     }
 
-    for (int i = 0; i < 10; i++) {
-        quest_text[i][0] = '\0';
-    }
+    quest_text_lines.clear();
 
     const auto &quest_list = QuestList::get_instance();
-    quest_text_line = 0;
     init_flags = INIT_NAME_ONLY;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
     return std::string(format(_("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest_list[floor_ptr->quest_number].name.data()));

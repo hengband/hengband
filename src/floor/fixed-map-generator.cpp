@@ -327,9 +327,8 @@ static int parse_qtw_Q(qtwg_type *qtwg_ptr, char **zz)
     }
 
     if (zz[1][0] == 'T') {
-        if (init_flags & INIT_SHOW_TEXT) {
-            strcpy(quest_text[quest_text_line], zz[2]);
-            quest_text_line++;
+        if ((init_flags & INIT_SHOW_TEXT) && (std::ssize(quest_text_lines) < QUEST_TEST_LINES_MAX)) {
+            quest_text_lines.emplace_back(zz[2]);
         }
 
         return PARSE_ERROR_NONE;

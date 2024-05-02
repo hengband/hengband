@@ -38,8 +38,7 @@
 #include <sstream>
 #include <stdexcept>
 
-char quest_text[10][80]; /*!< Quest text */
-int quest_text_line; /*!< Current line of the quest text */
+std::vector<std::string> quest_text_lines; /*!< Quest text */
 QuestId leaving_quest = QuestId::NONE;
 
 /*!
