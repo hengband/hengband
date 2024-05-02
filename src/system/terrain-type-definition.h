@@ -59,9 +59,13 @@ public:
     static TerrainList &get_instance();
     std::vector<TerrainType> &get_raw_vector();
     std::vector<TerrainType>::iterator begin();
-    const std::vector<TerrainType>::const_iterator begin() const;
+    std::vector<TerrainType>::const_iterator begin() const;
+    std::vector<TerrainType>::reverse_iterator rbegin();
+    std::vector<TerrainType>::const_reverse_iterator rbegin() const;
     std::vector<TerrainType>::iterator end();
-    const std::vector<TerrainType>::const_iterator end() const;
+    std::vector<TerrainType>::const_iterator end() const;
+    std::vector<TerrainType>::reverse_iterator rend();
+    std::vector<TerrainType>::const_reverse_iterator rend() const;
     size_t size() const;
     bool empty() const;
     void resize(size_t new_size);
