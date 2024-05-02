@@ -533,7 +533,7 @@ bool reset_recall(PlayerType *player_ptr)
     constexpr auto prompt = _("何階にセットしますか？", "Reset to which level?");
     const auto min_level = dungeons_info[select_dungeon].mindepth;
     const auto max_level = max_dlv[select_dungeon];
-    const auto reset_level = input_numerics(prompt, min_level, max_level, player_ptr->current_floor_ptr->dun_level);
+    const auto reset_level = input_numerics(prompt, min_level, max_level, max_level);
     if (!reset_level) {
         return false;
     }
