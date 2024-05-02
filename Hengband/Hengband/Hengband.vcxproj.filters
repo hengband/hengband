@@ -3719,6 +3719,9 @@
     <ClInclude Include="..\..\src\cmd-io\cmd-lore.h">
       <Filter>cmd-io</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\view\colored-char.h">
+      <Filter>view</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\view\display-monster-status.h">
       <Filter>view</Filter>
     </ClInclude>

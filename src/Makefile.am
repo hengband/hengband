@@ -979,6 +979,7 @@ hengband_SOURCES = \
 	util/sort.cpp util/sort.h \
 	util/string-processor.cpp util/string-processor.h \
 	\
+	view/colored-char.h \
 	view/display-birth.cpp view/display-birth.h \
 	view/display-characteristic.cpp view/display-characteristic.h \
 	view/display-fruit.cpp view/display-fruit.h \
