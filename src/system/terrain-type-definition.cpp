@@ -38,7 +38,7 @@ std::vector<TerrainType>::iterator TerrainList::begin()
     return this->terrains.begin();
 }
 
-const std::vector<TerrainType>::const_iterator TerrainList::begin() const
+std::vector<TerrainType>::const_iterator TerrainList::begin() const
 {
     return this->terrains.begin();
 }
@@ -58,7 +58,7 @@ std::vector<TerrainType>::iterator TerrainList::end()
     return this->terrains.end();
 }
 
-const std::vector<TerrainType>::const_iterator TerrainList::end() const
+std::vector<TerrainType>::const_iterator TerrainList::end() const
 {
     return this->terrains.end();
 }
