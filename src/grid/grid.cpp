@@ -237,10 +237,8 @@ void update_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x)
         update_local_illumination_aux(player_ptr, y, xx);
     } else /* Player's grid */
     {
-        for (i = 0; i < 8; i++) {
-            yy = y + ddy_cdd[i];
-            xx = x + ddx_cdd[i];
-            update_local_illumination_aux(player_ptr, yy, xx);
+        for (const auto &dd : CCW_DD) {
+            update_local_illumination_aux(player_ptr, y + dd.y, x + dd.x);
         }
     }
 }

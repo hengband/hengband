@@ -115,6 +115,20 @@ bool get_aim_dir(PlayerType *player_ptr, int *dp)
     return true;
 }
 
+/*!
+ * @brief 方向を指定する(テンキー配列順)
+ *
+ * 上下左右および斜め方向を指定する。
+ * 指定された方向は整数で返され、それぞれの値方向は以下の通り。
+ *
+ * 7 8 9
+ *  \|/
+ * 4-@-6
+ *  /|\
+ * 1 2 3
+ *
+ * @return 指定した方向。指定をキャンセルした場合はstd::nullopt。
+ */
 std::optional<int> get_direction(PlayerType *player_ptr)
 {
     auto dir = command_dir;
@@ -161,6 +175,32 @@ std::optional<int> get_direction(PlayerType *player_ptr)
                          : _("%sは思い通りに動いてくれない。", "You cannot control %s.");
     msg_format(fmt, m_name.data());
     return dir;
+}
+
+/*!
+ * @brief 方向を指定する(円周順)
+ *
+ * 上下左右および斜め方向を指定する。
+ * 指定された方向は整数で返され、それぞれの値方向は以下の通り。
+ *
+ * 5 4 3
+ *  \|/
+ * 6-@-2
+ *  /|\
+ * 7 0 1
+ *
+ * @return 指定した方向。指定をキャンセルした場合はstd::nullopt。
+ */
+std::optional<int> get_direction_as_cdir(PlayerType *player_ptr)
+{
+    constexpr std::array<int, 10> cdirs = { { 0, 7, 0, 1, 6, 0, 2, 5, 4, 3 } };
+
+    const auto dir = get_direction(player_ptr);
+    if (!dir || (dir <= 0) || (dir == 5) || (dir >= std::ssize(cdirs))) {
+        return std::nullopt;
+    }
+
+    return cdirs[*dir];
 }
 
 /*

@@ -100,43 +100,25 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
         }
 
         if (cast) {
-            const auto dir = get_direction(player_ptr);
-            if (!dir || (dir == 5)) {
+            const auto cdir = get_direction_as_cdir(player_ptr);
+            if (!cdir) {
                 return std::nullopt;
             }
 
-            int cdir;
-            for (cdir = 0; cdir < 8; cdir++) {
-                if (cdd[cdir] == dir) {
-                    break;
+            const auto attack_to = [player_ptr](int cdir) {
+                const auto pos = player_ptr->get_position() + CCW_DD[cdir];
+                const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+
+                if (grid.has_monster()) {
+                    do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
+                } else {
+                    msg_print(_("攻撃は空を切った。", "You attack the empty air."));
                 }
-            }
+            };
 
-            if (cdir == 8) {
-                return std::nullopt;
-            }
-
-            const auto pos = player_ptr->get_position();
-            Pos2D pos_cdd(pos.y + ddy_cdd[cdir], pos.x + ddx_cdd[cdir]);
-            if (player_ptr->current_floor_ptr->get_grid(pos_cdd).has_monster()) {
-                do_cmd_attack(player_ptr, pos_cdd.y, pos_cdd.x, HISSATSU_NONE);
-            } else {
-                msg_print(_("攻撃は空を切った。", "You attack the empty air."));
-            }
-
-            pos_cdd = Pos2D(pos.y + ddy_cdd[(cdir + 7) % 8], pos.x + ddx_cdd[(cdir + 7) % 8]);
-            if (player_ptr->current_floor_ptr->get_grid(pos_cdd).has_monster()) {
-                do_cmd_attack(player_ptr, pos_cdd.y, pos_cdd.x, HISSATSU_NONE);
-            } else {
-                msg_print(_("攻撃は空を切った。", "You attack the empty air."));
-            }
-
-            pos_cdd = Pos2D(pos.y + ddy_cdd[(cdir + 1) % 8], pos.x + ddx_cdd[(cdir + 1) % 8]);
-            if (player_ptr->current_floor_ptr->get_grid(pos_cdd).has_monster()) {
-                do_cmd_attack(player_ptr, pos_cdd.y, pos_cdd.x, HISSATSU_NONE);
-            } else {
-                msg_print(_("攻撃は空を切った。", "You attack the empty air."));
-            }
+            attack_to(*cdir); // 指定方向
+            attack_to((*cdir + 7) % 8); // 指定方向の右
+            attack_to((*cdir + 1) % 8); // 指定方向の左
         }
         break;
 

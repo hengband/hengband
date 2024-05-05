@@ -235,11 +235,10 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
             ta = bigma[j + 1][i + 1];
             tp = bigmp[j + 1][i + 1];
             if (mp[y][x] == tp) {
-                int t;
                 int cnt = 0;
 
-                for (t = 0; t < 8; t++) {
-                    if (tc == bigmc[j + 1 + ddy_cdd[t]][i + 1 + ddx_cdd[t]] && ta == bigma[j + 1 + ddy_cdd[t]][i + 1 + ddx_cdd[t]]) {
+                for (const auto &dd : CCW_DD) {
+                    if (tc == bigmc[j + 1 + dd.y][i + 1 + dd.x] && ta == bigma[j + 1 + dd.y][i + 1 + dd.x]) {
                         cnt++;
                     }
                 }

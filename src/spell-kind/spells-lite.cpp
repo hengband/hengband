@@ -33,7 +33,7 @@
 #include "world/world.h"
 #include <vector>
 
-using PassBoldFunc = bool (*)(FloorType *, POSITION, POSITION);
+using PassBoldFunc = bool (*)(const FloorType *, POSITION, POSITION);
 
 /*!
  * @brief 指定した座標全てを照らす。
@@ -153,10 +153,10 @@ static int next_to_open(FloorType *floor_ptr, const POSITION cy, const POSITION 
 {
     int len = 0;
     int blen = 0;
+    const Pos2D pos_center(cy, cx);
     for (int i = 0; i < 16; i++) {
-        POSITION y = cy + ddy_cdd[i % 8];
-        POSITION x = cx + ddx_cdd[i % 8];
-        if (!pass_bold(floor_ptr, y, x)) {
+        const auto pos = pos_center + CCW_DD[i % 8];
+        if (!pass_bold(floor_ptr, pos.y, pos.x)) {
             if (len > blen) {
                 blen = len;
             }
@@ -263,7 +263,7 @@ static void cave_temp_lite_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &
  * @param x 指定X座標
  * @return 射線を通すならばtrueを返す。
  */
-static bool cave_pass_dark_bold(FloorType *floor_ptr, POSITION y, POSITION x)
+static bool cave_pass_dark_bold(const FloorType *floor_ptr, POSITION y, POSITION x)
 {
     return cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PROJECT);
 }

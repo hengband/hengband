@@ -27,6 +27,7 @@
 #include "view/colored-char.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
+#include <algorithm>
 #include <span>
 
 byte display_autopick; /*!< 自動拾い状態の設定フラグ */
@@ -86,17 +87,16 @@ ColoredChar image_random()
 
 /*!
  * @brief マップに表示されるべき地形(壁)かどうかを判定する
- * @param floor_ptr 階の情報への参照ポインタ
- * @param y グリッドy座標
- * @param x グリッドx座標
+ * @param floor 階の情報への参照
+ * @param pos グリッド座標
  * @return 表示されるべきならtrue、そうでないならfalse
  * @details
  * 周り全てが壁に囲まれている壁についてはオプション状態による。
  * 1か所でも空きがあるか、壁ではない地形、金を含む地形、永久岩は表示。
  */
-static bool is_revealed_wall(FloorType *floor_ptr, int y, int x)
+static bool is_revealed_wall(const FloorType &floor, const Pos2D &pos)
 {
-    const auto &grid = floor_ptr->grid_array[y][x];
+    const auto &grid = floor.get_grid(pos);
     if (view_hidden_walls) {
         if (view_unsafe_walls) {
             return true;
@@ -111,29 +111,22 @@ static bool is_revealed_wall(FloorType *floor_ptr, int y, int x)
         return true;
     }
 
-    if (in_bounds(floor_ptr, y, x) && terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
+    if (in_bounds(&floor, pos.y, pos.x) && terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
         return true;
     }
 
-    constexpr auto neighbors = 8;
-    const auto &terrains = TerrainList::get_instance();
-    auto n = 0;
-    for (auto i = 0; i < neighbors; i++) {
-        const auto dy = y + ddy_cdd[i];
-        const auto dx = x + ddx_cdd[i];
-        if (!in_bounds(floor_ptr, dy, dx)) {
-            n++;
-            continue;
-        }
+    const auto num_of_walls = std::count_if(CCW_DD.begin(), CCW_DD.end(),
+        [&floor, &pos](const auto &dd) {
+            const auto pos_neighbor = pos + dd;
+            if (!in_bounds(&floor, pos_neighbor.y, pos_neighbor.x)) {
+                return true;
+            }
 
-        const auto terrain_id = floor_ptr->grid_array[dy][dx].feat;
-        const auto &terrain_neighbor = terrains[terrain_id];
-        if (terrain_neighbor.flags.has(TerrainCharacteristics::WALL)) {
-            n++;
-        }
-    }
+            const auto &terrain_neighbor = floor.get_grid(pos_neighbor).get_terrain();
+            return terrain_neighbor.flags.has(TerrainCharacteristics::WALL);
+        });
 
-    return n != neighbors;
+    return num_of_walls != std::ssize(CCW_DD);
 }
 
 /*!
@@ -197,7 +190,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
             c = terrain_mimic_ptr->x_char[F_LIT_STANDARD];
         }
     } else {
-        if (grid.is_mark() && is_revealed_wall(&floor, y, x)) {
+        if (grid.is_mark() && is_revealed_wall(floor, pos)) {
             a = terrain_mimic_ptr->x_attr[F_LIT_STANDARD];
             c = terrain_mimic_ptr->x_char[F_LIT_STANDARD];
             const auto is_blind = player_ptr->effects()->blindness()->is_blind();
