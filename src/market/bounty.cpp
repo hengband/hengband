@@ -297,7 +297,7 @@ void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             continue;
         }
-        if (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL) || r_ptr->population_flags.has(MonsterPopulationType::ONLY_ONE)) {
+        if (r_ptr->population_flags.has_any_of({ MonsterPopulationType::NAZGUL, MonsterPopulationType::ONLY_ONE, MonsterPopulationType::BUNBUN_STRIKER })) {
             continue;
         }
         if (r_ptr->misc_flags.has(MonsterMiscType::MULTIPLY)) {

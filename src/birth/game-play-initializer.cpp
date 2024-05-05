@@ -90,6 +90,8 @@ void player_wipe_without_name(PlayerType *player_ptr)
             r_ref.max_num = MAX_UNIQUE_NUM;
         } else if (r_ref.population_flags.has(MonsterPopulationType::NAZGUL)) {
             r_ref.max_num = MAX_NAZGUL_NUM;
+        } else if (r_ref.population_flags.has(MonsterPopulationType::BUNBUN_STRIKER)) {
+            r_ref.max_num = MAX_BUNBUN_NUM;
         }
 
         r_ref.r_pkills = 0;
