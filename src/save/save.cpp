@@ -312,10 +312,11 @@ bool save_player(PlayerType *player_ptr, SaveType type)
     safe_setuid_grab();
     fd_kill(savefile_new);
     if (type == SaveType::DEBUG) {
-        const auto debug_save_dir = std::filesystem::path(debug_savefile).remove_filename();
+        const std::filesystem::path debug_save_dir = std::filesystem::path(debug_savefile).remove_filename();
         std::error_code ec;
         std::filesystem::create_directory(debug_save_dir, ec);
     }
+
     safe_setuid_drop();
     w_ptr->update_playtime();
     auto result = false;

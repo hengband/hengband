@@ -82,11 +82,9 @@ static void process_fishing(PlayerType *player_ptr)
         const auto r_idx = get_mon_num(player_ptr, 0, level, PM_NONE);
         msg_print(nullptr);
         if (MonsterRace(r_idx).is_valid() && one_in_(2)) {
-            POSITION y, x;
-            y = player_ptr->y + ddy[player_ptr->fishing_dir];
-            x = player_ptr->x + ddx[player_ptr->fishing_dir];
-            if (place_specific_monster(player_ptr, 0, y, x, r_idx, PM_NO_KAGE)) {
-                const auto m_name = monster_desc(player_ptr, &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx], 0);
+            const auto pos = player_ptr->get_neighbor(player_ptr->fishing_dir);
+            if (place_specific_monster(player_ptr, 0, pos.y, pos.x, r_idx, PM_NO_KAGE)) {
+                const auto m_name = monster_desc(player_ptr, &floor_ptr->m_list[floor_ptr->get_grid(pos).m_idx], 0);
                 msg_print(_(format("%sが釣れた！", m_name.data()), "You have a good catch!"));
                 success = true;
             }

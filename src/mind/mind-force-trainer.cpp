@@ -206,55 +206,52 @@ bool shock_power(PlayerType *player_ptr)
         return false;
     }
 
-    POSITION y = player_ptr->y + ddy[dir];
-    POSITION x = player_ptr->x + ddx[dir];
+    auto pos = player_ptr->get_neighbor(dir);
     PLAYER_LEVEL plev = player_ptr->lev;
     int dam = damroll(8 + ((plev - 5) / 4) + boost / 12, 8);
     fire_beam(player_ptr, AttributeType::MISSILE, dir, dam);
-    if (!player_ptr->current_floor_ptr->grid_array[y][x].has_monster()) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto &grid = floor.get_grid(pos);
+    if (!grid.has_monster()) {
         return true;
     }
 
-    POSITION ty = y, tx = x;
-    POSITION oy = y, ox = x;
-    MONSTER_IDX m_idx = player_ptr->current_floor_ptr->grid_array[y][x].m_idx;
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+    auto pos_target = pos;
+    const auto pos_origin = pos;
+    const auto m_idx = grid.m_idx;
+    auto &monster = floor.m_list[m_idx];
+    const auto &monrace = monster.get_monrace();
+    const auto m_name = monster_desc(player_ptr, &monster, 0);
 
-    if (randint1(r_ptr->level * 3 / 2) > randint0(dam / 2) + dam / 2) {
+    if (randint1(monrace.level * 3 / 2) > randint0(dam / 2) + dam / 2) {
         msg_format(_("%sは飛ばされなかった。", "%s^ was not blown away."), m_name.data());
         return true;
     }
 
     for (int i = 0; i < 5; i++) {
-        y += ddy[dir];
-        x += ddx[dir];
-        if (is_cave_empty_bold(player_ptr, y, x)) {
-            ty = y;
-            tx = x;
+        pos = Pos2D(pos.y + ddy[dir], pos.x + ddx[dir]);
+        if (is_cave_empty_bold(player_ptr, pos.y, pos.x)) {
+            pos_target = pos;
         } else {
             break;
         }
     }
 
-    bool is_shock_successful = ty != oy;
-    is_shock_successful |= tx != ox;
-    if (is_shock_successful) {
+    if (pos_target == pos_origin) {
         return true;
     }
 
     msg_format(_("%sを吹き飛ばした！", "You blow %s away!"), m_name.data());
-    player_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
-    player_ptr->current_floor_ptr->grid_array[ty][tx].m_idx = m_idx;
-    m_ptr->fy = ty;
-    m_ptr->fx = tx;
+    floor.get_grid(pos_origin).m_idx = 0;
+    floor.get_grid(pos_target).m_idx = m_idx;
+    monster.fy = pos_target.y;
+    monster.fx = pos_target.x;
 
     update_monster(player_ptr, m_idx, true);
-    lite_spot(player_ptr, oy, ox);
-    lite_spot(player_ptr, ty, tx);
+    lite_spot(player_ptr, pos_origin.y, pos_origin.x);
+    lite_spot(player_ptr, pos_target.y, pos_target.x);
 
-    if (r_ptr->brightness_flags.has_any_of(ld_mask)) {
+    if (monrace.brightness_flags.has_any_of(ld_mask)) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 

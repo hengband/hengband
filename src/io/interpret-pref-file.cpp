@@ -70,19 +70,21 @@ static errr interpret_k_token(char *buf)
         return 1;
     }
 
-    int i = (int)strtol(zz[0], nullptr, 0);
-    TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
-    auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
+    const auto i = static_cast<short>(std::stoi(zz[0], nullptr, 0));
+    const auto color = static_cast<uint8_t>(std::stoi(zz[1], nullptr, 0));
+    const auto character = static_cast<char>(std::stoi(zz[2], nullptr, 0));
     if (i >= static_cast<int>(baseitems_info.size())) {
         return 1;
     }
 
-    auto *bii_ptr = &baseitems_info[i];
-    if (n1 || (!(n2 & 0x80) && n2)) {
-        bii_ptr->x_attr = n1;
-    } /* Allow TERM_DARK text */
-    if (n2) {
-        bii_ptr->x_char = n2;
+    /* Allow TERM_DARK text */
+    auto &baseitem = baseitems_info[i];
+    if ((color > 0) || (((character & 0x80) == 0) && (character != 0))) {
+        baseitem.x_attr = color;
+    }
+
+    if (character != 0) {
+        baseitem.x_char = character;
     }
 
     return 0;
@@ -207,7 +209,7 @@ static errr interpret_u_token(char *buf)
     const auto n1 = static_cast<uint8_t>(std::stoi(zz[1], nullptr, 0));
     const auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
     for (auto &baseitem : baseitems_info) {
-        if ((baseitem.idx > 0) && (baseitem.bi_key.tval() == tval)) {
+        if (baseitem.is_valid() && (baseitem.bi_key.tval() == tval)) {
             if (n1) {
                 baseitem.d_attr = n1;
             }
@@ -425,17 +427,16 @@ static errr decide_template_modifier(int tok, char **zz)
  */
 static errr interpret_macro_keycodes(int tok, char **zz)
 {
-    char buf_aux[MAX_MACRO_CHARS];
-    char *t, *s;
+    char buf_aux[MAX_MACRO_CHARS]{};
     if (max_macrotrigger >= MAX_MACRO_TRIG) {
         msg_print(_("マクロトリガーの設定が多すぎます!", "Too many macro triggers!"));
         return 1;
     }
 
-    int m = max_macrotrigger;
+    auto m = max_macrotrigger;
     max_macrotrigger++;
-    t = buf_aux;
-    s = zz[0];
+    auto *t = buf_aux;
+    auto *s = zz[0];
     while (*s) {
         if ('\\' == *s) {
             s++;

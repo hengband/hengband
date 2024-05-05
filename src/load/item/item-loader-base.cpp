@@ -10,15 +10,15 @@
 /*!
  * @brief アイテムオブジェクトの鑑定情報をロードする.
  */
-void ItemLoaderBase::load_item(void)
+void ItemLoaderBase::load_item()
 {
     auto loading_max_k_idx = rd_u16b();
     BaseitemInfo dummy;
     for (auto i = 0U; i < loading_max_k_idx; i++) {
-        auto *bii_ptr = i < baseitems_info.size() ? &baseitems_info[i] : &dummy;
-        auto tmp8u = rd_byte();
-        bii_ptr->aware = any_bits(tmp8u, 0x01);
-        bii_ptr->tried = any_bits(tmp8u, 0x02);
+        auto &baseitem = i < baseitems_info.size() ? baseitems_info[i] : dummy;
+        const auto tmp8u = rd_byte();
+        baseitem.aware = any_bits(tmp8u, 0x01);
+        baseitem.tried = any_bits(tmp8u, 0x02);
     }
 
     load_note(_("アイテムの記録をロードしました", "Loaded Object Memory"));

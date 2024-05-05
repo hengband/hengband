@@ -455,10 +455,9 @@ void ObjectThrowEntity::attack_racial_power()
     if (mdp.mon_take_hit(this->m_ptr->get_died_message())) {
         return;
     }
-
-    if (const auto pain_message = MonsterPainDescriber(player_ptr, this->g_ptr->m_idx).describe(this->tdam);
-        !pain_message.empty()) {
-        msg_print(pain_message);
+    const auto pain_message = MonsterPainDescriber(player_ptr, this->m_ptr).describe(this->tdam);
+    if (pain_message) {
+        msg_print(*pain_message);
     }
 
     if ((this->tdam > 0) && !this->q_ptr->is_potion()) {

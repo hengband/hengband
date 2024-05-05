@@ -159,25 +159,25 @@ static std::optional<short> wiz_select_tval()
 
 static short wiz_select_sval(const ItemKindType tval, std::string_view tval_description)
 {
-    auto num = 0;
-    short choice[80]{};
+    std::vector<short> choices;
     for (const auto &baseitem : baseitems_info) {
-        if (num >= 80) {
+        const auto size = choices.size();
+        if (size >= 80) {
             break;
         }
 
-        if ((baseitem.idx == 0) || baseitem.bi_key.tval() != tval) {
+        if (!baseitem.is_valid() || baseitem.bi_key.tval() != tval) {
             continue;
         }
 
-        auto row = 2 + (num % 20);
-        auto col = _(30, 32) * (num / 20);
+        auto row = 2 + (size % 20);
+        auto col = _(30, 32) * (size / 20);
         const auto buf = strip_name(baseitem.idx);
-        prt(format("[%c] %s", listsym[num], buf.data()), row, col);
-        choice[num++] = baseitem.idx;
+        prt(format("[%c] %s", listsym[size], buf.data()), row, col);
+        choices.push_back(baseitem.idx);
     }
 
-    auto max_num = num;
+    const auto max_num = static_cast<short>(choices.size());
     const auto prompt = format(_("%s群の具体的なアイテムを選んで下さい", "What Kind of %s? "), tval_description.data());
     const auto command = input_command(prompt);
     if (!command) {
@@ -195,7 +195,7 @@ static short wiz_select_sval(const ItemKindType tval, std::string_view tval_desc
         return 0;
     }
 
-    return choice[selection];
+    return choices[selection];
 }
 
 /*!
@@ -520,10 +520,10 @@ void wiz_create_feature(PlayerType *player_ptr)
 static std::optional<short> select_debugging_dungeon(short initial_dungeon_id)
 {
     if (command_arg > 0) {
-        return static_cast<short>(std::clamp(static_cast<int>(command_arg), DUNGEON_ANGBAND, DUNGEON_DARKNESS));
+        return static_cast<short>(std::clamp(static_cast<int>(command_arg), DUNGEON_ANGBAND, DUNGEON_MAX));
     }
 
-    return input_numerics("Jump which dungeon", DUNGEON_ANGBAND, DUNGEON_DARKNESS, initial_dungeon_id);
+    return input_numerics("Jump which dungeon", DUNGEON_ANGBAND, DUNGEON_MAX, initial_dungeon_id);
 }
 
 /*
@@ -616,13 +616,11 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
  */
 void wiz_learn_items_all(PlayerType *player_ptr)
 {
-    ItemEntity forge;
-    ItemEntity *q_ptr;
     for (const auto &baseitem : baseitems_info) {
-        if (baseitem.idx > 0 && baseitem.level <= command_arg) {
-            q_ptr = &forge;
-            q_ptr->prep(baseitem.idx);
-            object_aware(player_ptr, q_ptr);
+        if (baseitem.is_valid() && baseitem.level <= command_arg) {
+            ItemEntity item;
+            item.prep(baseitem.idx);
+            object_aware(player_ptr, &item);
         }
     }
 }

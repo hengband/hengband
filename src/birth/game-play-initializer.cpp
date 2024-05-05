@@ -54,7 +54,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     //! @todo std::make_shared の配列対応版は C++20 から
     player_ptr->inventory_list = std::shared_ptr<ItemEntity[]>{ new ItemEntity[INVEN_TOTAL] };
     for (int i = 0; i < 4; i++) {
-        strcpy(player_ptr->history[i], "");
+        player_ptr->history[i][0] = '\0';
     }
 
     auto &quest_list = QuestList::get_instance();

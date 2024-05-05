@@ -32,6 +32,10 @@ bool MonsterRaceInfo::has_living_flag() const
     return this->kind_flags.has_none_of({ MonsterKindType::DEMON, MonsterKindType::UNDEAD, MonsterKindType::NONLIVING });
 }
 
+/*!
+ * @brief モンスターが自爆するか否か
+ * @return 自爆するならtrue
+ */
 bool MonsterRaceInfo::is_explodable() const
 {
     return std::any_of(std::begin(this->blows), std::end(this->blows),

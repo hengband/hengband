@@ -406,6 +406,7 @@ public:
     bool is_located_at_running_destination() const;
     bool is_located_at(const Pos2D &pos) const;
     bool in_saved_floor() const;
+    Pos2D get_neighbor(int dir) const;
 
 private:
     std::shared_ptr<TimedEffects> timed_effects;

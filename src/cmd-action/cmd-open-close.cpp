@@ -125,7 +125,7 @@ void do_cmd_open(PlayerType *player_ptr)
 
     int dir;
     if (get_rep_dir(player_ptr, &dir, true)) {
-        const Pos2D pos(player_ptr->y + ddy[dir], player_ptr->x + ddx[dir]);
+        const auto pos = player_ptr->get_neighbor(dir);
         const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
         const auto o_idx = chest_check(player_ptr->current_floor_ptr, pos, false);
         if (grid.get_terrain_mimic().flags.has_not(TerrainCharacteristics::OPEN) && !o_idx) {
@@ -175,7 +175,7 @@ void do_cmd_close(PlayerType *player_ptr)
     auto more = false;
     int dir;
     if (get_rep_dir(player_ptr, &dir)) {
-        const Pos2D pos(player_ptr->y + ddy[dir], player_ptr->x + ddx[dir]);
+        const auto pos = player_ptr->get_neighbor(dir);
         const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
         if (grid.get_terrain_mimic().flags.has_not(TerrainCharacteristics::CLOSE)) {
             msg_print(_("そこには閉じるものが見当たらない。", "You see nothing there to close."));
@@ -225,7 +225,7 @@ void do_cmd_disarm(PlayerType *player_ptr)
     int dir;
     auto more = false;
     if (get_rep_dir(player_ptr, &dir, true)) {
-        const Pos2D pos(player_ptr->y + ddy[dir], player_ptr->x + ddx[dir]);
+        const auto pos = player_ptr->get_neighbor(dir);
         const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
         const auto feat = grid.get_feat_mimic();
         const auto o_idx = chest_check(player_ptr->current_floor_ptr, pos, true);
@@ -280,7 +280,7 @@ void do_cmd_bash(PlayerType *player_ptr)
 
     int dir;
     if (get_rep_dir(player_ptr, &dir)) {
-        const Pos2D pos(player_ptr->y + ddy[dir], player_ptr->x + ddx[dir]);
+        const auto pos = player_ptr->get_neighbor(dir);
         const Grid &grid = player_ptr->current_floor_ptr->get_grid(pos);
         if (grid.get_terrain_mimic().flags.has_not(TerrainCharacteristics::BASH)) {
             msg_print(_("そこには体当たりするものが見当たらない。", "You see nothing there to bash."));
@@ -347,7 +347,7 @@ void do_cmd_spike(PlayerType *player_ptr)
         return;
     }
 
-    const Pos2D pos(player_ptr->y + ddy[dir], player_ptr->x + ddx[dir]);
+    const auto pos = player_ptr->get_neighbor(dir);
     const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
     const auto &terrain_mimic = grid.get_terrain_mimic();
     INVENTORY_IDX i_idx;

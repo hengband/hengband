@@ -185,7 +185,6 @@ static void display_object_list(int col, int row, int per_page, const std::vecto
 {
     int i;
     for (i = 0; i < per_page && (object_idx[object_top + i] >= 0); i++) {
-        TERM_COLOR a;
         short bi_id = object_idx[object_top + i];
         const auto &baseitem = baseitems_info[bi_id];
         TERM_COLOR attr = ((baseitem.aware || visual_only) ? TERM_WHITE : TERM_SLATE);
@@ -204,7 +203,7 @@ static void display_object_list(int col, int row, int per_page, const std::vecto
             c_prt(attr, format("%d", bi_id), row + i, 70);
         }
 
-        a = flavor_baseitem.x_attr;
+        auto a = flavor_baseitem.x_attr;
         auto c = flavor_baseitem.x_char;
 
         term_queue_bigchar(use_bigtile ? 76 : 77, row + i, a, c, 0, 0);

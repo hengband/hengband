@@ -62,21 +62,21 @@ short PlayerStun::get_accumulation(int rank)
     case 0:
         return 0;
     case 1:
-        return randint1(10);
+        return randnum1<short>(10);
     case 2:
-        return randint1(10) + 10;
+        return randnum1<short>(10) + 10;
     case 3:
-        return randint1(10) + 20;
+        return randnum1<short>(10) + 20;
     case 4:
-        return randint1(10) + 30;
+        return randnum1<short>(10) + 30;
     case 5:
-        return randint1(10) + 40;
+        return randnum1<short>(10) + 40;
     case 6:
-        return randint1(10) + 50;
+        return randnum1<short>(10) + 50;
     case 7:
-        return randint1(10) + 60;
+        return randnum1<short>(10) + 60;
     default: // 8 or more.
-        return randint1(10) + 70;
+        return randnum1<short>(10) + 70;
     }
 }
 

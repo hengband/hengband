@@ -20,16 +20,15 @@ bool vampirism(PlayerType *player_ptr)
         return false;
     }
 
-    DIRECTION dir;
-    if (!get_direction(player_ptr, &dir)) {
+    const auto dir = get_direction(player_ptr);
+    if (!dir) {
         return false;
     }
 
-    POSITION y = player_ptr->y + ddy[dir];
-    POSITION x = player_ptr->x + ddx[dir];
-    const auto *g_ptr = &floor.grid_array[y][x];
+    const auto pos = player_ptr->get_neighbor(*dir);
+    const auto &grid = floor.get_grid(pos);
     stop_mouth(player_ptr);
-    if (!g_ptr->has_monster()) {
+    if (!grid.has_monster()) {
         msg_print(_("何もない場所に噛みついた！", "You bite into thin air!"));
         return false;
     }
@@ -37,7 +36,7 @@ bool vampirism(PlayerType *player_ptr)
     msg_print(_("あなたはニヤリとして牙をむいた...", "You grin and bare your fangs..."));
 
     int dummy = player_ptr->lev * 2;
-    if (!hypodynamic_bolt(player_ptr, dir, dummy)) {
+    if (!hypodynamic_bolt(player_ptr, *dir, dummy)) {
         msg_print(_("げぇ！ひどい味だ。", "Yechh. That tastes foul."));
         return true;
     }

@@ -27210,3 +27210,17 @@ D:$It is a part of Laffey II's rigging: a bunny-looking, propeller-less, futuris
 D:$  It can project light bolts that burn a hole through a target.
 D:ラフィーIIの艤装の一部で、兎を模したプロペラのない未来的なドローンだ。
 D:光の矢が放たれるようになっており、それが通ったものには風穴が空く。
+
+N:1358:豪雨の死神『ドラウナー』
+E:Drowner, the reaper of heavy rains
+G:W:b
+I:115:3d800:80:100:0
+W:49:3:80000:0:0
+B:SLASH:HURT:50d3
+F:UNIQUE | FORCE_MAXHP | UNDEAD | EVIL | NONLIVING | DROP_GOOD | DROP_2D2 | DROP_3D2 | RAND_25
+F:PASS_WALL | CAN_SWIM | CAN_FLY | COLD_BLOOD | POWERFUL | IM_COLD
+F:IM_POIS | RES_WATE | RES_NETH | RES_INER | RES_TIME | RES_GRAV | NO_FEAR | NO_STUN | NO_CONF
+F:NO_SLEEP
+S:1_IN_4 | BA_WATE | BO_WATE | HASTE
+D:$The skeleton, wearing a blue robe, drowns you by making the rain.
+D:青いローブを羽織るこの骸骨は雨を降らせ溺死させようとしている。

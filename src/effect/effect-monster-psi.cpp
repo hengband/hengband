@@ -113,7 +113,7 @@ static void effect_monster_psi_reflect_extra_effect(PlayerType *player_ptr, Effe
         (void)bss.mod_confusion(3 + randint1(em_ptr->dam));
         return;
     case 2:
-        (void)bss.mod_stun(randint1(em_ptr->dam));
+        (void)bss.mod_stun(randnum1<short>(em_ptr->dam));
         return;
     case 3:
         if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_FEAR)) {
@@ -125,7 +125,7 @@ static void effect_monster_psi_reflect_extra_effect(PlayerType *player_ptr, Effe
         return;
     default:
         if (!player_ptr->free_act) {
-            (void)bss.mod_paralysis(randint1(em_ptr->dam));
+            (void)bss.mod_paralysis(randnum1<short>(em_ptr->dam));
         }
 
         return;

@@ -1820,6 +1820,7 @@
     <ClInclude Include="..\..\src\util\rng-xoshiro.h" />
     <ClInclude Include="..\..\src\util\sha256.h" />
     <ClInclude Include="..\..\src\util\string-processor.h" />
+    <ClInclude Include="..\..\src\view\colored-char.h" />
     <ClInclude Include="..\..\src\view\display-birth.h" />
     <ClInclude Include="..\..\src\view\display-inventory.h" />
     <ClInclude Include="..\..\src\view\display-lore-attacks.h" />

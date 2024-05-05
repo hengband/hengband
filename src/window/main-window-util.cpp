@@ -18,6 +18,7 @@
 #include "term/term-color-types.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
+#include "view/colored-char.h"
 #include "view/display-map.h"
 #include "world/world.h"
 #include <string>
@@ -234,11 +235,10 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
             ta = bigma[j + 1][i + 1];
             tp = bigmp[j + 1][i + 1];
             if (mp[y][x] == tp) {
-                int t;
                 int cnt = 0;
 
-                for (t = 0; t < 8; t++) {
-                    if (tc == bigmc[j + 1 + ddy_cdd[t]][i + 1 + ddx_cdd[t]] && ta == bigma[j + 1 + ddy_cdd[t]][i + 1 + ddx_cdd[t]]) {
+                for (const auto &dd : CCW_DD) {
+                    if (tc == bigmc[j + 1 + dd.y][i + 1 + dd.x] && ta == bigma[j + 1 + dd.y][i + 1 + dd.x]) {
                         cnt++;
                     }
                 }
@@ -312,16 +312,15 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
     view_granite_lite = old_view_granite_lite;
 }
 
-void set_term_color(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, char *cp)
+ColoredChar set_term_color(PlayerType *player_ptr, const Pos2D &pos, const ColoredChar &cc_orig)
 {
-    if (!player_ptr->is_located_at({ y, x })) {
-        return;
+    if (!player_ptr->is_located_at(pos)) {
+        return cc_orig;
     }
 
-    auto *r_ptr = &monraces_info[MonsterRaceId::PLAYER];
-    *ap = r_ptr->x_attr;
-    *cp = r_ptr->x_char;
     feat_priority = 31;
+    const auto &monrace = monraces_info[MonsterRaceId::PLAYER];
+    return { monrace.x_attr, monrace.x_char };
 }
 
 /*

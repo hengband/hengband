@@ -115,18 +115,18 @@ static std::optional<BaseitemKey> check_magic_eater_spell_repeat(magic_eater_dat
         if (item.charge <= baseitems_info[lookup_baseitem_id({ ItemKindType::ROD, sval })].pval * (item.count - 1) * EATER_ROD_CHARGE) {
             return BaseitemKey(tval, sval);
         }
-        break;
+
+        return std::nullopt;
     case ItemKindType::STAFF:
     case ItemKindType::WAND:
         if (item.charge >= EATER_CHARGE) {
             return BaseitemKey(tval, sval);
         }
-        break;
-    default:
-        break;
-    }
 
-    return std::nullopt;
+        return std::nullopt;
+    default:
+        return std::nullopt;
+    }
 }
 
 /*!
@@ -329,28 +329,27 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
 
                 col = TERM_WHITE;
 
-                if (bi_id) {
-                    if (tval == ItemKindType::ROD) {
-                        dummy.append(
-                            format(_(" %-22.22s 充填:%2d/%2d%3d%%", " %-22.22s   (%2d/%2d) %3d%%"), baseitem.name.data(),
-                                item.charge ? (item.charge - 1) / (EATER_ROD_CHARGE * baseitem.pval) + 1 : 0,
-                                item.count, chance)
-                                .data());
-                        if (item.charge > baseitem.pval * (item.count - 1) * EATER_ROD_CHARGE) {
-                            col = TERM_RED;
-                        }
-                    } else {
-                        dummy.append(
-                            format(" %-22.22s    %2d/%2d %3d%%", baseitem.name.data(), (int16_t)(item.charge / EATER_CHARGE),
-                                item.count, chance)
-                                .data());
-                        if (item.charge < EATER_CHARGE) {
-                            col = TERM_RED;
-                        }
+                if (!baseitem.is_valid()) {
+                    dummy.clear();
+                    c_prt(col, dummy, y1, x1);
+                    continue;
+                }
+
+                if (tval == ItemKindType::ROD) {
+                    constexpr auto fmt = _(" %-22.22s 充填:%2d/%2d%3d%%", " %-22.22s   (%2d/%2d) %3d%%");
+                    const auto charge = item.charge > 0 ? (item.charge - 1) / (EATER_ROD_CHARGE * baseitem.pval) + 1 : 0;
+                    dummy.append(format(fmt, baseitem.name.data(), charge, item.count, chance));
+                    if (item.charge > baseitem.pval * (item.count - 1) * EATER_ROD_CHARGE) {
+                        col = TERM_RED;
                     }
                 } else {
-                    dummy.clear();
+                    constexpr auto fmt = " %-22.22s    %2d/%2d %3d%%";
+                    dummy.append(format(fmt, baseitem.name.data(), (int16_t)(item.charge / EATER_CHARGE), item.count, chance));
+                    if (item.charge < EATER_CHARGE) {
+                        col = TERM_RED;
+                    }
                 }
+
                 c_prt(col, dummy, y1, x1);
             }
         }

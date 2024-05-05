@@ -141,7 +141,7 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
         const auto insta_art = baseitems_info[bi_id].gen_flags.has(ItemGenerationTraitType::INSTA_ART);
         const auto flag = am_ptr->flag;
         const auto fixed_art = flag == AmusementFlagType::FIXED_ART;
-        std::optional<FixedArtifactId> opt_a_idx(std::nullopt);
+        std::optional<FixedArtifactId> opt_a_idx;
         if (insta_art || fixed_art) {
             opt_a_idx = sweep_amusement_artifact(insta_art, bi_id);
             if (!opt_a_idx) {
@@ -626,7 +626,7 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
     case 5:
         act = _("は非常に不安定になったようだ。", "seems very unstable now.");
         o_ptr->ego_idx = EgoType::TRUMP;
-        o_ptr->pval = randint1(2);
+        o_ptr->pval = randnum1<short>(2);
         break;
     case 4:
         act = _("は血を求めている！", "thirsts for blood!");

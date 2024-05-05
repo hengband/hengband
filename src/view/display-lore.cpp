@@ -559,13 +559,9 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
 #ifdef JP
         hooked_roff(format("、 %dd%d 体の%s", dd, ds, rf_ptr->name.data()));
 #else
-        auto plural = (dd * ds > 1);
-        GAME_TEXT name[MAX_NLEN];
-        strcpy(name, rf_ptr->name.data());
-        if (plural) {
-            plural_aux(name);
-        }
-        hooked_roff(format("%s%dd%d %s", prefix, dd, ds, name));
+        const auto plural = (dd * ds > 1);
+        const auto &name = plural ? pluralize(rf_ptr->name) : rf_ptr->name;
+        hooked_roff(format("%s%dd%d %s", prefix, dd, ds, name.data()));
 #endif
     }
 

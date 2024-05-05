@@ -33,7 +33,7 @@
 static short get_rumor_num(std::string_view zz, short max_idx)
 {
     if (zz == "*") {
-        return randint1(max_idx);
+        return randnum1<short>(max_idx);
     }
 
     return static_cast<short>(atoi(zz.data()));

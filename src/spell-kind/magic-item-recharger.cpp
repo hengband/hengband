@@ -92,7 +92,7 @@ bool recharge(PlayerType *player_ptr, int power)
         if (one_in_(recharge_strength)) {
             is_recharge_successful = false;
         } else {
-            recharge_amount = randint1(1 + baseitem.pval / 2);
+            recharge_amount = randnum1<short>(1 + baseitem.pval / 2);
             if ((tval == ItemKindType::WAND) && (o_ptr->number > 1)) {
                 recharge_amount += (randint1(recharge_amount * (o_ptr->number - 1))) / 2;
                 if (recharge_amount < 1) {

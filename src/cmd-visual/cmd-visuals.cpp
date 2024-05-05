@@ -151,7 +151,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
 
             auto_dump_printf(auto_dump_stream, _("\n# アイテムの[色/文字]の設定\n\n", "\n# Object attr/char definitions\n\n"));
             for (const auto &baseitem : baseitems_info) {
-                if (baseitem.name.empty()) {
+                if (!baseitem.is_valid()) {
                     continue;
                 }
 
@@ -319,7 +319,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
 
                 switch (c) {
                 case 'n': {
-                    std::optional<short> new_baseitem_id(std::nullopt);
+                    std::optional<short> new_baseitem_id;
                     const auto previous_bi_id = bi_id;
                     while (true) {
                         new_baseitem_id = input_new_visual_id(ch, bi_id, static_cast<short>(baseitems_info.size()));
@@ -329,7 +329,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                         }
 
                         bi_id = *new_baseitem_id;
-                        if (!baseitems_info[bi_id].name.empty()) {
+                        if (baseitems_info[bi_id].is_valid()) {
                             break;
                         }
                     }
@@ -408,7 +408,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
 
                 switch (c) {
                 case 'n': {
-                    std::optional<short> new_terrain_id(std::nullopt);
+                    std::optional<short> new_terrain_id;
                     const auto previous_terrain_id = terrain_id;
                     while (true) {
                         new_terrain_id = input_new_visual_id(ch, terrain_id, static_cast<short>(TerrainList::get_instance().size()));

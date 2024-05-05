@@ -718,7 +718,6 @@ static void display_spell_list(PlayerType *player_ptr)
     TERM_LEN y, x;
     int m[9]{};
     const magic_type *s_ptr;
-    GAME_TEXT name[MAX_NLEN];
 
     clear_from(0);
 
@@ -834,10 +833,10 @@ static void display_spell_list(PlayerType *player_ptr)
 
             const auto realm = (j < 1) ? player_ptr->realm1 : player_ptr->realm2;
             const auto spell_name = exe_spell(player_ptr, realm, i % 32, SpellProcessType::NAME);
-            strcpy(name, spell_name->data());
+            auto name = spell_name->data();
 
             if (s_ptr->slevel >= 99) {
-                strcpy(name, _("(判読不能)", "(illegible)"));
+                name = _("(判読不能)", "(illegible)");
                 a = TERM_L_DARK;
             } else if ((j < 1) ? ((player_ptr->spell_forgotten1 & (1UL << i))) : ((player_ptr->spell_forgotten2 & (1UL << (i % 32))))) {
                 a = TERM_ORANGE;

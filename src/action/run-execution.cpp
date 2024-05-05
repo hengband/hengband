@@ -112,24 +112,24 @@ static void run_init(PlayerType *player_ptr, DIRECTION dir)
     bool deepright = false;
     bool shortright = false;
     bool shortleft = false;
-    player_ptr->run_py = player_ptr->y;
-    player_ptr->run_px = player_ptr->x;
-    int row = player_ptr->y + ddy[dir];
-    int col = player_ptr->x + ddx[dir];
-    ignore_avoid_run = cave_has_flag_bold(player_ptr->current_floor_ptr, row, col, TerrainCharacteristics::AVOID_RUN);
+    const auto pos = player_ptr->get_position();
+    player_ptr->run_py = pos.y;
+    player_ptr->run_px = pos.x;
+    const auto pos_neighbor = player_ptr->get_neighbor(dir);
+    ignore_avoid_run = cave_has_flag_bold(player_ptr->current_floor_ptr, pos_neighbor.y, pos_neighbor.x, TerrainCharacteristics::AVOID_RUN);
     int i = chome[dir];
-    if (see_wall(player_ptr, cycle[i + 1], player_ptr->y, player_ptr->x)) {
+    if (see_wall(player_ptr, cycle[i + 1], pos.y, pos.x)) {
         find_breakleft = true;
         shortleft = true;
-    } else if (see_wall(player_ptr, cycle[i + 1], row, col)) {
+    } else if (see_wall(player_ptr, cycle[i + 1], pos_neighbor.y, pos_neighbor.x)) {
         find_breakleft = true;
         deepleft = true;
     }
 
-    if (see_wall(player_ptr, cycle[i - 1], player_ptr->y, player_ptr->x)) {
+    if (see_wall(player_ptr, cycle[i - 1], pos.y, pos.x)) {
         find_breakright = true;
         shortright = true;
-    } else if (see_wall(player_ptr, cycle[i - 1], row, col)) {
+    } else if (see_wall(player_ptr, cycle[i - 1], pos_neighbor.y, pos_neighbor.x)) {
         find_breakright = true;
         deepright = true;
     }
@@ -149,7 +149,7 @@ static void run_init(PlayerType *player_ptr, DIRECTION dir)
         return;
     }
 
-    if (!see_wall(player_ptr, cycle[i], row, col)) {
+    if (!see_wall(player_ptr, cycle[i], pos_neighbor.y, pos_neighbor.x)) {
         return;
     }
 
@@ -224,7 +224,7 @@ static bool run_test(PlayerType *player_ptr)
     auto option2 = 0;
     for (auto i = -max; i <= max; i++) {
         int new_dir = cycle[chome[prev_dir] + i];
-        const Pos2D pos(player_ptr->y + ddy[new_dir], player_ptr->x + ddx[new_dir]);
+        const auto pos = player_ptr->get_neighbor(new_dir);
         const auto &grid = floor.get_grid(pos);
         if (grid.has_monster()) {
             const auto &monster = floor.m_list[grid.m_idx];
@@ -345,10 +345,9 @@ static bool run_test(PlayerType *player_ptr)
         return see_wall(player_ptr, find_current, player_ptr->y, player_ptr->x);
     }
 
-    int row = player_ptr->y + ddy[option];
-    int col = player_ptr->x + ddx[option];
-    if (!see_wall(player_ptr, option, row, col) || !see_wall(player_ptr, check_dir, row, col)) {
-        if (see_nothing(player_ptr, option, row, col) && see_nothing(player_ptr, option2, row, col)) {
+    const auto pos = player_ptr->get_neighbor(option);
+    if (!see_wall(player_ptr, option, pos.y, pos.x) || !see_wall(player_ptr, check_dir, pos.y, pos.x)) {
+        if (see_nothing(player_ptr, option, pos.y, pos.x) && see_nothing(player_ptr, option2, pos.y, pos.x)) {
             find_current = option;
             find_prevdir = option2;
             return see_wall(player_ptr, find_current, player_ptr->y, player_ptr->x);

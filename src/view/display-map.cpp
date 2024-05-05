@@ -24,8 +24,10 @@
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
+#include "view/colored-char.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
+#include <algorithm>
 #include <span>
 
 byte display_autopick; /*!< 自動拾い状態の設定フラグ */
@@ -36,73 +38,65 @@ const std::string image_objects = R"(?/|\"!$()_-=[]{},~)";
 
 /* 一般的にモンスターシンボルとして扱われる記号を定義する(幻覚処理向け) / Hack -- Legal monster codes */
 const std::string image_monsters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-}
 
 /*!
- * @brief オブジェクトの表示を幻覚状態に差し替える / Hallucinatory object
- * @param ap 本来の色
- * @param cp 本来のシンボル
+ * @brief オブジェクトの表示を幻覚状態に差し替える
+ * @return 差し替えたシンボルと色
  */
-static void image_object(TERM_COLOR *ap, char *cp)
+ColoredChar image_object()
 {
     if (use_graphics) {
         std::span<BaseitemInfo> candidates(baseitems_info.begin() + 1, baseitems_info.end());
         const auto &baseitem = rand_choice(candidates);
-        *cp = baseitem.x_char;
-        *ap = baseitem.x_attr;
-        return;
+        return { baseitem.x_attr, baseitem.x_char };
     }
 
-    *cp = rand_choice(image_objects);
-    *ap = randint1(15);
+    return { randnum1<uint8_t>(15), rand_choice(image_objects) };
 }
 
 /*!
- * @brief モンスターの表示を幻覚状態に差し替える / Mega-Hack -- Hallucinatory monster
- * @param ap 本来の色
- * @param cp 本来のシンボル
+ * @brief モンスターの表示を幻覚状態に差し替える
+ * @return 差し替えたシンボルと色
  */
-static void image_monster(TERM_COLOR *ap, char *cp)
+ColoredChar image_monster()
 {
     if (use_graphics) {
-        auto r_idx = MonsterRace::pick_one_at_random();
-        auto *r_ptr = &monraces_info[r_idx];
-        *cp = r_ptr->x_char;
-        *ap = r_ptr->x_attr;
-        return;
+        const auto monrace_id = MonsterRace::pick_one_at_random();
+        const auto &monrace = monraces_info[monrace_id];
+        return { monrace.x_attr, monrace.x_char };
     }
 
-    *cp = one_in_(25) ? rand_choice(image_objects) : rand_choice(image_monsters);
-    *ap = randint1(15);
+    auto color = randnum1<uint8_t>(15);
+    auto character = one_in_(25) ? rand_choice(image_objects) : rand_choice(image_monsters);
+    return { color, character };
 }
 
 /*!
- * @brief オブジェクト＆モンスターの表示を幻覚状態に差し替える / Hack -- Random hallucination
- * @param ap 本来の色
- * @param cp 本来のシンボル
+ * @brief オブジェクト＆モンスターの表示を幻覚状態に差し替える
+ * @return 差し替えたシンボルと色
  */
-static void image_random(TERM_COLOR *ap, char *cp)
+ColoredChar image_random()
 {
     if (randint0(100) < 75) {
-        image_monster(ap, cp);
+        return image_monster();
     } else {
-        image_object(ap, cp);
+        return image_object();
     }
+}
 }
 
 /*!
  * @brief マップに表示されるべき地形(壁)かどうかを判定する
- * @param floor_ptr 階の情報への参照ポインタ
- * @param y グリッドy座標
- * @param x グリッドx座標
+ * @param floor 階の情報への参照
+ * @param pos グリッド座標
  * @return 表示されるべきならtrue、そうでないならfalse
  * @details
  * 周り全てが壁に囲まれている壁についてはオプション状態による。
  * 1か所でも空きがあるか、壁ではない地形、金を含む地形、永久岩は表示。
  */
-static bool is_revealed_wall(FloorType *floor_ptr, int y, int x)
+static bool is_revealed_wall(const FloorType &floor, const Pos2D &pos)
 {
-    const auto &grid = floor_ptr->grid_array[y][x];
+    const auto &grid = floor.get_grid(pos);
     if (view_hidden_walls) {
         if (view_unsafe_walls) {
             return true;
@@ -117,29 +111,22 @@ static bool is_revealed_wall(FloorType *floor_ptr, int y, int x)
         return true;
     }
 
-    if (in_bounds(floor_ptr, y, x) && terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
+    if (in_bounds(&floor, pos.y, pos.x) && terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
         return true;
     }
 
-    constexpr auto neighbors = 8;
-    const auto &terrains = TerrainList::get_instance();
-    auto n = 0;
-    for (auto i = 0; i < neighbors; i++) {
-        const auto dy = y + ddy_cdd[i];
-        const auto dx = x + ddx_cdd[i];
-        if (!in_bounds(floor_ptr, dy, dx)) {
-            n++;
-            continue;
-        }
+    const auto num_of_walls = std::count_if(CCW_DD.begin(), CCW_DD.end(),
+        [&floor, &pos](const auto &dd) {
+            const auto pos_neighbor = pos + dd;
+            if (!in_bounds(&floor, pos_neighbor.y, pos_neighbor.x)) {
+                return true;
+            }
 
-        const auto terrain_id = floor_ptr->grid_array[dy][dx].feat;
-        const auto &terrain_neighbor = terrains[terrain_id];
-        if (terrain_neighbor.flags.has(TerrainCharacteristics::WALL)) {
-            n++;
-        }
-    }
+            const auto &terrain_neighbor = floor.get_grid(pos_neighbor).get_terrain();
+            return terrain_neighbor.flags.has(TerrainCharacteristics::WALL);
+        });
 
-    return n != neighbors;
+    return num_of_walls != std::ssize(CCW_DD);
 }
 
 /*!
@@ -203,7 +190,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
             c = terrain_mimic_ptr->x_char[F_LIT_STANDARD];
         }
     } else {
-        if (grid.is_mark() && is_revealed_wall(&floor, y, x)) {
+        if (grid.is_mark() && is_revealed_wall(floor, pos)) {
             a = terrain_mimic_ptr->x_attr[F_LIT_STANDARD];
             c = terrain_mimic_ptr->x_char[F_LIT_STANDARD];
             const auto is_blind = player_ptr->effects()->blindness()->is_blind();
@@ -263,7 +250,9 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
 
     auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
     if (is_hallucinated && one_in_(256)) {
-        image_random(ap, cp);
+        const auto cc = image_random();
+        *ap = cc.color;
+        *cp = cc.character;
     }
 
     for (const auto this_o_idx : grid.o_idx_list) {
@@ -295,20 +284,26 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
         *ap = o_ptr->get_color();
         feat_priority = 20;
         if (is_hallucinated) {
-            image_object(ap, cp);
+            const auto cc = image_object();
+            *ap = cc.color;
+            *cp = cc.character;
         }
 
         break;
     }
 
     if (grid.has_monster() && display_autopick != 0) {
-        set_term_color(player_ptr, y, x, ap, cp);
+        const auto cc = set_term_color(player_ptr, { y, x }, { *ap, *cp });
+        *ap = cc.color;
+        *cp = cc.character;
         return;
     }
 
     auto *m_ptr = &floor.m_list[grid.m_idx];
     if (!m_ptr->ml) {
-        set_term_color(player_ptr, y, x, ap, cp);
+        const auto cc = set_term_color(player_ptr, { y, x }, { *ap, *cp });
+        *ap = cc.color;
+        *cp = cc.character;
         return;
     }
 
@@ -318,24 +313,30 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
         if (r_ptr->visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {
             /* Do nothing */
         } else {
-            image_monster(ap, cp);
+            const auto cc = image_monster();
+            *ap = cc.color;
+            *cp = cc.character;
         }
 
-        set_term_color(player_ptr, y, x, ap, cp);
+        const auto cc = set_term_color(player_ptr, { y, x }, { *ap, *cp });
+        *ap = cc.color;
+        *cp = cc.character;
         return;
     }
 
     a = r_ptr->x_attr;
     c = r_ptr->x_char;
     if (r_ptr->visual_flags.has_none_of({ MonsterVisualType::CLEAR, MonsterVisualType::SHAPECHANGER, MonsterVisualType::CLEAR_COLOR, MonsterVisualType::MULTI_COLOR, MonsterVisualType::RANDOM_COLOR })) {
-        *ap = a;
-        *cp = c;
-        set_term_color(player_ptr, y, x, ap, cp);
+        const auto cc = set_term_color(player_ptr, { y, x }, { a, c });
+        *ap = cc.color;
+        *cp = cc.character;
         return;
     }
 
     if (r_ptr->visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {
-        set_term_color(player_ptr, y, x, ap, cp);
+        const auto cc = set_term_color(player_ptr, { y, x }, { *ap, *cp });
+        *ap = cc.color;
+        *cp = cc.character;
         return;
     }
 
@@ -343,7 +344,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
         /* Do nothing */
     } else if (r_ptr->visual_flags.has(MonsterVisualType::MULTI_COLOR) && !use_graphics) {
         if (r_ptr->visual_flags.has(MonsterVisualType::ANY_COLOR)) {
-            *ap = randint1(15);
+            *ap = randnum1<uint8_t>(15);
         } else {
             constexpr static auto colors = {
                 TERM_RED,
@@ -364,24 +365,29 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
     }
 
     if (r_ptr->visual_flags.has(MonsterVisualType::CLEAR) && (*cp != ' ') && !use_graphics) {
-        set_term_color(player_ptr, y, x, ap, cp);
+        const auto cc = set_term_color(player_ptr, { y, x }, { *ap, *cp });
+        *ap = cc.color;
+        *cp = cc.character;
         return;
     }
 
     if (r_ptr->visual_flags.has(MonsterVisualType::SHAPECHANGER)) {
         if (use_graphics) {
             auto r_idx = MonsterRace::pick_one_at_random();
-            MonsterRaceInfo *tmp_r_ptr = &monraces_info[r_idx];
-            *cp = tmp_r_ptr->x_char;
-            *ap = tmp_r_ptr->x_attr;
+            const auto &monrace = monraces_info[r_idx];
+            *cp = monrace.x_char;
+            *ap = monrace.x_attr;
         } else {
             *cp = one_in_(25) ? rand_choice(image_objects) : rand_choice(image_monsters);
         }
 
-        set_term_color(player_ptr, y, x, ap, cp);
+        const auto cc = set_term_color(player_ptr, { y, x }, { *ap, *cp });
+        *ap = cc.color;
+        *cp = cc.character;
         return;
     }
 
-    *cp = c;
-    set_term_color(player_ptr, y, x, ap, cp);
+    const auto cc = set_term_color(player_ptr, { y, x }, { *ap, c });
+    *ap = cc.color;
+    *cp = cc.character;
 }

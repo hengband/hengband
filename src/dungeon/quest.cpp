@@ -38,8 +38,7 @@
 #include <sstream>
 #include <stdexcept>
 
-char quest_text[10][80]; /*!< Quest text */
-int quest_text_line; /*!< Current line of the quest text */
+std::vector<std::string> quest_text_lines; /*!< Quest text */
 QuestId leaving_quest = QuestId::NONE;
 
 /*!
@@ -311,25 +310,24 @@ void quest_discovery(QuestId q_idx)
         return;
     }
 
-    GAME_TEXT name[MAX_NLEN];
-    strcpy(name, (r_ptr->name.data()));
+#ifdef JP
+    const auto &name = r_ptr->name;
+#else
+    const auto &name = (q_num != 1) ? pluralize(r_ptr->name) : r_ptr->name;
+#endif
 
     msg_print(find_quest_map[rand_range(0, 4)]);
     msg_print(nullptr);
 
     if (q_num != 1) {
-#ifdef JP
-#else
-        plural_aux(name);
-#endif
-        msg_format(_("注意しろ！この階は%d体の%sによって守られている！", "Be warned, this level is guarded by %d %s!"), q_num, name);
+        msg_format(_("注意しろ！この階は%d体の%sによって守られている！", "Be warned, this level is guarded by %d %s!"), q_num, name.data());
         return;
     }
 
     bool is_random_quest_skipped = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     is_random_quest_skipped &= r_ptr->max_num == 0;
     if (!is_random_quest_skipped) {
-        msg_format(_("注意せよ！この階は%sによって守られている！", "Beware, this level is protected by %s!"), name);
+        msg_format(_("注意せよ！この階は%sによって守られている！", "Beware, this level is protected by %s!"), name.data());
         return;
     }
 

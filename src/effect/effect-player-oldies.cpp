@@ -28,7 +28,7 @@ void effect_player_old_speed(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         msg_print(_("何かで攻撃された！", "You are hit by something!"));
     }
 
-    (void)mod_acceleration(player_ptr, randint1(5), false);
+    (void)mod_acceleration(player_ptr, randnum1<short>(5), false);
     ep_ptr->dam = 0;
 }
 

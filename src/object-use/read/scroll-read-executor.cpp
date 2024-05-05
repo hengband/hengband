@@ -210,7 +210,7 @@ bool ScrollReadExecutor::read()
         this->ident = true;
         break;
     case SV_SCROLL_STAR_ENCHANT_WEAPON:
-        if (!enchant_spell(this->player_ptr, randint1(3), randint1(3), 0)) {
+        if (!enchant_spell(this->player_ptr, randnum1<short>(3), randint1(3), 0)) {
             used_up = false;
         }
 
