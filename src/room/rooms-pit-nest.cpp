@@ -195,24 +195,27 @@ const std::vector<nest_pit_type> nest_types = {
     { _("アンデッド", "undead"), vault_aux_undead, nullptr, 75, 5 },
 };
 
+/*!
+ * @brief Nestに格納するモンスターを選択する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param align アライメントが中立に設定されたモンスター実体 (その他の中身は空)
+ * @return モンスター種族ID (見つからなかったらnullopt)
+ * @details Nestにはそのフロアの通常レベルより11高いモンスターを中心に選ぶ
+ */
 static std::optional<MonsterRaceId> select_nest_monrace_id(PlayerType *player_ptr, MonsterEntity &align)
 {
     for (auto attempts = 100; attempts > 0; attempts--) {
-        /* Get a (hard) monster type */
-        auto r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 11, PM_NONE);
-        auto *r_ptr = &monraces_info[r_idx];
-
-        /* Decline incorrect alignment */
-        if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) {
+        const auto monrace_id = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 11, PM_NONE);
+        const auto &monrace = monraces_info[monrace_id];
+        if (monster_has_hostile_align(player_ptr, &align, 0, 0, &monrace)) {
             continue;
         }
 
-        /* Accept this monster */
-        if (MonsterRace(r_idx).is_valid()) {
-            return r_idx;
-        } else {
-            return std::nullopt;
+        if (MonsterRace(monrace_id).is_valid()) {
+            return monrace_id;
         }
+
+        return std::nullopt;
     }
 
     return std::nullopt;
