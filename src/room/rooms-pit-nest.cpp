@@ -195,6 +195,29 @@ const std::vector<nest_pit_type> nest_types = {
     { _("アンデッド", "undead"), vault_aux_undead, nullptr, 75, 5 },
 };
 
+static std::optional<MonsterRaceId> select_nest_monrace_id(PlayerType *player_ptr, MonsterEntity &align)
+{
+    for (auto attempts = 100; attempts > 0; attempts--) {
+        /* Get a (hard) monster type */
+        auto r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 11, PM_NONE);
+        auto *r_ptr = &monraces_info[r_idx];
+
+        /* Decline incorrect alignment */
+        if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) {
+            continue;
+        }
+
+        /* Accept this monster */
+        if (MonsterRace(r_idx).is_valid()) {
+            return r_idx;
+        } else {
+            return std::nullopt;
+        }
+    }
+
+    return std::nullopt;
+}
+
 /*!
  * @brief タイプ5の部屋…nestを生成する / Type 5 -- Monster nests
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -237,29 +260,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     /* Pick some monster types */
     std::array<nest_mon_info_type, NUM_NEST_MON_TYPE> nest_mon_info_list{};
     for (auto &nest_mon_info : nest_mon_info_list) {
-        auto select_r_idx = [player_ptr, floor, &align]() -> std::optional<MonsterRaceId> {
-            for (auto attempts = 100; attempts > 0; attempts--) {
-                /* Get a (hard) monster type */
-                auto r_idx = get_mon_num(player_ptr, 0, floor.dun_level + 11, PM_NONE);
-                auto *r_ptr = &monraces_info[r_idx];
-
-                /* Decline incorrect alignment */
-                if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) {
-                    continue;
-                }
-
-                /* Accept this monster */
-                if (MonsterRace(r_idx).is_valid()) {
-                    return r_idx;
-                } else {
-                    return std::nullopt;
-                }
-            }
-
-            return std::nullopt;
-        };
-
-        const auto r_idx = select_r_idx();
+        const auto r_idx = select_nest_monrace_id(player_ptr, align);
         if (!r_idx) {
             return false;
         }
