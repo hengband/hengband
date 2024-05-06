@@ -27224,3 +27224,27 @@ F:NO_SLEEP
 S:1_IN_4 | BA_WATE | BO_WATE | HASTE
 D:$The skeleton, wearing a blue robe, drowns you by making the rain.
 D:青いローブを羽織るこの骸骨は雨を降らせ溺死させようとしている。
+
+N:1359:おたずねものムシ
+E:Criminal Caterpillar
+G:w:g
+I:120:25d10:20:50:0
+W:23:15:10000:0:0
+F:EVIL | ANIMAL | DROP_CORPSE | NEVER_BLOW | FORCE_MAXHP | ONLY_ONE | HURT_FIRE
+F:HURT_COLD | HURT_LITE | WILD_WASTE
+S:1_IN_6
+S:BO_FIRE | BA_FIRE
+D:$To defeat it will give a lot of experiences.
+D:それを倒すととてもいい経験になりそうだ。
+
+N:1360:レアおたずねものムシ
+E:Master Criminal Caterpillar
+G:w:R
+I:120:30d20:20:50:0
+W:37:15:25000:0:0
+F:EVIL | ANIMAL | DROP_CORPSE | NEVER_BLOW | FORCE_MAXHP | ONLY_ONE | HURT_FIRE
+F:HURT_COLD | HURT_LITE | WILD_WASTE
+S:1_IN_4
+S:BR_FIRE | BA_FIRE | BO_FIRE
+D:$To defeat it will give a lot of experiences.
+D:それを倒すととてもいい経験になりそうだ。
