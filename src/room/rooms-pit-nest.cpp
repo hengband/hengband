@@ -27,6 +27,7 @@
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
 #include <optional>
+#include <utility>
 #include <vector>
 
 constexpr auto NUM_NEST_MON_TYPE = 64; //! nestの種別数.
@@ -355,13 +356,12 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     /* Place some monsters */
     for (auto y = yval - 2; y <= yval + 2; y++) {
         for (auto x = xval - 9; x <= xval + 9; x++) {
-            const auto i = randint0(NUM_NEST_MON_TYPE);
-            const auto r_idx = nest_mon_info[i].r_idx;
+            auto &info = rand_choice(nest_mon_info);
 
             /* Place that "random" monster (no groups) */
-            (void)place_specific_monster(player_ptr, 0, y, x, r_idx, 0L);
+            (void)place_specific_monster(player_ptr, 0, y, x, info.r_idx, 0L);
 
-            nest_mon_info[i].used = true;
+            info.used = true;
         }
     }
 
@@ -445,25 +445,15 @@ std::vector<nest_pit_type> pit_types = {
  */
 bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
-    POSITION y, x, y1, x1, y2, x2, xval, yval;
-    int i, j;
-
-    MonsterRaceId what[16];
-
-    MonsterEntity align;
-
-    Grid *g_ptr;
-
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    int cur_pit_type = pick_vault_type(floor_ptr, pit_types, floor_ptr->get_dungeon_definition().pit);
-    nest_pit_type *n_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto cur_pit_type = pick_vault_type(&floor, pit_types, floor.get_dungeon_definition().pit);
 
     /* No type available */
     if (cur_pit_type < 0) {
         return false;
     }
 
-    n_ptr = &pit_types[cur_pit_type];
+    const auto *n_ptr = &pit_types[cur_pit_type];
 
     /* Process a preparation function if necessary */
     if (n_ptr->prep_func) {
@@ -471,17 +461,19 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
     }
     get_mon_num_prep(player_ptr, n_ptr->hook_func, nullptr);
 
+    MonsterEntity align;
     align.sub_align = SUB_ALIGN_NEUTRAL;
 
     /* Pick some monster types */
-    for (i = 0; i < 16; i++) {
+    std::vector<MonsterRaceId> whats;
+    for (auto i = 0; i < 16; i++) {
         auto r_idx = MonsterRace::empty_id();
         int attempts = 100;
         MonsterRaceInfo *r_ptr = nullptr;
 
         while (attempts--) {
             /* Get a (hard) monster type */
-            r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level + 11, PM_NONE);
+            r_idx = get_mon_num(player_ptr, 0, floor.dun_level + 11, PM_NONE);
             r_ptr = &monraces_info[r_idx];
 
             /* Decline incorrect alignment */
@@ -506,40 +498,43 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
             align.sub_align |= SUB_ALIGN_GOOD;
         }
 
-        what[i] = r_idx;
+        whats.push_back(r_idx);
     }
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
+    int yval;
+    int xval;
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25)) {
         return false;
     }
 
     /* Large room */
-    y1 = yval - 4;
-    y2 = yval + 4;
-    x1 = xval - 11;
-    x2 = xval + 11;
+    auto y1 = yval - 4;
+    auto y2 = yval + 4;
+    auto x1 = xval - 11;
+    auto x2 = xval + 11;
 
     /* Place the floor area */
-    for (y = y1 - 1; y <= y2 + 1; y++) {
-        for (x = x1 - 1; x <= x2 + 1; x++) {
-            g_ptr = &floor_ptr->grid_array[y][x];
+    Grid *g_ptr;
+    for (auto y = y1 - 1; y <= y2 + 1; y++) {
+        for (auto x = x1 - 1; x <= x2 + 1; x++) {
+            g_ptr = &floor.grid_array[y][x];
             place_grid(player_ptr, g_ptr, GB_FLOOR);
             g_ptr->info |= (CAVE_ROOM);
         }
     }
 
     /* Place the outer walls */
-    for (y = y1 - 1; y <= y2 + 1; y++) {
-        g_ptr = &floor_ptr->grid_array[y][x1 - 1];
+    for (auto y = y1 - 1; y <= y2 + 1; y++) {
+        g_ptr = &floor.grid_array[y][x1 - 1];
         place_grid(player_ptr, g_ptr, GB_OUTER);
-        g_ptr = &floor_ptr->grid_array[y][x2 + 1];
+        g_ptr = &floor.grid_array[y][x2 + 1];
         place_grid(player_ptr, g_ptr, GB_OUTER);
     }
-    for (x = x1 - 1; x <= x2 + 1; x++) {
-        g_ptr = &floor_ptr->grid_array[y1 - 1][x];
+    for (auto x = x1 - 1; x <= x2 + 1; x++) {
+        g_ptr = &floor.grid_array[y1 - 1][x];
         place_grid(player_ptr, g_ptr, GB_OUTER);
-        g_ptr = &floor_ptr->grid_array[y2 + 1][x];
+        g_ptr = &floor.grid_array[y2 + 1][x];
         place_grid(player_ptr, g_ptr, GB_OUTER);
     }
 
@@ -550,21 +545,21 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
     x2 = x2 - 2;
 
     /* The inner walls */
-    for (y = y1 - 1; y <= y2 + 1; y++) {
-        g_ptr = &floor_ptr->grid_array[y][x1 - 1];
+    for (auto y = y1 - 1; y <= y2 + 1; y++) {
+        g_ptr = &floor.grid_array[y][x1 - 1];
         place_grid(player_ptr, g_ptr, GB_INNER);
-        g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-        place_grid(player_ptr, g_ptr, GB_INNER);
-    }
-    for (x = x1 - 1; x <= x2 + 1; x++) {
-        g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-        place_grid(player_ptr, g_ptr, GB_INNER);
-        g_ptr = &floor_ptr->grid_array[y2 + 1][x];
+        g_ptr = &floor.grid_array[y][x2 + 1];
         place_grid(player_ptr, g_ptr, GB_INNER);
     }
-    for (y = y1; y <= y2; y++) {
-        for (x = x1; x <= x2; x++) {
-            floor_ptr->grid_array[y][x].add_info(CAVE_ICKY);
+    for (auto x = x1 - 1; x <= x2 + 1; x++) {
+        g_ptr = &floor.grid_array[y1 - 1][x];
+        place_grid(player_ptr, g_ptr, GB_INNER);
+        g_ptr = &floor.grid_array[y2 + 1][x];
+        place_grid(player_ptr, g_ptr, GB_INNER);
+    }
+    for (auto y = y1; y <= y2; y++) {
+        for (auto x = x1; x <= x2; x++) {
+            floor.grid_array[y][x].add_info(CAVE_ICKY);
         }
     }
 
@@ -585,20 +580,18 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
     }
 
     /* Sort the entries */
-    for (i = 0; i < 16 - 1; i++) {
+    for (auto i = 0; i < 16 - 1; i++) {
         /* Sort the entries */
-        for (j = 0; j < 16 - 1; j++) {
+        for (auto j = 0; j < 16 - 1; j++) {
             int i1 = j;
             int i2 = j + 1;
 
-            int p1 = monraces_info[what[i1]].level;
-            int p2 = monraces_info[what[i2]].level;
+            int p1 = monraces_info[whats[i1]].level;
+            int p2 = monraces_info[whats[i2]].level;
 
             /* Bubble */
             if (p1 > p2) {
-                MonsterRaceId tmp = what[i1];
-                what[i1] = what[i2];
-                what[i2] = tmp;
+                std::swap(whats[i1], whats[i2]);
             }
         }
     }
@@ -607,57 +600,57 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
         player_ptr, CHEAT_DUNGEON, _("モンスター部屋(pit)(%s%s)を生成します。", "Monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, false).data());
 
     /* Select the entries */
-    for (i = 0; i < 8; i++) {
+    for (auto i = 0; i < 8; i++) {
         /* Every other entry */
-        what[i] = what[i * 2];
-        msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("Nest構成モンスター選択No.%d:%s", "Nest Monster Select No.%d:%s"), i, monraces_info[what[i]].name.data());
+        whats[i] = whats[i * 2];
+        msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("Nest構成モンスター選択No.%d:%s", "Nest Monster Select No.%d:%s"), i, monraces_info[whats[i]].name.data());
     }
 
     /* Top and bottom rows */
-    for (x = xval - 9; x <= xval + 9; x++) {
-        place_specific_monster(player_ptr, 0, yval - 2, x, what[0], PM_NO_KAGE);
-        place_specific_monster(player_ptr, 0, yval + 2, x, what[0], PM_NO_KAGE);
+    for (auto x = xval - 9; x <= xval + 9; x++) {
+        place_specific_monster(player_ptr, 0, yval - 2, x, whats[0], PM_NO_KAGE);
+        place_specific_monster(player_ptr, 0, yval + 2, x, whats[0], PM_NO_KAGE);
     }
 
     /* Middle columns */
-    for (y = yval - 1; y <= yval + 1; y++) {
-        place_specific_monster(player_ptr, 0, y, xval - 9, what[0], PM_NO_KAGE);
-        place_specific_monster(player_ptr, 0, y, xval + 9, what[0], PM_NO_KAGE);
+    for (auto y = yval - 1; y <= yval + 1; y++) {
+        place_specific_monster(player_ptr, 0, y, xval - 9, whats[0], PM_NO_KAGE);
+        place_specific_monster(player_ptr, 0, y, xval + 9, whats[0], PM_NO_KAGE);
 
-        place_specific_monster(player_ptr, 0, y, xval - 8, what[1], PM_NO_KAGE);
-        place_specific_monster(player_ptr, 0, y, xval + 8, what[1], PM_NO_KAGE);
+        place_specific_monster(player_ptr, 0, y, xval - 8, whats[1], PM_NO_KAGE);
+        place_specific_monster(player_ptr, 0, y, xval + 8, whats[1], PM_NO_KAGE);
 
-        place_specific_monster(player_ptr, 0, y, xval - 7, what[1], PM_NO_KAGE);
-        place_specific_monster(player_ptr, 0, y, xval + 7, what[1], PM_NO_KAGE);
+        place_specific_monster(player_ptr, 0, y, xval - 7, whats[1], PM_NO_KAGE);
+        place_specific_monster(player_ptr, 0, y, xval + 7, whats[1], PM_NO_KAGE);
 
-        place_specific_monster(player_ptr, 0, y, xval - 6, what[2], PM_NO_KAGE);
-        place_specific_monster(player_ptr, 0, y, xval + 6, what[2], PM_NO_KAGE);
+        place_specific_monster(player_ptr, 0, y, xval - 6, whats[2], PM_NO_KAGE);
+        place_specific_monster(player_ptr, 0, y, xval + 6, whats[2], PM_NO_KAGE);
 
-        place_specific_monster(player_ptr, 0, y, xval - 5, what[2], PM_NO_KAGE);
-        place_specific_monster(player_ptr, 0, y, xval + 5, what[2], PM_NO_KAGE);
+        place_specific_monster(player_ptr, 0, y, xval - 5, whats[2], PM_NO_KAGE);
+        place_specific_monster(player_ptr, 0, y, xval + 5, whats[2], PM_NO_KAGE);
 
-        place_specific_monster(player_ptr, 0, y, xval - 4, what[3], PM_NO_KAGE);
-        place_specific_monster(player_ptr, 0, y, xval + 4, what[3], PM_NO_KAGE);
+        place_specific_monster(player_ptr, 0, y, xval - 4, whats[3], PM_NO_KAGE);
+        place_specific_monster(player_ptr, 0, y, xval + 4, whats[3], PM_NO_KAGE);
 
-        place_specific_monster(player_ptr, 0, y, xval - 3, what[3], PM_NO_KAGE);
-        place_specific_monster(player_ptr, 0, y, xval + 3, what[3], PM_NO_KAGE);
+        place_specific_monster(player_ptr, 0, y, xval - 3, whats[3], PM_NO_KAGE);
+        place_specific_monster(player_ptr, 0, y, xval + 3, whats[3], PM_NO_KAGE);
 
-        place_specific_monster(player_ptr, 0, y, xval - 2, what[4], PM_NO_KAGE);
-        place_specific_monster(player_ptr, 0, y, xval + 2, what[4], PM_NO_KAGE);
+        place_specific_monster(player_ptr, 0, y, xval - 2, whats[4], PM_NO_KAGE);
+        place_specific_monster(player_ptr, 0, y, xval + 2, whats[4], PM_NO_KAGE);
     }
 
     /* Above/Below the center monster */
-    for (x = xval - 1; x <= xval + 1; x++) {
-        place_specific_monster(player_ptr, 0, yval + 1, x, what[5], PM_NO_KAGE);
-        place_specific_monster(player_ptr, 0, yval - 1, x, what[5], PM_NO_KAGE);
+    for (auto x = xval - 1; x <= xval + 1; x++) {
+        place_specific_monster(player_ptr, 0, yval + 1, x, whats[5], PM_NO_KAGE);
+        place_specific_monster(player_ptr, 0, yval - 1, x, whats[5], PM_NO_KAGE);
     }
 
     /* Next to the center monster */
-    place_specific_monster(player_ptr, 0, yval, xval + 1, what[6], PM_NO_KAGE);
-    place_specific_monster(player_ptr, 0, yval, xval - 1, what[6], PM_NO_KAGE);
+    place_specific_monster(player_ptr, 0, yval, xval + 1, whats[6], PM_NO_KAGE);
+    place_specific_monster(player_ptr, 0, yval, xval - 1, whats[6], PM_NO_KAGE);
 
     /* Center monster */
-    place_specific_monster(player_ptr, 0, yval, xval, what[7], PM_NO_KAGE);
+    place_specific_monster(player_ptr, 0, yval, xval, whats[7], PM_NO_KAGE);
 
     return true;
 }
