@@ -84,21 +84,18 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
         break;
     }
 
-    concptr insc = nullptr;
-    char buf[MAX_LINELEN];
-    int i;
-    for (i = 0; *str; i++) {
-        char c = *str++;
+    std::string inscription;
+    std::stringstream ss;
+    while (*str != '\0') {
+        auto c = *str++;
 #ifdef JP
         if (iskanji(c)) {
-            buf[i++] = c;
-            buf[i] = *str++;
+            ss << c << *str++;
             continue;
         }
 #endif
         if (c == '#') {
-            buf[i] = '\0';
-            insc = str;
+            inscription = str;
             break;
         }
 
@@ -106,19 +103,16 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
             c = (char)tolower(c);
         }
 
-        buf[i] = c;
+        ss << c;
     }
 
-    buf[i] = '\0';
-    if (!allow_default && *buf == 0) {
-        return false;
-    }
-    if (*buf == 0 && insc) {
+    const auto buf = ss.str();
+    if (buf.empty() && (!allow_default || !inscription.empty())) {
         return false;
     }
 
-    concptr prev_ptr, ptr;
-    ptr = prev_ptr = buf;
+    concptr prev_ptr = buf.data();
+    concptr ptr = buf.data();
     concptr old_ptr = nullptr;
     while (old_ptr != ptr) {
         old_ptr = ptr;
@@ -339,7 +333,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
 
     entry->name = ptr;
     entry->action = act;
-    entry->insc = insc != nullptr ? insc : "";
+    entry->insc = std::move(inscription);
 
     return true;
 }

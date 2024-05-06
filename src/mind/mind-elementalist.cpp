@@ -332,8 +332,8 @@ AttributeType get_element_type(int realm_idx, int n)
  */
 static AttributeType get_element_spells_type(PlayerType *player_ptr, int n)
 {
-    auto realm = element_types.at(i2enum<ElementRealmType>(player_ptr->element));
-    auto t = realm.type.at(n);
+    const auto &realm = element_types.at(i2enum<ElementRealmType>(player_ptr->element));
+    const auto t = realm.type.at(n);
     if (realm.extra.find(t) != realm.extra.end()) {
         if (randint0(100) < player_ptr->lev * 2) {
             return realm.extra.at(t);
