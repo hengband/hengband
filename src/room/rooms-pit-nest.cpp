@@ -31,8 +31,25 @@
 #include <utility>
 #include <vector>
 
+namespace {
 constexpr auto NUM_NEST_MON_TYPE = 64; //! nestの種別数.
 constexpr auto TRAPPED_PIT_MONSTER_PLACE_MAX = 69; //! 開門トラップのモンスター数.
+
+/*!
+ * @brief 生成するNestの情報テーブル
+ */
+const std::vector<nest_pit_type> nest_types = {
+    { _("クローン", "clone"), vault_aux_clone, vault_prep_clone, 5, 3 },
+    { _("ゼリー", "jelly"), vault_aux_jelly, nullptr, 5, 6 },
+    { _("シンボル(善)", "symbol good"), vault_aux_symbol_g, vault_prep_symbol, 25, 2 },
+    { _("シンボル(悪)", "symbol evil"), vault_aux_symbol_e, vault_prep_symbol, 25, 2 },
+    { _("ミミック", "mimic"), vault_aux_mimic, nullptr, 30, 4 },
+    { _("狂気", "lovecraftian"), vault_aux_cthulhu, nullptr, 70, 2 },
+    { _("犬小屋", "kennel"), vault_aux_kennel, nullptr, 45, 4 },
+    { _("動物園", "animal"), vault_aux_animal, nullptr, 35, 5 },
+    { _("教会", "chapel"), vault_aux_chapel_g, nullptr, 75, 4 },
+    { _("アンデッド", "undead"), vault_aux_undead, nullptr, 75, 5 },
+};
 
 /*!
  * @brief ダンジョン毎に指定されたピット配列を基準にランダムなpit/nestタイプを決める
@@ -40,7 +57,7 @@ constexpr auto TRAPPED_PIT_MONSTER_PLACE_MAX = 69; //! 開門トラップのモ�
  * @param allow_flag_mask 生成が許されるpit/nestのビット配列
  * @return 選択されたpit/nestのID、選択失敗した場合-1を返す。
  */
-static int pick_vault_type(FloorType *floor_ptr, const std::vector<nest_pit_type> &l_ptr, BIT_FLAGS16 allow_flag_mask)
+int pick_vault_type(FloorType *floor_ptr, const std::vector<nest_pit_type> &l_ptr, BIT_FLAGS16 allow_flag_mask)
 {
     ProbabilityTable<int> table;
     for (size_t i = 0; i < l_ptr.size(); i++) {
@@ -69,7 +86,7 @@ static int pick_vault_type(FloorType *floor_ptr, const std::vector<nest_pit_type
  * Hack -- Get the string describing subtype of pit/nest
  * Determined in prepare function (some pit/nest only)
  */
-static std::string pit_subtype_string(int type, bool nest)
+std::string pit_subtype_string(int type, bool nest)
 {
     if (nest) {
         switch (type) {
@@ -120,7 +137,7 @@ static std::string pit_subtype_string(int type, bool nest)
  *  @param b 比較対象参照ID2
  *  TODO: to sort.c
  */
-static bool ang_sort_comp_nest_mon_info(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
+bool ang_sort_comp_nest_mon_info(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
 {
     /* Unused */
     (void)player_ptr;
@@ -167,7 +184,7 @@ static bool ang_sort_comp_nest_mon_info(PlayerType *player_ptr, vptr u, vptr v, 
  * @param b スワップ対象参照ID2
  * TODO: to sort.c
  */
-static void ang_sort_swap_nest_mon_info(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
+void ang_sort_swap_nest_mon_info(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
 {
     /* Unused */
     (void)player_ptr;
@@ -180,29 +197,13 @@ static void ang_sort_swap_nest_mon_info(PlayerType *player_ptr, vptr u, vptr v, 
 }
 
 /*!
- * @brief 生成するNestの情報テーブル
- */
-const std::vector<nest_pit_type> nest_types = {
-    { _("クローン", "clone"), vault_aux_clone, vault_prep_clone, 5, 3 },
-    { _("ゼリー", "jelly"), vault_aux_jelly, nullptr, 5, 6 },
-    { _("シンボル(善)", "symbol good"), vault_aux_symbol_g, vault_prep_symbol, 25, 2 },
-    { _("シンボル(悪)", "symbol evil"), vault_aux_symbol_e, vault_prep_symbol, 25, 2 },
-    { _("ミミック", "mimic"), vault_aux_mimic, nullptr, 30, 4 },
-    { _("狂気", "lovecraftian"), vault_aux_cthulhu, nullptr, 70, 2 },
-    { _("犬小屋", "kennel"), vault_aux_kennel, nullptr, 45, 4 },
-    { _("動物園", "animal"), vault_aux_animal, nullptr, 35, 5 },
-    { _("教会", "chapel"), vault_aux_chapel_g, nullptr, 75, 4 },
-    { _("アンデッド", "undead"), vault_aux_undead, nullptr, 75, 5 },
-};
-
-/*!
  * @brief Nestに格納するモンスターを選択する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param align アライメントが中立に設定されたモンスター実体 (その他の中身は空)
  * @return モンスター種族ID (見つからなかったらnullopt)
  * @details Nestにはそのフロアの通常レベルより11高いモンスターを中心に選ぶ
  */
-static std::optional<MonsterRaceId> select_nest_monrace_id(PlayerType *player_ptr, MonsterEntity &align)
+std::optional<MonsterRaceId> select_nest_monrace_id(PlayerType *player_ptr, MonsterEntity &align)
 {
     for (auto attempts = 100; attempts > 0; attempts--) {
         const auto monrace_id = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 11, PM_NONE);
@@ -219,6 +220,7 @@ static std::optional<MonsterRaceId> select_nest_monrace_id(PlayerType *player_pt
     }
 
     return std::nullopt;
+}
 }
 
 /*!
