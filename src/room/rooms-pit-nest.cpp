@@ -40,15 +40,15 @@ constexpr auto TRAPPED_PIT_MONSTER_PLACE_MAX = 69; //! 開門トラップのモ�
  */
 const std::vector<nest_pit_type> nest_types = {
     { _("クローン", "clone"), vault_aux_clone, vault_prep_clone, 5, 3 },
-    { _("ゼリー", "jelly"), vault_aux_jelly, nullptr, 5, 6 },
+    { _("ゼリー", "jelly"), vault_aux_jelly, std::nullopt, 5, 6 },
     { _("シンボル(善)", "symbol good"), vault_aux_symbol_g, vault_prep_symbol, 25, 2 },
     { _("シンボル(悪)", "symbol evil"), vault_aux_symbol_e, vault_prep_symbol, 25, 2 },
-    { _("ミミック", "mimic"), vault_aux_mimic, nullptr, 30, 4 },
-    { _("狂気", "lovecraftian"), vault_aux_cthulhu, nullptr, 70, 2 },
-    { _("犬小屋", "kennel"), vault_aux_kennel, nullptr, 45, 4 },
-    { _("動物園", "animal"), vault_aux_animal, nullptr, 35, 5 },
-    { _("教会", "chapel"), vault_aux_chapel_g, nullptr, 75, 4 },
-    { _("アンデッド", "undead"), vault_aux_undead, nullptr, 75, 5 },
+    { _("ミミック", "mimic"), vault_aux_mimic, std::nullopt, 30, 4 },
+    { _("狂気", "lovecraftian"), vault_aux_cthulhu, std::nullopt, 70, 2 },
+    { _("犬小屋", "kennel"), vault_aux_kennel, std::nullopt, 45, 4 },
+    { _("動物園", "animal"), vault_aux_animal, std::nullopt, 35, 5 },
+    { _("教会", "chapel"), vault_aux_chapel_g, std::nullopt, 75, 4 },
+    { _("アンデッド", "undead"), vault_aux_undead, std::nullopt, 75, 5 },
 };
 
 /*!
@@ -252,10 +252,8 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     }
 
     const auto n_ptr = &nest_types[cur_nest_type];
-
-    /* Process a preparation function if necessary */
     if (n_ptr->prep_func) {
-        (*(n_ptr->prep_func))(player_ptr);
+        (*n_ptr->prep_func)(player_ptr);
     }
 
     get_mon_num_prep(player_ptr, n_ptr->hook_func, nullptr);
@@ -358,7 +356,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     }
 
     constexpr auto fmt_nest = _("モンスター部屋(nest)(%s%s)を生成します。", "Monster nest (%s%s)");
-    msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest, n_ptr->name, pit_subtype_string(cur_nest_type, true).data());
+    msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest, n_ptr->name.data(), pit_subtype_string(cur_nest_type, true).data());
 
     /* Place some monsters */
     for (auto y = yval - 2; y <= yval + 2; y++) {
@@ -401,16 +399,16 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
  * @brief 生成するPitの情報テーブル
  */
 const std::vector<nest_pit_type> pit_types = {
-    { _("オーク", "orc"), vault_aux_orc, nullptr, 5, 6 },
-    { _("トロル", "troll"), vault_aux_troll, nullptr, 20, 6 },
-    { _("巨人", "giant"), vault_aux_giant, nullptr, 50, 6 },
-    { _("狂気", "lovecraftian"), vault_aux_cthulhu, nullptr, 80, 2 },
+    { _("オーク", "orc"), vault_aux_orc, std::nullopt, 5, 6 },
+    { _("トロル", "troll"), vault_aux_troll, std::nullopt, 20, 6 },
+    { _("巨人", "giant"), vault_aux_giant, std::nullopt, 50, 6 },
+    { _("狂気", "lovecraftian"), vault_aux_cthulhu, std::nullopt, 80, 2 },
     { _("シンボル(善)", "symbol good"), vault_aux_symbol_g, vault_prep_symbol, 70, 1 },
     { _("シンボル(悪)", "symbol evil"), vault_aux_symbol_e, vault_prep_symbol, 70, 1 },
-    { _("教会", "chapel"), vault_aux_chapel_g, nullptr, 65, 2 },
+    { _("教会", "chapel"), vault_aux_chapel_g, std::nullopt, 65, 2 },
     { _("ドラゴン", "dragon"), vault_aux_dragon, vault_prep_dragon, 70, 6 },
-    { _("デーモン", "demon"), vault_aux_demon, nullptr, 80, 6 },
-    { _("ダークエルフ", "dark elf"), vault_aux_dark_elf, nullptr, 45, 4 },
+    { _("デーモン", "demon"), vault_aux_demon, std::nullopt, 80, 6 },
+    { _("ダークエルフ", "dark elf"), vault_aux_dark_elf, std::nullopt, 45, 4 },
 };
 
 /*!
@@ -595,14 +593,16 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
         }
     }
 
+    constexpr auto fmt_generate = _("モンスター部屋(pit)(%s%s)を生成します。", "Monster pit (%s%s)");
     msg_format_wizard(
-        player_ptr, CHEAT_DUNGEON, _("モンスター部屋(pit)(%s%s)を生成します。", "Monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, false).data());
+        player_ptr, CHEAT_DUNGEON, fmt_generate, n_ptr->name.data(), pit_subtype_string(cur_pit_type, false).data());
 
     /* Select the entries */
     for (auto i = 0; i < 8; i++) {
         /* Every other entry */
         whats[i] = whats[i * 2];
-        msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("Nest構成モンスター選択No.%d:%s", "Nest Monster Select No.%d:%s"), i, monraces_info[whats[i]].name.data());
+        constexpr auto fmt_pit_num = _("Pit構成モンスター選択No.%d:%s", "Pit Monster Select No.%d:%s");
+        msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_pit_num, i, monraces_info[whats[i]].name.data());
     }
 
     /* Top and bottom rows */
@@ -926,8 +926,8 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
         }
     }
 
-    msg_format_wizard(
-        player_ptr, CHEAT_DUNGEON, _("%s%sの罠ピットが生成されました。", "Trapped monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, false).data());
+    constexpr auto fmt = _("%s%sの罠ピットが生成されました。", "Trapped monster pit (%s%s)");
+    msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt, n_ptr->name.data(), pit_subtype_string(cur_pit_type, false).data());
 
     /* Select the entries */
     for (i = 0; i < 8; i++) {

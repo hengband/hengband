@@ -1,8 +1,8 @@
 #pragma once
 
-#include "system/angband.h"
-
-enum class MonsterRaceId : int16_t;
+#include <functional>
+#include <optional>
+#include <string>
 
 /*! nestのID定義 /  Nest types code */
 enum nest_type : int {
@@ -33,12 +33,13 @@ enum pit_type : int {
 };
 
 /*! pit/nest型情報の構造体定義 */
+enum class MonsterRaceId : short;
 class PlayerType;
 struct nest_pit_type {
-    concptr name; //<! 部屋名
-    bool (*hook_func)(PlayerType *player_ptr, MonsterRaceId r_idx); //<! モンスターフィルタ関数
-    void (*prep_func)(PlayerType *player_ptr); //<! 能力フィルタ関数
-    DEPTH level; //<! 相当階
+    std::string name; //<! 部屋名
+    std::function<bool(PlayerType *, MonsterRaceId)> hook_func; //<! モンスターフィルタ関数
+    std::optional<std::function<void(PlayerType *)>> prep_func; //<! 能力フィルタ関数
+    int level; //<! 相当階
     int chance; //!< 生成確率
 };
 
