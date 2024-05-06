@@ -58860,6 +58860,67 @@
         "ja": "それを倒すととてもいい経験になりそうだ。",
         "en": "To defeat it will give a lot of experiences."
       }
+    },
+    {
+      "id": 1361,
+      "name": {
+        "ja": "『メガ・フレイム・ドラゴン』",
+        "en": "Great Fire Dragon"
+      },
+      "symbol": { "character": "D", "color": "Red" },
+      "speed": 10,
+      "hit_point": "70d50",
+      "vision": 20,
+      "armor_class": 130,
+      "alertness": 5,
+      "level": 55,
+      "rarity": 4,
+      "exp": 20000,
+      "blows": [
+        { "method": "CLAW", "effect": "FIRE", "damage_dice": "10d20" },
+        { "method": "CLAW", "effect": "HURT", "damage_dice": "7d18" },
+        { "method": "BITE", "effect": "FIRE", "damage_dice": "30d7" },
+        { "method": "BITE", "effect": "HURT", "damage_dice": "15d10" }
+      ],
+      "flags": [
+        "UNIQUE",
+        "FORCE_MAXHP",
+        "DRAGON",
+        "EVIL",
+        "DROP_GOOD",
+        "DROP_CORPSE",
+        "DROP_SKELETON",
+        "DROP_1D2",
+        "DROP_2D2",
+        "DROP_3D2",
+        "DROP_4D2",
+        "BASH_DOOR",
+        "MOVE_BODY",
+        "RAND_50",
+        "SMART",
+        "CAN_FLY",
+        "SELF_LITE_1",
+        "ESCORT",
+        "ESCORTS",
+        "RIDING",
+        "AURA_FIRE",
+        "IM_FIRE",
+        "RES_LITE",
+        "RES_DARK",
+        "RES_NETH",
+        "RES_PLAS",
+        "NO_CONF",
+        "NO_SLEEP",
+        "WILD_VOLCANO"
+      ],
+      "skill": {
+        "probability": "1_IN_5",
+        "list": ["BR_FIRE", "BR_NETH", "BO_METEOR", "S_DRAGON", "HEAL"]
+      },
+      "flavor": {
+        "ja": "ドラゴン族の長にして何百年もの間魔王に仕えている幹部で、多数の巨大なドラゴンを従え、数の暴力で冒険者を圧倒する。「目の前に広がるのは、まるで煉獄のような戦場だ。数百、数千ものドラゴンが火山の上空を旋回している。その中で最も目を引くのは間違いなく、体長数百メートルに及び、全身が烈火に包まれた一体だ。そいつこそがメガフレイムドラゴン、ドラゴン族の長にして、魔王が最も信頼する幹部なのだ。」(Manjuu、Yostar、Yongshi『アズールレーン』、「ゼロから頑張る魔王討伐」、25章「メガフレイムドラゴン討伐！」)",
+        "en": "It is the leader of the dragons and the Demon King's officer for hundreds of years.  It defeats you by overwhelming numbers: with its many huge dragon-escorts.  \"Before us lies a battleground like something from hell itself.  Centuries or even millennia-old dragons circle the skies above the volcano.  The most eye-catching of them all is a titan of a monster, its body reaching hundreds of meters in length and entirely bathed in hellfire.  That is the Great Fire Dragon, the leader of the dragons and the Demon King's most trusted officer.\"  (Fighting the Great Fire Dragon, 'From Zero to Hero', \"Azur Lane\" by Manjuu, Yostar and Yongshi, ch.25)"
+      }
     }
   ]
 }
