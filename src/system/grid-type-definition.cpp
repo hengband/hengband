@@ -192,3 +192,13 @@ void Grid::place_closed_curtain()
     this->feat = feat_door[DOOR_CURTAIN].closed;
     this->info &= ~(CAVE_MASK);
 }
+
+/*!
+ * @brief グリッドに状態フラグを付与する
+ * @param grid_info フラグ群
+ * @todo intをenumに変更する
+ */
+void Grid::add_info(int grid_info)
+{
+    this->info |= grid_info;
+}

@@ -99,6 +99,7 @@ public:
     TerrainType &get_terrain_mimic_raw();
     const TerrainType &get_terrain_mimic_raw() const;
     void place_closed_curtain();
+    void add_info(int grid_info);
 
 private:
     flow_type get_grid_flow_type(const MonsterRaceInfo *r_ptr) const;
