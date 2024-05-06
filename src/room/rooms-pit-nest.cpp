@@ -28,6 +28,9 @@
 #include <optional>
 #include <vector>
 
+constexpr auto NUM_NEST_MON_TYPE = 64; //! nestの種別数.
+constexpr auto TRAPPED_PIT_MONSTER_PLACE_MAX = 69; //! 開門トラップのモンスター数.
+
 /*!
  * @brief ダンジョン毎に指定されたピット配列を基準にランダムなpit/nestタイプを決める
  * @param l_ptr 選択されたpit/nest情報を返す参照ポインタ
