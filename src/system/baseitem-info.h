@@ -141,6 +141,7 @@ public:
     bool tried{}; /*!< ベースアイテムを未鑑定のまま試したことがあるか /  The player has "tried" one of the items */
 
     void mark_as_tried();
+    void mark_as_aware();
 };
 
 extern std::vector<BaseitemInfo> baseitems_info;

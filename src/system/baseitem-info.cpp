@@ -666,6 +666,11 @@ void BaseitemInfo::mark_as_tried()
     this->tried = true;
 }
 
+void BaseitemInfo::mark_as_aware()
+{
+    this->aware = true;
+}
+
 std::vector<BaseitemInfo> baseitems_info;
 
 BaseitemList BaseitemList::instance{};
