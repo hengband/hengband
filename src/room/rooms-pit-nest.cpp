@@ -293,25 +293,21 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     /* Place the floor area */
     for (auto y = y1 - 1; y <= y2 + 1; y++) {
         for (auto x = x1 - 1; x <= x2 + 1; x++) {
-            auto *g_ptr = &floor.grid_array[y][x];
-            place_grid(player_ptr, g_ptr, GB_FLOOR);
-            g_ptr->info |= (CAVE_ROOM);
+            auto &grid = floor.get_grid({ y, x });
+            place_grid(player_ptr, &grid, GB_FLOOR);
+            grid.info |= (CAVE_ROOM);
         }
     }
 
     /* Place the outer walls */
     for (auto y = y1 - 1; y <= y2 + 1; y++) {
-        auto *g_ptr = &floor.grid_array[y][x1 - 1];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
-        g_ptr = &floor.grid_array[y][x2 + 1];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
+        place_grid(player_ptr, &floor.get_grid({ y, x1 - 1 }), GB_OUTER);
+        place_grid(player_ptr, &floor.get_grid({ y, x2 + 1 }), GB_OUTER);
     }
 
     for (auto x = x1 - 1; x <= x2 + 1; x++) {
-        auto *g_ptr = &floor.grid_array[y1 - 1][x];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
-        g_ptr = &floor.grid_array[y2 + 1][x];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
+        place_grid(player_ptr, &floor.get_grid({ y1 - 1, x }), GB_OUTER);
+        place_grid(player_ptr, &floor.get_grid({ y2 + 1, x }), GB_OUTER);
     }
 
     /* Advance to the center room */
@@ -322,22 +318,18 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     /* The inner walls */
     for (auto y = y1 - 1; y <= y2 + 1; y++) {
-        auto *g_ptr = &floor.grid_array[y][x1 - 1];
-        place_grid(player_ptr, g_ptr, GB_INNER);
-        g_ptr = &floor.grid_array[y][x2 + 1];
-        place_grid(player_ptr, g_ptr, GB_INNER);
+        place_grid(player_ptr, &floor.get_grid({ y, x1 - 1 }), GB_INNER);
+        place_grid(player_ptr, &floor.get_grid({ y, x2 + 1 }), GB_INNER);
     }
 
     for (auto x = x1 - 1; x <= x2 + 1; x++) {
-        auto *g_ptr = &floor.grid_array[y1 - 1][x];
-        place_grid(player_ptr, g_ptr, GB_INNER);
-        g_ptr = &floor.grid_array[y2 + 1][x];
-        place_grid(player_ptr, g_ptr, GB_INNER);
+        place_grid(player_ptr, &floor.get_grid({ y1 - 1, x }), GB_INNER);
+        place_grid(player_ptr, &floor.get_grid({ y2 + 1, x }), GB_INNER);
     }
 
     for (auto y = y1; y <= y2; y++) {
         for (auto x = x1; x <= x2; x++) {
-            floor.grid_array[y][x].add_info(CAVE_ICKY);
+            floor.get_grid({ y, x }).add_info(CAVE_ICKY);
         }
     }
 
@@ -357,8 +349,8 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
         break;
     }
 
-    msg_format_wizard(
-        player_ptr, CHEAT_DUNGEON, _("モンスター部屋(nest)(%s%s)を生成します。", "Monster nest (%s%s)"), n_ptr->name, pit_subtype_string(cur_nest_type, true).data());
+    constexpr auto fmt_nest = _("モンスター部屋(nest)(%s%s)を生成します。", "Monster nest (%s%s)");
+    msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest, n_ptr->name, pit_subtype_string(cur_nest_type, true).data());
 
     /* Place some monsters */
     for (auto y = yval - 2; y <= yval + 2; y++) {
@@ -391,8 +383,8 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
                 }
             }
 
-            constexpr auto fmt = _("Nest構成モンスターNo.%d: %s", "Nest monster No.%d: %s");
-            msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt, i, monraces_info[nest_mon_info[i].r_idx].name.data());
+            constexpr auto fmt_nest_num = _("Nest構成モンスターNo.%d: %s", "Nest monster No.%d: %s");
+            msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest_num, i, monraces_info[nest_mon_info[i].r_idx].name.data());
         }
     }
 
