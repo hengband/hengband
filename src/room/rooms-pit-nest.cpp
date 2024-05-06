@@ -26,6 +26,7 @@
 #include "util/sort.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
+#include <array>
 #include <optional>
 #include <utility>
 #include <vector>
@@ -39,11 +40,11 @@ constexpr auto TRAPPED_PIT_MONSTER_PLACE_MAX = 69; //! 開門トラップのモ�
  * @param allow_flag_mask 生成が許されるpit/nestのビット配列
  * @return 選択されたpit/nestのID、選択失敗した場合-1を返す。
  */
-static int pick_vault_type(FloorType *floor_ptr, std::vector<nest_pit_type> &l_ptr, BIT_FLAGS16 allow_flag_mask)
+static int pick_vault_type(FloorType *floor_ptr, const std::vector<nest_pit_type> &l_ptr, BIT_FLAGS16 allow_flag_mask)
 {
     ProbabilityTable<int> table;
     for (size_t i = 0; i < l_ptr.size(); i++) {
-        nest_pit_type *n_ptr = &l_ptr.at(i);
+        const nest_pit_type *n_ptr = &l_ptr.at(i);
 
         if (n_ptr->level > floor_ptr->dun_level) {
             continue;
@@ -181,7 +182,7 @@ static void ang_sort_swap_nest_mon_info(PlayerType *player_ptr, vptr u, vptr v, 
 /*!
  * @brief 生成するNestの情報テーブル
  */
-std::vector<nest_pit_type> nest_types = {
+const std::vector<nest_pit_type> nest_types = {
     { _("クローン", "clone"), vault_aux_clone, vault_prep_clone, 5, 3 },
     { _("ゼリー", "jelly"), vault_aux_jelly, nullptr, 5, 6 },
     { _("シンボル(善)", "symbol good"), vault_aux_symbol_g, vault_prep_symbol, 25, 2 },
@@ -234,8 +235,8 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     align.sub_align = SUB_ALIGN_NEUTRAL;
 
     /* Pick some monster types */
-    nest_mon_info_type nest_mon_info[NUM_NEST_MON_TYPE]{};
-    for (auto i = 0; i < NUM_NEST_MON_TYPE; i++) {
+    std::array<nest_mon_info_type, NUM_NEST_MON_TYPE> nest_mon_info_list{};
+    for (auto &nest_mon_info : nest_mon_info_list) {
         auto select_r_idx = [player_ptr, floor, &align]() -> std::optional<MonsterRaceId> {
             for (auto attempts = 100; attempts > 0; attempts--) {
                 /* Get a (hard) monster type */
@@ -274,8 +275,8 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
             align.sub_align |= SUB_ALIGN_GOOD;
         }
 
-        nest_mon_info[i].r_idx = *r_idx;
-        nest_mon_info[i].used = false;
+        nest_mon_info.r_idx = *r_idx;
+        nest_mon_info.used = false;
     }
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
@@ -356,35 +357,34 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     /* Place some monsters */
     for (auto y = yval - 2; y <= yval + 2; y++) {
         for (auto x = xval - 9; x <= xval + 9; x++) {
-            auto &info = rand_choice(nest_mon_info);
+            auto &nest_mon_info = rand_choice(nest_mon_info_list);
 
             /* Place that "random" monster (no groups) */
-            (void)place_specific_monster(player_ptr, 0, y, x, info.r_idx, 0L);
-
-            info.used = true;
+            (void)place_specific_monster(player_ptr, 0, y, x, nest_mon_info.r_idx, 0L);
+            nest_mon_info.used = true;
         }
     }
 
     if (cheat_room) {
-        ang_sort(player_ptr, nest_mon_info, nullptr, NUM_NEST_MON_TYPE, ang_sort_comp_nest_mon_info, ang_sort_swap_nest_mon_info);
+        ang_sort(player_ptr, nest_mon_info_list.data(), nullptr, NUM_NEST_MON_TYPE, ang_sort_comp_nest_mon_info, ang_sort_swap_nest_mon_info);
 
         /* Dump the entries (prevent multi-printing) */
         for (auto i = 0; i < NUM_NEST_MON_TYPE; i++) {
-            if (!nest_mon_info[i].used) {
+            if (!nest_mon_info_list[i].used) {
                 break;
             }
             for (; i < NUM_NEST_MON_TYPE - 1; i++) {
-                if (nest_mon_info[i].r_idx != nest_mon_info[i + 1].r_idx) {
+                if (nest_mon_info_list[i].r_idx != nest_mon_info_list[i + 1].r_idx) {
                     break;
                 }
 
-                if (!nest_mon_info[i + 1].used) {
+                if (!nest_mon_info_list[i + 1].used) {
                     break;
                 }
             }
 
             constexpr auto fmt_nest_num = _("Nest構成モンスターNo.%d: %s", "Nest monster No.%d: %s");
-            msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest_num, i, monraces_info[nest_mon_info[i].r_idx].name.data());
+            msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest_num, i, monraces_info[nest_mon_info_list[i].r_idx].name.data());
         }
     }
 
@@ -394,7 +394,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
 /*!
  * @brief 生成するPitの情報テーブル
  */
-std::vector<nest_pit_type> pit_types = {
+const std::vector<nest_pit_type> pit_types = {
     { _("オーク", "orc"), vault_aux_orc, nullptr, 5, 6 },
     { _("トロル", "troll"), vault_aux_troll, nullptr, 20, 6 },
     { _("巨人", "giant"), vault_aux_giant, nullptr, 50, 6 },
@@ -459,49 +459,42 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
     if (n_ptr->prep_func) {
         (*(n_ptr->prep_func))(player_ptr);
     }
-    get_mon_num_prep(player_ptr, n_ptr->hook_func, nullptr);
 
+    get_mon_num_prep(player_ptr, n_ptr->hook_func, nullptr);
     MonsterEntity align;
     align.sub_align = SUB_ALIGN_NEUTRAL;
 
     /* Pick some monster types */
-    std::vector<MonsterRaceId> whats;
-    for (auto i = 0; i < 16; i++) {
+    std::array<MonsterRaceId, 16> whats{};
+    for (auto &what : whats) {
         auto r_idx = MonsterRace::empty_id();
-        int attempts = 100;
+        auto attempts = 100;
         MonsterRaceInfo *r_ptr = nullptr;
-
         while (attempts--) {
-            /* Get a (hard) monster type */
             r_idx = get_mon_num(player_ptr, 0, floor.dun_level + 11, PM_NONE);
             r_ptr = &monraces_info[r_idx];
-
-            /* Decline incorrect alignment */
             if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) {
                 continue;
             }
 
-            /* Accept this monster */
             break;
         }
 
-        /* Notice failure */
-        if (!MonsterRace(r_idx).is_valid() || !attempts) {
+        if (!MonsterRace(r_idx).is_valid() || (attempts == 0)) {
             return false;
         }
 
-        /* Note the alignment */
         if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
             align.sub_align |= SUB_ALIGN_EVIL;
         }
+
         if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
             align.sub_align |= SUB_ALIGN_GOOD;
         }
 
-        whats.push_back(r_idx);
+        what = r_idx;
     }
 
-    /* Find and reserve some space in the dungeon.  Get center of room. */
     int yval;
     int xval;
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25)) {
@@ -759,7 +752,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     int cur_pit_type = pick_vault_type(floor_ptr, pit_types, floor_ptr->get_dungeon_definition().pit);
-    nest_pit_type *n_ptr;
+    const nest_pit_type *n_ptr;
 
     /* Only in Angband */
     if (floor_ptr->dungeon_idx != DUNGEON_ANGBAND) {
