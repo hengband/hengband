@@ -161,23 +161,23 @@ static void describe_effect_source(PlayerType *player_ptr, EffectPlayerType *ep_
         ep_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[ep_ptr->src_idx];
         ep_ptr->rlev = ep_ptr->m_ptr->get_monrace().level >= 1 ? ep_ptr->m_ptr->get_monrace().level : 1;
         angband_strcpy(ep_ptr->m_name, monster_desc(player_ptr, ep_ptr->m_ptr, 0), sizeof(ep_ptr->m_name));
-        angband_strcpy(ep_ptr->killer, src_name, sizeof(ep_ptr->killer));
+        ep_ptr->killer = src_name;
         return;
     }
 
     switch (ep_ptr->src_idx) {
     case PROJECT_WHO_UNCTRL_POWER:
-        strcpy(ep_ptr->killer, _("制御できない力の氾流", "uncontrollable power storm"));
+        ep_ptr->killer = _("制御できない力の氾流", "uncontrollable power storm");
         break;
     case PROJECT_WHO_GLASS_SHARDS:
-        strcpy(ep_ptr->killer, _("ガラスの破片", "shards of glass"));
+        ep_ptr->killer = _("ガラスの破片", "shards of glass");
         break;
     default:
-        strcpy(ep_ptr->killer, _("罠", "a trap"));
+        ep_ptr->killer = _("罠", "a trap");
         break;
     }
 
-    strcpy(ep_ptr->m_name, ep_ptr->killer);
+    strcpy(ep_ptr->m_name, ep_ptr->killer.data());
 }
 
 /*!

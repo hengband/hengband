@@ -9,7 +9,7 @@ class EffectPlayerType {
 public:
     DEPTH rlev; // モンスターのレベル (但し0のモンスターは1になる).
     MonsterEntity *m_ptr;
-    char killer[MAX_MONSTER_NAME];
+    std::string killer;
     GAME_TEXT m_name[MAX_NLEN];
     int get_damage;
 
