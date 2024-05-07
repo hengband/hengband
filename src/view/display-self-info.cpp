@@ -16,30 +16,26 @@
 void display_life_rating(PlayerType *player_ptr, self_info_type *self_ptr)
 {
     player_ptr->knowledge |= KNOW_STAT | KNOW_HPRATE;
-    angband_strcpy(self_ptr->plev_buf, "", sizeof(self_ptr->plev_buf));
-    int percent = (int)(((long)player_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) / (2 * player_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (player_ptr->hitdie + 1))));
-    strnfmt(self_ptr->plev_buf, sizeof(self_ptr->plev_buf), _("現在の体力ランク : %d/100", "Your current Life Rating is %d/100."), percent);
-    angband_strcpy(self_ptr->buf[0], self_ptr->plev_buf, sizeof(self_ptr->buf[0]));
-    self_ptr->info[self_ptr->line++] = self_ptr->buf[0];
-    self_ptr->info[self_ptr->line++] = "";
+    const int percent = (int)(((long)player_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) / (2 * player_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (player_ptr->hitdie + 1))));
+    self_ptr->info_list.push_back(format(_("現在の体力ランク : %d/100", "Your current Life Rating is %d/100."), percent));
+    self_ptr->info_list.emplace_back("");
 }
 
 void display_max_base_status(PlayerType *player_ptr, self_info_type *self_ptr)
 {
-    self_ptr->info[self_ptr->line++] = _("能力の最大値", "Limits of maximum stats");
+    self_ptr->info_list.emplace_back(_("能力の最大値", "Limits of maximum stats"));
     for (int v_nr = 0; v_nr < A_MAX; v_nr++) {
-        strnfmt(self_ptr->s_string[v_nr], sizeof(self_ptr->s_string[v_nr]), "%s 18/%d", stat_names[v_nr], player_ptr->stat_max_max[v_nr] - 18);
-        self_ptr->info[self_ptr->line++] = self_ptr->s_string[v_nr];
+        auto stat = format("%s 18/%d", stat_names[v_nr], player_ptr->stat_max_max[v_nr] - 18);
+        self_ptr->info_list.push_back(std::move(stat));
     }
 }
 
 void display_virtue(PlayerType *player_ptr, self_info_type *self_ptr)
 {
-    self_ptr->info[self_ptr->line++] = "";
-    std::string alg = PlayerAlignment(player_ptr).get_alignment_description(true);
-    strnfmt(self_ptr->plev_buf, sizeof(self_ptr->plev_buf), _("現在の属性 : %s", "Your alignment : %s"), alg.data());
-    angband_strcpy(self_ptr->buf[1], self_ptr->plev_buf, sizeof(self_ptr->buf[1]));
-    self_ptr->info[self_ptr->line++] = self_ptr->buf[1];
+    self_ptr->info_list.emplace_back("");
+    const std::string alg = PlayerAlignment(player_ptr).get_alignment_description(true);
+    self_ptr->info_list.push_back(format(_("現在の属性 : %s", "Your alignment : %s"), alg.data()));
+
     for (int v_nr = 0; v_nr < 8; v_nr++) {
         const auto vir_name = virtue_names.at(player_ptr->vir_types[v_nr]).data();
         std::string vir_desc;
@@ -72,8 +68,7 @@ void display_virtue(PlayerType *player_ptr, self_info_type *self_ptr)
             vir_desc = format(_("[%s]の具現者 (%d)", "You are the living embodiment of %s (%d)."), vir_name, tester);
         }
 
-        angband_strcpy(self_ptr->v_string[v_nr], vir_desc, sizeof(self_ptr->v_string[v_nr]));
-        self_ptr->info[self_ptr->line++] = self_ptr->v_string[v_nr];
+        self_ptr->info_list.push_back(std::move(vir_desc));
     }
 }
 
@@ -83,21 +78,23 @@ void display_mimic_race_ability(PlayerType *player_ptr, self_info_type *self_ptr
     case MimicKindType::NONE:
         return;
     case MimicKindType::DEMON:
-    case MimicKindType::DEMON_LORD:
-        strnfmt(self_ptr->plev_buf, sizeof(self_ptr->plev_buf), _("あなたは %d ダメージの地獄か火炎のブレスを吐くことができる。(%d MP)", "You can breathe nether, dam. %d (cost %d)."),
-            3 * player_ptr->lev, 10 + player_ptr->lev / 3);
-
-        self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
+    case MimicKindType::DEMON_LORD: {
+        constexpr auto fmt = _("あなたは %d ダメージの地獄か火炎のブレスを吐くことができる。(%d MP)", "You can breathe nether, dam. %d (cost %d).");
+        const auto dam = 3 * player_ptr->lev;
+        const auto cost = 10 + player_ptr->lev / 3;
+        self_ptr->info_list.push_back(format(fmt, dam, cost));
         return;
+    }
     case MimicKindType::VAMPIRE:
-        if (player_ptr->lev <= 1) {
-            break;
+        if (player_ptr->lev >= 2) {
+            constexpr auto fmt = _("あなたは敵から %d-%d HP の生命力を吸収できる。(%d MP)", "You can steal life from a foe, dam. %d-%d (cost %d).");
+            const auto lev = player_ptr->lev;
+            const auto min_dam = lev + std::max(1, lev / 10);
+            const auto max_dam = lev + lev * std::max(1, lev / 10);
+            const auto cost = 1 + lev / 3;
+            self_ptr->info_list.push_back(format(fmt, min_dam, max_dam, cost));
         }
 
-        strnfmt(self_ptr->plev_buf, sizeof(self_ptr->plev_buf), _("あなたは敵から %d-%d HP の生命力を吸収できる。(%d MP)", "You can steal life from a foe, dam. %d-%d (cost %d)."),
-            player_ptr->lev + std::max(1, player_ptr->lev / 10), player_ptr->lev + player_ptr->lev * std::max(1, player_ptr->lev / 10),
-            1 + (player_ptr->lev / 3));
-        self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
         return;
     }
 }
@@ -111,11 +108,11 @@ void display_self_info(self_info_type *self_ptr)
 
     prt(_("        あなたの状態:", "     Your Attributes:"), 1, 15);
     int k = 2;
-    for (int j = 0; j < self_ptr->line; j++) {
-        prt(self_ptr->info[j], k++, 15);
+    for (auto j = 0; j < std::ssize(self_ptr->info_list); j++) {
+        prt(self_ptr->info_list[j], k++, 15);
 
         /* Every 20 entries (lines 2 to 21), start over */
-        if ((k != 22) || (j + 1 >= self_ptr->line)) {
+        if ((k != 22) || (j + 1 >= std::ssize(self_ptr->info_list))) {
             continue;
         }
 
