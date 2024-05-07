@@ -160,24 +160,24 @@ static void describe_effect_source(PlayerType *player_ptr, EffectPlayerType *ep_
     if (is_monster(ep_ptr->src_idx)) {
         ep_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[ep_ptr->src_idx];
         ep_ptr->rlev = ep_ptr->m_ptr->get_monrace().level >= 1 ? ep_ptr->m_ptr->get_monrace().level : 1;
-        angband_strcpy(ep_ptr->m_name, monster_desc(player_ptr, ep_ptr->m_ptr, 0), sizeof(ep_ptr->m_name));
-        angband_strcpy(ep_ptr->killer, src_name, sizeof(ep_ptr->killer));
+        ep_ptr->m_name = monster_desc(player_ptr, ep_ptr->m_ptr, 0);
+        ep_ptr->killer = src_name;
         return;
     }
 
     switch (ep_ptr->src_idx) {
     case PROJECT_WHO_UNCTRL_POWER:
-        strcpy(ep_ptr->killer, _("制御できない力の氾流", "uncontrollable power storm"));
+        ep_ptr->killer = _("制御できない力の氾流", "uncontrollable power storm");
         break;
     case PROJECT_WHO_GLASS_SHARDS:
-        strcpy(ep_ptr->killer, _("ガラスの破片", "shards of glass"));
+        ep_ptr->killer = _("ガラスの破片", "shards of glass");
         break;
     default:
-        strcpy(ep_ptr->killer, _("罠", "a trap"));
+        ep_ptr->killer = _("罠", "a trap");
         break;
     }
 
-    strcpy(ep_ptr->m_name, ep_ptr->killer);
+    ep_ptr->m_name = ep_ptr->killer;
 }
 
 /*!
@@ -214,7 +214,7 @@ bool affect_player(MONSTER_IDX src_idx, PlayerType *player_ptr, concptr src_name
     SpellHex(player_ptr).store_vengeful_damage(ep_ptr->get_damage);
     if ((player_ptr->tim_eyeeye || SpellHex(player_ptr).is_spelling_specific(HEX_EYE_FOR_EYE)) && (ep_ptr->get_damage > 0) && !player_ptr->is_dead && is_monster(ep_ptr->src_idx)) {
         const auto m_name_self = monster_desc(player_ptr, ep_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
-        msg_print(_(format("攻撃が%s自身を傷つけた！", ep_ptr->m_name), format("The attack of %s has wounded %s!", ep_ptr->m_name, m_name_self.data())));
+        msg_print(_(format("攻撃が%s自身を傷つけた！", ep_ptr->m_name.data()), format("The attack of %s has wounded %s!", ep_ptr->m_name.data(), m_name_self.data())));
         (*project)(player_ptr, 0, 0, ep_ptr->m_ptr->fy, ep_ptr->m_ptr->fx, ep_ptr->get_damage, AttributeType::MISSILE, PROJECT_KILL, std::nullopt);
         if (player_ptr->tim_eyeeye) {
             set_tim_eyeeye(player_ptr, player_ptr->tim_eyeeye - 5, true);
