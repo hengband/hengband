@@ -4,6 +4,7 @@
  */
 
 #include "main/info-initializer.h"
+#include "external-lib/include-json.h"
 #include "floor/wild.h"
 #include "info-reader/artifact-reader.h"
 #include "info-reader/baseitem-reader.h"
@@ -137,6 +138,51 @@ static errr init_info(std::string_view filename, angband_header &head, InfoType 
 }
 
 /*!
+ * @brief 各種設定データをlib/edit/.jsoncから読み込み
+ * Load data from lib/edit/.jsonc
+ * @param filename ファイル名(拡張子jsonc)
+ * @param head 処理に用いるヘッダ構造体
+ * @param info データ保管先の構造体ポインタ
+ * @return エラーコード
+ * @note
+ * Note that we let each entry have a unique "name" and "text" string,
+ * even if the string happens to be empty (everyone has a unique '\0').
+ */
+template <typename InfoType>
+static errr init_json(std::string_view filename, std::string_view keyname, angband_header &head, InfoType &info, JSONParser parser)
+{
+    const auto &path = path_build(ANGBAND_DIR_EDIT, filename);
+    std::ifstream ifs(path);
+
+    if (!ifs) {
+        quit_fmt(_("'%s'ファイルをオープンできません。", "Cannot open '%s' file."), filename.data());
+    }
+
+    std::istreambuf_iterator<char> ifs_iter(ifs);
+    std::istreambuf_iterator<char> ifs_end;
+    auto json_object = nlohmann::json::parse(ifs_iter, ifs_end, nullptr, true, true);
+
+    constexpr auto info_is_vector = is_vector_v<InfoType>;
+    if constexpr (info_is_vector) {
+        using value_type = typename InfoType::value_type;
+        info.assign(head.info_num, value_type{});
+    }
+
+    for (auto &element : json_object[keyname]) {
+        const auto error_code = parser(element, &head);
+        if (error_code != PARSE_ERROR_NONE) {
+            quit_fmt(_("'%s'ファイルにエラー", "Error in '%s' file."), filename.data());
+        }
+    }
+
+    util::SHA256 sha256;
+    sha256.update(json_object.dump());
+    head.digest = sha256.digest();
+
+    return PARSE_ERROR_NONE;
+}
+
+/*!
  * @brief 固定アーティファクト情報読み込みのメインルーチン
  * @return エラーコード
  */
@@ -213,10 +259,10 @@ errr init_terrains_info()
  * @brief モンスター種族情報読み込みのメインルーチン
  * @return エラーコード
  */
-errr init_monster_race_definitions()
+errr init_monrace_definitions()
 {
     init_header(&monraces_header);
-    return init_info("MonsterRaceDefinitions.txt", monraces_header, monraces_info, parse_monraces_info);
+    return init_json("MonraceDefinitions.jsonc", "monsters", monraces_header, monraces_info, parse_monraces_info);
 }
 
 /*!

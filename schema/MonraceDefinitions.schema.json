@@ -1,0 +1,670 @@
+{
+    "type": "object",
+    "additionalProperties": false,
+    "description": "MonsterRaceの定義",
+    "properties": {
+        "versions": {
+            "type": "number",
+            "description": "Version情報"
+        },
+        "monsters": {
+            "type": "array",
+            "description": "Monster定義を格納する配列",
+            "items": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "name",
+                    "symbol",
+                    "speed",
+                    "hit_point",
+                    "vision",
+                    "armor_class",
+                    "alertness",
+                    "level",
+                    "rarity",
+                    "exp"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9999
+                    },
+                    "name": {
+                        "type": "object",
+                        "description": "モンスター名",
+                        "additionalProperties": false,
+                        "required": [
+                            "ja",
+                            "en"
+                        ],
+                        "properties": {
+                            "ja": {
+                                "type": "string",
+                                "description": "日本語モンスター名"
+                            },
+                            "en": {
+                                "type": "string",
+                                "description": "English Monster Name"
+                            }
+                        }
+                    },
+                    "symbol": {
+                        "type": "object",
+                        "description": "表示される文字と色",
+                        "additionalProperties": false,
+                        "required": [
+                            "character",
+                            "color"
+                        ],
+                        "properties": {
+                            "character": {
+                                "type": "string",
+                                "description": "表示される文字",
+                                "pattern": "[a-zA-Z!\/.!?#$%&()@,|*'`<>+{}=~\\[\\]]|\\\\"
+                            },
+                            "color": {
+                                "type": "string",
+                                "description": "表示される色",
+                                "enum": [
+                                    "Black",
+                                    "White",
+                                    "Gray",
+                                    "Orange",
+                                    "Red",
+                                    "Green",
+                                    "Blue",
+                                    "Brown",
+                                    "Dark Gray",
+                                    "Light Gray",
+                                    "Violet",
+                                    "Yellow",
+                                    "Light Red",
+                                    "Light Green",
+                                    "Light Blue",
+                                    "Light Brown"
+                                ]
+                            }
+                        }
+                    },
+                    "speed": {
+                        "type": "integer",
+                        "description": "加速。0を基準として-50～99",
+                        "minimum": -50,
+                        "maximum": 99
+                    },
+                    "hit_point": {
+                        "type": "string",
+                        "description": "体力。XdY形式",
+                        "pattern": "[1-9][0-9]*d[1-9][0-9]*"
+                    },
+                    "vision": {
+                        "type": "integer",
+                        "description": "感知範囲。1マスあたり1",
+                        "minimum": 0,
+                        "maximum": 999
+                    },
+                    "armor_class": {
+                        "type": "integer",
+                        "description": "物理防御力",
+                        "minimum": 0,
+                        "maximum": 10000
+                    },
+                    "alertness": {
+                        "type": "integer",
+                        "description": "警戒度。高いほど@を察知しやすい",
+                        "minimum": 0,
+                        "maximum": 255
+                    },
+                    "level": {
+                        "type": "integer",
+                        "description": "出現階層",
+                        "minimum": 0,
+                        "maximum": 128
+                    },
+                    "rarity": {
+                        "type": "integer",
+                        "description": "出現頻度。高いほど出にくい",
+                        "minimum": 0,
+                        "maximum": 255
+                    },
+                    "exp": {
+                        "type": "integer",
+                        "description": "獲得経験値",
+                        "minimum": 0,
+                        "maximum": 9999999
+                    },
+                    "evolve": {
+                        "type": "object",
+                        "description": "進化情報",
+                        "additionalProperties": false,
+                        "required": [
+                            "need_exp",
+                            "to"
+                        ],
+                        "properties": {
+                            "need_exp": {
+                                "type": "integer",
+                                "description": "進化に必要な経験値",
+                                "minimum": 0,
+                                "maximum": 9999999
+                            },
+                            "to": {
+                                "type": "integer",
+                                "description": "進化先モンスターID",
+                                "minimum": 1,
+                                "maximum": 9999
+                            }
+                        }
+                    },
+                    "sex": {
+                        "type": "string",
+                        "description": "性別",
+                        "enum": [
+                            "MALE",
+                            "FEMALE"
+                        ]
+                    },
+                    "odds_correction_ratio": {
+                        "type": "integer",
+                        "description": "闘技場オッズ補正値",
+                        "minimum": 1,
+                        "maximum": 9999
+                    },
+                    "start_hp_percentage": {
+                        "type": "integer",
+                        "description": "出現時体力。1-99%",
+                        "minimum": 1,
+                        "maximum": 99
+                    },
+                    "artifacts": {
+                        "type": "array",
+                        "description": "固定アーティファクトドロップリスト",
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                                "drop_artifact_id",
+                                "drop_probability"
+                            ],
+                            "properties": {
+                                "drop_artifact_id": {
+                                    "type": "integer",
+                                    "description": "ドロップアーティファクトID",
+                                    "minimum": 1,
+                                    "maximum": 999
+                                },
+                                "drop_probability": {
+                                    "type": "integer",
+                                    "description": "ドロップ率 1-100%",
+                                    "minimum": 1,
+                                    "maximum": 100
+                                }
+                            }
+                        }
+                    },
+                    "escorts": {
+                        "type": "array",
+                        "description": "護衛リスト",
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                                "escorts_id",
+                                "escort_num"
+                            ],
+                            "properties": {
+                                "escorts_id": {
+                                    "type": "integer",
+                                    "description": "護衛モンスターID",
+                                    "minimum": 1,
+                                    "maximum": 9999
+                                },
+                                "escort_num": {
+                                    "type": "string",
+                                    "description": "護衛生成数 XdY形式",
+                                    "pattern": "[1-9][0-9]*d[1-9][0-9]*"
+                                }
+                            }
+                        }
+                    },
+                    "blows": {
+                        "type": "array",
+                        "description": "物理攻撃",
+                        "items": {
+                            "type": "object",
+                            "maxItems": 4,
+                            "additionalProperties": false,
+                            "required": [
+                                "method",
+                                "effect"
+                            ],
+                            "properties": {
+                                "method": {
+                                    "type": "string",
+                                    "description": "打撃手段",
+                                    "enum": [
+                                        "HIT",
+                                        "TOUCH",
+                                        "PUNCH",
+                                        "KICK",
+                                        "CLAW",
+                                        "BITE",
+                                        "STING",
+                                        "SLASH",
+                                        "BUTT",
+                                        "CRUSH",
+                                        "ENGULF",
+                                        "CHARGE",
+                                        "CRAWL",
+                                        "DROOL",
+                                        "SPIT",
+                                        "EXPLODE",
+                                        "GAZE",
+                                        "WAIL",
+                                        "SPORE",
+                                        "BEG",
+                                        "INSULT",
+                                        "MOAN",
+                                        "SHOW",
+                                        "SHOOT"
+                                    ]
+                                },
+                                "effect": {
+                                    "type": "string",
+                                    "description": "打撃属性",
+                                    "enum": [
+                                        "HURT",
+                                        "POISON",
+                                        "UN_BONUS",
+                                        "UN_POWER",
+                                        "EAT_GOLD",
+                                        "EAT_ITEM",
+                                        "EAT_FOOD",
+                                        "EAT_LITE",
+                                        "ACID",
+                                        "ELEC",
+                                        "FIRE",
+                                        "COLD",
+                                        "BLIND",
+                                        "CONFUSE",
+                                        "TERRIFY",
+                                        "PARALYZE",
+                                        "LOSE_STR",
+                                        "LOSE_INT",
+                                        "LOSE_WIS",
+                                        "LOSE_DEX",
+                                        "LOSE_CON",
+                                        "LOSE_CHR",
+                                        "LOSE_ALL",
+                                        "SHATTER",
+                                        "EXP_10",
+                                        "EXP_20",
+                                        "EXP_40",
+                                        "EXP_80",
+                                        "DISEASE",
+                                        "TIME",
+                                        "EXP_VAMP",
+                                        "DR_MANA",
+                                        "SUPERHURT",
+                                        "INERTIA",
+                                        "STUN",
+                                        "HUNGRY",
+                                        "CHAOS",
+                                        "FLAVOR"
+                                    ]
+                                },
+                                "damage_dice": {
+                                    "type": "string",
+                                    "description": "ダメージダイス。XdY形式",
+                                    "pattern": "[1-9][0-9]*d[1-9][0-9]*"
+                                }
+                            }
+                        }
+                    },
+                    "flags": {
+                        "type": "array",
+                        "description": "モンスターフラグ",
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "RES_ALL",
+                                "HURT_ACID",
+                                "RES_ACID",
+                                "IM_ACID",
+                                "HURT_ELEC",
+                                "RES_ELEC",
+                                "IM_ELEC",
+                                "HURT_FIRE",
+                                "RES_FIRE",
+                                "IM_FIRE",
+                                "HURT_COLD",
+                                "RES_COLD",
+                                "IM_COLD",
+                                "HURT_POIS",
+                                "RES_POIS",
+                                "IM_POIS",
+                                "HURT_LITE",
+                                "RES_LITE",
+                                "HURT_DARK",
+                                "RES_DARK",
+                                "HURT_NETH",
+                                "RES_NETH",
+                                "HURT_WATE",
+                                "RES_WATE",
+                                "HURT_PLAS",
+                                "RES_PLAS",
+                                "HURT_SHAR",
+                                "RES_SHAR",
+                                "HURT_SOUN",
+                                "RES_SOUN",
+                                "HURT_CHAO",
+                                "RES_CHAO",
+                                "HURT_NEXU",
+                                "RES_NEXU",
+                                "HURT_DISE",
+                                "RES_DISE",
+                                "HURT_WALL",
+                                "RES_WALL",
+                                "HURT_INER",
+                                "RES_INER",
+                                "HURT_TIME",
+                                "RES_TIME",
+                                "HURT_GRAV",
+                                "RES_GRAV",
+                                "RES_TELE",
+                                "HURT_ROCK",
+                                "RES_ROCK",
+                                "HURT_ABYSS",
+                                "RES_ABYSS",
+                                "HURT_VOID",
+                                "RES_VOID",
+                                "HURT_METEOR",
+                                "RES_METEOR",
+                                "NO_FEAR",
+                                "NO_STUN",
+                                "NO_CONF",
+                                "NO_SLEEP",
+                                "NO_INSTANTLY_DEATH",
+                                "AURA_FIRE",
+                                "AURA_COLD",
+                                "AURA_ELEC",
+                                "AURA_ACID",
+                                "AURA_POISON",
+                                "AURA_NUKE",
+                                "AURA_PLASMA",
+                                "AURA_WATER",
+                                "AURA_ICEE",
+                                "AURA_LITE",
+                                "AURA_DARK",
+                                "AURA_SHARDS",
+                                "AURA_FORCE",
+                                "AURA_MANA",
+                                "AURA_METEOR",
+                                "AURA_CHAOS",
+                                "AURA_HOLINESS",
+                                "AURA_NETHER",
+                                "AURA_DISENCHANT",
+                                "AURA_NEXUS",
+                                "AURA_TIME",
+                                "AURA_GRAVITY",
+                                "AURA_VOIDS",
+                                "AURA_ABYSS",
+                                "NEVER_BLOW",
+                                "NEVER_MOVE",
+                                "OPEN_DOOR",
+                                "BASH_DOOR",
+                                "MOVE_BODY",
+                                "KILL_BODY",
+                                "TAKE_ITEM",
+                                "KILL_ITEM",
+                                "RAND_25",
+                                "RAND_50",
+                                "STUPID",
+                                "SMART",
+                                "FRIENDLY",
+                                "PREVENT_SUDDEN_MAGIC",
+                                "CHAR_CLEAR",
+                                "SHAPECHANGER",
+                                "ATTR_CLEAR",
+                                "ATTR_MULTI",
+                                "ATTR_SEMIRAND",
+                                "ATTR_ANY",
+                                "UNIQUE",
+                                "HUMAN",
+                                "QUANTUM",
+                                "ORC",
+                                "TROLL",
+                                "GIANT",
+                                "DRAGON",
+                                "DEMON",
+                                "UNDEAD",
+                                "EVIL",
+                                "ANIMAL",
+                                "AMBERITE",
+                                "GOOD",
+                                "NONLIVING",
+                                "ANGEL",
+                                "ONLY_GOLD",
+                                "ONLY_ITEM",
+                                "DROP_GOOD",
+                                "DROP_GREAT",
+                                "DROP_CORPSE",
+                                "DROP_SKELETON",
+                                "DROP_60",
+                                "DROP_90",
+                                "DROP_1D2",
+                                "DROP_2D2",
+                                "DROP_3D2",
+                                "DROP_4D2",
+                                "WILD_ONLY",
+                                "WILD_TOWN",
+                                "WILD_SHORE",
+                                "WILD_OCEAN",
+                                "WILD_WASTE",
+                                "WILD_WOOD",
+                                "WILD_VOLCANO",
+                                "WILD_MOUNTAIN",
+                                "WILD_GRASS",
+                                "WILD_SWAMP",
+                                "WILD_ALL",
+                                "PASS_WALL",
+                                "KILL_WALL",
+                                "AQUATIC",
+                                "CAN_SWIM",
+                                "CAN_FLY",
+                                "NAZGUL",
+                                "ONLY_ONE",
+                                "SPEAK_ALL",
+                                "SPEAK_BATTLE",
+                                "SPEAK_FEAR",
+                                "SPEAK_FRIEND",
+                                "SPEAK_DEATH",
+                                "SPEAK_SPAWN",
+                                "HAS_LITE_1",
+                                "SELF_LITE_1",
+                                "HAS_LITE_2",
+                                "SELF_LITE_2",
+                                "HAS_DARK_1",
+                                "SELF_DARK_1",
+                                "HAS_DARK_2",
+                                "SELF_DARK_2",
+                                "FORCE_DEPTH",
+                                "FORCE_MAXHP",
+                                "FRIENDS",
+                                "ESCORT",
+                                "ESCORTS",
+                                "RIDING",
+                                "INVISIBLE",
+                                "COLD_BLOOD",
+                                "KAGE",
+                                "CHAMELEON",
+                                "TANUKI",
+                                "NO_QUEST",
+                                "ELDRITCH_HORROR",
+                                "MULTIPLY",
+                                "REGENERATE",
+                                "POWERFUL",
+                                "REFLECTING",
+                                "QUESTOR",
+                                "EMPTY_MIND",
+                                "WEIRD_MIND",
+                                "DIMINISH_MAX_DAMAGE"
+                            ]
+                        }
+                    },
+                    "skill": {
+                        "type": "object",
+                        "description": "発動型能力",
+                        "additionalProperties": false,
+                        "required": [
+                            "probability",
+                            "list"
+                        ],
+                        "properties": {
+                            "probability": {
+                                "type": "string",
+                                "description": "能力使用確率",
+                                "pattern": "1_IN_[1-9][0-9]*"
+                            },
+                            "list": {
+                                "type": "array",
+                                "description": "発動型能力リスト",
+                                "items": {
+                                    "type": "string",
+                                    "enum": [
+                                        "SHRIEK",
+                                        "DISPEL",
+                                        "ROCKET",
+                                        "SHOOT",
+                                        "BR_ACID",
+                                        "BR_ELEC",
+                                        "BR_FIRE",
+                                        "BR_COLD",
+                                        "BR_POIS",
+                                        "BR_NETH",
+                                        "BR_LITE",
+                                        "BR_DARK",
+                                        "BR_CONF",
+                                        "BR_SOUN",
+                                        "BR_CHAO",
+                                        "BR_DISE",
+                                        "BR_NEXU",
+                                        "BR_TIME",
+                                        "BR_INER",
+                                        "BR_GRAV",
+                                        "BR_SHAR",
+                                        "BR_PLAS",
+                                        "BR_FORC",
+                                        "BR_MANA",
+                                        "BA_NUKE",
+                                        "BR_NUKE",
+                                        "BA_CHAO",
+                                        "BR_DISI",
+                                        "BR_VOID",
+                                        "BR_ABYSS",
+                                        "BA_ACID",
+                                        "BA_ELEC",
+                                        "BA_FIRE",
+                                        "BA_COLD",
+                                        "BA_POIS",
+                                        "BA_NETH",
+                                        "BA_WATE",
+                                        "BA_MANA",
+                                        "BA_DARK",
+                                        "BA_VOID",
+                                        "BA_ABYSS",
+                                        "BA_METEOR",
+                                        "DRAIN_MANA",
+                                        "MIND_BLAST",
+                                        "BRAIN_SMASH",
+                                        "CAUSE_1",
+                                        "CAUSE_2",
+                                        "CAUSE_3",
+                                        "CAUSE_4",
+                                        "BO_ACID",
+                                        "BO_ELEC",
+                                        "BO_FIRE",
+                                        "BO_COLD",
+                                        "BA_LITE",
+                                        "BO_NETH",
+                                        "BO_WATE",
+                                        "BO_MANA",
+                                        "BO_PLAS",
+                                        "BO_ICEE",
+                                        "BO_VOID",
+                                        "BO_ABYSS",
+                                        "BO_METEOR",
+                                        "BO_LITE",
+                                        "MISSILE",
+                                        "SCARE",
+                                        "BLIND",
+                                        "CONF",
+                                        "SLOW",
+                                        "HOLD",
+                                        "HASTE",
+                                        "HAND_DOOM",
+                                        "HEAL",
+                                        "INVULNER",
+                                        "BLINK",
+                                        "TPORT",
+                                        "WORLD",
+                                        "SPECIAL",
+                                        "TELE_TO",
+                                        "TELE_AWAY",
+                                        "TELE_LEVEL",
+                                        "PSY_SPEAR",
+                                        "DARKNESS",
+                                        "TRAPS",
+                                        "FORGET",
+                                        "ANIM_DEAD",
+                                        "S_KIN",
+                                        "S_CYBER",
+                                        "S_MONSTER",
+                                        "S_MONSTERS",
+                                        "S_ANT",
+                                        "S_SPIDER",
+                                        "S_HOUND",
+                                        "S_HYDRA",
+                                        "S_ANGEL",
+                                        "S_DEMON",
+                                        "S_UNDEAD",
+                                        "S_DRAGON",
+                                        "S_HI_UNDEAD",
+                                        "S_HI_DRAGON",
+                                        "S_AMBERITES",
+                                        "S_UNIQUE",
+                                        "S_DEAD_UNIQUE"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "flavor": {
+                        "type": "object",
+                        "description": "フレーバーテキスト",
+                        "additionalProperties": false,
+                        "required": [
+                            "ja"
+                        ],
+                        "properties": {
+                            "ja": {
+                                "type": "string",
+                                "description": "日本語フレーバーテキスト"
+                            },
+                            "en": {
+                                "type": "string",
+                                "description": "English Flavor Text"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "required": [
+        "versions",
+        "monsters"
+    ]
+}
