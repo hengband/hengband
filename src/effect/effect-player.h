@@ -10,7 +10,7 @@ public:
     DEPTH rlev; // モンスターのレベル (但し0のモンスターは1になる).
     MonsterEntity *m_ptr;
     std::string killer;
-    GAME_TEXT m_name[MAX_NLEN];
+    std::string m_name;
     int get_damage;
 
     MONSTER_IDX src_idx;
