@@ -367,19 +367,16 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
             return false;
         }
 
-        const auto *r_ptr = &monraces_info[*r_idx];
-
-        /* Note the alignment */
-        if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
+        const auto &monrace = monraces_info[*r_idx];
+        if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
             align.sub_align |= SUB_ALIGN_EVIL;
         }
 
-        if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
+        if (monrace.kind_flags.has(MonsterKindType::GOOD)) {
             align.sub_align |= SUB_ALIGN_GOOD;
         }
 
         nest_mon_info.r_idx = *r_idx;
-        nest_mon_info.used = false;
     }
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
