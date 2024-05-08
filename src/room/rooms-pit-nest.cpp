@@ -290,15 +290,15 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
         return false;
     }
 
-    /* Large room */
-    auto y1 = yval - 4;
-    auto y2 = yval + 4;
-    auto x1 = xval - 11;
-    auto x2 = xval + 11;
+    const Pos2D center(yval, xval);
 
+    /* Large room */
+    Vector2D vec(-4, -11);
+    auto north_west = center + vec;
+    auto south_east = center + vec.inverted();
     /* Place the floor area */
-    for (auto y = y1 - 1; y <= y2 + 1; y++) {
-        for (auto x = x1 - 1; x <= x2 + 1; x++) {
+    for (auto y = north_west.y - 1; y <= south_east.y + 1; y++) {
+        for (auto x = north_west.x - 1; x <= south_east.x + 1; x++) {
             auto &grid = floor.get_grid({ y, x });
             place_grid(player_ptr, &grid, GB_FLOOR);
             grid.info |= (CAVE_ROOM);
@@ -306,35 +306,34 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     }
 
     /* Place the outer walls */
-    for (auto y = y1 - 1; y <= y2 + 1; y++) {
-        place_grid(player_ptr, &floor.get_grid({ y, x1 - 1 }), GB_OUTER);
-        place_grid(player_ptr, &floor.get_grid({ y, x2 + 1 }), GB_OUTER);
+    for (auto y = north_west.y - 1; y <= south_east.y + 1; y++) {
+        place_grid(player_ptr, &floor.get_grid({ y, north_west.x - 1 }), GB_OUTER);
+        place_grid(player_ptr, &floor.get_grid({ y, south_east.x + 1 }), GB_OUTER);
     }
 
-    for (auto x = x1 - 1; x <= x2 + 1; x++) {
-        place_grid(player_ptr, &floor.get_grid({ y1 - 1, x }), GB_OUTER);
-        place_grid(player_ptr, &floor.get_grid({ y2 + 1, x }), GB_OUTER);
+    for (auto x = north_west.x - 1; x <= south_east.x + 1; x++) {
+        place_grid(player_ptr, &floor.get_grid({ north_west.y - 1, x }), GB_OUTER);
+        place_grid(player_ptr, &floor.get_grid({ south_east.y + 1, x }), GB_OUTER);
     }
 
     /* Advance to the center room */
-    y1 = y1 + 2;
-    y2 = y2 - 2;
-    x1 = x1 + 2;
-    x2 = x2 - 2;
+    vec = Vector2D(2, 2);
+    north_west += vec;
+    south_east += vec.inverted();
 
     /* The inner walls */
-    for (auto y = y1 - 1; y <= y2 + 1; y++) {
-        place_grid(player_ptr, &floor.get_grid({ y, x1 - 1 }), GB_INNER);
-        place_grid(player_ptr, &floor.get_grid({ y, x2 + 1 }), GB_INNER);
+    for (auto y = north_west.y - 1; y <= south_east.y + 1; y++) {
+        place_grid(player_ptr, &floor.get_grid({ y, north_west.x - 1 }), GB_INNER);
+        place_grid(player_ptr, &floor.get_grid({ y, south_east.x + 1 }), GB_INNER);
     }
 
-    for (auto x = x1 - 1; x <= x2 + 1; x++) {
-        place_grid(player_ptr, &floor.get_grid({ y1 - 1, x }), GB_INNER);
-        place_grid(player_ptr, &floor.get_grid({ y2 + 1, x }), GB_INNER);
+    for (auto x = north_west.x - 1; x <= south_east.x + 1; x++) {
+        place_grid(player_ptr, &floor.get_grid({ north_west.y - 1, x }), GB_INNER);
+        place_grid(player_ptr, &floor.get_grid({ south_east.y + 1, x }), GB_INNER);
     }
 
-    for (auto y = y1; y <= y2; y++) {
-        for (auto x = x1; x <= x2; x++) {
+    for (auto y = north_west.y; y <= south_east.y; y++) {
+        for (auto x = north_west.x; x <= south_east.x; x++) {
             floor.get_grid({ y, x }).add_info(CAVE_ICKY);
         }
     }
@@ -342,16 +341,16 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     /* Place a secret door */
     switch (randint1(4)) {
     case 1:
-        place_secret_door(player_ptr, y1 - 1, xval, DOOR_DEFAULT);
+        place_secret_door(player_ptr, north_west.y - 1, xval, DOOR_DEFAULT);
         break;
     case 2:
-        place_secret_door(player_ptr, y2 + 1, xval, DOOR_DEFAULT);
+        place_secret_door(player_ptr, south_east.y + 1, xval, DOOR_DEFAULT);
         break;
     case 3:
-        place_secret_door(player_ptr, yval, x1 - 1, DOOR_DEFAULT);
+        place_secret_door(player_ptr, yval, north_west.x - 1, DOOR_DEFAULT);
         break;
     case 4:
-        place_secret_door(player_ptr, yval, x2 + 1, DOOR_DEFAULT);
+        place_secret_door(player_ptr, yval, south_east.x + 1, DOOR_DEFAULT);
         break;
     }
 
