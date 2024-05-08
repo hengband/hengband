@@ -291,21 +291,17 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     }
 
     const Pos2D center(yval, xval);
-
-    /* Large room */
-    Vector2D vec(-4, -11);
-    auto north_west = center + vec;
-    auto south_east = center + vec.inverted();
-    /* Place the floor area */
+    constexpr Vector2D vec_large_room(-4, -11);
+    auto north_west = center + vec_large_room;
+    auto south_east = center + vec_large_room.inverted();
     for (auto y = north_west.y - 1; y <= south_east.y + 1; y++) {
         for (auto x = north_west.x - 1; x <= south_east.x + 1; x++) {
             auto &grid = floor.get_grid({ y, x });
             place_grid(player_ptr, &grid, GB_FLOOR);
-            grid.info |= (CAVE_ROOM);
+            grid.add_info(CAVE_ROOM);
         }
     }
 
-    /* Place the outer walls */
     for (auto y = north_west.y - 1; y <= south_east.y + 1; y++) {
         place_grid(player_ptr, &floor.get_grid({ y, north_west.x - 1 }), GB_OUTER);
         place_grid(player_ptr, &floor.get_grid({ y, south_east.x + 1 }), GB_OUTER);
@@ -316,12 +312,9 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
         place_grid(player_ptr, &floor.get_grid({ south_east.y + 1, x }), GB_OUTER);
     }
 
-    /* Advance to the center room */
-    vec = Vector2D(2, 2);
-    north_west += vec;
-    south_east += vec.inverted();
-
-    /* The inner walls */
+    constexpr Vector2D vec_center_room(2, 2);
+    north_west += vec_center_room;
+    south_east += vec_center_room.inverted();
     for (auto y = north_west.y - 1; y <= south_east.y + 1; y++) {
         place_grid(player_ptr, &floor.get_grid({ y, north_west.x - 1 }), GB_INNER);
         place_grid(player_ptr, &floor.get_grid({ y, south_east.x + 1 }), GB_INNER);
