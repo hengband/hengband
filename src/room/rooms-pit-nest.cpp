@@ -221,6 +221,74 @@ std::optional<MonsterRaceId> select_nest_monrace_id(PlayerType *player_ptr, Mons
 
     return std::nullopt;
 }
+
+std::tuple<Pos2D, Pos2D> generate_large_room(PlayerType *player_ptr, const Pos2D &center)
+{
+    auto &floor = *player_ptr->current_floor_ptr;
+    constexpr Vector2D vec(-4, -11);
+    const auto north_west = center + vec;
+    const auto south_east = center + vec.inverted();
+    for (auto y = north_west.y - 1; y <= south_east.y + 1; y++) {
+        for (auto x = north_west.x - 1; x <= south_east.x + 1; x++) {
+            auto &grid = floor.get_grid({ y, x });
+            place_grid(player_ptr, &grid, GB_FLOOR);
+            grid.add_info(CAVE_ROOM);
+        }
+    }
+
+    for (auto y = north_west.y - 1; y <= south_east.y + 1; y++) {
+        place_grid(player_ptr, &floor.get_grid({ y, north_west.x - 1 }), GB_OUTER);
+        place_grid(player_ptr, &floor.get_grid({ y, south_east.x + 1 }), GB_OUTER);
+    }
+
+    for (auto x = north_west.x - 1; x <= south_east.x + 1; x++) {
+        place_grid(player_ptr, &floor.get_grid({ north_west.y - 1, x }), GB_OUTER);
+        place_grid(player_ptr, &floor.get_grid({ south_east.y + 1, x }), GB_OUTER);
+    }
+
+    return { north_west, south_east };
+}
+
+void generate_inner_room(PlayerType *player_ptr, const Pos2D &center, std::tuple<Pos2D, Pos2D> &room)
+{
+    auto &floor = *player_ptr->current_floor_ptr;
+    constexpr Vector2D vec(2, 2);
+    auto &[north_west, south_east] = room;
+    north_west += vec;
+    south_east += vec.inverted();
+
+    for (auto y = north_west.y - 1; y <= south_east.y + 1; y++) {
+        place_grid(player_ptr, &floor.get_grid({ y, north_west.x - 1 }), GB_INNER);
+        place_grid(player_ptr, &floor.get_grid({ y, south_east.x + 1 }), GB_INNER);
+    }
+
+    for (auto x = north_west.x - 1; x <= south_east.x + 1; x++) {
+        place_grid(player_ptr, &floor.get_grid({ north_west.y - 1, x }), GB_INNER);
+        place_grid(player_ptr, &floor.get_grid({ south_east.y + 1, x }), GB_INNER);
+    }
+
+    for (auto y = north_west.y; y <= south_east.y; y++) {
+        for (auto x = north_west.x; x <= south_east.x; x++) {
+            floor.get_grid({ y, x }).add_info(CAVE_ICKY);
+        }
+    }
+
+    /* Place a secret door */
+    switch (randint1(4)) {
+    case 1:
+        place_secret_door(player_ptr, north_west.y - 1, center.x, DOOR_DEFAULT);
+        break;
+    case 2:
+        place_secret_door(player_ptr, south_east.y + 1, center.x, DOOR_DEFAULT);
+        break;
+    case 3:
+        place_secret_door(player_ptr, center.y, north_west.x - 1, DOOR_DEFAULT);
+        break;
+    case 4:
+        place_secret_door(player_ptr, center.y, south_east.x + 1, DOOR_DEFAULT);
+        break;
+    }
+}
 }
 
 /*!
@@ -291,68 +359,15 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     }
 
     const Pos2D center(yval, xval);
-    constexpr Vector2D vec_large_room(-4, -11);
-    auto north_west = center + vec_large_room;
-    auto south_east = center + vec_large_room.inverted();
-    for (auto y = north_west.y - 1; y <= south_east.y + 1; y++) {
-        for (auto x = north_west.x - 1; x <= south_east.x + 1; x++) {
-            auto &grid = floor.get_grid({ y, x });
-            place_grid(player_ptr, &grid, GB_FLOOR);
-            grid.add_info(CAVE_ROOM);
-        }
-    }
-
-    for (auto y = north_west.y - 1; y <= south_east.y + 1; y++) {
-        place_grid(player_ptr, &floor.get_grid({ y, north_west.x - 1 }), GB_OUTER);
-        place_grid(player_ptr, &floor.get_grid({ y, south_east.x + 1 }), GB_OUTER);
-    }
-
-    for (auto x = north_west.x - 1; x <= south_east.x + 1; x++) {
-        place_grid(player_ptr, &floor.get_grid({ north_west.y - 1, x }), GB_OUTER);
-        place_grid(player_ptr, &floor.get_grid({ south_east.y + 1, x }), GB_OUTER);
-    }
-
-    constexpr Vector2D vec_center_room(2, 2);
-    north_west += vec_center_room;
-    south_east += vec_center_room.inverted();
-    for (auto y = north_west.y - 1; y <= south_east.y + 1; y++) {
-        place_grid(player_ptr, &floor.get_grid({ y, north_west.x - 1 }), GB_INNER);
-        place_grid(player_ptr, &floor.get_grid({ y, south_east.x + 1 }), GB_INNER);
-    }
-
-    for (auto x = north_west.x - 1; x <= south_east.x + 1; x++) {
-        place_grid(player_ptr, &floor.get_grid({ north_west.y - 1, x }), GB_INNER);
-        place_grid(player_ptr, &floor.get_grid({ south_east.y + 1, x }), GB_INNER);
-    }
-
-    for (auto y = north_west.y; y <= south_east.y; y++) {
-        for (auto x = north_west.x; x <= south_east.x; x++) {
-            floor.get_grid({ y, x }).add_info(CAVE_ICKY);
-        }
-    }
-
-    /* Place a secret door */
-    switch (randint1(4)) {
-    case 1:
-        place_secret_door(player_ptr, north_west.y - 1, xval, DOOR_DEFAULT);
-        break;
-    case 2:
-        place_secret_door(player_ptr, south_east.y + 1, xval, DOOR_DEFAULT);
-        break;
-    case 3:
-        place_secret_door(player_ptr, yval, north_west.x - 1, DOOR_DEFAULT);
-        break;
-    case 4:
-        place_secret_door(player_ptr, yval, south_east.x + 1, DOOR_DEFAULT);
-        break;
-    }
+    auto room = generate_large_room(player_ptr, center);
+    generate_inner_room(player_ptr, center, room);
 
     constexpr auto fmt_nest = _("モンスター部屋(nest)(%s%s)を生成します。", "Monster nest (%s%s)");
     msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest, n_ptr->name.data(), pit_subtype_string(cur_nest_type, true).data());
 
     /* Place some monsters */
-    for (auto y = yval - 2; y <= yval + 2; y++) {
-        for (auto x = xval - 9; x <= xval + 9; x++) {
+    for (auto y = center.y - 2; y <= center.y + 2; y++) {
+        for (auto x = center.x - 9; x <= center.x + 9; x++) {
             auto &nest_mon_info = rand_choice(nest_mon_info_list);
 
             /* Place that "random" monster (no groups) */
