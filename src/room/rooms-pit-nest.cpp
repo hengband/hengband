@@ -368,31 +368,32 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
         }
     }
 
-    if (cheat_room) {
-        ang_sort(player_ptr, nest_mon_info_list.data(), nullptr, NUM_NEST_MON_TYPE, ang_sort_comp_nest_mon_info, ang_sort_swap_nest_mon_info);
+    if (!cheat_room) {
+        return true;
+    }
 
-        /* Dump the entries (prevent multi-printing) */
-        for (auto i = 0; i < NUM_NEST_MON_TYPE; i++) {
-            if (!nest_mon_info_list[i].used) {
-                break;
-            }
-            for (; i < NUM_NEST_MON_TYPE - 1; i++) {
-                if (nest_mon_info_list[i].r_idx != nest_mon_info_list[i + 1].r_idx) {
-                    break;
-                }
-
-                if (!nest_mon_info_list[i + 1].used) {
-                    break;
-                }
-            }
-
-            if (i == NUM_NEST_MON_TYPE) {
-                break;
-            }
-
-            constexpr auto fmt_nest_num = _("Nest構成モンスターNo.%d: %s", "Nest monster No.%d: %s");
-            msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest_num, i, monraces_info[nest_mon_info_list[i].r_idx].name.data());
+    ang_sort(player_ptr, nest_mon_info_list.data(), nullptr, NUM_NEST_MON_TYPE, ang_sort_comp_nest_mon_info, ang_sort_swap_nest_mon_info);
+    for (auto i = 0; i < NUM_NEST_MON_TYPE; i++) {
+        if (!nest_mon_info_list[i].used) {
+            break;
         }
+
+        for (; i < NUM_NEST_MON_TYPE - 1; i++) {
+            if (nest_mon_info_list[i].r_idx != nest_mon_info_list[i + 1].r_idx) {
+                break;
+            }
+
+            if (!nest_mon_info_list[i + 1].used) {
+                break;
+            }
+        }
+
+        if (i == NUM_NEST_MON_TYPE) {
+            break;
+        }
+
+        constexpr auto fmt_nest_num = _("Nest構成モンスターNo.%d: %s", "Nest monster No.%d: %s");
+        msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest_num, i, monraces_info[nest_mon_info_list[i].r_idx].name.data());
     }
 
     return true;
