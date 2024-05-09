@@ -222,6 +222,30 @@ std::optional<MonsterRaceId> select_nest_monrace_id(PlayerType *player_ptr, Mons
     return std::nullopt;
 }
 
+std::optional<std::array<nest_mon_info_type, NUM_NEST_MON_TYPE>> pick_nest_monster(PlayerType *player_ptr, MonsterEntity &align)
+{
+    std::array<nest_mon_info_type, NUM_NEST_MON_TYPE> nest_mon_info_list{};
+    for (auto &nest_mon_info : nest_mon_info_list) {
+        const auto monrace_id = select_nest_monrace_id(player_ptr, align);
+        if (!monrace_id) {
+            return std::nullopt;
+        }
+
+        const auto &monrace = monraces_info[*monrace_id];
+        if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
+            align.sub_align |= SUB_ALIGN_EVIL;
+        }
+
+        if (monrace.kind_flags.has(MonsterKindType::GOOD)) {
+            align.sub_align |= SUB_ALIGN_GOOD;
+        }
+
+        nest_mon_info.r_idx = *monrace_id;
+    }
+
+    return nest_mon_info_list;
+}
+
 std::tuple<Pos2D, Pos2D> generate_large_room(PlayerType *player_ptr, const Pos2D &center)
 {
     auto &floor = *player_ptr->current_floor_ptr;
@@ -359,24 +383,9 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     MonsterEntity align;
     align.sub_align = SUB_ALIGN_NEUTRAL;
 
-    /* Pick some monster types */
-    std::array<nest_mon_info_type, NUM_NEST_MON_TYPE> nest_mon_info_list{};
-    for (auto &nest_mon_info : nest_mon_info_list) {
-        const auto r_idx = select_nest_monrace_id(player_ptr, align);
-        if (!r_idx) {
-            return false;
-        }
-
-        const auto &monrace = monraces_info[*r_idx];
-        if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
-            align.sub_align |= SUB_ALIGN_EVIL;
-        }
-
-        if (monrace.kind_flags.has(MonsterKindType::GOOD)) {
-            align.sub_align |= SUB_ALIGN_GOOD;
-        }
-
-        nest_mon_info.r_idx = *r_idx;
+    auto nest_mon_info_list = pick_nest_monster(player_ptr, align);
+    if (!nest_mon_info_list) {
+        return false;
     }
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
@@ -396,7 +405,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     /* Place some monsters */
     for (auto y = center.y - 2; y <= center.y + 2; y++) {
         for (auto x = center.x - 9; x <= center.x + 9; x++) {
-            auto &nest_mon_info = rand_choice(nest_mon_info_list);
+            auto &nest_mon_info = rand_choice(*nest_mon_info_list);
 
             /* Place that "random" monster (no groups) */
             (void)place_specific_monster(player_ptr, 0, y, x, nest_mon_info.r_idx, 0L);
@@ -404,7 +413,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
         }
     }
 
-    output_debug_nest(player_ptr, nest_mon_info_list);
+    output_debug_nest(player_ptr, *nest_mon_info_list);
     return true;
 }
 
