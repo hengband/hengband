@@ -314,6 +314,17 @@ void generate_inner_room(PlayerType *player_ptr, const Pos2D &center, std::tuple
     }
 }
 
+void place_monsters_in_nest(PlayerType *player_ptr, const Pos2D &center, std::array<nest_mon_info_type, NUM_NEST_MON_TYPE> &nest_mon_info_list)
+{
+    for (auto y = center.y - 2; y <= center.y + 2; y++) {
+        for (auto x = center.x - 9; x <= center.x + 9; x++) {
+            auto &nest_mon_info = rand_choice(nest_mon_info_list);
+            (void)place_specific_monster(player_ptr, 0, y, x, nest_mon_info.r_idx, 0L);
+            nest_mon_info.used = true;
+        }
+    }
+}
+
 void output_debug_nest(PlayerType *player_ptr, std::array<nest_mon_info_type, NUM_NEST_MON_TYPE> &nest_mon_info_list)
 {
     if (!cheat_room) {
@@ -401,18 +412,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     constexpr auto fmt_nest = _("モンスター部屋(nest)(%s%s)を生成します。", "Monster nest (%s%s)");
     msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest, n_ptr->name.data(), pit_subtype_string(cur_nest_type, true).data());
-
-    /* Place some monsters */
-    for (auto y = center.y - 2; y <= center.y + 2; y++) {
-        for (auto x = center.x - 9; x <= center.x + 9; x++) {
-            auto &nest_mon_info = rand_choice(*nest_mon_info_list);
-
-            /* Place that "random" monster (no groups) */
-            (void)place_specific_monster(player_ptr, 0, y, x, nest_mon_info.r_idx, 0L);
-            nest_mon_info.used = true;
-        }
-    }
-
+    place_monsters_in_nest(player_ptr, center, *nest_mon_info_list);
     output_debug_nest(player_ptr, *nest_mon_info_list);
     return true;
 }
