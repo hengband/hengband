@@ -1,7 +1,6 @@
 #pragma once
 
 #include "util/point-2d.h"
-#include <utility>
 #include <vector>
 
 /* Minimum & maximum town size */
@@ -17,12 +16,11 @@ public:
     void set_area(int height, int width, int max_height, int max_width);
     bool is_area_used(const std::vector<std::vector<bool>> &ugarcade_used) const;
     void reserve_area(std::vector<std::vector<bool>> &ugarcade_used) const;
-    std::pair<Pos2D, Pos2D> get_room_positions(const Pos2D &pos_ug) const;
-    std::pair<Pos2D, Pos2D> get_inner_room_positions(const Pos2D &pos_ug) const;
+    Rect2D get_outer_room(const Pos2D &pos_ug) const;
+    Rect2D get_inner_room(const Pos2D &pos_ug) const;
 
 private:
-    Pos2D north_west; // 地下店舗左上座標.
-    Pos2D south_east; // 地下店舗右下座標.
+    Rect2D rectangle; // 地下店舗の領域.
 };
 
 struct dun_data_type;
