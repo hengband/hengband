@@ -1,6 +1,9 @@
 #pragma once
 
 #include "system/h-type.h"
+#include <algorithm>
+#include <concepts>
+#include <type_traits>
 
 /**
  * @brief 2次元平面上のベクトルを表すクラス
@@ -118,7 +121,28 @@ constexpr Vector2D<T> operator*(const Vector2D<T> &vector, T scalar)
 template <typename T>
 constexpr Point2D<T> operator+(const Point2D<T> &, const Point2D<T> &) = delete;
 
+/**
+ * @brief 長方形を表すクラス (左上/右下の座標を所有する)
+ */
+template <std::integral T>
+struct Rectangle2D {
+    Point2D<T> top_left;
+    Point2D<T> bottom_right;
+    constexpr Rectangle2D(const Point2D<T> &pos1, const Point2D<T> &pos2)
+        : top_left(std::min<T>(pos1.y, pos2.y), std::min<T>(pos1.x, pos2.x))
+        , bottom_right(std::max<T>(pos1.y, pos2.y), std::max<T>(pos1.x, pos2.x))
+    {
+    }
+
+    constexpr Rectangle2D(const Point2D<T> &center, const Vector2D<T> &vec)
+        : Rectangle2D(center + vec, center + vec.inverted())
+    {
+    }
+};
+
 //! ゲームの平面マップ上の座標位置を表す構造体
 using Pos2D = Point2D<POSITION>;
 
 using Pos2DVec = Vector2D<POSITION>;
+
+using Rect2D = Rectangle2D<POSITION>;
