@@ -21,6 +21,7 @@ void euc2sjis(char *str);
 byte codeconv(char *str);
 bool iskanji2(concptr s, int x);
 std::optional<std::string> sys_to_utf8(std::string_view str);
+std::optional<std::string> utf8_to_sys(std::string_view utf8_str);
 void guess_convert_to_system_encoding(char *strbuf, int buflen);
 
 int lb_to_kg_integer(int x);
