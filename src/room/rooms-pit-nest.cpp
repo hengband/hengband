@@ -221,6 +221,140 @@ std::optional<MonsterRaceId> select_nest_monrace_id(PlayerType *player_ptr, Mons
 
     return std::nullopt;
 }
+
+std::optional<std::array<nest_mon_info_type, NUM_NEST_MON_TYPE>> pick_nest_monster(PlayerType *player_ptr, MonsterEntity &align)
+{
+    std::array<nest_mon_info_type, NUM_NEST_MON_TYPE> nest_mon_info_list{};
+    for (auto &nest_mon_info : nest_mon_info_list) {
+        const auto monrace_id = select_nest_monrace_id(player_ptr, align);
+        if (!monrace_id) {
+            return std::nullopt;
+        }
+
+        const auto &monrace = monraces_info[*monrace_id];
+        if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
+            align.sub_align |= SUB_ALIGN_EVIL;
+        }
+
+        if (monrace.kind_flags.has(MonsterKindType::GOOD)) {
+            align.sub_align |= SUB_ALIGN_GOOD;
+        }
+
+        nest_mon_info.r_idx = *monrace_id;
+    }
+
+    return nest_mon_info_list;
+}
+
+std::tuple<Pos2D, Pos2D> generate_large_room(PlayerType *player_ptr, const Pos2D &center)
+{
+    auto &floor = *player_ptr->current_floor_ptr;
+    constexpr Vector2D vec(-4, -11);
+    const auto north_west = center + vec;
+    const auto south_east = center + vec.inverted();
+    for (auto y = north_west.y - 1; y <= south_east.y + 1; y++) {
+        for (auto x = north_west.x - 1; x <= south_east.x + 1; x++) {
+            auto &grid = floor.get_grid({ y, x });
+            place_grid(player_ptr, &grid, GB_FLOOR);
+            grid.add_info(CAVE_ROOM);
+        }
+    }
+
+    for (auto y = north_west.y - 1; y <= south_east.y + 1; y++) {
+        place_grid(player_ptr, &floor.get_grid({ y, north_west.x - 1 }), GB_OUTER);
+        place_grid(player_ptr, &floor.get_grid({ y, south_east.x + 1 }), GB_OUTER);
+    }
+
+    for (auto x = north_west.x - 1; x <= south_east.x + 1; x++) {
+        place_grid(player_ptr, &floor.get_grid({ north_west.y - 1, x }), GB_OUTER);
+        place_grid(player_ptr, &floor.get_grid({ south_east.y + 1, x }), GB_OUTER);
+    }
+
+    return { north_west, south_east };
+}
+
+void generate_inner_room(PlayerType *player_ptr, const Pos2D &center, std::tuple<Pos2D, Pos2D> &room)
+{
+    auto &floor = *player_ptr->current_floor_ptr;
+    constexpr Vector2D vec(2, 2);
+    auto &[north_west, south_east] = room;
+    north_west += vec;
+    south_east += vec.inverted();
+
+    for (auto y = north_west.y - 1; y <= south_east.y + 1; y++) {
+        place_grid(player_ptr, &floor.get_grid({ y, north_west.x - 1 }), GB_INNER);
+        place_grid(player_ptr, &floor.get_grid({ y, south_east.x + 1 }), GB_INNER);
+    }
+
+    for (auto x = north_west.x - 1; x <= south_east.x + 1; x++) {
+        place_grid(player_ptr, &floor.get_grid({ north_west.y - 1, x }), GB_INNER);
+        place_grid(player_ptr, &floor.get_grid({ south_east.y + 1, x }), GB_INNER);
+    }
+
+    for (auto y = north_west.y; y <= south_east.y; y++) {
+        for (auto x = north_west.x; x <= south_east.x; x++) {
+            floor.get_grid({ y, x }).add_info(CAVE_ICKY);
+        }
+    }
+
+    /* Place a secret door */
+    switch (randint1(4)) {
+    case 1:
+        place_secret_door(player_ptr, north_west.y - 1, center.x, DOOR_DEFAULT);
+        break;
+    case 2:
+        place_secret_door(player_ptr, south_east.y + 1, center.x, DOOR_DEFAULT);
+        break;
+    case 3:
+        place_secret_door(player_ptr, center.y, north_west.x - 1, DOOR_DEFAULT);
+        break;
+    case 4:
+        place_secret_door(player_ptr, center.y, south_east.x + 1, DOOR_DEFAULT);
+        break;
+    }
+}
+
+void place_monsters_in_nest(PlayerType *player_ptr, const Pos2D &center, std::array<nest_mon_info_type, NUM_NEST_MON_TYPE> &nest_mon_info_list)
+{
+    for (auto y = center.y - 2; y <= center.y + 2; y++) {
+        for (auto x = center.x - 9; x <= center.x + 9; x++) {
+            auto &nest_mon_info = rand_choice(nest_mon_info_list);
+            (void)place_specific_monster(player_ptr, 0, y, x, nest_mon_info.r_idx, 0L);
+            nest_mon_info.used = true;
+        }
+    }
+}
+
+void output_debug_nest(PlayerType *player_ptr, std::array<nest_mon_info_type, NUM_NEST_MON_TYPE> &nest_mon_info_list)
+{
+    if (!cheat_room) {
+        return;
+    }
+
+    ang_sort(player_ptr, nest_mon_info_list.data(), nullptr, NUM_NEST_MON_TYPE, ang_sort_comp_nest_mon_info, ang_sort_swap_nest_mon_info);
+    for (auto i = 0; i < NUM_NEST_MON_TYPE; i++) {
+        if (!nest_mon_info_list[i].used) {
+            return;
+        }
+
+        for (; i < NUM_NEST_MON_TYPE - 1; i++) {
+            if (nest_mon_info_list[i].r_idx != nest_mon_info_list[i + 1].r_idx) {
+                break;
+            }
+
+            if (!nest_mon_info_list[i + 1].used) {
+                break;
+            }
+        }
+
+        if (i == NUM_NEST_MON_TYPE) {
+            return;
+        }
+
+        constexpr auto fmt_nest_num = _("Nest構成モンスターNo.%d: %s", "Nest monster No.%d: %s");
+        msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest_num, i, monraces_info[nest_mon_info_list[i].r_idx].name.data());
+    }
+}
 }
 
 /*!
@@ -260,27 +394,9 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     MonsterEntity align;
     align.sub_align = SUB_ALIGN_NEUTRAL;
 
-    /* Pick some monster types */
-    std::array<nest_mon_info_type, NUM_NEST_MON_TYPE> nest_mon_info_list{};
-    for (auto &nest_mon_info : nest_mon_info_list) {
-        const auto r_idx = select_nest_monrace_id(player_ptr, align);
-        if (!r_idx) {
-            return false;
-        }
-
-        const auto *r_ptr = &monraces_info[*r_idx];
-
-        /* Note the alignment */
-        if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
-            align.sub_align |= SUB_ALIGN_EVIL;
-        }
-
-        if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
-            align.sub_align |= SUB_ALIGN_GOOD;
-        }
-
-        nest_mon_info.r_idx = *r_idx;
-        nest_mon_info.used = false;
+    auto nest_mon_info_list = pick_nest_monster(player_ptr, align);
+    if (!nest_mon_info_list) {
+        return false;
     }
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
@@ -290,108 +406,14 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
         return false;
     }
 
-    /* Large room */
-    auto y1 = yval - 4;
-    auto y2 = yval + 4;
-    auto x1 = xval - 11;
-    auto x2 = xval + 11;
-
-    /* Place the floor area */
-    for (auto y = y1 - 1; y <= y2 + 1; y++) {
-        for (auto x = x1 - 1; x <= x2 + 1; x++) {
-            auto &grid = floor.get_grid({ y, x });
-            place_grid(player_ptr, &grid, GB_FLOOR);
-            grid.info |= (CAVE_ROOM);
-        }
-    }
-
-    /* Place the outer walls */
-    for (auto y = y1 - 1; y <= y2 + 1; y++) {
-        place_grid(player_ptr, &floor.get_grid({ y, x1 - 1 }), GB_OUTER);
-        place_grid(player_ptr, &floor.get_grid({ y, x2 + 1 }), GB_OUTER);
-    }
-
-    for (auto x = x1 - 1; x <= x2 + 1; x++) {
-        place_grid(player_ptr, &floor.get_grid({ y1 - 1, x }), GB_OUTER);
-        place_grid(player_ptr, &floor.get_grid({ y2 + 1, x }), GB_OUTER);
-    }
-
-    /* Advance to the center room */
-    y1 = y1 + 2;
-    y2 = y2 - 2;
-    x1 = x1 + 2;
-    x2 = x2 - 2;
-
-    /* The inner walls */
-    for (auto y = y1 - 1; y <= y2 + 1; y++) {
-        place_grid(player_ptr, &floor.get_grid({ y, x1 - 1 }), GB_INNER);
-        place_grid(player_ptr, &floor.get_grid({ y, x2 + 1 }), GB_INNER);
-    }
-
-    for (auto x = x1 - 1; x <= x2 + 1; x++) {
-        place_grid(player_ptr, &floor.get_grid({ y1 - 1, x }), GB_INNER);
-        place_grid(player_ptr, &floor.get_grid({ y2 + 1, x }), GB_INNER);
-    }
-
-    for (auto y = y1; y <= y2; y++) {
-        for (auto x = x1; x <= x2; x++) {
-            floor.get_grid({ y, x }).add_info(CAVE_ICKY);
-        }
-    }
-
-    /* Place a secret door */
-    switch (randint1(4)) {
-    case 1:
-        place_secret_door(player_ptr, y1 - 1, xval, DOOR_DEFAULT);
-        break;
-    case 2:
-        place_secret_door(player_ptr, y2 + 1, xval, DOOR_DEFAULT);
-        break;
-    case 3:
-        place_secret_door(player_ptr, yval, x1 - 1, DOOR_DEFAULT);
-        break;
-    case 4:
-        place_secret_door(player_ptr, yval, x2 + 1, DOOR_DEFAULT);
-        break;
-    }
+    const Pos2D center(yval, xval);
+    auto room = generate_large_room(player_ptr, center);
+    generate_inner_room(player_ptr, center, room);
 
     constexpr auto fmt_nest = _("モンスター部屋(nest)(%s%s)を生成します。", "Monster nest (%s%s)");
     msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest, n_ptr->name.data(), pit_subtype_string(cur_nest_type, true).data());
-
-    /* Place some monsters */
-    for (auto y = yval - 2; y <= yval + 2; y++) {
-        for (auto x = xval - 9; x <= xval + 9; x++) {
-            auto &nest_mon_info = rand_choice(nest_mon_info_list);
-
-            /* Place that "random" monster (no groups) */
-            (void)place_specific_monster(player_ptr, 0, y, x, nest_mon_info.r_idx, 0L);
-            nest_mon_info.used = true;
-        }
-    }
-
-    if (cheat_room) {
-        ang_sort(player_ptr, nest_mon_info_list.data(), nullptr, NUM_NEST_MON_TYPE, ang_sort_comp_nest_mon_info, ang_sort_swap_nest_mon_info);
-
-        /* Dump the entries (prevent multi-printing) */
-        for (auto i = 0; i < NUM_NEST_MON_TYPE; i++) {
-            if (!nest_mon_info_list[i].used) {
-                break;
-            }
-            for (; i < NUM_NEST_MON_TYPE - 1; i++) {
-                if (nest_mon_info_list[i].r_idx != nest_mon_info_list[i + 1].r_idx) {
-                    break;
-                }
-
-                if (!nest_mon_info_list[i + 1].used) {
-                    break;
-                }
-            }
-
-            constexpr auto fmt_nest_num = _("Nest構成モンスターNo.%d: %s", "Nest monster No.%d: %s");
-            msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest_num, i, monraces_info[nest_mon_info_list[i].r_idx].name.data());
-        }
-    }
-
+    place_monsters_in_nest(player_ptr, center, *nest_mon_info_list);
+    output_debug_nest(player_ptr, *nest_mon_info_list);
     return true;
 }
 

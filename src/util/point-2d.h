@@ -28,6 +28,15 @@ struct Vector2D {
         this->x *= scalar;
         return *this;
     }
+
+    /*!
+     * @brief 反転したベクトルを生成する
+     * @return 反転ベクトル
+     */
+    constexpr Vector2D inverted() const
+    {
+        return Vector2D(-this->y, -this->x);
+    }
 };
 
 /**

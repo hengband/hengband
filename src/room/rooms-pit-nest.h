@@ -46,7 +46,7 @@ struct nest_pit_type {
 /*! デバッグ時にnestのモンスター情報を確認するための構造体 / A struct for nest monster information with cheat_hear */
 struct nest_mon_info_type {
     MonsterRaceId r_idx; //!< モンスター種族ID
-    bool used; //!< 既に選んだかどうか
+    bool used = false; //!< 既に選んだかどうか
 };
 
 struct dun_data_type;
