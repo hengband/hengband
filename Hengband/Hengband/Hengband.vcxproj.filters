@@ -380,7 +380,7 @@
     <ClCompile Include="..\..\src\room\rooms-vault.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\rooms-pit-nest.cpp">
+    <ClCompile Include="..\..\src\room\pit-nest-util.cpp">
       <Filter>room</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\player-info\class-info.cpp">
@@ -2493,6 +2493,12 @@
     <ClCompile Include="..\..\src\monster-race\race-sex-const.cpp">
       <Filter>monster-race</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\room\rooms-pit.cpp">
+      <Filter>room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\room\rooms-nest.cpp">
+      <Filter>room</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3665,7 +3671,7 @@
     <ClInclude Include="..\..\src\monster\smart-learn-types.h">
       <Filter>monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\room\rooms-pit-nest.h">
+    <ClInclude Include="..\..\src\room\pit-nest-util.h">
       <Filter>room</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-description-types.h">
@@ -3695,22 +3701,7 @@
     <ClInclude Include="..\..\src\monster\monster-util.h">
       <Filter>monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster-race\race-flags1.h">
-      <Filter>monster-race</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster-race\race-flags2.h">
-      <Filter>monster-race</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster-race\race-flags3.h">
-      <Filter>monster-race</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster-race\race-flags7.h">
-      <Filter>monster-race</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-flags-resistance.h">
-      <Filter>monster-race</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster-race\race-flags8.h">
       <Filter>monster-race</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\summon-checker.h">
@@ -5408,6 +5399,15 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-misc-flags.h">
       <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\race-special-flags.h">
+      <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\rooms-pit.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\rooms-nest.h">
+      <Filter>room</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

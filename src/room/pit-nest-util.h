@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <functional>
 #include <optional>
 #include <string>
@@ -49,7 +50,5 @@ struct nest_mon_info_type {
     bool used = false; //!< 既に選んだかどうか
 };
 
-struct dun_data_type;
-bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr);
-bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr);
-bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr);
+int pick_vault_type(const std::vector<nest_pit_type> &np_types, uint16_t allow_flag_mask, int dun_level);
+std::string pit_subtype_string(int type, bool nest);

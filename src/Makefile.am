@@ -780,14 +780,16 @@ hengband_SOURCES = \
 	room/cave-filler.cpp room/cave-filler.h \
 	room/door-definition.cpp room/door-definition.h \
 	room/lake-types.h room/room-types.h \
+	room/pit-nest-util.cpp room/pit-nest-util.h \
 	room/room-generator.cpp room/room-generator.h \
 	room/room-info-table.cpp room/room-info-table.h \
 	room/rooms-builder.cpp room/rooms-builder.h \
 	room/rooms-city.cpp room/rooms-city.h \
 	room/rooms-fractal.cpp room/rooms-fractal.h \
 	room/rooms-maze-vault.cpp room/rooms-maze-vault.h \
+	room/rooms-nest.cpp room/rooms-nest.h \
 	room/rooms-normal.cpp room/rooms-normal.h \
-	room/rooms-pit-nest.cpp room/rooms-pit-nest.h \
+	room/rooms-pit.cpp room/rooms-pit.h\
 	room/rooms-special.cpp room/rooms-special.h \
 	room/rooms-trap.cpp room/rooms-trap.h \
 	room/rooms-vault.cpp room/rooms-vault.h \
