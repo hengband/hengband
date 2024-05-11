@@ -16,20 +16,20 @@
 bool build_type9(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     /* get size: note 'Evenness'*/
-    auto xsize = randint1(22) * 2 + 6;
-    auto ysize = randint1(15) * 2 + 6;
+    auto width = randint1(22) * 2 + 6;
+    auto height = randint1(15) * 2 + 6;
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
     auto &floor = *player_ptr->current_floor_ptr;
     int y0;
     int x0;
-    if (!find_space(player_ptr, dd_ptr, &y0, &x0, ysize + 1, xsize + 1)) {
+    if (!find_space(player_ptr, dd_ptr, &y0, &x0, height + 1, width + 1)) {
         /* Limit to the minimum room size, and retry */
-        xsize = 8;
-        ysize = 8;
+        width = 8;
+        height = 8;
 
         /* Find and reserve some space in the dungeon.  Get center of room. */
-        if (!find_space(player_ptr, dd_ptr, &y0, &x0, ysize + 1, xsize + 1)) {
+        if (!find_space(player_ptr, dd_ptr, &y0, &x0, height + 1, width + 1)) {
             /*
              * Still no space?!
              * Try normal room
@@ -50,14 +50,14 @@ bool build_type9(PlayerType *player_ptr, dun_data_type *dd_ptr)
         const auto roug = randint1(8) * randint1(4);
 
         /* about size/2 */
-        const auto cutoff = randint1(xsize / 4) + randint1(ysize / 4) +
-                            randint1(xsize / 4) + randint1(ysize / 4);
+        const auto cutoff = randint1(width / 4) + randint1(height / 4) +
+                            randint1(width / 4) + randint1(height / 4);
 
         /* make it */
-        generate_hmap(&floor, y0, x0, xsize, ysize, grd, roug, cutoff);
+        generate_hmap(&floor, y0, x0, width, height, grd, roug, cutoff);
 
         /* Convert to normal format + clean up */
-        if (generate_fracave(player_ptr, y0, x0, xsize, ysize, cutoff, should_brighten, true)) {
+        if (generate_fracave(player_ptr, y0, x0, width, height, cutoff, should_brighten, true)) {
             break;
         }
     }

@@ -56,14 +56,14 @@ std::vector<std::vector<wilderness_type>> wilderness;
 static bool generate_encounter;
 
 struct border_type {
-    int16_t north[MAX_WID];
-    int16_t south[MAX_WID];
-    int16_t east[MAX_HGT];
-    int16_t west[MAX_HGT];
-    int16_t north_west;
-    int16_t north_east;
-    int16_t south_west;
-    int16_t south_east;
+    short top[MAX_WID];
+    short bottom[MAX_WID];
+    short right[MAX_HGT];
+    short left[MAX_HGT];
+    short top_left;
+    short top_right;
+    short bottom_left;
+    short bottom_right;
 };
 
 struct wilderness_grid {
@@ -282,16 +282,16 @@ static void generate_wilderness_area(FloorType *floor_ptr, int terrain, uint32_t
         return;
     }
 
-    int16_t north_west = floor_ptr->grid_array[1][1].feat;
-    int16_t south_west = floor_ptr->grid_array[MAX_HGT - 2][1].feat;
-    int16_t north_east = floor_ptr->grid_array[1][MAX_WID - 2].feat;
-    int16_t south_east = floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat;
-    FEAT_IDX roughness = 1; /* The roughness of the level. */
+    const auto top_left = floor_ptr->grid_array[1][1].feat;
+    const auto bottom_left = floor_ptr->grid_array[MAX_HGT - 2][1].feat;
+    const auto top_right = floor_ptr->grid_array[1][MAX_WID - 2].feat;
+    const auto bottom_right = floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat;
+    const short roughness = 1; /* The roughness of the level. */
     plasma_recursive(floor_ptr, 1, 1, MAX_WID - 2, MAX_HGT - 2, table_size - 1, roughness);
-    floor_ptr->grid_array[1][1].feat = north_west;
-    floor_ptr->grid_array[MAX_HGT - 2][1].feat = south_west;
-    floor_ptr->grid_array[1][MAX_WID - 2].feat = north_east;
-    floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat = south_east;
+    floor_ptr->grid_array[1][1].feat = top_left;
+    floor_ptr->grid_array[MAX_HGT - 2][1].feat = bottom_left;
+    floor_ptr->grid_array[1][MAX_WID - 2].feat = top_right;
+    floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat = bottom_right;
     for (POSITION y1 = 1; y1 < MAX_HGT - 1; y1++) {
         for (POSITION x1 = 1; x1 < MAX_WID - 1; x1++) {
             floor_ptr->grid_array[y1][x1].feat = terrain_table[terrain][floor_ptr->grid_array[y1][x1].feat];
@@ -436,42 +436,42 @@ void wilderness_gen(PlayerType *player_ptr)
     /* North border */
     generate_area(player_ptr, wild_y - 1, wild_x, true, false);
     for (int i = 1; i < MAX_WID - 1; i++) {
-        border.north[i] = floor.grid_array[MAX_HGT - 2][i].feat;
+        border.top[i] = floor.grid_array[MAX_HGT - 2][i].feat;
     }
 
     /* South border */
     generate_area(player_ptr, wild_y + 1, wild_x, true, false);
     for (int i = 1; i < MAX_WID - 1; i++) {
-        border.south[i] = floor.grid_array[1][i].feat;
+        border.bottom[i] = floor.grid_array[1][i].feat;
     }
 
     /* West border */
     generate_area(player_ptr, wild_y, wild_x - 1, true, false);
     for (int i = 1; i < MAX_HGT - 1; i++) {
-        border.west[i] = floor.grid_array[i][MAX_WID - 2].feat;
+        border.left[i] = floor.grid_array[i][MAX_WID - 2].feat;
     }
 
     /* East border */
     generate_area(player_ptr, wild_y, wild_x + 1, true, false);
     for (int i = 1; i < MAX_HGT - 1; i++) {
-        border.east[i] = floor.grid_array[i][1].feat;
+        border.right[i] = floor.grid_array[i][1].feat;
     }
 
     /* North west corner */
     generate_area(player_ptr, wild_y - 1, wild_x - 1, false, true);
-    border.north_west = floor.grid_array[MAX_HGT - 2][MAX_WID - 2].feat;
+    border.top_left = floor.grid_array[MAX_HGT - 2][MAX_WID - 2].feat;
 
     /* North east corner */
     generate_area(player_ptr, wild_y - 1, wild_x + 1, false, true);
-    border.north_east = floor.grid_array[MAX_HGT - 2][1].feat;
+    border.top_right = floor.grid_array[MAX_HGT - 2][1].feat;
 
     /* South west corner */
     generate_area(player_ptr, wild_y + 1, wild_x - 1, false, true);
-    border.south_west = floor.grid_array[1][MAX_WID - 2].feat;
+    border.bottom_left = floor.grid_array[1][MAX_WID - 2].feat;
 
     /* South east corner */
     generate_area(player_ptr, wild_y + 1, wild_x + 1, false, true);
-    border.south_east = floor.grid_array[1][1].feat;
+    border.bottom_right = floor.grid_array[1][1].feat;
 
     /* Create terrain of the current area */
     generate_area(player_ptr, wild_y, wild_x, false, false);
@@ -480,34 +480,34 @@ void wilderness_gen(PlayerType *player_ptr)
     for (auto i = 0; i < MAX_WID; i++) {
         auto &grid = floor.get_grid({ 0, i });
         grid.feat = feat_permanent;
-        grid.mimic = border.north[i];
+        grid.mimic = border.top[i];
     }
 
     /* Special boundary walls -- South */
     for (auto i = 0; i < MAX_WID; i++) {
         auto &grid = floor.get_grid({ MAX_HGT - 1, i });
         grid.feat = feat_permanent;
-        grid.mimic = border.south[i];
+        grid.mimic = border.bottom[i];
     }
 
     /* Special boundary walls -- West */
     for (auto i = 0; i < MAX_HGT; i++) {
         auto &grid = floor.get_grid({ i, 0 });
         grid.feat = feat_permanent;
-        grid.mimic = border.west[i];
+        grid.mimic = border.left[i];
     }
 
     /* Special boundary walls -- East */
     for (auto i = 0; i < MAX_HGT; i++) {
         auto &grid = floor.get_grid({ i, MAX_WID - 1 });
         grid.feat = feat_permanent;
-        grid.mimic = border.east[i];
+        grid.mimic = border.right[i];
     }
 
-    floor.get_grid({ 0, 0 }).mimic = border.north_west;
-    floor.get_grid({ 0, MAX_WID - 1 }).mimic = border.north_east;
-    floor.get_grid({ MAX_HGT - 1, 0 }).mimic = border.south_west;
-    floor.get_grid({ MAX_HGT - 1, MAX_WID - 1 }).mimic = border.south_east;
+    floor.get_grid({ 0, 0 }).mimic = border.top_left;
+    floor.get_grid({ 0, MAX_WID - 1 }).mimic = border.top_right;
+    floor.get_grid({ MAX_HGT - 1, 0 }).mimic = border.bottom_left;
+    floor.get_grid({ MAX_HGT - 1, MAX_WID - 1 }).mimic = border.bottom_right;
     for (auto y = 0; y < floor.height; y++) {
         for (auto x = 0; x < floor.width; x++) {
             auto &grid = floor.get_grid({ y, x });

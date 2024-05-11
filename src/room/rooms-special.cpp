@@ -57,14 +57,14 @@ void place_inner_perm_glass(PlayerType *player_ptr, Grid &grid)
 bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     /* Pick a room size */
-    const auto xsize = rand_range(9, 13);
-    const auto ysize = rand_range(9, 13);
+    const auto width = rand_range(9, 13);
+    const auto height = rand_range(9, 13);
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
     auto &floor = *player_ptr->current_floor_ptr;
     int yval;
     int xval;
-    if (!find_space(player_ptr, dd_ptr, &yval, &xval, ysize + 2, xsize + 2)) {
+    if (!find_space(player_ptr, dd_ptr, &yval, &xval, height + 2, width + 2)) {
         return false;
     }
 
@@ -72,14 +72,14 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
     const auto should_brighten = ((floor.dun_level <= randint1(25)) && floor.get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS));
 
     /* Get corner values */
-    const auto y1 = yval - ysize / 2;
-    const auto x1 = xval - xsize / 2;
-    const auto y2 = yval + (ysize - 1) / 2;
-    const auto x2 = xval + (xsize - 1) / 2;
+    const auto top = yval - height / 2;
+    const auto left = xval - width / 2;
+    const auto bottom = yval + (height - 1) / 2;
+    const auto right = xval + (width - 1) / 2;
 
     /* Place a full floor under the room */
-    for (auto y = y1 - 1; y <= y2 + 1; y++) {
-        for (auto x = x1 - 1; x <= x2 + 1; x++) {
+    for (auto y = top - 1; y <= bottom + 1; y++) {
+        for (auto x = left - 1; x <= right + 1; x++) {
             auto &grid = floor.get_grid({ y, x });
             place_floor_glass(player_ptr, grid);
             grid.info |= (CAVE_ROOM);
@@ -90,14 +90,14 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
     }
 
     /* Walls around the room */
-    for (auto y = y1 - 1; y <= y2 + 1; y++) {
-        place_outer_glass(player_ptr, floor.get_grid({ y, x1 - 1 }));
-        place_outer_glass(player_ptr, floor.get_grid({ y, x2 + 1 }));
+    for (auto y = top - 1; y <= bottom + 1; y++) {
+        place_outer_glass(player_ptr, floor.get_grid({ y, left - 1 }));
+        place_outer_glass(player_ptr, floor.get_grid({ y, right + 1 }));
     }
 
-    for (auto x = x1 - 1; x <= x2 + 1; x++) {
-        place_outer_glass(player_ptr, floor.get_grid({ y1 - 1, x }));
-        place_outer_glass(player_ptr, floor.get_grid({ y2 + 1, x }));
+    for (auto x = left - 1; x <= right + 1; x++) {
+        place_outer_glass(player_ptr, floor.get_grid({ top - 1, x }));
+        place_outer_glass(player_ptr, floor.get_grid({ bottom + 1, x }));
     }
 
     switch (randint1(3)) {
@@ -145,10 +145,10 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
     case 2: /* 1 lite breather + random object */
     {
         /* Pillars */
-        place_inner_glass(player_ptr, floor.get_grid({ y1 + 1, x1 + 1 }));
-        place_inner_glass(player_ptr, floor.get_grid({ y1 + 1, x2 - 1 }));
-        place_inner_glass(player_ptr, floor.get_grid({ y2 - 1, x1 + 1 }));
-        place_inner_glass(player_ptr, floor.get_grid({ y2 - 1, x2 - 1 }));
+        place_inner_glass(player_ptr, floor.get_grid({ top + 1, left + 1 }));
+        place_inner_glass(player_ptr, floor.get_grid({ top + 1, right - 1 }));
+        place_inner_glass(player_ptr, floor.get_grid({ bottom - 1, left + 1 }));
+        place_inner_glass(player_ptr, floor.get_grid({ bottom - 1, right - 1 }));
         get_mon_num_prep(player_ptr, vault_aux_lite, nullptr);
 
         const auto monrace_id = get_mon_num(player_ptr, 0, floor.dun_level, 0);
