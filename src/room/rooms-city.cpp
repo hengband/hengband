@@ -151,17 +151,17 @@ Pos2D UndergroundBuilding::pick_door_direction() const
 void UndergroundBuilding::set_area(int height, int width, int max_height, int max_width)
 {
     const Pos2D center(rand_range(2, height - 3), rand_range(2, width - 3));
-    auto north_west_y = center.y - randint1(max_height);
-    north_west_y = std::max(north_west_y, 1);
-    auto north_west_x = center.x - randint1(max_width);
-    north_west_x = std::max(north_west_x, 1);
-    this->rectangle.top_left = { north_west_y, north_west_x };
+    auto top = center.y - randint1(max_height);
+    top = std::max(top, 1);
+    auto left = center.x - randint1(max_width);
+    left = std::max(left, 1);
+    this->rectangle.top_left = { top, left };
 
-    auto south_east_y = center.y + randint1(max_height);
-    south_east_y = std::min(south_east_y, height - 2);
-    auto south_east_x = center.x + randint1(max_width);
-    south_east_x = std::min(south_east_x, width - 2);
-    this->rectangle.bottom_right = { south_east_y, south_east_x };
+    auto bottom = center.y + randint1(max_height);
+    bottom = std::min(bottom, height - 2);
+    auto right = center.x + randint1(max_width);
+    right = std::min(right, width - 2);
+    this->rectangle.bottom_right = { bottom, right };
 }
 
 bool UndergroundBuilding::is_area_used(const std::vector<std::vector<bool>> &ugarcade_used) const
