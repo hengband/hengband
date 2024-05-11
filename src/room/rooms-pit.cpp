@@ -23,6 +23,7 @@
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
 
+namespace {
 /*!
  * @brief 生成するPitの情報テーブル
  */
@@ -73,6 +74,7 @@ const std::vector<TrappedMonster> place_table_trapped_pit = {
     { { -2, 0 }, 7 }, { { +2, 0 }, 7 },
 };
 // clang-format on
+}
 
 /*!
  * @brief タイプ6の部屋…pitを生成する / Type 6 -- Monster pits
