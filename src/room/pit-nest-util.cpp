@@ -1,54 +1,66 @@
 #include "room/pit-nest-util.h"
-#include "game-option/cheat-options.h"
-#include "game-option/cheat-types.h"
-#include "grid/door.h"
-#include "grid/grid.h"
-#include "monster-floor/monster-generator.h"
-#include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
-#include "monster/monster-info.h"
-#include "monster/monster-list.h"
-#include "monster/monster-util.h"
-#include "room/door-definition.h"
-#include "room/space-finder.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
-#include "system/grid-type-definition.h"
-#include "system/monster-entity.h"
 #include "system/monster-race-info.h"
+#include "util/enum-converter.h"
 #include "util/probability-table.h"
-#include "util/sort.h"
-#include "wizard/wizard-messages.h"
-#include <array>
-#include <optional>
-#include <utility>
-#include <vector>
 
 /*!
- * @brief ダンジョン毎に指定されたピット配列を基準にランダムなpit/nestタイプを決める
- * @param l_ptr 選択されたpit/nest情報を返す参照ポインタ
- * @param allow_flag_mask 生成が許されるpit/nestのビット配列
- * @return 選択されたpit/nestのID、選択失敗した場合-1を返す。
+ * @brief ダンジョン毎に指定されたピット配列を基準にランダムなnestタイプを決める
+ * @param floor フロアへの参照
+ * @param nest_types nest定義のマップ
+ * @return 選択されたnestのID、選択失敗した場合nullopt.
  */
-int pick_vault_type(const std::vector<nest_pit_type> &np_types, uint16_t allow_flag_mask, int dun_level)
+std::optional<NestKind> pick_nest_type(const FloorType &floor, const std::map<NestKind, nest_pit_type> &nest_types)
 {
-    ProbabilityTable<int> table;
-    for (size_t i = 0; i < np_types.size(); i++) {
-        const nest_pit_type *n_ptr = &np_types.at(i);
-
-        if (n_ptr->level > dun_level) {
+    ProbabilityTable<NestKind> table;
+    for (const auto &[nest_kind, nest] : nest_types) {
+        if (nest.level > floor.dun_level) {
             continue;
         }
 
-        if (!(allow_flag_mask & (1UL << i))) {
+        if (none_bits(floor.get_dungeon_definition().nest, (1UL << enum2i(nest_kind)))) {
             continue;
         }
 
-        table.entry_item(i, n_ptr->chance * MAX_DEPTH / (std::min(dun_level, MAX_DEPTH - 1) - n_ptr->level + 5));
+        table.entry_item(nest_kind, nest.chance * MAX_DEPTH / (std::min(floor.dun_level, MAX_DEPTH - 1) - nest.level + 5));
     }
 
-    return !table.empty() ? table.pick_one_at_random() : -1;
+    if (table.empty()) {
+        return std::nullopt;
+    }
+
+    return table.pick_one_at_random();
+}
+
+/*!
+ * @brief ダンジョン毎に指定されたピット配列を基準にランダムなpitタイプを決める
+ * @param floor フロアへの参照
+ * @param pit_types pit定義のマップ
+ * @return 選択されたpitのID、選択失敗した場合nullopt.
+ */
+std::optional<PitKind> pick_pit_type(const FloorType &floor, const std::map<PitKind, nest_pit_type> &pit_types)
+{
+    ProbabilityTable<PitKind> table;
+    for (const auto &[pit_kind, pit] : pit_types) {
+        if (pit.level > floor.dun_level) {
+            continue;
+        }
+
+        if (none_bits(floor.get_dungeon_definition().pit, (1UL << enum2i(pit_kind)))) {
+            continue;
+        }
+
+        table.entry_item(pit_kind, pit.chance * MAX_DEPTH / (std::min(floor.dun_level, MAX_DEPTH - 1) - pit.level + 5));
+    }
+
+    if (table.empty()) {
+        return std::nullopt;
+    }
+
+    return table.pick_one_at_random();
 }
 
 /*!
@@ -60,44 +72,51 @@ int pick_vault_type(const std::vector<nest_pit_type> &np_types, uint16_t allow_f
  * Hack -- Get the string describing subtype of pit/nest
  * Determined in prepare function (some pit/nest only)
  */
-std::string pit_subtype_string(int type, bool nest)
+std::string pit_subtype_string(std::variant<NestKind, PitKind> type, bool nest)
 {
     if (nest) {
-        switch (type) {
-        case NEST_TYPE_CLONE:
+        switch (std::get<0>(type)) {
+        case NestKind::CLONE:
             return std::string("(").append(monraces_info[vault_aux_race].name).append(1, ')');
-        case NEST_TYPE_SYMBOL_GOOD:
-        case NEST_TYPE_SYMBOL_EVIL:
+        case NestKind::SYMBOL_GOOD:
+        case NestKind::SYMBOL_EVIL:
             return std::string("(").append(1, vault_aux_char).append(1, ')');
         }
 
-        return std::string();
+        return "";
     }
 
-    /* Pits */
-    switch (type) {
-    case PIT_TYPE_SYMBOL_GOOD:
-    case PIT_TYPE_SYMBOL_EVIL:
+    switch (std::get<1>(type)) {
+    case PitKind::SYMBOL_GOOD:
+    case PitKind::SYMBOL_EVIL:
         return std::string("(").append(1, vault_aux_char).append(1, ')');
-        break;
-    case PIT_TYPE_DRAGON:
+    case PitKind::DRAGON:
         if (vault_aux_dragon_mask4.has_all_of({ MonsterAbilityType::BR_ACID, MonsterAbilityType::BR_ELEC, MonsterAbilityType::BR_FIRE, MonsterAbilityType::BR_COLD, MonsterAbilityType::BR_POIS })) {
             return _("(万色)", "(multi-hued)");
-        } else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_ACID)) {
-            return _("(酸)", "(acid)");
-        } else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_ELEC)) {
-            return _("(稲妻)", "(lightning)");
-        } else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_FIRE)) {
-            return _("(火炎)", "(fire)");
-        } else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_COLD)) {
-            return _("(冷気)", "(frost)");
-        } else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_POIS)) {
-            return _("(毒)", "(poison)");
-        } else {
-            return _("(未定義)", "(undefined)");
         }
-        break;
-    }
 
-    return std::string();
+        if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_ACID)) {
+            return _("(酸)", "(acid)");
+        }
+
+        if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_ELEC)) {
+            return _("(稲妻)", "(lightning)");
+        }
+
+        if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_FIRE)) {
+            return _("(火炎)", "(fire)");
+        }
+
+        if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_COLD)) {
+            return _("(冷気)", "(frost)");
+        }
+
+        if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_POIS)) {
+            return _("(毒)", "(poison)");
+        }
+
+        return _("(未定義)", "(undefined)"); // @todo 本来は例外を飛ばすべき.
+    default:
+        return "";
+    }
 }

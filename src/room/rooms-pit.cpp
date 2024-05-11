@@ -27,17 +27,17 @@ namespace {
 /*!
  * @brief 生成するPitの情報テーブル
  */
-const std::vector<nest_pit_type> pit_types = {
-    { _("オーク", "orc"), vault_aux_orc, std::nullopt, 5, 6 },
-    { _("トロル", "troll"), vault_aux_troll, std::nullopt, 20, 6 },
-    { _("巨人", "giant"), vault_aux_giant, std::nullopt, 50, 6 },
-    { _("狂気", "lovecraftian"), vault_aux_cthulhu, std::nullopt, 80, 2 },
-    { _("シンボル(善)", "symbol good"), vault_aux_symbol_g, vault_prep_symbol, 70, 1 },
-    { _("シンボル(悪)", "symbol evil"), vault_aux_symbol_e, vault_prep_symbol, 70, 1 },
-    { _("教会", "chapel"), vault_aux_chapel_g, std::nullopt, 65, 2 },
-    { _("ドラゴン", "dragon"), vault_aux_dragon, vault_prep_dragon, 70, 6 },
-    { _("デーモン", "demon"), vault_aux_demon, std::nullopt, 80, 6 },
-    { _("ダークエルフ", "dark elf"), vault_aux_dark_elf, std::nullopt, 45, 4 },
+const std::map<PitKind, nest_pit_type> pit_types = {
+    { PitKind::ORC, { _("オーク", "orc"), vault_aux_orc, std::nullopt, 5, 6 } },
+    { PitKind::TROLL, { _("トロル", "troll"), vault_aux_troll, std::nullopt, 20, 6 } },
+    { PitKind::GIANT, { _("巨人", "giant"), vault_aux_giant, std::nullopt, 50, 6 } },
+    { PitKind::LOVECRAFTIAN, { _("狂気", "lovecraftian"), vault_aux_cthulhu, std::nullopt, 80, 2 } },
+    { PitKind::SYMBOL_GOOD, { _("シンボル(善)", "symbol good"), vault_aux_symbol_g, vault_prep_symbol, 70, 1 } },
+    { PitKind::SYMBOL_EVIL, { _("シンボル(悪)", "symbol evil"), vault_aux_symbol_e, vault_prep_symbol, 70, 1 } },
+    { PitKind::CHAPEL, { _("教会", "chapel"), vault_aux_chapel_g, std::nullopt, 65, 2 } },
+    { PitKind::DRAGON, { _("ドラゴン", "dragon"), vault_aux_dragon, vault_prep_dragon, 70, 6 } },
+    { PitKind::DEMON, { _("デーモン", "demon"), vault_aux_demon, std::nullopt, 80, 6 } },
+    { PitKind::DARK_ELF, { _("ダークエルフ", "dark elf"), vault_aux_dark_elf, std::nullopt, 45, 4 } },
 };
 
 class TrappedMonster {
@@ -115,21 +115,19 @@ const std::vector<TrappedMonster> place_table_trapped_pit = {
 bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    const auto cur_pit_type = pick_vault_type(pit_types, floor.get_dungeon_definition().pit, floor.dun_level);
-
-    /* No type available */
-    if (cur_pit_type < 0) {
+    const auto pit_type = pick_pit_type(floor, pit_types);
+    if (!pit_type) {
         return false;
     }
 
-    const auto *n_ptr = &pit_types[cur_pit_type];
+    const auto &pit = pit_types.at(*pit_type);
 
     /* Process a preparation function if necessary */
-    if (n_ptr->prep_func) {
-        (*(n_ptr->prep_func))(player_ptr);
+    if (pit.prep_func) {
+        (*(pit.prep_func))(player_ptr);
     }
 
-    get_mon_num_prep(player_ptr, n_ptr->hook_func, nullptr);
+    get_mon_num_prep(player_ptr, pit.hook_func, nullptr);
     MonsterEntity align;
     align.sub_align = SUB_ALIGN_NEUTRAL;
 
@@ -260,7 +258,7 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     constexpr auto fmt_generate = _("モンスター部屋(pit)(%s%s)を生成します。", "Monster pit (%s%s)");
     msg_format_wizard(
-        player_ptr, CHEAT_DUNGEON, fmt_generate, n_ptr->name.data(), pit_subtype_string(cur_pit_type, false).data());
+        player_ptr, CHEAT_DUNGEON, fmt_generate, pit.name.data(), pit_subtype_string(*pit_type, false).data());
 
     /* Select the entries */
     for (auto i = 0; i < 8; i++) {
@@ -399,8 +397,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
     Grid *g_ptr;
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    int cur_pit_type = pick_vault_type(pit_types, floor_ptr->get_dungeon_definition().pit, floor_ptr->dun_level);
-    const nest_pit_type *n_ptr;
+    const auto pit_type = pick_pit_type(*floor_ptr, pit_types);
 
     /* Only in Angband */
     if (floor_ptr->dungeon_idx != DUNGEON_ANGBAND) {
@@ -408,17 +405,17 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
     }
 
     /* No type available */
-    if (cur_pit_type < 0) {
+    if (!pit_type) {
         return false;
     }
 
-    n_ptr = &pit_types[cur_pit_type];
+    const auto &pit = pit_types.at(*pit_type);
 
     /* Process a preparation function if necessary */
-    if (n_ptr->prep_func) {
-        (*(n_ptr->prep_func))(player_ptr);
+    if (pit.prep_func) {
+        (*(pit.prep_func))(player_ptr);
     }
-    get_mon_num_prep(player_ptr, n_ptr->hook_func, vault_aux_trapped_pit);
+    get_mon_num_prep(player_ptr, pit.hook_func, vault_aux_trapped_pit);
 
     align.sub_align = SUB_ALIGN_NEUTRAL;
 
@@ -569,7 +566,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
     }
 
     constexpr auto fmt = _("%s%sの罠ピットが生成されました。", "Trapped monster pit (%s%s)");
-    msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt, n_ptr->name.data(), pit_subtype_string(cur_pit_type, false).data());
+    msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt, pit.name.data(), pit_subtype_string(*pit_type, false).data());
 
     /* Select the entries */
     for (i = 0; i < 8; i++) {
