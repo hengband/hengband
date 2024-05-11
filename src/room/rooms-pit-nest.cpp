@@ -249,80 +249,58 @@ std::optional<std::array<nest_mon_info_type, NUM_NEST_MON_TYPE>> pick_nest_monst
 Rect2D generate_large_room(PlayerType *player_ptr, const Pos2D &center)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    constexpr Vector2D vec(-4, -11);
-    const auto top_left = center + vec;
-    const auto bottom_right = center + vec.inverted();
-    for (auto y = top_left.y - 1; y <= bottom_right.y + 1; y++) {
-        for (auto x = top_left.x - 1; x <= bottom_right.x + 1; x++) {
-            auto &grid = floor.get_grid({ y, x });
-            place_grid(player_ptr, &grid, GB_FLOOR);
-            grid.add_info(CAVE_ROOM);
-        }
-    }
+    constexpr Vector2D vec(4, 11);
+    const Rect2D rectangle(center, vec);
+    rectangle.resized(1).each_area([player_ptr, &floor](const Pos2D &pos) {
+        auto &grid = floor.get_grid(pos);
+        place_grid(player_ptr, &grid, GB_FLOOR);
+        grid.add_info(CAVE_ROOM);
+    });
 
-    for (auto y = top_left.y - 1; y <= bottom_right.y + 1; y++) {
-        place_grid(player_ptr, &floor.get_grid({ y, top_left.x - 1 }), GB_OUTER);
-        place_grid(player_ptr, &floor.get_grid({ y, bottom_right.x + 1 }), GB_OUTER);
-    }
+    rectangle.resized(1).each_edge([player_ptr, &floor](const Pos2D &pos) {
+        place_grid(player_ptr, &floor.get_grid(pos), GB_OUTER);
+    });
 
-    for (auto x = top_left.x - 1; x <= bottom_right.x + 1; x++) {
-        place_grid(player_ptr, &floor.get_grid({ top_left.y - 1, x }), GB_OUTER);
-        place_grid(player_ptr, &floor.get_grid({ bottom_right.y + 1, x }), GB_OUTER);
-    }
-
-    return { top_left, bottom_right };
+    return rectangle;
 }
 
 void generate_inner_room(PlayerType *player_ptr, const Pos2D &center, Rect2D &rectangle)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    constexpr Vector2D vec(2, 2);
-    auto &[top_left, bottom_right] = rectangle;
-    top_left += vec;
-    bottom_right += vec.inverted();
+    const auto inner_rectangle = rectangle.resized(-2);
 
-    for (auto y = top_left.y - 1; y <= bottom_right.y + 1; y++) {
-        place_grid(player_ptr, &floor.get_grid({ y, top_left.x - 1 }), GB_INNER);
-        place_grid(player_ptr, &floor.get_grid({ y, bottom_right.x + 1 }), GB_INNER);
-    }
+    inner_rectangle.resized(1).each_edge([player_ptr, &floor](const Pos2D &pos) {
+        place_grid(player_ptr, &floor.get_grid(pos), GB_INNER);
+    });
 
-    for (auto x = top_left.x - 1; x <= bottom_right.x + 1; x++) {
-        place_grid(player_ptr, &floor.get_grid({ top_left.y - 1, x }), GB_INNER);
-        place_grid(player_ptr, &floor.get_grid({ bottom_right.y + 1, x }), GB_INNER);
-    }
-
-    for (auto y = top_left.y; y <= bottom_right.y; y++) {
-        for (auto x = top_left.x; x <= bottom_right.x; x++) {
-            floor.get_grid({ y, x }).add_info(CAVE_ICKY);
-        }
-    }
+    inner_rectangle.each_area([&floor](const Pos2D &pos) {
+        floor.get_grid(pos).add_info(CAVE_ICKY);
+    });
 
     /* Place a secret door */
     switch (randint1(4)) {
     case 1:
-        place_secret_door(player_ptr, top_left.y - 1, center.x, DOOR_DEFAULT);
+        place_secret_door(player_ptr, inner_rectangle.top_left.y - 1, center.x, DOOR_DEFAULT);
         break;
     case 2:
-        place_secret_door(player_ptr, bottom_right.y + 1, center.x, DOOR_DEFAULT);
+        place_secret_door(player_ptr, inner_rectangle.bottom_right.y + 1, center.x, DOOR_DEFAULT);
         break;
     case 3:
-        place_secret_door(player_ptr, center.y, top_left.x - 1, DOOR_DEFAULT);
+        place_secret_door(player_ptr, center.y, inner_rectangle.top_left.x - 1, DOOR_DEFAULT);
         break;
     case 4:
-        place_secret_door(player_ptr, center.y, bottom_right.x + 1, DOOR_DEFAULT);
+        place_secret_door(player_ptr, center.y, inner_rectangle.bottom_right.x + 1, DOOR_DEFAULT);
         break;
     }
 }
 
 void place_monsters_in_nest(PlayerType *player_ptr, const Pos2D &center, std::array<nest_mon_info_type, NUM_NEST_MON_TYPE> &nest_mon_info_list)
 {
-    for (auto y = center.y - 2; y <= center.y + 2; y++) {
-        for (auto x = center.x - 9; x <= center.x + 9; x++) {
-            auto &nest_mon_info = rand_choice(nest_mon_info_list);
-            (void)place_specific_monster(player_ptr, 0, y, x, nest_mon_info.r_idx, 0L);
-            nest_mon_info.used = true;
-        }
-    }
+    Rect2D(center, Vector2D(2, 9)).each_area([player_ptr, &nest_mon_info_list](const Pos2D &pos) {
+        auto &nest_mon_info = rand_choice(nest_mon_info_list);
+        (void)place_specific_monster(player_ptr, 0, pos.y, pos.x, nest_mon_info.r_idx, 0L);
+        nest_mon_info.used = true;
+    });
 }
 
 void output_debug_nest(PlayerType *player_ptr, std::array<nest_mon_info_type, NUM_NEST_MON_TYPE> &nest_mon_info_list)

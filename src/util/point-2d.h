@@ -138,6 +138,35 @@ struct Rectangle2D {
         : Rectangle2D(center + vec, center + vec.inverted())
     {
     }
+
+    constexpr Rectangle2D resized(T margin) const
+    {
+        const Vector2D<T> vec(margin, margin);
+        return { this->top_left + vec.inverted(), this->bottom_right + vec };
+    }
+
+    template <std::invocable<Point2D<T>> F>
+    void each_area(F &&f) const
+    {
+        for (auto y = this->top_left.y; y <= this->bottom_right.y; ++y) {
+            for (auto x = this->top_left.x; x <= this->bottom_right.x; ++x) {
+                f(Point2D<T>(y, x));
+            }
+        }
+    }
+
+    template <std::invocable<Point2D<T>> F>
+    void each_edge(F &&f) const
+    {
+        for (auto y = this->top_left.y; y <= this->bottom_right.y; ++y) {
+            f(Point2D<T>(y, top_left.x));
+            f(Point2D<T>(y, bottom_right.x));
+        }
+        for (auto x = this->top_left.x; x <= this->bottom_right.x; ++x) {
+            f(Point2D<T>(top_left.y, x));
+            f(Point2D<T>(bottom_right.y, x));
+        }
+    }
 };
 
 //! ゲームの平面マップ上の座標位置を表す構造体
