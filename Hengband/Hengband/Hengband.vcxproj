@@ -303,6 +303,7 @@
     <ClCompile Include="..\..\src\object-use\read\read-executor-factory.cpp" />
     <ClCompile Include="..\..\src\object-use\read\ring-power-read-executor.cpp" />
     <ClCompile Include="..\..\src\object-use\read\scroll-read-executor.cpp" />
+    <ClCompile Include="..\..\src\room\rooms-pit.cpp" />
     <ClCompile Include="..\..\src\smith\object-smith.cpp" />
     <ClCompile Include="..\..\src\smith\smith-info.cpp" />
     <ClCompile Include="..\..\src\smith\smith-tables.cpp" />
@@ -1023,6 +1024,7 @@
     <ClInclude Include="..\..\src\object-use\read\read-executor-factory.h" />
     <ClInclude Include="..\..\src\object-use\read\ring-power-read-executor.h" />
     <ClInclude Include="..\..\src\object-use\read\scroll-read-executor.h" />
+    <ClInclude Include="..\..\src\room\rooms-pit.h" />
     <ClInclude Include="..\..\src\smith\object-smith.h" />
     <ClInclude Include="..\..\src\smith\smith-info.h" />
     <ClInclude Include="..\..\src\smith\smith-tables.h" />

@@ -787,6 +787,7 @@ hengband_SOURCES = \
 	room/rooms-fractal.cpp room/rooms-fractal.h \
 	room/rooms-maze-vault.cpp room/rooms-maze-vault.h \
 	room/rooms-normal.cpp room/rooms-normal.h \
+	room/rooms-pit.cpp room/rooms-pit.h\
 	room/rooms-pit-nest.cpp room/rooms-pit-nest.h \
 	room/rooms-special.cpp room/rooms-special.h \
 	room/rooms-trap.cpp room/rooms-trap.h \
