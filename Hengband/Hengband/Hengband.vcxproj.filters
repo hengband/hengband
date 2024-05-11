@@ -380,7 +380,7 @@
     <ClCompile Include="..\..\src\room\rooms-vault.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\rooms-pit-nest.cpp">
+    <ClCompile Include="..\..\src\room\pit-nest-util.cpp">
       <Filter>room</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\player-info\class-info.cpp">
@@ -3671,7 +3671,7 @@
     <ClInclude Include="..\..\src\monster\smart-learn-types.h">
       <Filter>monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\room\rooms-pit-nest.h">
+    <ClInclude Include="..\..\src\room\pit-nest-util.h">
       <Filter>room</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-description-types.h">

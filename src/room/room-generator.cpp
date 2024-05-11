@@ -9,7 +9,6 @@
 #include "room/rooms-fractal.h"
 #include "room/rooms-nest.h"
 #include "room/rooms-normal.h"
-#include "room/rooms-pit-nest.h"
 #include "room/rooms-pit.h"
 #include "room/rooms-special.h"
 #include "room/rooms-trap.h"

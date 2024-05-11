@@ -11,7 +11,7 @@
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "room/door-definition.h"
-#include "room/rooms-pit-nest.h"
+#include "room/pit-nest-util.h"
 #include "room/space-finder.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
