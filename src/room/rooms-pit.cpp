@@ -23,8 +23,6 @@
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
 
-constexpr auto TRAPPED_PIT_MONSTER_PLACE_MAX = 69; //! 開門トラップのモンスター数.
-
 /*!
  * @brief 生成するPitの情報テーブル
  */
@@ -40,6 +38,41 @@ const std::vector<nest_pit_type> pit_types = {
     { _("デーモン", "demon"), vault_aux_demon, std::nullopt, 80, 6 },
     { _("ダークエルフ", "dark elf"), vault_aux_dark_elf, std::nullopt, 45, 4 },
 };
+
+class TrappedMonster {
+public:
+    TrappedMonster(const Pos2D &pos, int strength)
+        : pos(pos)
+        , strength(strength)
+    {
+    }
+
+    Pos2D pos;
+    int strength;
+};
+
+// clang-format off
+/*!
+ * @brief 開門トラップのモンスター配置テーブル
+ * @details
+ * 中央からの相対座標(X,Y)、モンスターの強さ
+ */
+const std::vector<TrappedMonster> place_table_trapped_pit = {
+    { { -2, -9 }, 0 }, { { -2, -8 }, 0 }, { { -3, -7 }, 0 }, { { -3, -6 }, 0 }, { { +2, -9 }, 0 }, { { +2, -8 }, 0 }, { { +3, -7 }, 0 }, { { +3, -6 }, 0 },
+    { { -2, +9 }, 0 }, { { -2, +8 }, 0 }, { { -3, +7 }, 0 }, { { -3, +6 }, 0 }, { { +2, +9 }, 0 }, { { +2, +8 }, 0 }, { { +3, +7 }, 0 }, { { +3, +6 }, 0 },
+    { { -2, -7 }, 1 }, { { -3, -5 }, 1 }, { { -3, -4 }, 1 }, { { -2, +7 }, 1 }, { { -3, +5 }, 1 }, { { -3, +4 }, 1 },
+    { { +2, -7 }, 1 }, { { +3, -5 }, 1 }, { { +3, -4 }, 1 }, { { +2, +7 }, 1 }, { { +3, +5 }, 1 }, { { +3, +4 }, 1 },
+    { { -2, -6 }, 2 }, { { -2, -5 }, 2 }, { { -3, -3 }, 2 }, { { -2, +6 }, 2 }, { { -2, +5 }, 2 }, { { -3, +3 }, 2 },
+    { { +2, -6 }, 2 }, { { +2, -5 }, 2 }, { { +3, -3 }, 2 }, { { +2, +6 }, 2 }, { { +2, +5 }, 2 }, { { +3, +3 }, 2 },
+    { { -2, -4 }, 3 }, { { -3, -2 }, 3 }, { { -2, +4 }, 3 }, { { -3, +2 }, 3 },
+    { { +2, -4 }, 3 }, { { +3, -2 }, 3 }, { { +2, +4 }, 3 }, { { +3, +2 }, 3 },
+    { { -2, -3 }, 4 }, { { -3, -1 }, 4 }, { { +2, -3 }, 4 }, { { +3, -1 }, 4 },
+    { { -2, +3 }, 4 }, { { -3, +1 }, 4 }, { { +2, +3 }, 4 }, { { +3, +1 }, 4 },
+    { { -2, -2 }, 5 }, { { -3, 0 }, 5 }, { { -2, +2 }, 5 }, { { +2, -2 }, 5 }, { { +3, 0 }, 5 }, { { +2, +2 }, 5 },
+    { { -2, -1 }, 6 }, { { -2, +1 }, 6 }, { { +2, -1 }, 6 }, { { +2, +1 }, 6 },
+    { { -2, 0 }, 7 }, { { +2, 0 }, 7 },
+};
+// clang-format on
 
 /*!
  * @brief タイプ6の部屋…pitを生成する / Type 6 -- Monster pits
@@ -283,29 +316,6 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     return true;
 }
-
-// clang-format off
-/*!
- * @brief 開門トラップのモンスター配置テーブル
- * @details
- * 中央からの相対座標(X,Y)、モンスターの強さ
- */
-const int place_table_trapped_pit[TRAPPED_PIT_MONSTER_PLACE_MAX][3] = {
-    { -2, -9, 0 }, { -2, -8, 0 }, { -3, -7, 0 }, { -3, -6, 0 }, { +2, -9, 0 }, { +2, -8, 0 }, { +3, -7, 0 }, { +3, -6, 0 },
-    { -2, +9, 0 }, { -2, +8, 0 }, { -3, +7, 0 }, { -3, +6, 0 }, { +2, +9, 0 }, { +2, +8, 0 }, { +3, +7, 0 }, { +3, +6, 0 },
-    { -2, -7, 1 }, { -3, -5, 1 }, { -3, -4, 1 }, { -2, +7, 1 }, { -3, +5, 1 }, { -3, +4, 1 },
-    { +2, -7, 1 }, { +3, -5, 1 }, { +3, -4, 1 }, { +2, +7, 1 }, { +3, +5, 1 }, { +3, +4, 1 },
-    { -2, -6, 2 }, { -2, -5, 2 }, { -3, -3, 2 }, { -2, +6, 2 }, { -2, +5, 2 }, { -3, +3, 2 },
-    { +2, -6, 2 }, { +2, -5, 2 }, { +3, -3, 2 }, { +2, +6, 2 }, { +2, +5, 2 }, { +3, +3, 2 },
-    { -2, -4, 3 }, { -3, -2, 3 }, { -2, +4, 3 }, { -3, +2, 3 },
-    { +2, -4, 3 }, { +3, -2, 3 }, { +2, +4, 3 }, { +3, +2, 3 },
-    { -2, -3, 4 }, { -3, -1, 4 }, { +2, -3, 4 }, { +3, -1, 4 },
-    { -2, +3, 4 }, { -3, +1, 4 }, { +2, +3, 4 }, { +3, +1, 4 },
-    { -2, -2, 5 }, { -3, 0, 5 }, { -2, +2, 5 }, { +2, -2, 5 }, { +3, 0, 5 }, { +2, +2, 5 },
-    { -2, -1, 6 }, { -2, +1, 6 }, { +2, -1, 6 }, { +2, +1, 6 },
-    { -2, 0, 7 }, { +2, 0, 7 },
-    { 0, 0, -1 } };
-// clang-format on
 
 /*!
  * @brief 開門トラップに配置するモンスターの条件フィルタ
@@ -569,10 +579,10 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
         }
     }
 
-    for (i = 0; place_table_trapped_pit[i][2] >= 0; i++) {
-        y = yval + place_table_trapped_pit[i][0];
-        x = xval + place_table_trapped_pit[i][1];
-        place_specific_monster(player_ptr, 0, y, x, what[place_table_trapped_pit[i][2]], PM_NO_KAGE);
+    const Pos2DVec vec(yval, xval);
+    for (const auto &trapped_monster : place_table_trapped_pit) {
+        const auto pos = trapped_monster.pos + vec;
+        place_specific_monster(player_ptr, 0, pos.y, pos.x, what[trapped_monster.strength], PM_NO_KAGE);
     }
 
     return true;
