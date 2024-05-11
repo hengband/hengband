@@ -4,7 +4,6 @@
 #include <map>
 #include <optional>
 #include <string>
-#include <variant>
 
 enum class NestKind {
     CLONE = 0,
@@ -54,4 +53,5 @@ struct nest_mon_info_type {
 class FloorType;
 std::optional<NestKind> pick_nest_type(const FloorType &floor, const std::map<NestKind, nest_pit_type> &np_types);
 std::optional<PitKind> pick_pit_type(const FloorType &floor, const std::map<PitKind, nest_pit_type> &np_types);
-std::string pit_subtype_string(std::variant<NestKind, PitKind> type, bool nest);
+std::string pit_subtype_string(PitKind type);
+std::string nest_subtype_string(NestKind type);

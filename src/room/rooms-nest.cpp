@@ -290,7 +290,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     generate_inner_room(player_ptr, center, rectangle);
 
     constexpr auto fmt_nest = _("モンスター部屋(nest)(%s%s)を生成します。", "Monster nest (%s%s)");
-    msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest, nest.name.data(), pit_subtype_string(*nest_type, true).data());
+    msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest, nest.name.data(), nest_subtype_string(*nest_type).data());
     place_monsters_in_nest(player_ptr, center, *nest_mon_info_list);
     output_debug_nest(player_ptr, *nest_mon_info_list);
     return true;

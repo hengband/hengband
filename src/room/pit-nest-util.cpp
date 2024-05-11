@@ -64,29 +64,13 @@ std::optional<PitKind> pick_pit_type(const FloorType &floor, const std::map<PitK
 }
 
 /*!
- * @brief デバッグ時に生成されたpit/nestの型を出力する処理
- * @param type pit/nestの型ID
- * @param nest TRUEならばnest、FALSEならばpit
- * @return デバッグ表示文字列の参照ポインタ
- * @details
- * Hack -- Get the string describing subtype of pit/nest
- * Determined in prepare function (some pit/nest only)
+ * @brief デバッグ時に生成されたpitの型を出力する処理
+ * @param type pitの型ID
+ * @return デバッグ表示文字列
  */
-std::string pit_subtype_string(std::variant<NestKind, PitKind> type, bool nest)
+std::string pit_subtype_string(PitKind type)
 {
-    if (nest) {
-        switch (std::get<0>(type)) {
-        case NestKind::CLONE:
-            return std::string("(").append(monraces_info[vault_aux_race].name).append(1, ')');
-        case NestKind::SYMBOL_GOOD:
-        case NestKind::SYMBOL_EVIL:
-            return std::string("(").append(1, vault_aux_char).append(1, ')');
-        }
-
-        return "";
-    }
-
-    switch (std::get<1>(type)) {
+    switch (type) {
     case PitKind::SYMBOL_GOOD:
     case PitKind::SYMBOL_EVIL:
         return std::string("(").append(1, vault_aux_char).append(1, ')');
@@ -116,6 +100,24 @@ std::string pit_subtype_string(std::variant<NestKind, PitKind> type, bool nest)
         }
 
         return _("(未定義)", "(undefined)"); // @todo 本来は例外を飛ばすべき.
+    default:
+        return "";
+    }
+}
+
+/*!
+ * @brief デバッグ時に生成されたnestの型を出力する処理
+ * @param type nestの型ID
+ * @return デバッグ表示文字列
+ */
+std::string nest_subtype_string(NestKind type)
+{
+    switch (type) {
+    case NestKind::CLONE:
+        return std::string("(").append(monraces_info[vault_aux_race].name).append(1, ')');
+    case NestKind::SYMBOL_GOOD:
+    case NestKind::SYMBOL_EVIL:
+        return std::string("(").append(1, vault_aux_char).append(1, ')');
     default:
         return "";
     }
