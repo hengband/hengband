@@ -10,6 +10,11 @@
 
 class ColoredChar {
 public:
+    constexpr ColoredChar()
+        : ColoredChar(0, '\0')
+    {
+    }
+
     constexpr ColoredChar(uint8_t color, char character)
         : color(color)
         , character(character)

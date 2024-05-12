@@ -15,8 +15,8 @@ void reset_visuals(PlayerType *player_ptr)
 {
     for (auto &terrain : TerrainList::get_instance()) {
         for (int j = 0; j < F_LIT_MAX; j++) {
-            terrain.x_attr[j] = terrain.d_attr[j];
-            terrain.x_char[j] = terrain.d_char[j];
+            terrain.x_attr[j] = terrain.cc_defs[j].color;
+            terrain.x_char[j] = terrain.cc_defs[j].character;
         }
     }
 

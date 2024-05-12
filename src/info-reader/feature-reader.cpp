@@ -135,33 +135,31 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
         }
 
         size_t n;
-        char s_char;
+        char character;
         if (tokens[1].size() == 1) {
-            s_char = tokens[1][0];
+            character = tokens[1][0];
             n = 2;
         } else if (tokens[1].size() == 0 && tokens[2].size() == 0) {
             if (tokens.size() < 4) {
                 return PARSE_ERROR_TOO_FEW_ARGUMENTS;
             }
 
-            s_char = ':';
+            character = ':';
             n = 3;
         } else {
             return PARSE_ERROR_GENERIC;
         }
 
-        auto s_attr = color_char_to_attr(tokens[n++][0]);
-        if (s_attr > 127) {
+        const auto color = color_char_to_attr(tokens[n++][0]);
+        if (color > 127) {
             return PARSE_ERROR_GENERIC;
         }
 
         auto &terrain = *terrains.rbegin();
-        terrain.d_char[F_LIT_STANDARD] = s_char;
-        terrain.d_attr[F_LIT_STANDARD] = s_attr;
+        terrain.cc_defs[F_LIT_STANDARD] = { color, character };
         if (tokens.size() == n) {
             for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
-                terrain.d_char[j] = s_char;
-                terrain.d_attr[j] = s_attr;
+                terrain.cc_defs[j] = { color, character };
             }
 
             return PARSE_ERROR_NONE;
@@ -180,18 +178,18 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
                     continue;
                 }
 
-                terrain.d_char[j] = tokens[c_idx][0];
+                terrain.cc_defs[j].character = tokens[c_idx][0];
                 if (tokens[a_idx] == "*") {
                     continue;
                 }
 
                 if (tokens[a_idx] == "-") {
-                    terrain.d_attr[j] = s_attr;
+                    terrain.cc_defs[j].color = color;
                     continue;
                 }
 
-                terrain.d_attr[j] = color_char_to_attr(tokens[a_idx][0]);
-                if (terrain.d_attr[j] > 127) {
+                terrain.cc_defs[j].color = color_char_to_attr(tokens[a_idx][0]);
+                if (terrain.cc_defs[j].color > 127) {
                     return PARSE_ERROR_GENERIC;
                 }
             }
