@@ -641,22 +641,20 @@ static errr set_mon_flavor(const nlohmann::json &flavor_data, MonsterRaceInfo &m
     }
 
 #ifdef JP
-    const auto &flavor_ja = flavor_data["ja"];
-    if (!flavor_ja.is_string()) {
+    if (flavor_data.find("ja") == flavor_data.end()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
-
+    const auto &flavor_ja = flavor_data["ja"];
     const auto flavor_ja_sys = utf8_to_sys(flavor_ja.get<std::string>());
     if (!flavor_ja_sys) {
         return PARSE_ERROR_INVALID_FLAG;
     }
     monrace.text = flavor_ja_sys.value();
 #else
-    const auto &flavor_en = flavor_data["en"];
-    if (!flavor_en.is_string()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    if (flavor_data.find("en") == flavor_data.end()) {
+        return PARSE_ERROR_NONE;
     }
-    monrace.text = flavor_en.get<std::string>();
+    monrace.text = flavor_data["en"].get<std::string>();
 #endif
     return PARSE_ERROR_NONE;
 }
