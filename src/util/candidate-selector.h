@@ -107,7 +107,7 @@ private:
         const auto page_item_count = std::min(this->max_per_page, candidates_count - page_base_idx);
 
         for (auto i = 0U; i < this->max_per_page + 1; ++i) {
-            term_erase(this->start_col, i + 1, 255);
+            term_erase(this->start_col, i + 1);
         }
 
         auto it = std::next(std::begin(candidates), page_base_idx);
