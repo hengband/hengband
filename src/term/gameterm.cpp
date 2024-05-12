@@ -4,6 +4,7 @@
 #include "term/term-color-types.h"
 #include "util/string-processor.h"
 #include <span>
+#include <unordered_map>
 
 /*
  * Convert an "attr"/"char" pair into a "pict" (P)
@@ -656,3 +657,22 @@ TERM_COLOR color_char_to_attr(char c)
 
     return 255;
 }
+
+const std::unordered_map<std::string_view, TERM_COLOR> color_list = {
+    { "Black", TERM_DARK },
+    { "White", TERM_WHITE },
+    { "Gray", TERM_SLATE },
+    { "Orange", TERM_ORANGE },
+    { "Red", TERM_RED },
+    { "Green", TERM_GREEN },
+    { "Blue", TERM_BLUE },
+    { "Brown", TERM_UMBER },
+    { "Dark Gray", TERM_L_DARK },
+    { "Light Gray", TERM_L_WHITE },
+    { "Violet", TERM_VIOLET },
+    { "Yellow", TERM_YELLOW },
+    { "Light Red", TERM_L_RED },
+    { "Light Green", TERM_L_GREEN },
+    { "Light Blue", TERM_L_BLUE },
+    { "Light Brown", TERM_L_UMBER },
+};

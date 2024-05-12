@@ -234,7 +234,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     }
 
     init_note(_("[データの初期化中... (モンスター)]", "[Initializing arrays... (monsters)]"));
-    if (init_monster_race_definitions()) {
+    if (init_monrace_definitions()) {
         quit(_("モンスター初期化不能", "Cannot initialize monsters"));
     }
 
