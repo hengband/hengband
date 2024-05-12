@@ -113,7 +113,7 @@ void ang_sort_swap_nest_mon_info(PlayerType *player_ptr, vptr u, vptr v, int a, 
     nest_mon_info[b] = holder;
 }
 
-std::optional<std::array<nest_mon_info_type, NUM_NEST_MON_TYPE>> pick_nest_monster(PlayerType *player_ptr, MonsterEntity &align)
+std::optional<std::array<nest_mon_info_type, NUM_NEST_MON_TYPE>> pick_nest_monraces(PlayerType *player_ptr, MonsterEntity &align)
 {
     std::array<nest_mon_info_type, NUM_NEST_MON_TYPE> nest_mon_info_list{};
     for (auto &nest_mon_info : nest_mon_info_list) {
@@ -247,7 +247,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     MonsterEntity align;
     align.sub_align = SUB_ALIGN_NEUTRAL;
 
-    auto nest_mon_info_list = pick_nest_monster(player_ptr, align);
+    auto nest_mon_info_list = pick_nest_monraces(player_ptr, align);
     if (!nest_mon_info_list) {
         return false;
     }
