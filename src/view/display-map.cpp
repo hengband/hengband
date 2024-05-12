@@ -147,95 +147,77 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
     auto &grid = floor.get_grid(pos);
     auto &terrains = TerrainList::get_instance();
     auto *terrain_mimic_ptr = &grid.get_terrain_mimic();
-    TERM_COLOR a;
-    char c;
+    ColoredChar cc_config;
     if (terrain_mimic_ptr->flags.has_not(TerrainCharacteristics::REMEMBER)) {
         auto is_visible = any_bits(grid.info, (CAVE_MARK | CAVE_LITE | CAVE_MNLT));
         auto is_glowing = match_bits(grid.info, CAVE_GLOW | CAVE_MNDK, CAVE_GLOW);
         auto can_view = grid.is_view() && (is_glowing || player_ptr->see_nocto);
         const auto is_blind = player_ptr->effects()->blindness()->is_blind();
         if (!is_blind && (is_visible || can_view)) {
-            a = terrain_mimic_ptr->x_attr[F_LIT_STANDARD];
-            c = terrain_mimic_ptr->x_char[F_LIT_STANDARD];
+            cc_config = terrain_mimic_ptr->cc_configs[F_LIT_STANDARD];
             if (player_ptr->wild_mode) {
                 if (view_special_lite && !w_ptr->is_daytime()) {
-                    a = terrain_mimic_ptr->x_attr[F_LIT_DARK];
-                    c = terrain_mimic_ptr->x_char[F_LIT_DARK];
+                    cc_config = terrain_mimic_ptr->cc_configs[F_LIT_DARK];
                 }
             } else if (darkened_grid(player_ptr, &grid)) {
                 const auto unsafe_terrain_id = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
                 terrain_mimic_ptr = &terrains[unsafe_terrain_id];
-                a = terrain_mimic_ptr->x_attr[F_LIT_STANDARD];
-                c = terrain_mimic_ptr->x_char[F_LIT_STANDARD];
+                cc_config = terrain_mimic_ptr->cc_configs[F_LIT_STANDARD];
             } else if (view_special_lite) {
                 if (grid.info & (CAVE_LITE | CAVE_MNLT)) {
                     if (view_yellow_lite) {
-                        a = terrain_mimic_ptr->x_attr[F_LIT_LITE];
-                        c = terrain_mimic_ptr->x_char[F_LIT_LITE];
+                        cc_config = terrain_mimic_ptr->cc_configs[F_LIT_LITE];
                     }
                 } else if ((grid.info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) {
-                    a = terrain_mimic_ptr->x_attr[F_LIT_DARK];
-                    c = terrain_mimic_ptr->x_char[F_LIT_DARK];
+                    cc_config = terrain_mimic_ptr->cc_configs[F_LIT_DARK];
                 } else if (!(grid.info & CAVE_VIEW)) {
                     if (view_bright_lite) {
-                        a = terrain_mimic_ptr->x_attr[F_LIT_DARK];
-                        c = terrain_mimic_ptr->x_char[F_LIT_DARK];
+                        cc_config = terrain_mimic_ptr->cc_configs[F_LIT_DARK];
                     }
                 }
             }
         } else {
             const auto unsafe_terrain_id = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
             terrain_mimic_ptr = &terrains[unsafe_terrain_id];
-            a = terrain_mimic_ptr->x_attr[F_LIT_STANDARD];
-            c = terrain_mimic_ptr->x_char[F_LIT_STANDARD];
+            cc_config = terrain_mimic_ptr->cc_configs[F_LIT_STANDARD];
         }
     } else {
         if (grid.is_mark() && is_revealed_wall(floor, pos)) {
-            a = terrain_mimic_ptr->x_attr[F_LIT_STANDARD];
-            c = terrain_mimic_ptr->x_char[F_LIT_STANDARD];
+            cc_config = terrain_mimic_ptr->cc_configs[F_LIT_STANDARD];
             const auto is_blind = player_ptr->effects()->blindness()->is_blind();
             if (player_ptr->wild_mode) {
                 if (view_granite_lite && (is_blind || !w_ptr->is_daytime())) {
-                    a = terrain_mimic_ptr->x_attr[F_LIT_DARK];
-                    c = terrain_mimic_ptr->x_char[F_LIT_DARK];
+                    cc_config = terrain_mimic_ptr->cc_configs[F_LIT_DARK];
                 }
             } else if (darkened_grid(player_ptr, &grid) && !is_blind) {
                 if (terrain_mimic_ptr->flags.has_all_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::PROJECT })) {
                     const auto unsafe_terrain_id = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
                     terrain_mimic_ptr = &terrains[unsafe_terrain_id];
-                    a = terrain_mimic_ptr->x_attr[F_LIT_STANDARD];
-                    c = terrain_mimic_ptr->x_char[F_LIT_STANDARD];
+                    cc_config = terrain_mimic_ptr->cc_configs[F_LIT_STANDARD];
                 } else if (view_granite_lite && view_bright_lite) {
-                    a = terrain_mimic_ptr->x_attr[F_LIT_DARK];
-                    c = terrain_mimic_ptr->x_char[F_LIT_DARK];
+                    cc_config = terrain_mimic_ptr->cc_configs[F_LIT_DARK];
                 }
             } else if (view_granite_lite) {
                 if (is_blind) {
-                    a = terrain_mimic_ptr->x_attr[F_LIT_DARK];
-                    c = terrain_mimic_ptr->x_char[F_LIT_DARK];
+                    cc_config = terrain_mimic_ptr->cc_configs[F_LIT_DARK];
                 } else if (grid.info & (CAVE_LITE | CAVE_MNLT)) {
                     if (view_yellow_lite) {
-                        a = terrain_mimic_ptr->x_attr[F_LIT_LITE];
-                        c = terrain_mimic_ptr->x_char[F_LIT_LITE];
+                        cc_config = terrain_mimic_ptr->cc_configs[F_LIT_LITE];
                     }
                 } else if (view_bright_lite) {
                     if (!(grid.info & CAVE_VIEW)) {
-                        a = terrain_mimic_ptr->x_attr[F_LIT_DARK];
-                        c = terrain_mimic_ptr->x_char[F_LIT_DARK];
+                        cc_config = terrain_mimic_ptr->cc_configs[F_LIT_DARK];
                     } else if ((grid.info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) {
-                        a = terrain_mimic_ptr->x_attr[F_LIT_DARK];
-                        c = terrain_mimic_ptr->x_char[F_LIT_DARK];
+                        cc_config = terrain_mimic_ptr->cc_configs[F_LIT_DARK];
                     } else if (terrain_mimic_ptr->flags.has_not(TerrainCharacteristics::LOS) && !check_local_illumination(player_ptr, y, x)) {
-                        a = terrain_mimic_ptr->x_attr[F_LIT_DARK];
-                        c = terrain_mimic_ptr->x_char[F_LIT_DARK];
+                        cc_config = terrain_mimic_ptr->cc_configs[F_LIT_DARK];
                     }
                 }
             }
         } else {
             const auto unsafe_terrain_id = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
             terrain_mimic_ptr = &terrains[unsafe_terrain_id];
-            a = terrain_mimic_ptr->x_attr[F_LIT_STANDARD];
-            c = terrain_mimic_ptr->x_char[F_LIT_STANDARD];
+            cc_config = terrain_mimic_ptr->cc_configs[F_LIT_STANDARD];
         }
     }
 
@@ -243,10 +225,10 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
         feat_priority = terrain_mimic_ptr->priority;
     }
 
-    (*tap) = a;
-    (*tcp) = c;
-    (*ap) = a;
-    (*cp) = c;
+    (*tap) = cc_config.color;
+    (*tcp) = cc_config.character;
+    (*ap) = cc_config.color;
+    (*cp) = cc_config.character;
 
     auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
     if (is_hallucinated && one_in_(256)) {
@@ -324,10 +306,9 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
         return;
     }
 
-    a = r_ptr->x_attr;
-    c = r_ptr->x_char;
+    cc_config = { r_ptr->x_attr, r_ptr->x_char };
     if (r_ptr->visual_flags.has_none_of({ MonsterVisualType::CLEAR, MonsterVisualType::SHAPECHANGER, MonsterVisualType::CLEAR_COLOR, MonsterVisualType::MULTI_COLOR, MonsterVisualType::RANDOM_COLOR })) {
-        const auto cc = set_term_color(player_ptr, { y, x }, { a, c });
+        const auto cc = set_term_color(player_ptr, { y, x }, cc_config);
         *ap = cc.color;
         *cp = cc.character;
         return;
@@ -361,7 +342,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
     } else if (r_ptr->visual_flags.has(MonsterVisualType::RANDOM_COLOR) && !use_graphics) {
         *ap = grid.m_idx % 15 + 1;
     } else {
-        *ap = a;
+        *ap = cc_config.color;
     }
 
     if (r_ptr->visual_flags.has(MonsterVisualType::CLEAR) && (*cp != ' ') && !use_graphics) {
@@ -387,7 +368,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
         return;
     }
 
-    const auto cc = set_term_color(player_ptr, { y, x }, { *ap, c });
+    const auto cc = set_term_color(player_ptr, { y, x }, { *ap, cc_config.character });
     *ap = cc.color;
     *cp = cc.character;
 }

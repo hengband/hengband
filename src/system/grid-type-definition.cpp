@@ -135,7 +135,7 @@ bool Grid::cave_has_flag(TerrainCharacteristics feature_flags) const
  */
 bool Grid::is_symbol(const int ch) const
 {
-    return this->get_terrain().x_char[0] == ch;
+    return this->get_terrain().cc_configs.at(F_LIT_STANDARD).character == ch;
 }
 
 void Grid::reset_costs()

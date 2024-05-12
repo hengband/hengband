@@ -196,9 +196,12 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 }
 
                 auto_dump_printf(auto_dump_stream, "# %s\n", (terrain.name.data()));
-                auto_dump_printf(auto_dump_stream, "F:%d:0x%02X/0x%02X:0x%02X/0x%02X:0x%02X/0x%02X\n\n", terrain.idx, (byte)(terrain.x_attr[F_LIT_STANDARD]),
-                    (byte)(terrain.x_char[F_LIT_STANDARD]), (byte)(terrain.x_attr[F_LIT_LITE]), (byte)(terrain.x_char[F_LIT_LITE]),
-                    (byte)(terrain.x_attr[F_LIT_DARK]), (byte)(terrain.x_char[F_LIT_DARK]));
+                const auto &cc_standard = terrain.cc_configs.at(F_LIT_STANDARD);
+                const auto &cc_lite = terrain.cc_configs.at(F_LIT_LITE);
+                const auto &cc_dark = terrain.cc_configs.at(F_LIT_DARK);
+                auto_dump_printf(auto_dump_stream, "F:%d:0x%02X/0x%02X:0x%02X/0x%02X:0x%02X/0x%02X\n\n", terrain.idx, cc_standard.color,
+                    static_cast<uint8_t>(cc_standard.character), cc_lite.color, static_cast<uint8_t>(cc_lite.character),
+                    cc_dark.color, static_cast<uint8_t>(cc_dark.character));
             }
 
             close_auto_dump(&auto_dump_stream, mark);
@@ -373,9 +376,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 auto &terrain = terrains[terrain_id];
                 int c;
                 const auto &cc_def = terrain.cc_defs[lighting_level];
-                TERM_COLOR ca = terrain.x_attr[lighting_level];
-                byte cc = terrain.x_char[lighting_level];
-
+                const auto &cc_config = terrain.cc_configs[lighting_level];
                 prt("", 17, 5);
                 term_putstr(5, 17, -1, TERM_WHITE,
                     format(_("地形 = %d, 名前 = %s, 明度 = %s", "Terrain = %d, Name = %s, Lighting = %s"), terrain_id, (terrain.name.data()),
@@ -383,9 +384,9 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), cc_def.color, cc_def.character));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 19, cc_def.color, cc_def.character, 0, 0);
-                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), ca, cc));
+                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), cc_config.color, cc_config.character));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
-                term_queue_bigchar(43, 20, ca, cc, 0, 0);
+                term_queue_bigchar(43, 20, cc_config.color, cc_config.character, 0, 0);
                 term_putstr(0, 22, -1, TERM_WHITE,
                     _("コマンド (n/N/^N/a/A/^A/c/C/^C/l/L/^L/d/D/^D/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/l/L/^L/d/D/^D/v/V/^V): "));
 
@@ -423,22 +424,24 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'a': {
-                    const auto visual_id = input_new_visual_id(ch, terrain.x_attr[lighting_level], 256);
+                    auto &color_config = terrain.cc_configs[lighting_level].color;
+                    const auto visual_id = input_new_visual_id(ch, color_config, 256);
                     if (!visual_id) {
                         break;
                     }
 
-                    terrain.x_attr[lighting_level] = *visual_id;
+                    color_config = *visual_id;
                     need_redraw = true;
                     break;
                 }
                 case 'c': {
-                    const auto visual_id = input_new_visual_id(ch, terrain.x_char[lighting_level], 256);
+                    auto &character_config = terrain.cc_configs[lighting_level].character;
+                    const auto visual_id = input_new_visual_id(ch, character_config, 256);
                     if (!visual_id) {
                         break;
                     }
 
-                    terrain.x_char[lighting_level] = *visual_id;
+                    character_config = *visual_id;
                     need_redraw = true;
                     break;
                 }
