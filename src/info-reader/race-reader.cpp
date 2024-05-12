@@ -546,9 +546,9 @@ static errr set_mon_blows(const nlohmann::json &blow_data, MonsterRaceInfo &monr
         monrace.blows[blow_num].method = rbm->second;
         monrace.blows[blow_num].effect = rbe->second;
 
-        if (blow.value().find("damage_dice") != blow.value().end()) {
-            const auto &blow_dice = blow.value()["damage_dice"];
-            const auto &dice = str_split(blow_dice.get<std::string>(), 'd', false, 2);
+        const auto &blow_dice = blow.value().find("damage_dice");
+        if (blow_dice != blow.value().end()) {
+            const auto &dice = str_split(blow_dice->get<std::string>(), 'd', false, 2);
             info_set_value(monrace.blows[blow_num].d_dice, dice[0]);
             info_set_value(monrace.blows[blow_num].d_side, dice[1]);
         }
@@ -641,22 +641,21 @@ static errr set_mon_flavor(const nlohmann::json &flavor_data, MonsterRaceInfo &m
     }
 
 #ifdef JP
-    const auto &flavor_ja = flavor_data["ja"];
-    if (!flavor_ja.is_string()) {
+    const auto &flavor_ja = flavor_data.find("ja");
+    if (flavor_ja == flavor_data.end()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
-
-    const auto flavor_ja_sys = utf8_to_sys(flavor_ja.get<std::string>());
+    const auto flavor_ja_sys = utf8_to_sys(flavor_ja->get<std::string>());
     if (!flavor_ja_sys) {
         return PARSE_ERROR_INVALID_FLAG;
     }
     monrace.text = flavor_ja_sys.value();
 #else
-    const auto &flavor_en = flavor_data["en"];
-    if (!flavor_en.is_string()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    const auto &flavor_en = flavor_data.find("en");
+    if (flavor_en == flavor_data.end()) {
+        return PARSE_ERROR_NONE;
     }
-    monrace.text = flavor_en.get<std::string>();
+    monrace.text = flavor_en->get<std::string>();
 #endif
     return PARSE_ERROR_NONE;
 }
