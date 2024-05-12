@@ -113,37 +113,11 @@ void ang_sort_swap_nest_mon_info(PlayerType *player_ptr, vptr u, vptr v, int a, 
     nest_mon_info[b] = holder;
 }
 
-/*!
- * @brief Nestに格納するモンスターを選択する
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param align アライメントが中立に設定されたモンスター実体 (その他の中身は空)
- * @return モンスター種族ID (見つからなかったらnullopt)
- * @details Nestにはそのフロアの通常レベルより11高いモンスターを中心に選ぶ
- */
-std::optional<MonsterRaceId> select_nest_monrace_id(PlayerType *player_ptr, MonsterEntity &align)
-{
-    for (auto attempts = 100; attempts > 0; attempts--) {
-        const auto monrace_id = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 11, PM_NONE);
-        const auto &monrace = monraces_info[monrace_id];
-        if (monster_has_hostile_align(player_ptr, &align, 0, 0, &monrace)) {
-            continue;
-        }
-
-        if (MonsterRace(monrace_id).is_valid()) {
-            return monrace_id;
-        }
-
-        return std::nullopt;
-    }
-
-    return std::nullopt;
-}
-
-std::optional<std::array<nest_mon_info_type, NUM_NEST_MON_TYPE>> pick_nest_monster(PlayerType *player_ptr, MonsterEntity &align)
+std::optional<std::array<nest_mon_info_type, NUM_NEST_MON_TYPE>> pick_nest_monraces(PlayerType *player_ptr, MonsterEntity &align)
 {
     std::array<nest_mon_info_type, NUM_NEST_MON_TYPE> nest_mon_info_list{};
     for (auto &nest_mon_info : nest_mon_info_list) {
-        const auto monrace_id = select_nest_monrace_id(player_ptr, align);
+        const auto monrace_id = select_pit_nest_monrace_id(player_ptr, align, 11);
         if (!monrace_id) {
             return std::nullopt;
         }
@@ -273,7 +247,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     MonsterEntity align;
     align.sub_align = SUB_ALIGN_NEUTRAL;
 
-    auto nest_mon_info_list = pick_nest_monster(player_ptr, align);
+    auto nest_mon_info_list = pick_nest_monraces(player_ptr, align);
     if (!nest_mon_info_list) {
         return false;
     }

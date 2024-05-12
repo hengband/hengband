@@ -1,9 +1,13 @@
 #include "room/pit-nest-util.h"
+#include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
+#include "monster/monster-info.h"
+#include "monster/monster-list.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-info.h"
+#include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 #include "util/probability-table.h"
 
@@ -61,6 +65,34 @@ std::optional<PitKind> pick_pit_type(const FloorType &floor, const std::map<PitK
     }
 
     return table.pick_one_at_random();
+}
+
+/*!
+ * @brief Pit/Nestに格納するモンスターを選択する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param align アライメントが中立に設定されたモンスター実体 (その他の中身は空)
+ * @param boost 選択基準となるフロアの増分
+ * @return モンスター種族ID (見つからなかったらnullopt)
+ * @details Nestにはそのフロアの通常レベルより11高いモンスターを中心に選ぶ
+ */
+std::optional<MonsterRaceId> select_pit_nest_monrace_id(PlayerType *player_ptr, MonsterEntity &align, int boost)
+{
+    const auto &floor = *player_ptr->current_floor_ptr;
+    for (auto attempts = 100; attempts > 0; attempts--) {
+        const auto monrace_id = get_mon_num(player_ptr, 0, floor.dun_level + boost, PM_NONE);
+        const auto &monrace = monraces_info[monrace_id];
+        if (monster_has_hostile_align(player_ptr, &align, 0, 0, &monrace)) {
+            continue;
+        }
+
+        if (MonsterRace(monrace_id).is_valid()) {
+            return monrace_id;
+        }
+
+        return std::nullopt;
+    }
+
+    return std::nullopt;
 }
 
 /*!
