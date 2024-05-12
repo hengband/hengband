@@ -4,7 +4,6 @@
 #include "core/visuals-reseter.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "flavor/object-flavor.h"
 #include "game-option/special-options.h"
 #include "grid/feature.h"
 #include "io/files-util.h"
@@ -157,7 +156,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
 
                 std::string item_name;
                 if (baseitem.flavor == 0) {
-                    item_name = strip_name(baseitem.idx);
+                    item_name = baseitem.stripped_name();
                 } else {
                     ItemEntity dummy;
                     dummy.prep(baseitem.idx);

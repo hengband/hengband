@@ -18,6 +18,7 @@
 #include "sv-definition/sv-rod-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/angband-exceptions.h"
+#include "util/string-processor.h"
 #include <set>
 #include <unordered_map>
 
@@ -617,6 +618,42 @@ BaseitemInfo::BaseitemInfo()
 bool BaseitemInfo::is_valid() const
 {
     return (this->idx > 0) && !this->name.empty();
+}
+
+/*!
+ * @brief ベースアイテム名を返す
+ * @return ベースアイテム名
+ */
+std::string BaseitemInfo::stripped_name() const
+{
+    const auto tokens = str_split(this->name, ' ');
+    std::stringstream ss;
+    for (const auto &token : tokens) {
+        if (token == "" || token == "~" || token == "&" || token == "#") {
+            continue;
+        }
+
+        auto offset = 0;
+        auto endpos = token.size();
+        auto is_kanji = false;
+        if (token[0] == '~' || token[0] == '#') {
+            offset++;
+        }
+#ifdef JP
+        if (token.size() > 2) {
+            is_kanji = iskanji(token[endpos - 2]);
+        }
+
+#endif
+        if (!is_kanji && (token[endpos - 1] == '~' || token[endpos - 1] == '#')) {
+            endpos--;
+        }
+
+        ss << token.substr(offset, endpos);
+    }
+
+    ss << " ";
+    return ss.str();
 }
 
 /*!

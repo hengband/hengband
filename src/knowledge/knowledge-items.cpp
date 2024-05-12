@@ -9,7 +9,6 @@
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "flavor/object-flavor.h"
 #include "game-option/special-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "io-dump/dump-util.h"
@@ -185,15 +184,15 @@ static void display_object_list(int col, int row, int per_page, const std::vecto
 {
     int i;
     for (i = 0; i < per_page && (object_idx[object_top + i] >= 0); i++) {
-        short bi_id = object_idx[object_top + i];
+        const short bi_id = object_idx[object_top + i];
         const auto &baseitem = baseitems_info[bi_id];
         TERM_COLOR attr = ((baseitem.aware || visual_only) ? TERM_WHITE : TERM_SLATE);
         byte cursor = ((baseitem.aware || visual_only) ? TERM_L_BLUE : TERM_BLUE);
-        const auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems_info[baseitem.flavor] : baseitems_info[bi_id];
+        const auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems_info[baseitem.flavor] : baseitem;
 
         attr = ((i + object_top == object_cur) ? cursor : attr);
         const auto is_flavor_only = (baseitem.flavor != 0) && (visual_only || !baseitem.aware);
-        const auto o_name = is_flavor_only ? flavor_baseitem.flavor_name : strip_name(bi_id);
+        const auto o_name = is_flavor_only ? flavor_baseitem.flavor_name : baseitem.stripped_name();
         c_prt(attr, o_name.data(), row + i, col);
         if (per_page == 1) {
             c_prt(attr, format("%02x/%02x", flavor_baseitem.x_attr, flavor_baseitem.x_char), row + i, (w_ptr->wizard || visual_only) ? 64 : 68);

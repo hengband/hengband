@@ -129,6 +129,7 @@ public:
     RandomArtActType act_idx{}; /*!< 発動能力のID /  Activative ability index */
 
     bool is_valid() const;
+    std::string stripped_name() const;
     void decide_easy_know();
 
     /* @todo ここから下はk_info.txt に依存しないミュータブルなフィールド群なので、将来的に分離予定 */
