@@ -91,38 +91,8 @@ std::shared_ptr<const std::string> message_str(int age)
 
 static void message_add_aux(std::string str)
 {
-    std::string splitted;
-
     if (str.empty()) {
         return;
-    }
-
-    // MAIN_TERM_MIN_COLS桁を超えるメッセージはMAIN_TERM_MIN_COLS桁ずつ分割する
-    if (str.length() > MAIN_TERM_MIN_COLS) {
-        int n;
-#ifdef JP
-        for (n = 0; n < MAIN_TERM_MIN_COLS; n++) {
-            if (iskanji(str[n])) {
-                n++;
-            }
-        }
-
-        /* 最後の文字が漢字半分 */
-        if (n == MAIN_TERM_MIN_COLS + 1) {
-            n = MAIN_TERM_MIN_COLS - 1;
-        }
-#else
-        for (n = MAIN_TERM_MIN_COLS; n > MAIN_TERM_MIN_COLS - 20; n--) {
-            if (str[n] == ' ') {
-                break;
-            }
-        }
-        if (n == MAIN_TERM_MIN_COLS - 20) {
-            n = MAIN_TERM_MIN_COLS;
-        }
-#endif
-        splitted = str.substr(n);
-        str = str.substr(0, n);
     }
 
     // 直前と同じメッセージの場合、「～ <xNN>」と表示する
@@ -177,10 +147,6 @@ static void message_add_aux(std::string str)
 
     if (message_history.size() == MESSAGE_MAX) {
         message_history.pop_back();
-    }
-
-    if (!splitted.empty()) {
-        message_add_aux(std::move(splitted));
     }
 }
 
