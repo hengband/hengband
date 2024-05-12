@@ -98,6 +98,21 @@ std::optional<std::array<MonsterRaceId, NUM_PIT_MONRACES>> pick_pit_monraces(Pla
 
     return whats;
 }
+
+void sort_pit_monraces(std::array<MonsterRaceId, NUM_PIT_MONRACES> &whats)
+{
+    for (auto i = 0; i < NUM_PIT_MONRACES - 1; i++) {
+        for (auto j = 0; j < NUM_PIT_MONRACES - 1; j++) {
+            auto i1 = j;
+            auto i2 = j + 1;
+            auto p1 = monraces_info[whats[i1]].level;
+            auto p2 = monraces_info[whats[i2]].level;
+            if (p1 > p2) {
+                std::swap(whats[i1], whats[i2]);
+            }
+        }
+    }
+}
 }
 
 /*!
@@ -223,23 +238,7 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
         break;
     }
 
-    /* Sort the entries */
-    for (auto i = 0; i < NUM_PIT_MONRACES - 1; i++) {
-        /* Sort the entries */
-        for (auto j = 0; j < NUM_PIT_MONRACES - 1; j++) {
-            int i1 = j;
-            int i2 = j + 1;
-
-            int p1 = monraces_info[(*whats)[i1]].level;
-            int p2 = monraces_info[(*whats)[i2]].level;
-
-            /* Bubble */
-            if (p1 > p2) {
-                std::swap((*whats)[i1], (*whats)[i2]);
-            }
-        }
-    }
-
+    sort_pit_monraces(*whats);
     constexpr auto fmt_generate = _("モンスター部屋(pit)(%s%s)を生成します。", "Monster pit (%s%s)");
     msg_format_wizard(
         player_ptr, CHEAT_DUNGEON, fmt_generate, pit.name.data(), pit_subtype_string(*pit_type).data());
@@ -485,23 +484,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
     grid.mimic = grid.feat;
     grid.feat = feat_trap_open;
 
-    /* Sort the entries */
-    for (auto i = 0; i < NUM_PIT_MONRACES - 1; i++) {
-        /* Sort the entries */
-        for (auto j = 0; j < NUM_PIT_MONRACES - 1; j++) {
-            int i1 = j;
-            int i2 = j + 1;
-
-            int p1 = monraces_info[(*whats)[i1]].level;
-            int p2 = monraces_info[(*whats)[i2]].level;
-
-            /* Bubble */
-            if (p1 > p2) {
-                std::swap((*whats)[i1], (*whats)[i2]);
-            }
-        }
-    }
-
+    sort_pit_monraces(*whats);
     constexpr auto fmt = _("%s%sの罠ピットが生成されました。", "Trapped monster pit (%s%s)");
     msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt, pit.name.data(), pit_subtype_string(*pit_type).data());
 
