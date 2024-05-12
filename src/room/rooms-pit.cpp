@@ -173,27 +173,22 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
     auto x2 = xval + 11;
 
     /* Place the floor area */
-    Grid *g_ptr;
     for (auto y = y1 - 1; y <= y2 + 1; y++) {
         for (auto x = x1 - 1; x <= x2 + 1; x++) {
-            g_ptr = &floor.grid_array[y][x];
-            place_grid(player_ptr, g_ptr, GB_FLOOR);
-            g_ptr->info |= (CAVE_ROOM);
+            auto &grid = floor.get_grid({ y, x });
+            place_grid(player_ptr, &grid, GB_FLOOR);
+            grid.add_info(CAVE_ROOM);
         }
     }
 
     /* Place the outer walls */
     for (auto y = y1 - 1; y <= y2 + 1; y++) {
-        g_ptr = &floor.grid_array[y][x1 - 1];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
-        g_ptr = &floor.grid_array[y][x2 + 1];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
+        place_grid(player_ptr, &floor.get_grid({ y, x1 - 1 }), GB_OUTER);
+        place_grid(player_ptr, &floor.get_grid({ y, x2 + 1 }), GB_OUTER);
     }
     for (auto x = x1 - 1; x <= x2 + 1; x++) {
-        g_ptr = &floor.grid_array[y1 - 1][x];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
-        g_ptr = &floor.grid_array[y2 + 1][x];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
+        place_grid(player_ptr, &floor.get_grid({ y1 - 1, x }), GB_OUTER);
+        place_grid(player_ptr, &floor.get_grid({ y2 + 1, x }), GB_OUTER);
     }
 
     /* Advance to the center room */
@@ -204,20 +199,16 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     /* The inner walls */
     for (auto y = y1 - 1; y <= y2 + 1; y++) {
-        g_ptr = &floor.grid_array[y][x1 - 1];
-        place_grid(player_ptr, g_ptr, GB_INNER);
-        g_ptr = &floor.grid_array[y][x2 + 1];
-        place_grid(player_ptr, g_ptr, GB_INNER);
+        place_grid(player_ptr, &floor.get_grid({ y, x1 - 1 }), GB_INNER);
+        place_grid(player_ptr, &floor.get_grid({ y, x2 + 1 }), GB_INNER);
     }
     for (auto x = x1 - 1; x <= x2 + 1; x++) {
-        g_ptr = &floor.grid_array[y1 - 1][x];
-        place_grid(player_ptr, g_ptr, GB_INNER);
-        g_ptr = &floor.grid_array[y2 + 1][x];
-        place_grid(player_ptr, g_ptr, GB_INNER);
+        place_grid(player_ptr, &floor.get_grid({ y1 - 1, x }), GB_INNER);
+        place_grid(player_ptr, &floor.get_grid({ y2 + 1, x }), GB_INNER);
     }
     for (auto y = y1; y <= y2; y++) {
         for (auto x = x1; x <= x2; x++) {
-            floor.grid_array[y][x].add_info(CAVE_ICKY);
+            floor.get_grid({ y, x }).add_info(CAVE_ICKY);
         }
     }
 
@@ -390,8 +381,6 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     MonsterEntity align;
 
-    Grid *g_ptr;
-
     auto *floor_ptr = player_ptr->current_floor_ptr;
     const auto pit_type = pick_pit_type(*floor_ptr, pit_types);
 
@@ -433,56 +422,49 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
     /* Fill with inner walls */
     for (y = y1 - 1; y <= y2 + 1; y++) {
         for (x = x1 - 1; x <= x2 + 1; x++) {
-            g_ptr = &floor_ptr->grid_array[y][x];
-            place_grid(player_ptr, g_ptr, GB_INNER);
-            g_ptr->info |= (CAVE_ROOM);
+            auto &grid = floor_ptr->get_grid({ y, x });
+            place_grid(player_ptr, &grid, GB_INNER);
+            grid.add_info(CAVE_ROOM);
         }
     }
 
     /* Place the floor area 1 */
     for (x = x1 + 3; x <= x2 - 3; x++) {
-        g_ptr = &floor_ptr->grid_array[yval - 2][x];
-        place_grid(player_ptr, g_ptr, GB_FLOOR);
-        floor_ptr->grid_array[yval - 2][x].add_info(CAVE_ICKY);
+        auto &grid_top = floor_ptr->get_grid({ yval - 2, x });
+        place_grid(player_ptr, &grid_top, GB_FLOOR);
+        grid_top.add_info(CAVE_ICKY);
 
-        g_ptr = &floor_ptr->grid_array[yval + 2][x];
-        place_grid(player_ptr, g_ptr, GB_FLOOR);
-        floor_ptr->grid_array[yval + 2][x].add_info(CAVE_ICKY);
+        auto &grid_bottom = floor_ptr->get_grid({ yval + 2, x });
+        place_grid(player_ptr, &grid_bottom, GB_FLOOR);
+        grid_bottom.add_info(CAVE_ICKY);
     }
 
     /* Place the floor area 2 */
     for (x = x1 + 5; x <= x2 - 5; x++) {
-        g_ptr = &floor_ptr->grid_array[yval - 3][x];
-        place_grid(player_ptr, g_ptr, GB_FLOOR);
-        floor_ptr->grid_array[yval - 3][x].add_info(CAVE_ICKY);
+        auto &grid_left = floor_ptr->get_grid({ yval - 3, x });
+        place_grid(player_ptr, &grid_left, GB_FLOOR);
+        grid_left.add_info(CAVE_ICKY);
 
-        g_ptr = &floor_ptr->grid_array[yval + 3][x];
-        place_grid(player_ptr, g_ptr, GB_FLOOR);
-        floor_ptr->grid_array[yval + 3][x].add_info(CAVE_ICKY);
+        auto &grid_right = floor_ptr->get_grid({ yval + 3, x });
+        place_grid(player_ptr, &grid_right, GB_FLOOR);
+        grid_right.add_info(CAVE_ICKY);
     }
 
     /* Corridor */
     for (x = x1; x <= x2; x++) {
-        g_ptr = &floor_ptr->grid_array[yval][x];
-        place_grid(player_ptr, g_ptr, GB_FLOOR);
-        g_ptr = &floor_ptr->grid_array[y1][x];
-        place_grid(player_ptr, g_ptr, GB_FLOOR);
-        g_ptr = &floor_ptr->grid_array[y2][x];
-        place_grid(player_ptr, g_ptr, GB_FLOOR);
+        place_grid(player_ptr, &floor_ptr->get_grid({ yval, x }), GB_FLOOR);
+        place_grid(player_ptr, &floor_ptr->get_grid({ y1, x }), GB_FLOOR);
+        place_grid(player_ptr, &floor_ptr->get_grid({ y2, x }), GB_FLOOR);
     }
 
     /* Place the outer walls */
     for (y = y1 - 1; y <= y2 + 1; y++) {
-        g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
-        g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
+        place_grid(player_ptr, &floor_ptr->get_grid({ y, x1 - 1 }), GB_OUTER);
+        place_grid(player_ptr, &floor_ptr->get_grid({ y, x2 + 1 }), GB_OUTER);
     }
     for (x = x1 - 1; x <= x2 + 1; x++) {
-        g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
-        g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-        place_grid(player_ptr, g_ptr, GB_OUTER);
+        place_grid(player_ptr, &floor_ptr->get_grid({ y1 - 1, x }), GB_OUTER);
+        place_grid(player_ptr, &floor_ptr->get_grid({ y2 + 1, x }), GB_OUTER);
     }
 
     /* Random corridor */
@@ -507,8 +489,10 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
     }
 
     /* Place the wall open trap */
-    floor_ptr->grid_array[yval][xval].mimic = floor_ptr->grid_array[yval][xval].feat;
-    floor_ptr->grid_array[yval][xval].feat = feat_trap_open;
+    const Pos2D pos(yval, xval);
+    auto &grid = floor_ptr->get_grid(pos);
+    grid.mimic = grid.feat;
+    grid.feat = feat_trap_open;
 
     /* Sort the entries */
     for (i = 0; i < NUM_PIT_MONRACES - 1; i++) {
@@ -542,8 +526,8 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     const Pos2DVec vec(yval, xval);
     for (const auto &trapped_monster : place_table_trapped_pit) {
-        const auto pos = trapped_monster.pos + vec;
-        place_specific_monster(player_ptr, 0, pos.y, pos.x, (*whats)[trapped_monster.strength], PM_NO_KAGE);
+        const auto trapped_pos = trapped_monster.pos + vec;
+        place_specific_monster(player_ptr, 0, trapped_pos.y, trapped_pos.x, (*whats)[trapped_monster.strength], PM_NO_KAGE);
     }
 
     return true;
