@@ -6,7 +6,6 @@
 
 #include "knowledge/knowledge-experiences.h"
 #include "core/show-file.h"
-#include "flavor/object-flavor.h"
 #include "game-option/cheat-options.h"
 #include "game-option/text-display-options.h"
 #include "io-dump/dump-util.h"
@@ -47,8 +46,7 @@ void do_cmd_knowledge_weapon_exp(PlayerType *player_ptr)
 
                 SUB_EXP weapon_exp = player_ptr->weapon_exp[tval][num];
                 SUB_EXP weapon_max = player_ptr->weapon_exp_max[tval][num];
-                const auto tmp = strip_name(baseitem.idx);
-                fprintf(fff, "%-25s ", tmp.data());
+                fprintf(fff, "%-25s ", baseitem.stripped_name().data());
                 if (show_actual_value) {
                     fprintf(fff, "%4d/%4d ", weapon_exp, weapon_max);
                 }

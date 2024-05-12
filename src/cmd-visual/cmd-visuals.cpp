@@ -4,7 +4,6 @@
 #include "core/visuals-reseter.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "flavor/object-flavor.h"
 #include "game-option/special-options.h"
 #include "grid/feature.h"
 #include "io/files-util.h"
@@ -157,7 +156,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
 
                 std::string item_name;
                 if (baseitem.flavor == 0) {
-                    item_name = strip_name(baseitem.idx);
+                    item_name = baseitem.stripped_name();
                 } else {
                     ItemEntity dummy;
                     dummy.prep(baseitem.idx);
@@ -165,7 +164,8 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 }
 
                 auto_dump_printf(auto_dump_stream, "# %s\n", item_name.data());
-                auto_dump_printf(auto_dump_stream, "K:%d:0x%02X/0x%02X\n\n", (int)baseitem.idx, (byte)(baseitem.x_attr), (byte)(baseitem.x_char));
+                const auto &cc_config = baseitem.cc_config;
+                auto_dump_printf(auto_dump_stream, "K:%d:0x%02X/0x%02X\n\n", (int)baseitem.idx, cc_config.color, static_cast<uint8_t>(cc_config.character));
             }
 
             close_auto_dump(&auto_dump_stream, mark);
@@ -288,20 +288,17 @@ void do_cmd_visuals(PlayerType *player_ptr)
             while (true) {
                 auto &baseitem = baseitems_info[bi_id];
                 int c;
-                TERM_COLOR da = baseitem.d_attr;
-                auto dc = baseitem.d_char;
-                TERM_COLOR ca = baseitem.x_attr;
-                auto cc = baseitem.x_char;
-
+                const auto &cc_def = baseitem.cc_def;
+                auto &cc_config = baseitem.cc_config;
                 term_putstr(5, 17, -1, TERM_WHITE,
                     format(
                         _("アイテム = %d, 名前 = %-40.40s", "Object = %d, Name = %-40.40s"), bi_id, (!baseitem.flavor ? baseitem.name : baseitem.flavor_name).data()));
-                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
+                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), cc_def.color, cc_def.character));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
-                term_queue_bigchar(43, 19, da, dc, 0, 0);
-                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), ca, cc));
+                term_queue_bigchar(43, 19, cc_def.color, cc_def.character, 0, 0);
+                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), cc_config.color, cc_config.character));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
-                term_queue_bigchar(43, 20, ca, cc, 0, 0);
+                term_queue_bigchar(43, 20, cc_config.color, cc_config.character, 0, 0);
                 term_putstr(0, 22, -1, TERM_WHITE, _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
 
                 const auto ch = inkey();
@@ -337,22 +334,22 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'a': {
-                    const auto visual_id = input_new_visual_id(ch, baseitem.x_attr, 256);
+                    const auto visual_id = input_new_visual_id(ch, cc_config.color, 256);
                     if (!visual_id) {
                         break;
                     }
 
-                    baseitem.x_attr = *visual_id;
+                    baseitem.cc_config.color = *visual_id;
                     need_redraw = true;
                     break;
                 }
                 case 'c': {
-                    const auto visual_id = input_new_visual_id(ch, baseitem.x_char, 256);
+                    const auto visual_id = input_new_visual_id(ch, cc_config.character, 256);
                     if (!visual_id) {
                         break;
                     }
 
-                    baseitem.x_char = *visual_id;
+                    baseitem.cc_config.character = *visual_id;
                     need_redraw = true;
                     break;
                 }

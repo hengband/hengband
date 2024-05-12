@@ -132,14 +132,13 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        const auto a = color_char_to_attr(tokens[2][0]);
-        if (a > 127) {
+        const auto color = color_char_to_attr(tokens[2][0]);
+        if (color > 127) {
             return PARSE_ERROR_GENERIC;
         }
 
         auto &baseitem = *baseitems_info.rbegin();
-        baseitem.d_attr = a;
-        baseitem.d_char = tokens[1][0];
+        baseitem.cc_def = ColoredChar(color, tokens[1][0]);
         return PARSE_ERROR_NONE;
     }
 

@@ -57,7 +57,7 @@ public:
     const TerrainType &operator[](short terrain_id) const;
 
     static TerrainList &get_instance();
-    std::vector<TerrainType> &get_raw_vector();
+    std::vector<TerrainType> &get_raw_vector(); // @todo init_terrains_info() 専用、将来的に廃止する.
     std::vector<TerrainType>::iterator begin();
     std::vector<TerrainType>::const_iterator begin() const;
     std::vector<TerrainType>::reverse_iterator rbegin();

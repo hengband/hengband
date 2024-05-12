@@ -18,6 +18,7 @@
 #include "sv-definition/sv-rod-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/angband-exceptions.h"
+#include "util/string-processor.h"
 #include <set>
 #include <unordered_map>
 
@@ -25,6 +26,7 @@ namespace {
 constexpr auto ITEM_NOT_BOW = "This item is not a bow!";
 constexpr auto ITEM_NOT_ROD = "This item is not a rod!";
 constexpr auto ITEM_NOT_LITE = "This item is not a lite!";
+constexpr auto INVALID_BI_ID_FORMAT = "Invalid Baseitem ID is specified! %d";
 }
 
 bool BaseitemKey::operator==(const BaseitemKey &other) const
@@ -603,6 +605,8 @@ bool BaseitemKey::is_mushrooms() const
 
 BaseitemInfo::BaseitemInfo()
     : bi_key(ItemKindType::NONE)
+    , cc_def(ColoredChar(0, '\0'))
+    , cc_config(ColoredChar(0, '\0'))
 {
 }
 
@@ -616,6 +620,42 @@ BaseitemInfo::BaseitemInfo()
 bool BaseitemInfo::is_valid() const
 {
     return (this->idx > 0) && !this->name.empty();
+}
+
+/*!
+ * @brief ベースアイテム名を返す
+ * @return ベースアイテム名
+ */
+std::string BaseitemInfo::stripped_name() const
+{
+    const auto tokens = str_split(this->name, ' ');
+    std::stringstream ss;
+    for (const auto &token : tokens) {
+        if (token == "" || token == "~" || token == "&" || token == "#") {
+            continue;
+        }
+
+        auto offset = 0;
+        auto endpos = token.size();
+        auto is_kanji = false;
+        if (token[0] == '~' || token[0] == '#') {
+            offset++;
+        }
+#ifdef JP
+        if (token.size() > 2) {
+            is_kanji = iskanji(token[endpos - 2]);
+        }
+
+#endif
+        if (!is_kanji && (token[endpos - 1] == '~' || token[endpos - 1] == '#')) {
+            endpos--;
+        }
+
+        ss << token.substr(offset, endpos);
+    }
+
+    ss << " ";
+    return ss.str();
 }
 
 /*!
@@ -665,4 +705,94 @@ void BaseitemInfo::mark_as_tried()
     this->tried = true;
 }
 
+void BaseitemInfo::mark_as_aware()
+{
+    this->aware = true;
+}
+
 std::vector<BaseitemInfo> baseitems_info;
+
+BaseitemList BaseitemList::instance{};
+
+BaseitemList &BaseitemList::get_instance()
+{
+    return instance;
+}
+
+BaseitemInfo &BaseitemList::get_baseitem(const short bi_id)
+{
+    if ((bi_id < 0) || (bi_id >= static_cast<short>(this->baseitems.size()))) {
+        THROW_EXCEPTION(std::logic_error, format(INVALID_BI_ID_FORMAT, bi_id));
+    }
+
+    return this->baseitems[bi_id];
+}
+
+const BaseitemInfo &BaseitemList::get_baseitem(const short bi_id) const
+{
+    if ((bi_id < 0) || (bi_id >= static_cast<short>(this->baseitems.size()))) {
+        THROW_EXCEPTION(std::logic_error, format(INVALID_BI_ID_FORMAT, bi_id));
+    }
+
+    return this->baseitems[bi_id];
+}
+
+std::vector<BaseitemInfo> &BaseitemList::get_raw_vector()
+{
+    return this->baseitems;
+}
+
+std::vector<BaseitemInfo>::iterator BaseitemList::begin()
+{
+    return this->baseitems.begin();
+}
+
+std::vector<BaseitemInfo>::const_iterator BaseitemList::begin() const
+{
+    return this->baseitems.begin();
+}
+
+std::vector<BaseitemInfo>::iterator BaseitemList::end()
+{
+    return this->baseitems.end();
+}
+
+std::vector<BaseitemInfo>::const_iterator BaseitemList::end() const
+{
+    return this->baseitems.end();
+}
+
+std::vector<BaseitemInfo>::reverse_iterator BaseitemList::rbegin()
+{
+    return this->baseitems.rbegin();
+}
+
+std::vector<BaseitemInfo>::const_reverse_iterator BaseitemList::rbegin() const
+{
+    return this->baseitems.rbegin();
+}
+
+std::vector<BaseitemInfo>::reverse_iterator BaseitemList::rend()
+{
+    return this->baseitems.rend();
+}
+
+std::vector<BaseitemInfo>::const_reverse_iterator BaseitemList::rend() const
+{
+    return this->baseitems.rend();
+}
+
+size_t BaseitemList::size() const
+{
+    return this->baseitems.size();
+}
+
+bool BaseitemList::empty() const
+{
+    return this->baseitems.empty();
+}
+
+void BaseitemList::resize(size_t new_size)
+{
+    this->baseitems.resize(new_size);
+}

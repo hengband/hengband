@@ -36,7 +36,6 @@
 #include "sv-definition/sv-lite-types.h"
 #include "system/baseitem-info.h"
 #include "util/bit-flags-calculator.h"
-#include "util/string-processor.h"
 #include <functional>
 #include <sstream>
 #include <utility>
@@ -117,43 +116,4 @@ std::string get_table_sindarin_aux()
 std::string get_table_sindarin()
 {
     return std::string(_("『", "'")).append(get_table_sindarin_aux()).append(_("』", "'"));
-}
-
-/*!
- * @brief nameバッファ内からベースアイテム名を返す / Strip an "object name" into a buffer
- * @param buf ベースアイテム格納先の参照ポインタ
- * @param bi_id ベースアイテムID
- */
-std::string strip_name(short bi_id)
-{
-    const auto &baseitem = baseitems_info[bi_id];
-    auto tok = str_split(baseitem.name, ' ');
-    std::stringstream name;
-    for (const auto &s : tok) {
-        if (s == "" || s == "~" || s == "&" || s == "#") {
-            continue;
-        }
-
-        auto offset = 0;
-        auto endpos = s.size();
-        auto is_kanji = false;
-
-        if (s[0] == '~' || s[0] == '#') {
-            offset++;
-        }
-#ifdef JP
-        if (s.size() > 2) {
-            is_kanji = iskanji(s[endpos - 2]);
-        }
-
-#endif
-        if (!is_kanji && (s[endpos - 1] == '~' || s[endpos - 1] == '#')) {
-            endpos--;
-        }
-
-        name << s.substr(offset, endpos);
-    }
-
-    name << " ";
-    return name.str();
 }

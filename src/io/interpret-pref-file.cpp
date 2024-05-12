@@ -80,11 +80,11 @@ static errr interpret_k_token(char *buf)
     /* Allow TERM_DARK text */
     auto &baseitem = baseitems_info[i];
     if ((color > 0) || (((character & 0x80) == 0) && (character != 0))) {
-        baseitem.x_attr = color;
+        baseitem.cc_config.color = color;
     }
 
     if (character != 0) {
-        baseitem.x_char = character;
+        baseitem.cc_config.character = character;
     }
 
     return 0;
@@ -211,11 +211,11 @@ static errr interpret_u_token(char *buf)
     for (auto &baseitem : baseitems_info) {
         if (baseitem.is_valid() && (baseitem.bi_key.tval() == tval)) {
             if (n1) {
-                baseitem.d_attr = n1;
+                baseitem.cc_def.color = n1;
             }
 
             if (n2) {
-                baseitem.d_char = n2;
+                baseitem.cc_def.character = n2;
             }
         }
     }

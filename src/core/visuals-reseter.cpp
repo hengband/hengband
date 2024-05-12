@@ -21,8 +21,7 @@ void reset_visuals(PlayerType *player_ptr)
     }
 
     for (auto &baseitem : baseitems_info) {
-        baseitem.x_attr = baseitem.d_attr;
-        baseitem.x_char = baseitem.d_char;
+        baseitem.cc_config = baseitem.cc_def;
     }
 
     for (auto &[monrace_id, monrace] : monraces_info) {

@@ -23,7 +23,6 @@
 #include "dungeon/quest.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "flavor/object-flavor.h"
 #include "floor/floor-leaver.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-object.h"
@@ -150,8 +149,8 @@ static std::optional<short> wiz_select_sval(const tval_desc &td)
     const auto prompt = format(_("%s群の具体的なアイテムを選んで下さい", "What Kind of %s? "), td.desc);
 
     CandidateSelector cs(prompt, 15);
-    const auto choice = cs.select(bi_ids, [](short bi_id) { return strip_name(bi_id); });
-
+    const auto choice = cs.select(bi_ids,
+        [](short bi_id) { return baseitems_info[bi_id].stripped_name(); });
     return (choice != bi_ids.end()) ? std::make_optional(*choice) : std::nullopt;
 }
 

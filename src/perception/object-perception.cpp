@@ -16,7 +16,7 @@ void object_aware(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
     const bool is_already_awared = o_ptr->is_aware();
     auto &baseitem = o_ptr->get_baseitem();
-    baseitem.aware = true;
+    baseitem.mark_as_aware();
 
     // 以下、playrecordに記録しない場合はreturnする
     if (!record_ident) {
