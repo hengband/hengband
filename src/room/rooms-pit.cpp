@@ -8,8 +8,6 @@
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
-#include "monster/monster-info.h"
-#include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "room/door-definition.h"
 #include "room/pit-nest-util.h"
@@ -134,32 +132,21 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
     /* Pick some monster types */
     std::array<MonsterRaceId, 16> whats{};
     for (auto &what : whats) {
-        auto r_idx = MonsterRace::empty_id();
-        auto attempts = 100;
-        MonsterRaceInfo *r_ptr = nullptr;
-        while (attempts--) {
-            r_idx = get_mon_num(player_ptr, 0, floor.dun_level + 11, PM_NONE);
-            r_ptr = &monraces_info[r_idx];
-            if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) {
-                continue;
-            }
-
-            break;
-        }
-
-        if (!MonsterRace(r_idx).is_valid() || (attempts == 0)) {
+        const auto monrace_id = select_pit_nest_monrace_id(player_ptr, align, 11);
+        if (!monrace_id) {
             return false;
         }
 
-        if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
+        const auto &monrace = monraces_info[*monrace_id];
+        if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
             align.sub_align |= SUB_ALIGN_EVIL;
         }
 
-        if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
+        if (monrace.kind_flags.has(MonsterKindType::GOOD)) {
             align.sub_align |= SUB_ALIGN_GOOD;
         }
 
-        what = r_idx;
+        what = *monrace_id;
     }
 
     int yval;
@@ -421,38 +408,21 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     /* Pick some monster types */
     for (i = 0; i < 16; i++) {
-        auto r_idx = MonsterRace::empty_id();
-        int attempts = 100;
-        MonsterRaceInfo *r_ptr = nullptr;
-
-        while (attempts--) {
-            /* Get a (hard) monster type */
-            r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level + 0, PM_NONE);
-            r_ptr = &monraces_info[r_idx];
-
-            /* Decline incorrect alignment */
-            if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) {
-                continue;
-            }
-
-            /* Accept this monster */
-            break;
-        }
-
-        /* Notice failure */
-        if (!MonsterRace(r_idx).is_valid() || !attempts) {
+        const auto monrace_id = select_pit_nest_monrace_id(player_ptr, align);
+        if (!monrace_id) {
             return false;
         }
 
-        /* Note the alignment */
-        if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
+        const auto &monrace = monraces_info[*monrace_id];
+        if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
             align.sub_align |= SUB_ALIGN_EVIL;
         }
-        if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
+
+        if (monrace.kind_flags.has(MonsterKindType::GOOD)) {
             align.sub_align |= SUB_ALIGN_GOOD;
         }
 
-        what[i] = r_idx;
+        what[i] = *monrace_id;
     }
 
     /* Find and reserve some space in the dungeon.  Get center of room. */

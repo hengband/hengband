@@ -51,7 +51,9 @@ struct nest_mon_info_type {
 };
 
 class FloorType;
+class MonsterEntity;
 std::optional<NestKind> pick_nest_type(const FloorType &floor, const std::map<NestKind, nest_pit_type> &np_types);
 std::optional<PitKind> pick_pit_type(const FloorType &floor, const std::map<PitKind, nest_pit_type> &np_types);
+std::optional<MonsterRaceId> select_pit_nest_monrace_id(PlayerType *player_ptr, MonsterEntity &align, int boost = 0);
 std::string pit_subtype_string(PitKind type);
 std::string nest_subtype_string(NestKind type);
