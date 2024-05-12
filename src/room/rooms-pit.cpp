@@ -376,16 +376,11 @@ static bool vault_aux_trapped_pit(PlayerType *player_ptr, MonsterRaceId r_idx)
  */
 bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
-    POSITION y, x, y1, x1, y2, x2, xval, yval;
-    int i, j;
-
-    MonsterEntity align;
-
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto pit_type = pick_pit_type(*floor_ptr, pit_types);
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto pit_type = pick_pit_type(floor, pit_types);
 
     /* Only in Angband */
-    if (floor_ptr->dungeon_idx != DUNGEON_ANGBAND) {
+    if (floor.dungeon_idx != DUNGEON_ANGBAND) {
         return false;
     }
 
@@ -400,89 +395,92 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
     if (pit.prep_func) {
         (*(pit.prep_func))(player_ptr);
     }
-    get_mon_num_prep(player_ptr, pit.hook_func, vault_aux_trapped_pit);
 
+    get_mon_num_prep(player_ptr, pit.hook_func, vault_aux_trapped_pit);
+    MonsterEntity align;
     align.sub_align = SUB_ALIGN_NEUTRAL;
     auto whats = pick_pit_monraces(player_ptr, align);
     if (!whats) {
         return false;
     }
 
-    /* Find and reserve some space in the dungeon.  Get center of room. */
+    int yval;
+    int xval;
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, 13, 25)) {
         return false;
     }
 
     /* Large room */
-    y1 = yval - 5;
-    y2 = yval + 5;
-    x1 = xval - 11;
-    x2 = xval + 11;
+    auto y1 = yval - 5;
+    auto y2 = yval + 5;
+    auto x1 = xval - 11;
+    auto x2 = xval + 11;
 
     /* Fill with inner walls */
-    for (y = y1 - 1; y <= y2 + 1; y++) {
-        for (x = x1 - 1; x <= x2 + 1; x++) {
-            auto &grid = floor_ptr->get_grid({ y, x });
+    for (auto y = y1 - 1; y <= y2 + 1; y++) {
+        for (auto x = x1 - 1; x <= x2 + 1; x++) {
+            auto &grid = floor.get_grid({ y, x });
             place_grid(player_ptr, &grid, GB_INNER);
             grid.add_info(CAVE_ROOM);
         }
     }
 
     /* Place the floor area 1 */
-    for (x = x1 + 3; x <= x2 - 3; x++) {
-        auto &grid_top = floor_ptr->get_grid({ yval - 2, x });
+    for (auto x = x1 + 3; x <= x2 - 3; x++) {
+        auto &grid_top = floor.get_grid({ yval - 2, x });
         place_grid(player_ptr, &grid_top, GB_FLOOR);
         grid_top.add_info(CAVE_ICKY);
 
-        auto &grid_bottom = floor_ptr->get_grid({ yval + 2, x });
+        auto &grid_bottom = floor.get_grid({ yval + 2, x });
         place_grid(player_ptr, &grid_bottom, GB_FLOOR);
         grid_bottom.add_info(CAVE_ICKY);
     }
 
     /* Place the floor area 2 */
-    for (x = x1 + 5; x <= x2 - 5; x++) {
-        auto &grid_left = floor_ptr->get_grid({ yval - 3, x });
+    for (auto x = x1 + 5; x <= x2 - 5; x++) {
+        auto &grid_left = floor.get_grid({ yval - 3, x });
         place_grid(player_ptr, &grid_left, GB_FLOOR);
         grid_left.add_info(CAVE_ICKY);
 
-        auto &grid_right = floor_ptr->get_grid({ yval + 3, x });
+        auto &grid_right = floor.get_grid({ yval + 3, x });
         place_grid(player_ptr, &grid_right, GB_FLOOR);
         grid_right.add_info(CAVE_ICKY);
     }
 
     /* Corridor */
-    for (x = x1; x <= x2; x++) {
-        place_grid(player_ptr, &floor_ptr->get_grid({ yval, x }), GB_FLOOR);
-        place_grid(player_ptr, &floor_ptr->get_grid({ y1, x }), GB_FLOOR);
-        place_grid(player_ptr, &floor_ptr->get_grid({ y2, x }), GB_FLOOR);
+    for (auto x = x1; x <= x2; x++) {
+        place_grid(player_ptr, &floor.get_grid({ yval, x }), GB_FLOOR);
+        place_grid(player_ptr, &floor.get_grid({ y1, x }), GB_FLOOR);
+        place_grid(player_ptr, &floor.get_grid({ y2, x }), GB_FLOOR);
     }
 
     /* Place the outer walls */
-    for (y = y1 - 1; y <= y2 + 1; y++) {
-        place_grid(player_ptr, &floor_ptr->get_grid({ y, x1 - 1 }), GB_OUTER);
-        place_grid(player_ptr, &floor_ptr->get_grid({ y, x2 + 1 }), GB_OUTER);
+    for (auto y = y1 - 1; y <= y2 + 1; y++) {
+        place_grid(player_ptr, &floor.get_grid({ y, x1 - 1 }), GB_OUTER);
+        place_grid(player_ptr, &floor.get_grid({ y, x2 + 1 }), GB_OUTER);
     }
-    for (x = x1 - 1; x <= x2 + 1; x++) {
-        place_grid(player_ptr, &floor_ptr->get_grid({ y1 - 1, x }), GB_OUTER);
-        place_grid(player_ptr, &floor_ptr->get_grid({ y2 + 1, x }), GB_OUTER);
+
+    for (auto x = x1 - 1; x <= x2 + 1; x++) {
+        place_grid(player_ptr, &floor.get_grid({ y1 - 1, x }), GB_OUTER);
+        place_grid(player_ptr, &floor.get_grid({ y2 + 1, x }), GB_OUTER);
     }
 
     /* Random corridor */
     if (one_in_(2)) {
-        for (y = y1; y <= yval; y++) {
+        for (auto y = y1; y <= yval; y++) {
             place_bold(player_ptr, y, x2, GB_FLOOR);
             place_bold(player_ptr, y, x1 - 1, GB_SOLID);
         }
-        for (y = yval; y <= y2 + 1; y++) {
+        for (auto y = yval; y <= y2 + 1; y++) {
             place_bold(player_ptr, y, x1, GB_FLOOR);
             place_bold(player_ptr, y, x2 + 1, GB_SOLID);
         }
     } else {
-        for (y = yval; y <= y2 + 1; y++) {
+        for (auto y = yval; y <= y2 + 1; y++) {
             place_bold(player_ptr, y, x1, GB_FLOOR);
             place_bold(player_ptr, y, x2 + 1, GB_SOLID);
         }
-        for (y = y1; y <= yval; y++) {
+        for (auto y = y1; y <= yval; y++) {
             place_bold(player_ptr, y, x2, GB_FLOOR);
             place_bold(player_ptr, y, x1 - 1, GB_SOLID);
         }
@@ -490,14 +488,14 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     /* Place the wall open trap */
     const Pos2D pos(yval, xval);
-    auto &grid = floor_ptr->get_grid(pos);
+    auto &grid = floor.get_grid(pos);
     grid.mimic = grid.feat;
     grid.feat = feat_trap_open;
 
     /* Sort the entries */
-    for (i = 0; i < NUM_PIT_MONRACES - 1; i++) {
+    for (auto i = 0; i < NUM_PIT_MONRACES - 1; i++) {
         /* Sort the entries */
-        for (j = 0; j < NUM_PIT_MONRACES - 1; j++) {
+        for (auto j = 0; j < NUM_PIT_MONRACES - 1; j++) {
             int i1 = j;
             int i2 = j + 1;
 
@@ -515,7 +513,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
     msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt, pit.name.data(), pit_subtype_string(*pit_type).data());
 
     /* Select the entries */
-    for (i = 0; i < NUM_PIT_MONRACES / 2; i++) {
+    for (auto i = 0; i < NUM_PIT_MONRACES / 2; i++) {
         /* Every other entry */
         (*whats)[i] = (*whats)[i * 2];
 
