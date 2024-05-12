@@ -10,7 +10,7 @@
 
 class ColoredChar {
 public:
-    ColoredChar(uint8_t color, char character)
+    constexpr ColoredChar(uint8_t color, char character)
         : color(color)
         , character(character)
     {
