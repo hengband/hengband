@@ -20,6 +20,7 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
+#include <algorithm>
 
 namespace {
 constexpr auto NUM_PIT_MONRACES = 16; //!< pit内に存在する最大モンスター種族数.
@@ -98,21 +99,6 @@ std::optional<std::array<MonsterRaceId, NUM_PIT_MONRACES>> pick_pit_monraces(Pla
     }
 
     return whats;
-}
-
-void sort_pit_monraces(std::array<MonsterRaceId, NUM_PIT_MONRACES> &whats)
-{
-    for (auto i = 0; i < NUM_PIT_MONRACES - 1; i++) {
-        for (auto j = 0; j < NUM_PIT_MONRACES - 1; j++) {
-            auto i1 = j;
-            auto i2 = j + 1;
-            auto p1 = monraces_info[whats[i1]].level;
-            auto p2 = monraces_info[whats[i2]].level;
-            if (p1 > p2) {
-                std::swap(whats[i1], whats[i2]);
-            }
-        }
-    }
 }
 
 void place_pit_outer(PlayerType *player_ptr, const Pos2D &center)
@@ -244,7 +230,9 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
     const Pos2D center(yval, xval);
     place_pit_outer(player_ptr, center);
     place_pit_inner(player_ptr, center);
-    sort_pit_monraces(*whats);
+    std::stable_sort(whats->begin(), whats->end(), [](const auto monrace_id1, const auto monrace_id2) {
+        return monraces_info[monrace_id1].level < monraces_info[monrace_id2].level;
+    });
     constexpr auto fmt_generate = _("モンスター部屋(pit)(%s%s)を生成します。", "Monster pit (%s%s)");
     msg_format_wizard(
         player_ptr, CHEAT_DUNGEON, fmt_generate, pit.name.data(), pit_subtype_string(*pit_type).data());
@@ -490,7 +478,9 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
     grid.mimic = grid.feat;
     grid.feat = feat_trap_open;
 
-    sort_pit_monraces(*whats);
+    std::stable_sort(whats->begin(), whats->end(), [](const auto monrace_id1, const auto monrace_id2) {
+        return monraces_info[monrace_id1].level < monraces_info[monrace_id2].level;
+    });
     constexpr auto fmt = _("%s%sの罠ピットが生成されました。", "Trapped monster pit (%s%s)");
     msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt, pit.name.data(), pit_subtype_string(*pit_type).data());
 
