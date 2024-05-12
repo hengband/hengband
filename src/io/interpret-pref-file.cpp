@@ -80,11 +80,11 @@ static errr interpret_k_token(char *buf)
     /* Allow TERM_DARK text */
     auto &baseitem = baseitems_info[i];
     if ((color > 0) || (((character & 0x80) == 0) && (character != 0))) {
-        baseitem.x_attr = color;
+        baseitem.cc_config.color = color;
     }
 
     if (character != 0) {
-        baseitem.x_char = character;
+        baseitem.cc_config.character = character;
     }
 
     return 0;

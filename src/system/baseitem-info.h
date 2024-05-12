@@ -131,10 +131,9 @@ public:
     std::string stripped_name() const;
     void decide_easy_know();
 
-    /* @todo ここから下はk_info.txt に依存しないミュータブルなフィールド群なので、将来的に分離予定 */
+    /* @todo ここから下はBaseitemDefinitions.txt に依存しないミュータブルなフィールド群なので、将来的に分離予定 */
 
-    TERM_COLOR x_attr{}; /*!< 設定変更後のアイテムシンボルカラー /  Desired object attribute */
-    char x_char{}; /*!< 設定変更後のアイテムシンボルアルファベット /  Desired object character */
+    ColoredChar cc_config; //!< ユーザ個別の設定シンボル (色/文字).
 
     IDX flavor{}; /*!< 未鑑定名の何番目を当てるか(0は未鑑定名なし) / Special object flavor (or zero) */
     bool aware{}; /*!< ベースアイテムが鑑定済かどうか /  The player is "aware" of the item's effects */

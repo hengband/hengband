@@ -590,14 +590,15 @@ TERM_COLOR ItemEntity::get_color() const
     const auto &baseitem = this->get_baseitem();
     const auto flavor = baseitem.flavor;
     if (flavor != 0) {
-        return baseitems_info[flavor].x_attr;
+        return baseitems_info[flavor].cc_config.color;
     }
 
+    const auto &cc_config = baseitem.cc_config;
     auto has_attr = this->is_valid();
     has_attr &= this->is_corpse();
-    has_attr &= baseitem.x_attr == TERM_DARK;
+    has_attr &= cc_config.color == TERM_DARK;
     if (!has_attr) {
-        return baseitem.x_attr;
+        return cc_config.color;
     }
 
     return monraces_info[i2enum<MonsterRaceId>(this->pval)].x_attr;
@@ -613,7 +614,7 @@ char ItemEntity::get_symbol() const
 {
     const auto &baseitem = this->get_baseitem();
     const auto flavor = baseitem.flavor;
-    return flavor ? baseitems_info[flavor].x_char : baseitem.x_char;
+    return flavor ? baseitems_info[flavor].cc_config.character : baseitem.cc_config.character;
 }
 
 /*!

@@ -48,7 +48,7 @@ ColoredChar image_object()
     if (use_graphics) {
         std::span<BaseitemInfo> candidates(baseitems_info.begin() + 1, baseitems_info.end());
         const auto &baseitem = rand_choice(candidates);
-        return { baseitem.x_attr, baseitem.x_char };
+        return baseitem.cc_config;
     }
 
     return { randnum1<uint8_t>(15), rand_choice(image_objects) };

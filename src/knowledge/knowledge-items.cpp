@@ -194,18 +194,16 @@ static void display_object_list(int col, int row, int per_page, const std::vecto
         const auto is_flavor_only = (baseitem.flavor != 0) && (visual_only || !baseitem.aware);
         const auto o_name = is_flavor_only ? flavor_baseitem.flavor_name : baseitem.stripped_name();
         c_prt(attr, o_name.data(), row + i, col);
+        const auto &cc_config = flavor_baseitem.cc_config;
         if (per_page == 1) {
-            c_prt(attr, format("%02x/%02x", flavor_baseitem.x_attr, flavor_baseitem.x_char), row + i, (w_ptr->wizard || visual_only) ? 64 : 68);
+            c_prt(attr, format("%02x/%02x", cc_config.color, cc_config.character), row + i, (w_ptr->wizard || visual_only) ? 64 : 68);
         }
 
         if (w_ptr->wizard || visual_only) {
             c_prt(attr, format("%d", bi_id), row + i, 70);
         }
 
-        auto a = flavor_baseitem.x_attr;
-        auto c = flavor_baseitem.x_char;
-
-        term_queue_bigchar(use_bigtile ? 76 : 77, row + i, a, c, 0, 0);
+        term_queue_bigchar(use_bigtile ? 76 : 77, row + i, cc_config.color, cc_config.character, 0, 0);
     }
 
     for (; i < per_page; i++) {
@@ -282,10 +280,9 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         object_idx[1] = -1;
         const auto height = browser_rows - 1;
         const auto width = wid - (max + 3);
-        auto *x_attr = &flavor_baseitem.x_attr;
-        auto *x_char = &flavor_baseitem.x_char;
+        auto &cc_config = flavor_baseitem.cc_config;
         (void)visual_mode_command(
-            'v', &visual_list, height, width, &attr_top, &char_left, x_attr, x_char, need_redraw);
+            'v', &visual_list, height, width, &attr_top, &char_left, &cc_config.color, &cc_config.character, need_redraw);
     }
 
     grp_idx[grp_cnt] = -1;
@@ -396,8 +393,9 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             }
         }
 
+        auto &cc_config = flavor_baseitem.cc_config;
         if (visual_list) {
-            place_visual_list_cursor(max + 3, 7, flavor_baseitem.x_attr, flavor_baseitem.x_char, attr_top, char_left);
+            place_visual_list_cursor(max + 3, 7, cc_config.color, cc_config.character, attr_top, char_left);
         } else if (!column) {
             term_gotoxy(0, 6 + (grp_cur - grp_top));
         } else {
@@ -407,10 +405,8 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         char ch = inkey();
         const auto height = browser_rows - 1;
         const auto width = wid - (max + 3);
-        auto *x_attr = &flavor_baseitem.x_attr;
-        auto *x_char = &flavor_baseitem.x_char;
         if (visual_mode_command(
-                ch, &visual_list, height, width, &attr_top, &char_left, x_attr, x_char, need_redraw)) {
+                ch, &visual_list, height, width, &attr_top, &char_left, &cc_config.color, &cc_config.character, need_redraw)) {
             if (direct_k_idx >= 0) {
                 switch (ch) {
                 case '\n':
