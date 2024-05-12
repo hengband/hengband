@@ -287,17 +287,16 @@ void do_cmd_visuals(PlayerType *player_ptr)
             while (true) {
                 auto &baseitem = baseitems_info[bi_id];
                 int c;
-                TERM_COLOR da = baseitem.d_attr;
-                auto dc = baseitem.d_char;
+                const auto &cc_def = baseitem.cc_def;
                 TERM_COLOR ca = baseitem.x_attr;
                 auto cc = baseitem.x_char;
 
                 term_putstr(5, 17, -1, TERM_WHITE,
                     format(
                         _("アイテム = %d, 名前 = %-40.40s", "Object = %d, Name = %-40.40s"), bi_id, (!baseitem.flavor ? baseitem.name : baseitem.flavor_name).data()));
-                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
+                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), cc_def.color, cc_def.character));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
-                term_queue_bigchar(43, 19, da, dc, 0, 0);
+                term_queue_bigchar(43, 19, cc_def.color, cc_def.character, 0, 0);
                 term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), ca, cc));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 20, ca, cc, 0, 0);

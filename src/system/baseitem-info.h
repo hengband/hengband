@@ -4,6 +4,7 @@
 #include "object-enchant/trg-types.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
+#include "view/colored-char.h"
 #include <array>
 #include <optional>
 #include <string>
@@ -122,9 +123,7 @@ public:
     };
 
     std::array<alloc_table, 4> alloc_tables{}; /*!< ベースアイテムの生成テーブル */
-
-    TERM_COLOR d_attr{}; /*!< デフォルトのアイテムシンボルカラー / Default object attribute */
-    char d_char{}; /*!< デフォルトのアイテムシンボルアルファベット / Default object character */
+    ColoredChar cc_def; //!< 定義上のシンボル (色/文字).
     bool easy_know{}; /*!< ベースアイテムが初期からベース名を判断可能かどうか / This object is always known (if aware) */
     RandomArtActType act_idx{}; /*!< 発動能力のID /  Activative ability index */
 

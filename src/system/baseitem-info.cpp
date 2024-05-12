@@ -605,6 +605,7 @@ bool BaseitemKey::is_mushrooms() const
 
 BaseitemInfo::BaseitemInfo()
     : bi_key(ItemKindType::NONE)
+    , cc_def(ColoredChar(0, '\0'))
 {
 }
 
