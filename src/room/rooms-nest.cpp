@@ -32,17 +32,17 @@ constexpr auto NUM_NEST_MON_TYPE = 64; //! nestの種別数.
 /*!
  * @brief 生成するNestの情報テーブル
  */
-const std::vector<nest_pit_type> nest_types = {
-    { _("クローン", "clone"), vault_aux_clone, vault_prep_clone, 5, 3 },
-    { _("ゼリー", "jelly"), vault_aux_jelly, std::nullopt, 5, 6 },
-    { _("シンボル(善)", "symbol good"), vault_aux_symbol_g, vault_prep_symbol, 25, 2 },
-    { _("シンボル(悪)", "symbol evil"), vault_aux_symbol_e, vault_prep_symbol, 25, 2 },
-    { _("ミミック", "mimic"), vault_aux_mimic, std::nullopt, 30, 4 },
-    { _("狂気", "lovecraftian"), vault_aux_cthulhu, std::nullopt, 70, 2 },
-    { _("犬小屋", "kennel"), vault_aux_kennel, std::nullopt, 45, 4 },
-    { _("動物園", "animal"), vault_aux_animal, std::nullopt, 35, 5 },
-    { _("教会", "chapel"), vault_aux_chapel_g, std::nullopt, 75, 4 },
-    { _("アンデッド", "undead"), vault_aux_undead, std::nullopt, 75, 5 },
+const std::map<NestKind, nest_pit_type> nest_types = {
+    { NestKind::CLONE, { _("クローン", "clone"), vault_aux_clone, vault_prep_clone, 5, 3 } },
+    { NestKind::JELLY, { _("ゼリー", "jelly"), vault_aux_jelly, std::nullopt, 5, 6 } },
+    { NestKind::SYMBOL_GOOD, { _("シンボル(善)", "symbol good"), vault_aux_symbol_g, vault_prep_symbol, 25, 2 } },
+    { NestKind::SYMBOL_EVIL, { _("シンボル(悪)", "symbol evil"), vault_aux_symbol_e, vault_prep_symbol, 25, 2 } },
+    { NestKind::MIMIC, { _("ミミック", "mimic"), vault_aux_mimic, std::nullopt, 30, 4 } },
+    { NestKind::LOVECRAFTIAN, { _("狂気", "lovecraftian"), vault_aux_cthulhu, std::nullopt, 70, 2 } },
+    { NestKind::KENNEL, { _("犬小屋", "kennel"), vault_aux_kennel, std::nullopt, 45, 4 } },
+    { NestKind::ANIMAL, { _("動物園", "animal"), vault_aux_animal, std::nullopt, 35, 5 } },
+    { NestKind::CHAPEL, { _("教会", "chapel"), vault_aux_chapel_g, std::nullopt, 75, 4 } },
+    { NestKind::UNDEAD, { _("アンデッド", "undead"), vault_aux_undead, std::nullopt, 75, 5 } },
 };
 
 /*
@@ -259,17 +259,17 @@ void output_debug_nest(PlayerType *player_ptr, std::array<nest_mon_info_type, NU
 bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    const auto cur_nest_type = pick_vault_type(nest_types, floor.get_dungeon_definition().nest, floor.dun_level);
-    if (cur_nest_type < 0) {
+    const auto nest_type = pick_nest_type(floor, nest_types);
+    if (!nest_type) {
         return false;
     }
 
-    const auto n_ptr = &nest_types[cur_nest_type];
-    if (n_ptr->prep_func) {
-        (*n_ptr->prep_func)(player_ptr);
+    const auto &nest = nest_types.at(*nest_type);
+    if (nest.prep_func) {
+        (*nest.prep_func)(player_ptr);
     }
 
-    get_mon_num_prep(player_ptr, n_ptr->hook_func, nullptr);
+    get_mon_num_prep(player_ptr, nest.hook_func, nullptr);
     MonsterEntity align;
     align.sub_align = SUB_ALIGN_NEUTRAL;
 
@@ -290,7 +290,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     generate_inner_room(player_ptr, center, rectangle);
 
     constexpr auto fmt_nest = _("モンスター部屋(nest)(%s%s)を生成します。", "Monster nest (%s%s)");
-    msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest, n_ptr->name.data(), pit_subtype_string(cur_nest_type, true).data());
+    msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest, nest.name.data(), nest_subtype_string(*nest_type).data());
     place_monsters_in_nest(player_ptr, center, *nest_mon_info_list);
     output_debug_nest(player_ptr, *nest_mon_info_list);
     return true;
