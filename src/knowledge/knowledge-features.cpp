@@ -275,9 +275,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
         } else if ((ch == 'D') || (ch == 'd')) {
             TERM_COLOR prev_x_attr = terrain.x_attr[*lighting_level];
             byte prev_x_char = terrain.x_char[*lighting_level];
-
-            apply_default_feat_lighting(terrain.x_attr, terrain.x_char);
-
+            terrain.reset_lighting();
             if (visual_list) {
                 if (prev_x_attr != terrain.x_attr[*lighting_level]) {
                     attr_top = std::max<int8_t>(0, (terrain.x_attr[*lighting_level] & 0x7f) - 5);

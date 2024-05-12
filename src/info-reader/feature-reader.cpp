@@ -168,7 +168,7 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
         }
 
         if (tokens[n++] == "LIT") {
-            apply_default_feat_lighting(terrain.d_attr, terrain.d_char);
+            terrain.reset_lighting(false);
             for (auto j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
                 auto c_idx = n + (j - F_LIT_NS_BEGIN) * 2;
                 auto a_idx = c_idx + 1;

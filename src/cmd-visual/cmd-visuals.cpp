@@ -453,7 +453,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'd':
-                    apply_default_feat_lighting(terrain.x_attr, terrain.x_char);
+                    terrain.reset_lighting();
                     need_redraw = true;
                     break;
                 case 'v':

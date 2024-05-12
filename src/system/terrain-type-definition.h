@@ -50,6 +50,8 @@ public:
     char x_char[F_LIT_MAX]{}; /*!< 設定変更後の地形シンボルアルファベット / Desired feature character */
 
     bool is_permanent_wall() const;
+
+    void reset_lighting(bool is_config = true);
 };
 
 class TerrainList {
