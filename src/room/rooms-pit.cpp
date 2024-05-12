@@ -22,6 +22,8 @@
 #include "wizard/wizard-messages.h"
 
 namespace {
+constexpr auto NUM_PIT_MONRACES = 16; //!< pit内に存在する最大モンスター種族数.
+
 /*!
  * @brief 生成するPitの情報テーブル
  */
@@ -72,6 +74,30 @@ const std::vector<TrappedMonster> place_table_trapped_pit = {
     { { -2, 0 }, 7 }, { { +2, 0 }, 7 },
 };
 // clang-format on
+
+std::optional<std::array<MonsterRaceId, NUM_PIT_MONRACES>> pick_pit_monraces(PlayerType *player_ptr, MonsterEntity &align, int boost = 0)
+{
+    std::array<MonsterRaceId, NUM_PIT_MONRACES> whats{};
+    for (auto &what : whats) {
+        const auto monrace_id = select_pit_nest_monrace_id(player_ptr, align, boost);
+        if (!monrace_id) {
+            return std::nullopt;
+        }
+
+        const auto &monrace = monraces_info[*monrace_id];
+        if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
+            align.sub_align |= SUB_ALIGN_EVIL;
+        }
+
+        if (monrace.kind_flags.has(MonsterKindType::GOOD)) {
+            align.sub_align |= SUB_ALIGN_GOOD;
+        }
+
+        what = *monrace_id;
+    }
+
+    return whats;
+}
 }
 
 /*!
@@ -129,26 +155,12 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
     MonsterEntity align;
     align.sub_align = SUB_ALIGN_NEUTRAL;
 
-    /* Pick some monster types */
-    std::array<MonsterRaceId, 16> whats{};
-    for (auto &what : whats) {
-        const auto monrace_id = select_pit_nest_monrace_id(player_ptr, align, 11);
-        if (!monrace_id) {
-            return false;
-        }
-
-        const auto &monrace = monraces_info[*monrace_id];
-        if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
-            align.sub_align |= SUB_ALIGN_EVIL;
-        }
-
-        if (monrace.kind_flags.has(MonsterKindType::GOOD)) {
-            align.sub_align |= SUB_ALIGN_GOOD;
-        }
-
-        what = *monrace_id;
+    auto whats_opt = pick_pit_monraces(player_ptr, align, 11);
+    if (!whats_opt) {
+        return false;
     }
 
+    auto &whats = *whats_opt;
     int yval;
     int xval;
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25)) {
@@ -227,9 +239,9 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
     }
 
     /* Sort the entries */
-    for (auto i = 0; i < 16 - 1; i++) {
+    for (auto i = 0; i < NUM_PIT_MONRACES - 1; i++) {
         /* Sort the entries */
-        for (auto j = 0; j < 16 - 1; j++) {
+        for (auto j = 0; j < NUM_PIT_MONRACES - 1; j++) {
             int i1 = j;
             int i2 = j + 1;
 
@@ -248,7 +260,7 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
         player_ptr, CHEAT_DUNGEON, fmt_generate, pit.name.data(), pit_subtype_string(*pit_type).data());
 
     /* Select the entries */
-    for (auto i = 0; i < 8; i++) {
+    for (auto i = 0; i < NUM_PIT_MONRACES / 2; i++) {
         /* Every other entry */
         whats[i] = whats[i * 2];
         constexpr auto fmt_pit_num = _("Pit構成モンスター選択No.%d:%s", "Pit Monster Select No.%d:%s");
@@ -377,8 +389,6 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
     POSITION y, x, y1, x1, y2, x2, xval, yval;
     int i, j;
 
-    MonsterRaceId what[16];
-
     MonsterEntity align;
 
     Grid *g_ptr;
@@ -405,25 +415,12 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
     get_mon_num_prep(player_ptr, pit.hook_func, vault_aux_trapped_pit);
 
     align.sub_align = SUB_ALIGN_NEUTRAL;
-
-    /* Pick some monster types */
-    for (i = 0; i < 16; i++) {
-        const auto monrace_id = select_pit_nest_monrace_id(player_ptr, align);
-        if (!monrace_id) {
-            return false;
-        }
-
-        const auto &monrace = monraces_info[*monrace_id];
-        if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
-            align.sub_align |= SUB_ALIGN_EVIL;
-        }
-
-        if (monrace.kind_flags.has(MonsterKindType::GOOD)) {
-            align.sub_align |= SUB_ALIGN_GOOD;
-        }
-
-        what[i] = *monrace_id;
+    auto whats_opt = pick_pit_monraces(player_ptr, align);
+    if (!whats_opt) {
+        return false;
     }
+
+    auto &whats = *whats_opt;
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, 13, 25)) {
@@ -517,20 +514,18 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
     floor_ptr->grid_array[yval][xval].feat = feat_trap_open;
 
     /* Sort the entries */
-    for (i = 0; i < 16 - 1; i++) {
+    for (i = 0; i < NUM_PIT_MONRACES - 1; i++) {
         /* Sort the entries */
-        for (j = 0; j < 16 - 1; j++) {
+        for (j = 0; j < NUM_PIT_MONRACES - 1; j++) {
             int i1 = j;
             int i2 = j + 1;
 
-            int p1 = monraces_info[what[i1]].level;
-            int p2 = monraces_info[what[i2]].level;
+            int p1 = monraces_info[whats[i1]].level;
+            int p2 = monraces_info[whats[i2]].level;
 
             /* Bubble */
             if (p1 > p2) {
-                MonsterRaceId tmp = what[i1];
-                what[i1] = what[i2];
-                what[i2] = tmp;
+                std::swap(whats[i1], whats[i2]);
             }
         }
     }
@@ -539,19 +534,19 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
     msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt, pit.name.data(), pit_subtype_string(*pit_type).data());
 
     /* Select the entries */
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < NUM_PIT_MONRACES / 2; i++) {
         /* Every other entry */
-        what[i] = what[i * 2];
+        whats[i] = whats[i * 2];
 
         if (cheat_hear) {
-            msg_print(monraces_info[what[i]].name);
+            msg_print(monraces_info[whats[i]].name);
         }
     }
 
     const Pos2DVec vec(yval, xval);
     for (const auto &trapped_monster : place_table_trapped_pit) {
         const auto pos = trapped_monster.pos + vec;
-        place_specific_monster(player_ptr, 0, pos.y, pos.x, what[trapped_monster.strength], PM_NO_KAGE);
+        place_specific_monster(player_ptr, 0, pos.y, pos.x, whats[trapped_monster.strength], PM_NO_KAGE);
     }
 
     return true;
