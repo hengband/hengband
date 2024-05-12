@@ -128,74 +128,31 @@ void wiz_cure_all(PlayerType *player_ptr)
     msg_print("You're fully cured by wizard command.");
 }
 
-static std::optional<short> wiz_select_tval()
+static std::optional<tval_desc> wiz_select_tval()
 {
-    short list;
-    for (list = 0; (list < 80) && (tvals[list].tval > ItemKindType::NONE); list++) {
-        auto row = 2 + (list % 20);
-        auto col = _(32, 24) * (list / 20);
-        prt(format("[%c] %s", listsym[list], tvals[list].desc), row, col);
-    }
+    CandidateSelector cs(_("アイテム種別を選んで下さい", "Get what type of object? "), 15);
+    const auto choice = cs.select(tval_desc_list, [](const auto &tval) { return tval.desc; });
 
-    const auto item_type = input_command(_("アイテム種別を選んで下さい", "Get what type of object? "));
-    if (!item_type) {
-        return std::nullopt;
-    }
-
-    short selection;
-    auto max_num = list;
-    for (selection = 0; selection < max_num; selection++) {
-        if (listsym[selection] == item_type) {
-            break;
-        }
-    }
-
-    if ((selection < 0) || (selection >= max_num)) {
-        return std::nullopt;
-    }
-
-    return selection;
+    return (choice != tval_desc_list.end()) ? std::make_optional(*choice) : std::nullopt;
 }
 
-static short wiz_select_sval(const ItemKindType tval, std::string_view tval_description)
+static std::optional<short> wiz_select_sval(const tval_desc &td)
 {
-    std::vector<short> choices;
+    std::vector<short> bi_ids;
     for (const auto &baseitem : baseitems_info) {
-        const auto size = choices.size();
-        if (size >= 80) {
-            break;
-        }
-
-        if (!baseitem.is_valid() || baseitem.bi_key.tval() != tval) {
+        if (!baseitem.is_valid() || baseitem.bi_key.tval() != td.tval) {
             continue;
         }
 
-        auto row = 2 + (size % 20);
-        auto col = _(30, 32) * (size / 20);
-        const auto buf = strip_name(baseitem.idx);
-        prt(format("[%c] %s", listsym[size], buf.data()), row, col);
-        choices.push_back(baseitem.idx);
+        bi_ids.push_back(baseitem.idx);
     }
 
-    const auto max_num = static_cast<short>(choices.size());
-    const auto prompt = format(_("%s群の具体的なアイテムを選んで下さい", "What Kind of %s? "), tval_description.data());
-    const auto command = input_command(prompt);
-    if (!command) {
-        return 0;
-    }
+    const auto prompt = format(_("%s群の具体的なアイテムを選んで下さい", "What Kind of %s? "), td.desc);
 
-    short selection;
-    for (selection = 0; selection < max_num; selection++) {
-        if (listsym[selection] == command) {
-            break;
-        }
-    }
+    CandidateSelector cs(prompt, 15);
+    const auto choice = cs.select(bi_ids, [](short bi_id) { return strip_name(bi_id); });
 
-    if ((selection < 0) || (selection >= max_num)) {
-        return 0;
-    }
-
-    return choices[selection];
+    return (choice != bi_ids.end()) ? std::make_optional(*choice) : std::nullopt;
 }
 
 /*!
@@ -207,18 +164,14 @@ static short wiz_select_sval(const ItemKindType tval, std::string_view tval_desc
  * This function returns the bi_id of an object type, or zero if failed
  * List up to 50 choices in three columns
  */
-static short wiz_create_itemtype()
+static std::optional<short> wiz_create_itemtype()
 {
-    term_clear();
     auto selection = wiz_select_tval();
     if (!selection) {
-        return 0;
+        return std::nullopt;
     }
 
-    auto tval = tvals[*selection].tval;
-    auto tval_description = tvals[*selection].desc;
-    term_clear();
-    return wiz_select_sval(tval, tval_description);
+    return wiz_select_sval(*selection);
 }
 
 /*!
@@ -237,11 +190,11 @@ void wiz_create_item(PlayerType *player_ptr)
     screen_save();
     const auto bi_id = wiz_create_itemtype();
     screen_load();
-    if (bi_id == 0) {
+    if (!bi_id) {
         return;
     }
 
-    const auto &baseitem = baseitems_info[bi_id];
+    const auto &baseitem = baseitems_info[*bi_id];
     if (baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
         for (const auto &[a_idx, artifact] : artifacts_info) {
             if ((a_idx == FixedArtifactId::NONE) || (artifact.bi_key != baseitem.bi_key)) {
@@ -255,7 +208,7 @@ void wiz_create_item(PlayerType *player_ptr)
     }
 
     ItemEntity item;
-    item.prep(bi_id);
+    item.prep(*bi_id);
     ItemMagicApplier(player_ptr, &item, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART).execute();
     (void)drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);
     msg_print("Allocated.");
