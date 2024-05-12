@@ -55,15 +55,16 @@ static FEAT_IDX collect_features(FEAT_IDX *feat_idx, BIT_FLAGS8 mode)
  */
 static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_idx, FEAT_IDX feat_cur, FEAT_IDX feat_top, bool visual_only, int lighting_level)
 {
-    int lit_col[F_LIT_MAX], i;
+    int lit_col[F_LIT_MAX]{};
     int f_idx_col = use_bigtile ? 62 : 64;
 
     lit_col[F_LIT_STANDARD] = use_bigtile ? (71 - F_LIT_MAX) : 71;
-    for (i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) {
+    for (auto i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) {
         lit_col[i] = lit_col[F_LIT_STANDARD] + 2 + (i - F_LIT_NS_BEGIN) * 2 + (use_bigtile ? i : 0);
     }
 
     const auto &terrains = TerrainList::get_instance();
+    int i;
     for (i = 0; i < per_page && (feat_idx[feat_top + i] >= 0); i++) {
         TERM_COLOR attr;
         auto terrain_id = feat_idx[feat_top + i];
@@ -110,18 +111,18 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     const auto &[wid, hgt] = term_get_size();
     std::vector<FEAT_IDX> feat_idx(TerrainList::get_instance().size());
 
-    concptr feature_group_text[] = { "terrains", nullptr };
+    concptr feature_group_text[] = { "terrains", nullptr }; // @todo 後の関数呼び出しで要素数1の配列を定義する必要があるが、vector<string> の方が素直なので直す.
     int len;
     int max = 0;
     int grp_cnt = 0;
     int feat_cnt;
-    FEAT_IDX grp_idx[100];
+    short grp_idx[100]{};
     TERM_COLOR attr_top = 0;
     bool visual_list = false;
     byte char_left = 0;
     TERM_LEN browser_rows = hgt - 8;
     if (direct_f_idx < 0) {
-        for (FEAT_IDX i = 0; feature_group_text[i] != nullptr; i++) {
+        for (short i = 0; feature_group_text[i] != nullptr; i++) {
             len = strlen(feature_group_text[i]);
             if (len > max) {
                 max = len;
