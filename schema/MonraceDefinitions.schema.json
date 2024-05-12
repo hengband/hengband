@@ -113,7 +113,7 @@
                     },
                     "alertness": {
                         "type": "integer",
-                        "description": "警戒度。高いほど@を察知しやすい",
+                        "description": "警戒度。0=起きた状態で生成。高いほど起きにくい。",
                         "minimum": 0,
                         "maximum": 255
                     },
@@ -168,7 +168,7 @@
                     },
                     "odds_correction_ratio": {
                         "type": "integer",
-                        "description": "闘技場オッズ補正値",
+                        "description": "闘技場オッズ補正値。1/100を使用、100で等倍200で2倍",
                         "minimum": 1,
                         "maximum": 9999
                     },
@@ -267,8 +267,7 @@
                                         "BEG",
                                         "INSULT",
                                         "MOAN",
-                                        "SHOW",
-                                        "SHOOT"
+                                        "SHOW"
                                     ]
                                 },
                                 "effect": {
@@ -518,15 +517,37 @@
                         "type": "object",
                         "description": "発動型能力",
                         "additionalProperties": false,
-                        "required": [
-                            "probability",
-                            "list"
+                        "anyOf": [
+                            {
+                                "required": [
+                                    "probability",
+                                    "list"
+                                ]
+                            },
+                            {
+                                "required": [
+                                    "probability",
+                                    "shoot"
+                                ]
+                            },
+                            {
+                                "required": [
+                                    "probability",
+                                    "list",
+                                    "shoot"
+                                ]
+                            }
                         ],
                         "properties": {
                             "probability": {
                                 "type": "string",
                                 "description": "能力使用確率",
                                 "pattern": "1_IN_[1-9][0-9]*"
+                            },
+                            "shoot": {
+                                "type": "string",
+                                "description": "射撃威力。XdY方式",
+                                "pattern": "[1-9][0-9]*d[1-9][0-9]*"
                             },
                             "list": {
                                 "type": "array",
@@ -537,7 +558,6 @@
                                         "SHRIEK",
                                         "DISPEL",
                                         "ROCKET",
-                                        "SHOOT",
                                         "BR_ACID",
                                         "BR_ELEC",
                                         "BR_FIRE",

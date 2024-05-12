@@ -320,10 +320,6 @@ void repeat_melee(PlayerType *player_ptr, mam_type *mam_ptr)
             break;
         }
 
-        if (mam_ptr->method == RaceBlowMethodType::SHOOT) {
-            continue;
-        }
-
         mam_ptr->power = mbe_info[enum2i(mam_ptr->effect)].power;
         process_melee(player_ptr, mam_ptr);
         if (!is_original_ap_and_seen(player_ptr, mam_ptr->m_ptr) || mam_ptr->do_silly_attack) {

@@ -114,7 +114,7 @@ void display_monster_blows(lore_type *lore_ptr)
 {
     const int max_attack_numbers = 4;
     for (int m = 0; m < max_attack_numbers; m++) {
-        if (lore_ptr->r_ptr->blows[m].method == RaceBlowMethodType::NONE || (lore_ptr->r_ptr->blows[m].method == RaceBlowMethodType::SHOOT)) {
+        if (lore_ptr->r_ptr->blows[m].method == RaceBlowMethodType::NONE) {
             continue;
         }
 
@@ -125,7 +125,7 @@ void display_monster_blows(lore_type *lore_ptr)
 
     int attack_numbers = 0;
     for (int m = 0; m < max_attack_numbers; m++) {
-        if (lore_ptr->r_ptr->blows[m].method == RaceBlowMethodType::NONE || (lore_ptr->r_ptr->blows[m].method == RaceBlowMethodType::SHOOT) || (((lore_ptr->r_ptr->r_blows[m] == 0) && !lore_ptr->know_everything))) {
+        if (lore_ptr->r_ptr->blows[m].method == RaceBlowMethodType::NONE || (((lore_ptr->r_ptr->r_blows[m] == 0) && !lore_ptr->know_everything))) {
             continue;
         }
 

@@ -94,6 +94,8 @@ public:
     EnumClassFlagGroup<MonsterSpecialType> special_flags; //!< 能力フラグ(特殊) / Special Flags
     EnumClassFlagGroup<MonsterMiscType> misc_flags; //!< 能力フラグ（その他） / Speaking Other
     MonsterBlow blows[MAX_NUM_BLOWS]{}; //!< 打撃能力定義 / Up to four blows per round
+    DICE_NUMBER shoot_dam_dice{}; //!< 射撃ダメージダイス数　/ shoot damage dice count
+    DICE_SID shoot_dam_side{}; //!< 射撃ダメージダイス面数 / shoot damage dice sides
 
     //! 指定護衛リスト <モンスター種族ID,護衛数ダイス数,護衛数ダイス面>
     std::vector<std::tuple<MonsterRaceId, DICE_NUMBER, DICE_SID>> reinforces;

@@ -164,10 +164,6 @@ bool MonsterAttackPlayer::process_monster_blows()
             break;
         }
 
-        if (this->method == RaceBlowMethodType::SHOOT) {
-            continue;
-        }
-
         // フレーバーの打撃は必中扱い。それ以外は通常の命中判定を行う。
         this->ac = this->player_ptr->ac + this->player_ptr->to_a;
         bool hit;

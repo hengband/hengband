@@ -173,7 +173,6 @@ void describe_melee_method(PlayerType *player_ptr, mam_type *mam_ptr)
     }
 
     case RaceBlowMethodType::NONE:
-    case RaceBlowMethodType::SHOOT:
     case RaceBlowMethodType::MAX:
         break;
     }

@@ -41,7 +41,7 @@
       ###打撃手段一覧###
         "HIT", "TOUCH","PUNCH","KICK", "CLAW", "BITE", "STING", "SLASH", 
         "BUTT", "CRUSH", "ENGULF", "CHARGE","CRAWL", "DROOL", "SPIT","EXPLODE",
-        "GAZE", "WAIL", "SPORE", "BEG", "INSULT", "MOAN","SHOW","SHOOT"
+        "GAZE", "WAIL", "SPORE", "BEG", "INSULT", "MOAN","SHOW"
       ###打撃属性一覧###
         "HURT",　"POISON", "UN_BONUS", "UN_POWER", "EAT_GOLD", "EAT_ITEM", "EAT_FOOD", "EAT_LITE", 
         "ACID", "ELEC", "FIRE", "COLD", "BLIND", "CONFUSE", "TERRIFY", "PARALYZE", 
@@ -92,10 +92,11 @@
 
       "skill": { モンスターの発動型能力設定
         "probability": "発動型能力使用確率　1_IN_Xの形式",
-        "list": ["発動型能力リスト", "複数設定可能"]
+        "list": ["発動型能力リスト", "複数設定可能"],
+        "shoot" : "射撃ダメージダイス XdY形式。射撃を使用する場合のみ"
       },
       ###発動型能力一覧###
-      "SHRIEK", "DISPEL", "ROCKET", "SHOOT", "BR_ACID", "BR_ELEC", "BR_FIRE", "BR_COLD",
+      "SHRIEK", "DISPEL", "ROCKET", "BR_ACID", "BR_ELEC", "BR_FIRE", "BR_COLD",
       "BR_POIS", "BR_NETH", "BR_LITE", "BR_DARK", "BR_CONF", "BR_SOUN", "BR_CHAO", "BR_DISE",
       "BR_NEXU", "BR_TIME", "BR_INER", "BR_GRAV", "BR_SHAR", "BR_PLAS", "BR_FORC", "BR_MANA",
       "BA_NUKE", "BR_NUKE", "BA_CHAO", "BR_DISI", "BR_VOID", "BR_ABYSS", 
@@ -2634,7 +2635,6 @@
       "evolve": { "need_exp": 500, "to": 1039 },
       "sex": "MALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "2d7" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "1d7" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "1d7" }
       ],
@@ -2649,7 +2649,7 @@
         "BASH_DOOR",
         "WILD_WOOD"
       ],
-      "skill": { "probability": "1_IN_9", "list": ["SHOOT", "MISSILE"] },
+      "skill": { "probability": "1_IN_9", "list": ["MISSILE"], "shoot": "2d7" },
       "flavor": {
         "ja": "機敏な野伏で、常に戦闘を意識している。",
         "en": "An agile hunter, ready and relaxed."
@@ -2911,7 +2911,6 @@
       "rarity": 2,
       "exp": 20,
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "2d5" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "2d4" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "2d4" }
       ],
@@ -2924,7 +2923,7 @@
         "WILD_WOOD",
         "HAS_LITE_1"
       ],
-      "skill": { "probability": "1_IN_8", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_8", "shoot": "2d5" },
       "flavor": {
         "ja": "それは小さな毛むくじゃらのかわいい熊で、商業的価値が高い。",
         "en": "A cute, furry little animal, full of merchandising potential."
@@ -3649,7 +3648,6 @@
       "evolve": { "need_exp": 140, "to": 219 },
       "sex": "MALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "2d5" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "1d5" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "1d5" }
       ],
@@ -3665,7 +3663,7 @@
         "OPEN_DOOR",
         "BASH_DOOR"
       ],
-      "skill": { "probability": "1_IN_3", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_3", "shoot": "2d5" },
       "flavor": {
         "ja": "弓と矢を持った、背の低いやっかいな奴だ。",
         "en": "A nasty little fellow with a bow and arrow."
@@ -4387,7 +4385,6 @@
       "sex": "MALE",
       "odds_correction_ratio": 75,
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "3d6" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "2d6" },
         { "method": "TOUCH", "effect": "EAT_GOLD" },
         { "method": "TOUCH", "effect": "EAT_ITEM" }
@@ -4409,7 +4406,7 @@
         "DROP_SKELETON",
         "DROP_CORPSE"
       ],
-      "skill": { "probability": "1_IN_5", "list": ["SHOOT", "HEAL", "TRAPS"] },
+      "skill": { "probability": "1_IN_5", "list": ["HEAL", "TRAPS"], "shoot": "3d6" },
       "artifacts": [{ "drop_artifact_id": 221, "drop_probability": 5 }],
       "flavor": {
         "ja": "この伝説の射手は金持ち（あなたは合格）から金を盗む。",
@@ -4535,7 +4532,6 @@
       "evolve": { "need_exp": 500, "to": 1039 },
       "sex": "MALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "2d7" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "1d7" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "1d7" }
       ],
@@ -4550,7 +4546,7 @@
         "OPEN_DOOR",
         "BASH_DOOR"
       ],
-      "skill": { "probability": "1_IN_9", "list": ["SHOOT", "MISSILE"] },
+      "skill": { "probability": "1_IN_9", "list": ["MISSILE"], "shoot": "2d7" },
       "flavor": {
         "ja": "機敏な野伏で、常に戦闘を意識している。そして仲間たちが追跡の手助けをしている。",
         "en": "An agile hunter, ready and relaxed."
@@ -5899,10 +5895,7 @@
       "level": 10,
       "rarity": 2,
       "exp": 3,
-      "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "2d5" },
-        { "method": "SPORE", "effect": "CONFUSE", "damage_dice": "1d1" }
-      ],
+      "blows": [{ "method": "SPORE", "effect": "CONFUSE", "damage_dice": "1d1" }],
       "flags": [
         "NEVER_MOVE",
         "COLD_BLOOD",
@@ -5913,7 +5906,7 @@
         "NO_SLEEP",
         "NO_FEAR"
       ],
-      "skill": { "probability": "1_IN_5", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_5", "shoot": "2d5" },
       "flavor": { "ja": "それは奇妙に見える。", "en": "It looks weird." }
     },
     //#J0#
@@ -7035,7 +7028,6 @@
       "exp": 40,
       "sex": "MALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "4d6" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "3d4" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "3d4" }
       ],
@@ -7048,7 +7040,7 @@
         "DROP_SKELETON",
         "DROP_CORPSE"
       ],
-      "skill": { "probability": "1_IN_8", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_8", "shoot": "4d6" },
       "flavor": {
         "ja": "射撃だけでなく接近戦にも優れた戦士だ。",
         "en": "A warrior trained in melee as well as missile weapons."
@@ -7539,7 +7531,6 @@
       "rarity": 2,
       "exp": 55,
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "3d6" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "1d12" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "1d12" },
         { "method": "BITE", "effect": "POISON", "damage_dice": "1d6" }
@@ -7547,7 +7538,8 @@
       "flags": ["PREVENT_SUDDEN_MAGIC", "BASH_DOOR", "DROP_SKELETON", "EVIL", "IM_POIS"],
       "skill": {
         "probability": "1_IN_8",
-        "list": ["CONF", "CAUSE_1", "DARKNESS", "MISSILE", "SHOOT"]
+        "list": ["CONF", "CAUSE_1", "DARKNESS", "MISSILE"],
+        "shoot": "3d6"
       },
       "flavor": {
         "ja": "それは上半身がエルフで、下半身には巨大蜘蛛のような膨れた腹を持っている。",
@@ -7900,7 +7892,6 @@
       "exp": 45,
       "sex": "MALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "2d7" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "3d4" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "3d4" }
       ],
@@ -7917,7 +7908,7 @@
         "HURT_LITE",
         "RES_DARK"
       ],
-      "skill": { "probability": "1_IN_15", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_15", "shoot": "2d7" },
       "flavor": {
         "ja": "彼は強い力と漆黒の肌を持った大きなオークだ。",
         "en": "He is a large orc with powerful arms and deep black skin."
@@ -9038,7 +9029,6 @@
       "rarity": 1,
       "exp": 50,
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "4d5" },
         { "method": "CLAW", "effect": "HURT", "damage_dice": "2d3" },
         { "method": "CLAW", "effect": "HURT", "damage_dice": "2d3" },
         { "method": "BITE", "effect": "HURT", "damage_dice": "2d3" }
@@ -9054,7 +9044,7 @@
         "IM_ELEC",
         "IM_ACID"
       ],
-      "skill": { "probability": "1_IN_10", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_10", "shoot": "4d5" },
       "flavor": {
         "ja": "その体は半分がライオンで、半分が鷲だ。それは冒険者の方へ威嚇的に飛んでくる。",
         "en": "It is half lion, half eagle.  It flies menacingly towards you."
@@ -9236,7 +9226,6 @@
       "exp": 40,
       "sex": "MALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "3d6" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "3d4" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "3d4" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "3d4" }
@@ -9254,7 +9243,7 @@
         "RES_DARK",
         "SPEAK_ALL"
       ],
-      "skill": { "probability": "1_IN_15", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_15", "shoot": "3d6" },
       "flavor": {
         "ja": "鎧を着たオークで、威厳のある雰囲気を漂わせている。",
         "en": "An armoured orc with an air of authority."
@@ -10190,7 +10179,6 @@
       "exp": 68,
       "sex": "MALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "3d5" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "3d5" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "3d5" }
       ],
@@ -10207,7 +10195,7 @@
         "IM_POIS",
         "RES_DARK"
       ],
-      "skill": { "probability": "1_IN_12", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_12", "shoot": "3d5" },
       "flavor": {
         "ja": "彼はずる賢くて力のあるオークで、背丈は人間と同じぐらいだが力は人間より強い。彼は恐れるということを知らない。",
         "en": "He is a cunning orc of power, as tall as a man, and stronger.  It fears little."
@@ -15054,7 +15042,6 @@
       "exp": 350,
       "evolve": { "need_exp": 2000, "to": 490 },
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "7d6" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "9d8" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "9d8" }
       ],
@@ -15073,7 +15060,7 @@
         "IM_ACID",
         "GIANT"
       ],
-      "skill": { "probability": "1_IN_8", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_8", "shoot": "7d6" },
       "flavor": {
         "ja": "一つ目の巨人だ。",
         "en": "A gigantic humanoid with but one eye."
@@ -16208,7 +16195,6 @@
       "rarity": 2,
       "exp": 300,
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "7d6" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "4d4" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "4d4" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "4d4" }
@@ -16223,7 +16209,7 @@
         "RIDING",
         "EVIL"
       ],
-      "skill": { "probability": "1_IN_5", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_5", "shoot": "7d6" },
       "flavor": {
         "ja": "それは羽の生えたライオンの体と、人間の上半身と、邪悪な刺に覆われた尻尾を持った生物だ。",
         "en": "It is a winged lion's body with a human torso and a tail covered in vicious spikes."
@@ -16905,7 +16891,6 @@
       "exp": 1200,
       "evolve": { "need_exp": 4500, "to": 1186 },
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "9d6" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "11d8" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "11d8" }
       ],
@@ -16922,7 +16907,7 @@
         "IM_ACID",
         "GIANT"
       ],
-      "skill": { "probability": "1_IN_8", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_8", "shoot": "9d6" },
       "flavor": {
         "ja": "なんということだ、あぁ！それは最も自然の摂理に反していて、考えうる限り最も忌まわしい生き物だ。二つ目のサイクロプス！この自然の汚点は根絶されなければならない！",
         "en": "Oh, no! Aaargh! It is the most unnatural, most disgusting creature imaginable: a two-eyed cyclops! This perversion of nature must be exterminated!"
@@ -19062,7 +19047,6 @@
       "exp": 330,
       "sex": "MALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "6d6" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "2d6" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "2d6" }
       ],
@@ -19078,7 +19062,7 @@
         "DROP_SKELETON",
         "DROP_CORPSE"
       ],
-      "skill": { "probability": "1_IN_3", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_3", "shoot": "6d6" },
       "flavor": {
         "ja": "ハーフリング（ホビット）の弓術の伝統を拒否したはぐれ者だ。",
         "en": "A rebel halfling who has rejected the halfling tradition of archery."
@@ -19853,7 +19837,7 @@
         "NO_FEAR",
         "HURT_ROCK"
       ],
-      "skill": { "probability": "1_IN_8", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_8", "shoot": "10d10" },
       "flavor": {
         "ja": "タイタンに似たような姿をした、石でできた巨大な構造物だ。わき目もふらずに冒険者の方に大股で歩み寄ってきて、その拳を大地も揺るがすかのように振り回す。",
         "en": "An enormous construct resembling a titan made from stone.  It strides purposefully towards you, swinging its slow fists with earth-shattering power."
@@ -26265,7 +26249,8 @@
       ],
       "skill": {
         "probability": "1_IN_6",
-        "list": ["BLIND", "SLOW", "CONF", "SHOOT", "BR_POIS"]
+        "list": ["BLIND", "SLOW", "CONF", "BR_POIS"],
+        "shoot": "5d8"
       },
       "flavor": {
         "ja": "人工的に作られたドラゴンであるドローレムは屈強な力強さを持っている。その創造に際しては強力な呪文が用いられ、それがこのモンスターを恐るべき強敵に仕立て上げているのだ。その目には知性のかけらも見いだすことはできず、唯一知っていることは、出会ったもの全てを倒すということだけだ。",
@@ -28195,7 +28180,8 @@
       ],
       "skill": {
         "probability": "1_IN_6",
-        "list": ["SLOW", "SHOOT", "BO_MANA", "BO_PLAS", "BA_ELEC", "BR_FORC"]
+        "list": ["SLOW", "BO_MANA", "BO_PLAS", "BA_ELEC", "BR_FORC"],
+        "shoot": "12d13"
       },
       "flavor": {
         "ja": "牛の頭を持った恐るべきデーモンであるバフォメットは、刃向かう者に呪いの言葉を吐きかけながら大きな斧を振り回している。",
@@ -32126,7 +32112,6 @@
       "sex": "MALE",
       "odds_correction_ratio": 75,
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "10d15" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "9d15" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "9d15" },
         { "method": "HIT", "effect": "LOSE_CON", "damage_dice": "1d30" }
@@ -32164,7 +32149,6 @@
         "list": [
           "TPORT",
           "TELE_TO",
-          "SHOOT",
           "SHRIEK",
           "SCARE",
           "DARKNESS",
@@ -32175,7 +32159,8 @@
           "TRAPS",
           "BO_WATE",
           "BO_ELEC"
-        ]
+        ],
+        "shoot": "10d15"
       },
       "artifacts": [{ "drop_artifact_id": 23, "drop_probability": 45 }],
       "escorts": [
@@ -37135,9 +37120,8 @@
       "rarity": 2,
       "exp": 25,
       "odds_correction_ratio": 300,
-      "blows": [{ "method": "SHOOT", "effect": "HURT", "damage_dice": "4d6" }],
       "flags": ["NEVER_BLOW", "RAND_25", "ANIMAL", "WILD_WOOD"],
-      "skill": { "probability": "1_IN_1", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_1", "shoot": "4d6" },
       "flavor": {
         "ja": "たくさんの脚で逃げ回り、小石を恐ろしいスピードで口から発射する虫。「で、その《ビハインダー》とやらは、どんな格好をしているのかね？」「はっきりこうとは言えないね。だってそれは、いつも、つかまえようとする相手の背後にいるからさ。（中略）まだ《カルヴァリン》もいる--口から小石を発射することができるんだよ」（マンリー・ウェイド・ウェルマン、深町眞理子訳『悪魔なんかこわくない』 国書刊行会、アーカムハウス叢書、p.146）",
         "en": "A many legged scuttling thing, it spits pebbles with deadly force."
@@ -38224,10 +38208,7 @@
       "level": 70,
       "rarity": 6,
       "exp": 2000,
-      "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "15d10" },
-        { "method": "EXPLODE", "effect": "HURT", "damage_dice": "15d5" }
-      ],
+      "blows": [{ "method": "EXPLODE", "effect": "HURT", "damage_dice": "15d5" }],
       "flags": [
         "CHAR_CLEAR",
         "ATTR_CLEAR",
@@ -38241,7 +38222,8 @@
       ],
       "skill": {
         "probability": "1_IN_3",
-        "list": ["ROCKET", "SHOOT", "BLINK", "BR_POIS", "BR_CHAO", "BR_NEXU"]
+        "list": ["ROCKET", "BLINK", "BR_POIS", "BR_CHAO", "BR_NEXU"],
+        "shoot": "15d10"
       },
       "flavor": {
         "ja": "それは侵入者に対して使用するために置かれている。",
@@ -38485,7 +38467,6 @@
       "rarity": 3,
       "exp": 4000,
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "7d6" },
         { "method": "SPIT", "effect": "COLD", "damage_dice": "10d10" },
         { "method": "SPIT", "effect": "COLD", "damage_dice": "10d10" },
         { "method": "GAZE", "effect": "BLIND" }
@@ -38504,7 +38485,8 @@
       ],
       "skill": {
         "probability": "1_IN_5",
-        "list": ["BR_LITE", "BA_COLD", "BR_COLD", "BO_ICEE", "BO_COLD", "BR_TIME", "SHOOT"]
+        "list": ["BR_LITE", "BA_COLD", "BR_COLD", "BO_ICEE", "BO_COLD", "BR_TIME"],
+        "shoot": "7d6"
       },
       "flavor": {
         "ja": "この世のものとは思えない程のパワーと呪文の嵐であなたを叩きつけている間、このゴーレムの黒曜石の目はじっとあなたを凝視している。",
@@ -38678,7 +38660,6 @@
       "exp": 555,
       "sex": "MALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "7d6" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "1d9" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "1d9" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "4d8" }
@@ -38695,7 +38676,8 @@
       ],
       "skill": {
         "probability": "1_IN_3",
-        "list": ["HEAL", "BLINK", "TPORT", "BA_FIRE", "SHOOT", "BA_COLD"]
+        "list": ["HEAL", "BLINK", "TPORT", "BA_FIRE", "BA_COLD"],
+        "shoot": "7d6"
       },
       "flavor": {
         "ja": "強力な力を持つエルフの指導者だ。魔法も使う事ができる。",
@@ -39885,7 +39867,6 @@
           "SHRIEK",
           "DISPEL",
           "ROCKET",
-          "SHOOT",
           "BR_ACID",
           "BR_ELEC",
           "BR_FIRE",
@@ -39980,7 +39961,8 @@
           "S_UNIQUE",
           "BA_LITE",
           "S_DEAD_UNIQUE"
-        ]
+        ],
+        "shoot": "1d200"
       },
       "flavor": {
         "ja": "それは何が何だか分からない。",
@@ -41098,13 +41080,12 @@
       "rarity": 2,
       "exp": 300,
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "4d6" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "2d4" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "2d4" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "2d4" }
       ],
       "flags": ["PREVENT_SUDDEN_MAGIC", "DROP_CORPSE", "RAND_50", "ANIMAL"],
-      "skill": { "probability": "1_IN_2", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_2", "shoot": "4d6" },
       "flavor": {
         "ja": "この二本足で歩行する亀のような生き物は、投擲を非常に得意としている。",
         "en": "A large turtle creature walking on two legs, proudly throwing hammers from an unlimited supply."
@@ -41227,7 +41208,6 @@
       "rarity": 3,
       "exp": 40,
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "3d6" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "1d5" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "1d5" }
       ],
@@ -41242,7 +41222,7 @@
         "EVIL",
         "RES_DARK"
       ],
-      "skill": { "probability": "1_IN_2", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_2", "shoot": "3d6" },
       "flavor": {
         "ja": "めったに見せない発明の才によって、オークは信じられないほど破壊的な兵器を発明した。このオーク弩弓隊の兵士の大半は、その有効性に疑問を投げかけた者たちが務めている。",
         "en": "In a rare display of ingenuity, the Orcs invented an incredibly destructive weapon. Most Orcish artillerists are those who dared criticize its effectiveness."
@@ -43413,7 +43393,6 @@
       "exp": 500,
       "sex": "MALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "9d6" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "10d8" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "10d8" }
       ],
@@ -43432,7 +43411,7 @@
         "RES_WATE",
         "RES_NETH"
       ],
-      "skill": { "probability": "1_IN_2", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_2", "shoot": "9d6" },
       "flavor": {
         "ja": "緑のクロークをまとい、長弓を使うエルフだ。",
         "en": "An elf cloaked in green wielding a longbow."
@@ -44778,14 +44757,14 @@
       "exp": 55,
       "sex": "MALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "5d6" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "5d4" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "5d4" }
       ],
       "flags": ["HUMAN", "DROP_1D2", "TAKE_ITEM", "OPEN_DOOR", "BASH_DOOR"],
       "skill": {
         "probability": "1_IN_4",
-        "list": ["SHOOT", "MISSILE", "S_MONSTER", "BO_ELEC", "BLINK"]
+        "list": ["MISSILE", "S_MONSTER", "BO_ELEC", "BLINK"],
+        "shoot": "5d6"
       },
       "flavor": {
         "ja": "自然と共に戦う戦士だ。弓にも剣にも達者で、多少の魔法も使うことができ、動物達を飼い、従えている。",
@@ -46018,7 +45997,6 @@
       "exp": 10000,
       "sex": "MALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "16d6" },
         { "method": "SLASH", "effect": "EXP_VAMP", "damage_dice": "6d8" },
         { "method": "SLASH", "effect": "EXP_VAMP", "damage_dice": "6d8" },
         { "method": "TOUCH", "effect": "EAT_ITEM" }
@@ -46058,7 +46036,8 @@
       ],
       "skill": {
         "probability": "1_IN_2",
-        "list": ["SHOOT", "TELE_AWAY", "TPORT", "HASTE", "BLINK", "HEAL"]
+        "list": ["TELE_AWAY", "TPORT", "HASTE", "BLINK", "HEAL"],
+        "shoot": "16d6"
       },
       "flavor": {
         "ja": "彼はこの世界で最も偉大ないかさま師だ。いかなる剣の達人も彼に深い傷を負わせる事は不可能であり、死角を付いて嵐のように射ち出される彼の聖なる矢は幾多の犠牲者を葬ってきた。",
@@ -46353,7 +46332,7 @@
         "OPEN_DOOR",
         "BASH_DOOR"
       ],
-      "skill": { "probability": "1_IN_5", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_5", "shoot": "1d10" },
       "flavor": {
         "ja": "南蛮王孟獲の援軍として現れた南蛮の将だ。孟獲の義理の弟にあたる。",
         "en": "He is one of the captains of Nanman.  He comes to help his sister and her husband Meng Huo."
@@ -46634,7 +46613,6 @@
       "exp": 150,
       "sex": "MALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "5d6" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "1d6" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "1d6" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "1d6" }
@@ -46656,7 +46634,7 @@
         "DROP_SKELETON",
         "DROP_CORPSE"
       ],
-      "skill": { "probability": "1_IN_4", "list": ["SHOOT", "BLINK"] },
+      "skill": { "probability": "1_IN_4", "list": ["BLINK"], "shoot": "5d6" },
       "flavor": {
         "ja": "アルファガン、ビジュームベルト、スカイロッドなどの破壊兵器を所持し、毎日のようにジュラル星人を大量虐殺している小学生だ。 「チャージマン！殺してやる！」「それは僕が言う言葉だ！」（『チャージマン研！』アニメ第３６話・『戦慄!悪魔の病院』）",
         "en": "He is an elementary school student who, with his weapons such as the Alpha Gun, Visual Belt, and Sky Rod, indiscriminately slaughters Juralians on a daily basis."
@@ -46675,7 +46653,6 @@
       "rarity": 8,
       "exp": 20,
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "1d5" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "1d4" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "1d4" }
       ],
@@ -46688,7 +46665,7 @@
         "WILD_WOOD",
         "HAS_LITE_1"
       ],
-      "skill": { "probability": "1_IN_6", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_6", "shoot": "1d5" },
       "flavor": {
         "ja": "彼等の文明は地球より５００年進んでいるそうだ。「これから毎日家を焼こうぜ」（『チャージマン研！』アニメ第２５話・『雄一少年を救え！』）",
         "en": "This maroon-colored, vaguely humanoid, creature with one eye, tentacle-like limbs, slim waist and broad chest is a member of an advanced civilization from another world.  They have invaded this world to steal its resources."
@@ -46959,7 +46936,6 @@
       "exp": 100,
       "sex": "MALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "1d12" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "1d10" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "1d10" }
       ],
@@ -46977,7 +46953,7 @@
         "OPEN_DOOR",
         "BASH_DOOR"
       ],
-      "skill": { "probability": "1_IN_2", "list": ["SHOOT", "SHRIEK"] },
+      "skill": { "probability": "1_IN_2", "list": ["SHRIEK"], "shoot": "1d12" },
       "flavor": {
         "ja": "環境の悪化したジュラル星に変わる新天地を求め、地球侵略を企てるジュラル星人の統率者だ。「諸君、今から命令をすりゅ！地球の子供達をかたっぱしからとらえて君! 」（『チャージマン研！』アニメ第１話・『危機!!子供宇宙ステーション』）",
         "en": "He leads the force of Juralians invading this world."
@@ -47135,10 +47111,7 @@
       "rarity": 3,
       "exp": 3200,
       "sex": "MALE",
-      "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "20d10" },
-        { "method": "HIT", "effect": "HURT", "damage_dice": "2d10" }
-      ],
+      "blows": [{ "method": "HIT", "effect": "HURT", "damage_dice": "2d10" }],
       "flags": [
         "BASH_DOOR",
         "OPEN_DOOR",
@@ -47151,7 +47124,7 @@
         "DROP_CORPSE",
         "DROP_SKELETON"
       ],
-      "skill": { "probability": "1_IN_3", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_3", "shoot": "20d10" },
       "flavor": {
         "ja": "アンバーの王子コーウィンは、並行世界の化学的作用が必ずしも共通でない事を知っている。そこで彼はあらゆる影から数多くの鉱物を取り寄せ、各世界で作用する火薬を生産し、現代地球の銃器で利用できる手法を確立した。彼はその武器を自らを絶対の神と崇める世界の民に与えて、軍隊を組織している。その自動小銃の砲口は、前近代的な忠義の軍隊を粉々に消し飛ばすだろう。",
         "en": "Firearms were not used in Amber since gunpowder does not work there: chemistry is not always the same in Amber and the parallel worlds that are shadows of it.  Prince Corwin, by accident, had found a substance in Avalon that could work as powder and primer in Amber and its closest shadows.  With that in mind, he devised a plan to take Amber using a small force armed with automatic rifles.  This gunner, from a parallel world where Corwin is worshipped as a god, is one of that force."
@@ -47171,7 +47144,6 @@
       "exp": 80,
       "sex": "MALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "2d10" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "2d4" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "2d4" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "2d4" }
@@ -47192,7 +47164,7 @@
         "ORC",
         "RES_DARK"
       ],
-      "skill": { "probability": "1_IN_3", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_3", "shoot": "2d10" },
       "flavor": {
         "ja": "ムズガッシュは弱いオークの部隊を指揮する隊長で、上役にへつらい出世を企んでいる。「お前さんには二度も話してるぜ、ゴルバグの豚どものほうが先に門を出たとね、そしておれたちのほうはだれも出ちゃおらんとね。ラグドゥフとムズガッシュの野郎が駆け抜けたが、二人とも矢で射たれた。」（J.R.R.トールキン、瀬田貞二・田中明子訳 新版指輪物語） ",
         "en": "A captain of a regiment of weaker orcs, Muzgash schemes promotion by flattering his superiors.  \"I've told you twice that Gorbag's swine got to the gate first, and none of ours got out.  Lagduf and Muzgash ran through, but they were shot.\""
@@ -48148,7 +48120,6 @@
       "exp": 600,
       "sex": "MALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "8d4" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "8d4" },
         { "method": "HIT", "effect": "FIRE", "damage_dice": "8d4" }
       ],
@@ -48170,7 +48141,7 @@
         "WILD_VOLCANO",
         "AURA_FIRE"
       ],
-      "skill": { "probability": "1_IN_8", "list": ["SHOOT", "BO_FIRE"] },
+      "skill": { "probability": "1_IN_8", "list": ["BO_FIRE"], "shoot": "8d4" },
       "flavor": {
         "ja": "このオークの体にはデーモンの血が流れており、そこから来る暗黒の炎をまとっている。この不浄な結合は、暗き風習を持つ生き物の中でしばしば育まれる。",
         "en": "Cloaked in black flame, this orc must be the descendant of a demon.  Such creatures are often seen among the foulest orcs."
@@ -48194,7 +48165,6 @@
       "exp": 1800,
       "sex": "MALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "10d10" },
         { "method": "SLASH", "effect": "HURT", "damage_dice": "8d4" },
         { "method": "KICK", "effect": "HURT", "damage_dice": "4d5" },
         { "method": "SLASH", "effect": "ELEC", "damage_dice": "14d4" }
@@ -48217,7 +48187,8 @@
       ],
       "skill": {
         "probability": "1_IN_5",
-        "list": ["S_KIN", "SHOOT", "BO_ELEC"]
+        "list": ["S_KIN", "BO_ELEC"],
+        "shoot": "10d10"
       },
       "flavor": {
         "ja": "葦名一心亡き後の故国の存亡を憂うこの一門の将は、いかなる異形の力をも顧みず手に入れようとする。ゆえにそれらを求め鉄獄に至ったこともまた必然であるだろう。",
@@ -49393,12 +49364,9 @@
       "level": 4,
       "rarity": 1,
       "exp": 40,
-      "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "2d6" },
-        { "method": "CRUSH", "effect": "HURT", "damage_dice": "4d4" }
-      ],
+      "blows": [{ "method": "CRUSH", "effect": "HURT", "damage_dice": "4d4" }],
       "flags": ["UNIQUE", "FORCE_MAXHP", "EVIL", "NONLIVING", "DROP_90", "DROP_4D2", "ONLY_GOLD"],
-      "skill": { "probability": "1_IN_8", "list": ["MISSILE", "ROCKET"] },
+      "skill": { "probability": "1_IN_8", "list": ["MISSILE", "ROCKET"], "shoot": "2d6" },
       "flavor": {
         "ja": "この機体は動力炉を剥き出しにしたままバクテリアン軍の本拠地を守っていた。最近暇を出されたようだ。",
         "en": "This aircraft protects the home of the Bacterian army with the power reactor exposed.  Recently this unit seemed to be fired."
@@ -49967,12 +49935,11 @@
       "exp": 200,
       "sex": "MALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "6d7" },
         { "method": "SLASH", "effect": "HURT", "damage_dice": "2d10" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "1d12" }
       ],
       "flags": ["NAZGUL", "FORCE_MAXHP", "HUMAN", "UNDEAD", "DROP_60"],
-      "skill": { "probability": "1_IN_6", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_6", "shoot": "6d7" },
       "flavor": {
         "ja": "累に殺された者たちの亡霊だ。",
         "en": "These corps are the ghosts killed by Rui."
@@ -50067,7 +50034,6 @@
       "exp": 320,
       "sex": "MALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "8d7" },
         { "method": "STING", "effect": "HURT", "damage_dice": "5d6" },
         { "method": "STING", "effect": "HURT", "damage_dice": "5d6" }
       ],
@@ -50082,7 +50048,7 @@
         "RES_SOUN",
         "NO_STUN"
       ],
-      "skill": { "probability": "1_IN_6", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_6", "shoot": "8d7" },
       "flavor": {
         "ja": "三兄弟の長男で、クロスボウからの一撃に要注意だ！",
         "en": "He is the eldest son of the three brothers, and be wary of his crossbow shots!"
@@ -50948,7 +50914,6 @@
       "rarity": 3,
       "exp": 2000,
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "9d9" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "15d8" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "15d8" }
       ],
@@ -50966,7 +50931,7 @@
         "IM_ACID",
         "GIANT"
       ],
-      "skill": { "probability": "1_IN_8", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_8", "shoot": "9d9" },
       "flavor": {
         "ja": "三つ目のサイクロプス！？　一体何が起きているというんだ！？",
         "en": "A three-eyes cyclops!?  What the hell is going on!?"
@@ -51949,7 +51914,6 @@
       "exp": 3500,
       "sex": "FEMALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "8d8" },
         { "method": "SLASH", "effect": "HURT", "damage_dice": "8d8" },
         { "method": "SLASH", "effect": "HURT", "damage_dice": "9d7" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "10d2" }
@@ -51973,7 +51937,8 @@
       ],
       "skill": {
         "probability": "1_IN_8",
-        "list": ["SHOOT", "HEAL", "CAUSE_3"]
+        "list": ["HEAL", "CAUSE_3"],
+        "shoot": "8d8"
       },
       "flavor": {
         "ja": "この世には善良なドラゴンもいる。そのことを理解できない頑迷さと、その意見を貫き通せるだけの強さを併せ持っている。",
@@ -52166,7 +52131,6 @@
       "rarity": 5,
       "exp": 1600,
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "15d15" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "11d10" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "11d10" },
         { "method": "INSULT", "effect": "HURT", "damage_dice": "11d10" }
@@ -52185,7 +52149,7 @@
         "NO_CONF",
         "DROP_60"
       ],
-      "skill": { "probability": "1_IN_5", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_5", "shoot": "15d15" },
       "flavor": {
         "ja": "ミラークの堕落した願いに賛同している者共の一人だ。彼らはあなたをミラークの崇高な意志に反する者として執拗に追っている。",
         "en": "It is one of those who agree with Miraak's corrupt wishes.  They relentlessly chase you, seeing you as threat to Miraak's noble will."
@@ -52394,7 +52358,6 @@
       "exp": 70,
       "evolve": { "need_exp": 450, "to": 1216 },
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "7d7" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "2d6" },
         { "method": "SLASH", "effect": "HURT", "damage_dice": "2d6" }
       ],
@@ -52413,7 +52376,7 @@
         "NO_FEAR",
         "COLD_BLOOD"
       ],
-      "skill": { "probability": "1_IN_9", "list": ["SHOOT", "BA_COLD"] },
+      "skill": { "probability": "1_IN_9", "list": ["BA_COLD"], "shoot": "7d7" },
       "flavor": {
         "ja": "太古に埋葬された戦士だ。財宝を狙う侵入者を決して容赦しない。",
         "en": "It is a warrior buried in ancient times.  It never forgives treasure-seeking intruders."
@@ -52433,7 +52396,6 @@
       "exp": 200,
       "evolve": { "need_exp": 1200, "to": 1217 },
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "8d9" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "4d6" },
         { "method": "SLASH", "effect": "HURT", "damage_dice": "4d6" },
         { "method": "CRUSH", "effect": "HURT", "damage_dice": "4d6" }
@@ -52451,7 +52413,7 @@
         "DROP_90",
         "FRIENDS"
       ],
-      "skill": { "probability": "1_IN_8", "list": ["SHOOT", "BA_COLD"] },
+      "skill": { "probability": "1_IN_8", "list": ["BA_COLD"], "shoot": "8d9" },
       "flavor": {
         "ja": "この戦士は墳墓を延々と守り続けている。あなたも眷属にされるかもしれない！",
         "en": "This warrior has continued to protect its tomb for a long time.  It may conscript you as an assistant guard!"
@@ -52471,7 +52433,6 @@
       "exp": 400,
       "evolve": { "need_exp": 2500, "to": 1218 },
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "10d9" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "7d6" },
         { "method": "SLASH", "effect": "HURT", "damage_dice": "7d6" },
         { "method": "CRUSH", "effect": "HURT", "damage_dice": "7d6" }
@@ -52494,7 +52455,8 @@
       ],
       "skill": {
         "probability": "1_IN_6",
-        "list": ["SHOOT", "SCARE", "BA_COLD", "BR_COLD", "BR_SOUN"]
+        "list": ["SCARE", "BA_COLD", "BR_COLD", "BR_SOUN"],
+        "shoot": "10d9"
       },
       "flavor": {
         "ja": "独特の叫びを会得したドラウグルだ。それは侵入者の存在を周囲に知らせる。",
@@ -52514,7 +52476,6 @@
       "rarity": 3,
       "exp": 3200,
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "12d10" },
         { "method": "HIT", "effect": "SUPERHURT", "damage_dice": "8d8" },
         { "method": "SLASH", "effect": "SUPERHURT", "damage_dice": "8d8" },
         { "method": "CRUSH", "effect": "HURT", "damage_dice": "8d9" }
@@ -52539,7 +52500,8 @@
       ],
       "skill": {
         "probability": "1_IN_5",
-        "list": ["SHOOT", "SCARE", "BA_COLD", "BR_COLD", "BR_SOUN", "S_UNDEAD"]
+        "list": ["SCARE", "BA_COLD", "BR_COLD", "BR_SOUN", "S_UNDEAD"],
+        "shoot": "12d10"
       },
       "flavor": {
         "ja": "太古に埋葬された戦士だ。それはドラウグル達を統括し、侵入者を注意深く見守っている。",
@@ -52562,7 +52524,6 @@
       "rarity": 4,
       "exp": 13000,
       "blows": [
-        { "method": "SHOOT", "effect": "SUPERHURT", "damage_dice": "12d13" },
         { "method": "HIT", "effect": "SUPERHURT", "damage_dice": "12d11" },
         { "method": "SLASH", "effect": "SUPERHURT", "damage_dice": "12d11" },
         { "method": "CRUSH", "effect": "HURT", "damage_dice": "8d11" }
@@ -52593,17 +52554,8 @@
       ],
       "skill": {
         "probability": "1_IN_5",
-        "list": [
-          "SHOOT",
-          "SCARE",
-          "HOLD",
-          "BA_POIS",
-          "BA_COLD",
-          "BR_COLD",
-          "BR_SOUN",
-          "S_UNDEAD",
-          "S_KIN"
-        ]
+        "list": ["SCARE", "HOLD", "BA_POIS", "BA_COLD", "BR_COLD", "BR_SOUN", "S_UNDEAD", "S_KIN"],
+        "shoot": "12d13"
       },
       "flavor": {
         "ja": "あらゆるドラウグル達の上位に立つ最強の戦士だ。世界でも埋葬された数はごく少ない。",
@@ -52730,10 +52682,7 @@
       "rarity": 2,
       "exp": 350,
       "evolve": { "need_exp": 2100, "to": 1228 },
-      "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "8d8" },
-        { "method": "HIT", "effect": "POISON", "damage_dice": "11d7" }
-      ],
+      "blows": [{ "method": "HIT", "effect": "POISON", "damage_dice": "11d7" }],
       "flags": [
         "EVIL",
         "FRIENDS",
@@ -52745,7 +52694,7 @@
         "RES_DARK",
         "BASH_DOOR"
       ],
-      "skill": { "probability": "1_IN_8", "list": ["SHOOT", "BA_POIS"] },
+      "skill": { "probability": "1_IN_8", "list": ["BA_POIS"], "shoot": "8d8" },
       "flavor": {
         "ja": "シャウラスの殻で身体を覆ったファルメルだ。目が見えないので光に身をすくめることもない。",
         "en": "A falmer whose body is covered with a chaurus shell.  It is blind and is not bothered by light."
@@ -52768,7 +52717,6 @@
       "exp": 1400,
       "evolve": { "need_exp": 10000, "to": 1229 },
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "13d8" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "9d9" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "9d7" }
       ],
@@ -52786,7 +52734,8 @@
       ],
       "skill": {
         "probability": "1_IN_7",
-        "list": ["SHOOT", "BA_POIS", "BR_POIS", "CONF", "HOLD", "BLIND"]
+        "list": ["BA_POIS", "BR_POIS", "CONF", "HOLD", "BLIND"],
+        "shoot": "13d8"
       },
       "flavor": {
         "ja": "シャウラスの殻でできた剣と盾を手にしたファルメルだ。",
@@ -52810,7 +52759,6 @@
       "exp": 4200,
       "evolve": { "need_exp": 35000, "to": 1230 },
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "15d10" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "14d12" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "12d10" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "12d10" }
@@ -52829,7 +52777,8 @@
       ],
       "skill": {
         "probability": "1_IN_7",
-        "list": ["SHOOT", "BA_POIS", "BR_POIS", "CONF", "HOLD", "BLIND"]
+        "list": ["BA_POIS", "BR_POIS", "CONF", "HOLD", "BLIND"],
+        "shoot": "15d10"
       },
       "flavor": {
         "ja": "鍛え上げたファルメルの重戦士だ。",
@@ -52853,7 +52802,6 @@
       "exp": 10000,
       "evolve": { "need_exp": 140000, "to": 1231 },
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "18d10" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "16d13" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "14d11" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "14d11" }
@@ -52872,7 +52820,8 @@
       ],
       "skill": {
         "probability": "1_IN_6",
-        "list": ["SHOOT", "BA_ELEC", "BA_POIS", "BR_POIS", "CONF", "HOLD", "BLIND"]
+        "list": ["BA_ELEC", "BA_POIS", "BR_POIS", "CONF", "HOLD", "BLIND"],
+        "shoot": "18d10"
       },
       "flavor": {
         "ja": "魔術すら身に着けたファルメルだ。迂闊には近寄らない方がいい。",
@@ -52893,7 +52842,6 @@
       "exp": 18000,
       "evolve": { "need_exp": 200000, "to": 1232 },
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "21d10" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "17d16" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "17d11" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "17d11" }
@@ -52913,7 +52861,8 @@
       ],
       "skill": {
         "probability": "1_IN_6",
-        "list": ["SHOOT", "BA_ELEC", "BA_POIS", "BR_POIS", "CONF", "HOLD", "BLIND"]
+        "list": ["BA_ELEC", "BA_POIS", "BR_POIS", "CONF", "HOLD", "BLIND"],
+        "shoot": "21d10"
       },
       "flavor": {
         "ja": "一般兵士の中では最強のファルメルだ。",
@@ -52935,10 +52884,7 @@
       "level": 33,
       "rarity": 3,
       "exp": 700,
-      "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "11d8" },
-        { "method": "SLASH", "effect": "POISON", "damage_dice": "14d10" }
-      ],
+      "blows": [{ "method": "SLASH", "effect": "POISON", "damage_dice": "14d10" }],
       "flags": [
         "FORCE_MAXHP",
         "EVIL",
@@ -52957,7 +52903,8 @@
       ],
       "skill": {
         "probability": "1_IN_8",
-        "list": ["SHOOT", "BA_ELEC", "BA_POIS", "BR_POIS", "CONF", "HOLD", "BLIND"]
+        "list": ["BA_ELEC", "BA_POIS", "BR_POIS", "CONF", "HOLD", "BLIND"],
+        "shoot": "11d8"
       },
       "flavor": {
         "ja": "ファルメルの鼻はどんな冒険者の匂いも嗅ぎ分ける。",
@@ -52980,7 +52927,6 @@
       "rarity": 3,
       "exp": 1700,
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "13d10" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "12d10" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "11d10" }
       ],
@@ -53002,7 +52948,8 @@
       ],
       "skill": {
         "probability": "1_IN_6",
-        "list": ["SHOOT", "BA_ELEC", "BA_POIS", "BR_POIS", "CONF", "HOLD", "BLIND"]
+        "list": ["BA_ELEC", "BA_POIS", "BR_POIS", "CONF", "HOLD", "BLIND"],
+        "shoot": "13d10"
       },
       "flavor": {
         "ja": "それは財宝をいくつも抱えているが、探りに行くのは愚策だろう。",
@@ -53025,7 +52972,6 @@
       "rarity": 3,
       "exp": 10000,
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "15d12" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "17d11" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "15d11" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "13d11" }
@@ -53048,7 +52994,8 @@
       ],
       "skill": {
         "probability": "1_IN_5",
-        "list": ["SHOOT", "BA_ELEC", "BA_POIS", "BR_POIS", "CONF", "HOLD", "BLIND"]
+        "list": ["BA_ELEC", "BA_POIS", "BR_POIS", "CONF", "HOLD", "BLIND"],
+        "shoot": "15d12"
       },
       "flavor": {
         "ja": "いよいよ危険なファルメルだ。毒の刃で切り刻まれないように気をつけろ！",
@@ -53071,7 +53018,6 @@
       "rarity": 4,
       "exp": 18000,
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "20d13" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "22d11" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "20d11" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "18d11" }
@@ -53093,7 +53039,8 @@
       ],
       "skill": {
         "probability": "1_IN_4",
-        "list": ["SHOOT", "BA_ELEC", "BA_POIS", "BR_POIS", "CONF", "HOLD", "BLIND"]
+        "list": ["BA_ELEC", "BA_POIS", "BR_POIS", "CONF", "HOLD", "BLIND"],
+        "shoot": "20d13"
       },
       "flavor": {
         "ja": "極めて危険なファルメルの一体だ。視界と引き換えに強烈な一撃を繰り出してくる。",
@@ -53116,7 +53063,6 @@
       "rarity": 4,
       "exp": 27000,
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "21d15" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "25d11" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "23d11" },
         { "method": "SLASH", "effect": "POISON", "damage_dice": "21d11" }
@@ -53139,7 +53085,8 @@
       ],
       "skill": {
         "probability": "1_IN_3",
-        "list": ["SHOOT", "BA_ELEC", "BA_POIS", "BR_POIS", "CONF", "HOLD", "BLIND"]
+        "list": ["BA_ELEC", "BA_POIS", "BR_POIS", "CONF", "HOLD", "BLIND"],
+        "shoot": "21d15"
       },
       "flavor": {
         "ja": "数多の眷属を抱える最強のファルメルだ。近づく前に細切れにされてしまうだろう！",
@@ -56238,7 +56185,6 @@
       "rarity": 2,
       "exp": 13500,
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "10d10" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "10d10" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "10d10" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "10d10" }
@@ -56260,7 +56206,7 @@
         "INVISIBLE",
         "REFLECTING"
       ],
-      "skill": { "probability": "1_IN_4", "list": ["SHOOT"] },
+      "skill": { "probability": "1_IN_4", "shoot": "10d10" },
       "escorts": [{ "escorts_id": 990, "escort_num": "1d4" }],
       "flavor": {
         "ja": "それは彫刻のような素晴らしい勇壮な姿をしている。あなたを倒すべき敵とみなして、磨き抜かれた盾を持ち、姿を隠している。",
@@ -57273,7 +57219,6 @@
       "rarity": 2,
       "exp": 300,
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "13d1" },
         { "method": "BITE", "effect": "SUPERHURT", "damage_dice": "5d4" },
         { "method": "BITE", "effect": "SUPERHURT", "damage_dice": "5d4" }
       ],
@@ -57290,7 +57235,8 @@
       ],
       "skill": {
         "probability": "1_IN_4",
-        "list": ["SHOOT", "BO_FIRE", "BA_POIS"]
+        "list": ["BO_FIRE", "BA_POIS"],
+        "shoot": "13d1"
       },
       "flavor": {
         "ja": "食虫植物が意思を持った凶暴な人喰い花で、鋭い牙を生やしている。おもに土管の中に潜んでおり、時々顔を出して愚かにも自分を踏もうとした人間を捕食する。口から炎や毒ガスやシューリンガンなどを吐き出して攻撃してくる個体もいる。",
@@ -57679,7 +57625,6 @@
       "exp": 558,
       "sex": "FEMALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "13d13" },
         { "method": "SLASH", "effect": "HURT", "damage_dice": "13d13" },
         { "method": "SLASH", "effect": "UN_POWER", "damage_dice": "13d13" },
         { "method": "ENGULF", "effect": "CONFUSE", "damage_dice": "13d13" }
@@ -57722,7 +57667,6 @@
       "skill": {
         "probability": "1_IN_5",
         "list": [
-          "SHOOT",
           "BR_NEXU",
           "BR_CHAO",
           "TPORT",
@@ -57736,7 +57680,8 @@
           "BRAIN_SMASH",
           "BO_MANA",
           "PSY_SPEAR"
-        ]
+        ],
+        "shoot": "13d13"
       },
       "escorts": [{ "escorts_id": 904, "escort_num": "3d5" }],
       "flavor": {
@@ -58660,7 +58605,6 @@
       "exp": 35000,
       "sex": "FEMALE",
       "blows": [
-        { "method": "SHOOT", "effect": "HURT", "damage_dice": "12d12" },
         { "method": "PUNCH", "effect": "SUPERHURT", "damage_dice": "12d12" },
         { "method": "HIT", "effect": "HURT", "damage_dice": "8d8" },
         { "method": "KICK", "effect": "HURT", "damage_dice": "8d8" }
@@ -58696,7 +58640,8 @@
       ],
       "skill": {
         "probability": "1_IN_2",
-        "list": ["ROCKET", "PSY_SPEAR", "BO_LITE", "SHOOT", "S_KIN"]
+        "list": ["ROCKET", "PSY_SPEAR", "BO_LITE", "S_KIN"],
+        "shoot": "12d12"
       },
       "escorts": [{ "escorts_id": 1357, "escort_num": "2d1" }],
       "flavor": {
