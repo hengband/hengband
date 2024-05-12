@@ -340,7 +340,10 @@ void msg_print(std::string_view msg)
         msg = msg_includes_turn = format("T:%d - %s", w_ptr->game_turn, msg.data());
     }
 
-    if ((msg_head_pos > 0) && ((msg_head_pos + msg.size()) > 72)) {
+    const auto &[wid, hgt] = term_get_size();
+    const auto split_width = wid - 8;
+
+    if ((msg_head_pos > 0) && ((msg_head_pos + std::ssize(msg)) > split_width)) {
         msg_flush(p_ptr, msg_head_pos);
         msg_flag = false;
         msg_head_pos = 0;
@@ -354,8 +357,8 @@ void msg_print(std::string_view msg)
         message_add(msg);
     }
 
-    while (msg.size() > 72) {
-        auto split = split_length(msg, 72);
+    while (std::ssize(msg) > split_width) {
+        auto split = split_length(msg, split_width);
         term_putstr(0, 0, split, TERM_WHITE, msg.data());
         msg_flush(p_ptr, split + 1);
         msg.remove_prefix(split);
