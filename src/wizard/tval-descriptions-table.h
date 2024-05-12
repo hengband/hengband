@@ -12,5 +12,4 @@ struct tval_desc {
     concptr desc; /*!< 大項目名 */
 };
 
-extern const std::vector<tval_desc> tvals;
-extern const std::vector<char> listsym;
+extern const std::vector<tval_desc> tval_desc_list;
