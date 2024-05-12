@@ -22,6 +22,9 @@ visual_studio_files = \
 	Hengband/Hengband/Hengband.vcxproj.filters \
 	Hengband/Hengband/packages.config
 
+schema_files = \
+	schema/MonraceDefinitions.schema.json
+
 EXTRA_DIST = \
 	autopick.txt \
 	autopick_eng.txt \
@@ -31,6 +34,7 @@ EXTRA_DIST = \
 	readme-eng.md \
 	THIRD-PARTY-NOTICES.txt \
 	hengband.spec \
-	$(visual_studio_files)
+	$(visual_studio_files) \
+	$(schema_files)
 
 SUBDIRS = src lib
