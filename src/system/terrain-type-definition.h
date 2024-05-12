@@ -7,7 +7,12 @@
 /* Number of feats we change to (Excluding default). Used in TerrainDefinitions.txt. */
 constexpr auto MAX_FEAT_STATES = 8;
 
+/* Lighting levels of features' attr and char */
+constexpr auto F_LIT_STANDARD = 0; /* Standard */
+constexpr auto F_LIT_LITE = 1; /* Brightly lit */
+constexpr auto F_LIT_DARK = 2; /* Darkened */
 constexpr auto F_LIT_MAX = 3;
+constexpr auto F_LIT_NS_BEGIN = 1; /* Nonstandard */
 
 /*!
  * @brief 地形状態変化指定構造体
