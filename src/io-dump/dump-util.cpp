@@ -9,6 +9,19 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
+ColoredCharsClipboard ColoredCharsClipboard::instance{};
+
+ColoredCharsClipboard::ColoredCharsClipboard()
+    : cc()
+    , cc_map({ { F_LIT_STANDARD, {} }, { F_LIT_LITE, {} }, { F_LIT_DARK, {} } })
+{
+}
+
+ColoredCharsClipboard &ColoredCharsClipboard::get_instance()
+{
+    return instance;
+}
+
 TERM_COLOR attr_idx = 0;
 char char_idx = 0;
 
