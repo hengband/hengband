@@ -294,6 +294,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
     bool flag = false;
     bool redraw = true;
     int column = 0;
+    const auto &cc_cb = ColoredCharsClipboard::get_instance();
     while (!flag) {
         if (redraw) {
             clear_from(0);
@@ -374,11 +375,11 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
 
 #ifdef JP
         prt(format("<方向>%s%s%s, ESC", (!visual_list && !visual_only) ? ", 'r'で詳細を見る" : "", visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更",
-                (attr_idx || char_idx) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"),
+                (cc_cb.cc != ColoredChar()) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"),
             hgt - 1, 0);
 #else
         prt(format("<dir>%s%s%s, ESC", (!visual_list && !visual_only) ? ", 'r' to recall" : "", visual_list ? ", ENTER to accept" : ", 'v' for visuals",
-                (attr_idx || char_idx) ? ", 'c', 'p' to paste" : ", 'c' to copy"),
+                (cc_cb.cc != ColoredChar()) ? ", 'c', 'p' to paste" : ", 'c' to copy"),
             hgt - 1, 0);
 #endif
 

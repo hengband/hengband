@@ -25,9 +25,6 @@ private:
     static ColoredCharsClipboard instance;
 };
 
-extern TERM_COLOR attr_idx;
-extern char char_idx;
-
 extern TERM_COLOR attr_idx_feat[F_LIT_MAX];
 extern char char_idx_feat[F_LIT_MAX];
 

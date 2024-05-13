@@ -22,9 +22,6 @@ ColoredCharsClipboard &ColoredCharsClipboard::get_instance()
     return instance;
 }
 
-TERM_COLOR attr_idx = 0;
-char char_idx = 0;
-
 TERM_COLOR attr_idx_feat[F_LIT_MAX];
 char char_idx_feat[F_LIT_MAX];
 
@@ -48,7 +45,7 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
 {
     static TERM_COLOR attr_old = 0;
     static char char_old = 0;
-
+    auto &cc_cb = ColoredCharsClipboard::get_instance();
     switch (ch) {
     case ESCAPE: {
         if (!*visual_list_ptr) {
@@ -85,8 +82,7 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
     }
     case 'C':
     case 'c': {
-        attr_idx = *cur_attr_ptr;
-        char_idx = *cur_char_ptr;
+        cc_cb.cc = { *cur_attr_ptr, *cur_char_ptr };
         for (int i = 0; i < F_LIT_MAX; i++) {
             attr_idx_feat[i] = 0;
             char_idx_feat[i] = 0;
@@ -96,17 +92,19 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
     }
     case 'P':
     case 'p': {
-        if (attr_idx || (!(char_idx & 0x80) && char_idx)) {
-            *cur_attr_ptr = attr_idx;
+        const auto &cc = cc_cb.cc;
+        const auto has_character = cc.character != '\0';
+        if (cc.color || (!(cc.character & 0x80) && has_character)) {
+            *cur_attr_ptr = cc.color;
             *attr_top_ptr = std::max<int8_t>(0, (*cur_attr_ptr & 0x7f) - 5);
             if (!*visual_list_ptr) {
                 *need_redraw = true;
             }
         }
 
-        if (char_idx) {
+        if (has_character) {
             /* Set the char */
-            *cur_char_ptr = char_idx;
+            *cur_char_ptr = cc.character;
             *char_left_ptr = std::max<int8_t>(0, *cur_char_ptr - 10);
             if (!*visual_list_ptr) {
                 *need_redraw = true;

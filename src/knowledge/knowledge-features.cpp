@@ -160,6 +160,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     bool redraw = true;
     ColoredChar cc_orig;
     auto &terrains = TerrainList::get_instance();
+    const auto &cc_cb = ColoredCharsClipboard::get_instance();
     while (!flag) {
         char ch;
         if (redraw) {
@@ -228,7 +229,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
         prt(format(_("<方向>%s, 'd'で標準光源効果%s, ESC", "<dir>%s, 'd' for default lighting%s, ESC"),
                 visual_list ? _(", ENTERで決定, 'a'で対象明度変更", ", ENTER to accept, 'a' for lighting level")
                             : _(", 'v'でシンボル変更", ", 'v' for visuals"),
-                (attr_idx || char_idx) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
+                (cc_cb.cc != ColoredChar()) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
             hgt - 1, 0);
 
         auto &terrain = terrains[feat_idx[feat_cur]];
