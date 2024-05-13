@@ -802,6 +802,18 @@ void BaseitemList::reset_all_visuals()
     }
 }
 
+void BaseitemList::shuffle_flavors()
+{
+    this->shuffle_flavors(ItemKindType::RING);
+    this->shuffle_flavors(ItemKindType::AMULET);
+    this->shuffle_flavors(ItemKindType::STAFF);
+    this->shuffle_flavors(ItemKindType::WAND);
+    this->shuffle_flavors(ItemKindType::ROD);
+    this->shuffle_flavors(ItemKindType::FOOD);
+    this->shuffle_flavors(ItemKindType::POTION);
+    this->shuffle_flavors(ItemKindType::SCROLL);
+}
+
 /*!
  * @brief ベースアイテムの未確定名を共通tval間でシャッフルする
  * @param tval シャッフルしたいtval

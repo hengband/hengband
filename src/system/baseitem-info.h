@@ -169,11 +169,13 @@ public:
     void resize(size_t new_size);
 
     void reset_all_visuals();
-    void shuffle_flavors(ItemKindType tval);
+    void shuffle_flavors();
 
 private:
     BaseitemList() = default;
 
     static BaseitemList instance;
     std::vector<BaseitemInfo> baseitems{};
+
+    void shuffle_flavors(ItemKindType tval);
 };

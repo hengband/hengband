@@ -27,14 +27,7 @@ void initialize_items_flavor()
         baseitem.flavor = baseitem.idx;
     }
 
-    baseitems.shuffle_flavors(ItemKindType::RING);
-    baseitems.shuffle_flavors(ItemKindType::AMULET);
-    baseitems.shuffle_flavors(ItemKindType::STAFF);
-    baseitems.shuffle_flavors(ItemKindType::WAND);
-    baseitems.shuffle_flavors(ItemKindType::ROD);
-    baseitems.shuffle_flavors(ItemKindType::FOOD);
-    baseitems.shuffle_flavors(ItemKindType::POTION);
-    baseitems.shuffle_flavors(ItemKindType::SCROLL);
+    baseitems.shuffle_flavors();
     system.set_rng(rng_backup);
     for (auto &baseitem : baseitems) {
         if (!baseitem.is_valid()) {
