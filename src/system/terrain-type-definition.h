@@ -47,12 +47,15 @@ public:
     FEAT_SUBTYPE subtype{}; /*!< 副特性値 */
     FEAT_POWER power{}; /*!< 地形強度 */
     std::map<int, ColoredChar> cc_defs; //!< デフォルトの地形シンボル (色/文字).
-    TERM_COLOR x_attr[F_LIT_MAX]{}; /*!< 設定変更後の地形シンボルカラー / Desired feature attribute */
-    char x_char[F_LIT_MAX]{}; /*!< 設定変更後の地形シンボルアルファベット / Desired feature character */
+    std::map<int, ColoredChar> cc_configs; //!< 設定変更後の地形シンボル (色/文字).
 
     bool is_permanent_wall() const;
 
     void reset_lighting(bool is_config = true);
+
+private:
+    void reset_lighting_ascii(std::map<int, ColoredChar> &cc);
+    void reset_lighting_graphics(std::map<int, ColoredChar> &cc);
 };
 
 class TerrainList {

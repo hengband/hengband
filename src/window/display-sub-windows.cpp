@@ -444,34 +444,29 @@ void fix_overhead(PlayerType *player_ptr)
  */
 static void display_dungeon(PlayerType *player_ptr)
 {
-    TERM_COLOR ta = 0;
-    auto tc = '\0';
-
+    ColoredChar cc_target;
     for (TERM_LEN x = player_ptr->x - game_term->wid / 2 + 1; x <= player_ptr->x + game_term->wid / 2; x++) {
         for (TERM_LEN y = player_ptr->y - game_term->hgt / 2 + 1; y <= player_ptr->y + game_term->hgt / 2; y++) {
-            TERM_COLOR a;
-            char c;
+            ColoredChar cc;
             if (!in_bounds2(player_ptr->current_floor_ptr, y, x)) {
                 const auto &terrain = TerrainList::get_instance()[feat_none];
-                a = terrain.x_attr[F_LIT_STANDARD];
-                c = terrain.x_char[F_LIT_STANDARD];
-                term_queue_char(x - player_ptr->x + game_term->wid / 2 - 1, y - player_ptr->y + game_term->hgt / 2 - 1, a, c, ta, tc);
+                cc = terrain.cc_configs.at(F_LIT_STANDARD);
+                term_queue_char(x - player_ptr->x + game_term->wid / 2 - 1, y - player_ptr->y + game_term->hgt / 2 - 1, cc.color, cc.character, cc_target.color, cc_target.character);
                 continue;
             }
 
-            map_info(player_ptr, y, x, &a, &c, &ta, &tc);
-
+            map_info(player_ptr, y, x, &cc.color, &cc.character, &cc_target.color, &cc_target.character);
             if (!use_graphics) {
                 if (w_ptr->timewalk_m_idx) {
-                    a = TERM_DARK;
+                    cc.color = TERM_DARK;
                 } else if (is_invuln(player_ptr) || player_ptr->timewalk) {
-                    a = TERM_WHITE;
+                    cc.color = TERM_WHITE;
                 } else if (player_ptr->wraith_form) {
-                    a = TERM_L_DARK;
+                    cc.color = TERM_L_DARK;
                 }
             }
 
-            term_queue_char(x - player_ptr->x + game_term->wid / 2 - 1, y - player_ptr->y + game_term->hgt / 2 - 1, a, c, ta, tc);
+            term_queue_char(x - player_ptr->x + game_term->wid / 2 - 1, y - player_ptr->y + game_term->hgt / 2 - 1, cc.color, cc.character, cc_target.color, cc_target.character);
         }
     }
 }
