@@ -67,7 +67,7 @@ void do_cmd_knowledge_weapon_exp(PlayerType *player_ptr)
     }
 
     angband_fclose(fff);
-    (void)show_file(player_ptr->name, true, file_name, 0, 0, _("武器の経験値", "Weapon Proficiency"));
+    FileDisplayer().display(player_ptr->name, true, file_name, 0, 0, _("武器の経験値", "Weapon Proficiency"));
     fd_kill(file_name);
 }
 
@@ -159,7 +159,7 @@ void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
     }
 
     angband_fclose(fff);
-    (void)show_file(player_ptr->name, true, file_name, 0, 0, _("魔法の経験値", "Spell Proficiency"));
+    FileDisplayer().display(player_ptr->name, true, file_name, 0, 0, _("魔法の経験値", "Spell Proficiency"));
     fd_kill(file_name);
 }
 
@@ -196,6 +196,6 @@ void do_cmd_knowledge_skill_exp(PlayerType *player_ptr)
     }
 
     angband_fclose(fff);
-    (void)show_file(player_ptr->name, true, file_name, 0, 0, _("技能の経験値", "Miscellaneous Proficiency"));
+    FileDisplayer().display(player_ptr->name, true, file_name, 0, 0, _("技能の経験値", "Miscellaneous Proficiency"));
     fd_kill(file_name);
 }

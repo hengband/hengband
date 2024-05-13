@@ -22,7 +22,7 @@ void birth_quit(void)
 void show_help(PlayerType *player_ptr, concptr helpfile)
 {
     screen_save();
-    (void)show_file(player_ptr->name, true, helpfile, 0, 0);
+    FileDisplayer().display(player_ptr->name, true, helpfile, 0, 0);
     screen_load();
 }
 

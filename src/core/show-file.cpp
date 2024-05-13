@@ -135,7 +135,7 @@ static void show_file_aux_line(std::string_view str, int cy, std::string_view sh
  * </pre>
  * @todo 表示とそれ以外を分割する
  */
-bool show_file(std::string_view player_name, bool show_version, std::string_view name_with_tag, int initial_line, uint32_t mode, std::string_view what)
+void FileDisplayer::display(std::string_view player_name, bool show_version, std::string_view name_with_tag, int initial_line, uint32_t mode, std::string_view what)
 {
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, std::nullopt);
 
@@ -329,7 +329,7 @@ bool show_file(std::string_view player_name, bool show_version, std::string_view
         switch (skey) {
         case '?':
             if (name != _("jhelpinfo.txt", "helpinfo.txt")) {
-                show_file(player_name, true, _("jhelpinfo.txt", "helpinfo.txt"), 0, mode);
+                this->display(player_name, true, _("jhelpinfo.txt", "helpinfo.txt"), 0, mode);
             }
 
             break;
@@ -405,7 +405,8 @@ bool show_file(std::string_view player_name, bool show_version, std::string_view
                 break;
             }
 
-            if (!show_file(player_name, true, *ask_result, 0, mode)) {
+            this->display(player_name, true, *ask_result, 0, mode);
+            if (this->is_terminated) {
                 skey = 'q';
             }
 
@@ -467,7 +468,8 @@ bool show_file(std::string_view player_name, bool show_version, std::string_view
 
             if ((key > -1) && hook[key][0]) {
                 /* Recurse on that file */
-                if (!show_file(player_name, true, hook[key], 0, mode)) {
+                this->display(player_name, true, hook[key], 0, mode);
+                if (this->is_terminated) {
                     skey = 'q';
                 }
             }
@@ -514,7 +516,7 @@ bool show_file(std::string_view player_name, bool show_version, std::string_view
     }
 
     angband_fclose(fff);
-    return skey != 'q';
+    this->is_terminated = skey == 'q';
 }
 
 /*
