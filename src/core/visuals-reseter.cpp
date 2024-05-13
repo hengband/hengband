@@ -25,7 +25,9 @@ void reset_visuals(PlayerType *player_ptr)
         monrace.x_char = monrace.d_char;
     }
 
-    concptr pref_file = use_graphics ? "graf.prf" : "font.prf";
+    const auto pref_file = use_graphics ? "graf.prf" : "font.prf";
     process_pref_file(player_ptr, pref_file);
-    process_pref_file(player_ptr, std::string(use_graphics ? "graf-" : "font-").append(player_ptr->base_name).append(".prf"));
+    std::stringstream ss;
+    ss << (use_graphics ? "graf-" : "font-") << player_ptr->base_name << ".prf";
+    process_pref_file(player_ptr, ss.str());
 }
