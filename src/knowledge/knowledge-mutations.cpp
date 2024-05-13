@@ -8,6 +8,7 @@
 #include "core/show-file.h"
 #include "io-dump/dump-util.h"
 #include "io/mutations-dump.h"
+#include "system/player-type-definition.h"
 #include "util/angband-files.h"
 
 /*!
@@ -24,6 +25,6 @@ void do_cmd_knowledge_mutations(PlayerType *player_ptr)
     dump_mutations(player_ptr, fff);
     angband_fclose(fff);
 
-    show_file(player_ptr, true, file_name, 0, 0, _("突然変異", "Mutations"));
+    FileDisplayer().display(player_ptr->name, true, file_name, 0, 0, _("突然変異", "Mutations"));
     fd_kill(file_name);
 }

@@ -85,7 +85,7 @@ bool reinit_wilderness = false;
 static void town_history(PlayerType *player_ptr)
 {
     screen_save();
-    (void)show_file(player_ptr, true, _("jbldg.txt", "bldg.txt"), 0, 0);
+    FileDisplayer().display(player_ptr->name, true, _("jbldg.txt", "bldg.txt"), 0, 0);
     screen_load();
 }
 

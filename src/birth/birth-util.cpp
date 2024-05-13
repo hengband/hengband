@@ -3,6 +3,7 @@
 #include "core/show-file.h"
 #include "main/sound-of-music.h"
 #include "system/game-option-types.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 
 /*!
@@ -21,7 +22,7 @@ void birth_quit(void)
 void show_help(PlayerType *player_ptr, concptr helpfile)
 {
     screen_save();
-    (void)show_file(player_ptr, true, helpfile, 0, 0);
+    FileDisplayer().display(player_ptr->name, true, helpfile, 0, 0);
     screen_load();
 }
 

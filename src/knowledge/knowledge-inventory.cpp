@@ -292,6 +292,6 @@ void do_cmd_knowledge_inventory(PlayerType *player_ptr)
     }
 
     angband_fclose(fff);
-    (void)show_file(player_ptr, true, file_name, 0, 0, _("*鑑定*済み武器/防具の耐性リスト", "Resistances of *identified* equipment"));
+    FileDisplayer().display(player_ptr->name, true, file_name, 0, 0, _("*鑑定*済み武器/防具の耐性リスト", "Resistances of *identified* equipment"));
     fd_kill(file_name);
 }
