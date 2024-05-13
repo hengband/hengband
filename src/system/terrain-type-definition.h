@@ -3,11 +3,18 @@
 #include "grid/feature-flag-types.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
+#include "view/colored-char.h"
+#include <map>
 
 /* Number of feats we change to (Excluding default). Used in TerrainDefinitions.txt. */
 constexpr auto MAX_FEAT_STATES = 8;
 
+/* Lighting levels of features' attr and char */
+constexpr auto F_LIT_STANDARD = 0; /* Standard */
+constexpr auto F_LIT_LITE = 1; /* Brightly lit */
+constexpr auto F_LIT_DARK = 2; /* Darkened */
 constexpr auto F_LIT_MAX = 3;
+constexpr auto F_LIT_NS_BEGIN = 1; /* Nonstandard */
 
 /*!
  * @brief 地形状態変化指定構造体
@@ -25,7 +32,7 @@ public:
  */
 class TerrainType {
 public:
-    TerrainType() = default;
+    TerrainType();
     FEAT_IDX idx{};
     std::string name; /*!< 地形名 */
     std::string text; /*!< 地形説明 */
@@ -39,12 +46,13 @@ public:
     TerrainState state[MAX_FEAT_STATES]{}; /*!< TerrainState テーブル */
     FEAT_SUBTYPE subtype{}; /*!< 副特性値 */
     FEAT_POWER power{}; /*!< 地形強度 */
-    TERM_COLOR d_attr[F_LIT_MAX]{}; /*!< デフォルトの地形シンボルカラー / Default feature attribute */
-    char d_char[F_LIT_MAX]{}; /*!< デフォルトの地形シンボルアルファベット / Default feature character */
+    std::map<int, ColoredChar> cc_defs; //!< デフォルトの地形シンボル (色/文字).
     TERM_COLOR x_attr[F_LIT_MAX]{}; /*!< 設定変更後の地形シンボルカラー / Desired feature attribute */
     char x_char[F_LIT_MAX]{}; /*!< 設定変更後の地形シンボルアルファベット / Desired feature character */
 
     bool is_permanent_wall() const;
+
+    void reset_lighting(bool is_config = true);
 };
 
 class TerrainList {

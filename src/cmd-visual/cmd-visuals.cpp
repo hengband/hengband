@@ -372,8 +372,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             while (true) {
                 auto &terrain = terrains[terrain_id];
                 int c;
-                TERM_COLOR da = terrain.d_attr[lighting_level];
-                byte dc = terrain.d_char[lighting_level];
+                const auto &cc_def = terrain.cc_defs[lighting_level];
                 TERM_COLOR ca = terrain.x_attr[lighting_level];
                 byte cc = terrain.x_char[lighting_level];
 
@@ -381,9 +380,9 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 term_putstr(5, 17, -1, TERM_WHITE,
                     format(_("地形 = %d, 名前 = %s, 明度 = %s", "Terrain = %d, Name = %s, Lighting = %s"), terrain_id, (terrain.name.data()),
                         lighting_level_str[lighting_level]));
-                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
+                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), cc_def.color, cc_def.character));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
-                term_queue_bigchar(43, 19, da, dc, 0, 0);
+                term_queue_bigchar(43, 19, cc_def.color, cc_def.character, 0, 0);
                 term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), ca, cc));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 20, ca, cc, 0, 0);
@@ -453,7 +452,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'd':
-                    apply_default_feat_lighting(terrain.x_attr, terrain.x_char);
+                    terrain.reset_lighting();
                     need_redraw = true;
                     break;
                 case 'v':

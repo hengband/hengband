@@ -4,13 +4,6 @@
 #include <string>
 #include <vector>
 
-/* Lighting levels of features' attr and char */
-#define F_LIT_STANDARD 0 /* Standard */
-#define F_LIT_LITE 1 /* Brightly lit */
-#define F_LIT_DARK 2 /* Darkened */
-
-#define F_LIT_NS_BEGIN 1 /* Nonstandard */
-
 /*** Terrain feature variables ***/
 extern FEAT_IDX feat_none;
 extern FEAT_IDX feat_floor;
@@ -73,7 +66,6 @@ class FloorType;
 class PlayerType;
 bool is_closed_door(PlayerType *player_ptr, FEAT_IDX feat);
 bool is_trap(PlayerType *player_ptr, FEAT_IDX feat);
-void apply_default_feat_lighting(TERM_COLOR *f_attr, char *f_char);
 bool is_ascii_graphics(char x);
 FEAT_IDX feat_locked_door_random(int door_type);
 FEAT_IDX feat_jammed_door_random(int door_type);

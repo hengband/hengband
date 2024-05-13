@@ -120,11 +120,9 @@ static errr decide_feature_type(int i, int num, char **zz)
 
         return 0;
     }
-    case 4: {
-        /* Use default lighting */
-        apply_default_feat_lighting(terrain.x_attr, terrain.x_char);
+    case 4:
+        terrain.reset_lighting();
         return 0;
-    }
     case F_LIT_MAX * 2 + 1: {
         /* Use desired lighting */
         for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
