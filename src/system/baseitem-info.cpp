@@ -801,3 +801,30 @@ void BaseitemList::reset_all_visuals()
         baseitem.cc_config = baseitem.cc_def;
     }
 }
+
+/*!
+ * @brief ベースアイテムの未確定名を共通tval間でシャッフルする
+ * @param tval シャッフルしたいtval
+ * @details 巻物、各種魔道具などに利用される。
+ */
+void BaseitemList::shuffle_flavors(ItemKindType tval)
+{
+    std::vector<std::reference_wrapper<short>> flavors;
+    for (auto &baseitem : this->baseitems) {
+        if (baseitem.bi_key.tval() != tval) {
+            continue;
+        }
+
+        if (baseitem.flavor == 0) {
+            continue;
+        }
+
+        if (baseitem.flags.has(TR_FIXED_FLAVOR)) {
+            continue;
+        }
+
+        flavors.push_back(baseitem.flavor);
+    }
+
+    rand_shuffle(flavors.begin(), flavors.end());
+}
