@@ -19,10 +19,7 @@ void reset_visuals(PlayerType *player_ptr)
         }
     }
 
-    for (auto &baseitem : BaseitemList::get_instance()) {
-        baseitem.cc_config = baseitem.cc_def;
-    }
-
+    BaseitemList::get_instance().reset_all_visuals();
     for (auto &[monrace_id, monrace] : monraces_info) {
         monrace.x_attr = monrace.d_attr;
         monrace.x_char = monrace.d_char;

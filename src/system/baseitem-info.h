@@ -168,6 +168,8 @@ public:
     bool empty() const;
     void resize(size_t new_size);
 
+    void reset_all_visuals();
+
 private:
     BaseitemList() = default;
 

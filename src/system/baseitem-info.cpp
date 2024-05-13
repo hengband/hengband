@@ -794,3 +794,10 @@ void BaseitemList::resize(size_t new_size)
 {
     this->baseitems.resize(new_size);
 }
+
+void BaseitemList::reset_all_visuals()
+{
+    for (auto &baseitem : this->baseitems) {
+        baseitem.cc_config = baseitem.cc_def;
+    }
+}
