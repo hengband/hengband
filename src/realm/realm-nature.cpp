@@ -9,7 +9,6 @@
 #include "hpmp/hp-mp-processor.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
-#include "object/object-kind-hook.h"
 #include "player-attack/player-attack.h"
 #include "player-base/player-race.h"
 #include "player-info/race-info.h"
@@ -143,14 +142,10 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         {
             if (cast) {
-                ItemEntity forge, *q_ptr = &forge;
+                ItemEntity item;
                 msg_print(_("食料を生成した。", "A food ration is produced."));
-
-                /* Create the food ration */
-                q_ptr->prep(lookup_baseitem_id({ ItemKindType::FOOD, SV_FOOD_RATION }));
-
-                /* Drop the object from heaven */
-                (void)drop_near(player_ptr, q_ptr, -1, player_ptr->y, player_ptr->x);
+                item.prep(BaseitemList::get_instance().lookup_baseitem_id({ ItemKindType::FOOD, SV_FOOD_RATION }));
+                (void)drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);
             }
         }
         break;

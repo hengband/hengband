@@ -51,7 +51,6 @@
 #include "object-enchant/item-magic-applier.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
-#include "object/object-kind-hook.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
@@ -224,7 +223,7 @@ static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArt
 {
     const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
     ItemEntity item;
-    item.prep(lookup_baseitem_id(artifact.bi_key));
+    item.prep(BaseitemList::get_instance().lookup_baseitem_id(artifact.bi_key));
     item.fixed_artifact_idx = a_idx;
     item.mark_as_known();
     return describe_flavor(player_ptr, &item, OD_NAME_ONLY);

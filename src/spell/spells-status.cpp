@@ -25,7 +25,6 @@
 #include "main/sound-of-music.h"
 #include "mind/mind-force-trainer.h"
 #include "monster/monster-describer.h"
-#include "object/object-kind-hook.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/magic-eater-data-type.h"
@@ -481,7 +480,7 @@ bool restore_mana(PlayerType *player_ptr, bool magic_eater)
         auto sval = 0;
         const auto &baseitems = BaseitemList::get_instance();
         for (auto &item : magic_eater_data->get_item_group(ItemKindType::ROD)) {
-            const auto bi_id = lookup_baseitem_id({ ItemKindType::ROD, sval });
+            const auto bi_id = baseitems.lookup_baseitem_id({ ItemKindType::ROD, sval });
             item.charge -= ((item.count < 10) ? EATER_ROD_CHARGE * 3 : item.count * EATER_ROD_CHARGE / 3) * baseitems.get_baseitem(bi_id).pval;
             item.charge = std::max(item.charge, 0);
             ++sval;

@@ -65,7 +65,6 @@
 #include "io/input-key-requester.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "object/object-kind-hook.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/magic-eater-data-type.h"
@@ -113,7 +112,7 @@ static std::optional<BaseitemKey> check_magic_eater_spell_repeat(magic_eater_dat
     switch (tval) {
     case ItemKindType::ROD: {
         const auto &baseitems = BaseitemList::get_instance();
-        const auto bi_id = lookup_baseitem_id({ ItemKindType::ROD, sval });
+        const auto bi_id = baseitems.lookup_baseitem_id({ ItemKindType::ROD, sval });
         const auto &baseitem = baseitems.get_baseitem(bi_id);
         if (item.charge <= baseitem.pval * (item.count - 1) * EATER_ROD_CHARGE) {
             return BaseitemKey(tval, sval);
@@ -292,7 +291,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
                     continue;
                 }
 
-                bi_id = lookup_baseitem_id({ tval, sval_ctr });
+                bi_id = baseitems.lookup_baseitem_id({ tval, sval_ctr });
 
                 std::string dummy;
                 if (use_menu) {
@@ -476,7 +475,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
         if (!only_browse) {
             auto &item = item_group[sval];
             if (tval == ItemKindType::ROD) {
-                const auto bi_id = lookup_baseitem_id({ tval, sval });
+                const auto bi_id = baseitems.lookup_baseitem_id({ tval, sval });
                 const auto &baseitem = baseitems.get_baseitem(bi_id);
                 if (item.charge > baseitem.pval * (item.count - 1) * EATER_ROD_CHARGE) {
                     msg_print(_("その魔法はまだ充填している最中だ。", "The magic is still charging."));
@@ -499,7 +498,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
             term_erase(7, 22);
             term_erase(7, 21);
             term_erase(7, 20);
-            const auto bi_id = lookup_baseitem_id({ tval, sval });
+            const auto bi_id = baseitems.lookup_baseitem_id({ tval, sval });
             const auto &baseitem = baseitems.get_baseitem(bi_id);
             display_wrap_around(baseitem.text, 62, 21, 10);
             continue;
@@ -555,10 +554,11 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
         energy.reset_player_turn();
         return false;
     }
-    auto &bi_key = *result;
 
-    const auto bi_id = lookup_baseitem_id(bi_key);
-    const auto &baseitem = BaseitemList::get_instance().get_baseitem(bi_id);
+    const auto &bi_key = *result;
+    const auto &baseitems = BaseitemList::get_instance();
+    const auto bi_id = baseitems.lookup_baseitem_id(bi_key);
+    const auto &baseitem = baseitems.get_baseitem(bi_id);
     auto level = (bi_key.tval() == ItemKindType::ROD ? baseitem.level * 5 / 6 - 5 : baseitem.level);
     auto chance = level * 4 / 5 + 20;
     chance -= 3 * (adj_mag_stat[player_ptr->stat_index[mp_ptr->spell_stat]] - 1);

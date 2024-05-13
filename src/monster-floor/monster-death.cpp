@@ -27,7 +27,6 @@
 #include "monster/monster-list.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/item-magic-applier.h"
-#include "object/object-kind-hook.h"
 #include "pet/pet-fall-off.h"
 #include "player/patron.h"
 #include "sv-definition/sv-other-types.h"
@@ -94,11 +93,10 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, MonsterDeath *md_ptr
     const auto &arena = arena_info[player_ptr->arena_number];
     const auto tval = arena.key.tval();
     if (tval > ItemKindType::NONE) {
-        ItemEntity forge;
-        auto *q_ptr = &forge;
-        q_ptr->prep(lookup_baseitem_id(arena.key));
-        ItemMagicApplier(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART).execute();
-        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
+        ItemEntity item;
+        item.prep(BaseitemList::get_instance().lookup_baseitem_id(arena.key));
+        ItemMagicApplier(player_ptr, &item, floor_ptr->object_level, AM_NO_FIXED_ART).execute();
+        (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
     }
 
     if (player_ptr->arena_number > MAX_ARENA_MONS) {
@@ -141,12 +139,11 @@ static void drop_corpse(PlayerType *player_ptr, MonsterDeath *md_ptr)
         }
     }
 
-    ItemEntity forge;
-    auto *q_ptr = &forge;
-    q_ptr->prep(lookup_baseitem_id({ ItemKindType::CORPSE, (corpse ? SV_CORPSE : SV_SKELETON) }));
-    ItemMagicApplier(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART).execute();
-    q_ptr->pval = enum2i(md_ptr->m_ptr->r_idx);
-    (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
+    ItemEntity item;
+    item.prep(BaseitemList::get_instance().lookup_baseitem_id({ ItemKindType::CORPSE, (corpse ? SV_CORPSE : SV_SKELETON) }));
+    ItemMagicApplier(player_ptr, &item, floor_ptr->object_level, AM_NO_FIXED_ART).execute();
+    item.pval = enum2i(md_ptr->m_ptr->r_idx);
+    (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
 /*!
@@ -189,7 +186,7 @@ static short drop_dungeon_final_artifact(PlayerType *player_ptr, MonsterDeath *m
 {
     const auto &dungeon = player_ptr->current_floor_ptr->get_dungeon_definition();
     const auto has_reward = dungeon.final_object > 0;
-    const auto bi_id = has_reward ? dungeon.final_object : lookup_baseitem_id({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
+    const auto bi_id = has_reward ? dungeon.final_object : BaseitemList::get_instance().lookup_baseitem_id({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
     if (dungeon.final_artifact == FixedArtifactId::NONE) {
         return bi_id;
     }

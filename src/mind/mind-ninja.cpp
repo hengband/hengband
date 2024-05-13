@@ -24,7 +24,6 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "object-enchant/trc-types.h"
-#include "object/object-kind-hook.h"
 #include "player-attack/player-attack.h"
 #include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
@@ -113,7 +112,7 @@ bool kawarimi(PlayerType *player_ptr, bool success)
     teleport_player(player_ptr, 10 + randint1(90), TELEPORT_SPONTANEOUS);
     q_ptr->wipe();
     const int sv_wooden_statue = 0;
-    q_ptr->prep(lookup_baseitem_id({ ItemKindType::STATUE, sv_wooden_statue }));
+    q_ptr->prep(BaseitemList::get_instance().lookup_baseitem_id({ ItemKindType::STATUE, sv_wooden_statue }));
 
     q_ptr->pval = enum2i(MonsterRaceId::NINJA);
     (void)drop_near(player_ptr, q_ptr, -1, y, x);
