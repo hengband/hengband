@@ -26,19 +26,29 @@ bool TerrainType::is_permanent_wall() const
 void TerrainType::reset_lighting(bool is_config)
 {
     auto &cc_map = is_config ? this->cc_configs : this->cc_defs;
-    const auto color_standard = cc_map[F_LIT_STANDARD].color;
-    const auto character_standard = cc_map[F_LIT_STANDARD].character;
-    if (is_ascii_graphics(color_standard)) {
-        cc_map[F_LIT_LITE].color = lighting_colours[color_standard & 0x0f][0];
-        cc_map[F_LIT_DARK].color = lighting_colours[color_standard & 0x0f][1];
-        for (int i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) {
-            cc_map[i].character = character_standard;
-        }
-
+    if (is_ascii_graphics(cc_map[F_LIT_STANDARD].color)) {
+        this->reset_lighting_ascii(cc_map);
         return;
     }
 
-    /* For tile graphics */
+    this->reset_lighting_graphics(cc_map);
+}
+
+void TerrainType::reset_lighting_ascii(std::map<int, ColoredChar> &cc_map)
+{
+    const auto color_standard = cc_map[F_LIT_STANDARD].color;
+    const auto character_standard = cc_map[F_LIT_STANDARD].character;
+    cc_map[F_LIT_LITE].color = lighting_colours[color_standard & 0x0f][0];
+    cc_map[F_LIT_DARK].color = lighting_colours[color_standard & 0x0f][1];
+    for (int i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) {
+        cc_map[i].character = character_standard;
+    }
+}
+
+void TerrainType::reset_lighting_graphics(std::map<int, ColoredChar> &cc_map)
+{
+    const auto color_standard = cc_map[F_LIT_STANDARD].color;
+    const auto character_standard = cc_map[F_LIT_STANDARD].character;
     for (auto i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) {
         cc_map[i].color = color_standard;
     }

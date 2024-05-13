@@ -52,6 +52,10 @@ public:
     bool is_permanent_wall() const;
 
     void reset_lighting(bool is_config = true);
+
+private:
+    void reset_lighting_ascii(std::map<int, ColoredChar> &cc);
+    void reset_lighting_graphics(std::map<int, ColoredChar> &cc);
 };
 
 class TerrainList {
