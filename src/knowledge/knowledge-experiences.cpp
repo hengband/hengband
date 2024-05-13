@@ -34,7 +34,7 @@ void do_cmd_knowledge_weapon_exp(PlayerType *player_ptr)
     for (auto tval : { ItemKindType::SWORD, ItemKindType::POLEARM, ItemKindType::HAFTED, ItemKindType::DIGGING, ItemKindType::BOW }) {
         for (int num = 0; num < 64; num++) {
             BaseitemKey bi_key(tval, num);
-            for (const auto &baseitem : baseitems_info) {
+            for (const auto &baseitem : BaseitemList::get_instance()) {
                 if (baseitem.bi_key != bi_key) {
                     continue;
                 }

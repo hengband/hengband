@@ -951,7 +951,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     std::vector<EgoType> ego_ids;
     if (exam_base) {
         auto max_len = 0;
-        for (const auto &baseitem : baseitems_info) {
+        for (const auto &baseitem : BaseitemList::get_instance()) {
             if (!baseitem.is_valid()) {
                 continue;
             }
@@ -1108,7 +1108,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
     if (baseitem_ids.size() == 1) {
         const auto bi_id = baseitem_ids.back();
-        const auto &baseitem = baseitems_info[bi_id];
+        const auto &baseitem = BaseitemList::get_instance().get_baseitem(bi_id);
         auto a_idx = FixedArtifactId::NONE;
         if (baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
             for (const auto &[a_idx_loop, artifact_loop] : artifacts_info) {

@@ -98,7 +98,7 @@ static std::string flavor_name_of(const ItemEntity &item, const describe_option_
     const auto &baseitem = item.get_baseitem();
     return any_bits(opt.mode, OD_FORCE_FLAVOR)
                ? baseitem.flavor_name
-               : baseitems_info[baseitem.flavor].flavor_name;
+               : BaseitemList::get_instance().get_baseitem(baseitem.flavor).flavor_name;
 }
 
 static std::pair<std::string, std::string> describe_amulet(const ItemEntity &item, const describe_option_type &opt)

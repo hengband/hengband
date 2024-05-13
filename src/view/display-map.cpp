@@ -46,7 +46,8 @@ const std::string image_monsters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR
 ColoredChar image_object()
 {
     if (use_graphics) {
-        std::span<BaseitemInfo> candidates(baseitems_info.begin() + 1, baseitems_info.end());
+        auto &baseitems = BaseitemList::get_instance();
+        const std::span<BaseitemInfo> candidates(baseitems.begin() + 1, baseitems.end());
         const auto &baseitem = rand_choice(candidates);
         return baseitem.cc_config;
     }
@@ -66,8 +67,8 @@ ColoredChar image_monster()
         return { monrace.x_attr, monrace.x_char };
     }
 
-    auto color = randnum1<uint8_t>(15);
-    auto character = one_in_(25) ? rand_choice(image_objects) : rand_choice(image_monsters);
+    const auto color = randnum1<uint8_t>(15);
+    const auto character = one_in_(25) ? rand_choice(image_objects) : rand_choice(image_monsters);
     return { color, character };
 }
 

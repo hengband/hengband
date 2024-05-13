@@ -73,12 +73,13 @@ static errr interpret_k_token(char *buf)
     const auto i = static_cast<short>(std::stoi(zz[0], nullptr, 0));
     const auto color = static_cast<uint8_t>(std::stoi(zz[1], nullptr, 0));
     const auto character = static_cast<char>(std::stoi(zz[2], nullptr, 0));
-    if (i >= static_cast<int>(baseitems_info.size())) {
+    auto &baseitems = BaseitemList::get_instance();
+    if (i >= static_cast<int>(baseitems.size())) {
         return 1;
     }
 
     /* Allow TERM_DARK text */
-    auto &baseitem = baseitems_info[i];
+    auto &baseitem = baseitems.get_baseitem(i);
     if ((color > 0) || (((character & 0x80) == 0) && (character != 0))) {
         baseitem.cc_config.color = color;
     }
@@ -212,7 +213,7 @@ static errr interpret_u_token(char *buf)
     const auto tval = i2enum<ItemKindType>(std::stoi(zz[0], nullptr, 0));
     const auto n1 = static_cast<uint8_t>(std::stoi(zz[1], nullptr, 0));
     const auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
-    for (auto &baseitem : baseitems_info) {
+    for (auto &baseitem : BaseitemList::get_instance()) {
         if (baseitem.is_valid() && (baseitem.bi_key.tval() == tval)) {
             if (n1) {
                 baseitem.cc_def.color = n1;

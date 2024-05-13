@@ -19,7 +19,7 @@ void reset_visuals(PlayerType *player_ptr)
         }
     }
 
-    for (auto &baseitem : baseitems_info) {
+    for (auto &baseitem : BaseitemList::get_instance()) {
         baseitem.cc_config = baseitem.cc_def;
     }
 

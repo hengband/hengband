@@ -400,7 +400,7 @@ bool make_artifact_special(PlayerType *player_ptr, ItemEntity *o_ptr)
          * ベースアイテムの生成階層が足りない場合1/(不足階層*5)を満たさないと除外される。
          */
         const auto bi_id = lookup_baseitem_id(artifact.bi_key);
-        const auto &baseitem = baseitems_info[bi_id];
+        const auto &baseitem = BaseitemList::get_instance().get_baseitem(bi_id);
         if (baseitem.level > floor_ptr->object_level) {
             int d = (baseitem.level - floor_ptr->object_level) * 5;
             if (!one_in_(d)) {

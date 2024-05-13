@@ -9,5 +9,5 @@ std::vector<alloc_entry> alloc_kind_table;
 
 BaseitemInfo &alloc_entry::get_baseitem() const
 {
-    return baseitems_info[this->index];
+    return BaseitemList::get_instance().get_baseitem(this->index);
 }

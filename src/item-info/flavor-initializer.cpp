@@ -17,7 +17,8 @@
 static void shuffle_flavors(ItemKindType tval)
 {
     std::vector<std::reference_wrapper<IDX>> flavor_idx_ref_list;
-    for (const auto &baseitem : baseitems_info) {
+    auto &baseitems = BaseitemList::get_instance();
+    for (auto &baseitem : baseitems) {
         if (baseitem.bi_key.tval() != tval) {
             continue;
         }
@@ -30,7 +31,7 @@ static void shuffle_flavors(ItemKindType tval)
             continue;
         }
 
-        flavor_idx_ref_list.push_back(baseitems_info[baseitem.idx].flavor);
+        flavor_idx_ref_list.push_back(baseitem.flavor);
     }
 
     rand_shuffle(flavor_idx_ref_list.begin(), flavor_idx_ref_list.end());
@@ -45,7 +46,8 @@ void initialize_items_flavor()
     const Xoshiro128StarStar rng_backup = system.get_rng();
     Xoshiro128StarStar flavor_rng(system.get_seed_flavor());
     system.set_rng(flavor_rng);
-    for (auto &baseitem : baseitems_info) {
+    auto &baseitems = BaseitemList::get_instance();
+    for (auto &baseitem : baseitems) {
         if (baseitem.flavor_name.empty()) {
             continue;
         }
@@ -62,7 +64,7 @@ void initialize_items_flavor()
     shuffle_flavors(ItemKindType::POTION);
     shuffle_flavors(ItemKindType::SCROLL);
     system.set_rng(rng_backup);
-    for (auto &baseitem : baseitems_info) {
+    for (auto &baseitem : baseitems) {
         if (!baseitem.is_valid()) {
             continue;
         }

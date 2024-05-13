@@ -710,8 +710,6 @@ void BaseitemInfo::mark_as_aware()
     this->aware = true;
 }
 
-std::vector<BaseitemInfo> baseitems_info;
-
 BaseitemList BaseitemList::instance{};
 
 BaseitemList &BaseitemList::get_instance()

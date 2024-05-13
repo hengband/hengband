@@ -149,7 +149,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             }
 
             auto_dump_printf(auto_dump_stream, _("\n# アイテムの[色/文字]の設定\n\n", "\n# Object attr/char definitions\n\n"));
-            for (const auto &baseitem : baseitems_info) {
+            for (const auto &baseitem : BaseitemList::get_instance()) {
                 if (!baseitem.is_valid()) {
                     continue;
                 }
@@ -288,8 +288,9 @@ void do_cmd_visuals(PlayerType *player_ptr)
             static auto choice_msg = _("アイテムの[色/文字]を変更します", "Change object attr/chars");
             static short bi_id = 0;
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
+            auto &baseitems = BaseitemList::get_instance();
             while (true) {
-                auto &baseitem = baseitems_info[bi_id];
+                auto &baseitem = baseitems.get_baseitem(bi_id);
                 int c;
                 const auto &cc_def = baseitem.cc_def;
                 auto &cc_config = baseitem.cc_config;
@@ -322,14 +323,14 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     std::optional<short> new_baseitem_id;
                     const auto previous_bi_id = bi_id;
                     while (true) {
-                        new_baseitem_id = input_new_visual_id(ch, bi_id, static_cast<short>(baseitems_info.size()));
+                        new_baseitem_id = input_new_visual_id(ch, bi_id, static_cast<short>(baseitems.size()));
                         if (!new_baseitem_id) {
                             bi_id = previous_bi_id;
                             break;
                         }
 
                         bi_id = *new_baseitem_id;
-                        if (baseitems_info[bi_id].is_valid()) {
+                        if (baseitems.get_baseitem(bi_id).is_valid()) {
                             break;
                         }
                     }

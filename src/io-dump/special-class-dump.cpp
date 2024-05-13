@@ -42,7 +42,7 @@ static void dump_magic_eater(PlayerType *player_ptr, FILE *fff)
     }
 
     fprintf(fff, _("\n\n  [取り込んだ魔法道具]\n", "\n\n  [Magic devices eaten]\n"));
-
+    const auto &baseitems = BaseitemList::get_instance();
     for (auto tval : { ItemKindType::STAFF, ItemKindType::WAND, ItemKindType::ROD }) {
         switch (tval) {
         case ItemKindType::STAFF:
@@ -71,7 +71,7 @@ static void dump_magic_eater(PlayerType *player_ptr, FILE *fff)
                 continue;
             }
 
-            const auto buf = format("%23s (%2d)", baseitems_info[bi_id].name.data(), item.count);
+            const auto buf = format("%23s (%2d)", baseitems.get_baseitem(bi_id).name.data(), item.count);
             desc_list.emplace_back(buf);
         }
 

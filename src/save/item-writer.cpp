@@ -274,7 +274,7 @@ void wr_item(ItemEntity *o_ptr)
 void wr_perception(short bi_id)
 {
     byte tmp8u = 0;
-    const auto &baseitem = baseitems_info[bi_id];
+    const auto &baseitem = BaseitemList::get_instance().get_baseitem(bi_id);
     if (baseitem.aware) {
         tmp8u |= 0x01;
     }
