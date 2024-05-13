@@ -16,6 +16,8 @@ constexpr auto F_LIT_DARK = 2; /* Darkened */
 constexpr auto F_LIT_MAX = 3;
 constexpr auto F_LIT_NS_BEGIN = 1; /* Nonstandard */
 
+const std::map<int, ColoredChar> DEFAULT_CC_MAP = { { F_LIT_STANDARD, {} }, { F_LIT_LITE, {} }, { F_LIT_DARK, {} } };
+
 /*!
  * @brief 地形状態変化指定構造体
  */

@@ -312,20 +312,13 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                 break;
 
             case 'C':
-            case 'c': {
+            case 'c':
                 if (visual_list) {
                     break;
                 }
 
-                auto &cc_cb_map = cc_cb.cc_map;
-                for (auto i = 0; i < F_LIT_MAX; i++) {
-                    const auto &cc_config = terrain.cc_configs.at(i);
-                    cc_cb_map[i].color = cc_config.color;
-                    cc_cb_map[i].character = cc_config.character;
-                }
-
+                cc_cb.set_cc_map(terrain.cc_configs);
                 break;
-            }
             case 'P':
             case 'p': {
                 if (visual_list) {

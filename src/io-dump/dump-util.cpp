@@ -13,13 +13,23 @@ ColoredCharsClipboard ColoredCharsClipboard::instance{};
 
 ColoredCharsClipboard::ColoredCharsClipboard()
     : cc()
-    , cc_map({ { F_LIT_STANDARD, {} }, { F_LIT_LITE, {} }, { F_LIT_DARK, {} } })
+    , cc_map(DEFAULT_CC_MAP)
 {
 }
 
 ColoredCharsClipboard &ColoredCharsClipboard::get_instance()
 {
     return instance;
+}
+
+void ColoredCharsClipboard::reset_cc_map()
+{
+    this->cc_map = DEFAULT_CC_MAP;
+}
+
+void ColoredCharsClipboard::set_cc_map(const std::map<int, ColoredChar> &cc_config)
+{
+    this->cc_map = cc_config;
 }
 
 /*!
@@ -78,16 +88,10 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
         return true;
     }
     case 'C':
-    case 'c': {
+    case 'c':
         cc_cb.cc = { *cur_attr_ptr, *cur_char_ptr };
-        auto &cc_map = cc_cb.cc_map;
-        for (int i = 0; i < F_LIT_MAX; i++) {
-            cc_map[i].color = 0;
-            cc_map[i].character = '\0';
-        }
-
+        cc_cb.reset_cc_map();
         return true;
-    }
     case 'P':
     case 'p': {
         const auto &cc = cc_cb.cc;

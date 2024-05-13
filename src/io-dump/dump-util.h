@@ -20,6 +20,9 @@ public:
     ColoredChar cc;
     std::map<int, ColoredChar> cc_map;
 
+    void reset_cc_map();
+    void set_cc_map(const std::map<int, ColoredChar> &cc_config);
+
 private:
     ColoredCharsClipboard();
     static ColoredCharsClipboard instance;
