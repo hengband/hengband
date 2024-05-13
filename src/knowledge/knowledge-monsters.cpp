@@ -94,7 +94,7 @@ static std::vector<MonsterRaceId> collect_monsters(PlayerType *player_ptr, IDX g
         }
     }
 
-    int dummy_why;
+    auto dummy_why = 0;
     ang_sort(player_ptr, monrace_ids.data(), &dummy_why, monrace_ids.size(), ang_sort_comp_monster_level, ang_sort_swap_hook);
     return monrace_ids;
 }
@@ -329,6 +329,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
     int column = 0;
     bool flag = false;
     bool redraw = true;
+    const auto &cc_cb = ColoredCharsClipboard::get_instance();
     while (!flag) {
         if (redraw) {
             clear_from(0);
@@ -393,13 +394,13 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
         prt(format(_("%lu 種", "%lu Races"), r_idx_list.size()), 3, 26);
         prt(format(_("<方向>%s%s%s, ESC", "<dir>%s%s%s, ESC"), (!visual_list && !visual_only) ? _(", 'r'で思い出を見る", ", 'r' to recall") : "",
                 visual_list ? _(", ENTERで決定", ", ENTER to accept") : _(", 'v'でシンボル変更", ", 'v' for visuals"),
-                (attr_idx || char_idx) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
+                (cc_cb.cc != ColoredChar()) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
             hgt - 1, 0);
 
-        TERM_COLOR dummy_a;
-        char dummy_c = 0;
-        auto *attr_ptr = &dummy_a;
-        auto *char_ptr = &dummy_c;
+        uint8_t dummy_color = 0;
+        char dummy_character = '\0';
+        auto *attr_ptr = &dummy_color;
+        auto *char_ptr = &dummy_character;
         if (!r_idx_list.empty()) {
             auto *r_ptr = &monraces_info[r_idx_list[mon_cur]];
             attr_ptr = &r_ptr->x_attr;

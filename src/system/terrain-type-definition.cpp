@@ -9,8 +9,8 @@
 #include "grid/lighting-colors-table.h"
 
 TerrainType::TerrainType()
-    : cc_defs({ { F_LIT_STANDARD, {} }, { F_LIT_LITE, {} }, { F_LIT_DARK, {} } })
-    , cc_configs({ { F_LIT_STANDARD, {} }, { F_LIT_LITE, {} }, { F_LIT_DARK, {} } })
+    : cc_defs(DEFAULT_CC_MAP)
+    , cc_configs(DEFAULT_CC_MAP)
 {
 }
 

@@ -2,15 +2,31 @@
 
 #include "system/angband.h"
 #include "system/terrain-type-definition.h"
+#include <map>
 
 #define FILE_NAME_SIZE 1024
 
-// Clipboard variables for copy&paste in visual mode
-extern TERM_COLOR attr_idx;
-extern char char_idx;
+class ColoredChar;
+class ColoredCharsClipboard {
+public:
+    ColoredCharsClipboard(const ColoredCharsClipboard &) = delete;
+    ColoredCharsClipboard(ColoredCharsClipboard &&) = delete;
+    ColoredCharsClipboard &operator=(const ColoredCharsClipboard &) = delete;
+    ColoredCharsClipboard &operator=(ColoredCharsClipboard &&) = delete;
+    ~ColoredCharsClipboard() = default;
 
-extern TERM_COLOR attr_idx_feat[F_LIT_MAX];
-extern char char_idx_feat[F_LIT_MAX];
+    static ColoredCharsClipboard &get_instance();
+
+    ColoredChar cc;
+    std::map<int, ColoredChar> cc_map;
+
+    void reset_cc_map();
+    void set_cc_map(const std::map<int, ColoredChar> &cc_config);
+
+private:
+    ColoredCharsClipboard();
+    static ColoredCharsClipboard instance;
+};
 
 bool visual_mode_command(char ch, bool *visual_list_ptr, int height, int width,
     TERM_COLOR *attr_top_ptr, byte *char_left_ptr,
