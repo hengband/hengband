@@ -160,7 +160,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     bool redraw = true;
     ColoredChar cc_orig;
     auto &terrains = TerrainList::get_instance();
-    const auto &cc_cb = ColoredCharsClipboard::get_instance();
+    auto &cc_cb = ColoredCharsClipboard::get_instance();
     while (!flag) {
         char ch;
         if (redraw) {
@@ -312,31 +312,42 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                 break;
 
             case 'C':
-            case 'c':
-                if (!visual_list) {
-                    for (FEAT_IDX i = 0; i < F_LIT_MAX; i++) {
-                        const auto &cc_config = terrain.cc_configs.at(i);
-                        attr_idx_feat[i] = cc_config.color;
-                        char_idx_feat[i] = cc_config.character;
-                    }
+            case 'c': {
+                if (visual_list) {
+                    break;
                 }
-                break;
 
+                auto &cc_cb_map = cc_cb.cc_map;
+                for (auto i = 0; i < F_LIT_MAX; i++) {
+                    const auto &cc_config = terrain.cc_configs.at(i);
+                    cc_cb_map[i].color = cc_config.color;
+                    cc_cb_map[i].character = cc_config.character;
+                }
+
+                break;
+            }
             case 'P':
-            case 'p':
-                if (!visual_list) {
-                    for (FEAT_IDX i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) {
-                        auto &cc_config = terrain.cc_configs.at(i);
-                        if (attr_idx_feat[i] || (!(char_idx_feat[i] & 0x80) && char_idx_feat[i])) {
-                            cc_config.color = attr_idx_feat[i];
-                        }
+            case 'p': {
+                if (visual_list) {
+                    break;
+                }
 
-                        if (char_idx_feat[i]) {
-                            cc_config.character = char_idx_feat[i];
-                        }
+                auto &cc_cb_map = cc_cb.cc_map;
+                for (auto i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) {
+                    auto &cc_config = terrain.cc_configs.at(i);
+                    auto &cc = cc_cb_map.at(i);
+                    const auto has_character = cc.character != '\0';
+                    if ((cc.color != 0) || (!(cc.character & 0x80) && has_character)) {
+                        cc_config.color = cc.color;
+                    }
+
+                    if (has_character) {
+                        cc_config.character = cc.character;
                     }
                 }
+
                 break;
+            }
             }
             continue;
         }

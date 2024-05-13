@@ -25,9 +25,6 @@ private:
     static ColoredCharsClipboard instance;
 };
 
-extern TERM_COLOR attr_idx_feat[F_LIT_MAX];
-extern char char_idx_feat[F_LIT_MAX];
-
 bool visual_mode_command(char ch, bool *visual_list_ptr, int height, int width,
     TERM_COLOR *attr_top_ptr, byte *char_left_ptr,
     TERM_COLOR *cur_attr_ptr, char *cur_char_ptr, bool *need_redraw);

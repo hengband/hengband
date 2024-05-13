@@ -22,9 +22,6 @@ ColoredCharsClipboard &ColoredCharsClipboard::get_instance()
     return instance;
 }
 
-TERM_COLOR attr_idx_feat[F_LIT_MAX];
-char char_idx_feat[F_LIT_MAX];
-
 /*!
  * @brief シンボル変更処理 / Do visual mode command -- Change symbols
  * @param ch
@@ -83,9 +80,10 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
     case 'C':
     case 'c': {
         cc_cb.cc = { *cur_attr_ptr, *cur_char_ptr };
+        auto &cc_map = cc_cb.cc_map;
         for (int i = 0; i < F_LIT_MAX; i++) {
-            attr_idx_feat[i] = 0;
-            char_idx_feat[i] = 0;
+            cc_map[i].color = 0;
+            cc_map[i].character = '\0';
         }
 
         return true;
