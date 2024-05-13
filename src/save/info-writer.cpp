@@ -53,7 +53,7 @@ void wr_randomizer(void)
 /*!
  * @brief ゲームオプション情報を書き込む / Write the "options"
  */
-void wr_options(SaveType type)
+void wr_options()
 {
     for (int i = 0; i < 4; i++) {
         wr_u32b(0L);
@@ -112,10 +112,6 @@ void wr_options(SaveType type)
 
     if (cheat_immortal) {
         c |= 0x0020;
-    }
-
-    if (type == SaveType::DEBUG) {
-        c |= 0xFFFF;
     }
 
     wr_u16b(c);

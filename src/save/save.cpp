@@ -52,7 +52,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 成功すればtrue
  */
-static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
+static bool wr_savefile_new(PlayerType *player_ptr)
 {
     compact_objects(player_ptr, 0);
     compact_monsters(player_ptr, 0);
@@ -102,9 +102,9 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
 #endif
 
     wr_randomizer();
-    wr_options(type);
+    wr_options();
     uint32_t tmp32u = message_num();
-    if ((compress_savefile || (type == SaveType::DEBUG)) && (tmp32u > 40)) {
+    if (compress_savefile && (tmp32u > 40)) {
         tmp32u = 40;
     }
 
@@ -254,7 +254,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
  * @param type セーブ後の処理種別
  * @return セーブの成功可否
  */
-static bool save_player_aux(PlayerType *player_ptr, const std::filesystem::path &path, SaveType type)
+static bool save_player_aux(PlayerType *player_ptr, const std::filesystem::path &path)
 {
     safe_setuid_grab();
     auto fd = fd_make(path);
@@ -268,7 +268,7 @@ static bool save_player_aux(PlayerType *player_ptr, const std::filesystem::path 
         saving_savefile = angband_fopen(path, FileOpenMode::WRITE, true);
         safe_setuid_drop();
         if (saving_savefile) {
-            if (wr_savefile_new(player_ptr, type)) {
+            if (wr_savefile_new(player_ptr)) {
                 is_save_successful = true;
             }
 
@@ -311,24 +311,18 @@ bool save_player(PlayerType *player_ptr, SaveType type)
     auto savefile_new = ss_new.str();
     safe_setuid_grab();
     fd_kill(savefile_new);
-    if (type == SaveType::DEBUG) {
-        const std::filesystem::path debug_save_dir = std::filesystem::path(debug_savefile).remove_filename();
-        std::error_code ec;
-        std::filesystem::create_directory(debug_save_dir, ec);
-    }
 
     safe_setuid_drop();
     w_ptr->update_playtime();
     auto result = false;
-    if (save_player_aux(player_ptr, savefile_new.data(), type)) {
+    if (save_player_aux(player_ptr, savefile_new.data())) {
         std::stringstream ss_old;
         ss_old << savefile.string() << ".old";
         auto savefile_old = ss_old.str();
         safe_setuid_grab();
         fd_kill(savefile_old);
-        const auto &path = type == SaveType::DEBUG ? debug_savefile : savefile;
-        fd_move(path, savefile_old);
-        fd_move(savefile_new, path);
+        fd_move(savefile, savefile_old);
+        fd_move(savefile_new, savefile);
         fd_kill(savefile_old);
         safe_setuid_drop();
         w_ptr->character_loaded = true;
