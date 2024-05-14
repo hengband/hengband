@@ -55,8 +55,7 @@ void rd_dummy_monsters(PlayerType *player_ptr)
  */
 void rd_ghost(void)
 {
-    char buf[64];
-    rd_string(buf, sizeof(buf));
+    (void)rd_string();
     strip_bytes(60);
 }
 

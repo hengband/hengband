@@ -61,18 +61,20 @@ static void rd_realms(PlayerType *player_ptr)
  */
 void rd_base_info(PlayerType *player_ptr)
 {
-    rd_string(player_ptr->name, sizeof(player_ptr->name));
-    rd_string(player_ptr->died_from, 1024);
+    const auto player_name = rd_string();
+    const auto player_name_len = player_name.copy(player_ptr->name, sizeof(player_ptr->name) - 1);
+    player_ptr->name[player_name_len] = '\0';
+    player_ptr->died_from = rd_string();
     if (!h_older_than(1, 7, 0, 1)) {
-        char buf[1024];
-        rd_string(buf, sizeof buf);
-        player_ptr->last_message = buf;
+        player_ptr->last_message = rd_string();
     }
 
     load_quick_start();
     const int max_history_lines = 4;
     for (int i = 0; i < max_history_lines; i++) {
-        rd_string(player_ptr->history[i], sizeof(player_ptr->history[i]));
+        const auto history = rd_string();
+        const auto history_len = history.copy(player_ptr->history[i], sizeof(player_ptr->history[i]) - 1);
+        player_ptr->history[i][history_len] = '\0';
     }
 
     player_ptr->prace = i2enum<PlayerRaceType>(rd_byte());
