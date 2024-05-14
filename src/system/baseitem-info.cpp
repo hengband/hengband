@@ -815,6 +815,18 @@ void BaseitemList::shuffle_flavors()
 }
 
 /*!
+ * @brief ベースアイテム構造体の鑑定済みフラグをリセットする。
+ * @details 不具合対策で0からリセットする(セーブは0から)
+ */
+void BaseitemList::reset_identification_flags()
+{
+    for (auto &baseitem : this->baseitems) {
+        baseitem.tried = false;
+        baseitem.aware = false;
+    }
+}
+
+/*!
  * @brief ベースアイテムの未確定名を共通tval間でシャッフルする
  * @param tval シャッフルしたいtval
  * @details 巻物、各種魔道具などに利用される。

@@ -170,6 +170,7 @@ public:
 
     void reset_all_visuals();
     void shuffle_flavors();
+    void reset_identification_flags();
 
 private:
     BaseitemList() = default;
