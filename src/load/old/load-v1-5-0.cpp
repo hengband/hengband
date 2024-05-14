@@ -305,17 +305,15 @@ void rd_item_old(ItemEntity *o_ptr)
 
     o_ptr->feeling = rd_byte();
 
-    char buf[128];
-    rd_string(buf, sizeof(buf));
-    if (buf[0]) {
-        o_ptr->inscription.emplace(buf);
+    if (auto insc = rd_string();
+        !insc.empty()) {
+        o_ptr->inscription = std::move(insc);
     }
 
-    rd_string(buf, sizeof(buf));
-
     /*!< @todo 元々このif文には末尾に";"が付いていた、バグかもしれない */
-    if (buf[0]) {
-        o_ptr->randart_name.emplace(buf);
+    if (auto name = rd_string();
+        !name.empty()) {
+        o_ptr->randart_name = std::move(name);
     }
     {
         auto tmp32s = rd_s32b();
@@ -473,10 +471,9 @@ void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
     if (h_older_than(0, 1, 3)) {
         m_ptr->nickname.clear();
     } else {
-        char buf[128];
-        rd_string(buf, sizeof(buf));
-        if (buf[0]) {
-            m_ptr->nickname = buf;
+        auto nickname = rd_string();
+        if (!nickname.empty()) {
+            m_ptr->nickname = std::move(nickname);
         }
     }
 

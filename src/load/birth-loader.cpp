@@ -47,7 +47,9 @@ void load_quick_start(void)
     }
 
     for (int i = 0; i < 4; i++) {
-        rd_string(previous_char.history[i], sizeof(previous_char.history[i]));
+        const auto history = rd_string();
+        const auto len = history.copy(previous_char.history[i], sizeof(previous_char.history[i]) - 1);
+        previous_char.history[i][len] = '\0';
     }
 
     strip_bytes(1);

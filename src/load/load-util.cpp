@@ -110,40 +110,38 @@ int32_t rd_s32b()
 }
 
 /*!
- * @brief ロードファイルポインタから文字列を読み込んでポインタに渡す / Hack -- read a string
- * @param str 読み込みポインタ
- * @param max 最大読み取りバイト数
+ * @brief ロードファイルポインタから文字列を読み込む
  */
-void rd_string(char *str, int max)
+std::string rd_string()
 {
-    for (int i = 0; true; i++) {
-        auto tmp8u = rd_byte();
-        if (i < max) {
-            str[i] = tmp8u;
-        }
+    std::string str;
+    str.reserve(1024);
 
-        if (!tmp8u) {
+    while (true) {
+        const auto ch = static_cast<char>(rd_byte());
+        if (ch == '\0') {
             break;
         }
+
+        str.push_back(ch);
     }
 
-    str[max - 1] = '\0';
 #ifdef JP
     switch (kanji_code) {
 #ifdef SJIS
     case 2:
-        euc2sjis(str);
+        euc2sjis(str.data());
         break;
 #endif
 
 #ifdef EUC
     case 3:
-        sjis2euc(str);
+        sjis2euc(str.data());
         break;
 #endif
 
     case 0: {
-        byte code = codeconv(str);
+        const auto code = codeconv(str.data());
 
         /* 漢字コードが判明したら、それを記録 */
         if (code) {
@@ -156,18 +154,9 @@ void rd_string(char *str, int max)
         break;
     }
 #endif
-}
 
-/*!
- * @brief ロードファイルポインタから文字列を読み込んで std::string オブジェクトに格納する
- * @param str std::string オブジェクトへの参照
- * @param max 最大読み取りバイト数
- */
-void rd_string(std::string &str, int max)
-{
-    std::vector<char> buf(max);
-    rd_string(buf.data(), max);
-    str = buf.data();
+    str.shrink_to_fit();
+    return str;
 }
 
 /*!

@@ -85,9 +85,7 @@ void MonsterLoader50::rd_monster(MonsterEntity *m_ptr_)
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::NICKNAME)) {
-        char buf[128];
-        rd_string(buf, sizeof(buf));
-        this->m_ptr->nickname = buf;
+        this->m_ptr->nickname = rd_string();
     } else {
         this->m_ptr->nickname.clear();
     }
