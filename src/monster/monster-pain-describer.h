@@ -7,11 +7,11 @@ class MonsterEntity;
 
 class MonsterPainDescriber {
 public:
-    MonsterPainDescriber(PlayerType *player_ptr, const MonsterEntity *m_ptr);
+    MonsterPainDescriber(std::string m_name, const MonsterEntity *m_ptr);
 
     std::optional<std::string> describe(int dam);
 
 private:
-    PlayerType *player_ptr;
+    std::string m_name;
     const MonsterEntity *m_ptr;
 };

@@ -179,8 +179,8 @@ static const std::vector<pain_message_type>
         { [](const MonsterEntity &) { return true; }, pain_messages_common },
     };
 
-MonsterPainDescriber::MonsterPainDescriber(PlayerType *player_ptr, const MonsterEntity *m_ptr)
-    : player_ptr(player_ptr)
+MonsterPainDescriber::MonsterPainDescriber(std::string m_name, const MonsterEntity *m_ptr)
+    : m_name(m_name)
     , m_ptr(m_ptr)
 {
 }
@@ -192,8 +192,6 @@ MonsterPainDescriber::MonsterPainDescriber(PlayerType *player_ptr, const Monster
  */
 std::optional<std::string> MonsterPainDescriber::describe(int dam)
 {
-    const auto m_name = monster_desc(player_ptr, this->m_ptr, 0);
-
     if (dam == 0) {
         if (this->m_ptr->ml) {
             return format(_("%s^はダメージを受けていない。", "%s^ is unharmed."), m_name.data());

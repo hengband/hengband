@@ -837,15 +837,14 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
                     /* No death */
                     else {
+                        const auto m_name = monster_desc(player_ptr, m_ptr, 0);
                         /* STICK TO */
                         if (q_ptr->is_fixed_artifact() && (sniper_concent == 0)) {
-                            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-
                             stick_to = true;
                             msg_format(_("%sは%sに突き刺さった！", "%s^ is stuck in %s!"), item_name.data(), m_name.data());
                         }
 
-                        const auto pain_message = MonsterPainDescriber(player_ptr, m_ptr).describe(tdam);
+                        const auto pain_message = MonsterPainDescriber(m_name, m_ptr).describe(tdam);
                         if (pain_message) {
                             msg_print(*pain_message);
                         }
@@ -856,7 +855,6 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                         }
 
                         if (fear && m_ptr->ml) {
-                            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
                             sound(SOUND_FLEE);
                             msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), m_name.data());
                         }
