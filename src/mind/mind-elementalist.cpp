@@ -1441,17 +1441,17 @@ static bool is_target_grid_dark(FloorType *f_ptr, POSITION y, POSITION x)
             }
 
             POSITION d = distance(dy, dx, y, x);
-            auto *r_ptr = &monraces_info[f_ptr->m_list[m_idx].r_idx];
-            if (d <= 1 && r_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::HAS_LITE_1, MonsterBrightnessType::SELF_LITE_1 })) {
+            const auto &monrace = f_ptr->m_list[m_idx].get_monrace();
+            if (d <= 1 && monrace.brightness_flags.has_any_of({ MonsterBrightnessType::HAS_LITE_1, MonsterBrightnessType::SELF_LITE_1 })) {
                 return false;
             }
-            if (d <= 2 && r_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::HAS_LITE_2, MonsterBrightnessType::SELF_LITE_2 })) {
+            if (d <= 2 && monrace.brightness_flags.has_any_of({ MonsterBrightnessType::HAS_LITE_2, MonsterBrightnessType::SELF_LITE_2 })) {
                 return false;
             }
-            if (d <= 1 && r_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::HAS_DARK_1, MonsterBrightnessType::SELF_DARK_1 })) {
+            if (d <= 1 && monrace.brightness_flags.has_any_of({ MonsterBrightnessType::HAS_DARK_1, MonsterBrightnessType::SELF_DARK_1 })) {
                 is_dark = true;
             }
-            if (d <= 2 && r_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::HAS_DARK_2, MonsterBrightnessType::SELF_DARK_2 })) {
+            if (d <= 2 && monrace.brightness_flags.has_any_of({ MonsterBrightnessType::HAS_DARK_2, MonsterBrightnessType::SELF_DARK_2 })) {
                 is_dark = true;
             }
         }

@@ -440,7 +440,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
 
     auto old_hp = m_ptr->hp;
     auto old_maxhp = m_ptr->max_maxhp;
-    auto old_r_idx = m_ptr->r_idx;
+    auto &old_monrace = m_ptr->get_monrace();
     auto old_sub_align = m_ptr->sub_align;
 
     /* Hack -- Reduce the racial counter of previous monster */
@@ -504,7 +504,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
         }
 
         if (!is_hallucinated) {
-            monraces_info[old_r_idx].r_can_evolve = true;
+            old_monrace.r_can_evolve = true;
         }
 
         /* Now you feel very close to this pet. */

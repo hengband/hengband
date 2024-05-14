@@ -514,7 +514,7 @@ bool has_pass_wall(PlayerType *player_ptr)
     }
 
     const auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-    const auto &monrace = monraces_info[monster.r_idx];
+    const auto &monrace = monster.get_monrace();
     return monrace.feature_flags.has(MonsterFeatureType::PASS_WALL);
 }
 
@@ -1001,7 +1001,7 @@ BIT_FLAGS has_levitation(PlayerType *player_ptr)
     }
 
     const auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-    const auto &monrace = monraces_info[monster.r_idx];
+    const auto &monrace = monster.get_monrace();
     return monrace.feature_flags.has(MonsterFeatureType::CAN_FLY) ? FLAG_CAUSE_RIDING : FLAG_CAUSE_NONE;
 }
 
@@ -1012,7 +1012,7 @@ bool has_can_swim(PlayerType *player_ptr)
     }
 
     const auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-    const auto &monrace = monraces_info[monster.r_idx];
+    const auto &monrace = monster.get_monrace();
     return monrace.feature_flags.has_any_of({ MonsterFeatureType::CAN_SWIM, MonsterFeatureType::AQUATIC });
 }
 

@@ -276,9 +276,9 @@ void process_player_hp_mp(PlayerType *player_ptr)
 
     if (player_ptr->riding) {
         int damage;
-        auto auras = monraces_info[floor.m_list[player_ptr->riding].r_idx].aura_flags;
+        auto auras = floor.m_list[player_ptr->riding].get_monrace().aura_flags;
         if (auras.has(MonsterAuraType::FIRE) && !has_immune_fire(player_ptr)) {
-            damage = monraces_info[floor.m_list[player_ptr->riding].r_idx].level / 2;
+            damage = floor.m_list[player_ptr->riding].get_monrace().level / 2;
             if (race.tr_flags().has(TR_VUL_FIRE)) {
                 damage += damage / 3;
             }
@@ -295,7 +295,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
         }
 
         if (auras.has(MonsterAuraType::ELEC) && !has_immune_elec(player_ptr)) {
-            damage = monraces_info[floor.m_list[player_ptr->riding].r_idx].level / 2;
+            damage = floor.m_list[player_ptr->riding].get_monrace().level / 2;
             if (race.tr_flags().has(TR_VUL_ELEC)) {
                 damage += damage / 3;
             }
@@ -312,7 +312,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
         }
 
         if (auras.has(MonsterAuraType::COLD) && !has_immune_cold(player_ptr)) {
-            damage = monraces_info[floor.m_list[player_ptr->riding].r_idx].level / 2;
+            damage = floor.m_list[player_ptr->riding].get_monrace().level / 2;
             if (race.tr_flags().has(TR_VUL_COLD)) {
                 damage += damage / 3;
             }

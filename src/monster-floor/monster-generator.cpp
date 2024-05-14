@@ -438,6 +438,7 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     MONSTER_IDX m_idx = floor_ptr->grid_array[y][x].m_idx;
+    const auto &monentity = floor_ptr->m_list[m_idx];
 
     POSITION cy = y;
     POSITION cx = x;
@@ -452,12 +453,9 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
         return true;
     }
 
-    auto *r_ptr = &monraces_info[*r_idx];
-    if (floor_ptr->m_list[m_idx].mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
-        r_ptr = &monraces_info[floor_ptr->m_list[m_idx].r_idx];
-    }
+    const auto &monrace = monentity.mflag2.has(MonsterConstantFlagType::CHAMELEON) ? monentity.get_monrace() : monraces_info[*r_idx];
 
-    msg_format(_("モンスターの大群(%c)", "Monster horde (%c)."), r_ptr->d_char);
+    msg_format(_("モンスターの大群(%c)", "Monster horde (%c)."), monrace.d_char);
 
     return true;
 }

@@ -953,7 +953,7 @@ bool player_can_enter(PlayerType *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mode
     const auto &terrain = TerrainList::get_instance()[feature];
     if (player_ptr->riding) {
         return monster_can_cross_terrain(
-            player_ptr, feature, &monraces_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx], mode | CEM_RIDING);
+            player_ptr, feature, &player_ptr->current_floor_ptr->m_list[player_ptr->riding].get_monrace(), mode | CEM_RIDING);
     }
 
     if (terrain.flags.has(TerrainCharacteristics::PATTERN)) {
