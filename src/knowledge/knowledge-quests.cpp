@@ -332,6 +332,6 @@ void do_cmd_knowledge_quests(PlayerType *player_ptr)
     }
 
     angband_fclose(fff);
-    FileDisplayer().display(player_ptr->name, true, file_name, 0, 0, _("クエスト達成状況", "Quest status"));
+    FileDisplayer(player_ptr->name).display(true, file_name, 0, 0, _("クエスト達成状況", "Quest status"));
     fd_kill(file_name);
 }

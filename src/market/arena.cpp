@@ -179,7 +179,7 @@ bool arena_comm(PlayerType *player_ptr, int cmd)
         return false;
     case BACT_ARENA_RULES:
         screen_save();
-        FileDisplayer().display(player_ptr->name, true, _("arena_j.txt", "arena.txt"), 0, 0);
+        FileDisplayer(player_ptr->name).display(true, _("arena_j.txt", "arena.txt"), 0, 0);
         screen_load();
         return false;
     default:

@@ -23,7 +23,7 @@ void gamble_comm(PlayerType *player_ptr, int cmd)
 {
     screen_save();
     if (cmd == BACT_GAMBLE_RULES) {
-        FileDisplayer().display(player_ptr->name, true, _("jgambling.txt", "gambling.txt"), 0, 0);
+        FileDisplayer(player_ptr->name).display(true, _("jgambling.txt", "gambling.txt"), 0, 0);
         screen_load();
         return;
     }

@@ -136,7 +136,7 @@ void do_cmd_knowledge_pets(PlayerType *player_ptr)
     fprintf(fff, _(" 維持コスト: %d%% MP\n", "   Upkeep: %d%% mana.\n"), show_upkeep);
 
     angband_fclose(fff);
-    FileDisplayer().display(player_ptr->name, true, file_name, 0, 0, _("現在のペット", "Current Pets"));
+    FileDisplayer(player_ptr->name).display(true, file_name, 0, 0, _("現在のペット", "Current Pets"));
     fd_kill(file_name);
 }
 
@@ -237,7 +237,7 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
 #endif
 
     angband_fclose(fff);
-    FileDisplayer().display(player_ptr->name, true, file_name, 0, 0, _("倒した敵の数", "Kill Count"));
+    FileDisplayer(player_ptr->name).display(true, file_name, 0, 0, _("倒した敵の数", "Kill Count"));
     fd_kill(file_name);
 }
 
@@ -494,6 +494,6 @@ void do_cmd_knowledge_bounty(PlayerType *player_ptr)
     }
 
     angband_fclose(fff);
-    FileDisplayer().display(player_ptr->name, true, file_name, 0, 0, _("賞金首の一覧", "Wanted monsters"));
+    FileDisplayer(player_ptr->name).display(true, file_name, 0, 0, _("賞金首の一覧", "Wanted monsters"));
     fd_kill(file_name);
 }

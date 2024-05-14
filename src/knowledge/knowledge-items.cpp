@@ -111,7 +111,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
     }
 
     angband_fclose(fff);
-    FileDisplayer().display(player_ptr->name, true, file_name, 0, 0, _("既知の伝説のアイテム", "Artifacts Seen"));
+    FileDisplayer(player_ptr->name).display(true, file_name, 0, 0, _("既知の伝説のアイテム", "Artifacts Seen"));
     fd_kill(file_name);
 }
 
