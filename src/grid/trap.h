@@ -57,7 +57,7 @@ extern const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps;
 
 class FloorType;
 class PlayerType;
-void init_normal_traps(void);
+void init_normal_traps();
 short choose_random_trap(FloorType *floor_ptr);
 void disclose_grid(PlayerType *player_ptr, POSITION y, POSITION x);
 void place_trap(FloorType *floor_ptr, POSITION y, POSITION x);

@@ -15,7 +15,7 @@ extern uint32_t x_check;
 extern byte kanji_code;
 
 void load_note(std::string_view msg);
-byte sf_get(void);
+byte sf_get();
 bool rd_bool();
 byte rd_byte();
 uint16_t rd_u16b();

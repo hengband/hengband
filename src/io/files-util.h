@@ -26,7 +26,7 @@ extern std::filesystem::path ANGBAND_DIR_USER;
 extern std::filesystem::path ANGBAND_DIR_XTRA;
 
 class PlayerType;
-typedef void (*update_playtime_pf)(void);
+typedef void (*update_playtime_pf)();
 
 void file_character(PlayerType *player_ptr, std::string_view filename);
 std::optional<std::string> get_random_line(concptr file_name, int entry);

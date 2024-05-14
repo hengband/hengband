@@ -25,14 +25,14 @@ public:
      * --output-spoilers | 全スポイラー出力を行う
      * 「-」で始まらない最初のオプション | セーブファイルパス
      */
-    void handle(void);
+    void handle();
 
     /*!
      * @brief セーブファイル名取得
      * @details 事前にhandle()を呼び出していること。
      * @return コマンドラインで指定されているセーブファイル名。設定されていなければ空文字列を返す。
      */
-    const std::string &get_savefile_option(void);
+    const std::string &get_savefile_option();
 };
 
 /*!
@@ -40,4 +40,4 @@ public:
  */
 extern CommandLine command_line;
 
-extern void create_debug_spoiler(void);
+extern void create_debug_spoiler();

@@ -102,7 +102,7 @@ struct term_type {
     errr (*bigcurs_hook)(TERM_LEN x, TERM_LEN y){}; //!< 大型タイル時カーソル描画実装部 / Hook for placing the cursor on bigtile mode
     errr (*wipe_hook)(TERM_LEN x, TERM_LEN y, int n){}; //!< 指定座標テキスト消去実装部 / Hook for drawing some blank spaces
     errr (*text_hook)(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s){}; //!< テキスト描画実装部 / Hook for drawing a string of chars using an attr
-    void (*resize_hook)(void){}; //!< 画面リサイズ実装部
+    void (*resize_hook)(){}; //!< 画面リサイズ実装部
     errr (*pict_hook)(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, concptr cp, const TERM_COLOR *tap,
         concptr tcp){}; //!< タイル描画実装部 / Hook for drawing a sequence of special attr / char pairs
 
@@ -198,8 +198,8 @@ void term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta
 void term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc);
 void term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM_COLOR *ta, char *tc);
 
-errr term_fresh(void);
-errr term_fresh_force(void);
+errr term_fresh();
+errr term_fresh_force();
 errr term_set_cursor(int v);
 errr term_gotoxy(TERM_LEN x, TERM_LEN y);
 errr term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
@@ -209,8 +209,8 @@ errr term_addstr(int n, TERM_COLOR a, std::string_view sv);
 errr term_putch(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
 errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, std::string_view sv);
 errr term_erase(TERM_LEN x, TERM_LEN y, std::optional<int> n_opt = std::nullopt);
-errr term_clear(void);
-errr term_redraw(void);
+errr term_clear();
+errr term_redraw();
 errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2);
 
 errr term_get_cursor(int *v);
@@ -218,14 +218,14 @@ std::pair<int, int> term_get_size();
 errr term_locate(TERM_LEN *x, TERM_LEN *y);
 errr term_what(TERM_LEN x, TERM_LEN y, TERM_COLOR *a, char *c);
 
-errr term_flush(void);
+errr term_flush();
 errr term_key_push(int k);
 errr term_inkey(char *ch, bool wait, bool take);
 
-errr term_save(void);
+errr term_save();
 errr term_load(bool load_all);
 
-errr term_exchange(void);
+errr term_exchange();
 
 errr term_resize(TERM_LEN w, TERM_LEN h);
 

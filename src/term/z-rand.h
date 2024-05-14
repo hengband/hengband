@@ -100,7 +100,7 @@ int randint1(T max)
  */
 #define saving_throw(S) (randint0(100) < (S))
 
-void Rand_state_init(void);
+void Rand_state_init();
 int16_t randnor(int mean, int stand);
 int16_t damroll(DICE_NUMBER num, DICE_SID sides);
 int16_t maxroll(DICE_NUMBER num, DICE_SID sides);
