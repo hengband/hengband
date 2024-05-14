@@ -12,6 +12,6 @@
 void do_cmd_help(PlayerType *player_ptr)
 {
     screen_save();
-    FileDisplayer().display(player_ptr->name, true, _("jhelp.hlp", "help.hlp"), 0, 0);
+    FileDisplayer(player_ptr->name).display(true, _("jhelp.hlp", "help.hlp"), 0, 0);
     screen_load();
 }

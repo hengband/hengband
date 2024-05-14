@@ -65,7 +65,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
         break;
     }
     case EC_HELP: {
-        FileDisplayer().display(player_ptr->name, true, _("jeditor.txt", "editor.txt"), 0, 0);
+        FileDisplayer(player_ptr->name).display(true, _("jeditor.txt", "editor.txt"), 0, 0);
         tb->dirty_flags |= DIRTY_SCREEN;
         break;
     }

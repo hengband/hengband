@@ -73,6 +73,6 @@ void do_cmd_knowledge_autopick(PlayerType *player_ptr)
 
     angband_fclose(fff);
 
-    FileDisplayer().display(player_ptr->name, true, file_name, 0, 0, _("自動拾い/破壊 設定リスト", "Auto-picker/Destroyer"));
+    FileDisplayer(player_ptr->name).display(true, file_name, 0, 0, _("自動拾い/破壊 設定リスト", "Auto-picker/Destroyer"));
     fd_kill(file_name);
 }

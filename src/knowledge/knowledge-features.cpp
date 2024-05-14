@@ -391,6 +391,6 @@ void do_cmd_knowledge_dungeon(PlayerType *player_ptr)
     }
 
     angband_fclose(fff);
-    FileDisplayer().display(player_ptr->name, true, file_name, 0, 0, _("今までに入ったダンジョン", "Dungeon"));
+    FileDisplayer(player_ptr->name).display(true, file_name, 0, 0, _("今までに入ったダンジョン", "Dungeon"));
     fd_kill(file_name);
 }
