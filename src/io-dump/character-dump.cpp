@@ -40,6 +40,7 @@
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/z-form.h"
+#include "util/buffer-shaper.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "util/sort.h"
@@ -144,8 +145,23 @@ static void dump_aux_last_message(PlayerType *player_ptr, FILE *fff)
 
     if (!w_ptr->total_winner) {
         fprintf(fff, _("\n  [死ぬ直前のメッセージ]\n\n", "\n  [Last Messages]\n\n"));
-        for (int i = std::min(message_num(), 30); i >= 0; i--) {
-            fprintf(fff, "> %s\n", message_str(i)->data());
+
+        constexpr auto msg_line_max = 30;
+        constexpr auto msg_width = 80;
+        std::vector<std::string> msg_lines;
+
+        for (auto i = 0; i < message_num() && std::size(msg_lines) < msg_line_max; ++i) {
+            const auto msg = message_str(i);
+            auto lines = shape_buffer(*msg, msg_width);
+
+            msg_lines.insert(msg_lines.end(),
+                std::make_move_iterator(lines.rbegin()), std::make_move_iterator(lines.rend()));
+        }
+
+        std::reverse(msg_lines.begin(), msg_lines.end());
+
+        for (const auto &line : msg_lines) {
+            fprintf(fff, "> %s\n", line.data());
         }
 
         fputc('\n', fff);

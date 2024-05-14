@@ -37,6 +37,7 @@
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
+#include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-lore.h"
 #include "view/display-map.h"
@@ -409,11 +410,28 @@ void fix_message(void)
     display_sub_windows(SubWindowRedrawingFlag::MESSAGE,
         [] {
             const auto &[wid, hgt] = term_get_size();
-            for (short i = 0; i < hgt; i++) {
-                term_putstr(0, (hgt - 1) - i, -1, (byte)((i < now_message) ? TERM_WHITE : TERM_SLATE), *message_str(i));
-                TERM_LEN x, y;
-                term_locate(&x, &y);
-                term_erase(x, y);
+
+            for (auto y = 0; y < hgt; ++y) {
+                term_erase(0, y);
+            }
+
+            auto displayed_lines = 0;
+            for (auto i = 0; i < message_num() && displayed_lines < hgt; ++i) {
+                const auto color = (i < now_message) ? TERM_WHITE : TERM_SLATE;
+
+                const auto msg = message_str(i);
+                auto lines = shape_buffer(*msg, wid);
+                std::reverse(lines.begin(), lines.end());
+
+                for (const auto &line : lines) {
+                    const auto y = hgt - 1 - displayed_lines;
+                    if (y < 0) {
+                        break;
+                    }
+
+                    term_putstr(0, y, -1, color, line);
+                    displayed_lines++;
+                }
             }
         });
 }
