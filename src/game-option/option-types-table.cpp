@@ -162,8 +162,6 @@ const std::vector<option_type> option_info = {
     { &send_score, false, OPT_PAGE_HIDE, 4, 6, "send_score", _("スコアサーバにスコアを送る", "Send score dump to the world score server") },
 #endif
 
-    { &auto_debug_save, true, OPT_PAGE_GAMEPLAY, 4, 7, "auto_debug_save", _("デバッグ用セーブデータを自動生成する", "Create a debug save automatically") },
-
     { &allow_debug_opts, false, OPT_PAGE_GAMEPLAY, 6, 11, "allow_debug_opts", _("デバッグ/詐欺オプションを許可する", "Allow use of debug/cheat options") },
 
     /*** Disturbance ***/
