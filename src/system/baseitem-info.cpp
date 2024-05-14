@@ -8,14 +8,17 @@
  */
 
 #include "system/baseitem-info.h"
+#include "object/object-kind-hook.h" // @todo 暫定、後で消す.
 #include "object/tval-types.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-bow-types.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
+#include "sv-definition/sv-potion-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-rod-types.h"
+#include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/angband-exceptions.h"
 #include "util/string-processor.h"
@@ -815,7 +818,7 @@ void BaseitemList::shuffle_flavors()
 }
 
 /*!
- * @brief ベースアイテム構造体の鑑定済みフラグをリセットする。
+ * @brief ベースアイテムの鑑定済みフラグをリセットする
  * @details 不具合対策で0からリセットする(セーブは0から)
  */
 void BaseitemList::reset_identification_flags()
@@ -823,6 +826,21 @@ void BaseitemList::reset_identification_flags()
     for (auto &baseitem : this->baseitems) {
         baseitem.tried = false;
         baseitem.aware = false;
+    }
+}
+
+/*!
+ * @brief 未鑑定アイテム種別の内、ゲーム開始時から鑑定済とするアイテムの鑑定済フラグをONにする
+ * @todo 食料用の杖は該当種族 (ゴーレム/骸骨/ゾンビ/幽霊)では鑑定済だが、本来はこのメソッドで鑑定済にすべき.
+ */
+void BaseitemList::mark_common_items_as_aware()
+{
+    std::vector<BaseitemKey> bi_keys;
+    bi_keys.emplace_back(ItemKindType::POTION, SV_POTION_WATER);
+    bi_keys.emplace_back(ItemKindType::STAFF, SV_STAFF_NOTHING);
+    for (const auto &bi_key : bi_keys) {
+        const auto bi_id = lookup_baseitem_id(bi_key);
+        this->baseitems[bi_id].mark_as_aware();
     }
 }
 
