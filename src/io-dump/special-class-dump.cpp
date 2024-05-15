@@ -64,12 +64,8 @@ static void dump_magic_eater(PlayerType *player_ptr, FILE *fff)
                 continue;
             }
 
-            auto bi_id = baseitems.lookup_baseitem_id({ tval, i });
-            if (!bi_id) {
-                continue;
-            }
-
-            const auto buf = format("%23s (%2d)", baseitems.get_baseitem(bi_id).name.data(), item.count);
+            const auto &baseitem = baseitems.lookup_baseitem({ tval, i });
+            const auto buf = format("%23s (%2d)", baseitem.name.data(), item.count);
             desc_list.emplace_back(buf);
         }
 

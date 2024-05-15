@@ -480,8 +480,8 @@ bool restore_mana(PlayerType *player_ptr, bool magic_eater)
         auto sval = 0;
         const auto &baseitems = BaseitemList::get_instance();
         for (auto &item : magic_eater_data->get_item_group(ItemKindType::ROD)) {
-            const auto bi_id = baseitems.lookup_baseitem_id({ ItemKindType::ROD, sval });
-            item.charge -= ((item.count < 10) ? EATER_ROD_CHARGE * 3 : item.count * EATER_ROD_CHARGE / 3) * baseitems.get_baseitem(bi_id).pval;
+            const auto &baseitem = baseitems.lookup_baseitem({ ItemKindType::ROD, sval });
+            item.charge -= ((item.count < 10) ? EATER_ROD_CHARGE * 3 : item.count * EATER_ROD_CHARGE / 3) * baseitem.pval;
             item.charge = std::max(item.charge, 0);
             ++sval;
         }

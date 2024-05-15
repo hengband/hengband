@@ -827,8 +827,7 @@ void BaseitemList::mark_common_items_as_aware()
     bi_keys.emplace_back(ItemKindType::POTION, SV_POTION_WATER);
     bi_keys.emplace_back(ItemKindType::STAFF, SV_STAFF_NOTHING);
     for (const auto &bi_key : bi_keys) {
-        const auto bi_id = this->lookup_baseitem_id(bi_key);
-        this->baseitems[bi_id].mark_as_aware();
+        this->lookup_baseitem(bi_key).mark_as_aware();
     }
 }
 
