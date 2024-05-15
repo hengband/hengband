@@ -174,11 +174,11 @@ static errr set_mon_speed(const nlohmann::json &speed_data, MonsterRaceInfo &mon
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto speed = speed_data.get<int>();
+    const auto speed = speed_data.get<int8_t>();
     if (speed < -50 || speed > 99) {
         return PARSE_ERROR_INVALID_FLAG;
     }
-    monrace.speed = (byte)speed + STANDARD_SPEED;
+    monrace.speed = speed + STANDARD_SPEED;
     return PARSE_ERROR_NONE;
 }
 
@@ -236,11 +236,11 @@ static errr set_mon_ac(const nlohmann::json &ac_data, MonsterRaceInfo &monrace)
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto armour_class = ac_data.get<int>();
+    const auto armour_class = ac_data.get<short>();
     if (armour_class < 0 || armour_class > 10000) {
         return PARSE_ERROR_INVALID_FLAG;
     }
-    monrace.ac = (ARMOUR_CLASS)armour_class;
+    monrace.ac = armour_class;
     return PARSE_ERROR_NONE;
 }
 
@@ -256,11 +256,11 @@ static errr set_mon_alertness(const nlohmann::json &alertness_data, MonsterRaceI
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto alertness = alertness_data.get<int>();
+    const auto alertness = alertness_data.get<short>();
     if (alertness < 0 || alertness > 255) {
         return PARSE_ERROR_INVALID_FLAG;
     }
-    monrace.sleep = (SLEEP_DEGREE)alertness;
+    monrace.sleep = alertness;
     return PARSE_ERROR_NONE;
 }
 
