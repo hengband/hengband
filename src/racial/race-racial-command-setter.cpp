@@ -25,7 +25,7 @@ void set_mimic_racial_command(PlayerType *player_ptr, rc_type *rc_ptr)
         rpi = rpi_type(_("吸血", "Vampiric Drain"));
         rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
         rpi.text = _("隣接したモンスター1体から生命力を吸い取る。吸い取った生命力によって満腹度があがる。",
-            "Drains and transfers HP from a monster near by you. You will also gain nutritional sustenance from this.");
+            "Drains and transfers HP from an adjacent monster. You will also gain nutritional sustenance from this.");
         rpi.min_level = 2;
         rpi.cost = 1 + (rc_ptr->lvl / 3);
         rpi.stat = A_CON;
@@ -125,7 +125,7 @@ void set_race_racial_command(PlayerType *player_ptr, rc_type *rc_ptr)
     case PlayerRaceType::HALF_OGRE:
         rpi = rpi_type(_("爆発のルーン", "Explosive Rune"));
         rpi.text = _("自分のいる床の上に、モンスターが上を通ろうとすると爆発するルーンを描く。",
-            "Sets a rune on the floor beneath you which exprodes if a monster through upon it. Monsters can try to disarm it.");
+            "Sets a rune on the floor beneath you which explodes if a monster passes over it. Monsters can try to disarm it.");
         rpi.min_level = 25;
         rpi.cost = 35;
         rpi.stat = A_INT;
@@ -153,7 +153,7 @@ void set_race_racial_command(PlayerType *player_ptr, rc_type *rc_ptr)
     case PlayerRaceType::CYCLOPS:
         rpi = rpi_type(_("岩石投げ", "Throw Boulder"));
         rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 3 / 2);
-        rpi.text = _("弱い魔法のボールを放つ", "Fires a weak boll of magic.");
+        rpi.text = _("弱い魔法のボールを放つ", "Fires a weak ball of magic.");
         rpi.min_level = 20;
         rpi.cost = 15;
         rpi.stat = A_STR;
@@ -182,7 +182,7 @@ void set_race_racial_command(PlayerType *player_ptr, rc_type *rc_ptr)
         rpi = rpi_type(_("酸の唾", "Spit Acid"));
         rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl);
         if (rc_ptr->lvl >= 25) {
-            rpi.text = _("酸のボールを放つ", "Fires a boll of acid.");
+            rpi.text = _("酸のボールを放つ", "Fires a ball of acid.");
         } else {
             rpi.text = _("酸の矢を放つ", "Fires a bolt of acid.");
         }
@@ -225,7 +225,7 @@ void set_race_racial_command(PlayerType *player_ptr, rc_type *rc_ptr)
     case PlayerRaceType::MIND_FLAYER:
         rpi = rpi_type(_("精神攻撃", "Mind Blast"));
         rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl);
-        rpi.text = _("モンスター1体に精神攻撃を行う。", "Deals a PSI damage to a monster.");
+        rpi.text = _("モンスター1体に精神攻撃を行う。", "Deals PSI damage to a monster.");
         rpi.min_level = 15;
         rpi.cost = 12;
         rpi.stat = A_INT;
@@ -271,7 +271,7 @@ void set_race_racial_command(PlayerType *player_ptr, rc_type *rc_ptr)
         rpi = rpi_type(_("吸血", "Vampiric Drain"));
         rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
         rpi.text = _("隣接したモンスター1体から生命力を吸い取る。吸い取った生命力によって満腹度があがる。",
-            "Drains and transfers HP from a monster near by you. You will also gain nutritional sustenance from this.");
+            "Drains and transfers HP from an adjacent monster. You will also gain nutritional sustenance from this.");
         rpi.min_level = 2;
         rpi.cost = 1 + (rc_ptr->lvl / 3);
         rpi.stat = A_CON;
@@ -334,7 +334,7 @@ void set_race_racial_command(PlayerType *player_ptr, rc_type *rc_ptr)
         } else if (player_ptr->lev < 45) {
             rpi = rpi_type(_("ビームキャノン", "Beam Cannon"));
             rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
-            rpi.text = _("弱い魔法のビームを放つ。", "Fires a beam bolt of magic.");
+            rpi.text = _("弱い魔法のビームを放つ。", "Fires a beam of magic.");
             rpi.min_level = 35;
             rpi.cost = 40;
             rpi.fail = 15;
