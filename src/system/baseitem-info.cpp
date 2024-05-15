@@ -856,6 +856,12 @@ short BaseitemList::lookup_baseitem_id(const BaseitemKey &bi_key) const
     return exe_lookup({ bi_key.tval(), rand_choice(svals) });
 }
 
+const BaseitemInfo &BaseitemList::lookup_baseitem(const BaseitemKey &bi_key) const
+{
+    const auto bi_id = this->lookup_baseitem_id(bi_key);
+    return this->baseitems[bi_id];
+}
+
 void BaseitemList::shuffle_flavors()
 {
     this->shuffle_flavors(ItemKindType::RING);
@@ -866,6 +872,12 @@ void BaseitemList::shuffle_flavors()
     this->shuffle_flavors(ItemKindType::FOOD);
     this->shuffle_flavors(ItemKindType::POTION);
     this->shuffle_flavors(ItemKindType::SCROLL);
+}
+
+BaseitemInfo &BaseitemList::lookup_baseitem(const BaseitemKey &bi_key)
+{
+    const auto bi_id = this->lookup_baseitem_id(bi_key);
+    return this->baseitems[bi_id];
 }
 
 /*!
