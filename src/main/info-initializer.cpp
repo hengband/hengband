@@ -167,6 +167,7 @@ static errr init_json(std::string_view filename, std::string_view keyname, angba
         using value_type = typename InfoType::value_type;
         info.assign(head.info_num, value_type{});
     }
+    error_idx = -1;
 
     for (auto &element : json_object[keyname]) {
         const auto error_code = parser(element, &head);
@@ -189,7 +190,7 @@ static errr init_json(std::string_view filename, std::string_view keyname, angba
 errr init_artifacts_info()
 {
     init_header(&artifacts_header);
-    return init_info("ArtifactDefinitions.txt", artifacts_header, artifacts_info, parse_artifacts_info);
+    return init_json("ArtifactDefinitions.jsonc", "artifacts", artifacts_header, artifacts_info, parse_artifacts_info);
 }
 
 /*!
