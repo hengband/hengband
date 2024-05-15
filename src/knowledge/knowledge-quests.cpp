@@ -318,7 +318,8 @@ void do_cmd_knowledge_quests(PlayerType *player_ptr)
     for (const auto &[q_idx, quest] : quest_list) {
         quest_numbers.push_back(q_idx);
     }
-    int dummy;
+
+    auto dummy = 0;
     ang_sort(player_ptr, quest_numbers.data(), &dummy, quest_numbers.size(), ang_sort_comp_quest_num, ang_sort_swap_quest_num);
 
     do_cmd_knowledge_quests_current(player_ptr, fff);

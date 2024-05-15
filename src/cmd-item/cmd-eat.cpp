@@ -182,9 +182,7 @@ static bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ItemEntity *o
 
     /* XXX Hack -- unstack if necessary */
     if (is_staff && (i_idx >= 0) && (o_ptr->number > 1)) {
-        auto item = *o_ptr;
-
-        /* Modify quantity */
+        ItemEntity item = *o_ptr;
         item.number = 1;
 
         /* Restore the charges */

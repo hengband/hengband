@@ -261,7 +261,6 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
         if (request_list || use_menu) {
             byte y, x = 0;
             PERCENTAGE chance;
-            short bi_id;
             POSITION x1, y1;
             DEPTH level;
             byte col;
