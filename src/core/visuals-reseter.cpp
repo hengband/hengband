@@ -19,16 +19,15 @@ void reset_visuals(PlayerType *player_ptr)
         }
     }
 
-    for (auto &baseitem : BaseitemList::get_instance()) {
-        baseitem.cc_config = baseitem.cc_def;
-    }
-
+    BaseitemList::get_instance().reset_all_visuals();
     for (auto &[monrace_id, monrace] : monraces_info) {
         monrace.x_attr = monrace.d_attr;
         monrace.x_char = monrace.d_char;
     }
 
-    concptr pref_file = use_graphics ? "graf.prf" : "font.prf";
+    const auto pref_file = use_graphics ? "graf.prf" : "font.prf";
     process_pref_file(player_ptr, pref_file);
-    process_pref_file(player_ptr, std::string(use_graphics ? "graf-" : "font-").append(player_ptr->base_name).append(".prf"));
+    std::stringstream ss;
+    ss << (use_graphics ? "graf-" : "font-") << player_ptr->base_name << ".prf";
+    process_pref_file(player_ptr, ss.str());
 }

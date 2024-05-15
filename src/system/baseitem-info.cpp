@@ -8,14 +8,17 @@
  */
 
 #include "system/baseitem-info.h"
+#include "object/object-kind-hook.h" // @todo 暫定、後で消す.
 #include "object/tval-types.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-bow-types.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
+#include "sv-definition/sv-potion-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-rod-types.h"
+#include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/angband-exceptions.h"
 #include "util/string-processor.h"
@@ -793,4 +796,77 @@ bool BaseitemList::empty() const
 void BaseitemList::resize(size_t new_size)
 {
     this->baseitems.resize(new_size);
+}
+
+void BaseitemList::reset_all_visuals()
+{
+    for (auto &baseitem : this->baseitems) {
+        baseitem.cc_config = baseitem.cc_def;
+    }
+}
+
+void BaseitemList::shuffle_flavors()
+{
+    this->shuffle_flavors(ItemKindType::RING);
+    this->shuffle_flavors(ItemKindType::AMULET);
+    this->shuffle_flavors(ItemKindType::STAFF);
+    this->shuffle_flavors(ItemKindType::WAND);
+    this->shuffle_flavors(ItemKindType::ROD);
+    this->shuffle_flavors(ItemKindType::FOOD);
+    this->shuffle_flavors(ItemKindType::POTION);
+    this->shuffle_flavors(ItemKindType::SCROLL);
+}
+
+/*!
+ * @brief ベースアイテムの鑑定済みフラグをリセットする
+ * @details 不具合対策で0からリセットする(セーブは0から)
+ */
+void BaseitemList::reset_identification_flags()
+{
+    for (auto &baseitem : this->baseitems) {
+        baseitem.tried = false;
+        baseitem.aware = false;
+    }
+}
+
+/*!
+ * @brief 未鑑定アイテム種別の内、ゲーム開始時から鑑定済とするアイテムの鑑定済フラグをONにする
+ * @todo 食料用の杖は該当種族 (ゴーレム/骸骨/ゾンビ/幽霊)では鑑定済だが、本来はこのメソッドで鑑定済にすべき.
+ */
+void BaseitemList::mark_common_items_as_aware()
+{
+    std::vector<BaseitemKey> bi_keys;
+    bi_keys.emplace_back(ItemKindType::POTION, SV_POTION_WATER);
+    bi_keys.emplace_back(ItemKindType::STAFF, SV_STAFF_NOTHING);
+    for (const auto &bi_key : bi_keys) {
+        const auto bi_id = lookup_baseitem_id(bi_key);
+        this->baseitems[bi_id].mark_as_aware();
+    }
+}
+
+/*!
+ * @brief ベースアイテムの未確定名を共通tval間でシャッフルする
+ * @param tval シャッフルしたいtval
+ * @details 巻物、各種魔道具などに利用される。
+ */
+void BaseitemList::shuffle_flavors(ItemKindType tval)
+{
+    std::vector<std::reference_wrapper<short>> flavors;
+    for (auto &baseitem : this->baseitems) {
+        if (baseitem.bi_key.tval() != tval) {
+            continue;
+        }
+
+        if (baseitem.flavor == 0) {
+            continue;
+        }
+
+        if (baseitem.flags.has(TR_FIXED_FLAVOR)) {
+            continue;
+        }
+
+        flavors.push_back(baseitem.flavor);
+    }
+
+    rand_shuffle(flavors.begin(), flavors.end());
 }

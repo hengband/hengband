@@ -168,9 +168,16 @@ public:
     bool empty() const;
     void resize(size_t new_size);
 
+    void reset_all_visuals();
+    void shuffle_flavors();
+    void reset_identification_flags();
+    void mark_common_items_as_aware();
+
 private:
     BaseitemList() = default;
 
     static BaseitemList instance;
     std::vector<BaseitemInfo> baseitems{};
+
+    void shuffle_flavors(ItemKindType tval);
 };

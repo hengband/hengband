@@ -27,19 +27,6 @@
 #include <string>
 
 /*!
- * @brief ベースアイテム構造体の鑑定済みフラグをリセットする。
- * @details
- * 不具合対策で0からリセットする(セーブは0から)
- */
-static void reset_baseitem_idenditication_flags()
-{
-    for (auto &baseitem : BaseitemList::get_instance()) {
-        baseitem.tried = false;
-        baseitem.aware = false;
-    }
-}
-
-/*!
  * @brief プレイヤー構造体の内容を初期値で消去する(名前を除く) / Clear all the global "character" data (without name)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @details 少し長いが、これ1つで処理が完結しているので分割は見送る
@@ -79,7 +66,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
         artifact.is_generated = false;
     }
 
-    reset_baseitem_idenditication_flags();
+    BaseitemList::get_instance().reset_identification_flags();
     for (auto &[r_idx, r_ref] : monraces_info) {
         if (!MonsterRace(r_ref.idx).is_valid()) {
             continue;
