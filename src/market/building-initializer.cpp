@@ -43,7 +43,7 @@ static int count_town_numbers()
  * Initialize town array
  * @details 「我が家を拡張する」オプションのON/OFFとは無関係に、ON時の容量を確保しておく.
  */
-void init_towns(void)
+void init_towns()
 {
     const auto town_numbers = count_town_numbers();
     towns_info = std::vector<town_type>(town_numbers);
@@ -78,7 +78,7 @@ void init_towns(void)
  * @brief 店情報初期化のメインルーチン /
  * Initialize buildings
  */
-void init_buildings(void)
+void init_buildings()
 {
     for (auto i = 0; i < MAX_BUILDINGS; i++) {
         buildings[i].name[0] = '\0';
