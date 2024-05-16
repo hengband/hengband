@@ -91,9 +91,12 @@ static std::vector<concptr> read_text_lines(std::string_view filename)
 
     auto lines = 0;
     std::vector<concptr> lines_list(MAX_LINES);
-    char buf[1024]{};
-    while (angband_fgets(fff, buf, sizeof(buf)) == 0) {
-        lines_list[lines++] = string_make(buf);
+    while (true) {
+        const auto line_str = angband_fgets(fff, MAX_LINELEN);
+        if (!line_str) {
+            break;
+        }
+        lines_list[lines++] = string_make(line_str->data());
         if (is_greater_autopick_max_line(lines)) {
             break;
         }
@@ -141,9 +144,12 @@ static void prepare_default_pickpref(PlayerType *player_ptr)
         return;
     }
 
-    char buf[1024]{};
-    while (!angband_fgets(pref_fp, buf, sizeof(buf))) {
-        fprintf(user_fp, "%s\n", buf);
+    while (true) {
+        const auto line_str = angband_fgets(pref_fp, MAX_LINELEN);
+        if (!line_str) {
+            break;
+        }
+        fprintf(user_fp, "%s\n", line_str->data());
     }
 
     angband_fclose(user_fp);

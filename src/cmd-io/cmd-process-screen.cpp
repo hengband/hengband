@@ -55,21 +55,24 @@ static void read_temporary_file(FILE *fff, FILE *tmpfff, int num_tag)
 {
     bool is_first_line = true;
     int next_tag = num_tag + 1;
-    char buf[2048]{};
-    while (!angband_fgets(tmpfff, buf, sizeof(buf))) {
+    while (true) {
+        const auto buf = angband_fgets(tmpfff);
+        if (!buf) {
+            break;
+        }
         if (is_first_line) {
-            if (strncmp(buf, tags[num_tag], strlen(tags[num_tag])) == 0) {
+            if (strncmp(buf->data(), tags[num_tag], strlen(tags[num_tag])) == 0) {
                 is_first_line = false;
             }
 
             continue;
         }
 
-        if (strncmp(buf, tags[next_tag], strlen(tags[next_tag])) == 0) {
+        if (strncmp(buf->data(), tags[next_tag], strlen(tags[next_tag])) == 0) {
             break;
         }
 
-        fprintf(fff, "%s\n", buf);
+        fprintf(fff, "%s\n", buf->data());
     }
 }
 

@@ -38,8 +38,15 @@ std::tuple<errr, int> init_info_txt(FILE *fp, char *buf, angband_header *head, P
 
     util::SHA256 sha256;
 
-    while (angband_fgets(fp, buf, 1024) == 0) {
+    while (true) {
+        // init_info_txtの呼び出し側のbufは1024バイト
+        const auto line_str = angband_fgets(fp, 1024);
+        if (!line_str) {
+            break;
+        }
         error_line++;
+        const auto len = line_str->copy(buf, 1024 - 1);
+        buf[len] = '\0';
         const std::string_view line = buf;
         if (line.empty() || line.starts_with('#')) {
             continue;

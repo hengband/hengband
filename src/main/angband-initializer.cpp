@@ -176,9 +176,12 @@ void init_angband(PlayerType *player_ptr, bool no_term)
         auto *fp = angband_fopen(path_news, FileOpenMode::READ);
         if (fp) {
             int i = 0;
-            char buf[1024]{};
-            while (0 == angband_fgets(fp, buf, sizeof(buf))) {
-                term_putstr(0, i++, -1, TERM_WHITE, buf);
+            while (true) {
+                const auto buf = angband_fgets(fp);
+                if (!buf) {
+                    break;
+                }
+                term_putstr(0, i++, -1, TERM_WHITE, *buf);
             }
 
             angband_fclose(fp);

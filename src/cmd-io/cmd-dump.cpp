@@ -293,8 +293,12 @@ void do_cmd_time(PlayerType *player_ptr)
     auto start = 9999;
     auto end = -9999;
     auto num = 0;
-    char buf[1024]{};
-    while (!angband_fgets(fff, buf, sizeof(buf))) {
+    while (true) {
+        const auto line_str = angband_fgets(fff);
+        if (!line_str) {
+            break;
+        }
+        const auto *buf = line_str->data();
         if (!buf[0] || (buf[0] == '#')) {
             continue;
         }

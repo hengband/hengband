@@ -119,11 +119,12 @@ std::optional<std::string> get_random_line(concptr file_name, int entry)
     int test;
     auto line_num = 0;
     while (true) {
-        char buf[1024];
-        if (angband_fgets(fp, buf, sizeof(buf)) != 0) {
+        const auto line_str = angband_fgets(fp);
+        if (!line_str) {
             angband_fclose(fp);
             return std::nullopt;
         }
+        const auto *buf = line_str->data();
 
         line_num++;
         if ((buf[0] != 'N') || (buf[1] != ':')) {
@@ -156,27 +157,28 @@ std::optional<std::string> get_random_line(concptr file_name, int entry)
     auto counter = 0;
     std::optional<std::string> line{};
     while (true) {
-        char buf[1024];
+        std::optional<std::string> buf;
         while (true) {
-            if (angband_fgets(fp, buf, sizeof(buf))) {
+            buf = angband_fgets(fp);
+            if (!buf) {
                 break;
             }
 
-            if ((buf[0] == 'N') && (buf[1] == ':')) {
+            if (buf->starts_with("N:")) {
                 continue;
             }
 
-            if (buf[0] != '#') {
+            if (!buf->starts_with('#')) {
                 break;
             }
         }
 
-        if (!buf[0]) {
+        if (!buf || buf->empty()) {
             break;
         }
 
         if (one_in_(counter + 1)) {
-            line = buf;
+            line = std::move(buf);
         }
 
         counter++;
@@ -341,9 +343,12 @@ void read_dead_file()
     }
 
     int i = 0;
-    char buf[1024]{};
-    while (angband_fgets(fp, buf, sizeof(buf)) == 0) {
-        put_str(buf, i++, 0);
+    while (true) {
+        const auto buf = angband_fgets(fp);
+        if (!buf) {
+            break;
+        }
+        put_str(*buf, i++, 0);
     }
 
     angband_fclose(fp);
