@@ -24,7 +24,6 @@
 #include "player/player-sex.h"
 #include "specific-object/bloody-moon.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
@@ -258,10 +257,7 @@ bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y,
         return false;
     }
 
-    const auto &baseitems = BaseitemList::get_instance();
-    const auto bi_id = baseitems.lookup_baseitem_id(artifact.bi_key);
-    ItemEntity item;
-    item.generate(bi_id);
+    ItemEntity item(artifact.bi_key);
     item.fixed_artifact_idx = a_idx;
     apply_artifact(player_ptr, &item);
     if (drop_near(player_ptr, &item, -1, y, x) == 0) {
@@ -395,8 +391,7 @@ bool make_artifact_special(PlayerType *player_ptr, ItemEntity *o_ptr)
          * ベースアイテムの生成階層が足りない場合1/(不足階層*5)を満たさないと除外される。
          */
         const auto &baseitems = BaseitemList::get_instance();
-        const auto bi_id = baseitems.lookup_baseitem_id(artifact.bi_key);
-        const auto &baseitem = baseitems.get_baseitem(bi_id);
+        const auto &baseitem = baseitems.lookup_baseitem(artifact.bi_key);
         if (baseitem.level > floor_ptr->object_level) {
             int d = (baseitem.level - floor_ptr->object_level) * 5;
             if (!one_in_(d)) {
@@ -404,10 +399,8 @@ bool make_artifact_special(PlayerType *player_ptr, ItemEntity *o_ptr)
             }
         }
 
-        /*! @note 前述の条件を満たしたら、後のIDのアーティファクトはチェックせずすぐ確定し生成処理に移す /
-         * Assign the template. Mega-Hack -- mark the item as an artifact. Hack: Some artifacts get random extra powers. Success. */
-        o_ptr->generate(bi_id);
-
+        //<! @note 前述の条件を満たしたら、後のIDのアーティファクトはチェックせずすぐ確定し生成処理に移す.
+        o_ptr->generate(artifact.bi_key);
         o_ptr->fixed_artifact_idx = a_idx;
         return true;
     }

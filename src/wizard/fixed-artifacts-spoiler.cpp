@@ -2,7 +2,6 @@
 #include "io/files-util.h"
 #include "system/angband-version.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
@@ -72,9 +71,7 @@ void spoiler_outlist(std::string_view header, const std::vector<std::string> &de
 static ItemEntity make_fake_artifact(FixedArtifactId fixed_artifact_idx)
 {
     const auto &artifact = ArtifactsInfo::get_instance().get_artifact(fixed_artifact_idx);
-    const auto bi_id = BaseitemList::get_instance().lookup_baseitem_id(artifact.bi_key);
-    ItemEntity item;
-    item.generate(bi_id);
+    ItemEntity item(artifact.bi_key);
     item.fixed_artifact_idx = fixed_artifact_idx;
     item.pval = artifact.pval;
     item.ac = artifact.ac;

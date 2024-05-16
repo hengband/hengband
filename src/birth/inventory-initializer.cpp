@@ -28,7 +28,6 @@
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-wand-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
@@ -82,7 +81,7 @@ void wield_all(PlayerType *player_ptr)
  * @details アイテムを既知のものとした上でwield_all()関数により装備させる。
  * @param o_ptr 処理したいオブジェクト構造体の参照ポインタ
  */
-void add_outfit(PlayerType *player_ptr, ItemEntity *o_ptr)
+static void add_outfit(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     object_aware(player_ptr, o_ptr);
     o_ptr->mark_as_known();
@@ -93,7 +92,6 @@ void add_outfit(PlayerType *player_ptr, ItemEntity *o_ptr)
 
 static void decide_initial_items(PlayerType *player_ptr, ItemEntity *q_ptr)
 {
-    const auto &baseitems = BaseitemList::get_instance();
     switch (player_ptr->prace) {
     case PlayerRaceType::VAMPIRE:
         /* Nothing! */
@@ -103,7 +101,7 @@ static void decide_initial_items(PlayerType *player_ptr, ItemEntity *q_ptr)
         /* Demon can drain vitality from humanoid corpse */
         get_mon_num_prep(player_ptr, monster_hook_human, nullptr);
         for (int i = rand_range(3, 4); i > 0; i--) {
-            q_ptr->generate(baseitems.lookup_baseitem_id({ ItemKindType::CORPSE, SV_CORPSE }));
+            q_ptr->generate({ ItemKindType::CORPSE, SV_CORPSE });
             q_ptr->pval = enum2i(get_mon_num(player_ptr, 0, 2, PM_NONE));
             if (q_ptr->pval) {
                 q_ptr->number = 1;
@@ -117,26 +115,26 @@ static void decide_initial_items(PlayerType *player_ptr, ItemEntity *q_ptr)
     case PlayerRaceType::ZOMBIE:
     case PlayerRaceType::SPECTRE:
         /* Staff (of Nothing) */
-        q_ptr->generate(baseitems.lookup_baseitem_id({ ItemKindType::STAFF, SV_STAFF_NOTHING }));
+        q_ptr->generate({ ItemKindType::STAFF, SV_STAFF_NOTHING });
         q_ptr->number = 1;
         add_outfit(player_ptr, q_ptr);
         break;
     case PlayerRaceType::ENT:
         /* Potions of Water */
-        q_ptr->generate(baseitems.lookup_baseitem_id({ ItemKindType::POTION, SV_POTION_WATER }));
+        q_ptr->generate({ ItemKindType::POTION, SV_POTION_WATER });
         q_ptr->number = (ITEM_NUMBER)rand_range(15, 23);
         add_outfit(player_ptr, q_ptr);
         break;
     case PlayerRaceType::ANDROID:
         /* Flasks of oil */
-        q_ptr->generate(baseitems.lookup_baseitem_id({ ItemKindType::FLASK }));
+        q_ptr->generate({ ItemKindType::FLASK });
         ItemMagicApplier(player_ptr, q_ptr, 1, AM_NO_FIXED_ART).execute();
         q_ptr->number = (ITEM_NUMBER)rand_range(7, 12);
         add_outfit(player_ptr, q_ptr);
         break;
     default:
         /* Food rations */
-        q_ptr->generate(baseitems.lookup_baseitem_id({ ItemKindType::FOOD, SV_FOOD_RATION }));
+        q_ptr->generate({ ItemKindType::FOOD, SV_FOOD_RATION });
         q_ptr->number = (ITEM_NUMBER)rand_range(3, 7);
         add_outfit(player_ptr, q_ptr);
     }

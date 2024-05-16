@@ -15,7 +15,6 @@
 #include "knowledge/lighting-level-table.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
-#include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -158,8 +157,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 if (baseitem.flavor == 0) {
                     item_name = baseitem.stripped_name();
                 } else {
-                    ItemEntity dummy;
-                    dummy.generate(baseitem.idx);
+                    ItemEntity dummy(baseitem.idx);
                     item_name = describe_flavor(player_ptr, &dummy, OD_FORCE_FLAVOR);
                 }
 
