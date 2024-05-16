@@ -58757,7 +58757,7 @@
       "alertness": 0,
       "level": 49,
       "rarity": 3,
-      "exp": 80000,
+      "exp": 28000,
       "blows": [{ "method": "SLASH", "effect": "HURT", "damage_dice": "50d3" }],
       "flags": [
         "UNIQUE",
