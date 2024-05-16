@@ -213,7 +213,7 @@ void exe_cmd_save_screen_html(const std::filesystem::path &path, bool need_messa
         screen_save();
     }
 
-    const auto &path_prf = path_build(ANGBAND_DIR_USER, "htmldump.prf");
+    const auto path_prf = path_build(ANGBAND_DIR_USER, "htmldump.prf");
     auto *tmpfff = angband_fopen(path_prf, FileOpenMode::READ);
     write_html_header(tmpfff, fff);
     screen_dump_lines(wid, hgt, fff);
@@ -239,7 +239,7 @@ static void exe_cmd_save_screen_html_with_naming()
         return;
     }
 
-    auto path = path_build(ANGBAND_DIR_USER, *filename);
+    const auto path = path_build(ANGBAND_DIR_USER, *filename);
     msg_print(nullptr);
     exe_cmd_save_screen_html(path, true);
 }
@@ -298,7 +298,7 @@ static bool do_cmd_save_screen_text(int wid, int hgt)
 {
     TERM_COLOR a = 0;
     auto c = ' ';
-    const auto &path = path_build(ANGBAND_DIR_USER, "dump.txt");
+    const auto path = path_build(ANGBAND_DIR_USER, "dump.txt");
     auto *fff = angband_fopen(path, FileOpenMode::WRITE);
     if (!check_screen_text_can_open(fff, path.string())) {
         return false;

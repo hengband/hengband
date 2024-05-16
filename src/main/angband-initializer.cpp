@@ -161,7 +161,7 @@ static void put_title()
  */
 void init_angband(PlayerType *player_ptr, bool no_term)
 {
-    const auto &path_news = path_build(ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
+    const auto path_news = path_build(ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
     auto fd = fd_open(path_news, O_RDONLY);
     if (fd < 0) {
         std::string why = _("'", "Cannot access the '");
@@ -187,7 +187,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
         term_flush();
     }
 
-    const auto &path_score = path_build(ANGBAND_DIR_APEX, "scores.raw");
+    const auto path_score = path_build(ANGBAND_DIR_APEX, "scores.raw");
     fd = fd_open(path_score, O_RDONLY);
     if (fd < 0) {
         safe_setuid_grab();

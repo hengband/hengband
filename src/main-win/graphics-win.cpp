@@ -116,8 +116,8 @@ graphics_mode change_graphics(graphics_mode arg)
         return current_graphics_mode;
     }
 
-    const auto &path = path_build(ANGBAND_DIR_XTRA_GRAF, name);
-    const auto &filename = path.string();
+    const auto path = path_build(ANGBAND_DIR_XTRA_GRAF, name);
+    const auto filename = path.string();
     infGraph.hBitmap = read_graphic(filename.data());
     if (!infGraph.hBitmap) {
         plog_fmt(_("ビットマップ '%s' を読み込めません。", "Cannot read bitmap file '%s'"), name.data());
@@ -138,8 +138,8 @@ graphics_mode change_graphics(graphics_mode arg)
         return arg;
     }
 
-    const auto &path_mask = path_build(ANGBAND_DIR_XTRA_GRAF, name_mask);
-    const auto &filename_mask = path_mask.string();
+    const auto path_mask = path_build(ANGBAND_DIR_XTRA_GRAF, name_mask);
+    const auto filename_mask = path_mask.string();
     infGraph.hBitmapMask = read_graphic(filename_mask.data());
     if (infGraph.hBitmapMask) {
         current_graphics_mode = arg;

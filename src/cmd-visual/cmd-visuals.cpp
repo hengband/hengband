@@ -118,7 +118,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 continue;
             }
 
-            const auto &path = path_build(ANGBAND_DIR_USER, *ask_result);
+            const auto path = path_build(ANGBAND_DIR_USER, *ask_result);
             constexpr auto mark = "Monster attr/chars";
             if (!open_auto_dump(&auto_dump_stream, path, mark)) {
                 continue;
@@ -142,7 +142,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 continue;
             }
 
-            const auto &path = path_build(ANGBAND_DIR_USER, *ask_result);
+            const auto path = path_build(ANGBAND_DIR_USER, *ask_result);
             constexpr auto mark = "Object attr/chars";
             if (!open_auto_dump(&auto_dump_stream, path, mark)) {
                 continue;
@@ -180,7 +180,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 continue;
             }
 
-            const auto &path = path_build(ANGBAND_DIR_USER, *ask_result);
+            const auto path = path_build(ANGBAND_DIR_USER, *ask_result);
             constexpr auto mark = "Feature attr/chars";
             if (!open_auto_dump(&auto_dump_stream, path, mark)) {
                 continue;

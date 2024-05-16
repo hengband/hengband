@@ -136,7 +136,7 @@ static void send_waiting_record(PlayerType *player_ptr)
     w_ptr->start_time = (uint32_t)time(nullptr);
     signals_ignore_tstp();
     w_ptr->character_icky_depth = 1;
-    const auto &path = path_build(ANGBAND_DIR_APEX, "scores.raw");
+    const auto path = path_build(ANGBAND_DIR_APEX, "scores.raw");
     highscore_fd = fd_open(path, O_RDWR);
 
     /* 町名消失バグ対策(#38205)のためここで世界マップ情報を読み出す */

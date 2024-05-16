@@ -97,7 +97,7 @@ static void init_header(angband_header *head, IDX num = 0)
 template <typename InfoType>
 static errr init_info(std::string_view filename, angband_header &head, InfoType &info, Parser parser, Retoucher retouch = nullptr)
 {
-    const auto &path = path_build(ANGBAND_DIR_EDIT, filename);
+    const auto path = path_build(ANGBAND_DIR_EDIT, filename);
     auto *fp = angband_fopen(path, FileOpenMode::READ);
     if (!fp) {
         quit_fmt(_("'%s'ファイルをオープンできません。", "Cannot open '%s' file."), filename.data());
@@ -151,7 +151,7 @@ static errr init_info(std::string_view filename, angband_header &head, InfoType 
 template <typename InfoType>
 static errr init_json(std::string_view filename, std::string_view keyname, angband_header &head, InfoType &info, JSONParser parser)
 {
-    const auto &path = path_build(ANGBAND_DIR_EDIT, filename);
+    const auto path = path_build(ANGBAND_DIR_EDIT, filename);
     std::ifstream ifs(path);
 
     if (!ifs) {
@@ -319,7 +319,7 @@ static bool read_wilderness_definition(std::ifstream &ifs)
  */
 bool init_wilderness()
 {
-    const auto &path = path_build(ANGBAND_DIR_EDIT, WILDERNESS_DEFINITION);
+    const auto path = path_build(ANGBAND_DIR_EDIT, WILDERNESS_DEFINITION);
     std::ifstream ifs(path);
     if (!ifs) {
         return false;

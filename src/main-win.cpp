@@ -1649,7 +1649,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
         break;
     }
     case IDM_FILE_SCORE: {
-        const auto &path = path_build(ANGBAND_DIR_APEX, "scores.raw");
+        const auto path = path_build(ANGBAND_DIR_APEX, "scores.raw");
         highscore_fd = fd_open(path, O_RDONLY);
         if (highscore_fd < 0) {
             msg_print("Score file unavailable.");
@@ -1912,7 +1912,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
         break;
     }
     case IDM_OPTIONS_OPEN_MUSIC_DIR: {
-        const auto &path = path_build(ANGBAND_DIR_XTRA_MUSIC, "music.cfg");
+        const auto path = path_build(ANGBAND_DIR_XTRA_MUSIC, "music.cfg");
         open_dir_in_explorer(path.string());
         break;
     }
@@ -1935,7 +1935,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
         break;
     }
     case IDM_OPTIONS_OPEN_SOUND_DIR: {
-        const auto &path = path_build(ANGBAND_DIR_XTRA_SOUND, "sound.cfg");
+        const auto path = path_build(ANGBAND_DIR_XTRA_SOUND, "sound.cfg");
         open_dir_in_explorer(path.string());
         break;
     }
@@ -2659,7 +2659,7 @@ static void init_stuff()
     validate_dir(ANGBAND_DIR_DEBUG_SAVE, false);
     validate_dir(ANGBAND_DIR_USER, true);
     validate_dir(ANGBAND_DIR_XTRA, true);
-    const auto &path_news = path_build(ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
+    const auto path_news = path_build(ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
     validate_file(path_news);
 
     ANGBAND_DIR_XTRA_GRAF = path_build(ANGBAND_DIR_XTRA, "graf");

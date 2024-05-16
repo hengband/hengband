@@ -102,7 +102,7 @@ void do_cmd_colors(PlayerType *player_ptr)
                 continue;
             }
 
-            const auto &path = path_build(ANGBAND_DIR_USER, *ask_result);
+            const auto path = path_build(ANGBAND_DIR_USER, *ask_result);
             if (!open_auto_dump(&auto_dump_stream, path, mark)) {
                 continue;
             }

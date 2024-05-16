@@ -117,7 +117,7 @@ static ItemEntity prepare_item_for_obj_desc(short bi_id)
  */
 SpoilerOutputResultType spoil_obj_desc()
 {
-    const auto &path = path_build(ANGBAND_DIR_USER, "obj-desc.txt");
+    const auto path = path_build(ANGBAND_DIR_USER, "obj-desc.txt");
     std::ofstream ofs(path);
     if (!ofs) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
