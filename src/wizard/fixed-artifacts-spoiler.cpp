@@ -74,7 +74,7 @@ static ItemEntity make_fake_artifact(FixedArtifactId fixed_artifact_idx)
     const auto &artifact = ArtifactsInfo::get_instance().get_artifact(fixed_artifact_idx);
     const auto bi_id = BaseitemList::get_instance().lookup_baseitem_id(artifact.bi_key);
     ItemEntity item;
-    item.prep(bi_id);
+    item.generate(bi_id);
     item.fixed_artifact_idx = fixed_artifact_idx;
     item.pval = artifact.pval;
     item.ac = artifact.ac;

@@ -144,7 +144,7 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
             if (cast) {
                 ItemEntity item;
                 msg_print(_("食料を生成した。", "A food ration is produced."));
-                item.prep(BaseitemList::get_instance().lookup_baseitem_id({ ItemKindType::FOOD, SV_FOOD_RATION }));
+                item.generate(BaseitemList::get_instance().lookup_baseitem_id({ ItemKindType::FOOD, SV_FOOD_RATION }));
                 (void)drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);
             }
         }

@@ -57,7 +57,7 @@ void ItemEntity::copy_from(const ItemEntity *j_ptr)
  * @brief アイテム構造体にベースアイテムを作成する
  * @param bi_id 新たに作成したいベースアイテム情報のID
  */
-void ItemEntity::prep(short new_bi_id)
+void ItemEntity::generate(short new_bi_id)
 {
     const auto &baseitem = BaseitemList::get_instance().get_baseitem(new_bi_id);
     auto old_stack_idx = this->stack_idx;

@@ -591,32 +591,32 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         switch (tolower(*command)) {
         /* Apply bad magic, but first clear object */
         case 'w':
-            q_ptr->prep(o_ptr->bi_id);
+            q_ptr->generate(o_ptr->bi_id);
             ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED).execute();
             break;
         /* Apply bad magic, but first clear object */
         case 'c':
-            q_ptr->prep(o_ptr->bi_id);
+            q_ptr->generate(o_ptr->bi_id);
             ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED).execute();
             break;
         /* Apply normal magic, but first clear object */
         case 'n':
-            q_ptr->prep(o_ptr->bi_id);
+            q_ptr->generate(o_ptr->bi_id);
             ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART).execute();
             break;
         /* Apply good magic, but first clear object */
         case 'g':
-            q_ptr->prep(o_ptr->bi_id);
+            q_ptr->generate(o_ptr->bi_id);
             ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD).execute();
             break;
         /* Apply great magic, but first clear object */
         case 'e':
-            q_ptr->prep(o_ptr->bi_id);
+            q_ptr->generate(o_ptr->bi_id);
             ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT).execute();
             break;
         /* Apply special magic, but first clear object */
         case 's':
-            q_ptr->prep(o_ptr->bi_id);
+            q_ptr->generate(o_ptr->bi_id);
             ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL).execute();
             if (!q_ptr->is_fixed_or_random_artifact()) {
                 become_random_artifact(player_ptr, q_ptr, false);
@@ -955,7 +955,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                 continue;
             }
 
-            o_ptr->prep(baseitem.idx);
+            o_ptr->generate(baseitem.idx);
 #ifdef JP
             const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 #else
@@ -977,7 +977,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
         if (allow_ego && baseitem_ids.size() == 1) {
             short bi_id = baseitem_ids.back();
-            o_ptr->prep(bi_id);
+            o_ptr->generate(bi_id);
 
             for (const auto &[e_idx, ego] : egos_info) {
                 if (ego.idx == EgoType::NONE || ego.name.empty()) {
@@ -1019,7 +1019,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             }
 
             const auto bi_id = baseitems.lookup_baseitem_id(artifact.bi_key);
-            o_ptr->prep(bi_id);
+            o_ptr->generate(bi_id);
             o_ptr->fixed_artifact_idx = a_idx;
 
 #ifdef JP
@@ -1131,7 +1131,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         if (wish_randart) {
             if (must || ok_art) {
                 do {
-                    o_ptr->prep(bi_id);
+                    o_ptr->generate(bi_id);
                     ItemMagicApplier(player_ptr, o_ptr, baseitem.level, AM_SPECIAL | AM_NO_FIXED_ART).execute();
                 } while (!o_ptr->is_random_artifact() || o_ptr->is_ego() || o_ptr->is_cursed());
 
@@ -1148,14 +1148,14 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         if (allow_ego && (wish_ego || ego_ids.size() > 0)) {
             if (must || ok_ego) {
                 if (ego_ids.size() > 0) {
-                    o_ptr->prep(bi_id);
+                    o_ptr->generate(bi_id);
                     o_ptr->ego_idx = ego_ids[0];
                     apply_ego(o_ptr, player_ptr->current_floor_ptr->base_level);
                 } else {
                     auto max_roll = 1000;
                     auto i = 0;
                     for (i = 0; i < max_roll; i++) {
-                        o_ptr->prep(bi_id);
+                        o_ptr->generate(bi_id);
                         ItemMagicApplier(player_ptr, o_ptr, baseitem.level, AM_GREAT | AM_NO_FIXED_ART).execute();
                         if (o_ptr->is_random_artifact()) {
                             continue;
@@ -1190,7 +1190,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             res = WishResultType::EGO;
         } else {
             for (auto i = 0; i < 100; i++) {
-                o_ptr->prep(bi_id);
+                o_ptr->generate(bi_id);
                 ItemMagicApplier(player_ptr, o_ptr, 0, AM_NO_FIXED_ART).execute();
                 if (!o_ptr->is_cursed()) {
                     break;

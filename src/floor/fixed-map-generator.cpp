@@ -86,7 +86,7 @@ static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const
 
     const auto bi_id = BaseitemList::get_instance().lookup_baseitem_id({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
     ItemEntity item;
-    item.prep(bi_id);
+    item.generate(bi_id);
     drop_here(player_ptr->current_floor_ptr, &item, *qtwg_ptr->y, *qtwg_ptr->x);
 }
 
@@ -178,7 +178,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
         } else if (object_index) {
             ItemEntity tmp_object;
             auto *o_ptr = &tmp_object;
-            o_ptr->prep(object_index);
+            o_ptr->generate(object_index);
             if (o_ptr->bi_key.tval() == ItemKindType::GOLD) {
                 coin_type = object_index - OBJ_GOLD_LIST;
                 make_gold(player_ptr, o_ptr);

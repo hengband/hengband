@@ -689,7 +689,7 @@ static void postprocess_by_taking_photo(PlayerType *player_ptr, EffectMonster *e
     }
 
     ItemEntity item;
-    item.prep(BaseitemList::get_instance().lookup_baseitem_id({ ItemKindType::STATUE, SV_PHOTO }));
+    item.generate(BaseitemList::get_instance().lookup_baseitem_id({ ItemKindType::STATUE, SV_PHOTO }));
     item.pval = em_ptr->photo;
     item.ident |= (IDENT_FULL_KNOWN);
     (void)drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);

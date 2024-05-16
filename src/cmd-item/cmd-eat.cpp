@@ -302,7 +302,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
             auto *q_ptr = &forge;
 
             msg_print(_("食べ物がアゴを素通りして落ちた！", "The food falls through your jaws!"));
-            q_ptr->prep(BaseitemList::get_instance().lookup_baseitem_id(bi_key));
+            q_ptr->generate(BaseitemList::get_instance().lookup_baseitem_id(bi_key));
 
             /* Drop the object from heaven */
             (void)drop_near(player_ptr, q_ptr, -1, player_ptr->y, player_ptr->x);

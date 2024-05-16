@@ -172,7 +172,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
             const auto bi_id = BaseitemList::get_instance().lookup_baseitem_id(prize_list[num - 1]);
             ItemEntity item;
-            item.prep(bi_id);
+            item.generate(bi_id);
             ItemMagicApplier(player_ptr, &item, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART).execute();
 
             object_aware(player_ptr, &item);

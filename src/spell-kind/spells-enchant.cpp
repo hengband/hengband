@@ -139,7 +139,7 @@ bool mundane_spell(PlayerType *player_ptr, bool only_equip)
     auto marked = o_ptr->marked;
     auto inscription = std::move(o_ptr->inscription);
 
-    o_ptr->prep(o_ptr->bi_id);
+    o_ptr->generate(o_ptr->bi_id);
 
     o_ptr->iy = iy;
     o_ptr->ix = ix;

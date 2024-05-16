@@ -261,7 +261,7 @@ bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y,
     const auto &baseitems = BaseitemList::get_instance();
     const auto bi_id = baseitems.lookup_baseitem_id(artifact.bi_key);
     ItemEntity item;
-    item.prep(bi_id);
+    item.generate(bi_id);
     item.fixed_artifact_idx = a_idx;
     apply_artifact(player_ptr, &item);
     if (drop_near(player_ptr, &item, -1, y, x) == 0) {
@@ -406,7 +406,7 @@ bool make_artifact_special(PlayerType *player_ptr, ItemEntity *o_ptr)
 
         /*! @note 前述の条件を満たしたら、後のIDのアーティファクトはチェックせずすぐ確定し生成処理に移す /
          * Assign the template. Mega-Hack -- mark the item as an artifact. Hack: Some artifacts get random extra powers. Success. */
-        o_ptr->prep(bi_id);
+        o_ptr->generate(bi_id);
 
         o_ptr->fixed_artifact_idx = a_idx;
         return true;

@@ -147,7 +147,7 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
         }
 
         ItemEntity item;
-        item.prep(baseitem.idx);
+        item.generate(baseitem.idx);
         if (opt_a_idx) {
             item.fixed_artifact_idx = *opt_a_idx;
         }

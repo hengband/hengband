@@ -96,7 +96,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         const auto bi_id = baseitems.lookup_baseitem_id(artifact.bi_key);
         constexpr auto template_basename = _("     %s\n", "     The %s\n");
         ItemEntity item;
-        item.prep(bi_id);
+        item.generate(bi_id);
         item.fixed_artifact_idx = a_idx;
         item.ident |= IDENT_STORE;
         const auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -214,7 +214,7 @@ static void desc_obj_fake(PlayerType *player_ptr, short bi_id)
     ItemEntity ObjectType_body;
     o_ptr = &ObjectType_body;
     o_ptr->wipe();
-    o_ptr->prep(bi_id);
+    o_ptr->generate(bi_id);
 
     o_ptr->ident |= IDENT_KNOWN;
     handle_stuff(player_ptr);

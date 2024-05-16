@@ -140,7 +140,7 @@ bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, std:
             return false;
         }
 
-        j_ptr->prep(bi_id);
+        j_ptr->generate(bi_id);
     }
 
     ItemMagicApplier(player_ptr, j_ptr, floor_ptr->object_level, mode).execute();
@@ -174,7 +174,7 @@ bool make_gold(PlayerType *player_ptr, ItemEntity *j_ptr)
         i = MAX_GOLD - 1;
     }
 
-    j_ptr->prep(OBJ_GOLD_LIST + i);
+    j_ptr->generate(OBJ_GOLD_LIST + i);
     const auto &baseitems = BaseitemList::get_instance();
     const auto base = baseitems.get_baseitem(OBJ_GOLD_LIST + i).cost;
     j_ptr->pval = (base + (8L * randint1(base)) + randint1(8));
