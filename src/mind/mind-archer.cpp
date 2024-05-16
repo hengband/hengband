@@ -153,7 +153,7 @@ bool create_ammo(PlayerType *player_ptr)
 
         ItemEntity forge;
         q_ptr = &forge;
-        q_ptr->prep(baseitems.lookup_baseitem_id({ ItemKindType::ARROW, static_cast<short>(m_bonus(1, player_ptr->lev) + 1) }));
+        q_ptr->prep(baseitems.lookup_baseitem_id({ ItemKindType::ARROW, m_bonus(1, player_ptr->lev) + 1 }));
         q_ptr->number = (byte)rand_range(5, 10);
         object_aware(player_ptr, q_ptr);
         q_ptr->mark_as_known();
@@ -180,7 +180,7 @@ bool create_ammo(PlayerType *player_ptr)
 
         ItemEntity forge;
         q_ptr = &forge;
-        q_ptr->prep(baseitems.lookup_baseitem_id({ ItemKindType::BOLT, static_cast<short>(m_bonus(1, player_ptr->lev) + 1) }));
+        q_ptr->prep(baseitems.lookup_baseitem_id({ ItemKindType::BOLT, m_bonus(1, player_ptr->lev) + 1 }));
         q_ptr->number = (byte)rand_range(4, 8);
         object_aware(player_ptr, q_ptr);
         q_ptr->mark_as_known();

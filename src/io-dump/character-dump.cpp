@@ -122,9 +122,9 @@ static void dump_aux_quest(PlayerType *player_ptr, FILE *fff)
     for (const auto &[q_idx, quest] : quest_list) {
         quest_numbers.push_back(q_idx);
     }
-    int dummy;
-    ang_sort(player_ptr, quest_numbers.data(), &dummy, quest_numbers.size(), ang_sort_comp_quest_num, ang_sort_swap_quest_num);
 
+    auto dummy = 0;
+    ang_sort(player_ptr, quest_numbers.data(), &dummy, quest_numbers.size(), ang_sort_comp_quest_num, ang_sort_swap_quest_num);
     fputc('\n', fff);
     do_cmd_knowledge_quests_completed(player_ptr, fff, quest_numbers);
     fputc('\n', fff);
@@ -646,6 +646,6 @@ void make_character_dump(PlayerType *player_ptr, FILE *fff)
     dump_aux_home_museum(player_ptr, fff);
 
     // ダンプの幅をはみ出さないように48文字目以降を切り捨てる
-    const auto checksum = get_check_sum().erase(48);
+    const std::string checksum = get_check_sum().erase(48);
     fprintf(fff, _("  [チェックサム: \"%s\"]\n\n", "  [Check Sum: \"%s\"]\n\n"), checksum.data());
 }

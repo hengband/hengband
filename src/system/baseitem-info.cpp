@@ -827,8 +827,7 @@ void BaseitemList::mark_common_items_as_aware()
     bi_keys.emplace_back(ItemKindType::POTION, SV_POTION_WATER);
     bi_keys.emplace_back(ItemKindType::STAFF, SV_STAFF_NOTHING);
     for (const auto &bi_key : bi_keys) {
-        const auto bi_id = this->lookup_baseitem_id(bi_key);
-        this->baseitems[bi_id].mark_as_aware();
+        this->lookup_baseitem(bi_key).mark_as_aware();
     }
 }
 
@@ -856,6 +855,12 @@ short BaseitemList::lookup_baseitem_id(const BaseitemKey &bi_key) const
     return exe_lookup({ bi_key.tval(), rand_choice(svals) });
 }
 
+const BaseitemInfo &BaseitemList::lookup_baseitem(const BaseitemKey &bi_key) const
+{
+    const auto bi_id = this->lookup_baseitem_id(bi_key);
+    return this->baseitems[bi_id];
+}
+
 void BaseitemList::shuffle_flavors()
 {
     this->shuffle_flavors(ItemKindType::RING);
@@ -866,6 +871,12 @@ void BaseitemList::shuffle_flavors()
     this->shuffle_flavors(ItemKindType::FOOD);
     this->shuffle_flavors(ItemKindType::POTION);
     this->shuffle_flavors(ItemKindType::SCROLL);
+}
+
+BaseitemInfo &BaseitemList::lookup_baseitem(const BaseitemKey &bi_key)
+{
+    const auto bi_id = this->lookup_baseitem_id(bi_key);
+    return this->baseitems[bi_id];
 }
 
 /*!

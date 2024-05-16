@@ -172,6 +172,7 @@ public:
     void reset_identification_flags();
     void mark_common_items_as_aware();
     short lookup_baseitem_id(const BaseitemKey &bi_key) const;
+    const BaseitemInfo &lookup_baseitem(const BaseitemKey &bi_key) const;
     void shuffle_flavors();
 
 private:
@@ -180,6 +181,7 @@ private:
     static BaseitemList instance;
     std::vector<BaseitemInfo> baseitems{};
 
+    BaseitemInfo &lookup_baseitem(const BaseitemKey &bi_key);
     short exe_lookup(const BaseitemKey &bi_key) const;
     const std::map<BaseitemKey, short> &create_baseitem_index_chache() const;
     const std::map<ItemKindType, std::vector<int>> &create_baseitems_cache() const;
