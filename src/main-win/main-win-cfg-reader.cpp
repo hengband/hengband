@@ -114,7 +114,7 @@ CfgData *CfgReader::read_sections(std::initializer_list<cfg_section> sections)
 #endif
                 const int num = tokenize_whitespace(buf, SAMPLE_MAX, tokens);
                 for (auto j = 0; j < num; j++) {
-                    const auto &path = path_build(dir, tokens[j]);
+                    const auto path = path_build(dir, tokens[j]);
                     if (check_file(path)) {
                         filenames->push_back(string_make(tokens[j]));
                     }

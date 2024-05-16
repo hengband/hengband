@@ -254,7 +254,7 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
  */
 parse_error_type parse_fixed_map(PlayerType *player_ptr, std::string_view name, int ymin, int xmin, int ymax, int xmax)
 {
-    const auto &path = path_build(ANGBAND_DIR_EDIT, name);
+    const auto path = path_build(ANGBAND_DIR_EDIT, name);
     auto *fp = angband_fopen(path, FileOpenMode::READ);
     if (fp == nullptr) {
         return PARSE_ERROR_GENERIC;
@@ -345,7 +345,7 @@ static void parse_quest_info_aux(std::string_view file_name, std::set<QuestId> &
         key_list_ref.insert(q);
     };
 
-    const auto &path = path_build(ANGBAND_DIR_EDIT, file_name);
+    const auto path = path_build(ANGBAND_DIR_EDIT, file_name);
     auto *fp = angband_fopen(path, FileOpenMode::READ);
     if (fp == nullptr) {
         std::stringstream ss;

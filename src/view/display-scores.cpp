@@ -208,8 +208,8 @@ void display_scores(int from, int to, int note, high_score *score)
  */
 void display_scores(int from, int to)
 {
-    const auto &path = path_build(ANGBAND_DIR_APEX, "scores.raw");
-    const auto &filename = path.string();
+    const auto path = path_build(ANGBAND_DIR_APEX, "scores.raw");
+    const auto filename = path.string();
     highscore_fd = fd_open(filename, O_RDONLY);
     if (highscore_fd < 0) {
         quit(_("スコア・ファイルが使用できません。", "Score file unavailable."));

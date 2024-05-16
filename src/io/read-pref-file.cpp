@@ -158,14 +158,14 @@ errr process_pref_file(PlayerType *player_ptr, std::string_view name, bool only_
 {
     errr err1 = 0;
     if (!only_user_dir) {
-        const auto &path = path_build(ANGBAND_DIR_PREF, name);
+        const auto path = path_build(ANGBAND_DIR_PREF, name);
         err1 = process_pref_file_aux(player_ptr, path, PREF_TYPE_NORMAL);
         if (err1 > 0) {
             return err1;
         }
     }
 
-    const auto &path = path_build(ANGBAND_DIR_USER, name);
+    const auto path = path_build(ANGBAND_DIR_USER, name);
     errr err2 = process_pref_file_aux(player_ptr, path, PREF_TYPE_NORMAL);
     if (err2 < 0 && !err1) {
         return -2;
@@ -182,7 +182,7 @@ errr process_pref_file(PlayerType *player_ptr, std::string_view name, bool only_
  */
 errr process_autopick_file(PlayerType *player_ptr, std::string_view name)
 {
-    const auto &path = path_build(ANGBAND_DIR_USER, name);
+    const auto path = path_build(ANGBAND_DIR_USER, name);
     return process_pref_file_aux(player_ptr, path, PREF_TYPE_AUTOPICK);
 }
 
@@ -197,7 +197,7 @@ errr process_autopick_file(PlayerType *player_ptr, std::string_view name)
 errr process_histpref_file(PlayerType *player_ptr, std::string_view name)
 {
     bool old_character_xtra = w_ptr->character_xtra;
-    const auto &path = path_build(ANGBAND_DIR_USER, name);
+    const auto path = path_build(ANGBAND_DIR_USER, name);
     w_ptr->character_xtra = true;
     errr err = process_pref_file_aux(player_ptr, path, PREF_TYPE_HISTPREF);
     w_ptr->character_xtra = old_character_xtra;

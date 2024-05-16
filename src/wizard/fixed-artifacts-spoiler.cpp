@@ -127,7 +127,7 @@ static void spoiler_print_art(const ArtifactsDumpInfo *art_ptr, std::ofstream &o
  */
 SpoilerOutputResultType spoil_fixed_artifact()
 {
-    const auto &path = path_build(ANGBAND_DIR_USER, "artifact.txt");
+    const auto path = path_build(ANGBAND_DIR_USER, "artifact.txt");
     std::ofstream ofs(path);
     if (!ofs) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
