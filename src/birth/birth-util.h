@@ -11,6 +11,6 @@ enum class BirthKind {
 };
 
 class PlayerType;
-void birth_quit(void);
+void birth_quit();
 void show_help(PlayerType *player_ptr, concptr helpfile);
 void birth_help_option(PlayerType *player_ptr, char c, BirthKind bk);

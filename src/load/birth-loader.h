@@ -1,3 +1,3 @@
 #pragma once
 
-void load_quick_start(void);
+void load_quick_start();

@@ -56,7 +56,7 @@ struct store_type {
 extern store_type *st_ptr;
 
 class PlayerType;
-void store_delete(void);
+void store_delete();
 std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(ItemEntity *j_ptr);
 void store_item_increase(INVENTORY_IDX i_idx, ITEM_NUMBER num);
 void store_item_optimize(INVENTORY_IDX i_idx);

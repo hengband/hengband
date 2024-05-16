@@ -29,6 +29,6 @@ extern concptr inkey_next;
 
 char inkey(bool do_all_term_refresh = false);
 int inkey_special(bool numpad_cursor);
-void start_term_fresh(void);
-void stop_term_fresh(void);
-bool macro_running(void);
+void start_term_fresh();
+void stop_term_fresh();
+bool macro_running();

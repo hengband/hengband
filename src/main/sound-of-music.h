@@ -11,7 +11,7 @@
 extern bool has_monster_music;
 
 class PlayerType;
-void bell(void);
+void bell();
 void sound(int num);
 errr play_music(int type, int num);
 void select_floor_music(PlayerType *player_ptr);

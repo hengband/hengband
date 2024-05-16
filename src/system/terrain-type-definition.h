@@ -56,8 +56,8 @@ public:
     void reset_lighting(bool is_config = true);
 
 private:
-    void reset_lighting_ascii(std::map<int, ColoredChar> &cc);
-    void reset_lighting_graphics(std::map<int, ColoredChar> &cc);
+    void reset_lighting_ascii(std::map<int, ColoredChar> &cc_map);
+    void reset_lighting_graphics(std::map<int, ColoredChar> &cc_map);
 };
 
 class TerrainList {

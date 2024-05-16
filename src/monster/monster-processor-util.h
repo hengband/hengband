@@ -65,7 +65,7 @@ struct coordinate_candidate {
 
 class MonsterEntity;
 turn_flags *init_turn_flags(MONSTER_IDX riding_idx, MONSTER_IDX m_idx, turn_flags *turn_flags_ptr);
-coordinate_candidate init_coordinate_candidate(void);
+coordinate_candidate init_coordinate_candidate();
 
 void store_enemy_approch_direction(int *mm, POSITION y, POSITION x);
 void store_moves_val(int *mm, int y, int x);
