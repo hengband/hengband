@@ -55,7 +55,7 @@ struct sound_res {
      * @retval true 完了
      * @retval false 再生中
      */
-    bool isDone()
+    bool isDone() const
     {
         return (this->hwo == NULL) || (this->wh.dwFlags & WHDR_DONE);
     }

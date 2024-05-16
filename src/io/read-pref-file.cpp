@@ -303,20 +303,14 @@ void load_all_pref_files(PlayerType *player_ptr)
  */
 bool read_histpref(PlayerType *player_ptr)
 {
-    errr err;
-    int i, j, n;
-    char *s;
-    char histbuf[HISTPREF_LIMIT];
-
     if (!input_check(_("生い立ち設定ファイルをロードしますか? ", "Load background history preference file? "))) {
         return false;
     }
 
-    histbuf[0] = '\0';
+    char histbuf[HISTPREF_LIMIT]{};
     histpref_buf = histbuf;
 
-    err = process_histpref_file(player_ptr, std::string(_("histedit-", "histpref-")).append(player_ptr->base_name).append(".prf").data());
-
+    auto err = process_histpref_file(player_ptr, std::string(_("histedit-", "histpref-")).append(player_ptr->base_name).append(".prf").data());
     if (0 > err) {
         err = process_histpref_file(player_ptr, _("histedit.prf", "histpref.prf"));
     }
@@ -333,16 +327,17 @@ bool read_histpref(PlayerType *player_ptr)
         return false;
     }
 
-    for (i = 0; i < 4; i++) {
+    for (auto i = 0; i < 4; i++) {
         player_ptr->history[i][0] = '\0';
     }
 
     /* loop */
+    char *s;
     for (s = histpref_buf; *s == ' '; s++) {
         ;
     }
 
-    n = strlen(s);
+    auto n = strlen(s);
     while ((n > 0) && (s[n - 1] == ' ')) {
         s[--n] = '\0';
     }
@@ -354,8 +349,9 @@ bool read_histpref(PlayerType *player_ptr)
         angband_strcpy(player_ptr->history[l], history_lines[l], max_line_len);
     }
 
-    for (i = 0; i < 4; i++) {
+    for (auto i = 0; i < 4; i++) {
         /* loop */
+        int j;
         for (j = 0; player_ptr->history[i][j]; j++) {
             ;
         }
