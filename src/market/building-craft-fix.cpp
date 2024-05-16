@@ -14,7 +14,6 @@
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-kind-hook.h"
 #include "object/object-value.h"
 #include "racial/racial-android.h"
 #include "spell-realm/spells-hex.h"
@@ -197,7 +196,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     } else {
         auto tval = (one_in_(5) ? mo_ptr->bi_key.tval() : ItemKindType::SWORD);
         while (true) {
-            bi_id = lookup_baseitem_id({ tval });
+            bi_id = baseitems.lookup_baseitem_id({ tval });
             const auto &baseitem = baseitems.get_baseitem(bi_id);
             const auto sval = baseitem.bi_key.sval();
             if (tval == ItemKindType::SWORD) {

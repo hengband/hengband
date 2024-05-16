@@ -20,7 +20,6 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
-#include "object/object-kind-hook.h"
 #include "player-base/player-class.h"
 #include "player/player-sex.h"
 #include "specific-object/bloody-moon.h"
@@ -259,17 +258,13 @@ bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y,
         return false;
     }
 
-    auto bi_id = lookup_baseitem_id(artifact.bi_key);
-    if (bi_id == 0) {
-        return true;
-    }
-
-    ItemEntity forge;
-    auto q_ptr = &forge;
-    q_ptr->prep(bi_id);
-    q_ptr->fixed_artifact_idx = a_idx;
-    apply_artifact(player_ptr, q_ptr);
-    if (drop_near(player_ptr, q_ptr, -1, y, x) == 0) {
+    const auto &baseitems = BaseitemList::get_instance();
+    const auto bi_id = baseitems.lookup_baseitem_id(artifact.bi_key);
+    ItemEntity item;
+    item.prep(bi_id);
+    item.fixed_artifact_idx = a_idx;
+    apply_artifact(player_ptr, &item);
+    if (drop_near(player_ptr, &item, -1, y, x) == 0) {
         return false;
     }
 
@@ -399,8 +394,9 @@ bool make_artifact_special(PlayerType *player_ptr, ItemEntity *o_ptr)
          * @note INSTA_ART型固定アーティファクトのベースアイテムもチェック対象とする。
          * ベースアイテムの生成階層が足りない場合1/(不足階層*5)を満たさないと除外される。
          */
-        const auto bi_id = lookup_baseitem_id(artifact.bi_key);
-        const auto &baseitem = BaseitemList::get_instance().get_baseitem(bi_id);
+        const auto &baseitems = BaseitemList::get_instance();
+        const auto bi_id = baseitems.lookup_baseitem_id(artifact.bi_key);
+        const auto &baseitem = baseitems.get_baseitem(bi_id);
         if (baseitem.level > floor_ptr->object_level) {
             int d = (baseitem.level - floor_ptr->object_level) * 5;
             if (!one_in_(d)) {

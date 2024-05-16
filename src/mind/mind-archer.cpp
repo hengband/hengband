@@ -14,7 +14,6 @@
 #include "object-enchant/object-boost.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-kind-hook.h"
 #include "perception/object-perception.h"
 #include "system/angband.h"
 #include "system/baseitem-info.h"
@@ -104,6 +103,7 @@ bool create_ammo(PlayerType *player_ptr)
         return false;
     }
 
+    const auto &baseitems = BaseitemList::get_instance();
     switch (ext) {
     case AMMO_SHOT: {
         int dir;
@@ -125,7 +125,7 @@ bool create_ammo(PlayerType *player_ptr)
 
         ItemEntity forge;
         auto *q_ptr = &forge;
-        q_ptr->prep(lookup_baseitem_id({ ItemKindType::SHOT, m_bonus(1, player_ptr->lev) + 1 }));
+        q_ptr->prep(baseitems.lookup_baseitem_id({ ItemKindType::SHOT, m_bonus(1, player_ptr->lev) + 1 }));
         q_ptr->number = (byte)rand_range(15, 30);
         object_aware(player_ptr, q_ptr);
         q_ptr->mark_as_known();
@@ -153,7 +153,7 @@ bool create_ammo(PlayerType *player_ptr)
 
         ItemEntity forge;
         q_ptr = &forge;
-        q_ptr->prep(lookup_baseitem_id({ ItemKindType::ARROW, static_cast<short>(m_bonus(1, player_ptr->lev) + 1) }));
+        q_ptr->prep(baseitems.lookup_baseitem_id({ ItemKindType::ARROW, static_cast<short>(m_bonus(1, player_ptr->lev) + 1) }));
         q_ptr->number = (byte)rand_range(5, 10);
         object_aware(player_ptr, q_ptr);
         q_ptr->mark_as_known();
@@ -180,7 +180,7 @@ bool create_ammo(PlayerType *player_ptr)
 
         ItemEntity forge;
         q_ptr = &forge;
-        q_ptr->prep(lookup_baseitem_id({ ItemKindType::BOLT, static_cast<short>(m_bonus(1, player_ptr->lev) + 1) }));
+        q_ptr->prep(baseitems.lookup_baseitem_id({ ItemKindType::BOLT, static_cast<short>(m_bonus(1, player_ptr->lev) + 1) }));
         q_ptr->number = (byte)rand_range(4, 8);
         object_aware(player_ptr, q_ptr);
         q_ptr->mark_as_known();

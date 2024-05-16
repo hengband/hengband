@@ -21,7 +21,6 @@
 #include "object-enchant/tr-types.h"
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
-#include "object/object-kind-hook.h"
 #include "object/object-mark-types.h"
 #include "object/object-value.h"
 #include "spell-kind/spells-perception.h"
@@ -1013,16 +1012,13 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
         int len;
         auto mlen = 0;
+        const auto &baseitems = BaseitemList::get_instance();
         for (const auto &[a_idx, artifact] : artifacts_info) {
             if (a_idx == FixedArtifactId::NONE || artifact.name.empty()) {
                 continue;
             }
 
-            const auto bi_id = lookup_baseitem_id(artifact.bi_key);
-            if (bi_id == 0) {
-                continue;
-            }
-
+            const auto bi_id = baseitems.lookup_baseitem_id(artifact.bi_key);
             o_ptr->prep(bi_id);
             o_ptr->fixed_artifact_idx = a_idx;
 

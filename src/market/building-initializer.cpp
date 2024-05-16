@@ -1,7 +1,6 @@
 #include "market/building-initializer.h"
 #include "floor/floor-town.h"
 #include "io/files-util.h"
-#include "object/object-kind-hook.h"
 #include "player-info/class-types.h"
 #include "store/articles-on-sale.h"
 #include "store/store-owners.h"
@@ -45,6 +44,7 @@ static int count_town_numbers()
  */
 void init_towns()
 {
+    const auto &baseitems = BaseitemList::get_instance();
     const auto town_numbers = count_town_numbers();
     towns_info = std::vector<town_type>(town_numbers);
     for (auto i = 1; i < town_numbers; i++) {
@@ -61,13 +61,13 @@ void init_towns()
                 continue;
             }
 
-            for (const auto &baseitem : store_regular_sale_table.at(sst)) {
-                auto bi_id = lookup_baseitem_id(baseitem);
+            for (const auto &bi_key : store_regular_sale_table.at(sst)) {
+                const auto bi_id = baseitems.lookup_baseitem_id(bi_key);
                 store_ptr->regular.push_back(bi_id);
             }
 
-            for (const auto &baseitem : store_sale_table.at(sst)) {
-                auto bi_id = lookup_baseitem_id(baseitem);
+            for (const auto &bi_key : store_sale_table.at(sst)) {
+                const auto bi_id = baseitems.lookup_baseitem_id(bi_key);
                 store_ptr->table.push_back(bi_id);
             }
         }

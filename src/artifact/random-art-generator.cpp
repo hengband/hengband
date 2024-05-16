@@ -24,7 +24,6 @@
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-armor.h"
 #include "object-hook/hook-weapon.h"
-#include "object/object-kind-hook.h"
 #include "object/object-value-calc.h"
 #include "object/tval-types.h"
 #include "perception/identification.h"

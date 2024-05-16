@@ -37,7 +37,6 @@
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
 #include "object-enchant/special-object-flags.h"
-#include "object/object-kind-hook.h"
 #include "spell-kind/blood-curse.h"
 #include "spell-kind/spells-polymorph.h"
 #include "spell-kind/spells-teleport.h"
@@ -689,13 +688,11 @@ static void postprocess_by_taking_photo(PlayerType *player_ptr, EffectMonster *e
         return;
     }
 
-    ItemEntity *q_ptr;
-    ItemEntity forge;
-    q_ptr = &forge;
-    q_ptr->prep(lookup_baseitem_id({ ItemKindType::STATUE, SV_PHOTO }));
-    q_ptr->pval = em_ptr->photo;
-    q_ptr->ident |= (IDENT_FULL_KNOWN);
-    (void)drop_near(player_ptr, q_ptr, -1, player_ptr->y, player_ptr->x);
+    ItemEntity item;
+    item.prep(BaseitemList::get_instance().lookup_baseitem_id({ ItemKindType::STATUE, SV_PHOTO }));
+    item.pval = em_ptr->photo;
+    item.ident |= (IDENT_FULL_KNOWN);
+    (void)drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);
 }
 
 /*!

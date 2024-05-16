@@ -17,7 +17,6 @@
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
-#include "object/object-kind-hook.h"
 #include "player-info/class-info.h"
 #include "realm/realm-names-table.h"
 #include "spell/spells-execution.h"
@@ -186,6 +185,7 @@ static SpoilerOutputResultType spoil_player_spell()
 
     PlayerType dummy_p;
     dummy_p.lev = 1;
+    const auto &baseitems = BaseitemList::get_instance();
     for (auto c = 0; c < PLAYER_CLASS_TYPE_MAX; c++) {
         auto class_ptr = &class_info[c];
         spoil_out(format("[[Class: %s]]\n", class_ptr->title));
@@ -195,7 +195,7 @@ static SpoilerOutputResultType spoil_player_spell()
         if (magic_ptr->spell_book != ItemKindType::NONE) {
             ItemEntity book;
             auto o_ptr = &book;
-            o_ptr->prep(lookup_baseitem_id({ magic_ptr->spell_book, 0 }));
+            o_ptr->prep(baseitems.lookup_baseitem_id({ magic_ptr->spell_book, 0 }));
             book_name = describe_flavor(&dummy_p, o_ptr, OD_NAME_ONLY);
             auto *s = angband_strchr(book_name.data(), '[');
             if (s != nullptr) {

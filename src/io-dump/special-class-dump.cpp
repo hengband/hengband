@@ -10,7 +10,6 @@
 #include "mind/mind-blue-mage.h"
 #include "monster-race/race-ability-flags.h"
 #include "mspell/monster-power-table.h"
-#include "object/object-kind-hook.h"
 #include "player-base/player-class.h"
 #include "player-info/bluemage-data-type.h"
 #include "player-info/magic-eater-data-type.h"
@@ -19,7 +18,6 @@
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 #include "util/flag-group.h"
-
 #include <algorithm>
 #include <iterator>
 #include <string>
@@ -66,7 +64,7 @@ static void dump_magic_eater(PlayerType *player_ptr, FILE *fff)
                 continue;
             }
 
-            auto bi_id = lookup_baseitem_id({ tval, i });
+            auto bi_id = baseitems.lookup_baseitem_id({ tval, i });
             if (!bi_id) {
                 continue;
             }

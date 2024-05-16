@@ -8,7 +8,6 @@
  */
 
 #include "system/baseitem-info.h"
-#include "object/object-kind-hook.h" // @todo 暫定、後で消す.
 #include "object/tval-types.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-bow-types.h"
@@ -21,6 +20,7 @@
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/angband-exceptions.h"
+#include "util/enum-converter.h"
 #include "util/string-processor.h"
 #include <set>
 #include <unordered_map>
@@ -805,18 +805,6 @@ void BaseitemList::reset_all_visuals()
     }
 }
 
-void BaseitemList::shuffle_flavors()
-{
-    this->shuffle_flavors(ItemKindType::RING);
-    this->shuffle_flavors(ItemKindType::AMULET);
-    this->shuffle_flavors(ItemKindType::STAFF);
-    this->shuffle_flavors(ItemKindType::WAND);
-    this->shuffle_flavors(ItemKindType::ROD);
-    this->shuffle_flavors(ItemKindType::FOOD);
-    this->shuffle_flavors(ItemKindType::POTION);
-    this->shuffle_flavors(ItemKindType::SCROLL);
-}
-
 /*!
  * @brief ベースアイテムの鑑定済みフラグをリセットする
  * @details 不具合対策で0からリセットする(セーブは0から)
@@ -839,9 +827,102 @@ void BaseitemList::mark_common_items_as_aware()
     bi_keys.emplace_back(ItemKindType::POTION, SV_POTION_WATER);
     bi_keys.emplace_back(ItemKindType::STAFF, SV_STAFF_NOTHING);
     for (const auto &bi_key : bi_keys) {
-        const auto bi_id = lookup_baseitem_id(bi_key);
+        const auto bi_id = this->lookup_baseitem_id(bi_key);
         this->baseitems[bi_id].mark_as_aware();
     }
+}
+
+/*!
+ * @brief ベースアイテムキーからIDを引いて返す
+ * @param key ベースアイテムキー、但しsvalはランダム(nullopt) の可能性がある
+ * @return ベースアイテムID
+ * @details ベースアイテムIDが存在しなければ例外
+ */
+short BaseitemList::lookup_baseitem_id(const BaseitemKey &bi_key) const
+{
+    const auto sval = bi_key.sval();
+    if (sval) {
+        return exe_lookup(bi_key);
+    }
+
+    static const auto &cache = create_baseitems_cache();
+    const auto itr = cache.find(bi_key.tval());
+    if (itr == cache.end()) {
+        constexpr auto fmt = "Specified ItemKindType has no subtype! %d";
+        THROW_EXCEPTION(std::runtime_error, format(fmt, enum2i(bi_key.tval())));
+    }
+
+    const auto &svals = itr->second;
+    return exe_lookup({ bi_key.tval(), rand_choice(svals) });
+}
+
+void BaseitemList::shuffle_flavors()
+{
+    this->shuffle_flavors(ItemKindType::RING);
+    this->shuffle_flavors(ItemKindType::AMULET);
+    this->shuffle_flavors(ItemKindType::STAFF);
+    this->shuffle_flavors(ItemKindType::WAND);
+    this->shuffle_flavors(ItemKindType::ROD);
+    this->shuffle_flavors(ItemKindType::FOOD);
+    this->shuffle_flavors(ItemKindType::POTION);
+    this->shuffle_flavors(ItemKindType::SCROLL);
+}
+
+/*!
+ * @brief ベースアイテムキーに対応するベースアイテムのIDを検索する
+ * @param key 検索したいベースアイテムキー
+ * @return ベースアイテムID
+ * @details ベースアイテムIDが存在しなければ例外
+ */
+short BaseitemList::exe_lookup(const BaseitemKey &bi_key) const
+{
+    static const auto &cache = create_baseitem_index_chache();
+    const auto itr = cache.find(bi_key);
+    if (itr == cache.end()) {
+        constexpr auto fmt = "Invalid Baseitem Key is specified! %d, %d";
+        THROW_EXCEPTION(std::runtime_error, format(fmt, enum2i(bi_key.tval()), *bi_key.sval()));
+    }
+
+    return itr->second;
+}
+
+/*
+ * @brief tvalとbi_key.svalに対応する、BaseitenDefinitions のIDを返すためのキャッシュを生成する
+ * @return tvalと(実在する)svalの組み合わせをキーに、ベースアイテムIDを値とした辞書
+ */
+const std::map<BaseitemKey, short> &BaseitemList::create_baseitem_index_chache() const
+{
+    static std::map<BaseitemKey, short> cache;
+    for (const auto &baseitem : BaseitemList::get_instance()) {
+        if (!baseitem.is_valid()) {
+            continue;
+        }
+
+        const auto &bi_key = baseitem.bi_key;
+        cache[bi_key] = baseitem.idx;
+    }
+
+    return cache;
+}
+
+/*
+ * @brief 特定のtvalとランダムなsvalの組み合わせからベースアイテムを選択するためのキャッシュを生成する
+ * @return tvalをキーに、svalのリストを値とした辞書
+ */
+const std::map<ItemKindType, std::vector<int>> &BaseitemList::create_baseitems_cache() const
+{
+    static std::map<ItemKindType, std::vector<int>> cache;
+    for (const auto &baseitem : BaseitemList::get_instance()) {
+        if (!baseitem.is_valid()) {
+            continue;
+        }
+
+        const auto &bi_key = baseitem.bi_key;
+        const auto tval = bi_key.tval();
+        cache[tval].push_back(*bi_key.sval());
+    }
+
+    return cache;
 }
 
 /*!

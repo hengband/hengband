@@ -6,7 +6,6 @@
 #include "io/tokenizer.h"
 #include "monster-race/monster-race.h"
 #include "object-enchant/special-object-flags.h"
-#include "object/object-kind-hook.h"
 #include "system/angband-exceptions.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info.h"
@@ -120,7 +119,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
     if (category == "ARTIFACT") {
         const auto &artifact_name = tokens[1];
         const auto &[a_idx, a_ptr] = get_artifact_definition(artifact_name);
-        const auto bi_id = lookup_baseitem_id(a_ptr->bi_key);
+        const auto bi_id = BaseitemList::get_instance().lookup_baseitem_id(a_ptr->bi_key);
         ItemEntity item;
         item.prep(bi_id);
         item.fixed_artifact_idx = a_idx;

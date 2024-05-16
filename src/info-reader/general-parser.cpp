@@ -9,7 +9,6 @@
 #include "io/tokenizer.h"
 #include "main/angband-headers.h"
 #include "object-enchant/trg-types.h"
-#include "object/object-kind-hook.h"
 #include "realm/realm-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info.h"
@@ -150,7 +149,7 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
                 if (quest.has_reward()) {
                     const auto &artifact = quest.get_reward();
                     if (artifact.gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {
-                        letter[index].object = lookup_baseitem_id(artifact.bi_key);
+                        letter[index].object = BaseitemList::get_instance().lookup_baseitem_id(artifact.bi_key);
                     }
                 }
             }

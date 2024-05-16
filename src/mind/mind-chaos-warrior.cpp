@@ -2,7 +2,6 @@
 #include "floor/floor-object.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-ego.h"
-#include "object/object-kind-hook.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
@@ -71,7 +70,7 @@ void acquire_chaos_weapon(PlayerType *player_ptr)
     ItemEntity forge;
     auto *q_ptr = &forge;
 
-    q_ptr->prep(lookup_baseitem_id({ ItemKindType::SWORD, sval }));
+    q_ptr->prep(BaseitemList::get_instance().lookup_baseitem_id({ ItemKindType::SWORD, sval }));
     q_ptr->to_h = 3 + randint1(player_ptr->current_floor_ptr->dun_level) % 10;
     q_ptr->to_d = 3 + randint1(player_ptr->current_floor_ptr->dun_level) % 10;
     one_resistance(q_ptr);

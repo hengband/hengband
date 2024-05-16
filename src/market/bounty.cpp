@@ -20,7 +20,6 @@
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/item-magic-applier.h"
 #include "object/object-info.h"
-#include "object/object-kind-hook.h"
 #include "perception/object-perception.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/baseitem-info.h"
@@ -157,8 +156,6 @@ bool exchange_cash(PlayerType *player_ptr)
             }
 
             INVENTORY_IDX inventory_new;
-            ItemEntity forge;
-
             const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
             if (!input_check(format(_("%sを渡しますか？", "Hand %s over? "), item_name.data()))) {
                 continue;
@@ -173,19 +170,21 @@ bool exchange_cash(PlayerType *player_ptr)
 
             msg_print(_(format("これで合計 %d ポイント獲得しました。", num), format("You earned %d point%s total.", num, (num > 1 ? "s" : ""))));
 
-            (&forge)->prep(lookup_baseitem_id(prize_list[num - 1]));
-            ItemMagicApplier(player_ptr, &forge, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART).execute();
+            const auto bi_id = BaseitemList::get_instance().lookup_baseitem_id(prize_list[num - 1]);
+            ItemEntity item;
+            item.prep(bi_id);
+            ItemMagicApplier(player_ptr, &item, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART).execute();
 
-            object_aware(player_ptr, &forge);
-            forge.mark_as_known();
+            object_aware(player_ptr, &item);
+            item.mark_as_known();
 
             /*
              * Hand it --- Assume there is an empty slot.
              * Since a corpse is handed at first,
              * there is at least one empty slot.
              */
-            inventory_new = store_item_to_inventory(player_ptr, &forge);
-            const auto got_item_name = describe_flavor(player_ptr, &forge, 0);
+            inventory_new = store_item_to_inventory(player_ptr, &item);
+            const auto got_item_name = describe_flavor(player_ptr, &item, 0);
             msg_format(_("%s(%c)を貰った。", "You get %s (%c). "), got_item_name.data(), index_to_label(inventory_new));
 
             autopick_alter_item(player_ptr, inventory_new, false);

@@ -23,7 +23,6 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/trg-types.h"
 #include "object/object-info.h"
-#include "object/object-kind-hook.h"
 #include "room/rooms-vault.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "system/artifact-type-definition.h"
@@ -86,11 +85,10 @@ static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const
         return;
     }
 
-    const auto bi_id = lookup_baseitem_id({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
-    ItemEntity forge;
-    auto *q_ptr = &forge;
-    q_ptr->prep(bi_id);
-    drop_here(player_ptr->current_floor_ptr, q_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
+    const auto bi_id = BaseitemList::get_instance().lookup_baseitem_id({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
+    ItemEntity item;
+    item.prep(bi_id);
+    drop_here(player_ptr->current_floor_ptr, &item, *qtwg_ptr->y, *qtwg_ptr->x);
 }
 
 static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)

@@ -26,7 +26,6 @@
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-kind-hook.h"
 #include "perception/object-perception.h"
 #include "player-info/class-info.h"
 #include "racial/racial-android.h"
@@ -135,11 +134,7 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
     const auto &baseitems = BaseitemList::get_instance();
     for (auto i = 0; i < num; i++) {
         auto am_ptr = pt.pick_one_at_random();
-        const auto bi_id = lookup_baseitem_id(am_ptr->key);
-        if (bi_id == 0) {
-            continue;
-        }
-
+        const auto bi_id = baseitems.lookup_baseitem_id(am_ptr->key);
         const auto insta_art = baseitems.get_baseitem(bi_id).gen_flags.has(ItemGenerationTraitType::INSTA_ART);
         const auto flag = am_ptr->flag;
         const auto fixed_art = flag == AmusementFlagType::FIXED_ART;
