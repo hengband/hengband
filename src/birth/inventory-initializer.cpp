@@ -31,6 +31,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
+#include "util/enum-range.h"
 #include <tuple>
 
 /*!
@@ -190,8 +191,8 @@ void player_outfit(PlayerType *player_ptr)
         item.pval = (PARAMETER_VALUE)rand_range(25, 30);
         add_outfit(player_ptr, item);
     } else if (pc.equals(PlayerClassType::SORCERER)) {
-        for (auto book_tval = enum2i(ItemKindType::LIFE_BOOK); book_tval <= enum2i(ItemKindType::LIFE_BOOK) + MAX_MAGIC - 1; book_tval++) {
-            ItemEntity item({ i2enum<ItemKindType>(book_tval), 0 });
+        for (const auto tval : TV_MAGIC_BOOK_RANGE) {
+            ItemEntity item({ tval, 0 });
             item.number = 1;
             add_outfit(player_ptr, item);
         }

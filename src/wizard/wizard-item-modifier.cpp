@@ -27,7 +27,6 @@
 #include "spell/spells-object.h"
 #include "system/alloc-entries.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
@@ -853,8 +852,6 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 #endif
     };
 
-    ItemEntity forge;
-    auto *o_ptr = &forge;
     auto wish_art = false;
     auto wish_randart = false;
     auto wish_ego = false;
@@ -955,11 +952,11 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                 continue;
             }
 
-            o_ptr->generate(baseitem.idx);
+            ItemEntity item(baseitem.idx);
 #ifdef JP
-            const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+            const auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 #else
-            auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+            auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
             str_tolower(item_name.data());
 #endif
             if (cheat_xtra) {
@@ -976,9 +973,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         }
 
         if (allow_ego && baseitem_ids.size() == 1) {
-            short bi_id = baseitem_ids.back();
-            o_ptr->generate(bi_id);
-
+            ItemEntity item(baseitem_ids.back());
             for (const auto &[e_idx, ego] : egos_info) {
                 if (ego.idx == EgoType::NONE || ego.name.empty()) {
                     continue;
@@ -994,7 +989,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                 }
 
                 if (std::string(str).find(item_name) != std::string::npos) {
-                    if (is_slot_able_to_be_ego(player_ptr, o_ptr) != ego.slot) {
+                    if (is_slot_able_to_be_ego(player_ptr, &item) != ego.slot) {
                         continue;
                     }
 
@@ -1012,20 +1007,18 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
         int len;
         auto mlen = 0;
-        const auto &baseitems = BaseitemList::get_instance();
         for (const auto &[a_idx, artifact] : artifacts_info) {
             if (a_idx == FixedArtifactId::NONE || artifact.name.empty()) {
                 continue;
             }
 
-            const auto bi_id = baseitems.lookup_baseitem_id(artifact.bi_key);
-            o_ptr->generate(bi_id);
-            o_ptr->fixed_artifact_idx = a_idx;
+            ItemEntity item(artifact.bi_key);
+            item.fixed_artifact_idx = a_idx;
 
 #ifdef JP
-            const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+            const auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 #else
-            auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+            auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
             str_tolower(item_name.data());
 #endif
             a_str = a_desc;
@@ -1130,13 +1123,14 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
         if (wish_randart) {
             if (must || ok_art) {
+                ItemEntity item;
                 do {
-                    o_ptr->generate(bi_id);
-                    ItemMagicApplier(player_ptr, o_ptr, baseitem.level, AM_SPECIAL | AM_NO_FIXED_ART).execute();
-                } while (!o_ptr->is_random_artifact() || o_ptr->is_ego() || o_ptr->is_cursed());
+                    item.generate(bi_id);
+                    ItemMagicApplier(player_ptr, &item, baseitem.level, AM_SPECIAL | AM_NO_FIXED_ART).execute();
+                } while (!item.is_random_artifact() || item.is_ego() || item.is_cursed());
 
-                if (o_ptr->is_random_artifact()) {
-                    drop_near(player_ptr, o_ptr, -1, player_ptr->y, player_ptr->x);
+                if (item.is_random_artifact()) {
+                    drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);
                 }
             } else {
                 wishing_puff_of_smoke();
@@ -1145,19 +1139,20 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         }
 
         WishResultType res = WishResultType::NOTHING;
+        ItemEntity item;
         if (allow_ego && (wish_ego || ego_ids.size() > 0)) {
             if (must || ok_ego) {
                 if (ego_ids.size() > 0) {
-                    o_ptr->generate(bi_id);
-                    o_ptr->ego_idx = ego_ids[0];
-                    apply_ego(o_ptr, player_ptr->current_floor_ptr->base_level);
+                    item.generate(bi_id);
+                    item.ego_idx = ego_ids[0];
+                    apply_ego(&item, player_ptr->current_floor_ptr->base_level);
                 } else {
                     auto max_roll = 1000;
                     auto i = 0;
                     for (i = 0; i < max_roll; i++) {
-                        o_ptr->generate(bi_id);
-                        ItemMagicApplier(player_ptr, o_ptr, baseitem.level, AM_GREAT | AM_NO_FIXED_ART).execute();
-                        if (o_ptr->is_random_artifact()) {
+                        item.generate(bi_id);
+                        ItemMagicApplier(player_ptr, &item, baseitem.level, AM_GREAT | AM_NO_FIXED_ART).execute();
+                        if (item.is_random_artifact()) {
                             continue;
                         }
 
@@ -1167,7 +1162,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
                         auto e_idx = EgoType::NONE;
                         for (auto e : ego_ids) {
-                            if (o_ptr->ego_idx == e) {
+                            if (item.ego_idx == e) {
                                 e_idx = e;
                                 break;
                             }
@@ -1190,9 +1185,9 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             res = WishResultType::EGO;
         } else {
             for (auto i = 0; i < 100; i++) {
-                o_ptr->generate(bi_id);
-                ItemMagicApplier(player_ptr, o_ptr, 0, AM_NO_FIXED_ART).execute();
-                if (!o_ptr->is_cursed()) {
+                item.generate(bi_id);
+                ItemMagicApplier(player_ptr, &item, 0, AM_NO_FIXED_ART).execute();
+                if (!item.is_cursed()) {
                     break;
                 }
             }
@@ -1200,16 +1195,16 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             res = WishResultType::NORMAL;
         }
 
-        if (blessed && wield_slot(player_ptr, o_ptr) != -1) {
-            o_ptr->art_flags.set(TR_BLESSED);
+        if (blessed && wield_slot(player_ptr, &item) != -1) {
+            item.art_flags.set(TR_BLESSED);
         }
 
-        if (fixed && wield_slot(player_ptr, o_ptr) != -1) {
-            o_ptr->art_flags.set(TR_IGNORE_ACID);
-            o_ptr->art_flags.set(TR_IGNORE_FIRE);
+        if (fixed && wield_slot(player_ptr, &item) != -1) {
+            item.art_flags.set(TR_IGNORE_ACID);
+            item.art_flags.set(TR_IGNORE_FIRE);
         }
 
-        (void)drop_near(player_ptr, o_ptr, -1, player_ptr->y, player_ptr->x);
+        (void)drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);
         return res;
     }
 
