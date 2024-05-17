@@ -250,80 +250,108 @@ FILE *angband_fopen_temp(char *buf, int max)
 }
 #endif /* HAVE_MKSTEMP */
 
-/*
- * Hack -- replacement for "fgets()"
+/*!
+ * @brief ファイルから改行かEOFまでの文字列を読み取り、システムのエンコーディングに変換した結果を返す
  *
- * Read a string, without a newline, to a file
- *
- * Process tabs, replace internal non-printables with '?'
+ * @param fp ファイルポインタ
+ * @return 読み取った文字列。1バイトも読み取らずファイルの終端に達した場合はstd::nullopt
  */
-errr angband_fgets(FILE *fff, char *buf, ulong n)
+static std::optional<std::string> read_line(FILE *fp)
 {
-    ulong i = 0;
-    char *s;
+    std::string line_buf;
 
-    if (n <= 1) {
-        return 1;
+    char buf[1024];
+    while (fgets(buf, sizeof(buf), fp) != nullptr) {
+        std::string_view sv(buf);
+
+        line_buf.append(sv.begin(), sv.end());
+        if (sv.back() == '\n') {
+            break;
+        }
     }
+
+    if (line_buf.empty()) {
+        return std::nullopt;
+    }
+
+    if (line_buf.back() == '\n') {
+        line_buf.pop_back();
+    }
+
+#ifdef JP
+    const int len = guess_convert_to_system_encoding(line_buf.data(), line_buf.size());
+    line_buf.erase(len);
+#endif
+
+    return line_buf;
+}
+
+/*!
+ * @brief ファイルから1行読み込む
+ *
+ * ファイルから1行読み込み、読み込んだ文字列に以下の処理を行い最大n-1バイトまでの文字列を返す。
+ * - タブをスペースに変換する
+ * - プリント可能文字以外を'?'に変換する
+ * - 行末の改行を削除する
+ *
+ * 日本語版ではさらに以下の処理も行う。
+ * - 文字コードをシステムの文字コードに変換する
+ * - マルチバイト文字の前半のみが残らないようにする
+ *
+ * 読み込んだ行で上記の変換を行いn-1バイトを超えた分は読み捨てられる。
+ *
+ * @param fp 読み込むファイルポインタ
+ * @param n 読み込む文字列の最大サイズ。
+ * 呼び出し側で終端文字を扱う可能性を考慮し、文字列長としては最大n-1バイトまでの文字列を返す。
+ * デフォルト引数（std::string::npos）の場合は巨大な値であるため実質的にサイズ制限なし。
+ * @return 読み取った文字列。1バイトも読み取らずファイルの終端に達した場合はstd::nullopt
+ */
+std::optional<std::string> angband_fgets(FILE *fp, size_t n)
+{
     // Reserve for null termination
     --n;
 
-    std::vector<char> file_read_tmp(FILE_READ_BUFF_SIZE);
-    if (fgets(file_read_tmp.data(), file_read_tmp.size(), fff)) {
-#ifdef JP
-        guess_convert_to_system_encoding(file_read_tmp.data(), FILE_READ_BUFF_SIZE);
-#endif
-        for (s = file_read_tmp.data(); *s; s++) {
-            if (*s == '\n') {
-                buf[i] = '\0';
-                return 0;
-            } else if (*s == '\t') {
-                if (i + 8 >= n) {
-                    break;
-                }
-
-                buf[i++] = ' ';
-                while (0 != (i % 8)) {
-                    buf[i++] = ' ';
-                }
-            }
-#ifdef JP
-            else if (iskanji(*s)) {
-                if (i + 1 >= n) {
-                    break;
-                }
-                if (!s[1]) {
-                    break;
-                }
-                buf[i++] = *s++;
-                buf[i++] = *s;
-            } else if (iskana(*s)) {
-                /* 半角かなに対応 */
-                buf[i++] = *s;
-                if (i >= n) {
-                    break;
-                }
-            }
-#endif
-            else if (isprint((unsigned char)*s)) {
-                buf[i++] = *s;
-                if (i >= n) {
-                    break;
-                }
-            } else {
-                buf[i++] = '?';
-                if (i >= n) {
-                    break;
-                }
-            }
-        }
-
-        buf[i] = '\0';
-        return 0;
+    const auto line = read_line(fp);
+    if (!line) {
+        return std::nullopt;
     }
 
-    buf[0] = '\0';
-    return 1;
+    std::string str;
+
+    for (const auto *s = line->data(); *s; s++) {
+        if (*s == '\t') {
+            constexpr auto tab_width = 8;
+            if (str.length() + tab_width >= n) {
+                break;
+            }
+
+            const auto space_count = tab_width - (str.length() % tab_width);
+            str.append(space_count, ' ');
+        }
+#ifdef JP
+        else if (iskanji(*s)) {
+            if (str.length() + 1 >= n || s[1] == '\0') {
+                break;
+            }
+            str.push_back(*s++);
+            str.push_back(*s);
+        } else if (iskana(*s)) {
+            /* 半角かなに対応 */
+            str.push_back(*s);
+        }
+#endif
+        else if (isprint((unsigned char)*s)) {
+            str.push_back(*s);
+        } else {
+            str.push_back('?');
+        }
+
+        if (str.length() >= n) {
+            break;
+        }
+    }
+
+    return str;
 }
 
 /*

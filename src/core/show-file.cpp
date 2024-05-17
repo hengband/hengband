@@ -188,15 +188,17 @@ void FileDisplayer::display(bool show_version, std::string_view name_with_tag, i
     auto next = 0;
     auto back = 0;
     auto menu = false;
-    char buf[1024]{};
     auto reverse = initial_line < 0;
     auto line = initial_line;
     while (true) {
-        char *str = buf;
-        if (angband_fgets(fff, buf, sizeof(buf))) {
+        auto line_str = angband_fgets(fff);
+        if (!line_str) {
             break;
         }
-        if (!prefix(str, "***** ")) {
+
+        auto *const str = line_str->data();
+
+        if (!line_str->starts_with("***** ")) {
             next++;
             continue;
         }
@@ -255,10 +257,11 @@ void FileDisplayer::display(bool show_version, std::string_view name_with_tag, i
         }
 
         while (next < line) {
-            if (angband_fgets(fff, buf, sizeof(buf))) {
+            const auto line_str = angband_fgets(fff);
+            if (!line_str) {
                 break;
             }
-            if (prefix(buf, "***** ")) {
+            if (line_str->starts_with("***** ")) {
                 continue;
             }
             next++;
@@ -266,28 +269,27 @@ void FileDisplayer::display(bool show_version, std::string_view name_with_tag, i
 
         int row_count;
         for (row_count = 0; row_count < rows;) {
-            concptr str = buf;
             if (!row_count) {
                 line = next;
             }
-            if (angband_fgets(fff, buf, sizeof(buf))) {
+            const auto line_str = angband_fgets(fff);
+            if (!line_str) {
                 break;
             }
-            if (prefix(buf, "***** ")) {
+            if (line_str->starts_with("***** ")) {
                 continue;
             }
             next++;
             if (!find.empty() && !row_count) {
-                char lc_buf[1024];
-                strcpy(lc_buf, str);
-                str_tolower(lc_buf);
-                if (!str_find(lc_buf, find)) {
+                auto lc_str = *line_str;
+                str_tolower(lc_str.data());
+                if (!str_find(lc_str, find)) {
                     continue;
                 }
             }
 
             find.clear();
-            show_file_aux_line(str, row_count + 2, shower);
+            show_file_aux_line(*line_str, row_count + 2, shower);
             row_count++;
         }
 
@@ -493,9 +495,12 @@ void FileDisplayer::display(bool show_version, std::string_view name_with_tag, i
             }
 
             fprintf(ffp, "%s: %s\n", this->player_name.data(), !what.empty() ? what.data() : caption_str.data());
-            char buff[1024]{};
-            while (!angband_fgets(fff, buff, sizeof(buff))) {
-                angband_fputs(ffp, buff, 80);
+            while (true) {
+                const auto line_str = angband_fgets(fff);
+                if (!line_str) {
+                    break;
+                }
+                angband_fputs(ffp, line_str->data(), line_str->size());
             }
             angband_fclose(fff);
             angband_fclose(ffp);

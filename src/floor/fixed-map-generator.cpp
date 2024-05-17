@@ -40,9 +40,8 @@
 // PARSE_ERROR_MAXが既にあり扱い辛いのでここでconst宣言.
 static const int PARSE_CONTINUE = 255;
 
-qtwg_type *initialize_quest_generator_type(qtwg_type *qtwg_ptr, char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
+qtwg_type *initialize_quest_generator_type(qtwg_type *qtwg_ptr, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
 {
-    qtwg_ptr->buf = buf;
     qtwg_ptr->ymin = ymin;
     qtwg_ptr->xmin = xmin;
     qtwg_ptr->ymax = ymax;

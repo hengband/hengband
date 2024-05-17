@@ -58,31 +58,33 @@ static errr process_pref_file_aux(PlayerType *player_ptr, const std::filesystem:
     int line = -1;
     errr err = 0;
     bool bypass = false;
-    std::vector<char> file_read_buf(FILE_READ_BUFF_SIZE);
     std::string error_line;
-    while (angband_fgets(fp, file_read_buf.data(), file_read_buf.size()) == 0) {
+    while (true) {
+        auto line_str = angband_fgets(fp);
+        if (!line_str) {
+            break;
+        }
         line++;
-        if (!file_read_buf[0]) {
+        if (line_str->empty()) {
             continue;
         }
 
 #ifdef JP
-        if (!iskanji(file_read_buf[0]))
+        if (!iskanji(line_str->front()))
 #endif
-            if (iswspace(file_read_buf[0])) {
+            if (iswspace(line_str->front())) {
                 continue;
             }
 
-        if (file_read_buf[0] == '#') {
+        if (line_str->starts_with('#')) {
             continue;
         }
-        error_line = file_read_buf.data();
+        error_line = *line_str;
 
         /* Process "?:<expr>" */
-        if ((file_read_buf[0] == '?') && (file_read_buf[1] == ':')) {
+        if (line_str->starts_with("?:")) {
             char f;
-            char *s;
-            s = file_read_buf.data() + 2;
+            char *s = line_str->data() + 2;
             concptr v = process_pref_file_expr(player_ptr, &s, &f);
             bypass = streq(v, "0");
             continue;
@@ -93,22 +95,24 @@ static errr process_pref_file_aux(PlayerType *player_ptr, const std::filesystem:
         }
 
         /* Process "%:<file>" */
-        if (file_read_buf[0] == '%') {
+        if (line_str->starts_with("%:")) {
             static int depth_count = 0;
             if (depth_count > 20) {
                 continue;
             }
 
             depth_count++;
+            std::string_view file(*line_str);
+            file.remove_prefix(2);
             switch (preftype) {
             case PREF_TYPE_AUTOPICK:
-                (void)process_autopick_file(player_ptr, file_read_buf.data() + 2);
+                (void)process_autopick_file(player_ptr, file);
                 break;
             case PREF_TYPE_HISTPREF:
-                (void)process_histpref_file(player_ptr, file_read_buf.data() + 2);
+                (void)process_histpref_file(player_ptr, file);
                 break;
             default:
-                (void)process_pref_file(player_ptr, file_read_buf.data() + 2);
+                (void)process_pref_file(player_ptr, file);
                 break;
             }
 
@@ -116,13 +120,13 @@ static errr process_pref_file_aux(PlayerType *player_ptr, const std::filesystem:
             continue;
         }
 
-        err = interpret_pref_file(player_ptr, file_read_buf.data());
+        err = interpret_pref_file(player_ptr, line_str->data());
         if (err != 0) {
             if (preftype != PREF_TYPE_AUTOPICK) {
                 break;
             }
 
-            process_autopick_file_command(file_read_buf.data());
+            process_autopick_file_command(line_str->data());
             err = 0;
         }
     }

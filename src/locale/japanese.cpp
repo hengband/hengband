@@ -608,11 +608,12 @@ std::optional<std::string> utf8_to_sys(std::string_view str)
  *               バッファは変換した文字列で上書きされる。
  *               UTF-8からSJISもしくはEUCへの変換を想定しているのでバッファの長さが足りなくなることはない。
  * @param buflen バッファの長さ。
+ * @return 変換後の文字列の長さ（終端文字は含まない）
  */
-void guess_convert_to_system_encoding(char *strbuf, int buflen)
+size_t guess_convert_to_system_encoding(char *strbuf, int buflen)
 {
     if (is_ascii_str(strbuf)) {
-        return;
+        return std::string_view(strbuf).length();
     }
 
     if (is_utf8_str(strbuf)) {
@@ -620,13 +621,15 @@ void guess_convert_to_system_encoding(char *strbuf, int buflen)
         if (!sys_str || std::ssize(*sys_str) >= buflen) {
             msg_print("警告:文字コードの変換に失敗しました");
             msg_print(nullptr);
-            return;
+            return std::string_view(strbuf).length();
         }
 
         std::copy(sys_str->begin(), sys_str->end(), strbuf);
         strbuf[sys_str->length()] = '\0';
-        return;
+        return sys_str->length();
     }
+
+    return std::string_view(strbuf).length();
 }
 
 /*!
