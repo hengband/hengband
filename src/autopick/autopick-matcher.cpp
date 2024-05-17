@@ -129,7 +129,7 @@ static bool check_item_features(PlayerType *player_ptr, const autopick_type &ent
 /*!
  * @brief A function for Auto-picker/destroyer Examine whether the object matches to the entry
  */
-bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, const autopick_type &entry, std::string_view item_name)
+bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const autopick_type &entry, std::string_view item_name)
 {
     if (entry.has(FLG_UNAWARE) && o_ptr->is_aware()) {
         return false;
