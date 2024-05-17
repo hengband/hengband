@@ -106,7 +106,7 @@ static bool clear_auto_register(PlayerType *player_ptr)
 /*!
  * @brief Automatically register an auto-destroy preference line
  */
-bool autopick_autoregister(PlayerType *player_ptr, ItemEntity *o_ptr)
+bool autopick_autoregister(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
     autopick_type an_entry, *entry = &an_entry;
     int autopick_registered = find_autopick_list(player_ptr, o_ptr);
