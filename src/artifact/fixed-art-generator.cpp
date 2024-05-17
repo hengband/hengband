@@ -281,41 +281,18 @@ bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y,
  */
 bool make_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    auto floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->dun_level == 0) {
-        return false;
-    }
-
+    const auto &floor = *player_ptr->current_floor_ptr;
     if (o_ptr->number != 1) {
         return false;
     }
 
-    for (const auto &[a_idx, artifact] : artifacts_info) {
-        if (artifact.name.empty()) {
+    for (const auto &[a_idx, artifact] : ArtifactList::get_instance()) {
+        if (!artifact.can_generate(o_ptr->bi_key)) {
             continue;
         }
 
-        if (artifact.is_generated) {
-            continue;
-        }
-
-        if (artifact.gen_flags.has(ItemGenerationTraitType::QUESTITEM)) {
-            continue;
-        }
-
-        if (artifact.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
-            continue;
-        }
-
-        if (artifact.bi_key != o_ptr->bi_key) {
-            continue;
-        }
-
-        if (artifact.level > floor_ptr->dun_level) {
-            int d = (artifact.level - floor_ptr->dun_level) * 2;
-            if (!one_in_(d)) {
-                continue;
-            }
+        if ((artifact.level > floor.dun_level) && !one_in_((artifact.level - floor.dun_level) * 2)) {
+            return false;
         }
 
         if (!one_in_(artifact.rarity)) {

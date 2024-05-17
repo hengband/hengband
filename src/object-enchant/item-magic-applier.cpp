@@ -160,6 +160,11 @@ int ItemMagicApplier::calculate_rolls(const int power)
  */
 void ItemMagicApplier::try_make_artifact(const int rolls)
 {
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    if (!floor.is_in_dungeon()) {
+        return;
+    }
+
     for (auto i = 0; i < rolls; i++) {
         if (make_artifact(this->player_ptr, this->o_ptr)) {
             break;
