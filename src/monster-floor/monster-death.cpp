@@ -180,7 +180,7 @@ bool drop_single_artifact(PlayerType *player_ptr, MonsterDeath *md_ptr, FixedArt
     return create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x);
 }
 
-static short drop_dungeon_final_artifact(PlayerType *player_ptr, MonsterDeath *md_ptr)
+static std::optional<short> drop_dungeon_final_artifact(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
     const auto &dungeon = player_ptr->current_floor_ptr->get_dungeon_definition();
     const auto has_reward = dungeon.final_object > 0;
@@ -196,8 +196,7 @@ static short drop_dungeon_final_artifact(PlayerType *player_ptr, MonsterDeath *m
     }
 
     create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x);
-
-    return dungeon.final_object ? bi_id : 0;
+    return dungeon.final_object ? std::make_optional<short>(bi_id) : std::nullopt;
 }
 
 static void drop_artifacts(PlayerType *player_ptr, MonsterDeath *md_ptr)
@@ -214,13 +213,12 @@ static void drop_artifacts(PlayerType *player_ptr, MonsterDeath *md_ptr)
     }
 
     const auto bi_id = drop_dungeon_final_artifact(player_ptr, md_ptr);
-    if (bi_id == 0) {
-        return;
+    if (bi_id) {
+        ItemEntity item(*bi_id);
+        ItemMagicApplier(player_ptr, &item, floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD).execute();
+        (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
     }
 
-    ItemEntity item(bi_id);
-    ItemMagicApplier(player_ptr, &item, floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD).execute();
-    (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
     msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), dungeon.name.data());
 }
 
