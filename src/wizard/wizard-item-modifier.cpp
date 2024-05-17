@@ -221,7 +221,7 @@ void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx
 {
     const auto max_a_idx = enum2i(artifacts_info.rbegin()->first);
     const auto message = aware ? "Modified." : "Restored.";
-    auto &artifacts = ArtifactsInfo::get_instance();
+    auto &artifacts = ArtifactList::get_instance();
     if (reset_artifact_idx != FixedArtifactId::NONE) {
         artifacts.get_artifact(reset_artifact_idx).is_generated = aware;
         msg_print(message);
@@ -1086,7 +1086,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
     if (artifact_ids.size() == 1) {
         const auto a_idx = artifact_ids.back();
-        const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+        const auto &artifact = ArtifactList::get_instance().get_artifact(a_idx);
         if (must || (ok_art && !artifact.is_generated)) {
             (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
         } else {
@@ -1117,7 +1117,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         }
 
         if (a_idx != FixedArtifactId::NONE) {
-            const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+            const auto &artifact = ArtifactList::get_instance().get_artifact(a_idx);
             if (must || (ok_art && !artifact.is_generated)) {
                 (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
             } else {

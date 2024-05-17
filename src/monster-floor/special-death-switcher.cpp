@@ -175,7 +175,7 @@ static void on_dead_sacred_treasures(PlayerType *player_ptr, MonsterDeath *md_pt
     std::vector<FixedArtifactId> candidates;
     std::copy_if(namake_equipments.begin(), namake_equipments.end(), std::back_inserter(candidates),
         [](FixedArtifactId a_idx) {
-            const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+            const auto &artifact = ArtifactList::get_instance().get_artifact(a_idx);
             return !artifact.is_generated;
         });
 

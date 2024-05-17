@@ -220,7 +220,7 @@ void wiz_create_item(PlayerType *player_ptr)
  */
 static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArtifactId a_idx)
 {
-    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+    const auto &artifact = ArtifactList::get_instance().get_artifact(a_idx);
     ItemEntity item(artifact.bi_key);
     item.fixed_artifact_idx = a_idx;
     item.mark_as_known();
@@ -296,7 +296,7 @@ void wiz_create_named_art(PlayerType *player_ptr)
 
     screen_load();
     const auto a_idx = *create_a_idx;
-    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+    const auto &artifact = ArtifactList::get_instance().get_artifact(a_idx);
     if (artifact.is_generated) {
         msg_print("It's already allocated.");
         return;

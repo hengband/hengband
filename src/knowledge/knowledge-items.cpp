@@ -91,7 +91,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
     uint16_t why = 3;
     ang_sort(player_ptr, whats.data(), &why, whats.size(), ang_sort_art_comp, ang_sort_art_swap);
     for (auto a_idx : whats) {
-        const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+        const auto &artifact = ArtifactList::get_instance().get_artifact(a_idx);
         const auto bi_id = baseitems.lookup_baseitem_id(artifact.bi_key);
         constexpr auto template_basename = _("     %s\n", "     The %s\n");
         ItemEntity item(bi_id);

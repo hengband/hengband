@@ -70,7 +70,7 @@ void spoiler_outlist(std::string_view header, const std::vector<std::string> &de
  */
 static ItemEntity make_fake_artifact(FixedArtifactId fixed_artifact_idx)
 {
-    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(fixed_artifact_idx);
+    const auto &artifact = ArtifactList::get_instance().get_artifact(fixed_artifact_idx);
     ItemEntity item(artifact.bi_key);
     item.fixed_artifact_idx = fixed_artifact_idx;
     item.pval = artifact.pval;

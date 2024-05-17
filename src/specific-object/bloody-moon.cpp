@@ -61,7 +61,7 @@ constexpr auto BLOODY_MOON_PVAL_FLAG_CANDIDATES = {
  */
 void get_bloody_moon_flags(ItemEntity *o_ptr)
 {
-    o_ptr->art_flags = ArtifactsInfo::get_instance().get_artifact(FixedArtifactId::BLOOD).flags;
+    o_ptr->art_flags = ArtifactList::get_instance().get_artifact(FixedArtifactId::BLOOD).flags;
 
     for (int i = 0, count = damroll(2, 2); i < count; i++) {
         const auto flag = rand_choice(BLOODY_MOON_SLAYING_FLAG_CANDIDATES);

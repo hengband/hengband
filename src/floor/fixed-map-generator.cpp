@@ -78,7 +78,7 @@ static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const
         return;
     }
 
-    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+    const auto &artifact = ArtifactList::get_instance().get_artifact(a_idx);
     if (!artifact.is_generated && create_named_art(player_ptr, a_idx, *qtwg_ptr->y, *qtwg_ptr->x)) {
         return;
     }
@@ -246,7 +246,7 @@ static bool parse_qtw_QR(QuestType *q_ptr, char **zz, int num)
 
     int count = 0;
     FixedArtifactId reward_idx = FixedArtifactId::NONE;
-    const auto &artifacts = ArtifactsInfo::get_instance();
+    const auto &artifacts = ArtifactList::get_instance();
     for (auto idx = 2; idx < num; idx++) {
         const auto a_idx = i2enum<FixedArtifactId>(atoi(zz[idx]));
         if (a_idx == FixedArtifactId::NONE) {

@@ -252,7 +252,7 @@ void apply_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
  */
 bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y, POSITION x)
 {
-    auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+    auto &artifact = ArtifactList::get_instance().get_artifact(a_idx);
     if (artifact.name.empty()) {
         return false;
     }

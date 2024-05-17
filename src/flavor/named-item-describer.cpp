@@ -290,7 +290,7 @@ static std::string describe_unique_name_after_body_en(const ItemEntity &item, co
     }
 
     if (item.is_fixed_artifact()) {
-        const auto &artifact = ArtifactsInfo::get_instance().get_artifact(item.fixed_artifact_idx);
+        const auto &artifact = ArtifactList::get_instance().get_artifact(item.fixed_artifact_idx);
         ss << ' ' << artifact.name;
         return ss.str();
     }

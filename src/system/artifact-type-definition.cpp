@@ -9,16 +9,16 @@ ArtifactType::ArtifactType()
 
 std::map<FixedArtifactId, ArtifactType> artifacts_info;
 
-ArtifactsInfo ArtifactsInfo::instance{};
+ArtifactList ArtifactList::instance{};
 
-ArtifactType ArtifactsInfo::dummy{};
+ArtifactType ArtifactList::dummy{};
 
-ArtifactsInfo &ArtifactsInfo::get_instance()
+ArtifactList &ArtifactList::get_instance()
 {
     return instance;
 }
 
-ArtifactType &ArtifactsInfo::get_artifact(const FixedArtifactId id) const
+ArtifactType &ArtifactList::get_artifact(const FixedArtifactId id) const
 {
     if (id == FixedArtifactId::NONE) {
         return dummy;

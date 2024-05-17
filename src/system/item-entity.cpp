@@ -815,7 +815,7 @@ EgoItemDefinition &ItemEntity::get_ego() const
 
 ArtifactType &ItemEntity::get_fixed_artifact() const
 {
-    return ArtifactsInfo::get_instance().get_artifact(this->fixed_artifact_idx);
+    return ArtifactList::get_instance().get_artifact(this->fixed_artifact_idx);
 }
 
 TrFlags ItemEntity::get_flags() const
