@@ -42,7 +42,6 @@
 #include "status/experience.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-other-types.h"
-#include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -298,14 +297,11 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     if (PlayerRace(player_ptr).equals(PlayerRaceType::SKELETON)) {
         const auto sval = bi_key.sval();
         if ((sval != SV_FOOD_WAYBREAD) && (sval >= SV_FOOD_BISCUIT)) {
-            ItemEntity forge;
-            auto *q_ptr = &forge;
-
+            ItemEntity item(bi_key);
             msg_print(_("食べ物がアゴを素通りして落ちた！", "The food falls through your jaws!"));
-            q_ptr->prep(BaseitemList::get_instance().lookup_baseitem_id(bi_key));
 
             /* Drop the object from heaven */
-            (void)drop_near(player_ptr, q_ptr, -1, player_ptr->y, player_ptr->x);
+            (void)drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);
         } else {
             msg_print(_("食べ物がアゴを素通りして落ち、消えた！", "The food falls through your jaws and vanishes!"));
         }

@@ -19,7 +19,6 @@
 #include "perception/identification.h"
 #include "perception/object-perception.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -95,8 +94,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
         const auto bi_id = baseitems.lookup_baseitem_id(artifact.bi_key);
         constexpr auto template_basename = _("     %s\n", "     The %s\n");
-        ItemEntity item;
-        item.prep(bi_id);
+        ItemEntity item(bi_id);
         item.fixed_artifact_idx = a_idx;
         item.ident |= IDENT_STORE;
         const auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -210,16 +208,10 @@ static void display_object_list(int col, int row, int per_page, const std::vecto
  */
 static void desc_obj_fake(PlayerType *player_ptr, short bi_id)
 {
-    ItemEntity *o_ptr;
-    ItemEntity ObjectType_body;
-    o_ptr = &ObjectType_body;
-    o_ptr->wipe();
-    o_ptr->prep(bi_id);
-
-    o_ptr->ident |= IDENT_KNOWN;
+    ItemEntity item(bi_id);
+    item.ident |= IDENT_KNOWN;
     handle_stuff(player_ptr);
-
-    if (screen_object(player_ptr, o_ptr, SCROBJ_FAKE_OBJECT | SCROBJ_FORCE_DETAIL)) {
+    if (screen_object(player_ptr, &item, SCROBJ_FAKE_OBJECT | SCROBJ_FORCE_DETAIL)) {
         return;
     }
 

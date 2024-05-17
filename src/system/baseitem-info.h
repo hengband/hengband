@@ -2,6 +2,7 @@
 
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/trg-types.h"
+#include "object/tval-types.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
 #include "view/colored-char.h"
@@ -10,9 +11,14 @@
 #include <string>
 #include <vector>
 
-enum class ItemKindType : short;
 class BaseitemKey {
 public:
+    constexpr BaseitemKey()
+        : type_value(ItemKindType::NONE)
+        , subtype_value(std::nullopt)
+    {
+    }
+
     constexpr BaseitemKey(const ItemKindType type_value, const std::optional<int> &subtype_value = std::nullopt)
         : type_value(type_value)
         , subtype_value(subtype_value)

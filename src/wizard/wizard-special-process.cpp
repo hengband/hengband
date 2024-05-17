@@ -206,8 +206,7 @@ void wiz_create_item(PlayerType *player_ptr)
         }
     }
 
-    ItemEntity item;
-    item.prep(*bi_id);
+    ItemEntity item(*bi_id);
     ItemMagicApplier(player_ptr, &item, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART).execute();
     (void)drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);
     msg_print("Allocated.");
@@ -222,8 +221,7 @@ void wiz_create_item(PlayerType *player_ptr)
 static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArtifactId a_idx)
 {
     const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
-    ItemEntity item;
-    item.prep(BaseitemList::get_instance().lookup_baseitem_id(artifact.bi_key));
+    ItemEntity item(artifact.bi_key);
     item.fixed_artifact_idx = a_idx;
     item.mark_as_known();
     return describe_flavor(player_ptr, &item, OD_NAME_ONLY);
@@ -570,8 +568,7 @@ void wiz_learn_items_all(PlayerType *player_ptr)
 {
     for (const auto &baseitem : BaseitemList::get_instance()) {
         if (baseitem.is_valid() && baseitem.level <= command_arg) {
-            ItemEntity item;
-            item.prep(baseitem.idx);
+            ItemEntity item(baseitem.idx);
             object_aware(player_ptr, &item);
         }
     }

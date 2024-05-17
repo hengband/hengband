@@ -74,8 +74,7 @@ void display_koff(PlayerType *player_ptr)
         term_erase(0, y);
     }
 
-    ItemEntity item;
-    item.prep(player_ptr->tracking_bi_id);
+    ItemEntity item(player_ptr->tracking_bi_id);
     const auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
     term_putstr(0, 0, -1, TERM_WHITE, item_name);
     const auto sval = *item.bi_key.sval();

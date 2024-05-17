@@ -31,6 +31,8 @@ class EgoItemDefinition;
 class ItemEntity {
 public:
     ItemEntity();
+    ItemEntity(short bi_id);
+    ItemEntity(const BaseitemKey &bi_key);
     short bi_id{}; /*!< ベースアイテムID (0は、不具合調査用の無効アイテム または 何も装備していない箇所のアイテム であることを示す) */
     POSITION iy{}; /*!< Y-position on map, or zero */
     POSITION ix{}; /*!< X-position on map, or zero */
@@ -76,7 +78,8 @@ public:
 
     void wipe();
     void copy_from(const ItemEntity *j_ptr);
-    void prep(short new_bi_id);
+    void generate(const BaseitemKey &new_bi_key);
+    void generate(short new_bi_id);
     bool is(ItemKindType tval) const;
     bool is_weapon() const;
     bool is_weapon_ammo() const;

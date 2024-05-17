@@ -22,7 +22,6 @@
 #include "object/object-info.h"
 #include "perception/object-perception.h"
 #include "sv-definition/sv-other-types.h"
-#include "system/baseitem-info.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
@@ -170,11 +169,8 @@ bool exchange_cash(PlayerType *player_ptr)
 
             msg_print(_(format("これで合計 %d ポイント獲得しました。", num), format("You earned %d point%s total.", num, (num > 1 ? "s" : ""))));
 
-            const auto bi_id = BaseitemList::get_instance().lookup_baseitem_id(prize_list[num - 1]);
-            ItemEntity item;
-            item.prep(bi_id);
+            ItemEntity item(prize_list[num - 1]);
             ItemMagicApplier(player_ptr, &item, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART).execute();
-
             object_aware(player_ptr, &item);
             item.mark_as_known();
 

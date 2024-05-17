@@ -26,7 +26,6 @@
 #include "room/rooms-vault.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -84,9 +83,7 @@ static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const
         return;
     }
 
-    const auto bi_id = BaseitemList::get_instance().lookup_baseitem_id({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
-    ItemEntity item;
-    item.prep(bi_id);
+    ItemEntity item({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
     drop_here(player_ptr->current_floor_ptr, &item, *qtwg_ptr->y, *qtwg_ptr->x);
 }
 
@@ -176,17 +173,15 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             g_ptr->mimic = g_ptr->feat;
             g_ptr->feat = conv_dungeon_feat(floor_ptr, letter[idx].trap);
         } else if (object_index) {
-            ItemEntity tmp_object;
-            auto *o_ptr = &tmp_object;
-            o_ptr->prep(object_index);
-            if (o_ptr->bi_key.tval() == ItemKindType::GOLD) {
+            ItemEntity item(object_index);
+            if (item.bi_key.tval() == ItemKindType::GOLD) {
                 coin_type = object_index - OBJ_GOLD_LIST;
-                make_gold(player_ptr, o_ptr);
+                make_gold(player_ptr, &item);
                 coin_type = 0;
             }
 
-            ItemMagicApplier(player_ptr, o_ptr, floor_ptr->base_level, AM_NO_FIXED_ART | AM_GOOD).execute();
-            drop_here(floor_ptr, o_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
+            ItemMagicApplier(player_ptr, &item, floor_ptr->base_level, AM_NO_FIXED_ART | AM_GOOD).execute();
+            drop_here(floor_ptr, &item, *qtwg_ptr->y, *qtwg_ptr->x);
         }
 
         generate_artifact(player_ptr, qtwg_ptr, letter[idx].artifact);

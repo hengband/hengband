@@ -45,7 +45,6 @@
 #include "status/body-improvement.h"
 #include "status/element-resistance.h"
 #include "status/temporary-resistance.h"
-#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -79,8 +78,6 @@ bool kawarimi(PlayerType *player_ptr, bool success)
         return false;
     }
 
-    ItemEntity forge;
-    auto *q_ptr = &forge;
     if (player_ptr->is_dead) {
         return false;
     }
@@ -110,12 +107,10 @@ bool kawarimi(PlayerType *player_ptr, bool success)
     POSITION x = player_ptr->x;
 
     teleport_player(player_ptr, 10 + randint1(90), TELEPORT_SPONTANEOUS);
-    q_ptr->wipe();
-    const int sv_wooden_statue = 0;
-    q_ptr->prep(BaseitemList::get_instance().lookup_baseitem_id({ ItemKindType::STATUE, sv_wooden_statue }));
-
-    q_ptr->pval = enum2i(MonsterRaceId::NINJA);
-    (void)drop_near(player_ptr, q_ptr, -1, y, x);
+    constexpr int sv_wooden_statue = 0;
+    ItemEntity item({ ItemKindType::STATUE, sv_wooden_statue });
+    item.pval = enum2i(MonsterRaceId::NINJA);
+    (void)drop_near(player_ptr, &item, -1, y, x);
 
     if (success) {
         msg_print(_("攻撃を受ける前に素早く身をひるがえした。", "You have turned around just before the attack hit you."));

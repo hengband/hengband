@@ -102,8 +102,7 @@ static std::string describe_weight(const ItemEntity &item)
  */
 static ItemEntity prepare_item_for_obj_desc(short bi_id)
 {
-    ItemEntity item;
-    item.prep(bi_id);
+    ItemEntity item(bi_id);
     item.ident |= IDENT_KNOWN;
     item.pval = 0;
     item.to_a = 0;

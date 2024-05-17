@@ -16,7 +16,6 @@
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"
 #include "system/angband.h"
-#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -103,7 +102,6 @@ bool create_ammo(PlayerType *player_ptr)
         return false;
     }
 
-    const auto &baseitems = BaseitemList::get_instance();
     switch (ext) {
     case AMMO_SHOT: {
         int dir;
@@ -123,16 +121,14 @@ bool create_ammo(PlayerType *player_ptr)
             return true;
         }
 
-        ItemEntity forge;
-        auto *q_ptr = &forge;
-        q_ptr->prep(baseitems.lookup_baseitem_id({ ItemKindType::SHOT, m_bonus(1, player_ptr->lev) + 1 }));
-        q_ptr->number = (byte)rand_range(15, 30);
-        object_aware(player_ptr, q_ptr);
-        q_ptr->mark_as_known();
-        ItemMagicApplier(player_ptr, q_ptr, player_ptr->lev, AM_NO_FIXED_ART).execute();
-        q_ptr->discount = 99;
-        int16_t slot = store_item_to_inventory(player_ptr, q_ptr);
-        const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
+        ItemEntity item({ ItemKindType::SHOT, m_bonus(1, player_ptr->lev) + 1 });
+        item.number = (byte)rand_range(15, 30);
+        object_aware(player_ptr, &item);
+        item.mark_as_known();
+        ItemMagicApplier(player_ptr, &item, player_ptr->lev, AM_NO_FIXED_ART).execute();
+        item.discount = 99;
+        int16_t slot = store_item_to_inventory(player_ptr, &item);
+        const auto item_name = describe_flavor(player_ptr, &item, 0);
         msg_print(_(format("%sを作った。", item_name.data()), "You make some ammo."));
         if (slot >= 0) {
             autopick_alter_item(player_ptr, slot, false);
@@ -146,23 +142,21 @@ bool create_ammo(PlayerType *player_ptr)
         constexpr auto q = _("どのアイテムから作りますか？ ", "Convert which item? ");
         constexpr auto s = _("材料を持っていない。", "You have no item to convert.");
         short i_idx;
-        auto *q_ptr = choose_object(player_ptr, &i_idx, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ItemEntity::is_convertible));
-        if (!q_ptr) {
+        auto *item_ptr = choose_object(player_ptr, &i_idx, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ItemEntity::is_convertible));
+        if (item_ptr == nullptr) {
             return false;
         }
 
-        ItemEntity forge;
-        q_ptr = &forge;
-        q_ptr->prep(baseitems.lookup_baseitem_id({ ItemKindType::ARROW, m_bonus(1, player_ptr->lev) + 1 }));
-        q_ptr->number = (byte)rand_range(5, 10);
-        object_aware(player_ptr, q_ptr);
-        q_ptr->mark_as_known();
-        ItemMagicApplier(player_ptr, q_ptr, player_ptr->lev, AM_NO_FIXED_ART).execute();
-        q_ptr->discount = 99;
-        const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
+        item_ptr->generate({ ItemKindType::ARROW, m_bonus(1, player_ptr->lev) + 1 });
+        item_ptr->number = (byte)rand_range(5, 10);
+        object_aware(player_ptr, item_ptr);
+        item_ptr->mark_as_known();
+        ItemMagicApplier(player_ptr, item_ptr, player_ptr->lev, AM_NO_FIXED_ART).execute();
+        item_ptr->discount = 99;
+        const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
         msg_print(_(format("%sを作った。", item_name.data()), "You make some ammo."));
         vary_item(player_ptr, i_idx, -1);
-        int16_t slot = store_item_to_inventory(player_ptr, q_ptr);
+        int16_t slot = store_item_to_inventory(player_ptr, item_ptr);
         if (slot >= 0) {
             autopick_alter_item(player_ptr, slot, false);
         }
@@ -173,23 +167,21 @@ bool create_ammo(PlayerType *player_ptr)
         constexpr auto q = _("どのアイテムから作りますか？ ", "Convert which item? ");
         constexpr auto s = _("材料を持っていない。", "You have no item to convert.");
         short i_idx;
-        auto *q_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::is_convertible));
-        if (!q_ptr) {
+        auto *item_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::is_convertible));
+        if (!item_ptr) {
             return false;
         }
 
-        ItemEntity forge;
-        q_ptr = &forge;
-        q_ptr->prep(baseitems.lookup_baseitem_id({ ItemKindType::BOLT, m_bonus(1, player_ptr->lev) + 1 }));
-        q_ptr->number = (byte)rand_range(4, 8);
-        object_aware(player_ptr, q_ptr);
-        q_ptr->mark_as_known();
-        ItemMagicApplier(player_ptr, q_ptr, player_ptr->lev, AM_NO_FIXED_ART).execute();
-        q_ptr->discount = 99;
-        const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
+        item_ptr->generate({ ItemKindType::BOLT, m_bonus(1, player_ptr->lev) + 1 });
+        item_ptr->number = (byte)rand_range(4, 8);
+        object_aware(player_ptr, item_ptr);
+        item_ptr->mark_as_known();
+        ItemMagicApplier(player_ptr, item_ptr, player_ptr->lev, AM_NO_FIXED_ART).execute();
+        item_ptr->discount = 99;
+        const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
         msg_print(_(format("%sを作った。", item_name.data()), "You make some ammo."));
         vary_item(player_ptr, i_idx, -1);
-        int16_t slot = store_item_to_inventory(player_ptr, q_ptr);
+        int16_t slot = store_item_to_inventory(player_ptr, item_ptr);
         if (slot >= 0) {
             autopick_alter_item(player_ptr, slot, false);
         }

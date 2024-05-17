@@ -16,7 +16,6 @@
 #include "monster-race/monster-race.h"
 #include "object-enchant/special-object-flags.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
@@ -50,7 +49,6 @@ void do_cmd_checkquest(PlayerType *player_ptr)
 static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
 {
     const auto &quest_list = QuestList::get_instance();
-    const auto &baseitems = BaseitemList::get_instance();
     std::string rand_tmp_str;
     int rand_level = 100;
     int total = 0;
@@ -105,9 +103,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                     std::string item_name("");
                     if (quest.has_reward()) {
                         const auto &artifact = quest.get_reward();
-                        ItemEntity item;
-                        const auto bi_id = baseitems.lookup_baseitem_id(artifact.bi_key);
-                        item.prep(bi_id);
+                        ItemEntity item(artifact.bi_key);
                         item.fixed_artifact_idx = quest.reward_artifact_idx;
                         item.ident = IDENT_STORE;
                         item_name = describe_flavor(player_ptr, &item, OD_NAME_ONLY);

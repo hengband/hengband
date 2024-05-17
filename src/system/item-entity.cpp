@@ -36,6 +36,17 @@ ItemEntity::ItemEntity()
 {
 }
 
+ItemEntity::ItemEntity(short bi_id)
+{
+    this->generate(bi_id);
+}
+
+ItemEntity::ItemEntity(const BaseitemKey &bi_key)
+{
+    const auto &baseitems = BaseitemList::get_instance();
+    this->generate(baseitems.lookup_baseitem_id(bi_key));
+}
+
 /*!
  * @brief アイテムを初期化する
  */
@@ -53,11 +64,17 @@ void ItemEntity::copy_from(const ItemEntity *j_ptr)
     *this = *j_ptr;
 }
 
+void ItemEntity::generate(const BaseitemKey &new_bi_key)
+{
+    const auto new_bi_id = BaseitemList::get_instance().lookup_baseitem_id(new_bi_key);
+    this->generate(new_bi_id);
+}
+
 /*!
  * @brief アイテム構造体にベースアイテムを作成する
  * @param bi_id 新たに作成したいベースアイテム情報のID
  */
-void ItemEntity::prep(short new_bi_id)
+void ItemEntity::generate(short new_bi_id)
 {
     const auto &baseitem = BaseitemList::get_instance().get_baseitem(new_bi_id);
     auto old_stack_idx = this->stack_idx;

@@ -22,7 +22,6 @@
 #include "spell/spells-execution.h"
 #include "spell/spells-util.h"
 #include "system/angband-version.h"
-#include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -185,7 +184,6 @@ static SpoilerOutputResultType spoil_player_spell()
 
     PlayerType dummy_p;
     dummy_p.lev = 1;
-    const auto &baseitems = BaseitemList::get_instance();
     for (auto c = 0; c < PLAYER_CLASS_TYPE_MAX; c++) {
         auto class_ptr = &class_info[c];
         spoil_out(format("[[Class: %s]]\n", class_ptr->title));
@@ -193,10 +191,8 @@ static SpoilerOutputResultType spoil_player_spell()
         auto magic_ptr = &class_magics_info[c];
         std::string book_name = _("なし", "None");
         if (magic_ptr->spell_book != ItemKindType::NONE) {
-            ItemEntity book;
-            auto o_ptr = &book;
-            o_ptr->prep(baseitems.lookup_baseitem_id({ magic_ptr->spell_book, 0 }));
-            book_name = describe_flavor(&dummy_p, o_ptr, OD_NAME_ONLY);
+            ItemEntity item({ magic_ptr->spell_book, 0 });
+            book_name = describe_flavor(&dummy_p, &item, OD_NAME_ONLY);
             auto *s = angband_strchr(book_name.data(), '[');
             if (s != nullptr) {
                 book_name.erase(s - book_name.data());

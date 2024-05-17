@@ -29,7 +29,6 @@
 #include "perception/object-perception.h"
 #include "system/alloc-entries.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -140,7 +139,7 @@ bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, std:
             return false;
         }
 
-        j_ptr->prep(bi_id);
+        j_ptr->generate(bi_id);
     }
 
     ItemMagicApplier(player_ptr, j_ptr, floor_ptr->object_level, mode).execute();
@@ -174,7 +173,7 @@ bool make_gold(PlayerType *player_ptr, ItemEntity *j_ptr)
         i = MAX_GOLD - 1;
     }
 
-    j_ptr->prep(OBJ_GOLD_LIST + i);
+    j_ptr->generate(OBJ_GOLD_LIST + i);
     const auto &baseitems = BaseitemList::get_instance();
     const auto base = baseitems.get_baseitem(OBJ_GOLD_LIST + i).cost;
     j_ptr->pval = (base + (8L * randint1(base)) + randint1(8));

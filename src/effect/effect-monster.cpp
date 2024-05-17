@@ -42,7 +42,6 @@
 #include "spell-kind/spells-teleport.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/angband-system.h"
-#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -688,8 +687,7 @@ static void postprocess_by_taking_photo(PlayerType *player_ptr, EffectMonster *e
         return;
     }
 
-    ItemEntity item;
-    item.prep(BaseitemList::get_instance().lookup_baseitem_id({ ItemKindType::STATUE, SV_PHOTO }));
+    ItemEntity item({ ItemKindType::STATUE, SV_PHOTO });
     item.pval = em_ptr->photo;
     item.ident |= (IDENT_FULL_KNOWN);
     (void)drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);

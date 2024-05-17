@@ -37,7 +37,6 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
@@ -126,8 +125,7 @@ static void on_dead_bloodletter(PlayerType *player_ptr, MonsterDeath *md_ptr)
         return;
     }
 
-    ItemEntity item;
-    item.prep(BaseitemList::get_instance().lookup_baseitem_id({ ItemKindType::SWORD, SV_BLADE_OF_CHAOS }));
+    ItemEntity item({ ItemKindType::SWORD, SV_BLADE_OF_CHAOS });
     ItemMagicApplier(player_ptr, &item, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | md_ptr->mo_mode).execute();
     (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
 }
@@ -195,15 +193,12 @@ static void on_dead_serpent(PlayerType *player_ptr, MonsterDeath *md_ptr)
         return;
     }
 
-    const auto &baseitems = BaseitemList::get_instance();
-    ItemEntity item_grond;
-    item_grond.prep(baseitems.lookup_baseitem_id({ ItemKindType::HAFTED, SV_GROND }));
+    ItemEntity item_grond({ ItemKindType::HAFTED, SV_GROND });
     item_grond.fixed_artifact_idx = FixedArtifactId::GROND;
     ItemMagicApplier(player_ptr, &item_grond, -1, AM_GOOD | AM_GREAT).execute();
     (void)drop_near(player_ptr, &item_grond, -1, md_ptr->md_y, md_ptr->md_x);
 
-    ItemEntity item_chaos;
-    item_chaos.prep(baseitems.lookup_baseitem_id({ ItemKindType::CROWN, SV_CHAOS }));
+    ItemEntity item_chaos({ ItemKindType::CROWN, SV_CHAOS });
     item_chaos.fixed_artifact_idx = FixedArtifactId::CHAOS;
     ItemMagicApplier(player_ptr, &item_chaos, -1, AM_GOOD | AM_GREAT).execute();
     (void)drop_near(player_ptr, &item_chaos, -1, md_ptr->md_y, md_ptr->md_x);
@@ -215,8 +210,7 @@ static void on_dead_death_sword(PlayerType *player_ptr, MonsterDeath *md_ptr)
         return;
     }
 
-    ItemEntity item;
-    item.prep(BaseitemList::get_instance().lookup_baseitem_id({ ItemKindType::SWORD, randint1(2) }));
+    ItemEntity item({ ItemKindType::SWORD, randint1(2) });
     (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
@@ -230,8 +224,7 @@ static void on_dead_can_angel(PlayerType *player_ptr, MonsterDeath *md_ptr)
         return;
     }
 
-    ItemEntity item;
-    item.prep(BaseitemList::get_instance().lookup_baseitem_id({ ItemKindType::CHEST, SV_CHEST_KANDUME }));
+    ItemEntity item({ ItemKindType::CHEST, SV_CHEST_KANDUME });
     ItemMagicApplier(player_ptr, &item, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART).execute();
     (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
 }
