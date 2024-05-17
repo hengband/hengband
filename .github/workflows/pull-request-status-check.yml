@@ -36,8 +36,8 @@ jobs:
     name: Build Japanese version with gcc
     uses: ./.github/workflows/build-with-autotools.yml
     with:
-      runner: ubuntu-22.04
-      cxx: g++-11
+      runner: ubuntu-24.04
+      cxx: g++-13
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
       use-ccache: true
 
@@ -45,8 +45,8 @@ jobs:
     name: Build English version with gcc
     uses: ./.github/workflows/build-with-autotools.yml
     with:
-      runner: ubuntu-22.04
-      cxx: g++-11
+      runner: ubuntu-24.04
+      cxx: g++-13
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
       configure-opts: "--disable-japanese"
       distcheck: true
