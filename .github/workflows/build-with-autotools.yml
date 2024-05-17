@@ -3,6 +3,9 @@ name: Build with Autotools
 on:
   workflow_call:
     inputs:
+      runner:
+        type: string
+        required: true
       cxx:
         type: string
         required: true
@@ -21,7 +24,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ${{ inputs.runner }}
     steps:
       - uses: actions/checkout@v3
         with:
