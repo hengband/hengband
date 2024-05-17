@@ -547,6 +547,49 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 }
 
+static std::optional<ItemEntity> wiz_apply_magic_to_item(PlayerType *player_ptr, char command, short bi_id)
+{
+    const auto &floor = *player_ptr->current_floor_ptr;
+    switch (tolower(command)) {
+    case 'w': { // 呪われた高級品.
+        ItemEntity item(bi_id);
+        ItemMagicApplier(player_ptr, &item, floor.dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED).execute();
+        return item;
+    }
+    case 'c': { // 呪われた上質.
+        ItemEntity item(bi_id);
+        ItemMagicApplier(player_ptr, &item, floor.dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED).execute();
+        return item;
+    }
+    case 'n': { // 普通品.
+        ItemEntity item(bi_id);
+        ItemMagicApplier(player_ptr, &item, floor.dun_level, AM_NO_FIXED_ART).execute();
+        return item;
+    }
+    case 'g': { // 上質.
+        ItemEntity item(bi_id);
+        ItemMagicApplier(player_ptr, &item, floor.dun_level, AM_NO_FIXED_ART | AM_GOOD).execute();
+        return item;
+    }
+    case 'e': { // 高級品.
+        ItemEntity item(bi_id);
+        ItemMagicApplier(player_ptr, &item, floor.dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT).execute();
+        return item;
+    }
+    case 's': { // アーティファクト.
+        ItemEntity item(bi_id);
+        ItemMagicApplier(player_ptr, &item, floor.dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL).execute();
+        if (!item.is_fixed_or_random_artifact()) {
+            become_random_artifact(player_ptr, &item, false);
+        }
+
+        return item;
+    }
+    default:
+        return std::nullopt;
+    }
+}
+
 /*!
  * @brief アイテムの質を選択して再生成する /
  * Apply magic to an item or turn it into an artifact. -Bernd-
@@ -558,19 +601,16 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         return;
     }
 
-    ItemEntity forge;
-    auto *q_ptr = &forge;
-    q_ptr->copy_from(o_ptr);
-
+    ItemEntity item = *o_ptr;
     auto changed = false;
     constexpr auto prompt = "[a]ccept, [w]orthless, [c]ursed, [n]ormal, [g]ood, [e]xcellent, [s]pecial? ";
     while (true) {
-        wiz_display_item(player_ptr, q_ptr);
+        wiz_display_item(player_ptr, &item);
         const auto command = input_command(prompt);
         if (!command) {
-            if (q_ptr->is_fixed_artifact()) {
-                q_ptr->get_fixed_artifact().is_generated = false;
-                q_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
+            if (item.is_fixed_artifact()) {
+                item.get_fixed_artifact().is_generated = false;
+                item.fixed_artifact_idx = FixedArtifactId::NONE;
             }
 
             changed = false;
@@ -582,60 +622,26 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
             break;
         }
 
-        if (q_ptr->is_fixed_artifact()) {
-            q_ptr->get_fixed_artifact().is_generated = false;
-            q_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
+        if (item.is_fixed_artifact()) {
+            item.get_fixed_artifact().is_generated = false;
+            item.fixed_artifact_idx = FixedArtifactId::NONE;
         }
 
-        switch (tolower(*command)) {
-        /* Apply bad magic, but first clear object */
-        case 'w':
-            q_ptr->generate(o_ptr->bi_id);
-            ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED).execute();
-            break;
-        /* Apply bad magic, but first clear object */
-        case 'c':
-            q_ptr->generate(o_ptr->bi_id);
-            ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED).execute();
-            break;
-        /* Apply normal magic, but first clear object */
-        case 'n':
-            q_ptr->generate(o_ptr->bi_id);
-            ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART).execute();
-            break;
-        /* Apply good magic, but first clear object */
-        case 'g':
-            q_ptr->generate(o_ptr->bi_id);
-            ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD).execute();
-            break;
-        /* Apply great magic, but first clear object */
-        case 'e':
-            q_ptr->generate(o_ptr->bi_id);
-            ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT).execute();
-            break;
-        /* Apply special magic, but first clear object */
-        case 's':
-            q_ptr->generate(o_ptr->bi_id);
-            ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL).execute();
-            if (!q_ptr->is_fixed_or_random_artifact()) {
-                become_random_artifact(player_ptr, q_ptr, false);
-            }
-
-            break;
-        default:
-            break;
+        const auto applied_item = wiz_apply_magic_to_item(player_ptr, *command, o_ptr->bi_id);
+        if (applied_item) {
+            item = *applied_item;
         }
 
-        q_ptr->iy = o_ptr->iy;
-        q_ptr->ix = o_ptr->ix;
-        q_ptr->marked = o_ptr->marked;
+        item.iy = o_ptr->iy;
+        item.ix = o_ptr->ix;
+        item.marked = o_ptr->marked;
     }
 
     if (!changed) {
         return;
     }
 
-    o_ptr->copy_from(q_ptr);
+    *o_ptr = item;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
