@@ -257,7 +257,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
         msg_print(_("突然ほとんど孤独になった気がする。", "You suddenly feel almost lonely."));
 
         banish_monsters(player_ptr, 100);
-        if (!player_ptr->current_floor_ptr->is_in_dungeon() && player_ptr->town_num) {
+        if (!player_ptr->current_floor_ptr->is_in_underground() && player_ptr->town_num) {
             StoreSaleType sst;
             do {
                 sst = i2enum<StoreSaleType>(randint0(MAX_STORES));

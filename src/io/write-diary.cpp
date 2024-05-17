@@ -377,7 +377,7 @@ void exe_write_diary(PlayerType *player_ptr, DiaryKind dk, int num, std::string_
     }
     case DiaryKind::PAT_TELE: {
         const auto &floor_ref = *player_ptr->current_floor_ptr;
-        auto to = !floor_ref.is_in_dungeon()
+        auto to = !floor_ref.is_in_underground()
                       ? _("地上", "the surface")
                       : format(_("%d階(%s)", "level %d of %s"), floor.dun_level, floor.get_dungeon_definition().name.data());
         constexpr auto mes = _(" %2d:%02d %20s %sへとパターンの力で移動した。\n", " %2d:%02d %20s used Pattern to teleport to %s.\n");

@@ -332,7 +332,7 @@ static void jump_floors(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &dungeon = floor.get_dungeon_definition();
     if (any_bits(mode, CFM_DOWN)) {
-        if (!floor.is_in_dungeon()) {
+        if (!floor.is_in_underground()) {
             move_num = dungeon.mindepth;
         }
     } else if (any_bits(mode, CFM_UP)) {
@@ -347,7 +347,7 @@ static void jump_floors(PlayerType *player_ptr)
 static void exit_to_wilderness(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.is_in_dungeon() || (floor.dungeon_idx == 0)) {
+    if (floor.is_in_underground() || (floor.dungeon_idx == 0)) {
         return;
     }
 

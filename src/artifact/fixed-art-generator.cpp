@@ -270,14 +270,9 @@ bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y,
 
 /*!
  * @brief 非INSTA_ART型の固定アーティファクトの生成を確率に応じて試行する。
- * Mega-Hack -- Attempt to create one of the "Special Objects"
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 生成に割り当てたいオブジェクトの構造体参照ポインタ
  * @return 生成に成功したらTRUEを返す。
- * @details
- * Attempt to change an object into an artifact\n
- * This routine should only be called by "apply_magic()"\n
- * Note -- see "make_artifact_special()" and "apply_magic()"\n
  */
 bool make_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
 {

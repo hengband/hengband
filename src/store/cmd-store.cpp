@@ -80,7 +80,7 @@ void do_cmd_store(PlayerType *player_ptr)
         player_ptr->town_num = 1;
     }
 
-    if (floor.is_in_dungeon()) {
+    if (floor.is_in_underground()) {
         player_ptr->town_num = VALID_TOWNS;
     }
 

@@ -242,7 +242,7 @@ void do_cmd_feeling(PlayerType *player_ptr)
         return;
     }
 
-    if (player_ptr->town_num && !floor.is_in_dungeon()) {
+    if (player_ptr->town_num && !floor.is_in_underground()) {
         if (towns_info[player_ptr->town_num].name == _("荒野", "wilderness")) {
             msg_print(_("何かありそうな荒野のようだ。", "Looks like a strange wilderness."));
             return;
@@ -252,7 +252,7 @@ void do_cmd_feeling(PlayerType *player_ptr)
         return;
     }
 
-    if (!floor.is_in_dungeon()) {
+    if (!floor.is_in_underground()) {
         msg_print(_("典型的な荒野のようだ。", "Looks like a typical wilderness."));
         return;
     }

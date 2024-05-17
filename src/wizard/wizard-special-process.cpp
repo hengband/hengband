@@ -506,14 +506,14 @@ static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH de
     floor.set_dungeon_index(dun_idx);
     floor.dun_level = depth;
     prepare_change_floor_mode(player_ptr, CFM_RAND_PLACE);
-    if (!floor.is_in_dungeon()) {
+    if (!floor.is_in_underground()) {
         floor.reset_dungeon_index();
     }
 
     floor.inside_arena = false;
     player_ptr->wild_mode = false;
     leave_quest_check(player_ptr);
-    auto to = !floor.is_in_dungeon()
+    auto to = !floor.is_in_underground()
                   ? _("地上", "the surface")
                   : format(_("%d階(%s)", "level %d of %s"), floor.dun_level, floor.get_dungeon_definition().name.data());
     constexpr auto mes = _("%sへとウィザード・テレポートで移動した。\n", "You wizard-teleported to %s.\n");
@@ -532,7 +532,7 @@ static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH de
 void wiz_jump_to_dungeon(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto is_in_dungeon = floor.is_in_dungeon();
+    const auto is_in_dungeon = floor.is_in_underground();
     const auto dungeon_idx = is_in_dungeon ? floor.dungeon_idx : static_cast<short>(DUNGEON_ANGBAND);
     const auto dungeon_id = select_debugging_dungeon(dungeon_idx);
     if (!dungeon_id) {

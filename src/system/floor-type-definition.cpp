@@ -24,7 +24,7 @@ const Grid &FloorType::get_grid(const Pos2D pos) const
     return this->grid_array[pos.y][pos.x];
 }
 
-bool FloorType::is_in_dungeon() const
+bool FloorType::is_in_underground() const
 {
     return this->dun_level > 0;
 }
