@@ -156,7 +156,8 @@ int ItemMagicApplier::calculate_rolls(const int power)
 
 /*!
  * @brief アーティファクト生成を試みる
- * @param power 試行回数
+ * @param rolls 試行回数
+ * @details 地上では生成を禁止する
  */
 void ItemMagicApplier::try_make_artifact(const int rolls)
 {
@@ -166,7 +167,7 @@ void ItemMagicApplier::try_make_artifact(const int rolls)
     }
 
     for (auto i = 0; i < rolls; i++) {
-        if (make_artifact(this->player_ptr, this->o_ptr)) {
+        if (this->o_ptr->try_become_artifact(floor.dun_level)) {
             break;
         }
 
@@ -174,7 +175,7 @@ void ItemMagicApplier::try_make_artifact(const int rolls)
             continue;
         }
 
-        if (make_artifact(this->player_ptr, this->o_ptr)) {
+        if (this->o_ptr->try_become_artifact(floor.dun_level)) {
             break;
         }
     }

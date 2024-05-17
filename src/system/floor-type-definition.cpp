@@ -2,6 +2,7 @@
 #include "dungeon/quest.h"
 #include "game-option/birth-options.h"
 #include "system/angband-system.h"
+#include "system/artifact-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"

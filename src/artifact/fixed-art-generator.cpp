@@ -269,39 +269,6 @@ bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y,
 }
 
 /*!
- * @brief 非INSTA_ART型の固定アーティファクトの生成を確率に応じて試行する。
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param o_ptr 生成に割り当てたいオブジェクトの構造体参照ポインタ
- * @return 生成に成功したらTRUEを返す。
- */
-bool make_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
-{
-    const auto &floor = *player_ptr->current_floor_ptr;
-    if (o_ptr->number != 1) {
-        return false;
-    }
-
-    for (const auto &[a_idx, artifact] : ArtifactList::get_instance()) {
-        if (!artifact.can_generate(o_ptr->bi_key)) {
-            continue;
-        }
-
-        if ((artifact.level > floor.dun_level) && !one_in_((artifact.level - floor.dun_level) * 2)) {
-            return false;
-        }
-
-        if (!one_in_(artifact.rarity)) {
-            continue;
-        }
-
-        o_ptr->fixed_artifact_idx = a_idx;
-        return true;
-    }
-
-    return false;
-}
-
-/*!
  * @brief INSTA_ART型の固定アーティファクトの生成を確率に応じて試行する。
  * Mega-Hack -- Attempt to create one of the "Special Objects"
  * @param player_ptr プレイヤーへの参照ポインタ
