@@ -26,7 +26,19 @@
 
 #define MAX_MACRO_CHARS 16128 // 1つのマクロキー押下で実行可能なコマンド最大数 (エスケープシーケンス含む).
 
-char *histpref_buf = nullptr;
+std::optional<std::string> histpref_buf;
+
+/*!
+ * @brief 生い立ちメッセージの内容をバッファに加える。 / Hook function for reading the histpref.prf file.
+ */
+static void add_history_from_pref_line(std::string_view t)
+{
+    if (!histpref_buf) {
+        return;
+    }
+
+    histpref_buf->append(t);
+}
 
 /*!
  * @brief Rトークンの解釈 / Process "R:<num>:<a>/<c>" -- attr/char for monster races
@@ -549,16 +561,4 @@ int interpret_pref_file(PlayerType *player_ptr, char *buf)
     default:
         return 1;
     }
-}
-
-/*!
- * @brief 生い立ちメッセージの内容をバッファに加える。 / Hook function for reading the histpref.prf file.
- */
-void add_history_from_pref_line(concptr t)
-{
-    if (!histpref_buf) {
-        return;
-    }
-
-    angband_strcat(histpref_buf, t, HISTPREF_LIMIT);
 }
