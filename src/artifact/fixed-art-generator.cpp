@@ -283,8 +283,8 @@ bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y,
 bool make_artifact_special(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     /*! @note 地上ではキャンセルする / No artifacts in the town */
-    auto floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->dun_level == 0) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (!floor.is_in_underground()) {
         return false;
     }
 
@@ -312,9 +312,9 @@ bool make_artifact_special(PlayerType *player_ptr, ItemEntity *o_ptr)
         }
 
         /*! @note アーティファクト生成階が現在に対して足りない場合は高確率で1/(不足階層*2)を満たさないと生成リストに加えられない */
-        if (artifact.level > floor_ptr->object_level) {
+        if (artifact.level > floor.object_level) {
             /* @note  / Acquire the "out-of-depth factor". Roll for out-of-depth creation. */
-            int d = (artifact.level - floor_ptr->object_level) * 2;
+            int d = (artifact.level - floor.object_level) * 2;
             if (!one_in_(d)) {
                 continue;
             }
@@ -331,8 +331,8 @@ bool make_artifact_special(PlayerType *player_ptr, ItemEntity *o_ptr)
          */
         const auto &baseitems = BaseitemList::get_instance();
         const auto &baseitem = baseitems.lookup_baseitem(artifact.bi_key);
-        if (baseitem.level > floor_ptr->object_level) {
-            int d = (baseitem.level - floor_ptr->object_level) * 5;
+        if (baseitem.level > floor.object_level) {
+            int d = (baseitem.level - floor.object_level) * 5;
             if (!one_in_(d)) {
                 continue;
             }

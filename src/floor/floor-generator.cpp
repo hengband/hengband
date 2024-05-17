@@ -340,16 +340,16 @@ static bool level_gen(PlayerType *player_ptr, concptr *why)
  */
 void wipe_generate_random_floor_flags(FloorType *floor_ptr)
 {
-    for (POSITION y = 0; y < floor_ptr->height; y++) {
-        for (POSITION x = 0; x < floor_ptr->width; x++) {
-            floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+    for (auto y = 0; y < floor_ptr->height; y++) {
+        for (auto x = 0; x < floor_ptr->width; x++) {
+            floor_ptr->get_grid({ y, x }).info &= ~(CAVE_MASK);
         }
     }
 
-    if (floor_ptr->dun_level > 0) {
-        for (POSITION y = 1; y < floor_ptr->height - 1; y++) {
-            for (POSITION x = 1; x < floor_ptr->width - 1; x++) {
-                floor_ptr->grid_array[y][x].info |= CAVE_UNSAFE;
+    if (floor_ptr->is_in_underground()) {
+        for (auto y = 1; y < floor_ptr->height - 1; y++) {
+            for (auto x = 1; x < floor_ptr->width - 1; x++) {
+                floor_ptr->get_grid({ y, x }).info |= CAVE_UNSAFE;
             }
         }
     }
@@ -493,20 +493,20 @@ static bool floor_is_connected(const FloorType *const floor_ptr, const IsWallFun
  */
 void generate_floor(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    set_floor_and_wall(floor_ptr->dungeon_idx);
+    auto &floor = *player_ptr->current_floor_ptr;
+    set_floor_and_wall(floor.dungeon_idx);
     for (int num = 0; true; num++) {
         bool okay = true;
         concptr why = nullptr;
         clear_cave(player_ptr);
         player_ptr->x = player_ptr->y = 0;
-        if (floor_ptr->inside_arena) {
+        if (floor.inside_arena) {
             generate_challenge_arena(player_ptr);
         } else if (AngbandSystem::get_instance().is_phase_out()) {
             generate_gambling_arena(player_ptr);
-        } else if (floor_ptr->is_in_quest()) {
+        } else if (floor.is_in_quest()) {
             generate_fixed_floor(player_ptr);
-        } else if (!floor_ptr->dun_level) {
+        } else if (!floor.is_in_underground()) {
             if (player_ptr->wild_mode) {
                 wilderness_gen_small(player_ptr);
             } else {
@@ -516,10 +516,10 @@ void generate_floor(PlayerType *player_ptr)
             okay = level_gen(player_ptr, &why);
         }
 
-        if (floor_ptr->o_max >= MAX_FLOOR_ITEMS) {
+        if (floor.o_max >= MAX_FLOOR_ITEMS) {
             why = _("アイテムが多すぎる", "too many objects");
             okay = false;
-        } else if (floor_ptr->m_max >= MAX_FLOOR_MONSTERS) {
+        } else if (floor.m_max >= MAX_FLOOR_MONSTERS) {
             why = _("モンスターが多すぎる", "too many monsters");
             okay = false;
         }
@@ -528,8 +528,8 @@ void generate_floor(PlayerType *player_ptr)
         // 狂戦士でのプレイに支障をきたしうるので再生成する。
         // 地上、荒野マップ、クエストでは連結性判定は行わない。
         // TODO: 本来はダンジョン生成アルゴリズム自身で連結性を保証するのが理想ではある。
-        const bool check_conn = okay && floor_ptr->dun_level > 0 && !floor_ptr->is_in_quest();
-        if (check_conn && !floor_is_connected(floor_ptr, is_permanent_blocker)) {
+        const bool check_conn = okay && floor.is_in_underground() && !floor.is_in_quest();
+        if (check_conn && !floor_is_connected(&floor, is_permanent_blocker)) {
             // 一定回数試しても連結にならないなら諦める。
             if (num >= 1000) {
                 plog("cannot generate connected floor. giving up...");
@@ -547,11 +547,11 @@ void generate_floor(PlayerType *player_ptr)
             msg_format(_("生成やり直し(%s)", "Generation restarted (%s)"), why);
         }
 
-        wipe_o_list(floor_ptr);
+        wipe_o_list(&floor);
         wipe_monsters_list(player_ptr);
     }
 
     glow_deep_lava_and_bldg(player_ptr);
     player_ptr->enter_dungeon = false;
-    wipe_generate_random_floor_flags(floor_ptr);
+    wipe_generate_random_floor_flags(&floor);
 }
