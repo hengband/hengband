@@ -51,6 +51,14 @@ public:
     ~ArtifactList() = default;
 
     static ArtifactList &get_instance();
+    std::map<FixedArtifactId, ArtifactType>::iterator begin();
+    std::map<FixedArtifactId, ArtifactType>::iterator end();
+    std::map<FixedArtifactId, ArtifactType>::const_iterator begin() const;
+    std::map<FixedArtifactId, ArtifactType>::const_iterator end() const;
+    std::map<FixedArtifactId, ArtifactType>::reverse_iterator rbegin();
+    std::map<FixedArtifactId, ArtifactType>::reverse_iterator rend();
+    std::map<FixedArtifactId, ArtifactType>::const_reverse_iterator rbegin() const;
+    std::map<FixedArtifactId, ArtifactType>::const_reverse_iterator rend() const;
     ArtifactType &get_artifact(const FixedArtifactId id) const;
 
 private:
