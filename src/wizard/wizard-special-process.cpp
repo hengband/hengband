@@ -289,7 +289,8 @@ void wiz_create_named_art(PlayerType *player_ptr)
             continue;
         }
 
-        const auto a_idx_list = wiz_collect_group_a_idx(group_artifact_list[idx]);
+        auto a_idx_list = wiz_collect_group_a_idx(group_artifact_list[idx]);
+        std::sort(a_idx_list.begin(), a_idx_list.end(), [](FixedArtifactId id1, FixedArtifactId id2) { return ArtifactList::get_instance().order(id1, id2); });
         create_a_idx = wiz_select_named_artifact(player_ptr, a_idx_list);
     }
 
