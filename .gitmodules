@@ -2,3 +2,6 @@
 	path = lib/xtra
 	url = https://github.com/hengband/hengband.xtra
 	ignore = dirty
+[submodule "Hengband/Hengband/libcurl"]
+	path = Hengband/Hengband/libcurl
+	url = https://github.com/hengband/libcurl.git
