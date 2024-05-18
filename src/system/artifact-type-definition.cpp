@@ -88,3 +88,10 @@ ArtifactType &ArtifactList::get_artifact(const FixedArtifactId id) const
 
     return artifacts_info.at(id);
 }
+
+void ArtifactList::reset_generated_flags()
+{
+    for (auto &[_, artifact] : artifacts_info) {
+        artifact.is_generated = false;
+    }
+}

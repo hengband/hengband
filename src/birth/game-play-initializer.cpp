@@ -62,10 +62,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
         (&player_ptr->inventory_list[i])->wipe();
     }
 
-    for (auto &[a_idx, artifact] : artifacts_info) {
-        artifact.is_generated = false;
-    }
-
+    ArtifactList::get_instance().reset_generated_flags();
     BaseitemList::get_instance().reset_identification_flags();
     for (auto &[r_idx, r_ref] : monraces_info) {
         if (!MonsterRace(r_ref.idx).is_valid()) {
