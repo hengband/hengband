@@ -276,7 +276,7 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
     auto visual = false;
     const auto max_range = AngbandSystem::get_instance().get_max_range();
     while (true) {
-        projection_path path_g(this->player_ptr, (project_length ? project_length : max_range), y1, x1, y2, x2, flag);
+        ProjectionPath path_g(this->player_ptr, (project_length ? project_length : max_range), y1, x1, y2, x2, flag);
 
         if (path_g.path_num() == 0) {
             break;
@@ -341,8 +341,8 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
     }
 }
 
-static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std::vector<projection_path::const_iterator>> &pos_list_map,
-    const std::vector<projection_path> &second_path_g_list, const std::pair<int, int> &center)
+static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std::vector<ProjectionPath::const_iterator>> &pos_list_map,
+    const std::vector<ProjectionPath> &second_path_g_list, const std::pair<int, int> &center)
 {
     if (delay_factor <= 0) {
         return;
@@ -451,8 +451,8 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
 
     /* Calculate the projection path */
     const auto &system = AngbandSystem::get_instance();
-    projection_path path_g(this->player_ptr, (project_length ? project_length : system.get_max_range()), y1, x1, y2, x2, flag);
-    std::vector<projection_path> second_path_g_list;
+    ProjectionPath path_g(this->player_ptr, (project_length ? project_length : system.get_max_range()), y1, x1, y2, x2, flag);
+    std::vector<ProjectionPath> second_path_g_list;
     handle_stuff(this->player_ptr);
 
     if (path_g.path_num() == 0) {
@@ -515,7 +515,7 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     }
 
     // 起点の鏡からの距離 → 8方向へのスーパーレイの軌道上のその距離にある座標のイテレータのリストの map
-    std::map<int, std::vector<projection_path::const_iterator>> pos_list_map;
+    std::map<int, std::vector<ProjectionPath::const_iterator>> pos_list_map;
     for (const auto &second_path_g : second_path_g_list) {
         for (auto it = second_path_g.begin(); it != second_path_g.end(); ++it) {
             const auto &[o_y, o_x] = path_g.back();

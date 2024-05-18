@@ -31,32 +31,32 @@ struct projection_path_type {
     int k;
 };
 
-std::vector<std::pair<int, int>>::const_iterator projection_path::begin() const
+std::vector<std::pair<int, int>>::const_iterator ProjectionPath::begin() const
 {
     return this->position.cbegin();
 }
 
-std::vector<std::pair<int, int>>::const_iterator projection_path::end() const
+std::vector<std::pair<int, int>>::const_iterator ProjectionPath::end() const
 {
     return this->position.cend();
 }
 
-const std::pair<int, int> &projection_path::front() const
+const std::pair<int, int> &ProjectionPath::front() const
 {
     return this->position.front();
 }
 
-const std::pair<int, int> &projection_path::back() const
+const std::pair<int, int> &ProjectionPath::back() const
 {
     return this->position.back();
 }
 
-const std::pair<int, int> &projection_path::operator[](int num) const
+const std::pair<int, int> &ProjectionPath::operator[](int num) const
 {
     return this->position[num];
 }
 
-int projection_path::path_num() const
+int ProjectionPath::path_num() const
 {
     return static_cast<int>(this->position.size());
 }
@@ -245,7 +245,7 @@ static void calc_projection_others(PlayerType *player_ptr, projection_path_type 
  * @param flag フラグID
  * @return リストの長さ
  */
-projection_path::projection_path(PlayerType *player_ptr, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flag)
+ProjectionPath::ProjectionPath(PlayerType *player_ptr, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flag)
 {
     this->position.clear();
     if ((x1 == x2) && (y1 == y2)) {
@@ -280,7 +280,7 @@ projection_path::projection_path(PlayerType *player_ptr, POSITION range, POSITIO
  */
 bool projectable(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-    projection_path grid_g(player_ptr, (project_length ? project_length : AngbandSystem::get_instance().get_max_range()), y1, x1, y2, x2, 0);
+    ProjectionPath grid_g(player_ptr, (project_length ? project_length : AngbandSystem::get_instance().get_max_range()), y1, x1, y2, x2, 0);
     if (grid_g.path_num() == 0) {
         return true;
     }

@@ -569,7 +569,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     }
 
     /* Get projection path length */
-    projection_path path_g(player_ptr, project_length, player_ptr->y, player_ptr->x, ty, tx, PROJECT_PATH | PROJECT_THRU);
+    ProjectionPath path_g(player_ptr, project_length, player_ptr->y, player_ptr->x, ty, tx, PROJECT_PATH | PROJECT_THRU);
     tdis = path_g.path_num() - 1;
 
     project_length = 0; /* reset to default */
