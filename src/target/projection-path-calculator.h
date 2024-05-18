@@ -21,6 +21,5 @@ public:
 private:
     std::vector<std::pair<int, int>> position;
 };
+
 bool projectable(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
-POSITION get_grid_y(uint16_t grid);
-POSITION get_grid_x(uint16_t grid);

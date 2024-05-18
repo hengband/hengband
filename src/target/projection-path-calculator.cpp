@@ -292,19 +292,3 @@ bool projectable(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, 
 
     return true;
 }
-
-/*
- * Convert a "grid" (G) into a "location" (Y)
- */
-POSITION get_grid_y(uint16_t grid)
-{
-    return (int)(grid / 256U);
-}
-
-/*
- * Convert a "grid" (G) into a "location" (X)
- */
-POSITION get_grid_x(uint16_t grid)
-{
-    return (int)(grid % 256U);
-}
