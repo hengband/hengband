@@ -290,7 +290,7 @@ bool make_artifact_special(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     /*! @note 全固定アーティファクト中からIDの若い順に生成対象とその確率を走査する / Check the artifact list (just the "specials") */
-    for (const auto &[a_idx, artifact] : artifacts_info) {
+    for (const auto &[fa_id, artifact] : ArtifactList::get_instance()) {
         /*! @note 既に生成回数がカウントされたアーティファクト、QUESTITEMと非INSTA_ARTは除外 / Cannot make an artifact twice */
         if (artifact.is_generated) {
             continue;
@@ -331,7 +331,7 @@ bool make_artifact_special(PlayerType *player_ptr, ItemEntity *o_ptr)
 
         //<! @note 前述の条件を満たしたら、後のIDのアーティファクトはチェックせずすぐ確定し生成処理に移す.
         o_ptr->generate(artifact.bi_key);
-        o_ptr->fixed_artifact_idx = a_idx;
+        o_ptr->fixed_artifact_idx = fa_id;
         return true;
     }
 

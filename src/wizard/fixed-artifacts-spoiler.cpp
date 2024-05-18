@@ -139,12 +139,12 @@ SpoilerOutputResultType spoil_fixed_artifact()
         spoiler_blanklines(1, ofs);
 
         for (auto tval : tval_list) {
-            for (const auto &[a_idx, artifact] : artifacts_info) {
+            for (const auto &[fa_id, artifact] : ArtifactList::get_instance()) {
                 if (artifact.bi_key.tval() != tval) {
                     continue;
                 }
 
-                const auto item = make_fake_artifact(a_idx);
+                const auto item = make_fake_artifact(fa_id);
                 PlayerType dummy;
                 const auto artifacts_list = object_analyze(&dummy, &item);
                 spoiler_print_art(&artifacts_list, ofs);

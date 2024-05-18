@@ -195,12 +195,12 @@ void wiz_create_item(PlayerType *player_ptr)
 
     const auto &baseitem = BaseitemList::get_instance().get_baseitem(*bi_id);
     if (baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
-        for (const auto &[a_idx, artifact] : artifacts_info) {
-            if ((a_idx == FixedArtifactId::NONE) || (artifact.bi_key != baseitem.bi_key)) {
+        for (const auto &[fa_id, artifact] : ArtifactList::get_instance()) {
+            if (artifact.bi_key != baseitem.bi_key) {
                 continue;
             }
 
-            (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
+            (void)create_named_art(player_ptr, fa_id, player_ptr->y, player_ptr->x);
             msg_print("Allocated(INSTA_ART).");
             return;
         }
@@ -244,23 +244,22 @@ static std::optional<FixedArtifactId> wiz_select_named_artifact(PlayerType *play
 
 /**
  * @brief 指定したカテゴリの固定アーティファクトのIDのリストを得る
- *
  * @param group_artifact 固定アーティファクトのカテゴリ
  * @return 該当のカテゴリの固定アーティファクトのIDのリスト
  */
 static std::vector<FixedArtifactId> wiz_collect_group_a_idx(const grouper &group_artifact)
 {
-    const auto &[tval_list, name] = group_artifact;
-    std::vector<FixedArtifactId> a_idx_list;
-    for (auto tval : tval_list) {
-        for (const auto &[a_idx, artifact] : artifacts_info) {
+    const auto &[tvals, name] = group_artifact;
+    std::vector<FixedArtifactId> fa_ids;
+    for (const auto tval : tvals) {
+        for (const auto &[fa_id, artifact] : ArtifactList::get_instance()) {
             if (artifact.bi_key.tval() == tval) {
-                a_idx_list.push_back(a_idx);
+                fa_ids.push_back(fa_id);
             }
         }
     }
 
-    return a_idx_list;
+    return fa_ids;
 }
 
 /*!
