@@ -53,7 +53,7 @@
 bool direct_beam(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, MonsterEntity *m_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    ProjectionPath grid_g(player_ptr, AngbandSystem::get_instance().get_max_range(), y1, x1, y2, x2, PROJECT_THRU);
+    ProjectionPath grid_g(player_ptr, AngbandSystem::get_instance().get_max_range(), { y1, x1 }, { y2, x2 }, PROJECT_THRU);
     if (grid_g.path_num()) {
         return false;
     }
@@ -105,7 +105,7 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
         break;
     }
 
-    ProjectionPath grid_g(player_ptr, AngbandSystem::get_instance().get_max_range(), y1, x1, y2, x2, flg);
+    ProjectionPath grid_g(player_ptr, AngbandSystem::get_instance().get_max_range(), { y1, x1 }, { y2, x2 }, flg);
     auto path_n = 0;
     POSITION y = y1;
     POSITION x = x1;
@@ -193,7 +193,7 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
  */
 void get_project_point(PlayerType *player_ptr, POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg)
 {
-    ProjectionPath path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), sy, sx, *ty, *tx, flg);
+    ProjectionPath path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), { sy, sx }, { *ty, *tx }, flg);
     *ty = sy;
     *tx = sx;
     for (const auto &[y, x] : path_g) {

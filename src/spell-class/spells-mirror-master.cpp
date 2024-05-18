@@ -276,7 +276,7 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
     auto visual = false;
     const auto max_range = AngbandSystem::get_instance().get_max_range();
     while (true) {
-        ProjectionPath path_g(this->player_ptr, (project_length ? project_length : max_range), y1, x1, y2, x2, flag);
+        ProjectionPath path_g(this->player_ptr, (project_length ? project_length : max_range), { y1, x1 }, { y2, x2 }, flag);
 
         if (path_g.path_num() == 0) {
             break;
@@ -451,7 +451,7 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
 
     /* Calculate the projection path */
     const auto &system = AngbandSystem::get_instance();
-    ProjectionPath path_g(this->player_ptr, (project_length ? project_length : system.get_max_range()), y1, x1, y2, x2, flag);
+    ProjectionPath path_g(this->player_ptr, (project_length ? project_length : system.get_max_range()), { y1, x1 }, { y2, x2 }, flag);
     std::vector<ProjectionPath> second_path_g_list;
     handle_stuff(this->player_ptr);
 
@@ -493,7 +493,7 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     }
 
     for (const auto &[y, x] : drawn_pos_list) {
-        lite_spot(player_ptr, y, x);
+        lite_spot(this->player_ptr, y, x);
     }
 
     {
@@ -505,7 +505,8 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
 
             const auto length = project_length ? project_length : system.get_max_range();
             for (const auto &dd : CCW_DD) {
-                second_path_g_list.emplace_back(this->player_ptr, length, y, x, y + dd.y, x + dd.x, project_flag);
+                const Pos2D pos(y, x);
+                second_path_g_list.emplace_back(this->player_ptr, length, pos, pos + dd, project_flag);
             }
         }
     }

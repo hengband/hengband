@@ -245,15 +245,15 @@ static void calc_projection_others(PlayerType *player_ptr, projection_path_type 
  * @param flag フラグID
  * @return リストの長さ
  */
-ProjectionPath::ProjectionPath(PlayerType *player_ptr, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flag)
+ProjectionPath::ProjectionPath(PlayerType *player_ptr, int range, const Pos2D &pos_src, const Pos2D &pos_dst, uint32_t flag)
 {
     this->position.clear();
-    if ((x1 == x2) && (y1 == y2)) {
+    if (pos_src == pos_dst) {
         return;
     }
 
     projection_path_type tmp_projection_path;
-    auto *pp_ptr = initialize_projection_path_type(&tmp_projection_path, &this->position, range, flag, y1, x1, y2, x2);
+    auto *pp_ptr = initialize_projection_path_type(&tmp_projection_path, &this->position, range, flag, pos_src.y, pos_src.x, pos_dst.y, pos_dst.x);
     set_asxy(pp_ptr);
     pp_ptr->half = pp_ptr->ay * pp_ptr->ax;
     pp_ptr->full = pp_ptr->half << 1;
@@ -267,8 +267,8 @@ ProjectionPath::ProjectionPath(PlayerType *player_ptr, POSITION range, POSITION 
         return;
     }
 
-    pp_ptr->y = y1 + pp_ptr->sy;
-    pp_ptr->x = x1 + pp_ptr->sx;
+    pp_ptr->y = pos_src.y + pp_ptr->sy;
+    pp_ptr->x = pos_src.x + pp_ptr->sx;
     calc_projection_others(player_ptr, pp_ptr);
 }
 
@@ -280,7 +280,7 @@ ProjectionPath::ProjectionPath(PlayerType *player_ptr, POSITION range, POSITION 
  */
 bool projectable(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-    ProjectionPath grid_g(player_ptr, (project_length ? project_length : AngbandSystem::get_instance().get_max_range()), y1, x1, y2, x2, 0);
+    ProjectionPath grid_g(player_ptr, (project_length ? project_length : AngbandSystem::get_instance().get_max_range()), { y1, x1 }, { y2, x2 }, 0);
     if (grid_g.path_num() == 0) {
         return true;
     }
