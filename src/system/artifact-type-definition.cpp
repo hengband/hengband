@@ -106,7 +106,7 @@ bool ArtifactList::order(const FixedArtifactId id1, const FixedArtifactId id2) c
     }
 
     if (artifact1.level > artifact2.level) {
-        return true;
+        return false;
     }
 
     return id1 < id2;
