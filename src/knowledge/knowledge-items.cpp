@@ -47,14 +47,15 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         return;
     }
 
-    std::set<FixedArtifactId> known_list;
-
-    for (const auto &[a_idx, artifact] : artifacts_info) {
+    const auto &artifacts = ArtifactList::get_instance();
+    const auto comparer = [&artifacts](auto id1, auto id2) { return artifacts.order(id1, id2); };
+    std::set<FixedArtifactId, decltype(comparer)> fa_ids(comparer);
+    for (const auto &[fa_id, artifact] : artifacts) {
         if (!artifact.is_generated) {
             continue;
         }
 
-        known_list.insert(known_list.end(), a_idx);
+        fa_ids.insert(fa_id);
     }
 
     for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
@@ -66,7 +67,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
                     continue;
                 }
 
-                known_list.erase(o_ptr->fixed_artifact_idx);
+                fa_ids.erase(o_ptr->fixed_artifact_idx);
             }
         }
     }
@@ -83,19 +84,14 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
             continue;
         }
 
-        known_list.erase(o_ptr->fixed_artifact_idx);
+        fa_ids.erase(o_ptr->fixed_artifact_idx);
     }
 
-    std::vector<FixedArtifactId> whats(known_list.begin(), known_list.end());
-    const auto &baseitems = BaseitemList::get_instance();
-    uint16_t why = 3;
-    ang_sort(player_ptr, whats.data(), &why, whats.size(), ang_sort_art_comp, ang_sort_art_swap);
-    for (auto a_idx : whats) {
-        const auto &artifact = ArtifactList::get_instance().get_artifact(a_idx);
-        const auto bi_id = baseitems.lookup_baseitem_id(artifact.bi_key);
+    for (auto fa_id : fa_ids) {
+        const auto &artifact = artifacts.get_artifact(fa_id);
         constexpr auto template_basename = _("     %s\n", "     The %s\n");
-        ItemEntity item(bi_id);
-        item.fixed_artifact_idx = a_idx;
+        ItemEntity item(artifact.bi_key);
+        item.fixed_artifact_idx = fa_id;
         item.ident |= IDENT_STORE;
         const auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         fprintf(fff, template_basename, item_name.data());
