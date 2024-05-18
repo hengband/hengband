@@ -114,12 +114,11 @@ static errr set_mon_name(const nlohmann::json &name_data, MonsterRaceInfo &monra
     const auto en_name = name_data["en"].get<std::string>();
 
 #ifdef JP
-    const auto ja_name_sys = utf8_to_sys(ja_name);
+    auto ja_name_sys = utf8_to_sys(ja_name);
     if (!ja_name_sys) {
         return PARSE_ERROR_INVALID_FLAG;
     }
-
-    monrace.name = ja_name_sys.value();
+    monrace.name = std::move(*ja_name_sys);
     monrace.E_name = en_name;
 #else
     monrace.name = en_name;
@@ -645,11 +644,11 @@ static errr set_mon_flavor(const nlohmann::json &flavor_data, MonsterRaceInfo &m
     if (flavor_ja == flavor_data.end()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
-    const auto flavor_ja_sys = utf8_to_sys(flavor_ja->get<std::string>());
+    auto flavor_ja_sys = utf8_to_sys(flavor_ja->get<std::string>());
     if (!flavor_ja_sys) {
         return PARSE_ERROR_INVALID_FLAG;
     }
-    monrace.text = flavor_ja_sys.value();
+    monrace.text = std::move(*flavor_ja_sys);
 #else
     const auto &flavor_en = flavor_data.find("en");
     if (flavor_en == flavor_data.end()) {

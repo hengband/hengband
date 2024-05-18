@@ -51,11 +51,11 @@ static errr set_art_name(const nlohmann::json &name_data, ArtifactType &artifact
     if (ja_name == name_data.end()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
-    const auto ja_name_sys = utf8_to_sys(ja_name->get<std::string>());
+    auto ja_name_sys = utf8_to_sys(ja_name->get<std::string>());
     if (!ja_name_sys) {
         return PARSE_ERROR_INVALID_FLAG;
     }
-    artifact.name = ja_name_sys.value();
+    artifact.name = std::move(*ja_name_sys);
 #else
     const auto &en_name = name_data.find("en");
     if (en_name == name_data.end()) {
@@ -394,11 +394,11 @@ static errr set_art_flavor(const nlohmann::json &flavor_data, ArtifactType &arti
     if (ja_flavor == flavor_data.end()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
-    const auto ja_flavor_sys = utf8_to_sys(ja_flavor->get<std::string>());
+    auto ja_flavor_sys = utf8_to_sys(ja_flavor->get<std::string>());
     if (!ja_flavor_sys) {
         return PARSE_ERROR_INVALID_FLAG;
     }
-    artifact.text = ja_flavor_sys.value();
+    artifact.text = std::move(*ja_flavor_sys);
 #else
     const auto &en_flavor = flavor_data.find("en");
     if (en_flavor == flavor_data.end()) {
