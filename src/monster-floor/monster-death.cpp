@@ -172,7 +172,7 @@ static void drop_artifact_from_unique(PlayerType *player_ptr, MonsterDeath *md_p
  */
 bool drop_single_artifact(PlayerType *player_ptr, MonsterDeath *md_ptr, FixedArtifactId a_idx)
 {
-    auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+    auto &artifact = ArtifactList::get_instance().get_artifact(a_idx);
     if (artifact.is_generated) {
         return false;
     }
@@ -190,7 +190,7 @@ static std::optional<short> drop_dungeon_final_artifact(PlayerType *player_ptr, 
     }
 
     const auto a_idx = dungeon.final_artifact;
-    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+    const auto &artifact = ArtifactList::get_instance().get_artifact(a_idx);
     if (artifact.is_generated) {
         return bi_id;
     }

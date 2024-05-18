@@ -252,11 +252,7 @@ void apply_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
  */
 bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y, POSITION x)
 {
-    auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
-    if (artifact.name.empty()) {
-        return false;
-    }
-
+    auto &artifact = ArtifactList::get_instance().get_artifact(a_idx);
     ItemEntity item(artifact.bi_key);
     item.fixed_artifact_idx = a_idx;
     apply_artifact(player_ptr, &item);
@@ -266,67 +262,6 @@ bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y,
 
     artifact.is_generated = true;
     return true;
-}
-
-/*!
- * @brief 非INSTA_ART型の固定アーティファクトの生成を確率に応じて試行する。
- * Mega-Hack -- Attempt to create one of the "Special Objects"
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param o_ptr 生成に割り当てたいオブジェクトの構造体参照ポインタ
- * @return 生成に成功したらTRUEを返す。
- * @details
- * Attempt to change an object into an artifact\n
- * This routine should only be called by "apply_magic()"\n
- * Note -- see "make_artifact_special()" and "apply_magic()"\n
- */
-bool make_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
-{
-    auto floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->dun_level == 0) {
-        return false;
-    }
-
-    if (o_ptr->number != 1) {
-        return false;
-    }
-
-    for (const auto &[a_idx, artifact] : artifacts_info) {
-        if (artifact.name.empty()) {
-            continue;
-        }
-
-        if (artifact.is_generated) {
-            continue;
-        }
-
-        if (artifact.gen_flags.has(ItemGenerationTraitType::QUESTITEM)) {
-            continue;
-        }
-
-        if (artifact.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
-            continue;
-        }
-
-        if (artifact.bi_key != o_ptr->bi_key) {
-            continue;
-        }
-
-        if (artifact.level > floor_ptr->dun_level) {
-            int d = (artifact.level - floor_ptr->dun_level) * 2;
-            if (!one_in_(d)) {
-                continue;
-            }
-        }
-
-        if (!one_in_(artifact.rarity)) {
-            continue;
-        }
-
-        o_ptr->fixed_artifact_idx = a_idx;
-        return true;
-    }
-
-    return false;
 }
 
 /*!
@@ -344,8 +279,8 @@ bool make_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
 bool make_artifact_special(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     /*! @note 地上ではキャンセルする / No artifacts in the town */
-    auto floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->dun_level == 0) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (!floor.is_in_underground()) {
         return false;
     }
 
@@ -355,12 +290,7 @@ bool make_artifact_special(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     /*! @note 全固定アーティファクト中からIDの若い順に生成対象とその確率を走査する / Check the artifact list (just the "specials") */
-    for (const auto &[a_idx, artifact] : artifacts_info) {
-        /*! @note アーティファクト名が空の不正なデータは除外する / Skip "empty" artifacts */
-        if (artifact.name.empty()) {
-            continue;
-        }
-
+    for (const auto &[fa_id, artifact] : ArtifactList::get_instance()) {
         /*! @note 既に生成回数がカウントされたアーティファクト、QUESTITEMと非INSTA_ARTは除外 / Cannot make an artifact twice */
         if (artifact.is_generated) {
             continue;
@@ -373,9 +303,9 @@ bool make_artifact_special(PlayerType *player_ptr, ItemEntity *o_ptr)
         }
 
         /*! @note アーティファクト生成階が現在に対して足りない場合は高確率で1/(不足階層*2)を満たさないと生成リストに加えられない */
-        if (artifact.level > floor_ptr->object_level) {
+        if (artifact.level > floor.object_level) {
             /* @note  / Acquire the "out-of-depth factor". Roll for out-of-depth creation. */
-            int d = (artifact.level - floor_ptr->object_level) * 2;
+            int d = (artifact.level - floor.object_level) * 2;
             if (!one_in_(d)) {
                 continue;
             }
@@ -392,8 +322,8 @@ bool make_artifact_special(PlayerType *player_ptr, ItemEntity *o_ptr)
          */
         const auto &baseitems = BaseitemList::get_instance();
         const auto &baseitem = baseitems.lookup_baseitem(artifact.bi_key);
-        if (baseitem.level > floor_ptr->object_level) {
-            int d = (baseitem.level - floor_ptr->object_level) * 5;
+        if (baseitem.level > floor.object_level) {
+            int d = (baseitem.level - floor.object_level) * 5;
             if (!one_in_(d)) {
                 continue;
             }
@@ -401,7 +331,7 @@ bool make_artifact_special(PlayerType *player_ptr, ItemEntity *o_ptr)
 
         //<! @note 前述の条件を満たしたら、後のIDのアーティファクトはチェックせずすぐ確定し生成処理に移す.
         o_ptr->generate(artifact.bi_key);
-        o_ptr->fixed_artifact_idx = a_idx;
+        o_ptr->fixed_artifact_idx = fa_id;
         return true;
     }
 

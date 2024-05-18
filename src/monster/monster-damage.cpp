@@ -384,7 +384,7 @@ void MonsterDamageProcessor::get_exp_from_mon(MonsterEntity *m_ptr, int exp_dam)
     s64b_mul(&div_h, &div_l, 0, r_ptr->hdice * (ironman_nightmare ? 2 : 1) * compensation);
 
     /* Special penalty in the wilderness */
-    if (!this->player_ptr->current_floor_ptr->is_in_dungeon()) {
+    if (!this->player_ptr->current_floor_ptr->is_in_underground()) {
         auto is_dungeon_monster = r_ptr->wilderness_flags.has_not(MonsterWildernessType::WILD_ONLY);
         is_dungeon_monster |= r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE);
         if (is_dungeon_monster) {

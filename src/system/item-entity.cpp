@@ -815,7 +815,7 @@ EgoItemDefinition &ItemEntity::get_ego() const
 
 ArtifactType &ItemEntity::get_fixed_artifact() const
 {
-    return ArtifactsInfo::get_instance().get_artifact(this->fixed_artifact_idx);
+    return ArtifactList::get_instance().get_artifact(this->fixed_artifact_idx);
 }
 
 TrFlags ItemEntity::get_flags() const
@@ -962,6 +962,37 @@ void ItemEntity::mark_as_known()
 void ItemEntity::mark_as_tried() const
 {
     this->get_baseitem().mark_as_tried();
+}
+
+/*!
+ * @brief 非INSTA_ART型の固定アーティファクトの生成を確率に応じて試行する.
+ * @param dungeon_level ダンジョンの階層
+ * @return 生成に成功したか失敗したか
+ */
+bool ItemEntity::try_become_artifact(int dungeon_level)
+{
+    if (this->number != 1) {
+        return false;
+    }
+
+    for (const auto &[a_idx, artifact] : ArtifactList::get_instance()) {
+        if (!artifact.can_generate(this->bi_key)) {
+            continue;
+        }
+
+        if ((artifact.level > dungeon_level) && !one_in_((artifact.level - dungeon_level) * 2)) {
+            continue;
+        }
+
+        if (!one_in_(artifact.rarity)) {
+            continue;
+        }
+
+        this->fixed_artifact_idx = a_idx;
+        return true;
+    }
+
+    return false;
 }
 
 /*!

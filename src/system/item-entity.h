@@ -156,6 +156,8 @@ public:
     void mark_as_known();
     void mark_as_tried() const;
 
+    bool try_become_artifact(int dungeon_level);
+
 private:
     int get_baseitem_price() const;
     int calc_figurine_value() const;

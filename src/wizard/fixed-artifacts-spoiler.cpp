@@ -70,7 +70,7 @@ void spoiler_outlist(std::string_view header, const std::vector<std::string> &de
  */
 static ItemEntity make_fake_artifact(FixedArtifactId fixed_artifact_idx)
 {
-    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(fixed_artifact_idx);
+    const auto &artifact = ArtifactList::get_instance().get_artifact(fixed_artifact_idx);
     ItemEntity item(artifact.bi_key);
     item.fixed_artifact_idx = fixed_artifact_idx;
     item.pval = artifact.pval;
@@ -139,12 +139,12 @@ SpoilerOutputResultType spoil_fixed_artifact()
         spoiler_blanklines(1, ofs);
 
         for (auto tval : tval_list) {
-            for (const auto &[a_idx, artifact] : artifacts_info) {
+            for (const auto &[fa_id, artifact] : ArtifactList::get_instance()) {
                 if (artifact.bi_key.tval() != tval) {
                     continue;
                 }
 
-                const auto item = make_fake_artifact(a_idx);
+                const auto item = make_fake_artifact(fa_id);
                 PlayerType dummy;
                 const auto artifacts_list = object_analyze(&dummy, &item);
                 spoiler_print_art(&artifacts_list, ofs);

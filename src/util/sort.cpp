@@ -271,8 +271,8 @@ bool ang_sort_art_comp(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     int z2;
 
     /* Sort by total kills */
-    const auto &artifact_w1 = ArtifactsInfo::get_instance().get_artifact(w1);
-    const auto &artifact_w2 = ArtifactsInfo::get_instance().get_artifact(w2);
+    const auto &artifact_w1 = ArtifactList::get_instance().get_artifact(w1);
+    const auto &artifact_w2 = ArtifactList::get_instance().get_artifact(w2);
     if (*why >= 3) {
         /* Extract total kills */
         z1 = enum2i(artifact_w1.bi_key.tval());

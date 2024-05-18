@@ -333,13 +333,6 @@ void rd_item_old(ItemEntity *o_ptr)
         }
     }
 
-    if (o_ptr->is_fixed_artifact()) {
-        const auto &artifact = o_ptr->get_fixed_artifact();
-        if (artifact.name.empty()) {
-            o_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
-        }
-    }
-
     if (o_ptr->is_ego()) {
         const auto &ego = o_ptr->get_ego();
         if (ego.name.empty()) {

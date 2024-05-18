@@ -126,7 +126,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
     }
 
     auto go_up = false;
-    if (!floor.is_in_dungeon()) {
+    if (!floor.is_in_underground()) {
         go_up = true;
     } else {
         go_up = confirm_leave_level(player_ptr, false);
@@ -262,7 +262,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
     }
 
     short target_dungeon = 0;
-    if (!floor.is_in_dungeon()) {
+    if (!floor.is_in_underground()) {
         target_dungeon = terrain.flags.has(TerrainCharacteristics::ENTRANCE) ? grid.special : DUNGEON_ANGBAND;
         if (ironman_downward && (target_dungeon != DUNGEON_ANGBAND)) {
             msg_print(_("ダンジョンの入口は塞がれている！", "The entrance of this dungeon is closed!"));
@@ -296,7 +296,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
     }
 
     const auto &dungeon = floor.get_dungeon_definition();
-    if (!floor.is_in_dungeon()) {
+    if (!floor.is_in_underground()) {
         player_ptr->enter_dungeon = true;
         down_num = dungeon.mindepth;
     }

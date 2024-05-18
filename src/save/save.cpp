@@ -175,7 +175,7 @@ static bool wr_savefile_new(PlayerType *player_ptr)
     wr_u16b(tmp16u);
     for (auto i = 0U; i < tmp16u; i++) {
         const auto a_idx = i2enum<FixedArtifactId>(i);
-        const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+        const auto &artifact = ArtifactList::get_instance().get_artifact(a_idx);
         wr_bool(artifact.is_generated);
         wr_s16b(artifact.floor_id);
     }

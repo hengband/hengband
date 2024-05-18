@@ -219,9 +219,9 @@ void wizard_item_modifier(PlayerType *player_ptr)
  */
 void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx, bool aware)
 {
-    const auto max_a_idx = enum2i(artifacts_info.rbegin()->first);
+    auto &artifacts = ArtifactList::get_instance();
+    const auto max_a_idx = enum2i(artifacts.rbegin()->first);
     const auto message = aware ? "Modified." : "Restored.";
-    auto &artifacts = ArtifactsInfo::get_instance();
     if (reset_artifact_idx != FixedArtifactId::NONE) {
         artifacts.get_artifact(reset_artifact_idx).is_generated = aware;
         msg_print(message);
@@ -804,6 +804,62 @@ void wiz_modify_item(PlayerType *player_ptr)
     }
 }
 
+static std::vector<FixedArtifactId> find_wishing_fixed_artifact(PlayerType *player_ptr, std::string_view pray_chars)
+{
+    std::vector<FixedArtifactId> fa_ids;
+    for (const auto &[fa_id, artifact] : ArtifactList::get_instance()) {
+        ItemEntity item(artifact.bi_key);
+        item.fixed_artifact_idx = fa_id;
+#ifdef JP
+        const auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+#else
+        auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+        str_tolower(item_name.data());
+#endif
+        std::string art_description = artifact.name;
+#ifdef JP
+        if (art_description.starts_with("『")) {
+            art_description = art_description.substr(2);
+            if (art_description.ends_with("』")) {
+                art_description = art_description.substr(0, art_description.length() - 2);
+            }
+        } else {
+            if (art_description.ends_with("の")) {
+                art_description = art_description.substr(0, art_description.length() - 2);
+            }
+        }
+#else
+        if (art_description.starts_with('\'')) {
+            art_description = art_description.substr(1);
+            const auto find_pos = art_description.find('\'');
+            if (find_pos != std::string::npos) {
+                art_description = art_description.substr(0, find_pos);
+            }
+        } else {
+            const std::string of_space("of ");
+            if (art_description.starts_with(of_space)) {
+                art_description = art_description.substr(of_space.length());
+            }
+        }
+
+        str_tolower(art_description.data());
+#endif
+        const std::string match_name(_(item_name.substr(2), item_name));
+        if (cheat_xtra) {
+            msg_format("Matching artifact No.%d %s(%s)", enum2i(fa_id), art_description.data(), match_name.data());
+        }
+
+        std::vector<std::string> candidates = { match_name, artifact.name, art_description };
+        for (const auto &candidate : candidates) {
+            if (pray_chars == candidate) {
+                fa_ids.push_back(fa_id);
+            }
+        }
+    }
+
+    return fa_ids;
+}
+
 /*!
  * @brief オブジェクトの装備スロットがエゴが有効なスロットかどうか判定
  */
@@ -885,57 +941,57 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         return WishResultType::NOTHING;
     }
 
-    auto *str = pray.data();
+    auto *pray_chars = pray.data();
 #ifndef JP
-    str_tolower(str);
+    str_tolower(pray_chars);
     const std::string article_single("a ");
     const std::string article_multi("an ");
     if (pray.starts_with("a ")) {
-        str += article_single.length();
+        pray_chars += article_single.length();
     } else if (pray.starts_with("an ")) {
-        str += article_multi.length();
+        pray_chars += article_multi.length();
     }
 
-    str = ltrim(str);
+    pray_chars = ltrim(pray_chars);
 #endif // !JP
 
-    str = rtrim(str);
+    pray_chars = rtrim(pray_chars);
 
-    if (!strncmp(str, _("祝福された", "blessed"), _(10, 7))) {
-        str = ltrim(str + _(10, 7));
+    if (!strncmp(pray_chars, _("祝福された", "blessed"), _(10, 7))) {
+        pray_chars = ltrim(pray_chars + _(10, 7));
         blessed = true;
     }
 
     for (const auto &expression : fixed_expressions) {
         auto len = expression.length();
-        if (std::string_view(str).starts_with(expression)) {
-            str = ltrim(str + len);
+        if (std::string_view(pray_chars).starts_with(expression)) {
+            pray_chars = ltrim(pray_chars + len);
             fixed = true;
             break;
         }
     }
 
 #ifdef JP
-    if (!strncmp(str, "★", 2)) {
-        str = ltrim(str + 2);
+    if (!strncmp(pray_chars, "★", 2)) {
+        pray_chars = ltrim(pray_chars + 2);
         wish_art = true;
         exam_base = false;
     } else
 #endif
 
-        if (!strncmp(str, _("☆", "The "), _(2, 4))) {
-        str = ltrim(str + _(2, 4));
+        if (!strncmp(pray_chars, _("☆", "The "), _(2, 4))) {
+        pray_chars = ltrim(pray_chars + _(2, 4));
         wish_art = true;
         wish_randart = true;
     }
 
     /* wishing random ego ? */
-    else if (!strncmp(str, _("高級な", "excellent "), _(6, 9))) {
-        str = ltrim(str + _(6, 9));
+    else if (!strncmp(pray_chars, _("高級な", "excellent "), _(6, 9))) {
+        pray_chars = ltrim(pray_chars + _(6, 9));
         wish_ego = true;
     }
 
-    if (strlen(str) < 1) {
+    if (strlen(pray_chars) < 1) {
         msg_print(_("名前がない！", "What?"));
         return WishResultType::NOTHING;
     }
@@ -970,7 +1026,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             }
 
             const int len = item_name.length();
-            if (std::string(str).find(item_name) != std::string::npos) {
+            if (std::string(pray_chars).find(item_name) != std::string::npos) {
                 if (len > max_len) {
                     baseitem_ids.push_back(baseitem.idx);
                     max_len = len;
@@ -994,7 +1050,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                     msg_format("matching ego no.%d %s...", enum2i(ego.idx), item_name.data());
                 }
 
-                if (std::string(str).find(item_name) != std::string::npos) {
+                if (std::string(pray_chars).find(item_name) != std::string::npos) {
                     if (is_slot_able_to_be_ego(player_ptr, &item) != ego.slot) {
                         continue;
                     }
@@ -1005,90 +1061,18 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         }
     }
 
-    std::vector<FixedArtifactId> artifact_ids;
-
-    if (allow_art) {
-        char a_desc[MAX_NLEN] = "\0";
-        char *a_str = a_desc;
-
-        int len;
-        auto mlen = 0;
-        for (const auto &[a_idx, artifact] : artifacts_info) {
-            if (a_idx == FixedArtifactId::NONE || artifact.name.empty()) {
-                continue;
-            }
-
-            ItemEntity item(artifact.bi_key);
-            item.fixed_artifact_idx = a_idx;
-
-#ifdef JP
-            const auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
-#else
-            auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
-            str_tolower(item_name.data());
-#endif
-            a_str = a_desc;
-            strcpy(a_desc, artifact.name.data());
-
-            if (*a_str == '$') {
-                a_str++;
-            }
-#ifdef JP
-            /* remove quotes */
-            if (!strncmp(a_str, "『", 2)) {
-                a_str += 2;
-                char *s = strstr(a_str, "』");
-                *s = '\0';
-            }
-            /* remove 'of' */
-            else {
-                int l = strlen(a_str);
-                if (!strrncmp(a_str, "の", 2)) {
-                    a_str[l - 2] = '\0';
-                }
-            }
-#else
-            /* remove quotes */
-            if (a_str[0] == '\'') {
-                a_str += 1;
-                auto *s = angband_strchr(a_desc, '\'');
-                *s = '\0';
-            }
-            /* remove 'of ' */
-            else if (!strncmp(a_str, (const char *)"of ", 3)) {
-                a_str += 3;
-            }
-
-            str_tolower(a_str);
-#endif
-            const auto match_name = _(item_name.data() + 2, item_name.data());
-            if (cheat_xtra) {
-                msg_format("Matching artifact No.%d %s(%s)", enum2i(a_idx), a_desc, match_name);
-            }
-
-            std::vector<const char *> l = { a_str, artifact.name.data(), match_name };
-            for (size_t c = 0; c < l.size(); c++) {
-                if (!strcmp(str, l.at(c))) {
-                    len = strlen(l.at(c));
-                    if (len > mlen) {
-                        artifact_ids.push_back(a_idx);
-                        mlen = len;
-                    }
-                }
-            }
-        }
-    }
-
-    if (w_ptr->wizard && ((artifact_ids.size() > 1) || (ego_ids.size() > 1))) {
+    const auto wishing_fa_ids = allow_art ? find_wishing_fixed_artifact(player_ptr, pray_chars) : std::vector<FixedArtifactId>{};
+    if (w_ptr->wizard && ((wishing_fa_ids.size() > 1) || (ego_ids.size() > 1))) {
         msg_print(_("候補が多すぎる！", "Too many matches!"));
         return WishResultType::FAIL;
     }
 
-    if (artifact_ids.size() == 1) {
-        const auto a_idx = artifact_ids.back();
-        const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+    const auto &artifacts = ArtifactList::get_instance();
+    if (!wishing_fa_ids.empty()) {
+        const auto wishing_fa_id = *wishing_fa_ids.begin();
+        const auto &artifact = artifacts.get_artifact(wishing_fa_id);
         if (must || (ok_art && !artifact.is_generated)) {
-            (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
+            (void)create_named_art(player_ptr, wishing_fa_id, player_ptr->y, player_ptr->x);
         } else {
             wishing_puff_of_smoke();
         }
@@ -1106,7 +1090,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         const auto &baseitem = BaseitemList::get_instance().get_baseitem(bi_id);
         auto a_idx = FixedArtifactId::NONE;
         if (baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
-            for (const auto &[a_idx_loop, artifact_loop] : artifacts_info) {
+            for (const auto &[a_idx_loop, artifact_loop] : artifacts) {
                 if (a_idx_loop == FixedArtifactId::NONE || artifact_loop.bi_key != baseitem.bi_key) {
                     continue;
                 }
@@ -1117,7 +1101,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         }
 
         if (a_idx != FixedArtifactId::NONE) {
-            const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+            const auto &artifact = artifacts.get_artifact(a_idx);
             if (must || (ok_art && !artifact.is_generated)) {
                 (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
             } else {
