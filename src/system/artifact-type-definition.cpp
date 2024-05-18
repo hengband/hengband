@@ -29,7 +29,7 @@ bool ArtifactType::can_generate(const BaseitemKey &generaing_bi_key) const
     return this->bi_key == generaing_bi_key;
 }
 
-std::map<FixedArtifactId, ArtifactType> artifacts_info;
+std::map<FixedArtifactId, ArtifactType> artifacts;
 
 ArtifactList ArtifactList::instance{};
 
@@ -42,51 +42,65 @@ ArtifactList &ArtifactList::get_instance()
 
 std::map<FixedArtifactId, ArtifactType>::iterator ArtifactList::begin()
 {
-    return artifacts_info.begin();
+    return this->artifacts.begin();
 }
 
 std::map<FixedArtifactId, ArtifactType>::iterator ArtifactList::end()
 {
-    return artifacts_info.end();
+    return this->artifacts.end();
 }
 
 std::map<FixedArtifactId, ArtifactType>::const_iterator ArtifactList::begin() const
 {
-    return artifacts_info.begin();
+    return this->artifacts.begin();
 }
 
 std::map<FixedArtifactId, ArtifactType>::const_iterator ArtifactList::end() const
 {
-    return artifacts_info.end();
+    return this->artifacts.end();
 }
 
 std::map<FixedArtifactId, ArtifactType>::reverse_iterator ArtifactList::rbegin()
 {
-    return artifacts_info.rbegin();
+    return this->artifacts.rbegin();
 }
 
 std::map<FixedArtifactId, ArtifactType>::reverse_iterator ArtifactList::rend()
 {
-    return artifacts_info.rend();
+    return this->artifacts.rend();
 }
 
 std::map<FixedArtifactId, ArtifactType>::const_reverse_iterator ArtifactList::rbegin() const
 {
-    return artifacts_info.rbegin();
+    return this->artifacts.rbegin();
 }
 
 std::map<FixedArtifactId, ArtifactType>::const_reverse_iterator ArtifactList::rend() const
 {
-    return artifacts_info.rend();
+    return this->artifacts.rend();
 }
 
-ArtifactType &ArtifactList::get_artifact(const FixedArtifactId id) const
+std::map<FixedArtifactId, ArtifactType> &ArtifactList::get_raw_map()
 {
-    if (id == FixedArtifactId::NONE) {
+    return this->artifacts;
+}
+
+const ArtifactType &ArtifactList::get_artifact(const FixedArtifactId fa_id) const
+{
+    if (fa_id == FixedArtifactId::NONE) {
         return dummy;
     }
 
-    return artifacts_info.at(id);
+    return this->artifacts.at(fa_id);
+}
+
+ArtifactType &ArtifactList::get_artifact(const FixedArtifactId fa_id)
+{
+    if (fa_id == FixedArtifactId::NONE) {
+        return dummy;
+    }
+
+    return this->artifacts.at(fa_id);
 }
 
 bool ArtifactList::order(const FixedArtifactId id1, const FixedArtifactId id2) const
@@ -112,9 +126,14 @@ bool ArtifactList::order(const FixedArtifactId id1, const FixedArtifactId id2) c
     return id1 < id2;
 }
 
+void ArtifactList::emplace(const FixedArtifactId fa_id, const ArtifactType &artifact)
+{
+    this->artifacts.emplace(fa_id, artifact);
+}
+
 void ArtifactList::reset_generated_flags()
 {
-    for (auto &[_, artifact] : artifacts_info) {
+    for (auto &[_, artifact] : this->artifacts) {
         artifact.is_generated = false;
     }
 }

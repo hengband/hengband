@@ -95,8 +95,8 @@ static const std::array<AmuseDefinition, 13> amuse_info = { {
 static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_art, const short bi_id)
 {
     const auto &baseitems = BaseitemList::get_instance();
-    for (const auto &[a_idx, artifact] : artifacts_info) {
-        if (a_idx == FixedArtifactId::NONE) {
+    for (const auto &[fa_id, artifact] : ArtifactList::get_instance()) {
+        if (fa_id == FixedArtifactId::NONE) {
             continue;
         }
 
@@ -112,7 +112,7 @@ static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_
             continue;
         }
 
-        return a_idx;
+        return fa_id;
     }
 
     return std::nullopt;

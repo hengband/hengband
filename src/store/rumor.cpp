@@ -77,9 +77,10 @@ std::pair<bool, std::vector<std::string>> get_rumor_tokens(std::string rumor)
  */
 static std::pair<FixedArtifactId, const ArtifactType *> get_artifact_definition(std::string_view artifact_name)
 {
-    const auto max_idx = enum2i(artifacts_info.rbegin()->first);
+    const auto &artifacts = ArtifactList::get_instance();
+    const auto max_idx = enum2i(artifacts.rbegin()->first);
     const auto fa_id = i2enum<FixedArtifactId>(get_rumor_num(artifact_name.data(), max_idx));
-    const auto &artifact = ArtifactList::get_instance().get_artifact(fa_id);
+    const auto &artifact = artifacts.get_artifact(fa_id);
     return { fa_id, &artifact };
 }
 

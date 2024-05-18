@@ -245,21 +245,21 @@ static bool parse_qtw_QR(QuestType *q_ptr, char **zz, int num)
     }
 
     int count = 0;
-    FixedArtifactId reward_idx = FixedArtifactId::NONE;
-    const auto &artifacts = ArtifactList::get_instance();
+    auto reward_idx = FixedArtifactId::NONE;
+    auto &artifacts = ArtifactList::get_instance();
     for (auto idx = 2; idx < num; idx++) {
-        const auto a_idx = i2enum<FixedArtifactId>(atoi(zz[idx]));
-        if (a_idx == FixedArtifactId::NONE) {
+        const auto fa_id = i2enum<FixedArtifactId>(atoi(zz[idx]));
+        if (fa_id == FixedArtifactId::NONE) {
             continue;
         }
 
-        if (artifacts.get_artifact(a_idx).is_generated) {
+        if (artifacts.get_artifact(fa_id).is_generated) {
             continue;
         }
 
         count++;
         if (one_in_(count)) {
-            reward_idx = a_idx;
+            reward_idx = fa_id;
         }
     }
 

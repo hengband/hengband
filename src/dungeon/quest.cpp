@@ -168,7 +168,7 @@ bool QuestType::has_reward() const
 
 ArtifactType &QuestType::get_reward() const
 {
-    const auto &artifacts = ArtifactList::get_instance();
+    auto &artifacts = ArtifactList::get_instance();
     return artifacts.get_artifact(this->reward_artifact_idx);
 }
 
