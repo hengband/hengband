@@ -35,18 +35,9 @@
 #include <set>
 #include <vector>
 
-/*!
- * @brief Check the status of "artifacts"
- * @param player_ptr プレイヤーへの参照ポインタ
- */
-void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
+namespace {
+auto collect_known_fixed_artifacts(PlayerType *player_ptr)
 {
-    FILE *fff = nullptr;
-    GAME_TEXT file_name[FILE_NAME_SIZE];
-    if (!open_temporary_file(&fff, file_name)) {
-        return;
-    }
-
     const auto &artifacts = ArtifactList::get_instance();
     const auto comparer = [&artifacts](auto id1, auto id2) { return artifacts.order(id1, id2); };
     std::set<FixedArtifactId, decltype(comparer)> fa_ids(comparer);
@@ -90,6 +81,24 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         fa_ids.erase(item.fixed_artifact_idx);
     }
 
+    return fa_ids;
+}
+}
+
+/*!
+ * @brief Check the status of "artifacts"
+ * @param player_ptr プレイヤーへの参照ポインタ
+ */
+void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
+{
+    FILE *fff = nullptr;
+    GAME_TEXT file_name[FILE_NAME_SIZE];
+    if (!open_temporary_file(&fff, file_name)) {
+        return;
+    }
+
+    const auto &artifacts = ArtifactList::get_instance();
+    const auto fa_ids = collect_known_fixed_artifacts(player_ptr);
     for (const auto fa_id : fa_ids) {
         const auto &artifact = artifacts.get_artifact(fa_id);
         constexpr auto template_basename = _("     %s\n", "     The %s\n");
