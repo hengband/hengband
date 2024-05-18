@@ -19,6 +19,7 @@
 #include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/buffer-shaper.h"
+#include "util/finalizer.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -303,59 +304,46 @@ void load_all_pref_files(PlayerType *player_ptr)
  */
 bool read_histpref(PlayerType *player_ptr)
 {
-    errr err;
-    int i, j, n;
-    char *s;
-    char histbuf[HISTPREF_LIMIT];
-
     if (!input_check(_("生い立ち設定ファイルをロードしますか? ", "Load background history preference file? "))) {
         return false;
     }
 
-    histbuf[0] = '\0';
-    histpref_buf = histbuf;
-
-    err = process_histpref_file(player_ptr, std::string(_("histedit-", "histpref-")).append(player_ptr->base_name).append(".prf").data());
-
+    histpref_buf = "";
+    std::stringstream ss;
+    ss << _("histedit-", "histpref-") << player_ptr->base_name << ".prf";
+    auto err = process_histpref_file(player_ptr, ss.str());
     if (0 > err) {
         err = process_histpref_file(player_ptr, _("histedit.prf", "histpref.prf"));
     }
 
+    const auto finalizer = util::make_finalizer([]() { histpref_buf = std::nullopt; });
     if (err) {
         msg_print(_("生い立ち設定ファイルの読み込みに失敗しました。", "Failed to load background history preference."));
         msg_print(nullptr);
-        histpref_buf = nullptr;
-        return false;
-    } else if (!histpref_buf[0]) {
-        msg_print(_("有効な生い立ち設定はこのファイルにありません。", "There does not exist valid background history preference."));
-        msg_print(nullptr);
-        histpref_buf = nullptr;
         return false;
     }
 
-    for (i = 0; i < 4; i++) {
+    if (!histpref_buf || histpref_buf->empty()) {
+        msg_print(_("有効な生い立ち設定はこのファイルにありません。", "There does not exist valid background history preference."));
+        msg_print(nullptr);
+        return false;
+    }
+
+    for (auto i = 0; i < 4; i++) {
         player_ptr->history[i][0] = '\0';
     }
 
-    /* loop */
-    for (s = histpref_buf; *s == ' '; s++) {
-        ;
-    }
-
-    n = strlen(s);
-    while ((n > 0) && (s[n - 1] == ' ')) {
-        s[--n] = '\0';
-    }
-
+    histpref_buf = str_trim(*histpref_buf);
     constexpr auto max_line_len = sizeof(player_ptr->history[0]);
-    const auto history_lines = shape_buffer(s, max_line_len);
+    const auto history_lines = shape_buffer(*histpref_buf, max_line_len);
     const auto max_lines = std::min<int>(4, history_lines.size());
     for (auto l = 0; l < max_lines; ++l) {
         angband_strcpy(player_ptr->history[l], history_lines[l], max_line_len);
     }
 
-    for (i = 0; i < 4; i++) {
+    for (auto i = 0; i < 4; i++) {
         /* loop */
+        int j;
         for (j = 0; player_ptr->history[i][j]; j++) {
             ;
         }
@@ -366,6 +354,5 @@ bool read_histpref(PlayerType *player_ptr)
         player_ptr->history[i][59] = '\0';
     }
 
-    histpref_buf = nullptr;
     return true;
 }

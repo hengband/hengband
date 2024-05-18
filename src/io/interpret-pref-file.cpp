@@ -26,25 +26,37 @@
 
 #define MAX_MACRO_CHARS 16128 // 1つのマクロキー押下で実行可能なコマンド最大数 (エスケープシーケンス含む).
 
-char *histpref_buf = nullptr;
+std::optional<std::string> histpref_buf;
+
+/*!
+ * @brief 生い立ちメッセージの内容をバッファに加える。 / Hook function for reading the histpref.prf file.
+ */
+static void add_history_from_pref_line(std::string_view t)
+{
+    if (!histpref_buf) {
+        return;
+    }
+
+    histpref_buf->append(t);
+}
 
 /*!
  * @brief Rトークンの解釈 / Process "R:<num>:<a>/<c>" -- attr/char for monster races
  * @param buf バッファ
- * @return エラーコード
+ * @return 解釈に成功したか否か
  */
-static errr interpret_r_token(char *buf)
+static bool interpret_r_token(char *buf)
 {
     char *zz[16];
     if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) {
-        return 1;
+        return false;
     }
 
     int i = (int)strtol(zz[0], nullptr, 0);
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
     auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
     if (i >= static_cast<int>(monraces_info.size())) {
-        return 1;
+        return false;
     }
 
     auto *r_ptr = &monraces_info[i2enum<MonsterRaceId>(i)];
@@ -55,19 +67,19 @@ static errr interpret_r_token(char *buf)
         r_ptr->x_char = n2;
     }
 
-    return 0;
+    return true;
 }
 
 /*!
  * @brief Kトークンの解釈 / Process "K:<num>:<a>/<c>"  -- attr/char for object kinds
  * @param buf バッファ
- * @return エラーコード
+ * @return 解釈に成功したか否か
  */
-static errr interpret_k_token(char *buf)
+static bool interpret_k_token(char *buf)
 {
     char *zz[16];
     if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) {
-        return 1;
+        return false;
     }
 
     const auto i = static_cast<short>(std::stoi(zz[0], nullptr, 0));
@@ -75,7 +87,7 @@ static errr interpret_k_token(char *buf)
     const auto character = static_cast<char>(std::stoi(zz[2], nullptr, 0));
     auto &baseitems = BaseitemList::get_instance();
     if (i >= static_cast<int>(baseitems.size())) {
-        return 1;
+        return false;
     }
 
     /* Allow TERM_DARK text */
@@ -88,16 +100,16 @@ static errr interpret_k_token(char *buf)
         baseitem.cc_config.character = character;
     }
 
-    return 0;
+    return true;
 }
 
 /*!
  * @brief トークン数によって地形の文字形と色を決定する
  * @param i 地形種別
  * @param num トークン数
- * @return エラーコード
+ * @param zz トークン内容
  */
-static errr decide_feature_type(int i, int num, char **zz)
+static void decide_feature_type(int i, int num, char **zz)
 {
     auto &terrain = TerrainList::get_instance()[static_cast<short>(i)];
     auto color_token = static_cast<uint8_t>(std::stoi(zz[1], nullptr, 0));
@@ -121,11 +133,11 @@ static errr decide_feature_type(int i, int num, char **zz)
             terrain.cc_configs[j] = cc;
         }
 
-        return 0;
+        return;
     }
     case 4:
         terrain.reset_lighting();
-        return 0;
+        return;
     case F_LIT_MAX * 2 + 1:
         /* Use desired lighting */
         for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
@@ -144,50 +156,53 @@ static errr decide_feature_type(int i, int num, char **zz)
             }
         }
 
-        return 0;
+        return;
     default:
-        return 0;
+        return;
     }
 }
 
 /*!
  * @brief Fトークンの解釈 / Process "F:<num>:<a>/<c>" -- attr/char for terrain features
  * @param buf バッファ
- * @return エラーコード
+ * @return 解釈に成功したか否か
  * @details
  * "F:<num>:<a>/<c>"
  * "F:<num>:<a>/<c>:LIT"
  * "F:<num>:<a>/<c>:<la>/<lc>:<da>/<dc>"
  */
-static errr interpret_f_token(char *buf)
+static bool interpret_f_token(char *buf)
 {
     char *zz[16];
     int num = tokenize(buf + 2, F_LIT_MAX * 2 + 1, zz, TOKENIZE_CHECKQUOTE);
 
     if ((num != 3) && (num != 4) && (num != F_LIT_MAX * 2 + 1)) {
-        return 1;
-    } else if ((num == 4) && !streq(zz[3], "LIT")) {
-        return 1;
+        return false;
+    }
+
+    if ((num == 4) && !streq(zz[3], "LIT")) {
+        return false;
     }
 
     int i = (int)strtol(zz[0], nullptr, 0);
     if (i >= static_cast<int>(TerrainList::get_instance().size())) {
-        return 1;
+        return false;
     }
 
-    return decide_feature_type(i, num, zz);
+    decide_feature_type(i, num, zz);
+    return true;
 }
 
 /*!
  * @brief Fトークンの解釈 / Process "S:<num>:<a>/<c>" -- attr/char for special things
  * @param buf バッファ
- * @return エラーコード
+ * @return 解釈に成功したか否か
  */
-static errr interpret_s_token(char *buf)
+static bool interpret_s_token(char *buf)
 {
     char *zz[16];
     if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) {
-        return 1;
+        return false;
     }
 
     int j = (byte)strtol(zz[0], nullptr, 0);
@@ -195,19 +210,19 @@ static errr interpret_s_token(char *buf)
     auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
     misc_to_attr[j] = n1;
     misc_to_char[j] = n2;
-    return 0;
+    return true;
 }
 
 /*!
  * @brief Uトークンの解釈 / Process "U:<tv>:<a>/<c>" -- attr/char for unaware items
  * @param buf バッファ
- * @return エラーコード
+ * @return 解釈に成功したか否か
  */
-static errr interpret_u_token(char *buf)
+static bool interpret_u_token(char *buf)
 {
     char *zz[16];
     if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) {
-        return 1;
+        return false;
     }
 
     const auto tval = i2enum<ItemKindType>(std::stoi(zz[0], nullptr, 0));
@@ -225,19 +240,19 @@ static errr interpret_u_token(char *buf)
         }
     }
 
-    return 0;
+    return true;
 }
 
 /*!
  * @brief Eトークンの解釈 / Process "E:<tv>:<a>" -- attribute for inventory objects
  * @param buf バッファ
- * @return エラーコード
+ * @return 解釈に成功したか否か
  */
-static errr interpret_e_token(char *buf)
+static bool interpret_e_token(char *buf)
 {
     char *zz[16];
     if (tokenize(buf + 2, 2, zz, TOKENIZE_CHECKQUOTE) != 2) {
-        return 1;
+        return false;
     }
 
     int j = (byte)strtol(zz[0], nullptr, 0) % 128;
@@ -245,7 +260,7 @@ static errr interpret_e_token(char *buf)
     if (n1) {
         tval_to_attr[j] = n1;
     }
-    return 0;
+    return true;
 }
 
 /*!
@@ -253,7 +268,7 @@ static errr interpret_e_token(char *buf)
  * @param buf バッファ
  * @return エラーコード
  */
-static errr interpret_p_token(char *buf)
+static int interpret_p_token(char *buf)
 {
     char tmp[1024];
     text_to_ascii(tmp, buf + 2, sizeof(tmp));
@@ -263,42 +278,42 @@ static errr interpret_p_token(char *buf)
 /*!
  * @brief Cトークンの解釈 / Process "C:<str>" -- create keymap
  * @param buf バッファ
- * @return エラーコード
+ * @return 解釈に成功したか否か
  */
-static errr interpret_c_token(char *buf)
+static bool interpret_c_token(char *buf)
 {
     char *zz[16];
     if (tokenize(buf + 2, 2, zz, TOKENIZE_CHECKQUOTE) != 2) {
-        return 1;
+        return false;
     }
 
     int mode = strtol(zz[0], nullptr, 0);
     if ((mode < 0) || (mode >= KEYMAP_MODES)) {
-        return 1;
+        return false;
     }
 
     char tmp[1024];
     text_to_ascii(tmp, zz[1], sizeof(tmp));
     if (!tmp[0] || tmp[1]) {
-        return 1;
+        return false;
     }
 
     int i = (byte)(tmp[0]);
     string_free(keymap_act[mode][i]);
     keymap_act[mode][i] = string_make(macro_buffers.data());
-    return 0;
+    return true;
 }
 
 /*!
  * @brief Vトークンの解釈 / Process "V:<num>:<kv>:<rv>:<gv>:<bv>" -- visual info
  * @param buf バッファ
- * @return エラーコード
+ * @return 解釈に成功したか否か
  */
-static errr interpret_v_token(char *buf)
+static bool interpret_v_token(char *buf)
 {
     char *zz[16];
     if (tokenize(buf + 2, 5, zz, TOKENIZE_CHECKQUOTE) != 5) {
-        return 1;
+        return false;
     }
 
     int i = (byte)strtol(zz[0], nullptr, 0);
@@ -306,19 +321,19 @@ static errr interpret_v_token(char *buf)
     angband_color_table[i][1] = (byte)strtol(zz[2], nullptr, 0);
     angband_color_table[i][2] = (byte)strtol(zz[3], nullptr, 0);
     angband_color_table[i][3] = (byte)strtol(zz[4], nullptr, 0);
-    return 0;
+    return true;
 }
 
 /*!
  * @brief X/Yトークンの解釈
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param buf バッファ
- * @return エラーコード
  * @details
  * Process "X:<str>" -- turn option off
  * Process "Y:<str>" -- turn option on
+ * オプションの名前が正しくない時も、パース自体は続行する (V2以前からの仕様)
  */
-static errr interpret_xy_token(PlayerType *player_ptr, char *buf)
+static void interpret_xy_token(PlayerType *player_ptr, char *buf)
 {
     for (int i = 0; option_info[i].o_desc; i++) {
         bool is_option = option_info[i].o_var != nullptr;
@@ -334,23 +349,22 @@ static errr interpret_xy_token(PlayerType *player_ptr, char *buf)
         if ((player_ptr->playing || w_ptr->character_xtra) && (OPT_PAGE_BIRTH == option_info[i].o_page) && !w_ptr->wizard) {
             msg_format(_("初期オプションは変更できません! '%s'", "Birth options can not be changed! '%s'"), buf);
             msg_print(nullptr);
-            return 0;
+            return;
         }
 
         if (buf[0] == 'X') {
             g_option_flags[os] &= ~(1UL << ob);
             (*option_info[i].o_var) = false;
-            return 0;
+            return;
         }
 
         g_option_flags[os] |= (1UL << ob);
         (*option_info[i].o_var) = true;
-        return 0;
+        return;
     }
 
     msg_format(_("オプションの名前が正しくありません： %s", "Ignored invalid option: %s"), buf);
     msg_print(nullptr);
-    return 0;
 }
 
 /*!
@@ -383,9 +397,9 @@ static bool interpret_z_token(std::string_view line)
  * @brief Tトークンの解釈 / Process "T:<template>:<modifier chr>:<modifier name>:..." for 4 tokens
  * @param buf バッファ
  * @param zz トークン保管文字列
- * @return エラーコード
+ * @return 解釈に成功したか否か
  */
-static errr decide_template_modifier(int tok, char **zz)
+static bool decide_template_modifier(int tok, char **zz)
 {
     if (macro_template != nullptr) {
         int macro_modifier_length = strlen(macro_modifier_chr);
@@ -406,13 +420,13 @@ static errr decide_template_modifier(int tok, char **zz)
     }
 
     if (*zz[0] == '\0') {
-        return 0;
+        return true;
     }
 
     int zz_length = strlen(zz[1]);
     zz_length = std::min(MAX_MACRO_MOD, zz_length);
     if (2 + zz_length != tok) {
-        return 1;
+        return false;
     }
 
     macro_template = string_make(zz[0]);
@@ -421,21 +435,21 @@ static errr decide_template_modifier(int tok, char **zz)
         macro_modifier_name[i] = string_make(zz[2 + i]);
     }
 
-    return 0;
+    return true;
 }
 
 /*!
  * @brief Tトークンの解釈 / Process "T:<trigger>:<keycode>:<shift-keycode>" for 2 or 3 tokens
  * @param tok トークン数
  * @param zz トークン保管文字列
- * @return エラーコード
+ * @return 解釈に成功したか否か
  */
-static errr interpret_macro_keycodes(int tok, char **zz)
+static bool interpret_macro_keycodes(int tok, char **zz)
 {
     char buf_aux[MAX_MACRO_CHARS]{};
     if (max_macrotrigger >= MAX_MACRO_TRIG) {
         msg_print(_("マクロトリガーの設定が多すぎます!", "Too many macro triggers!"));
-        return 1;
+        return false;
     }
 
     auto m = max_macrotrigger;
@@ -454,20 +468,20 @@ static errr interpret_macro_keycodes(int tok, char **zz)
     macro_trigger_keycode[0][m] = string_make(zz[1]);
     if (tok == 3) {
         macro_trigger_keycode[1][m] = string_make(zz[2]);
-        return 0;
+        return true;
     }
 
     macro_trigger_keycode[1][m] = string_make(zz[1]);
-    return 0;
+    return true;
 }
 
 /*!
  * @brief Tトークンの個数調査 (解釈はサブルーチンで) / Initialize macro trigger names and a template
  * @param buf バッファ
- * @return エラーコード
+ * @return 解釈に成功したか否か
  * @todo 2.2.1r時点のコードからトークン数0～1の場合もエラーコード0だが、1であるべきでは？
  */
-static errr interpret_t_token(char *buf)
+static bool interpret_t_token(char *buf)
 {
     char *zz[16];
     int tok = tokenize(buf + 2, 2 + MAX_MACRO_MOD, zz, 0);
@@ -475,18 +489,17 @@ static errr interpret_t_token(char *buf)
         return decide_template_modifier(tok, zz);
     }
     if (tok < 2) {
-        return 0;
+        return true;
     }
 
     return interpret_macro_keycodes(tok, zz);
 }
 
 /*!
- * @brief 設定ファイルの各行から各種テキスト情報を取得する /
- * Parse a sub-file of the "extra info" (format shown below)
+ * @brief 設定ファイルの各行から各種テキスト情報を取得する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param buf データテキストの参照ポインタ
- * @return エラーコード
+ * @return 解釈に成功したか否か
  * @details
  * <pre>
  * Each "action" line has an "action symbol" in the first column,
@@ -504,61 +517,48 @@ static errr interpret_t_token(char *buf)
  * used for the "nothing" attr/char.
  * </pre>
  */
-errr interpret_pref_file(PlayerType *player_ptr, char *buf)
+int interpret_pref_file(PlayerType *player_ptr, char *buf)
 {
     if (buf[1] != ':') {
         return 1;
     }
 
     switch (buf[0]) {
-    case 'H': {
+    case 'H':
         /* Process "H:<history>" */
         add_history_from_pref_line(buf + 2);
         return 0;
-    }
     case 'R':
-        return interpret_r_token(buf);
+        return interpret_r_token(buf) ? 0 : 1;
     case 'K':
-        return interpret_k_token(buf);
+        return interpret_k_token(buf) ? 0 : 1;
     case 'F':
-        return interpret_f_token(buf);
+        return interpret_f_token(buf) ? 0 : 1;
     case 'S':
-        return interpret_s_token(buf);
+        return interpret_s_token(buf) ? 0 : 1;
     case 'U':
-        return interpret_u_token(buf);
+        return interpret_u_token(buf) ? 0 : 1;
     case 'E':
-        return interpret_e_token(buf);
-    case 'A': {
+        return interpret_e_token(buf) ? 0 : 1;
+    case 'A':
         /* Process "A:<str>" -- save an "action" for later */
         text_to_ascii(macro_buffers.data(), buf + 2, macro_buffers.size());
         return 0;
-    }
     case 'P':
         return interpret_p_token(buf);
     case 'C':
-        return interpret_c_token(buf);
+        return interpret_c_token(buf) ? 0 : 1;
     case 'V':
-        return interpret_v_token(buf);
+        return interpret_v_token(buf) ? 0 : 1;
     case 'X':
     case 'Y':
-        return interpret_xy_token(player_ptr, buf);
+        interpret_xy_token(player_ptr, buf);
+        return 0;
     case 'Z':
         return interpret_z_token(buf) ? 0 : 1;
     case 'T':
-        return interpret_t_token(buf);
+        return interpret_t_token(buf) ? 0 : 1;
     default:
         return 1;
     }
-}
-
-/*!
- * @brief 生い立ちメッセージの内容をバッファに加える。 / Hook function for reading the histpref.prf file.
- */
-void add_history_from_pref_line(concptr t)
-{
-    if (!histpref_buf) {
-        return;
-    }
-
-    angband_strcat(histpref_buf, t, HISTPREF_LIMIT);
 }
