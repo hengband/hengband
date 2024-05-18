@@ -3,6 +3,7 @@
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/race-info-tokens-table.h"
+#include "locale/japanese.h"
 #include "main/angband-headers.h"
 #include "monster-race/monster-race.h"
 #include "player-ability/player-ability-types.h"
@@ -11,7 +12,6 @@
 #include "util/enum-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
-#include <locale/japanese.h>
 #include <string>
 
 /*!
@@ -114,12 +114,11 @@ static errr set_mon_name(const nlohmann::json &name_data, MonsterRaceInfo &monra
     const auto en_name = name_data["en"].get<std::string>();
 
 #ifdef JP
-    const auto ja_name_sys = utf8_to_sys(ja_name);
+    auto ja_name_sys = utf8_to_sys(ja_name);
     if (!ja_name_sys) {
         return PARSE_ERROR_INVALID_FLAG;
     }
-
-    monrace.name = ja_name_sys.value();
+    monrace.name = std::move(*ja_name_sys);
     monrace.E_name = en_name;
 #else
     monrace.name = en_name;
@@ -174,11 +173,11 @@ static errr set_mon_speed(const nlohmann::json &speed_data, MonsterRaceInfo &mon
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto speed = speed_data.get<int>();
+    const auto speed = speed_data.get<int8_t>();
     if (speed < -50 || speed > 99) {
         return PARSE_ERROR_INVALID_FLAG;
     }
-    monrace.speed = (byte)speed + STANDARD_SPEED;
+    monrace.speed = speed + STANDARD_SPEED;
     return PARSE_ERROR_NONE;
 }
 
@@ -236,11 +235,11 @@ static errr set_mon_ac(const nlohmann::json &ac_data, MonsterRaceInfo &monrace)
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto armour_class = ac_data.get<int>();
+    const auto armour_class = ac_data.get<short>();
     if (armour_class < 0 || armour_class > 10000) {
         return PARSE_ERROR_INVALID_FLAG;
     }
-    monrace.ac = (ARMOUR_CLASS)armour_class;
+    monrace.ac = armour_class;
     return PARSE_ERROR_NONE;
 }
 
@@ -256,11 +255,11 @@ static errr set_mon_alertness(const nlohmann::json &alertness_data, MonsterRaceI
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto alertness = alertness_data.get<int>();
+    const auto alertness = alertness_data.get<short>();
     if (alertness < 0 || alertness > 255) {
         return PARSE_ERROR_INVALID_FLAG;
     }
-    monrace.sleep = (SLEEP_DEGREE)alertness;
+    monrace.sleep = alertness;
     return PARSE_ERROR_NONE;
 }
 
@@ -645,11 +644,11 @@ static errr set_mon_flavor(const nlohmann::json &flavor_data, MonsterRaceInfo &m
     if (flavor_ja == flavor_data.end()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
-    const auto flavor_ja_sys = utf8_to_sys(flavor_ja->get<std::string>());
+    auto flavor_ja_sys = utf8_to_sys(flavor_ja->get<std::string>());
     if (!flavor_ja_sys) {
         return PARSE_ERROR_INVALID_FLAG;
     }
-    monrace.text = flavor_ja_sys.value();
+    monrace.text = std::move(*flavor_ja_sys);
 #else
     const auto &flavor_en = flavor_data.find("en");
     if (flavor_en == flavor_data.end()) {
