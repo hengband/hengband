@@ -1014,7 +1014,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         int len;
         auto mlen = 0;
         for (const auto &[a_idx, artifact] : artifacts_info) {
-            if (a_idx == FixedArtifactId::NONE || artifact.name.empty()) {
+            if (a_idx == FixedArtifactId::NONE) {
                 continue;
             }
 

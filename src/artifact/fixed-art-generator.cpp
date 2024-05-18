@@ -253,10 +253,6 @@ void apply_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
 bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y, POSITION x)
 {
     auto &artifact = ArtifactList::get_instance().get_artifact(a_idx);
-    if (artifact.name.empty()) {
-        return false;
-    }
-
     ItemEntity item(artifact.bi_key);
     item.fixed_artifact_idx = a_idx;
     apply_artifact(player_ptr, &item);
@@ -295,11 +291,6 @@ bool make_artifact_special(PlayerType *player_ptr, ItemEntity *o_ptr)
 
     /*! @note 全固定アーティファクト中からIDの若い順に生成対象とその確率を走査する / Check the artifact list (just the "specials") */
     for (const auto &[a_idx, artifact] : artifacts_info) {
-        /*! @note アーティファクト名が空の不正なデータは除外する / Skip "empty" artifacts */
-        if (artifact.name.empty()) {
-            continue;
-        }
-
         /*! @note 既に生成回数がカウントされたアーティファクト、QUESTITEMと非INSTA_ARTは除外 / Cannot make an artifact twice */
         if (artifact.is_generated) {
             continue;

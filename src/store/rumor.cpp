@@ -74,18 +74,13 @@ std::pair<bool, std::vector<std::string>> get_rumor_tokens(std::string rumor)
 /*!
  * @brief 固定アーティファクト番号とその定義を、ランダムに抽選する
  * @param artifact_name rumor.txt (rumor_j.txt)の定義により、常に"*" (ランダム)
- * @details 固定アーティファクト番号は欠番があるので、もし欠番だったら再抽選する
  */
 static std::pair<FixedArtifactId, const ArtifactType *> get_artifact_definition(std::string_view artifact_name)
 {
     const auto max_idx = enum2i(artifacts_info.rbegin()->first);
-    while (true) {
-        const auto a_idx = i2enum<FixedArtifactId>(get_rumor_num(artifact_name.data(), max_idx));
-        const auto &artifact = ArtifactList::get_instance().get_artifact(a_idx);
-        if (!artifact.name.empty()) {
-            return { a_idx, &artifact };
-        }
-    }
+    const auto fa_id = i2enum<FixedArtifactId>(get_rumor_num(artifact_name.data(), max_idx));
+    const auto &artifact = ArtifactList::get_instance().get_artifact(fa_id);
+    return { fa_id, &artifact };
 }
 
 void display_rumor(PlayerType *player_ptr, bool ex)

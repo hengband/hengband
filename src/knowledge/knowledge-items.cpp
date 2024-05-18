@@ -50,7 +50,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
     std::set<FixedArtifactId> known_list;
 
     for (const auto &[a_idx, artifact] : artifacts_info) {
-        if (artifact.name.empty() || !artifact.is_generated) {
+        if (!artifact.is_generated) {
             continue;
         }
 

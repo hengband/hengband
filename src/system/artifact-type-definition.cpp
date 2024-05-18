@@ -14,10 +14,6 @@ ArtifactType::ArtifactType()
  */
 bool ArtifactType::can_generate(const BaseitemKey &generaing_bi_key) const
 {
-    if (this->name.empty()) {
-        return false;
-    }
-
     if (this->is_generated) {
         return false;
     }
