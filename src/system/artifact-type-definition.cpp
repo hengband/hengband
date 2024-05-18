@@ -89,6 +89,29 @@ ArtifactType &ArtifactList::get_artifact(const FixedArtifactId id) const
     return artifacts_info.at(id);
 }
 
+bool ArtifactList::order(const FixedArtifactId id1, const FixedArtifactId id2) const
+{
+    const auto &artifact1 = this->get_artifact(id1);
+    const auto &artifact2 = this->get_artifact(id2);
+    if (artifact1.bi_key < artifact2.bi_key) {
+        return true;
+    }
+
+    if (artifact1.bi_key > artifact2.bi_key) {
+        return false;
+    }
+
+    if (artifact1.level < artifact2.level) {
+        return true;
+    }
+
+    if (artifact1.level > artifact2.level) {
+        return true;
+    }
+
+    return id1 < id2;
+}
+
 void ArtifactList::reset_generated_flags()
 {
     for (auto &[_, artifact] : artifacts_info) {

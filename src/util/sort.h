@@ -10,9 +10,6 @@ bool ang_sort_comp_distance(PlayerType *player_ptr, vptr u, vptr v, int a, int b
 bool ang_sort_comp_importance(PlayerType *player_ptr, vptr u, vptr v, int a, int b);
 void ang_sort_swap_position(PlayerType *player_ptr, vptr u, vptr v, int a, int b);
 
-bool ang_sort_art_comp(PlayerType *player_ptr, vptr u, vptr v, int a, int b);
-void ang_sort_art_swap(PlayerType *player_ptr, vptr u, vptr v, int a, int b);
-
 bool ang_sort_comp_quest_num(PlayerType *player_ptr, vptr u, vptr v, int a, int b);
 void ang_sort_swap_quest_num(PlayerType *player_ptr, vptr u, vptr v, int a, int b);
 

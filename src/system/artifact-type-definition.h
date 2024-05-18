@@ -63,6 +63,7 @@ public:
     std::map<FixedArtifactId, ArtifactType>::const_reverse_iterator rend() const;
     ArtifactType &get_artifact(const FixedArtifactId id) const;
 
+    bool order(const FixedArtifactId id1, const FixedArtifactId id2) const;
     void reset_generated_flags();
 
 private:
