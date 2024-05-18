@@ -58,36 +58,39 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         fa_ids.insert(fa_id);
     }
 
-    for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
-        for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
-            auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-            for (const auto this_o_idx : g_ptr->o_idx_list) {
-                const auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-                if (!o_ptr->is_fixed_artifact() || o_ptr->is_known()) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    for (auto y = 0; y < floor.height; y++) {
+        for (auto x = 0; x < floor.width; x++) {
+            const auto &grid = floor.get_grid({ y, x });
+            for (const auto this_o_idx : grid.o_idx_list) {
+                const auto &item = floor.o_list[this_o_idx];
+                if (!item.is_fixed_artifact() || item.is_known()) {
                     continue;
                 }
 
-                fa_ids.erase(o_ptr->fixed_artifact_idx);
+                fa_ids.erase(item.fixed_artifact_idx);
             }
         }
     }
 
     for (auto i = 0; i < INVEN_TOTAL; i++) {
-        auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->is_valid()) {
-            continue;
-        }
-        if (!o_ptr->is_fixed_artifact()) {
-            continue;
-        }
-        if (o_ptr->is_known()) {
+        const auto &item = player_ptr->inventory_list[i];
+        if (!item.is_valid()) {
             continue;
         }
 
-        fa_ids.erase(o_ptr->fixed_artifact_idx);
+        if (!item.is_fixed_artifact()) {
+            continue;
+        }
+
+        if (item.is_known()) {
+            continue;
+        }
+
+        fa_ids.erase(item.fixed_artifact_idx);
     }
 
-    for (auto fa_id : fa_ids) {
+    for (const auto fa_id : fa_ids) {
         const auto &artifact = artifacts.get_artifact(fa_id);
         constexpr auto template_basename = _("     %s\n", "     The %s\n");
         ItemEntity item(artifact.bi_key);
