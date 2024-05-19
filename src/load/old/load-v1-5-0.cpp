@@ -89,7 +89,7 @@ void rd_item_old(ItemEntity *o_ptr)
 
     o_ptr->weight = rd_s16b();
 
-    o_ptr->fixed_artifact_idx = i2enum<FixedArtifactId>(rd_byte());
+    o_ptr->fa_id = i2enum<FixedArtifactId>(rd_byte());
 
     o_ptr->ego_idx = i2enum<EgoType>(rd_byte());
 

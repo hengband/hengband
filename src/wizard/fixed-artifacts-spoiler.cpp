@@ -65,14 +65,14 @@ void spoiler_outlist(std::string_view header, const std::vector<std::string> &de
 
 /*!
  * @brief アーティファクト情報を出力するためにダミー生成を行う
- * @param fixed_artifact_idx 生成するアーティファクトID
+ * @param fa_id 生成するアーティファクトID
  * @return 生成したアーティファクト (連番で埋まっているので不存在例外は吐かない)
  */
-static ItemEntity make_fake_artifact(FixedArtifactId fixed_artifact_idx)
+static ItemEntity make_fake_artifact(FixedArtifactId fa_id)
 {
-    const auto &artifact = ArtifactList::get_instance().get_artifact(fixed_artifact_idx);
+    const auto &artifact = ArtifactList::get_instance().get_artifact(fa_id);
     ItemEntity item(artifact.bi_key);
-    item.fixed_artifact_idx = fixed_artifact_idx;
+    item.fa_id = fa_id;
     item.pval = artifact.pval;
     item.ac = artifact.ac;
     item.dd = artifact.dd;

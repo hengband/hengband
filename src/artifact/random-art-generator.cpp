@@ -436,7 +436,7 @@ static void generate_unnatural_random_artifact(
 bool become_random_artifact(PlayerType *player_ptr, ItemEntity *o_ptr, bool a_scroll)
 {
     o_ptr->artifact_bias = 0;
-    o_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
+    o_ptr->fa_id = FixedArtifactId::NONE;
     o_ptr->ego_idx = EgoType::NONE;
     o_ptr->art_flags |= o_ptr->get_baseitem().flags;
 

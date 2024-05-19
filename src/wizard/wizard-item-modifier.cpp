@@ -402,7 +402,7 @@ static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->bi_id, item_level, enum2i(bi_key.tval()), *bi_key.sval()), line, j);
     prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), ++line, j);
     prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), ++line, j);
-    prt(format("fixed_artifact_idx = %-4d  ego_idx = %-4d  cost = %d", enum2i(o_ptr->fixed_artifact_idx), enum2i(o_ptr->ego_idx), object_value_real(o_ptr)), ++line, j);
+    prt(format("fixed_artifact_id = %-4d  ego_idx = %-4d  cost = %d", enum2i(o_ptr->fa_id), enum2i(o_ptr->ego_idx), object_value_real(o_ptr)), ++line, j);
     prt(format("ident = %04x  activation_id = %-4d  timeout = %-d", o_ptr->ident, enum2i(o_ptr->activation_id), o_ptr->timeout), ++line, j);
     prt(format("chest_level = %-4d  fuel = %-d", o_ptr->chest_level, o_ptr->fuel), ++line, j);
     prt(format("smith_hit = %-4d  smith_damage = %-4d", o_ptr->smith_hit, o_ptr->smith_damage), ++line, j);
@@ -526,7 +526,7 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
             }
 
             correct++;
-            const auto is_same_fixed_artifact_idx = o_ptr->is_specific_artifact(item.fixed_artifact_idx);
+            const auto is_same_fixed_artifact_idx = o_ptr->is_specific_artifact(item.fa_id);
             if ((item.pval == o_ptr->pval) && (item.to_a == o_ptr->to_a) && (item.to_h == o_ptr->to_h) && (item.to_d == o_ptr->to_d) && is_same_fixed_artifact_idx) {
                 matches++;
             } else if ((item.pval >= o_ptr->pval) && (item.to_a >= o_ptr->to_a) && (item.to_h >= o_ptr->to_h) && (item.to_d >= o_ptr->to_d)) {
@@ -610,7 +610,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         if (!command) {
             if (item.is_fixed_artifact()) {
                 item.get_fixed_artifact().is_generated = false;
-                item.fixed_artifact_idx = FixedArtifactId::NONE;
+                item.fa_id = FixedArtifactId::NONE;
             }
 
             changed = false;
@@ -624,7 +624,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 
         if (item.is_fixed_artifact()) {
             item.get_fixed_artifact().is_generated = false;
-            item.fixed_artifact_idx = FixedArtifactId::NONE;
+            item.fa_id = FixedArtifactId::NONE;
         }
 
         const auto applied_item = wiz_apply_magic_to_item(player_ptr, *command, o_ptr->bi_id);
@@ -809,7 +809,7 @@ static std::vector<FixedArtifactId> find_wishing_fixed_artifact(PlayerType *play
     std::vector<FixedArtifactId> fa_ids;
     for (const auto &[fa_id, artifact] : ArtifactList::get_instance()) {
         ItemEntity item(artifact.bi_key);
-        item.fixed_artifact_idx = fa_id;
+        item.fa_id = fa_id;
 #ifdef JP
         const auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 #else

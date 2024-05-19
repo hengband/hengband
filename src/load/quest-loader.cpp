@@ -68,7 +68,7 @@ static void load_quest_details(PlayerType *player_ptr, QuestType *q_ptr, const Q
         auto &quest_list = QuestList::get_instance();
         determine_random_questor(player_ptr, &quest_list[loading_quest_index]);
     }
-    q_ptr->reward_artifact_idx = i2enum<FixedArtifactId>(rd_s16b());
+    q_ptr->reward_fa_id = i2enum<FixedArtifactId>(rd_s16b());
     if (q_ptr->has_reward()) {
         q_ptr->get_reward().gen_flags.set(ItemGenerationTraitType::QUESTITEM);
     }

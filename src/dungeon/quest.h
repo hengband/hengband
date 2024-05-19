@@ -112,7 +112,7 @@ public:
     MONSTER_NUMBER cur_num = 0; /*!< 撃破したモンスターの数 / Number killed */
     MONSTER_NUMBER max_num = 0; /*!< 求められるモンスターの撃破数 / Number required */
 
-    FixedArtifactId reward_artifact_idx{}; /*!< クエスト対象のアイテムID / object index */
+    FixedArtifactId reward_fa_id{}; /*!< クエスト対象のアイテムID / object index */
     MONSTER_NUMBER num_mon = 0; /*!< QuestKindTypeがKILL_NUMBER時の目標撃破数 number of monsters on level */
 
     BIT_FLAGS flags = 0; /*!< クエストに関するフラグビット / quest flags */

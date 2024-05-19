@@ -32,7 +32,7 @@
 
 ItemEntity::ItemEntity()
     : bi_key(BaseitemKey(ItemKindType::NONE))
-    , fixed_artifact_idx(FixedArtifactId::NONE)
+    , fa_id(FixedArtifactId::NONE)
 {
 }
 
@@ -720,7 +720,7 @@ bool ItemEntity::should_refuse_enchant() const
 
 bool ItemEntity::is_specific_artifact(FixedArtifactId id) const
 {
-    return this->fixed_artifact_idx == id;
+    return this->fa_id == id;
 }
 
 bool ItemEntity::has_unidentified_name() const
@@ -815,7 +815,7 @@ EgoItemDefinition &ItemEntity::get_ego() const
 
 ArtifactType &ItemEntity::get_fixed_artifact() const
 {
-    return ArtifactList::get_instance().get_artifact(this->fixed_artifact_idx);
+    return ArtifactList::get_instance().get_artifact(this->fa_id);
 }
 
 TrFlags ItemEntity::get_flags() const
@@ -988,7 +988,7 @@ bool ItemEntity::try_become_artifact(int dungeon_level)
             continue;
         }
 
-        this->fixed_artifact_idx = a_idx;
+        this->fa_id = a_idx;
         return true;
     }
 

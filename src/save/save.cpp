@@ -153,7 +153,7 @@ static bool wr_savefile_new(PlayerType *player_ptr)
         wr_s16b((int16_t)quest.max_num);
         wr_s16b(enum2i(quest.type));
         wr_s16b(enum2i(quest.r_idx));
-        wr_s16b(enum2i(quest.reward_artifact_idx));
+        wr_s16b(enum2i(quest.reward_fa_id));
         wr_byte((byte)quest.flags);
         wr_byte((byte)quest.dungeon);
     }
