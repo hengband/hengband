@@ -357,7 +357,7 @@ static errr set_art_activate(const nlohmann::json &act_data, ArtifactType &artif
 /*!
  * @brief JSON Objectからモンスターフラグをセットする
  * @param flag_data モンスターフラグ情報の格納されたJSON Object
- * @param monrace 保管先のモンスター種族構造体
+ * @param artifact 保管先のアーティファクト
  * @return エラーコード
  */
 static errr set_art_flags(const nlohmann::json &flag_data, ArtifactType &artifact)
@@ -379,7 +379,7 @@ static errr set_art_flags(const nlohmann::json &flag_data, ArtifactType &artifac
 
 /*!
  * @brief JSON Objectから固定アーティファクトのフレーバーをセットする
- * @param name_data フレーバー情報の格納されたJSON Object
+ * @param flavor_data フレーバー情報の格納されたJSON Object
  * @param artifact 保管先のアーティファクト
  * @return エラーコード
  */
