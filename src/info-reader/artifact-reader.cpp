@@ -265,70 +265,70 @@ static errr set_art_base_dice(const nlohmann::json &dice_data, ArtifactType &art
 
 /*!
  * @brief JSON Objectから固定アーティファクトの命中補正値をセットする
- * @param to_h_data 命中補正値情報の格納されたJSON Object
+ * @param hit_bonus_data 命中補正値情報の格納されたJSON Object
  * @param artifact 保管先のアーティファクト
  * @return エラーコード
  */
-static errr set_art_to_hit(const nlohmann::json &to_h_data, ArtifactType &artifact)
+static errr set_art_hit_bonus(const nlohmann::json &hit_bonus_data, ArtifactType &artifact)
 {
-    if (to_h_data.is_null()) {
+    if (hit_bonus_data.is_null()) {
         return PARSE_ERROR_NONE;
     }
-    if (!to_h_data.is_number_integer()) {
+    if (!hit_bonus_data.is_number_integer()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto to_hit = to_h_data.get<short>();
-    if (to_hit < -99 || to_hit > 99) {
+    const auto hit_bonus = hit_bonus_data.get<short>();
+    if (hit_bonus < -99 || hit_bonus > 99) {
         return PARSE_ERROR_INVALID_FLAG;
     }
-    artifact.to_h = to_hit;
+    artifact.to_h = hit_bonus;
     return PARSE_ERROR_NONE;
 }
 
 /*!
  * @brief JSON Objectから固定アーティファクトのダメージ補正値をセットする
- * @param to_d_data ダメージ補正値情報の格納されたJSON Object
+ * @param damage_bonus_data ダメージ補正値情報の格納されたJSON Object
  * @param artifact 保管先のアーティファクト
  * @return エラーコード
  */
-static errr set_art_to_damage(const nlohmann::json &to_d_data, ArtifactType &artifact)
+static errr set_art_damage_bonus(const nlohmann::json &damage_bonus_data, ArtifactType &artifact)
 {
-    if (to_d_data.is_null()) {
+    if (damage_bonus_data.is_null()) {
         return PARSE_ERROR_NONE;
     }
-    if (!to_d_data.is_number_integer()) {
+    if (!damage_bonus_data.is_number_integer()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto to_damage = to_d_data.get<int>();
-    if (to_damage < -99 || to_damage > 99) {
+    const auto damage_bonus = damage_bonus_data.get<int>();
+    if (damage_bonus < -99 || damage_bonus > 99) {
         return PARSE_ERROR_INVALID_FLAG;
     }
-    artifact.to_d = to_damage;
+    artifact.to_d = damage_bonus;
     return PARSE_ERROR_NONE;
 }
 
 /*!
  * @brief JSON Objectから固定アーティファクトのAC補正値をセットする
- * @param to_ac_data AC補正値情報の格納されたJSON Object
+ * @param ac_bonus_data AC補正値情報の格納されたJSON Object
  * @param artifact 保管先のアーティファクト
  * @return エラーコード
  */
-static errr set_art_to_ac(const nlohmann::json &to_ac_data, ArtifactType &artifact)
+static errr set_art_ac_bonus(const nlohmann::json &ac_bonus_data, ArtifactType &artifact)
 {
-    if (to_ac_data.is_null()) {
+    if (ac_bonus_data.is_null()) {
         return PARSE_ERROR_NONE;
     }
-    if (!to_ac_data.is_number_integer()) {
+    if (!ac_bonus_data.is_number_integer()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto to_ac = to_ac_data.get<short>();
-    if (to_ac < -99 || to_ac > 99) {
+    const auto ac_bonus = ac_bonus_data.get<short>();
+    if (ac_bonus < -99 || ac_bonus > 99) {
         return PARSE_ERROR_INVALID_FLAG;
     }
-    artifact.to_a = to_ac;
+    artifact.to_a = ac_bonus;
     return PARSE_ERROR_NONE;
 }
 
@@ -471,15 +471,15 @@ errr parse_artifacts_info(nlohmann::json &art_data, angband_header *)
         msg_format(_("アーティファクトのベースダイス読込失敗。ID: '%d'。", "Failed to load base dice of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_art_to_hit(art_data["hit_bonus"], artifact)) {
+    if (auto err = set_art_hit_bonus(art_data["hit_bonus"], artifact)) {
         msg_format(_("アーティファクトの命中補正値読込失敗。ID: '%d'。", "Failed to load hit bonus of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_art_to_damage(art_data["damage_bonus"], artifact)) {
+    if (auto err = set_art_damage_bonus(art_data["damage_bonus"], artifact)) {
         msg_format(_("アーティファクトの命中補正値読込失敗。ID: '%d'。", "Failed to load damage bonus of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_art_to_ac(art_data["ac_bonus"], artifact)) {
+    if (auto err = set_art_ac_bonus(art_data["ac_bonus"], artifact)) {
         msg_format(_("アーティファクトのAC補正値読込失敗。ID: '%d'。", "Failed to load AC bonus of artifact. ID: '%d'."), error_idx);
         return err;
     }
