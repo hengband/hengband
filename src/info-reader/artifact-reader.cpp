@@ -122,7 +122,7 @@ static errr set_art_parameter_value(const nlohmann::json &pval_data, ArtifactTyp
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto parameter_value = pval_data.get<PARAMETER_VALUE>();
+    const auto parameter_value = pval_data.get<short>();
     if (parameter_value < -128 || parameter_value > 128) {
         return PARSE_ERROR_INVALID_FLAG;
     }
