@@ -10,6 +10,7 @@ visual_studio_files = \
 
 schema_files = \
 	schema/ArtifactDefinitions.schema.json
+	schema/BaseitemDefinitions.schema.json
 	schema/MonraceDefinitions.schema.json
 
 EXTRA_DIST = \

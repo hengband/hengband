@@ -200,7 +200,7 @@ errr init_artifacts_info()
 errr init_baseitems_info()
 {
     init_header(&baseitems_header);
-    return init_info("BaseitemDefinitions.txt", baseitems_header, BaseitemList::get_instance().get_raw_vector(), parse_baseitems_info);
+    return init_json("BaseitemDefinitions.jsonc", "baseitems", baseitems_header, BaseitemList::get_instance().get_raw_vector(), parse_baseitems_info);
 }
 
 /*!
