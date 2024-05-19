@@ -45,16 +45,10 @@ struct Vector2D {
 /**
  * @brief 2次元平面上の座標を表すクラス
  */
-template <std::integral T>
+template <typename T>
 struct Point2D {
     T y{};
     T x{};
-    constexpr Point2D()
-        : y(static_cast<T>(0))
-        , x(static_cast<T>(0))
-    {
-    }
-
     constexpr Point2D(T y, T x)
         : y(y)
         , x(x)
