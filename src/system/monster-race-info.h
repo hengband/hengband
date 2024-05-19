@@ -169,6 +169,8 @@ public:
     int calc_figurine_value(const MonsterRaceId r_idx) const;
     int calc_capture_value(const MonsterRaceId r_idx) const;
 
+    void reset_all_visuals();
+
 private:
     MonraceList() = default;
 

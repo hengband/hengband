@@ -20,10 +20,7 @@ void reset_visuals(PlayerType *player_ptr)
     }
 
     BaseitemList::get_instance().reset_all_visuals();
-    for (auto &[monrace_id, monrace] : monraces_info) {
-        monrace.cc_config = monrace.cc_def;
-    }
-
+    MonraceList::get_instance().reset_all_visuals();
     const auto pref_file = use_graphics ? "graf.prf" : "font.prf";
     process_pref_file(player_ptr, pref_file);
     std::stringstream ss;
