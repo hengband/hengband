@@ -23,6 +23,7 @@
 #include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
+#include "view/colored-char.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -39,11 +40,10 @@
 void roff_top(MonsterRaceId r_idx)
 {
     auto *r_ptr = &monraces_info[r_idx];
-    char c1 = r_ptr->d_char;
-    char c2 = r_ptr->x_char;
-
     TERM_COLOR a1 = r_ptr->d_attr;
+    char c1 = r_ptr->d_char;
     TERM_COLOR a2 = r_ptr->x_attr;
+    char c2 = r_ptr->x_char;
 
     term_erase(0, 0);
     term_gotoxy(0, 0);
@@ -64,11 +64,11 @@ void roff_top(MonsterRaceId r_idx)
     term_addstr(-1, TERM_WHITE, r_ptr->name);
 
     term_addstr(-1, TERM_WHITE, " ('");
-    term_add_bigch(a1, c1);
+    term_add_bigch({ a1, c1 });
     term_addstr(-1, TERM_WHITE, "')");
 
     term_addstr(-1, TERM_WHITE, "/('");
-    term_add_bigch(a2, c2);
+    term_add_bigch({ a2, c2 });
     term_addstr(-1, TERM_WHITE, "'):");
 }
 

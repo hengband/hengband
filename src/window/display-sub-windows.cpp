@@ -14,6 +14,7 @@
 #include "mind/mind-sniper.h"
 #include "mind/mind-types.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "object/item-tester-hooker.h"
@@ -128,34 +129,33 @@ void fix_inventory(PlayerType *player_ptr)
  */
 static void print_monster_line(TERM_LEN x, TERM_LEN y, MonsterEntity *m_ptr, int n_same, int n_awake)
 {
-    std::string buf;
-    MonsterRaceId r_idx = m_ptr->ap_r_idx;
-    auto *r_ptr = &monraces_info[r_idx];
-
     term_erase(0, y);
     term_gotoxy(x, y);
-    if (!r_ptr) {
+    const auto monrace_id = m_ptr->ap_r_idx;
+    if (monrace_id == MonsterRaceId::PLAYER) {
         return;
     }
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-        buf = format(_("%3s(覚%2d)", "%3s(%2d)"), MonsterRace(r_idx).is_bounty(true) ? "  W" : "  U", n_awake);
+
+    std::string buf;
+    const auto &monrace = monraces_info[monrace_id];
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+        buf = format(_("%3s(覚%2d)", "%3s(%2d)"), MonsterRace(monrace_id).is_bounty(true) ? "  W" : "  U", n_awake);
     } else {
         buf = format(_("%3d(覚%2d)", "%3d(%2d)"), n_same, n_awake);
     }
+
     term_addstr(-1, TERM_WHITE, buf);
-
     term_addstr(-1, TERM_WHITE, " ");
-    term_add_bigch(r_ptr->x_attr, r_ptr->x_char);
+    term_add_bigch({ monrace.x_attr, monrace.x_char });
 
-    if (r_ptr->r_tkills && m_ptr->mflag2.has_not(MonsterConstantFlagType::KAGE)) {
-        buf = format(" %2d", (int)r_ptr->level);
+    if (monrace.r_tkills && m_ptr->mflag2.has_not(MonsterConstantFlagType::KAGE)) {
+        buf = format(" %2d", monrace.level);
     } else {
         buf = " ??";
     }
 
     term_addstr(-1, TERM_WHITE, buf);
-
-    term_addstr(-1, TERM_WHITE, format(" %s ", r_ptr->name.data()));
+    term_addstr(-1, TERM_WHITE, format(" %s ", monrace.name.data()));
 }
 
 /*!
@@ -232,7 +232,7 @@ static void print_pet_list_oneline(PlayerType *player_ptr, const MonsterEntity &
     }
 
     term_gotoxy(x + 13, y);
-    term_add_bigch(monrace.x_attr, monrace.x_char);
+    term_add_bigch({ monrace.x_attr, monrace.x_char });
     term_addstr(-1, TERM_WHITE, " ");
     term_addstr(-1, TERM_WHITE, name);
 
