@@ -10,48 +10,79 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-struct projection_path_type {
-    std::vector<std::pair<int, int>> *position;
-    POSITION range;
-    BIT_FLAGS flag;
-    POSITION y1;
-    POSITION x1;
-    POSITION y2;
-    POSITION x2;
-    POSITION y;
-    POSITION x;
-    POSITION ay;
-    POSITION ax;
-    POSITION sy;
-    POSITION sx;
-    int frac;
-    int m;
+class projection_path_type {
+public:
+    projection_path_type(std::vector<Pos2D> *position, int range, uint32_t flag, Pos2D pos_src, Pos2D pos_dst)
+        : position(position)
+        , range(range)
+        , flag(flag)
+        , pos_src(pos_src)
+        , pos_dst(pos_dst)
+    {
+        int ay;
+        int sy;
+        if (this->pos_dst.y < this->pos_src.y) {
+            ay = this->pos_src.y - this->pos_dst.y;
+            sy = -1;
+        } else {
+            ay = this->pos_dst.y - this->pos_src.y;
+            sy = 1;
+        }
+
+        int ax;
+        int sx;
+        if (this->pos_dst.x < this->pos_src.x) {
+            ax = this->pos_src.x - this->pos_dst.x;
+            sx = -1;
+        } else {
+            ax = this->pos_dst.x - this->pos_src.x;
+            sx = 1;
+        }
+
+        this->pos_a = Pos2D(ay, ax);
+        this->pos_s = Pos2D(sy, sx);
+
+        this->half = this->pos_a.y * this->pos_a.x;
+        this->full = this->half << 1;
+        this->k = 0;
+    }
+
+    std::vector<Pos2D> *position;
+    int range;
+    uint32_t flag;
+    Pos2D pos_src;
+    Pos2D pos_dst;
+    Pos2D pos_a;
+    Pos2D pos_s;
+    Pos2D pos{};
+    int frac = 0;
+    int m = 0;
     int half;
     int full;
     int k;
 };
 
-std::vector<std::pair<int, int>>::const_iterator ProjectionPath::begin() const
+std::vector<Pos2D>::const_iterator ProjectionPath::begin() const
 {
     return this->position.cbegin();
 }
 
-std::vector<std::pair<int, int>>::const_iterator ProjectionPath::end() const
+std::vector<Pos2D>::const_iterator ProjectionPath::end() const
 {
     return this->position.cend();
 }
 
-const std::pair<int, int> &ProjectionPath::front() const
+const Pos2D &ProjectionPath::front() const
 {
     return this->position.front();
 }
 
-const std::pair<int, int> &ProjectionPath::back() const
+const Pos2D &ProjectionPath::back() const
 {
     return this->position.back();
 }
 
-const std::pair<int, int> &ProjectionPath::operator[](int num) const
+const Pos2D &ProjectionPath::operator[](int num) const
 {
     return this->position[num];
 }
@@ -61,73 +92,39 @@ int ProjectionPath::path_num() const
     return static_cast<int>(this->position.size());
 }
 
-static projection_path_type *initialize_projection_path_type(
-    projection_path_type *pp_ptr, std::vector<std::pair<int, int>> *position, POSITION range, BIT_FLAGS flag, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
-{
-    pp_ptr->position = position;
-    pp_ptr->range = range;
-    pp_ptr->flag = flag;
-    pp_ptr->y1 = y1;
-    pp_ptr->x1 = x1;
-    pp_ptr->y2 = y2;
-    pp_ptr->x2 = x2;
-    return pp_ptr;
-}
-
-static void set_asxy(projection_path_type *pp_ptr)
-{
-    if (pp_ptr->y2 < pp_ptr->y1) {
-        pp_ptr->ay = pp_ptr->y1 - pp_ptr->y2;
-        pp_ptr->sy = -1;
-    } else {
-        pp_ptr->ay = pp_ptr->y2 - pp_ptr->y1;
-        pp_ptr->sy = 1;
-    }
-
-    if (pp_ptr->x2 < pp_ptr->x1) {
-        pp_ptr->ax = pp_ptr->x1 - pp_ptr->x2;
-        pp_ptr->sx = -1;
-    } else {
-        pp_ptr->ax = pp_ptr->x2 - pp_ptr->x1;
-        pp_ptr->sx = 1;
-    }
-}
-
 static bool project_stop(PlayerType *player_ptr, projection_path_type *pp_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    const Pos2D pos(pp_ptr->y, pp_ptr->x);
-    const Pos2D pos2(pp_ptr->y2, pp_ptr->x2);
-    if (none_bits(pp_ptr->flag, PROJECT_THRU) && (pos == pos2)) {
+    if (none_bits(pp_ptr->flag, PROJECT_THRU) && (pp_ptr->pos == pp_ptr->pos_dst)) {
         return true;
     }
 
     if (any_bits(pp_ptr->flag, PROJECT_DISI)) {
-        if (!pp_ptr->position->empty() && cave_stop_disintegration(floor_ptr, pos.y, pos.x)) {
+        if (!pp_ptr->position->empty() && cave_stop_disintegration(floor_ptr, pp_ptr->pos.y, pp_ptr->pos.x)) {
             return true;
         }
     } else if (any_bits(pp_ptr->flag, PROJECT_LOS)) {
-        if (!pp_ptr->position->empty() && !cave_los_bold(floor_ptr, pos.y, pos.x)) {
+        if (!pp_ptr->position->empty() && !cave_los_bold(floor_ptr, pp_ptr->pos.y, pp_ptr->pos.x)) {
             return true;
         }
     } else if (none_bits(pp_ptr->flag, PROJECT_PATH)) {
-        if (!pp_ptr->position->empty() && !cave_has_flag_bold(floor_ptr, pos.y, pos.x, TerrainCharacteristics::PROJECT)) {
+        if (!pp_ptr->position->empty() && !cave_has_flag_bold(floor_ptr, pp_ptr->pos.y, pp_ptr->pos.x, TerrainCharacteristics::PROJECT)) {
             return true;
         }
     }
 
-    const auto &grid = floor_ptr->get_grid(pos);
+    const auto &grid = floor_ptr->get_grid(pp_ptr->pos);
     if (any_bits(pp_ptr->flag, PROJECT_MIRROR)) {
         if (!pp_ptr->position->empty() && grid.is_mirror()) {
             return true;
         }
     }
 
-    if (any_bits(pp_ptr->flag, PROJECT_STOP) && !pp_ptr->position->empty() && (player_ptr->is_located_at(pos) || grid.has_monster())) {
+    if (any_bits(pp_ptr->flag, PROJECT_STOP) && !pp_ptr->position->empty() && (player_ptr->is_located_at(pp_ptr->pos) || grid.has_monster())) {
         return true;
     }
 
-    if (!in_bounds(floor_ptr, pos.y, pos.x)) {
+    if (!in_bounds(floor_ptr, pp_ptr->pos.y, pp_ptr->pos.x)) {
         return true;
     }
 
@@ -146,9 +143,9 @@ static void calc_frac(projection_path_type *pp_ptr, bool is_vertical)
     }
 
     if (is_vertical) {
-        pp_ptr->x += pp_ptr->sx;
+        pp_ptr->pos.x += pp_ptr->pos_s.x;
     } else {
-        pp_ptr->y += pp_ptr->sy;
+        pp_ptr->pos.y += pp_ptr->pos_s.y;
     }
 
     pp_ptr->frac -= pp_ptr->full;
@@ -158,7 +155,7 @@ static void calc_frac(projection_path_type *pp_ptr, bool is_vertical)
 static void calc_projection_to_target(PlayerType *player_ptr, projection_path_type *pp_ptr, bool is_vertical)
 {
     while (true) {
-        pp_ptr->position->emplace_back(pp_ptr->y, pp_ptr->x);
+        pp_ptr->position->push_back(pp_ptr->pos);
         if (static_cast<int>(pp_ptr->position->size()) + pp_ptr->k / 2 >= pp_ptr->range) {
             break;
         }
@@ -169,25 +166,25 @@ static void calc_projection_to_target(PlayerType *player_ptr, projection_path_ty
 
         calc_frac(pp_ptr, is_vertical);
         if (is_vertical) {
-            pp_ptr->y += pp_ptr->sy;
+            pp_ptr->pos.y += pp_ptr->pos_s.y;
         } else {
-            pp_ptr->x += pp_ptr->sx;
+            pp_ptr->pos.x += pp_ptr->pos_s.x;
         }
     }
 }
 
 static bool calc_vertical_projection(PlayerType *player_ptr, projection_path_type *pp_ptr)
 {
-    if (pp_ptr->ay <= pp_ptr->ax) {
+    if (pp_ptr->pos_a.y <= pp_ptr->pos_a.x) {
         return false;
     }
 
-    pp_ptr->m = pp_ptr->ax * pp_ptr->ax * 2;
-    pp_ptr->y = pp_ptr->y1 + pp_ptr->sy;
-    pp_ptr->x = pp_ptr->x1;
+    pp_ptr->m = pp_ptr->pos_a.x * pp_ptr->pos_a.x * 2;
+    pp_ptr->pos.y = pp_ptr->pos_src.y + pp_ptr->pos_s.y;
+    pp_ptr->pos.x = pp_ptr->pos_src.x;
     pp_ptr->frac = pp_ptr->m;
     if (pp_ptr->frac > pp_ptr->half) {
-        pp_ptr->x += pp_ptr->sx;
+        pp_ptr->pos.x += pp_ptr->pos_s.x;
         pp_ptr->frac -= pp_ptr->full;
         pp_ptr->k++;
     }
@@ -198,16 +195,16 @@ static bool calc_vertical_projection(PlayerType *player_ptr, projection_path_typ
 
 static bool calc_horizontal_projection(PlayerType *player_ptr, projection_path_type *pp_ptr)
 {
-    if (pp_ptr->ax <= pp_ptr->ay) {
+    if (pp_ptr->pos_a.x <= pp_ptr->pos_a.y) {
         return false;
     }
 
-    pp_ptr->m = pp_ptr->ay * pp_ptr->ay * 2;
-    pp_ptr->y = pp_ptr->y1;
-    pp_ptr->x = pp_ptr->x1 + pp_ptr->sx;
+    pp_ptr->m = pp_ptr->pos_a.y * pp_ptr->pos_a.y * 2;
+    pp_ptr->pos.y = pp_ptr->pos_src.y;
+    pp_ptr->pos.x = pp_ptr->pos_src.x + pp_ptr->pos_s.x;
     pp_ptr->frac = pp_ptr->m;
     if (pp_ptr->frac > pp_ptr->half) {
-        pp_ptr->y += pp_ptr->sy;
+        pp_ptr->pos.y += pp_ptr->pos_s.y;
         pp_ptr->frac -= pp_ptr->full;
         pp_ptr->k++;
     }
@@ -219,7 +216,7 @@ static bool calc_horizontal_projection(PlayerType *player_ptr, projection_path_t
 static void calc_projection_others(PlayerType *player_ptr, projection_path_type *pp_ptr)
 {
     while (true) {
-        pp_ptr->position->emplace_back(pp_ptr->y, pp_ptr->x);
+        pp_ptr->position->push_back(pp_ptr->pos);
         if (static_cast<int>(pp_ptr->position->size()) * 3 / 2 >= pp_ptr->range) {
             break;
         }
@@ -228,8 +225,8 @@ static void calc_projection_others(PlayerType *player_ptr, projection_path_type 
             break;
         }
 
-        pp_ptr->y += pp_ptr->sy;
-        pp_ptr->x += pp_ptr->sx;
+        pp_ptr->pos.y += pp_ptr->pos_src.y;
+        pp_ptr->pos.x += pp_ptr->pos_src.x;
     }
 }
 
@@ -252,24 +249,18 @@ ProjectionPath::ProjectionPath(PlayerType *player_ptr, int range, const Pos2D &p
         return;
     }
 
-    projection_path_type tmp_projection_path;
-    auto *pp_ptr = initialize_projection_path_type(&tmp_projection_path, &this->position, range, flag, pos_src.y, pos_src.x, pos_dst.y, pos_dst.x);
-    set_asxy(pp_ptr);
-    pp_ptr->half = pp_ptr->ay * pp_ptr->ax;
-    pp_ptr->full = pp_ptr->half << 1;
-    pp_ptr->k = 0;
-
-    if (calc_vertical_projection(player_ptr, pp_ptr)) {
+    projection_path_type pp(&this->position, range, flag, pos_src, pos_dst);
+    if (calc_vertical_projection(player_ptr, &pp)) {
         return;
     }
 
-    if (calc_horizontal_projection(player_ptr, pp_ptr)) {
+    if (calc_horizontal_projection(player_ptr, &pp)) {
         return;
     }
 
-    pp_ptr->y = pos_src.y + pp_ptr->sy;
-    pp_ptr->x = pos_src.x + pp_ptr->sx;
-    calc_projection_others(player_ptr, pp_ptr);
+    pp.pos.y = pos_src.y + pp.pos_s.y;
+    pp.pos.x = pos_src.x + pp.pos_s.x;
+    calc_projection_others(player_ptr, &pp);
 }
 
 /*
