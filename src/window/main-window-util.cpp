@@ -282,7 +282,7 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
                 }
             }
 
-            term_add_bigch(ta, tc);
+            term_add_bigch({ ta, tc });
         }
     }
 

@@ -121,17 +121,17 @@ bool MonsterEntity::is_mimicry() const
         return true;
     }
 
-    const auto &r_ref = this->get_appearance_monrace();
+    const auto &monrace = this->get_appearance_monrace();
     const auto mimic_symbols = "/|\\()[]=$,.!?&`#%<>+~";
-    if (angband_strchr(mimic_symbols, r_ref.d_char) == nullptr) {
+    if (angband_strchr(mimic_symbols, monrace.cc_def.character) == nullptr) {
         return false;
     }
 
-    if (r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
         return true;
     }
 
-    return r_ref.behavior_flags.has(MonsterBehaviorType::NEVER_MOVE) || this->is_asleep();
+    return monrace.behavior_flags.has(MonsterBehaviorType::NEVER_MOVE) || this->is_asleep();
 }
 
 bool MonsterEntity::is_valid() const

@@ -92,11 +92,11 @@ static bool interpret_k_token(char *buf)
 
     /* Allow TERM_DARK text */
     auto &baseitem = baseitems.get_baseitem(i);
-    if ((color > 0) || (((character & 0x80) == 0) && (character != 0))) {
+    if ((color > 0) || (((character & 0x80) == 0) && (character != '\0'))) {
         baseitem.cc_config.color = color;
     }
 
-    if (character != 0) {
+    if (character != '\0') {
         baseitem.cc_config.character = character;
     }
 
@@ -112,12 +112,12 @@ static bool interpret_k_token(char *buf)
 static void decide_feature_type(int i, int num, char **zz)
 {
     auto &terrain = TerrainList::get_instance()[static_cast<short>(i)];
-    auto color_token = static_cast<uint8_t>(std::stoi(zz[1], nullptr, 0));
-    auto character_token = static_cast<char>(std::stoi(zz[2], nullptr, 0));
+    const auto color_token = static_cast<uint8_t>(std::stoi(zz[1], nullptr, 0));
+    const auto character_token = static_cast<char>(std::stoi(zz[2], nullptr, 0));
     const auto has_character_token = character_token != '\0';
 
     /* Allow TERM_DARK text */
-    if ((color_token != 0) || (!(character_token & 0x80) && has_character_token)) {
+    if ((color_token > 0) || (!(character_token & 0x80) && has_character_token)) {
         terrain.cc_configs[F_LIT_STANDARD].color = color_token;
     }
 
@@ -140,7 +140,7 @@ static void decide_feature_type(int i, int num, char **zz)
         return;
     case F_LIT_MAX * 2 + 1:
         /* Use desired lighting */
-        for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
+        for (auto j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
             const auto color = static_cast<uint8_t>(std::stoi(zz[j * 2 + 1], nullptr, 0));
             const auto character = static_cast<char>(std::stoi(zz[j * 2 + 2], nullptr, 0));
             const auto has_character = character != '\0';

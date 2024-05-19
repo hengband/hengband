@@ -140,9 +140,9 @@ bool symbol_genocide(PlayerType *player_ptr, int power, bool player_cast)
 
     auto result = false;
     for (short i = 1; i < floor.m_max; i++) {
-        auto *m_ptr = &floor.m_list[i];
-        auto *r_ptr = &m_ptr->get_monrace();
-        if (!m_ptr->is_valid() || (r_ptr->d_char != symbol)) {
+        const auto &monster = floor.m_list[i];
+        const auto &monrace = monster.get_monrace();
+        if (!monster.is_valid() || (monrace.cc_def.character != symbol)) {
             continue;
         }
 

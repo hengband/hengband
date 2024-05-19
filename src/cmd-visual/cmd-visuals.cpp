@@ -212,17 +212,16 @@ void do_cmd_visuals(PlayerType *player_ptr)
             static auto monrace_id = monraces_info.begin()->second.idx;
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
             while (true) {
-                auto *r_ptr = &monraces_info[monrace_id];
+                auto &monrace = monraces_info[monrace_id];
                 int c;
-                TERM_COLOR da = r_ptr->d_attr;
-                byte dc = r_ptr->d_char;
-                TERM_COLOR ca = r_ptr->x_attr;
-                byte cc = r_ptr->x_char;
+                const auto &cc_def = monrace.cc_def;
+                TERM_COLOR ca = monrace.x_attr;
+                byte cc = monrace.x_char;
 
-                term_putstr(5, 17, -1, TERM_WHITE, format(_("モンスター = %d, 名前 = %-40.40s", "Monster = %d, Name = %-40.40s"), enum2i(monrace_id), r_ptr->name.data()));
-                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3u / %3u", "Default attr/char = %3u / %3u"), da, dc));
+                term_putstr(5, 17, -1, TERM_WHITE, format(_("モンスター = %d, 名前 = %-40.40s", "Monster = %d, Name = %-40.40s"), enum2i(monrace_id), monrace.name.data()));
+                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3u / %3u", "Default attr/char = %3u / %3u"), cc_def.color, cc_def.character));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
-                term_queue_bigchar(43, 19, da, dc, 0, 0);
+                term_queue_bigchar(43, 19, cc_def.color, cc_def.character, 0, 0);
                 term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3u / %3u", "Current attr/char = %3u / %3u"), ca, cc));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 20, ca, cc, 0, 0);
@@ -253,22 +252,22 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'a': {
-                    const auto visual_id = input_new_visual_id(ch, r_ptr->x_attr, 256);
+                    const auto visual_id = input_new_visual_id(ch, monrace.x_attr, 256);
                     if (!visual_id) {
                         break;
                     }
 
-                    r_ptr->x_attr = *visual_id;
+                    monrace.x_attr = *visual_id;
                     need_redraw = true;
                     break;
                 }
                 case 'c': {
-                    const auto visual_id = input_new_visual_id(ch, r_ptr->x_char, 256);
+                    const auto visual_id = input_new_visual_id(ch, monrace.x_char, 256);
                     if (!visual_id) {
                         break;
                     }
 
-                    r_ptr->x_char = *visual_id;
+                    monrace.x_char = *visual_id;
                     need_redraw = true;
                     break;
                 }

@@ -179,7 +179,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_ROLENTO(PlayerType *player_ptr, POSI
  */
 static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
-    mspell_cast_msg_simple msg;
+    mspell_cast_msg_simple msg{};
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
@@ -279,7 +279,7 @@ MonsterSpellResult spell_RF6_SPECIAL(PlayerType *player_ptr, POSITION y, POSITIO
     case MonsterRaceId::ROLENTO:
         return spell_RF6_SPECIAL_ROLENTO(player_ptr, y, x, m_idx, t_idx, target_type);
     default:
-        if (monrace.d_char == 'B') {
+        if (monrace.cc_def.character == 'B') {
             return spell_RF6_SPECIAL_B(player_ptr, y, x, m_idx, t_idx, target_type);
         }
 

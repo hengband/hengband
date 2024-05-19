@@ -48,7 +48,7 @@ void vault_prep_symbol(PlayerType *player_ptr)
     get_mon_num_prep(player_ptr, vault_aux_simple, nullptr);
     MonsterRaceId r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
     get_mon_num_prep(player_ptr, nullptr, nullptr);
-    vault_aux_char = monraces_info[r_idx].d_char;
+    vault_aux_char = monraces_info[r_idx].cc_def.character;
 }
 
 /*!
@@ -384,20 +384,20 @@ bool vault_aux_simple(PlayerType *player_ptr, MonsterRaceId r_idx)
  */
 bool vault_aux_jelly(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
+    const auto &monrace = monraces_info[r_idx];
     if (!vault_monster_okay(player_ptr, r_idx)) {
         return false;
     }
 
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::KILL_BODY) && r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW)) {
+    if (monrace.behavior_flags.has(MonsterBehaviorType::KILL_BODY) && monrace.behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW)) {
         return false;
     }
 
-    if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
+    if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
         return false;
     }
 
-    if (!angband_strchr("ijm,", r_ptr->d_char)) {
+    if (!angband_strchr("ijm,", monrace.cc_def.character)) {
         return false;
     }
 
@@ -468,12 +468,12 @@ bool vault_aux_chapel_g(PlayerType *player_ptr, MonsterRaceId r_idx)
         MonsterRaceId::TOPAZ_MONK,
     };
 
-    auto *r_ptr = &monraces_info[r_idx];
+    const auto &monrace = monraces_info[r_idx];
     if (!vault_monster_okay(player_ptr, r_idx)) {
         return false;
     }
 
-    if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
+    if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
         return false;
     }
 
@@ -481,7 +481,7 @@ bool vault_aux_chapel_g(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if (r_ptr->d_char == 'A') {
+    if (monrace.cc_def.character == 'A') {
         return true;
     }
 
@@ -501,7 +501,7 @@ bool vault_aux_kennel(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if (!angband_strchr("CZ", r_ptr->d_char)) {
+    if (!angband_strchr("CZ", r_ptr->cc_def.character)) {
         return false;
     }
 
@@ -521,7 +521,7 @@ bool vault_aux_mimic(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if (!angband_strchr("!$&(/=?[\\|][`~>+", r_ptr->d_char)) {
+    if (!angband_strchr("!$&(/=?[\\|][`~>+", r_ptr->cc_def.character)) {
         return false;
     }
 
@@ -551,20 +551,20 @@ bool vault_aux_clone(PlayerType *player_ptr, MonsterRaceId r_idx)
  */
 bool vault_aux_symbol_e(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
+    const auto &monrace = monraces_info[r_idx];
     if (!vault_monster_okay(player_ptr, r_idx)) {
         return false;
     }
 
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::KILL_BODY) && r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW)) {
+    if (monrace.behavior_flags.has(MonsterBehaviorType::KILL_BODY) && monrace.behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW)) {
         return false;
     }
 
-    if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
+    if (monrace.kind_flags.has(MonsterKindType::GOOD)) {
         return false;
     }
 
-    if (r_ptr->d_char != vault_aux_char) {
+    if (monrace.cc_def.character != vault_aux_char) {
         return false;
     }
 
@@ -579,20 +579,20 @@ bool vault_aux_symbol_e(PlayerType *player_ptr, MonsterRaceId r_idx)
  */
 bool vault_aux_symbol_g(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
+    const auto &monrace = monraces_info[r_idx];
     if (!vault_monster_okay(player_ptr, r_idx)) {
         return false;
     }
 
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::KILL_BODY) && r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW)) {
+    if (monrace.behavior_flags.has(MonsterBehaviorType::KILL_BODY) && monrace.behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW)) {
         return false;
     }
 
-    if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
+    if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
         return false;
     }
 
-    if (r_ptr->d_char != vault_aux_char) {
+    if (monrace.cc_def.character != vault_aux_char) {
         return false;
     }
 
@@ -792,12 +792,12 @@ bool monster_hook_human(PlayerType *player_ptr, MonsterRaceId r_idx)
     /* Unused */
     (void)player_ptr;
 
-    auto *r_ptr = &monraces_info[r_idx];
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
+    const auto &monrace = monraces_info[r_idx];
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
         return false;
     }
 
-    if (angband_strchr("pht", r_ptr->d_char)) {
+    if (angband_strchr("pht", monrace.cc_def.character)) {
         return true;
     }
 
@@ -833,12 +833,11 @@ bool monster_is_fishing_target(PlayerType *player_ptr, MonsterRaceId r_idx)
     /* Unused */
     (void)player_ptr;
 
-    auto *r_ptr = &monraces_info[r_idx];
-    if (r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && angband_strchr("Jjlw", r_ptr->d_char)) {
-        return true;
-    } else {
-        return false;
-    }
+    const auto &monrace = monraces_info[r_idx];
+    auto can_fish = monrace.feature_flags.has(MonsterFeatureType::AQUATIC);
+    can_fish &= monrace.kind_flags.has_not(MonsterKindType::UNIQUE);
+    can_fish &= angband_strchr("Jjlw", monrace.cc_def.character) != nullptr;
+    return can_fish;
 }
 
 /*!

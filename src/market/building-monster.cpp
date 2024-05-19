@@ -118,7 +118,7 @@ bool research_mon(PlayerType *player_ptr)
             if (str_find(temp2, monster_name))
 #endif
                 monraces.push_back(monrace_id);
-        } else if (all || (monrace.d_char == sym)) {
+        } else if (all || (monrace.cc_def.character == sym)) {
             monraces.push_back(monrace_id);
         }
     }

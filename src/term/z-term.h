@@ -191,6 +191,7 @@ private:
 /**** Available Variables ****/
 extern term_type *game_term;
 
+class ColoredChar;
 errr term_user(int n);
 errr term_xtra(int n, int v);
 
@@ -204,7 +205,7 @@ errr term_set_cursor(int v);
 errr term_gotoxy(TERM_LEN x, TERM_LEN y);
 errr term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
 errr term_addch(TERM_COLOR a, char c);
-errr term_add_bigch(TERM_COLOR a, char c);
+void term_add_bigch(const ColoredChar &cc);
 errr term_addstr(int n, TERM_COLOR a, std::string_view sv);
 errr term_putch(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
 errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, std::string_view sv);

@@ -329,7 +329,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                 for (auto i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) {
                     auto &cc_config = terrain.cc_configs.at(i);
                     auto &cc = cc_cb_map.at(i);
-                    const auto has_character = cc.character != '\0';
+                    const auto has_character = cc.has_character();
                     if ((cc.color != 0) || (!(cc.character & 0x80) && has_character)) {
                         cc_config.color = cc.color;
                     }

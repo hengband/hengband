@@ -14,6 +14,7 @@
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "term/z-virt.h"
+#include "view/colored-char.h"
 
 /* Special flags in the attr data */
 #define AF_BIGTILE2 0xf0
@@ -1473,38 +1474,36 @@ errr term_addch(TERM_COLOR a, char c)
  * Otherwise, queue a pair of attr/char for display at the current
  * cursor location, and advance the cursor to the right by two.
  */
-errr term_add_bigch(TERM_COLOR a, char c)
+void term_add_bigch(const ColoredChar &cc)
 {
     if (!use_bigtile) {
-        return term_addch(a, c);
+        (void)term_addch(cc.color, cc.character);
+        return;
     }
 
     /* Handle "unusable" cursor */
     if (game_term->scr->cu) {
-        return -1;
+        return;
     }
 
     /* Paranoia -- no illegal chars */
-    if (!c) {
-        return -2;
+    if (!cc.has_character()) {
+        return;
     }
 
     /* Queue the given character for display */
-    term_queue_bigchar(game_term->scr->cx, game_term->scr->cy, a, c, 0, 0);
+    term_queue_bigchar(game_term->scr->cx, game_term->scr->cy, cc.color, cc.character, 0, 0);
 
     /* Advance the cursor */
     game_term->scr->cx += 2;
 
     /* Success */
     if (game_term->scr->cx < game_term->wid) {
-        return 0;
+        return;
     }
 
     /* Note "Useless" cursor */
     game_term->scr->cu = 1;
-
-    /* Note "Useless" cursor */
-    return 1;
 }
 
 /*
