@@ -10,9 +10,9 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-class projection_path_type {
+class ProjectionPathHelper {
 public:
-    projection_path_type(std::vector<Pos2D> *position, int range, uint32_t flag, Pos2D pos_src, Pos2D pos_dst)
+    ProjectionPathHelper(std::vector<Pos2D> *position, int range, uint32_t flag, Pos2D pos_src, Pos2D pos_dst)
         : position(position)
         , range(range)
         , flag(flag)
@@ -92,141 +92,141 @@ int ProjectionPath::path_num() const
     return static_cast<int>(this->position.size());
 }
 
-static bool project_stop(PlayerType *player_ptr, projection_path_type *pp_ptr)
+static bool project_stop(PlayerType *player_ptr, ProjectionPathHelper *pph_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (none_bits(pp_ptr->flag, PROJECT_THRU) && (pp_ptr->pos == pp_ptr->pos_dst)) {
+    if (none_bits(pph_ptr->flag, PROJECT_THRU) && (pph_ptr->pos == pph_ptr->pos_dst)) {
         return true;
     }
 
-    if (any_bits(pp_ptr->flag, PROJECT_DISI)) {
-        if (!pp_ptr->position->empty() && cave_stop_disintegration(floor_ptr, pp_ptr->pos.y, pp_ptr->pos.x)) {
+    if (any_bits(pph_ptr->flag, PROJECT_DISI)) {
+        if (!pph_ptr->position->empty() && cave_stop_disintegration(floor_ptr, pph_ptr->pos.y, pph_ptr->pos.x)) {
             return true;
         }
-    } else if (any_bits(pp_ptr->flag, PROJECT_LOS)) {
-        if (!pp_ptr->position->empty() && !cave_los_bold(floor_ptr, pp_ptr->pos.y, pp_ptr->pos.x)) {
+    } else if (any_bits(pph_ptr->flag, PROJECT_LOS)) {
+        if (!pph_ptr->position->empty() && !cave_los_bold(floor_ptr, pph_ptr->pos.y, pph_ptr->pos.x)) {
             return true;
         }
-    } else if (none_bits(pp_ptr->flag, PROJECT_PATH)) {
-        if (!pp_ptr->position->empty() && !cave_has_flag_bold(floor_ptr, pp_ptr->pos.y, pp_ptr->pos.x, TerrainCharacteristics::PROJECT)) {
-            return true;
-        }
-    }
-
-    const auto &grid = floor_ptr->get_grid(pp_ptr->pos);
-    if (any_bits(pp_ptr->flag, PROJECT_MIRROR)) {
-        if (!pp_ptr->position->empty() && grid.is_mirror()) {
+    } else if (none_bits(pph_ptr->flag, PROJECT_PATH)) {
+        if (!pph_ptr->position->empty() && !cave_has_flag_bold(floor_ptr, pph_ptr->pos.y, pph_ptr->pos.x, TerrainCharacteristics::PROJECT)) {
             return true;
         }
     }
 
-    if (any_bits(pp_ptr->flag, PROJECT_STOP) && !pp_ptr->position->empty() && (player_ptr->is_located_at(pp_ptr->pos) || grid.has_monster())) {
+    const auto &grid = floor_ptr->get_grid(pph_ptr->pos);
+    if (any_bits(pph_ptr->flag, PROJECT_MIRROR)) {
+        if (!pph_ptr->position->empty() && grid.is_mirror()) {
+            return true;
+        }
+    }
+
+    if (any_bits(pph_ptr->flag, PROJECT_STOP) && !pph_ptr->position->empty() && (player_ptr->is_located_at(pph_ptr->pos) || grid.has_monster())) {
         return true;
     }
 
-    if (!in_bounds(floor_ptr, pp_ptr->pos.y, pp_ptr->pos.x)) {
+    if (!in_bounds(floor_ptr, pph_ptr->pos.y, pph_ptr->pos.x)) {
         return true;
     }
 
     return false;
 }
 
-static void calc_frac(projection_path_type *pp_ptr, bool is_vertical)
+static void calc_frac(ProjectionPathHelper *pph_ptr, bool is_vertical)
 {
-    if (pp_ptr->m == 0) {
+    if (pph_ptr->m == 0) {
         return;
     }
 
-    pp_ptr->frac += pp_ptr->m;
-    if (pp_ptr->frac <= pp_ptr->half) {
+    pph_ptr->frac += pph_ptr->m;
+    if (pph_ptr->frac <= pph_ptr->half) {
         return;
     }
 
     if (is_vertical) {
-        pp_ptr->pos.x += pp_ptr->pos_s.x;
+        pph_ptr->pos.x += pph_ptr->pos_s.x;
     } else {
-        pp_ptr->pos.y += pp_ptr->pos_s.y;
+        pph_ptr->pos.y += pph_ptr->pos_s.y;
     }
 
-    pp_ptr->frac -= pp_ptr->full;
-    pp_ptr->k++;
+    pph_ptr->frac -= pph_ptr->full;
+    pph_ptr->k++;
 }
 
-static void calc_projection_to_target(PlayerType *player_ptr, projection_path_type *pp_ptr, bool is_vertical)
+static void calc_projection_to_target(PlayerType *player_ptr, ProjectionPathHelper *pph_ptr, bool is_vertical)
 {
     while (true) {
-        pp_ptr->position->push_back(pp_ptr->pos);
-        if (static_cast<int>(pp_ptr->position->size()) + pp_ptr->k / 2 >= pp_ptr->range) {
+        pph_ptr->position->push_back(pph_ptr->pos);
+        if (static_cast<int>(pph_ptr->position->size()) + pph_ptr->k / 2 >= pph_ptr->range) {
             break;
         }
 
-        if (project_stop(player_ptr, pp_ptr)) {
+        if (project_stop(player_ptr, pph_ptr)) {
             break;
         }
 
-        calc_frac(pp_ptr, is_vertical);
+        calc_frac(pph_ptr, is_vertical);
         if (is_vertical) {
-            pp_ptr->pos.y += pp_ptr->pos_s.y;
+            pph_ptr->pos.y += pph_ptr->pos_s.y;
         } else {
-            pp_ptr->pos.x += pp_ptr->pos_s.x;
+            pph_ptr->pos.x += pph_ptr->pos_s.x;
         }
     }
 }
 
-static bool calc_vertical_projection(PlayerType *player_ptr, projection_path_type *pp_ptr)
+static bool calc_vertical_projection(PlayerType *player_ptr, ProjectionPathHelper *pph_ptr)
 {
-    if (pp_ptr->pos_a.y <= pp_ptr->pos_a.x) {
+    if (pph_ptr->pos_a.y <= pph_ptr->pos_a.x) {
         return false;
     }
 
-    pp_ptr->m = pp_ptr->pos_a.x * pp_ptr->pos_a.x * 2;
-    pp_ptr->pos.y = pp_ptr->pos_src.y + pp_ptr->pos_s.y;
-    pp_ptr->pos.x = pp_ptr->pos_src.x;
-    pp_ptr->frac = pp_ptr->m;
-    if (pp_ptr->frac > pp_ptr->half) {
-        pp_ptr->pos.x += pp_ptr->pos_s.x;
-        pp_ptr->frac -= pp_ptr->full;
-        pp_ptr->k++;
+    pph_ptr->m = pph_ptr->pos_a.x * pph_ptr->pos_a.x * 2;
+    pph_ptr->pos.y = pph_ptr->pos_src.y + pph_ptr->pos_s.y;
+    pph_ptr->pos.x = pph_ptr->pos_src.x;
+    pph_ptr->frac = pph_ptr->m;
+    if (pph_ptr->frac > pph_ptr->half) {
+        pph_ptr->pos.x += pph_ptr->pos_s.x;
+        pph_ptr->frac -= pph_ptr->full;
+        pph_ptr->k++;
     }
 
-    calc_projection_to_target(player_ptr, pp_ptr, true);
+    calc_projection_to_target(player_ptr, pph_ptr, true);
     return true;
 }
 
-static bool calc_horizontal_projection(PlayerType *player_ptr, projection_path_type *pp_ptr)
+static bool calc_horizontal_projection(PlayerType *player_ptr, ProjectionPathHelper *pph_ptr)
 {
-    if (pp_ptr->pos_a.x <= pp_ptr->pos_a.y) {
+    if (pph_ptr->pos_a.x <= pph_ptr->pos_a.y) {
         return false;
     }
 
-    pp_ptr->m = pp_ptr->pos_a.y * pp_ptr->pos_a.y * 2;
-    pp_ptr->pos.y = pp_ptr->pos_src.y;
-    pp_ptr->pos.x = pp_ptr->pos_src.x + pp_ptr->pos_s.x;
-    pp_ptr->frac = pp_ptr->m;
-    if (pp_ptr->frac > pp_ptr->half) {
-        pp_ptr->pos.y += pp_ptr->pos_s.y;
-        pp_ptr->frac -= pp_ptr->full;
-        pp_ptr->k++;
+    pph_ptr->m = pph_ptr->pos_a.y * pph_ptr->pos_a.y * 2;
+    pph_ptr->pos.y = pph_ptr->pos_src.y;
+    pph_ptr->pos.x = pph_ptr->pos_src.x + pph_ptr->pos_s.x;
+    pph_ptr->frac = pph_ptr->m;
+    if (pph_ptr->frac > pph_ptr->half) {
+        pph_ptr->pos.y += pph_ptr->pos_s.y;
+        pph_ptr->frac -= pph_ptr->full;
+        pph_ptr->k++;
     }
 
-    calc_projection_to_target(player_ptr, pp_ptr, false);
+    calc_projection_to_target(player_ptr, pph_ptr, false);
     return true;
 }
 
-static void calc_projection_others(PlayerType *player_ptr, projection_path_type *pp_ptr)
+static void calc_projection_others(PlayerType *player_ptr, ProjectionPathHelper *pph_ptr)
 {
     while (true) {
-        pp_ptr->position->push_back(pp_ptr->pos);
-        if (static_cast<int>(pp_ptr->position->size()) * 3 / 2 >= pp_ptr->range) {
+        pph_ptr->position->push_back(pph_ptr->pos);
+        if (static_cast<int>(pph_ptr->position->size()) * 3 / 2 >= pph_ptr->range) {
             break;
         }
 
-        if (project_stop(player_ptr, pp_ptr)) {
+        if (project_stop(player_ptr, pph_ptr)) {
             break;
         }
 
-        pp_ptr->pos.y += pp_ptr->pos_src.y;
-        pp_ptr->pos.x += pp_ptr->pos_src.x;
+        pph_ptr->pos.y += pph_ptr->pos_src.y;
+        pph_ptr->pos.x += pph_ptr->pos_src.x;
     }
 }
 
@@ -249,18 +249,18 @@ ProjectionPath::ProjectionPath(PlayerType *player_ptr, int range, const Pos2D &p
         return;
     }
 
-    projection_path_type pp(&this->position, range, flag, pos_src, pos_dst);
-    if (calc_vertical_projection(player_ptr, &pp)) {
+    ProjectionPathHelper pph(&this->position, range, flag, pos_src, pos_dst);
+    if (calc_vertical_projection(player_ptr, &pph)) {
         return;
     }
 
-    if (calc_horizontal_projection(player_ptr, &pp)) {
+    if (calc_horizontal_projection(player_ptr, &pph)) {
         return;
     }
 
-    pp.pos.y = pos_src.y + pp.pos_s.y;
-    pp.pos.x = pos_src.x + pp.pos_s.x;
-    calc_projection_others(player_ptr, &pp);
+    pph.pos.y = pos_src.y + pph.pos_s.y;
+    pph.pos.x = pos_src.x + pph.pos_s.x;
+    calc_projection_others(player_ptr, &pph);
 }
 
 /*
