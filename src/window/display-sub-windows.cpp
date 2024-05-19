@@ -347,7 +347,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
         if (show_item_graph) {
             const auto a = o_ptr->get_color();
             const auto c = o_ptr->get_symbol();
-            term_queue_bigchar(cur_col, cur_row, a, c, 0, 0);
+            term_queue_bigchar(cur_col, cur_row, { { a, c }, {} });
             if (use_bigtile) {
                 cur_col++;
             }

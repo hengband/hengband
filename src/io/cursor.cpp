@@ -76,7 +76,7 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
             }
 
             ccp.cc_foreground.character = '*';
-            term_queue_bigchar(panel_col_of(pos_path.x), pos_path.y - panel_row_prt, ccp.cc_foreground.color, ccp.cc_foreground.character, ccp.cc_background.color, ccp.cc_background.character);
+            term_queue_bigchar(panel_col_of(pos_path.x), pos_path.y - panel_row_prt, ccp);
         }
 
         if (g_ptr->is_mark() && !g_ptr->cave_has_flag(TerrainCharacteristics::PROJECT)) {

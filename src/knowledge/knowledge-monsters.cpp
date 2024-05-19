@@ -262,7 +262,7 @@ static void display_monster_list(int col, int row, int per_page, const std::vect
         }
 
         term_erase(69, row + i);
-        term_queue_bigchar(use_bigtile ? 69 : 70, row + i, cc_config.color, cc_config.character, 0, 0);
+        term_queue_bigchar(use_bigtile ? 69 : 70, row + i, { cc_config, {} });
         if (!visual_only) {
             if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
                 put_str(format("%5d", monrace.r_pkills), row + i, 73);

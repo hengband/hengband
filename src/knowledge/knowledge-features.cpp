@@ -83,7 +83,7 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
         }
 
         const auto &cc_standard = terrain.cc_configs.at(F_LIT_STANDARD);
-        term_queue_bigchar(lit_col[F_LIT_STANDARD], row_i, cc_standard.color, cc_standard.character, 0, 0);
+        term_queue_bigchar(lit_col[F_LIT_STANDARD], row_i, { cc_standard, {} });
         term_putch(lit_col[F_LIT_NS_BEGIN], row_i, TERM_SLATE, '(');
         for (int j = F_LIT_NS_BEGIN + 1; j < F_LIT_MAX; j++) {
             term_putch(lit_col[j], row_i, TERM_SLATE, '/');
@@ -92,7 +92,7 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
         term_putch(lit_col[F_LIT_MAX - 1] + (use_bigtile ? 3 : 2), row_i, TERM_SLATE, ')');
         for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
             const auto &cc_config = terrain.cc_configs.at(j);
-            term_queue_bigchar(lit_col[j] + 1, row_i, cc_config.color, cc_config.character, 0, 0);
+            term_queue_bigchar(lit_col[j] + 1, row_i, { cc_config, {} });
         }
     }
 

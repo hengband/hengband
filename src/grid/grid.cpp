@@ -272,7 +272,7 @@ void print_rel(PlayerType *player_ptr, char c, TERM_COLOR a, POSITION y, POSITIO
         }
 
         /* Draw the char using the attr */
-        term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, 0, 0);
+        term_queue_bigchar(panel_col_of(x), y - panel_row_prt, { { a, c }, {} });
     }
 }
 
@@ -418,7 +418,7 @@ void lite_spot(PlayerType *player_ptr, POSITION y, POSITION x)
             }
         }
 
-        term_queue_bigchar(panel_col_of(x), y - panel_row_prt, ccp.cc_foreground.color, ccp.cc_foreground.character, ccp.cc_background.color, ccp.cc_background.character);
+        term_queue_bigchar(panel_col_of(x), y - panel_row_prt, ccp);
         static constexpr auto flags = {
             SubWindowRedrawingFlag::OVERHEAD,
             SubWindowRedrawingFlag::DUNGEON,

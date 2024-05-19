@@ -202,7 +202,7 @@ static void display_object_list(int col, int row, int per_page, const std::vecto
             c_prt(attr, format("%d", bi_id), row + i, 70);
         }
 
-        term_queue_bigchar(use_bigtile ? 76 : 77, row + i, cc_config.color, cc_config.character, 0, 0);
+        term_queue_bigchar(use_bigtile ? 76 : 77, row + i, { cc_config, {} });
     }
 
     for (; i < per_page; i++) {

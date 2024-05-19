@@ -109,7 +109,7 @@ void print_map(PlayerType *player_ptr)
                 }
             }
 
-            term_queue_bigchar(panel_col_of(x), y - panel_row_prt, ccp.cc_foreground.color, ccp.cc_foreground.character, ccp.cc_background.color, ccp.cc_background.character);
+            term_queue_bigchar(panel_col_of(x), y - panel_row_prt, ccp);
         }
     }
 

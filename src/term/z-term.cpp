@@ -341,7 +341,7 @@ void term_queue_char(TERM_LEN x, TERM_LEN y, const ColoredCharPair &ccp)
  * Otherwise, mentally draw a pair of attr/char at a given location.
  * Assumes given location and values are valid.
  */
-void term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc)
+void term_queue_bigchar(TERM_LEN x, TERM_LEN y, const ColoredCharPair &ccp_initial)
 {
 #ifdef JP
     /*
@@ -358,29 +358,27 @@ void term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR
                                      "ｐｑｒｓｔｕｖｗｘｙｚ｛｜｝～■";
 #endif
 
-    byte a2;
-    char c2;
-
     const auto ch_x = x + game_term->offset_x;
     const auto ch_y = y + game_term->offset_y;
 
     /* If non bigtile mode, call orginal function */
     if (!use_bigtile) {
-        term_queue_char_aux(ch_x, ch_y, { { a, c }, { ta, tc } });
+        term_queue_char_aux(ch_x, ch_y, ccp_initial);
         return;
     }
 
     /* A tile becomes a Bigtile */
-    if ((a & AF_TILE1) && (c & 0x80)) {
+    ColoredCharPair ccp = ccp_initial;
+    uint8_t color;
+    char character;
+    if ((ccp_initial.cc_foreground.color & AF_TILE1) && (ccp_initial.cc_foreground.character & 0x80)) {
         /* Mark it as a Bigtile */
-        a2 = AF_BIGTILE2;
-
-        c2 = -1;
+        color = AF_BIGTILE2;
+        character = -1;
 
         /* Ignore non-tile background */
-        if (!((ta & AF_TILE1) && (tc & 0x80))) {
-            ta = 0;
-            tc = 0;
+        if (!((ccp_initial.cc_background.color & AF_TILE1) && (ccp_initial.cc_background.character & 0x80))) {
+            ccp.cc_background = {};
         }
     }
 
@@ -389,26 +387,26 @@ void term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR
      * Use a multibyte character instead of a dirty pair of ASCII
      * characters.
      */
-    else if (' ' <= c) /* isprint(c) */
+    else if (' ' <= ccp_initial.cc_foreground.character) /* isprint(c) */
     {
-        c2 = ascii_to_zenkaku[2 * (c - ' ') + 1];
-        c = ascii_to_zenkaku[2 * (c - ' ')];
+        character = ascii_to_zenkaku[2 * (ccp_initial.cc_foreground.character - ' ') + 1];
+        ccp.cc_foreground.character = ascii_to_zenkaku[2 * (ccp_initial.cc_foreground.character - ' ')];
 
         /* Mark it as a Kanji */
-        a2 = a | AF_KANJI2;
-        a |= AF_KANJI1;
+        color = ccp_initial.cc_foreground.color | AF_KANJI2;
+        ccp.cc_foreground.color |= AF_KANJI1;
     }
 #endif
 
     else {
         /* Dirty pair of ASCII characters */
-        a2 = TERM_WHITE;
-        c2 = ' ';
+        color = TERM_WHITE;
+        character = ' ';
     }
 
     /* Display pair of attr/char */
-    term_queue_char_aux(ch_x, ch_y, { { a, c }, { ta, tc } });
-    term_queue_char_aux(ch_x + 1, ch_y, { { a2, c2 }, {} });
+    term_queue_char_aux(ch_x, ch_y, ccp);
+    term_queue_char_aux(ch_x + 1, ch_y, { { color, character }, {} });
 }
 
 /*
@@ -1497,7 +1495,7 @@ void term_add_bigch(const ColoredChar &cc)
     }
 
     /* Queue the given character for display */
-    term_queue_bigchar(game_term->scr->cx, game_term->scr->cy, cc.color, cc.character, 0, 0);
+    term_queue_bigchar(game_term->scr->cx, game_term->scr->cy, { cc, {} });
 
     /* Advance the cursor */
     game_term->scr->cx += 2;
