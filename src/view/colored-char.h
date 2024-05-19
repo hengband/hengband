@@ -33,4 +33,10 @@ public:
 
     uint8_t color; //! @todo TERM_COLOR 型エイリアスをenum class に変えたら型を差し替える.
     char character;
+
+    // @details 本来ASCII印字可能文字 (0x20～0x7F)だけ許可すべきだが、今のところそこまで厳密なチェックはしない.
+    bool has_character() const
+    {
+        return this->character != '\0';
+    }
 };

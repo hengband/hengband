@@ -95,7 +95,7 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
     case 'P':
     case 'p': {
         const auto &cc = cc_cb.cc;
-        const auto has_character = cc.character != '\0';
+        const auto has_character = cc.has_character();
         if (cc.color || (!(cc.character & 0x80) && has_character)) {
             *cur_attr_ptr = cc.color;
             *attr_top_ptr = std::max<int8_t>(0, (*cur_attr_ptr & 0x7f) - 5);
