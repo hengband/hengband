@@ -148,7 +148,7 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
             desc.append(std::to_string((int)rad)).append(_(")を授ける。", ") forever."));
         }
         if (rad < 0) {
-            desc = _("それは明かりの半径を狭める(半径に-", "It decreases the radius of your light by");
+            desc = _("それは明かりの半径を狭める(半径に-", "It decreases the radius of your light by ");
             desc.append(std::to_string((int)-rad)).append(_(")。", "."));
         }
     }
