@@ -140,7 +140,7 @@ bool fetch_monster(PlayerType *player_ptr)
     auto &monster = floor.m_list[m_idx];
     const auto m_name = monster_desc(player_ptr, &monster, 0);
     msg_format(_("%sを引き戻した。", "You pull back %s."), m_name.data());
-    projection_path path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), target_row, target_col, player_ptr->y, player_ptr->x, 0);
+    ProjectionPath path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), { target_row, target_col }, player_ptr->get_position(), 0);
     auto ty = target_row, tx = target_col;
     for (const auto &[ny, nx] : path_g) {
         const Pos2D pos_path(ny, nx);

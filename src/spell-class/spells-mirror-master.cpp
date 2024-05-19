@@ -276,7 +276,7 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
     auto visual = false;
     const auto max_range = AngbandSystem::get_instance().get_max_range();
     while (true) {
-        projection_path path_g(this->player_ptr, (project_length ? project_length : max_range), y1, x1, y2, x2, flag);
+        ProjectionPath path_g(this->player_ptr, (project_length ? project_length : max_range), { y1, x1 }, { y2, x2 }, flag);
 
         if (path_g.path_num() == 0) {
             break;
@@ -341,8 +341,8 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
     }
 }
 
-static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std::vector<projection_path::const_iterator>> &pos_list_map,
-    const std::vector<projection_path> &second_path_g_list, const std::pair<int, int> &center)
+static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std::vector<ProjectionPath::pp_const_iterator>> &pos_list_map,
+    const std::vector<ProjectionPath> &second_path_g_list, const Pos2D &center)
 {
     if (delay_factor <= 0) {
         return;
@@ -351,40 +351,40 @@ static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std:
     constexpr auto typ = AttributeType::SUPER_RAY;
 
     // 8方向のスーパーレイの軌道上の最後の到達点の座標のリスト
-    std::vector<std::pair<int, int>> last_pos_list;
+    std::vector<Pos2D> last_pos_list;
     std::transform(second_path_g_list.begin(), second_path_g_list.end(), std::back_inserter(last_pos_list),
         [](const auto &path_g) { return path_g.back(); });
 
     // スーパーレイの描画を行った座標のリスト。スーパーレイの全ての描画完了後に描画を消去するのに使用する。
-    std::vector<std::pair<int, int>> drawn_pos_list;
+    std::vector<Pos2D> drawn_pos_list;
 
     const auto &floor = *player_ptr->current_floor_ptr;
     for (const auto &[n, pos_list] : pos_list_map) {
         // スーパーレイの最終到達点の座標の描画を行った座標のリスト。最終到達点の描画を '*' で上書きするのに使用する。
-        std::vector<std::pair<int, int>> drawn_last_pos_list;
+        std::vector<Pos2D> drawn_last_pos_list;
 
         for (const auto &it : pos_list) {
-            const auto &[y, x] = (n == 1) ? center : *std::next(it, -1);
-            const auto &[ny, nx] = *it;
+            const auto &pos = (n == 1) ? center : *std::next(it, -1);
+            const auto &pos_new = *it;
 
-            if (panel_contains(y, x) && floor.has_los({ y, x })) {
-                print_bolt_pict(player_ptr, y, x, y, x, typ);
-                drawn_pos_list.emplace_back(y, x);
+            if (panel_contains(pos.y, pos.x) && floor.has_los(pos)) {
+                print_bolt_pict(player_ptr, pos.y, pos.x, pos.y, pos.x, typ);
+                drawn_pos_list.push_back(pos);
             }
-            if (panel_contains(ny, nx) && floor.has_los({ ny, nx })) {
-                print_bolt_pict(player_ptr, y, x, ny, nx, typ);
+            if (panel_contains(pos_new.y, pos_new.x) && floor.has_los(pos_new)) {
+                print_bolt_pict(player_ptr, pos.y, pos.x, pos_new.y, pos_new.x, typ);
                 if (std::find(last_pos_list.begin(), last_pos_list.end(), *it) != last_pos_list.end()) {
-                    drawn_last_pos_list.emplace_back(ny, nx);
+                    drawn_last_pos_list.push_back(pos_new);
                 }
             }
         }
         term_fresh();
         term_xtra(TERM_XTRA_DELAY, delay_factor);
 
-        for (const auto &[y, x] : drawn_last_pos_list) {
-            if (panel_contains(y, x) && floor.has_los({ y, x })) {
-                print_bolt_pict(player_ptr, y, x, y, x, typ);
-                drawn_pos_list.emplace_back(y, x);
+        for (const auto &pos : drawn_last_pos_list) {
+            if (panel_contains(pos.y, pos.x) && floor.has_los(pos)) {
+                print_bolt_pict(player_ptr, pos.y, pos.x, pos.y, pos.x, typ);
+                drawn_pos_list.push_back(pos);
             }
         }
     }
@@ -392,8 +392,8 @@ static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std:
     term_fresh();
     term_xtra(TERM_XTRA_DELAY, delay_factor);
 
-    for (const auto &[y, x] : drawn_pos_list) {
-        lite_spot(player_ptr, y, x);
+    for (const auto &pos : drawn_pos_list) {
+        lite_spot(player_ptr, pos.y, pos.x);
     }
 }
 
@@ -451,8 +451,8 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
 
     /* Calculate the projection path */
     const auto &system = AngbandSystem::get_instance();
-    projection_path path_g(this->player_ptr, (project_length ? project_length : system.get_max_range()), y1, x1, y2, x2, flag);
-    std::vector<projection_path> second_path_g_list;
+    ProjectionPath path_g(this->player_ptr, (project_length ? project_length : system.get_max_range()), { y1, x1 }, { y2, x2 }, flag);
+    std::vector<ProjectionPath> second_path_g_list;
     handle_stuff(this->player_ptr);
 
     if (path_g.path_num() == 0) {
@@ -493,7 +493,7 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     }
 
     for (const auto &[y, x] : drawn_pos_list) {
-        lite_spot(player_ptr, y, x);
+        lite_spot(this->player_ptr, y, x);
     }
 
     {
@@ -505,7 +505,8 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
 
             const auto length = project_length ? project_length : system.get_max_range();
             for (const auto &dd : CCW_DD) {
-                second_path_g_list.emplace_back(this->player_ptr, length, y, x, y + dd.y, x + dd.x, project_flag);
+                const Pos2D pos(y, x);
+                second_path_g_list.emplace_back(this->player_ptr, length, pos, pos + dd, project_flag);
             }
         }
     }
@@ -515,7 +516,7 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     }
 
     // 起点の鏡からの距離 → 8方向へのスーパーレイの軌道上のその距離にある座標のイテレータのリストの map
-    std::map<int, std::vector<projection_path::const_iterator>> pos_list_map;
+    std::map<int, std::vector<ProjectionPath::pp_const_iterator>> pos_list_map;
     for (const auto &second_path_g : second_path_g_list) {
         for (auto it = second_path_g.begin(); it != second_path_g.end(); ++it) {
             const auto &[o_y, o_x] = path_g.back();

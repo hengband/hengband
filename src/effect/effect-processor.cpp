@@ -138,7 +138,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
 
     /* Calculate the projection path */
     const auto &system = AngbandSystem::get_instance();
-    projection_path path_g(player_ptr, (project_length ? project_length : system.get_max_range()), y1, x1, y2, x2, flag);
+    ProjectionPath path_g(player_ptr, (project_length ? project_length : system.get_max_range()), { y1, x1 }, { y2, x2 }, flag);
     handle_stuff(player_ptr);
 
     int k = 0;

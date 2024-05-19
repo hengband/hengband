@@ -155,7 +155,7 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
         tm_idx = floor_ptr->grid_array[ty][tx].m_idx;
     }
 
-    projection_path path_g(player_ptr, project_length, player_ptr->y, player_ptr->x, ty, tx, PROJECT_STOP | PROJECT_KILL);
+    ProjectionPath path_g(player_ptr, project_length, player_ptr->get_position(), { ty, tx }, PROJECT_STOP | PROJECT_KILL);
     project_length = 0;
     if (path_g.path_num() == 0) {
         return true;
