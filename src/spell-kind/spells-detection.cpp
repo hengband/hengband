@@ -590,7 +590,7 @@ bool detect_monsters_string(PlayerType *player_ptr, POSITION range, concptr Matc
     auto flag = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
         auto *m_ptr = &floor.m_list[i];
-        auto *r_ptr = &m_ptr->get_monrace();
+        const auto &monrace = m_ptr->get_monrace();
         if (!m_ptr->is_valid()) {
             continue;
         }
@@ -602,7 +602,7 @@ bool detect_monsters_string(PlayerType *player_ptr, POSITION range, concptr Matc
             continue;
         }
 
-        if (angband_strchr(Match, r_ptr->d_char)) {
+        if (angband_strchr(Match, monrace.cc_def.character)) {
             if (player_ptr->monster_race_idx == m_ptr->r_idx) {
                 rfu.set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
             }

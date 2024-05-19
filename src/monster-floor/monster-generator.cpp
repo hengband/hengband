@@ -245,7 +245,7 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MonsterRaceId r_idx
         return false;
     }
 
-    if (z_ptr->d_char != r_ptr->d_char) {
+    if (z_ptr->cc_def.character != r_ptr->cc_def.character) {
         return false;
     }
 
@@ -308,7 +308,7 @@ bool place_specific_monster(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITIO
     place_monster_m_idx = hack_m_idx_ii;
 
     /* Reinforcement */
-    for (auto [reinforce_r_idx, dd, ds] : r_ptr->reinforces) {
+    for (const auto &[reinforce_r_idx, dd, ds] : r_ptr->reinforces) {
         if (!MonsterRace(reinforce_r_idx).is_valid()) {
             continue;
         }
@@ -371,15 +371,19 @@ bool place_specific_monster(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITIO
 bool place_random_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 {
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
+    const auto &floor = *player_ptr->current_floor_ptr;
     MonsterRaceId r_idx;
     do {
-        r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->monster_level, PM_NONE);
+        r_idx = get_mon_num(player_ptr, 0, floor.monster_level, PM_NONE);
     } while ((mode & PM_NO_QUEST) && monraces_info[r_idx].misc_flags.has(MonsterMiscType::NO_QUEST));
     if (!MonsterRace(r_idx).is_valid()) {
         return false;
     }
 
-    if ((one_in_(5) || (player_ptr->current_floor_ptr->dun_level == 0)) && monraces_info[r_idx].kind_flags.has_not(MonsterKindType::UNIQUE) && angband_strchr("hkoptuyAHLOPTUVY", monraces_info[r_idx].d_char)) {
+    auto try_become_jural = one_in_(5) || !floor.is_in_underground();
+    try_become_jural &= monraces_info[r_idx].kind_flags.has_not(MonsterKindType::UNIQUE);
+    try_become_jural &= angband_strchr("hkoptuyAHLOPTUVY", monraces_info[r_idx].cc_def.character) != nullptr;
+    if (try_become_jural) {
         mode |= PM_JURAL;
     }
 
@@ -436,15 +440,15 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
         }
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    MONSTER_IDX m_idx = floor_ptr->grid_array[y][x].m_idx;
-    const auto &monentity = floor_ptr->m_list[m_idx];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto m_idx = floor.get_grid({ y, x }).m_idx;
+    const auto &monentity = floor.m_list[m_idx];
 
     POSITION cy = y;
     POSITION cx = x;
     for (auto attempts = randint1(10) + 5; attempts > 0; attempts--) {
         scatter(player_ptr, &cy, &cx, y, x, 5, PROJECT_NONE);
-        (void)(*summon_specific)(player_ptr, m_idx, cy, cx, floor_ptr->dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP);
+        (void)(*summon_specific)(player_ptr, m_idx, cy, cx, floor.dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP);
         y = cy;
         x = cx;
     }
@@ -454,9 +458,7 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
     }
 
     const auto &monrace = monentity.mflag2.has(MonsterConstantFlagType::CHAMELEON) ? monentity.get_monrace() : monraces_info[*r_idx];
-
-    msg_format(_("モンスターの大群(%c)", "Monster horde (%c)."), monrace.d_char);
-
+    msg_format(_("モンスターの大群(%c)", "Monster horde (%c)."), monrace.cc_def.character);
     return true;
 }
 

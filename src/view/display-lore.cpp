@@ -39,18 +39,17 @@
  */
 void roff_top(MonsterRaceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
-    TERM_COLOR a1 = r_ptr->d_attr;
-    char c1 = r_ptr->d_char;
-    TERM_COLOR a2 = r_ptr->x_attr;
-    char c2 = r_ptr->x_char;
+    const auto &monrace = monraces_info[r_idx];
+    const auto &cc_def = monrace.cc_def;
+    TERM_COLOR a2 = monrace.x_attr;
+    char c2 = monrace.x_char;
 
     term_erase(0, 0);
     term_gotoxy(0, 0);
 
 #ifdef JP
 #else
-    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
+    if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
         term_addstr(-1, TERM_WHITE, "The ");
     }
 #endif
@@ -61,10 +60,10 @@ void roff_top(MonsterRaceId r_idx)
         term_addstr(-1, TERM_WHITE, "] ");
     }
 
-    term_addstr(-1, TERM_WHITE, r_ptr->name);
+    term_addstr(-1, TERM_WHITE, monrace.name);
 
     term_addstr(-1, TERM_WHITE, " ('");
-    term_add_bigch({ a1, c1 });
+    term_add_bigch(cc_def);
     term_addstr(-1, TERM_WHITE, "')");
 
     term_addstr(-1, TERM_WHITE, "/('");
@@ -537,7 +536,7 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
     auto idx = 0 * max_idx;
 #endif
 
-    for (auto [r_idx, dd, ds] : lore_ptr->r_ptr->reinforces) {
+    for (const auto &[r_idx, dd, ds] : lore_ptr->r_ptr->reinforces) {
         auto is_reinforced = MonsterRace(r_idx).is_valid();
 #ifndef JP
         const char *prefix = (idx == 0) ? " " : (idx == max_idx) ? " and "

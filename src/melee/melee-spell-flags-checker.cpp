@@ -257,7 +257,7 @@ static void check_melee_spell_special(PlayerType *player_ptr, melee_spell_type *
         return;
     }
 
-    if (ms_ptr->r_ptr->d_char == 'B') {
+    if (ms_ptr->r_ptr->cc_def.character == 'B') {
         if ((player_ptr->pet_extra_flags & (PF_ATTACK_SPELL | PF_TELEPORT)) != (PF_ATTACK_SPELL | PF_TELEPORT)) {
             ms_ptr->ability_flags.reset(MonsterAbilityType::SPECIAL);
         }
@@ -381,7 +381,7 @@ bool check_melee_spell_set(PlayerType *player_ptr, melee_spell_type *ms_ptr)
         ms_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);
     }
 
-    if (ms_ptr->ability_flags.has(MonsterAbilityType::SPECIAL) && (ms_ptr->m_ptr->r_idx != MonsterRaceId::ROLENTO) && (ms_ptr->r_ptr->d_char != 'B')) {
+    if (ms_ptr->ability_flags.has(MonsterAbilityType::SPECIAL) && (ms_ptr->m_ptr->r_idx != MonsterRaceId::ROLENTO) && (ms_ptr->r_ptr->cc_def.character != 'B')) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::SPECIAL);
     }
 

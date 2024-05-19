@@ -101,9 +101,12 @@ static bool check_store_temple(const ItemEntity &item)
         return true;
     case ItemKindType::FIGURINE:
     case ItemKindType::STATUE: {
-        auto *r_ptr = &monraces_info[i2enum<MonsterRaceId>(item.pval)];
-        if (r_ptr->kind_flags.has_not(MonsterKindType::EVIL)) {
-            if ((r_ptr->kind_flags.has(MonsterKindType::GOOD)) || (r_ptr->kind_flags.has(MonsterKindType::ANIMAL)) || (angband_strchr("?!", r_ptr->d_char) != nullptr)) {
+        const auto &monrace = monraces_info[i2enum<MonsterRaceId>(item.pval)];
+        if (monrace.kind_flags.has_not(MonsterKindType::EVIL)) {
+            auto can_sell = monrace.kind_flags.has(MonsterKindType::GOOD);
+            can_sell |= monrace.kind_flags.has(MonsterKindType::ANIMAL);
+            can_sell |= angband_strchr("?!", monrace.cc_def.character) != nullptr;
+            if (can_sell) {
                 return true;
             }
         }

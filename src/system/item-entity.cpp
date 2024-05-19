@@ -471,7 +471,7 @@ bool ItemEntity::is_offerable() const
         return false;
     }
 
-    return angband_strchr("pht", monraces_info[i2enum<MonsterRaceId>(this->pval)].d_char) != nullptr;
+    return angband_strchr("pht", monraces_info[i2enum<MonsterRaceId>(this->pval)].cc_def.character) != nullptr;
 }
 
 /*!

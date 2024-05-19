@@ -269,7 +269,7 @@ static int decide_drop_numbers(MonsterDeath *md_ptr, const bool drop_item, const
         drop_numbers = 0;
     }
 
-    if (!drop_item && (md_ptr->r_ptr->d_char != '$')) {
+    if (!drop_item && (md_ptr->r_ptr->cc_def.character != '$')) {
         drop_numbers = 0;
     }
 

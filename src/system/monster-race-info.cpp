@@ -4,6 +4,11 @@
 #include "monster/horror-descriptions.h"
 #include <algorithm>
 
+MonsterRaceInfo::MonsterRaceInfo()
+    : idx(MonsterRaceId::PLAYER)
+{
+}
+
 /*!
  * @brief エルドリッチホラーの形容詞種別を決める
  * @return エルドリッチホラーの形容詞

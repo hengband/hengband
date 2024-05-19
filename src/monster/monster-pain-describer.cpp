@@ -30,7 +30,7 @@ static auto d_char_is_any_of(concptr symbols)
 {
     return [symbols](const MonsterEntity &monster) {
         const auto &monrace = monster.get_monrace();
-        return angband_strchr(symbols, monrace.d_char) != nullptr;
+        return angband_strchr(symbols, monrace.cc_def.character) != nullptr;
     };
 }
 
@@ -86,7 +86,7 @@ static const std::vector<pain_message_type>
                                      } },
         { [](const MonsterEntity &monster) {
         const auto &monrace = monster.get_monrace();
-        return d_char_is_any_of("JMR")(monster) || !isalpha(monrace.d_char); }, {
+        return d_char_is_any_of("JMR")(monster) || !isalpha(monrace.cc_def.character); }, {
                                                     { 95, _("はほとんど気にとめていない。", " barely notices.") },
                                                     { 75, _("はシーッと鳴いた。", " hisses.") },
                                                     { 50, _("は怒って頭を上げた。", " rears up in anger.") },
