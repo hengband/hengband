@@ -128,7 +128,7 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
         } else if (zz[6][0] == '!') {
             if (floor_ptr->is_in_quest()) {
                 const auto &quest_list = QuestList::get_instance();
-                letter[index].artifact = quest_list[floor_ptr->quest_number].reward_artifact_idx;
+                letter[index].artifact = quest_list[floor_ptr->quest_number].reward_fa_id;
             }
         } else {
             letter[index].artifact = i2enum<FixedArtifactId>(atoi(zz[6]));

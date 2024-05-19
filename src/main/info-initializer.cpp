@@ -190,7 +190,7 @@ static errr init_json(std::string_view filename, std::string_view keyname, angba
 errr init_artifacts_info()
 {
     init_header(&artifacts_header);
-    return init_json("ArtifactDefinitions.jsonc", "artifacts", artifacts_header, artifacts_info, parse_artifacts_info);
+    return init_json("ArtifactDefinitions.jsonc", "artifacts", artifacts_header, ArtifactList::get_instance().get_raw_map(), parse_artifacts_info);
 }
 
 /*!

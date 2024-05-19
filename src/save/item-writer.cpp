@@ -128,7 +128,7 @@ static void write_item_info(ItemEntity *o_ptr, const BIT_FLAGS flags)
 {
     wr_s16b((int16_t)o_ptr->weight);
     if (any_bits(flags, SaveDataItemFlagType::FIXED_ARTIFACT_IDX)) {
-        wr_s16b(enum2i(o_ptr->fixed_artifact_idx));
+        wr_s16b(enum2i(o_ptr->fa_id));
     }
 
     if (any_bits(flags, SaveDataItemFlagType::EGO_IDX)) {

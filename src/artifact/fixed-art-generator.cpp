@@ -92,7 +92,7 @@ static void milim_swimsuit(PlayerType *player_ptr, ItemEntity *o_ptr)
 static void invest_special_artifact_abilities(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     const auto pc = PlayerClass(player_ptr);
-    switch (o_ptr->fixed_artifact_idx) {
+    switch (o_ptr->fa_id) {
     case FixedArtifactId::MURAMASA:
         if (!pc.equals(PlayerClassType::SAMURAI)) {
             o_ptr->art_flags.set(TR_NO_MAGIC);
@@ -254,7 +254,7 @@ bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y,
 {
     auto &artifact = ArtifactList::get_instance().get_artifact(a_idx);
     ItemEntity item(artifact.bi_key);
-    item.fixed_artifact_idx = a_idx;
+    item.fa_id = a_idx;
     apply_artifact(player_ptr, &item);
     if (drop_near(player_ptr, &item, -1, y, x) == 0) {
         return false;
@@ -331,7 +331,7 @@ bool make_artifact_special(PlayerType *player_ptr, ItemEntity *o_ptr)
 
         //<! @note 前述の条件を満たしたら、後のIDのアーティファクトはチェックせずすぐ確定し生成処理に移す.
         o_ptr->generate(artifact.bi_key);
-        o_ptr->fixed_artifact_idx = fa_id;
+        o_ptr->fa_id = fa_id;
         return true;
     }
 

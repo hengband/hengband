@@ -104,7 +104,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                     if (quest.has_reward()) {
                         const auto &artifact = quest.get_reward();
                         ItemEntity item(artifact.bi_key);
-                        item.fixed_artifact_idx = quest.reward_artifact_idx;
+                        item.fa_id = quest.reward_fa_id;
                         item.ident = IDENT_STORE;
                         item_name = describe_flavor(player_ptr, &item, OD_NAME_ONLY);
                     }

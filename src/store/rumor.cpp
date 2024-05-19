@@ -77,9 +77,10 @@ std::pair<bool, std::vector<std::string>> get_rumor_tokens(std::string rumor)
  */
 static std::pair<FixedArtifactId, const ArtifactType *> get_artifact_definition(std::string_view artifact_name)
 {
-    const auto max_idx = enum2i(artifacts_info.rbegin()->first);
+    const auto &artifacts = ArtifactList::get_instance();
+    const auto max_idx = enum2i(artifacts.rbegin()->first);
     const auto fa_id = i2enum<FixedArtifactId>(get_rumor_num(artifact_name.data(), max_idx));
-    const auto &artifact = ArtifactList::get_instance().get_artifact(fa_id);
+    const auto &artifact = artifacts.get_artifact(fa_id);
     return { fa_id, &artifact };
 }
 
@@ -116,7 +117,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         const auto &[a_idx, a_ptr] = get_artifact_definition(artifact_name);
         const auto bi_id = BaseitemList::get_instance().lookup_baseitem_id(a_ptr->bi_key);
         ItemEntity item(bi_id);
-        item.fixed_artifact_idx = a_idx;
+        item.fa_id = a_idx;
         item.ident = IDENT_STORE;
         fullname = describe_flavor(player_ptr, &item, OD_NAME_ONLY);
     } else if (category == "MONSTER") {

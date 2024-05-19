@@ -940,7 +940,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             if (!o_idx) {
                 msg_format(_("%sはどこかへ行った。", "The %s went somewhere."), item_name.data());
                 if (q_ptr->is_fixed_artifact()) {
-                    ArtifactList::get_instance().get_artifact(j_ptr->fixed_artifact_idx).is_generated = false;
+                    ArtifactList::get_instance().get_artifact(j_ptr->fa_id).is_generated = false;
                 }
                 return;
             }

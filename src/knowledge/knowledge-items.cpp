@@ -28,7 +28,6 @@
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
-#include "util/sort.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <numeric>
@@ -59,7 +58,7 @@ auto collect_known_fixed_artifacts(PlayerType *player_ptr)
                     continue;
                 }
 
-                fa_ids.erase(item.fixed_artifact_idx);
+                fa_ids.erase(item.fa_id);
             }
         }
     }
@@ -78,7 +77,7 @@ auto collect_known_fixed_artifacts(PlayerType *player_ptr)
             continue;
         }
 
-        fa_ids.erase(item.fixed_artifact_idx);
+        fa_ids.erase(item.fa_id);
     }
 
     return fa_ids;
@@ -103,7 +102,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         const auto &artifact = artifacts.get_artifact(fa_id);
         constexpr auto template_basename = _("     %s\n", "     The %s\n");
         ItemEntity item(artifact.bi_key);
-        item.fixed_artifact_idx = fa_id;
+        item.fa_id = fa_id;
         item.ident |= IDENT_STORE;
         const auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         fprintf(fff, template_basename, item_name.data());

@@ -42,8 +42,6 @@ public:
     bool can_generate(const BaseitemKey &bi_key) const;
 };
 
-extern std::map<FixedArtifactId, ArtifactType> artifacts_info;
-
 class ArtifactList {
 public:
     ArtifactList(const ArtifactList &) = delete;
@@ -61,13 +59,18 @@ public:
     std::map<FixedArtifactId, ArtifactType>::reverse_iterator rend();
     std::map<FixedArtifactId, ArtifactType>::const_reverse_iterator rbegin() const;
     std::map<FixedArtifactId, ArtifactType>::const_reverse_iterator rend() const;
-    ArtifactType &get_artifact(const FixedArtifactId id) const;
+    std::map<FixedArtifactId, ArtifactType> &get_raw_map(); // @todo init_artifacts_info() 専用、将来的に廃止する.
+    const ArtifactType &get_artifact(const FixedArtifactId fa_id) const;
+    ArtifactType &get_artifact(const FixedArtifactId fa_id);
 
     bool order(const FixedArtifactId id1, const FixedArtifactId id2) const;
+    void emplace(const FixedArtifactId fa_id, const ArtifactType &artifact);
     void reset_generated_flags();
 
 private:
     ArtifactList() = default;
     static ArtifactList instance;
     static ArtifactType dummy;
+
+    std::map<FixedArtifactId, ArtifactType> artifacts{};
 };

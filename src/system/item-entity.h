@@ -42,7 +42,7 @@ public:
     byte discount{}; /*!< ゲーム中の値引き率 (0～100) / Discount (if any) */
     ITEM_NUMBER number{}; /*!< Number of items */
     WEIGHT weight{}; /*!< Item weight */
-    FixedArtifactId fixed_artifact_idx; /*!< 固定アーティファクト番号 (固定アーティファクトでないなら0) */
+    FixedArtifactId fa_id; /*!< 固定アーティファクト番号 (固定アーティファクトでないなら0) */
     EgoType ego_idx{}; /*!< エゴ番号 (エゴでないなら0) */
 
     RandomArtActType activation_id{}; /*!< エゴ/アーティファクトの発動ID / Extra info activation index */

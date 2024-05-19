@@ -40,12 +40,12 @@ void ItemLoader50::rd_item(ItemEntity *o_ptr)
     o_ptr->weight = rd_s16b();
     if (any_bits(flags, SaveDataItemFlagType::FIXED_ARTIFACT_IDX)) {
         if (h_older_than(3, 0, 0, 2)) {
-            o_ptr->fixed_artifact_idx = i2enum<FixedArtifactId>(rd_byte());
+            o_ptr->fa_id = i2enum<FixedArtifactId>(rd_byte());
         } else {
-            o_ptr->fixed_artifact_idx = i2enum<FixedArtifactId>(rd_s16b());
+            o_ptr->fa_id = i2enum<FixedArtifactId>(rd_s16b());
         }
     } else {
-        o_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
+        o_ptr->fa_id = FixedArtifactId::NONE;
     }
 
     o_ptr->ego_idx = i2enum<EgoType>(any_bits(flags, SaveDataItemFlagType::EGO_IDX) ? rd_byte() : 0);
