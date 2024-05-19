@@ -40,3 +40,15 @@ public:
         return this->character != '\0';
     }
 };
+
+class ColoredCharPair {
+public:
+    constexpr ColoredCharPair(const ColoredChar &cc_foreground, const ColoredChar &cc_background)
+        : cc_foreground(cc_foreground)
+        , cc_background(cc_background)
+    {
+    }
+
+    ColoredChar cc_foreground;
+    ColoredChar cc_background;
+};
