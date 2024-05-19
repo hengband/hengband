@@ -600,8 +600,7 @@ static errr set_mon_skills(const nlohmann::json &skill_data, MonsterRaceInfo &mo
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto prob_str = prob.get<std::string>();
-    const auto &prob_token = str_split(prob_str, '_', false, 2);
+    const auto &prob_token = str_split(prob.get<std::string>(), '_', false, 2);
     if (prob_token.size() == 3 && prob_token[1] == "IN") {
         if (prob_token[0] != "1") {
             return PARSE_ERROR_GENERIC;
@@ -611,12 +610,24 @@ static errr set_mon_skills(const nlohmann::json &skill_data, MonsterRaceInfo &mo
         monrace.freq_spell = 100 / denominator;
     }
 
-    const auto &skill_list = skill_data["list"];
-    if (!skill_list.is_array()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    const auto &shoot_dice = skill_data.find("shoot");
+    const auto shoot = (shoot_dice != skill_data.end());
+    if (shoot) {
+        const auto &dice = str_split(shoot_dice->get<std::string>(), 'd', false, 2);
+        info_set_value(monrace.shoot_dam_dice, dice[0]);
+        info_set_value(monrace.shoot_dam_side, dice[1]);
+        monrace.ability_flags.set(MonsterAbilityType::SHOOT);
     }
 
-    for (auto &skill : skill_list.items()) {
+    const auto &skill_list = skill_data.find("list");
+    if (skill_list == skill_data.end()) {
+        if (!shoot) {
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        }
+        return PARSE_ERROR_NONE;
+    }
+
+    for (auto &skill : skill_list->items()) {
         if (!grab_one_spell_flag(monrace, skill.value().get<std::string>())) {
             return PARSE_ERROR_INVALID_FLAG;
         }

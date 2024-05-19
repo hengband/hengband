@@ -222,7 +222,6 @@ void describe_monster_attack_method(MonsterAttackPlayer *monap_ptr)
     }
 
     case RaceBlowMethodType::NONE:
-    case RaceBlowMethodType::SHOOT:
     case RaceBlowMethodType::MAX:
         break;
     }

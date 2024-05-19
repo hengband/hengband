@@ -502,7 +502,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
             int dam_melee = 0;
             for (const auto &blow : r_ptr->blows) {
                 /* Skip non-attacks */
-                if (blow.method == RaceBlowMethodType::NONE || (blow.method == RaceBlowMethodType::SHOOT)) {
+                if (blow.method == RaceBlowMethodType::NONE) {
                     continue;
                 }
 
