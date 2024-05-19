@@ -270,7 +270,7 @@ static errr term_pict_hack(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, 
  * Mentally draw an attr/char at a given location
  * Assumes given location and values are valid.
  */
-static void term_queue_char_aux(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc)
+static void term_queue_char_aux(TERM_LEN x, TERM_LEN y, const ColoredCharPair &ccp)
 {
     if ((x < 0) || (x >= game_term->wid)) {
         return;
@@ -287,17 +287,22 @@ static void term_queue_char_aux(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TE
     TERM_COLOR *scr_taa = &scrn->ta[y][x];
     char *scr_tcc = &scrn->tc[y][x];
 
-    /* Ignore non-changes */
-    if ((*scr_aa == a) && (*scr_cc == c) && (*scr_taa == ta) && (*scr_tcc == tc)) {
+    const auto &cc_foreground = ccp.cc_foreground;
+    const auto &cc_background = ccp.cc_background;
+    auto should_ignore = *scr_aa == cc_foreground.color;
+    should_ignore &= *scr_cc == cc_foreground.character;
+    should_ignore &= *scr_taa == cc_background.color;
+    should_ignore &= *scr_tcc == cc_background.character;
+    if (should_ignore) {
         return;
     }
 
     /* Save the "literal" information */
-    *scr_aa = a;
-    *scr_cc = c;
+    *scr_aa = cc_foreground.color;
+    *scr_cc = cc_foreground.character;
 
-    *scr_taa = ta;
-    *scr_tcc = tc;
+    *scr_taa = cc_background.color;
+    *scr_tcc = cc_background.character;
 
     /* Check for new min/max row info */
     if (y < game_term->y1) {
@@ -327,7 +332,7 @@ static void term_queue_char_aux(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TE
 
 void term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc)
 {
-    term_queue_char_aux(x + game_term->offset_x, y + game_term->offset_y, a, c, ta, tc);
+    term_queue_char_aux(x + game_term->offset_x, y + game_term->offset_y, { { a, c }, { ta, tc } });
 }
 
 /*
@@ -361,7 +366,7 @@ void term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR
 
     /* If non bigtile mode, call orginal function */
     if (!use_bigtile) {
-        term_queue_char_aux(ch_x, ch_y, a, c, ta, tc);
+        term_queue_char_aux(ch_x, ch_y, { { a, c }, { ta, tc } });
         return;
     }
 
@@ -402,8 +407,8 @@ void term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR
     }
 
     /* Display pair of attr/char */
-    term_queue_char_aux(ch_x, ch_y, a, c, ta, tc);
-    term_queue_char_aux(ch_x + 1, ch_y, a2, c2, 0, 0);
+    term_queue_char_aux(ch_x, ch_y, { { a, c }, { ta, tc } });
+    term_queue_char_aux(ch_x + 1, ch_y, { { a2, c2 }, {} });
 }
 
 /*
@@ -1414,7 +1419,7 @@ errr term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c)
     }
 
     /* Queue it for later */
-    term_queue_char_aux(game_term->scr->cx, game_term->scr->cy, a, c, 0, 0);
+    term_queue_char_aux(game_term->scr->cx, game_term->scr->cy, { { a, c }, {} });
     return 0;
 }
 
@@ -1449,7 +1454,7 @@ errr term_addch(TERM_COLOR a, char c)
     }
 
     /* Queue the given character for display */
-    term_queue_char_aux(game_term->scr->cx, game_term->scr->cy, a, c, 0, 0);
+    term_queue_char_aux(game_term->scr->cx, game_term->scr->cy, { { a, c }, {} });
 
     /* Advance the cursor */
     game_term->scr->cx++;
