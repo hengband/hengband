@@ -199,7 +199,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
     if (terrain.flags.has(TerrainCharacteristics::POISON_PUDDLE) && !is_invuln(player_ptr)) {
         constexpr auto mes_leviation = _("毒気を吸い込んだ！", "The gas poisons you!");
         constexpr auto mes_normal = _("に毒された！", "poisons you!");
-        if (deal_damege_by_feat(player_ptr, grid, mes_leviation, mes_normal, calc_acid_damage_rate,
+        if (deal_damege_by_feat(player_ptr, grid, mes_leviation, mes_normal, calc_pois_damage_rate,
                 [](PlayerType *player_ptr, int damage) {
                     if (!has_resist_pois(player_ptr)) {
                         (void)BadStatusSetter(player_ptr).mod_poison(static_cast<TIME_EFFECT>(damage));
