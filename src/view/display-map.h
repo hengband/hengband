@@ -1,8 +1,10 @@
 #pragma once
 
-#include "system/angband.h"
+#include "util/point-2d.h"
+#include "view/colored-char.h"
+#include <cstdint>
 
-extern byte display_autopick;
+extern uint8_t display_autopick;
 
 class PlayerType;
-void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap, char *tcp);
+ColoredCharPair map_info(PlayerType *player_ptr, const Pos2D &pos);

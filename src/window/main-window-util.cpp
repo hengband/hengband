@@ -87,32 +87,29 @@ void print_map(PlayerType *player_ptr)
     POSITION ymin = (0 < panel_row_min) ? panel_row_min : 0;
     POSITION ymax = (floor_ptr->height - 1 > panel_row_max) ? panel_row_max : floor_ptr->height - 1;
 
-    for (POSITION y = 1; y <= ymin - panel_row_prt; y++) {
+    for (auto y = 1; y <= ymin - panel_row_prt; y++) {
         term_erase(COL_MAP, y, wid);
     }
 
-    for (POSITION y = ymax - panel_row_prt; y <= hgt; y++) {
+    for (auto y = ymax - panel_row_prt; y <= hgt; y++) {
         term_erase(COL_MAP, y, wid);
     }
 
-    for (POSITION y = ymin; y <= ymax; y++) {
-        for (POSITION x = xmin; x <= xmax; x++) {
-            TERM_COLOR a;
-            char c;
-            TERM_COLOR ta;
-            char tc;
-            map_info(player_ptr, y, x, &a, &c, &ta, &tc);
+    for (auto y = ymin; y <= ymax; y++) {
+        for (auto x = xmin; x <= xmax; x++) {
+            auto ccp = map_info(player_ptr, { y, x });
             if (!use_graphics) {
+                auto &cc_foreground = ccp.cc_foreground;
                 if (w_ptr->timewalk_m_idx) {
-                    a = TERM_DARK;
+                    cc_foreground.color = TERM_DARK;
                 } else if (is_invuln(player_ptr) || player_ptr->timewalk) {
-                    a = TERM_WHITE;
+                    cc_foreground.color = TERM_WHITE;
                 } else if (player_ptr->wraith_form) {
-                    a = TERM_L_DARK;
+                    cc_foreground.color = TERM_L_DARK;
                 }
             }
 
-            term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, ta, tc);
+            term_queue_bigchar(panel_col_of(x), y - panel_row_prt, ccp.cc_foreground.color, ccp.cc_foreground.character, ccp.cc_background.color, ccp.cc_background.character);
         }
     }
 
@@ -171,9 +168,6 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
 {
     int i, j, x, y;
 
-    TERM_COLOR ta;
-    char tc;
-
     byte tp;
 
     bool old_view_special_lite = view_special_lite;
@@ -212,7 +206,7 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
             match_autopick = -1;
             autopick_obj = nullptr;
             feat_priority = -1;
-            map_info(player_ptr, j, i, &ta, &tc, &ta, &tc);
+            const auto ccp = map_info(player_ptr, { j, i });
             tp = (byte)feat_priority;
             if (match_autopick != -1 && (match_autopick_yx[y][x] == -1 || match_autopick_yx[y][x] > match_autopick)) {
                 match_autopick_yx[y][x] = match_autopick;
@@ -220,8 +214,8 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
                 tp = 0x7f;
             }
 
-            bigmc[j + 1][i + 1] = tc;
-            bigma[j + 1][i + 1] = ta;
+            bigma[j + 1][i + 1] = ccp.cc_foreground.color;
+            bigmc[j + 1][i + 1] = ccp.cc_foreground.character;
             bigmp[j + 1][i + 1] = tp;
         }
     }
@@ -231,14 +225,13 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
             x = i / xrat + 1;
             y = j / yrat + 1;
 
-            tc = bigmc[j + 1][i + 1];
-            ta = bigma[j + 1][i + 1];
+            ColoredChar cc_foreground(bigma[j + 1][i + 1], bigmc[j + 1][i + 1]);
             tp = bigmp[j + 1][i + 1];
             if (mp[y][x] == tp) {
                 int cnt = 0;
 
                 for (const auto &dd : CCW_DD) {
-                    if (tc == bigmc[j + 1 + dd.y][i + 1 + dd.x] && ta == bigma[j + 1 + dd.y][i + 1 + dd.x]) {
+                    if ((cc_foreground.character == bigmc[j + 1 + dd.y][i + 1 + dd.x]) && (cc_foreground.color == bigma[j + 1 + dd.y][i + 1 + dd.x])) {
                         cnt++;
                     }
                 }
@@ -248,8 +241,8 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
             }
 
             if (mp[y][x] < tp) {
-                mc[y][x] = tc;
-                ma[y][x] = ta;
+                ma[y][x] = cc_foreground.color;
+                mc[y][x] = cc_foreground.character;
                 mp[y][x] = tp;
             }
         }
@@ -270,19 +263,18 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
     for (y = 0; y < hgt + 2; ++y) {
         term_gotoxy(COL_MAP, y);
         for (x = 0; x < wid + 2; ++x) {
-            ta = ma[y][x];
-            tc = mc[y][x];
+            ColoredChar cc_foreground(ma[y][x], mc[y][x]);
             if (!use_graphics) {
                 if (w_ptr->timewalk_m_idx) {
-                    ta = TERM_DARK;
+                    cc_foreground.color = TERM_DARK;
                 } else if (is_invuln(player_ptr) || player_ptr->timewalk) {
-                    ta = TERM_WHITE;
+                    cc_foreground.color = TERM_WHITE;
                 } else if (player_ptr->wraith_form) {
-                    ta = TERM_L_DARK;
+                    cc_foreground.color = TERM_L_DARK;
                 }
             }
 
-            term_add_bigch({ ta, tc });
+            term_add_bigch(cc_foreground);
         }
     }
 

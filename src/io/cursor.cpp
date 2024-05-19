@@ -38,8 +38,8 @@ void move_cursor_relative(int row, int col)
  */
 void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    byte default_color = TERM_SLATE;
-
+    uint8_t default_color = TERM_SLATE;
+    const Pos2D pos(y, x);
     if (!display_path || (project_length == -1)) {
         return;
     }
@@ -48,46 +48,42 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
     ProjectionPath path_g(player_ptr, (project_length ? project_length : AngbandSystem::get_instance().get_max_range()), player_ptr->get_position(), { y, x }, PROJECT_PATH | PROJECT_THRU);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MAP);
     handle_stuff(player_ptr);
-    for (const auto &[ny, nx] : path_g) {
-        auto *g_ptr = &floor_ptr->grid_array[ny][nx];
-        if (panel_contains(ny, nx)) {
-            TERM_COLOR a = default_color;
-            char c;
-
-            TERM_COLOR ta = default_color;
-            auto tc = '*';
-
+    for (const auto &pos_path : path_g) {
+        auto *g_ptr = &floor_ptr->get_grid(pos_path);
+        if (panel_contains(pos_path.y, pos_path.x)) {
+            ColoredCharPair ccp({ default_color, '\0' }, { default_color, '*' });
             if (g_ptr->has_monster() && floor_ptr->m_list[g_ptr->m_idx].ml) {
-                map_info(player_ptr, ny, nx, &a, &c, &ta, &tc);
-
-                if (!is_ascii_graphics(a)) {
-                    a = default_color;
-                } else if (c == '.' && (a == TERM_WHITE || a == TERM_L_WHITE)) {
-                    a = default_color;
-                } else if (a == default_color) {
-                    a = TERM_WHITE;
+                ccp = map_info(player_ptr, pos_path);
+                auto &cc_foreground = ccp.cc_foreground;
+                if (!is_ascii_graphics(cc_foreground.color)) {
+                    cc_foreground.color = default_color;
+                } else if ((cc_foreground.character == '.') && ((cc_foreground.color == TERM_WHITE) || (cc_foreground.color == TERM_L_WHITE))) {
+                    cc_foreground.color = default_color;
+                } else if (cc_foreground.color == default_color) {
+                    cc_foreground.color = TERM_WHITE;
                 }
             }
 
             if (!use_graphics) {
+                auto &cc_foreground = ccp.cc_foreground;
                 if (w_ptr->timewalk_m_idx) {
-                    a = TERM_DARK;
+                    cc_foreground.color = TERM_DARK;
                 } else if (is_invuln(player_ptr) || player_ptr->timewalk) {
-                    a = TERM_WHITE;
+                    cc_foreground.color = TERM_WHITE;
                 } else if (player_ptr->wraith_form) {
-                    a = TERM_L_DARK;
+                    cc_foreground.color = TERM_L_DARK;
                 }
             }
 
-            c = '*';
-            term_queue_bigchar(panel_col_of(nx), ny - panel_row_prt, a, c, ta, tc);
+            ccp.cc_foreground.character = '*';
+            term_queue_bigchar(panel_col_of(pos_path.x), pos_path.y - panel_row_prt, ccp.cc_foreground.color, ccp.cc_foreground.character, ccp.cc_background.color, ccp.cc_background.character);
         }
 
         if (g_ptr->is_mark() && !g_ptr->cave_has_flag(TerrainCharacteristics::PROJECT)) {
             break;
         }
 
-        if (nx == x && ny == y) {
+        if (pos_path == pos) {
             default_color = TERM_L_DARK;
         }
     }

@@ -475,7 +475,8 @@ static void display_dungeon(PlayerType *player_ptr)
                 continue;
             }
 
-            map_info(player_ptr, y, x, &cc_foreground.color, &cc_foreground.character, &cc_background.color, &cc_background.character);
+            auto ccp = map_info(player_ptr, { y, x });
+            cc_foreground = ccp.cc_foreground;
             if (!use_graphics) {
                 if (w_ptr->timewalk_m_idx) {
                     cc_foreground.color = TERM_DARK;
