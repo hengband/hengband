@@ -392,7 +392,7 @@ static errr set_art_flavor(const nlohmann::json &flavor_data, ArtifactType &arti
 #ifdef JP
     const auto &ja_flavor = flavor_data.find("ja");
     if (ja_flavor == flavor_data.end()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return PARSE_ERROR_NONE;
     }
     auto ja_flavor_sys = utf8_to_sys(ja_flavor->get<std::string>());
     if (!ja_flavor_sys) {
@@ -402,7 +402,7 @@ static errr set_art_flavor(const nlohmann::json &flavor_data, ArtifactType &arti
 #else
     const auto &en_flavor = flavor_data.find("en");
     if (en_flavor == flavor_data.end()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return PARSE_ERROR_NONE;
     }
     artifact.text = en_flavor->get<std::string>();
 #endif
