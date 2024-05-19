@@ -192,10 +192,11 @@ private:
 extern term_type *game_term;
 
 class ColoredChar;
+class ColoredCharPair;
 errr term_user(int n);
 errr term_xtra(int n, int v);
 
-void term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc);
+void term_queue_char(TERM_LEN x, TERM_LEN y, const ColoredCharPair &ccp);
 void term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc);
 void term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM_COLOR *ta, char *tc);
 

@@ -330,9 +330,9 @@ static void term_queue_char_aux(TERM_LEN x, TERM_LEN y, const ColoredCharPair &c
         }
 }
 
-void term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc)
+void term_queue_char(TERM_LEN x, TERM_LEN y, const ColoredCharPair &ccp)
 {
-    term_queue_char_aux(x + game_term->offset_x, y + game_term->offset_y, { { a, c }, { ta, tc } });
+    term_queue_char_aux(x + game_term->offset_x, y + game_term->offset_y, ccp);
 }
 
 /*

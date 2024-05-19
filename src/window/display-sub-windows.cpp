@@ -462,29 +462,33 @@ void fix_overhead(PlayerType *player_ptr)
  */
 static void display_dungeon(PlayerType *player_ptr)
 {
-    ColoredChar cc_target;
-    for (TERM_LEN x = player_ptr->x - game_term->wid / 2 + 1; x <= player_ptr->x + game_term->wid / 2; x++) {
-        for (TERM_LEN y = player_ptr->y - game_term->hgt / 2 + 1; y <= player_ptr->y + game_term->hgt / 2; y++) {
-            ColoredChar cc;
+    ColoredChar cc_background;
+    for (auto x = player_ptr->x - game_term->wid / 2 + 1; x <= player_ptr->x + game_term->wid / 2; x++) {
+        for (auto y = player_ptr->y - game_term->hgt / 2 + 1; y <= player_ptr->y + game_term->hgt / 2; y++) {
+            ColoredChar cc_foreground;
             if (!in_bounds2(player_ptr->current_floor_ptr, y, x)) {
                 const auto &terrain = TerrainList::get_instance()[feat_none];
-                cc = terrain.cc_configs.at(F_LIT_STANDARD);
-                term_queue_char(x - player_ptr->x + game_term->wid / 2 - 1, y - player_ptr->y + game_term->hgt / 2 - 1, cc.color, cc.character, cc_target.color, cc_target.character);
+                cc_foreground = terrain.cc_configs.at(F_LIT_STANDARD);
+                const auto pos_y = y - player_ptr->y + game_term->hgt / 2 - 1;
+                const auto pos_x = x - player_ptr->x + game_term->wid / 2 - 1;
+                term_queue_char(pos_x, pos_y, { cc_foreground, cc_background });
                 continue;
             }
 
-            map_info(player_ptr, y, x, &cc.color, &cc.character, &cc_target.color, &cc_target.character);
+            map_info(player_ptr, y, x, &cc_foreground.color, &cc_foreground.character, &cc_background.color, &cc_background.character);
             if (!use_graphics) {
                 if (w_ptr->timewalk_m_idx) {
-                    cc.color = TERM_DARK;
+                    cc_foreground.color = TERM_DARK;
                 } else if (is_invuln(player_ptr) || player_ptr->timewalk) {
-                    cc.color = TERM_WHITE;
+                    cc_foreground.color = TERM_WHITE;
                 } else if (player_ptr->wraith_form) {
-                    cc.color = TERM_L_DARK;
+                    cc_foreground.color = TERM_L_DARK;
                 }
             }
 
-            term_queue_char(x - player_ptr->x + game_term->wid / 2 - 1, y - player_ptr->y + game_term->hgt / 2 - 1, cc.color, cc.character, cc_target.color, cc_target.character);
+            const auto pos_y = y - player_ptr->y + game_term->hgt / 2 - 1;
+            const auto pos_x = x - player_ptr->x + game_term->wid / 2 - 1;
+            term_queue_char(pos_x, pos_y, { cc_foreground, cc_background });
         }
     }
 }
