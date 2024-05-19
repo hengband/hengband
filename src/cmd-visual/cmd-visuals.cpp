@@ -126,7 +126,8 @@ void do_cmd_visuals(PlayerType *player_ptr)
             auto_dump_printf(auto_dump_stream, _("\n# モンスターの[色/文字]の設定\n\n", "\n# Monster attr/char definitions\n\n"));
             for (const auto &[monrace_id, monrace] : monraces_info) {
                 auto_dump_printf(auto_dump_stream, "# %s\n", monrace.name.data());
-                auto_dump_printf(auto_dump_stream, "R:%d:0x%02X/0x%02X\n\n", enum2i(monrace_id), monrace.x_attr, static_cast<byte>(monrace.x_char));
+                const auto &cc_config = monrace.cc_config;
+                auto_dump_printf(auto_dump_stream, "R:%d:0x%02X/0x%02X\n\n", enum2i(monrace_id), cc_config.color, static_cast<uint8_t>(cc_config.character));
             }
 
             close_auto_dump(&auto_dump_stream, mark);
@@ -215,16 +216,14 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 auto &monrace = monraces_info[monrace_id];
                 int c;
                 const auto &cc_def = monrace.cc_def;
-                TERM_COLOR ca = monrace.x_attr;
-                byte cc = monrace.x_char;
-
+                auto &cc_config = monrace.cc_config;
                 term_putstr(5, 17, -1, TERM_WHITE, format(_("モンスター = %d, 名前 = %-40.40s", "Monster = %d, Name = %-40.40s"), enum2i(monrace_id), monrace.name.data()));
                 term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3u / %3u", "Default attr/char = %3u / %3u"), cc_def.color, cc_def.character));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 19, cc_def.color, cc_def.character, 0, 0);
-                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3u / %3u", "Current attr/char = %3u / %3u"), ca, cc));
+                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3u / %3u", "Current attr/char = %3u / %3u"), cc_config.color, cc_config.character));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
-                term_queue_bigchar(43, 20, ca, cc, 0, 0);
+                term_queue_bigchar(43, 20, cc_config.color, cc_config.character, 0, 0);
                 term_putstr(0, 22, -1, TERM_WHITE, _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
                 const auto ch = inkey();
                 if (ch == ESCAPE) {
@@ -252,22 +251,22 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'a': {
-                    const auto visual_id = input_new_visual_id(ch, monrace.x_attr, 256);
+                    const auto visual_id = input_new_visual_id(ch, cc_config.color, 256);
                     if (!visual_id) {
                         break;
                     }
 
-                    monrace.x_attr = *visual_id;
+                    cc_config.color = *visual_id;
                     need_redraw = true;
                     break;
                 }
                 case 'c': {
-                    const auto visual_id = input_new_visual_id(ch, monrace.x_char, 256);
+                    const auto visual_id = input_new_visual_id(ch, cc_config.character, 256);
                     if (!visual_id) {
                         break;
                     }
 
-                    monrace.x_char = *visual_id;
+                    cc_config.character = *visual_id;
                     need_redraw = true;
                     break;
                 }

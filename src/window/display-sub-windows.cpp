@@ -146,7 +146,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, MonsterEntity *m_ptr, int
 
     term_addstr(-1, TERM_WHITE, buf);
     term_addstr(-1, TERM_WHITE, " ");
-    term_add_bigch({ monrace.x_attr, monrace.x_char });
+    term_add_bigch(monrace.cc_config);
 
     if (monrace.r_tkills && m_ptr->mflag2.has_not(MonsterConstantFlagType::KAGE)) {
         buf = format(" %2d", monrace.level);
@@ -232,7 +232,7 @@ static void print_pet_list_oneline(PlayerType *player_ptr, const MonsterEntity &
     }
 
     term_gotoxy(x + 13, y);
-    term_add_bigch({ monrace.x_attr, monrace.x_char });
+    term_add_bigch(monrace.cc_config);
     term_addstr(-1, TERM_WHITE, " ");
     term_addstr(-1, TERM_WHITE, name);
 

@@ -21,8 +21,7 @@ void reset_visuals(PlayerType *player_ptr)
 
     BaseitemList::get_instance().reset_all_visuals();
     for (auto &[monrace_id, monrace] : monraces_info) {
-        monrace.x_attr = monrace.cc_def.color;
-        monrace.x_char = monrace.cc_def.character;
+        monrace.cc_config = monrace.cc_def;
     }
 
     const auto pref_file = use_graphics ? "graf.prf" : "font.prf";

@@ -39,14 +39,10 @@
  */
 void roff_top(MonsterRaceId r_idx)
 {
-    const auto &monrace = monraces_info[r_idx];
-    const auto &cc_def = monrace.cc_def;
-    TERM_COLOR a2 = monrace.x_attr;
-    char c2 = monrace.x_char;
-
     term_erase(0, 0);
     term_gotoxy(0, 0);
 
+    const auto &monrace = monraces_info[r_idx];
 #ifdef JP
 #else
     if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
@@ -63,11 +59,11 @@ void roff_top(MonsterRaceId r_idx)
     term_addstr(-1, TERM_WHITE, monrace.name);
 
     term_addstr(-1, TERM_WHITE, " ('");
-    term_add_bigch(cc_def);
+    term_add_bigch(monrace.cc_def);
     term_addstr(-1, TERM_WHITE, "')");
 
     term_addstr(-1, TERM_WHITE, "/('");
-    term_add_bigch({ a2, c2 });
+    term_add_bigch(monrace.cc_config);
     term_addstr(-1, TERM_WHITE, "'):");
 }
 

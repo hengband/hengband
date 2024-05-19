@@ -64,7 +64,7 @@ ColoredChar image_monster()
     if (use_graphics) {
         const auto monrace_id = MonsterRace::pick_one_at_random();
         const auto &monrace = monraces_info[monrace_id];
-        return { monrace.x_attr, monrace.x_char };
+        return monrace.cc_config;
     }
 
     const auto color = randnum1<uint8_t>(15);
@@ -290,10 +290,10 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
         return;
     }
 
-    auto *r_ptr = &m_ptr->get_appearance_monrace();
+    const auto &monrace_ap = m_ptr->get_appearance_monrace();
     feat_priority = 30;
     if (is_hallucinated) {
-        if (r_ptr->visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {
+        if (monrace_ap.visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {
             /* Do nothing */
         } else {
             const auto cc = image_monster();
@@ -307,25 +307,25 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
         return;
     }
 
-    cc_config = { r_ptr->x_attr, r_ptr->x_char };
-    if (r_ptr->visual_flags.has_none_of({ MonsterVisualType::CLEAR, MonsterVisualType::SHAPECHANGER, MonsterVisualType::CLEAR_COLOR, MonsterVisualType::MULTI_COLOR, MonsterVisualType::RANDOM_COLOR })) {
+    cc_config = monrace_ap.cc_config;
+    if (monrace_ap.visual_flags.has_none_of({ MonsterVisualType::CLEAR, MonsterVisualType::SHAPECHANGER, MonsterVisualType::CLEAR_COLOR, MonsterVisualType::MULTI_COLOR, MonsterVisualType::RANDOM_COLOR })) {
         const auto cc = set_term_color(player_ptr, { y, x }, cc_config);
         *ap = cc.color;
         *cp = cc.character;
         return;
     }
 
-    if (r_ptr->visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {
+    if (monrace_ap.visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {
         const auto cc = set_term_color(player_ptr, { y, x }, { *ap, *cp });
         *ap = cc.color;
         *cp = cc.character;
         return;
     }
 
-    if (r_ptr->visual_flags.has(MonsterVisualType::CLEAR_COLOR) && (*ap != TERM_DARK) && !use_graphics) {
+    if (monrace_ap.visual_flags.has(MonsterVisualType::CLEAR_COLOR) && (*ap != TERM_DARK) && !use_graphics) {
         /* Do nothing */
-    } else if (r_ptr->visual_flags.has(MonsterVisualType::MULTI_COLOR) && !use_graphics) {
-        if (r_ptr->visual_flags.has(MonsterVisualType::ANY_COLOR)) {
+    } else if (monrace_ap.visual_flags.has(MonsterVisualType::MULTI_COLOR) && !use_graphics) {
+        if (monrace_ap.visual_flags.has(MonsterVisualType::ANY_COLOR)) {
             *ap = randnum1<uint8_t>(15);
         } else {
             constexpr static auto colors = {
@@ -340,25 +340,25 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
 
             *ap = rand_choice(colors);
         }
-    } else if (r_ptr->visual_flags.has(MonsterVisualType::RANDOM_COLOR) && !use_graphics) {
+    } else if (monrace_ap.visual_flags.has(MonsterVisualType::RANDOM_COLOR) && !use_graphics) {
         *ap = grid.m_idx % 15 + 1;
     } else {
         *ap = cc_config.color;
     }
 
-    if (r_ptr->visual_flags.has(MonsterVisualType::CLEAR) && (*cp != ' ') && !use_graphics) {
+    if (monrace_ap.visual_flags.has(MonsterVisualType::CLEAR) && (*cp != ' ') && !use_graphics) {
         const auto cc = set_term_color(player_ptr, { y, x }, { *ap, *cp });
         *ap = cc.color;
         *cp = cc.character;
         return;
     }
 
-    if (r_ptr->visual_flags.has(MonsterVisualType::SHAPECHANGER)) {
+    if (monrace_ap.visual_flags.has(MonsterVisualType::SHAPECHANGER)) {
         if (use_graphics) {
             auto r_idx = MonsterRace::pick_one_at_random();
             const auto &monrace = monraces_info[r_idx];
-            *cp = monrace.x_char;
-            *ap = monrace.x_attr;
+            *ap = monrace.cc_config.color;
+            *cp = monrace.cc_config.character;
         } else {
             *cp = one_in_(25) ? rand_choice(image_objects) : rand_choice(image_monsters);
         }
