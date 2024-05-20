@@ -35,39 +35,6 @@ static bool grab_one_artifact_flag(ArtifactType *a_ptr, std::string_view what)
 }
 
 /*!
- * @brief JSON Objectからアーティファクト名をセットする
- * @param name_data 名前情報の格納されたJSON Object
- * @param artifact 保管先のアーティファクト
- * @return エラーコード
- */
-static errr set_art_name(const nlohmann::json &name_data, ArtifactType &artifact)
-{
-    if (name_data.is_null()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-#ifdef JP
-    const auto &ja_name = name_data.find("ja");
-    if (ja_name == name_data.end()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    auto ja_name_sys = utf8_to_sys(ja_name->get<std::string>());
-    if (!ja_name_sys) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    artifact.name = std::move(*ja_name_sys);
-#else
-    const auto &en_name = name_data.find("en");
-    if (en_name == name_data.end()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    artifact.name = en_name->get<std::string>();
-#endif
-
-    return PARSE_ERROR_NONE;
-}
-
-/*!
  * @brief JSON Objectから固定アーティファクトのベースアイテムをセットする
  * @param baseitem_data ベースアイテム情報の格納されたJSON Object
  * @param artifact 保管先のアーティファクト
@@ -378,39 +345,6 @@ static errr set_art_flags(const nlohmann::json &flag_data, ArtifactType &artifac
 }
 
 /*!
- * @brief JSON Objectから固定アーティファクトのフレーバーをセットする
- * @param flavor_data フレーバー情報の格納されたJSON Object
- * @param artifact 保管先のアーティファクト
- * @return エラーコード
- */
-static errr set_art_flavor(const nlohmann::json &flavor_data, ArtifactType &artifact)
-{
-    if (flavor_data.is_null()) {
-        return PARSE_ERROR_NONE;
-    }
-
-#ifdef JP
-    const auto &ja_flavor = flavor_data.find("ja");
-    if (ja_flavor == flavor_data.end()) {
-        return PARSE_ERROR_NONE;
-    }
-    auto ja_flavor_sys = utf8_to_sys(ja_flavor->get<std::string>());
-    if (!ja_flavor_sys) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    artifact.text = std::move(*ja_flavor_sys);
-#else
-    const auto &en_flavor = flavor_data.find("en");
-    if (en_flavor == flavor_data.end()) {
-        return PARSE_ERROR_NONE;
-    }
-    artifact.text = en_flavor->get<std::string>();
-#endif
-
-    return PARSE_ERROR_NONE;
-}
-
-/*!
  * @brief 固定アーティファクト情報(JSON Object)のパース関数
  * @param art_data 固定アーティファクトデータの格納されたJSON Object
  * @param head ヘッダ構造体
@@ -435,7 +369,7 @@ errr parse_artifacts_info(nlohmann::json &art_data, angband_header *)
     artifact.flags.set(TR_IGNORE_FIRE);
     artifact.flags.set(TR_IGNORE_COLD);
 
-    if (auto err = set_art_name(art_data["name"], artifact)) {
+    if (auto err = info_set_string(art_data["name"], artifact.name, true)) {
         msg_format(_("アーティファクトの名称読込失敗。ID: '%d'。", "Failed to load artifact name. ID: '%d'."), error_idx);
         return err;
     }
@@ -491,7 +425,7 @@ errr parse_artifacts_info(nlohmann::json &art_data, angband_header *)
         msg_format(_("アーティファクトの能力フラグ読込失敗。ID: '%d'。", "Failed to load ability flags of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_art_flavor(art_data["flavor"], artifact)) {
+    if (auto err = info_set_string(art_data["flavor"], artifact.text, false)) {
         msg_format(_("アーティファクトのフレーバーテキスト読込失敗。ID: '%d'。", "Failed to load flavor text of artifact. ID: '%d'."), error_idx);
         return err;
     }

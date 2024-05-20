@@ -1,5 +1,9 @@
 #pragma once
 
+#include "external-lib/include-json.h"
+#include "info-reader/parse-error-types.h"
+#include "locale/japanese.h"
+#include "system/angband.h"
 #include "util/bit-flags-calculator.h"
 #include <concepts>
 #include <map>
@@ -19,6 +23,8 @@ RandomArtActType grab_one_activation_flag(std::string_view what);
 #ifndef JP
 void append_english_text(std::string &text, std::string_view add);
 #endif
+
+errr info_set_string(const nlohmann::json &json, std::string &data, bool is_required);
 
 /// @note clang-formatによるconceptの整形が安定していないので抑制しておく
 // clang-format off

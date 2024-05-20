@@ -635,41 +635,6 @@ static errr set_mon_skills(const nlohmann::json &skill_data, MonsterRaceInfo &mo
 }
 
 /*!
- * @brief JSON Objectからモンスターの説明文をセットする
- * @param flag_data 説明文の情報の格納されたJSON Object
- * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
- */
-static errr set_mon_flavor(const nlohmann::json &flavor_data, MonsterRaceInfo &monrace)
-{
-    if (flavor_data.is_null()) {
-        return PARSE_ERROR_NONE;
-    }
-    if (!flavor_data.is_object()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-#ifdef JP
-    const auto &flavor_ja = flavor_data.find("ja");
-    if (flavor_ja == flavor_data.end()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    auto flavor_ja_sys = utf8_to_sys(flavor_ja->get<std::string>());
-    if (!flavor_ja_sys) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    monrace.text = std::move(*flavor_ja_sys);
-#else
-    const auto &flavor_en = flavor_data.find("en");
-    if (flavor_en == flavor_data.end()) {
-        return PARSE_ERROR_NONE;
-    }
-    monrace.text = flavor_en->get<std::string>();
-#endif
-    return PARSE_ERROR_NONE;
-}
-
-/*!
  * @brief モンスター種族情報(JSON Object)のパース関数
  * @param mon_data モンスターデータの格納されたJSON Object
  * @param head ヘッダ構造体
@@ -785,7 +750,7 @@ errr parse_monraces_info(nlohmann::json &mon_data, angband_header *)
         msg_format(_("モンスター発動能力情報読込失敗。ID: '%d'。", "Failed to load monster skill data. ID: '%d'."), error_idx);
         return err;
     }
-    err = set_mon_flavor(mon_data["flavor"], monrace);
+    err = info_set_string(mon_data["flavor"], monrace.text, false);
     if (err) {
         msg_format(_("モンスター説明文読込失敗。ID: '%d'。", "Failed to load monster flavor text. ID: '%d'."), error_idx);
         return err;

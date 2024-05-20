@@ -41,105 +41,6 @@ static bool grab_one_baseitem_flag(BaseitemInfo &baseitem, std::string_view what
 }
 
 /*!
- * @brief JSON Objectからベースアイテム名をセットする
- * @param name_data 名前情報の格納されたJSON Object
- * @param baseitem 保管先のベースアイテム情報インスタンス
- * @return エラーコード
- */
-static errr set_baseitem_name(const nlohmann::json &name_data, BaseitemInfo &baseitem)
-{
-    if (name_data.is_null()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-#ifdef JP
-    const auto &ja_name = name_data.find("ja");
-    if (ja_name == name_data.end()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    auto ja_name_sys = utf8_to_sys(ja_name->get<std::string>());
-    if (!ja_name_sys) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    baseitem.name = std::move(*ja_name_sys);
-#else
-    const auto &en_name = name_data.find("en");
-    if (en_name == name_data.end()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    baseitem.name = en_name->get<std::string>();
-#endif
-
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectからベースアイテムの未識別名をセットする
- * @param flavor_name_data 未識別名情報の格納されたJSON Object
- * @param baseitem 保管先のベースアイテム情報インスタンス
- * @return エラーコード
- */
-static errr set_baseitem_flavor_name(const nlohmann::json &flavor_name_data, BaseitemInfo &baseitem)
-{
-    if (flavor_name_data.is_null()) {
-        return PARSE_ERROR_NONE;
-    }
-
-#ifdef JP
-    const auto &ja_name = flavor_name_data.find("ja");
-    if (ja_name == flavor_name_data.end()) {
-        return PARSE_ERROR_NONE;
-    }
-    auto ja_name_sys = utf8_to_sys(ja_name->get<std::string>());
-    if (!ja_name_sys) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    baseitem.flavor_name = std::move(*ja_name_sys);
-#else
-    const auto &en_name = flavor_name_data.find("en");
-    if (en_name == flavor_name_data.end()) {
-        return PARSE_ERROR_NONE;
-    }
-    baseitem.flavor_name = en_name->get<std::string>();
-#endif
-
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectからベースアイテムのフレーバーをセットする
- * @param flavor_data フレーバー情報の格納されたJSON Object
- * @param baseitem 保管先のベースアイテム情報インスタンス
- * @return エラーコード
- */
-static errr set_baseitem_flavor(const nlohmann::json &flavor_data, BaseitemInfo &baseitem)
-{
-    if (flavor_data.is_null()) {
-        return PARSE_ERROR_NONE;
-    }
-
-#ifdef JP
-    const auto &ja_flavor = flavor_data.find("ja");
-    if (ja_flavor == flavor_data.end()) {
-        return PARSE_ERROR_NONE;
-    }
-    auto ja_flavor_sys = utf8_to_sys(ja_flavor->get<std::string>());
-    if (!ja_flavor_sys) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    baseitem.text = std::move(*ja_flavor_sys);
-#else
-    const auto &en_flavor = flavor_data.find("en");
-    if (en_flavor == flavor_data.end()) {
-        return PARSE_ERROR_NONE;
-    }
-    baseitem.text = en_flavor->get<std::string>();
-#endif
-
-    return PARSE_ERROR_NONE;
-}
-
-/*!
  * @brief JSON Objectからベースアイテムのシンボルをセットする
  * @param symbol_data シンボル情報の格納されたJSON Object
  * @param baseitem 保管先のベースアイテム情報インスタンス
@@ -543,15 +444,15 @@ errr parse_baseitems_info(nlohmann::json &item_data, angband_header *)
     auto &baseitem = baseitems.get_baseitem(short_id);
     baseitem.idx = short_id;
 
-    if (auto err = set_baseitem_name(item_data["name"], baseitem)) {
+    if (auto err = info_set_string(item_data["name"], baseitem.name, true)) {
         msg_format(_("アイテムの名称読込失敗。ID: '%d'。", "Failed to load item name. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_baseitem_flavor_name(item_data["flavor_name"], baseitem)) {
+    if (auto err = info_set_string(item_data["flavor_name"], baseitem.flavor_name, false)) {
         msg_format(_("アイテム未識別名の読込失敗。ID: '%d'。", "Failed to load item unidentified name. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_baseitem_flavor(item_data["flavor"], baseitem)) {
+    if (auto err = info_set_string(item_data["flavor"], baseitem.text, false)) {
         msg_format(_("アイテムのフレーバーテキスト読込失敗。ID: '%d'。", "Failed to load flavor text of item. ID: '%d'."), error_idx);
         return err;
     }
