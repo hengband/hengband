@@ -320,7 +320,7 @@ ColoredChar set_term_color(PlayerType *player_ptr, const Pos2D &pos, const Color
 
     feat_priority = 31;
     const auto &monrace = monraces_info[MonsterRaceId::PLAYER];
-    return { monrace.x_attr, monrace.x_char };
+    return monrace.cc_config;
 }
 
 /*

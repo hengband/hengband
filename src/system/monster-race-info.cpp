@@ -294,3 +294,10 @@ int MonraceList::calc_capture_value(const MonsterRaceId r_idx) const
 
     return (*this)[r_idx].level * 50 + 1000;
 }
+
+void MonraceList::reset_all_visuals()
+{
+    for (auto &[_, monrace] : monraces_info) {
+        monrace.cc_config = monrace.cc_def;
+    }
+}

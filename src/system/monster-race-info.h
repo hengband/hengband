@@ -110,8 +110,7 @@ public:
     DEPTH level{}; //!< レベル / Level of creature
     RARITY rarity{}; //!< レアリティ / Rarity of creature
     ColoredChar cc_def{}; //!< 定義上のシンボル (色/文字).
-    TERM_COLOR x_attr{}; //!< 設定した表示色(またはタイル位置Y) / Desired monster attribute
-    char x_char{}; //!< 設定した表示文字(またはタイル位置X) / Desired monster character
+    ColoredChar cc_config{}; //!< 設定したシンボル (色/文字).
     MONSTER_NUMBER max_num{}; //!< 階に最大存在できる数 / Maximum population allowed per level
     MONSTER_NUMBER cur_num{}; //!< 階に現在いる数 / Monster population on current level
     FLOOR_IDX floor_id{}; //!< 存在している保存階ID /  Location of unique monster
@@ -169,6 +168,8 @@ public:
     bool can_select_separate(const MonsterRaceId r_idx, const int hp, const int maxhp) const;
     int calc_figurine_value(const MonsterRaceId r_idx) const;
     int calc_capture_value(const MonsterRaceId r_idx) const;
+
+    void reset_all_visuals();
 
 private:
     MonraceList() = default;
