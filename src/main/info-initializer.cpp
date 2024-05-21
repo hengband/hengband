@@ -172,6 +172,7 @@ static errr init_json(std::string_view filename, std::string_view keyname, angba
     for (auto &element : json_object[keyname]) {
         const auto error_code = parser(element, &head);
         if (error_code != PARSE_ERROR_NONE) {
+            msg_print(nullptr);
             quit_fmt(_("'%s'ファイルにエラー", "Error in '%s' file."), filename.data());
         }
     }
