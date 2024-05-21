@@ -295,6 +295,55 @@ int MonraceList::calc_capture_value(const MonsterRaceId r_idx) const
     return (*this)[r_idx].level * 50 + 1000;
 }
 
+bool MonraceList::order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed) const
+{
+    const auto &monrace1 = monraces_info[id1];
+    const auto &monrace2 = monraces_info[id2];
+    if (is_detailed) {
+        const auto pkills1 = monrace1.r_pkills;
+        const auto pkills2 = monrace2.r_pkills;
+        if (pkills1 < pkills2) {
+            return true;
+        }
+
+        if (pkills1 > pkills2) {
+            return false;
+        }
+
+        const auto tkills1 = monrace1.r_tkills;
+        const auto tkills2 = monrace2.r_tkills;
+        if (tkills1 < tkills2) {
+            return true;
+        }
+
+        if (tkills1 > tkills2) {
+            return false;
+        }
+    }
+
+    const auto level1 = monrace1.level;
+    const auto level2 = monrace2.level;
+    if (level1 < level2) {
+        return true;
+    }
+
+    if (level1 > level2) {
+        return false;
+    }
+
+    const auto exp1 = monrace1.mexp;
+    const auto exp2 = monrace2.mexp;
+    if (exp1 < exp2) {
+        return true;
+    }
+
+    if (exp1 > exp2) {
+        return false;
+    }
+
+    return id1 <= id2;
+}
+
 void MonraceList::reset_all_visuals()
 {
     for (auto &[_, monrace] : monraces_info) {
