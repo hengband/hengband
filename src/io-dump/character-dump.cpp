@@ -378,19 +378,18 @@ static void dump_aux_monsters(FILE *fff)
 
     std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
     fprintf(fff, _("\n《上位%d体のユニーク・モンスター》\n", "\n< Unique monsters top %d >\n"), std::min(uniq_total, 10));
-
-    char buf[80];
     for (auto it = monrace_ids.rbegin(); it != monrace_ids.rend() && std::distance(monrace_ids.rbegin(), it) < 10; it++) {
-        auto *r_ptr = &monraces_info[*it];
-        if (r_ptr->defeat_level && r_ptr->defeat_time) {
-            strnfmt(buf, sizeof(buf), _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
-                (r_ptr->defeat_time / 60) % 60, r_ptr->defeat_time % 60);
-        } else {
-            buf[0] = '\0';
+        const auto &monrace = monraces[*it];
+        const auto defeat_level = monrace.defeat_level;
+        const auto defeat_time = monrace.defeat_time;
+        std::string defeat_info;
+        if ((defeat_level > 0) && (defeat_time > 0)) {
+            constexpr auto fmt = _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d");
+            defeat_info = format(fmt, defeat_level, defeat_time / (60 * 60), (defeat_time / 60) % 60, defeat_time % 60);
         }
 
-        auto name = str_separate(r_ptr->name, 40);
-        fprintf(fff, _("  %-40s (レベル%3d)%s\n", "  %-40s (level %3d)%s\n"), name.front().data(), (int)r_ptr->level, buf);
+        const auto name = str_separate(monrace.name, 40);
+        fprintf(fff, _("  %-40s (レベル%3d)%s\n", "  %-40s (level %3d)%s\n"), name.front().data(), monrace.level, defeat_info.data());
         for (auto i = 1U; i < name.size(); ++i) {
             fprintf(fff, "  %s\n", name[i].data());
         }
