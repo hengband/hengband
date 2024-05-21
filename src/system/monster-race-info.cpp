@@ -126,6 +126,46 @@ const MonsterRaceInfo &MonraceList::operator[](const MonsterRaceId r_idx) const
     return monraces_info.at(r_idx);
 }
 
+std::map<MonsterRaceId, MonsterRaceInfo>::iterator MonraceList::begin()
+{
+    return monraces_info.begin();
+}
+
+std::map<MonsterRaceId, MonsterRaceInfo>::const_iterator MonraceList::begin() const
+{
+    return monraces_info.begin();
+}
+
+std::map<MonsterRaceId, MonsterRaceInfo>::iterator MonraceList::end()
+{
+    return monraces_info.end();
+}
+
+std::map<MonsterRaceId, MonsterRaceInfo>::const_iterator MonraceList::end() const
+{
+    return monraces_info.end();
+}
+
+std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator MonraceList::rbegin()
+{
+    return monraces_info.rbegin();
+}
+
+std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator MonraceList::rbegin() const
+{
+    return monraces_info.rbegin();
+}
+
+std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator MonraceList::rend()
+{
+    return monraces_info.rend();
+}
+
+std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator MonraceList::rend() const
+{
+    return monraces_info.rend();
+}
+
 /*!
  * @brief 合体/分離ユニーク判定
  * @param r_idx 調査対象のモンスター種族ID

@@ -158,6 +158,14 @@ public:
 
     static const std::map<MonsterRaceId, std::set<MonsterRaceId>> &get_unified_uniques();
     static MonraceList &get_instance();
+    std::map<MonsterRaceId, MonsterRaceInfo>::iterator begin();
+    std::map<MonsterRaceId, MonsterRaceInfo>::const_iterator begin() const;
+    std::map<MonsterRaceId, MonsterRaceInfo>::iterator end();
+    std::map<MonsterRaceId, MonsterRaceInfo>::const_iterator end() const;
+    std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator rbegin();
+    std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator rbegin() const;
+    std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator rend();
+    std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator rend() const;
     bool can_unify_separate(const MonsterRaceId r_idx) const;
     void kill_unified_unique(const MonsterRaceId r_idx);
     bool is_selectable(const MonsterRaceId r_idx) const;
