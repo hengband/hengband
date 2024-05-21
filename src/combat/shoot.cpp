@@ -34,7 +34,6 @@
 #include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
-#include "monster/monster-pain-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
@@ -844,7 +843,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                             msg_format(_("%sは%sに突き刺さった！", "%s^ is stuck in %s!"), item_name.data(), m_name.data());
                         }
 
-                        const auto pain_message = MonsterPainDescriber(m_name, m_ptr).describe(tdam);
+                        const auto pain_message = m_ptr->get_pain_message(m_name, tdam);
                         if (pain_message) {
                             msg_print(*pain_message);
                         }

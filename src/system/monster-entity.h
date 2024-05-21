@@ -92,6 +92,7 @@ public:
     std::string get_died_message() const;
     std::pair<TERM_COLOR, int> get_hp_bar_data() const;
     std::string get_pronoun_of_summoned_kin() const;
+    std::optional<std::string> get_pain_message(std::string_view monster_name, int damage) const;
 
     void set_hostile();
 };

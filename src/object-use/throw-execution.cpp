@@ -35,7 +35,6 @@
 #include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
-#include "monster/monster-pain-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "object-enchant/tr-types.h"
@@ -455,7 +454,7 @@ void ObjectThrowEntity::attack_racial_power()
     if (mdp.mon_take_hit(this->m_ptr->get_died_message())) {
         return;
     }
-    const auto pain_message = MonsterPainDescriber(this->m_name, this->m_ptr).describe(this->tdam);
+    const auto pain_message = this->m_ptr->get_pain_message(this->m_name, this->tdam);
     if (pain_message) {
         msg_print(*pain_message);
     }
