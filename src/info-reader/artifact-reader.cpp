@@ -61,27 +61,6 @@ static errr set_art_baseitem(nlohmann::json &baseitem_data, ArtifactType &artifa
 }
 
 /*!
- * @brief JSON Objectから固定アーティファクトのベースダイスをセットする
- * @param dice_data ac情報の格納されたJSON Object
- * @param artifact 保管先のアーティファクト
- * @return エラーコード
- */
-static errr set_art_base_dice(const nlohmann::json &dice_data, ArtifactType &artifact)
-{
-    if (!dice_data.is_string()) {
-        return PARSE_ERROR_NONE;
-    }
-
-    const auto &dice = str_split(dice_data.get<std::string>(), 'd', false, 2);
-    if (dice.size() < 2) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    artifact.dd = std::stoi(dice[0]);
-    artifact.ds = std::stoi(dice[1]);
-    return PARSE_ERROR_NONE;
-}
-
-/*!
  * @brief JSON Objectから固定アーティファクトの発動能力をセットする
  * @param act_data 発動能力情報の格納されたJSON Object
  * @param artifact 保管先のアーティファクト
@@ -183,7 +162,7 @@ errr parse_artifacts_info(nlohmann::json &art_data, angband_header *)
         msg_format(_("アーティファクトのベースAC読込失敗。ID: '%d'。", "Failed to load base AC of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_art_base_dice(art_data["base_dice"], artifact)) {
+    if (auto err = info_set_dice(art_data["base_dice"], artifact.dd, artifact.ds, false)) {
         msg_format(_("アーティファクトのベースダイス読込失敗。ID: '%d'。", "Failed to load base dice of artifact. ID: '%d'."), error_idx);
         return err;
     }

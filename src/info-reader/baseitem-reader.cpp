@@ -118,27 +118,6 @@ static errr set_baseitem_parameter_value(const nlohmann::json &pval_data, Baseit
 }
 
 /*!
- * @brief JSON Objectからベースアイテムのベースダイスをセットする
- * @param dice_data ac情報の格納されたJSON Object
- * @param baseitem 保管先のベースアイテム情報インスタンス
- * @return エラーコード
- */
-static errr set_baseitem_base_dice(const nlohmann::json &dice_data, BaseitemInfo &baseitem)
-{
-    if (!dice_data.is_string()) {
-        return PARSE_ERROR_NONE;
-    }
-
-    const auto &dice = str_split(dice_data.get<std::string>(), 'd', false, 2);
-    if (dice.size() < 2) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    baseitem.dd = std::stoi(dice[0]);
-    baseitem.ds = std::stoi(dice[1]);
-    return PARSE_ERROR_NONE;
-}
-
-/*!
  * @brief JSON Objectからアイテムの階層/希少度情報をセットする
  * @param alloc_data 階層/希少度情報の格納されたJSON Object
  * @param baseitem 保管先のベースアイテム情報インスタンス
@@ -278,7 +257,7 @@ errr parse_baseitems_info(nlohmann::json &item_data, angband_header *)
         msg_format(_("アイテムのベースAC読込失敗。ID: '%d'。", "Failed to load base AC of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_baseitem_base_dice(item_data["base_dice"], baseitem)) {
+    if (auto err = info_set_dice(item_data["base_dice"], baseitem.dd, baseitem.ds, false)) {
         msg_format(_("アイテムのベースダイス読込失敗。ID: '%d'。", "Failed to load base dice of item. ID: '%d'."), error_idx);
         return err;
     }

@@ -177,28 +177,6 @@ static errr set_mon_speed(const nlohmann::json &speed_data, MonsterRaceInfo &mon
 }
 
 /*!
- * @brief JSON Objectからモンスター体力をセットする
- * @param hp_data 体力情報の格納されたJSON Object
- * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
- */
-static errr set_mon_hp(const nlohmann::json &hp_data, MonsterRaceInfo &monrace)
-{
-    if (!hp_data.is_string()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto hit_point = hp_data.get<std::string>();
-    const auto &dice = str_split(hit_point, 'd', false, 2);
-    if (dice.size() < 2) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    monrace.hdice = std::stoi(dice[0]);
-    monrace.hside = std::stoi(dice[1]);
-    return PARSE_ERROR_NONE;
-}
-
-/*!
  * @brief JSON Objectからモンスターの進化をセットする
  * @param evolve_data 進化情報の格納されたJSON Object
  * @param monrace 保管先のモンスター種族構造体
@@ -294,16 +272,12 @@ static errr set_mon_escorts(nlohmann::json &escort_data, MonsterRaceInfo &monrac
             return err;
         }
 
-        const auto &escort_num_obj = escort.value()["escort_num"];
-        if (!escort_num_obj.is_string()) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-        const auto escort_num = escort_num_obj.get<std::string>();
-        const auto &dice = str_split(escort_num, 'd', false, 2);
         DICE_NUMBER dd;
         DICE_SID ds;
-        info_set_value(dd, dice[0]);
-        info_set_value(ds, dice[1]);
+        if (auto err = info_set_dice(escort.value()["escort_num"], dd, ds, true)) {
+            return err;
+        }
+
         monrace.reinforces.emplace_back(monrace_id, dd, ds);
     }
     return PARSE_ERROR_NONE;
@@ -315,7 +289,7 @@ static errr set_mon_escorts(nlohmann::json &escort_data, MonsterRaceInfo &monrac
  * @param monrace 保管先のモンスター種族構造体
  * @return エラーコード
  */
-static errr set_mon_blows(const nlohmann::json &blow_data, MonsterRaceInfo &monrace)
+static errr set_mon_blows(nlohmann::json &blow_data, MonsterRaceInfo &monrace)
 {
     if (blow_data.is_null()) {
         return PARSE_ERROR_NONE;
@@ -324,8 +298,7 @@ static errr set_mon_blows(const nlohmann::json &blow_data, MonsterRaceInfo &monr
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    auto blow_num = 0;
-    for (auto &blow : blow_data.items()) {
+    for (auto blow_num = 0; auto &blow : blow_data.items()) {
         if (blow_num > 5) {
             return PARSE_ERROR_GENERIC;
         }
@@ -345,14 +318,12 @@ static errr set_mon_blows(const nlohmann::json &blow_data, MonsterRaceInfo &monr
         if (rbe == r_info_blow_effect.end()) {
             return PARSE_ERROR_INVALID_FLAG;
         }
-        monrace.blows[blow_num].method = rbm->second;
-        monrace.blows[blow_num].effect = rbe->second;
+        auto &mon_blow = monrace.blows[blow_num];
+        mon_blow.method = rbm->second;
+        mon_blow.effect = rbe->second;
 
-        const auto &blow_dice = blow.value().find("damage_dice");
-        if (blow_dice != blow.value().end()) {
-            const auto &dice = str_split(blow_dice->get<std::string>(), 'd', false, 2);
-            info_set_value(monrace.blows[blow_num].d_dice, dice[0]);
-            info_set_value(monrace.blows[blow_num].d_side, dice[1]);
+        if (auto err = info_set_dice(blow.value()["damage_dice"], mon_blow.d_dice, mon_blow.d_side, false)) {
+            return err;
         }
 
         blow_num++;
@@ -474,7 +445,7 @@ errr parse_monraces_info(nlohmann::json &mon_data, angband_header *)
         msg_format(_("モンスター速度読込失敗。ID: '%d'。", "Failed to load monster speed. ID: '%d'."), error_idx);
         return err;
     }
-    err = set_mon_hp(mon_data["hit_point"], monrace);
+    err = info_set_dice(mon_data["hit_point"], monrace.hdice, monrace.hside, true);
     if (err) {
         msg_format(_("モンスターHP読込失敗。ID: '%d'。", "Failed to load monster HP. ID: '%d'."), error_idx);
         return err;

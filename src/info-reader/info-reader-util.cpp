@@ -101,3 +101,45 @@ errr info_set_string(const nlohmann::json &json, std::string &data, bool is_requ
 
     return PARSE_ERROR_NONE;
 }
+
+/*!
+ * @brief ダイスを表す文字列を解析してダイスの値をセットする
+ *
+ * 引数で与えられた文字列 "XdY" をダイスの値に変換し、X を dd に、Y を ds に格納する。
+ * 文字列が正しくダイスとして解釈できない場合はエラーを返す。
+ *
+ * @param dice_str ダイスを表す文字列
+ * @param dd ダイスの数を格納する変数への参照
+ * @param ds ダイスの面数を格納する変数への参照
+ * @return エラーコード
+ */
+errr info_set_dice(const std::string_view dice_str, DICE_NUMBER &dd, DICE_SID &ds)
+{
+    const auto &dice = str_split(dice_str, 'd', false, 2);
+    if (dice.size() < 2) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+
+    dd = std::stoi(dice[0]);
+    ds = std::stoi(dice[1]);
+
+    return PARSE_ERROR_NONE;
+}
+
+/*!
+ * @brief JSON Objectからダイスの値を取得する
+ * @param json ダイスの値が格納されたJSON Object
+ * @param dd ダイスの数を格納する変数への参照
+ * @param ds ダイスの面数を格納する変数への参照
+ * @param is_required 必須かどうか
+ * 必須でJSON Objectがnullや文字列でない場合はエラーを返す。必須でない場合は何もせずに終了する。
+ * @return エラーコード
+ */
+errr info_set_dice(const nlohmann::json &json, DICE_NUMBER &dd, DICE_SID &ds, bool is_required)
+{
+    if (json.is_null() || !json.is_string()) {
+        return is_required ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_NONE;
+    }
+
+    return info_set_dice(json.get<std::string>(), dd, ds);
+}

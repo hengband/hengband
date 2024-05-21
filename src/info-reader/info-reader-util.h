@@ -26,6 +26,8 @@ void append_english_text(std::string &text, std::string_view add);
 #endif
 
 errr info_set_string(const nlohmann::json &json, std::string &data, bool is_required);
+errr info_set_dice(const std::string_view dice_str, DICE_NUMBER &dd, DICE_SID &ds);
+errr info_set_dice(const nlohmann::json &json, DICE_NUMBER &dd, DICE_SID &ds, bool is_required);
 
 /// @note clang-formatによるconceptの整形が安定していないので抑制しておく
 // clang-format off
