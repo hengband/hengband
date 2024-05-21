@@ -322,17 +322,13 @@ static void dump_aux_arena(PlayerType *player_ptr, FILE *fff)
  * @brief 撃破モンスターの情報をファイルにダンプする
  * @param fff ファイルポインタ
  */
-static void dump_aux_monsters(PlayerType *player_ptr, FILE *fff)
+static void dump_aux_monsters(FILE *fff)
 {
     fprintf(fff, _("\n  [倒したモンスター]\n\n", "\n  [Defeated Monsters]\n\n"));
-
-    /* Allocate the "who" array */
-    uint16_t why = 2;
-    std::vector<MonsterRaceId> who;
-
-    /* Count monster kills */
+    std::vector<MonsterRaceId> monrace_ids;
+    const auto &monraces = MonraceList::get_instance();
     auto norm_total = 0;
-    for (const auto &[monrace_id, monrace] : monraces_info) {
+    for (const auto &[monrace_id, monrace] : monraces) {
         /* Ignore unused index */
         if (!MonsterRace(monrace_id).is_valid()) {
             continue;
@@ -344,7 +340,7 @@ static void dump_aux_monsters(PlayerType *player_ptr, FILE *fff)
                 norm_total++;
 
                 /* Add a unique monster to the list */
-                who.push_back(monrace.idx);
+                monrace_ids.push_back(monrace.idx);
             }
 
             continue;
@@ -361,7 +357,7 @@ static void dump_aux_monsters(PlayerType *player_ptr, FILE *fff)
         return;
     }
 
-    auto uniq_total = static_cast<int>(who.size());
+    const int uniq_total = std::ssize(monrace_ids);
     /* Defeated more than one normal monsters */
     if (uniq_total == 0) {
 #ifdef JP
@@ -380,12 +376,11 @@ static void dump_aux_monsters(PlayerType *player_ptr, FILE *fff)
         (uniq_total == 1 ? "" : "s"));
 #endif
 
-    /* Sort the array by dungeon depth of monsters */
-    ang_sort(player_ptr, who.data(), &why, uniq_total, ang_sort_comp_hook, ang_sort_swap_hook);
+    std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
     fprintf(fff, _("\n《上位%d体のユニーク・モンスター》\n", "\n< Unique monsters top %d >\n"), std::min(uniq_total, 10));
 
     char buf[80];
-    for (auto it = who.rbegin(); it != who.rend() && std::distance(who.rbegin(), it) < 10; it++) {
+    for (auto it = monrace_ids.rbegin(); it != monrace_ids.rend() && std::distance(monrace_ids.rbegin(), it) < 10; it++) {
         auto *r_ptr = &monraces_info[*it];
         if (r_ptr->defeat_level && r_ptr->defeat_time) {
             strnfmt(buf, sizeof(buf), _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
@@ -634,7 +629,7 @@ void make_character_dump(PlayerType *player_ptr, FILE *fff)
     dump_aux_recall(fff);
     dump_aux_quest(player_ptr, fff);
     dump_aux_arena(player_ptr, fff);
-    dump_aux_monsters(player_ptr, fff);
+    dump_aux_monsters(fff);
     dump_aux_virtues(player_ptr, fff);
     dump_aux_race_history(player_ptr, fff);
     dump_aux_realm_history(player_ptr, fff);
