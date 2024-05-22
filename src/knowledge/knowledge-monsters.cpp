@@ -180,12 +180,10 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
     const auto &monraces = MonraceList::get_instance();
     std::vector<MonsterRaceId> monrace_ids = monraces.get_valid_monrace_ids();
     std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
-    total = 0;
     for (const auto monrace_id : monrace_ids) {
         const auto &monrace = monraces_info[monrace_id];
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
-            bool dead = (monrace.max_num == 0);
-            if (dead) {
+            if (monrace.max_num == 0) {
                 std::string details;
                 if (monrace.defeat_level && monrace.defeat_time) {
                     details = format(_(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), monrace.defeat_level, monrace.defeat_time / (60 * 60),
@@ -193,20 +191,19 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
                 }
 
                 fprintf(fff, "     %s%s\n", monrace.name.data(), details.data());
-                total++;
             }
 
             continue;
         }
 
-        MONSTER_NUMBER this_monster = monrace.r_pkills;
+        auto this_monster = monrace.r_pkills;
         if (this_monster <= 0) {
             continue;
         }
 
 #ifdef JP
-        concptr number_of_kills = angband_strchr("pt", monrace.cc_def.character) ? "人" : "体";
-        fprintf(fff, "     %3d %sの %s\n", (int)this_monster, number_of_kills, monrace.name.data());
+        const auto number_of_kills = angband_strchr("pt", monrace.cc_def.character) ? "人" : "体";
+        fprintf(fff, "     %3d %sの %s\n", this_monster, number_of_kills, monrace.name.data());
 #else
         if (this_monster < 2) {
             if (monrace.name.find("coins") != std::string::npos) {
@@ -219,14 +216,13 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
             fprintf(fff, "     %d %s\n", this_monster, name.data());
         }
 #endif
-        total += this_monster;
     }
 
     fprintf(fff, "----------------------------------------------\n");
 #ifdef JP
-    fprintf(fff, "    合計: %lu 体を倒した。\n", (ulong)total);
+    fprintf(fff, "    合計: %d 体を倒した。\n", total);
 #else
-    fprintf(fff, "   Total: %lu creature%s killed.\n", (ulong)total, (total == 1 ? "" : "s"));
+    fprintf(fff, "   Total: %d creature%s killed.\n", total, (total == 1 ? "" : "s"));
 #endif
 
     angband_fclose(fff);
