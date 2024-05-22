@@ -14,8 +14,6 @@ bool ang_sort_comp_quest_num(PlayerType *player_ptr, vptr u, vptr v, int a, int 
 void ang_sort_swap_quest_num(PlayerType *player_ptr, vptr u, vptr v, int a, int b);
 
 bool ang_sort_comp_pet(PlayerType *player_ptr, vptr u, vptr v, int a, int b);
-
-bool ang_sort_comp_hook(PlayerType *player_ptr, vptr u, vptr v, int a, int b);
 void ang_sort_swap_hook(PlayerType *player_ptr, vptr u, vptr v, int a, int b);
 
 bool ang_sort_comp_monster_level(PlayerType *player_ptr, vptr u, vptr v, int a, int b);

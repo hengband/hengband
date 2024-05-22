@@ -154,42 +154,35 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
         return;
     }
 
-    int32_t total = 0;
-    for (const auto &[r_idx, r_ref] : monraces_info) {
-        if (r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
-            bool dead = (r_ref.max_num == 0);
-
-            if (dead) {
+    auto total = 0;
+    for (const auto &[monrace_id, monrace] : monraces_info) {
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+            if (monrace.max_num == 0) {
                 total++;
             }
         } else {
-            if (r_ref.r_pkills > 0) {
-                total += r_ref.r_pkills;
+            if (monrace.r_pkills > 0) {
+                total += monrace.r_pkills;
             }
         }
     }
 
     if (total < 1) {
         fprintf(fff, _("あなたはまだ敵を倒していない。\n\n", "You have defeated no enemies yet.\n\n"));
-    } else
+    } else {
 #ifdef JP
-        fprintf(fff, "あなたは%ld体の敵を倒している。\n\n", (long int)total);
+        fprintf(fff, "あなたは%d体の敵を倒している。\n\n", total);
 #else
-        fprintf(fff, "You have defeated %ld %s.\n\n", (long int)total, (total == 1) ? "enemy" : "enemies");
+        fprintf(fff, "You have defeated %d %s.\n\n", total, (total == 1) ? "enemy" : "enemies");
 #endif
-
-    std::vector<MonsterRaceId> who;
-    total = 0;
-    for (const auto &[monrace_id, r_ref] : monraces_info) {
-        if (MonsterRace(monrace_id).is_valid()) {
-            who.push_back(monrace_id);
-        }
     }
 
-    uint16_t why = 2;
-    ang_sort(player_ptr, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
-    for (auto r_idx : who) {
-        const auto &monrace = monraces_info[r_idx];
+    const auto &monraces = MonraceList::get_instance();
+    std::vector<MonsterRaceId> monrace_ids = monraces.get_valid_monrace_ids();
+    std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
+    total = 0;
+    for (const auto monrace_id : monrace_ids) {
+        const auto &monrace = monraces_info[monrace_id];
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
             bool dead = (monrace.max_num == 0);
             if (dead) {
