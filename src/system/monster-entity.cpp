@@ -3,6 +3,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-kind-flags.h"
+#include "monster/monster-pain-describer.h"
 #include "monster/monster-status.h"
 #include "system/angband-system.h"
 #include "system/monster-race-info.h"
@@ -294,6 +295,16 @@ std::string MonsterEntity::get_died_message() const
 {
     const auto &monrace = this->get_monrace();
     return monrace.get_died_message();
+}
+
+/*!
+ * @brief モンスターにダメージを与えた際の述語メッセージを返す
+ * @return ダメージを受けたモンスターの述語
+ */
+std::optional<std::string> MonsterEntity::get_pain_message(std::string_view monster_name, int damage) const
+{
+    auto &monrace = this->get_monrace();
+    return MonsterPainDescriber(monrace.idx, monrace.cc_def.character, monster_name).describe(this->hp, damage, this->ml);
 }
 
 /*!

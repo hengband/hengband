@@ -13,7 +13,7 @@
 
 struct pain_message_type {
     // message_table を選択するかどうかを判定する関数
-    std::function<bool(const MonsterEntity &)> pred;
+    std::function<bool(const MonsterRaceId, const char)> pred;
 
     // percentage, message のペアのリスト
     // (ダメージを受けた後のHP / ダメージを受ける前のHP)[%]が percentage 以上ならそのメッセージが選択される
@@ -28,15 +28,14 @@ struct pain_message_type {
  */
 static auto d_char_is_any_of(concptr symbols)
 {
-    return [symbols](const MonsterEntity &monster) {
-        const auto &monrace = monster.get_monrace();
-        return angband_strchr(symbols, monrace.cc_def.character) != nullptr;
+    return [symbols](const MonsterRaceId, const char symbol) {
+        return angband_strchr(symbols, symbol) != nullptr;
     };
 }
 
-static bool is_personified(const MonsterEntity &m_info)
+static bool is_personified(const MonsterRaceId r_idx, const char)
 {
-    switch (m_info.r_idx) {
+    switch (r_idx) {
     case MonsterRaceId::LAFFEY_II:
         return true;
     default:
@@ -84,17 +83,15 @@ static const std::vector<pain_message_type>
                                          { 10, _("は躊躇した。", " hesitates.") },
                                          { 0, _("はくしゃくしゃになった。", " crumples.") },
                                      } },
-        { [](const MonsterEntity &monster) {
-        const auto &monrace = monster.get_monrace();
-        return d_char_is_any_of("JMR")(monster) || !isalpha(monrace.cc_def.character); }, {
-                                                    { 95, _("はほとんど気にとめていない。", " barely notices.") },
-                                                    { 75, _("はシーッと鳴いた。", " hisses.") },
-                                                    { 50, _("は怒って頭を上げた。", " rears up in anger.") },
-                                                    { 35, _("は猛然と威嚇した。", " hisses furiously.") },
-                                                    { 20, _("は身もだえした。", " writhes about.") },
-                                                    { 10, _("は苦痛で身もだえした。", " writhes in agony.") },
-                                                    { 0, _("はぐにゃぐにゃと痙攣した。", " jerks limply.") },
-                                                } },
+        { [](const MonsterRaceId, const char symbol) { return d_char_is_any_of("JMR")(MonsterRaceId::PLAYER, symbol) || !isalpha(symbol); }, {
+                                                                                                                                                 { 95, _("はほとんど気にとめていない。", " barely notices.") },
+                                                                                                                                                 { 75, _("はシーッと鳴いた。", " hisses.") },
+                                                                                                                                                 { 50, _("は怒って頭を上げた。", " rears up in anger.") },
+                                                                                                                                                 { 35, _("は猛然と威嚇した。", " hisses furiously.") },
+                                                                                                                                                 { 20, _("は身もだえした。", " writhes about.") },
+                                                                                                                                                 { 10, _("は苦痛で身もだえした。", " writhes in agony.") },
+                                                                                                                                                 { 0, _("はぐにゃぐにゃと痙攣した。", " jerks limply.") },
+                                                                                                                                             } },
         { d_char_is_any_of("f"), {
                                      { 95, _("は攻撃に肩をすくめた。", " shrugs off the attack.") },
                                      { 75, _("は吠えた。", " roars.") },
@@ -176,12 +173,13 @@ static const std::vector<pain_message_type>
                                            { 10, _("は苦痛でもだえ苦しんだ。", " writhes in agony.") },
                                            { 0, _("は弱々しく叫んだ。", " cries out feebly.") },
                                        } },
-        { [](const MonsterEntity &) { return true; }, pain_messages_common },
+        { [](const MonsterRaceId, const char) { return true; }, pain_messages_common },
     };
 
-MonsterPainDescriber::MonsterPainDescriber(std::string m_name, const MonsterEntity *m_ptr)
-    : m_name(m_name)
-    , m_ptr(m_ptr)
+MonsterPainDescriber::MonsterPainDescriber(MonsterRaceId r_idx, char symbol, std::string_view m_name)
+    : r_idx(r_idx)
+    , symbol(symbol)
+    , m_name(m_name)
 {
 }
 
@@ -190,26 +188,25 @@ MonsterPainDescriber::MonsterPainDescriber(std::string m_name, const MonsterEnti
  * @param dam モンスターが受けたダメージ
  * @return std::string ダメージを受けたモンスターの様子を表す文字列。表示すべき様子が無い場合はnullopt。
  */
-std::optional<std::string> MonsterPainDescriber::describe(int dam)
+std::optional<std::string> MonsterPainDescriber::describe(int now_hp, int took_damage, bool visible)
 {
-    if (dam == 0) {
-        if (this->m_ptr->ml) {
-            return format(_("%s^はダメージを受けていない。", "%s^ is unharmed."), m_name.data());
+    if (took_damage == 0) {
+        if (visible) {
+            return format(_("%s^はダメージを受けていない。", "%s^ is unharmed."), this->m_name.data());
         }
         return std::nullopt;
     }
 
-    const auto newhp = m_ptr->hp;
-    const auto oldhp = newhp + dam;
-    const auto percentage = std::max((newhp * 100) / oldhp, 0);
+    const auto oldhp = now_hp + took_damage;
+    const auto percentage = std::max((now_hp * 100) / oldhp, 0);
 
     for (const auto &[pred, table] : pain_messages) {
-        if (!pred(*this->m_ptr)) {
+        if (!pred(r_idx, symbol)) {
             continue;
         }
 
         const auto msg = table.lower_bound(percentage)->second;
-        return format("%s^%s", m_name.data(), msg);
+        return format("%s^%s", this->m_name.data(), msg);
     }
 
     return std::nullopt;
