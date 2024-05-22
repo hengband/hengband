@@ -20,7 +20,6 @@ struct unique_list_type {
     unique_list_type(bool is_alive);
     int num_uniques[10]{};
     bool is_alive;
-    uint16_t why = 2;
     std::vector<MonsterRaceId> monrace_ids{};
     int num_uniques_surface = 0;
     int num_uniques_over100 = 0;
@@ -160,7 +159,8 @@ void do_cmd_knowledge_uniques(PlayerType *player_ptr, bool is_alive)
         unique_list_ptr->monrace_ids.push_back(r_ref.idx);
     }
 
-    ang_sort(player_ptr, unique_list_ptr->monrace_ids.data(), &unique_list_ptr->why, unique_list_ptr->monrace_ids.size(), ang_sort_comp_hook, ang_sort_swap_hook);
+    const auto &monraces = MonraceList::get_instance();
+    std::stable_sort(unique_list_ptr->monrace_ids.begin(), unique_list_ptr->monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
     display_uniques(unique_list_ptr, fff);
     angband_fclose(fff);
     concptr title_desc = unique_list_ptr->is_alive ? _("まだ生きているユニーク・モンスター", "Alive Uniques") : _("もう撃破したユニーク・モンスター", "Dead Uniques");
