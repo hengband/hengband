@@ -7,7 +7,7 @@
 #include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
-#include "util/sort.h"
+#include "util/enum-converter.h"
 #include "util/string-processor.h"
 #include "view/display-lore.h"
 #include "view/display-messages.h"
@@ -73,8 +73,6 @@ static std::string attr_to_text(const MonsterRaceInfo &monrace)
 
 SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<bool(const MonsterRaceInfo *)> filter_monster)
 {
-    PlayerType dummy;
-    uint16_t why = 2;
     const auto path = path_build(ANGBAND_DIR_USER, filename);
     std::ofstream ofs(path);
     if (!ofs) {
@@ -90,16 +88,11 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
         "----------",
         "---", "---", "---", "-----", "-----", "-------------------");
 
-    std::vector<MonsterRaceId> who;
-    for (const auto &[monrace_id, monrace] : monraces_info) {
-        if (MonsterRace(monrace_id).is_valid()) {
-            who.push_back(monrace_id);
-        }
-    }
-
-    ang_sort(&dummy, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
-    for (auto r_idx : who) {
-        const auto &monrace = monraces_info[r_idx];
+    const auto &monraces = MonraceList::get_instance();
+    std::vector<MonsterRaceId> monrace_ids = monraces.get_valid_monrace_ids();
+    std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
+    for (auto monrace_id : monrace_ids) {
+        const auto &monrace = monraces_info[monrace_id];
         if (filter_monster && !filter_monster(&monrace)) {
             continue;
         }
@@ -163,7 +156,6 @@ static void roff_func(TERM_COLOR attr, std::string_view str)
  */
 SpoilerOutputResultType spoil_mon_info()
 {
-    PlayerType dummy;
     const auto path = path_build(ANGBAND_DIR_USER, "mon-info.txt");
     spoiler_file = angband_fopen(path, FileOpenMode::WRITE);
     if (!spoiler_file) {
@@ -173,17 +165,11 @@ SpoilerOutputResultType spoil_mon_info()
     spoil_out(std::string("Monster Spoilers for ").append(get_version()).append("\n"));
     spoil_out("------------------------------------------\n\n");
 
-    std::vector<MonsterRaceId> who;
-    for (const auto &[monrace_id, monrace] : monraces_info) {
-        if (MonsterRace(monrace_id).is_valid()) {
-            who.push_back(monrace_id);
-        }
-    }
-
-    uint16_t why = 2;
-    ang_sort(&dummy, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
-    for (auto r_idx : who) {
-        const auto &monrace = monraces_info[r_idx];
+    const auto &monraces = MonraceList::get_instance();
+    std::vector<MonsterRaceId> monrace_ids = monraces.get_valid_monrace_ids();
+    std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
+    for (auto monrace_id : monrace_ids) {
+        const auto &monrace = monraces_info[monrace_id];
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
             spoil_out("[U] ");
         } else if (monrace.population_flags.has(MonsterPopulationType::NAZGUL)) {
@@ -194,7 +180,7 @@ SpoilerOutputResultType spoil_mon_info()
         spoil_out(attr_to_text(monrace));
         spoil_out(format(" '%c')\n", monrace.cc_def.character));
         spoil_out("=== ");
-        spoil_out(format("Num:%d  ", enum2i(r_idx)));
+        spoil_out(format("Num:%d  ", enum2i(monrace_id)));
         spoil_out(format("Lev:%d  ", (int)monrace.level));
         spoil_out(format("Rar:%d  ", monrace.rarity));
         spoil_out(format("Spd:%+d  ", monrace.speed - STANDARD_SPEED));
@@ -206,7 +192,7 @@ SpoilerOutputResultType spoil_mon_info()
 
         spoil_out(format("Ac:%d  ", monrace.ac));
         spoil_out(format("Exp:%ld\n", (long)(monrace.mexp)));
-        output_monster_spoiler(r_idx, roff_func);
+        output_monster_spoiler(monrace_id, roff_func);
         spoil_out({}, true);
     }
 
