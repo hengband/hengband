@@ -166,6 +166,17 @@ std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator MonraceList::re
     return monraces_info.rend();
 }
 
+const std::vector<MonsterRaceId> &MonraceList::get_valid_monrace_ids() const
+{
+    static std::vector<MonsterRaceId> valid_monraces;
+    if (!valid_monraces.empty()) {
+        return valid_monraces;
+    }
+
+    std::transform(++monraces_info.begin(), monraces_info.end(), std::back_inserter(valid_monraces), [](auto &x) { return x.first; });
+    return valid_monraces;
+}
+
 /*!
  * @brief 合体/分離ユニーク判定
  * @param r_idx 調査対象のモンスター種族ID
