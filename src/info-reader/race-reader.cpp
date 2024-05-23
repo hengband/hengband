@@ -168,157 +168,11 @@ static errr set_mon_symbol(const nlohmann::json &symbol_data, MonsterRaceInfo &m
  */
 static errr set_mon_speed(const nlohmann::json &speed_data, MonsterRaceInfo &monrace)
 {
-    if (!speed_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto speed = speed_data.get<int8_t>();
-    if (speed < -50 || speed > 99) {
-        return PARSE_ERROR_INVALID_FLAG;
+    int speed;
+    if (auto err = info_set_integer(speed_data, speed, true, Range(-50, 99))) {
+        return err;
     }
     monrace.speed = speed + STANDARD_SPEED;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectからモンスター体力をセットする
- * @param hp_data 体力情報の格納されたJSON Object
- * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
- */
-static errr set_mon_hp(const nlohmann::json &hp_data, MonsterRaceInfo &monrace)
-{
-    if (!hp_data.is_string()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto hit_point = hp_data.get<std::string>();
-    const auto &dice = str_split(hit_point, 'd', false, 2);
-    if (dice.size() < 2) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    monrace.hdice = std::stoi(dice[0]);
-    monrace.hside = std::stoi(dice[1]);
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectからモンスターの感知範囲をセットする
- * @param vision_data 感知範囲情報の格納されたJSON Object
- * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
- */
-static errr set_mon_vision(const nlohmann::json &vision_data, MonsterRaceInfo &monrace)
-{
-    if (!vision_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto vision = vision_data.get<int>();
-    if (vision < 0 || vision > 999) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    monrace.aaf = vision;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectからモンスターの物理防御力をセットする
- * @param ac_data 物理防御力情報の格納されたJSON Object
- * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
- */
-static errr set_mon_ac(const nlohmann::json &ac_data, MonsterRaceInfo &monrace)
-{
-    if (!ac_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto armour_class = ac_data.get<short>();
-    if (armour_class < 0 || armour_class > 10000) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    monrace.ac = armour_class;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectからモンスターの警戒度をセットする
- * @param alertness_data 物理防御力情報の格納されたJSON Object
- * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
- */
-static errr set_mon_alertness(const nlohmann::json &alertness_data, MonsterRaceInfo &monrace)
-{
-    if (!alertness_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto alertness = alertness_data.get<short>();
-    if (alertness < 0 || alertness > 255) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    monrace.sleep = alertness;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectからモンスターの出現階層をセットする
- * @param level_data 出現階層情報の格納されたJSON Object
- * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
- */
-static errr set_mon_level(const nlohmann::json &level_data, MonsterRaceInfo &monrace)
-{
-    if (!level_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto level = level_data.get<int>();
-    if (level < 0 || level > 255) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    monrace.level = level;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectからモンスターの出現階層をセットする
- * @param rarity_data 出現階層情報の格納されたJSON Object
- * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
- */
-static errr set_mon_rarity(const nlohmann::json &rarity_data, MonsterRaceInfo &monrace)
-{
-    if (!rarity_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto rarity = rarity_data.get<int>();
-    if (rarity < 0 || rarity > 255) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    monrace.rarity = (RARITY)rarity;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectからモンスターの経験値をセットする
- * @param exp_data 経験値情報の格納されたJSON Object
- * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
- */
-static errr set_mon_exp(const nlohmann::json &exp_data, MonsterRaceInfo &monrace)
-{
-    if (!exp_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto exp = exp_data.get<int>();
-    if (exp < 0 || exp > 9999999) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    monrace.mexp = exp;
     return PARSE_ERROR_NONE;
 }
 
@@ -328,30 +182,19 @@ static errr set_mon_exp(const nlohmann::json &exp_data, MonsterRaceInfo &monrace
  * @param monrace 保管先のモンスター種族構造体
  * @return エラーコード
  */
-static errr set_mon_evolve(const nlohmann::json &evolve_data, MonsterRaceInfo &monrace)
+static errr set_mon_evolve(nlohmann::json &evolve_data, MonsterRaceInfo &monrace)
 {
     if (evolve_data.is_null()) {
         return PARSE_ERROR_NONE;
     }
 
-    const auto &need_exp_obj = evolve_data["need_exp"];
-    const auto &evlove_to_obj = evolve_data["to"];
-    if (!need_exp_obj.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    if (auto err = info_set_integer(evolve_data["need_exp"], monrace.next_exp, true, Range(0, 9999999))) {
+        return err;
     }
-    if (!evlove_to_obj.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    if (auto err = info_set_integer(evolve_data["to"], monrace.next_r_idx, true, Range(0, 9999))) {
+        return err;
     }
-    const auto need_exp = need_exp_obj.get<int>();
-    const auto evlove_to = evlove_to_obj.get<int>();
-    if (need_exp <= 0 || need_exp > 9999999) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    if (evlove_to <= 0 || evlove_to > 9999) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    monrace.next_exp = need_exp;
-    monrace.next_r_idx = static_cast<MonsterRaceId>(evlove_to);
+
     return PARSE_ERROR_NONE;
 }
 
@@ -379,58 +222,12 @@ static errr set_mon_sex(const nlohmann::json &sex_data, MonsterRaceInfo &monrace
 }
 
 /*!
- * @brief JSON Objectからモンスターの闘技場オッズをセットする
- * @param odds_data オッズ情報の格納されたJSON Object
- * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
- */
-static errr set_mon_odds_rate(const nlohmann::json &odds_data, MonsterRaceInfo &monrace)
-{
-    if (odds_data.is_null()) {
-        return PARSE_ERROR_NONE;
-    }
-    if (!odds_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto odds = odds_data.get<int>();
-    if (odds <= 0 || odds > 9999) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    monrace.arena_ratio = odds;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectからモンスターの初期体力をセットする
- * @param start_hp_data 初期体力情報の格納されたJSON Object
- * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
- */
-static errr set_mon_start_hp_percentage(const nlohmann::json &start_hp_data, MonsterRaceInfo &monrace)
-{
-    if (start_hp_data.is_null()) {
-        return PARSE_ERROR_NONE;
-    }
-    if (!start_hp_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto start_hp = start_hp_data.get<int>();
-    if (start_hp < 0 || start_hp > 99) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    monrace.cur_hp_per = start_hp;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
  * @brief JSON Objectからモンスターの固定アーティファクトドロップ情報をセットする
  * @param artifact_data 固定アーティファクトドロップ情報の格納されたJSON Object
  * @param monrace 保管先のモンスター種族構造体
  * @return エラーコード
  */
-static errr set_mon_artifacts(const nlohmann::json &artifact_data, MonsterRaceInfo &monrace)
+static errr set_mon_artifacts(nlohmann::json &artifact_data, MonsterRaceInfo &monrace)
 {
     if (artifact_data.is_null()) {
         return PARSE_ERROR_NONE;
@@ -440,25 +237,16 @@ static errr set_mon_artifacts(const nlohmann::json &artifact_data, MonsterRaceIn
     }
 
     for (auto &artifact : artifact_data.items()) {
-        const auto &artifact_id_obj = artifact.value()["drop_artifact_id"];
-        const auto &artifact_chance_obj = artifact.value()["drop_probability"];
+        FixedArtifactId fa_id;
+        if (auto err = info_set_integer(artifact.value()["drop_artifact_id"], fa_id, true, Range(0, 1024))) {
+            return err;
+        }
+        int prob;
+        if (auto err = info_set_integer(artifact.value()["drop_probability"], prob, true, Range(1, 100))) {
+            return err;
+        }
 
-        if (!artifact_id_obj.is_number_integer()) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-        if (!artifact_chance_obj.is_number_integer()) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-        const auto artifact_id = artifact_id_obj.get<int>();
-        if (artifact_id < 0 || artifact_id > 1024) {
-            return PARSE_ERROR_INVALID_FLAG;
-        }
-        const auto a_idx = static_cast<FixedArtifactId>(artifact_id);
-        const auto artifact_chance = artifact_chance_obj.get<int>();
-        if (artifact_chance <= 0 || artifact_chance > 100) {
-            return PARSE_ERROR_INVALID_FLAG;
-        }
-        monrace.drop_artifacts.emplace_back(a_idx, artifact_chance);
+        monrace.drop_artifacts.emplace_back(fa_id, prob);
     }
     return PARSE_ERROR_NONE;
 }
@@ -469,7 +257,7 @@ static errr set_mon_artifacts(const nlohmann::json &artifact_data, MonsterRaceIn
  * @param monrace 保管先のモンスター種族構造体
  * @return エラーコード
  */
-static errr set_mon_escorts(const nlohmann::json &escort_data, MonsterRaceInfo &monrace)
+static errr set_mon_escorts(nlohmann::json &escort_data, MonsterRaceInfo &monrace)
 {
     if (escort_data.is_null()) {
         return PARSE_ERROR_NONE;
@@ -479,27 +267,17 @@ static errr set_mon_escorts(const nlohmann::json &escort_data, MonsterRaceInfo &
     }
 
     for (auto &escort : escort_data.items()) {
-        const auto &escorts_id_obj = escort.value()["escorts_id"];
-        const auto &escort_num_obj = escort.value()["escort_num"];
-        if (!escorts_id_obj.is_number_integer()) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-        if (!escort_num_obj.is_string()) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        MonsterRaceId monrace_id;
+        if (auto err = info_set_integer(escort.value()["escorts_id"], monrace_id, true, Range(0, 8192))) {
+            return err;
         }
 
-        const auto escorts_id = escorts_id_obj.get<int>();
-        if (escorts_id < 0 || escorts_id > 8192) {
-            return PARSE_ERROR_INVALID_FLAG;
-        }
-
-        const auto monrace_id = static_cast<MonsterRaceId>(escorts_id);
-        const auto escort_num = escort_num_obj.get<std::string>();
-        const auto &dice = str_split(escort_num, 'd', false, 2);
         DICE_NUMBER dd;
         DICE_SID ds;
-        info_set_value(dd, dice[0]);
-        info_set_value(ds, dice[1]);
+        if (auto err = info_set_dice(escort.value()["escort_num"], dd, ds, true)) {
+            return err;
+        }
+
         monrace.reinforces.emplace_back(monrace_id, dd, ds);
     }
     return PARSE_ERROR_NONE;
@@ -511,7 +289,7 @@ static errr set_mon_escorts(const nlohmann::json &escort_data, MonsterRaceInfo &
  * @param monrace 保管先のモンスター種族構造体
  * @return エラーコード
  */
-static errr set_mon_blows(const nlohmann::json &blow_data, MonsterRaceInfo &monrace)
+static errr set_mon_blows(nlohmann::json &blow_data, MonsterRaceInfo &monrace)
 {
     if (blow_data.is_null()) {
         return PARSE_ERROR_NONE;
@@ -520,8 +298,7 @@ static errr set_mon_blows(const nlohmann::json &blow_data, MonsterRaceInfo &monr
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    auto blow_num = 0;
-    for (auto &blow : blow_data.items()) {
+    for (auto blow_num = 0; auto &blow : blow_data.items()) {
         if (blow_num > 5) {
             return PARSE_ERROR_GENERIC;
         }
@@ -541,14 +318,12 @@ static errr set_mon_blows(const nlohmann::json &blow_data, MonsterRaceInfo &monr
         if (rbe == r_info_blow_effect.end()) {
             return PARSE_ERROR_INVALID_FLAG;
         }
-        monrace.blows[blow_num].method = rbm->second;
-        monrace.blows[blow_num].effect = rbe->second;
+        auto &mon_blow = monrace.blows[blow_num];
+        mon_blow.method = rbm->second;
+        mon_blow.effect = rbe->second;
 
-        const auto &blow_dice = blow.value().find("damage_dice");
-        if (blow_dice != blow.value().end()) {
-            const auto &dice = str_split(blow_dice->get<std::string>(), 'd', false, 2);
-            info_set_value(monrace.blows[blow_num].d_dice, dice[0]);
-            info_set_value(monrace.blows[blow_num].d_side, dice[1]);
+        if (auto err = info_set_dice(blow.value()["damage_dice"], mon_blow.d_dice, mon_blow.d_side, false)) {
+            return err;
         }
 
         blow_num++;
@@ -635,41 +410,6 @@ static errr set_mon_skills(const nlohmann::json &skill_data, MonsterRaceInfo &mo
 }
 
 /*!
- * @brief JSON Objectからモンスターの説明文をセットする
- * @param flag_data 説明文の情報の格納されたJSON Object
- * @param monrace 保管先のモンスター種族構造体
- * @return エラーコード
- */
-static errr set_mon_flavor(const nlohmann::json &flavor_data, MonsterRaceInfo &monrace)
-{
-    if (flavor_data.is_null()) {
-        return PARSE_ERROR_NONE;
-    }
-    if (!flavor_data.is_object()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-#ifdef JP
-    const auto &flavor_ja = flavor_data.find("ja");
-    if (flavor_ja == flavor_data.end()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    auto flavor_ja_sys = utf8_to_sys(flavor_ja->get<std::string>());
-    if (!flavor_ja_sys) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    monrace.text = std::move(*flavor_ja_sys);
-#else
-    const auto &flavor_en = flavor_data.find("en");
-    if (flavor_en == flavor_data.end()) {
-        return PARSE_ERROR_NONE;
-    }
-    monrace.text = flavor_en->get<std::string>();
-#endif
-    return PARSE_ERROR_NONE;
-}
-
-/*!
  * @brief モンスター種族情報(JSON Object)のパース関数
  * @param mon_data モンスターデータの格納されたJSON Object
  * @param head ヘッダ構造体
@@ -705,37 +445,37 @@ errr parse_monraces_info(nlohmann::json &mon_data, angband_header *)
         msg_format(_("モンスター速度読込失敗。ID: '%d'。", "Failed to load monster speed. ID: '%d'."), error_idx);
         return err;
     }
-    err = set_mon_hp(mon_data["hit_point"], monrace);
+    err = info_set_dice(mon_data["hit_point"], monrace.hdice, monrace.hside, true);
     if (err) {
         msg_format(_("モンスターHP読込失敗。ID: '%d'。", "Failed to load monster HP. ID: '%d'."), error_idx);
         return err;
     }
-    err = set_mon_vision(mon_data["vision"], monrace);
+    err = info_set_integer(mon_data["vision"], monrace.aaf, true, Range(0, 999));
     if (err) {
         msg_format(_("モンスター感知範囲読込失敗。ID: '%d'。", "Failed to load monster vision. ID: '%d'."), error_idx);
         return err;
     }
-    err = set_mon_ac(mon_data["armor_class"], monrace);
+    err = info_set_integer(mon_data["armor_class"], monrace.ac, true, Range(0, 10000));
     if (err) {
         msg_format(_("モンスターAC読込失敗。ID: '%d'。", "Failed to load monster AC. ID: '%d'."), error_idx);
         return err;
     }
-    err = set_mon_alertness(mon_data["alertness"], monrace);
+    err = info_set_integer(mon_data["alertness"], monrace.sleep, true, Range(0, 255));
     if (err) {
         msg_format(_("モンスター警戒度読込失敗。ID: '%d'。", "Failed to load monster alertness. ID: '%d'."), error_idx);
         return err;
     }
-    err = set_mon_level(mon_data["level"], monrace);
+    err = info_set_integer(mon_data["level"], monrace.level, true, Range(0, 255));
     if (err) {
         msg_format(_("モンスターレベル読込失敗。ID: '%d'。", "Failed to load monster level. ID: '%d'."), error_idx);
         return err;
     }
-    err = set_mon_rarity(mon_data["rarity"], monrace);
+    err = info_set_integer(mon_data["rarity"], monrace.rarity, true, Range(0, 255));
     if (err) {
         msg_format(_("モンスター希少度読込失敗。ID: '%d'。", "Failed to load monster rarity. ID: '%d'."), error_idx);
         return err;
     }
-    err = set_mon_exp(mon_data["exp"], monrace);
+    err = info_set_integer(mon_data["exp"], monrace.mexp, true, Range(0, 9999999));
     if (err) {
         msg_format(_("モンスター経験値読込失敗。ID: '%d'。", "Failed to load monster exp. ID: '%d'."), error_idx);
         return err;
@@ -750,12 +490,12 @@ errr parse_monraces_info(nlohmann::json &mon_data, angband_header *)
         msg_format(_("モンスター性別読込失敗。ID: '%d'。", "Failed to load monster sex. ID: '%d'."), error_idx);
         return err;
     }
-    err = set_mon_odds_rate(mon_data["odds_correction_ratio"], monrace);
+    err = info_set_integer(mon_data["odds_correction_ratio"], monrace.arena_ratio, false, Range(1, 9999));
     if (err) {
         msg_format(_("モンスター賭け倍率読込失敗。ID: '%d'。", "Failed to load monster odds for arena. ID: '%d'."), error_idx);
         return err;
     }
-    err = set_mon_start_hp_percentage(mon_data["start_hp_percentage"], monrace);
+    err = info_set_integer(mon_data["start_hp_percentage"], monrace.cur_hp_per, false, Range(0, 99));
     if (err) {
         msg_format(_("モンスター初期体力読込失敗。ID: '%d'。", "Failed to load monster starting HP. ID: '%d'."), error_idx);
         return err;
@@ -785,7 +525,7 @@ errr parse_monraces_info(nlohmann::json &mon_data, angband_header *)
         msg_format(_("モンスター発動能力情報読込失敗。ID: '%d'。", "Failed to load monster skill data. ID: '%d'."), error_idx);
         return err;
     }
-    err = set_mon_flavor(mon_data["flavor"], monrace);
+    err = info_set_string(mon_data["flavor"], monrace.text, false);
     if (err) {
         msg_format(_("モンスター説明文読込失敗。ID: '%d'。", "Failed to load monster flavor text. ID: '%d'."), error_idx);
         return err;

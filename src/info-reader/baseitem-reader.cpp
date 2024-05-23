@@ -41,105 +41,6 @@ static bool grab_one_baseitem_flag(BaseitemInfo &baseitem, std::string_view what
 }
 
 /*!
- * @brief JSON Objectからベースアイテム名をセットする
- * @param name_data 名前情報の格納されたJSON Object
- * @param baseitem 保管先のベースアイテム情報インスタンス
- * @return エラーコード
- */
-static errr set_baseitem_name(const nlohmann::json &name_data, BaseitemInfo &baseitem)
-{
-    if (name_data.is_null()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-#ifdef JP
-    const auto &ja_name = name_data.find("ja");
-    if (ja_name == name_data.end()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    auto ja_name_sys = utf8_to_sys(ja_name->get<std::string>());
-    if (!ja_name_sys) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    baseitem.name = std::move(*ja_name_sys);
-#else
-    const auto &en_name = name_data.find("en");
-    if (en_name == name_data.end()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    baseitem.name = en_name->get<std::string>();
-#endif
-
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectからベースアイテムの未識別名をセットする
- * @param flavor_name_data 未識別名情報の格納されたJSON Object
- * @param baseitem 保管先のベースアイテム情報インスタンス
- * @return エラーコード
- */
-static errr set_baseitem_flavor_name(const nlohmann::json &flavor_name_data, BaseitemInfo &baseitem)
-{
-    if (flavor_name_data.is_null()) {
-        return PARSE_ERROR_NONE;
-    }
-
-#ifdef JP
-    const auto &ja_name = flavor_name_data.find("ja");
-    if (ja_name == flavor_name_data.end()) {
-        return PARSE_ERROR_NONE;
-    }
-    auto ja_name_sys = utf8_to_sys(ja_name->get<std::string>());
-    if (!ja_name_sys) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    baseitem.flavor_name = std::move(*ja_name_sys);
-#else
-    const auto &en_name = flavor_name_data.find("en");
-    if (en_name == flavor_name_data.end()) {
-        return PARSE_ERROR_NONE;
-    }
-    baseitem.flavor_name = en_name->get<std::string>();
-#endif
-
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectからベースアイテムのフレーバーをセットする
- * @param flavor_data フレーバー情報の格納されたJSON Object
- * @param baseitem 保管先のベースアイテム情報インスタンス
- * @return エラーコード
- */
-static errr set_baseitem_flavor(const nlohmann::json &flavor_data, BaseitemInfo &baseitem)
-{
-    if (flavor_data.is_null()) {
-        return PARSE_ERROR_NONE;
-    }
-
-#ifdef JP
-    const auto &ja_flavor = flavor_data.find("ja");
-    if (ja_flavor == flavor_data.end()) {
-        return PARSE_ERROR_NONE;
-    }
-    auto ja_flavor_sys = utf8_to_sys(ja_flavor->get<std::string>());
-    if (!ja_flavor_sys) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    baseitem.text = std::move(*ja_flavor_sys);
-#else
-    const auto &en_flavor = flavor_data.find("en");
-    if (en_flavor == flavor_data.end()) {
-        return PARSE_ERROR_NONE;
-    }
-    baseitem.text = en_flavor->get<std::string>();
-#endif
-
-    return PARSE_ERROR_NONE;
-}
-
-/*!
  * @brief JSON Objectからベースアイテムのシンボルをセットする
  * @param symbol_data シンボル情報の格納されたJSON Object
  * @param baseitem 保管先のベースアイテム情報インスタンス
@@ -179,37 +80,22 @@ static errr set_baseitem_symbol(const nlohmann::json &symbol_data, BaseitemInfo 
  * @param baseitem 保管先のベースアイテム情報インスタンス
  * @return エラーコード
  */
-static errr set_baseitem_kind(const nlohmann::json &baseitem_data, BaseitemInfo &baseitem)
+static errr set_baseitem_kind(nlohmann::json &baseitem_data, BaseitemInfo &baseitem)
 {
     if (baseitem_data.is_null()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto &item_type = baseitem_data.find("type_value");
-    if (item_type == baseitem_data.end()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    ItemKindType type_value;
+    if (auto err = info_set_integer(baseitem_data["type_value"], type_value, true, Range(0, 128))) {
+        return err;
     }
-    if (!item_type->is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    const auto type_value = item_type->get<int>();
-    if (type_value < 0 || type_value > 128) {
-        return PARSE_ERROR_INVALID_FLAG;
+    int subtype_value;
+    if (auto err = info_set_integer(baseitem_data["subtype_value"], subtype_value, true, Range(0, 128))) {
+        return err;
     }
 
-    const auto &item_subtype = baseitem_data.find("subtype_value");
-    if (item_subtype == baseitem_data.end()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    if (!item_subtype->is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    const auto subtype_value = item_subtype->get<int>();
-    if (subtype_value < 0 || subtype_value > 128) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-
-    baseitem.bi_key = { i2enum<ItemKindType>(type_value), subtype_value };
+    baseitem.bi_key = { type_value, subtype_value };
     return PARSE_ERROR_NONE;
 }
 
@@ -221,204 +107,13 @@ static errr set_baseitem_kind(const nlohmann::json &baseitem_data, BaseitemInfo 
  */
 static errr set_baseitem_parameter_value(const nlohmann::json &pval_data, BaseitemInfo &baseitem)
 {
-    if (pval_data.is_null()) {
-        return PARSE_ERROR_NONE;
+    if (auto err = info_set_integer(pval_data, baseitem.pval, false, Range(-9999, 9999))) {
+        return err;
     }
-    if (!pval_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto parameter_value = pval_data.get<short>();
-    if (parameter_value < -9999 || parameter_value > 9999) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    if ((baseitem.bi_key.tval() == ItemKindType::ROD) && (parameter_value <= 0)) {
+    if ((baseitem.bi_key.tval() == ItemKindType::ROD) && (baseitem.pval <= 0)) {
         return PAESE_ERROR_INVALID_PVAL;
     }
 
-    baseitem.pval = parameter_value;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectからベースアイテムのレベルをセットする
- * @param level_data レベル情報の格納されたJSON Object
- * @param baseitem 保管先のベースアイテム情報インスタンス
- * @return エラーコード
- */
-static errr set_baseitem_level(const nlohmann::json &level_data, BaseitemInfo &baseitem)
-{
-    if (level_data.is_null()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    if (!level_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto level = level_data.get<int>();
-    if (level < 0 || level > 128) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    baseitem.level = level;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectからベースアイテムの重量をセットする
- * @param weight_data weight情報の格納されたJSON Object
- * @param baseitem 保管先のベースアイテム情報インスタンス
- * @return エラーコード
- */
-static errr set_baseitem_weight(const nlohmann::json &weight_data, BaseitemInfo &baseitem)
-{
-    if (weight_data.is_null()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    if (!weight_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto weight = weight_data.get<int>();
-    if (weight < 0 || weight > 9999) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    baseitem.weight = weight;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectからベースアイテムの売値をセットする
- * @param cost_data cost情報の格納されたJSON Object
- * @param baseitem 保管先のベースアイテム情報インスタンス
- * @return エラーコード
- */
-static errr set_baseitem_cost(const nlohmann::json &cost_data, BaseitemInfo &baseitem)
-{
-    if (cost_data.is_null()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    if (!cost_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto cost = cost_data.get<int>();
-    if (cost < 0 || cost > 99999999) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    baseitem.cost = cost;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON ObjectからベースアイテムのベースACをセットする
- * @param ac_data ac情報の格納されたJSON Object
- * @param baseitem 保管先のベースアイテム情報インスタンス
- * @return エラーコード
- */
-static errr set_baseitem_base_ac(const nlohmann::json &ac_data, BaseitemInfo &baseitem)
-{
-    if (ac_data.is_null()) {
-        return PARSE_ERROR_NONE;
-    }
-    if (!ac_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto base_ac = ac_data.get<short>();
-    if (base_ac < -99 || base_ac > 99) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    baseitem.ac = base_ac;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectからベースアイテムのベースダイスをセットする
- * @param dice_data ac情報の格納されたJSON Object
- * @param baseitem 保管先のベースアイテム情報インスタンス
- * @return エラーコード
- */
-static errr set_baseitem_base_dice(const nlohmann::json &dice_data, BaseitemInfo &baseitem)
-{
-    if (!dice_data.is_string()) {
-        return PARSE_ERROR_NONE;
-    }
-
-    const auto &dice = str_split(dice_data.get<std::string>(), 'd', false, 2);
-    if (dice.size() < 2) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    baseitem.dd = std::stoi(dice[0]);
-    baseitem.ds = std::stoi(dice[1]);
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectからベースアイテムの命中補正値をセットする
- * @param hit_bonus_data 命中補正値情報の格納されたJSON Object
- * @param baseitem 保管先のベースアイテム情報インスタンス
- * @return エラーコード
- */
-static errr set_baseitem_hit_bonus(const nlohmann::json &hit_bonus_data, BaseitemInfo &baseitem)
-{
-    if (hit_bonus_data.is_null()) {
-        return PARSE_ERROR_NONE;
-    }
-    if (!hit_bonus_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto hit_bonus = hit_bonus_data.get<short>();
-    if (hit_bonus < -99 || hit_bonus > 99) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    baseitem.to_h = hit_bonus;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectからベースアイテムのダメージ補正値をセットする
- * @param damage_bonus_data ダメージ補正値情報の格納されたJSON Object
- * @param baseitem 保管先のベースアイテム情報インスタンス
- * @return エラーコード
- */
-static errr set_baseitem_damage_bonus(const nlohmann::json &damage_bonus_data, BaseitemInfo &baseitem)
-{
-    if (damage_bonus_data.is_null()) {
-        return PARSE_ERROR_NONE;
-    }
-    if (!damage_bonus_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto damage_bonus = damage_bonus_data.get<int>();
-    if (damage_bonus < -99 || damage_bonus > 99) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    baseitem.to_d = damage_bonus;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON ObjectからベースアイテムのAC補正値をセットする
- * @param ac_bonus_data AC補正値情報の格納されたJSON Object
- * @param baseitem 保管先のベースアイテム情報インスタンス
- * @return エラーコード
- */
-static errr set_baseitem_ac_bonus(const nlohmann::json &ac_bonus_data, BaseitemInfo &baseitem)
-{
-    if (ac_bonus_data.is_null()) {
-        return PARSE_ERROR_NONE;
-    }
-    if (!ac_bonus_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto ac_bonus = ac_bonus_data.get<short>();
-    if (ac_bonus < -99 || ac_bonus > 99) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    baseitem.to_a = ac_bonus;
     return PARSE_ERROR_NONE;
 }
 
@@ -428,7 +123,7 @@ static errr set_baseitem_ac_bonus(const nlohmann::json &ac_bonus_data, BaseitemI
  * @param baseitem 保管先のベースアイテム情報インスタンス
  * @return エラーコード
  */
-static errr set_baseitem_allocations(const nlohmann::json &allocations_data, BaseitemInfo &baseitem)
+static errr set_baseitem_allocations(nlohmann::json &allocations_data, BaseitemInfo &baseitem)
 {
     if (allocations_data.is_null()) {
         return PARSE_ERROR_NONE;
@@ -437,36 +132,15 @@ static errr set_baseitem_allocations(const nlohmann::json &allocations_data, Bas
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    int i = 0;
-    for (auto &element : allocations_data.items()) {
+    for (auto i = 0; auto &element : allocations_data.items()) {
         auto &alloc = element.value();
-        const auto &depth = alloc.find("depth");
-        const auto &rarity = alloc.find("rarity");
-        if (depth == alloc.end()) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-        if (rarity == alloc.end()) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-        if (!depth->is_number_integer()) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-        if (!rarity->is_number_integer()) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-
-        const auto depth_int = depth->get<int>();
-        const auto rarity_short = rarity->get<short>();
-        if (depth_int < 0 || depth_int > 128) {
-            return PARSE_ERROR_INVALID_FLAG;
-        }
-        if (rarity_short < 0 || rarity_short > 256) {
-            return PARSE_ERROR_INVALID_FLAG;
-        }
-
         auto &table = baseitem.alloc_tables[i];
-        table.level = depth_int;
-        table.chance = rarity_short;
+        if (auto err = info_set_integer(alloc["depth"], table.level, true, Range(0, 128))) {
+            return err;
+        }
+        if (auto err = info_set_integer(alloc["rarity"], table.chance, true, Range(0, 256))) {
+            return err;
+        }
         i++;
     }
     return PARSE_ERROR_NONE;
@@ -543,15 +217,15 @@ errr parse_baseitems_info(nlohmann::json &item_data, angband_header *)
     auto &baseitem = baseitems.get_baseitem(short_id);
     baseitem.idx = short_id;
 
-    if (auto err = set_baseitem_name(item_data["name"], baseitem)) {
+    if (auto err = info_set_string(item_data["name"], baseitem.name, true)) {
         msg_format(_("アイテムの名称読込失敗。ID: '%d'。", "Failed to load item name. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_baseitem_flavor_name(item_data["flavor_name"], baseitem)) {
+    if (auto err = info_set_string(item_data["flavor_name"], baseitem.flavor_name, false)) {
         msg_format(_("アイテム未識別名の読込失敗。ID: '%d'。", "Failed to load item unidentified name. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_baseitem_flavor(item_data["flavor"], baseitem)) {
+    if (auto err = info_set_string(item_data["flavor"], baseitem.text, false)) {
         msg_format(_("アイテムのフレーバーテキスト読込失敗。ID: '%d'。", "Failed to load flavor text of item. ID: '%d'."), error_idx);
         return err;
     }
@@ -567,35 +241,35 @@ errr parse_baseitems_info(nlohmann::json &item_data, angband_header *)
         msg_format(_("アイテムのパラメータ値読込失敗。ID: '%d'。", "Failed to load prameter value of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_baseitem_level(item_data["level"], baseitem)) {
+    if (auto err = info_set_integer(item_data["level"], baseitem.level, true, Range(0, 128))) {
         msg_format(_("アイテムのレベル読込失敗。ID: '%d'。", "Failed to load level of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_baseitem_weight(item_data["weight"], baseitem)) {
+    if (auto err = info_set_integer(item_data["weight"], baseitem.weight, true, Range(0, 9999))) {
         msg_format(_("アイテムの重量読込失敗。ID: '%d'。", "Failed to load weight of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_baseitem_cost(item_data["cost"], baseitem)) {
+    if (auto err = info_set_integer(item_data["cost"], baseitem.cost, true, Range(0, 99999999))) {
         msg_format(_("アイテムの売値読込失敗。ID: '%d'。", "Failed to load cost of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_baseitem_base_ac(item_data["base_ac"], baseitem)) {
+    if (auto err = info_set_integer(item_data["base_ac"], baseitem.ac, false, Range(-99, 99))) {
         msg_format(_("アイテムのベースAC読込失敗。ID: '%d'。", "Failed to load base AC of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_baseitem_base_dice(item_data["base_dice"], baseitem)) {
+    if (auto err = info_set_dice(item_data["base_dice"], baseitem.dd, baseitem.ds, false)) {
         msg_format(_("アイテムのベースダイス読込失敗。ID: '%d'。", "Failed to load base dice of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_baseitem_hit_bonus(item_data["hit_bonus"], baseitem)) {
+    if (auto err = info_set_integer(item_data["hit_bonus"], baseitem.to_h, false, Range(-99, 99))) {
         msg_format(_("アイテムの命中補正値読込失敗。ID: '%d'。", "Failed to load hit bonus of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_baseitem_damage_bonus(item_data["damage_bonus"], baseitem)) {
+    if (auto err = info_set_integer(item_data["damage_bonus"], baseitem.to_d, false, Range(-99, 99))) {
         msg_format(_("アイテムの命中補正値読込失敗。ID: '%d'。", "Failed to load damage bonus of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_baseitem_ac_bonus(item_data["ac_bonus"], baseitem)) {
+    if (auto err = info_set_integer(item_data["ac_bonus"], baseitem.to_a, false, Range(-99, 99))) {
         msg_format(_("アイテムのAC補正値読込失敗。ID: '%d'。", "Failed to load AC bonus of item. ID: '%d'."), error_idx);
         return err;
     }

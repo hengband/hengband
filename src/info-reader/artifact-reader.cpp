@@ -35,300 +35,28 @@ static bool grab_one_artifact_flag(ArtifactType *a_ptr, std::string_view what)
 }
 
 /*!
- * @brief JSON Objectからアーティファクト名をセットする
- * @param name_data 名前情報の格納されたJSON Object
- * @param artifact 保管先のアーティファクト
- * @return エラーコード
- */
-static errr set_art_name(const nlohmann::json &name_data, ArtifactType &artifact)
-{
-    if (name_data.is_null()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-#ifdef JP
-    const auto &ja_name = name_data.find("ja");
-    if (ja_name == name_data.end()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    auto ja_name_sys = utf8_to_sys(ja_name->get<std::string>());
-    if (!ja_name_sys) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    artifact.name = std::move(*ja_name_sys);
-#else
-    const auto &en_name = name_data.find("en");
-    if (en_name == name_data.end()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    artifact.name = en_name->get<std::string>();
-#endif
-
-    return PARSE_ERROR_NONE;
-}
-
-/*!
  * @brief JSON Objectから固定アーティファクトのベースアイテムをセットする
  * @param baseitem_data ベースアイテム情報の格納されたJSON Object
  * @param artifact 保管先のアーティファクト
  * @return エラーコード
  */
-static errr set_art_baseitem(const nlohmann::json &baseitem_data, ArtifactType &artifact)
+static errr set_art_baseitem(nlohmann::json &baseitem_data, ArtifactType &artifact)
 {
     if (baseitem_data.is_null()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto &item_type = baseitem_data.find("type_value");
-    if (item_type == baseitem_data.end()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    if (!item_type->is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    const auto type_value = item_type->get<int>();
-    if (type_value < 0 || type_value > 128) {
-        return PARSE_ERROR_INVALID_FLAG;
+    ItemKindType type_value;
+    if (auto err = info_set_integer(baseitem_data["type_value"], type_value, true, Range(0, 128))) {
+        return err;
     }
 
-    const auto &item_subtype = baseitem_data.find("subtype_value");
-    if (item_subtype == baseitem_data.end()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    if (!item_subtype->is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    const auto subtype_value = item_subtype->get<int>();
-    if (subtype_value < 0 || subtype_value > 128) {
-        return PARSE_ERROR_INVALID_FLAG;
+    int subtype_value;
+    if (auto err = info_set_integer(baseitem_data["subtype_value"], subtype_value, true, Range(0, 128))) {
+        return err;
     }
 
-    artifact.bi_key = { i2enum<ItemKindType>(type_value), subtype_value };
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectから固定アーティファクトのpvalをセットする
- * @param pval_data pval情報の格納されたJSON Object
- * @param artifact 保管先のアーティファクト
- * @return エラーコード
- */
-static errr set_art_parameter_value(const nlohmann::json &pval_data, ArtifactType &artifact)
-{
-    if (pval_data.is_null()) {
-        return PARSE_ERROR_NONE;
-    }
-    if (!pval_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto parameter_value = pval_data.get<short>();
-    if (parameter_value < -128 || parameter_value > 128) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    artifact.pval = parameter_value;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectから固定アーティファクトの出現階層をセットする
- * @param level_data レベル情報の格納されたJSON Object
- * @param artifact 保管先のアーティファクト
- * @return エラーコード
- */
-static errr set_art_level(const nlohmann::json &level_data, ArtifactType &artifact)
-{
-    if (level_data.is_null()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    if (!level_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto level = level_data.get<int>();
-    if (level < 0 || level > 128) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    artifact.level = level;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectから固定アーティファクトの希少度をセットする
- * @param rarity_data rarity情報の格納されたJSON Object
- * @param artifact 保管先のアーティファクト
- * @return エラーコード
- */
-static errr set_art_rarity(const nlohmann::json &rarity_data, ArtifactType &artifact)
-{
-    if (rarity_data.is_null()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    if (!rarity_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto rarity = rarity_data.get<uint8_t>();
-    artifact.rarity = rarity;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectから固定アーティファクトの重量をセットする
- * @param weight_data weight情報の格納されたJSON Object
- * @param artifact 保管先のアーティファクト
- * @return エラーコード
- */
-static errr set_art_weight(const nlohmann::json &weight_data, ArtifactType &artifact)
-{
-    if (weight_data.is_null()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    if (!weight_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto weight = weight_data.get<int>();
-    if (weight < 0 || weight > 9999) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    artifact.weight = weight;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectから固定アーティファクトの売値をセットする
- * @param cost_data cost情報の格納されたJSON Object
- * @param artifact 保管先のアーティファクト
- * @return エラーコード
- */
-static errr set_art_cost(const nlohmann::json &cost_data, ArtifactType &artifact)
-{
-    if (cost_data.is_null()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    if (!cost_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto cost = cost_data.get<int>();
-    if (cost < 0 || cost > 99999999) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    artifact.cost = cost;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectから固定アーティファクトのベースACをセットする
- * @param ac_data ac情報の格納されたJSON Object
- * @param artifact 保管先のアーティファクト
- * @return エラーコード
- */
-static errr set_art_base_ac(const nlohmann::json &ac_data, ArtifactType &artifact)
-{
-    if (ac_data.is_null()) {
-        return PARSE_ERROR_NONE;
-    }
-    if (!ac_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto base_ac = ac_data.get<short>();
-    if (base_ac < -99 || base_ac > 99) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    artifact.ac = base_ac;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectから固定アーティファクトのベースダイスをセットする
- * @param dice_data ac情報の格納されたJSON Object
- * @param artifact 保管先のアーティファクト
- * @return エラーコード
- */
-static errr set_art_base_dice(const nlohmann::json &dice_data, ArtifactType &artifact)
-{
-    if (!dice_data.is_string()) {
-        return PARSE_ERROR_NONE;
-    }
-
-    const auto &dice = str_split(dice_data.get<std::string>(), 'd', false, 2);
-    if (dice.size() < 2) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    artifact.dd = std::stoi(dice[0]);
-    artifact.ds = std::stoi(dice[1]);
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectから固定アーティファクトの命中補正値をセットする
- * @param hit_bonus_data 命中補正値情報の格納されたJSON Object
- * @param artifact 保管先のアーティファクト
- * @return エラーコード
- */
-static errr set_art_hit_bonus(const nlohmann::json &hit_bonus_data, ArtifactType &artifact)
-{
-    if (hit_bonus_data.is_null()) {
-        return PARSE_ERROR_NONE;
-    }
-    if (!hit_bonus_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto hit_bonus = hit_bonus_data.get<short>();
-    if (hit_bonus < -99 || hit_bonus > 99) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    artifact.to_h = hit_bonus;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectから固定アーティファクトのダメージ補正値をセットする
- * @param damage_bonus_data ダメージ補正値情報の格納されたJSON Object
- * @param artifact 保管先のアーティファクト
- * @return エラーコード
- */
-static errr set_art_damage_bonus(const nlohmann::json &damage_bonus_data, ArtifactType &artifact)
-{
-    if (damage_bonus_data.is_null()) {
-        return PARSE_ERROR_NONE;
-    }
-    if (!damage_bonus_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto damage_bonus = damage_bonus_data.get<int>();
-    if (damage_bonus < -99 || damage_bonus > 99) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    artifact.to_d = damage_bonus;
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief JSON Objectから固定アーティファクトのAC補正値をセットする
- * @param ac_bonus_data AC補正値情報の格納されたJSON Object
- * @param artifact 保管先のアーティファクト
- * @return エラーコード
- */
-static errr set_art_ac_bonus(const nlohmann::json &ac_bonus_data, ArtifactType &artifact)
-{
-    if (ac_bonus_data.is_null()) {
-        return PARSE_ERROR_NONE;
-    }
-    if (!ac_bonus_data.is_number_integer()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    const auto ac_bonus = ac_bonus_data.get<short>();
-    if (ac_bonus < -99 || ac_bonus > 99) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    artifact.to_a = ac_bonus;
+    artifact.bi_key = { type_value, subtype_value };
     return PARSE_ERROR_NONE;
 }
 
@@ -378,39 +106,6 @@ static errr set_art_flags(const nlohmann::json &flag_data, ArtifactType &artifac
 }
 
 /*!
- * @brief JSON Objectから固定アーティファクトのフレーバーをセットする
- * @param flavor_data フレーバー情報の格納されたJSON Object
- * @param artifact 保管先のアーティファクト
- * @return エラーコード
- */
-static errr set_art_flavor(const nlohmann::json &flavor_data, ArtifactType &artifact)
-{
-    if (flavor_data.is_null()) {
-        return PARSE_ERROR_NONE;
-    }
-
-#ifdef JP
-    const auto &ja_flavor = flavor_data.find("ja");
-    if (ja_flavor == flavor_data.end()) {
-        return PARSE_ERROR_NONE;
-    }
-    auto ja_flavor_sys = utf8_to_sys(ja_flavor->get<std::string>());
-    if (!ja_flavor_sys) {
-        return PARSE_ERROR_INVALID_FLAG;
-    }
-    artifact.text = std::move(*ja_flavor_sys);
-#else
-    const auto &en_flavor = flavor_data.find("en");
-    if (en_flavor == flavor_data.end()) {
-        return PARSE_ERROR_NONE;
-    }
-    artifact.text = en_flavor->get<std::string>();
-#endif
-
-    return PARSE_ERROR_NONE;
-}
-
-/*!
  * @brief 固定アーティファクト情報(JSON Object)のパース関数
  * @param art_data 固定アーティファクトデータの格納されたJSON Object
  * @param head ヘッダ構造体
@@ -435,7 +130,7 @@ errr parse_artifacts_info(nlohmann::json &art_data, angband_header *)
     artifact.flags.set(TR_IGNORE_FIRE);
     artifact.flags.set(TR_IGNORE_COLD);
 
-    if (auto err = set_art_name(art_data["name"], artifact)) {
+    if (auto err = info_set_string(art_data["name"], artifact.name, true)) {
         msg_format(_("アーティファクトの名称読込失敗。ID: '%d'。", "Failed to load artifact name. ID: '%d'."), error_idx);
         return err;
     }
@@ -443,43 +138,43 @@ errr parse_artifacts_info(nlohmann::json &art_data, angband_header *)
         msg_format(_("アーティファクトのベースアイテム読込失敗。ID: '%d'。", "Failed to load base item of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_art_parameter_value(art_data["parameter_value"], artifact)) {
+    if (auto err = info_set_integer(art_data["parameter_value"], artifact.pval, false, Range(-128, 128))) {
         msg_format(_("アーティファクトのパラメータ値読込失敗。ID: '%d'。", "Failed to load parameter value of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_art_level(art_data["level"], artifact)) {
+    if (auto err = info_set_integer(art_data["level"], artifact.level, true, Range(0, 128))) {
         msg_format(_("アーティファクトのレベル読込失敗。ID: '%d'。", "Failed to load level of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_art_rarity(art_data["rarity"], artifact)) {
+    if (auto err = info_set_integer(art_data["rarity"], artifact.rarity, true)) {
         msg_format(_("アーティファクトの希少度読込失敗。ID: '%d'。", "Failed to load rarity of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_art_weight(art_data["weight"], artifact)) {
+    if (auto err = info_set_integer(art_data["weight"], artifact.weight, true, Range(0, 9999))) {
         msg_format(_("アーティファクトの重量読込失敗。ID: '%d'。", "Failed to load weight of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_art_cost(art_data["cost"], artifact)) {
+    if (auto err = info_set_integer(art_data["cost"], artifact.cost, true, Range(0, 99999999))) {
         msg_format(_("アーティファクトの売値読込失敗。ID: '%d'。", "Failed to load cost of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_art_base_ac(art_data["base_ac"], artifact)) {
+    if (auto err = info_set_integer(art_data["base_ac"], artifact.ac, false, Range(-99, 99))) {
         msg_format(_("アーティファクトのベースAC読込失敗。ID: '%d'。", "Failed to load base AC of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_art_base_dice(art_data["base_dice"], artifact)) {
+    if (auto err = info_set_dice(art_data["base_dice"], artifact.dd, artifact.ds, false)) {
         msg_format(_("アーティファクトのベースダイス読込失敗。ID: '%d'。", "Failed to load base dice of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_art_hit_bonus(art_data["hit_bonus"], artifact)) {
+    if (auto err = info_set_integer(art_data["hit_bonus"], artifact.to_h, false, Range(-99, 99))) {
         msg_format(_("アーティファクトの命中補正値読込失敗。ID: '%d'。", "Failed to load hit bonus of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_art_damage_bonus(art_data["damage_bonus"], artifact)) {
+    if (auto err = info_set_integer(art_data["damage_bonus"], artifact.to_d, false, Range(-99, 99))) {
         msg_format(_("アーティファクトの命中補正値読込失敗。ID: '%d'。", "Failed to load damage bonus of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_art_ac_bonus(art_data["ac_bonus"], artifact)) {
+    if (auto err = info_set_integer(art_data["ac_bonus"], artifact.to_a, false, Range(-99, 99))) {
         msg_format(_("アーティファクトのAC補正値読込失敗。ID: '%d'。", "Failed to load AC bonus of artifact. ID: '%d'."), error_idx);
         return err;
     }
@@ -491,7 +186,7 @@ errr parse_artifacts_info(nlohmann::json &art_data, angband_header *)
         msg_format(_("アーティファクトの能力フラグ読込失敗。ID: '%d'。", "Failed to load ability flags of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_art_flavor(art_data["flavor"], artifact)) {
+    if (auto err = info_set_string(art_data["flavor"], artifact.text, false)) {
         msg_format(_("アーティファクトのフレーバーテキスト読込失敗。ID: '%d'。", "Failed to load flavor text of artifact. ID: '%d'."), error_idx);
         return err;
     }
