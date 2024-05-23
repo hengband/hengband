@@ -30,7 +30,7 @@
 #include <algorithm>
 #include <span>
 
-byte display_autopick; /*!< 自動拾い状態の設定フラグ */
+uint8_t display_autopick; /*!< 自動拾い状態の設定フラグ */
 
 namespace {
 /* 一般的にオブジェクトシンボルとして扱われる記号を定義する(幻覚処理向け) /  Hack -- Legal object codes */
@@ -133,18 +133,13 @@ static bool is_revealed_wall(const FloorType &floor, const Pos2D &pos)
 /*!
  * @brief 指定した座標の地形の表示属性を取得する
  * @param player_ptr プレイヤー情報への参照ポインタ
- * @param y 階の中のy座標
- * @param x 階の中のy座標
- * @param ap 文字色属性
- * @param cp 文字種属性
- * @param tap 文字色属性(タイル)
- * @param tcp 文字種属性(タイル)
+ * @param pos 階の中の座標
+ * @return シンボル表記
  * @todo 強力発動コピペの嵐…ポインタ引数の嵐……Fuuu^h^hck!!
  */
-void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap, char *tcp)
+ColoredCharPair map_info(PlayerType *player_ptr, const Pos2D &pos)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    const Pos2D pos(y, x);
     auto &grid = floor.get_grid(pos);
     auto &terrains = TerrainList::get_instance();
     auto *terrain_mimic_ptr = &grid.get_terrain_mimic();
@@ -210,7 +205,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
                         cc_config = terrain_mimic_ptr->cc_configs[F_LIT_DARK];
                     } else if ((grid.info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) {
                         cc_config = terrain_mimic_ptr->cc_configs[F_LIT_DARK];
-                    } else if (terrain_mimic_ptr->flags.has_not(TerrainCharacteristics::LOS) && !check_local_illumination(player_ptr, y, x)) {
+                    } else if (terrain_mimic_ptr->flags.has_not(TerrainCharacteristics::LOS) && !check_local_illumination(player_ptr, pos.y, pos.x)) {
                         cc_config = terrain_mimic_ptr->cc_configs[F_LIT_DARK];
                     }
                 }
@@ -226,16 +221,10 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
         feat_priority = terrain_mimic_ptr->priority;
     }
 
-    (*tap) = cc_config.color;
-    (*tcp) = cc_config.character;
-    (*ap) = cc_config.color;
-    (*cp) = cc_config.character;
-
-    auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
+    ColoredCharPair ccp = { cc_config, cc_config };
+    const auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
     if (is_hallucinated && one_in_(256)) {
-        const auto cc = image_random();
-        *ap = cc.color;
-        *cp = cc.character;
+        ccp.cc_foreground = image_random();
     }
 
     for (const auto this_o_idx : grid.o_idx_list) {
@@ -263,70 +252,53 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
             }
         }
 
-        *cp = o_ptr->get_symbol();
-        *ap = o_ptr->get_color();
+        ccp.cc_foreground = { o_ptr->get_color(), o_ptr->get_symbol() };
         feat_priority = 20;
         if (is_hallucinated) {
-            const auto cc = image_object();
-            *ap = cc.color;
-            *cp = cc.character;
+            ccp.cc_foreground = image_object();
         }
 
         break;
     }
 
     if (grid.has_monster() && display_autopick != 0) {
-        const auto cc = set_term_color(player_ptr, { y, x }, { *ap, *cp });
-        *ap = cc.color;
-        *cp = cc.character;
-        return;
+        ccp.cc_foreground = set_term_color(player_ptr, pos, ccp.cc_foreground);
+        return ccp;
     }
 
     auto *m_ptr = &floor.m_list[grid.m_idx];
     if (!m_ptr->ml) {
-        const auto cc = set_term_color(player_ptr, { y, x }, { *ap, *cp });
-        *ap = cc.color;
-        *cp = cc.character;
-        return;
+        ccp.cc_foreground = set_term_color(player_ptr, pos, ccp.cc_foreground);
+        return ccp;
     }
 
     const auto &monrace_ap = m_ptr->get_appearance_monrace();
     feat_priority = 30;
     if (is_hallucinated) {
-        if (monrace_ap.visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {
-            /* Do nothing */
-        } else {
-            const auto cc = image_monster();
-            *ap = cc.color;
-            *cp = cc.character;
+        if (!monrace_ap.visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {
+            ccp.cc_foreground = image_monster();
         }
 
-        const auto cc = set_term_color(player_ptr, { y, x }, { *ap, *cp });
-        *ap = cc.color;
-        *cp = cc.character;
-        return;
+        ccp.cc_foreground = set_term_color(player_ptr, pos, ccp.cc_foreground);
+        return ccp;
     }
 
     cc_config = monrace_ap.cc_config;
     if (monrace_ap.visual_flags.has_none_of({ MonsterVisualType::CLEAR, MonsterVisualType::SHAPECHANGER, MonsterVisualType::CLEAR_COLOR, MonsterVisualType::MULTI_COLOR, MonsterVisualType::RANDOM_COLOR })) {
-        const auto cc = set_term_color(player_ptr, { y, x }, cc_config);
-        *ap = cc.color;
-        *cp = cc.character;
-        return;
+        ccp.cc_foreground = set_term_color(player_ptr, pos, cc_config);
+        return ccp;
     }
 
     if (monrace_ap.visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {
-        const auto cc = set_term_color(player_ptr, { y, x }, { *ap, *cp });
-        *ap = cc.color;
-        *cp = cc.character;
-        return;
+        ccp.cc_foreground = set_term_color(player_ptr, pos, ccp.cc_foreground);
+        return ccp;
     }
 
-    if (monrace_ap.visual_flags.has(MonsterVisualType::CLEAR_COLOR) && (*ap != TERM_DARK) && !use_graphics) {
+    if (monrace_ap.visual_flags.has(MonsterVisualType::CLEAR_COLOR) && (ccp.cc_foreground.color != TERM_DARK) && !use_graphics) {
         /* Do nothing */
     } else if (monrace_ap.visual_flags.has(MonsterVisualType::MULTI_COLOR) && !use_graphics) {
         if (monrace_ap.visual_flags.has(MonsterVisualType::ANY_COLOR)) {
-            *ap = randnum1<uint8_t>(15);
+            ccp.cc_foreground.color = randnum1<uint8_t>(15);
         } else {
             constexpr static auto colors = {
                 TERM_RED,
@@ -338,38 +310,32 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
                 TERM_GREEN,
             };
 
-            *ap = rand_choice(colors);
+            ccp.cc_foreground.color = rand_choice(colors);
         }
     } else if (monrace_ap.visual_flags.has(MonsterVisualType::RANDOM_COLOR) && !use_graphics) {
-        *ap = grid.m_idx % 15 + 1;
+        ccp.cc_foreground.color = grid.m_idx % 15 + 1;
     } else {
-        *ap = cc_config.color;
+        ccp.cc_foreground.color = cc_config.color;
     }
 
-    if (monrace_ap.visual_flags.has(MonsterVisualType::CLEAR) && (*cp != ' ') && !use_graphics) {
-        const auto cc = set_term_color(player_ptr, { y, x }, { *ap, *cp });
-        *ap = cc.color;
-        *cp = cc.character;
-        return;
+    if (monrace_ap.visual_flags.has(MonsterVisualType::CLEAR) && (ccp.cc_foreground.character != ' ') && !use_graphics) {
+        ccp.cc_foreground = set_term_color(player_ptr, pos, ccp.cc_foreground);
+        return ccp;
     }
 
     if (monrace_ap.visual_flags.has(MonsterVisualType::SHAPECHANGER)) {
         if (use_graphics) {
             auto r_idx = MonsterRace::pick_one_at_random();
             const auto &monrace = monraces_info[r_idx];
-            *ap = monrace.cc_config.color;
-            *cp = monrace.cc_config.character;
+            ccp.cc_foreground = monrace.cc_config;
         } else {
-            *cp = one_in_(25) ? rand_choice(image_objects) : rand_choice(image_monsters);
+            ccp.cc_foreground.character = one_in_(25) ? rand_choice(image_objects) : rand_choice(image_monsters);
         }
 
-        const auto cc = set_term_color(player_ptr, { y, x }, { *ap, *cp });
-        *ap = cc.color;
-        *cp = cc.character;
-        return;
+        ccp.cc_foreground = set_term_color(player_ptr, pos, ccp.cc_foreground);
+        return ccp;
     }
 
-    const auto cc = set_term_color(player_ptr, { y, x }, { *ap, cc_config.character });
-    *ap = cc.color;
-    *cp = cc.character;
+    ccp.cc_foreground = set_term_color(player_ptr, pos, { ccp.cc_foreground.color, cc_config.character });
+    return ccp;
 }

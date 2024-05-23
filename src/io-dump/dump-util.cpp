@@ -245,7 +245,7 @@ void display_visual_list(int col, int row, int height, int width, TERM_COLOR att
                 a |= 0x80;
             }
 
-            term_queue_bigchar(x, y, a, c, 0, 0);
+            term_queue_bigchar(x, y, { { a, c }, {} });
         }
     }
 }

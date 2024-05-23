@@ -272,7 +272,7 @@ void print_rel(PlayerType *player_ptr, char c, TERM_COLOR a, POSITION y, POSITIO
         }
 
         /* Draw the char using the attr */
-        term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, 0, 0);
+        term_queue_bigchar(panel_col_of(x), y - panel_row_prt, { { a, c }, {} });
     }
 }
 
@@ -406,23 +406,19 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
 void lite_spot(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     if (panel_contains(y, x) && in_bounds2(player_ptr->current_floor_ptr, y, x)) {
-        TERM_COLOR a;
-        char c;
-        TERM_COLOR ta;
-        char tc;
-
-        map_info(player_ptr, y, x, &a, &c, &ta, &tc);
+        auto ccp = map_info(player_ptr, { y, x });
         if (!use_graphics) {
+            auto &cc_foreground = ccp.cc_foreground;
             if (w_ptr->timewalk_m_idx) {
-                a = TERM_DARK;
+                cc_foreground.color = TERM_DARK;
             } else if (is_invuln(player_ptr) || player_ptr->timewalk) {
-                a = TERM_WHITE;
+                cc_foreground.color = TERM_WHITE;
             } else if (player_ptr->wraith_form) {
-                a = TERM_L_DARK;
+                cc_foreground.color = TERM_L_DARK;
             }
         }
 
-        term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, ta, tc);
+        term_queue_bigchar(panel_col_of(x), y - panel_row_prt, ccp);
         static constexpr auto flags = {
             SubWindowRedrawingFlag::OVERHEAD,
             SubWindowRedrawingFlag::DUNGEON,

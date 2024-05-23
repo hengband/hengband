@@ -112,7 +112,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
         if (show_item_graph) {
             const auto a = o_ptr->get_color();
             const auto c = o_ptr->get_symbol();
-            term_queue_bigchar(cur_col, j + 1, a, c, 0, 0);
+            term_queue_bigchar(cur_col, j + 1, { { a, c }, {} });
             if (use_bigtile) {
                 cur_col++;
             }

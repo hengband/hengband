@@ -53,7 +53,7 @@ void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
         const auto a = o_ptr->get_color();
         const auto c = o_ptr->get_symbol();
 
-        term_queue_bigchar(cur_col, i + 6, a, c, 0, 0);
+        term_queue_bigchar(cur_col, i + 6, { { a, c }, {} });
         if (use_bigtile) {
             cur_col++;
         }
