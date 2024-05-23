@@ -349,20 +349,9 @@ std::optional<bool> MonsterEntity::order_pet_whistle(const MonsterEntity &other)
 
     const auto &monrace1 = this->get_monrace();
     const auto &monrace2 = other.get_monrace();
-    if (monrace1.kind_flags.has(MonsterKindType::UNIQUE) && monrace2.kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        return true;
-    }
-
-    if (monrace1.kind_flags.has_not(MonsterKindType::UNIQUE) && monrace2.kind_flags.has(MonsterKindType::UNIQUE)) {
-        return false;
-    }
-
-    if (monrace1.level > monrace2.level) {
-        return true;
-    }
-
-    if (monrace1.level < monrace2.level) {
-        return false;
+    const auto is_ordered = monrace1.order_pet(monrace2);
+    if (is_ordered) {
+        return *is_ordered;
     }
 
     if (this->hp > other.hp) {

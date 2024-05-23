@@ -61,6 +61,27 @@ std::string MonsterRaceInfo::get_died_message() const
     return is_explodable ? _("は爆発して粉々になった。", " explodes into tiny shreds.") : _("を倒した。", " is destroyed.");
 }
 
+std::optional<bool> MonsterRaceInfo::order_pet(const MonsterRaceInfo &other) const
+{
+    if (this->kind_flags.has(MonsterKindType::UNIQUE) && other.kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        return true;
+    }
+
+    if (this->kind_flags.has_not(MonsterKindType::UNIQUE) && other.kind_flags.has(MonsterKindType::UNIQUE)) {
+        return false;
+    }
+
+    if (this->level > other.level) {
+        return true;
+    }
+
+    if (this->level < other.level) {
+        return false;
+    }
+
+    return std::nullopt;
+}
+
 /*!
  * @brief ユニークモンスターの撃破状態を更新する
  * @todo 状態変更はモンスター「定義」ではないので将来的に別クラスへ分離する
