@@ -7,6 +7,7 @@
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-range.h"
 
@@ -142,4 +143,51 @@ bool FloorType::can_teleport_level(bool to_player) const
     is_invalid_floor &= this->dun_level >= 1;
     is_invalid_floor &= ironman_downward;
     return this->is_special() || is_invalid_floor;
+}
+
+/*!
+ * @brief 魔法の笛でペットを呼び寄せる順番を決める
+ * @param index1 フロア内のモンスターインデックス1
+ * @param index2 フロア内のモンスターインデックス2
+ * @return index1の優先度が高いならtrue、低いならfalse
+ */
+bool FloorType::order_pet_whistle(short index1, short index2) const
+{
+    const auto &monster1 = this->m_list[index1];
+    const auto &monster2 = this->m_list[index2];
+    if (monster1.is_named() && !monster2.is_named()) {
+        return true;
+    }
+
+    if (!monster1.is_named() && monster2.is_named()) {
+        return false;
+    }
+
+    const auto &monrace1 = monster1.get_monrace();
+    const auto &monrace2 = monster2.get_monrace();
+    if (monrace1.kind_flags.has(MonsterKindType::UNIQUE) && monrace2.kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        return true;
+    }
+
+    if (monrace1.kind_flags.has_not(MonsterKindType::UNIQUE) && monrace2.kind_flags.has(MonsterKindType::UNIQUE)) {
+        return false;
+    }
+
+    if (monrace1.level > monrace2.level) {
+        return true;
+    }
+
+    if (monrace1.level < monrace2.level) {
+        return false;
+    }
+
+    if (monster1.hp > monster2.hp) {
+        return true;
+    }
+
+    if (monster1.hp < monster2.hp) {
+        return false;
+    }
+
+    return index1 <= index2;
 }
