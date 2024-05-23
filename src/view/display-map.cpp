@@ -11,6 +11,7 @@
 #include "monster-race/monster-race.h"
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
+#include "player/player-status.h"
 #include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -338,4 +339,35 @@ ColoredCharPair map_info(PlayerType *player_ptr, const Pos2D &pos)
 
     ccp.cc_foreground = set_term_color(player_ptr, pos, { ccp.cc_foreground.color, cc_config.character });
     return ccp;
+}
+
+/*!
+ * @brief 単色表示色を取得する
+ *
+ * 以下のゲームの状態にしたがってマップを単色表示する場合にその色を返す。
+ * なお、タイル表示モードでは適用されない。
+ *
+ * - モンスターが時間停止スキルを使用中: TERM_DARK(マップが黒一色となりなにも表示されない)
+ * - プレイヤーが無敵状態もしくは時間停止スキルを使用中: TERM_WHITE
+ * - プレイヤーが幽体化スキルを使用中: TERM_L_DARK
+ *
+ * @return 単色表示色。単色表示を行わない場合はstd::nullopt
+ */
+std::optional<uint8_t> get_monochrome_display_color(PlayerType *player_ptr)
+{
+    if (use_graphics) {
+        return std::nullopt;
+    }
+
+    if (w_ptr->timewalk_m_idx) {
+        return TERM_DARK;
+    }
+    if (is_invuln(player_ptr) || player_ptr->timewalk) {
+        return TERM_WHITE;
+    }
+    if (player_ptr->wraith_form) {
+        return TERM_L_DARK;
+    }
+
+    return std::nullopt;
 }

@@ -98,16 +98,7 @@ void print_map(PlayerType *player_ptr)
     for (auto y = ymin; y <= ymax; y++) {
         for (auto x = xmin; x <= xmax; x++) {
             auto ccp = map_info(player_ptr, { y, x });
-            if (!use_graphics) {
-                auto &cc_foreground = ccp.cc_foreground;
-                if (w_ptr->timewalk_m_idx) {
-                    cc_foreground.color = TERM_DARK;
-                } else if (is_invuln(player_ptr) || player_ptr->timewalk) {
-                    cc_foreground.color = TERM_WHITE;
-                } else if (player_ptr->wraith_form) {
-                    cc_foreground.color = TERM_L_DARK;
-                }
-            }
+            ccp.cc_foreground.color = get_monochrome_display_color(player_ptr).value_or(ccp.cc_foreground.color);
 
             term_queue_bigchar(panel_col_of(x), y - panel_row_prt, ccp);
         }
@@ -264,15 +255,7 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
         term_gotoxy(COL_MAP, y);
         for (x = 0; x < wid + 2; ++x) {
             ColoredChar cc_foreground(ma[y][x], mc[y][x]);
-            if (!use_graphics) {
-                if (w_ptr->timewalk_m_idx) {
-                    cc_foreground.color = TERM_DARK;
-                } else if (is_invuln(player_ptr) || player_ptr->timewalk) {
-                    cc_foreground.color = TERM_WHITE;
-                } else if (player_ptr->wraith_form) {
-                    cc_foreground.color = TERM_L_DARK;
-                }
-            }
+            cc_foreground.color = get_monochrome_display_color(player_ptr).value_or(cc_foreground.color);
 
             term_add_bigch(cc_foreground);
         }
