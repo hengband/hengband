@@ -24,10 +24,7 @@
  */
 bool research_mon(PlayerType *player_ptr)
 {
-    bool notpicked;
     bool recall = false;
-    uint16_t why = 0;
-
     bool all = false;
     bool uniq = false;
     bool norm = false;
@@ -75,8 +72,9 @@ bool research_mon(PlayerType *player_ptr)
     }
 
     prt(buf, 16, 10);
-    std::vector<MonsterRaceId> monraces;
-    for (const auto &[monrace_id, monrace] : monraces_info) {
+    std::vector<MonsterRaceId> monrace_ids;
+    const auto &monraces = MonraceList::get_instance();
+    for (const auto &[monrace_id, monrace] : monraces) {
         if (!MonsterRace(monrace_id).is_valid()) {
             continue;
         }
@@ -117,37 +115,32 @@ bool research_mon(PlayerType *player_ptr)
 #else
             if (str_find(temp2, monster_name))
 #endif
-                monraces.push_back(monrace_id);
+                monrace_ids.push_back(monrace_id);
         } else if (all || (monrace.cc_def.character == sym)) {
-            monraces.push_back(monrace_id);
+            monrace_ids.push_back(monrace_id);
         }
     }
 
-    if (monraces.empty()) {
+    if (monrace_ids.empty()) {
         screen_load();
-
         return false;
     }
 
-    why = 2;
-    char query = 'y';
-
-    if (why) {
-        ang_sort(player_ptr, monraces.data(), &why, monraces.size(), ang_sort_comp_hook, ang_sort_swap_hook);
-    }
+    std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
 
     uint i;
     static int old_sym = '\0';
     static uint old_i = 0;
-    if (old_sym == sym && old_i < monraces.size()) {
+    if (old_sym == sym && old_i < monrace_ids.size()) {
         i = old_i;
     } else {
-        i = monraces.size() - 1;
+        i = monrace_ids.size() - 1;
     }
 
-    notpicked = true;
+    auto notpicked = true;
+    auto query = 'y';
     while (notpicked) {
-        auto r_idx = monraces[i];
+        auto r_idx = monrace_ids[i];
         roff_top(r_idx);
         term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ' 'で続行, ESC]", " [(r)ecall, ESC, space to continue]"));
         while (true) {
@@ -174,7 +167,7 @@ bool research_mon(PlayerType *player_ptr)
         }
 
         if (query == '-') {
-            if (++i == monraces.size()) {
+            if (++i == monrace_ids.size()) {
                 i = 0;
                 if (!expand_list) {
                     break;
@@ -185,7 +178,7 @@ bool research_mon(PlayerType *player_ptr)
         }
 
         if (i-- == 0) {
-            i = monraces.size() - 1;
+            i = monrace_ids.size() - 1;
             if (!expand_list) {
                 break;
             }

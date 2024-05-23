@@ -13,7 +13,6 @@
 #include "term/term-color-types.h"
 #include "term/z-form.h"
 #include "util/int-char-converter.h"
-#include "util/sort.h"
 #include "util/string-processor.h"
 #include "view/display-lore.h"
 
@@ -40,8 +39,6 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
     bool norm = false;
     bool ride = false;
     bool recall = false;
-
-    uint16_t why = 0;
 
     constexpr auto prompt = _("知りたい文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^R乗馬,^M名前): ",
         "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): ");
@@ -87,8 +84,9 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
     }
 
     prt(buf, 0, 0);
-    std::vector<MonsterRaceId> monraces;
-    for (const auto &[monrace_id, monrace] : monraces_info) {
+    std::vector<MonsterRaceId> monrace_ids;
+    const auto &monraces = MonraceList::get_instance();
+    for (const auto &[monrace_id, monrace] : monraces) {
         if (!cheat_know && !monrace.r_sights) {
             continue;
         }
@@ -134,25 +132,24 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
 #else
             if (str_find(temp2, monster_name))
 #endif
-                monraces.push_back(monrace_id);
+                monrace_ids.push_back(monrace_id);
         }
 
         else if (all || (monrace.cc_def.character == symbol)) {
-            monraces.push_back(monrace_id);
+            monrace_ids.push_back(monrace_id);
         }
     }
 
-    if (monraces.empty()) {
+    if (monrace_ids.empty()) {
         return;
     }
 
     put_str(_("思い出を見ますか? (k:殺害順/y/n): ", "Recall details? (k/y/n): "), 0, _(36, 40));
     auto query = inkey();
     prt(buf, 0, 0);
-    why = 2;
-    ang_sort(player_ptr, monraces.data(), &why, monraces.size(), ang_sort_comp_hook, ang_sort_swap_hook);
+    auto is_detailed = false;
     if (query == 'k') {
-        why = 4;
+        is_detailed = true;
         query = 'y';
     }
 
@@ -160,19 +157,17 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
         return;
     }
 
-    if (why == 4) {
-        ang_sort(player_ptr, monraces.data(), &why, monraces.size(), ang_sort_comp_hook, ang_sort_swap_hook);
-    }
-
-    auto i = monraces.size() - 1;
+    std::stable_sort(monrace_ids.begin(), monrace_ids.end(),
+        [&monraces, is_detailed](auto x, auto y) { return monraces.order(x, y, is_detailed); });
+    auto i = std::ssize(monrace_ids) - 1;
     while (true) {
-        auto r_idx = monraces[i];
+        auto r_idx = monrace_ids[i];
         monster_race_track(player_ptr, r_idx);
         handle_stuff(player_ptr);
         while (true) {
             if (recall) {
                 screen_save();
-                screen_roff(player_ptr, monraces[i], MONSTER_LORE_NORMAL);
+                screen_roff(player_ptr, monrace_ids[i], MONSTER_LORE_NORMAL);
             }
 
             roff_top(r_idx);
@@ -193,7 +188,7 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
         }
 
         if (query == '-') {
-            if (++i == monraces.size()) {
+            if (++i == std::ssize(monrace_ids)) {
                 i = 0;
                 if (!expand_list) {
                     break;
@@ -201,7 +196,7 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
             }
         } else {
             if (i-- == 0) {
-                i = monraces.size() - 1;
+                i = monrace_ids.size() - 1;
                 if (!expand_list) {
                     break;
                 }

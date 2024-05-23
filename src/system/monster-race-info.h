@@ -158,6 +158,15 @@ public:
 
     static const std::map<MonsterRaceId, std::set<MonsterRaceId>> &get_unified_uniques();
     static MonraceList &get_instance();
+    std::map<MonsterRaceId, MonsterRaceInfo>::iterator begin();
+    std::map<MonsterRaceId, MonsterRaceInfo>::const_iterator begin() const;
+    std::map<MonsterRaceId, MonsterRaceInfo>::iterator end();
+    std::map<MonsterRaceId, MonsterRaceInfo>::const_iterator end() const;
+    std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator rbegin();
+    std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator rbegin() const;
+    std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator rend();
+    std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator rend() const;
+    const std::vector<MonsterRaceId> &get_valid_monrace_ids() const;
     bool can_unify_separate(const MonsterRaceId r_idx) const;
     void kill_unified_unique(const MonsterRaceId r_idx);
     bool is_selectable(const MonsterRaceId r_idx) const;
@@ -168,6 +177,7 @@ public:
     bool can_select_separate(const MonsterRaceId r_idx, const int hp, const int maxhp) const;
     int calc_figurine_value(const MonsterRaceId r_idx) const;
     int calc_capture_value(const MonsterRaceId r_idx) const;
+    bool order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed = false) const;
 
     void reset_all_visuals();
 
