@@ -337,6 +337,45 @@ std::pair<TERM_COLOR, int> MonsterEntity::get_hp_bar_data() const
     return { TERM_RED, len };
 }
 
+std::optional<bool> MonsterEntity::order_pet_whistle(const MonsterEntity &other) const
+{
+    if (this->is_named() && !other.is_named()) {
+        return true;
+    }
+
+    if (!this->is_named() && other.is_named()) {
+        return false;
+    }
+
+    const auto &monrace1 = this->get_monrace();
+    const auto &monrace2 = other.get_monrace();
+    if (monrace1.kind_flags.has(MonsterKindType::UNIQUE) && monrace2.kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        return true;
+    }
+
+    if (monrace1.kind_flags.has_not(MonsterKindType::UNIQUE) && monrace2.kind_flags.has(MonsterKindType::UNIQUE)) {
+        return false;
+    }
+
+    if (monrace1.level > monrace2.level) {
+        return true;
+    }
+
+    if (monrace1.level < monrace2.level) {
+        return false;
+    }
+
+    if (this->hp > other.hp) {
+        return true;
+    }
+
+    if (this->hp < other.hp) {
+        return false;
+    }
+
+    return std::nullopt;
+}
+
 /*!
  * @brief モンスターを敵に回す
  */
