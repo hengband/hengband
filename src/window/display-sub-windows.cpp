@@ -474,16 +474,7 @@ static void display_dungeon(PlayerType *player_ptr)
             }
 
             auto ccp = map_info(player_ptr, { y, x });
-            auto &cc_foreground = ccp.cc_foreground;
-            if (!use_graphics) {
-                if (w_ptr->timewalk_m_idx) {
-                    cc_foreground.color = TERM_DARK;
-                } else if (is_invuln(player_ptr) || player_ptr->timewalk) {
-                    cc_foreground.color = TERM_WHITE;
-                } else if (player_ptr->wraith_form) {
-                    cc_foreground.color = TERM_L_DARK;
-                }
-            }
+            ccp.cc_foreground.color = get_monochrome_display_color(player_ptr).value_or(ccp.cc_foreground.color);
 
             term_queue_char(pos_x, pos_y, ccp);
         }

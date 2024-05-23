@@ -64,17 +64,7 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
                 }
             }
 
-            if (!use_graphics) {
-                auto &cc_foreground = ccp.cc_foreground;
-                if (w_ptr->timewalk_m_idx) {
-                    cc_foreground.color = TERM_DARK;
-                } else if (is_invuln(player_ptr) || player_ptr->timewalk) {
-                    cc_foreground.color = TERM_WHITE;
-                } else if (player_ptr->wraith_form) {
-                    cc_foreground.color = TERM_L_DARK;
-                }
-            }
-
+            ccp.cc_foreground.color = get_monochrome_display_color(player_ptr).value_or(ccp.cc_foreground.color);
             ccp.cc_foreground.character = '*';
             term_queue_bigchar(panel_col_of(pos_path.x), pos_path.y - panel_row_prt, ccp);
         }

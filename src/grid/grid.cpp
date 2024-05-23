@@ -260,16 +260,7 @@ void print_rel(PlayerType *player_ptr, char c, TERM_COLOR a, POSITION y, POSITIO
 {
     /* Only do "legal" locations */
     if (panel_contains(y, x)) {
-        /* Hack -- fake monochrome */
-        if (!use_graphics) {
-            if (w_ptr->timewalk_m_idx) {
-                a = TERM_DARK;
-            } else if (is_invuln(player_ptr) || player_ptr->timewalk) {
-                a = TERM_WHITE;
-            } else if (player_ptr->wraith_form) {
-                a = TERM_L_DARK;
-            }
-        }
+        a = get_monochrome_display_color(player_ptr).value_or(a);
 
         /* Draw the char using the attr */
         term_queue_bigchar(panel_col_of(x), y - panel_row_prt, { { a, c }, {} });
@@ -407,16 +398,7 @@ void lite_spot(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     if (panel_contains(y, x) && in_bounds2(player_ptr->current_floor_ptr, y, x)) {
         auto ccp = map_info(player_ptr, { y, x });
-        if (!use_graphics) {
-            auto &cc_foreground = ccp.cc_foreground;
-            if (w_ptr->timewalk_m_idx) {
-                cc_foreground.color = TERM_DARK;
-            } else if (is_invuln(player_ptr) || player_ptr->timewalk) {
-                cc_foreground.color = TERM_WHITE;
-            } else if (player_ptr->wraith_form) {
-                cc_foreground.color = TERM_L_DARK;
-            }
-        }
+        ccp.cc_foreground.color = get_monochrome_display_color(player_ptr).value_or(ccp.cc_foreground.color);
 
         term_queue_bigchar(panel_col_of(x), y - panel_row_prt, ccp);
         static constexpr auto flags = {
