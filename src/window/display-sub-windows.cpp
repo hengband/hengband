@@ -462,21 +462,19 @@ void fix_overhead(PlayerType *player_ptr)
  */
 static void display_dungeon(PlayerType *player_ptr)
 {
-    ColoredChar cc_background;
     for (auto x = player_ptr->x - game_term->wid / 2 + 1; x <= player_ptr->x + game_term->wid / 2; x++) {
         for (auto y = player_ptr->y - game_term->hgt / 2 + 1; y <= player_ptr->y + game_term->hgt / 2; y++) {
-            ColoredChar cc_foreground;
+            const auto pos_y = y - player_ptr->y + game_term->hgt / 2 - 1;
+            const auto pos_x = x - player_ptr->x + game_term->wid / 2 - 1;
             if (!in_bounds2(player_ptr->current_floor_ptr, y, x)) {
                 const auto &terrain = TerrainList::get_instance()[feat_none];
-                cc_foreground = terrain.cc_configs.at(F_LIT_STANDARD);
-                const auto pos_y = y - player_ptr->y + game_term->hgt / 2 - 1;
-                const auto pos_x = x - player_ptr->x + game_term->wid / 2 - 1;
-                term_queue_char(pos_x, pos_y, { cc_foreground, cc_background });
+                const auto &cc_foreground = terrain.cc_configs.at(F_LIT_STANDARD);
+                term_queue_char(pos_x, pos_y, { cc_foreground, {} });
                 continue;
             }
 
             auto ccp = map_info(player_ptr, { y, x });
-            cc_foreground = ccp.cc_foreground;
+            auto &cc_foreground = ccp.cc_foreground;
             if (!use_graphics) {
                 if (w_ptr->timewalk_m_idx) {
                     cc_foreground.color = TERM_DARK;
@@ -487,9 +485,7 @@ static void display_dungeon(PlayerType *player_ptr)
                 }
             }
 
-            const auto pos_y = y - player_ptr->y + game_term->hgt / 2 - 1;
-            const auto pos_x = x - player_ptr->x + game_term->wid / 2 - 1;
-            term_queue_char(pos_x, pos_y, { cc_foreground, cc_background });
+            term_queue_char(pos_x, pos_y, ccp);
         }
     }
 }
