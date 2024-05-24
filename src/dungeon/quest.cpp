@@ -52,10 +52,34 @@ static concptr find_quest_map[] = {
     _("巻物を見つけた。メッセージが書いてある:", "You find a scroll with the following message"),
 };
 
+QuestList QuestList::instance{};
+
 QuestList &QuestList::get_instance()
 {
-    static QuestList instance{};
     return instance;
+}
+
+/*!
+ * @brief クエストの初期化
+ * @details ソフトウェア起動時ではパース関数が動作しないので、各種初期化シーケンス時に遅延初期化する
+ */
+void QuestList::initialize()
+{
+    try {
+        const auto quest_numbers = parse_quest_info(QUEST_DEFINITION_LIST);
+        QuestType quest{};
+        quest.status = QuestStatusType::UNTAKEN;
+        this->quests.emplace(QuestId::NONE, quest);
+        for (const auto q : quest_numbers) {
+            this->quests.emplace(q, quest);
+        }
+    } catch (const std::runtime_error &r) {
+        std::stringstream ss;
+        ss << _("ファイル読み込みエラー: ", "File loading error: ") << r.what();
+        msg_print(ss.str());
+        msg_print(nullptr);
+        quit(_("クエスト初期化エラー", "Error of quests initializing"));
+    }
 }
 
 QuestType &QuestList::operator[](QuestId id)
@@ -121,34 +145,6 @@ QuestList::const_iterator QuestList::find(QuestId id) const
 size_t QuestList::size() const
 {
     return this->quests.size();
-}
-
-/*!
- * @brief クエスト情報初期化のメインルーチン /
- * Initialize quest array
- */
-void QuestList::initialize()
-{
-    if (initialized) {
-        return;
-    }
-    try {
-        auto quest_numbers = parse_quest_info(QUEST_DEFINITION_LIST);
-        QuestType init_quest{};
-        init_quest.status = QuestStatusType::UNTAKEN;
-        this->quests.insert({ QuestId::NONE, init_quest });
-        for (auto q : quest_numbers) {
-            this->quests.insert({ q, init_quest });
-        }
-        initialized = true;
-    } catch (const std::runtime_error &r) {
-        std::stringstream ss;
-        ss << _("ファイル読み込みエラー: ", "File loading error: ") << r.what();
-
-        msg_print(ss.str());
-        msg_print(nullptr);
-        quit(_("クエスト初期化エラー", "Error of quests initializing"));
-    }
 }
 
 /*!

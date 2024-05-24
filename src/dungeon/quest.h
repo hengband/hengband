@@ -133,6 +133,8 @@ public:
     using const_iterator = std::map<QuestId, QuestType>::const_iterator;
     using const_reverse_iterator = std::map<QuestId, QuestType>::const_reverse_iterator;
     static QuestList &get_instance();
+
+    void initialize();
     QuestType &operator[](QuestId id);
     const QuestType &operator[](QuestId id) const;
     iterator begin();
@@ -146,14 +148,13 @@ public:
     iterator find(QuestId id);
     const_iterator find(QuestId id) const;
     size_t size() const;
-    void initialize();
     QuestList(const QuestList &) = delete;
     QuestList(QuestList &&) = delete;
     QuestList &operator=(const QuestList &) = delete;
     QuestList &operator=(QuestList &&) = delete;
 
 private:
-    bool initialized = false;
+    static QuestList instance;
     std::map<QuestId, QuestType> quests;
     QuestList() = default;
 };
