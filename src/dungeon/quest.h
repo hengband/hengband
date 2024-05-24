@@ -156,7 +156,6 @@ private:
     bool initialized = false;
     std::map<QuestId, QuestType> quest_data;
     QuestList() = default;
-    ~QuestList() = default;
 };
 
 extern std::vector<std::string> quest_text_lines;
