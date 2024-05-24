@@ -57,7 +57,7 @@ static void load_quest_completion(QuestType *q_ptr)
     }
 }
 
-static void load_quest_details(PlayerType *player_ptr, QuestType *q_ptr, const QuestId loading_quest_index)
+static void load_quest_details(PlayerType *player_ptr, QuestType *q_ptr, const QuestId loading_quest_id)
 {
     q_ptr->cur_num = rd_s16b();
     q_ptr->max_num = rd_s16b();
@@ -66,7 +66,7 @@ static void load_quest_details(PlayerType *player_ptr, QuestType *q_ptr, const Q
     q_ptr->r_idx = i2enum<MonsterRaceId>(rd_s16b());
     if ((q_ptr->type == QuestKindType::RANDOM) && !MonsterRace(q_ptr->r_idx).is_valid()) {
         auto &quest_list = QuestList::get_instance();
-        determine_random_questor(player_ptr, &quest_list[loading_quest_index]);
+        determine_random_questor(player_ptr, quest_list[loading_quest_id]);
     }
     q_ptr->reward_fa_id = i2enum<FixedArtifactId>(rd_s16b());
     if (q_ptr->has_reward()) {

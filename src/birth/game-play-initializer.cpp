@@ -160,13 +160,13 @@ void init_dungeon_quests(PlayerType *player_ptr)
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
     floor_ptr->quest_number = QuestId::NONE;
     for (auto q_idx : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
-        auto *q_ptr = &quest_list[q_idx];
+        auto &quest = quest_list[q_idx];
         MonsterRaceInfo *quest_r_ptr;
-        q_ptr->status = QuestStatusType::TAKEN;
-        determine_random_questor(player_ptr, q_ptr);
-        quest_r_ptr = &monraces_info[q_ptr->r_idx];
+        quest.status = QuestStatusType::TAKEN;
+        determine_random_questor(player_ptr, quest);
+        quest_r_ptr = &monraces_info[quest.r_idx];
         quest_r_ptr->misc_flags.set(MonsterMiscType::QUESTOR);
-        q_ptr->max_num = 1;
+        quest.max_num = 1;
     }
 
     init_flags = INIT_ASSIGN;

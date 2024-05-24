@@ -149,12 +149,12 @@ size_t QuestList::size() const
 
 /*!
  * @brief 該当IDが固定クエストかどうかを判定する.
- * @param quest_idx クエストID
+ * @param quest_id クエストID
  * @return 固定クエストならばTRUEを返す
  */
-bool QuestType::is_fixed(QuestId quest_idx)
+bool QuestType::is_fixed(QuestId quest_id)
 {
-    return (enum2i(quest_idx) < MIN_RANDOM_QUEST) || (enum2i(quest_idx) > MAX_RANDOM_QUEST);
+    return (enum2i(quest_id) < MIN_RANDOM_QUEST) || (enum2i(quest_id) > MAX_RANDOM_QUEST);
 }
 
 bool QuestType::has_reward() const
@@ -170,14 +170,14 @@ ArtifactType &QuestType::get_reward() const
 
 /*!
  * @brief ランダムクエストの討伐ユニークを決める / Determine the random quest uniques
- * @param q_ptr クエスト構造体の参照ポインタ
+ * @param quest クエスト構造体への参照
  */
-void determine_random_questor(PlayerType *player_ptr, QuestType *q_ptr)
+void determine_random_questor(PlayerType *player_ptr, QuestType &quest)
 {
     get_mon_num_prep(player_ptr, mon_hook_quest, nullptr);
     MonsterRaceId r_idx;
     while (true) {
-        r_idx = get_mon_num(player_ptr, 0, q_ptr->level + 5 + randint1(q_ptr->level / 10), PM_ARENA);
+        r_idx = get_mon_num(player_ptr, 0, quest.level + 5 + randint1(quest.level / 10), PM_ARENA);
         const auto &monrace = monraces_info[r_idx];
         if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
             continue;
@@ -215,12 +215,12 @@ void determine_random_questor(PlayerType *player_ptr, QuestType *q_ptr)
          * Accept monsters that are 2 - 6 levels
          * out of depth depending on the quest level
          */
-        if (monrace.level > (q_ptr->level + (q_ptr->level / 20))) {
+        if (monrace.level > (quest.level + (quest.level / 20))) {
             break;
         }
     }
 
-    q_ptr->r_idx = r_idx;
+    quest.r_idx = r_idx;
 }
 
 /*!
@@ -240,29 +240,27 @@ void record_quest_final_status(QuestType *q_ptr, PLAYER_LEVEL lev, QuestStatusTy
 /*!
  * @brief クエストを達成状態にする /
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param quest_num 達成状態にしたいクエストのID
+ * @param quest_id 達成状態にしたいクエストのID
  */
-void complete_quest(PlayerType *player_ptr, QuestId quest_num)
+void complete_quest(PlayerType *player_ptr, QuestId quest_id)
 {
-    auto &quest_list = QuestList::get_instance();
-    auto *const q_ptr = &quest_list[quest_num];
-
-    switch (q_ptr->type) {
+    auto &quests = QuestList::get_instance();
+    auto &quest = quests[quest_id];
+    switch (quest.type) {
     case QuestKindType::RANDOM:
         if (record_rand_quest) {
-            exe_write_diary_quest(player_ptr, DiaryKind::RAND_QUEST_C, quest_num);
+            exe_write_diary_quest(player_ptr, DiaryKind::RAND_QUEST_C, quest_id);
         }
         break;
     default:
         if (record_fix_quest) {
-            exe_write_diary_quest(player_ptr, DiaryKind::FIX_QUEST_C, quest_num);
+            exe_write_diary_quest(player_ptr, DiaryKind::FIX_QUEST_C, quest_id);
         }
         break;
     }
 
-    record_quest_final_status(q_ptr, player_ptr->lev, QuestStatusType::COMPLETED);
-
-    if (q_ptr->flags & QUEST_FLAG_SILENT) {
+    record_quest_final_status(&quest, player_ptr->lev, QuestStatusType::COMPLETED);
+    if (quest.flags & QUEST_FLAG_SILENT) {
         return;
     }
 
@@ -279,56 +277,54 @@ void complete_quest(PlayerType *player_ptr, QuestId quest_num)
  */
 void check_find_art_quest_completion(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    const auto &quest_list = QuestList::get_instance();
+    const auto &quests = QuestList::get_instance();
     /* Check if completed a quest */
-    for (const auto &[q_idx, quest] : quest_list) {
+    for (const auto &[quest_id, quest] : quests) {
         auto found_artifact = (quest.type == QuestKindType::FIND_ARTIFACT);
         found_artifact &= (quest.status == QuestStatusType::TAKEN);
         found_artifact &= (o_ptr->is_specific_artifact(quest.reward_fa_id));
         if (found_artifact) {
-            complete_quest(player_ptr, q_idx);
+            complete_quest(player_ptr, quest_id);
         }
     }
 }
 
 /*!
- * @brief クエストの導入メッセージを表示する / Discover quest
- * @param q_idx 開始されたクエストのID
+ * @brief クエストの導入メッセージを表示する
+ * @param quest_id 開始されたクエストのID
  */
-void quest_discovery(QuestId q_idx)
+void quest_discovery(QuestId quest_id)
 {
-    auto &quest_list = QuestList::get_instance();
-    auto *q_ptr = &quest_list[q_idx];
-    auto *r_ptr = &monraces_info[q_ptr->r_idx];
-    MONSTER_NUMBER q_num = q_ptr->max_num;
-
-    if (!inside_quest(q_idx)) {
+    auto &quests = QuestList::get_instance();
+    auto &quest = quests[quest_id];
+    const auto &monrace = monraces_info[quest.r_idx];
+    if (!inside_quest(quest_id)) {
         return;
     }
 
+    const auto num_subjugation = quest.max_num;
 #ifdef JP
-    const auto &name = r_ptr->name;
+    const auto &name = monrace.name;
 #else
-    const auto &name = (q_num != 1) ? pluralize(r_ptr->name) : r_ptr->name;
+    const auto &name = (num_subjugation != 1) ? pluralize(monrace.name) : monrace.name;
 #endif
 
     msg_print(find_quest_map[rand_range(0, 4)]);
     msg_print(nullptr);
-
-    if (q_num != 1) {
-        msg_format(_("注意しろ！この階は%d体の%sによって守られている！", "Be warned, this level is guarded by %d %s!"), q_num, name.data());
+    if (num_subjugation != 1) {
+        msg_format(_("注意しろ！この階は%d体の%sによって守られている！", "Be warned, this level is guarded by %d %s!"), num_subjugation, name.data());
         return;
     }
 
-    bool is_random_quest_skipped = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
-    is_random_quest_skipped &= r_ptr->max_num == 0;
+    auto is_random_quest_skipped = monrace.kind_flags.has(MonsterKindType::UNIQUE);
+    is_random_quest_skipped &= monrace.max_num == 0;
     if (!is_random_quest_skipped) {
         msg_format(_("注意せよ！この階は%sによって守られている！", "Beware, this level is protected by %s!"), name.data());
         return;
     }
 
     msg_print(_("この階は以前は誰かによって守られていたようだ…。", "It seems that this level was protected by someone before..."));
-    record_quest_final_status(q_ptr, 0, QuestStatusType::FINISHED);
+    record_quest_final_status(&quest, 0, QuestStatusType::FINISHED);
 }
 
 /*!
@@ -342,26 +338,26 @@ void leave_quest_check(PlayerType *player_ptr)
         return;
     }
 
-    auto &quest_list = QuestList::get_instance();
-    auto *q_ptr = &quest_list[leaving_quest];
-    bool is_one_time_quest = ((q_ptr->flags & QUEST_FLAG_ONCE) || (q_ptr->type == QuestKindType::RANDOM)) && (q_ptr->status == QuestStatusType::TAKEN);
+    auto &quests = QuestList::get_instance();
+    auto &quest = quests[leaving_quest];
+    auto is_one_time_quest = ((quest.flags & QUEST_FLAG_ONCE) || (quest.type == QuestKindType::RANDOM)) && (quest.status == QuestStatusType::TAKEN);
     if (!is_one_time_quest) {
         return;
     }
 
-    record_quest_final_status(q_ptr, player_ptr->lev, QuestStatusType::FAILED);
+    record_quest_final_status(&quest, player_ptr->lev, QuestStatusType::FAILED);
 
     /* Additional settings */
-    switch (q_ptr->type) {
+    switch (quest.type) {
     case QuestKindType::TOWER:
-        quest_list[QuestId::TOWER1].status = QuestStatusType::FAILED;
-        quest_list[QuestId::TOWER1].complev = player_ptr->lev;
+        quests[QuestId::TOWER1].status = QuestStatusType::FAILED;
+        quests[QuestId::TOWER1].complev = player_ptr->lev;
         break;
     case QuestKindType::FIND_ARTIFACT:
-        q_ptr->get_reward().gen_flags.reset(ItemGenerationTraitType::QUESTITEM);
+        quest.get_reward().gen_flags.reset(ItemGenerationTraitType::QUESTITEM);
         break;
     case QuestKindType::RANDOM:
-        monraces_info[q_ptr->r_idx].misc_flags.reset(MonsterMiscType::QUESTOR);
+        monraces_info[quest.r_idx].misc_flags.reset(MonsterMiscType::QUESTOR);
         prepare_change_floor_mode(player_ptr, CFM_NO_RETURN);
         break;
     default:
@@ -369,7 +365,7 @@ void leave_quest_check(PlayerType *player_ptr)
     }
 
     /* Record finishing a quest */
-    if (q_ptr->type == QuestKindType::RANDOM) {
+    if (quest.type == QuestKindType::RANDOM) {
         if (record_rand_quest) {
             exe_write_diary_quest(player_ptr, DiaryKind::RAND_QUEST_F, leaving_quest);
         }
@@ -386,17 +382,17 @@ void leave_quest_check(PlayerType *player_ptr)
  */
 void leave_tower_check(PlayerType *player_ptr)
 {
-    auto &quest_list = QuestList::get_instance();
+    auto &quests = QuestList::get_instance();
     leaving_quest = player_ptr->current_floor_ptr->quest_number;
 
-    auto &tower1 = quest_list[QuestId::TOWER1];
-    bool is_leaving_from_tower = inside_quest(leaving_quest);
-    is_leaving_from_tower &= quest_list[leaving_quest].type == QuestKindType::TOWER;
+    auto &tower1 = quests[QuestId::TOWER1];
+    auto is_leaving_from_tower = inside_quest(leaving_quest);
+    is_leaving_from_tower &= quests[leaving_quest].type == QuestKindType::TOWER;
     is_leaving_from_tower &= tower1.status != QuestStatusType::COMPLETED;
     if (!is_leaving_from_tower) {
         return;
     }
-    if (quest_list[leaving_quest].type != QuestKindType::TOWER) {
+    if (quests[leaving_quest].type != QuestKindType::TOWER) {
         return;
     }
     tower1.status = QuestStatusType::FAILED;
@@ -408,14 +404,13 @@ void leave_tower_check(PlayerType *player_ptr)
 /*!
  * @brief Player enters a new quest
  */
-void exe_enter_quest(PlayerType *player_ptr, QuestId quest_idx)
+void exe_enter_quest(PlayerType *player_ptr, QuestId quest_id)
 {
-    const auto &quest_list = QuestList::get_instance();
-    if (quest_list[quest_idx].type != QuestKindType::RANDOM) {
+    const auto &quests = QuestList::get_instance();
+    if (quests[quest_id].type != QuestKindType::RANDOM) {
         player_ptr->current_floor_ptr->dun_level = 1;
     }
-    player_ptr->current_floor_ptr->quest_number = quest_idx;
-
+    player_ptr->current_floor_ptr->quest_number = quest_id;
     player_ptr->leaving = true;
 }
 
@@ -430,8 +425,8 @@ void do_cmd_quest(PlayerType *player_ptr)
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-
-    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, TerrainCharacteristics::QUEST_ENTER)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (!cave_has_flag_bold(&floor, player_ptr->y, player_ptr->x, TerrainCharacteristics::QUEST_ENTER)) {
         msg_print(_("ここにはクエストの入口はない。", "You see no quest level here."));
         return;
     }
@@ -450,7 +445,7 @@ void do_cmd_quest(PlayerType *player_ptr)
     player_ptr->oldpx = 0;
     leave_quest_check(player_ptr);
 
-    exe_enter_quest(player_ptr, i2enum<QuestId>(player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].special));
+    exe_enter_quest(player_ptr, i2enum<QuestId>(floor.get_grid(player_ptr->get_position()).special));
 }
 
 bool inside_quest(QuestId id)
