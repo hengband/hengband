@@ -252,23 +252,23 @@ static void get_out_monster(PlayerType *player_ptr)
  */
 static void preserve_info(PlayerType *player_ptr)
 {
-    auto quest_r_idx = MonsterRace::empty_id();
-    const auto &quest_list = QuestList::get_instance();
+    auto quest_monrace_id = MonsterRace::empty_id();
+    const auto &quests = QuestList::get_instance();
     const auto &floor = *player_ptr->current_floor_ptr;
-    for (const auto &[q_idx, quest] : quest_list) {
+    for (const auto &[quest_id, quest] : quests) {
         auto quest_relating_monster = (quest.status == QuestStatusType::TAKEN);
         quest_relating_monster &= ((quest.type == QuestKindType::KILL_LEVEL) || (quest.type == QuestKindType::RANDOM));
         quest_relating_monster &= (quest.level == floor.dun_level);
         quest_relating_monster &= (floor.dungeon_idx == quest.dungeon);
         quest_relating_monster &= !(quest.flags & QUEST_FLAG_PRESET);
         if (quest_relating_monster) {
-            quest_r_idx = quest.r_idx;
+            quest_monrace_id = quest.r_idx;
         }
     }
 
     for (DUNGEON_IDX i = 1; i < floor.m_max; i++) {
         auto *m_ptr = &floor.m_list[i];
-        if (!m_ptr->is_valid() || (quest_r_idx != m_ptr->r_idx)) {
+        if (!m_ptr->is_valid() || (quest_monrace_id != m_ptr->r_idx)) {
             continue;
         }
 
