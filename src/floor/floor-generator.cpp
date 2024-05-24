@@ -268,7 +268,7 @@ static void generate_fixed_floor(PlayerType *player_ptr)
     }
 
     const auto &quests = QuestList::get_instance();
-    floor.base_level = quests[floor.quest_number].level;
+    floor.base_level = quests.get_quest(floor.quest_number).level;
     floor.dun_level = floor.base_level;
     floor.object_level = floor.base_level;
     floor.monster_level = floor.base_level;

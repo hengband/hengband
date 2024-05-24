@@ -49,7 +49,7 @@ static void print_questinfo(PlayerType *player_ptr, QuestId quest_id, bool do_in
     get_questinfo(player_ptr, quest_id, do_init);
 
     const auto &quests = QuestList::get_instance();
-    const auto &quest = quests[quest_id];
+    const auto &quest = quests.get_quest(quest_id);
     prt(format(_("クエスト情報 (危険度: %d 階相当)", "Quest Information (Danger level: %d)"), quest.level), 5, 0);
     prt(quest.name, 7, 0);
 
@@ -73,7 +73,7 @@ void castle_quest(PlayerType *player_ptr)
     }
 
     auto &quests = QuestList::get_instance();
-    auto &quest = quests[quest_id];
+    auto &quest = quests.get_quest(quest_id);
     if (quest.status == QuestStatusType::COMPLETED) {
         quest.status = QuestStatusType::REWARDED;
         print_questinfo(player_ptr, quest_id, false);

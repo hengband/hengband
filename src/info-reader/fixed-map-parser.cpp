@@ -213,11 +213,11 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
         v = tmp.data();
     } else if (prefix(b + 1, "QUEST_TYPE")) {
         const auto &quests = QuestList::get_instance();
-        tmp = std::to_string(enum2i(quests[i2enum<QuestId>(atoi(b + 11))].type));
+        tmp = std::to_string(enum2i(quests.get_quest(i2enum<QuestId>(atoi(b + 11))).type));
         v = tmp.data();
     } else if (prefix(b + 1, "QUEST")) {
         const auto &quests = QuestList::get_instance();
-        tmp = std::to_string(enum2i(quests[i2enum<QuestId>(atoi(b + 6))].status));
+        tmp = std::to_string(enum2i(quests.get_quest(i2enum<QuestId>(atoi(b + 6))).status));
         v = tmp.data();
     } else if (prefix(b + 1, "RANDOM")) {
         const auto &system = AngbandSystem::get_instance();

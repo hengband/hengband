@@ -74,8 +74,8 @@ static errr load_town_quest(PlayerType *player_ptr)
     analyze_quests(player_ptr, max_quests_load, max_rquests_load);
     if (h_older_than(1, 7, 0, 6)) {
         auto &quests = QuestList::get_instance();
-        quests[i2enum<QuestId>(OLD_QUEST_WATER_CAVE)] = {};
-        quests[i2enum<QuestId>(OLD_QUEST_WATER_CAVE)].status = QuestStatusType::UNTAKEN;
+        quests.get_quest(i2enum<QuestId>(OLD_QUEST_WATER_CAVE)) = {};
+        quests.get_quest(i2enum<QuestId>(OLD_QUEST_WATER_CAVE)).status = QuestStatusType::UNTAKEN;
     }
 
     load_wilderness_info(player_ptr);

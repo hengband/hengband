@@ -54,10 +54,10 @@
 static bool confirm_leave_level(PlayerType *player_ptr, bool down_stair)
 {
     const auto &quests = QuestList::get_instance();
-    const auto &quest = quests[player_ptr->current_floor_ptr->quest_number];
+    const auto &quest = quests.get_quest(player_ptr->current_floor_ptr->quest_number);
 
     auto caution_in_tower = any_bits(quest.flags, QUEST_FLAG_TOWER);
-    caution_in_tower &= quest.status != QuestStatusType::STAGE_COMPLETED || (down_stair && (quests[QuestId::TOWER1].status != QuestStatusType::COMPLETED));
+    caution_in_tower &= quest.status != QuestStatusType::STAGE_COMPLETED || (down_stair && (quests.get_quest(QuestId::TOWER1).status != QuestStatusType::COMPLETED));
 
     auto caution_in_quest = quest.type == QuestKindType::RANDOM;
     caution_in_quest |= quest.flags & QUEST_FLAG_ONCE && quest.status != QuestStatusType::COMPLETED;
@@ -103,7 +103,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
         leave_quest_check(player_ptr);
         floor.quest_number = i2enum<QuestId>(grid.special);
         const auto quest_id = floor.quest_number;
-        auto &quest = quests[quest_id];
+        auto &quest = quests.get_quest(quest_id);
         if (quest.status == QuestStatusType::UNTAKEN) {
             if (quest.type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
@@ -143,7 +143,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
     }
 
     const auto quest_number = player_ptr->current_floor_ptr->quest_number;
-    auto &quest = quests[quest_number];
+    auto &quest = quests.get_quest(quest_number);
 
     if (inside_quest(quest_number) && quest.type == QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
@@ -239,7 +239,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
         floor.quest_number = i2enum<QuestId>(grid.special);
 
         auto &quests = QuestList::get_instance();
-        auto &quest = quests[floor.quest_number];
+        auto &quest = quests.get_quest(floor.quest_number);
         if (quest.status == QuestStatusType::UNTAKEN) {
             if (quest.type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;

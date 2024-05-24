@@ -66,7 +66,7 @@ static void load_quest_details(PlayerType *player_ptr, QuestType *q_ptr, const Q
     q_ptr->r_idx = i2enum<MonsterRaceId>(rd_s16b());
     if ((q_ptr->type == QuestKindType::RANDOM) && !MonsterRace(q_ptr->r_idx).is_valid()) {
         auto &quests = QuestList::get_instance();
-        determine_random_questor(player_ptr, quests[loading_quest_id]);
+        determine_random_questor(player_ptr, quests.get_quest(loading_quest_id));
     }
     q_ptr->reward_fa_id = i2enum<FixedArtifactId>(rd_s16b());
     if (q_ptr->has_reward()) {
@@ -151,7 +151,7 @@ void analyze_quests(PlayerType *player_ptr, const uint16_t max_quests_load, cons
         }
 
         auto &quests = QuestList::get_instance();
-        auto &quest = quests[quest_id];
+        auto &quest = quests.get_quest(quest_id);
 
         if (loading_savefile_version_is_older_than(15)) {
             if (i == enum2i(OldQuestId15::CITY_SEA) && quest.status != QuestStatusType::UNTAKEN) {

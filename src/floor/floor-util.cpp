@@ -195,7 +195,7 @@ std::string map_name(PlayerType *player_ptr)
     const auto &quests = QuestList::get_instance();
     auto is_fixed_quest = floor.is_in_quest();
     is_fixed_quest &= QuestType::is_fixed(floor.quest_number);
-    is_fixed_quest &= any_bits(quests[floor.quest_number].flags, QUEST_FLAG_PRESET);
+    is_fixed_quest &= any_bits(quests.get_quest(floor.quest_number).flags, QUEST_FLAG_PRESET);
     if (is_fixed_quest) {
         return _("クエスト", "Quest");
     } else if (player_ptr->wild_mode) {

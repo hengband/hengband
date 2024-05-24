@@ -442,7 +442,7 @@ ProcessResult effect_monster_capture(PlayerType *player_ptr, EffectMonster *em_p
     const auto &floor = *player_ptr->current_floor_ptr;
 
     auto quest_monster = floor.is_in_quest();
-    quest_monster &= (quests[floor.quest_number].type == QuestKindType::KILL_ALL);
+    quest_monster &= (quests.get_quest(floor.quest_number).type == QuestKindType::KILL_ALL);
     quest_monster &= !em_ptr->m_ptr->is_pet();
 
     auto cannot_capture = quest_monster;

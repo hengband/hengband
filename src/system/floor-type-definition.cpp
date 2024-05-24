@@ -65,7 +65,7 @@ QuestId FloorType::get_random_quest_id(std::optional<int> level_opt) const
     const auto level = level_opt.value_or(this->dun_level);
     const auto &quests = QuestList::get_instance();
     for (auto quest_id : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
-        const auto &quest = quests[quest_id];
+        const auto &quest = quests.get_quest(quest_id);
         auto is_random_quest = (quest.type == QuestKindType::RANDOM);
         is_random_quest &= (quest.status == QuestStatusType::TAKEN);
         is_random_quest &= (quest.level == level);

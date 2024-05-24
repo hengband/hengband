@@ -258,8 +258,8 @@ bool ang_sort_comp_quest_num(PlayerType *player_ptr, vptr u, vptr v, int a, int 
 
     const auto &quests = QuestList::get_instance();
     QuestId *q_num = (QuestId *)u;
-    const auto *qa = &quests[q_num[a]];
-    const auto *qb = &quests[q_num[b]];
+    const auto *qa = &quests.get_quest(q_num[a]);
+    const auto *qb = &quests.get_quest(q_num[b]);
     return (qa->comptime != qb->comptime) ? (qa->comptime < qb->comptime) : (qa->level <= qb->level);
 }
 

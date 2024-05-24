@@ -113,8 +113,9 @@ void wiz_enter_quest(PlayerType *player_ptr)
     init_flags = i2enum<init_flags_type>(INIT_SHOW_TEXT | INIT_ASSIGN);
     player_ptr->current_floor_ptr->quest_number = *quest_id;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
-    quests[*quest_id].status = QuestStatusType::TAKEN;
-    if (quests[*quest_id].dungeon == 0) {
+    auto &quest = quests.get_quest(*quest_id);
+    quest.status = QuestStatusType::TAKEN;
+    if (quest.dungeon == 0) {
         exe_enter_quest(player_ptr, *quest_id);
     }
 }
@@ -125,15 +126,16 @@ void wiz_enter_quest(PlayerType *player_ptr)
  */
 void wiz_complete_quest(PlayerType *player_ptr)
 {
-    if (!player_ptr->current_floor_ptr->is_in_quest()) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (!floor.is_in_quest()) {
         msg_print("No current quest");
         msg_print(nullptr);
         return;
     }
 
     const auto &quests = QuestList::get_instance();
-    if (quests[player_ptr->current_floor_ptr->quest_number].status == QuestStatusType::TAKEN) {
-        complete_quest(player_ptr, player_ptr->current_floor_ptr->quest_number);
+    if (quests.get_quest(floor.quest_number).status == QuestStatusType::TAKEN) {
+        complete_quest(player_ptr, floor.quest_number);
     }
 }
 

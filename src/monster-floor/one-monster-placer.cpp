@@ -159,7 +159,7 @@ static bool check_quest_placeable(const FloorType &floor, MonsterRaceId r_idx)
 
     const auto &quests = QuestList::get_instance();
     const auto quest_id = floor.get_quest_id();
-    const auto &quest = quests[quest_id];
+    const auto &quest = quests.get_quest(quest_id);
     if ((quest.type != QuestKindType::KILL_LEVEL) && (quest.type != QuestKindType::RANDOM)) {
         return true;
     }

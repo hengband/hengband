@@ -452,7 +452,7 @@ static std::string decide_target_floor(PlayerType *player_ptr, GridExamination *
         const auto old_quest = floor_ptr->quest_number;
         const auto &quests = QuestList::get_instance();
         const auto quest_id = i2enum<QuestId>(ge_ptr->g_ptr->special);
-        const auto &quest = quests[quest_id];
+        const auto &quest = quests.get_quest(quest_id);
         constexpr auto fmt = _("クエスト「%s」(%d階相当)", "the entrance to the quest '%s'(level %d)");
 
         quest_text_lines.clear();

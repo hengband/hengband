@@ -135,8 +135,8 @@ public:
     static QuestList &get_instance();
 
     void initialize();
-    QuestType &operator[](QuestId id);
-    const QuestType &operator[](QuestId id) const;
+    QuestType &get_quest(QuestId id);
+    const QuestType &get_quest(QuestId id) const;
     iterator begin();
     const_iterator begin() const;
     iterator end();

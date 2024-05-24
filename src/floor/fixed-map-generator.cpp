@@ -301,7 +301,7 @@ static int parse_qtw_Q(qtwg_type *qtwg_ptr, char **zz)
     }
 
     auto &quests = QuestList::get_instance();
-    auto &quest = quests[i2enum<QuestId>(atoi(zz[0]))];
+    auto &quest = quests.get_quest(i2enum<QuestId>(atoi(zz[0])));
     if (parse_qtw_QQ(&quest, zz, num)) {
         return PARSE_ERROR_NONE;
     }

@@ -171,7 +171,7 @@ static void write_diary_pet(FILE *fff, int num, std::string_view note)
  * @param num 日記内容のIDに応じた番号
  * @return エラーコード
  */
-int exe_write_diary_quest(PlayerType *player_ptr, DiaryKind dk, QuestId num)
+int exe_write_diary_quest(PlayerType *player_ptr, DiaryKind dk, QuestId quest_id)
 {
     static auto disable_diary = false;
     const auto &[day, hour, min] = w_ptr->extract_date_time(player_ptr->start_race);
@@ -182,8 +182,8 @@ int exe_write_diary_quest(PlayerType *player_ptr, DiaryKind dk, QuestId num)
     auto &floor = *player_ptr->current_floor_ptr;
     const auto old_quest = floor.quest_number;
     const auto &quests = QuestList::get_instance();
-    const auto &quest = quests[num];
-    floor.quest_number = (quest.type == QuestKindType::RANDOM) ? QuestId::NONE : num;
+    const auto &quest = quests.get_quest(quest_id);
+    floor.quest_number = (quest.type == QuestKindType::RANDOM) ? QuestId::NONE : quest_id;
     init_flags = INIT_NAME_ONLY;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
     floor.quest_number = old_quest;

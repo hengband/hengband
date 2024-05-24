@@ -182,7 +182,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
 static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, QuestId q_idx)
 {
     const auto &quests = QuestList::get_instance();
-    const auto &quest = quests[q_idx];
+    const auto &quest = quests.get_quest(q_idx);
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto is_fixed_quest = QuestType::is_fixed(q_idx);
@@ -238,7 +238,7 @@ void do_cmd_knowledge_quests_completed(PlayerType *player_ptr, FILE *fff, const 
     int16_t total = 0;
     for (const auto quest_id : quest_ids) {
         const auto &quests = QuestList::get_instance();
-        const auto &quest = quests[quest_id];
+        const auto &quest = quests.get_quest(quest_id);
         if (quest.status == QuestStatusType::FINISHED && do_cmd_knowledge_quests_aux(player_ptr, fff, quest_id)) {
             ++total;
         }
@@ -261,7 +261,7 @@ void do_cmd_knowledge_quests_failed(PlayerType *player_ptr, FILE *fff, const std
     int16_t total = 0;
     for (const auto quest_id : quest_ids) {
         const auto &quests = QuestList::get_instance();
-        const auto &quest = quests[quest_id];
+        const auto &quest = quests.get_quest(quest_id);
         if (((quest.status == QuestStatusType::FAILED_DONE) || (quest.status == QuestStatusType::FAILED)) && do_cmd_knowledge_quests_aux(player_ptr, fff, quest_id)) {
             ++total;
         }

@@ -195,7 +195,7 @@ static std::optional<std::string> search_death_cause(PlayerType *player_ptr)
         init_flags = INIT_NAME_ONLY;
         parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
 
-        const auto &quest = quests[floor.quest_number];
+        const auto &quest = quests.get_quest(floor.quest_number);
         constexpr auto killed_quest = _("…あなたは、クエスト「%s」で%sに殺された。", "...You were killed by %s in the quest '%s'.");
 #ifdef JP
         return format(killed_quest, quest.name.data(), player_ptr->died_from.data());
@@ -230,7 +230,7 @@ static std::optional<std::string> decide_death_in_quest(PlayerType *player_ptr)
     const auto &quests = QuestList::get_instance();
     init_flags = INIT_NAME_ONLY;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
-    return format(_("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quests[floor.quest_number].name.data());
+    return format(_("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quests.get_quest(floor.quest_number).name.data());
 }
 
 /*!
