@@ -55,8 +55,9 @@ static std::vector<MonsterRaceId> collect_monsters(PlayerType *player_ptr, IDX g
     bool grp_wanted = (monster_group_char[grp_cur] == (char *)-3L);
     bool grp_amberite = (monster_group_char[grp_cur] == (char *)-4L);
 
+    const auto &monraces = MonraceList::get_instance();
     std::vector<MonsterRaceId> monrace_ids;
-    for (const auto &[monrace_id, monrace] : monraces_info) {
+    for (const auto &[monrace_id, monrace] : monraces) {
         if (((mode != MONSTER_LORE_DEBUG) && (mode != MONSTER_LORE_RESEARCH)) && !cheat_know && !monrace.r_sights) {
             continue;
         }
@@ -94,8 +95,7 @@ static std::vector<MonsterRaceId> collect_monsters(PlayerType *player_ptr, IDX g
         }
     }
 
-    auto dummy_why = 0;
-    ang_sort(player_ptr, monrace_ids.data(), &dummy_why, monrace_ids.size(), ang_sort_comp_monster_level, ang_sort_swap_hook);
+    std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order_level(x, y); });
     return monrace_ids;
 }
 

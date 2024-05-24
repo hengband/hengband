@@ -276,67 +276,6 @@ void ang_sort_swap_quest_num(PlayerType *player_ptr, vptr u, vptr v, int a, int 
 }
 
 /*!
- * @brief モンスター種族情報を特定の基準によりソートするためのスワップ処理
- * Sorting hook -- Swap function -- see below
- * @param u モンスター種族情報の入れるポインタ
- * @param v 未使用
- * @param a スワップするモンスター種族のID1
- * @param b スワップするモンスター種族のID2
- * @details
- * We use "u" to point to array of monster indexes,
- * and "v" to select the type of sorting to perform.
- */
-void ang_sort_swap_hook(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
-{
-    /* Unused */
-    (void)player_ptr;
-    (void)v;
-
-    uint16_t *who = (uint16_t *)(u);
-    uint16_t holder;
-
-    holder = who[a];
-    who[a] = who[b];
-    who[b] = holder;
-}
-
-/*
- * hook function to sort monsters by level
- */
-bool ang_sort_comp_monster_level(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
-{
-    /* Unused */
-    (void)player_ptr;
-    (void)v;
-
-    MonsterRaceId *who = (MonsterRaceId *)(u);
-
-    auto w1 = who[a];
-    auto w2 = who[b];
-
-    MonsterRaceInfo *r_ptr1 = &monraces_info[w1];
-    MonsterRaceInfo *r_ptr2 = &monraces_info[w2];
-
-    if (r_ptr2->level > r_ptr1->level) {
-        return true;
-    }
-
-    if (r_ptr1->level > r_ptr2->level) {
-        return false;
-    }
-
-    if (r_ptr2->kind_flags.has(MonsterKindType::UNIQUE) && r_ptr1->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        return true;
-    }
-
-    if (r_ptr1->kind_flags.has(MonsterKindType::UNIQUE) && r_ptr2->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        return false;
-    }
-
-    return w1 <= w2;
-}
-
-/*!
  * @brief フロア保存時のgrid情報テンプレートをソートするための比較処理
  * @param u gridテンプレートの参照ポインタ
  * @param v 未使用
