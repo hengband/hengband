@@ -375,11 +375,11 @@ bool ang_sort_comp_pet_dismiss(PlayerType *player_ptr, vptr u, vptr v, int a, in
         return false;
     }
 
-    if (!monster1.parent_m_idx && monster2.parent_m_idx) {
+    if (!monster1.has_parent() && monster2.has_parent()) {
         return true;
     }
 
-    if (!monster2.parent_m_idx && monster1.parent_m_idx) {
+    if (!monster2.has_parent() && monster1.has_parent()) {
         return false;
     }
 

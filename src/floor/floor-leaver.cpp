@@ -43,7 +43,7 @@ static void check_riding_preservation(PlayerType *player_ptr)
     }
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-    if (m_ptr->parent_m_idx) {
+    if (m_ptr->has_parent()) {
         player_ptr->riding = 0;
         player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
         player_ptr->riding_ryoute = player_ptr->old_riding_ryoute = false;
@@ -60,7 +60,7 @@ static bool check_pet_preservation_conditions(PlayerType *player_ptr, MonsterEnt
     }
 
     auto dis = distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
-    if (m_ptr->is_confused() || m_ptr->is_stunned() || m_ptr->is_asleep() || (m_ptr->parent_m_idx != 0)) {
+    if (m_ptr->is_confused() || m_ptr->is_stunned() || m_ptr->is_asleep() || m_ptr->has_parent()) {
         return true;
     }
 
@@ -126,7 +126,7 @@ static void preserve_pet(PlayerType *player_ptr)
     for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         const auto parent_r_idx = player_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx;
-        if ((m_ptr->parent_m_idx == 0) || MonsterRace(parent_r_idx).is_valid()) {
+        if (!m_ptr->has_parent() || MonsterRace(parent_r_idx).is_valid()) {
             continue;
         }
 

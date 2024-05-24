@@ -89,6 +89,7 @@ public:
     byte get_temporary_speed() const;
     bool has_living_flag(bool is_apperance = false) const;
     bool is_explodable() const;
+    bool has_parent() const;
     std::string get_died_message() const;
     std::pair<TERM_COLOR, int> get_hp_bar_data() const;
     std::string get_pronoun_of_summoned_kin() const;

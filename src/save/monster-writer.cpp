@@ -71,7 +71,7 @@ static void write_monster_flags(MonsterEntity *m_ptr, BIT_FLAGS *flags)
         set_bits(*flags, SaveDataMonsterFlagType::NICKNAME);
     }
 
-    if (m_ptr->parent_m_idx) {
+    if (m_ptr->has_parent()) {
         set_bits(*flags, SaveDataMonsterFlagType::PARENT);
     }
 

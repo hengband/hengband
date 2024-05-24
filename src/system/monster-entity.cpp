@@ -288,6 +288,15 @@ bool MonsterEntity::is_explodable() const
 }
 
 /*!
+ * @brief モンスターに召喚主がいるか
+ * @return 召喚主がいるならtrue
+ */
+bool MonsterEntity::has_parent() const
+{
+    return this->parent_m_idx > 0;
+}
+
+/*!
  * @brief モンスターを撃破した際の述語メッセージを返す
  * @return 撃破されたモンスターの述語
  */
@@ -375,11 +384,11 @@ std::optional<bool> MonsterEntity::order_pet_dismission(const MonsterEntity &oth
         return false;
     }
 
-    if (!this->parent_m_idx && other.parent_m_idx) {
+    if (!this->has_parent() && other.has_parent()) {
         return true;
     }
 
-    if (this->parent_m_idx && !other.parent_m_idx) {
+    if (this->has_parent() && !other.has_parent()) {
         return false;
     }
 
