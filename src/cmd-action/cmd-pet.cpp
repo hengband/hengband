@@ -61,7 +61,6 @@
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
-#include "util/sort.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -76,34 +75,35 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
     auto cv = game_term->scr->cv;
     game_term->scr->cu = false;
     game_term->scr->cv = true;
-    std::vector<MONSTER_IDX> who;
-
-    /* Process the monsters (backwards) */
-    for (MONSTER_IDX pet_ctr = player_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--) {
-        const auto &m_ref = player_ptr->current_floor_ptr->m_list[pet_ctr];
-        if (m_ref.is_pet()) {
-            who.push_back(pet_ctr);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    std::vector<short> pet_index;
+    for (short pet_indice = floor.m_max - 1; pet_indice >= 1; pet_indice--) {
+        const auto &monster = floor.m_list[pet_indice];
+        if (monster.is_pet()) {
+            pet_index.push_back(pet_indice);
         }
     }
 
-    uint16_t dummy_why = 0;
-    ang_sort(player_ptr, who.data(), &dummy_why, who.size(), ang_sort_comp_pet_dismiss, ang_sort_swap_hook);
+    const auto riding_index = player_ptr->riding;
+    std::stable_sort(pet_index.begin(), pet_index.end(),
+        [&floor, riding_index](auto x, auto y) { return floor.order_pet_dismission(x, y, riding_index); });
 
     /* Process the monsters (backwards) */
     auto all_pets = false;
     auto num_dismissed = 0;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    for (auto i = 0U; i < who.size(); i++) {
-        const auto pet_ctr = who[i];
-        const auto &monster = player_ptr->current_floor_ptr->m_list[pet_ctr];
+    const int num_pet_index = std::ssize(pet_index);
+    for (auto i = 0; i < num_pet_index; i++) {
+        const auto pet_ctr = pet_index[i];
+        const auto &monster = floor.m_list[pet_ctr];
         auto delete_this = false;
-        const auto should_ask = (pet_ctr == player_ptr->riding) || monster.is_named();
+        const auto should_ask = (pet_ctr == riding_index) || monster.is_named();
         const auto friend_name = monster_desc(player_ptr, &monster, MD_ASSUME_VISIBLE);
         if (!all_pets) {
             health_track(player_ptr, pet_ctr);
             handle_stuff(player_ptr);
-            constexpr auto mes = _("%sを放しますか？ [Yes/No/Unnamed (%lu体)]", "Dismiss %s? [Yes/No/Unnamed (%lu remain)]");
-            msg_format(mes, friend_name.data(), who.size() - i);
+            constexpr auto mes = _("%sを放しますか？ [Yes/No/Unnamed (%d体)]", "Dismiss %s? [Yes/No/Unnamed (%d remain)]");
+            msg_format(mes, friend_name.data(), num_pet_index - i);
             if (monster.ml) {
                 move_cursor_relative(monster.fy, monster.fx);
             }
