@@ -365,6 +365,42 @@ std::optional<bool> MonsterEntity::order_pet_whistle(const MonsterEntity &other)
     return std::nullopt;
 }
 
+std::optional<bool> MonsterEntity::order_pet_dismission(const MonsterEntity &other) const
+{
+    if (this->is_named() && !other.is_named()) {
+        return true;
+    }
+
+    if (!this->is_named() && other.is_named()) {
+        return false;
+    }
+
+    if (!this->parent_m_idx && other.parent_m_idx) {
+        return true;
+    }
+
+    if (this->parent_m_idx && !other.parent_m_idx) {
+        return false;
+    }
+
+    const auto &monrace1 = this->get_monrace();
+    const auto &monrace2 = other.get_monrace();
+    const auto is_ordered = monrace1.order_pet(monrace2);
+    if (is_ordered) {
+        return *is_ordered;
+    }
+
+    if (this->hp > other.hp) {
+        return true;
+    }
+
+    if (this->hp < other.hp) {
+        return false;
+    }
+
+    return std::nullopt;
+}
+
 /*!
  * @brief モンスターを敵に回す
  */
