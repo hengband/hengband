@@ -21,6 +21,7 @@
 #include "specific-object/blade-turner.h"
 #include "specific-object/bloody-moon.h"
 #include "specific-object/death-crimson.h"
+#include "specific-object/monster-ball.h"
 #include "specific-object/muramasa.h"
 #include "specific-object/ring-of-power.h"
 #include "specific-object/stone-of-lore.h"
@@ -383,6 +384,10 @@ bool switch_activation(PlayerType *player_ptr, ItemEntity **o_ptr_ptr, const Ran
         return activate_create_ammo(player_ptr);
     case RandomArtActType::DISPEL_MAGIC:
         return activate_dispel_magic(player_ptr);
+    case RandomArtActType::WHISTLE:
+        return activate_whistle(player_ptr, *o_ptr);
+    case RandomArtActType::CAPTURE_MONSTER:
+        return exe_monster_capture(player_ptr, *o_ptr);
     default:
         msg_format(_("Unknown activation effect: %d.", "Unknown activation effect: %d."), enum2i(index));
         return false;

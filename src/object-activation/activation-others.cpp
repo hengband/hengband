@@ -448,3 +448,34 @@ bool activate_dispel_magic(PlayerType *player_ptr)
     dispel_monster_status(player_ptr, m_idx);
     return true;
 }
+
+bool activate_whistle(PlayerType *player_ptr, const ItemEntity &item)
+{
+    if (item.bi_key.tval() != ItemKindType::WHISTLE) {
+        return false;
+    }
+
+    if (music_singing_any(player_ptr)) {
+        stop_singing(player_ptr);
+    }
+
+    if (SpellHex(player_ptr).is_spelling_any()) {
+        (void)SpellHex(player_ptr).stop_all_spells();
+    }
+
+    const auto &floor = *player_ptr->current_floor_ptr;
+    std::vector<short> pet_index;
+    for (short pet_indice = floor.m_max - 1; pet_indice >= 1; pet_indice--) {
+        const auto &monster = floor.m_list[pet_indice];
+        if (monster.is_pet() && (player_ptr->riding != pet_indice)) {
+            pet_index.push_back(pet_indice);
+        }
+    }
+
+    std::stable_sort(pet_index.begin(), pet_index.end(), [&floor](auto x, auto y) { return floor.order_pet_whistle(x, y); });
+    for (auto pet_indice : pet_index) {
+        teleport_monster_to(player_ptr, pet_indice, player_ptr->y, player_ptr->x, 100, TELEPORT_PASSIVE);
+    }
+
+    return true;
+}

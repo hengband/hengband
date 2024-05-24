@@ -79,7 +79,6 @@ public:
     bool is_armour() const;
     bool is_cross_bow() const;
     bool should_refuse_enchant() const;
-    std::string explain_activation() const;
     bool is_convertible() const;
     bool is_fuel() const;
     bool is_lance() const;
