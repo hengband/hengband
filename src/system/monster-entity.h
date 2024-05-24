@@ -98,4 +98,8 @@ public:
     std::optional<bool> order_pet_dismission(const MonsterEntity &other) const;
 
     void set_hostile();
+
+private:
+    std::optional<bool> order_pet_named(const MonsterEntity &other) const;
+    std::optional<bool> order_pet_hp(const MonsterEntity &other) const;
 };
