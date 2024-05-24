@@ -143,3 +143,47 @@ bool FloorType::can_teleport_level(bool to_player) const
     is_invalid_floor &= ironman_downward;
     return this->is_special() || is_invalid_floor;
 }
+
+/*!
+ * @brief 魔法の笛でペットを呼び寄せる順番を決める
+ * @param index1 フロア内のモンスターインデックス1
+ * @param index2 フロア内のモンスターインデックス2
+ * @return index1の優先度が高いならtrue、低いならfalse
+ */
+bool FloorType::order_pet_whistle(short index1, short index2) const
+{
+    const auto &monster1 = this->m_list[index1];
+    const auto &monster2 = this->m_list[index2];
+    const auto is_ordered = monster1.order_pet_whistle(monster2);
+    if (is_ordered) {
+        return *is_ordered;
+    }
+
+    return index1 <= index2;
+}
+
+/*!
+ * @brief ペットを開放する順番を決める
+ * @param index1 フロア内のモンスターインデックス1
+ * @param index2 フロア内のモンスターインデックス2
+ * @return index1の優先度が高いならtrue、低いならfalse
+ */
+bool FloorType::order_pet_dismission(short index1, short index2, short riding_index) const
+{
+    const auto &monster1 = this->m_list[index1];
+    const auto &monster2 = this->m_list[index2];
+    if (index1 == riding_index) {
+        return true;
+    }
+
+    if (index2 == riding_index) {
+        return false;
+    }
+
+    const auto is_ordered = monster1.order_pet_dismission(monster2);
+    if (is_ordered) {
+        return *is_ordered;
+    }
+
+    return index1 <= index2;
+}

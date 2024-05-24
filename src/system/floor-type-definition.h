@@ -97,4 +97,7 @@ public:
     bool has_los(const Pos2D pos) const;
     bool is_special() const;
     bool can_teleport_level(bool to_player = false) const;
+
+    bool order_pet_whistle(short index1, short index2) const;
+    bool order_pet_dismission(short index1, short index2, short riding_index) const;
 };

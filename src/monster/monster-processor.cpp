@@ -275,7 +275,7 @@ bool vanish_summoned_children(PlayerType *player_ptr, MONSTER_IDX m_idx, bool se
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
 
-    if (m_ptr->parent_m_idx == 0) {
+    if (!m_ptr->has_parent()) {
         return false;
     }
 

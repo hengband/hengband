@@ -288,6 +288,15 @@ bool MonsterEntity::is_explodable() const
 }
 
 /*!
+ * @brief モンスターに召喚主がいるか
+ * @return 召喚主がいるならtrue
+ */
+bool MonsterEntity::has_parent() const
+{
+    return this->parent_m_idx > 0;
+}
+
+/*!
  * @brief モンスターを撃破した際の述語メッセージを返す
  * @return 撃破されたモンスターの述語
  */
@@ -337,6 +346,48 @@ std::pair<TERM_COLOR, int> MonsterEntity::get_hp_bar_data() const
     return { TERM_RED, len };
 }
 
+std::optional<bool> MonsterEntity::order_pet_whistle(const MonsterEntity &other) const
+{
+    const auto is_ordered_name = this->order_pet_named(other);
+    if (is_ordered_name) {
+        return *is_ordered_name;
+    }
+
+    const auto &monrace1 = this->get_monrace();
+    const auto &monrace2 = other.get_monrace();
+    const auto is_ordered_race = monrace1.order_pet(monrace2);
+    if (is_ordered_race) {
+        return *is_ordered_race;
+    }
+
+    return this->order_pet_hp(other);
+}
+
+std::optional<bool> MonsterEntity::order_pet_dismission(const MonsterEntity &other) const
+{
+    const auto is_ordered_name = this->order_pet_named(other);
+    if (is_ordered_name) {
+        return *is_ordered_name;
+    }
+
+    if (!this->has_parent() && other.has_parent()) {
+        return true;
+    }
+
+    if (this->has_parent() && !other.has_parent()) {
+        return false;
+    }
+
+    const auto &monrace1 = this->get_monrace();
+    const auto &monrace2 = other.get_monrace();
+    const auto is_ordered_race = monrace1.order_pet(monrace2);
+    if (is_ordered_race) {
+        return *is_ordered_race;
+    }
+
+    return this->order_pet_hp(other);
+}
+
 /*!
  * @brief モンスターを敵に回す
  */
@@ -352,4 +403,30 @@ void MonsterEntity::set_hostile()
 std::string MonsterEntity::get_pronoun_of_summoned_kin() const
 {
     return this->get_monrace().get_pronoun_of_summoned_kin();
+}
+
+std::optional<bool> MonsterEntity::order_pet_named(const MonsterEntity &other) const
+{
+    if (this->is_named() && !other.is_named()) {
+        return true;
+    }
+
+    if (!this->is_named() && other.is_named()) {
+        return false;
+    }
+
+    return std::nullopt;
+}
+
+std::optional<bool> MonsterEntity::order_pet_hp(const MonsterEntity &other) const
+{
+    if (this->hp > other.hp) {
+        return true;
+    }
+
+    if (this->hp < other.hp) {
+        return false;
+    }
+
+    return std::nullopt;
 }
