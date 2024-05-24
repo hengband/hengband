@@ -416,6 +416,29 @@ bool MonraceList::order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed) 
     return id1 <= id2;
 }
 
+bool MonraceList::MonraceList::order_level(MonsterRaceId id1, MonsterRaceId id2) const
+{
+    const auto &monrace1 = monraces_info[id1];
+    const auto &monrace2 = monraces_info[id2];
+    if (monrace1.level < monrace2.level) {
+        return true;
+    }
+
+    if (monrace1.level > monrace2.level) {
+        return false;
+    }
+
+    if (monrace1.kind_flags.has_not(MonsterKindType::UNIQUE) && monrace2.kind_flags.has(MonsterKindType::UNIQUE)) {
+        return true;
+    }
+
+    if (monrace1.kind_flags.has(MonsterKindType::UNIQUE) && monrace2.kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        return false;
+    }
+
+    return id1 <= id2;
+}
+
 void MonraceList::reset_all_visuals()
 {
     for (auto &[_, monrace] : monraces_info) {
