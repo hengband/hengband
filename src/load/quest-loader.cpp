@@ -65,8 +65,8 @@ static void load_quest_details(PlayerType *player_ptr, QuestType *q_ptr, const Q
 
     q_ptr->r_idx = i2enum<MonsterRaceId>(rd_s16b());
     if ((q_ptr->type == QuestKindType::RANDOM) && !MonsterRace(q_ptr->r_idx).is_valid()) {
-        auto &quest_list = QuestList::get_instance();
-        determine_random_questor(player_ptr, quest_list[loading_quest_id]);
+        auto &quests = QuestList::get_instance();
+        determine_random_questor(player_ptr, quests[loading_quest_id]);
     }
     q_ptr->reward_fa_id = i2enum<FixedArtifactId>(rd_s16b());
     if (q_ptr->has_reward()) {
@@ -91,8 +91,8 @@ static bool is_missing_id_ver_16(const QuestId q_idx)
 
 static bool is_loadable_quest(const QuestId q_idx, const byte max_rquests_load)
 {
-    const auto &quest_list = QuestList::get_instance();
-    if (quest_list.find(q_idx) != quest_list.end()) {
+    const auto &quests = QuestList::get_instance();
+    if (quests.find(q_idx) != quests.end()) {
         return true;
     }
 
@@ -140,45 +140,45 @@ void analyze_quests(PlayerType *player_ptr, const uint16_t max_quests_load, cons
 {
     QuestId old_inside_quest = player_ptr->current_floor_ptr->quest_number;
     for (auto i = 0; i < max_quests_load; i++) {
-        QuestId q_idx;
+        QuestId quest_id;
         if (loading_savefile_version_is_older_than(17)) {
-            q_idx = i2enum<QuestId>(i);
+            quest_id = i2enum<QuestId>(i);
         } else {
-            q_idx = i2enum<QuestId>(rd_s16b());
+            quest_id = i2enum<QuestId>(rd_s16b());
         }
-        if (!is_loadable_quest(q_idx, max_rquests_load)) {
+        if (!is_loadable_quest(quest_id, max_rquests_load)) {
             continue;
         }
 
-        auto &quest_list = QuestList::get_instance();
-        auto *q_ptr = &quest_list[q_idx];
+        auto &quests = QuestList::get_instance();
+        auto &quest = quests[quest_id];
 
         if (loading_savefile_version_is_older_than(15)) {
-            if (i == enum2i(OldQuestId15::CITY_SEA) && q_ptr->status != QuestStatusType::UNTAKEN) {
+            if (i == enum2i(OldQuestId15::CITY_SEA) && quest.status != QuestStatusType::UNTAKEN) {
                 const std::string msg(_("海底都市クエストを受領または解決しているセーブデータはサポート外です。",
                     "The save data with the taken quest of The City beneath the Sea is unsupported."));
                 throw(SaveDataNotSupportedException(msg));
             }
         }
 
-        load_quest_completion(q_ptr);
-        auto is_quest_running = (q_ptr->status == QuestStatusType::TAKEN);
-        is_quest_running |= (!h_older_than(0, 3, 14) && (q_ptr->status == QuestStatusType::COMPLETED));
-        is_quest_running |= (!h_older_than(1, 0, 7) && (enum2i(q_idx) >= MIN_RANDOM_QUEST) && (enum2i(q_idx) <= (MIN_RANDOM_QUEST + max_rquests_load)));
+        load_quest_completion(&quest);
+        auto is_quest_running = (quest.status == QuestStatusType::TAKEN);
+        is_quest_running |= (!h_older_than(0, 3, 14) && (quest.status == QuestStatusType::COMPLETED));
+        is_quest_running |= (!h_older_than(1, 0, 7) && (enum2i(quest_id) >= MIN_RANDOM_QUEST) && (enum2i(quest_id) <= (MIN_RANDOM_QUEST + max_rquests_load)));
         if (!is_quest_running) {
             continue;
         }
 
-        load_quest_details(player_ptr, q_ptr, q_idx);
+        load_quest_details(player_ptr, &quest, quest_id);
         if (h_older_than(0, 3, 11)) {
-            set_zangband_quest(player_ptr, q_ptr, q_idx, old_inside_quest);
+            set_zangband_quest(player_ptr, &quest, quest_id, old_inside_quest);
         } else {
-            q_ptr->dungeon = rd_byte();
+            quest.dungeon = rd_byte();
         }
 
-        if (q_ptr->status == QuestStatusType::TAKEN || q_ptr->status == QuestStatusType::UNTAKEN) {
-            if (monraces_info[q_ptr->r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
-                monraces_info[q_ptr->r_idx].misc_flags.set(MonsterMiscType::QUESTOR);
+        if (quest.status == QuestStatusType::TAKEN || quest.status == QuestStatusType::UNTAKEN) {
+            if (monraces_info[quest.r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
+                monraces_info[quest.r_idx].misc_flags.set(MonsterMiscType::QUESTOR);
             }
         }
     }

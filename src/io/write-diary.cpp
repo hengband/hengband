@@ -180,9 +180,9 @@ int exe_write_diary_quest(PlayerType *player_ptr, DiaryKind dk, QuestId num)
     }
 
     auto &floor = *player_ptr->current_floor_ptr;
-    auto old_quest = floor.quest_number;
-    const auto &quest_list = QuestList::get_instance();
-    const auto &quest = quest_list[num];
+    const auto old_quest = floor.quest_number;
+    const auto &quests = QuestList::get_instance();
+    const auto &quest = quests[num];
     floor.quest_number = (quest.type == QuestKindType::RANDOM) ? QuestId::NONE : num;
     init_flags = INIT_NAME_ONLY;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
