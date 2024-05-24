@@ -60,67 +60,67 @@ QuestList &QuestList::get_instance()
 
 QuestType &QuestList::operator[](QuestId id)
 {
-    return this->quest_data.at(id);
+    return this->quests.at(id);
 }
 
 const QuestType &QuestList::operator[](QuestId id) const
 {
-    return this->quest_data.at(id);
+    return this->quests.at(id);
 }
 
 QuestList::iterator QuestList::begin()
 {
-    return this->quest_data.begin();
+    return this->quests.begin();
 }
 
 QuestList::const_iterator QuestList::begin() const
 {
-    return this->quest_data.cbegin();
+    return this->quests.cbegin();
 }
 
 QuestList::iterator QuestList::end()
 {
-    return this->quest_data.end();
+    return this->quests.end();
 }
 
 QuestList::const_iterator QuestList::end() const
 {
-    return this->quest_data.cend();
+    return this->quests.cend();
 }
 
 QuestList::reverse_iterator QuestList::rbegin()
 {
-    return this->quest_data.rbegin();
+    return this->quests.rbegin();
 }
 
 QuestList::const_reverse_iterator QuestList::rbegin() const
 {
-    return this->quest_data.crbegin();
+    return this->quests.crbegin();
 }
 
 QuestList::reverse_iterator QuestList::rend()
 {
-    return this->quest_data.rend();
+    return this->quests.rend();
 }
 
 QuestList::const_reverse_iterator QuestList::rend() const
 {
-    return this->quest_data.crend();
+    return this->quests.crend();
 }
 
 QuestList::iterator QuestList::find(QuestId id)
 {
-    return this->quest_data.find(id);
+    return this->quests.find(id);
 }
 
 QuestList::const_iterator QuestList::find(QuestId id) const
 {
-    return this->quest_data.find(id);
+    return this->quests.find(id);
 }
 
 size_t QuestList::size() const
 {
-    return this->quest_data.size();
+    return this->quests.size();
 }
 
 /*!
@@ -136,9 +136,9 @@ void QuestList::initialize()
         auto quest_numbers = parse_quest_info(QUEST_DEFINITION_LIST);
         QuestType init_quest{};
         init_quest.status = QuestStatusType::UNTAKEN;
-        this->quest_data.insert({ QuestId::NONE, init_quest });
+        this->quests.insert({ QuestId::NONE, init_quest });
         for (auto q : quest_numbers) {
-            this->quest_data.insert({ q, init_quest });
+            this->quests.insert({ q, init_quest });
         }
         initialized = true;
     } catch (const std::runtime_error &r) {

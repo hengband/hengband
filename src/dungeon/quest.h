@@ -154,7 +154,7 @@ public:
 
 private:
     bool initialized = false;
-    std::map<QuestId, QuestType> quest_data;
+    std::map<QuestId, QuestType> quests;
     QuestList() = default;
 };
 
