@@ -48,6 +48,7 @@ struct nest_pit_type {
 struct nest_mon_info_type {
     MonsterRaceId r_idx; //!< モンスター種族ID
     bool used = false; //!< 既に選んだかどうか
+    bool order_nest(const nest_mon_info_type &other) const;
 };
 
 class FloorType;

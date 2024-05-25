@@ -18,8 +18,8 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
+#include "system/player-type-definition.h"
 #include "util/probability-table.h"
-#include "util/sort.h"
 #include "wizard/wizard-messages.h"
 #include <array>
 #include <optional>
@@ -44,74 +44,6 @@ const std::map<NestKind, nest_pit_type> nest_types = {
     { NestKind::CHAPEL, { _("教会", "chapel"), vault_aux_chapel_g, std::nullopt, 75, 4 } },
     { NestKind::UNDEAD, { _("アンデッド", "undead"), vault_aux_undead, std::nullopt, 75, 5 } },
 };
-
-/*
- *! @brief nestのモンスターリストをソートするための関数 /
- *  Comp function for sorting nest monster information
- *  @param u ソート処理対象配列ポインタ
- *  @param v 未使用
- *  @param a 比較対象参照ID1
- *  @param b 比較対象参照ID2
- *  TODO: to sort.c
- */
-bool ang_sort_comp_nest_mon_info(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
-{
-    /* Unused */
-    (void)player_ptr;
-    (void)v;
-
-    nest_mon_info_type *nest_mon_info = (nest_mon_info_type *)u;
-    auto w1 = nest_mon_info[a].r_idx;
-    auto w2 = nest_mon_info[b].r_idx;
-    MonsterRaceInfo *r1_ptr = &monraces_info[w1];
-    MonsterRaceInfo *r2_ptr = &monraces_info[w2];
-    int z1 = nest_mon_info[a].used;
-    int z2 = nest_mon_info[b].used;
-
-    if (z1 < z2) {
-        return false;
-    }
-    if (z1 > z2) {
-        return true;
-    }
-
-    if (r1_ptr->level < r2_ptr->level) {
-        return true;
-    }
-    if (r1_ptr->level > r2_ptr->level) {
-        return false;
-    }
-
-    if (r1_ptr->mexp < r2_ptr->mexp) {
-        return true;
-    }
-    if (r1_ptr->mexp > r2_ptr->mexp) {
-        return false;
-    }
-
-    return w1 <= w2;
-}
-
-/*!
- * @brief nestのモンスターリストをスワップするための関数 /
- * Swap function for sorting nest monster information
- * @param u スワップ処理対象配列ポインタ
- * @param v 未使用
- * @param a スワップ対象参照ID1
- * @param b スワップ対象参照ID2
- * TODO: to sort.c
- */
-void ang_sort_swap_nest_mon_info(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
-{
-    /* Unused */
-    (void)player_ptr;
-    (void)v;
-
-    nest_mon_info_type *nest_mon_info = (nest_mon_info_type *)u;
-    nest_mon_info_type holder = nest_mon_info[a];
-    nest_mon_info[a] = nest_mon_info[b];
-    nest_mon_info[b] = holder;
-}
 
 std::optional<std::array<nest_mon_info_type, NUM_NEST_MON_TYPE>> pick_nest_monraces(PlayerType *player_ptr, MonsterEntity &align)
 {
@@ -200,7 +132,8 @@ void output_debug_nest(PlayerType *player_ptr, std::array<nest_mon_info_type, NU
         return;
     }
 
-    ang_sort(player_ptr, nest_mon_info_list.data(), nullptr, NUM_NEST_MON_TYPE, ang_sort_comp_nest_mon_info, ang_sort_swap_nest_mon_info);
+    std::stable_sort(nest_mon_info_list.begin(), nest_mon_info_list.end(),
+        [](const auto &x, const auto &y) { return x.order_nest(y); });
     for (auto i = 0; i < NUM_NEST_MON_TYPE; i++) {
         if (!nest_mon_info_list[i].used) {
             return;
@@ -224,6 +157,37 @@ void output_debug_nest(PlayerType *player_ptr, std::array<nest_mon_info_type, NU
         msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest_num, i, monraces_info[nest_mon_info_list[i].r_idx].name.data());
     }
 }
+}
+
+bool nest_mon_info_type::order_nest(const nest_mon_info_type &other) const
+{
+    if (this->used && !other.used) {
+        return true;
+    }
+
+    if (!this->used && other.used) {
+        return false;
+    }
+
+    const auto &monrace1 = monraces_info[this->r_idx];
+    const auto &monrace2 = monraces_info[other.r_idx];
+    if (monrace1.level < monrace2.level) {
+        return true;
+    }
+
+    if (monrace1.level > monrace2.level) {
+        return false;
+    }
+
+    if (monrace1.mexp < monrace2.mexp) {
+        return true;
+    }
+
+    if (monrace1.mexp > monrace2.mexp) {
+        return false;
+    }
+
+    return this->r_idx < other.r_idx;
 }
 
 /*!
