@@ -404,6 +404,7 @@
     <ClCompile Include="..\..\src\info-reader\feature-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\general-parser.cpp" />
     <ClCompile Include="..\..\src\info-reader\info-reader-util.cpp" />
+    <ClCompile Include="..\..\src\info-reader\json-reader-util.cpp" />
     <ClCompile Include="..\..\src\info-reader\baseitem-tokens-table.cpp" />
     <ClCompile Include="..\..\src\info-reader\baseitem-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\magic-reader.cpp" />
@@ -1190,6 +1191,7 @@
     <ClInclude Include="..\..\src\info-reader\feature-reader.h" />
     <ClInclude Include="..\..\src\info-reader\general-parser.h" />
     <ClInclude Include="..\..\src\info-reader\info-reader-util.h" />
+    <ClInclude Include="..\..\src\info-reader\json-reader-util.h" />
     <ClInclude Include="..\..\src\info-reader\baseitem-tokens-table.h" />
     <ClInclude Include="..\..\src\info-reader\baseitem-reader.h" />
     <ClInclude Include="..\..\src\info-reader\magic-reader.h" />

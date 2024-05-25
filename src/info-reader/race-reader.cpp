@@ -1,6 +1,7 @@
 #include "info-reader/race-reader.h"
 #include "artifact/fixed-art-types.h"
 #include "info-reader/info-reader-util.h"
+#include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/race-info-tokens-table.h"
 #include "locale/japanese.h"
