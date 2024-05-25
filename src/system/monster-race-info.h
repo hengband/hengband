@@ -167,6 +167,8 @@ public:
     std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator rbegin() const;
     std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator rend();
     std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator rend() const;
+    MonsterRaceInfo &get_monrace(MonsterRaceId monrace_id);
+    const MonsterRaceInfo &get_monrace(MonsterRaceId monrace_id) const;
     const std::vector<MonsterRaceId> &get_valid_monrace_ids() const;
     bool can_unify_separate(const MonsterRaceId r_idx) const;
     void kill_unified_unique(const MonsterRaceId r_idx);

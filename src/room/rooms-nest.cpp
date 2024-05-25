@@ -18,8 +18,8 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
+#include "system/player-type-definition.h"
 #include "util/probability-table.h"
-#include "util/sort.h"
 #include "wizard/wizard-messages.h"
 #include <array>
 #include <optional>
@@ -45,77 +45,9 @@ const std::map<NestKind, nest_pit_type> nest_types = {
     { NestKind::UNDEAD, { _("アンデッド", "undead"), vault_aux_undead, std::nullopt, 75, 5 } },
 };
 
-/*
- *! @brief nestのモンスターリストをソートするための関数 /
- *  Comp function for sorting nest monster information
- *  @param u ソート処理対象配列ポインタ
- *  @param v 未使用
- *  @param a 比較対象参照ID1
- *  @param b 比較対象参照ID2
- *  TODO: to sort.c
- */
-bool ang_sort_comp_nest_mon_info(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
+std::optional<std::array<NestMonsterInfo, NUM_NEST_MON_TYPE>> pick_nest_monraces(PlayerType *player_ptr, MonsterEntity &align)
 {
-    /* Unused */
-    (void)player_ptr;
-    (void)v;
-
-    nest_mon_info_type *nest_mon_info = (nest_mon_info_type *)u;
-    auto w1 = nest_mon_info[a].r_idx;
-    auto w2 = nest_mon_info[b].r_idx;
-    MonsterRaceInfo *r1_ptr = &monraces_info[w1];
-    MonsterRaceInfo *r2_ptr = &monraces_info[w2];
-    int z1 = nest_mon_info[a].used;
-    int z2 = nest_mon_info[b].used;
-
-    if (z1 < z2) {
-        return false;
-    }
-    if (z1 > z2) {
-        return true;
-    }
-
-    if (r1_ptr->level < r2_ptr->level) {
-        return true;
-    }
-    if (r1_ptr->level > r2_ptr->level) {
-        return false;
-    }
-
-    if (r1_ptr->mexp < r2_ptr->mexp) {
-        return true;
-    }
-    if (r1_ptr->mexp > r2_ptr->mexp) {
-        return false;
-    }
-
-    return w1 <= w2;
-}
-
-/*!
- * @brief nestのモンスターリストをスワップするための関数 /
- * Swap function for sorting nest monster information
- * @param u スワップ処理対象配列ポインタ
- * @param v 未使用
- * @param a スワップ対象参照ID1
- * @param b スワップ対象参照ID2
- * TODO: to sort.c
- */
-void ang_sort_swap_nest_mon_info(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
-{
-    /* Unused */
-    (void)player_ptr;
-    (void)v;
-
-    nest_mon_info_type *nest_mon_info = (nest_mon_info_type *)u;
-    nest_mon_info_type holder = nest_mon_info[a];
-    nest_mon_info[a] = nest_mon_info[b];
-    nest_mon_info[b] = holder;
-}
-
-std::optional<std::array<nest_mon_info_type, NUM_NEST_MON_TYPE>> pick_nest_monraces(PlayerType *player_ptr, MonsterEntity &align)
-{
-    std::array<nest_mon_info_type, NUM_NEST_MON_TYPE> nest_mon_info_list{};
+    std::array<NestMonsterInfo, NUM_NEST_MON_TYPE> nest_mon_info_list{};
     for (auto &nest_mon_info : nest_mon_info_list) {
         const auto monrace_id = select_pit_nest_monrace_id(player_ptr, align, 11);
         if (!monrace_id) {
@@ -131,7 +63,7 @@ std::optional<std::array<nest_mon_info_type, NUM_NEST_MON_TYPE>> pick_nest_monra
             align.sub_align |= SUB_ALIGN_GOOD;
         }
 
-        nest_mon_info.r_idx = *monrace_id;
+        nest_mon_info.monrace_id = *monrace_id;
     }
 
     return nest_mon_info_list;
@@ -185,33 +117,36 @@ void generate_inner_room(PlayerType *player_ptr, const Pos2D &center, Rect2D &re
     }
 }
 
-void place_monsters_in_nest(PlayerType *player_ptr, const Pos2D &center, std::array<nest_mon_info_type, NUM_NEST_MON_TYPE> &nest_mon_info_list)
+void place_monsters_in_nest(PlayerType *player_ptr, const Pos2D &center, std::array<NestMonsterInfo, NUM_NEST_MON_TYPE> &nest_mon_info_list)
 {
     Rect2D(center, Vector2D(2, 9)).each_area([player_ptr, &nest_mon_info_list](const Pos2D &pos) {
         auto &nest_mon_info = rand_choice(nest_mon_info_list);
-        (void)place_specific_monster(player_ptr, 0, pos.y, pos.x, nest_mon_info.r_idx, 0L);
+        (void)place_specific_monster(player_ptr, 0, pos.y, pos.x, nest_mon_info.monrace_id, 0L);
         nest_mon_info.used = true;
     });
 }
 
-void output_debug_nest(PlayerType *player_ptr, std::array<nest_mon_info_type, NUM_NEST_MON_TYPE> &nest_mon_info_list)
+void output_debug_nest(PlayerType *player_ptr, std::array<NestMonsterInfo, NUM_NEST_MON_TYPE> &nest_mon_info_list)
 {
     if (!cheat_room) {
         return;
     }
 
-    ang_sort(player_ptr, nest_mon_info_list.data(), nullptr, NUM_NEST_MON_TYPE, ang_sort_comp_nest_mon_info, ang_sort_swap_nest_mon_info);
+    std::stable_sort(nest_mon_info_list.begin(), nest_mon_info_list.end(),
+        [](const auto &x, const auto &y) { return x.order_nest(y); });
     for (auto i = 0; i < NUM_NEST_MON_TYPE; i++) {
-        if (!nest_mon_info_list[i].used) {
+        const auto &nest_mon_info = nest_mon_info_list[i];
+        const auto &next_nest_mon_info = nest_mon_info_list[i + 1];
+        if (!nest_mon_info.used) {
             return;
         }
 
         for (; i < NUM_NEST_MON_TYPE - 1; i++) {
-            if (nest_mon_info_list[i].r_idx != nest_mon_info_list[i + 1].r_idx) {
+            if (nest_mon_info.monrace_id != next_nest_mon_info.monrace_id) {
                 break;
             }
 
-            if (!nest_mon_info_list[i + 1].used) {
+            if (!next_nest_mon_info.used) {
                 break;
             }
         }
@@ -221,9 +156,45 @@ void output_debug_nest(PlayerType *player_ptr, std::array<nest_mon_info_type, NU
         }
 
         constexpr auto fmt_nest_num = _("Nest構成モンスターNo.%d: %s", "Nest monster No.%d: %s");
-        msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest_num, i, monraces_info[nest_mon_info_list[i].r_idx].name.data());
+        msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest_num, i, nest_mon_info.get_monrace().name.data());
     }
 }
+}
+
+bool NestMonsterInfo::order_nest(const NestMonsterInfo &other) const
+{
+    if (this->used && !other.used) {
+        return true;
+    }
+
+    if (!this->used && other.used) {
+        return false;
+    }
+
+    const auto &monrace1 = this->get_monrace();
+    const auto &monrace2 = other.get_monrace();
+    if (monrace1.level < monrace2.level) {
+        return true;
+    }
+
+    if (monrace1.level > monrace2.level) {
+        return false;
+    }
+
+    if (monrace1.mexp < monrace2.mexp) {
+        return true;
+    }
+
+    if (monrace1.mexp > monrace2.mexp) {
+        return false;
+    }
+
+    return this->monrace_id < other.monrace_id;
+}
+
+const MonsterRaceInfo &NestMonsterInfo::get_monrace() const
+{
+    return MonraceList::get_instance().get_monrace(this->monrace_id);
 }
 
 /*!

@@ -187,6 +187,16 @@ std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator MonraceList::re
     return monraces_info.rend();
 }
 
+MonsterRaceInfo &MonraceList::get_monrace(MonsterRaceId monrace_id)
+{
+    return monraces_info.at(monrace_id);
+}
+
+const MonsterRaceInfo &MonraceList::get_monrace(MonsterRaceId monrace_id) const
+{
+    return monraces_info.at(monrace_id);
+}
+
 const std::vector<MonsterRaceId> &MonraceList::get_valid_monrace_ids() const
 {
     static std::vector<MonsterRaceId> valid_monraces;
