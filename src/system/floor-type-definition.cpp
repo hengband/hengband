@@ -159,7 +159,7 @@ bool FloorType::order_pet_whistle(short index1, short index2) const
         return *is_ordered;
     }
 
-    return index1 <= index2;
+    return index1 < index2;
 }
 
 /*!
@@ -185,5 +185,5 @@ bool FloorType::order_pet_dismission(short index1, short index2, short riding_in
         return *is_ordered;
     }
 
-    return index1 <= index2;
+    return index1 < index2;
 }

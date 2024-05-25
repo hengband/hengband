@@ -250,31 +250,6 @@ void ang_sort_swap_position(PlayerType *player_ptr, vptr u, vptr v, int a, int b
     y[b] = temp;
 }
 
-bool ang_sort_comp_quest_num(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
-{
-    /* Unused */
-    (void)player_ptr;
-    (void)v;
-
-    const auto &quests = QuestList::get_instance();
-    QuestId *q_num = (QuestId *)u;
-    const auto *qa = &quests.get_quest(q_num[a]);
-    const auto *qb = &quests.get_quest(q_num[b]);
-    return (qa->comptime != qb->comptime) ? (qa->comptime < qb->comptime) : (qa->level <= qb->level);
-}
-
-void ang_sort_swap_quest_num(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
-{
-    /* Unused */
-    (void)player_ptr;
-    (void)v;
-
-    QuestId *q_num = (QuestId *)u;
-    QuestId tmp = q_num[a];
-    q_num[a] = q_num[b];
-    q_num[b] = tmp;
-}
-
 /*!
  * @brief フロア保存時のgrid情報テンプレートをソートするための比較処理
  * @param u gridテンプレートの参照ポインタ
