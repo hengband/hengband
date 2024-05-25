@@ -41,11 +41,7 @@ std::vector<GridTemplate> generate_sorted_grid_templates(const FloorType &floor)
             const int size = std::ssize(templates);
             for (i = 0; i < size; i++) {
                 auto &gt = templates[i];
-                auto is_matched = gt.info == grid.info;
-                is_matched &= gt.feat == grid.feat;
-                is_matched &= gt.mimic == grid.mimic;
-                is_matched &= gt.special == grid.special;
-                if (is_matched) {
+                if (gt.matches(grid)) {
                     gt.occurrence++;
                     break;
                 }
@@ -109,12 +105,7 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
             const auto &grid = floor.get_grid({ y, x });
             uint i;
             for (i = 0; i < templates.size(); i++) {
-                const auto &gt = templates[i];
-                auto is_matched = gt.info == grid.info;
-                is_matched &= gt.feat == grid.feat;
-                is_matched &= gt.mimic == grid.mimic;
-                is_matched &= gt.special == grid.special;
-                if (is_matched) {
+                if (templates[i].matches(grid)) {
                     break;
                 }
             }

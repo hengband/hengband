@@ -21,7 +21,7 @@
 #include <utility>
 
 enum class AttributeType;
-
+class Grid;
 class GridTemplate {
 public:
     GridTemplate()
@@ -43,6 +43,8 @@ public:
     FEAT_IDX mimic;
     short special;
     uint16_t occurrence;
+
+    bool matches(const Grid &grid) const;
 };
 
 enum grid_bold_type {
