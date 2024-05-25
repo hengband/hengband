@@ -52,6 +52,27 @@ static concptr find_quest_map[] = {
     _("巻物を見つけた。メッセージが書いてある:", "You find a scroll with the following message"),
 };
 
+/*!
+ * @brief 該当IDが固定クエストかどうかを判定する.
+ * @param quest_id クエストID
+ * @return 固定クエストならばTRUEを返す
+ */
+bool QuestType::is_fixed(QuestId quest_id)
+{
+    return (enum2i(quest_id) < MIN_RANDOM_QUEST) || (enum2i(quest_id) > MAX_RANDOM_QUEST);
+}
+
+bool QuestType::has_reward() const
+{
+    return this->reward_fa_id != FixedArtifactId::NONE;
+}
+
+ArtifactType &QuestType::get_reward() const
+{
+    auto &artifacts = ArtifactList::get_instance();
+    return artifacts.get_artifact(this->reward_fa_id);
+}
+
 QuestList QuestList::instance{};
 
 QuestList &QuestList::get_instance()
@@ -145,27 +166,6 @@ QuestList::const_iterator QuestList::find(QuestId id) const
 size_t QuestList::size() const
 {
     return this->quests.size();
-}
-
-/*!
- * @brief 該当IDが固定クエストかどうかを判定する.
- * @param quest_id クエストID
- * @return 固定クエストならばTRUEを返す
- */
-bool QuestType::is_fixed(QuestId quest_id)
-{
-    return (enum2i(quest_id) < MIN_RANDOM_QUEST) || (enum2i(quest_id) > MAX_RANDOM_QUEST);
-}
-
-bool QuestType::has_reward() const
-{
-    return this->reward_fa_id != FixedArtifactId::NONE;
-}
-
-ArtifactType &QuestType::get_reward() const
-{
-    auto &artifacts = ArtifactList::get_instance();
-    return artifacts.get_artifact(this->reward_fa_id);
 }
 
 /*!
