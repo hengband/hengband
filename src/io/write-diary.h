@@ -57,5 +57,5 @@ enum class QuestId : short;
 #else
 std::string get_ordinal_number_suffix(int num);
 #endif
-int exe_write_diary_quest(PlayerType *player_ptr, DiaryKind dk, QuestId num);
+int exe_write_diary_quest(PlayerType *player_ptr, DiaryKind dk, QuestId quest_id);
 void exe_write_diary(PlayerType *player_ptr, DiaryKind dk, int num, std::string_view note = "");

@@ -135,9 +135,9 @@ static errr rd_dungeon(PlayerType *player_ptr)
 errr restore_dungeon(PlayerType *player_ptr)
 {
     if (player_ptr->is_dead) {
-        const auto &quest_list = QuestList::get_instance();
-        for (auto q_idx : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
-            monraces_info[quest_list[q_idx].r_idx].misc_flags.reset(MonsterMiscType::QUESTOR);
+        const auto &quests = QuestList::get_instance();
+        for (const auto quest_id : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
+            monraces_info[quests.get_quest(quest_id).r_idx].misc_flags.reset(MonsterMiscType::QUESTOR);
         }
 
         return 0;

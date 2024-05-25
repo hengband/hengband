@@ -92,11 +92,11 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
             shaft_num = (randint1(num + 1)) / 2;
         }
     } else if (terrain.flags.has(TerrainCharacteristics::MORE)) {
-        auto q_idx = floor.get_quest_id();
-        const auto &quest_list = QuestList::get_instance();
-        if (floor.dun_level > 1 && inside_quest(q_idx)) {
-            auto *r_ptr = &monraces_info[quest_list[q_idx].r_idx];
-            if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) || 0 < r_ptr->max_num) {
+        auto quest_id = floor.get_quest_id();
+        const auto &quests = QuestList::get_instance();
+        if (floor.dun_level > 1 && inside_quest(quest_id)) {
+            const auto &monrace = monraces_info[quests.get_quest(quest_id).r_idx];
+            if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE) || (monrace.max_num > 0)) {
                 return true;
             }
         }

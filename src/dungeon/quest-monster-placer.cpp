@@ -20,52 +20,47 @@
  */
 bool place_quest_monsters(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto &quest_list = QuestList::get_instance();
-    for (const auto &[q_idx, quest] : quest_list) {
-        MonsterRaceInfo *r_ptr;
-        BIT_FLAGS mode;
-
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &quests = QuestList::get_instance();
+    for (const auto &[quest_id, quest] : quests) {
         auto no_quest_monsters = quest.status != QuestStatusType::TAKEN;
         no_quest_monsters |= (quest.type != QuestKindType::KILL_LEVEL && quest.type != QuestKindType::RANDOM);
-        no_quest_monsters |= quest.level != floor_ptr->dun_level;
-        no_quest_monsters |= floor_ptr->dungeon_idx != quest.dungeon;
+        no_quest_monsters |= quest.level != floor.dun_level;
+        no_quest_monsters |= floor.dungeon_idx != quest.dungeon;
         no_quest_monsters |= any_bits(quest.flags, QUEST_FLAG_PRESET);
 
         if (no_quest_monsters) {
             continue;
         }
 
-        r_ptr = &monraces_info[quest.r_idx];
-        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (r_ptr->cur_num >= r_ptr->max_num)) {
+        auto &monrace = monraces_info[quest.r_idx];
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE) && (monrace.cur_num >= monrace.max_num)) {
             continue;
         }
 
-        mode = PM_NO_KAGE | PM_NO_PET;
-        if (r_ptr->misc_flags.has_not(MonsterMiscType::HAS_FRIENDS)) {
+        auto mode = PM_NO_KAGE | PM_NO_PET;
+        if (monrace.misc_flags.has_not(MonsterMiscType::HAS_FRIENDS)) {
             mode |= PM_ALLOW_GROUP;
         }
 
         for (int j = 0; j < (quest.max_num - quest.cur_num); j++) {
             int k;
             for (k = 0; k < SAFE_MAX_ATTEMPTS; k++) {
-                POSITION x = 0;
-                POSITION y = 0;
+                Pos2D pos(0, 0);
                 int l;
                 for (l = SAFE_MAX_ATTEMPTS; l > 0; l--) {
-                    y = randint0(floor_ptr->height);
-                    x = randint0(floor_ptr->width);
-                    const auto &grid = floor_ptr->get_grid({ y, x });
+                    pos = Pos2D(randint0(floor.height), randint0(floor.width));
+                    const auto &grid = floor.get_grid(pos);
                     const auto &terrain = grid.get_terrain();
                     if (terrain.flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY })) {
                         continue;
                     }
 
-                    if (!monster_can_enter(player_ptr, y, x, r_ptr, 0)) {
+                    if (!monster_can_enter(player_ptr, pos.y, pos.x, &monrace, 0)) {
                         continue;
                     }
 
-                    if (distance(y, x, player_ptr->y, player_ptr->x) < 10) {
+                    if (distance(pos.y, pos.x, player_ptr->y, player_ptr->x) < 10) {
                         continue;
                     }
 
@@ -80,11 +75,11 @@ bool place_quest_monsters(PlayerType *player_ptr)
                     return false;
                 }
 
-                if (place_specific_monster(player_ptr, 0, y, x, quest.r_idx, mode)) {
+                if (place_specific_monster(player_ptr, 0, pos.y, pos.x, quest.r_idx, mode)) {
                     break;
-                } else {
-                    continue;
                 }
+
+                continue;
             }
 
             if (k == SAFE_MAX_ATTEMPTS) {

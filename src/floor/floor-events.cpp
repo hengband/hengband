@@ -295,15 +295,15 @@ void update_dungeon_feeling(PlayerType *player_ptr)
         return;
     }
 
-    auto quest_num = floor.get_quest_id();
-    const auto &quest_list = QuestList::get_instance();
+    const auto quest_id = floor.get_quest_id();
+    const auto &quests = QuestList::get_instance();
 
-    auto dungeon_quest = (quest_num == QuestId::OBERON);
-    dungeon_quest |= (quest_num == QuestId::SERPENT);
-    dungeon_quest |= !(quest_list[quest_num].flags & QUEST_FLAG_PRESET);
+    auto dungeon_quest = (quest_id == QuestId::OBERON);
+    dungeon_quest |= (quest_id == QuestId::SERPENT);
+    dungeon_quest |= !(quests.get_quest(quest_id).flags & QUEST_FLAG_PRESET);
 
-    auto feeling_quest = inside_quest(quest_num);
-    feeling_quest &= QuestType::is_fixed(quest_num);
+    auto feeling_quest = inside_quest(quest_id);
+    feeling_quest &= QuestType::is_fixed(quest_id);
     feeling_quest &= !dungeon_quest;
     if (feeling_quest) {
         return;

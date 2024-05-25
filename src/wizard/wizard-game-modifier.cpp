@@ -103,20 +103,20 @@ void wizard_game_modifier(PlayerType *player_ptr)
  */
 void wiz_enter_quest(PlayerType *player_ptr)
 {
-    auto &quest_list = QuestList::get_instance();
-    const auto quest_max = enum2i(quest_list.rbegin()->first);
-    const auto quest_num = input_numerics("QuestID", 0, quest_max - 1, QuestId::NONE);
-    if (!quest_num) {
+    auto &quests = QuestList::get_instance();
+    const auto quest_max = enum2i(quests.rbegin()->first);
+    const auto quest_id = input_numerics("QuestID", 0, quest_max - 1, QuestId::NONE);
+    if (!quest_id) {
         return;
     }
 
-    auto q_idx = *quest_num;
     init_flags = i2enum<init_flags_type>(INIT_SHOW_TEXT | INIT_ASSIGN);
-    player_ptr->current_floor_ptr->quest_number = q_idx;
+    player_ptr->current_floor_ptr->quest_number = *quest_id;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
-    quest_list[q_idx].status = QuestStatusType::TAKEN;
-    if (quest_list[q_idx].dungeon == 0) {
-        exe_enter_quest(player_ptr, q_idx);
+    auto &quest = quests.get_quest(*quest_id);
+    quest.status = QuestStatusType::TAKEN;
+    if (quest.dungeon == 0) {
+        exe_enter_quest(player_ptr, *quest_id);
     }
 }
 
@@ -126,15 +126,16 @@ void wiz_enter_quest(PlayerType *player_ptr)
  */
 void wiz_complete_quest(PlayerType *player_ptr)
 {
-    if (!player_ptr->current_floor_ptr->is_in_quest()) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (!floor.is_in_quest()) {
         msg_print("No current quest");
         msg_print(nullptr);
         return;
     }
 
-    const auto &quest_list = QuestList::get_instance();
-    if (quest_list[player_ptr->current_floor_ptr->quest_number].status == QuestStatusType::TAKEN) {
-        complete_quest(player_ptr, player_ptr->current_floor_ptr->quest_number);
+    const auto &quests = QuestList::get_instance();
+    if (quests.get_quest(floor.quest_number).status == QuestStatusType::TAKEN) {
+        complete_quest(player_ptr, floor.quest_number);
     }
 }
 

@@ -127,8 +127,8 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
             }
         } else if (zz[6][0] == '!') {
             if (floor_ptr->is_in_quest()) {
-                const auto &quest_list = QuestList::get_instance();
-                letter[index].artifact = quest_list[floor_ptr->quest_number].reward_fa_id;
+                const auto &quests = QuestList::get_instance();
+                letter[index].artifact = quests.get_quest(floor_ptr->quest_number).reward_fa_id;
             }
         } else {
             letter[index].artifact = i2enum<FixedArtifactId>(atoi(zz[6]));
@@ -152,7 +152,8 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
             }
         } else if (zz[4][0] == '!') {
             if (floor_ptr->is_in_quest()) {
-                const auto &quest = QuestList::get_instance()[floor_ptr->quest_number];
+                const auto &quests = QuestList::get_instance();
+                const auto &quest = quests.get_quest(floor_ptr->quest_number);
                 if (quest.has_reward()) {
                     const auto &artifact = quest.get_reward();
                     if (artifact.gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {

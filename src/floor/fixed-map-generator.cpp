@@ -300,19 +300,19 @@ static int parse_qtw_Q(qtwg_type *qtwg_ptr, char **zz)
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    auto &quest_list = QuestList::get_instance();
-    auto *q_ptr = &(quest_list[i2enum<QuestId>(atoi(zz[0]))]);
-    if (parse_qtw_QQ(q_ptr, zz, num)) {
+    auto &quests = QuestList::get_instance();
+    auto &quest = quests.get_quest(i2enum<QuestId>(atoi(zz[0])));
+    if (parse_qtw_QQ(&quest, zz, num)) {
         return PARSE_ERROR_NONE;
     }
 
-    if (parse_qtw_QR(q_ptr, zz, num)) {
+    if (parse_qtw_QR(&quest, zz, num)) {
         return PARSE_ERROR_NONE;
     }
 
     if (zz[1][0] == 'N') {
         if (init_flags & (INIT_ASSIGN | INIT_SHOW_TEXT | INIT_NAME_ONLY)) {
-            q_ptr->name = zz[2];
+            quest.name = zz[2];
         }
 
         return PARSE_ERROR_NONE;

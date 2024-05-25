@@ -26,13 +26,13 @@
  */
 void check_random_quest_auto_failure(PlayerType *player_ptr)
 {
-    auto &quest_list = QuestList::get_instance();
+    auto &quests = QuestList::get_instance();
     const auto &floor = *player_ptr->current_floor_ptr;
     if (floor.dungeon_idx != DUNGEON_ANGBAND) {
         return;
     }
-    for (auto q_idx : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
-        auto &quest = quest_list[q_idx];
+    for (auto quest_id : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
+        auto &quest = quests.get_quest(quest_id);
         auto is_taken_quest = (quest.type == QuestKindType::RANDOM);
         is_taken_quest &= (quest.status == QuestStatusType::TAKEN);
         is_taken_quest &= (quest.level < floor.dun_level);

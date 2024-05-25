@@ -48,15 +48,15 @@ void do_cmd_checkquest(PlayerType *player_ptr)
  */
 static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
 {
-    const auto &quest_list = QuestList::get_instance();
+    const auto &quests = QuestList::get_instance();
     std::string rand_tmp_str;
     int rand_level = 100;
     int total = 0;
 
     fprintf(fff, _("《遂行中のクエスト》\n", "< Current Quest >\n"));
 
-    for (const auto &[q_idx, quest] : quest_list) {
-        if (q_idx == QuestId::NONE) {
+    for (const auto &[quest_id, quest] : quests) {
+        if (quest_id == QuestId::NONE) {
             continue;
         }
 
@@ -71,7 +71,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
 
         quest_text_lines.clear();
 
-        player_ptr->current_floor_ptr->quest_number = q_idx;
+        player_ptr->current_floor_ptr->quest_number = quest_id;
         init_flags = INIT_SHOW_TEXT;
         parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
         player_ptr->current_floor_ptr->quest_number = old_quest;
@@ -181,8 +181,8 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
 
 static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, QuestId q_idx)
 {
-    const auto &quest_list = QuestList::get_instance();
-    const auto &quest = quest_list[q_idx];
+    const auto &quests = QuestList::get_instance();
+    const auto &quest = quests.get_quest(q_idx);
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto is_fixed_quest = QuestType::is_fixed(q_idx);
@@ -230,16 +230,16 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, Quest
  * Print all finished quests
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff セーブファイル (展開済？)
- * @param quest_numbers 受注したことのあるクエスト群
+ * @param quest_ids 受注したことのあるクエスト群
  */
-void do_cmd_knowledge_quests_completed(PlayerType *player_ptr, FILE *fff, const std::vector<QuestId> &quest_numbers)
+void do_cmd_knowledge_quests_completed(PlayerType *player_ptr, FILE *fff, const std::vector<QuestId> &quest_ids)
 {
     fprintf(fff, _("《達成したクエスト》\n", "< Completed Quest >\n"));
     int16_t total = 0;
-    for (auto &q_idx : quest_numbers) {
-        const auto &quest_list = QuestList::get_instance();
-        const auto &quest = quest_list[q_idx];
-        if (quest.status == QuestStatusType::FINISHED && do_cmd_knowledge_quests_aux(player_ptr, fff, q_idx)) {
+    for (const auto quest_id : quest_ids) {
+        const auto &quests = QuestList::get_instance();
+        const auto &quest = quests.get_quest(quest_id);
+        if (quest.status == QuestStatusType::FINISHED && do_cmd_knowledge_quests_aux(player_ptr, fff, quest_id)) {
             ++total;
         }
     }
@@ -253,16 +253,16 @@ void do_cmd_knowledge_quests_completed(PlayerType *player_ptr, FILE *fff, const 
  * Print all failed quests
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff セーブファイル (展開済？)
- * @param quest_numbers 受注したことのあるクエスト群
+ * @param quest_ids 受注したことのあるクエスト群
  */
-void do_cmd_knowledge_quests_failed(PlayerType *player_ptr, FILE *fff, const std::vector<QuestId> &quest_numbers)
+void do_cmd_knowledge_quests_failed(PlayerType *player_ptr, FILE *fff, const std::vector<QuestId> &quest_ids)
 {
     fprintf(fff, _("《失敗したクエスト》\n", "< Failed Quest >\n"));
     int16_t total = 0;
-    for (auto &q_idx : quest_numbers) {
-        const auto &quest_list = QuestList::get_instance();
-        const auto &quest = quest_list[q_idx];
-        if (((quest.status == QuestStatusType::FAILED_DONE) || (quest.status == QuestStatusType::FAILED)) && do_cmd_knowledge_quests_aux(player_ptr, fff, q_idx)) {
+    for (const auto quest_id : quest_ids) {
+        const auto &quests = QuestList::get_instance();
+        const auto &quest = quests.get_quest(quest_id);
+        if (((quest.status == QuestStatusType::FAILED_DONE) || (quest.status == QuestStatusType::FAILED)) && do_cmd_knowledge_quests_aux(player_ptr, fff, quest_id)) {
             ++total;
         }
     }
@@ -278,9 +278,9 @@ void do_cmd_knowledge_quests_failed(PlayerType *player_ptr, FILE *fff, const std
 static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 {
     fprintf(fff, _("《残りのランダムクエスト》\n", "< Remaining Random Quest >\n"));
-    const auto &quest_list = QuestList::get_instance();
+    const auto &quests = QuestList::get_instance();
     int16_t total = 0;
-    for (const auto &[q_idx, quest] : quest_list) {
+    for (const auto &[q_idx, quest] : quests) {
         if (quest.flags & QUEST_FLAG_SILENT) {
             continue;
         }
@@ -309,20 +309,20 @@ void do_cmd_knowledge_quests(PlayerType *player_ptr)
         return;
     }
 
-    std::vector<QuestId> quest_numbers;
-    const auto &quest_list = QuestList::get_instance();
-    for (const auto &[q_idx, quest] : quest_list) {
-        quest_numbers.push_back(q_idx);
+    std::vector<QuestId> quest_ids;
+    const auto &quests = QuestList::get_instance();
+    for (const auto &[quest_id, quest] : quests) {
+        quest_ids.push_back(quest_id);
     }
 
     auto dummy = 0;
-    ang_sort(player_ptr, quest_numbers.data(), &dummy, quest_numbers.size(), ang_sort_comp_quest_num, ang_sort_swap_quest_num);
+    ang_sort(player_ptr, quest_ids.data(), &dummy, quest_ids.size(), ang_sort_comp_quest_num, ang_sort_swap_quest_num);
 
     do_cmd_knowledge_quests_current(player_ptr, fff);
     fputc('\n', fff);
-    do_cmd_knowledge_quests_completed(player_ptr, fff, quest_numbers);
+    do_cmd_knowledge_quests_completed(player_ptr, fff, quest_ids);
     fputc('\n', fff);
-    do_cmd_knowledge_quests_failed(player_ptr, fff, quest_numbers);
+    do_cmd_knowledge_quests_failed(player_ptr, fff, quest_ids);
     if (w_ptr->wizard) {
         fputc('\n', fff);
         do_cmd_knowledge_quests_wiz_random(fff);

@@ -266,8 +266,8 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         energy.reset_player_turn();
         command_new = SPECIAL_KEY_QUEST;
     } else if (terrain_new.flags.has(TerrainCharacteristics::QUEST_EXIT)) {
-        const auto &quest_list = QuestList::get_instance();
-        if (quest_list[floor.quest_number].type == QuestKindType::FIND_EXIT) {
+        const auto &quests = QuestList::get_instance();
+        if (quests.get_quest(floor.quest_number).type == QuestKindType::FIND_EXIT) {
             complete_quest(player_ptr, floor.quest_number);
         }
         leave_quest_check(player_ptr);

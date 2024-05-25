@@ -260,20 +260,20 @@ static void generate_gambling_arena(PlayerType *player_ptr)
  */
 static void generate_fixed_floor(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (POSITION y = 0; y < floor_ptr->height; y++) {
-        for (POSITION x = 0; x < floor_ptr->width; x++) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (auto y = 0; y < floor.height; y++) {
+        for (auto x = 0; x < floor.width; x++) {
             place_bold(player_ptr, y, x, GB_SOLID_PERM);
         }
     }
 
-    const auto &quest_list = QuestList::get_instance();
-    floor_ptr->base_level = quest_list[floor_ptr->quest_number].level;
-    floor_ptr->dun_level = floor_ptr->base_level;
-    floor_ptr->object_level = floor_ptr->base_level;
-    floor_ptr->monster_level = floor_ptr->base_level;
+    const auto &quests = QuestList::get_instance();
+    floor.base_level = quests.get_quest(floor.quest_number).level;
+    floor.dun_level = floor.base_level;
+    floor.object_level = floor.base_level;
+    floor.monster_level = floor.base_level;
     if (record_stair) {
-        exe_write_diary_quest(player_ptr, DiaryKind::TO_QUEST, floor_ptr->quest_number);
+        exe_write_diary_quest(player_ptr, DiaryKind::TO_QUEST, floor.quest_number);
     }
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), nullptr);
     init_flags = INIT_CREATE_DUNGEON;

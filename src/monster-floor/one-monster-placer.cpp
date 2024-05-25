@@ -157,27 +157,27 @@ static bool check_quest_placeable(const FloorType &floor, MonsterRaceId r_idx)
         return true;
     }
 
-    const auto &quest_list = QuestList::get_instance();
-    QuestId number = floor.get_quest_id();
-    const auto *q_ptr = &quest_list[number];
-    if ((q_ptr->type != QuestKindType::KILL_LEVEL) && (q_ptr->type != QuestKindType::RANDOM)) {
+    const auto &quests = QuestList::get_instance();
+    const auto quest_id = floor.get_quest_id();
+    const auto &quest = quests.get_quest(quest_id);
+    if ((quest.type != QuestKindType::KILL_LEVEL) && (quest.type != QuestKindType::RANDOM)) {
         return true;
     }
-    if (r_idx != q_ptr->r_idx) {
+    if (r_idx != quest.r_idx) {
         return true;
     }
     int number_mon = 0;
     for (int i2 = 0; i2 < floor.width; ++i2) {
         for (int j2 = 0; j2 < floor.height; j2++) {
             auto quest_monster = floor.grid_array[j2][i2].has_monster();
-            quest_monster &= (floor.m_list[floor.grid_array[j2][i2].m_idx].r_idx == q_ptr->r_idx);
+            quest_monster &= (floor.m_list[floor.grid_array[j2][i2].m_idx].r_idx == quest.r_idx);
             if (quest_monster) {
                 number_mon++;
             }
         }
     }
 
-    if (number_mon + q_ptr->cur_num >= q_ptr->max_num) {
+    if (number_mon + quest.cur_num >= quest.max_num) {
         return false;
     }
     return true;
