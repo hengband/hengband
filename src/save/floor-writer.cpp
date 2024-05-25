@@ -18,7 +18,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "term/z-form.h"
 #include "util/angband-files.h"
-#include "util/sort.h"
 
 /*!
  * @brief 保存フロアの書き込み / Actually write a saved floor data using effectively compressed format.
@@ -59,8 +58,8 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
      */
 
     std::vector<GridTemplate> templates;
-    for (int y = 0; y < floor.height; y++) {
-        for (int x = 0; x < floor.width; x++) {
+    for (auto y = 0; y < floor.height; y++) {
+        for (auto x = 0; x < floor.width; x++) {
             const auto &grid = floor.get_grid({ y, x });
             int i;
             const int size = std::ssize(templates);
@@ -84,8 +83,7 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         }
     }
 
-    int dummy_why;
-    ang_sort(player_ptr, templates.data(), &dummy_why, templates.size(), ang_sort_comp_cave_temp, ang_sort_swap_cave_temp);
+    std::stable_sort(templates.begin(), templates.end(), [](const auto &x, const auto &y) { return x.occurrence < y.occurrence; });
 
     /*** Dump templates ***/
     wr_u16b(static_cast<uint16_t>(templates.size()));
