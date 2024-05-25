@@ -26,7 +26,7 @@
  */
 void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     if (!sf_ptr) {
         wr_s16b((int16_t)floor.dun_level);
     } else {
@@ -151,8 +151,8 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     /*** Dump the monsters ***/
     wr_u16b(floor.m_max);
     for (int i = 1; i < floor.m_max; i++) {
-        auto *m_ptr = &floor.m_list[i];
-        wr_monster(m_ptr);
+        const auto &monster = floor.m_list[i];
+        wr_monster(monster);
     }
 }
 
