@@ -98,7 +98,7 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     player_ptr->feeling = rd_byte();
 
     auto limit = rd_u16b();
-    std::vector<grid_template_type> templates(limit);
+    std::vector<GridTemplate> templates(limit);
 
     for (auto &ct_ref : templates) {
         ct_ref.info = rd_u16b();

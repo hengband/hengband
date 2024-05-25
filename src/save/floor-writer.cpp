@@ -15,10 +15,51 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
+#include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/z-form.h"
 #include "util/angband-files.h"
-#include "util/sort.h"
+
+namespace {
+/*
+ * Usually number of templates are fewer than 255.  Even if
+ * more than 254 are exist, the occurrence of each template
+ * with larger ID is very small when we sort templates by
+ * occurrence.  So we will use two (or more) bytes for
+ * templete ID larger than 254.
+ *
+ * Ex: 256 will be "0xff" "0x01".
+ *     515 will be "0xff" "0xff" "0x03"
+ */
+std::vector<GridTemplate> generate_sorted_grid_templates(const FloorType &floor)
+{
+    std::vector<GridTemplate> templates;
+    for (auto y = 0; y < floor.height; y++) {
+        for (auto x = 0; x < floor.width; x++) {
+            const auto &grid = floor.get_grid({ y, x });
+            int i;
+            const int size = std::ssize(templates);
+            for (i = 0; i < size; i++) {
+                auto &gt = templates[i];
+                if (gt.matches(grid)) {
+                    gt.occurrence++;
+                    break;
+                }
+            }
+
+            if (i < size) {
+                continue;
+            }
+
+            templates.emplace_back(grid.info, grid.feat, grid.mimic, grid.special, static_cast<uint16_t>(1));
+        }
+    }
+
+    std::stable_sort(templates.begin(), templates.end(),
+        [](const auto &x, const auto &y) { return x.occurrence < y.occurrence; });
+    return templates;
+}
+}
 
 /*!
  * @brief 保存フロアの書き込み / Actually write a saved floor data using effectively compressed format.
@@ -26,9 +67,9 @@
  */
 void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     if (!sf_ptr) {
-        wr_s16b((int16_t)floor_ptr->dun_level);
+        wr_s16b((int16_t)floor.dun_level);
     } else {
         wr_s16b(sf_ptr->floor_id);
         wr_byte((byte)sf_ptr->savefile_id);
@@ -39,47 +80,14 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         wr_s16b(sf_ptr->lower_floor_id);
     }
 
-    wr_u16b((uint16_t)floor_ptr->base_level);
+    wr_u16b((uint16_t)floor.base_level);
     wr_u16b((int16_t)player_ptr->current_floor_ptr->num_repro);
     wr_u16b((uint16_t)player_ptr->y);
     wr_u16b((uint16_t)player_ptr->x);
-    wr_u16b((uint16_t)floor_ptr->height);
-    wr_u16b((uint16_t)floor_ptr->width);
+    wr_u16b((uint16_t)floor.height);
+    wr_u16b((uint16_t)floor.width);
     wr_byte(player_ptr->feeling);
-
-    /*
-     * Usually number of templates are fewer than 255.  Even if
-     * more than 254 are exist, the occurrence of each template
-     * with larger ID is very small when we sort templates by
-     * occurrence.  So we will use two (or more) bytes for
-     * templete ID larger than 254.
-     *
-     * Ex: 256 will be "0xff" "0x01".
-     *     515 will be "0xff" "0xff" "0x03"
-     */
-
-    std::vector<grid_template_type> templates;
-    for (int y = 0; y < floor_ptr->height; y++) {
-        for (int x = 0; x < floor_ptr->width; x++) {
-            auto *g_ptr = &floor_ptr->grid_array[y][x];
-            uint i;
-            for (i = 0; i < templates.size(); i++) {
-                if (templates[i].info == g_ptr->info && templates[i].feat == g_ptr->feat && templates[i].mimic == g_ptr->mimic && templates[i].special == g_ptr->special) {
-                    templates[i].occurrence++;
-                    break;
-                }
-            }
-
-            if (i < templates.size()) {
-                continue;
-            }
-
-            templates.push_back({ g_ptr->info, g_ptr->feat, g_ptr->mimic, g_ptr->special, 1 });
-        }
-    }
-
-    int dummy_why;
-    ang_sort(player_ptr, templates.data(), &dummy_why, templates.size(), ang_sort_comp_cave_temp, ang_sort_swap_cave_temp);
+    const auto templates = generate_sorted_grid_templates(floor);
 
     /*** Dump templates ***/
     wr_u16b(static_cast<uint16_t>(templates.size()));
@@ -92,12 +100,12 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 
     byte count = 0;
     uint16_t prev_u16b = 0;
-    for (int y = 0; y < floor_ptr->height; y++) {
-        for (int x = 0; x < floor_ptr->width; x++) {
-            auto *g_ptr = &floor_ptr->grid_array[y][x];
+    for (int y = 0; y < floor.height; y++) {
+        for (int x = 0; x < floor.width; x++) {
+            const auto &grid = floor.get_grid({ y, x });
             uint i;
             for (i = 0; i < templates.size(); i++) {
-                if (templates[i].info == g_ptr->info && templates[i].feat == g_ptr->feat && templates[i].mimic == g_ptr->mimic && templates[i].special == g_ptr->special) {
+                if (templates[i].matches(grid)) {
                     break;
                 }
             }
@@ -131,17 +139,17 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     }
 
     /*** Dump objects ***/
-    wr_u16b(floor_ptr->o_max);
-    for (int i = 1; i < floor_ptr->o_max; i++) {
-        auto *o_ptr = &floor_ptr->o_list[i];
-        wr_item(o_ptr);
+    wr_u16b(floor.o_max);
+    for (int i = 1; i < floor.o_max; i++) {
+        const auto &item = floor.o_list[i];
+        wr_item(item);
     }
 
     /*** Dump the monsters ***/
-    wr_u16b(floor_ptr->m_max);
-    for (int i = 1; i < floor_ptr->m_max; i++) {
-        auto *m_ptr = &floor_ptr->m_list[i];
-        wr_monster(m_ptr);
+    wr_u16b(floor.m_max);
+    for (int i = 1; i < floor.m_max; i++) {
+        const auto &monster = floor.m_list[i];
+        wr_monster(monster);
     }
 }
 

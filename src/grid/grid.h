@@ -21,14 +21,30 @@
 #include <utility>
 
 enum class AttributeType;
+class Grid;
+class GridTemplate {
+public:
+    GridTemplate()
+        : GridTemplate(0, 0, 0, 0, 0)
+    {
+    }
 
-/*  A structure type for terrain template of saving dungeon floor */
-struct grid_template_type {
+    GridTemplate(BIT_FLAGS info, FEAT_IDX feat, FEAT_IDX mimic, short special, uint16_t occurrence)
+        : info(info)
+        , feat(feat)
+        , mimic(mimic)
+        , special(special)
+        , occurrence(occurrence)
+    {
+    }
+
     BIT_FLAGS info;
     FEAT_IDX feat;
     FEAT_IDX mimic;
-    int16_t special;
+    short special;
     uint16_t occurrence;
+
+    bool matches(const Grid &grid) const;
 };
 
 enum grid_bold_type {

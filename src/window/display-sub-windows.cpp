@@ -40,6 +40,7 @@
 #include "timed-effect/timed-effects.h"
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
+#include "util/object-sort.h"
 #include "view/display-lore.h"
 #include "view/display-map.h"
 #include "view/display-messages.h"
@@ -53,7 +54,6 @@
 #include <mutex>
 #include <sstream>
 #include <string>
-#include <util/object-sort.h>
 
 /*! サブウィンドウ表示用の ItemTester オブジェクト */
 static std::unique_ptr<ItemTester> fix_item_tester = std::make_unique<AllMatchItemTester>();

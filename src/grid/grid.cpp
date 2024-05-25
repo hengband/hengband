@@ -65,6 +65,15 @@
 #include "world/world.h"
 #include <queue>
 
+bool GridTemplate::matches(const Grid &grid) const
+{
+    auto is_matched = this->info == grid.info;
+    is_matched &= this->feat == grid.feat;
+    is_matched &= this->mimic == grid.mimic;
+    is_matched &= this->special == grid.special;
+    return is_matched;
+}
+
 /*!
  * @brief 新規フロアに入りたてのプレイヤーをランダムな場所に配置する / Returns random co-ordinates for player/monster/object
  * @param player_ptr プレイヤーへの参照ポインタ
