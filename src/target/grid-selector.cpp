@@ -19,7 +19,7 @@
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/int-char-converter.h"
-#include "util/sort.h"
+#include "target/target-sorter.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
 #include <functional>

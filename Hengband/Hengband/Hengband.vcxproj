@@ -1732,7 +1732,7 @@
     <ClCompile Include="..\..\src\player-info\self-info.cpp" />
     <ClCompile Include="..\..\src\io\signal-handlers.cpp" />
     <ClCompile Include="..\..\src\mind\mind-sniper.cpp" />
-    <ClCompile Include="..\..\src\util\sort.cpp" />
+    <ClCompile Include="..\..\src\target\target-sorter.cpp" />
     <ClCompile Include="..\..\src\spell\spells-diceroll.cpp" />
     <ClCompile Include="..\..\src\spell-kind\spells-floor.cpp" />
     <ClCompile Include="..\..\src\spell\spells-object.cpp" />
@@ -2009,7 +2009,7 @@
     <ClInclude Include="..\..\src\core\scores.h" />
     <ClInclude Include="..\..\src\player-info\self-info.h" />
     <ClInclude Include="..\..\src\mind\mind-sniper.h" />
-    <ClInclude Include="..\..\src\util\sort.h" />
+    <ClInclude Include="..\..\src\target\target-sorter.h" />
     <ClInclude Include="..\..\src\spell\spells-diceroll.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-floor.h" />
     <ClInclude Include="..\..\src\spell\spells-object.h" />

@@ -1,4 +1,4 @@
-#include "util/sort.h"
+#include "target/target-sorter.h"
 #include "artifact/fixed-art-types.h"
 #include "dungeon/quest.h"
 #include "grid/grid.h"

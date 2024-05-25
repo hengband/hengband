@@ -16,11 +16,11 @@
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "target/projection-path-calculator.h"
+#include "target/target-sorter.h"
 #include "target/target-types.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
-#include "util/sort.h"
 #include "window/main-window-util.h"
 #include <algorithm>
 #include <utility>
