@@ -13,103 +13,16 @@
 #include "system/terrain-type-definition.h"
 #include "util/point-2d.h"
 
-/*
- * @brief クイックソートの実行 / Quick sort in place
- * @param u アイテムやモンスター等への配列
- * @param v 条件基準IDへの参照ポインタ
- * @param a 比較対象のID1
- * @param b 比較対象のID2
- * @param ang_sort_comp 比較用の関数ポインタ
- * @param ang_sort_swap スワップ用の関数ポインタ
- */
-static void exe_ang_sort(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int> &xs, int p, int q, SortKind kind)
-{
-    if (p >= q) {
-        return;
-    }
-
-    int z = p;
-    int a = p;
-    int b = q;
-    while (true) {
-        /* Slide i2 */
-        auto is_less_i2 = false;
-        do {
-            switch (kind) {
-            case SortKind::DISTANCE:
-                is_less_i2 = ang_sort_comp_distance(player_ptr, ys, xs, b, z);
-                break;
-            case SortKind::IMPORTANCE:
-                is_less_i2 = ang_sort_comp_importance(player_ptr, ys, xs, b, z);
-                break;
-            default:
-                THROW_EXCEPTION(std::logic_error, "Invalid Sort Kind was specified!");
-            }
-
-            if (!is_less_i2) {
-                b--;
-            }
-        } while (!is_less_i2);
-
-        /* Slide i1 */
-        auto is_less_i1 = false;
-        do {
-            switch (kind) {
-            case SortKind::DISTANCE:
-                is_less_i1 = ang_sort_comp_distance(player_ptr, ys, xs, z, a);
-                break;
-            case SortKind::IMPORTANCE:
-                is_less_i1 = ang_sort_comp_importance(player_ptr, ys, xs, z, a);
-                break;
-            default:
-                THROW_EXCEPTION(std::logic_error, "Invalid Sort Kind was specified!");
-            }
-
-            if (!is_less_i1) {
-                a++;
-            }
-        } while (!is_less_i1);
-
-        if (a >= b) {
-            break;
-        }
-
-        std::swap(xs[a], xs[b]);
-        std::swap(ys[a], ys[b]);
-        a++, b--;
-    }
-
-    /* Recurse left side */
-    exe_ang_sort(player_ptr, ys, xs, p, b, kind);
-
-    /* Recurse right side */
-    exe_ang_sort(player_ptr, ys, xs, b + 1, q, kind);
-}
-
-/*
- * @brief クイックソートの受け付け / Accepting auick sort in place
- * @param u アイテムやモンスター等への配列
- * @param v 条件基準IDへの参照ポインタ
- * @param a 比較対象のID1
- * @param b 比較対象のID2
- * @param ang_sort_comp 比較用の関数ポインタ
- * @param ang_sort_swap スワップ用の関数ポインタ
- */
-void ang_sort(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int> &xs, SortKind kind)
-{
-    exe_ang_sort(player_ptr, ys, xs, 0, std::ssize(ys) - 1, kind);
-}
-
+namespace {
 /*
  * Sorting hook -- comp function -- by "distance to player"
  *
  * We use "u" and "v" to point to arrays of "x" and "y" positions,
  * and sort the arrays by double-distance to the player.
  */
-bool ang_sort_comp_distance(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int> &xs, int a, int b)
+bool ang_sort_comp_distance(const Pos2D &p_pos, std::vector<int> &ys, std::vector<int> &xs, int a, int b)
 {
     /* Absolute distance components */
-    const auto p_pos = player_ptr->get_position();
     auto xa = xs[a];
     xa -= p_pos.x;
     xa = std::abs(xa);
@@ -139,14 +52,12 @@ bool ang_sort_comp_distance(PlayerType *player_ptr, std::vector<int> &ys, std::v
  * We use "u" and "v" to point to arrays of "x" and "y" positions,
  * and sort the arrays by level of monster
  */
-bool ang_sort_comp_importance(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int> &xs, int a, int b)
+bool ang_sort_comp_importance(const FloorType &floor, const Pos2D &p_pos, std::vector<int> &ys, std::vector<int> &xs, int a, int b)
 {
-    const auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid1 = floor.get_grid({ ys[a], xs[a] });
     const auto &grid2 = floor.get_grid({ ys[b], xs[b] });
     const auto &monster_a = floor.m_list[grid1.m_idx];
     const auto &monster_b = floor.m_list[grid2.m_idx];
-    const auto p_pos = player_ptr->get_position();
     if (p_pos == Pos2D(ys[a], xs[a])) {
         return true;
     }
@@ -229,5 +140,95 @@ bool ang_sort_comp_importance(PlayerType *player_ptr, std::vector<int> &ys, std:
         return false;
     }
 
-    return ang_sort_comp_distance(player_ptr, ys, xs, a, b);
+    return ang_sort_comp_distance(p_pos, ys, xs, a, b);
+}
+
+/*
+ * @brief クイックソートの実行 / Quick sort in place
+ * @param u アイテムやモンスター等への配列
+ * @param v 条件基準IDへの参照ポインタ
+ * @param a 比較対象のID1
+ * @param b 比較対象のID2
+ * @param ang_sort_comp 比較用の関数ポインタ
+ * @param ang_sort_swap スワップ用の関数ポインタ
+ */
+void exe_ang_sort(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int> &xs, int p, int q, SortKind kind)
+{
+    if (p >= q) {
+        return;
+    }
+
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto p_pos = player_ptr->get_position();
+    int z = p;
+    int a = p;
+    int b = q;
+    while (true) {
+        /* Slide i2 */
+        auto is_less_i2 = false;
+        do {
+            switch (kind) {
+            case SortKind::DISTANCE:
+                is_less_i2 = ang_sort_comp_distance(p_pos, ys, xs, b, z);
+                break;
+            case SortKind::IMPORTANCE:
+                is_less_i2 = ang_sort_comp_importance(floor, p_pos, ys, xs, b, z);
+                break;
+            default:
+                THROW_EXCEPTION(std::logic_error, "Invalid Sort Kind was specified!");
+            }
+
+            if (!is_less_i2) {
+                b--;
+            }
+        } while (!is_less_i2);
+
+        /* Slide i1 */
+        auto is_less_i1 = false;
+        do {
+            switch (kind) {
+            case SortKind::DISTANCE:
+                is_less_i1 = ang_sort_comp_distance(p_pos, ys, xs, z, a);
+                break;
+            case SortKind::IMPORTANCE:
+                is_less_i1 = ang_sort_comp_importance(floor, p_pos, ys, xs, z, a);
+                break;
+            default:
+                THROW_EXCEPTION(std::logic_error, "Invalid Sort Kind was specified!");
+            }
+
+            if (!is_less_i1) {
+                a++;
+            }
+        } while (!is_less_i1);
+
+        if (a >= b) {
+            break;
+        }
+
+        std::swap(xs[a], xs[b]);
+        std::swap(ys[a], ys[b]);
+        a++, b--;
+    }
+
+    /* Recurse left side */
+    exe_ang_sort(player_ptr, ys, xs, p, b, kind);
+
+    /* Recurse right side */
+    exe_ang_sort(player_ptr, ys, xs, b + 1, q, kind);
+}
+}
+
+/*
+ * @brief クイックソートの受け付け / Accepting auick sort in place
+ * @param u アイテムやモンスター等への配列
+ * @param v 条件基準IDへの参照ポインタ
+ * @param a 比較対象のID1
+ * @param b 比較対象のID2
+ * @param ang_sort_comp 比較用の関数ポインタ
+ * @param ang_sort_swap スワップ用の関数ポインタ
+ */
+void ang_sort(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int> &xs, SortKind kind)
+{
+    exe_ang_sort(player_ptr, ys, xs, 0, std::ssize(ys) - 1, kind);
 }
