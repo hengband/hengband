@@ -19,44 +19,19 @@
 #include "term/z-form.h"
 #include "util/angband-files.h"
 
-/*!
- * @brief 保存フロアの書き込み / Actually write a saved floor data using effectively compressed format.
- * @param sf_ptr 保存したいフロアの参照ポインタ
+namespace {
+/*
+ * Usually number of templates are fewer than 255.  Even if
+ * more than 254 are exist, the occurrence of each template
+ * with larger ID is very small when we sort templates by
+ * occurrence.  So we will use two (or more) bytes for
+ * templete ID larger than 254.
+ *
+ * Ex: 256 will be "0xff" "0x01".
+ *     515 will be "0xff" "0xff" "0x03"
  */
-void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
+std::vector<GridTemplate> generate_sorted_grid_templates(const FloorType &floor)
 {
-    const auto &floor = *player_ptr->current_floor_ptr;
-    if (!sf_ptr) {
-        wr_s16b((int16_t)floor.dun_level);
-    } else {
-        wr_s16b(sf_ptr->floor_id);
-        wr_byte((byte)sf_ptr->savefile_id);
-        wr_s16b((int16_t)sf_ptr->dun_level);
-        wr_s32b(sf_ptr->last_visit);
-        wr_u32b(sf_ptr->visit_mark);
-        wr_s16b(sf_ptr->upper_floor_id);
-        wr_s16b(sf_ptr->lower_floor_id);
-    }
-
-    wr_u16b((uint16_t)floor.base_level);
-    wr_u16b((int16_t)player_ptr->current_floor_ptr->num_repro);
-    wr_u16b((uint16_t)player_ptr->y);
-    wr_u16b((uint16_t)player_ptr->x);
-    wr_u16b((uint16_t)floor.height);
-    wr_u16b((uint16_t)floor.width);
-    wr_byte(player_ptr->feeling);
-
-    /*
-     * Usually number of templates are fewer than 255.  Even if
-     * more than 254 are exist, the occurrence of each template
-     * with larger ID is very small when we sort templates by
-     * occurrence.  So we will use two (or more) bytes for
-     * templete ID larger than 254.
-     *
-     * Ex: 256 will be "0xff" "0x01".
-     *     515 will be "0xff" "0xff" "0x03"
-     */
-
     std::vector<GridTemplate> templates;
     for (auto y = 0; y < floor.height; y++) {
         for (auto x = 0; x < floor.width; x++) {
@@ -83,7 +58,39 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         }
     }
 
-    std::stable_sort(templates.begin(), templates.end(), [](const auto &x, const auto &y) { return x.occurrence < y.occurrence; });
+    std::stable_sort(templates.begin(), templates.end(),
+        [](const auto &x, const auto &y) { return x.occurrence < y.occurrence; });
+    return templates;
+}
+}
+
+/*!
+ * @brief 保存フロアの書き込み / Actually write a saved floor data using effectively compressed format.
+ * @param sf_ptr 保存したいフロアの参照ポインタ
+ */
+void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
+{
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (!sf_ptr) {
+        wr_s16b((int16_t)floor.dun_level);
+    } else {
+        wr_s16b(sf_ptr->floor_id);
+        wr_byte((byte)sf_ptr->savefile_id);
+        wr_s16b((int16_t)sf_ptr->dun_level);
+        wr_s32b(sf_ptr->last_visit);
+        wr_u32b(sf_ptr->visit_mark);
+        wr_s16b(sf_ptr->upper_floor_id);
+        wr_s16b(sf_ptr->lower_floor_id);
+    }
+
+    wr_u16b((uint16_t)floor.base_level);
+    wr_u16b((int16_t)player_ptr->current_floor_ptr->num_repro);
+    wr_u16b((uint16_t)player_ptr->y);
+    wr_u16b((uint16_t)player_ptr->x);
+    wr_u16b((uint16_t)floor.height);
+    wr_u16b((uint16_t)floor.width);
+    wr_byte(player_ptr->feeling);
+    const auto templates = generate_sorted_grid_templates(floor);
 
     /*** Dump templates ***/
     wr_u16b(static_cast<uint16_t>(templates.size()));
