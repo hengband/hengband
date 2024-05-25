@@ -133,6 +133,8 @@ public:
     using const_iterator = std::map<QuestId, QuestType>::const_iterator;
     using const_reverse_iterator = std::map<QuestId, QuestType>::const_reverse_iterator;
     static QuestList &get_instance();
+
+    void initialize();
     QuestType &operator[](QuestId id);
     const QuestType &operator[](QuestId id) const;
     iterator begin();
@@ -146,17 +148,15 @@ public:
     iterator find(QuestId id);
     const_iterator find(QuestId id) const;
     size_t size() const;
-    void initialize();
     QuestList(const QuestList &) = delete;
     QuestList(QuestList &&) = delete;
     QuestList &operator=(const QuestList &) = delete;
     QuestList &operator=(QuestList &&) = delete;
 
 private:
-    bool initialized = false;
-    std::map<QuestId, QuestType> quest_data;
+    static QuestList instance;
+    std::map<QuestId, QuestType> quests;
     QuestList() = default;
-    ~QuestList() = default;
 };
 
 extern std::vector<std::string> quest_text_lines;
@@ -167,13 +167,13 @@ constexpr auto QUEST_TEST_LINES_MAX = 10;
 class FloorType;
 class ItemEntity;
 class PlayerType;
-void determine_random_questor(PlayerType *player_ptr, QuestType *q_ptr);
+void determine_random_questor(PlayerType *player_ptr, QuestType &quest);
 void record_quest_final_status(QuestType *q_ptr, PLAYER_LEVEL lev, QuestStatusType stat);
 void complete_quest(PlayerType *player_ptr, QuestId quest_num);
 void check_find_art_quest_completion(PlayerType *player_ptr, ItemEntity *o_ptr);
-void quest_discovery(QuestId q_idx);
+void quest_discovery(QuestId quest_id);
 void leave_quest_check(PlayerType *player_ptr);
 void leave_tower_check(PlayerType *player_ptr);
-void exe_enter_quest(PlayerType *player_ptr, QuestId quest_idx);
+void exe_enter_quest(PlayerType *player_ptr, QuestId quest_id);
 void do_cmd_quest(PlayerType *player_ptr);
-bool inside_quest(QuestId id);
+bool inside_quest(QuestId quest_id);
