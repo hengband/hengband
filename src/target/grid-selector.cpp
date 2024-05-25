@@ -82,7 +82,7 @@ static void tgt_pt_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, st
         }
     }
 
-    ang_sort(player_ptr, ys, xs, SortKind::DISTANCE);
+    ang_sort(*player_ptr->current_floor_ptr, player_ptr->get_position(), ys, xs, SortKind::DISTANCE);
 }
 
 /*!

@@ -9,9 +9,7 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
-#include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
-#include "util/point-2d.h"
 
 namespace {
 /*
@@ -152,14 +150,12 @@ bool ang_sort_comp_importance(const FloorType &floor, const Pos2D &p_pos, std::v
  * @param ang_sort_comp 比較用の関数ポインタ
  * @param ang_sort_swap スワップ用の関数ポインタ
  */
-void exe_ang_sort(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int> &xs, int p, int q, SortKind kind)
+void exe_ang_sort(const FloorType &floor, const Pos2D &p_pos, std::vector<int> &ys, std::vector<int> &xs, int p, int q, SortKind kind)
 {
     if (p >= q) {
         return;
     }
 
-    const auto &floor = *player_ptr->current_floor_ptr;
-    const auto p_pos = player_ptr->get_position();
     int z = p;
     int a = p;
     int b = q;
@@ -212,10 +208,10 @@ void exe_ang_sort(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int>
     }
 
     /* Recurse left side */
-    exe_ang_sort(player_ptr, ys, xs, p, b, kind);
+    exe_ang_sort(floor, p_pos, ys, xs, p, b, kind);
 
     /* Recurse right side */
-    exe_ang_sort(player_ptr, ys, xs, b + 1, q, kind);
+    exe_ang_sort(floor, p_pos, ys, xs, b + 1, q, kind);
 }
 }
 
@@ -228,7 +224,7 @@ void exe_ang_sort(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int>
  * @param ang_sort_comp 比較用の関数ポインタ
  * @param ang_sort_swap スワップ用の関数ポインタ
  */
-void ang_sort(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int> &xs, SortKind kind)
+void ang_sort(const FloorType &floor, const Pos2D &p_pos, std::vector<int> &ys, std::vector<int> &xs, SortKind kind)
 {
-    exe_ang_sort(player_ptr, ys, xs, 0, std::ssize(ys) - 1, kind);
+    exe_ang_sort(floor, p_pos, ys, xs, 0, std::ssize(ys) - 1, kind);
 }
