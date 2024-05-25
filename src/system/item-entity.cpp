@@ -900,7 +900,7 @@ std::string ItemEntity::explain_activation() const
         return this->build_activation_description();
     }
 
-    return this->bi_key.explain_activation();
+    return _("何も起きない", "Nothing");
 }
 
 std::string ItemEntity::build_timeout_description(const ActivationType &act) const

@@ -272,7 +272,9 @@
                             "DETECT_TREASURE",
                             "HERO_BLESS",
                             "CREATE_AMMO",
-                            "DISPEL_MAGIC"
+                            "DISPEL_MAGIC",
+                            "WHISTLE",
+                            "CAPTURE_MONSTER"
                         ]
                     },
                     "flags": {

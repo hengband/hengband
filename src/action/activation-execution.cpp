@@ -29,7 +29,6 @@
 #include "player-base/player-class.h"
 #include "player-status/player-energy.h"
 #include "racial/racial-android.h"
-#include "specific-object/monster-ball.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
@@ -192,38 +191,6 @@ static bool activate_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 }
 
-static bool activate_whistle(PlayerType *player_ptr, ae_type *ae_ptr)
-{
-    if (ae_ptr->o_ptr->bi_key.tval() != ItemKindType::WHISTLE) {
-        return false;
-    }
-
-    if (music_singing_any(player_ptr)) {
-        stop_singing(player_ptr);
-    }
-
-    if (SpellHex(player_ptr).is_spelling_any()) {
-        (void)SpellHex(player_ptr).stop_all_spells();
-    }
-
-    const auto &floor = *player_ptr->current_floor_ptr;
-    std::vector<short> pet_index;
-    for (short pet_indice = floor.m_max - 1; pet_indice >= 1; pet_indice--) {
-        const auto &monster = floor.m_list[pet_indice];
-        if (monster.is_pet() && (player_ptr->riding != pet_indice)) {
-            pet_index.push_back(pet_indice);
-        }
-    }
-
-    std::stable_sort(pet_index.begin(), pet_index.end(), [&floor](auto x, auto y) { return floor.order_pet_whistle(x, y); });
-    for (auto pet_indice : pet_index) {
-        teleport_monster_to(player_ptr, pet_indice, player_ptr->y, player_ptr->x, 100, TELEPORT_PASSIVE);
-    }
-
-    ae_ptr->o_ptr->timeout = 100 + randint1(100);
-    return true;
-}
-
 /*!
  * @brief 装備を発動するコマンドのサブルーチン
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -254,14 +221,6 @@ void exe_activate(PlayerType *player_ptr, INVENTORY_IDX i_idx)
             SubWindowRedrawingFlag::EQUIPMENT,
         };
         RedrawingFlagsUpdater::get_instance().set_flags(flags);
-        return;
-    }
-
-    if (activate_whistle(player_ptr, ae_ptr)) {
-        return;
-    }
-
-    if (exe_monster_capture(player_ptr, *ae_ptr->o_ptr)) {
         return;
     }
 

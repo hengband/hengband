@@ -12123,7 +12123,8 @@
       "hit_bonus": 0,
       "damage_bonus": 0,
       "ac_bonus": 0,
-      "allocations": [{ "depth": 15, "rarity": 4 }]
+      "allocations": [{ "depth": 15, "rarity": 4 }],
+      "activate": "CAPTURE_MONSTER"
     },
     {
       "id": 594,
@@ -13266,7 +13267,8 @@
       "level": 15,
       "weight": 3,
       "cost": 1000,
-      "allocations": [{ "depth": 15, "rarity": 2 }]
+      "allocations": [{ "depth": 15, "rarity": 2 }],
+      "activate": "WHISTLE"
     },
     {
       "id": 652,
