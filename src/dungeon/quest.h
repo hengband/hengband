@@ -152,6 +152,7 @@ public:
     iterator find(QuestId id);
     const_iterator find(QuestId id) const;
     size_t size() const;
+    std::vector<QuestId> get_sorted_quest_ids() const;
 
 private:
     static QuestList instance;

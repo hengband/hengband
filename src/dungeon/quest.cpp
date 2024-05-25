@@ -170,11 +170,19 @@ size_t QuestList::size() const
     return this->quests.size();
 }
 
+std::vector<QuestId> QuestList::get_sorted_quest_ids() const
+{
+    std::vector<QuestId> quest_ids;
+    std::transform(++this->quests.begin(), this->quests.end(), std::back_inserter(quest_ids), [](const auto &x) { return x.first; });
+    std::stable_sort(quest_ids.begin(), quest_ids.end(), [this](auto x, auto y) { return this->order_completed(x, y); });
+    return quest_ids;
+}
+
 bool QuestList::order_completed(QuestId id1, QuestId id2) const
 {
     const auto &quest1 = this->get_quest(id1);
     const auto &quest2 = this->get_quest(id2);
-    return (quest1.comptime != quest2.comptime) ? (quest1.comptime < quest2.comptime) : (quest1.level <= quest2.level);
+    return (quest1.comptime != quest2.comptime) ? (quest1.comptime < quest2.comptime) : (quest1.level < quest2.level);
 }
 
 /*!
