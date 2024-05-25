@@ -413,7 +413,7 @@ bool MonraceList::order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed) 
         return false;
     }
 
-    return id1 <= id2;
+    return id1 < id2;
 }
 
 bool MonraceList::MonraceList::order_level(MonsterRaceId id1, MonsterRaceId id2) const
@@ -436,7 +436,7 @@ bool MonraceList::MonraceList::order_level(MonsterRaceId id1, MonsterRaceId id2)
         return false;
     }
 
-    return id1 <= id2;
+    return id1 < id2;
 }
 
 void MonraceList::reset_all_visuals()
