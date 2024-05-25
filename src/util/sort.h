@@ -1,11 +1,8 @@
 #pragma once
 
-#include "system/angband.h"
+#include <vector>
 
-#include "system/player-type-definition.h"
-void ang_sort(PlayerType *player_ptr, vptr u, vptr v, int n, bool (*ang_sort_comp)(PlayerType *, vptr, vptr, int, int),
-    void (*ang_sort_swap)(PlayerType *, vptr, vptr, int, int));
-
-bool ang_sort_comp_distance(PlayerType *player_ptr, vptr u, vptr v, int a, int b);
-bool ang_sort_comp_importance(PlayerType *player_ptr, vptr u, vptr v, int a, int b);
-void ang_sort_swap_position(PlayerType *player_ptr, vptr u, vptr v, int a, int b);
+class PlayerType;
+void ang_sort(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int> &xs, int n, bool (*ang_sort_comp)(PlayerType *, std::vector<int> &, std::vector<int> &, int, int));
+bool ang_sort_comp_distance(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int> &xs, int a, int b);
+bool ang_sort_comp_importance(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int> &xs, int a, int b);

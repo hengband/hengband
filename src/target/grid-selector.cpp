@@ -12,6 +12,7 @@
 #include "io/screen-util.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
+#include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "term/screen-processor.h"
@@ -81,7 +82,7 @@ static void tgt_pt_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, st
         }
     }
 
-    ang_sort(player_ptr, xs.data(), ys.data(), size(ys), ang_sort_comp_distance, ang_sort_swap_position);
+    ang_sort(player_ptr, ys, xs, size(ys), ang_sort_comp_distance);
 }
 
 /*!

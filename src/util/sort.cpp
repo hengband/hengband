@@ -13,6 +13,18 @@
 #include "system/terrain-type-definition.h"
 
 /*
+ * Sorting hook -- swap function -- by "distance to player"
+ *
+ * We use "u" and "v" to point to arrays of "x" and "y" positions,
+ * and sort the arrays by distance to the player.
+ */
+static void ang_sort_swap_position(std::vector<int> &ys, std::vector<int> &xs, int a, int b)
+{
+    std::swap(xs[a], xs[b]);
+    std::swap(ys[a], ys[b]);
+}
+
+/*
  * @brief クイックソートの実行 / Quick sort in place
  * @param u アイテムやモンスター等への配列
  * @param v 条件基準IDへの参照ポインタ
@@ -21,8 +33,7 @@
  * @param ang_sort_comp 比較用の関数ポインタ
  * @param ang_sort_swap スワップ用の関数ポインタ
  */
-static void exe_ang_sort(PlayerType *player_ptr, vptr u, vptr v, int p, int q, bool (*ang_sort_comp)(PlayerType *, vptr, vptr, int, int),
-    void (*ang_sort_swap)(PlayerType *, vptr, vptr, int, int))
+static void exe_ang_sort(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int> &xs, int p, int q, bool (*ang_sort_comp)(PlayerType *, std::vector<int> &, std::vector<int> &, int, int))
 {
     if (p >= q) {
         return;
@@ -33,12 +44,12 @@ static void exe_ang_sort(PlayerType *player_ptr, vptr u, vptr v, int p, int q, b
     int b = q;
     while (true) {
         /* Slide i2 */
-        while (!(*ang_sort_comp)(player_ptr, u, v, b, z)) {
+        while (!(*ang_sort_comp)(player_ptr, ys, xs, b, z)) {
             b--;
         }
 
         /* Slide i1 */
-        while (!(*ang_sort_comp)(player_ptr, u, v, z, a)) {
+        while (!(*ang_sort_comp)(player_ptr, ys, xs, z, a)) {
             a++;
         }
 
@@ -46,16 +57,16 @@ static void exe_ang_sort(PlayerType *player_ptr, vptr u, vptr v, int p, int q, b
             break;
         }
 
-        (*ang_sort_swap)(player_ptr, u, v, a, b);
+        ang_sort_swap_position(ys, xs, a, b);
 
         a++, b--;
     }
 
     /* Recurse left side */
-    exe_ang_sort(player_ptr, u, v, p, b, ang_sort_comp, ang_sort_swap);
+    exe_ang_sort(player_ptr, ys, xs, p, b, ang_sort_comp);
 
     /* Recurse right side */
-    exe_ang_sort(player_ptr, u, v, b + 1, q, ang_sort_comp, ang_sort_swap);
+    exe_ang_sort(player_ptr, ys, xs, b + 1, q, ang_sort_comp);
 }
 
 /*
@@ -67,10 +78,9 @@ static void exe_ang_sort(PlayerType *player_ptr, vptr u, vptr v, int p, int q, b
  * @param ang_sort_comp 比較用の関数ポインタ
  * @param ang_sort_swap スワップ用の関数ポインタ
  */
-void ang_sort(PlayerType *player_ptr, vptr u, vptr v, int n, bool (*ang_sort_comp)(PlayerType *, vptr, vptr, int, int),
-    void (*ang_sort_swap)(PlayerType *, vptr, vptr, int, int))
+void ang_sort(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int> &xs, int n, bool (*ang_sort_comp)(PlayerType *, std::vector<int> &, std::vector<int> &, int, int))
 {
-    exe_ang_sort(player_ptr, u, v, 0, n - 1, ang_sort_comp, ang_sort_swap);
+    exe_ang_sort(player_ptr, ys, xs, 0, n - 1, ang_sort_comp);
 }
 
 /*
@@ -79,16 +89,13 @@ void ang_sort(PlayerType *player_ptr, vptr u, vptr v, int n, bool (*ang_sort_com
  * We use "u" and "v" to point to arrays of "x" and "y" positions,
  * and sort the arrays by double-distance to the player.
  */
-bool ang_sort_comp_distance(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
+bool ang_sort_comp_distance(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int> &xs, int a, int b)
 {
-    POSITION *x = (POSITION *)(u);
-    POSITION *y = (POSITION *)(v);
-
     /* Absolute distance components */
-    POSITION kx = x[a];
+    POSITION kx = xs[a];
     kx -= player_ptr->x;
     kx = std::abs(kx);
-    POSITION ky = y[a];
+    POSITION ky = ys[a];
     ky -= player_ptr->y;
     ky = std::abs(ky);
 
@@ -96,10 +103,10 @@ bool ang_sort_comp_distance(PlayerType *player_ptr, vptr u, vptr v, int a, int b
     POSITION da = ((kx > ky) ? (kx + kx + ky) : (ky + ky + kx));
 
     /* Absolute distance components */
-    kx = x[b];
+    kx = xs[b];
     kx -= player_ptr->x;
     kx = std::abs(kx);
-    ky = y[b];
+    ky = ys[b];
     ky -= player_ptr->y;
     ky = std::abs(ky);
 
@@ -116,22 +123,20 @@ bool ang_sort_comp_distance(PlayerType *player_ptr, vptr u, vptr v, int a, int b
  * We use "u" and "v" to point to arrays of "x" and "y" positions,
  * and sort the arrays by level of monster
  */
-bool ang_sort_comp_importance(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
+bool ang_sort_comp_importance(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int> &xs, int a, int b)
 {
-    auto *x = static_cast<int *>(u);
-    auto *y = static_cast<int *>(v);
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto &grid_a = floor.get_grid({ y[a], x[a] });
-    const auto &grid_b = floor.get_grid({ y[b], x[b] });
+    const auto &grid_a = floor.get_grid({ ys[a], xs[a] });
+    const auto &grid_b = floor.get_grid({ ys[b], xs[b] });
     const auto &monster_a = floor.m_list[grid_a.m_idx];
     const auto &monster_b = floor.m_list[grid_b.m_idx];
 
     /* The player grid */
-    if (y[a] == player_ptr->y && x[a] == player_ptr->x) {
+    if (ys[a] == player_ptr->y && xs[a] == player_ptr->x) {
         return true;
     }
 
-    if (y[b] == player_ptr->y && x[b] == player_ptr->x) {
+    if (ys[b] == player_ptr->y && xs[b] == player_ptr->x) {
         return false;
     }
 
@@ -224,28 +229,5 @@ bool ang_sort_comp_importance(PlayerType *player_ptr, vptr u, vptr v, int a, int
     }
 
     /* If all conditions are same, compare distance */
-    return ang_sort_comp_distance(player_ptr, u, v, a, b);
-}
-
-/*
- * Sorting hook -- swap function -- by "distance to player"
- *
- * We use "u" and "v" to point to arrays of "x" and "y" positions,
- * and sort the arrays by distance to the player.
- */
-void ang_sort_swap_position(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
-{
-    /* Unused */
-    (void)player_ptr;
-
-    POSITION *x = (POSITION *)(u);
-    POSITION *y = (POSITION *)(v);
-
-    POSITION temp = x[a];
-    x[a] = x[b];
-    x[b] = temp;
-
-    temp = y[a];
-    y[a] = y[b];
-    y[b] = temp;
+    return ang_sort_comp_distance(player_ptr, ys, xs, a, b);
 }
