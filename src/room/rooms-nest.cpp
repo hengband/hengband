@@ -45,9 +45,9 @@ const std::map<NestKind, nest_pit_type> nest_types = {
     { NestKind::UNDEAD, { _("アンデッド", "undead"), vault_aux_undead, std::nullopt, 75, 5 } },
 };
 
-std::optional<std::array<nest_mon_info_type, NUM_NEST_MON_TYPE>> pick_nest_monraces(PlayerType *player_ptr, MonsterEntity &align)
+std::optional<std::array<NestMonsterInfo, NUM_NEST_MON_TYPE>> pick_nest_monraces(PlayerType *player_ptr, MonsterEntity &align)
 {
-    std::array<nest_mon_info_type, NUM_NEST_MON_TYPE> nest_mon_info_list{};
+    std::array<NestMonsterInfo, NUM_NEST_MON_TYPE> nest_mon_info_list{};
     for (auto &nest_mon_info : nest_mon_info_list) {
         const auto monrace_id = select_pit_nest_monrace_id(player_ptr, align, 11);
         if (!monrace_id) {
@@ -63,7 +63,7 @@ std::optional<std::array<nest_mon_info_type, NUM_NEST_MON_TYPE>> pick_nest_monra
             align.sub_align |= SUB_ALIGN_GOOD;
         }
 
-        nest_mon_info.r_idx = *monrace_id;
+        nest_mon_info.monrace_id = *monrace_id;
     }
 
     return nest_mon_info_list;
@@ -117,16 +117,16 @@ void generate_inner_room(PlayerType *player_ptr, const Pos2D &center, Rect2D &re
     }
 }
 
-void place_monsters_in_nest(PlayerType *player_ptr, const Pos2D &center, std::array<nest_mon_info_type, NUM_NEST_MON_TYPE> &nest_mon_info_list)
+void place_monsters_in_nest(PlayerType *player_ptr, const Pos2D &center, std::array<NestMonsterInfo, NUM_NEST_MON_TYPE> &nest_mon_info_list)
 {
     Rect2D(center, Vector2D(2, 9)).each_area([player_ptr, &nest_mon_info_list](const Pos2D &pos) {
         auto &nest_mon_info = rand_choice(nest_mon_info_list);
-        (void)place_specific_monster(player_ptr, 0, pos.y, pos.x, nest_mon_info.r_idx, 0L);
+        (void)place_specific_monster(player_ptr, 0, pos.y, pos.x, nest_mon_info.monrace_id, 0L);
         nest_mon_info.used = true;
     });
 }
 
-void output_debug_nest(PlayerType *player_ptr, std::array<nest_mon_info_type, NUM_NEST_MON_TYPE> &nest_mon_info_list)
+void output_debug_nest(PlayerType *player_ptr, std::array<NestMonsterInfo, NUM_NEST_MON_TYPE> &nest_mon_info_list)
 {
     if (!cheat_room) {
         return;
@@ -142,7 +142,7 @@ void output_debug_nest(PlayerType *player_ptr, std::array<nest_mon_info_type, NU
         }
 
         for (; i < NUM_NEST_MON_TYPE - 1; i++) {
-            if (nest_mon_info.r_idx != next_nest_mon_info.r_idx) {
+            if (nest_mon_info.monrace_id != next_nest_mon_info.monrace_id) {
                 break;
             }
 
@@ -161,7 +161,7 @@ void output_debug_nest(PlayerType *player_ptr, std::array<nest_mon_info_type, NU
 }
 }
 
-bool nest_mon_info_type::order_nest(const nest_mon_info_type &other) const
+bool NestMonsterInfo::order_nest(const NestMonsterInfo &other) const
 {
     if (this->used && !other.used) {
         return true;
@@ -189,12 +189,12 @@ bool nest_mon_info_type::order_nest(const nest_mon_info_type &other) const
         return false;
     }
 
-    return this->r_idx < other.r_idx;
+    return this->monrace_id < other.monrace_id;
 }
 
-const MonsterRaceInfo &nest_mon_info_type::get_monrace() const
+const MonsterRaceInfo &NestMonsterInfo::get_monrace() const
 {
-    return MonraceList::get_instance().get_monrace(this->r_idx);
+    return MonraceList::get_instance().get_monrace(this->monrace_id);
 }
 
 /*!
