@@ -13,18 +13,6 @@
 #include "system/terrain-type-definition.h"
 
 /*
- * Sorting hook -- swap function -- by "distance to player"
- *
- * We use "u" and "v" to point to arrays of "x" and "y" positions,
- * and sort the arrays by distance to the player.
- */
-static void ang_sort_swap_position(std::vector<int> &ys, std::vector<int> &xs, int a, int b)
-{
-    std::swap(xs[a], xs[b]);
-    std::swap(ys[a], ys[b]);
-}
-
-/*
  * @brief クイックソートの実行 / Quick sort in place
  * @param u アイテムやモンスター等への配列
  * @param v 条件基準IDへの参照ポインタ
@@ -57,8 +45,8 @@ static void exe_ang_sort(PlayerType *player_ptr, std::vector<int> &ys, std::vect
             break;
         }
 
-        ang_sort_swap_position(ys, xs, a, b);
-
+        std::swap(xs[a], xs[b]);
+        std::swap(ys[a], ys[b]);
         a++, b--;
     }
 
