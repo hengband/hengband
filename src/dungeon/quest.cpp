@@ -42,15 +42,17 @@ std::vector<std::string> quest_text_lines; /*!< Quest text */
 QuestId leaving_quest = QuestId::NONE;
 
 /*!
- * @brief クエスト突入時のメッセージテーブル / Array of places to find an inscription
+ * @brief クエスト突入時のメッセージテーブル
  */
-static concptr find_quest_map[] = {
+namespace {
+const std::vector<std::string> quest_entered_messages = {
     _("床にメッセージが刻まれている:", "You find the following inscription in the floor"),
     _("壁にメッセージが刻まれている:", "You see a message inscribed in the wall"),
     _("メッセージを見つけた:", "There is a sign saying"),
     _("何かが階段の上に書いてある:", "Something is written on the staircase"),
     _("巻物を見つけた。メッセージが書いてある:", "You find a scroll with the following message"),
 };
+}
 
 /*!
  * @brief 該当IDが固定クエストかどうかを判定する.
@@ -309,7 +311,7 @@ void quest_discovery(QuestId quest_id)
     const auto &name = (num_subjugation != 1) ? pluralize(monrace.name) : monrace.name;
 #endif
 
-    msg_print(find_quest_map[rand_range(0, 4)]);
+    msg_print(rand_choice(quest_entered_messages));
     msg_print(nullptr);
     if (num_subjugation != 1) {
         msg_format(_("注意しろ！この階は%d体の%sによって守られている！", "Be warned, this level is guarded by %d %s!"), num_subjugation, name.data());
