@@ -205,13 +205,13 @@ static bool wr_savefile_new(PlayerType *player_ptr)
     }
 
     for (int i = 0; i < INVEN_TOTAL; i++) {
-        auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->is_valid()) {
+        const auto &item = player_ptr->inventory_list[i];
+        if (!item.is_valid()) {
             continue;
         }
 
         wr_u16b((uint16_t)i);
-        wr_item(o_ptr);
+        wr_item(item);
     }
 
     wr_u16b(0xFFFF);

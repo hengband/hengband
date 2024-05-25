@@ -26,9 +26,9 @@
  */
 void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
     if (!sf_ptr) {
-        wr_s16b((int16_t)floor_ptr->dun_level);
+        wr_s16b((int16_t)floor.dun_level);
     } else {
         wr_s16b(sf_ptr->floor_id);
         wr_byte((byte)sf_ptr->savefile_id);
@@ -39,12 +39,12 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         wr_s16b(sf_ptr->lower_floor_id);
     }
 
-    wr_u16b((uint16_t)floor_ptr->base_level);
+    wr_u16b((uint16_t)floor.base_level);
     wr_u16b((int16_t)player_ptr->current_floor_ptr->num_repro);
     wr_u16b((uint16_t)player_ptr->y);
     wr_u16b((uint16_t)player_ptr->x);
-    wr_u16b((uint16_t)floor_ptr->height);
-    wr_u16b((uint16_t)floor_ptr->width);
+    wr_u16b((uint16_t)floor.height);
+    wr_u16b((uint16_t)floor.width);
     wr_byte(player_ptr->feeling);
 
     /*
@@ -59,22 +59,28 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
      */
 
     std::vector<GridTemplate> templates;
-    for (int y = 0; y < floor_ptr->height; y++) {
-        for (int x = 0; x < floor_ptr->width; x++) {
-            auto *g_ptr = &floor_ptr->grid_array[y][x];
-            uint i;
-            for (i = 0; i < templates.size(); i++) {
-                if (templates[i].info == g_ptr->info && templates[i].feat == g_ptr->feat && templates[i].mimic == g_ptr->mimic && templates[i].special == g_ptr->special) {
-                    templates[i].occurrence++;
+    for (int y = 0; y < floor.height; y++) {
+        for (int x = 0; x < floor.width; x++) {
+            const auto &grid = floor.get_grid({ y, x });
+            int i;
+            const int size = std::ssize(templates);
+            for (i = 0; i < size; i++) {
+                auto &gt = templates[i];
+                auto is_matched = gt.info == grid.info;
+                is_matched &= gt.feat == grid.feat;
+                is_matched &= gt.mimic == grid.mimic;
+                is_matched &= gt.special == grid.special;
+                if (is_matched) {
+                    gt.occurrence++;
                     break;
                 }
             }
 
-            if (i < templates.size()) {
+            if (i < size) {
                 continue;
             }
 
-            templates.push_back({ g_ptr->info, g_ptr->feat, g_ptr->mimic, g_ptr->special, 1 });
+            templates.emplace_back(grid.info, grid.feat, grid.mimic, grid.special, static_cast<uint16_t>(1));
         }
     }
 
@@ -92,12 +98,17 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 
     byte count = 0;
     uint16_t prev_u16b = 0;
-    for (int y = 0; y < floor_ptr->height; y++) {
-        for (int x = 0; x < floor_ptr->width; x++) {
-            auto *g_ptr = &floor_ptr->grid_array[y][x];
+    for (int y = 0; y < floor.height; y++) {
+        for (int x = 0; x < floor.width; x++) {
+            const auto &grid = floor.get_grid({ y, x });
             uint i;
             for (i = 0; i < templates.size(); i++) {
-                if (templates[i].info == g_ptr->info && templates[i].feat == g_ptr->feat && templates[i].mimic == g_ptr->mimic && templates[i].special == g_ptr->special) {
+                const auto &gt = templates[i];
+                auto is_matched = gt.info == grid.info;
+                is_matched &= gt.feat == grid.feat;
+                is_matched &= gt.mimic == grid.mimic;
+                is_matched &= gt.special == grid.special;
+                if (is_matched) {
                     break;
                 }
             }
@@ -131,16 +142,16 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     }
 
     /*** Dump objects ***/
-    wr_u16b(floor_ptr->o_max);
-    for (int i = 1; i < floor_ptr->o_max; i++) {
-        auto *o_ptr = &floor_ptr->o_list[i];
-        wr_item(o_ptr);
+    wr_u16b(floor.o_max);
+    for (int i = 1; i < floor.o_max; i++) {
+        const auto &item = floor.o_list[i];
+        wr_item(item);
     }
 
     /*** Dump the monsters ***/
-    wr_u16b(floor_ptr->m_max);
-    for (int i = 1; i < floor_ptr->m_max; i++) {
-        auto *m_ptr = &floor_ptr->m_list[i];
+    wr_u16b(floor.m_max);
+    for (int i = 1; i < floor.m_max; i++) {
+        auto *m_ptr = &floor.m_list[i];
         wr_monster(m_ptr);
     }
 }

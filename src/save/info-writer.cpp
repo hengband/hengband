@@ -29,7 +29,7 @@ void wr_store(store_type *store_ptr)
     wr_s16b(store_ptr->bad_buy);
     wr_s32b(store_ptr->last_visit);
     for (int j = 0; j < store_ptr->stock_num; j++) {
-        wr_item(&store_ptr->stock[j]);
+        wr_item(store_ptr->stock[j]);
     }
 }
 

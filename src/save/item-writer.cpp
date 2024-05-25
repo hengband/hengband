@@ -7,263 +7,263 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 
-static void write_item_flags(ItemEntity *o_ptr, BIT_FLAGS *flags)
+static BIT_FLAGS write_item_flags(const ItemEntity &item)
 {
-    if (o_ptr->pval) {
-        set_bits(*flags, SaveDataItemFlagType::PVAL);
+    BIT_FLAGS flags = 0x00000000;
+    if (item.pval) {
+        set_bits(flags, SaveDataItemFlagType::PVAL);
     }
 
-    if (o_ptr->discount) {
-        set_bits(*flags, SaveDataItemFlagType::DISCOUNT);
+    if (item.discount) {
+        set_bits(flags, SaveDataItemFlagType::DISCOUNT);
     }
 
-    if (o_ptr->number != 1) {
-        set_bits(*flags, SaveDataItemFlagType::NUMBER);
+    if (item.number != 1) {
+        set_bits(flags, SaveDataItemFlagType::NUMBER);
     }
 
-    if (o_ptr->is_fixed_artifact()) {
-        set_bits(*flags, SaveDataItemFlagType::FIXED_ARTIFACT_IDX);
+    if (item.is_fixed_artifact()) {
+        set_bits(flags, SaveDataItemFlagType::FIXED_ARTIFACT_IDX);
     }
 
-    if (o_ptr->is_ego()) {
-        set_bits(*flags, SaveDataItemFlagType::EGO_IDX);
+    if (item.is_ego()) {
+        set_bits(flags, SaveDataItemFlagType::EGO_IDX);
     }
 
-    if (o_ptr->timeout) {
-        set_bits(*flags, SaveDataItemFlagType::TIMEOUT);
+    if (item.timeout) {
+        set_bits(flags, SaveDataItemFlagType::TIMEOUT);
     }
 
-    if (o_ptr->to_h) {
-        set_bits(*flags, SaveDataItemFlagType::TO_H);
+    if (item.to_h) {
+        set_bits(flags, SaveDataItemFlagType::TO_H);
     }
 
-    if (o_ptr->to_d) {
-        set_bits(*flags, SaveDataItemFlagType::TO_D);
+    if (item.to_d) {
+        set_bits(flags, SaveDataItemFlagType::TO_D);
     }
 
-    if (o_ptr->to_a) {
-        set_bits(*flags, SaveDataItemFlagType::TO_A);
+    if (item.to_a) {
+        set_bits(flags, SaveDataItemFlagType::TO_A);
     }
 
-    if (o_ptr->ac) {
-        set_bits(*flags, SaveDataItemFlagType::AC);
+    if (item.ac) {
+        set_bits(flags, SaveDataItemFlagType::AC);
     }
 
-    if (o_ptr->dd) {
-        set_bits(*flags, SaveDataItemFlagType::DD);
+    if (item.dd) {
+        set_bits(flags, SaveDataItemFlagType::DD);
     }
 
-    if (o_ptr->ds) {
-        set_bits(*flags, SaveDataItemFlagType::DS);
+    if (item.ds) {
+        set_bits(flags, SaveDataItemFlagType::DS);
     }
 
-    if (o_ptr->ident) {
-        set_bits(*flags, SaveDataItemFlagType::IDENT);
+    if (item.ident) {
+        set_bits(flags, SaveDataItemFlagType::IDENT);
     }
 
-    if (o_ptr->marked.any()) {
-        set_bits(*flags, SaveDataItemFlagType::MARKED);
+    if (item.marked.any()) {
+        set_bits(flags, SaveDataItemFlagType::MARKED);
     }
 
-    if (o_ptr->art_flags.any()) {
-        set_bits(*flags, SaveDataItemFlagType::ART_FLAGS);
+    if (item.art_flags.any()) {
+        set_bits(flags, SaveDataItemFlagType::ART_FLAGS);
     }
 
-    if (o_ptr->curse_flags.any()) {
-        set_bits(*flags, SaveDataItemFlagType::CURSE_FLAGS);
+    if (item.curse_flags.any()) {
+        set_bits(flags, SaveDataItemFlagType::CURSE_FLAGS);
     }
 
-    if (o_ptr->held_m_idx) {
-        set_bits(*flags, SaveDataItemFlagType::HELD_M_IDX);
+    if (item.held_m_idx) {
+        set_bits(flags, SaveDataItemFlagType::HELD_M_IDX);
     }
 
-    if (o_ptr->activation_id > RandomArtActType::NONE) {
-        set_bits(*flags, SaveDataItemFlagType::ACTIVATION_ID);
+    if (item.activation_id > RandomArtActType::NONE) {
+        set_bits(flags, SaveDataItemFlagType::ACTIVATION_ID);
     }
 
-    if (o_ptr->chest_level > 0) {
-        set_bits(*flags, SaveDataItemFlagType::CHEST_LEVEL);
+    if (item.chest_level > 0) {
+        set_bits(flags, SaveDataItemFlagType::CHEST_LEVEL);
     }
 
-    if (o_ptr->captured_monster_speed > 0) {
-        set_bits(*flags, SaveDataItemFlagType::CAPTURED_MONSTER_SPEED);
+    if (item.captured_monster_speed > 0) {
+        set_bits(flags, SaveDataItemFlagType::CAPTURED_MONSTER_SPEED);
     }
 
-    if (o_ptr->fuel > 0) {
-        set_bits(*flags, SaveDataItemFlagType::FUEL);
+    if (item.fuel > 0) {
+        set_bits(flags, SaveDataItemFlagType::FUEL);
     }
 
-    if (o_ptr->captured_monster_current_hp > 0) {
-        set_bits(*flags, SaveDataItemFlagType::CAPTURED_MONSTER_CURRENT_HP);
+    if (item.captured_monster_current_hp > 0) {
+        set_bits(flags, SaveDataItemFlagType::CAPTURED_MONSTER_CURRENT_HP);
     }
 
-    if (o_ptr->captured_monster_max_hp) {
-        set_bits(*flags, SaveDataItemFlagType::XTRA5);
+    if (item.captured_monster_max_hp) {
+        set_bits(flags, SaveDataItemFlagType::XTRA5);
     }
 
-    if (o_ptr->feeling) {
-        set_bits(*flags, SaveDataItemFlagType::FEELING);
+    if (item.feeling) {
+        set_bits(flags, SaveDataItemFlagType::FEELING);
     }
 
-    if (o_ptr->is_inscribed()) {
-        set_bits(*flags, SaveDataItemFlagType::INSCRIPTION);
+    if (item.is_inscribed()) {
+        set_bits(flags, SaveDataItemFlagType::INSCRIPTION);
     }
 
-    if (o_ptr->is_random_artifact()) {
-        set_bits(*flags, SaveDataItemFlagType::ART_NAME);
+    if (item.is_random_artifact()) {
+        set_bits(flags, SaveDataItemFlagType::ART_NAME);
     }
 
-    if (o_ptr->stack_idx) {
-        set_bits(*flags, SaveDataItemFlagType::STACK_IDX);
+    if (item.stack_idx) {
+        set_bits(flags, SaveDataItemFlagType::STACK_IDX);
     }
 
-    if (o_ptr->is_smith()) {
-        set_bits(*flags, SaveDataItemFlagType::SMITH);
+    if (item.is_smith()) {
+        set_bits(flags, SaveDataItemFlagType::SMITH);
     }
 
-    wr_u32b(*flags);
+    wr_u32b(flags);
+    return flags;
 }
 
-static void write_item_info(ItemEntity *o_ptr, const BIT_FLAGS flags)
+static void write_item_info(const ItemEntity &item, const BIT_FLAGS flags)
 {
-    wr_s16b((int16_t)o_ptr->weight);
+    wr_s16b((int16_t)item.weight);
     if (any_bits(flags, SaveDataItemFlagType::FIXED_ARTIFACT_IDX)) {
-        wr_s16b(enum2i(o_ptr->fa_id));
+        wr_s16b(enum2i(item.fa_id));
     }
 
     if (any_bits(flags, SaveDataItemFlagType::EGO_IDX)) {
-        wr_byte((byte)o_ptr->ego_idx);
+        wr_byte((byte)item.ego_idx);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::TIMEOUT)) {
-        wr_s16b(o_ptr->timeout);
+        wr_s16b(item.timeout);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::TO_H)) {
-        wr_s16b(o_ptr->to_h);
+        wr_s16b(item.to_h);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::TO_D)) {
-        wr_s16b((int16_t)o_ptr->to_d);
+        wr_s16b((int16_t)item.to_d);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::TO_A)) {
-        wr_s16b(o_ptr->to_a);
+        wr_s16b(item.to_a);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::AC)) {
-        wr_s16b(o_ptr->ac);
+        wr_s16b(item.ac);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::DD)) {
-        wr_byte((byte)o_ptr->dd);
+        wr_byte((byte)item.dd);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::DS)) {
-        wr_byte((byte)o_ptr->ds);
+        wr_byte((byte)item.ds);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::IDENT)) {
-        wr_byte(o_ptr->ident);
+        wr_byte(item.ident);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::MARKED)) {
-        wr_FlagGroup_bytes(o_ptr->marked, wr_byte, 1);
+        wr_FlagGroup_bytes(item.marked, wr_byte, 1);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::ART_FLAGS)) {
-        wr_FlagGroup(o_ptr->art_flags, wr_byte);
+        wr_FlagGroup(item.art_flags, wr_byte);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::CURSE_FLAGS)) {
-        wr_FlagGroup(o_ptr->curse_flags, wr_byte);
+        wr_FlagGroup(item.curse_flags, wr_byte);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::HELD_M_IDX)) {
-        wr_s16b(o_ptr->held_m_idx);
+        wr_s16b(item.held_m_idx);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::ACTIVATION_ID)) {
-        wr_s16b(enum2i(o_ptr->activation_id));
+        wr_s16b(enum2i(item.activation_id));
     }
 
     if (any_bits(flags, SaveDataItemFlagType::CHEST_LEVEL)) {
-        wr_byte(o_ptr->chest_level);
+        wr_byte(item.chest_level);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::CAPTURED_MONSTER_SPEED)) {
-        wr_byte(o_ptr->captured_monster_speed);
+        wr_byte(item.captured_monster_speed);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::FUEL)) {
-        wr_s16b(o_ptr->fuel);
+        wr_s16b(item.fuel);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::CAPTURED_MONSTER_CURRENT_HP)) {
-        wr_s16b(o_ptr->captured_monster_current_hp);
+        wr_s16b(item.captured_monster_current_hp);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::XTRA5)) {
-        wr_s16b(o_ptr->captured_monster_max_hp);
+        wr_s16b(item.captured_monster_max_hp);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::FEELING)) {
-        wr_byte(o_ptr->feeling);
+        wr_byte(item.feeling);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::STACK_IDX)) {
-        wr_s16b(o_ptr->stack_idx);
+        wr_s16b(item.stack_idx);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::SMITH)) {
-        if (o_ptr->smith_effect) {
-            wr_s16b(enum2i(*o_ptr->smith_effect));
+        if (item.smith_effect) {
+            wr_s16b(enum2i(*item.smith_effect));
         } else {
             wr_s16b(0);
         }
 
-        if (o_ptr->smith_act_idx) {
-            wr_s16b(enum2i(*o_ptr->smith_act_idx));
+        if (item.smith_act_idx) {
+            wr_s16b(enum2i(*item.smith_act_idx));
         } else {
             wr_s16b(0);
         }
 
-        wr_byte(o_ptr->smith_hit);
-        wr_byte(o_ptr->smith_damage);
+        wr_byte(item.smith_hit);
+        wr_byte(item.smith_damage);
     }
 }
 
 /*!
- * @brief アイテムオブジェクトを書き込む / Write an "item" record
- * @param o_ptr アイテムオブジェクト保存元ポインタ
+ * @brief アイテム情報をセーブデータに書き込む
+ * @param item アイテムへの参照
  */
-void wr_item(ItemEntity *o_ptr)
+void wr_item(const ItemEntity &item)
 {
-    BIT_FLAGS flags = 0x00000000;
-    write_item_flags(o_ptr, &flags);
-
-    wr_s16b(o_ptr->bi_id);
-    wr_byte((byte)o_ptr->iy);
-    wr_byte((byte)o_ptr->ix);
+    const auto flags = write_item_flags(item);
+    wr_s16b(item.bi_id);
+    wr_byte((byte)item.iy);
+    wr_byte((byte)item.ix);
     if (any_bits(flags, SaveDataItemFlagType::PVAL)) {
-        wr_s16b(o_ptr->pval);
+        wr_s16b(item.pval);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::DISCOUNT)) {
-        wr_byte(o_ptr->discount);
+        wr_byte(item.discount);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::NUMBER)) {
-        wr_byte((byte)o_ptr->number);
+        wr_byte((byte)item.number);
     }
 
-    write_item_info(o_ptr, flags);
+    write_item_info(item, flags);
     if (any_bits(flags, SaveDataItemFlagType::INSCRIPTION)) {
-        wr_string(*o_ptr->inscription);
+        wr_string(*item.inscription);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::ART_NAME)) {
-        wr_string(*o_ptr->randart_name);
+        wr_string(*item.randart_name);
     }
 }
 
