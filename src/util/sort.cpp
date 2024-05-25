@@ -11,6 +11,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
+#include "util/point-2d.h"
 
 /*
  * @brief クイックソートの実行 / Quick sort in place
@@ -80,28 +81,27 @@ void ang_sort(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int> &xs
 bool ang_sort_comp_distance(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int> &xs, int a, int b)
 {
     /* Absolute distance components */
-    POSITION kx = xs[a];
-    kx -= player_ptr->x;
-    kx = std::abs(kx);
-    POSITION ky = ys[a];
-    ky -= player_ptr->y;
-    ky = std::abs(ky);
+    const auto p_pos = player_ptr->get_position();
+    auto xa = xs[a];
+    xa -= p_pos.x;
+    xa = std::abs(xa);
+    auto ya = ys[a];
+    ya -= p_pos.y;
+    ya = std::abs(ya);
 
     /* Approximate Double Distance to the first point */
-    POSITION da = ((kx > ky) ? (kx + kx + ky) : (ky + ky + kx));
+    auto da = (xa > ya) ? (xa + xa + ya) : (ya + ya + xa);
 
     /* Absolute distance components */
-    kx = xs[b];
-    kx -= player_ptr->x;
-    kx = std::abs(kx);
-    ky = ys[b];
-    ky -= player_ptr->y;
-    ky = std::abs(ky);
+    auto xb = xs[b];
+    xb -= p_pos.x;
+    xb = std::abs(xb);
+    auto yb = ys[b];
+    yb -= p_pos.y;
+    yb = std::abs(yb);
 
     /* Approximate Double Distance to the first point */
-    POSITION db = ((kx > ky) ? (kx + kx + ky) : (ky + ky + kx));
-
-    /* Compare the distances */
+    auto db = (xb > yb) ? (xb + xb + yb) : (yb + yb + xb);
     return da <= db;
 }
 
