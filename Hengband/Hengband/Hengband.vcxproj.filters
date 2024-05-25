@@ -956,6 +956,9 @@
     <ClCompile Include="..\..\src\info-reader\info-reader-util.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\json-reader-util.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\info-reader\feature-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
@@ -3585,6 +3588,9 @@
       <Filter>term</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\info-reader-util.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\json-reader-util.h">
       <Filter>info-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\parse-error-types.h">

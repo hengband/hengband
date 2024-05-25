@@ -3,6 +3,7 @@
 #include "artifact/random-art-effects.h"
 #include "info-reader/baseitem-tokens-table.h"
 #include "info-reader/info-reader-util.h"
+#include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "locale/japanese.h"
 #include "main/angband-headers.h"
