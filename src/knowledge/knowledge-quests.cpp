@@ -25,7 +25,6 @@
 #include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/enum-converter.h"
-#include "util/sort.h"
 #include "util/string-processor.h"
 #include "world/world.h"
 #include <numeric>

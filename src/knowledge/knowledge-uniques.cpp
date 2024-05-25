@@ -13,7 +13,6 @@
 #include "system/player-type-definition.h"
 #include "term/z-form.h"
 #include "util/angband-files.h"
-#include "util/sort.h"
 #include "util/string-processor.h"
 
 struct unique_list_type {

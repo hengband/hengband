@@ -34,7 +34,6 @@
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
-#include "util/sort.h"
 #include "util/string-processor.h"
 #include "view/display-lore.h"
 #include "view/display-monster-status.h"
