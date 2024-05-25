@@ -58,7 +58,7 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
      *     515 will be "0xff" "0xff" "0x03"
      */
 
-    std::vector<grid_template_type> templates;
+    std::vector<GridTemplate> templates;
     for (int y = 0; y < floor_ptr->height; y++) {
         for (int x = 0; x < floor_ptr->width; x++) {
             auto *g_ptr = &floor_ptr->grid_array[y][x];

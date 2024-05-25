@@ -264,7 +264,7 @@ bool ang_sort_comp_cave_temp(PlayerType *player_ptr, vptr u, vptr v, int a, int 
     (void)player_ptr;
     (void)v;
 
-    grid_template_type *who = (grid_template_type *)(u);
+    GridTemplate *who = (GridTemplate *)(u);
 
     uint16_t o1 = who[a].occurrence;
     uint16_t o2 = who[b].occurrence;
@@ -285,8 +285,8 @@ void ang_sort_swap_cave_temp(PlayerType *player_ptr, vptr u, vptr v, int a, int 
     (void)player_ptr;
     (void)v;
 
-    grid_template_type *who = (grid_template_type *)(u);
-    grid_template_type holder;
+    GridTemplate *who = (GridTemplate *)(u);
+    GridTemplate holder;
 
     holder = who[a];
     who[a] = who[b];
