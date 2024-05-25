@@ -170,6 +170,13 @@ size_t QuestList::size() const
     return this->quests.size();
 }
 
+bool QuestList::order_completed(QuestId id1, QuestId id2) const
+{
+    const auto &quest1 = this->get_quest(id1);
+    const auto &quest2 = this->get_quest(id2);
+    return (quest1.comptime != quest2.comptime) ? (quest1.comptime < quest2.comptime) : (quest1.level <= quest2.level);
+}
+
 /*!
  * @brief ランダムクエストの討伐ユニークを決める / Determine the random quest uniques
  * @param quest クエスト構造体への参照
