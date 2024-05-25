@@ -135,16 +135,18 @@ void output_debug_nest(PlayerType *player_ptr, std::array<nest_mon_info_type, NU
     std::stable_sort(nest_mon_info_list.begin(), nest_mon_info_list.end(),
         [](const auto &x, const auto &y) { return x.order_nest(y); });
     for (auto i = 0; i < NUM_NEST_MON_TYPE; i++) {
-        if (!nest_mon_info_list[i].used) {
+        const auto &nest_mon_info = nest_mon_info_list[i];
+        const auto &next_nest_mon_info = nest_mon_info_list[i + 1];
+        if (!nest_mon_info.used) {
             return;
         }
 
         for (; i < NUM_NEST_MON_TYPE - 1; i++) {
-            if (nest_mon_info_list[i].r_idx != nest_mon_info_list[i + 1].r_idx) {
+            if (nest_mon_info.r_idx != next_nest_mon_info.r_idx) {
                 break;
             }
 
-            if (!nest_mon_info_list[i + 1].used) {
+            if (!next_nest_mon_info.used) {
                 break;
             }
         }
@@ -154,7 +156,7 @@ void output_debug_nest(PlayerType *player_ptr, std::array<nest_mon_info_type, NU
         }
 
         constexpr auto fmt_nest_num = _("Nest構成モンスターNo.%d: %s", "Nest monster No.%d: %s");
-        msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest_num, i, monraces_info[nest_mon_info_list[i].r_idx].name.data());
+        msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_nest_num, i, nest_mon_info.get_monrace().name.data());
     }
 }
 }
@@ -169,8 +171,8 @@ bool nest_mon_info_type::order_nest(const nest_mon_info_type &other) const
         return false;
     }
 
-    const auto &monrace1 = monraces_info[this->r_idx];
-    const auto &monrace2 = monraces_info[other.r_idx];
+    const auto &monrace1 = this->get_monrace();
+    const auto &monrace2 = other.get_monrace();
     if (monrace1.level < monrace2.level) {
         return true;
     }
@@ -188,6 +190,11 @@ bool nest_mon_info_type::order_nest(const nest_mon_info_type &other) const
     }
 
     return this->r_idx < other.r_idx;
+}
+
+const MonsterRaceInfo &nest_mon_info_type::get_monrace() const
+{
+    return MonraceList::get_instance().get_monrace(this->r_idx);
 }
 
 /*!
