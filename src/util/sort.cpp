@@ -22,7 +22,7 @@
  * @param ang_sort_comp 比較用の関数ポインタ
  * @param ang_sort_swap スワップ用の関数ポインタ
  */
-static void exe_ang_sort(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int> &xs, int p, int q, bool (*ang_sort_comp)(PlayerType *, std::vector<int> &, std::vector<int> &, int, int))
+static void exe_ang_sort(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int> &xs, int p, int q, SortKind kind)
 {
     if (p >= q) {
         return;
@@ -33,14 +33,42 @@ static void exe_ang_sort(PlayerType *player_ptr, std::vector<int> &ys, std::vect
     int b = q;
     while (true) {
         /* Slide i2 */
-        while (!(*ang_sort_comp)(player_ptr, ys, xs, b, z)) {
-            b--;
-        }
+        auto is_less_i2 = false;
+        do {
+            switch (kind) {
+            case SortKind::DISTANCE:
+                is_less_i2 = ang_sort_comp_distance(player_ptr, ys, xs, b, z);
+                break;
+            case SortKind::IMPORTANCE:
+                is_less_i2 = ang_sort_comp_importance(player_ptr, ys, xs, b, z);
+                break;
+            default:
+                THROW_EXCEPTION(std::logic_error, "Invalid Sort Kind was specified!");
+            }
+
+            if (!is_less_i2) {
+                b--;
+            }
+        } while (!is_less_i2);
 
         /* Slide i1 */
-        while (!(*ang_sort_comp)(player_ptr, ys, xs, z, a)) {
-            a++;
-        }
+        auto is_less_i1 = false;
+        do {
+            switch (kind) {
+            case SortKind::DISTANCE:
+                is_less_i1 = ang_sort_comp_distance(player_ptr, ys, xs, z, a);
+                break;
+            case SortKind::IMPORTANCE:
+                is_less_i1 = ang_sort_comp_importance(player_ptr, ys, xs, z, a);
+                break;
+            default:
+                THROW_EXCEPTION(std::logic_error, "Invalid Sort Kind was specified!");
+            }
+
+            if (!is_less_i1) {
+                a++;
+            }
+        } while (!is_less_i1);
 
         if (a >= b) {
             break;
@@ -52,10 +80,10 @@ static void exe_ang_sort(PlayerType *player_ptr, std::vector<int> &ys, std::vect
     }
 
     /* Recurse left side */
-    exe_ang_sort(player_ptr, ys, xs, p, b, ang_sort_comp);
+    exe_ang_sort(player_ptr, ys, xs, p, b, kind);
 
     /* Recurse right side */
-    exe_ang_sort(player_ptr, ys, xs, b + 1, q, ang_sort_comp);
+    exe_ang_sort(player_ptr, ys, xs, b + 1, q, kind);
 }
 
 /*
@@ -67,9 +95,9 @@ static void exe_ang_sort(PlayerType *player_ptr, std::vector<int> &ys, std::vect
  * @param ang_sort_comp 比較用の関数ポインタ
  * @param ang_sort_swap スワップ用の関数ポインタ
  */
-void ang_sort(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int> &xs, int n, bool (*ang_sort_comp)(PlayerType *, std::vector<int> &, std::vector<int> &, int, int))
+void ang_sort(PlayerType *player_ptr, std::vector<int> &ys, std::vector<int> &xs, SortKind kind)
 {
-    exe_ang_sort(player_ptr, ys, xs, 0, n - 1, ang_sort_comp);
+    exe_ang_sort(player_ptr, ys, xs, 0, std::ssize(ys) - 1, kind);
 }
 
 /*

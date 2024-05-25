@@ -162,9 +162,9 @@ void target_set_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, std::
     }
 
     if (mode & (TARGET_KILL)) {
-        ang_sort(player_ptr, ys, xs, size(ys), ang_sort_comp_distance);
+        ang_sort(player_ptr, ys, xs, SortKind::DISTANCE);
     } else {
-        ang_sort(player_ptr, ys, xs, size(ys), ang_sort_comp_importance);
+        ang_sort(player_ptr, ys, xs, SortKind::IMPORTANCE);
     }
 
     // 乗っているモンスターがターゲットリストの先頭にならないようにする調整。
