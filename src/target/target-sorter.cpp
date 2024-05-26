@@ -11,41 +11,6 @@
 #include "system/monster-race-info.h"
 #include "system/terrain-type-definition.h"
 
-namespace {
-/*
- * Sorting hook -- comp function -- by "distance to player"
- *
- * We use "u" and "v" to point to arrays of "x" and "y" positions,
- * and sort the arrays by double-distance to the player.
- */
-bool ang_sort_comp_distance(const Pos2D &p_pos, const std::vector<int> &ys, const std::vector<int> &xs, int a, int b)
-{
-    /* Absolute distance components */
-    auto xa = xs[a];
-    xa -= p_pos.x;
-    xa = std::abs(xa);
-    auto ya = ys[a];
-    ya -= p_pos.y;
-    ya = std::abs(ya);
-
-    /* Approximate Double Distance to the first point */
-    auto distance_a = (xa > ya) ? (xa + xa + ya) : (ya + ya + xa);
-
-    /* Absolute distance components */
-    auto xb = xs[b];
-    xb -= p_pos.x;
-    xb = std::abs(xb);
-    auto yb = ys[b];
-    yb -= p_pos.y;
-    yb = std::abs(yb);
-
-    /* Approximate Double Distance to the first point */
-    auto distance_b = (xb > yb) ? (xb + xb + yb) : (yb + yb + xb);
-    return distance_a <= distance_b;
-}
-
-}
-
 TargetSorter::TargetSorter(const Pos2D &p_pos, const std::vector<int> &ys, const std::vector<int> &xs, SortKind kind)
     : p_pos(p_pos)
     , ys(ys)
@@ -94,7 +59,7 @@ void TargetSorter::exe_sort(const FloorType &floor, int a, int b)
         do {
             switch (this->kind) {
             case SortKind::DISTANCE:
-                is_less_i2 = ang_sort_comp_distance(this->p_pos, this->ys, this->xs, q, z);
+                is_less_i2 = this->compare_distance(q, z);
                 break;
             case SortKind::IMPORTANCE:
                 is_less_i2 = this->compare_importance(floor, q, z);
@@ -113,7 +78,7 @@ void TargetSorter::exe_sort(const FloorType &floor, int a, int b)
         do {
             switch (this->kind) {
             case SortKind::DISTANCE:
-                is_less_i1 = ang_sort_comp_distance(this->p_pos, this->ys, this->xs, z, p);
+                is_less_i1 = this->compare_distance(z, p);
                 break;
             case SortKind::IMPORTANCE:
                 is_less_i1 = this->compare_importance(floor, z, p);
@@ -237,5 +202,38 @@ bool TargetSorter::compare_importance(const FloorType &floor, int a, int b) cons
         return false;
     }
 
-    return ang_sort_comp_distance(this->p_pos, this->ys, this->xs, a, b);
+    return this->compare_distance(a, b);
+}
+
+/*
+ * @brief プレイヤーからの距離でソートする
+ * @param a ソート対象の座標番号1. 座標そのものはPos2D(ys[a], xs[a])
+ * @param b ソート対象の座標番号2. 座標そのものはPos2D(ys[b], xs[b])
+ * @return aの座標がbの座標よりプレイヤー座標に近いか同一ならtrue、遠いならfalse
+ * @details
+ * アルゴリズムは以下の通り.
+ * 1. 点aと点bの、プレイヤーからの絶対距離を測る
+ * 2. 点aと点bの、Double Distance (座標の大きい方を2倍して小さい方を足し、距離とする手法) を測る
+ * 3. Double Distance の大小を測る.
+ * 注意：「同じならfalse」とSTLのソート関数と同様に扱うと正常に動作しなくなる
+ */
+bool TargetSorter::compare_distance(int a, int b) const
+{
+    auto ya = this->ys[a];
+    ya -= this->p_pos.y;
+    ya = std::abs(ya);
+    auto xa = this->xs[a];
+    xa -= this->p_pos.x;
+    xa = std::abs(xa);
+    auto distance_a = (xa > ya) ? (2 * xa + ya) : (2 * ya + xa);
+
+    auto yb = ys[b];
+    yb -= this->p_pos.y;
+    yb = std::abs(yb);
+    auto xb = this->xs[b];
+    xb -= this->p_pos.x;
+    xb = std::abs(xb);
+    auto distance_b = (xb > yb) ? (2 * xb + yb) : (2 * yb + xb);
+
+    return distance_a <= distance_b;
 }
