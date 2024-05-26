@@ -25,4 +25,5 @@ private:
     void exe_sort(const FloorType &floor, int a, int b);
     bool compare_importance(const FloorType &floor, int a, int b) const;
     bool compare_distance(int a, int b) const;
+    int calc_double_distance(int num_pos) const;
 };

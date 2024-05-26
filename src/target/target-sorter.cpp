@@ -219,15 +219,15 @@ bool TargetSorter::compare_importance(const FloorType &floor, int a, int b) cons
  */
 bool TargetSorter::compare_distance(int a, int b) const
 {
-    const Pos2D pos_a(this->ys[a], this->xs[a]);
-    auto vec_a = pos_a - this->p_pos;
-    vec_a = Pos2DVec(std::abs(vec_a.y), std::abs(vec_a.x));
-    const auto distance_a = (vec_a.x > vec_a.y) ? (2 * vec_a.x + vec_a.y) : (2 * vec_a.y + vec_a.x);
-
-    const Pos2D pos_b(this->ys[b], this->xs[b]);
-    auto vec_b = pos_b - this->p_pos;
-    vec_b = Pos2DVec(std::abs(vec_b.y), std::abs(vec_b.x));
-    const auto distance_b = (vec_b.x > vec_b.y) ? (2 * vec_b.x + vec_b.y) : (2 * vec_b.y + vec_b.x);
-
+    const auto distance_a = this->calc_double_distance(a);
+    const auto distance_b = this->calc_double_distance(b);
     return distance_a <= distance_b;
+}
+
+int TargetSorter::calc_double_distance(int num_pos) const
+{
+    const Pos2D pos(this->ys[num_pos], this->xs[num_pos]);
+    auto vec = pos - this->p_pos;
+    vec = Pos2DVec(std::abs(vec.y), std::abs(vec.x));
+    return (vec.x > vec.y) ? (2 * vec.x + vec.y) : (2 * vec.y + vec.x);
 }
