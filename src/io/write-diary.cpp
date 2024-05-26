@@ -57,7 +57,7 @@ std::string get_ordinal_number_suffix(int num)
 static bool open_diary_file(FILE **fff, bool *disable_diary)
 {
     std::stringstream ss;
-    ss << _("playrecord-", "playrec-") << savefile_base << ".txt";
+    ss << _("playrecord-", "playrec-") << savefile_base.string() << ".txt";
     const auto path = path_build(ANGBAND_DIR_USER, ss.str());
     *fff = angband_fopen(path, FileOpenMode::APPEND);
     if (*fff) {
