@@ -138,8 +138,7 @@ void target_set_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, std::
         max_wid = panel_col_max;
     }
 
-    ys.clear();
-    xs.clear();
+    std::vector<Pos2D> pos_list;
     for (auto y = min_hgt; y <= max_hgt; y++) {
         for (auto x = min_wid; x <= max_wid; x++) {
             const Pos2D pos(y, x);
@@ -157,16 +156,27 @@ void target_set_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, std::
                 continue;
             }
 
-            ys.emplace_back(y);
-            xs.emplace_back(x);
+            pos_list.push_back(pos);
         }
     }
 
-    const auto kind = is_killable ? SortKind::DISTANCE : SortKind::IMPORTANCE;
-    TargetSorter sorter(player_ptr->get_position(), ys, xs, kind);
-    sorter.sort(floor);
-    ys = sorter.get_result_y();
-    xs = sorter.get_result_x();
+    TargetSorter sorter(player_ptr->get_position());
+    if (is_killable) {
+        std::stable_sort(pos_list.begin(), pos_list.end(), [&sorter](const auto &a, const auto &b) {
+            return sorter.compare_distance(a, b);
+        });
+    } else {
+        std::stable_sort(pos_list.begin(), pos_list.end(), [&sorter, &floor](const auto &a, const auto &b) {
+            return sorter.compare_importance(floor, a, b);
+        });
+    }
+
+    ys.clear();
+    xs.clear();
+    for (const auto &pos : pos_list) {
+        ys.push_back(pos.y);
+        xs.push_back(pos.x);
+    }
 
     // 乗っているモンスターがターゲットリストの先頭にならないようにする調整。
     if (player_ptr->riding == 0 || !target_pet || (size(ys) <= 1) || !(mode & (TARGET_KILL))) {
