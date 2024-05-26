@@ -33,39 +33,6 @@
 #include "time.h"
 #include "util/angband-files.h"
 #include "world/world.h"
-#include <chrono>
-
-/*!
- * @brief 古いデバッグ用セーブファイルを削除する
- *
- * 最終更新日時が現在時刻より7日以前のデバッグ用セーブファイルを削除する。
- * デバッグ用セーブファイルは、ANGBAND_DIR_DEBUG_SAVEディレクトリにある、
- * ファイル名に '-' を含むファイルであることを想定する。
- */
-static void remove_old_debug_savefiles()
-{
-    namespace fs = std::filesystem;
-    constexpr auto remove_threshold_days = std::chrono::days(7);
-    const auto now = fs::file_time_type::clock::now();
-
-    // アクセスエラーが発生した場合に例外が送出されないようにするため
-    // 例外を送出せず引数でエラーコードを返すオーバーロードを使用する。
-    // アクセスエラーが発生した場合は単に無視し、エラーコードの確認は行わない。
-    std::error_code ec;
-
-    for (const auto &entry : fs::directory_iterator(ANGBAND_DIR_DEBUG_SAVE, ec)) {
-        const auto &path = entry.path();
-        if (path.filename().string().find('-') == std::string::npos) {
-            continue;
-        }
-
-        const auto savefile_timestamp = fs::last_write_time(path);
-        const auto elapsed_days = std::chrono::duration_cast<std::chrono::days>(now - savefile_timestamp);
-        if (elapsed_days >= remove_threshold_days) {
-            fs::remove(path, ec);
-        }
-    }
-}
 
 /*!
  * @brief 各データファイルを読み取るためのパスを取得する.
@@ -84,20 +51,12 @@ void init_file_paths(const std::filesystem::path &libpath)
     ANGBAND_DIR_INFO = std::filesystem::path(libpath).append("info");
     ANGBAND_DIR_PREF = std::filesystem::path(libpath).append("pref");
     ANGBAND_DIR_SAVE = std::filesystem::path(libpath).append("save");
-    ANGBAND_DIR_DEBUG_SAVE = std::filesystem::path(ANGBAND_DIR_SAVE).append("log");
 #ifdef PRIVATE_USER_PATH
     ANGBAND_DIR_USER = std::filesystem::path(PRIVATE_USER_PATH).append(VARIANT_NAME);
 #else
     ANGBAND_DIR_USER = std::filesystem::path(libpath).append("user");
 #endif
     ANGBAND_DIR_XTRA = std::filesystem::path(libpath).append("xtra");
-
-    time_t now = time(nullptr);
-    struct tm *t = localtime(&now);
-    char tmp[128];
-    strftime(tmp, sizeof(tmp), "%Y-%m-%d-%H-%M-%S", t);
-    debug_savefile = path_build(ANGBAND_DIR_DEBUG_SAVE, tmp);
-    remove_old_debug_savefiles();
 }
 
 /*!

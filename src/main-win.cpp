@@ -2656,7 +2656,6 @@ static void init_stuff()
     validate_dir(ANGBAND_DIR_INFO, false);
     validate_dir(ANGBAND_DIR_PREF, true);
     validate_dir(ANGBAND_DIR_SAVE, false);
-    validate_dir(ANGBAND_DIR_DEBUG_SAVE, false);
     validate_dir(ANGBAND_DIR_USER, true);
     validate_dir(ANGBAND_DIR_XTRA, true);
     const auto path_news = path_build(ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));

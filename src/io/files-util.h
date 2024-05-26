@@ -8,7 +8,6 @@
 
 extern std::filesystem::path savefile; //!< セーブファイルのフルパス
 extern std::string savefile_base; //!< セーブファイル名
-extern std::filesystem::path debug_savefile; //!< デバッグセーブファイルのフルパス
 
 extern std::filesystem::path ANGBAND_DIR;
 extern std::filesystem::path ANGBAND_DIR_APEX;
@@ -21,7 +20,6 @@ extern std::filesystem::path ANGBAND_DIR_HELP;
 extern std::filesystem::path ANGBAND_DIR_INFO;
 extern std::filesystem::path ANGBAND_DIR_PREF;
 extern std::filesystem::path ANGBAND_DIR_SAVE;
-extern std::filesystem::path ANGBAND_DIR_DEBUG_SAVE;
 extern std::filesystem::path ANGBAND_DIR_USER;
 extern std::filesystem::path ANGBAND_DIR_XTRA;
 
