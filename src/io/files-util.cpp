@@ -40,13 +40,11 @@ std::filesystem::path ANGBAND_DIR_HELP; //!< Help files (normal) for the online 
 std::filesystem::path ANGBAND_DIR_INFO; //!< Help files (spoilers) for the online help (ascii) These files are portable between platforms
 std::filesystem::path ANGBAND_DIR_PREF; //!< Default user "preference" files (ascii) These files are rarely portable between platforms
 std::filesystem::path ANGBAND_DIR_SAVE; //!< Savefiles for current characters (binary)
-std::filesystem::path ANGBAND_DIR_DEBUG_SAVE; //*< Savefiles for debug data
 std::filesystem::path ANGBAND_DIR_USER; //!< User "preference" files (ascii) These files are rarely portable between platforms
 std::filesystem::path ANGBAND_DIR_XTRA; //!< Various extra files (binary) These files are rarely portable between platforms
 
 std::filesystem::path savefile;
 std::string savefile_base;
-std::filesystem::path debug_savefile;
 
 /*!
  * @brief プレイヤーステータスをファイルダンプ出力する
