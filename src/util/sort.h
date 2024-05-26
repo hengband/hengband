@@ -1,11 +1,12 @@
 #pragma once
 
-#include "system/angband.h"
+#include "util/point-2d.h"
+#include <vector>
 
-#include "system/player-type-definition.h"
-void ang_sort(PlayerType *player_ptr, vptr u, vptr v, int n, bool (*ang_sort_comp)(PlayerType *, vptr, vptr, int, int),
-    void (*ang_sort_swap)(PlayerType *, vptr, vptr, int, int));
+enum class SortKind {
+    DISTANCE,
+    IMPORTANCE,
+};
 
-bool ang_sort_comp_distance(PlayerType *player_ptr, vptr u, vptr v, int a, int b);
-bool ang_sort_comp_importance(PlayerType *player_ptr, vptr u, vptr v, int a, int b);
-void ang_sort_swap_position(PlayerType *player_ptr, vptr u, vptr v, int a, int b);
+class FloorType;
+void ang_sort(const FloorType &floor, const Pos2D &p_pos, std::vector<int> &ys, std::vector<int> &xs, SortKind kind);
