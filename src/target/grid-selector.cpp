@@ -70,6 +70,7 @@ static void tgt_pt_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, st
         return;
     }
 
+    std::vector<Pos2D> pos_list;
     const auto &floor = *player_ptr->current_floor_ptr;
     for (POSITION y = 1; y < floor.height; y++) {
         for (POSITION x = 1; x < floor.width; x++) {
@@ -77,15 +78,16 @@ static void tgt_pt_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, st
                 continue;
             }
 
-            ys.emplace_back(y);
-            xs.emplace_back(x);
+            pos_list.emplace_back(y, x);
         }
     }
 
-    TargetSorter sorter(player_ptr->get_position(), ys, xs, SortKind::DISTANCE);
-    sorter.sort(floor);
-    ys = sorter.get_result_y();
-    xs = sorter.get_result_x();
+    TargetSorter sorter(player_ptr->get_position());
+    std::stable_sort(pos_list.begin(), pos_list.end(), [&sorter](const auto &a, const auto &b) { return sorter.compare_distance(a, b); });
+    for (const auto &pos : pos_list) {
+        ys.push_back(pos.y);
+        xs.push_back(pos.x);
+    }
 }
 
 /*!
