@@ -9,6 +9,8 @@
 #include "term/z-form.h"
 #include "util/string-processor.h"
 #include <functional>
+#include <string>
+#include <string_view>
 #include <vector>
 
 struct pain_message_type {
@@ -17,25 +19,25 @@ struct pain_message_type {
 
     // percentage, message のペアのリスト
     // (ダメージを受けた後のHP / ダメージを受ける前のHP)[%]が percentage 以上ならそのメッセージが選択される
-    std::map<int, concptr, std::greater<int>> message_table;
+    std::map<int, std::string, std::greater<int>> message_table;
 };
 
 /*!
- * @brief MonsterEntity を引数を受け取り文字列 symbols の中にそのモンスターのシンボルが含まれていれば true を返す関数オブジェクトを生成する
+ * @brief MonsterEntity を引数を受け取り文字列 characters の中にそのモンスターのシンボルが含まれていれば true を返す関数オブジェクトを生成する
  *
- * @param symbols 文字が含まれるか調べる文字列
+ * @param characters 文字が含まれるか調べる文字列
  * @return 生成した関数オブジェクト(ラムダ式)
  */
-static auto d_char_is_any_of(concptr symbols)
+static auto d_char_is_any_of(std::string_view characters)
 {
-    return [symbols](const MonsterRaceId, const char symbol) {
-        return angband_strchr(symbols, symbol) != nullptr;
+    return [characters](const MonsterRaceId, const char symbol) {
+        return angband_strchr(characters.data(), symbol) != nullptr;
     };
 }
 
-static bool is_personified(const MonsterRaceId r_idx, const char)
+static bool is_personified(const MonsterRaceId monrace_id, const char)
 {
-    switch (r_idx) {
+    switch (monrace_id) {
     case MonsterRaceId::LAFFEY_II:
         return true;
     default:
@@ -43,7 +45,7 @@ static bool is_personified(const MonsterRaceId r_idx, const char)
     }
 }
 
-static const std::map<int, concptr, std::greater<int>> pain_messages_common = {
+static const std::map<int, std::string, std::greater<int>> pain_messages_common = {
     { 95, _("は攻撃に肩をすくめた。", " shrugs off the attack.") },
     { 75, _("は痛みでうなった。", " grunts with pain.") },
     { 50, _("は痛みで叫んだ。", " cries out in pain.") },
@@ -205,8 +207,8 @@ std::optional<std::string> MonsterPainDescriber::describe(int now_hp, int took_d
             continue;
         }
 
-        const auto msg = table.lower_bound(percentage)->second;
-        return format("%s^%s", this->m_name.data(), msg);
+        const auto &msg = table.lower_bound(percentage)->second;
+        return format("%s^%s", this->m_name.data(), msg.data());
     }
 
     return std::nullopt;
