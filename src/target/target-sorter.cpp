@@ -143,30 +143,40 @@ bool ang_sort_comp_importance(const FloorType &floor, const Pos2D &p_pos, std::v
 
 }
 
+TargetSorter::TargetSorter(const Pos2D &p_pos, const std::vector<int> &ys, const std::vector<int> &xs, SortKind kind)
+    : p_pos(p_pos)
+    , ys(ys)
+    , xs(xs)
+    , kind(kind)
+{
+}
+
 /*
  * @brief クイックソートの受け付け
  * @param floor フロアへの参照
- * @param p_pos プレイヤーの現在位置
- * @param ys マップのY座標群 (歴史的経緯によりPos2D化されていない)
- * @param xs マップのX座標群 (同上)
- * @param kind ソート種別
  */
-void TargetSorter::sort(const FloorType &floor, const Pos2D &p_pos, std::vector<int> &ys, std::vector<int> &xs, SortKind kind)
+void TargetSorter::sort(const FloorType &floor)
 {
-    this->exe_sort(floor, p_pos, ys, xs, 0, std::ssize(ys) - 1, kind);
+    this->exe_sort(floor, 0, std::ssize(this->ys) - 1);
+}
+
+const std::vector<int> &TargetSorter::get_result_y() const
+{
+    return this->ys;
+}
+
+const std::vector<int> &TargetSorter::get_result_x() const
+{
+    return this->xs;
 }
 
 /*
  * @brief クイックソートの実行
  * @param floor フロアへの参照
- * @param p_pos プレイヤーの現在位置
- * @param ys マップのY座標群
- * @param xs マップのX座標群
  * @param p ソート対象の座標1
  * @param q ソート対象の座標2
- * @param kind ソート種別
  */
-void TargetSorter::exe_sort(const FloorType &floor, const Pos2D &p_pos, std::vector<int> &ys, std::vector<int> &xs, int p, int q, SortKind kind)
+void TargetSorter::exe_sort(const FloorType &floor, int p, int q)
 {
     if (p >= q) {
         return;
@@ -179,12 +189,12 @@ void TargetSorter::exe_sort(const FloorType &floor, const Pos2D &p_pos, std::vec
         /* Slide i2 */
         auto is_less_i2 = false;
         do {
-            switch (kind) {
+            switch (this->kind) {
             case SortKind::DISTANCE:
-                is_less_i2 = ang_sort_comp_distance(p_pos, ys, xs, b, z);
+                is_less_i2 = ang_sort_comp_distance(this->p_pos, this->ys, this->xs, b, z);
                 break;
             case SortKind::IMPORTANCE:
-                is_less_i2 = ang_sort_comp_importance(floor, p_pos, ys, xs, b, z);
+                is_less_i2 = ang_sort_comp_importance(floor, this->p_pos, this->ys, this->xs, b, z);
                 break;
             default:
                 THROW_EXCEPTION(std::logic_error, "Invalid Sort Kind was specified!");
@@ -198,12 +208,12 @@ void TargetSorter::exe_sort(const FloorType &floor, const Pos2D &p_pos, std::vec
         /* Slide i1 */
         auto is_less_i1 = false;
         do {
-            switch (kind) {
+            switch (this->kind) {
             case SortKind::DISTANCE:
-                is_less_i1 = ang_sort_comp_distance(p_pos, ys, xs, z, a);
+                is_less_i1 = ang_sort_comp_distance(this->p_pos, this->ys, this->xs, z, a);
                 break;
             case SortKind::IMPORTANCE:
-                is_less_i1 = ang_sort_comp_importance(floor, p_pos, ys, xs, z, a);
+                is_less_i1 = ang_sort_comp_importance(floor, this->p_pos, this->ys, this->xs, z, a);
                 break;
             default:
                 THROW_EXCEPTION(std::logic_error, "Invalid Sort Kind was specified!");
@@ -218,14 +228,14 @@ void TargetSorter::exe_sort(const FloorType &floor, const Pos2D &p_pos, std::vec
             break;
         }
 
-        std::swap(xs[a], xs[b]);
-        std::swap(ys[a], ys[b]);
+        std::swap(this->xs[a], this->xs[b]);
+        std::swap(this->ys[a], this->ys[b]);
         a++, b--;
     }
 
     /* Recurse left side */
-    this->exe_sort(floor, p_pos, ys, xs, p, b, kind);
+    this->exe_sort(floor, p, b);
 
     /* Recurse right side */
-    this->exe_sort(floor, p_pos, ys, xs, b + 1, q, kind);
+    this->exe_sort(floor, b + 1, q);
 }
