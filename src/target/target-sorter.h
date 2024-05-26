@@ -22,5 +22,5 @@ private:
     std::vector<int> xs; //!< フロアのX座標群 @todo 将来的にvector<Pos2D> へまとめる
     SortKind kind;
 
-    void exe_sort(const FloorType &floor, int p, int q);
+    void exe_sort(const FloorType &floor, int a, int b);
 };

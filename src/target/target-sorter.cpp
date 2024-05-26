@@ -29,7 +29,7 @@ bool ang_sort_comp_distance(const Pos2D &p_pos, std::vector<int> &ys, std::vecto
     ya = std::abs(ya);
 
     /* Approximate Double Distance to the first point */
-    auto da = (xa > ya) ? (xa + xa + ya) : (ya + ya + xa);
+    auto distance_a = (xa > ya) ? (xa + xa + ya) : (ya + ya + xa);
 
     /* Absolute distance components */
     auto xb = xs[b];
@@ -40,8 +40,8 @@ bool ang_sort_comp_distance(const Pos2D &p_pos, std::vector<int> &ys, std::vecto
     yb = std::abs(yb);
 
     /* Approximate Double Distance to the first point */
-    auto db = (xb > yb) ? (xb + xb + yb) : (yb + yb + xb);
-    return da <= db;
+    auto distance_b = (xb > yb) ? (xb + xb + yb) : (yb + yb + xb);
+    return distance_a <= distance_b;
 }
 
 /*
@@ -173,35 +173,35 @@ const std::vector<int> &TargetSorter::get_result_x() const
 /*
  * @brief クイックソートの実行
  * @param floor フロアへの参照
- * @param p ソート対象の座標1
- * @param q ソート対象の座標2
+ * @param a ソート対象の座標1
+ * @param b ソート対象の座標2
  */
-void TargetSorter::exe_sort(const FloorType &floor, int p, int q)
+void TargetSorter::exe_sort(const FloorType &floor, int a, int b)
 {
-    if (p >= q) {
+    if (a >= b) {
         return;
     }
 
-    int z = p;
-    int a = p;
-    int b = q;
+    auto z = a;
+    auto p = a;
+    auto q = b;
     while (true) {
         /* Slide i2 */
         auto is_less_i2 = false;
         do {
             switch (this->kind) {
             case SortKind::DISTANCE:
-                is_less_i2 = ang_sort_comp_distance(this->p_pos, this->ys, this->xs, b, z);
+                is_less_i2 = ang_sort_comp_distance(this->p_pos, this->ys, this->xs, q, z);
                 break;
             case SortKind::IMPORTANCE:
-                is_less_i2 = ang_sort_comp_importance(floor, this->p_pos, this->ys, this->xs, b, z);
+                is_less_i2 = ang_sort_comp_importance(floor, this->p_pos, this->ys, this->xs, q, z);
                 break;
             default:
                 THROW_EXCEPTION(std::logic_error, "Invalid Sort Kind was specified!");
             }
 
             if (!is_less_i2) {
-                b--;
+                q--;
             }
         } while (!is_less_i2);
 
@@ -210,32 +210,32 @@ void TargetSorter::exe_sort(const FloorType &floor, int p, int q)
         do {
             switch (this->kind) {
             case SortKind::DISTANCE:
-                is_less_i1 = ang_sort_comp_distance(this->p_pos, this->ys, this->xs, z, a);
+                is_less_i1 = ang_sort_comp_distance(this->p_pos, this->ys, this->xs, z, p);
                 break;
             case SortKind::IMPORTANCE:
-                is_less_i1 = ang_sort_comp_importance(floor, this->p_pos, this->ys, this->xs, z, a);
+                is_less_i1 = ang_sort_comp_importance(floor, this->p_pos, this->ys, this->xs, z, p);
                 break;
             default:
                 THROW_EXCEPTION(std::logic_error, "Invalid Sort Kind was specified!");
             }
 
             if (!is_less_i1) {
-                a++;
+                p++;
             }
         } while (!is_less_i1);
 
-        if (a >= b) {
+        if (p >= q) {
             break;
         }
 
-        std::swap(this->xs[a], this->xs[b]);
-        std::swap(this->ys[a], this->ys[b]);
-        a++, b--;
+        std::swap(this->xs[p], this->xs[q]);
+        std::swap(this->ys[p], this->ys[q]);
+        p++, q--;
     }
 
     /* Recurse left side */
-    this->exe_sort(floor, p, b);
+    this->exe_sort(floor, a, q);
 
     /* Recurse right side */
-    this->exe_sort(floor, b + 1, q);
+    this->exe_sort(floor, q + 1, b);
 }
