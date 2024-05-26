@@ -219,21 +219,15 @@ bool TargetSorter::compare_importance(const FloorType &floor, int a, int b) cons
  */
 bool TargetSorter::compare_distance(int a, int b) const
 {
-    auto ya = this->ys[a];
-    ya -= this->p_pos.y;
-    ya = std::abs(ya);
-    auto xa = this->xs[a];
-    xa -= this->p_pos.x;
-    xa = std::abs(xa);
-    auto distance_a = (xa > ya) ? (2 * xa + ya) : (2 * ya + xa);
+    const Pos2D pos_a(this->ys[a], this->xs[a]);
+    auto vec_a = pos_a - this->p_pos;
+    vec_a = Pos2DVec(std::abs(vec_a.y), std::abs(vec_a.x));
+    const auto distance_a = (vec_a.x > vec_a.y) ? (2 * vec_a.x + vec_a.y) : (2 * vec_a.y + vec_a.x);
 
-    auto yb = ys[b];
-    yb -= this->p_pos.y;
-    yb = std::abs(yb);
-    auto xb = this->xs[b];
-    xb -= this->p_pos.x;
-    xb = std::abs(xb);
-    auto distance_b = (xb > yb) ? (2 * xb + yb) : (2 * yb + xb);
+    const Pos2D pos_b(this->ys[b], this->xs[b]);
+    auto vec_b = pos_b - this->p_pos;
+    vec_b = Pos2DVec(std::abs(vec_b.y), std::abs(vec_b.x));
+    const auto distance_b = (vec_b.x > vec_b.y) ? (2 * vec_b.x + vec_b.y) : (2 * vec_b.y + vec_b.x);
 
     return distance_a <= distance_b;
 }
