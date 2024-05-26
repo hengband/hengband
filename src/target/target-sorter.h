@@ -23,4 +23,5 @@ private:
     SortKind kind;
 
     void exe_sort(const FloorType &floor, int a, int b);
+    bool compare_importance(const FloorType &floor, int a, int b) const;
 };
