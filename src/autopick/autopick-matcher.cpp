@@ -302,7 +302,7 @@ bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const au
         return false;
     }
 
-    if (entry.has(FLG_HUMAN) && (tval != ItemKindType::CORPSE || !angband_strchr("pht", monraces_info[r_idx].cc_def.character))) {
+    if (entry.has(FLG_HUMAN) && (tval != ItemKindType::CORPSE || !angband_strchr("pht", monraces_info[r_idx].symbol_def.character))) {
         return false;
     }
 

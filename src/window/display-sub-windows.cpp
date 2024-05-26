@@ -146,7 +146,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, MonsterEntity *m_ptr, int
 
     term_addstr(-1, TERM_WHITE, buf);
     term_addstr(-1, TERM_WHITE, " ");
-    term_add_bigch(monrace.cc_config);
+    term_add_bigch(monrace.symbol_config);
 
     if (monrace.r_tkills && m_ptr->mflag2.has_not(MonsterConstantFlagType::KAGE)) {
         buf = format(" %2d", monrace.level);
@@ -232,7 +232,7 @@ static void print_pet_list_oneline(PlayerType *player_ptr, const MonsterEntity &
     }
 
     term_gotoxy(x + 13, y);
-    term_add_bigch(monrace.cc_config);
+    term_add_bigch(monrace.symbol_config);
     term_addstr(-1, TERM_WHITE, " ");
     term_addstr(-1, TERM_WHITE, name);
 
@@ -468,15 +468,15 @@ static void display_dungeon(PlayerType *player_ptr)
             const auto pos_x = x - player_ptr->x + game_term->wid / 2 - 1;
             if (!in_bounds2(player_ptr->current_floor_ptr, y, x)) {
                 const auto &terrain = TerrainList::get_instance()[feat_none];
-                const auto &cc_foreground = terrain.cc_configs.at(F_LIT_STANDARD);
-                term_queue_char(pos_x, pos_y, { cc_foreground, {} });
+                const auto &symbol_foreground = terrain.symbol_configs.at(F_LIT_STANDARD);
+                term_queue_char(pos_x, pos_y, { symbol_foreground, {} });
                 continue;
             }
 
-            auto ccp = map_info(player_ptr, { y, x });
-            ccp.cc_foreground.color = get_monochrome_display_color(player_ptr).value_or(ccp.cc_foreground.color);
+            auto symbol_pair = map_info(player_ptr, { y, x });
+            symbol_pair.symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_pair.symbol_foreground.color);
 
-            term_queue_char(pos_x, pos_y, ccp);
+            term_queue_char(pos_x, pos_y, symbol_pair);
         }
     }
 }

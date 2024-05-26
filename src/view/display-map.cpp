@@ -44,13 +44,13 @@ const std::string image_monsters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR
  * @brief オブジェクトの表示を幻覚状態に差し替える
  * @return 差し替えたシンボルと色
  */
-ColoredChar image_object()
+DisplaySymbol image_object()
 {
     if (use_graphics) {
         auto &baseitems = BaseitemList::get_instance();
         const std::span<BaseitemInfo> candidates(baseitems.begin() + 1, baseitems.end());
         const auto &baseitem = rand_choice(candidates);
-        return baseitem.cc_config;
+        return baseitem.symbol_config;
     }
 
     return { randnum1<uint8_t>(15), rand_choice(image_objects) };
@@ -60,12 +60,12 @@ ColoredChar image_object()
  * @brief モンスターの表示を幻覚状態に差し替える
  * @return 差し替えたシンボルと色
  */
-ColoredChar image_monster()
+DisplaySymbol image_monster()
 {
     if (use_graphics) {
         const auto monrace_id = MonsterRace::pick_one_at_random();
         const auto &monrace = monraces_info[monrace_id];
-        return monrace.cc_config;
+        return monrace.symbol_config;
     }
 
     const auto color = randnum1<uint8_t>(15);
@@ -77,7 +77,7 @@ ColoredChar image_monster()
  * @brief オブジェクト＆モンスターの表示を幻覚状態に差し替える
  * @return 差し替えたシンボルと色
  */
-ColoredChar image_random()
+DisplaySymbol image_random()
 {
     if (randint0(100) < 75) {
         return image_monster();
@@ -138,83 +138,83 @@ static bool is_revealed_wall(const FloorType &floor, const Pos2D &pos)
  * @return シンボル表記
  * @todo 強力発動コピペの嵐…ポインタ引数の嵐……Fuuu^h^hck!!
  */
-ColoredCharPair map_info(PlayerType *player_ptr, const Pos2D &pos)
+DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
     auto &terrains = TerrainList::get_instance();
     auto *terrain_mimic_ptr = &grid.get_terrain_mimic();
-    ColoredChar cc_config;
+    DisplaySymbol symbol_config;
     if (terrain_mimic_ptr->flags.has_not(TerrainCharacteristics::REMEMBER)) {
         auto is_visible = any_bits(grid.info, (CAVE_MARK | CAVE_LITE | CAVE_MNLT));
         auto is_glowing = match_bits(grid.info, CAVE_GLOW | CAVE_MNDK, CAVE_GLOW);
         auto can_view = grid.is_view() && (is_glowing || player_ptr->see_nocto);
         const auto is_blind = player_ptr->effects()->blindness()->is_blind();
         if (!is_blind && (is_visible || can_view)) {
-            cc_config = terrain_mimic_ptr->cc_configs[F_LIT_STANDARD];
+            symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_STANDARD];
             if (player_ptr->wild_mode) {
                 if (view_special_lite && !w_ptr->is_daytime()) {
-                    cc_config = terrain_mimic_ptr->cc_configs[F_LIT_DARK];
+                    symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_DARK];
                 }
             } else if (darkened_grid(player_ptr, &grid)) {
                 const auto unsafe_terrain_id = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
                 terrain_mimic_ptr = &terrains[unsafe_terrain_id];
-                cc_config = terrain_mimic_ptr->cc_configs[F_LIT_STANDARD];
+                symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_STANDARD];
             } else if (view_special_lite) {
                 if (grid.info & (CAVE_LITE | CAVE_MNLT)) {
                     if (view_yellow_lite) {
-                        cc_config = terrain_mimic_ptr->cc_configs[F_LIT_LITE];
+                        symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_LITE];
                     }
                 } else if ((grid.info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) {
-                    cc_config = terrain_mimic_ptr->cc_configs[F_LIT_DARK];
+                    symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_DARK];
                 } else if (!(grid.info & CAVE_VIEW)) {
                     if (view_bright_lite) {
-                        cc_config = terrain_mimic_ptr->cc_configs[F_LIT_DARK];
+                        symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_DARK];
                     }
                 }
             }
         } else {
             const auto unsafe_terrain_id = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
             terrain_mimic_ptr = &terrains[unsafe_terrain_id];
-            cc_config = terrain_mimic_ptr->cc_configs[F_LIT_STANDARD];
+            symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_STANDARD];
         }
     } else {
         if (grid.is_mark() && is_revealed_wall(floor, pos)) {
-            cc_config = terrain_mimic_ptr->cc_configs[F_LIT_STANDARD];
+            symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_STANDARD];
             const auto is_blind = player_ptr->effects()->blindness()->is_blind();
             if (player_ptr->wild_mode) {
                 if (view_granite_lite && (is_blind || !w_ptr->is_daytime())) {
-                    cc_config = terrain_mimic_ptr->cc_configs[F_LIT_DARK];
+                    symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_DARK];
                 }
             } else if (darkened_grid(player_ptr, &grid) && !is_blind) {
                 if (terrain_mimic_ptr->flags.has_all_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::PROJECT })) {
                     const auto unsafe_terrain_id = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
                     terrain_mimic_ptr = &terrains[unsafe_terrain_id];
-                    cc_config = terrain_mimic_ptr->cc_configs[F_LIT_STANDARD];
+                    symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_STANDARD];
                 } else if (view_granite_lite && view_bright_lite) {
-                    cc_config = terrain_mimic_ptr->cc_configs[F_LIT_DARK];
+                    symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_DARK];
                 }
             } else if (view_granite_lite) {
                 if (is_blind) {
-                    cc_config = terrain_mimic_ptr->cc_configs[F_LIT_DARK];
+                    symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_DARK];
                 } else if (grid.info & (CAVE_LITE | CAVE_MNLT)) {
                     if (view_yellow_lite) {
-                        cc_config = terrain_mimic_ptr->cc_configs[F_LIT_LITE];
+                        symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_LITE];
                     }
                 } else if (view_bright_lite) {
                     if (!(grid.info & CAVE_VIEW)) {
-                        cc_config = terrain_mimic_ptr->cc_configs[F_LIT_DARK];
+                        symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_DARK];
                     } else if ((grid.info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) {
-                        cc_config = terrain_mimic_ptr->cc_configs[F_LIT_DARK];
+                        symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_DARK];
                     } else if (terrain_mimic_ptr->flags.has_not(TerrainCharacteristics::LOS) && !check_local_illumination(player_ptr, pos.y, pos.x)) {
-                        cc_config = terrain_mimic_ptr->cc_configs[F_LIT_DARK];
+                        symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_DARK];
                     }
                 }
             }
         } else {
             const auto unsafe_terrain_id = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
             terrain_mimic_ptr = &terrains[unsafe_terrain_id];
-            cc_config = terrain_mimic_ptr->cc_configs[F_LIT_STANDARD];
+            symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_STANDARD];
         }
     }
 
@@ -222,10 +222,10 @@ ColoredCharPair map_info(PlayerType *player_ptr, const Pos2D &pos)
         feat_priority = terrain_mimic_ptr->priority;
     }
 
-    ColoredCharPair ccp = { cc_config, cc_config };
+    DisplaySymbolPair symbol_pair = { symbol_config, symbol_config };
     const auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
     if (is_hallucinated && one_in_(256)) {
-        ccp.cc_foreground = image_random();
+        symbol_pair.symbol_foreground = image_random();
     }
 
     for (const auto this_o_idx : grid.o_idx_list) {
@@ -253,53 +253,53 @@ ColoredCharPair map_info(PlayerType *player_ptr, const Pos2D &pos)
             }
         }
 
-        ccp.cc_foreground = { o_ptr->get_color(), o_ptr->get_symbol() };
+        symbol_pair.symbol_foreground = { o_ptr->get_color(), o_ptr->get_symbol() };
         feat_priority = 20;
         if (is_hallucinated) {
-            ccp.cc_foreground = image_object();
+            symbol_pair.symbol_foreground = image_object();
         }
 
         break;
     }
 
     if (grid.has_monster() && display_autopick != 0) {
-        ccp.cc_foreground = set_term_color(player_ptr, pos, ccp.cc_foreground);
-        return ccp;
+        symbol_pair.symbol_foreground = set_term_color(player_ptr, pos, symbol_pair.symbol_foreground);
+        return symbol_pair;
     }
 
     auto *m_ptr = &floor.m_list[grid.m_idx];
     if (!m_ptr->ml) {
-        ccp.cc_foreground = set_term_color(player_ptr, pos, ccp.cc_foreground);
-        return ccp;
+        symbol_pair.symbol_foreground = set_term_color(player_ptr, pos, symbol_pair.symbol_foreground);
+        return symbol_pair;
     }
 
     const auto &monrace_ap = m_ptr->get_appearance_monrace();
     feat_priority = 30;
     if (is_hallucinated) {
         if (!monrace_ap.visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {
-            ccp.cc_foreground = image_monster();
+            symbol_pair.symbol_foreground = image_monster();
         }
 
-        ccp.cc_foreground = set_term_color(player_ptr, pos, ccp.cc_foreground);
-        return ccp;
+        symbol_pair.symbol_foreground = set_term_color(player_ptr, pos, symbol_pair.symbol_foreground);
+        return symbol_pair;
     }
 
-    cc_config = monrace_ap.cc_config;
+    symbol_config = monrace_ap.symbol_config;
     if (monrace_ap.visual_flags.has_none_of({ MonsterVisualType::CLEAR, MonsterVisualType::SHAPECHANGER, MonsterVisualType::CLEAR_COLOR, MonsterVisualType::MULTI_COLOR, MonsterVisualType::RANDOM_COLOR })) {
-        ccp.cc_foreground = set_term_color(player_ptr, pos, cc_config);
-        return ccp;
+        symbol_pair.symbol_foreground = set_term_color(player_ptr, pos, symbol_config);
+        return symbol_pair;
     }
 
     if (monrace_ap.visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {
-        ccp.cc_foreground = set_term_color(player_ptr, pos, ccp.cc_foreground);
-        return ccp;
+        symbol_pair.symbol_foreground = set_term_color(player_ptr, pos, symbol_pair.symbol_foreground);
+        return symbol_pair;
     }
 
-    if (monrace_ap.visual_flags.has(MonsterVisualType::CLEAR_COLOR) && (ccp.cc_foreground.color != TERM_DARK) && !use_graphics) {
+    if (monrace_ap.visual_flags.has(MonsterVisualType::CLEAR_COLOR) && (symbol_pair.symbol_foreground.color != TERM_DARK) && !use_graphics) {
         /* Do nothing */
     } else if (monrace_ap.visual_flags.has(MonsterVisualType::MULTI_COLOR) && !use_graphics) {
         if (monrace_ap.visual_flags.has(MonsterVisualType::ANY_COLOR)) {
-            ccp.cc_foreground.color = randnum1<uint8_t>(15);
+            symbol_pair.symbol_foreground.color = randnum1<uint8_t>(15);
         } else {
             constexpr static auto colors = {
                 TERM_RED,
@@ -311,34 +311,34 @@ ColoredCharPair map_info(PlayerType *player_ptr, const Pos2D &pos)
                 TERM_GREEN,
             };
 
-            ccp.cc_foreground.color = rand_choice(colors);
+            symbol_pair.symbol_foreground.color = rand_choice(colors);
         }
     } else if (monrace_ap.visual_flags.has(MonsterVisualType::RANDOM_COLOR) && !use_graphics) {
-        ccp.cc_foreground.color = grid.m_idx % 15 + 1;
+        symbol_pair.symbol_foreground.color = grid.m_idx % 15 + 1;
     } else {
-        ccp.cc_foreground.color = cc_config.color;
+        symbol_pair.symbol_foreground.color = symbol_config.color;
     }
 
-    if (monrace_ap.visual_flags.has(MonsterVisualType::CLEAR) && (ccp.cc_foreground.character != ' ') && !use_graphics) {
-        ccp.cc_foreground = set_term_color(player_ptr, pos, ccp.cc_foreground);
-        return ccp;
+    if (monrace_ap.visual_flags.has(MonsterVisualType::CLEAR) && (symbol_pair.symbol_foreground.character != ' ') && !use_graphics) {
+        symbol_pair.symbol_foreground = set_term_color(player_ptr, pos, symbol_pair.symbol_foreground);
+        return symbol_pair;
     }
 
     if (monrace_ap.visual_flags.has(MonsterVisualType::SHAPECHANGER)) {
         if (use_graphics) {
             auto r_idx = MonsterRace::pick_one_at_random();
             const auto &monrace = monraces_info[r_idx];
-            ccp.cc_foreground = monrace.cc_config;
+            symbol_pair.symbol_foreground = monrace.symbol_config;
         } else {
-            ccp.cc_foreground.character = one_in_(25) ? rand_choice(image_objects) : rand_choice(image_monsters);
+            symbol_pair.symbol_foreground.character = one_in_(25) ? rand_choice(image_objects) : rand_choice(image_monsters);
         }
 
-        ccp.cc_foreground = set_term_color(player_ptr, pos, ccp.cc_foreground);
-        return ccp;
+        symbol_pair.symbol_foreground = set_term_color(player_ptr, pos, symbol_pair.symbol_foreground);
+        return symbol_pair;
     }
 
-    ccp.cc_foreground = set_term_color(player_ptr, pos, { ccp.cc_foreground.color, cc_config.character });
-    return ccp;
+    symbol_pair.symbol_foreground = set_term_color(player_ptr, pos, { symbol_pair.symbol_foreground.color, symbol_config.character });
+    return symbol_pair;
 }
 
 /*!

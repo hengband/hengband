@@ -51,22 +51,22 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
     for (const auto &pos_path : path_g) {
         auto *g_ptr = &floor_ptr->get_grid(pos_path);
         if (panel_contains(pos_path.y, pos_path.x)) {
-            ColoredCharPair ccp({ default_color, '\0' }, { default_color, '*' });
+            DisplaySymbolPair symbol_pair({ default_color, '\0' }, { default_color, '*' });
             if (g_ptr->has_monster() && floor_ptr->m_list[g_ptr->m_idx].ml) {
-                ccp = map_info(player_ptr, pos_path);
-                auto &cc_foreground = ccp.cc_foreground;
-                if (!is_ascii_graphics(cc_foreground.color)) {
-                    cc_foreground.color = default_color;
-                } else if ((cc_foreground.character == '.') && ((cc_foreground.color == TERM_WHITE) || (cc_foreground.color == TERM_L_WHITE))) {
-                    cc_foreground.color = default_color;
-                } else if (cc_foreground.color == default_color) {
-                    cc_foreground.color = TERM_WHITE;
+                symbol_pair = map_info(player_ptr, pos_path);
+                auto &symbol_foreground = symbol_pair.symbol_foreground;
+                if (!is_ascii_graphics(symbol_foreground.color)) {
+                    symbol_foreground.color = default_color;
+                } else if ((symbol_foreground.character == '.') && ((symbol_foreground.color == TERM_WHITE) || (symbol_foreground.color == TERM_L_WHITE))) {
+                    symbol_foreground.color = default_color;
+                } else if (symbol_foreground.color == default_color) {
+                    symbol_foreground.color = TERM_WHITE;
                 }
             }
 
-            ccp.cc_foreground.color = get_monochrome_display_color(player_ptr).value_or(ccp.cc_foreground.color);
-            ccp.cc_foreground.character = '*';
-            term_queue_bigchar(panel_col_of(pos_path.x), pos_path.y - panel_row_prt, ccp);
+            symbol_pair.symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_pair.symbol_foreground.color);
+            symbol_pair.symbol_foreground.character = '*';
+            term_queue_bigchar(panel_col_of(pos_path.x), pos_path.y - panel_row_prt, symbol_pair);
         }
 
         if (g_ptr->is_mark() && !g_ptr->cave_has_flag(TerrainCharacteristics::PROJECT)) {

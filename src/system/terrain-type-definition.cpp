@@ -9,8 +9,8 @@
 #include "grid/lighting-colors-table.h"
 
 TerrainType::TerrainType()
-    : cc_defs(DEFAULT_CC_MAP)
-    , cc_configs(DEFAULT_CC_MAP)
+    : symbol_defs(DEFAULT_SYMBOLS)
+    , symbol_configs(DEFAULT_SYMBOLS)
 {
 }
 
@@ -25,36 +25,36 @@ bool TerrainType::is_permanent_wall() const
  */
 void TerrainType::reset_lighting(bool is_config)
 {
-    auto &cc_map = is_config ? this->cc_configs : this->cc_defs;
-    if (is_ascii_graphics(cc_map[F_LIT_STANDARD].color)) {
-        this->reset_lighting_ascii(cc_map);
+    auto &symbols = is_config ? this->symbol_configs : this->symbol_defs;
+    if (is_ascii_graphics(symbols[F_LIT_STANDARD].color)) {
+        this->reset_lighting_ascii(symbols);
         return;
     }
 
-    this->reset_lighting_graphics(cc_map);
+    this->reset_lighting_graphics(symbols);
 }
 
-void TerrainType::reset_lighting_ascii(std::map<int, ColoredChar> &cc_map)
+void TerrainType::reset_lighting_ascii(std::map<int, DisplaySymbol> &symbols)
 {
-    const auto color_standard = cc_map[F_LIT_STANDARD].color;
-    const auto character_standard = cc_map[F_LIT_STANDARD].character;
-    cc_map[F_LIT_LITE].color = lighting_colours[color_standard & 0x0f][0];
-    cc_map[F_LIT_DARK].color = lighting_colours[color_standard & 0x0f][1];
+    const auto color_standard = symbols[F_LIT_STANDARD].color;
+    const auto character_standard = symbols[F_LIT_STANDARD].character;
+    symbols[F_LIT_LITE].color = lighting_colours[color_standard & 0x0f][0];
+    symbols[F_LIT_DARK].color = lighting_colours[color_standard & 0x0f][1];
     for (int i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) {
-        cc_map[i].character = character_standard;
+        symbols[i].character = character_standard;
     }
 }
 
-void TerrainType::reset_lighting_graphics(std::map<int, ColoredChar> &cc_map)
+void TerrainType::reset_lighting_graphics(std::map<int, DisplaySymbol> &symbols)
 {
-    const auto color_standard = cc_map[F_LIT_STANDARD].color;
-    const auto character_standard = cc_map[F_LIT_STANDARD].character;
+    const auto color_standard = symbols[F_LIT_STANDARD].color;
+    const auto character_standard = symbols[F_LIT_STANDARD].character;
     for (auto i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) {
-        cc_map[i].color = color_standard;
+        symbols[i].color = color_standard;
     }
 
-    cc_map[F_LIT_LITE].character = character_standard + 2;
-    cc_map[F_LIT_DARK].character = character_standard + 1;
+    symbols[F_LIT_LITE].character = character_standard + 2;
+    symbols[F_LIT_DARK].character = character_standard + 1;
 }
 
 TerrainList TerrainList::instance{};

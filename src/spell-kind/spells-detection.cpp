@@ -602,7 +602,7 @@ bool detect_monsters_string(PlayerType *player_ptr, POSITION range, concptr Matc
             continue;
         }
 
-        if (angband_strchr(Match, monrace.cc_def.character)) {
+        if (angband_strchr(Match, monrace.symbol_def.character)) {
             if (player_ptr->monster_race_idx == m_ptr->r_idx) {
                 rfu.set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
             }

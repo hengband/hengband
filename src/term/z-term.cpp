@@ -270,7 +270,7 @@ static errr term_pict_hack(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, 
  * Mentally draw an attr/char at a given location
  * Assumes given location and values are valid.
  */
-static void term_queue_char_aux(TERM_LEN x, TERM_LEN y, const ColoredCharPair &ccp)
+static void term_queue_char_aux(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pair)
 {
     if ((x < 0) || (x >= game_term->wid)) {
         return;
@@ -287,22 +287,22 @@ static void term_queue_char_aux(TERM_LEN x, TERM_LEN y, const ColoredCharPair &c
     TERM_COLOR *scr_taa = &scrn->ta[y][x];
     char *scr_tcc = &scrn->tc[y][x];
 
-    const auto &cc_foreground = ccp.cc_foreground;
-    const auto &cc_background = ccp.cc_background;
-    auto should_ignore = *scr_aa == cc_foreground.color;
-    should_ignore &= *scr_cc == cc_foreground.character;
-    should_ignore &= *scr_taa == cc_background.color;
-    should_ignore &= *scr_tcc == cc_background.character;
+    const auto &symbol_foreground = symbol_pair.symbol_foreground;
+    const auto &symbol_background = symbol_pair.symbol_background;
+    auto should_ignore = *scr_aa == symbol_foreground.color;
+    should_ignore &= *scr_cc == symbol_foreground.character;
+    should_ignore &= *scr_taa == symbol_background.color;
+    should_ignore &= *scr_tcc == symbol_background.character;
     if (should_ignore) {
         return;
     }
 
     /* Save the "literal" information */
-    *scr_aa = cc_foreground.color;
-    *scr_cc = cc_foreground.character;
+    *scr_aa = symbol_foreground.color;
+    *scr_cc = symbol_foreground.character;
 
-    *scr_taa = cc_background.color;
-    *scr_tcc = cc_background.character;
+    *scr_taa = symbol_background.color;
+    *scr_tcc = symbol_background.character;
 
     /* Check for new min/max row info */
     if (y < game_term->y1) {
@@ -330,9 +330,9 @@ static void term_queue_char_aux(TERM_LEN x, TERM_LEN y, const ColoredCharPair &c
         }
 }
 
-void term_queue_char(TERM_LEN x, TERM_LEN y, const ColoredCharPair &ccp)
+void term_queue_char(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pair)
 {
-    term_queue_char_aux(x + game_term->offset_x, y + game_term->offset_y, ccp);
+    term_queue_char_aux(x + game_term->offset_x, y + game_term->offset_y, symbol_pair);
 }
 
 /*
@@ -341,7 +341,7 @@ void term_queue_char(TERM_LEN x, TERM_LEN y, const ColoredCharPair &ccp)
  * Otherwise, mentally draw a pair of attr/char at a given location.
  * Assumes given location and values are valid.
  */
-void term_queue_bigchar(TERM_LEN x, TERM_LEN y, const ColoredCharPair &ccp_initial)
+void term_queue_bigchar(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pair_initial)
 {
 #ifdef JP
     /*
@@ -363,22 +363,22 @@ void term_queue_bigchar(TERM_LEN x, TERM_LEN y, const ColoredCharPair &ccp_initi
 
     /* If non bigtile mode, call orginal function */
     if (!use_bigtile) {
-        term_queue_char_aux(ch_x, ch_y, ccp_initial);
+        term_queue_char_aux(ch_x, ch_y, symbol_pair_initial);
         return;
     }
 
     /* A tile becomes a Bigtile */
-    ColoredCharPair ccp = ccp_initial;
+    DisplaySymbolPair symbol_pair = symbol_pair_initial;
     uint8_t color;
     char character;
-    if ((ccp_initial.cc_foreground.color & AF_TILE1) && (ccp_initial.cc_foreground.character & 0x80)) {
+    if ((symbol_pair_initial.symbol_foreground.color & AF_TILE1) && (symbol_pair_initial.symbol_foreground.character & 0x80)) {
         /* Mark it as a Bigtile */
         color = AF_BIGTILE2;
         character = -1;
 
         /* Ignore non-tile background */
-        if (!((ccp_initial.cc_background.color & AF_TILE1) && (ccp_initial.cc_background.character & 0x80))) {
-            ccp.cc_background = {};
+        if (!((symbol_pair_initial.symbol_background.color & AF_TILE1) && (symbol_pair_initial.symbol_background.character & 0x80))) {
+            symbol_pair.symbol_background = {};
         }
     }
 
@@ -387,14 +387,14 @@ void term_queue_bigchar(TERM_LEN x, TERM_LEN y, const ColoredCharPair &ccp_initi
      * Use a multibyte character instead of a dirty pair of ASCII
      * characters.
      */
-    else if (' ' <= ccp_initial.cc_foreground.character) /* isprint(c) */
+    else if (' ' <= symbol_pair_initial.symbol_foreground.character) /* isprint(c) */
     {
-        character = ascii_to_zenkaku[2 * (ccp_initial.cc_foreground.character - ' ') + 1];
-        ccp.cc_foreground.character = ascii_to_zenkaku[2 * (ccp_initial.cc_foreground.character - ' ')];
+        character = ascii_to_zenkaku[2 * (symbol_pair_initial.symbol_foreground.character - ' ') + 1];
+        symbol_pair.symbol_foreground.character = ascii_to_zenkaku[2 * (symbol_pair_initial.symbol_foreground.character - ' ')];
 
         /* Mark it as a Kanji */
-        color = ccp_initial.cc_foreground.color | AF_KANJI2;
-        ccp.cc_foreground.color |= AF_KANJI1;
+        color = symbol_pair_initial.symbol_foreground.color | AF_KANJI2;
+        symbol_pair.symbol_foreground.color |= AF_KANJI1;
     }
 #endif
 
@@ -405,7 +405,7 @@ void term_queue_bigchar(TERM_LEN x, TERM_LEN y, const ColoredCharPair &ccp_initi
     }
 
     /* Display pair of attr/char */
-    term_queue_char_aux(ch_x, ch_y, ccp);
+    term_queue_char_aux(ch_x, ch_y, symbol_pair);
     term_queue_char_aux(ch_x + 1, ch_y, { { color, character }, {} });
 }
 
@@ -1477,10 +1477,10 @@ errr term_addch(TERM_COLOR a, char c)
  * Otherwise, queue a pair of attr/char for display at the current
  * cursor location, and advance the cursor to the right by two.
  */
-void term_add_bigch(const ColoredChar &cc)
+void term_add_bigch(const DisplaySymbol &symbol)
 {
     if (!use_bigtile) {
-        (void)term_addch(cc.color, cc.character);
+        (void)term_addch(symbol.color, symbol.character);
         return;
     }
 
@@ -1490,12 +1490,12 @@ void term_add_bigch(const ColoredChar &cc)
     }
 
     /* Paranoia -- no illegal chars */
-    if (!cc.has_character()) {
+    if (!symbol.has_character()) {
         return;
     }
 
     /* Queue the given character for display */
-    term_queue_bigchar(game_term->scr->cx, game_term->scr->cy, { cc, {} });
+    term_queue_bigchar(game_term->scr->cx, game_term->scr->cy, { symbol, {} });
 
     /* Advance the cursor */
     game_term->scr->cx += 2;

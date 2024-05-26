@@ -126,8 +126,8 @@ void do_cmd_visuals(PlayerType *player_ptr)
             auto_dump_printf(auto_dump_stream, _("\n# モンスターの[色/文字]の設定\n\n", "\n# Monster attr/char definitions\n\n"));
             for (const auto &[monrace_id, monrace] : monraces_info) {
                 auto_dump_printf(auto_dump_stream, "# %s\n", monrace.name.data());
-                const auto &cc_config = monrace.cc_config;
-                auto_dump_printf(auto_dump_stream, "R:%d:0x%02X/0x%02X\n\n", enum2i(monrace_id), cc_config.color, static_cast<uint8_t>(cc_config.character));
+                const auto &symbol_config = monrace.symbol_config;
+                auto_dump_printf(auto_dump_stream, "R:%d:0x%02X/0x%02X\n\n", enum2i(monrace_id), symbol_config.color, static_cast<uint8_t>(symbol_config.character));
             }
 
             close_auto_dump(&auto_dump_stream, mark);
@@ -163,8 +163,8 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 }
 
                 auto_dump_printf(auto_dump_stream, "# %s\n", item_name.data());
-                const auto &cc_config = baseitem.cc_config;
-                auto_dump_printf(auto_dump_stream, "K:%d:0x%02X/0x%02X\n\n", (int)baseitem.idx, cc_config.color, static_cast<uint8_t>(cc_config.character));
+                const auto &symbol_config = baseitem.symbol_config;
+                auto_dump_printf(auto_dump_stream, "K:%d:0x%02X/0x%02X\n\n", (int)baseitem.idx, symbol_config.color, static_cast<uint8_t>(symbol_config.character));
             }
 
             close_auto_dump(&auto_dump_stream, mark);
@@ -195,12 +195,12 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 }
 
                 auto_dump_printf(auto_dump_stream, "# %s\n", (terrain.name.data()));
-                const auto &cc_standard = terrain.cc_configs.at(F_LIT_STANDARD);
-                const auto &cc_lite = terrain.cc_configs.at(F_LIT_LITE);
-                const auto &cc_dark = terrain.cc_configs.at(F_LIT_DARK);
-                auto_dump_printf(auto_dump_stream, "F:%d:0x%02X/0x%02X:0x%02X/0x%02X:0x%02X/0x%02X\n\n", terrain.idx, cc_standard.color,
-                    static_cast<uint8_t>(cc_standard.character), cc_lite.color, static_cast<uint8_t>(cc_lite.character),
-                    cc_dark.color, static_cast<uint8_t>(cc_dark.character));
+                const auto &symbol_standard = terrain.symbol_configs.at(F_LIT_STANDARD);
+                const auto &symbol_lite = terrain.symbol_configs.at(F_LIT_LITE);
+                const auto &symbol_dark = terrain.symbol_configs.at(F_LIT_DARK);
+                auto_dump_printf(auto_dump_stream, "F:%d:0x%02X/0x%02X:0x%02X/0x%02X:0x%02X/0x%02X\n\n", terrain.idx, symbol_standard.color,
+                    static_cast<uint8_t>(symbol_standard.character), symbol_lite.color, static_cast<uint8_t>(symbol_lite.character),
+                    symbol_dark.color, static_cast<uint8_t>(symbol_dark.character));
             }
 
             close_auto_dump(&auto_dump_stream, mark);
@@ -215,15 +215,15 @@ void do_cmd_visuals(PlayerType *player_ptr)
             while (true) {
                 auto &monrace = monraces_info[monrace_id];
                 int c;
-                const auto &cc_def = monrace.cc_def;
-                auto &cc_config = monrace.cc_config;
+                const auto &symbol_def = monrace.symbol_def;
+                auto &symbol_config = monrace.symbol_config;
                 term_putstr(5, 17, -1, TERM_WHITE, format(_("モンスター = %d, 名前 = %-40.40s", "Monster = %d, Name = %-40.40s"), enum2i(monrace_id), monrace.name.data()));
-                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3u / %3u", "Default attr/char = %3u / %3u"), cc_def.color, cc_def.character));
+                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3u / %3u", "Default attr/char = %3u / %3u"), symbol_def.color, symbol_def.character));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
-                term_queue_bigchar(43, 19, { cc_def, {} });
-                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3u / %3u", "Current attr/char = %3u / %3u"), cc_config.color, cc_config.character));
+                term_queue_bigchar(43, 19, { symbol_def, {} });
+                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3u / %3u", "Current attr/char = %3u / %3u"), symbol_config.color, symbol_config.character));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
-                term_queue_bigchar(43, 20, { cc_config, {} });
+                term_queue_bigchar(43, 20, { symbol_config, {} });
                 term_putstr(0, 22, -1, TERM_WHITE, _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
                 const auto ch = inkey();
                 if (ch == ESCAPE) {
@@ -251,22 +251,22 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'a': {
-                    const auto visual_id = input_new_visual_id(ch, cc_config.color, 256);
+                    const auto visual_id = input_new_visual_id(ch, symbol_config.color, 256);
                     if (!visual_id) {
                         break;
                     }
 
-                    cc_config.color = *visual_id;
+                    symbol_config.color = *visual_id;
                     need_redraw = true;
                     break;
                 }
                 case 'c': {
-                    const auto visual_id = input_new_visual_id(ch, cc_config.character, 256);
+                    const auto visual_id = input_new_visual_id(ch, symbol_config.character, 256);
                     if (!visual_id) {
                         break;
                     }
 
-                    cc_config.character = *visual_id;
+                    symbol_config.character = *visual_id;
                     need_redraw = true;
                     break;
                 }
@@ -288,17 +288,17 @@ void do_cmd_visuals(PlayerType *player_ptr)
             while (true) {
                 auto &baseitem = baseitems.get_baseitem(bi_id);
                 int c;
-                const auto &cc_def = baseitem.cc_def;
-                auto &cc_config = baseitem.cc_config;
+                const auto &symbol_def = baseitem.symbol_def;
+                auto &symbol_config = baseitem.symbol_config;
                 term_putstr(5, 17, -1, TERM_WHITE,
                     format(
                         _("アイテム = %d, 名前 = %-40.40s", "Object = %d, Name = %-40.40s"), bi_id, (!baseitem.flavor ? baseitem.name : baseitem.flavor_name).data()));
-                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), cc_def.color, cc_def.character));
+                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), symbol_def.color, symbol_def.character));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
-                term_queue_bigchar(43, 19, { cc_def, {} });
-                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), cc_config.color, cc_config.character));
+                term_queue_bigchar(43, 19, { symbol_def, {} });
+                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), symbol_config.color, symbol_config.character));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
-                term_queue_bigchar(43, 20, { cc_config, {} });
+                term_queue_bigchar(43, 20, { symbol_config, {} });
                 term_putstr(0, 22, -1, TERM_WHITE, _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
 
                 const auto ch = inkey();
@@ -334,22 +334,22 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'a': {
-                    const auto visual_id = input_new_visual_id(ch, cc_config.color, 256);
+                    const auto visual_id = input_new_visual_id(ch, symbol_config.color, 256);
                     if (!visual_id) {
                         break;
                     }
 
-                    baseitem.cc_config.color = *visual_id;
+                    baseitem.symbol_config.color = *visual_id;
                     need_redraw = true;
                     break;
                 }
                 case 'c': {
-                    const auto visual_id = input_new_visual_id(ch, cc_config.character, 256);
+                    const auto visual_id = input_new_visual_id(ch, symbol_config.character, 256);
                     if (!visual_id) {
                         break;
                     }
 
-                    baseitem.cc_config.character = *visual_id;
+                    baseitem.symbol_config.character = *visual_id;
                     need_redraw = true;
                     break;
                 }
@@ -372,18 +372,18 @@ void do_cmd_visuals(PlayerType *player_ptr)
             while (true) {
                 auto &terrain = terrains[terrain_id];
                 int c;
-                const auto &cc_def = terrain.cc_defs[lighting_level];
-                const auto &cc_config = terrain.cc_configs[lighting_level];
+                const auto &symbol_def = terrain.symbol_defs[lighting_level];
+                const auto &symbol_config = terrain.symbol_configs[lighting_level];
                 prt("", 17, 5);
                 term_putstr(5, 17, -1, TERM_WHITE,
                     format(_("地形 = %d, 名前 = %s, 明度 = %s", "Terrain = %d, Name = %s, Lighting = %s"), terrain_id, (terrain.name.data()),
                         lighting_level_str[lighting_level]));
-                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), cc_def.color, cc_def.character));
+                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), symbol_def.color, symbol_def.character));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
-                term_queue_bigchar(43, 19, { cc_def, {} });
-                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), cc_config.color, cc_config.character));
+                term_queue_bigchar(43, 19, { symbol_def, {} });
+                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), symbol_config.color, symbol_config.character));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
-                term_queue_bigchar(43, 20, { cc_config, {} });
+                term_queue_bigchar(43, 20, { symbol_config, {} });
                 term_putstr(0, 22, -1, TERM_WHITE,
                     _("コマンド (n/N/^N/a/A/^A/c/C/^C/l/L/^L/d/D/^D/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/l/L/^L/d/D/^D/v/V/^V): "));
 
@@ -421,7 +421,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'a': {
-                    auto &color_config = terrain.cc_configs[lighting_level].color;
+                    auto &color_config = terrain.symbol_configs[lighting_level].color;
                     const auto visual_id = input_new_visual_id(ch, color_config, 256);
                     if (!visual_id) {
                         break;
@@ -432,7 +432,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'c': {
-                    auto &character_config = terrain.cc_configs[lighting_level].character;
+                    auto &character_config = terrain.symbol_configs[lighting_level].character;
                     const auto visual_id = input_new_visual_id(ch, character_config, 256);
                     if (!visual_id) {
                         break;

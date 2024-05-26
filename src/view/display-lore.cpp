@@ -59,11 +59,11 @@ void roff_top(MonsterRaceId r_idx)
     term_addstr(-1, TERM_WHITE, monrace.name);
 
     term_addstr(-1, TERM_WHITE, " ('");
-    term_add_bigch(monrace.cc_def);
+    term_add_bigch(monrace.symbol_def);
     term_addstr(-1, TERM_WHITE, "')");
 
     term_addstr(-1, TERM_WHITE, "/('");
-    term_add_bigch(monrace.cc_config);
+    term_add_bigch(monrace.symbol_config);
     term_addstr(-1, TERM_WHITE, "'):");
 }
 

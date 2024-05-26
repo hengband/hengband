@@ -279,7 +279,7 @@ MonsterSpellResult spell_RF6_SPECIAL(PlayerType *player_ptr, POSITION y, POSITIO
     case MonsterRaceId::ROLENTO:
         return spell_RF6_SPECIAL_ROLENTO(player_ptr, y, x, m_idx, t_idx, target_type);
     default:
-        if (monrace.cc_def.character == 'B') {
+        if (monrace.symbol_def.character == 'B') {
             return spell_RF6_SPECIAL_B(player_ptr, y, x, m_idx, t_idx, target_type);
         }
 

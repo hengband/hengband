@@ -97,10 +97,10 @@ void print_map(PlayerType *player_ptr)
 
     for (auto y = ymin; y <= ymax; y++) {
         for (auto x = xmin; x <= xmax; x++) {
-            auto ccp = map_info(player_ptr, { y, x });
-            ccp.cc_foreground.color = get_monochrome_display_color(player_ptr).value_or(ccp.cc_foreground.color);
+            auto symbol_pair = map_info(player_ptr, { y, x });
+            symbol_pair.symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_pair.symbol_foreground.color);
 
-            term_queue_bigchar(panel_col_of(x), y - panel_row_prt, ccp);
+            term_queue_bigchar(panel_col_of(x), y - panel_row_prt, symbol_pair);
         }
     }
 
@@ -197,7 +197,7 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
             match_autopick = -1;
             autopick_obj = nullptr;
             feat_priority = -1;
-            const auto ccp = map_info(player_ptr, { j, i });
+            const auto symbol_pair = map_info(player_ptr, { j, i });
             tp = (byte)feat_priority;
             if (match_autopick != -1 && (match_autopick_yx[y][x] == -1 || match_autopick_yx[y][x] > match_autopick)) {
                 match_autopick_yx[y][x] = match_autopick;
@@ -205,8 +205,8 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
                 tp = 0x7f;
             }
 
-            bigma[j + 1][i + 1] = ccp.cc_foreground.color;
-            bigmc[j + 1][i + 1] = ccp.cc_foreground.character;
+            bigma[j + 1][i + 1] = symbol_pair.symbol_foreground.color;
+            bigmc[j + 1][i + 1] = symbol_pair.symbol_foreground.character;
             bigmp[j + 1][i + 1] = tp;
         }
     }
@@ -216,13 +216,13 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
             x = i / xrat + 1;
             y = j / yrat + 1;
 
-            ColoredChar cc_foreground(bigma[j + 1][i + 1], bigmc[j + 1][i + 1]);
+            DisplaySymbol symbol_foreground(bigma[j + 1][i + 1], bigmc[j + 1][i + 1]);
             tp = bigmp[j + 1][i + 1];
             if (mp[y][x] == tp) {
                 int cnt = 0;
 
                 for (const auto &dd : CCW_DD) {
-                    if ((cc_foreground.character == bigmc[j + 1 + dd.y][i + 1 + dd.x]) && (cc_foreground.color == bigma[j + 1 + dd.y][i + 1 + dd.x])) {
+                    if ((symbol_foreground.character == bigmc[j + 1 + dd.y][i + 1 + dd.x]) && (symbol_foreground.color == bigma[j + 1 + dd.y][i + 1 + dd.x])) {
                         cnt++;
                     }
                 }
@@ -232,8 +232,8 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
             }
 
             if (mp[y][x] < tp) {
-                ma[y][x] = cc_foreground.color;
-                mc[y][x] = cc_foreground.character;
+                ma[y][x] = symbol_foreground.color;
+                mc[y][x] = symbol_foreground.character;
                 mp[y][x] = tp;
             }
         }
@@ -254,10 +254,10 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
     for (y = 0; y < hgt + 2; ++y) {
         term_gotoxy(COL_MAP, y);
         for (x = 0; x < wid + 2; ++x) {
-            ColoredChar cc_foreground(ma[y][x], mc[y][x]);
-            cc_foreground.color = get_monochrome_display_color(player_ptr).value_or(cc_foreground.color);
+            DisplaySymbol symbol_foreground(ma[y][x], mc[y][x]);
+            symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_foreground.color);
 
-            term_add_bigch(cc_foreground);
+            term_add_bigch(symbol_foreground);
         }
     }
 
@@ -287,15 +287,15 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
     view_granite_lite = old_view_granite_lite;
 }
 
-ColoredChar set_term_color(PlayerType *player_ptr, const Pos2D &pos, const ColoredChar &cc_orig)
+DisplaySymbol set_term_color(PlayerType *player_ptr, const Pos2D &pos, const DisplaySymbol &symbol_orig)
 {
     if (!player_ptr->is_located_at(pos)) {
-        return cc_orig;
+        return symbol_orig;
     }
 
     feat_priority = 31;
     const auto &monrace = monraces_info[MonsterRaceId::PLAYER];
-    return monrace.cc_config;
+    return monrace.symbol_config;
 }
 
 /*
