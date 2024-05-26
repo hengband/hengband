@@ -80,7 +80,7 @@ static std::vector<MonsterRaceId> collect_monsters(PlayerType *player_ptr, IDX g
                 continue;
             }
         } else {
-            if (angband_strchr(group_char, monrace.symbol_def.character) == nullptr) {
+            if (angband_strchr(group_char, monrace.symbol_definition.character) == nullptr) {
                 continue;
             }
         }
@@ -201,7 +201,7 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
         }
 
 #ifdef JP
-        const auto number_of_kills = angband_strchr("pt", monrace.symbol_def.character) ? "人" : "体";
+        const auto number_of_kills = angband_strchr("pt", monrace.symbol_definition.character) ? "人" : "体";
         fprintf(fff, "     %3d %sの %s\n", this_monster, number_of_kills, monrace.name.data());
 #else
         if (this_monster < 2) {

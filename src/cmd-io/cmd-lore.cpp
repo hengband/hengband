@@ -135,7 +135,7 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
                 monrace_ids.push_back(monrace_id);
         }
 
-        else if (all || (monrace.symbol_def.character == symbol)) {
+        else if (all || (monrace.symbol_definition.character == symbol)) {
             monrace_ids.push_back(monrace_id);
         }
     }

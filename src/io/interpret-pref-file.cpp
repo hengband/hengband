@@ -233,11 +233,11 @@ static bool interpret_u_token(char *buf)
     for (auto &baseitem : BaseitemList::get_instance()) {
         if (baseitem.is_valid() && (baseitem.bi_key.tval() == tval)) {
             if (n1) {
-                baseitem.symbol_def.color = n1;
+                baseitem.symbol_definition.color = n1;
             }
 
             if (n2) {
-                baseitem.symbol_def.character = n2;
+                baseitem.symbol_definition.character = n2;
             }
         }
     }

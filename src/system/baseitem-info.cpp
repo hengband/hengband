@@ -592,7 +592,7 @@ bool BaseitemKey::is_mushrooms() const
 
 BaseitemInfo::BaseitemInfo()
     : bi_key(ItemKindType::NONE)
-    , symbol_def(DisplaySymbol(0, '\0'))
+    , symbol_definition(DisplaySymbol(0, '\0'))
     , symbol_config(DisplaySymbol(0, '\0'))
 {
 }
@@ -785,7 +785,7 @@ void BaseitemList::resize(size_t new_size)
 void BaseitemList::reset_all_visuals()
 {
     for (auto &baseitem : this->baseitems) {
-        baseitem.symbol_config = baseitem.symbol_def;
+        baseitem.symbol_config = baseitem.symbol_definition;
     }
 }
 

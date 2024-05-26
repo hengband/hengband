@@ -156,10 +156,10 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
         }
 
         auto &terrain = *terrains.rbegin();
-        terrain.symbol_defs[F_LIT_STANDARD] = { color, character };
+        terrain.symbol_definitions[F_LIT_STANDARD] = { color, character };
         if (tokens.size() == n) {
             for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
-                terrain.symbol_defs[j] = { color, character };
+                terrain.symbol_definitions[j] = { color, character };
             }
 
             return PARSE_ERROR_NONE;
@@ -178,18 +178,18 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
                     continue;
                 }
 
-                terrain.symbol_defs[j].character = tokens[c_idx][0];
+                terrain.symbol_definitions[j].character = tokens[c_idx][0];
                 if (tokens[a_idx] == "*") {
                     continue;
                 }
 
                 if (tokens[a_idx] == "-") {
-                    terrain.symbol_defs[j].color = color;
+                    terrain.symbol_definitions[j].color = color;
                     continue;
                 }
 
-                terrain.symbol_defs[j].color = color_char_to_attr(tokens[a_idx][0]);
-                if (terrain.symbol_defs[j].color > 127) {
+                terrain.symbol_definitions[j].color = color_char_to_attr(tokens[a_idx][0]);
+                if (terrain.symbol_definitions[j].color > 127) {
                     return PARSE_ERROR_GENERIC;
                 }
             }

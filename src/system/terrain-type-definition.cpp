@@ -9,7 +9,7 @@
 #include "grid/lighting-colors-table.h"
 
 TerrainType::TerrainType()
-    : symbol_defs(DEFAULT_SYMBOLS)
+    : symbol_definitions(DEFAULT_SYMBOLS)
     , symbol_configs(DEFAULT_SYMBOLS)
 {
 }
@@ -25,7 +25,7 @@ bool TerrainType::is_permanent_wall() const
  */
 void TerrainType::reset_lighting(bool is_config)
 {
-    auto &symbols = is_config ? this->symbol_configs : this->symbol_defs;
+    auto &symbols = is_config ? this->symbol_configs : this->symbol_definitions;
     if (is_ascii_graphics(symbols[F_LIT_STANDARD].color)) {
         this->reset_lighting_ascii(symbols);
         return;

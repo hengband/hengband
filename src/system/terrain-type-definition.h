@@ -48,7 +48,7 @@ public:
     TerrainState state[MAX_FEAT_STATES]{}; /*!< TerrainState テーブル */
     FEAT_SUBTYPE subtype{}; /*!< 副特性値 */
     FEAT_POWER power{}; /*!< 地形強度 */
-    std::map<int, DisplaySymbol> symbol_defs; //!< デフォルトの地形シンボル (色/文字).
+    std::map<int, DisplaySymbol> symbol_definitions; //!< デフォルトの地形シンボル (色/文字).
     std::map<int, DisplaySymbol> symbol_configs; //!< 設定変更後の地形シンボル (色/文字).
 
     bool is_permanent_wall() const;

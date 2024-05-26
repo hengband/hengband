@@ -452,6 +452,6 @@ bool MonraceList::MonraceList::order_level(MonsterRaceId id1, MonsterRaceId id2)
 void MonraceList::reset_all_visuals()
 {
     for (auto &[_, monrace] : monraces_info) {
-        monrace.symbol_config = monrace.symbol_def;
+        monrace.symbol_config = monrace.symbol_definition;
     }
 }

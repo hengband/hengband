@@ -215,12 +215,12 @@ void do_cmd_visuals(PlayerType *player_ptr)
             while (true) {
                 auto &monrace = monraces_info[monrace_id];
                 int c;
-                const auto &symbol_def = monrace.symbol_def;
+                const auto &symbol_definition = monrace.symbol_definition;
                 auto &symbol_config = monrace.symbol_config;
                 term_putstr(5, 17, -1, TERM_WHITE, format(_("モンスター = %d, 名前 = %-40.40s", "Monster = %d, Name = %-40.40s"), enum2i(monrace_id), monrace.name.data()));
-                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3u / %3u", "Default attr/char = %3u / %3u"), symbol_def.color, symbol_def.character));
+                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3u / %3u", "Default attr/char = %3u / %3u"), symbol_definition.color, symbol_definition.character));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
-                term_queue_bigchar(43, 19, { symbol_def, {} });
+                term_queue_bigchar(43, 19, { symbol_definition, {} });
                 term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3u / %3u", "Current attr/char = %3u / %3u"), symbol_config.color, symbol_config.character));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 20, { symbol_config, {} });
@@ -288,14 +288,14 @@ void do_cmd_visuals(PlayerType *player_ptr)
             while (true) {
                 auto &baseitem = baseitems.get_baseitem(bi_id);
                 int c;
-                const auto &symbol_def = baseitem.symbol_def;
+                const auto &symbol_definition = baseitem.symbol_definition;
                 auto &symbol_config = baseitem.symbol_config;
                 term_putstr(5, 17, -1, TERM_WHITE,
                     format(
                         _("アイテム = %d, 名前 = %-40.40s", "Object = %d, Name = %-40.40s"), bi_id, (!baseitem.flavor ? baseitem.name : baseitem.flavor_name).data()));
-                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), symbol_def.color, symbol_def.character));
+                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), symbol_definition.color, symbol_definition.character));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
-                term_queue_bigchar(43, 19, { symbol_def, {} });
+                term_queue_bigchar(43, 19, { symbol_definition, {} });
                 term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), symbol_config.color, symbol_config.character));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 20, { symbol_config, {} });
@@ -372,15 +372,15 @@ void do_cmd_visuals(PlayerType *player_ptr)
             while (true) {
                 auto &terrain = terrains[terrain_id];
                 int c;
-                const auto &symbol_def = terrain.symbol_defs[lighting_level];
+                const auto &symbol_definition = terrain.symbol_definitions[lighting_level];
                 const auto &symbol_config = terrain.symbol_configs[lighting_level];
                 prt("", 17, 5);
                 term_putstr(5, 17, -1, TERM_WHITE,
                     format(_("地形 = %d, 名前 = %s, 明度 = %s", "Terrain = %d, Name = %s, Lighting = %s"), terrain_id, (terrain.name.data()),
                         lighting_level_str[lighting_level]));
-                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), symbol_def.color, symbol_def.character));
+                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), symbol_definition.color, symbol_definition.character));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
-                term_queue_bigchar(43, 19, { symbol_def, {} });
+                term_queue_bigchar(43, 19, { symbol_definition, {} });
                 term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), symbol_config.color, symbol_config.character));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 20, { symbol_config, {} });
