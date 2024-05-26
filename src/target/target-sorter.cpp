@@ -216,15 +216,14 @@ void exe_ang_sort(const FloorType &floor, const Pos2D &p_pos, std::vector<int> &
 }
 
 /*
- * @brief クイックソートの受け付け / Accepting auick sort in place
- * @param u アイテムやモンスター等への配列
- * @param v 条件基準IDへの参照ポインタ
- * @param a 比較対象のID1
- * @param b 比較対象のID2
- * @param ang_sort_comp 比較用の関数ポインタ
- * @param ang_sort_swap スワップ用の関数ポインタ
+ * @brief クイックソートの受け付け
+ * @param floor フロアへの参照
+ * @param p_pos プレイヤーの現在位置
+ * @param ys マップのY座標群 (歴史的経緯によりPos2D化されていない)
+ * @param xs マップのX座標群 (同上)
+ * @param kind ソート種別
  */
-void ang_sort(const FloorType &floor, const Pos2D &p_pos, std::vector<int> &ys, std::vector<int> &xs, SortKind kind)
+void TargetSorter::sort(const FloorType &floor, const Pos2D &p_pos, std::vector<int> &ys, std::vector<int> &xs, SortKind kind)
 {
     exe_ang_sort(floor, p_pos, ys, xs, 0, std::ssize(ys) - 1, kind);
 }

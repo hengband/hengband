@@ -9,4 +9,8 @@ enum class SortKind {
 };
 
 class FloorType;
-void ang_sort(const FloorType &floor, const Pos2D &p_pos, std::vector<int> &ys, std::vector<int> &xs, SortKind kind);
+class TargetSorter {
+public:
+    TargetSorter() = default;
+    void sort(const FloorType &floor, const Pos2D &p_pos, std::vector<int> &ys, std::vector<int> &xs, SortKind kind);
+};
