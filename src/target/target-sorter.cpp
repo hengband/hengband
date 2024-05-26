@@ -141,16 +141,32 @@ bool ang_sort_comp_importance(const FloorType &floor, const Pos2D &p_pos, std::v
     return ang_sort_comp_distance(p_pos, ys, xs, a, b);
 }
 
+}
+
 /*
- * @brief クイックソートの実行 / Quick sort in place
- * @param u アイテムやモンスター等への配列
- * @param v 条件基準IDへの参照ポインタ
- * @param a 比較対象のID1
- * @param b 比較対象のID2
- * @param ang_sort_comp 比較用の関数ポインタ
- * @param ang_sort_swap スワップ用の関数ポインタ
+ * @brief クイックソートの受け付け
+ * @param floor フロアへの参照
+ * @param p_pos プレイヤーの現在位置
+ * @param ys マップのY座標群 (歴史的経緯によりPos2D化されていない)
+ * @param xs マップのX座標群 (同上)
+ * @param kind ソート種別
  */
-void exe_ang_sort(const FloorType &floor, const Pos2D &p_pos, std::vector<int> &ys, std::vector<int> &xs, int p, int q, SortKind kind)
+void TargetSorter::sort(const FloorType &floor, const Pos2D &p_pos, std::vector<int> &ys, std::vector<int> &xs, SortKind kind)
+{
+    this->exe_sort(floor, p_pos, ys, xs, 0, std::ssize(ys) - 1, kind);
+}
+
+/*
+ * @brief クイックソートの実行
+ * @param floor フロアへの参照
+ * @param p_pos プレイヤーの現在位置
+ * @param ys マップのY座標群
+ * @param xs マップのX座標群
+ * @param p ソート対象の座標1
+ * @param q ソート対象の座標2
+ * @param kind ソート種別
+ */
+void TargetSorter::exe_sort(const FloorType &floor, const Pos2D &p_pos, std::vector<int> &ys, std::vector<int> &xs, int p, int q, SortKind kind)
 {
     if (p >= q) {
         return;
@@ -208,22 +224,8 @@ void exe_ang_sort(const FloorType &floor, const Pos2D &p_pos, std::vector<int> &
     }
 
     /* Recurse left side */
-    exe_ang_sort(floor, p_pos, ys, xs, p, b, kind);
+    this->exe_sort(floor, p_pos, ys, xs, p, b, kind);
 
     /* Recurse right side */
-    exe_ang_sort(floor, p_pos, ys, xs, b + 1, q, kind);
-}
-}
-
-/*
- * @brief クイックソートの受け付け
- * @param floor フロアへの参照
- * @param p_pos プレイヤーの現在位置
- * @param ys マップのY座標群 (歴史的経緯によりPos2D化されていない)
- * @param xs マップのX座標群 (同上)
- * @param kind ソート種別
- */
-void TargetSorter::sort(const FloorType &floor, const Pos2D &p_pos, std::vector<int> &ys, std::vector<int> &xs, SortKind kind)
-{
-    exe_ang_sort(floor, p_pos, ys, xs, 0, std::ssize(ys) - 1, kind);
+    this->exe_sort(floor, p_pos, ys, xs, b + 1, q, kind);
 }
