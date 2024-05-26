@@ -36,7 +36,7 @@ static void display_diary(PlayerType *player_ptr)
 #endif
 
     std::stringstream ss;
-    ss << _("playrecord-", "playrec-") << savefile_base << ".txt";
+    ss << _("playrecord-", "playrec-") << savefile_base.string() << ".txt";
     const auto path = path_build(ANGBAND_DIR_USER, ss.str());
     FileDisplayer(player_ptr->name).display(false, path.string(), -1, 0, diary_title);
 }
@@ -83,7 +83,7 @@ static void do_cmd_erase_diary()
     }
 
     std::stringstream ss;
-    ss << _("playrecord-", "playrec-") << savefile_base << ".txt";
+    ss << _("playrecord-", "playrec-") << savefile_base.string() << ".txt";
     const auto path = path_build(ANGBAND_DIR_USER, ss.str());
     fd_kill(path);
 

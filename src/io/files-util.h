@@ -7,7 +7,7 @@
 #include <string_view>
 
 extern std::filesystem::path savefile; //!< セーブファイルのフルパス
-extern std::string savefile_base; //!< セーブファイル名
+extern std::filesystem::path savefile_base; //!< セーブファイル名
 
 extern std::filesystem::path ANGBAND_DIR;
 extern std::filesystem::path ANGBAND_DIR_APEX;

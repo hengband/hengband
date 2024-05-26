@@ -107,11 +107,11 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
 
     if (is_modified || savefile_base.empty()) {
 #ifdef SAVEFILE_USE_UID
-        const auto &savefile_str = savefile.filename().string();
+        const auto savefile_str = savefile.filename().string();
         const auto split = str_split(savefile_str, '.');
         savefile_base = split[1];
 #else
-        savefile_base = savefile.filename().string();
+        savefile_base = savefile.filename();
 #endif
     }
 

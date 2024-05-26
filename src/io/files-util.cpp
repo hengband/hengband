@@ -44,7 +44,7 @@ std::filesystem::path ANGBAND_DIR_USER; //!< User "preference" files (ascii) The
 std::filesystem::path ANGBAND_DIR_XTRA; //!< Various extra files (binary) These files are rarely portable between platforms
 
 std::filesystem::path savefile;
-std::string savefile_base;
+std::filesystem::path savefile_base;
 
 /*!
  * @brief プレイヤーステータスをファイルダンプ出力する
@@ -233,9 +233,9 @@ static errr counts_seek(PlayerType *player_ptr, int fd, uint32_t where, bool fla
     auto short_pclass = enum2i(player_ptr->pclass);
 #ifdef SAVEFILE_USE_UID
     const auto user_id = UnixUserIds::get_instance().get_user_id();
-    strnfmt(temp1, sizeof(temp1), "%d.%s.%d%d%d", user_id, savefile_base.data(), short_pclass, player_ptr->ppersonality, player_ptr->age);
+    strnfmt(temp1, sizeof(temp1), "%d.%s.%d%d%d", user_id, savefile_base.string().data(), short_pclass, player_ptr->ppersonality, player_ptr->age);
 #else
-    strnfmt(temp1, sizeof(temp1), "%s.%d%d%d", savefile_base.data(), short_pclass, player_ptr->ppersonality, player_ptr->age);
+    strnfmt(temp1, sizeof(temp1), "%s.%d%d%d", savefile_base.string().data(), short_pclass, player_ptr->ppersonality, player_ptr->age);
 #endif
     for (int i = 0; temp1[i]; i++) {
         temp1[i] ^= (i + 1) * 63;
