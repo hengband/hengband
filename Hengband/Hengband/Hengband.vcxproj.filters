@@ -1199,8 +1199,8 @@
     <ClCompile Include="..\..\src\term\screen-processor.cpp">
       <Filter>term</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\util\sort.cpp">
-      <Filter>util</Filter>
+    <ClCompile Include="..\..\src\target\target-sorter.cpp">
+      <Filter>target</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\io\input-key-requester.cpp">
       <Filter>io</Filter>
@@ -3899,8 +3899,8 @@
     <ClInclude Include="..\..\src\term\screen-processor.h">
       <Filter>term</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\util\sort.h">
-      <Filter>util</Filter>
+    <ClInclude Include="..\..\src\target\target-sorter.h">
+      <Filter>target</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\io\input-key-requester.h">
       <Filter>io</Filter>

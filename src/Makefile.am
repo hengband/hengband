@@ -944,6 +944,7 @@ hengband_SOURCES = \
 	target/target-getter.cpp target/target-getter.h \
 	target/target-preparation.cpp target/target-preparation.h \
 	target/target-setter.cpp target/target-setter.h \
+	target/target-sorter.cpp target/target-sorter.h \
 	target/target-types.h \
 	\
 	term/gameterm.cpp term/gameterm.h \
@@ -979,7 +980,6 @@ hengband_SOURCES = \
 	util/probability-table.h \
 	util/rng-xoshiro.cpp util/rng-xoshiro.h \
 	util/sha256.cpp util/sha256.h \
-	util/sort.cpp util/sort.h \
 	util/string-processor.cpp util/string-processor.h \
 	\
 	view/colored-char.h \

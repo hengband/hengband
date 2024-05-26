@@ -15,11 +15,11 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
+#include "target/target-sorter.h"
 #include "term/screen-processor.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/int-char-converter.h"
-#include "util/sort.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
 #include <functional>
@@ -70,9 +70,9 @@ static void tgt_pt_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, st
         return;
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (POSITION y = 1; y < floor_ptr->height; y++) {
-        for (POSITION x = 1; x < floor_ptr->width; x++) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    for (POSITION y = 1; y < floor.height; y++) {
+        for (POSITION x = 1; x < floor.width; x++) {
             if (!tgt_pt_accept(player_ptr, y, x)) {
                 continue;
             }
@@ -82,7 +82,10 @@ static void tgt_pt_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, st
         }
     }
 
-    ang_sort(*player_ptr->current_floor_ptr, player_ptr->get_position(), ys, xs, SortKind::DISTANCE);
+    TargetSorter sorter(player_ptr->get_position(), ys, xs, SortKind::DISTANCE);
+    sorter.sort(floor);
+    ys = sorter.get_result_y();
+    xs = sorter.get_result_x();
 }
 
 /*!

@@ -16,11 +16,11 @@
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "target/projection-path-calculator.h"
+#include "target/target-sorter.h"
 #include "target/target-types.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
-#include "util/sort.h"
 #include "window/main-window-util.h"
 #include <algorithm>
 #include <utility>
@@ -123,12 +123,14 @@ static bool target_set_accept(PlayerType *player_ptr, const Pos2D &pos)
 void target_set_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, std::vector<POSITION> &xs, const BIT_FLAGS mode)
 {
     POSITION min_hgt, max_hgt, min_wid, max_wid;
-    if (mode & TARGET_KILL) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto is_killable = any_bits(mode, TARGET_KILL);
+    if (is_killable) {
         const auto max_range = AngbandSystem::get_instance().get_max_range();
         min_hgt = std::max((player_ptr->y - max_range), 0);
-        max_hgt = std::min((player_ptr->y + max_range), player_ptr->current_floor_ptr->height - 1);
+        max_hgt = std::min((player_ptr->y + max_range), floor.height - 1);
         min_wid = std::max((player_ptr->x - max_range), 0);
-        max_wid = std::min((player_ptr->x + max_range), player_ptr->current_floor_ptr->width - 1);
+        max_wid = std::min((player_ptr->x + max_range), floor.width - 1);
     } else {
         min_hgt = panel_row_min;
         max_hgt = panel_row_max;
@@ -138,7 +140,6 @@ void target_set_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, std::
 
     ys.clear();
     xs.clear();
-    const auto &floor = *player_ptr->current_floor_ptr;
     for (auto y = min_hgt; y <= max_hgt; y++) {
         for (auto x = min_wid; x <= max_wid; x++) {
             const Pos2D pos(y, x);
@@ -161,14 +162,13 @@ void target_set_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, std::
         }
     }
 
-    if (mode & (TARGET_KILL)) {
-        ang_sort(*player_ptr->current_floor_ptr, player_ptr->get_position(), ys, xs, SortKind::DISTANCE);
-    } else {
-        ang_sort(*player_ptr->current_floor_ptr, player_ptr->get_position(), ys, xs, SortKind::IMPORTANCE);
-    }
+    const auto kind = is_killable ? SortKind::DISTANCE : SortKind::IMPORTANCE;
+    TargetSorter sorter(player_ptr->get_position(), ys, xs, kind);
+    sorter.sort(floor);
+    ys = sorter.get_result_y();
+    xs = sorter.get_result_x();
 
     // 乗っているモンスターがターゲットリストの先頭にならないようにする調整。
-
     if (player_ptr->riding == 0 || !target_pet || (size(ys) <= 1) || !(mode & (TARGET_KILL))) {
         return;
     }
