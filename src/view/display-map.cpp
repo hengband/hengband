@@ -253,7 +253,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
             }
         }
 
-        symbol_pair.symbol_foreground = { o_ptr->get_color(), o_ptr->get_symbol() };
+        symbol_pair.symbol_foreground = o_ptr->get_symbol();
         feat_priority = 20;
         if (is_hallucinated) {
             symbol_pair.symbol_foreground = image_object();

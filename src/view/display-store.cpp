@@ -50,10 +50,7 @@ void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
 
     int cur_col = 3;
     if (show_item_graph) {
-        const auto a = o_ptr->get_color();
-        const auto c = o_ptr->get_symbol();
-
-        term_queue_bigchar(cur_col, i + 6, { { a, c }, {} });
+        term_queue_bigchar(cur_col, i + 6, { o_ptr->get_symbol(), {} });
         if (use_bigtile) {
             cur_col++;
         }

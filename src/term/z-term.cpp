@@ -1437,36 +1437,33 @@ errr term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c)
  * positive value, future calls to either function will
  * return negative ones.
  */
-errr term_addch(TERM_COLOR a, char c)
+void term_addch(const DisplaySymbol &symbol)
 {
     TERM_LEN w = game_term->wid;
 
     /* Handle "unusable" cursor */
     if (game_term->scr->cu) {
-        return -1;
+        return;
     }
 
     /* Paranoia -- no illegal chars */
-    if (!c) {
-        return -2;
+    if (!symbol.has_character()) {
+        return;
     }
 
     /* Queue the given character for display */
-    term_queue_char_aux(game_term->scr->cx, game_term->scr->cy, { { a, c }, {} });
+    term_queue_char_aux(game_term->scr->cx, game_term->scr->cy, { symbol, {} });
 
     /* Advance the cursor */
     game_term->scr->cx++;
 
     /* Success */
     if (game_term->scr->cx < w) {
-        return 0;
+        return;
     }
 
     /* Note "Useless" cursor */
     game_term->scr->cu = 1;
-
-    /* Note "Useless" cursor */
-    return 1;
 }
 
 /*
@@ -1480,7 +1477,7 @@ errr term_addch(TERM_COLOR a, char c)
 void term_add_bigch(const DisplaySymbol &symbol)
 {
     if (!use_bigtile) {
-        (void)term_addch(symbol.color, symbol.character);
+        term_addch(symbol);
         return;
     }
 
@@ -1566,21 +1563,15 @@ errr term_addstr(int n, TERM_COLOR a, std::string_view sv)
 /*
  * Move to a location and, using an attr, add a char
  */
-errr term_putch(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c)
+void term_putch(TERM_LEN x, TERM_LEN y, const DisplaySymbol &symbol)
 {
-    errr res;
-
     /* Move first */
-    if ((res = term_gotoxy(x, y)) != 0) {
-        return res;
+    if (term_gotoxy(x, y) != 0) {
+        return;
     }
 
     /* Then add the char */
-    if ((res = term_addch(a, c)) != 0) {
-        return res;
-    }
-
-    return 0;
+    term_addch(symbol);
 }
 
 /*

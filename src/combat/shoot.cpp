@@ -670,12 +670,11 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
             /* The player can see the (on screen) missile */
             if (panel_contains(ny, nx) && player_can_see_bold(player_ptr, ny, nx)) {
-                const auto a = q_ptr->get_color();
-                const auto c = q_ptr->get_symbol();
+                const auto symbol = q_ptr->get_symbol();
 
                 /* Draw, Hilite, Fresh, Pause, Erase */
                 if (delay_factor > 0) {
-                    print_rel(player_ptr, c, a, ny, nx);
+                    print_rel(player_ptr, symbol, ny, nx);
                     move_cursor_relative(ny, nx);
                     term_fresh();
                     term_xtra(TERM_XTRA_DELAY, delay_factor);

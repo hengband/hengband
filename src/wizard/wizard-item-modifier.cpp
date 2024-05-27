@@ -342,7 +342,7 @@ static void prt_alloc(const BaseitemKey &bi_key, TERM_LEN row, TERM_LEN col)
     }
 
     for (auto i = 0; i < 22; i++) {
-        term_putch(col, row + i + 1, TERM_WHITE, '|');
+        term_putch(col, row + i + 1, { TERM_WHITE, '|' });
         prt(format("%2dF", (i * 5)), row + i + 1, col);
         if ((i * BASEITEM_MAX_DEPTH / 22 <= home) && (home < (i + 1) * BASEITEM_MAX_DEPTH / 22)) {
             c_prt(TERM_RED, format("%3d.%04d%%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
@@ -363,9 +363,9 @@ static void prt_binary(BIT_FLAGS flags, const int row, int col)
     uint32_t bitmask;
     for (int i = bitmask = 1; i <= 32; i++, bitmask *= 2) {
         if (flags & bitmask) {
-            term_putch(col++, row, TERM_BLUE, '*');
+            term_putch(col++, row, { TERM_BLUE, '*' });
         } else {
-            term_putch(col++, row, TERM_WHITE, '-');
+            term_putch(col++, row, { TERM_WHITE, '-' });
         }
     }
 }

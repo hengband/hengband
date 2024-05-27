@@ -24,6 +24,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
+#include "view/colored-char.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -264,7 +265,7 @@ static void do_cmd_options_win(PlayerType *player_ptr)
                     c = 'X';
                 }
 
-                term_putch(35 + j * 5, i + 5, a, c);
+                term_putch(35 + j * 5, i + 5, { a, c });
             }
         }
 

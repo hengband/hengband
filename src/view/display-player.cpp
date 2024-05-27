@@ -331,13 +331,12 @@ void display_player_equippy(PlayerType *player_ptr, TERM_LEN y, TERM_LEN x, BIT_
     const auto max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
     for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
         const auto &item = player_ptr->inventory_list[i];
-        auto a = item.get_color();
-        auto c = item.get_symbol();
+        auto symbol = item.get_symbol();
         if (!equippy_chars || !item.is_valid()) {
-            c = ' ';
-            a = TERM_DARK;
+            symbol.color = TERM_DARK;
+            symbol.character = ' ';
         }
 
-        term_putch(x + i - INVEN_MAIN_HAND, y, a, c);
+        term_putch(x + i - INVEN_MAIN_HAND, y, symbol);
     }
 }

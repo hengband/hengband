@@ -345,9 +345,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
         }
 
         if (show_item_graph) {
-            const auto a = o_ptr->get_color();
-            const auto c = o_ptr->get_symbol();
-            term_queue_bigchar(cur_col, cur_row, { { a, c }, {} });
+            term_queue_bigchar(cur_col, cur_row, { o_ptr->get_symbol(), {} });
             if (use_bigtile) {
                 cur_col++;
             }
@@ -683,10 +681,9 @@ static void display_found_item_list(PlayerType *player_ptr)
         term_gotoxy(0, term_y);
 
         // アイテムシンボル表示
-        const auto symbol_code = item->get_symbol();
-        const auto symbol = format(" %c ", symbol_code);
-        const auto color_code_for_symbol = item->get_color();
-        term_addstr(-1, color_code_for_symbol, symbol);
+        const auto symbol = item->get_symbol();
+        const auto symbol_str = format(" %c ", symbol.character);
+        term_addstr(-1, symbol.color, symbol_str);
 
         const auto item_name = describe_flavor(player_ptr, item, 0);
         const auto color_code_for_item = tval_to_attr[enum2i(item->bi_key.tval()) % 128];

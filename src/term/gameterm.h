@@ -30,4 +30,6 @@ extern std::map<AttributeType, std::string> gf_colors;
 extern TERM_COLOR color_char_to_attr(char c);
 
 extern const std::unordered_map<std::string_view, TERM_COLOR> color_list;
-std::pair<TERM_COLOR, char> bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeType typ);
+
+class DisplayDymbol;
+DisplaySymbol bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeType typ);
