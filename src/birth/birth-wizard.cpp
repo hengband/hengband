@@ -39,10 +39,10 @@
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
-#include "view/colored-char.h"
 #include "view/display-birth.h" // 暫定。後で消す予定。
 #include "view/display-player-misc-info.h"
 #include "view/display-player.h" // 暫定。後で消す.
+#include "view/display-symbol.h"
 #include "view/display-util.h"
 #include "world/world.h"
 #include <sstream>

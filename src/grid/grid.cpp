@@ -59,9 +59,9 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/point-2d.h"
-#include "view/colored-char.h"
 #include "view/display-map.h"
 #include "view/display-messages.h"
+#include "view/display-symbol.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
 #include <queue>

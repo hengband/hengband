@@ -3,7 +3,7 @@
 #include "system/system-variables.h"
 #include "term/term-color-types.h"
 #include "util/string-processor.h"
-#include "view/colored-char.h"
+#include "view/display-symbol.h"
 #include <span>
 #include <unordered_map>
 

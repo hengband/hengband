@@ -19,7 +19,7 @@
 #include "monster-race/race-wilderness-flags.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
-#include "view/colored-char.h"
+#include "view/display-symbol.h"
 #include <map>
 #include <set>
 #include <string>

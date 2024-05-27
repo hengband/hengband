@@ -18,8 +18,8 @@
 #include "term/term-color-types.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
-#include "view/colored-char.h"
 #include "view/display-map.h"
+#include "view/display-symbol.h"
 #include "world/world.h"
 #include <string>
 #include <string_view>
