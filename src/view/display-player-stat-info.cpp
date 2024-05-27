@@ -320,27 +320,29 @@ static int compensation_stat_by_mutation(PlayerType *player_ptr, int stat)
  * @param c 補正後の表示記号
  * @param a 表示色
  */
-static void change_display_by_mutation(PlayerType *player_ptr, int stat, char *c, TERM_COLOR *a)
+static DisplaySymbol change_display_by_mutation(PlayerType *player_ptr, int stat, const DisplaySymbol &symbol_initial)
 {
     int compensation = compensation_stat_by_mutation(player_ptr, stat);
     if (compensation == 0) {
-        return;
+        return symbol_initial;
     }
 
-    *c = '*';
+    DisplaySymbol symbol = { symbol_initial.color, '*' };
     if (compensation > 0) {
-        *a = TERM_L_GREEN;
+        symbol.color = TERM_L_GREEN;
         if (compensation < 10) {
-            *c = '0' + compensation;
+            symbol.character = '0' + compensation;
         }
     }
 
     if (compensation < 0) {
-        *a = TERM_RED;
+        symbol.color = TERM_RED;
         if (compensation > -10) {
-            *c = '0' - compensation;
+            symbol.character = '0' - compensation;
         }
     }
+
+    return symbol;
 }
 
 /*!
@@ -355,9 +357,7 @@ static void display_mutation_compensation(PlayerType *player_ptr, int row, int c
     player_flags(player_ptr, flags);
 
     for (int stat = 0; stat < A_MAX; stat++) {
-        DisplaySymbol symbol(TERM_SLATE, '.');
-        change_display_by_mutation(player_ptr, stat, &symbol.character, &symbol.color);
-
+        auto symbol = change_display_by_mutation(player_ptr, stat, { TERM_SLATE, '.' });
         if (flags.has(TR_SUST_STATUS_LIST[stat])) {
             symbol = { TERM_GREEN, 's' };
         }
