@@ -277,8 +277,8 @@ void print_rel(PlayerType *player_ptr, const DisplaySymbol &symbol, POSITION y, 
 
 void print_bolt_pict(PlayerType *player_ptr, POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeType typ)
 {
-    const auto &[a, c] = bolt_pict(y, x, ny, nx, typ);
-    print_rel(player_ptr, { a, c }, ny, nx);
+    const auto symbol = bolt_pict(y, x, ny, nx, typ);
+    print_rel(player_ptr, symbol, ny, nx);
 }
 
 /*!

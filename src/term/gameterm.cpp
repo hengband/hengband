@@ -3,6 +3,7 @@
 #include "system/system-variables.h"
 #include "term/term-color-types.h"
 #include "util/string-processor.h"
+#include "view/colored-char.h"
 #include <span>
 #include <unordered_map>
 
@@ -561,15 +562,10 @@ static TERM_COLOR spell_color(AttributeType type)
  * If the distance is not "one", we (may) return "*".
  * </pre>
  */
-std::pair<TERM_COLOR, char> bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeType typ)
+DisplaySymbol bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeType typ)
 {
-    int base;
-
-    byte k;
-
-    TERM_COLOR a;
-
     /* No motion (*) */
+    int base;
     if ((ny == y) && (nx == x)) {
         base = 0x30;
     }
@@ -600,11 +596,11 @@ std::pair<TERM_COLOR, char> bolt_pict(POSITION y, POSITION x, POSITION ny, POSIT
     }
 
     /* Basic spell color */
-    k = spell_color(typ);
+    const auto k = spell_color(typ);
 
     /* Obtain attr/char */
-    a = misc_to_attr[base + k];
-    auto c = misc_to_char[base + k];
+    const auto a = misc_to_attr[base + k];
+    const auto c = misc_to_char[base + k];
 
     /* Create pict */
     return { a, c };
