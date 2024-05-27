@@ -337,6 +337,6 @@ void display_player_equippy(PlayerType *player_ptr, TERM_LEN y, TERM_LEN x, BIT_
             symbol.character = ' ';
         }
 
-        term_putch(x + i - INVEN_MAIN_HAND, y, symbol.color, symbol.character);
+        term_putch(x + i - INVEN_MAIN_HAND, y, symbol);
     }
 }

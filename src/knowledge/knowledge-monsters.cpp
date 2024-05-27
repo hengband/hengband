@@ -336,12 +336,12 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
             }
 
             for (IDX i = 0; i < 78; i++) {
-                term_putch(i, 5, TERM_WHITE, '=');
+                term_putch(i, 5, { TERM_WHITE, '=' });
             }
 
             if (!direct_r_idx) {
                 for (IDX i = 0; i < browser_rows; i++) {
-                    term_putch(max + 1, 6 + i, TERM_WHITE, '|');
+                    term_putch(max + 1, 6 + i, { TERM_WHITE, '|' });
                 }
             }
 

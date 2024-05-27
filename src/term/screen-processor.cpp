@@ -2,6 +2,7 @@
 #include "io/input-key-acceptor.h"
 #include "locale/japanese.h"
 #include "term/term-color-types.h"
+#include "view/colored-char.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -202,16 +203,16 @@ void c_roff(TERM_COLOR a, std::string_view str)
 
             term_erase(0, y);
             for (const auto &[ca, cv] : wrap_chars) {
-                term_addch(ca, cv);
+                term_addch({ ca, cv });
             }
             x = wrap_chars.size();
         }
 
-        term_addch(_((a | 0x10), a), ch);
+        term_addch({ static_cast<uint8_t>(_(a | 0x10, a)), ch });
         if (is_kanji) {
             s++;
             x++;
-            term_addch((a | 0x20), *s);
+            term_addch({ static_cast<uint8_t>(a | 0x20), *s });
         }
 
         if (++x > wid) {

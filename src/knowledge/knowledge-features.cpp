@@ -84,12 +84,12 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
 
         const auto &symbol_standard = terrain.symbol_configs.at(F_LIT_STANDARD);
         term_queue_bigchar(lit_col[F_LIT_STANDARD], row_i, { symbol_standard, {} });
-        term_putch(lit_col[F_LIT_NS_BEGIN], row_i, TERM_SLATE, '(');
+        term_putch(lit_col[F_LIT_NS_BEGIN], row_i, { TERM_SLATE, '(' });
         for (int j = F_LIT_NS_BEGIN + 1; j < F_LIT_MAX; j++) {
-            term_putch(lit_col[j], row_i, TERM_SLATE, '/');
+            term_putch(lit_col[j], row_i, { TERM_SLATE, '/' });
         }
 
-        term_putch(lit_col[F_LIT_MAX - 1] + (use_bigtile ? 3 : 2), row_i, TERM_SLATE, ')');
+        term_putch(lit_col[F_LIT_MAX - 1] + (use_bigtile ? 3 : 2), row_i, { TERM_SLATE, ')' });
         for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
             const auto &symbol_config = terrain.symbol_configs.at(j);
             term_queue_bigchar(lit_col[j] + 1, row_i, { symbol_config, {} });
@@ -184,12 +184,12 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             }
 
             for (FEAT_IDX i = 0; i < 78; i++) {
-                term_putch(i, 5, TERM_WHITE, '=');
+                term_putch(i, 5, { TERM_WHITE, '=' });
             }
 
             if (direct_f_idx < 0) {
                 for (FEAT_IDX i = 0; i < browser_rows; i++) {
-                    term_putch(max + 1, 6 + i, TERM_WHITE, '|');
+                    term_putch(max + 1, 6 + i, { TERM_WHITE, '|' });
                 }
             }
 

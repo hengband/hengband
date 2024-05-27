@@ -210,16 +210,14 @@ static void display_equipments_compensation(PlayerType *player_ptr, int row, int
         o_ptr = &player_ptr->inventory_list[i];
         auto flags = o_ptr->get_flags_known();
         for (int stat = 0; stat < A_MAX; stat++) {
-            TERM_COLOR a = TERM_SLATE;
-            char c = '.';
+            DisplaySymbol symbol(TERM_SLATE, '.');
             if (flags.has(TR_STATUS_LIST[stat])) {
-                compensate_stat_by_weapon(&c, &a, o_ptr, TR_SUST_STATUS_LIST[stat], flags);
+                compensate_stat_by_weapon(&symbol.character, &symbol.color, o_ptr, TR_SUST_STATUS_LIST[stat], flags);
             } else if (flags.has(TR_SUST_STATUS_LIST[stat])) {
-                a = TERM_GREEN;
-                c = 's';
+                symbol = { TERM_GREEN, 's' };
             }
 
-            term_putch(*col, row + stat + 1, a, c);
+            term_putch(*col, row + stat + 1, symbol);
         }
 
         (*col)++;
@@ -356,16 +354,14 @@ static void display_mutation_compensation(PlayerType *player_ptr, int row, int c
     player_flags(player_ptr, flags);
 
     for (int stat = 0; stat < A_MAX; stat++) {
-        byte a = TERM_SLATE;
-        char c = '.';
-        change_display_by_mutation(player_ptr, stat, &c, &a);
+        DisplaySymbol symbol(TERM_SLATE, '.');
+        change_display_by_mutation(player_ptr, stat, &symbol.character, &symbol.color);
 
         if (flags.has(TR_SUST_STATUS_LIST[stat])) {
-            a = TERM_GREEN;
-            c = 's';
+            symbol = { TERM_GREEN, 's' };
         }
 
-        term_putch(col, row + stat + 1, a, c);
+        term_putch(col, row + stat + 1, symbol);
     }
 }
 
