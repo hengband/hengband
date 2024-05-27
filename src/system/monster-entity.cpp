@@ -124,7 +124,7 @@ bool MonsterEntity::is_mimicry() const
 
     const auto &monrace = this->get_appearance_monrace();
     const auto mimic_symbols = "/|\\()[]=$,.!?&`#%<>+~";
-    if (angband_strchr(mimic_symbols, monrace.cc_def.character) == nullptr) {
+    if (angband_strchr(mimic_symbols, monrace.symbol_definition.character) == nullptr) {
         return false;
     }
 
@@ -313,7 +313,7 @@ std::string MonsterEntity::get_died_message() const
 std::optional<std::string> MonsterEntity::get_pain_message(std::string_view monster_name, int damage) const
 {
     auto &monrace = this->get_monrace();
-    return MonsterPainDescriber(monrace.idx, monrace.cc_def.character, monster_name).describe(this->hp, damage, this->ml);
+    return MonsterPainDescriber(monrace.idx, monrace.symbol_definition.character, monster_name).describe(this->hp, damage, this->ml);
 }
 
 /*!

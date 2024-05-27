@@ -131,7 +131,7 @@ static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonsterRaceI
         };
 
         auto result = std::all_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });
-        result &= std::all_of(d_ptr->r_chars.begin(), d_ptr->r_chars.end(), [r_ptr](const auto &v) { return v == r_ptr->cc_def.character; });
+        result &= std::all_of(d_ptr->r_chars.begin(), d_ptr->r_chars.end(), [r_ptr](const auto &v) { return v == r_ptr->symbol_definition.character; });
 
         return d_ptr->mode == DUNGEON_MODE_AND ? result : !result;
     }
@@ -153,7 +153,7 @@ static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonsterRaceI
         };
 
         auto result = std::any_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });
-        result |= std::any_of(d_ptr->r_chars.begin(), d_ptr->r_chars.end(), [r_ptr](const auto &v) { return v == r_ptr->cc_def.character; });
+        result |= std::any_of(d_ptr->r_chars.begin(), d_ptr->r_chars.end(), [r_ptr](const auto &v) { return v == r_ptr->symbol_definition.character; });
 
         return d_ptr->mode == DUNGEON_MODE_OR ? result : !result;
     }

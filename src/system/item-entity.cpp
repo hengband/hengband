@@ -471,7 +471,7 @@ bool ItemEntity::is_offerable() const
         return false;
     }
 
-    return angband_strchr("pht", monraces_info[i2enum<MonsterRaceId>(this->pval)].cc_def.character) != nullptr;
+    return angband_strchr("pht", monraces_info[i2enum<MonsterRaceId>(this->pval)].symbol_definition.character) != nullptr;
 }
 
 /*!
@@ -607,18 +607,18 @@ TERM_COLOR ItemEntity::get_color() const
     const auto &baseitem = this->get_baseitem();
     const auto flavor = baseitem.flavor;
     if (flavor != 0) {
-        return BaseitemList::get_instance().get_baseitem(flavor).cc_config.color;
+        return BaseitemList::get_instance().get_baseitem(flavor).symbol_config.color;
     }
 
-    const auto &cc_config = baseitem.cc_config;
+    const auto &symbol_config = baseitem.symbol_config;
     auto has_attr = this->is_valid();
     has_attr &= this->is_corpse();
-    has_attr &= cc_config.color == TERM_DARK;
+    has_attr &= symbol_config.color == TERM_DARK;
     if (!has_attr) {
-        return cc_config.color;
+        return symbol_config.color;
     }
 
-    return monraces_info[i2enum<MonsterRaceId>(this->pval)].cc_config.color;
+    return monraces_info[i2enum<MonsterRaceId>(this->pval)].symbol_config.color;
 }
 
 /*
@@ -631,7 +631,7 @@ char ItemEntity::get_symbol() const
 {
     const auto &baseitem = this->get_baseitem();
     const auto flavor = baseitem.flavor;
-    return flavor ? BaseitemList::get_instance().get_baseitem(flavor).cc_config.character : baseitem.cc_config.character;
+    return flavor ? BaseitemList::get_instance().get_baseitem(flavor).symbol_config.character : baseitem.symbol_config.character;
 }
 
 /*!

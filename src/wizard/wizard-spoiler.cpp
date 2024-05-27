@@ -108,13 +108,13 @@ static SpoilerOutputResultType spoil_mon_evol()
     for (auto monrace_id : get_mon_evol_roots()) {
         const auto *r_ptr = &monraces_info[monrace_id];
         constexpr auto fmt_before = _("[%d]: %s (レベル%d, '%c')\n", "[%d]: %s (Level %d, '%c')\n");
-        fprintf(spoiler_file, fmt_before, enum2i(monrace_id), r_ptr->name.data(), r_ptr->level, r_ptr->cc_def.character);
+        fprintf(spoiler_file, fmt_before, enum2i(monrace_id), r_ptr->name.data(), r_ptr->level, r_ptr->symbol_definition.character);
         for (auto n = 1; MonsterRace(r_ptr->next_r_idx).is_valid(); n++) {
             fprintf(spoiler_file, "%*s-(%d)-> ", n * 2, "", r_ptr->next_exp);
             fprintf(spoiler_file, "[%d]: ", enum2i(r_ptr->next_r_idx));
             r_ptr = &monraces_info[r_ptr->next_r_idx];
             constexpr auto fmt_after = _("%s (レベル%d, '%c')\n", "%s (Level %d, '%c')\n");
-            fprintf(spoiler_file, fmt_after, r_ptr->name.data(), r_ptr->level, r_ptr->cc_def.character);
+            fprintf(spoiler_file, fmt_after, r_ptr->name.data(), r_ptr->level, r_ptr->symbol_definition.character);
         }
 
         fputc('\n', spoiler_file);

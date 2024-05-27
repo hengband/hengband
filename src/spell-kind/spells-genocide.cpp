@@ -142,7 +142,7 @@ bool symbol_genocide(PlayerType *player_ptr, int power, bool player_cast)
     for (short i = 1; i < floor.m_max; i++) {
         const auto &monster = floor.m_list[i];
         const auto &monrace = monster.get_monrace();
-        if (!monster.is_valid() || (monrace.cc_def.character != symbol)) {
+        if (!monster.is_valid() || (monrace.symbol_definition.character != symbol)) {
             continue;
         }
 

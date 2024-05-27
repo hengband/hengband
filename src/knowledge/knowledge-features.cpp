@@ -74,16 +74,16 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
         c_prt(attr, terrain.name.data(), row_i, col);
         if (per_page == 1) {
             c_prt(attr, format("(%s)", lighting_level_str[lighting_level]), row_i, col + 1 + terrain.name.size());
-            const auto &cc_config = terrain.cc_configs.at(lighting_level);
-            c_prt(attr, format("%02x/%02x", cc_config.color, static_cast<uint8_t>(cc_config.character)), row_i,
+            const auto &symbol_config = terrain.symbol_configs.at(lighting_level);
+            c_prt(attr, format("%02x/%02x", symbol_config.color, static_cast<uint8_t>(symbol_config.character)), row_i,
                 f_idx_col - ((w_ptr->wizard || visual_only) ? 6 : 2));
         }
         if (w_ptr->wizard || visual_only) {
             c_prt(attr, format("%d", terrain_id), row_i, f_idx_col);
         }
 
-        const auto &cc_standard = terrain.cc_configs.at(F_LIT_STANDARD);
-        term_queue_bigchar(lit_col[F_LIT_STANDARD], row_i, { cc_standard, {} });
+        const auto &symbol_standard = terrain.symbol_configs.at(F_LIT_STANDARD);
+        term_queue_bigchar(lit_col[F_LIT_STANDARD], row_i, { symbol_standard, {} });
         term_putch(lit_col[F_LIT_NS_BEGIN], row_i, TERM_SLATE, '(');
         for (int j = F_LIT_NS_BEGIN + 1; j < F_LIT_MAX; j++) {
             term_putch(lit_col[j], row_i, TERM_SLATE, '/');
@@ -91,8 +91,8 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
 
         term_putch(lit_col[F_LIT_MAX - 1] + (use_bigtile ? 3 : 2), row_i, TERM_SLATE, ')');
         for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
-            const auto &cc_config = terrain.cc_configs.at(j);
-            term_queue_bigchar(lit_col[j] + 1, row_i, { cc_config, {} });
+            const auto &symbol_config = terrain.symbol_configs.at(j);
+            term_queue_bigchar(lit_col[j] + 1, row_i, { symbol_config, {} });
         }
     }
 
@@ -107,7 +107,7 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
 void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f_idx, IDX *lighting_level)
 {
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, std::nullopt);
-    std::map<int, ColoredChar> cc_map;
+    std::map<int, DisplaySymbol> symbols;
     const auto &[wid, hgt] = term_get_size();
     std::vector<FEAT_IDX> feat_idx(TerrainList::get_instance().size());
 
@@ -136,15 +136,15 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
         feat_cnt = 0;
     } else {
         auto &terrain = TerrainList::get_instance()[direct_f_idx];
-        auto &cc_config = terrain.cc_configs.at(*lighting_level);
+        auto &symbol_config = terrain.symbol_configs.at(*lighting_level);
         feat_idx[0] = direct_f_idx;
         feat_cnt = 1;
         feat_idx[1] = -1;
-        (void)visual_mode_command('v', &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &cc_config.color,
-            &cc_config.character, need_redraw);
+        (void)visual_mode_command('v', &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &symbol_config.color,
+            &symbol_config.character, need_redraw);
 
         for (FEAT_IDX i = 0; i < F_LIT_MAX; i++) {
-            cc_map[i] = cc_config;
+            symbols[i] = symbol_config;
         }
     }
 
@@ -158,9 +158,9 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     TERM_LEN column = 0;
     bool flag = false;
     bool redraw = true;
-    ColoredChar cc_orig;
+    DisplaySymbol symbol_orig;
     auto &terrains = TerrainList::get_instance();
-    auto &cc_cb = ColoredCharsClipboard::get_instance();
+    auto &symbols_cb = DisplaySymbolsClipboard::get_instance();
     while (!flag) {
         char ch;
         if (redraw) {
@@ -229,13 +229,13 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
         prt(format(_("<方向>%s, 'd'で標準光源効果%s, ESC", "<dir>%s, 'd' for default lighting%s, ESC"),
                 visual_list ? _(", ENTERで決定, 'a'で対象明度変更", ", ENTER to accept, 'a' for lighting level")
                             : _(", 'v'でシンボル変更", ", 'v' for visuals"),
-                (cc_cb.cc != ColoredChar()) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
+                (symbols_cb.symbol != DisplaySymbol()) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
             hgt - 1, 0);
 
         auto &terrain = terrains[feat_idx[feat_cur]];
-        cc_orig = terrain.cc_configs.at(*lighting_level);
+        symbol_orig = terrain.symbol_configs.at(*lighting_level);
         if (visual_list) {
-            place_visual_list_cursor(max + 3, 7, cc_orig.color, static_cast<uint8_t>(cc_orig.character), attr_top, char_left);
+            place_visual_list_cursor(max + 3, 7, symbol_orig.color, static_cast<uint8_t>(symbol_orig.character), attr_top, char_left);
         } else if (!column) {
             term_gotoxy(0, 6 + (grp_cur - grp_top));
         } else {
@@ -259,30 +259,30 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                 }
             }
 
-            const auto &cc_previous = terrain.cc_configs.at(prev_lighting_level);
-            const auto &cc_lightning = terrain.cc_configs.at(*lighting_level);
-            if (cc_previous.color != cc_lightning.color) {
-                attr_top = std::max<int8_t>(0, (cc_lightning.color & 0x7f) - 5);
+            const auto &symbol_previous = terrain.symbol_configs.at(prev_lighting_level);
+            const auto &symbol_lightning = terrain.symbol_configs.at(*lighting_level);
+            if (symbol_previous.color != symbol_lightning.color) {
+                attr_top = std::max<int8_t>(0, (symbol_lightning.color & 0x7f) - 5);
             }
 
-            if (cc_previous.character != cc_lightning.character) {
-                char_left = std::max<int8_t>(0, cc_lightning.character - 10);
+            if (symbol_previous.character != symbol_lightning.character) {
+                char_left = std::max<int8_t>(0, symbol_lightning.character - 10);
             }
 
             continue;
         }
 
         if ((ch == 'D') || (ch == 'd')) {
-            const auto &cc_previous = terrain.cc_configs.at(*lighting_level);
+            const auto &symbol_previous = terrain.symbol_configs.at(*lighting_level);
             terrain.reset_lighting();
-            const auto &cc_current = terrain.cc_configs.at(*lighting_level);
+            const auto &symbol_current = terrain.symbol_configs.at(*lighting_level);
             if (visual_list) {
-                if (cc_previous.color != cc_current.color) {
-                    attr_top = std::max<int8_t>(0, (cc_current.color & 0x7f) - 5);
+                if (symbol_previous.color != symbol_current.color) {
+                    attr_top = std::max<int8_t>(0, (symbol_current.color & 0x7f) - 5);
                 }
 
-                if (cc_previous.character != cc_current.character) {
-                    char_left = std::max<int8_t>(0, cc_current.character - 10);
+                if (symbol_previous.character != symbol_current.character) {
+                    char_left = std::max<int8_t>(0, symbol_current.character - 10);
                 }
             } else {
                 *need_redraw = true;
@@ -291,10 +291,10 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             continue;
         }
 
-        if (visual_mode_command(ch, &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &cc_orig.color, &cc_orig.character, need_redraw)) {
+        if (visual_mode_command(ch, &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &symbol_orig.color, &symbol_orig.character, need_redraw)) {
             switch (ch) {
             case ESCAPE:
-                terrain.cc_configs = cc_map;
+                terrain.symbol_configs = symbols;
 
                 [[fallthrough]];
             case '\n':
@@ -307,7 +307,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                 break;
             case 'V':
             case 'v':
-                cc_map = terrain.cc_configs;
+                symbols = terrain.symbol_configs;
                 *lighting_level = F_LIT_STANDARD;
                 break;
 
@@ -317,7 +317,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                     break;
                 }
 
-                cc_cb.set_cc_map(terrain.cc_configs);
+                symbols_cb.set_symbol(terrain.symbol_configs);
                 break;
             case 'P':
             case 'p': {
@@ -325,17 +325,17 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                     break;
                 }
 
-                auto &cc_cb_map = cc_cb.cc_map;
+                auto &symbols_cb_map = symbols_cb.symbols;
                 for (auto i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) {
-                    auto &cc_config = terrain.cc_configs.at(i);
-                    auto &cc = cc_cb_map.at(i);
-                    const auto has_character = cc.has_character();
-                    if ((cc.color != 0) || (!(cc.character & 0x80) && has_character)) {
-                        cc_config.color = cc.color;
+                    auto &symbol_config = terrain.symbol_configs.at(i);
+                    auto &symbol = symbols_cb_map.at(i);
+                    const auto has_character = symbol.has_character();
+                    if ((symbol.color != 0) || (!(symbol.character & 0x80) && has_character)) {
+                        symbol_config.color = symbol.color;
                     }
 
                     if (has_character) {
-                        cc_config.character = cc.character;
+                        symbol_config.character = symbol.character;
                     }
                 }
 

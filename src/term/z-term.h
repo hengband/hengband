@@ -191,13 +191,13 @@ private:
 /**** Available Variables ****/
 extern term_type *game_term;
 
-class ColoredChar;
-class ColoredCharPair;
+class DisplaySymbol;
+class DisplaySymbolPair;
 errr term_user(int n);
 errr term_xtra(int n, int v);
 
-void term_queue_char(TERM_LEN x, TERM_LEN y, const ColoredCharPair &ccp);
-void term_queue_bigchar(TERM_LEN x, TERM_LEN y, const ColoredCharPair &ccp);
+void term_queue_char(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pair);
+void term_queue_bigchar(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pair);
 void term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM_COLOR *ta, char *tc);
 
 errr term_fresh();
@@ -206,7 +206,7 @@ errr term_set_cursor(int v);
 errr term_gotoxy(TERM_LEN x, TERM_LEN y);
 errr term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
 errr term_addch(TERM_COLOR a, char c);
-void term_add_bigch(const ColoredChar &cc);
+void term_add_bigch(const DisplaySymbol &symbol);
 errr term_addstr(int n, TERM_COLOR a, std::string_view sv);
 errr term_putch(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
 errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, std::string_view sv);

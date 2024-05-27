@@ -406,10 +406,10 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
 void lite_spot(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     if (panel_contains(y, x) && in_bounds2(player_ptr->current_floor_ptr, y, x)) {
-        auto ccp = map_info(player_ptr, { y, x });
-        ccp.cc_foreground.color = get_monochrome_display_color(player_ptr).value_or(ccp.cc_foreground.color);
+        auto symbol_pair = map_info(player_ptr, { y, x });
+        symbol_pair.symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_pair.symbol_foreground.color);
 
-        term_queue_bigchar(panel_col_of(x), y - panel_row_prt, ccp);
+        term_queue_bigchar(panel_col_of(x), y - panel_row_prt, symbol_pair);
         static constexpr auto flags = {
             SubWindowRedrawingFlag::OVERHEAD,
             SubWindowRedrawingFlag::DUNGEON,

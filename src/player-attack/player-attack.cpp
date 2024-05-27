@@ -545,7 +545,7 @@ void exe_player_attack_to_monster(PlayerType *player_ptr, POSITION y, POSITION x
     player_attack_type tmp_attack(*player_ptr->current_floor_ptr, y, x, hand, mode, fear, mdeath);
     auto pa_ptr = &tmp_attack;
 
-    const auto is_human = (pa_ptr->r_ptr->cc_def.character == 'p');
+    const auto is_human = (pa_ptr->r_ptr->symbol_definition.character == 'p');
     const auto is_lowlevel = (pa_ptr->r_ptr->level < (player_ptr->lev - 15));
 
     attack_classify(player_ptr, pa_ptr);
@@ -557,8 +557,8 @@ void exe_player_attack_to_monster(PlayerType *player_ptr, POSITION y, POSITION x
 
     int chance = calc_attack_quality(player_ptr, pa_ptr);
     auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
-    const auto is_zantetsu_nullified = (o_ptr->is_specific_artifact(FixedArtifactId::ZANTETSU) && (pa_ptr->r_ptr->cc_def.character == 'j'));
-    const auto is_ej_nullified = (o_ptr->is_specific_artifact(FixedArtifactId::EXCALIBUR_J) && (pa_ptr->r_ptr->cc_def.character == 'S'));
+    const auto is_zantetsu_nullified = (o_ptr->is_specific_artifact(FixedArtifactId::ZANTETSU) && (pa_ptr->r_ptr->symbol_definition.character == 'j'));
+    const auto is_ej_nullified = (o_ptr->is_specific_artifact(FixedArtifactId::EXCALIBUR_J) && (pa_ptr->r_ptr->symbol_definition.character == 'S'));
     calc_num_blow(player_ptr, pa_ptr);
 
     /* Attack once for each legal blow */

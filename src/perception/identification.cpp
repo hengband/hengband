@@ -802,7 +802,7 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
         const auto &monrace = monraces_info[statue_r_idx];
         int namelen = strlen(monrace.name.data());
         prt(format("%s: '", monrace.name.data()), 1, 15);
-        term_queue_bigchar(18 + namelen, 1, { monrace.cc_config, {} });
+        term_queue_bigchar(18 + namelen, 1, { monrace.symbol_config, {} });
         prt("'", 1, (use_bigtile ? 20 : 19) + namelen);
     } else {
         prt(_("     アイテムの能力:", "     Item Attributes:"), 1, 15);

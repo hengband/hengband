@@ -287,8 +287,8 @@ static void print_health_monster_in_arena_for_wizard(PlayerType *player_ptr)
         auto &monster = player_ptr->current_floor_ptr->m_list[monster_list_index];
         if (MonsterRace(monster.r_idx).is_valid()) {
             const auto &monrace = monster.get_monrace();
-            const auto &cc_config = monrace.cc_config;
-            term_putstr(col - 2, row + row_offset, 2, cc_config.color, format("%c", cc_config.character));
+            const auto &symbol_config = monrace.symbol_config;
+            term_putstr(col - 2, row + row_offset, 2, symbol_config.color, format("%c", symbol_config.character));
             term_putstr(col - 1, row + row_offset, 5, TERM_WHITE, format("%5d", monster.hp));
             term_putstr(col + 5, row + row_offset, 6, TERM_WHITE, format("%5d", monster.max_maxhp));
         }

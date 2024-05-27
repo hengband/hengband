@@ -6,26 +6,26 @@
 
 #define FILE_NAME_SIZE 1024
 
-class ColoredChar;
-class ColoredCharsClipboard {
+class DisplaySymbol;
+class DisplaySymbolsClipboard {
 public:
-    ColoredCharsClipboard(const ColoredCharsClipboard &) = delete;
-    ColoredCharsClipboard(ColoredCharsClipboard &&) = delete;
-    ColoredCharsClipboard &operator=(const ColoredCharsClipboard &) = delete;
-    ColoredCharsClipboard &operator=(ColoredCharsClipboard &&) = delete;
-    ~ColoredCharsClipboard() = default;
+    DisplaySymbolsClipboard(const DisplaySymbolsClipboard &) = delete;
+    DisplaySymbolsClipboard(DisplaySymbolsClipboard &&) = delete;
+    DisplaySymbolsClipboard &operator=(const DisplaySymbolsClipboard &) = delete;
+    DisplaySymbolsClipboard &operator=(DisplaySymbolsClipboard &&) = delete;
+    ~DisplaySymbolsClipboard() = default;
 
-    static ColoredCharsClipboard &get_instance();
+    static DisplaySymbolsClipboard &get_instance();
 
-    ColoredChar cc;
-    std::map<int, ColoredChar> cc_map;
+    DisplaySymbol symbol;
+    std::map<int, DisplaySymbol> symbols;
 
-    void reset_cc_map();
-    void set_cc_map(const std::map<int, ColoredChar> &cc_config);
+    void reset_symbols();
+    void set_symbol(const std::map<int, DisplaySymbol> &symbol_configs);
 
 private:
-    ColoredCharsClipboard();
-    static ColoredCharsClipboard instance;
+    DisplaySymbolsClipboard();
+    static DisplaySymbolsClipboard instance;
 };
 
 bool visual_mode_command(char ch, bool *visual_list_ptr, int height, int width,

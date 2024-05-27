@@ -441,7 +441,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, co
         entry->add(FLG_UNIQUE);
     }
 
-    if (tval == ItemKindType::CORPSE && angband_strchr("pht", monraces_info[r_idx].cc_def.character)) {
+    if (tval == ItemKindType::CORPSE && angband_strchr("pht", monraces_info[r_idx].symbol_definition.character)) {
         entry->add(FLG_HUMAN);
     }
 

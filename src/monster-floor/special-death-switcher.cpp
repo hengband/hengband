@@ -429,7 +429,7 @@ static void on_dead_mimics(PlayerType *player_ptr, MonsterDeath *md_ptr)
         return;
     }
 
-    switch (md_ptr->r_ptr->cc_def.character) {
+    switch (md_ptr->r_ptr->symbol_definition.character) {
     case '(':
         if (player_ptr->current_floor_ptr->dun_level <= 0) {
             return;

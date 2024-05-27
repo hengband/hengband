@@ -9,27 +9,27 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
-ColoredCharsClipboard ColoredCharsClipboard::instance{};
+DisplaySymbolsClipboard DisplaySymbolsClipboard::instance{};
 
-ColoredCharsClipboard::ColoredCharsClipboard()
-    : cc()
-    , cc_map(DEFAULT_CC_MAP)
+DisplaySymbolsClipboard::DisplaySymbolsClipboard()
+    : symbol()
+    , symbols(DEFAULT_SYMBOLS)
 {
 }
 
-ColoredCharsClipboard &ColoredCharsClipboard::get_instance()
+DisplaySymbolsClipboard &DisplaySymbolsClipboard::get_instance()
 {
     return instance;
 }
 
-void ColoredCharsClipboard::reset_cc_map()
+void DisplaySymbolsClipboard::reset_symbols()
 {
-    this->cc_map = DEFAULT_CC_MAP;
+    this->symbols = DEFAULT_SYMBOLS;
 }
 
-void ColoredCharsClipboard::set_cc_map(const std::map<int, ColoredChar> &cc_config)
+void DisplaySymbolsClipboard::set_symbol(const std::map<int, DisplaySymbol> &symbol_configs)
 {
-    this->cc_map = cc_config;
+    this->symbols = symbol_configs;
 }
 
 /*!
@@ -52,7 +52,7 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
 {
     static TERM_COLOR attr_old = 0;
     static char char_old = 0;
-    auto &cc_cb = ColoredCharsClipboard::get_instance();
+    auto &symbols_cb = DisplaySymbolsClipboard::get_instance();
     switch (ch) {
     case ESCAPE: {
         if (!*visual_list_ptr) {
@@ -89,15 +89,15 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
     }
     case 'C':
     case 'c':
-        cc_cb.cc = { *cur_attr_ptr, *cur_char_ptr };
-        cc_cb.reset_cc_map();
+        symbols_cb.symbol = { *cur_attr_ptr, *cur_char_ptr };
+        symbols_cb.reset_symbols();
         return true;
     case 'P':
     case 'p': {
-        const auto &cc = cc_cb.cc;
-        const auto has_character = cc.has_character();
-        if (cc.color || (!(cc.character & 0x80) && has_character)) {
-            *cur_attr_ptr = cc.color;
+        const auto &symbols = symbols_cb.symbol;
+        const auto has_character = symbols.has_character();
+        if (symbols.color || (!(symbols.character & 0x80) && has_character)) {
+            *cur_attr_ptr = symbols.color;
             *attr_top_ptr = std::max<int8_t>(0, (*cur_attr_ptr & 0x7f) - 5);
             if (!*visual_list_ptr) {
                 *need_redraw = true;
@@ -106,7 +106,7 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
 
         if (has_character) {
             /* Set the char */
-            *cur_char_ptr = cc.character;
+            *cur_char_ptr = symbols.character;
             *char_left_ptr = std::max<int8_t>(0, *cur_char_ptr - 10);
             if (!*visual_list_ptr) {
                 *need_redraw = true;

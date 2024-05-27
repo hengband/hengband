@@ -16,7 +16,7 @@ constexpr auto F_LIT_DARK = 2; /* Darkened */
 constexpr auto F_LIT_MAX = 3;
 constexpr auto F_LIT_NS_BEGIN = 1; /* Nonstandard */
 
-const std::map<int, ColoredChar> DEFAULT_CC_MAP = { { F_LIT_STANDARD, {} }, { F_LIT_LITE, {} }, { F_LIT_DARK, {} } };
+const std::map<int, DisplaySymbol> DEFAULT_SYMBOLS = { { F_LIT_STANDARD, {} }, { F_LIT_LITE, {} }, { F_LIT_DARK, {} } };
 
 /*!
  * @brief 地形状態変化指定構造体
@@ -48,16 +48,16 @@ public:
     TerrainState state[MAX_FEAT_STATES]{}; /*!< TerrainState テーブル */
     FEAT_SUBTYPE subtype{}; /*!< 副特性値 */
     FEAT_POWER power{}; /*!< 地形強度 */
-    std::map<int, ColoredChar> cc_defs; //!< デフォルトの地形シンボル (色/文字).
-    std::map<int, ColoredChar> cc_configs; //!< 設定変更後の地形シンボル (色/文字).
+    std::map<int, DisplaySymbol> symbol_definitions; //!< デフォルトの地形シンボル (色/文字).
+    std::map<int, DisplaySymbol> symbol_configs; //!< 設定変更後の地形シンボル (色/文字).
 
     bool is_permanent_wall() const;
 
     void reset_lighting(bool is_config = true);
 
 private:
-    void reset_lighting_ascii(std::map<int, ColoredChar> &cc_map);
-    void reset_lighting_graphics(std::map<int, ColoredChar> &cc_map);
+    void reset_lighting_ascii(std::map<int, DisplaySymbol> &symbols);
+    void reset_lighting_graphics(std::map<int, DisplaySymbol> &symbols);
 };
 
 class TerrainList {

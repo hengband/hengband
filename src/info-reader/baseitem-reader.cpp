@@ -70,7 +70,7 @@ static errr set_baseitem_symbol(const nlohmann::json &symbol_data, BaseitemInfo 
     if (color->second > 127) {
         return PARSE_ERROR_GENERIC;
     }
-    baseitem.cc_def = ColoredChar(color->second, character_obj.get<std::string>().front());
+    baseitem.symbol_definition = DisplaySymbol(color->second, character_obj.get<std::string>().front());
 
     return PARSE_ERROR_NONE;
 }

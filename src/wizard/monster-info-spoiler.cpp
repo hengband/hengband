@@ -33,7 +33,7 @@ static std::string attr_to_text(const MonsterRaceInfo &monrace)
         return _("準ランダムな", "S.Rand");
     }
 
-    switch (monrace.cc_def.color) {
+    switch (monrace.symbol_definition.color) {
     case TERM_DARK:
         return _("黒い", "Dark");
     case TERM_WHITE:
@@ -123,7 +123,7 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
             hp = format("%dd%d", monrace.hdice, monrace.hside);
         }
 
-        const auto symbol = format("%s '%c'", attr_to_text(monrace).data(), monrace.cc_def.character);
+        const auto symbol = format("%s '%c'", attr_to_text(monrace).data(), monrace.symbol_definition.character);
         ofs << format("%-45.45s%4s %4s %4s %7s %7s  %19.19s\n",
             nam.data(), lev.data(), rar.data(), spd.data(), hp.data(),
             ac.data(), symbol.data());
@@ -178,7 +178,7 @@ SpoilerOutputResultType spoil_mon_info()
 
         spoil_out(format(_("%s/%s  (", "%s%s ("), monrace.name.data(), _(monrace.E_name.data(), ""))); /* ---)--- */
         spoil_out(attr_to_text(monrace));
-        spoil_out(format(" '%c')\n", monrace.cc_def.character));
+        spoil_out(format(" '%c')\n", monrace.symbol_definition.character));
         spoil_out("=== ");
         spoil_out(format("Num:%d  ", enum2i(monrace_id)));
         spoil_out(format("Lev:%d  ", (int)monrace.level));

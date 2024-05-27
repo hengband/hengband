@@ -128,7 +128,7 @@ public:
     };
 
     std::array<alloc_table, 4> alloc_tables{}; /*!< ベースアイテムの生成テーブル */
-    ColoredChar cc_def; //!< 定義上のシンボル (色/文字).
+    DisplaySymbol symbol_definition; //!< 定義上のシンボル (色/文字).
     bool easy_know{}; /*!< ベースアイテムが初期からベース名を判断可能かどうか / This object is always known (if aware) */
     RandomArtActType act_idx{}; /*!< 発動能力のID /  Activative ability index */
 
@@ -138,7 +138,7 @@ public:
 
     /* @todo ここから下はBaseitemDefinitions.txt に依存しないミュータブルなフィールド群なので、将来的に分離予定 */
 
-    ColoredChar cc_config; //!< ユーザ個別の設定シンボル (色/文字).
+    DisplaySymbol symbol_config; //!< ユーザ個別の設定シンボル (色/文字).
 
     IDX flavor{}; /*!< 未鑑定名の何番目を当てるか(0は未鑑定名なし) / Special object flavor (or zero) */
     bool aware{}; /*!< ベースアイテムが鑑定済かどうか /  The player is "aware" of the item's effects */

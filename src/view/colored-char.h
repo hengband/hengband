@@ -8,25 +8,25 @@
 
 #include <cstdint>
 
-class ColoredChar {
+class DisplaySymbol {
 public:
-    constexpr ColoredChar()
-        : ColoredChar(0, '\0')
+    constexpr DisplaySymbol()
+        : DisplaySymbol(0, '\0')
     {
     }
 
-    constexpr ColoredChar(uint8_t color, char character)
+    constexpr DisplaySymbol(uint8_t color, char character)
         : color(color)
         , character(character)
     {
     }
 
-    bool operator==(const ColoredChar &other) const
+    bool operator==(const DisplaySymbol &other) const
     {
         return (this->color == other.color) && (this->character == other.character);
     }
 
-    bool operator!=(const ColoredChar &other) const
+    bool operator!=(const DisplaySymbol &other) const
     {
         return !(*this == other);
     }
@@ -41,14 +41,14 @@ public:
     }
 };
 
-class ColoredCharPair {
+class DisplaySymbolPair {
 public:
-    constexpr ColoredCharPair(const ColoredChar &cc_foreground, const ColoredChar &cc_background)
-        : cc_foreground(cc_foreground)
-        , cc_background(cc_background)
+    constexpr DisplaySymbolPair(const DisplaySymbol &symbol_foreground, const DisplaySymbol &symbol_background)
+        : symbol_foreground(symbol_foreground)
+        , symbol_background(symbol_background)
     {
     }
 
-    ColoredChar cc_foreground;
-    ColoredChar cc_background;
+    DisplaySymbol symbol_foreground;
+    DisplaySymbol symbol_background;
 };

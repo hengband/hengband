@@ -245,7 +245,7 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MonsterRaceId r_idx
         return false;
     }
 
-    if (z_ptr->cc_def.character != r_ptr->cc_def.character) {
+    if (z_ptr->symbol_definition.character != r_ptr->symbol_definition.character) {
         return false;
     }
 
@@ -382,7 +382,7 @@ bool place_random_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FL
 
     auto try_become_jural = one_in_(5) || !floor.is_in_underground();
     try_become_jural &= monraces_info[r_idx].kind_flags.has_not(MonsterKindType::UNIQUE);
-    try_become_jural &= angband_strchr("hkoptuyAHLOPTUVY", monraces_info[r_idx].cc_def.character) != nullptr;
+    try_become_jural &= angband_strchr("hkoptuyAHLOPTUVY", monraces_info[r_idx].symbol_definition.character) != nullptr;
     if (try_become_jural) {
         mode |= PM_JURAL;
     }
@@ -458,7 +458,7 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
     }
 
     const auto &monrace = monentity.mflag2.has(MonsterConstantFlagType::CHAMELEON) ? monentity.get_monrace() : monraces_info[*r_idx];
-    msg_format(_("モンスターの大群(%c)", "Monster horde (%c)."), monrace.cc_def.character);
+    msg_format(_("モンスターの大群(%c)", "Monster horde (%c)."), monrace.symbol_definition.character);
     return true;
 }
 

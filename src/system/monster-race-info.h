@@ -109,8 +109,8 @@ public:
     EXP next_exp{}; //!< 進化に必要な経験値
     DEPTH level{}; //!< レベル / Level of creature
     RARITY rarity{}; //!< レアリティ / Rarity of creature
-    ColoredChar cc_def{}; //!< 定義上のシンボル (色/文字).
-    ColoredChar cc_config{}; //!< 設定したシンボル (色/文字).
+    DisplaySymbol symbol_definition{}; //!< 定義上のシンボル (色/文字).
+    DisplaySymbol symbol_config{}; //!< 設定したシンボル (色/文字).
     MONSTER_NUMBER max_num{}; //!< 階に最大存在できる数 / Maximum population allowed per level
     MONSTER_NUMBER cur_num{}; //!< 階に現在いる数 / Monster population on current level
     FLOOR_IDX floor_id{}; //!< 存在している保存階ID /  Location of unique monster

@@ -80,7 +80,7 @@ static std::vector<MonsterRaceId> collect_monsters(PlayerType *player_ptr, IDX g
                 continue;
             }
         } else {
-            if (angband_strchr(group_char, monrace.cc_def.character) == nullptr) {
+            if (angband_strchr(group_char, monrace.symbol_definition.character) == nullptr) {
                 continue;
             }
         }
@@ -201,7 +201,7 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
         }
 
 #ifdef JP
-        const auto number_of_kills = angband_strchr("pt", monrace.cc_def.character) ? "人" : "体";
+        const auto number_of_kills = angband_strchr("pt", monrace.symbol_definition.character) ? "人" : "体";
         fprintf(fff, "     %3d %sの %s\n", this_monster, number_of_kills, monrace.name.data());
 #else
         if (this_monster < 2) {
@@ -240,9 +240,9 @@ static void display_monster_list(int col, int row, int per_page, const std::vect
         const auto &monrace = monraces_info[monrace_id];
         const auto color = ((i + mon_top == mon_cur) ? TERM_L_BLUE : TERM_WHITE);
         c_prt(color, (monrace.name.data()), row + i, col);
-        const auto &cc_config = monrace.cc_config;
+        const auto &symbol_config = monrace.symbol_config;
         if (per_page == 1) {
-            c_prt(color, format("%02x/%02x", cc_config.color, cc_config.character), row + i, (w_ptr->wizard || visual_only) ? 56 : 61);
+            c_prt(color, format("%02x/%02x", symbol_config.color, symbol_config.character), row + i, (w_ptr->wizard || visual_only) ? 56 : 61);
         }
 
         if (w_ptr->wizard || visual_only) {
@@ -250,7 +250,7 @@ static void display_monster_list(int col, int row, int per_page, const std::vect
         }
 
         term_erase(69, row + i);
-        term_queue_bigchar(use_bigtile ? 69 : 70, row + i, { cc_config, {} });
+        term_queue_bigchar(use_bigtile ? 69 : 70, row + i, { symbol_config, {} });
         if (!visual_only) {
             if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
                 put_str(format("%5d", monrace.r_pkills), row + i, 73);
@@ -303,9 +303,9 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
     } else {
         r_idx_list.push_back(*direct_r_idx);
         auto &monrace = monraces_info[*direct_r_idx];
-        auto &cc_config = monrace.cc_config;
+        auto &symbol_config = monrace.symbol_config;
         (void)visual_mode_command('v', &visual_list, browser_rows - 1, wid - (max + 3),
-            &color_top, &character_left, &cc_config.color, &cc_config.character, need_redraw);
+            &color_top, &character_left, &symbol_config.color, &symbol_config.character, need_redraw);
     }
 
     grp_idx.push_back(-1); // Sentinel
@@ -318,7 +318,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
     int column = 0;
     bool flag = false;
     bool redraw = true;
-    const auto &cc_cb = ColoredCharsClipboard::get_instance();
+    const auto &symbols_cb = DisplaySymbolsClipboard::get_instance();
     while (!flag) {
         if (redraw) {
             clear_from(0);
@@ -383,22 +383,22 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
         prt(format(_("%lu 種", "%lu Races"), r_idx_list.size()), 3, 26);
         prt(format(_("<方向>%s%s%s, ESC", "<dir>%s%s%s, ESC"), (!visual_list && !visual_only) ? _(", 'r'で思い出を見る", ", 'r' to recall") : "",
                 visual_list ? _(", ENTERで決定", ", ENTER to accept") : _(", 'v'でシンボル変更", ", 'v' for visuals"),
-                (cc_cb.cc != ColoredChar()) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
+                (symbols_cb.symbol != DisplaySymbol()) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
             hgt - 1, 0);
 
-        ColoredChar cc_dummy;
-        auto *cc_ptr = &cc_dummy;
+        DisplaySymbol symbol_dummy;
+        auto *symbol_ptr = &symbol_dummy;
         if (!r_idx_list.empty()) {
             auto &monrace = monraces_info[r_idx_list[mon_cur]];
-            cc_ptr = &monrace.cc_config;
+            symbol_ptr = &monrace.symbol_config;
             if (!visual_only) {
                 monster_race_track(player_ptr, r_idx_list[mon_cur]);
                 handle_stuff(player_ptr);
             }
 
             if (visual_list) {
-                const auto &cc_config = monrace.cc_config;
-                place_visual_list_cursor(max + 3, 7, cc_config.color, cc_config.character, color_top, character_left);
+                const auto &symbol_config = monrace.symbol_config;
+                place_visual_list_cursor(max + 3, 7, symbol_config.color, symbol_config.character, color_top, character_left);
             } else if (!column) {
                 term_gotoxy(0, 6 + (grp_cur - grp_top));
             } else {
@@ -407,7 +407,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
         }
 
         char ch = inkey();
-        if (visual_mode_command(ch, &visual_list, browser_rows - 1, wid - (max + 3), &color_top, &character_left, &cc_ptr->color, &cc_ptr->character, need_redraw)) {
+        if (visual_mode_command(ch, &visual_list, browser_rows - 1, wid - (max + 3), &color_top, &character_left, &symbol_ptr->color, &symbol_ptr->character, need_redraw)) {
             if (direct_r_idx) {
                 switch (ch) {
                 case '\n':

@@ -15,7 +15,7 @@ void reset_visuals(PlayerType *player_ptr)
 {
     for (auto &terrain : TerrainList::get_instance()) {
         for (int j = 0; j < F_LIT_MAX; j++) {
-            terrain.cc_configs[j] = terrain.cc_defs[j];
+            terrain.symbol_configs[j] = terrain.symbol_definitions[j];
         }
     }
 

@@ -157,7 +157,7 @@ static errr set_mon_symbol(const nlohmann::json &symbol_data, MonsterRaceInfo &m
         return PARSE_ERROR_GENERIC;
     }
 
-    monrace.cc_def = { color->second, character_obj.get<std::string>().front() };
+    monrace.symbol_definition = { color->second, character_obj.get<std::string>().front() };
     return PARSE_ERROR_NONE;
 }
 

@@ -62,11 +62,11 @@ static bool interpret_r_token(char *buf)
     auto &monrace = monraces_info[i2enum<MonsterRaceId>(i)];
     /* Allow TERM_DARK text */
     if (n1 || (!(n2 & 0x80) && n2)) {
-        monrace.cc_config.color = n1;
+        monrace.symbol_config.color = n1;
     }
 
     if (n2) {
-        monrace.cc_config.character = n2;
+        monrace.symbol_config.character = n2;
     }
 
     return true;
@@ -95,11 +95,11 @@ static bool interpret_k_token(char *buf)
     /* Allow TERM_DARK text */
     auto &baseitem = baseitems.get_baseitem(i);
     if ((color > 0) || (((character & 0x80) == 0) && (character != '\0'))) {
-        baseitem.cc_config.color = color;
+        baseitem.symbol_config.color = color;
     }
 
     if (character != '\0') {
-        baseitem.cc_config.character = character;
+        baseitem.symbol_config.character = character;
     }
 
     return true;
@@ -120,19 +120,19 @@ static void decide_feature_type(int i, int num, char **zz)
 
     /* Allow TERM_DARK text */
     if ((color_token > 0) || (!(character_token & 0x80) && has_character_token)) {
-        terrain.cc_configs[F_LIT_STANDARD].color = color_token;
+        terrain.symbol_configs[F_LIT_STANDARD].color = color_token;
     }
 
     if (has_character_token) {
-        terrain.cc_configs[F_LIT_STANDARD].character = character_token;
+        terrain.symbol_configs[F_LIT_STANDARD].character = character_token;
     }
 
     switch (num) {
     case 3: {
         /* No lighting support */
-        const auto &cc = terrain.cc_configs.at(F_LIT_STANDARD);
+        const auto &symbol = terrain.symbol_configs.at(F_LIT_STANDARD);
         for (auto j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
-            terrain.cc_configs[j] = cc;
+            terrain.symbol_configs[j] = symbol;
         }
 
         return;
@@ -146,15 +146,15 @@ static void decide_feature_type(int i, int num, char **zz)
             const auto color = static_cast<uint8_t>(std::stoi(zz[j * 2 + 1], nullptr, 0));
             const auto character = static_cast<char>(std::stoi(zz[j * 2 + 2], nullptr, 0));
             const auto has_character = character != '\0';
-            auto &cc = terrain.cc_configs[j];
+            auto &symbol = terrain.symbol_configs[j];
 
             /* Allow TERM_DARK text */
             if ((color != 0) || (!(character & 0x80) && has_character)) {
-                cc.color = color;
+                symbol.color = color;
             }
 
             if (has_character) {
-                cc.character = character;
+                symbol.character = character;
             }
         }
 
@@ -233,11 +233,11 @@ static bool interpret_u_token(char *buf)
     for (auto &baseitem : BaseitemList::get_instance()) {
         if (baseitem.is_valid() && (baseitem.bi_key.tval() == tval)) {
             if (n1) {
-                baseitem.cc_def.color = n1;
+                baseitem.symbol_definition.color = n1;
             }
 
             if (n2) {
-                baseitem.cc_def.character = n2;
+                baseitem.symbol_definition.character = n2;
             }
         }
     }
