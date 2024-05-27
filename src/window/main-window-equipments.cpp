@@ -110,9 +110,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
         put_str(tmp_val, j + 1, col);
         int cur_col = col + 3;
         if (show_item_graph) {
-            const auto a = o_ptr->get_color();
-            const auto c = o_ptr->get_symbol();
-            term_queue_bigchar(cur_col, j + 1, { { a, c }, {} });
+            term_queue_bigchar(cur_col, j + 1, { o_ptr->get_symbol(), {} });
             if (use_bigtile) {
                 cur_col++;
             }

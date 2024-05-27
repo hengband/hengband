@@ -594,44 +594,14 @@ bool ItemEntity::can_pile(const ItemEntity *j_ptr) const
     return true;
 }
 
-/*
- * @brief アイテムの色を取得する
- * @details 未鑑定名のあるアイテム (薬等)は、未鑑定名の割り当てられた色を返す
- * 未鑑定名のないアイテム (魔法書等)はベースアイテム定義そのままを返す
- * その中でモンスターの死体以外は、ベースアイテムの色を返す
- * モンスターの死体は、元モンスターの色を返す
- * 異常アイテム (「何か」)の場合、ベースアイテム定義に基づき黒を返す
+/*!
+ * @brief アイテムのシンボルを取得する
+ * @return シンボル
+ * @details シンボル変更コマンドの影響を受けたくないので毎回ベースアイテムからシンボルを引っ張って返す.
  */
-TERM_COLOR ItemEntity::get_color() const
+DisplaySymbol ItemEntity::get_symbol() const
 {
-    const auto &baseitem = this->get_baseitem();
-    const auto flavor = baseitem.flavor;
-    if (flavor != 0) {
-        return BaseitemList::get_instance().get_baseitem(flavor).symbol_config.color;
-    }
-
-    const auto &symbol_config = baseitem.symbol_config;
-    auto has_attr = this->is_valid();
-    has_attr &= this->is_corpse();
-    has_attr &= symbol_config.color == TERM_DARK;
-    if (!has_attr) {
-        return symbol_config.color;
-    }
-
-    return monraces_info[i2enum<MonsterRaceId>(this->pval)].symbol_config.color;
-}
-
-/*
- * @brief アイテムシンボルを取得する
- * @details 未鑑定名のないアイテム (魔法書等)はベースアイテム定義そのまま
- * 未鑑定名のあるアイテム (薬等)は、未鑑定名の割り当てられたシンボル
- * 以上について、設定で変更しているシンボルならばそれを、していないならば定義シンボルを返す
- */
-char ItemEntity::get_symbol() const
-{
-    const auto &baseitem = this->get_baseitem();
-    const auto flavor = baseitem.flavor;
-    return flavor ? BaseitemList::get_instance().get_baseitem(flavor).symbol_config.character : baseitem.symbol_config.character;
+    return { this->get_color(), this->get_character() };
 }
 
 /*!
@@ -1122,4 +1092,44 @@ std::string ItemEntity::build_activation_description_dragon_breath() const
 {
     const auto flags = this->get_flags();
     return DragonBreaths::build_description(flags);
+}
+
+/*
+ * @brief アイテムの色を取得する
+ * @details 未鑑定名のあるアイテム (薬等)は、未鑑定名の割り当てられた色を返す
+ * 未鑑定名のないアイテム (魔法書等)はベースアイテム定義そのままを返す
+ * その中でモンスターの死体以外は、ベースアイテムの色を返す
+ * モンスターの死体は、元モンスターの色を返す
+ * 異常アイテム (「何か」)の場合、ベースアイテム定義に基づき黒を返す
+ */
+uint8_t ItemEntity::get_color() const
+{
+    const auto &baseitem = this->get_baseitem();
+    const auto flavor = baseitem.flavor;
+    if (flavor != 0) {
+        return BaseitemList::get_instance().get_baseitem(flavor).symbol_config.color;
+    }
+
+    const auto &symbol_config = baseitem.symbol_config;
+    auto has_attr = this->is_valid();
+    has_attr &= this->is_corpse();
+    has_attr &= symbol_config.color == TERM_DARK;
+    if (!has_attr) {
+        return symbol_config.color;
+    }
+
+    return monraces_info[i2enum<MonsterRaceId>(this->pval)].symbol_config.color;
+}
+
+/*
+ * @brief アイテムシンボルを取得する
+ * @details 未鑑定名のないアイテム (魔法書等)はベースアイテム定義そのまま
+ * 未鑑定名のあるアイテム (薬等)は、未鑑定名の割り当てられたシンボル
+ * 以上について、設定で変更しているシンボルならばそれを、していないならば定義シンボルを返す
+ */
+char ItemEntity::get_character() const
+{
+    const auto &baseitem = this->get_baseitem();
+    const auto flavor = baseitem.flavor;
+    return flavor ? BaseitemList::get_instance().get_baseitem(flavor).symbol_config.character : baseitem.symbol_config.character;
 }

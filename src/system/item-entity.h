@@ -27,6 +27,7 @@ enum class RandomArtActType : short;
 class ActivationType;
 class ArtifactType;
 class BaseitemInfo;
+class DisplaySymbol;
 class EgoItemDefinition;
 class ItemEntity {
 public:
@@ -126,8 +127,7 @@ public:
     bool is_spell_book() const;
     bool is_glove_same_temper(const ItemEntity *j_ptr) const;
     bool can_pile(const ItemEntity *j_ptr) const;
-    TERM_COLOR get_color() const;
-    char get_symbol() const;
+    DisplaySymbol get_symbol() const;
     int get_price() const;
     bool is_specific_artifact(FixedArtifactId id) const;
     bool has_unidentified_name() const;
@@ -169,4 +169,6 @@ private:
     std::string build_timeout_description(const ActivationType &act) const;
     std::string build_activation_description(const ActivationType &act) const;
     std::string build_activation_description_dragon_breath() const;
+    uint8_t get_color() const;
+    char get_character() const;
 };

@@ -412,9 +412,8 @@ void ObjectThrowEntity::check_racial_target_seen()
         return;
     }
 
-    const auto c = this->q_ptr->get_symbol();
-    const auto a = this->q_ptr->get_color();
-    print_rel(this->player_ptr, c, a, this->ny[this->cur_dis], this->nx[this->cur_dis]);
+    const auto symbol = this->q_ptr->get_symbol();
+    print_rel(this->player_ptr, symbol.character, symbol.color, this->ny[this->cur_dis], this->nx[this->cur_dis]);
     move_cursor_relative(this->ny[this->cur_dis], this->nx[this->cur_dis]);
     term_fresh();
     term_xtra(TERM_XTRA_DELAY, this->msec);
@@ -531,13 +530,12 @@ void ObjectThrowEntity::process_boomerang_throw()
             continue;
         }
 
-        const auto c = this->q_ptr->get_symbol();
-        const auto a = this->q_ptr->get_color();
         if (this->msec <= 0) {
             continue;
         }
 
-        print_rel(this->player_ptr, c, a, this->ny[i], this->nx[i]);
+        const auto symbol = this->q_ptr->get_symbol();
+        print_rel(this->player_ptr, symbol.character, symbol.color, this->ny[i], this->nx[i]);
         move_cursor_relative(this->ny[i], this->nx[i]);
         term_fresh();
         term_xtra(TERM_XTRA_DELAY, this->msec);
