@@ -111,13 +111,13 @@ void prt(std::string_view sv, TERM_LEN row, TERM_LEN col)
     c_prt(TERM_WHITE, sv, row, col);
 }
 
-static std::vector<std::pair<TERM_COLOR, char>> c_roff_wrap(int x, int y, int w, const char *s)
+static std::vector<DisplaySymbol> c_roff_wrap(int x, int y, int w, const char *s)
 {
     if (x >= w) {
         return {};
     }
 
-    std::vector<std::pair<TERM_COLOR, char>> wrap_chars;
+    std::vector<DisplaySymbol> wrap_chars;
     auto wrap_col = w;
 
     if (_(iskanji(*s), false)) {
@@ -202,8 +202,8 @@ void c_roff(TERM_COLOR a, std::string_view str)
             }
 
             term_erase(0, y);
-            for (const auto &[ca, cv] : wrap_chars) {
-                term_addch({ ca, cv });
+            for (const auto &symbol : wrap_chars) {
+                term_addch(symbol);
             }
             x = wrap_chars.size();
         }
