@@ -33,7 +33,6 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
-#include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -119,7 +118,7 @@ static void spell_damcalc(PlayerType *player_ptr, MonsterEntity *m_ptr, Attribut
         break;
 
     case AttributeType::MONSTER_SHOOT:
-        if (!player_ptr->effects()->blindness()->is_blind() && (has_invuln_arrow(player_ptr))) {
+        if (!player_ptr->effects()->blindness().is_blind() && (has_invuln_arrow(player_ptr))) {
             dam = 0;
             ignore_wraith_form = true;
         }

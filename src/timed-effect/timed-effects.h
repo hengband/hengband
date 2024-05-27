@@ -1,9 +1,9 @@
 #pragma once
 
+#include "timed-effect/player-blindness.h"
 #include <memory>
 
 class PlayerAcceleration;
-class PlayerBlindness;
 class PlayerConfusion;
 class PlayerDeceleration;
 class PlayerFear;
@@ -15,9 +15,14 @@ class PlayerStun;
 class TimedEffects {
 public:
     TimedEffects();
-    virtual ~TimedEffects() = default;
+    ~TimedEffects() = default;
+    TimedEffects(const TimedEffects &) = delete;
+    TimedEffects(TimedEffects &&) = delete;
+    TimedEffects &operator=(const TimedEffects &) = delete;
+    TimedEffects &operator=(TimedEffects &&) = delete;
 
-    std::shared_ptr<PlayerBlindness> blindness() const;
+    PlayerBlindness &blindness();
+    const PlayerBlindness &blindness() const;
     std::shared_ptr<PlayerConfusion> confusion() const;
     std::shared_ptr<PlayerCut> cut() const;
     std::shared_ptr<PlayerFear> fear() const;
@@ -29,7 +34,7 @@ public:
     std::shared_ptr<PlayerPoison> poison() const;
 
 private:
-    std::shared_ptr<PlayerBlindness> player_blindness;
+    PlayerBlindness player_blindness{};
     std::shared_ptr<PlayerConfusion> player_confusion;
     std::shared_ptr<PlayerCut> player_cut;
     std::shared_ptr<PlayerFear> player_fear;

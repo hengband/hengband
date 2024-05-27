@@ -46,7 +46,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "target/target-checker.h"
-#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
@@ -108,7 +107,7 @@ void search(PlayerType *player_ptr)
 {
     PERCENTAGE chance = player_ptr->skill_srh;
     const auto effects = player_ptr->effects();
-    if (effects->blindness()->is_blind() || no_lite(player_ptr)) {
+    if (effects->blindness().is_blind() || no_lite(player_ptr)) {
         chance = chance / 10;
     }
 
@@ -186,7 +185,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
             SubWindowRedrawingFlag::DUNGEON,
         };
         rfu.set_flags(flags_swrf);
-        if ((!player_ptr->effects()->blindness()->is_blind() && !no_lite(player_ptr)) || !is_trap(player_ptr, grid_new.feat)) {
+        if ((!player_ptr->effects()->blindness().is_blind() && !no_lite(player_ptr)) || !is_trap(player_ptr, grid_new.feat)) {
             grid_new.info &= ~(CAVE_UNSAFE);
         }
 

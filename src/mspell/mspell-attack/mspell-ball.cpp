@@ -17,7 +17,6 @@
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
@@ -54,7 +53,7 @@ static bool message_water_ball(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTE
 
     if (mon_to_player) {
         msg_format(_("あなたは渦巻きに飲み込まれた。", "You are engulfed in a whirlpool."));
-    } else if (mon_to_mon && known && see_either && !player_ptr->effects()->blindness()->is_blind()) {
+    } else if (mon_to_mon && known && see_either && !player_ptr->effects()->blindness().is_blind()) {
         msg_format(_("%s^は渦巻に飲み込まれた。", "%s^ is engulfed in a whirlpool."), t_name.data());
     }
     return result;

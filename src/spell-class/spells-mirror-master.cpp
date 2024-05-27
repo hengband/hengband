@@ -37,7 +37,6 @@
 #include "target/grid-selector.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
-#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -286,7 +285,7 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
             const auto &[oy, ox] = *(path_g_ite == path_g.begin() ? path_g.begin() : path_g_ite - 1);
             const auto &[ny, nx] = *path_g_ite;
 
-            if (delay_factor > 0 && !this->player_ptr->effects()->blindness()->is_blind()) {
+            if (delay_factor > 0 && !this->player_ptr->effects()->blindness().is_blind()) {
                 if (panel_contains(ny, nx) && floor.has_los({ ny, nx })) {
                     print_bolt_pict(this->player_ptr, oy, ox, ny, nx, typ);
                     move_cursor_relative(ny, nx);

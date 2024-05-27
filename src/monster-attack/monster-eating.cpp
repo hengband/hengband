@@ -28,7 +28,6 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -205,7 +204,7 @@ void process_eat_lite(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         monap_ptr->o_ptr->fuel = 1;
     }
 
-    if (!player_ptr->effects()->blindness()->is_blind()) {
+    if (!player_ptr->effects()->blindness().is_blind()) {
         msg_print(_("明かりが暗くなってしまった。", "Your light dims."));
         monap_ptr->obvious = true;
     }

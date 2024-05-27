@@ -38,7 +38,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
-#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -463,7 +462,7 @@ static void decide_sight_invisible_monster(PlayerType *player_ptr, um_type *um_p
         update_specific_race_telepathy(player_ptr, um_ptr);
     }
 
-    if (!player_ptr->current_floor_ptr->has_los({ um_ptr->fy, um_ptr->fx }) || player_ptr->effects()->blindness()->is_blind()) {
+    if (!player_ptr->current_floor_ptr->has_los({ um_ptr->fy, um_ptr->fx }) || player_ptr->effects()->blindness().is_blind()) {
         return;
     }
 

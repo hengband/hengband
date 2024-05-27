@@ -21,7 +21,6 @@
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "term/term-color-types.h"
-#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -149,7 +148,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
         auto is_visible = any_bits(grid.info, (CAVE_MARK | CAVE_LITE | CAVE_MNLT));
         auto is_glowing = match_bits(grid.info, CAVE_GLOW | CAVE_MNDK, CAVE_GLOW);
         auto can_view = grid.is_view() && (is_glowing || player_ptr->see_nocto);
-        const auto is_blind = player_ptr->effects()->blindness()->is_blind();
+        const auto is_blind = player_ptr->effects()->blindness().is_blind();
         if (!is_blind && (is_visible || can_view)) {
             symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_STANDARD];
             if (player_ptr->wild_mode) {
@@ -181,7 +180,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
     } else {
         if (grid.is_mark() && is_revealed_wall(floor, pos)) {
             symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_STANDARD];
-            const auto is_blind = player_ptr->effects()->blindness()->is_blind();
+            const auto is_blind = player_ptr->effects()->blindness().is_blind();
             if (player_ptr->wild_mode) {
                 if (view_granite_lite && (is_blind || !w_ptr->is_daytime())) {
                     symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_DARK];

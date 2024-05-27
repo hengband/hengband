@@ -19,7 +19,6 @@
 #include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-deceleration.h"
@@ -57,8 +56,8 @@ bool BadStatusSetter::set_blindness(const TIME_EFFECT tmp_v)
     }
 
     PlayerRace pr(this->player_ptr);
-    const auto blindness = this->player_ptr->effects()->blindness();
-    const auto is_blind = blindness->is_blind();
+    auto &blindness = this->player_ptr->effects()->blindness();
+    const auto is_blind = blindness.is_blind();
     if (v > 0) {
         if (!is_blind) {
             if (pr.equals(PlayerRaceType::ANDROID)) {
@@ -82,7 +81,7 @@ bool BadStatusSetter::set_blindness(const TIME_EFFECT tmp_v)
         }
     }
 
-    blindness->set(v);
+    blindness.set(v);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
@@ -114,7 +113,7 @@ bool BadStatusSetter::set_blindness(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_blindness(const TIME_EFFECT tmp_v)
 {
-    return this->set_blindness(this->player_ptr->effects()->blindness()->current() + tmp_v);
+    return this->set_blindness(this->player_ptr->effects()->blindness().current() + tmp_v);
 }
 
 /*!

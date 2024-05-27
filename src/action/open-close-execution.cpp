@@ -28,7 +28,6 @@
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
@@ -62,7 +61,7 @@ bool exe_open(PlayerType *player_ptr, POSITION y, POSITION x)
 
     int i = player_ptr->skill_dis;
     const auto effects = player_ptr->effects();
-    if (effects->blindness()->is_blind() || no_lite(player_ptr)) {
+    if (effects->blindness().is_blind() || no_lite(player_ptr)) {
         i = i / 10;
     }
 
@@ -163,7 +162,7 @@ bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
     } else if (terrain.power) {
         auto power_disarm = player_ptr->skill_dis;
         const auto effects = player_ptr->effects();
-        if (effects->blindness()->is_blind() || no_lite(player_ptr)) {
+        if (effects->blindness().is_blind() || no_lite(player_ptr)) {
             power_disarm = power_disarm / 10;
         }
 
@@ -218,7 +217,7 @@ bool exe_disarm_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJECT_IDX
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     int i = player_ptr->skill_dis;
     const auto effects = player_ptr->effects();
-    if (effects->blindness()->is_blind() || no_lite(player_ptr)) {
+    if (effects->blindness().is_blind() || no_lite(player_ptr)) {
         i = i / 10;
     }
 
@@ -283,7 +282,7 @@ bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
     int i = player_ptr->skill_dis;
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     auto effects = player_ptr->effects();
-    if (effects->blindness()->is_blind() || no_lite(player_ptr)) {
+    if (effects->blindness().is_blind() || no_lite(player_ptr)) {
         i = i / 10;
     }
 

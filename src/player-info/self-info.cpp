@@ -30,7 +30,6 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
-#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-fear.h"
@@ -43,7 +42,7 @@
 static void set_bad_status_info(PlayerType *player_ptr, self_info_type *self_ptr)
 {
     auto effects = player_ptr->effects();
-    if (effects->blindness()->is_blind()) {
+    if (effects->blindness().is_blind()) {
         self_ptr->info_list.emplace_back(_("あなたは目が見えない。", "You cannot see."));
     }
 
@@ -323,9 +322,9 @@ void report_magics(PlayerType *player_ptr)
     concptr info[128];
     int info2[128];
     const auto effects = player_ptr->effects();
-    const auto blindness = effects->blindness();
-    if (blindness->is_blind()) {
-        info2[i] = report_magics_aux(blindness->current());
+    const auto &blindness = effects->blindness();
+    if (blindness.is_blind()) {
+        info2[i] = report_magics_aux(blindness.current());
         info[i++] = _("あなたは目が見えない", "You cannot see");
     }
 
