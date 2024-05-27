@@ -173,27 +173,28 @@ static void process_stats(PlayerType *player_ptr, int row, int stat_col)
  * @param stat 能力値番号
  * @param flags 装備品に立っているフラグ
  */
-static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, ItemEntity *o_ptr, tr_type tr_flag, const TrFlags &flags)
+static DisplaySymbol compensate_stat_by_weapon(uint8_t color, ItemEntity *o_ptr, tr_type tr_flag, const TrFlags &flags)
 {
-    *c = '*';
-
+    DisplaySymbol symbol(color, '*');
     if (o_ptr->pval > 0) {
-        *a = TERM_L_GREEN;
+        symbol.color = TERM_L_GREEN;
         if (o_ptr->pval < 10) {
-            *c = '0' + o_ptr->pval;
+            symbol.character = '0' + o_ptr->pval;
         }
     }
 
     if (flags.has(tr_flag)) {
-        *a = TERM_GREEN;
+        symbol.color = TERM_GREEN;
     }
 
     if (o_ptr->pval < 0) {
-        *a = TERM_RED;
+        symbol.color = TERM_RED;
         if (o_ptr->pval > -10) {
-            *c = '0' - o_ptr->pval;
+            symbol.character = '0' - o_ptr->pval;
         }
     }
+
+    return symbol;
 }
 
 /*!
@@ -212,7 +213,7 @@ static void display_equipments_compensation(PlayerType *player_ptr, int row, int
         for (int stat = 0; stat < A_MAX; stat++) {
             DisplaySymbol symbol(TERM_SLATE, '.');
             if (flags.has(TR_STATUS_LIST[stat])) {
-                compensate_stat_by_weapon(&symbol.character, &symbol.color, o_ptr, TR_SUST_STATUS_LIST[stat], flags);
+                symbol = compensate_stat_by_weapon(symbol.color, o_ptr, TR_SUST_STATUS_LIST[stat], flags);
             } else if (flags.has(TR_SUST_STATUS_LIST[stat])) {
                 symbol = { TERM_GREEN, 's' };
             }
