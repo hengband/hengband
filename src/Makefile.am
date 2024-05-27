@@ -982,7 +982,6 @@ hengband_SOURCES = \
 	util/sha256.cpp util/sha256.h \
 	util/string-processor.cpp util/string-processor.h \
 	\
-	view/colored-char.h \
 	view/display-birth.cpp view/display-birth.h \
 	view/display-characteristic.cpp view/display-characteristic.h \
 	view/display-fruit.cpp view/display-fruit.h \
@@ -1002,6 +1001,7 @@ hengband_SOURCES = \
 	view/display-scores.cpp view/display-scores.h \
 	view/display-self-info.cpp view/display-self-info.h \
 	view/display-store.cpp view/display-store.h \
+	view/display-symbol.h \
 	view/display-util.cpp view/display-util.h \
 	view/object-describer.cpp view/object-describer.h \
 	view/status-first-page.cpp view/status-first-page.h \

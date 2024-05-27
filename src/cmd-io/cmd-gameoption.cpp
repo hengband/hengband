@@ -24,8 +24,8 @@
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
-#include "view/colored-char.h"
 #include "view/display-messages.h"
+#include "view/display-symbol.h"
 #include "world/world.h"
 
 #define OPT_NUM 15

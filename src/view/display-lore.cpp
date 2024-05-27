@@ -23,8 +23,8 @@
 #include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
-#include "view/colored-char.h"
 #include "view/display-messages.h"
+#include "view/display-symbol.h"
 #include "world/world.h"
 
 /*!

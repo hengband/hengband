@@ -2,8 +2,8 @@
 #include "io/input-key-acceptor.h"
 #include "locale/japanese.h"
 #include "term/term-color-types.h"
-#include "view/colored-char.h"
 #include "view/display-messages.h"
+#include "view/display-symbol.h"
 #include "world/world.h"
 
 /*

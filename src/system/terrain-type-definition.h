@@ -3,7 +3,7 @@
 #include "grid/feature-flag-types.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
-#include "view/colored-char.h"
+#include "view/display-symbol.h"
 #include <map>
 
 /* Number of feats we change to (Excluding default). Used in TerrainDefinitions.txt. */

@@ -14,7 +14,7 @@
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "term/z-virt.h"
-#include "view/colored-char.h"
+#include "view/display-symbol.h"
 
 /* Special flags in the attr data */
 #define AF_BIGTILE2 0xf0

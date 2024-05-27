@@ -25,7 +25,7 @@
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
-#include "view/colored-char.h"
+#include "view/display-symbol.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
 #include <algorithm>
