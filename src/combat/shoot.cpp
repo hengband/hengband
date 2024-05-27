@@ -674,7 +674,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
                 /* Draw, Hilite, Fresh, Pause, Erase */
                 if (delay_factor > 0) {
-                    print_rel(player_ptr, symbol.character, symbol.color, ny, nx);
+                    print_rel(player_ptr, symbol, ny, nx);
                     move_cursor_relative(ny, nx);
                     term_fresh();
                     term_xtra(TERM_XTRA_DELAY, delay_factor);
