@@ -25,7 +25,6 @@
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "term/z-form.h"
-#include "timed-effect/player-cut.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
@@ -113,7 +112,7 @@ bool pattern_effect(PlayerType *player_ptr)
         return false;
     }
 
-    auto is_cut = player_ptr->effects()->cut()->is_cut();
+    const auto is_cut = player_ptr->effects()->cut().is_cut();
     if ((PlayerRace(player_ptr).equals(PlayerRaceType::AMBERITE)) && is_cut && one_in_(10)) {
         wreck_the_pattern(player_ptr);
     }

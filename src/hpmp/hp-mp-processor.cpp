@@ -40,7 +40,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
-#include "timed-effect/player-cut.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -126,9 +125,9 @@ void process_player_hp_mp(PlayerType *player_ptr)
         }
     }
 
-    const auto player_cut = effects->cut();
-    if (player_cut->is_cut() && !is_invuln(player_ptr)) {
-        auto dam = player_cut->get_damage();
+    const auto &player_cut = effects->cut();
+    if (player_cut.is_cut() && !is_invuln(player_ptr)) {
+        const auto dam = player_cut.get_damage();
         if (take_hit(player_ptr, DAMAGE_NOESCAPE, dam, _("致命傷", "a mortal wound")) > 0) {
             sound(SOUND_DAMAGE_OVER_TIME);
         }
@@ -413,7 +412,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
     if (player_poison->is_poisoned()) {
         regen_amount = 0;
     }
-    if (player_cut->is_cut()) {
+    if (player_cut.is_cut()) {
         regen_amount = 0;
     }
     if (cave_no_regen) {

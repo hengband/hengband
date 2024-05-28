@@ -19,7 +19,6 @@
 #include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "timed-effect/player-cut.h"
 #include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
@@ -517,7 +516,7 @@ bool BadStatusSetter::set_cut(const TIME_EFFECT tmp_v)
     }
 
     auto notice = this->process_cut_effect(v);
-    this->player_ptr->effects()->cut()->set(v);
+    this->player_ptr->effects()->cut().set(v);
     if (!notice) {
         return false;
     }
@@ -535,7 +534,7 @@ bool BadStatusSetter::set_cut(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_cut(const TIME_EFFECT tmp_v)
 {
-    return this->set_cut(this->player_ptr->effects()->cut()->current() + tmp_v);
+    return this->set_cut(this->player_ptr->effects()->cut().current() + tmp_v);
 }
 
 bool BadStatusSetter::process_stun_effect(const short v)
@@ -627,9 +626,9 @@ void BadStatusSetter::decrease_int_wis(const short v)
 
 bool BadStatusSetter::process_cut_effect(const short v)
 {
-    auto player_cut = this->player_ptr->effects()->cut();
-    auto old_rank = player_cut->get_rank();
-    auto new_rank = player_cut->get_rank(v);
+    const auto &player_cut = this->player_ptr->effects()->cut();
+    auto old_rank = player_cut.get_rank();
+    auto new_rank = player_cut.get_rank(v);
     if (new_rank > old_rank) {
         this->decrease_charisma(new_rank, v);
         return true;

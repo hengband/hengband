@@ -25,7 +25,6 @@
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-acceleration.h"
-#include "timed-effect/player-cut.h"
 #include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
@@ -368,7 +367,7 @@ static void rd_status(PlayerType *player_ptr)
     effects->acceleration()->set(rd_s16b());
     effects->deceleration()->set(rd_s16b());
     effects->fear()->set(rd_s16b());
-    effects->cut()->set(rd_s16b());
+    effects->cut().set(rd_s16b());
     effects->stun()->set(rd_s16b());
     effects->poison()->set(rd_s16b());
     effects->hallucination()->set(rd_s16b());

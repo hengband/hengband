@@ -12,7 +12,6 @@
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-acceleration.h"
-#include "timed-effect/player-cut.h"
 #include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
@@ -170,7 +169,7 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(effects->acceleration()->current());
     wr_s16b(effects->deceleration()->current());
     wr_s16b(effects->fear()->current());
-    wr_s16b(effects->cut()->current());
+    wr_s16b(effects->cut().current());
     wr_s16b(effects->stun()->current());
     wr_s16b(effects->poison()->current());
     wr_s16b(effects->hallucination()->current());

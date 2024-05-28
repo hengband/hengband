@@ -23,7 +23,6 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
-#include "timed-effect/player-cut.h"
 #include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
@@ -79,13 +78,13 @@ void print_stat(PlayerType *player_ptr, int stat)
  */
 void print_cut(PlayerType *player_ptr)
 {
-    auto player_cut = player_ptr->effects()->cut();
-    if (!player_cut->is_cut()) {
+    const auto &player_cut = player_ptr->effects()->cut();
+    if (!player_cut.is_cut()) {
         put_str("            ", ROW_CUT, COL_CUT);
         return;
     }
 
-    auto [color, stat] = player_cut->get_expr();
+    auto [color, stat] = player_cut.get_expr();
     c_put_str(color, stat, ROW_CUT, COL_CUT);
 }
 

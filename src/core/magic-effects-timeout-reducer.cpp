@@ -18,7 +18,6 @@
 #include "status/temporary-resistance.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-acceleration.h"
-#include "timed-effect/player-cut.h"
 #include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
@@ -228,10 +227,10 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         (void)bss.mod_stun(-adjust);
     }
 
-    auto player_cut = effects->cut();
-    if (player_cut->is_cut()) {
+    auto &player_cut = effects->cut();
+    if (player_cut.is_cut()) {
         short adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
-        if (player_cut->get_rank() == PlayerCutRank::MORTAL) {
+        if (player_cut.get_rank() == PlayerCutRank::MORTAL) {
             adjust = 0;
         }
 
