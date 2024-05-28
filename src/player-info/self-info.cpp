@@ -30,7 +30,6 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
-#include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
@@ -46,7 +45,7 @@ static void set_bad_status_info(PlayerType *player_ptr, self_info_type *self_ptr
         self_ptr->info_list.emplace_back(_("あなたは目が見えない。", "You cannot see."));
     }
 
-    if (effects->confusion()->is_confused()) {
+    if (effects->confusion().is_confused()) {
         self_ptr->info_list.emplace_back(_("あなたは混乱している。", "You are confused."));
     }
 
@@ -326,9 +325,9 @@ void report_magics(PlayerType *player_ptr)
             _("あなたは目が見えない", "You cannot see"));
     }
 
-    const auto confusion = effects->confusion();
-    if (confusion->is_confused()) {
-        info.emplace_back(report_magics_aux(confusion->current()),
+    const auto &confusion = effects->confusion();
+    if (confusion.is_confused()) {
+        info.emplace_back(report_magics_aux(confusion.current()),
             _("あなたは混乱している", "You are confused"));
     }
 

@@ -47,7 +47,6 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-confusion.h"
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-stun.h"
@@ -201,7 +200,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
         health_track(player_ptr, g_ptr->m_idx);
     }
 
-    auto is_confused = effects->confusion()->is_confused();
+    auto is_confused = effects->confusion().is_confused();
     auto is_stunned = effects->stun()->is_stunned();
     if (is_female(*r_ptr) && !(is_stunned || is_confused || is_hallucinated || !m_ptr->ml)) {
         // @todo 「特定の武器を装備している」旨のメソッドを別途作る

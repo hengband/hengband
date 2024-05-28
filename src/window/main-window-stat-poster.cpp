@@ -23,7 +23,6 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
-#include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-fear.h"
@@ -466,7 +465,7 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_PARALYZE);
     }
 
-    if (effects->confusion()->is_confused()) {
+    if (effects->confusion().is_confused()) {
         ADD_BAR_FLAG(BAR_CONFUSE);
     }
 

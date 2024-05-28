@@ -44,7 +44,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-confusion.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -74,7 +73,7 @@ static void decide_activation_level(ae_type *ae_ptr)
 static void decide_chance_fail(PlayerType *player_ptr, ae_type *ae_ptr)
 {
     ae_ptr->chance = player_ptr->skill_dev;
-    if (player_ptr->effects()->confusion()->is_confused()) {
+    if (player_ptr->effects()->confusion().is_confused()) {
         ae_ptr->chance = ae_ptr->chance / 2;
     }
 

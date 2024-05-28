@@ -19,7 +19,6 @@
 #include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-fear.h"
@@ -33,7 +32,6 @@
 
 BadStatusSetter::BadStatusSetter(PlayerType *player_ptr)
     : player_ptr(player_ptr)
-    , player_confusion(player_ptr->effects()->confusion())
 {
 }
 
@@ -130,7 +128,7 @@ bool BadStatusSetter::set_confusion(const TIME_EFFECT tmp_v)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    auto is_confused = this->player_confusion->is_confused();
+    const auto is_confused = this->player_ptr->effects()->confusion().is_confused();
     if (v > 0) {
         if (!is_confused) {
             msg_print(_("あなたは混乱した！", "You are confused!"));
@@ -172,7 +170,7 @@ bool BadStatusSetter::set_confusion(const TIME_EFFECT tmp_v)
         }
     }
 
-    this->player_confusion->set(v);
+    this->player_ptr->effects()->confusion().set(v);
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
@@ -188,7 +186,7 @@ bool BadStatusSetter::set_confusion(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_confusion(const TIME_EFFECT tmp_v)
 {
-    return this->set_confusion(this->player_confusion->current() + tmp_v);
+    return this->set_confusion(this->player_ptr->effects()->confusion().current() + tmp_v);
 }
 
 /*!

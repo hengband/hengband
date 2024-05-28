@@ -41,7 +41,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
-#include "timed-effect/player-confusion.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
@@ -168,7 +167,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
         auto *r_ptr = &m_ptr->get_monrace();
         auto effects = player_ptr->effects();
         auto is_stunned = effects->stun()->is_stunned();
-        auto can_cast = !effects->confusion()->is_confused();
+        auto can_cast = !effects->confusion().is_confused();
         auto is_hallucinated = effects->hallucination()->is_hallucinated();
         can_cast &= !is_hallucinated;
         can_cast &= m_ptr->ml;
@@ -283,7 +282,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
             }
         } else {
             auto effects = player_ptr->effects();
-            auto is_confused = effects->confusion()->is_confused();
+            auto is_confused = effects->confusion().is_confused();
             auto is_stunned = effects->stun()->is_stunned();
             auto is_hallucinated = effects->hallucination()->is_hallucinated();
             if (boundary_floor(grid, terrain, terrain_mimic)) {
@@ -315,7 +314,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
 
     if (can_move && !pattern_seq(player_ptr, pos)) {
         auto effects = player_ptr->effects();
-        auto is_confused = effects->confusion()->is_confused();
+        auto is_confused = effects->confusion().is_confused();
         auto is_stunned = effects->stun()->is_stunned();
         auto is_hallucinated = effects->hallucination()->is_hallucinated();
         if (!(is_confused || is_stunned || is_hallucinated)) {

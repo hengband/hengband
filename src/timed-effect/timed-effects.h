@@ -1,10 +1,10 @@
 #pragma once
 
 #include "timed-effect/player-blindness.h"
+#include "timed-effect/player-confusion.h"
 #include <memory>
 
 class PlayerAcceleration;
-class PlayerConfusion;
 class PlayerDeceleration;
 class PlayerFear;
 class PlayerHallucination;
@@ -23,7 +23,8 @@ public:
 
     PlayerBlindness &blindness();
     const PlayerBlindness &blindness() const;
-    std::shared_ptr<PlayerConfusion> confusion() const;
+    PlayerConfusion &confusion();
+    const PlayerConfusion &confusion() const;
     std::shared_ptr<PlayerCut> cut() const;
     std::shared_ptr<PlayerFear> fear() const;
     std::shared_ptr<PlayerHallucination> hallucination() const;
@@ -35,7 +36,7 @@ public:
 
 private:
     PlayerBlindness player_blindness{};
-    std::shared_ptr<PlayerConfusion> player_confusion;
+    PlayerConfusion player_confusion{};
     std::shared_ptr<PlayerCut> player_cut;
     std::shared_ptr<PlayerFear> player_fear;
     std::shared_ptr<PlayerHallucination> player_hallucination;

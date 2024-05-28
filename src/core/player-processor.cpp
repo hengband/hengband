@@ -55,7 +55,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
@@ -179,7 +178,7 @@ void process_player(PlayerType *player_ptr)
     }
 
     const auto effects = player_ptr->effects();
-    if (player_ptr->riding && !effects->confusion()->is_confused() && !effects->blindness().is_blind()) {
+    if (player_ptr->riding && !effects->confusion().is_confused() && !effects->blindness().is_blind()) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
         auto *r_ptr = &m_ptr->get_monrace();
         if (m_ptr->is_asleep()) {

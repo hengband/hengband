@@ -46,7 +46,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "target/target-checker.h"
-#include "timed-effect/player-confusion.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -111,7 +110,7 @@ void search(PlayerType *player_ptr)
         chance = chance / 10;
     }
 
-    if (effects->confusion()->is_confused() || effects->hallucination()->is_hallucinated()) {
+    if (effects->confusion().is_confused() || effects->hallucination()->is_hallucinated()) {
         chance = chance / 10;
     }
 
