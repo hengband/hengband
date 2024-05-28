@@ -35,7 +35,6 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -485,7 +484,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
             if (grid.has_monster()) {
                 auto &monster = floor.m_list[grid.m_idx];
                 if (monster.ml) {
-                    if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
+                    if (!player_ptr->effects()->hallucination().is_hallucinated()) {
                         monster_race_track(player_ptr, monster.ap_r_idx);
                     }
 

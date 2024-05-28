@@ -20,7 +20,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
@@ -356,10 +355,10 @@ bool BadStatusSetter::hallucination(const TIME_EFFECT tmp_v)
         v = 0;
     }
 
-    auto hallucination = this->player_ptr->effects()->hallucination();
+    auto &hallucination = this->player_ptr->effects()->hallucination();
     if (v > 0) {
         set_tsuyoshi(this->player_ptr, 0, true);
-        if (!hallucination->is_hallucinated()) {
+        if (!hallucination.is_hallucinated()) {
             msg_print(_("ワーオ！何もかも虹色に見える！", "Oh, wow! Everything looks so cosmic now!"));
             reset_concentration(this->player_ptr, true);
 
@@ -367,13 +366,13 @@ bool BadStatusSetter::hallucination(const TIME_EFFECT tmp_v)
             notice = true;
         }
     } else {
-        if (hallucination->is_hallucinated()) {
+        if (hallucination.is_hallucinated()) {
             msg_print(_("やっとはっきりと物が見えるようになった。", "You can see clearly again."));
             notice = true;
         }
     }
 
-    hallucination->set(v);
+    hallucination.set(v);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
@@ -402,7 +401,7 @@ bool BadStatusSetter::hallucination(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_hallucination(const TIME_EFFECT tmp_v)
 {
-    return this->hallucination(this->player_ptr->effects()->hallucination()->current() + tmp_v);
+    return this->hallucination(this->player_ptr->effects()->hallucination().current() + tmp_v);
 }
 
 /*!

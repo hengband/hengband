@@ -28,7 +28,6 @@
 #include "system/terrain-type-definition.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -57,7 +56,7 @@ static bool exe_open_chest(PlayerType *player_ptr, const Pos2D &pos, OBJECT_IDX 
             i = i / 10;
         }
 
-        if (effects->confusion().is_confused() || effects->hallucination()->is_hallucinated()) {
+        if (effects->confusion().is_confused() || effects->hallucination().is_hallucinated()) {
             i = i / 10;
         }
 

@@ -24,7 +24,6 @@
 #include "term/term-color-types.h"
 #include "term/z-form.h"
 #include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
@@ -451,7 +450,7 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_TSUYOSHI);
     }
 
-    if (effects->hallucination()->is_hallucinated()) {
+    if (effects->hallucination().is_hallucinated()) {
         ADD_BAR_FLAG(BAR_HALLUCINATION);
     }
 

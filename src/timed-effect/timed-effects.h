@@ -4,11 +4,11 @@
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-fear.h"
+#include "timed-effect/player-hallucination.h"
 #include <memory>
 
 class PlayerAcceleration;
 class PlayerDeceleration;
-class PlayerHallucination;
 class PlayerParalysis;
 class PlayerPoison;
 class PlayerStun;
@@ -29,7 +29,8 @@ public:
     const PlayerCut &cut() const;
     PlayerFear &fear();
     const PlayerFear &fear() const;
-    std::shared_ptr<PlayerHallucination> hallucination() const;
+    PlayerHallucination &hallucination();
+    const PlayerHallucination &hallucination() const;
     std::shared_ptr<PlayerParalysis> paralysis() const;
     std::shared_ptr<PlayerStun> stun() const;
     std::shared_ptr<PlayerAcceleration> acceleration() const;
@@ -41,7 +42,7 @@ private:
     PlayerConfusion player_confusion{};
     PlayerCut player_cut{};
     PlayerFear player_fear{};
-    std::shared_ptr<PlayerHallucination> player_hallucination;
+    PlayerHallucination player_hallucination{};
     std::shared_ptr<PlayerParalysis> player_paralysis;
     std::shared_ptr<PlayerStun> player_stun;
     std::shared_ptr<PlayerAcceleration> player_acceleration;

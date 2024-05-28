@@ -30,7 +30,6 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
@@ -63,7 +62,7 @@ static void set_bad_status_info(PlayerType *player_ptr, self_info_type *self_ptr
         self_ptr->info_list.emplace_back(_("あなたは毒に侵されている。", "You are poisoned."));
     }
 
-    if (effects->hallucination()->is_hallucinated()) {
+    if (effects->hallucination().is_hallucinated()) {
         self_ptr->info_list.emplace_back(_("あなたは幻覚を見ている。", "You are hallucinating."));
     }
 }
@@ -341,9 +340,9 @@ void report_magics(PlayerType *player_ptr)
             _("あなたは毒に侵されている", "You are poisoned"));
     }
 
-    const auto hallucination = effects->hallucination();
-    if (hallucination->is_hallucinated()) {
-        info.emplace_back(report_magics_aux(hallucination->current()),
+    const auto &hallucination = effects->hallucination();
+    if (hallucination.is_hallucinated()) {
+        info.emplace_back(report_magics_aux(hallucination.current()),
             _("あなたは幻覚を見ている", "You are hallucinating"));
     }
 

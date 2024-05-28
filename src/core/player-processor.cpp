@@ -56,7 +56,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "timed-effect/player-cut.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
@@ -330,7 +329,7 @@ void process_player(PlayerType *player_ptr)
                 player_ptr->energy_need += (int16_t)((int32_t)player_ptr->energy_use * ENERGY_NEED() / 100L);
             }
 
-            if (effects->hallucination()->is_hallucinated()) {
+            if (effects->hallucination().is_hallucinated()) {
                 rfu.set_flag(MainWindowRedrawingFlag::MAP);
             }
 

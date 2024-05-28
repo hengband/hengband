@@ -35,7 +35,6 @@
 #include "target/target-preparation.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/buffer-shaper.h"
@@ -223,7 +222,7 @@ static void print_pet_list_oneline(PlayerType *player_ptr, const MonsterEntity &
     const auto &monrace = monster.get_appearance_monrace();
     const auto name = monster_desc(player_ptr, &monster, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE | MD_NO_OWNER);
     const auto &[bar_color, bar_len] = monster.get_hp_bar_data();
-    const auto is_visible = monster.ml && !player_ptr->effects()->hallucination()->is_hallucinated();
+    const auto is_visible = monster.ml && !player_ptr->effects()->hallucination().is_hallucinated();
 
     term_erase(0, y);
     if (is_visible) {
@@ -563,7 +562,7 @@ static void display_floor_item_list(PlayerType *player_ptr, const Pos2D &pos)
     std::string line;
 
     // 先頭行を書く。
-    auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
+    const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
     if (player_ptr->is_located_at(pos)) {
         line = format(_("(X:%03d Y:%03d) あなたの足元のアイテム一覧", "Items at (%03d,%03d) under you"), pos.x, pos.y);
     } else if (const auto *m_ptr = monster_on_floor_items(&floor, &grid); m_ptr != nullptr) {

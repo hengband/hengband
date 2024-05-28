@@ -21,7 +21,6 @@
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "term/term-color-types.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-symbol.h"
@@ -222,7 +221,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
     }
 
     DisplaySymbolPair symbol_pair = { symbol_config, symbol_config };
-    const auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
+    const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
     if (is_hallucinated && one_in_(256)) {
         symbol_pair.symbol_foreground = image_random();
     }

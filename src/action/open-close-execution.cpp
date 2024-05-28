@@ -28,7 +28,6 @@
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -64,7 +63,7 @@ bool exe_open(PlayerType *player_ptr, POSITION y, POSITION x)
         i = i / 10;
     }
 
-    if (effects->confusion().is_confused() || effects->hallucination()->is_hallucinated()) {
+    if (effects->confusion().is_confused() || effects->hallucination().is_hallucinated()) {
         i = i / 10;
     }
 
@@ -165,7 +164,7 @@ bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
             power_disarm = power_disarm / 10;
         }
 
-        if (effects->confusion().is_confused() || effects->hallucination()->is_hallucinated()) {
+        if (effects->confusion().is_confused() || effects->hallucination().is_hallucinated()) {
             power_disarm = power_disarm / 10;
         }
 
@@ -220,7 +219,7 @@ bool exe_disarm_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJECT_IDX
         i = i / 10;
     }
 
-    if (effects->confusion().is_confused() || effects->hallucination()->is_hallucinated()) {
+    if (effects->confusion().is_confused() || effects->hallucination().is_hallucinated()) {
         i = i / 10;
     }
 
@@ -285,7 +284,7 @@ bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
         i = i / 10;
     }
 
-    if (effects->confusion().is_confused() || effects->hallucination()->is_hallucinated()) {
+    if (effects->confusion().is_confused() || effects->hallucination().is_hallucinated()) {
         i = i / 10;
     }
 

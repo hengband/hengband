@@ -29,7 +29,6 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -63,7 +62,7 @@ static void feel_eldritch_horror(std::string_view desc, MonsterRaceInfo *r_ptr)
 
 static bool process_mod_hallucination(PlayerType *player_ptr, std::string_view m_name, const MonsterRaceInfo &monrace)
 {
-    if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
+    if (!player_ptr->effects()->hallucination().is_hallucinated()) {
         return false;
     }
 

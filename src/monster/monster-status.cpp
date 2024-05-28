@@ -20,7 +20,6 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -485,7 +484,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
 
     m_ptr->exp = 0;
     if (m_ptr->is_pet() || m_ptr->ml) {
-        auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
+        const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
         if (!ignore_unview || player_can_see_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
             if (is_hallucinated) {
                 MonsterRaceInfo *hallucinated_race = nullptr;

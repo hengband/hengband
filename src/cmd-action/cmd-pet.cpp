@@ -57,7 +57,6 @@
 #include "target/target-setter.h"
 #include "target/target-types.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
@@ -382,12 +381,12 @@ void do_cmd_pet(PlayerType *player_ptr)
     power_desc[num] = _("ペットを放す", "dismiss pets");
     powers[num++] = PET_DISMISS;
 
-    auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
-    auto taget_of_pet = player_ptr->current_floor_ptr->m_list[player_ptr->pet_t_m_idx].get_appearance_monrace().name.data();
-    auto target_of_pet_appearance = is_hallucinated ? _("何か奇妙な物", "something strange") : taget_of_pet;
-    auto mes = _("ペットのターゲットを指定 (現在：%s)", "specify a target of pet (now:%s)");
-    auto target_name = player_ptr->pet_t_m_idx > 0 ? target_of_pet_appearance : _("指定なし", "nothing");
-    auto target_ask = format(mes, target_name);
+    const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
+    const auto taget_of_pet = player_ptr->current_floor_ptr->m_list[player_ptr->pet_t_m_idx].get_appearance_monrace().name.data();
+    const auto target_of_pet_appearance = is_hallucinated ? _("何か奇妙な物", "something strange") : taget_of_pet;
+    const auto mes = _("ペットのターゲットを指定 (現在：%s)", "specify a target of pet (now:%s)");
+    const auto target_name = player_ptr->pet_t_m_idx > 0 ? target_of_pet_appearance : _("指定なし", "nothing");
+    const auto target_ask = format(mes, target_name);
     power_desc[num] = target_ask;
     powers[num++] = PET_TARGET;
     power_desc[num] = _("近くにいろ", "stay close");

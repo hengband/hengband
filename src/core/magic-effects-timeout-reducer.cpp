@@ -19,7 +19,6 @@
 #include "system/player-type-definition.h"
 #include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
@@ -37,7 +36,7 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
 
     BadStatusSetter bss(player_ptr);
     const auto effects = player_ptr->effects();
-    if (effects->hallucination()->is_hallucinated()) {
+    if (effects->hallucination().is_hallucinated()) {
         (void)bss.mod_hallucination(-1);
     }
 

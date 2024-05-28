@@ -47,7 +47,6 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -189,8 +188,8 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     }
 
     const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-    auto effects = player_ptr->effects();
-    auto is_hallucinated = effects->hallucination()->is_hallucinated();
+    const auto effects = player_ptr->effects();
+    const auto is_hallucinated = effects->hallucination().is_hallucinated();
     if (m_ptr->ml) {
         if (!is_hallucinated) {
             monster_race_track(player_ptr, m_ptr->ap_r_idx);
@@ -199,8 +198,8 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
         health_track(player_ptr, g_ptr->m_idx);
     }
 
-    auto is_confused = effects->confusion().is_confused();
-    auto is_stunned = effects->stun()->is_stunned();
+    const auto is_confused = effects->confusion().is_confused();
+    const auto is_stunned = effects->stun()->is_stunned();
     if (is_female(*r_ptr) && !(is_stunned || is_confused || is_hallucinated || !m_ptr->ml)) {
         // @todo 「特定の武器を装備している」旨のメソッドを別途作る
         constexpr auto zantetsu = FixedArtifactId::ZANTETSU;

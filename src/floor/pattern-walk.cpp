@@ -25,7 +25,6 @@
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "term/z-form.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -187,7 +186,7 @@ bool pattern_seq(PlayerType *player_ptr, const Pos2D &pos)
         const auto effects = player_ptr->effects();
         const auto is_stunned = effects->stun()->is_stunned();
         const auto is_confused = effects->confusion().is_confused();
-        const auto is_hallucinated = effects->hallucination()->is_hallucinated();
+        const auto is_hallucinated = effects->hallucination().is_hallucinated();
         if (is_pattern_tile_cur || is_confused || is_stunned || is_hallucinated) {
             return true;
         }

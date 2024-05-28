@@ -38,7 +38,6 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-lore.h"
@@ -154,7 +153,7 @@ static void describe_target(PlayerType *player_ptr, GridExamination *ge_ptr)
 
 static ProcessResult describe_hallucinated_target(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
-    if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
+    if (!player_ptr->effects()->hallucination().is_hallucinated()) {
         return ProcessResult::PROCESS_CONTINUE;
     }
 

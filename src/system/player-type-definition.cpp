@@ -4,7 +4,6 @@
 #include "system/angband-exceptions.h"
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
@@ -54,7 +53,7 @@ bool PlayerType::is_fully_healthy() const
     is_fully_healthy &= !effects->cut().is_cut();
     is_fully_healthy &= !effects->deceleration()->is_slow();
     is_fully_healthy &= !effects->paralysis()->is_paralyzed();
-    is_fully_healthy &= !effects->hallucination()->is_hallucinated();
+    is_fully_healthy &= !effects->hallucination().is_hallucinated();
     is_fully_healthy &= !this->word_recall;
     is_fully_healthy &= !this->alter_reality;
     return is_fully_healthy;
