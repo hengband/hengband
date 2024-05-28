@@ -19,7 +19,6 @@
 #include "system/player-type-definition.h"
 #include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-poison.h"
@@ -140,7 +139,7 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         (void)bss.mod_confusion(-1);
     }
 
-    if (effects->fear()->is_fearful()) {
+    if (effects->fear().is_fearful()) {
         (void)bss.mod_fear(-1);
     }
 

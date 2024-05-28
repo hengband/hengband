@@ -24,7 +24,6 @@
 #include "term/term-color-types.h"
 #include "term/z-form.h"
 #include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-poison.h"
@@ -587,7 +586,7 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_ALTER);
     }
 
-    if (effects->fear()->is_fearful()) {
+    if (effects->fear().is_fearful()) {
         ADD_BAR_FLAG(BAR_AFRAID);
     }
 

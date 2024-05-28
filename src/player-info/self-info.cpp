@@ -30,7 +30,6 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
-#include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
@@ -48,7 +47,7 @@ static void set_bad_status_info(PlayerType *player_ptr, self_info_type *self_ptr
         self_ptr->info_list.emplace_back(_("あなたは混乱している。", "You are confused."));
     }
 
-    if (effects->fear()->is_fearful()) {
+    if (effects->fear().is_fearful()) {
         self_ptr->info_list.emplace_back(_("あなたは恐怖に侵されている。", "You are terrified."));
     }
 
@@ -330,8 +329,9 @@ void report_magics(PlayerType *player_ptr)
             _("あなたは混乱している", "You are confused"));
     }
 
-    if (effects->fear()->is_fearful()) {
-        info.emplace_back(report_magics_aux(effects->fear()->current()),
+    const auto &fear = effects->fear();
+    if (fear.is_fearful()) {
+        info.emplace_back(report_magics_aux(fear.current()),
             _("あなたは恐怖に侵されている", "You are terrified"));
     }
 
@@ -341,7 +341,7 @@ void report_magics(PlayerType *player_ptr)
             _("あなたは毒に侵されている", "You are poisoned"));
     }
 
-    auto hallucination = effects->hallucination();
+    const auto hallucination = effects->hallucination();
     if (hallucination->is_hallucinated()) {
         info.emplace_back(report_magics_aux(hallucination->current()),
             _("あなたは幻覚を見ている", "You are hallucinating"));

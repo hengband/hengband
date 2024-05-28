@@ -20,7 +20,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-poison.h"
@@ -247,9 +246,9 @@ bool BadStatusSetter::set_fear(const TIME_EFFECT tmp_v)
         return false;
     }
 
-    auto fear = this->player_ptr->effects()->fear();
+    auto &fear = this->player_ptr->effects()->fear();
     if (v > 0) {
-        if (!fear->is_fearful()) {
+        if (!fear.is_fearful()) {
             msg_print(_("何もかも恐くなってきた！", "You are terrified!"));
             if (PlayerClass(this->player_ptr).lose_balance()) {
                 msg_print(_("型が崩れた。", "You lose your stance."));
@@ -260,13 +259,13 @@ bool BadStatusSetter::set_fear(const TIME_EFFECT tmp_v)
             chg_virtue(this->player_ptr, Virtue::VALOUR, -1);
         }
     } else {
-        if (fear->is_fearful()) {
+        if (fear.is_fearful()) {
             msg_print(_("やっと恐怖を振り払った。", "You feel bolder now."));
             notice = true;
         }
     }
 
-    fear->set(v);
+    fear.set(v);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
@@ -282,7 +281,7 @@ bool BadStatusSetter::set_fear(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_fear(const TIME_EFFECT tmp_v)
 {
-    return this->set_fear(this->player_ptr->effects()->fear()->current() + tmp_v);
+    return this->set_fear(this->player_ptr->effects()->fear().current() + tmp_v);
 }
 
 /*!
