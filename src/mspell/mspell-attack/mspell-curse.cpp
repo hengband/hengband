@@ -10,7 +10,6 @@
 #include "mspell/mspell-result.h"
 #include "mspell/mspell-util.h"
 #include "system/floor-type-definition.h"
-#include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
@@ -21,7 +20,7 @@ static bool message_curse(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 
     if (target_type == MONSTER_TO_PLAYER) {
         disturb(player_ptr, true, true);
-        if (player_ptr->effects()->blindness()->is_blind()) {
+        if (player_ptr->effects()->blindness().is_blind()) {
             msg_format(msg1.data(), m_name.data());
         } else {
             msg_format(msg2.data(), m_name.data());

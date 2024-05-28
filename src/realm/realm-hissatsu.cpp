@@ -50,7 +50,6 @@
 #include "target/projection-path-calculator.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-cut.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -579,7 +578,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
         }
 
         if (cast) {
-            auto current_cut = player_ptr->effects()->cut()->current();
+            const auto current_cut = player_ptr->effects()->cut().current();
             short new_cut = current_cut < 300 ? current_cut + 300 : current_cut * 2;
             (void)BadStatusSetter(player_ptr).set_cut(new_cut);
             const auto &floor = *player_ptr->current_floor_ptr;

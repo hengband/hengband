@@ -62,7 +62,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -401,8 +400,8 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                     player_ptr->died_from = _("切腹", "Seppuku");
                 }
             } else {
-                auto effects = player_ptr->effects();
-                auto is_hallucinated = effects->hallucination()->is_hallucinated();
+                const auto effects = player_ptr->effects();
+                const auto is_hallucinated = effects->hallucination().is_hallucinated();
                 auto paralysis_state = "";
                 if (effects->paralysis()->is_paralyzed()) {
                     paralysis_state = player_ptr->free_act ? _("彫像状態で", " while being the statue") : _("麻痺状態で", " while paralyzed");
@@ -560,7 +559,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
 
         sound(SOUND_WARN);
         if (record_danger && (old_chp > warning)) {
-            if (player_ptr->effects()->hallucination()->is_hallucinated() && damage_type == DAMAGE_ATTACK) {
+            if (player_ptr->effects()->hallucination().is_hallucinated() && damage_type == DAMAGE_ATTACK) {
                 hit_from = _("何か", "something");
             }
 

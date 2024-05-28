@@ -16,7 +16,6 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-map.h"
 #include "view/display-symbol.h"
@@ -118,7 +117,7 @@ static void display_shortened_item_name(PlayerType *player_ptr, ItemEntity *o_pt
 {
     auto item_name = describe_flavor(player_ptr, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
     auto attr = tval_to_attr[enum2i(o_ptr->bi_key.tval()) % 128];
-    if (player_ptr->effects()->hallucination()->is_hallucinated()) {
+    if (player_ptr->effects()->hallucination().is_hallucinated()) {
         attr = TERM_WHITE;
         item_name = _("何か奇妙な物", "something strange");
     }

@@ -17,7 +17,6 @@
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
@@ -60,7 +59,7 @@ static void message_breath(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_ID
     const auto t_name = monster_name(player_ptr, t_idx);
 
     if (!spell_RF4_BREATH_special_message(m_ptr->r_idx, GF_TYPE, m_name.data())) {
-        if (player_ptr->effects()->blindness()->is_blind()) {
+        if (player_ptr->effects()->blindness().is_blind()) {
             if (mon_to_player || (mon_to_mon && known && see_either)) {
                 msg_format(_("%s^が何かのブレスを吐いた。", "%s^ breathes."), m_name.data());
             }

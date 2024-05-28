@@ -42,7 +42,6 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
@@ -694,7 +693,7 @@ BIT_FLAGS has_no_ac(PlayerType *player_ptr)
 
 BIT_FLAGS has_invuln_arrow(PlayerType *player_ptr)
 {
-    if (player_ptr->effects()->blindness()->is_blind()) {
+    if (player_ptr->effects()->blindness().is_blind()) {
         return 0;
     }
 

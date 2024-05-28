@@ -18,7 +18,11 @@ enum class PlayerCutRank {
 class PlayerCut {
 public:
     PlayerCut() = default;
-    virtual ~PlayerCut() = default;
+    ~PlayerCut() = default;
+    PlayerCut(const PlayerCut &) = delete;
+    PlayerCut(PlayerCut &&) = delete;
+    PlayerCut &operator=(const PlayerCut &) = delete;
+    PlayerCut &operator=(PlayerCut &&) = delete;
 
     static PlayerCutRank get_rank(short value);
     static std::string get_cut_mes(PlayerCutRank stun_rank);

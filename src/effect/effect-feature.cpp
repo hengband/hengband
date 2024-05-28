@@ -23,7 +23,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
-#include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -197,7 +196,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
             }
         }
 
-        if (player_ptr->effects()->blindness()->is_blind() || !grid.has_los()) {
+        if (player_ptr->effects()->blindness().is_blind() || !grid.has_los()) {
             break;
         }
 
@@ -216,7 +215,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::TUNNEL);
         }
 
-        if (player_ptr->effects()->blindness()->is_blind() || !grid.has_los()) {
+        if (player_ptr->effects()->blindness().is_blind() || !grid.has_los()) {
             break;
         }
 

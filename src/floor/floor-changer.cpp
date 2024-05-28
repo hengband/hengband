@@ -39,7 +39,6 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
-#include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -375,7 +374,7 @@ static void cut_off_the_upstair(PlayerType *player_ptr)
         return;
     }
 
-    if (!player_ptr->effects()->blindness()->is_blind()) {
+    if (!player_ptr->effects()->blindness().is_blind()) {
         msg_print(_("突然階段が塞がれてしまった。", "Suddenly the stairs is blocked!"));
     } else {
         msg_print(_("ゴトゴトと何か音がした。", "You hear some noises."));

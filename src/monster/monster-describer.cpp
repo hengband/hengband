@@ -11,7 +11,6 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
@@ -169,7 +168,7 @@ static std::string replace_monster_name_undefined(std::string_view name)
 static std::optional<std::string> get_fake_monster_name(const PlayerType &player, const MonsterEntity &monster, const std::string &name, const BIT_FLAGS mode)
 {
     const auto &monrace = monster.get_appearance_monrace();
-    const auto is_hallucinated = player.effects()->hallucination()->is_hallucinated();
+    const auto is_hallucinated = player.effects()->hallucination().is_hallucinated();
     if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE) || (is_hallucinated && none_bits(mode, MD_IGNORE_HALLU))) {
         return std::nullopt;
     }
@@ -248,7 +247,7 @@ std::string monster_desc(PlayerType *player_ptr, const MonsterEntity *m_ptr, BIT
         return *pronoun_self;
     }
 
-    const auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
+    const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
     const auto name = get_describing_monster_name(*m_ptr, is_hallucinated, mode);
     std::stringstream ss;
     if (m_ptr->is_pet() && !m_ptr->is_original_ap()) {

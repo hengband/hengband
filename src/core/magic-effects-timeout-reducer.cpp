@@ -18,12 +18,7 @@
 #include "status/temporary-resistance.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-acceleration.h"
-#include "timed-effect/player-blindness.h"
-#include "timed-effect/player-confusion.h"
-#include "timed-effect/player-cut.h"
 #include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-fear.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
@@ -41,11 +36,11 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
 
     BadStatusSetter bss(player_ptr);
     const auto effects = player_ptr->effects();
-    if (effects->hallucination()->is_hallucinated()) {
+    if (effects->hallucination().is_hallucinated()) {
         (void)bss.mod_hallucination(-1);
     }
 
-    if (effects->blindness()->is_blind()) {
+    if (effects->blindness().is_blind()) {
         (void)bss.mod_blindness(-1);
     }
 
@@ -139,11 +134,11 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         (void)bss.mod_paralysis(-1);
     }
 
-    if (player_ptr->effects()->confusion()->is_confused()) {
+    if (player_ptr->effects()->confusion().is_confused()) {
         (void)bss.mod_confusion(-1);
     }
 
-    if (effects->fear()->is_fearful()) {
+    if (effects->fear().is_fearful()) {
         (void)bss.mod_fear(-1);
     }
 
@@ -230,10 +225,10 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         (void)bss.mod_stun(-adjust);
     }
 
-    auto player_cut = effects->cut();
-    if (player_cut->is_cut()) {
+    auto &player_cut = effects->cut();
+    if (player_cut.is_cut()) {
         short adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
-        if (player_cut->get_rank() == PlayerCutRank::MORTAL) {
+        if (player_cut.get_rank() == PlayerCutRank::MORTAL) {
             adjust = 0;
         }
 

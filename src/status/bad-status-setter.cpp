@@ -19,12 +19,7 @@
 #include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "timed-effect/player-blindness.h"
-#include "timed-effect/player-confusion.h"
-#include "timed-effect/player-cut.h"
 #include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-fear.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
@@ -34,7 +29,6 @@
 
 BadStatusSetter::BadStatusSetter(PlayerType *player_ptr)
     : player_ptr(player_ptr)
-    , player_confusion(player_ptr->effects()->confusion())
 {
 }
 
@@ -57,8 +51,8 @@ bool BadStatusSetter::set_blindness(const TIME_EFFECT tmp_v)
     }
 
     PlayerRace pr(this->player_ptr);
-    const auto blindness = this->player_ptr->effects()->blindness();
-    const auto is_blind = blindness->is_blind();
+    auto &blindness = this->player_ptr->effects()->blindness();
+    const auto is_blind = blindness.is_blind();
     if (v > 0) {
         if (!is_blind) {
             if (pr.equals(PlayerRaceType::ANDROID)) {
@@ -82,7 +76,7 @@ bool BadStatusSetter::set_blindness(const TIME_EFFECT tmp_v)
         }
     }
 
-    blindness->set(v);
+    blindness.set(v);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
@@ -114,7 +108,7 @@ bool BadStatusSetter::set_blindness(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_blindness(const TIME_EFFECT tmp_v)
 {
-    return this->set_blindness(this->player_ptr->effects()->blindness()->current() + tmp_v);
+    return this->set_blindness(this->player_ptr->effects()->blindness().current() + tmp_v);
 }
 
 /*!
@@ -131,7 +125,7 @@ bool BadStatusSetter::set_confusion(const TIME_EFFECT tmp_v)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    auto is_confused = this->player_confusion->is_confused();
+    const auto is_confused = this->player_ptr->effects()->confusion().is_confused();
     if (v > 0) {
         if (!is_confused) {
             msg_print(_("あなたは混乱した！", "You are confused!"));
@@ -173,7 +167,7 @@ bool BadStatusSetter::set_confusion(const TIME_EFFECT tmp_v)
         }
     }
 
-    this->player_confusion->set(v);
+    this->player_ptr->effects()->confusion().set(v);
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
@@ -189,7 +183,7 @@ bool BadStatusSetter::set_confusion(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_confusion(const TIME_EFFECT tmp_v)
 {
-    return this->set_confusion(this->player_confusion->current() + tmp_v);
+    return this->set_confusion(this->player_ptr->effects()->confusion().current() + tmp_v);
 }
 
 /*!
@@ -251,9 +245,9 @@ bool BadStatusSetter::set_fear(const TIME_EFFECT tmp_v)
         return false;
     }
 
-    auto fear = this->player_ptr->effects()->fear();
+    auto &fear = this->player_ptr->effects()->fear();
     if (v > 0) {
-        if (!fear->is_fearful()) {
+        if (!fear.is_fearful()) {
             msg_print(_("何もかも恐くなってきた！", "You are terrified!"));
             if (PlayerClass(this->player_ptr).lose_balance()) {
                 msg_print(_("型が崩れた。", "You lose your stance."));
@@ -264,13 +258,13 @@ bool BadStatusSetter::set_fear(const TIME_EFFECT tmp_v)
             chg_virtue(this->player_ptr, Virtue::VALOUR, -1);
         }
     } else {
-        if (fear->is_fearful()) {
+        if (fear.is_fearful()) {
             msg_print(_("やっと恐怖を振り払った。", "You feel bolder now."));
             notice = true;
         }
     }
 
-    fear->set(v);
+    fear.set(v);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
@@ -286,7 +280,7 @@ bool BadStatusSetter::set_fear(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_fear(const TIME_EFFECT tmp_v)
 {
-    return this->set_fear(this->player_ptr->effects()->fear()->current() + tmp_v);
+    return this->set_fear(this->player_ptr->effects()->fear().current() + tmp_v);
 }
 
 /*!
@@ -361,10 +355,10 @@ bool BadStatusSetter::hallucination(const TIME_EFFECT tmp_v)
         v = 0;
     }
 
-    auto hallucination = this->player_ptr->effects()->hallucination();
+    auto &hallucination = this->player_ptr->effects()->hallucination();
     if (v > 0) {
         set_tsuyoshi(this->player_ptr, 0, true);
-        if (!hallucination->is_hallucinated()) {
+        if (!hallucination.is_hallucinated()) {
             msg_print(_("ワーオ！何もかも虹色に見える！", "Oh, wow! Everything looks so cosmic now!"));
             reset_concentration(this->player_ptr, true);
 
@@ -372,13 +366,13 @@ bool BadStatusSetter::hallucination(const TIME_EFFECT tmp_v)
             notice = true;
         }
     } else {
-        if (hallucination->is_hallucinated()) {
+        if (hallucination.is_hallucinated()) {
             msg_print(_("やっとはっきりと物が見えるようになった。", "You can see clearly again."));
             notice = true;
         }
     }
 
-    hallucination->set(v);
+    hallucination.set(v);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
@@ -407,7 +401,7 @@ bool BadStatusSetter::hallucination(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_hallucination(const TIME_EFFECT tmp_v)
 {
-    return this->hallucination(this->player_ptr->effects()->hallucination()->current() + tmp_v);
+    return this->hallucination(this->player_ptr->effects()->hallucination().current() + tmp_v);
 }
 
 /*!
@@ -520,7 +514,7 @@ bool BadStatusSetter::set_cut(const TIME_EFFECT tmp_v)
     }
 
     auto notice = this->process_cut_effect(v);
-    this->player_ptr->effects()->cut()->set(v);
+    this->player_ptr->effects()->cut().set(v);
     if (!notice) {
         return false;
     }
@@ -538,7 +532,7 @@ bool BadStatusSetter::set_cut(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_cut(const TIME_EFFECT tmp_v)
 {
-    return this->set_cut(this->player_ptr->effects()->cut()->current() + tmp_v);
+    return this->set_cut(this->player_ptr->effects()->cut().current() + tmp_v);
 }
 
 bool BadStatusSetter::process_stun_effect(const short v)
@@ -630,9 +624,9 @@ void BadStatusSetter::decrease_int_wis(const short v)
 
 bool BadStatusSetter::process_cut_effect(const short v)
 {
-    auto player_cut = this->player_ptr->effects()->cut();
-    auto old_rank = player_cut->get_rank();
-    auto new_rank = player_cut->get_rank(v);
+    const auto &player_cut = this->player_ptr->effects()->cut();
+    auto old_rank = player_cut.get_rank();
+    auto new_rank = player_cut.get_rank(v);
     if (new_rank > old_rank) {
         this->decrease_charisma(new_rank, v);
         return true;

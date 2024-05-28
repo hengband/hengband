@@ -30,11 +30,6 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
-#include "timed-effect/player-blindness.h"
-#include "timed-effect/player-confusion.h"
-#include "timed-effect/player-cut.h"
-#include "timed-effect/player-fear.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
@@ -43,19 +38,19 @@
 static void set_bad_status_info(PlayerType *player_ptr, self_info_type *self_ptr)
 {
     auto effects = player_ptr->effects();
-    if (effects->blindness()->is_blind()) {
+    if (effects->blindness().is_blind()) {
         self_ptr->info_list.emplace_back(_("あなたは目が見えない。", "You cannot see."));
     }
 
-    if (effects->confusion()->is_confused()) {
+    if (effects->confusion().is_confused()) {
         self_ptr->info_list.emplace_back(_("あなたは混乱している。", "You are confused."));
     }
 
-    if (effects->fear()->is_fearful()) {
+    if (effects->fear().is_fearful()) {
         self_ptr->info_list.emplace_back(_("あなたは恐怖に侵されている。", "You are terrified."));
     }
 
-    if (effects->cut()->is_cut()) {
+    if (effects->cut().is_cut()) {
         self_ptr->info_list.emplace_back(_("あなたは出血している。", "You are bleeding."));
     }
 
@@ -67,7 +62,7 @@ static void set_bad_status_info(PlayerType *player_ptr, self_info_type *self_ptr
         self_ptr->info_list.emplace_back(_("あなたは毒に侵されている。", "You are poisoned."));
     }
 
-    if (effects->hallucination()->is_hallucinated()) {
+    if (effects->hallucination().is_hallucinated()) {
         self_ptr->info_list.emplace_back(_("あなたは幻覚を見ている。", "You are hallucinating."));
     }
 }
@@ -310,7 +305,7 @@ static int report_magics_aux(int dur)
     }
 }
 
-static concptr report_magic_durations[] = { _("ごく短い間", "for a short time"), _("少しの間", "for a little while"), _("しばらくの間", "for a while"),
+static const std::vector<std::string> report_magic_durations = { _("ごく短い間", "for a short time"), _("少しの間", "for a little while"), _("しばらくの間", "for a while"),
     _("多少長い間", "for a long while"), _("長い間", "for a long time"), _("非常に長い間", "for a very long time"),
     _("信じ難いほど長い間", "for an incredibly long time"), _("モンスターを攻撃するまで", "until you hit a monster") };
 
@@ -319,112 +314,110 @@ static concptr report_magic_durations[] = { _("ごく短い間", "for a short ti
  */
 void report_magics(PlayerType *player_ptr)
 {
-    int i = 0;
-    concptr info[128];
-    int info2[128];
+    std::vector<std::pair<int, std::string>> info;
     const auto effects = player_ptr->effects();
-    const auto blindness = effects->blindness();
-    if (blindness->is_blind()) {
-        info2[i] = report_magics_aux(blindness->current());
-        info[i++] = _("あなたは目が見えない", "You cannot see");
+    const auto &blindness = effects->blindness();
+    if (blindness.is_blind()) {
+        info.emplace_back(report_magics_aux(blindness.current()),
+            _("あなたは目が見えない", "You cannot see"));
     }
 
-    const auto confusion = effects->confusion();
-    if (confusion->is_confused()) {
-        info2[i] = report_magics_aux(confusion->current());
-        info[i++] = _("あなたは混乱している", "You are confused");
+    const auto &confusion = effects->confusion();
+    if (confusion.is_confused()) {
+        info.emplace_back(report_magics_aux(confusion.current()),
+            _("あなたは混乱している", "You are confused"));
     }
 
-    if (effects->fear()->is_fearful()) {
-        info2[i] = report_magics_aux(effects->fear()->current());
-        info[i++] = _("あなたは恐怖に侵されている", "You are terrified");
+    const auto &fear = effects->fear();
+    if (fear.is_fearful()) {
+        info.emplace_back(report_magics_aux(fear.current()),
+            _("あなたは恐怖に侵されている", "You are terrified"));
     }
 
     const auto player_poison = effects->poison();
     if (player_poison->is_poisoned()) {
-        info2[i] = report_magics_aux(player_poison->current());
-        info[i++] = _("あなたは毒に侵されている", "You are poisoned");
+        info.emplace_back(report_magics_aux(player_poison->current()),
+            _("あなたは毒に侵されている", "You are poisoned"));
     }
 
-    auto hallucination = effects->hallucination();
-    if (hallucination->is_hallucinated()) {
-        info2[i] = report_magics_aux(hallucination->current());
-        info[i++] = _("あなたは幻覚を見ている", "You are hallucinating");
+    const auto &hallucination = effects->hallucination();
+    if (hallucination.is_hallucinated()) {
+        info.emplace_back(report_magics_aux(hallucination.current()),
+            _("あなたは幻覚を見ている", "You are hallucinating"));
     }
 
     if (player_ptr->blessed) {
-        info2[i] = report_magics_aux(player_ptr->blessed);
-        info[i++] = _("あなたは高潔さを感じている", "You feel rightous");
+        info.emplace_back(report_magics_aux(player_ptr->blessed),
+            _("あなたは高潔さを感じている", "You feel rightous"));
     }
 
     if (player_ptr->hero) {
-        info2[i] = report_magics_aux(player_ptr->hero);
-        info[i++] = _("あなたはヒーロー気分だ", "You feel heroic");
+        info.emplace_back(report_magics_aux(player_ptr->hero),
+            _("あなたはヒーロー気分だ", "You feel heroic"));
     }
 
     if (is_shero(player_ptr)) {
-        info2[i] = report_magics_aux(player_ptr->shero);
-        info[i++] = _("あなたは戦闘狂だ", "You are in a battle rage");
+        info.emplace_back(report_magics_aux(player_ptr->shero),
+            _("あなたは戦闘狂だ", "You are in a battle rage"));
     }
 
     if (player_ptr->protevil) {
-        info2[i] = report_magics_aux(player_ptr->protevil);
-        info[i++] = _("あなたは邪悪なる存在から守られている", "You are protected from evil");
+        info.emplace_back(report_magics_aux(player_ptr->protevil),
+            _("あなたは邪悪なる存在から守られている", "You are protected from evil"));
     }
 
     if (player_ptr->shield) {
-        info2[i] = report_magics_aux(player_ptr->shield);
-        info[i++] = _("あなたは神秘のシールドで守られている", "You are protected by a mystic shield");
+        info.emplace_back(report_magics_aux(player_ptr->shield),
+            _("あなたは神秘のシールドで守られている", "You are protected by a mystic shield"));
     }
 
     if (player_ptr->invuln) {
-        info2[i] = report_magics_aux(player_ptr->invuln);
-        info[i++] = _("あなたは無敵だ", "You are invulnerable");
+        info.emplace_back(report_magics_aux(player_ptr->invuln),
+            _("あなたは無敵だ", "You are invulnerable"));
     }
 
     if (player_ptr->wraith_form) {
-        info2[i] = report_magics_aux(player_ptr->wraith_form);
-        info[i++] = _("あなたは幽体化している", "You are incorporeal");
+        info.emplace_back(report_magics_aux(player_ptr->wraith_form),
+            _("あなたは幽体化している", "You are incorporeal"));
     }
 
     if (player_ptr->special_attack & ATTACK_CONFUSE) {
-        info2[i] = 7;
-        info[i++] = _("あなたの手は赤く輝いている", "Your hands are glowing dull red.");
+        info.emplace_back(7, _("あなたの手は赤く輝いている", "Your hands are glowing dull red."));
     }
 
     if (player_ptr->word_recall) {
-        info2[i] = report_magics_aux(player_ptr->word_recall);
-        info[i++] = _("この後帰還の詔が発動する", "You are waiting to be recalled");
+        info.emplace_back(report_magics_aux(player_ptr->word_recall),
+            _("この後帰還の詔が発動する", "You are waiting to be recalled"));
     }
 
     if (player_ptr->alter_reality) {
-        info2[i] = report_magics_aux(player_ptr->alter_reality);
-        info[i++] = _("この後現実変容が発動する", "You waiting to be altered");
+        info.emplace_back(report_magics_aux(player_ptr->alter_reality),
+            _("この後現実変容が発動する", "You waiting to be altered"));
     }
 
     if (player_ptr->oppose_acid) {
-        info2[i] = report_magics_aux(player_ptr->oppose_acid);
-        info[i++] = _("あなたは酸への耐性を持っている", "You are resistant to acid");
+        info.emplace_back(report_magics_aux(player_ptr->oppose_acid),
+            _("あなたは酸への耐性を持っている", "You are resistant to acid"));
     }
 
     if (player_ptr->oppose_elec) {
-        info2[i] = report_magics_aux(player_ptr->oppose_elec);
-        info[i++] = _("あなたは電撃への耐性を持っている", "You are resistant to lightning");
+        info.emplace_back(report_magics_aux(player_ptr->oppose_elec),
+            _("あなたは電撃への耐性を持っている", "You are resistant to lightning"));
     }
 
     if (player_ptr->oppose_fire) {
-        info2[i] = report_magics_aux(player_ptr->oppose_fire);
-        info[i++] = _("あなたは火への耐性を持っている", "You are resistant to fire");
+        info.emplace_back(report_magics_aux(player_ptr->oppose_fire),
+            _("あなたは火への耐性を持っている", "You are resistant to fire"));
     }
 
     if (player_ptr->oppose_cold) {
-        info2[i] = report_magics_aux(player_ptr->oppose_cold);
-        info[i++] = _("あなたは冷気への耐性を持っている", "You are resistant to cold");
+        info.emplace_back(report_magics_aux(player_ptr->oppose_cold),
+            _("あなたは冷気への耐性を持っている", "You are resistant to cold"));
     }
 
     if (player_ptr->oppose_pois) {
-        info2[i] = report_magics_aux(player_ptr->oppose_pois);
-        info[i++] = _("あなたは毒への耐性を持っている", "You are resistant to poison");
+        info.emplace_back(report_magics_aux(player_ptr->oppose_pois),
+            _("あなたは毒への耐性を持っている", "You are resistant to poison"));
     }
 
     screen_save();
@@ -435,14 +428,15 @@ void report_magics(PlayerType *player_ptr)
     }
 
     prt(_("    現在かかっている魔法     :", "     Your Current Magic:"), 1, 15);
-    int k = 2;
-    char buf[80];
-    for (int j = 0; j < i; j++) {
-        strnfmt(buf, sizeof(buf), _("%-28s : 期間 - %s ", "%s %s."), info[j], report_magic_durations[info2[j]]);
-        prt(buf, k++, 15);
+    const int size = std::ssize(info);
+    auto k = 2;
+    for (int j = 0; j < size; j++) {
+        constexpr auto fmt = _("%-28s : 期間 - %s ", "%s %s.");
+        const auto mes = format(fmt, info[j].second.data(), report_magic_durations[info[j].first].data());
+        prt(mes, k++, 15);
 
         /* Every 20 entries (lines 2 to 21), start over */
-        if ((k == 22) && (j + 1 < i)) {
+        if ((k == 22) && (j + 1 < size)) {
             prt(_("-- 続く --", "-- more --"), k, 15);
             inkey();
             for (; k > 2; k--) {

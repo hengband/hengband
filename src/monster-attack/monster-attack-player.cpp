@@ -51,8 +51,6 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "timed-effect/player-cut.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -69,7 +67,7 @@ MonsterAttackPlayer::MonsterAttackPlayer(PlayerType *player_ptr, short m_idx)
     , m_ptr(&player_ptr->current_floor_ptr->m_list[m_idx])
     , method(RaceBlowMethodType::NONE)
     , effect(RaceBlowEffectType::NONE)
-    , do_silly_attack(one_in_(2) && player_ptr->effects()->hallucination()->is_hallucinated())
+    , do_silly_attack(one_in_(2) && player_ptr->effects()->hallucination().is_hallucinated())
     , player_ptr(player_ptr)
 {
 }

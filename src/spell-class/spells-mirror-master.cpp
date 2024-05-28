@@ -37,8 +37,6 @@
 #include "target/grid-selector.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
-#include "timed-effect/player-blindness.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -286,7 +284,7 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
             const auto &[oy, ox] = *(path_g_ite == path_g.begin() ? path_g.begin() : path_g_ite - 1);
             const auto &[ny, nx] = *path_g_ite;
 
-            if (delay_factor > 0 && !this->player_ptr->effects()->blindness()->is_blind()) {
+            if (delay_factor > 0 && !this->player_ptr->effects()->blindness().is_blind()) {
                 if (panel_contains(ny, nx) && floor.has_los({ ny, nx })) {
                     print_bolt_pict(this->player_ptr, oy, ox, ny, nx, typ);
                     move_cursor_relative(ny, nx);
@@ -315,7 +313,7 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
             const auto &grid = floor.grid_array[project_m_y][project_m_x];
             const auto &monster = floor.m_list[grid.m_idx];
             if (project_m_n == 1 && grid.has_monster() && monster.ml) {
-                if (!this->player_ptr->effects()->hallucination()->is_hallucinated()) {
+                if (!this->player_ptr->effects()->hallucination().is_hallucinated()) {
                     monster_race_track(this->player_ptr, monster.ap_r_idx);
                 }
                 health_track(this->player_ptr, grid.m_idx);
@@ -414,7 +412,7 @@ static bool activate_super_ray_effect(PlayerType *player_ptr, int y, int x, int 
     const auto *g_ptr = &floor_ptr->grid_array[project_m_y][project_m_x];
     const auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
     if (project_m_n == 1 && g_ptr->has_monster() && m_ptr->ml) {
-        if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
+        if (!player_ptr->effects()->hallucination().is_hallucinated()) {
             monster_race_track(player_ptr, m_ptr->ap_r_idx);
         }
         health_track(player_ptr, g_ptr->m_idx);

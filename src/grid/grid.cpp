@@ -54,7 +54,6 @@
 #include "system/terrain-type-definition.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
-#include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
@@ -327,7 +326,7 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
     auto &grid = floor.get_grid(pos);
 
     /* Blind players see nothing */
-    if (player_ptr->effects()->blindness()->is_blind()) {
+    if (player_ptr->effects()->blindness().is_blind()) {
         return;
     }
 

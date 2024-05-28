@@ -60,7 +60,6 @@
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -765,7 +764,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                         msg_format(_("%sが%sに命中した。", "The %s hits %s."), item_name.data(), m_name.data());
 
                         if (m_ptr->ml) {
-                            if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
+                            if (!player_ptr->effects()->hallucination().is_hallucinated()) {
                                 monster_race_track(player_ptr, m_ptr->ap_r_idx);
                             }
 

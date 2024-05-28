@@ -19,12 +19,7 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-acceleration.h"
-#include "timed-effect/player-blindness.h"
-#include "timed-effect/player-confusion.h"
-#include "timed-effect/player-cut.h"
 #include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-fear.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
@@ -40,13 +35,13 @@ void reset_tim_flags(PlayerType *player_ptr)
     effects->acceleration()->reset();
     player_ptr->lightspeed = 0;
     effects->deceleration()->reset();
-    effects->blindness()->reset();
+    effects->blindness().reset();
     effects->paralysis()->reset();
-    effects->confusion()->reset();
-    effects->fear()->reset();
-    effects->hallucination()->reset();
+    effects->confusion().reset();
+    effects->fear().reset();
+    effects->hallucination().reset();
     effects->poison()->reset();
-    effects->cut()->reset();
+    effects->cut().reset();
     effects->stun()->reset();
 
     player_ptr->protevil = 0; /* Timed -- Protection */

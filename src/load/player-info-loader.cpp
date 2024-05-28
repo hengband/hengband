@@ -25,12 +25,7 @@
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-acceleration.h"
-#include "timed-effect/player-blindness.h"
-#include "timed-effect/player-confusion.h"
-#include "timed-effect/player-cut.h"
 #include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-fear.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
@@ -338,9 +333,9 @@ static void rd_bad_status(PlayerType *player_ptr)
 {
     auto effects = player_ptr->effects();
     strip_bytes(2); /* Old "rest" */
-    effects->blindness()->set(rd_s16b());
+    effects->blindness().set(rd_s16b());
     effects->paralysis()->set(rd_s16b());
-    effects->confusion()->set(rd_s16b());
+    effects->confusion().set(rd_s16b());
     player_ptr->food = rd_s16b();
     strip_bytes(4); /* Old "food_digested" / "protection" */
 }
@@ -369,11 +364,11 @@ static void rd_status(PlayerType *player_ptr)
     const auto effects = player_ptr->effects();
     effects->acceleration()->set(rd_s16b());
     effects->deceleration()->set(rd_s16b());
-    effects->fear()->set(rd_s16b());
-    effects->cut()->set(rd_s16b());
+    effects->fear().set(rd_s16b());
+    effects->cut().set(rd_s16b());
     effects->stun()->set(rd_s16b());
     effects->poison()->set(rd_s16b());
-    effects->hallucination()->set(rd_s16b());
+    effects->hallucination().set(rd_s16b());
     player_ptr->protevil = rd_s16b();
     player_ptr->invuln = rd_s16b();
     if (h_older_than(0, 0, 0)) {

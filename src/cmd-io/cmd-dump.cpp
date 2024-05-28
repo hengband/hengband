@@ -33,7 +33,6 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
@@ -277,7 +276,7 @@ void do_cmd_time(PlayerType *player_ptr)
     constexpr auto mes = _("%s日目, 時刻は%d:%02d %sです。", "This is day %s. The time is %d:%02d %s.");
     msg_format(mes, day_buf.data(), (hour % 12 == 0) ? 12 : (hour % 12), min, (hour < 12) ? "AM" : "PM");
     std::filesystem::path path;
-    if (!randint0(10) || player_ptr->effects()->hallucination()->is_hallucinated()) {
+    if (!randint0(10) || player_ptr->effects()->hallucination().is_hallucinated()) {
         path = path_build(ANGBAND_DIR_FILE, _("timefun_j.txt", "timefun.txt"));
     } else {
         path = path_build(ANGBAND_DIR_FILE, _("timenorm_j.txt", "timenorm.txt"));

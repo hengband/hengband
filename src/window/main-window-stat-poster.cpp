@@ -23,12 +23,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
-#include "timed-effect/player-blindness.h"
-#include "timed-effect/player-confusion.h"
-#include "timed-effect/player-cut.h"
 #include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-fear.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
@@ -81,13 +76,13 @@ void print_stat(PlayerType *player_ptr, int stat)
  */
 void print_cut(PlayerType *player_ptr)
 {
-    auto player_cut = player_ptr->effects()->cut();
-    if (!player_cut->is_cut()) {
+    const auto &player_cut = player_ptr->effects()->cut();
+    if (!player_cut.is_cut()) {
         put_str("            ", ROW_CUT, COL_CUT);
         return;
     }
 
-    auto [color, stat] = player_cut->get_expr();
+    auto [color, stat] = player_cut.get_expr();
     c_put_str(color, stat, ROW_CUT, COL_CUT);
 }
 
@@ -455,11 +450,11 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_TSUYOSHI);
     }
 
-    if (effects->hallucination()->is_hallucinated()) {
+    if (effects->hallucination().is_hallucinated()) {
         ADD_BAR_FLAG(BAR_HALLUCINATION);
     }
 
-    if (player_ptr->effects()->blindness()->is_blind()) {
+    if (player_ptr->effects()->blindness().is_blind()) {
         ADD_BAR_FLAG(BAR_BLINDNESS);
     }
 
@@ -467,7 +462,7 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_PARALYZE);
     }
 
-    if (effects->confusion()->is_confused()) {
+    if (effects->confusion().is_confused()) {
         ADD_BAR_FLAG(BAR_CONFUSE);
     }
 
@@ -590,7 +585,7 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_ALTER);
     }
 
-    if (effects->fear()->is_fearful()) {
+    if (effects->fear().is_fearful()) {
         ADD_BAR_FLAG(BAR_AFRAID);
     }
 

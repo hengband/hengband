@@ -18,7 +18,6 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/string-processor.h"
 #include "window/main-window-row-column.h"
@@ -385,7 +384,7 @@ void print_health(PlayerType *player_ptr, bool riding)
 
     const auto &monster = player_ptr->current_floor_ptr->m_list[*monster_idx];
 
-    if ((!monster.ml) || (player_ptr->effects()->hallucination()->is_hallucinated()) || monster.is_dead()) {
+    if ((!monster.ml) || (player_ptr->effects()->hallucination().is_hallucinated()) || monster.is_dead()) {
         term_putstr(col, row, max_width, TERM_WHITE, "[----------]");
         return;
     }
