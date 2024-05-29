@@ -33,34 +33,33 @@
 #include "timed-effect/timed-effects.h"
 #include "view/display-self-info.h"
 
-static void set_bad_status_info(PlayerType *player_ptr, self_info_type *self_ptr)
+static void set_bad_status_info(const TimedEffects &effects, self_info_type *self_ptr)
 {
-    auto effects = player_ptr->effects();
-    if (effects->blindness().is_blind()) {
+    if (effects.blindness().is_blind()) {
         self_ptr->info_list.emplace_back(_("あなたは目が見えない。", "You cannot see."));
     }
 
-    if (effects->confusion().is_confused()) {
+    if (effects.confusion().is_confused()) {
         self_ptr->info_list.emplace_back(_("あなたは混乱している。", "You are confused."));
     }
 
-    if (effects->fear().is_fearful()) {
+    if (effects.fear().is_fearful()) {
         self_ptr->info_list.emplace_back(_("あなたは恐怖に侵されている。", "You are terrified."));
     }
 
-    if (effects->cut().is_cut()) {
+    if (effects.cut().is_cut()) {
         self_ptr->info_list.emplace_back(_("あなたは出血している。", "You are bleeding."));
     }
 
-    if (effects->stun().is_stunned()) {
+    if (effects.stun().is_stunned()) {
         self_ptr->info_list.emplace_back(_("あなたはもうろうとしている。", "You are stunned."));
     }
 
-    if (effects->poison().is_poisoned()) {
+    if (effects.poison().is_poisoned()) {
         self_ptr->info_list.emplace_back(_("あなたは毒に侵されている。", "You are poisoned."));
     }
 
-    if (effects->hallucination().is_hallucinated()) {
+    if (effects.hallucination().is_hallucinated()) {
         self_ptr->info_list.emplace_back(_("あなたは幻覚を見ている。", "You are hallucinating."));
     }
 }
@@ -257,7 +256,7 @@ void self_knowledge(PlayerType *player_ptr)
 
     set_class_ability_info(player_ptr, self_ptr);
     set_mutation_info(player_ptr, self_ptr);
-    set_bad_status_info(player_ptr, self_ptr);
+    set_bad_status_info(*player_ptr->effects(), self_ptr);
     set_curse_info(player_ptr, self_ptr);
     set_body_improvement_info_1(player_ptr, self_ptr);
     set_special_attack_info(player_ptr, self_ptr);
