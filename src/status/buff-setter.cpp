@@ -18,11 +18,6 @@
 #include "status/element-resistance.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "timed-effect/player-acceleration.h"
-#include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-paralysis.h"
-#include "timed-effect/player-poison.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
@@ -32,17 +27,17 @@
 void reset_tim_flags(PlayerType *player_ptr)
 {
     auto effects = player_ptr->effects();
-    effects->acceleration()->reset();
+    effects->acceleration().reset();
     player_ptr->lightspeed = 0;
-    effects->deceleration()->reset();
+    effects->deceleration().reset();
     effects->blindness().reset();
-    effects->paralysis()->reset();
+    effects->paralysis().reset();
     effects->confusion().reset();
     effects->fear().reset();
     effects->hallucination().reset();
-    effects->poison()->reset();
+    effects->poison().reset();
     effects->cut().reset();
-    effects->stun()->reset();
+    effects->stun().reset();
 
     player_ptr->protevil = 0; /* Timed -- Protection */
     player_ptr->invuln = 0; /* Timed -- Invulnerable */
@@ -124,10 +119,10 @@ bool set_acceleration(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    auto acceleration = player_ptr->effects()->acceleration();
+    auto &acceleration = player_ptr->effects()->acceleration();
     if (v) {
-        if (acceleration->is_fast() && !do_dec) {
-            if (acceleration->current() > v) {
+        if (acceleration.is_fast() && !do_dec) {
+            if (acceleration.current() > v) {
                 return false;
             }
         } else if (!is_fast(player_ptr) && !player_ptr->lightspeed) {
@@ -137,7 +132,7 @@ bool set_acceleration(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             chg_virtue(player_ptr, Virtue::DILIGENCE, 1);
         }
     } else {
-        if (acceleration->is_fast() && !player_ptr->lightspeed) {
+        if (acceleration.is_fast() && !player_ptr->lightspeed) {
             auto is_singing = music_singing(player_ptr, MUSIC_SPEED);
             is_singing |= music_singing(player_ptr, MUSIC_SHERO);
             if (!is_singing) {
@@ -147,7 +142,7 @@ bool set_acceleration(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         }
     }
 
-    acceleration->set(v);
+    acceleration.set(v);
     if (!notice) {
         return false;
     }
@@ -162,7 +157,7 @@ bool set_acceleration(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 
 bool mod_acceleration(PlayerType *player_ptr, const TIME_EFFECT v, const bool do_dec)
 {
-    return set_acceleration(player_ptr, player_ptr->effects()->acceleration()->current() + v, do_dec);
+    return set_acceleration(player_ptr, player_ptr->effects()->acceleration().current() + v, do_dec);
 }
 
 /*!

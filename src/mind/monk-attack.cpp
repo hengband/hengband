@@ -29,7 +29,6 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -111,9 +110,9 @@ static int select_blow(PlayerType *player_ptr, player_attack_type *pa_ptr, int m
             }
         } while ((min_level > player_ptr->lev) || (randint1(player_ptr->lev) < pa_ptr->ma_ptr->chance));
 
-        auto effects = player_ptr->effects();
-        auto is_stunned = effects->stun()->is_stunned();
-        auto is_confused = effects->confusion().is_confused();
+        const auto effects = player_ptr->effects();
+        const auto is_stunned = effects->stun().is_stunned();
+        const auto is_confused = effects->confusion().is_confused();
         if ((pa_ptr->ma_ptr->min_level <= old_ptr->min_level) || is_stunned || is_confused) {
             pa_ptr->ma_ptr = old_ptr;
             continue;

@@ -17,7 +17,6 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-paralysis.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
@@ -76,20 +75,20 @@ void process_paralyze_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_
         return;
     }
 
-    auto *r_ptr = &monap_ptr->m_ptr->get_monrace();
+    const auto &monrace = monap_ptr->m_ptr->get_monrace();
     if (player_ptr->free_act) {
         msg_print(_("しかし効果がなかった！", "You are unaffected!"));
         monap_ptr->obvious = true;
         return;
     }
 
-    if (randint0(100 + r_ptr->level / 2) < player_ptr->skill_sav) {
+    if (randint0(100 + monrace.level / 2) < player_ptr->skill_sav) {
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
         monap_ptr->obvious = true;
         return;
     }
 
-    auto is_paralyzed = player_ptr->effects()->paralysis()->is_paralyzed();
+    const auto is_paralyzed = player_ptr->effects()->paralysis().is_paralyzed();
     if (!is_paralyzed && BadStatusSetter(player_ptr).set_paralysis(3 + randint1(monap_ptr->rlev))) {
         monap_ptr->obvious = true;
     }

@@ -27,7 +27,6 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-deceleration.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 
@@ -193,7 +192,7 @@ int16_t PlayerSpeed::time_effect_bonus()
         bonus += 10;
     }
 
-    if (this->player_ptr->effects()->deceleration()->is_slow()) {
+    if (this->player_ptr->effects()->deceleration().is_slow()) {
         bonus -= 10;
     }
 

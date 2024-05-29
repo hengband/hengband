@@ -17,11 +17,6 @@
 #include "status/sight-setter.h"
 #include "status/temporary-resistance.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-acceleration.h"
-#include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-paralysis.h"
-#include "timed-effect/player-poison.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 
 /*!
@@ -130,7 +125,7 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         (void)set_pass_wall(player_ptr, player_ptr->tim_pass_wall - 1, true);
     }
 
-    if (effects->paralysis()->is_paralyzed()) {
+    if (effects->paralysis().is_paralyzed()) {
         (void)bss.mod_paralysis(-1);
     }
 
@@ -142,11 +137,11 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         (void)bss.mod_fear(-1);
     }
 
-    if (effects->acceleration()->is_fast()) {
+    if (effects->acceleration().is_fast()) {
         (void)mod_acceleration(player_ptr, -1, true);
     }
 
-    if (effects->deceleration()->is_slow()) {
+    if (effects->deceleration().is_slow()) {
         (void)bss.mod_deceleration(-1, true);
     }
 
@@ -214,13 +209,12 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         (void)set_ultimate_res(player_ptr, player_ptr->ult_res - 1, true);
     }
 
-    if (effects->poison()->is_poisoned()) {
+    if (effects->poison().is_poisoned()) {
         int adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
         (void)bss.mod_poison(-adjust);
     }
 
-    auto player_stun = effects->stun();
-    if (player_stun->is_stunned()) {
+    if (effects->stun().is_stunned()) {
         int adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
         (void)bss.mod_stun(-adjust);
     }

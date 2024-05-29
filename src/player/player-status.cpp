@@ -105,8 +105,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-acceleration.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
@@ -2132,8 +2130,7 @@ static short calc_to_damage(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_
         damage += 3 + (player_ptr->lev / 5);
     }
 
-    auto player_stun = player_ptr->effects()->stun();
-    damage -= player_stun->get_damage_penalty();
+    damage -= player_ptr->effects()->stun().get_damage_penalty();
     PlayerClass pc(player_ptr);
     const auto tval = o_ptr->bi_key.tval();
     if (pc.equals(PlayerClassType::PRIEST) && (o_ptr->get_flags().has_not(TR_BLESSED)) && ((tval == ItemKindType::SWORD) || (tval == ItemKindType::POLEARM))) {
@@ -2290,8 +2287,7 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
         hit += 12;
     }
 
-    auto player_stun = player_ptr->effects()->stun();
-    hit -= player_stun->get_damage_penalty();
+    hit -= player_ptr->effects()->stun().get_damage_penalty();
     player_hand calc_hand = PLAYER_HAND_OTHER;
     if (slot == INVEN_MAIN_HAND) {
         calc_hand = PLAYER_HAND_MAIN;
@@ -2526,8 +2522,7 @@ static int16_t calc_to_hit_bow(PlayerType *player_ptr, bool is_real_value)
         }
     }
 
-    auto player_stun = player_ptr->effects()->stun();
-    pow -= player_stun->get_damage_penalty();
+    pow -= player_ptr->effects()->stun().get_damage_penalty();
     if (is_blessed(player_ptr)) {
         pow += 10;
     }
@@ -2610,8 +2605,7 @@ static int16_t calc_to_damage_misc(PlayerType *player_ptr)
         to_dam += 3 + (player_ptr->lev / 5);
     }
 
-    auto player_stun = player_ptr->effects()->stun();
-    to_dam -= player_stun->get_damage_penalty();
+    to_dam -= player_ptr->effects()->stun().get_damage_penalty();
     to_dam += ((int)(adj_str_td[player_ptr->stat_index[A_STR]]) - 128);
     return to_dam;
 }
@@ -2649,8 +2643,7 @@ static int16_t calc_to_hit_misc(PlayerType *player_ptr)
         to_hit += 12;
     }
 
-    auto player_stun = player_ptr->effects()->stun();
-    to_hit -= player_stun->get_damage_penalty();
+    to_hit -= player_ptr->effects()->stun().get_damage_penalty();
     to_hit += ((int)(adj_dex_th[player_ptr->stat_index[A_DEX]]) - 128);
     to_hit += ((int)(adj_str_th[player_ptr->stat_index[A_STR]]) - 128);
 
@@ -3228,7 +3221,7 @@ void stop_mouth(PlayerType *player_ptr)
 
 bool is_fast(PlayerType *player_ptr)
 {
-    return player_ptr->effects()->acceleration()->is_fast() || music_singing(player_ptr, MUSIC_SPEED) || music_singing(player_ptr, MUSIC_SHERO);
+    return player_ptr->effects()->acceleration().is_fast() || music_singing(player_ptr, MUSIC_SPEED) || music_singing(player_ptr, MUSIC_SHERO);
 }
 
 bool is_invuln(PlayerType *player_ptr)

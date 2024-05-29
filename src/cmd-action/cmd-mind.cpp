@@ -48,7 +48,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
@@ -189,9 +188,7 @@ static void decide_mind_chance(PlayerType *player_ptr, cm_type *cm_ptr)
         cm_ptr->chance = cm_ptr->minfail;
     }
 
-    auto player_stun = player_ptr->effects()->stun();
-    cm_ptr->chance += player_stun->get_magic_chance_penalty();
-
+    cm_ptr->chance += player_ptr->effects()->stun().get_magic_chance_penalty();
     if (cm_ptr->use_mind != MindKindType::KI) {
         return;
     }

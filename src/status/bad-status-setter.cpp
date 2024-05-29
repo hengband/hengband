@@ -19,10 +19,6 @@
 #include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-paralysis.h"
-#include "timed-effect/player-poison.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include <algorithm>
@@ -199,8 +195,8 @@ bool BadStatusSetter::set_poison(const TIME_EFFECT tmp_v)
         return false;
     }
 
-    const auto player_poison = this->player_ptr->effects()->poison();
-    const auto is_poisoned = player_poison->is_poisoned();
+    auto &player_poison = this->player_ptr->effects()->poison();
+    const auto is_poisoned = player_poison.is_poisoned();
     if (v > 0) {
         if (!is_poisoned) {
             msg_print(_("毒に侵されてしまった！", "You are poisoned!"));
@@ -213,7 +209,7 @@ bool BadStatusSetter::set_poison(const TIME_EFFECT tmp_v)
         }
     }
 
-    player_poison->set(v);
+    player_poison.set(v);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
@@ -229,7 +225,7 @@ bool BadStatusSetter::set_poison(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_poison(const TIME_EFFECT tmp_v)
 {
-    return this->set_poison(this->player_ptr->effects()->poison()->current() + tmp_v);
+    return this->set_poison(this->player_ptr->effects()->poison().current() + tmp_v);
 }
 
 /*!
@@ -296,9 +292,9 @@ bool BadStatusSetter::set_paralysis(const TIME_EFFECT tmp_v)
         return false;
     }
 
-    auto paralysis = this->player_ptr->effects()->paralysis();
+    auto &paralysis = this->player_ptr->effects()->paralysis();
     if (v > 0) {
-        if (!paralysis->is_paralyzed()) {
+        if (!paralysis.is_paralyzed()) {
             msg_print(_("体が麻痺してしまった！", "You are paralyzed!"));
             reset_concentration(this->player_ptr, true);
 
@@ -311,13 +307,13 @@ bool BadStatusSetter::set_paralysis(const TIME_EFFECT tmp_v)
             notice = true;
         }
     } else {
-        if (paralysis->is_paralyzed()) {
+        if (paralysis.is_paralyzed()) {
             msg_print(_("やっと動けるようになった。", "You can move again."));
             notice = true;
         }
     }
 
-    paralysis->set(v);
+    paralysis.set(v);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
@@ -334,7 +330,7 @@ bool BadStatusSetter::set_paralysis(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_paralysis(const TIME_EFFECT tmp_v)
 {
-    return this->set_paralysis(this->player_ptr->effects()->paralysis()->current() + tmp_v);
+    return this->set_paralysis(this->player_ptr->effects()->paralysis().current() + tmp_v);
 }
 
 /*!
@@ -418,11 +414,11 @@ bool BadStatusSetter::set_deceleration(const TIME_EFFECT tmp_v, bool do_dec)
         return false;
     }
 
-    auto deceleration = this->player_ptr->effects()->deceleration();
-    auto is_slow = deceleration->is_slow();
+    auto &deceleration = this->player_ptr->effects()->deceleration();
+    auto is_slow = deceleration.is_slow();
     if (v > 0) {
         if (is_slow && !do_dec) {
-            if (deceleration->current() > v) {
+            if (deceleration.current() > v) {
                 return false;
             }
         } else if (!is_slow) {
@@ -436,7 +432,7 @@ bool BadStatusSetter::set_deceleration(const TIME_EFFECT tmp_v, bool do_dec)
         }
     }
 
-    deceleration->set(v);
+    deceleration.set(v);
     if (!notice) {
         return false;
     }
@@ -452,7 +448,7 @@ bool BadStatusSetter::set_deceleration(const TIME_EFFECT tmp_v, bool do_dec)
 
 bool BadStatusSetter::mod_deceleration(const TIME_EFFECT tmp_v, bool do_dec)
 {
-    return this->set_deceleration(this->player_ptr->effects()->deceleration()->current() + tmp_v, do_dec);
+    return this->set_deceleration(this->player_ptr->effects()->deceleration().current() + tmp_v, do_dec);
 }
 
 /*!
@@ -474,7 +470,7 @@ bool BadStatusSetter::set_stun(const TIME_EFFECT tmp_v)
     }
 
     auto notice = this->process_stun_effect(v);
-    this->player_ptr->effects()->stun()->set(v);
+    this->player_ptr->effects()->stun().set(v);
     if (!notice) {
         return false;
     }
@@ -492,7 +488,7 @@ bool BadStatusSetter::set_stun(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_stun(const TIME_EFFECT tmp_v)
 {
-    return this->set_stun(this->player_ptr->effects()->stun()->current() + tmp_v);
+    return this->set_stun(this->player_ptr->effects()->stun().current() + tmp_v);
 }
 
 /*!
@@ -537,7 +533,7 @@ bool BadStatusSetter::mod_cut(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::process_stun_effect(const short v)
 {
-    auto old_rank = this->player_ptr->effects()->stun()->get_rank();
+    auto old_rank = this->player_ptr->effects()->stun().get_rank();
     auto new_rank = PlayerStun::get_rank(v);
     if (new_rank > old_rank) {
         this->process_stun_status(new_rank, v);
@@ -571,7 +567,7 @@ void BadStatusSetter::process_stun_status(const PlayerStunRank new_rank, const s
 
 void BadStatusSetter::clear_head()
 {
-    if (this->player_ptr->effects()->stun()->is_stunned()) {
+    if (this->player_ptr->effects()->stun().is_stunned()) {
         return;
     }
 

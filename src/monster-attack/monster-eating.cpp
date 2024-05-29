@@ -28,7 +28,6 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "timed-effect/player-paralysis.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -36,7 +35,7 @@
 
 void process_eat_gold(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
-    auto is_paralyzed = player_ptr->effects()->paralysis()->is_paralyzed();
+    const auto is_paralyzed = player_ptr->effects()->paralysis().is_paralyzed();
     if (!is_paralyzed && (randint0(100) < (adj_dex_safe[player_ptr->stat_index[A_DEX]] + player_ptr->lev))) {
         msg_print(_("しかし素早く財布を守った！", "You quickly protect your money pouch!"));
         if (randint0(3)) {
@@ -94,7 +93,7 @@ bool check_eat_item(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         return false;
     }
 
-    auto is_paralyzed = player_ptr->effects()->paralysis()->is_paralyzed();
+    const auto is_paralyzed = player_ptr->effects()->paralysis().is_paralyzed();
     if (!is_paralyzed && (randint0(100) < (adj_dex_safe[player_ptr->stat_index[A_DEX]] + player_ptr->lev))) {
         msg_print(_("しかしあわててザックを取り返した！", "You grab hold of your backpack!"));
         monap_ptr->blinked = true;
