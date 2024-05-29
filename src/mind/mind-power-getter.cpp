@@ -251,16 +251,15 @@ bool MindPowerGetter::display_minds_chance(const bool only_browse)
 
 void MindPowerGetter::display_each_mind_chance()
 {
-    bool has_weapon[2];
-    has_weapon[0] = has_melee_weapon(this->player_ptr, INVEN_MAIN_HAND);
-    has_weapon[1] = has_melee_weapon(this->player_ptr, INVEN_SUB_HAND);
+    const auto has_weapon_main = has_melee_weapon(this->player_ptr, INVEN_MAIN_HAND);
+    const auto has_weapon_sub = has_melee_weapon(this->player_ptr, INVEN_SUB_HAND);
     for (this->index = 0; this->index < MAX_MIND_POWERS; this->index++) {
         this->spell = &mind_ptr->info[this->index];
         if (this->spell->min_lev > this->player_ptr->lev) {
             break;
         }
 
-        calculate_mind_chance(has_weapon);
+        calculate_mind_chance(has_weapon_main, has_weapon_sub);
         const auto comment = mindcraft_info(this->player_ptr, this->use_mind, this->index);
         std::string psi_desc;
         if (use_menu) {
@@ -279,7 +278,7 @@ void MindPowerGetter::display_each_mind_chance()
     }
 }
 
-void MindPowerGetter::calculate_mind_chance(bool *has_weapon)
+void MindPowerGetter::calculate_mind_chance(bool has_weapon_main, bool has_weapon_sub)
 {
     this->chance = this->spell->fail;
     this->mana_cost = this->spell->mana_cost;
@@ -289,7 +288,7 @@ void MindPowerGetter::calculate_mind_chance(bool *has_weapon)
 
     this->chance -= 3 * (this->player_ptr->lev - this->spell->min_lev);
     this->chance -= 3 * (adj_mag_stat[this->player_ptr->stat_index[mp_ptr->spell_stat]] - 1);
-    calculate_ki_chance(has_weapon);
+    calculate_ki_chance(has_weapon_main, has_weapon_sub);
     if ((this->use_mind != MindKindType::BERSERKER) && (this->use_mind != MindKindType::NINJUTSU) && (this->mana_cost > this->player_ptr->csp)) {
         this->chance += 5 * (this->mana_cost - this->player_ptr->csp);
     }
@@ -307,7 +306,7 @@ void MindPowerGetter::calculate_mind_chance(bool *has_weapon)
     }
 }
 
-void MindPowerGetter::calculate_ki_chance(bool *has_weapon)
+void MindPowerGetter::calculate_ki_chance(bool has_weapon_main, bool has_weapon_sub)
 {
     if (this->use_mind != MindKindType::KI) {
         return;
@@ -319,13 +318,13 @@ void MindPowerGetter::calculate_ki_chance(bool *has_weapon)
 
     if (this->player_ptr->is_icky_wield[0]) {
         this->chance += 20;
-    } else if (has_weapon[0]) {
+    } else if (has_weapon_main) {
         this->chance += 10;
     }
 
     if (this->player_ptr->is_icky_wield[1]) {
         chance += 20;
-    } else if (has_weapon[1]) {
+    } else if (has_weapon_sub) {
         this->chance += 10;
     }
 
