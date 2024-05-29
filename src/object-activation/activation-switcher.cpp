@@ -39,7 +39,6 @@
 #include "status/sight-setter.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-acceleration.h"
 #include "view/display-messages.h"
 
 bool switch_activation(PlayerType *player_ptr, ItemEntity **o_ptr_ptr, const RandomArtActType index, std::string_view name)

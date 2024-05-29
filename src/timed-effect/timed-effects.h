@@ -1,5 +1,6 @@
 #pragma once
 
+#include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
@@ -9,7 +10,6 @@
 #include "timed-effect/player-stun.h"
 #include <memory>
 
-class PlayerAcceleration;
 class PlayerDeceleration;
 class PlayerPoison;
 class TimedEffects {
@@ -35,7 +35,8 @@ public:
     const PlayerParalysis &paralysis() const;
     PlayerStun &stun();
     const PlayerStun &stun() const;
-    std::shared_ptr<PlayerAcceleration> acceleration() const;
+    PlayerAcceleration &acceleration();
+    const PlayerAcceleration &acceleration() const;
     std::shared_ptr<PlayerDeceleration> deceleration() const;
     std::shared_ptr<PlayerPoison> poison() const;
 
@@ -47,7 +48,7 @@ private:
     PlayerHallucination player_hallucination{};
     PlayerParalysis player_paralysis{};
     PlayerStun player_stun{};
-    std::shared_ptr<PlayerAcceleration> player_acceleration;
+    PlayerAcceleration player_acceleration{};
     std::shared_ptr<PlayerDeceleration> player_deceleration;
     std::shared_ptr<PlayerPoison> player_poison;
 };

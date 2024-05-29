@@ -17,7 +17,6 @@
 #include "status/sight-setter.h"
 #include "status/temporary-resistance.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/timed-effects.h"
@@ -140,7 +139,7 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         (void)bss.mod_fear(-1);
     }
 
-    if (effects->acceleration()->is_fast()) {
+    if (effects->acceleration().is_fast()) {
         (void)mod_acceleration(player_ptr, -1, true);
     }
 

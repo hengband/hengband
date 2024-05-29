@@ -37,7 +37,6 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -377,7 +376,7 @@ bool QuaffEffects::death()
  */
 bool QuaffEffects::speed()
 {
-    if (this->player_ptr->effects()->acceleration()->is_fast()) {
+    if (this->player_ptr->effects()->acceleration().is_fast()) {
         (void)mod_acceleration(this->player_ptr, 5, false);
         return false;
     }
