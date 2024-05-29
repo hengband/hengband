@@ -4,13 +4,13 @@
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
+#include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-stun.h"
 #include <memory>
 
-class PlayerDeceleration;
 class PlayerPoison;
 class TimedEffects {
 public:
@@ -37,7 +37,8 @@ public:
     const PlayerStun &stun() const;
     PlayerAcceleration &acceleration();
     const PlayerAcceleration &acceleration() const;
-    std::shared_ptr<PlayerDeceleration> deceleration() const;
+    PlayerDeceleration &deceleration();
+    const PlayerDeceleration &deceleration() const;
     std::shared_ptr<PlayerPoison> poison() const;
 
 private:
@@ -49,6 +50,6 @@ private:
     PlayerParalysis player_paralysis{};
     PlayerStun player_stun{};
     PlayerAcceleration player_acceleration{};
-    std::shared_ptr<PlayerDeceleration> player_deceleration;
+    PlayerDeceleration player_deceleration{};
     std::shared_ptr<PlayerPoison> player_poison;
 };

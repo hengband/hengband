@@ -18,7 +18,6 @@
 #include "status/element-resistance.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -31,7 +30,7 @@ void reset_tim_flags(PlayerType *player_ptr)
     auto effects = player_ptr->effects();
     effects->acceleration().reset();
     player_ptr->lightspeed = 0;
-    effects->deceleration()->reset();
+    effects->deceleration().reset();
     effects->blindness().reset();
     effects->paralysis().reset();
     effects->confusion().reset();

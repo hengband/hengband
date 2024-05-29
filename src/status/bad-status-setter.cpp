@@ -19,7 +19,6 @@
 #include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -416,11 +415,11 @@ bool BadStatusSetter::set_deceleration(const TIME_EFFECT tmp_v, bool do_dec)
         return false;
     }
 
-    auto deceleration = this->player_ptr->effects()->deceleration();
-    auto is_slow = deceleration->is_slow();
+    auto &deceleration = this->player_ptr->effects()->deceleration();
+    auto is_slow = deceleration.is_slow();
     if (v > 0) {
         if (is_slow && !do_dec) {
-            if (deceleration->current() > v) {
+            if (deceleration.current() > v) {
                 return false;
             }
         } else if (!is_slow) {
@@ -434,7 +433,7 @@ bool BadStatusSetter::set_deceleration(const TIME_EFFECT tmp_v, bool do_dec)
         }
     }
 
-    deceleration->set(v);
+    deceleration.set(v);
     if (!notice) {
         return false;
     }
@@ -450,7 +449,7 @@ bool BadStatusSetter::set_deceleration(const TIME_EFFECT tmp_v, bool do_dec)
 
 bool BadStatusSetter::mod_deceleration(const TIME_EFFECT tmp_v, bool do_dec)
 {
-    return this->set_deceleration(this->player_ptr->effects()->deceleration()->current() + tmp_v, do_dec);
+    return this->set_deceleration(this->player_ptr->effects()->deceleration().current() + tmp_v, do_dec);
 }
 
 /*!

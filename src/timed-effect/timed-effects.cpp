@@ -5,12 +5,10 @@
  */
 
 #include "timed-effect/timed-effects.h"
-#include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-poison.h"
 
 TimedEffects::TimedEffects()
-    : player_deceleration(std::make_shared<PlayerDeceleration>())
-    , player_poison(std::make_shared<PlayerPoison>())
+    : player_poison(std::make_shared<PlayerPoison>())
 {
 }
 
@@ -94,7 +92,12 @@ const PlayerAcceleration &TimedEffects::acceleration() const
     return this->player_acceleration;
 }
 
-std::shared_ptr<PlayerDeceleration> TimedEffects::deceleration() const
+PlayerDeceleration &TimedEffects::deceleration()
+{
+    return this->player_deceleration;
+}
+
+const PlayerDeceleration &TimedEffects::deceleration() const
 {
     return this->player_deceleration;
 }

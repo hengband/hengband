@@ -52,7 +52,6 @@
 #include "target/target-setter.h"
 #include "target/target-types.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-deceleration.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
@@ -240,7 +239,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
             }
         } else {
             msg_print(_("精力的になった気がする。", "You feel more energetic."));
-            if (player_ptr->effects()->deceleration()->is_slow()) {
+            if (player_ptr->effects()->deceleration().is_slow()) {
                 (void)bss.set_deceleration(0, true);
             } else {
                 set_acceleration(player_ptr, randint1(30) + 10, false);

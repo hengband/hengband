@@ -11,7 +11,6 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/timed-effects.h"
 #include "world/world.h"
@@ -162,7 +161,7 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(player_ptr->energy_need);
     wr_s16b(player_ptr->enchant_energy_need);
     wr_s16b(effects->acceleration().current());
-    wr_s16b(effects->deceleration()->current());
+    wr_s16b(effects->deceleration().current());
     wr_s16b(effects->fear().current());
     wr_s16b(effects->cut().current());
     wr_s16b(effects->stun().current());

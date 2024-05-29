@@ -23,7 +23,6 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
-#include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/timed-effects.h"
 #include "view/status-bars-table.h"
@@ -257,8 +256,8 @@ void print_speed(PlayerType *player_ptr)
     bool is_player_fast = is_fast(player_ptr);
     std::string buf;
     TERM_COLOR attr = TERM_WHITE;
+    const auto is_slow = player_ptr->effects()->deceleration().is_slow();
     if (speed > 0) {
-        auto is_slow = player_ptr->effects()->deceleration()->is_slow();
         if (player_ptr->riding) {
             auto *m_ptr = &floor_ptr->m_list[player_ptr->riding];
             if (m_ptr->is_accelerated() && !m_ptr->is_decelerated()) {
@@ -277,7 +276,6 @@ void print_speed(PlayerType *player_ptr)
         }
         buf = format("%s(+%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("加速", "Fast")), speed);
     } else if (speed < 0) {
-        auto is_slow = player_ptr->effects()->deceleration()->is_slow();
         if (player_ptr->riding) {
             auto *m_ptr = &floor_ptr->m_list[player_ptr->riding];
             if (m_ptr->is_accelerated() && !m_ptr->is_decelerated()) {
