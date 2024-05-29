@@ -11,7 +11,6 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-poison.h"
 #include "timed-effect/timed-effects.h"
 #include "world/world.h"
 #include <variant>
@@ -165,7 +164,7 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(effects->fear().current());
     wr_s16b(effects->cut().current());
     wr_s16b(effects->stun().current());
-    wr_s16b(effects->poison()->current());
+    wr_s16b(effects->poison().current());
     wr_s16b(effects->hallucination().current());
     wr_s16b(player_ptr->protevil);
     wr_s16b(player_ptr->invuln);

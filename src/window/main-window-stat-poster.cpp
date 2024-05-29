@@ -23,7 +23,6 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
-#include "timed-effect/player-poison.h"
 #include "timed-effect/timed-effects.h"
 #include "view/status-bars-table.h"
 #include "window/main-window-row-column.h"
@@ -462,7 +461,7 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_CONFUSE);
     }
 
-    if (effects->poison()->is_poisoned()) {
+    if (effects->poison().is_poisoned()) {
         ADD_BAR_FLAG(BAR_POISONED);
     }
 

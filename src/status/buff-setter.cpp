@@ -18,7 +18,6 @@
 #include "status/element-resistance.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "timed-effect/player-poison.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
@@ -36,7 +35,7 @@ void reset_tim_flags(PlayerType *player_ptr)
     effects->confusion().reset();
     effects->fear().reset();
     effects->hallucination().reset();
-    effects->poison()->reset();
+    effects->poison().reset();
     effects->cut().reset();
     effects->stun().reset();
 

@@ -19,7 +19,6 @@
 #include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "timed-effect/player-poison.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include <algorithm>
@@ -196,8 +195,8 @@ bool BadStatusSetter::set_poison(const TIME_EFFECT tmp_v)
         return false;
     }
 
-    const auto player_poison = this->player_ptr->effects()->poison();
-    const auto is_poisoned = player_poison->is_poisoned();
+    auto &player_poison = this->player_ptr->effects()->poison();
+    const auto is_poisoned = player_poison.is_poisoned();
     if (v > 0) {
         if (!is_poisoned) {
             msg_print(_("毒に侵されてしまった！", "You are poisoned!"));
@@ -210,7 +209,7 @@ bool BadStatusSetter::set_poison(const TIME_EFFECT tmp_v)
         }
     }
 
-    player_poison->set(v);
+    player_poison.set(v);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
@@ -226,7 +225,7 @@ bool BadStatusSetter::set_poison(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_poison(const TIME_EFFECT tmp_v)
 {
-    return this->set_poison(this->player_ptr->effects()->poison()->current() + tmp_v);
+    return this->set_poison(this->player_ptr->effects()->poison().current() + tmp_v);
 }
 
 /*!

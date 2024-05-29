@@ -40,7 +40,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
-#include "timed-effect/player-poison.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -118,8 +117,8 @@ void process_player_hp_mp(PlayerType *player_ptr)
     int upkeep_factor = 0;
     int regen_amount = PY_REGEN_NORMAL;
     const auto effects = player_ptr->effects();
-    const auto player_poison = effects->poison();
-    if (player_poison->is_poisoned() && !is_invuln(player_ptr)) {
+    const auto &player_poison = effects->poison();
+    if (player_poison.is_poisoned() && !is_invuln(player_ptr)) {
         if (take_hit(player_ptr, DAMAGE_NOESCAPE, 1, _("毒", "poison")) > 0) {
             sound(SOUND_DAMAGE_OVER_TIME);
         }
@@ -409,7 +408,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
         }
     }
 
-    if (player_poison->is_poisoned()) {
+    if (player_poison.is_poisoned()) {
         regen_amount = 0;
     }
     if (player_cut.is_cut()) {

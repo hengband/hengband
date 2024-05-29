@@ -17,7 +17,6 @@
 #include "status/sight-setter.h"
 #include "status/temporary-resistance.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-poison.h"
 #include "timed-effect/timed-effects.h"
 
 /*!
@@ -210,7 +209,7 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         (void)set_ultimate_res(player_ptr, player_ptr->ult_res - 1, true);
     }
 
-    if (effects->poison()->is_poisoned()) {
+    if (effects->poison().is_poisoned()) {
         int adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
         (void)bss.mod_poison(-adjust);
     }

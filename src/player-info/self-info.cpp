@@ -30,7 +30,6 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
-#include "timed-effect/player-poison.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-self-info.h"
 
@@ -57,7 +56,7 @@ static void set_bad_status_info(PlayerType *player_ptr, self_info_type *self_ptr
         self_ptr->info_list.emplace_back(_("あなたはもうろうとしている。", "You are stunned."));
     }
 
-    if (effects->poison()->is_poisoned()) {
+    if (effects->poison().is_poisoned()) {
         self_ptr->info_list.emplace_back(_("あなたは毒に侵されている。", "You are poisoned."));
     }
 
@@ -333,9 +332,9 @@ void report_magics(PlayerType *player_ptr)
             _("あなたは恐怖に侵されている", "You are terrified"));
     }
 
-    const auto player_poison = effects->poison();
-    if (player_poison->is_poisoned()) {
-        info.emplace_back(report_magics_aux(player_poison->current()),
+    const auto &player_poison = effects->poison();
+    if (player_poison.is_poisoned()) {
+        info.emplace_back(report_magics_aux(player_poison.current()),
             _("あなたは毒に侵されている", "You are poisoned"));
     }
 

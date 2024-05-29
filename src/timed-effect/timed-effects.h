@@ -8,13 +8,12 @@
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
+#include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
-#include <memory>
 
-class PlayerPoison;
 class TimedEffects {
 public:
-    TimedEffects();
+    TimedEffects() = default;
     ~TimedEffects() = default;
     TimedEffects(const TimedEffects &) = delete;
     TimedEffects(TimedEffects &&) = delete;
@@ -39,7 +38,8 @@ public:
     const PlayerAcceleration &acceleration() const;
     PlayerDeceleration &deceleration();
     const PlayerDeceleration &deceleration() const;
-    std::shared_ptr<PlayerPoison> poison() const;
+    PlayerPoison &poison();
+    const PlayerPoison &poison() const;
 
 private:
     PlayerBlindness player_blindness{};
@@ -51,5 +51,5 @@ private:
     PlayerStun player_stun{};
     PlayerAcceleration player_acceleration{};
     PlayerDeceleration player_deceleration{};
-    std::shared_ptr<PlayerPoison> player_poison;
+    PlayerPoison player_poison{};
 };
