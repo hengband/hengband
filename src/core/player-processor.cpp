@@ -56,7 +56,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "timed-effect/player-cut.h"
-#include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -273,8 +272,8 @@ void process_player(PlayerType *player_ptr)
 
         PlayerEnergy energy(player_ptr);
         energy.reset_player_turn();
-        auto is_knocked_out = effects->stun()->is_knocked_out();
-        auto is_paralyzed = effects->paralysis()->is_paralyzed();
+        const auto is_knocked_out = effects->stun()->is_knocked_out();
+        const auto is_paralyzed = effects->paralysis().is_paralyzed();
         if (system.is_phase_out()) {
             move_cursor_relative(player_ptr->y, player_ptr->x);
             command_cmd = SPECIAL_KEY_BUILDING;

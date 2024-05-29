@@ -5,11 +5,11 @@
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
+#include "timed-effect/player-paralysis.h"
 #include <memory>
 
 class PlayerAcceleration;
 class PlayerDeceleration;
-class PlayerParalysis;
 class PlayerPoison;
 class PlayerStun;
 class TimedEffects {
@@ -31,7 +31,8 @@ public:
     const PlayerFear &fear() const;
     PlayerHallucination &hallucination();
     const PlayerHallucination &hallucination() const;
-    std::shared_ptr<PlayerParalysis> paralysis() const;
+    PlayerParalysis &paralysis();
+    const PlayerParalysis &paralysis() const;
     std::shared_ptr<PlayerStun> stun() const;
     std::shared_ptr<PlayerAcceleration> acceleration() const;
     std::shared_ptr<PlayerDeceleration> deceleration() const;
@@ -43,7 +44,7 @@ private:
     PlayerCut player_cut{};
     PlayerFear player_fear{};
     PlayerHallucination player_hallucination{};
-    std::shared_ptr<PlayerParalysis> player_paralysis;
+    PlayerParalysis player_paralysis{};
     std::shared_ptr<PlayerStun> player_stun;
     std::shared_ptr<PlayerAcceleration> player_acceleration;
     std::shared_ptr<PlayerDeceleration> player_deceleration;

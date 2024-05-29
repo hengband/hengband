@@ -20,7 +20,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
@@ -296,9 +295,9 @@ bool BadStatusSetter::set_paralysis(const TIME_EFFECT tmp_v)
         return false;
     }
 
-    auto paralysis = this->player_ptr->effects()->paralysis();
+    auto &paralysis = this->player_ptr->effects()->paralysis();
     if (v > 0) {
-        if (!paralysis->is_paralyzed()) {
+        if (!paralysis.is_paralyzed()) {
             msg_print(_("体が麻痺してしまった！", "You are paralyzed!"));
             reset_concentration(this->player_ptr, true);
 
@@ -311,13 +310,13 @@ bool BadStatusSetter::set_paralysis(const TIME_EFFECT tmp_v)
             notice = true;
         }
     } else {
-        if (paralysis->is_paralyzed()) {
+        if (paralysis.is_paralyzed()) {
             msg_print(_("やっと動けるようになった。", "You can move again."));
             notice = true;
         }
     }
 
-    paralysis->set(v);
+    paralysis.set(v);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
@@ -334,7 +333,7 @@ bool BadStatusSetter::set_paralysis(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_paralysis(const TIME_EFFECT tmp_v)
 {
-    return this->set_paralysis(this->player_ptr->effects()->paralysis()->current() + tmp_v);
+    return this->set_paralysis(this->player_ptr->effects()->paralysis().current() + tmp_v);
 }
 
 /*!

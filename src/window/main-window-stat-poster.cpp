@@ -24,7 +24,6 @@
 #include "term/term-color-types.h"
 #include "term/z-form.h"
 #include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
@@ -458,7 +457,7 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_BLINDNESS);
     }
 
-    if (effects->paralysis()->is_paralyzed()) {
+    if (effects->paralysis().is_paralyzed()) {
         ADD_BAR_FLAG(BAR_PARALYZE);
     }
 

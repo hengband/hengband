@@ -26,7 +26,6 @@
 #include "system/player-type-definition.h"
 #include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
@@ -334,7 +333,7 @@ static void rd_bad_status(PlayerType *player_ptr)
     auto effects = player_ptr->effects();
     strip_bytes(2); /* Old "rest" */
     effects->blindness().set(rd_s16b());
-    effects->paralysis()->set(rd_s16b());
+    effects->paralysis().set(rd_s16b());
     effects->confusion().set(rd_s16b());
     player_ptr->food = rd_s16b();
     strip_bytes(4); /* Old "food_digested" / "protection" */

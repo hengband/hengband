@@ -13,7 +13,6 @@
 #include "system/player-type-definition.h"
 #include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
@@ -157,7 +156,7 @@ void wr_player(PlayerType *player_ptr)
     auto effects = player_ptr->effects();
     wr_s16b(0); /* old "rest" */
     wr_s16b(effects->blindness().current());
-    wr_s16b(effects->paralysis()->current());
+    wr_s16b(effects->paralysis().current());
     wr_s16b(effects->confusion().current());
     wr_s16b(player_ptr->food);
     wr_s16b(0); /* old "food_digested" */
