@@ -35,7 +35,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
@@ -377,8 +376,8 @@ bool choose_samurai_stance(PlayerType *player_ptr)
         return false;
     }
 
-    auto effects = player_ptr->effects();
-    if (effects->stun()->is_stunned()) {
+    const auto effects = player_ptr->effects();
+    if (effects->stun().is_stunned()) {
         msg_print(_("意識がはっきりとしない。", "You are not clear-headed"));
         return false;
     }

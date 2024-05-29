@@ -18,7 +18,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
@@ -301,8 +300,7 @@ void MindPowerGetter::calculate_mind_chance(bool *has_weapon)
         this->chance = minfail;
     }
 
-    auto player_stun = this->player_ptr->effects()->stun();
-    this->chance += player_stun->get_magic_chance_penalty();
+    this->chance += this->player_ptr->effects()->stun().get_magic_chance_penalty();
     add_ki_chance();
     if (this->chance > 95) {
         this->chance = 95;

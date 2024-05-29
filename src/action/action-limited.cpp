@@ -15,7 +15,6 @@
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
@@ -67,7 +66,7 @@ bool cmd_limit_image(PlayerType *player_ptr)
 
 bool cmd_limit_stun(PlayerType *player_ptr)
 {
-    if (player_ptr->effects()->stun()->is_stunned()) {
+    if (player_ptr->effects()->stun().is_stunned()) {
         msg_print(_("頭が朦朧としていて集中できない！", "You are too stunned!"));
         return true;
     }

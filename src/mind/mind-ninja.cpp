@@ -56,7 +56,6 @@
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -87,7 +86,7 @@ bool kawarimi(PlayerType *player_ptr, bool success)
         return false;
     }
 
-    if (effects->stun()->current() > randint0(200)) {
+    if (effects->stun().current() > randint0(200)) {
         return false;
     }
 

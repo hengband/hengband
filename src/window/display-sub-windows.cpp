@@ -35,7 +35,6 @@
 #include "target/target-preparation.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
@@ -800,8 +799,7 @@ static void display_spell_list(PlayerType *player_ptr)
                 chance = minfail;
             }
 
-            auto player_stun = player_ptr->effects()->stun();
-            chance += player_stun->get_magic_chance_penalty();
+            chance += player_ptr->effects()->stun().get_magic_chance_penalty();
             if (chance > 95) {
                 chance = 95;
             }

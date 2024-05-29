@@ -31,7 +31,6 @@
 #include "term/screen-processor.h"
 #include "term/z-form.h"
 #include "timed-effect/player-poison.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-self-info.h"
 
@@ -54,7 +53,7 @@ static void set_bad_status_info(PlayerType *player_ptr, self_info_type *self_ptr
         self_ptr->info_list.emplace_back(_("あなたは出血している。", "You are bleeding."));
     }
 
-    if (effects->stun()->is_stunned()) {
+    if (effects->stun().is_stunned()) {
         self_ptr->info_list.emplace_back(_("あなたはもうろうとしている。", "You are stunned."));
     }
 

@@ -20,7 +20,6 @@
 #include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-poison.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 
 /*!
@@ -218,8 +217,7 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         (void)bss.mod_poison(-adjust);
     }
 
-    auto player_stun = effects->stun();
-    if (player_stun->is_stunned()) {
+    if (effects->stun().is_stunned()) {
         int adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
         (void)bss.mod_stun(-adjust);
     }

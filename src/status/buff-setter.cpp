@@ -21,7 +21,6 @@
 #include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-poison.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
@@ -41,7 +40,7 @@ void reset_tim_flags(PlayerType *player_ptr)
     effects->hallucination().reset();
     effects->poison()->reset();
     effects->cut().reset();
-    effects->stun()->reset();
+    effects->stun().reset();
 
     player_ptr->protevil = 0; /* Timed -- Protection */
     player_ptr->invuln = 0; /* Timed -- Invulnerable */

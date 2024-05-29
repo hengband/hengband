@@ -21,7 +21,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-poison.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include <algorithm>
@@ -473,7 +472,7 @@ bool BadStatusSetter::set_stun(const TIME_EFFECT tmp_v)
     }
 
     auto notice = this->process_stun_effect(v);
-    this->player_ptr->effects()->stun()->set(v);
+    this->player_ptr->effects()->stun().set(v);
     if (!notice) {
         return false;
     }
@@ -491,7 +490,7 @@ bool BadStatusSetter::set_stun(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_stun(const TIME_EFFECT tmp_v)
 {
-    return this->set_stun(this->player_ptr->effects()->stun()->current() + tmp_v);
+    return this->set_stun(this->player_ptr->effects()->stun().current() + tmp_v);
 }
 
 /*!
@@ -536,7 +535,7 @@ bool BadStatusSetter::mod_cut(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::process_stun_effect(const short v)
 {
-    auto old_rank = this->player_ptr->effects()->stun()->get_rank();
+    auto old_rank = this->player_ptr->effects()->stun().get_rank();
     auto new_rank = PlayerStun::get_rank(v);
     if (new_rank > old_rank) {
         this->process_stun_status(new_rank, v);
@@ -570,7 +569,7 @@ void BadStatusSetter::process_stun_status(const PlayerStunRank new_rank, const s
 
 void BadStatusSetter::clear_head()
 {
-    if (this->player_ptr->effects()->stun()->is_stunned()) {
+    if (this->player_ptr->effects()->stun().is_stunned()) {
         return;
     }
 

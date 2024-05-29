@@ -25,7 +25,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "util/flag-group.h"
@@ -270,8 +269,7 @@ int calculate_blue_magic_failure_probability(PlayerType *player_ptr, const monst
         chance = minfail;
     }
 
-    auto player_stun = player_ptr->effects()->stun();
-    chance += player_stun->get_magic_chance_penalty();
+    chance += player_ptr->effects()->stun().get_magic_chance_penalty();
     if (chance > 95) {
         chance = 95;
     }
