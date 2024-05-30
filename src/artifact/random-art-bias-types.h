@@ -4,7 +4,7 @@
  * @brief ランダムアーティファクトのバイアス定義
  */
 
-enum random_art_bias_type {
+enum random_art_bias_type : int {
     BIAS_NONE = 0,
     BIAS_ELEC = 1, /*!< ランダムアーティファクトバイアス:電撃 */
     BIAS_POIS = 2, /*!< ランダムアーティファクトバイアス:毒 */
