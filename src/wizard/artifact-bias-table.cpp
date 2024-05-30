@@ -5,7 +5,7 @@
 /*!
  * @brief ランダムアーティファクトのバイアス名称テーブル
  */
-const std::map<random_art_bias_type, std::string> artifact_bias_name = {
+const std::map<random_art_bias_type, std::string> ARTIFACT_BIAS_NAMES = {
     { BIAS_NONE, _("なし", "None") },
     { BIAS_ELEC, _("電撃", "Elec") },
     { BIAS_POIS, _("毒", "Poison") },
