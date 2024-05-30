@@ -105,6 +105,10 @@ static void check_lite_resistance(msr_type *msr_ptr)
     if (int_outof(msr_ptr->r_ptr, 50)) {
         msr_ptr->ability_flags.reset(MonsterAbilityType::BA_LITE);
     }
+
+    if (int_outof(msr_ptr->r_ptr, 50)) {
+        msr_ptr->ability_flags.reset(MonsterAbilityType::BO_LITE);
+    }
 }
 
 static void check_dark_resistance(PlayerType *player_ptr, msr_type *msr_ptr)
