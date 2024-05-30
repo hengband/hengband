@@ -8,6 +8,7 @@
 
 #include "system/item-entity.h"
 #include "artifact/fixed-art-types.h"
+#include "artifact/random-art-bias-types.h"
 #include "artifact/random-art-effects.h"
 #include "monster-race/monster-race.h"
 #include "object-enchant/activation-info-table.h"
@@ -771,6 +772,11 @@ std::vector<ActivationType>::const_iterator ItemEntity::find_activation_info() c
 bool ItemEntity::has_activation() const
 {
     return this->get_activation_index() != RandomArtActType::NONE;
+}
+
+bool ItemEntity::has_bias() const
+{
+    return this->artifact_bias != RandomArtifactBias::NONE;
 }
 
 BaseitemInfo &ItemEntity::get_baseitem() const

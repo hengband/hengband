@@ -26,8 +26,8 @@ static bool random_art_slay_bow(ItemEntity *o_ptr)
             o_ptr->art_flags.reset(TR_XTRA_SHOTS);
         }
 
-        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(9)) {
-            o_ptr->artifact_bias = BIAS_RANGER;
+        if (!o_ptr->has_bias() && one_in_(9)) {
+            o_ptr->artifact_bias = RandomArtifactBias::RANGER;
         }
 
         return true;
@@ -37,8 +37,8 @@ static bool random_art_slay_bow(ItemEntity *o_ptr)
             o_ptr->art_flags.reset(TR_XTRA_MIGHT);
         }
 
-        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(9)) {
-            o_ptr->artifact_bias = BIAS_RANGER;
+        if (!o_ptr->has_bias() && one_in_(9)) {
+            o_ptr->artifact_bias = RandomArtifactBias::RANGER;
         }
 
         return true;
@@ -168,12 +168,12 @@ static bool random_art_slay_demon(ItemEntity *o_ptr)
 static bool switch_random_art_slay(ItemEntity *o_ptr)
 {
     switch (o_ptr->artifact_bias) {
-    case BIAS_CHAOS:
+    case RandomArtifactBias::CHAOS:
         return random_art_slay_chaos(o_ptr);
-    case BIAS_MAGE:
-    case BIAS_INT:
+    case RandomArtifactBias::MAGE:
+    case RandomArtifactBias::INT:
         return random_art_brand_magical(o_ptr);
-    case BIAS_PRIESTLY: {
+    case RandomArtifactBias::PRIESTLY: {
         const auto tval = o_ptr->bi_key.tval();
         if (((tval == ItemKindType::SWORD) || (tval == ItemKindType::POLEARM)) && o_ptr->art_flags.has_not(TR_BLESSED)) {
             o_ptr->art_flags.set(TR_BLESSED);
@@ -181,11 +181,11 @@ static bool switch_random_art_slay(ItemEntity *o_ptr)
 
         return false;
     }
-    case BIAS_NECROMANTIC:
+    case RandomArtifactBias::NECROMANTIC:
         return random_art_slay_vampiric(o_ptr) || random_art_slay_brand_pois(o_ptr);
-    case BIAS_RANGER:
+    case RandomArtifactBias::RANGER:
         return random_art_slay_animal(o_ptr);
-    case BIAS_ROGUE: {
+    case RandomArtifactBias::ROGUE: {
         auto is_throwable = o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_DAGGER);
         is_throwable |= o_ptr->bi_key == BaseitemKey(ItemKindType::POLEARM, SV_SPEAR);
         if (is_throwable && o_ptr->art_flags.has_not(TR_THROW)) {
@@ -194,17 +194,17 @@ static bool switch_random_art_slay(ItemEntity *o_ptr)
 
         return random_art_slay_brand_pois(o_ptr);
     }
-    case BIAS_POIS:
+    case RandomArtifactBias::POIS:
         return random_art_slay_brand_pois(o_ptr);
-    case BIAS_ACID:
+    case RandomArtifactBias::ACID:
         return random_art_slay_brand_acid(o_ptr);
-    case BIAS_ELEC:
+    case RandomArtifactBias::ELEC:
         return random_art_slay_brand_elec(o_ptr);
-    case BIAS_FIRE:
+    case RandomArtifactBias::FIRE:
         return random_art_slay_brand_fire(o_ptr);
-    case BIAS_COLD:
+    case RandomArtifactBias::COLD:
         return random_art_slay_brand_cold(o_ptr);
-    case BIAS_LAW:
+    case RandomArtifactBias::LAW:
         return random_art_slay_evil(o_ptr) || random_art_slay_undead(o_ptr) || random_art_slay_demon(o_ptr);
     default:
         return false;
@@ -244,13 +244,13 @@ void random_slay(ItemEntity *o_ptr)
             o_ptr->art_flags.set(TR_SLAY_EVIL);
         }
 
-        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(2)) {
-            o_ptr->artifact_bias = BIAS_LAW;
+        if (!o_ptr->has_bias() && one_in_(2)) {
+            o_ptr->artifact_bias = RandomArtifactBias::LAW;
             break;
         }
 
-        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(9)) {
-            o_ptr->artifact_bias = BIAS_PRIESTLY;
+        if (!o_ptr->has_bias() && one_in_(9)) {
+            o_ptr->artifact_bias = RandomArtifactBias::PRIESTLY;
         }
 
         break;
@@ -262,8 +262,8 @@ void random_slay(ItemEntity *o_ptr)
             o_ptr->art_flags.set(TR_SLAY_UNDEAD);
         }
 
-        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(9)) {
-            o_ptr->artifact_bias = BIAS_PRIESTLY;
+        if (!o_ptr->has_bias() && one_in_(9)) {
+            o_ptr->artifact_bias = RandomArtifactBias::PRIESTLY;
         }
 
         break;
@@ -275,8 +275,8 @@ void random_slay(ItemEntity *o_ptr)
             o_ptr->art_flags.set(TR_SLAY_DEMON);
         }
 
-        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(9)) {
-            o_ptr->artifact_bias = BIAS_PRIESTLY;
+        if (!o_ptr->has_bias() && one_in_(9)) {
+            o_ptr->artifact_bias = RandomArtifactBias::PRIESTLY;
         }
 
         break;
@@ -322,8 +322,8 @@ void random_slay(ItemEntity *o_ptr)
         }
 
         o_ptr->art_flags.set(TR_VORPAL);
-        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(9)) {
-            o_ptr->artifact_bias = BIAS_WARRIOR;
+        if (!o_ptr->has_bias() && one_in_(9)) {
+            o_ptr->artifact_bias = RandomArtifactBias::WARRIOR;
         }
 
         break;
@@ -333,64 +333,64 @@ void random_slay(ItemEntity *o_ptr)
     case 21:
     case 22:
         o_ptr->art_flags.set(TR_BRAND_FIRE);
-        if (o_ptr->artifact_bias == BIAS_NONE) {
-            o_ptr->artifact_bias = BIAS_FIRE;
+        if (!o_ptr->has_bias()) {
+            o_ptr->artifact_bias = RandomArtifactBias::FIRE;
         }
 
         break;
     case 23:
     case 24:
         o_ptr->art_flags.set(TR_BRAND_COLD);
-        if (o_ptr->artifact_bias == BIAS_NONE) {
-            o_ptr->artifact_bias = BIAS_COLD;
+        if (!o_ptr->has_bias()) {
+            o_ptr->artifact_bias = RandomArtifactBias::COLD;
         }
 
         break;
     case 25:
     case 26:
         o_ptr->art_flags.set(TR_BRAND_ELEC);
-        if (o_ptr->artifact_bias == BIAS_NONE) {
-            o_ptr->artifact_bias = BIAS_ELEC;
+        if (!o_ptr->has_bias()) {
+            o_ptr->artifact_bias = RandomArtifactBias::ELEC;
         }
 
         break;
     case 27:
     case 28:
         o_ptr->art_flags.set(TR_BRAND_ACID);
-        if (!o_ptr->artifact_bias) {
-            o_ptr->artifact_bias = BIAS_ACID;
+        if (!o_ptr->has_bias()) {
+            o_ptr->artifact_bias = RandomArtifactBias::ACID;
         }
 
         break;
     case 29:
     case 30:
         o_ptr->art_flags.set(TR_BRAND_POIS);
-        if ((o_ptr->artifact_bias == BIAS_NONE) && !one_in_(3)) {
-            o_ptr->artifact_bias = BIAS_POIS;
+        if (!o_ptr->has_bias() && !one_in_(3)) {
+            o_ptr->artifact_bias = RandomArtifactBias::POIS;
             break;
         }
 
-        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(6)) {
-            o_ptr->artifact_bias = BIAS_NECROMANTIC;
+        if (!o_ptr->has_bias() && one_in_(6)) {
+            o_ptr->artifact_bias = RandomArtifactBias::NECROMANTIC;
             break;
         }
 
-        if (o_ptr->artifact_bias == BIAS_NONE) {
-            o_ptr->artifact_bias = BIAS_ROGUE;
+        if (!o_ptr->has_bias()) {
+            o_ptr->artifact_bias = RandomArtifactBias::ROGUE;
         }
 
         break;
     case 31:
         o_ptr->art_flags.set(TR_VAMPIRIC);
-        if (o_ptr->artifact_bias == BIAS_NONE) {
-            o_ptr->artifact_bias = BIAS_NECROMANTIC;
+        if (!o_ptr->has_bias()) {
+            o_ptr->artifact_bias = RandomArtifactBias::NECROMANTIC;
         }
 
         break;
     case 32:
         o_ptr->art_flags.set(TR_FORCE_WEAPON);
-        if (o_ptr->artifact_bias == BIAS_NONE) {
-            o_ptr->artifact_bias = (one_in_(2) ? BIAS_MAGE : BIAS_PRIESTLY);
+        if (!o_ptr->has_bias()) {
+            o_ptr->artifact_bias = (one_in_(2) ? RandomArtifactBias::MAGE : RandomArtifactBias::PRIESTLY);
         }
 
         break;
@@ -405,15 +405,15 @@ void random_slay(ItemEntity *o_ptr)
         break;
     case 35:
         o_ptr->art_flags.set(TR_BRAND_MAGIC);
-        if (o_ptr->artifact_bias == BIAS_NONE) {
-            o_ptr->artifact_bias = BIAS_MAGE;
+        if (!o_ptr->has_bias()) {
+            o_ptr->artifact_bias = RandomArtifactBias::MAGE;
         }
         break;
     case 36:
     case 37:
         o_ptr->art_flags.set(TR_CHAOTIC);
-        if (o_ptr->artifact_bias == BIAS_NONE) {
-            o_ptr->artifact_bias = BIAS_CHAOS;
+        if (!o_ptr->has_bias()) {
+            o_ptr->artifact_bias = RandomArtifactBias::CHAOS;
         }
 
         break;
@@ -424,13 +424,13 @@ void random_slay(ItemEntity *o_ptr)
             o_ptr->art_flags.set(TR_SLAY_GOOD);
         }
 
-        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(2)) {
-            o_ptr->artifact_bias = BIAS_POIS;
+        if (!o_ptr->has_bias() && one_in_(2)) {
+            o_ptr->artifact_bias = RandomArtifactBias::POIS;
             break;
         }
 
-        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(9)) {
-            o_ptr->artifact_bias = BIAS_ROGUE;
+        if (!o_ptr->has_bias() && one_in_(9)) {
+            o_ptr->artifact_bias = RandomArtifactBias::ROGUE;
         }
 
         break;

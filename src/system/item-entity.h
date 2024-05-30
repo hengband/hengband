@@ -22,6 +22,7 @@
 enum class FixedArtifactId : short;
 enum class ItemKindType : short;
 enum class SmithEffectType : int16_t;
+enum class RandomArtifactBias : int;
 enum class RandomArtActType : short;
 
 class ActivationType;
@@ -75,7 +76,7 @@ public:
     TrFlags art_flags{}; /*!< Extra Flags for ego and artifacts */
     EnumClassFlagGroup<CurseTraitType> curse_flags{}; /*!< Flags for curse */
     MONSTER_IDX held_m_idx{}; /*!< アイテムを所持しているモンスターID (いないなら 0) / Monster holding us (if any) */
-    int artifact_bias{}; /*!< ランダムアーティファクト生成時のバイアスID */
+    RandomArtifactBias artifact_bias{}; /*!< ランダムアーティファクト生成時のバイアスID */
 
     void wipe();
     void copy_from(const ItemEntity *j_ptr);
@@ -145,6 +146,7 @@ public:
     bool is_inscribed() const;
     std::vector<ActivationType>::const_iterator find_activation_info() const;
     bool has_activation() const;
+    bool has_bias() const;
 
     BaseitemInfo &get_baseitem() const;
     EgoItemDefinition &get_ego() const;
