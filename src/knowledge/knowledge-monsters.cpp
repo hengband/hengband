@@ -48,11 +48,11 @@
  */
 static std::vector<MonsterRaceId> collect_monsters(PlayerType *player_ptr, IDX grp_cur, monster_lore_mode mode)
 {
-    const auto &group_char = monster_group_char[grp_cur];
-    const auto grp_unique = (monster_group_char[grp_cur] == "Uniques");
-    const auto grp_riding = (monster_group_char[grp_cur] == "Riding");
-    const auto grp_wanted = (monster_group_char[grp_cur] == "Wanted");
-    const auto grp_amberite = (monster_group_char[grp_cur] == "Amberites");
+    const auto &group_char = MONRACE_CHARACTERS_GROUP[grp_cur];
+    const auto grp_unique = (MONRACE_CHARACTERS_GROUP[grp_cur] == "Uniques");
+    const auto grp_riding = (MONRACE_CHARACTERS_GROUP[grp_cur] == "Riding");
+    const auto grp_wanted = (MONRACE_CHARACTERS_GROUP[grp_cur] == "Wanted");
+    const auto grp_amberite = (MONRACE_CHARACTERS_GROUP[grp_cur] == "Amberites");
 
     const auto &monraces = MonraceList::get_instance();
     std::vector<MonsterRaceId> monrace_ids;
@@ -281,7 +281,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
     std::vector<MonsterRaceId> r_idx_list;
     std::vector<IDX> grp_idx;
 
-    const auto max_element = std::max_element(monster_group_text.begin(), monster_group_text.end(),
+    const auto max_element = std::max_element(MONSTER_KINDS_GROUP.begin(), MONSTER_KINDS_GROUP.end(),
         [](const auto &x, const auto &y) { return x.length() < y.length(); });
     const int max = max_element->length();
     bool visual_list = false;
@@ -291,9 +291,9 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
     const int browser_rows = hgt - 8;
     if (!direct_r_idx) {
         mode = visual_only ? MONSTER_LORE_DEBUG : MONSTER_LORE_NORMAL;
-        const auto size = static_cast<short>(monster_group_text.size());
+        const auto size = static_cast<short>(MONSTER_KINDS_GROUP.size());
         for (short i = 0; i < size; i++) {
-            if ((monster_group_char[i] == "Uniques") || !collect_monsters(player_ptr, i, mode).empty()) {
+            if ((MONRACE_CHARACTERS_GROUP[i] == "Uniques") || !collect_monsters(player_ptr, i, mode).empty()) {
                 grp_idx.push_back(i);
             }
         }
@@ -352,7 +352,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
                 grp_top = grp_cur - browser_rows + 1;
             }
 
-            display_group_list(max, browser_rows, grp_idx, monster_group_text, grp_cur, grp_top);
+            display_group_list(max, browser_rows, grp_idx, MONSTER_KINDS_GROUP, grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
                 r_idx_list = collect_monsters(player_ptr, grp_idx[grp_cur], mode);

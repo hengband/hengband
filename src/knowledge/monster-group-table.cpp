@@ -5,13 +5,12 @@
  */
 
 #include "knowledge/monster-group-table.h"
-#include "locale/language-switcher.h"
 
 /*!
- * @todo 元々t (町人)がいなかったが、問題ないのか？
- * Description of each monster group.
+ * @brief モンスターグループ表記
+ * @details 人間にはp/t 両方が含まれるなど、一部吸収合併されている (犬とハウンドは別).
  */
-const std::vector<std::string> monster_group_text = {
+const std::vector<std::string> MONSTER_KINDS_GROUP = {
     _("ユニーク", "Uniques"),
     _("乗馬可能なモンスター", "Ridable monsters"),
     _("賞金首", "Wanted monsters"),
@@ -31,7 +30,7 @@ const std::vector<std::string> monster_group_text = {
     _("モルド", "Mold"),
     _("ナーガ", "Naga"),
     _("オーク", "Orc"),
-    _("人間", "Person/Human"),
+    _("人間", "Person/Townsman"),
     _("四足獣", "Quadruped"),
     _("ネズミ", "Rodent"),
     _("スケルトン", "Skeleton"),
@@ -75,6 +74,6 @@ const std::vector<std::string> monster_group_text = {
  * Symbols of monsters in each group. Note the "Uniques" group
  * is handled differently.
  */
-const std::vector<std::string> monster_group_char = { "Uniques", "Riding", "Wanted", "Amberites", "a", "b", "c", "dD", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",
+const std::vector<std::string> MONRACE_CHARACTERS_GROUP = { "Uniques", "Riding", "Wanted", "Amberites", "a", "b", "c", "dD", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",
     "pt", "q", "r", "s", "uU", "v", "w", "y", "z", "A", "B", "C", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "V", "W", "X",
     "Y", "Z", "!$&()+./=>?[\\]`{|~", "#%", ",", "*", "@" };

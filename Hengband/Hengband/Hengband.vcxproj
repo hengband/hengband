@@ -833,7 +833,7 @@
     <ClCompile Include="..\..\src\cmd-io\feeling-table.cpp" />
     <ClCompile Include="..\..\src\knowledge\lighting-level-table.cpp" />
     <ClCompile Include="..\..\src\knowledge\monster-group-table.cpp" />
-    <ClCompile Include="..\..\src\knowledge\object-group-table.cpp" />
+    <ClCompile Include="..\..\src\knowledge\item-group-table.cpp" />
     <ClCompile Include="..\..\src\melee\melee-postprocess.cpp" />
     <ClCompile Include="..\..\src\combat\shoot.cpp" />
     <ClCompile Include="..\..\src\mspell\mspell-attack\mspell-bolt.cpp" />
@@ -1816,7 +1816,7 @@
     <ClInclude Include="..\..\src\cmd-io\feeling-table.h" />
     <ClInclude Include="..\..\src\knowledge\lighting-level-table.h" />
     <ClInclude Include="..\..\src\knowledge\monster-group-table.h" />
-    <ClInclude Include="..\..\src\knowledge\object-group-table.h" />
+    <ClInclude Include="..\..\src\knowledge\item-group-table.h" />
     <ClInclude Include="..\..\src\melee\melee-postprocess.h" />
     <ClInclude Include="..\..\src\combat\shoot.h" />
     <ClInclude Include="..\..\src\core\show-file.h" />

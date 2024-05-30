@@ -13,7 +13,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "io-dump/dump-util.h"
 #include "io/input-key-acceptor.h"
-#include "knowledge/object-group-table.h"
+#include "knowledge/item-group-table.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/tval-types.h"
 #include "perception/identification.h"
@@ -147,7 +147,7 @@ static bool check_baseitem_chance(const BIT_FLAGS8 mode, const BaseitemInfo &bas
 static short collect_objects(int grp_cur, std::vector<short> &object_idx, BIT_FLAGS8 mode)
 {
     short object_cnt = 0;
-    const auto group_tval = object_group_tval[grp_cur];
+    const auto group_tval = ITEM_KINDS_GROUP[grp_cur];
     for (const auto &baseitem : BaseitemList::get_instance()) {
         if (baseitem.name.empty() || !check_baseitem_chance(mode, baseitem)) {
             continue;
@@ -247,13 +247,13 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
     auto &baseitems = BaseitemList::get_instance();
     std::vector<short> object_idx(baseitems.size());
 
-    const auto max_element = std::max_element(object_group_text.begin(), object_group_text.end(),
+    const auto max_element = std::max_element(ITEM_KIND_NAMES_GROUP.begin(), ITEM_KIND_NAMES_GROUP.end(),
         [](auto x, auto y) { return x.length() < y.length(); });
     const int max_length = max_element->length();
     const auto width = wid - (max_length + 3);
     if (direct_k_idx < 0) {
         mode = visual_only ? 0x03 : 0x01;
-        const auto size = static_cast<short>(object_group_text.size());
+        const auto size = static_cast<short>(ITEM_KIND_NAMES_GROUP.size());
         for (short i = 0; i < size; i++) {
             if (collect_objects(i, object_idx, mode)) {
                 grp_idx.push_back(i);
@@ -331,7 +331,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
                 grp_top = grp_cur - browser_rows + 1;
             }
 
-            std::vector<std::string> tmp_texts = object_group_text;
+            std::vector<std::string> tmp_texts = ITEM_KIND_NAMES_GROUP;
             display_group_list(max_length, browser_rows, grp_idx, tmp_texts, grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
