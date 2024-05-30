@@ -219,6 +219,14 @@ static void check_reflection(msr_type *msr_ptr)
     }
 
     if (int_outof(msr_ptr->r_ptr, 150)) {
+        msr_ptr->ability_flags.reset(MonsterAbilityType::BO_METEOR);
+    }
+
+    if (int_outof(msr_ptr->r_ptr, 150)) {
+        msr_ptr->ability_flags.reset(MonsterAbilityType::BO_LITE);
+    }
+
+    if (int_outof(msr_ptr->r_ptr, 150)) {
         msr_ptr->ability_flags.reset(MonsterAbilityType::MISSILE);
     }
 }
