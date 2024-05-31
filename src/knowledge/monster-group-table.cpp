@@ -5,6 +5,7 @@
  */
 
 #include "knowledge/monster-group-table.h"
+#include "locale/language-switcher.h"
 
 /*!
  * @brief モンスターグループ表記
