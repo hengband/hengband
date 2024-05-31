@@ -749,7 +749,7 @@
     <ClCompile Include="..\..\src\io-dump\special-class-dump.cpp">
       <Filter>io-dump</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\knowledge\object-group-table.cpp">
+    <ClCompile Include="..\..\src\knowledge\item-group-table.cpp">
       <Filter>knowledge</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\floor\floor-object.cpp">
@@ -3302,7 +3302,7 @@
     <ClInclude Include="..\..\src\io-dump\special-class-dump.h">
       <Filter>io-dump</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\knowledge\object-group-table.h">
+    <ClInclude Include="..\..\src\knowledge\item-group-table.h">
       <Filter>knowledge</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\floor\floor-object.h">

@@ -321,6 +321,7 @@ hengband_SOURCES = \
 	\
 	item-info/flavor-initializer.cpp item-info/flavor-initializer.h \
 	\
+	knowledge/item-group-table.cpp knowledge/item-group-table.h \
 	knowledge/knowledge-autopick.cpp knowledge/knowledge-autopick.h \
 	knowledge/knowledge-experiences.cpp knowledge/knowledge-experiences.h \
 	knowledge/knowledge-features.cpp knowledge/knowledge-features.h \
@@ -333,7 +334,6 @@ hengband_SOURCES = \
 	knowledge/knowledge-quests.cpp knowledge/knowledge-quests.h \
 	knowledge/lighting-level-table.cpp knowledge/lighting-level-table.h \
 	knowledge/monster-group-table.cpp knowledge/monster-group-table.h \
-	knowledge/object-group-table.cpp knowledge/object-group-table.h \
 	\
 	load/angband-version-comparer.cpp load/angband-version-comparer.h \
 	load/birth-loader.cpp load/birth-loader.h \

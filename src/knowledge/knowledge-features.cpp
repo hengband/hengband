@@ -111,26 +111,17 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     const auto &[wid, hgt] = term_get_size();
     std::vector<FEAT_IDX> feat_idx(TerrainList::get_instance().size());
 
-    concptr feature_group_text[] = { "terrains", nullptr }; // @todo 後の関数呼び出しで要素数1の配列を定義する必要があるが、vector<string> の方が素直なので直す.
-    int len;
-    int max = 0;
-    int grp_cnt = 0;
+    const std::string terrain_group(_("地形    ", "Terrains")); //!< @details 他と合わせるためgroupと呼ぶ.
+    const auto max_length = terrain_group.length();
     int feat_cnt;
-    short grp_idx[100]{};
+    std::vector<short> grp_idx;
     TERM_COLOR attr_top = 0;
     bool visual_list = false;
     byte char_left = 0;
     TERM_LEN browser_rows = hgt - 8;
     if (direct_f_idx < 0) {
-        for (short i = 0; feature_group_text[i] != nullptr; i++) {
-            len = strlen(feature_group_text[i]);
-            if (len > max) {
-                max = len;
-            }
-
-            if (collect_features(feat_idx.data(), 0x01)) {
-                grp_idx[grp_cnt++] = i;
-            }
+        if (collect_features(feat_idx.data(), 0x01)) {
+            grp_idx.push_back(0);
         }
 
         feat_cnt = 0;
@@ -140,15 +131,13 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
         feat_idx[0] = direct_f_idx;
         feat_cnt = 1;
         feat_idx[1] = -1;
-        (void)visual_mode_command('v', &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &symbol_config.color,
+        (void)visual_mode_command('v', &visual_list, browser_rows - 1, wid - max_length + 3, &attr_top, &char_left, &symbol_config.color,
             &symbol_config.character, need_redraw);
 
         for (FEAT_IDX i = 0; i < F_LIT_MAX; i++) {
             symbols[i] = symbol_config;
         }
     }
-
-    grp_idx[grp_cnt] = -1;
 
     FEAT_IDX old_grp_cur = -1;
     FEAT_IDX grp_cur = 0;
@@ -170,7 +159,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             if (direct_f_idx < 0) {
                 prt(_("グループ", "Group"), 4, 0);
             }
-            prt(_("名前", "Name"), 4, max + 3);
+            prt(_("名前", "Name"), 4, max_length + 3);
             if (use_bigtile) {
                 if (w_ptr->wizard || visual_only) {
                     prt("Idx", 4, 62);
@@ -189,7 +178,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
 
             if (direct_f_idx < 0) {
                 for (FEAT_IDX i = 0; i < browser_rows; i++) {
-                    term_putch(max + 1, 6 + i, { TERM_WHITE, '|' });
+                    term_putch(max_length + 1, 6 + i, { TERM_WHITE, '|' });
                 }
             }
 
@@ -204,7 +193,8 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                 grp_top = grp_cur - browser_rows + 1;
             }
 
-            display_group_list(0, 6, max, browser_rows, grp_idx, feature_group_text, grp_cur, grp_top);
+            static const std::vector<short> terrain_group_num = { 0 }; // size - 1 を引数に入れる必要があるので0.
+            display_group_list(max_length, browser_rows, terrain_group_num, { terrain_group }, grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
                 feat_cnt = collect_features(feat_idx.data(), 0x00);
@@ -219,11 +209,11 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
         }
 
         if (!visual_list) {
-            display_feature_list(max + 3, 6, browser_rows, feat_idx.data(), feat_cur, feat_top, visual_only, F_LIT_STANDARD);
+            display_feature_list(max_length + 3, 6, browser_rows, feat_idx.data(), feat_cur, feat_top, visual_only, F_LIT_STANDARD);
         } else {
             feat_top = feat_cur;
-            display_feature_list(max + 3, 6, 1, feat_idx.data(), feat_cur, feat_top, visual_only, *lighting_level);
-            display_visual_list(max + 3, 7, browser_rows - 1, wid - (max + 3), attr_top, char_left);
+            display_feature_list(max_length + 3, 6, 1, feat_idx.data(), feat_cur, feat_top, visual_only, *lighting_level);
+            display_visual_list(max_length + 3, 7, browser_rows - 1, wid - max_length + 3, attr_top, char_left);
         }
 
         prt(format(_("<方向>%s, 'd'で標準光源効果%s, ESC", "<dir>%s, 'd' for default lighting%s, ESC"),
@@ -235,11 +225,11 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
         auto &terrain = terrains[feat_idx[feat_cur]];
         symbol_orig = terrain.symbol_configs.at(*lighting_level);
         if (visual_list) {
-            place_visual_list_cursor(max + 3, 7, symbol_orig.color, static_cast<uint8_t>(symbol_orig.character), attr_top, char_left);
+            place_visual_list_cursor(max_length + 3, 7, symbol_orig.color, static_cast<uint8_t>(symbol_orig.character), attr_top, char_left);
         } else if (!column) {
             term_gotoxy(0, 6 + (grp_cur - grp_top));
         } else {
-            term_gotoxy(max + 3, 6 + (feat_cur - feat_top));
+            term_gotoxy(max_length + 3, 6 + (feat_cur - feat_top));
         }
 
         ch = inkey();
@@ -291,7 +281,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             continue;
         }
 
-        if (visual_mode_command(ch, &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &symbol_orig.color, &symbol_orig.character, need_redraw)) {
+        if (visual_mode_command(ch, &visual_list, browser_rows - 1, wid - max_length + 3, &attr_top, &char_left, &symbol_orig.color, &symbol_orig.character, need_redraw)) {
             switch (ch) {
             case ESCAPE:
                 terrain.symbol_configs = symbols;
@@ -352,7 +342,8 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
         }
 
         default: {
-            browser_cursor(ch, &column, &grp_cur, grp_cnt, &feat_cur, feat_cnt);
+            constexpr auto dummy_count = 0;
+            browser_cursor(ch, &column, &grp_cur, dummy_count, &feat_cur, feat_cnt);
             break;
         }
         }

@@ -190,10 +190,7 @@ bool open_temporary_file(FILE **fff, char *file_name)
 }
 
 /*!
- * @brief モンスター情報リスト中のグループを表示する /
- * Display the object groups.
- * @param col 開始行
- * @param row 開始列
+ * @brief モンスター情報リスト中のグループを表示する
  * @param wid 表示文字数幅
  * @param per_page リストの表示行
  * @param grp_idx グループのID配列
@@ -201,13 +198,14 @@ bool open_temporary_file(FILE **fff, char *file_name)
  * @param grp_cur 現在の選択ID
  * @param grp_top 現在の選択リスト最上部ID
  */
-void display_group_list(int col, int row, int wid, int per_page, IDX grp_idx[], concptr group_text[], int grp_cur, int grp_top)
+void display_group_list(int wid, int per_page, const std::vector<short> &grp_idx, const std::vector<std::string> &group_text, int grp_cur, int grp_top)
 {
-    for (int i = 0; i < per_page && (grp_idx[i] >= 0); i++) {
-        int grp = grp_idx[grp_top + i];
-        TERM_COLOR attr = (grp_top + i == grp_cur) ? TERM_L_BLUE : TERM_WHITE;
-        term_erase(col, row + i, wid);
-        c_put_str(attr, group_text[grp], row + i, col);
+    const int size = std::min(grp_idx.size(), group_text.size());
+    for (auto i = 0; i < per_page && (i < size); i++) {
+        const auto grp = grp_idx[grp_top + i];
+        const auto attr = (grp_top + i == grp_cur) ? TERM_L_BLUE : TERM_WHITE;
+        term_erase(0, 6 + i, wid);
+        c_put_str(attr, group_text[grp], 6 + i, 0);
     }
 }
 
