@@ -24,6 +24,10 @@ TargetSorter::TargetSorter(const Pos2D &p_pos)
  */
 bool TargetSorter::compare_importance(const FloorType &floor, const Pos2D &pos_a, const Pos2D &pos_b) const
 {
+    if (pos_a == pos_b) {
+        return false;
+    }
+
     const auto &grid1 = floor.get_grid(pos_a);
     const auto &grid2 = floor.get_grid(pos_b);
     const auto &monster_a = floor.m_list[grid1.m_idx];
@@ -126,6 +130,10 @@ bool TargetSorter::compare_importance(const FloorType &floor, const Pos2D &pos_a
  */
 bool TargetSorter::compare_distance(const Pos2D &pos_a, const Pos2D &pos_b) const
 {
+    if (pos_a == pos_b) {
+        return false;
+    }
+
     const auto distance_a = this->calc_double_distance(pos_a);
     const auto distance_b = this->calc_double_distance(pos_b);
     return distance_a < distance_b;
