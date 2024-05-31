@@ -1,6 +1,7 @@
 #pragma once
 
 #include "system/angband.h"
+#include "util/flag-group.h"
 
 /*!
  * @enum フロア切り替えモードのbit設定 / Change Floor Mode.
@@ -20,3 +21,17 @@ enum cfm_type {
 
 class PlayerType;
 void prepare_change_floor_mode(PlayerType *player_ptr, BIT_FLAGS mode);
+
+class FloorChangeModesStore {
+public:
+    ~FloorChangeModesStore() = default;
+    FloorChangeModesStore(const FloorChangeModesStore &) = delete;
+    FloorChangeModesStore(FloorChangeModesStore &&) = delete;
+    FloorChangeModesStore &operator=(const FloorChangeModesStore &) = delete;
+    FloorChangeModesStore &operator=(FloorChangeModesStore &&) = delete;
+    static FloorChangeModesStore &get_instace();
+
+private:
+    static FloorChangeModesStore instance;
+    FloorChangeModesStore() = default;
+};

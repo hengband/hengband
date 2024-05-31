@@ -10,3 +10,10 @@ void prepare_change_floor_mode(PlayerType *player_ptr, BIT_FLAGS mode)
 {
     player_ptr->change_floor_mode |= mode;
 }
+
+FloorChangeModesStore FloorChangeModesStore::instance{};
+
+FloorChangeModesStore &FloorChangeModesStore::get_instace()
+{
+    return instance;
+}
