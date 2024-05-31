@@ -3,14 +3,14 @@
 #include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "monster-attack/monster-attack-player.h"
 #include "monster-race/monster-race.h"
+#include "monster/monster-describer.h"
+#include "monster/monster-description-types.h"
 #include "player-base/player-class.h"
 #include "player-info/spell-hex-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "realm/realm-hex-numbers.h"
-#include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-song.h"
 #include "spell/spell-info.h"
@@ -27,11 +27,6 @@
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
-#ifdef JP
-#else
-#include "monster/monster-describer.h"
-#include "monster/monster-description-types.h"
-#endif
 
 /*!< 呪術の最大詠唱数 */
 constexpr int MAX_KEEP = 4;
@@ -49,12 +44,6 @@ SpellHex::SpellHex(PlayerType *player_ptr)
     if (this->casting_spells.size() > MAX_KEEP) {
         THROW_EXCEPTION(std::logic_error, "Invalid numbers of hex magics keep!");
     }
-}
-
-SpellHex::SpellHex(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
-    : player_ptr(player_ptr)
-    , monap_ptr(monap_ptr)
-{
 }
 
 /*!
@@ -374,49 +363,29 @@ void SpellHex::interrupt_spelling()
 
 /*!
  * @brief 呪術「目には目を」の効果処理
- * @param this->player_ptr プレイヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
+ * @param m_idx モンスターのインデックス
+ * @param dam プレイヤーが受けたダメージ
  */
-void SpellHex::eyes_on_eyes()
+void SpellHex::eyes_on_eyes(MONSTER_IDX m_idx, int dam)
 {
-    if (this->monap_ptr == nullptr) {
-        THROW_EXCEPTION(std::logic_error, "Invalid constructor was used!");
-    }
-
     const auto is_eyeeye_finished = (this->player_ptr->tim_eyeeye == 0) && !this->is_spelling_specific(HEX_EYE_FOR_EYE);
-    if (is_eyeeye_finished || (this->monap_ptr->get_damage == 0) || this->player_ptr->is_dead) {
+    if (is_eyeeye_finished || (dam == 0) || this->player_ptr->is_dead) {
         return;
     }
 
+    const auto &monster = this->player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto m_name = monster_desc(this->player_ptr, &monster, 0);
 #ifdef JP
-    msg_format("攻撃が%s自身を傷つけた！", this->monap_ptr->m_name);
+    msg_format("攻撃が%s自身を傷つけた！", m_name.data());
 #else
-    const auto m_name_self = monster_desc(this->player_ptr, this->monap_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
-    msg_format("The attack of %s has wounded %s!", this->monap_ptr->m_name, m_name_self.data());
+    const auto m_name_self = monster_desc(this->player_ptr, &monster, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
+    msg_format("The attack of %s has wounded %s!", m_name.data(), m_name_self.data());
 #endif
-    const auto y = this->monap_ptr->m_ptr->fy;
-    const auto x = this->monap_ptr->m_ptr->fx;
-    project(this->player_ptr, 0, 0, y, x, this->monap_ptr->get_damage, AttributeType::MISSILE, PROJECT_KILL);
+    const auto y = monster.fy;
+    const auto x = monster.fx;
+    project(this->player_ptr, 0, 0, y, x, dam, AttributeType::MISSILE, PROJECT_KILL);
     if (this->player_ptr->tim_eyeeye) {
         set_tim_eyeeye(this->player_ptr, this->player_ptr->tim_eyeeye - 5, true);
-    }
-}
-
-void SpellHex::thief_teleport()
-{
-    if (this->monap_ptr == nullptr) {
-        THROW_EXCEPTION(std::logic_error, "Invalid constructor was used!");
-    }
-
-    if (!this->monap_ptr->blinked || !this->monap_ptr->alive || this->player_ptr->is_dead) {
-        return;
-    }
-
-    if (this->check_hex_barrier(this->monap_ptr->m_idx, HEX_ANTI_TELE)) {
-        msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));
-    } else {
-        msg_print(_("泥棒は笑って逃げた！", "The thief flees laughing!"));
-        teleport_away(this->player_ptr, this->monap_ptr->m_idx, MAX_PLAYER_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
     }
 }
 
