@@ -110,23 +110,23 @@ static bool invest_misc_res_curse(ItemEntity *o_ptr)
 static bool switch_misc_bias(ItemEntity *o_ptr)
 {
     switch (o_ptr->artifact_bias) {
-    case BIAS_RANGER:
+    case RandomArtifactBias::RANGER:
         return invest_misc_ranger(o_ptr);
-    case BIAS_STR:
+    case RandomArtifactBias::STR:
         return invest_misc_strength(o_ptr);
-    case BIAS_INT:
+    case RandomArtifactBias::INT:
         return invest_misc_intelligence(o_ptr);
-    case BIAS_WIS:
+    case RandomArtifactBias::WIS:
         return invest_misc_wisdom(o_ptr);
-    case BIAS_DEX:
+    case RandomArtifactBias::DEX:
         return invest_misc_dexterity(o_ptr);
-    case BIAS_CON:
+    case RandomArtifactBias::CON:
         return invest_misc_constitution(o_ptr);
-    case BIAS_CHR:
+    case RandomArtifactBias::CHR:
         return invest_misc_charisma(o_ptr);
-    case BIAS_CHAOS:
+    case RandomArtifactBias::CHAOS:
         return invest_misc_chaos(o_ptr);
-    case BIAS_FIRE:
+    case RandomArtifactBias::FIRE:
         if (o_ptr->art_flags.has_not(TR_LITE_1)) {
             o_ptr->art_flags.set(TR_LITE_1);
         }
@@ -155,16 +155,16 @@ static void invest_misc_hit_dice(ItemEntity *o_ptr)
 
 static void invest_misc_string_esp(ItemEntity *o_ptr)
 {
-    constexpr std::array<std::tuple<tr_type, random_art_bias_type, int>, 3> candidates = { {
-        { TR_ESP_EVIL, BIAS_LAW, 3 },
-        { TR_ESP_NONLIVING, BIAS_MAGE, 3 },
-        { TR_TELEPATHY, BIAS_MAGE, 9 },
+    constexpr std::array<std::tuple<tr_type, RandomArtifactBias, int>, 3> candidates = { {
+        { TR_ESP_EVIL, RandomArtifactBias::LAW, 3 },
+        { TR_ESP_NONLIVING, RandomArtifactBias::MAGE, 3 },
+        { TR_TELEPATHY, RandomArtifactBias::MAGE, 9 },
     } };
 
     const auto &[flag, bias, denom] = rand_choice(candidates);
 
     o_ptr->art_flags.set(flag);
-    if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(denom)) {
+    if ((o_ptr->artifact_bias == RandomArtifactBias::NONE) && one_in_(denom)) {
         o_ptr->artifact_bias = bias;
     }
 }
@@ -174,17 +174,17 @@ static void switch_investment_weak_esps(ItemEntity *o_ptr, const int num_esp)
     switch (num_esp) {
     case 1:
         o_ptr->art_flags.set(TR_ESP_ANIMAL);
-        if (!o_ptr->artifact_bias && one_in_(4)) {
-            o_ptr->artifact_bias = BIAS_RANGER;
+        if (!o_ptr->has_bias() && one_in_(4)) {
+            o_ptr->artifact_bias = RandomArtifactBias::RANGER;
         }
 
         break;
     case 2:
         o_ptr->art_flags.set(TR_ESP_UNDEAD);
-        if (!o_ptr->artifact_bias && one_in_(3)) {
-            o_ptr->artifact_bias = BIAS_PRIESTLY;
-        } else if (!o_ptr->artifact_bias && one_in_(6)) {
-            o_ptr->artifact_bias = BIAS_NECROMANTIC;
+        if (!o_ptr->has_bias() && one_in_(3)) {
+            o_ptr->artifact_bias = RandomArtifactBias::PRIESTLY;
+        } else if (!o_ptr->has_bias() && one_in_(6)) {
+            o_ptr->artifact_bias = RandomArtifactBias::NECROMANTIC;
         }
 
         break;
@@ -205,22 +205,22 @@ static void switch_investment_weak_esps(ItemEntity *o_ptr, const int num_esp)
         break;
     case 8:
         o_ptr->art_flags.set(TR_ESP_HUMAN);
-        if (!o_ptr->artifact_bias && one_in_(6)) {
-            o_ptr->artifact_bias = BIAS_ROGUE;
+        if (!o_ptr->has_bias() && one_in_(6)) {
+            o_ptr->artifact_bias = RandomArtifactBias::ROGUE;
         }
 
         break;
     case 9:
         o_ptr->art_flags.set(TR_ESP_GOOD);
-        if (!o_ptr->artifact_bias && one_in_(3)) {
-            o_ptr->artifact_bias = BIAS_LAW;
+        if (!o_ptr->has_bias() && one_in_(3)) {
+            o_ptr->artifact_bias = RandomArtifactBias::LAW;
         }
 
         break;
     case 10:
         o_ptr->art_flags.set(TR_ESP_UNIQUE);
-        if (!o_ptr->artifact_bias && one_in_(3)) {
-            o_ptr->artifact_bias = BIAS_LAW;
+        if (!o_ptr->has_bias() && one_in_(3)) {
+            o_ptr->artifact_bias = RandomArtifactBias::LAW;
         }
 
         break;
@@ -267,43 +267,43 @@ void random_misc(PlayerType *player_ptr, ItemEntity *o_ptr)
     switch (randint1(34)) {
     case 1:
         o_ptr->art_flags.set(TR_SUST_STR);
-        if (!o_ptr->artifact_bias) {
-            o_ptr->artifact_bias = BIAS_STR;
+        if (!o_ptr->has_bias()) {
+            o_ptr->artifact_bias = RandomArtifactBias::STR;
         }
 
         break;
     case 2:
         o_ptr->art_flags.set(TR_SUST_INT);
-        if (!o_ptr->artifact_bias) {
-            o_ptr->artifact_bias = BIAS_INT;
+        if (!o_ptr->has_bias()) {
+            o_ptr->artifact_bias = RandomArtifactBias::INT;
         }
 
         break;
     case 3:
         o_ptr->art_flags.set(TR_SUST_WIS);
-        if (!o_ptr->artifact_bias) {
-            o_ptr->artifact_bias = BIAS_WIS;
+        if (!o_ptr->has_bias()) {
+            o_ptr->artifact_bias = RandomArtifactBias::WIS;
         }
 
         break;
     case 4:
         o_ptr->art_flags.set(TR_SUST_DEX);
-        if (!o_ptr->artifact_bias) {
-            o_ptr->artifact_bias = BIAS_DEX;
+        if (!o_ptr->has_bias()) {
+            o_ptr->artifact_bias = RandomArtifactBias::DEX;
         }
 
         break;
     case 5:
         o_ptr->art_flags.set(TR_SUST_CON);
-        if (!o_ptr->artifact_bias) {
-            o_ptr->artifact_bias = BIAS_CON;
+        if (!o_ptr->has_bias()) {
+            o_ptr->artifact_bias = RandomArtifactBias::CON;
         }
 
         break;
     case 6:
         o_ptr->art_flags.set(TR_SUST_CHR);
-        if (!o_ptr->artifact_bias) {
-            o_ptr->artifact_bias = BIAS_CHR;
+        if (!o_ptr->has_bias()) {
+            o_ptr->artifact_bias = RandomArtifactBias::CHR;
         }
 
         break;
@@ -314,10 +314,10 @@ void random_misc(PlayerType *player_ptr, ItemEntity *o_ptr)
         break;
     case 9:
         o_ptr->art_flags.set(TR_HOLD_EXP);
-        if (!o_ptr->artifact_bias && one_in_(5)) {
-            o_ptr->artifact_bias = BIAS_PRIESTLY;
-        } else if (!o_ptr->artifact_bias && one_in_(6)) {
-            o_ptr->artifact_bias = BIAS_NECROMANTIC;
+        if (!o_ptr->has_bias() && one_in_(5)) {
+            o_ptr->artifact_bias = RandomArtifactBias::PRIESTLY;
+        } else if (!o_ptr->has_bias() && one_in_(6)) {
+            o_ptr->artifact_bias = RandomArtifactBias::NECROMANTIC;
         }
 
         break;

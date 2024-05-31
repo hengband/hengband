@@ -1,6 +1,7 @@
 #pragma once
 
-#include "artifact/random-art-bias-types.h"
-#include "system/angband.h"
+#include <map>
+#include <string>
 
-extern const concptr artifact_bias_name[MAX_BIAS];
+enum class RandomArtifactBias : int;
+extern const std::map<RandomArtifactBias, std::string> ARTIFACT_BIAS_NAMES;

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "locale/language-switcher.h" //!< ヘッダでインクルードしないと非Windows環境で日本語にならない.
 #include <string>
 #include <vector>
 
