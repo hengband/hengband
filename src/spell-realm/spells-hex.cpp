@@ -11,7 +11,6 @@
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "realm/realm-hex-numbers.h"
-#include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-song.h"
 #include "spell/spell-info.h"
@@ -387,20 +386,6 @@ void SpellHex::eyes_on_eyes(MONSTER_IDX m_idx, int dam)
     project(this->player_ptr, 0, 0, y, x, dam, AttributeType::MISSILE, PROJECT_KILL);
     if (this->player_ptr->tim_eyeeye) {
         set_tim_eyeeye(this->player_ptr, this->player_ptr->tim_eyeeye - 5, true);
-    }
-}
-
-void SpellHex::thief_teleport(MONSTER_IDX m_idx)
-{
-    if (this->player_ptr->is_dead) {
-        return;
-    }
-
-    if (this->check_hex_barrier(m_idx, HEX_ANTI_TELE)) {
-        msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));
-    } else {
-        msg_print(_("泥棒は笑って逃げた！", "The thief flees laughing!"));
-        teleport_away(this->player_ptr, m_idx, MAX_PLAYER_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
     }
 }
 

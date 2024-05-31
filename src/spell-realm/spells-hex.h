@@ -30,7 +30,6 @@ public:
     bool is_spelling_any() const;
     void interrupt_spelling();
     void eyes_on_eyes(MONSTER_IDX, int dam);
-    void thief_teleport(MONSTER_IDX m_idx);
     void set_casting_flag(spell_hex_type type);
     void reset_casting_flag(spell_hex_type type);
     int32_t get_casting_num() const;

@@ -5,6 +5,7 @@
 enum class RaceBlowEffectType;
 enum class RaceBlowMethodType;
 class PlayerType;
+class SpellHex;
 class MonsterEntity;
 class ItemEntity;
 class MonsterAttackPlayer {
@@ -58,4 +59,5 @@ private:
     void gain_armor_exp();
     void increase_blow_type_seen(const int ap_cnt);
     void postprocess_monster_blows();
+    void process_thief_teleport(const SpellHex &spell_hex);
 };
