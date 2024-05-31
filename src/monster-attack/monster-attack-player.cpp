@@ -493,11 +493,13 @@ void MonsterAttackPlayer::increase_blow_type_seen(const int ap_cnt)
 
 void MonsterAttackPlayer::postprocess_monster_blows()
 {
-    SpellHex spell_hex(this->player_ptr, this);
+    SpellHex spell_hex(this->player_ptr);
     spell_hex.store_vengeful_damage(this->get_damage);
-    spell_hex.eyes_on_eyes();
+    spell_hex.eyes_on_eyes(this->m_idx, this->get_damage);
     musou_counterattack(this->player_ptr, this);
-    spell_hex.thief_teleport();
+    if (this->blinked && this->alive) {
+        spell_hex.thief_teleport(this->m_idx);
+    }
     auto *r_ptr = &this->m_ptr->get_monrace();
     if (this->player_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !this->player_ptr->current_floor_ptr->inside_arena) {
         r_ptr->r_deaths++;
