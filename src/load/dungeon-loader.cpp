@@ -26,7 +26,7 @@
  */
 static errr rd_dungeon(PlayerType *player_ptr)
 {
-    init_saved_floors(player_ptr, false);
+    init_saved_floors(false);
     errr err = 0;
     auto &floor = *player_ptr->current_floor_ptr;
     if (h_older_than(1, 5, 0, 0)) {

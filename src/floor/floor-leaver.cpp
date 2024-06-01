@@ -293,13 +293,13 @@ static void preserve_info(PlayerType *player_ptr)
     }
 }
 
-static Grid *set_grid_by_leaving_floor(PlayerType *player_ptr)
+static Grid *set_grid_by_leaving_floor(FloorType &floor, const Pos2D &p_pos)
 {
     if (FloorChangeModesStore::get_instace()->has_not(FloorChangeMode::SAVE_FLOORS)) {
         return nullptr;
     }
 
-    auto *g_ptr = &player_ptr->current_floor_ptr->get_grid(player_ptr->get_position());
+    auto *g_ptr = &floor.get_grid(p_pos);
     const auto &terrain = g_ptr->get_terrain();
     if (g_ptr->special && terrain.flags.has_not(TerrainCharacteristics::SPECIAL) && get_sf_ptr(g_ptr->special)) {
         new_floor_id = g_ptr->special;
@@ -312,7 +312,7 @@ static Grid *set_grid_by_leaving_floor(PlayerType *player_ptr)
     return g_ptr;
 }
 
-static void jump_floors(PlayerType *player_ptr)
+static void jump_floors(FloorType &floor)
 {
     const auto &fcms = FloorChangeModesStore::get_instace();
     if (fcms->has_none_of({ FloorChangeMode::DOWN, FloorChangeMode::UP })) {
@@ -330,7 +330,6 @@ static void jump_floors(PlayerType *player_ptr)
         move_num *= 2;
     }
 
-    auto &floor = *player_ptr->current_floor_ptr;
     const auto &dungeon = floor.get_dungeon_definition();
     if (fcms->has(FloorChangeMode::DOWN)) {
         if (!floor.is_in_underground()) {
@@ -394,7 +393,7 @@ static void refresh_new_floor_id(PlayerType *player_ptr, Grid *g_ptr)
     }
 }
 
-static void update_upper_lower_or_floor_id(PlayerType *player_ptr, saved_floor_type *sf_ptr)
+static void update_upper_lower_or_floor_id(saved_floor_type *sf_ptr)
 {
     const auto &fcms = FloorChangeModesStore::get_instace();
     if (fcms->has_not(FloorChangeMode::RANDOM_CONNECT)) {
@@ -410,8 +409,8 @@ static void update_upper_lower_or_floor_id(PlayerType *player_ptr, saved_floor_t
 
 static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    auto g_ptr = set_grid_by_leaving_floor(player_ptr);
-    jump_floors(player_ptr);
+    auto g_ptr = set_grid_by_leaving_floor(*player_ptr->current_floor_ptr, player_ptr->get_position());
+    jump_floors(*player_ptr->current_floor_ptr);
     exit_to_wilderness(player_ptr);
     kill_saved_floors(player_ptr, sf_ptr);
     if (!player_ptr->in_saved_floor()) {
@@ -419,7 +418,7 @@ static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     }
 
     refresh_new_floor_id(player_ptr, g_ptr);
-    update_upper_lower_or_floor_id(player_ptr, sf_ptr);
+    update_upper_lower_or_floor_id(sf_ptr);
     auto &fcms = FloorChangeModesStore::get_instace();
     if (fcms->has_not(FloorChangeMode::SAVE_FLOORS) || fcms->has(FloorChangeMode::NO_RETURN)) {
         return;

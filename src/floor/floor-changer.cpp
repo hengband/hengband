@@ -209,25 +209,26 @@ static bool is_visited_floor(saved_floor_type *sf_ptr)
 
 /*!
  * @brief フロア読込時にプレイヤー足元の地形に必要な情報を設定する
- * @params player_ptr プレイヤーへの参照ポインタ
+ * @param floor フロアへの参照
+ * @param p_pos プレイヤーの現在位置
  */
-static void set_player_grid(PlayerType *player_ptr)
+static void set_player_grid(FloorType &floor, const Pos2D &p_pos)
 {
     const auto &fcms = FloorChangeModesStore::get_instace();
     if (fcms->has_not(FloorChangeMode::NO_RETURN)) {
         return;
     }
 
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-    if (feat_uses_special(g_ptr->feat)) {
+    auto &grid = floor.get_grid(p_pos);
+    if (feat_uses_special(grid.feat)) {
         return;
     }
 
     if (fcms->has_any_of({ FloorChangeMode::DOWN, FloorChangeMode::UP })) {
-        g_ptr->feat = rand_choice(feat_ground_type);
+        grid.feat = rand_choice(feat_ground_type);
     }
 
-    g_ptr->special = 0;
+    grid.special = 0;
 }
 
 static void update_floor_id(PlayerType *player_ptr, saved_floor_type *sf_ptr)
@@ -402,7 +403,7 @@ static void update_floor(PlayerType *player_ptr)
     saved_floor_type *sf_ptr;
     sf_ptr = get_sf_ptr(new_floor_id);
     const bool loaded = is_visited_floor(sf_ptr) && load_floor(player_ptr, sf_ptr, 0);
-    set_player_grid(player_ptr);
+    set_player_grid(*player_ptr->current_floor_ptr, player_ptr->get_position());
     update_floor_id(player_ptr, sf_ptr);
 
     if (loaded) {

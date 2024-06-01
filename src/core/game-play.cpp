@@ -166,9 +166,9 @@ static void init_random_seed(PlayerType *player_ptr, bool new_game)
         new_game = true;
         w_ptr->character_dungeon = false;
         init_random_seed = true;
-        init_saved_floors(player_ptr, false);
+        init_saved_floors(false);
     } else if (new_game) {
-        init_saved_floors(player_ptr, true);
+        init_saved_floors(true);
     }
 
     if (!new_game) {

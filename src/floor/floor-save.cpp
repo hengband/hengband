@@ -61,7 +61,7 @@ static void check_saved_tmp_files(const int fd, bool *force)
  * @param force テンポラリファイルが残っていた場合も警告なしで強制的に削除するフラグ
  * @details Make sure that old temporary files are not remaining as gurbages.
  */
-void init_saved_floors(PlayerType *player_ptr, bool force)
+void init_saved_floors(bool force)
 {
     auto fd = -1;
     for (int i = 0; i < MAX_SAVED_FLOORS; i++) {
