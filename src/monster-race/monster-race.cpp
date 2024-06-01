@@ -50,17 +50,6 @@ MonsterRaceId MonsterRace::pick_one_at_random()
 }
 
 /*!
- * @brief コンストラクタに渡された MonsterRaceId が正当なもの（実際に存在するモンスター種族IDである）かどうかを調べる
- * @details モンスター種族IDが MonsterRaceDefinitions に実在するもの(MonsterRaceId::PLAYERは除く)であるかどうかの用途の他、
- * m_list 上の要素などの r_idx にMonsterRaceId::PLAYER を入れることで死亡扱いとして使われるのでその判定に使用する事もある
- * @return 正当なものであれば true、そうでなければ false
- */
-bool MonsterRace::is_valid() const
-{
-    return this->r_idx != MonsterRaceId::PLAYER;
-}
-
-/*!
  * @brief モンスター種族が賞金首の対象かどうかを調べる。日替わり賞金首は対象外。
  *
  * @param unachieved_only true の場合未達成の賞金首のみを対象とする。false の場合達成未達成に関わらずすべての賞金首を対象とする。

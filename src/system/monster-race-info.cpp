@@ -10,6 +10,10 @@ MonsterRaceInfo::MonsterRaceInfo()
 }
 
 /*!
+ * @brief 正当なモンスター (実際に存在するモンスター種族IDである)かどうかを調べる
+ * @details モンスター種族IDが MonsterRaceDefinitions に実在するもの(MonsterRaceId::PLAYERは除く)であるかどうかの用途の他、
+ * m_list 上の要素などの r_idx にMonsterRaceId::PLAYER を入れることで死亡扱いとして使われるのでその判定に使用する事もある
+ * @return 正当なものであれば true、そうでなければ false
  * @todo 将来的に定義側のIDが廃止されたら有効フラグのフィールド変数を代わりに作る.
  */
 bool MonsterRaceInfo::is_valid() const
