@@ -273,7 +273,7 @@ static bool heal_leaper(PlayerType *player_ptr, EffectMonster *em_ptr)
 
     if (record_named_pet && em_ptr->m_ptr->is_named_pet()) {
         const auto m2_name = monster_desc(player_ptr, em_ptr->m_ptr, MD_INDEF_VISIBLE);
-        exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
+        exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
     }
 
     delete_monster_idx(player_ptr, em_ptr->g_ptr->m_idx);

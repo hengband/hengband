@@ -140,19 +140,19 @@ void do_cmd_go_up(PlayerType *player_ptr)
         do_cmd_save_game(player_ptr, true);
     }
 
-    const auto quest_number = player_ptr->current_floor_ptr->quest_number;
+    const auto quest_number = floor.quest_number;
     auto &quest = quests.get_quest(quest_number);
 
     if (inside_quest(quest_number) && quest.type == QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
-        player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
+        floor.quest_number = QuestId::NONE;
     }
 
     auto up_num = 0;
     if (inside_quest(quest_number) && quest.type != QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
-        player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(grid.special);
-        player_ptr->current_floor_ptr->dun_level = 0;
+        floor.quest_number = i2enum<QuestId>(grid.special);
+        floor.dun_level = 0;
         up_num = 0;
     } else {
         auto &fcms = FloorChangeModesStore::get_instace();
@@ -163,16 +163,16 @@ void do_cmd_go_up(PlayerType *player_ptr)
             up_num *= 2;
         }
 
-        if (player_ptr->current_floor_ptr->dun_level - up_num < floor.get_dungeon_definition().mindepth) {
-            up_num = player_ptr->current_floor_ptr->dun_level;
+        if (floor.dun_level - up_num < floor.get_dungeon_definition().mindepth) {
+            up_num = floor.dun_level;
         }
     }
 
     if (record_stair) {
-        exe_write_diary(player_ptr, DiaryKind::STAIR, 0 - up_num, _("階段を上った", "climbed up the stairs to"));
+        exe_write_diary(floor, DiaryKind::STAIR, 0 - up_num, _("階段を上った", "climbed up the stairs to"));
     }
 
-    if (up_num == player_ptr->current_floor_ptr->dun_level) {
+    if (up_num == floor.dun_level) {
         if (is_echizen(player_ptr)) {
             msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
         } else {
@@ -302,9 +302,9 @@ void do_cmd_go_down(PlayerType *player_ptr)
 
     if (record_stair) {
         if (fall_trap) {
-            exe_write_diary(player_ptr, DiaryKind::STAIR, down_num, _("落とし戸に落ちた", "fell through a trap door"));
+            exe_write_diary(floor, DiaryKind::STAIR, down_num, _("落とし戸に落ちた", "fell through a trap door"));
         } else {
-            exe_write_diary(player_ptr, DiaryKind::STAIR, down_num, _("階段を下りた", "climbed down the stairs to"));
+            exe_write_diary(floor, DiaryKind::STAIR, down_num, _("階段を下りた", "climbed down the stairs to"));
         }
     }
 

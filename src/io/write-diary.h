@@ -51,6 +51,7 @@ enum class DiaryKind {
 
 extern bool write_level;
 
+class FloorType;
 class PlayerType;
 enum class QuestId : short;
 #ifdef JP
@@ -58,4 +59,4 @@ enum class QuestId : short;
 std::string get_ordinal_number_suffix(int num);
 #endif
 int exe_write_diary_quest(PlayerType *player_ptr, DiaryKind dk, QuestId quest_id);
-void exe_write_diary(PlayerType *player_ptr, DiaryKind dk, int num, std::string_view note = "");
+void exe_write_diary(const FloorType &floor, DiaryKind dk, int num, std::string_view note = "");

@@ -152,7 +152,7 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(std::string_view note, cons
     if (monrace.kind_flags.has(MonsterKindType::UNIQUE) && record_destroy_uniq) {
         std::stringstream ss;
         ss << monrace.name << (monster.mflag2.has(MonsterConstantFlagType::CLONED) ? _("(クローン)", "(Clone)") : "");
-        exe_write_diary(this->player_ptr, DiaryKind::UNIQUE, 0, ss.str());
+        exe_write_diary(*this->player_ptr->current_floor_ptr, DiaryKind::UNIQUE, 0, ss.str());
     }
 
     sound(SOUND_KILL);

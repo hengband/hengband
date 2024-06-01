@@ -89,12 +89,13 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     record_turn = w_ptr->game_turn;
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
+    const auto &floor = *player_ptr->current_floor_ptr;
     if (record_fix_art && !old_known && o_ptr->is_fixed_artifact()) {
-        exe_write_diary(player_ptr, DiaryKind::ART, 0, item_name);
+        exe_write_diary(floor, DiaryKind::ART, 0, item_name);
     }
 
     if (record_rand_art && !old_known && o_ptr->is_random_artifact()) {
-        exe_write_diary(player_ptr, DiaryKind::ART, 0, item_name);
+        exe_write_diary(floor, DiaryKind::ART, 0, item_name);
     }
 
     return old_known;

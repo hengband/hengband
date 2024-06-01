@@ -3,6 +3,8 @@
 #include "game-option/cheat-types.h"
 #include "io/write-diary.h"
 #include "system/angband-exceptions.h"
+#include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include <array>
 #include <sstream>
@@ -37,7 +39,7 @@ void msg_print_wizard(PlayerType *player_ptr, int cheat_type, std::string_view m
     const auto mes = ss.str();
     msg_print(mes);
     if (cheat_diary_output) {
-        exe_write_diary(player_ptr, DiaryKind::WIZARD_LOG, 0, mes);
+        exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::WIZARD_LOG, 0, mes);
     }
 }
 

@@ -43,5 +43,5 @@ void object_aware(PlayerType *player_ptr, const ItemEntity *o_ptr)
     q_ptr->copy_from(o_ptr);
     q_ptr->number = 1;
     const auto item_name = describe_flavor(player_ptr, q_ptr, OD_NAME_ONLY);
-    exe_write_diary(player_ptr, DiaryKind::FOUND, 0, item_name);
+    exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::FOUND, 0, item_name);
 }

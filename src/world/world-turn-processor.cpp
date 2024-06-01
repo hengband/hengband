@@ -70,8 +70,8 @@ void WorldTurnProcessor::process_world()
     }
 
     decide_auto_save();
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    if (floor_ptr->monster_noise && !ignore_unview) {
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    if (floor.monster_noise && !ignore_unview) {
         msg_print(_("何かが聞こえた。", "You hear noise."));
     }
 
@@ -79,7 +79,7 @@ void WorldTurnProcessor::process_world()
     process_world_monsters();
     if ((this->hour == 0) && (this->min == 0)) {
         if (this->min != prev_min) {
-            exe_write_diary(this->player_ptr, DiaryKind::DIALY, 0);
+            exe_write_diary(floor, DiaryKind::DIALY, 0);
             determine_daily_bounty(this->player_ptr, false);
         }
     }
