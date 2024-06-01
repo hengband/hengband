@@ -17,6 +17,7 @@
 #include "system/baseitem-info.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
+#include "system/inner-game-data.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -189,12 +190,11 @@ void init_turn(PlayerType *player_ptr)
 {
     if (PlayerRace(player_ptr).life() == PlayerRaceLifeType::UNDEAD) {
         w_ptr->game_turn = (TURNS_PER_TICK * 3 * TOWN_DAWN) / 4 + 1;
-        w_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
     } else {
         w_ptr->game_turn = 1;
-        w_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
     }
 
+    InnerGameData::get_instance().init_turn_limit();
     w_ptr->dungeon_turn = 1;
     w_ptr->dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
 }

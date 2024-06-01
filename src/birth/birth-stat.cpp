@@ -10,6 +10,7 @@
 #include "player/player-skill.h"
 #include "spell/spells-status.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include <array>
@@ -119,7 +120,7 @@ void get_extra(PlayerType *player_ptr, bool roll_hitdie)
     player_ptr->expfact = get_expfact(player_ptr);
 
     /* Reset record of race/realm changes */
-    player_ptr->start_race = player_ptr->prace;
+    InnerGameData::get_instance().set_start_race(player_ptr->prace);
     player_ptr->old_race1 = 0L;
     player_ptr->old_race2 = 0L;
     player_ptr->old_realm = 0;

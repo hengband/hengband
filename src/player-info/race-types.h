@@ -5,7 +5,7 @@
 /*!
  * @details 既にplayer_raceが存在するので_typeと付けた
  */
-enum class PlayerRaceType {
+enum class PlayerRaceType : int {
     HUMAN = 0,
     HALF_ELF = 1,
     ELF = 2,
