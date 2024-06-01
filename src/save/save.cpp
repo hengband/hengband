@@ -16,7 +16,6 @@
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
 #include "floor/wild.h"
-#include "game-option/text-display-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
 #include "io/report.h"
@@ -103,15 +102,7 @@ static bool wr_savefile_new(PlayerType *player_ptr)
 
     wr_randomizer();
     wr_options();
-    uint32_t tmp32u = message_num();
-    if (compress_savefile && (tmp32u > 40)) {
-        tmp32u = 40;
-    }
-
-    wr_u32b(tmp32u);
-    for (int i = tmp32u - 1; i >= 0; i--) {
-        wr_string(*message_str(i));
-    }
+    wr_message_history();
 
     uint16_t tmp16u = static_cast<uint16_t>(monraces_info.size());
     wr_u16b(tmp16u);

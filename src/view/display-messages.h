@@ -22,3 +22,5 @@ void msg_erase();
 void msg_print(std::string_view msg);
 void msg_print(std::nullptr_t);
 void msg_format(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
+void wr_message_history();
+void rd_message_history();
