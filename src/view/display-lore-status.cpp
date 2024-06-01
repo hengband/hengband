@@ -11,7 +11,7 @@
 
 void display_monster_hp_ac(lore_type *lore_ptr)
 {
-    if (!know_armour(lore_ptr->r_idx, lore_ptr->know_everything)) {
+    if (!know_details(lore_ptr->r_idx) && !lore_ptr->know_everything) {
         return;
     }
 

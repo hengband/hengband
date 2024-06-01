@@ -22,7 +22,7 @@ static void display_monster_blow_jp(lore_type *lore_ptr, int attack_numbers, int
         hooked_roff(format("%s^は", Who::who(lore_ptr->msex)));
     }
 
-    if (d1 && d2 && (lore_ptr->know_everything || know_damage(lore_ptr->r_idx, m))) {
+    if (d1 && d2 && (lore_ptr->know_everything || know_blow_damage(lore_ptr->r_idx, m))) {
         hook_c_roff(TERM_L_WHITE, format(" %dd%d ", d1, d2));
         hooked_roff("のダメージで");
     }
@@ -84,7 +84,7 @@ static void display_monster_blow_en(lore_type *lore_ptr, int attack_numbers, int
     if (lore_ptr->q != nullptr) {
         hooked_roff(" to ");
         hook_c_roff(lore_ptr->qc, lore_ptr->q);
-        if (d1 && d2 && (lore_ptr->know_everything || know_damage(lore_ptr->r_idx, m))) {
+        if (d1 && d2 && (lore_ptr->know_everything || know_blow_damage(lore_ptr->r_idx, m))) {
             hooked_roff(" with damage");
             hook_c_roff(TERM_L_WHITE, format(" %dd%d", d1, d2));
         }
