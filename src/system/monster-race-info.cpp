@@ -117,6 +117,15 @@ std::string MonsterRaceInfo::get_pronoun_of_summoned_kin() const
     }
 }
 
+/*!
+ * @brief 進化先モンスターを返す. 進化しなければプレイヤー (無効値の意)
+ * @return 進化先モンスター
+ */
+const MonsterRaceInfo &MonsterRaceInfo::get_next() const
+{
+    return MonraceList::get_instance()[this->next_r_idx];
+}
+
 const std::map<MonsterRaceId, std::set<MonsterRaceId>> MonraceList::unified_uniques = {
     { MonsterRaceId::BANORLUPART, { MonsterRaceId::BANOR, MonsterRaceId::LUPART } },
 };

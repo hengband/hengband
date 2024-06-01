@@ -147,6 +147,7 @@ public:
     std::optional<bool> order_pet(const MonsterRaceInfo &other) const;
     void kill_unique();
     std::string get_pronoun_of_summoned_kin() const;
+    const MonsterRaceInfo &get_next() const;
 };
 
 class MonraceList {
