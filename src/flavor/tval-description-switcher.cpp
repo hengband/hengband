@@ -30,7 +30,7 @@ static std::pair<std::string, std::string> describe_monster_ball(const ItemEntit
         return { basename, "" };
     }
 
-    if (!MonsterRace(monrace_id).is_valid()) {
+    if (!monrace.is_valid()) {
         return { basename, _(" (空)", " (empty)") };
     }
 

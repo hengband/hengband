@@ -139,6 +139,7 @@ public:
     REAL_TIME defeat_time{}; //!< 倒した時間(ユニーク用) / time at which defeated this race
     PERCENTAGE cur_hp_per{}; //!< 生成時現在HP率(%)
 
+    bool is_valid() const;
     const std::string &decide_horror_message() const;
     bool has_living_flag() const;
     bool is_explodable() const;

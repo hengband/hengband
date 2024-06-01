@@ -62,10 +62,10 @@ static auto get_mon_evol_roots()
 {
     std::set<MonsterRaceId> evol_parents;
     std::set<MonsterRaceId> evol_children;
-    for (const auto &[r_idx, r_ref] : monraces_info) {
-        if (MonsterRace(r_ref.next_r_idx).is_valid()) {
-            evol_parents.emplace(r_ref.idx);
-            evol_children.emplace(r_ref.next_r_idx);
+    for (const auto &[monrace_id, monrace] : monraces_info) {
+        if (MonsterRace(monrace.next_r_idx).is_valid()) {
+            evol_parents.emplace(monrace_id);
+            evol_children.emplace(monrace.next_r_idx);
         }
     }
 

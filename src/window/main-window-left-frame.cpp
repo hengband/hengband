@@ -284,7 +284,7 @@ static void print_health_monster_in_arena_for_wizard(PlayerType *player_ptr)
         term_putstr(col - 2, row + row_offset, 12, TERM_WHITE, "      /     ");
 
         auto &monster = player_ptr->current_floor_ptr->m_list[monster_list_index];
-        if (MonsterRace(monster.r_idx).is_valid()) {
+        if (monster.is_valid()) {
             const auto &monrace = monster.get_monrace();
             const auto &symbol_config = monrace.symbol_config;
             term_putstr(col - 2, row + row_offset, 2, symbol_config.color, format("%c", symbol_config.character));

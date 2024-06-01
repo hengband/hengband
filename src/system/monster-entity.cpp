@@ -137,7 +137,7 @@ bool MonsterEntity::is_mimicry() const
 
 bool MonsterEntity::is_valid() const
 {
-    return MonsterRace(this->r_idx).is_valid();
+    return MonraceList::is_valid(this->r_idx);
 }
 
 MonsterRaceId MonsterEntity::get_real_monrace_id() const

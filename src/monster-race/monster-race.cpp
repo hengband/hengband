@@ -39,9 +39,9 @@ MonsterRaceId MonsterRace::pick_one_at_random()
     static ProbabilityTable<MonsterRaceId> table;
 
     if (table.empty()) {
-        for (const auto &[r_idx, r_ref] : monraces_info) {
-            if (MonsterRace(r_idx).is_valid()) {
-                table.entry_item(r_idx, 1);
+        for (const auto &[monrace_id, monrace] : monraces_info) {
+            if (monrace.is_valid()) {
+                table.entry_item(monrace_id, 1);
             }
         }
     }

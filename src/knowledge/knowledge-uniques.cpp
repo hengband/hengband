@@ -133,16 +133,16 @@ void do_cmd_knowledge_uniques(PlayerType *player_ptr, bool is_alive)
         return;
     }
 
-    for (auto &[r_idx, r_ref] : monraces_info) {
-        if (!MonsterRace(r_ref.idx).is_valid()) {
+    for (auto &[monrace_id, monrace] : monraces_info) {
+        if (!monrace.is_valid()) {
             continue;
         }
-        if (!sweep_uniques(&r_ref, unique_list_ptr->is_alive)) {
+        if (!sweep_uniques(&monrace, unique_list_ptr->is_alive)) {
             continue;
         }
 
-        if (r_ref.level) {
-            int lev = (r_ref.level - 1) / 10;
+        if (monrace.level) {
+            int lev = (monrace.level - 1) / 10;
             if (lev < 10) {
                 unique_list_ptr->num_uniques[lev]++;
                 if (unique_list_ptr->max_lev < lev) {
@@ -155,7 +155,7 @@ void do_cmd_knowledge_uniques(PlayerType *player_ptr, bool is_alive)
             unique_list_ptr->num_uniques_surface++;
         }
 
-        unique_list_ptr->monrace_ids.push_back(r_ref.idx);
+        unique_list_ptr->monrace_ids.push_back(monrace_id);
     }
 
     const auto &monraces = MonraceList::get_instance();

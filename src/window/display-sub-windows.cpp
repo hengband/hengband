@@ -181,7 +181,7 @@ void print_monster_list(FloorType *floor_ptr, const std::vector<MONSTER_IDX> &mo
         if (m_ptr->is_pet()) {
             continue;
         } // pet
-        if (!MonsterRace(m_ptr->r_idx).is_valid()) {
+        if (!m_ptr->is_valid()) {
             continue;
         } // dead?
 

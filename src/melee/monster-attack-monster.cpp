@@ -84,14 +84,14 @@ static void process_blow_effect(PlayerType *player_ptr, mam_type *mam_ptr)
 
 static void aura_fire_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
-    auto *r_ptr = &mam_ptr->m_ptr->get_monrace();
-    auto *tr_ptr = &mam_ptr->t_ptr->get_monrace();
-    if (tr_ptr->aura_flags.has_not(MonsterAuraType::FIRE) || !MonsterRace(mam_ptr->m_ptr->r_idx).is_valid()) {
+    auto &monrace = mam_ptr->m_ptr->get_monrace();
+    auto &monrace_target = mam_ptr->t_ptr->get_monrace();
+    if (monrace_target.aura_flags.has_not(MonsterAuraType::FIRE) || !mam_ptr->m_ptr->is_valid()) {
         return;
     }
 
-    if (r_ptr->resistance_flags.has_any_of(RFR_EFF_IM_FIRE_MASK) && is_original_ap_and_seen(player_ptr, mam_ptr->m_ptr)) {
-        r_ptr->r_resistance_flags.set(r_ptr->resistance_flags & RFR_EFF_IM_FIRE_MASK);
+    if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_FIRE_MASK) && is_original_ap_and_seen(player_ptr, mam_ptr->m_ptr)) {
+        monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_FIRE_MASK);
         return;
     }
 
@@ -100,25 +100,25 @@ static void aura_fire_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     }
 
     if (mam_ptr->m_ptr->ml && is_original_ap_and_seen(player_ptr, mam_ptr->t_ptr)) {
-        tr_ptr->aura_flags.set(MonsterAuraType::FIRE);
+        monrace_target.aura_flags.set(MonsterAuraType::FIRE);
     }
 
-    const auto dam = damroll(1 + ((tr_ptr->level) / 26), 1 + ((tr_ptr->level) / 17));
+    const auto dam = damroll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
     constexpr auto flags = PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED;
     project(player_ptr, mam_ptr->t_idx, 0, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, dam, AttributeType::FIRE, flags);
 }
 
 static void aura_cold_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
-    const auto *m_ptr = mam_ptr->m_ptr;
-    auto *r_ptr = &m_ptr->get_monrace();
-    auto *tr_ptr = &mam_ptr->t_ptr->get_monrace();
-    if (tr_ptr->aura_flags.has_not(MonsterAuraType::COLD) || !MonsterRace(m_ptr->r_idx).is_valid()) {
+    const auto &monster = *mam_ptr->m_ptr;
+    auto &monrace = monster.get_monrace();
+    auto &monrace_target = mam_ptr->t_ptr->get_monrace();
+    if (monrace_target.aura_flags.has_not(MonsterAuraType::COLD) || !monster.is_valid()) {
         return;
     }
 
-    if (r_ptr->resistance_flags.has_any_of(RFR_EFF_IM_COLD_MASK) && is_original_ap_and_seen(player_ptr, m_ptr)) {
-        r_ptr->r_resistance_flags.set(r_ptr->resistance_flags & RFR_EFF_IM_COLD_MASK);
+    if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_COLD_MASK) && is_original_ap_and_seen(player_ptr, &monster)) {
+        monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_COLD_MASK);
         return;
     }
 
@@ -126,26 +126,26 @@ static void aura_cold_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         msg_format(_("%s^は突然寒くなった！", "%s^ is suddenly very cold!"), mam_ptr->m_name);
     }
 
-    if (m_ptr->ml && is_original_ap_and_seen(player_ptr, mam_ptr->t_ptr)) {
-        tr_ptr->aura_flags.set(MonsterAuraType::COLD);
+    if (monster.ml && is_original_ap_and_seen(player_ptr, mam_ptr->t_ptr)) {
+        monrace_target.aura_flags.set(MonsterAuraType::COLD);
     }
 
-    const auto dam = damroll(1 + ((tr_ptr->level) / 26), 1 + ((tr_ptr->level) / 17));
+    const auto dam = damroll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
     constexpr auto flags = PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED;
-    project(player_ptr, mam_ptr->t_idx, 0, m_ptr->fy, m_ptr->fx, dam, AttributeType::COLD, flags);
+    project(player_ptr, mam_ptr->t_idx, 0, monster.fy, monster.fx, dam, AttributeType::COLD, flags);
 }
 
 static void aura_elec_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
-    const auto *m_ptr = mam_ptr->m_ptr;
-    auto *r_ptr = &m_ptr->get_monrace();
-    auto *tr_ptr = &mam_ptr->t_ptr->get_monrace();
-    if (tr_ptr->aura_flags.has_not(MonsterAuraType::ELEC) || !MonsterRace(m_ptr->r_idx).is_valid()) {
+    const auto &monster = *mam_ptr->m_ptr;
+    auto &monrace = monster.get_monrace();
+    auto &monrace_target = mam_ptr->t_ptr->get_monrace();
+    if (monrace_target.aura_flags.has_not(MonsterAuraType::ELEC) || !monster.is_valid()) {
         return;
     }
 
-    if (r_ptr->resistance_flags.has_any_of(RFR_EFF_IM_ELEC_MASK) && is_original_ap_and_seen(player_ptr, m_ptr)) {
-        r_ptr->r_resistance_flags.set(r_ptr->resistance_flags & RFR_EFF_IM_ELEC_MASK);
+    if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_ELEC_MASK) && is_original_ap_and_seen(player_ptr, &monster)) {
+        monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_ELEC_MASK);
         return;
     }
 
@@ -153,13 +153,13 @@ static void aura_elec_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         msg_format(_("%s^は電撃を食らった！", "%s^ gets zapped!"), mam_ptr->m_name);
     }
 
-    if (m_ptr->ml && is_original_ap_and_seen(player_ptr, mam_ptr->t_ptr)) {
-        tr_ptr->aura_flags.set(MonsterAuraType::ELEC);
+    if (monster.ml && is_original_ap_and_seen(player_ptr, mam_ptr->t_ptr)) {
+        monrace_target.aura_flags.set(MonsterAuraType::ELEC);
     }
 
-    const auto dam = damroll(1 + ((tr_ptr->level) / 26), 1 + ((tr_ptr->level) / 17));
+    const auto dam = damroll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
     constexpr auto flags = PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED;
-    project(player_ptr, mam_ptr->t_idx, 0, m_ptr->fy, m_ptr->fx, dam, AttributeType::ELEC, flags);
+    project(player_ptr, mam_ptr->t_idx, 0, monster.fy, monster.fx, dam, AttributeType::ELEC, flags);
 }
 
 static bool check_same_monster(PlayerType *player_ptr, mam_type *mam_ptr)
@@ -363,7 +363,7 @@ bool monst_attack_monst(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
 
     repeat_melee(player_ptr, mam_ptr);
     explode_monster_by_melee(player_ptr, mam_ptr);
-    if (!mam_ptr->blinked || !MonsterRace(mam_ptr->m_ptr->r_idx).is_valid()) {
+    if (!mam_ptr->blinked || !mam_ptr->m_ptr->is_valid()) {
         return true;
     }
 

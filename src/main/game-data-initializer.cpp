@@ -96,9 +96,9 @@ void init_other(PlayerType *player_ptr)
 void init_monsters_alloc()
 {
     std::vector<const MonsterRaceInfo *> elements;
-    for (const auto &[r_idx, r_ref] : monraces_info) {
-        if (MonsterRace(r_ref.idx).is_valid()) {
-            elements.push_back(&r_ref);
+    for (const auto &[monrace_id, monrace] : monraces_info) {
+        if (monrace.is_valid()) {
+            elements.push_back(&monrace);
         }
     }
 

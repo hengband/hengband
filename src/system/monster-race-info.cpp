@@ -10,6 +10,14 @@ MonsterRaceInfo::MonsterRaceInfo()
 }
 
 /*!
+ * @todo 将来的に定義側のIDが廃止されたら有効フラグのフィールド変数を代わりに作る.
+ */
+bool MonsterRaceInfo::is_valid() const
+{
+    return this->idx != MonsterRaceId::PLAYER;
+}
+
+/*!
  * @brief エルドリッチホラーの形容詞種別を決める
  * @return エルドリッチホラーの形容詞
  */

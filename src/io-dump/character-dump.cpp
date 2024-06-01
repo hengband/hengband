@@ -324,7 +324,7 @@ static void dump_aux_monsters(FILE *fff)
     auto norm_total = 0;
     for (const auto &[monrace_id, monrace] : monraces) {
         /* Ignore unused index */
-        if (!MonsterRace(monrace_id).is_valid()) {
+        if (!monrace.is_valid()) {
             continue;
         }
 
