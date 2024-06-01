@@ -472,29 +472,31 @@ bool alloc_guardian(PlayerType *player_ptr, bool def_val)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     const auto &dungeon = floor_ptr->get_dungeon_definition();
-    MonsterRaceId guardian = dungeon.final_guardian;
-    bool is_guardian_applicable = MonsterRace(guardian).is_valid();
-    is_guardian_applicable &= dungeon.maxdepth == floor_ptr->dun_level;
-    is_guardian_applicable &= monraces_info[guardian].cur_num < monraces_info[guardian].max_num;
+    if (!dungeon.has_guardian()) {
+        return def_val;
+    }
+
+    const auto &monrace = dungeon.get_guardian();
+    auto is_guardian_applicable = dungeon.maxdepth == floor_ptr->dun_level;
+    is_guardian_applicable &= monrace.cur_num < monrace.max_num;
     if (!is_guardian_applicable) {
         return def_val;
     }
 
-    int try_count = 4000;
-    while (try_count) {
-        POSITION oy = randint1(floor_ptr->height - 4) + 2;
-        POSITION ox = randint1(floor_ptr->width - 4) + 2;
-        if (!is_cave_empty_bold2(player_ptr, oy, ox)) {
+    auto try_count = 4000;
+    while (try_count > 0) {
+        const auto pos = Pos2D(randint1(floor_ptr->height - 4), randint1(floor_ptr->width - 4)) + Pos2DVec(2, 2);
+        if (!is_cave_empty_bold2(player_ptr, pos.y, pos.x)) {
             try_count++;
             continue;
         }
 
-        if (!monster_can_cross_terrain(player_ptr, floor_ptr->grid_array[oy][ox].feat, &monraces_info[guardian], 0)) {
+        if (!monster_can_cross_terrain(player_ptr, floor_ptr->get_grid(pos).feat, &monrace, 0)) {
             try_count++;
             continue;
         }
 
-        if (place_specific_monster(player_ptr, 0, oy, ox, guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) {
+        if (place_specific_monster(player_ptr, 0, pos.y, pos.x, dungeon.final_guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) {
             return true;
         }
 

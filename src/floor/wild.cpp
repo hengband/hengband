@@ -782,13 +782,14 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
         return PARSE_ERROR_UNDEFINED_DIRECTIVE;
     }
 
-    for (const auto &d_ref : dungeons_info) {
-        if (d_ref.idx == 0 || !d_ref.maxdepth) {
+    for (const auto &dungeon : dungeons_info) {
+        if (!dungeon.is_dungeon() || !dungeon.maxdepth) {
             continue;
         }
-        wilderness[d_ref.dy][d_ref.dx].entrance = static_cast<byte>(d_ref.idx);
-        if (!wilderness[d_ref.dy][d_ref.dx].town) {
-            wilderness[d_ref.dy][d_ref.dx].level = d_ref.mindepth;
+
+        wilderness[dungeon.dy][dungeon.dx].entrance = static_cast<byte>(dungeon.idx);
+        if (!wilderness[dungeon.dy][dungeon.dx].town) {
+            wilderness[dungeon.dy][dungeon.dx].level = dungeon.mindepth;
         }
     }
 
