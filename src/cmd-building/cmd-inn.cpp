@@ -14,6 +14,7 @@
 #include "player/eldritch-horror.h"
 #include "status/bad-status-setter.h"
 #include "store/rumor.h"
+#include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -189,7 +190,7 @@ static bool stay_inn(PlayerType *player_ptr)
         return false;
     }
 
-    const auto &[prev_day, prev_hour, prev_min] = w_ptr->extract_date_time(player_ptr->start_race);
+    const auto &[prev_day, prev_hour, prev_min] = w_ptr->extract_date_time(InnerGameData::get_instance().get_start_race());
     write_diary_stay_inn(player_ptr, prev_hour);
 
     pass_game_turn_by_stay();

@@ -24,6 +24,7 @@
 #include "system/angband-version.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
+#include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/system-variables.h"
@@ -278,8 +279,9 @@ bool report_score(PlayerType *player_ptr)
              << format("depth: %d\n", player_ptr->current_floor_ptr->dun_level)
              << format("maxlv: %d\n", player_ptr->max_plv)
              << format("maxdp: %d\n", max_dlv[DUNGEON_ANGBAND])
-             << format("au: %d\n", player_ptr->au)
-             << format("turns: %d\n", turn_real(player_ptr, w_ptr->game_turn))
+             << format("au: %d\n", player_ptr->au);
+    const auto &igd = InnerGameData::get_instance();
+    score_ss << format("turns: %d\n", igd.get_real_turns(w_ptr->game_turn))
              << format("sex: %d\n", player_ptr->psex)
              << format("race: %s\n", rp_ptr->title)
              << format("class: %s\n", cp_ptr->title)

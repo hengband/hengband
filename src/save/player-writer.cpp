@@ -10,6 +10,7 @@
 #include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
+#include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/timed-effects.h"
 #include "world/world.h"
@@ -101,7 +102,7 @@ void wr_player(PlayerType *player_ptr)
 
     std::visit(PlayerClassSpecificDataWriter(), player_ptr->class_specific_data);
 
-    wr_byte((byte)player_ptr->start_race);
+    wr_byte(static_cast<uint8_t>(InnerGameData::get_instance().get_start_race()));
     wr_s32b(player_ptr->old_race1);
     wr_s32b(player_ptr->old_race2);
     wr_s16b(player_ptr->old_realm);
