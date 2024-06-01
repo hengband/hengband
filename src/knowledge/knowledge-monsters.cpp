@@ -278,7 +278,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, std::nullopt);
 
     const auto &[wid, hgt] = term_get_size();
-    std::vector<MonsterRaceId> r_idx_list;
+    std::vector<MonsterRaceId> monrace_ids;
     std::vector<IDX> grp_idx;
 
     const auto max_element = std::max_element(MONSTER_KINDS_GROUP.begin(), MONSTER_KINDS_GROUP.end(),
@@ -298,7 +298,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
             }
         }
     } else {
-        r_idx_list.push_back(*direct_r_idx);
+        monrace_ids.push_back(*direct_r_idx);
         auto &monrace = monraces_info[*direct_r_idx];
         auto &symbol_config = monrace.symbol_config;
         (void)visual_mode_command('v', &visual_list, browser_rows - 1, wid - (max + 3),
@@ -355,7 +355,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
             display_group_list(max, browser_rows, grp_idx, MONSTER_KINDS_GROUP, grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
-                r_idx_list = collect_monsters(player_ptr, grp_idx[grp_cur], mode);
+                monrace_ids = collect_monsters(player_ptr, grp_idx[grp_cur], mode);
             }
 
             while (mon_cur < mon_top) {
@@ -363,20 +363,20 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
             }
 
             while (mon_cur >= mon_top + browser_rows) {
-                auto remain = static_cast<int>(r_idx_list.size()) - browser_rows;
+                const int remain = std::ssize(monrace_ids) - browser_rows;
                 mon_top = static_cast<short>(std::min(remain, mon_top + browser_rows / 2));
             }
         }
 
         if (!visual_list) {
-            display_monster_list(max + 3, 6, browser_rows, r_idx_list, mon_cur, mon_top, visual_only);
+            display_monster_list(max + 3, 6, browser_rows, monrace_ids, mon_cur, mon_top, visual_only);
         } else {
             mon_top = mon_cur;
-            display_monster_list(max + 3, 6, 1, r_idx_list, mon_cur, mon_top, visual_only);
+            display_monster_list(max + 3, 6, 1, monrace_ids, mon_cur, mon_top, visual_only);
             display_visual_list(max + 3, 7, browser_rows - 1, wid - (max + 3), color_top, character_left);
         }
 
-        prt(format(_("%lu 種", "%lu Races"), r_idx_list.size()), 3, 26);
+        prt(format(_("%lu 種", "%lu Races"), monrace_ids.size()), 3, 26);
         prt(format(_("<方向>%s%s%s, ESC", "<dir>%s%s%s, ESC"), (!visual_list && !visual_only) ? _(", 'r'で思い出を見る", ", 'r' to recall") : "",
                 visual_list ? _(", ENTERで決定", ", ENTER to accept") : _(", 'v'でシンボル変更", ", 'v' for visuals"),
                 (symbols_cb.symbol != DisplaySymbol()) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
@@ -384,11 +384,11 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
 
         DisplaySymbol symbol_dummy;
         auto *symbol_ptr = &symbol_dummy;
-        if (!r_idx_list.empty()) {
-            auto &monrace = monraces_info[r_idx_list[mon_cur]];
+        if (!monrace_ids.empty()) {
+            auto &monrace = monraces_info[monrace_ids[mon_cur]];
             symbol_ptr = &monrace.symbol_config;
             if (!visual_only) {
-                monster_race_track(player_ptr, r_idx_list[mon_cur]);
+                monster_race_track(player_ptr, monrace_ids[mon_cur]);
                 handle_stuff(player_ptr);
             }
 
@@ -425,11 +425,9 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
 
         case 'R':
         case 'r': {
-            if (!visual_list && !visual_only && MonsterRace(r_idx_list[mon_cur]).is_valid()) {
-                screen_roff(player_ptr, r_idx_list[mon_cur], MONSTER_LORE_NORMAL);
-
+            if (!visual_list && !visual_only && MonraceList::is_valid(monrace_ids[mon_cur])) {
+                screen_roff(player_ptr, monrace_ids[mon_cur], MONSTER_LORE_NORMAL);
                 (void)inkey();
-
                 redraw = true;
             }
 
@@ -437,7 +435,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
         }
 
         default: {
-            browser_cursor(ch, &column, &grp_cur, std::ssize(grp_idx), &mon_cur, r_idx_list.size());
+            browser_cursor(ch, &column, &grp_cur, std::ssize(grp_idx), &mon_cur, monrace_ids.size());
 
             break;
         }

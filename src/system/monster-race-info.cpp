@@ -115,6 +115,11 @@ const std::map<MonsterRaceId, std::set<MonsterRaceId>> MonraceList::unified_uniq
 
 MonraceList MonraceList::instance{};
 
+bool MonraceList::is_valid(MonsterRaceId monrace_id)
+{
+    return monrace_id != MonsterRaceId::PLAYER;
+}
+
 const std::map<MonsterRaceId, std::set<MonsterRaceId>> &MonraceList::get_unified_uniques()
 {
     return unified_uniques;

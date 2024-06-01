@@ -85,7 +85,7 @@ std::optional<MonsterRaceId> select_pit_nest_monrace_id(PlayerType *player_ptr, 
             continue;
         }
 
-        if (MonsterRace(monrace_id).is_valid()) {
+        if (MonraceList::is_valid(monrace_id)) {
             return monrace_id;
         }
 

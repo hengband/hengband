@@ -126,7 +126,7 @@ static void preserve_pet(PlayerType *player_ptr)
     for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         const auto parent_r_idx = player_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx;
-        if (!m_ptr->has_parent() || MonsterRace(parent_r_idx).is_valid()) {
+        if (!m_ptr->has_parent() || MonraceList::is_valid(parent_r_idx)) {
             continue;
         }
 

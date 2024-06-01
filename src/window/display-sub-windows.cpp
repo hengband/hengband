@@ -496,7 +496,7 @@ void fix_dungeon(PlayerType *player_ptr)
  */
 void fix_monster(PlayerType *player_ptr)
 {
-    if (!MonsterRace(player_ptr->monster_race_idx).is_valid()) {
+    if (!MonraceList::is_valid(player_ptr->monster_race_idx)) {
         return;
     }
     display_sub_windows(SubWindowRedrawingFlag::MONSTER_LORE,

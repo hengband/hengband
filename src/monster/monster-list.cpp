@@ -319,7 +319,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
 
     const auto old_m_name = monster_desc(player_ptr, m_ptr, 0);
 
-    if (!MonsterRace(r_idx).is_valid()) {
+    if (!MonraceList::is_valid(r_idx)) {
         DEPTH level;
 
         chameleon_change_m_idx = m_idx;
@@ -347,7 +347,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
         r_ptr = &monraces_info[r_idx];
 
         chameleon_change_m_idx = 0;
-        if (!MonsterRace(r_idx).is_valid()) {
+        if (!MonraceList::is_valid(r_idx)) {
             return;
         }
     }

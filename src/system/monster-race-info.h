@@ -157,6 +157,7 @@ public:
     MonsterRaceInfo &operator[](const MonsterRaceId r_idx);
     const MonsterRaceInfo &operator[](const MonsterRaceId r_idx) const;
 
+    static bool is_valid(MonsterRaceId monrace_id);
     static const std::map<MonsterRaceId, std::set<MonsterRaceId>> &get_unified_uniques();
     static MonraceList &get_instance();
     std::map<MonsterRaceId, MonsterRaceInfo>::iterator begin();
