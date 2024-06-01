@@ -203,7 +203,7 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, Quest
         }
     };
 
-    if (is_fixed_quest || !MonsterRace(quest.r_idx).is_valid()) {
+    if (is_fixed_quest || !quest.get_bounty().is_valid()) {
         auto name = str_separate(quest.name, 35);
         constexpr auto mes = _("  %-35s (危険度:%3d階相当) - レベル%2d - %s\n", "  %-35s (Danger  level: %3d) - level %2d - %s\n");
         fprintf(fff, mes, name.front().data(), (int)quest.level, quest.complev, playtime_str.data());
