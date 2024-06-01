@@ -253,7 +253,7 @@ int exe_write_diary_quest(PlayerType *player_ptr, DiaryKind dk, QuestId quest_id
  * @param num 日記内容のIDに応じた数値
  * @param note 日記内容のIDに応じた文字列
  */
-void exe_write_diary(PlayerType *player_ptr, DiaryKind dk, int num, std::string_view note)
+void exe_write_diary(const FloorType &floor, DiaryKind dk, int num, std::string_view note)
 {
     static auto disable_diary = false;
     const auto &[day, hour, min] = w_ptr->extract_date_time(InnerGameData::get_instance().get_start_race());
@@ -266,7 +266,6 @@ void exe_write_diary(PlayerType *player_ptr, DiaryKind dk, int num, std::string_
         return;
     }
 
-    const auto &floor = *player_ptr->current_floor_ptr;
     const auto &[q_idx, note_level] = write_floor(floor);
     auto do_level = true;
     switch (dk) {
@@ -318,9 +317,9 @@ void exe_write_diary(PlayerType *player_ptr, DiaryKind dk, int num, std::string_
     case DiaryKind::STAIR: {
         auto to = inside_quest(q_idx) && (QuestType::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT)))
                       ? _("地上", "the surface")
-                  : !(player_ptr->current_floor_ptr->dun_level + num)
+                  : !(floor.dun_level + num)
                       ? _("地上", "the surface")
-                      : format(_("%d階", "level %d"), player_ptr->current_floor_ptr->dun_level + num);
+                      : format(_("%d階", "level %d"), floor.dun_level + num);
         constexpr auto fmt = _(" %2d:%02d %20s %sへ%s。\n", " %2d:%02d %20s %s %s.\n");
         fprintf(fff, fmt, hour, min, note_level.data(), _(to.data(), note.data()), _(note.data(), to.data()));
         break;
@@ -377,10 +376,9 @@ void exe_write_diary(PlayerType *player_ptr, DiaryKind dk, int num, std::string_
         break;
     }
     case DiaryKind::PAT_TELE: {
-        const auto &floor_ref = *player_ptr->current_floor_ptr;
-        auto to = !floor_ref.is_in_underground()
-                      ? _("地上", "the surface")
-                      : format(_("%d階(%s)", "level %d of %s"), floor.dun_level, floor.get_dungeon_definition().name.data());
+        const auto to = !floor.is_in_underground()
+                            ? _("地上", "the surface")
+                            : format(_("%d階(%s)", "level %d of %s"), floor.dun_level, floor.get_dungeon_definition().name.data());
         constexpr auto fmt = _(" %2d:%02d %20s %sへとパターンの力で移動した。\n", " %2d:%02d %20s used Pattern to teleport to %s.\n");
         fprintf(fff, fmt, hour, min, note_level.data(), to.data());
         break;

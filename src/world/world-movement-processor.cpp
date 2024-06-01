@@ -73,43 +73,43 @@ void execute_recall(PlayerType *player_ptr)
     }
 
     disturb(player_ptr, false, true);
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->dun_level || floor_ptr->is_in_quest() || player_ptr->enter_dungeon) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (floor.dun_level || floor.is_in_quest() || player_ptr->enter_dungeon) {
         msg_print(_("上に引っ張りあげられる感じがする！", "You feel yourself yanked upwards!"));
-        if (floor_ptr->dungeon_idx) {
-            player_ptr->recall_dungeon = floor_ptr->dungeon_idx;
+        if (floor.dungeon_idx) {
+            player_ptr->recall_dungeon = floor.dungeon_idx;
         }
         if (record_stair) {
-            exe_write_diary(player_ptr, DiaryKind::RECALL, floor_ptr->dun_level);
+            exe_write_diary(floor, DiaryKind::RECALL, floor.dun_level);
         }
 
-        floor_ptr->dun_level = 0;
-        floor_ptr->reset_dungeon_index();
+        floor.dun_level = 0;
+        floor.reset_dungeon_index();
         leave_quest_check(player_ptr);
         leave_tower_check(player_ptr);
-        floor_ptr->quest_number = QuestId::NONE;
+        floor.quest_number = QuestId::NONE;
         player_ptr->leaving = true;
         sound(SOUND_TPLEVEL);
         return;
     }
 
     msg_print(_("下に引きずり降ろされる感じがする！", "You feel yourself yanked downwards!"));
-    floor_ptr->set_dungeon_index(player_ptr->recall_dungeon);
+    floor.set_dungeon_index(player_ptr->recall_dungeon);
     if (record_stair) {
-        exe_write_diary(player_ptr, DiaryKind::RECALL, floor_ptr->dun_level);
+        exe_write_diary(floor, DiaryKind::RECALL, floor.dun_level);
     }
 
-    floor_ptr->dun_level = max_dlv[floor_ptr->dungeon_idx];
-    if (floor_ptr->dun_level < 1) {
-        floor_ptr->dun_level = 1;
+    floor.dun_level = max_dlv[floor.dungeon_idx];
+    if (floor.dun_level < 1) {
+        floor.dun_level = 1;
     }
-    if (ironman_nightmare && !randint0(666) && (floor_ptr->dungeon_idx == DUNGEON_ANGBAND)) {
-        if (floor_ptr->dun_level < 50) {
-            floor_ptr->dun_level *= 2;
-        } else if (floor_ptr->dun_level < 99) {
-            floor_ptr->dun_level = (floor_ptr->dun_level + 99) / 2;
-        } else if (floor_ptr->dun_level > 100) {
-            floor_ptr->dun_level = floor_ptr->get_dungeon_definition().maxdepth - 1;
+    if (ironman_nightmare && !randint0(666) && (floor.dungeon_idx == DUNGEON_ANGBAND)) {
+        if (floor.dun_level < 50) {
+            floor.dun_level *= 2;
+        } else if (floor.dun_level < 99) {
+            floor.dun_level = (floor.dun_level + 99) / 2;
+        } else if (floor.dun_level > 100) {
+            floor.dun_level = floor.get_dungeon_definition().maxdepth - 1;
         }
     }
 
