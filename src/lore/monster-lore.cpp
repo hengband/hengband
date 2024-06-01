@@ -191,23 +191,21 @@ void process_monster_lore(PlayerType *player_ptr, MonsterRaceId r_idx, monster_l
     }
 
     display_monster_collective(lore_ptr);
-    lore_ptr->vn = 0;
+    lore_ptr->lore_msgs.clear();
     if (lore_ptr->ability_flags.has(MonsterAbilityType::SHRIEK)) {
-        lore_ptr->vp[lore_ptr->vn] = _("悲鳴で助けを求める", "shriek for help");
-        lore_ptr->color[lore_ptr->vn++] = TERM_L_WHITE;
+        lore_ptr->lore_msgs.emplace_back(_("悲鳴で助けを求める", "shriek for help"), TERM_L_WHITE);
     }
 
     display_monster_launching(player_ptr, lore_ptr);
     if (lore_ptr->ability_flags.has(MonsterAbilityType::SPECIAL)) {
-        lore_ptr->vp[lore_ptr->vn] = _("特別な行動をする", "do something");
-        lore_ptr->color[lore_ptr->vn++] = TERM_VIOLET;
+        lore_ptr->lore_msgs.emplace_back(_("特別な行動をする", "do something"), TERM_VIOLET);
     }
 
     display_monster_sometimes(lore_ptr);
     set_breath_types(player_ptr, lore_ptr);
     display_monster_breath(lore_ptr);
 
-    lore_ptr->vn = 0;
+    lore_ptr->lore_msgs.clear();
     set_ball_types(player_ptr, lore_ptr);
     set_particular_types(player_ptr, lore_ptr);
     set_bolt_types(player_ptr, lore_ptr);
@@ -219,21 +217,21 @@ void process_monster_lore(PlayerType *player_ptr, MonsterRaceId r_idx, monster_l
     display_mosnter_magic_possibility(lore_ptr);
     display_monster_hp_ac(lore_ptr);
 
-    lore_ptr->vn = 0;
+    lore_ptr->lore_msgs.clear();
     display_monster_concrete_abilities(lore_ptr);
     display_monster_abilities(lore_ptr);
     display_monster_constitutions(lore_ptr);
 
-    lore_ptr->vn = 0;
+    lore_ptr->lore_msgs.clear();
     display_monster_concrete_weakness(lore_ptr);
     display_monster_weakness(lore_ptr);
 
-    lore_ptr->vn = 0;
+    lore_ptr->lore_msgs.clear();
     display_monster_concrete_resistances(lore_ptr);
     display_monster_resistances(lore_ptr);
     display_monster_evolution(lore_ptr);
 
-    lore_ptr->vn = 0;
+    lore_ptr->lore_msgs.clear();
     display_monster_concrete_immunities(lore_ptr);
     display_monster_immunities(lore_ptr);
     display_monster_alert(lore_ptr);

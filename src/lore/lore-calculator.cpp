@@ -118,19 +118,19 @@ bool know_damage(MonsterRaceId r_idx, int i)
 }
 
 /*!
- * @brief 文字列にモンスターの攻撃力を加える
- * @param r_idx モンスターの種族ID
- * @param SPELL_NUM 呪文番号
- * @param msg 表示する文字列
+ * @brief lore_ptrにダメージを与えるスキルの情報を追加する
+ * @param lore_ptr 知識情報
+ * @param ms_type スキル
+ * @param msg スキルを表す文字列
+ * @param color 表示する文字色
  */
-void set_damage(PlayerType *player_ptr, lore_type *lore_ptr, MonsterAbilityType ms_type, concptr msg)
+void add_lore_of_damage_skill(PlayerType *player_ptr, lore_type *lore_ptr, MonsterAbilityType ms_type, concptr msg, byte color)
 {
     MonsterRaceId r_idx = lore_ptr->r_idx;
-    char *tmp = lore_ptr->tmp_msg[lore_ptr->vn];
-    size_t tmpsz = sizeof(lore_ptr->tmp_msg[lore_ptr->vn]);
 
     if (!know_armour(r_idx, lore_ptr->know_everything)) {
-        strnfmt(tmp, tmpsz, msg, "");
+        // ダメージ量の情報なし
+        lore_ptr->lore_msgs.emplace_back(format(msg, ""), color);
         return;
     }
 
@@ -139,7 +139,9 @@ void set_damage(PlayerType *player_ptr, lore_type *lore_ptr, MonsterAbilityType 
     int dice_side = monspell_race_damage(player_ptr, ms_type, r_idx, DICE_SIDE);
     int dice_mult = monspell_race_damage(player_ptr, ms_type, r_idx, DICE_MULT);
     int dice_div = monspell_race_damage(player_ptr, ms_type, r_idx, DICE_DIV);
-    strnfmt(tmp, tmpsz, msg, std::string("(").append(dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div)).append(")").data());
+    std::stringstream dam_info;
+    dam_info << '(' << dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div) << ')';
+    lore_ptr->lore_msgs.emplace_back(format(msg, dam_info.str().data()), color);
 }
 
 void set_flags_for_full_knowledge(lore_type *lore_ptr)
