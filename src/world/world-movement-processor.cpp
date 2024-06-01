@@ -127,7 +127,7 @@ void execute_recall(PlayerType *player_ptr)
      * Clear all saved floors
      * and create a first saved floor
      */
-    prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);
+    FloorChangeModesStore::get_instace()->set(FloorChangeMode::FIRST_FLOOR);
     player_ptr->leaving = true;
 
     check_random_quest_auto_failure(player_ptr);
@@ -159,12 +159,7 @@ void execute_floor_reset(PlayerType *player_ptr)
     disturb(player_ptr, false, true);
     if (!inside_quest(floor.get_quest_id()) && floor.dun_level) {
         msg_print(_("世界が変わった！", "The world changes!"));
-
-        /*
-         * Clear all saved floors
-         * and create a first saved floor
-         */
-        prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);
+        FloorChangeModesStore::get_instace()->set(FloorChangeMode::FIRST_FLOOR);
         player_ptr->leaving = true;
     } else {
         msg_print(_("世界が少しの間変化したようだ。", "The world seems to change for a moment!"));

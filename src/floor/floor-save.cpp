@@ -11,6 +11,7 @@
 
 #include "floor/floor-save.h"
 #include "core/asking-player.h"
+#include "floor/floor-mode-changer.h"
 #include "floor/floor-save-util.h"
 #include "io/files-util.h"
 #include "io/uid-checker.h"
@@ -80,7 +81,7 @@ void init_saved_floors(PlayerType *player_ptr, bool force)
     latest_visit_mark = 1;
     saved_floor_file_sign = (uint32_t)time(nullptr);
     new_floor_id = 0;
-    player_ptr->change_floor_mode = 0;
+    FloorChangeModesStore::get_instace()->clear();
 }
 
 /*!

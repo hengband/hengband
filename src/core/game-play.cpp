@@ -360,7 +360,7 @@ static void decide_arena_death(PlayerType *player_ptr)
     player_ptr->chp_frac = 0;
     w_ptr->set_arena(true);
     reset_tim_flags(player_ptr);
-    prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_RAND_CONNECT);
+    FloorChangeModesStore::get_instace()->set({ FloorChangeMode::SAVE_FLOORS, FloorChangeMode::RANDOM_CONNECT });
     leave_floor(player_ptr);
 }
 
