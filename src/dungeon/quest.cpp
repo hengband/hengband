@@ -80,7 +80,7 @@ ArtifactType &QuestType::get_reward() const
  */
 const MonsterRaceInfo &QuestType::get_bounty() const
 {
-    return MonraceList::get_instance()[this->r_idx];
+    return MonraceList::get_instance().get_monrace(this->r_idx);
 }
 
 QuestList QuestList::instance{};
