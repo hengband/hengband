@@ -2,6 +2,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/horror-descriptions.h"
+#include "world/world.h"
 #include <algorithm>
 
 MonsterRaceInfo::MonsterRaceInfo()
@@ -128,6 +129,23 @@ std::string MonsterRaceInfo::get_pronoun_of_summoned_kin() const
 const MonsterRaceInfo &MonsterRaceInfo::get_next() const
 {
     return MonraceList::get_instance()[this->next_r_idx];
+}
+
+/*!
+ * @brief モンスター種族が賞金首の対象かどうかを調べる。日替わり賞金首は対象外。
+ * @param unachieved_only true の場合未達成の賞金首のみを対象とする。false の場合達成未達成に関わらずすべての賞金首を対象とする。
+ * @return モンスター種族が賞金首の対象ならば true、そうでなければ false
+ */
+bool MonsterRaceInfo::is_bounty(bool unachieved_only) const
+{
+    const auto end = std::end(w_ptr->bounties);
+    const auto it = std::find_if(std::begin(w_ptr->bounties), end,
+        [this](const auto &bounty) { return bounty.r_idx == this->idx; });
+    if (it == end) {
+        return false;
+    }
+
+    return !unachieved_only || !it->is_achieved;
 }
 
 const std::map<MonsterRaceId, std::set<MonsterRaceId>> MonraceList::unified_uniques = {
@@ -452,7 +470,7 @@ bool MonraceList::order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed) 
     return id1 < id2;
 }
 
-bool MonraceList::MonraceList::order_level(MonsterRaceId id1, MonsterRaceId id2) const
+bool MonraceList::order_level(MonsterRaceId id1, MonsterRaceId id2) const
 {
     const auto &monrace1 = monraces_info[id1];
     const auto &monrace2 = monraces_info[id2];

@@ -29,16 +29,18 @@ bool object_is_bounty(PlayerType *player_ptr, const ItemEntity *o_ptr)
         return false;
     }
 
-    auto corpse_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-    if (player_ptr->knows_daily_bounty && (streq(monraces_info[corpse_r_idx].name.data(), monraces_info[w_ptr->today_mon].name.data()))) {
+    const auto corpse_monrace_id = i2enum<MonsterRaceId>(o_ptr->pval);
+    const auto &monraces = MonraceList::get_instance();
+    const auto &monrace = monraces.get_monrace(corpse_monrace_id);
+    if (player_ptr->knows_daily_bounty && (monrace.name == monraces_info[w_ptr->today_mon].name)) {
         return true;
     }
 
-    if (corpse_r_idx == MonsterRaceId::TSUCHINOKO) {
+    if (corpse_monrace_id == MonsterRaceId::TSUCHINOKO) {
         return true;
     }
 
-    return MonsterRace(corpse_r_idx).is_bounty(true);
+    return monrace.is_bounty(true);
 }
 
 /*!
