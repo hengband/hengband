@@ -4,8 +4,11 @@
 #include "game-option/input-options.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/option-flags.h"
+#include "game-option/text-display-options.h"
 #include "io/input-key-acceptor.h"
+#include "load/load-util.h"
 #include "main/sound-of-music.h"
+#include "save/save-util.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
@@ -39,19 +42,34 @@ auto string_ptr_cmp = [](const std::string *a, const std::string *b) { return *a
  */
 std::map<const std::string *, msg_wp, decltype(string_ptr_cmp)> message_map(string_ptr_cmp);
 
+/** メッセージ行 */
+struct msg_record {
+    msg_record(msg_sp msg, short repeat_count = 1)
+        : msg(std::move(msg))
+        , repeat_count(repeat_count)
+    {
+    }
+    msg_sp msg; //< メッセージ
+    short repeat_count; //< 繰り返し回数
+};
+
 /** メッセージ履歴 */
-std::deque<msg_sp> message_history;
+std::deque<msg_record> message_history;
 
 /**
  * @brief メッセージを保持する msg_sp オブジェクトを生成する
  *
- * @tparam T メッセージの型。std::string / std::string_view / const char* 等
- * @param str メッセージ
+ * @param msg メッセージ
  * @return 生成した msg_sp オブジェクト
  */
-template <typename T>
-msg_sp make_message(T &&str)
+msg_sp make_message(std::string &&msg)
 {
+    // メッセージ履歴に同一のメッセージがあれば、そのメッセージの msg_sp オブジェクトを複製して返す
+    if (const auto &it = message_map.find(&msg); it != message_map.end()) {
+        return it->second.lock();
+    }
+
+    // 見つからなければ新たに msg_sp オブジェクトを作成する
     /** std::stringオブジェクトと同時にmessage_mapのエントリも削除するカスタムデリータ */
     auto deleter = [](std::string *s) {
         message_map.erase(s);
@@ -59,7 +77,7 @@ msg_sp make_message(T &&str)
     };
 
     // 新たにメッセージを保持する msg_sp オブジェクトを生成し、検索用mapオブジェクトにも追加する
-    auto new_msg = msg_sp(new std::string(std::forward<T>(str)), std::move(deleter));
+    auto new_msg = msg_sp(new std::string(std::move(msg)), std::move(deleter));
     message_map.emplace(new_msg.get(), msg_wp(new_msg));
 
     return new_msg;
@@ -86,77 +104,47 @@ std::shared_ptr<const std::string> message_str(int age)
         return std::make_shared<const std::string>("");
     }
 
-    return message_history[age];
-}
-
-static void message_add_aux(std::string str)
-{
-    if (str.empty()) {
-        return;
+    const auto &[msg, repeat_count] = message_history[age];
+    if (repeat_count > 1) {
+        return std::make_shared<const std::string>(*msg + format(" <x%d>", repeat_count));
     }
 
-    // 直前と同じメッセージの場合、「～ <xNN>」と表示する
-    if (!message_history.empty()) {
-        const char *t;
-        std::string_view last_message = *message_history.front();
-#ifdef JP
-        for (t = last_message.data(); *t && (*t != '<' || (*(t + 1) != 'x')); t++) {
-            if (iskanji(*t)) {
-                t++;
-            }
-        }
-#else
-        for (t = last_message.data(); *t && (*t != '<'); t++) {
-            ;
-        }
-#endif
-        int j = 1;
-        if (*t && t != last_message.data()) {
-            if (last_message.length() >= sizeof(" <xN>") - 1) {
-                last_message = last_message.substr(0, t - last_message.data() - 1);
-                j = atoi(t + 2);
-            }
-        }
-
-        if (str == last_message && (j < 1000)) {
-            str = format("%s <x%d>", str.data(), j + 1);
-            message_history.pop_front();
-            if (!now_message) {
-                now_message++;
-            }
-        } else {
-            /*流れた行の数を数えておく */
-            num_more++;
-            now_message++;
-        }
-    }
-
-    msg_sp add_msg;
-
-    // メッセージ履歴から同一のメッセージを探す
-    if (const auto &it = message_map.find(&str); it != message_map.end()) {
-        // 同一のメッセージが見つかったならそのメッセージの msg_sp オブジェクトを複製
-        add_msg = it->second.lock();
-    } else {
-        // 見つからなかった場合は新たに msg_sp オブジェクトを作成
-        add_msg = make_message(std::move(str));
-    }
-
-    // メッセージ履歴に追加
-    message_history.push_front(std::move(add_msg));
-
-    if (message_history.size() == MESSAGE_MAX) {
-        message_history.pop_back();
-    }
+    return msg;
 }
 
 /*!
- * @brief ゲームメッセージをログに追加する。 / Add a new message, with great efficiency
- * @param msg 保存したいメッセージ
+ * @brief メッセージ履歴にメッセージを追加する
+ * @param msg 保存するメッセージ
  */
 void message_add(std::string_view msg)
 {
-    message_add_aux(std::string(msg));
+    if (msg.empty()) {
+        return;
+    }
+
+    if (!message_history.empty()) {
+        auto &last_msg = message_history.front();
+
+        // 直前と同じメッセージの場合、繰り返し回数を増やして終了
+        if ((msg == *last_msg.msg) && (last_msg.repeat_count < 9999)) {
+            last_msg.repeat_count++;
+            if (!now_message) {
+                now_message++;
+            }
+            return;
+        }
+
+        /*流れた行の数を数えておく */
+        num_more++;
+        now_message++;
+    }
+
+    // メッセージ履歴に追加
+    message_history.emplace_front(make_message(std::string(msg)));
+
+    while (message_history.size() > MESSAGE_MAX) {
+        message_history.pop_back();
+    }
 }
 
 bool is_msg_window_flowed(void)
@@ -368,4 +356,39 @@ void msg_format(const char *fmt, ...)
     (void)vstrnfmt(buf, sizeof(buf), fmt, vp);
     va_end(vp);
     msg_print(buf);
+}
+
+/*!
+ * @brief セーブファイルにメッセージ履歴を保存する
+ */
+void wr_message_history()
+{
+    auto num = message_num();
+    if (compress_savefile && (num > 40)) {
+        num = 40;
+    }
+
+    wr_s32b(num);
+    for (auto i = 0; i < num; ++i) {
+        const auto &[msg, repeat_count] = message_history[i];
+        wr_string(*msg);
+        wr_s16b(repeat_count);
+    }
+}
+
+/*!
+ * @brief セーブファイルからメッセージ履歴を読み込む
+ */
+void rd_message_history()
+{
+    message_history.clear();
+
+    const auto message_hisotry_num = rd_s32b();
+    for (auto i = 0; i < message_hisotry_num; i++) {
+        auto msg = rd_string();
+        const auto repeat_count = rd_s16b();
+        if (message_history.size() < MESSAGE_MAX) {
+            message_history.emplace_back(make_message(std::move(msg)), repeat_count);
+        }
+    }
 }
