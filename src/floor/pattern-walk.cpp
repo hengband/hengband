@@ -91,7 +91,7 @@ void pattern_teleport(PlayerType *player_ptr)
      * Clear all saved floors
      * and create a first saved floor
      */
-    prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);
+    FloorChangeModesStore::get_instace()->set(FloorChangeMode::FIRST_FLOOR);
 
     check_random_quest_auto_failure(player_ptr);
 

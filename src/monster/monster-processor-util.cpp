@@ -35,19 +35,6 @@ turn_flags *init_turn_flags(MONSTER_IDX riding_idx, MONSTER_IDX m_idx, turn_flag
     turn_flags_ptr->did_kill_wall = false;
     return turn_flags_ptr;
 }
-/*!
- * @brief coordinate_candidate の初期化
- * @param なし
- * @return 初期化済の構造体
- */
-coordinate_candidate init_coordinate_candidate(void)
-{
-    coordinate_candidate candidate;
-    candidate.gy = 0;
-    candidate.gx = 0;
-    candidate.gdis = 0;
-    return candidate;
-}
 
 /*!
  * @brief モンスターの移動方向を保存する

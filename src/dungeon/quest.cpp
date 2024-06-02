@@ -375,7 +375,7 @@ void leave_quest_check(PlayerType *player_ptr)
         break;
     case QuestKindType::RANDOM:
         monraces_info[quest.r_idx].misc_flags.reset(MonsterMiscType::QUESTOR);
-        prepare_change_floor_mode(player_ptr, CFM_NO_RETURN);
+        FloorChangeModesStore::get_instace()->set(FloorChangeMode::NO_RETURN);
         break;
     default:
         break;

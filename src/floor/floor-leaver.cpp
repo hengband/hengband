@@ -143,19 +143,20 @@ static void preserve_pet(PlayerType *player_ptr)
  * @brief 新フロアに移動元フロアに繋がる階段を配置する / Virtually teleport onto the stairs that is connecting between two floors.
  * @param sf_ptr 移動元の保存フロア構造体参照ポインタ
  */
-static void locate_connected_stairs(PlayerType *player_ptr, FloorType *floor_ptr, saved_floor_type *sf_ptr, BIT_FLAGS floor_mode)
+static void locate_connected_stairs(PlayerType *player_ptr, FloorType *floor_ptr, saved_floor_type *sf_ptr)
 {
     auto sx = 0;
     auto sy = 0;
     int x_table[20]{};
     int y_table[20]{};
     auto num = 0;
+    const auto &fcms = FloorChangeModesStore::get_instace();
     for (POSITION y = 0; y < floor_ptr->height; y++) {
         for (POSITION x = 0; x < floor_ptr->width; x++) {
             const auto &grid = floor_ptr->get_grid({ y, x });
             const auto &terrain = grid.get_terrain();
             auto ok = false;
-            if (floor_mode & CFM_UP) {
+            if (fcms->has(FloorChangeMode::UP)) {
                 if (terrain.flags.has_all_of({ TerrainCharacteristics::LESS, TerrainCharacteristics::STAIRS }) && terrain.flags.has_not(TerrainCharacteristics::SPECIAL)) {
                     ok = true;
                     if (grid.special && grid.special == sf_ptr->upper_floor_id) {
@@ -163,7 +164,7 @@ static void locate_connected_stairs(PlayerType *player_ptr, FloorType *floor_ptr
                         sy = y;
                     }
                 }
-            } else if (floor_mode & CFM_DOWN) {
+            } else if (fcms->has(FloorChangeMode::DOWN)) {
                 if (terrain.flags.has_all_of({ TerrainCharacteristics::MORE, TerrainCharacteristics::STAIRS }) && terrain.flags.has_not(TerrainCharacteristics::SPECIAL)) {
                     ok = true;
                     if (grid.special && grid.special == sf_ptr->lower_floor_id) {
@@ -192,7 +193,7 @@ static void locate_connected_stairs(PlayerType *player_ptr, FloorType *floor_ptr
     }
 
     if (num == 0) {
-        prepare_change_floor_mode(player_ptr, CFM_RAND_PLACE | CFM_NO_RETURN);
+        FloorChangeModesStore::get_instace()->set({ FloorChangeMode::RANDOM_PLACE, FloorChangeMode::NO_RETURN });
         if (!feat_uses_special(floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat)) {
             floor_ptr->grid_array[player_ptr->y][player_ptr->x].special = 0;
         }
@@ -292,50 +293,49 @@ static void preserve_info(PlayerType *player_ptr)
     }
 }
 
-static Grid *set_grid_by_leaving_floor(PlayerType *player_ptr)
+static Grid *set_grid_by_leaving_floor(FloorType &floor, const Pos2D &p_pos)
 {
-    if ((player_ptr->change_floor_mode & CFM_SAVE_FLOORS) == 0) {
+    if (FloorChangeModesStore::get_instace()->has_not(FloorChangeMode::SAVE_FLOORS)) {
         return nullptr;
     }
 
-    auto *g_ptr = &player_ptr->current_floor_ptr->get_grid(player_ptr->get_position());
+    auto *g_ptr = &floor.get_grid(p_pos);
     const auto &terrain = g_ptr->get_terrain();
     if (g_ptr->special && terrain.flags.has_not(TerrainCharacteristics::SPECIAL) && get_sf_ptr(g_ptr->special)) {
         new_floor_id = g_ptr->special;
     }
 
     if (terrain.flags.has_all_of({ TerrainCharacteristics::STAIRS, TerrainCharacteristics::SHAFT })) {
-        prepare_change_floor_mode(player_ptr, CFM_SHAFT);
+        FloorChangeModesStore::get_instace()->set(FloorChangeMode::SHAFT);
     }
 
     return g_ptr;
 }
 
-static void jump_floors(PlayerType *player_ptr)
+static void jump_floors(FloorType &floor)
 {
-    const auto mode = player_ptr->change_floor_mode;
-    if (none_bits(mode, CFM_DOWN | CFM_UP)) {
+    const auto &fcms = FloorChangeModesStore::get_instace();
+    if (fcms->has_none_of({ FloorChangeMode::DOWN, FloorChangeMode::UP })) {
         return;
     }
 
     auto move_num = 0;
-    if (any_bits(mode, CFM_DOWN)) {
+    if (fcms->has(FloorChangeMode::DOWN)) {
         move_num = 1;
-    } else if (any_bits(mode, CFM_UP)) {
+    } else if (fcms->has(FloorChangeMode::UP)) {
         move_num = -1;
     }
 
-    if (any_bits(mode, CFM_SHAFT)) {
+    if (fcms->has(FloorChangeMode::SHAFT)) {
         move_num *= 2;
     }
 
-    auto &floor = *player_ptr->current_floor_ptr;
     const auto &dungeon = floor.get_dungeon_definition();
-    if (any_bits(mode, CFM_DOWN)) {
+    if (fcms->has(FloorChangeMode::DOWN)) {
         if (!floor.is_in_underground()) {
             move_num = dungeon.mindepth;
         }
-    } else if (any_bits(mode, CFM_UP)) {
+    } else if (fcms->has(FloorChangeMode::UP)) {
         if (floor.dun_level + move_num < dungeon.mindepth) {
             move_num = -floor.dun_level;
         }
@@ -344,6 +344,7 @@ static void jump_floors(PlayerType *player_ptr)
     floor.dun_level += move_num;
 }
 
+//!< @details SAVE_FLOORS フラグを抜く箇所に「TODO」のコメントがあった、何をするかは書いておらず詳細不明
 static void exit_to_wilderness(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
@@ -361,12 +362,13 @@ static void exit_to_wilderness(PlayerType *player_ptr)
     player_ptr->recall_dungeon = floor.dungeon_idx;
     player_ptr->word_recall = 0;
     floor.reset_dungeon_index();
-    player_ptr->change_floor_mode &= ~CFM_SAVE_FLOORS; // TODO
+    FloorChangeModesStore::get_instace()->reset(FloorChangeMode::SAVE_FLOORS);
 }
 
 static void kill_saved_floors(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    if (!(player_ptr->change_floor_mode & CFM_SAVE_FLOORS)) {
+    const auto &fcms = FloorChangeModesStore::get_instace();
+    if (fcms->has_not(FloorChangeMode::SAVE_FLOORS)) {
         for (DUNGEON_IDX i = 0; i < MAX_SAVED_FLOORS; i++) {
             kill_saved_floor(player_ptr, &saved_floors[i]);
         }
@@ -374,7 +376,7 @@ static void kill_saved_floors(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         latest_visit_mark = 1;
         return;
     }
-    if (player_ptr->change_floor_mode & CFM_NO_RETURN) {
+    if (fcms->has(FloorChangeMode::NO_RETURN)) {
         kill_saved_floor(player_ptr, sf_ptr);
     }
 }
@@ -391,23 +393,24 @@ static void refresh_new_floor_id(PlayerType *player_ptr, Grid *g_ptr)
     }
 }
 
-static void update_upper_lower_or_floor_id(PlayerType *player_ptr, saved_floor_type *sf_ptr)
+static void update_upper_lower_or_floor_id(saved_floor_type *sf_ptr)
 {
-    if ((player_ptr->change_floor_mode & CFM_RAND_CONNECT) == 0) {
+    const auto &fcms = FloorChangeModesStore::get_instace();
+    if (fcms->has_not(FloorChangeMode::RANDOM_CONNECT)) {
         return;
     }
 
-    if (player_ptr->change_floor_mode & CFM_UP) {
+    if (fcms->has(FloorChangeMode::UP)) {
         sf_ptr->upper_floor_id = new_floor_id;
-    } else if (player_ptr->change_floor_mode & CFM_DOWN) {
+    } else if (fcms->has(FloorChangeMode::DOWN)) {
         sf_ptr->lower_floor_id = new_floor_id;
     }
 }
 
 static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    auto g_ptr = set_grid_by_leaving_floor(player_ptr);
-    jump_floors(player_ptr);
+    auto g_ptr = set_grid_by_leaving_floor(*player_ptr->current_floor_ptr, player_ptr->get_position());
+    jump_floors(*player_ptr->current_floor_ptr);
     exit_to_wilderness(player_ptr);
     kill_saved_floors(player_ptr, sf_ptr);
     if (!player_ptr->in_saved_floor()) {
@@ -415,8 +418,9 @@ static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     }
 
     refresh_new_floor_id(player_ptr, g_ptr);
-    update_upper_lower_or_floor_id(player_ptr, sf_ptr);
-    if (((player_ptr->change_floor_mode & CFM_SAVE_FLOORS) == 0) || ((player_ptr->change_floor_mode & CFM_NO_RETURN) != 0)) {
+    update_upper_lower_or_floor_id(sf_ptr);
+    auto &fcms = FloorChangeModesStore::get_instace();
+    if (fcms->has_not(FloorChangeMode::SAVE_FLOORS) || fcms->has(FloorChangeMode::NO_RETURN)) {
         return;
     }
 
@@ -429,7 +433,7 @@ static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         return;
     }
 
-    prepare_change_floor_mode(player_ptr, CFM_NO_RETURN);
+    fcms->set(FloorChangeMode::NO_RETURN);
     kill_saved_floor(player_ptr, get_sf_ptr(player_ptr->floor_id));
 }
 
@@ -448,8 +452,8 @@ void leave_floor(PlayerType *player_ptr)
 
     preserve_info(player_ptr);
     saved_floor_type *sf_ptr = get_sf_ptr(player_ptr->floor_id);
-    if (player_ptr->change_floor_mode & CFM_RAND_CONNECT) {
-        locate_connected_stairs(player_ptr, player_ptr->current_floor_ptr, sf_ptr, player_ptr->change_floor_mode);
+    if (FloorChangeModesStore::get_instace()->has(FloorChangeMode::RANDOM_CONNECT)) {
+        locate_connected_stairs(player_ptr, player_ptr->current_floor_ptr, sf_ptr);
     }
 
     exe_leave_floor(player_ptr, sf_ptr);

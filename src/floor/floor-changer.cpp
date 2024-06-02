@@ -44,7 +44,6 @@
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
-
 #include <algorithm>
 
 /*!
@@ -68,10 +67,10 @@ static void build_dead_end(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     player_ptr->x = player_ptr->current_floor_ptr->width / 2;
     place_bold(player_ptr, player_ptr->y, player_ptr->x, GB_FLOOR);
     wipe_generate_random_floor_flags(player_ptr->current_floor_ptr);
-
-    if (player_ptr->change_floor_mode & CFM_UP) {
+    const auto &fcms = FloorChangeModesStore::get_instace();
+    if (fcms->has(FloorChangeMode::UP)) {
         sf_ptr->upper_floor_id = 0;
-    } else if (player_ptr->change_floor_mode & CFM_DOWN) {
+    } else if (fcms->has(FloorChangeMode::DOWN)) {
         sf_ptr->lower_floor_id = 0;
     }
 }
@@ -210,32 +209,37 @@ static bool is_visited_floor(saved_floor_type *sf_ptr)
 
 /*!
  * @brief フロア読込時にプレイヤー足元の地形に必要な情報を設定する
- * @params player_ptr プレイヤーへの参照ポインタ
+ * @param floor フロアへの参照
+ * @param p_pos プレイヤーの現在位置
  */
-static void set_player_grid(PlayerType *player_ptr)
+static void set_player_grid(FloorType &floor, const Pos2D &p_pos)
 {
-    if ((player_ptr->change_floor_mode & CFM_NO_RETURN) == 0) {
+    const auto &fcms = FloorChangeModesStore::get_instace();
+    if (fcms->has_not(FloorChangeMode::NO_RETURN)) {
         return;
     }
 
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-    if (feat_uses_special(g_ptr->feat)) {
+    auto &grid = floor.get_grid(p_pos);
+    if (feat_uses_special(grid.feat)) {
         return;
     }
 
-    if (player_ptr->change_floor_mode & (CFM_DOWN | CFM_UP)) {
-        g_ptr->feat = rand_choice(feat_ground_type);
+    if (fcms->has_any_of({ FloorChangeMode::DOWN, FloorChangeMode::UP })) {
+        grid.feat = rand_choice(feat_ground_type);
     }
 
-    g_ptr->special = 0;
+    grid.special = 0;
 }
 
 static void update_floor_id(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
+    const auto &fcms = FloorChangeModesStore::get_instace();
+    const auto is_up = fcms->has(FloorChangeMode::UP);
+    const auto is_down = fcms->has(FloorChangeMode::DOWN);
     if (!player_ptr->in_saved_floor()) {
-        if (player_ptr->change_floor_mode & CFM_UP) {
+        if (is_up) {
             sf_ptr->lower_floor_id = 0;
-        } else if (player_ptr->change_floor_mode & CFM_DOWN) {
+        } else if (is_down) {
             sf_ptr->upper_floor_id = 0;
         }
 
@@ -243,7 +247,7 @@ static void update_floor_id(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     }
 
     saved_floor_type *cur_sf_ptr = get_sf_ptr(player_ptr->floor_id);
-    if (player_ptr->change_floor_mode & CFM_UP) {
+    if (is_up) {
         if (cur_sf_ptr->upper_floor_id == new_floor_id) {
             sf_ptr->lower_floor_id = player_ptr->floor_id;
         }
@@ -251,7 +255,7 @@ static void update_floor_id(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         return;
     }
 
-    if (((player_ptr->change_floor_mode & CFM_DOWN) != 0) && (cur_sf_ptr->lower_floor_id == new_floor_id)) {
+    if (is_down && (cur_sf_ptr->lower_floor_id == new_floor_id)) {
         sf_ptr->upper_floor_id = player_ptr->floor_id;
     }
 }
@@ -329,15 +333,16 @@ static void allocate_loaded_floor(PlayerType *player_ptr, saved_floor_type *sf_p
 static void set_stairs(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    auto *g_ptr = &floor.grid_array[player_ptr->y][player_ptr->x];
-    if ((player_ptr->change_floor_mode & CFM_UP) && !inside_quest(floor.get_quest_id())) {
-        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(&floor, feat_down_stair, TerrainCharacteristics::SHAFT) : feat_down_stair;
-    } else if ((player_ptr->change_floor_mode & CFM_DOWN) && !ironman_downward) {
-        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(&floor, feat_up_stair, TerrainCharacteristics::SHAFT) : feat_up_stair;
+    auto &grid = floor.grid_array[player_ptr->y][player_ptr->x];
+    const auto &fcms = FloorChangeModesStore::get_instace();
+    if (fcms->has(FloorChangeMode::UP) && !inside_quest(floor.get_quest_id())) {
+        grid.feat = fcms->has(FloorChangeMode::SHAFT) ? feat_state(&floor, feat_down_stair, TerrainCharacteristics::SHAFT) : feat_down_stair;
+    } else if (fcms->has(FloorChangeMode::DOWN) && !ironman_downward) {
+        grid.feat = fcms->has(FloorChangeMode::SHAFT) ? feat_state(&floor, feat_up_stair, TerrainCharacteristics::SHAFT) : feat_up_stair;
     }
 
-    g_ptr->mimic = 0;
-    g_ptr->special = player_ptr->floor_id;
+    grid.mimic = 0;
+    grid.special = player_ptr->floor_id;
 }
 
 /*!
@@ -356,7 +361,7 @@ static void generate_new_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     sf_ptr->last_visit = w_ptr->game_turn;
     auto &floor = *player_ptr->current_floor_ptr;
     sf_ptr->dun_level = floor.dun_level;
-    if ((player_ptr->change_floor_mode & CFM_NO_RETURN) != 0) {
+    if (FloorChangeModesStore::get_instace()->has(FloorChangeMode::NO_RETURN)) {
         return;
     }
 
@@ -365,12 +370,13 @@ static void generate_new_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 
 static void cut_off_the_upstair(PlayerType *player_ptr)
 {
-    if (player_ptr->change_floor_mode & CFM_RAND_PLACE) {
+    const auto &fcms = FloorChangeModesStore::get_instace();
+    if (fcms->has(FloorChangeMode::RANDOM_PLACE)) {
         (void)new_player_spot(player_ptr);
         return;
     }
 
-    if (((player_ptr->change_floor_mode & CFM_NO_RETURN) == 0) || ((player_ptr->change_floor_mode & (CFM_DOWN | CFM_UP)) == 0)) {
+    if (fcms->has_not(FloorChangeMode::NO_RETURN) || fcms->has_none_of({ FloorChangeMode::DOWN, FloorChangeMode::UP })) {
         return;
     }
 
@@ -383,7 +389,8 @@ static void cut_off_the_upstair(PlayerType *player_ptr)
 
 static void update_floor(PlayerType *player_ptr)
 {
-    if (!(player_ptr->change_floor_mode & CFM_SAVE_FLOORS) && !(player_ptr->change_floor_mode & CFM_FIRST_FLOOR)) {
+    const auto &fcms = FloorChangeModesStore::get_instace();
+    if (fcms->has_none_of({ FloorChangeMode::SAVE_FLOORS, FloorChangeMode::FIRST_FLOOR })) {
         generate_floor(player_ptr);
         new_floor_id = 0;
         return;
@@ -396,7 +403,7 @@ static void update_floor(PlayerType *player_ptr)
     saved_floor_type *sf_ptr;
     sf_ptr = get_sf_ptr(new_floor_id);
     const bool loaded = is_visited_floor(sf_ptr) && load_floor(player_ptr, sf_ptr, 0);
-    set_player_grid(player_ptr);
+    set_player_grid(*player_ptr->current_floor_ptr, player_ptr->get_position());
     update_floor_id(player_ptr, sf_ptr);
 
     if (loaded) {
@@ -439,7 +446,8 @@ void change_floor(PlayerType *player_ptr)
     player_ptr->current_floor_ptr->generated_turn = w_ptr->game_turn;
     player_ptr->feeling_turn = player_ptr->current_floor_ptr->generated_turn;
     player_ptr->feeling = 0;
-    player_ptr->change_floor_mode = 0L;
+    auto &fcms = FloorChangeModesStore::get_instace();
+    fcms->clear();
     select_floor_music(player_ptr);
-    player_ptr->change_floor_mode = 0;
+    fcms->clear();
 }

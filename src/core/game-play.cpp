@@ -166,9 +166,9 @@ static void init_random_seed(PlayerType *player_ptr, bool new_game)
         new_game = true;
         w_ptr->character_dungeon = false;
         init_random_seed = true;
-        init_saved_floors(player_ptr, false);
+        init_saved_floors(false);
     } else if (new_game) {
-        init_saved_floors(player_ptr, true);
+        init_saved_floors(true);
     }
 
     if (!new_game) {
@@ -360,7 +360,7 @@ static void decide_arena_death(PlayerType *player_ptr)
     player_ptr->chp_frac = 0;
     w_ptr->set_arena(true);
     reset_tim_flags(player_ptr);
-    prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_RAND_CONNECT);
+    FloorChangeModesStore::get_instace()->set({ FloorChangeMode::SAVE_FLOORS, FloorChangeMode::RANDOM_CONNECT });
     leave_floor(player_ptr);
 }
 

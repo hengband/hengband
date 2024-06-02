@@ -504,7 +504,8 @@ static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH de
     auto &floor = *player_ptr->current_floor_ptr;
     floor.set_dungeon_index(dun_idx);
     floor.dun_level = depth;
-    prepare_change_floor_mode(player_ptr, CFM_RAND_PLACE);
+    auto &fcms = FloorChangeModesStore::get_instace();
+    fcms->set(FloorChangeMode::RANDOM_PLACE);
     if (!floor.is_in_underground()) {
         floor.reset_dungeon_index();
     }
@@ -520,7 +521,7 @@ static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH de
     floor.quest_number = QuestId::NONE;
     PlayerEnergy(player_ptr).reset_player_turn();
     player_ptr->energy_need = 0;
-    prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);
+    fcms->set(FloorChangeMode::FIRST_FLOOR);
     player_ptr->leaving = true;
 }
 
