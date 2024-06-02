@@ -10,7 +10,6 @@
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-bias-types.h"
 #include "artifact/random-art-effects.h"
-#include "monster-race/monster-race.h"
 #include "object-enchant/activation-info-table.h"
 #include "object-enchant/dragon-breaths-table.h"
 #include "object-enchant/item-feeling.h"

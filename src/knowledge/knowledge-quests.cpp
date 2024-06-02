@@ -13,7 +13,6 @@
 #include "info-reader/fixed-map-parser.h"
 #include "io-dump/dump-util.h"
 #include "locale/english.h"
-#include "monster-race/monster-race.h"
 #include "object-enchant/special-object-flags.h"
 #include "system/artifact-type-definition.h"
 #include "system/dungeon-info.h"

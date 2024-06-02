@@ -9,7 +9,6 @@
 #include "flavor/flavor-describer.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-resistance-mask.h"
 #include "monster/monster-describer.h"

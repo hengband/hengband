@@ -16,7 +16,6 @@
 #include "knowledge/monster-group-table.h"
 #include "locale/english.h"
 #include "lore/lore-util.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"

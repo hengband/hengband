@@ -1,7 +1,6 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "game-option/birth-options.h"
 #include "inventory/inventory-slot-types.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster/monster-status.h"
 #include "player-info/equipment-info.h"

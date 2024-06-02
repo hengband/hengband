@@ -8,7 +8,6 @@
 #include "game-option/special-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "monster-race/monster-race.h"
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "player/player-status.h"

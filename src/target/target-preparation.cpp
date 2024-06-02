@@ -2,7 +2,6 @@
 #include "floor/cave.h"
 #include "game-option/input-options.h"
 #include "grid/grid.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"

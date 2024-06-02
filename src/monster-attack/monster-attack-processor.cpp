@@ -9,7 +9,6 @@
 #include "floor/cave.h"
 #include "melee/monster-attack-monster.h"
 #include "monster-attack/monster-attack-player.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "monster/monster-processor-util.h"
 #include "monster/monster-status-setter.h"

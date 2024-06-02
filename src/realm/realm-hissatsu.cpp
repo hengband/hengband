@@ -21,7 +21,6 @@
 #include "io/input-key-requester.h"
 #include "mind/mind-ninja.h"
 #include "monster-race/monster-race-hook.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-brightness-mask.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"

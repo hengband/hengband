@@ -1,7 +1,6 @@
 #include "room/pit-nest-util.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
 #include "system/dungeon-info.h"

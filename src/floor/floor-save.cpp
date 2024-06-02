@@ -15,7 +15,6 @@
 #include "floor/floor-save-util.h"
 #include "io/files-util.h"
 #include "io/uid-checker.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "system/floor-type-definition.h"

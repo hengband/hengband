@@ -13,7 +13,6 @@
 #include "floor/floor-object.h"
 #include "game-option/disturbance-options.h"
 #include "inventory/inventory-slot-types.h"
-#include "monster-race/monster-race.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/item-magic-applier.h"

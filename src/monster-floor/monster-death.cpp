@@ -17,7 +17,6 @@
 #include "monster-floor/monster-object.h"
 #include "monster-floor/special-death-switcher.h"
 #include "monster-race/monster-race-hook.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"

@@ -7,7 +7,6 @@
 #include "dungeon/quest-completion-checker.h"
 #include "monster-floor/monster-move.h"
 #include "monster-race/monster-kind-mask.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"

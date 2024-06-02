@@ -7,7 +7,6 @@
 #include "load/floor-loader.h"
 #include "load/load-util.h"
 #include "load/old/load-v1-5-0.h"
-#include "monster-race/monster-race.h"
 #include "save/floor-writer.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-info.h"

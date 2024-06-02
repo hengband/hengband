@@ -152,6 +152,8 @@ public:
     int calc_power() const;
 };
 
+extern std::map<MonsterRaceId, MonsterRaceInfo> monraces_info;
+
 class MonraceList {
 public:
     MonraceList(MonraceList &&) = delete;

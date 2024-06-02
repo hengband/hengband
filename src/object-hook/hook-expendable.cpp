@@ -1,7 +1,6 @@
 #include "object-hook/hook-expendable.h"
 #include "artifact/fixed-art-types.h"
 #include "core/window-redrawer.h"
-#include "monster-race/monster-race.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/tval-types.h"

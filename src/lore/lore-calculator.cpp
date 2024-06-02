@@ -1,7 +1,6 @@
 #include "lore/lore-calculator.h"
 #include "game-option/cheat-options.h"
 #include "lore/lore-util.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-ability-flags.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "system/monster-race-info.h"

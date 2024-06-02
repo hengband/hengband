@@ -11,7 +11,6 @@
 #include "effect/attribute-types.h"
 #include "effect/effect-processor.h"
 #include "mind/drs-types.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"

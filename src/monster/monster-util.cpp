@@ -4,7 +4,6 @@
 #include "floor/wild.h"
 #include "game-option/cheat-options.h"
 #include "monster-race/monster-race-hook.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-indice-types.h"

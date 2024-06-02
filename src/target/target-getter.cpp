@@ -6,7 +6,6 @@
 #include "io/command-repeater.h"
 #include "io/input-key-requester.h"
 #include "main/sound-of-music.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-status.h"
 #include "system/floor-type-definition.h"

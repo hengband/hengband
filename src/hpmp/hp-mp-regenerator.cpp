@@ -2,7 +2,6 @@
 #include "cmd-item/cmd-magiceat.h"
 #include "core/window-redrawer.h"
 #include "inventory/inventory-slot-types.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-status.h"
 #include "player-base/player-class.h"
 #include "player-info/magic-eater-data-type.h"

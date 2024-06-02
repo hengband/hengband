@@ -4,7 +4,6 @@
 #include "floor/floor-town.h"
 #include "io/files-util.h"
 #include "io/tokenizer.h"
-#include "monster-race/monster-race.h"
 #include "object-enchant/special-object-flags.h"
 #include "system/angband-exceptions.h"
 #include "system/artifact-type-definition.h"

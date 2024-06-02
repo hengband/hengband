@@ -2,7 +2,6 @@
 #include "core/disturbance.h"
 #include "melee/melee-spell-flags-checker.h"
 #include "melee/melee-spell-util.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"

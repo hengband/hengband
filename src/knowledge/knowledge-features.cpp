@@ -11,7 +11,6 @@
 #include "io-dump/dump-util.h"
 #include "io/input-key-acceptor.h"
 #include "knowledge/lighting-level-table.h"
-#include "monster-race/monster-race.h"
 #include "system/dungeon-info.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"

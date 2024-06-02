@@ -14,7 +14,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "lore/lore-store.h"
 #include "monster-race//race-ability-mask.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-resistance-mask.h"
 #include "monster/monster-describer.h"
