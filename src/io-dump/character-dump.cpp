@@ -40,9 +40,9 @@
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/z-form.h"
+#include "util/buffer-shaper.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
-#include "util/sort.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -116,18 +116,12 @@ static void dump_aux_quest(PlayerType *player_ptr, FILE *fff)
 {
     fprintf(fff, _("\n\n  [クエスト情報]\n", "\n\n  [Quest Information]\n"));
 
-    const auto &quest_list = QuestList::get_instance();
-    std::vector<QuestId> quest_numbers;
-    for (const auto &[q_idx, quest] : quest_list) {
-        quest_numbers.push_back(q_idx);
-    }
-    int dummy;
-    ang_sort(player_ptr, quest_numbers.data(), &dummy, quest_numbers.size(), ang_sort_comp_quest_num, ang_sort_swap_quest_num);
-
+    const auto &quests = QuestList::get_instance();
+    const auto quest_ids = quests.get_sorted_quest_ids();
     fputc('\n', fff);
-    do_cmd_knowledge_quests_completed(player_ptr, fff, quest_numbers);
+    do_cmd_knowledge_quests_completed(player_ptr, fff, quest_ids);
     fputc('\n', fff);
-    do_cmd_knowledge_quests_failed(player_ptr, fff, quest_numbers);
+    do_cmd_knowledge_quests_failed(player_ptr, fff, quest_ids);
     fputc('\n', fff);
 }
 
@@ -144,8 +138,23 @@ static void dump_aux_last_message(PlayerType *player_ptr, FILE *fff)
 
     if (!w_ptr->total_winner) {
         fprintf(fff, _("\n  [死ぬ直前のメッセージ]\n\n", "\n  [Last Messages]\n\n"));
-        for (int i = std::min(message_num(), 30); i >= 0; i--) {
-            fprintf(fff, "> %s\n", message_str(i)->data());
+
+        constexpr auto msg_line_max = 30;
+        constexpr auto msg_width = 80;
+        std::vector<std::string> msg_lines;
+
+        for (auto i = 0; i < message_num() && std::size(msg_lines) < msg_line_max; ++i) {
+            const auto msg = message_str(i);
+            auto lines = shape_buffer(*msg, msg_width);
+
+            msg_lines.insert(msg_lines.end(),
+                std::make_move_iterator(lines.rbegin()), std::make_move_iterator(lines.rend()));
+        }
+
+        std::reverse(msg_lines.begin(), msg_lines.end());
+
+        for (const auto &line : msg_lines) {
+            fprintf(fff, "> %s\n", line.data());
         }
 
         fputc('\n', fff);
@@ -168,24 +177,25 @@ static void dump_aux_last_message(PlayerType *player_ptr, FILE *fff)
 static void dump_aux_recall(FILE *fff)
 {
     fprintf(fff, _("\n  [帰還場所]\n\n", "\n  [Recall Depth]\n\n"));
-    for (const auto &d_ref : dungeons_info) {
-        bool seiha = false;
+    for (const auto &dungeon : dungeons_info) {
+        auto is_conquered = false;
+        if (!dungeon.is_dungeon() || !dungeon.maxdepth) {
+            continue;
+        }
 
-        if (d_ref.idx == 0 || !d_ref.maxdepth) {
+        if (!max_dlv[dungeon.idx]) {
             continue;
         }
-        if (!max_dlv[d_ref.idx]) {
-            continue;
-        }
-        if (MonsterRace(d_ref.final_guardian).is_valid()) {
-            if (!monraces_info[d_ref.final_guardian].max_num) {
-                seiha = true;
+
+        if (dungeon.has_guardian()) {
+            if (dungeon.get_guardian().max_num == 0) {
+                is_conquered = true;
             }
-        } else if (max_dlv[d_ref.idx] == d_ref.maxdepth) {
-            seiha = true;
+        } else if (max_dlv[dungeon.idx] == dungeon.maxdepth) {
+            is_conquered = true;
         }
 
-        fprintf(fff, _("   %c%-12s: %3d 階\n", "   %c%-16s: level %3d\n"), seiha ? '!' : ' ', d_ref.name.data(), (int)max_dlv[d_ref.idx]);
+        fprintf(fff, _("   %c%-12s: %3d 階\n", "   %c%-16s: level %3d\n"), is_conquered ? '!' : ' ', dungeon.name.data(), (int)max_dlv[dungeon.idx]);
     }
 }
 
@@ -306,19 +316,15 @@ static void dump_aux_arena(PlayerType *player_ptr, FILE *fff)
  * @brief 撃破モンスターの情報をファイルにダンプする
  * @param fff ファイルポインタ
  */
-static void dump_aux_monsters(PlayerType *player_ptr, FILE *fff)
+static void dump_aux_monsters(FILE *fff)
 {
     fprintf(fff, _("\n  [倒したモンスター]\n\n", "\n  [Defeated Monsters]\n\n"));
-
-    /* Allocate the "who" array */
-    uint16_t why = 2;
-    std::vector<MonsterRaceId> who;
-
-    /* Count monster kills */
+    std::vector<MonsterRaceId> monrace_ids;
+    const auto &monraces = MonraceList::get_instance();
     auto norm_total = 0;
-    for (const auto &[monrace_id, monrace] : monraces_info) {
+    for (const auto &[monrace_id, monrace] : monraces) {
         /* Ignore unused index */
-        if (!MonsterRace(monrace_id).is_valid()) {
+        if (!monrace.is_valid()) {
             continue;
         }
 
@@ -328,7 +334,7 @@ static void dump_aux_monsters(PlayerType *player_ptr, FILE *fff)
                 norm_total++;
 
                 /* Add a unique monster to the list */
-                who.push_back(monrace.idx);
+                monrace_ids.push_back(monrace.idx);
             }
 
             continue;
@@ -345,7 +351,7 @@ static void dump_aux_monsters(PlayerType *player_ptr, FILE *fff)
         return;
     }
 
-    auto uniq_total = static_cast<int>(who.size());
+    const int uniq_total = std::ssize(monrace_ids);
     /* Defeated more than one normal monsters */
     if (uniq_total == 0) {
 #ifdef JP
@@ -364,22 +370,20 @@ static void dump_aux_monsters(PlayerType *player_ptr, FILE *fff)
         (uniq_total == 1 ? "" : "s"));
 #endif
 
-    /* Sort the array by dungeon depth of monsters */
-    ang_sort(player_ptr, who.data(), &why, uniq_total, ang_sort_comp_hook, ang_sort_swap_hook);
+    std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
     fprintf(fff, _("\n《上位%d体のユニーク・モンスター》\n", "\n< Unique monsters top %d >\n"), std::min(uniq_total, 10));
-
-    char buf[80];
-    for (auto it = who.rbegin(); it != who.rend() && std::distance(who.rbegin(), it) < 10; it++) {
-        auto *r_ptr = &monraces_info[*it];
-        if (r_ptr->defeat_level && r_ptr->defeat_time) {
-            strnfmt(buf, sizeof(buf), _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
-                (r_ptr->defeat_time / 60) % 60, r_ptr->defeat_time % 60);
-        } else {
-            buf[0] = '\0';
+    for (auto it = monrace_ids.rbegin(); it != monrace_ids.rend() && std::distance(monrace_ids.rbegin(), it) < 10; it++) {
+        const auto &monrace = monraces[*it];
+        const auto defeat_level = monrace.defeat_level;
+        const auto defeat_time = monrace.defeat_time;
+        std::string defeat_info;
+        if ((defeat_level > 0) && (defeat_time > 0)) {
+            constexpr auto fmt = _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d");
+            defeat_info = format(fmt, defeat_level, defeat_time / (60 * 60), (defeat_time / 60) % 60, defeat_time % 60);
         }
 
-        auto name = str_separate(r_ptr->name, 40);
-        fprintf(fff, _("  %-40s (レベル%3d)%s\n", "  %-40s (level %3d)%s\n"), name.front().data(), (int)r_ptr->level, buf);
+        const auto name = str_separate(monrace.name, 40);
+        fprintf(fff, _("  %-40s (レベル%3d)%s\n", "  %-40s (level %3d)%s\n"), name.front().data(), monrace.level, defeat_info.data());
         for (auto i = 1U; i < name.size(); ++i) {
             fprintf(fff, "  %s\n", name[i].data());
         }
@@ -618,7 +622,7 @@ void make_character_dump(PlayerType *player_ptr, FILE *fff)
     dump_aux_recall(fff);
     dump_aux_quest(player_ptr, fff);
     dump_aux_arena(player_ptr, fff);
-    dump_aux_monsters(player_ptr, fff);
+    dump_aux_monsters(fff);
     dump_aux_virtues(player_ptr, fff);
     dump_aux_race_history(player_ptr, fff);
     dump_aux_realm_history(player_ptr, fff);
@@ -630,6 +634,6 @@ void make_character_dump(PlayerType *player_ptr, FILE *fff)
     dump_aux_home_museum(player_ptr, fff);
 
     // ダンプの幅をはみ出さないように48文字目以降を切り捨てる
-    const auto checksum = get_check_sum().erase(48);
+    const std::string checksum = get_check_sum().erase(48);
     fprintf(fff, _("  [チェックサム: \"%s\"]\n\n", "  [Check Sum: \"%s\"]\n\n"), checksum.data());
 }

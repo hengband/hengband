@@ -380,7 +380,7 @@
     <ClCompile Include="..\..\src\room\rooms-vault.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\rooms-pit-nest.cpp">
+    <ClCompile Include="..\..\src\room\pit-nest-util.cpp">
       <Filter>room</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\player-info\class-info.cpp">
@@ -749,7 +749,7 @@
     <ClCompile Include="..\..\src\io-dump\special-class-dump.cpp">
       <Filter>io-dump</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\knowledge\object-group-table.cpp">
+    <ClCompile Include="..\..\src\knowledge\item-group-table.cpp">
       <Filter>knowledge</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\floor\floor-object.cpp">
@@ -954,6 +954,9 @@
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\info-reader\info-reader-util.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\json-reader-util.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\info-reader\feature-reader.cpp">
@@ -1196,8 +1199,8 @@
     <ClCompile Include="..\..\src\term\screen-processor.cpp">
       <Filter>term</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\util\sort.cpp">
-      <Filter>util</Filter>
+    <ClCompile Include="..\..\src\target\target-sorter.cpp">
+      <Filter>target</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\io\input-key-requester.cpp">
       <Filter>io</Filter>
@@ -2493,6 +2496,12 @@
     <ClCompile Include="..\..\src\monster-race\race-sex-const.cpp">
       <Filter>monster-race</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\room\rooms-pit.cpp">
+      <Filter>room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\room\rooms-nest.cpp">
+      <Filter>room</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3293,7 +3302,7 @@
     <ClInclude Include="..\..\src\io-dump\special-class-dump.h">
       <Filter>io-dump</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\knowledge\object-group-table.h">
+    <ClInclude Include="..\..\src\knowledge\item-group-table.h">
       <Filter>knowledge</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\floor\floor-object.h">
@@ -3581,6 +3590,9 @@
     <ClInclude Include="..\..\src\info-reader\info-reader-util.h">
       <Filter>info-reader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\json-reader-util.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\info-reader\parse-error-types.h">
       <Filter>info-reader</Filter>
     </ClInclude>
@@ -3665,7 +3677,7 @@
     <ClInclude Include="..\..\src\monster\smart-learn-types.h">
       <Filter>monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\room\rooms-pit-nest.h">
+    <ClInclude Include="..\..\src\room\pit-nest-util.h">
       <Filter>room</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-description-types.h">
@@ -3695,22 +3707,7 @@
     <ClInclude Include="..\..\src\monster\monster-util.h">
       <Filter>monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster-race\race-flags1.h">
-      <Filter>monster-race</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster-race\race-flags2.h">
-      <Filter>monster-race</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster-race\race-flags3.h">
-      <Filter>monster-race</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster-race\race-flags7.h">
-      <Filter>monster-race</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-flags-resistance.h">
-      <Filter>monster-race</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster-race\race-flags8.h">
       <Filter>monster-race</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\summon-checker.h">
@@ -3719,7 +3716,7 @@
     <ClInclude Include="..\..\src\cmd-io\cmd-lore.h">
       <Filter>cmd-io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\view\colored-char.h">
+    <ClInclude Include="..\..\src\view\display-symbol.h">
       <Filter>view</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-monster-status.h">
@@ -3902,8 +3899,8 @@
     <ClInclude Include="..\..\src\term\screen-processor.h">
       <Filter>term</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\util\sort.h">
-      <Filter>util</Filter>
+    <ClInclude Include="..\..\src\target\target-sorter.h">
+      <Filter>target</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\io\input-key-requester.h">
       <Filter>io</Filter>
@@ -5408,6 +5405,15 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-misc-flags.h">
       <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\race-special-flags.h">
+      <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\rooms-pit.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\rooms-nest.h">
+      <Filter>room</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

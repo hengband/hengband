@@ -29,7 +29,6 @@
 #include "player-base/player-class.h"
 #include "player-status/player-energy.h"
 #include "racial/racial-android.h"
-#include "specific-object/monster-ball.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
@@ -45,9 +44,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-confusion.h"
 #include "timed-effect/timed-effects.h"
-#include "util/sort.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -76,7 +73,7 @@ static void decide_activation_level(ae_type *ae_ptr)
 static void decide_chance_fail(PlayerType *player_ptr, ae_type *ae_ptr)
 {
     ae_ptr->chance = player_ptr->skill_dev;
-    if (player_ptr->effects()->confusion()->is_confused()) {
+    if (player_ptr->effects()->confusion().is_confused()) {
         ae_ptr->chance = ae_ptr->chance / 2;
     }
 
@@ -192,38 +189,6 @@ static bool activate_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 }
 
-static bool activate_whistle(PlayerType *player_ptr, ae_type *ae_ptr)
-{
-    if (ae_ptr->o_ptr->bi_key.tval() != ItemKindType::WHISTLE) {
-        return false;
-    }
-
-    if (music_singing_any(player_ptr)) {
-        stop_singing(player_ptr);
-    }
-
-    if (SpellHex(player_ptr).is_spelling_any()) {
-        (void)SpellHex(player_ptr).stop_all_spells();
-    }
-
-    std::vector<MONSTER_IDX> who;
-    for (MONSTER_IDX pet_ctr = player_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--) {
-        const auto &m_ref = player_ptr->current_floor_ptr->m_list[pet_ctr];
-        if (m_ref.is_pet() && (player_ptr->riding != pet_ctr)) {
-            who.push_back(pet_ctr);
-        }
-    }
-
-    short dummy_why = 0;
-    ang_sort(player_ptr, who.data(), &dummy_why, who.size(), ang_sort_comp_pet, ang_sort_swap_hook);
-    for (auto pet_ctr : who) {
-        teleport_monster_to(player_ptr, pet_ctr, player_ptr->y, player_ptr->x, 100, TELEPORT_PASSIVE);
-    }
-
-    ae_ptr->o_ptr->timeout = 100 + randint1(100);
-    return true;
-}
-
 /*!
  * @brief 装備を発動するコマンドのサブルーチン
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -254,14 +219,6 @@ void exe_activate(PlayerType *player_ptr, INVENTORY_IDX i_idx)
             SubWindowRedrawingFlag::EQUIPMENT,
         };
         RedrawingFlagsUpdater::get_instance().set_flags(flags);
-        return;
-    }
-
-    if (activate_whistle(player_ptr, ae_ptr)) {
-        return;
-    }
-
-    if (exe_monster_capture(player_ptr, *ae_ptr->o_ptr)) {
         return;
     }
 

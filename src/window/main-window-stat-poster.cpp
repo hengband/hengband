@@ -23,15 +23,6 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
-#include "timed-effect/player-blindness.h"
-#include "timed-effect/player-confusion.h"
-#include "timed-effect/player-cut.h"
-#include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-fear.h"
-#include "timed-effect/player-hallucination.h"
-#include "timed-effect/player-paralysis.h"
-#include "timed-effect/player-poison.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/status-bars-table.h"
 #include "window/main-window-row-column.h"
@@ -81,13 +72,13 @@ void print_stat(PlayerType *player_ptr, int stat)
  */
 void print_cut(PlayerType *player_ptr)
 {
-    auto player_cut = player_ptr->effects()->cut();
-    if (!player_cut->is_cut()) {
+    const auto &player_cut = player_ptr->effects()->cut();
+    if (!player_cut.is_cut()) {
         put_str("            ", ROW_CUT, COL_CUT);
         return;
     }
 
-    auto [color, stat] = player_cut->get_expr();
+    auto [color, stat] = player_cut.get_expr();
     c_put_str(color, stat, ROW_CUT, COL_CUT);
 }
 
@@ -97,13 +88,13 @@ void print_cut(PlayerType *player_ptr)
  */
 void print_stun(PlayerType *player_ptr)
 {
-    auto player_stun = player_ptr->effects()->stun();
-    if (!player_stun->is_stunned()) {
+    const auto &player_stun = player_ptr->effects()->stun();
+    if (!player_stun.is_stunned()) {
         put_str("            ", ROW_STUN, COL_STUN);
         return;
     }
 
-    auto [color, stat] = player_stun->get_expr();
+    const auto &[color, stat] = player_stun.get_expr();
     c_put_str(color, stat, ROW_STUN, COL_STUN);
 }
 
@@ -264,8 +255,8 @@ void print_speed(PlayerType *player_ptr)
     bool is_player_fast = is_fast(player_ptr);
     std::string buf;
     TERM_COLOR attr = TERM_WHITE;
+    const auto is_slow = player_ptr->effects()->deceleration().is_slow();
     if (speed > 0) {
-        auto is_slow = player_ptr->effects()->deceleration()->is_slow();
         if (player_ptr->riding) {
             auto *m_ptr = &floor_ptr->m_list[player_ptr->riding];
             if (m_ptr->is_accelerated() && !m_ptr->is_decelerated()) {
@@ -284,7 +275,6 @@ void print_speed(PlayerType *player_ptr)
         }
         buf = format("%s(+%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("加速", "Fast")), speed);
     } else if (speed < 0) {
-        auto is_slow = player_ptr->effects()->deceleration()->is_slow();
         if (player_ptr->riding) {
             auto *m_ptr = &floor_ptr->m_list[player_ptr->riding];
             if (m_ptr->is_accelerated() && !m_ptr->is_decelerated()) {
@@ -455,23 +445,23 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_TSUYOSHI);
     }
 
-    if (effects->hallucination()->is_hallucinated()) {
+    if (effects->hallucination().is_hallucinated()) {
         ADD_BAR_FLAG(BAR_HALLUCINATION);
     }
 
-    if (player_ptr->effects()->blindness()->is_blind()) {
+    if (player_ptr->effects()->blindness().is_blind()) {
         ADD_BAR_FLAG(BAR_BLINDNESS);
     }
 
-    if (effects->paralysis()->is_paralyzed()) {
+    if (effects->paralysis().is_paralyzed()) {
         ADD_BAR_FLAG(BAR_PARALYZE);
     }
 
-    if (effects->confusion()->is_confused()) {
+    if (effects->confusion().is_confused()) {
         ADD_BAR_FLAG(BAR_CONFUSE);
     }
 
-    if (effects->poison()->is_poisoned()) {
+    if (effects->poison().is_poisoned()) {
         ADD_BAR_FLAG(BAR_POISONED);
     }
 
@@ -590,7 +580,7 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_ALTER);
     }
 
-    if (effects->fear()->is_fearful()) {
+    if (effects->fear().is_fearful()) {
         ADD_BAR_FLAG(BAR_AFRAID);
     }
 

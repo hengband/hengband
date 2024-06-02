@@ -26,13 +26,13 @@
  */
 void check_random_quest_auto_failure(PlayerType *player_ptr)
 {
-    auto &quest_list = QuestList::get_instance();
+    auto &quests = QuestList::get_instance();
     const auto &floor = *player_ptr->current_floor_ptr;
     if (floor.dungeon_idx != DUNGEON_ANGBAND) {
         return;
     }
-    for (auto q_idx : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
-        auto &quest = quest_list[q_idx];
+    for (auto quest_id : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
+        auto &quest = quests.get_quest(quest_id);
         auto is_taken_quest = (quest.type == QuestKindType::RANDOM);
         is_taken_quest &= (quest.status == QuestStatusType::TAKEN);
         is_taken_quest &= (quest.level < floor.dun_level);
@@ -127,7 +127,7 @@ void execute_recall(PlayerType *player_ptr)
      * Clear all saved floors
      * and create a first saved floor
      */
-    prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);
+    FloorChangeModesStore::get_instace()->set(FloorChangeMode::FIRST_FLOOR);
     player_ptr->leaving = true;
 
     check_random_quest_auto_failure(player_ptr);
@@ -159,12 +159,7 @@ void execute_floor_reset(PlayerType *player_ptr)
     disturb(player_ptr, false, true);
     if (!inside_quest(floor.get_quest_id()) && floor.dun_level) {
         msg_print(_("世界が変わった！", "The world changes!"));
-
-        /*
-         * Clear all saved floors
-         * and create a first saved floor
-         */
-        prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);
+        FloorChangeModesStore::get_instace()->set(FloorChangeMode::FIRST_FLOOR);
         player_ptr->leaving = true;
     } else {
         msg_print(_("世界が少しの間変化したようだ。", "The world seems to change for a moment!"));

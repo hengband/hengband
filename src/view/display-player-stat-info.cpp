@@ -173,27 +173,28 @@ static void process_stats(PlayerType *player_ptr, int row, int stat_col)
  * @param stat 能力値番号
  * @param flags 装備品に立っているフラグ
  */
-static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, ItemEntity *o_ptr, tr_type tr_flag, const TrFlags &flags)
+static DisplaySymbol compensate_stat_by_weapon(uint8_t color, ItemEntity *o_ptr, tr_type tr_flag, const TrFlags &flags)
 {
-    *c = '*';
-
+    DisplaySymbol symbol(color, '*');
     if (o_ptr->pval > 0) {
-        *a = TERM_L_GREEN;
+        symbol.color = TERM_L_GREEN;
         if (o_ptr->pval < 10) {
-            *c = '0' + o_ptr->pval;
+            symbol.character = '0' + o_ptr->pval;
         }
     }
 
     if (flags.has(tr_flag)) {
-        *a = TERM_GREEN;
+        symbol.color = TERM_GREEN;
     }
 
     if (o_ptr->pval < 0) {
-        *a = TERM_RED;
+        symbol.color = TERM_RED;
         if (o_ptr->pval > -10) {
-            *c = '0' - o_ptr->pval;
+            symbol.character = '0' - o_ptr->pval;
         }
     }
+
+    return symbol;
 }
 
 /*!
@@ -210,16 +211,14 @@ static void display_equipments_compensation(PlayerType *player_ptr, int row, int
         o_ptr = &player_ptr->inventory_list[i];
         auto flags = o_ptr->get_flags_known();
         for (int stat = 0; stat < A_MAX; stat++) {
-            TERM_COLOR a = TERM_SLATE;
-            char c = '.';
+            DisplaySymbol symbol(TERM_SLATE, '.');
             if (flags.has(TR_STATUS_LIST[stat])) {
-                compensate_stat_by_weapon(&c, &a, o_ptr, TR_SUST_STATUS_LIST[stat], flags);
+                symbol = compensate_stat_by_weapon(symbol.color, o_ptr, TR_SUST_STATUS_LIST[stat], flags);
             } else if (flags.has(TR_SUST_STATUS_LIST[stat])) {
-                a = TERM_GREEN;
-                c = 's';
+                symbol = { TERM_GREEN, 's' };
             }
 
-            term_putch(*col, row + stat + 1, a, c);
+            term_putch(*col, row + stat + 1, symbol);
         }
 
         (*col)++;
@@ -321,27 +320,29 @@ static int compensation_stat_by_mutation(PlayerType *player_ptr, int stat)
  * @param c 補正後の表示記号
  * @param a 表示色
  */
-static void change_display_by_mutation(PlayerType *player_ptr, int stat, char *c, TERM_COLOR *a)
+static DisplaySymbol change_display_by_mutation(PlayerType *player_ptr, int stat, const DisplaySymbol &symbol_initial)
 {
     int compensation = compensation_stat_by_mutation(player_ptr, stat);
     if (compensation == 0) {
-        return;
+        return symbol_initial;
     }
 
-    *c = '*';
+    DisplaySymbol symbol = { symbol_initial.color, '*' };
     if (compensation > 0) {
-        *a = TERM_L_GREEN;
+        symbol.color = TERM_L_GREEN;
         if (compensation < 10) {
-            *c = '0' + compensation;
+            symbol.character = '0' + compensation;
         }
     }
 
     if (compensation < 0) {
-        *a = TERM_RED;
+        symbol.color = TERM_RED;
         if (compensation > -10) {
-            *c = '0' - compensation;
+            symbol.character = '0' - compensation;
         }
     }
+
+    return symbol;
 }
 
 /*!
@@ -356,16 +357,12 @@ static void display_mutation_compensation(PlayerType *player_ptr, int row, int c
     player_flags(player_ptr, flags);
 
     for (int stat = 0; stat < A_MAX; stat++) {
-        byte a = TERM_SLATE;
-        char c = '.';
-        change_display_by_mutation(player_ptr, stat, &c, &a);
-
+        auto symbol = change_display_by_mutation(player_ptr, stat, { TERM_SLATE, '.' });
         if (flags.has(TR_SUST_STATUS_LIST[stat])) {
-            a = TERM_GREEN;
-            c = 's';
+            symbol = { TERM_GREEN, 's' };
         }
 
-        term_putch(col, row + stat + 1, a, c);
+        term_putch(col, row + stat + 1, symbol);
     }
 }
 

@@ -102,7 +102,6 @@ void set_monster_blow_method(lore_type *lore_ptr, int m)
         break;
 
     case RaceBlowMethodType::NONE:
-    case RaceBlowMethodType::SHOOT:
     case RaceBlowMethodType::MAX:
         break;
     }

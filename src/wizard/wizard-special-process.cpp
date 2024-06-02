@@ -23,7 +23,6 @@
 #include "dungeon/quest.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "flavor/object-flavor.h"
 #include "floor/floor-leaver.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-object.h"
@@ -52,7 +51,6 @@
 #include "object-enchant/item-magic-applier.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
-#include "object/object-kind-hook.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
@@ -128,74 +126,32 @@ void wiz_cure_all(PlayerType *player_ptr)
     msg_print("You're fully cured by wizard command.");
 }
 
-static std::optional<short> wiz_select_tval()
+static std::optional<tval_desc> wiz_select_tval()
 {
-    short list;
-    for (list = 0; (list < 80) && (tvals[list].tval > ItemKindType::NONE); list++) {
-        auto row = 2 + (list % 20);
-        auto col = _(32, 24) * (list / 20);
-        prt(format("[%c] %s", listsym[list], tvals[list].desc), row, col);
-    }
+    CandidateSelector cs(_("アイテム種別を選んで下さい", "Get what type of object? "), 15);
+    const auto choice = cs.select(tval_desc_list, [](const auto &tval) { return tval.desc; });
 
-    const auto item_type = input_command(_("アイテム種別を選んで下さい", "Get what type of object? "));
-    if (!item_type) {
-        return std::nullopt;
-    }
-
-    short selection;
-    auto max_num = list;
-    for (selection = 0; selection < max_num; selection++) {
-        if (listsym[selection] == item_type) {
-            break;
-        }
-    }
-
-    if ((selection < 0) || (selection >= max_num)) {
-        return std::nullopt;
-    }
-
-    return selection;
+    return (choice != tval_desc_list.end()) ? std::make_optional(*choice) : std::nullopt;
 }
 
-static short wiz_select_sval(const ItemKindType tval, std::string_view tval_description)
+static std::optional<short> wiz_select_sval(const tval_desc &td)
 {
-    std::vector<short> choices;
-    for (const auto &baseitem : baseitems_info) {
-        const auto size = choices.size();
-        if (size >= 80) {
-            break;
-        }
-
-        if (!baseitem.is_valid() || baseitem.bi_key.tval() != tval) {
+    std::vector<short> bi_ids;
+    for (const auto &baseitem : BaseitemList::get_instance()) {
+        if (!baseitem.is_valid() || baseitem.bi_key.tval() != td.tval) {
             continue;
         }
 
-        auto row = 2 + (size % 20);
-        auto col = _(30, 32) * (size / 20);
-        const auto buf = strip_name(baseitem.idx);
-        prt(format("[%c] %s", listsym[size], buf.data()), row, col);
-        choices.push_back(baseitem.idx);
+        bi_ids.push_back(baseitem.idx);
     }
 
-    const auto max_num = static_cast<short>(choices.size());
-    const auto prompt = format(_("%s群の具体的なアイテムを選んで下さい", "What Kind of %s? "), tval_description.data());
-    const auto command = input_command(prompt);
-    if (!command) {
-        return 0;
-    }
+    const auto prompt = format(_("%s群の具体的なアイテムを選んで下さい", "What Kind of %s? "), td.desc);
 
-    short selection;
-    for (selection = 0; selection < max_num; selection++) {
-        if (listsym[selection] == command) {
-            break;
-        }
-    }
-
-    if ((selection < 0) || (selection >= max_num)) {
-        return 0;
-    }
-
-    return choices[selection];
+    CandidateSelector cs(prompt, 15);
+    const auto &baseitems = BaseitemList::get_instance();
+    const auto choice = cs.select(bi_ids,
+        [&baseitems](short bi_id) { return baseitems.get_baseitem(bi_id).stripped_name(); });
+    return (choice != bi_ids.end()) ? std::make_optional(*choice) : std::nullopt;
 }
 
 /*!
@@ -207,18 +163,14 @@ static short wiz_select_sval(const ItemKindType tval, std::string_view tval_desc
  * This function returns the bi_id of an object type, or zero if failed
  * List up to 50 choices in three columns
  */
-static short wiz_create_itemtype()
+static std::optional<short> wiz_create_itemtype()
 {
-    term_clear();
     auto selection = wiz_select_tval();
     if (!selection) {
-        return 0;
+        return std::nullopt;
     }
 
-    auto tval = tvals[*selection].tval;
-    auto tval_description = tvals[*selection].desc;
-    term_clear();
-    return wiz_select_sval(tval, tval_description);
+    return wiz_select_sval(*selection);
 }
 
 /*!
@@ -237,25 +189,24 @@ void wiz_create_item(PlayerType *player_ptr)
     screen_save();
     const auto bi_id = wiz_create_itemtype();
     screen_load();
-    if (bi_id == 0) {
+    if (!bi_id) {
         return;
     }
 
-    const auto &baseitem = baseitems_info[bi_id];
+    const auto &baseitem = BaseitemList::get_instance().get_baseitem(*bi_id);
     if (baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
-        for (const auto &[a_idx, artifact] : artifacts_info) {
-            if ((a_idx == FixedArtifactId::NONE) || (artifact.bi_key != baseitem.bi_key)) {
+        for (const auto &[fa_id, artifact] : ArtifactList::get_instance()) {
+            if (artifact.bi_key != baseitem.bi_key) {
                 continue;
             }
 
-            (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
+            (void)create_named_art(player_ptr, fa_id, player_ptr->y, player_ptr->x);
             msg_print("Allocated(INSTA_ART).");
             return;
         }
     }
 
-    ItemEntity item;
-    item.prep(bi_id);
+    ItemEntity item(*bi_id);
     ItemMagicApplier(player_ptr, &item, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART).execute();
     (void)drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);
     msg_print("Allocated.");
@@ -264,15 +215,14 @@ void wiz_create_item(PlayerType *player_ptr)
 /*!
  * @brief 指定したIDの固定アーティファクトの名称を取得する
  *
- * @param a_idx 固定アーティファクトのID
+ * @param fa_id 固定アーティファクトのID
  * @return 固定アーティファクトの名称(Ex. ★ロング・ソード『リンギル』)を保持する std::string オブジェクト
  */
-static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArtifactId a_idx)
+static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArtifactId fa_id)
 {
-    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
-    ItemEntity item;
-    item.prep(lookup_baseitem_id(artifact.bi_key));
-    item.fixed_artifact_idx = a_idx;
+    const auto &artifact = ArtifactList::get_instance().get_artifact(fa_id);
+    ItemEntity item(artifact.bi_key);
+    item.fa_id = fa_id;
     item.mark_as_known();
     return describe_flavor(player_ptr, &item, OD_NAME_ONLY);
 }
@@ -280,37 +230,36 @@ static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArt
 /**
  * @brief 固定アーティファクトをリストから選択する
  *
- * @param a_idx_list 選択する候補となる固定アーティファクトのIDのリスト
+ * @param fa_ids 選択する候補となる固定アーティファクトのIDのリスト
  * @return 選択した固定アーティファクトのIDを返す。但しキャンセルした場合は std::nullopt を返す。
  */
-static std::optional<FixedArtifactId> wiz_select_named_artifact(PlayerType *player_ptr, const std::vector<FixedArtifactId> &a_idx_list)
+static std::optional<FixedArtifactId> wiz_select_named_artifact(PlayerType *player_ptr, const std::vector<FixedArtifactId> &fa_ids)
 {
     CandidateSelector cs("Which artifact: ", 15);
 
-    auto describe_artifact = [player_ptr](FixedArtifactId a_idx) { return wiz_make_named_artifact_desc(player_ptr, a_idx); };
-    const auto it = cs.select(a_idx_list, describe_artifact);
-    return (it != a_idx_list.end()) ? std::make_optional(*it) : std::nullopt;
+    auto describe_artifact = [player_ptr](FixedArtifactId fa_id) { return wiz_make_named_artifact_desc(player_ptr, fa_id); };
+    const auto it = cs.select(fa_ids, describe_artifact);
+    return (it != fa_ids.end()) ? std::make_optional(*it) : std::nullopt;
 }
 
 /**
  * @brief 指定したカテゴリの固定アーティファクトのIDのリストを得る
- *
  * @param group_artifact 固定アーティファクトのカテゴリ
  * @return 該当のカテゴリの固定アーティファクトのIDのリスト
  */
-static std::vector<FixedArtifactId> wiz_collect_group_a_idx(const grouper &group_artifact)
+static std::vector<FixedArtifactId> wiz_collect_group_fa_ids(const grouper &group_artifact)
 {
-    const auto &[tval_list, name] = group_artifact;
-    std::vector<FixedArtifactId> a_idx_list;
-    for (auto tval : tval_list) {
-        for (const auto &[a_idx, artifact] : artifacts_info) {
+    const auto &[tvals, name] = group_artifact;
+    std::vector<FixedArtifactId> fa_ids;
+    for (const auto tval : tvals) {
+        for (const auto &[fa_id, artifact] : ArtifactList::get_instance()) {
             if (artifact.bi_key.tval() == tval) {
-                a_idx_list.push_back(a_idx);
+                fa_ids.push_back(fa_id);
             }
         }
     }
 
-    return a_idx_list;
+    return fa_ids;
 }
 
 /*!
@@ -327,8 +276,8 @@ void wiz_create_named_art(PlayerType *player_ptr)
         put_str(ss.str(), i + 1, 15);
     }
 
-    std::optional<FixedArtifactId> create_a_idx;
-    while (!create_a_idx) {
+    std::optional<FixedArtifactId> created_fa_id;
+    while (!created_fa_id) {
         const auto command = input_command("Kind of artifact: ");
         if (!command) {
             screen_load();
@@ -340,19 +289,19 @@ void wiz_create_named_art(PlayerType *player_ptr)
             continue;
         }
 
-        const auto a_idx_list = wiz_collect_group_a_idx(group_artifact_list[idx]);
-        create_a_idx = wiz_select_named_artifact(player_ptr, a_idx_list);
+        auto fa_ids = wiz_collect_group_fa_ids(group_artifact_list[idx]);
+        std::sort(fa_ids.begin(), fa_ids.end(), [](FixedArtifactId id1, FixedArtifactId id2) { return ArtifactList::get_instance().order(id1, id2); });
+        created_fa_id = wiz_select_named_artifact(player_ptr, fa_ids);
     }
 
     screen_load();
-    const auto a_idx = *create_a_idx;
-    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+    const auto &artifact = ArtifactList::get_instance().get_artifact(*created_fa_id);
     if (artifact.is_generated) {
         msg_print("It's already allocated.");
         return;
     }
 
-    (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
+    (void)create_named_art(player_ptr, *created_fa_id, player_ptr->y, player_ptr->x);
     msg_print("Allocated.");
 }
 
@@ -555,15 +504,16 @@ static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH de
     auto &floor = *player_ptr->current_floor_ptr;
     floor.set_dungeon_index(dun_idx);
     floor.dun_level = depth;
-    prepare_change_floor_mode(player_ptr, CFM_RAND_PLACE);
-    if (!floor.is_in_dungeon()) {
+    auto &fcms = FloorChangeModesStore::get_instace();
+    fcms->set(FloorChangeMode::RANDOM_PLACE);
+    if (!floor.is_in_underground()) {
         floor.reset_dungeon_index();
     }
 
     floor.inside_arena = false;
     player_ptr->wild_mode = false;
     leave_quest_check(player_ptr);
-    auto to = !floor.is_in_dungeon()
+    auto to = !floor.is_in_underground()
                   ? _("地上", "the surface")
                   : format(_("%d階(%s)", "level %d of %s"), floor.dun_level, floor.get_dungeon_definition().name.data());
     constexpr auto mes = _("%sへとウィザード・テレポートで移動した。\n", "You wizard-teleported to %s.\n");
@@ -571,7 +521,7 @@ static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH de
     floor.quest_number = QuestId::NONE;
     PlayerEnergy(player_ptr).reset_player_turn();
     player_ptr->energy_need = 0;
-    prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);
+    fcms->set(FloorChangeMode::FIRST_FLOOR);
     player_ptr->leaving = true;
 }
 
@@ -582,7 +532,7 @@ static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH de
 void wiz_jump_to_dungeon(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto is_in_dungeon = floor.is_in_dungeon();
+    const auto is_in_dungeon = floor.is_in_underground();
     const auto dungeon_idx = is_in_dungeon ? floor.dungeon_idx : static_cast<short>(DUNGEON_ANGBAND);
     const auto dungeon_id = select_debugging_dungeon(dungeon_idx);
     if (!dungeon_id) {
@@ -616,10 +566,9 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
  */
 void wiz_learn_items_all(PlayerType *player_ptr)
 {
-    for (const auto &baseitem : baseitems_info) {
+    for (const auto &baseitem : BaseitemList::get_instance()) {
         if (baseitem.is_valid() && baseitem.level <= command_arg) {
-            ItemEntity item;
-            item.prep(baseitem.idx);
+            ItemEntity item(baseitem.idx);
             object_aware(player_ptr, &item);
         }
     }
@@ -711,7 +660,7 @@ void wiz_reset_realms(PlayerType *player_ptr)
  */
 void wiz_dump_options(void)
 {
-    const auto &path = path_build(ANGBAND_DIR_USER, "opt_info.txt");
+    const auto path = path_build(ANGBAND_DIR_USER, "opt_info.txt");
     const auto &filename = path.string();
     auto *fff = angband_fopen(path, FileOpenMode::APPEND);
     if (fff == nullptr) {

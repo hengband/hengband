@@ -46,9 +46,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "target/target-checker.h"
-#include "timed-effect/player-blindness.h"
-#include "timed-effect/player-confusion.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
@@ -108,11 +105,11 @@ void search(PlayerType *player_ptr)
 {
     PERCENTAGE chance = player_ptr->skill_srh;
     const auto effects = player_ptr->effects();
-    if (effects->blindness()->is_blind() || no_lite(player_ptr)) {
+    if (effects->blindness().is_blind() || no_lite(player_ptr)) {
         chance = chance / 10;
     }
 
-    if (effects->confusion()->is_confused() || effects->hallucination()->is_hallucinated()) {
+    if (effects->confusion().is_confused() || effects->hallucination().is_hallucinated()) {
         chance = chance / 10;
     }
 
@@ -186,7 +183,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
             SubWindowRedrawingFlag::DUNGEON,
         };
         rfu.set_flags(flags_swrf);
-        if ((!player_ptr->effects()->blindness()->is_blind() && !no_lite(player_ptr)) || !is_trap(player_ptr, grid_new.feat)) {
+        if ((!player_ptr->effects()->blindness().is_blind() && !no_lite(player_ptr)) || !is_trap(player_ptr, grid_new.feat)) {
             grid_new.info &= ~(CAVE_UNSAFE);
         }
 
@@ -266,8 +263,8 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         energy.reset_player_turn();
         command_new = SPECIAL_KEY_QUEST;
     } else if (terrain_new.flags.has(TerrainCharacteristics::QUEST_EXIT)) {
-        const auto &quest_list = QuestList::get_instance();
-        if (quest_list[floor.quest_number].type == QuestKindType::FIND_EXIT) {
+        const auto &quests = QuestList::get_instance();
+        if (quests.get_quest(floor.quest_number).type == QuestKindType::FIND_EXIT) {
             complete_quest(player_ptr, floor.quest_number);
         }
         leave_quest_check(player_ptr);

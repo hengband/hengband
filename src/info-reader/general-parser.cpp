@@ -9,7 +9,6 @@
 #include "io/tokenizer.h"
 #include "main/angband-headers.h"
 #include "object-enchant/trg-types.h"
-#include "object/object-kind-hook.h"
 #include "realm/realm-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info.h"
@@ -38,8 +37,15 @@ std::tuple<errr, int> init_info_txt(FILE *fp, char *buf, angband_header *head, P
 
     util::SHA256 sha256;
 
-    while (angband_fgets(fp, buf, 1024) == 0) {
+    while (true) {
+        // init_info_txtの呼び出し側のbufは1024バイト
+        const auto line_str = angband_fgets(fp, 1024);
+        if (!line_str) {
+            break;
+        }
         error_line++;
+        const auto len = line_str->copy(buf, 1024 - 1);
+        buf[len] = '\0';
         const std::string_view line = buf;
         if (line.empty() || line.starts_with('#')) {
             continue;
@@ -121,8 +127,8 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
             }
         } else if (zz[6][0] == '!') {
             if (floor_ptr->is_in_quest()) {
-                const auto &quest_list = QuestList::get_instance();
-                letter[index].artifact = quest_list[floor_ptr->quest_number].reward_artifact_idx;
+                const auto &quests = QuestList::get_instance();
+                letter[index].artifact = quests.get_quest(floor_ptr->quest_number).reward_fa_id;
             }
         } else {
             letter[index].artifact = i2enum<FixedArtifactId>(atoi(zz[6]));
@@ -146,11 +152,12 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
             }
         } else if (zz[4][0] == '!') {
             if (floor_ptr->is_in_quest()) {
-                const auto &quest = QuestList::get_instance()[floor_ptr->quest_number];
+                const auto &quests = QuestList::get_instance();
+                const auto &quest = quests.get_quest(floor_ptr->quest_number);
                 if (quest.has_reward()) {
                     const auto &artifact = quest.get_reward();
                     if (artifact.gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {
-                        letter[index].object = lookup_baseitem_id(artifact.bi_key);
+                        letter[index].object = BaseitemList::get_instance().lookup_baseitem_id(artifact.bi_key);
                     }
                 }
             }

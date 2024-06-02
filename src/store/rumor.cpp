@@ -6,7 +6,6 @@
 #include "io/tokenizer.h"
 #include "monster-race/monster-race.h"
 #include "object-enchant/special-object-flags.h"
-#include "object/object-kind-hook.h"
 #include "system/angband-exceptions.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info.h"
@@ -75,18 +74,14 @@ std::pair<bool, std::vector<std::string>> get_rumor_tokens(std::string rumor)
 /*!
  * @brief 固定アーティファクト番号とその定義を、ランダムに抽選する
  * @param artifact_name rumor.txt (rumor_j.txt)の定義により、常に"*" (ランダム)
- * @details 固定アーティファクト番号は欠番があるので、もし欠番だったら再抽選する
  */
 static std::pair<FixedArtifactId, const ArtifactType *> get_artifact_definition(std::string_view artifact_name)
 {
-    const auto max_idx = enum2i(artifacts_info.rbegin()->first);
-    while (true) {
-        const auto a_idx = i2enum<FixedArtifactId>(get_rumor_num(artifact_name.data(), max_idx));
-        const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
-        if (!artifact.name.empty()) {
-            return { a_idx, &artifact };
-        }
-    }
+    const auto &artifacts = ArtifactList::get_instance();
+    const auto max_idx = enum2i(artifacts.rbegin()->first);
+    const auto fa_id = i2enum<FixedArtifactId>(get_rumor_num(artifact_name.data(), max_idx));
+    const auto &artifact = artifacts.get_artifact(fa_id);
+    return { fa_id, &artifact };
 }
 
 void display_rumor(PlayerType *player_ptr, bool ex)
@@ -120,10 +115,9 @@ void display_rumor(PlayerType *player_ptr, bool ex)
     if (category == "ARTIFACT") {
         const auto &artifact_name = tokens[1];
         const auto &[a_idx, a_ptr] = get_artifact_definition(artifact_name);
-        const auto bi_id = lookup_baseitem_id(a_ptr->bi_key);
-        ItemEntity item;
-        item.prep(bi_id);
-        item.fixed_artifact_idx = a_idx;
+        const auto bi_id = BaseitemList::get_instance().lookup_baseitem_id(a_ptr->bi_key);
+        ItemEntity item(bi_id);
+        item.fa_id = a_idx;
         item.ident = IDENT_STORE;
         fullname = describe_flavor(player_ptr, &item, OD_NAME_ONLY);
     } else if (category == "MONSTER") {

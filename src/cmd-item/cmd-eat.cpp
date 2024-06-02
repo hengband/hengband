@@ -20,7 +20,6 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
-#include "object/object-kind-hook.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
@@ -43,7 +42,6 @@
 #include "status/experience.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-other-types.h"
-#include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -183,9 +181,7 @@ static bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ItemEntity *o
 
     /* XXX Hack -- unstack if necessary */
     if (is_staff && (i_idx >= 0) && (o_ptr->number > 1)) {
-        auto item = *o_ptr;
-
-        /* Modify quantity */
+        ItemEntity item = *o_ptr;
         item.number = 1;
 
         /* Restore the charges */
@@ -287,7 +283,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 
     /* Balrogs change humanoid corpses to energy */
     const auto corpse_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-    const auto search = angband_strchr("pht", monraces_info[corpse_r_idx].d_char);
+    const auto search = angband_strchr("pht", monraces_info[corpse_r_idx].symbol_definition.character);
     if (food_type == PlayerRaceFoodType::CORPSE && o_ptr->is_corpse() && (search != nullptr)) {
         const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         msg_format(_("%sは燃え上り灰になった。精力を吸収した気がする。", "%s^ is burnt to ashes.  You absorb its vitality!"), item_name.data());
@@ -301,14 +297,11 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     if (PlayerRace(player_ptr).equals(PlayerRaceType::SKELETON)) {
         const auto sval = bi_key.sval();
         if ((sval != SV_FOOD_WAYBREAD) && (sval >= SV_FOOD_BISCUIT)) {
-            ItemEntity forge;
-            auto *q_ptr = &forge;
-
+            ItemEntity item(bi_key);
             msg_print(_("食べ物がアゴを素通りして落ちた！", "The food falls through your jaws!"));
-            q_ptr->prep(lookup_baseitem_id(bi_key));
 
             /* Drop the object from heaven */
-            (void)drop_near(player_ptr, q_ptr, -1, player_ptr->y, player_ptr->x);
+            (void)drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);
         } else {
             msg_print(_("食べ物がアゴを素通りして落ち、消えた！", "The food falls through your jaws and vanishes!"));
         }

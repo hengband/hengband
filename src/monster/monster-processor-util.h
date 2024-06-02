@@ -58,14 +58,13 @@ struct old_race_flags {
 };
 
 struct coordinate_candidate {
-    POSITION gy;
-    POSITION gx;
-    POSITION gdis;
+    POSITION gy = 0;
+    POSITION gx = 0;
+    int gdis = 0;
 };
 
 class MonsterEntity;
 turn_flags *init_turn_flags(MONSTER_IDX riding_idx, MONSTER_IDX m_idx, turn_flags *turn_flags_ptr);
-coordinate_candidate init_coordinate_candidate(void);
 
 void store_enemy_approch_direction(int *mm, POSITION y, POSITION x);
 void store_moves_val(int *mm, int y, int x);

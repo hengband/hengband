@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(hengband, 3.0.1.12-Beta)
+AC_INIT(hengband, 3.0.1.13-Beta)
 
 AC_CONFIG_MACRO_DIRS([m4])
 AC_CONFIG_HEADERS(src/autoconf.h)
@@ -45,7 +45,7 @@ AC_SUBST(DEFAULT_VAR_PATH)
 dnl Checks for programs.
 AC_LANG(C++)
 AC_PROG_CXX
-AX_CXX_COMPILE_STDCXX(20, [ext], [mandatory])
+AX_CXX_COMPILE_STDCXX(20, [noext], [mandatory])
 PKG_PROG_PKG_CONFIG
 
 AC_ARG_ENABLE(japanese,

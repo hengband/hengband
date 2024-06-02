@@ -23,43 +23,37 @@
  * @param menu_key 自動拾いエディタのメニューで入力したキー
  * @param max_len
  */
-static void redraw_edit_command_menu(bool *redraw, int level, int start, char *linestr, byte *menu_key, int max_len)
+static uint8_t redraw_edit_command_menu(bool redraw, int level, int start, std::string_view line, uint8_t initial_menu_key, int max_len)
 {
-    if (!*redraw) {
-        return;
+    if (!redraw) {
+        return initial_menu_key;
     }
 
-    int col0 = 5 + level * 7;
-    int row0 = 1 + level * 3;
-    int row1 = row0 + 1;
-    term_putstr(col0, row0, -1, TERM_WHITE, linestr);
+    const auto col0 = 5 + level * 7;
+    const auto row0 = 1 + level * 3;
+    auto row1 = row0 + 1;
+    term_putstr(col0, row0, -1, TERM_WHITE, line);
 
-    *menu_key = 0;
+    uint8_t menu_key = 0;
     for (int i = start; menu_data[i].level >= level; i++) {
-        char com_key_str[3];
+        std::stringstream com_key;
         if (menu_data[i].level > level) {
             continue;
         }
 
         if (menu_data[i].com_id == -1) {
-            strcpy(com_key_str, _("▼", ">"));
+            com_key << _("▼", ">");
         } else if (menu_data[i].key != -1) {
-            com_key_str[0] = '^';
-            com_key_str[1] = menu_data[i].key + '@';
-            com_key_str[2] = '\0';
-        } else {
-            com_key_str[0] = '\0';
+            com_key << '^' << static_cast<char>(menu_data[i].key + '@');
         }
 
-        const auto str = format("| %c) %-*s %2s | ", *menu_key + 'a', max_len, menu_data[i].name, com_key_str);
-
+        const auto str = format("| %c) %-*s %2s | ", menu_key + 'a', max_len, menu_data[i].name, com_key.str().data());
         term_putstr(col0, row1++, -1, TERM_WHITE, str);
-
-        (*menu_key)++;
+        menu_key++;
     }
 
-    term_putstr(col0, row1, -1, TERM_WHITE, linestr);
-    *redraw = false;
+    term_putstr(col0, row1, -1, TERM_WHITE, line);
+    return menu_key;
 }
 
 /*!
@@ -67,50 +61,49 @@ static void redraw_edit_command_menu(bool *redraw, int level, int start, char *l
  */
 int do_command_menu(int level, int start)
 {
-    int max_len = 0;
-    int menu_id_list[26];
-    byte menu_key = 0;
-    for (int i = start; menu_data[i].level >= level; i++) {
+    auto max_len = 0;
+    std::vector<int> menu_ids;
+    for (auto i = start; menu_data[i].level >= level; i++) {
         /* Ignore lower level sub menus */
         if (menu_data[i].level > level) {
             continue;
         }
 
-        int len = strlen(menu_data[i].name);
+        const int len = strlen(menu_data[i].name);
         if (len > max_len) {
             max_len = len;
         }
 
-        menu_id_list[menu_key] = i;
-        menu_key++;
+        menu_ids.push_back(i);
     }
 
-    while (menu_key < 26) {
-        menu_id_list[menu_key] = -1;
-        menu_key++;
+    constexpr char num_alphabets = 26;
+    while (std::ssize(menu_ids) < num_alphabets) {
+        menu_ids.push_back(-1);
     }
 
-    int max_menu_wid = max_len + 3 + 3;
-
-    char linestr[MAX_LINELEN];
-    linestr[0] = '\0';
-    strcat(linestr, "+");
+    const auto max_menu_wid = max_len + 3 + 3;
+    std::stringstream ss;
+    ss << "+";
     for (int i = 0; i < max_menu_wid + 2; i++) {
-        strcat(linestr, "-");
+        ss << "-";
     }
 
-    strcat(linestr, "+");
-    bool redraw = true;
+    ss << "+";
+    auto redraw = true;
+    const auto line = ss.str();
+    auto menu_key = num_alphabets;
     while (true) {
-        redraw_edit_command_menu(&redraw, level, start, linestr, &menu_key, max_len);
+        menu_key = redraw_edit_command_menu(redraw, level, start, line, menu_key, max_len);
+        redraw = false;
         prt(format(_("(a-%c) コマンド:", "(a-%c) Command:"), menu_key + 'a' - 1), 0, 0);
-        char key = inkey();
+        const auto key = inkey();
         if (key == ESCAPE) {
             return 0;
         }
 
         int com_id;
-        bool is_alphabet = key >= 'a' && key <= 'z';
+        const auto is_alphabet = (key >= 'a') && (key <= 'z');
         if (!is_alphabet) {
             com_id = get_com_id(key);
             if (com_id) {
@@ -120,21 +113,25 @@ int do_command_menu(int level, int start)
             continue;
         }
 
-        int menu_id = menu_id_list[key - 'a'];
+        const auto menu_id = menu_ids[key - 'a'];
         if (menu_id < 0) {
             continue;
         }
 
         com_id = menu_data[menu_id].com_id;
-        if (com_id == -1) {
-            com_id = do_command_menu(level + 1, menu_id + 1);
-            if (com_id) {
-                return com_id;
-            } else {
-                redraw = true;
-            }
-        } else if (com_id) {
+        if (com_id > 0) {
             return com_id;
         }
+
+        if (com_id != -1) {
+            continue;
+        }
+
+        com_id = do_command_menu(level + 1, menu_id + 1);
+        if (com_id > 0) {
+            return com_id;
+        }
+
+        redraw = true;
     }
 }

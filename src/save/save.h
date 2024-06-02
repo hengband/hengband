@@ -2,8 +2,7 @@
 
 enum class SaveType {
     CLOSE_GAME,
-    CONTINUE_GAME,
-    DEBUG
+    CONTINUE_GAME
 };
 
 class PlayerType;

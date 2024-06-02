@@ -40,6 +40,7 @@
 #include "player/player-damage.h"
 #include "player/player-skill.h"
 #include "player/special-defense-types.h"
+#include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
 #include "status/action-setter.h"
 #include "status/bad-status-setter.h"
@@ -51,9 +52,6 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "timed-effect/player-cut.h"
-#include "timed-effect/player-hallucination.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
@@ -69,7 +67,7 @@ MonsterAttackPlayer::MonsterAttackPlayer(PlayerType *player_ptr, short m_idx)
     , m_ptr(&player_ptr->current_floor_ptr->m_list[m_idx])
     , method(RaceBlowMethodType::NONE)
     , effect(RaceBlowEffectType::NONE)
-    , do_silly_attack(one_in_(2) && player_ptr->effects()->hallucination()->is_hallucinated())
+    , do_silly_attack(one_in_(2) && player_ptr->effects()->hallucination().is_hallucinated())
     , player_ptr(player_ptr)
 {
 }
@@ -162,10 +160,6 @@ bool MonsterAttackPlayer::process_monster_blows()
         if (this->effect == RaceBlowEffectType::NONE) {
             plog("unexpected: MonsterAttackPlayer::effect == RaceBlowEffectType::NONE");
             break;
-        }
-
-        if (this->method == RaceBlowMethodType::SHOOT) {
-            continue;
         }
 
         // フレーバーの打撃は必中扱い。それ以外は通常の命中判定を行う。
@@ -500,11 +494,11 @@ void MonsterAttackPlayer::increase_blow_type_seen(const int ap_cnt)
 
 void MonsterAttackPlayer::postprocess_monster_blows()
 {
-    SpellHex spell_hex(this->player_ptr, this);
+    SpellHex spell_hex(this->player_ptr);
     spell_hex.store_vengeful_damage(this->get_damage);
-    spell_hex.eyes_on_eyes();
+    spell_hex.eyes_on_eyes(this->m_idx, this->get_damage);
     musou_counterattack(this->player_ptr, this);
-    spell_hex.thief_teleport();
+    this->process_thief_teleport(spell_hex);
     auto *r_ptr = &this->m_ptr->get_monrace();
     if (this->player_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !this->player_ptr->current_floor_ptr->inside_arena) {
         r_ptr->r_deaths++;
@@ -516,4 +510,18 @@ void MonsterAttackPlayer::postprocess_monster_blows()
     }
 
     PlayerClass(this->player_ptr).break_samurai_stance({ SamuraiStanceType::IAI });
+}
+
+void MonsterAttackPlayer::process_thief_teleport(const SpellHex &spell_hex)
+{
+    if (!this->blinked || !this->alive || this->player_ptr->is_dead) {
+        return;
+    }
+
+    if (spell_hex.check_hex_barrier(this->m_idx, HEX_ANTI_TELE)) {
+        msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));
+    } else {
+        msg_print(_("泥棒は笑って逃げた！", "The thief flees laughing!"));
+        teleport_away(this->player_ptr, this->m_idx, MAX_PLAYER_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
+    }
 }

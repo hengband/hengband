@@ -29,7 +29,7 @@ void wr_store(store_type *store_ptr)
     wr_s16b(store_ptr->bad_buy);
     wr_s32b(store_ptr->last_visit);
     for (int j = 0; j < store_ptr->stock_num; j++) {
-        wr_item(&store_ptr->stock[j]);
+        wr_item(store_ptr->stock[j]);
     }
 }
 
@@ -53,7 +53,7 @@ void wr_randomizer(void)
 /*!
  * @brief ゲームオプション情報を書き込む / Write the "options"
  */
-void wr_options(SaveType type)
+void wr_options()
 {
     for (int i = 0; i < 4; i++) {
         wr_u32b(0L);
@@ -112,10 +112,6 @@ void wr_options(SaveType type)
 
     if (cheat_immortal) {
         c |= 0x0020;
-    }
-
-    if (type == SaveType::DEBUG) {
-        c |= 0xFFFF;
     }
 
     wr_u16b(c);

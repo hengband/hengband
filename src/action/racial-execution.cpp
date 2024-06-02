@@ -17,8 +17,6 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-confusion.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
@@ -48,7 +46,7 @@ bool exe_racial_power(PlayerType *player_ptr, const int32_t command)
  */
 PERCENTAGE racial_chance(PlayerType *player_ptr, rpi_type *rpi_ptr)
 {
-    if ((player_ptr->lev < rpi_ptr->min_level) || player_ptr->effects()->confusion()->is_confused()) {
+    if ((player_ptr->lev < rpi_ptr->min_level) || player_ptr->effects()->confusion().is_confused()) {
         return 0;
     }
 
@@ -57,9 +55,9 @@ PERCENTAGE racial_chance(PlayerType *player_ptr, rpi_type *rpi_ptr)
         return 100;
     }
 
-    auto player_stun = player_ptr->effects()->stun();
-    if (player_stun->is_stunned()) {
-        difficulty += player_stun->current();
+    const auto &player_stun = player_ptr->effects()->stun();
+    if (player_stun.is_stunned()) {
+        difficulty += player_stun.current();
     } else if (player_ptr->lev > rpi_ptr->min_level) {
         PERCENTAGE lev_adj = (PERCENTAGE)((player_ptr->lev - rpi_ptr->min_level) / 3);
         if (lev_adj > 10) {
@@ -103,9 +101,9 @@ static void adjust_racial_power_difficulty(PlayerType *player_ptr, rpi_type *rpi
         return;
     }
 
-    auto player_stun = player_ptr->effects()->stun();
-    if (player_stun->is_stunned()) {
-        *difficulty += player_stun->current();
+    const auto &player_stun = player_ptr->effects()->stun();
+    if (player_stun.is_stunned()) {
+        *difficulty += player_stun.current();
     } else if (player_ptr->lev > rpi_ptr->min_level) {
         int lev_adj = ((player_ptr->lev - rpi_ptr->min_level) / 3);
         if (lev_adj > 10) {

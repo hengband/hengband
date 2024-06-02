@@ -24,16 +24,6 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-acceleration.h"
-#include "timed-effect/player-blindness.h"
-#include "timed-effect/player-confusion.h"
-#include "timed-effect/player-cut.h"
-#include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-fear.h"
-#include "timed-effect/player-hallucination.h"
-#include "timed-effect/player-paralysis.h"
-#include "timed-effect/player-poison.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "world/world.h"
 
@@ -61,18 +51,20 @@ static void rd_realms(PlayerType *player_ptr)
  */
 void rd_base_info(PlayerType *player_ptr)
 {
-    rd_string(player_ptr->name, sizeof(player_ptr->name));
-    rd_string(player_ptr->died_from, 1024);
+    const auto player_name = rd_string();
+    const auto player_name_len = player_name.copy(player_ptr->name, sizeof(player_ptr->name) - 1);
+    player_ptr->name[player_name_len] = '\0';
+    player_ptr->died_from = rd_string();
     if (!h_older_than(1, 7, 0, 1)) {
-        char buf[1024];
-        rd_string(buf, sizeof buf);
-        player_ptr->last_message = buf;
+        player_ptr->last_message = rd_string();
     }
 
     load_quick_start();
     const int max_history_lines = 4;
     for (int i = 0; i < max_history_lines; i++) {
-        rd_string(player_ptr->history[i], sizeof(player_ptr->history[i]));
+        const auto history = rd_string();
+        const auto history_len = history.copy(player_ptr->history[i], sizeof(player_ptr->history[i]) - 1);
+        player_ptr->history[i][history_len] = '\0';
     }
 
     player_ptr->prace = i2enum<PlayerRaceType>(rd_byte());
@@ -290,7 +282,7 @@ static void rd_arena(PlayerType *player_ptr)
     player_ptr->oldpx = rd_s16b();
     player_ptr->oldpy = rd_s16b();
     const auto &floor_ref = *player_ptr->current_floor_ptr;
-    if (h_older_than(0, 3, 13) && !floor_ref.is_in_dungeon() && !floor_ref.inside_arena) {
+    if (h_older_than(0, 3, 13) && !floor_ref.is_in_underground() && !floor_ref.inside_arena) {
         player_ptr->oldpy = 33;
         player_ptr->oldpx = 131;
     }
@@ -336,9 +328,9 @@ static void rd_bad_status(PlayerType *player_ptr)
 {
     auto effects = player_ptr->effects();
     strip_bytes(2); /* Old "rest" */
-    effects->blindness()->set(rd_s16b());
-    effects->paralysis()->set(rd_s16b());
-    effects->confusion()->set(rd_s16b());
+    effects->blindness().set(rd_s16b());
+    effects->paralysis().set(rd_s16b());
+    effects->confusion().set(rd_s16b());
     player_ptr->food = rd_s16b();
     strip_bytes(4); /* Old "food_digested" / "protection" */
 }
@@ -365,13 +357,13 @@ static void rd_energy(PlayerType *player_ptr)
 static void rd_status(PlayerType *player_ptr)
 {
     const auto effects = player_ptr->effects();
-    effects->acceleration()->set(rd_s16b());
-    effects->deceleration()->set(rd_s16b());
-    effects->fear()->set(rd_s16b());
-    effects->cut()->set(rd_s16b());
-    effects->stun()->set(rd_s16b());
-    effects->poison()->set(rd_s16b());
-    effects->hallucination()->set(rd_s16b());
+    effects->acceleration().set(rd_s16b());
+    effects->deceleration().set(rd_s16b());
+    effects->fear().set(rd_s16b());
+    effects->cut().set(rd_s16b());
+    effects->stun().set(rd_s16b());
+    effects->poison().set(rd_s16b());
+    effects->hallucination().set(rd_s16b());
     player_ptr->protevil = rd_s16b();
     player_ptr->invuln = rd_s16b();
     if (h_older_than(0, 0, 0)) {

@@ -107,17 +107,17 @@ private:
         const auto page_item_count = std::min(this->max_per_page, candidates_count - page_base_idx);
 
         for (auto i = 0U; i < this->max_per_page + 1; ++i) {
-            term_erase(this->start_col, i + 1, 255);
+            term_erase(this->start_col, i + 1);
         }
 
         auto it = std::next(std::begin(candidates), page_base_idx);
         for (auto i = 0U; i < page_item_count; ++i, ++it) {
             std::stringstream ss;
-            ss << i2sym[i] << ") " << std::invoke(describe_candidate, *it);
+            ss << ' ' << i2sym[i] << ") " << std::invoke(describe_candidate, *it);
             put_str(ss.str(), i + 1, this->start_col);
         }
         if (page_max > 1) {
-            const auto page_info = format("-- more (%lu/%lu) --", page + 1, page_max);
+            const auto page_info = format(" -- more (%lu/%lu) --", page + 1, page_max);
             put_str(page_info, page_item_count + 1, this->start_col);
         }
     }

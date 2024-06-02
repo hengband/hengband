@@ -9,169 +9,170 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 
-static void write_monster_flags(MonsterEntity *m_ptr, BIT_FLAGS *flags)
+static BIT_FLAGS write_monster_flags(const MonsterEntity &monster)
 {
-    if (!m_ptr->is_original_ap()) {
-        set_bits(*flags, SaveDataMonsterFlagType::AP_R_IDX);
+    BIT_FLAGS flags = 0x00000000;
+    if (!monster.is_original_ap()) {
+        set_bits(flags, SaveDataMonsterFlagType::AP_R_IDX);
     }
 
-    if (m_ptr->sub_align) {
-        set_bits(*flags, SaveDataMonsterFlagType::SUB_ALIGN);
+    if (monster.sub_align) {
+        set_bits(flags, SaveDataMonsterFlagType::SUB_ALIGN);
     }
 
-    if (m_ptr->is_asleep()) {
-        set_bits(*flags, SaveDataMonsterFlagType::CSLEEP);
+    if (monster.is_asleep()) {
+        set_bits(flags, SaveDataMonsterFlagType::CSLEEP);
     }
 
-    if (m_ptr->is_accelerated()) {
-        set_bits(*flags, SaveDataMonsterFlagType::FAST);
+    if (monster.is_accelerated()) {
+        set_bits(flags, SaveDataMonsterFlagType::FAST);
     }
 
-    if (m_ptr->is_decelerated()) {
-        set_bits(*flags, SaveDataMonsterFlagType::SLOW);
+    if (monster.is_decelerated()) {
+        set_bits(flags, SaveDataMonsterFlagType::SLOW);
     }
 
-    if (m_ptr->is_stunned()) {
-        set_bits(*flags, SaveDataMonsterFlagType::STUNNED);
+    if (monster.is_stunned()) {
+        set_bits(flags, SaveDataMonsterFlagType::STUNNED);
     }
 
-    if (m_ptr->is_confused()) {
-        set_bits(*flags, SaveDataMonsterFlagType::CONFUSED);
+    if (monster.is_confused()) {
+        set_bits(flags, SaveDataMonsterFlagType::CONFUSED);
     }
 
-    if (m_ptr->is_fearful()) {
-        set_bits(*flags, SaveDataMonsterFlagType::MONFEAR);
+    if (monster.is_fearful()) {
+        set_bits(flags, SaveDataMonsterFlagType::MONFEAR);
     }
 
-    if (m_ptr->target_y) {
-        set_bits(*flags, SaveDataMonsterFlagType::TARGET_Y);
+    if (monster.target_y) {
+        set_bits(flags, SaveDataMonsterFlagType::TARGET_Y);
     }
 
-    if (m_ptr->target_x) {
-        set_bits(*flags, SaveDataMonsterFlagType::TARGET_X);
+    if (monster.target_x) {
+        set_bits(flags, SaveDataMonsterFlagType::TARGET_X);
     }
 
-    if (m_ptr->is_invulnerable()) {
-        set_bits(*flags, SaveDataMonsterFlagType::INVULNER);
+    if (monster.is_invulnerable()) {
+        set_bits(flags, SaveDataMonsterFlagType::INVULNER);
     }
 
-    if (m_ptr->smart.any()) {
-        set_bits(*flags, SaveDataMonsterFlagType::SMART);
+    if (monster.smart.any()) {
+        set_bits(flags, SaveDataMonsterFlagType::SMART);
     }
 
-    if (m_ptr->exp) {
-        set_bits(*flags, SaveDataMonsterFlagType::EXP);
+    if (monster.exp) {
+        set_bits(flags, SaveDataMonsterFlagType::EXP);
     }
 
-    if (m_ptr->mflag2.any()) {
-        set_bits(*flags, SaveDataMonsterFlagType::MFLAG2);
+    if (monster.mflag2.any()) {
+        set_bits(flags, SaveDataMonsterFlagType::MFLAG2);
     }
 
-    if (m_ptr->is_named()) {
-        set_bits(*flags, SaveDataMonsterFlagType::NICKNAME);
+    if (monster.is_named()) {
+        set_bits(flags, SaveDataMonsterFlagType::NICKNAME);
     }
 
-    if (m_ptr->parent_m_idx) {
-        set_bits(*flags, SaveDataMonsterFlagType::PARENT);
+    if (monster.has_parent()) {
+        set_bits(flags, SaveDataMonsterFlagType::PARENT);
     }
 
-    wr_u32b(*flags);
+    wr_u32b(flags);
+    return flags;
 }
 
-static void write_monster_info(MonsterEntity *m_ptr, const BIT_FLAGS flags)
+static void write_monster_info(const MonsterEntity &monster, const BIT_FLAGS flags)
 {
     byte tmp8u;
     if (any_bits(flags, SaveDataMonsterFlagType::FAST)) {
-        tmp8u = (byte)m_ptr->mtimed[MTIMED_FAST];
+        tmp8u = (byte)monster.mtimed[MTIMED_FAST];
         wr_byte(tmp8u);
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::SLOW)) {
-        tmp8u = (byte)m_ptr->mtimed[MTIMED_SLOW];
+        tmp8u = (byte)monster.mtimed[MTIMED_SLOW];
         wr_byte(tmp8u);
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::STUNNED)) {
-        tmp8u = (byte)m_ptr->mtimed[MTIMED_STUNNED];
+        tmp8u = (byte)monster.mtimed[MTIMED_STUNNED];
         wr_byte(tmp8u);
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::CONFUSED)) {
-        tmp8u = (byte)m_ptr->mtimed[MTIMED_CONFUSED];
+        tmp8u = (byte)monster.mtimed[MTIMED_CONFUSED];
         wr_byte(tmp8u);
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::MONFEAR)) {
-        tmp8u = (byte)m_ptr->mtimed[MTIMED_MONFEAR];
+        tmp8u = (byte)monster.mtimed[MTIMED_MONFEAR];
         wr_byte(tmp8u);
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::TARGET_Y)) {
-        wr_s16b((int16_t)m_ptr->target_y);
+        wr_s16b((int16_t)monster.target_y);
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::TARGET_X)) {
-        wr_s16b((int16_t)m_ptr->target_x);
+        wr_s16b((int16_t)monster.target_x);
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::INVULNER)) {
-        tmp8u = (byte)m_ptr->mtimed[MTIMED_INVULNER];
+        tmp8u = (byte)monster.mtimed[MTIMED_INVULNER];
         wr_byte(tmp8u);
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::SMART)) {
-        wr_FlagGroup(m_ptr->smart, wr_byte);
+        wr_FlagGroup(monster.smart, wr_byte);
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::EXP)) {
-        wr_u32b(m_ptr->exp);
+        wr_u32b(monster.exp);
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::MFLAG2)) {
-        wr_FlagGroup(m_ptr->mflag2, wr_byte);
+        wr_FlagGroup(monster.mflag2, wr_byte);
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::NICKNAME)) {
-        wr_string(m_ptr->nickname);
+        wr_string(monster.nickname);
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::PARENT)) {
-        wr_s16b(m_ptr->parent_m_idx);
+        wr_s16b(monster.parent_m_idx);
     }
 }
 
 /*!
- * @brief モンスター情報を書き込む / Write a "monster" record
- * @param m_ptr モンスター情報保存元ポインタ
+ * @brief モンスター情報をセーブデータに書き込む
+ * @param monster モンスター情報への参照
  */
-void wr_monster(MonsterEntity *m_ptr)
+void wr_monster(const MonsterEntity &monster)
 {
-    BIT_FLAGS flags = 0x00000000;
-    write_monster_flags(m_ptr, &flags);
+    const auto flags = write_monster_flags(monster);
 
-    wr_s16b(enum2i(m_ptr->r_idx));
-    wr_byte((byte)m_ptr->fy);
-    wr_byte((byte)m_ptr->fx);
-    wr_s16b((int16_t)m_ptr->hp);
-    wr_s16b((int16_t)m_ptr->maxhp);
-    wr_s16b((int16_t)m_ptr->max_maxhp);
-    wr_u32b(m_ptr->dealt_damage);
+    wr_s16b(enum2i(monster.r_idx));
+    wr_byte((byte)monster.fy);
+    wr_byte((byte)monster.fx);
+    wr_s16b((int16_t)monster.hp);
+    wr_s16b((int16_t)monster.maxhp);
+    wr_s16b((int16_t)monster.max_maxhp);
+    wr_u32b(monster.dealt_damage);
 
     if (any_bits(flags, SaveDataMonsterFlagType::AP_R_IDX)) {
-        wr_s16b(enum2i(m_ptr->ap_r_idx));
+        wr_s16b(enum2i(monster.ap_r_idx));
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::SUB_ALIGN)) {
-        wr_byte(m_ptr->sub_align);
+        wr_byte(monster.sub_align);
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::CSLEEP)) {
-        wr_s16b(m_ptr->mtimed[MTIMED_CSLEEP]);
+        wr_s16b(monster.mtimed[MTIMED_CSLEEP]);
     }
 
-    wr_byte((byte)m_ptr->mspeed);
-    wr_s16b(m_ptr->energy_need);
-    write_monster_info(m_ptr, flags);
+    wr_byte((byte)monster.mspeed);
+    wr_s16b(monster.energy_need);
+    write_monster_info(monster, flags);
 }
 
 /*!

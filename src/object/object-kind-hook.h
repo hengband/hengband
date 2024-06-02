@@ -11,6 +11,3 @@ bool kind_is_potion(short bi_id);
 bool kind_is_boots(short bi_id);
 bool kind_is_amulet(short bi_id);
 bool kind_is_good(short bi_id);
-
-class BaseitemKey;
-short lookup_baseitem_id(const BaseitemKey &key);

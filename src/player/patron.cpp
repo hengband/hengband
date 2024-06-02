@@ -12,7 +12,6 @@
 #include "mutation/mutation-flag-types.h"
 #include "mutation/mutation-investor-remover.h"
 #include "object-enchant/object-curse.h"
-#include "object/object-kind-hook.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"

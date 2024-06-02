@@ -1,6 +1,7 @@
 #pragma once
 
 #include "system/angband.h"
+#include "timed-effect/player-confusion.h"
 #include <memory>
 
 /*!
@@ -9,12 +10,11 @@
  */
 enum class PlayerCutRank;
 enum class PlayerStunRank;
-class PlayerConfusion;
 class PlayerType;
 class BadStatusSetter {
 public:
     BadStatusSetter(PlayerType *player_ptr);
-    virtual ~BadStatusSetter() = default;
+    ~BadStatusSetter() = default;
 
     bool set_blindness(const TIME_EFFECT tmp_v);
     bool mod_blindness(const TIME_EFFECT tmp_v);
@@ -37,7 +37,6 @@ public:
 
 private:
     PlayerType *player_ptr;
-    std::shared_ptr<PlayerConfusion> player_confusion;
 
     bool process_stun_effect(const short v);
     void process_stun_status(const PlayerStunRank new_rank, const short v);

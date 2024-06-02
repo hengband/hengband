@@ -88,24 +88,14 @@ void rd_randomizer(void)
  */
 void rd_messages(void)
 {
-    if (h_older_than(2, 2, 0, 75)) {
-        auto num = rd_u16b();
-        int message_max;
-        message_max = (int)num;
-
-        for (int i = 0; i < message_max; i++) {
-            char buf[128];
-            rd_string(buf, sizeof(buf));
-            message_add(buf);
-        }
+    if (!loading_savefile_version_is_older_than(22)) {
+        rd_message_history();
+        return;
     }
 
-    auto num = rd_u32b();
-    int message_max = (int)num;
+    const auto message_max = static_cast<int>(h_older_than(2, 2, 0, 75) ? rd_u16b() : rd_u32b());
     for (int i = 0; i < message_max; i++) {
-        char buf[128];
-        rd_string(buf, sizeof(buf));
-        message_add(buf);
+        message_add(rd_string());
     }
 }
 

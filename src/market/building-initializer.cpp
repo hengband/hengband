@@ -1,7 +1,6 @@
 #include "market/building-initializer.h"
 #include "floor/floor-town.h"
 #include "io/files-util.h"
-#include "object/object-kind-hook.h"
 #include "player-info/class-types.h"
 #include "store/articles-on-sale.h"
 #include "store/store-owners.h"
@@ -24,7 +23,7 @@
  */
 static int count_town_numbers()
 {
-    const auto &path = path_build(ANGBAND_DIR_EDIT, "towns");
+    const auto path = path_build(ANGBAND_DIR_EDIT, "towns");
     std::set<std::string> unique_towns;
     for (const auto &entry : std::filesystem::directory_iterator(path)) {
         const auto &filename = entry.path().filename().string();
@@ -43,8 +42,9 @@ static int count_town_numbers()
  * Initialize town array
  * @details 「我が家を拡張する」オプションのON/OFFとは無関係に、ON時の容量を確保しておく.
  */
-void init_towns(void)
+void init_towns()
 {
+    const auto &baseitems = BaseitemList::get_instance();
     const auto town_numbers = count_town_numbers();
     towns_info = std::vector<town_type>(town_numbers);
     for (auto i = 1; i < town_numbers; i++) {
@@ -61,13 +61,13 @@ void init_towns(void)
                 continue;
             }
 
-            for (const auto &baseitem : store_regular_sale_table.at(sst)) {
-                auto bi_id = lookup_baseitem_id(baseitem);
+            for (const auto &bi_key : store_regular_sale_table.at(sst)) {
+                const auto bi_id = baseitems.lookup_baseitem_id(bi_key);
                 store_ptr->regular.push_back(bi_id);
             }
 
-            for (const auto &baseitem : store_sale_table.at(sst)) {
-                auto bi_id = lookup_baseitem_id(baseitem);
+            for (const auto &bi_key : store_sale_table.at(sst)) {
+                const auto bi_id = baseitems.lookup_baseitem_id(bi_key);
                 store_ptr->table.push_back(bi_id);
             }
         }
@@ -78,7 +78,7 @@ void init_towns(void)
  * @brief 店情報初期化のメインルーチン /
  * Initialize buildings
  */
-void init_buildings(void)
+void init_buildings()
 {
     for (auto i = 0; i < MAX_BUILDINGS; i++) {
         buildings[i].name[0] = '\0';

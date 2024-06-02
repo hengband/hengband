@@ -38,7 +38,6 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-lore.h"
@@ -154,7 +153,7 @@ static void describe_target(PlayerType *player_ptr, GridExamination *ge_ptr)
 
 static ProcessResult describe_hallucinated_target(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
-    if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
+    if (!player_ptr->effects()->hallucination().is_hallucinated()) {
         return ProcessResult::PROCESS_CONTINUE;
     }
 
@@ -449,19 +448,19 @@ static std::string decide_target_floor(PlayerType *player_ptr, GridExamination *
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::QUEST_ENTER)) {
-        QuestId old_quest = floor_ptr->quest_number;
-        const auto &quest_list = QuestList::get_instance();
-        const QuestId number = i2enum<QuestId>(ge_ptr->g_ptr->special);
-        const auto *q_ptr = &quest_list[number];
-        std::string_view msg(_("クエスト「%s」(%d階相当)", "the entrance to the quest '%s'(level %d)"));
+        const auto old_quest = floor_ptr->quest_number;
+        const auto &quests = QuestList::get_instance();
+        const auto quest_id = i2enum<QuestId>(ge_ptr->g_ptr->special);
+        const auto &quest = quests.get_quest(quest_id);
+        constexpr auto fmt = _("クエスト「%s」(%d階相当)", "the entrance to the quest '%s'(level %d)");
 
         quest_text_lines.clear();
 
-        floor_ptr->quest_number = number;
+        floor_ptr->quest_number = quest_id;
         init_flags = INIT_NAME_ONLY;
         parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
         floor_ptr->quest_number = old_quest;
-        return format(msg.data(), q_ptr->name.data(), q_ptr->level);
+        return format(fmt, quest.name.data(), quest.level);
     }
 
     if (ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::BLDG) && !floor_ptr->inside_arena) {

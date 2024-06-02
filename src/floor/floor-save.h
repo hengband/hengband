@@ -4,7 +4,7 @@
 
 class PlayerType;
 struct saved_floor_type;
-void init_saved_floors(PlayerType *player_ptr, bool force);
+void init_saved_floors(bool force);
 void clear_saved_floor_files(PlayerType *player_ptr);
 saved_floor_type *get_sf_ptr(FLOOR_IDX floor_id);
 void kill_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr);

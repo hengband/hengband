@@ -4,7 +4,7 @@
 /*!
  * ベースアイテムの大項目IDの種別名定義 / A list of tvals and their textual names
  */
-const std::vector<tval_desc> tvals = {
+const std::vector<tval_desc> tval_desc_list = {
     { ItemKindType::SWORD, _("刀剣", "Sword") },
     { ItemKindType::POLEARM, _("長柄/斧", "Polearm") },
     { ItemKindType::HAFTED, _("鈍器", "Hafted Weapon") },
@@ -56,16 +56,4 @@ const std::vector<tval_desc> tvals = {
     { ItemKindType::FLASK, _("油つぼ", "Flask") },
     { ItemKindType::JUNK, _("がらくた", "Junk") },
     { ItemKindType::SKELETON, _("骨", "Skeleton") },
-    { ItemKindType::NONE, nullptr },
-};
-
-/*!
- * 選択処理用キーコード /
- * Global array for converting numbers to a logical list symbol
- */
-const std::vector<char> listsym = {
-    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-    '\0'
 };

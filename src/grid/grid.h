@@ -21,14 +21,30 @@
 #include <utility>
 
 enum class AttributeType;
+class Grid;
+class GridTemplate {
+public:
+    GridTemplate()
+        : GridTemplate(0, 0, 0, 0, 0)
+    {
+    }
 
-/*  A structure type for terrain template of saving dungeon floor */
-struct grid_template_type {
+    GridTemplate(BIT_FLAGS info, FEAT_IDX feat, FEAT_IDX mimic, short special, uint16_t occurrence)
+        : info(info)
+        , feat(feat)
+        , mimic(mimic)
+        , special(special)
+        , occurrence(occurrence)
+    {
+    }
+
     BIT_FLAGS info;
     FEAT_IDX feat;
     FEAT_IDX mimic;
-    int16_t special;
+    short special;
     uint16_t occurrence;
+
+    bool matches(const Grid &grid) const;
 };
 
 enum grid_bold_type {
@@ -44,6 +60,7 @@ enum grid_bold_type {
     GB_SOLID_NOPERM
 };
 
+class DisplaySymbol;
 class FloorType;
 class Grid;
 class PlayerType;
@@ -55,7 +72,7 @@ bool player_can_enter(PlayerType *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mode
 bool feat_uses_special(FEAT_IDX f_idx);
 void update_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x);
 bool no_lite(PlayerType *player_ptr);
-void print_rel(PlayerType *player_ptr, char c, TERM_COLOR a, POSITION y, POSITION x);
+void print_rel(PlayerType *player_ptr, const DisplaySymbol &symbol, POSITION y, POSITION x);
 void print_bolt_pict(PlayerType *player_ptr, POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeType typ);
 void note_spot(PlayerType *player_ptr, POSITION y, POSITION x);
 void lite_spot(PlayerType *player_ptr, POSITION y, POSITION x);

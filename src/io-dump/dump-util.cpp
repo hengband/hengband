@@ -9,11 +9,28 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
-TERM_COLOR attr_idx = 0;
-char char_idx = 0;
+DisplaySymbolsClipboard DisplaySymbolsClipboard::instance{};
 
-TERM_COLOR attr_idx_feat[F_LIT_MAX];
-char char_idx_feat[F_LIT_MAX];
+DisplaySymbolsClipboard::DisplaySymbolsClipboard()
+    : symbol()
+    , symbols(DEFAULT_SYMBOLS)
+{
+}
+
+DisplaySymbolsClipboard &DisplaySymbolsClipboard::get_instance()
+{
+    return instance;
+}
+
+void DisplaySymbolsClipboard::reset_symbols()
+{
+    this->symbols = DEFAULT_SYMBOLS;
+}
+
+void DisplaySymbolsClipboard::set_symbol(const std::map<int, DisplaySymbol> &symbol_configs)
+{
+    this->symbols = symbol_configs;
+}
 
 /*!
  * @brief シンボル変更処理 / Do visual mode command -- Change symbols
@@ -35,7 +52,7 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
 {
     static TERM_COLOR attr_old = 0;
     static char char_old = 0;
-
+    auto &symbols_cb = DisplaySymbolsClipboard::get_instance();
     switch (ch) {
     case ESCAPE: {
         if (!*visual_list_ptr) {
@@ -71,29 +88,25 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
         return true;
     }
     case 'C':
-    case 'c': {
-        attr_idx = *cur_attr_ptr;
-        char_idx = *cur_char_ptr;
-        for (int i = 0; i < F_LIT_MAX; i++) {
-            attr_idx_feat[i] = 0;
-            char_idx_feat[i] = 0;
-        }
-
+    case 'c':
+        symbols_cb.symbol = { *cur_attr_ptr, *cur_char_ptr };
+        symbols_cb.reset_symbols();
         return true;
-    }
     case 'P':
     case 'p': {
-        if (attr_idx || (!(char_idx & 0x80) && char_idx)) {
-            *cur_attr_ptr = attr_idx;
+        const auto &symbols = symbols_cb.symbol;
+        const auto has_character = symbols.has_character();
+        if (symbols.color || (!(symbols.character & 0x80) && has_character)) {
+            *cur_attr_ptr = symbols.color;
             *attr_top_ptr = std::max<int8_t>(0, (*cur_attr_ptr & 0x7f) - 5);
             if (!*visual_list_ptr) {
                 *need_redraw = true;
             }
         }
 
-        if (char_idx) {
+        if (has_character) {
             /* Set the char */
-            *cur_char_ptr = char_idx;
+            *cur_char_ptr = symbols.character;
             *char_left_ptr = std::max<int8_t>(0, *cur_char_ptr - 10);
             if (!*visual_list_ptr) {
                 *need_redraw = true;
@@ -177,10 +190,7 @@ bool open_temporary_file(FILE **fff, char *file_name)
 }
 
 /*!
- * @brief モンスター情報リスト中のグループを表示する /
- * Display the object groups.
- * @param col 開始行
- * @param row 開始列
+ * @brief モンスター情報リスト中のグループを表示する
  * @param wid 表示文字数幅
  * @param per_page リストの表示行
  * @param grp_idx グループのID配列
@@ -188,13 +198,14 @@ bool open_temporary_file(FILE **fff, char *file_name)
  * @param grp_cur 現在の選択ID
  * @param grp_top 現在の選択リスト最上部ID
  */
-void display_group_list(int col, int row, int wid, int per_page, IDX grp_idx[], concptr group_text[], int grp_cur, int grp_top)
+void display_group_list(int wid, int per_page, const std::vector<short> &grp_idx, const std::vector<std::string> &group_text, int grp_cur, int grp_top)
 {
-    for (int i = 0; i < per_page && (grp_idx[i] >= 0); i++) {
-        int grp = grp_idx[grp_top + i];
-        TERM_COLOR attr = (grp_top + i == grp_cur) ? TERM_L_BLUE : TERM_WHITE;
-        term_erase(col, row + i, wid);
-        c_put_str(attr, group_text[grp], row + i, col);
+    const int size = std::min(grp_idx.size(), group_text.size());
+    for (auto i = 0; i < per_page && (i < size); i++) {
+        const auto grp = grp_idx[grp_top + i];
+        const auto attr = (grp_top + i == grp_cur) ? TERM_L_BLUE : TERM_WHITE;
+        term_erase(0, 6 + i, wid);
+        c_put_str(attr, group_text[grp], 6 + i, 0);
     }
 }
 
@@ -232,7 +243,7 @@ void display_visual_list(int col, int row, int height, int width, TERM_COLOR att
                 a |= 0x80;
             }
 
-            term_queue_bigchar(x, y, a, c, 0, 0);
+            term_queue_bigchar(x, y, { { a, c }, {} });
         }
     }
 }

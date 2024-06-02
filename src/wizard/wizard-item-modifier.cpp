@@ -21,14 +21,12 @@
 #include "object-enchant/tr-types.h"
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
-#include "object/object-kind-hook.h"
 #include "object/object-mark-types.h"
 #include "object/object-value.h"
 #include "spell-kind/spells-perception.h"
 #include "spell/spells-object.h"
 #include "system/alloc-entries.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
@@ -221,9 +219,9 @@ void wizard_item_modifier(PlayerType *player_ptr)
  */
 void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx, bool aware)
 {
-    const auto max_a_idx = enum2i(artifacts_info.rbegin()->first);
+    auto &artifacts = ArtifactList::get_instance();
+    const auto max_a_idx = enum2i(artifacts.rbegin()->first);
     const auto message = aware ? "Modified." : "Restored.";
-    auto &artifacts = ArtifactsInfo::get_instance();
     if (reset_artifact_idx != FixedArtifactId::NONE) {
         artifacts.get_artifact(reset_artifact_idx).is_generated = aware;
         msg_print(message);
@@ -278,7 +276,7 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
         }
 
         auto &baseitem = o_ptr->get_baseitem();
-        baseitem.aware = true; //!< @note 記録には残さないためTRUEを立てるのみ
+        baseitem.mark_as_aware(); //!< @note 記録には残さないためTRUEを立てるのみ
         set_bits(o_ptr->ident, IDENT_KNOWN | IDENT_FULL_KNOWN);
         o_ptr->marked.set(OmType::TOUCHED);
     }
@@ -344,7 +342,7 @@ static void prt_alloc(const BaseitemKey &bi_key, TERM_LEN row, TERM_LEN col)
     }
 
     for (auto i = 0; i < 22; i++) {
-        term_putch(col, row + i + 1, TERM_WHITE, '|');
+        term_putch(col, row + i + 1, { TERM_WHITE, '|' });
         prt(format("%2dF", (i * 5)), row + i + 1, col);
         if ((i * BASEITEM_MAX_DEPTH / 22 <= home) && (home < (i + 1) * BASEITEM_MAX_DEPTH / 22)) {
             c_prt(TERM_RED, format("%3d.%04d%%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
@@ -365,9 +363,9 @@ static void prt_binary(BIT_FLAGS flags, const int row, int col)
     uint32_t bitmask;
     for (int i = bitmask = 1; i <= 32; i++, bitmask *= 2) {
         if (flags & bitmask) {
-            term_putch(col++, row, TERM_BLUE, '*');
+            term_putch(col++, row, { TERM_BLUE, '*' });
         } else {
-            term_putch(col++, row, TERM_WHITE, '-');
+            term_putch(col++, row, { TERM_WHITE, '-' });
         }
     }
 }
@@ -404,7 +402,7 @@ static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->bi_id, item_level, enum2i(bi_key.tval()), *bi_key.sval()), line, j);
     prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), ++line, j);
     prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), ++line, j);
-    prt(format("fixed_artifact_idx = %-4d  ego_idx = %-4d  cost = %d", enum2i(o_ptr->fixed_artifact_idx), enum2i(o_ptr->ego_idx), object_value_real(o_ptr)), ++line, j);
+    prt(format("fixed_artifact_id = %-4d  ego_idx = %-4d  cost = %d", enum2i(o_ptr->fa_id), enum2i(o_ptr->ego_idx), object_value_real(o_ptr)), ++line, j);
     prt(format("ident = %04x  activation_id = %-4d  timeout = %-d", o_ptr->ident, enum2i(o_ptr->activation_id), o_ptr->timeout), ++line, j);
     prt(format("chest_level = %-4d  fuel = %-d", o_ptr->chest_level, o_ptr->fuel), ++line, j);
     prt(format("smith_hit = %-4d  smith_damage = %-4d", o_ptr->smith_hit, o_ptr->smith_damage), ++line, j);
@@ -528,7 +526,7 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
             }
 
             correct++;
-            const auto is_same_fixed_artifact_idx = o_ptr->is_specific_artifact(item.fixed_artifact_idx);
+            const auto is_same_fixed_artifact_idx = o_ptr->is_specific_artifact(item.fa_id);
             if ((item.pval == o_ptr->pval) && (item.to_a == o_ptr->to_a) && (item.to_h == o_ptr->to_h) && (item.to_d == o_ptr->to_d) && is_same_fixed_artifact_idx) {
                 matches++;
             } else if ((item.pval >= o_ptr->pval) && (item.to_a >= o_ptr->to_a) && (item.to_h >= o_ptr->to_h) && (item.to_d >= o_ptr->to_d)) {
@@ -549,6 +547,49 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 }
 
+static std::optional<ItemEntity> wiz_apply_magic_to_item(PlayerType *player_ptr, char command, short bi_id)
+{
+    const auto &floor = *player_ptr->current_floor_ptr;
+    switch (tolower(command)) {
+    case 'w': { // 呪われた高級品.
+        ItemEntity item(bi_id);
+        ItemMagicApplier(player_ptr, &item, floor.dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED).execute();
+        return item;
+    }
+    case 'c': { // 呪われた上質.
+        ItemEntity item(bi_id);
+        ItemMagicApplier(player_ptr, &item, floor.dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED).execute();
+        return item;
+    }
+    case 'n': { // 普通品.
+        ItemEntity item(bi_id);
+        ItemMagicApplier(player_ptr, &item, floor.dun_level, AM_NO_FIXED_ART).execute();
+        return item;
+    }
+    case 'g': { // 上質.
+        ItemEntity item(bi_id);
+        ItemMagicApplier(player_ptr, &item, floor.dun_level, AM_NO_FIXED_ART | AM_GOOD).execute();
+        return item;
+    }
+    case 'e': { // 高級品.
+        ItemEntity item(bi_id);
+        ItemMagicApplier(player_ptr, &item, floor.dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT).execute();
+        return item;
+    }
+    case 's': { // アーティファクト.
+        ItemEntity item(bi_id);
+        ItemMagicApplier(player_ptr, &item, floor.dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL).execute();
+        if (!item.is_fixed_or_random_artifact()) {
+            become_random_artifact(player_ptr, &item, false);
+        }
+
+        return item;
+    }
+    default:
+        return std::nullopt;
+    }
+}
+
 /*!
  * @brief アイテムの質を選択して再生成する /
  * Apply magic to an item or turn it into an artifact. -Bernd-
@@ -560,19 +601,16 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         return;
     }
 
-    ItemEntity forge;
-    auto *q_ptr = &forge;
-    q_ptr->copy_from(o_ptr);
-
+    ItemEntity item = *o_ptr;
     auto changed = false;
     constexpr auto prompt = "[a]ccept, [w]orthless, [c]ursed, [n]ormal, [g]ood, [e]xcellent, [s]pecial? ";
     while (true) {
-        wiz_display_item(player_ptr, q_ptr);
+        wiz_display_item(player_ptr, &item);
         const auto command = input_command(prompt);
         if (!command) {
-            if (q_ptr->is_fixed_artifact()) {
-                q_ptr->get_fixed_artifact().is_generated = false;
-                q_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
+            if (item.is_fixed_artifact()) {
+                item.get_fixed_artifact().is_generated = false;
+                item.fa_id = FixedArtifactId::NONE;
             }
 
             changed = false;
@@ -584,60 +622,26 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
             break;
         }
 
-        if (q_ptr->is_fixed_artifact()) {
-            q_ptr->get_fixed_artifact().is_generated = false;
-            q_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
+        if (item.is_fixed_artifact()) {
+            item.get_fixed_artifact().is_generated = false;
+            item.fa_id = FixedArtifactId::NONE;
         }
 
-        switch (tolower(*command)) {
-        /* Apply bad magic, but first clear object */
-        case 'w':
-            q_ptr->prep(o_ptr->bi_id);
-            ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED).execute();
-            break;
-        /* Apply bad magic, but first clear object */
-        case 'c':
-            q_ptr->prep(o_ptr->bi_id);
-            ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED).execute();
-            break;
-        /* Apply normal magic, but first clear object */
-        case 'n':
-            q_ptr->prep(o_ptr->bi_id);
-            ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART).execute();
-            break;
-        /* Apply good magic, but first clear object */
-        case 'g':
-            q_ptr->prep(o_ptr->bi_id);
-            ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD).execute();
-            break;
-        /* Apply great magic, but first clear object */
-        case 'e':
-            q_ptr->prep(o_ptr->bi_id);
-            ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT).execute();
-            break;
-        /* Apply special magic, but first clear object */
-        case 's':
-            q_ptr->prep(o_ptr->bi_id);
-            ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL).execute();
-            if (!q_ptr->is_fixed_or_random_artifact()) {
-                become_random_artifact(player_ptr, q_ptr, false);
-            }
-
-            break;
-        default:
-            break;
+        const auto applied_item = wiz_apply_magic_to_item(player_ptr, *command, o_ptr->bi_id);
+        if (applied_item) {
+            item = *applied_item;
         }
 
-        q_ptr->iy = o_ptr->iy;
-        q_ptr->ix = o_ptr->ix;
-        q_ptr->marked = o_ptr->marked;
+        item.iy = o_ptr->iy;
+        item.ix = o_ptr->ix;
+        item.marked = o_ptr->marked;
     }
 
     if (!changed) {
         return;
     }
 
-    o_ptr->copy_from(q_ptr);
+    *o_ptr = item;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
@@ -800,6 +804,62 @@ void wiz_modify_item(PlayerType *player_ptr)
     }
 }
 
+static std::vector<FixedArtifactId> find_wishing_fixed_artifact(PlayerType *player_ptr, std::string_view pray_chars)
+{
+    std::vector<FixedArtifactId> fa_ids;
+    for (const auto &[fa_id, artifact] : ArtifactList::get_instance()) {
+        ItemEntity item(artifact.bi_key);
+        item.fa_id = fa_id;
+#ifdef JP
+        const auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+#else
+        auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+        str_tolower(item_name.data());
+#endif
+        std::string art_description = artifact.name;
+#ifdef JP
+        if (art_description.starts_with("『")) {
+            art_description = art_description.substr(2);
+            if (art_description.ends_with("』")) {
+                art_description = art_description.substr(0, art_description.length() - 2);
+            }
+        } else {
+            if (art_description.ends_with("の")) {
+                art_description = art_description.substr(0, art_description.length() - 2);
+            }
+        }
+#else
+        if (art_description.starts_with('\'')) {
+            art_description = art_description.substr(1);
+            const auto find_pos = art_description.find('\'');
+            if (find_pos != std::string::npos) {
+                art_description = art_description.substr(0, find_pos);
+            }
+        } else {
+            const std::string of_space("of ");
+            if (art_description.starts_with(of_space)) {
+                art_description = art_description.substr(of_space.length());
+            }
+        }
+
+        str_tolower(art_description.data());
+#endif
+        const std::string match_name(_(item_name.substr(2), item_name));
+        if (cheat_xtra) {
+            msg_format("Matching artifact No.%d %s(%s)", enum2i(fa_id), art_description.data(), match_name.data());
+        }
+
+        std::vector<std::string> candidates = { match_name, artifact.name, art_description };
+        for (const auto &candidate : candidates) {
+            if (pray_chars == candidate) {
+                fa_ids.push_back(fa_id);
+            }
+        }
+    }
+
+    return fa_ids;
+}
+
 /*!
  * @brief オブジェクトの装備スロットがエゴが有効なスロットかどうか判定
  */
@@ -854,8 +914,6 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 #endif
     };
 
-    ItemEntity forge;
-    auto *o_ptr = &forge;
     auto wish_art = false;
     auto wish_randart = false;
     auto wish_ego = false;
@@ -883,57 +941,57 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         return WishResultType::NOTHING;
     }
 
-    auto *str = pray.data();
+    auto *pray_chars = pray.data();
 #ifndef JP
-    str_tolower(str);
+    str_tolower(pray_chars);
     const std::string article_single("a ");
     const std::string article_multi("an ");
     if (pray.starts_with("a ")) {
-        str += article_single.length();
+        pray_chars += article_single.length();
     } else if (pray.starts_with("an ")) {
-        str += article_multi.length();
+        pray_chars += article_multi.length();
     }
 
-    str = ltrim(str);
+    pray_chars = ltrim(pray_chars);
 #endif // !JP
 
-    str = rtrim(str);
+    pray_chars = rtrim(pray_chars);
 
-    if (!strncmp(str, _("祝福された", "blessed"), _(10, 7))) {
-        str = ltrim(str + _(10, 7));
+    if (!strncmp(pray_chars, _("祝福された", "blessed"), _(10, 7))) {
+        pray_chars = ltrim(pray_chars + _(10, 7));
         blessed = true;
     }
 
     for (const auto &expression : fixed_expressions) {
         auto len = expression.length();
-        if (std::string_view(str).starts_with(expression)) {
-            str = ltrim(str + len);
+        if (std::string_view(pray_chars).starts_with(expression)) {
+            pray_chars = ltrim(pray_chars + len);
             fixed = true;
             break;
         }
     }
 
 #ifdef JP
-    if (!strncmp(str, "★", 2)) {
-        str = ltrim(str + 2);
+    if (!strncmp(pray_chars, "★", 2)) {
+        pray_chars = ltrim(pray_chars + 2);
         wish_art = true;
         exam_base = false;
     } else
 #endif
 
-        if (!strncmp(str, _("☆", "The "), _(2, 4))) {
-        str = ltrim(str + _(2, 4));
+        if (!strncmp(pray_chars, _("☆", "The "), _(2, 4))) {
+        pray_chars = ltrim(pray_chars + _(2, 4));
         wish_art = true;
         wish_randart = true;
     }
 
     /* wishing random ego ? */
-    else if (!strncmp(str, _("高級な", "excellent "), _(6, 9))) {
-        str = ltrim(str + _(6, 9));
+    else if (!strncmp(pray_chars, _("高級な", "excellent "), _(6, 9))) {
+        pray_chars = ltrim(pray_chars + _(6, 9));
         wish_ego = true;
     }
 
-    if (strlen(str) < 1) {
+    if (strlen(pray_chars) < 1) {
         msg_print(_("名前がない！", "What?"));
         return WishResultType::NOTHING;
     }
@@ -951,16 +1009,16 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     std::vector<EgoType> ego_ids;
     if (exam_base) {
         auto max_len = 0;
-        for (const auto &baseitem : baseitems_info) {
+        for (const auto &baseitem : BaseitemList::get_instance()) {
             if (!baseitem.is_valid()) {
                 continue;
             }
 
-            o_ptr->prep(baseitem.idx);
+            ItemEntity item(baseitem.idx);
 #ifdef JP
-            const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+            const auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 #else
-            auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+            auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
             str_tolower(item_name.data());
 #endif
             if (cheat_xtra) {
@@ -968,7 +1026,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             }
 
             const int len = item_name.length();
-            if (std::string(str).find(item_name) != std::string::npos) {
+            if (std::string(pray_chars).find(item_name) != std::string::npos) {
                 if (len > max_len) {
                     baseitem_ids.push_back(baseitem.idx);
                     max_len = len;
@@ -977,9 +1035,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         }
 
         if (allow_ego && baseitem_ids.size() == 1) {
-            short bi_id = baseitem_ids.back();
-            o_ptr->prep(bi_id);
-
+            ItemEntity item(baseitem_ids.back());
             for (const auto &[e_idx, ego] : egos_info) {
                 if (ego.idx == EgoType::NONE || ego.name.empty()) {
                     continue;
@@ -994,8 +1050,8 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                     msg_format("matching ego no.%d %s...", enum2i(ego.idx), item_name.data());
                 }
 
-                if (std::string(str).find(item_name) != std::string::npos) {
-                    if (is_slot_able_to_be_ego(player_ptr, o_ptr) != ego.slot) {
+                if (std::string(pray_chars).find(item_name) != std::string::npos) {
+                    if (is_slot_able_to_be_ego(player_ptr, &item) != ego.slot) {
                         continue;
                     }
 
@@ -1005,95 +1061,18 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         }
     }
 
-    std::vector<FixedArtifactId> artifact_ids;
-
-    if (allow_art) {
-        char a_desc[MAX_NLEN] = "\0";
-        char *a_str = a_desc;
-
-        int len;
-        auto mlen = 0;
-        for (const auto &[a_idx, artifact] : artifacts_info) {
-            if (a_idx == FixedArtifactId::NONE || artifact.name.empty()) {
-                continue;
-            }
-
-            const auto bi_id = lookup_baseitem_id(artifact.bi_key);
-            if (bi_id == 0) {
-                continue;
-            }
-
-            o_ptr->prep(bi_id);
-            o_ptr->fixed_artifact_idx = a_idx;
-
-#ifdef JP
-            const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
-#else
-            auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
-            str_tolower(item_name.data());
-#endif
-            a_str = a_desc;
-            strcpy(a_desc, artifact.name.data());
-
-            if (*a_str == '$') {
-                a_str++;
-            }
-#ifdef JP
-            /* remove quotes */
-            if (!strncmp(a_str, "『", 2)) {
-                a_str += 2;
-                char *s = strstr(a_str, "』");
-                *s = '\0';
-            }
-            /* remove 'of' */
-            else {
-                int l = strlen(a_str);
-                if (!strrncmp(a_str, "の", 2)) {
-                    a_str[l - 2] = '\0';
-                }
-            }
-#else
-            /* remove quotes */
-            if (a_str[0] == '\'') {
-                a_str += 1;
-                auto *s = angband_strchr(a_desc, '\'');
-                *s = '\0';
-            }
-            /* remove 'of ' */
-            else if (!strncmp(a_str, (const char *)"of ", 3)) {
-                a_str += 3;
-            }
-
-            str_tolower(a_str);
-#endif
-            const auto match_name = _(item_name.data() + 2, item_name.data());
-            if (cheat_xtra) {
-                msg_format("Matching artifact No.%d %s(%s)", enum2i(a_idx), a_desc, match_name);
-            }
-
-            std::vector<const char *> l = { a_str, artifact.name.data(), match_name };
-            for (size_t c = 0; c < l.size(); c++) {
-                if (!strcmp(str, l.at(c))) {
-                    len = strlen(l.at(c));
-                    if (len > mlen) {
-                        artifact_ids.push_back(a_idx);
-                        mlen = len;
-                    }
-                }
-            }
-        }
-    }
-
-    if (w_ptr->wizard && ((artifact_ids.size() > 1) || (ego_ids.size() > 1))) {
+    const auto wishing_fa_ids = allow_art ? find_wishing_fixed_artifact(player_ptr, pray_chars) : std::vector<FixedArtifactId>{};
+    if (w_ptr->wizard && ((wishing_fa_ids.size() > 1) || (ego_ids.size() > 1))) {
         msg_print(_("候補が多すぎる！", "Too many matches!"));
         return WishResultType::FAIL;
     }
 
-    if (artifact_ids.size() == 1) {
-        const auto a_idx = artifact_ids.back();
-        const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+    const auto &artifacts = ArtifactList::get_instance();
+    if (!wishing_fa_ids.empty()) {
+        const auto wishing_fa_id = *wishing_fa_ids.begin();
+        const auto &artifact = artifacts.get_artifact(wishing_fa_id);
         if (must || (ok_art && !artifact.is_generated)) {
-            (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
+            (void)create_named_art(player_ptr, wishing_fa_id, player_ptr->y, player_ptr->x);
         } else {
             wishing_puff_of_smoke();
         }
@@ -1108,10 +1087,10 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
     if (baseitem_ids.size() == 1) {
         const auto bi_id = baseitem_ids.back();
-        const auto &baseitem = baseitems_info[bi_id];
+        const auto &baseitem = BaseitemList::get_instance().get_baseitem(bi_id);
         auto a_idx = FixedArtifactId::NONE;
         if (baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
-            for (const auto &[a_idx_loop, artifact_loop] : artifacts_info) {
+            for (const auto &[a_idx_loop, artifact_loop] : artifacts) {
                 if (a_idx_loop == FixedArtifactId::NONE || artifact_loop.bi_key != baseitem.bi_key) {
                     continue;
                 }
@@ -1122,7 +1101,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         }
 
         if (a_idx != FixedArtifactId::NONE) {
-            const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+            const auto &artifact = artifacts.get_artifact(a_idx);
             if (must || (ok_art && !artifact.is_generated)) {
                 (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
             } else {
@@ -1134,13 +1113,14 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
         if (wish_randart) {
             if (must || ok_art) {
+                ItemEntity item;
                 do {
-                    o_ptr->prep(bi_id);
-                    ItemMagicApplier(player_ptr, o_ptr, baseitem.level, AM_SPECIAL | AM_NO_FIXED_ART).execute();
-                } while (!o_ptr->is_random_artifact() || o_ptr->is_ego() || o_ptr->is_cursed());
+                    item.generate(bi_id);
+                    ItemMagicApplier(player_ptr, &item, baseitem.level, AM_SPECIAL | AM_NO_FIXED_ART).execute();
+                } while (!item.is_random_artifact() || item.is_ego() || item.is_cursed());
 
-                if (o_ptr->is_random_artifact()) {
-                    drop_near(player_ptr, o_ptr, -1, player_ptr->y, player_ptr->x);
+                if (item.is_random_artifact()) {
+                    drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);
                 }
             } else {
                 wishing_puff_of_smoke();
@@ -1149,19 +1129,20 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         }
 
         WishResultType res = WishResultType::NOTHING;
+        ItemEntity item;
         if (allow_ego && (wish_ego || ego_ids.size() > 0)) {
             if (must || ok_ego) {
                 if (ego_ids.size() > 0) {
-                    o_ptr->prep(bi_id);
-                    o_ptr->ego_idx = ego_ids[0];
-                    apply_ego(o_ptr, player_ptr->current_floor_ptr->base_level);
+                    item.generate(bi_id);
+                    item.ego_idx = ego_ids[0];
+                    apply_ego(&item, player_ptr->current_floor_ptr->base_level);
                 } else {
                     auto max_roll = 1000;
                     auto i = 0;
                     for (i = 0; i < max_roll; i++) {
-                        o_ptr->prep(bi_id);
-                        ItemMagicApplier(player_ptr, o_ptr, baseitem.level, AM_GREAT | AM_NO_FIXED_ART).execute();
-                        if (o_ptr->is_random_artifact()) {
+                        item.generate(bi_id);
+                        ItemMagicApplier(player_ptr, &item, baseitem.level, AM_GREAT | AM_NO_FIXED_ART).execute();
+                        if (item.is_random_artifact()) {
                             continue;
                         }
 
@@ -1171,7 +1152,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
                         auto e_idx = EgoType::NONE;
                         for (auto e : ego_ids) {
-                            if (o_ptr->ego_idx == e) {
+                            if (item.ego_idx == e) {
                                 e_idx = e;
                                 break;
                             }
@@ -1194,9 +1175,9 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             res = WishResultType::EGO;
         } else {
             for (auto i = 0; i < 100; i++) {
-                o_ptr->prep(bi_id);
-                ItemMagicApplier(player_ptr, o_ptr, 0, AM_NO_FIXED_ART).execute();
-                if (!o_ptr->is_cursed()) {
+                item.generate(bi_id);
+                ItemMagicApplier(player_ptr, &item, 0, AM_NO_FIXED_ART).execute();
+                if (!item.is_cursed()) {
                     break;
                 }
             }
@@ -1204,16 +1185,16 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             res = WishResultType::NORMAL;
         }
 
-        if (blessed && wield_slot(player_ptr, o_ptr) != -1) {
-            o_ptr->art_flags.set(TR_BLESSED);
+        if (blessed && wield_slot(player_ptr, &item) != -1) {
+            item.art_flags.set(TR_BLESSED);
         }
 
-        if (fixed && wield_slot(player_ptr, o_ptr) != -1) {
-            o_ptr->art_flags.set(TR_IGNORE_ACID);
-            o_ptr->art_flags.set(TR_IGNORE_FIRE);
+        if (fixed && wield_slot(player_ptr, &item) != -1) {
+            item.art_flags.set(TR_IGNORE_ACID);
+            item.art_flags.set(TR_IGNORE_FIRE);
         }
 
-        (void)drop_near(player_ptr, o_ptr, -1, player_ptr->y, player_ptr->x);
+        (void)drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);
         return res;
     }
 

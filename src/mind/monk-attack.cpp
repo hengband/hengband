@@ -29,8 +29,6 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
-#include "timed-effect/player-confusion.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -112,9 +110,9 @@ static int select_blow(PlayerType *player_ptr, player_attack_type *pa_ptr, int m
             }
         } while ((min_level > player_ptr->lev) || (randint1(player_ptr->lev) < pa_ptr->ma_ptr->chance));
 
-        auto effects = player_ptr->effects();
-        auto is_stunned = effects->stun()->is_stunned();
-        auto is_confused = effects->confusion()->is_confused();
+        const auto effects = player_ptr->effects();
+        const auto is_stunned = effects->stun().is_stunned();
+        const auto is_confused = effects->confusion().is_confused();
         if ((pa_ptr->ma_ptr->min_level <= old_ptr->min_level) || is_stunned || is_confused) {
             pa_ptr->ma_ptr = old_ptr;
             continue;
@@ -150,7 +148,7 @@ static int process_monk_additional_effect(player_attack_type *pa_ptr, int *stun_
     }
 
     else if (pa_ptr->ma_ptr->effect == MA_SLOW) {
-        if (!(r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_MOVE) || angband_strchr("~#{}.UjmeEv$,DdsbBFIJQSXclnw!=?", r_ptr->d_char))) {
+        if (!(r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_MOVE) || angband_strchr("~#{}.UjmeEv$,DdsbBFIJQSXclnw!=?", r_ptr->symbol_definition.character))) {
             msg_format(_("%sの足首に関節蹴りをくらわした！", "You kick %s in the ankle."), pa_ptr->m_name);
             special_effect = MA_SLOW;
         } else {

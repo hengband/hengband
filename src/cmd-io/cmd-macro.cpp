@@ -24,7 +24,7 @@
 static void macro_dump(FILE **fpp, std::string_view filename)
 {
     constexpr auto mark = "Macro Dump";
-    const auto &path = path_build(ANGBAND_DIR_USER, filename);
+    const auto path = path_build(ANGBAND_DIR_USER, filename);
     if (!open_auto_dump(fpp, path, mark)) {
         return;
     }
@@ -111,7 +111,7 @@ static errr keymap_dump(std::string_view filename)
         mode = KEYMAP_MODE_ORIG;
     }
 
-    const auto &path = path_build(ANGBAND_DIR_USER, filename);
+    const auto path = path_build(ANGBAND_DIR_USER, filename);
     constexpr auto mark = "Keymap Dump";
     if (!open_auto_dump(&auto_dump_stream, path, mark)) {
         return -1;

@@ -18,7 +18,6 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/string-processor.h"
 #include "window/main-window-row-column.h"
@@ -285,10 +284,10 @@ static void print_health_monster_in_arena_for_wizard(PlayerType *player_ptr)
         term_putstr(col - 2, row + row_offset, 12, TERM_WHITE, "      /     ");
 
         auto &monster = player_ptr->current_floor_ptr->m_list[monster_list_index];
-        if (MonsterRace(monster.r_idx).is_valid()) {
+        if (monster.is_valid()) {
             const auto &monrace = monster.get_monrace();
-            term_putstr(col - 2, row + row_offset, 2, monrace.x_attr,
-                format("%c", monrace.x_char));
+            const auto &symbol_config = monrace.symbol_config;
+            term_putstr(col - 2, row + row_offset, 2, symbol_config.color, format("%c", symbol_config.character));
             term_putstr(col - 1, row + row_offset, 5, TERM_WHITE, format("%5d", monster.hp));
             term_putstr(col + 5, row + row_offset, 6, TERM_WHITE, format("%5d", monster.max_maxhp));
         }
@@ -385,7 +384,7 @@ void print_health(PlayerType *player_ptr, bool riding)
 
     const auto &monster = player_ptr->current_floor_ptr->m_list[*monster_idx];
 
-    if ((!monster.ml) || (player_ptr->effects()->hallucination()->is_hallucinated()) || monster.is_dead()) {
+    if ((!monster.ml) || (player_ptr->effects()->hallucination().is_hallucinated()) || monster.is_dead()) {
         term_putstr(col, row, max_width, TERM_WHITE, "[----------]");
         return;
     }

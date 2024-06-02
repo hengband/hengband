@@ -1,6 +1,9 @@
 #pragma once
 
 #include "system/h-type.h"
+#include <algorithm>
+#include <concepts>
+#include <type_traits>
 
 /**
  * @brief 2次元平面上のベクトルを表すクラス
@@ -27,6 +30,15 @@ struct Vector2D {
         this->y *= scalar;
         this->x *= scalar;
         return *this;
+    }
+
+    /*!
+     * @brief 反転したベクトルを生成する
+     * @return 反転ベクトル
+     */
+    constexpr Vector2D inverted() const
+    {
+        return Vector2D(-this->y, -this->x);
     }
 };
 
@@ -109,7 +121,57 @@ constexpr Vector2D<T> operator*(const Vector2D<T> &vector, T scalar)
 template <typename T>
 constexpr Point2D<T> operator+(const Point2D<T> &, const Point2D<T> &) = delete;
 
+/**
+ * @brief 長方形を表すクラス (左上/右下の座標を所有する)
+ */
+template <std::integral T>
+struct Rectangle2D {
+    Point2D<T> top_left;
+    Point2D<T> bottom_right;
+    constexpr Rectangle2D(const Point2D<T> &pos1, const Point2D<T> &pos2)
+        : top_left(std::min<T>(pos1.y, pos2.y), std::min<T>(pos1.x, pos2.x))
+        , bottom_right(std::max<T>(pos1.y, pos2.y), std::max<T>(pos1.x, pos2.x))
+    {
+    }
+
+    constexpr Rectangle2D(const Point2D<T> &center, const Vector2D<T> &vec)
+        : Rectangle2D(center + vec, center + vec.inverted())
+    {
+    }
+
+    constexpr Rectangle2D resized(T margin) const
+    {
+        const Vector2D<T> vec(margin, margin);
+        return { this->top_left + vec.inverted(), this->bottom_right + vec };
+    }
+
+    template <std::invocable<Point2D<T>> F>
+    void each_area(F &&f) const
+    {
+        for (auto y = this->top_left.y; y <= this->bottom_right.y; ++y) {
+            for (auto x = this->top_left.x; x <= this->bottom_right.x; ++x) {
+                f(Point2D<T>(y, x));
+            }
+        }
+    }
+
+    template <std::invocable<Point2D<T>> F>
+    void each_edge(F &&f) const
+    {
+        for (auto y = this->top_left.y; y <= this->bottom_right.y; ++y) {
+            f(Point2D<T>(y, top_left.x));
+            f(Point2D<T>(y, bottom_right.x));
+        }
+        for (auto x = this->top_left.x; x <= this->bottom_right.x; ++x) {
+            f(Point2D<T>(top_left.y, x));
+            f(Point2D<T>(bottom_right.y, x));
+        }
+    }
+};
+
 //! ゲームの平面マップ上の座標位置を表す構造体
 using Pos2D = Point2D<POSITION>;
 
 using Pos2DVec = Vector2D<POSITION>;
+
+using Rect2D = Rectangle2D<POSITION>;

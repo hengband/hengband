@@ -438,11 +438,11 @@ static void effect_monster_captured(PlayerType *player_ptr, EffectMonster *em_pt
  */
 ProcessResult effect_monster_capture(PlayerType *player_ptr, EffectMonster *em_ptr, std::optional<CapturedMonsterType *> cap_mon_ptr)
 {
-    const auto &quest_list = QuestList::get_instance();
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &quests = QuestList::get_instance();
+    const auto &floor = *player_ptr->current_floor_ptr;
 
-    auto quest_monster = floor_ptr->is_in_quest();
-    quest_monster &= (quest_list[floor_ptr->quest_number].type == QuestKindType::KILL_ALL);
+    auto quest_monster = floor.is_in_quest();
+    quest_monster &= (quests.get_quest(floor.quest_number).type == QuestKindType::KILL_ALL);
     quest_monster &= !em_ptr->m_ptr->is_pet();
 
     auto cannot_capture = quest_monster;
@@ -450,7 +450,7 @@ ProcessResult effect_monster_capture(PlayerType *player_ptr, EffectMonster *em_p
     cannot_capture |= em_ptr->r_ptr->misc_flags.has(MonsterMiscType::QUESTOR);
     cannot_capture |= em_ptr->r_ptr->population_flags.has(MonsterPopulationType::NAZGUL);
     cannot_capture |= em_ptr->r_ptr->population_flags.has(MonsterPopulationType::ONLY_ONE);
-    cannot_capture |= (em_ptr->m_ptr->parent_m_idx != 0);
+    cannot_capture |= em_ptr->m_ptr->has_parent();
     if (cannot_capture) {
         msg_format(_("%sには効果がなかった。", "%s is unaffected."), em_ptr->m_name);
         em_ptr->skipped = true;

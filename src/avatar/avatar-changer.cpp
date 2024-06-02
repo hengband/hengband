@@ -58,25 +58,25 @@ void AvatarChanger::change_virtue()
  */
 void AvatarChanger::change_virtue_non_beginner()
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *r_ptr = &m_ptr->get_monrace();
-    if (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::BEGINNER)) {
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    const auto &monrace = this->m_ptr->get_monrace();
+    if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::BEGINNER)) {
         return;
     }
 
-    if ((floor_ptr->dun_level == 0) && !this->player_ptr->ambush_flag && !floor_ptr->inside_arena) {
+    if (!floor.is_in_underground() && !this->player_ptr->ambush_flag && !floor.inside_arena) {
         chg_virtue(this->player_ptr, Virtue::VALOUR, -1);
-    } else if (r_ptr->level > floor_ptr->dun_level) {
-        if (randint1(10) <= (r_ptr->level - floor_ptr->dun_level)) {
+    } else if (monrace.level > floor.dun_level) {
+        if (randint1(10) <= (monrace.level - floor.dun_level)) {
             chg_virtue(this->player_ptr, Virtue::VALOUR, 1);
         }
     }
 
-    if (r_ptr->level > 60) {
+    if (monrace.level > 60) {
         chg_virtue(this->player_ptr, Virtue::VALOUR, 1);
     }
 
-    if (r_ptr->level >= 2 * (this->player_ptr->lev + 1)) {
+    if (monrace.level >= 2 * (this->player_ptr->lev + 1)) {
         chg_virtue(this->player_ptr, Virtue::VALOUR, 2);
     }
 }

@@ -8,7 +8,11 @@ enum class PlayerStunRank;
 class PlayerStun {
 public:
     PlayerStun() = default;
-    virtual ~PlayerStun() = default;
+    ~PlayerStun() = default;
+    PlayerStun(const PlayerStun &) = delete;
+    PlayerStun(PlayerStun &&) = delete;
+    PlayerStun &operator=(const PlayerStun &) = delete;
+    PlayerStun &operator=(PlayerStun &&) = delete;
 
     static PlayerStunRank get_rank(short value);
     static std::string_view get_stun_mes(PlayerStunRank stun_rank);

@@ -63,7 +63,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
-#include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
@@ -947,7 +946,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
         return false;
     }
 
-    if (player_ptr->effects()->blindness()->is_blind() || no_lite(player_ptr)) {
+    if (player_ptr->effects()->blindness().is_blind() || no_lite(player_ptr)) {
         if (pc.equals(PlayerClassType::FORCETRAINER)) {
             confirm_use_force(player_ptr, false);
         } else {

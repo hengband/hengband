@@ -33,7 +33,7 @@
  * A function for Auto-picker/destroyer
  * Examine whether the object matches to the list of keywords or not.
  */
-int find_autopick_list(PlayerType *player_ptr, ItemEntity *o_ptr)
+int find_autopick_list(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
     if (o_ptr->bi_key.tval() == ItemKindType::GOLD) {
         return -1;
@@ -308,7 +308,7 @@ byte get_string_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concpt
 /*!
  * @brief Search next line matches for o_ptr
  */
-void search_for_object(PlayerType *player_ptr, text_body_type *tb, ItemEntity *o_ptr, bool forward)
+void search_for_object(PlayerType *player_ptr, text_body_type *tb, const ItemEntity *o_ptr, bool forward)
 {
     autopick_type an_entry, *entry = &an_entry;
     int bypassed_cy = -1;

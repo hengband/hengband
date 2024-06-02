@@ -34,6 +34,12 @@ enum monster_lore_mode {
 };
 
 class MonsterRaceInfo;
+struct lore_msg {
+    lore_msg(std::string_view msg, byte color);
+    std::string msg;
+    byte color;
+};
+
 struct lore_type {
     lore_type(MonsterRaceId r_idx, monster_lore_mode mode);
 
@@ -47,10 +53,7 @@ struct lore_type {
     int count = 0;
     bool shoot = false;
     bool rocket = false;
-    int vn = 0;
-    byte color[96]{};
-    concptr vp[96]{};
-    char tmp_msg[96][96]{};
+    std::vector<lore_msg> lore_msgs;
     bool breath = false;
     bool magic = false;
     int drop_quantity = 0;

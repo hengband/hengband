@@ -1,8 +1,12 @@
 #pragma once
 
-#include "system/angband.h"
+#include "util/point-2d.h"
+#include <cstdint>
+#include <optional>
 
-extern byte display_autopick;
+extern uint8_t display_autopick;
 
+class DisplaySymbolPair;
 class PlayerType;
-void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap, char *tcp);
+DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos);
+std::optional<uint8_t> get_monochrome_display_color(PlayerType *player_ptr);

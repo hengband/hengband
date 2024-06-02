@@ -98,6 +98,7 @@ enum class QuestKindType : short {
 enum class FixedArtifactId : short;
 enum class MonsterRaceId : int16_t;
 class ArtifactType;
+class MonsterRaceInfo;
 class QuestType {
 public:
     QuestType() = default;
@@ -112,7 +113,7 @@ public:
     MONSTER_NUMBER cur_num = 0; /*!< 撃破したモンスターの数 / Number killed */
     MONSTER_NUMBER max_num = 0; /*!< 求められるモンスターの撃破数 / Number required */
 
-    FixedArtifactId reward_artifact_idx{}; /*!< クエスト対象のアイテムID / object index */
+    FixedArtifactId reward_fa_id{}; /*!< クエスト対象のアイテムID / object index */
     MONSTER_NUMBER num_mon = 0; /*!< QuestKindTypeがKILL_NUMBER時の目標撃破数 number of monsters on level */
 
     BIT_FLAGS flags = 0; /*!< クエストに関するフラグビット / quest flags */
@@ -124,6 +125,7 @@ public:
     static bool is_fixed(QuestId quest_idx);
     bool has_reward() const;
     ArtifactType &get_reward() const;
+    const MonsterRaceInfo &get_bounty() const;
 };
 
 class QuestList final {
@@ -132,9 +134,15 @@ public:
     using reverse_iterator = std::map<QuestId, QuestType>::reverse_iterator;
     using const_iterator = std::map<QuestId, QuestType>::const_iterator;
     using const_reverse_iterator = std::map<QuestId, QuestType>::const_reverse_iterator;
+    QuestList(const QuestList &) = delete;
+    QuestList(QuestList &&) = delete;
+    QuestList &operator=(const QuestList &) = delete;
+    QuestList &operator=(QuestList &&) = delete;
     static QuestList &get_instance();
-    QuestType &operator[](QuestId id);
-    const QuestType &operator[](QuestId id) const;
+
+    void initialize();
+    QuestType &get_quest(QuestId id);
+    const QuestType &get_quest(QuestId id) const;
     iterator begin();
     const_iterator begin() const;
     iterator end();
@@ -146,17 +154,14 @@ public:
     iterator find(QuestId id);
     const_iterator find(QuestId id) const;
     size_t size() const;
-    void initialize();
-    QuestList(const QuestList &) = delete;
-    QuestList(QuestList &&) = delete;
-    QuestList &operator=(const QuestList &) = delete;
-    QuestList &operator=(QuestList &&) = delete;
+    std::vector<QuestId> get_sorted_quest_ids() const;
 
 private:
-    bool initialized = false;
-    std::map<QuestId, QuestType> quest_data;
+    static QuestList instance;
+    std::map<QuestId, QuestType> quests;
     QuestList() = default;
-    ~QuestList() = default;
+
+    bool order_completed(QuestId id1, QuestId id2) const;
 };
 
 extern std::vector<std::string> quest_text_lines;
@@ -167,13 +172,13 @@ constexpr auto QUEST_TEST_LINES_MAX = 10;
 class FloorType;
 class ItemEntity;
 class PlayerType;
-void determine_random_questor(PlayerType *player_ptr, QuestType *q_ptr);
+void determine_random_questor(PlayerType *player_ptr, QuestType &quest);
 void record_quest_final_status(QuestType *q_ptr, PLAYER_LEVEL lev, QuestStatusType stat);
 void complete_quest(PlayerType *player_ptr, QuestId quest_num);
 void check_find_art_quest_completion(PlayerType *player_ptr, ItemEntity *o_ptr);
-void quest_discovery(QuestId q_idx);
+void quest_discovery(QuestId quest_id);
 void leave_quest_check(PlayerType *player_ptr);
 void leave_tower_check(PlayerType *player_ptr);
-void exe_enter_quest(PlayerType *player_ptr, QuestId quest_idx);
+void exe_enter_quest(PlayerType *player_ptr, QuestId quest_id);
 void do_cmd_quest(PlayerType *player_ptr);
-bool inside_quest(QuestId id);
+bool inside_quest(QuestId quest_id);

@@ -33,7 +33,6 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
@@ -102,7 +101,7 @@ void do_cmd_colors(PlayerType *player_ptr)
                 continue;
             }
 
-            const auto &path = path_build(ANGBAND_DIR_USER, *ask_result);
+            const auto path = path_build(ANGBAND_DIR_USER, *ask_result);
             if (!open_auto_dump(&auto_dump_stream, path, mark)) {
                 continue;
             }
@@ -242,7 +241,7 @@ void do_cmd_feeling(PlayerType *player_ptr)
         return;
     }
 
-    if (player_ptr->town_num && !floor.is_in_dungeon()) {
+    if (player_ptr->town_num && !floor.is_in_underground()) {
         if (towns_info[player_ptr->town_num].name == _("荒野", "wilderness")) {
             msg_print(_("何かありそうな荒野のようだ。", "Looks like a strange wilderness."));
             return;
@@ -252,7 +251,7 @@ void do_cmd_feeling(PlayerType *player_ptr)
         return;
     }
 
-    if (!floor.is_in_dungeon()) {
+    if (!floor.is_in_underground()) {
         msg_print(_("典型的な荒野のようだ。", "Looks like a typical wilderness."));
         return;
     }
@@ -277,7 +276,7 @@ void do_cmd_time(PlayerType *player_ptr)
     constexpr auto mes = _("%s日目, 時刻は%d:%02d %sです。", "This is day %s. The time is %d:%02d %s.");
     msg_format(mes, day_buf.data(), (hour % 12 == 0) ? 12 : (hour % 12), min, (hour < 12) ? "AM" : "PM");
     std::filesystem::path path;
-    if (!randint0(10) || player_ptr->effects()->hallucination()->is_hallucinated()) {
+    if (!randint0(10) || player_ptr->effects()->hallucination().is_hallucinated()) {
         path = path_build(ANGBAND_DIR_FILE, _("timefun_j.txt", "timefun.txt"));
     } else {
         path = path_build(ANGBAND_DIR_FILE, _("timenorm_j.txt", "timenorm.txt"));
@@ -293,8 +292,12 @@ void do_cmd_time(PlayerType *player_ptr)
     auto start = 9999;
     auto end = -9999;
     auto num = 0;
-    char buf[1024]{};
-    while (!angband_fgets(fff, buf, sizeof(buf))) {
+    while (true) {
+        const auto line_str = angband_fgets(fff);
+        if (!line_str) {
+            break;
+        }
+        const auto *buf = line_str->data();
         if (!buf[0] || (buf[0] == '#')) {
             continue;
         }

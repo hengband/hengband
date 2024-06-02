@@ -3,6 +3,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-kind-flags.h"
+#include "monster/monster-pain-describer.h"
 #include "monster/monster-status.h"
 #include "system/angband-system.h"
 #include "system/monster-race-info.h"
@@ -60,8 +61,8 @@ bool MonsterEntity::is_hostile_to_melee(const MonsterEntity &other) const
         return !this->is_pet() && !other.is_pet();
     }
 
-    const auto &monrace1 = monraces_info[this->r_idx];
-    const auto &monrace2 = monraces_info[other.r_idx];
+    const auto &monrace1 = this->get_monrace();
+    const auto &monrace2 = other.get_monrace();
     const auto is_m1_wild = monrace1.wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
     const auto is_m2_wild = monrace2.wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
     if (is_m1_wild && is_m2_wild) {
@@ -121,22 +122,22 @@ bool MonsterEntity::is_mimicry() const
         return true;
     }
 
-    const auto &r_ref = this->get_appearance_monrace();
+    const auto &monrace = this->get_appearance_monrace();
     const auto mimic_symbols = "/|\\()[]=$,.!?&`#%<>+~";
-    if (angband_strchr(mimic_symbols, r_ref.d_char) == nullptr) {
+    if (angband_strchr(mimic_symbols, monrace.symbol_definition.character) == nullptr) {
         return false;
     }
 
-    if (r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
         return true;
     }
 
-    return r_ref.behavior_flags.has(MonsterBehaviorType::NEVER_MOVE) || this->is_asleep();
+    return monrace.behavior_flags.has(MonsterBehaviorType::NEVER_MOVE) || this->is_asleep();
 }
 
 bool MonsterEntity::is_valid() const
 {
-    return MonsterRace(this->r_idx).is_valid();
+    return MonraceList::is_valid(this->r_idx);
 }
 
 MonsterRaceId MonsterEntity::get_real_monrace_id() const
@@ -287,6 +288,15 @@ bool MonsterEntity::is_explodable() const
 }
 
 /*!
+ * @brief モンスターに召喚主がいるか
+ * @return 召喚主がいるならtrue
+ */
+bool MonsterEntity::has_parent() const
+{
+    return this->parent_m_idx > 0;
+}
+
+/*!
  * @brief モンスターを撃破した際の述語メッセージを返す
  * @return 撃破されたモンスターの述語
  */
@@ -294,6 +304,16 @@ std::string MonsterEntity::get_died_message() const
 {
     const auto &monrace = this->get_monrace();
     return monrace.get_died_message();
+}
+
+/*!
+ * @brief モンスターにダメージを与えた際の述語メッセージを返す
+ * @return ダメージを受けたモンスターの述語
+ */
+std::optional<std::string> MonsterEntity::get_pain_message(std::string_view monster_name, int damage) const
+{
+    auto &monrace = this->get_monrace();
+    return MonsterPainDescriber(monrace.idx, monrace.symbol_definition.character, monster_name).describe(this->hp, damage, this->ml);
 }
 
 /*!
@@ -326,6 +346,48 @@ std::pair<TERM_COLOR, int> MonsterEntity::get_hp_bar_data() const
     return { TERM_RED, len };
 }
 
+std::optional<bool> MonsterEntity::order_pet_whistle(const MonsterEntity &other) const
+{
+    const auto is_ordered_name = this->order_pet_named(other);
+    if (is_ordered_name) {
+        return *is_ordered_name;
+    }
+
+    const auto &monrace1 = this->get_monrace();
+    const auto &monrace2 = other.get_monrace();
+    const auto is_ordered_race = monrace1.order_pet(monrace2);
+    if (is_ordered_race) {
+        return *is_ordered_race;
+    }
+
+    return this->order_pet_hp(other);
+}
+
+std::optional<bool> MonsterEntity::order_pet_dismission(const MonsterEntity &other) const
+{
+    const auto is_ordered_name = this->order_pet_named(other);
+    if (is_ordered_name) {
+        return *is_ordered_name;
+    }
+
+    if (!this->has_parent() && other.has_parent()) {
+        return true;
+    }
+
+    if (this->has_parent() && !other.has_parent()) {
+        return false;
+    }
+
+    const auto &monrace1 = this->get_monrace();
+    const auto &monrace2 = other.get_monrace();
+    const auto is_ordered_race = monrace1.order_pet(monrace2);
+    if (is_ordered_race) {
+        return *is_ordered_race;
+    }
+
+    return this->order_pet_hp(other);
+}
+
 /*!
  * @brief モンスターを敵に回す
  */
@@ -341,4 +403,30 @@ void MonsterEntity::set_hostile()
 std::string MonsterEntity::get_pronoun_of_summoned_kin() const
 {
     return this->get_monrace().get_pronoun_of_summoned_kin();
+}
+
+std::optional<bool> MonsterEntity::order_pet_named(const MonsterEntity &other) const
+{
+    if (this->is_named() && !other.is_named()) {
+        return true;
+    }
+
+    if (!this->is_named() && other.is_named()) {
+        return false;
+    }
+
+    return std::nullopt;
+}
+
+std::optional<bool> MonsterEntity::order_pet_hp(const MonsterEntity &other) const
+{
+    if (this->hp > other.hp) {
+        return true;
+    }
+
+    if (this->hp < other.hp) {
+        return false;
+    }
+
+    return std::nullopt;
 }

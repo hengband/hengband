@@ -33,7 +33,6 @@
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-acceleration.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
@@ -307,7 +306,7 @@ static void calc_blow_drain_mana(PlayerType *player_ptr, MonsterAttackPlayer *mo
 
 static void calc_blow_inertia(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
-    if (player_ptr->effects()->acceleration()->is_fast() || (player_ptr->pspeed >= 130)) {
+    if (player_ptr->effects()->acceleration().is_fast() || (player_ptr->pspeed >= 130)) {
         monap_ptr->damage = monap_ptr->damage * (randint1(4) + 4) / 9;
     }
 
@@ -564,7 +563,7 @@ void switch_monster_blow_to_player(PlayerType *player_ptr, MonsterAttackPlayer *
         if (one_in_(250)) {
             monap_ptr->obvious = true;
             const auto *floor_ptr = player_ptr->current_floor_ptr;
-            if (floor_ptr->is_in_dungeon() && (!floor_ptr->is_in_quest() || !QuestType::is_fixed(floor_ptr->quest_number))) {
+            if (floor_ptr->is_in_underground() && (!floor_ptr->is_in_quest() || !QuestType::is_fixed(floor_ptr->quest_number))) {
                 if (monap_ptr->damage > 23 || monap_ptr->explode) {
                     msg_print(_("カオスの力でダンジョンが崩れ始める！", "The dungeon tumbles by the chaotic power!"));
                     earthquake(player_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, 8, monap_ptr->m_idx);

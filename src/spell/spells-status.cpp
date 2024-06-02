@@ -25,7 +25,6 @@
 #include "main/sound-of-music.h"
 #include "mind/mind-force-trainer.h"
 #include "monster/monster-describer.h"
-#include "object/object-kind-hook.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/magic-eater-data-type.h"
@@ -50,8 +49,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/target-getter.h"
-#include "timed-effect/player-acceleration.h"
-#include "timed-effect/player-cut.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -382,7 +379,7 @@ bool cure_serious_wounds(PlayerType *player_ptr, DICE_NUMBER dice, DICE_SID side
         ident = true;
     }
 
-    if (bss.set_cut((player_ptr->effects()->cut()->current() / 2) - 50)) {
+    if (bss.set_cut((player_ptr->effects()->cut().current() / 2) - 50)) {
         ident = true;
     }
 
@@ -479,9 +476,10 @@ bool restore_mana(PlayerType *player_ptr, bool magic_eater)
         }
 
         auto sval = 0;
+        const auto &baseitems = BaseitemList::get_instance();
         for (auto &item : magic_eater_data->get_item_group(ItemKindType::ROD)) {
-            const auto bi_id = lookup_baseitem_id({ ItemKindType::ROD, sval });
-            item.charge -= ((item.count < 10) ? EATER_ROD_CHARGE * 3 : item.count * EATER_ROD_CHARGE / 3) * baseitems_info[bi_id].pval;
+            const auto &baseitem = baseitems.lookup_baseitem({ ItemKindType::ROD, sval });
+            item.charge -= ((item.count < 10) ? EATER_ROD_CHARGE * 3 : item.count * EATER_ROD_CHARGE / 3) * baseitem.pval;
             item.charge = std::max(item.charge, 0);
             ++sval;
         }

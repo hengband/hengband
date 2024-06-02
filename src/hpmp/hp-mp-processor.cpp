@@ -40,8 +40,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
-#include "timed-effect/player-cut.h"
-#include "timed-effect/player-poison.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -119,16 +117,16 @@ void process_player_hp_mp(PlayerType *player_ptr)
     int upkeep_factor = 0;
     int regen_amount = PY_REGEN_NORMAL;
     const auto effects = player_ptr->effects();
-    const auto player_poison = effects->poison();
-    if (player_poison->is_poisoned() && !is_invuln(player_ptr)) {
+    const auto &player_poison = effects->poison();
+    if (player_poison.is_poisoned() && !is_invuln(player_ptr)) {
         if (take_hit(player_ptr, DAMAGE_NOESCAPE, 1, _("毒", "poison")) > 0) {
             sound(SOUND_DAMAGE_OVER_TIME);
         }
     }
 
-    const auto player_cut = effects->cut();
-    if (player_cut->is_cut() && !is_invuln(player_ptr)) {
-        auto dam = player_cut->get_damage();
+    const auto &player_cut = effects->cut();
+    if (player_cut.is_cut() && !is_invuln(player_ptr)) {
+        const auto dam = player_cut.get_damage();
         if (take_hit(player_ptr, DAMAGE_NOESCAPE, dam, _("致命傷", "a mortal wound")) > 0) {
             sound(SOUND_DAMAGE_OVER_TIME);
         }
@@ -136,7 +134,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
 
     const PlayerRace race(player_ptr);
     if (race.life() == PlayerRaceLifeType::UNDEAD && race.tr_flags().has(TR_VUL_LITE)) {
-        if (!floor.is_in_dungeon() && !has_resist_lite(player_ptr) && !is_invuln(player_ptr) && w_ptr->is_daytime()) {
+        if (!floor.is_in_underground() && !has_resist_lite(player_ptr) && !is_invuln(player_ptr) && w_ptr->is_daytime()) {
             if ((floor.grid_array[player_ptr->y][player_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) {
                 msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
                 take_hit(player_ptr, DAMAGE_NOESCAPE, 1, _("日光", "sunlight"));
@@ -199,7 +197,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
     if (terrain.flags.has(TerrainCharacteristics::POISON_PUDDLE) && !is_invuln(player_ptr)) {
         constexpr auto mes_leviation = _("毒気を吸い込んだ！", "The gas poisons you!");
         constexpr auto mes_normal = _("に毒された！", "poisons you!");
-        if (deal_damege_by_feat(player_ptr, grid, mes_leviation, mes_normal, calc_acid_damage_rate,
+        if (deal_damege_by_feat(player_ptr, grid, mes_leviation, mes_normal, calc_pois_damage_rate,
                 [](PlayerType *player_ptr, int damage) {
                     if (!has_resist_pois(player_ptr)) {
                         (void)BadStatusSetter(player_ptr).mod_poison(static_cast<TIME_EFFECT>(damage));
@@ -276,9 +274,9 @@ void process_player_hp_mp(PlayerType *player_ptr)
 
     if (player_ptr->riding) {
         int damage;
-        auto auras = monraces_info[floor.m_list[player_ptr->riding].r_idx].aura_flags;
+        auto auras = floor.m_list[player_ptr->riding].get_monrace().aura_flags;
         if (auras.has(MonsterAuraType::FIRE) && !has_immune_fire(player_ptr)) {
-            damage = monraces_info[floor.m_list[player_ptr->riding].r_idx].level / 2;
+            damage = floor.m_list[player_ptr->riding].get_monrace().level / 2;
             if (race.tr_flags().has(TR_VUL_FIRE)) {
                 damage += damage / 3;
             }
@@ -295,7 +293,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
         }
 
         if (auras.has(MonsterAuraType::ELEC) && !has_immune_elec(player_ptr)) {
-            damage = monraces_info[floor.m_list[player_ptr->riding].r_idx].level / 2;
+            damage = floor.m_list[player_ptr->riding].get_monrace().level / 2;
             if (race.tr_flags().has(TR_VUL_ELEC)) {
                 damage += damage / 3;
             }
@@ -312,7 +310,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
         }
 
         if (auras.has(MonsterAuraType::COLD) && !has_immune_cold(player_ptr)) {
-            damage = monraces_info[floor.m_list[player_ptr->riding].r_idx].level / 2;
+            damage = floor.m_list[player_ptr->riding].get_monrace().level / 2;
             if (race.tr_flags().has(TR_VUL_COLD)) {
                 damage += damage / 3;
             }
@@ -410,10 +408,10 @@ void process_player_hp_mp(PlayerType *player_ptr)
         }
     }
 
-    if (player_poison->is_poisoned()) {
+    if (player_poison.is_poisoned()) {
         regen_amount = 0;
     }
-    if (player_cut->is_cut()) {
+    if (player_cut.is_cut()) {
         regen_amount = 0;
     }
     if (cave_no_regen) {

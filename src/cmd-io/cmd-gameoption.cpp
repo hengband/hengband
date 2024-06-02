@@ -25,6 +25,7 @@
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include "view/display-symbol.h"
 #include "world/world.h"
 
 #define OPT_NUM 15
@@ -153,7 +154,7 @@ static void do_cmd_options_autosave(PlayerType *player_ptr, concptr info)
         }
 
         case '?': {
-            (void)show_file(player_ptr, true, _("joption.txt#Autosave", "option.txt#Autosave"), 0, 0);
+            FileDisplayer(player_ptr->name).display(true, _("joption.txt#Autosave", "option.txt#Autosave"), 0, 0);
             term_clear();
             break;
         }
@@ -264,7 +265,7 @@ static void do_cmd_options_win(PlayerType *player_ptr)
                     c = 'X';
                 }
 
-                term_putch(35 + j * 5, i + 5, a, c);
+                term_putch(35 + j * 5, i + 5, { a, c });
             }
         }
 
@@ -294,7 +295,7 @@ static void do_cmd_options_win(PlayerType *player_ptr)
             set_window_flag(x, y);
             break;
         case '?':
-            (void)show_file(player_ptr, true, _("joption.txt#Window", "option.txt#Window"), 0, 0);
+            FileDisplayer(player_ptr->name).display(true, _("joption.txt#Window", "option.txt#Window"), 0, 0);
             term_clear();
             break;
         default:
@@ -394,7 +395,7 @@ static void do_cmd_options_cheat(PlayerType *player_ptr, concptr info)
             k = (k + 1) % n;
             break;
         case '?':
-            (void)show_file(player_ptr, true, std::string(_("joption.txt#", "option.txt#")).append(cheat_info[k].o_text), 0, 0);
+            FileDisplayer(player_ptr->name).display(true, std::string(_("joption.txt#", "option.txt#")).append(cheat_info[k].o_text), 0, 0);
             term_clear();
             break;
         default:
@@ -591,7 +592,7 @@ void do_cmd_options(PlayerType *player_ptr)
                 if (k == ESCAPE) {
                     break;
                 } else if (k == '?') {
-                    (void)show_file(player_ptr, true, _("joption.txt#Hitpoint", "option.txt#Hitpoint"), 0, 0);
+                    FileDisplayer(player_ptr->name).display(true, _("joption.txt#Hitpoint", "option.txt#Hitpoint"), 0, 0);
                     term_clear();
                 } else if (isdigit(k)) {
                     hitpoint_warn = D2I(k);
@@ -613,7 +614,7 @@ void do_cmd_options(PlayerType *player_ptr)
                 if (k == ESCAPE) {
                     break;
                 } else if (k == '?') {
-                    (void)show_file(player_ptr, true, _("joption.txt#Manapoint", "option.txt#Manapoint"), 0, 0);
+                    FileDisplayer(player_ptr->name).display(true, _("joption.txt#Manapoint", "option.txt#Manapoint"), 0, 0);
                     term_clear();
                 } else if (isdigit(k)) {
                     mana_warn = D2I(k);
@@ -625,7 +626,7 @@ void do_cmd_options(PlayerType *player_ptr)
             break;
         }
         case '?':
-            (void)show_file(player_ptr, true, _("joption.txt", "option.txt"), 0, 0);
+            FileDisplayer(player_ptr->name).display(true, _("joption.txt", "option.txt"), 0, 0);
             term_clear();
             break;
         default: {
@@ -746,7 +747,7 @@ void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr 
             break;
         }
         case '?': {
-            (void)show_file(player_ptr, true, std::string(_("joption.txt#", "option.txt#")).append(option_info[opt[k]].o_text), 0, 0);
+            FileDisplayer(player_ptr->name).display(true, std::string(_("joption.txt#", "option.txt#")).append(option_info[opt[k]].o_text), 0, 0);
             term_clear();
             break;
         }

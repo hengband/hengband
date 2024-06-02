@@ -16,7 +16,6 @@
 #include "target/target-checker.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
-#include "timed-effect/player-confusion.h"
 #include "timed-effect/timed-effects.h"
 #include "util/finalizer.h"
 #include "view/display-messages.h"
@@ -102,7 +101,7 @@ bool get_aim_dir(PlayerType *player_ptr, int *dp)
     }
 
     command_dir = dir;
-    if (player_ptr->effects()->confusion()->is_confused()) {
+    if (player_ptr->effects()->confusion().is_confused()) {
         dir = ddd[randint0(8)];
     }
 
@@ -154,7 +153,7 @@ std::optional<int> get_direction(PlayerType *player_ptr)
     const auto finalizer = util::make_finalizer([] {
         repeat_push(static_cast<short>(command_dir));
     });
-    const auto is_confused = player_ptr->effects()->confusion()->is_confused();
+    const auto is_confused = player_ptr->effects()->confusion().is_confused();
     if (is_confused && (randint0(100) < 75)) {
         dir = ddd[randint0(8)];
     }
@@ -252,7 +251,7 @@ bool get_rep_dir(PlayerType *player_ptr, int *dp, bool under)
     }
 
     command_dir = dir;
-    auto is_confused = player_ptr->effects()->confusion()->is_confused();
+    auto is_confused = player_ptr->effects()->confusion().is_confused();
     if (is_confused) {
         if (randint0(100) < 75) {
             dir = ddd[randint0(8)];

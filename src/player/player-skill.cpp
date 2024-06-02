@@ -290,7 +290,7 @@ void PlayerSkill::gain_riding_skill_exp_on_melee_attack(const MonsterRaceInfo *r
         return;
     }
 
-    auto riding_level = monraces_info[this->player_ptr->current_floor_ptr->m_list[this->player_ptr->riding].r_idx].level;
+    auto riding_level = this->player_ptr->current_floor_ptr->m_list[this->player_ptr->riding].get_monrace().level;
     int inc = 0;
 
     if ((now_exp / 200 - 5) < r_ptr->level) {
@@ -334,7 +334,7 @@ void PlayerSkill::gain_riding_skill_exp_on_fall_off_check(int dam)
         return;
     }
 
-    auto riding_level = monraces_info[this->player_ptr->current_floor_ptr->m_list[this->player_ptr->riding].r_idx].level;
+    auto riding_level = this->player_ptr->current_floor_ptr->m_list[this->player_ptr->riding].get_monrace().level;
 
     if ((dam / 2 + riding_level) <= (now_exp / 30 + 10)) {
         return;

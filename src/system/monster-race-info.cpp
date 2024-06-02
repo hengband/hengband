@@ -4,6 +4,23 @@
 #include "monster/horror-descriptions.h"
 #include <algorithm>
 
+MonsterRaceInfo::MonsterRaceInfo()
+    : idx(MonsterRaceId::PLAYER)
+{
+}
+
+/*!
+ * @brief 正当なモンスター (実際に存在するモンスター種族IDである)かどうかを調べる
+ * @details モンスター種族IDが MonsterRaceDefinitions に実在するもの(MonsterRaceId::PLAYERは除く)であるかどうかの用途の他、
+ * m_list 上の要素などの r_idx にMonsterRaceId::PLAYER を入れることで死亡扱いとして使われるのでその判定に使用する事もある
+ * @return 正当なものであれば true、そうでなければ false
+ * @todo 将来的に定義側のIDが廃止されたら有効フラグのフィールド変数を代わりに作る.
+ */
+bool MonsterRaceInfo::is_valid() const
+{
+    return this->idx != MonsterRaceId::PLAYER;
+}
+
 /*!
  * @brief エルドリッチホラーの形容詞種別を決める
  * @return エルドリッチホラーの形容詞
@@ -56,6 +73,27 @@ std::string MonsterRaceInfo::get_died_message() const
     return is_explodable ? _("は爆発して粉々になった。", " explodes into tiny shreds.") : _("を倒した。", " is destroyed.");
 }
 
+std::optional<bool> MonsterRaceInfo::order_pet(const MonsterRaceInfo &other) const
+{
+    if (this->kind_flags.has(MonsterKindType::UNIQUE) && other.kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        return true;
+    }
+
+    if (this->kind_flags.has_not(MonsterKindType::UNIQUE) && other.kind_flags.has(MonsterKindType::UNIQUE)) {
+        return false;
+    }
+
+    if (this->level > other.level) {
+        return true;
+    }
+
+    if (this->level < other.level) {
+        return false;
+    }
+
+    return std::nullopt;
+}
+
 /*!
  * @brief ユニークモンスターの撃破状態を更新する
  * @todo 状態変更はモンスター「定義」ではないので将来的に別クラスへ分離する
@@ -83,11 +121,25 @@ std::string MonsterRaceInfo::get_pronoun_of_summoned_kin() const
     }
 }
 
+/*!
+ * @brief 進化先モンスターを返す. 進化しなければプレイヤー (無効値の意)
+ * @return 進化先モンスター
+ */
+const MonsterRaceInfo &MonsterRaceInfo::get_next() const
+{
+    return MonraceList::get_instance()[this->next_r_idx];
+}
+
 const std::map<MonsterRaceId, std::set<MonsterRaceId>> MonraceList::unified_uniques = {
     { MonsterRaceId::BANORLUPART, { MonsterRaceId::BANOR, MonsterRaceId::LUPART } },
 };
 
 MonraceList MonraceList::instance{};
+
+bool MonraceList::is_valid(MonsterRaceId monrace_id)
+{
+    return monrace_id != MonsterRaceId::PLAYER;
+}
 
 const std::map<MonsterRaceId, std::set<MonsterRaceId>> &MonraceList::get_unified_uniques()
 {
@@ -119,6 +171,67 @@ MonsterRaceInfo &MonraceList::operator[](const MonsterRaceId r_idx)
 const MonsterRaceInfo &MonraceList::operator[](const MonsterRaceId r_idx) const
 {
     return monraces_info.at(r_idx);
+}
+
+std::map<MonsterRaceId, MonsterRaceInfo>::iterator MonraceList::begin()
+{
+    return monraces_info.begin();
+}
+
+std::map<MonsterRaceId, MonsterRaceInfo>::const_iterator MonraceList::begin() const
+{
+    return monraces_info.begin();
+}
+
+std::map<MonsterRaceId, MonsterRaceInfo>::iterator MonraceList::end()
+{
+    return monraces_info.end();
+}
+
+std::map<MonsterRaceId, MonsterRaceInfo>::const_iterator MonraceList::end() const
+{
+    return monraces_info.end();
+}
+
+std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator MonraceList::rbegin()
+{
+    return monraces_info.rbegin();
+}
+
+std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator MonraceList::rbegin() const
+{
+    return monraces_info.rbegin();
+}
+
+std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator MonraceList::rend()
+{
+    return monraces_info.rend();
+}
+
+std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator MonraceList::rend() const
+{
+    return monraces_info.rend();
+}
+
+MonsterRaceInfo &MonraceList::get_monrace(MonsterRaceId monrace_id)
+{
+    return monraces_info.at(monrace_id);
+}
+
+const MonsterRaceInfo &MonraceList::get_monrace(MonsterRaceId monrace_id) const
+{
+    return monraces_info.at(monrace_id);
+}
+
+const std::vector<MonsterRaceId> &MonraceList::get_valid_monrace_ids() const
+{
+    static std::vector<MonsterRaceId> valid_monraces;
+    if (!valid_monraces.empty()) {
+        return valid_monraces;
+    }
+
+    std::transform(++monraces_info.begin(), monraces_info.end(), std::back_inserter(valid_monraces), [](auto &x) { return x.first; });
+    return valid_monraces;
 }
 
 /*!
@@ -288,4 +401,83 @@ int MonraceList::calc_capture_value(const MonsterRaceId r_idx) const
     }
 
     return (*this)[r_idx].level * 50 + 1000;
+}
+
+bool MonraceList::order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed) const
+{
+    const auto &monrace1 = monraces_info[id1];
+    const auto &monrace2 = monraces_info[id2];
+    if (is_detailed) {
+        const auto pkills1 = monrace1.r_pkills;
+        const auto pkills2 = monrace2.r_pkills;
+        if (pkills1 < pkills2) {
+            return true;
+        }
+
+        if (pkills1 > pkills2) {
+            return false;
+        }
+
+        const auto tkills1 = monrace1.r_tkills;
+        const auto tkills2 = monrace2.r_tkills;
+        if (tkills1 < tkills2) {
+            return true;
+        }
+
+        if (tkills1 > tkills2) {
+            return false;
+        }
+    }
+
+    const auto level1 = monrace1.level;
+    const auto level2 = monrace2.level;
+    if (level1 < level2) {
+        return true;
+    }
+
+    if (level1 > level2) {
+        return false;
+    }
+
+    const auto exp1 = monrace1.mexp;
+    const auto exp2 = monrace2.mexp;
+    if (exp1 < exp2) {
+        return true;
+    }
+
+    if (exp1 > exp2) {
+        return false;
+    }
+
+    return id1 < id2;
+}
+
+bool MonraceList::MonraceList::order_level(MonsterRaceId id1, MonsterRaceId id2) const
+{
+    const auto &monrace1 = monraces_info[id1];
+    const auto &monrace2 = monraces_info[id2];
+    if (monrace1.level < monrace2.level) {
+        return true;
+    }
+
+    if (monrace1.level > monrace2.level) {
+        return false;
+    }
+
+    if (monrace1.kind_flags.has_not(MonsterKindType::UNIQUE) && monrace2.kind_flags.has(MonsterKindType::UNIQUE)) {
+        return true;
+    }
+
+    if (monrace1.kind_flags.has(MonsterKindType::UNIQUE) && monrace2.kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        return false;
+    }
+
+    return id1 < id2;
+}
+
+void MonraceList::reset_all_visuals()
+{
+    for (auto &[_, monrace] : monraces_info) {
+        monrace.symbol_config = monrace.symbol_definition;
+    }
 }

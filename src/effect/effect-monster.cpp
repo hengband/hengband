@@ -31,19 +31,16 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
-#include "monster/monster-pain-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
 #include "object-enchant/special-object-flags.h"
-#include "object/object-kind-hook.h"
 #include "spell-kind/blood-curse.h"
 #include "spell-kind/spells-polymorph.h"
 #include "spell-kind/spells-teleport.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/angband-system.h"
-#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -210,7 +207,8 @@ static void effect_damage_makes_sleep(PlayerType *player_ptr, EffectMonster *em_
     if (!em_ptr->note.empty() && em_ptr->seen_msg) {
         msg_format("%s^%s", em_ptr->m_name, em_ptr->note.data());
     } else if (em_ptr->see_s_msg) {
-        const auto pain_message = MonsterPainDescriber(player_ptr, em_ptr->m_ptr).describe(em_ptr->dam);
+        const auto m_name = monster_desc(player_ptr, em_ptr->m_ptr, 0);
+        const auto pain_message = em_ptr->m_ptr->get_pain_message(m_name, em_ptr->dam);
         if (pain_message) {
             msg_print(*pain_message);
         }
@@ -305,7 +303,8 @@ static bool deal_effect_damage_from_player(PlayerType *player_ptr, EffectMonster
     if (!em_ptr->note.empty() && em_ptr->seen) {
         msg_format(_("%s%s", "%s^%s"), em_ptr->m_name, em_ptr->note.data());
     } else if (em_ptr->known && (em_ptr->dam || !em_ptr->do_fear)) {
-        const auto pain_message = MonsterPainDescriber(player_ptr, em_ptr->m_ptr).describe(em_ptr->dam);
+        const auto m_name = monster_desc(player_ptr, em_ptr->m_ptr, 0);
+        const auto pain_message = em_ptr->m_ptr->get_pain_message(m_name, em_ptr->dam);
         if (pain_message) {
             msg_print(*pain_message);
         }
@@ -687,13 +686,10 @@ static void postprocess_by_taking_photo(PlayerType *player_ptr, EffectMonster *e
         return;
     }
 
-    ItemEntity *q_ptr;
-    ItemEntity forge;
-    q_ptr = &forge;
-    q_ptr->prep(lookup_baseitem_id({ ItemKindType::STATUE, SV_PHOTO }));
-    q_ptr->pval = em_ptr->photo;
-    q_ptr->ident |= (IDENT_FULL_KNOWN);
-    (void)drop_near(player_ptr, q_ptr, -1, player_ptr->y, player_ptr->x);
+    ItemEntity item({ ItemKindType::STATUE, SV_PHOTO });
+    item.pval = em_ptr->photo;
+    item.ident |= (IDENT_FULL_KNOWN);
+    (void)drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);
 }
 
 /*!
@@ -755,7 +751,7 @@ bool affect_monster(
     exe_affect_monster_by_damage(player_ptr, em_ptr);
 
     update_phase_out_stat(player_ptr, em_ptr);
-    const auto monster_is_valid = MonsterRace(em_ptr->m_ptr->r_idx).is_valid();
+    const auto monster_is_valid = em_ptr->m_ptr->is_valid();
     if (monster_is_valid) {
         update_monster(player_ptr, target_m_idx, false);
     }

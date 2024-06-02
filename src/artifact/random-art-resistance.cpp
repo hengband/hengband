@@ -74,25 +74,25 @@ static bool random_art_resistance(ItemEntity *o_ptr, tr_type tr_res_flag, bool s
 static bool switch_random_art_resistance(ItemEntity *o_ptr)
 {
     switch (o_ptr->artifact_bias) {
-    case BIAS_ACID:
+    case RandomArtifactBias::ACID:
         return random_art_resistance(o_ptr, TR_RES_ACID) || random_art_immunity(o_ptr, TR_IM_ACID);
-    case BIAS_ELEC:
+    case RandomArtifactBias::ELEC:
         return random_art_resistance(o_ptr, TR_RES_ELEC) || random_art_aura(o_ptr, TR_SH_ELEC) || random_art_immunity(o_ptr, TR_IM_ELEC);
-    case BIAS_FIRE:
+    case RandomArtifactBias::FIRE:
         return random_art_resistance(o_ptr, TR_RES_FIRE) || random_art_aura(o_ptr, TR_SH_FIRE) || random_art_immunity(o_ptr, TR_IM_FIRE);
-    case BIAS_COLD:
+    case RandomArtifactBias::COLD:
         return random_art_resistance(o_ptr, TR_RES_COLD) || random_art_aura(o_ptr, TR_SH_COLD) || random_art_immunity(o_ptr, TR_IM_COLD);
-    case BIAS_POIS:
+    case RandomArtifactBias::POIS:
         return random_art_resistance(o_ptr, TR_RES_POIS);
-    case BIAS_PRIESTLY:
+    case RandomArtifactBias::PRIESTLY:
         return random_art_resistance(o_ptr, TR_RES_CURSE);
-    case BIAS_WARRIOR:
+    case RandomArtifactBias::WARRIOR:
         return random_art_resistance(o_ptr, TR_RES_FEAR, one_in_(3)) || random_art_resistance(o_ptr, TR_NO_MAGIC, !one_in_(3));
-    case BIAS_RANGER:
+    case RandomArtifactBias::RANGER:
         return random_art_resistance(o_ptr, TR_RES_WATER) || random_art_resistance(o_ptr, TR_RES_POIS);
-    case BIAS_NECROMANTIC:
+    case RandomArtifactBias::NECROMANTIC:
         return random_art_resistance(o_ptr, TR_RES_NETHER) || random_art_resistance(o_ptr, TR_RES_POIS) || random_art_resistance(o_ptr, TR_RES_DARK);
-    case BIAS_CHAOS:
+    case RandomArtifactBias::CHAOS:
         return random_art_resistance(o_ptr, TR_RES_CHAOS) || random_art_resistance(o_ptr, TR_RES_CONF) || random_art_resistance(o_ptr, TR_RES_DISEN);
     default:
         return false;
@@ -108,8 +108,8 @@ static void set_weird_bias_acid(ItemEntity *o_ptr)
     }
 
     o_ptr->art_flags.set(TR_IM_ACID);
-    if (!o_ptr->artifact_bias) {
-        o_ptr->artifact_bias = BIAS_ACID;
+    if (!o_ptr->has_bias()) {
+        o_ptr->artifact_bias = RandomArtifactBias::ACID;
     }
 }
 
@@ -122,8 +122,8 @@ static void set_weird_bias_elec(ItemEntity *o_ptr)
     }
 
     o_ptr->art_flags.set(TR_IM_ELEC);
-    if (!o_ptr->artifact_bias) {
-        o_ptr->artifact_bias = BIAS_ELEC;
+    if (!o_ptr->has_bias()) {
+        o_ptr->artifact_bias = RandomArtifactBias::ELEC;
     }
 }
 
@@ -136,8 +136,8 @@ static void set_weird_bias_cold(ItemEntity *o_ptr)
     }
 
     o_ptr->art_flags.set(TR_IM_COLD);
-    if (!o_ptr->artifact_bias) {
-        o_ptr->artifact_bias = BIAS_COLD;
+    if (!o_ptr->has_bias()) {
+        o_ptr->artifact_bias = RandomArtifactBias::COLD;
     }
 }
 
@@ -150,26 +150,26 @@ static void set_weird_bias_fire(ItemEntity *o_ptr)
     }
 
     o_ptr->art_flags.set(TR_IM_FIRE);
-    if (!o_ptr->artifact_bias) {
-        o_ptr->artifact_bias = BIAS_FIRE;
+    if (!o_ptr->has_bias()) {
+        o_ptr->artifact_bias = RandomArtifactBias::FIRE;
     }
 }
 
 static void set_bias_pois(ItemEntity *o_ptr)
 {
     o_ptr->art_flags.set(TR_RES_POIS);
-    if (!o_ptr->artifact_bias && !one_in_(4)) {
-        o_ptr->artifact_bias = BIAS_POIS;
+    if (!o_ptr->has_bias() && !one_in_(4)) {
+        o_ptr->artifact_bias = RandomArtifactBias::POIS;
         return;
     }
 
-    if (!o_ptr->artifact_bias && one_in_(2)) {
-        o_ptr->artifact_bias = BIAS_NECROMANTIC;
+    if (!o_ptr->has_bias() && one_in_(2)) {
+        o_ptr->artifact_bias = RandomArtifactBias::NECROMANTIC;
         return;
     }
 
-    if (!o_ptr->artifact_bias && one_in_(2)) {
-        o_ptr->artifact_bias = BIAS_ROGUE;
+    if (!o_ptr->has_bias() && one_in_(2)) {
+        o_ptr->artifact_bias = RandomArtifactBias::ROGUE;
     }
 }
 
@@ -182,8 +182,8 @@ static void set_weird_bias_aura_elec(ItemEntity *o_ptr)
         random_resistance(o_ptr);
     }
 
-    if (!o_ptr->artifact_bias) {
-        o_ptr->artifact_bias = BIAS_ELEC;
+    if (!o_ptr->has_bias()) {
+        o_ptr->artifact_bias = RandomArtifactBias::ELEC;
     }
 }
 
@@ -196,8 +196,8 @@ static void set_weird_bias_aura_fire(ItemEntity *o_ptr)
         random_resistance(o_ptr);
     }
 
-    if (!o_ptr->artifact_bias) {
-        o_ptr->artifact_bias = BIAS_FIRE;
+    if (!o_ptr->has_bias()) {
+        o_ptr->artifact_bias = RandomArtifactBias::FIRE;
     }
 }
 
@@ -227,8 +227,8 @@ static void set_weird_bias_aura_cold(ItemEntity *o_ptr)
         random_resistance(o_ptr);
     }
 
-    if (!o_ptr->artifact_bias) {
-        o_ptr->artifact_bias = BIAS_COLD;
+    if (!o_ptr->has_bias()) {
+        o_ptr->artifact_bias = RandomArtifactBias::COLD;
     }
 }
 
@@ -264,8 +264,8 @@ void random_resistance(ItemEntity *o_ptr)
     case 6:
     case 13:
         o_ptr->art_flags.set(TR_RES_ACID);
-        if (!o_ptr->artifact_bias) {
-            o_ptr->artifact_bias = BIAS_ACID;
+        if (!o_ptr->has_bias()) {
+            o_ptr->artifact_bias = RandomArtifactBias::ACID;
         }
 
         break;
@@ -273,8 +273,8 @@ void random_resistance(ItemEntity *o_ptr)
     case 8:
     case 14:
         o_ptr->art_flags.set(TR_RES_ELEC);
-        if (!o_ptr->artifact_bias) {
-            o_ptr->artifact_bias = BIAS_ELEC;
+        if (!o_ptr->has_bias()) {
+            o_ptr->artifact_bias = RandomArtifactBias::ELEC;
         }
 
         break;
@@ -282,8 +282,8 @@ void random_resistance(ItemEntity *o_ptr)
     case 10:
     case 15:
         o_ptr->art_flags.set(TR_RES_FIRE);
-        if (!o_ptr->artifact_bias) {
-            o_ptr->artifact_bias = BIAS_FIRE;
+        if (!o_ptr->has_bias()) {
+            o_ptr->artifact_bias = RandomArtifactBias::FIRE;
         }
 
         break;
@@ -291,8 +291,8 @@ void random_resistance(ItemEntity *o_ptr)
     case 12:
     case 16:
         o_ptr->art_flags.set(TR_RES_COLD);
-        if (!o_ptr->artifact_bias) {
-            o_ptr->artifact_bias = BIAS_COLD;
+        if (!o_ptr->has_bias()) {
+            o_ptr->artifact_bias = RandomArtifactBias::COLD;
         }
 
         break;
@@ -303,8 +303,8 @@ void random_resistance(ItemEntity *o_ptr)
     case 19:
     case 20:
         o_ptr->art_flags.set(TR_RES_FEAR);
-        if (!o_ptr->artifact_bias && one_in_(3)) {
-            o_ptr->artifact_bias = BIAS_WARRIOR;
+        if (!o_ptr->has_bias() && one_in_(3)) {
+            o_ptr->artifact_bias = RandomArtifactBias::WARRIOR;
         }
 
         break;
@@ -321,8 +321,8 @@ void random_resistance(ItemEntity *o_ptr)
     case 25:
     case 26:
         o_ptr->art_flags.set(TR_RES_CONF);
-        if (!o_ptr->artifact_bias && one_in_(6)) {
-            o_ptr->artifact_bias = BIAS_CHAOS;
+        if (!o_ptr->has_bias() && one_in_(6)) {
+            o_ptr->artifact_bias = RandomArtifactBias::CHAOS;
         }
 
         break;
@@ -337,8 +337,8 @@ void random_resistance(ItemEntity *o_ptr)
     case 31:
     case 32:
         o_ptr->art_flags.set(TR_RES_NETHER);
-        if (!o_ptr->artifact_bias && one_in_(3)) {
-            o_ptr->artifact_bias = BIAS_NECROMANTIC;
+        if (!o_ptr->has_bias() && one_in_(3)) {
+            o_ptr->artifact_bias = RandomArtifactBias::NECROMANTIC;
         }
 
         break;
@@ -349,8 +349,8 @@ void random_resistance(ItemEntity *o_ptr)
     case 35:
     case 36:
         o_ptr->art_flags.set(TR_RES_CHAOS);
-        if (!o_ptr->artifact_bias && one_in_(2)) {
-            o_ptr->artifact_bias = BIAS_CHAOS;
+        if (!o_ptr->has_bias() && one_in_(2)) {
+            o_ptr->artifact_bias = RandomArtifactBias::CHAOS;
         }
 
         break;
@@ -363,14 +363,14 @@ void random_resistance(ItemEntity *o_ptr)
         break;
     case 40:
         o_ptr->art_flags.set(TR_RES_WATER);
-        if (!o_ptr->artifact_bias && one_in_(6)) {
-            o_ptr->artifact_bias = BIAS_RANGER;
+        if (!o_ptr->has_bias() && one_in_(6)) {
+            o_ptr->artifact_bias = RandomArtifactBias::RANGER;
         }
         break;
     case 41:
         o_ptr->art_flags.set(TR_RES_CURSE);
-        if (!o_ptr->artifact_bias && one_in_(3)) {
-            o_ptr->artifact_bias = BIAS_PRIESTLY;
+        if (!o_ptr->has_bias() && one_in_(3)) {
+            o_ptr->artifact_bias = RandomArtifactBias::PRIESTLY;
         }
         break;
     case 42:

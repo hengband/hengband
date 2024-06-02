@@ -108,7 +108,7 @@
       <DisableSpecificWarnings>4061;4062;4127;4244;4255;4365;4514;4668;4710;4820;4996;4774;5045;5264;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>..\..\src;curl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\src;libcurl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -118,7 +118,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalDependencies>winmm.lib;gdiplus.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;curl\lib\libcurl_a_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;gdiplus.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;libcurl\lib\libcurl_a_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ShowProgress>LinkVerbose</ShowProgress>
       <SubSystem>Windows</SubSystem>
     </Link>
@@ -141,7 +141,7 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <DisableSpecificWarnings>4127;4996;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>..\..\src;curl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\src;libcurl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -152,7 +152,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
       <ShowProgress>LinkVerbose</ShowProgress>
-      <AdditionalDependencies>winmm.lib;gdiplus.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;curl\lib\libcurl_a_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;gdiplus.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;libcurl\lib\libcurl_a_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -163,7 +163,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DisableSpecificWarnings>4244;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>..\..\src;curl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\src;libcurl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>None</DebugInformationFormat>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -176,7 +176,7 @@
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalDependencies>winmm.lib;gdiplus.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;curl\lib\libcurl_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;gdiplus.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;libcurl\lib\libcurl_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <OptimizeReferences>true</OptimizeReferences>
@@ -201,7 +201,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4244;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>..\..\src;curl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\src;libcurl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -210,7 +210,7 @@
       <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>winmm.lib;gdiplus.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;curl\lib\libcurl_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;gdiplus.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;libcurl\lib\libcurl_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -303,6 +303,8 @@
     <ClCompile Include="..\..\src\object-use\read\read-executor-factory.cpp" />
     <ClCompile Include="..\..\src\object-use\read\ring-power-read-executor.cpp" />
     <ClCompile Include="..\..\src\object-use\read\scroll-read-executor.cpp" />
+    <ClCompile Include="..\..\src\room\rooms-nest.cpp" />
+    <ClCompile Include="..\..\src\room\rooms-pit.cpp" />
     <ClCompile Include="..\..\src\smith\object-smith.cpp" />
     <ClCompile Include="..\..\src\smith\smith-info.cpp" />
     <ClCompile Include="..\..\src\smith\smith-tables.cpp" />
@@ -402,6 +404,7 @@
     <ClCompile Include="..\..\src\info-reader\feature-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\general-parser.cpp" />
     <ClCompile Include="..\..\src\info-reader\info-reader-util.cpp" />
+    <ClCompile Include="..\..\src\info-reader\json-reader-util.cpp" />
     <ClCompile Include="..\..\src\info-reader\baseitem-tokens-table.cpp" />
     <ClCompile Include="..\..\src\info-reader\baseitem-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\magic-reader.cpp" />
@@ -830,7 +833,7 @@
     <ClCompile Include="..\..\src\cmd-io\feeling-table.cpp" />
     <ClCompile Include="..\..\src\knowledge\lighting-level-table.cpp" />
     <ClCompile Include="..\..\src\knowledge\monster-group-table.cpp" />
-    <ClCompile Include="..\..\src\knowledge\object-group-table.cpp" />
+    <ClCompile Include="..\..\src\knowledge\item-group-table.cpp" />
     <ClCompile Include="..\..\src\melee\melee-postprocess.cpp" />
     <ClCompile Include="..\..\src\combat\shoot.cpp" />
     <ClCompile Include="..\..\src\mspell\mspell-attack\mspell-bolt.cpp" />
@@ -1023,6 +1026,8 @@
     <ClInclude Include="..\..\src\object-use\read\read-executor-factory.h" />
     <ClInclude Include="..\..\src\object-use\read\ring-power-read-executor.h" />
     <ClInclude Include="..\..\src\object-use\read\scroll-read-executor.h" />
+    <ClInclude Include="..\..\src\room\rooms-nest.h" />
+    <ClInclude Include="..\..\src\room\rooms-pit.h" />
     <ClInclude Include="..\..\src\smith\object-smith.h" />
     <ClInclude Include="..\..\src\smith\smith-info.h" />
     <ClInclude Include="..\..\src\smith\smith-tables.h" />
@@ -1186,6 +1191,7 @@
     <ClInclude Include="..\..\src\info-reader\feature-reader.h" />
     <ClInclude Include="..\..\src\info-reader\general-parser.h" />
     <ClInclude Include="..\..\src\info-reader\info-reader-util.h" />
+    <ClInclude Include="..\..\src\info-reader\json-reader-util.h" />
     <ClInclude Include="..\..\src\info-reader\baseitem-tokens-table.h" />
     <ClInclude Include="..\..\src\info-reader\baseitem-reader.h" />
     <ClInclude Include="..\..\src\info-reader\magic-reader.h" />
@@ -1715,7 +1721,7 @@
     <ClCompile Include="..\..\src\room\rooms-city.cpp" />
     <ClCompile Include="..\..\src\room\rooms-fractal.cpp" />
     <ClCompile Include="..\..\src\room\rooms-normal.cpp" />
-    <ClCompile Include="..\..\src\room\rooms-pit-nest.cpp" />
+    <ClCompile Include="..\..\src\room\pit-nest-util.cpp" />
     <ClCompile Include="..\..\src\room\rooms-special.cpp" />
     <ClCompile Include="..\..\src\room\rooms-trap.cpp" />
     <ClCompile Include="..\..\src\room\rooms-vault.cpp" />
@@ -1726,7 +1732,7 @@
     <ClCompile Include="..\..\src\player-info\self-info.cpp" />
     <ClCompile Include="..\..\src\io\signal-handlers.cpp" />
     <ClCompile Include="..\..\src\mind\mind-sniper.cpp" />
-    <ClCompile Include="..\..\src\util\sort.cpp" />
+    <ClCompile Include="..\..\src\target\target-sorter.cpp" />
     <ClCompile Include="..\..\src\spell\spells-diceroll.cpp" />
     <ClCompile Include="..\..\src\spell-kind\spells-floor.cpp" />
     <ClCompile Include="..\..\src\spell\spells-object.cpp" />
@@ -1810,7 +1816,7 @@
     <ClInclude Include="..\..\src\cmd-io\feeling-table.h" />
     <ClInclude Include="..\..\src\knowledge\lighting-level-table.h" />
     <ClInclude Include="..\..\src\knowledge\monster-group-table.h" />
-    <ClInclude Include="..\..\src\knowledge\object-group-table.h" />
+    <ClInclude Include="..\..\src\knowledge\item-group-table.h" />
     <ClInclude Include="..\..\src\melee\melee-postprocess.h" />
     <ClInclude Include="..\..\src\combat\shoot.h" />
     <ClInclude Include="..\..\src\core\show-file.h" />
@@ -1820,7 +1826,7 @@
     <ClInclude Include="..\..\src\util\rng-xoshiro.h" />
     <ClInclude Include="..\..\src\util\sha256.h" />
     <ClInclude Include="..\..\src\util\string-processor.h" />
-    <ClInclude Include="..\..\src\view\colored-char.h" />
+    <ClInclude Include="..\..\src\view\display-symbol.h" />
     <ClInclude Include="..\..\src\view\display-birth.h" />
     <ClInclude Include="..\..\src\view\display-inventory.h" />
     <ClInclude Include="..\..\src\view\display-lore-attacks.h" />
@@ -1993,7 +1999,7 @@
     <ClInclude Include="..\..\src\room\rooms-city.h" />
     <ClInclude Include="..\..\src\room\rooms-fractal.h" />
     <ClInclude Include="..\..\src\room\rooms-normal.h" />
-    <ClInclude Include="..\..\src\room\rooms-pit-nest.h" />
+    <ClInclude Include="..\..\src\room\pit-nest-util.h" />
     <ClInclude Include="..\..\src\room\rooms-special.h" />
     <ClInclude Include="..\..\src\room\rooms-trap.h" />
     <ClInclude Include="..\..\src\room\rooms-vault.h" />
@@ -2003,7 +2009,7 @@
     <ClInclude Include="..\..\src\core\scores.h" />
     <ClInclude Include="..\..\src\player-info\self-info.h" />
     <ClInclude Include="..\..\src\mind\mind-sniper.h" />
-    <ClInclude Include="..\..\src\util\sort.h" />
+    <ClInclude Include="..\..\src\target\target-sorter.h" />
     <ClInclude Include="..\..\src\spell\spells-diceroll.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-floor.h" />
     <ClInclude Include="..\..\src\spell\spells-object.h" />

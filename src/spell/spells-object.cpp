@@ -26,7 +26,6 @@
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-kind-hook.h"
 #include "perception/object-perception.h"
 #include "player-info/class-info.h"
 #include "racial/racial-android.h"
@@ -44,6 +43,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/probability-table.h"
 #include "view/display-messages.h"
+#include <variant>
 
 /*!
  * @brief 装備強化処理の失敗率定数 (千分率)
@@ -58,65 +58,88 @@ static constexpr std::array<int, 16> enchant_table = { { 0, 10, 50, 100, 200, 30
 enum class AmusementFlagType : byte {
     NOTHING, /* No restriction */
     NO_UNIQUE, /* Don't make the amusing object of uniques */
-    FIXED_ART, /* Make a fixed artifact based on the amusing object */
     MULTIPLE, /* Drop 1-3 objects for one type */
     PILE, /* Drop 1-99 pile objects for one type */
 };
 
+using AmusementRewardItem = std::variant<FixedArtifactId, BaseitemKey>;
+
 class AmuseDefinition {
 public:
-    AmuseDefinition(const BaseitemKey &key, PERCENTAGE prob, AmusementFlagType flag)
-        : key(key)
+    AmuseDefinition(const AmusementRewardItem &reward_item, PERCENTAGE prob, AmusementFlagType flag)
+        : reward_item(reward_item)
         , prob(prob)
         , flag(flag)
     {
     }
 
-    BaseitemKey key;
+    AmusementRewardItem reward_item;
     PERCENTAGE prob;
     AmusementFlagType flag;
 };
 
 static const std::array<AmuseDefinition, 13> amuse_info = { {
-    { { ItemKindType::BOTTLE }, 5, AmusementFlagType::NOTHING },
-    { { ItemKindType::JUNK }, 3, AmusementFlagType::MULTIPLE },
-    { { ItemKindType::SPIKE }, 10, AmusementFlagType::PILE },
-    { { ItemKindType::STATUE }, 15, AmusementFlagType::NOTHING },
-    { { ItemKindType::CORPSE }, 15, AmusementFlagType::NO_UNIQUE },
-    { { ItemKindType::SKELETON }, 10, AmusementFlagType::NO_UNIQUE },
-    { { ItemKindType::FIGURINE }, 10, AmusementFlagType::NO_UNIQUE },
-    { { ItemKindType::PARCHMENT }, 1, AmusementFlagType::NOTHING },
-    { { ItemKindType::POLEARM, SV_TSURIZAO }, 3, AmusementFlagType::NOTHING }, // Fishing Pole of Taikobo
-    { { ItemKindType::SWORD, SV_BROKEN_DAGGER }, 3, AmusementFlagType::FIXED_ART }, // Broken Dagger of Magician
-    { { ItemKindType::SWORD, SV_BROKEN_DAGGER }, 10, AmusementFlagType::NOTHING },
-    { { ItemKindType::SWORD, SV_BROKEN_SWORD }, 5, AmusementFlagType::NOTHING },
-    { { ItemKindType::SCROLL, SV_SCROLL_AMUSEMENT }, 10, AmusementFlagType::NOTHING },
+    { BaseitemKey{ ItemKindType::BOTTLE }, 5, AmusementFlagType::NOTHING },
+    { BaseitemKey{ ItemKindType::JUNK }, 3, AmusementFlagType::MULTIPLE },
+    { BaseitemKey{ ItemKindType::SPIKE }, 10, AmusementFlagType::PILE },
+    { BaseitemKey{ ItemKindType::STATUE }, 15, AmusementFlagType::NOTHING },
+    { BaseitemKey{ ItemKindType::CORPSE }, 15, AmusementFlagType::NO_UNIQUE },
+    { BaseitemKey{ ItemKindType::SKELETON }, 10, AmusementFlagType::NO_UNIQUE },
+    { BaseitemKey{ ItemKindType::FIGURINE }, 10, AmusementFlagType::NO_UNIQUE },
+    { BaseitemKey{ ItemKindType::PARCHMENT }, 1, AmusementFlagType::NOTHING },
+    { FixedArtifactId::TAIKOBO, 3, AmusementFlagType::NOTHING },
+    { FixedArtifactId::MAGICIAN, 3, AmusementFlagType::NOTHING },
+    { BaseitemKey{ ItemKindType::SWORD, SV_BROKEN_DAGGER }, 10, AmusementFlagType::NOTHING },
+    { BaseitemKey{ ItemKindType::SWORD, SV_BROKEN_SWORD }, 5, AmusementFlagType::NOTHING },
+    { BaseitemKey{ ItemKindType::SCROLL, SV_SCROLL_AMUSEMENT }, 10, AmusementFlagType::NOTHING },
 } };
 
-static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_art, const short bi_id)
-{
-    for (const auto &[a_idx, artifact] : artifacts_info) {
-        if (a_idx == FixedArtifactId::NONE) {
-            continue;
-        }
-
-        if (insta_art && !artifact.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
-            continue;
-        }
-
-        if (artifact.bi_key != baseitems_info[bi_id].bi_key) {
-            continue;
-        }
-
-        if (artifact.is_generated) {
-            continue;
-        }
-
-        return a_idx;
+struct AmusementRewardItemVisitor {
+    AmusementRewardItemVisitor(PlayerType *player_ptr, AmusementFlagType flag)
+        : player_ptr(player_ptr)
+        , flag(flag)
+    {
     }
 
-    return std::nullopt;
-}
+    std::optional<ItemEntity> operator()(const FixedArtifactId &fa_id) const
+    {
+        const auto &artifact = ArtifactList::get_instance().get_artifact(fa_id);
+        if (artifact.is_generated) {
+            return std::nullopt;
+        }
+
+        ItemEntity item(artifact.bi_key);
+        item.fa_id = fa_id;
+        ItemMagicApplier(player_ptr, &item, 1, AM_NO_FIXED_ART).execute();
+
+        return item;
+    }
+
+    std::optional<ItemEntity> operator()(const BaseitemKey &bi_key) const
+    {
+        ItemEntity item(bi_key);
+        ItemMagicApplier(player_ptr, &item, 1, AM_NO_FIXED_ART).execute();
+
+        if (this->flag == AmusementFlagType::NO_UNIQUE) {
+            if (monraces_info[i2enum<MonsterRaceId>(item.pval)].kind_flags.has(MonsterKindType::UNIQUE)) {
+                return std::nullopt;
+            }
+        }
+
+        if (this->flag == AmusementFlagType::MULTIPLE) {
+            item.number = randint1(3);
+        }
+
+        if (this->flag == AmusementFlagType::PILE) {
+            item.number = randint1(99);
+        }
+
+        return item;
+    }
+
+    PlayerType *player_ptr;
+    AmusementFlagType flag;
+};
 
 /*!
  * @brief 誰得ドロップを行う。
@@ -133,49 +156,18 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
 
     for (auto i = 0; i < num; i++) {
         auto am_ptr = pt.pick_one_at_random();
-        const auto bi_id = lookup_baseitem_id(am_ptr->key);
-        if (bi_id == 0) {
+
+        auto item = std::visit(AmusementRewardItemVisitor(player_ptr, am_ptr->flag), am_ptr->reward_item);
+        if (!item) {
             continue;
         }
 
-        const auto insta_art = baseitems_info[bi_id].gen_flags.has(ItemGenerationTraitType::INSTA_ART);
-        const auto flag = am_ptr->flag;
-        const auto fixed_art = flag == AmusementFlagType::FIXED_ART;
-        std::optional<FixedArtifactId> opt_a_idx;
-        if (insta_art || fixed_art) {
-            opt_a_idx = sweep_amusement_artifact(insta_art, bi_id);
-            if (!opt_a_idx) {
-                continue;
-            }
-        }
-
-        ItemEntity item;
-        item.prep(bi_id);
-        if (opt_a_idx) {
-            item.fixed_artifact_idx = *opt_a_idx;
-        }
-
-        ItemMagicApplier(player_ptr, &item, 1, AM_NO_FIXED_ART).execute();
-        if (flag == AmusementFlagType::NO_UNIQUE) {
-            if (monraces_info[i2enum<MonsterRaceId>(item.pval)].kind_flags.has(MonsterKindType::UNIQUE)) {
-                continue;
-            }
-        }
-
-        if (flag == AmusementFlagType::MULTIPLE) {
-            item.number = randint1(3);
-        }
-
-        if (flag == AmusementFlagType::PILE) {
-            item.number = randint1(99);
-        }
-
         if (known) {
-            object_aware(player_ptr, &item);
-            item.mark_as_known();
+            object_aware(player_ptr, &*item);
+            item->mark_as_known();
         }
 
-        (void)drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);
+        (void)drop_near(player_ptr, &*item, -1, player_ptr->y, player_ptr->x);
     }
 }
 
@@ -228,7 +220,7 @@ bool curse_armor(PlayerType *player_ptr)
 
     msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), item_name.data());
     chg_virtue(player_ptr, Virtue::ENCHANT, -5);
-    o_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
+    o_ptr->fa_id = FixedArtifactId::NONE;
     o_ptr->ego_idx = EgoType::BLASTED;
     o_ptr->to_a = 0 - randint1(5) - randint1(5);
     o_ptr->to_h = 0;
@@ -284,7 +276,7 @@ bool curse_weapon_object(PlayerType *player_ptr, bool force, ItemEntity *o_ptr)
     }
 
     chg_virtue(player_ptr, Virtue::ENCHANT, -5);
-    o_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
+    o_ptr->fa_id = FixedArtifactId::NONE;
     o_ptr->ego_idx = EgoType::SHATTERED;
     o_ptr->to_h = 0 - randint1(5) - randint1(5);
     o_ptr->to_d = 0 - randint1(5) - randint1(5);

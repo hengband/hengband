@@ -20,8 +20,6 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "timed-effect/player-blindness.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -92,7 +90,7 @@ int mon_damage_mod(PlayerType *player_ptr, MonsterEntity *m_ptr, int dam, bool i
     }
 
     if (is_psy_spear) {
-        if (!player_ptr->effects()->blindness()->is_blind() && is_seen(player_ptr, m_ptr)) {
+        if (!player_ptr->effects()->blindness().is_blind() && is_seen(player_ptr, m_ptr)) {
             msg_print(_("バリアを切り裂いた！", "The barrier is penetrated!"));
         }
 
@@ -393,11 +391,11 @@ void dispel_monster_status(PlayerType *player_ptr, MONSTER_IDX m_idx)
  * @brief モンスターの経験値取得処理
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 経験値を得るモンスターの参照ID
- * @param s_idx 撃破されたモンスター種族の参照ID
+ * @param monrace_id 撃破されたモンスター種族ID
  */
-void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s_idx)
+void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId monrace_id)
 {
-    if (m_idx <= 0 || !MonsterRace(s_idx).is_valid()) {
+    if (m_idx <= 0 || !MonraceList::is_valid(monrace_id)) {
         return;
     }
 
@@ -409,7 +407,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     }
 
     auto *r_ptr = &m_ptr->get_monrace();
-    auto *s_ptr = &monraces_info[s_idx];
+    auto *s_ptr = &monraces_info[monrace_id];
 
     if (AngbandSystem::get_instance().is_phase_out() || (r_ptr->next_exp == 0)) {
         return;
@@ -440,7 +438,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
 
     auto old_hp = m_ptr->hp;
     auto old_maxhp = m_ptr->max_maxhp;
-    auto old_r_idx = m_ptr->r_idx;
+    auto &old_monrace = m_ptr->get_monrace();
     auto old_sub_align = m_ptr->sub_align;
 
     /* Hack -- Reduce the racial counter of previous monster */
@@ -486,7 +484,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
 
     m_ptr->exp = 0;
     if (m_ptr->is_pet() || m_ptr->ml) {
-        auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
+        const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
         if (!ignore_unview || player_can_see_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
             if (is_hallucinated) {
                 MonsterRaceInfo *hallucinated_race = nullptr;
@@ -504,7 +502,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
         }
 
         if (!is_hallucinated) {
-            monraces_info[old_r_idx].r_can_evolve = true;
+            old_monrace.r_can_evolve = true;
         }
 
         /* Now you feel very close to this pet. */

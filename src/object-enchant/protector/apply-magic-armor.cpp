@@ -8,7 +8,6 @@
 #include "object-enchant/protector/apply-magic-armor.h"
 #include "artifact/random-art-generator.h"
 #include "inventory/inventory-slot-types.h"
-#include "object/object-kind-hook.h"
 #include "object/tval-types.h"
 #include "system/item-entity.h"
 #include "view/display-messages.h"

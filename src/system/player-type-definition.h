@@ -194,7 +194,6 @@ public:
     bool is_dead{}; /* Player is dead */
     bool now_damaged{};
     bool ambush_flag{};
-    BIT_FLAGS change_floor_mode{}; /*!<フロア移行処理に関するフラグ / Mode flags for changing floor */
 
     MONSTER_IDX riding{}; /* Riding on a monster of this index */
 

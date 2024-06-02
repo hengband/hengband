@@ -23,7 +23,6 @@
 #include "status/base-status.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "timed-effect/player-cut.h"
 #include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
@@ -33,8 +32,8 @@ void do_poly_wounds(PlayerType *player_ptr)
     int16_t hit_p = (player_ptr->mhp - player_ptr->chp);
     int16_t change = damroll(player_ptr->lev, 5);
     auto nasty_effect = one_in_(5);
-    auto player_cut = player_ptr->effects()->cut();
-    if (!player_cut->is_cut() && (hit_p == 0) && !nasty_effect) {
+    const auto &player_cut = player_ptr->effects()->cut();
+    if (!player_cut.is_cut() && (hit_p == 0) && !nasty_effect) {
         return;
     }
 

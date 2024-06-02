@@ -55,21 +55,24 @@ static void read_temporary_file(FILE *fff, FILE *tmpfff, int num_tag)
 {
     bool is_first_line = true;
     int next_tag = num_tag + 1;
-    char buf[2048]{};
-    while (!angband_fgets(tmpfff, buf, sizeof(buf))) {
+    while (true) {
+        const auto buf = angband_fgets(tmpfff);
+        if (!buf) {
+            break;
+        }
         if (is_first_line) {
-            if (strncmp(buf, tags[num_tag], strlen(tags[num_tag])) == 0) {
+            if (strncmp(buf->data(), tags[num_tag], strlen(tags[num_tag])) == 0) {
                 is_first_line = false;
             }
 
             continue;
         }
 
-        if (strncmp(buf, tags[next_tag], strlen(tags[next_tag])) == 0) {
+        if (strncmp(buf->data(), tags[next_tag], strlen(tags[next_tag])) == 0) {
             break;
         }
 
-        fprintf(fff, "%s\n", buf);
+        fprintf(fff, "%s\n", buf->data());
     }
 }
 
@@ -213,7 +216,7 @@ void exe_cmd_save_screen_html(const std::filesystem::path &path, bool need_messa
         screen_save();
     }
 
-    const auto &path_prf = path_build(ANGBAND_DIR_USER, "htmldump.prf");
+    const auto path_prf = path_build(ANGBAND_DIR_USER, "htmldump.prf");
     auto *tmpfff = angband_fopen(path_prf, FileOpenMode::READ);
     write_html_header(tmpfff, fff);
     screen_dump_lines(wid, hgt, fff);
@@ -239,7 +242,7 @@ static void exe_cmd_save_screen_html_with_naming()
         return;
     }
 
-    auto path = path_build(ANGBAND_DIR_USER, *filename);
+    const auto path = path_build(ANGBAND_DIR_USER, *filename);
     msg_print(nullptr);
     exe_cmd_save_screen_html(path, true);
 }
@@ -298,7 +301,7 @@ static bool do_cmd_save_screen_text(int wid, int hgt)
 {
     TERM_COLOR a = 0;
     auto c = ' ';
-    const auto &path = path_build(ANGBAND_DIR_USER, "dump.txt");
+    const auto path = path_build(ANGBAND_DIR_USER, "dump.txt");
     auto *fff = angband_fopen(path, FileOpenMode::WRITE);
     if (!check_screen_text_can_open(fff, path.string())) {
         return false;

@@ -34,7 +34,6 @@
 #include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
-#include "monster/monster-pain-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
@@ -61,7 +60,6 @@
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -569,7 +567,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     }
 
     /* Get projection path length */
-    projection_path path_g(player_ptr, project_length, player_ptr->y, player_ptr->x, ty, tx, PROJECT_PATH | PROJECT_THRU);
+    ProjectionPath path_g(player_ptr, project_length, player_ptr->get_position(), { ty, tx }, PROJECT_PATH | PROJECT_THRU);
     tdis = path_g.path_num() - 1;
 
     project_length = 0; /* reset to default */
@@ -671,12 +669,11 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
             /* The player can see the (on screen) missile */
             if (panel_contains(ny, nx) && player_can_see_bold(player_ptr, ny, nx)) {
-                const auto a = q_ptr->get_color();
-                const auto c = q_ptr->get_symbol();
+                const auto symbol = q_ptr->get_symbol();
 
                 /* Draw, Hilite, Fresh, Pause, Erase */
                 if (delay_factor > 0) {
-                    print_rel(player_ptr, c, a, ny, nx);
+                    print_rel(player_ptr, symbol, ny, nx);
                     move_cursor_relative(ny, nx);
                     term_fresh();
                     term_xtra(TERM_XTRA_DELAY, delay_factor);
@@ -767,7 +764,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                         msg_format(_("%sが%sに命中した。", "The %s hits %s."), item_name.data(), m_name.data());
 
                         if (m_ptr->ml) {
-                            if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
+                            if (!player_ptr->effects()->hallucination().is_hallucinated()) {
                                 monster_race_track(player_ptr, m_ptr->ap_r_idx);
                             }
 
@@ -837,15 +834,14 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
                     /* No death */
                     else {
+                        const auto m_name = monster_desc(player_ptr, m_ptr, 0);
                         /* STICK TO */
                         if (q_ptr->is_fixed_artifact() && (sniper_concent == 0)) {
-                            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-
                             stick_to = true;
                             msg_format(_("%sは%sに突き刺さった！", "%s^ is stuck in %s!"), item_name.data(), m_name.data());
                         }
 
-                        const auto pain_message = MonsterPainDescriber(player_ptr, m_ptr).describe(tdam);
+                        const auto pain_message = m_ptr->get_pain_message(m_name, tdam);
                         if (pain_message) {
                             msg_print(*pain_message);
                         }
@@ -856,7 +852,6 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                         }
 
                         if (fear && m_ptr->ml) {
-                            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
                             sound(SOUND_FLEE);
                             msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), m_name.data());
                         }
@@ -942,7 +937,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             if (!o_idx) {
                 msg_format(_("%sはどこかへ行った。", "The %s went somewhere."), item_name.data());
                 if (q_ptr->is_fixed_artifact()) {
-                    ArtifactsInfo::get_instance().get_artifact(j_ptr->fixed_artifact_idx).is_generated = false;
+                    ArtifactList::get_instance().get_artifact(j_ptr->fa_id).is_generated = false;
                 }
                 return;
             }

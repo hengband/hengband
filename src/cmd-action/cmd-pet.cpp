@@ -57,11 +57,9 @@
 #include "target/target-setter.h"
 #include "target/target-types.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
-#include "util/sort.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -76,34 +74,35 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
     auto cv = game_term->scr->cv;
     game_term->scr->cu = false;
     game_term->scr->cv = true;
-    std::vector<MONSTER_IDX> who;
-
-    /* Process the monsters (backwards) */
-    for (MONSTER_IDX pet_ctr = player_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--) {
-        const auto &m_ref = player_ptr->current_floor_ptr->m_list[pet_ctr];
-        if (m_ref.is_pet()) {
-            who.push_back(pet_ctr);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    std::vector<short> pet_index;
+    for (short pet_indice = floor.m_max - 1; pet_indice >= 1; pet_indice--) {
+        const auto &monster = floor.m_list[pet_indice];
+        if (monster.is_pet()) {
+            pet_index.push_back(pet_indice);
         }
     }
 
-    uint16_t dummy_why = 0;
-    ang_sort(player_ptr, who.data(), &dummy_why, who.size(), ang_sort_comp_pet_dismiss, ang_sort_swap_hook);
+    const auto riding_index = player_ptr->riding;
+    std::stable_sort(pet_index.begin(), pet_index.end(),
+        [&floor, riding_index](auto x, auto y) { return floor.order_pet_dismission(x, y, riding_index); });
 
     /* Process the monsters (backwards) */
     auto all_pets = false;
     auto num_dismissed = 0;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    for (auto i = 0U; i < who.size(); i++) {
-        const auto pet_ctr = who[i];
-        const auto &monster = player_ptr->current_floor_ptr->m_list[pet_ctr];
+    const int num_pet_index = std::ssize(pet_index);
+    for (auto i = 0; i < num_pet_index; i++) {
+        const auto pet_ctr = pet_index[i];
+        const auto &monster = floor.m_list[pet_ctr];
         auto delete_this = false;
-        const auto should_ask = (pet_ctr == player_ptr->riding) || monster.is_named();
+        const auto should_ask = (pet_ctr == riding_index) || monster.is_named();
         const auto friend_name = monster_desc(player_ptr, &monster, MD_ASSUME_VISIBLE);
         if (!all_pets) {
             health_track(player_ptr, pet_ctr);
             handle_stuff(player_ptr);
-            constexpr auto mes = _("%sを放しますか？ [Yes/No/Unnamed (%lu体)]", "Dismiss %s? [Yes/No/Unnamed (%lu remain)]");
-            msg_format(mes, friend_name.data(), who.size() - i);
+            constexpr auto mes = _("%sを放しますか？ [Yes/No/Unnamed (%d体)]", "Dismiss %s? [Yes/No/Unnamed (%d remain)]");
+            msg_format(mes, friend_name.data(), num_pet_index - i);
             if (monster.ml) {
                 move_cursor_relative(monster.fy, monster.fx);
             }
@@ -382,12 +381,12 @@ void do_cmd_pet(PlayerType *player_ptr)
     power_desc[num] = _("ペットを放す", "dismiss pets");
     powers[num++] = PET_DISMISS;
 
-    auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
-    auto taget_of_pet = monraces_info[player_ptr->current_floor_ptr->m_list[player_ptr->pet_t_m_idx].ap_r_idx].name.data();
-    auto target_of_pet_appearance = is_hallucinated ? _("何か奇妙な物", "something strange") : taget_of_pet;
-    auto mes = _("ペットのターゲットを指定 (現在：%s)", "specify a target of pet (now:%s)");
-    auto target_name = player_ptr->pet_t_m_idx > 0 ? target_of_pet_appearance : _("指定なし", "nothing");
-    auto target_ask = format(mes, target_name);
+    const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
+    const auto taget_of_pet = player_ptr->current_floor_ptr->m_list[player_ptr->pet_t_m_idx].get_appearance_monrace().name.data();
+    const auto target_of_pet_appearance = is_hallucinated ? _("何か奇妙な物", "something strange") : taget_of_pet;
+    const auto mes = _("ペットのターゲットを指定 (現在：%s)", "specify a target of pet (now:%s)");
+    const auto target_name = player_ptr->pet_t_m_idx > 0 ? target_of_pet_appearance : _("指定なし", "nothing");
+    const auto target_ask = format(mes, target_name);
     power_desc[num] = target_ask;
     powers[num++] = PET_TARGET;
     power_desc[num] = _("近くにいろ", "stay close");

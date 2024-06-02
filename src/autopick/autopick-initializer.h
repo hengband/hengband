@@ -1,3 +1,3 @@
 #pragma once
 
-void init_autopick(void);
+void init_autopick();

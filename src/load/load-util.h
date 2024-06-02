@@ -15,15 +15,14 @@ extern uint32_t x_check;
 extern byte kanji_code;
 
 void load_note(std::string_view msg);
-byte sf_get(void);
+byte sf_get();
 bool rd_bool();
 byte rd_byte();
 uint16_t rd_u16b();
 int16_t rd_s16b();
 uint32_t rd_u32b();
 int32_t rd_s32b();
-void rd_string(char *str, int max);
-void rd_string(std::string &str, int max);
+std::string rd_string();
 void strip_bytes(int n);
 bool loading_savefile_version_is_older_than(uint32_t version);
 

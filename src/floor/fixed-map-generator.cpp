@@ -23,11 +23,9 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/trg-types.h"
 #include "object/object-info.h"
-#include "object/object-kind-hook.h"
 #include "room/rooms-vault.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -41,9 +39,8 @@
 // PARSE_ERROR_MAXが既にあり扱い辛いのでここでconst宣言.
 static const int PARSE_CONTINUE = 255;
 
-qtwg_type *initialize_quest_generator_type(qtwg_type *qtwg_ptr, char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
+qtwg_type *initialize_quest_generator_type(qtwg_type *qtwg_ptr, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
 {
-    qtwg_ptr->buf = buf;
     qtwg_ptr->ymin = ymin;
     qtwg_ptr->xmin = xmin;
     qtwg_ptr->ymax = ymax;
@@ -81,16 +78,13 @@ static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const
         return;
     }
 
-    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+    const auto &artifact = ArtifactList::get_instance().get_artifact(a_idx);
     if (!artifact.is_generated && create_named_art(player_ptr, a_idx, *qtwg_ptr->y, *qtwg_ptr->x)) {
         return;
     }
 
-    const auto bi_id = lookup_baseitem_id({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
-    ItemEntity forge;
-    auto *q_ptr = &forge;
-    q_ptr->prep(bi_id);
-    drop_here(player_ptr->current_floor_ptr, q_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
+    ItemEntity item({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
+    drop_here(player_ptr->current_floor_ptr, &item, *qtwg_ptr->y, *qtwg_ptr->x);
 }
 
 static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
@@ -179,17 +173,15 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             g_ptr->mimic = g_ptr->feat;
             g_ptr->feat = conv_dungeon_feat(floor_ptr, letter[idx].trap);
         } else if (object_index) {
-            ItemEntity tmp_object;
-            auto *o_ptr = &tmp_object;
-            o_ptr->prep(object_index);
-            if (o_ptr->bi_key.tval() == ItemKindType::GOLD) {
+            ItemEntity item(object_index);
+            if (item.bi_key.tval() == ItemKindType::GOLD) {
                 coin_type = object_index - OBJ_GOLD_LIST;
-                make_gold(player_ptr, o_ptr);
+                make_gold(player_ptr, &item);
                 coin_type = 0;
             }
 
-            ItemMagicApplier(player_ptr, o_ptr, floor_ptr->base_level, AM_NO_FIXED_ART | AM_GOOD).execute();
-            drop_here(floor_ptr, o_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
+            ItemMagicApplier(player_ptr, &item, floor_ptr->base_level, AM_NO_FIXED_ART | AM_GOOD).execute();
+            drop_here(floor_ptr, &item, *qtwg_ptr->y, *qtwg_ptr->x);
         }
 
         generate_artifact(player_ptr, qtwg_ptr, letter[idx].artifact);
@@ -217,8 +209,8 @@ static bool parse_qtw_QQ(QuestType *q_ptr, char **zz, int num)
     q_ptr->max_num = (MONSTER_NUMBER)atoi(zz[5]);
     q_ptr->level = (DEPTH)atoi(zz[6]);
     q_ptr->r_idx = i2enum<MonsterRaceId>(atoi(zz[7]));
-    const auto a_idx = i2enum<FixedArtifactId>(atoi(zz[8]));
-    q_ptr->reward_artifact_idx = a_idx;
+    const auto fa_id = i2enum<FixedArtifactId>(atoi(zz[8]));
+    q_ptr->reward_fa_id = fa_id;
     q_ptr->dungeon = (DUNGEON_IDX)atoi(zz[9]);
 
     if (num > 10) {
@@ -230,7 +222,7 @@ static bool parse_qtw_QQ(QuestType *q_ptr, char **zz, int num)
         r_ref.misc_flags.set(MonsterMiscType::QUESTOR);
     }
 
-    if (a_idx == FixedArtifactId::NONE) {
+    if (fa_id == FixedArtifactId::NONE) {
         return true;
     }
 
@@ -253,26 +245,26 @@ static bool parse_qtw_QR(QuestType *q_ptr, char **zz, int num)
     }
 
     int count = 0;
-    FixedArtifactId reward_idx = FixedArtifactId::NONE;
-    const auto &artifacts = ArtifactsInfo::get_instance();
+    auto reward_idx = FixedArtifactId::NONE;
+    auto &artifacts = ArtifactList::get_instance();
     for (auto idx = 2; idx < num; idx++) {
-        const auto a_idx = i2enum<FixedArtifactId>(atoi(zz[idx]));
-        if (a_idx == FixedArtifactId::NONE) {
+        const auto fa_id = i2enum<FixedArtifactId>(atoi(zz[idx]));
+        if (fa_id == FixedArtifactId::NONE) {
             continue;
         }
 
-        if (artifacts.get_artifact(a_idx).is_generated) {
+        if (artifacts.get_artifact(fa_id).is_generated) {
             continue;
         }
 
         count++;
         if (one_in_(count)) {
-            reward_idx = a_idx;
+            reward_idx = fa_id;
         }
     }
 
     if (reward_idx != FixedArtifactId::NONE) {
-        q_ptr->reward_artifact_idx = reward_idx;
+        q_ptr->reward_fa_id = reward_idx;
         artifacts.get_artifact(reward_idx).gen_flags.set(ItemGenerationTraitType::QUESTITEM);
     } else {
         q_ptr->type = QuestKindType::KILL_ALL;
@@ -308,19 +300,19 @@ static int parse_qtw_Q(qtwg_type *qtwg_ptr, char **zz)
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    auto &quest_list = QuestList::get_instance();
-    auto *q_ptr = &(quest_list[i2enum<QuestId>(atoi(zz[0]))]);
-    if (parse_qtw_QQ(q_ptr, zz, num)) {
+    auto &quests = QuestList::get_instance();
+    auto &quest = quests.get_quest(i2enum<QuestId>(atoi(zz[0])));
+    if (parse_qtw_QQ(&quest, zz, num)) {
         return PARSE_ERROR_NONE;
     }
 
-    if (parse_qtw_QR(q_ptr, zz, num)) {
+    if (parse_qtw_QR(&quest, zz, num)) {
         return PARSE_ERROR_NONE;
     }
 
     if (zz[1][0] == 'N') {
         if (init_flags & (INIT_ASSIGN | INIT_SHOW_TEXT | INIT_NAME_ONLY)) {
-            q_ptr->name = zz[2];
+            quest.name = zz[2];
         }
 
         return PARSE_ERROR_NONE;

@@ -24,7 +24,6 @@
 #include "monster-floor/monster-move.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
-
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
@@ -34,7 +33,6 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
-#include "object/object-kind-hook.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-lite-types.h"
 #include "system/angband-exceptions.h"
@@ -91,7 +89,7 @@ void rd_item_old(ItemEntity *o_ptr)
 
     o_ptr->weight = rd_s16b();
 
-    o_ptr->fixed_artifact_idx = i2enum<FixedArtifactId>(rd_byte());
+    o_ptr->fa_id = i2enum<FixedArtifactId>(rd_byte());
 
     o_ptr->ego_idx = i2enum<EgoType>(rd_byte());
 
@@ -305,17 +303,15 @@ void rd_item_old(ItemEntity *o_ptr)
 
     o_ptr->feeling = rd_byte();
 
-    char buf[128];
-    rd_string(buf, sizeof(buf));
-    if (buf[0]) {
-        o_ptr->inscription.emplace(buf);
+    if (auto insc = rd_string();
+        !insc.empty()) {
+        o_ptr->inscription = std::move(insc);
     }
 
-    rd_string(buf, sizeof(buf));
-
     /*!< @todo 元々このif文には末尾に";"が付いていた、バグかもしれない */
-    if (buf[0]) {
-        o_ptr->randart_name.emplace(buf);
+    if (auto name = rd_string();
+        !name.empty()) {
+        o_ptr->randart_name = std::move(name);
     }
     {
         auto tmp32s = rd_s32b();
@@ -327,20 +323,13 @@ void rd_item_old(ItemEntity *o_ptr)
     }
 
     if (h_older_than(0, 4, 10) && (o_ptr->ego_idx == EgoType::TWILIGHT)) {
-        o_ptr->bi_id = lookup_baseitem_id({ ItemKindType::SOFT_ARMOR, SV_TWILIGHT_ROBE });
+        o_ptr->bi_id = BaseitemList::get_instance().lookup_baseitem_id({ ItemKindType::SOFT_ARMOR, SV_TWILIGHT_ROBE });
     }
 
     if (h_older_than(0, 4, 9)) {
         if (o_ptr->art_flags.has(TR_MAGIC_MASTERY)) {
             o_ptr->art_flags.reset(TR_MAGIC_MASTERY);
             o_ptr->art_flags.set(TR_DEC_MANA);
-        }
-    }
-
-    if (o_ptr->is_fixed_artifact()) {
-        const auto &artifact = o_ptr->get_fixed_artifact();
-        if (artifact.name.empty()) {
-            o_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
         }
     }
 
@@ -473,10 +462,9 @@ void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
     if (h_older_than(0, 1, 3)) {
         m_ptr->nickname.clear();
     } else {
-        char buf[128];
-        rd_string(buf, sizeof(buf));
-        if (buf[0]) {
-            m_ptr->nickname = buf;
+        auto nickname = rd_string();
+        if (!nickname.empty()) {
+            m_ptr->nickname = std::move(nickname);
         }
     }
 

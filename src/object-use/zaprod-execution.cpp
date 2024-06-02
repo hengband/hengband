@@ -25,7 +25,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-confusion.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -66,7 +65,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
 
     auto lev = o_ptr->get_baseitem().level;
     auto chance = this->player_ptr->skill_dev;
-    if (this->player_ptr->effects()->confusion()->is_confused()) {
+    if (this->player_ptr->effects()->confusion().is_confused()) {
         chance = chance / 2;
     }
 

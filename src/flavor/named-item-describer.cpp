@@ -216,7 +216,7 @@ static std::string describe_vowel(const ItemEntity &item, std::string_view basen
         vowel = is_a_vowel(modstr[0]);
         break;
     case '%':
-        vowel = is_a_vowel(baseitems_info[item.bi_id].name[0]);
+        vowel = is_a_vowel(item.get_baseitem().name[0]);
         break;
     default:
         vowel = is_a_vowel(basename[0]);
@@ -290,7 +290,7 @@ static std::string describe_unique_name_after_body_en(const ItemEntity &item, co
     }
 
     if (item.is_fixed_artifact()) {
-        const auto &artifact = ArtifactsInfo::get_instance().get_artifact(item.fixed_artifact_idx);
+        const auto &artifact = ArtifactList::get_instance().get_artifact(item.fa_id);
         ss << ' ' << artifact.name;
         return ss.str();
     }

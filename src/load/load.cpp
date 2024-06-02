@@ -73,9 +73,9 @@ static errr load_town_quest(PlayerType *player_ptr)
     auto [max_quests_load, max_rquests_load] = load_quest_info();
     analyze_quests(player_ptr, max_quests_load, max_rquests_load);
     if (h_older_than(1, 7, 0, 6)) {
-        auto &quest_list = QuestList::get_instance();
-        quest_list[i2enum<QuestId>(OLD_QUEST_WATER_CAVE)] = {};
-        quest_list[i2enum<QuestId>(OLD_QUEST_WATER_CAVE)].status = QuestStatusType::UNTAKEN;
+        auto &quests = QuestList::get_instance();
+        quests.get_quest(i2enum<QuestId>(OLD_QUEST_WATER_CAVE)) = {};
+        quests.get_quest(i2enum<QuestId>(OLD_QUEST_WATER_CAVE)).status = QuestStatusType::UNTAKEN;
     }
 
     load_wilderness_info(player_ptr);
@@ -191,6 +191,11 @@ static errr verify_encoded_checksum()
 static errr exe_reading_savefile(PlayerType *player_ptr)
 {
     rd_version_info();
+    if (!loading_savefile_version_is_older_than(SAVEFILE_VERSION + 1)) {
+        load_note(_("セーブデータのバージョンが新しすぎる", "Savefile version is too new"));
+        return -1;
+    }
+
     rd_dummy3();
     rd_system_info();
     load_lore();
@@ -238,7 +243,8 @@ static errr exe_reading_savefile(PlayerType *player_ptr)
 
     if (!h_older_than(1, 0, 9)) {
         std::vector<char> buf(SCREEN_BUF_MAX_SIZE);
-        rd_string(buf.data(), SCREEN_BUF_MAX_SIZE);
+        const auto dump_str = rd_string();
+        dump_str.copy(buf.data(), SCREEN_BUF_MAX_SIZE - 1);
         if (buf[0]) {
             screen_dump = string_make(buf.data());
         }

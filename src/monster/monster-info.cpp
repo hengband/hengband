@@ -27,7 +27,6 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
@@ -197,7 +196,7 @@ bool monster_has_hostile_align(PlayerType *player_ptr, MonsterEntity *m_ptr, int
 
 bool is_original_ap_and_seen(PlayerType *player_ptr, const MonsterEntity *m_ptr)
 {
-    return m_ptr->ml && !player_ptr->effects()->hallucination()->is_hallucinated() && m_ptr->is_original_ap();
+    return m_ptr->ml && !player_ptr->effects()->hallucination().is_hallucinated() && m_ptr->is_original_ap();
 }
 
 /*!

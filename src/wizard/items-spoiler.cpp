@@ -102,8 +102,7 @@ static std::string describe_weight(const ItemEntity &item)
  */
 static ItemEntity prepare_item_for_obj_desc(short bi_id)
 {
-    ItemEntity item;
-    item.prep(bi_id);
+    ItemEntity item(bi_id);
     item.ident |= IDENT_KNOWN;
     item.pval = 0;
     item.to_a = 0;
@@ -117,7 +116,7 @@ static ItemEntity prepare_item_for_obj_desc(short bi_id)
  */
 SpoilerOutputResultType spoil_obj_desc()
 {
-    const auto &path = path_build(ANGBAND_DIR_USER, "obj-desc.txt");
+    const auto path = path_build(ANGBAND_DIR_USER, "obj-desc.txt");
     std::ofstream ofs(path);
     if (!ofs) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
@@ -130,7 +129,7 @@ SpoilerOutputResultType spoil_obj_desc()
     for (const auto &[tval_list, name] : group_item_list) {
         std::vector<short> whats;
         for (auto tval : tval_list) {
-            for (const auto &baseitem : baseitems_info) {
+            for (const auto &baseitem : BaseitemList::get_instance()) {
                 if ((baseitem.bi_key.tval() == tval) && baseitem.gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {
                     whats.push_back(baseitem.idx);
                 }

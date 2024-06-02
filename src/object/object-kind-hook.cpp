@@ -25,7 +25,7 @@ static const int SV_BOOK_MIN_GOOD = 2;
  */
 bool kind_is_cloak(short bi_id)
 {
-    return baseitems_info[bi_id].bi_key.tval() == ItemKindType::CLOAK;
+    return BaseitemList::get_instance().get_baseitem(bi_id).bi_key.tval() == ItemKindType::CLOAK;
 }
 
 /*!
@@ -35,7 +35,7 @@ bool kind_is_cloak(short bi_id)
  */
 bool kind_is_polearm(short bi_id)
 {
-    return baseitems_info[bi_id].bi_key.tval() == ItemKindType::POLEARM;
+    return BaseitemList::get_instance().get_baseitem(bi_id).bi_key.tval() == ItemKindType::POLEARM;
 }
 
 /*!
@@ -45,7 +45,7 @@ bool kind_is_polearm(short bi_id)
  */
 bool kind_is_sword(short bi_id)
 {
-    const auto &baseitem = baseitems_info[bi_id];
+    const auto &baseitem = BaseitemList::get_instance().get_baseitem(bi_id);
     return (baseitem.bi_key.tval() == ItemKindType::SWORD) && (baseitem.bi_key.sval() > 2);
 }
 
@@ -56,7 +56,7 @@ bool kind_is_sword(short bi_id)
  */
 bool kind_is_book(short bi_id)
 {
-    const auto &baseitem = baseitems_info[bi_id];
+    const auto &baseitem = BaseitemList::get_instance().get_baseitem(bi_id);
     return baseitem.bi_key.is_spell_book();
 }
 
@@ -67,7 +67,7 @@ bool kind_is_book(short bi_id)
  */
 bool kind_is_good_book(short bi_id)
 {
-    const auto &baseitem = baseitems_info[bi_id];
+    const auto &baseitem = BaseitemList::get_instance().get_baseitem(bi_id);
     return baseitem.bi_key.is_high_level_book();
 }
 
@@ -78,7 +78,7 @@ bool kind_is_good_book(short bi_id)
  */
 bool kind_is_armor(short bi_id)
 {
-    return baseitems_info[bi_id].bi_key.tval() == ItemKindType::HARD_ARMOR;
+    return BaseitemList::get_instance().get_baseitem(bi_id).bi_key.tval() == ItemKindType::HARD_ARMOR;
 }
 
 /*!
@@ -88,7 +88,7 @@ bool kind_is_armor(short bi_id)
  */
 bool kind_is_hafted(short bi_id)
 {
-    return baseitems_info[bi_id].bi_key.tval() == ItemKindType::HAFTED;
+    return BaseitemList::get_instance().get_baseitem(bi_id).bi_key.tval() == ItemKindType::HAFTED;
 }
 
 /*!
@@ -98,7 +98,7 @@ bool kind_is_hafted(short bi_id)
  */
 bool kind_is_potion(short bi_id)
 {
-    return baseitems_info[bi_id].bi_key.tval() == ItemKindType::POTION;
+    return BaseitemList::get_instance().get_baseitem(bi_id).bi_key.tval() == ItemKindType::POTION;
 }
 
 /*!
@@ -108,7 +108,7 @@ bool kind_is_potion(short bi_id)
  */
 bool kind_is_boots(short bi_id)
 {
-    return baseitems_info[bi_id].bi_key.tval() == ItemKindType::BOOTS;
+    return BaseitemList::get_instance().get_baseitem(bi_id).bi_key.tval() == ItemKindType::BOOTS;
 }
 
 /*!
@@ -118,7 +118,7 @@ bool kind_is_boots(short bi_id)
  */
 bool kind_is_amulet(short bi_id)
 {
-    return baseitems_info[bi_id].bi_key.tval() == ItemKindType::AMULET;
+    return BaseitemList::get_instance().get_baseitem(bi_id).bi_key.tval() == ItemKindType::AMULET;
 }
 
 /*!
@@ -129,7 +129,7 @@ bool kind_is_amulet(short bi_id)
  */
 bool kind_is_good(short bi_id)
 {
-    const auto &baseitem = baseitems_info[bi_id];
+    const auto &baseitem = BaseitemList::get_instance().get_baseitem(bi_id);
     switch (baseitem.bi_key.tval()) {
         /* Armor -- Good unless damaged */
     case ItemKindType::HARD_ARMOR:
@@ -181,85 +181,4 @@ bool kind_is_good(short bi_id)
     default:
         return false;
     }
-}
-
-/*
- * @brief 特定のtvalとランダムなsvalの組み合わせからベースアイテムを選択するためのキャッシュを生成する
- * @return tvalをキーに、svalのリストを値とした辞書
- */
-static const std::map<ItemKindType, std::vector<int>> &create_baseitems_cache()
-{
-    static std::map<ItemKindType, std::vector<int>> cache;
-    for (const auto &baseitem : baseitems_info) {
-        if (!baseitem.is_valid()) {
-            continue;
-        }
-
-        const auto &bi_key = baseitem.bi_key;
-        const auto tval = bi_key.tval();
-        cache[tval].push_back(*bi_key.sval());
-    }
-
-    return cache;
-}
-
-/*
- * @brief tvalとbi_key.svalに対応する、BaseitenDefinitions のIDを返すためのキャッシュを生成する
- * @return tvalと(実在する)svalの組み合わせをキーに、ベースアイテムIDを値とした辞書
- */
-static const std::map<BaseitemKey, short> &create_baseitem_index_chache()
-{
-    static std::map<BaseitemKey, short> cache;
-    for (const auto &baseitem : baseitems_info) {
-        if (!baseitem.is_valid()) {
-            continue;
-        }
-
-        const auto &bi_key = baseitem.bi_key;
-        cache[bi_key] = baseitem.idx;
-    }
-
-    return cache;
-}
-
-/*!
- * @brief tvalとsvalに対応するベースアイテムのIDを検索する
- * @param key 検索したいベースアイテムの、tval/svalのペア (svalがnulloptの可能性はない)
- * @return tvalとsvalに対応するベースアイテムが存在すればそのID、存在しなければ0
- * @details 存在しないことはリファクタリング成果により考えにくく、自作の不存在例外を投げればいいはず.
- * 但し呼び出し側全部の処理を保証するのが面倒なので旧処理のままとする.
- */
-static short exe_lookup(const BaseitemKey &key)
-{
-    static const auto &cache = create_baseitem_index_chache();
-    const auto itr = cache.find(key);
-    if (itr == cache.end()) {
-        return 0;
-    }
-
-    return itr->second;
-}
-
-/*!
- * @brief ベースアイテムのtval/svalからIDを引いて返す
- * @param key tval/svalのペア、但しsvalはランダム (nullopt)の可能性がある
- * @return ベースアイテムID
- * @details 「tvalが不存在」という状況は事実上ないが、辞書探索のお作法として「有無チェック」を入れておく.
- * 万が一tvalがキャッシュになかったらベースアイテムID 0を返す.
- */
-short lookup_baseitem_id(const BaseitemKey &key)
-{
-    const auto sval = key.sval();
-    if (sval) {
-        return exe_lookup(key);
-    }
-
-    static const auto &cache = create_baseitems_cache();
-    const auto itr = cache.find(key.tval());
-    if (itr == cache.end()) {
-        return 0;
-    }
-
-    const auto &svals = itr->second;
-    return exe_lookup({ key.tval(), rand_choice(svals) });
 }

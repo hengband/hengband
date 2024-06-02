@@ -19,6 +19,7 @@
 #include "monster-race/race-wilderness-flags.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
+#include "view/display-symbol.h"
 #include <map>
 #include <set>
 #include <string>
@@ -62,14 +63,14 @@ public:
  */
 class MonsterRaceInfo {
 public:
-    MonsterRaceInfo() = default;
+    MonsterRaceInfo();
 
     MonsterRaceId idx{};
-    std::string name; //!< 名前データのオフセット(日本語) /  Name offset(Japanese)
+    std::string name = ""; //!< 名前データのオフセット(日本語) /  Name offset(Japanese)
 #ifdef JP
-    std::string E_name; //!< 名前データのオフセット(英語) /  Name offset(English)
+    std::string E_name = ""; //!< 名前データのオフセット(英語) /  Name offset(English)
 #endif
-    std::string text; //!< 思い出テキストのオフセット / Lore text offset
+    std::string text = ""; //!< 思い出テキストのオフセット / Lore text offset
     DICE_NUMBER hdice{}; //!< HPのダイス数 / Creatures hit dice count
     DICE_SID hside{}; //!< HPのダイス面数 / Creatures hit dice sides
     ARMOUR_CLASS ac{}; //!< アーマークラス / Armour Class
@@ -94,6 +95,8 @@ public:
     EnumClassFlagGroup<MonsterSpecialType> special_flags; //!< 能力フラグ(特殊) / Special Flags
     EnumClassFlagGroup<MonsterMiscType> misc_flags; //!< 能力フラグ（その他） / Speaking Other
     MonsterBlow blows[MAX_NUM_BLOWS]{}; //!< 打撃能力定義 / Up to four blows per round
+    DICE_NUMBER shoot_dam_dice{}; //!< 射撃ダメージダイス数　/ shoot damage dice count
+    DICE_SID shoot_dam_side{}; //!< 射撃ダメージダイス面数 / shoot damage dice sides
 
     //! 指定護衛リスト <モンスター種族ID,護衛数ダイス数,護衛数ダイス面>
     std::vector<std::tuple<MonsterRaceId, DICE_NUMBER, DICE_SID>> reinforces;
@@ -106,10 +109,8 @@ public:
     EXP next_exp{}; //!< 進化に必要な経験値
     DEPTH level{}; //!< レベル / Level of creature
     RARITY rarity{}; //!< レアリティ / Rarity of creature
-    TERM_COLOR d_attr{}; //!< デフォルトの表示色 / Default monster attribute
-    char d_char{}; //!< デフォルトの表示文字 / Default monster character
-    TERM_COLOR x_attr{}; //!< 設定した表示色(またはタイル位置Y) / Desired monster attribute
-    char x_char{}; //!< 設定した表示文字(またはタイル位置X) / Desired monster character
+    DisplaySymbol symbol_definition{}; //!< 定義上のシンボル (色/文字).
+    DisplaySymbol symbol_config{}; //!< 設定したシンボル (色/文字).
     MONSTER_NUMBER max_num{}; //!< 階に最大存在できる数 / Maximum population allowed per level
     MONSTER_NUMBER cur_num{}; //!< 階に現在いる数 / Monster population on current level
     FLOOR_IDX floor_id{}; //!< 存在している保存階ID /  Location of unique monster
@@ -138,12 +139,15 @@ public:
     REAL_TIME defeat_time{}; //!< 倒した時間(ユニーク用) / time at which defeated this race
     PERCENTAGE cur_hp_per{}; //!< 生成時現在HP率(%)
 
+    bool is_valid() const;
     const std::string &decide_horror_message() const;
     bool has_living_flag() const;
     bool is_explodable() const;
     std::string get_died_message() const;
+    std::optional<bool> order_pet(const MonsterRaceInfo &other) const;
     void kill_unique();
     std::string get_pronoun_of_summoned_kin() const;
+    const MonsterRaceInfo &get_next() const;
 };
 
 class MonraceList {
@@ -155,8 +159,20 @@ public:
     MonsterRaceInfo &operator[](const MonsterRaceId r_idx);
     const MonsterRaceInfo &operator[](const MonsterRaceId r_idx) const;
 
+    static bool is_valid(MonsterRaceId monrace_id);
     static const std::map<MonsterRaceId, std::set<MonsterRaceId>> &get_unified_uniques();
     static MonraceList &get_instance();
+    std::map<MonsterRaceId, MonsterRaceInfo>::iterator begin();
+    std::map<MonsterRaceId, MonsterRaceInfo>::const_iterator begin() const;
+    std::map<MonsterRaceId, MonsterRaceInfo>::iterator end();
+    std::map<MonsterRaceId, MonsterRaceInfo>::const_iterator end() const;
+    std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator rbegin();
+    std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator rbegin() const;
+    std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator rend();
+    std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator rend() const;
+    MonsterRaceInfo &get_monrace(MonsterRaceId monrace_id);
+    const MonsterRaceInfo &get_monrace(MonsterRaceId monrace_id) const;
+    const std::vector<MonsterRaceId> &get_valid_monrace_ids() const;
     bool can_unify_separate(const MonsterRaceId r_idx) const;
     void kill_unified_unique(const MonsterRaceId r_idx);
     bool is_selectable(const MonsterRaceId r_idx) const;
@@ -167,6 +183,10 @@ public:
     bool can_select_separate(const MonsterRaceId r_idx, const int hp, const int maxhp) const;
     int calc_figurine_value(const MonsterRaceId r_idx) const;
     int calc_capture_value(const MonsterRaceId r_idx) const;
+    bool order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed = false) const;
+    bool order_level(MonsterRaceId id1, MonsterRaceId id2) const;
+
+    void reset_all_visuals();
 
 private:
     MonraceList() = default;

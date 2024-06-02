@@ -224,11 +224,11 @@ PRICE object_value_real(const ItemEntity *o_ptr)
         break;
     }
     case ItemKindType::CAPTURE: {
-        auto capture_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-        if (!MonsterRace(capture_r_idx).is_valid()) {
+        auto captured_monrace_id = i2enum<MonsterRaceId>(o_ptr->pval);
+        if (!MonraceList::is_valid(captured_monrace_id)) {
             value = 1000L;
         } else {
-            value = ((monraces_info[capture_r_idx].level) * 50L + 1000);
+            value = ((monraces_info[captured_monrace_id].level) * 50L + 1000);
         }
         break;
     }

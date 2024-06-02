@@ -6,7 +6,6 @@
 
 #include "knowledge/knowledge-experiences.h"
 #include "core/show-file.h"
-#include "flavor/object-flavor.h"
 #include "game-option/cheat-options.h"
 #include "game-option/text-display-options.h"
 #include "io-dump/dump-util.h"
@@ -35,7 +34,7 @@ void do_cmd_knowledge_weapon_exp(PlayerType *player_ptr)
     for (auto tval : { ItemKindType::SWORD, ItemKindType::POLEARM, ItemKindType::HAFTED, ItemKindType::DIGGING, ItemKindType::BOW }) {
         for (int num = 0; num < 64; num++) {
             BaseitemKey bi_key(tval, num);
-            for (const auto &baseitem : baseitems_info) {
+            for (const auto &baseitem : BaseitemList::get_instance()) {
                 if (baseitem.bi_key != bi_key) {
                     continue;
                 }
@@ -47,8 +46,7 @@ void do_cmd_knowledge_weapon_exp(PlayerType *player_ptr)
 
                 SUB_EXP weapon_exp = player_ptr->weapon_exp[tval][num];
                 SUB_EXP weapon_max = player_ptr->weapon_exp_max[tval][num];
-                const auto tmp = strip_name(baseitem.idx);
-                fprintf(fff, "%-25s ", tmp.data());
+                fprintf(fff, "%-25s ", baseitem.stripped_name().data());
                 if (show_actual_value) {
                     fprintf(fff, "%4d/%4d ", weapon_exp, weapon_max);
                 }
@@ -69,7 +67,7 @@ void do_cmd_knowledge_weapon_exp(PlayerType *player_ptr)
     }
 
     angband_fclose(fff);
-    (void)show_file(player_ptr, true, file_name, 0, 0, _("武器の経験値", "Weapon Proficiency"));
+    FileDisplayer(player_ptr->name).display(true, file_name, 0, 0, _("武器の経験値", "Weapon Proficiency"));
     fd_kill(file_name);
 }
 
@@ -161,7 +159,7 @@ void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
     }
 
     angband_fclose(fff);
-    (void)show_file(player_ptr, true, file_name, 0, 0, _("魔法の経験値", "Spell Proficiency"));
+    FileDisplayer(player_ptr->name).display(true, file_name, 0, 0, _("魔法の経験値", "Spell Proficiency"));
     fd_kill(file_name);
 }
 
@@ -198,6 +196,6 @@ void do_cmd_knowledge_skill_exp(PlayerType *player_ptr)
     }
 
     angband_fclose(fff);
-    (void)show_file(player_ptr, true, file_name, 0, 0, _("技能の経験値", "Miscellaneous Proficiency"));
+    FileDisplayer(player_ptr->name).display(true, file_name, 0, 0, _("技能の経験値", "Miscellaneous Proficiency"));
     fd_kill(file_name);
 }

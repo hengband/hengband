@@ -1,3 +1,3 @@
 #pragma once
 
-void load_lore(void);
+void load_lore();

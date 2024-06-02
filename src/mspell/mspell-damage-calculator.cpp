@@ -452,42 +452,6 @@ static int monspell_damage_base(
 }
 
 /*!
- * @brief モンスターの使う射撃のダイス情報を返す /
- * @param r_ptr モンスター種族への参照ポインタ
- * @param dd ダイス数への参照ポインタ
- * @param ds ダイス面への参照ポインタ
- */
-void monspell_shoot_dice(MonsterRaceInfo *r_ptr, int *dd, int *ds)
-{
-    int p = -1; /* Position of SHOOT */
-    int n = 0; /* Number of blows */
-    const int max_blows = 4;
-    for (int m = 0; m < max_blows; m++) {
-        if (r_ptr->blows[m].method != RaceBlowMethodType::NONE) {
-            n++;
-        } /* Count blows */
-
-        if (r_ptr->blows[m].method == RaceBlowMethodType::SHOOT) {
-            p = m; /* Remember position */
-            break;
-        }
-    }
-
-    /* When full blows, use a first damage */
-    if (n == max_blows) {
-        p = 0;
-    }
-
-    if (p < 0) {
-        (*dd) = 0;
-        (*ds) = 0;
-    } else {
-        (*dd) = r_ptr->blows[p].d_dice;
-        (*ds) = r_ptr->blows[p].d_side;
-    }
-}
-
-/*!
  * @brief モンスターの使う呪文の威力を返す /
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param ms_type 呪文番号
@@ -502,10 +466,8 @@ int monspell_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, MONSTER_
     auto *r_ptr = &m_ptr->get_monrace();
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     int hp = (TYPE == DAM_ROLL) ? m_ptr->hp : m_ptr->max_maxhp;
-    int shoot_dd, shoot_ds;
 
-    monspell_shoot_dice(r_ptr, &shoot_dd, &shoot_ds);
-    return monspell_damage_base(player_ptr, ms_type, hp, rlev, monster_is_powerful(floor_ptr, m_idx), shoot_dd, shoot_ds, 0, TYPE);
+    return monspell_damage_base(player_ptr, ms_type, hp, rlev, monster_is_powerful(floor_ptr, m_idx), r_ptr->shoot_dam_dice, r_ptr->shoot_dam_side, 0, TYPE);
 }
 
 /*!
@@ -522,10 +484,8 @@ int monspell_race_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, Mon
     DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
     bool powerful = r_ptr->misc_flags.has(MonsterMiscType::POWERFUL);
     int hp = r_ptr->hdice * (ironman_nightmare ? 2 : 1) * r_ptr->hside;
-    int shoot_dd, shoot_ds;
 
-    monspell_shoot_dice(r_ptr, &shoot_dd, &shoot_ds);
-    return monspell_damage_base(player_ptr, ms_type, std::min(MONSTER_MAXHP, hp), rlev, powerful, shoot_dd, shoot_ds, 0, TYPE);
+    return monspell_damage_base(player_ptr, ms_type, std::min(MONSTER_MAXHP, hp), rlev, powerful, r_ptr->shoot_dam_dice, r_ptr->shoot_dam_side, 0, TYPE);
 }
 
 /*!

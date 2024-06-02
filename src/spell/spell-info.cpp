@@ -16,7 +16,6 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
@@ -139,7 +138,8 @@ PERCENTAGE spell_chance(PlayerType *player_ptr, SPELL_IDX spell, int16_t use_rea
     chance -= 3 * (player_ptr->lev - s_ptr->slevel);
     chance -= 3 * (adj_mag_stat[player_ptr->stat_index[mp_ptr->spell_stat]] - 1);
     if (player_ptr->riding) {
-        chance += (std::max(monraces_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level - player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 100 - 10, 0));
+        const auto &riding_monrace = player_ptr->current_floor_ptr->m_list[player_ptr->riding].get_monrace();
+        chance += (std::max(riding_monrace.level - player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 100 - 10, 0));
     }
 
     MANA_POINT need_mana = mod_need_mana(player_ptr, s_ptr->smana, spell, use_realm);
@@ -196,8 +196,7 @@ PERCENTAGE spell_chance(PlayerType *player_ptr, SPELL_IDX spell, int16_t use_rea
         chance = minfail;
     }
 
-    auto player_stun = player_ptr->effects()->stun();
-    chance += player_stun->get_magic_chance_penalty();
+    chance += player_ptr->effects()->stun().get_magic_chance_penalty();
     if (chance > 95) {
         chance = 95;
     }

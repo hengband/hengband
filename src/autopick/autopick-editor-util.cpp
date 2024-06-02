@@ -224,7 +224,7 @@ void kill_yank_chain(text_body_type *tb)
     tb->yank_eol = true;
 }
 
-void add_str_to_yank(text_body_type *tb, concptr str)
+void add_str_to_yank(text_body_type *tb, std::string_view str)
 {
     tb->yank_eol = false;
     tb->yank.emplace_back(str);
@@ -261,24 +261,18 @@ void copy_text_to_yank(text_body_type *tb)
         return;
     }
 
-    char buf[MAX_LINELEN];
-    int bx1 = std::min(tb->mx, tb->cx);
-    int bx2 = std::max(tb->mx, tb->cx);
+    const auto bx1 = std::min(tb->mx, tb->cx);
+    auto bx2 = std::max(tb->mx, tb->cx);
     if (bx2 > len) {
         bx2 = len;
     }
 
-    if (bx1 == 0 && bx2 == len) {
+    if ((bx1 == 0) && (bx2 == len)) {
         add_str_to_yank(tb, tb->lines_list[tb->cy]);
         add_str_to_yank(tb, "");
     } else {
-        int end = bx2 - bx1;
-        for (int i = 0; i < bx2 - bx1; i++) {
-            buf[i] = tb->lines_list[tb->cy][bx1 + i];
-        }
-
-        buf[end] = '\0';
-        add_str_to_yank(tb, buf);
+        const std::string_view buf(tb->lines_list[tb->cy]);
+        add_str_to_yank(tb, buf.substr(bx1, bx2 - bx1));
     }
 
     tb->mark = 0;

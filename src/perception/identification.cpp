@@ -148,7 +148,7 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
             desc.append(std::to_string((int)rad)).append(_(")を授ける。", ") forever."));
         }
         if (rad < 0) {
-            desc = _("それは明かりの半径を狭める(半径に-", "It decreases the radius of your light by");
+            desc = _("それは明かりの半径を狭める(半径に-", "It decreases the radius of your light by ");
             desc.append(std::to_string((int)-rad)).append(_(")。", "."));
         }
     }
@@ -799,10 +799,10 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
 
     if (bi_key == BaseitemKey(ItemKindType::STATUE, SV_PHOTO)) {
         auto statue_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-        auto *r_ptr = &monraces_info[statue_r_idx];
-        int namelen = strlen(r_ptr->name.data());
-        prt(format("%s: '", r_ptr->name.data()), 1, 15);
-        term_queue_bigchar(18 + namelen, 1, r_ptr->x_attr, r_ptr->x_char, 0, 0);
+        const auto &monrace = monraces_info[statue_r_idx];
+        int namelen = strlen(monrace.name.data());
+        prt(format("%s: '", monrace.name.data()), 1, 15);
+        term_queue_bigchar(18 + namelen, 1, { monrace.symbol_config, {} });
         prt("'", 1, (use_bigtile ? 20 : 19) + namelen);
     } else {
         prt(_("     アイテムの能力:", "     Item Attributes:"), 1, 15);

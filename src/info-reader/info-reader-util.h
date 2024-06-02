@@ -1,5 +1,6 @@
 #pragma once
 
+#include "system/angband.h"
 #include "util/bit-flags-calculator.h"
 #include <concepts>
 #include <map>
@@ -7,6 +8,7 @@
 #include <string>
 #include <string_view>
 #include <unordered_map>
+#include <utility>
 
 /*
  * Size of memory reserved for initialization of some arrays
@@ -20,6 +22,8 @@ RandomArtActType grab_one_activation_flag(std::string_view what);
 void append_english_text(std::string &text, std::string_view add);
 #endif
 
+errr info_set_dice(std::string_view dice_str, DICE_NUMBER &dd, DICE_SID &ds);
+
 /// @note clang-formatによるconceptの整形が安定していないので抑制しておく
 // clang-format off
 /*!
@@ -28,7 +32,7 @@ void append_english_text(std::string &text, std::string_view add);
  */
 template <typename T, typename Key>
 concept DictIndexedBy = requires(T t, Key k) {
-    std::same_as<typename T::key_type, Key>;
+    requires std::is_constructible_v<typename T::key_type, std::remove_cvref_t<Key>>;
     typename T::mapped_type;
     { t.find(k) } -> std::same_as<typename T::iterator>;
     { t.find(k)->second } -> std::convertible_to<typename T::mapped_type>;

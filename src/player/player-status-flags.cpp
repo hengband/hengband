@@ -42,7 +42,6 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
@@ -499,23 +498,21 @@ bool has_kill_wall(PlayerType *player_ptr)
  * @brief プレイヤーが壁通過を持っているかを返す。
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 持っていたらTRUE
- * @details
- * * 時限で幽体化、壁抜けをもつか種族幽霊ならばひとまずTRUE。
- * * 但し騎乗中は乗騎が壁抜けを持っていなければ不能になる。
+ * @details 騎乗状態でなければ、時限または種族特性で壁抜けできるか否か.
+ * 騎乗状態ならば、そのモンスターとプレイヤーが両方壁抜けできるか否か.
  */
 bool has_pass_wall(PlayerType *player_ptr)
 {
-    if (player_ptr->wraith_form || player_ptr->tim_pass_wall || PlayerRace(player_ptr).equals(PlayerRaceType::SPECTRE)) {
-        return true;
-    }
-
+    auto can_player_pass_wall = player_ptr->wraith_form > 0;
+    can_player_pass_wall |= player_ptr->tim_pass_wall > 0;
+    can_player_pass_wall |= PlayerRace(player_ptr).equals(PlayerRaceType::SPECTRE);
     if (player_ptr->riding == 0) {
-        return false;
+        return can_player_pass_wall;
     }
 
     const auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-    const auto &monrace = monraces_info[monster.r_idx];
-    return monrace.feature_flags.has(MonsterFeatureType::PASS_WALL);
+    const auto &monrace = monster.get_monrace();
+    return can_player_pass_wall && monrace.feature_flags.has(MonsterFeatureType::PASS_WALL);
 }
 
 /*!
@@ -696,7 +693,7 @@ BIT_FLAGS has_no_ac(PlayerType *player_ptr)
 
 BIT_FLAGS has_invuln_arrow(PlayerType *player_ptr)
 {
-    if (player_ptr->effects()->blindness()->is_blind()) {
+    if (player_ptr->effects()->blindness().is_blind()) {
         return 0;
     }
 
@@ -1001,7 +998,7 @@ BIT_FLAGS has_levitation(PlayerType *player_ptr)
     }
 
     const auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-    const auto &monrace = monraces_info[monster.r_idx];
+    const auto &monrace = monster.get_monrace();
     return monrace.feature_flags.has(MonsterFeatureType::CAN_FLY) ? FLAG_CAUSE_RIDING : FLAG_CAUSE_NONE;
 }
 
@@ -1012,7 +1009,7 @@ bool has_can_swim(PlayerType *player_ptr)
     }
 
     const auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-    const auto &monrace = monraces_info[monster.r_idx];
+    const auto &monrace = monster.get_monrace();
     return monrace.feature_flags.has_any_of({ MonsterFeatureType::CAN_SWIM, MonsterFeatureType::AQUATIC });
 }
 

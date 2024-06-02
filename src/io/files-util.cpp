@@ -40,13 +40,11 @@ std::filesystem::path ANGBAND_DIR_HELP; //!< Help files (normal) for the online 
 std::filesystem::path ANGBAND_DIR_INFO; //!< Help files (spoilers) for the online help (ascii) These files are portable between platforms
 std::filesystem::path ANGBAND_DIR_PREF; //!< Default user "preference" files (ascii) These files are rarely portable between platforms
 std::filesystem::path ANGBAND_DIR_SAVE; //!< Savefiles for current characters (binary)
-std::filesystem::path ANGBAND_DIR_DEBUG_SAVE; //*< Savefiles for debug data
 std::filesystem::path ANGBAND_DIR_USER; //!< User "preference" files (ascii) These files are rarely portable between platforms
 std::filesystem::path ANGBAND_DIR_XTRA; //!< Various extra files (binary) These files are rarely portable between platforms
 
 std::filesystem::path savefile;
-std::string savefile_base;
-std::filesystem::path debug_savefile;
+std::filesystem::path savefile_base;
 
 /*!
  * @brief プレイヤーステータスをファイルダンプ出力する
@@ -60,7 +58,7 @@ std::filesystem::path debug_savefile;
  */
 void file_character(PlayerType *player_ptr, std::string_view filename)
 {
-    const auto &path = path_build(ANGBAND_DIR_USER, filename);
+    const auto path = path_build(ANGBAND_DIR_USER, filename);
     auto fd = fd_open(path, O_RDONLY);
     if (fd >= 0) {
         const auto &path_str = path.string();
@@ -110,7 +108,7 @@ void file_character(PlayerType *player_ptr, std::string_view filename)
  */
 std::optional<std::string> get_random_line(concptr file_name, int entry)
 {
-    const auto &path = path_build(ANGBAND_DIR_FILE, file_name);
+    const auto path = path_build(ANGBAND_DIR_FILE, file_name);
     auto *fp = angband_fopen(path, FileOpenMode::READ);
     if (!fp) {
         return std::nullopt;
@@ -119,11 +117,12 @@ std::optional<std::string> get_random_line(concptr file_name, int entry)
     int test;
     auto line_num = 0;
     while (true) {
-        char buf[1024];
-        if (angband_fgets(fp, buf, sizeof(buf)) != 0) {
+        const auto line_str = angband_fgets(fp);
+        if (!line_str) {
             angband_fclose(fp);
             return std::nullopt;
         }
+        const auto *buf = line_str->data();
 
         line_num++;
         if ((buf[0] != 'N') || (buf[1] != ':')) {
@@ -156,27 +155,28 @@ std::optional<std::string> get_random_line(concptr file_name, int entry)
     auto counter = 0;
     std::optional<std::string> line{};
     while (true) {
-        char buf[1024];
+        std::optional<std::string> buf;
         while (true) {
-            if (angband_fgets(fp, buf, sizeof(buf))) {
+            buf = angband_fgets(fp);
+            if (!buf) {
                 break;
             }
 
-            if ((buf[0] == 'N') && (buf[1] == ':')) {
+            if (buf->starts_with("N:")) {
                 continue;
             }
 
-            if (buf[0] != '#') {
+            if (!buf->starts_with('#')) {
                 break;
             }
         }
 
-        if (!buf[0]) {
+        if (!buf || buf->empty()) {
             break;
         }
 
         if (one_in_(counter + 1)) {
-            line = buf;
+            line = std::move(buf);
         }
 
         counter++;
@@ -233,9 +233,9 @@ static errr counts_seek(PlayerType *player_ptr, int fd, uint32_t where, bool fla
     auto short_pclass = enum2i(player_ptr->pclass);
 #ifdef SAVEFILE_USE_UID
     const auto user_id = UnixUserIds::get_instance().get_user_id();
-    strnfmt(temp1, sizeof(temp1), "%d.%s.%d%d%d", user_id, savefile_base.data(), short_pclass, player_ptr->ppersonality, player_ptr->age);
+    strnfmt(temp1, sizeof(temp1), "%d.%s.%d%d%d", user_id, savefile_base.string().data(), short_pclass, player_ptr->ppersonality, player_ptr->age);
 #else
-    strnfmt(temp1, sizeof(temp1), "%s.%d%d%d", savefile_base.data(), short_pclass, player_ptr->ppersonality, player_ptr->age);
+    strnfmt(temp1, sizeof(temp1), "%s.%d%d%d", savefile_base.string().data(), short_pclass, player_ptr->ppersonality, player_ptr->age);
 #endif
     for (int i = 0; temp1[i]; i++) {
         temp1[i] ^= (i + 1) * 63;
@@ -277,7 +277,7 @@ static errr counts_seek(PlayerType *player_ptr, int fd, uint32_t where, bool fla
  */
 uint32_t counts_read(PlayerType *player_ptr, int where)
 {
-    const auto &path = path_build(ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
+    const auto path = path_build(ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
     auto fd = fd_open(path, O_RDONLY);
     uint32_t count = 0;
     if (counts_seek(player_ptr, fd, where, false) || fd_read(fd, (char *)(&count), sizeof(uint32_t))) {
@@ -298,7 +298,7 @@ uint32_t counts_read(PlayerType *player_ptr, int where)
  */
 errr counts_write(PlayerType *player_ptr, int where, uint32_t count)
 {
-    const auto &path = path_build(ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
+    const auto path = path_build(ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
     safe_setuid_grab();
     auto fd = fd_open(path, O_RDWR);
     safe_setuid_drop();
@@ -334,16 +334,19 @@ errr counts_write(PlayerType *player_ptr, int where, uint32_t count)
  */
 void read_dead_file()
 {
-    const auto &path = path_build(ANGBAND_DIR_FILE, _("dead_j.txt", "dead.txt"));
+    const auto path = path_build(ANGBAND_DIR_FILE, _("dead_j.txt", "dead.txt"));
     auto *fp = angband_fopen(path, FileOpenMode::READ);
     if (!fp) {
         return;
     }
 
     int i = 0;
-    char buf[1024]{};
-    while (angband_fgets(fp, buf, sizeof(buf)) == 0) {
-        put_str(buf, i++, 0);
+    while (true) {
+        const auto buf = angband_fgets(fp);
+        if (!buf) {
+            break;
+        }
+        put_str(*buf, i++, 0);
     }
 
     angband_fclose(fp);

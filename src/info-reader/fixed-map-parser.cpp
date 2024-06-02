@@ -212,12 +212,12 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
         tmp = std::to_string(enum2i(leaving_quest));
         v = tmp.data();
     } else if (prefix(b + 1, "QUEST_TYPE")) {
-        const auto &quest_list = QuestList::get_instance();
-        tmp = std::to_string(enum2i(quest_list[i2enum<QuestId>(atoi(b + 11))].type));
+        const auto &quests = QuestList::get_instance();
+        tmp = std::to_string(enum2i(quests.get_quest(i2enum<QuestId>(atoi(b + 11))).type));
         v = tmp.data();
     } else if (prefix(b + 1, "QUEST")) {
-        const auto &quest_list = QuestList::get_instance();
-        tmp = std::to_string(enum2i(quest_list[i2enum<QuestId>(atoi(b + 6))].status));
+        const auto &quests = QuestList::get_instance();
+        tmp = std::to_string(enum2i(quests.get_quest(i2enum<QuestId>(atoi(b + 6))).status));
         v = tmp.data();
     } else if (prefix(b + 1, "RANDOM")) {
         const auto &system = AngbandSystem::get_instance();
@@ -254,7 +254,7 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
  */
 parse_error_type parse_fixed_map(PlayerType *player_ptr, std::string_view name, int ymin, int xmin, int ymax, int xmax)
 {
-    const auto &path = path_build(ANGBAND_DIR_EDIT, name);
+    const auto path = path_build(ANGBAND_DIR_EDIT, name);
     auto *fp = angband_fopen(path, FileOpenMode::READ);
     if (fp == nullptr) {
         return PARSE_ERROR_GENERIC;
@@ -266,18 +266,20 @@ parse_error_type parse_fixed_map(PlayerType *player_ptr, std::string_view name, 
     int x = xmin;
     int y = ymin;
     qtwg_type tmp_qg;
-    char buf[1024]{};
-    qtwg_type *qg_ptr = initialize_quest_generator_type(&tmp_qg, buf, ymin, xmin, ymax, xmax, &y, &x);
-    while (angband_fgets(fp, buf, sizeof(buf)) == 0) {
+    qtwg_type *qg_ptr = initialize_quest_generator_type(&tmp_qg, ymin, xmin, ymax, xmax, &y, &x);
+    while (true) {
+        auto line_str = angband_fgets(fp);
+        if (!line_str) {
+            break;
+        }
         num++;
-        if (!buf[0] || iswspace(buf[0]) || buf[0] == '#') {
+        if (line_str->empty() || iswspace(line_str->front()) || line_str->starts_with(('#'))) {
             continue;
         }
 
-        if ((buf[0] == '?') && (buf[1] == ':')) {
+        if (line_str->starts_with("?:")) {
             char f;
-            char *s;
-            s = buf + 2;
+            auto *s = line_str->data() + 2;
             concptr v = parse_fixed_map_expression(player_ptr, &s, &f);
             bypass = streq(v, "0");
             continue;
@@ -287,17 +289,15 @@ parse_error_type parse_fixed_map(PlayerType *player_ptr, std::string_view name, 
             continue;
         }
 
+        qg_ptr->buf = line_str->data();
         err = generate_fixed_map_floor(player_ptr, qg_ptr, parse_fixed_map);
         if (err != PARSE_ERROR_NONE) {
+            concptr oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
+            msg_format("Error %d (%s) at line %d of '%s'.", err, oops, num, name.data());
+            msg_format(_("'%s'を解析中。", "Parsing '%s'."), line_str->data());
+            msg_print(nullptr);
             break;
         }
-    }
-
-    if (err != 0) {
-        concptr oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
-        msg_format("Error %d (%s) at line %d of '%s'.", err, oops, num, name.data());
-        msg_format(_("'%s'を解析中。", "Parsing '%s'."), buf);
-        msg_print(nullptr);
     }
 
     angband_fclose(fp);
@@ -345,7 +345,7 @@ static void parse_quest_info_aux(std::string_view file_name, std::set<QuestId> &
         key_list_ref.insert(q);
     };
 
-    const auto &path = path_build(ANGBAND_DIR_EDIT, file_name);
+    const auto path = path_build(ANGBAND_DIR_EDIT, file_name);
     auto *fp = angband_fopen(path, FileOpenMode::READ);
     if (fp == nullptr) {
         std::stringstream ss;
@@ -353,12 +353,15 @@ static void parse_quest_info_aux(std::string_view file_name, std::set<QuestId> &
         THROW_EXCEPTION(std::runtime_error, ss.str());
     }
 
-    char buf[4096];
     auto line_num = 0;
-    while (angband_fgets(fp, buf, sizeof(buf)) == 0) {
+    while (true) {
+        const auto line_str = angband_fgets(fp);
+        if (!line_str) {
+            break;
+        }
         line_num++;
 
-        const auto token = str_split(buf, ':', true);
+        const auto token = str_split(*line_str, ':', true);
 
         switch (token[0][0]) {
         case 'Q': {

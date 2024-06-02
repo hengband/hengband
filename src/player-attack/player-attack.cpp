@@ -52,7 +52,6 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-cut.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
@@ -390,7 +389,7 @@ static void apply_damage_bonus(PlayerType *player_ptr, player_attack_type *pa_pt
         pa_ptr->attack_damage = 0;
     }
 
-    auto is_cut = player_ptr->effects()->cut()->is_cut();
+    auto is_cut = player_ptr->effects()->cut().is_cut();
     if ((pa_ptr->mode == HISSATSU_SEKIRYUKA) && !is_cut) {
         pa_ptr->attack_damage /= 2;
     }
@@ -545,8 +544,8 @@ void exe_player_attack_to_monster(PlayerType *player_ptr, POSITION y, POSITION x
     player_attack_type tmp_attack(*player_ptr->current_floor_ptr, y, x, hand, mode, fear, mdeath);
     auto pa_ptr = &tmp_attack;
 
-    bool is_human = (pa_ptr->r_ptr->d_char == 'p');
-    bool is_lowlevel = (pa_ptr->r_ptr->level < (player_ptr->lev - 15));
+    const auto is_human = (pa_ptr->r_ptr->symbol_definition.character == 'p');
+    const auto is_lowlevel = (pa_ptr->r_ptr->level < (player_ptr->lev - 15));
 
     attack_classify(player_ptr, pa_ptr);
     get_attack_exp(player_ptr, pa_ptr);
@@ -557,8 +556,8 @@ void exe_player_attack_to_monster(PlayerType *player_ptr, POSITION y, POSITION x
 
     int chance = calc_attack_quality(player_ptr, pa_ptr);
     auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
-    bool is_zantetsu_nullified = (o_ptr->is_specific_artifact(FixedArtifactId::ZANTETSU) && (pa_ptr->r_ptr->d_char == 'j'));
-    bool is_ej_nullified = (o_ptr->is_specific_artifact(FixedArtifactId::EXCALIBUR_J) && (pa_ptr->r_ptr->d_char == 'S'));
+    const auto is_zantetsu_nullified = (o_ptr->is_specific_artifact(FixedArtifactId::ZANTETSU) && (pa_ptr->r_ptr->symbol_definition.character == 'j'));
+    const auto is_ej_nullified = (o_ptr->is_specific_artifact(FixedArtifactId::EXCALIBUR_J) && (pa_ptr->r_ptr->symbol_definition.character == 'S'));
     calc_num_blow(player_ptr, pa_ptr);
 
     /* Attack once for each legal blow */

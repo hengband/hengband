@@ -9,7 +9,6 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
-#include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 
@@ -114,7 +113,7 @@ DIRECTION coords_to_dir(PlayerType *player_ptr, POSITION y, POSITION x)
 bool player_can_see_bold(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     /* Blind players see nothing */
-    if (player_ptr->effects()->blindness()->is_blind()) {
+    if (player_ptr->effects()->blindness().is_blind()) {
         return false;
     }
 

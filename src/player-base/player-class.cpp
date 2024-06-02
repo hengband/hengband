@@ -28,7 +28,6 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 
@@ -226,7 +225,7 @@ TrFlags PlayerClass::stance_tr_flags() const
 
     switch (this->get_samurai_stance()) {
     case SamuraiStanceType::FUUJIN:
-        if (!this->player_ptr->effects()->blindness()->is_blind()) {
+        if (!this->player_ptr->effects()->blindness().is_blind()) {
             flags.set(TR_REFLECT);
         }
         break;

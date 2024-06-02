@@ -17,13 +17,11 @@
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
-#include "object/object-kind-hook.h"
 #include "player-info/class-info.h"
 #include "realm/realm-names-table.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-util.h"
 #include "system/angband-version.h"
-#include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -32,7 +30,6 @@
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
-#include "util/sort.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "wizard/fixed-artifacts-spoiler.h"
@@ -65,10 +62,10 @@ static auto get_mon_evol_roots()
 {
     std::set<MonsterRaceId> evol_parents;
     std::set<MonsterRaceId> evol_children;
-    for (const auto &[r_idx, r_ref] : monraces_info) {
-        if (MonsterRace(r_ref.next_r_idx).is_valid()) {
-            evol_parents.emplace(r_ref.idx);
-            evol_children.emplace(r_ref.next_r_idx);
+    for (const auto &[monrace_id, monrace] : monraces_info) {
+        if (monrace.get_next().is_valid()) {
+            evol_parents.emplace(monrace_id);
+            evol_children.emplace(monrace.next_r_idx);
         }
     }
 
@@ -98,7 +95,7 @@ static auto get_mon_evol_roots()
  */
 static SpoilerOutputResultType spoil_mon_evol()
 {
-    const auto &path = path_build(ANGBAND_DIR_USER, "mon-evol.txt");
+    const auto path = path_build(ANGBAND_DIR_USER, "mon-evol.txt");
     spoiler_file = angband_fopen(path, FileOpenMode::WRITE);
     if (!spoiler_file) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
@@ -108,16 +105,16 @@ static SpoilerOutputResultType spoil_mon_evol()
     ss << "Monster Spoilers for " << get_version() << '\n';
     spoil_out(ss.str());
     spoil_out("------------------------------------------\n\n");
-    for (auto r_idx : get_mon_evol_roots()) {
-        auto r_ptr = &monraces_info[r_idx];
+    for (auto monrace_id : get_mon_evol_roots()) {
+        const auto *monrace_ptr = &monraces_info[monrace_id];
         constexpr auto fmt_before = _("[%d]: %s (レベル%d, '%c')\n", "[%d]: %s (Level %d, '%c')\n");
-        fprintf(spoiler_file, fmt_before, enum2i(r_idx), r_ptr->name.data(), (int)r_ptr->level, r_ptr->d_char);
-        for (auto n = 1; MonsterRace(r_ptr->next_r_idx).is_valid(); n++) {
-            fprintf(spoiler_file, "%*s-(%d)-> ", n * 2, "", r_ptr->next_exp);
-            fprintf(spoiler_file, "[%d]: ", enum2i(r_ptr->next_r_idx));
-            r_ptr = &monraces_info[r_ptr->next_r_idx];
+        fprintf(spoiler_file, fmt_before, enum2i(monrace_id), monrace_ptr->name.data(), monrace_ptr->level, monrace_ptr->symbol_definition.character);
+        for (auto n = 1; monrace_ptr->get_next().is_valid(); n++) {
+            fprintf(spoiler_file, "%*s-(%d)-> ", n * 2, "", monrace_ptr->next_exp);
+            monrace_ptr = &monrace_ptr->get_next();
+            fprintf(spoiler_file, "[%d]: ", enum2i(monrace_ptr->idx));
             constexpr auto fmt_after = _("%s (レベル%d, '%c')\n", "%s (Level %d, '%c')\n");
-            fprintf(spoiler_file, fmt_after, r_ptr->name.data(), (int)r_ptr->level, r_ptr->d_char);
+            fprintf(spoiler_file, fmt_after, monrace_ptr->name.data(), monrace_ptr->level, monrace_ptr->symbol_definition.character);
         }
 
         fputc('\n', spoiler_file);
@@ -175,7 +172,7 @@ static SpoilerOutputResultType spoil_categorized_mon_desc()
 
 static SpoilerOutputResultType spoil_player_spell()
 {
-    const auto &path = path_build(ANGBAND_DIR_USER, "spells.txt");
+    const auto path = path_build(ANGBAND_DIR_USER, "spells.txt");
     spoiler_file = angband_fopen(path, FileOpenMode::WRITE);
     if (!spoiler_file) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
@@ -193,10 +190,8 @@ static SpoilerOutputResultType spoil_player_spell()
         auto magic_ptr = &class_magics_info[c];
         std::string book_name = _("なし", "None");
         if (magic_ptr->spell_book != ItemKindType::NONE) {
-            ItemEntity book;
-            auto o_ptr = &book;
-            o_ptr->prep(lookup_baseitem_id({ magic_ptr->spell_book, 0 }));
-            book_name = describe_flavor(&dummy_p, o_ptr, OD_NAME_ONLY);
+            ItemEntity item({ magic_ptr->spell_book, 0 });
+            book_name = describe_flavor(&dummy_p, &item, OD_NAME_ONLY);
             auto *s = angband_strchr(book_name.data(), '[');
             if (s != nullptr) {
                 book_name.erase(s - book_name.data());

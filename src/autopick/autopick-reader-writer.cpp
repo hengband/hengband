@@ -83,7 +83,7 @@ std::string pickpref_filename(PlayerType *player_ptr, int filename_mode)
  */
 static std::vector<concptr> read_text_lines(std::string_view filename)
 {
-    const auto &path = path_build(ANGBAND_DIR_USER, filename);
+    const auto path = path_build(ANGBAND_DIR_USER, filename);
     auto *fff = angband_fopen(path, FileOpenMode::READ);
     if (!fff) {
         return {};
@@ -91,9 +91,12 @@ static std::vector<concptr> read_text_lines(std::string_view filename)
 
     auto lines = 0;
     std::vector<concptr> lines_list(MAX_LINES);
-    char buf[1024]{};
-    while (angband_fgets(fff, buf, sizeof(buf)) == 0) {
-        lines_list[lines++] = string_make(buf);
+    while (true) {
+        const auto line_str = angband_fgets(fff, MAX_LINELEN);
+        if (!line_str) {
+            break;
+        }
+        lines_list[lines++] = string_make(line_str->data());
         if (is_greater_autopick_max_line(lines)) {
             break;
         }
@@ -122,7 +125,7 @@ static void prepare_default_pickpref(PlayerType *player_ptr)
     }
 
     msg_print(nullptr);
-    const auto &path_user = path_build(ANGBAND_DIR_USER, filename);
+    const auto path_user = path_build(ANGBAND_DIR_USER, filename);
     auto *user_fp = angband_fopen(path_user, FileOpenMode::WRITE);
     if (!user_fp) {
         return;
@@ -134,16 +137,19 @@ static void prepare_default_pickpref(PlayerType *player_ptr)
     }
 
     fprintf(user_fp, "#***\n\n\n");
-    const auto &path_pref = path_build(ANGBAND_DIR_PREF, filename);
+    const auto path_pref = path_build(ANGBAND_DIR_PREF, filename);
     auto *pref_fp = angband_fopen(path_pref, FileOpenMode::READ);
     if (!pref_fp) {
         angband_fclose(user_fp);
         return;
     }
 
-    char buf[1024]{};
-    while (!angband_fgets(pref_fp, buf, sizeof(buf))) {
-        fprintf(user_fp, "%s\n", buf);
+    while (true) {
+        const auto line_str = angband_fgets(pref_fp, MAX_LINELEN);
+        if (!line_str) {
+            break;
+        }
+        fprintf(user_fp, "%s\n", line_str->data());
     }
 
     angband_fclose(user_fp);
@@ -185,7 +191,7 @@ std::vector<concptr> read_pickpref_text_lines(PlayerType *player_ptr, int *filen
  */
 bool write_text_lines(std::string_view filename, const std::vector<concptr> &lines)
 {
-    const auto &path = path_build(ANGBAND_DIR_USER, filename);
+    const auto path = path_build(ANGBAND_DIR_USER, filename);
     auto *fff = angband_fopen(path, FileOpenMode::WRITE);
     if (!fff) {
         return false;

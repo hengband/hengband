@@ -72,7 +72,7 @@ static void spoil_random_artifact_aux(PlayerType *player_ptr, ItemEntity *o_ptr,
  */
 void spoil_random_artifact(PlayerType *player_ptr)
 {
-    const auto &path = path_build(ANGBAND_DIR_USER, "randifact.txt");
+    const auto path = path_build(ANGBAND_DIR_USER, "randifact.txt");
     std::ofstream ofs(path);
     if (!ofs) {
         msg_print("Cannot create list file.");

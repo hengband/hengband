@@ -19,6 +19,7 @@
 #include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/buffer-shaper.h"
+#include "util/finalizer.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -58,31 +59,33 @@ static errr process_pref_file_aux(PlayerType *player_ptr, const std::filesystem:
     int line = -1;
     errr err = 0;
     bool bypass = false;
-    std::vector<char> file_read_buf(FILE_READ_BUFF_SIZE);
     std::string error_line;
-    while (angband_fgets(fp, file_read_buf.data(), file_read_buf.size()) == 0) {
+    while (true) {
+        auto line_str = angband_fgets(fp);
+        if (!line_str) {
+            break;
+        }
         line++;
-        if (!file_read_buf[0]) {
+        if (line_str->empty()) {
             continue;
         }
 
 #ifdef JP
-        if (!iskanji(file_read_buf[0]))
+        if (!iskanji(line_str->front()))
 #endif
-            if (iswspace(file_read_buf[0])) {
+            if (iswspace(line_str->front())) {
                 continue;
             }
 
-        if (file_read_buf[0] == '#') {
+        if (line_str->starts_with('#')) {
             continue;
         }
-        error_line = file_read_buf.data();
+        error_line = *line_str;
 
         /* Process "?:<expr>" */
-        if ((file_read_buf[0] == '?') && (file_read_buf[1] == ':')) {
+        if (line_str->starts_with("?:")) {
             char f;
-            char *s;
-            s = file_read_buf.data() + 2;
+            char *s = line_str->data() + 2;
             concptr v = process_pref_file_expr(player_ptr, &s, &f);
             bypass = streq(v, "0");
             continue;
@@ -93,22 +96,24 @@ static errr process_pref_file_aux(PlayerType *player_ptr, const std::filesystem:
         }
 
         /* Process "%:<file>" */
-        if (file_read_buf[0] == '%') {
+        if (line_str->starts_with("%:")) {
             static int depth_count = 0;
             if (depth_count > 20) {
                 continue;
             }
 
             depth_count++;
+            std::string_view file(*line_str);
+            file.remove_prefix(2);
             switch (preftype) {
             case PREF_TYPE_AUTOPICK:
-                (void)process_autopick_file(player_ptr, file_read_buf.data() + 2);
+                (void)process_autopick_file(player_ptr, file);
                 break;
             case PREF_TYPE_HISTPREF:
-                (void)process_histpref_file(player_ptr, file_read_buf.data() + 2);
+                (void)process_histpref_file(player_ptr, file);
                 break;
             default:
-                (void)process_pref_file(player_ptr, file_read_buf.data() + 2);
+                (void)process_pref_file(player_ptr, file);
                 break;
             }
 
@@ -116,13 +121,13 @@ static errr process_pref_file_aux(PlayerType *player_ptr, const std::filesystem:
             continue;
         }
 
-        err = interpret_pref_file(player_ptr, file_read_buf.data());
+        err = interpret_pref_file(player_ptr, line_str->data());
         if (err != 0) {
             if (preftype != PREF_TYPE_AUTOPICK) {
                 break;
             }
 
-            process_autopick_file_command(file_read_buf.data());
+            process_autopick_file_command(line_str->data());
             err = 0;
         }
     }
@@ -158,14 +163,14 @@ errr process_pref_file(PlayerType *player_ptr, std::string_view name, bool only_
 {
     errr err1 = 0;
     if (!only_user_dir) {
-        const auto &path = path_build(ANGBAND_DIR_PREF, name);
+        const auto path = path_build(ANGBAND_DIR_PREF, name);
         err1 = process_pref_file_aux(player_ptr, path, PREF_TYPE_NORMAL);
         if (err1 > 0) {
             return err1;
         }
     }
 
-    const auto &path = path_build(ANGBAND_DIR_USER, name);
+    const auto path = path_build(ANGBAND_DIR_USER, name);
     errr err2 = process_pref_file_aux(player_ptr, path, PREF_TYPE_NORMAL);
     if (err2 < 0 && !err1) {
         return -2;
@@ -182,7 +187,7 @@ errr process_pref_file(PlayerType *player_ptr, std::string_view name, bool only_
  */
 errr process_autopick_file(PlayerType *player_ptr, std::string_view name)
 {
-    const auto &path = path_build(ANGBAND_DIR_USER, name);
+    const auto path = path_build(ANGBAND_DIR_USER, name);
     return process_pref_file_aux(player_ptr, path, PREF_TYPE_AUTOPICK);
 }
 
@@ -197,7 +202,7 @@ errr process_autopick_file(PlayerType *player_ptr, std::string_view name)
 errr process_histpref_file(PlayerType *player_ptr, std::string_view name)
 {
     bool old_character_xtra = w_ptr->character_xtra;
-    const auto &path = path_build(ANGBAND_DIR_USER, name);
+    const auto path = path_build(ANGBAND_DIR_USER, name);
     w_ptr->character_xtra = true;
     errr err = process_pref_file_aux(player_ptr, path, PREF_TYPE_HISTPREF);
     w_ptr->character_xtra = old_character_xtra;
@@ -299,59 +304,46 @@ void load_all_pref_files(PlayerType *player_ptr)
  */
 bool read_histpref(PlayerType *player_ptr)
 {
-    errr err;
-    int i, j, n;
-    char *s;
-    char histbuf[HISTPREF_LIMIT];
-
     if (!input_check(_("生い立ち設定ファイルをロードしますか? ", "Load background history preference file? "))) {
         return false;
     }
 
-    histbuf[0] = '\0';
-    histpref_buf = histbuf;
-
-    err = process_histpref_file(player_ptr, std::string(_("histedit-", "histpref-")).append(player_ptr->base_name).append(".prf").data());
-
+    histpref_buf = "";
+    std::stringstream ss;
+    ss << _("histedit-", "histpref-") << player_ptr->base_name << ".prf";
+    auto err = process_histpref_file(player_ptr, ss.str());
     if (0 > err) {
         err = process_histpref_file(player_ptr, _("histedit.prf", "histpref.prf"));
     }
 
+    const auto finalizer = util::make_finalizer([]() { histpref_buf = std::nullopt; });
     if (err) {
         msg_print(_("生い立ち設定ファイルの読み込みに失敗しました。", "Failed to load background history preference."));
         msg_print(nullptr);
-        histpref_buf = nullptr;
-        return false;
-    } else if (!histpref_buf[0]) {
-        msg_print(_("有効な生い立ち設定はこのファイルにありません。", "There does not exist valid background history preference."));
-        msg_print(nullptr);
-        histpref_buf = nullptr;
         return false;
     }
 
-    for (i = 0; i < 4; i++) {
+    if (!histpref_buf || histpref_buf->empty()) {
+        msg_print(_("有効な生い立ち設定はこのファイルにありません。", "There does not exist valid background history preference."));
+        msg_print(nullptr);
+        return false;
+    }
+
+    for (auto i = 0; i < 4; i++) {
         player_ptr->history[i][0] = '\0';
     }
 
-    /* loop */
-    for (s = histpref_buf; *s == ' '; s++) {
-        ;
-    }
-
-    n = strlen(s);
-    while ((n > 0) && (s[n - 1] == ' ')) {
-        s[--n] = '\0';
-    }
-
+    histpref_buf = str_trim(*histpref_buf);
     constexpr auto max_line_len = sizeof(player_ptr->history[0]);
-    const auto history_lines = shape_buffer(s, max_line_len);
+    const auto history_lines = shape_buffer(*histpref_buf, max_line_len);
     const auto max_lines = std::min<int>(4, history_lines.size());
     for (auto l = 0; l < max_lines; ++l) {
         angband_strcpy(player_ptr->history[l], history_lines[l], max_line_len);
     }
 
-    for (i = 0; i < 4; i++) {
+    for (auto i = 0; i < 4; i++) {
         /* loop */
+        int j;
         for (j = 0; player_ptr->history[i][j]; j++) {
             ;
         }
@@ -362,6 +354,5 @@ bool read_histpref(PlayerType *player_ptr)
         player_ptr->history[i][59] = '\0';
     }
 
-    histpref_buf = nullptr;
     return true;
 }

@@ -62,7 +62,7 @@ public:
      * @brief 現在のモードを取得する
      * @return 現在のモード
      */
-    graphics_mode get_mode(void);
+    graphics_mode get_mode();
 
     /*!
      * @brief 指定モードのタイルに変更する / Change graphics (tile)
@@ -75,7 +75,7 @@ public:
      * @brief 現在のタイル情報を取得する
      * @return tile_info
      */
-    const tile_info &get_tile_info(void);
+    const tile_info &get_tile_info();
 
     /*!
      * @brief 初期化
@@ -83,7 +83,7 @@ public:
      * 必要な時に自動的に初期化が行われるため、明示的に行う必要はない。
      * 事前に初期化処理を済ませたい場合に使用すること。
      */
-    void init(void);
+    void init();
 
     /*!
      * @brief 終了処理
@@ -91,7 +91,7 @@ public:
      * プロセスの終了前のみ使用すること。
      * 繰り返し初期化と終了処理を行わないこと。
      */
-    void finalize(void);
+    void finalize();
 
     Graphics(const Graphics &) = delete;
     void operator=(const Graphics &) = delete;

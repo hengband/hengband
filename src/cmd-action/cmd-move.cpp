@@ -39,8 +39,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "target/target-getter.h"
-#include "timed-effect/player-cut.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -53,14 +51,14 @@
  */
 static bool confirm_leave_level(PlayerType *player_ptr, bool down_stair)
 {
-    const auto &quest_list = QuestList::get_instance();
-    const auto *q_ptr = &quest_list[player_ptr->current_floor_ptr->quest_number];
+    const auto &quests = QuestList::get_instance();
+    const auto &quest = quests.get_quest(player_ptr->current_floor_ptr->quest_number);
 
-    auto caution_in_tower = any_bits(q_ptr->flags, QUEST_FLAG_TOWER);
-    caution_in_tower &= q_ptr->status != QuestStatusType::STAGE_COMPLETED || (down_stair && (quest_list[QuestId::TOWER1].status != QuestStatusType::COMPLETED));
+    auto caution_in_tower = any_bits(quest.flags, QUEST_FLAG_TOWER);
+    caution_in_tower &= quest.status != QuestStatusType::STAGE_COMPLETED || (down_stair && (quests.get_quest(QuestId::TOWER1).status != QuestStatusType::COMPLETED));
 
-    auto caution_in_quest = q_ptr->type == QuestKindType::RANDOM;
-    caution_in_quest |= q_ptr->flags & QUEST_FLAG_ONCE && q_ptr->status != QuestStatusType::COMPLETED;
+    auto caution_in_quest = quest.type == QuestKindType::RANDOM;
+    caution_in_quest |= quest.flags & QUEST_FLAG_ONCE && quest.status != QuestStatusType::COMPLETED;
     caution_in_quest |= caution_in_tower;
 
     if (confirm_quest && player_ptr->current_floor_ptr->is_in_quest() && caution_in_quest) {
@@ -76,7 +74,7 @@ static bool confirm_leave_level(PlayerType *player_ptr, bool down_stair)
  */
 void do_cmd_go_up(PlayerType *player_ptr)
 {
-    auto &quest_list = QuestList::get_instance();
+    auto &quests = QuestList::get_instance();
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid({ player_ptr->y, player_ptr->x });
     const auto &terrain = grid.get_terrain();
@@ -102,8 +100,8 @@ void do_cmd_go_up(PlayerType *player_ptr)
 
         leave_quest_check(player_ptr);
         floor.quest_number = i2enum<QuestId>(grid.special);
-        const auto quest_number = floor.quest_number;
-        auto &quest = quest_list[quest_number];
+        const auto quest_id = floor.quest_number;
+        auto &quest = quests.get_quest(quest_id);
         if (quest.status == QuestStatusType::UNTAKEN) {
             if (quest.type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
@@ -113,7 +111,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
             quest.status = QuestStatusType::TAKEN;
         }
 
-        if (!inside_quest(quest_number)) {
+        if (!inside_quest(quest_id)) {
             floor.dun_level = 0;
             player_ptr->word_recall = 0;
         }
@@ -126,7 +124,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
     }
 
     auto go_up = false;
-    if (!floor.is_in_dungeon()) {
+    if (!floor.is_in_underground()) {
         go_up = true;
     } else {
         go_up = confirm_leave_level(player_ptr, false);
@@ -143,7 +141,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
     }
 
     const auto quest_number = player_ptr->current_floor_ptr->quest_number;
-    auto &quest = quest_list[quest_number];
+    auto &quest = quests.get_quest(quest_number);
 
     if (inside_quest(quest_number) && quest.type == QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
@@ -157,12 +155,12 @@ void do_cmd_go_up(PlayerType *player_ptr)
         player_ptr->current_floor_ptr->dun_level = 0;
         up_num = 0;
     } else {
+        auto &fcms = FloorChangeModesStore::get_instace();
+        fcms->set({ FloorChangeMode::SAVE_FLOORS, FloorChangeMode::UP });
+        up_num = 1;
         if (terrain.flags.has(TerrainCharacteristics::SHAFT)) {
-            prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_UP | CFM_SHAFT);
-            up_num = 2;
-        } else {
-            prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_UP);
-            up_num = 1;
+            fcms->set(FloorChangeMode::SHAFT);
+            up_num *= 2;
         }
 
         if (player_ptr->current_floor_ptr->dun_level - up_num < floor.get_dungeon_definition().mindepth) {
@@ -222,7 +220,6 @@ void do_cmd_go_down(PlayerType *player_ptr)
     }
 
     if (terrain.flags.has(TerrainCharacteristics::QUEST)) {
-        auto &quest_list = QuestList::get_instance();
         if (!confirm_leave_level(player_ptr, true)) {
             return;
         }
@@ -239,14 +236,15 @@ void do_cmd_go_down(PlayerType *player_ptr)
         leave_tower_check(player_ptr);
         floor.quest_number = i2enum<QuestId>(grid.special);
 
-        auto &current_quest = quest_list[floor.quest_number];
-        if (current_quest.status == QuestStatusType::UNTAKEN) {
-            if (current_quest.type != QuestKindType::RANDOM) {
+        auto &quests = QuestList::get_instance();
+        auto &quest = quests.get_quest(floor.quest_number);
+        if (quest.status == QuestStatusType::UNTAKEN) {
+            if (quest.type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
                 parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
             }
 
-            current_quest.status = QuestStatusType::TAKEN;
+            quest.status = QuestStatusType::TAKEN;
         }
 
         if (!floor.is_in_quest()) {
@@ -262,7 +260,8 @@ void do_cmd_go_down(PlayerType *player_ptr)
     }
 
     short target_dungeon = 0;
-    if (!floor.is_in_dungeon()) {
+    auto &fcms = FloorChangeModesStore::get_instace();
+    if (!floor.is_in_underground()) {
         target_dungeon = terrain.flags.has(TerrainCharacteristics::ENTRANCE) ? grid.special : DUNGEON_ANGBAND;
         if (ironman_downward && (target_dungeon != DUNGEON_ANGBAND)) {
             msg_print(_("ダンジョンの入口は塞がれている！", "The entrance of this dungeon is closed!"));
@@ -281,7 +280,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
         player_ptr->oldpx = player_ptr->x;
         player_ptr->oldpy = player_ptr->y;
         floor.set_dungeon_index(target_dungeon);
-        prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);
+        fcms->set(FloorChangeMode::FIRST_FLOOR);
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
@@ -296,7 +295,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
     }
 
     const auto &dungeon = floor.get_dungeon_definition();
-    if (!floor.is_in_dungeon()) {
+    if (!floor.is_in_underground()) {
         player_ptr->enter_dungeon = true;
         down_num = dungeon.mindepth;
     }
@@ -328,14 +327,13 @@ void do_cmd_go_down(PlayerType *player_ptr)
     player_ptr->leaving = true;
 
     if (fall_trap) {
-        prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+        fcms->set({ FloorChangeMode::SAVE_FLOORS, FloorChangeMode::DOWN, FloorChangeMode::RANDOM_PLACE, FloorChangeMode::RANDOM_CONNECT });
         return;
     }
 
+    fcms->set({ FloorChangeMode::SAVE_FLOORS, FloorChangeMode::DOWN });
     if (terrain.flags.has(TerrainCharacteristics::SHAFT)) {
-        prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_SHAFT);
-    } else {
-        prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_DOWN);
+        fcms->set(FloorChangeMode::SHAFT);
     }
 }
 

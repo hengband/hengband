@@ -76,10 +76,6 @@ void InputKeyRequestor::request_command()
 void InputKeyRequestor::process_input_command()
 {
     while (true) {
-        if (!this->shopping && !macro_running() && !command_new && auto_debug_save && (!inkey_next || *inkey_next == '\0')) {
-            save_player(this->player_ptr, SaveType::DEBUG);
-        }
-
         if (fresh_once && macro_running()) {
             stop_term_fresh();
         }

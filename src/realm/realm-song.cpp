@@ -24,7 +24,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/target-getter.h"
-#include "timed-effect/player-acceleration.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
@@ -696,7 +695,7 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (stop) {
-            if (!player_ptr->effects()->acceleration()->is_fast()) {
+            if (!player_ptr->effects()->acceleration().is_fast()) {
                 msg_print(_("動きの素早さがなくなったようだ。", "You feel yourself slow down."));
             }
         }
@@ -971,7 +970,7 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
                 RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::HP);
             }
 
-            if (!player_ptr->effects()->acceleration()->is_fast()) {
+            if (!player_ptr->effects()->acceleration().is_fast()) {
                 msg_print(_("動きの素早さがなくなったようだ。", "You feel yourself slow down."));
             }
         }

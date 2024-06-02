@@ -62,8 +62,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "timed-effect/player-hallucination.h"
-#include "timed-effect/player-paralysis.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
@@ -401,10 +399,10 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                     player_ptr->died_from = _("切腹", "Seppuku");
                 }
             } else {
-                auto effects = player_ptr->effects();
-                auto is_hallucinated = effects->hallucination()->is_hallucinated();
+                const auto effects = player_ptr->effects();
+                const auto is_hallucinated = effects->hallucination().is_hallucinated();
                 auto paralysis_state = "";
-                if (effects->paralysis()->is_paralyzed()) {
+                if (effects->paralysis().is_paralyzed()) {
                     paralysis_state = player_ptr->free_act ? _("彫像状態で", " while being the statue") : _("麻痺状態で", " while paralyzed");
                 }
 
@@ -425,7 +423,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
 
                 if (floor.inside_arena) {
                     place = _("アリーナ", "in the Arena");
-                } else if (!floor.is_in_dungeon()) {
+                } else if (!floor.is_in_underground()) {
                     place = _("地上", "on the surface");
                 } else if (inside_quest(q_idx) && (QuestType::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT)))) {
                     place = _("クエスト", "in a quest");
@@ -560,7 +558,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
 
         sound(SOUND_WARN);
         if (record_danger && (old_chp > warning)) {
-            if (player_ptr->effects()->hallucination()->is_hallucinated() && damage_type == DAMAGE_ATTACK) {
+            if (player_ptr->effects()->hallucination().is_hallucinated() && damage_type == DAMAGE_ATTACK) {
                 hit_from = _("何か", "something");
             }
 

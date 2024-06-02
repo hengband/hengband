@@ -42,6 +42,7 @@
 #include "view/display-birth.h" // 暫定。後で消す予定。
 #include "view/display-player-misc-info.h"
 #include "view/display-player.h" // 暫定。後で消す.
+#include "view/display-symbol.h"
 #include "view/display-util.h"
 #include "world/world.h"
 #include <sstream>
@@ -453,7 +454,7 @@ static bool display_auto_roller_result(PlayerType *player_ptr, bool prev, char *
         (void)display_player(player_ptr, mode);
         term_gotoxy(2, 23);
         const char b1 = '[';
-        term_addch(TERM_WHITE, b1);
+        term_addch({ TERM_WHITE, b1 });
         term_addstr(-1, TERM_WHITE, _("'r' 次の数値", "'r'eroll"));
         if (prev) {
             term_addstr(-1, TERM_WHITE, _(", 'p' 前の数値", ", 'p'revious"));
@@ -467,7 +468,7 @@ static bool display_auto_roller_result(PlayerType *player_ptr, bool prev, char *
 
         term_addstr(-1, TERM_WHITE, _(", Enter この数値に決定", ", or Enter to accept"));
         const char b2 = ']';
-        term_addch(TERM_WHITE, b2);
+        term_addch({ TERM_WHITE, b2 });
         *c = inkey();
         if (*c == 'Q') {
             birth_quit();

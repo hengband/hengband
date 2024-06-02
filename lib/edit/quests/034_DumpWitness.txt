@@ -11,12 +11,15 @@ Q:34:Q:6:0:0:0:5:0:0:0:6
 
 # Description for quest
 ?:[LEQ $QUEST34 2]
-Q:$34:T:Adventurers are dead in the building behind this one. All windows and 
-Q:$34:T:doors are locked. We guess the murderer still hides in the house.
+Q:$34:T:Adventurers are dead in the building behind this one.
+Q:$34:T:All windows and doors are locked.
+Q:$34:T:We guess the murderer still hides in the house.
 Q:$34:T:Your task is to clean everything up in the room.
+Q:$34:T:There should be only junks inside, but you can take them if you need.
 Q:34:T:この建物の裏の一軒家で冒険者が不審な死に方をしているとの報告がありました。
 Q:34:T:窓にも扉にも鍵がかかっており、殺戮者はまだ内部に潜んでいると思われます。
 Q:34:T:どうかあの家に潜む脅威を排除して下さい。
+Q:34:T:中の物はガラクタばかりのはずですが、必要なら持っていって下さって構いません。
 ?:1
 
 # Description for quest reward
@@ -68,6 +71,12 @@ F:!:FLOOR:10:0:241
 F:3:FLOOR:10:0:247
 # Scroll of Teleportation
 F:?:FLOOR:8:0:186
+# Flask of oil
+F:5:FLOOR:10:0:348
+# Brass lantern
+F:6:FLOOR:10:0:347
+# Gold
+F:7:FLOOR:10:0:488
 
 
 # Dungeon layout
@@ -80,9 +89,9 @@ D:X.X    %           X.X
 D:X.+   3 3     %    +.X
 D:X.+ 3         3(   +.X
 D:X.X  XXDXXXXX % %  +.X
-D:X.X  X %2~X|D    3 +.X
-D:X.X  XXDX&X~2      X.X
-D:X.1  X??X|X~D%!!   X.X
+D:X.X  X %2~X|D    3 +5X
+D:X.X  XXDX&X~2      X6X
+D:X.1  X??X|X~D%!!   X7X
 D:XXXXXXXXXXXXXXXXXXXXXX
 
 # Starting position

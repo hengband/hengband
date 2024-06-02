@@ -76,3 +76,4 @@ enum class ItemKindType : short {
 
 constexpr auto TV_WEARABLE_RANGE = EnumRange(ItemKindType::BOW, ItemKindType::CARD);
 constexpr auto TV_WEAPON_RANGE = EnumRange(ItemKindType::BOW, ItemKindType::SWORD);
+constexpr auto TV_MAGIC_BOOK_RANGE = EnumRange(ItemKindType::LIFE_BOOK, ItemKindType::CRUSADE_BOOK);

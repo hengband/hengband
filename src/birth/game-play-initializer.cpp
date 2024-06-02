@@ -27,19 +27,6 @@
 #include <string>
 
 /*!
- * @brief ベースアイテム構造体の鑑定済みフラグをリセットする。
- * @details
- * 不具合対策で0からリセットする(セーブは0から)
- */
-static void reset_baseitem_idenditication_flags()
-{
-    for (auto &baseitem : baseitems_info) {
-        baseitem.tried = false;
-        baseitem.aware = false;
-    }
-}
-
-/*!
  * @brief プレイヤー構造体の内容を初期値で消去する(名前を除く) / Clear all the global "character" data (without name)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @details 少し長いが、これ1つで処理が完結しているので分割は見送る
@@ -57,8 +44,8 @@ void player_wipe_without_name(PlayerType *player_ptr)
         player_ptr->history[i][0] = '\0';
     }
 
-    auto &quest_list = QuestList::get_instance();
-    for (auto &[q_idx, quest] : quest_list) {
+    auto &quests = QuestList::get_instance();
+    for (auto &[quest_id, quest] : quests) {
         quest.status = QuestStatusType::UNTAKEN;
         quest.cur_num = 0;
         quest.max_num = 0;
@@ -75,25 +62,22 @@ void player_wipe_without_name(PlayerType *player_ptr)
         (&player_ptr->inventory_list[i])->wipe();
     }
 
-    for (auto &[a_idx, artifact] : artifacts_info) {
-        artifact.is_generated = false;
-    }
-
-    reset_baseitem_idenditication_flags();
-    for (auto &[r_idx, r_ref] : monraces_info) {
-        if (!MonsterRace(r_ref.idx).is_valid()) {
+    ArtifactList::get_instance().reset_generated_flags();
+    BaseitemList::get_instance().reset_identification_flags();
+    for (auto &[_, monrace] : monraces_info) {
+        if (!monrace.is_valid()) {
             continue;
         }
-        r_ref.cur_num = 0;
-        r_ref.max_num = MAX_MONSTER_NUM;
-        if (r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
-            r_ref.max_num = MAX_UNIQUE_NUM;
-        } else if (r_ref.population_flags.has(MonsterPopulationType::NAZGUL)) {
-            r_ref.max_num = MAX_NAZGUL_NUM;
+        monrace.cur_num = 0;
+        monrace.max_num = MAX_MONSTER_NUM;
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+            monrace.max_num = MAX_UNIQUE_NUM;
+        } else if (monrace.population_flags.has(MonsterPopulationType::NAZGUL)) {
+            monrace.max_num = MAX_NAZGUL_NUM;
         }
 
-        r_ref.r_pkills = 0;
-        r_ref.r_akills = 0;
+        monrace.r_pkills = 0;
+        monrace.r_akills = 0;
     }
 
     player_ptr->food = PY_FOOD_FULL - 1;
@@ -170,30 +154,29 @@ void player_wipe_without_name(PlayerType *player_ptr)
 void init_dungeon_quests(PlayerType *player_ptr)
 {
     init_flags = INIT_ASSIGN;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto &quest_list = QuestList::get_instance();
-    floor_ptr->quest_number = QuestId::RANDOM_QUEST1;
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &quests = QuestList::get_instance();
+    floor.quest_number = QuestId::RANDOM_QUEST1;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
-    floor_ptr->quest_number = QuestId::NONE;
-    for (auto q_idx : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
-        auto *q_ptr = &quest_list[q_idx];
-        MonsterRaceInfo *quest_r_ptr;
-        q_ptr->status = QuestStatusType::TAKEN;
-        determine_random_questor(player_ptr, q_ptr);
-        quest_r_ptr = &monraces_info[q_ptr->r_idx];
-        quest_r_ptr->misc_flags.set(MonsterMiscType::QUESTOR);
-        q_ptr->max_num = 1;
+    floor.quest_number = QuestId::NONE;
+    for (auto quest_id : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
+        auto &quest = quests.get_quest(quest_id);
+        quest.status = QuestStatusType::TAKEN;
+        determine_random_questor(player_ptr, quest);
+        auto &quest_monrace = monraces_info[quest.r_idx];
+        quest_monrace.misc_flags.set(MonsterMiscType::QUESTOR);
+        quest.max_num = 1;
     }
 
     init_flags = INIT_ASSIGN;
-    floor_ptr->quest_number = QuestId::OBERON;
+    floor.quest_number = QuestId::OBERON;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
-    quest_list[QuestId::OBERON].status = QuestStatusType::TAKEN;
+    quests.get_quest(QuestId::OBERON).status = QuestStatusType::TAKEN;
 
-    floor_ptr->quest_number = QuestId::SERPENT;
+    floor.quest_number = QuestId::SERPENT;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
-    quest_list[QuestId::SERPENT].status = QuestStatusType::TAKEN;
-    floor_ptr->quest_number = QuestId::NONE;
+    quests.get_quest(QuestId::SERPENT).status = QuestStatusType::TAKEN;
+    floor.quest_number = QuestId::NONE;
 }
 
 /*!

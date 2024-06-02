@@ -336,51 +336,48 @@ static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType 
             level = rand_range(1, ow_ptr->level);
         }
 
-        ItemEntity forge;
-        ItemEntity *q_ptr;
-        q_ptr = &forge;
-        q_ptr->prep(bi_id);
-        ItemMagicApplier(player_ptr, q_ptr, level, AM_NO_FIXED_ART).execute();
-        if (!store_will_buy(player_ptr, q_ptr, store_num)) {
+        ItemEntity item(bi_id);
+        ItemMagicApplier(player_ptr, &item, level, AM_NO_FIXED_ART).execute();
+        if (!store_will_buy(player_ptr, &item, store_num)) {
             continue;
         }
 
-        auto pvals = store_same_magic_device_pvals(q_ptr);
+        const auto pvals = store_same_magic_device_pvals(&item);
         if (pvals.size() >= 2) {
             auto pval = rand_choice(pvals);
-            q_ptr->pval = pval;
+            item.pval = pval;
         }
 
-        const auto tval = q_ptr->bi_key.tval();
-        const auto sval = q_ptr->bi_key.sval();
+        const auto tval = item.bi_key.tval();
+        const auto sval = item.bi_key.sval();
         if (tval == ItemKindType::LITE) {
             if (sval == SV_LITE_TORCH) {
-                q_ptr->fuel = FUEL_TORCH / 2;
+                item.fuel = FUEL_TORCH / 2;
             }
 
             if (sval == SV_LITE_LANTERN) {
-                q_ptr->fuel = FUEL_LAMP / 2;
+                item.fuel = FUEL_LAMP / 2;
             }
         }
 
-        q_ptr->mark_as_known();
-        q_ptr->ident |= IDENT_STORE;
+        item.mark_as_known();
+        item.ident |= IDENT_STORE;
         if (tval == ItemKindType::CHEST) {
             continue;
         }
 
         if (store_num == StoreSaleType::BLACK) {
-            if (black_market_crap(player_ptr, q_ptr) || (q_ptr->get_price() < 10)) {
+            if (black_market_crap(player_ptr, &item) || (item.get_price() < 10)) {
                 continue;
             }
         } else {
-            if (q_ptr->get_price() <= 0) {
+            if (item.get_price() <= 0) {
                 continue;
             }
         }
 
-        mass_produce(q_ptr, store_num);
-        (void)store_carry(q_ptr);
+        mass_produce(&item, store_num);
+        (void)store_carry(&item);
         break;
     }
 }

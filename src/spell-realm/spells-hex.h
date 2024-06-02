@@ -12,13 +12,11 @@ enum class SpellHexRevengeType : byte {
     REVENGE = 2,
 };
 
-class MonsterAttackPlayer;
 class PlayerType;
 struct spell_hex_data_type;
 class SpellHex {
 public:
     SpellHex(PlayerType *player_ptr);
-    SpellHex(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr);
     virtual ~SpellHex() = default;
 
     bool stop_spells_with_selection();
@@ -31,8 +29,7 @@ public:
     bool is_spelling_specific(int hex) const;
     bool is_spelling_any() const;
     void interrupt_spelling();
-    void eyes_on_eyes();
-    void thief_teleport();
+    void eyes_on_eyes(MONSTER_IDX, int dam);
     void set_casting_flag(spell_hex_type type);
     void reset_casting_flag(spell_hex_type type);
     int32_t get_casting_num() const;
@@ -46,7 +43,6 @@ public:
 private:
     PlayerType *player_ptr;
     std::vector<int> casting_spells;
-    MonsterAttackPlayer *monap_ptr = nullptr;
     std::shared_ptr<spell_hex_data_type> spell_hex_data;
 
     std::pair<bool, std::optional<char>> select_spell_stopping(std::string_view prompt);

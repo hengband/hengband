@@ -33,39 +33,6 @@
 #include "time.h"
 #include "util/angband-files.h"
 #include "world/world.h"
-#include <chrono>
-
-/*!
- * @brief 古いデバッグ用セーブファイルを削除する
- *
- * 最終更新日時が現在時刻より7日以前のデバッグ用セーブファイルを削除する。
- * デバッグ用セーブファイルは、ANGBAND_DIR_DEBUG_SAVEディレクトリにある、
- * ファイル名に '-' を含むファイルであることを想定する。
- */
-static void remove_old_debug_savefiles()
-{
-    namespace fs = std::filesystem;
-    constexpr auto remove_threshold_days = std::chrono::days(7);
-    const auto now = fs::file_time_type::clock::now();
-
-    // アクセスエラーが発生した場合に例外が送出されないようにするため
-    // 例外を送出せず引数でエラーコードを返すオーバーロードを使用する。
-    // アクセスエラーが発生した場合は単に無視し、エラーコードの確認は行わない。
-    std::error_code ec;
-
-    for (const auto &entry : fs::directory_iterator(ANGBAND_DIR_DEBUG_SAVE, ec)) {
-        const auto &path = entry.path();
-        if (path.filename().string().find('-') == std::string::npos) {
-            continue;
-        }
-
-        const auto savefile_timestamp = fs::last_write_time(path);
-        const auto elapsed_days = std::chrono::duration_cast<std::chrono::days>(now - savefile_timestamp);
-        if (elapsed_days >= remove_threshold_days) {
-            fs::remove(path, ec);
-        }
-    }
-}
 
 /*!
  * @brief 各データファイルを読み取るためのパスを取得する.
@@ -84,20 +51,12 @@ void init_file_paths(const std::filesystem::path &libpath)
     ANGBAND_DIR_INFO = std::filesystem::path(libpath).append("info");
     ANGBAND_DIR_PREF = std::filesystem::path(libpath).append("pref");
     ANGBAND_DIR_SAVE = std::filesystem::path(libpath).append("save");
-    ANGBAND_DIR_DEBUG_SAVE = std::filesystem::path(ANGBAND_DIR_SAVE).append("log");
 #ifdef PRIVATE_USER_PATH
     ANGBAND_DIR_USER = std::filesystem::path(PRIVATE_USER_PATH).append(VARIANT_NAME);
 #else
     ANGBAND_DIR_USER = std::filesystem::path(libpath).append("user");
 #endif
     ANGBAND_DIR_XTRA = std::filesystem::path(libpath).append("xtra");
-
-    time_t now = time(nullptr);
-    struct tm *t = localtime(&now);
-    char tmp[128];
-    strftime(tmp, sizeof(tmp), "%Y-%m-%d-%H-%M-%S", t);
-    debug_savefile = path_build(ANGBAND_DIR_DEBUG_SAVE, tmp);
-    remove_old_debug_savefiles();
 }
 
 /*!
@@ -161,7 +120,7 @@ static void put_title()
  */
 void init_angband(PlayerType *player_ptr, bool no_term)
 {
-    const auto &path_news = path_build(ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
+    const auto path_news = path_build(ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
     auto fd = fd_open(path_news, O_RDONLY);
     if (fd < 0) {
         std::string why = _("'", "Cannot access the '");
@@ -176,9 +135,12 @@ void init_angband(PlayerType *player_ptr, bool no_term)
         auto *fp = angband_fopen(path_news, FileOpenMode::READ);
         if (fp) {
             int i = 0;
-            char buf[1024]{};
-            while (0 == angband_fgets(fp, buf, sizeof(buf))) {
-                term_putstr(0, i++, -1, TERM_WHITE, buf);
+            while (true) {
+                const auto buf = angband_fgets(fp);
+                if (!buf) {
+                    break;
+                }
+                term_putstr(0, i++, -1, TERM_WHITE, *buf);
             }
 
             angband_fclose(fp);
@@ -187,7 +149,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
         term_flush();
     }
 
-    const auto &path_score = path_build(ANGBAND_DIR_APEX, "scores.raw");
+    const auto path_score = path_build(ANGBAND_DIR_APEX, "scores.raw");
     fd = fd_open(path_score, O_RDONLY);
     if (fd < 0) {
         safe_setuid_grab();
@@ -234,7 +196,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     }
 
     init_note(_("[データの初期化中... (モンスター)]", "[Initializing arrays... (monsters)]"));
-    if (init_monster_race_definitions()) {
+    if (init_monrace_definitions()) {
         quit(_("モンスター初期化不能", "Cannot initialize monsters"));
     }
 
@@ -243,9 +205,10 @@ void init_angband(PlayerType *player_ptr, bool no_term)
         quit(_("ダンジョン初期化不能", "Cannot initialize dungeon"));
     }
 
-    for (const auto &d_ref : dungeons_info) {
-        if (d_ref.idx > 0 && MonsterRace(d_ref.final_guardian).is_valid()) {
-            monraces_info[d_ref.final_guardian].misc_flags.set(MonsterMiscType::GUARDIAN);
+    for (auto &dungeon : dungeons_info) {
+        if (dungeon.is_dungeon() && dungeon.has_guardian()) {
+            auto &monrace = dungeon.get_guardian();
+            monrace.misc_flags.set(MonsterMiscType::GUARDIAN);
         }
     }
 

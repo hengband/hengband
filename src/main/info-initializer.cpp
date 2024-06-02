@@ -4,6 +4,7 @@
  */
 
 #include "main/info-initializer.h"
+#include "external-lib/include-json.h"
 #include "floor/wild.h"
 #include "info-reader/artifact-reader.h"
 #include "info-reader/baseitem-reader.h"
@@ -96,7 +97,7 @@ static void init_header(angband_header *head, IDX num = 0)
 template <typename InfoType>
 static errr init_info(std::string_view filename, angband_header &head, InfoType &info, Parser parser, Retoucher retouch = nullptr)
 {
-    const auto &path = path_build(ANGBAND_DIR_EDIT, filename);
+    const auto path = path_build(ANGBAND_DIR_EDIT, filename);
     auto *fp = angband_fopen(path, FileOpenMode::READ);
     if (!fp) {
         quit_fmt(_("'%s'ファイルをオープンできません。", "Cannot open '%s' file."), filename.data());
@@ -137,13 +138,60 @@ static errr init_info(std::string_view filename, angband_header &head, InfoType 
 }
 
 /*!
+ * @brief 各種設定データをlib/edit/.jsoncから読み込み
+ * Load data from lib/edit/.jsonc
+ * @param filename ファイル名(拡張子jsonc)
+ * @param head 処理に用いるヘッダ構造体
+ * @param info データ保管先の構造体ポインタ
+ * @return エラーコード
+ * @note
+ * Note that we let each entry have a unique "name" and "text" string,
+ * even if the string happens to be empty (everyone has a unique '\0').
+ */
+template <typename InfoType>
+static errr init_json(std::string_view filename, std::string_view keyname, angband_header &head, InfoType &info, JSONParser parser)
+{
+    const auto path = path_build(ANGBAND_DIR_EDIT, filename);
+    std::ifstream ifs(path);
+
+    if (!ifs) {
+        quit_fmt(_("'%s'ファイルをオープンできません。", "Cannot open '%s' file."), filename.data());
+    }
+
+    std::istreambuf_iterator<char> ifs_iter(ifs);
+    std::istreambuf_iterator<char> ifs_end;
+    auto json_object = nlohmann::json::parse(ifs_iter, ifs_end, nullptr, true, true);
+
+    constexpr auto info_is_vector = is_vector_v<InfoType>;
+    if constexpr (info_is_vector) {
+        using value_type = typename InfoType::value_type;
+        info.assign(head.info_num, value_type{});
+    }
+    error_idx = -1;
+
+    for (auto &element : json_object[keyname]) {
+        const auto error_code = parser(element, &head);
+        if (error_code != PARSE_ERROR_NONE) {
+            msg_print(nullptr);
+            quit_fmt(_("'%s'ファイルにエラー", "Error in '%s' file."), filename.data());
+        }
+    }
+
+    util::SHA256 sha256;
+    sha256.update(json_object.dump());
+    head.digest = sha256.digest();
+
+    return PARSE_ERROR_NONE;
+}
+
+/*!
  * @brief 固定アーティファクト情報読み込みのメインルーチン
  * @return エラーコード
  */
 errr init_artifacts_info()
 {
     init_header(&artifacts_header);
-    return init_info("ArtifactDefinitions.txt", artifacts_header, artifacts_info, parse_artifacts_info);
+    return init_json("ArtifactDefinitions.jsonc", "artifacts", artifacts_header, ArtifactList::get_instance().get_raw_map(), parse_artifacts_info);
 }
 
 /*!
@@ -153,7 +201,7 @@ errr init_artifacts_info()
 errr init_baseitems_info()
 {
     init_header(&baseitems_header);
-    return init_info("BaseitemDefinitions.txt", baseitems_header, baseitems_info, parse_baseitems_info);
+    return init_json("BaseitemDefinitions.jsonc", "baseitems", baseitems_header, BaseitemList::get_instance().get_raw_vector(), parse_baseitems_info);
 }
 
 /*!
@@ -213,10 +261,10 @@ errr init_terrains_info()
  * @brief モンスター種族情報読み込みのメインルーチン
  * @return エラーコード
  */
-errr init_monster_race_definitions()
+errr init_monrace_definitions()
 {
     init_header(&monraces_header);
-    return init_info("MonsterRaceDefinitions.txt", monraces_header, monraces_info, parse_monraces_info);
+    return init_json("MonraceDefinitions.jsonc", "monsters", monraces_header, monraces_info, parse_monraces_info);
 }
 
 /*!
@@ -273,7 +321,7 @@ static bool read_wilderness_definition(std::ifstream &ifs)
  */
 bool init_wilderness()
 {
-    const auto &path = path_build(ANGBAND_DIR_EDIT, WILDERNESS_DEFINITION);
+    const auto path = path_build(ANGBAND_DIR_EDIT, WILDERNESS_DEFINITION);
     std::ifstream ifs(path);
     if (!ifs) {
         return false;

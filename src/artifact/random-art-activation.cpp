@@ -221,54 +221,64 @@ void give_activation_power(ItemEntity *o_ptr)
     RandomArtActType type = RandomArtActType::NONE;
     int chance = 0;
     switch (o_ptr->artifact_bias) {
-    case BIAS_ELEC:
+    case RandomArtifactBias::ELEC:
         type = invest_activation_elec();
         chance = 101;
         break;
-    case BIAS_POIS:
+    case RandomArtifactBias::POIS:
         type = RandomArtActType::BA_POIS_1;
         chance = 101;
         break;
-    case BIAS_FIRE:
+    case RandomArtifactBias::FIRE:
         type = invest_activation_fire();
         chance = 101;
         break;
-    case BIAS_COLD:
+    case RandomArtifactBias::COLD:
         type = invest_activation_cold();
         chance = 101;
         break;
-    case BIAS_CHAOS:
+    case RandomArtifactBias::ACID:
+    case RandomArtifactBias::STR:
+    case RandomArtifactBias::INT:
+    case RandomArtifactBias::WIS:
+    case RandomArtifactBias::DEX:
+    case RandomArtifactBias::CON:
+    case RandomArtifactBias::CHR:
+        break;
+    case RandomArtifactBias::CHAOS:
         type = invest_activation_chaos();
         chance = 50;
         break;
-    case BIAS_PRIESTLY:
+    case RandomArtifactBias::PRIESTLY:
         type = invest_activation_priest();
         chance = 101;
         break;
-    case BIAS_NECROMANTIC:
+    case RandomArtifactBias::NECROMANTIC:
         type = invest_activation_necromancy();
         chance = 101;
         break;
-    case BIAS_LAW:
+    case RandomArtifactBias::LAW:
         type = invest_activation_law();
         chance = 101;
         break;
-    case BIAS_ROGUE:
+    case RandomArtifactBias::ROGUE:
         type = invest_activation_rogue();
         chance = 101;
         break;
-    case BIAS_MAGE:
+    case RandomArtifactBias::MAGE:
         type = invest_activation_mage();
         chance = 66;
         break;
-    case BIAS_WARRIOR:
+    case RandomArtifactBias::WARRIOR:
         type = invest_activation_warrior();
         chance = 80;
         break;
-    case BIAS_RANGER:
+    case RandomArtifactBias::RANGER:
         type = invest_activation_ranger();
         chance = 101;
         break;
+    default:
+        THROW_EXCEPTION(std::runtime_error, "Invalid artifact bias was set!");
     }
 
     if ((type == RandomArtActType::NONE) || (randint1(100) >= chance)) {

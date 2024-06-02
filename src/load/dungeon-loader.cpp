@@ -26,7 +26,7 @@
  */
 static errr rd_dungeon(PlayerType *player_ptr)
 {
-    init_saved_floors(player_ptr, false);
+    init_saved_floors(false);
     errr err = 0;
     auto &floor = *player_ptr->current_floor_ptr;
     if (h_older_than(1, 5, 0, 0)) {
@@ -135,9 +135,9 @@ static errr rd_dungeon(PlayerType *player_ptr)
 errr restore_dungeon(PlayerType *player_ptr)
 {
     if (player_ptr->is_dead) {
-        const auto &quest_list = QuestList::get_instance();
-        for (auto q_idx : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
-            monraces_info[quest_list[q_idx].r_idx].misc_flags.reset(MonsterMiscType::QUESTOR);
+        const auto &quests = QuestList::get_instance();
+        for (const auto quest_id : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
+            monraces_info[quests.get_quest(quest_id).r_idx].misc_flags.reset(MonsterMiscType::QUESTOR);
         }
 
         return 0;

@@ -45,7 +45,6 @@
 #include "target/grid-selector.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-getter.h"
-#include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -151,7 +150,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
             }
 
             if (floor.has_los(pos) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
-                if (!(player_ptr->effects()->blindness()->is_blind()) && panel_contains(y, x)) {
+                if (!(player_ptr->effects()->blindness().is_blind()) && panel_contains(y, x)) {
                     print_bolt_pict(player_ptr, y, x, y, x, AttributeType::MANA);
                     move_cursor_relative(y, x);
                     term_fresh();

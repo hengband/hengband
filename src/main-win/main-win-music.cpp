@@ -83,8 +83,8 @@ static concptr dungeon_key_at(int index, char *buf)
  */
 static concptr quest_key_at(int index, char *buf)
 {
-    const auto &quest_list = QuestList::get_instance();
-    if (index > enum2i(quest_list.rbegin()->first)) {
+    const auto &quests = QuestList::get_instance();
+    if (index > enum2i(quests.rbegin()->first)) {
         return nullptr;
     }
 

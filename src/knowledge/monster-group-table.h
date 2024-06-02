@@ -1,6 +1,7 @@
 #pragma once
 
-#include "system/angband.h"
+#include <string>
+#include <vector>
 
-extern concptr monster_group_text[];
-extern concptr monster_group_char[];
+extern const std::vector<std::string> MONSTER_KINDS_GROUP;
+extern const std::vector<std::string> MONRACE_CHARACTERS_GROUP;

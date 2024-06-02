@@ -10,7 +10,7 @@ enum class ScreenLoadOptType {
 };
 
 void move_cursor(int row, int col);
-void flush(void);
+void flush();
 void screen_save();
 void screen_load(ScreenLoadOptType opt = ScreenLoadOptType::ONE);
 void c_put_str(TERM_COLOR attr, std::string_view sv, TERM_LEN row, TERM_LEN col);

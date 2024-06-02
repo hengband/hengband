@@ -116,11 +116,11 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     health_track(player_ptr, 0);
 
     disturb(player_ptr, true, true);
-    auto quest_num = floor.get_quest_id();
-    const auto &quest_list = QuestList::get_instance();
-    auto *questor_ptr = &monraces_info[quest_list[quest_num].r_idx];
-    if (inside_quest(quest_num)) {
-        questor_ptr->misc_flags.set(MonsterMiscType::QUESTOR);
+    const auto quest_id = floor.get_quest_id();
+    const auto &quests = QuestList::get_instance();
+    auto &monrace_questor = monraces_info[quests.get_quest(quest_id).r_idx];
+    if (inside_quest(quest_id)) {
+        monrace_questor.misc_flags.set(MonsterMiscType::QUESTOR);
     }
 
     if (player_ptr->max_plv < player_ptr->lev) {
@@ -152,10 +152,10 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     handle_stuff(player_ptr);
     term_fresh();
 
-    auto no_feeling_quest = (quest_num == QuestId::OBERON);
-    no_feeling_quest |= (quest_num == QuestId::SERPENT);
-    no_feeling_quest |= none_bits(quest_list[quest_num].flags, QUEST_FLAG_PRESET);
-    if (inside_quest(quest_num) && QuestType::is_fixed(quest_num) && !no_feeling_quest) {
+    auto no_feeling_quest = (quest_id == QuestId::OBERON);
+    no_feeling_quest |= (quest_id == QuestId::SERPENT);
+    no_feeling_quest |= none_bits(quests.get_quest(quest_id).flags, QUEST_FLAG_PRESET);
+    if (inside_quest(quest_id) && QuestType::is_fixed(quest_id) && !no_feeling_quest) {
         do_cmd_feeling(player_ptr);
     }
 
@@ -185,14 +185,13 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     }
 
     const auto &dungeon = floor.get_dungeon_definition();
-    const auto guardian = dungeon.final_guardian;
-    if ((floor.dun_level == dungeon.maxdepth) && MonsterRace(guardian).is_valid()) {
-        const auto &guardian_ref = monraces_info[guardian];
-        if (guardian_ref.max_num) {
+    if ((floor.dun_level == dungeon.maxdepth) && dungeon.is_dungeon()) {
+        const auto &monrace = dungeon.get_guardian();
+        if (monrace.max_num > 0) {
 #ifdef JP
-            msg_format("この階には%sの主である%sが棲んでいる。", dungeon.name.data(), guardian_ref.name.data());
+            msg_format("この階には%sの主である%sが棲んでいる。", dungeon.name.data(), monrace.name.data());
 #else
-            msg_format("%s^ lives in this level as the keeper of %s.", guardian_ref.name.data(), dungeon.name.data());
+            msg_format("%s^ lives in this level as the keeper of %s.", monrace.name.data(), dungeon.name.data());
 #endif
         }
     }
@@ -204,7 +203,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     floor.monster_level = floor.base_level;
     floor.object_level = floor.base_level;
     w_ptr->is_loading_now = true;
-    if (player_ptr->energy_need > 0 && !is_watching && (floor.dun_level || player_ptr->leaving_dungeon || floor.inside_arena)) {
+    if (player_ptr->energy_need > 0 && !is_watching && (floor.is_in_underground() || player_ptr->leaving_dungeon || floor.inside_arena)) {
         player_ptr->energy_need = 0;
     }
 
@@ -285,8 +284,8 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         }
     }
 
-    if ((inside_quest(quest_num)) && questor_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        questor_ptr->misc_flags.reset(MonsterMiscType::QUESTOR);
+    if ((inside_quest(quest_id)) && monrace_questor.kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        monrace_questor.misc_flags.reset(MonsterMiscType::QUESTOR);
     }
 
     if (player_ptr->playing && !player_ptr->is_dead) {

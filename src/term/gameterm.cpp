@@ -3,7 +3,9 @@
 #include "system/system-variables.h"
 #include "term/term-color-types.h"
 #include "util/string-processor.h"
+#include "view/display-symbol.h"
 #include <span>
+#include <unordered_map>
 
 /*
  * Convert an "attr"/"char" pair into a "pict" (P)
@@ -560,15 +562,10 @@ static TERM_COLOR spell_color(AttributeType type)
  * If the distance is not "one", we (may) return "*".
  * </pre>
  */
-std::pair<TERM_COLOR, char> bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeType typ)
+DisplaySymbol bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeType typ)
 {
-    int base;
-
-    byte k;
-
-    TERM_COLOR a;
-
     /* No motion (*) */
+    int base;
     if ((ny == y) && (nx == x)) {
         base = 0x30;
     }
@@ -599,11 +596,11 @@ std::pair<TERM_COLOR, char> bolt_pict(POSITION y, POSITION x, POSITION ny, POSIT
     }
 
     /* Basic spell color */
-    k = spell_color(typ);
+    const auto k = spell_color(typ);
 
     /* Obtain attr/char */
-    a = misc_to_attr[base + k];
-    auto c = misc_to_char[base + k];
+    const auto a = misc_to_attr[base + k];
+    const auto c = misc_to_char[base + k];
 
     /* Create pict */
     return { a, c };
@@ -656,3 +653,22 @@ TERM_COLOR color_char_to_attr(char c)
 
     return 255;
 }
+
+const std::unordered_map<std::string_view, TERM_COLOR> color_list = {
+    { "Black", TERM_DARK },
+    { "White", TERM_WHITE },
+    { "Gray", TERM_SLATE },
+    { "Orange", TERM_ORANGE },
+    { "Red", TERM_RED },
+    { "Green", TERM_GREEN },
+    { "Blue", TERM_BLUE },
+    { "Brown", TERM_UMBER },
+    { "Dark Gray", TERM_L_DARK },
+    { "Light Gray", TERM_L_WHITE },
+    { "Violet", TERM_VIOLET },
+    { "Yellow", TERM_YELLOW },
+    { "Light Red", TERM_L_RED },
+    { "Light Green", TERM_L_GREEN },
+    { "Light Blue", TERM_L_BLUE },
+    { "Light Brown", TERM_L_UMBER },
+};

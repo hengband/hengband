@@ -91,6 +91,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     const auto &dungeon = floor.get_dungeon_definition();
+    auto &fcms = FloorChangeModesStore::get_instace();
     if ((ironman_downward && (m_idx <= 0)) || (floor.dun_level <= dungeon.mindepth)) {
 #ifdef JP
         if (see_m) {
@@ -102,7 +103,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
         }
 #endif
         if (m_idx <= 0) {
-            if (!floor.is_in_dungeon()) {
+            if (!floor.is_in_underground()) {
                 floor.set_dungeon_index(ironman_downward ? DUNGEON_ANGBAND : player_ptr->recall_dungeon);
                 player_ptr->oldpy = player_ptr->y;
                 player_ptr->oldpx = player_ptr->x;
@@ -116,12 +117,12 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
                 do_cmd_save_game(player_ptr, true);
             }
 
-            if (!floor.is_in_dungeon()) {
+            fcms->set(FloorChangeMode::RANDOM_PLACE);
+            if (!floor.is_in_underground()) {
                 const auto &recall_dungeon = floor.get_dungeon_definition();
                 floor.dun_level = recall_dungeon.mindepth;
-                prepare_change_floor_mode(player_ptr, CFM_RAND_PLACE);
             } else {
-                prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+                fcms->set({ FloorChangeMode::SAVE_FLOORS, FloorChangeMode::DOWN, FloorChangeMode::RANDOM_CONNECT });
             }
 
             player_ptr->leaving = true;
@@ -146,8 +147,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
                 do_cmd_save_game(player_ptr, true);
             }
 
-            prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
-
+            fcms->set({ FloorChangeMode::SAVE_FLOORS, FloorChangeMode::UP, FloorChangeMode::RANDOM_PLACE, FloorChangeMode::RANDOM_CONNECT });
             leave_quest_check(player_ptr);
             floor.quest_number = QuestId::NONE;
             player_ptr->leaving = true;
@@ -172,7 +172,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
                 do_cmd_save_game(player_ptr, true);
             }
 
-            prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+            fcms->set({ FloorChangeMode::SAVE_FLOORS, FloorChangeMode::UP, FloorChangeMode::RANDOM_PLACE, FloorChangeMode::RANDOM_CONNECT });
             player_ptr->leaving = true;
         }
     } else {
@@ -194,7 +194,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
                 do_cmd_save_game(player_ptr, true);
             }
 
-            prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+            fcms->set({ FloorChangeMode::SAVE_FLOORS, FloorChangeMode::DOWN, FloorChangeMode::RANDOM_PLACE, FloorChangeMode::RANDOM_CONNECT });
             player_ptr->leaving = true;
         }
     }
@@ -377,28 +377,28 @@ static DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
     std::vector<DUNGEON_IDX> dun;
 
     screen_save();
-    for (const auto &d_ref : dungeons_info) {
-        char buf[80];
-        bool seiha = false;
+    for (const auto &dungeon : dungeons_info) {
+        auto is_conquered = false;
+        if (!dungeon.is_dungeon() || !dungeon.maxdepth) {
+            continue;
+        }
 
-        if (d_ref.idx == 0 || !d_ref.maxdepth) {
+        if (!max_dlv[dungeon.idx]) {
             continue;
         }
-        if (!max_dlv[d_ref.idx]) {
-            continue;
-        }
-        if (MonsterRace(d_ref.final_guardian).is_valid()) {
-            if (!monraces_info[d_ref.final_guardian].max_num) {
-                seiha = true;
+
+        if (dungeon.has_guardian()) {
+            if (dungeon.get_guardian().max_num == 0) {
+                is_conquered = true;
             }
-        } else if (max_dlv[d_ref.idx] == d_ref.maxdepth) {
-            seiha = true;
+        } else if (max_dlv[dungeon.idx] == dungeon.maxdepth) {
+            is_conquered = true;
         }
 
         constexpr auto fmt = _("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d");
-        strnfmt(buf, sizeof(buf), fmt, static_cast<char>('a' + dun.size()), seiha ? '!' : ' ', d_ref.name.data(), (int)max_dlv[d_ref.idx]);
+        const auto buf = format(fmt, static_cast<char>('a' + dun.size()), is_conquered ? '!' : ' ', dungeon.name.data(), (int)max_dlv[dungeon.idx]);
         prt(buf, y + dun.size(), x);
-        dun.push_back(d_ref.idx);
+        dun.push_back(dungeon.idx);
     }
 
     if (dun.empty()) {
@@ -440,7 +440,7 @@ bool recall_player(PlayerType *player_ptr, TIME_EFFECT turns)
         return true;
     }
 
-    bool is_special_floor = floor.is_in_dungeon();
+    bool is_special_floor = floor.is_in_underground();
     is_special_floor &= max_dlv[floor.dungeon_idx] > floor.dun_level;
     is_special_floor &= !floor.is_in_quest();
     is_special_floor &= !player_ptr->word_recall;
@@ -461,7 +461,7 @@ bool recall_player(PlayerType *player_ptr, TIME_EFFECT turns)
         return true;
     }
 
-    if (!floor.is_in_dungeon()) {
+    if (!floor.is_in_underground()) {
         DUNGEON_IDX select_dungeon;
         select_dungeon = choose_dungeon(_("に帰還", "recall"), 2, 14);
         if (!select_dungeon) {
@@ -486,10 +486,10 @@ bool free_level_recall(PlayerType *player_ptr)
     const auto &dungeon = dungeons_info[select_dungeon];
     auto max_depth = dungeon.maxdepth;
     if (select_dungeon == DUNGEON_ANGBAND) {
-        const auto &quest_list = QuestList::get_instance();
-        if (quest_list[QuestId::OBERON].status != QuestStatusType::FINISHED) {
+        const auto &quests = QuestList::get_instance();
+        if (quests.get_quest(QuestId::OBERON).status != QuestStatusType::FINISHED) {
             max_depth = 98;
-        } else if (quest_list[QuestId::SERPENT].status != QuestStatusType::FINISHED) {
+        } else if (quests.get_quest(QuestId::SERPENT).status != QuestStatusType::FINISHED) {
             max_depth = 99;
         }
     }

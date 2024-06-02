@@ -270,6 +270,7 @@ hengband_SOURCES = \
 	info-reader/fixed-map-parser.cpp info-reader/fixed-map-parser.h \
 	info-reader/general-parser.cpp info-reader/general-parser.h \
 	info-reader/info-reader-util.cpp info-reader/info-reader-util.h \
+	info-reader/json-reader-util.cpp info-reader/json-reader-util.h \
 	info-reader/magic-reader.cpp info-reader/magic-reader.h \
 	info-reader/parse-error-types.h \
 	info-reader/race-info-tokens-table.cpp info-reader/race-info-tokens-table.h \
@@ -320,6 +321,7 @@ hengband_SOURCES = \
 	\
 	item-info/flavor-initializer.cpp item-info/flavor-initializer.h \
 	\
+	knowledge/item-group-table.cpp knowledge/item-group-table.h \
 	knowledge/knowledge-autopick.cpp knowledge/knowledge-autopick.h \
 	knowledge/knowledge-experiences.cpp knowledge/knowledge-experiences.h \
 	knowledge/knowledge-features.cpp knowledge/knowledge-features.h \
@@ -332,7 +334,6 @@ hengband_SOURCES = \
 	knowledge/knowledge-quests.cpp knowledge/knowledge-quests.h \
 	knowledge/lighting-level-table.cpp knowledge/lighting-level-table.h \
 	knowledge/monster-group-table.cpp knowledge/monster-group-table.h \
-	knowledge/object-group-table.cpp knowledge/object-group-table.h \
 	\
 	load/angband-version-comparer.cpp load/angband-version-comparer.h \
 	load/birth-loader.cpp load/birth-loader.h \
@@ -780,14 +781,16 @@ hengband_SOURCES = \
 	room/cave-filler.cpp room/cave-filler.h \
 	room/door-definition.cpp room/door-definition.h \
 	room/lake-types.h room/room-types.h \
+	room/pit-nest-util.cpp room/pit-nest-util.h \
 	room/room-generator.cpp room/room-generator.h \
 	room/room-info-table.cpp room/room-info-table.h \
 	room/rooms-builder.cpp room/rooms-builder.h \
 	room/rooms-city.cpp room/rooms-city.h \
 	room/rooms-fractal.cpp room/rooms-fractal.h \
 	room/rooms-maze-vault.cpp room/rooms-maze-vault.h \
+	room/rooms-nest.cpp room/rooms-nest.h \
 	room/rooms-normal.cpp room/rooms-normal.h \
-	room/rooms-pit-nest.cpp room/rooms-pit-nest.h \
+	room/rooms-pit.cpp room/rooms-pit.h\
 	room/rooms-special.cpp room/rooms-special.h \
 	room/rooms-trap.cpp room/rooms-trap.h \
 	room/rooms-vault.cpp room/rooms-vault.h \
@@ -941,6 +944,7 @@ hengband_SOURCES = \
 	target/target-getter.cpp target/target-getter.h \
 	target/target-preparation.cpp target/target-preparation.h \
 	target/target-setter.cpp target/target-setter.h \
+	target/target-sorter.cpp target/target-sorter.h \
 	target/target-types.h \
 	\
 	term/gameterm.cpp term/gameterm.h \
@@ -976,10 +980,8 @@ hengband_SOURCES = \
 	util/probability-table.h \
 	util/rng-xoshiro.cpp util/rng-xoshiro.h \
 	util/sha256.cpp util/sha256.h \
-	util/sort.cpp util/sort.h \
 	util/string-processor.cpp util/string-processor.h \
 	\
-	view/colored-char.h \
 	view/display-birth.cpp view/display-birth.h \
 	view/display-characteristic.cpp view/display-characteristic.h \
 	view/display-fruit.cpp view/display-fruit.h \
@@ -999,6 +1001,7 @@ hengband_SOURCES = \
 	view/display-scores.cpp view/display-scores.h \
 	view/display-self-info.cpp view/display-self-info.h \
 	view/display-store.cpp view/display-store.h \
+	view/display-symbol.h \
 	view/display-util.cpp view/display-util.h \
 	view/object-describer.cpp view/object-describer.h \
 	view/status-first-page.cpp view/status-first-page.h \

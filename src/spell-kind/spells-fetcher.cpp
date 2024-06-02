@@ -23,7 +23,6 @@
 #include "target/target-checker.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
-#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -140,7 +139,7 @@ bool fetch_monster(PlayerType *player_ptr)
     auto &monster = floor.m_list[m_idx];
     const auto m_name = monster_desc(player_ptr, &monster, 0);
     msg_format(_("%sを引き戻した。", "You pull back %s."), m_name.data());
-    projection_path path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), target_row, target_col, player_ptr->y, player_ptr->x, 0);
+    ProjectionPath path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), { target_row, target_col }, player_ptr->get_position(), 0);
     auto ty = target_row, tx = target_col;
     for (const auto &[ny, nx] : path_g) {
         const Pos2D pos_path(ny, nx);
@@ -165,7 +164,7 @@ bool fetch_monster(PlayerType *player_ptr)
     }
 
     if (monster.ml) {
-        if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
+        if (!player_ptr->effects()->hallucination().is_hallucinated()) {
             monster_race_track(player_ptr, monster.ap_r_idx);
         }
 

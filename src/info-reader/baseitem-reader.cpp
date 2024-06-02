@@ -8,7 +8,9 @@
 #include "artifact/random-art-effects.h"
 #include "info-reader/baseitem-tokens-table.h"
 #include "info-reader/info-reader-util.h"
+#include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
+#include "locale/japanese.h"
 #include "main/angband-headers.h"
 #include "object-enchant/tr-types.h"
 #include "object/tval-types.h"
@@ -40,221 +42,250 @@ static bool grab_one_baseitem_flag(BaseitemInfo &baseitem, std::string_view what
 }
 
 /*!
- * @brief ベースアイテム(BaseitemDefinitions)のパース関数
- * @param buf テキスト列
+ * @brief JSON Objectからベースアイテムのシンボルをセットする
+ * @param symbol_data シンボル情報の格納されたJSON Object
+ * @param baseitem 保管先のベースアイテム情報インスタンス
+ * @return エラーコード
+ */
+static errr set_baseitem_symbol(const nlohmann::json &symbol_data, BaseitemInfo &baseitem)
+{
+    if (symbol_data.is_null()) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+
+    const auto &character_obj = symbol_data["character"];
+    if (!character_obj.is_string()) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+
+    const auto &color_obj = symbol_data["color"];
+    if (!color_obj.is_string()) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+
+    const auto color = color_list.find(color_obj.get<std::string>());
+    if (color == color_list.end()) {
+        return PARSE_ERROR_INVALID_FLAG;
+    }
+    if (color->second > 127) {
+        return PARSE_ERROR_GENERIC;
+    }
+    baseitem.symbol_definition = DisplaySymbol(color->second, character_obj.get<std::string>().front());
+
+    return PARSE_ERROR_NONE;
+}
+
+/*!
+ * @brief JSON Objectからベースアイテム種別をセットする
+ * @param baseitem_data ベースアイテム情報の格納されたJSON Object
+ * @param baseitem 保管先のベースアイテム情報インスタンス
+ * @return エラーコード
+ */
+static errr set_baseitem_kind(nlohmann::json &baseitem_data, BaseitemInfo &baseitem)
+{
+    if (baseitem_data.is_null()) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+
+    ItemKindType type_value;
+    if (auto err = info_set_integer(baseitem_data["type_value"], type_value, true, Range(0, 128))) {
+        return err;
+    }
+    int subtype_value;
+    if (auto err = info_set_integer(baseitem_data["subtype_value"], subtype_value, true, Range(0, 128))) {
+        return err;
+    }
+
+    baseitem.bi_key = { type_value, subtype_value };
+    return PARSE_ERROR_NONE;
+}
+
+/*!
+ * @brief JSON Objectからベースアイテムのpvalをセットする
+ * @param pval_data pval情報の格納されたJSON Object
+ * @param baseitem 保管先のベースアイテム情報インスタンス
+ * @return エラーコード
+ */
+static errr set_baseitem_parameter_value(const nlohmann::json &pval_data, BaseitemInfo &baseitem)
+{
+    if (auto err = info_set_integer(pval_data, baseitem.pval, false, Range(-9999, 9999))) {
+        return err;
+    }
+    if ((baseitem.bi_key.tval() == ItemKindType::ROD) && (baseitem.pval <= 0)) {
+        return PAESE_ERROR_INVALID_PVAL;
+    }
+
+    return PARSE_ERROR_NONE;
+}
+
+/*!
+ * @brief JSON Objectからアイテムの階層/希少度情報をセットする
+ * @param alloc_data 階層/希少度情報の格納されたJSON Object
+ * @param baseitem 保管先のベースアイテム情報インスタンス
+ * @return エラーコード
+ */
+static errr set_baseitem_allocations(nlohmann::json &allocations_data, BaseitemInfo &baseitem)
+{
+    if (allocations_data.is_null()) {
+        return PARSE_ERROR_NONE;
+    }
+    if (!allocations_data.is_array()) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+
+    for (auto i = 0; auto &element : allocations_data.items()) {
+        auto &alloc = element.value();
+        auto &table = baseitem.alloc_tables[i];
+        if (auto err = info_set_integer(alloc["depth"], table.level, true, Range(0, 128))) {
+            return err;
+        }
+        if (auto err = info_set_integer(alloc["rarity"], table.chance, true, Range(0, 256))) {
+            return err;
+        }
+        i++;
+    }
+    return PARSE_ERROR_NONE;
+}
+
+/*!
+ * @brief JSON Objectからベースアイテムの発動能力をセットする
+ * @param act_data 発動能力情報の格納されたJSON Object
+ * @param baseitem 保管先のベースアイテム情報インスタンス
+ * @return エラーコード
+ */
+static errr set_baseitem_activate(const nlohmann::json &act_data, BaseitemInfo &baseitem)
+{
+    if (!act_data.is_string()) {
+        return PARSE_ERROR_NONE;
+    }
+
+    auto activation = grab_one_activation_flag(act_data.get<std::string>());
+    if (activation <= RandomArtActType::NONE) {
+        return PARSE_ERROR_INVALID_FLAG;
+    }
+
+    baseitem.act_idx = activation;
+    baseitem.flags.set(tr_type::TR_ACTIVATE);
+    return PARSE_ERROR_NONE;
+}
+
+/*!
+ * @brief JSON Objectからベースアイテムフラグをセットする
+ * @param flag_data ベースアイテムフラグ情報の格納されたJSON Object
+ * @param baseitem 保管先のベースアイテム情報インスタンス
+ * @return エラーコード
+ */
+static errr set_baseitem_flags(const nlohmann::json &flag_data, BaseitemInfo &baseitem)
+{
+    if (flag_data.is_null()) {
+        return PARSE_ERROR_NONE;
+    }
+    if (!flag_data.is_array()) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+
+    for (auto &flag : flag_data) {
+        if (!grab_one_baseitem_flag(baseitem, flag.get<std::string>())) {
+            return PARSE_ERROR_INVALID_FLAG;
+        }
+    }
+    return PARSE_ERROR_NONE;
+}
+
+/*!
+ * @brief ベースアイテム情報(JSON Object)のパース関数
+ * @param art_data ベースアイテムデータの格納されたJSON Object
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_baseitems_info(std::string_view buf, angband_header *head)
+errr parse_baseitems_info(nlohmann::json &item_data, angband_header *)
 {
-    (void)head;
-    const auto &tokens = str_split(buf, ':', false, 10);
-
-    // N:index:name_ja
-    if (tokens[0] == "N") {
-        if (tokens.size() < 3 || tokens[1].size() == 0) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-
-        const auto i = std::stoi(tokens[1]);
-        if (i < error_idx) {
-            return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
-        }
-
-        if (i >= static_cast<int>(baseitems_info.size())) {
-            baseitems_info.resize(i + 1);
-        }
-
-        error_idx = i;
-        auto &baseitem = baseitems_info[i];
-        baseitem.idx = static_cast<short>(i);
-#ifdef JP
-        baseitem.name = tokens[2];
-#endif
-        if (tokens.size() > 3) {
-            baseitem.flavor_name = tokens[3];
-        }
-
-        return PARSE_ERROR_NONE;
+    if (!item_data["id"].is_number_integer()) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    if (baseitems_info.empty()) {
-        return PARSE_ERROR_MISSING_RECORD_HEADER;
+    const auto item_id = item_data["id"].get<int>();
+    if (item_id < error_idx) {
+        return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
     }
 
-    // E:name_en
-    if (tokens[0] == "E") {
-#ifndef JP
-        if (tokens.size() < 2 || tokens[1].size() == 0) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
+    auto &baseitems = BaseitemList::get_instance();
+    error_idx = item_id;
+    if (item_id >= static_cast<int>(baseitems.size())) {
+        baseitems.resize(item_id + 1);
+    }
+    const short short_id = static_cast<short>(item_id);
+    auto &baseitem = baseitems.get_baseitem(short_id);
+    baseitem.idx = short_id;
 
-        auto &baseitem = *baseitems_info.rbegin();
-        baseitem.name = tokens[1];
-        if (tokens.size() > 2) {
-            baseitem.flavor_name = tokens[2];
-        }
-#endif
-        return PARSE_ERROR_NONE;
+    if (auto err = info_set_string(item_data["name"], baseitem.name, true)) {
+        msg_format(_("アイテムの名称読込失敗。ID: '%d'。", "Failed to load item name. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = info_set_string(item_data["flavor_name"], baseitem.flavor_name, false)) {
+        msg_format(_("アイテム未識別名の読込失敗。ID: '%d'。", "Failed to load item unidentified name. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = info_set_string(item_data["flavor"], baseitem.text, false)) {
+        msg_format(_("アイテムのフレーバーテキスト読込失敗。ID: '%d'。", "Failed to load flavor text of item. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = set_baseitem_symbol(item_data["symbol"], baseitem)) {
+        msg_format(_("アイテムのシンボル読込失敗。ID: '%d'。", "Failed to load symbol of item. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = set_baseitem_kind(item_data["itemkind"], baseitem)) {
+        msg_format(_("アイテム種別の読込失敗。ID: '%d'。", "Failed to load kind of item. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = set_baseitem_parameter_value(item_data["parameter_value"], baseitem)) {
+        msg_format(_("アイテムのパラメータ値読込失敗。ID: '%d'。", "Failed to load prameter value of item. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = info_set_integer(item_data["level"], baseitem.level, true, Range(0, 128))) {
+        msg_format(_("アイテムのレベル読込失敗。ID: '%d'。", "Failed to load level of item. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = info_set_integer(item_data["weight"], baseitem.weight, true, Range(0, 9999))) {
+        msg_format(_("アイテムの重量読込失敗。ID: '%d'。", "Failed to load weight of item. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = info_set_integer(item_data["cost"], baseitem.cost, true, Range(0, 99999999))) {
+        msg_format(_("アイテムの売値読込失敗。ID: '%d'。", "Failed to load cost of item. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = info_set_integer(item_data["base_ac"], baseitem.ac, false, Range(-99, 99))) {
+        msg_format(_("アイテムのベースAC読込失敗。ID: '%d'。", "Failed to load base AC of item. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = info_set_dice(item_data["base_dice"], baseitem.dd, baseitem.ds, false)) {
+        msg_format(_("アイテムのベースダイス読込失敗。ID: '%d'。", "Failed to load base dice of item. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = info_set_integer(item_data["hit_bonus"], baseitem.to_h, false, Range(-99, 99))) {
+        msg_format(_("アイテムの命中補正値読込失敗。ID: '%d'。", "Failed to load hit bonus of item. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = info_set_integer(item_data["damage_bonus"], baseitem.to_d, false, Range(-99, 99))) {
+        msg_format(_("アイテムの命中補正値読込失敗。ID: '%d'。", "Failed to load damage bonus of item. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = info_set_integer(item_data["ac_bonus"], baseitem.to_a, false, Range(-99, 99))) {
+        msg_format(_("アイテムのAC補正値読込失敗。ID: '%d'。", "Failed to load AC bonus of item. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = set_baseitem_allocations(item_data["allocations"], baseitem)) {
+        msg_format(_("アイテムの生成情報読込失敗。ID: '%d'。", "Failed to load generation info of item. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = set_baseitem_activate(item_data["activate"], baseitem)) {
+        msg_format(_("アイテムの生成情報読込失敗。ID: '%d'。", "Failed to load activation of item. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = set_baseitem_flags(item_data["flags"], baseitem)) {
+        msg_format(_("アイテムの生成情報読込失敗。ID: '%d'。", "Failed to load flags of item. ID: '%d'."), error_idx);
+        return err;
     }
 
-    // D:text_ja
-    // D:$text_en
-    if (tokens[0] == "D") {
-        if (tokens.size() < 2 || buf.length() < 3) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-
-        auto &baseitem = *baseitems_info.rbegin();
-#ifdef JP
-        if (buf[2] == '$') {
-            return PARSE_ERROR_NONE;
-        }
-
-        baseitem.text.append(buf.substr(2));
-#else
-        if (buf[2] != '$') {
-            return PARSE_ERROR_NONE;
-        }
-
-        if (buf.length() == 3) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-
-        append_english_text(baseitem.text, buf.substr(3));
-#endif
-        return PARSE_ERROR_NONE;
-    }
-
-    // G:color:symbol
-    if (tokens[0] == "G") {
-        if (tokens.size() < 3 || tokens[1].size() == 0 || tokens[2].size() == 0) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-
-        const auto a = color_char_to_attr(tokens[2][0]);
-        if (a > 127) {
-            return PARSE_ERROR_GENERIC;
-        }
-
-        auto &baseitem = *baseitems_info.rbegin();
-        baseitem.d_attr = a;
-        baseitem.d_char = tokens[1][0];
-        return PARSE_ERROR_NONE;
-    }
-
-    // I:tval:sval:pval
-    if (tokens[0] == "I") {
-        if (tokens.size() < 4) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-
-        constexpr auto base = 10;
-        const auto tval = i2enum<ItemKindType>(std::stoi(tokens[1], nullptr, base));
-        const auto sval = std::stoi(tokens[2], nullptr, base);
-        auto &baseitem = *baseitems_info.rbegin();
-        baseitem.bi_key = { tval, sval };
-        info_set_value(baseitem.pval, tokens[3]);
-        if ((tval == ItemKindType::ROD) && (baseitem.pval <= 0)) {
-            return PAESE_ERROR_INVALID_PVAL;
-        }
-
-        return PARSE_ERROR_NONE;
-    }
-
-    // W:level:weight:cost
-    if (tokens[0] == "W") {
-        if (tokens.size() < 4) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-
-        auto &baseitem = *baseitems_info.rbegin();
-        info_set_value(baseitem.level, tokens[1]);
-        info_set_value(baseitem.weight, tokens[2]);
-        info_set_value(baseitem.cost, tokens[3]);
-        return PARSE_ERROR_NONE;
-    }
-
-    // A:level/chance(:level/chance:level/chance:level/chance)
-    if (tokens[0] == "A") {
-        if (tokens.size() < 2 || tokens.size() > 5) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-
-        auto i = 0;
-        for (auto t = tokens.begin() + 1; t != tokens.end(); t++) {
-            const auto &rarity = str_split(*t, '/', false, 2);
-            if (rarity.size() != 2 || rarity[0].size() == 0 || rarity[1].size() == 0) {
-                return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
-            }
-
-            auto &baseitem = *baseitems_info.rbegin();
-            auto &table = baseitem.alloc_tables[i];
-            info_set_value(table.level, rarity[0]);
-            info_set_value(table.chance, rarity[1]);
-            i++;
-        }
-
-        return PARSE_ERROR_NONE;
-    }
-
-    // P:ac:dd:ds:to_h:to_d:to_a
-    if (tokens[0] == "P") {
-        if (tokens.size() < 6) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-
-        const auto &dice = str_split(tokens[2], 'd', false, 2);
-        if (dice.size() != 2) {
-            return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
-        }
-
-        auto &baseitem = *baseitems_info.rbegin();
-        info_set_value(baseitem.ac, tokens[1]);
-        info_set_value(baseitem.dd, dice[0]);
-        info_set_value(baseitem.ds, dice[1]);
-        info_set_value(baseitem.to_h, tokens[3]);
-        info_set_value(baseitem.to_d, tokens[4]);
-        info_set_value(baseitem.to_a, tokens[5]);
-        return PARSE_ERROR_NONE;
-    }
-
-    // U:activation_flag
-    if (tokens[0] == "U") {
-        if (tokens.size() < 2 || tokens[1].size() == 0) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-
-        const auto n = grab_one_activation_flag(tokens[1]);
-        if (n <= RandomArtActType::NONE) {
-            return PARSE_ERROR_INVALID_FLAG;
-        }
-
-        auto &baseitem = *baseitems_info.rbegin();
-        baseitem.act_idx = n;
-        return PARSE_ERROR_NONE;
-    }
-
-    // F:flags
-    if (tokens[0] == "F") {
-        if (tokens.size() < 2 || tokens[1].size() == 0) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-
-        const auto &flags = str_split(tokens[1], '|', true, 10);
-        for (const auto &f : flags) {
-            if (f.size() == 0) {
-                continue;
-            }
-
-            auto &baseitem = *baseitems_info.rbegin();
-            if (!grab_one_baseitem_flag(baseitem, f)) {
-                return PARSE_ERROR_INVALID_FLAG;
-            }
-        }
-
-        return PARSE_ERROR_NONE;
-    }
-
-    return PARSE_ERROR_UNDEFINED_DIRECTIVE;
+    return PARSE_ERROR_NONE;
 }

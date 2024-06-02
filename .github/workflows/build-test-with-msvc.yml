@@ -10,8 +10,9 @@ jobs:
     runs-on: windows-2022
 
     steps:
-      - name: Checkout Repository
-        uses: nschloe/action-cached-lfs-checkout@v1
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
