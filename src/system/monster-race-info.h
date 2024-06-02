@@ -187,6 +187,7 @@ public:
     int calc_capture_value(const MonsterRaceId r_idx) const;
     bool order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed = false) const;
     bool order_level(MonsterRaceId id1, MonsterRaceId id2) const;
+    MonsterRaceId pick_one_at_random() const;
 
     void reset_all_visuals();
 

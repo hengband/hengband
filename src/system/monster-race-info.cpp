@@ -2,6 +2,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/horror-descriptions.h"
+#include "util/probability-table.h"
 #include "world/world.h"
 #include <algorithm>
 
@@ -504,6 +505,25 @@ bool MonraceList::order_level(MonsterRaceId id1, MonsterRaceId id2) const
     }
 
     return id1 < id2;
+}
+
+/*!
+ * @brief (MonsterRaceId::PLAYERを除く)実在するすべてのモンスター種族IDから等確率で1つ選択する
+ *
+ * @return 選択したモンスター種族ID
+ */
+MonsterRaceId MonraceList::pick_one_at_random() const
+{
+    static ProbabilityTable<MonsterRaceId> table;
+    if (table.empty()) {
+        for (const auto &[monrace_id, monrace] : monraces_info) {
+            if (monrace.is_valid()) {
+                table.entry_item(monrace_id, 1);
+            }
+        }
+    }
+
+    return table.pick_one_at_random();
 }
 
 void MonraceList::reset_all_visuals()

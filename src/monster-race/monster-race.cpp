@@ -3,7 +3,6 @@
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-resistance-mask.h"
 #include "system/monster-race-info.h"
-#include "util/probability-table.h"
 #include "world/world.h"
 #include <algorithm>
 #include <vector>
@@ -14,26 +13,6 @@ std::map<MonsterRaceId, MonsterRaceInfo> monraces_info;
 MonsterRace::MonsterRace(MonsterRaceId r_idx)
     : r_idx(r_idx)
 {
-}
-
-/*!
- * @brief (MonsterRaceId::PLAYERを除く)実在するすべてのモンスター種族IDから等確率で1つ選択する
- *
- * @return 選択したモンスター種族ID
- */
-MonsterRaceId MonsterRace::pick_one_at_random()
-{
-    static ProbabilityTable<MonsterRaceId> table;
-
-    if (table.empty()) {
-        for (const auto &[monrace_id, monrace] : monraces_info) {
-            if (monrace.is_valid()) {
-                table.entry_item(monrace_id, 1);
-            }
-        }
-    }
-
-    return table.pick_one_at_random();
 }
 
 /*!
