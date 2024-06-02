@@ -490,8 +490,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId m
                 const auto &monraces = MonraceList::get_instance();
                 const MonsterRaceInfo *hallucinated_race = nullptr;
                 do {
-                    auto r_idx = monraces.pick_one_at_random();
-                    hallucinated_race = &monraces[r_idx];
+                    hallucinated_race = &monraces.pick_monrace_at_random();
                 } while (hallucinated_race->kind_flags.has(MonsterKindType::UNIQUE));
                 auto mes_evolution = _("%sは%sに進化した。", "%s^ evolved into %s.");
                 auto mes_degeneration = _("%sは%sに退化した。", "%s^ degenerated into %s.");
