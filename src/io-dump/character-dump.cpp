@@ -373,7 +373,7 @@ static void dump_aux_monsters(FILE *fff)
     std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
     fprintf(fff, _("\n《上位%d体のユニーク・モンスター》\n", "\n< Unique monsters top %d >\n"), std::min(uniq_total, 10));
     for (auto it = monrace_ids.rbegin(); it != monrace_ids.rend() && std::distance(monrace_ids.rbegin(), it) < 10; it++) {
-        const auto &monrace = monraces[*it];
+        const auto &monrace = monraces.get_monrace(*it);
         const auto defeat_level = monrace.defeat_level;
         const auto defeat_time = monrace.defeat_time;
         std::string defeat_info;
