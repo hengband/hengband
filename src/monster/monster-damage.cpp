@@ -467,7 +467,7 @@ void MonsterDamageProcessor::summon_special_unique()
         mes = _("「これは『試練』だ　過去に打ち勝てという『試練』とオレは受けとった」", "This is a 'trial'. I took it as a 'trial' to overcome in the past.");
         break;
     default: // バグでなければ入らない.
-        new_unique_idx = MonsterRace::empty_id();
+        new_unique_idx = MonraceList::empty_id();
         mes = "";
         break;
     }

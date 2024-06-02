@@ -170,6 +170,19 @@ MonraceList &MonraceList::get_instance()
 }
 
 /*!
+ * @brief どのモンスター種族でもない事を意味する MonsterRaceId を返す
+ * @details 実態は MonsterRaceId::PLAYER だが、この値は実際にプレイヤーとしての意味として使われる場合
+ * （召喚主がプレイヤーの場合やマップ上の表示属性情報等）とどのモンスターでもない意味として使われる場合があるので、
+ * 後者ではこれを使用することでコード上の意図をわかりやすくする。
+ *
+ * @return (どのモンスター種族でもないという意味での) MonsterRaceId::PLAYER を返す
+ */
+MonsterRaceId MonraceList::empty_id()
+{
+    return MonsterRaceId::PLAYER;
+}
+
+/*!
  * @bried モンスター定義を種族IDから直接得る
  * @param モンスター種族ID
  * @return モンスター定義への参照
