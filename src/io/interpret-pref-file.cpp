@@ -112,7 +112,7 @@ static bool interpret_k_token(char *buf)
  */
 static void decide_feature_type(int i, int num, char **zz)
 {
-    auto &terrain = TerrainList::get_instance()[static_cast<short>(i)];
+    auto &terrain = TerrainList::get_instance().get_terrain(static_cast<short>(i));
     const auto color_token = static_cast<uint8_t>(std::stoi(zz[1], nullptr, 0));
     const auto character_token = static_cast<char>(std::stoi(zz[2], nullptr, 0));
     const auto has_character_token = character_token != '\0';

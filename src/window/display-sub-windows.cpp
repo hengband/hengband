@@ -462,7 +462,7 @@ static void display_dungeon(PlayerType *player_ptr)
             const auto pos_y = y - player_ptr->y + game_term->hgt / 2 - 1;
             const auto pos_x = x - player_ptr->x + game_term->wid / 2 - 1;
             if (!in_bounds2(player_ptr->current_floor_ptr, y, x)) {
-                const auto &terrain = TerrainList::get_instance()[feat_none];
+                const auto &terrain = TerrainList::get_instance().get_terrain(feat_none);
                 const auto &symbol_foreground = terrain.symbol_configs.at(F_LIT_STANDARD);
                 term_queue_char(pos_x, pos_y, { symbol_foreground, {} });
                 continue;

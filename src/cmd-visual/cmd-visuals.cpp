@@ -369,7 +369,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
             auto &terrains = TerrainList::get_instance();
             while (true) {
-                auto &terrain = terrains[terrain_id];
+                auto &terrain = terrains.get_terrain(terrain_id);
                 int c;
                 const auto &symbol_definition = terrain.symbol_definitions[lighting_level];
                 const auto &symbol_config = terrain.symbol_configs[lighting_level];
@@ -411,7 +411,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                         }
 
                         terrain_id = *new_terrain_id;
-                        const auto &new_terrain = terrains[terrain_id];
+                        const auto &new_terrain = terrains.get_terrain(terrain_id);
                         if (!new_terrain.name.empty() && (new_terrain.mimic == terrain_id)) {
                             break;
                         }

@@ -115,7 +115,7 @@ bool exe_close(PlayerType *player_ptr, POSITION y, POSITION x)
     const auto closed_feat = feat_state(player_ptr->current_floor_ptr, terrain_id, TerrainCharacteristics::CLOSE);
     auto is_preventing = !grid.o_idx_list.empty() || grid.is_object();
     is_preventing &= closed_feat != terrain_id;
-    is_preventing &= TerrainList::get_instance()[closed_feat].flags.has_not(TerrainCharacteristics::DROP);
+    is_preventing &= TerrainList::get_instance().get_terrain(closed_feat).flags.has_not(TerrainCharacteristics::DROP);
     if (is_preventing) {
         msg_print(_("何かがつっかえて閉まらない。", "Something prevents it from closing."));
         return more;

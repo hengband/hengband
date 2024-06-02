@@ -50,7 +50,7 @@ void set_friendly(MonsterEntity *m_ptr)
  */
 bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, const MonsterRaceInfo *r_ptr, BIT_FLAGS16 mode)
 {
-    const auto &terrain = TerrainList::get_instance()[feat];
+    const auto &terrain = TerrainList::get_instance().get_terrain(feat);
     if (terrain.flags.has(TerrainCharacteristics::PATTERN)) {
         if (!(mode & CEM_RIDING)) {
             if (r_ptr->feature_flags.has_not(MonsterFeatureType::CAN_FLY)) {
