@@ -50,30 +50,6 @@ MonsterRaceId MonsterRace::pick_one_at_random()
 }
 
 /*!
- * @brief モンスター種族が賞金首の対象かどうかを調べる。日替わり賞金首は対象外。
- *
- * @param unachieved_only true の場合未達成の賞金首のみを対象とする。false の場合達成未達成に関わらずすべての賞金首を対象とする。
- * @return モンスター種族が賞金首の対象ならば true、そうでなければ false
- */
-bool MonsterRace::is_bounty(bool unachieved_only) const
-{
-    auto it = std::find_if(std::begin(w_ptr->bounties), std::end(w_ptr->bounties),
-        [r_idx = this->r_idx](const auto &b_ref) {
-            return b_ref.r_idx == r_idx;
-        });
-
-    if (it == std::end(w_ptr->bounties)) {
-        return false;
-    }
-
-    if (unachieved_only && (*it).is_achieved) {
-        return false;
-    }
-
-    return true;
-}
-
-/*!
  * @brief モンスター種族の総合的な強さを計算する。
  * @details 現在はモンスター闘技場でのモンスターの強さの総合的な評価にのみ使用されている。
  * @return 計算した結果のモンスター種族の総合的な強さの値を返す。

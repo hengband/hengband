@@ -71,7 +71,7 @@ static std::vector<MonsterRaceId> collect_monsters(PlayerType *player_ptr, IDX g
             }
         } else if (grp_wanted) {
             auto wanted = player_ptr->knows_daily_bounty && (w_ptr->today_mon == monrace_id);
-            wanted |= MonsterRace(monrace_id).is_bounty(false);
+            wanted |= monrace.is_bounty(false);
             if (!wanted) {
                 continue;
             }

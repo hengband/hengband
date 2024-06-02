@@ -148,6 +148,7 @@ public:
     void kill_unique();
     std::string get_pronoun_of_summoned_kin() const;
     const MonsterRaceInfo &get_next() const;
+    bool is_bounty(bool unachieved_only) const;
 };
 
 class MonraceList {
