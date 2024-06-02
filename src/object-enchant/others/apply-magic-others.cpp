@@ -106,16 +106,17 @@ void OtherItemsEnchanter::enchant_wand_staff()
  */
 void OtherItemsEnchanter::generate_figurine()
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    MonsterRaceId r_idx;
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    const auto &monraces = MonraceList::get_instance();
+    MonsterRaceId monrace_id;
     while (true) {
-        r_idx = MonsterRace::pick_one_at_random();
-        if (!item_monster_okay(this->player_ptr, r_idx) || (r_idx == MonsterRaceId::TSUCHINOKO)) {
+        monrace_id = monraces.pick_one_at_random();
+        if (!item_monster_okay(this->player_ptr, monrace_id) || (monrace_id == MonsterRaceId::TSUCHINOKO)) {
             continue;
         }
 
-        auto *r_ptr = &monraces_info[r_idx];
-        auto check = (floor_ptr->dun_level < r_ptr->level) ? (r_ptr->level - floor_ptr->dun_level) : 0;
+        auto *r_ptr = &monraces_info[monrace_id];
+        auto check = (floor.dun_level < r_ptr->level) ? (r_ptr->level - floor.dun_level) : 0;
         if ((r_ptr->rarity == 0) || (r_ptr->rarity > 100) || (randint0(check) > 0)) {
             continue;
         }
@@ -123,7 +124,7 @@ void OtherItemsEnchanter::generate_figurine()
         break;
     }
 
-    this->o_ptr->pval = enum2i(r_idx);
+    this->o_ptr->pval = enum2i(monrace_id);
     if (one_in_(6)) {
         this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
     }
@@ -174,20 +175,20 @@ void OtherItemsEnchanter::generate_corpse()
  */
 void OtherItemsEnchanter::generate_statue()
 {
-    auto pick_r_idx_for_statue = [] {
+    const auto &monraces = MonraceList::get_instance();
+    const auto pick_monrace_id_for_statue = [&monraces] {
         while (true) {
-            auto r_idx = MonsterRace::pick_one_at_random();
-            if (monraces_info[r_idx].rarity > 0) {
-                return r_idx;
+            auto monrace_id = monraces.pick_one_at_random();
+            if (monraces[monrace_id].rarity > 0) {
+                return monrace_id;
             }
         }
     };
-    auto r_idx = pick_r_idx_for_statue();
-    auto *r_ptr = &monraces_info[r_idx];
-
-    this->o_ptr->pval = enum2i(r_idx);
+    const auto monrace_id = pick_monrace_id_for_statue();
+    const auto &monrace = monraces[monrace_id];
+    this->o_ptr->pval = enum2i(monrace_id);
     if (cheat_peek) {
-        msg_format(_("%sの像", "Statue of %s"), r_ptr->name.data());
+        msg_format(_("%sの像", "Statue of %s"), monrace.name.data());
     }
 
     object_aware(this->player_ptr, this->o_ptr);

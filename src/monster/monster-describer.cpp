@@ -138,10 +138,11 @@ static std::string get_describing_monster_name(const MonsterEntity &monster, con
         }
     }
 
-    MonsterRaceInfo *hallu_race;
+    const MonsterRaceInfo *hallu_race = nullptr;
+    const auto &monraces = MonraceList::get_instance();
     do {
-        auto r_idx = MonsterRace::pick_one_at_random();
-        hallu_race = &monraces_info[r_idx];
+        auto r_idx = monraces.pick_one_at_random();
+        hallu_race = &monraces[r_idx];
     } while (hallu_race->kind_flags.has(MonsterKindType::UNIQUE));
     return hallu_race->name;
 }

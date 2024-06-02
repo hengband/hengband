@@ -61,8 +61,9 @@ DisplaySymbol image_object()
 DisplaySymbol image_monster()
 {
     if (use_graphics) {
-        const auto monrace_id = MonsterRace::pick_one_at_random();
-        const auto &monrace = monraces_info[monrace_id];
+        const auto &monraces = MonraceList::get_instance();
+        const auto monrace_id = monraces.pick_one_at_random();
+        const auto &monrace = monraces[monrace_id];
         return monrace.symbol_config;
     }
 
@@ -324,8 +325,9 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
 
     if (monrace_ap.visual_flags.has(MonsterVisualType::SHAPECHANGER)) {
         if (use_graphics) {
-            auto r_idx = MonsterRace::pick_one_at_random();
-            const auto &monrace = monraces_info[r_idx];
+            const auto &monraces = MonraceList::get_instance();
+            const auto monrace_id = monraces.pick_one_at_random();
+            const auto &monrace = monraces[monrace_id];
             symbol_pair.symbol_foreground = monrace.symbol_config;
         } else {
             symbol_pair.symbol_foreground.character = one_in_(25) ? rand_choice(image_objects) : rand_choice(image_monsters);
