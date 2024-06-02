@@ -84,6 +84,7 @@ public:
     bool is_lance() const;
     bool is_readable() const;
     bool is_corpse() const;
+    bool is_monster() const;
 
 private:
     ItemKindType type_value;

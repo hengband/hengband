@@ -120,7 +120,7 @@ struct AmusementRewardItemVisitor {
         ItemMagicApplier(player_ptr, &item, 1, AM_NO_FIXED_ART).execute();
 
         if (this->flag == AmusementFlagType::NO_UNIQUE) {
-            if (monraces_info[i2enum<MonsterRaceId>(item.pval)].kind_flags.has(MonsterKindType::UNIQUE)) {
+            if (item.has_monrace() && item.get_monrace().kind_flags.has(MonsterKindType::UNIQUE)) {
                 return std::nullopt;
             }
         }

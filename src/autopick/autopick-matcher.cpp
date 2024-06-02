@@ -296,13 +296,18 @@ bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const au
     const auto &bi_key = o_ptr->bi_key;
     const auto tval = bi_key.tval();
     const auto sval = *bi_key.sval();
-    const auto r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-    if (entry.has(FLG_UNIQUE) && ((tval != ItemKindType::CORPSE && tval != ItemKindType::STATUE) || monraces_info[r_idx].kind_flags.has_not(MonsterKindType::UNIQUE))) {
-        return false;
+    if (entry.has(FLG_UNIQUE) && o_ptr->has_monrace()) {
+        const auto &monrace = o_ptr->get_monrace();
+        if (((tval != ItemKindType::CORPSE && tval != ItemKindType::STATUE) || monrace.kind_flags.has_not(MonsterKindType::UNIQUE))) {
+            return false;
+        }
     }
 
-    if (entry.has(FLG_HUMAN) && (tval != ItemKindType::CORPSE || !angband_strchr("pht", monraces_info[r_idx].symbol_definition.character))) {
-        return false;
+    if (entry.has(FLG_HUMAN) && o_ptr->has_monrace()) {
+        const auto &monrace = o_ptr->get_monrace();
+        if ((tval != ItemKindType::CORPSE || !angband_strchr("pht", monrace.symbol_definition.character))) {
+            return false;
+        }
     }
 
     if (entry.has(FLG_UNREADABLE) && check_book_realm(player_ptr, bi_key)) {

@@ -100,7 +100,7 @@ static bool check_store_temple(const ItemEntity &item)
         return true;
     case ItemKindType::FIGURINE:
     case ItemKindType::STATUE: {
-        const auto &monrace = monraces_info[i2enum<MonsterRaceId>(item.pval)];
+        const auto &monrace = item.get_monrace();
         if (monrace.kind_flags.has_not(MonsterKindType::EVIL)) {
             auto can_sell = monrace.kind_flags.has(MonsterKindType::GOOD);
             can_sell |= monrace.kind_flags.has(MonsterKindType::ANIMAL);

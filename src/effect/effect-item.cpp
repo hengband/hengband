@@ -19,6 +19,7 @@
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -233,7 +234,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
             }
 
             for (int i = 0; i < o_ptr->number; i++) {
-                auto corpse_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
+                const auto &monrace = o_ptr->get_monrace();
                 const auto sval = *o_ptr->bi_key.sval();
                 if (((sval == SV_CORPSE) && (randint1(100) > 80)) || ((sval == SV_SKELETON) && (randint1(100) > 60))) {
                     if (!note_kill) {
@@ -241,7 +242,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
                     }
 
                     continue;
-                } else if (summon_named_creature(player_ptr, src_idx, y, x, corpse_r_idx, mode)) {
+                } else if (summon_named_creature(player_ptr, src_idx, y, x, monrace.idx, mode)) {
                     note_kill = _("生き返った。", " revived.");
                 } else if (!note_kill) {
                     note_kill = _("灰になった。", (plural ? " become dust." : " becomes dust."));

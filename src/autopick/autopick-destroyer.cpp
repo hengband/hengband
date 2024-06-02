@@ -48,8 +48,7 @@ static bool is_leave_special_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     const auto &bi_key = o_ptr->bi_key;
     const auto tval = bi_key.tval();
     if (PlayerRace(player_ptr).equals(PlayerRaceType::BALROG)) {
-        const auto r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-        if (o_ptr->is_corpse() && angband_strchr("pht", monraces_info[r_idx].symbol_definition.character)) {
+        if (o_ptr->is_corpse() && angband_strchr("pht", o_ptr->get_monrace().symbol_definition.character)) {
             return false;
         }
     } else if (pc.equals(PlayerClassType::ARCHER)) {

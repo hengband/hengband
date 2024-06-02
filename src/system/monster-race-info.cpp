@@ -204,6 +204,37 @@ int MonsterRaceInfo::calc_power() const
     return power;
 }
 
+int MonsterRaceInfo::calc_figurine_value() const
+{
+    const auto figurine_level = this->level;
+    if (figurine_level < 20) {
+        return figurine_level * 50;
+    }
+
+    if (figurine_level < 30) {
+        return 1000 + (figurine_level - 20) * 150;
+    }
+
+    if (figurine_level < 40) {
+        return 2500 + (figurine_level - 30) * 350;
+    }
+
+    if (figurine_level < 50) {
+        return 6000 + (figurine_level - 40) * 800;
+    }
+
+    return 14000 + (figurine_level - 50) * 2000;
+}
+
+int MonsterRaceInfo::calc_capture_value() const
+{
+    if (!this->is_valid()) {
+        return 1000;
+    }
+
+    return this->level * 50 + 1000;
+}
+
 const std::map<MonsterRaceId, std::set<MonsterRaceId>> MonraceList::unified_uniques = {
     { MonsterRaceId::BANORLUPART, { MonsterRaceId::BANOR, MonsterRaceId::LUPART } },
 };
@@ -276,6 +307,11 @@ std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator MonraceList::rend()
 std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator MonraceList::rend() const
 {
     return monraces_info.crend();
+}
+
+size_t MonraceList::size() const
+{
+    return monraces_info.size();
 }
 
 /*!
@@ -447,37 +483,6 @@ bool MonraceList::can_select_separate(const MonsterRaceId monrace_id, const int 
     }
 
     return std::all_of(found_separates.begin(), found_separates.end(), [this](const auto x) { return this->get_monrace(x).max_num > 0; });
-}
-
-int MonraceList::calc_figurine_value(const MonsterRaceId monrace_id) const
-{
-    const auto level = this->get_monrace(monrace_id).level;
-    if (level < 20) {
-        return level * 50;
-    }
-
-    if (level < 30) {
-        return 1000 + (level - 20) * 150;
-    }
-
-    if (level < 40) {
-        return 2500 + (level - 30) * 350;
-    }
-
-    if (level < 50) {
-        return 6000 + (level - 40) * 800;
-    }
-
-    return 14000 + (level - 50) * 2000;
-}
-
-int MonraceList::calc_capture_value(const MonsterRaceId monrace_id) const
-{
-    if (monrace_id == MonsterRaceId::PLAYER) {
-        return 1000;
-    }
-
-    return this->get_monrace(monrace_id).level * 50 + 1000;
 }
 
 bool MonraceList::order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed) const

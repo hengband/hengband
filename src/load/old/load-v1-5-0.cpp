@@ -261,11 +261,11 @@ void rd_item_old(ItemEntity *o_ptr)
         }
 
         if (tval == ItemKindType::CAPTURE) {
-            const auto &r_ref = monraces_info[i2enum<MonsterRaceId>(o_ptr->pval)];
-            if (r_ref.misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
-                o_ptr->captured_monster_max_hp = maxroll(r_ref.hdice, r_ref.hside);
+            const auto &monrace = o_ptr->get_monrace();
+            if (monrace.misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
+                o_ptr->captured_monster_max_hp = maxroll(monrace.hdice, monrace.hside);
             } else {
-                o_ptr->captured_monster_max_hp = damroll(r_ref.hdice, r_ref.hside);
+                o_ptr->captured_monster_max_hp = damroll(monrace.hdice, monrace.hside);
             }
             if (ironman_nightmare) {
                 o_ptr->captured_monster_max_hp = std::min<short>(MONSTER_MAXHP, o_ptr->captured_monster_max_hp * 2L);
