@@ -160,7 +160,6 @@ public:
     MonraceList(const MonraceList &) = delete;
     MonraceList &operator=(const MonraceList &) = delete;
     MonraceList &operator=(MonraceList &&) = delete;
-    MonsterRaceInfo &operator[](const MonsterRaceId r_idx);
 
     static bool is_valid(MonsterRaceId monrace_id);
     static const std::map<MonsterRaceId, std::set<MonsterRaceId>> &get_unified_uniques();

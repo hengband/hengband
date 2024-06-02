@@ -131,7 +131,7 @@ std::string MonsterRaceInfo::get_pronoun_of_summoned_kin() const
  */
 const MonsterRaceInfo &MonsterRaceInfo::get_next() const
 {
-    return MonraceList::get_instance()[this->next_r_idx];
+    return MonraceList::get_instance().get_monrace(this->next_r_idx);
 }
 
 /*!
@@ -238,17 +238,6 @@ MonsterRaceId MonraceList::empty_id()
     return MonsterRaceId::PLAYER;
 }
 
-/*!
- * @brief モンスター定義を種族IDから直接得る
- * @param r_idx モンスター種族ID
- * @return モンスター定義への参照
- * @details モンスター実体からモンスター定義を得るためには使用しないこと
- */
-MonsterRaceInfo &MonraceList::operator[](const MonsterRaceId r_idx)
-{
-    return monraces_info.at(r_idx);
-}
-
 std::map<MonsterRaceId, MonsterRaceInfo>::iterator MonraceList::begin()
 {
     return monraces_info.begin();
@@ -289,13 +278,19 @@ std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator MonraceList::re
     return monraces_info.crend();
 }
 
+/*!
+ * @brief モンスター定義を種族IDから直接得る (非const版)
+ * @param monrace_id モンスター種族ID
+ * @return モンスター定義への参照
+ * @details モンスター実体からモンスター定義を得るためには使用しないこと
+ */
 MonsterRaceInfo &MonraceList::get_monrace(MonsterRaceId monrace_id)
 {
     return monraces_info.at(monrace_id);
 }
 
 /*!
- * @brief モンスター定義を種族IDから直接得る
+ * @brief モンスター定義を種族IDから直接得る (const版)
  * @param monrace_id モンスター種族ID
  * @return モンスター定義への参照
  * @details モンスター実体からモンスター定義を得るためには使用しないこと
@@ -342,9 +337,9 @@ void MonraceList::kill_unified_unique(const MonsterRaceId r_idx)
 {
     const auto it_unique = unified_uniques.find(r_idx);
     if (it_unique != unified_uniques.end()) {
-        (*this)[it_unique->first].kill_unique();
+        this->get_monrace(it_unique->first).kill_unique();
         for (const auto separate : it_unique->second) {
-            (*this)[separate].kill_unique();
+            this->get_monrace(separate).kill_unique();
         }
 
         return;
@@ -353,8 +348,8 @@ void MonraceList::kill_unified_unique(const MonsterRaceId r_idx)
     for (const auto &[unified_unique, separates] : unified_uniques) {
         const auto it_separate = separates.find(r_idx);
         if (it_separate != separates.end()) {
-            (*this)[*it_separate].kill_unique();
-            (*this)[unified_unique].kill_unique();
+            this->get_monrace(*it_separate).kill_unique();
+            this->get_monrace(unified_unique).kill_unique();
             return;
         }
     }
@@ -384,12 +379,12 @@ bool MonraceList::is_selectable(const MonsterRaceId r_idx) const
 void MonraceList::defeat_separated_uniques()
 {
     for (const auto &[unified_unique, separates] : unified_uniques) {
-        if ((*this)[unified_unique].max_num > 0) {
+        if (this->get_monrace(unified_unique).max_num > 0) {
             continue;
         }
 
         for (const auto separate : separates) {
-            auto &monrace = (*this)[separate];
+            auto &monrace = this->get_monrace(separate);
             if (monrace.max_num == 0) {
                 continue;
             }
