@@ -778,8 +778,8 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
     cave_set_feat(player_ptr, y, x, newfeat);
     const auto &terrains = TerrainList::get_instance();
     if (!(terrain_action_flags[enum2i(action)] & FAF_NO_DROP)) {
-        const auto &old_terrain = terrains[oldfeat];
-        const auto &new_terrain = terrains[newfeat];
+        const auto &old_terrain = terrains.get_terrain(oldfeat);
+        const auto &new_terrain = terrains.get_terrain(newfeat);
         bool found = false;
 
         /* Handle gold */
@@ -802,7 +802,7 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
     }
 
     if (terrain_action_flags[enum2i(action)] & FAF_CRASH_GLASS) {
-        const auto &old_terrain = terrains[oldfeat];
+        const auto &old_terrain = terrains.get_terrain(oldfeat);
         if (old_terrain.flags.has(TerrainCharacteristics::GLASS) && w_ptr->character_dungeon) {
             project(player_ptr, PROJECT_WHO_GLASS_SHARDS, 1, y, x, std::min(floor_ptr->dun_level, 100) / 4, AttributeType::SHARDS,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE | PROJECT_JUMP | PROJECT_NO_HANGEKI));

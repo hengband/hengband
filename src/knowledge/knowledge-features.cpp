@@ -67,7 +67,7 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
     for (i = 0; i < per_page && (feat_idx[feat_top + i] >= 0); i++) {
         TERM_COLOR attr;
         auto terrain_id = feat_idx[feat_top + i];
-        const auto &terrain = terrains[terrain_id];
+        const auto &terrain = terrains.get_terrain(terrain_id);
         int row_i = row + i;
         attr = ((i + feat_top == feat_cur) ? TERM_L_BLUE : TERM_WHITE);
         c_prt(attr, terrain.name.data(), row_i, col);

@@ -74,7 +74,7 @@ TerrainType &TerrainList::operator[](short terrain_id)
     return this->terrains.at(terrain_id);
 }
 
-const TerrainType &TerrainList::operator[](short terrain_id) const
+const TerrainType &TerrainList::get_terrain(short terrain_id) const
 {
     return this->terrains.at(terrain_id);
 }
