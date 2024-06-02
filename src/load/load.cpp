@@ -191,6 +191,11 @@ static errr verify_encoded_checksum()
 static errr exe_reading_savefile(PlayerType *player_ptr)
 {
     rd_version_info();
+    if (!loading_savefile_version_is_older_than(SAVEFILE_VERSION + 1)) {
+        load_note(_("セーブデータのバージョンが新しすぎる", "Savefile version is too new"));
+        return -1;
+    }
+
     rd_dummy3();
     rd_system_info();
     load_lore();
