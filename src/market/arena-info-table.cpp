@@ -1,5 +1,4 @@
 #include "market/arena-info-table.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-amulet-types.h"
@@ -11,6 +10,7 @@
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-wand-types.h"
 #include "system/building-type-definition.h"
+#include "system/monster-race-info.h"
 
 /*!
  * @brief 闘技場のモンスターID及び報酬アイテムテーブル
@@ -57,7 +57,7 @@ const std::vector<ArenaMonsterEntry> arena_info = {
     { MonsterRaceId::BLACK_REAVER, { ItemKindType::RING, SV_RING_LORDLY } },
     { MonsterRaceId::FENGHUANG, { ItemKindType::STAFF, SV_STAFF_THE_MAGI } },
     { MonsterRaceId::WYRM_POWER, { ItemKindType::SCROLL, SV_SCROLL_ARTIFACT } },
-    { MonsterRace::empty_id(), { ItemKindType::NONE, 0 } }, /* Victory prizing */
+    { MonraceList::empty_id(), { ItemKindType::NONE, 0 } }, /* Victory prizing */
     { MonsterRaceId::HAGURE, { ItemKindType::SCROLL, SV_SCROLL_ARTIFACT } },
 };
 

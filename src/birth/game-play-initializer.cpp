@@ -52,7 +52,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
         quest.max_num = 0;
         quest.type = QuestKindType::NONE;
         quest.level = 0;
-        quest.r_idx = MonsterRace::empty_id();
+        quest.r_idx = MonraceList::empty_id();
         quest.complev = 0;
         quest.comptime = 0;
     }

@@ -43,7 +43,7 @@
  * @brief 護衛対象となるモンスター種族IDを渡すグローバル変数 / Hack -- help pick an escort type
  * @todo 関数ポインタの都合を配慮しながら、グローバル変数place_monster_idxを除去し、関数引数化する
  */
-static MonsterRaceId place_monster_idx = MonsterRace::empty_id();
+static MonsterRaceId place_monster_idx = MonraceList::empty_id();
 
 /*!
  * @var place_monster_m_idx

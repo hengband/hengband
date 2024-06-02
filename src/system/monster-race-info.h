@@ -163,6 +163,7 @@ public:
     static bool is_valid(MonsterRaceId monrace_id);
     static const std::map<MonsterRaceId, std::set<MonsterRaceId>> &get_unified_uniques();
     static MonraceList &get_instance();
+    static MonsterRaceId empty_id();
     std::map<MonsterRaceId, MonsterRaceInfo>::iterator begin();
     std::map<MonsterRaceId, MonsterRaceInfo>::const_iterator begin() const;
     std::map<MonsterRaceId, MonsterRaceInfo>::iterator end();

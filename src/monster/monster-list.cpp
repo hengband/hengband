@@ -178,7 +178,7 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
     }
 
     if (prob_table.empty()) {
-        return MonsterRace::empty_id();
+        return MonraceList::empty_id();
     }
 
     // 40%で1回、50%で2回、10%で3回抽選し、その中で一番レベルが高いモンスターを選択する
