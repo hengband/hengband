@@ -148,7 +148,7 @@ static void recursive_river(FloorType *floor_ptr, POSITION x1, POSITION y1, POSI
                         g_ptr->mimic = 0;
 
                         /* Lava terrain glows */
-                        if (terrains[feat1].flags.has(TerrainCharacteristics::LAVA)) {
+                        if (terrains.get_terrain(feat1).flags.has(TerrainCharacteristics::LAVA)) {
                             if (floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS)) {
                                 g_ptr->info |= CAVE_GLOW;
                             }

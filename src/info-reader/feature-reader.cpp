@@ -455,7 +455,7 @@ FEAT_IDX f_tag_to_index(std::string_view str)
 {
     const auto &terrains = TerrainList::get_instance();
     for (short i = 0; i < terrains_header.info_num; i++) {
-        if (terrains[i].tag == str) {
+        if (terrains.get_terrain(i).tag == str) {
             return (FEAT_IDX)i;
         }
     }
@@ -493,7 +493,7 @@ static FEAT_IDX search_real_feat(std::string feat)
 
     const auto &terrains = TerrainList::get_instance();
     for (short i = 0; i < terrains_header.info_num; i++) {
-        if (feat == terrains[i].tag) {
+        if (feat == terrains.get_terrain(i).tag) {
             return i;
         }
     }

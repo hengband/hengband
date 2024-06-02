@@ -163,7 +163,7 @@ short choose_random_trap(FloorType *floor_ptr)
     const auto &terrains = TerrainList::get_instance();
     while (true) {
         const auto terrain_id = rand_choice(normal_traps);
-        if (terrains[terrain_id].flags.has_not(TerrainCharacteristics::MORE)) {
+        if (terrains.get_terrain(terrain_id).flags.has_not(TerrainCharacteristics::MORE)) {
             return terrain_id;
         }
 
