@@ -177,24 +177,25 @@ static void dump_aux_last_message(PlayerType *player_ptr, FILE *fff)
 static void dump_aux_recall(FILE *fff)
 {
     fprintf(fff, _("\n  [帰還場所]\n\n", "\n  [Recall Depth]\n\n"));
-    for (const auto &d_ref : dungeons_info) {
-        bool seiha = false;
+    for (const auto &dungeon : dungeons_info) {
+        auto is_conquered = false;
+        if (!dungeon.is_dungeon() || !dungeon.maxdepth) {
+            continue;
+        }
 
-        if (d_ref.idx == 0 || !d_ref.maxdepth) {
+        if (!max_dlv[dungeon.idx]) {
             continue;
         }
-        if (!max_dlv[d_ref.idx]) {
-            continue;
-        }
-        if (MonsterRace(d_ref.final_guardian).is_valid()) {
-            if (!monraces_info[d_ref.final_guardian].max_num) {
-                seiha = true;
+
+        if (dungeon.has_guardian()) {
+            if (dungeon.get_guardian().max_num == 0) {
+                is_conquered = true;
             }
-        } else if (max_dlv[d_ref.idx] == d_ref.maxdepth) {
-            seiha = true;
+        } else if (max_dlv[dungeon.idx] == dungeon.maxdepth) {
+            is_conquered = true;
         }
 
-        fprintf(fff, _("   %c%-12s: %3d 階\n", "   %c%-16s: level %3d\n"), seiha ? '!' : ' ', d_ref.name.data(), (int)max_dlv[d_ref.idx]);
+        fprintf(fff, _("   %c%-12s: %3d 階\n", "   %c%-16s: level %3d\n"), is_conquered ? '!' : ' ', dungeon.name.data(), (int)max_dlv[dungeon.idx]);
     }
 }
 
@@ -323,7 +324,7 @@ static void dump_aux_monsters(FILE *fff)
     auto norm_total = 0;
     for (const auto &[monrace_id, monrace] : monraces) {
         /* Ignore unused index */
-        if (!MonsterRace(monrace_id).is_valid()) {
+        if (!monrace.is_valid()) {
             continue;
         }
 

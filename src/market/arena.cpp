@@ -212,27 +212,29 @@ void update_gambling_monsters(PlayerType *player_ptr)
         mon_level = std::max(i, mon_level);
     }
 
+    const auto &monraces = MonraceList::get_instance();
     while (true) {
         total = 0;
         tekitou = false;
         for (i = 0; i < 4; i++) {
-            MonsterRaceId r_idx;
+            MonsterRaceId monrace_id;
             int j;
             while (true) {
                 get_mon_num_prep(player_ptr, monster_can_entry_arena, nullptr);
-                r_idx = get_mon_num(player_ptr, 0, mon_level, PM_ARENA);
-                if (!MonsterRace(r_idx).is_valid()) {
+                monrace_id = get_mon_num(player_ptr, 0, mon_level, PM_ARENA);
+                if (!MonraceList::is_valid(monrace_id)) {
                     continue;
                 }
 
-                if (monraces_info[r_idx].kind_flags.has(MonsterKindType::UNIQUE) || monraces_info[r_idx].population_flags.has(MonsterPopulationType::ONLY_ONE)) {
-                    if ((monraces_info[r_idx].level + 10) > mon_level) {
+                const auto &monrace = monraces.get_monrace(monrace_id);
+                if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || monrace.population_flags.has(MonsterPopulationType::ONLY_ONE)) {
+                    if ((monrace.level + 10) > mon_level) {
                         continue;
                     }
                 }
 
                 for (j = 0; j < i; j++) {
-                    if (r_idx == battle_mon_list[j]) {
+                    if (monrace_id == battle_mon_list[j]) {
                         break;
                     }
                 }
@@ -242,8 +244,9 @@ void update_gambling_monsters(PlayerType *player_ptr)
 
                 break;
             }
-            battle_mon_list[i] = r_idx;
-            if (monraces_info[r_idx].level < 45) {
+
+            battle_mon_list[i] = monrace_id;
+            if (monraces.get_monrace(monrace_id).level < 45) {
                 tekitou = true;
             }
         }

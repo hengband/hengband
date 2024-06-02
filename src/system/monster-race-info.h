@@ -139,6 +139,7 @@ public:
     REAL_TIME defeat_time{}; //!< 倒した時間(ユニーク用) / time at which defeated this race
     PERCENTAGE cur_hp_per{}; //!< 生成時現在HP率(%)
 
+    bool is_valid() const;
     const std::string &decide_horror_message() const;
     bool has_living_flag() const;
     bool is_explodable() const;
@@ -146,6 +147,7 @@ public:
     std::optional<bool> order_pet(const MonsterRaceInfo &other) const;
     void kill_unique();
     std::string get_pronoun_of_summoned_kin() const;
+    const MonsterRaceInfo &get_next() const;
 };
 
 class MonraceList {
@@ -157,6 +159,7 @@ public:
     MonsterRaceInfo &operator[](const MonsterRaceId r_idx);
     const MonsterRaceInfo &operator[](const MonsterRaceId r_idx) const;
 
+    static bool is_valid(MonsterRaceId monrace_id);
     static const std::map<MonsterRaceId, std::set<MonsterRaceId>> &get_unified_uniques();
     static MonraceList &get_instance();
     std::map<MonsterRaceId, MonsterRaceInfo>::iterator begin();

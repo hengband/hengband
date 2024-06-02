@@ -322,10 +322,10 @@ void display_monster_evolution(lore_type *lore_ptr)
         return;
     }
 
-    if (MonsterRace(lore_ptr->r_ptr->next_r_idx).is_valid()) {
+    const auto &monrace_next = lore_ptr->r_ptr->get_next();
+    if (monrace_next.is_valid()) {
         hooked_roff(format(_("%s^は経験を積むと、", "%s^ will evolve into "), Who::who(lore_ptr->msex)));
-        hook_c_roff(TERM_YELLOW, format("%s", monraces_info[lore_ptr->r_ptr->next_r_idx].name.data()));
-
+        hook_c_roff(TERM_YELLOW, format("%s", monrace_next.name.data()));
         hooked_roff(_(format("に進化する。"), format(" when %s gets enough experience.  ", Who::who(lore_ptr->msex))));
     } else if (lore_ptr->r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         hooked_roff(format(_("%sは進化しない。", "%s won't evolve.  "), Who::who(lore_ptr->msex)));

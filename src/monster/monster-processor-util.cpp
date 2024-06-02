@@ -247,7 +247,7 @@ void store_moves_val(int *mm, int y, int x)
  */
 old_race_flags::old_race_flags(MonsterRaceId monrace_id)
 {
-    if (!MonsterRace(monrace_id).is_valid()) {
+    if (!MonraceList::is_valid(monrace_id)) {
         return;
     }
 

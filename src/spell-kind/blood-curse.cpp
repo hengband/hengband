@@ -55,7 +55,7 @@ void blood_curse_to_enemy(PlayerType *player_ptr, MONSTER_IDX m_idx)
         case 8:
             if (!count) {
                 msg_print(_("空間が歪んだ！", "Space warps about you!"));
-                if (MonsterRace(m_ptr->r_idx).is_valid()) {
+                if (m_ptr->is_valid()) {
                     teleport_away(player_ptr, g_ptr->m_idx, damroll(10, 10), TELEPORT_PASSIVE);
                 }
                 if (one_in_(13)) {

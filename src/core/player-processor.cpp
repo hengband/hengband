@@ -75,7 +75,7 @@ static void process_fishing(PlayerType *player_ptr)
         const auto level = floor_ptr->is_in_underground() ? floor_ptr->dun_level : wild_level;
         const auto r_idx = get_mon_num(player_ptr, 0, level, PM_NONE);
         msg_print(nullptr);
-        if (MonsterRace(r_idx).is_valid() && one_in_(2)) {
+        if (MonraceList::is_valid(r_idx) && one_in_(2)) {
             const auto pos = player_ptr->get_neighbor(player_ptr->fishing_dir);
             if (place_specific_monster(player_ptr, 0, pos.y, pos.x, r_idx, PM_NO_KAGE)) {
                 const auto m_name = monster_desc(player_ptr, &floor_ptr->m_list[floor_ptr->get_grid(pos).m_idx], 0);

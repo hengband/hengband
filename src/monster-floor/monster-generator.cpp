@@ -88,7 +88,7 @@ bool mon_scatter(PlayerType *player_ptr, MonsterRaceId r_idx, POSITION *yp, POSI
             if (!projectable(player_ptr, y, x, ny, nx)) {
                 continue;
             }
-            if (MonsterRace(r_idx).is_valid()) {
+            if (MonraceList::is_valid(r_idx)) {
                 auto *r_ptr = &monraces_info[r_idx];
                 if (!monster_can_enter(player_ptr, ny, nx, r_ptr, 0)) {
                     continue;
@@ -309,7 +309,7 @@ bool place_specific_monster(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITIO
 
     /* Reinforcement */
     for (const auto &[reinforce_r_idx, dd, ds] : r_ptr->reinforces) {
-        if (!MonsterRace(reinforce_r_idx).is_valid()) {
+        if (!MonraceList::is_valid(reinforce_r_idx)) {
             continue;
         }
         auto n = damroll(dd, ds);
@@ -340,21 +340,20 @@ bool place_specific_monster(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITIO
     place_monster_idx = r_idx;
     for (int i = 0; i < 32; i++) {
         POSITION nx, ny, d = 3;
-        MonsterRaceId z;
         scatter(player_ptr, &ny, &nx, y, x, d, PROJECT_NONE);
         if (!is_cave_empty_bold2(player_ptr, ny, nx)) {
             continue;
         }
 
         get_mon_num_prep(player_ptr, place_monster_can_escort, get_monster_hook2(player_ptr, ny, nx));
-        z = get_mon_num(player_ptr, 0, r_ptr->level, 0);
-        if (!MonsterRace(z).is_valid()) {
+        const auto monrace_id = get_mon_num(player_ptr, 0, r_ptr->level, 0);
+        if (!MonraceList::is_valid(monrace_id)) {
             break;
         }
 
-        (void)place_monster_one(player_ptr, place_monster_m_idx, ny, nx, z, mode, summoner_m_idx);
-        if (monraces_info[z].misc_flags.has(MonsterMiscType::HAS_FRIENDS) || r_ptr->misc_flags.has(MonsterMiscType::MORE_ESCORT)) {
-            (void)place_monster_group(player_ptr, place_monster_m_idx, ny, nx, z, mode, summoner_m_idx);
+        (void)place_monster_one(player_ptr, place_monster_m_idx, ny, nx, monrace_id, mode, summoner_m_idx);
+        if (monraces_info[monrace_id].misc_flags.has(MonsterMiscType::HAS_FRIENDS) || r_ptr->misc_flags.has(MonsterMiscType::MORE_ESCORT)) {
+            (void)place_monster_group(player_ptr, place_monster_m_idx, ny, nx, monrace_id, mode, summoner_m_idx);
         }
     }
 
@@ -372,22 +371,22 @@ bool place_random_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FL
 {
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
     const auto &floor = *player_ptr->current_floor_ptr;
-    MonsterRaceId r_idx;
+    MonsterRaceId monrace_id;
     do {
-        r_idx = get_mon_num(player_ptr, 0, floor.monster_level, PM_NONE);
-    } while ((mode & PM_NO_QUEST) && monraces_info[r_idx].misc_flags.has(MonsterMiscType::NO_QUEST));
-    if (!MonsterRace(r_idx).is_valid()) {
+        monrace_id = get_mon_num(player_ptr, 0, floor.monster_level, PM_NONE);
+    } while ((mode & PM_NO_QUEST) && monraces_info[monrace_id].misc_flags.has(MonsterMiscType::NO_QUEST));
+    if (!MonraceList::is_valid(monrace_id)) {
         return false;
     }
 
     auto try_become_jural = one_in_(5) || !floor.is_in_underground();
-    try_become_jural &= monraces_info[r_idx].kind_flags.has_not(MonsterKindType::UNIQUE);
-    try_become_jural &= angband_strchr("hkoptuyAHLOPTUVY", monraces_info[r_idx].symbol_definition.character) != nullptr;
+    try_become_jural &= monraces_info[monrace_id].kind_flags.has_not(MonsterKindType::UNIQUE);
+    try_become_jural &= angband_strchr("hkoptuyAHLOPTUVY", monraces_info[monrace_id].symbol_definition.character) != nullptr;
     if (try_become_jural) {
         mode |= PM_JURAL;
     }
 
-    return place_specific_monster(player_ptr, 0, y, x, r_idx, mode);
+    return place_specific_monster(player_ptr, 0, y, x, monrace_id, mode);
 }
 
 static std::optional<MonsterRaceId> select_horde_leader_r_idx(PlayerType *player_ptr)
@@ -395,20 +394,20 @@ static std::optional<MonsterRaceId> select_horde_leader_r_idx(PlayerType *player
     const auto *floor_ptr = player_ptr->current_floor_ptr;
 
     for (auto attempts = 1000; attempts > 0; --attempts) {
-        auto r_idx = get_mon_num(player_ptr, 0, floor_ptr->monster_level, PM_NONE);
-        if (!MonsterRace(r_idx).is_valid()) {
+        const auto monrace_id = get_mon_num(player_ptr, 0, floor_ptr->monster_level, PM_NONE);
+        if (!MonraceList::is_valid(monrace_id)) {
             return std::nullopt;
         }
 
-        if (monraces_info[r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
+        if (monraces_info[monrace_id].kind_flags.has(MonsterKindType::UNIQUE)) {
             continue;
         }
 
-        if (r_idx == MonsterRaceId::HAGURE) {
+        if (monrace_id == MonsterRaceId::HAGURE) {
             continue;
         }
 
-        return r_idx;
+        return monrace_id;
     }
 
     return std::nullopt;
@@ -472,29 +471,31 @@ bool alloc_guardian(PlayerType *player_ptr, bool def_val)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     const auto &dungeon = floor_ptr->get_dungeon_definition();
-    MonsterRaceId guardian = dungeon.final_guardian;
-    bool is_guardian_applicable = MonsterRace(guardian).is_valid();
-    is_guardian_applicable &= dungeon.maxdepth == floor_ptr->dun_level;
-    is_guardian_applicable &= monraces_info[guardian].cur_num < monraces_info[guardian].max_num;
+    if (!dungeon.has_guardian()) {
+        return def_val;
+    }
+
+    const auto &monrace = dungeon.get_guardian();
+    auto is_guardian_applicable = dungeon.maxdepth == floor_ptr->dun_level;
+    is_guardian_applicable &= monrace.cur_num < monrace.max_num;
     if (!is_guardian_applicable) {
         return def_val;
     }
 
-    int try_count = 4000;
-    while (try_count) {
-        POSITION oy = randint1(floor_ptr->height - 4) + 2;
-        POSITION ox = randint1(floor_ptr->width - 4) + 2;
-        if (!is_cave_empty_bold2(player_ptr, oy, ox)) {
+    auto try_count = 4000;
+    while (try_count > 0) {
+        const auto pos = Pos2D(randint1(floor_ptr->height - 4), randint1(floor_ptr->width - 4)) + Pos2DVec(2, 2);
+        if (!is_cave_empty_bold2(player_ptr, pos.y, pos.x)) {
             try_count++;
             continue;
         }
 
-        if (!monster_can_cross_terrain(player_ptr, floor_ptr->grid_array[oy][ox].feat, &monraces_info[guardian], 0)) {
+        if (!monster_can_cross_terrain(player_ptr, floor_ptr->get_grid(pos).feat, &monrace, 0)) {
             try_count++;
             continue;
         }
 
-        if (place_specific_monster(player_ptr, 0, oy, ox, guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) {
+        if (place_specific_monster(player_ptr, 0, pos.y, pos.x, dungeon.final_guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) {
             return true;
         }
 

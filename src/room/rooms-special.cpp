@@ -10,7 +10,6 @@
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "object-enchant/item-apply-magic.h"
@@ -20,6 +19,7 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "wizard/wizard-messages.h"
@@ -110,7 +110,7 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
             const auto monrace_id = get_mon_num(player_ptr, 0, floor.dun_level, 0);
             const auto y = yval + 2 * ddy_ddd[dir1];
             const auto x = xval + 2 * ddx_ddd[dir1];
-            if (MonsterRace(monrace_id).is_valid()) {
+            if (MonraceList::is_valid(monrace_id)) {
                 place_specific_monster(player_ptr, 0, y, x, monrace_id, PM_ALLOW_SLEEP);
             }
 
@@ -152,7 +152,7 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
         get_mon_num_prep(player_ptr, vault_aux_lite, nullptr);
 
         const auto monrace_id = get_mon_num(player_ptr, 0, floor.dun_level, 0);
-        if (MonsterRace(monrace_id).is_valid()) {
+        if (MonraceList::is_valid(monrace_id)) {
             place_specific_monster(player_ptr, 0, yval, xval, monrace_id, 0L);
         }
 
@@ -201,7 +201,7 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
             const auto monrace_id = get_mon_num(player_ptr, 0, floor.dun_level, 0);
             const auto y = yval + ddy_ddd[dir1];
             const auto x = xval + ddx_ddd[dir1];
-            if (MonsterRace(monrace_id).is_valid()) {
+            if (MonraceList::is_valid(monrace_id)) {
                 place_specific_monster(player_ptr, 0, y, x, monrace_id, 0L);
             }
         }

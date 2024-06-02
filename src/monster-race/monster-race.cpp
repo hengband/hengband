@@ -39,25 +39,14 @@ MonsterRaceId MonsterRace::pick_one_at_random()
     static ProbabilityTable<MonsterRaceId> table;
 
     if (table.empty()) {
-        for (const auto &[r_idx, r_ref] : monraces_info) {
-            if (MonsterRace(r_idx).is_valid()) {
-                table.entry_item(r_idx, 1);
+        for (const auto &[monrace_id, monrace] : monraces_info) {
+            if (monrace.is_valid()) {
+                table.entry_item(monrace_id, 1);
             }
         }
     }
 
     return table.pick_one_at_random();
-}
-
-/*!
- * @brief コンストラクタに渡された MonsterRaceId が正当なもの（実際に存在するモンスター種族IDである）かどうかを調べる
- * @details モンスター種族IDが MonsterRaceDefinitions に実在するもの(MonsterRaceId::PLAYERは除く)であるかどうかの用途の他、
- * m_list 上の要素などの r_idx にMonsterRaceId::PLAYER を入れることで死亡扱いとして使われるのでその判定に使用する事もある
- * @return 正当なものであれば true、そうでなければ false
- */
-bool MonsterRace::is_valid() const
-{
-    return this->r_idx != MonsterRaceId::PLAYER;
 }
 
 /*!

@@ -24,24 +24,24 @@
 static std::pair<std::string, std::string> describe_monster_ball(const ItemEntity &item, const describe_option_type &opt)
 {
     const auto &basename = item.get_baseitem().name;
-    const auto r_idx = i2enum<MonsterRaceId>(item.pval);
-    auto *r_ptr = &monraces_info[r_idx];
+    const auto monrace_id = i2enum<MonsterRaceId>(item.pval);
+    const auto &monrace = monraces_info[monrace_id];
     if (!opt.known) {
         return { basename, "" };
     }
 
-    if (!MonsterRace(r_idx).is_valid()) {
+    if (!monrace.is_valid()) {
         return { basename, _(" (空)", " (empty)") };
     }
 
 #ifdef JP
-    const auto modstr = format(" (%s)", r_ptr->name.data());
+    const auto modstr = format(" (%s)", monrace.name.data());
 #else
     std::string modstr;
-    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        modstr = format(" (%s%s)", (is_a_vowel(r_ptr->name[0]) ? "an " : "a "), r_ptr->name.data());
+    if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        modstr = format(" (%s%s)", (is_a_vowel(monrace.name[0]) ? "an " : "a "), monrace.name.data());
     } else {
-        modstr = format(" (%s)", r_ptr->name.data());
+        modstr = format(" (%s)", monrace.name.data());
     }
 #endif
     return { basename, modstr };
@@ -50,16 +50,16 @@ static std::pair<std::string, std::string> describe_monster_ball(const ItemEntit
 static std::pair<std::string, std::string> describe_statue(const ItemEntity &item)
 {
     const auto &basename = item.get_baseitem().name;
-    const auto r_idx = i2enum<MonsterRaceId>(item.pval);
-    auto *r_ptr = &monraces_info[r_idx];
+    const auto monrace_id = i2enum<MonsterRaceId>(item.pval);
+    const auto &monrace = monraces_info[monrace_id];
 #ifdef JP
-    const auto &modstr = r_ptr->name;
+    const auto &modstr = monrace.name;
 #else
     std::string modstr;
-    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        modstr = format("%s%s", (is_a_vowel(r_ptr->name[0]) ? "an " : "a "), r_ptr->name.data());
+    if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        modstr = format("%s%s", (is_a_vowel(monrace.name[0]) ? "an " : "a "), monrace.name.data());
     } else {
-        modstr = r_ptr->name;
+        modstr = monrace.name;
     }
 #endif
     return { basename, modstr };
@@ -67,18 +67,17 @@ static std::pair<std::string, std::string> describe_statue(const ItemEntity &ite
 
 static std::pair<std::string, std::string> describe_corpse(const ItemEntity &item)
 {
-    const auto r_idx = i2enum<MonsterRaceId>(item.pval);
-    auto *r_ptr = &monraces_info[r_idx];
-    const auto &modstr = r_ptr->name;
+    const auto monrace_id = i2enum<MonsterRaceId>(item.pval);
+    const auto &monrace = monraces_info[monrace_id];
 #ifdef JP
     const auto basename = "#%";
 #else
     const auto basename =
-        (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
+        (monrace.kind_flags.has(MonsterKindType::UNIQUE))
             ? "& % of #"
             : "& # %";
 #endif
-    return { basename, modstr };
+    return { basename, monrace.name };
 }
 
 /*!

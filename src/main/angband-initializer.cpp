@@ -205,9 +205,10 @@ void init_angband(PlayerType *player_ptr, bool no_term)
         quit(_("ダンジョン初期化不能", "Cannot initialize dungeon"));
     }
 
-    for (const auto &d_ref : dungeons_info) {
-        if (d_ref.idx > 0 && MonsterRace(d_ref.final_guardian).is_valid()) {
-            monraces_info[d_ref.final_guardian].misc_flags.set(MonsterMiscType::GUARDIAN);
+    for (auto &dungeon : dungeons_info) {
+        if (dungeon.is_dungeon() && dungeon.has_guardian()) {
+            auto &monrace = dungeon.get_guardian();
+            monrace.misc_flags.set(MonsterMiscType::GUARDIAN);
         }
     }
 

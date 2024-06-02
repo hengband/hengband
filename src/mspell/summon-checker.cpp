@@ -62,7 +62,7 @@ bool check_summon_specific(PlayerType *player_ptr, MonsterRaceId summoner_idx, M
     case SUMMON_CYBER:
         return (monrace.symbol_definition.character == 'U') && monrace.ability_flags.has(MonsterAbilityType::ROCKET);
     case SUMMON_KIN: {
-        auto summon_kin_type = MonsterRace(summoner_idx).is_valid() ? monraces_info[summoner_idx].symbol_definition.character : PlayerRace(player_ptr).get_summon_symbol();
+        const auto summon_kin_type = MonraceList::is_valid(summoner_idx) ? monraces_info[summoner_idx].symbol_definition.character : PlayerRace(player_ptr).get_summon_symbol();
         return (monrace.symbol_definition.character == summon_kin_type) && (r_idx != MonsterRaceId::HAGURE);
     }
     case SUMMON_DAWN:

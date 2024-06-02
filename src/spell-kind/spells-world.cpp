@@ -377,28 +377,28 @@ static DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
     std::vector<DUNGEON_IDX> dun;
 
     screen_save();
-    for (const auto &d_ref : dungeons_info) {
-        char buf[80];
-        bool seiha = false;
+    for (const auto &dungeon : dungeons_info) {
+        auto is_conquered = false;
+        if (!dungeon.is_dungeon() || !dungeon.maxdepth) {
+            continue;
+        }
 
-        if (d_ref.idx == 0 || !d_ref.maxdepth) {
+        if (!max_dlv[dungeon.idx]) {
             continue;
         }
-        if (!max_dlv[d_ref.idx]) {
-            continue;
-        }
-        if (MonsterRace(d_ref.final_guardian).is_valid()) {
-            if (!monraces_info[d_ref.final_guardian].max_num) {
-                seiha = true;
+
+        if (dungeon.has_guardian()) {
+            if (dungeon.get_guardian().max_num == 0) {
+                is_conquered = true;
             }
-        } else if (max_dlv[d_ref.idx] == d_ref.maxdepth) {
-            seiha = true;
+        } else if (max_dlv[dungeon.idx] == dungeon.maxdepth) {
+            is_conquered = true;
         }
 
         constexpr auto fmt = _("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d");
-        strnfmt(buf, sizeof(buf), fmt, static_cast<char>('a' + dun.size()), seiha ? '!' : ' ', d_ref.name.data(), (int)max_dlv[d_ref.idx]);
+        const auto buf = format(fmt, static_cast<char>('a' + dun.size()), is_conquered ? '!' : ' ', dungeon.name.data(), (int)max_dlv[dungeon.idx]);
         prt(buf, y + dun.size(), x);
-        dun.push_back(d_ref.idx);
+        dun.push_back(dungeon.idx);
     }
 
     if (dun.empty()) {

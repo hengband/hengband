@@ -74,7 +74,7 @@ bool research_mon(PlayerType *player_ptr)
     std::vector<MonsterRaceId> monrace_ids;
     const auto &monraces = MonraceList::get_instance();
     for (const auto &[monrace_id, monrace] : monraces) {
-        if (!MonsterRace(monrace_id).is_valid()) {
+        if (!monrace.is_valid()) {
             continue;
         }
 

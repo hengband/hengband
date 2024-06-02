@@ -10,6 +10,18 @@ MonsterRaceInfo::MonsterRaceInfo()
 }
 
 /*!
+ * @brief 正当なモンスター (実際に存在するモンスター種族IDである)かどうかを調べる
+ * @details モンスター種族IDが MonsterRaceDefinitions に実在するもの(MonsterRaceId::PLAYERは除く)であるかどうかの用途の他、
+ * m_list 上の要素などの r_idx にMonsterRaceId::PLAYER を入れることで死亡扱いとして使われるのでその判定に使用する事もある
+ * @return 正当なものであれば true、そうでなければ false
+ * @todo 将来的に定義側のIDが廃止されたら有効フラグのフィールド変数を代わりに作る.
+ */
+bool MonsterRaceInfo::is_valid() const
+{
+    return this->idx != MonsterRaceId::PLAYER;
+}
+
+/*!
  * @brief エルドリッチホラーの形容詞種別を決める
  * @return エルドリッチホラーの形容詞
  */
@@ -109,11 +121,25 @@ std::string MonsterRaceInfo::get_pronoun_of_summoned_kin() const
     }
 }
 
+/*!
+ * @brief 進化先モンスターを返す. 進化しなければプレイヤー (無効値の意)
+ * @return 進化先モンスター
+ */
+const MonsterRaceInfo &MonsterRaceInfo::get_next() const
+{
+    return MonraceList::get_instance()[this->next_r_idx];
+}
+
 const std::map<MonsterRaceId, std::set<MonsterRaceId>> MonraceList::unified_uniques = {
     { MonsterRaceId::BANORLUPART, { MonsterRaceId::BANOR, MonsterRaceId::LUPART } },
 };
 
 MonraceList MonraceList::instance{};
+
+bool MonraceList::is_valid(MonsterRaceId monrace_id)
+{
+    return monrace_id != MonsterRaceId::PLAYER;
+}
 
 const std::map<MonsterRaceId, std::set<MonsterRaceId>> &MonraceList::get_unified_uniques()
 {

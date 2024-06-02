@@ -56,6 +56,7 @@ struct feat_prob {
 };
 
 /* A structure for the != dungeon types */
+class MonsterRaceInfo;
 struct dungeon_type {
     DUNGEON_IDX idx{};
 
@@ -110,6 +111,10 @@ struct dungeon_type {
     int obj_good{};
 
     bool has_river_flag() const;
+    bool is_dungeon() const;
+    bool has_guardian() const;
+    MonsterRaceInfo &get_guardian();
+    const MonsterRaceInfo &get_guardian() const;
 };
 
 extern std::vector<DEPTH> max_dlv;

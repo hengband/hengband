@@ -141,7 +141,7 @@ void wiz_complete_quest(PlayerType *player_ptr)
 
 void wiz_restore_monster_max_num(MonsterRaceId r_idx)
 {
-    if (!MonsterRace(r_idx).is_valid()) {
+    if (!MonraceList::is_valid(r_idx)) {
         const auto restore_monrace_id = input_numerics("MonsterID", 1, monraces_info.size() - 1, MonsterRaceId::FILTHY_URCHIN);
         if (!restore_monrace_id) {
             return;

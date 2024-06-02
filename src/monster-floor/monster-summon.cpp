@@ -132,8 +132,8 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y1, P
     get_mon_num_prep(player_ptr, std::move(summon_specific_hook), get_monster_hook2(player_ptr, y, x), type);
 
     DEPTH dlev = get_dungeon_or_wilderness_level(player_ptr);
-    MonsterRaceId r_idx = get_mon_num(player_ptr, 0, (dlev + lev) / 2 + 5, mode);
-    if (!MonsterRace(r_idx).is_valid()) {
+    const auto r_idx = get_mon_num(player_ptr, 0, (dlev + lev) / 2 + 5, mode);
+    if (!MonraceList::is_valid(r_idx)) {
         return false;
     }
 
@@ -179,7 +179,7 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y1, P
  */
 bool summon_named_creature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION oy, POSITION ox, MonsterRaceId r_idx, BIT_FLAGS mode)
 {
-    if (!MonsterRace(r_idx).is_valid() || (r_idx >= static_cast<MonsterRaceId>(monraces_info.size()))) {
+    if (!MonraceList::is_valid(r_idx) || (r_idx >= static_cast<MonsterRaceId>(monraces_info.size()))) {
         return false;
     }
 

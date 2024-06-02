@@ -75,20 +75,19 @@ void exe_monster_attack_to_player(PlayerType *player_ptr, turn_flags *turn_flags
  */
 static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, Grid *g_ptr)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor.m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-    MonsterEntity *y_ptr;
-    y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monster = floor.m_list[m_idx];
+    auto &monrace = monster.get_monrace();
+    const auto &monster_target = player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+    if (monrace.behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
         return false;
     }
 
-    if ((r_ptr->behavior_flags.has_not(MonsterBehaviorType::KILL_BODY)) && is_original_ap_and_seen(player_ptr, m_ptr)) {
-        r_ptr->r_behavior_flags.set(MonsterBehaviorType::KILL_BODY);
+    if ((monrace.behavior_flags.has_not(MonsterBehaviorType::KILL_BODY)) && is_original_ap_and_seen(player_ptr, &monster)) {
+        monrace.r_behavior_flags.set(MonsterBehaviorType::KILL_BODY);
     }
 
-    if (!MonsterRace(y_ptr->r_idx).is_valid() || (y_ptr->hp < 0)) {
+    if (!monster_target.is_valid() || (monster_target.hp < 0)) {
         return false;
     }
     if (monst_attack_monst(player_ptr, m_idx, g_ptr->m_idx)) {
@@ -97,15 +96,15 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
     if (floor.get_dungeon_definition().flags.has_not(DungeonFeatureType::NO_MELEE)) {
         return false;
     }
-    if (m_ptr->is_confused()) {
+    if (monster.is_confused()) {
         return true;
     }
-    if (r_ptr->behavior_flags.has_not(MonsterBehaviorType::STUPID)) {
+    if (monrace.behavior_flags.has_not(MonsterBehaviorType::STUPID)) {
         return false;
     }
 
-    if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-        r_ptr->r_behavior_flags.set(MonsterBehaviorType::STUPID);
+    if (is_original_ap_and_seen(player_ptr, &monster)) {
+        monrace.r_behavior_flags.set(MonsterBehaviorType::STUPID);
     }
 
     return true;

@@ -751,7 +751,7 @@ bool affect_monster(
     exe_affect_monster_by_damage(player_ptr, em_ptr);
 
     update_phase_out_stat(player_ptr, em_ptr);
-    const auto monster_is_valid = MonsterRace(em_ptr->m_ptr->r_idx).is_valid();
+    const auto monster_is_valid = em_ptr->m_ptr->is_valid();
     if (monster_is_valid) {
         update_monster(player_ptr, target_m_idx, false);
     }

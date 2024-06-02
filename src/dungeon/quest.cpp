@@ -75,6 +75,15 @@ ArtifactType &QuestType::get_reward() const
     return artifacts.get_artifact(this->reward_fa_id);
 }
 
+/*!
+ * @brief 討伐対象モンスターを返す. いなければプレイヤー (無効値の意)
+ * @return 討伐対象モンスター
+ */
+const MonsterRaceInfo &QuestType::get_bounty() const
+{
+    return MonraceList::get_instance()[this->r_idx];
+}
+
 QuestList QuestList::instance{};
 
 QuestList &QuestList::get_instance()

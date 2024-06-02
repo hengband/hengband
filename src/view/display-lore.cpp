@@ -533,7 +533,7 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
 #endif
 
     for (const auto &[r_idx, dd, ds] : lore_ptr->r_ptr->reinforces) {
-        auto is_reinforced = MonsterRace(r_idx).is_valid();
+        auto is_reinforced = MonraceList::is_valid(r_idx);
 #ifndef JP
         const char *prefix = (idx == 0) ? " " : (idx == max_idx) ? " and "
                                                                  : ", ";

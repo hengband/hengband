@@ -185,14 +185,13 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     }
 
     const auto &dungeon = floor.get_dungeon_definition();
-    const auto guardian = dungeon.final_guardian;
-    if ((floor.dun_level == dungeon.maxdepth) && MonsterRace(guardian).is_valid()) {
-        const auto &guardian_ref = monraces_info[guardian];
-        if (guardian_ref.max_num) {
+    if ((floor.dun_level == dungeon.maxdepth) && dungeon.is_dungeon()) {
+        const auto &monrace = dungeon.get_guardian();
+        if (monrace.max_num > 0) {
 #ifdef JP
-            msg_format("この階には%sの主である%sが棲んでいる。", dungeon.name.data(), guardian_ref.name.data());
+            msg_format("この階には%sの主である%sが棲んでいる。", dungeon.name.data(), monrace.name.data());
 #else
-            msg_format("%s^ lives in this level as the keeper of %s.", guardian_ref.name.data(), dungeon.name.data());
+            msg_format("%s^ lives in this level as the keeper of %s.", monrace.name.data(), dungeon.name.data());
 #endif
         }
     }

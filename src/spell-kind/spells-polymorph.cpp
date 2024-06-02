@@ -38,14 +38,14 @@ static MonsterRaceId poly_r_idx(PlayerType *player_ptr, MonsterRaceId r_idx)
 
     DEPTH lev1 = r_ptr->level - ((randint1(20) / randint1(9)) + 1);
     DEPTH lev2 = r_ptr->level + ((randint1(20) / randint1(9)) + 1);
-    MonsterRaceId r;
+    MonsterRaceId monrace_id;
     for (int i = 0; i < 1000; i++) {
-        r = get_mon_num(player_ptr, 0, (player_ptr->current_floor_ptr->dun_level + r_ptr->level) / 2 + 5, PM_NONE);
-        if (!MonsterRace(r).is_valid()) {
+        monrace_id = get_mon_num(player_ptr, 0, (player_ptr->current_floor_ptr->dun_level + r_ptr->level) / 2 + 5, PM_NONE);
+        if (!MonraceList::is_valid(monrace_id)) {
             break;
         }
 
-        r_ptr = &monraces_info[r];
+        r_ptr = &monraces_info[monrace_id];
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             continue;
         }
@@ -53,7 +53,7 @@ static MonsterRaceId poly_r_idx(PlayerType *player_ptr, MonsterRaceId r_idx)
             continue;
         }
 
-        r_idx = r;
+        r_idx = monrace_id;
         break;
     }
 

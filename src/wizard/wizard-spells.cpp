@@ -57,7 +57,7 @@ static const std::vector<debug_spell_command> debug_spell_commands_list = {
 
 static std::optional<MonsterRaceId> input_monster_race_id(const MonsterRaceId r_idx)
 {
-    if (MonsterRace(r_idx).is_valid()) {
+    if (MonraceList::is_valid(r_idx)) {
         return r_idx;
     }
     return input_numerics("MonsterID", 1, monraces_info.size() - 1, MonsterRaceId::FILTHY_URCHIN);

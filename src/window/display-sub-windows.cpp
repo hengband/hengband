@@ -181,7 +181,7 @@ void print_monster_list(FloorType *floor_ptr, const std::vector<MONSTER_IDX> &mo
         if (m_ptr->is_pet()) {
             continue;
         } // pet
-        if (!MonsterRace(m_ptr->r_idx).is_valid()) {
+        if (!m_ptr->is_valid()) {
             continue;
         } // dead?
 
@@ -496,7 +496,7 @@ void fix_dungeon(PlayerType *player_ptr)
  */
 void fix_monster(PlayerType *player_ptr)
 {
-    if (!MonsterRace(player_ptr->monster_race_idx).is_valid()) {
+    if (!MonraceList::is_valid(player_ptr->monster_race_idx)) {
         return;
     }
     display_sub_windows(SubWindowRedrawingFlag::MONSTER_LORE,
