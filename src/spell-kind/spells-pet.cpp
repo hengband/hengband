@@ -6,7 +6,6 @@
 #include "game-option/play-record-options.h"
 #include "io/write-diary.h"
 #include "monster-floor/monster-remover.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"

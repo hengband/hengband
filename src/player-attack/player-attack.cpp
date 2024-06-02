@@ -23,7 +23,6 @@
 #include "mind/mind-samurai.h"
 #include "mind/monk-attack.h"
 #include "monster-race/monster-race-hook.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-status-setter.h"

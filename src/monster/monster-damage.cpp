@@ -21,7 +21,6 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"

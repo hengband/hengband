@@ -13,7 +13,6 @@
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"
 #include "mind/drs-types.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-brightness-flags.h"
 #include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-indice-types.h"

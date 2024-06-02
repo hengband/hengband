@@ -1,5 +1,4 @@
 #include "monster-floor/monster-death-util.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
 #include "monster/smart-learn-types.h"

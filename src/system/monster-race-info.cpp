@@ -1,11 +1,12 @@
 #include "system/monster-race-info.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-resistance-mask.h"
 #include "monster/horror-descriptions.h"
 #include "util/probability-table.h"
 #include "world/world.h"
 #include <algorithm>
+
+std::map<MonsterRaceId, MonsterRaceInfo> monraces_info;
 
 MonsterRaceInfo::MonsterRaceInfo()
     : idx(MonsterRaceId::PLAYER)

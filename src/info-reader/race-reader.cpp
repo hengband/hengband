@@ -6,7 +6,6 @@
 #include "info-reader/race-info-tokens-table.h"
 #include "locale/japanese.h"
 #include "main/angband-headers.h"
-#include "monster-race/monster-race.h"
 #include "player-ability/player-ability-types.h"
 #include "system/monster-race-info.h"
 #include "term/gameterm.h"

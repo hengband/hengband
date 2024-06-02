@@ -22,7 +22,6 @@
 #include "main/game-data-initializer.h"
 #include "main/info-initializer.h"
 #include "market/building-initializer.h"
-#include "monster-race/monster-race.h"
 #include "system/angband-version.h"
 #include "system/dungeon-info.h"
 #include "system/monster-race-info.h"

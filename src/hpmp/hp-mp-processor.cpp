@@ -10,7 +10,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "monster-race/monster-race.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"

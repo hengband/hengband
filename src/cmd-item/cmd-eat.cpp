@@ -14,7 +14,6 @@
 #include "inventory/inventory-object.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "monster-race/monster-race.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-expendable.h"
 #include "object/item-tester-hooker.h"

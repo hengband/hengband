@@ -31,7 +31,6 @@
 #include "main/sound-of-music.h"
 #include "mind/mind-explanations-table.h"
 #include "mind/mind-mindcrafter.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-brightness-flags.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster/monster-describer.h"

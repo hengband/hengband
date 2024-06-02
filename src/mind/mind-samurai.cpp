@@ -13,7 +13,6 @@
 #include "mind/stances-table.h"
 #include "monster-attack/monster-attack-player.h"
 #include "monster-race/monster-race-hook.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-resistance-mask.h"
 #include "monster/monster-describer.h"

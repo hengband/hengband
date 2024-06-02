@@ -17,7 +17,6 @@
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-indice-types.h"
 #include "mutation/mutation-processor.h"

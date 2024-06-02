@@ -13,7 +13,6 @@
 #include "lore/lore-util.h"
 #include "lore/monster-lore.h"
 #include "monster-attack/monster-attack-table.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-indice-types.h"
 #include "system/monster-race-info.h"

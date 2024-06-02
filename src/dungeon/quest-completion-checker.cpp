@@ -7,7 +7,6 @@
 #include "grid/feature-flag-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-ego.h"

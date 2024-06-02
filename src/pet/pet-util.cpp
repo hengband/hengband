@@ -1,7 +1,6 @@
 #include "pet/pet-util.h"
 #include "core/stuff-handler.h"
 #include "grid/grid.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "player-info/class-info.h"

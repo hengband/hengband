@@ -5,7 +5,6 @@
 #include "game-option/game-play-options.h"
 #include "io/input-key-acceptor.h"
 #include "lore/lore-util.h"
-#include "monster-race/monster-race.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"

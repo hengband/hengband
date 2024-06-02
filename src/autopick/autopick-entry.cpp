@@ -8,7 +8,6 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
-#include "monster-race/monster-race.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"

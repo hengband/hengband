@@ -6,7 +6,6 @@
 #include "game-option/text-display-options.h"
 #include "grid/grid.h"
 #include "monster-race/monster-kind-mask.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-special-flags.h"
 #include "monster/monster-describer.h"

@@ -6,7 +6,6 @@
 #include "info-reader/fixed-map-parser.h"
 #include "inventory/inventory-slot-types.h"
 #include "market/arena.h"
-#include "monster-race/monster-race.h"
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"

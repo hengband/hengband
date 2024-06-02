@@ -3,7 +3,6 @@
 #include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "player-base/player-class.h"

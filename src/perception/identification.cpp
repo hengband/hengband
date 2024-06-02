@@ -4,7 +4,6 @@
 #include "flavor/object-flavor-types.h"
 #include "game-option/special-options.h"
 #include "io/input-key-acceptor.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"

@@ -28,7 +28,6 @@
 #include "main/sound-of-music.h"
 #include "market/arena-info-table.h"
 #include "mind/mind-mirror-master.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"

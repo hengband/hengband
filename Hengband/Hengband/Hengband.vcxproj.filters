@@ -1013,9 +1013,6 @@
     <ClCompile Include="..\..\src\object-enchant\activation-info-table.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-race\monster-race.cpp">
-      <Filter>monster-race</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monster-race\monster-race-hook.cpp">
       <Filter>monster-race</Filter>
     </ClCompile>
@@ -3660,9 +3657,6 @@
       <Filter>object-enchant</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-indice-types.h">
-      <Filter>monster-race</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster-race\monster-race.h">
       <Filter>monster-race</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster-race\monster-race-hook.h">

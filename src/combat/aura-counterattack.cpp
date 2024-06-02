@@ -11,7 +11,6 @@
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster-attack/monster-attack-player.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-resistance-mask.h"
 #include "monster/monster-damage.h"

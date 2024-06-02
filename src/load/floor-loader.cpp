@@ -15,7 +15,6 @@
 #include "load/old/item-loader-savefile50.h"
 #include "load/old/load-v1-5-0.h"
 #include "load/old/monster-loader-savefile50.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
 #include "save/floor-writer.h"
