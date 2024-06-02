@@ -586,9 +586,7 @@ void display_monster_collective(lore_type *lore_ptr)
 void display_monster_launching(PlayerType *player_ptr, lore_type *lore_ptr)
 {
     if (lore_ptr->ability_flags.has(MonsterAbilityType::ROCKET)) {
-        set_damage(player_ptr, lore_ptr, MonsterAbilityType::ROCKET, _("ロケット%sを発射する", "shoot a rocket%s"));
-        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
-        lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
+        add_lore_of_damage_skill(player_ptr, lore_ptr, MonsterAbilityType::ROCKET, _("ロケット%sを発射する", "shoot a rocket%s"), TERM_UMBER);
         lore_ptr->rocket = true;
     }
 
@@ -596,46 +594,46 @@ void display_monster_launching(PlayerType *player_ptr, lore_type *lore_ptr)
         return;
     }
 
-    if (know_armour(lore_ptr->r_idx, lore_ptr->know_everything)) {
-        strnfmt(lore_ptr->tmp_msg[lore_ptr->vn], sizeof(lore_ptr->tmp_msg[lore_ptr->vn]), _("威力 %dd%d の射撃をする", "fire an arrow (Power:%dd%d)"), lore_ptr->r_ptr->shoot_dam_dice,
-            lore_ptr->r_ptr->shoot_dam_side);
+    std::string msg;
+    if (know_details(lore_ptr->r_idx) || lore_ptr->know_everything) {
+        msg = format(_("威力 %dd%d の射撃をする", "fire an arrow (Power:%dd%d)"), lore_ptr->r_ptr->shoot_dam_dice, lore_ptr->r_ptr->shoot_dam_side);
     } else {
-        angband_strcpy(lore_ptr->tmp_msg[lore_ptr->vn], _("射撃をする", "fire an arrow"), sizeof(lore_ptr->tmp_msg[lore_ptr->vn]));
+        msg = _("射撃をする", "fire an arrow");
     }
 
-    lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
-    lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
+    lore_ptr->lore_msgs.emplace_back(msg, TERM_UMBER);
     lore_ptr->shoot = true;
 }
 
 void display_monster_sometimes(lore_type *lore_ptr)
 {
-    if (lore_ptr->vn <= 0) {
+    if (lore_ptr->lore_msgs.empty()) {
         return;
     }
 
     hooked_roff(format(_("%s^は", "%s^"), Who::who(lore_ptr->msex)));
-    for (int n = 0; n < lore_ptr->vn; n++) {
+    for (int n = 0; const auto &[msg, color] : lore_ptr->lore_msgs) {
 #ifdef JP
-        if (n != lore_ptr->vn - 1) {
-            const auto verb = conjugate_jverb(lore_ptr->vp[n], JVerbConjugationType::OR);
-            hook_c_roff(lore_ptr->color[n], verb);
-            hook_c_roff(lore_ptr->color[n], "り");
+        if (n != std::ssize(lore_ptr->lore_msgs) - 1) {
+            const auto verb = conjugate_jverb(msg, JVerbConjugationType::OR);
+            hook_c_roff(color, verb);
+            hook_c_roff(color, "り");
             hooked_roff("、");
         } else {
-            hook_c_roff(lore_ptr->color[n], lore_ptr->vp[n]);
+            hook_c_roff(color, msg);
         }
 #else
         if (n == 0) {
             hooked_roff(" may ");
-        } else if (n < lore_ptr->vn - 1) {
+        } else if (n < std::ssize(lore_ptr->lore_msgs) - 1) {
             hooked_roff(", ");
         } else {
             hooked_roff(" or ");
         }
 
-        hook_c_roff(lore_ptr->color[n], lore_ptr->vp[n]);
+        hook_c_roff(color, msg);
 #endif
+        n++;
     }
 
     hooked_roff(_("ことがある。", ".  "));

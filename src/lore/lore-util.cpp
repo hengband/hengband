@@ -29,6 +29,12 @@ const who_word_definition Who::words = {
  */
 hook_c_roff_pf hook_c_roff = c_roff;
 
+lore_msg::lore_msg(std::string_view msg, byte color)
+    : msg(msg)
+    , color(color)
+{
+}
+
 lore_type::lore_type(MonsterRaceId r_idx, monster_lore_mode mode)
     : r_idx(r_idx)
     , mode(mode)
