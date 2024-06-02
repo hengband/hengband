@@ -313,7 +313,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
  */
 bool trap_can_be_ignored(PlayerType *player_ptr, FEAT_IDX feat)
 {
-    const auto &terrain = TerrainList::get_instance()[feat];
+    const auto &terrain = TerrainList::get_instance().get_terrain(feat);
     if (terrain.flags.has_not(TerrainCharacteristics::TRAP)) {
         return true;
     }

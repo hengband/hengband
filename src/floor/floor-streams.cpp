@@ -213,7 +213,7 @@ void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
     }
 
     if (feat1) {
-        const auto &terrain = TerrainList::get_instance()[feat1];
+        const auto &terrain = TerrainList::get_instance().get_terrain(feat1);
         auto is_lava = dd_ptr->laketype == LAKE_T_LAVA;
         is_lava &= terrain.flags.has(TerrainCharacteristics::LAVA);
         auto is_water = dd_ptr->laketype == LAKE_T_WATER;
@@ -286,7 +286,7 @@ void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
  */
 void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
 {
-    const auto &streamer = TerrainList::get_instance()[feat];
+    const auto &streamer = TerrainList::get_instance().get_terrain(feat);
     bool streamer_is_wall = streamer.flags.has(TerrainCharacteristics::WALL) && streamer.flags.has_not(TerrainCharacteristics::PERMANENT);
     bool streamer_may_have_gold = streamer.flags.has(TerrainCharacteristics::MAY_HAVE_GOLD);
 

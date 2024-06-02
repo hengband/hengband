@@ -66,10 +66,10 @@ public:
     TerrainList(TerrainList &&) = delete;
     TerrainList operator=(const TerrainList &) = delete;
     TerrainList operator=(TerrainList &&) = delete;
-    TerrainType &operator[](short terrain_id);
 
     static TerrainList &get_instance();
     std::vector<TerrainType> &get_raw_vector(); // @todo init_terrains_info() 専用、将来的に廃止する.
+    TerrainType &get_terrain(short terrain_id);
     const TerrainType &get_terrain(short terrain_id) const;
     std::vector<TerrainType>::iterator begin();
     std::vector<TerrainType>::const_iterator begin() const;

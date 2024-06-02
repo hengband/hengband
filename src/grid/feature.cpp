@@ -123,7 +123,7 @@ bool is_trap(PlayerType *player_ptr, FEAT_IDX feat)
 {
     /* 関数ポインタの都合 */
     (void)player_ptr;
-    return TerrainList::get_instance()[feat].flags.has(TerrainCharacteristics::TRAP);
+    return TerrainList::get_instance().get_terrain(feat).flags.has(TerrainCharacteristics::TRAP);
 }
 
 /*!
@@ -135,7 +135,7 @@ bool is_closed_door(PlayerType *player_ptr, FEAT_IDX feat)
 {
     /* 関数ポインタの都合 */
     (void)player_ptr;
-    const auto &terrain = TerrainList::get_instance()[feat];
+    const auto &terrain = TerrainList::get_instance().get_terrain(feat);
     return (terrain.flags.has(TerrainCharacteristics::OPEN) || terrain.flags.has(TerrainCharacteristics::BASH)) &&
            terrain.flags.has_not(TerrainCharacteristics::MOVE);
 }
@@ -169,7 +169,7 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
-    const auto &terrain = TerrainList::get_instance()[feat];
+    const auto &terrain = TerrainList::get_instance().get_terrain(feat);
     const auto &dungeon = floor_ptr->get_dungeon_definition();
     if (!w_ptr->character_dungeon) {
         g_ptr->mimic = 0;
@@ -256,7 +256,7 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
 
 FEAT_IDX conv_dungeon_feat(const FloorType *floor_ptr, FEAT_IDX newfeat)
 {
-    const auto &terrain = TerrainList::get_instance()[newfeat];
+    const auto &terrain = TerrainList::get_instance().get_terrain(newfeat);
     if (terrain.flags.has_not(TerrainCharacteristics::CONVERT)) {
         return newfeat;
     }

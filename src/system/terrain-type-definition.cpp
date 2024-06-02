@@ -69,7 +69,7 @@ std::vector<TerrainType> &TerrainList::get_raw_vector()
     return this->terrains;
 }
 
-TerrainType &TerrainList::operator[](short terrain_id)
+TerrainType &TerrainList::get_terrain(short terrain_id)
 {
     return this->terrains.at(terrain_id);
 }

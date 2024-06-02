@@ -155,7 +155,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
                 }
             } else if (darkened_grid(player_ptr, &grid)) {
                 const auto unsafe_terrain_id = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
-                terrain_mimic_ptr = &terrains[unsafe_terrain_id];
+                terrain_mimic_ptr = &terrains.get_terrain(unsafe_terrain_id);
                 symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_STANDARD];
             } else if (view_special_lite) {
                 if (grid.info & (CAVE_LITE | CAVE_MNLT)) {
@@ -172,7 +172,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
             }
         } else {
             const auto unsafe_terrain_id = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
-            terrain_mimic_ptr = &terrains[unsafe_terrain_id];
+            terrain_mimic_ptr = &terrains.get_terrain(unsafe_terrain_id);
             symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_STANDARD];
         }
     } else {
@@ -186,7 +186,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
             } else if (darkened_grid(player_ptr, &grid) && !is_blind) {
                 if (terrain_mimic_ptr->flags.has_all_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::PROJECT })) {
                     const auto unsafe_terrain_id = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
-                    terrain_mimic_ptr = &terrains[unsafe_terrain_id];
+                    terrain_mimic_ptr = &terrains.get_terrain(unsafe_terrain_id);
                     symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_STANDARD];
                 } else if (view_granite_lite && view_bright_lite) {
                     symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_DARK];
@@ -210,7 +210,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
             }
         } else {
             const auto unsafe_terrain_id = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
-            terrain_mimic_ptr = &terrains[unsafe_terrain_id];
+            terrain_mimic_ptr = &terrains.get_terrain(unsafe_terrain_id);
             symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_STANDARD];
         }
     }
