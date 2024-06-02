@@ -512,7 +512,7 @@ bool MonraceList::order_level(MonsterRaceId id1, MonsterRaceId id2) const
  *
  * @return 選択したモンスター種族ID
  */
-MonsterRaceId MonraceList::pick_one_at_random() const
+MonsterRaceId MonraceList::pick_id_at_random() const
 {
     static ProbabilityTable<MonsterRaceId> table;
     if (table.empty()) {
@@ -524,6 +524,11 @@ MonsterRaceId MonraceList::pick_one_at_random() const
     }
 
     return table.pick_one_at_random();
+}
+
+const MonsterRaceInfo &MonraceList::pick_monrace_at_random() const
+{
+    return monraces_info.at(this->pick_id_at_random());
 }
 
 void MonraceList::reset_all_visuals()

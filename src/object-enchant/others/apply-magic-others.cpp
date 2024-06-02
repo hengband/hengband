@@ -110,7 +110,7 @@ void OtherItemsEnchanter::generate_figurine()
     const auto &monraces = MonraceList::get_instance();
     MonsterRaceId monrace_id;
     while (true) {
-        monrace_id = monraces.pick_one_at_random();
+        monrace_id = monraces.pick_id_at_random();
         if (!item_monster_okay(this->player_ptr, monrace_id) || (monrace_id == MonsterRaceId::TSUCHINOKO)) {
             continue;
         }
@@ -178,16 +178,16 @@ void OtherItemsEnchanter::generate_statue()
     const auto &monraces = MonraceList::get_instance();
     const auto pick_monrace_id_for_statue = [&monraces] {
         while (true) {
-            auto monrace_id = monraces.pick_one_at_random();
-            if (monraces[monrace_id].rarity > 0) {
-                return monrace_id;
+            auto &monrace = monraces.pick_monrace_at_random();
+            if (monrace.rarity > 0) {
+                return monrace.idx;
             }
         }
     };
     const auto monrace_id = pick_monrace_id_for_statue();
-    const auto &monrace = monraces[monrace_id];
     this->o_ptr->pval = enum2i(monrace_id);
     if (cheat_peek) {
+        const auto &monrace = monraces[monrace_id];
         msg_format(_("%sの像", "Statue of %s"), monrace.name.data());
     }
 
