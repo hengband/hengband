@@ -1,6 +1,7 @@
 #include "system/monster-race-info.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
+#include "monster-race/race-resistance-mask.h"
 #include "monster/horror-descriptions.h"
 #include "util/probability-table.h"
 #include "world/world.h"
@@ -147,6 +148,59 @@ bool MonsterRaceInfo::is_bounty(bool unachieved_only) const
     }
 
     return !unachieved_only || !it->is_achieved;
+}
+
+/*!
+ * @brief モンスター種族の総合的な強さを計算する。
+ * @details 現在はモンスター闘技場でのモンスターの強さの総合的な評価にのみ使用されている。
+ * @return 計算した結果のモンスター種族の総合的な強さの値を返す。
+ */
+int MonsterRaceInfo::calc_power() const
+{
+    auto power = 0;
+    const auto num_resistances = EnumClassFlagGroup<MonsterResistanceType>(this->resistance_flags & RFR_EFF_IMMUNE_ELEMENT_MASK).count();
+    if (this->misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
+        power = this->hdice * this->hside * 2;
+    } else {
+        power = this->hdice * (this->hside + 1);
+    }
+
+    power = power * (100 + this->level) / 100;
+    if (this->speed > STANDARD_SPEED) {
+        power = power * (this->speed * 2 - 110) / 100;
+    }
+
+    if (this->speed < STANDARD_SPEED) {
+        power = power * (this->speed - 20) / 100;
+    }
+
+    if (num_resistances > 2) {
+        power = power * (num_resistances * 2 + 5) / 10;
+    } else if (this->ability_flags.has(MonsterAbilityType::INVULNER)) {
+        power = power * 4 / 3;
+    } else if (this->ability_flags.has(MonsterAbilityType::HEAL)) {
+        power = power * 4 / 3;
+    } else if (this->ability_flags.has(MonsterAbilityType::DRAIN_MANA)) {
+        power = power * 11 / 10;
+    }
+
+    if (this->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25)) {
+        power = power * 9 / 10;
+    }
+
+    if (this->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50)) {
+        power = power * 9 / 10;
+    }
+
+    if (this->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
+        power *= 100000;
+    }
+
+    if (this->arena_ratio) {
+        power = power * this->arena_ratio / 100;
+    }
+
+    return power;
 }
 
 const std::map<MonsterRaceId, std::set<MonsterRaceId>> MonraceList::unified_uniques = {

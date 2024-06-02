@@ -12,8 +12,6 @@ class MonsterRace {
 public:
     MonsterRace(MonsterRaceId r_idx);
 
-    int calc_power() const;
-
 private:
     MonsterRaceId r_idx;
 };
