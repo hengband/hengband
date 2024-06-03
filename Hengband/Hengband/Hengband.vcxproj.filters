@@ -3917,6 +3917,9 @@
     <ClInclude Include="..\..\src\util\buffer-shaper.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\locale\character-encoding.h">
+      <Filter>locale</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\locale\language-switcher.h">
       <Filter>locale</Filter>
     </ClInclude>

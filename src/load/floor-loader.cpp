@@ -15,6 +15,7 @@
 #include "load/old/item-loader-savefile50.h"
 #include "load/old/load-v1-5-0.h"
 #include "load/old/monster-loader-savefile50.h"
+#include "locale/character-encoding.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
 #include "save/floor-writer.h"
@@ -27,6 +28,7 @@
 #include "system/player-type-definition.h"
 #include "term/z-form.h"
 #include "util/angband-files.h"
+#include "util/finalizer.h"
 #include "world/world-object.h"
 
 /*!
@@ -248,19 +250,23 @@ static bool load_floor_aux(PlayerType *player_ptr, saved_floor_type *sf_ptr)
  */
 bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode)
 {
+    const auto finalizer = util::make_finalizer([backup = loading_character_encoding]() {
+        loading_character_encoding = backup;
+    });
+
     /*
      * Temporary files are always written in system depended kanji
      * code.
      */
 #ifdef JP
 #ifdef EUC
-    kanji_code = 2;
+    loading_character_encoding = CharacterEncoding::EUC_JP;
 #endif
 #ifdef SJIS
-    kanji_code = 3;
+    loading_character_encoding = CharacterEncoding::SHIFT_JIS;
 #endif
 #else
-    kanji_code = 1;
+    loading_character_encoding = CharacterEncoding::US_ASCII;
 #endif
 
     FILE *old_fff = nullptr;
@@ -326,7 +332,5 @@ bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
         loading_savefile_version = old_loading_savefile_version;
     }
 
-    byte old_kanji_code = kanji_code;
-    kanji_code = old_kanji_code;
     return is_save_successful;
 }
