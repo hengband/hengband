@@ -16,7 +16,6 @@
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
-#include "monster-race/monster-race.h"
 #include "player-info/class-info.h"
 #include "realm/realm-names-table.h"
 #include "spell/spells-execution.h"

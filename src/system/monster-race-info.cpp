@@ -1,8 +1,12 @@
 #include "system/monster-race-info.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
+#include "monster-race/race-resistance-mask.h"
 #include "monster/horror-descriptions.h"
+#include "util/probability-table.h"
+#include "world/world.h"
 #include <algorithm>
+
+std::map<MonsterRaceId, MonsterRaceInfo> monraces_info;
 
 MonsterRaceInfo::MonsterRaceInfo()
     : idx(MonsterRaceId::PLAYER)
@@ -130,6 +134,76 @@ const MonsterRaceInfo &MonsterRaceInfo::get_next() const
     return MonraceList::get_instance()[this->next_r_idx];
 }
 
+/*!
+ * @brief モンスター種族が賞金首の対象かどうかを調べる。日替わり賞金首は対象外。
+ * @param unachieved_only true の場合未達成の賞金首のみを対象とする。false の場合達成未達成に関わらずすべての賞金首を対象とする。
+ * @return モンスター種族が賞金首の対象ならば true、そうでなければ false
+ */
+bool MonsterRaceInfo::is_bounty(bool unachieved_only) const
+{
+    const auto end = std::end(w_ptr->bounties);
+    const auto it = std::find_if(std::begin(w_ptr->bounties), end,
+        [this](const auto &bounty) { return bounty.r_idx == this->idx; });
+    if (it == end) {
+        return false;
+    }
+
+    return !unachieved_only || !it->is_achieved;
+}
+
+/*!
+ * @brief モンスター種族の総合的な強さを計算する。
+ * @details 現在はモンスター闘技場でのモンスターの強さの総合的な評価にのみ使用されている。
+ * @return 計算した結果のモンスター種族の総合的な強さの値を返す。
+ */
+int MonsterRaceInfo::calc_power() const
+{
+    auto power = 0;
+    const auto num_resistances = EnumClassFlagGroup<MonsterResistanceType>(this->resistance_flags & RFR_EFF_IMMUNE_ELEMENT_MASK).count();
+    if (this->misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
+        power = this->hdice * this->hside * 2;
+    } else {
+        power = this->hdice * (this->hside + 1);
+    }
+
+    power = power * (100 + this->level) / 100;
+    if (this->speed > STANDARD_SPEED) {
+        power = power * (this->speed * 2 - 110) / 100;
+    }
+
+    if (this->speed < STANDARD_SPEED) {
+        power = power * (this->speed - 20) / 100;
+    }
+
+    if (num_resistances > 2) {
+        power = power * (num_resistances * 2 + 5) / 10;
+    } else if (this->ability_flags.has(MonsterAbilityType::INVULNER)) {
+        power = power * 4 / 3;
+    } else if (this->ability_flags.has(MonsterAbilityType::HEAL)) {
+        power = power * 4 / 3;
+    } else if (this->ability_flags.has(MonsterAbilityType::DRAIN_MANA)) {
+        power = power * 11 / 10;
+    }
+
+    if (this->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25)) {
+        power = power * 9 / 10;
+    }
+
+    if (this->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50)) {
+        power = power * 9 / 10;
+    }
+
+    if (this->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
+        power *= 100000;
+    }
+
+    if (this->arena_ratio) {
+        power = power * this->arena_ratio / 100;
+    }
+
+    return power;
+}
+
 const std::map<MonsterRaceId, std::set<MonsterRaceId>> MonraceList::unified_uniques = {
     { MonsterRaceId::BANORLUPART, { MonsterRaceId::BANOR, MonsterRaceId::LUPART } },
 };
@@ -149,6 +223,19 @@ const std::map<MonsterRaceId, std::set<MonsterRaceId>> &MonraceList::get_unified
 MonraceList &MonraceList::get_instance()
 {
     return instance;
+}
+
+/*!
+ * @brief どのモンスター種族でもない事を意味する MonsterRaceId を返す
+ * @details 実態は MonsterRaceId::PLAYER だが、この値は実際にプレイヤーとしての意味として使われる場合
+ * （召喚主がプレイヤーの場合やマップ上の表示属性情報等）とどのモンスターでもない意味として使われる場合があるので、
+ * 後者ではこれを使用することでコード上の意図をわかりやすくする。
+ *
+ * @return (どのモンスター種族でもないという意味での) MonsterRaceId::PLAYER を返す
+ */
+MonsterRaceId MonraceList::empty_id()
+{
+    return MonsterRaceId::PLAYER;
 }
 
 /*!
@@ -452,7 +539,7 @@ bool MonraceList::order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed) 
     return id1 < id2;
 }
 
-bool MonraceList::MonraceList::order_level(MonsterRaceId id1, MonsterRaceId id2) const
+bool MonraceList::order_level(MonsterRaceId id1, MonsterRaceId id2) const
 {
     const auto &monrace1 = monraces_info[id1];
     const auto &monrace2 = monraces_info[id2];
@@ -473,6 +560,30 @@ bool MonraceList::MonraceList::order_level(MonsterRaceId id1, MonsterRaceId id2)
     }
 
     return id1 < id2;
+}
+
+/*!
+ * @brief (MonsterRaceId::PLAYERを除く)実在するすべてのモンスター種族IDから等確率で1つ選択する
+ *
+ * @return 選択したモンスター種族ID
+ */
+MonsterRaceId MonraceList::pick_id_at_random() const
+{
+    static ProbabilityTable<MonsterRaceId> table;
+    if (table.empty()) {
+        for (const auto &[monrace_id, monrace] : monraces_info) {
+            if (monrace.is_valid()) {
+                table.entry_item(monrace_id, 1);
+            }
+        }
+    }
+
+    return table.pick_one_at_random();
+}
+
+const MonsterRaceInfo &MonraceList::pick_monrace_at_random() const
+{
+    return monraces_info.at(this->pick_id_at_random());
 }
 
 void MonraceList::reset_all_visuals()

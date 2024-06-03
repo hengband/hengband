@@ -27,7 +27,6 @@
 #include "mind/snipe-types.h"
 #include "monster-floor/monster-death.h"
 #include "monster-floor/monster-move.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-resistance-mask.h"

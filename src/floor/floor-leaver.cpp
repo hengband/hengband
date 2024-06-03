@@ -16,7 +16,6 @@
 #include "mind/mind-ninja.h"
 #include "monster-floor/monster-lite.h"
 #include "monster-floor/monster-remover.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "pet/pet-util.h"
@@ -118,7 +117,7 @@ static void record_pet_diary(PlayerType *player_ptr)
 static void preserve_pet(PlayerType *player_ptr)
 {
     for (auto &mon : party_mon) {
-        mon.r_idx = MonsterRace::empty_id();
+        mon.r_idx = MonraceList::empty_id();
     }
 
     check_riding_preservation(player_ptr);
@@ -254,7 +253,7 @@ static void get_out_monster(PlayerType *player_ptr)
  */
 static void preserve_info(PlayerType *player_ptr)
 {
-    auto quest_monrace_id = MonsterRace::empty_id();
+    auto quest_monrace_id = MonraceList::empty_id();
     const auto &quests = QuestList::get_instance();
     const auto &floor = *player_ptr->current_floor_ptr;
     for (const auto &[quest_id, quest] : quests) {

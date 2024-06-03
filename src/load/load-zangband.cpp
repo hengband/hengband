@@ -7,7 +7,6 @@
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "market/bounty.h"
-#include "monster-race/monster-race.h"
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"

@@ -19,7 +19,6 @@
 #include "io/files-util.h"
 #include "monster-attack/monster-attack-processor.h"
 #include "monster-floor/monster-object.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-flag-types.h"

@@ -26,7 +26,6 @@
 #include "game-option/cheat-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "room/lake-types.h"
 #include "spell-kind/spells-floor.h"

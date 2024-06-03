@@ -1,7 +1,6 @@
 #include "effect/effect-monster-spirit.h"
 #include "effect/effect-monster-util.h"
 #include "hpmp/hp-mp-processor.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"

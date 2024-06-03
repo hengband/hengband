@@ -20,7 +20,6 @@
 #include "io/files-util.h"
 #include "io/report.h"
 #include "io/uid-checker.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-compaction.h"
 #include "monster/monster-status.h"
 #include "player/player-status.h"

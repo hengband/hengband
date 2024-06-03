@@ -6,7 +6,6 @@
 #include "game-option/text-display-options.h"
 #include "grid/grid.h"
 #include "monster-race/monster-kind-mask.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-special-flags.h"
 #include "monster/monster-describer.h"
@@ -487,10 +486,10 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId m
         const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
         if (!ignore_unview || player_can_see_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
             if (is_hallucinated) {
-                MonsterRaceInfo *hallucinated_race = nullptr;
+                const auto &monraces = MonraceList::get_instance();
+                const MonsterRaceInfo *hallucinated_race = nullptr;
                 do {
-                    auto r_idx = MonsterRace::pick_one_at_random();
-                    hallucinated_race = &monraces_info[r_idx];
+                    hallucinated_race = &monraces.pick_monrace_at_random();
                 } while (hallucinated_race->kind_flags.has(MonsterKindType::UNIQUE));
                 auto mes_evolution = _("%sは%sに進化した。", "%s^ evolved into %s.");
                 auto mes_degeneration = _("%sは%sに退化した。", "%s^ degenerated into %s.");

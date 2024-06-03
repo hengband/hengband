@@ -6,7 +6,6 @@
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
 #include "grid/grid.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "player/player-status.h"
 #include "system/floor-type-definition.h"

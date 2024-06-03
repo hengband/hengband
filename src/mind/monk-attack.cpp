@@ -15,7 +15,6 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-force-trainer.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "player-attack/player-attack.h"

@@ -1,6 +1,5 @@
 #include "system/dungeon-info.h"
 #include "dungeon/dungeon-flag-mask.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "system/monster-race-info.h"
 

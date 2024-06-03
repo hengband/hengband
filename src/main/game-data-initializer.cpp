@@ -9,7 +9,6 @@
 #include "floor/floor-util.h"
 #include "game-option/option-flags.h"
 #include "game-option/option-types-table.h"
-#include "monster-race/monster-race.h"
 #include "system/alloc-entries.h"
 #include "system/baseitem-info.h"
 #include "system/dungeon-info.h"

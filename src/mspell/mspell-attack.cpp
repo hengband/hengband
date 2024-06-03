@@ -5,7 +5,6 @@
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "monster-floor/monster-move.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"

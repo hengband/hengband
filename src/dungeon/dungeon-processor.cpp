@@ -20,7 +20,6 @@
 #include "io/write-diary.h"
 #include "market/arena.h"
 #include "mind/mind-ninja.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-compaction.h"
 #include "monster/monster-processor.h"
 #include "monster/monster-status.h"

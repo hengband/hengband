@@ -6,7 +6,6 @@
 #include "main/scene-table-monster.h"
 #include "dungeon/quest.h"
 #include "main/music-definitions-table.h"
-#include "monster-race/monster-race.h"
 #include "system/floor-type-definition.h"
 #include "system/inner-game-data.h"
 #include "system/monster-entity.h"

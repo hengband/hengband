@@ -32,7 +32,6 @@
 #include "monster-floor/monster-lite.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-race/monster-race-hook.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-update.h"
 #include "monster/smart-learn-types.h"
 #include "mutation/mutation-calculator.h"

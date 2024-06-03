@@ -11,7 +11,6 @@
 #include "flavor/flavor-describer.h"
 #include "game-option/auto-destruction-options.h"
 #include "game-option/input-options.h"
-#include "monster-race/monster-race.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-expendable.h"

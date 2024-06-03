@@ -6,7 +6,6 @@
 #include "load/load-util.h"
 #include "load/load-zangband.h"
 #include "load/savedata-old-flag-types.h"
-#include "monster-race/monster-race.h"
 #include "object-enchant/trg-types.h"
 #include "system/angband-exceptions.h"
 #include "system/artifact-type-definition.h"

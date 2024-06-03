@@ -11,7 +11,6 @@
 #include "floor/geometry.h"
 #include "grid/grid.h"
 #include "monster-attack/monster-attack-player.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"

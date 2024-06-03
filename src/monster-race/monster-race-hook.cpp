@@ -3,7 +3,6 @@
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-table.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-indice-types.h"

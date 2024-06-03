@@ -5,7 +5,6 @@
 #include "floor/line-of-sight.h"
 #include "melee/melee-spell-util.h"
 #include "monster-floor/monster-move.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-indice-types.h"

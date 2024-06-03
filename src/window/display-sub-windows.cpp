@@ -13,7 +13,6 @@
 #include "mind/mind-info.h"
 #include "mind/mind-sniper.h"
 #include "mind/mind-types.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
@@ -137,7 +136,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, MonsterEntity *m_ptr, int
     std::string buf;
     const auto &monrace = monraces_info[monrace_id];
     if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
-        buf = format(_("%3s(覚%2d)", "%3s(%2d)"), MonsterRace(monrace_id).is_bounty(true) ? "  W" : "  U", n_awake);
+        buf = format(_("%3s(覚%2d)", "%3s(%2d)"), monrace.is_bounty(true) ? "  W" : "  U", n_awake);
     } else {
         buf = format(_("%3d(覚%2d)", "%3d(%2d)"), n_same, n_awake);
     }

@@ -148,7 +148,11 @@ public:
     void kill_unique();
     std::string get_pronoun_of_summoned_kin() const;
     const MonsterRaceInfo &get_next() const;
+    bool is_bounty(bool unachieved_only) const;
+    int calc_power() const;
 };
+
+extern std::map<MonsterRaceId, MonsterRaceInfo> monraces_info;
 
 class MonraceList {
 public:
@@ -162,6 +166,7 @@ public:
     static bool is_valid(MonsterRaceId monrace_id);
     static const std::map<MonsterRaceId, std::set<MonsterRaceId>> &get_unified_uniques();
     static MonraceList &get_instance();
+    static MonsterRaceId empty_id();
     std::map<MonsterRaceId, MonsterRaceInfo>::iterator begin();
     std::map<MonsterRaceId, MonsterRaceInfo>::const_iterator begin() const;
     std::map<MonsterRaceId, MonsterRaceInfo>::iterator end();
@@ -185,6 +190,8 @@ public:
     int calc_capture_value(const MonsterRaceId r_idx) const;
     bool order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed = false) const;
     bool order_level(MonsterRaceId id1, MonsterRaceId id2) const;
+    MonsterRaceId pick_id_at_random() const;
+    const MonsterRaceInfo &pick_monrace_at_random() const;
 
     void reset_all_visuals();
 

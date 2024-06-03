@@ -6,7 +6,6 @@
 
 #include "lore/lore-store.h"
 #include "core/window-redrawer.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h" //!< @todo 違和感、m_ptr は外から与えることとしたい.

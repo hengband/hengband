@@ -14,7 +14,6 @@
 #include "main-win/main-win-utils.h"
 #include "main/scene-table.h"
 #include "main/sound-of-music.h"
-#include "monster-race/monster-race.h"
 #include "system/dungeon-info.h"
 #include "system/monster-race-info.h"
 #include "term/z-term.h"

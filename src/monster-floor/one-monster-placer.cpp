@@ -22,7 +22,6 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-kind-mask.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-misc-flags.h"
@@ -337,7 +336,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, 
     }
 
     if (r_ptr->misc_flags.has(MonsterMiscType::CHAMELEON)) {
-        choose_new_monster(player_ptr, g_ptr->m_idx, true, MonsterRace::empty_id(), summoner_m_idx);
+        choose_new_monster(player_ptr, g_ptr->m_idx, true, MonraceList::empty_id(), summoner_m_idx);
         r_ptr = &m_ptr->get_monrace();
         m_ptr->mflag2.set(MonsterConstantFlagType::CHAMELEON);
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (!is_monster(src_idx))) {

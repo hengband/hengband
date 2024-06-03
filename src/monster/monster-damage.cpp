@@ -21,7 +21,6 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
@@ -330,18 +329,18 @@ void MonsterDamageProcessor::show_explosion_message(std::string_view died_mes, s
 
 void MonsterDamageProcessor::show_bounty_message(std::string_view m_name)
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    const auto &r_ref = m_ptr->get_real_monrace();
-    if (r_ref.kind_flags.has_not(MonsterKindType::UNIQUE) || m_ptr->mflag2.has(MonsterConstantFlagType::CLONED) || vanilla_town) {
+    auto &floor = *this->player_ptr->current_floor_ptr;
+    auto &monster = floor.m_list[this->m_idx];
+    const auto &monrace = monster.get_real_monrace();
+    if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE) || monster.mflag2.has(MonsterConstantFlagType::CLONED) || vanilla_town) {
         return;
     }
 
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
+    if (monster.mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
         return;
     }
 
-    if (MonsterRace(m_ptr->r_idx).is_bounty(true)) {
+    if (monrace.is_bounty(true)) {
         msg_format(_("%sの首には賞金がかかっている。", "There is a price on %s's head."), m_name.data());
     }
 }
@@ -467,7 +466,7 @@ void MonsterDamageProcessor::summon_special_unique()
         mes = _("「これは『試練』だ　過去に打ち勝てという『試練』とオレは受けとった」", "This is a 'trial'. I took it as a 'trial' to overcome in the past.");
         break;
     default: // バグでなければ入らない.
-        new_unique_idx = MonsterRace::empty_id();
+        new_unique_idx = MonraceList::empty_id();
         mes = "";
         break;
     }

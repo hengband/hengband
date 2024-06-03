@@ -6,7 +6,6 @@
 #include "info-reader/fixed-map-parser.h"
 #include "inventory/inventory-slot-types.h"
 #include "market/arena.h"
-#include "monster-race/monster-race.h"
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
@@ -52,7 +51,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
         quest.max_num = 0;
         quest.type = QuestKindType::NONE;
         quest.level = 0;
-        quest.r_idx = MonsterRace::empty_id();
+        quest.r_idx = MonraceList::empty_id();
         quest.complev = 0;
         quest.comptime = 0;
     }

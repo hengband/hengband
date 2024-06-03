@@ -7,7 +7,6 @@
 #include "avatar/avatar-changer.h"
 #include "avatar/avatar.h"
 #include "monster-race/monster-kind-mask.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"

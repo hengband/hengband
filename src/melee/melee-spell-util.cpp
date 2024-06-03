@@ -2,7 +2,6 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
 #include "floor/geometry.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"

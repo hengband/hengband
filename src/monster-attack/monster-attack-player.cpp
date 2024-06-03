@@ -24,7 +24,6 @@
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-switcher.h"
 #include "monster-attack/monster-attack-table.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
