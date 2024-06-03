@@ -1,4 +1,5 @@
 #include "load/load-util.h"
+#include "locale/character-encoding.h"
 #include "locale/japanese.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -10,13 +11,9 @@ uint32_t v_check = 0L; // Simple "checksum" on the actual values.
 uint32_t x_check = 0L; // Simple "checksum" on the encoded bytes.
 
 /*
- * Japanese Kanji code
- * 0: Unknown
- * 1: ASCII
- * 2: EUC
- * 3: SJIS
+ * Character encoding of loading savefile.
  */
-byte kanji_code = 0;
+CharacterEncoding loading_character_encoding = CharacterEncoding::UNKNOWN;
 
 /*!
  * @brief ゲームスクリーンにメッセージを表示する / Hack -- Show information on the screen, one line at a time.
@@ -127,25 +124,25 @@ std::string rd_string()
     }
 
 #ifdef JP
-    switch (kanji_code) {
+    switch (loading_character_encoding) {
 #ifdef SJIS
-    case 2:
+    case CharacterEncoding::EUC_JP:
         euc2sjis(str.data());
         break;
 #endif
 
 #ifdef EUC
-    case 3:
+    case CharacterEncoding::SHIFT_JIS:
         sjis2euc(str.data());
         break;
 #endif
 
-    case 0: {
+    case CharacterEncoding::UNKNOWN: {
         const auto code = codeconv(str.data());
 
         /* 漢字コードが判明したら、それを記録 */
-        if (code) {
-            kanji_code = code;
+        if (code != CharacterEncoding::UNKNOWN) {
+            loading_character_encoding = code;
         }
 
         break;

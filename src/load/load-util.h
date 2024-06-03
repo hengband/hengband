@@ -7,12 +7,14 @@
 #include <string>
 #include <string_view>
 
+enum class CharacterEncoding : uint8_t;
+
 extern FILE *loading_savefile;
 extern uint32_t loading_savefile_version;
 extern byte load_xor_byte;
 extern uint32_t v_check;
 extern uint32_t x_check;
-extern byte kanji_code;
+extern CharacterEncoding loading_character_encoding;
 
 void load_note(std::string_view msg);
 byte sf_get();

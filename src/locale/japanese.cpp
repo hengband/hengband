@@ -5,6 +5,7 @@
  */
 
 #include "locale/japanese.h"
+#include "locale/character-encoding.h"
 #include "locale/utf-8.h"
 #include "util/enum-converter.h"
 #include "util/string-processor.h"
@@ -245,83 +246,64 @@ void euc2sjis(char *str)
 /*!
  * @brief strを環境に合った文字コードに変換し、変換前の文字コードを返す。strの長さに制限はない。
  * @param str 変換する文字列のポインタ
- * @return
- * 0: Unknown<br>
- * 1: ASCII (Never known to be ASCII in this function.)<br>
- * 2: EUC<br>
- * 3: SJIS<br>
+ * @return 変換前の文字コード
  */
-byte codeconv(char *str)
+CharacterEncoding codeconv(char *str)
 {
-    byte code = 0;
+    auto encoding = CharacterEncoding::UNKNOWN;
     for (auto i = 0; str[i]; i++) {
-        unsigned char c1;
-        unsigned char c2;
-
         /* First byte */
-        c1 = str[i];
+        const auto c1 = static_cast<unsigned char>(str[i]);
 
         /* ASCII? */
         if (!(c1 & 0x80)) {
+            encoding = CharacterEncoding::US_ASCII;
             continue;
         }
 
         /* Second byte */
         i++;
-        c2 = str[i];
+        const auto c2 = static_cast<unsigned char>(str[i]);
 
-        if (((0xa1 <= c1 && c1 <= 0xdf) || (0xfd <= c1 && c1 <= 0xfe)) && (0xa1 <= c2 && c2 <= 0xfe)) {
+        const auto is_euc_jp = ((0xa1 <= c1 && c1 <= 0xdf) || (0xfd <= c1 && c1 <= 0xfe)) && (0xa1 <= c2 && c2 <= 0xfe);
+        auto is_cp932 = (0x81 <= c1 && c1 <= 0x9f) && ((0x40 <= c2 && c2 <= 0x7e) || (0x80 <= c2 && c2 <= 0xfc));
+        is_cp932 |= (0xe0 <= c1 && c1 <= 0xfc) && (0x40 <= c2 && c2 <= 0x7e);
+
+        if (is_euc_jp) {
             /* Only EUC is allowed */
-            if (!code) {
-                /* EUC */
-                code = 2;
-            }
-
-            /* Broken string? */
-            else if (code != 2) {
-                /* No conversion */
-                return 0;
-            }
-        } else {
-            auto is_cp932 = (0x81 <= c1 && c1 <= 0x9f) && ((0x40 <= c2 && c2 <= 0x7e) || (0x80 <= c2 && c2 <= 0xfc));
-            is_cp932 |= (0xe0 <= c1 && c1 <= 0xfc) && (0x40 <= c2 && c2 <= 0x7e);
-            if (!is_cp932) {
+            if (encoding == CharacterEncoding::UNKNOWN || encoding == CharacterEncoding::US_ASCII || encoding == CharacterEncoding::EUC_JP) {
+                encoding = CharacterEncoding::EUC_JP;
                 continue;
             }
-
+        } else if (is_cp932) {
             /* Only SJIS is allowed */
-            if (!code) {
-                /* SJIS */
-                code = 3;
-            }
-
-            /* Broken string? */
-            else if (code != 3) {
-                /* No conversion */
-                return 0;
+            if (encoding == CharacterEncoding::UNKNOWN || encoding == CharacterEncoding::US_ASCII || encoding == CharacterEncoding::SHIFT_JIS) {
+                encoding = CharacterEncoding::SHIFT_JIS;
+                continue;
             }
         }
+
+        /* Broken string, no conversion */
+        return CharacterEncoding::UNKNOWN;
     }
 
-    switch (code) {
+    switch (encoding) {
 #ifdef EUC
-    case 3:
-        /* SJIS -> EUC */
+    case CharacterEncoding::SHIFT_JIS:
         sjis2euc(str);
         break;
 #endif
 
 #ifdef SJIS
-    case 2:
-        /* EUC -> SJIS */
+    case CharacterEncoding::EUC_JP:
         euc2sjis(str);
-
         break;
 #endif
+    default:
+        break;
     }
 
-    /* Return kanji code */
-    return code;
+    return encoding;
 }
 
 /*!
