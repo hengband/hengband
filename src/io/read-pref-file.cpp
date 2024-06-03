@@ -210,24 +210,20 @@ errr process_histpref_file(PlayerType *player_ptr, std::string_view name)
 }
 
 /*!
- * @brief prfファイルのフォーマットに従った内容を出力する /
- * Dump a formatted line, using "vstrnfmt()".
+ * @brief prfファイルのフォーマットに従った内容を出力する
  * @param fmt 出力内容
  */
 void auto_dump_printf(FILE *auto_dump_stream, const char *fmt, ...)
 {
     va_list vp;
-    char buf[1024];
     va_start(vp, fmt);
-    (void)vstrnfmt(buf, sizeof(buf), fmt, vp);
+    const auto buf = vformat(fmt, vp);
     va_end(vp);
-    for (auto p = buf; *p; p++) {
-        if (*p == '\n') {
-            auto_dump_line_num++;
-        }
-    }
 
-    fprintf(auto_dump_stream, "%s", buf);
+    // '\n'はSJISのマルチバイト文字のコードに含まれないため、ダメ文字を考慮する必要はない
+    auto_dump_line_num += std::count(buf.begin(), buf.end(), '\n');
+
+    fprintf(auto_dump_stream, "%s", buf.data());
 }
 
 /*!
