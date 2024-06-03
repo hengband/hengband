@@ -34,6 +34,7 @@
 #include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
+#include "system/inner-game-data.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -401,9 +402,10 @@ static void dump_aux_race_history(PlayerType *player_ptr, FILE *fff)
         return;
     }
 
-    fprintf(fff, _("\n\n あなたは%sとして生まれた。", "\n\n You were born as %s."), race_info[enum2i(player_ptr->start_race)].title);
+    const auto start_race = InnerGameData::get_instance().get_start_race();
+    fprintf(fff, _("\n\n あなたは%sとして生まれた。", "\n\n You were born as %s."), race_info[enum2i(start_race)].title);
     for (int i = 0; i < MAX_RACES; i++) {
-        if (enum2i(player_ptr->start_race) == i) {
+        if (enum2i(start_race) == i) {
             continue;
         }
         if (i < 32) {

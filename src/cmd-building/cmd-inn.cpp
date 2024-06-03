@@ -14,6 +14,7 @@
 #include "player/eldritch-horror.h"
 #include "status/bad-status-setter.h"
 #include "store/rumor.h"
+#include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -66,14 +67,15 @@ static bool is_player_undead(PlayerType *player_ptr)
  */
 static void write_diary_stay_inn(PlayerType *player_ptr, int prev_hour)
 {
+    const auto &floor = *player_ptr->current_floor_ptr;
     if ((prev_hour >= 6) && (prev_hour < 18)) {
         const auto stay_message = _(is_player_undead(player_ptr) ? "宿屋に泊まった。" : "日が暮れるまで宿屋で過ごした。", "stayed during the day at the inn.");
-        exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, stay_message);
+        exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, stay_message);
         return;
     }
 
     const auto stay_message = _(is_player_undead(player_ptr) ? "夜が明けるまで宿屋で過ごした。" : "宿屋に泊まった。", "stayed overnight at the inn.");
-    exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, stay_message);
+    exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, stay_message);
 }
 
 /*!
@@ -116,7 +118,7 @@ static bool has_a_nightmare(PlayerType *player_ptr)
     }
 
     msg_print(_("あなたは絶叫して目を覚ました。", "You awake screaming."));
-    exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, _("悪夢にうなされてよく眠れなかった。", "had a nightmare."));
+    exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::DESCRIPTION, 0, _("悪夢にうなされてよく眠れなかった。", "had a nightmare."));
     return true;
 }
 
@@ -162,6 +164,7 @@ static void charge_magic_eating_energy(PlayerType *player_ptr)
  */
 static void display_stay_result(PlayerType *player_ptr, int prev_hour)
 {
+    const auto &floor = *player_ptr->current_floor_ptr;
     if ((prev_hour >= 6) && (prev_hour < 18)) {
 #if JP
         msg_format("あなたはリフレッシュして目覚め、%sを迎えた。", is_player_undead(player_ptr) ? "夜" : "夕方");
@@ -169,13 +172,13 @@ static void display_stay_result(PlayerType *player_ptr, int prev_hour)
         msg_format("You awake refreshed for the %s.", is_player_undead(player_ptr) ? "evening" : "twilight");
 #endif
         const auto awake_message = _(is_player_undead(player_ptr) ? "すがすがしい夜を迎えた。" : "夕方を迎えた。", "awoke refreshed.");
-        exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, awake_message);
+        exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, awake_message);
         return;
     }
 
     msg_print(_("あなたはリフレッシュして目覚め、新たな日を迎えた。", "You awake refreshed for the new day."));
     const auto awake_message = _(is_player_undead(player_ptr) ? "すがすがしい朝を迎えた。" : "朝を迎えた。", "awoke refreshed.");
-    exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, awake_message);
+    exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, awake_message);
 }
 
 /*!
@@ -189,15 +192,14 @@ static bool stay_inn(PlayerType *player_ptr)
         return false;
     }
 
-    const auto &[prev_day, prev_hour, prev_min] = w_ptr->extract_date_time(player_ptr->start_race);
+    const auto &[prev_day, prev_hour, prev_min] = w_ptr->extract_date_time(InnerGameData::get_instance().get_start_race());
     write_diary_stay_inn(player_ptr, prev_hour);
 
     pass_game_turn_by_stay();
     prevent_turn_overflow(player_ptr);
-
     if ((prev_hour >= 18) && (prev_hour <= 23)) {
         determine_daily_bounty(player_ptr, false); /* Update daily bounty */
-        exe_write_diary(player_ptr, DiaryKind::DIALY, 0);
+        exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::DIALY, 0);
     }
 
     player_ptr->chp = player_ptr->mhp;

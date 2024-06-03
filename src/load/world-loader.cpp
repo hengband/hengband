@@ -9,6 +9,7 @@
 #include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
+#include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
 #include "world/world.h"
 
@@ -81,24 +82,10 @@ void rd_autopick(PlayerType *player_ptr)
     player_ptr->autopick_autoregister = rd_bool();
 }
 
-static void set_undead_turn_limit(PlayerType *player_ptr)
-{
-    switch (player_ptr->start_race) {
-    case PlayerRaceType::VAMPIRE:
-    case PlayerRaceType::SKELETON:
-    case PlayerRaceType::ZOMBIE:
-    case PlayerRaceType::SPECTRE:
-        w_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
-        break;
-    default:
-        w_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
-        break;
-    }
-}
-
 static void rd_world_info(PlayerType *player_ptr)
 {
-    set_undead_turn_limit(player_ptr);
+    auto &igd = InnerGameData::get_instance();
+    igd.init_turn_limit();
     w_ptr->dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
     player_ptr->current_floor_ptr->generated_turn = rd_s32b();
     if (h_older_than(1, 7, 0, 4)) {

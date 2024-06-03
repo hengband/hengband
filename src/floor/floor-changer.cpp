@@ -135,6 +135,7 @@ static MonsterRaceInfo &set_pet_params(PlayerType *player_ptr, const int current
 static void place_pet(PlayerType *player_ptr)
 {
     int max_num = player_ptr->wild_mode ? 1 : MAX_PARTY_MON;
+    auto &floor = *player_ptr->current_floor_ptr;
     for (int current_monster = 0; current_monster < max_num; current_monster++) {
         POSITION cy = 0;
         POSITION cx = 0;
@@ -148,18 +149,18 @@ static void place_pet(PlayerType *player_ptr)
             update_monster(player_ptr, m_idx, true);
             lite_spot(player_ptr, cy, cx);
             if (r_ref.misc_flags.has(MonsterMiscType::MULTIPLY)) {
-                player_ptr->current_floor_ptr->num_repro++;
+                floor.num_repro++;
             }
         } else {
-            auto *m_ptr = &party_mon[current_monster];
-            auto &r_ref = m_ptr->get_real_monrace();
-            msg_format(_("%sとはぐれてしまった。", "You have lost sight of %s."), monster_desc(player_ptr, m_ptr, 0).data());
-            if (record_named_pet && m_ptr->is_named()) {
-                exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE));
+            const auto &monster = party_mon[current_monster];
+            auto &monrace = monster.get_real_monrace();
+            msg_format(_("%sとはぐれてしまった。", "You have lost sight of %s."), monster_desc(player_ptr, &monster, 0).data());
+            if (record_named_pet && monster.is_named()) {
+                exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE));
             }
 
-            if (r_ref.cur_num) {
-                r_ref.cur_num--;
+            if (monrace.cur_num) {
+                monrace.cur_num--;
             }
         }
     }

@@ -106,32 +106,32 @@ void compact_monsters(PlayerType *player_ptr, int size)
     }
 
     /* Compact at least 'size' objects */
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
     for (int num = 0, cnt = 1; num < size; cnt++) {
         int cur_lev = 5 * cnt;
         int cur_dis = 5 * (20 - cnt);
-        for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
-            auto *m_ptr = &floor_ptr->m_list[i];
-            auto *r_ptr = &m_ptr->get_monrace();
-            if (!m_ptr->is_valid()) {
+        for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
+            const auto &monster = floor.m_list[i];
+            const auto &monrace = monster.get_monrace();
+            if (!monster.is_valid()) {
                 continue;
             }
-            if (r_ptr->level > cur_lev) {
+            if (monrace.level > cur_lev) {
                 continue;
             }
             if (i == player_ptr->riding) {
                 continue;
             }
-            if ((cur_dis > 0) && (m_ptr->cdis < cur_dis)) {
+            if ((cur_dis > 0) && (monster.cdis < cur_dis)) {
                 continue;
             }
 
             int chance = 90;
-            if (r_ptr->misc_flags.has(MonsterMiscType::QUESTOR) && (cnt < 1000)) {
+            if (monrace.misc_flags.has(MonsterMiscType::QUESTOR) && (cnt < 1000)) {
                 chance = 100;
             }
 
-            if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
+            if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
                 chance = 100;
             }
 
@@ -139,9 +139,9 @@ void compact_monsters(PlayerType *player_ptr, int size)
                 continue;
             }
 
-            if (record_named_pet && m_ptr->is_named_pet()) {
-                const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
-                exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_COMPACT, m_name);
+            if (record_named_pet && monster.is_named_pet()) {
+                const auto m_name = monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE);
+                exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_COMPACT, m_name);
             }
 
             delete_monster_idx(player_ptr, i);
@@ -150,12 +150,13 @@ void compact_monsters(PlayerType *player_ptr, int size)
     }
 
     /* Excise dead monsters (backwards!) */
-    for (MONSTER_IDX i = floor_ptr->m_max - 1; i >= 1; i--) {
-        const auto &monster = floor_ptr->m_list[i];
+    for (MONSTER_IDX i = floor.m_max - 1; i >= 1; i--) {
+        const auto &monster = floor.m_list[i];
         if (monster.is_valid()) {
             continue;
         }
-        compact_monsters_aux(player_ptr, floor_ptr->m_max - 1, i);
-        floor_ptr->m_max--;
+
+        compact_monsters_aux(player_ptr, floor.m_max - 1, i);
+        floor.m_max--;
     }
 }

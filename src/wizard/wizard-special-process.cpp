@@ -717,15 +717,16 @@ void set_gametime(void)
  */
 void wiz_zap_surrounding_monsters(PlayerType *player_ptr)
 {
-    for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!m_ptr->is_valid() || (i == player_ptr->riding) || (m_ptr->cdis > MAX_PLAYER_SIGHT)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
+        const auto &monster = floor.m_list[i];
+        if (!monster.is_valid() || (i == player_ptr->riding) || (monster.cdis > MAX_PLAYER_SIGHT)) {
             continue;
         }
 
-        if (record_named_pet && m_ptr->is_named_pet()) {
-            const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
-            exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
+        if (record_named_pet && monster.is_named_pet()) {
+            const auto m_name = monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE);
+            exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
         }
 
         delete_monster_idx(player_ptr, i);
@@ -738,15 +739,16 @@ void wiz_zap_surrounding_monsters(PlayerType *player_ptr)
  */
 void wiz_zap_floor_monsters(PlayerType *player_ptr)
 {
-    for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!m_ptr->is_valid() || (i == player_ptr->riding)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
+        const auto &monster = floor.m_list[i];
+        if (!monster.is_valid() || (i == player_ptr->riding)) {
             continue;
         }
 
-        if (record_named_pet && m_ptr->is_named_pet()) {
-            const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
-            exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
+        if (record_named_pet && monster.is_named_pet()) {
+            const auto m_name = monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE);
+            exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
         }
 
         delete_monster_idx(player_ptr, i);
@@ -773,17 +775,17 @@ void cheat_death(PlayerType *player_ptr)
     player_ptr->died_from = _("死の欺き", "Cheating death");
     (void)set_food(player_ptr, PY_FOOD_MAX - 1);
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    floor_ptr->dun_level = 0;
-    floor_ptr->inside_arena = false;
+    auto &floor = *player_ptr->current_floor_ptr;
+    floor.dun_level = 0;
+    floor.inside_arena = false;
     AngbandSystem::get_instance().set_phase_out(false);
     leaving_quest = QuestId::NONE;
-    floor_ptr->quest_number = QuestId::NONE;
-    if (floor_ptr->dungeon_idx) {
-        player_ptr->recall_dungeon = floor_ptr->dungeon_idx;
+    floor.quest_number = QuestId::NONE;
+    if (floor.dungeon_idx) {
+        player_ptr->recall_dungeon = floor.dungeon_idx;
     }
 
-    floor_ptr->reset_dungeon_index();
+    floor.reset_dungeon_index();
     if (lite_town || vanilla_town) {
         player_ptr->wilderness_y = 1;
         player_ptr->wilderness_x = 1;
@@ -804,6 +806,6 @@ void cheat_death(PlayerType *player_ptr)
     player_ptr->wild_mode = false;
     player_ptr->leaving = true;
     constexpr auto note = _("                            しかし、生き返った。", "                            but revived.");
-    exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 1, note);
+    exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, note);
     leave_floor(player_ptr);
 }

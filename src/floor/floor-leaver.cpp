@@ -100,13 +100,14 @@ static void record_pet_diary(PlayerType *player_ptr)
         return;
     }
 
-    for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!m_ptr->is_valid() || !m_ptr->is_named_pet() || (player_ptr->riding == i)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    for (MONSTER_IDX i = floor.m_max - 1; i >= 1; i--) {
+        const auto &monster = floor.m_list[i];
+        if (!monster.is_valid() || !monster.is_named_pet() || (player_ptr->riding == i)) {
             continue;
         }
 
-        exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_MOVED, monster_desc(player_ptr, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE));
+        exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_MOVED, monster_desc(player_ptr, &monster, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE));
     }
 }
 

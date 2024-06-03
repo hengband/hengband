@@ -110,7 +110,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
             }
 
             if (record_stair) {
-                exe_write_diary(player_ptr, DiaryKind::TELEPORT_LEVEL, 1);
+                exe_write_diary(floor, DiaryKind::TELEPORT_LEVEL, 1);
             }
 
             if (autosave_l) {
@@ -140,7 +140,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
         if (m_idx <= 0) {
             if (record_stair) {
-                exe_write_diary(player_ptr, DiaryKind::TELEPORT_LEVEL, -1);
+                exe_write_diary(floor, DiaryKind::TELEPORT_LEVEL, -1);
             }
 
             if (autosave_l) {
@@ -165,7 +165,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
         if (m_idx <= 0) {
             if (record_stair) {
-                exe_write_diary(player_ptr, DiaryKind::TELEPORT_LEVEL, -1);
+                exe_write_diary(floor, DiaryKind::TELEPORT_LEVEL, -1);
             }
 
             if (autosave_l) {
@@ -188,7 +188,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
         if (m_idx <= 0) {
             if (record_stair) {
-                exe_write_diary(player_ptr, DiaryKind::TELEPORT_LEVEL, 1);
+                exe_write_diary(floor, DiaryKind::TELEPORT_LEVEL, 1);
             }
             if (autosave_l) {
                 do_cmd_save_game(player_ptr, true);
@@ -208,7 +208,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
     QuestCompletionChecker(player_ptr, m_ptr).complete();
     if (record_named_pet && m_ptr->is_named_pet()) {
         const auto m2_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
-        exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_TELE_LEVEL, m2_name);
+        exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_TELE_LEVEL, m2_name);
     }
 
     delete_monster_idx(player_ptr, m_idx);
@@ -448,7 +448,7 @@ bool recall_player(PlayerType *player_ptr, TIME_EFFECT turns)
         if (input_check(_("ここは最深到達階より浅い階です。この階に戻って来ますか？ ", "Reset recall depth? "))) {
             max_dlv[floor.dungeon_idx] = floor.dun_level;
             if (record_maxdepth) {
-                exe_write_diary(player_ptr, DiaryKind::TRUMP, floor.dungeon_idx, _("帰還のときに", "when recalled from dungeon"));
+                exe_write_diary(floor, DiaryKind::TRUMP, floor.dungeon_idx, _("帰還のときに", "when recalled from dungeon"));
             }
         }
     }
@@ -505,7 +505,7 @@ bool free_level_recall(PlayerType *player_ptr)
     max_dlv[player_ptr->recall_dungeon] = ((amt > dungeon.maxdepth) ? dungeon.maxdepth
                                                                     : ((amt < dungeon.mindepth) ? dungeon.mindepth : amt));
     if (record_maxdepth) {
-        exe_write_diary(player_ptr, DiaryKind::TRUMP, select_dungeon, _("トランプタワーで", "at Trump Tower"));
+        exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::TRUMP, select_dungeon, _("トランプタワーで", "at Trump Tower"));
     }
 
     msg_print(_("回りの大気が張りつめてきた...", "The air about you becomes charged..."));
@@ -541,7 +541,7 @@ bool reset_recall(PlayerType *player_ptr)
     max_dlv[select_dungeon] = *reset_level;
     if (record_maxdepth) {
         constexpr auto note = _("フロア・リセットで", "using a scroll of reset recall");
-        exe_write_diary(player_ptr, DiaryKind::TRUMP, select_dungeon, note);
+        exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::TRUMP, select_dungeon, note);
     }
 #ifdef JP
     msg_format("%sの帰還レベルを %d 階にセット。", dungeons_info[select_dungeon].name.data(), *reset_level);

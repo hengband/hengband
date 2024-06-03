@@ -89,7 +89,8 @@ static bool check_death(PlayerType *player_ptr)
 static void kingly(PlayerType *player_ptr)
 {
     bool seppuku = streq(player_ptr->died_from, "Seppuku");
-    player_ptr->current_floor_ptr->dun_level = 0;
+    auto &floor = *player_ptr->current_floor_ptr;
+    floor.dun_level = 0;
     if (!seppuku) {
         /* 引退したときの識別文字 */
         player_ptr->died_from = _("ripe", "Ripe Old Age");
@@ -124,9 +125,9 @@ static void kingly(PlayerType *player_ptr)
 #endif
 
     if (!seppuku) {
-        exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, _("ダンジョンの探索から引退した。", "retired exploring dungeons."));
-        exe_write_diary(player_ptr, DiaryKind::GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
-        exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 1, "\n\n\n\n");
+        exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, _("ダンジョンの探索から引退した。", "retired exploring dungeons."));
+        exe_write_diary(floor, DiaryKind::GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
+        exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, "\n\n\n\n");
     }
 
     flush();

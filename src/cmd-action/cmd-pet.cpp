@@ -138,7 +138,7 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
         if ((all_pets && !should_ask) || (!all_pets && delete_this)) {
             if (record_named_pet && monster.is_named()) {
                 const auto m_name = monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE);
-                exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_DISMISS, m_name);
+                exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_DISMISS, m_name);
             }
 
             if (pet_ctr == player_ptr->riding) {
@@ -345,14 +345,14 @@ static void do_name_pet(PlayerType *player_ptr)
     if (!new_name->empty()) {
         m_ptr->nickname = *new_name;
         if (record_named_pet) {
-            exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_NAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE));
+            exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_NAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE));
         }
 
         return;
     }
 
     if (record_named_pet && old_name) {
-        exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_UNNAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE));
+        exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_UNNAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE));
     }
 
     m_ptr->nickname.clear();

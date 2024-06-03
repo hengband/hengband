@@ -385,7 +385,8 @@ static void hit_trap_slow(PlayerType *player_ptr)
 void hit_trap(PlayerType *player_ptr, bool break_trap)
 {
     const Pos2D p_pos(player_ptr->y, player_ptr->x);
-    const auto &grid = player_ptr->current_floor_ptr->get_grid(p_pos);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &grid = floor.get_grid(p_pos);
     const auto &terrain = grid.get_terrain();
     TrapType trap_feat_type = terrain.flags.has(TerrainCharacteristics::TRAP) ? i2enum<TrapType>(terrain.subtype) : TrapType::NOT_TRAP;
 
@@ -417,7 +418,7 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
                 do_cmd_save_game(player_ptr, true);
             }
 
-            exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, _("落とし戸に落ちた", "fell through a trap door!"));
+            exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, _("落とし戸に落ちた", "fell through a trap door!"));
             FloorChangeModesStore::get_instace()->set({ FloorChangeMode::SAVE_FLOORS, FloorChangeMode::DOWN, FloorChangeMode::RANDOM_PLACE, FloorChangeMode::RANDOM_CONNECT });
             player_ptr->leaving = true;
         }

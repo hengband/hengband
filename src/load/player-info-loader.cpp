@@ -23,6 +23,7 @@
 #include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
+#include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/timed-effects.h"
 #include "world/world.h"
@@ -145,7 +146,7 @@ void rd_skills(PlayerType *player_ptr)
 
 static void set_race(PlayerType *player_ptr)
 {
-    player_ptr->start_race = i2enum<PlayerRaceType>(rd_byte());
+    InnerGameData::get_instance().set_start_race(i2enum<PlayerRaceType>(rd_byte()));
     player_ptr->old_race1 = rd_u32b();
     player_ptr->old_race2 = rd_u32b();
     player_ptr->old_realm = rd_s16b();

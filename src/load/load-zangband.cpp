@@ -20,6 +20,7 @@
 #include "spell/spells-status.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
+#include "system/inner-game-data.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
@@ -112,7 +113,7 @@ void set_zangband_skill(PlayerType *player_ptr)
 
 void set_zangband_race(PlayerType *player_ptr)
 {
-    player_ptr->start_race = player_ptr->prace;
+    InnerGameData::get_instance().set_start_race(player_ptr->prace);
     player_ptr->old_race1 = 0L;
     player_ptr->old_race2 = 0L;
     player_ptr->old_realm = 0;

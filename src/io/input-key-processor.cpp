@@ -100,10 +100,10 @@
 /*!
  * @brief ウィザードモードへの導入処理
  * / Verify use of "wizard" mode
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @param floor フロアへの参照
  * @return 実際にウィザードモードへ移行したらTRUEを返す。
  */
-bool enter_wizard_mode(PlayerType *player_ptr)
+bool enter_wizard_mode(const FloorType &floor)
 {
     if (!w_ptr->noscore) {
         if (!allow_debug_opts) {
@@ -119,7 +119,7 @@ bool enter_wizard_mode(PlayerType *player_ptr)
         }
 
         constexpr auto mes = _("ウィザードモードに突入してスコアを残せなくなった。", "gave up recording score to enter wizard mode.");
-        exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, mes);
+        exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, mes);
         w_ptr->noscore |= 0x0002;
     }
 
@@ -132,7 +132,7 @@ bool enter_wizard_mode(PlayerType *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 実際にデバッグコマンドへ移行したらTRUEを返す。
  */
-static bool enter_debug_mode(PlayerType *player_ptr)
+static bool enter_debug_mode(const FloorType &floor)
 {
     if (!w_ptr->noscore) {
         if (!allow_debug_opts) {
@@ -148,7 +148,7 @@ static bool enter_debug_mode(PlayerType *player_ptr)
         }
 
         constexpr auto mes = _("デバッグモードに突入してスコアを残せなくなった。", "gave up sending score to use debug commands.");
-        exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, mes);
+        exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, mes);
         w_ptr->noscore |= 0x0008;
     }
 
@@ -170,7 +170,7 @@ void process_command(PlayerType *player_ptr)
         sniper_data->reset_concent = true;
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     switch (command_cmd) {
     case ESCAPE:
     case ' ':
@@ -183,7 +183,7 @@ void process_command(PlayerType *player_ptr)
         if (w_ptr->wizard) {
             w_ptr->wizard = false;
             msg_print(_("ウィザードモード解除。", "Wizard mode off."));
-        } else if (enter_wizard_mode(player_ptr)) {
+        } else if (enter_wizard_mode(floor)) {
             w_ptr->wizard = true;
             msg_print(_("ウィザードモード突入。", "Wizard mode on."));
         }
@@ -194,7 +194,7 @@ void process_command(PlayerType *player_ptr)
         break;
     }
     case KTRL('A'): {
-        if (enter_debug_mode(player_ptr)) {
+        if (enter_debug_mode(floor)) {
             do_cmd_debug(player_ptr);
         }
 
@@ -309,7 +309,7 @@ void process_command(PlayerType *player_ptr)
         break;
     }
     case '<': {
-        if (!player_ptr->wild_mode && !floor_ptr->dun_level && !floor_ptr->inside_arena && !floor_ptr->is_in_quest()) {
+        if (!player_ptr->wild_mode && !floor.dun_level && !floor.inside_arena && !floor.is_in_quest()) {
             if (vanilla_town) {
                 break;
             }
@@ -403,10 +403,10 @@ void process_command(PlayerType *player_ptr)
             break;
         }
 
-        const auto &dungeon = floor_ptr->get_dungeon_definition();
+        const auto &dungeon = floor.get_dungeon_definition();
         auto non_magic_class = pc.equals(PlayerClassType::BERSERKER);
         non_magic_class |= pc.equals(PlayerClassType::SMITH);
-        if (floor_ptr->dun_level && dungeon.flags.has(DungeonFeatureType::NO_MAGIC) && !non_magic_class) {
+        if (floor.is_in_underground() && dungeon.flags.has(DungeonFeatureType::NO_MAGIC) && !non_magic_class) {
             msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
             msg_print(nullptr);
             break;

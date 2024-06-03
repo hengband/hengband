@@ -928,6 +928,7 @@ hengband_SOURCES = \
 	system/game-option-types.h \
 	system/h-basic.h system/h-config.h \
 	system/h-system.h system/h-type.h \
+	system/inner-game-data.cpp system/inner-game-data.h \
 	system/item-entity.cpp system/item-entity.h \
 	system/monster-entity.cpp system/monster-entity.h \
 	system/monster-race-info.cpp system/monster-race-info.h \

@@ -331,13 +331,13 @@ static void do_cmd_options_win(PlayerType *player_ptr)
  * Interact with some options for cheating
  * @param info 表示メッセージ
  */
-static void do_cmd_options_cheat(PlayerType *player_ptr, concptr info)
+static void do_cmd_options_cheat(const FloorType &floor, std::string_view player_name, std::string_view info)
 {
     term_clear();
     auto k = 0U;
     const auto n = cheat_info.size();
     while (true) {
-        prt(format(_("%s ( リターンで次へ, y/n でセット, ESC で決定 )", "%s (RET to advance, y/n to set, ESC to accept) "), info), 0, 0);
+        prt(format(_("%s ( リターンで次へ, y/n でセット, ESC で決定 )", "%s (RET to advance, y/n to set, ESC to accept) "), info.data()), 0, 0);
 
 #ifdef JP
         /* 詐欺オプションをうっかりいじってしまう人がいるようなので注意 */
@@ -380,7 +380,7 @@ static void do_cmd_options_cheat(PlayerType *player_ptr, concptr info)
         case 'Y':
         case '6':
             if (!w_ptr->noscore) {
-                exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0,
+                exe_write_diary(floor, DiaryKind::DESCRIPTION, 0,
                     _("詐欺オプションをONにして、スコアを残せなくなった。", "gave up sending score to use cheating options."));
             }
 
@@ -395,7 +395,7 @@ static void do_cmd_options_cheat(PlayerType *player_ptr, concptr info)
             k = (k + 1) % n;
             break;
         case '?':
-            FileDisplayer(player_ptr->name).display(true, std::string(_("joption.txt#", "option.txt#")).append(cheat_info[k].o_text), 0, 0);
+            FileDisplayer(player_name).display(true, std::string(_("joption.txt#", "option.txt#")).append(cheat_info[k].o_text), 0, 0);
             term_clear();
             break;
         default:
@@ -549,7 +549,7 @@ void do_cmd_options(PlayerType *player_ptr)
                 break;
             }
 
-            do_cmd_options_cheat(player_ptr, _("詐欺師は決して勝利できない！", "Cheaters never win"));
+            do_cmd_options_cheat(*player_ptr->current_floor_ptr, player_ptr->name, _("詐欺師は決して勝利できない！", "Cheaters never win"));
             break;
         }
         case 'a':
