@@ -162,11 +162,10 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
         return;
     }
 
-    char out_val[MAX_NLEN + 20];
     auto *o_ptr = &player_ptr->current_floor_ptr->o_list[floor_o_idx];
     const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
-    strnfmt(out_val, sizeof(out_val), _("%sを拾いますか? ", "Pick up %s? "), item_name.data());
-    if (!input_check(out_val)) {
+    const auto prompt = format(_("%sを拾いますか? ", "Pick up %s? "), item_name.data());
+    if (!input_check(prompt)) {
         return;
     }
 
@@ -288,9 +287,8 @@ void carry(PlayerType *player_ptr, bool pickup)
 
         int is_pickup_successful = true;
         if (carry_query_flag) {
-            char out_val[MAX_NLEN + 20];
-            strnfmt(out_val, sizeof(out_val), _("%sを拾いますか? ", "Pick up %s? "), item_name.data());
-            is_pickup_successful = input_check(out_val);
+            const auto prompt = format(_("%sを拾いますか? ", "Pick up %s? "), item_name.data());
+            is_pickup_successful = input_check(prompt);
         }
 
         if (is_pickup_successful) {

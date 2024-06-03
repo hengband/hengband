@@ -128,8 +128,7 @@ static bool get_player_sex(PlayerType *player_ptr)
             break;
         }
 
-        char buf[80];
-        strnfmt(buf, sizeof(buf), _("性別を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a sex (%c-%c) ('=' for options): "), I2A(0), I2A(1));
+        const auto buf = format(_("性別を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a sex (%c-%c) ('=' for options): "), I2A(0), I2A(1));
         put_str(buf, 10, 10);
         char c = inkey();
         if (c == 'Q') {
@@ -283,23 +282,24 @@ static void display_initial_options(PlayerType *player_ptr)
     put_str("                                   ", 3, 40);
     put_str(_("修正の合計値", "Your total modification"), 3, 40);
     put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
-    strnfmt(buf, sizeof(buf), "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", adj[0], adj[1], adj[2], adj[3], adj[4], adj[5], expfact_mod);
+    const auto stats = format("%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", adj[0], adj[1], adj[2], adj[3], adj[4], adj[5], expfact_mod);
     c_put_str(TERM_L_BLUE, buf, 5, 40);
 
     put_str("HD ", 6, 40);
-    strnfmt(buf, sizeof(buf), "%2d", rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp);
+    const auto hd = format("%2d", rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp);
     c_put_str(TERM_L_BLUE, buf, 6, 43);
 
     put_str(_("隠密", "Stealth"), 6, 47);
+    std::string stealth;
     if (PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER)) {
-        angband_strcpy(buf, "xx", sizeof(buf));
+        stealth = "xx";
     } else {
-        strnfmt(buf, sizeof(buf), "%+2d", rp_ptr->r_stl + cp_ptr->c_stl + ap_ptr->a_stl);
+        stealth = format("%+2d", rp_ptr->r_stl + cp_ptr->c_stl + ap_ptr->a_stl);
     }
     c_put_str(TERM_L_BLUE, buf, 6, _(52, 55));
 
     put_str(_("赤外線視力", "Infra"), 6, _(56, 59));
-    strnfmt(buf, sizeof(buf), _("%2dft", "%2dft"), 10 * rp_ptr->infra);
+    const auto infra = format(_("%2dft", "%2dft"), 10 * rp_ptr->infra);
     c_put_str(TERM_L_BLUE, buf, 6, _(67, 65));
 
     clear_from(10);
@@ -317,16 +317,16 @@ static void display_auto_roller_success_rate(const int col)
     put_str(_("最小値", " Limit"), 2, col + 13);
     put_str(_("現在値", "  Roll"), 2, col + 24);
 
-    char buf[32];
+    std::string prob;
 
     if (autoroll_chance >= 1) {
-        strnfmt(buf, sizeof(buf), _("確率 :  1/%8d00", "Prob :  1/%8d00"), autoroll_chance);
+        prob = format(_("確率 :  1/%8d00", "Prob :  1/%8d00"), autoroll_chance);
     } else if (autoroll_chance == -999) {
-        angband_strcpy(buf, _("確率 :     不可能", "Prob :     Impossible"), sizeof(buf));
+        prob = _("確率 :     不可能", "Prob :     Impossible");
     } else {
-        angband_strcpy(buf, _("確率 :     1/10000以上", "Prob :     >1/10000"), sizeof(buf));
+        prob = _("確率 :     1/10000以上", "Prob :     >1/10000");
     }
-    put_str(buf, 11, col + 10);
+    put_str(prob, 11, col + 10);
 
     put_str(_("注意 : 体格等のオートローラを併用時は、上記確率より困難です。", "Note : Prob may be lower when you use the 'autochara' option."), 22, 5);
 

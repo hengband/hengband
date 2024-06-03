@@ -57,21 +57,20 @@ static std::string display_race_stat(int cs, int *os, const std::string &cur, co
         put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
         put_str(_("の種族修正", ": Race modification"), 3, 40 + strlen(rp_ptr->title));
 
-        char buf[80];
-        strnfmt(buf, sizeof(buf), "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", rp_ptr->r_adj[0], rp_ptr->r_adj[1], rp_ptr->r_adj[2], rp_ptr->r_adj[3], rp_ptr->r_adj[4], rp_ptr->r_adj[5], (rp_ptr->r_exp - 100));
-        c_put_str(TERM_L_BLUE, buf, 5, 40);
+        const auto stats = format("%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", rp_ptr->r_adj[0], rp_ptr->r_adj[1], rp_ptr->r_adj[2], rp_ptr->r_adj[3], rp_ptr->r_adj[4], rp_ptr->r_adj[5], (rp_ptr->r_exp - 100));
+        c_put_str(TERM_L_BLUE, stats, 5, 40);
 
         put_str("HD ", 6, 40);
-        strnfmt(buf, sizeof(buf), "%2d", rp_ptr->r_mhp);
-        c_put_str(TERM_L_BLUE, buf, 6, 43);
+        const auto hd = format("%2d", rp_ptr->r_mhp);
+        c_put_str(TERM_L_BLUE, hd, 6, 43);
 
         put_str(_("隠密", "Stealth"), 6, 47);
-        strnfmt(buf, sizeof(buf), "%+2d", rp_ptr->r_stl);
-        c_put_str(TERM_L_BLUE, buf, 6, _(52, 55));
+        const auto stealth = format("%+2d", rp_ptr->r_stl);
+        c_put_str(TERM_L_BLUE, stealth, 6, _(52, 55));
 
         put_str(_("赤外線視力", "Infra"), 6, _(56, 59));
-        strnfmt(buf, sizeof(buf), _("%2dft", "%2dft"), 10 * rp_ptr->infra);
-        c_put_str(TERM_L_BLUE, buf, 6, _(67, 65));
+        const auto infra = format(_("%2dft", "%2dft"), 10 * rp_ptr->infra);
+        c_put_str(TERM_L_BLUE, infra, 6, _(67, 65));
     }
 
     c_put_str(TERM_YELLOW, result, 12 + (cs / 5), 1 + 16 * (cs % 5));
@@ -117,8 +116,7 @@ static bool select_race(PlayerType *player_ptr, char *sym, int *k)
             break;
         }
 
-        char buf[80];
-        strnfmt(buf, sizeof(buf), _("種族を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a race (%c-%c) ('=' for options): "), sym[0], sym[MAX_RACES - 1]);
+        const auto buf = format(_("種族を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a race (%c-%c) ('=' for options): "), sym[0], sym[MAX_RACES - 1]);
         put_str(buf, 10, 10);
         char c = inkey();
         if (c == 'Q') {

@@ -209,7 +209,8 @@ concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
         v = realm_names[player_ptr->realm2];
 #endif
     } else if (streq(b + 1, "LEVEL")) {
-        strnfmt(tmp, sizeof(tmp), "%02d", player_ptr->lev);
+        const auto plev = format("%02d", player_ptr->lev);
+        angband_strcpy(tmp, plev, sizeof(tmp));
         v = tmp;
     } else if (streq(b + 1, "AUTOREGISTER")) {
         if (player_ptr->autopick_autoregister) {
@@ -218,7 +219,8 @@ concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
             v = "0";
         }
     } else if (streq(b + 1, "MONEY")) {
-        strnfmt(tmp, sizeof(tmp), "%09ld", (long int)player_ptr->au);
+        const auto au = format("%09ld", (long int)player_ptr->au);
+        angband_strcpy(tmp, au, sizeof(tmp));
         v = tmp;
     }
 

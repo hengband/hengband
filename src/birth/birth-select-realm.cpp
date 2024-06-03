@@ -13,6 +13,7 @@
 #include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "view/display-util.h"
+#include <string>
 
 static const byte REALM_SELECT_CANCEL = 255;
 
@@ -21,9 +22,8 @@ struct birth_realm_type {
     int n;
     char p2;
     char sym[VALID_REALM];
-    char buf[80];
     int picks[VALID_REALM];
-    char cur[80];
+    std::string cur;
     int k;
     int os;
 };
@@ -150,8 +150,8 @@ static void analyze_realms(const PlayerType *player_ptr, const uint32_t choices,
 
         birth_realm_ptr->sym[birth_realm_ptr->n] = I2A(birth_realm_ptr->n);
 
-        strnfmt(birth_realm_ptr->buf, sizeof(birth_realm_ptr->buf), "%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->n], birth_realm_ptr->p2, realm_names[i + 1]);
-        put_str(birth_realm_ptr->buf, 12 + (birth_realm_ptr->n / 5), 2 + 15 * (birth_realm_ptr->n % 5));
+        const auto buf = format("%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->n], birth_realm_ptr->p2, realm_names[i + 1]);
+        put_str(buf, 12 + (birth_realm_ptr->n / 5), 2 + 15 * (birth_realm_ptr->n % 5));
         birth_realm_ptr->picks[birth_realm_ptr->n++] = i + 1;
     }
 }
@@ -165,13 +165,13 @@ static void move_birth_realm_cursor(birth_realm_type *birth_realm_ptr)
     c_put_str(TERM_WHITE, birth_realm_ptr->cur, 12 + (birth_realm_ptr->os / 5), 2 + 15 * (birth_realm_ptr->os % 5));
 
     if (birth_realm_ptr->cs == birth_realm_ptr->n) {
-        strnfmt(birth_realm_ptr->cur, sizeof(birth_realm_ptr->cur), "%c%c %s", '*', birth_realm_ptr->p2, _("ランダム", "Random"));
+        birth_realm_ptr->cur = format("%c%c %s", '*', birth_realm_ptr->p2, _("ランダム", "Random"));
     } else {
-        strnfmt(birth_realm_ptr->cur, sizeof(birth_realm_ptr->cur), "%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->cs], birth_realm_ptr->p2,
+        birth_realm_ptr->cur = format("%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->cs], birth_realm_ptr->p2,
             realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]]);
-        strnfmt(birth_realm_ptr->buf, sizeof(birth_realm_ptr->buf), "%s", realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]]);
-        c_put_str(TERM_L_BLUE, birth_realm_ptr->buf, 3, 40);
-        prt(_("の特徴", ": Characteristic"), 3, 40 + strlen(birth_realm_ptr->buf));
+        const auto buf = format("%s", realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]]);
+        c_put_str(TERM_L_BLUE, buf, 3, 40);
+        prt(_("の特徴", ": Characteristic"), 3, 40 + buf.length());
         prt(realm_subinfo[technic2magic(birth_realm_ptr->picks[birth_realm_ptr->cs]) - 1], 4, 40);
     }
 
@@ -219,10 +219,10 @@ static bool get_a_realm(PlayerType *player_ptr, birth_realm_type *birth_realm_pt
             break;
         }
 
-        strnfmt(birth_realm_ptr->buf, sizeof(birth_realm_ptr->buf), _("領域を選んで下さい(%c-%c) ('='初期オプション設定): ", "Choose a realm (%c-%c) ('=' for options): "),
+        const auto buf = format(_("領域を選んで下さい(%c-%c) ('='初期オプション設定): ", "Choose a realm (%c-%c) ('=' for options): "),
             birth_realm_ptr->sym[0], birth_realm_ptr->sym[birth_realm_ptr->n - 1]);
 
-        put_str(birth_realm_ptr->buf, 10, 10);
+        put_str(buf, 10, 10);
         char c = inkey();
         interpret_realm_select_key(birth_realm_ptr, c);
         if (c == 'S') {
@@ -286,7 +286,7 @@ static byte select_realm(PlayerType *player_ptr, uint32_t choices, int *count)
     birth_realm_type tmp_birth_realm;
     birth_realm_type *birth_realm_ptr = initialize_birth_realm_type(&tmp_birth_realm);
     analyze_realms(player_ptr, choices, birth_realm_ptr);
-    strnfmt(birth_realm_ptr->cur, sizeof(birth_realm_ptr->cur), "%c%c %s", '*', birth_realm_ptr->p2, _("ランダム", "Random"));
+    birth_realm_ptr->cur = format("%c%c %s", '*', birth_realm_ptr->p2, _("ランダム", "Random"));
     if (get_a_realm(player_ptr, birth_realm_ptr)) {
         return REALM_SELECT_CANCEL;
     }

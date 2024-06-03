@@ -349,18 +349,6 @@ uint32_t vstrnfmt(char *buf, uint32_t max, const char *fmt, va_list vp)
 }
 
 /*
- * Do a vstrnfmt (see above) into a buffer of a given size.
- */
-uint32_t strnfmt(char *buf, uint32_t max, const char *fmt, ...)
-{
-    va_list vp;
-    va_start(vp, fmt);
-    auto len = vstrnfmt(buf, max, fmt, vp);
-    va_end(vp);
-    return len;
-}
-
-/*
  * Do a vstrnfmt() into (see above) into a (growable) static buffer.
  * This buffer is usable for very short term formatting of results.
  * Note that the buffer is (technically) writable, but only up to

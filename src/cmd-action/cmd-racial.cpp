@@ -113,7 +113,7 @@ static void racial_power_make_prompt(rc_type *rc_ptr)
         fmt = _("(特殊能力 %c-%c, '*'で一覧, '/'で閲覧, ESCで中断) どの能力を使いますか？", "(Powers %c-%c, *=List, /=Browse, ESC=exit) Use which power? ");
     }
 
-    (void)strnfmt(rc_ptr->out_val, 78, fmt, I2A(0), (rc_ptr->power_count() <= 26) ? I2A(rc_ptr->power_count() - 1) : '0' + rc_ptr->power_count() - 27);
+    rc_ptr->out_val = format(fmt, I2A(0), (rc_ptr->power_count() <= 26) ? I2A(rc_ptr->power_count() - 1) : '0' + rc_ptr->power_count() - 27);
 }
 
 /*!
@@ -293,9 +293,8 @@ static bool ask_invoke_racial_power(rc_type *rc_ptr)
         return true;
     }
 
-    char tmp_val[160];
-    (void)strnfmt(tmp_val, 78, _("%sを使いますか？ ", "Use %s? "), rc_ptr->power_desc[rc_ptr->command_code].racial_name.data());
-    return input_check(tmp_val);
+    const auto prompt = format(_("%sを使いますか？ ", "Use %s? "), rc_ptr->power_desc[rc_ptr->command_code].racial_name.data());
+    return input_check(prompt);
 }
 
 static void racial_power_display_explanation(PlayerType *player_ptr, rc_type *rc_ptr)
