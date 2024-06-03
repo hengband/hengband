@@ -87,48 +87,41 @@ std::array<Pos2D, NUM_BUBBLES> create_bubbles_center(const Pos2DVec &vec)
 }
 }
 
-/*
- * This function creates a random vault that looks like a collection of bubbles.
- * It works by getting a set of coordinates that represent the center of each
- * bubble.  The entire room is made by seeing which bubble center is closest. If
- * two centers are equidistant then the square is a wall, otherwise it is a floor.
- * The only exception is for squares really near a center, these are always floor.
- * (It looks better than without this check.)
- *
- * Note: If two centers are on the same point then this algorithm will create a
- *       blank bubble filled with walls. - This is prevented from happening.
+/*!
+ * @brief 泡型Vaultを生成する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param pos0 Vault全体の中心座標
+ * @param vec 中心から部屋の隅までの線分長
  */
-static void build_bubble_vault(PlayerType *player_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
+static void build_bubble_vault(PlayerType *player_ptr, const Pos2D &pos0, const Pos2DVec &vec)
 {
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("泡型ランダムVaultを生成しました。", "Bubble-shaped Vault."));
-    auto center_points = create_bubbles_center({ ysize, xsize });
+    auto center_points = create_bubbles_center(vec);
 
-    /* Offset from center to top left hand corner */
-    const auto xhsize = xsize / 2;
-    const auto yhsize = ysize / 2;
+    const Pos2DVec vec_half(vec.y / 2, vec.x / 2);
 
     /* Top and bottom boundaries */
     auto &floor = *player_ptr->current_floor_ptr;
-    for (auto i = 0; i < xsize; i++) {
-        const auto side_x = x0 - xhsize + i;
-        place_bold(player_ptr, y0 - yhsize + 0, side_x, GB_OUTER_NOPERM);
-        floor.grid_array[y0 - yhsize + 0][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
-        place_bold(player_ptr, y0 - yhsize + ysize - 1, side_x, GB_OUTER_NOPERM);
-        floor.grid_array[y0 - yhsize + ysize - 1][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
+    for (auto i = 0; i < vec.x; i++) {
+        const auto side_x = pos0.x - vec_half.x + i;
+        place_bold(player_ptr, pos0.y - vec_half.y + 0, side_x, GB_OUTER_NOPERM);
+        floor.grid_array[pos0.y - vec_half.y + 0][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
+        place_bold(player_ptr, pos0.y - vec_half.y + vec.y - 1, side_x, GB_OUTER_NOPERM);
+        floor.grid_array[pos0.y - vec_half.y + vec.y - 1][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
     }
 
     /* Left and right boundaries */
-    for (auto i = 1; i < ysize - 1; i++) {
-        const auto side_y = y0 - yhsize + i;
-        place_bold(player_ptr, side_y, x0 - xhsize + 0, GB_OUTER_NOPERM);
-        floor.grid_array[side_y][x0 - xhsize + 0].info |= (CAVE_ROOM | CAVE_ICKY);
-        place_bold(player_ptr, side_y, x0 - xhsize + xsize - 1, GB_OUTER_NOPERM);
-        floor.grid_array[side_y][x0 - xhsize + xsize - 1].info |= (CAVE_ROOM | CAVE_ICKY);
+    for (auto i = 1; i < vec.y - 1; i++) {
+        const auto side_y = pos0.y - vec_half.y + i;
+        place_bold(player_ptr, side_y, pos0.x - vec_half.x + 0, GB_OUTER_NOPERM);
+        floor.grid_array[side_y][pos0.x - vec_half.x + 0].info |= (CAVE_ROOM | CAVE_ICKY);
+        place_bold(player_ptr, side_y, pos0.x - vec_half.x + vec.x - 1, GB_OUTER_NOPERM);
+        floor.grid_array[side_y][pos0.x - vec_half.x + vec.x - 1].info |= (CAVE_ROOM | CAVE_ICKY);
     }
 
     /* Fill in middle with bubbles */
-    for (auto x = 1; x < xsize - 1; x++) {
-        for (auto y = 1; y < ysize - 1; y++) {
+    for (auto x = 1; x < vec.x - 1; x++) {
+        for (auto y = 1; y < vec.y - 1; y++) {
             /* Get distances to two closest centers */
             auto min1 = distance(x, y, center_points[0].x, center_points[0].y);
             auto min2 = distance(x, y, center_points[1].x, center_points[1].y);
@@ -149,24 +142,24 @@ static void build_bubble_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
 
             if (((min2 - min1) <= 2) && (!(min1 < 3))) {
                 /* Boundary at midpoint+ not at inner region of bubble */
-                place_bold(player_ptr, y0 - yhsize + y, x0 - xhsize + x, GB_OUTER_NOPERM);
+                place_bold(player_ptr, pos0.y - vec_half.y + y, pos0.x - vec_half.x + x, GB_OUTER_NOPERM);
             } else {
                 /* middle of a bubble */
-                place_bold(player_ptr, y0 - yhsize + y, x0 - xhsize + x, GB_FLOOR);
+                place_bold(player_ptr, pos0.y - vec_half.y + y, pos0.x - vec_half.x + x, GB_FLOOR);
             }
 
             /* clean up rest of flags */
-            floor.get_grid({ y0 - yhsize + y, x0 - xhsize + x }).add_info(CAVE_ROOM | CAVE_ICKY);
+            floor.get_grid({ pos0.y - vec_half.y + y, pos0.x - vec_half.x + x }).add_info(CAVE_ROOM | CAVE_ICKY);
         }
     }
 
     /* Try to add some random doors */
     for (auto i = 0; i < 500; i++) {
-        add_door(player_ptr, randint1(xsize - 3) - xhsize + x0 + 1, randint1(ysize - 3) - yhsize + y0 + 1);
+        add_door(player_ptr, randint1(vec.x - 3) - vec_half.x + pos0.x + 1, randint1(vec.y - 3) - vec_half.y + pos0.y + 1);
     }
 
     /* Fill with monsters and treasure, low difficulty */
-    fill_treasure(player_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 2, y0 - yhsize + 1, y0 - yhsize + ysize - 2, randint1(5));
+    fill_treasure(player_ptr, pos0.x - vec_half.x + 1, pos0.x - vec_half.x + vec.x - 2, pos0.y - vec_half.y + 1, pos0.y - vec_half.y + vec.y - 2, randint1(5));
 }
 
 /* Create a random vault that looks like a collection of overlapping rooms */
@@ -966,7 +959,7 @@ bool build_type10(PlayerType *player_ptr, dun_data_type *dd_ptr)
         /* Build an appropriate room */
     case 1:
     case 9:
-        build_bubble_vault(player_ptr, x0, y0, xsize, ysize);
+        build_bubble_vault(player_ptr, { y0, x0 }, { ysize, xsize });
         break;
     case 2:
     case 10:
