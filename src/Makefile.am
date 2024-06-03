@@ -372,6 +372,7 @@ hengband_SOURCES = \
 	load/old/monster-flag-types-savefile50.h \
 	load/old/monster-loader-savefile50.cpp load/old/monster-loader-savefile50.h \
 	\
+	locale/character-encoding.h \
 	locale/english.cpp locale/english.h \
 	locale/japanese.cpp locale/japanese.h \
 	locale/utf-8.cpp locale/utf-8.h \

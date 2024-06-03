@@ -1214,6 +1214,7 @@
     <ClInclude Include="..\..\src\io\input-key-requester.h" />
     <ClInclude Include="..\..\src\store\store-key-processor.h" />
     <ClInclude Include="..\..\src\load\info-loader.h" />
+    <ClInclude Include="..\..\src\locale\character-encoding.h" />
     <ClInclude Include="..\..\src\locale\language-switcher.h" />
     <ClInclude Include="..\..\src\locale\utf-8.h" />
     <ClInclude Include="..\..\src\main-win\main-win-cfg-reader.h" />

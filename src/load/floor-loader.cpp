@@ -15,6 +15,7 @@
 #include "load/old/item-loader-savefile50.h"
 #include "load/old/load-v1-5-0.h"
 #include "load/old/monster-loader-savefile50.h"
+#include "locale/character-encoding.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
 #include "save/floor-writer.h"
@@ -254,13 +255,13 @@ bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
      */
 #ifdef JP
 #ifdef EUC
-    kanji_code = 2;
+    loading_character_encoding = CharacterEncoding::EUC_JP;
 #endif
 #ifdef SJIS
-    kanji_code = 3;
+    loading_character_encoding = CharacterEncoding::SHIFT_JIS;
 #endif
 #else
-    kanji_code = 1;
+    loading_character_encoding = CharacterEncoding::US_ASCII;
 #endif
 
     FILE *old_fff = nullptr;
@@ -326,7 +327,7 @@ bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
         loading_savefile_version = old_loading_savefile_version;
     }
 
-    byte old_kanji_code = kanji_code;
-    kanji_code = old_kanji_code;
+    auto old_kanji_code = loading_character_encoding;
+    loading_character_encoding = old_kanji_code;
     return is_save_successful;
 }
