@@ -27,8 +27,7 @@
 
 static std::string get_saved_floor_name(int level)
 {
-    char ext[32];
-    strnfmt(ext, sizeof(ext), ".F%02d", level);
+    const auto ext = format(".F%02d", level);
     return savefile.string().append(ext);
 }
 

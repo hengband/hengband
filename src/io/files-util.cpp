@@ -22,6 +22,7 @@
 #include "term/screen-processor.h"
 #include "term/z-form.h"
 #include "util/angband-files.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <algorithm>
 #ifdef SAVEFILE_USE_UID
@@ -232,10 +233,11 @@ static errr counts_seek(PlayerType *player_ptr, int fd, uint32_t where, bool fla
     auto short_pclass = enum2i(player_ptr->pclass);
 #ifdef SAVEFILE_USE_UID
     const auto user_id = UnixUserIds::get_instance().get_user_id();
-    strnfmt(temp1, sizeof(temp1), "%d.%s.%d%d%d", user_id, savefile_base.string().data(), short_pclass, player_ptr->ppersonality, player_ptr->age);
+    const auto header = format("%d.%s.%d%d%d", user_id, savefile_base.string().data(), short_pclass, player_ptr->ppersonality, player_ptr->age);
 #else
-    strnfmt(temp1, sizeof(temp1), "%s.%d%d%d", savefile_base.string().data(), short_pclass, player_ptr->ppersonality, player_ptr->age);
+    const auto header = format("%s.%d%d%d", savefile_base.string().data(), short_pclass, player_ptr->ppersonality, player_ptr->age);
 #endif
+    angband_strcpy(temp1, header, sizeof(temp1));
     for (int i = 0; temp1[i]; i++) {
         temp1[i] ^= (i + 1) * 63;
     }

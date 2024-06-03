@@ -1093,7 +1093,6 @@ static void react_keypress(XKeyEvent *xev)
     XKeyEvent *ev = (XKeyEvent *)(xev);
     KeySym ks;
     char buf[128];
-    char msg[128];
 
 #ifdef USE_XIM
     int valid_keysym = true;
@@ -1173,16 +1172,17 @@ static void react_keypress(XKeyEvent *xev)
     }
     }
 
+    std::string msg;
     if (ks) {
-        strnfmt(msg, sizeof(msg), "%c%s%s%s%s_%lX%c", 31, mc ? "N" : "", ms ? "S" : "", mo ? "O" : "", mx ? "M" : "", (unsigned long)(ks), 13);
+        msg = format("%c%s%s%s%s_%lX%c", 31, mc ? "N" : "", ms ? "S" : "", mo ? "O" : "", mx ? "M" : "", (unsigned long)(ks), 13);
     } else {
-        strnfmt(msg, sizeof(msg), "%c%s%s%s%sK_%X%c", 31, mc ? "N" : "", ms ? "S" : "", mo ? "O" : "", mx ? "M" : "", ev->keycode, 13);
+        msg = format("%c%s%s%s%sK_%X%c", 31, mc ? "N" : "", ms ? "S" : "", mo ? "O" : "", mx ? "M" : "", ev->keycode, 13);
     }
 
-    send_keys(msg);
+    send_keys(msg.data());
 
-    if (n && !macro_patterns.empty() && (macro_find_exact(msg) < 0)) {
-        macro_add(msg, buf);
+    if (n && !macro_patterns.empty() && (macro_find_exact(msg.data()) < 0)) {
+        macro_add(msg.data(), buf);
     }
 }
 

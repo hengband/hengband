@@ -555,8 +555,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
         if (!can_insert_line(tb, 2)) {
             break;
         }
-        char expression[80];
-        strnfmt(expression, sizeof(expression), "?:[AND [EQU $RACE %s] [EQU $CLASS %s] [GEQ $LEVEL %02d]]",
+        const auto expression = format("?:[AND [EQU $RACE %s] [EQU $CLASS %s] [GEQ $LEVEL %02d]]",
 #ifdef JP
             rp_ptr->E_title, cp_ptr->E_title,
 #else
@@ -566,7 +565,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
         tb->cx = 0;
         insert_return_code(tb);
         string_free(tb->lines_list[tb->cy]);
-        tb->lines_list[tb->cy] = string_make(expression);
+        tb->lines_list[tb->cy] = string_make(expression.data());
         tb->cy++;
         insert_return_code(tb);
         string_free(tb->lines_list[tb->cy]);

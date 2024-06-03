@@ -68,21 +68,21 @@ static std::string display_class_stat(int cs, int *os, const std::string &cur, c
         c_put_str(TERM_L_BLUE, cp_ptr->title, 3, 40);
         put_str(_("の職業修正", ": Class modification"), 3, 40 + strlen(cp_ptr->title));
         put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
-        char buf[80];
-        strnfmt(buf, sizeof(buf), "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", cp_ptr->c_adj[0], cp_ptr->c_adj[1], cp_ptr->c_adj[2], cp_ptr->c_adj[3], cp_ptr->c_adj[4], cp_ptr->c_adj[5], cp_ptr->c_exp);
-        c_put_str(TERM_L_BLUE, buf, 5, 40);
+        const auto stats = format("%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", cp_ptr->c_adj[0], cp_ptr->c_adj[1], cp_ptr->c_adj[2], cp_ptr->c_adj[3], cp_ptr->c_adj[4], cp_ptr->c_adj[5], cp_ptr->c_exp);
+        c_put_str(TERM_L_BLUE, stats, 5, 40);
 
         put_str("HD", 6, 40);
-        strnfmt(buf, sizeof(buf), "%+3d", cp_ptr->c_mhp);
-        c_put_str(TERM_L_BLUE, buf, 6, 42);
+        const auto hd = format("%+3d", cp_ptr->c_mhp);
+        c_put_str(TERM_L_BLUE, hd, 6, 42);
 
         put_str(_("隠密", "Stealth"), 6, 47);
+        std::string stealth;
         if (i2enum<PlayerClassType>(cs) == PlayerClassType::BERSERKER) {
-            angband_strcpy(buf, " xx", sizeof(buf));
+            stealth = " xx";
         } else {
-            strnfmt(buf, sizeof(buf), " %+2d", cp_ptr->c_stl);
+            stealth = format(" %+2d", cp_ptr->c_stl);
         }
-        c_put_str(TERM_L_BLUE, buf, 6, _(51, 54));
+        c_put_str(TERM_L_BLUE, stealth, 6, _(51, 54));
     }
 
     c_put_str(TERM_YELLOW, result, 13 + (cs / 4), 2 + 19 * (cs % 4));
@@ -136,8 +136,7 @@ static bool select_class(PlayerType *player_ptr, concptr sym, int *k)
             break;
         }
 
-        char buf[80];
-        strnfmt(buf, sizeof(buf), _("職業を選んで下さい (%c-%c) ('='初期オプション設定, 灰色:勝利済): ", "Choose a class (%c-%c) ('=' for options, Gray is winner): "), sym[0], sym[PLAYER_CLASS_TYPE_MAX - 1]);
+        const auto buf = format(_("職業を選んで下さい (%c-%c) ('='初期オプション設定, 灰色:勝利済): ", "Choose a class (%c-%c) ('=' for options, Gray is winner): "), sym[0], sym[PLAYER_CLASS_TYPE_MAX - 1]);
 
         put_str(buf, 10, 6);
         char c = inkey();
