@@ -62,6 +62,29 @@ std::array<Pos2D, NUM_BUBBLES> allocate_bubbles_center(const Pos2DVec &vec)
     } };
     return center_points;
 }
+
+std::array<Pos2D, NUM_BUBBLES> create_bubbles_center(const Pos2DVec &vec)
+{
+    auto center_points = allocate_bubbles_center(vec);
+    Pos2D pos(0, 0);
+    bool is_center_checked;
+    for (auto i = 1; i < NUM_BUBBLES; i++) {
+        is_center_checked = false;
+        while (!is_center_checked) {
+            is_center_checked = true;
+            pos = { randint1(vec.y - 3) + 1, randint1(vec.x - 3) + 1 };
+            for (auto j = 0; j < i; j++) {
+                if (pos == center_points[j]) {
+                    is_center_checked = false;
+                }
+            }
+        }
+
+        center_points[i] = pos;
+    }
+
+    return center_points;
+}
 }
 
 /*
@@ -78,24 +101,7 @@ std::array<Pos2D, NUM_BUBBLES> allocate_bubbles_center(const Pos2DVec &vec)
 static void build_bubble_vault(PlayerType *player_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
 {
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("泡型ランダムVaultを生成しました。", "Bubble-shaped Vault."));
-
-    auto center_points = allocate_bubbles_center({ ysize, xsize });
-    Pos2D pos(0, 0);
-    bool is_center_checked;
-    for (auto i = 1; i < NUM_BUBBLES; i++) {
-        is_center_checked = false;
-        while (!is_center_checked) {
-            is_center_checked = true;
-            pos = { randint1(ysize - 3) + 1, randint1(xsize - 3) + 1 };
-            for (auto j = 0; j < i; j++) {
-                if (pos == center_points[j]) {
-                    is_center_checked = false;
-                }
-            }
-        }
-
-        center_points[i] = pos;
-    }
+    auto center_points = create_bubbles_center({ ysize, xsize });
 
     /* Offset from center to top left hand corner */
     const auto xhsize = xsize / 2;
