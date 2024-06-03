@@ -45,6 +45,25 @@ std::vector<vault_type> vaults_info;
 
 constexpr auto NUM_BUBBLES = 10;
 
+namespace {
+std::array<Pos2D, NUM_BUBBLES> allocate_bubbles_center(const Pos2DVec &vec)
+{
+    std::array<Pos2D, NUM_BUBBLES> center_points{ {
+        { randint1(vec.y - 3) + 1, randint1(vec.x - 3) + 1 },
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+    } };
+    return center_points;
+}
+}
+
 /*
  * This function creates a random vault that looks like a collection of bubbles.
  * It works by getting a set of coordinates that represent the center of each
@@ -60,22 +79,7 @@ static void build_bubble_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
 {
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("泡型ランダムVaultを生成しました。", "Bubble-shaped Vault."));
 
-    /* Allocate center of bubbles */
-    std::array<Pos2D, NUM_BUBBLES> center_points{ {
-        { 0, 0 },
-        { 0, 0 },
-        { 0, 0 },
-        { 0, 0 },
-        { 0, 0 },
-        { 0, 0 },
-        { 0, 0 },
-        { 0, 0 },
-        { 0, 0 },
-        { 0, 0 },
-    } };
-    center_points[0].y = (byte)randint1(ysize - 3) + 1;
-    center_points[0].x = (byte)randint1(xsize - 3) + 1;
-
+    auto center_points = allocate_bubbles_center({ ysize, xsize });
     Pos2D pos(0, 0);
     bool is_center_checked;
     for (auto i = 1; i < NUM_BUBBLES; i++) {
