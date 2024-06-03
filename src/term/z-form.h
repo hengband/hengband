@@ -10,7 +10,7 @@
 #include "system/h-basic.h"
 #include <string>
 
-uint32_t vstrnfmt(char *buf, uint32_t max, const char *fmt, va_list vp);
+std::string vformat(const char *fmt, va_list vp);
 std::string format(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
 void plog_fmt(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
 void quit_fmt(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
