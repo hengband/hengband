@@ -28,6 +28,7 @@
 #include "system/player-type-definition.h"
 #include "term/z-form.h"
 #include "util/angband-files.h"
+#include "util/finalizer.h"
 #include "world/world-object.h"
 
 /*!
@@ -249,6 +250,10 @@ static bool load_floor_aux(PlayerType *player_ptr, saved_floor_type *sf_ptr)
  */
 bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode)
 {
+    const auto finalizer = util::make_finalizer([backup = loading_character_encoding]() {
+        loading_character_encoding = backup;
+    });
+
     /*
      * Temporary files are always written in system depended kanji
      * code.
@@ -327,7 +332,5 @@ bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
         loading_savefile_version = old_loading_savefile_version;
     }
 
-    auto old_kanji_code = loading_character_encoding;
-    loading_character_encoding = old_kanji_code;
     return is_save_successful;
 }
