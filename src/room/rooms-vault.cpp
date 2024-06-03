@@ -43,6 +43,8 @@
  */
 std::vector<vault_type> vaults_info;
 
+constexpr auto NUM_BUBBLES = 10;
+
 /*
  * This function creates a random vault that looks like a collection of bubbles.
  * It works by getting a set of coordinates that represent the center of each
@@ -56,97 +58,85 @@ std::vector<vault_type> vaults_info;
  */
 static void build_bubble_vault(PlayerType *player_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
 {
-#define BUBBLENUM 10 /* number of bubbles */
-
-    /* array of center points of bubbles */
-    coord center[BUBBLENUM];
-
-    int i, j;
-    POSITION x = 0, y = 0;
-    uint16_t min1, min2, temp;
-    bool done;
-
-    /* Offset from center to top left hand corner */
-    POSITION xhsize = xsize / 2;
-    POSITION yhsize = ysize / 2;
-
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("泡型ランダムVaultを生成しました。", "Bubble-shaped Vault."));
 
     /* Allocate center of bubbles */
-    center[0].x = (byte)randint1(xsize - 3) + 1;
-    center[0].y = (byte)randint1(ysize - 3) + 1;
+    std::array<Pos2D, NUM_BUBBLES> center_points{ {
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+    } };
+    center_points[0].y = (byte)randint1(ysize - 3) + 1;
+    center_points[0].x = (byte)randint1(xsize - 3) + 1;
 
-    for (i = 1; i < BUBBLENUM; i++) {
-        done = false;
-
-        /* get center and check to see if it is unique */
-        while (!done) {
-            done = true;
-
-            x = randint1(xsize - 3) + 1;
-            y = randint1(ysize - 3) + 1;
-
-            for (j = 0; j < i; j++) {
-                /* rough test to see if there is an overlap */
-                if ((x == center[j].x) && (y == center[j].y)) {
-                    done = false;
+    Pos2D pos(0, 0);
+    bool is_center_checked;
+    for (auto i = 1; i < NUM_BUBBLES; i++) {
+        is_center_checked = false;
+        while (!is_center_checked) {
+            is_center_checked = true;
+            pos = { randint1(ysize - 3) + 1, randint1(xsize - 3) + 1 };
+            for (auto j = 0; j < i; j++) {
+                if (pos == center_points[j]) {
+                    is_center_checked = false;
                 }
             }
         }
 
-        center[i].x = x;
-        center[i].y = y;
+        center_points[i] = pos;
     }
 
-    /* Top and bottom boundaries */
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (i = 0; i < xsize; i++) {
-        int side_x = x0 - xhsize + i;
+    /* Offset from center to top left hand corner */
+    const auto xhsize = xsize / 2;
+    const auto yhsize = ysize / 2;
 
+    /* Top and bottom boundaries */
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (auto i = 0; i < xsize; i++) {
+        const auto side_x = x0 - xhsize + i;
         place_bold(player_ptr, y0 - yhsize + 0, side_x, GB_OUTER_NOPERM);
-        floor_ptr->grid_array[y0 - yhsize + 0][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
+        floor.grid_array[y0 - yhsize + 0][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
         place_bold(player_ptr, y0 - yhsize + ysize - 1, side_x, GB_OUTER_NOPERM);
-        floor_ptr->grid_array[y0 - yhsize + ysize - 1][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
+        floor.grid_array[y0 - yhsize + ysize - 1][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
     }
 
     /* Left and right boundaries */
-    for (i = 1; i < ysize - 1; i++) {
-        int side_y = y0 - yhsize + i;
-
+    for (auto i = 1; i < ysize - 1; i++) {
+        const auto side_y = y0 - yhsize + i;
         place_bold(player_ptr, side_y, x0 - xhsize + 0, GB_OUTER_NOPERM);
-        floor_ptr->grid_array[side_y][x0 - xhsize + 0].info |= (CAVE_ROOM | CAVE_ICKY);
+        floor.grid_array[side_y][x0 - xhsize + 0].info |= (CAVE_ROOM | CAVE_ICKY);
         place_bold(player_ptr, side_y, x0 - xhsize + xsize - 1, GB_OUTER_NOPERM);
-        floor_ptr->grid_array[side_y][x0 - xhsize + xsize - 1].info |= (CAVE_ROOM | CAVE_ICKY);
+        floor.grid_array[side_y][x0 - xhsize + xsize - 1].info |= (CAVE_ROOM | CAVE_ICKY);
     }
 
     /* Fill in middle with bubbles */
-    for (x = 1; x < xsize - 1; x++) {
-        for (y = 1; y < ysize - 1; y++) {
+    for (auto x = 1; x < xsize - 1; x++) {
+        for (auto y = 1; y < ysize - 1; y++) {
             /* Get distances to two closest centers */
-
-            min1 = (uint16_t)distance(x, y, center[0].x, center[0].y);
-            min2 = (uint16_t)distance(x, y, center[1].x, center[1].y);
-
+            auto min1 = distance(x, y, center_points[0].x, center_points[0].y);
+            auto min2 = distance(x, y, center_points[1].x, center_points[1].y);
             if (min1 > min2) {
-                /* swap if in wrong order */
-                temp = min1;
-                min1 = min2;
-                min2 = temp;
+                std::swap(min1, min2);
             }
 
             /* Scan the rest */
-            for (i = 2; i < BUBBLENUM; i++) {
-                temp = (uint16_t)distance(x, y, center[i].x, center[i].y);
-
+            for (auto i = 2; i < NUM_BUBBLES; i++) {
+                auto temp = distance(x, y, center_points[i].x, center_points[i].y);
                 if (temp < min1) {
-                    /* smallest */
                     min2 = min1;
-                    min1 = temp;
+                    std::swap(temp, min1);
                 } else if (temp < min2) {
-                    /* second smallest */
-                    min2 = temp;
+                    std::swap(min2, temp);
                 }
             }
+
             if (((min2 - min1) <= 2) && (!(min1 < 3))) {
                 /* Boundary at midpoint+ not at inner region of bubble */
                 place_bold(player_ptr, y0 - yhsize + y, x0 - xhsize + x, GB_OUTER_NOPERM);
@@ -156,15 +146,13 @@ static void build_bubble_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
             }
 
             /* clean up rest of flags */
-            floor_ptr->grid_array[y0 - yhsize + y][x0 - xhsize + x].info |= (CAVE_ROOM | CAVE_ICKY);
+            floor.get_grid({ y0 - yhsize + y, x0 - xhsize + x }).add_info(CAVE_ROOM | CAVE_ICKY);
         }
     }
 
     /* Try to add some random doors */
-    for (i = 0; i < 500; i++) {
-        x = randint1(xsize - 3) - xhsize + x0 + 1;
-        y = randint1(ysize - 3) - yhsize + y0 + 1;
-        add_door(player_ptr, x, y);
+    for (auto i = 0; i < 500; i++) {
+        add_door(player_ptr, randint1(xsize - 3) - xhsize + x0 + 1, randint1(ysize - 3) - yhsize + y0 + 1);
     }
 
     /* Fill with monsters and treasure, low difficulty */
