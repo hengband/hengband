@@ -154,7 +154,7 @@ static std::string get_describing_monster_name(const MonsterEntity &monster, con
  */
 static std::string replace_monster_name_undefined(std::string_view name)
 {
-    if (name.starts_with("』")) {
+    if (name.ends_with("』")) {
         constexpr auto ja_char_length = 2;
         const auto name_without_brackets = name.substr(0, name.length() - ja_char_length);
         return format("%s？』", name_without_brackets.data());
