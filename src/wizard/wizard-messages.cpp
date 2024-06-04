@@ -62,9 +62,8 @@ void msg_format_wizard(PlayerType *player_ptr, int cheat_type, const char *fmt, 
     }
 
     va_list vp;
-    char buf[1024];
     va_start(vp, fmt);
-    (void)vstrnfmt(buf, 1024, fmt, vp);
+    const auto buf = vformat(fmt, vp);
     va_end(vp);
     msg_print_wizard(player_ptr, cheat_type, buf);
 }

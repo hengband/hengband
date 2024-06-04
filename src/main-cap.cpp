@@ -256,9 +256,8 @@ static void do_cs(int y1, int y2)
 #endif
 
 #ifdef USE_HARDCODE
-    char temp[64];
-    strnfmt(temp, sizeof(temp), cs, y1, y2);
-    tp(temp);
+    auto temp = format(cs, y1, y2);
+    tp(temp.data());
 #endif
 }
 
@@ -275,9 +274,8 @@ static void do_cm(int x, int y)
 #endif
 
 #ifdef USE_HARDCODE
-    char temp[64];
-    strnfmt(temp, sizeof(temp), cm, y + 1, x + 1);
-    tp(temp);
+    auto temp = format(cm, y + 1, x + 1);
+    tp(temp.data());
 #endif
 }
 

@@ -197,7 +197,6 @@ static void redraw_health_bar(PlayerType *player_ptr, mam_type *mam_ptr)
 
 static void describe_silly_melee(mam_type *mam_ptr)
 {
-    char temp[MAX_NLEN];
     if ((mam_ptr->act == nullptr) || !mam_ptr->see_either) {
         return;
     }
@@ -207,17 +206,18 @@ static void describe_silly_melee(mam_type *mam_ptr)
         mam_ptr->act = rand_choice(silly_attacks2);
     }
 
-    strnfmt(temp, sizeof(temp), mam_ptr->act, mam_ptr->t_name);
-    msg_format("%s^は%s", mam_ptr->m_name, temp);
+    const auto temp = format(mam_ptr->act, mam_ptr->t_name);
+    msg_format("%s^は%s", mam_ptr->m_name, temp.data());
 #else
+    std::string temp;
     if (mam_ptr->do_silly_attack) {
         mam_ptr->act = rand_choice(silly_attacks);
-        strnfmt(temp, sizeof(temp), "%s %s.", mam_ptr->act, mam_ptr->t_name);
+        temp = format("%s %s.", mam_ptr->act, mam_ptr->t_name);
     } else {
-        strnfmt(temp, sizeof(temp), mam_ptr->act, mam_ptr->t_name);
+        temp = format(mam_ptr->act, mam_ptr->t_name);
     }
 
-    msg_format("%s^ %s", mam_ptr->m_name, temp);
+    msg_format("%s^ %s", mam_ptr->m_name, temp.data());
 #endif
 }
 

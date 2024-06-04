@@ -274,13 +274,11 @@ bool tele_town(PlayerType *player_ptr)
     auto num = 0;
     const int towns_size = towns_info.size();
     for (auto i = 1; i < towns_size; i++) {
-        char buf[80];
-
         if ((i == VALID_TOWNS) || (i == SECRET_TOWN) || (i == player_ptr->town_num) || !(player_ptr->visit & (1UL << (i - 1)))) {
             continue;
         }
 
-        strnfmt(buf, sizeof(buf), "%c) %-20s", I2A(i - 1), towns_info[i].name.data());
+        const auto buf = format("%c) %-20s", I2A(i - 1), towns_info[i].name.data());
         prt(buf, 5 + i, 5);
         num++;
     }

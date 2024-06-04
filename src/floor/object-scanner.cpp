@@ -106,7 +106,6 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
     COMMAND_CODE i, m;
     int j, k, l;
     ItemEntity *o_ptr;
-    char tmp_val[80]{};
     COMMAND_CODE out_index[23]{};
     TERM_COLOR out_color[23]{};
     std::array<std::string, 23> descriptions{};
@@ -153,23 +152,24 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
         m = floor_list[out_index[j]];
         o_ptr = &floor_ptr->o_list[m];
         prt("", j + 1, col ? col - 2 : col);
+        std::string head;
         if (use_menu && target_item) {
             if (j == (target_item - 1)) {
-                angband_strcpy(tmp_val, _("》", "> "), sizeof(tmp_val));
+                head = _("》", "> ");
                 target_item_label = m;
             } else {
-                angband_strcpy(tmp_val, "   ", sizeof(tmp_val));
+                head = "   ";
             }
         } else {
-            strnfmt(tmp_val, sizeof(tmp_val), "%c)", floor_label[j]);
+            head = format("%c)", floor_label[j]);
         }
 
-        put_str(tmp_val, j + 1, col);
+        put_str(head, j + 1, col);
         c_put_str(out_color[j], descriptions[j], j + 1, col + 3);
         if (show_weights && (o_ptr->bi_key.tval() != ItemKindType::GOLD)) {
             int wgt = o_ptr->weight * o_ptr->number;
-            strnfmt(tmp_val, sizeof(tmp_val), _("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
-            prt(tmp_val, j + 1, wid - 9);
+            const auto weight = format(_("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
+            prt(weight, j + 1, wid - 9);
         }
     }
 

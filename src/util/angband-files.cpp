@@ -146,9 +146,9 @@ static errr path_temp(char *buf, int max)
     }
 
 #if !defined(WIN32) || (defined(_MSC_VER) && (_MSC_VER >= 1900))
-    (void)strnfmt(buf, max, "%s", s);
+    angband_strcpy(buf, s, max);
 #else
-    (void)strnfmt(buf, max, ".%s", s);
+    angband_strcpy(buf, format(".%s", s), max);
 #endif
 
     return 0;

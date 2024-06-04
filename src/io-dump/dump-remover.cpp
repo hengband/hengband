@@ -18,12 +18,10 @@ void remove_auto_dump(const std::filesystem::path &orig_file, std::string_view a
     bool changed = false;
     int line_num = 0;
     long header_location = 0;
-    char header_mark_str[80];
-    char footer_mark_str[80];
 
-    strnfmt(header_mark_str, sizeof(header_mark_str), auto_dump_header, auto_dump_mark.data());
-    strnfmt(footer_mark_str, sizeof(footer_mark_str), auto_dump_footer, auto_dump_mark.data());
-    size_t mark_len = strlen(footer_mark_str);
+    const auto header_mark_str = format(auto_dump_header, auto_dump_mark.data());
+    const auto footer_mark_str = format(auto_dump_footer, auto_dump_mark.data());
+    size_t mark_len = footer_mark_str.length();
 
     FILE *orig_fff;
     orig_fff = angband_fopen(orig_file, FileOpenMode::READ);
@@ -50,7 +48,7 @@ void remove_auto_dump(const std::filesystem::path &orig_file, std::string_view a
         }
 
         if (!between_mark) {
-            if (!strcmp(buf->data(), header_mark_str)) {
+            if (!strcmp(buf->data(), header_mark_str.data())) {
                 header_location = ftell(orig_fff);
                 line_num = 0;
                 between_mark = true;
@@ -62,7 +60,7 @@ void remove_auto_dump(const std::filesystem::path &orig_file, std::string_view a
             continue;
         }
 
-        if (!strncmp(buf->data(), footer_mark_str, mark_len)) {
+        if (!strncmp(buf->data(), footer_mark_str.data(), mark_len)) {
             int tmp;
             if (!sscanf(buf->data() + mark_len, " (%d)", &tmp) || tmp != line_num) {
                 fseek(orig_fff, header_location, SEEK_SET);

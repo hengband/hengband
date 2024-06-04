@@ -360,8 +360,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
         if (command_wrk == USE_INVEN) {
             angband_strcpy(fis_ptr->out_val, _("持ち物:", "Inven:"), sizeof(fis_ptr->out_val));
             if (!use_menu) {
-                char tmp_val[80];
-                strnfmt(tmp_val, sizeof(tmp_val), _("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(fis_ptr->i1), index_to_label(fis_ptr->i2));
+                const auto tmp_val = format(_("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(fis_ptr->i1), index_to_label(fis_ptr->i2));
                 angband_strcat(fis_ptr->out_val, tmp_val, sizeof(fis_ptr->out_val));
             }
 
@@ -391,8 +390,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
         } else if (command_wrk == (USE_EQUIP)) {
             angband_strcpy(fis_ptr->out_val, _("装備品:", "Equip:"), sizeof(fis_ptr->out_val));
             if (!use_menu) {
-                char tmp_val[80];
-                strnfmt(tmp_val, sizeof(tmp_val), _("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(fis_ptr->e1), index_to_label(fis_ptr->e2));
+                const auto tmp_val = format(_("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(fis_ptr->e1), index_to_label(fis_ptr->e2));
                 angband_strcat(fis_ptr->out_val, tmp_val, sizeof(fis_ptr->out_val));
             }
 
@@ -422,8 +420,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
         } else if (command_wrk == USE_FLOOR) {
             angband_strcpy(fis_ptr->out_val, _("床上:", "Floor:"), sizeof(fis_ptr->out_val));
             if (!use_menu) {
-                char tmp_val[80];
-                strnfmt(tmp_val, sizeof(tmp_val), _("%c-%c,'(',')',", " %c-%c,'(',')',"), fis_ptr->n1, fis_ptr->n2);
+                const auto tmp_val = format(_("%c-%c,'(',')',", " %c-%c,'(',')',"), fis_ptr->n1, fis_ptr->n2);
                 angband_strcat(fis_ptr->out_val, tmp_val, sizeof(fis_ptr->out_val));
             }
 
@@ -455,8 +452,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
         }
 
         angband_strcat(fis_ptr->out_val, " ESC", sizeof(fis_ptr->out_val));
-        strnfmt(fis_ptr->tmp_val, sizeof(fis_ptr->tmp_val), "(%s) %s", fis_ptr->out_val, pmt);
-        prt(fis_ptr->tmp_val, 0, 0);
+        prt(format("(%s) %s", fis_ptr->out_val, pmt), 0, 0);
         fis_ptr->which = inkey();
         if (use_menu) {
             int max_line = 1;

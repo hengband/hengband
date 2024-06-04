@@ -86,20 +86,6 @@
 #include <vector>
 
 namespace {
-std::string vformat(const char *fmt, va_list vp)
-{
-    std::vector<char> format_buf(1024);
-    while (true) {
-        const auto len = vstrnfmt(format_buf.data(), format_buf.size(), fmt, vp);
-        if (len < format_buf.size() - 1) {
-            return std::string(format_buf.data());
-        }
-
-        format_buf.resize(format_buf.size() * 2);
-    }
-}
-}
-
 /*!
  * @brief 2バイト文字、及び文頭の大文字小文字を考慮しつつ、文字列のフォーマットを行う
  * @details 文頭を大文字にするには'%s^'とする.
@@ -347,25 +333,21 @@ uint32_t vstrnfmt(char *buf, uint32_t max, const char *fmt, va_list vp)
     buf[n] = '\0';
     return n;
 }
-
-/*
- * Do a vstrnfmt (see above) into a buffer of a given size.
- */
-uint32_t strnfmt(char *buf, uint32_t max, const char *fmt, ...)
-{
-    va_list vp;
-    va_start(vp, fmt);
-    auto len = vstrnfmt(buf, max, fmt, vp);
-    va_end(vp);
-    return len;
 }
 
-/*
- * Do a vstrnfmt() into (see above) into a (growable) static buffer.
- * This buffer is usable for very short term formatting of results.
- * Note that the buffer is (technically) writable, but only up to
- * the length of the string contained inside it.
- */
+std::string vformat(const char *fmt, va_list vp)
+{
+    std::vector<char> format_buf(1024);
+    while (true) {
+        const auto len = vstrnfmt(format_buf.data(), format_buf.size(), fmt, vp);
+        if (len < format_buf.size() - 1) {
+            return std::string(format_buf.data(), len);
+        }
+
+        format_buf.resize(format_buf.size() * 2);
+    }
+}
+
 std::string format(const char *fmt, ...)
 {
     va_list vp;

@@ -351,9 +351,8 @@ void msg_print(std::nullptr_t)
 void msg_format(const char *fmt, ...)
 {
     va_list vp;
-    char buf[1024];
     va_start(vp, fmt);
-    (void)vstrnfmt(buf, sizeof(buf), fmt, vp);
+    const auto buf = vformat(fmt, vp);
     va_end(vp);
     msg_print(buf);
 }

@@ -202,7 +202,6 @@ void display_snipe_list(PlayerType *player_ptr)
     TERM_LEN x = 1;
     PLAYER_LEVEL plev = player_ptr->lev;
     snipe_power spell;
-    char psi_desc[80];
 
     /* Display a list of spells */
     prt("", y, x);
@@ -218,7 +217,7 @@ void display_snipe_list(PlayerType *player_ptr)
             continue;
         }
 
-        strnfmt(psi_desc, sizeof(psi_desc), "  %c) %-30s%2d %4d", I2A(i), spell.name, spell.min_lev, spell.mana_cost);
+        const auto psi_desc = format("  %c) %-30s%2d %4d", I2A(i), spell.name, spell.min_lev, spell.mana_cost);
 
         TERM_COLOR tcol = (spell.mana_cost > sniper_data->concent) ? TERM_SLATE : TERM_WHITE;
         term_putstr(x, y + i + 1, -1, tcol, psi_desc);
