@@ -83,14 +83,16 @@ MonsterDamageProcessor::MonsterDamageProcessor(PlayerType *player_ptr, MONSTER_I
 }
 
 /*!
- * @brief モンスターのHPをダメージに応じて減算する /
+ * @brief モンスターのHPをダメージに応じて減算する
  * @return モンスターが生きていればfalse、死んだらtrue
+ * @details exp_mon をコピーしているのは、撃破時の経験値を算出する頃にはmonsterが無効モンスターになっているため.
  */
 bool MonsterDamageProcessor::mon_take_hit(std::string_view note)
 {
     auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
+    const MonsterEntity exp_mon = monster;
     auto exp_dam = (monster.hp > this->dam) ? this->dam : monster.hp;
-    this->get_exp_from_mon(monster, exp_dam);
+    this->get_exp_from_mon(exp_mon, exp_dam);
     if (this->genocide_chaos_patron()) {
         return true;
     }
@@ -105,7 +107,7 @@ bool MonsterDamageProcessor::mon_take_hit(std::string_view note)
         msg_format(_("合計%d/%dのダメージを与えた。", "You do %d (out of %d) damage."), monster.dealt_damage, monster.maxhp);
     }
 
-    if (this->process_dead_exp_virtue(note, monster)) {
+    if (this->process_dead_exp_virtue(note, exp_mon)) {
         return true;
     }
 
@@ -127,7 +129,7 @@ bool MonsterDamageProcessor::genocide_chaos_patron()
     return this->m_idx == 0;
 }
 
-bool MonsterDamageProcessor::process_dead_exp_virtue(std::string_view note, const MonsterEntity &exp_monster)
+bool MonsterDamageProcessor::process_dead_exp_virtue(std::string_view note, const MonsterEntity &exp_mon)
 {
     auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto &monrace = monster.get_real_monrace();
@@ -157,7 +159,7 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(std::string_view note, cons
     this->show_bounty_message(m_name);
     monster_death(this->player_ptr, this->m_idx, true, this->attribute_flags);
     this->summon_special_unique();
-    this->get_exp_from_mon(exp_monster, exp_monster.max_maxhp * 2);
+    this->get_exp_from_mon(exp_mon, exp_mon.max_maxhp * 2);
     *this->fear = false;
     return true;
 }
