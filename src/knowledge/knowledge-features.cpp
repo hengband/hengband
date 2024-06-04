@@ -67,7 +67,7 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
     for (i = 0; i < per_page && (feat_idx[feat_top + i] >= 0); i++) {
         TERM_COLOR attr;
         auto terrain_id = feat_idx[feat_top + i];
-        const auto &terrain = terrains[terrain_id];
+        const auto &terrain = terrains.get_terrain(terrain_id);
         int row_i = row + i;
         attr = ((i + feat_top == feat_cur) ? TERM_L_BLUE : TERM_WHITE);
         c_prt(attr, terrain.name.data(), row_i, col);
@@ -125,7 +125,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
 
         feat_cnt = 0;
     } else {
-        auto &terrain = TerrainList::get_instance()[direct_f_idx];
+        auto &terrain = TerrainList::get_instance().get_terrain(direct_f_idx);
         auto &symbol_config = terrain.symbol_configs.at(*lighting_level);
         feat_idx[0] = direct_f_idx;
         feat_cnt = 1;
@@ -221,7 +221,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                 (symbols_cb.symbol != DisplaySymbol()) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
             hgt - 1, 0);
 
-        auto &terrain = terrains[feat_idx[feat_cur]];
+        auto &terrain = terrains.get_terrain(feat_idx[feat_cur]);
         symbol_orig = terrain.symbol_configs.at(*lighting_level);
         if (visual_list) {
             place_visual_list_cursor(max_length + 3, 7, symbol_orig.color, static_cast<uint8_t>(symbol_orig.character), attr_top, char_left);

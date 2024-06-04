@@ -164,7 +164,7 @@ void display_store(PlayerType *player_ptr, StoreSaleType store_num)
         return;
     }
 
-    const auto &store_name = TerrainList::get_instance()[cur_store_feat].name;
+    const auto &store_name = TerrainList::get_instance().get_terrain(cur_store_feat).name;
     const auto owner_name = ot_ptr->owner_name;
     const auto race_name = race_info[enum2i(ot_ptr->owner_race)].title;
     put_str(format("%s (%s)", owner_name, race_name), 3, 10);

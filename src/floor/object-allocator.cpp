@@ -79,7 +79,7 @@ static bool alloc_stairs_aux(PlayerType *player_ptr, POSITION y, POSITION x, int
 bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
 {
     int shaft_num = 0;
-    const auto &terrain = TerrainList::get_instance()[feat];
+    const auto &terrain = TerrainList::get_instance().get_terrain(feat);
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &dungeon = floor.get_dungeon_definition();
     if (terrain.flags.has(TerrainCharacteristics::LESS)) {

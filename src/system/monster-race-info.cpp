@@ -267,7 +267,7 @@ std::map<MonsterRaceId, MonsterRaceInfo>::iterator MonraceList::begin()
 
 std::map<MonsterRaceId, MonsterRaceInfo>::const_iterator MonraceList::begin() const
 {
-    return monraces_info.begin();
+    return monraces_info.cbegin();
 }
 
 std::map<MonsterRaceId, MonsterRaceInfo>::iterator MonraceList::end()
@@ -277,7 +277,7 @@ std::map<MonsterRaceId, MonsterRaceInfo>::iterator MonraceList::end()
 
 std::map<MonsterRaceId, MonsterRaceInfo>::const_iterator MonraceList::end() const
 {
-    return monraces_info.end();
+    return monraces_info.cend();
 }
 
 std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator MonraceList::rbegin()
@@ -287,7 +287,7 @@ std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator MonraceList::rbegin()
 
 std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator MonraceList::rbegin() const
 {
-    return monraces_info.rbegin();
+    return monraces_info.crbegin();
 }
 
 std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator MonraceList::rend()
@@ -297,7 +297,7 @@ std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator MonraceList::rend()
 
 std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator MonraceList::rend() const
 {
-    return monraces_info.rend();
+    return monraces_info.crend();
 }
 
 MonsterRaceInfo &MonraceList::get_monrace(MonsterRaceId monrace_id)

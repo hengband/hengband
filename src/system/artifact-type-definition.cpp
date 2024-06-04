@@ -52,12 +52,12 @@ std::map<FixedArtifactId, ArtifactType>::iterator ArtifactList::end()
 
 std::map<FixedArtifactId, ArtifactType>::const_iterator ArtifactList::begin() const
 {
-    return this->artifacts.begin();
+    return this->artifacts.cbegin();
 }
 
 std::map<FixedArtifactId, ArtifactType>::const_iterator ArtifactList::end() const
 {
-    return this->artifacts.end();
+    return this->artifacts.cend();
 }
 
 std::map<FixedArtifactId, ArtifactType>::reverse_iterator ArtifactList::rbegin()
@@ -72,12 +72,12 @@ std::map<FixedArtifactId, ArtifactType>::reverse_iterator ArtifactList::rend()
 
 std::map<FixedArtifactId, ArtifactType>::const_reverse_iterator ArtifactList::rbegin() const
 {
-    return this->artifacts.rbegin();
+    return this->artifacts.crbegin();
 }
 
 std::map<FixedArtifactId, ArtifactType>::const_reverse_iterator ArtifactList::rend() const
 {
-    return this->artifacts.rend();
+    return this->artifacts.crend();
 }
 
 std::map<FixedArtifactId, ArtifactType> &ArtifactList::get_raw_map()
