@@ -2,6 +2,7 @@
 #include "floor/geometry.h"
 #include "market/arena-info-table.h"
 #include "system/angband-exceptions.h"
+#include "system/monster-race-info.h" // @todo 暫定、後で消す.
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "world/world.h"
@@ -139,4 +140,14 @@ bool PlayerType::is_located_at(const Pos2D &pos) const
 bool PlayerType::in_saved_floor() const
 {
     return this->floor_id != 0;
+}
+
+/*!
+ * @brief トラッキング中のモンスター種族定義を取得する
+ * @return モンスター種族定義
+ * @todo そもそもmonster_race_idx はこのクラスにいるべきではない、後でどこか別なクラスへ移す.
+ */
+const MonsterRaceInfo &PlayerType::get_tracking_monrace() const
+{
+    return MonraceList::get_instance().get_monrace(this->monster_race_idx);
 }

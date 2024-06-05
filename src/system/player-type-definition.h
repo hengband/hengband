@@ -25,6 +25,7 @@ enum class Virtue : short;
 
 class FloorType;
 class ItemEntity;
+class MonsterRaceInfo;
 class TimedEffects;
 class PlayerType {
 public:
@@ -401,10 +402,11 @@ public:
     std::string decrease_ability_random();
     std::string decrease_ability_all();
     Pos2D get_position() const;
+    Pos2D get_neighbor(int dir) const;
     bool is_located_at_running_destination() const;
     bool is_located_at(const Pos2D &pos) const;
     bool in_saved_floor() const;
-    Pos2D get_neighbor(int dir) const;
+    const MonsterRaceInfo &get_tracking_monrace() const;
 
 private:
     std::shared_ptr<TimedEffects> timed_effects;
