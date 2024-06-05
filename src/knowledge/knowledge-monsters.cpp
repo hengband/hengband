@@ -459,11 +459,11 @@ void do_cmd_knowledge_bounty(PlayerType *player_ptr)
     fprintf(fff, "\n");
     fprintf(fff, _("賞金首リスト\n", "List of wanted monsters\n"));
     fprintf(fff, "----------------------------------------------\n");
-
-    bool listed = false;
-    for (const auto &[r_idx, is_achieved] : w_ptr->bounties) {
+    const auto &monraces = MonraceList::get_instance();
+    auto listed = false;
+    for (const auto &[monrace_id, is_achieved] : w_ptr->bounties) {
         if (!is_achieved) {
-            fprintf(fff, "%s\n", monraces_info[r_idx].name.data());
+            fprintf(fff, "%s\n", monraces.get_monrace(monrace_id).name.data());
             listed = true;
         }
     }

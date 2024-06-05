@@ -243,23 +243,20 @@ void tsuchinoko(void)
  */
 void show_bounty(void)
 {
-    TERM_LEN y = 0;
-
     clear_bldg(4, 18);
     prt(_("死体を持ち帰れば報酬を差し上げます。", "Offer a prize when you bring a wanted monster's corpse"), 4, 10);
     c_put_str(TERM_YELLOW, _("現在の賞金首", "Wanted monsters"), 6, 10);
-
-    for (auto i = 0U; i < std::size(w_ptr->bounties); i++) {
-        const auto &[r_idx, is_achieved] = w_ptr->bounties[i];
-        MonsterRaceInfo *r_ptr = &monraces_info[r_idx];
-
-        auto color = is_achieved ? TERM_RED : TERM_WHITE;
-        auto done_mark = is_achieved ? _("(済)", "(done)") : "";
-
-        c_prt(color, format("%s %s", r_ptr->name.data(), done_mark), y + 7, 10);
-
+    const auto &monraces = MonraceList::get_instance();
+    const int size_bounties = std::ssize(w_ptr->bounties);
+    auto y = 0;
+    for (auto i = 0; i < size_bounties; i++) {
+        const auto &[monrace_id, is_achieved] = w_ptr->bounties[i];
+        const auto &monrace = monraces.get_monrace(monrace_id);
+        const auto color = is_achieved ? TERM_RED : TERM_WHITE;
+        const auto done_mark = is_achieved ? _("(済)", "(done)") : "";
+        c_prt(color, format("%s %s", monrace.name.data(), done_mark), y + 7, 10);
         y = (y + 1) % 10;
-        if (!y && (i < std::size(w_ptr->bounties) - 1)) {
+        if (!y && (i < size_bounties - 1)) {
             prt(_("何かキーを押してください", "Hit any key."), 0, 0);
             (void)inkey();
             prt("", 0, 0);
@@ -343,29 +340,29 @@ void determine_bounty_uniques(PlayerType *player_ptr)
     };
 
     // 賞金首とするモンスターの種族IDのリストを生成
-    std::vector<MonsterRaceId> bounty_r_idx_list;
-    while (bounty_r_idx_list.size() < std::size(w_ptr->bounties)) {
-        auto r_idx = get_mon_num(player_ptr, 0, MAX_DEPTH - 1, PM_ARENA);
-        if (!is_suitable_for_bounty(r_idx)) {
+    std::vector<MonsterRaceId> bounty_monrace_ids;
+    while (bounty_monrace_ids.size() < std::size(w_ptr->bounties)) {
+        const auto monrace_id = get_mon_num(player_ptr, 0, MAX_DEPTH - 1, PM_ARENA);
+        if (!is_suitable_for_bounty(monrace_id)) {
             continue;
         }
 
-        auto is_already_selected = std::any_of(bounty_r_idx_list.begin(), bounty_r_idx_list.end(),
-            [r_idx](MonsterRaceId bounty_r_idx) { return r_idx == bounty_r_idx; });
+        const auto is_already_selected = std::any_of(bounty_monrace_ids.begin(), bounty_monrace_ids.end(),
+            [monrace_id](auto bounty_monrace_id) { return monrace_id == bounty_monrace_id; });
         if (!is_already_selected) {
-            bounty_r_idx_list.push_back(r_idx);
+            bounty_monrace_ids.push_back(monrace_id);
         }
     }
 
     // モンスターのLVで昇順に並び替える
-    std::sort(bounty_r_idx_list.begin(), bounty_r_idx_list.end(),
-        [](MonsterRaceId r_idx1, MonsterRaceId r_idx2) {
-            return monraces_info[r_idx1].level < monraces_info[r_idx2].level;
+    std::sort(bounty_monrace_ids.begin(), bounty_monrace_ids.end(),
+        [&monraces](auto id1, auto id2) {
+            return monraces.get_monrace(id1).level < monraces.get_monrace(id2).level;
         });
 
     // 賞金首情報を設定
-    std::transform(bounty_r_idx_list.begin(), bounty_r_idx_list.end(), std::begin(w_ptr->bounties),
-        [](MonsterRaceId r_idx) -> bounty_type {
-            return { r_idx, false };
+    std::transform(bounty_monrace_ids.begin(), bounty_monrace_ids.end(), std::begin(w_ptr->bounties),
+        [](auto monrace_id) -> bounty_type {
+            return { monrace_id, false };
         });
 }
