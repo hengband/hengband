@@ -448,19 +448,12 @@ errr init_feat_variables(void)
 /*!
  * @brief 地形タグからIDを得る /
  * Convert a fake tag to a real feat index
- * @param str タグ文字列
+ * @param tag タグ文字列
  * @return 地形ID
  */
-FEAT_IDX f_tag_to_index(std::string_view str)
+short f_tag_to_index(std::string_view tag)
 {
-    const auto &terrains = TerrainList::get_instance();
-    for (short i = 0; i < std::ssize(terrains); i++) {
-        if (terrains.get_terrain(i).tag == str) {
-            return (FEAT_IDX)i;
-        }
-    }
-
-    return -1;
+    return TerrainList::get_instance().find_terrain_id_by_tag(tag).value_or(-1);
 }
 
 /*!
@@ -468,9 +461,9 @@ FEAT_IDX f_tag_to_index(std::string_view str)
  * Initialize quest array
  * @return 地形ID
  */
-int16_t f_tag_to_index_in_init(concptr str)
+short f_tag_to_index_in_init(std::string_view tag)
 {
-    FEAT_IDX feat = f_tag_to_index(str);
+    const auto feat = f_tag_to_index(tag);
 
     if (feat < 0) {
         feat_tag_is_not_found = true;
@@ -482,24 +475,22 @@ int16_t f_tag_to_index_in_init(concptr str)
 /*!
  * @brief 地形タグからIDを得る /
  * Search for real index corresponding to this fake tag
- * @param feat タグ文字列のオフセット
- * @return 地形ID。該当がないなら-1
+ * @param tag タグ文字列のオフセット
+ * @return 地形ID。該当がないならstd::nullopt
  */
-static FEAT_IDX search_real_feat(std::string feat)
+static std::optional<short> search_real_feat(std::string_view tag)
 {
-    if (feat.empty()) {
-        return -1;
+    if (tag.empty()) {
+        return std::nullopt;
     }
 
-    const auto &terrains = TerrainList::get_instance();
-    for (short i = 0; i < std::ssize(terrains); i++) {
-        if (feat == terrains.get_terrain(i).tag) {
-            return i;
-        }
+    auto terrain_id = TerrainList::get_instance().find_terrain_id_by_tag(tag);
+    if (!terrain_id) {
+        msg_format(_("未定義のタグ '%s'。", "%s is undefined."), tag.data());
+        return std::nullopt;
     }
 
-    msg_format(_("未定義のタグ '%s'。", "%s is undefined."), feat.data());
-    return -1;
+    return terrain_id;
 }
 
 /*!
@@ -509,15 +500,11 @@ static FEAT_IDX search_real_feat(std::string feat)
 void retouch_terrains_info()
 {
     auto &terrains = TerrainList::get_instance();
-    for (short i = 0; i < std::ssize(terrains); i++) {
-        auto &terrain = terrains.get_terrain(i);
-        FEAT_IDX k = search_real_feat(terrain.mimic_tag);
-        terrain.mimic = k < 0 ? terrain.mimic : k;
-        k = search_real_feat(terrain.destroyed_tag);
-        terrain.destroyed = k < 0 ? terrain.destroyed : k;
-        for (FEAT_IDX j = 0; j < MAX_FEAT_STATES; j++) {
-            k = search_real_feat(terrain.state[j].result_tag);
-            terrain.state[j].result = k < 0 ? terrain.state[j].result : k;
+    for (auto &terrain : terrains) {
+        terrain.mimic = search_real_feat(terrain.mimic_tag).value_or(terrain.mimic);
+        terrain.destroyed = search_real_feat(terrain.destroyed_tag).value_or(terrain.destroyed);
+        for (auto &ts : terrain.state) {
+            ts.result = search_real_feat(ts.result_tag).value_or(ts.result);
         }
     }
 }

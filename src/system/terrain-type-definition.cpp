@@ -7,6 +7,7 @@
 #include "system/terrain-type-definition.h"
 #include "grid/feature.h" // 暫定、is_ascii_graphics() は別ファイルに移す.
 #include "grid/lighting-colors-table.h"
+#include <algorithm>
 
 TerrainType::TerrainType()
     : symbol_definitions(DEFAULT_SYMBOLS)
@@ -72,6 +73,19 @@ TerrainType &TerrainList::get_terrain(short terrain_id)
 const TerrainType &TerrainList::get_terrain(short terrain_id) const
 {
     return this->terrains.at(terrain_id);
+}
+
+std::optional<short> TerrainList::find_terrain_id_by_tag(std::string_view tag) const
+{
+    const auto it = std::find_if(this->terrains.begin(), this->terrains.end(),
+        [tag](const auto &terrain) {
+            return terrain.tag == tag;
+        });
+    if (it == this->terrains.end()) {
+        return std::nullopt;
+    }
+
+    return static_cast<short>(std::distance(this->terrains.begin(), it));
 }
 
 std::vector<TerrainType>::iterator TerrainList::begin()
