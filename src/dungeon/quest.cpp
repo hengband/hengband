@@ -123,52 +123,52 @@ const QuestType &QuestList::get_quest(QuestId id) const
     return this->quests.at(id);
 }
 
-QuestList::iterator QuestList::begin()
+std::map<QuestId, QuestType>::iterator QuestList::begin()
 {
     return this->quests.begin();
 }
 
-QuestList::const_iterator QuestList::begin() const
+std::map<QuestId, QuestType>::const_iterator QuestList::begin() const
 {
     return this->quests.cbegin();
 }
 
-QuestList::iterator QuestList::end()
+std::map<QuestId, QuestType>::iterator QuestList::end()
 {
     return this->quests.end();
 }
 
-QuestList::const_iterator QuestList::end() const
+std::map<QuestId, QuestType>::const_iterator QuestList::end() const
 {
     return this->quests.cend();
 }
 
-QuestList::reverse_iterator QuestList::rbegin()
+std::map<QuestId, QuestType>::reverse_iterator QuestList::rbegin()
 {
     return this->quests.rbegin();
 }
 
-QuestList::const_reverse_iterator QuestList::rbegin() const
+std::map<QuestId, QuestType>::const_reverse_iterator QuestList::rbegin() const
 {
     return this->quests.crbegin();
 }
 
-QuestList::reverse_iterator QuestList::rend()
+std::map<QuestId, QuestType>::reverse_iterator QuestList::rend()
 {
     return this->quests.rend();
 }
 
-QuestList::const_reverse_iterator QuestList::rend() const
+std::map<QuestId, QuestType>::const_reverse_iterator QuestList::rend() const
 {
     return this->quests.crend();
 }
 
-QuestList::iterator QuestList::find(QuestId id)
+std::map<QuestId, QuestType>::iterator QuestList::find(QuestId id)
 {
     return this->quests.find(id);
 }
 
-QuestList::const_iterator QuestList::find(QuestId id) const
+std::map<QuestId, QuestType>::const_iterator QuestList::find(QuestId id) const
 {
     return this->quests.find(id);
 }
