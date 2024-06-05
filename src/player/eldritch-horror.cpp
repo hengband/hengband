@@ -34,19 +34,6 @@
 #include <string>
 #include <string_view>
 
-/*!
- * @brief エルドリッチホラー持ちのモンスターを見た時の反応
- * @param desc モンスター表記
- * @param monrace モンスター情報への参照
- * @details 実際に見るとは限らない (悪夢モードで宿に泊まった時など)
- */
-static void see_eldritch_horror(std::string_view desc, MonsterRaceInfo &monrace)
-{
-    const auto &horror_message = monrace.decide_horror_message();
-    msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), horror_message.data(), desc.data());
-    monrace.r_misc_flags.set(MonsterMiscType::ELDRITCH_HORROR);
-}
-
 static bool process_mod_hallucination(PlayerType *player_ptr, std::string_view m_name, const MonsterRaceInfo &monrace)
 {
     if (!player_ptr->effects()->hallucination().is_hallucinated()) {
@@ -115,7 +102,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
             return;
         }
 
-        see_eldritch_horror(m_name, monrace);
+        msg_print(monrace.see_eldritch_horror(m_name));
         switch (PlayerRace(player_ptr).life()) {
         case PlayerRaceLifeType::DEMON:
             return;
@@ -161,7 +148,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
             return;
         }
 
-        see_eldritch_horror(desc, monrace);
+        msg_print(monrace.see_eldritch_horror(desc));
         switch (PlayerRace(player_ptr).life()) {
         case PlayerRaceLifeType::DEMON:
             if (saving_throw(20 + player_ptr->lev)) {

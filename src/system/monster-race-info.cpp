@@ -26,25 +26,6 @@ bool MonsterRaceInfo::is_valid() const
 }
 
 /*!
- * @brief エルドリッチホラーの形容詞種別を決める
- * @return エルドリッチホラーの形容詞
- */
-const std::string &MonsterRaceInfo::decide_horror_message() const
-{
-    const int horror_desc_common_size = horror_desc_common.size();
-    auto horror_num = randint0(horror_desc_common_size + horror_desc_evil.size());
-    if (horror_num < horror_desc_common_size) {
-        return horror_desc_common[horror_num];
-    }
-
-    if (this->kind_flags.has(MonsterKindType::EVIL)) {
-        return horror_desc_evil[horror_num - horror_desc_common_size];
-    }
-
-    return horror_desc_neutral[horror_num - horror_desc_common_size];
-}
-
-/*!
  * @brief モンスターが生命体かどうかを返す
  * @return 生命体ならばtrue
  */
@@ -233,6 +214,39 @@ int MonsterRaceInfo::calc_capture_value() const
     }
 
     return this->level * 50 + 1000;
+}
+
+/*!
+ * @brief エルドリッチホラー持ちのモンスターを見た時の反応
+ * @param description モンスター表記
+ * @return 反応メッセージ
+ * @details 実際に見るとは限らない (悪夢モードで宿に泊まった時など)
+ */
+std::string MonsterRaceInfo::see_eldritch_horror(std::string_view description)
+{
+    const auto &horror_message = this->decide_horror_message();
+    this->r_misc_flags.set(MonsterMiscType::ELDRITCH_HORROR);
+    constexpr auto fmt = _("%s%sの顔を見てしまった！", "You behold the %s visage of %s!");
+    return format(fmt, horror_message.data(), description.data());
+}
+
+/*!
+ * @brief エルドリッチホラーの形容詞種別を決める
+ * @return エルドリッチホラーの形容詞
+ */
+const std::string &MonsterRaceInfo::decide_horror_message() const
+{
+    const int horror_desc_common_size = horror_desc_common.size();
+    auto horror_num = randint0(horror_desc_common_size + horror_desc_evil.size());
+    if (horror_num < horror_desc_common_size) {
+        return horror_desc_common[horror_num];
+    }
+
+    if (this->kind_flags.has(MonsterKindType::EVIL)) {
+        return horror_desc_evil[horror_num - horror_desc_common_size];
+    }
+
+    return horror_desc_neutral[horror_num - horror_desc_common_size];
 }
 
 const std::map<MonsterRaceId, std::set<MonsterRaceId>> MonraceList::unified_uniques = {
