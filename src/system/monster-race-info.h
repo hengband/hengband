@@ -160,8 +160,6 @@ public:
     MonraceList(const MonraceList &) = delete;
     MonraceList &operator=(const MonraceList &) = delete;
     MonraceList &operator=(MonraceList &&) = delete;
-    MonsterRaceInfo &operator[](const MonsterRaceId r_idx);
-    const MonsterRaceInfo &operator[](const MonsterRaceId r_idx) const;
 
     static bool is_valid(MonsterRaceId monrace_id);
     static const std::map<MonsterRaceId, std::set<MonsterRaceId>> &get_unified_uniques();
@@ -185,9 +183,9 @@ public:
     bool is_unified(const MonsterRaceId r_idx) const;
     bool exists_separates(const MonsterRaceId r_idx) const;
     bool is_separated(const MonsterRaceId r_idx) const;
-    bool can_select_separate(const MonsterRaceId r_idx, const int hp, const int maxhp) const;
-    int calc_figurine_value(const MonsterRaceId r_idx) const;
-    int calc_capture_value(const MonsterRaceId r_idx) const;
+    bool can_select_separate(const MonsterRaceId morace_id, const int hp, const int maxhp) const;
+    int calc_figurine_value(const MonsterRaceId monrace_id) const;
+    int calc_capture_value(const MonsterRaceId morace_id) const;
     bool order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed = false) const;
     bool order_level(MonsterRaceId id1, MonsterRaceId id2) const;
     MonsterRaceId pick_id_at_random() const;

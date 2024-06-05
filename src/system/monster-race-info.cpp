@@ -131,7 +131,7 @@ std::string MonsterRaceInfo::get_pronoun_of_summoned_kin() const
  */
 const MonsterRaceInfo &MonsterRaceInfo::get_next() const
 {
-    return MonraceList::get_instance()[this->next_r_idx];
+    return MonraceList::get_instance().get_monrace(this->next_r_idx);
 }
 
 /*!
@@ -238,28 +238,6 @@ MonsterRaceId MonraceList::empty_id()
     return MonsterRaceId::PLAYER;
 }
 
-/*!
- * @bried モンスター定義を種族IDから直接得る
- * @param モンスター種族ID
- * @return モンスター定義への参照
- * @details モンスター実体からモンスター定義を得るためには使用しないこと
- */
-MonsterRaceInfo &MonraceList::operator[](const MonsterRaceId r_idx)
-{
-    return monraces_info.at(r_idx);
-}
-
-/*!
- * @bried モンスター定義を種族IDから直接得る
- * @param モンスター種族ID
- * @return モンスター定義への参照
- * @details モンスター実体からモンスター定義を得るためには使用しないこと
- */
-const MonsterRaceInfo &MonraceList::operator[](const MonsterRaceId r_idx) const
-{
-    return monraces_info.at(r_idx);
-}
-
 std::map<MonsterRaceId, MonsterRaceInfo>::iterator MonraceList::begin()
 {
     return monraces_info.begin();
@@ -300,11 +278,23 @@ std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator MonraceList::re
     return monraces_info.crend();
 }
 
+/*!
+ * @brief モンスター定義を種族IDから直接得る (非const版)
+ * @param monrace_id モンスター種族ID
+ * @return モンスター定義への参照
+ * @details モンスター実体からモンスター定義を得るためには使用しないこと
+ */
 MonsterRaceInfo &MonraceList::get_monrace(MonsterRaceId monrace_id)
 {
     return monraces_info.at(monrace_id);
 }
 
+/*!
+ * @brief モンスター定義を種族IDから直接得る (const版)
+ * @param monrace_id モンスター種族ID
+ * @return モンスター定義への参照
+ * @details モンスター実体からモンスター定義を得るためには使用しないこと
+ */
 const MonsterRaceInfo &MonraceList::get_monrace(MonsterRaceId monrace_id) const
 {
     return monraces_info.at(monrace_id);
@@ -347,9 +337,9 @@ void MonraceList::kill_unified_unique(const MonsterRaceId r_idx)
 {
     const auto it_unique = unified_uniques.find(r_idx);
     if (it_unique != unified_uniques.end()) {
-        (*this)[it_unique->first].kill_unique();
+        this->get_monrace(it_unique->first).kill_unique();
         for (const auto separate : it_unique->second) {
-            (*this)[separate].kill_unique();
+            this->get_monrace(separate).kill_unique();
         }
 
         return;
@@ -358,8 +348,8 @@ void MonraceList::kill_unified_unique(const MonsterRaceId r_idx)
     for (const auto &[unified_unique, separates] : unified_uniques) {
         const auto it_separate = separates.find(r_idx);
         if (it_separate != separates.end()) {
-            (*this)[*it_separate].kill_unique();
-            (*this)[unified_unique].kill_unique();
+            this->get_monrace(*it_separate).kill_unique();
+            this->get_monrace(unified_unique).kill_unique();
             return;
         }
     }
@@ -380,7 +370,7 @@ bool MonraceList::is_selectable(const MonsterRaceId r_idx) const
         return true;
     }
 
-    return std::all_of(it->second.begin(), it->second.end(), [&](const auto x) { return (*this)[x].cur_num == 0; });
+    return std::all_of(it->second.begin(), it->second.end(), [this](const auto x) { return this->get_monrace(x).cur_num == 0; });
 }
 
 /*!
@@ -389,12 +379,12 @@ bool MonraceList::is_selectable(const MonsterRaceId r_idx) const
 void MonraceList::defeat_separated_uniques()
 {
     for (const auto &[unified_unique, separates] : unified_uniques) {
-        if ((*this)[unified_unique].max_num > 0) {
+        if (this->get_monrace(unified_unique).max_num > 0) {
             continue;
         }
 
         for (const auto separate : separates) {
-            auto &monrace = (*this)[separate];
+            auto &monrace = this->get_monrace(separate);
             if (monrace.max_num == 0) {
                 continue;
             }
@@ -417,7 +407,7 @@ bool MonraceList::is_unified(const MonsterRaceId r_idx) const
 bool MonraceList::exists_separates(const MonsterRaceId r_idx) const
 {
     const auto &separates = unified_uniques.at(r_idx);
-    return std::all_of(separates.begin(), separates.end(), [&](const auto x) { return (*this)[x].cur_num > 0; });
+    return std::all_of(separates.begin(), separates.end(), [this](const auto x) { return this->get_monrace(x).cur_num > 0; });
 }
 
 /*!
@@ -435,18 +425,18 @@ bool MonraceList::is_separated(const MonsterRaceId r_idx) const
 
 /*!
  * @brief 合体ユニークが分離魔法を唱えられるかをチェックする
- * @param r_idx 分離ユニークの種族ID
+ * @param monrace_id 分離ユニークの種族ID
  * @param hp 分離ユニークの現在HP
  * @param maxhp 分離ユニークの最大HP (衰弱を含)
  */
-bool MonraceList::can_select_separate(const MonsterRaceId r_idx, const int hp, const int maxhp) const
+bool MonraceList::can_select_separate(const MonsterRaceId monrace_id, const int hp, const int maxhp) const
 {
-    if (unified_uniques.contains(r_idx)) {
+    if (unified_uniques.contains(monrace_id)) {
         return false;
     }
 
     const auto end = unified_uniques.end();
-    const auto it = std::find_if(unified_uniques.begin(), end, [&r_idx](const auto &x) { return x.second.contains(r_idx); });
+    const auto it = std::find_if(unified_uniques.begin(), end, [monrace_id](const auto &x) { return x.second.contains(monrace_id); });
     if (it == end) {
         return false;
     }
@@ -456,12 +446,12 @@ bool MonraceList::can_select_separate(const MonsterRaceId r_idx, const int hp, c
         return false;
     }
 
-    return std::all_of(found_separates.begin(), found_separates.end(), [&](const auto x) { return (*this)[x].max_num > 0; });
+    return std::all_of(found_separates.begin(), found_separates.end(), [this](const auto x) { return this->get_monrace(x).max_num > 0; });
 }
 
-int MonraceList::calc_figurine_value(const MonsterRaceId r_idx) const
+int MonraceList::calc_figurine_value(const MonsterRaceId monrace_id) const
 {
-    const auto level = (*this)[r_idx].level;
+    const auto level = this->get_monrace(monrace_id).level;
     if (level < 20) {
         return level * 50;
     }
@@ -481,13 +471,13 @@ int MonraceList::calc_figurine_value(const MonsterRaceId r_idx) const
     return 14000 + (level - 50) * 2000;
 }
 
-int MonraceList::calc_capture_value(const MonsterRaceId r_idx) const
+int MonraceList::calc_capture_value(const MonsterRaceId monrace_id) const
 {
-    if (r_idx == MonsterRaceId::PLAYER) {
+    if (monrace_id == MonsterRaceId::PLAYER) {
         return 1000;
     }
 
-    return (*this)[r_idx].level * 50 + 1000;
+    return this->get_monrace(monrace_id).level * 50 + 1000;
 }
 
 bool MonraceList::order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed) const

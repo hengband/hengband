@@ -71,7 +71,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
             floor_ptr->m_list[hack_m_idx_ii].maxhp = separated_maxhp;
         }
 
-        const auto &m_name = monraces[it_unified->first].name;
+        const auto &m_name = monraces.get_monrace(it_unified->first).name;
         msg_format(_("%sが分離した！", "%s splits!"), m_name.data());
         return MonsterSpellResult::make_valid();
     }
@@ -108,7 +108,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
         floor_ptr->m_list[hack_m_idx_ii].maxhp = unified_maxhp;
         std::vector<std::string> m_names;
         for (const auto &separate : separates) {
-            const auto &monrace = monraces[separate];
+            const auto &monrace = monraces.get_monrace(separate);
             m_names.push_back(monrace.name);
         }
 
