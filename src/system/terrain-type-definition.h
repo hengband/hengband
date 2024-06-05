@@ -68,7 +68,6 @@ public:
     TerrainList operator=(TerrainList &&) = delete;
 
     static TerrainList &get_instance();
-    std::vector<TerrainType> &get_raw_vector(); // @todo init_terrains_info() 専用、将来的に廃止する.
     TerrainType &get_terrain(short terrain_id);
     const TerrainType &get_terrain(short terrain_id) const;
     std::vector<TerrainType>::iterator begin();
@@ -82,6 +81,7 @@ public:
     size_t size() const;
     bool empty() const;
     void resize(size_t new_size);
+    void shrink_to_fit();
 
 private:
     TerrainList() = default;

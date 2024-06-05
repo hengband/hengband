@@ -49,23 +49,13 @@ namespace {
 
 using Retoucher = void (*)();
 
-template <typename>
-struct is_vector : std::false_type {
-};
-
-template <typename T, typename Alloc>
-struct is_vector<std::vector<T, Alloc>> : std::true_type {
-};
-
-/*!
- * @brief 与えられた型 T が std::vector 型かどうか調べる
- * T の型が std::vector<SomeType> に一致する時、is_vector_v<T> == true
- * 一致しない時、is_vector_v<T> == false となる
- * @tparam T 調べる型
- */
+/// @note clang-formatによるconceptの整形が安定していないので抑制しておく
+// clang-format off
 template <typename T>
-constexpr bool is_vector_v = is_vector<T>::value;
-
+concept HasShrinkToFit = requires(T t) {
+    t.shrink_to_fit();
+};
+// clang-format on
 }
 
 /*!
@@ -115,7 +105,7 @@ static errr init_info(std::string_view filename, angband_header &head, InfoType 
         quit_fmt(_("'%s'ファイルにエラー", "Error in '%s' file."), filename.data());
     }
 
-    if constexpr (is_vector_v<InfoType>) {
+    if constexpr (HasShrinkToFit<InfoType>) {
         info.shrink_to_fit();
     }
 
@@ -138,7 +128,7 @@ static errr init_info(std::string_view filename, angband_header &head, InfoType 
  * even if the string happens to be empty (everyone has a unique '\0').
  */
 template <typename InfoType>
-static errr init_json(std::string_view filename, std::string_view keyname, angband_header &head, InfoType &, JSONParser parser)
+static errr init_json(std::string_view filename, std::string_view keyname, angband_header &head, InfoType &info, JSONParser parser)
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, filename);
     std::ifstream ifs(path);
@@ -165,6 +155,10 @@ static errr init_json(std::string_view filename, std::string_view keyname, angba
     sha256.update(json_object.dump());
     head.digest = sha256.digest();
 
+    if constexpr (HasShrinkToFit<InfoType>) {
+        info.shrink_to_fit();
+    }
+
     return PARSE_ERROR_NONE;
 }
 
@@ -175,7 +169,7 @@ static errr init_json(std::string_view filename, std::string_view keyname, angba
 errr init_artifacts_info()
 {
     init_header(&artifacts_header);
-    return init_json("ArtifactDefinitions.jsonc", "artifacts", artifacts_header, ArtifactList::get_instance().get_raw_map(), parse_artifacts_info);
+    return init_json("ArtifactDefinitions.jsonc", "artifacts", artifacts_header, ArtifactList::get_instance(), parse_artifacts_info);
 }
 
 /*!
@@ -185,7 +179,7 @@ errr init_artifacts_info()
 errr init_baseitems_info()
 {
     init_header(&baseitems_header);
-    return init_json("BaseitemDefinitions.jsonc", "baseitems", baseitems_header, BaseitemList::get_instance().get_raw_vector(), parse_baseitems_info);
+    return init_json("BaseitemDefinitions.jsonc", "baseitems", baseitems_header, BaseitemList::get_instance(), parse_baseitems_info);
 }
 
 /*!
@@ -239,7 +233,7 @@ errr init_terrains_info()
     auto *parser = parse_terrains_info;
     auto *retoucher = retouch_terrains_info;
     auto &terrains = TerrainList::get_instance();
-    return init_info("TerrainDefinitions.txt", terrains_header, terrains.get_raw_vector(), parser, retoucher);
+    return init_info("TerrainDefinitions.txt", terrains_header, terrains, parser, retoucher);
 }
 
 /*!

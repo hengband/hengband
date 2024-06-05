@@ -64,11 +64,6 @@ TerrainList &TerrainList::get_instance()
     return instance;
 }
 
-std::vector<TerrainType> &TerrainList::get_raw_vector()
-{
-    return this->terrains;
-}
-
 TerrainType &TerrainList::get_terrain(short terrain_id)
 {
     return this->terrains.at(terrain_id);
@@ -132,4 +127,9 @@ bool TerrainList::empty() const
 void TerrainList::resize(size_t new_size)
 {
     this->terrains.resize(new_size);
+}
+
+void TerrainList::shrink_to_fit()
+{
+    this->terrains.shrink_to_fit();
 }
