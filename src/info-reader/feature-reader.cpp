@@ -454,7 +454,7 @@ errr init_feat_variables(void)
 FEAT_IDX f_tag_to_index(std::string_view str)
 {
     const auto &terrains = TerrainList::get_instance();
-    for (short i = 0; i < terrains_header.info_num; i++) {
+    for (short i = 0; i < std::ssize(terrains); i++) {
         if (terrains.get_terrain(i).tag == str) {
             return (FEAT_IDX)i;
         }
@@ -492,7 +492,7 @@ static FEAT_IDX search_real_feat(std::string feat)
     }
 
     const auto &terrains = TerrainList::get_instance();
-    for (short i = 0; i < terrains_header.info_num; i++) {
+    for (short i = 0; i < std::ssize(terrains); i++) {
         if (feat == terrains.get_terrain(i).tag) {
             return i;
         }
@@ -506,10 +506,10 @@ static FEAT_IDX search_real_feat(std::string feat)
  * @brief 地形情報の各種タグからIDへ変換して結果を収める
  * @param head ヘッダ構造体
  */
-void retouch_terrains_info(angband_header *head)
+void retouch_terrains_info()
 {
     auto &terrains = TerrainList::get_instance();
-    for (short i = 0; i < head->info_num; i++) {
+    for (short i = 0; i < std::ssize(terrains); i++) {
         auto &terrain = terrains.get_terrain(i);
         FEAT_IDX k = search_real_feat(terrain.mimic_tag);
         terrain.mimic = k < 0 ? terrain.mimic : k;

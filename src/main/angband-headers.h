@@ -12,7 +12,6 @@
  */
 struct angband_header {
     util::SHA256::Digest digest; //!< Checksum of "info" records
-    uint16_t info_num; //!< このinfoのデータ数
 };
 
 extern angband_header artifacts_header;

@@ -47,7 +47,7 @@
 
 namespace {
 
-using Retoucher = void (*)(angband_header *);
+using Retoucher = void (*)();
 
 template <typename>
 struct is_vector : std::false_type {
@@ -71,15 +71,12 @@ constexpr bool is_vector_v = is_vector<T>::value;
 /*!
  * @brief ヘッダ構造体の更新
  * Initialize the header of an *_info.raw file.
- * @param head rawファイルのヘッダ
- * @param num データ数
- * @param len データの長さ
+ * @param head ヘッダ構造体
  * @return エラーコード
  */
-static void init_header(angband_header *head, IDX num = 0)
+static void init_header(angband_header *head)
 {
     head->digest = {};
-    head->info_num = (IDX)num;
 }
 
 /*!
@@ -102,12 +99,6 @@ static errr init_info(std::string_view filename, angband_header &head, InfoType 
         quit_fmt(_("'%s'ファイルをオープンできません。", "Cannot open '%s' file."), filename.data());
     }
 
-    constexpr auto info_is_vector = is_vector_v<InfoType>;
-    if constexpr (info_is_vector) {
-        using value_type = typename InfoType::value_type;
-        info.assign(head.info_num, value_type{});
-    }
-
     char buf[1024]{};
     const auto &[error_code, error_line] = init_info_txt(fp, buf, &head, parser);
     angband_fclose(fp);
@@ -124,13 +115,12 @@ static errr init_info(std::string_view filename, angband_header &head, InfoType 
         quit_fmt(_("'%s'ファイルにエラー", "Error in '%s' file."), filename.data());
     }
 
-    if constexpr (info_is_vector) {
+    if constexpr (is_vector_v<InfoType>) {
         info.shrink_to_fit();
     }
 
-    head.info_num = static_cast<uint16_t>(info.size());
     if (retouch) {
-        (*retouch)(&head);
+        retouch();
     }
 
     return 0;
@@ -148,7 +138,7 @@ static errr init_info(std::string_view filename, angband_header &head, InfoType 
  * even if the string happens to be empty (everyone has a unique '\0').
  */
 template <typename InfoType>
-static errr init_json(std::string_view filename, std::string_view keyname, angband_header &head, InfoType &info, JSONParser parser)
+static errr init_json(std::string_view filename, std::string_view keyname, angband_header &head, InfoType &, JSONParser parser)
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, filename);
     std::ifstream ifs(path);
@@ -161,11 +151,6 @@ static errr init_json(std::string_view filename, std::string_view keyname, angba
     std::istreambuf_iterator<char> ifs_end;
     auto json_object = nlohmann::json::parse(ifs_iter, ifs_end, nullptr, true, true);
 
-    constexpr auto info_is_vector = is_vector_v<InfoType>;
-    if constexpr (info_is_vector) {
-        using value_type = typename InfoType::value_type;
-        info.assign(head.info_num, value_type{});
-    }
     error_idx = -1;
 
     for (auto &element : json_object[keyname]) {
@@ -209,9 +194,9 @@ errr init_baseitems_info()
  */
 errr init_class_magics_info()
 {
-    init_header(&class_magics_header, PLAYER_CLASS_TYPE_MAX);
-    auto *parser = parse_class_magics_info;
-    return init_info("ClassMagicDefinitions.txt", class_magics_header, class_magics_info, parser);
+    init_header(&class_magics_header);
+    class_magics_info.assign(PLAYER_CLASS_TYPE_MAX, {});
+    return init_info("ClassMagicDefinitions.txt", class_magics_header, class_magics_info, parse_class_magics_info);
 }
 
 /*!
@@ -220,7 +205,8 @@ errr init_class_magics_info()
  */
 errr init_class_skills_info()
 {
-    init_header(&class_skills_header, PLAYER_CLASS_TYPE_MAX);
+    init_header(&class_skills_header);
+    class_skills_info.assign(PLAYER_CLASS_TYPE_MAX, {});
     return init_info("ClassSkillDefinitions.txt", class_skills_header, class_skills_info, parse_class_skills_info);
 }
 /*!

@@ -13,7 +13,7 @@
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_class_skills_info(std::string_view buf, angband_header *head)
+errr parse_class_skills_info(std::string_view buf, angband_header *)
 {
     static skill_table *s_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 5);
@@ -28,7 +28,7 @@ errr parse_class_skills_info(std::string_view buf, angband_header *head)
         if (i < error_idx) {
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
-        if (i >= head->info_num) {
+        if (i >= std::ssize(class_skills_info)) {
             return PARSE_ERROR_OUT_OF_BOUNDS;
         }
 
