@@ -78,6 +78,15 @@ ArtifactType &QuestType::get_reward() const
  * @brief 討伐対象モンスターを返す. いなければプレイヤー (無効値の意)
  * @return 討伐対象モンスター
  */
+MonsterRaceInfo &QuestType::get_bounty()
+{
+    return MonraceList::get_instance().get_monrace(this->r_idx);
+}
+
+/*!
+ * @brief 討伐対象モンスターを返す. いなければプレイヤー (無効値の意)
+ * @return 討伐対象モンスター
+ */
 const MonsterRaceInfo &QuestType::get_bounty() const
 {
     return MonraceList::get_instance().get_monrace(this->r_idx);
@@ -322,7 +331,7 @@ void quest_discovery(QuestId quest_id)
 {
     auto &quests = QuestList::get_instance();
     auto &quest = quests.get_quest(quest_id);
-    const auto &monrace = monraces_info[quest.r_idx];
+    const auto &monrace = quest.get_bounty();
     if (!inside_quest(quest_id)) {
         return;
     }
@@ -382,7 +391,7 @@ void leave_quest_check(PlayerType *player_ptr)
         quest.get_reward().gen_flags.reset(ItemGenerationTraitType::QUESTITEM);
         break;
     case QuestKindType::RANDOM:
-        monraces_info[quest.r_idx].misc_flags.reset(MonsterMiscType::QUESTOR);
+        quest.get_bounty().misc_flags.reset(MonsterMiscType::QUESTOR);
         FloorChangeModesStore::get_instace()->set(FloorChangeMode::NO_RETURN);
         break;
     default:

@@ -83,7 +83,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
             if (quest.status == QuestStatusType::TAKEN || quest.status == QuestStatusType::STAGE_COMPLETED) {
                 switch (quest.type) {
                 case QuestKindType::KILL_LEVEL: {
-                    const auto &monrace = monraces_info[quest.r_idx];
+                    const auto &monrace = quest.get_bounty();
                     if (quest.max_num > 1) {
 #ifdef JP
                         note = format(" - %d 体の%sを倒す。(あと %d 体)", (int)quest.max_num, monrace.name.data(), (int)(quest.max_num - quest.cur_num));
@@ -151,7 +151,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
             continue;
         }
 
-        const auto &monrace = monraces_info[quest.r_idx];
+        const auto &monrace = quest.get_bounty();
         if (quest.max_num <= 1) {
             constexpr auto mes = _("  %s (%d 階) - %sを倒す。\n", "  %s (Dungeon level: %d)\n  Kill %s.\n");
             rand_tmp_str = format(mes, quest.name.data(), (int)quest.level, monrace.name.data());
@@ -210,7 +210,7 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, Quest
         return true;
     }
 
-    auto name = str_separate(monraces_info[quest.r_idx].name, 35);
+    const auto name = str_separate(quest.get_bounty().name, 35);
     if (quest.complev == 0) {
         constexpr auto mes = _("  %-35s (%3d階)            -   不戦勝 - %s\n", "  %-35s (Dungeon level: %3d) - Unearned - %s\n");
         fprintf(fff, mes, name.front().data(), (int)quest.level, playtime_str.data());
@@ -286,7 +286,7 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
         if ((quest.type == QuestKindType::RANDOM) && (quest.status == QuestStatusType::TAKEN)) {
             total++;
             constexpr auto mes = _("  %s (%d階, %s)\n", "  %s (%d, %s)\n");
-            fprintf(fff, mes, quest.name.data(), (int)quest.level, monraces_info[quest.r_idx].name.data());
+            fprintf(fff, mes, quest.name.data(), (int)quest.level, quest.get_bounty().name.data());
         }
     }
 

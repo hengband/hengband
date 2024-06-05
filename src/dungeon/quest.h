@@ -125,6 +125,7 @@ public:
     static bool is_fixed(QuestId quest_idx);
     bool has_reward() const;
     ArtifactType &get_reward() const;
+    MonsterRaceInfo &get_bounty();
     const MonsterRaceInfo &get_bounty() const;
 };
 

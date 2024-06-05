@@ -116,8 +116,8 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
 
     disturb(player_ptr, true, true);
     const auto quest_id = floor.get_quest_id();
-    const auto &quests = QuestList::get_instance();
-    auto &monrace_questor = monraces_info[quests.get_quest(quest_id).r_idx];
+    auto &quests = QuestList::get_instance();
+    auto &monrace_questor = quests.get_quest(quest_id).get_bounty();
     if (inside_quest(quest_id)) {
         monrace_questor.misc_flags.set(MonsterMiscType::QUESTOR);
     }

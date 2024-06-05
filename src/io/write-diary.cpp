@@ -217,12 +217,12 @@ int exe_write_diary_quest(PlayerType *player_ptr, DiaryKind dk, QuestId quest_id
     }
     case DiaryKind::RAND_QUEST_C: {
         constexpr auto fmt = _(" %2d:%02d %20s ランダムクエスト(%s)を達成した。\n", " %2d:%02d %20s completed random quest '%s'\n");
-        fprintf(fff, fmt, hour, min, note_level.data(), monraces_info[quest.r_idx].name.data());
+        fprintf(fff, fmt, hour, min, note_level.data(), quest.get_bounty().name.data());
         break;
     }
     case DiaryKind::RAND_QUEST_F: {
         constexpr auto fmt = _(" %2d:%02d %20s ランダムクエスト(%s)から逃げ出した。\n", " %2d:%02d %20s ran away from quest '%s'.\n");
-        fprintf(fff, fmt, hour, min, note_level.data(), monraces_info[quest.r_idx].name.data());
+        fprintf(fff, fmt, hour, min, note_level.data(), quest.get_bounty().name.data());
         break;
     }
     case DiaryKind::TO_QUEST: {
