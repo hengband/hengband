@@ -577,7 +577,7 @@ void process_monsters(PlayerType *player_ptr)
 {
     const auto &tracker = LoreTracker::get_instance();
     const auto old_monrace_id = tracker.get_trackee();
-    old_race_flags flags(old_monrace_id);
+    OldRaceFlags flags(old_monrace_id);
     player_ptr->current_floor_ptr->monster_noise = false;
     sweep_monster_process(player_ptr);
     hack_m_idx = 0;
