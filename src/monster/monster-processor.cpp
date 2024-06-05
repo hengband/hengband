@@ -585,7 +585,7 @@ void process_monsters(PlayerType *player_ptr)
         return;
     }
 
-    flags.update_player_window(tracker.get_tracking_monrace());
+    flags.update_lore_window_flag(tracker.get_tracking_monrace());
 }
 
 /*!

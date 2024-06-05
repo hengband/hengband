@@ -58,7 +58,7 @@ public:
 
     byte old_r_cast_spell = 0;
 
-    void update_player_window(const MonsterRaceInfo &monrace) const;
+    void update_lore_window_flag(const MonsterRaceInfo &monrace) const;
 };
 
 struct coordinate_candidate {
