@@ -278,16 +278,15 @@ static void display_initial_options(PlayerType *player_ptr)
         adj[i] = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
     }
 
-    char buf[80];
     put_str("                                   ", 3, 40);
     put_str(_("修正の合計値", "Your total modification"), 3, 40);
     put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
     const auto stats = format("%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", adj[0], adj[1], adj[2], adj[3], adj[4], adj[5], expfact_mod);
-    c_put_str(TERM_L_BLUE, buf, 5, 40);
+    c_put_str(TERM_L_BLUE, stats, 5, 40);
 
     put_str("HD ", 6, 40);
     const auto hd = format("%2d", rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp);
-    c_put_str(TERM_L_BLUE, buf, 6, 43);
+    c_put_str(TERM_L_BLUE, hd, 6, 43);
 
     put_str(_("隠密", "Stealth"), 6, 47);
     std::string stealth;
@@ -296,11 +295,11 @@ static void display_initial_options(PlayerType *player_ptr)
     } else {
         stealth = format("%+2d", rp_ptr->r_stl + cp_ptr->c_stl + ap_ptr->a_stl);
     }
-    c_put_str(TERM_L_BLUE, buf, 6, _(52, 55));
+    c_put_str(TERM_L_BLUE, stealth, 6, _(52, 55));
 
     put_str(_("赤外線視力", "Infra"), 6, _(56, 59));
     const auto infra = format(_("%2dft", "%2dft"), 10 * rp_ptr->infra);
-    c_put_str(TERM_L_BLUE, buf, 6, _(67, 65));
+    c_put_str(TERM_L_BLUE, infra, 6, _(67, 65));
 
     clear_from(10);
     screen_save();
