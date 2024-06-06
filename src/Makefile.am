@@ -800,6 +800,7 @@ hengband_SOURCES = \
 	save/floor-writer.cpp save/floor-writer.h \
 	save/info-writer.cpp save/info-writer.h \
 	save/item-writer.cpp save/item-writer.h \
+	save/monster-entity-writer.cpp save/monster-entity-writer.h \
 	save/monster-writer.cpp save/monster-writer.h \
 	save/player-class-specific-data-writer.cpp save/player-class-specific-data-writer.h \
 	save/player-writer.cpp save/player-writer.h \
