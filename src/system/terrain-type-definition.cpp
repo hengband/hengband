@@ -75,14 +75,20 @@ const TerrainType &TerrainList::get_terrain(short terrain_id) const
     return this->terrains.at(terrain_id);
 }
 
-std::optional<short> TerrainList::find_terrain_id_by_tag(std::string_view tag) const
+/*!
+ * @brief 地形タグからIDを得る
+ * @param tag タグ文字列
+ * @throw std::runtime_error 未定義のタグが指定された
+ * @return 地形タグに対応するID
+ */
+short TerrainList::get_terrain_id_by_tag(std::string_view tag) const
 {
     const auto it = std::find_if(this->terrains.begin(), this->terrains.end(),
         [tag](const auto &terrain) {
             return terrain.tag == tag;
         });
     if (it == this->terrains.end()) {
-        return std::nullopt;
+        THROW_EXCEPTION(std::runtime_error, format(_("未定義のタグ '%s'。", "%s is undefined."), tag.data()));
     }
 
     return static_cast<short>(std::distance(this->terrains.begin(), it));

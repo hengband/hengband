@@ -171,12 +171,15 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     void (*init_note)(concptr) = (no_term ? init_note_no_term : init_note_term);
 
     init_note(_("[データの初期化中... (地形)]", "[Initializing arrays... (features)]"));
-    if (init_terrains_info()) {
-        quit(_("地形初期化不能", "Cannot initialize features"));
-    }
 
-    if (init_feat_variables()) {
-        quit(_("地形初期化不能", "Cannot initialize features"));
+    try {
+        if (init_terrains_info()) {
+            quit(_("地形初期化不能", "Cannot initialize features"));
+        }
+
+        init_feat_variables();
+    } catch (const std::exception &e) {
+        quit_fmt("地形初期化不能: %s", e.what());
     }
 
     init_note(_("[データの初期化中... (アイテム)]", "[Initializing arrays... (objects)]"));
