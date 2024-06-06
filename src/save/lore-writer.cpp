@@ -1,4 +1,4 @@
-#include "save/monster-writer.h"
+#include "save/lore-writer.h"
 #include "load/old/monster-flag-types-savefile50.h"
 #include "save/save-util.h"
 #include "system/monster-race-info.h"
