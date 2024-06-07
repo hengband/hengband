@@ -13,7 +13,6 @@
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-armor.h"
-#include "object-hook/hook-quest.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-info.h"
 #include "object/object-stack.h"
@@ -156,7 +155,7 @@ bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const au
             return false;
         }
 
-        if (!o_ptr->is_known() && object_is_quest_target(player_ptr->current_floor_ptr->quest_number, o_ptr)) {
+        if (!o_ptr->is_known() && o_ptr->is_target_of(player_ptr->current_floor_ptr->quest_number)) {
             return false;
         }
     }
@@ -288,7 +287,7 @@ bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const au
         return false;
     }
 
-    if (entry.has(FLG_WANTED) && !object_is_bounty(o_ptr)) {
+    if (entry.has(FLG_WANTED) && !o_ptr->is_bounty()) {
         return false;
     }
 

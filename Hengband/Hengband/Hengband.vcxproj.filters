@@ -1289,9 +1289,6 @@
     <ClCompile Include="..\..\src\object-hook\hook-magic.cpp">
       <Filter>object-hook</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-hook\hook-quest.cpp">
-      <Filter>object-hook</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mind\mind-weaponsmith.cpp">
       <Filter>mind</Filter>
     </ClCompile>
@@ -4011,9 +4008,6 @@
       <Filter>object-hook</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-hook\hook-magic.h">
-      <Filter>object-hook</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object-hook\hook-quest.h">
       <Filter>object-hook</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind\mind-weaponsmith.h">

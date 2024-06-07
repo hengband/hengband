@@ -645,7 +645,6 @@ hengband_SOURCES = \
 	object-hook/hook-expendable.cpp object-hook/hook-expendable.h \
 	object-hook/hook-magic.cpp object-hook/hook-magic.h \
 	object-hook/hook-perception.cpp object-hook/hook-perception.h \
-	object-hook/hook-quest.cpp object-hook/hook-quest.h \
 	object-hook/hook-weapon.cpp object-hook/hook-weapon.h \
 	\
 	object-use/item-use-checker.cpp object-use/item-use-checker.h \

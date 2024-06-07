@@ -21,7 +21,8 @@
 
 enum class FixedArtifactId : short;
 enum class ItemKindType : short;
-enum class SmithEffectType : int16_t;
+enum class SmithEffectType : short;
+enum class QuestId : short;
 enum class RandomArtifactBias : int;
 enum class RandomArtActType : short;
 
@@ -148,7 +149,8 @@ public:
     std::vector<ActivationType>::const_iterator find_activation_info() const;
     bool has_activation() const;
     bool has_bias() const;
-
+    bool is_bounty() const;
+    bool is_target_of(QuestId quest_id) const;
     BaseitemInfo &get_baseitem() const;
     EgoItemDefinition &get_ego() const;
     ArtifactType &get_fixed_artifact() const;

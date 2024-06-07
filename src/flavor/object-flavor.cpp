@@ -26,7 +26,6 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trg-types.h"
-#include "object-hook/hook-quest.h"
 #include "object/object-info.h"
 #include "perception/object-perception.h"
 #include "player-info/class-info.h"

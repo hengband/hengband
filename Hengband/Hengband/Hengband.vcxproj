@@ -524,7 +524,6 @@
     <ClCompile Include="..\..\src\object-hook\hook-expendable.cpp" />
     <ClCompile Include="..\..\src\object-hook\hook-magic.cpp" />
     <ClCompile Include="..\..\src\object-hook\hook-perception.cpp" />
-    <ClCompile Include="..\..\src\object-hook\hook-quest.cpp" />
     <ClCompile Include="..\..\src\object-hook\hook-weapon.cpp" />
     <ClCompile Include="..\..\src\object-hook\hook-armor.cpp" />
     <ClCompile Include="..\..\src\object-use\quaff\quaff-execution.cpp" />
@@ -1331,7 +1330,6 @@
     <ClInclude Include="..\..\src\object-hook\hook-expendable.h" />
     <ClInclude Include="..\..\src\object-hook\hook-magic.h" />
     <ClInclude Include="..\..\src\object-hook\hook-perception.h" />
-    <ClInclude Include="..\..\src\object-hook\hook-quest.h" />
     <ClInclude Include="..\..\src\object-hook\hook-weapon.h" />
     <ClInclude Include="..\..\src\object-use\quaff\quaff-execution.h" />
     <ClInclude Include="..\..\src\player\attack-defense-types.h" />
