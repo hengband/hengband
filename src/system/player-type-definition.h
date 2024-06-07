@@ -209,8 +209,6 @@ public:
     int16_t pet_follow_distance{}; /* Length of the imaginary "leash" for pets */
     BIT_FLAGS16 pet_extra_flags{}; /* Various flags for controling pets */
 
-    bool knows_daily_bounty{}; //!< 日替わり賞金首を知っているか否か
-
     bool dtrap{}; /* Whether you are on trap-safe grids */
     FLOOR_IDX floor_id{}; /* Current floor location */
 

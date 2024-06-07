@@ -214,7 +214,7 @@ bool exchange_cash(PlayerType *player_ptr)
  * @brief 本日の賞金首情報を表示する。
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void today_target(PlayerType *player_ptr)
+void today_target()
 {
     const auto &monrace = w_ptr->get_today_bounty();
     clear_bldg(4, 18);
@@ -222,7 +222,7 @@ void today_target(PlayerType *player_ptr)
     c_put_str(TERM_YELLOW, format(_("ターゲット： %s", "target: %s"), monrace.name.data()), 6, 10);
     prt(format(_("死体 ---- $%d", "corpse   ---- $%d"), monrace.level * 50 + 100), 8, 10);
     prt(format(_("骨   ---- $%d", "skeleton ---- $%d"), monrace.level * 30 + 60), 9, 10);
-    player_ptr->knows_daily_bounty = true;
+    w_ptr->knows_daily_bounty = true;
 }
 
 /*!
@@ -319,7 +319,7 @@ void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
         break;
     }
 
-    player_ptr->knows_daily_bounty = false;
+    w_ptr->knows_daily_bounty = false;
 }
 
 /*!

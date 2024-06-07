@@ -1,11 +1,9 @@
 #pragma once
 
-#include "system/angband.h"
-
-enum class MonsterRaceId : int16_t;
+enum class MonsterRaceId : short;
 class PlayerType;
 bool exchange_cash(PlayerType *player_ptr);
-void today_target(PlayerType *player_ptr);
+void today_target();
 void tsuchinoko();
 void show_bounty();
 void determine_daily_bounty(PlayerType *player_ptr, bool conv_old);

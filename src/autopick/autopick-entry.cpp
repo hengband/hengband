@@ -428,7 +428,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, co
         }
     }
 
-    if (object_is_bounty(player_ptr, o_ptr)) {
+    if (object_is_bounty(o_ptr)) {
         entry->remove(FLG_WORTHLESS);
         entry->add(FLG_WANTED);
     }

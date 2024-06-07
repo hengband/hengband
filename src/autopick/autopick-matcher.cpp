@@ -288,7 +288,7 @@ bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const au
         return false;
     }
 
-    if (entry.has(FLG_WANTED) && !object_is_bounty(player_ptr, o_ptr)) {
+    if (entry.has(FLG_WANTED) && !object_is_bounty(o_ptr)) {
         return false;
     }
 

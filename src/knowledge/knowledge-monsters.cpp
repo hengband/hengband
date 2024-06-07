@@ -46,7 +46,7 @@
  * @param mode 思い出の扱いに関するモード
  * @return 作成したモンスターのIDリスト
  */
-static std::vector<MonsterRaceId> collect_monsters(PlayerType *player_ptr, IDX grp_cur, monster_lore_mode mode)
+static std::vector<MonsterRaceId> collect_monsters(short grp_cur, monster_lore_mode mode)
 {
     const auto &group_char = MONRACE_CHARACTERS_GROUP[grp_cur];
     const auto grp_unique = (MONRACE_CHARACTERS_GROUP[grp_cur] == "Uniques");
@@ -70,7 +70,7 @@ static std::vector<MonsterRaceId> collect_monsters(PlayerType *player_ptr, IDX g
                 continue;
             }
         } else if (grp_wanted) {
-            auto wanted = player_ptr->knows_daily_bounty && (w_ptr->today_mon == monrace_id);
+            auto wanted = w_ptr->knows_daily_bounty && (w_ptr->today_mon == monrace_id);
             wanted |= monrace.is_bounty(false);
             if (!wanted) {
                 continue;
@@ -293,7 +293,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
         mode = visual_only ? MONSTER_LORE_DEBUG : MONSTER_LORE_NORMAL;
         const auto size = static_cast<short>(MONSTER_KINDS_GROUP.size());
         for (short i = 0; i < size; i++) {
-            if ((MONRACE_CHARACTERS_GROUP[i] == "Uniques") || !collect_monsters(player_ptr, i, mode).empty()) {
+            if ((MONRACE_CHARACTERS_GROUP[i] == "Uniques") || !collect_monsters(i, mode).empty()) {
                 grp_idx.push_back(i);
             }
         }
@@ -356,7 +356,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
             display_group_list(max, browser_rows, grp_idx, MONSTER_KINDS_GROUP, grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
-                monrace_ids = collect_monsters(player_ptr, grp_idx[grp_cur], mode);
+                monrace_ids = collect_monsters(grp_idx[grp_cur], mode);
             }
 
             while (mon_cur < mon_top) {
@@ -448,7 +448,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
  * List wanted monsters
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_knowledge_bounty(PlayerType *player_ptr)
+void do_cmd_knowledge_bounty(std::string_view player_name)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
@@ -457,7 +457,7 @@ void do_cmd_knowledge_bounty(PlayerType *player_ptr)
     }
 
     fprintf(fff, _("今日のターゲット : %s\n", "Today's target : %s\n"),
-        player_ptr->knows_daily_bounty ? w_ptr->get_today_bounty().name.data() : _("不明", "unknown"));
+        w_ptr->knows_daily_bounty ? w_ptr->get_today_bounty().name.data() : _("不明", "unknown"));
     fprintf(fff, "\n");
     fprintf(fff, _("賞金首リスト\n", "List of wanted monsters\n"));
     fprintf(fff, "----------------------------------------------\n");
@@ -475,6 +475,6 @@ void do_cmd_knowledge_bounty(PlayerType *player_ptr)
     }
 
     angband_fclose(fff);
-    FileDisplayer(player_ptr->name).display(true, file_name, 0, 0, _("賞金首の一覧", "Wanted monsters"));
+    FileDisplayer(player_name).display(true, file_name, 0, 0, _("賞金首の一覧", "Wanted monsters"));
     fd_kill(file_name);
 }

@@ -30,7 +30,8 @@ public:
 
     MONSTER_IDX timewalk_m_idx{}; /*!< 現在時間停止を行っているモンスターのID */
 
-    bounty_type bounties[MAX_BOUNTY]{};
+    bounty_type bounties[MAX_BOUNTY]{}; //!< 賞金首ユニーク
+    bool knows_daily_bounty{}; //!< 日替わり賞金首を知っているか否か
     MonsterRaceId today_mon{}; //!< 実際の日替わり賞金首
 
     uint32_t play_time{}; /*!< 実プレイ時間 */

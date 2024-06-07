@@ -1,16 +1,11 @@
 #include "object-hook/hook-quest.h"
 #include "artifact/fixed-art-types.h"
-#include "cmd-building/cmd-building.h"
 #include "dungeon/quest.h"
 #include "game-option/birth-options.h"
 #include "monster-race/race-indice-types.h"
-#include "object-enchant/trg-types.h"
 #include "system/artifact-type-definition.h"
-#include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
-#include "system/player-type-definition.h"
-#include "util/enum-converter.h"
 #include "world/world.h"
 
 /*!
@@ -18,7 +13,7 @@
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return オブジェクトが報酬対象になるならTRUEを返す
  */
-bool object_is_bounty(PlayerType *player_ptr, const ItemEntity *o_ptr)
+bool object_is_bounty(const ItemEntity *o_ptr)
 {
     if (o_ptr->bi_key.tval() != ItemKindType::CORPSE) {
         return false;
@@ -29,7 +24,7 @@ bool object_is_bounty(PlayerType *player_ptr, const ItemEntity *o_ptr)
     }
 
     const auto &monrace = o_ptr->get_monrace();
-    if (player_ptr->knows_daily_bounty && (monrace.name == w_ptr->get_today_bounty().name)) {
+    if (w_ptr->knows_daily_bounty && (monrace.name == w_ptr->get_today_bounty().name)) {
         return true;
     }
 

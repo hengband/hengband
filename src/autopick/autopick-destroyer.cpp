@@ -97,7 +97,7 @@ static bool is_opt_confirm_destroy(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     if (leave_wanted) {
-        if (object_is_bounty(player_ptr, o_ptr)) {
+        if (object_is_bounty(o_ptr)) {
             return false;
         }
     }
