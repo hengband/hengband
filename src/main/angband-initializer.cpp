@@ -171,63 +171,36 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     void (*init_note)(concptr) = (no_term ? init_note_no_term : init_note_term);
 
     init_note(_("[データの初期化中... (地形)]", "[Initializing arrays... (features)]"));
-
     try {
-        if (init_terrains_info()) {
-            quit(_("地形初期化不能", "Cannot initialize features"));
-        }
-
+        init_terrains_info();
         init_feat_variables();
     } catch (const std::exception &e) {
         quit_fmt("地形初期化不能: %s", e.what());
     }
 
     init_note(_("[データの初期化中... (アイテム)]", "[Initializing arrays... (objects)]"));
-    if (init_baseitems_info()) {
-        quit(_("アイテム初期化不能", "Cannot initialize objects"));
-    }
+    init_baseitems_info();
 
     init_note(_("[データの初期化中... (伝説のアイテム)]", "[Initializing arrays... (artifacts)]"));
-    if (init_artifacts_info()) {
-        quit(_("伝説のアイテム初期化不能", "Cannot initialize artifacts"));
-    }
+    init_artifacts_info();
 
     init_note(_("[データの初期化中... (名のあるアイテム)]", "[Initializing arrays... (ego-items)]"));
-    if (init_egos_info()) {
-        quit(_("名のあるアイテム初期化不能", "Cannot initialize ego-items"));
-    }
+    init_egos_info();
 
     init_note(_("[データの初期化中... (モンスター)]", "[Initializing arrays... (monsters)]"));
-    if (init_monrace_definitions()) {
-        quit(_("モンスター初期化不能", "Cannot initialize monsters"));
-    }
+    init_monrace_definitions();
 
     init_note(_("[データの初期化中... (ダンジョン)]", "[Initializing arrays... (dungeon)]"));
-    if (init_dungeons_info()) {
-        quit(_("ダンジョン初期化不能", "Cannot initialize dungeon"));
-    }
-
-    for (auto &dungeon : dungeons_info) {
-        if (dungeon.is_dungeon() && dungeon.has_guardian()) {
-            auto &monrace = dungeon.get_guardian();
-            monrace.misc_flags.set(MonsterMiscType::GUARDIAN);
-        }
-    }
+    init_dungeons_info();
 
     init_note(_("[データの初期化中... (魔法)]", "[Initializing arrays... (magic)]"));
-    if (init_class_magics_info()) {
-        quit(_("魔法初期化不能", "Cannot initialize magic"));
-    }
+    init_class_magics_info();
 
     init_note(_("[データの初期化中... (熟練度)]", "[Initializing arrays... (skill)]"));
-    if (init_class_skills_info()) {
-        quit(_("熟練度初期化不能", "Cannot initialize skill"));
-    }
+    init_class_skills_info();
 
     init_note(_("[配列を初期化しています... (荒野)]", "[Initializing arrays... (wilderness)]"));
-    if (!init_wilderness()) {
-        quit(_("荒野を初期化できません", "Cannot initialize wilderness"));
-    }
+    init_wilderness();
 
     init_note(_("[配列を初期化しています... (街)]", "[Initializing arrays... (towns)]"));
     init_towns();
@@ -237,18 +210,22 @@ void init_angband(PlayerType *player_ptr, bool no_term)
 
     init_note(_("[配列を初期化しています... (クエスト)]", "[Initializing arrays... (quests)]"));
     QuestList::get_instance().initialize();
-    if (init_vaults_info()) {
-        quit(_("vault 初期化不能", "Cannot initialize vaults"));
-    }
+
+    init_note(_("[データの初期化中... (宝物庫)]", "[Initializing arrays... (vaults)]"));
+    init_vaults_info();
 
     init_note(_("[データの初期化中... (その他)]", "[Initializing arrays... (other)]"));
     init_other(player_ptr);
+
     init_note(_("[データの初期化中... (モンスターアロケーション)]", "[Initializing arrays... (monsters alloc)]"));
     init_monsters_alloc();
+
     init_note(_("[データの初期化中... (アイテムアロケーション)]", "[Initializing arrays... (items alloc)]"));
     init_items_alloc();
+
     init_note(_("[ユーザー設定ファイルを初期化しています...]", "[Initializing user pref files...]"));
     process_pref_file(player_ptr, "pref.prf");
     process_pref_file(player_ptr, std::string("pref-").append(ANGBAND_SYS).append(".prf"));
+
     init_note(_("[初期化終了]", "[Initialization complete]"));
 }

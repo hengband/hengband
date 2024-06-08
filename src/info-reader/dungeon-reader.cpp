@@ -7,6 +7,7 @@
 #include "io/tokenizer.h"
 #include "main/angband-headers.h"
 #include "system/dungeon-info.h"
+#include "system/monster-race-info.h"
 #include "system/terrain-type-definition.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -342,4 +343,17 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
     }
 
     return 0;
+}
+
+/*!
+ * @brief ダンジョン情報の読み込みが終わった後の設定を行う
+ */
+void retouch_dungeons_info()
+{
+    for (auto &dungeon : dungeons_info) {
+        if (dungeon.is_dungeon() && dungeon.has_guardian()) {
+            auto &monrace = dungeon.get_guardian();
+            monrace.misc_flags.set(MonsterMiscType::GUARDIAN);
+        }
+    }
 }
