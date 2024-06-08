@@ -125,15 +125,12 @@ public:
     static bool is_fixed(QuestId quest_idx);
     bool has_reward() const;
     ArtifactType &get_reward() const;
+    MonsterRaceInfo &get_bounty();
     const MonsterRaceInfo &get_bounty() const;
 };
 
 class QuestList final {
 public:
-    using iterator = std::map<QuestId, QuestType>::iterator;
-    using reverse_iterator = std::map<QuestId, QuestType>::reverse_iterator;
-    using const_iterator = std::map<QuestId, QuestType>::const_iterator;
-    using const_reverse_iterator = std::map<QuestId, QuestType>::const_reverse_iterator;
     QuestList(const QuestList &) = delete;
     QuestList(QuestList &&) = delete;
     QuestList &operator=(const QuestList &) = delete;
@@ -143,16 +140,16 @@ public:
     void initialize();
     QuestType &get_quest(QuestId id);
     const QuestType &get_quest(QuestId id) const;
-    iterator begin();
-    const_iterator begin() const;
-    iterator end();
-    const_iterator end() const;
-    reverse_iterator rbegin();
-    const_reverse_iterator rbegin() const;
-    reverse_iterator rend();
-    const_reverse_iterator rend() const;
-    iterator find(QuestId id);
-    const_iterator find(QuestId id) const;
+    std::map<QuestId, QuestType>::iterator begin();
+    std::map<QuestId, QuestType>::const_iterator begin() const;
+    std::map<QuestId, QuestType>::iterator end();
+    std::map<QuestId, QuestType>::const_iterator end() const;
+    std::map<QuestId, QuestType>::reverse_iterator rbegin();
+    std::map<QuestId, QuestType>::const_reverse_iterator rbegin() const;
+    std::map<QuestId, QuestType>::reverse_iterator rend();
+    std::map<QuestId, QuestType>::const_reverse_iterator rend() const;
+    std::map<QuestId, QuestType>::iterator find(QuestId id);
+    std::map<QuestId, QuestType>::const_iterator find(QuestId id) const;
     size_t size() const;
     std::vector<QuestId> get_sorted_quest_ids() const;
 

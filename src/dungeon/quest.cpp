@@ -78,6 +78,15 @@ ArtifactType &QuestType::get_reward() const
  * @brief 討伐対象モンスターを返す. いなければプレイヤー (無効値の意)
  * @return 討伐対象モンスター
  */
+MonsterRaceInfo &QuestType::get_bounty()
+{
+    return MonraceList::get_instance().get_monrace(this->r_idx);
+}
+
+/*!
+ * @brief 討伐対象モンスターを返す. いなければプレイヤー (無効値の意)
+ * @return 討伐対象モンスター
+ */
 const MonsterRaceInfo &QuestType::get_bounty() const
 {
     return MonraceList::get_instance().get_monrace(this->r_idx);
@@ -123,52 +132,52 @@ const QuestType &QuestList::get_quest(QuestId id) const
     return this->quests.at(id);
 }
 
-QuestList::iterator QuestList::begin()
+std::map<QuestId, QuestType>::iterator QuestList::begin()
 {
     return this->quests.begin();
 }
 
-QuestList::const_iterator QuestList::begin() const
+std::map<QuestId, QuestType>::const_iterator QuestList::begin() const
 {
     return this->quests.cbegin();
 }
 
-QuestList::iterator QuestList::end()
+std::map<QuestId, QuestType>::iterator QuestList::end()
 {
     return this->quests.end();
 }
 
-QuestList::const_iterator QuestList::end() const
+std::map<QuestId, QuestType>::const_iterator QuestList::end() const
 {
     return this->quests.cend();
 }
 
-QuestList::reverse_iterator QuestList::rbegin()
+std::map<QuestId, QuestType>::reverse_iterator QuestList::rbegin()
 {
     return this->quests.rbegin();
 }
 
-QuestList::const_reverse_iterator QuestList::rbegin() const
+std::map<QuestId, QuestType>::const_reverse_iterator QuestList::rbegin() const
 {
     return this->quests.crbegin();
 }
 
-QuestList::reverse_iterator QuestList::rend()
+std::map<QuestId, QuestType>::reverse_iterator QuestList::rend()
 {
     return this->quests.rend();
 }
 
-QuestList::const_reverse_iterator QuestList::rend() const
+std::map<QuestId, QuestType>::const_reverse_iterator QuestList::rend() const
 {
     return this->quests.crend();
 }
 
-QuestList::iterator QuestList::find(QuestId id)
+std::map<QuestId, QuestType>::iterator QuestList::find(QuestId id)
 {
     return this->quests.find(id);
 }
 
-QuestList::const_iterator QuestList::find(QuestId id) const
+std::map<QuestId, QuestType>::const_iterator QuestList::find(QuestId id) const
 {
     return this->quests.find(id);
 }
@@ -322,7 +331,7 @@ void quest_discovery(QuestId quest_id)
 {
     auto &quests = QuestList::get_instance();
     auto &quest = quests.get_quest(quest_id);
-    const auto &monrace = monraces_info[quest.r_idx];
+    const auto &monrace = quest.get_bounty();
     if (!inside_quest(quest_id)) {
         return;
     }
@@ -382,7 +391,7 @@ void leave_quest_check(PlayerType *player_ptr)
         quest.get_reward().gen_flags.reset(ItemGenerationTraitType::QUESTITEM);
         break;
     case QuestKindType::RANDOM:
-        monraces_info[quest.r_idx].misc_flags.reset(MonsterMiscType::QUESTOR);
+        quest.get_bounty().misc_flags.reset(MonsterMiscType::QUESTOR);
         FloorChangeModesStore::get_instace()->set(FloorChangeMode::NO_RETURN);
         break;
     default:
