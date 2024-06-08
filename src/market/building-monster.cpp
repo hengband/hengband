@@ -146,15 +146,12 @@ bool research_mon(PlayerType *player_ptr)
         term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ' 'で続行, ESC]", " [(r)ecall, ESC, space to continue]"));
         while (true) {
             if (recall) {
-                if (monraces.probe_lore(monrace_id)) {
-                    const auto &monrace = monraces.get_monrace(monrace_id);
-#ifdef JP
-                    msg_format("%sについてさらに詳しくなった気がする。", monrace.name.data());
-#else
-                    const auto nm = pluralize(monrace.name);
-                    msg_format("You now know more about %s.", nm.data());
-#endif
+                const auto mes = monraces.probe_lore(monrace_id);
+                if (mes) {
+                    msg_print(*mes);
+                    msg_print(nullptr);
                 }
+
                 tracker.set_trackee(monrace_id);
                 handle_stuff(player_ptr);
                 screen_roff(player_ptr, monrace_id, MONSTER_LORE_RESEARCH);

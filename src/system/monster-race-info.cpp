@@ -7,6 +7,9 @@
 #include "util/probability-table.h"
 #include "world/world.h"
 #include <algorithm>
+#ifndef JP
+#include "locale/english.h"
+#endif
 
 namespace {
 template <class T>
@@ -241,7 +244,7 @@ std::string MonsterRaceInfo::build_eldritch_horror_message(std::string_view desc
     return format(fmt, horror_message.data(), description.data());
 }
 
-bool MonsterRaceInfo::probe_lore()
+std::optional<std::string> MonsterRaceInfo::probe_lore()
 {
     auto n = false;
     if (this->r_wake != MAX_UCHAR) {
@@ -313,7 +316,16 @@ bool MonsterRaceInfo::probe_lore()
     }
 
     this->r_can_evolve = true;
-    return n;
+    if (n == 0) {
+        return std::nullopt;
+    }
+
+#ifdef JP
+    return format("%sについてさらに詳しくなった気がする。", this->name.data());
+#else
+    const auto nm = pluralize(this->name);
+    return format("You now know more about %s.", nm.data());
+#endif
 }
 
 /*!
@@ -688,7 +700,7 @@ void MonraceList::reset_all_visuals()
     }
 }
 
-bool MonraceList::probe_lore(MonsterRaceId monrace_id)
+std::optional<std::string> MonraceList::probe_lore(MonsterRaceId monrace_id)
 {
     if (LoreTracker::get_instance().is_tracking(monrace_id)) {
         RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);

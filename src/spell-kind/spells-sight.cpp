@@ -470,13 +470,9 @@ bool probing(PlayerType *player_ptr)
         move_cursor_relative(monster.fy, monster.fx);
         inkey();
         term_erase(0, 0);
-        if (monrace.probe_lore()) {
-#ifdef JP
-            msg_format("%sについてさらに詳しくなった気がする。", monrace.name.data());
-#else
-            const auto nm = pluralize(monrace.name);
-            msg_format("You now know more about %s.", nm.data());
-#endif
+        const auto mes = monrace.probe_lore();
+        if (mes) {
+            msg_print(*mes);
             msg_print(nullptr);
             if (LoreTracker::get_instance().is_tracking(monster.r_idx)) {
                 RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
