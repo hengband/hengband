@@ -1,4 +1,4 @@
-%define version 3.0.1.13
+%define version 3.0.1.14
 %define release 1
 
 Summary: hengband %{version}
@@ -151,6 +151,9 @@ exit 0
 %license lib/help/jlicense.txt
 
 %changelog
+* Wed Jun 05 2024 whitehara <white@vx-xv.com>
+- hengband RPM 3.0.1.14(Beta)
+
 * Sun Jun 02 2024 whitehara <white@vx-xv.com>
 - Add new .jsonc to data
 - hengband RPM 3.0.1.13(Beta)
