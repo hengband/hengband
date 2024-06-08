@@ -469,7 +469,7 @@ bool probing(PlayerType *player_ptr)
         move_cursor_relative(monster.fy, monster.fx);
         inkey();
         term_erase(0, 0);
-        if (lore_do_probe(player_ptr, monster.r_idx)) {
+        if (lore_do_probe(monster.r_idx)) {
 #ifdef JP
             msg_format("%sについてさらに詳しくなった気がする。", monrace.name.data());
 #else

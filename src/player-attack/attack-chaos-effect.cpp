@@ -162,7 +162,7 @@ static void attack_probe(PlayerType *player_ptr, player_attack_type *pa_ptr)
     msg_print(nullptr);
     msg_print(probed_monster_info(player_ptr, pa_ptr->m_ptr, pa_ptr->r_ptr));
     msg_print(nullptr);
-    (void)lore_do_probe(player_ptr, pa_ptr->r_idx);
+    (void)lore_do_probe(pa_ptr->r_idx);
 }
 
 /*!

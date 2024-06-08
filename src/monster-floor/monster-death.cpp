@@ -309,7 +309,7 @@ static void drop_items_golds(PlayerType *player_ptr, MonsterDeath *md_ptr, int d
     auto visible = md_ptr->m_ptr->ml && !player_ptr->effects()->hallucination().is_hallucinated();
     visible |= (md_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE));
     if (visible && (dump_item || dump_gold)) {
-        lore_treasure(player_ptr, md_ptr->m_idx, dump_item, dump_gold);
+        lore_treasure(*md_ptr->m_ptr, dump_item, dump_gold);
     }
 }
 

@@ -145,7 +145,7 @@ bool research_mon(PlayerType *player_ptr)
         term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ' 'で続行, ESC]", " [(r)ecall, ESC, space to continue]"));
         while (true) {
             if (recall) {
-                lore_do_probe(player_ptr, monrace_id);
+                lore_do_probe(monrace_id);
                 tracker.set_trackee(monrace_id);
                 handle_stuff(player_ptr);
                 screen_roff(player_ptr, monrace_id, MONSTER_LORE_RESEARCH);
