@@ -200,9 +200,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     init_class_skills_info();
 
     init_note(_("[配列を初期化しています... (荒野)]", "[Initializing arrays... (wilderness)]"));
-    if (!init_wilderness()) {
-        quit(_("荒野を初期化できません", "Cannot initialize wilderness"));
-    }
+    init_wilderness();
 
     init_note(_("[配列を初期化しています... (街)]", "[Initializing arrays... (towns)]"));
     init_towns();

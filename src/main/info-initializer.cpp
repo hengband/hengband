@@ -281,15 +281,16 @@ static bool read_wilderness_definition(std::ifstream &ifs)
 
 /*!
  * @brief 荒野情報読み込み処理
- * @return 読み込みに成功したか
  */
-bool init_wilderness()
+void init_wilderness()
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, WILDERNESS_DEFINITION);
     std::ifstream ifs(path);
     if (!ifs) {
-        return false;
+        quit_fmt(_("'%s'ファイルをオープンできません。", "Cannot open '%s' file."), WILDERNESS_DEFINITION);
     }
 
-    return read_wilderness_definition(ifs);
+    if (!read_wilderness_definition(ifs)) {
+        quit(_("荒野を初期化できません", "Cannot initialize wilderness"));
+    }
 }
