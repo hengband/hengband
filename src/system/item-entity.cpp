@@ -25,6 +25,7 @@
 #include "system/baseitem-info.h"
 #include "system/monster-race-info.h"
 #include "term/term-color-types.h"
+#include "tracking/baseitem-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/string-processor.h"
@@ -897,8 +898,7 @@ bool ItemEntity::has_monrace() const
 /*!
  * @brief アイテムのpvalからモンスター種族を引いて返す
  * @return モンスター種族定義
- * @details 死体・骨・モンスターボール・人形・像が該当する.
- * pval がモンスター種族IDの意でない場合にこのメソッドを叩くと想定外のモンスター種族定義を引くことになるので注意.
+ * @details 死体/骨・モンスターボール・人形・像が該当する.
  */
 const MonsterRaceInfo &ItemEntity::get_monrace() const
 {
@@ -908,6 +908,11 @@ const MonsterRaceInfo &ItemEntity::get_monrace() const
 
     const auto monrace_id = i2enum<MonsterRaceId>(this->pval);
     return MonraceList::get_instance().get_monrace(monrace_id);
+}
+
+void ItemEntity::track_baseitem() const
+{
+    BaseitemTracker::get_instance().set_trackee(this->bi_id);
 }
 
 std::string ItemEntity::build_timeout_description(const ActivationType &act) const

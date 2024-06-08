@@ -157,6 +157,7 @@ public:
     std::string explain_activation() const;
     bool has_monrace() const;
     const MonsterRaceInfo &get_monrace() const;
+    void track_baseitem() const;
 
     void mark_as_known();
     void mark_as_tried() const;

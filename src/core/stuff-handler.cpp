@@ -3,6 +3,7 @@
 #include "player/player-status.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "tracking/baseitem-tracker.h"
 
 /*!
  * @brief 全更新処理をチェックして処理していく
@@ -21,15 +22,6 @@ void handle_stuff(PlayerType *player_ptr)
     if (rfu.any_sub()) {
         window_stuff(player_ptr);
     }
-}
-
-/*
- * Track the given object kind
- */
-void object_kind_track(PlayerType *player_ptr, short bi_id)
-{
-    player_ptr->tracking_bi_id = bi_id;
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
 }
 
 /*
