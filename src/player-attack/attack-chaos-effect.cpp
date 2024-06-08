@@ -162,7 +162,7 @@ static void attack_probe(PlayerType *player_ptr, player_attack_type *pa_ptr)
     msg_print(nullptr);
     msg_print(probed_monster_info(player_ptr, pa_ptr->m_ptr, pa_ptr->r_ptr));
     msg_print(nullptr);
-    if (lore_do_probe(pa_ptr->r_idx)) {
+    if (MonraceList::get_instance().probe_lore(pa_ptr->r_idx)) {
 #ifdef JP
         msg_format("%sについてさらに詳しくなった気がする。", pa_ptr->r_ptr->name.data());
 #else

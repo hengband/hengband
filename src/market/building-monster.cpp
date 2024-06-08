@@ -73,7 +73,7 @@ bool research_mon(PlayerType *player_ptr)
 
     prt(buf, 16, 10);
     std::vector<MonsterRaceId> monrace_ids;
-    const auto &monraces = MonraceList::get_instance();
+    auto &monraces = MonraceList::get_instance();
     for (const auto &[monrace_id, monrace] : monraces) {
         if (!monrace.is_valid()) {
             continue;
@@ -146,7 +146,7 @@ bool research_mon(PlayerType *player_ptr)
         term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ' 'で続行, ESC]", " [(r)ecall, ESC, space to continue]"));
         while (true) {
             if (recall) {
-                if (lore_do_probe(monrace_id)) {
+                if (monraces.probe_lore(monrace_id)) {
                     const auto &monrace = monraces.get_monrace(monrace_id);
 #ifdef JP
                     msg_format("%sについてさらに詳しくなった気がする。", monrace.name.data());

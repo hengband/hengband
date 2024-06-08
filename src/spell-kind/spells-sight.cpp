@@ -27,6 +27,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "term/screen-processor.h"
+#include "tracking/lore-tracker.h"
 #include "view/display-messages.h"
 
 /*!
@@ -469,7 +470,7 @@ bool probing(PlayerType *player_ptr)
         move_cursor_relative(monster.fy, monster.fx);
         inkey();
         term_erase(0, 0);
-        if (lore_do_probe(monster.r_idx)) {
+        if (monrace.probe_lore()) {
 #ifdef JP
             msg_format("%sについてさらに詳しくなった気がする。", monrace.name.data());
 #else
@@ -477,6 +478,9 @@ bool probing(PlayerType *player_ptr)
             msg_format("You now know more about %s.", nm.data());
 #endif
             msg_print(nullptr);
+            if (LoreTracker::get_instance().is_tracking(monster.r_idx)) {
+                RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
+            }
         }
 
         probe = true;

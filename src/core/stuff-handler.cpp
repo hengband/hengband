@@ -3,7 +3,6 @@
 #include "player/player-status.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "tracking/lore-tracker.h"
 
 /*!
  * @brief 全更新処理をチェックして処理していく

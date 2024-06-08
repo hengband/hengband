@@ -2,9 +2,21 @@
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-resistance-mask.h"
 #include "monster/horror-descriptions.h"
+#include "system/redrawing-flags-updater.h"
+#include "tracking/lore-tracker.h"
 #include "util/probability-table.h"
 #include "world/world.h"
 #include <algorithm>
+
+namespace {
+template <class T>
+static int count_lore_mflag_group(const EnumClassFlagGroup<T> &flags, const EnumClassFlagGroup<T> &r_flags)
+{
+    auto result_flags = flags;
+    auto num = result_flags.reset(r_flags).count();
+    return num;
+}
+}
 
 std::map<MonsterRaceId, MonsterRaceInfo> monraces_info;
 
@@ -222,11 +234,86 @@ int MonsterRaceInfo::calc_capture_value() const
  * @return 反応メッセージ
  * @details 実際に見るとは限らない (悪夢モードで宿に泊まった時など)
  */
-std::string MonsterRaceInfo::build_eldritch_horror_message(std::string_view description)
+std::string MonsterRaceInfo::build_eldritch_horror_message(std::string_view description) const
 {
     const auto &horror_message = this->decide_horror_message();
     constexpr auto fmt = _("%s%sの顔を見てしまった！", "You behold the %s visage of %s!");
     return format(fmt, horror_message.data(), description.data());
+}
+
+bool MonsterRaceInfo::probe_lore()
+{
+    auto n = false;
+    if (this->r_wake != MAX_UCHAR) {
+        n = true;
+    }
+
+    if (this->r_ignore != MAX_UCHAR) {
+        n = true;
+    }
+
+    this->r_wake = MAX_UCHAR;
+    this->r_ignore = MAX_UCHAR;
+    for (auto i = 0; i < 4; i++) {
+        const auto &blow = this->blows[i];
+        if ((blow.effect != RaceBlowEffectType::NONE) || (blow.method != RaceBlowMethodType::NONE)) {
+            if (this->r_blows[i] != MAX_UCHAR) {
+                n = true;
+            }
+
+            this->r_blows[i] = MAX_UCHAR;
+        }
+    }
+
+    using Mdt = MonsterDropType;
+    auto num_drops = (this->drop_flags.has(Mdt::DROP_4D2) ? 8 : 0);
+    num_drops += (this->drop_flags.has(Mdt::DROP_3D2) ? 6 : 0);
+    num_drops += (this->drop_flags.has(Mdt::DROP_2D2) ? 4 : 0);
+    num_drops += (this->drop_flags.has(Mdt::DROP_1D2) ? 2 : 0);
+    num_drops += (this->drop_flags.has(Mdt::DROP_90) ? 1 : 0);
+    num_drops += (this->drop_flags.has(Mdt::DROP_60) ? 1 : 0);
+    if (this->drop_flags.has_not(Mdt::ONLY_GOLD)) {
+        if (this->r_drop_item != num_drops) {
+            n = true;
+        }
+
+        this->r_drop_item = num_drops;
+    }
+
+    if (this->drop_flags.has_not(Mdt::ONLY_ITEM)) {
+        if (this->r_drop_gold != num_drops) {
+            n = true;
+        }
+
+        this->r_drop_gold = num_drops;
+    }
+
+    if (this->r_cast_spell != MAX_UCHAR) {
+        n = true;
+    }
+
+    this->r_cast_spell = MAX_UCHAR;
+    n |= count_lore_mflag_group(this->resistance_flags, this->r_resistance_flags) > 0;
+    n |= count_lore_mflag_group(this->ability_flags, this->r_ability_flags) > 0;
+    n |= count_lore_mflag_group(this->behavior_flags, this->r_behavior_flags) > 0;
+    n |= count_lore_mflag_group(this->drop_flags, this->r_drop_flags) > 0;
+    n |= count_lore_mflag_group(this->feature_flags, this->r_feature_flags) > 0;
+    n |= count_lore_mflag_group(this->special_flags, this->r_special_flags) > 0;
+    n |= count_lore_mflag_group(this->misc_flags, this->r_misc_flags) > 0;
+
+    this->r_resistance_flags = this->resistance_flags;
+    this->r_ability_flags = this->ability_flags;
+    this->r_behavior_flags = this->behavior_flags;
+    this->r_drop_flags = this->drop_flags;
+    this->r_feature_flags = this->feature_flags;
+    this->r_special_flags = this->special_flags;
+    this->r_misc_flags = this->misc_flags;
+    if (!this->r_can_evolve) {
+        n = true;
+    }
+
+    this->r_can_evolve = true;
+    return n;
 }
 
 /*!
@@ -599,4 +686,13 @@ void MonraceList::reset_all_visuals()
     for (auto &[_, monrace] : monraces_info) {
         monrace.symbol_config = monrace.symbol_definition;
     }
+}
+
+bool MonraceList::probe_lore(MonsterRaceId monrace_id)
+{
+    if (LoreTracker::get_instance().is_tracking(monrace_id)) {
+        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
+    }
+
+    return this->get_monrace(monrace_id).probe_lore();
 }
