@@ -37,7 +37,7 @@ const std::unordered_map<std::string_view, int> name_to_stat = {
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_class_magics_info(std::string_view buf, angband_header *head)
+errr parse_class_magics_info(std::string_view buf, angband_header *)
 {
     static player_magic *m_ptr = nullptr;
     static int realm, magic_idx = 0, readable = 0;
@@ -53,7 +53,7 @@ errr parse_class_magics_info(std::string_view buf, angband_header *head)
         if (i < error_idx) {
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
-        if (i >= head->info_num) {
+        if (i >= std::ssize(class_magics_info)) {
             return PARSE_ERROR_OUT_OF_BOUNDS;
         }
 

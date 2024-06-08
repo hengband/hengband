@@ -80,11 +80,6 @@ std::map<FixedArtifactId, ArtifactType>::const_reverse_iterator ArtifactList::re
     return this->artifacts.crend();
 }
 
-std::map<FixedArtifactId, ArtifactType> &ArtifactList::get_raw_map()
-{
-    return this->artifacts;
-}
-
 const ArtifactType &ArtifactList::get_artifact(const FixedArtifactId fa_id) const
 {
     if (fa_id == FixedArtifactId::NONE) {

@@ -47,39 +47,26 @@
 
 namespace {
 
-using Retoucher = void (*)(angband_header *);
+using Retoucher = void (*)();
 
-template <typename>
-struct is_vector : std::false_type {
-};
-
-template <typename T, typename Alloc>
-struct is_vector<std::vector<T, Alloc>> : std::true_type {
-};
-
-/*!
- * @brief 与えられた型 T が std::vector 型かどうか調べる
- * T の型が std::vector<SomeType> に一致する時、is_vector_v<T> == true
- * 一致しない時、is_vector_v<T> == false となる
- * @tparam T 調べる型
- */
+/// @note clang-formatによるconceptの整形が安定していないので抑制しておく
+// clang-format off
 template <typename T>
-constexpr bool is_vector_v = is_vector<T>::value;
-
+concept HasShrinkToFit = requires(T t) {
+    t.shrink_to_fit();
+};
+// clang-format on
 }
 
 /*!
  * @brief ヘッダ構造体の更新
  * Initialize the header of an *_info.raw file.
- * @param head rawファイルのヘッダ
- * @param num データ数
- * @param len データの長さ
+ * @param head ヘッダ構造体
  * @return エラーコード
  */
-static void init_header(angband_header *head, IDX num = 0)
+static void init_header(angband_header *head)
 {
     head->digest = {};
-    head->info_num = (IDX)num;
 }
 
 /*!
@@ -102,12 +89,6 @@ static errr init_info(std::string_view filename, angband_header &head, InfoType 
         quit_fmt(_("'%s'ファイルをオープンできません。", "Cannot open '%s' file."), filename.data());
     }
 
-    constexpr auto info_is_vector = is_vector_v<InfoType>;
-    if constexpr (info_is_vector) {
-        using value_type = typename InfoType::value_type;
-        info.assign(head.info_num, value_type{});
-    }
-
     char buf[1024]{};
     const auto &[error_code, error_line] = init_info_txt(fp, buf, &head, parser);
     angband_fclose(fp);
@@ -124,13 +105,12 @@ static errr init_info(std::string_view filename, angband_header &head, InfoType 
         quit_fmt(_("'%s'ファイルにエラー", "Error in '%s' file."), filename.data());
     }
 
-    if constexpr (info_is_vector) {
+    if constexpr (HasShrinkToFit<InfoType>) {
         info.shrink_to_fit();
     }
 
-    head.info_num = static_cast<uint16_t>(info.size());
     if (retouch) {
-        (*retouch)(&head);
+        retouch();
     }
 
     return 0;
@@ -161,11 +141,6 @@ static errr init_json(std::string_view filename, std::string_view keyname, angba
     std::istreambuf_iterator<char> ifs_end;
     auto json_object = nlohmann::json::parse(ifs_iter, ifs_end, nullptr, true, true);
 
-    constexpr auto info_is_vector = is_vector_v<InfoType>;
-    if constexpr (info_is_vector) {
-        using value_type = typename InfoType::value_type;
-        info.assign(head.info_num, value_type{});
-    }
     error_idx = -1;
 
     for (auto &element : json_object[keyname]) {
@@ -180,6 +155,10 @@ static errr init_json(std::string_view filename, std::string_view keyname, angba
     sha256.update(json_object.dump());
     head.digest = sha256.digest();
 
+    if constexpr (HasShrinkToFit<InfoType>) {
+        info.shrink_to_fit();
+    }
+
     return PARSE_ERROR_NONE;
 }
 
@@ -190,7 +169,7 @@ static errr init_json(std::string_view filename, std::string_view keyname, angba
 errr init_artifacts_info()
 {
     init_header(&artifacts_header);
-    return init_json("ArtifactDefinitions.jsonc", "artifacts", artifacts_header, ArtifactList::get_instance().get_raw_map(), parse_artifacts_info);
+    return init_json("ArtifactDefinitions.jsonc", "artifacts", artifacts_header, ArtifactList::get_instance(), parse_artifacts_info);
 }
 
 /*!
@@ -200,7 +179,7 @@ errr init_artifacts_info()
 errr init_baseitems_info()
 {
     init_header(&baseitems_header);
-    return init_json("BaseitemDefinitions.jsonc", "baseitems", baseitems_header, BaseitemList::get_instance().get_raw_vector(), parse_baseitems_info);
+    return init_json("BaseitemDefinitions.jsonc", "baseitems", baseitems_header, BaseitemList::get_instance(), parse_baseitems_info);
 }
 
 /*!
@@ -209,9 +188,9 @@ errr init_baseitems_info()
  */
 errr init_class_magics_info()
 {
-    init_header(&class_magics_header, PLAYER_CLASS_TYPE_MAX);
-    auto *parser = parse_class_magics_info;
-    return init_info("ClassMagicDefinitions.txt", class_magics_header, class_magics_info, parser);
+    init_header(&class_magics_header);
+    class_magics_info.assign(PLAYER_CLASS_TYPE_MAX, {});
+    return init_info("ClassMagicDefinitions.txt", class_magics_header, class_magics_info, parse_class_magics_info);
 }
 
 /*!
@@ -220,7 +199,8 @@ errr init_class_magics_info()
  */
 errr init_class_skills_info()
 {
-    init_header(&class_skills_header, PLAYER_CLASS_TYPE_MAX);
+    init_header(&class_skills_header);
+    class_skills_info.assign(PLAYER_CLASS_TYPE_MAX, {});
     return init_info("ClassSkillDefinitions.txt", class_skills_header, class_skills_info, parse_class_skills_info);
 }
 /*!
@@ -253,7 +233,7 @@ errr init_terrains_info()
     auto *parser = parse_terrains_info;
     auto *retoucher = retouch_terrains_info;
     auto &terrains = TerrainList::get_instance();
-    return init_info("TerrainDefinitions.txt", terrains_header, terrains.get_raw_vector(), parser, retoucher);
+    return init_info("TerrainDefinitions.txt", terrains_header, terrains, parser, retoucher);
 }
 
 /*!

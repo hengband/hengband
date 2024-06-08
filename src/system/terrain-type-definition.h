@@ -5,6 +5,8 @@
 #include "util/flag-group.h"
 #include "view/display-symbol.h"
 #include <map>
+#include <optional>
+#include <string_view>
 
 /* Number of feats we change to (Excluding default). Used in TerrainDefinitions.txt. */
 constexpr auto MAX_FEAT_STATES = 8;
@@ -68,9 +70,9 @@ public:
     TerrainList operator=(TerrainList &&) = delete;
 
     static TerrainList &get_instance();
-    std::vector<TerrainType> &get_raw_vector(); // @todo init_terrains_info() 専用、将来的に廃止する.
     TerrainType &get_terrain(short terrain_id);
     const TerrainType &get_terrain(short terrain_id) const;
+    short get_terrain_id_by_tag(std::string_view tag) const;
     std::vector<TerrainType>::iterator begin();
     std::vector<TerrainType>::const_iterator begin() const;
     std::vector<TerrainType>::reverse_iterator rbegin();
@@ -82,6 +84,7 @@ public:
     size_t size() const;
     bool empty() const;
     void resize(size_t new_size);
+    void shrink_to_fit();
 
 private:
     TerrainList() = default;

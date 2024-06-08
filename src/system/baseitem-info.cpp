@@ -722,11 +722,6 @@ const BaseitemInfo &BaseitemList::get_baseitem(const short bi_id) const
     return this->baseitems[bi_id];
 }
 
-std::vector<BaseitemInfo> &BaseitemList::get_raw_vector()
-{
-    return this->baseitems;
-}
-
 std::vector<BaseitemInfo>::iterator BaseitemList::begin()
 {
     return this->baseitems.begin();
@@ -780,6 +775,11 @@ bool BaseitemList::empty() const
 void BaseitemList::resize(size_t new_size)
 {
     this->baseitems.resize(new_size);
+}
+
+void BaseitemList::shrink_to_fit()
+{
+    this->baseitems.shrink_to_fit();
 }
 
 void BaseitemList::reset_all_visuals()
