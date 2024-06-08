@@ -3,6 +3,7 @@
 #include "player/player-status.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "tracking/lore-tracker.h"
 
 /*!
  * @brief 全更新処理をチェックして処理していく
@@ -28,7 +29,8 @@ void handle_stuff(PlayerType *player_ptr)
  */
 void monster_race_track(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
-    player_ptr->monster_race_idx = r_idx;
+    (void)player_ptr;
+    LoreTracker::get_instance().set_trackee(r_idx);
     RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
 }
 

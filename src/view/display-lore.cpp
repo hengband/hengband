@@ -20,6 +20,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
+#include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -94,9 +95,14 @@ void display_roff(PlayerType *player_ptr)
 
     term_gotoxy(0, 1);
     hook_c_roff = c_roff;
-    MonsterRaceId r_idx = player_ptr->monster_race_idx;
-    process_monster_lore(player_ptr, r_idx, MONSTER_LORE_NORMAL);
-    roff_top(r_idx);
+    const auto &tracker = LoreTracker::get_instance();
+    if (!tracker.is_tracking()) {
+        return;
+    }
+
+    const auto monrace_id = tracker.get_trackee();
+    process_monster_lore(player_ptr, monrace_id, MONSTER_LORE_NORMAL);
+    roff_top(monrace_id);
 }
 
 /*!

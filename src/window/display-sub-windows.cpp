@@ -35,6 +35,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
+#include "tracking/lore-tracker.h"
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "util/object-sort.h"
@@ -489,15 +490,15 @@ void fix_dungeon(PlayerType *player_ptr)
 }
 
 /*!
- * @brief モンスターの思い出をサブウィンドウに表示する /
- * Hack -- display dungeon view in sub-windows
+ * @brief モンスターの思い出をサブウィンドウに表示する
  * @param player_ptr プレイヤーへの参照ポインタ
  */
 void fix_monster(PlayerType *player_ptr)
 {
-    if (!MonraceList::is_valid(player_ptr->monster_race_idx)) {
+    if (!LoreTracker::get_instance().is_tracking()) {
         return;
     }
+
     display_sub_windows(SubWindowRedrawingFlag::MONSTER_LORE,
         [player_ptr] {
             display_roff(player_ptr);

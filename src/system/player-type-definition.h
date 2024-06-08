@@ -25,7 +25,6 @@ enum class Virtue : short;
 
 class FloorType;
 class ItemEntity;
-class MonsterRaceInfo;
 class TimedEffects;
 class PlayerType {
 public:
@@ -239,8 +238,6 @@ public:
 
     IDX health_who{}; /* Health bar trackee */
 
-    MonsterRaceId monster_race_idx{}; /* Monster race trackee */
-
     short tracking_bi_id{}; /* Object kind trackee */
 
     int16_t new_spells{}; /* Number of spells available */
@@ -406,7 +403,6 @@ public:
     bool is_located_at_running_destination() const;
     bool is_located_at(const Pos2D &pos) const;
     bool in_saved_floor() const;
-    const MonsterRaceInfo &get_tracking_monrace() const;
 
 private:
     std::shared_ptr<TimedEffects> timed_effects;

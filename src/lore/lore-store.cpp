@@ -12,6 +12,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "tracking/lore-tracker.h"
 
 template <class T>
 static int count_lore_mflag_group(const EnumClassFlagGroup<T> &flags, const EnumClassFlagGroup<T> &r_flags)
@@ -31,6 +32,7 @@ static int count_lore_mflag_group(const EnumClassFlagGroup<T> &flags, const Enum
  */
 int lore_do_probe(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
+    (void)player_ptr;
     int n = 0;
     auto *r_ptr = &monraces_info[r_idx];
     if (r_ptr->r_wake != MAX_UCHAR) {
@@ -95,9 +97,9 @@ int lore_do_probe(PlayerType *player_ptr, MonsterRaceId r_idx)
     if (!r_ptr->r_can_evolve) {
         n++;
     }
-    r_ptr->r_can_evolve = true;
 
-    if (player_ptr->monster_race_idx == r_idx) {
+    r_ptr->r_can_evolve = true;
+    if (LoreTracker::get_instance().is_tracking(r_idx)) {
         RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
     }
 
@@ -113,27 +115,29 @@ int lore_do_probe(PlayerType *player_ptr, MonsterRaceId r_idx)
  */
 void lore_treasure(PlayerType *player_ptr, MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-
-    if (!m_ptr->is_original_ap()) {
+    auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    auto &monrace = monster.get_monrace();
+    if (!monster.is_original_ap()) {
         return;
     }
 
-    if (num_item > r_ptr->r_drop_item) {
-        r_ptr->r_drop_item = num_item;
-    }
-    if (num_gold > r_ptr->r_drop_gold) {
-        r_ptr->r_drop_gold = num_gold;
+    if (num_item > monrace.r_drop_item) {
+        monrace.r_drop_item = num_item;
     }
 
-    if (r_ptr->drop_flags.has(MonsterDropType::DROP_GOOD)) {
-        r_ptr->r_drop_flags.set(MonsterDropType::DROP_GOOD);
+    if (num_gold > monrace.r_drop_gold) {
+        monrace.r_drop_gold = num_gold;
     }
-    if (r_ptr->drop_flags.has(MonsterDropType::DROP_GREAT)) {
-        r_ptr->r_drop_flags.set(MonsterDropType::DROP_GREAT);
+
+    if (monrace.drop_flags.has(MonsterDropType::DROP_GOOD)) {
+        monrace.r_drop_flags.set(MonsterDropType::DROP_GOOD);
     }
-    if (player_ptr->monster_race_idx == m_ptr->r_idx) {
+
+    if (monrace.drop_flags.has(MonsterDropType::DROP_GREAT)) {
+        monrace.r_drop_flags.set(MonsterDropType::DROP_GREAT);
+    }
+
+    if (LoreTracker::get_instance().is_tracking(monster.r_idx)) {
         RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
     }
 }

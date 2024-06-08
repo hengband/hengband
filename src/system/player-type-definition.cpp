@@ -141,13 +141,3 @@ bool PlayerType::in_saved_floor() const
 {
     return this->floor_id != 0;
 }
-
-/*!
- * @brief トラッキング中のモンスター種族定義を取得する
- * @return モンスター種族定義
- * @todo そもそもmonster_race_idx はこのクラスにいるべきではない、後でどこか別なクラスへ移す.
- */
-const MonsterRaceInfo &PlayerType::get_tracking_monrace() const
-{
-    return MonraceList::get_instance().get_monrace(this->monster_race_idx);
-}

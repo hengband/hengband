@@ -63,6 +63,7 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
+#include "tracking/lore-tracker.h"
 #include "view/display-messages.h"
 
 void decide_drop_from_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool is_riding_mon);
@@ -574,16 +575,17 @@ bool process_monster_fear(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MO
  */
 void process_monsters(PlayerType *player_ptr)
 {
-    const auto old_monrace_id = player_ptr->monster_race_idx;
+    const auto &tracker = LoreTracker::get_instance();
+    const auto old_monrace_id = tracker.get_trackee();
     old_race_flags flags(old_monrace_id);
     player_ptr->current_floor_ptr->monster_noise = false;
     sweep_monster_process(player_ptr);
     hack_m_idx = 0;
-    if (!MonraceList::is_valid(player_ptr->monster_race_idx) || (player_ptr->monster_race_idx != old_monrace_id)) {
+    if (!tracker.is_tracking() || !tracker.is_tracking(old_monrace_id)) {
         return;
     }
 
-    flags.update_player_window(player_ptr->get_tracking_monrace());
+    flags.update_player_window(tracker.get_tracking_monrace());
 }
 
 /*!
