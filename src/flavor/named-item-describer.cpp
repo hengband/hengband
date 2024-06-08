@@ -248,10 +248,9 @@ static std::string describe_item_count_or_article_en(const ItemEntity &item, con
         return prefix;
     }
 
-    const auto corpse_r_idx = i2enum<MonsterRaceId>(item.pval);
-    auto is_unique_corpse = item.bi_key.tval() == ItemKindType::CORPSE;
-    is_unique_corpse &= monraces_info[corpse_r_idx].kind_flags.has(MonsterKindType::UNIQUE);
-    if ((opt.known && item.is_fixed_or_random_artifact()) || is_unique_corpse) {
+    auto is_unique_item = opt.known && item.is_fixed_or_random_artifact();
+    is_unique_item |= (item.bi_key.tval() == ItemKindType::CORPSE) && item.get_monrace().kind_flags.has(MonsterKindType::UNIQUE);
+    if (is_unique_item) {
         return "The ";
     }
 

@@ -150,6 +150,8 @@ public:
     const MonsterRaceInfo &get_next() const;
     bool is_bounty(bool unachieved_only) const;
     int calc_power() const;
+    int calc_figurine_value() const;
+    int calc_capture_value() const;
 };
 
 extern std::map<MonsterRaceId, MonsterRaceInfo> monraces_info;
@@ -173,6 +175,7 @@ public:
     std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator rbegin() const;
     std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator rend();
     std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator rend() const;
+    size_t size() const;
     MonsterRaceInfo &get_monrace(MonsterRaceId monrace_id);
     const MonsterRaceInfo &get_monrace(MonsterRaceId monrace_id) const;
     const std::vector<MonsterRaceId> &get_valid_monrace_ids() const;
@@ -184,8 +187,6 @@ public:
     bool exists_separates(const MonsterRaceId r_idx) const;
     bool is_separated(const MonsterRaceId r_idx) const;
     bool can_select_separate(const MonsterRaceId morace_id, const int hp, const int maxhp) const;
-    int calc_figurine_value(const MonsterRaceId monrace_id) const;
-    int calc_capture_value(const MonsterRaceId morace_id) const;
     bool order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed = false) const;
     bool order_level(MonsterRaceId id1, MonsterRaceId id2) const;
     MonsterRaceId pick_id_at_random() const;

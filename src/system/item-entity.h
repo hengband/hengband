@@ -30,6 +30,7 @@ class ArtifactType;
 class BaseitemInfo;
 class DisplaySymbol;
 class EgoItemDefinition;
+class MonsterRaceInfo;
 class ItemEntity {
 public:
     ItemEntity();
@@ -154,6 +155,8 @@ public:
     TrFlags get_flags() const;
     TrFlags get_flags_known() const;
     std::string explain_activation() const;
+    bool has_monrace() const;
+    const MonsterRaceInfo &get_monrace() const;
 
     void mark_as_known();
     void mark_as_tried() const;

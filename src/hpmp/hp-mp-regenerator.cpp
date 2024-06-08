@@ -227,8 +227,7 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
         }
 
         heal = true;
-        const auto r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-        const auto *r_ptr = &monraces_info[r_idx];
+        const auto &monrace = o_ptr->get_monrace();
         if (o_ptr->captured_monster_current_hp < o_ptr->captured_monster_max_hp) {
             short frac = o_ptr->captured_monster_max_hp / 100;
             if (!frac) {
@@ -237,7 +236,7 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
                 }
             }
 
-            if (r_ptr->misc_flags.has(MonsterMiscType::REGENERATE)) {
+            if (monrace.misc_flags.has(MonsterMiscType::REGENERATE)) {
                 frac *= 2;
             }
 

@@ -138,7 +138,7 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, const Mons
  * @param mode オプション
  * @return 踏破可能ならばTRUEを返す
  */
-bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, MonsterRaceInfo *r_ptr, BIT_FLAGS16 mode)
+bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, const MonsterRaceInfo *r_ptr, BIT_FLAGS16 mode)
 {
     const Pos2D pos(y, x);
     auto &grid = player_ptr->current_floor_ptr->get_grid(pos);

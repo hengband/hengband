@@ -557,6 +557,20 @@ bool BaseitemKey::is_corpse() const
     return *this == BaseitemKey(ItemKindType::CORPSE, SV_CORPSE);
 }
 
+bool BaseitemKey::is_monster() const
+{
+    switch (this->type_value) {
+    case ItemKindType::SKELETON:
+    case ItemKindType::FIGURINE:
+    case ItemKindType::STATUE:
+    case ItemKindType::CORPSE:
+    case ItemKindType::CAPTURE:
+        return true;
+    default:
+        return false;
+    }
+}
+
 bool BaseitemKey::is_mushrooms() const
 {
     if (!this->subtype_value) {

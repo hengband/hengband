@@ -207,8 +207,7 @@ PRICE object_value_real(const ItemEntity *o_ptr)
         break;
     }
     case ItemKindType::FIGURINE: {
-        auto figure_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-        DEPTH level = monraces_info[figure_r_idx].level;
+        const auto level = o_ptr->get_monrace().level;
         if (level < 20) {
             value = level * 50L;
         } else if (level < 30) {
@@ -223,11 +222,11 @@ PRICE object_value_real(const ItemEntity *o_ptr)
         break;
     }
     case ItemKindType::CAPTURE: {
-        auto captured_monrace_id = i2enum<MonsterRaceId>(o_ptr->pval);
-        if (!MonraceList::is_valid(captured_monrace_id)) {
+        const auto &monrace = o_ptr->get_monrace();
+        if (!monrace.is_valid()) {
             value = 1000L;
         } else {
-            value = ((monraces_info[captured_monrace_id].level) * 50L + 1000);
+            value = monrace.level * 50 + 1000;
         }
         break;
     }

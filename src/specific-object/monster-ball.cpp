@@ -94,13 +94,13 @@ static void restore_monster_nickname(MonsterEntity &monster, ItemEntity &item)
 
 static bool release_monster(PlayerType *player_ptr, ItemEntity &item, DIRECTION dir)
 {
-    const auto r_idx = i2enum<MonsterRaceId>(item.pval);
+    const auto &monrace = item.get_monrace();
     const auto pos = player_ptr->get_neighbor(dir);
-    if (!monster_can_enter(player_ptr, pos.y, pos.x, &monraces_info[r_idx], 0)) {
+    if (!monster_can_enter(player_ptr, pos.y, pos.x, &monrace, 0)) {
         return false;
     }
 
-    if (!place_specific_monster(player_ptr, 0, pos.y, pos.x, r_idx, PM_FORCE_PET | PM_NO_KAGE)) {
+    if (!place_specific_monster(player_ptr, 0, pos.y, pos.x, monrace.idx, PM_FORCE_PET | PM_NO_KAGE)) {
         return false;
     }
 

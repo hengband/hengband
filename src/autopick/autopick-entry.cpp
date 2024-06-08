@@ -433,15 +433,18 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, co
         entry->add(FLG_WANTED);
     }
 
-    const auto r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
     const auto &bi_key = o_ptr->bi_key;
     const auto tval = bi_key.tval();
-    if ((tval == ItemKindType::CORPSE || tval == ItemKindType::STATUE) && monraces_info[r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
-        entry->add(FLG_UNIQUE);
+    if ((tval == ItemKindType::CORPSE) || (tval == ItemKindType::STATUE)) {
+        if (o_ptr->get_monrace().kind_flags.has(MonsterKindType::UNIQUE)) {
+            entry->add(FLG_UNIQUE);
+        }
     }
 
-    if (tval == ItemKindType::CORPSE && angband_strchr("pht", monraces_info[r_idx].symbol_definition.character)) {
-        entry->add(FLG_HUMAN);
+    if (tval == ItemKindType::CORPSE) {
+        if (angband_strchr("pht", o_ptr->get_monrace().symbol_definition.character)) {
+            entry->add(FLG_HUMAN);
+        }
     }
 
     if (o_ptr->is_spell_book() && !check_book_realm(player_ptr, bi_key)) {

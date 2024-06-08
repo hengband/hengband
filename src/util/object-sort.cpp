@@ -107,17 +107,18 @@ bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value
     }
 
     switch (o_tval) {
+    case ItemKindType::SKELETON:
     case ItemKindType::FIGURINE:
     case ItemKindType::STATUE:
     case ItemKindType::CORPSE:
     case ItemKindType::CAPTURE: {
-        auto o_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-        auto j_r_idx = i2enum<MonsterRaceId>(j_ptr->pval);
-        if (monraces_info[o_r_idx].level < monraces_info[j_r_idx].level) {
+        const auto &monrace1 = o_ptr->get_monrace();
+        const auto &monrace2 = j_ptr->get_monrace();
+        if (monrace1.level < monrace2.level) {
             return true;
         }
 
-        if ((monraces_info[o_r_idx].level == monraces_info[j_r_idx].level) && (o_ptr->pval < j_ptr->pval)) {
+        if ((monrace1.level == monrace2.level) && (o_ptr->pval < j_ptr->pval)) {
             return true;
         }
 

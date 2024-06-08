@@ -96,11 +96,10 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
     }
 
     if (bi_key.tval() == ItemKindType::STATUE) {
-        auto statue_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-        auto *r_ptr = &monraces_info[statue_r_idx];
-        if (statue_r_idx == MonsterRaceId::BULLGATES) {
+        const auto &monrace = o_ptr->get_monrace();
+        if (monrace.idx == MonsterRaceId::BULLGATES) {
             info[i++] = _("それは部屋に飾ると恥ずかしい。", "It is shameful.");
-        } else if (r_ptr->misc_flags.has(MonsterMiscType::ELDRITCH_HORROR)) {
+        } else if (monrace.misc_flags.has(MonsterMiscType::ELDRITCH_HORROR)) {
             info[i++] = _("それは部屋に飾ると恐い。", "It is fearful.");
         } else {
             info[i++] = _("それは部屋に飾ると楽しい。", "It is cheerful.");
@@ -797,12 +796,11 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
     }
 
     if (bi_key == BaseitemKey(ItemKindType::STATUE, SV_PHOTO)) {
-        auto statue_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-        const auto &monrace = monraces_info[statue_r_idx];
-        int namelen = strlen(monrace.name.data());
+        const auto &monrace = o_ptr->get_monrace();
+        const auto name_length = monrace.name.length();
         prt(format("%s: '", monrace.name.data()), 1, 15);
-        term_queue_bigchar(18 + namelen, 1, { monrace.symbol_config, {} });
-        prt("'", 1, (use_bigtile ? 20 : 19) + namelen);
+        term_queue_bigchar(18 + name_length, 1, { monrace.symbol_config, {} });
+        prt("'", 1, (use_bigtile ? 20 : 19) + name_length);
     } else {
         prt(_("     アイテムの能力:", "     Item Attributes:"), 1, 15);
     }
