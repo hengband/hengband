@@ -2502,6 +2502,9 @@
     <ClCompile Include="..\..\src\tracking\lore-tracker.cpp">
       <Filter>tracking</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\tracking\baseitem-tracker.cpp">
+      <Filter>tracking</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5416,6 +5419,9 @@
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\tracking\lore-tracker.h">
+      <Filter>tracking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tracking\baseitem-tracker.h">
       <Filter>tracking</Filter>
     </ClInclude>
   </ItemGroup>
