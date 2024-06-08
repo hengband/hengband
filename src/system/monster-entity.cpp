@@ -50,7 +50,7 @@ bool MonsterEntity::is_hostile() const
 }
 
 /*!
- * @brief モンスターの属性の基づいた敵対関係の有無を返す
+ * @brief モンスターの属性に基づいた敵対関係の有無を返す
  * @param other 比較対象モンスターへの参照
  * @return 敵対関係にあるか否か
  */
@@ -80,7 +80,7 @@ bool MonsterEntity::is_hostile_to_melee(const MonsterEntity &other) const
 }
 
 /*!
- * @brief モンスターの属性の基づいた敵対関係の有無を返す
+ * @brief モンスターの属性に基づいた敵対関係の有無を返す
  * @param other 比較対象のサブフラグ
  * @return 敵対関係にあるか否か
  */
