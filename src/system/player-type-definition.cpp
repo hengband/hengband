@@ -2,6 +2,7 @@
 #include "floor/geometry.h"
 #include "market/arena-info-table.h"
 #include "system/angband-exceptions.h"
+#include "system/monster-race-info.h" // @todo 暫定、後で消す.
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "world/world.h"

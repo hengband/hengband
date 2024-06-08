@@ -3,16 +3,17 @@
 #include "core/stuff-handler.h"
 #include "game-option/game-play-options.h"
 #include "io/input-key-acceptor.h"
-#include "lore/lore-store.h"
 #include "lore/lore-util.h"
 #include "system/monster-race-info.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
+#include "tracking/lore-tracker.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-lore.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 施設でモンスターの情報を知るメインルーチン / research_mon -KMW-
@@ -71,7 +72,7 @@ bool research_mon(PlayerType *player_ptr)
 
     prt(buf, 16, 10);
     std::vector<MonsterRaceId> monrace_ids;
-    const auto &monraces = MonraceList::get_instance();
+    auto &monraces = MonraceList::get_instance();
     for (const auto &[monrace_id, monrace] : monraces) {
         if (!monrace.is_valid()) {
             continue;
@@ -135,18 +136,24 @@ bool research_mon(PlayerType *player_ptr)
         i = monrace_ids.size() - 1;
     }
 
+    auto &tracker = LoreTracker::get_instance();
     auto notpicked = true;
     auto query = 'y';
     while (notpicked) {
-        auto r_idx = monrace_ids[i];
-        roff_top(r_idx);
+        auto monrace_id = monrace_ids[i];
+        roff_top(monrace_id);
         term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ' 'で続行, ESC]", " [(r)ecall, ESC, space to continue]"));
         while (true) {
             if (recall) {
-                lore_do_probe(player_ptr, r_idx);
-                monster_race_track(player_ptr, r_idx);
+                const auto mes = monraces.probe_lore(monrace_id);
+                if (mes) {
+                    msg_print(*mes);
+                    msg_print(nullptr);
+                }
+
+                tracker.set_trackee(monrace_id);
                 handle_stuff(player_ptr);
-                screen_roff(player_ptr, r_idx, MONSTER_LORE_RESEARCH);
+                screen_roff(player_ptr, monrace_id, MONSTER_LORE_RESEARCH);
                 notpicked = false;
                 old_sym = *sym;
                 old_i = i;

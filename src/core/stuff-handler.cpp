@@ -24,15 +24,6 @@ void handle_stuff(PlayerType *player_ptr)
 }
 
 /*
- * Track the given monster race
- */
-void monster_race_track(PlayerType *player_ptr, MonsterRaceId r_idx)
-{
-    player_ptr->monster_race_idx = r_idx;
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
-}
-
-/*
  * Track the given object kind
  */
 void object_kind_track(PlayerType *player_ptr, short bi_id)
@@ -47,7 +38,7 @@ void object_kind_track(PlayerType *player_ptr, short bi_id)
  * @param m_idx トラッキング対象のモンスターID。0の時キャンセル
  * @param なし
  */
-void health_track(PlayerType *player_ptr, MONSTER_IDX m_idx)
+void health_track(PlayerType *player_ptr, short m_idx)
 {
     if (m_idx && m_idx == player_ptr->riding) {
         return;

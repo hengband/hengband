@@ -62,6 +62,7 @@
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
+#include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -479,7 +480,7 @@ void ObjectThrowEntity::display_attack_racial_power()
     }
 
     if (!this->player_ptr->effects()->hallucination().is_hallucinated()) {
-        monster_race_track(this->player_ptr, this->m_ptr->ap_r_idx);
+        LoreTracker::get_instance().set_trackee(this->m_ptr->ap_r_idx);
     }
 
     health_track(this->player_ptr, this->g_ptr->m_idx);

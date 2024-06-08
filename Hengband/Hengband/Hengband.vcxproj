@@ -628,6 +628,7 @@
     <ClCompile Include="..\..\src\timed-effect\player-poison.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-stun.cpp" />
     <ClCompile Include="..\..\src\timed-effect\timed-effects.cpp" />
+    <ClCompile Include="..\..\src\tracking\lore-tracker.cpp" />
     <ClCompile Include="..\..\src\util\candidate-selector.cpp" />
     <ClCompile Include="..\..\src\util\rng-xoshiro.cpp" />
     <ClCompile Include="..\..\src\util\sha256.cpp" />
@@ -653,7 +654,6 @@
     <ClCompile Include="..\..\src\monster-floor\one-monster-placer.cpp" />
     <ClCompile Include="..\..\src\monster\monster-compaction.cpp" />
     <ClCompile Include="..\..\src\monster-floor\monster-death.cpp" />
-    <ClCompile Include="..\..\src\lore\lore-store.cpp" />
     <ClCompile Include="..\..\src\lore\monster-lore.cpp" />
     <ClCompile Include="..\..\src\monster\monster-describer.cpp" />
     <ClCompile Include="..\..\src\monster-floor\monster-generator.cpp" />
@@ -1439,6 +1439,7 @@
     <ClInclude Include="..\..\src\timed-effect\player-poison.h" />
     <ClInclude Include="..\..\src\timed-effect\player-stun.h" />
     <ClInclude Include="..\..\src\timed-effect\timed-effects.h" />
+    <ClInclude Include="..\..\src\tracking\lore-tracker.h" />
     <ClInclude Include="..\..\src\util\bit-flags-calculator.h" />
     <ClInclude Include="..\..\src\util\buffer-shaper.h" />
     <ClInclude Include="..\..\src\util\candidate-selector.h" />
@@ -1459,7 +1460,6 @@
     <ClInclude Include="..\..\src\monster-floor\one-monster-placer.h" />
     <ClInclude Include="..\..\src\monster\monster-compaction.h" />
     <ClInclude Include="..\..\src\monster-floor\monster-death.h" />
-    <ClInclude Include="..\..\src\lore\lore-store.h" />
     <ClInclude Include="..\..\src\lore\monster-lore.h" />
     <ClInclude Include="..\..\src\monster-race\race-flags-resistance.h" />
     <ClInclude Include="..\..\src\monster-race\race-indice-types.h" />

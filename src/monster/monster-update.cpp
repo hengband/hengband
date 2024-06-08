@@ -166,27 +166,6 @@ void update_monster_race_flags(PlayerType *player_ptr, turn_flags *turn_flags_pt
     }
 }
 
-/*!
- * @brief モンスターフラグの更新に基づき、モンスター表示を更新する
- * @param monster_race_idx モンスターID
- * @param window ウィンドウフラグ
- * @param old_race_flags_ptr モンスターフラグへの参照ポインタ
- */
-void update_player_window(PlayerType *player_ptr, old_race_flags *old_race_flags_ptr)
-{
-    MonsterRaceInfo *r_ptr;
-    r_ptr = &monraces_info[player_ptr->monster_race_idx];
-    if ((old_race_flags_ptr->old_r_ability_flags != r_ptr->r_ability_flags) ||
-        (old_race_flags_ptr->old_r_resistance_flags != r_ptr->r_resistance_flags) || (old_race_flags_ptr->old_r_blows0 != r_ptr->r_blows[0]) ||
-        (old_race_flags_ptr->old_r_blows1 != r_ptr->r_blows[1]) || (old_race_flags_ptr->old_r_blows2 != r_ptr->r_blows[2]) ||
-        (old_race_flags_ptr->old_r_blows3 != r_ptr->r_blows[3]) || (old_race_flags_ptr->old_r_cast_spell != r_ptr->r_cast_spell) ||
-        (old_race_flags_ptr->old_r_behavior_flags != r_ptr->r_behavior_flags) || (old_race_flags_ptr->old_r_kind_flags != r_ptr->r_kind_flags) ||
-        (old_race_flags_ptr->old_r_drop_flags != r_ptr->r_drop_flags) || (old_race_flags_ptr->old_r_feature_flags != r_ptr->r_feature_flags) ||
-        (old_race_flags_ptr->old_r_special_flags != r_ptr->r_special_flags)) {
-        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
-    }
-}
-
 static um_type *initialize_um_type(PlayerType *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx, bool full)
 {
     auto &floor = *player_ptr->current_floor_ptr;

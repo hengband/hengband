@@ -41,6 +41,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "timed-effect/timed-effects.h"
+#include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -175,7 +176,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
             m_name = monster_desc(player_ptr, m_ptr, 0);
             if (m_ptr->ml) {
                 if (!is_hallucinated) {
-                    monster_race_track(player_ptr, m_ptr->ap_r_idx);
+                    LoreTracker::get_instance().set_trackee(m_ptr->ap_r_idx);
                 }
 
                 health_track(player_ptr, grid.m_idx);

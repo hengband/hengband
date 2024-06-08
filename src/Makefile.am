@@ -380,7 +380,6 @@ hengband_SOURCES = \
 	\
 	lore/combat-types-setter.cpp lore/combat-types-setter.h \
 	lore/lore-calculator.cpp lore/lore-calculator.h \
-	lore/lore-store.cpp lore/lore-store.h \
 	lore/lore-util.cpp lore/lore-util.h \
 	lore/magic-types-setter.cpp lore/magic-types-setter.h \
 	lore/monster-lore.cpp lore/monster-lore.h \
@@ -966,6 +965,8 @@ hengband_SOURCES = \
 	timed-effect/player-poison.cpp timed-effect/player-poison.h \
 	timed-effect/player-stun.cpp timed-effect/player-stun.h \
 	timed-effect/timed-effects.cpp timed-effect/timed-effects.h \
+	\
+	tracking/lore-tracker.cpp tracking/lore-tracker.h \
 	\
 	util/angband-files.cpp util/angband-files.h \
 	util/buffer-shaper.cpp util/buffer-shaper.h \

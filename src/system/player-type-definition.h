@@ -238,8 +238,6 @@ public:
 
     IDX health_who{}; /* Health bar trackee */
 
-    MonsterRaceId monster_race_idx{}; /* Monster race trackee */
-
     short tracking_bi_id{}; /* Object kind trackee */
 
     int16_t new_spells{}; /* Number of spells available */
@@ -401,10 +399,10 @@ public:
     std::string decrease_ability_random();
     std::string decrease_ability_all();
     Pos2D get_position() const;
+    Pos2D get_neighbor(int dir) const;
     bool is_located_at_running_destination() const;
     bool is_located_at(const Pos2D &pos) const;
     bool in_saved_floor() const;
-    Pos2D get_neighbor(int dir) const;
 
 private:
     std::shared_ptr<TimedEffects> timed_effects;

@@ -27,6 +27,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
+#include "tracking/lore-tracker.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -154,8 +155,7 @@ static void see_arena_poster(PlayerType *player_ptr)
 
     auto *r_ptr = &monraces_info[arena_info[player_ptr->arena_number].r_idx];
     msg_format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), r_ptr->name.data());
-    player_ptr->monster_race_idx = arena_info[player_ptr->arena_number].r_idx;
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
+    LoreTracker::get_instance().set_trackee(arena_info[player_ptr->arena_number].r_idx);
     handle_stuff(player_ptr);
 }
 

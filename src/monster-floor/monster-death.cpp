@@ -9,7 +9,6 @@
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "io/write-diary.h"
-#include "lore/lore-store.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "market/arena-info-table.h"
@@ -309,7 +308,7 @@ static void drop_items_golds(PlayerType *player_ptr, MonsterDeath *md_ptr, int d
     auto visible = md_ptr->m_ptr->ml && !player_ptr->effects()->hallucination().is_hallucinated();
     visible |= (md_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE));
     if (visible && (dump_item || dump_gold)) {
-        lore_treasure(player_ptr, md_ptr->m_idx, dump_item, dump_gold);
+        md_ptr->m_ptr->make_lore_treasure(dump_item, dump_gold);
     }
 }
 

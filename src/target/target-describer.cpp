@@ -38,6 +38,7 @@
 #include "term/term-color-types.h"
 #include "term/z-form.h"
 #include "timed-effect/timed-effects.h"
+#include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-lore.h"
 #include "view/display-messages.h"
@@ -272,7 +273,7 @@ static short describe_grid(PlayerType *player_ptr, GridExamination *ge_ptr)
     }
 
     ge_ptr->boring = false;
-    monster_race_track(player_ptr, ge_ptr->m_ptr->ap_r_idx);
+    LoreTracker::get_instance().set_trackee(ge_ptr->m_ptr->ap_r_idx);
     health_track(player_ptr, ge_ptr->g_ptr->m_idx);
     handle_stuff(player_ptr);
     describe_grid_monster(player_ptr, ge_ptr);

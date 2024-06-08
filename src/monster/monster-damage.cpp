@@ -38,6 +38,7 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
+#include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -220,26 +221,26 @@ void MonsterDamageProcessor::death_unique_monster(MonsterRaceId r_idx)
 
 void MonsterDamageProcessor::increase_kill_numbers()
 {
-    auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    auto &r_ref = m_ptr->get_real_monrace();
+    auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
+    auto &monrace = monster.get_real_monrace();
     auto is_hallucinated = this->player_ptr->effects()->hallucination().is_hallucinated();
-    if (((m_ptr->ml == 0) || is_hallucinated) && r_ref.kind_flags.has_not(MonsterKindType::UNIQUE)) {
+    if (((monster.ml == 0) || is_hallucinated) && monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return;
     }
 
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE) && (monraces_info[MonsterRaceId::KAGE].r_pkills < MAX_SHORT)) {
+    if (monster.mflag2.has(MonsterConstantFlagType::KAGE) && (monraces_info[MonsterRaceId::KAGE].r_pkills < MAX_SHORT)) {
         monraces_info[MonsterRaceId::KAGE].r_pkills++;
-    } else if (r_ref.r_pkills < MAX_SHORT) {
-        r_ref.r_pkills++;
+    } else if (monrace.r_pkills < MAX_SHORT) {
+        monrace.r_pkills++;
     }
 
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE) && (monraces_info[MonsterRaceId::KAGE].r_tkills < MAX_SHORT)) {
+    if (monster.mflag2.has(MonsterConstantFlagType::KAGE) && (monraces_info[MonsterRaceId::KAGE].r_tkills < MAX_SHORT)) {
         monraces_info[MonsterRaceId::KAGE].r_tkills++;
-    } else if (r_ref.r_tkills < MAX_SHORT) {
-        r_ref.r_tkills++;
+    } else if (monrace.r_tkills < MAX_SHORT) {
+        monrace.r_tkills++;
     }
 
-    monster_race_track(this->player_ptr, m_ptr->ap_r_idx);
+    LoreTracker::get_instance().set_trackee(monster.ap_r_idx);
 }
 
 void MonsterDamageProcessor::death_amberites(std::string_view m_name)

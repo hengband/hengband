@@ -12,7 +12,6 @@
 #include "flavor/object-flavor-types.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
-#include "lore/lore-store.h"
 #include "monster-race//race-ability-mask.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-resistance-mask.h"
@@ -162,7 +161,11 @@ static void attack_probe(PlayerType *player_ptr, player_attack_type *pa_ptr)
     msg_print(nullptr);
     msg_print(probed_monster_info(player_ptr, pa_ptr->m_ptr, pa_ptr->r_ptr));
     msg_print(nullptr);
-    (void)lore_do_probe(player_ptr, pa_ptr->r_idx);
+    const auto mes = MonraceList::get_instance().probe_lore(pa_ptr->r_idx);
+    if (mes) {
+        msg_print(*mes);
+        msg_print(nullptr);
+    }
 }
 
 /*!

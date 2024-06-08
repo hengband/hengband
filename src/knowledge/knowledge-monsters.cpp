@@ -30,6 +30,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
+#include "tracking/lore-tracker.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
@@ -313,6 +314,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
     int column = 0;
     bool flag = false;
     bool redraw = true;
+    auto &tracker = LoreTracker::get_instance();
     const auto &symbols_cb = DisplaySymbolsClipboard::get_instance();
     while (!flag) {
         if (redraw) {
@@ -387,7 +389,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
             auto &monrace = monraces_info[monrace_ids[mon_cur]];
             symbol_ptr = &monrace.symbol_config;
             if (!visual_only) {
-                monster_race_track(player_ptr, monrace_ids[mon_cur]);
+                tracker.set_trackee(monrace_ids[mon_cur]);
                 handle_stuff(player_ptr);
             }
 

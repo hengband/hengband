@@ -1055,9 +1055,6 @@
     <ClCompile Include="..\..\src\monster\monster-list.cpp">
       <Filter>monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\lore\lore-store.cpp">
-      <Filter>lore</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\lore\monster-lore.cpp">
       <Filter>lore</Filter>
     </ClCompile>
@@ -2502,6 +2499,9 @@
     <ClCompile Include="..\..\src\system\inner-game-data.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\tracking\lore-tracker.cpp">
+      <Filter>tracking</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3730,9 +3730,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-list.h">
       <Filter>monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\lore\lore-store.h">
-      <Filter>lore</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\lore\monster-lore.h">
       <Filter>lore</Filter>
@@ -5418,6 +5415,9 @@
     <ClInclude Include="..\..\src\system\inner-game-data.h">
       <Filter>system</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\tracking\lore-tracker.h">
+      <Filter>tracking</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5681,6 +5681,9 @@
     </Filter>
     <Filter Include="external-lib">
       <UniqueIdentifier>{7a77d993-afa0-4750-97c6-d52b440fafa9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tracking">
+      <UniqueIdentifier>{a5b8bf13-a675-4500-8b4c-37ea664757eb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

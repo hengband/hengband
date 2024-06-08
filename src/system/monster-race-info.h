@@ -151,8 +151,10 @@ public:
     int calc_power() const;
     int calc_figurine_value() const;
     int calc_capture_value() const;
+    std::string build_eldritch_horror_message(std::string_view description) const;
 
-    std::string build_eldritch_horror_message(std::string_view description);
+    std::optional<std::string> probe_lore();
+    void make_lore_treasure(int num_item, int num_drop);
 
 private:
     const std::string &decide_horror_message() const;
@@ -197,6 +199,7 @@ public:
     const MonsterRaceInfo &pick_monrace_at_random() const;
 
     void reset_all_visuals();
+    std::optional<std::string> probe_lore(MonsterRaceId monrace_id);
 
 private:
     MonraceList() = default;
