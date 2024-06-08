@@ -157,15 +157,6 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
             rand_tmp_str = format(mes, quest.name.data(), (int)quest.level, monrace.name.data());
             continue;
         }
-
-#ifdef JP
-        rand_tmp_str = format("  %s (%d 階) - %d 体の%sを倒す。(あと %d 体)\n", quest.name.data(), (int)quest.level, (int)quest.max_num, monrace.name.data(),
-            (int)(quest.max_num - quest.cur_num));
-#else
-        const auto monster_name = pluralize(monrace.name);
-        rand_tmp_str = format("  %s (Dungeon level: %d)\n  Kill %d %s, have killed %d.\n", quest.name.data(), (int)quest.level, (int)quest.max_num,
-            monster_name.data(), (int)quest.cur_num);
-#endif
     }
 
     if (!rand_tmp_str.empty()) {
