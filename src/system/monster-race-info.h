@@ -152,7 +152,7 @@ public:
     int calc_figurine_value() const;
     int calc_capture_value() const;
 
-    std::string see_eldritch_horror(std::string_view description);
+    std::string build_eldritch_horror_message(std::string_view description);
 
 private:
     const std::string &decide_horror_message() const;

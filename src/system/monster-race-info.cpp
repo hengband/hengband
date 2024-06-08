@@ -217,15 +217,14 @@ int MonsterRaceInfo::calc_capture_value() const
 }
 
 /*!
- * @brief エルドリッチホラー持ちのモンスターを見た時の反応
+ * @brief エルドリッチホラー持ちのモンスターを見た時の反応メッセージを作って返す
  * @param description モンスター表記
  * @return 反応メッセージ
  * @details 実際に見るとは限らない (悪夢モードで宿に泊まった時など)
  */
-std::string MonsterRaceInfo::see_eldritch_horror(std::string_view description)
+std::string MonsterRaceInfo::build_eldritch_horror_message(std::string_view description)
 {
     const auto &horror_message = this->decide_horror_message();
-    this->r_misc_flags.set(MonsterMiscType::ELDRITCH_HORROR);
     constexpr auto fmt = _("%s%sの顔を見てしまった！", "You behold the %s visage of %s!");
     return format(fmt, horror_message.data(), description.data());
 }

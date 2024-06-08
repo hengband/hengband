@@ -102,7 +102,8 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
             return;
         }
 
-        msg_print(monrace.see_eldritch_horror(m_name));
+        msg_print(monrace.build_eldritch_horror_message(m_name));
+        monrace.r_misc_flags.set(MonsterMiscType::ELDRITCH_HORROR);
         switch (PlayerRace(player_ptr).life()) {
         case PlayerRaceLifeType::DEMON:
             return;
@@ -148,7 +149,8 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
             return;
         }
 
-        msg_print(monrace.see_eldritch_horror(desc));
+        msg_print(monrace.build_eldritch_horror_message(desc));
+        monrace.r_misc_flags.set(MonsterMiscType::ELDRITCH_HORROR);
         switch (PlayerRace(player_ptr).life()) {
         case PlayerRaceLifeType::DEMON:
             if (saving_throw(20 + player_ptr->lev)) {
