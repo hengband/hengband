@@ -162,7 +162,15 @@ static void attack_probe(PlayerType *player_ptr, player_attack_type *pa_ptr)
     msg_print(nullptr);
     msg_print(probed_monster_info(player_ptr, pa_ptr->m_ptr, pa_ptr->r_ptr));
     msg_print(nullptr);
-    (void)lore_do_probe(pa_ptr->r_idx);
+    if (lore_do_probe(pa_ptr->r_idx)) {
+#ifdef JP
+        msg_format("%sについてさらに詳しくなった気がする。", pa_ptr->r_ptr->name.data());
+#else
+        const auto nm = pluralize(pa_ptr->r_ptr->name);
+        msg_format("You now know more about %s.", nm.data());
+#endif
+        msg_print(nullptr);
+    }
 }
 
 /*!

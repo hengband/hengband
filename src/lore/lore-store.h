@@ -2,5 +2,5 @@
 
 enum class MonsterRaceId : short;
 class MonsterEntity;
-int lore_do_probe(MonsterRaceId r_idx);
+bool lore_do_probe(MonsterRaceId r_idx);
 void lore_treasure(const MonsterEntity &monster, int num_item, int num_gold);

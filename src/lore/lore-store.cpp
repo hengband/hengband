@@ -25,26 +25,27 @@ static int count_lore_mflag_group(const EnumClassFlagGroup<T> &flags, const Enum
 /*!
  * @brief モンスターの調査による思い出補完処理
  * @param monrace_id 補完されるモンスター種族ID
- * @return 明らかになった情報の度数
+ * @return 何か追加で明らかになったか否か
  */
-int lore_do_probe(MonsterRaceId monrace_id)
+bool lore_do_probe(MonsterRaceId monrace_id)
 {
-    auto n = 0;
     auto &monrace = monraces_info[monrace_id];
+    auto n = false;
     if (monrace.r_wake != MAX_UCHAR) {
-        n++;
+        n = true;
     }
 
     if (monrace.r_ignore != MAX_UCHAR) {
-        n++;
+        n = true;
     }
 
-    monrace.r_wake = monrace.r_ignore = MAX_UCHAR;
+    monrace.r_wake = MAX_UCHAR;
+    monrace.r_ignore = MAX_UCHAR;
     for (auto i = 0; i < 4; i++) {
         const auto &blow = monrace.blows[i];
         if ((blow.effect != RaceBlowEffectType::NONE) || (blow.method != RaceBlowMethodType::NONE)) {
             if (monrace.r_blows[i] != MAX_UCHAR) {
-                n++;
+                n = true;
             }
 
             monrace.r_blows[i] = MAX_UCHAR;
@@ -52,38 +53,40 @@ int lore_do_probe(MonsterRaceId monrace_id)
     }
 
     using Mdt = MonsterDropType;
-    byte tmp_byte = (monrace.drop_flags.has(Mdt::DROP_4D2) ? 8 : 0);
-    tmp_byte += (monrace.drop_flags.has(Mdt::DROP_3D2) ? 6 : 0);
-    tmp_byte += (monrace.drop_flags.has(Mdt::DROP_2D2) ? 4 : 0);
-    tmp_byte += (monrace.drop_flags.has(Mdt::DROP_1D2) ? 2 : 0);
-    tmp_byte += (monrace.drop_flags.has(Mdt::DROP_90) ? 1 : 0);
-    tmp_byte += (monrace.drop_flags.has(Mdt::DROP_60) ? 1 : 0);
+    auto num_drops = (monrace.drop_flags.has(Mdt::DROP_4D2) ? 8 : 0);
+    num_drops += (monrace.drop_flags.has(Mdt::DROP_3D2) ? 6 : 0);
+    num_drops += (monrace.drop_flags.has(Mdt::DROP_2D2) ? 4 : 0);
+    num_drops += (monrace.drop_flags.has(Mdt::DROP_1D2) ? 2 : 0);
+    num_drops += (monrace.drop_flags.has(Mdt::DROP_90) ? 1 : 0);
+    num_drops += (monrace.drop_flags.has(Mdt::DROP_60) ? 1 : 0);
     if (monrace.drop_flags.has_not(Mdt::ONLY_GOLD)) {
-        if (monrace.r_drop_item != tmp_byte) {
-            n++;
+        if (monrace.r_drop_item != num_drops) {
+            n = true;
         }
-        monrace.r_drop_item = tmp_byte;
+
+        monrace.r_drop_item = num_drops;
     }
 
     if (monrace.drop_flags.has_not(Mdt::ONLY_ITEM)) {
-        if (monrace.r_drop_gold != tmp_byte) {
-            n++;
+        if (monrace.r_drop_gold != num_drops) {
+            n = true;
         }
-        monrace.r_drop_gold = tmp_byte;
+
+        monrace.r_drop_gold = num_drops;
     }
 
     if (monrace.r_cast_spell != MAX_UCHAR) {
-        n++;
+        n = true;
     }
 
     monrace.r_cast_spell = MAX_UCHAR;
-    n += count_lore_mflag_group(monrace.resistance_flags, monrace.r_resistance_flags);
-    n += count_lore_mflag_group(monrace.ability_flags, monrace.r_ability_flags);
-    n += count_lore_mflag_group(monrace.behavior_flags, monrace.r_behavior_flags);
-    n += count_lore_mflag_group(monrace.drop_flags, monrace.r_drop_flags);
-    n += count_lore_mflag_group(monrace.feature_flags, monrace.r_feature_flags);
-    n += count_lore_mflag_group(monrace.special_flags, monrace.r_special_flags);
-    n += count_lore_mflag_group(monrace.misc_flags, monrace.r_misc_flags);
+    n |= count_lore_mflag_group(monrace.resistance_flags, monrace.r_resistance_flags) > 0;
+    n |= count_lore_mflag_group(monrace.ability_flags, monrace.r_ability_flags) > 0;
+    n |= count_lore_mflag_group(monrace.behavior_flags, monrace.r_behavior_flags) > 0;
+    n |= count_lore_mflag_group(monrace.drop_flags, monrace.r_drop_flags) > 0;
+    n |= count_lore_mflag_group(monrace.feature_flags, monrace.r_feature_flags) > 0;
+    n |= count_lore_mflag_group(monrace.special_flags, monrace.r_special_flags) > 0;
+    n |= count_lore_mflag_group(monrace.misc_flags, monrace.r_misc_flags) > 0;
 
     monrace.r_resistance_flags = monrace.resistance_flags;
     monrace.r_ability_flags = monrace.ability_flags;
@@ -93,7 +96,7 @@ int lore_do_probe(MonsterRaceId monrace_id)
     monrace.r_special_flags = monrace.special_flags;
     monrace.r_misc_flags = monrace.misc_flags;
     if (!monrace.r_can_evolve) {
-        n++;
+        n = true;
     }
 
     monrace.r_can_evolve = true;
