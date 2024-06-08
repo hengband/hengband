@@ -140,7 +140,6 @@ public:
     PERCENTAGE cur_hp_per{}; //!< 生成時現在HP率(%)
 
     bool is_valid() const;
-    const std::string &decide_horror_message() const;
     bool has_living_flag() const;
     bool is_explodable() const;
     std::string get_died_message() const;
@@ -152,6 +151,11 @@ public:
     int calc_power() const;
     int calc_figurine_value() const;
     int calc_capture_value() const;
+
+    std::string build_eldritch_horror_message(std::string_view description);
+
+private:
+    const std::string &decide_horror_message() const;
 };
 
 extern std::map<MonsterRaceId, MonsterRaceInfo> monraces_info;
