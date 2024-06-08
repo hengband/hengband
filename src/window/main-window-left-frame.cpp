@@ -18,6 +18,7 @@
 #include "term/term-color-types.h"
 #include "term/z-form.h"
 #include "timed-effect/timed-effects.h"
+#include "tracking/health-bar-tracker.h"
 #include "util/string-processor.h"
 #include "window/main-window-row-column.h"
 #include "window/main-window-stat-poster.h"
@@ -363,8 +364,10 @@ void print_health(PlayerType *player_ptr, bool riding)
             print_health_monster_in_arena_for_wizard(player_ptr);
             return;
         }
-        if (player_ptr->health_who > 0) {
-            monster_idx = player_ptr->health_who;
+
+        auto &tracker = HealthBarTracker::get_instance();
+        if (tracker.is_tracking()) {
+            monster_idx = tracker.get_trackee();
         }
         row = ROW_INFO;
         col = COL_INFO;

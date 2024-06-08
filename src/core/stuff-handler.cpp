@@ -4,6 +4,7 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "tracking/baseitem-tracker.h"
+#include "tracking/health-bar-tracker.h"
 
 /*!
  * @brief 全更新処理をチェックして処理していく
@@ -36,8 +37,7 @@ void health_track(PlayerType *player_ptr, short m_idx)
         return;
     }
 
-    player_ptr->health_who = m_idx;
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::HEALTH);
+    HealthBarTracker::get_instance().set_trackee(m_idx);
 }
 
 bool update_player()

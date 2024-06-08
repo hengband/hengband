@@ -15,6 +15,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "tracking/health-bar-tracker.h"
 
 /*!<広域マップ移動時の自然回復処理カウンタ（広域マップ1マス毎に20回処理を基本とする）*/
 int wild_regen = 20;
@@ -170,35 +171,33 @@ void regenmagic(PlayerType *player_ptr, int regen_amount)
  */
 void regenerate_monsters(PlayerType *player_ptr)
 {
-    for (int i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        auto *r_ptr = &m_ptr->get_monrace();
-
-        if (!m_ptr->is_valid()) {
+    auto &tracker = HealthBarTracker::get_instance();
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    for (short i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
+        auto &monster = player_ptr->current_floor_ptr->m_list[i];
+        const auto &monrace = monster.get_monrace();
+        if (!monster.is_valid()) {
             continue;
         }
 
-        if (m_ptr->hp < m_ptr->maxhp) {
-            int frac = m_ptr->maxhp / 100;
+        if (monster.hp < monster.maxhp) {
+            int frac = monster.maxhp / 100;
             if (!frac) {
                 if (one_in_(2)) {
                     frac = 1;
                 }
             }
 
-            if (r_ptr->misc_flags.has(MonsterMiscType::REGENERATE)) {
+            if (monrace.misc_flags.has(MonsterMiscType::REGENERATE)) {
                 frac *= 2;
             }
 
-            m_ptr->hp += frac;
-            if (m_ptr->hp > m_ptr->maxhp) {
-                m_ptr->hp = m_ptr->maxhp;
+            monster.hp += frac;
+            if (monster.hp > monster.maxhp) {
+                monster.hp = monster.maxhp;
             }
 
-            auto &rfu = RedrawingFlagsUpdater::get_instance();
-            if (player_ptr->health_who == i) {
-                rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
-            }
+            tracker.set_flag_if_tracking(i);
             if (player_ptr->riding == i) {
                 rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
             }

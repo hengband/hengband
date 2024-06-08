@@ -38,6 +38,7 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
+#include "tracking/health-bar-tracker.h"
 #include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -426,13 +427,9 @@ void MonsterDamageProcessor::get_exp_from_mon(const MonsterEntity &monster, int 
 
 void MonsterDamageProcessor::set_redraw()
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (this->player_ptr->health_who == this->m_idx) {
-        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
-    }
-
+    HealthBarTracker::get_instance().set_flag_if_tracking(this->m_idx);
     if (this->player_ptr->riding == this->m_idx) {
-        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
+        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 }
 

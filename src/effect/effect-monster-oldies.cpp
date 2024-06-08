@@ -13,6 +13,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "tracking/health-bar-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -80,14 +81,10 @@ ProcessResult effect_monster_star_heal(PlayerType *player_ptr, EffectMonster *em
         em_ptr->m_ptr->maxhp = em_ptr->m_ptr->max_maxhp;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (!em_ptr->dam) {
-        if (player_ptr->health_who == em_ptr->g_ptr->m_idx) {
-            rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
-        }
-
+        HealthBarTracker::get_instance().set_flag_if_tracking(em_ptr->g_ptr->m_idx);
         if (player_ptr->riding == em_ptr->g_ptr->m_idx) {
-            rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
+            RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
         }
 
         return ProcessResult::PROCESS_FALSE;
@@ -175,13 +172,9 @@ ProcessResult effect_monster_old_heal(PlayerType *player_ptr, EffectMonster *em_
         }
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (player_ptr->health_who == em_ptr->g_ptr->m_idx) {
-        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
-    }
-
+    HealthBarTracker::get_instance().set_flag_if_tracking(em_ptr->g_ptr->m_idx);
     if (player_ptr->riding == em_ptr->g_ptr->m_idx) {
-        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
+        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     em_ptr->note = _("は体力を回復したようだ。", " looks healthier.");
