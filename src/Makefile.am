@@ -967,6 +967,8 @@ hengband_SOURCES = \
 	timed-effect/player-stun.cpp timed-effect/player-stun.h \
 	timed-effect/timed-effects.cpp timed-effect/timed-effects.h \
 	\
+	tracking/lore-tracker.cpp tracking/lore-tracker.h \
+	\
 	util/angband-files.cpp util/angband-files.h \
 	util/buffer-shaper.cpp util/buffer-shaper.h \
 	util/bit-flags-calculator.h \
