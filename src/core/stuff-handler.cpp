@@ -25,16 +25,6 @@ void handle_stuff(PlayerType *player_ptr)
 }
 
 /*
- * Track the given object kind
- */
-void object_kind_track(PlayerType *player_ptr, short bi_id)
-{
-    (void)player_ptr;
-    BaseitemTracker::get_instance().set_trackee(bi_id);
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
-}
-
-/*
  * Track a new monster
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx トラッキング対象のモンスターID。0の時キャンセル
