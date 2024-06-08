@@ -6,7 +6,9 @@
 #include "monster/monster-status.h"
 #include "system/angband-system.h"
 #include "system/monster-race-info.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/term-color-types.h"
+#include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include <algorithm>
@@ -402,6 +404,34 @@ void MonsterEntity::set_hostile()
 std::string MonsterEntity::get_pronoun_of_summoned_kin() const
 {
     return this->get_monrace().get_pronoun_of_summoned_kin();
+}
+
+void MonsterEntity::make_lore_treasure(int num_item, int num_gold) const
+{
+    auto &monrace = this->get_monrace();
+    if (!this->is_original_ap()) {
+        return;
+    }
+
+    if (monrace.r_drop_item < num_item) {
+        monrace.r_drop_item = num_item;
+    }
+
+    if (monrace.r_drop_gold < num_gold) {
+        monrace.r_drop_gold = num_gold;
+    }
+
+    if (monrace.drop_flags.has(MonsterDropType::DROP_GOOD)) {
+        monrace.r_drop_flags.set(MonsterDropType::DROP_GOOD);
+    }
+
+    if (monrace.drop_flags.has(MonsterDropType::DROP_GREAT)) {
+        monrace.r_drop_flags.set(MonsterDropType::DROP_GREAT);
+    }
+
+    if (LoreTracker::get_instance().is_tracking(this->r_idx)) {
+        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
+    }
 }
 
 std::optional<bool> MonsterEntity::order_pet_named(const MonsterEntity &other) const

@@ -98,6 +98,7 @@ public:
     std::optional<bool> order_pet_dismission(const MonsterEntity &other) const;
 
     void set_hostile();
+    void make_lore_treasure(int num_item, int num_gold) const;
 
 private:
     std::optional<bool> order_pet_named(const MonsterEntity &other) const;

@@ -3,7 +3,6 @@
 #include "core/stuff-handler.h"
 #include "game-option/game-play-options.h"
 #include "io/input-key-acceptor.h"
-#include "lore/lore-store.h"
 #include "lore/lore-util.h"
 #include "system/monster-race-info.h"
 #include "term/gameterm.h"

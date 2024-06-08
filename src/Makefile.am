@@ -380,7 +380,6 @@ hengband_SOURCES = \
 	\
 	lore/combat-types-setter.cpp lore/combat-types-setter.h \
 	lore/lore-calculator.cpp lore/lore-calculator.h \
-	lore/lore-store.cpp lore/lore-store.h \
 	lore/lore-util.cpp lore/lore-util.h \
 	lore/magic-types-setter.cpp lore/magic-types-setter.h \
 	lore/monster-lore.cpp lore/monster-lore.h \

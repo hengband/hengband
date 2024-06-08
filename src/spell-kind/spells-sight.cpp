@@ -11,7 +11,6 @@
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "locale/english.h"
-#include "lore/lore-store.h"
 #include "monster-race/monster-kind-mask.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
