@@ -11,6 +11,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
+#include "tracking/baseitem-tracker.h"
 #include "view/display-messages.h"
 
 /*!
@@ -66,7 +67,8 @@ void inven_item_describe(PlayerType *player_ptr, short i_idx)
  */
 void display_koff(PlayerType *player_ptr)
 {
-    if (player_ptr->tracking_bi_id == 0) {
+    const auto &tracker = BaseitemTracker::get_instance();
+    if (!tracker.is_tracking()) {
         return;
     }
 
@@ -74,7 +76,7 @@ void display_koff(PlayerType *player_ptr)
         term_erase(0, y);
     }
 
-    ItemEntity item(player_ptr->tracking_bi_id);
+    const auto item = tracker.get_trackee();
     const auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
     term_putstr(0, 0, -1, TERM_WHITE, item_name);
     const auto sval = *item.bi_key.sval();
