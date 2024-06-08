@@ -107,7 +107,6 @@ bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value
     }
 
     switch (o_tval) {
-    case ItemKindType::SKELETON:
     case ItemKindType::FIGURINE:
     case ItemKindType::STATUE:
     case ItemKindType::CORPSE:

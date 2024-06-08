@@ -1,5 +1,6 @@
 #include "world/world.h"
 #include "player-info/race-types.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
@@ -107,6 +108,16 @@ term_color_type AngbandWorld::get_birth_class_color(PlayerClassType c) const
     }
 
     return this->is_winner_class(c) ? TERM_SLATE : TERM_WHITE;
+}
+
+MonsterRaceInfo &AngbandWorld::get_today_bounty()
+{
+    return MonraceList::get_instance().get_monrace(this->today_mon);
+}
+
+const MonsterRaceInfo &AngbandWorld::get_today_bounty() const
+{
+    return MonraceList::get_instance().get_monrace(this->today_mon);
 }
 
 /*!

@@ -13,6 +13,7 @@ constexpr auto MAX_BOUNTY = 20;
  */
 enum term_color_type : unsigned char;
 enum class PlayerRaceType;
+class MonsterRaceInfo;
 class AngbandWorld {
 public:
     AngbandWorld() = default;
@@ -64,6 +65,8 @@ public:
     void add_winner_class(PlayerClassType c);
     void add_retired_class(PlayerClassType c);
     term_color_type get_birth_class_color(PlayerClassType c) const;
+    MonsterRaceInfo &get_today_bounty();
+    const MonsterRaceInfo &get_today_bounty() const;
 
 private:
     bool is_out_arena = false; // アリーナ外部にいる時だけtrue.

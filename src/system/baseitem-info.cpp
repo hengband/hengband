@@ -560,7 +560,6 @@ bool BaseitemKey::is_corpse() const
 bool BaseitemKey::is_monster() const
 {
     switch (this->type_value) {
-    case ItemKindType::SKELETON:
     case ItemKindType::FIGURINE:
     case ItemKindType::STATUE:
     case ItemKindType::CORPSE:

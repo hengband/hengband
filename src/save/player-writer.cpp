@@ -107,8 +107,8 @@ void wr_player(PlayerType *player_ptr)
     wr_s32b(player_ptr->old_race2);
     wr_s16b(player_ptr->old_realm);
 
-    for (const auto &[r_idx, is_achieved] : w_ptr->bounties) {
-        wr_s16b(enum2i(r_idx));
+    for (const auto &[monrace_id, is_achieved] : w_ptr->bounties) {
+        wr_s16b(enum2i(monrace_id));
         wr_bool(is_achieved);
     }
 

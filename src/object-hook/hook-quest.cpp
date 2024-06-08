@@ -29,7 +29,7 @@ bool object_is_bounty(PlayerType *player_ptr, const ItemEntity *o_ptr)
     }
 
     const auto &monrace = o_ptr->get_monrace();
-    if (player_ptr->knows_daily_bounty && (monrace.name == monraces_info[w_ptr->today_mon].name)) {
+    if (player_ptr->knows_daily_bounty && (monrace.name == w_ptr->get_today_bounty().name)) {
         return true;
     }
 
