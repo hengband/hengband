@@ -328,6 +328,25 @@ std::optional<std::string> MonsterRaceInfo::probe_lore()
 #endif
 }
 
+void MonsterRaceInfo::make_lore_treasure(int num_item, int num_gold)
+{
+    if (this->r_drop_item < num_item) {
+        this->r_drop_item = num_item;
+    }
+
+    if (this->r_drop_gold < num_gold) {
+        this->r_drop_gold = num_gold;
+    }
+
+    if (this->drop_flags.has(MonsterDropType::DROP_GOOD)) {
+        this->r_drop_flags.set(MonsterDropType::DROP_GOOD);
+    }
+
+    if (this->drop_flags.has(MonsterDropType::DROP_GREAT)) {
+        this->r_drop_flags.set(MonsterDropType::DROP_GREAT);
+    }
+}
+
 /*!
  * @brief エルドリッチホラーの形容詞種別を決める
  * @return エルドリッチホラーの形容詞

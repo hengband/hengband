@@ -413,22 +413,7 @@ void MonsterEntity::make_lore_treasure(int num_item, int num_gold) const
         return;
     }
 
-    if (monrace.r_drop_item < num_item) {
-        monrace.r_drop_item = num_item;
-    }
-
-    if (monrace.r_drop_gold < num_gold) {
-        monrace.r_drop_gold = num_gold;
-    }
-
-    if (monrace.drop_flags.has(MonsterDropType::DROP_GOOD)) {
-        monrace.r_drop_flags.set(MonsterDropType::DROP_GOOD);
-    }
-
-    if (monrace.drop_flags.has(MonsterDropType::DROP_GREAT)) {
-        monrace.r_drop_flags.set(MonsterDropType::DROP_GREAT);
-    }
-
+    monrace.make_lore_treasure(num_item, num_gold);
     if (LoreTracker::get_instance().is_tracking(this->r_idx)) {
         RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
     }

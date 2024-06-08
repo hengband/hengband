@@ -154,6 +154,7 @@ public:
     std::string build_eldritch_horror_message(std::string_view description) const;
 
     std::optional<std::string> probe_lore();
+    void make_lore_treasure(int num_item, int num_drop);
 
 private:
     const std::string &decide_horror_message() const;
