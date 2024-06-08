@@ -156,7 +156,6 @@ static void see_arena_poster(PlayerType *player_ptr)
     auto *r_ptr = &monraces_info[arena_info[player_ptr->arena_number].r_idx];
     msg_format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), r_ptr->name.data());
     LoreTracker::get_instance().set_trackee(arena_info[player_ptr->arena_number].r_idx);
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
     handle_stuff(player_ptr);
 }
 

@@ -47,6 +47,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/timed-effects.h"
+#include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
@@ -190,7 +191,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     const auto is_hallucinated = effects->hallucination().is_hallucinated();
     if (m_ptr->ml) {
         if (!is_hallucinated) {
-            monster_race_track(player_ptr, m_ptr->ap_r_idx);
+            LoreTracker::get_instance().set_trackee(m_ptr->ap_r_idx);
         }
 
         health_track(player_ptr, g_ptr->m_idx);

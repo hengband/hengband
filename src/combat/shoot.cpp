@@ -60,6 +60,7 @@
 #include "target/target-checker.h"
 #include "target/target-getter.h"
 #include "timed-effect/timed-effects.h"
+#include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
@@ -590,6 +591,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     }
 
     /* Sniper - Repeat shooting when double shots */
+    auto &tracker = LoreTracker::get_instance();
     for (auto i = 0; i < ((snipe_type == SP_DOUBLE) ? 2 : 1); i++) {
         /* Start at the player */
         y = player_ptr->y;
@@ -764,7 +766,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
                         if (m_ptr->ml) {
                             if (!player_ptr->effects()->hallucination().is_hallucinated()) {
-                                monster_race_track(player_ptr, m_ptr->ap_r_idx);
+                                tracker.set_trackee(m_ptr->ap_r_idx);
                             }
 
                             health_track(player_ptr, c_mon_ptr->m_idx);

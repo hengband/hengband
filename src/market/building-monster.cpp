@@ -10,6 +10,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
+#include "tracking/lore-tracker.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-lore.h"
@@ -135,18 +136,19 @@ bool research_mon(PlayerType *player_ptr)
         i = monrace_ids.size() - 1;
     }
 
+    auto &tracker = LoreTracker::get_instance();
     auto notpicked = true;
     auto query = 'y';
     while (notpicked) {
-        auto r_idx = monrace_ids[i];
-        roff_top(r_idx);
+        auto monrace_id = monrace_ids[i];
+        roff_top(monrace_id);
         term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ' 'で続行, ESC]", " [(r)ecall, ESC, space to continue]"));
         while (true) {
             if (recall) {
-                lore_do_probe(player_ptr, r_idx);
-                monster_race_track(player_ptr, r_idx);
+                lore_do_probe(player_ptr, monrace_id);
+                tracker.set_trackee(monrace_id);
                 handle_stuff(player_ptr);
-                screen_roff(player_ptr, r_idx, MONSTER_LORE_RESEARCH);
+                screen_roff(player_ptr, monrace_id, MONSTER_LORE_RESEARCH);
                 notpicked = false;
                 old_sym = *sym;
                 old_i = i;

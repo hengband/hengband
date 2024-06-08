@@ -38,6 +38,7 @@
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "timed-effect/timed-effects.h"
+#include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include <algorithm>
@@ -272,6 +273,7 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
     project_m_x = 0;
     project_m_y = 0;
     auto visual = false;
+    auto &tracker = LoreTracker::get_instance();
     const auto max_range = AngbandSystem::get_instance().get_max_range();
     while (true) {
         ProjectionPath path_g(this->player_ptr, (project_length ? project_length : max_range), { y1, x1 }, { y2, x2 }, flag);
@@ -314,8 +316,9 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
             const auto &monster = floor.m_list[grid.m_idx];
             if (project_m_n == 1 && grid.has_monster() && monster.ml) {
                 if (!this->player_ptr->effects()->hallucination().is_hallucinated()) {
-                    monster_race_track(this->player_ptr, monster.ap_r_idx);
+                    tracker.set_trackee(monster.ap_r_idx);
                 }
+
                 health_track(this->player_ptr, grid.m_idx);
             }
 
@@ -413,8 +416,9 @@ static bool activate_super_ray_effect(PlayerType *player_ptr, int y, int x, int 
     const auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
     if (project_m_n == 1 && g_ptr->has_monster() && m_ptr->ml) {
         if (!player_ptr->effects()->hallucination().is_hallucinated()) {
-            monster_race_track(player_ptr, m_ptr->ap_r_idx);
+            LoreTracker::get_instance().set_trackee(m_ptr->ap_r_idx);
         }
+
         health_track(player_ptr, g_ptr->m_idx);
     }
 
