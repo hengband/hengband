@@ -12,7 +12,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/object-sort.h"
-#include <stdint.h>
+#include <cstdint>
 
 /*!
  * @brief 店置きのアイテムオブジェクトを読み込む / Add the item "o_ptr" to the inventory of the "Home"

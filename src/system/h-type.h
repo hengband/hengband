@@ -34,7 +34,7 @@
  */
 
 #include <cassert>
-#include <stdint.h>
+#include <cstdint>
 
 /*** Special 4 letter names for some standard types ***/
 typedef void *vptr; /*!< void型ポインタ定義 / A standard pointer (to "void" because ANSI C says so) */
