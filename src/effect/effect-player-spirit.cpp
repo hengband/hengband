@@ -11,6 +11,7 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "tracking/health-bar-tracker.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -59,9 +60,7 @@ void effect_player_drain_mana(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         ep_ptr->m_ptr->hp = ep_ptr->m_ptr->maxhp;
     }
 
-    if (player_ptr->health_who == ep_ptr->src_idx) {
-        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
-    }
+    HealthBarTracker::get_instance().set_flag_if_tracking(ep_ptr->src_idx);
     if (player_ptr->riding == ep_ptr->src_idx) {
         rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }

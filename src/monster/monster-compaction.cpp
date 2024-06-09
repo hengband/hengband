@@ -14,6 +14,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
+#include "tracking/health-bar-tracker.h"
 #include "view/display-messages.h"
 
 /*!
@@ -59,7 +60,7 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
         player_ptr->riding = i2;
     }
 
-    if (player_ptr->health_who == i1) {
+    if (HealthBarTracker::get_instance().is_tracking(i1)) {
         health_track(player_ptr, i2);
     }
 

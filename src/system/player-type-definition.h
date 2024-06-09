@@ -236,8 +236,6 @@ public:
     bool teleport_town{};
     bool enter_dungeon{}; /* Just enter the dungeon */
 
-    IDX health_who{}; /* Health bar trackee */
-
     int16_t new_spells{}; /* Number of spells available */
     int16_t old_spells{};
 

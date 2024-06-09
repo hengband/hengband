@@ -57,6 +57,7 @@
 #include "target/target-types.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
+#include "tracking/health-bar-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
@@ -270,9 +271,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
         }
 
         player_ptr->riding = grid.m_idx;
-
-        /* Hack -- remove tracked monster */
-        if (player_ptr->riding == player_ptr->health_who) {
+        if (HealthBarTracker::get_instance().is_tracking(player_ptr->riding)) {
             health_track(player_ptr, 0);
         }
     }

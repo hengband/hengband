@@ -16,6 +16,7 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
+#include "tracking/health-bar-tracker.h"
 
 /*!
  * @brief モンスター配列からモンスターを消去する / Delete a monster by index.
@@ -64,7 +65,7 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
         target_who = 0;
     }
 
-    if (i == player_ptr->health_who) {
+    if (HealthBarTracker::get_instance().is_tracking(i)) {
         health_track(player_ptr, 0);
     }
 

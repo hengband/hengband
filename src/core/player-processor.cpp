@@ -55,6 +55,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
+#include "tracking/health-bar-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "window/display-sub-windows.h"
@@ -363,10 +364,7 @@ void process_player(PlayerType *player_ptr)
                         m_ptr->mflag2.reset(MonsterConstantFlagType::MARK);
                         m_ptr->ml = false;
                         update_monster(player_ptr, m_idx, false);
-                        if (player_ptr->health_who == m_idx) {
-                            rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
-                        }
-
+                        HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
                         if (player_ptr->riding == m_idx) {
                             rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
                         }

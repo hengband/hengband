@@ -47,6 +47,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "tracking/health-bar-tracker.h"
 #include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
@@ -235,13 +236,9 @@ static bool deal_effect_damage_from_monster(PlayerType *player_ptr, EffectMonste
         return false;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (player_ptr->health_who == em_ptr->g_ptr->m_idx) {
-        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
-    }
-
+    HealthBarTracker::get_instance().set_flag_if_tracking(em_ptr->g_ptr->m_idx);
     if (player_ptr->riding == em_ptr->g_ptr->m_idx) {
-        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
+        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     (void)set_monster_csleep(player_ptr, em_ptr->g_ptr->m_idx, 0);
@@ -625,8 +622,7 @@ static void update_phase_out_stat(PlayerType *player_ptr, EffectMonster *em_ptr)
         return;
     }
 
-    player_ptr->health_who = em_ptr->g_ptr->m_idx;
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::HEALTH);
+    HealthBarTracker::get_instance().set_trackee(em_ptr->g_ptr->m_idx);
     handle_stuff(player_ptr);
 }
 

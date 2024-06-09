@@ -967,6 +967,7 @@ hengband_SOURCES = \
 	timed-effect/timed-effects.cpp timed-effect/timed-effects.h \
 	\
 	tracking/baseitem-tracker.cpp tracking/baseitem-tracker.h \
+	tracking/health-bar-tracker.cpp tracking/health-bar-tracker.h \
 	tracking/lore-tracker.cpp tracking/lore-tracker.h \
 	\
 	util/angband-files.cpp util/angband-files.h \

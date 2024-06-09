@@ -629,6 +629,7 @@
     <ClCompile Include="..\..\src\timed-effect\player-stun.cpp" />
     <ClCompile Include="..\..\src\timed-effect\timed-effects.cpp" />
     <ClCompile Include="..\..\src\tracking\baseitem-tracker.cpp" />
+    <ClCompile Include="..\..\src\tracking\health-bar-tracker.cpp" />
     <ClCompile Include="..\..\src\tracking\lore-tracker.cpp" />
     <ClCompile Include="..\..\src\util\candidate-selector.cpp" />
     <ClCompile Include="..\..\src\util\rng-xoshiro.cpp" />
@@ -1441,6 +1442,7 @@
     <ClInclude Include="..\..\src\timed-effect\player-stun.h" />
     <ClInclude Include="..\..\src\timed-effect\timed-effects.h" />
     <ClInclude Include="..\..\src\tracking\baseitem-tracker.h" />
+    <ClInclude Include="..\..\src\tracking\health-bar-tracker.h" />
     <ClInclude Include="..\..\src\tracking\lore-tracker.h" />
     <ClInclude Include="..\..\src\util\bit-flags-calculator.h" />
     <ClInclude Include="..\..\src\util\buffer-shaper.h" />

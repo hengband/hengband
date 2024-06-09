@@ -21,6 +21,7 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
+#include "tracking/health-bar-tracker.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <string>
@@ -107,10 +108,7 @@ bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (m_ptr->ml) {
-        if (player_ptr->health_who == m_idx) {
-            rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
-        }
-
+        HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
         if (player_ptr->riding == m_idx) {
             rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
         }
@@ -292,13 +290,9 @@ bool set_monster_monfear(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     }
 
     if (m_ptr->ml) {
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
-        if (player_ptr->health_who == m_idx) {
-            rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
-        }
-
+        HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
         if (player_ptr->riding == m_idx) {
-            rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
+            RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
         }
     }
 
@@ -342,13 +336,9 @@ bool set_monster_invulner(PlayerType *player_ptr, MONSTER_IDX m_idx, int v, bool
     }
 
     if (m_ptr->ml) {
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
-        if (player_ptr->health_who == m_idx) {
-            rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
-        }
-
+        HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
         if (player_ptr->riding == m_idx) {
-            rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
+            RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
         }
     }
 
