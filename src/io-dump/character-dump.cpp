@@ -1,7 +1,6 @@
 #include "io-dump/character-dump.h"
 #include "artifact/fixed-art-types.h"
 #include "avatar/avatar.h"
-#include "cmd-building/cmd-building.h"
 #include "dungeon/quest.h"
 #include "flavor/flavor-describer.h"
 #include "floor/floor-town.h"
@@ -275,19 +274,19 @@ static void dump_aux_arena(PlayerType *player_ptr, FILE *fff)
     const auto &entries = ArenaEntryList::get_instance();
     const auto arena_number = player_ptr->arena_number;
     if (arena_number < 0) {
-        if (arena_number <= ARENA_DEFEATED_OLD_VER) {
-            fprintf(fff, _("\n 闘技場: 敗北\n", "\n Arena: Defeated\n"));
-        } else {
-            constexpr auto mes = _("\n 闘技場: %d回戦で%sの前に敗北\n", "\n Arena: Defeated by %s in the %d%s fight\n");
-            const auto &arena = arena_info[-1 - arena_number];
-            const auto &arena_monrace = monraces_info[arena.r_idx];
-#ifdef JP
-            fprintf(fff, mes, -arena_number, arena_monrace.name.data());
-#else
-            fprintf(fff, mes, arena_monrace.name.data(), -arena_number, get_ordinal_number_suffix(-arena_number).data());
-#endif
+        if (arena_number == ARENA_DEFEATED_OLD_VER) {
+            fprintf(fff, _("\n 闘技場: 敗北\n\n", "\n Arena: Defeated\n\n"));
+            return;
         }
 
+        constexpr auto fmt = _("\n 闘技場: %d回戦で%sの前に敗北\n", "\n Arena: Defeated by %s in the %d%s fight\n");
+        const auto &arena = arena_info[-1 - arena_number];
+        const auto &arena_monrace = monraces_info[arena.r_idx];
+#ifdef JP
+        fprintf(fff, fmt, -arena_number, arena_monrace.name.data());
+#else
+        fprintf(fff, fmt, arena_monrace.name.data(), -arena_number, get_ordinal_number_suffix(-arena_number).data());
+#endif
         fprintf(fff, "\n");
         return;
     }

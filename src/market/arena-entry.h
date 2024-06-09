@@ -1,6 +1,7 @@
 #pragma once
 
 #include "system/baseitem-info.h"
+#include "system/h-type.h"
 #include <vector>
 
 /*!
@@ -37,3 +38,5 @@ private:
 };
 
 extern const std::vector<ArenaMonsterEntry> arena_info;
+
+constexpr auto ARENA_DEFEATED_OLD_VER = -MAX_SHORT; /*<! 旧バージョンの闘技場敗北定義 */

@@ -1,5 +1,4 @@
 #include "load/player-info-loader.h"
-#include "cmd-building/cmd-building.h"
 #include "load/angband-version-comparer.h"
 #include "load/birth-loader.h"
 #include "load/dummy-loader.h"
@@ -10,6 +9,7 @@
 #include "load/player-class-specific-data-loader.h"
 #include "load/savedata-old-flag-types.h"
 #include "load/world-loader.h"
+#include "market/arena-entry.h"
 #include "market/arena.h"
 #include "monster-race/race-ability-flags.h"
 #include "mutation/mutation-calculator.h"
