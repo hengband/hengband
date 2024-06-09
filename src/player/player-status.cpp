@@ -3087,9 +3087,9 @@ int16_t modify_stat_value(int value, int amount)
  */
 long calc_score(PlayerType *player_ptr)
 {
-    int arena_win = std::min<int>(player_ptr->arena_number, MAX_ARENA_MONS);
-
-    int mult = 100;
+    const auto &entries = ArenaEntryList::get_instance();
+    const auto arena_win = std::min<int>(player_ptr->arena_number, entries.get_max_entries());
+    auto mult = 100;
     if (!preserve_mode) {
         mult += 10;
     }

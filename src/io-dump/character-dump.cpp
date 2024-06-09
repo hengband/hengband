@@ -272,6 +272,7 @@ static void dump_aux_arena(PlayerType *player_ptr, FILE *fff)
         return;
     }
 
+    const auto &entries = ArenaEntryList::get_instance();
     const auto arena_number = player_ptr->arena_number;
     if (arena_number < 0) {
         if (arena_number <= ARENA_DEFEATED_OLD_VER) {
@@ -291,19 +292,20 @@ static void dump_aux_arena(PlayerType *player_ptr, FILE *fff)
         return;
     }
 
-    if (arena_number > MAX_ARENA_MONS + 2) {
+    const auto max_entries = entries.get_max_entries();
+    if (arena_number > max_entries + 2) {
         fprintf(fff, _("\n 闘技場: 真のチャンピオン\n", "\n Arena: True Champion\n"));
         fprintf(fff, "\n");
         return;
     }
 
-    if (arena_number > MAX_ARENA_MONS - 1) {
+    if (arena_number > max_entries - 1) {
         fprintf(fff, _("\n 闘技場: チャンピオン\n", "\n Arena: Champion\n"));
         fprintf(fff, "\n");
         return;
     }
 
-    const auto victory_count = arena_number > MAX_ARENA_MONS ? MAX_ARENA_MONS : arena_number;
+    const auto victory_count = arena_number > max_entries ? max_entries : arena_number;
 #ifdef JP
     fprintf(fff, "\n 闘技場: %2d勝\n", victory_count);
 #else

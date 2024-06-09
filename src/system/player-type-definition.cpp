@@ -24,7 +24,8 @@ PlayerType::PlayerType()
 
 bool PlayerType::is_true_winner() const
 {
-    return (w_ptr->total_winner > 0) && (this->arena_number > MAX_ARENA_MONS + 2);
+    const auto &entries = ArenaEntryList::get_instance();
+    return (w_ptr->total_winner > 0) && (this->arena_number > entries.get_max_entries() + 2);
 }
 
 std::shared_ptr<TimedEffects> PlayerType::effects() const

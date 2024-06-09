@@ -49,7 +49,8 @@ enum class ArenaRecord {
  */
 static bool process_ostensible_arena_victory(PlayerType *player_ptr)
 {
-    if (player_ptr->arena_number != MAX_ARENA_MONS) {
+    auto &entries = ArenaEntryList::get_instance();
+    if (player_ptr->arena_number != entries.get_max_entries()) {
         return false;
     }
 
@@ -74,11 +75,13 @@ static bool process_ostensible_arena_victory(PlayerType *player_ptr)
  */
 static ArenaRecord check_arena_record(PlayerType *player_ptr)
 {
-    if (player_ptr->arena_number <= MAX_ARENA_MONS) {
+    const auto &entries = ArenaEntryList::get_instance();
+    const auto max_entries = entries.get_max_entries();
+    if (player_ptr->arena_number <= max_entries) {
         return ArenaRecord::FENGFUANG;
     }
 
-    if (player_ptr->arena_number < MAX_ARENA_MONS + 2) {
+    if (player_ptr->arena_number < max_entries + 2) {
         return ArenaRecord::POWER_WYRM;
     }
 
@@ -143,18 +146,20 @@ static bool go_to_arena(PlayerType *player_ptr)
 
 static void see_arena_poster(PlayerType *player_ptr)
 {
-    if (player_ptr->arena_number == MAX_ARENA_MONS) {
+    const auto &entries = ArenaEntryList::get_instance();
+    const auto max_entries = entries.get_max_entries();
+    if (player_ptr->arena_number == max_entries) {
         msg_print(_("あなたは勝利者だ。 アリーナでのセレモニーに参加しなさい。", "You are victorious. Enter the arena for the ceremony."));
         return;
     }
 
-    if (player_ptr->arena_number > MAX_ARENA_MONS) {
+    if (player_ptr->arena_number > max_entries) {
         msg_print(_("あなたはすべての敵に勝利した。", "You have won against all foes."));
         return;
     }
 
-    auto *r_ptr = &monraces_info[arena_info[player_ptr->arena_number].r_idx];
-    msg_format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), r_ptr->name.data());
+    const auto &monrace = monraces_info[arena_info[player_ptr->arena_number].r_idx];
+    msg_format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), monrace.name.data());
     LoreTracker::get_instance().set_trackee(arena_info[player_ptr->arena_number].r_idx);
     handle_stuff(player_ptr);
 }

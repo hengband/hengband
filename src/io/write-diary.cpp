@@ -359,8 +359,7 @@ void exe_write_diary(const FloorType &floor, DiaryKind dk, int num, std::string_
 
         constexpr auto fmt = _(" %2d:%02d %20s 闘技場の%d%s回戦(%s)に勝利した。\n", " %2d:%02d %20s won the %d%s fight (%s).\n");
         fprintf(fff, fmt, hour, min, note_level.data(), num, _("", get_ordinal_number_suffix(num).data()), note.data());
-
-        if (num == MAX_ARENA_MONS) {
+        if (num == ArenaEntryList::get_instance().get_max_entries()) {
             constexpr auto mes_champion = _("                 闘技場のすべての敵に勝利し、チャンピオンとなった。\n",
                 "                 won all fights to become a Champion.\n");
             fprintf(fff, mes_champion);

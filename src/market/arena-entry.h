@@ -37,9 +37,3 @@ private:
 };
 
 extern const std::vector<ArenaMonsterEntry> arena_info;
-
-/*
- * @brief 表彰式までの最大数.
- * @todo arena_info を配列からvectorに変えたので、後でarena_info.size() に差し替えて廃止予定.
- */
-extern const int MAX_ARENA_MONS;

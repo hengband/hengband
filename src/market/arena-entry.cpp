@@ -19,6 +19,9 @@ ArenaEntryList &ArenaEntryList::get_instance()
     return instance;
 }
 
+/*
+ * @brief 表彰式までの最大数を返す.
+ */
 int ArenaEntryList::get_max_entries() const
 {
     return std::ssize(arena_info) - 2;
@@ -72,5 +75,3 @@ const std::vector<ArenaMonsterEntry> arena_info = {
     { MonraceList::empty_id(), { ItemKindType::NONE, 0 } }, /* Victory prizing */
     { MonsterRaceId::HAGURE, { ItemKindType::SCROLL, SV_SCROLL_ARTIFACT } },
 };
-
-const int MAX_ARENA_MONS = arena_info.size() - 2;

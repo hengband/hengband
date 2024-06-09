@@ -81,7 +81,9 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, MonsterDeath *md_ptr
     }
 
     w_ptr->set_arena(true);
-    if (player_ptr->arena_number > MAX_ARENA_MONS) {
+    auto &entries = ArenaEntryList::get_instance();
+    const auto max_entries = entries.get_max_entries();
+    if (player_ptr->arena_number > max_entries) {
         msg_print(_("素晴らしい！君こそ真の勝利者だ。", "You are a Genuine Champion!"));
     } else {
         msg_print(_("勝利！チャンピオンへの道を進んでいる。", "Victorious! You're on your way to becoming Champion."));
@@ -95,7 +97,7 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, MonsterDeath *md_ptr
         (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
     }
 
-    if (player_ptr->arena_number > MAX_ARENA_MONS) {
+    if (player_ptr->arena_number > max_entries) {
         player_ptr->arena_number++;
     }
 
