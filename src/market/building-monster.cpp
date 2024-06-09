@@ -14,6 +14,7 @@
 #include "util/string-processor.h"
 #include "view/display-lore.h"
 #include "view/display-messages.h"
+#include <algorithm>
 
 /*!
  * @brief 施設でモンスターの情報を知るメインルーチン / research_mon -KMW-
