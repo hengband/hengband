@@ -120,7 +120,7 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
     decide_drop_from_monster(player_ptr, m_idx, turn_flags_ptr->is_riding_mon);
     if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && one_in_(13) && !m_ptr->is_asleep()) {
-        choose_new_monster(player_ptr, m_idx, false, MonraceList::empty_id());
+        choose_chameleon_polymorph(player_ptr, m_idx);
 
         const auto &new_monrace = m_ptr->get_monrace();
 

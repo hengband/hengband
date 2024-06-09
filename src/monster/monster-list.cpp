@@ -337,14 +337,12 @@ static std::optional<MonsterRaceId> polymorph_of_chameleon(PlayerType *player_pt
 }
 
 /*!
- * @brief モンスターの変身処理
+ * @brief カメレオンの変身処理
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 変身処理を受けるモンスター情報のID
- * @param born 生成時の初変身先指定ならばtrue
- * @param r_idx 旧モンスター種族のID
  * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
  */
-void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, MonsterRaceId r_idx, std::optional<MONSTER_IDX> summoner_m_idx)
+void choose_chameleon_polymorph(PlayerType *player_ptr, MONSTER_IDX m_idx, std::optional<MONSTER_IDX> summoner_m_idx)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto &monster = floor.m_list[m_idx];
