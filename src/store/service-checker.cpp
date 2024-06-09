@@ -104,7 +104,7 @@ static bool check_store_temple(const ItemEntity &item)
         if (monrace.kind_flags.has_not(MonsterKindType::EVIL)) {
             auto can_sell = monrace.kind_flags.has(MonsterKindType::GOOD);
             can_sell |= monrace.kind_flags.has(MonsterKindType::ANIMAL);
-            can_sell |= angband_strchr("?!", monrace.symbol_definition.character) != nullptr;
+            can_sell |= monrace.symbol_char_is_any_of("?!");
             if (can_sell) {
                 return true;
             }

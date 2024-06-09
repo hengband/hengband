@@ -305,7 +305,7 @@ bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const au
 
     if (entry.has(FLG_HUMAN) && o_ptr->has_monrace()) {
         const auto &monrace = o_ptr->get_monrace();
-        if ((tval != ItemKindType::CORPSE || !angband_strchr("pht", monrace.symbol_definition.character))) {
+        if (tval != ItemKindType::CORPSE || !monrace.symbol_char_is_any_of("pht")) {
             return false;
         }
     }
