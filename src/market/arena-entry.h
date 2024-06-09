@@ -1,26 +1,9 @@
 #pragma once
 
-#include "system/baseitem-info.h"
-#include "system/h-type.h"
 #include <optional>
 #include <vector>
 
-/*!
- * @brief 闘技場のモンスターエントリー構造体
- */
-enum class MonsterRaceId : short;
-class ArenaMonsterEntry {
-public:
-    ArenaMonsterEntry(MonsterRaceId r_idx, const BaseitemKey &key)
-        : monrace_id(r_idx)
-        , key(key)
-    {
-    }
-
-    MonsterRaceId monrace_id; /*!< 闘技場のモンスター種族ID(0ならば表彰式) / Monster (0 means victory prizing) */
-    BaseitemKey key;
-};
-
+class BaseitemKey;
 class MonsterRaceInfo;
 class ArenaEntryList {
 public:

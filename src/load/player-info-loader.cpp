@@ -13,6 +13,7 @@
 #include "market/arena.h"
 #include "monster-race/race-ability-flags.h"
 #include "mutation/mutation-calculator.h"
+#include "object/tval-types.h"
 #include "player-base/player-class.h"
 #include "player-info/mane-data-type.h"
 #include "player-info/sniper-data-type.h"

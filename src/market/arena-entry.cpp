@@ -9,10 +9,25 @@
 #include "sv-definition/sv-scroll-types.h"
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-wand-types.h"
-#include "system/building-type-definition.h"
+#include "system/baseitem-info.h"
 #include "system/monster-race-info.h"
 
 namespace {
+/*!
+ * @brief 闘技場のモンスターエントリー構造体
+ */
+class ArenaMonsterEntry {
+public:
+    ArenaMonsterEntry(MonsterRaceId r_idx, const BaseitemKey &key)
+        : monrace_id(r_idx)
+        , key(key)
+    {
+    }
+
+    MonsterRaceId monrace_id; /*!< 闘技場のモンスター種族ID(0ならば表彰式) / Monster (0 means victory prizing) */
+    BaseitemKey key;
+};
+
 /*!
  * @brief 闘技場のモンスターID及び報酬アイテムテーブル
  */
