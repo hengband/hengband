@@ -139,7 +139,8 @@ static void generate_challenge_arena(PlayerType *player_ptr)
     build_arena(player_ptr, &y, &x);
     player_place(player_ptr, y, x);
     auto &entries = ArenaEntryList::get_instance();
-    if (place_specific_monster(player_ptr, 0, player_ptr->y + 5, player_ptr->x, arena_info[entries.get_current_entry()].r_idx, PM_NO_KAGE | PM_NO_PET)) {
+    const auto &monrace = entries.get_monrace();
+    if (place_specific_monster(player_ptr, 0, player_ptr->y + 5, player_ptr->x, monrace.idx, PM_NO_KAGE | PM_NO_PET)) {
         return;
     }
 

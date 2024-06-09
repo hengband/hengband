@@ -277,12 +277,11 @@ static void dump_aux_arena(FILE *fff)
     if (defeated_entry && !entries.is_player_true_victor()) {
         const auto defeated_fight = *defeated_entry + 1; //!< entryは配列番号なので対戦回数と1つずれる.
         constexpr auto fmt = _("\n 闘技場: %d回戦で%sの前に敗北\n", "\n Arena: Defeated by %s in the %d%s fight\n");
-        const auto &arena = arena_info[*defeated_entry];
-        const auto &arena_monrace = monraces_info[arena.r_idx];
+        const auto &monrace = entries.get_monrace();
 #ifdef JP
-        fprintf(fff, fmt, defeated_fight, arena_monrace.name.data());
+        fprintf(fff, fmt, defeated_fight, monrace.name.data());
 #else
-        fprintf(fff, fmt, arena_monrace.name.data(), defeated_fight, get_ordinal_number_suffix(*defeated_entry).data());
+        fprintf(fff, fmt, monrace.name.data(), defeated_fight, get_ordinal_number_suffix(*defeated_entry).data());
 #endif
         fprintf(fff, "\n");
         return;

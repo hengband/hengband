@@ -378,8 +378,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
         if (floor.inside_arena) {
             auto &entries = ArenaEntryList::get_instance();
             entries.set_defeated_entry();
-            const auto current_entry = entries.get_current_entry();
-            const auto &m_name = monraces_info[arena_info[current_entry].r_idx].name;
+            const auto &m_name = entries.get_monrace().name;
             msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name.data());
             msg_print(nullptr);
             if (record_arena) {

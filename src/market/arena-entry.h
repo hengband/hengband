@@ -8,19 +8,20 @@
 /*!
  * @brief 闘技場のモンスターエントリー構造体
  */
-enum class MonsterRaceId : int16_t;
+enum class MonsterRaceId : short;
 class ArenaMonsterEntry {
 public:
     ArenaMonsterEntry(MonsterRaceId r_idx, const BaseitemKey &key)
-        : r_idx(r_idx)
+        : monrace_id(r_idx)
         , key(key)
     {
     }
 
-    MonsterRaceId r_idx; /*!< 闘技場のモンスター種族ID(0ならば表彰式) / Monster (0 means victory prizing) */
+    MonsterRaceId monrace_id; /*!< 闘技場のモンスター種族ID(0ならば表彰式) / Monster (0 means victory prizing) */
     BaseitemKey key;
 };
 
+class MonsterRaceInfo;
 class ArenaEntryList {
 public:
     ~ArenaEntryList() = default;
@@ -35,6 +36,9 @@ public:
     std::optional<int> get_defeated_entry() const;
     bool is_player_victor() const;
     bool is_player_true_victor() const;
+    const BaseitemKey &get_bi_key() const;
+    MonsterRaceInfo &get_monrace();
+    const MonsterRaceInfo &get_monrace() const;
     void increment_entry();
     void reset_entry();
     void set_defeated_entry();
@@ -48,5 +52,3 @@ private:
     int current_entry = 0; //!< 現在の対戦相手.
     std::optional<int> defeated_entry; //!< 負けた相手. 無敗ならnullopt. v1.5.0.1以前の敗北済セーブデータは0固定.
 };
-
-extern const std::vector<ArenaMonsterEntry> arena_info;

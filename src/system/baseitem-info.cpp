@@ -61,6 +61,11 @@ std::optional<int> BaseitemKey::sval() const
     return this->subtype_value;
 }
 
+bool BaseitemKey::is_valid() const
+{
+    return (this->type_value > ItemKindType::NONE) && this->subtype_value.has_value();
+}
+
 bool BaseitemKey::is(ItemKindType tval) const
 {
     return this->type_value == tval;

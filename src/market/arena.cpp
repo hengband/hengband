@@ -159,8 +159,7 @@ static void see_arena_poster(PlayerType *player_ptr)
         return;
     }
 
-    const auto current_entry = entries.get_current_entry();
-    const auto &monrace = MonraceList::get_instance().get_monrace(arena_info[current_entry].r_idx);
+    const auto &monrace = entries.get_monrace();
     msg_format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), monrace.name.data());
     LoreTracker::get_instance().set_trackee(monrace.idx);
     handle_stuff(player_ptr);
