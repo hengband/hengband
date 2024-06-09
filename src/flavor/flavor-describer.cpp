@@ -73,10 +73,10 @@ static std::string describe_chest_trap(const ItemEntity &item)
     case ChestTrapType::SCATTER:
         return _("(アイテム散乱)", " (Scatter)");
     case ChestTrapType::MAX:
-        throw("Invalid chest trap type is specified!");
+        THROW_EXCEPTION(std::logic_error, "Invalid chest trap type is specified!");
+    default:
+        return "";
     }
-
-    return "";
 }
 
 static std::string describe_chest(const ItemEntity &item, const describe_option_type &opt)

@@ -404,7 +404,7 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
         auto is_old_ver = (10 <= tmp_major) && (tmp_major <= 13);
         if (tmp_major == variant_length) {
             if (std::string_view(&tmp_ver[1], variant_length) != VARIANT_NAME) {
-                throw(_("セーブデータのバリアントは変愚蛮怒以外です", "The variant of save data is other than Hengband!"));
+                THROW_EXCEPTION(std::runtime_error, _("セーブデータのバリアントは変愚蛮怒以外です", "The variant of save data is other than Hengband!"));
             }
 
             system.savefile_key = tmp_ver[version_length - 1];
@@ -414,7 +414,7 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
             (void)fd_close(fd);
         } else {
             (void)fd_close(fd);
-            throw("Invalid version is detected!");
+            THROW_EXCEPTION(std::runtime_error, _("異常なバージョンが検出されました！", "Invalid version is detected!"));
         }
     }
 
