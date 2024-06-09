@@ -8,7 +8,7 @@
 #include "dungeon/quest.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/files-util.h"
-#include "market/arena-info-table.h"
+#include "market/arena-entry.h"
 #include "player/player-status.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"

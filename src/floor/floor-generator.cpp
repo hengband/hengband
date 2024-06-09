@@ -26,7 +26,7 @@
 #include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/write-diary.h"
-#include "market/arena-info-table.h"
+#include "market/arena-entry.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/place-monster-types.h"

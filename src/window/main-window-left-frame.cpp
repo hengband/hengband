@@ -2,7 +2,7 @@
 #include "dungeon/quest.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
-#include "market/arena-info-table.h"
+#include "market/arena-entry.h"
 #include "monster/monster-status.h"
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"

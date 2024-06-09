@@ -52,7 +52,7 @@
 #include "item-info/flavor-initializer.h"
 #include "load/load.h"
 #include "main/sound-of-music.h"
-#include "market/arena-info-table.h"
+#include "market/arena-entry.h"
 #include "market/bounty.h"
 #include "market/building-initializer.h"
 #include "monster-floor/monster-generator.h"

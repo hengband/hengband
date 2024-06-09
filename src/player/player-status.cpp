@@ -26,7 +26,7 @@
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "market/arena-info-table.h"
+#include "market/arena-entry.h"
 #include "mind/mind-force-trainer.h"
 #include "mind/mind-ninja.h"
 #include "monster-floor/monster-lite.h"

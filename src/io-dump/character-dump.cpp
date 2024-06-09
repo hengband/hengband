@@ -14,7 +14,7 @@
 #include "io/write-diary.h"
 #include "knowledge/knowledge-quests.h"
 #include "main/angband-headers.h"
-#include "market/arena-info-table.h"
+#include "market/arena-entry.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"

@@ -26,7 +26,7 @@
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "market/arena-info-table.h"
+#include "market/arena-entry.h"
 #include "mind/mind-mirror-master.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"

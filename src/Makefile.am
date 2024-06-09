@@ -402,7 +402,7 @@ hengband_SOURCES = \
 	main-unix/x11-gamma-builder.cpp main-unix/x11-gamma-builder.h \
 	main-unix/x11-type-string.cpp main-unix/x11-type-string.h \
 	\
-	market/arena-info-table.cpp market/arena-info-table.h \
+	market/arena-entry.cpp market/arena-entry.h \
 	market/building-initializer.cpp market/building-initializer.h \
 	market/building-util.cpp market/building-util.h \
 	market/play-gamble.cpp market/play-gamble.h \
