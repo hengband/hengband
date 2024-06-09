@@ -293,6 +293,49 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx, 
     return hook_pf(player_ptr, r_idx);
 }
 
+static std::optional<MonsterRaceId> polymorph_of_chameleon(PlayerType *player_ptr, MONSTER_IDX m_idx, const std::optional<MONSTER_IDX> summoner_m_idx)
+{
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
+
+    bool old_unique = false;
+    if (m_ptr->get_monrace().kind_flags.has(MonsterKindType::UNIQUE)) {
+        old_unique = true;
+    }
+
+    chameleon_change_m_idx = m_idx;
+    if (old_unique) {
+        auto hook = [summoner_m_idx](PlayerType *player_ptr, MonsterRaceId r_idx) { return monster_hook_chameleon_lord(player_ptr, r_idx, summoner_m_idx); };
+        get_mon_num_prep(player_ptr, std::move(hook), nullptr);
+    } else {
+        auto hook = [summoner_m_idx](PlayerType *player_ptr, MonsterRaceId r_idx) { return monster_hook_chameleon(player_ptr, r_idx, summoner_m_idx); };
+        get_mon_num_prep(player_ptr, std::move(hook), nullptr);
+    }
+
+    int level;
+
+    if (old_unique) {
+        level = monraces_info[MonsterRaceId::CHAMELEON_K].level;
+    } else if (!floor_ptr->dun_level) {
+        level = wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].level;
+    } else {
+        level = floor_ptr->dun_level;
+    }
+
+    if (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::CHAMELEON)) {
+        level += 2 + randint1(3);
+    }
+
+    const auto new_monrace_id = get_mon_num(player_ptr, 0, level, 0);
+
+    chameleon_change_m_idx = 0;
+    if (!MonraceList::is_valid(new_monrace_id)) {
+        return std::nullopt;
+    }
+
+    return new_monrace_id;
+}
+
 /*!
  * @brief モンスターの変身処理
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -305,54 +348,18 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    MonsterRaceInfo *r_ptr;
-
-    bool old_unique = false;
-    if (m_ptr->get_monrace().kind_flags.has(MonsterKindType::UNIQUE)) {
-        old_unique = true;
-    }
-    if (old_unique && (r_idx == MonsterRaceId::CHAMELEON)) {
-        r_idx = MonsterRaceId::CHAMELEON_K;
-    }
-    r_ptr = &monraces_info[r_idx];
 
     const auto old_m_name = monster_desc(player_ptr, m_ptr, 0);
 
-    if (!MonraceList::is_valid(r_idx)) {
-        DEPTH level;
-
-        chameleon_change_m_idx = m_idx;
-        if (old_unique) {
-            auto hook = [summoner_m_idx](PlayerType *player_ptr, MonsterRaceId r_idx) { return monster_hook_chameleon_lord(player_ptr, r_idx, summoner_m_idx); };
-            get_mon_num_prep(player_ptr, std::move(hook), nullptr);
-        } else {
-            auto hook = [summoner_m_idx](PlayerType *player_ptr, MonsterRaceId r_idx) { return monster_hook_chameleon(player_ptr, r_idx, summoner_m_idx); };
-            get_mon_num_prep(player_ptr, std::move(hook), nullptr);
-        }
-
-        if (old_unique) {
-            level = monraces_info[MonsterRaceId::CHAMELEON_K].level;
-        } else if (!floor_ptr->dun_level) {
-            level = wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].level;
-        } else {
-            level = floor_ptr->dun_level;
-        }
-
-        if (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::CHAMELEON)) {
-            level += 2 + randint1(3);
-        }
-
-        r_idx = get_mon_num(player_ptr, 0, level, 0);
-        r_ptr = &monraces_info[r_idx];
-
-        chameleon_change_m_idx = 0;
-        if (!MonraceList::is_valid(r_idx)) {
-            return;
-        }
+    auto new_monrace_id = polymorph_of_chameleon(player_ptr, m_idx, summoner_m_idx);
+    if (!new_monrace_id) {
+        return;
     }
 
-    m_ptr->r_idx = r_idx;
-    m_ptr->ap_r_idx = r_idx;
+    MonsterRaceInfo *r_ptr = &monraces_info[*new_monrace_id];
+
+    m_ptr->r_idx = *new_monrace_id;
+    m_ptr->ap_r_idx = *new_monrace_id;
     update_monster(player_ptr, m_idx, false);
     lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
 
