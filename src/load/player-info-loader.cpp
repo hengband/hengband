@@ -268,11 +268,21 @@ static void rd_arena(PlayerType *player_ptr)
     }
 
     player_ptr->town_num = rd_s16b();
-    player_ptr->arena_number = rd_s16b();
+    auto &entries = ArenaEntryList::get_instance();
+    entries.load_current_entry(rd_s16b());
     if (h_older_than(1, 5, 0, 1)) {
-        if (player_ptr->arena_number >= 99) {
-            player_ptr->arena_number = ARENA_DEFEATED_OLD_VER;
+        if (entries.get_current_entry() >= 99) {
+            entries.reset_entry();
+            entries.set_defeated_entry();
         }
+    } else if (loading_savefile_version < 23) {
+        const auto currrent_entry = entries.get_current_entry();
+        if (currrent_entry < 0) {
+            entries.load_current_entry(-currrent_entry);
+            entries.set_defeated_entry();
+        }
+    } else {
+        entries.load_defeated_entry(rd_s16b());
     }
 
     rd_phase_out(player_ptr);

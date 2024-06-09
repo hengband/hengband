@@ -264,51 +264,49 @@ static void dump_aux_options(FILE *fff)
  * @brief 闘技場の情報をファイルにダンプする
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
+ * @details 旧バージョン (v1.5.0.1より前)では何回戦で敗北したか記録していないので、便宜的に1回戦で敗北したことにする.
  */
-static void dump_aux_arena(PlayerType *player_ptr, FILE *fff)
+static void dump_aux_arena(FILE *fff)
 {
     if (lite_town || vanilla_town) {
         return;
     }
 
     const auto &entries = ArenaEntryList::get_instance();
-    const auto arena_number = player_ptr->arena_number;
-    if (arena_number < 0) {
-        if (arena_number == ARENA_DEFEATED_OLD_VER) {
-            fprintf(fff, _("\n 闘技場: 敗北\n\n", "\n Arena: Defeated\n\n"));
-            return;
-        }
-
+    const auto defeated_entry = entries.get_defeated_entry();
+    if (defeated_entry && !entries.is_player_true_victor()) {
+        const auto defeated_fight = *defeated_entry + 1; //!< entryは配列番号なので対戦回数と1つずれる.
         constexpr auto fmt = _("\n 闘技場: %d回戦で%sの前に敗北\n", "\n Arena: Defeated by %s in the %d%s fight\n");
-        const auto &arena = arena_info[-1 - arena_number];
+        const auto &arena = arena_info[*defeated_entry];
         const auto &arena_monrace = monraces_info[arena.r_idx];
 #ifdef JP
-        fprintf(fff, fmt, -arena_number, arena_monrace.name.data());
+        fprintf(fff, fmt, defeated_fight, arena_monrace.name.data());
 #else
-        fprintf(fff, fmt, arena_monrace.name.data(), -arena_number, get_ordinal_number_suffix(-arena_number).data());
+        fprintf(fff, fmt, arena_monrace.name.data(), defeated_fight, get_ordinal_number_suffix(*defeated_entry).data());
 #endif
         fprintf(fff, "\n");
         return;
     }
 
     const auto max_entries = entries.get_max_entries();
-    if (arena_number > max_entries + 2) {
+    const auto current_entry = entries.get_current_entry();
+    if (current_entry > max_entries + 2) {
         fprintf(fff, _("\n 闘技場: 真のチャンピオン\n", "\n Arena: True Champion\n"));
         fprintf(fff, "\n");
         return;
     }
 
-    if (arena_number > max_entries - 1) {
+    if (current_entry > max_entries - 1) {
         fprintf(fff, _("\n 闘技場: チャンピオン\n", "\n Arena: Champion\n"));
         fprintf(fff, "\n");
         return;
     }
 
-    const auto victory_count = arena_number > max_entries ? max_entries : arena_number;
+    const auto victory_count = current_entry > max_entries ? max_entries : current_entry;
 #ifdef JP
     fprintf(fff, "\n 闘技場: %2d勝\n", victory_count);
 #else
-    fprintf(fff, "\n Arena: %2d %s\n", victory_count, (arena_number > 1) ? "Victories" : "Victory");
+    fprintf(fff, "\n Arena: %2d %s\n", victory_count, (current_entry > 1) ? "Victories" : "Victory");
 #endif
     fprintf(fff, "\n");
 }
@@ -623,7 +621,7 @@ void make_character_dump(PlayerType *player_ptr, FILE *fff)
     dump_aux_options(fff);
     dump_aux_recall(fff);
     dump_aux_quest(player_ptr, fff);
-    dump_aux_arena(player_ptr, fff);
+    dump_aux_arena(fff);
     dump_aux_monsters(fff);
     dump_aux_virtues(player_ptr, fff);
     dump_aux_race_history(player_ptr, fff);

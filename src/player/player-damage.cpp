@@ -376,11 +376,14 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
         }
 
         if (floor.inside_arena) {
-            const auto &m_name = monraces_info[arena_info[player_ptr->arena_number].r_idx].name;
+            auto &entries = ArenaEntryList::get_instance();
+            entries.set_defeated_entry();
+            const auto current_entry = entries.get_current_entry();
+            const auto &m_name = monraces_info[arena_info[current_entry].r_idx].name;
             msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name.data());
             msg_print(nullptr);
             if (record_arena) {
-                exe_write_diary(floor, DiaryKind::ARENA, -1 - player_ptr->arena_number, m_name);
+                exe_write_diary(floor, DiaryKind::ARENA, 0, m_name);
             }
         } else {
             const auto q_idx = floor.get_quest_id();

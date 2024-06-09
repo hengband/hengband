@@ -33,6 +33,7 @@
 #include "world/world.h"
 #include <algorithm>
 #include <numeric>
+#include <optional>
 
 namespace {
 enum class ArenaRecord {
@@ -47,11 +48,11 @@ enum class ArenaRecord {
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return まだ優勝していないか、挑戦者モンスターとの戦いではFALSE
  */
-static bool process_ostensible_arena_victory(PlayerType *player_ptr)
+static std::optional<int> process_ostensible_arena_victory()
 {
     auto &entries = ArenaEntryList::get_instance();
-    if (player_ptr->arena_number != entries.get_max_entries()) {
-        return false;
+    if (!entries.is_player_victor()) {
+        return std::nullopt;
     }
 
     clear_bldg(5, 19);
@@ -61,11 +62,10 @@ static bool process_ostensible_arena_victory(PlayerType *player_ptr)
 
     prt("", 10, 0);
     prt("", 11, 0);
-    player_ptr->au += 1000000L;
     msg_print(_("スペースキーで続行", "Press the space bar to continue"));
     msg_print(nullptr);
-    player_ptr->arena_number++;
-    return true;
+    entries.increment_entry();
+    return 1000000;
 }
 
 /*!
@@ -73,15 +73,15 @@ static bool process_ostensible_arena_victory(PlayerType *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 最後に倒した対戦相手 (鳳凰以下は一律で鳳凰)
  */
-static ArenaRecord check_arena_record(PlayerType *player_ptr)
+static ArenaRecord check_arena_record()
 {
     const auto &entries = ArenaEntryList::get_instance();
     const auto max_entries = entries.get_max_entries();
-    if (player_ptr->arena_number <= max_entries) {
+    if (entries.get_current_entry() <= max_entries) {
         return ArenaRecord::FENGFUANG;
     }
 
-    if (player_ptr->arena_number < max_entries + 2) {
+    if (entries.get_current_entry() < max_entries + 2) {
         return ArenaRecord::POWER_WYRM;
     }
 
@@ -115,11 +115,13 @@ static bool check_battle_metal_babble(PlayerType *player_ptr)
  */
 static bool go_to_arena(PlayerType *player_ptr)
 {
-    if (process_ostensible_arena_victory(player_ptr)) {
+    const auto prize_money = process_ostensible_arena_victory();
+    if (prize_money) {
+        player_ptr->au += *prize_money;
         return false;
     }
 
-    const auto arena_record = check_arena_record(player_ptr);
+    const auto arena_record = check_arena_record();
     if (arena_record == ArenaRecord::METAL_BABBLE) {
         msg_print(_("あなたはアリーナに入り、しばらくの間栄光にひたった。", "You enter the arena briefly and bask in your glory."));
         msg_print(nullptr);
@@ -147,20 +149,20 @@ static bool go_to_arena(PlayerType *player_ptr)
 static void see_arena_poster(PlayerType *player_ptr)
 {
     const auto &entries = ArenaEntryList::get_instance();
-    const auto max_entries = entries.get_max_entries();
-    if (player_ptr->arena_number == max_entries) {
+    if (entries.is_player_victor()) {
         msg_print(_("あなたは勝利者だ。 アリーナでのセレモニーに参加しなさい。", "You are victorious. Enter the arena for the ceremony."));
         return;
     }
 
-    if (player_ptr->arena_number > max_entries) {
+    if (entries.is_player_true_victor()) {
         msg_print(_("あなたはすべての敵に勝利した。", "You have won against all foes."));
         return;
     }
 
-    const auto &monrace = monraces_info[arena_info[player_ptr->arena_number].r_idx];
+    const auto current_entry = entries.get_current_entry();
+    const auto &monrace = MonraceList::get_instance().get_monrace(arena_info[current_entry].r_idx);
     msg_format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), monrace.name.data());
-    LoreTracker::get_instance().set_trackee(arena_info[player_ptr->arena_number].r_idx);
+    LoreTracker::get_instance().set_trackee(monrace.idx);
     handle_stuff(player_ptr);
 }
 

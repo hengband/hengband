@@ -64,7 +64,6 @@ public:
     PLAYER_LEVEL lev{}; /* Level */
 
     int16_t town_num{}; /* Current town number */
-    int16_t arena_number{}; /* monster number in on_defeat_arena_monster -KMW- */
 
     POSITION wilderness_x{}; /* Coordinates in the wilderness */
     POSITION wilderness_y{};

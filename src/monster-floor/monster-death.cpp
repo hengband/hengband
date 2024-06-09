@@ -82,14 +82,14 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, MonsterDeath *md_ptr
 
     w_ptr->set_arena(true);
     auto &entries = ArenaEntryList::get_instance();
-    const auto max_entries = entries.get_max_entries();
-    if (player_ptr->arena_number > max_entries) {
+    const auto is_true_victor = entries.is_player_true_victor();
+    if (is_true_victor) {
         msg_print(_("素晴らしい！君こそ真の勝利者だ。", "You are a Genuine Champion!"));
     } else {
         msg_print(_("勝利！チャンピオンへの道を進んでいる。", "Victorious! You're on your way to becoming Champion."));
     }
 
-    const auto &arena = arena_info[player_ptr->arena_number];
+    const auto &arena = arena_info[entries.get_current_entry()];
     const auto tval = arena.key.tval();
     if (tval > ItemKindType::NONE) {
         ItemEntity item(arena.key);
@@ -97,17 +97,17 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, MonsterDeath *md_ptr
         (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
     }
 
-    if (player_ptr->arena_number > max_entries) {
-        player_ptr->arena_number++;
+    if (is_true_victor) {
+        entries.increment_entry();
     }
 
-    player_ptr->arena_number++;
+    entries.increment_entry();
     if (!record_arena) {
         return;
     }
 
     const auto m_name = monster_desc(player_ptr, md_ptr->m_ptr, MD_WRONGDOER_NAME);
-    exe_write_diary(floor, DiaryKind::ARENA, player_ptr->arena_number, m_name);
+    exe_write_diary(floor, DiaryKind::ARENA, 0, m_name);
 }
 
 static void drop_corpse(PlayerType *player_ptr, MonsterDeath *md_ptr)

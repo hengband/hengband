@@ -349,10 +349,10 @@ static void decide_arena_death(PlayerType *player_ptr)
 
     floor.inside_arena = false;
     auto &entries = ArenaEntryList::get_instance();
-    if (player_ptr->arena_number > entries.get_max_entries()) {
-        player_ptr->arena_number++;
+    if (entries.is_player_true_victor()) {
+        entries.increment_entry();
     } else {
-        player_ptr->arena_number = -1 - player_ptr->arena_number;
+        entries.set_defeated_entry();
     }
 
     player_ptr->is_dead = false;

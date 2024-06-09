@@ -1,6 +1,7 @@
 #include "save/player-writer.h"
 #include "cmd-building/cmd-building.h"
 #include "game-option/birth-options.h"
+#include "market/arena-entry.h"
 #include "player-base/player-class.h"
 #include "player/player-skill.h"
 #include "save/info-writer.h"
@@ -118,8 +119,10 @@ void wr_player(PlayerType *player_ptr)
     }
 
     wr_s16b(player_ptr->town_num);
-
-    wr_s16b(player_ptr->arena_number);
+    const auto &entries = ArenaEntryList::get_instance();
+    wr_s16b(static_cast<int16_t>(entries.get_current_entry()));
+    const auto defeated_entry = entries.get_defeated_entry();
+    wr_s16b(static_cast<int16_t>(defeated_entry.value_or(-1)));
     wr_s16b(player_ptr->current_floor_ptr->inside_arena);
     wr_s16b(enum2i(player_ptr->current_floor_ptr->quest_number));
     wr_s16b(AngbandSystem::get_instance().is_phase_out());
