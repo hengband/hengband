@@ -29,7 +29,6 @@ class TimedEffects;
 class PlayerType {
 public:
     PlayerType();
-    bool is_true_winner() const;
 
     FloorType *current_floor_ptr{};
     POSITION oldpy{}; /* Previous player location -KMW- */

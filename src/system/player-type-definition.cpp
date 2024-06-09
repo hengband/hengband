@@ -1,6 +1,5 @@
 #include "system/player-type-definition.h"
 #include "floor/geometry.h"
-#include "market/arena-entry.h"
 #include "system/angband-exceptions.h"
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
@@ -19,12 +18,6 @@ PlayerType *p_ptr = &p_body;
 PlayerType::PlayerType()
     : timed_effects(std::make_shared<TimedEffects>())
 {
-}
-
-bool PlayerType::is_true_winner() const
-{
-    const auto &entries = ArenaEntryList::get_instance();
-    return (w_ptr->total_winner > 0) && (entries.is_player_true_victor());
 }
 
 std::shared_ptr<TimedEffects> PlayerType::effects() const
