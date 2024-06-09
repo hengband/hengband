@@ -346,72 +346,25 @@ static std::optional<MonsterRaceId> polymorph_of_chameleon(PlayerType *player_pt
  */
 void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, MonsterRaceId r_idx, std::optional<MONSTER_IDX> summoner_m_idx)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
-
-    const auto old_m_name = monster_desc(player_ptr, m_ptr, 0);
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &monster = floor.m_list[m_idx];
 
     auto new_monrace_id = polymorph_of_chameleon(player_ptr, m_idx, summoner_m_idx);
     if (!new_monrace_id) {
         return;
     }
 
-    MonsterRaceInfo *r_ptr = &monraces_info[*new_monrace_id];
+    const auto &monrace = MonraceList::get_instance().get_monrace(*new_monrace_id);
 
-    m_ptr->r_idx = *new_monrace_id;
-    m_ptr->ap_r_idx = *new_monrace_id;
+    monster.r_idx = *new_monrace_id;
+    monster.ap_r_idx = *new_monrace_id;
     update_monster(player_ptr, m_idx, false);
-    lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
+    lite_spot(player_ptr, monster.fy, monster.fx);
 
-    const auto &new_monrace = m_ptr->get_monrace();
-    if (new_monrace.brightness_flags.has_any_of(ld_mask) || r_ptr->brightness_flags.has_any_of(ld_mask)) {
+    const auto &new_monrace = monster.get_monrace();
+    if (new_monrace.brightness_flags.has_any_of(ld_mask) || monrace.brightness_flags.has_any_of(ld_mask)) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
-
-    if (born) {
-        if (r_ptr->kind_flags.has_any_of(alignment_mask)) {
-            m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
-            if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
-                m_ptr->sub_align |= SUB_ALIGN_EVIL;
-            }
-            if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
-                m_ptr->sub_align |= SUB_ALIGN_GOOD;
-            }
-        }
-
-        return;
-    }
-
-    if (m_idx == player_ptr->riding) {
-        msg_format(_("突然%sが変身した。", "Suddenly, %s transforms!"), old_m_name.data());
-        if (r_ptr->misc_flags.has_not(MonsterMiscType::RIDING)) {
-            if (process_fall_off_horse(player_ptr, 0, true)) {
-                const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-                msg_print(_("地面に落とされた。", format("You have fallen from %s.", m_name.data())));
-            }
-        }
-    }
-
-    m_ptr->set_individual_speed(floor_ptr->inside_arena);
-
-    int oldmaxhp = m_ptr->max_maxhp;
-    if (r_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
-        m_ptr->max_maxhp = r_ptr->hit_dice.maxroll();
-    } else {
-        m_ptr->max_maxhp = r_ptr->hit_dice.roll();
-    }
-
-    if (ironman_nightmare) {
-        auto hp = m_ptr->max_maxhp * 2;
-        m_ptr->max_maxhp = std::min(MONSTER_MAXHP, hp);
-    }
-
-    m_ptr->maxhp = (long)(m_ptr->maxhp * m_ptr->max_maxhp) / oldmaxhp;
-    if (m_ptr->maxhp < 1) {
-        m_ptr->maxhp = 1;
-    }
-    m_ptr->hp = (long)(m_ptr->hp * m_ptr->max_maxhp) / oldmaxhp;
-    m_ptr->dealt_damage = 0;
 }
 
 /*!
