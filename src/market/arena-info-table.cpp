@@ -12,6 +12,18 @@
 #include "system/building-type-definition.h"
 #include "system/monster-race-info.h"
 
+ArenaEntryList ArenaEntryList::instance{};
+
+ArenaEntryList &ArenaEntryList::get_instance()
+{
+    return instance;
+}
+
+int ArenaEntryList::get_max_entries() const
+{
+    return std::ssize(arena_info) - 2;
+}
+
 /*!
  * @brief 闘技場のモンスターID及び報酬アイテムテーブル
  */

@@ -19,6 +19,23 @@ public:
     BaseitemKey key;
 };
 
+class ArenaEntryList {
+public:
+    ~ArenaEntryList() = default;
+    ArenaEntryList(ArenaEntryList &&) = delete;
+    ArenaEntryList(const ArenaEntryList &) = delete;
+    ArenaEntryList &operator=(const ArenaEntryList &) = delete;
+    ArenaEntryList &operator=(ArenaEntryList &&) = delete;
+    static ArenaEntryList &get_instance();
+
+    int get_max_entries() const;
+
+private:
+    ArenaEntryList() = default;
+
+    static ArenaEntryList instance;
+};
+
 extern const std::vector<ArenaMonsterEntry> arena_info;
 
 /*
