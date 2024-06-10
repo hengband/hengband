@@ -14,6 +14,5 @@ enum class MonsterBehaviorType {
     STUPID = 10,
     SMART = 11,
     FRIENDLY = 12,
-    PREVENT_SUDDEN_MAGIC = 13,
     MAX,
 };
