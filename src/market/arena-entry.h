@@ -29,6 +29,7 @@ public:
     MonsterRaceInfo &get_monrace();
     const MonsterRaceInfo &get_monrace() const;
     ArenaRecord check_arena_record() const;
+    std::string get_poster_message() const;
     void increment_entry();
     void reset_entry();
     void set_defeated_entry();

@@ -118,25 +118,6 @@ static bool go_to_arena(PlayerType *player_ptr)
     return true;
 }
 
-static void see_arena_poster(PlayerType *player_ptr)
-{
-    const auto &entries = ArenaEntryList::get_instance();
-    if (entries.is_player_victor()) {
-        msg_print(_("あなたは勝利者だ。 アリーナでのセレモニーに参加しなさい。", "You are victorious. Enter the arena for the ceremony."));
-        return;
-    }
-
-    if (entries.is_player_true_victor()) {
-        msg_print(_("あなたはすべての敵に勝利した。", "You have won against all foes."));
-        return;
-    }
-
-    const auto &monrace = entries.get_monrace();
-    msg_format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), monrace.name.data());
-    LoreTracker::get_instance().set_trackee(monrace.idx);
-    handle_stuff(player_ptr);
-}
-
 /*!
  * @brief 闘技場に入るコマンドの処理 / on_defeat_arena_monster commands
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -147,9 +128,18 @@ bool arena_comm(PlayerType *player_ptr, int cmd)
     switch (cmd) {
     case BACT_ARENA:
         return go_to_arena(player_ptr);
-    case BACT_POSTER:
-        see_arena_poster(player_ptr);
+    case BACT_POSTER: {
+        const auto &entries = ArenaEntryList::get_instance();
+        msg_print(entries.get_poster_message());
+        if (entries.is_player_victor() || entries.is_player_true_victor()) {
+            return false;
+        }
+
+        const auto &monrace = entries.get_monrace();
+        LoreTracker::get_instance().set_trackee(monrace.idx);
+        handle_stuff(player_ptr);
         return false;
+    }
     case BACT_ARENA_RULES:
         screen_save();
         FileDisplayer(player_ptr->name).display(true, _("arena_j.txt", "arena.txt"), 0, 0);

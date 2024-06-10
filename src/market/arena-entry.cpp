@@ -146,6 +146,19 @@ ArenaRecord ArenaEntryList::check_arena_record() const
     return ArenaRecord::METAL_BABBLE;
 }
 
+std::string ArenaEntryList::get_poster_message() const
+{
+    if (this->is_player_victor()) {
+        return _("あなたは勝利者だ。 アリーナでのセレモニーに参加しなさい。", "You are victorious. Enter the arena for the ceremony.");
+    }
+
+    if (this->is_player_true_victor()) {
+        return _("あなたはすべての敵に勝利した。", "You have won against all foes.");
+    }
+
+    return format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), this->get_monrace().name.data());
+}
+
 void ArenaEntryList::increment_entry()
 {
     this->current_entry++;
