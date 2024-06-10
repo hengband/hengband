@@ -29,6 +29,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/string-processor.h"
+#include <algorithm>
 #include <sstream>
 
 ItemEntity::ItemEntity()
