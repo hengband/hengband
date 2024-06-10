@@ -402,7 +402,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, 
         m_ptr->energy_need = ENERGY_NEED() - (int16_t)randint0(100) * 2;
     }
 
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::PREVENT_SUDDEN_MAGIC) && !ironman_nightmare) {
+    if (!ironman_nightmare) {
         m_ptr->mflag.set(MonsterTemporaryFlagType::PREVENT_MAGIC);
     }
 

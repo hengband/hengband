@@ -313,7 +313,6 @@ const std::unordered_map<std::string_view, MonsterBehaviorType> r_info_behavior_
     { "STUPID", MonsterBehaviorType::STUPID },
     { "SMART", MonsterBehaviorType::SMART },
     { "FRIENDLY", MonsterBehaviorType::FRIENDLY },
-    { "PREVENT_SUDDEN_MAGIC", MonsterBehaviorType::PREVENT_SUDDEN_MAGIC },
 };
 
 const std::unordered_map<std::string_view, MonsterVisualType> r_info_visual_flags = {

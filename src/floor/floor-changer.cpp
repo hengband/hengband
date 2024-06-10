@@ -120,7 +120,7 @@ static MonsterRaceInfo &set_pet_params(PlayerType *player_ptr, const int current
     m_ptr->hold_o_idx_list.clear();
     m_ptr->target_y = 0;
     auto &r_ref = m_ptr->get_real_monrace();
-    if (r_ref.behavior_flags.has(MonsterBehaviorType::PREVENT_SUDDEN_MAGIC) && !ironman_nightmare) {
+    if (!ironman_nightmare) {
         m_ptr->mflag.set(MonsterTemporaryFlagType::PREVENT_MAGIC);
     }
 
