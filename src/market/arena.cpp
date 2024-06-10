@@ -35,14 +35,6 @@
 #include <numeric>
 #include <optional>
 
-namespace {
-enum class ArenaRecord {
-    FENGFUANG,
-    POWER_WYRM,
-    METAL_BABBLE,
-};
-}
-
 /*!
  * @brief 優勝時のメッセージを表示し、賞金を与える
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -66,26 +58,6 @@ static std::optional<int> process_ostensible_arena_victory()
     msg_print(nullptr);
     entries.increment_entry();
     return 1000000;
-}
-
-/*!
- * @brief 対戦相手の確認
- * @param player_ptr プレイヤーへの参照ポインタ
- * @return 最後に倒した対戦相手 (鳳凰以下は一律で鳳凰)
- */
-static ArenaRecord check_arena_record()
-{
-    const auto &entries = ArenaEntryList::get_instance();
-    const auto max_entries = entries.get_max_entries();
-    if (entries.get_current_entry() <= max_entries) {
-        return ArenaRecord::FENGFUANG;
-    }
-
-    if (entries.get_current_entry() < max_entries + 2) {
-        return ArenaRecord::POWER_WYRM;
-    }
-
-    return ArenaRecord::METAL_BABBLE;
 }
 
 static bool check_battle_metal_babble(PlayerType *player_ptr)
@@ -121,7 +93,7 @@ static bool go_to_arena(PlayerType *player_ptr)
         return false;
     }
 
-    const auto arena_record = check_arena_record();
+    const auto arena_record = ArenaEntryList::get_instance().check_arena_record();
     if (arena_record == ArenaRecord::METAL_BABBLE) {
         msg_print(_("あなたはアリーナに入り、しばらくの間栄光にひたった。", "You enter the arena briefly and bask in your glory."));
         msg_print(nullptr);

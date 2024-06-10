@@ -128,6 +128,24 @@ const MonsterRaceInfo &ArenaEntryList::get_monrace() const
     return MonraceList::get_instance().get_monrace(ARENA_ENTRIES.at(this->current_entry).monrace_id);
 }
 
+/*!
+ * @brief 対戦相手の確認
+ * @return 最後に倒した対戦相手 (鳳凰以下は一律で鳳凰)
+ */
+ArenaRecord ArenaEntryList::check_arena_record() const
+{
+    const auto max_entries = this->get_max_entries();
+    if (this->current_entry <= max_entries) {
+        return ArenaRecord::FENGFUANG;
+    }
+
+    if (this->current_entry < max_entries + 2) {
+        return ArenaRecord::POWER_WYRM;
+    }
+
+    return ArenaRecord::METAL_BABBLE;
+}
+
 void ArenaEntryList::increment_entry()
 {
     this->current_entry++;

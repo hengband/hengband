@@ -3,6 +3,12 @@
 #include <optional>
 #include <vector>
 
+enum class ArenaRecord {
+    FENGFUANG,
+    POWER_WYRM,
+    METAL_BABBLE,
+};
+
 class BaseitemKey;
 class MonsterRaceInfo;
 class ArenaEntryList {
@@ -22,6 +28,7 @@ public:
     const BaseitemKey &get_bi_key() const;
     MonsterRaceInfo &get_monrace();
     const MonsterRaceInfo &get_monrace() const;
+    ArenaRecord check_arena_record() const;
     void increment_entry();
     void reset_entry();
     void set_defeated_entry();
