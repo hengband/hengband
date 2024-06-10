@@ -125,6 +125,7 @@ static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonsterRaceI
             is_possible_monster_and(r_ptr->population_flags, d_ptr->mon_population_flags),
             is_possible_monster_and(r_ptr->speak_flags, d_ptr->mon_speak_flags),
             is_possible_monster_and(r_ptr->brightness_flags, d_ptr->mon_brightness_flags),
+            is_possible_monster_and(r_ptr->misc_flags, d_ptr->mon_misc_flags),
         };
 
         auto result = std::all_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });
@@ -145,6 +146,7 @@ static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonsterRaceI
             is_possible_monster_or(r_ptr->population_flags, d_ptr->mon_population_flags),
             is_possible_monster_or(r_ptr->speak_flags, d_ptr->mon_speak_flags),
             is_possible_monster_or(r_ptr->brightness_flags, d_ptr->mon_brightness_flags),
+            is_possible_monster_or(r_ptr->misc_flags, d_ptr->mon_misc_flags),
         };
 
         auto result = std::any_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });
