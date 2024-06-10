@@ -51,15 +51,18 @@ static bool is_leave_special_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         if (o_ptr->is_corpse() && o_ptr->get_monrace().symbol_char_is_any_of("pht")) {
             return false;
         }
-    } else if (pc.equals(PlayerClassType::ARCHER)) {
+    }
+    if (pc.equals(PlayerClassType::ARCHER)) {
         if ((tval == ItemKindType::SKELETON) || (bi_key == BaseitemKey(ItemKindType::CORPSE, SV_SKELETON))) {
             return false;
         }
-    } else if (pc.equals(PlayerClassType::NINJA)) {
+    }
+    if (pc.equals(PlayerClassType::NINJA)) {
         if (tval == ItemKindType::LITE && o_ptr->ego_idx == EgoType::LITE_DARKNESS && o_ptr->is_known()) {
             return false;
         }
-    } else if (pc.is_tamer()) {
+    }
+    if (pc.is_tamer()) {
         if (bi_key == BaseitemKey(ItemKindType::WAND, SV_WAND_HEAL_MONSTER) && o_ptr->is_aware()) {
             return false;
         }
