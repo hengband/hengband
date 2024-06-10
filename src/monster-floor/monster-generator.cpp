@@ -380,7 +380,7 @@ bool place_random_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FL
 
     auto try_become_jural = one_in_(5) || !floor.is_in_underground();
     try_become_jural &= monraces_info[monrace_id].kind_flags.has_not(MonsterKindType::UNIQUE);
-    try_become_jural &= angband_strchr("hkoptuyAHLOPTUVY", monraces_info[monrace_id].symbol_definition.character) != nullptr;
+    try_become_jural &= monraces_info[monrace_id].symbol_char_is_any_of("hkoptuyAHLOPTUVY");
     if (try_become_jural) {
         mode |= PM_JURAL;
     }

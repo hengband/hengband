@@ -124,8 +124,7 @@ bool MonsterEntity::is_mimicry() const
     }
 
     const auto &monrace = this->get_appearance_monrace();
-    const auto mimic_symbols = "/|\\()[]=$,.!?&`#%<>+~";
-    if (angband_strchr(mimic_symbols, monrace.symbol_definition.character) == nullptr) {
+    if (monrace.symbol_char_is_any_of(R"(/|\()[]="$,.!?&`#%<>+~)")) {
         return false;
     }
 

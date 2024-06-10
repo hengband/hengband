@@ -473,7 +473,7 @@ bool ItemEntity::is_offerable() const
         return false;
     }
 
-    return angband_strchr("pht", this->get_monrace().symbol_definition.character) != nullptr;
+    return this->get_monrace().symbol_char_is_any_of("pht");
 }
 
 /*!

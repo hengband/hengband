@@ -60,6 +60,17 @@ bool MonsterRaceInfo::is_explodable() const
 }
 
 /*!
+ * @brief モンスターのシンボル文字が指定された文字列に含まれるかどうかを返す
+ * @param candidate_chars シンボル文字の集合の文字列。"pht" のように複数の文字を指定可能。
+ * @return モンスターのシンボル文字が candidate_chars に含まれるならばtrue
+ * @note ASCIIのみ対応。マルチバイト文字が指定された場合の動作は未定義。
+ */
+bool MonsterRaceInfo::symbol_char_is_any_of(std::string_view candidate_chars) const
+{
+    return candidate_chars.find(this->symbol_definition.character) != std::string_view::npos;
+}
+
+/*!
  * @brief モンスターを撃破した際の述語メッセージを返す
  * @return 撃破されたモンスターの述語
  */

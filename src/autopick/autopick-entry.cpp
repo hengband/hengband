@@ -442,7 +442,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, co
     }
 
     if (tval == ItemKindType::CORPSE) {
-        if (angband_strchr("pht", o_ptr->get_monrace().symbol_definition.character)) {
+        if (o_ptr->get_monrace().symbol_char_is_any_of("pht")) {
             entry->add(FLG_HUMAN);
         }
     }

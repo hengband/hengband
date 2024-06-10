@@ -396,11 +396,7 @@ bool vault_aux_jelly(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if (!angband_strchr("ijm,", monrace.symbol_definition.character)) {
-        return false;
-    }
-
-    return true;
+    return monrace.symbol_char_is_any_of("ijm,");
 }
 
 /*!
@@ -480,7 +476,7 @@ bool vault_aux_chapel_g(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if (monrace.symbol_definition.character == 'A') {
+    if (monrace.symbol_char_is_any_of("A")) {
         return true;
     }
 
@@ -500,11 +496,7 @@ bool vault_aux_kennel(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if (!angband_strchr("CZ", r_ptr->symbol_definition.character)) {
-        return false;
-    }
-
-    return true;
+    return r_ptr->symbol_char_is_any_of("CZ");
 }
 
 /*!
@@ -520,11 +512,7 @@ bool vault_aux_mimic(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if (!angband_strchr("!$&(/=?[\\|][`~>+", r_ptr->symbol_definition.character)) {
-        return false;
-    }
-
-    return true;
+    return r_ptr->symbol_char_is_any_of("!$&(/=?[\\|][`~>+");
 }
 
 /*!
@@ -796,11 +784,7 @@ bool monster_hook_human(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if (angband_strchr("pht", monrace.symbol_definition.character)) {
-        return true;
-    }
-
-    return false;
+    return monrace.symbol_char_is_any_of("pht");
 }
 
 /*!

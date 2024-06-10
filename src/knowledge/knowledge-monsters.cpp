@@ -201,7 +201,7 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
         }
 
 #ifdef JP
-        const auto number_of_kills = angband_strchr("pt", monrace.symbol_definition.character) ? "人" : "体";
+        const auto number_of_kills = monrace.symbol_char_is_any_of("pt") ? "人" : "体";
         fprintf(fff, "     %3d %sの %s\n", this_monster, number_of_kills, monrace.name.data());
 #else
         if (this_monster < 2) {
