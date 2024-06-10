@@ -379,7 +379,7 @@ std::string InputKeyRequestor::switch_special_menu_condition(const SpecialMenuCo
         return "";
     }
     default:
-        throw("Invalid SpecialMenuType is specified!");
+        THROW_EXCEPTION(std::logic_error, "Invalid SpecialMenuType is specified!");
     }
 }
 

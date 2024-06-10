@@ -1,7 +1,7 @@
 #pragma once
 
 #include "util/rng-xoshiro.h"
-#include <stdint.h>
+#include <cstdint>
 #include <string>
 #include <string_view>
 

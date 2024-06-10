@@ -25,7 +25,7 @@ std::unique_ptr<ItemLoaderBase> ItemLoaderFactory::create_loader()
     case ItemLoaderVersionType::LOAD51:
         // dummy yet.
     default:
-        throw("Invalid loader version was specified!");
+        THROW_EXCEPTION(std::logic_error, "Invalid loader version was specified!");
     }
 }
 

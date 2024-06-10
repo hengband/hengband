@@ -34,7 +34,7 @@ void rd_version_info(void)
     } else if (is_old_ver) {
         strip_bytes(3);
     } else {
-        throw("Invalid version is detected!");
+        THROW_EXCEPTION(std::runtime_error, _("異常なバージョンが検出されました！", "Invalid version is detected!"));
     }
 
     load_xor_byte = system.savefile_key;

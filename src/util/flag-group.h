@@ -3,9 +3,9 @@
 #include "info-reader/info-reader-util.h"
 #include <bitset>
 #include <concepts>
+#include <cstdint>
 #include <iterator>
 #include <optional>
-#include <stdint.h>
 #include <type_traits>
 
 template <typename T>
