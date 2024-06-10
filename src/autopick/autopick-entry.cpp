@@ -11,7 +11,6 @@
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
-#include "object-hook/hook-quest.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
@@ -428,7 +427,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, co
         }
     }
 
-    if (object_is_bounty(player_ptr, o_ptr)) {
+    if (o_ptr->is_bounty()) {
         entry->remove(FLG_WORTHLESS);
         entry->add(FLG_WANTED);
     }

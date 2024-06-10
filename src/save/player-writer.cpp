@@ -255,7 +255,7 @@ void wr_player(PlayerType *player_ptr)
     wr_s32b(w_ptr->dungeon_turn);
     wr_s32b(w_ptr->arena_start_turn);
     wr_s16b(enum2i(w_ptr->today_mon));
-    wr_s16b(player_ptr->knows_daily_bounty ? 1 : 0); // 現在bool型だが、かつてモンスター種族IDを保存していた仕様に合わせる
+    wr_s16b(w_ptr->knows_daily_bounty ? 1 : 0); // 現在bool型だが、かつてモンスター種族IDを保存していた仕様に合わせる
     wr_s16b(player_ptr->riding);
     wr_s16b(player_ptr->floor_id);
 

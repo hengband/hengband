@@ -19,7 +19,6 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trg-types.h"
-#include "object-hook/hook-quest.h"
 #include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
@@ -141,7 +140,7 @@ static bool should_show_slaying_bonus(const ItemEntity &item)
 
 static std::string describe_weapon_dice(PlayerType *player_ptr, const ItemEntity &item, const describe_option_type &opt)
 {
-    if (!opt.known && object_is_quest_target(player_ptr->current_floor_ptr->quest_number, &item)) {
+    if (!opt.known && item.is_target_of(player_ptr->current_floor_ptr->quest_number)) {
         return "";
     }
 

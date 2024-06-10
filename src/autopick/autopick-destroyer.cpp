@@ -14,7 +14,6 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-expendable.h"
-#include "object-hook/hook-quest.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-mark-types.h"
 #include "object/object-value.h"
@@ -100,7 +99,7 @@ static bool is_opt_confirm_destroy(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     if (leave_wanted) {
-        if (object_is_bounty(player_ptr, o_ptr)) {
+        if (o_ptr->is_bounty()) {
             return false;
         }
     }

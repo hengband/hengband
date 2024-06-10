@@ -257,7 +257,7 @@ static bool bldg_process_command(PlayerType *player_ptr, building_type *bldg, in
         show_bounty();
         return false;
     case BACT_TARGET:
-        today_target(player_ptr);
+        today_target();
         return false;
     case BACT_KANKIN:
         exchange_cash(player_ptr);

@@ -10,6 +10,9 @@
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-bias-types.h"
 #include "artifact/random-art-effects.h"
+#include "dungeon/quest.h"
+#include "game-option/birth-options.h"
+#include "monster-race/race-indice-types.h"
 #include "object-enchant/activation-info-table.h"
 #include "object-enchant/dragon-breaths-table.h"
 #include "object-enchant/item-feeling.h"
@@ -29,6 +32,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/string-processor.h"
+#include "world/world.h"
 #include <algorithm>
 #include <sstream>
 
@@ -776,6 +780,47 @@ bool ItemEntity::has_activation() const
 bool ItemEntity::has_bias() const
 {
     return this->artifact_bias != RandomArtifactBias::NONE;
+}
+
+bool ItemEntity::is_bounty() const
+{
+    if (this->bi_key.tval() != ItemKindType::CORPSE) {
+        return false;
+    }
+
+    if (vanilla_town) {
+        return false;
+    }
+
+    const auto &monrace = this->get_monrace();
+    if (w_ptr->knows_daily_bounty && (monrace.name == w_ptr->get_today_bounty().name)) {
+        return true;
+    }
+
+    if (monrace.idx == MonsterRaceId::TSUCHINOKO) {
+        return true;
+    }
+
+    return monrace.is_bounty(true);
+}
+
+bool ItemEntity::is_target_of(QuestId quest_id) const
+{
+    if (!inside_quest(quest_id)) {
+        return false;
+    }
+
+    const auto &quest = QuestList::get_instance().get_quest(quest_id);
+    if (!quest.has_reward()) {
+        return false;
+    }
+
+    const auto &artifact = quest.get_reward();
+    if (artifact.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
+        return false;
+    }
+
+    return this->bi_key == artifact.bi_key;
 }
 
 BaseitemInfo &ItemEntity::get_baseitem() const
