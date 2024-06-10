@@ -424,6 +424,16 @@ void MonsterEntity::set_hostile()
     this->mflag2.reset({ MonsterConstantFlagType::PET, MonsterConstantFlagType::FRIENDLY });
 }
 
+/*
+ * 捕獲・死亡の際にカメレオンの変身を元に戻す
+ */
+void MonsterEntity::reset_chameleon_polymorph()
+{
+    auto real_monrace_id = this->get_real_monrace_id();
+    this->r_idx = real_monrace_id;
+    this->ap_r_idx = real_monrace_id;
+}
+
 std::string MonsterEntity::get_pronoun_of_summoned_kin() const
 {
     return this->get_monrace().get_pronoun_of_summoned_kin();
