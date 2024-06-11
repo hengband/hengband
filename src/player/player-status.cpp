@@ -111,8 +111,6 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-static const int extra_magic_glove_reduce_mana = 1;
-
 static bool is_martial_arts_mode(PlayerType *player_ptr);
 
 static ACTION_SKILL_POWER calc_disarming(PlayerType *player_ptr);
@@ -825,7 +823,7 @@ static void update_max_mana(PlayerType *player_ptr)
         }
     }
 
-    if (any_bits(mp_ptr->spell_xtra, extra_magic_glove_reduce_mana)) {
+    if (mp_ptr->has_glove_mp_penalty) {
         player_ptr->cumber_glove = false;
         const auto *o_ptr = &player_ptr->inventory_list[INVEN_ARMS];
         const auto flags = o_ptr->get_flags();

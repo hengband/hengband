@@ -80,7 +80,12 @@ errr parse_class_magics_info(std::string_view buf, angband_header *)
 
         m_ptr->spell_stat = stat->second;
 
-        info_set_value(m_ptr->spell_xtra, tokens[3], 16);
+        uint extra_flag;
+        info_set_value(extra_flag, tokens[3], 16);
+        m_ptr->has_glove_mp_penalty = any_bits(extra_flag, 1);
+        m_ptr->has_magic_fail_rate_cap = any_bits(extra_flag, 2);
+        m_ptr->is_spell_trainable = any_bits(extra_flag, 4);
+
         info_set_value(m_ptr->spell_type, tokens[4]);
         info_set_value(m_ptr->spell_first, tokens[5]);
         info_set_value(m_ptr->spell_weight, tokens[6]);
