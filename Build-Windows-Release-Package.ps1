@@ -11,7 +11,7 @@ $Env:Path = $msbuild_path + ";" + $Env:Path
 
 function BuildPackage ($package_name, $package_unique_files, $build_conf) {
     # バイナリをリビルド
-    MSBuild.exe .\Hengband\Hengband.sln /t:Rebuild /p:Configuration=$build_conf
+    MSBuild.exe .\VisualStudio\Hengband.sln /t:Rebuild /p:Configuration=$build_conf
 
     if ($LASTEXITCODE -ne 0) {
         # ビルド失敗ならスクリプトを中断する

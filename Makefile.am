@@ -3,10 +3,10 @@
 AUTOMAKE_OPTIONS = foreign
 
 visual_studio_files = \
-	Hengband/Hengband.sln \
-	Hengband/Hengband/Hengband.vcxproj \
-	Hengband/Hengband/Hengband.vcxproj.filters \
-	Hengband/Hengband/packages.config
+	VisualStudio/Hengband.sln \
+	VisualStudio/Hengband/Hengband.vcxproj \
+	VisualStudio/Hengband/Hengband.vcxproj.filters \
+	VisualStudio/Hengband/packages.config
 
 schema_files = \
 	schema/ArtifactDefinitions.schema.json
