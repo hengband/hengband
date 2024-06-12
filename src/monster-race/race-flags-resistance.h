@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 enum class MonsterResistanceType {
     RESIST_ALL = 0, /* Resist all */
