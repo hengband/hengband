@@ -22,7 +22,9 @@
 
 struct player_magic {
     ItemKindType spell_book{}; /* Tval of spell books (if any) */
-    BIT_FLAGS8 spell_xtra{}; /* Something for later */
+    bool has_glove_mp_penalty{}; /* 籠手装備によるMP減少 */
+    bool has_magic_fail_rate_cap{}; /* 魔法失率の5%キャップ */
+    bool is_spell_trainable{}; /* 魔法熟練度 */
 
     int spell_stat{}; /* Stat for spells (if any)  */
     int spell_type{}; /* Spell type (mage/priest) */

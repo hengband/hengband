@@ -70,8 +70,6 @@
 #include "view/display-util.h"
 #include <string_view>
 
-static const int extra_magic_gain_exp = 4;
-
 concptr KWD_DAM = _("損傷:", "dam ");
 concptr KWD_RANGE = _("射程:", "rng ");
 concptr KWD_DURATION = _("期間:", "dur ");
@@ -1299,7 +1297,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
             }
             break;
         }
-        if (any_bits(mp_ptr->spell_xtra, extra_magic_gain_exp)) {
+        if (mp_ptr->is_spell_trainable) {
             PlayerSkill(player_ptr).gain_spell_skill_exp(realm, spell);
         }
     }

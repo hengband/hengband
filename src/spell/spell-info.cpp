@@ -21,9 +21,6 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-// 5%
-static const int extra_min_magic_fail_rate = 2;
-
 /*!
  * @brief 呪文の消費MPを返す /
  * Modify mana consumption rate using spell exp and dec_mana
@@ -152,7 +149,7 @@ PERCENTAGE spell_chance(PlayerType *player_ptr, SPELL_IDX spell, int16_t use_rea
     }
 
     PERCENTAGE minfail = adj_mag_fail[player_ptr->stat_index[mp_ptr->spell_stat]];
-    if (any_bits(mp_ptr->spell_xtra, extra_min_magic_fail_rate)) {
+    if (mp_ptr->has_magic_fail_rate_cap) {
         if (minfail < 5) {
             minfail = 5;
         }
