@@ -339,6 +339,14 @@ void exe_write_diary(const FloorType &floor, DiaryKind dk, int num, std::string_
         constexpr auto fmt = _(" %2d:%02d %20s 闘技場の%sで(%s)に勝利した。\n", " %2d:%02d %20s won %s (%s).\n");
         const auto fight_number = entries.get_fight_number(true);
         fprintf(fff, fmt, hour, min, note_level.data(), fight_number.data(), note.data());
+        if (entries.is_player_true_victor()) {
+            constexpr auto mes_true_champion = _("                 最強の挑戦者からタイトルを防衛し、真のチャンピオンとなった。\n",
+                "                 won the strongest challenger and became the True Champion.\n");
+            fprintf(fff, mes_true_champion);
+            do_level = false;
+            break;
+        }
+
         if (entries.is_player_victor()) {
             constexpr auto mes_champion = _("                 闘技場のすべての敵に勝利し、チャンピオンとなった。\n",
                 "                 won all fights to become a Champion.\n");

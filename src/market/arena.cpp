@@ -62,14 +62,14 @@ static std::optional<int> process_ostensible_arena_victory()
 
 static bool check_battle_metal_babble(PlayerType *player_ptr)
 {
-    msg_print(_("君のために最強の挑戦者を用意しておいた。", "The strongest challenger is waiting for you."));
+    msg_print(_("最強の挑戦者が君に決闘を申し込んできた。", "The strongest challenger throws down the gauntlet to your feet."));
     msg_print(nullptr);
-    if (!input_check(_("挑戦するかね？", "Do you fight? "))) {
-        msg_print(_("残念だ。", "We are disappointed."));
+    if (!input_check(_("受けて立つかね？", "Do you take up the gauntlet? "))) {
+        msg_print(_("失望したよ。", "We are disappointed."));
         return false;
     }
 
-    msg_print(_("死ぬがよい。", "Die, maggots."));
+    msg_print(_("挑戦者「死ぬがよい。」", "The challenger says, 'Die, maggots.'"));
     msg_print(nullptr);
 
     w_ptr->set_arena(false);
