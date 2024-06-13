@@ -24,29 +24,6 @@
 
 bool write_level; //!< @todo *抹殺* したい…
 
-#ifdef JP
-#else
-/*!
- * @brief Return suffix of ordinal number
- * @param num number
- * @return pointer of suffix string.
- */
-std::string get_ordinal_number_suffix(int num)
-{
-    num = std::abs(num) % 100;
-    switch (num % 10) {
-    case 1:
-        return (num == 11) ? "th" : "st";
-    case 2:
-        return (num == 12) ? "th" : "nd";
-    case 3:
-        return (num == 13) ? "th" : "rd";
-    default:
-        return "th";
-    }
-}
-#endif
-
 /*!
  * @brief 日記ファイルを開く
  * @param fff ファイルへのポインタ
@@ -353,16 +330,16 @@ void exe_write_diary(const FloorType &floor, DiaryKind dk, int num, std::string_
         const auto &entries = ArenaEntryList::get_instance();
         const auto defeated_entry = entries.get_defeated_entry();
         if (defeated_entry) {
-            constexpr auto fmt = _(" %2d:%02d %20s 闘技場の%d%s回戦で、%sの前に敗れ去った。\n", " %2d:%02d %20s beaten by %s in the %d%s fight.\n");
-            const auto num_defeated = *defeated_entry + 1; //!< entryは配列番号なので対戦回数と1つずれる.
-            fprintf(fff, fmt, hour, min, note_level.data(), _(num_defeated, note.data()), _("", num_defeated), _(note.data(), get_ordinal_number_suffix(num_defeated).data()));
+            constexpr auto fmt = _(" %2d:%02d %20s 闘技場の%sで、%sの前に敗れ去った。\n", " %2d:%02d %20s beaten by %s in %s.\n");
+            const auto num_defeated = entries.get_fight_number(false);
+            fprintf(fff, fmt, hour, min, note_level.data(), _(num_defeated.data(), note.data()), _(note.data(), num_defeated.data()));
             break;
         }
 
-        constexpr auto fmt = _(" %2d:%02d %20s 闘技場の%d%s回戦(%s)に勝利した。\n", " %2d:%02d %20s won the %d%s fight (%s).\n");
-        const auto current_entry = entries.get_current_entry();
-        fprintf(fff, fmt, hour, min, note_level.data(), current_entry, _("", get_ordinal_number_suffix(current_entry).data()), note.data());
-        if (num == ArenaEntryList::get_instance().get_max_entries()) {
+        constexpr auto fmt = _(" %2d:%02d %20s 闘技場の%sで(%s)に勝利した。\n", " %2d:%02d %20s won %s (%s).\n");
+        const auto fight_number = entries.get_fight_number(true);
+        fprintf(fff, fmt, hour, min, note_level.data(), fight_number.data(), note.data());
+        if (entries.is_player_victor()) {
             constexpr auto mes_champion = _("                 闘技場のすべての敵に勝利し、チャンピオンとなった。\n",
                 "                 won all fights to become a Champion.\n");
             fprintf(fff, mes_champion);

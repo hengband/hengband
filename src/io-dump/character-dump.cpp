@@ -273,29 +273,24 @@ static void dump_aux_arena(FILE *fff)
     }
 
     const auto &entries = ArenaEntryList::get_instance();
-    const auto defeated_entry = entries.get_defeated_entry();
-    if (defeated_entry && !entries.is_player_true_victor()) {
-        const auto defeated_fight = *defeated_entry + 1; //!< entryは配列番号なので対戦回数と1つずれる.
-        constexpr auto fmt = _("\n 闘技場: %d回戦で%sの前に敗北\n", "\n Arena: Defeated by %s in the %d%s fight\n");
+    if (entries.get_defeated_entry() && !entries.is_player_true_victor()) {
+        constexpr auto fmt = _("\n 闘技場: %sで%sの前に敗北\n", "\n Arena: Defeated by %s in %s\n");
         const auto &monrace = entries.get_monrace();
-#ifdef JP
-        fprintf(fff, fmt, defeated_fight, monrace.name.data());
-#else
-        fprintf(fff, fmt, monrace.name.data(), defeated_fight, get_ordinal_number_suffix(*defeated_entry).data());
-#endif
+        const auto fight_number = entries.get_fight_number(false);
+        fprintf(fff, fmt, _(fight_number.data(), monrace.name.data()), _(monrace.name.data(), fight_number.data()));
         fprintf(fff, "\n");
         return;
     }
 
-    const auto max_entries = entries.get_max_entries();
     const auto current_entry = entries.get_current_entry();
-    if (current_entry > max_entries + 2) {
+    if (current_entry > entries.get_true_max_entries()) {
         fprintf(fff, _("\n 闘技場: 真のチャンピオン\n", "\n Arena: True Champion\n"));
         fprintf(fff, "\n");
         return;
     }
 
-    if (current_entry > max_entries - 1) {
+    const auto max_entries = entries.get_max_entries();
+    if (current_entry >= max_entries) {
         fprintf(fff, _("\n 闘技場: チャンピオン\n", "\n Arena: Champion\n"));
         fprintf(fff, "\n");
         return;

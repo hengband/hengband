@@ -11,6 +11,9 @@
 #include "sv-definition/sv-wand-types.h"
 #include "system/baseitem-info.h"
 #include "system/monster-race-info.h"
+#ifndef JP
+#include <sstream>
+#endif
 
 namespace {
 /*!
@@ -93,6 +96,11 @@ int ArenaEntryList::get_max_entries() const
     return std::ssize(ARENA_ENTRIES) - 2;
 }
 
+int ArenaEntryList::get_true_max_entries() const
+{
+    return std::ssize(ARENA_ENTRIES);
+}
+
 int ArenaEntryList::get_current_entry() const
 {
     return this->current_entry;
@@ -134,12 +142,11 @@ const MonsterRaceInfo &ArenaEntryList::get_monrace() const
  */
 ArenaRecord ArenaEntryList::check_arena_record() const
 {
-    const auto max_entries = this->get_max_entries();
-    if (this->current_entry <= max_entries) {
+    if (this->current_entry <= this->get_max_entries()) {
         return ArenaRecord::FENGFUANG;
     }
 
-    if (this->current_entry < max_entries + 2) {
+    if (this->current_entry < this->get_true_max_entries()) {
         return ArenaRecord::POWER_WYRM;
     }
 
@@ -157,6 +164,38 @@ std::string ArenaEntryList::get_poster_message() const
     }
 
     return format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), this->get_monrace().name.data());
+}
+
+std::string ArenaEntryList::get_fight_number(bool is_current) const
+{
+    if (!is_current && !this->defeated_entry) {
+        THROW_EXCEPTION(std::logic_error, "No defeated!");
+    }
+
+    const auto num = is_current ? this->current_entry : *this->defeated_entry + 1;
+#ifdef JP
+    return format("%d回戦", num);
+#else
+    std::stringstream ss;
+    std::string particle;
+    switch (num % 10) {
+    case 1:
+        particle = (num == 11) ? "th" : "st";
+        break;
+    case 2:
+        particle = (num == 12) ? "th" : "nd";
+        break;
+    case 3:
+        particle = (num == 13) ? "th" : "rd";
+        break;
+    default:
+        particle = "th";
+        break;
+    }
+
+    ss << "the " << num << particle << " fight";
+    return ss.str();
+#endif
 }
 
 void ArenaEntryList::increment_entry()

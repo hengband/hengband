@@ -21,6 +21,7 @@ public:
     static ArenaEntryList &get_instance();
 
     int get_max_entries() const;
+    int get_true_max_entries() const;
     int get_current_entry() const;
     std::optional<int> get_defeated_entry() const;
     bool is_player_victor() const;
@@ -30,6 +31,7 @@ public:
     const MonsterRaceInfo &get_monrace() const;
     ArenaRecord check_arena_record() const;
     std::string get_poster_message() const;
+    std::string get_fight_number(bool is_current) const;
     void increment_entry();
     void reset_entry();
     void set_defeated_entry();
