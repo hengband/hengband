@@ -940,57 +940,52 @@ static void build_castle_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
  */
 bool build_type10(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
-    POSITION y0, x0, xsize, ysize, vtype;
-
-    /* big enough to look good, small enough to be fairly common. */
-    xsize = randint1(22) + 22;
-    ysize = randint1(11) + 11;
-
-    /* Find and reserve some space in the dungeon.  Get center of room. */
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!find_space(player_ptr, dd_ptr, &y0, &x0, ysize + 1, xsize + 1)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto xsize = randint1(22) + 22;
+    const auto ysize = randint1(11) + 11;
+    int y;
+    int x;
+    if (!find_space(player_ptr, dd_ptr, &y, &x, ysize + 1, xsize + 1)) {
         return false;
     }
 
-    /* Select type of vault */
+    int vault_type;
     do {
-        vtype = randint1(15);
-    } while (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::NO_CAVE) && ((vtype == 1) || (vtype == 3) || (vtype == 8) || (vtype == 9) || (vtype == 11)));
+        vault_type = randint1(15);
+    } while (floor.get_dungeon_definition().flags.has(DungeonFeatureType::NO_CAVE) && ((vault_type == 1) || (vault_type == 3) || (vault_type == 8) || (vault_type == 9) || (vault_type == 11)));
 
-    switch (vtype) {
-        /* Build an appropriate room */
+    switch (vault_type) {
     case 1:
     case 9:
-        build_bubble_vault(player_ptr, { y0, x0 }, { ysize, xsize });
+        build_bubble_vault(player_ptr, { y, x }, { ysize, xsize });
         break;
     case 2:
     case 10:
-        build_room_vault(player_ptr, x0, y0, xsize, ysize);
+        build_room_vault(player_ptr, x, y, xsize, ysize);
         break;
     case 3:
     case 11:
-        build_cave_vault(player_ptr, x0, y0, xsize, ysize);
+        build_cave_vault(player_ptr, x, y, xsize, ysize);
         break;
     case 4:
     case 12:
-        build_maze_vault(player_ptr, x0, y0, xsize, ysize, true);
+        build_maze_vault(player_ptr, x, y, xsize, ysize, true);
         break;
     case 5:
     case 13:
-        build_mini_c_vault(player_ptr, x0, y0, xsize, ysize);
+        build_mini_c_vault(player_ptr, x, y, xsize, ysize);
         break;
     case 6:
     case 14:
-        build_castle_vault(player_ptr, x0, y0, xsize, ysize);
+        build_castle_vault(player_ptr, x, y, xsize, ysize);
         break;
     case 7:
     case 15:
-        build_target_vault(player_ptr, x0, y0, xsize, ysize);
+        build_target_vault(player_ptr, x, y, xsize, ysize);
         break;
     case 8:
-        build_elemental_vault(player_ptr, x0, y0, xsize, ysize);
+        build_elemental_vault(player_ptr, x, y, xsize, ysize);
         break;
-        /* I know how to add a few more... give me some time. */
     default:
         return false;
     }
