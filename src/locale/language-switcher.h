@@ -10,7 +10,7 @@
 
 //!< 普通のマクロ関数と違って展開後のカッコがないので注意.
 #ifdef JP
-#define _N(JAPANESE, ENGLISH) JAPANESE, ENGLISH
+#define N(JAPANESE, ENGLISH) JAPANESE, ENGLISH
 #else
-#define _N(JAPANESE, ENGLISH) ENGLISH
+#define N(JAPANESE, ENGLISH) ENGLISH
 #endif

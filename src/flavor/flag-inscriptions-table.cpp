@@ -1,12 +1,6 @@
 #include "flavor/flag-inscriptions-table.h"
 #include "object-enchant/tr-types.h"
 
-#ifdef JP
-#define N(JAPANESE, ENGLISH) JAPANESE, ENGLISH
-#else
-#define N(JAPANESE, ENGLISH) ENGLISH
-#endif
-
 /*! @brief アイテムの価値記述テーブル */
 const concptr game_inscriptions[MAX_GAME_INSCRIPTIONS] = {
     nullptr, /* FEEL_NONE */
