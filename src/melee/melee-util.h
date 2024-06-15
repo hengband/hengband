@@ -4,6 +4,7 @@
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-table.h"
 #include "system/angband.h"
+#include "util/dice.h"
 
 enum class BlowEffectType;
 
@@ -35,8 +36,7 @@ struct mam_type {
     bool do_silly_attack;
     int power;
     bool obvious;
-    int d_dice;
-    int d_side;
+    Dice damage_dice;
     bool known;
     bool fear;
     bool dead;

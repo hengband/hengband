@@ -307,18 +307,18 @@ bool place_specific_monster(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITIO
     place_monster_m_idx = hack_m_idx_ii;
 
     /* Reinforcement */
-    for (const auto &[reinforce_r_idx, dd, ds] : r_ptr->reinforces) {
-        if (!MonraceList::is_valid(reinforce_r_idx)) {
+    for (const auto &[reinforce_monrace_id, num_dice] : r_ptr->reinforces) {
+        if (!MonraceList::is_valid(reinforce_monrace_id)) {
             continue;
         }
-        auto n = damroll(dd, ds);
+        auto n = num_dice.roll();
         for (int j = 0; j < n; j++) {
             POSITION nx, ny, d;
             const POSITION scatter_min = 7;
             const POSITION scatter_max = 40;
             for (d = scatter_min; d <= scatter_max; d++) {
                 scatter(player_ptr, &ny, &nx, y, x, d, PROJECT_NONE);
-                if (place_monster_one(player_ptr, place_monster_m_idx, ny, nx, reinforce_r_idx, mode, summoner_m_idx)) {
+                if (place_monster_one(player_ptr, place_monster_m_idx, ny, nx, reinforce_monrace_id, mode, summoner_m_idx)) {
                     break;
                 }
             }

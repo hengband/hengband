@@ -18,6 +18,7 @@
 #include "monster-race/race-visual-flags.h"
 #include "monster-race/race-wilderness-flags.h"
 #include "system/angband.h"
+#include "util/dice.h"
 #include "util/flag-group.h"
 #include "view/display-symbol.h"
 #include <map>
@@ -37,8 +38,7 @@ class MonsterBlow {
 public:
     RaceBlowMethodType method{};
     RaceBlowEffectType effect{};
-    DICE_NUMBER d_dice{};
-    DICE_SID d_side{};
+    Dice damage_dice;
 };
 
 /*!
@@ -72,8 +72,7 @@ public:
     std::string E_name = ""; //!< 名前データのオフセット(英語) /  Name offset(English)
 #endif
     std::string text = ""; //!< 思い出テキストのオフセット / Lore text offset
-    DICE_NUMBER hdice{}; //!< HPのダイス数 / Creatures hit dice count
-    DICE_SID hside{}; //!< HPのダイス面数 / Creatures hit dice sides
+    Dice hit_dice; //!< HPのダイス / Creatures hit dice
     ARMOUR_CLASS ac{}; //!< アーマークラス / Armour Class
     SLEEP_DEGREE sleep{}; //!< 睡眠値 / Inactive counter (base)
     POSITION aaf{}; //!< 感知範囲(1-100スクエア) / Area affect radius (1-100)
@@ -96,11 +95,10 @@ public:
     EnumClassFlagGroup<MonsterSpecialType> special_flags; //!< 能力フラグ(特殊) / Special Flags
     EnumClassFlagGroup<MonsterMiscType> misc_flags; //!< 能力フラグ（その他） / Speaking Other
     MonsterBlow blows[MAX_NUM_BLOWS]{}; //!< 打撃能力定義 / Up to four blows per round
-    DICE_NUMBER shoot_dam_dice{}; //!< 射撃ダメージダイス数　/ shoot damage dice count
-    DICE_SID shoot_dam_side{}; //!< 射撃ダメージダイス面数 / shoot damage dice sides
+    Dice shoot_damage_dice; //!< 射撃ダメージダイス / shoot damage dice
 
-    //! 指定護衛リスト <モンスター種族ID,護衛数ダイス数,護衛数ダイス面>
-    std::vector<std::tuple<MonsterRaceId, DICE_NUMBER, DICE_SID>> reinforces;
+    //! 指定護衛リスト <モンスター種族ID,護衛数ダイス>
+    std::vector<std::tuple<MonsterRaceId, Dice>> reinforces;
 
     //! 特定アーティファクトドロップリスト <アーティファクトID,ドロップ率>
     std::vector<std::tuple<FixedArtifactId, PERCENTAGE>> drop_artifacts;

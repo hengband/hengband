@@ -325,9 +325,9 @@ static void init_riding_pet(PlayerType *player_ptr, bool new_game)
     place_specific_monster(player_ptr, 0, player_ptr->y, player_ptr->x - 1, pet_r_idx, (PM_FORCE_PET | PM_NO_KAGE));
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[hack_m_idx_ii];
     m_ptr->mspeed = r_ptr->speed;
-    m_ptr->maxhp = r_ptr->hdice * (r_ptr->hside + 1) / 2;
+    m_ptr->maxhp = static_cast<int>(r_ptr->hit_dice.expected_value());
     m_ptr->max_maxhp = m_ptr->maxhp;
-    m_ptr->hp = r_ptr->hdice * (r_ptr->hside + 1) / 2;
+    m_ptr->hp = static_cast<int>(r_ptr->hit_dice.expected_value());
     m_ptr->dealt_damage = 0;
     m_ptr->energy_need = ENERGY_NEED() + ENERGY_NEED();
 }

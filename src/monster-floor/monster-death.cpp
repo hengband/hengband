@@ -65,9 +65,7 @@ static void on_dead_explosion(PlayerType *player_ptr, MonsterDeath *md_ptr)
 
         BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
         AttributeType typ = mbe_info[enum2i(blow.effect)].explode_type;
-        DICE_NUMBER d_dice = blow.d_dice;
-        DICE_SID d_side = blow.d_side;
-        int damage = damroll(d_dice, d_side);
+        const auto damage = blow.damage_dice.roll();
         (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, damage, typ, flg);
         break;
     }

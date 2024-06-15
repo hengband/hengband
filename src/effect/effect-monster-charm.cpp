@@ -456,7 +456,7 @@ ProcessResult effect_monster_capture(PlayerType *player_ptr, EffectMonster *em_p
         return ProcessResult::PROCESS_CONTINUE;
     }
 
-    auto r_max_hp = em_ptr->r_ptr->hdice * em_ptr->r_ptr->hside;
+    auto r_max_hp = em_ptr->r_ptr->hit_dice.maxroll();
     auto threshold_hp = calcutate_capturable_hp(player_ptr, em_ptr->m_ptr, r_max_hp);
     auto capturable_hp = std::max(2, calcutate_capturable_hp(player_ptr, em_ptr->m_ptr, em_ptr->m_ptr->max_maxhp));
 
