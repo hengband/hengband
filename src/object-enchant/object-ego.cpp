@@ -128,26 +128,27 @@ static void ego_invest_extra_abilities(ItemEntity *o_ptr, EnumClassFlagGroup<Ite
     if (gen_flags.has(ItemGenerationTraitType::XTRA_L_ESP)) {
         one_low_esp(o_ptr);
     }
+    auto &dice = o_ptr->damage_dice;
     if (gen_flags.has(ItemGenerationTraitType::ADD_DICE)) {
-        o_ptr->dd++;
+        dice.num++;
     }
     if (gen_flags.has(ItemGenerationTraitType::DOUBLED_DICE)) {
-        o_ptr->dd *= 2;
+        dice.num *= 2;
     } else {
         if (gen_flags.has(ItemGenerationTraitType::XTRA_DICE)) {
             do {
-                o_ptr->dd++;
-            } while (one_in_(o_ptr->dd));
+                dice.num++;
+            } while (one_in_(dice.num));
         }
         if (gen_flags.has(ItemGenerationTraitType::XTRA_DICE_SIDE)) {
             do {
-                o_ptr->ds++;
-            } while (one_in_(o_ptr->ds));
+                dice.sides++;
+            } while (one_in_(dice.sides));
         }
     }
 
-    if (o_ptr->dd > 9) {
-        o_ptr->dd = 9;
+    if (dice.num > 9) {
+        dice.num = 9;
     }
 }
 
@@ -235,7 +236,7 @@ void ego_invest_extra_attack(ItemEntity *o_ptr, const EgoItemDefinition &ego, DE
 
     if (ego_has_flag(o_ptr, ego, TR_SLAY_EVIL) || ego_has_flag(o_ptr, ego, TR_KILL_EVIL)) {
         o_ptr->pval++;
-        if ((lev > 60) && one_in_(3) && ((o_ptr->dd * (o_ptr->ds + 1)) < 15)) {
+        if ((lev > 60) && one_in_(3) && (o_ptr->damage_dice.expected_value() * 2 < 15)) {
             o_ptr->pval++;
         }
         return;

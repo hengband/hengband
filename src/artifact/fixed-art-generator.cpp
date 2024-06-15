@@ -168,12 +168,13 @@ static void fixed_artifact_random_abilities(PlayerType *player_ptr, const Artifa
     }
 
     if (artifact.gen_flags.has(ItemGenerationTraitType::XTRA_DICE)) {
+        auto &dice = o_ptr->damage_dice;
         do {
-            o_ptr->dd++;
-        } while (one_in_(o_ptr->dd));
+            dice.num++;
+        } while (one_in_(dice.num));
 
-        if (o_ptr->dd > 9) {
-            o_ptr->dd = 9;
+        if (dice.num > 9) {
+            dice.num = 9;
         }
     }
 }
@@ -226,8 +227,7 @@ void apply_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
     const auto &artifact = o_ptr->get_fixed_artifact();
     o_ptr->pval = artifact.pval;
     o_ptr->ac = artifact.ac;
-    o_ptr->dd = artifact.dd;
-    o_ptr->ds = artifact.ds;
+    o_ptr->damage_dice = artifact.damage_dice;
     o_ptr->to_a = artifact.to_a;
     o_ptr->to_h = artifact.to_h;
     o_ptr->to_d = artifact.to_d;

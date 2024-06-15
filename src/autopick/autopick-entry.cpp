@@ -422,7 +422,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, co
 
     if (o_ptr->is_melee_weapon()) {
         const auto &baseitem = o_ptr->get_baseitem();
-        if ((o_ptr->dd != baseitem.dd) || (o_ptr->ds != baseitem.ds)) {
+        if (o_ptr->damage_dice != baseitem.damage_dice) {
             entry->add(FLG_BOOSTED);
         }
     }

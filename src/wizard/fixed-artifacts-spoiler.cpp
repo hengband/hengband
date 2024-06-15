@@ -75,8 +75,7 @@ static ItemEntity make_fake_artifact(FixedArtifactId fa_id)
     item.fa_id = fa_id;
     item.pval = artifact.pval;
     item.ac = artifact.ac;
-    item.dd = artifact.dd;
-    item.ds = artifact.ds;
+    item.damage_dice = artifact.damage_dice;
     item.to_a = artifact.to_a;
     item.to_h = artifact.to_h;
     item.to_d = artifact.to_d;

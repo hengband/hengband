@@ -50,11 +50,12 @@ void MeleeWeaponEnchanter::strengthen()
         return;
     }
 
-    while (one_in_(10 * this->o_ptr->dd * this->o_ptr->ds)) {
-        this->o_ptr->dd++;
+    auto &dice = this->o_ptr->damage_dice;
+    while (one_in_(10 * dice.maxroll())) {
+        dice.num++;
     }
 
-    if (this->o_ptr->dd > 9) {
-        this->o_ptr->dd = 9;
+    if (dice.num > 9) {
+        dice.num = 9;
     }
 }

@@ -49,13 +49,13 @@ static bool weakening_artifact(ItemEntity *o_ptr)
         return true;
     }
 
-    if (baseitem.dd < o_ptr->dd) {
-        o_ptr->dd--;
+    if (baseitem.damage_dice.num < o_ptr->damage_dice.num) {
+        o_ptr->damage_dice.num--;
         return true;
     }
 
-    if (baseitem.ds < o_ptr->ds) {
-        o_ptr->ds--;
+    if (baseitem.damage_dice.sides < o_ptr->damage_dice.sides) {
+        o_ptr->damage_dice.sides--;
         return true;
     }
 
@@ -216,13 +216,14 @@ static void invest_powers(PlayerType *player_ptr, ItemEntity *o_ptr, int *powers
                 if (a_cursed && !one_in_(13)) {
                     break;
                 }
+                auto &dice = o_ptr->damage_dice;
                 if (one_in_(13)) {
-                    if (one_in_(o_ptr->ds + 4)) {
-                        o_ptr->ds++;
+                    if (one_in_(dice.sides + 4)) {
+                        dice.sides++;
                     }
                 } else {
-                    if (one_in_(o_ptr->dd + 1)) {
-                        o_ptr->dd++;
+                    if (one_in_(dice.num + 1)) {
+                        dice.num++;
                     }
                 }
             } else {

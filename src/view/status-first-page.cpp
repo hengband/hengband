@@ -242,8 +242,8 @@ static void calc_two_hands(PlayerType *player_ptr, int *damage, int *to_h)
             to_h[i] += o_ptr->to_h;
         }
 
-        int mindice = (o_ptr->dd + player_ptr->to_dd[i]);
-        int maxdice = (o_ptr->dd + player_ptr->to_dd[i]) * (o_ptr->ds + player_ptr->to_ds[i]);
+        const auto mindice = (o_ptr->damage_dice.num + player_ptr->to_dd[i]);
+        const auto maxdice = mindice * (o_ptr->damage_dice.sides + player_ptr->to_ds[i]);
 
         basedam = calc_expect_dice(player_ptr, mindice, p_ptr->to_h[i], o_ptr);
         basedam += calc_expect_dice(player_ptr, maxdice, p_ptr->to_h[i], o_ptr);

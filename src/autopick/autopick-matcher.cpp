@@ -151,7 +151,7 @@ bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const au
         }
 
         const auto &baseitem = o_ptr->get_baseitem();
-        if ((o_ptr->dd == baseitem.dd) && (o_ptr->ds == baseitem.ds)) {
+        if (o_ptr->damage_dice == baseitem.damage_dice) {
             return false;
         }
 
@@ -161,7 +161,7 @@ bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const au
     }
 
     if (entry.has(FLG_MORE_DICE)) {
-        if (o_ptr->dd * o_ptr->ds < entry.dice) {
+        if (o_ptr->damage_dice.maxroll() < entry.dice) {
             return false;
         }
     }

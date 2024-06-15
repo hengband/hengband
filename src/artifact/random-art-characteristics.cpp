@@ -14,6 +14,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
+#include <cmath>
 #include <sstream>
 #include <string_view>
 
@@ -166,7 +167,8 @@ static int calc_arm_avgdamage(PlayerType *player_ptr, ItemEntity *o_ptr)
     const auto flags = o_ptr->get_flags();
     int base, forced, vorpal;
     int s_evil = forced = vorpal = 0;
-    int dam = base = (o_ptr->dd * o_ptr->ds + o_ptr->dd) / 2;
+    /// @todo 最初に小数点以下を切り捨てているため誤差が大きくなっている。なるべく正しいダメージが計算されるようにしたい。
+    int dam = base = static_cast<int>(o_ptr->damage_dice.expected_value());
     if (flags.has(TR_KILL_EVIL)) {
         dam = s_evil = dam * 7 / 2;
     } else if (flags.has_not(TR_KILL_EVIL) && flags.has(TR_SLAY_EVIL)) {
@@ -176,7 +178,7 @@ static int calc_arm_avgdamage(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     if (flags.has(TR_FORCE_WEAPON)) {
-        dam = forced = dam * 3 / 2 + (o_ptr->dd * o_ptr->ds + o_ptr->dd);
+        dam = forced = dam * 3 / 2 + static_cast<int>(std::round(o_ptr->damage_dice.expected_value() * 2));
     } else {
         forced = dam;
     }

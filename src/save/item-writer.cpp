@@ -50,11 +50,11 @@ static BIT_FLAGS write_item_flags(const ItemEntity &item)
         set_bits(flags, SaveDataItemFlagType::AC);
     }
 
-    if (item.dd) {
+    if (item.damage_dice.num != 0) {
         set_bits(flags, SaveDataItemFlagType::DD);
     }
 
-    if (item.ds) {
+    if (item.damage_dice.sides != 0) {
         set_bits(flags, SaveDataItemFlagType::DS);
     }
 
@@ -158,11 +158,11 @@ static void write_item_info(const ItemEntity &item, const BIT_FLAGS flags)
     }
 
     if (any_bits(flags, SaveDataItemFlagType::DD)) {
-        wr_byte((byte)item.dd);
+        wr_byte((byte)item.damage_dice.num);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::DS)) {
-        wr_byte((byte)item.ds);
+        wr_byte((byte)item.damage_dice.sides);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::IDENT)) {

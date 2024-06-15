@@ -41,12 +41,11 @@ static std::string describe_dam_or_ac(const ItemEntity &item)
     case ItemKindType::SHOT:
     case ItemKindType::BOLT:
     case ItemKindType::ARROW:
-        return format("%dd%d", item.dd, item.ds);
     case ItemKindType::HAFTED:
     case ItemKindType::POLEARM:
     case ItemKindType::SWORD:
     case ItemKindType::DIGGING:
-        return format("%dd%d", item.dd, item.ds);
+        return item.damage_dice.to_string();
     case ItemKindType::BOOTS:
     case ItemKindType::GLOVES:
     case ItemKindType::CLOAK:

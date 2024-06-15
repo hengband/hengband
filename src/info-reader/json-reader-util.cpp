@@ -1,6 +1,7 @@
 #include "info-reader/json-reader-util.h"
 #include "info-reader/info-reader-util.h"
 #include "locale/japanese.h"
+#include "util/dice.h"
 
 /*!
  * @brief JSON Objectから文字列をセットする
@@ -62,4 +63,18 @@ errr info_set_dice(const nlohmann::json &json, DICE_NUMBER &dd, DICE_SID &ds, bo
     }
 
     return info_set_dice(json.get<std::string>(), dd, ds);
+}
+
+errr info_set_dice(const nlohmann::json &json, Dice &dice, bool is_required)
+{
+    if (json.is_null() || !json.is_string()) {
+        return is_required ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_NONE;
+    }
+
+    try {
+        dice = Dice::parse(json.get<std::string>());
+        return PARSE_ERROR_NONE;
+    } catch (const std::runtime_error &) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
 }
