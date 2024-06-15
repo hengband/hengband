@@ -79,25 +79,6 @@ static void write_diary_stay_inn(PlayerType *player_ptr, int prev_hour)
 }
 
 /*!
- * @brief 宿泊によってゲーム内ターンを経過させる
- * @param なし
- */
-static void pass_game_turn_by_stay(void)
-{
-    int32_t oldturn = w_ptr->game_turn;
-    w_ptr->game_turn = (w_ptr->game_turn / (TURNS_PER_TICK * TOWN_DAWN / 2) + 1) * (TURNS_PER_TICK * TOWN_DAWN / 2);
-    if (w_ptr->dungeon_turn >= w_ptr->dungeon_turn_limit) {
-        return;
-    }
-
-    constexpr auto stay_magnificant = 10;
-    w_ptr->dungeon_turn += std::min<int>((w_ptr->game_turn - oldturn), TURNS_PER_TICK * 250) * stay_magnificant;
-    if (w_ptr->dungeon_turn > w_ptr->dungeon_turn_limit) {
-        w_ptr->dungeon_turn = w_ptr->dungeon_turn_limit;
-    }
-}
-
-/*!
  * @brief 悪夢モードなら悪夢を見せる
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 悪夢モードならばTRUE
@@ -195,7 +176,7 @@ static bool stay_inn(PlayerType *player_ptr)
     const auto &[prev_day, prev_hour, prev_min] = w_ptr->extract_date_time(InnerGameData::get_instance().get_start_race());
     write_diary_stay_inn(player_ptr, prev_hour);
 
-    pass_game_turn_by_stay();
+    w_ptr->pass_game_turn_by_stay();
     prevent_turn_overflow(player_ptr);
     if ((prev_hour >= 18) && (prev_hour <= 23)) {
         determine_daily_bounty(player_ptr, false); /* Update daily bounty */
