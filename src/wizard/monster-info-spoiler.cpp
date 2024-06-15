@@ -1,6 +1,6 @@
 #include "wizard/monster-info-spoiler.h"
 #include "io/files-util.h"
-#include "system/angband-version.h"
+#include "system/angband-system.h"
 #include "system/monster-race-info.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
@@ -78,7 +78,8 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
-    ofs << format("Monster Spoilers for %s\n", get_version().data());
+    constexpr auto fmt_version = "Monster Spoilers for %s\n";
+    ofs << format(fmt_version, AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL).data());
     ofs << "------------------------------------------\n\n";
     ofs << format("%-45.45s%4s %4s %4s %7s %7s  %19.19s\n", "Name", "Lev", "Rar", "Spd", "Hp", "Ac", "Visual Info");
     ofs << format("%-45.45s%4s %4s %4s %7s %7s  %4.19s\n",
@@ -161,7 +162,8 @@ SpoilerOutputResultType spoil_mon_info()
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
-    spoil_out(std::string("Monster Spoilers for ").append(get_version()).append("\n"));
+    constexpr auto fmt_version = "Monster Spoilers for %s\n";
+    spoil_out(format(fmt_version, AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL).data()));
     spoil_out("------------------------------------------\n\n");
 
     const auto &monraces = MonraceList::get_instance();

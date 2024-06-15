@@ -678,7 +678,7 @@ void wiz_dump_options(void)
         }
     }
 
-    fprintf(fff, "[Option bits usage on %s\n]", get_version().data());
+    fprintf(fff, "[Option bits usage on %s\n]", AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL).data());
     fputs("Set - Bit (Page) Option Name\n", fff);
     fputs("------------------------------------------------\n", fff);
     for (int i = 0; i < NUM_O_SET; i++) {

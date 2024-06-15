@@ -68,7 +68,7 @@ void rd_version_info(void)
     }
 
     constexpr auto fmt = _("バージョン %s のセーブデータ(SAVE%u形式)をロード中...", "Loading a version %s savefile (SAVE%u format)...");
-    load_note(format(fmt, system.build_version_expression(false).data(), loading_savefile_version));
+    load_note(format(fmt, system.build_version_expression(VersionExpression::WITHOUT_EXTRA).data(), loading_savefile_version));
 }
 
 /*!

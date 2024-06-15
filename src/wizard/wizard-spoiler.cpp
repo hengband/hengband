@@ -20,7 +20,7 @@
 #include "realm/realm-names-table.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-util.h"
-#include "system/angband-version.h"
+#include "system/angband-system.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -101,7 +101,7 @@ static SpoilerOutputResultType spoil_mon_evol()
     }
 
     std::stringstream ss;
-    ss << "Monster Spoilers for " << get_version() << '\n';
+    ss << "Monster Spoilers for " << AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL) << '\n';
     spoil_out(ss.str());
     spoil_out("------------------------------------------\n\n");
     for (auto monrace_id : get_mon_evol_roots()) {
@@ -177,7 +177,7 @@ static SpoilerOutputResultType spoil_player_spell()
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
-    spoil_out(format("Player spells for %s\n", get_version().data()));
+    spoil_out(format("Player spells for %s\n", AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL).data()));
     spoil_out("------------------------------------------\n\n");
 
     PlayerType dummy_p;

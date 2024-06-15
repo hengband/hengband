@@ -26,7 +26,7 @@
 #include "player/player-personality-types.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
-#include "system/angband-version.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/inner-game-data.h"
@@ -208,7 +208,7 @@ void do_cmd_colors(PlayerType *player_ptr)
 /*
  * Note something in the message recall
  */
-void do_cmd_note(void)
+void do_cmd_note()
 {
     const auto note = input_string(_("メモ: ", "Note: "), 60);
     if (!note || note->empty()) {
@@ -221,9 +221,9 @@ void do_cmd_note(void)
 /*
  * Mention the current version
  */
-void do_cmd_version(void)
+void do_cmd_version()
 {
-    msg_print(get_version());
+    msg_print(AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL));
 }
 
 /*

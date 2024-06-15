@@ -3,15 +3,6 @@
 
 AngbandSystem AngbandSystem::instance{};
 
-std::string AngbandVersion::build_expression(bool includes_extra) const
-{
-    if (includes_extra) {
-        return format("%d.%d.%d.%d", this->major, this->minor, this->patch, this->extra);
-    }
-
-    return format("%d.%d.%d", this->major, this->minor, this->patch);
-}
-
 AngbandSystem &AngbandSystem::get_instance()
 {
     return instance;
@@ -81,7 +72,7 @@ void AngbandSystem::set_version(const AngbandVersion &new_version)
     this->version = new_version;
 }
 
-std::string AngbandSystem::build_version_expression(bool includes_extra) const
+std::string AngbandSystem::build_version_expression(VersionExpression expression) const
 {
-    return this->version.build_expression(includes_extra);
+    return this->version.build_expression(expression);
 }
