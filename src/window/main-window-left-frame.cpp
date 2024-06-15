@@ -48,7 +48,7 @@ void print_title(PlayerType *player_ptr)
             p = _("***勝利者***", "***WINNER***");
         }
     } else {
-        p = player_titles[enum2i(player_ptr->pclass)][(player_ptr->lev - 1) / 5];
+        p = player_titles.at(player_ptr->pclass).at((player_ptr->lev - 1) / 5);
     }
 
     print_field(p, ROW_TITLE, COL_TITLE);
@@ -241,8 +241,8 @@ void print_depth(PlayerType *player_ptr)
 void print_frame_basic(PlayerType *player_ptr)
 {
     const auto title = player_ptr->mimic_form == MimicKindType::NONE
-                                  ? rp_ptr->title
-                                  : mimic_info.at(player_ptr->mimic_form).title;
+                           ? rp_ptr->title
+                           : mimic_info.at(player_ptr->mimic_form).title;
     print_field(title, ROW_RACE, COL_RACE);
     print_title(player_ptr);
     print_level(player_ptr);
