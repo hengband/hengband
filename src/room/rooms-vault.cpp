@@ -86,7 +86,7 @@ std::array<Pos2D, NUM_BUBBLES> create_bubbles_center(const Pos2DVec &vec)
     return center_points;
 }
 
-void set_boundaries(PlayerType* player_ptr, const Pos2D& pos)
+void set_boundaries(PlayerType *player_ptr, const Pos2D &pos)
 {
     place_bold(player_ptr, pos.y, pos.x, GB_OUTER_NOPERM);
     player_ptr->current_floor_ptr->get_grid(pos).add_info(CAVE_ROOM | CAVE_ICKY);
@@ -998,52 +998,31 @@ bool build_type10(PlayerType *player_ptr, dun_data_type *dd_ptr)
  */
 bool build_fixed_room(PlayerType *player_ptr, dun_data_type *dd_ptr, int typ, bool more_space)
 {
-    vault_type *v_ptr = nullptr;
-    POSITION x, y;
-    POSITION xval, yval;
-    POSITION xoffset, yoffset;
-    int transno;
-
     ProbabilityTable<int> prob_table;
-
-    /* Pick fixed room */
-    for (const auto &v_ref : vaults_info) {
-        if (v_ref.typ == typ) {
-            prob_table.entry_item(v_ref.idx, 1);
+    for (const auto &vault : vaults_info) {
+        if (vault.typ == typ) {
+            prob_table.entry_item(vault.idx, 1);
         }
     }
 
-    auto result = prob_table.pick_one_at_random();
-
-    v_ptr = &vaults_info[result];
-
-    /* pick type of transformation (0-7) */
-    transno = randint0(8);
+    const auto result = prob_table.pick_one_at_random();
+    const auto &vault = vaults_info[result];
+    auto num_transformation = randint0(8);
 
     /* calculate offsets */
-    x = v_ptr->wid;
-    y = v_ptr->hgt;
+    auto x = vault.wid;
+    auto y = vault.hgt;
 
     /* Some huge vault cannot be ratated to fit in the dungeon */
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (x + 2 > floor_ptr->height - 2) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (x + 2 > floor.height - 2) {
         /* Forbid 90 or 270 degree ratation */
-        transno &= ~1;
+        num_transformation &= ~1;
     }
 
-    coord_trans(&x, &y, 0, 0, transno);
-
-    if (x < 0) {
-        xoffset = -x - 1;
-    } else {
-        xoffset = 0;
-    }
-
-    if (y < 0) {
-        yoffset = -y - 1;
-    } else {
-        yoffset = 0;
-    }
+    coord_trans(&x, &y, 0, 0, num_transformation);
+    const auto y_offset = y < 0 ? -y - 1 : 0;
+    const auto x_offset = x < 0 ? -x - 1 : 0;
 
     /*
      * Try to allocate space for room.  If fails, exit
@@ -1051,17 +1030,16 @@ bool build_fixed_room(PlayerType *player_ptr, dun_data_type *dd_ptr, int typ, bo
      * Hack -- Prepare a bit larger space (+2, +2) to
      * prevent generation of vaults with no-entrance.
      */
-    int xsize = more_space ? abs(x) + 2 : abs(x);
-    int ysize = more_space ? abs(y) + 2 : abs(y);
+    const auto xsize = more_space ? std::abs(x) + 2 : std::abs(x);
+    const auto ysize = more_space ? std::abs(y) + 2 : std::abs(y);
     /* Find and reserve some space in the dungeon.  Get center of room. */
+    int yval;
+    int xval;
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, ysize, xsize)) {
         return false;
     }
 
-    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("固定部屋(%s)を生成しました。", "Fixed room (%s)."), v_ptr->name.data());
-
-    /* Hack -- Build the vault */
-    build_vault(player_ptr, yval, xval, v_ptr->hgt, v_ptr->wid, v_ptr->text.data(), xoffset, yoffset, transno);
-
+    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("固定部屋(%s)を生成しました。", "Fixed room (%s)."), vault.name.data());
+    build_vault(player_ptr, yval, xval, vault.hgt, vault.wid, vault.text.data(), x_offset, y_offset, num_transformation);
     return true;
 }
