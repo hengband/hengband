@@ -149,8 +149,8 @@ void process_death_scythe_reflection(PlayerType *player_ptr, player_attack_type 
 
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     const auto death_scythe_flags = o_ptr->get_flags();
-    const auto num = o_ptr->damage_dice.num + player_ptr->to_dd[pa_ptr->hand];
-    const auto sides = o_ptr->damage_dice.sides + player_ptr->to_ds[pa_ptr->hand];
+    const auto num = o_ptr->damage_dice.num + player_ptr->damage_dice_bonus[pa_ptr->hand].num;
+    const auto sides = o_ptr->damage_dice.sides + player_ptr->damage_dice_bonus[pa_ptr->hand].sides;
     pa_ptr->attack_damage = Dice::roll(num, sides);
     int magnification = calc_death_scythe_reflection_magnification(player_ptr);
     compensate_death_scythe_reflection_magnification(player_ptr, &magnification, death_scythe_flags);

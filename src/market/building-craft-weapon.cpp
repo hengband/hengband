@@ -69,8 +69,8 @@ static void compare_weapon_aux(PlayerType *player_ptr, ItemEntity *o_ptr, int co
     bool force = false;
     bool dokubari = false;
 
-    int eff_dd = o_ptr->damage_dice.num + player_ptr->to_dd[0];
-    int eff_ds = o_ptr->damage_dice.sides + player_ptr->to_ds[0];
+    int eff_dd = o_ptr->damage_dice.num + player_ptr->damage_dice_bonus[0].num;
+    int eff_ds = o_ptr->damage_dice.sides + player_ptr->damage_dice_bonus[0].sides;
 
     int mindice = eff_dd;
     int maxdice = eff_ds * eff_dd;
@@ -257,8 +257,8 @@ static void compare_weapon_aux(PlayerType *player_ptr, ItemEntity *o_ptr, int co
  */
 static void list_weapon(PlayerType *player_ptr, ItemEntity *o_ptr, TERM_LEN row, TERM_LEN col)
 {
-    const auto eff_dd = o_ptr->damage_dice.num + player_ptr->to_dd[0];
-    const auto eff_ds = o_ptr->damage_dice.sides + player_ptr->to_ds[0];
+    const auto eff_dd = o_ptr->damage_dice.num + player_ptr->damage_dice_bonus[0].num;
+    const auto eff_ds = o_ptr->damage_dice.sides + player_ptr->damage_dice_bonus[0].sides;
     const auto hit_reliability = player_ptr->skill_thn + (player_ptr->to_h[0] + o_ptr->to_h) * BTH_PLUS_ADJ;
     const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
     c_put_str(TERM_YELLOW, item_name, row, col);

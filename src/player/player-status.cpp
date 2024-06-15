@@ -331,8 +331,8 @@ static void update_bonuses(PlayerType *player_ptr)
         player_ptr->is_icky_riding_wield[i] = is_wielding_icky_riding_weapon(player_ptr, i);
         player_ptr->heavy_wield[i] = is_heavy_wield(player_ptr, i);
         player_ptr->num_blow[i] = calc_num_blow(player_ptr, i);
-        player_ptr->to_dd[i] = calc_to_weapon_dice_num(player_ptr, INVEN_MAIN_HAND + i);
-        player_ptr->to_ds[i] = 0;
+        player_ptr->damage_dice_bonus[i].num = calc_to_weapon_dice_num(player_ptr, INVEN_MAIN_HAND + i);
+        player_ptr->damage_dice_bonus[i].sides = 0;
     }
 
     player_ptr->pspeed = PlayerSpeed(player_ptr).get_value();
