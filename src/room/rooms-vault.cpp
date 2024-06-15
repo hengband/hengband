@@ -85,6 +85,12 @@ std::array<Pos2D, NUM_BUBBLES> create_bubbles_center(const Pos2DVec &vec)
 
     return center_points;
 }
+
+void set_boundaries(PlayerType* player_ptr, const Pos2D& pos)
+{
+    place_bold(player_ptr, pos.y, pos.x, GB_OUTER_NOPERM);
+    player_ptr->current_floor_ptr->get_grid(pos).add_info(CAVE_ROOM | CAVE_ICKY);
+}
 }
 
 /*!
@@ -104,19 +110,15 @@ static void build_bubble_vault(PlayerType *player_ptr, const Pos2D &pos0, const 
     auto &floor = *player_ptr->current_floor_ptr;
     for (auto i = 0; i < vec.x; i++) {
         const auto side_x = pos0.x - vec_half.x + i;
-        place_bold(player_ptr, pos0.y - vec_half.y + 0, side_x, GB_OUTER_NOPERM);
-        floor.grid_array[pos0.y - vec_half.y + 0][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
-        place_bold(player_ptr, pos0.y - vec_half.y + vec.y - 1, side_x, GB_OUTER_NOPERM);
-        floor.grid_array[pos0.y - vec_half.y + vec.y - 1][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
+        set_boundaries(player_ptr, { pos0.y - vec_half.y, side_x });
+        set_boundaries(player_ptr, { pos0.y - vec_half.y + vec.y - 1, side_x });
     }
 
     /* Left and right boundaries */
     for (auto i = 1; i < vec.y - 1; i++) {
         const auto side_y = pos0.y - vec_half.y + i;
-        place_bold(player_ptr, side_y, pos0.x - vec_half.x + 0, GB_OUTER_NOPERM);
-        floor.grid_array[side_y][pos0.x - vec_half.x + 0].info |= (CAVE_ROOM | CAVE_ICKY);
-        place_bold(player_ptr, side_y, pos0.x - vec_half.x + vec.x - 1, GB_OUTER_NOPERM);
-        floor.grid_array[side_y][pos0.x - vec_half.x + vec.x - 1].info |= (CAVE_ROOM | CAVE_ICKY);
+        set_boundaries(player_ptr, { side_y, pos0.x - vec_half.x });
+        set_boundaries(player_ptr, { side_y, pos0.x - vec_half.x + vec.x - 1 });
     }
 
     /* Fill in middle with bubbles */
