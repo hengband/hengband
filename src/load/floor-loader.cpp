@@ -218,10 +218,7 @@ static bool load_floor_aux(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     x_check = 0L;
 
     auto &system = AngbandSystem::get_instance();
-    system.version_extra = H_VER_EXTRA;
-    system.version_patch = H_VER_PATCH;
-    system.version_minor = H_VER_MINOR;
-    system.version_major = H_VER_MAJOR;
+    system.set_version({ H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH, H_VER_EXTRA });
     loading_savefile_version = SAVEFILE_VERSION;
 
     if (saved_floor_file_sign != rd_u32b()) {
@@ -273,10 +270,7 @@ bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
     byte old_xor_byte = 0;
     uint32_t old_v_check = 0;
     uint32_t old_x_check = 0;
-    byte old_h_ver_major = 0;
-    byte old_h_ver_minor = 0;
-    byte old_h_ver_patch = 0;
-    byte old_h_ver_extra = 0;
+    AngbandVersion version_backup{};
     uint32_t old_loading_savefile_version = 0;
     auto &system = AngbandSystem::get_instance();
     if (mode & SLF_SECOND) {
@@ -284,10 +278,7 @@ bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
         old_xor_byte = load_xor_byte;
         old_v_check = v_check;
         old_x_check = x_check;
-        old_h_ver_major = system.version_major;
-        old_h_ver_minor = system.version_minor;
-        old_h_ver_patch = system.version_patch;
-        old_h_ver_extra = system.version_extra;
+        version_backup = system.get_version();
         old_loading_savefile_version = loading_savefile_version;
     }
 
@@ -324,10 +315,7 @@ bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
         load_xor_byte = old_xor_byte;
         v_check = old_v_check;
         x_check = old_x_check;
-        system.version_major = old_h_ver_major;
-        system.version_minor = old_h_ver_minor;
-        system.version_patch = old_h_ver_patch;
-        system.version_extra = old_h_ver_extra;
+        system.set_version(version_backup);
         loading_savefile_version = old_loading_savefile_version;
     }
 
