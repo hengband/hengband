@@ -26,7 +26,7 @@
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "market/arena-info-table.h"
+#include "market/arena-entry.h"
 #include "mind/mind-force-trainer.h"
 #include "mind/mind-ninja.h"
 #include "monster-floor/monster-lite.h"
@@ -3087,9 +3087,10 @@ int16_t modify_stat_value(int value, int amount)
  */
 long calc_score(PlayerType *player_ptr)
 {
-    int arena_win = std::min<int>(player_ptr->arena_number, MAX_ARENA_MONS);
-
-    int mult = 100;
+    const auto &entries = ArenaEntryList::get_instance();
+    const auto current_entry = entries.get_current_entry();
+    const auto arena_win = std::min(current_entry, entries.get_max_entries());
+    auto mult = 100;
     if (!preserve_mode) {
         mult += 10;
     }
@@ -3145,7 +3146,7 @@ long calc_score(PlayerType *player_ptr)
     point_l /= 100;
 
     uint32_t point = (point_h << 16) + (point_l);
-    if (player_ptr->arena_number >= 0) {
+    if (current_entry >= 0) {
         point += (arena_win * arena_win * (arena_win > 29 ? 1000 : 100));
     }
 

@@ -1,4 +1,5 @@
 #include "world/world.h"
+#include "market/arena-entry.h"
 #include "player-info/race-types.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -118,6 +119,12 @@ MonsterRaceInfo &AngbandWorld::get_today_bounty()
 const MonsterRaceInfo &AngbandWorld::get_today_bounty() const
 {
     return MonraceList::get_instance().get_monrace(this->today_mon);
+}
+
+bool AngbandWorld::is_player_true_winner() const
+{
+    const auto &entries = ArenaEntryList::get_instance();
+    return (this->total_winner > 0) && (entries.is_player_true_victor());
 }
 
 /*!

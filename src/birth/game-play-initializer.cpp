@@ -5,6 +5,7 @@
 #include "game-option/cheat-options.h"
 #include "info-reader/fixed-map-parser.h"
 #include "inventory/inventory-slot-types.h"
+#include "market/arena-entry.h"
 #include "market/arena.h"
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
@@ -128,7 +129,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     player_ptr->wild_mode = false;
 
     player_ptr->max_plv = player_ptr->lev = 1;
-    player_ptr->arena_number = 0;
+    ArenaEntryList::get_instance().reset_entry();
     w_ptr->set_arena(true);
     w_ptr->knows_daily_bounty = false;
     update_gambling_monsters(player_ptr);

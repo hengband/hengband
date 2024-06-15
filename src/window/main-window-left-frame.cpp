@@ -2,7 +2,7 @@
 #include "dungeon/quest.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
-#include "market/arena-info-table.h"
+#include "market/arena-entry.h"
 #include "monster/monster-status.h"
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"
@@ -43,7 +43,7 @@ void print_title(PlayerType *player_ptr)
     if (w_ptr->wizard) {
         p = _("[ウィザード]", "[=-WIZARD-=]");
     } else if (w_ptr->total_winner) {
-        if (player_ptr->is_true_winner()) {
+        if (w_ptr->is_player_true_winner()) {
             p = _("*真・勝利者*", "*TRUEWINNER*");
         } else {
             p = _("***勝利者***", "***WINNER***");

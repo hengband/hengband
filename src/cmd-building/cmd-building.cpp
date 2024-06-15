@@ -30,6 +30,7 @@
 #include "io/input-key-requester.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "market/arena-entry.h"
 #include "market/arena.h"
 #include "market/bounty.h"
 #include "market/building-actions-table.h"
@@ -330,8 +331,8 @@ void do_cmd_building(PlayerType *player_ptr)
     bldg = &buildings[which];
 
     reinit_wilderness = false;
-
-    if ((which == 2) && (player_ptr->arena_number < 0)) {
+    const auto &entries = ArenaEntryList::get_instance();
+    if ((which == 2) && entries.get_defeated_entry() && !entries.is_player_true_victor()) {
         msg_print(_("「敗者に用はない。」", "'There's no place here for a LOSER like you!'"));
         return;
     }

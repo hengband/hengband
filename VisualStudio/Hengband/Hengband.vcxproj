@@ -887,7 +887,7 @@
     <ClCompile Include="..\..\src\io-dump\special-class-dump.cpp" />
     <ClCompile Include="..\..\src\io\tokenizer.cpp" />
     <ClCompile Include="..\..\src\io\write-diary.cpp" />
-    <ClCompile Include="..\..\src\market\arena-info-table.cpp" />
+    <ClCompile Include="..\..\src\market\arena-entry.cpp" />
     <ClCompile Include="..\..\src\store\articles-on-sale.cpp" />
     <ClCompile Include="..\..\src\store\black-market.cpp" />
     <ClCompile Include="..\..\src\market\building-util.cpp" />
@@ -1874,7 +1874,7 @@
     <ClInclude Include="..\..\src\io-dump\special-class-dump.h" />
     <ClInclude Include="..\..\src\io\tokenizer.h" />
     <ClInclude Include="..\..\src\io\write-diary.h" />
-    <ClInclude Include="..\..\src\market\arena-info-table.h" />
+    <ClInclude Include="..\..\src\market\arena-entry.h" />
     <ClInclude Include="..\..\src\store\articles-on-sale.h" />
     <ClInclude Include="..\..\src\store\black-market.h" />
     <ClInclude Include="..\..\src\market\building-util.h" />

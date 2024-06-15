@@ -11,7 +11,7 @@
 #include "io/write-diary.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "market/arena-info-table.h"
+#include "market/arena-entry.h"
 #include "monster-floor/monster-death-util.h"
 #include "monster-floor/monster-object.h"
 #include "monster-floor/special-death-switcher.h"
@@ -81,31 +81,32 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, MonsterDeath *md_ptr
     }
 
     w_ptr->set_arena(true);
-    if (player_ptr->arena_number > MAX_ARENA_MONS) {
+    auto &entries = ArenaEntryList::get_instance();
+    const auto is_true_victor = entries.is_player_true_victor();
+    if (is_true_victor) {
         msg_print(_("素晴らしい！君こそ真の勝利者だ。", "You are a Genuine Champion!"));
     } else {
         msg_print(_("勝利！チャンピオンへの道を進んでいる。", "Victorious! You're on your way to becoming Champion."));
     }
 
-    const auto &arena = arena_info[player_ptr->arena_number];
-    const auto tval = arena.key.tval();
-    if (tval > ItemKindType::NONE) {
-        ItemEntity item(arena.key);
+    const auto &bi_key = entries.get_bi_key();
+    if (bi_key.is_valid()) {
+        ItemEntity item(bi_key);
         ItemMagicApplier(player_ptr, &item, floor.object_level, AM_NO_FIXED_ART).execute();
         (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
     }
 
-    if (player_ptr->arena_number > MAX_ARENA_MONS) {
-        player_ptr->arena_number++;
+    if (is_true_victor) {
+        entries.increment_entry();
     }
 
-    player_ptr->arena_number++;
+    entries.increment_entry();
     if (!record_arena) {
         return;
     }
 
     const auto m_name = monster_desc(player_ptr, md_ptr->m_ptr, MD_WRONGDOER_NAME);
-    exe_write_diary(floor, DiaryKind::ARENA, player_ptr->arena_number, m_name);
+    exe_write_diary(floor, DiaryKind::ARENA, 0, m_name);
 }
 
 static void drop_corpse(PlayerType *player_ptr, MonsterDeath *md_ptr)

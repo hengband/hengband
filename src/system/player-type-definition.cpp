@@ -1,8 +1,6 @@
 #include "system/player-type-definition.h"
 #include "floor/geometry.h"
-#include "market/arena-info-table.h"
 #include "system/angband-exceptions.h"
-#include "system/monster-race-info.h" // @todo 暫定、後で消す.
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "world/world.h"
@@ -20,11 +18,6 @@ PlayerType *p_ptr = &p_body;
 PlayerType::PlayerType()
     : timed_effects(std::make_shared<TimedEffects>())
 {
-}
-
-bool PlayerType::is_true_winner() const
-{
-    return (w_ptr->total_winner > 0) && (this->arena_number > MAX_ARENA_MONS + 2);
 }
 
 std::shared_ptr<TimedEffects> PlayerType::effects() const

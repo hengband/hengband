@@ -8,7 +8,7 @@
 #include "dungeon/quest.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/files-util.h"
-#include "market/arena-info-table.h"
+#include "market/arena-entry.h"
 #include "player/player-status.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
@@ -23,29 +23,6 @@
 #include <sstream>
 
 bool write_level; //!< @todo *抹殺* したい…
-
-#ifdef JP
-#else
-/*!
- * @brief Return suffix of ordinal number
- * @param num number
- * @return pointer of suffix string.
- */
-std::string get_ordinal_number_suffix(int num)
-{
-    num = std::abs(num) % 100;
-    switch (num % 10) {
-    case 1:
-        return (num == 11) ? "th" : "st";
-    case 2:
-        return (num == 12) ? "th" : "nd";
-    case 3:
-        return (num == 13) ? "th" : "rd";
-    default:
-        return "th";
-    }
-}
-#endif
 
 /*!
  * @brief 日記ファイルを開く
@@ -350,17 +327,27 @@ void exe_write_diary(const FloorType &floor, DiaryKind dk, int num, std::string_
         break;
     }
     case DiaryKind::ARENA: {
-        if (num < 0) {
-            int n = -num;
-            constexpr auto fmt = _(" %2d:%02d %20s 闘技場の%d%s回戦で、%sの前に敗れ去った。\n", " %2d:%02d %20s beaten by %s in the %d%s fight.\n");
-            fprintf(fff, fmt, hour, min, note_level.data(), _(n, note.data()), _("", n), _(note.data(), get_ordinal_number_suffix(n).data()));
+        const auto &entries = ArenaEntryList::get_instance();
+        const auto defeated_entry = entries.get_defeated_entry();
+        if (defeated_entry) {
+            constexpr auto fmt = _(" %2d:%02d %20s 闘技場の%sで、%sの前に敗れ去った。\n", " %2d:%02d %20s beaten by %s in %s.\n");
+            const auto num_defeated = entries.get_fight_number(false);
+            fprintf(fff, fmt, hour, min, note_level.data(), _(num_defeated.data(), note.data()), _(note.data(), num_defeated.data()));
             break;
         }
 
-        constexpr auto fmt = _(" %2d:%02d %20s 闘技場の%d%s回戦(%s)に勝利した。\n", " %2d:%02d %20s won the %d%s fight (%s).\n");
-        fprintf(fff, fmt, hour, min, note_level.data(), num, _("", get_ordinal_number_suffix(num).data()), note.data());
+        constexpr auto fmt = _(" %2d:%02d %20s 闘技場の%sで(%s)に勝利した。\n", " %2d:%02d %20s won %s (%s).\n");
+        const auto fight_number = entries.get_fight_number(true);
+        fprintf(fff, fmt, hour, min, note_level.data(), fight_number.data(), note.data());
+        if (entries.is_player_true_victor()) {
+            constexpr auto mes_true_champion = _("                 最強の挑戦者からタイトルを防衛し、真のチャンピオンとなった。\n",
+                "                 won the strongest challenger and became the True Champion.\n");
+            fprintf(fff, mes_true_champion);
+            do_level = false;
+            break;
+        }
 
-        if (num == MAX_ARENA_MONS) {
+        if (entries.is_player_victor()) {
             constexpr auto mes_champion = _("                 闘技場のすべての敵に勝利し、チャンピオンとなった。\n",
                 "                 won all fights to become a Champion.\n");
             fprintf(fff, mes_champion);

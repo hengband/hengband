@@ -74,7 +74,7 @@
     <ClCompile Include="..\..\src\market\play-gamble.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\arena-info-table.cpp">
+    <ClCompile Include="..\..\src\market\arena-entry.cpp">
       <Filter>market</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\player\race-info-table.cpp">
@@ -2579,7 +2579,7 @@
     <ClInclude Include="..\..\src\market\play-gamble.h">
       <Filter>market</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\market\arena-info-table.h">
+    <ClInclude Include="..\..\src\market\arena-entry.h">
       <Filter>market</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\race-info-table.h">

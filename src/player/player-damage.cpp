@@ -26,7 +26,7 @@
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "market/arena-info-table.h"
+#include "market/arena-entry.h"
 #include "mind/mind-mirror-master.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
@@ -376,11 +376,13 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
         }
 
         if (floor.inside_arena) {
-            const auto &m_name = monraces_info[arena_info[player_ptr->arena_number].r_idx].name;
+            auto &entries = ArenaEntryList::get_instance();
+            entries.set_defeated_entry();
+            const auto &m_name = entries.get_monrace().name;
             msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name.data());
             msg_print(nullptr);
             if (record_arena) {
-                exe_write_diary(floor, DiaryKind::ARENA, -1 - player_ptr->arena_number, m_name);
+                exe_write_diary(floor, DiaryKind::ARENA, 0, m_name);
             }
         } else {
             const auto q_idx = floor.get_quest_id();
