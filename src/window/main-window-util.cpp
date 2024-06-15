@@ -55,7 +55,7 @@ static const std::vector<std::pair<std::string_view, std::string_view>> simplify
  * @param row 描画列
  * @param col 描画行
  */
-void print_field(concptr info, TERM_LEN row, TERM_LEN col)
+void print_field(std::string_view info, TERM_LEN row, TERM_LEN col)
 {
     c_put_str(TERM_WHITE, "             ", row, col);
     c_put_str(TERM_L_BLUE, info, row, col);

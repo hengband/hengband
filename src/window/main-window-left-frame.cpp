@@ -38,8 +38,7 @@ struct condition_layout_info {
  */
 void print_title(PlayerType *player_ptr)
 {
-    GAME_TEXT str[14];
-    concptr p = "";
+    std::string p;
     if (w_ptr->wizard) {
         p = _("[ウィザード]", "[=-WIZARD-=]");
     } else if (w_ptr->total_winner) {
@@ -49,8 +48,7 @@ void print_title(PlayerType *player_ptr)
             p = _("***勝利者***", "***WINNER***");
         }
     } else {
-        angband_strcpy(str, player_titles[enum2i(player_ptr->pclass)][(player_ptr->lev - 1) / 5], sizeof(str));
-        p = str;
+        p = player_titles[enum2i(player_ptr->pclass)][(player_ptr->lev - 1) / 5];
     }
 
     print_field(p, ROW_TITLE, COL_TITLE);
@@ -242,14 +240,10 @@ void print_depth(PlayerType *player_ptr)
  */
 void print_frame_basic(PlayerType *player_ptr)
 {
-    if (player_ptr->mimic_form != MimicKindType::NONE) {
-        print_field(mimic_info.at(player_ptr->mimic_form).title, ROW_RACE, COL_RACE);
-    } else {
-        char str[14];
-        angband_strcpy(str, rp_ptr->title, sizeof(str));
-        print_field(str, ROW_RACE, COL_RACE);
-    }
-
+    const auto title = player_ptr->mimic_form == MimicKindType::NONE
+                                  ? rp_ptr->title
+                                  : mimic_info.at(player_ptr->mimic_form).title;
+    print_field(title, ROW_RACE, COL_RACE);
     print_title(player_ptr);
     print_level(player_ptr);
     print_exp(player_ptr);
