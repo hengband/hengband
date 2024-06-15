@@ -385,7 +385,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
         }
     }
 
-    m_ptr->mspeed = get_mspeed(floor_ptr, r_ptr);
+    m_ptr->set_individual_speed(floor_ptr->inside_arena);
 
     int oldmaxhp = m_ptr->max_maxhp;
     if (r_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
@@ -405,29 +405,6 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
     }
     m_ptr->hp = (long)(m_ptr->hp * m_ptr->max_maxhp) / oldmaxhp;
     m_ptr->dealt_damage = 0;
-}
-
-/*!
- * @brief モンスターの個体加速を設定する / Get initial monster speed
- * @param r_ptr モンスター種族の参照ポインタ
- * @return 加速値
- */
-byte get_mspeed(FloorType *floor_ptr, MonsterRaceInfo *r_ptr)
-{
-    auto mspeed = r_ptr->speed;
-    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && !floor_ptr->inside_arena) {
-        /* Allow some small variation per monster */
-        int i = speed_to_energy(r_ptr->speed) / (one_in_(4) ? 3 : 10);
-        if (i) {
-            mspeed += rand_spread(0, i);
-        }
-    }
-
-    if (mspeed > 199) {
-        mspeed = 199;
-    }
-
-    return mspeed;
 }
 
 /*!

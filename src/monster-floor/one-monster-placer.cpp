@@ -390,7 +390,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, 
 
     m_ptr->dealt_damage = 0;
 
-    m_ptr->mspeed = get_mspeed(&floor, r_ptr);
+    m_ptr->set_individual_speed(floor.inside_arena);
 
     if (any_bits(mode, PM_HASTE)) {
         (void)set_monster_fast(player_ptr, g_ptr->m_idx, 100);

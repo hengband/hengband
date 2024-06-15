@@ -1,4 +1,5 @@
 #include "system/monster-entity.h"
+#include "core/speed-table.h"
 #include "game-option/birth-options.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-kind-flags.h"
@@ -386,6 +387,29 @@ std::optional<bool> MonsterEntity::order_pet_dismission(const MonsterEntity &oth
     }
 
     return this->order_pet_hp(other);
+}
+
+/*!
+ * @brief モンスターの個体加速を設定する / Get initial monster speed
+ * @param force_fixed_speed 速度を固定にする(個体差を適用しない)か否か
+ */
+void MonsterEntity::set_individual_speed(bool force_fixed_speed)
+{
+    const auto &monrace = this->get_monrace();
+    auto speed = monrace.speed;
+    if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE) && !force_fixed_speed) {
+        /* Allow some small variation per monster */
+        int i = speed_to_energy(monrace.speed) / (one_in_(4) ? 3 : 10);
+        if (i) {
+            speed += rand_spread(0, i);
+        }
+    }
+
+    if (speed > STANDARD_SPEED + 99) {
+        speed = STANDARD_SPEED + 99;
+    }
+
+    this->mspeed = speed;
 }
 
 /*!

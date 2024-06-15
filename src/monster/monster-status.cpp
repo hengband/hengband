@@ -465,7 +465,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId m
     m_ptr->dealt_damage = 0;
 
     /* Extract the monster base speed */
-    m_ptr->mspeed = get_mspeed(floor_ptr, r_ptr);
+    m_ptr->set_individual_speed(floor_ptr->inside_arena);
 
     /* Sub-alignment of a monster */
     if (!m_ptr->is_pet() && r_ptr->kind_flags.has_none_of(alignment_mask)) {
