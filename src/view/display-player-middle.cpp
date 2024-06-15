@@ -308,19 +308,6 @@ static void display_playtime_in_game(PlayerType *player_ptr)
 }
 
 /*!
- * @brief 現実世界におけるプレイ時間を表示する
- * @param なし
- * @param なし
- */
-static void display_real_playtime(void)
-{
-    uint32_t play_hour = w_ptr->play_time / (60 * 60);
-    uint32_t play_min = (w_ptr->play_time / 60) % 60;
-    uint32_t play_sec = w_ptr->play_time % 60;
-    display_player_one_line(ENTRY_PLAY_TIME, format("%.2u:%.2u:%.2u", play_hour, play_min, play_sec), TERM_L_GREEN);
-}
-
-/*!
  * @brief プレイヤーステータス表示の中央部分を表示するサブルーチン
  * @param player_ptr プレイヤーへの参照ポインタ
  * Prints the following information on the screen.
@@ -347,5 +334,5 @@ void display_player_middle(PlayerType *player_ptr)
     display_player_exp(player_ptr);
     display_player_one_line(ENTRY_GOLD, format("%d", player_ptr->au), TERM_L_GREEN);
     display_playtime_in_game(player_ptr);
-    display_real_playtime();
+    display_player_one_line(ENTRY_PLAY_TIME, w_ptr->format_real_playtime(), TERM_L_GREEN);
 }

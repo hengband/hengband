@@ -168,3 +168,14 @@ void AngbandWorld::pass_game_turn_by_stay()
         this->dungeon_turn = this->dungeon_turn_limit;
     }
 }
+
+/*!
+ * @brief 現実のプレイ時間をフォーマットして返す
+ */
+std::string AngbandWorld::format_real_playtime() const
+{
+    const auto hour = this->play_time / (60 * 60);
+    const auto min = (this->play_time / 60) % 60;
+    const auto sec = this->play_time % 60;
+    return format("%.2u:%.2u:%.2u", hour, min, sec);
+}
