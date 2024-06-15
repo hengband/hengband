@@ -406,8 +406,8 @@ void MonsterEntity::set_individual_speed(bool force_fixed_speed)
         }
     }
 
-    if (speed > 199) {
-        speed = 199;
+    if (speed > STANDARD_SPEED + 99) {
+        speed = STANDARD_SPEED + 99;
     }
 
     this->mspeed = speed;
