@@ -7,7 +7,6 @@
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
@@ -122,7 +121,7 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y1, P
     }
 
     POSITION x, y;
-    if (!mon_scatter(player_ptr, MonsterRace::empty_id(), &y, &x, y1, x1, 2)) {
+    if (!mon_scatter(player_ptr, MonraceList::empty_id(), &y, &x, y1, x1, 2)) {
         return false;
     }
 

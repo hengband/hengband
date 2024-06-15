@@ -22,7 +22,6 @@
 #include "io/uid-checker.h"
 #include "main/angband-headers.h"
 #include "main/init-error-messages-table.h"
-#include "monster-race/monster-race.h"
 #include "object-enchant/object-ego.h"
 #include "player-info/class-info.h"
 #include "player/player-skill.h"
@@ -48,39 +47,26 @@
 
 namespace {
 
-using Retoucher = void (*)(angband_header *);
+using Retoucher = void (*)();
 
-template <typename>
-struct is_vector : std::false_type {
-};
-
-template <typename T, typename Alloc>
-struct is_vector<std::vector<T, Alloc>> : std::true_type {
-};
-
-/*!
- * @brief 与えられた型 T が std::vector 型かどうか調べる
- * T の型が std::vector<SomeType> に一致する時、is_vector_v<T> == true
- * 一致しない時、is_vector_v<T> == false となる
- * @tparam T 調べる型
- */
+/// @note clang-formatによるconceptの整形が安定していないので抑制しておく
+// clang-format off
 template <typename T>
-constexpr bool is_vector_v = is_vector<T>::value;
-
+concept HasShrinkToFit = requires(T t) {
+    t.shrink_to_fit();
+};
+// clang-format on
 }
 
 /*!
  * @brief ヘッダ構造体の更新
  * Initialize the header of an *_info.raw file.
- * @param head rawファイルのヘッダ
- * @param num データ数
- * @param len データの長さ
+ * @param head ヘッダ構造体
  * @return エラーコード
  */
-static void init_header(angband_header *head, IDX num = 0)
+static void init_header(angband_header *head)
 {
     head->digest = {};
-    head->info_num = (IDX)num;
 }
 
 /*!
@@ -89,24 +75,17 @@ static void init_header(angband_header *head, IDX num = 0)
  * @param filename ファイル名(拡張子txt)
  * @param head 処理に用いるヘッダ構造体
  * @param info データ保管先の構造体ポインタ
- * @return エラーコード
  * @note
  * Note that we let each entry have a unique "name" and "text" string,
  * even if the string happens to be empty (everyone has a unique '\0').
  */
 template <typename InfoType>
-static errr init_info(std::string_view filename, angband_header &head, InfoType &info, Parser parser, Retoucher retouch = nullptr)
+static void init_info(std::string_view filename, angband_header &head, InfoType &info, Parser parser, Retoucher retouch = nullptr)
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, filename);
     auto *fp = angband_fopen(path, FileOpenMode::READ);
     if (!fp) {
         quit_fmt(_("'%s'ファイルをオープンできません。", "Cannot open '%s' file."), filename.data());
-    }
-
-    constexpr auto info_is_vector = is_vector_v<InfoType>;
-    if constexpr (info_is_vector) {
-        using value_type = typename InfoType::value_type;
-        info.assign(head.info_num, value_type{});
     }
 
     char buf[1024]{};
@@ -125,16 +104,13 @@ static errr init_info(std::string_view filename, angband_header &head, InfoType 
         quit_fmt(_("'%s'ファイルにエラー", "Error in '%s' file."), filename.data());
     }
 
-    if constexpr (info_is_vector) {
+    if constexpr (HasShrinkToFit<InfoType>) {
         info.shrink_to_fit();
     }
 
-    head.info_num = static_cast<uint16_t>(info.size());
     if (retouch) {
-        (*retouch)(&head);
+        retouch();
     }
-
-    return 0;
 }
 
 /*!
@@ -143,13 +119,12 @@ static errr init_info(std::string_view filename, angband_header &head, InfoType 
  * @param filename ファイル名(拡張子jsonc)
  * @param head 処理に用いるヘッダ構造体
  * @param info データ保管先の構造体ポインタ
- * @return エラーコード
  * @note
  * Note that we let each entry have a unique "name" and "text" string,
  * even if the string happens to be empty (everyone has a unique '\0').
  */
 template <typename InfoType>
-static errr init_json(std::string_view filename, std::string_view keyname, angband_header &head, InfoType &info, JSONParser parser)
+static void init_json(std::string_view filename, std::string_view keyname, angband_header &head, InfoType &info, JSONParser parser)
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, filename);
     std::ifstream ifs(path);
@@ -162,11 +137,6 @@ static errr init_json(std::string_view filename, std::string_view keyname, angba
     std::istreambuf_iterator<char> ifs_end;
     auto json_object = nlohmann::json::parse(ifs_iter, ifs_end, nullptr, true, true);
 
-    constexpr auto info_is_vector = is_vector_v<InfoType>;
-    if constexpr (info_is_vector) {
-        using value_type = typename InfoType::value_type;
-        info.assign(head.info_num, value_type{});
-    }
     error_idx = -1;
 
     for (auto &element : json_object[keyname]) {
@@ -181,103 +151,97 @@ static errr init_json(std::string_view filename, std::string_view keyname, angba
     sha256.update(json_object.dump());
     head.digest = sha256.digest();
 
-    return PARSE_ERROR_NONE;
+    if constexpr (HasShrinkToFit<InfoType>) {
+        info.shrink_to_fit();
+    }
 }
 
 /*!
  * @brief 固定アーティファクト情報読み込みのメインルーチン
- * @return エラーコード
  */
-errr init_artifacts_info()
+void init_artifacts_info()
 {
     init_header(&artifacts_header);
-    return init_json("ArtifactDefinitions.jsonc", "artifacts", artifacts_header, ArtifactList::get_instance().get_raw_map(), parse_artifacts_info);
+    init_json("ArtifactDefinitions.jsonc", "artifacts", artifacts_header, ArtifactList::get_instance(), parse_artifacts_info);
 }
 
 /*!
  * @brief ベースアイテム情報読み込みのメインルーチン
- * @return エラーコード
  */
-errr init_baseitems_info()
+void init_baseitems_info()
 {
     init_header(&baseitems_header);
-    return init_json("BaseitemDefinitions.jsonc", "baseitems", baseitems_header, BaseitemList::get_instance().get_raw_vector(), parse_baseitems_info);
+    init_json("BaseitemDefinitions.jsonc", "baseitems", baseitems_header, BaseitemList::get_instance(), parse_baseitems_info);
 }
 
 /*!
  * @brief 職業魔法情報読み込みのメインルーチン
- * @return エラーコード
  */
-errr init_class_magics_info()
+void init_class_magics_info()
 {
-    init_header(&class_magics_header, PLAYER_CLASS_TYPE_MAX);
-    auto *parser = parse_class_magics_info;
-    return init_info("ClassMagicDefinitions.txt", class_magics_header, class_magics_info, parser);
+    init_header(&class_magics_header);
+    class_magics_info.assign(PLAYER_CLASS_TYPE_MAX, {});
+    init_info("ClassMagicDefinitions.txt", class_magics_header, class_magics_info, parse_class_magics_info);
 }
 
 /*!
  * @brief 職業技能情報読み込みのメインルーチン
- * @return エラーコード
  */
-errr init_class_skills_info()
+void init_class_skills_info()
 {
-    init_header(&class_skills_header, PLAYER_CLASS_TYPE_MAX);
-    return init_info("ClassSkillDefinitions.txt", class_skills_header, class_skills_info, parse_class_skills_info);
+    init_header(&class_skills_header);
+    class_skills_info.assign(PLAYER_CLASS_TYPE_MAX, {});
+    init_info("ClassSkillDefinitions.txt", class_skills_header, class_skills_info, parse_class_skills_info);
 }
 /*!
  * @brief ダンジョン情報読み込みのメインルーチン
- * @return エラーコード
  */
-errr init_dungeons_info()
+void init_dungeons_info()
 {
     init_header(&dungeons_header);
-    return init_info("DungeonDefinitions.txt", dungeons_header, dungeons_info, parse_dungeons_info);
+    init_info("DungeonDefinitions.txt", dungeons_header, dungeons_info, parse_dungeons_info, retouch_dungeons_info);
 }
 
 /*!
  * @brief エゴ情報読み込みのメインルーチン
- * @return エラーコード
  */
-errr init_egos_info()
+void init_egos_info()
 {
     init_header(&egos_header);
-    return init_info("EgoDefinitions.txt", egos_header, egos_info, parse_egos_info);
+    init_info("EgoDefinitions.txt", egos_header, egos_info, parse_egos_info);
 }
 
 /*!
  * @brief 地形情報読み込みのメインルーチン
- * @return エラーコード
  */
-errr init_terrains_info()
+void init_terrains_info()
 {
     init_header(&terrains_header);
     auto *parser = parse_terrains_info;
     auto *retoucher = retouch_terrains_info;
     auto &terrains = TerrainList::get_instance();
-    return init_info("TerrainDefinitions.txt", terrains_header, terrains.get_raw_vector(), parser, retoucher);
+    init_info("TerrainDefinitions.txt", terrains_header, terrains, parser, retoucher);
 }
 
 /*!
  * @brief モンスター種族情報読み込みのメインルーチン
- * @return エラーコード
  */
-errr init_monrace_definitions()
+void init_monrace_definitions()
 {
     init_header(&monraces_header);
-    return init_json("MonraceDefinitions.jsonc", "monsters", monraces_header, monraces_info, parse_monraces_info);
+    init_json("MonraceDefinitions.jsonc", "monsters", monraces_header, monraces_info, parse_monraces_info);
 }
 
 /*!
  * @brief Vault情報読み込みのメインルーチン
- * @return エラーコード
  * @note
  * Note that we let each entry have a unique "name" and "text" string,
  * even if the string happens to be empty (everyone has a unique '\0').
  */
-errr init_vaults_info()
+void init_vaults_info()
 {
     init_header(&vaults_header);
-    return init_info("VaultDefinitions.txt", vaults_header, vaults_info, parse_vaults_info);
+    init_info("VaultDefinitions.txt", vaults_header, vaults_info, parse_vaults_info);
 }
 
 static bool read_wilderness_definition(std::ifstream &ifs)
@@ -317,15 +281,16 @@ static bool read_wilderness_definition(std::ifstream &ifs)
 
 /*!
  * @brief 荒野情報読み込み処理
- * @return 読み込みに成功したか
  */
-bool init_wilderness()
+void init_wilderness()
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, WILDERNESS_DEFINITION);
     std::ifstream ifs(path);
     if (!ifs) {
-        return false;
+        quit_fmt(_("'%s'ファイルをオープンできません。", "Cannot open '%s' file."), WILDERNESS_DEFINITION);
     }
 
-    return read_wilderness_definition(ifs);
+    if (!read_wilderness_definition(ifs)) {
+        quit(_("荒野を初期化できません", "Cannot initialize wilderness"));
+    }
 }

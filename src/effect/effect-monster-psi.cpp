@@ -4,7 +4,6 @@
 #include "floor/line-of-sight.h"
 #include "mind/mind-mirror-master.h"
 #include "monster-race/monster-kind-mask.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"

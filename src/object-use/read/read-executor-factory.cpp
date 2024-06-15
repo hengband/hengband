@@ -26,5 +26,5 @@ std::unique_ptr<ReadExecutorBase> ReadExecutorFactory::create(PlayerType *player
         return std::make_unique<ParchmentReadExecutor>(player_ptr, o_ptr);
     }
 
-    throw("Invalid item is specified; this can't be read!");
+    THROW_EXCEPTION(std::logic_error, "Invalid item is specified; this can't be read!");
 }

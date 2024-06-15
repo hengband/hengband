@@ -4,7 +4,6 @@
 #include "floor/geometry.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -33,7 +32,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
             continue;
         }
 
-        auto &monrace = monraces_info[quest.r_idx];
+        const auto &monrace = quest.get_bounty();
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE) && (monrace.cur_num >= monrace.max_num)) {
             continue;
         }

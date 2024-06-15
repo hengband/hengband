@@ -59,7 +59,6 @@ public:
     std::map<FixedArtifactId, ArtifactType>::reverse_iterator rend();
     std::map<FixedArtifactId, ArtifactType>::const_reverse_iterator rbegin() const;
     std::map<FixedArtifactId, ArtifactType>::const_reverse_iterator rend() const;
-    std::map<FixedArtifactId, ArtifactType> &get_raw_map(); // @todo init_artifacts_info() 専用、将来的に廃止する.
     const ArtifactType &get_artifact(const FixedArtifactId fa_id) const;
     ArtifactType &get_artifact(const FixedArtifactId fa_id);
 

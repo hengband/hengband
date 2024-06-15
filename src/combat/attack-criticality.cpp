@@ -2,7 +2,6 @@
 #include "combat/combat-options-type.h"
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-of-music.h"
-#include "monster-race/monster-race.h"
 #include "object/tval-types.h"
 #include "player-attack/player-attack.h"
 #include "player-base/player-class.h"

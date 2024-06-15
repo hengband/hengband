@@ -19,7 +19,6 @@
 #include "melee/melee-util.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-race/monster-race-hook.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
@@ -33,6 +32,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "tracking/health-bar-tracker.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
@@ -48,13 +48,9 @@ static void heal_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         mam_ptr->m_ptr->hp = mam_ptr->m_ptr->maxhp;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (player_ptr->health_who == mam_ptr->m_idx) {
-        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
-    }
-
+    HealthBarTracker::get_instance().set_flag_if_tracking(mam_ptr->m_idx);
     if (player_ptr->riding == mam_ptr->m_idx) {
-        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
+        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     if (mam_ptr->see_m && did_heal) {
@@ -186,19 +182,14 @@ static void redraw_health_bar(PlayerType *player_ptr, mam_type *mam_ptr)
         return;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (player_ptr->health_who == mam_ptr->t_idx) {
-        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
-    }
-
+    HealthBarTracker::get_instance().set_flag_if_tracking(mam_ptr->t_idx);
     if (player_ptr->riding == mam_ptr->t_idx) {
-        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
+        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 }
 
 static void describe_silly_melee(mam_type *mam_ptr)
 {
-    char temp[MAX_NLEN];
     if ((mam_ptr->act == nullptr) || !mam_ptr->see_either) {
         return;
     }
@@ -208,17 +199,18 @@ static void describe_silly_melee(mam_type *mam_ptr)
         mam_ptr->act = rand_choice(silly_attacks2);
     }
 
-    strnfmt(temp, sizeof(temp), mam_ptr->act, mam_ptr->t_name);
-    msg_format("%s^は%s", mam_ptr->m_name, temp);
+    const auto temp = format(mam_ptr->act, mam_ptr->t_name);
+    msg_format("%s^は%s", mam_ptr->m_name, temp.data());
 #else
+    std::string temp;
     if (mam_ptr->do_silly_attack) {
         mam_ptr->act = rand_choice(silly_attacks);
-        strnfmt(temp, sizeof(temp), "%s %s.", mam_ptr->act, mam_ptr->t_name);
+        temp = format("%s %s.", mam_ptr->act, mam_ptr->t_name);
     } else {
-        strnfmt(temp, sizeof(temp), mam_ptr->act, mam_ptr->t_name);
+        temp = format(mam_ptr->act, mam_ptr->t_name);
     }
 
-    msg_format("%s^ %s", mam_ptr->m_name, temp);
+    msg_format("%s^ %s", mam_ptr->m_name, temp.data());
 #endif
 }
 

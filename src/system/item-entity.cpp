@@ -10,7 +10,9 @@
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-bias-types.h"
 #include "artifact/random-art-effects.h"
-#include "monster-race/monster-race.h"
+#include "dungeon/quest.h"
+#include "game-option/birth-options.h"
+#include "monster-race/race-indice-types.h"
 #include "object-enchant/activation-info-table.h"
 #include "object-enchant/dragon-breaths-table.h"
 #include "object-enchant/item-feeling.h"
@@ -26,9 +28,12 @@
 #include "system/baseitem-info.h"
 #include "system/monster-race-info.h"
 #include "term/term-color-types.h"
+#include "tracking/baseitem-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/string-processor.h"
+#include "world/world.h"
+#include <algorithm>
 #include <sstream>
 
 ItemEntity::ItemEntity()
@@ -472,7 +477,7 @@ bool ItemEntity::is_offerable() const
         return false;
     }
 
-    return angband_strchr("pht", monraces_info[i2enum<MonsterRaceId>(this->pval)].symbol_definition.character) != nullptr;
+    return this->get_monrace().symbol_char_is_any_of("pht");
 }
 
 /*!
@@ -670,14 +675,12 @@ int ItemEntity::get_baseitem_price() const
 
 int ItemEntity::calc_figurine_value() const
 {
-    const auto r_idx = i2enum<MonsterRaceId>(this->pval);
-    return MonraceList::get_instance().calc_figurine_value(r_idx);
+    return this->get_monrace().calc_figurine_value();
 }
 
 int ItemEntity::calc_capture_value() const
 {
-    const auto r_idx = i2enum<MonsterRaceId>(this->pval);
-    return MonraceList::get_instance().calc_capture_value(r_idx);
+    return this->get_monrace().calc_capture_value();
 }
 
 /*!
@@ -779,6 +782,47 @@ bool ItemEntity::has_bias() const
     return this->artifact_bias != RandomArtifactBias::NONE;
 }
 
+bool ItemEntity::is_bounty() const
+{
+    if (this->bi_key.tval() != ItemKindType::CORPSE) {
+        return false;
+    }
+
+    if (vanilla_town) {
+        return false;
+    }
+
+    const auto &monrace = this->get_monrace();
+    if (w_ptr->knows_daily_bounty && (monrace.name == w_ptr->get_today_bounty().name)) {
+        return true;
+    }
+
+    if (monrace.idx == MonsterRaceId::TSUCHINOKO) {
+        return true;
+    }
+
+    return monrace.is_bounty(true);
+}
+
+bool ItemEntity::is_target_of(QuestId quest_id) const
+{
+    if (!inside_quest(quest_id)) {
+        return false;
+    }
+
+    const auto &quest = QuestList::get_instance().get_quest(quest_id);
+    if (!quest.has_reward()) {
+        return false;
+    }
+
+    const auto &artifact = quest.get_reward();
+    if (artifact.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
+        return false;
+    }
+
+    return this->bi_key == artifact.bi_key;
+}
+
 BaseitemInfo &ItemEntity::get_baseitem() const
 {
     return BaseitemList::get_instance().get_baseitem(this->bi_id);
@@ -877,6 +921,44 @@ std::string ItemEntity::explain_activation() const
     }
 
     return _("何も起きない", "Nothing");
+}
+
+/*!
+ * @brief アイテムのpvalがモンスター種族IDを指しているかチェックする
+ * @return モンスター種族IDの意図で使われているか否か
+ */
+bool ItemEntity::has_monrace() const
+{
+    if ((this->pval < 0) || !this->bi_key.is_monster()) {
+        return false;
+    }
+
+    if (!this->bi_key.is(ItemKindType::CAPTURE) && (this->pval == 0)) {
+        return false;
+    }
+
+    const auto &monraces = MonraceList::get_instance();
+    return this->pval < static_cast<short>(monraces.size());
+}
+
+/*!
+ * @brief アイテムのpvalからモンスター種族を引いて返す
+ * @return モンスター種族定義
+ * @details 死体/骨・モンスターボール・人形・像が該当する.
+ */
+const MonsterRaceInfo &ItemEntity::get_monrace() const
+{
+    if (!this->has_monrace()) {
+        THROW_EXCEPTION(std::logic_error, "This item is not related to monrace!");
+    }
+
+    const auto monrace_id = i2enum<MonsterRaceId>(this->pval);
+    return MonraceList::get_instance().get_monrace(monrace_id);
+}
+
+void ItemEntity::track_baseitem() const
+{
+    BaseitemTracker::get_instance().set_trackee(this->bi_id);
 }
 
 std::string ItemEntity::build_timeout_description(const ActivationType &act) const
@@ -1124,7 +1206,7 @@ uint8_t ItemEntity::get_color() const
         return symbol_config.color;
     }
 
-    return monraces_info[i2enum<MonsterRaceId>(this->pval)].symbol_config.color;
+    return this->get_monrace().symbol_config.color;
 }
 
 /*

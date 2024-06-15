@@ -9,7 +9,6 @@
 #include "floor/cave.h"
 #include "floor/geometry.h"
 #include "floor/line-of-sight.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster-race/race-brightness-mask.h"
 #include "mspell/mspell-attack-util.h"

@@ -6,7 +6,6 @@
 #include "info-reader/fixed-map-parser.h"
 #include "inventory/inventory-slot-types.h"
 #include "market/arena.h"
-#include "monster-race/monster-race.h"
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
@@ -17,6 +16,7 @@
 #include "system/baseitem-info.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
+#include "system/inner-game-data.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -51,7 +51,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
         quest.max_num = 0;
         quest.type = QuestKindType::NONE;
         quest.level = 0;
-        quest.r_idx = MonsterRace::empty_id();
+        quest.r_idx = MonraceList::empty_id();
         quest.complev = 0;
         quest.comptime = 0;
     }
@@ -130,7 +130,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     player_ptr->max_plv = player_ptr->lev = 1;
     player_ptr->arena_number = 0;
     w_ptr->set_arena(true);
-    player_ptr->knows_daily_bounty = false;
+    w_ptr->knows_daily_bounty = false;
     update_gambling_monsters(player_ptr);
     player_ptr->muta.clear();
 
@@ -163,8 +163,8 @@ void init_dungeon_quests(PlayerType *player_ptr)
         auto &quest = quests.get_quest(quest_id);
         quest.status = QuestStatusType::TAKEN;
         determine_random_questor(player_ptr, quest);
-        auto &quest_monrace = monraces_info[quest.r_idx];
-        quest_monrace.misc_flags.set(MonsterMiscType::QUESTOR);
+        auto &monrace = quest.get_bounty();
+        monrace.misc_flags.set(MonsterMiscType::QUESTOR);
         quest.max_num = 1;
     }
 
@@ -189,12 +189,11 @@ void init_turn(PlayerType *player_ptr)
 {
     if (PlayerRace(player_ptr).life() == PlayerRaceLifeType::UNDEAD) {
         w_ptr->game_turn = (TURNS_PER_TICK * 3 * TOWN_DAWN) / 4 + 1;
-        w_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
     } else {
         w_ptr->game_turn = 1;
-        w_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
     }
 
+    InnerGameData::get_instance().init_turn_limit();
     w_ptr->dungeon_turn = 1;
     w_ptr->dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
 }

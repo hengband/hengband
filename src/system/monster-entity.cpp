@@ -1,13 +1,14 @@
 #include "system/monster-entity.h"
 #include "game-option/birth-options.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-kind-flags.h"
 #include "monster/monster-pain-describer.h"
 #include "monster/monster-status.h"
 #include "system/angband-system.h"
 #include "system/monster-race-info.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/term-color-types.h"
+#include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include <algorithm>
@@ -51,7 +52,7 @@ bool MonsterEntity::is_hostile() const
 }
 
 /*!
- * @brief モンスターの属性の基づいた敵対関係の有無を返す
+ * @brief モンスターの属性に基づいた敵対関係の有無を返す
  * @param other 比較対象モンスターへの参照
  * @return 敵対関係にあるか否か
  */
@@ -81,7 +82,7 @@ bool MonsterEntity::is_hostile_to_melee(const MonsterEntity &other) const
 }
 
 /*!
- * @brief モンスターの属性の基づいた敵対関係の有無を返す
+ * @brief モンスターの属性に基づいた敵対関係の有無を返す
  * @param other 比較対象のサブフラグ
  * @return 敵対関係にあるか否か
  */
@@ -123,8 +124,7 @@ bool MonsterEntity::is_mimicry() const
     }
 
     const auto &monrace = this->get_appearance_monrace();
-    const auto mimic_symbols = "/|\\()[]=$,.!?&`#%<>+~";
-    if (angband_strchr(mimic_symbols, monrace.symbol_definition.character) == nullptr) {
+    if (monrace.symbol_char_is_any_of(R"(/|\()[]="$,.!?&`#%<>+~)")) {
         return false;
     }
 
@@ -403,6 +403,19 @@ void MonsterEntity::set_hostile()
 std::string MonsterEntity::get_pronoun_of_summoned_kin() const
 {
     return this->get_monrace().get_pronoun_of_summoned_kin();
+}
+
+void MonsterEntity::make_lore_treasure(int num_item, int num_gold) const
+{
+    auto &monrace = this->get_monrace();
+    if (!this->is_original_ap()) {
+        return;
+    }
+
+    monrace.make_lore_treasure(num_item, num_gold);
+    if (LoreTracker::get_instance().is_tracking(this->r_idx)) {
+        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
+    }
 }
 
 std::optional<bool> MonsterEntity::order_pet_named(const MonsterEntity &other) const

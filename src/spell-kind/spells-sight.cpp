@@ -11,9 +11,7 @@
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "locale/english.h"
-#include "lore/lore-store.h"
 #include "monster-race/monster-kind-mask.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
@@ -28,6 +26,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "term/screen-processor.h"
+#include "tracking/lore-tracker.h"
 #include "view/display-messages.h"
 
 /*!
@@ -470,14 +469,13 @@ bool probing(PlayerType *player_ptr)
         move_cursor_relative(monster.fy, monster.fx);
         inkey();
         term_erase(0, 0);
-        if (lore_do_probe(player_ptr, monster.r_idx)) {
-#ifdef JP
-            msg_format("%sについてさらに詳しくなった気がする。", monrace.name.data());
-#else
-            const auto nm = pluralize(monrace.name);
-            msg_format("You now know more about %s.", nm.data());
-#endif
+        const auto mes = monrace.probe_lore();
+        if (mes) {
+            msg_print(*mes);
             msg_print(nullptr);
+            if (LoreTracker::get_instance().is_tracking(monster.r_idx)) {
+                RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
+            }
         }
 
         probe = true;

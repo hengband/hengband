@@ -20,7 +20,6 @@
 #include "io/write-diary.h"
 #include "market/arena.h"
 #include "mind/mind-ninja.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-compaction.h"
 #include "monster/monster-processor.h"
 #include "monster/monster-status.h"
@@ -117,8 +116,8 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
 
     disturb(player_ptr, true, true);
     const auto quest_id = floor.get_quest_id();
-    const auto &quests = QuestList::get_instance();
-    auto &monrace_questor = monraces_info[quests.get_quest(quest_id).r_idx];
+    auto &quests = QuestList::get_instance();
+    auto &monrace_questor = quests.get_quest(quest_id).get_bounty();
     if (inside_quest(quest_id)) {
         monrace_questor.misc_flags.set(MonsterMiscType::QUESTOR);
     }
@@ -130,7 +129,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     if ((max_dlv[floor.dungeon_idx] < floor.dun_level) && !floor.is_in_quest()) {
         max_dlv[floor.dungeon_idx] = floor.dun_level;
         if (record_maxdepth) {
-            exe_write_diary(player_ptr, DiaryKind::MAXDEAPTH, floor.dun_level);
+            exe_write_diary(floor, DiaryKind::MAXDEAPTH, floor.dun_level);
         }
     }
 

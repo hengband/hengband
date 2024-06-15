@@ -372,6 +372,7 @@ hengband_SOURCES = \
 	load/old/monster-flag-types-savefile50.h \
 	load/old/monster-loader-savefile50.cpp load/old/monster-loader-savefile50.h \
 	\
+	locale/character-encoding.h \
 	locale/english.cpp locale/english.h \
 	locale/japanese.cpp locale/japanese.h \
 	locale/utf-8.cpp locale/utf-8.h \
@@ -379,7 +380,6 @@ hengband_SOURCES = \
 	\
 	lore/combat-types-setter.cpp lore/combat-types-setter.h \
 	lore/lore-calculator.cpp lore/lore-calculator.h \
-	lore/lore-store.cpp lore/lore-store.h \
 	lore/lore-util.cpp lore/lore-util.h \
 	lore/magic-types-setter.cpp lore/magic-types-setter.h \
 	lore/monster-lore.cpp lore/monster-lore.h \
@@ -510,7 +510,6 @@ hengband_SOURCES = \
 	\
 	monster-race/monster-aura-types.h \
 	monster-race/monster-kind-mask.cpp monster-race/monster-kind-mask.h \
-	monster-race/monster-race.cpp monster-race/monster-race.h \
 	monster-race/monster-race-hook.cpp monster-race/monster-race-hook.h \
 	monster-race/race-ability-flags.h \
 	monster-race/race-ability-mask.cpp monster-race/race-ability-mask.h \
@@ -646,7 +645,6 @@ hengband_SOURCES = \
 	object-hook/hook-expendable.cpp object-hook/hook-expendable.h \
 	object-hook/hook-magic.cpp object-hook/hook-magic.h \
 	object-hook/hook-perception.cpp object-hook/hook-perception.h \
-	object-hook/hook-quest.cpp object-hook/hook-quest.h \
 	object-hook/hook-weapon.cpp object-hook/hook-weapon.h \
 	\
 	object-use/item-use-checker.cpp object-use/item-use-checker.h \
@@ -928,6 +926,7 @@ hengband_SOURCES = \
 	system/game-option-types.h \
 	system/h-basic.h system/h-config.h \
 	system/h-system.h system/h-type.h \
+	system/inner-game-data.cpp system/inner-game-data.h \
 	system/item-entity.cpp system/item-entity.h \
 	system/monster-entity.cpp system/monster-entity.h \
 	system/monster-race-info.cpp system/monster-race-info.h \
@@ -965,6 +964,10 @@ hengband_SOURCES = \
 	timed-effect/player-poison.cpp timed-effect/player-poison.h \
 	timed-effect/player-stun.cpp timed-effect/player-stun.h \
 	timed-effect/timed-effects.cpp timed-effect/timed-effects.h \
+	\
+	tracking/baseitem-tracker.cpp tracking/baseitem-tracker.h \
+	tracking/health-bar-tracker.cpp tracking/health-bar-tracker.h \
+	tracking/lore-tracker.cpp tracking/lore-tracker.h \
 	\
 	util/angband-files.cpp util/angband-files.h \
 	util/buffer-shaper.cpp util/buffer-shaper.h \

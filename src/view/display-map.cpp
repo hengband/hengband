@@ -8,7 +8,6 @@
 #include "game-option/special-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "monster-race/monster-race.h"
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "player/player-status.h"
@@ -61,8 +60,8 @@ DisplaySymbol image_object()
 DisplaySymbol image_monster()
 {
     if (use_graphics) {
-        const auto monrace_id = MonsterRace::pick_one_at_random();
-        const auto &monrace = monraces_info[monrace_id];
+        const auto &monraces = MonraceList::get_instance();
+        const auto &monrace = monraces.pick_monrace_at_random();
         return monrace.symbol_config;
     }
 
@@ -156,7 +155,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
                 }
             } else if (darkened_grid(player_ptr, &grid)) {
                 const auto unsafe_terrain_id = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
-                terrain_mimic_ptr = &terrains[unsafe_terrain_id];
+                terrain_mimic_ptr = &terrains.get_terrain(unsafe_terrain_id);
                 symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_STANDARD];
             } else if (view_special_lite) {
                 if (grid.info & (CAVE_LITE | CAVE_MNLT)) {
@@ -173,7 +172,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
             }
         } else {
             const auto unsafe_terrain_id = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
-            terrain_mimic_ptr = &terrains[unsafe_terrain_id];
+            terrain_mimic_ptr = &terrains.get_terrain(unsafe_terrain_id);
             symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_STANDARD];
         }
     } else {
@@ -187,7 +186,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
             } else if (darkened_grid(player_ptr, &grid) && !is_blind) {
                 if (terrain_mimic_ptr->flags.has_all_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::PROJECT })) {
                     const auto unsafe_terrain_id = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
-                    terrain_mimic_ptr = &terrains[unsafe_terrain_id];
+                    terrain_mimic_ptr = &terrains.get_terrain(unsafe_terrain_id);
                     symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_STANDARD];
                 } else if (view_granite_lite && view_bright_lite) {
                     symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_DARK];
@@ -211,7 +210,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
             }
         } else {
             const auto unsafe_terrain_id = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
-            terrain_mimic_ptr = &terrains[unsafe_terrain_id];
+            terrain_mimic_ptr = &terrains.get_terrain(unsafe_terrain_id);
             symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_STANDARD];
         }
     }
@@ -324,8 +323,8 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
 
     if (monrace_ap.visual_flags.has(MonsterVisualType::SHAPECHANGER)) {
         if (use_graphics) {
-            auto r_idx = MonsterRace::pick_one_at_random();
-            const auto &monrace = monraces_info[r_idx];
+            const auto &monraces = MonraceList::get_instance();
+            const auto &monrace = monraces.pick_monrace_at_random();
             symbol_pair.symbol_foreground = monrace.symbol_config;
         } else {
             symbol_pair.symbol_foreground.character = one_in_(25) ? rand_choice(image_objects) : rand_choice(image_monsters);

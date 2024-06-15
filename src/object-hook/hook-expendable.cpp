@@ -1,7 +1,6 @@
 #include "object-hook/hook-expendable.h"
 #include "artifact/fixed-art-types.h"
 #include "core/window-redrawer.h"
-#include "monster-race/monster-race.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/tval-types.h"
@@ -36,8 +35,7 @@ bool item_tester_hook_eatable(PlayerType *player_ptr, const ItemEntity *o_ptr)
             return true;
         }
     } else if (food_type == PlayerRaceFoodType::CORPSE) {
-        auto corpse_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-        if (o_ptr->is_corpse() && angband_strchr("pht", monraces_info[corpse_r_idx].symbol_definition.character)) {
+        if (o_ptr->is_corpse() && o_ptr->get_monrace().symbol_char_is_any_of("pht")) {
             return true;
         }
     }

@@ -23,6 +23,7 @@
 #include <map>
 #include <set>
 #include <string>
+#include <string_view>
 #include <tuple>
 #include <vector>
 
@@ -140,15 +141,28 @@ public:
     PERCENTAGE cur_hp_per{}; //!< 生成時現在HP率(%)
 
     bool is_valid() const;
-    const std::string &decide_horror_message() const;
     bool has_living_flag() const;
     bool is_explodable() const;
+    bool symbol_char_is_any_of(std::string_view symbol_characters) const;
     std::string get_died_message() const;
     std::optional<bool> order_pet(const MonsterRaceInfo &other) const;
     void kill_unique();
     std::string get_pronoun_of_summoned_kin() const;
     const MonsterRaceInfo &get_next() const;
+    bool is_bounty(bool unachieved_only) const;
+    int calc_power() const;
+    int calc_figurine_value() const;
+    int calc_capture_value() const;
+    std::string build_eldritch_horror_message(std::string_view description) const;
+
+    std::optional<std::string> probe_lore();
+    void make_lore_treasure(int num_item, int num_drop);
+
+private:
+    const std::string &decide_horror_message() const;
 };
+
+extern std::map<MonsterRaceId, MonsterRaceInfo> monraces_info;
 
 class MonraceList {
 public:
@@ -156,12 +170,11 @@ public:
     MonraceList(const MonraceList &) = delete;
     MonraceList &operator=(const MonraceList &) = delete;
     MonraceList &operator=(MonraceList &&) = delete;
-    MonsterRaceInfo &operator[](const MonsterRaceId r_idx);
-    const MonsterRaceInfo &operator[](const MonsterRaceId r_idx) const;
 
     static bool is_valid(MonsterRaceId monrace_id);
     static const std::map<MonsterRaceId, std::set<MonsterRaceId>> &get_unified_uniques();
     static MonraceList &get_instance();
+    static MonsterRaceId empty_id();
     std::map<MonsterRaceId, MonsterRaceInfo>::iterator begin();
     std::map<MonsterRaceId, MonsterRaceInfo>::const_iterator begin() const;
     std::map<MonsterRaceId, MonsterRaceInfo>::iterator end();
@@ -170,6 +183,7 @@ public:
     std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator rbegin() const;
     std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator rend();
     std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator rend() const;
+    size_t size() const;
     MonsterRaceInfo &get_monrace(MonsterRaceId monrace_id);
     const MonsterRaceInfo &get_monrace(MonsterRaceId monrace_id) const;
     const std::vector<MonsterRaceId> &get_valid_monrace_ids() const;
@@ -180,13 +194,14 @@ public:
     bool is_unified(const MonsterRaceId r_idx) const;
     bool exists_separates(const MonsterRaceId r_idx) const;
     bool is_separated(const MonsterRaceId r_idx) const;
-    bool can_select_separate(const MonsterRaceId r_idx, const int hp, const int maxhp) const;
-    int calc_figurine_value(const MonsterRaceId r_idx) const;
-    int calc_capture_value(const MonsterRaceId r_idx) const;
+    bool can_select_separate(const MonsterRaceId morace_id, const int hp, const int maxhp) const;
     bool order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed = false) const;
     bool order_level(MonsterRaceId id1, MonsterRaceId id2) const;
+    MonsterRaceId pick_id_at_random() const;
+    const MonsterRaceInfo &pick_monrace_at_random() const;
 
     void reset_all_visuals();
+    std::optional<std::string> probe_lore(MonsterRaceId monrace_id);
 
 private:
     MonraceList() = default;

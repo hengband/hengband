@@ -3,7 +3,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "util/flag-group.h"
 #include <array>
-#include <stdint.h>
+#include <cstdint>
 
 constexpr auto MAX_WINDOW_ENTITIES = 8;
 

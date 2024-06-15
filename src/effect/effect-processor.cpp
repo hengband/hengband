@@ -18,7 +18,6 @@
 #include "io/screen-util.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
@@ -36,6 +35,7 @@
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "timed-effect/timed-effects.h"
+#include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -357,6 +357,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
         project_m_x = 0;
         project_m_y = 0;
         auto dist = 0;
+        auto &tracker = LoreTracker::get_instance();
         for (int i = 0; i < grids; i++) {
             int effective_dist;
             if (gm[dist + 1] == i) {
@@ -485,7 +486,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                 auto &monster = floor.m_list[grid.m_idx];
                 if (monster.ml) {
                     if (!player_ptr->effects()->hallucination().is_hallucinated()) {
-                        monster_race_track(player_ptr, monster.ap_r_idx);
+                        tracker.set_trackee(monster.ap_r_idx);
                     }
 
                     health_track(player_ptr, grid.m_idx);

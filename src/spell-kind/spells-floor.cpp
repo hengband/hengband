@@ -28,7 +28,6 @@
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
 #include "monster-floor/monster-lite.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
@@ -86,7 +85,7 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
 
             /* Feature code (applying "mimic" field) */
             FEAT_IDX feat = g_ptr->get_feat_mimic();
-            auto *t_ptr = &terrains[feat];
+            auto *t_ptr = &terrains.get_terrain(feat);
 
             /* Scan all neighbors */
             for (OBJECT_IDX i = 0; i < 9; i++) {
@@ -95,7 +94,7 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
                 g_ptr = &floor.grid_array[yy][xx];
 
                 /* Feature code (applying "mimic" field) */
-                t_ptr = &terrains[g_ptr->get_feat_mimic()];
+                t_ptr = &terrains.get_terrain(g_ptr->get_feat_mimic());
 
                 /* Perma-lite the grid */
                 if (floor.get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS) && !ninja) {
@@ -226,7 +225,7 @@ void map_area(PlayerType *player_ptr, POSITION range)
 
             /* Feature code (applying "mimic" field) */
             FEAT_IDX feat = g_ptr->get_feat_mimic();
-            auto *t_ptr = &terrains[feat];
+            auto *t_ptr = &terrains.get_terrain(feat);
 
             /* Memorize normal features */
             if (t_ptr->flags.has(TerrainCharacteristics::REMEMBER)) {
@@ -240,7 +239,7 @@ void map_area(PlayerType *player_ptr, POSITION range)
 
                 /* Feature code (applying "mimic" field) */
                 feat = g_ptr->get_feat_mimic();
-                t_ptr = &terrains[feat];
+                t_ptr = &terrains.get_terrain(feat);
 
                 /* Memorize walls (etc) */
                 if (t_ptr->flags.has(TerrainCharacteristics::REMEMBER)) {
@@ -354,7 +353,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                 } else {
                     if (record_named_pet && monster.is_named_pet()) {
                         const auto m_name = monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE);
-                        exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_DESTROY, m_name);
+                        exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_DESTROY, m_name);
                     }
 
                     /* Delete the monster (if any) */

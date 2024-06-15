@@ -9,7 +9,6 @@
 #include "game-option/map-screen-options.h"
 #include "grid/grid.h"
 #include "mind/mind-ninja.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"

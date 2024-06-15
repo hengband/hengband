@@ -26,6 +26,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "tracking/baseitem-tracker.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -283,6 +284,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
     bool flag = false;
     bool redraw = true;
     int column = 0;
+    auto &tracker = BaseitemTracker::get_instance();
     const auto &symbols_cb = DisplaySymbolsClipboard::get_instance();
     while (!flag) {
         if (redraw) {
@@ -370,7 +372,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
 
         if (!visual_only) {
             if (object_cnt) {
-                object_kind_track(player_ptr, object_idx[object_cur]);
+                tracker.set_trackee(object_idx[object_cur]);
             }
 
             if (object_old != object_idx[object_cur]) {

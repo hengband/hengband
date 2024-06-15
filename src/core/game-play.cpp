@@ -59,7 +59,6 @@
 #include "monster-floor/monster-lite.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-util.h"
 #include "player-base/player-class.h"
@@ -212,16 +211,16 @@ static void restore_world_floor_info(PlayerType *player_ptr)
 {
     write_level = false;
     constexpr auto mes = _("                            ----ゲーム再開----", "                            --- Restarted Game ---");
-    exe_write_diary(player_ptr, DiaryKind::GAMESTART, 1, mes);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    exe_write_diary(floor, DiaryKind::GAMESTART, 1, mes);
 
     if (player_ptr->riding != -1) {
         return;
     }
 
     player_ptr->riding = 0;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (short i = floor_ptr->m_max; i > 0; i--) {
-        const auto &monster = floor_ptr->m_list[i];
+    for (short i = floor.m_max; i > 0; i--) {
+        const auto &monster = floor.m_list[i];
         if (player_ptr->is_located_at({ monster.fy, monster.fx })) {
             player_ptr->riding = i;
             break;
@@ -280,11 +279,11 @@ static void change_floor_if_error(PlayerType *player_ptr)
 static void generate_world(PlayerType *player_ptr, bool new_game)
 {
     reset_world_info(player_ptr);
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    panel_row_min = floor_ptr->height;
-    panel_col_min = floor_ptr->width;
+    const auto &floor = *player_ptr->current_floor_ptr;
+    panel_row_min = floor.height;
+    panel_col_min = floor.width;
 
-    set_floor_and_wall(floor_ptr->dungeon_idx);
+    set_floor_and_wall(floor.dungeon_idx);
     initialize_items_flavor();
     prt(_("お待ち下さい...", "Please wait..."), 0, 0);
     term_fresh();
@@ -297,7 +296,7 @@ static void generate_world(PlayerType *player_ptr, bool new_game)
     }
 
     const auto mes = format(_("%sに降り立った。", "arrived in %s."), map_name(player_ptr).data());
-    exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, mes);
+    exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, mes);
 }
 
 static void init_io(PlayerType *player_ptr)

@@ -13,7 +13,6 @@
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"
 #include "mind/drs-types.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-brightness-flags.h"
 #include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-indice-types.h"
@@ -39,6 +38,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "timed-effect/timed-effects.h"
+#include "tracking/health-bar-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
 
@@ -164,27 +164,6 @@ void update_monster_race_flags(PlayerType *player_ptr, turn_flags *turn_flags_pt
 
     if (turn_flags_ptr->did_kill_wall) {
         r_ptr->r_feature_flags.set(MonsterFeatureType::KILL_WALL);
-    }
-}
-
-/*!
- * @brief モンスターフラグの更新に基づき、モンスター表示を更新する
- * @param monster_race_idx モンスターID
- * @param window ウィンドウフラグ
- * @param old_race_flags_ptr モンスターフラグへの参照ポインタ
- */
-void update_player_window(PlayerType *player_ptr, old_race_flags *old_race_flags_ptr)
-{
-    MonsterRaceInfo *r_ptr;
-    r_ptr = &monraces_info[player_ptr->monster_race_idx];
-    if ((old_race_flags_ptr->old_r_ability_flags != r_ptr->r_ability_flags) ||
-        (old_race_flags_ptr->old_r_resistance_flags != r_ptr->r_resistance_flags) || (old_race_flags_ptr->old_r_blows0 != r_ptr->r_blows[0]) ||
-        (old_race_flags_ptr->old_r_blows1 != r_ptr->r_blows[1]) || (old_race_flags_ptr->old_r_blows2 != r_ptr->r_blows[2]) ||
-        (old_race_flags_ptr->old_r_blows3 != r_ptr->r_blows[3]) || (old_race_flags_ptr->old_r_cast_spell != r_ptr->r_cast_spell) ||
-        (old_race_flags_ptr->old_r_behavior_flags != r_ptr->r_behavior_flags) || (old_race_flags_ptr->old_r_kind_flags != r_ptr->r_kind_flags) ||
-        (old_race_flags_ptr->old_r_drop_flags != r_ptr->r_drop_flags) || (old_race_flags_ptr->old_r_feature_flags != r_ptr->r_feature_flags) ||
-        (old_race_flags_ptr->old_r_special_flags != r_ptr->r_special_flags)) {
-        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
     }
 }
 
@@ -504,13 +483,9 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
     m_ptr->ml = true;
     lite_spot(player_ptr, um_ptr->fy, um_ptr->fx);
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (player_ptr->health_who == m_idx) {
-        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
-    }
-
+    HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
     if (player_ptr->riding == m_idx) {
-        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
+        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     if (!player_ptr->effects()->hallucination().is_hallucinated()) {
@@ -544,13 +519,9 @@ static void update_visible_monster(PlayerType *player_ptr, um_type *um_ptr, MONS
     um_ptr->m_ptr->ml = false;
     lite_spot(player_ptr, um_ptr->fy, um_ptr->fx);
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (player_ptr->health_who == m_idx) {
-        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
-    }
-
+    HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
     if (player_ptr->riding == m_idx) {
-        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
+        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     if (um_ptr->do_disturb && (disturb_pets || um_ptr->m_ptr->is_hostile())) {

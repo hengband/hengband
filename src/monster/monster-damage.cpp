@@ -21,7 +21,6 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
@@ -39,6 +38,8 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
+#include "tracking/health-bar-tracker.h"
+#include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -152,7 +153,7 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(std::string_view note, cons
     if (monrace.kind_flags.has(MonsterKindType::UNIQUE) && record_destroy_uniq) {
         std::stringstream ss;
         ss << monrace.name << (monster.mflag2.has(MonsterConstantFlagType::CLONED) ? _("(クローン)", "(Clone)") : "");
-        exe_write_diary(this->player_ptr, DiaryKind::UNIQUE, 0, ss.str());
+        exe_write_diary(*this->player_ptr->current_floor_ptr, DiaryKind::UNIQUE, 0, ss.str());
     }
 
     sound(SOUND_KILL);
@@ -221,26 +222,26 @@ void MonsterDamageProcessor::death_unique_monster(MonsterRaceId r_idx)
 
 void MonsterDamageProcessor::increase_kill_numbers()
 {
-    auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    auto &r_ref = m_ptr->get_real_monrace();
+    auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
+    auto &monrace = monster.get_real_monrace();
     auto is_hallucinated = this->player_ptr->effects()->hallucination().is_hallucinated();
-    if (((m_ptr->ml == 0) || is_hallucinated) && r_ref.kind_flags.has_not(MonsterKindType::UNIQUE)) {
+    if (((monster.ml == 0) || is_hallucinated) && monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return;
     }
 
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE) && (monraces_info[MonsterRaceId::KAGE].r_pkills < MAX_SHORT)) {
+    if (monster.mflag2.has(MonsterConstantFlagType::KAGE) && (monraces_info[MonsterRaceId::KAGE].r_pkills < MAX_SHORT)) {
         monraces_info[MonsterRaceId::KAGE].r_pkills++;
-    } else if (r_ref.r_pkills < MAX_SHORT) {
-        r_ref.r_pkills++;
+    } else if (monrace.r_pkills < MAX_SHORT) {
+        monrace.r_pkills++;
     }
 
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE) && (monraces_info[MonsterRaceId::KAGE].r_tkills < MAX_SHORT)) {
+    if (monster.mflag2.has(MonsterConstantFlagType::KAGE) && (monraces_info[MonsterRaceId::KAGE].r_tkills < MAX_SHORT)) {
         monraces_info[MonsterRaceId::KAGE].r_tkills++;
-    } else if (r_ref.r_tkills < MAX_SHORT) {
-        r_ref.r_tkills++;
+    } else if (monrace.r_tkills < MAX_SHORT) {
+        monrace.r_tkills++;
     }
 
-    monster_race_track(this->player_ptr, m_ptr->ap_r_idx);
+    LoreTracker::get_instance().set_trackee(monster.ap_r_idx);
 }
 
 void MonsterDamageProcessor::death_amberites(std::string_view m_name)
@@ -332,18 +333,18 @@ void MonsterDamageProcessor::show_explosion_message(std::string_view died_mes, s
 
 void MonsterDamageProcessor::show_bounty_message(std::string_view m_name)
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    const auto &r_ref = m_ptr->get_real_monrace();
-    if (r_ref.kind_flags.has_not(MonsterKindType::UNIQUE) || m_ptr->mflag2.has(MonsterConstantFlagType::CLONED) || vanilla_town) {
+    auto &floor = *this->player_ptr->current_floor_ptr;
+    auto &monster = floor.m_list[this->m_idx];
+    const auto &monrace = monster.get_real_monrace();
+    if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE) || monster.mflag2.has(MonsterConstantFlagType::CLONED) || vanilla_town) {
         return;
     }
 
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
+    if (monster.mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
         return;
     }
 
-    if (MonsterRace(m_ptr->r_idx).is_bounty(true)) {
+    if (monrace.is_bounty(true)) {
         msg_format(_("%sの首には賞金がかかっている。", "There is a price on %s's head."), m_name.data());
     }
 }
@@ -426,13 +427,9 @@ void MonsterDamageProcessor::get_exp_from_mon(const MonsterEntity &monster, int 
 
 void MonsterDamageProcessor::set_redraw()
 {
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (this->player_ptr->health_who == this->m_idx) {
-        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
-    }
-
+    HealthBarTracker::get_instance().set_flag_if_tracking(this->m_idx);
     if (this->player_ptr->riding == this->m_idx) {
-        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
+        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 }
 
@@ -469,7 +466,7 @@ void MonsterDamageProcessor::summon_special_unique()
         mes = _("「これは『試練』だ　過去に打ち勝てという『試練』とオレは受けとった」", "This is a 'trial'. I took it as a 'trial' to overcome in the past.");
         break;
     default: // バグでなければ入らない.
-        new_unique_idx = MonsterRace::empty_id();
+        new_unique_idx = MonraceList::empty_id();
         mes = "";
         break;
     }

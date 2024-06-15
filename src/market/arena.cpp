@@ -12,7 +12,6 @@
 #include "market/building-util.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
@@ -28,6 +27,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
+#include "tracking/lore-tracker.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -155,8 +155,7 @@ static void see_arena_poster(PlayerType *player_ptr)
 
     auto *r_ptr = &monraces_info[arena_info[player_ptr->arena_number].r_idx];
     msg_format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), r_ptr->name.data());
-    player_ptr->monster_race_idx = arena_info[player_ptr->arena_number].r_idx;
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
+    LoreTracker::get_instance().set_trackee(arena_info[player_ptr->arena_number].r_idx);
     handle_stuff(player_ptr);
 }
 
@@ -252,7 +251,7 @@ void update_gambling_monsters(PlayerType *player_ptr)
         }
 
         std::transform(std::begin(battle_mon_list), std::end(battle_mon_list), std::begin(power),
-            [](MonsterRace r_idx) { return MonsterRace(r_idx).calc_power(); });
+            [&monraces](auto monrace_id) { return monraces.get_monrace(monrace_id).calc_power(); });
         total += std::reduce(std::begin(power), std::end(power));
 
         for (i = 0; i < 4; i++) {

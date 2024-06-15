@@ -9,7 +9,6 @@
 #include "dungeon/quest.h"
 #include "melee/melee-util.h"
 #include "monster-attack/monster-attack-effect.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-kind-flags.h"
 #include "monster/monster-info.h"

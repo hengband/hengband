@@ -7,7 +7,6 @@
 #include "load/floor-loader.h"
 #include "load/load-util.h"
 #include "load/old/load-v1-5-0.h"
-#include "monster-race/monster-race.h"
 #include "save/floor-writer.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-info.h"
@@ -135,9 +134,9 @@ static errr rd_dungeon(PlayerType *player_ptr)
 errr restore_dungeon(PlayerType *player_ptr)
 {
     if (player_ptr->is_dead) {
-        const auto &quests = QuestList::get_instance();
+        auto &quests = QuestList::get_instance();
         for (const auto quest_id : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
-            monraces_info[quests.get_quest(quest_id).r_idx].misc_flags.reset(MonsterMiscType::QUESTOR);
+            quests.get_quest(quest_id).get_bounty().misc_flags.reset(MonsterMiscType::QUESTOR);
         }
 
         return 0;

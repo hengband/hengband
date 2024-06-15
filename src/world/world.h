@@ -13,6 +13,7 @@ constexpr auto MAX_BOUNTY = 20;
  */
 enum term_color_type : unsigned char;
 enum class PlayerRaceType;
+class MonsterRaceInfo;
 class AngbandWorld {
 public:
     AngbandWorld() = default;
@@ -20,7 +21,6 @@ public:
     POSITION max_wild_x{}; /*!< Maximum size of the wilderness */
     POSITION max_wild_y{}; /*!< Maximum size of the wilderness */
     GAME_TURN game_turn{}; /*!< 画面表示上のゲーム時間基準となるターン / Current game turn */
-    GAME_TURN game_turn_limit{}; /*!< game_turnの最大値 / Limit of game_turn */
     GAME_TURN dungeon_turn{}; /*!< NASTY生成の計算に関わる内部ターン値 / Game turn in dungeon */
     GAME_TURN dungeon_turn_limit{}; /*!< dungeon_turnの最大値 / Limit of game_turn in dungeon */
     GAME_TURN arena_start_turn{}; /*!< 闘技場賭博の開始ターン値 */
@@ -30,7 +30,8 @@ public:
 
     MONSTER_IDX timewalk_m_idx{}; /*!< 現在時間停止を行っているモンスターのID */
 
-    bounty_type bounties[MAX_BOUNTY]{};
+    bounty_type bounties[MAX_BOUNTY]{}; //!< 賞金首ユニーク
+    bool knows_daily_bounty{}; //!< 日替わり賞金首を知っているか否か
     MonsterRaceId today_mon{}; //!< 実際の日替わり賞金首
 
     uint32_t play_time{}; /*!< 実プレイ時間 */
@@ -65,6 +66,8 @@ public:
     void add_winner_class(PlayerClassType c);
     void add_retired_class(PlayerClassType c);
     term_color_type get_birth_class_color(PlayerClassType c) const;
+    MonsterRaceInfo &get_today_bounty();
+    const MonsterRaceInfo &get_today_bounty() const;
 
 private:
     bool is_out_arena = false; // アリーナ外部にいる時だけtrue.

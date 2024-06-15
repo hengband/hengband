@@ -8,7 +8,6 @@
 #include "flavor/flavor-util.h"
 #include "flavor/object-flavor-types.h"
 #include "locale/english.h"
-#include "monster-race/monster-race.h"
 #include "object-enchant/trg-types.h"
 #include "object/tval-types.h"
 #include "system/baseitem-info.h"
@@ -24,8 +23,7 @@
 static std::pair<std::string, std::string> describe_monster_ball(const ItemEntity &item, const describe_option_type &opt)
 {
     const auto &basename = item.get_baseitem().name;
-    const auto monrace_id = i2enum<MonsterRaceId>(item.pval);
-    const auto &monrace = monraces_info[monrace_id];
+    const auto &monrace = item.get_monrace();
     if (!opt.known) {
         return { basename, "" };
     }
@@ -50,8 +48,7 @@ static std::pair<std::string, std::string> describe_monster_ball(const ItemEntit
 static std::pair<std::string, std::string> describe_statue(const ItemEntity &item)
 {
     const auto &basename = item.get_baseitem().name;
-    const auto monrace_id = i2enum<MonsterRaceId>(item.pval);
-    const auto &monrace = monraces_info[monrace_id];
+    const auto &monrace = item.get_monrace();
 #ifdef JP
     const auto &modstr = monrace.name;
 #else
@@ -67,8 +64,7 @@ static std::pair<std::string, std::string> describe_statue(const ItemEntity &ite
 
 static std::pair<std::string, std::string> describe_corpse(const ItemEntity &item)
 {
-    const auto monrace_id = i2enum<MonsterRaceId>(item.pval);
-    const auto &monrace = monraces_info[monrace_id];
+    const auto &monrace = item.get_monrace();
 #ifdef JP
     const auto basename = "#%";
 #else

@@ -5,3 +5,4 @@
 
 struct angband_header;
 errr parse_dungeons_info(std::string_view buf, angband_header *head);
+void retouch_dungeons_info();

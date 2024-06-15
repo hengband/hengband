@@ -23,7 +23,6 @@
 #include "monster-floor/monster-death.h"
 #include "monster-floor/monster-move.h"
 #include "monster-floor/monster-remover.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-resistance-mask.h"
@@ -48,6 +47,8 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "tracking/health-bar-tracker.h"
+#include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -235,13 +236,9 @@ static bool deal_effect_damage_from_monster(PlayerType *player_ptr, EffectMonste
         return false;
     }
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (player_ptr->health_who == em_ptr->g_ptr->m_idx) {
-        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
-    }
-
+    HealthBarTracker::get_instance().set_flag_if_tracking(em_ptr->g_ptr->m_idx);
     if (player_ptr->riding == em_ptr->g_ptr->m_idx) {
-        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
+        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     (void)set_monster_csleep(player_ptr, em_ptr->g_ptr->m_idx, 0);
@@ -273,7 +270,7 @@ static bool heal_leaper(PlayerType *player_ptr, EffectMonster *em_ptr)
 
     if (record_named_pet && em_ptr->m_ptr->is_named_pet()) {
         const auto m2_name = monster_desc(player_ptr, em_ptr->m_ptr, MD_INDEF_VISIBLE);
-        exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
+        exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
     }
 
     delete_monster_idx(player_ptr, em_ptr->g_ptr->m_idx);
@@ -625,8 +622,7 @@ static void update_phase_out_stat(PlayerType *player_ptr, EffectMonster *em_ptr)
         return;
     }
 
-    player_ptr->health_who = em_ptr->g_ptr->m_idx;
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::HEALTH);
+    HealthBarTracker::get_instance().set_trackee(em_ptr->g_ptr->m_idx);
     handle_stuff(player_ptr);
 }
 
@@ -757,7 +753,7 @@ bool affect_monster(
     }
 
     lite_spot(player_ptr, em_ptr->y, em_ptr->x);
-    if ((player_ptr->monster_race_idx == em_ptr->m_ptr->r_idx) && (em_ptr->seen || !monster_is_valid)) {
+    if (LoreTracker::get_instance().is_tracking(em_ptr->m_ptr->r_idx) && (em_ptr->seen || !monster_is_valid)) {
         RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
     }
 

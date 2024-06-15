@@ -6,7 +6,6 @@
 #include "monster-floor/monster-remover.h"
 #include "monster-race/monster-kind-mask.h"
 #include "monster-race/monster-race-hook.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"

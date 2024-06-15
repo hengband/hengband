@@ -44,8 +44,7 @@ bool choose_monk_stance(PlayerType *player_ptr)
     prt(_(" a) 構えをとく", " a) No form"), 2, 20);
     for (auto i = 0U; i < monk_stances.size(); i++) {
         if (player_ptr->lev >= monk_stances[i].min_level) {
-            char buf[80];
-            strnfmt(buf, sizeof(buf), " %c) %-12s  %s", I2A(i + 1), monk_stances[i].desc, monk_stances[i].info);
+            const auto buf = format(" %c) %-12s  %s", I2A(i + 1), monk_stances[i].desc, monk_stances[i].info);
             prt(buf, 3 + i, 20);
         }
     }

@@ -6,7 +6,6 @@
 
 #include "mind/mind-cavalry.h"
 #include "cmd-action/cmd-pet.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"

@@ -2,7 +2,6 @@
 #include "artifact/fixed-art-types.h"
 #include "effect/attribute-types.h"
 #include "mind/mind-samurai.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-resistance-mask.h"

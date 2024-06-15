@@ -3,7 +3,6 @@
 #include "grid/feature-flag-types.h"
 #include "grid/feature.h"
 #include "inventory/inventory-slot-types.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-status.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"

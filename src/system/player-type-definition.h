@@ -202,15 +202,12 @@ public:
     BIT_FLAGS8 knowledge{}; /* Knowledge about yourself */
     BIT_FLAGS visit{}; /* Visited towns */
 
-    PlayerRaceType start_race{}; /* Race at birth */
     BIT_FLAGS old_race1{}; /* Record of race changes */
     BIT_FLAGS old_race2{}; /* Record of race changes */
     int16_t old_realm{}; /* Record of realm changes */
 
     int16_t pet_follow_distance{}; /* Length of the imaginary "leash" for pets */
     BIT_FLAGS16 pet_extra_flags{}; /* Various flags for controling pets */
-
-    bool knows_daily_bounty{}; //!< 日替わり賞金首を知っているか否か
 
     bool dtrap{}; /* Whether you are on trap-safe grids */
     FLOOR_IDX floor_id{}; /* Current floor location */
@@ -236,12 +233,6 @@ public:
     bool leaving_dungeon{}; /* True if player is leaving the dungeon */
     bool teleport_town{};
     bool enter_dungeon{}; /* Just enter the dungeon */
-
-    IDX health_who{}; /* Health bar trackee */
-
-    MonsterRaceId monster_race_idx{}; /* Monster race trackee */
-
-    short tracking_bi_id{}; /* Object kind trackee */
 
     int16_t new_spells{}; /* Number of spells available */
     int16_t old_spells{};
@@ -402,10 +393,10 @@ public:
     std::string decrease_ability_random();
     std::string decrease_ability_all();
     Pos2D get_position() const;
+    Pos2D get_neighbor(int dir) const;
     bool is_located_at_running_destination() const;
     bool is_located_at(const Pos2D &pos) const;
     bool in_saved_floor() const;
-    Pos2D get_neighbor(int dir) const;
 
 private:
     std::shared_ptr<TimedEffects> timed_effects;

@@ -10,11 +10,9 @@
 #include "autopick/autopick-key-flag-process.h"
 #include "autopick/autopick-util.h"
 #include "inventory/inventory-slot-types.h"
-#include "monster-race/monster-race.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-armor.h"
-#include "object-hook/hook-quest.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-info.h"
 #include "object/object-stack.h"
@@ -157,7 +155,7 @@ bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const au
             return false;
         }
 
-        if (!o_ptr->is_known() && object_is_quest_target(player_ptr->current_floor_ptr->quest_number, o_ptr)) {
+        if (!o_ptr->is_known() && o_ptr->is_target_of(player_ptr->current_floor_ptr->quest_number)) {
             return false;
         }
     }
@@ -289,7 +287,7 @@ bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const au
         return false;
     }
 
-    if (entry.has(FLG_WANTED) && !object_is_bounty(player_ptr, o_ptr)) {
+    if (entry.has(FLG_WANTED) && !o_ptr->is_bounty()) {
         return false;
     }
 
@@ -297,13 +295,18 @@ bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const au
     const auto &bi_key = o_ptr->bi_key;
     const auto tval = bi_key.tval();
     const auto sval = *bi_key.sval();
-    const auto r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-    if (entry.has(FLG_UNIQUE) && ((tval != ItemKindType::CORPSE && tval != ItemKindType::STATUE) || monraces_info[r_idx].kind_flags.has_not(MonsterKindType::UNIQUE))) {
-        return false;
+    if (entry.has(FLG_UNIQUE) && o_ptr->has_monrace()) {
+        const auto &monrace = o_ptr->get_monrace();
+        if (((tval != ItemKindType::CORPSE && tval != ItemKindType::STATUE) || monrace.kind_flags.has_not(MonsterKindType::UNIQUE))) {
+            return false;
+        }
     }
 
-    if (entry.has(FLG_HUMAN) && (tval != ItemKindType::CORPSE || !angband_strchr("pht", monraces_info[r_idx].symbol_definition.character))) {
-        return false;
+    if (entry.has(FLG_HUMAN) && o_ptr->has_monrace()) {
+        const auto &monrace = o_ptr->get_monrace();
+        if (tval != ItemKindType::CORPSE || !monrace.symbol_char_is_any_of("pht")) {
+            return false;
+        }
     }
 
     if (entry.has(FLG_UNREADABLE) && check_book_realm(player_ptr, bi_key)) {

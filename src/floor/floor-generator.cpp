@@ -24,14 +24,12 @@
 #include "game-option/play-record-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "info-reader/feature-reader.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/write-diary.h"
 #include "market/arena-info-table.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
@@ -109,7 +107,7 @@ static void build_arena(PlayerType *player_ptr, POSITION *start_y, POSITION *sta
 
     *start_y = y_height + 5;
     *start_x = xval;
-    floor_ptr->grid_array[*start_y][*start_x].feat = f_tag_to_index("ARENA_GATE");
+    floor_ptr->grid_array[*start_y][*start_x].feat = TerrainList::get_instance().get_terrain_id_by_tag("ARENA_GATE");
     floor_ptr->grid_array[*start_y][*start_x].info |= CAVE_GLOW | CAVE_MARK;
 }
 
@@ -208,7 +206,7 @@ static void build_battle(PlayerType *player_ptr, POSITION *y, POSITION *x)
 
     POSITION last_y = y_height + 1;
     POSITION last_x = xval;
-    floor_ptr->grid_array[last_y][last_x].feat = f_tag_to_index("BUILDING_3");
+    floor_ptr->grid_array[last_y][last_x].feat = TerrainList::get_instance().get_terrain_id_by_tag("BUILDING_3");
     floor_ptr->grid_array[last_y][last_x].info |= CAVE_GLOW | CAVE_MARK;
     *y = last_y;
     *x = last_x;

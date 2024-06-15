@@ -16,7 +16,6 @@
 #include "knowledge/monster-group-table.h"
 #include "locale/english.h"
 #include "lore/lore-util.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
@@ -31,6 +30,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
+#include "tracking/lore-tracker.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
@@ -46,7 +46,7 @@
  * @param mode 思い出の扱いに関するモード
  * @return 作成したモンスターのIDリスト
  */
-static std::vector<MonsterRaceId> collect_monsters(PlayerType *player_ptr, IDX grp_cur, monster_lore_mode mode)
+static std::vector<MonsterRaceId> collect_monsters(short grp_cur, monster_lore_mode mode)
 {
     const auto &group_char = MONRACE_CHARACTERS_GROUP[grp_cur];
     const auto grp_unique = (MONRACE_CHARACTERS_GROUP[grp_cur] == "Uniques");
@@ -70,8 +70,8 @@ static std::vector<MonsterRaceId> collect_monsters(PlayerType *player_ptr, IDX g
                 continue;
             }
         } else if (grp_wanted) {
-            auto wanted = player_ptr->knows_daily_bounty && (w_ptr->today_mon == monrace_id);
-            wanted |= MonsterRace(monrace_id).is_bounty(false);
+            auto wanted = w_ptr->knows_daily_bounty && (w_ptr->today_mon == monrace_id);
+            wanted |= monrace.is_bounty(false);
             if (!wanted) {
                 continue;
             }
@@ -201,7 +201,7 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
         }
 
 #ifdef JP
-        const auto number_of_kills = angband_strchr("pt", monrace.symbol_definition.character) ? "人" : "体";
+        const auto number_of_kills = monrace.symbol_char_is_any_of("pt") ? "人" : "体";
         fprintf(fff, "     %3d %sの %s\n", this_monster, number_of_kills, monrace.name.data());
 #else
         if (this_monster < 2) {
@@ -293,7 +293,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
         mode = visual_only ? MONSTER_LORE_DEBUG : MONSTER_LORE_NORMAL;
         const auto size = static_cast<short>(MONSTER_KINDS_GROUP.size());
         for (short i = 0; i < size; i++) {
-            if ((MONRACE_CHARACTERS_GROUP[i] == "Uniques") || !collect_monsters(player_ptr, i, mode).empty()) {
+            if ((MONRACE_CHARACTERS_GROUP[i] == "Uniques") || !collect_monsters(i, mode).empty()) {
                 grp_idx.push_back(i);
             }
         }
@@ -314,6 +314,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
     int column = 0;
     bool flag = false;
     bool redraw = true;
+    auto &tracker = LoreTracker::get_instance();
     const auto &symbols_cb = DisplaySymbolsClipboard::get_instance();
     while (!flag) {
         if (redraw) {
@@ -355,7 +356,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
             display_group_list(max, browser_rows, grp_idx, MONSTER_KINDS_GROUP, grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
-                monrace_ids = collect_monsters(player_ptr, grp_idx[grp_cur], mode);
+                monrace_ids = collect_monsters(grp_idx[grp_cur], mode);
             }
 
             while (mon_cur < mon_top) {
@@ -388,7 +389,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
             auto &monrace = monraces_info[monrace_ids[mon_cur]];
             symbol_ptr = &monrace.symbol_config;
             if (!visual_only) {
-                monster_race_track(player_ptr, monrace_ids[mon_cur]);
+                tracker.set_trackee(monrace_ids[mon_cur]);
                 handle_stuff(player_ptr);
             }
 
@@ -447,7 +448,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
  * List wanted monsters
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_knowledge_bounty(PlayerType *player_ptr)
+void do_cmd_knowledge_bounty(std::string_view player_name)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
@@ -456,15 +457,15 @@ void do_cmd_knowledge_bounty(PlayerType *player_ptr)
     }
 
     fprintf(fff, _("今日のターゲット : %s\n", "Today's target : %s\n"),
-        player_ptr->knows_daily_bounty ? monraces_info[w_ptr->today_mon].name.data() : _("不明", "unknown"));
+        w_ptr->knows_daily_bounty ? w_ptr->get_today_bounty().name.data() : _("不明", "unknown"));
     fprintf(fff, "\n");
     fprintf(fff, _("賞金首リスト\n", "List of wanted monsters\n"));
     fprintf(fff, "----------------------------------------------\n");
-
-    bool listed = false;
-    for (const auto &[r_idx, is_achieved] : w_ptr->bounties) {
+    const auto &monraces = MonraceList::get_instance();
+    auto listed = false;
+    for (const auto &[monrace_id, is_achieved] : w_ptr->bounties) {
         if (!is_achieved) {
-            fprintf(fff, "%s\n", monraces_info[r_idx].name.data());
+            fprintf(fff, "%s\n", monraces.get_monrace(monrace_id).name.data());
             listed = true;
         }
     }
@@ -474,6 +475,6 @@ void do_cmd_knowledge_bounty(PlayerType *player_ptr)
     }
 
     angband_fclose(fff);
-    FileDisplayer(player_ptr->name).display(true, file_name, 0, 0, _("賞金首の一覧", "Wanted monsters"));
+    FileDisplayer(player_name).display(true, file_name, 0, 0, _("賞金首の一覧", "Wanted monsters"));
     fd_kill(file_name);
 }

@@ -11,11 +11,9 @@
 #include "flavor/flavor-describer.h"
 #include "game-option/auto-destruction-options.h"
 #include "game-option/input-options.h"
-#include "monster-race/monster-race.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-expendable.h"
-#include "object-hook/hook-quest.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-mark-types.h"
 #include "object/object-value.h"
@@ -49,19 +47,21 @@ static bool is_leave_special_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     const auto &bi_key = o_ptr->bi_key;
     const auto tval = bi_key.tval();
     if (PlayerRace(player_ptr).equals(PlayerRaceType::BALROG)) {
-        const auto r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-        if (o_ptr->is_corpse() && angband_strchr("pht", monraces_info[r_idx].symbol_definition.character)) {
+        if (o_ptr->is_corpse() && o_ptr->get_monrace().symbol_char_is_any_of("pht")) {
             return false;
         }
-    } else if (pc.equals(PlayerClassType::ARCHER)) {
+    }
+    if (pc.equals(PlayerClassType::ARCHER)) {
         if ((tval == ItemKindType::SKELETON) || (bi_key == BaseitemKey(ItemKindType::CORPSE, SV_SKELETON))) {
             return false;
         }
-    } else if (pc.equals(PlayerClassType::NINJA)) {
+    }
+    if (pc.equals(PlayerClassType::NINJA)) {
         if (tval == ItemKindType::LITE && o_ptr->ego_idx == EgoType::LITE_DARKNESS && o_ptr->is_known()) {
             return false;
         }
-    } else if (pc.is_tamer()) {
+    }
+    if (pc.is_tamer()) {
         if (bi_key == BaseitemKey(ItemKindType::WAND, SV_WAND_HEAL_MONSTER) && o_ptr->is_aware()) {
             return false;
         }
@@ -99,7 +99,7 @@ static bool is_opt_confirm_destroy(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     if (leave_wanted) {
-        if (object_is_bounty(player_ptr, o_ptr)) {
+        if (o_ptr->is_bounty()) {
             return false;
         }
     }

@@ -1,15 +1,17 @@
 #include "info-reader/dungeon-reader.h"
 #include "grid/feature.h"
 #include "info-reader/dungeon-info-tokens-table.h"
-#include "info-reader/feature-reader.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/race-info-tokens-table.h"
 #include "io/tokenizer.h"
 #include "main/angband-headers.h"
 #include "system/dungeon-info.h"
+#include "system/monster-race-info.h"
+#include "system/terrain-type-definition.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <span>
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(ダンジョン用) /
@@ -115,6 +117,7 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
 {
     static dungeon_type *d_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false);
+    const auto &terrains = TerrainList::get_instance();
 
     if (tokens[0] == "N") {
         // N:index:name_ja
@@ -204,8 +207,9 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
         for (size_t i = 0; i < DUNGEON_FEAT_PROB_NUM; i++) {
             auto feat_idx = i * 2 + 1;
             auto per_idx = feat_idx + 1;
-            d_ptr->floor[i].feat = f_tag_to_index(tokens[feat_idx]);
-            if (d_ptr->floor[i].feat < 0) {
+            try {
+                d_ptr->floor[i].feat = terrains.get_terrain_id_by_tag(tokens[feat_idx]);
+            } catch (const std::exception &) {
                 return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
             }
 
@@ -223,32 +227,22 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
         for (int i = 0; i < DUNGEON_FEAT_PROB_NUM; i++) {
             auto feat_idx = i * 2 + 1;
             auto prob_idx = feat_idx + 1;
-            d_ptr->fill[i].feat = f_tag_to_index(tokens[feat_idx]);
-            if (d_ptr->fill[i].feat < 0) {
+            try {
+                d_ptr->fill[i].feat = terrains.get_terrain_id_by_tag(tokens[feat_idx]);
+            } catch (const std::exception &) {
                 return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
             }
 
             info_set_value(d_ptr->fill[i].percent, tokens[prob_idx]);
         }
 
-        auto idx = DUNGEON_FEAT_PROB_NUM * 2 + 1;
-        d_ptr->outer_wall = f_tag_to_index(tokens[idx++]);
-        if (d_ptr->outer_wall < 0) {
-            return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
-        }
-
-        d_ptr->inner_wall = f_tag_to_index(tokens[idx++]);
-        if (d_ptr->inner_wall < 0) {
-            return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
-        }
-
-        d_ptr->stream1 = f_tag_to_index(tokens[idx++]);
-        if (d_ptr->stream1 < 0) {
-            return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
-        }
-
-        d_ptr->stream2 = f_tag_to_index(tokens[idx]);
-        if (d_ptr->stream2 < 0) {
+        try {
+            const std::span tags(tokens.begin() + DUNGEON_FEAT_PROB_NUM * 2 + 1, 4);
+            d_ptr->outer_wall = terrains.get_terrain_id_by_tag(tags[0]);
+            d_ptr->inner_wall = terrains.get_terrain_id_by_tag(tags[1]);
+            d_ptr->stream1 = terrains.get_terrain_id_by_tag(tags[2]);
+            d_ptr->stream2 = terrains.get_terrain_id_by_tag(tags[3]);
+        } catch (const std::exception &) {
             return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
         }
     } else if (tokens[0] == "F") {
@@ -349,4 +343,17 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
     }
 
     return 0;
+}
+
+/*!
+ * @brief ダンジョン情報の読み込みが終わった後の設定を行う
+ */
+void retouch_dungeons_info()
+{
+    for (auto &dungeon : dungeons_info) {
+        if (dungeon.is_dungeon() && dungeon.has_guardian()) {
+            auto &monrace = dungeon.get_guardian();
+            monrace.misc_flags.set(MonsterMiscType::GUARDIAN);
+        }
+    }
 }

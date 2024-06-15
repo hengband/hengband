@@ -90,7 +90,7 @@ void InputKeyRequestor::process_input_command()
         this->process_control_command(cmd);
         auto act = keymap_act[this->mode][(byte)(cmd)];
         if (act && !inkey_next) {
-            (void)strnfmt(request_command_buffer, sizeof(request_command_buffer), "%s", act);
+            angband_strcpy(request_command_buffer, act, sizeof(request_command_buffer));
             inkey_next = request_command_buffer;
             continue;
         }
@@ -379,7 +379,7 @@ std::string InputKeyRequestor::switch_special_menu_condition(const SpecialMenuCo
         return "";
     }
     default:
-        throw("Invalid SpecialMenuType is specified!");
+        THROW_EXCEPTION(std::logic_error, "Invalid SpecialMenuType is specified!");
     }
 }
 

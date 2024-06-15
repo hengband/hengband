@@ -34,7 +34,6 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     COMMAND_CODE i;
     int j, k, l;
     ItemEntity *o_ptr;
-    char tmp_val[80];
     COMMAND_CODE out_index[23]{};
     TERM_COLOR out_color[23]{};
     std::array<std::string, 23> out_desc{};
@@ -94,20 +93,21 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
         i = out_index[j];
         o_ptr = &player_ptr->inventory_list[i];
         prt("", j + 1, col ? col - 2 : col);
+        std::string head;
         if (use_menu && target_item) {
             if (j == (target_item - 1)) {
-                angband_strcpy(tmp_val, _("》", "> "), sizeof(tmp_val));
+                head = _("》", "> ");
                 target_item_label = i;
             } else {
-                angband_strcpy(tmp_val, "  ", sizeof(tmp_val));
+                head = "  ";
             }
         } else if (i >= INVEN_MAIN_HAND) {
-            strnfmt(tmp_val, sizeof(tmp_val), "%c)", equip_label[i - INVEN_MAIN_HAND]);
+            head = format("%c)", equip_label[i - INVEN_MAIN_HAND]);
         } else {
-            strnfmt(tmp_val, sizeof(tmp_val), "%c)", index_to_label(i));
+            head = format("%c)", index_to_label(i));
         }
 
-        put_str(tmp_val, j + 1, col);
+        put_str(head, j + 1, col);
         int cur_col = col + 3;
         if (show_item_graph) {
             term_queue_bigchar(cur_col, j + 1, { o_ptr->get_symbol(), {} });
@@ -119,8 +119,8 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
         }
 
         if (show_labels) {
-            strnfmt(tmp_val, sizeof(tmp_val), _("%-7s: ", "%-14s: "), mention_use(player_ptr, i));
-            put_str(tmp_val, j + 1, cur_col);
+            const auto label = format(_("%-7s: ", "%-14s: "), mention_use(player_ptr, i));
+            put_str(label, j + 1, cur_col);
             c_put_str(out_color[j], out_desc[j], j + 1, _(cur_col + 9, cur_col + 16));
         } else {
             c_put_str(out_color[j], out_desc[j], j + 1, cur_col);
@@ -131,8 +131,8 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
         }
 
         int wgt = o_ptr->weight * o_ptr->number;
-        strnfmt(tmp_val, sizeof(tmp_val), _("%3d.%1d kg", "%3d.%d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
-        prt(tmp_val, j + 1, wid - 9);
+        const auto weight = format(_("%3d.%1d kg", "%3d.%d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
+        prt(weight, j + 1, wid - 9);
     }
 
     if (j && (j < 23)) {

@@ -124,16 +124,17 @@ static void handle_signal_abort(int sig)
         quit(nullptr);
     }
 
-    forget_lite(p_ptr->current_floor_ptr);
-    forget_view(p_ptr->current_floor_ptr);
-    clear_mon_lite(p_ptr->current_floor_ptr);
+    auto &floor = *p_ptr->current_floor_ptr;
+    forget_lite(&floor);
+    forget_view(&floor);
+    clear_mon_lite(&floor);
 
     term_erase(0, hgt - 1);
     term_putstr(0, hgt - 1, -1, TERM_RED, _("恐ろしいソフトのバグが飛びかかってきた！", "A gruesome software bug LEAPS out at you!"));
 
     term_putstr(45, hgt - 1, -1, TERM_RED, _("緊急セーブ...", "Panic save..."));
 
-    exe_write_diary(p_ptr, DiaryKind::GAMESTART, 0, _("----ゲーム異常終了----", "-- Tried Panic Save and Aborted Game --"));
+    exe_write_diary(floor, DiaryKind::GAMESTART, 0, _("----ゲーム異常終了----", "-- Tried Panic Save and Aborted Game --"));
     term_fresh();
 
     p_ptr->panic_save = 1;

@@ -15,7 +15,6 @@
 #include "io/tokenizer.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
 #include "object-enchant/item-apply-magic.h"
@@ -217,9 +216,9 @@ static bool parse_qtw_QQ(QuestType *q_ptr, char **zz, int num)
         q_ptr->flags = atoi(zz[10]);
     }
 
-    auto &r_ref = monraces_info[q_ptr->r_idx];
-    if (r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
-        r_ref.misc_flags.set(MonsterMiscType::QUESTOR);
+    auto &monrace = q_ptr->get_bounty();
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+        monrace.misc_flags.set(MonsterMiscType::QUESTOR);
     }
 
     if (fa_id == FixedArtifactId::NONE) {

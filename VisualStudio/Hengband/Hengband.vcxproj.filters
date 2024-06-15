@@ -1013,9 +1013,6 @@
     <ClCompile Include="..\..\src\object-enchant\activation-info-table.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-race\monster-race.cpp">
-      <Filter>monster-race</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monster-race\monster-race-hook.cpp">
       <Filter>monster-race</Filter>
     </ClCompile>
@@ -1057,9 +1054,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\monster\monster-list.cpp">
       <Filter>monster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\lore\lore-store.cpp">
-      <Filter>lore</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\lore\monster-lore.cpp">
       <Filter>lore</Filter>
@@ -1293,9 +1287,6 @@
       <Filter>object-hook</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\object-hook\hook-magic.cpp">
-      <Filter>object-hook</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object-hook\hook-quest.cpp">
       <Filter>object-hook</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\mind\mind-weaponsmith.cpp">
@@ -2502,6 +2493,18 @@
     <ClCompile Include="..\..\src\room\rooms-nest.cpp">
       <Filter>room</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\inner-game-data.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tracking\lore-tracker.cpp">
+      <Filter>tracking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tracking\baseitem-tracker.cpp">
+      <Filter>tracking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tracking\health-bar-tracker.cpp">
+      <Filter>tracking</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3659,9 +3662,6 @@
     <ClInclude Include="..\..\src\monster-race\race-indice-types.h">
       <Filter>monster-race</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster-race\monster-race.h">
-      <Filter>monster-race</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster-race\monster-race-hook.h">
       <Filter>monster-race</Filter>
     </ClInclude>
@@ -3733,9 +3733,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-list.h">
       <Filter>monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\lore\lore-store.h">
-      <Filter>lore</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\lore\monster-lore.h">
       <Filter>lore</Filter>
@@ -3920,6 +3917,9 @@
     <ClInclude Include="..\..\src\util\buffer-shaper.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\locale\character-encoding.h">
+      <Filter>locale</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\locale\language-switcher.h">
       <Filter>locale</Filter>
     </ClInclude>
@@ -4008,9 +4008,6 @@
       <Filter>object-hook</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-hook\hook-magic.h">
-      <Filter>object-hook</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object-hook\hook-quest.h">
       <Filter>object-hook</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind\mind-weaponsmith.h">
@@ -5415,6 +5412,18 @@
     <ClInclude Include="..\..\src\room\rooms-nest.h">
       <Filter>room</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\system\inner-game-data.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tracking\lore-tracker.h">
+      <Filter>tracking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tracking\baseitem-tracker.h">
+      <Filter>tracking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tracking\health-bar-tracker.h">
+      <Filter>tracking</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5678,6 +5687,9 @@
     </Filter>
     <Filter Include="external-lib">
       <UniqueIdentifier>{7a77d993-afa0-4750-97c6-d52b440fafa9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tracking">
+      <UniqueIdentifier>{a5b8bf13-a675-4500-8b4c-37ea664757eb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

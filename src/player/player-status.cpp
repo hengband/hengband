@@ -32,7 +32,6 @@
 #include "monster-floor/monster-lite.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-race/monster-race-hook.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-update.h"
 #include "monster/smart-learn-types.h"
 #include "mutation/mutation-calculator.h"
@@ -111,8 +110,6 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
-static const int extra_magic_glove_reduce_mana = 1;
 
 static bool is_martial_arts_mode(PlayerType *player_ptr);
 
@@ -826,7 +823,7 @@ static void update_max_mana(PlayerType *player_ptr)
         }
     }
 
-    if (any_bits(mp_ptr->spell_xtra, extra_magic_glove_reduce_mana)) {
+    if (mp_ptr->has_glove_mp_penalty) {
         player_ptr->cumber_glove = false;
         const auto *o_ptr = &player_ptr->inventory_list[INVEN_ARMS];
         const auto flags = o_ptr->get_flags();
@@ -2928,7 +2925,7 @@ void check_experience(PlayerType *player_ptr)
             }
             level_inc_stat = true;
 
-            exe_write_diary(player_ptr, DiaryKind::LEVELUP, player_ptr->lev);
+            exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::LEVELUP, player_ptr->lev);
         }
 
         sound(SOUND_LEVEL);

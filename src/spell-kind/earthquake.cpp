@@ -14,7 +14,6 @@
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
 #include "monster-floor/monster-lite.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
@@ -49,8 +48,8 @@
  */
 bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->is_in_quest() && QuestType::is_fixed(floor_ptr->quest_number)) || !floor_ptr->dun_level) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    if ((floor.is_in_quest() && QuestType::is_fixed(floor.quest_number)) || !floor.dun_level) {
         return false;
     }
 
@@ -70,7 +69,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
     for (auto dy = -r; dy <= r; dy++) {
         for (auto dx = -r; dx <= r; dx++) {
             const Pos2D pos(cy + dy, cx + dx);
-            if (!in_bounds(floor_ptr, pos.y, pos.x)) {
+            if (!in_bounds(&floor, pos.y, pos.x)) {
                 continue;
             }
 
@@ -78,7 +77,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            auto &grid = floor_ptr->get_grid(pos);
+            auto &grid = floor.get_grid(pos);
             grid.info &= ~(CAVE_ROOM | CAVE_ICKY | CAVE_UNSAFE);
             grid.info &= ~(CAVE_GLOW | CAVE_MARK | CAVE_KNOWN);
             if (!dx && !dy) {
@@ -110,7 +109,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            if (floor_ptr->grid_array[y][x].has_monster()) {
+            if (floor.grid_array[y][x].has_monster()) {
                 continue;
             }
 
@@ -155,7 +154,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             std::string killer;
 
             if (m_idx) {
-                auto *m_ptr = &floor_ptr->m_list[m_idx];
+                auto *m_ptr = &floor.m_list[m_idx];
                 const auto m_name = monster_desc(player_ptr, m_ptr, MD_WRONGDOER_NAME);
                 killer = format(_("%sの起こした地震", "an earthquake caused by %s"), m_name.data());
             } else {
@@ -173,7 +172,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            auto &grid = floor_ptr->get_grid(pos);
+            auto &grid = floor.get_grid(pos);
             if (grid.m_idx == player_ptr->riding) {
                 continue;
             }
@@ -182,7 +181,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            auto *m_ptr = &floor_ptr->m_list[grid.m_idx];
+            auto *m_ptr = &floor.m_list[grid.m_idx];
             auto *r_ptr = &m_ptr->get_monrace();
             if (r_ptr->misc_flags.has(MonsterMiscType::QUESTOR)) {
                 map[16 + pos.y - cy][16 + pos.x - cx] = false;
@@ -201,7 +200,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                         continue;
                     }
 
-                    const auto &grid_neighbor = floor_ptr->get_grid(pos_neighbor);
+                    const auto &grid_neighbor = floor.get_grid(pos_neighbor);
                     if (grid_neighbor.is_rune_protection()) {
                         continue;
                     }
@@ -210,7 +209,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                         continue;
                     }
 
-                    if (pattern_tile(floor_ptr, pos_neighbor.y, pos_neighbor.x)) {
+                    if (pattern_tile(&floor, pos_neighbor.y, pos_neighbor.x)) {
                         continue;
                     }
 
@@ -250,10 +249,10 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 }
 
                 if (grid.has_monster()) {
-                    const auto &m_ref = floor_ptr->m_list[grid.m_idx];
-                    if (record_named_pet && m_ref.is_named_pet()) {
+                    const auto &monster = floor.m_list[grid.m_idx];
+                    if (record_named_pet && monster.is_named_pet()) {
                         const auto m2_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
-                        exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_EARTHQUAKE, m2_name);
+                        exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_EARTHQUAKE, m2_name);
                     }
                 }
 
@@ -267,7 +266,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
 
             const auto m_idx_aux = grid.m_idx;
             grid.m_idx = 0;
-            floor_ptr->get_grid(p_pos_new).m_idx = m_idx_aux;
+            floor.get_grid(p_pos_new).m_idx = m_idx_aux;
             m_ptr->fy = p_pos_new.y;
             m_ptr->fx = p_pos_new.x;
             update_monster(player_ptr, m_idx_aux, true);
@@ -276,7 +275,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
         }
     }
 
-    clear_mon_lite(floor_ptr);
+    clear_mon_lite(&floor);
     for (auto dy = -r; dy <= r; dy++) {
         for (auto dx = -r; dx <= r; dx++) {
             auto yy = cy + dy;
@@ -285,12 +284,12 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            if (!cave_valid_bold(floor_ptr, yy, xx)) {
+            if (!cave_valid_bold(&floor, yy, xx)) {
                 continue;
             }
 
             delete_all_items_from_floor(player_ptr, yy, xx);
-            int t = cave_has_flag_bold(floor_ptr, yy, xx, TerrainCharacteristics::PROJECT) ? randint0(100) : 200;
+            int t = cave_has_flag_bold(&floor, yy, xx, TerrainCharacteristics::PROJECT) ? randint0(100) : 200;
             if (t < 20) {
                 cave_set_feat(player_ptr, yy, xx, feat_granite);
                 continue;
@@ -313,7 +312,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
     for (auto dy = -r; dy <= r; dy++) {
         for (auto dx = -r; dx <= r; dx++) {
             const Pos2D pos(cy + dy, cx + dx);
-            if (!in_bounds(floor_ptr, pos.y, pos.x)) {
+            if (!in_bounds(&floor, pos.y, pos.x)) {
                 continue;
             }
 
@@ -321,23 +320,23 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            auto &grid = floor_ptr->get_grid(pos);
+            auto &grid = floor.get_grid(pos);
             if (grid.is_mirror()) {
                 grid.info |= CAVE_GLOW;
                 continue;
             }
 
-            if (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
+            if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
                 continue;
             }
 
             for (auto j = 0; j < 9; j++) {
                 const Pos2D pos_neighbor(pos.y + ddy_ddd[j], pos.x + ddx_ddd[j]);
-                if (!in_bounds2(floor_ptr, pos_neighbor.y, pos_neighbor.x)) {
+                if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
                     continue;
                 }
 
-                const auto &grid_neighbor = floor_ptr->get_grid(pos_neighbor);
+                const auto &grid_neighbor = floor.get_grid(pos_neighbor);
                 if (grid_neighbor.get_terrain_mimic().flags.has(TerrainCharacteristics::GLOW)) {
                     grid.info |= CAVE_GLOW;
                     break;
@@ -368,7 +367,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
         SubWindowRedrawingFlag::DUNGEON,
     };
     rfu.set_flags(flags_swrf);
-    if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
+    if (floor.grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
         set_superstealth(player_ptr, false);
     }
 

@@ -31,7 +31,7 @@ jobs:
 
       - name: Restore Nuget Packages
         run: |
-          NuGet restore .\Hengband\Hengband.sln
+          NuGet restore .\VisualStudio\Hengband.sln
 
       - name: Build Windows Release Package
         run: |

@@ -14,7 +14,6 @@
 #include "knowledge/knowledge-monsters.h"
 #include "knowledge/lighting-level-table.h"
 #include "main/sound-of-music.h"
-#include "monster-race/monster-race.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -124,7 +123,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             }
 
             auto_dump_printf(auto_dump_stream, _("\n# モンスターの[色/文字]の設定\n\n", "\n# Monster attr/char definitions\n\n"));
-            for (const auto &[monrace_id, monrace] : monraces_info) {
+            for (const auto &[monrace_id, monrace] : MonraceList::get_instance()) {
                 auto_dump_printf(auto_dump_stream, "# %s\n", monrace.name.data());
                 const auto &symbol_config = monrace.symbol_config;
                 auto_dump_printf(auto_dump_stream, "R:%d:0x%02X/0x%02X\n\n", enum2i(monrace_id), symbol_config.color, static_cast<uint8_t>(symbol_config.character));
@@ -208,12 +207,13 @@ void do_cmd_visuals(PlayerType *player_ptr)
             break;
         }
         case '4': {
-            IDX num = 0;
+            short num = 0;
+            auto &monraces = MonraceList::get_instance();
             static auto choice_msg = _("モンスターの[色/文字]を変更します", "Change monster attr/chars");
-            static auto monrace_id = monraces_info.begin()->second.idx;
+            static auto monrace_id = monraces.begin()->second.idx;
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
             while (true) {
-                auto &monrace = monraces_info[monrace_id];
+                auto &monrace = monraces.get_monrace(monrace_id);
                 int c;
                 const auto &symbol_definition = monrace.symbol_definition;
                 auto &symbol_config = monrace.symbol_config;
@@ -240,7 +240,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
 
                 switch (c) {
                 case 'n': {
-                    const auto new_monrace_id_opt = input_new_visual_id(ch, num, static_cast<short>(monraces_info.size()));
+                    const auto new_monrace_id_opt = input_new_visual_id(ch, num, static_cast<short>(monraces.size()));
                     if (!new_monrace_id_opt) {
                         break;
                     }
@@ -370,7 +370,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
             auto &terrains = TerrainList::get_instance();
             while (true) {
-                auto &terrain = terrains[terrain_id];
+                auto &terrain = terrains.get_terrain(terrain_id);
                 int c;
                 const auto &symbol_definition = terrain.symbol_definitions[lighting_level];
                 const auto &symbol_config = terrain.symbol_configs[lighting_level];
@@ -412,7 +412,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                         }
 
                         terrain_id = *new_terrain_id;
-                        const auto &new_terrain = terrains[terrain_id];
+                        const auto &new_terrain = terrains.get_terrain(terrain_id);
                         if (!new_terrain.name.empty() && (new_terrain.mimic == terrain_id)) {
                             break;
                         }

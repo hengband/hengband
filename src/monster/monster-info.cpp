@@ -12,7 +12,6 @@
 #include "monster/monster-info.h"
 #include "floor/cave.h"
 #include "floor/wild.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-resistance-mask.h"
@@ -51,7 +50,7 @@ void set_friendly(MonsterEntity *m_ptr)
  */
 bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, const MonsterRaceInfo *r_ptr, BIT_FLAGS16 mode)
 {
-    const auto &terrain = TerrainList::get_instance()[feat];
+    const auto &terrain = TerrainList::get_instance().get_terrain(feat);
     if (terrain.flags.has(TerrainCharacteristics::PATTERN)) {
         if (!(mode & CEM_RIDING)) {
             if (r_ptr->feature_flags.has_not(MonsterFeatureType::CAN_FLY)) {
@@ -139,7 +138,7 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, const Mons
  * @param mode オプション
  * @return 踏破可能ならばTRUEを返す
  */
-bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, MonsterRaceInfo *r_ptr, BIT_FLAGS16 mode)
+bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, const MonsterRaceInfo *r_ptr, BIT_FLAGS16 mode)
 {
     const Pos2D pos(y, x);
     auto &grid = player_ptr->current_floor_ptr->get_grid(pos);

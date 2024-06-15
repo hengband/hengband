@@ -34,6 +34,7 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
+#include "system/inner-game-data.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
@@ -60,7 +61,7 @@ void WorldTurnProcessor::process_world()
     const int a_day = TURNS_PER_TICK * TOWN_DAWN;
     const int prev_turn_in_today = ((w_ptr->game_turn - TURNS_PER_TICK) % a_day + a_day / 4) % a_day;
     const int prev_min = (1440 * prev_turn_in_today / a_day) % 60;
-    std::tie(std::ignore, this->hour, this->min) = w_ptr->extract_date_time(this->player_ptr->start_race);
+    std::tie(std::ignore, this->hour, this->min) = w_ptr->extract_date_time(InnerGameData::get_instance().get_start_race());
     update_dungeon_feeling(this->player_ptr);
     process_downward();
     process_monster_arena();
@@ -69,8 +70,8 @@ void WorldTurnProcessor::process_world()
     }
 
     decide_auto_save();
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    if (floor_ptr->monster_noise && !ignore_unview) {
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    if (floor.monster_noise && !ignore_unview) {
         msg_print(_("何かが聞こえた。", "You hear noise."));
     }
 
@@ -78,7 +79,7 @@ void WorldTurnProcessor::process_world()
     process_world_monsters();
     if ((this->hour == 0) && (this->min == 0)) {
         if (this->min != prev_min) {
-            exe_write_diary(this->player_ptr, DiaryKind::DIALY, 0);
+            exe_write_diary(floor, DiaryKind::DIALY, 0);
             determine_daily_bounty(this->player_ptr, false);
         }
     }
@@ -108,7 +109,7 @@ void WorldTurnProcessor::print_time()
 
     c_put_str(TERM_WHITE, "             ", row, COL_DAY);
     auto day = 0;
-    std::tie(day, this->hour, this->min) = w_ptr->extract_date_time(this->player_ptr->start_race);
+    std::tie(day, this->hour, this->min) = w_ptr->extract_date_time(InnerGameData::get_instance().get_start_race());
     if (day < 1000) {
         c_put_str(TERM_WHITE, format(_("%2d日目", "Day%3d"), day), row, COL_DAY);
     } else {

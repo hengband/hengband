@@ -28,7 +28,6 @@
 #include "main/sound-of-music.h"
 #include "market/arena-info-table.h"
 #include "mind/mind-mirror-master.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
@@ -359,6 +358,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
         chg_virtue(player_ptr, Virtue::CHANCE, 2);
     }
 
+    const auto &floor = *player_ptr->current_floor_ptr;
     if (player_ptr->chp < 0 && !cheat_immortal) {
         bool android = PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID);
 
@@ -375,13 +375,12 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
             player_ptr->is_dead = true;
         }
 
-        const auto &floor = *player_ptr->current_floor_ptr;
         if (floor.inside_arena) {
             const auto &m_name = monraces_info[arena_info[player_ptr->arena_number].r_idx].name;
             msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name.data());
             msg_print(nullptr);
             if (record_arena) {
-                exe_write_diary(player_ptr, DiaryKind::ARENA, -1 - player_ptr->arena_number, m_name);
+                exe_write_diary(floor, DiaryKind::ARENA, -1 - player_ptr->arena_number, m_name);
             }
         } else {
             const auto q_idx = floor.get_quest_id();
@@ -417,7 +416,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
             w_ptr->total_winner = false;
             if (winning_seppuku) {
                 w_ptr->add_retired_class(player_ptr->pclass);
-                exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, _("勝利の後切腹した。", "committed seppuku after the winning."));
+                exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, _("勝利の後切腹した。", "committed seppuku after the winning."));
             } else {
                 std::string place;
 
@@ -436,11 +435,11 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
 #else
                 const auto note = format("killed by %s %s.", player_ptr->died_from.data(), place.data());
 #endif
-                exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, note);
+                exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, note);
             }
 
-            exe_write_diary(player_ptr, DiaryKind::GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
-            exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 1, "\n\n\n\n");
+            exe_write_diary(floor, DiaryKind::GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
+            exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, "\n\n\n\n");
             flush();
             if (input_check_strict(player_ptr, _("画面を保存しますか？", "Dump the screen? "), UserCheck::NO_HISTORY)) {
                 do_cmd_save_screen(player_ptr);
@@ -566,7 +565,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
             ss << _(hit_from, "was in a critical situation because of ");
             ss << _("によってピンチに陥った。", hit_from);
             ss << _("", ".");
-            exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, ss.str());
+            exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, ss.str());
         }
 
         if (auto_more) {

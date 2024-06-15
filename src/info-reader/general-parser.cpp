@@ -2,7 +2,6 @@
 #include "artifact/fixed-art-types.h"
 #include "dungeon/quest.h"
 #include "grid/feature.h"
-#include "info-reader/feature-reader.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/random-grid-effect-types.h"
@@ -15,6 +14,7 @@
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/system-variables.h"
+#include "system/terrain-type-definition.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include <string>
@@ -105,6 +105,8 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
     letter[index].special = 0;
     letter[index].random = RANDOM_NONE;
 
+    const auto &terrains = TerrainList::get_instance();
+
     switch (num) {
     case 9:
         letter[index].special = (int16_t)atoi(zz[8]);
@@ -113,8 +115,9 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
         if ((zz[7][0] == '*') && !zz[7][1]) {
             letter[index].random |= RANDOM_TRAP;
         } else {
-            letter[index].trap = f_tag_to_index(zz[7]);
-            if (letter[index].trap < 0) {
+            try {
+                letter[index].trap = terrains.get_terrain_id_by_tag(zz[7]);
+            } catch (const std::exception &) {
                 return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
             }
         }
@@ -187,8 +190,9 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
         if ((zz[1][0] == '*') && !zz[1][1]) {
             letter[index].random |= RANDOM_FEATURE;
         } else {
-            letter[index].feature = f_tag_to_index(zz[1]);
-            if (letter[index].feature < 0) {
+            try {
+                letter[index].feature = terrains.get_terrain_id_by_tag(zz[1]);
+            } catch (const std::exception &) {
                 return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
             }
         }

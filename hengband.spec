@@ -1,4 +1,4 @@
-%define version 3.0.1.12
+%define version 3.0.1.14
 %define release 1
 
 Summary: hengband %{version}
@@ -138,6 +138,7 @@ exit 0
 %{_datadir}/games/%{name}/lib/apex/readme.txt
 %attr(664 root,games) %config(noreplace) %{_datadir}/games/%{name}/lib/apex/scores.raw
 %{_datadir}/games/%{name}/lib/edit/*.txt
+%{_datadir}/games/%{name}/lib/edit/*.jsonc
 %{_datadir}/games/%{name}/lib/edit/quests/*.txt
 %{_datadir}/games/%{name}/lib/edit/towns/*.txt
 %{_datadir}/games/%{name}/lib/file/*.txt
@@ -150,6 +151,13 @@ exit 0
 %license lib/help/jlicense.txt
 
 %changelog
+* Wed Jun 05 2024 whitehara <white@vx-xv.com>
+- hengband RPM 3.0.1.14(Beta)
+
+* Sun Jun 02 2024 whitehara <white@vx-xv.com>
+- Add new .jsonc to data
+- hengband RPM 3.0.1.13(Beta)
+
 * Wed May 08 2024 Shiro Hara <white@vx-xv.com>
 - hengband RPM 3.0.1.12(Beta)
 

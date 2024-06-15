@@ -6,7 +6,6 @@
 #include "game-option/play-record-options.h"
 #include "io/write-diary.h"
 #include "monster-floor/monster-remover.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
@@ -23,12 +22,13 @@
 void discharge_minion(PlayerType *player_ptr)
 {
     bool okay = true;
-    for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!m_ptr->is_valid() || !m_ptr->is_pet()) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
+        const auto &monster = floor.m_list[i];
+        if (!monster.is_valid() || !monster.is_pet()) {
             continue;
         }
-        if (m_ptr->is_named()) {
+        if (monster.is_named()) {
             okay = false;
         }
     }
@@ -39,22 +39,21 @@ void discharge_minion(PlayerType *player_ptr)
         }
     }
 
-    for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!m_ptr->is_valid() || !m_ptr->is_pet()) {
+    for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
+        const auto &monster = floor.m_list[i];
+        if (!monster.is_valid() || !monster.is_pet()) {
             continue;
         }
 
-        MonsterRaceInfo *r_ptr;
-        r_ptr = &m_ptr->get_monrace();
-        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            const auto m_name = monster_desc(player_ptr, m_ptr, 0x00);
+        const auto &monrace = monster.get_monrace();
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+            const auto m_name = monster_desc(player_ptr, &monster, 0x00);
             msg_format(_("%sは爆破されるのを嫌がり、勝手に自分の世界へと帰った。", "%s^ resists being blasted and runs away."), m_name.data());
             delete_monster_idx(player_ptr, i);
             continue;
         }
 
-        int dam = m_ptr->maxhp / 2;
+        auto dam = monster.maxhp / 2;
         if (dam > 100) {
             dam = (dam - 100) / 2 + 100;
         }
@@ -64,11 +63,11 @@ void discharge_minion(PlayerType *player_ptr)
         if (dam > 800) {
             dam = 800;
         }
-        project(player_ptr, i, 2 + (r_ptr->level / 20), m_ptr->fy, m_ptr->fx, dam, AttributeType::PLASMA, PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
+        project(player_ptr, i, 2 + (monrace.level / 20), monster.fy, monster.fx, dam, AttributeType::PLASMA, PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
 
-        if (record_named_pet && m_ptr->is_named()) {
-            const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
-            exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_BLAST, m_name);
+        if (record_named_pet && monster.is_named()) {
+            const auto m_name = monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE);
+            exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_BLAST, m_name);
         }
 
         delete_monster_idx(player_ptr, i);

@@ -13,7 +13,6 @@
 #include "mind/mind-info.h"
 #include "mind/mind-sniper.h"
 #include "mind/mind-types.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
@@ -36,6 +35,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
+#include "tracking/lore-tracker.h"
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "util/object-sort.h"
@@ -137,7 +137,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, MonsterEntity *m_ptr, int
     std::string buf;
     const auto &monrace = monraces_info[monrace_id];
     if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
-        buf = format(_("%3s(覚%2d)", "%3s(%2d)"), MonsterRace(monrace_id).is_bounty(true) ? "  W" : "  U", n_awake);
+        buf = format(_("%3s(覚%2d)", "%3s(%2d)"), monrace.is_bounty(true) ? "  W" : "  U", n_awake);
     } else {
         buf = format(_("%3d(覚%2d)", "%3d(%2d)"), n_same, n_awake);
     }
@@ -463,7 +463,7 @@ static void display_dungeon(PlayerType *player_ptr)
             const auto pos_y = y - player_ptr->y + game_term->hgt / 2 - 1;
             const auto pos_x = x - player_ptr->x + game_term->wid / 2 - 1;
             if (!in_bounds2(player_ptr->current_floor_ptr, y, x)) {
-                const auto &terrain = TerrainList::get_instance()[feat_none];
+                const auto &terrain = TerrainList::get_instance().get_terrain(feat_none);
                 const auto &symbol_foreground = terrain.symbol_configs.at(F_LIT_STANDARD);
                 term_queue_char(pos_x, pos_y, { symbol_foreground, {} });
                 continue;
@@ -490,15 +490,15 @@ void fix_dungeon(PlayerType *player_ptr)
 }
 
 /*!
- * @brief モンスターの思い出をサブウィンドウに表示する /
- * Hack -- display dungeon view in sub-windows
+ * @brief モンスターの思い出をサブウィンドウに表示する
  * @param player_ptr プレイヤーへの参照ポインタ
  */
 void fix_monster(PlayerType *player_ptr)
 {
-    if (!MonraceList::is_valid(player_ptr->monster_race_idx)) {
+    if (!LoreTracker::get_instance().is_tracking()) {
         return;
     }
+
     display_sub_windows(SubWindowRedrawingFlag::MONSTER_LORE,
         [player_ptr] {
             display_roff(player_ptr);

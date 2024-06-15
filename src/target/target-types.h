@@ -1,5 +1,5 @@
 #pragma once
-#include <stdint.h>
+#include <cstdint>
 
 /* target_set用関数の利用用途フラグ / Bit flags for the "target_set" function */
 enum target_type : uint32_t {

@@ -4,7 +4,6 @@
 #include "effect/effect-processor.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster-race/monster-race.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"

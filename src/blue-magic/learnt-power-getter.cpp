@@ -345,9 +345,8 @@ static void describe_blue_magic_name(PlayerType *player_ptr, int menu_line, cons
  */
 static bool confirm_cast_blue_magic(MonsterAbilityType spell)
 {
-    char tmp_val[160];
-    (void)strnfmt(tmp_val, 78, _("%sの魔法を唱えますか？", "Use %s? "), monster_powers.at(spell).name);
-    return input_check(tmp_val);
+    const auto prompt = format(_("%sの魔法を唱えますか？", "Use %s? "), monster_powers.at(spell).name);
+    return input_check(prompt);
 }
 
 /*!

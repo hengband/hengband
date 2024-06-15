@@ -3,6 +3,8 @@
 #include "player/player-status.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "tracking/baseitem-tracker.h"
+#include "tracking/health-bar-tracker.h"
 
 /*!
  * @brief 全更新処理をチェックして処理していく
@@ -24,37 +26,18 @@ void handle_stuff(PlayerType *player_ptr)
 }
 
 /*
- * Track the given monster race
- */
-void monster_race_track(PlayerType *player_ptr, MonsterRaceId r_idx)
-{
-    player_ptr->monster_race_idx = r_idx;
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
-}
-
-/*
- * Track the given object kind
- */
-void object_kind_track(PlayerType *player_ptr, short bi_id)
-{
-    player_ptr->tracking_bi_id = bi_id;
-    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
-}
-
-/*
  * Track a new monster
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx トラッキング対象のモンスターID。0の時キャンセル
  * @param なし
  */
-void health_track(PlayerType *player_ptr, MONSTER_IDX m_idx)
+void health_track(PlayerType *player_ptr, short m_idx)
 {
     if (m_idx && m_idx == player_ptr->riding) {
         return;
     }
 
-    player_ptr->health_who = m_idx;
-    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::HEALTH);
+    HealthBarTracker::get_instance().set_trackee(m_idx);
 }
 
 bool update_player()

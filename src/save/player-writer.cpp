@@ -10,6 +10,7 @@
 #include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
+#include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/timed-effects.h"
 #include "world/world.h"
@@ -101,13 +102,13 @@ void wr_player(PlayerType *player_ptr)
 
     std::visit(PlayerClassSpecificDataWriter(), player_ptr->class_specific_data);
 
-    wr_byte((byte)player_ptr->start_race);
+    wr_byte(static_cast<uint8_t>(InnerGameData::get_instance().get_start_race()));
     wr_s32b(player_ptr->old_race1);
     wr_s32b(player_ptr->old_race2);
     wr_s16b(player_ptr->old_realm);
 
-    for (const auto &[r_idx, is_achieved] : w_ptr->bounties) {
-        wr_s16b(enum2i(r_idx));
+    for (const auto &[monrace_id, is_achieved] : w_ptr->bounties) {
+        wr_s16b(enum2i(monrace_id));
         wr_bool(is_achieved);
     }
 
@@ -254,7 +255,7 @@ void wr_player(PlayerType *player_ptr)
     wr_s32b(w_ptr->dungeon_turn);
     wr_s32b(w_ptr->arena_start_turn);
     wr_s16b(enum2i(w_ptr->today_mon));
-    wr_s16b(player_ptr->knows_daily_bounty ? 1 : 0); // 現在bool型だが、かつてモンスター種族IDを保存していた仕様に合わせる
+    wr_s16b(w_ptr->knows_daily_bounty ? 1 : 0); // 現在bool型だが、かつてモンスター種族IDを保存していた仕様に合わせる
     wr_s16b(player_ptr->riding);
     wr_s16b(player_ptr->floor_id);
 

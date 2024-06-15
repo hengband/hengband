@@ -40,13 +40,13 @@ void pattern_teleport(PlayerType *player_ptr)
 {
     auto min_level = 0;
     auto max_level = 99;
-    auto current_level = static_cast<short>(player_ptr->current_floor_ptr->dun_level);
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto current_level = static_cast<short>(floor.dun_level);
     if (input_check(_("他の階にテレポートしますか？", "Teleport level? "))) {
         if (ironman_downward) {
             min_level = current_level;
         }
 
-        const auto &floor = *player_ptr->current_floor_ptr;
         if (floor.dungeon_idx == DUNGEON_ANGBAND) {
             if (floor.dun_level > 100) {
                 max_level = MAX_DEPTH - 1;
@@ -78,10 +78,10 @@ void pattern_teleport(PlayerType *player_ptr)
         do_cmd_save_game(player_ptr, true);
     }
 
-    player_ptr->current_floor_ptr->dun_level = command_arg;
+    floor.dun_level = command_arg;
     leave_quest_check(player_ptr);
     if (record_stair) {
-        exe_write_diary(player_ptr, DiaryKind::PAT_TELE, 0);
+        exe_write_diary(floor, DiaryKind::PAT_TELE, 0);
     }
 
     player_ptr->current_floor_ptr->quest_number = QuestId::NONE;

@@ -11,7 +11,6 @@
 #include "game-option/special-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "info-reader/feature-reader.h"
 #include "io/files-util.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
@@ -131,24 +130,30 @@ const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps = {
  */
 void init_normal_traps(void)
 {
-    normal_traps.push_back(f_tag_to_index_in_init("TRAP_TRAPDOOR"));
-    normal_traps.push_back(f_tag_to_index_in_init("TRAP_PIT"));
-    normal_traps.push_back(f_tag_to_index_in_init("TRAP_SPIKED_PIT"));
-    normal_traps.push_back(f_tag_to_index_in_init("TRAP_POISON_PIT"));
-    normal_traps.push_back(f_tag_to_index_in_init("TRAP_TY_CURSE"));
-    normal_traps.push_back(f_tag_to_index_in_init("TRAP_TELEPORT"));
-    normal_traps.push_back(f_tag_to_index_in_init("TRAP_FIRE"));
-    normal_traps.push_back(f_tag_to_index_in_init("TRAP_ACID"));
-    normal_traps.push_back(f_tag_to_index_in_init("TRAP_SLOW"));
-    normal_traps.push_back(f_tag_to_index_in_init("TRAP_LOSE_STR"));
-    normal_traps.push_back(f_tag_to_index_in_init("TRAP_LOSE_DEX"));
-    normal_traps.push_back(f_tag_to_index_in_init("TRAP_LOSE_CON"));
-    normal_traps.push_back(f_tag_to_index_in_init("TRAP_BLIND"));
-    normal_traps.push_back(f_tag_to_index_in_init("TRAP_CONFUSE"));
-    normal_traps.push_back(f_tag_to_index_in_init("TRAP_POISON"));
-    normal_traps.push_back(f_tag_to_index_in_init("TRAP_SLEEP"));
-    normal_traps.push_back(f_tag_to_index_in_init("TRAP_TRAPS"));
-    normal_traps.push_back(f_tag_to_index_in_init("TRAP_ALARM"));
+    static constexpr auto normal_trap_tags = {
+        "TRAP_TRAPDOOR",
+        "TRAP_PIT",
+        "TRAP_SPIKED_PIT",
+        "TRAP_POISON_PIT",
+        "TRAP_TY_CURSE",
+        "TRAP_TELEPORT",
+        "TRAP_FIRE",
+        "TRAP_ACID",
+        "TRAP_SLOW",
+        "TRAP_LOSE_STR",
+        "TRAP_LOSE_DEX",
+        "TRAP_LOSE_CON",
+        "TRAP_BLIND",
+        "TRAP_CONFUSE",
+        "TRAP_POISON",
+        "TRAP_SLEEP",
+        "TRAP_TRAPS",
+        "TRAP_ALARM",
+    };
+
+    std::transform(normal_trap_tags.begin(), normal_trap_tags.end(), std::back_inserter(normal_traps), [](const auto &tag) {
+        return TerrainList::get_instance().get_terrain_id_by_tag(tag);
+    });
 }
 
 /*!
@@ -163,7 +168,7 @@ short choose_random_trap(FloorType *floor_ptr)
     const auto &terrains = TerrainList::get_instance();
     while (true) {
         const auto terrain_id = rand_choice(normal_traps);
-        if (terrains[terrain_id].flags.has_not(TerrainCharacteristics::MORE)) {
+        if (terrains.get_terrain(terrain_id).flags.has_not(TerrainCharacteristics::MORE)) {
             return terrain_id;
         }
 
@@ -385,7 +390,8 @@ static void hit_trap_slow(PlayerType *player_ptr)
 void hit_trap(PlayerType *player_ptr, bool break_trap)
 {
     const Pos2D p_pos(player_ptr->y, player_ptr->x);
-    const auto &grid = player_ptr->current_floor_ptr->get_grid(p_pos);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &grid = floor.get_grid(p_pos);
     const auto &terrain = grid.get_terrain();
     TrapType trap_feat_type = terrain.flags.has(TerrainCharacteristics::TRAP) ? i2enum<TrapType>(terrain.subtype) : TrapType::NOT_TRAP;
 
@@ -417,7 +423,7 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
                 do_cmd_save_game(player_ptr, true);
             }
 
-            exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, _("落とし戸に落ちた", "fell through a trap door!"));
+            exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, _("落とし戸に落ちた", "fell through a trap door!"));
             FloorChangeModesStore::get_instace()->set({ FloorChangeMode::SAVE_FLOORS, FloorChangeMode::DOWN, FloorChangeMode::RANDOM_PLACE, FloorChangeMode::RANDOM_CONNECT });
             player_ptr->leaving = true;
         }

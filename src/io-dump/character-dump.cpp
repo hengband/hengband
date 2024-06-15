@@ -15,7 +15,6 @@
 #include "knowledge/knowledge-quests.h"
 #include "main/angband-headers.h"
 #include "market/arena-info-table.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
@@ -34,6 +33,7 @@
 #include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
+#include "system/inner-game-data.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -373,7 +373,7 @@ static void dump_aux_monsters(FILE *fff)
     std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
     fprintf(fff, _("\n《上位%d体のユニーク・モンスター》\n", "\n< Unique monsters top %d >\n"), std::min(uniq_total, 10));
     for (auto it = monrace_ids.rbegin(); it != monrace_ids.rend() && std::distance(monrace_ids.rbegin(), it) < 10; it++) {
-        const auto &monrace = monraces[*it];
+        const auto &monrace = monraces.get_monrace(*it);
         const auto defeat_level = monrace.defeat_level;
         const auto defeat_time = monrace.defeat_time;
         std::string defeat_info;
@@ -401,9 +401,10 @@ static void dump_aux_race_history(PlayerType *player_ptr, FILE *fff)
         return;
     }
 
-    fprintf(fff, _("\n\n あなたは%sとして生まれた。", "\n\n You were born as %s."), race_info[enum2i(player_ptr->start_race)].title);
+    const auto start_race = InnerGameData::get_instance().get_start_race();
+    fprintf(fff, _("\n\n あなたは%sとして生まれた。", "\n\n You were born as %s."), race_info[enum2i(start_race)].title);
     for (int i = 0; i < MAX_RACES; i++) {
-        if (enum2i(player_ptr->start_race) == i) {
+        if (enum2i(start_race) == i) {
             continue;
         }
         if (i < 32) {

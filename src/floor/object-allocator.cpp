@@ -10,7 +10,6 @@
 #include "grid/grid.h"
 #include "grid/object-placer.h"
 #include "grid/trap.h"
-#include "monster-race/monster-race.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -80,7 +79,7 @@ static bool alloc_stairs_aux(PlayerType *player_ptr, POSITION y, POSITION x, int
 bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
 {
     int shaft_num = 0;
-    const auto &terrain = TerrainList::get_instance()[feat];
+    const auto &terrain = TerrainList::get_instance().get_terrain(feat);
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &dungeon = floor.get_dungeon_definition();
     if (terrain.flags.has(TerrainCharacteristics::LESS)) {
@@ -95,7 +94,7 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
         auto quest_id = floor.get_quest_id();
         const auto &quests = QuestList::get_instance();
         if (floor.dun_level > 1 && inside_quest(quest_id)) {
-            const auto &monrace = monraces_info[quests.get_quest(quest_id).r_idx];
+            const auto &monrace = quests.get_quest(quest_id).get_bounty();
             if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE) || (monrace.max_num > 0)) {
                 return true;
             }

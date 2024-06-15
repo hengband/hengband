@@ -4,7 +4,6 @@
 #include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-lite-util.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-brightness-flags.h"
 #include "monster/monster-status.h"
 #include "player-base/player-class.h"

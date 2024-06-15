@@ -38,8 +38,10 @@ struct turn_flags {
 };
 
 // @details ダミーIDが渡されるとオブジェクトが生焼けになるので、ヘッダ側で全て初期化しておく.
-struct old_race_flags {
-    old_race_flags(MonsterRaceId monrace_id);
+class MonsterRaceInfo;
+class OldRaceFlags {
+public:
+    OldRaceFlags(MonsterRaceId monrace_id);
 
     EnumClassFlagGroup<MonsterAbilityType> old_r_ability_flags{};
     EnumClassFlagGroup<MonsterBehaviorType> old_r_behavior_flags{};
@@ -55,6 +57,8 @@ struct old_race_flags {
     byte old_r_blows3 = 0;
 
     byte old_r_cast_spell = 0;
+
+    void update_lore_window_flag(const MonsterRaceInfo &monrace) const;
 };
 
 struct coordinate_candidate {

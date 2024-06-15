@@ -6,7 +6,6 @@
 #include "load/load-util.h"
 #include "load/load-zangband.h"
 #include "load/savedata-old-flag-types.h"
-#include "monster-race/monster-race.h"
 #include "object-enchant/trg-types.h"
 #include "system/angband-exceptions.h"
 #include "system/artifact-type-definition.h"
@@ -177,8 +176,9 @@ void analyze_quests(PlayerType *player_ptr, const uint16_t max_quests_load, cons
         }
 
         if (quest.status == QuestStatusType::TAKEN || quest.status == QuestStatusType::UNTAKEN) {
-            if (monraces_info[quest.r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
-                monraces_info[quest.r_idx].misc_flags.set(MonsterMiscType::QUESTOR);
+            auto &monrace = quest.get_bounty();
+            if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+                monrace.misc_flags.set(MonsterMiscType::QUESTOR);
             }
         }
     }

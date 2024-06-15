@@ -7,6 +7,7 @@
 #include "system/terrain-type-definition.h"
 #include "grid/feature.h" // 暫定、is_ascii_graphics() は別ファイルに移す.
 #include "grid/lighting-colors-table.h"
+#include <algorithm>
 
 TerrainType::TerrainType()
     : symbol_definitions(DEFAULT_SYMBOLS)
@@ -64,19 +65,33 @@ TerrainList &TerrainList::get_instance()
     return instance;
 }
 
-std::vector<TerrainType> &TerrainList::get_raw_vector()
-{
-    return this->terrains;
-}
-
-TerrainType &TerrainList::operator[](short terrain_id)
+TerrainType &TerrainList::get_terrain(short terrain_id)
 {
     return this->terrains.at(terrain_id);
 }
 
-const TerrainType &TerrainList::operator[](short terrain_id) const
+const TerrainType &TerrainList::get_terrain(short terrain_id) const
 {
     return this->terrains.at(terrain_id);
+}
+
+/*!
+ * @brief 地形タグからIDを得る
+ * @param tag タグ文字列
+ * @throw std::runtime_error 未定義のタグが指定された
+ * @return 地形タグに対応するID
+ */
+short TerrainList::get_terrain_id_by_tag(std::string_view tag) const
+{
+    const auto it = std::find_if(this->terrains.begin(), this->terrains.end(),
+        [tag](const auto &terrain) {
+            return terrain.tag == tag;
+        });
+    if (it == this->terrains.end()) {
+        THROW_EXCEPTION(std::runtime_error, format(_("未定義のタグ '%s'。", "%s is undefined."), tag.data()));
+    }
+
+    return static_cast<short>(std::distance(this->terrains.begin(), it));
 }
 
 std::vector<TerrainType>::iterator TerrainList::begin()
@@ -86,7 +101,7 @@ std::vector<TerrainType>::iterator TerrainList::begin()
 
 std::vector<TerrainType>::const_iterator TerrainList::begin() const
 {
-    return this->terrains.begin();
+    return this->terrains.cbegin();
 }
 
 std::vector<TerrainType>::reverse_iterator TerrainList::rbegin()
@@ -96,7 +111,7 @@ std::vector<TerrainType>::reverse_iterator TerrainList::rbegin()
 
 std::vector<TerrainType>::const_reverse_iterator TerrainList::rbegin() const
 {
-    return this->terrains.rbegin();
+    return this->terrains.crbegin();
 }
 
 std::vector<TerrainType>::iterator TerrainList::end()
@@ -106,7 +121,7 @@ std::vector<TerrainType>::iterator TerrainList::end()
 
 std::vector<TerrainType>::const_iterator TerrainList::end() const
 {
-    return this->terrains.end();
+    return this->terrains.cend();
 }
 
 std::vector<TerrainType>::reverse_iterator TerrainList::rend()
@@ -116,7 +131,7 @@ std::vector<TerrainType>::reverse_iterator TerrainList::rend()
 
 std::vector<TerrainType>::const_reverse_iterator TerrainList::rend() const
 {
-    return this->terrains.rend();
+    return this->terrains.crend();
 }
 
 size_t TerrainList::size() const
@@ -132,4 +147,9 @@ bool TerrainList::empty() const
 void TerrainList::resize(size_t new_size)
 {
     this->terrains.resize(new_size);
+}
+
+void TerrainList::shrink_to_fit()
+{
+    this->terrains.shrink_to_fit();
 }

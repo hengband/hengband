@@ -210,24 +210,20 @@ errr process_histpref_file(PlayerType *player_ptr, std::string_view name)
 }
 
 /*!
- * @brief prfファイルのフォーマットに従った内容を出力する /
- * Dump a formatted line, using "vstrnfmt()".
+ * @brief prfファイルのフォーマットに従った内容を出力する
  * @param fmt 出力内容
  */
 void auto_dump_printf(FILE *auto_dump_stream, const char *fmt, ...)
 {
     va_list vp;
-    char buf[1024];
     va_start(vp, fmt);
-    (void)vstrnfmt(buf, sizeof(buf), fmt, vp);
+    const auto buf = vformat(fmt, vp);
     va_end(vp);
-    for (auto p = buf; *p; p++) {
-        if (*p == '\n') {
-            auto_dump_line_num++;
-        }
-    }
 
-    fprintf(auto_dump_stream, "%s", buf);
+    // '\n'はSJISのマルチバイト文字のコードに含まれないため、ダメ文字を考慮する必要はない
+    auto_dump_line_num += std::count(buf.begin(), buf.end(), '\n');
+
+    fprintf(auto_dump_stream, "%s", buf.data());
 }
 
 /*!
@@ -239,8 +235,7 @@ void auto_dump_printf(FILE *auto_dump_stream, const char *fmt, ...)
  */
 bool open_auto_dump(FILE **fpp, const std::filesystem::path &path, std::string_view mark)
 {
-    char header_mark_str[80];
-    strnfmt(header_mark_str, sizeof(header_mark_str), auto_dump_header, mark.data());
+    const auto header_mark_str = format(auto_dump_header, mark.data());
     remove_auto_dump(path, mark);
     *fpp = angband_fopen(path, FileOpenMode::APPEND);
     if (!fpp) {
@@ -250,7 +245,7 @@ bool open_auto_dump(FILE **fpp, const std::filesystem::path &path, std::string_v
         return false;
     }
 
-    fprintf(*fpp, "%s\n", header_mark_str);
+    fprintf(*fpp, "%s\n", header_mark_str.data());
     auto_dump_line_num = 0;
     auto_dump_printf(*fpp, _("# *警告!!* 以降の行は自動生成されたものです。\n", "# *Warning!*  The lines below are an automatic dump.\n"));
     auto_dump_printf(
@@ -265,12 +260,11 @@ bool open_auto_dump(FILE **fpp, const std::filesystem::path &path, std::string_v
  */
 void close_auto_dump(FILE **fpp, std::string_view mark)
 {
-    char footer_mark_str[80];
-    strnfmt(footer_mark_str, sizeof(footer_mark_str), auto_dump_footer, mark.data());
+    const auto footer_mark_str = format(auto_dump_footer, mark.data());
     auto_dump_printf(*fpp, _("# *警告!!* 以降の行は自動生成されたものです。\n", "# *Warning!*  The lines below are an automatic dump.\n"));
     auto_dump_printf(
         *fpp, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n", "# Don't edit them; changes will be deleted and replaced automatically.\n"));
-    fprintf(*fpp, "%s (%d)\n", footer_mark_str, auto_dump_line_num);
+    fprintf(*fpp, "%s (%d)\n", footer_mark_str.data(), auto_dump_line_num);
     angband_fclose(*fpp);
 }
 

@@ -557,6 +557,19 @@ bool BaseitemKey::is_corpse() const
     return *this == BaseitemKey(ItemKindType::CORPSE, SV_CORPSE);
 }
 
+bool BaseitemKey::is_monster() const
+{
+    switch (this->type_value) {
+    case ItemKindType::FIGURINE:
+    case ItemKindType::STATUE:
+    case ItemKindType::CORPSE:
+    case ItemKindType::CAPTURE:
+        return true;
+    default:
+        return false;
+    }
+}
+
 bool BaseitemKey::is_mushrooms() const
 {
     if (!this->subtype_value) {
@@ -722,11 +735,6 @@ const BaseitemInfo &BaseitemList::get_baseitem(const short bi_id) const
     return this->baseitems[bi_id];
 }
 
-std::vector<BaseitemInfo> &BaseitemList::get_raw_vector()
-{
-    return this->baseitems;
-}
-
 std::vector<BaseitemInfo>::iterator BaseitemList::begin()
 {
     return this->baseitems.begin();
@@ -780,6 +788,11 @@ bool BaseitemList::empty() const
 void BaseitemList::resize(size_t new_size)
 {
     this->baseitems.resize(new_size);
+}
+
+void BaseitemList::shrink_to_fit()
+{
+    this->baseitems.shrink_to_fit();
 }
 
 void BaseitemList::reset_all_visuals()

@@ -23,6 +23,7 @@
 #include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
+#include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/timed-effects.h"
 #include "world/world.h"
@@ -145,7 +146,7 @@ void rd_skills(PlayerType *player_ptr)
 
 static void set_race(PlayerType *player_ptr)
 {
-    player_ptr->start_race = i2enum<PlayerRaceType>(rd_byte());
+    InnerGameData::get_instance().set_start_race(i2enum<PlayerRaceType>(rd_byte()));
     player_ptr->old_race1 = rd_u32b();
     player_ptr->old_race2 = rd_u32b();
     player_ptr->old_realm = rd_s16b();
@@ -168,21 +169,20 @@ void rd_bounty_uniques(PlayerType *player_ptr)
         return;
     }
 
-    for (auto &[r_idx, is_achieved] : w_ptr->bounties) {
-        auto r_idx_num = rd_s16b();
-
+    for (auto &[bounty_monrace_id, is_achieved] : w_ptr->bounties) {
+        auto monrace_id = rd_s16b();
         if (loading_savefile_version_is_older_than(16)) {
             constexpr auto old_achieved_flag = 10000; // かつて賞金首達成フラグとしてモンスター種族番号を10000増やしていた
             is_achieved = false;
-            if (r_idx_num >= old_achieved_flag) {
-                r_idx_num -= old_achieved_flag;
+            if (monrace_id >= old_achieved_flag) {
+                monrace_id -= old_achieved_flag;
                 is_achieved = true;
             }
         } else {
             is_achieved = rd_bool();
         }
 
-        r_idx = i2enum<MonsterRaceId>(r_idx_num);
+        bounty_monrace_id = i2enum<MonsterRaceId>(monrace_id);
     }
 }
 

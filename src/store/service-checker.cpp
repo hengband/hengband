@@ -1,5 +1,4 @@
 #include "store/service-checker.h"
-#include "monster-race/monster-race.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-value.h"
 #include "object/tval-types.h"
@@ -101,11 +100,11 @@ static bool check_store_temple(const ItemEntity &item)
         return true;
     case ItemKindType::FIGURINE:
     case ItemKindType::STATUE: {
-        const auto &monrace = monraces_info[i2enum<MonsterRaceId>(item.pval)];
+        const auto &monrace = item.get_monrace();
         if (monrace.kind_flags.has_not(MonsterKindType::EVIL)) {
             auto can_sell = monrace.kind_flags.has(MonsterKindType::GOOD);
             can_sell |= monrace.kind_flags.has(MonsterKindType::ANIMAL);
-            can_sell |= angband_strchr("?!", monrace.symbol_definition.character) != nullptr;
+            can_sell |= monrace.symbol_char_is_any_of("?!");
             if (can_sell) {
                 return true;
             }

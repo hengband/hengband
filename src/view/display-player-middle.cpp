@@ -21,6 +21,7 @@
 #include "player/player-status.h"
 #include "sv-definition/sv-bow-types.h"
 #include "system/floor-type-definition.h"
+#include "system/inner-game-data.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
@@ -283,7 +284,7 @@ static void display_player_exp(PlayerType *player_ptr)
  */
 static void display_playtime_in_game(PlayerType *player_ptr)
 {
-    const auto &[day, hour, min] = w_ptr->extract_date_time(player_ptr->start_race);
+    const auto &[day, hour, min] = w_ptr->extract_date_time(InnerGameData::get_instance().get_start_race());
     const auto is_days_countable = day < MAX_DAYS;
     const std::string fmt = is_days_countable ? _("%d日目 %2d:%02d", "Day %d %2d:%02d") : _("*****日目 %2d:%02d", "Day ***** %2d:%02d");
     const auto mes = is_days_countable ? format(fmt.data(), day, hour, min) : format(fmt.data(), hour, min);

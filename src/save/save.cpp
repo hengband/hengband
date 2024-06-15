@@ -20,7 +20,7 @@
 #include "io/files-util.h"
 #include "io/report.h"
 #include "io/uid-checker.h"
-#include "monster-race/monster-race.h"
+#include "locale/character-encoding.h"
 #include "monster/monster-compaction.h"
 #include "monster/monster-status.h"
 #include "player/player-status.h"
@@ -39,6 +39,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
+#include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
@@ -91,13 +92,13 @@ static bool wr_savefile_new(PlayerType *player_ptr)
 
 #ifdef JP
 #ifdef EUC
-    wr_byte(2);
+    wr_byte(enum2i(CharacterEncoding::EUC_JP));
 #endif
 #ifdef SJIS
-    wr_byte(3);
+    wr_byte(enum2i(CharacterEncoding::SHIFT_JIS));
 #endif
 #else
-    wr_byte(1);
+    wr_byte(enum2i(CharacterEncoding::US_ASCII));
 #endif
 
     wr_randomizer();

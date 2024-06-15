@@ -16,7 +16,6 @@
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
-#include "monster-race/monster-race.h"
 #include "player-info/class-info.h"
 #include "realm/realm-names-table.h"
 #include "spell/spells-execution.h"
@@ -198,9 +197,12 @@ static SpoilerOutputResultType spoil_player_spell()
             }
         }
 
-        constexpr auto mes = "BookType:%s Stat:%s Xtra:%x Type:%d Weight:%d\n";
+        constexpr auto mes = "BookType:%s Stat:%s %s%s%sType:%d Weight:%d\n";
         const auto &spell = wiz_spell_stat[magic_ptr->spell_stat];
-        spoil_out(format(mes, book_name.data(), spell.data(), magic_ptr->spell_xtra, magic_ptr->spell_type, magic_ptr->spell_weight));
+        auto trainable = magic_ptr->is_spell_trainable ? "Trainable " : "";
+        auto glove = magic_ptr->has_glove_mp_penalty ? "GlovePenalty " : "";
+        auto failcap = magic_ptr->has_magic_fail_rate_cap ? "5%FailCap " : "";
+        spoil_out(format(mes, book_name.data(), spell.data(), glove, failcap, trainable, magic_ptr->spell_type, magic_ptr->spell_weight));
         if (magic_ptr->spell_book == ItemKindType::NONE) {
             spoil_out(_("呪文なし\n\n", "No spells.\n\n"));
             continue;

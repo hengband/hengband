@@ -18,7 +18,6 @@
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
@@ -277,7 +276,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         if (can_banish) {
             if (record_named_pet && monster.is_named_pet()) {
                 const auto m_name = monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE);
-                exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
+                exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
             }
 
             delete_monster_idx(player_ptr, grid.m_idx);

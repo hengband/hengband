@@ -6,8 +6,8 @@
 #include "main/scene-table-monster.h"
 #include "dungeon/quest.h"
 #include "main/music-definitions-table.h"
-#include "monster-race/monster-race.h"
 #include "system/floor-type-definition.h"
+#include "system/inner-game-data.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -43,13 +43,14 @@ void clear_scene_target_monster()
     scene_target_monster.ap_r_ptr = nullptr;
 }
 
-static GAME_TURN get_game_turn()
+static int get_game_turn()
 {
-    GAME_TURN ret = w_ptr->game_turn;
-    if (ret == w_ptr->game_turn_limit) {
-        ret = 0;
+    auto turns = w_ptr->game_turn;
+    if (turns == InnerGameData::get_instance().get_game_turn_limit()) {
+        return 0;
     }
-    return ret;
+
+    return turns;
 }
 
 /*!

@@ -7,7 +7,6 @@
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "market/bounty.h"
-#include "monster-race/monster-race.h"
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
@@ -20,6 +19,7 @@
 #include "spell/spells-status.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
+#include "system/inner-game-data.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
@@ -112,7 +112,7 @@ void set_zangband_skill(PlayerType *player_ptr)
 
 void set_zangband_race(PlayerType *player_ptr)
 {
-    player_ptr->start_race = player_ptr->prace;
+    InnerGameData::get_instance().set_start_race(player_ptr->prace);
     player_ptr->old_race1 = 0L;
     player_ptr->old_race2 = 0L;
     player_ptr->old_realm = 0;
@@ -121,9 +121,10 @@ void set_zangband_race(PlayerType *player_ptr)
 void set_zangband_bounty_uniques(PlayerType *player_ptr)
 {
     determine_bounty_uniques(player_ptr);
-    for (auto &[r_idx, is_achieved] : w_ptr->bounties) {
+    const auto &monraces = MonraceList::get_instance();
+    for (auto &[monrace_id, is_achieved] : w_ptr->bounties) {
         /* Is this bounty unique already dead? */
-        if (monraces_info[r_idx].max_num == 0) {
+        if (monraces.get_monrace(monrace_id).max_num == 0) {
             is_achieved = true;
         }
     }

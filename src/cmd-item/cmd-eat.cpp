@@ -14,7 +14,6 @@
 #include "inventory/inventory-object.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "monster-race/monster-race.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-expendable.h"
 #include "object/item-tester-hooker.h"
@@ -282,16 +281,16 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     auto food_type = PlayerRace(player_ptr).food();
 
     /* Balrogs change humanoid corpses to energy */
-    const auto corpse_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-    const auto search = angband_strchr("pht", monraces_info[corpse_r_idx].symbol_definition.character);
-    if (food_type == PlayerRaceFoodType::CORPSE && o_ptr->is_corpse() && (search != nullptr)) {
-        const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        msg_format(_("%sは燃え上り灰になった。精力を吸収した気がする。", "%s^ is burnt to ashes.  You absorb its vitality!"), item_name.data());
-        (void)set_food(player_ptr, PY_FOOD_MAX - 1);
+    if (food_type == PlayerRaceFoodType::CORPSE) {
+        if (o_ptr->is_corpse() && o_ptr->get_monrace().symbol_char_is_any_of("pht")) {
+            const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+            msg_format(_("%sは燃え上り灰になった。精力を吸収した気がする。", "%s^ is burnt to ashes.  You absorb its vitality!"), item_name.data());
+            (void)set_food(player_ptr, PY_FOOD_MAX - 1);
 
-        rfu.set_flags(flags_srf);
-        vary_item(player_ptr, i_idx, -1);
-        return;
+            rfu.set_flags(flags_srf);
+            vary_item(player_ptr, i_idx, -1);
+            return;
+        }
     }
 
     if (PlayerRace(player_ptr).equals(PlayerRaceType::SKELETON)) {

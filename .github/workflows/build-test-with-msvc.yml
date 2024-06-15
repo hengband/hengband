@@ -22,8 +22,8 @@ jobs:
 
       - name: Restore Nuget Packages
         run: |
-          NuGet restore .\Hengband\Hengband.sln
+          NuGet restore .\VisualStudio\Hengband.sln
 
       - name: Run build test
         run: |
-          MSBuild -warnAsError .\Hengband\Hengband.sln /t:Rebuild /p:Configuration=Debug
+          MSBuild -warnAsError .\VisualStudio\Hengband.sln /t:Rebuild /p:Configuration=Debug

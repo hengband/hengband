@@ -4,7 +4,6 @@
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
@@ -18,6 +17,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
+#include "tracking/health-bar-tracker.h"
 #include "util/bit-flags-calculator.h"
 
 /*!
@@ -76,7 +76,7 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
     MonsterRaceId new_r_idx;
     MonsterRaceId old_r_idx = m_ptr->r_idx;
     bool targeted = target_who == g_ptr->m_idx;
-    bool health_tracked = player_ptr->health_who == g_ptr->m_idx;
+    auto health_tracked = HealthBarTracker::get_instance().is_tracking(g_ptr->m_idx);
 
     if (floor_ptr->inside_arena || AngbandSystem::get_instance().is_phase_out()) {
         return false;

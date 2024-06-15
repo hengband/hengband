@@ -21,7 +21,8 @@
 
 enum class FixedArtifactId : short;
 enum class ItemKindType : short;
-enum class SmithEffectType : int16_t;
+enum class SmithEffectType : short;
+enum class QuestId : short;
 enum class RandomArtifactBias : int;
 enum class RandomArtActType : short;
 
@@ -30,6 +31,7 @@ class ArtifactType;
 class BaseitemInfo;
 class DisplaySymbol;
 class EgoItemDefinition;
+class MonsterRaceInfo;
 class ItemEntity {
 public:
     ItemEntity();
@@ -147,13 +149,17 @@ public:
     std::vector<ActivationType>::const_iterator find_activation_info() const;
     bool has_activation() const;
     bool has_bias() const;
-
+    bool is_bounty() const;
+    bool is_target_of(QuestId quest_id) const;
     BaseitemInfo &get_baseitem() const;
     EgoItemDefinition &get_ego() const;
     ArtifactType &get_fixed_artifact() const;
     TrFlags get_flags() const;
     TrFlags get_flags_known() const;
     std::string explain_activation() const;
+    bool has_monrace() const;
+    const MonsterRaceInfo &get_monrace() const;
+    void track_baseitem() const;
 
     void mark_as_known();
     void mark_as_tried() const;

@@ -221,6 +221,8 @@ void give_activation_power(ItemEntity *o_ptr)
     RandomArtActType type = RandomArtActType::NONE;
     int chance = 0;
     switch (o_ptr->artifact_bias) {
+    case RandomArtifactBias::NONE:
+        break;
     case RandomArtifactBias::ELEC:
         type = invest_activation_elec();
         chance = 101;
@@ -278,7 +280,7 @@ void give_activation_power(ItemEntity *o_ptr)
         chance = 101;
         break;
     default:
-        THROW_EXCEPTION(std::runtime_error, "Invalid artifact bias was set!");
+        THROW_EXCEPTION(std::out_of_range, "Invalid artifact bias was set!");
     }
 
     if ((type == RandomArtActType::NONE) || (randint1(100) >= chance)) {

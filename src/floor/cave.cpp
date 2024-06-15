@@ -106,7 +106,7 @@ bool cave_los_bold(const FloorType *floor_ptr, int y, int x)
  */
 bool feat_supports_los(short f_idx)
 {
-    return TerrainList::get_instance()[f_idx].flags.has(TerrainCharacteristics::LOS);
+    return TerrainList::get_instance().get_terrain(f_idx).flags.has(TerrainCharacteristics::LOS);
 }
 
 /*

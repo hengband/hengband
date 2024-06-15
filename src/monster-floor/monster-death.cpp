@@ -9,7 +9,6 @@
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "io/write-diary.h"
-#include "lore/lore-store.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "market/arena-info-table.h"
@@ -17,7 +16,6 @@
 #include "monster-floor/monster-object.h"
 #include "monster-floor/special-death-switcher.h"
 #include "monster-race/monster-race-hook.h"
-#include "monster-race/monster-race.h"
 #include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
@@ -54,7 +52,7 @@ static void write_pet_death(PlayerType *player_ptr, MonsterDeath *md_ptr)
     md_ptr->md_x = md_ptr->m_ptr->fx;
     if (record_named_pet && md_ptr->m_ptr->is_named_pet()) {
         const auto m_name = monster_desc(player_ptr, md_ptr->m_ptr, MD_INDEF_VISIBLE);
-        exe_write_diary(player_ptr, DiaryKind::NAMED_PET, 3, m_name);
+        exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::NAMED_PET, 3, m_name);
     }
 }
 
@@ -77,8 +75,8 @@ static void on_dead_explosion(PlayerType *player_ptr, MonsterDeath *md_ptr)
 
 static void on_defeat_arena_monster(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!floor_ptr->inside_arena || md_ptr->m_ptr->is_pet()) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (!floor.inside_arena || md_ptr->m_ptr->is_pet()) {
         return;
     }
 
@@ -93,7 +91,7 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, MonsterDeath *md_ptr
     const auto tval = arena.key.tval();
     if (tval > ItemKindType::NONE) {
         ItemEntity item(arena.key);
-        ItemMagicApplier(player_ptr, &item, floor_ptr->object_level, AM_NO_FIXED_ART).execute();
+        ItemMagicApplier(player_ptr, &item, floor.object_level, AM_NO_FIXED_ART).execute();
         (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
     }
 
@@ -107,7 +105,7 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, MonsterDeath *md_ptr
     }
 
     const auto m_name = monster_desc(player_ptr, md_ptr->m_ptr, MD_WRONGDOER_NAME);
-    exe_write_diary(player_ptr, DiaryKind::ARENA, player_ptr->arena_number, m_name);
+    exe_write_diary(floor, DiaryKind::ARENA, player_ptr->arena_number, m_name);
 }
 
 static void drop_corpse(PlayerType *player_ptr, MonsterDeath *md_ptr)
@@ -268,7 +266,7 @@ static int decide_drop_numbers(MonsterDeath *md_ptr, const bool drop_item, const
         drop_numbers = 0;
     }
 
-    if (!drop_item && (md_ptr->r_ptr->symbol_definition.character != '$')) {
+    if (!drop_item && !md_ptr->r_ptr->symbol_char_is_any_of("$")) {
         drop_numbers = 0;
     }
 
@@ -310,7 +308,7 @@ static void drop_items_golds(PlayerType *player_ptr, MonsterDeath *md_ptr, int d
     auto visible = md_ptr->m_ptr->ml && !player_ptr->effects()->hallucination().is_hallucinated();
     visible |= (md_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE));
     if (visible && (dump_item || dump_gold)) {
-        lore_treasure(player_ptr, md_ptr->m_idx, dump_item, dump_gold);
+        md_ptr->m_ptr->make_lore_treasure(dump_item, dump_gold);
     }
 }
 
@@ -324,7 +322,7 @@ static void on_defeat_last_boss(PlayerType *player_ptr)
     w_ptr->add_winner_class(player_ptr->pclass);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TITLE);
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FINAL_QUEST_CLEAR);
-    exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, _("見事に変愚蛮怒の勝利者となった！", "finally became *WINNER* of Hengband!"));
+    exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::DESCRIPTION, 0, _("見事に変愚蛮怒の勝利者となった！", "finally became *WINNER* of Hengband!"));
     patron_list[player_ptr->chaos_patron].admire(player_ptr);
     msg_print(_("*** おめでとう ***", "*** CONGRATULATIONS ***"));
     msg_print(_("あなたはゲームをコンプリートしました。", "You have won the game!"));

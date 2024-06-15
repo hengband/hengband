@@ -5,13 +5,13 @@
 #include "game-option/game-play-options.h"
 #include "io/input-key-acceptor.h"
 #include "lore/lore-util.h"
-#include "monster-race/monster-race.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
+#include "tracking/lore-tracker.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-lore.h"
@@ -160,9 +160,10 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
     std::stable_sort(monrace_ids.begin(), monrace_ids.end(),
         [&monraces, is_detailed](auto x, auto y) { return monraces.order(x, y, is_detailed); });
     auto i = std::ssize(monrace_ids) - 1;
+    auto &tracker = LoreTracker::get_instance();
     while (true) {
-        auto r_idx = monrace_ids[i];
-        monster_race_track(player_ptr, r_idx);
+        const auto monrace_id = monrace_ids[i];
+        tracker.set_trackee(monrace_id);
         handle_stuff(player_ptr);
         while (true) {
             if (recall) {
@@ -170,7 +171,7 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
                 screen_roff(player_ptr, monrace_ids[i], MONSTER_LORE_NORMAL);
             }
 
-            roff_top(r_idx);
+            roff_top(monrace_id);
             term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ESC]", " [(r)ecall, ESC]"));
             query = inkey();
             if (recall) {

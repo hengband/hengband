@@ -26,7 +26,6 @@ struct fis_type {
     bool allow_inven;
     bool allow_floor;
     bool toggle;
-    char tmp_val[320];
     char out_val[160];
     ITEM_NUMBER floor_num;
     OBJECT_IDX floor_list[23];
@@ -55,7 +54,6 @@ struct item_selection_type {
     bool floor;
     bool allow_floor;
     bool toggle;
-    char tmp_val[320];
     char out_val[160];
     int menu_line;
     int max_inven;

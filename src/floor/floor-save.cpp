@@ -15,7 +15,6 @@
 #include "floor/floor-save-util.h"
 #include "io/files-util.h"
 #include "io/uid-checker.h"
-#include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "system/floor-type-definition.h"
@@ -28,8 +27,7 @@
 
 static std::string get_saved_floor_name(int level)
 {
-    char ext[32];
-    strnfmt(ext, sizeof(ext), ".F%02d", level);
+    const auto ext = format(".F%02d", level);
     return savefile.string().append(ext);
 }
 

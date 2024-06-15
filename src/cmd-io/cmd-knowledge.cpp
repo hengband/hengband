@@ -93,7 +93,7 @@ void do_cmd_knowledge(PlayerType *player_ptr)
             break;
         case '7': /* wanted */
             if (!vanilla_town) {
-                do_cmd_knowledge_bounty(player_ptr);
+                do_cmd_knowledge_bounty(player_ptr->name);
             }
             break;
         case '8': /* Pets */
