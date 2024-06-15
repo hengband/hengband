@@ -977,6 +977,7 @@ hengband_SOURCES = \
 	util/enum-range.h \
 	util/finalizer.h \
 	util/flag-group.h \
+	util/dice.cpp util/dice.h \
 	util/int-char-converter.h \
 	util/object-sort.cpp util/object-sort.h \
 	util/point-2d.h \
