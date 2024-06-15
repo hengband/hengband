@@ -97,7 +97,7 @@ static std::string evaluate_monster_exp(PlayerType *player_ptr, MonsterEntity *m
     }
 
     if (!ap_r_ptr->r_tkills || m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {
-        if (!w_ptr->wizard) {
+        if (!AngbandWorld::get_instance().wizard) {
             return "??";
         }
     }
@@ -484,7 +484,7 @@ static std::string decide_target_floor(PlayerType *player_ptr, GridExamination *
 
 static std::string describe_grid_monster_all(GridExamination *ge_ptr)
 {
-    if (!w_ptr->wizard) {
+    if (!AngbandWorld::get_instance().wizard) {
 #ifdef JP
         return format("%s%s%s%s[%s]", ge_ptr->s1, ge_ptr->name.data(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
 #else

@@ -126,7 +126,7 @@ static bool check_baseitem_chance(const BIT_FLAGS8 mode, const BaseitemInfo &bas
         return true;
     }
 
-    if (!w_ptr->wizard && ((baseitem.flavor == 0) || !baseitem.aware)) {
+    if (!AngbandWorld::get_instance().wizard && ((baseitem.flavor == 0) || !baseitem.aware)) {
         return false;
     }
 
@@ -181,6 +181,7 @@ static short collect_objects(int grp_cur, std::vector<short> &object_idx, BIT_FL
  */
 static void display_object_list(int col, int row, int per_page, const std::vector<short> &object_idx, int object_cur, int object_top, bool visual_only)
 {
+    const auto is_wizard = AngbandWorld::get_instance().wizard;
     const auto &baseitems = BaseitemList::get_instance();
     int i;
     for (i = 0; i < per_page && (object_idx[object_top + i] >= 0); i++) {
@@ -196,10 +197,10 @@ static void display_object_list(int col, int row, int per_page, const std::vecto
         c_prt(attr, o_name.data(), row + i, col);
         const auto &symbol_config = flavor_baseitem.symbol_config;
         if (per_page == 1) {
-            c_prt(attr, format("%02x/%02x", symbol_config.color, symbol_config.character), row + i, (w_ptr->wizard || visual_only) ? 64 : 68);
+            c_prt(attr, format("%02x/%02x", symbol_config.color, symbol_config.character), row + i, (is_wizard || visual_only) ? 64 : 68);
         }
 
-        if (w_ptr->wizard || visual_only) {
+        if (is_wizard || visual_only) {
             c_prt(attr, format("%d", bi_id), row + i, 70);
         }
 
@@ -285,6 +286,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
     bool redraw = true;
     int column = 0;
     auto &tracker = BaseitemTracker::get_instance();
+    const auto &world = AngbandWorld::get_instance();
     const auto &symbols_cb = DisplaySymbolsClipboard::get_instance();
     while (!flag) {
         if (redraw) {
@@ -296,7 +298,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
                 prt("グループ", 4, 0);
             }
             prt("名前", 4, max_length + 3);
-            if (w_ptr->wizard || visual_only) {
+            if (world.wizard || visual_only) {
                 prt("Idx", 4, 70);
             }
             prt("文字", 4, 74);
@@ -306,7 +308,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
                 prt("Group", 4, 0);
             }
             prt("Name", 4, max_length + 3);
-            if (w_ptr->wizard || visual_only) {
+            if (world.wizard || visual_only) {
                 prt("Idx", 4, 70);
             }
             prt("Sym", 4, 75);

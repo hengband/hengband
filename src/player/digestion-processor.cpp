@@ -34,7 +34,7 @@ void starve_player(PlayerType *player_ptr)
 
     if (player_ptr->food >= PY_FOOD_MAX) {
         (void)set_food(player_ptr, player_ptr->food - 100);
-    } else if (!(w_ptr->game_turn % (TURNS_PER_TICK * 5))) {
+    } else if (AngbandWorld::get_instance().game_turn % (TURNS_PER_TICK * 5) == 0) {
         int digestion = speed_to_energy(player_ptr->pspeed);
         if (player_ptr->regenerate) {
             digestion += 20;

@@ -777,6 +777,7 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
     /* Set the new feature */
     cave_set_feat(player_ptr, y, x, newfeat);
     const auto &terrains = TerrainList::get_instance();
+    const auto &world = AngbandWorld::get_instance();
     if (!(terrain_action_flags[enum2i(action)] & FAF_NO_DROP)) {
         const auto &old_terrain = terrains.get_terrain(oldfeat);
         const auto &new_terrain = terrains.get_terrain(newfeat);
@@ -796,14 +797,14 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
             found = true;
         }
 
-        if (found && w_ptr->character_dungeon && player_can_see_bold(player_ptr, y, x)) {
+        if (found && world.character_dungeon && player_can_see_bold(player_ptr, y, x)) {
             msg_print(_("何かを発見した！", "You have found something!"));
         }
     }
 
     if (terrain_action_flags[enum2i(action)] & FAF_CRASH_GLASS) {
         const auto &old_terrain = terrains.get_terrain(oldfeat);
-        if (old_terrain.flags.has(TerrainCharacteristics::GLASS) && w_ptr->character_dungeon) {
+        if (old_terrain.flags.has(TerrainCharacteristics::GLASS) && world.character_dungeon) {
             project(player_ptr, PROJECT_WHO_GLASS_SHARDS, 1, y, x, std::min(floor_ptr->dun_level, 100) / 4, AttributeType::SHARDS,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }

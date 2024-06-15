@@ -148,8 +148,9 @@ const MonsterRaceInfo &MonsterRaceInfo::get_next() const
  */
 bool MonsterRaceInfo::is_bounty(bool unachieved_only) const
 {
-    const auto end = std::end(w_ptr->bounties);
-    const auto it = std::find_if(std::begin(w_ptr->bounties), end,
+    const auto &world = AngbandWorld::get_instance();
+    const auto end = std::end(world.bounties);
+    const auto it = std::find_if(std::begin(world.bounties), end,
         [this](const auto &bounty) { return bounty.r_idx == this->idx; });
     if (it == end) {
         return false;

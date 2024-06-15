@@ -108,7 +108,8 @@ void wr_player(PlayerType *player_ptr)
     wr_s32b(player_ptr->old_race2);
     wr_s16b(player_ptr->old_realm);
 
-    for (const auto &[monrace_id, is_achieved] : w_ptr->bounties) {
+    const auto &world = AngbandWorld::get_instance();
+    for (const auto &[monrace_id, is_achieved] : world.bounties) {
         wr_s16b(enum2i(monrace_id));
         wr_bool(is_achieved);
     }
@@ -126,7 +127,7 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(player_ptr->current_floor_ptr->inside_arena);
     wr_s16b(enum2i(player_ptr->current_floor_ptr->quest_number));
     wr_s16b(AngbandSystem::get_instance().is_phase_out());
-    wr_byte(w_ptr->get_arena());
+    wr_byte(world.get_arena());
     wr_byte(0); /* Unused */
 
     wr_s16b((int16_t)player_ptr->oldpx);
@@ -248,23 +249,23 @@ void wr_player(PlayerType *player_ptr)
     wr_u32b(system.get_seed_flavor());
     wr_u32b(system.get_seed_town());
     wr_u16b(player_ptr->panic_save);
-    wr_u16b(w_ptr->total_winner);
-    wr_u16b(w_ptr->noscore);
+    wr_u16b(world.total_winner);
+    wr_u16b(world.noscore);
     wr_bool(player_ptr->is_dead);
     wr_byte(player_ptr->feeling);
     wr_s32b(player_ptr->current_floor_ptr->generated_turn);
     wr_s32b(player_ptr->feeling_turn);
-    wr_s32b(w_ptr->game_turn);
-    wr_s32b(w_ptr->dungeon_turn);
-    wr_s32b(w_ptr->arena_start_turn);
-    wr_s16b(enum2i(w_ptr->today_mon));
-    wr_s16b(w_ptr->knows_daily_bounty ? 1 : 0); // 現在bool型だが、かつてモンスター種族IDを保存していた仕様に合わせる
+    wr_s32b(world.game_turn);
+    wr_s32b(world.dungeon_turn);
+    wr_s32b(world.arena_start_turn);
+    wr_s16b(enum2i(world.today_mon));
+    wr_s16b(world.knows_daily_bounty ? 1 : 0); // 現在bool型だが、かつてモンスター種族IDを保存していた仕様に合わせる
     wr_s16b(player_ptr->riding);
     wr_s16b(player_ptr->floor_id);
 
     /* Save temporary preserved pets (obsolated) */
     wr_s16b(0);
-    wr_u32b(w_ptr->play_time);
+    wr_u32b(world.play_time);
     wr_s32b(player_ptr->visit);
     wr_u32b(player_ptr->count);
 }

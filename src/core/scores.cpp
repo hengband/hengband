@@ -196,7 +196,7 @@ errr top_twenty(PlayerType *player_ptr)
     the_score.gold[9] = '\0';
 
     const auto &igd = InnerGameData::get_instance();
-    snprintf(the_score.turns, sizeof(the_score.turns), "%9d", igd.get_real_turns(w_ptr->game_turn));
+    snprintf(the_score.turns, sizeof(the_score.turns), "%9d", igd.get_real_turns(AngbandWorld::get_instance().game_turn));
     the_score.turns[9] = '\0';
 
     auto ct = time((time_t *)0);
@@ -258,7 +258,7 @@ errr predict_score(PlayerType *player_ptr)
     snprintf(the_score.what, sizeof(the_score.what), "%u.%u.%u", H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH);
     snprintf(the_score.pts, sizeof(the_score.pts), "%9ld", (long)calc_score(player_ptr));
     snprintf(the_score.gold, sizeof(the_score.gold), "%9lu", (long)player_ptr->au);
-    snprintf(the_score.turns, sizeof(the_score.turns), "%9d", igd.get_real_turns(w_ptr->game_turn));
+    snprintf(the_score.turns, sizeof(the_score.turns), "%9d", igd.get_real_turns(AngbandWorld::get_instance().game_turn));
     angband_strcpy(the_score.day, _("今日", "TODAY"), sizeof(the_score.day));
     the_score.copy_info(*player_ptr);
     strcpy(the_score.how, _("yet", "nobody (yet!)"));
@@ -453,28 +453,31 @@ bool check_score(PlayerType *player_ptr)
     }
 
     /* Wizard-mode pre-empts scoring */
-    if (w_ptr->noscore & 0x000F) {
+    auto &world = AngbandWorld::get_instance();
+    const auto no_score = world.noscore;
+    if (no_score & 0x000F) {
         msg_print(_("ウィザード・モードではスコアが記録されません。", "Score not registered for wizards."));
         msg_print(nullptr);
         return false;
     }
 
     /* Cheaters are not scored */
-    if (w_ptr->noscore & 0xFF00) {
+    if (no_score & 0xFF00) {
         msg_print(_("詐欺をやった人はスコアが記録されません。", "Score not registered for cheaters."));
         msg_print(nullptr);
         return false;
     }
 
     /* Interupted */
-    if (!w_ptr->total_winner && streq(player_ptr->died_from, _("強制終了", "Interrupting"))) {
+    const auto is_total_winner = world.total_winner != 0;
+    if (!is_total_winner && streq(player_ptr->died_from, _("強制終了", "Interrupting"))) {
         msg_print(_("強制終了のためスコアが記録されません。", "Score not registered due to interruption."));
         msg_print(nullptr);
         return false;
     }
 
     /* Quitter */
-    if (!w_ptr->total_winner && streq(player_ptr->died_from, _("途中終了", "Quitting"))) {
+    if (!is_total_winner && streq(player_ptr->died_from, _("途中終了", "Quitting"))) {
         msg_print(_("途中終了のためスコアが記録されません。", "Score not registered due to quitting."));
         msg_print(nullptr);
         return false;

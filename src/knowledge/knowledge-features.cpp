@@ -62,6 +62,7 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
         lit_col[i] = lit_col[F_LIT_STANDARD] + 2 + (i - F_LIT_NS_BEGIN) * 2 + (use_bigtile ? i : 0);
     }
 
+    const auto is_wizard = AngbandWorld::get_instance().wizard;
     const auto &terrains = TerrainList::get_instance();
     int i;
     for (i = 0; i < per_page && (feat_idx[feat_top + i] >= 0); i++) {
@@ -75,9 +76,9 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
             c_prt(attr, format("(%s)", lighting_level_str[lighting_level]), row_i, col + 1 + terrain.name.size());
             const auto &symbol_config = terrain.symbol_configs.at(lighting_level);
             c_prt(attr, format("%02x/%02x", symbol_config.color, static_cast<uint8_t>(symbol_config.character)), row_i,
-                f_idx_col - ((w_ptr->wizard || visual_only) ? 6 : 2));
+                f_idx_col - ((is_wizard || visual_only) ? 6 : 2));
         }
-        if (w_ptr->wizard || visual_only) {
+        if (is_wizard || visual_only) {
             c_prt(attr, format("%d", terrain_id), row_i, f_idx_col);
         }
 
@@ -147,6 +148,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     bool flag = false;
     bool redraw = true;
     DisplaySymbol symbol_orig;
+    const auto is_wizard = AngbandWorld::get_instance().wizard;
     auto &terrains = TerrainList::get_instance();
     auto &symbols_cb = DisplaySymbolsClipboard::get_instance();
     while (!flag) {
@@ -160,12 +162,12 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             }
             prt(_("名前", "Name"), 4, max_length + 3);
             if (use_bigtile) {
-                if (w_ptr->wizard || visual_only) {
+                if (is_wizard || visual_only) {
                     prt("Idx", 4, 62);
                 }
                 prt(_("文字 ( l/ d)", "Sym ( l/ d)"), 4, 66);
             } else {
-                if (w_ptr->wizard || visual_only) {
+                if (is_wizard || visual_only) {
                     prt("Idx", 4, 64);
                 }
                 prt(_("文字 (l/d)", "Sym (l/d)"), 4, 68);

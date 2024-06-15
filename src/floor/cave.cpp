@@ -68,7 +68,7 @@ bool is_cave_empty_bold(PlayerType *player_ptr, int y, int x)
 bool is_cave_empty_bold2(PlayerType *player_ptr, int y, int x)
 {
     bool is_empty_grid = is_cave_empty_bold(player_ptr, y, x);
-    is_empty_grid &= w_ptr->character_dungeon || !cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::TREE);
+    is_empty_grid &= AngbandWorld::get_instance().character_dungeon || !cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::TREE);
     return is_empty_grid;
 }
 

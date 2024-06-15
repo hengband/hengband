@@ -33,7 +33,7 @@
  */
 void redraw_window()
 {
-    if (!w_ptr->character_dungeon) {
+    if (!AngbandWorld::get_instance().character_dungeon) {
         return;
     }
 
@@ -71,11 +71,12 @@ void redraw_stuff(PlayerType *player_ptr)
         return;
     }
 
-    if (!w_ptr->character_generated) {
+    const auto &world = AngbandWorld::get_instance();
+    if (!world.character_generated) {
         return;
     }
 
-    if (w_ptr->character_icky_depth > 0) {
+    if (world.character_icky_depth > 0) {
         return;
     }
 

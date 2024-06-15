@@ -145,7 +145,7 @@ static void generate_challenge_arena(PlayerType *player_ptr)
         return;
     }
 
-    w_ptr->set_arena(true);
+    AngbandWorld::get_instance().set_arena(true);
     entries.increment_entry();
     msg_print(_("相手は欠場した。あなたの不戦勝だ。", "The enemy is unable to appear. You won by default."));
 }

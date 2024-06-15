@@ -75,7 +75,7 @@ MONSTER_IDX m_pop(FloorType *floor_ptr)
         return i;
     }
 
-    if (w_ptr->character_dungeon) {
+    if (AngbandWorld::get_instance().character_dungeon) {
         msg_print(_("モンスターが多すぎる！", "Too many monsters!"));
     }
 
@@ -104,7 +104,7 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
 
     /* +1 per day after the base date */
     /* base dates : day5(1F), day18(10F,0F), day34(30F), day53(60F), day69(90F) */
-    const auto over_days = std::max<int>(0, w_ptr->dungeon_turn / (TURNS_PER_TICK * 10000L) - delay / 20);
+    const auto over_days = std::max<int>(0, AngbandWorld::get_instance().dungeon_turn / (TURNS_PER_TICK * 10000L) - delay / 20);
 
     /* Probability starts from 1/25, reaches 1/3 after 44days from a max_level dependent base date */
     /* Boost level starts from 0, reaches +25lv after 75days from a max_level dependent base date */

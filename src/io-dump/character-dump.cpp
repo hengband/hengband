@@ -135,7 +135,7 @@ static void dump_aux_last_message(PlayerType *player_ptr, FILE *fff)
         return;
     }
 
-    if (!w_ptr->total_winner) {
+    if (!AngbandWorld::get_instance().total_winner) {
         fprintf(fff, _("\n  [死ぬ直前のメッセージ]\n\n", "\n  [Last Messages]\n\n"));
 
         constexpr auto msg_line_max = 30;
@@ -253,7 +253,7 @@ static void dump_aux_options(FILE *fff)
 
     fputc('\n', fff);
 
-    if (w_ptr->noscore) {
+    if (AngbandWorld::get_instance().noscore) {
         fprintf(fff, _("\n 何か不正なことをしてしまっています。\n", "\n You have done something illegal.\n"));
     }
 

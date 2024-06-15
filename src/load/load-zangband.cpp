@@ -122,7 +122,7 @@ void set_zangband_bounty_uniques(PlayerType *player_ptr)
 {
     determine_bounty_uniques(player_ptr);
     const auto &monraces = MonraceList::get_instance();
-    for (auto &[monrace_id, is_achieved] : w_ptr->bounties) {
+    for (auto &[monrace_id, is_achieved] : AngbandWorld::get_instance().bounties) {
         /* Is this bounty unique already dead? */
         if (monraces.get_monrace(monrace_id).max_num == 0) {
             is_achieved = true;
@@ -160,8 +160,9 @@ void set_zangband_game_turns(PlayerType *player_ptr)
 {
     player_ptr->current_floor_ptr->generated_turn /= 2;
     player_ptr->feeling_turn /= 2;
-    w_ptr->game_turn /= 2;
-    w_ptr->dungeon_turn /= 2;
+    auto &world = AngbandWorld::get_instance();
+    world.game_turn /= 2;
+    world.dungeon_turn /= 2;
 }
 
 void set_zangband_gambling_monsters(int i)

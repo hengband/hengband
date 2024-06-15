@@ -201,11 +201,12 @@ errr process_autopick_file(PlayerType *player_ptr, std::string_view name)
  */
 errr process_histpref_file(PlayerType *player_ptr, std::string_view name)
 {
-    bool old_character_xtra = w_ptr->character_xtra;
+    auto &world = AngbandWorld::get_instance();
+    const auto old_character_xtra = world.character_xtra;
     const auto path = path_build(ANGBAND_DIR_USER, name);
-    w_ptr->character_xtra = true;
+    world.character_xtra = true;
     errr err = process_pref_file_aux(player_ptr, path, PREF_TYPE_HISTPREF);
-    w_ptr->character_xtra = old_character_xtra;
+    world.character_xtra = old_character_xtra;
     return err;
 }
 

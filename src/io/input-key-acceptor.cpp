@@ -227,7 +227,8 @@ char inkey(bool do_all_term_refresh)
     (void)term_get_cursor(&v);
 
     /* Show the cursor if waiting, except sometimes in "command" mode */
-    if (!inkey_scan && (!inkey_flag || hilite_player || w_ptr->character_icky_depth > 0)) {
+    auto &world = AngbandWorld::get_instance();
+    if (!inkey_scan && (!inkey_flag || hilite_player || world.character_icky_depth > 0)) {
         (void)term_set_cursor(1);
     }
 
@@ -245,8 +246,8 @@ char inkey(bool do_all_term_refresh)
             } else {
                 term_fresh();
             }
-            w_ptr->character_saved = false;
 
+            world.character_saved = false;
             signal_count = 0;
             done = true;
         }

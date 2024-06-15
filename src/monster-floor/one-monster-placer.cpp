@@ -215,25 +215,25 @@ static bool check_procection_rune(PlayerType *player_ptr, MonsterRaceId r_idx, P
 
 static void warn_unique_generation(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
-    if (!player_ptr->warning || !w_ptr->character_dungeon) {
+    if (!player_ptr->warning || !AngbandWorld::get_instance().character_dungeon) {
         return;
     }
 
-    auto *r_ptr = &monraces_info[r_idx];
-    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
+    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
+    if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return;
     }
 
     std::string color;
-    if (r_ptr->level > player_ptr->lev + 30) {
+    if (monrace.level > player_ptr->lev + 30) {
         color = _("黒く", "black");
-    } else if (r_ptr->level > player_ptr->lev + 15) {
+    } else if (monrace.level > player_ptr->lev + 15) {
         color = _("紫色に", "purple");
-    } else if (r_ptr->level > player_ptr->lev + 5) {
+    } else if (monrace.level > player_ptr->lev + 5) {
         color = _("ルビー色に", "deep red");
-    } else if (r_ptr->level > player_ptr->lev - 5) {
+    } else if (monrace.level > player_ptr->lev - 5) {
         color = _("赤く", "red");
-    } else if (r_ptr->level > player_ptr->lev - 15) {
+    } else if (monrace.level > player_ptr->lev - 15) {
         color = _("ピンク色に", "pink");
     } else {
         color = _("白く", "white");
@@ -263,9 +263,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, 
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto *g_ptr = &floor.grid_array[y][x];
-    auto *r_ptr = &monraces_info[r_idx];
-    concptr name = r_ptr->name.data();
-
+    auto *r_ptr = &MonraceList::get_instance().get_monrace(r_idx);
     if (player_ptr->wild_mode || !in_bounds(&floor, y, x) || !MonraceList::is_valid(r_idx)) {
         return false;
     }
@@ -278,7 +276,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, 
         return false;
     }
 
-    msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%s(Lv%d)を生成しました。", "%s(Lv%d) was generated."), name, r_ptr->level);
+    msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%s(Lv%d)を生成しました。", "%s(Lv%d) was generated."), r_ptr->name.data(), r_ptr->level);
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->population_flags.has(MonsterPopulationType::NAZGUL) || (r_ptr->level < 10)) {
         reset_bits(mode, PM_KAGE);
     }
@@ -424,7 +422,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, 
      * Memorize location of the unique monster in saved floors.
      * A unique monster move from old saved floor.
      */
-    if (w_ptr->character_dungeon && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->population_flags.has(MonsterPopulationType::NAZGUL))) {
+    if (AngbandWorld::get_instance().character_dungeon && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->population_flags.has(MonsterPopulationType::NAZGUL))) {
         m_ptr->get_real_monrace().floor_id = player_ptr->floor_id;
     }
 

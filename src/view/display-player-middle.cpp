@@ -284,7 +284,7 @@ static void display_player_exp(PlayerType *player_ptr)
  */
 static void display_playtime_in_game(PlayerType *player_ptr)
 {
-    const auto &[day, hour, min] = w_ptr->extract_date_time(InnerGameData::get_instance().get_start_race());
+    const auto &[day, hour, min] = AngbandWorld::get_instance().extract_date_time(InnerGameData::get_instance().get_start_race());
     const auto is_days_countable = day < MAX_DAYS;
     const std::string fmt = is_days_countable ? _("%d日目 %2d:%02d", "Day %d %2d:%02d") : _("*****日目 %2d:%02d", "Day ***** %2d:%02d");
     const auto mes = is_days_countable ? format(fmt.data(), day, hour, min) : format(fmt.data(), hour, min);
@@ -334,5 +334,5 @@ void display_player_middle(PlayerType *player_ptr)
     display_player_exp(player_ptr);
     display_player_one_line(ENTRY_GOLD, format("%d", player_ptr->au), TERM_L_GREEN);
     display_playtime_in_game(player_ptr);
-    display_player_one_line(ENTRY_PLAY_TIME, w_ptr->format_real_playtime(), TERM_L_GREEN);
+    display_player_one_line(ENTRY_PLAY_TIME, AngbandWorld::get_instance().format_real_playtime(), TERM_L_GREEN);
 }

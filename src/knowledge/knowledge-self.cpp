@@ -71,9 +71,9 @@ static void dump_yourself(PlayerType *player_ptr, FILE *fff)
     fprintf(fff, _("種族: %s\n", "Race: %s\n"), race_info[enum2i(player_ptr->prace)].title);
     dump_explanation(race_explanations[enum2i(player_ptr->prace)], fff);
 
-    auto short_pclass = enum2i(player_ptr->pclass);
     fprintf(fff, "\n");
     fprintf(fff, _("職業: %s\n", "Class: %s\n"), class_info.at(player_ptr->pclass).title);
+    auto short_pclass = enum2i(player_ptr->pclass);
     dump_explanation(class_explanations[short_pclass].data(), fff);
 
     fprintf(fff, "\n");
@@ -99,7 +99,8 @@ static void dump_yourself(PlayerType *player_ptr, FILE *fff)
  */
 static void dump_winner_classes(FILE *fff)
 {
-    int n = w_ptr->sf_winner.count();
+    const auto &world = AngbandWorld::get_instance();
+    const int n = world.sf_winner.count();
     concptr ss = n > 1 ? _("", "s") : "";
     fprintf(fff, _("*勝利*済みの職業%s : %d\n", "Class of *Winner%s* : %d\n"), ss, n);
     if (n == 0) {
@@ -110,14 +111,14 @@ static void dump_winner_classes(FILE *fff)
     std::string s = "";
     std::string l = "";
     for (int c = 0; c < PLAYER_CLASS_TYPE_MAX; c++) {
-        if (w_ptr->sf_winner.has_not(i2enum<PlayerClassType>(c))) {
+        const auto pclass_enum = i2enum<PlayerClassType>(c);
+        if (world.sf_winner.has_not(pclass_enum)) {
             continue;
         }
 
-        auto &cl = class_info.at(i2enum<PlayerClassType>(c));
-        auto t = std::string(cl.title);
-
-        if (w_ptr->sf_retired.has_not(i2enum<PlayerClassType>(c))) {
+        auto &player_class = class_info.at(i2enum<PlayerClassType>(c));
+        std::string t = player_class.title;
+        if (world.sf_retired.has_not(pclass_enum)) {
             t = "(" + t + ")";
         }
 
@@ -148,9 +149,10 @@ void do_cmd_knowledge_stat(PlayerType *player_ptr)
         return;
     }
 
-    w_ptr->update_playtime();
-    uint32_t play_time = w_ptr->play_time;
-    uint32_t all_time = w_ptr->sf_play_time + play_time;
+    auto &world = AngbandWorld::get_instance();
+    world.update_playtime();
+    const auto play_time = world.play_time;
+    const auto all_time = world.sf_play_time + play_time;
     fprintf(fff, _("現在のプレイ時間 : %d:%02d:%02d\n", "Current Play Time is %d:%02d:%02d\n"), play_time / (60 * 60), (play_time / 60) % 60, play_time % 60);
     fprintf(fff, _("合計のプレイ時間 : %d:%02d:%02d\n", "  Total play Time is %d:%02d:%02d\n"), all_time / (60 * 60), (all_time / 60) % 60, all_time % 60);
     fputs("\n", fff);
@@ -184,7 +186,8 @@ void do_cmd_knowledge_stat(PlayerType *player_ptr)
  */
 void do_cmd_knowledge_home(PlayerType *player_ptr)
 {
-    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, w_ptr->max_wild_y, w_ptr->max_wild_x);
+    const auto &world = AngbandWorld::get_instance();
+    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, world.max_wild_y, world.max_wild_x);
 
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];

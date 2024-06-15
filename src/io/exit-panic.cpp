@@ -26,7 +26,8 @@
  */
 void exit_game_panic(PlayerType *player_ptr)
 {
-    if (!w_ptr->character_generated || w_ptr->character_saved) {
+    auto &world = AngbandWorld::get_instance();
+    if (!world.character_generated || world.character_saved) {
         quit(_("緊急事態", "panic"));
     }
     msg_flag = false;

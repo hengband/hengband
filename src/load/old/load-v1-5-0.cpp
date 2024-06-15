@@ -753,10 +753,11 @@ errr rd_dungeon_old(PlayerType *player_ptr)
         m_ptr->get_real_monrace().cur_num++;
     }
 
+    auto &world = AngbandWorld::get_instance();
     if (h_older_than(0, 3, 13) && !floor_ptr->dun_level && !floor_ptr->inside_arena) {
-        w_ptr->character_dungeon = false;
+        world.character_dungeon = false;
     } else {
-        w_ptr->character_dungeon = true;
+        world.character_dungeon = true;
     }
 
     return 0;

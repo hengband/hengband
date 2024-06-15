@@ -173,7 +173,7 @@ static std::optional<std::string> search_death_cause(PlayerType *player_ptr)
         return std::nullopt;
     }
 
-    if (w_ptr->total_winner) {
+    if (AngbandWorld::get_instance().total_winner) {
         return format(_("…あなたは勝利の後%sした。", "...You %s after winning."),
             streq(player_ptr->died_from, "Seppuku") ? _("切腹", "committed seppuku") : _("引退", "retired from the adventure"));
     }
@@ -241,7 +241,7 @@ static std::optional<std::string> decide_death_in_quest(PlayerType *player_ptr)
 static std::string decide_current_floor(PlayerType *player_ptr)
 {
     if (const auto death_cause = search_death_cause(player_ptr);
-        death_cause || !w_ptr->character_dungeon) {
+        death_cause || !AngbandWorld::get_instance().character_dungeon) {
         return death_cause.value_or("");
     }
 

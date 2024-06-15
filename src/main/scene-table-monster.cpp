@@ -45,7 +45,7 @@ void clear_scene_target_monster()
 
 static int get_game_turn()
 {
-    auto turns = w_ptr->game_turn;
+    const auto turns = AngbandWorld::get_instance().game_turn;
     if (turns == InnerGameData::get_instance().get_game_turn_limit()) {
         return 0;
     }

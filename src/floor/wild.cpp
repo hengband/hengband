@@ -377,7 +377,7 @@ static void generate_area(PlayerType *player_ptr, POSITION y, POSITION x, bool i
     bool is_winner = wilderness[y][x].entrance > 0;
     is_winner &= (wilderness[y][x].town == 0);
     bool is_wild_winner = dungeons_info[wilderness[y][x].entrance].flags.has_not(DungeonFeatureType::WINNER);
-    is_winner &= ((w_ptr->total_winner != 0) || is_wild_winner);
+    is_winner &= ((AngbandWorld::get_instance().total_winner != 0) || is_wild_winner);
     if (!is_winner) {
         return;
     }
@@ -428,7 +428,8 @@ void wilderness_gen(PlayerType *player_ptr)
     floor.width = MAX_WID;
     panel_row_min = floor.height;
     panel_col_min = floor.width;
-    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, w_ptr->max_wild_y, w_ptr->max_wild_x);
+    auto &world = AngbandWorld::get_instance();
+    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, world.max_wild_y, world.max_wild_x);
     const auto wild_y = player_ptr->wilderness_y;
     const auto wild_x = player_ptr->wilderness_x;
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), nullptr);
@@ -511,7 +512,7 @@ void wilderness_gen(PlayerType *player_ptr)
     for (auto y = 0; y < floor.height; y++) {
         for (auto x = 0; x < floor.width; x++) {
             auto &grid = floor.get_grid({ y, x });
-            if (w_ptr->is_daytime()) {
+            if (world.is_daytime()) {
                 grid.info |= CAVE_GLOW;
                 if (view_perma_grids) {
                     grid.info |= CAVE_MARK;
@@ -615,9 +616,10 @@ void wilderness_gen_small(PlayerType *player_ptr)
         }
     }
 
-    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, w_ptr->max_wild_y, w_ptr->max_wild_x);
-    for (int i = 0; i < w_ptr->max_wild_x; i++) {
-        for (int j = 0; j < w_ptr->max_wild_y; j++) {
+    const auto &world = AngbandWorld::get_instance();
+    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, world.max_wild_y, world.max_wild_x);
+    for (int i = 0; i < world.max_wild_x; i++) {
+        for (int j = 0; j < world.max_wild_y; j++) {
             if (wilderness[j][i].town && (wilderness[j][i].town != VALID_TOWNS)) {
                 floor_ptr->grid_array[j][i].feat = (int16_t)feat_town;
                 floor_ptr->grid_array[j][i].special = (int16_t)wilderness[j][i].town;
@@ -631,7 +633,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
                 continue;
             }
 
-            if (wilderness[j][i].entrance && (w_ptr->total_winner || dungeons_info[wilderness[j][i].entrance].flags.has_not(DungeonFeatureType::WINNER))) {
+            if (wilderness[j][i].entrance && (world.total_winner || dungeons_info[wilderness[j][i].entrance].flags.has_not(DungeonFeatureType::WINNER))) {
                 floor_ptr->grid_array[j][i].feat = feat_entrance;
                 floor_ptr->grid_array[j][i].special = (byte)wilderness[j][i].entrance;
                 floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);
@@ -643,8 +645,8 @@ void wilderness_gen_small(PlayerType *player_ptr)
         }
     }
 
-    floor_ptr->height = (int16_t)w_ptr->max_wild_y;
-    floor_ptr->width = (int16_t)w_ptr->max_wild_x;
+    floor_ptr->height = (int16_t)world.max_wild_y;
+    floor_ptr->width = (int16_t)world.max_wild_x;
     if (floor_ptr->height > MAX_HGT) {
         floor_ptr->height = MAX_HGT;
     }
@@ -754,7 +756,7 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
 
     /* Process "W:P:<x>:<y> - starting position in the wilderness */
     case 'P': {
-        bool is_corner = player_ptr->wilderness_x == 0;
+        auto is_corner = player_ptr->wilderness_x == 0;
         is_corner = player_ptr->wilderness_y == 0;
         if (!is_corner) {
             break;
@@ -768,9 +770,10 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
         player_ptr->wilderness_x = atoi(zz[1]);
 
         auto out_of_bounds = (player_ptr->wilderness_x < 1);
-        out_of_bounds |= (player_ptr->wilderness_x > w_ptr->max_wild_x);
+        const auto &world = AngbandWorld::get_instance();
+        out_of_bounds |= (player_ptr->wilderness_x > world.max_wild_x);
         out_of_bounds |= (player_ptr->wilderness_y < 1);
-        out_of_bounds |= (player_ptr->wilderness_y > w_ptr->max_wild_y);
+        out_of_bounds |= (player_ptr->wilderness_y > world.max_wild_y);
         if (out_of_bounds) {
             return PARSE_ERROR_OUT_OF_BOUNDS;
         }
@@ -802,8 +805,9 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
  */
 void seed_wilderness(void)
 {
-    for (POSITION x = 0; x < w_ptr->max_wild_x; x++) {
-        for (POSITION y = 0; y < w_ptr->max_wild_y; y++) {
+    const auto &world = AngbandWorld::get_instance();
+    for (auto x = 0; x < world.max_wild_x; x++) {
+        for (auto y = 0; y < world.max_wild_y; y++) {
             wilderness[y][x].seed = randint0(0x10000000);
             wilderness[y][x].entrance = 0;
         }

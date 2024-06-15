@@ -124,9 +124,9 @@ void do_cmd_alter(PlayerType *player_ptr)
  * @param なし
  * @return 自殺/引退/切腹を実施するならTRUE、キャンセルならFALSE
  */
-static bool decide_suicide(void)
+static bool decide_suicide()
 {
-    if (w_ptr->noscore) {
+    if (AngbandWorld::get_instance().noscore) {
         return true;
     }
 
@@ -139,7 +139,7 @@ static bool decide_suicide(void)
 
 static void accept_winner_message(PlayerType *player_ptr)
 {
-    if (!w_ptr->total_winner || !last_words) {
+    if (!AngbandWorld::get_instance().total_winner || !last_words) {
         return;
     }
 
@@ -170,7 +170,8 @@ static void accept_winner_message(PlayerType *player_ptr)
 void do_cmd_suicide(PlayerType *player_ptr)
 {
     flush();
-    if (w_ptr->total_winner) {
+    auto &world = AngbandWorld::get_instance();
+    if (world.total_winner) {
         if (!input_check_strict(player_ptr, _("引退しますか? ", "Do you want to retire? "), UserCheck::NO_HISTORY)) {
             return;
         }
@@ -188,9 +189,9 @@ void do_cmd_suicide(PlayerType *player_ptr)
     player_ptr->playing = false;
     player_ptr->is_dead = true;
     player_ptr->leaving = true;
-    if (w_ptr->total_winner) {
+    if (world.total_winner) {
         accept_winner_message(player_ptr);
-        w_ptr->add_retired_class(player_ptr->pclass);
+        world.add_retired_class(player_ptr->pclass);
     } else {
         play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_GAMEOVER);
         const auto &floor = *player_ptr->current_floor_ptr;

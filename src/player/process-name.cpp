@@ -28,8 +28,9 @@
  */
 void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
 {
+    const auto &world = AngbandWorld::get_instance();
     char old_player_base[32] = "";
-    if (w_ptr->character_generated) {
+    if (world.character_generated) {
         strcpy(old_player_base, player_ptr->base_name);
     }
 
@@ -115,7 +116,7 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
 #endif
     }
 
-    if (w_ptr->character_generated && !streq(old_player_base, player_ptr->base_name)) {
+    if (world.character_generated && !streq(old_player_base, player_ptr->base_name)) {
         autopick_load_pref(player_ptr, false);
     }
 }

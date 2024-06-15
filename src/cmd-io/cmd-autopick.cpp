@@ -125,19 +125,19 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
     tb->dirty_flags = DIRTY_ALL | DIRTY_MODE | DIRTY_EXPRESSION;
     tb->dirty_line = -1;
     tb->filename_mode = PT_DEFAULT;
-
-    if (w_ptr->game_turn < old_autosave_turn) {
-        while (old_autosave_turn > w_ptr->game_turn) {
+    auto &world = AngbandWorld::get_instance();
+    if (world.game_turn < old_autosave_turn) {
+        while (old_autosave_turn > world.game_turn) {
             old_autosave_turn -= TURNS_PER_TICK * TOWN_DAWN;
         }
     }
 
-    if (w_ptr->game_turn > old_autosave_turn + 100L) {
+    if (world.game_turn > old_autosave_turn + 100L) {
         do_cmd_save_game(player_ptr, true);
-        old_autosave_turn = w_ptr->game_turn;
+        old_autosave_turn = world.game_turn;
     }
 
-    w_ptr->update_playtime();
+    world.update_playtime();
     init_autopick();
     if (autopick_last_destroyed_object.is_valid()) {
         autopick_entry_from_object(player_ptr, entry, &autopick_last_destroyed_object);
@@ -213,7 +213,7 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
     kill_yank_chain(tb);
 
     process_autopick_file(player_ptr, filename);
-    w_ptr->start_time = (uint32_t)time(nullptr);
+    world.start_time = (uint32_t)time(nullptr);
     cx_save = tb->cx;
     cy_save = tb->cy;
 }

@@ -105,7 +105,7 @@ bool MonsterDamageProcessor::mon_take_hit(std::string_view note)
         monster.dealt_damage = monster.max_maxhp * 100;
     }
 
-    if (w_ptr->wizard) {
+    if (AngbandWorld::get_instance().wizard) {
         msg_format(_("合計%d/%dのダメージを与えた。", "You do %d (out of %d) damage."), monster.dealt_damage, monster.maxhp);
     }
 

@@ -66,7 +66,7 @@ void wr_options()
 
     /*** Cheating options ***/
     uint16_t c = 0;
-    if (w_ptr->wizard) {
+    if (AngbandWorld::get_instance().wizard) {
         c |= 0x0002;
     }
 
@@ -203,7 +203,7 @@ void save_quick_start(void)
 
     /* UNUSED : Was number of random quests */
     wr_byte(0);
-    if (w_ptr->noscore) {
+    if (AngbandWorld::get_instance().noscore) {
         previous_char.quick_ok = false;
     }
 

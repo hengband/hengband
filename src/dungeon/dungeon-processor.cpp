@@ -44,7 +44,8 @@
 
 static void redraw_character_xtra(PlayerType *player_ptr)
 {
-    w_ptr->character_xtra = true;
+    auto &world = AngbandWorld::get_instance();
+    world.character_xtra = true;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
@@ -79,7 +80,7 @@ static void redraw_character_xtra(PlayerType *player_ptr)
     };
     rfu.set_flags(flags_srf);
     handle_stuff(player_ptr);
-    w_ptr->character_xtra = false;
+    world.character_xtra = false;
 }
 
 /*!
@@ -100,7 +101,8 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     floor.base_level = floor.dun_level;
-    w_ptr->is_loading_now = false;
+    auto &world = AngbandWorld::get_instance();
+    world.is_loading_now = false;
     player_ptr->leaving = false;
 
     command_cmd = 0;
@@ -201,7 +203,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
 
     floor.monster_level = floor.base_level;
     floor.object_level = floor.base_level;
-    w_ptr->is_loading_now = true;
+    world.is_loading_now = true;
     if (player_ptr->energy_need > 0 && !is_watching && (floor.is_in_underground() || player_ptr->leaving_dungeon || floor.inside_arena)) {
         player_ptr->energy_need = 0;
     }
@@ -263,12 +265,12 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
             break;
         }
 
-        w_ptr->game_turn++;
-        if (w_ptr->dungeon_turn < w_ptr->dungeon_turn_limit) {
+        world.game_turn++;
+        if (world.dungeon_turn < world.dungeon_turn_limit) {
             if (!player_ptr->wild_mode || wild_regen) {
-                w_ptr->dungeon_turn++;
-            } else if (player_ptr->wild_mode && !(w_ptr->game_turn % ((MAX_HGT + MAX_WID) / 2))) {
-                w_ptr->dungeon_turn++;
+                world.dungeon_turn++;
+            } else if (player_ptr->wild_mode && !(world.game_turn % ((MAX_HGT + MAX_WID) / 2))) {
+                world.dungeon_turn++;
             }
         }
 

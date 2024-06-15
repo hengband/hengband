@@ -287,7 +287,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                     project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, power, AttributeType::HELL_FIRE, (PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
                 }
 
-                if (w_ptr->wizard) {
+                if (AngbandWorld::get_instance().wizard) {
                     msg_format(_("%d点のダメージを返した。", "You return %d damage."), power);
                 }
 
@@ -929,7 +929,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
 
                     fire_ball(player_ptr, AttributeType::HELL_FIRE, dir, power, 1);
 
-                    if (w_ptr->wizard) {
+                    if (AngbandWorld::get_instance().wizard) {
                         msg_format(_("%d点のダメージを返した。", "You return %d damage."), power);
                     }
                 } else {

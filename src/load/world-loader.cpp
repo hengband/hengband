@@ -86,7 +86,8 @@ static void rd_world_info(PlayerType *player_ptr)
 {
     auto &igd = InnerGameData::get_instance();
     igd.init_turn_limit();
-    w_ptr->dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+    auto &world = AngbandWorld::get_instance();
+    world.dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
     player_ptr->current_floor_ptr->generated_turn = rd_s32b();
     if (h_older_than(1, 7, 0, 4)) {
         player_ptr->feeling_turn = player_ptr->current_floor_ptr->generated_turn;
@@ -94,11 +95,11 @@ static void rd_world_info(PlayerType *player_ptr)
         player_ptr->feeling_turn = rd_s32b();
     }
 
-    w_ptr->game_turn = rd_s32b();
+    world.game_turn = rd_s32b();
     if (h_older_than(0, 3, 12)) {
-        w_ptr->dungeon_turn = w_ptr->game_turn;
+        world.dungeon_turn = world.game_turn;
     } else {
-        w_ptr->dungeon_turn = rd_s32b();
+        world.dungeon_turn = rd_s32b();
     }
 
     if (h_older_than(1, 0, 13)) {
@@ -106,16 +107,16 @@ static void rd_world_info(PlayerType *player_ptr)
     }
 
     if (h_older_than(0, 3, 13)) {
-        w_ptr->arena_start_turn = w_ptr->game_turn;
+        world.arena_start_turn = world.game_turn;
     } else {
-        w_ptr->arena_start_turn = rd_s32b();
+        world.arena_start_turn = rd_s32b();
     }
 
     if (h_older_than(0, 0, 3)) {
         determine_daily_bounty(player_ptr, true);
     } else {
-        w_ptr->today_mon = i2enum<MonsterRaceId>(rd_s16b());
-        w_ptr->knows_daily_bounty = rd_s16b() != 0; // 現在bool型だが、かつてモンスター種族IDを保存していた仕様に合わせる
+        world.today_mon = i2enum<MonsterRaceId>(rd_s16b());
+        world.knows_daily_bounty = rd_s16b() != 0; // 現在bool型だが、かつてモンスター種族IDを保存していた仕様に合わせる
     }
 }
 
@@ -141,8 +142,9 @@ void rd_global_configurations(PlayerType *player_ptr)
     system.set_seed_town(rd_u32b());
 
     player_ptr->panic_save = rd_u16b();
-    w_ptr->total_winner = rd_u16b();
-    w_ptr->noscore = rd_u16b();
+    auto &world = AngbandWorld::get_instance();
+    world.total_winner = rd_u16b();
+    world.noscore = rd_u16b();
 
     player_ptr->is_dead = rd_bool();
 
@@ -174,10 +176,10 @@ void load_wilderness_info(PlayerType *player_ptr)
 
 errr analyze_wilderness(void)
 {
-    auto wild_x_size = rd_s32b();
-    auto wild_y_size = rd_s32b();
-
-    if ((wild_x_size > w_ptr->max_wild_x) || (wild_y_size > w_ptr->max_wild_y)) {
+    const auto wild_x_size = rd_s32b();
+    const auto wild_y_size = rd_s32b();
+    auto &world = AngbandWorld::get_instance();
+    if ((wild_x_size > world.max_wild_x) || (wild_y_size > world.max_wild_y)) {
         load_note(format(_("荒野が大きすぎる(%u/%u)！", "Wilderness is too big (%u/%u)!"), wild_x_size, wild_y_size));
         return 23;
     }
