@@ -58,8 +58,8 @@ bool ask_quick_start(PlayerType *player_ptr)
 
     sp_ptr = &sex_info[player_ptr->psex];
     rp_ptr = &race_info[enum2i(player_ptr->prace)];
+    cp_ptr = &class_info.at(player_ptr->pclass);
     auto short_pclass = enum2i(player_ptr->pclass);
-    cp_ptr = &class_info[short_pclass];
     mp_ptr = &class_magics_info[short_pclass];
     ap_ptr = &personality_info[player_ptr->ppersonality];
 

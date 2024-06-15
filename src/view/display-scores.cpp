@@ -124,14 +124,15 @@ void display_scores(int from, int to, int note, high_score *score)
             }
 
             std::string out_val;
+            const auto pclass = i2enum<PlayerClassType>(pc);
 #ifdef JP
             /* out_val = format("%3d.%9s  %s%s%sという名の%sの%s (レベル %d)", */
             out_val = format("%3d.%9s  %s%s%s - %s%s (レベル %d)", place, the_score.pts, personality_info[pa].title, (personality_info[pa].no ? "の" : ""),
-                the_score.who, race_info[pr].title, class_info[pc].title, clev);
+                the_score.who, race_info[pr].title, class_info.at(pclass).title, clev);
 
 #else
             out_val = format("%3d.%9s  %s %s the %s %s, Level %d", place, the_score.pts, personality_info[pa].title, the_score.who, race_info[pr].title,
-                class_info[pc].title, clev);
+                class_info.at(pclass).title, clev);
 #endif
             if (mlev > clev) {
                 out_val.append(format(_(" (最高%d)", " (Max %d)"), mlev));

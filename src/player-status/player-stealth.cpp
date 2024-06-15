@@ -54,8 +54,8 @@ int16_t PlayerStealth::personality_bonus()
  */
 int16_t PlayerStealth::class_base_bonus()
 {
-    const player_class_info *c_ptr = &class_info[enum2i(this->player_ptr->pclass)];
-    return c_ptr->c_stl + (c_ptr->x_stl * this->player_ptr->lev / 10);
+    const auto &player_class = class_info.at(this->player_ptr->pclass);
+    return player_class.c_stl + (player_class.x_stl * this->player_ptr->lev / 10);
 }
 
 /*!

@@ -73,7 +73,7 @@ static void dump_yourself(PlayerType *player_ptr, FILE *fff)
 
     auto short_pclass = enum2i(player_ptr->pclass);
     fprintf(fff, "\n");
-    fprintf(fff, _("職業: %s\n", "Class: %s\n"), class_info[short_pclass].title);
+    fprintf(fff, _("職業: %s\n", "Class: %s\n"), class_info.at(player_ptr->pclass).title);
     dump_explanation(class_explanations[short_pclass].data(), fff);
 
     fprintf(fff, "\n");
@@ -114,7 +114,7 @@ static void dump_winner_classes(FILE *fff)
             continue;
         }
 
-        auto &cl = class_info[c];
+        auto &cl = class_info.at(i2enum<PlayerClassType>(c));
         auto t = std::string(cl.title);
 
         if (w_ptr->sf_retired.has_not(i2enum<PlayerClassType>(c))) {

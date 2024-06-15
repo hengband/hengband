@@ -214,13 +214,13 @@ static errr exe_reading_savefile(PlayerType *player_ptr)
         return load_hp_result;
     }
 
-    auto short_pclass = enum2i(player_ptr->pclass);
     sp_ptr = &sex_info[player_ptr->psex];
     rp_ptr = &race_info[enum2i(player_ptr->prace)];
-    cp_ptr = &class_info[short_pclass];
+    cp_ptr = &class_info.at(player_ptr->pclass);
     ap_ptr = &personality_info[player_ptr->ppersonality];
 
     set_zangband_class(player_ptr);
+    auto short_pclass = enum2i(player_ptr->pclass);
     mp_ptr = &class_magics_info[short_pclass];
 
     load_spells(player_ptr);
