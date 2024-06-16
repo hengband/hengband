@@ -69,6 +69,8 @@ public:
     MonsterRaceInfo &get_today_bounty();
     const MonsterRaceInfo &get_today_bounty() const;
     bool is_player_true_winner() const;
+    void pass_game_turn_by_stay();
+    std::string format_real_playtime() const;
 
 private:
     bool is_out_arena = false; // アリーナ外部にいる時だけtrue.

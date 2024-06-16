@@ -150,3 +150,32 @@ bool AngbandWorld::is_retired_class(PlayerClassType c) const
 
     return this->sf_retired.has(c);
 }
+
+/*!
+ * @brief 宿泊によってゲーム内ターンを経過させる
+ */
+void AngbandWorld::pass_game_turn_by_stay()
+{
+    const auto oldturn = this->game_turn;
+    this->game_turn = (this->game_turn / (TURNS_PER_TICK * TOWN_DAWN / 2) + 1) * (TURNS_PER_TICK * TOWN_DAWN / 2);
+    if (this->dungeon_turn >= this->dungeon_turn_limit) {
+        return;
+    }
+
+    constexpr auto stay_magnificant = 10;
+    this->dungeon_turn += std::min<int>((this->game_turn - oldturn), TURNS_PER_TICK * 250) * stay_magnificant;
+    if (this->dungeon_turn > this->dungeon_turn_limit) {
+        this->dungeon_turn = this->dungeon_turn_limit;
+    }
+}
+
+/*!
+ * @brief 現実のプレイ時間をフォーマットして返す
+ */
+std::string AngbandWorld::format_real_playtime() const
+{
+    const auto hour = this->play_time / (60 * 60);
+    const auto min = (this->play_time / 60) % 60;
+    const auto sec = this->play_time % 60;
+    return format("%.2u:%.2u:%.2u", hour, min, sec);
+}
