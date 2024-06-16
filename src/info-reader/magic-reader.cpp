@@ -2,6 +2,7 @@
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "main/angband-headers.h"
+#include "object/tval-types.h"
 #include "player-ability/player-ability-types.h"
 #include "player-info/class-info.h"
 #include "util/string-processor.h"

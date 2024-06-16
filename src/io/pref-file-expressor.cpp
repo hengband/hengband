@@ -25,7 +25,7 @@
  *   result
  * </pre>
  */
-concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
+std::string process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
 {
     char *s;
     s = (*sp);
@@ -36,15 +36,15 @@ concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
     char *b;
     b = s;
 
-    concptr v = "?o?o?";
+    std::string v = "?o?o?";
 
     char b1 = '[';
     char b2 = ']';
     char f = ' ';
     static char tmp[16];
     if (*s == b1) {
-        concptr p;
-        concptr t;
+        std::string p;
+        std::string t;
 
         /* Skip b1 */
         s++;
@@ -52,43 +52,43 @@ concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
         /* First */
         t = process_pref_file_expr(player_ptr, &s, &f);
 
-        if (!*t) {
-        } else if (streq(t, "IOR")) {
+        if (t.empty()) {
+        } else if (t == "IOR") {
             v = "0";
             while (*s && (f != b2)) {
                 t = process_pref_file_expr(player_ptr, &s, &f);
-                if (*t && !streq(t, "0")) {
+                if (t != "0") {
                     v = "1";
                 }
             }
-        } else if (streq(t, "AND")) {
+        } else if (t == "AND") {
             v = "1";
             while (*s && (f != b2)) {
                 t = process_pref_file_expr(player_ptr, &s, &f);
-                if (*t && streq(t, "0")) {
+                if (t == "0") {
                     v = "0";
                 }
             }
-        } else if (streq(t, "NOT")) {
+        } else if (t == "NOT") {
             v = "1";
             while (*s && (f != b2)) {
                 t = process_pref_file_expr(player_ptr, &s, &f);
-                if (*t && streq(t, "1")) {
+                if (t == "1") {
                     v = "0";
                 }
             }
-        } else if (streq(t, "EQU")) {
+        } else if (t == "EQU") {
             v = "0";
             if (*s && (f != b2)) {
                 t = process_pref_file_expr(player_ptr, &s, &f);
             }
             while (*s && (f != b2)) {
                 p = process_pref_file_expr(player_ptr, &s, &f);
-                if (streq(t, p)) {
+                if (t == p) {
                     v = "1";
                 }
             }
-        } else if (streq(t, "LEQ")) {
+        } else if (t == "LEQ") {
             v = "1";
             if (*s && (f != b2)) {
                 t = process_pref_file_expr(player_ptr, &s, &f);
@@ -96,11 +96,11 @@ concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
             while (*s && (f != b2)) {
                 p = t;
                 t = process_pref_file_expr(player_ptr, &s, &f);
-                if (*t && atoi(p) > atoi(t)) {
+                if (!t.empty() && std::stoi(p) > std::stoi(t)) {
                     v = "0";
                 }
             }
-        } else if (streq(t, "GEQ")) {
+        } else if (t == "GEQ") {
             v = "1";
             if (*s && (f != b2)) {
                 t = process_pref_file_expr(player_ptr, &s, &f);
@@ -108,7 +108,7 @@ concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
             while (*s && (f != b2)) {
                 p = t;
                 t = process_pref_file_expr(player_ptr, &s, &f);
-                if (*t && atoi(p) < atoi(t)) {
+                if (!t.empty() && std::stoi(p) < std::stoi(t)) {
                     v = "0";
                 }
             }

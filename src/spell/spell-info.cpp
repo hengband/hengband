@@ -1,5 +1,6 @@
 #include "spell/spell-info.h"
 #include "io/input-key-requester.h"
+#include "object/tval-types.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player/player-skill.h"

@@ -1,10 +1,7 @@
 #pragma once
 
-#include "object/tval-types.h"
-#include "player-info/class-types.h"
-#include "realm/realm-types.h"
 #include "spell/technic-info-table.h"
-#include "system/angband.h"
+#include <cstdint>
 #include <map>
 #include <string>
 #include <vector>
@@ -18,6 +15,7 @@
  * Note that a player with a "spell_book" of "zero" is illiterate.
  */
 
+enum class ItemKindType : short;
 struct player_magic {
     ItemKindType spell_book{}; /* Tval of spell books (if any) */
     bool has_glove_mp_penalty{}; /* 籠手装備によるMP減少 */
@@ -37,35 +35,35 @@ extern std::vector<player_magic> class_magics_info;
 extern const player_magic *mp_ptr;
 
 struct player_class_info {
-    concptr title; /* Type of class */
+    std::string title; //!< 職種
 
 #ifdef JP
-    concptr E_title; /* 英語職業 */
+    std::string E_title; //!< 職種 (英語表記)
 #endif
-    int16_t c_adj[6]; /* Class stat modifier */
+    short c_adj[6]; /* Class stat modifier */
 
-    int16_t c_dis; /* class disarming */
-    int16_t c_dev; /* class magic devices */
-    int16_t c_sav; /* class saving throws */
-    int16_t c_stl; /* class stealth */
-    int16_t c_srh; /* class searching ability */
-    int16_t c_fos; /* class searching frequency */
-    int16_t c_thn; /* class to hit (normal) */
-    int16_t c_thb; /* class to hit (bows) */
+    short c_dis; /* class disarming */
+    short c_dev; /* class magic devices */
+    short c_sav; /* class saving throws */
+    short c_stl; /* class stealth */
+    short c_srh; /* class searching ability */
+    short c_fos; /* class searching frequency */
+    short c_thn; /* class to hit (normal) */
+    short c_thb; /* class to hit (bows) */
 
-    int16_t x_dis; /* extra disarming */
-    int16_t x_dev; /* extra magic devices */
-    int16_t x_sav; /* extra saving throws */
-    int16_t x_stl; /* extra stealth */
-    int16_t x_srh; /* extra searching ability */
-    int16_t x_fos; /* extra searching frequency */
-    int16_t x_thn; /* extra to hit (normal) */
-    int16_t x_thb; /* extra to hit (bows) */
+    short x_dis; /* extra disarming */
+    short x_dev; /* extra magic devices */
+    short x_sav; /* extra saving throws */
+    short x_stl; /* extra stealth */
+    short x_srh; /* extra searching ability */
+    short x_fos; /* extra searching frequency */
+    short x_thn; /* extra to hit (normal) */
+    short x_thb; /* extra to hit (bows) */
 
-    int16_t c_mhp; /* Class hit-dice adjustment */
-    int16_t c_exp; /* Class experience factor */
+    short c_mhp; /* Class hit-dice adjustment */
+    short c_exp; /* Class experience factor */
 
-    byte pet_upkeep_div; /* Pet upkeep divider */
+    uint8_t pet_upkeep_div; /* Pet upkeep divider */
 
     int num;
     int wgt;

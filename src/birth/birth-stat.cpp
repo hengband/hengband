@@ -1,5 +1,6 @@
 #include "birth/birth-stat.h"
 #include "birth/auto-roller.h"
+#include "object/tval-types.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"

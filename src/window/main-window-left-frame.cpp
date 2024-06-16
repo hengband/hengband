@@ -4,6 +4,7 @@
 #include "game-option/text-display-options.h"
 #include "market/arena-entry.h"
 #include "monster/monster-status.h"
+#include "object/tval-types.h"
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player-info/mimic-info-table.h"

@@ -37,7 +37,7 @@ static concptr variant = "ZANGBAND";
  * @param fp
  * @return エラーコード
  */
-static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, char *fp)
+static std::string parse_fixed_map_expression(PlayerType *player_ptr, char **sp, char *fp)
 {
     static std::string tmp;
     char b1 = '[';
@@ -54,39 +54,39 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
 
     char *b;
     b = s;
-    concptr v = "?o?o?";
+    std::string v("?o?o?");
     if (*s == b1) {
-        concptr p;
-        concptr t;
+        std::string p;
+        std::string t;
         s++;
         t = parse_fixed_map_expression(player_ptr, &s, &f);
-        if (!*t) {
+        if (t.empty()) {
             /* Nothing */
-        } else if (streq(t, "IOR")) {
+        } else if (t == "IOR") {
             v = "0";
             while (*s && (f != b2)) {
                 t = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (*t && !streq(t, "0")) {
+                if (t != "0") {
                     v = "1";
                 }
             }
-        } else if (streq(t, "AND")) {
+        } else if (t == "AND") {
             v = "1";
             while (*s && (f != b2)) {
                 t = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (*t && streq(t, "0")) {
+                if (t == "0") {
                     v = "0";
                 }
             }
-        } else if (streq(t, "NOT")) {
+        } else if (t == "NOT") {
             v = "1";
             while (*s && (f != b2)) {
                 t = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (*t && streq(t, "1")) {
+                if (t == "1") {
                     v = "0";
                 }
             }
-        } else if (streq(t, "EQU")) {
+        } else if (t == "EQU") {
             v = "0";
             if (*s && (f != b2)) {
                 t = parse_fixed_map_expression(player_ptr, &s, &f);
@@ -94,11 +94,11 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
 
             while (*s && (f != b2)) {
                 p = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (streq(t, p)) {
+                if (t == p) {
                     v = "1";
                 }
             }
-        } else if (streq(t, "LEQ")) {
+        } else if (t == "LEQ") {
             v = "1";
             if (*s && (f != b2)) {
                 t = parse_fixed_map_expression(player_ptr, &s, &f);
@@ -107,11 +107,11 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
             while (*s && (f != b2)) {
                 p = t;
                 t = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (*t && atoi(p) > atoi(t)) {
+                if (!t.empty() && std::stoi(p) > std::stoi(t)) {
                     v = "0";
                 }
             }
-        } else if (streq(t, "GEQ")) {
+        } else if (t == "GEQ") {
             v = "1";
             if (*s && (f != b2)) {
                 t = parse_fixed_map_expression(player_ptr, &s, &f);
@@ -120,7 +120,7 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
             while (*s && (f != b2)) {
                 p = t;
                 t = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (*t && atoi(p) < atoi(t)) {
+                if (!t.empty() && std::stoi(p) < std::stoi(t)) {
                     v = "0";
                 }
             }
@@ -280,8 +280,8 @@ parse_error_type parse_fixed_map(PlayerType *player_ptr, std::string_view name, 
         if (line_str->starts_with("?:")) {
             char f;
             auto *s = line_str->data() + 2;
-            concptr v = parse_fixed_map_expression(player_ptr, &s, &f);
-            bypass = streq(v, "0");
+            const auto v = parse_fixed_map_expression(player_ptr, &s, &f);
+            bypass = v == "0";
             continue;
         }
 

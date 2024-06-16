@@ -11,6 +11,7 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
+#include "object/tval-types.h"
 #include "player-info/class-info.h"
 #include "player/player-damage.h"
 #include "spell-kind/spells-floor.h"
