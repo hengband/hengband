@@ -779,7 +779,7 @@ bool ItemEntity::has_bias() const
 
 bool ItemEntity::is_bounty() const
 {
-    if (this->bi_key.tval() != ItemKindType::CORPSE) {
+    if (this->bi_key.tval() != ItemKindType::MONSTER_REMAINS) {
         return false;
     }
 

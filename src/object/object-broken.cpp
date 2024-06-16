@@ -71,7 +71,7 @@ bool BreakerAcid::hates(ItemEntity *o_ptr) const
     case ItemKindType::STAFF:
     case ItemKindType::SCROLL:
     case ItemKindType::CHEST:
-    case ItemKindType::SKELETON:
+    case ItemKindType::FLAVOR_SKELETON:
     case ItemKindType::BOTTLE:
     case ItemKindType::JUNK:
         return true;
@@ -388,7 +388,7 @@ PERCENTAGE breakage_chance(PlayerType *player_ptr, ItemEntity *o_ptr, bool has_a
         /* Often break */
     case ItemKindType::LITE:
     case ItemKindType::SCROLL:
-    case ItemKindType::SKELETON:
+    case ItemKindType::FLAVOR_SKELETON:
         return 50;
 
         /* Sometimes break */

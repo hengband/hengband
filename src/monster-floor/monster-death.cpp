@@ -136,7 +136,7 @@ static void drop_corpse(PlayerType *player_ptr, MonsterDeath *md_ptr)
         }
     }
 
-    ItemEntity item({ ItemKindType::CORPSE, (corpse ? SV_CORPSE : SV_SKELETON) });
+    ItemEntity item({ ItemKindType::MONSTER_REMAINS, (corpse ? SV_CORPSE : SV_SKELETON) });
     ItemMagicApplier(player_ptr, &item, floor_ptr->object_level, AM_NO_FIXED_ART).execute();
     item.pval = enum2i(md_ptr->m_ptr->r_idx);
     (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);

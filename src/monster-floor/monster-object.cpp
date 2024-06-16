@@ -191,7 +191,7 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
 
         if (turn_flags_ptr->do_take) {
             const auto tval = o_ptr->bi_key.tval();
-            if (tval == ItemKindType::GOLD || (tval == ItemKindType::CORPSE) || (tval == ItemKindType::STATUE)) {
+            if (tval == ItemKindType::GOLD || (tval == ItemKindType::MONSTER_REMAINS) || (tval == ItemKindType::STATUE)) {
                 continue;
             }
         }

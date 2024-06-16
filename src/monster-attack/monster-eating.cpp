@@ -176,7 +176,7 @@ void process_eat_food(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         }
 
         const auto tval = monap_ptr->o_ptr->bi_key.tval();
-        if ((tval != ItemKindType::FOOD) && !((tval == ItemKindType::CORPSE) && (monap_ptr->o_ptr->bi_key.sval() != 0))) {
+        if ((tval != ItemKindType::FOOD) && !((tval == ItemKindType::MONSTER_REMAINS) && (monap_ptr->o_ptr->bi_key.sval() != 0))) {
             continue;
         }
 

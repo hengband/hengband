@@ -51,9 +51,9 @@ const std::vector<tval_desc> tval_desc_list = {
     { ItemKindType::CARD, _("エクスプレスカード", "Express Card") },
     { ItemKindType::FIGURINE, _("人形", "Magical Figurine") },
     { ItemKindType::STATUE, _("像", "Statue") },
-    { ItemKindType::CORPSE, _("死体", "Corpse") },
+    { ItemKindType::MONSTER_REMAINS, _("死体", "Corpse") },
     { ItemKindType::FOOD, _("食料", "Food") },
     { ItemKindType::FLASK, _("油つぼ", "Flask") },
     { ItemKindType::JUNK, _("がらくた", "Junk") },
-    { ItemKindType::SKELETON, _("骨", "Skeleton") },
+    { ItemKindType::FLAVOR_SKELETON, _("骨", "Skeleton") },
 };

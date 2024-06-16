@@ -40,9 +40,9 @@ const std::vector<grouper> group_item_list = {
 
     { { ItemKindType::FIGURINE }, _("人形", "Magical Figurines") },
     { { ItemKindType::STATUE }, _("像", "Statues") },
-    { { ItemKindType::CORPSE }, _("死体", "Corpses") },
+    { { ItemKindType::MONSTER_REMAINS }, _("死体", "Corpses") },
 
-    { { ItemKindType::SKELETON, ItemKindType::BOTTLE, ItemKindType::JUNK, ItemKindType::SPIKE, ItemKindType::FLASK, ItemKindType::PARCHMENT }, _("その他", "Misc") },
+    { { ItemKindType::FLAVOR_SKELETON, ItemKindType::BOTTLE, ItemKindType::JUNK, ItemKindType::SPIKE, ItemKindType::FLASK, ItemKindType::PARCHMENT }, _("その他", "Misc") },
 };
 
 /* The artifacts categorized by type */

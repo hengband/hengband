@@ -486,7 +486,7 @@ bool BaseitemKey::is_lite_requiring_fuel() const
 bool BaseitemKey::is_junk() const
 {
     switch (this->type_value) {
-    case ItemKindType::SKELETON:
+    case ItemKindType::FLAVOR_SKELETON:
     case ItemKindType::BOTTLE:
     case ItemKindType::JUNK:
     case ItemKindType::STATUE:
@@ -530,8 +530,8 @@ bool BaseitemKey::should_refuse_enchant() const
 
 bool BaseitemKey::is_convertible() const
 {
-    auto is_convertible = this->is(ItemKindType::JUNK) || this->is(ItemKindType::SKELETON);
-    is_convertible |= *this == BaseitemKey(ItemKindType::CORPSE, SV_SKELETON);
+    auto is_convertible = this->is(ItemKindType::JUNK) || this->is(ItemKindType::FLAVOR_SKELETON);
+    is_convertible |= *this == BaseitemKey(ItemKindType::MONSTER_REMAINS, SV_SKELETON);
     return is_convertible;
 }
 
@@ -559,7 +559,7 @@ bool BaseitemKey::is_readable() const
 
 bool BaseitemKey::is_corpse() const
 {
-    return *this == BaseitemKey(ItemKindType::CORPSE, SV_CORPSE);
+    return *this == BaseitemKey(ItemKindType::MONSTER_REMAINS, SV_CORPSE);
 }
 
 bool BaseitemKey::is_monster() const
@@ -567,7 +567,7 @@ bool BaseitemKey::is_monster() const
     switch (this->type_value) {
     case ItemKindType::FIGURINE:
     case ItemKindType::STATUE:
-    case ItemKindType::CORPSE:
+    case ItemKindType::MONSTER_REMAINS:
     case ItemKindType::CAPTURE:
         return true;
     default:
@@ -685,7 +685,7 @@ void BaseitemInfo::decide_easy_know()
     case ItemKindType::FLASK:
     case ItemKindType::JUNK:
     case ItemKindType::BOTTLE:
-    case ItemKindType::SKELETON:
+    case ItemKindType::FLAVOR_SKELETON:
     case ItemKindType::SPIKE:
     case ItemKindType::WHISTLE:
     case ItemKindType::FOOD:

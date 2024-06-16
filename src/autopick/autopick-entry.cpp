@@ -434,13 +434,13 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, co
 
     const auto &bi_key = o_ptr->bi_key;
     const auto tval = bi_key.tval();
-    if ((tval == ItemKindType::CORPSE) || (tval == ItemKindType::STATUE)) {
+    if ((tval == ItemKindType::MONSTER_REMAINS) || (tval == ItemKindType::STATUE)) {
         if (o_ptr->get_monrace().kind_flags.has(MonsterKindType::UNIQUE)) {
             entry->add(FLG_UNIQUE);
         }
     }
 
-    if (tval == ItemKindType::CORPSE) {
+    if (tval == ItemKindType::MONSTER_REMAINS) {
         if (o_ptr->get_monrace().symbol_char_is_any_of("pht")) {
             entry->add(FLG_HUMAN);
         }
@@ -488,7 +488,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, co
         entry->add(FLG_LIGHTS);
     } else if (o_ptr->is_junk()) {
         entry->add(FLG_JUNKS);
-    } else if (tval == ItemKindType::CORPSE) {
+    } else if (tval == ItemKindType::MONSTER_REMAINS) {
         entry->add(FLG_CORPSES);
     } else if (o_ptr->is_spell_book()) {
         entry->add(FLG_SPELLBOOKS);
