@@ -70,7 +70,7 @@ void OtherItemsEnchanter::apply_magic()
     case ItemKindType::FIGURINE:
         this->generate_figurine();
         break;
-    case ItemKindType::CORPSE:
+    case ItemKindType::MONSTER_REMAINS:
         this->generate_corpse();
         break;
     case ItemKindType::STATUE:

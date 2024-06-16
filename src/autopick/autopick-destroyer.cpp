@@ -52,7 +52,7 @@ static bool is_leave_special_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         }
     }
     if (pc.equals(PlayerClassType::ARCHER)) {
-        if ((tval == ItemKindType::SKELETON) || (bi_key == BaseitemKey(ItemKindType::CORPSE, SV_SKELETON))) {
+        if ((tval == ItemKindType::FLAVOR_SKELETON) || (bi_key == BaseitemKey(ItemKindType::MONSTER_REMAINS, SV_SKELETON))) {
             return false;
         }
     }
@@ -105,7 +105,7 @@ static bool is_opt_confirm_destroy(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     if (leave_corpse) {
-        if (tval == ItemKindType::CORPSE) {
+        if (tval == ItemKindType::MONSTER_REMAINS) {
             return false;
         }
     }

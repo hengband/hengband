@@ -359,7 +359,7 @@ std::pair<std::string, std::string> switch_tval_description(const ItemEntity &it
     switch (item.bi_key.tval()) {
     case ItemKindType::NONE:
         return { _("(なし)", "(Nothing)"), "" };
-    case ItemKindType::SKELETON:
+    case ItemKindType::FLAVOR_SKELETON:
     case ItemKindType::BOTTLE:
     case ItemKindType::JUNK:
     case ItemKindType::SPIKE:
@@ -372,7 +372,7 @@ std::pair<std::string, std::string> switch_tval_description(const ItemEntity &it
     case ItemKindType::FIGURINE:
     case ItemKindType::STATUE:
         return describe_statue(item);
-    case ItemKindType::CORPSE:
+    case ItemKindType::MONSTER_REMAINS:
         return describe_corpse(item);
     case ItemKindType::SHOT:
     case ItemKindType::BOLT:

@@ -101,7 +101,7 @@ int object_similar_part(const ItemEntity *o_ptr, const ItemEntity *j_ptr)
         break;
     }
     case ItemKindType::FIGURINE:
-    case ItemKindType::CORPSE:
+    case ItemKindType::MONSTER_REMAINS:
         if (o_ptr->pval != j_ptr->pval) {
             return 0;
         }

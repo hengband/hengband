@@ -94,7 +94,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         const auto &item = player_ptr->inventory_list[i];
-        if (item.bi_key != BaseitemKey(ItemKindType::CORPSE, SV_SKELETON)) {
+        if (item.bi_key != BaseitemKey(ItemKindType::MONSTER_REMAINS, SV_SKELETON)) {
             continue;
         }
 
@@ -138,7 +138,7 @@ bool exchange_cash(PlayerType *player_ptr)
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         const auto &item = player_ptr->inventory_list[i];
         const auto &monrace = w_ptr->get_today_bounty();
-        if ((item.bi_key != BaseitemKey(ItemKindType::CORPSE, SV_SKELETON)) || (item.get_monrace().name != monrace.name)) {
+        if ((item.bi_key != BaseitemKey(ItemKindType::MONSTER_REMAINS, SV_SKELETON)) || (item.get_monrace().name != monrace.name)) {
             continue;
         }
 
@@ -162,7 +162,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
         for (INVENTORY_IDX i = INVEN_PACK - 1; i >= 0; i--) {
             auto &item = player_ptr->inventory_list[i];
-            if ((item.bi_key.tval() != ItemKindType::CORPSE) || (item.get_monrace().idx != monrace_id)) {
+            if ((item.bi_key.tval() != ItemKindType::MONSTER_REMAINS) || (item.get_monrace().idx != monrace_id)) {
                 continue;
             }
 

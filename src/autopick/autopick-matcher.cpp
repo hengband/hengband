@@ -63,7 +63,7 @@ static bool check_item_features(PlayerType *player_ptr, const autopick_type &ent
 
     if (entry.has(FLG_JUNKS)) {
         switch (tval) {
-        case ItemKindType::SKELETON:
+        case ItemKindType::FLAVOR_SKELETON:
         case ItemKindType::BOTTLE:
         case ItemKindType::JUNK:
         case ItemKindType::STATUE:
@@ -74,7 +74,7 @@ static bool check_item_features(PlayerType *player_ptr, const autopick_type &ent
     }
 
     if (entry.has(FLG_CORPSES)) {
-        return (tval == ItemKindType::CORPSE) || (tval == ItemKindType::SKELETON);
+        return (tval == ItemKindType::MONSTER_REMAINS) || (tval == ItemKindType::FLAVOR_SKELETON);
     }
 
     if (entry.has(FLG_SPELLBOOKS)) {
@@ -297,14 +297,14 @@ bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const au
     const auto sval = *bi_key.sval();
     if (entry.has(FLG_UNIQUE) && o_ptr->has_monrace()) {
         const auto &monrace = o_ptr->get_monrace();
-        if (((tval != ItemKindType::CORPSE && tval != ItemKindType::STATUE) || monrace.kind_flags.has_not(MonsterKindType::UNIQUE))) {
+        if (((tval != ItemKindType::MONSTER_REMAINS && tval != ItemKindType::STATUE) || monrace.kind_flags.has_not(MonsterKindType::UNIQUE))) {
             return false;
         }
     }
 
     if (entry.has(FLG_HUMAN) && o_ptr->has_monrace()) {
         const auto &monrace = o_ptr->get_monrace();
-        if (tval != ItemKindType::CORPSE || !monrace.symbol_char_is_any_of("pht")) {
+        if (tval != ItemKindType::MONSTER_REMAINS || !monrace.symbol_char_is_any_of("pht")) {
             return false;
         }
     }

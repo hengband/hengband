@@ -18,7 +18,7 @@
 
 enum class ItemKindType : short {
     NONE = 0,
-    SKELETON = 1, /* Skeletons ('s'), not specified */
+    FLAVOR_SKELETON = 1, /* Skeletons ('~'), not specified */
     BOTTLE = 2, /* Empty bottles ('!') */
     JUNK = 3, /* Sticks, Pottery, etc ('~') */
     WHISTLE = 4, /* Whistle ('~') */
@@ -26,7 +26,7 @@ enum class ItemKindType : short {
     CHEST = 7, /* Chests ('&') */
     FIGURINE = 8, /* Magical figurines */
     STATUE = 9, /* Statue, what a silly object... */
-    CORPSE = 10, /* Corpses and Skeletons, specific */
+    MONSTER_REMAINS = 10, /* Corpses and Skeletons of the specific monster */
     CAPTURE = 11, /* Monster ball */
     NO_AMMO = 15, /* Ammo for crimson */
     SHOT = 16, /* Ammo for slings */
