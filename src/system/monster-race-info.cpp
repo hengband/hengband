@@ -170,7 +170,7 @@ int MonsterRaceInfo::calc_power() const
     if (this->misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
         power = this->hit_dice.maxroll() * 2;
     } else {
-        power = this->hit_dice.expected_value() * 2;
+        power = this->hit_dice.floored_expected_value_multiplied_by(2);
     }
 
     power = power * (100 + this->level) / 100;

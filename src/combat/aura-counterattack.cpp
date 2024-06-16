@@ -211,7 +211,7 @@ static void aura_shadow_by_monster_attack(PlayerType *player_ptr, MonsterAttackP
     if (o_armed_ptr->is_valid()) {
         const auto num = (o_armed_ptr->damage_dice.num + player_ptr->to_dd[0]);
         const auto sides = (o_armed_ptr->damage_dice.sides + player_ptr->to_ds[0]);
-        dam = Dice::expected_value(num, sides) + o_armed_ptr->to_d + player_ptr->to_d[0];
+        dam = Dice::floored_expected_value(num, sides) + o_armed_ptr->to_d + player_ptr->to_d[0];
     }
 
     o_armed_ptr = &player_ptr->inventory_list[INVEN_BODY];

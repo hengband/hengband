@@ -59,6 +59,21 @@ double Dice::expected_value(int num, int sides)
 }
 
 /*!
+ * @brief 面数sidesのダイスをnum個振った時の出目の合計の期待値の整数部を返す
+ *
+ * 小数部を切り捨てたことによる誤差をなくすため、引数で倍率を指定することができる。
+ *
+ * @param num ダイスの数
+ * @param sides ダイスの面数
+ * @param mult 期待値の倍率
+ * @return 出目の合計の期待値のmult倍の小数点以下を切り捨てた値
+ */
+int Dice::floored_expected_value(int num, int sides, int mult)
+{
+    return mult * num * (sides + 1) / 2;
+}
+
+/*!
  * @brief ダイスを表す文字列を生成する
  *
  * ダイスの数をN、面数をMとした時、"NdM"の形式の文字列を生成する。
@@ -113,6 +128,16 @@ int Dice::maxroll() const
 double Dice::expected_value() const
 {
     return Dice::expected_value(this->num, this->sides);
+}
+
+int Dice::floored_expected_value() const
+{
+    return Dice::floored_expected_value(this->num, this->sides, 1);
+}
+
+int Dice::floored_expected_value_multiplied_by(int mult) const
+{
+    return Dice::floored_expected_value(this->num, this->sides, mult);
 }
 
 std::string Dice::to_string() const
