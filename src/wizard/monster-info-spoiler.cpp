@@ -117,10 +117,10 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
         const auto spd = format("%+d", monrace.speed - STANDARD_SPEED);
         const auto ac = format("%d", monrace.ac);
         std::string hp;
-        if (monrace.misc_flags.has(MonsterMiscType::FORCE_MAXHP) || (monrace.hside == 1)) {
-            hp = format("%d", monrace.hdice * monrace.hside);
+        if (monrace.misc_flags.has(MonsterMiscType::FORCE_MAXHP) || (monrace.hit_dice.sides == 1)) {
+            hp = format("%d", monrace.hit_dice.maxroll());
         } else {
-            hp = format("%dd%d", monrace.hdice, monrace.hside);
+            hp = monrace.hit_dice.to_string();
         }
 
         const auto symbol = format("%s '%c'", attr_to_text(monrace).data(), monrace.symbol_definition.character);
@@ -185,10 +185,10 @@ SpoilerOutputResultType spoil_mon_info()
         spoil_out(format("Lev:%d  ", (int)monrace.level));
         spoil_out(format("Rar:%d  ", monrace.rarity));
         spoil_out(format("Spd:%+d  ", monrace.speed - STANDARD_SPEED));
-        if (monrace.misc_flags.has(MonsterMiscType::FORCE_MAXHP) || (monrace.hside == 1)) {
-            spoil_out(format("Hp:%d  ", monrace.hdice * monrace.hside));
+        if (monrace.misc_flags.has(MonsterMiscType::FORCE_MAXHP) || (monrace.hit_dice.sides == 1)) {
+            spoil_out(format("Hp:%d  ", monrace.hit_dice.maxroll()));
         } else {
-            spoil_out(format("Hp:%dd%d  ", monrace.hdice, monrace.hside));
+            spoil_out(format("Hp:%s  ", monrace.hit_dice.to_string().data()));
         }
 
         spoil_out(format("Ac:%d  ", monrace.ac));

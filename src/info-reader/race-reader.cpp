@@ -272,13 +272,12 @@ static errr set_mon_escorts(nlohmann::json &escort_data, MonsterRaceInfo &monrac
             return err;
         }
 
-        DICE_NUMBER dd;
-        DICE_SID ds;
-        if (auto err = info_set_dice(escort.value()["escort_num"], dd, ds, true)) {
+        Dice num_dice;
+        if (auto err = info_set_dice(escort.value()["escort_num"], num_dice, true)) {
             return err;
         }
 
-        monrace.reinforces.emplace_back(monrace_id, dd, ds);
+        monrace.reinforces.emplace_back(monrace_id, num_dice);
     }
     return PARSE_ERROR_NONE;
 }
@@ -322,7 +321,7 @@ static errr set_mon_blows(nlohmann::json &blow_data, MonsterRaceInfo &monrace)
         mon_blow.method = rbm->second;
         mon_blow.effect = rbe->second;
 
-        if (auto err = info_set_dice(blow.value()["damage_dice"], mon_blow.d_dice, mon_blow.d_side, false)) {
+        if (auto err = info_set_dice(blow.value()["damage_dice"], mon_blow.damage_dice, false)) {
             return err;
         }
 
@@ -387,9 +386,9 @@ static errr set_mon_skills(const nlohmann::json &skill_data, MonsterRaceInfo &mo
     const auto &shoot_dice = skill_data.find("shoot");
     const auto shoot = (shoot_dice != skill_data.end());
     if (shoot) {
-        const auto &dice = str_split(shoot_dice->get<std::string>(), 'd', false, 2);
-        info_set_value(monrace.shoot_dam_dice, dice[0]);
-        info_set_value(monrace.shoot_dam_side, dice[1]);
+        if (auto ret = info_set_dice(shoot_dice->get<std::string>(), monrace.shoot_damage_dice, true)) {
+            return ret;
+        }
         monrace.ability_flags.set(MonsterAbilityType::SHOOT);
     }
 
@@ -445,7 +444,7 @@ errr parse_monraces_info(nlohmann::json &mon_data, angband_header *)
         msg_format(_("モンスター速度読込失敗。ID: '%d'。", "Failed to load monster speed. ID: '%d'."), error_idx);
         return err;
     }
-    err = info_set_dice(mon_data["hit_point"], monrace.hdice, monrace.hside, true);
+    err = info_set_dice(mon_data["hit_point"], monrace.hit_dice, true);
     if (err) {
         msg_format(_("モンスターHP読込失敗。ID: '%d'。", "Failed to load monster HP. ID: '%d'."), error_idx);
         return err;

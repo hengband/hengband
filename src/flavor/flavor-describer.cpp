@@ -35,7 +35,6 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
-#include <cmath>
 #include <sstream>
 
 static std::string describe_chest_trap(const ItemEntity &item)
@@ -249,7 +248,7 @@ static std::string describe_fire_energy(PlayerType *player_ptr, const ItemEntity
 
 static std::string describe_ammo_detail(PlayerType *player_ptr, const ItemEntity &ammo, const ItemEntity &bow, const describe_option_type &opt)
 {
-    auto avgdam = static_cast<int>(std::round(ammo.damage_dice.expected_value() * 10));
+    auto avgdam = ammo.damage_dice.floored_expected_value_multiplied_by(10);
     auto tmul = bow.get_arrow_magnification();
     if (bow.is_known()) {
         avgdam += (bow.to_d * 10);

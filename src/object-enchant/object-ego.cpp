@@ -236,7 +236,7 @@ void ego_invest_extra_attack(ItemEntity *o_ptr, const EgoItemDefinition &ego, DE
 
     if (ego_has_flag(o_ptr, ego, TR_SLAY_EVIL) || ego_has_flag(o_ptr, ego, TR_KILL_EVIL)) {
         o_ptr->pval++;
-        if ((lev > 60) && one_in_(3) && (o_ptr->damage_dice.expected_value() * 2 < 15)) {
+        if ((lev > 60) && one_in_(3) && (o_ptr->damage_dice.floored_expected_value_multiplied_by(2) < 15)) {
             o_ptr->pval++;
         }
         return;

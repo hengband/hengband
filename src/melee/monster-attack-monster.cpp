@@ -248,7 +248,7 @@ static void process_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     describe_melee_method(player_ptr, mam_ptr);
     describe_silly_melee(mam_ptr);
     mam_ptr->obvious = true;
-    mam_ptr->damage = damroll(mam_ptr->d_dice, mam_ptr->d_side);
+    mam_ptr->damage = mam_ptr->damage_dice.roll();
     mam_ptr->attribute = BlowEffectType::NONE;
     mam_ptr->pt = AttributeType::MONSTER_MELEE;
     decide_monster_attack_effect(player_ptr, mam_ptr);
@@ -299,8 +299,7 @@ void repeat_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     for (int ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
         mam_ptr->effect = r_ptr->blows[ap_cnt].effect;
         mam_ptr->method = r_ptr->blows[ap_cnt].method;
-        mam_ptr->d_dice = r_ptr->blows[ap_cnt].d_dice;
-        mam_ptr->d_side = r_ptr->blows[ap_cnt].d_side;
+        mam_ptr->damage_dice = r_ptr->blows[ap_cnt].damage_dice;
 
         if (!m_ptr->is_valid()) {
             break;

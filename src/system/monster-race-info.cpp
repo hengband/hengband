@@ -168,9 +168,9 @@ int MonsterRaceInfo::calc_power() const
     auto power = 0;
     const auto num_resistances = EnumClassFlagGroup<MonsterResistanceType>(this->resistance_flags & RFR_EFF_IMMUNE_ELEMENT_MASK).count();
     if (this->misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
-        power = this->hdice * this->hside * 2;
+        power = this->hit_dice.maxroll() * 2;
     } else {
-        power = this->hdice * (this->hside + 1);
+        power = this->hit_dice.floored_expected_value_multiplied_by(2);
     }
 
     power = power * (100 + this->level) / 100;

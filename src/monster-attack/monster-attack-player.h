@@ -1,6 +1,7 @@
 #pragma once
 
 #include "system/angband.h"
+#include "util/dice.h"
 
 enum class RaceBlowEffectType;
 enum class RaceBlowMethodType;
@@ -26,8 +27,7 @@ public:
     bool explode = false;
     DEPTH rlev = 0;
     GAME_TEXT m_name[MAX_NLEN]{};
-    int d_dice = 0;
-    int d_side = 0;
+    Dice damage_dice{};
     ItemEntity *o_ptr = nullptr;
     bool obvious = false;
     int damage = 0;

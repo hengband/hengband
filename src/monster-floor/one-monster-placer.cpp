@@ -371,9 +371,9 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, 
     }
 
     if (r_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
-        m_ptr->max_maxhp = maxroll(r_ptr->hdice, r_ptr->hside);
+        m_ptr->max_maxhp = r_ptr->hit_dice.maxroll();
     } else {
-        m_ptr->max_maxhp = damroll(r_ptr->hdice, r_ptr->hside);
+        m_ptr->max_maxhp = r_ptr->hit_dice.roll();
     }
 
     if (ironman_nightmare) {

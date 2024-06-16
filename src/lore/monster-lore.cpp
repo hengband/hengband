@@ -136,10 +136,10 @@ void process_monster_lore(PlayerType *player_ptr, MonsterRaceId r_idx, monster_l
     lore_type *lore_ptr = &tmp_lore;
 
     auto is_valid_reinforcer = [](const auto &reinforce) {
-        const auto &[r_idx, dd, ds] = reinforce;
-        auto is_reinforce = MonraceList::is_valid(r_idx);
-        is_reinforce &= dd > 0;
-        is_reinforce &= ds > 0;
+        const auto &[monrace_id, num_dice] = reinforce;
+        auto is_reinforce = MonraceList::is_valid(monrace_id);
+        is_reinforce &= num_dice.num > 0;
+        is_reinforce &= num_dice.sides > 0;
         return is_reinforce;
     };
 

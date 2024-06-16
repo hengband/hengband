@@ -11,12 +11,15 @@ public:
     static int roll(int num, int sides);
     static int maxroll(int num, int sides);
     static double expected_value(int num, int sides);
+    static int floored_expected_value(int num, int sides, int mult = 1);
     static std::string to_string(int num, int sides);
     static Dice parse(std::string_view dice_str);
 
     int roll() const;
     int maxroll() const;
     double expected_value() const;
+    int floored_expected_value() const;
+    int floored_expected_value_multiplied_by(int mult) const;
     std::string to_string() const;
 
     bool operator==(const Dice &other) const = default;

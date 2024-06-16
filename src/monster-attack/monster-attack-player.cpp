@@ -146,8 +146,7 @@ bool MonsterAttackPlayer::process_monster_blows()
         this->act = nullptr;
         this->effect = r_ptr->blows[ap_cnt].effect;
         this->method = r_ptr->blows[ap_cnt].method;
-        this->d_dice = r_ptr->blows[ap_cnt].d_dice;
-        this->d_side = r_ptr->blows[ap_cnt].d_side;
+        this->damage_dice = r_ptr->blows[ap_cnt].damage_dice;
 
         if (!this->check_monster_continuous_attack()) {
             break;
@@ -213,7 +212,7 @@ bool MonsterAttackPlayer::check_monster_continuous_attack()
     auto *r_ptr = &this->m_ptr->get_monrace();
     if (this->m_ptr->is_pet() && r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (this->method == RaceBlowMethodType::EXPLODE)) {
         this->method = RaceBlowMethodType::HIT;
-        this->d_dice /= 10;
+        this->damage_dice.num /= 10;
     }
 
     auto is_neighbor = distance(this->player_ptr->y, this->player_ptr->x, this->m_ptr->fy, this->m_ptr->fx) <= 1;
@@ -239,7 +238,7 @@ bool MonsterAttackPlayer::process_monster_attack_hit()
     describe_monster_attack_method(this);
     this->describe_silly_attacks();
     this->obvious = true;
-    this->damage = damroll(this->d_dice, this->d_side);
+    this->damage = this->damage_dice.roll();
     if (this->explode) {
         this->damage = 0;
     }
@@ -329,7 +328,7 @@ void MonsterAttackPlayer::calc_player_cut()
         return;
     }
 
-    auto cut_plus = PlayerCut::get_accumulation(this->d_dice * this->d_side, this->damage);
+    auto cut_plus = PlayerCut::get_accumulation(this->damage_dice.maxroll(), this->damage);
     if (cut_plus > 0) {
         (void)BadStatusSetter(this->player_ptr).mod_cut(cut_plus);
     }
@@ -350,7 +349,7 @@ void MonsterAttackPlayer::process_player_stun()
         return;
     }
 
-    auto total = this->d_dice * this->d_side;
+    auto total = this->damage_dice.maxroll();
     auto accumulation_rank = PlayerStun::get_accumulation_rank(total, this->damage);
     if (accumulation_rank == 0) {
         return;
