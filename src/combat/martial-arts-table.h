@@ -1,6 +1,7 @@
 #pragma once
 
 #include "system/angband.h"
+#include "util/dice.h"
 
 #define MAX_MA 17 /*!< 修行僧マーシャルアーツの技数 / Monk martial arts... */
 #define MA_KNEE 1 /*!< 金的効果ID */
@@ -11,8 +12,7 @@ struct martial_arts {
     concptr desc; /* A verbose attack description */
     PLAYER_LEVEL min_level; /* Minimum level to use */
     int chance; /* Chance of 'success' */
-    int dd; /* Damage dice */
-    int ds; /* Damage sides */
+    Dice damage_dice; /* Damage dice */
     int effect; /* Special effects */
 };
 

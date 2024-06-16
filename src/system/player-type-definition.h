@@ -10,6 +10,7 @@
 #include "player/player-sex.h"
 #include "system/angband.h"
 #include "system/system-variables.h"
+#include "util/dice.h"
 #include "util/flag-group.h"
 #include "util/point-2d.h"
 #include <array>
@@ -329,8 +330,7 @@ public:
     BIT_FLAGS see_nocto{}; /* Noctovision */
     bool invoking_midnight_curse{};
 
-    DICE_NUMBER to_dd[2]{}; /* Extra dice/sides */
-    DICE_SID to_ds[2]{};
+    Dice damage_dice_bonus[2]{}; /* Extra damage dice num/sides */
 
     HIT_PROB dis_to_h[2]{}; /*!< 判明している現在の表記上の近接武器命中修正値 /  Known bonus to hit (wield) */
     HIT_PROB dis_to_h_b{}; /*!< 判明している現在の表記上の射撃武器命中修正値 / Known bonus to hit (bow) */
