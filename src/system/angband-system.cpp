@@ -1,4 +1,5 @@
 #include "system/angband-system.h"
+#include "util/string-processor.h"
 
 AngbandSystem AngbandSystem::instance{};
 
@@ -54,4 +55,24 @@ Xoshiro128StarStar &AngbandSystem::get_rng()
 void AngbandSystem::set_rng(const Xoshiro128StarStar &rng_)
 {
     this->rng = rng_;
+}
+
+AngbandVersion &AngbandSystem::get_version()
+{
+    return this->version;
+}
+
+const AngbandVersion &AngbandSystem::get_version() const
+{
+    return this->version;
+}
+
+void AngbandSystem::set_version(const AngbandVersion &new_version)
+{
+    this->version = new_version;
+}
+
+std::string AngbandSystem::build_version_expression(VersionExpression expression) const
+{
+    return this->version.build_expression(expression);
 }

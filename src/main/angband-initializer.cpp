@@ -22,7 +22,7 @@
 #include "main/game-data-initializer.h"
 #include "main/info-initializer.h"
 #include "market/building-initializer.h"
-#include "system/angband-version.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/monster-race-info.h"
 #include "system/system-variables.h"
@@ -104,11 +104,10 @@ static void init_angband_aux(const std::string &why)
  */
 static void put_title()
 {
-    const auto title = get_version();
-
-    auto col = (title.length() <= MAIN_TERM_MIN_COLS) ? (MAIN_TERM_MIN_COLS - title.length()) / 2 : 0;
-    constexpr auto VER_INFO_ROW = 3; //!< タイトル表記(行)
-    prt(title, VER_INFO_ROW, col);
+    const auto title = AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL);
+    const auto col = (title.length() <= MAIN_TERM_MIN_COLS) ? (MAIN_TERM_MIN_COLS - title.length()) / 2 : 0;
+    constexpr auto row_version_info = 3; //!< タイトル表記(行)
+    prt(title, row_version_info, col);
 }
 
 /*!

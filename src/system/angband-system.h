@@ -1,5 +1,6 @@
 #pragma once
 
+#include "system/angband-version.h"
 #include "util/rng-xoshiro.h"
 #include <cstdint>
 #include <string>
@@ -13,11 +14,6 @@ public:
     AngbandSystem &operator=(AngbandSystem &&) = delete;
     static AngbandSystem &get_instance();
 
-    uint8_t version_major{}; //!< 変愚蛮怒バージョン(メジャー番号)
-    uint8_t version_minor{}; //!< 変愚蛮怒バージョン(マイナー番号)
-    uint8_t version_patch{}; //!< 変愚蛮怒バージョン(パッチ番号)
-    uint8_t version_extra{}; //!< 変愚蛮怒バージョン(エクストラ番号)
-
     uint8_t savefile_key{}; //!< セーブファイルエンコードキー(XOR)
 
     void set_phase_out(bool new_status);
@@ -29,6 +25,10 @@ public:
     void set_seed_town(const uint32_t seed);
     Xoshiro128StarStar &get_rng();
     void set_rng(const Xoshiro128StarStar &rng_);
+    AngbandVersion &get_version();
+    const AngbandVersion &get_version() const;
+    void set_version(const AngbandVersion &new_version);
+    std::string build_version_expression(VersionExpression expression) const;
 
 private:
     AngbandSystem() = default;
@@ -38,4 +38,5 @@ private:
     Xoshiro128StarStar rng; //!< Uniform random bit generator for <random>
     uint32_t seed_flavor{}; /* アイテム未鑑定名をシャッフルするための乱数シード */
     uint32_t seed_town{}; /* ランダム生成される町をレイアウトするための乱数シード */
+    AngbandVersion version{};
 };

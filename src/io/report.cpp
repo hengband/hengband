@@ -21,7 +21,7 @@
 #include "player/player-personality.h"
 #include "player/player-status.h"
 #include "realm/realm-names-table.h"
-#include "system/angband-version.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/inner-game-data.h"
@@ -273,7 +273,7 @@ bool report_score(PlayerType *player_ptr)
 
     auto realm1_name = PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST) ? get_element_title(player_ptr->element) : realm_names[player_ptr->realm1];
     score_ss << format("name: %s\n", player_ptr->name)
-             << format("version: %s\n", get_version().data())
+             << format("version: %s\n", AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL).data())
              << format("score: %ld\n", calc_score(player_ptr))
              << format("level: %d\n", player_ptr->lev)
              << format("depth: %d\n", player_ptr->current_floor_ptr->dun_level)

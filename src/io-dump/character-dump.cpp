@@ -28,7 +28,7 @@
 #include "realm/realm-names-table.h"
 #include "store/store-util.h"
 #include "store/store.h"
-#include "system/angband-version.h"
+#include "system/angband-system.h"
 #include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
@@ -608,7 +608,8 @@ void make_character_dump(PlayerType *player_ptr, FILE *fff)
 {
     TermCenteredOffsetSetter tos(MAIN_TERM_MIN_COLS, std::nullopt);
 
-    fprintf(fff, _("  [%s キャラクタ情報]\n\n", "  [%s Character Dump]\n\n"), get_version().data());
+    constexpr auto fmt = _("  [%s キャラクタ情報]\n\n", "  [%s Character Dump]\n\n");
+    fprintf(fff, fmt, AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL).data());
 
     dump_aux_player_status(player_ptr, fff);
     dump_aux_last_message(player_ptr, fff);

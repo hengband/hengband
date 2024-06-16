@@ -1,7 +1,7 @@
 #include "external-lib/include-json.h"
 #include "locale/japanese.h"
 #include "net/http-client.h"
-#include "system/angband-version.h"
+#include "system/angband-system.h"
 #include <sstream>
 #include <string_view>
 
@@ -38,11 +38,11 @@ nlohmann::json create_report_json(std::string_view message)
     webhook["username"] = "Hengband Error Report";
     constexpr auto conv_error_msg = "Cannot convert to UTF-8";
     nlohmann::json embed;
-    embed["title"] = sys_to_utf8(get_version()).value_or(conv_error_msg);
+    const auto version = AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL);
+    embed["title"] = sys_to_utf8(version).value_or(conv_error_msg);
     embed["description"] = sys_to_utf8(message).value_or(conv_error_msg);
     embed["color"] = 0xff0000; // red
     webhook["embeds"].push_back(std::move(embed));
-
     return webhook;
 }
 
