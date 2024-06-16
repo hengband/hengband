@@ -22,6 +22,7 @@
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
+#include "util/dice.h"
 
 /*!
  * @brief 生命領域魔法の各処理を行う
@@ -49,13 +50,12 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
             return _("怪我と体力を少し回復させる。", "Heals cuts and HP a little.");
         }
         {
-            DICE_NUMBER dice = 2;
-            DICE_SID sides = 10;
+            const Dice dice(2, 10);
             if (info) {
-                return info_heal(dice, sides, 0);
+                return info_heal(dice);
             }
             if (cast) {
-                (void)cure_light_wounds(player_ptr, dice, sides);
+                (void)cure_light_wounds(player_ptr, dice.roll());
             }
         }
         break;
@@ -69,13 +69,14 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
         }
         {
             int base = 12;
+            const Dice dice(1, 12);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_blessed(player_ptr, randint1(base) + base, false);
+                set_blessed(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -88,18 +89,17 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
             return _("1体のモンスターに小ダメージを与える。抵抗されると無効。", "Wounds a monster a little unless resisted.");
         }
         {
-            DICE_NUMBER dice = 3 + (plev - 1) / 5;
-            DICE_SID sides = 4;
+            const Dice dice(3 + (plev - 1) / 5, 4);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
                     return std::nullopt;
                 }
-                fire_ball_hide(player_ptr, AttributeType::WOUNDS, dir, damroll(dice, sides), 0);
+                fire_ball_hide(player_ptr, AttributeType::WOUNDS, dir, dice.roll(), 0);
             }
         }
         break;
@@ -112,16 +112,15 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
             return _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
         }
         {
-            DICE_NUMBER dice = 2;
-            DICE_SID sides = plev / 2;
+            const Dice dice(2, plev / 2);
             POSITION rad = plev / 10 + 1;
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
-                lite_area(player_ptr, damroll(dice, sides), rad);
+                lite_area(player_ptr, dice.roll(), rad);
             }
         }
         break;
@@ -156,14 +155,13 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
             return _("怪我と体力を中程度回復させる。", "Heals cuts and HP more.");
         }
         {
-            DICE_NUMBER dice = 4;
-            DICE_SID sides = 10;
+            const Dice dice(4, 10);
 
             if (info) {
-                return info_heal(dice, sides, 0);
+                return info_heal(dice);
             }
             if (cast) {
-                (void)cure_serious_wounds(player_ptr, dice, sides);
+                (void)cure_serious_wounds(player_ptr, dice.roll());
             }
         }
         break;
@@ -219,18 +217,17 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
             return _("1体のモンスターに中ダメージを与える。抵抗されると無効。", "Wounds a monster unless resisted.");
         }
         {
-            DICE_SID sides = 8 + (plev - 5) / 4;
-            DICE_NUMBER dice = 8;
+            const Dice dice(8 + (plev - 5) / 4, 8);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
                     return std::nullopt;
                 }
-                fire_ball_hide(player_ptr, AttributeType::WOUNDS, dir, damroll(dice, sides), 0);
+                fire_ball_hide(player_ptr, AttributeType::WOUNDS, dir, dice.roll(), 0);
             }
         }
         break;
@@ -243,14 +240,13 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
             return _("体力を大幅に回復させ、負傷と朦朧状態も全快する。", "Heals HP greatly. Also cures cuts and being stunned.");
         }
         {
-            DICE_NUMBER dice = 8;
-            DICE_SID sides = 10;
+            const Dice dice(8, 10);
 
             if (info) {
-                return info_heal(dice, sides, 0);
+                return info_heal(dice);
             }
             if (cast) {
-                (void)cure_critical_wounds(player_ptr, damroll(dice, sides));
+                (void)cure_critical_wounds(player_ptr, dice.roll());
             }
         }
         break;
@@ -266,14 +262,15 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
 
         {
             int base = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_oppose_cold(player_ptr, randint1(base) + base, false);
-                set_oppose_fire(player_ptr, randint1(base) + base, false);
+                set_oppose_cold(player_ptr, dice.roll() + base, false);
+                set_oppose_fire(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -325,7 +322,7 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
         {
             int heal = 300;
             if (info) {
-                return info_heal(0, 0, heal);
+                return info_heal(heal);
             }
             if (cast) {
                 (void)cure_critical_wounds(player_ptr, heal);
@@ -389,15 +386,14 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
         }
 
         {
-            DICE_NUMBER dice = 1;
-            DICE_SID sides = plev * 5;
+            const Dice dice(1, plev * 5);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
-                dispel_undead(player_ptr, damroll(dice, sides));
+                dispel_undead(player_ptr, dice.roll());
             }
         }
         break;
@@ -432,18 +428,17 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
         }
 
         {
-            DICE_NUMBER dice = 5 + (plev - 5) / 3;
-            DICE_SID sides = 15;
+            const Dice dice(5 + (plev - 5) / 3, 15);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
                     return std::nullopt;
                 }
-                fire_ball_hide(player_ptr, AttributeType::WOUNDS, dir, damroll(dice, sides), 0);
+                fire_ball_hide(player_ptr, AttributeType::WOUNDS, dir, dice.roll(), 0);
             }
         }
         break;
@@ -459,14 +454,14 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
 
         {
             int base = 15;
-            DICE_SID sides = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_delay(base, sides);
+                return info_delay(base, dice);
             }
 
             if (cast) {
-                if (!recall_player(player_ptr, randint0(21) + 15)) {
+                if (!recall_player(player_ptr, dice.roll() + base)) {
                     return std::nullopt;
                 }
             }
@@ -483,14 +478,14 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
 
         {
             int base = 15;
-            DICE_SID sides = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_delay(base, sides);
+                return info_delay(base, dice);
             }
 
             if (cast) {
-                reserve_alter_reality(player_ptr, randint0(sides) + base);
+                reserve_alter_reality(player_ptr, dice.roll() + base);
             }
         }
         break;
@@ -620,7 +615,7 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
         {
             int heal = 2000;
             if (info) {
-                return info_heal(0, 0, heal);
+                return info_heal(heal);
             }
             if (cast) {
                 (void)cure_critical_wounds(player_ptr, heal);
@@ -655,13 +650,14 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
 
         {
             TIME_EFFECT base = (TIME_EFFECT)plev / 2;
+            const Dice dice(1, plev / 2);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                TIME_EFFECT v = randint1(base) + base;
+                const auto v = static_cast<TIME_EFFECT>(dice.roll() + base);
                 set_acceleration(player_ptr, v, false);
                 set_oppose_acid(player_ptr, v, false);
                 set_oppose_elec(player_ptr, v, false);

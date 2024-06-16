@@ -25,6 +25,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "target/target-getter.h"
 #include "timed-effect/timed-effects.h"
+#include "util/dice.h"
 #include "view/display-messages.h"
 
 /*!
@@ -142,11 +143,10 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 4 + (plev - 1) / 5;
-            DICE_SID sides = 4;
+            const Dice dice(4 + (plev - 1) / 5, 4);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
@@ -154,7 +154,7 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
                     return std::nullopt;
                 }
 
-                fire_bolt(player_ptr, AttributeType::SOUND, dir, damroll(dice, sides));
+                fire_bolt(player_ptr, AttributeType::SOUND, dir, dice.roll());
             }
         }
         break;
@@ -178,15 +178,14 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = plev / 10;
-            DICE_SID sides = 2;
+            const Dice dice(plev / 10, 2);
 
             if (info) {
-                return info_power_dice(dice, sides);
+                return info_power_dice(dice);
             }
 
             if (cont) {
-                stun_monsters(player_ptr, damroll(dice, sides));
+                stun_monsters(player_ptr, dice.roll());
             }
         }
 
@@ -211,15 +210,14 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 2;
-            DICE_SID sides = 6;
+            const Dice dice(2, 6);
 
             if (info) {
-                return info_heal(dice, sides, 0);
+                return info_heal(dice);
             }
 
             if (cont) {
-                hp_player(player_ptr, damroll(dice, sides));
+                hp_player(player_ptr, dice.roll());
             }
         }
 
@@ -239,17 +237,16 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 2;
-            DICE_SID sides = plev / 2;
+            const Dice dice(2, plev / 2);
             POSITION rad = plev / 10 + 1;
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
                 msg_print(_("光り輝く歌が辺りを照らした。", "Your uplifting song brings brightness to dark places..."));
-                lite_area(player_ptr, damroll(dice, sides), rad);
+                lite_area(player_ptr, dice.roll(), rad);
             }
         }
         break;
@@ -408,15 +405,14 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 1;
-            DICE_SID sides = plev * 3 / 2;
+            const Dice dice(1, plev * 3 / 2);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cont) {
-                project_all_los(player_ptr, AttributeType::PSI, damroll(dice, sides));
+                project_all_los(player_ptr, AttributeType::PSI, dice.roll());
             }
         }
 
@@ -535,15 +531,14 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 10 + plev / 5;
-            DICE_SID sides = 7;
+            const Dice dice(10 + plev / 5, 7);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cont) {
-                project_all_los(player_ptr, AttributeType::SOUND, damroll(dice, sides));
+                project_all_los(player_ptr, AttributeType::SOUND, dice.roll());
             }
         }
 
@@ -589,15 +584,14 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 10 + plev / 15;
-            DICE_SID sides = 6;
+            const Dice dice(10 + plev / 15, 6);
 
             if (info) {
-                return info_power_dice(dice, sides);
+                return info_power_dice(dice);
             }
 
             if (cont) {
-                charm_monsters(player_ptr, damroll(dice, sides));
+                charm_monsters(player_ptr, dice.roll());
             }
         }
 
@@ -806,11 +800,10 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 15 + (plev - 1) / 2;
-            DICE_SID sides = 10;
+            const Dice dice(15 + (plev - 1) / 2, 10);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             /* Stop singing before start another */
@@ -823,7 +816,7 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
                     return std::nullopt;
                 }
 
-                fire_beam(player_ptr, AttributeType::SOUND, dir, damroll(dice, sides));
+                fire_beam(player_ptr, AttributeType::SOUND, dir, dice.roll());
             }
         }
         break;
@@ -838,10 +831,10 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 15;
-            DICE_SID sides = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_delay(base, sides);
+                return info_delay(base, dice);
             }
 
             /* Stop singing before start another */
@@ -851,7 +844,7 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
 
             if (cast) {
                 msg_print(_("周囲が変化し始めた．．．", "You sing of the primeval shaping of Middle-earth..."));
-                reserve_alter_reality(player_ptr, randint0(sides) + base);
+                reserve_alter_reality(player_ptr, dice.roll() + base);
             }
         }
         break;
@@ -975,14 +968,13 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
             }
         }
 
-        DICE_NUMBER dice = 1;
-        DICE_SID sides = plev * 3;
+        const Dice dice(1, plev * 3);
         if (info) {
-            return info_damage(dice, sides, 0);
+            return info_damage(dice);
         }
 
         if (cont) {
-            dispel_monsters(player_ptr, damroll(dice, sides));
+            dispel_monsters(player_ptr, dice.roll());
         }
 
         break;
@@ -1005,14 +997,13 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
             start_singing(player_ptr, spell, MUSIC_H_LIFE);
         }
 
-        auto dice = 15;
-        auto sides = 10;
+        const Dice dice(15, 10);
         if (info) {
-            return info_heal(dice, sides, 0);
+            return info_heal(dice);
         }
 
         if (cont) {
-            hp_player(player_ptr, damroll(dice, sides));
+            hp_player(player_ptr, dice.roll());
             BadStatusSetter bss(player_ptr);
             (void)bss.set_stun(0);
             (void)bss.set_cut(0);
@@ -1052,12 +1043,11 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 50 + plev;
-            DICE_SID sides = 10;
+            const Dice dice(50 + plev, 10);
             POSITION rad = 0;
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             /* Stop singing before start another */
@@ -1070,7 +1060,7 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
                     return std::nullopt;
                 }
 
-                fire_ball(player_ptr, AttributeType::SOUND, dir, damroll(dice, sides), rad);
+                fire_ball(player_ptr, AttributeType::SOUND, dir, dice.roll(), rad);
             }
         }
         break;

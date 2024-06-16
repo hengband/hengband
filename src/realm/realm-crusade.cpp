@@ -29,6 +29,7 @@
 #include "status/sight-setter.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
+#include "util/dice.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -58,16 +59,15 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
             return _("電撃のボルトもしくはビームを放つ。", "Fires a bolt or beam of lightning.");
         }
         {
-            DICE_NUMBER dice = 3 + (plev - 1) / 5;
-            DICE_SID sides = 4;
+            const Dice dice(3 + (plev - 1) / 5, 4);
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
                     return std::nullopt;
                 }
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::ELEC, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::ELEC, dir, dice.roll());
             }
         }
         break;
@@ -172,16 +172,15 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
         }
 
         {
-            DICE_NUMBER dice = 3 + (plev - 1) / 9;
-            DICE_SID sides = 2;
+            const Dice dice(3 + (plev - 1) / 9, 2);
             if (info) {
-                return info_multi_damage_dice(dice, sides);
+                return info_multi_damage_dice(dice);
             }
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
                     return std::nullopt;
                 }
-                fire_blast(player_ptr, AttributeType::LITE, dir, dice, sides, 10, 3);
+                fire_blast(player_ptr, AttributeType::LITE, dir, dice, 10, 3);
             }
         }
         break;
@@ -236,8 +235,7 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
         }
 
         {
-            DICE_NUMBER dice = 3;
-            DICE_SID sides = 6;
+            const Dice dice(3, 6);
             POSITION rad = (plev < 30) ? 2 : 3;
             int base;
             PlayerClass pc(player_ptr);
@@ -248,7 +246,7 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
             }
 
             if (info) {
-                return info_damage(dice, sides, base);
+                return info_damage(dice, base);
             }
 
             if (cast) {
@@ -256,7 +254,7 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
                     return std::nullopt;
                 }
 
-                fire_ball(player_ptr, AttributeType::HOLY_FIRE, dir, damroll(dice, sides) + base, rad);
+                fire_ball(player_ptr, AttributeType::HOLY_FIRE, dir, dice.roll() + base, rad);
             }
         }
         break;
@@ -270,14 +268,14 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
                 "Damages all undead and demons in sight, and scares all evil monsters in sight.");
         }
         {
-            DICE_SID sides = plev;
+            const Dice dice(1, plev);
             int power = plev;
             if (info) {
-                return info_damage(1, sides, 0);
+                return info_damage(dice);
             }
             if (cast) {
-                dispel_undead(player_ptr, randint1(sides));
-                dispel_demons(player_ptr, randint1(sides));
+                dispel_undead(player_ptr, dice.roll());
+                dispel_demons(player_ptr, dice.roll());
                 turn_evil(player_ptr, power);
             }
         }
@@ -307,13 +305,14 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
 
         {
             int base = 24;
+            const Dice dice(1, 24);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_tim_invis(player_ptr, randint1(base) + base, false);
+                set_tim_invis(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -328,14 +327,14 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
 
         {
             int base = 25;
-            DICE_SID sides = 3 * plev;
+            const Dice dice(1, 3 * plev);
 
             if (info) {
-                return info_duration(base, sides);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_protevil(player_ptr, randint1(sides) + base, false);
+                set_protevil(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -352,7 +351,7 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
             int dam = plev * 5;
 
             if (info) {
-                return info_damage(0, 0, dam);
+                return info_damage(dam);
             }
 
             if (cast) {
@@ -446,13 +445,14 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
 
         {
             int base = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_tim_sh_holy(player_ptr, randint1(base) + base, false);
+                set_tim_sh_holy(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -466,15 +466,15 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
         }
 
         {
-            DICE_SID sides = plev * 4;
+            const Dice dice(1, plev * 4);
 
             if (info) {
-                return info_damage(1, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
-                dispel_undead(player_ptr, randint1(sides));
-                dispel_demons(player_ptr, randint1(sides));
+                dispel_undead(player_ptr, dice.roll());
+                dispel_demons(player_ptr, dice.roll());
             }
         }
         break;
@@ -488,14 +488,14 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
         }
 
         {
-            DICE_SID sides = plev * 4;
+            const Dice dice(1, plev * 4);
 
             if (info) {
-                return info_damage(1, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
-                dispel_evil(player_ptr, randint1(sides));
+                dispel_evil(player_ptr, dice.roll());
             }
         }
         break;
@@ -528,7 +528,7 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
             POSITION rad = 4;
 
             if (info) {
-                return info_damage(0, 0, dam);
+                return info_damage(dam);
             }
 
             if (cast) {
@@ -584,13 +584,14 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
 
         {
             int base = 25;
+            const Dice dice(1, 25);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                (void)heroism(player_ptr, base);
+                (void)heroism(player_ptr, dice.roll() + base);
             }
         }
         break;
@@ -662,13 +663,14 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
 
         {
             int base = 10;
+            const Dice dice(1, 10);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_tim_eyeeye(player_ptr, randint1(base) + base, false);
+                set_tim_eyeeye(player_ptr, dice.roll() + base, false);
             }
         }
         break;

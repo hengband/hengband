@@ -26,6 +26,7 @@
 #include "status/temporary-resistance.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
+#include "util/dice.h"
 #include "view/display-messages.h"
 
 /*!
@@ -55,11 +56,10 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         {
-            DICE_NUMBER dice = 3 + (plev - 1) / 5;
-            DICE_SID sides = 4;
+            const Dice dice(3 + (plev - 1) / 5, 4);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
@@ -67,7 +67,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
                     return std::nullopt;
                 }
 
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::MISSILE, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::MISSILE, dir, dice.roll());
             }
         }
         break;
@@ -103,13 +103,14 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         {
             int base = 12;
+            const Dice dice(1, 12);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_blessed(player_ptr, randint1(base) + base, false);
+                set_blessed(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -126,13 +127,14 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         {
             int base = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_oppose_fire(player_ptr, randint1(base) + base, false);
+                set_oppose_fire(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -172,11 +174,10 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         {
-            DICE_NUMBER dice = 6 + (plev - 5) / 4;
-            DICE_SID sides = 8;
+            const Dice dice(6 + (plev - 5) / 4, 8);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
@@ -184,7 +185,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
                     return std::nullopt;
                 }
 
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::NETHER, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::NETHER, dir, dice.roll());
             }
         }
         break;
@@ -215,8 +216,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         {
-            DICE_NUMBER dice = 3;
-            DICE_SID sides = 6;
+            const Dice dice(3, 6);
             POSITION rad = (plev < 30) ? 2 : 3;
             int base;
 
@@ -227,7 +227,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
             }
 
             if (info) {
-                return info_damage(dice, sides, base);
+                return info_damage(dice, base);
             }
 
             if (cast) {
@@ -235,7 +235,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
                     return std::nullopt;
                 }
 
-                fire_ball(player_ptr, AttributeType::HELL_FIRE, dir, damroll(dice, sides) + base, rad);
+                fire_ball(player_ptr, AttributeType::HELL_FIRE, dir, dice.roll() + base, rad);
             }
         }
         break;
@@ -296,13 +296,14 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         {
             int base = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_tim_res_nether(player_ptr, randint1(base) + base, false);
+                set_tim_res_nether(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -316,11 +317,10 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         {
-            DICE_NUMBER dice = 11 + (plev - 5) / 4;
-            DICE_SID sides = 8;
+            const Dice dice(11 + (plev - 5) / 4, 8);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
@@ -328,7 +328,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
                     return std::nullopt;
                 }
 
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::PLASMA, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::PLASMA, dir, dice.roll());
             }
         }
         break;
@@ -346,7 +346,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
             POSITION rad = 2;
 
             if (info) {
-                return info_damage(0, 0, dam);
+                return info_damage(dam);
             }
 
             if (cast) {
@@ -387,7 +387,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
             POSITION rad = plev / 20 + 2;
 
             if (info) {
-                return info_damage(0, 0, dam);
+                return info_damage(dam);
             }
 
             if (cast) {
@@ -425,14 +425,14 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         {
             int base = 30;
-            DICE_SID sides = 25;
+            const Dice dice(1, 25);
 
             if (info) {
-                return info_duration(base, sides);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_tim_esp(player_ptr, randint1(sides) + base, false);
+                set_tim_esp(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -449,12 +449,13 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         TIME_EFFECT base = 20;
+        const Dice dice(1, 20);
         if (info) {
-            return info_duration(base, base);
+            return info_duration(base, dice);
         }
 
         if (cast) {
-            TIME_EFFECT dur = randint1(base) + base;
+            const auto dur = static_cast<TIME_EFFECT>(dice.roll() + base);
             set_oppose_fire(player_ptr, dur, false);
             set_oppose_cold(player_ptr, dur, false);
             set_tim_sh_fire(player_ptr, dur, false);
@@ -477,7 +478,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
             POSITION rad = 3;
 
             if (info) {
-                return info_damage(0, 0, dam / 2);
+                return info_damage(dam / 2);
             }
 
             if (cast) {
@@ -500,7 +501,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
             POSITION rad = 2 + plev / 40;
 
             if (info) {
-                return info_damage(0, 0, dam);
+                return info_damage(dam);
             }
 
             if (cast) {
@@ -524,13 +525,14 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         {
             int base = 10 + plev / 2;
+            const Dice dice(1, 10 + plev / 2);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_mimic(player_ptr, base + randint1(base), MimicKindType::DEMON, false);
+                set_mimic(player_ptr, base + dice.roll(), MimicKindType::DEMON, false);
             }
         }
         break;
@@ -572,7 +574,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
             POSITION rad = 4;
 
             if (info) {
-                return info_damage(0, 0, dam);
+                return info_damage(dam);
             }
 
             if (cast) {
@@ -615,11 +617,12 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         {
             int base = 25;
+            const Dice dice(1, 25);
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
             if (cast) {
-                heroism(player_ptr, base);
+                heroism(player_ptr, dice.roll() + base);
             }
         }
         break;
@@ -634,13 +637,14 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         {
             int base = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_tim_res_time(player_ptr, randint1(base) + base, false);
+                set_tim_res_time(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -717,7 +721,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
             POSITION rad = plev / 5;
 
             if (info) {
-                return info_damage(0, 0, dam);
+                return info_damage(dam);
             }
 
             if (cast) {
@@ -744,7 +748,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
             POSITION rad = 0;
 
             if (info) {
-                return info_damage(0, 0, dam);
+                return info_damage(dam);
             }
 
             if (cast) {
@@ -770,13 +774,14 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         {
             int base = 15;
+            const Dice dice(1, 15);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_mimic(player_ptr, base + randint1(base), MimicKindType::DEMON_LORD, false);
+                set_mimic(player_ptr, base + dice.roll(), MimicKindType::DEMON_LORD, false);
             }
         }
         break;

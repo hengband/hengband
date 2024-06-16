@@ -5,6 +5,7 @@
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
 #include "util/bit-flags-calculator.h"
+#include "util/dice.h"
 
 /*!
  * @brief ボール系スペルの発動 / Cast a ball spell
@@ -158,13 +159,12 @@ bool fire_meteor(PlayerType *player_ptr, MONSTER_IDX src_idx, AttributeType typ,
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param typ 効果属性
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
- * @param dd 威力ダイス数
- * @param ds 威力ダイス目
+ * @param dice 威力ダイス
  * @param num 基本回数
  * @param dev 回数分散
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool fire_blast(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, DICE_NUMBER dd, DICE_SID ds, int num, int dev)
+bool fire_blast(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, const Dice &dice, int num, int dev)
 {
     POSITION ty, tx, y, x;
     POSITION ly, lx;
@@ -194,7 +194,7 @@ bool fire_blast(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, DICE_N
         }
 
         /* Analyze the "dir" and the "target". */
-        const auto proj_res = project(player_ptr, 0, 0, y, x, damroll(dd, ds), typ, flg);
+        const auto proj_res = project(player_ptr, 0, 0, y, x, dice.roll(), typ, flg);
         if (!proj_res.notice) {
             result = false;
         }

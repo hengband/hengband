@@ -156,14 +156,14 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 25;
-            DICE_SID sides = 30;
+            const Dice dice(1, 30);
 
             if (info) {
-                return info_duration(base, sides);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_tim_esp(player_ptr, randint1(sides) + base, false);
+                set_tim_esp(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -383,14 +383,14 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 15;
-            DICE_SID sides = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_delay(base, sides);
+                return info_delay(base, dice);
             }
 
             if (cast) {
-                if (!recall_player(player_ptr, randint0(21) + 15)) {
+                if (!recall_player(player_ptr, dice.roll() + base)) {
                     return std::nullopt;
                 }
             }
@@ -633,7 +633,7 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
             int heal = plev * 10 + 200;
 
             if (info) {
-                return info_heal(0, 0, heal);
+                return info_heal(heal);
             }
 
             if (cast) {

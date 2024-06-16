@@ -39,6 +39,7 @@
 #include "status/sight-setter.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/dice.h"
 #include "view/display-messages.h"
 
 bool switch_activation(PlayerType *player_ptr, ItemEntity **o_ptr_ptr, const RandomArtActType index, std::string_view name)
@@ -192,7 +193,7 @@ bool switch_activation(PlayerType *player_ptr, ItemEntity **o_ptr_ptr, const Ran
         return activate_cure_lw(player_ptr);
     case RandomArtActType::CURE_MW:
         msg_print(_("深紫色の光を発している...", "It radiates deep purple..."));
-        (void)cure_serious_wounds(player_ptr, 4, 8);
+        (void)cure_serious_wounds(player_ptr, Dice::roll(4, 8));
         return true;
     case RandomArtActType::CURE_POISON: {
         msg_print(_("深青色に輝いている...", "It glows deep blue..."));

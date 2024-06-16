@@ -23,6 +23,7 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/target-getter.h"
+#include "util/dice.h"
 #include "view/display-messages.h"
 
 /*!
@@ -52,11 +53,10 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 3 + ((plev - 1) / 5);
-            DICE_SID sides = 4;
+            const Dice dice(3 + ((plev - 1) / 5), 4);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
@@ -64,7 +64,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
                     return std::nullopt;
                 }
 
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::MISSILE, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::MISSILE, dir, dice.roll());
             }
         }
         break;
@@ -99,16 +99,15 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 2;
-            DICE_SID sides = plev / 2;
+            const Dice dice(2, plev / 2);
             POSITION rad = (plev / 10) + 1;
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
-                lite_area(player_ptr, damroll(dice, sides), rad);
+                lite_area(player_ptr, dice.roll(), rad);
             }
         }
         break;
@@ -141,8 +140,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 3;
-            DICE_SID sides = 5;
+            const Dice dice(3, 5);
             POSITION rad = (plev < 30) ? 2 : 3;
             int base;
 
@@ -153,7 +151,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
             }
 
             if (info) {
-                return info_damage(dice, sides, base);
+                return info_damage(dice, base);
             }
 
             if (cast) {
@@ -161,7 +159,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
                     return std::nullopt;
                 }
 
-                fire_ball(player_ptr, AttributeType::MISSILE, dir, damroll(dice, sides) + base, rad);
+                fire_ball(player_ptr, AttributeType::MISSILE, dir, dice.roll() + base, rad);
 
                 /*
                  * Shouldn't actually use MANA, as
@@ -181,11 +179,10 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 8 + (plev - 5) / 4;
-            DICE_SID sides = 8;
+            const Dice dice(8 + (plev - 5) / 4, 8);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
@@ -193,7 +190,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
                     return std::nullopt;
                 }
 
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::FIRE, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::FIRE, dir, dice.roll());
             }
         }
         break;
@@ -207,11 +204,10 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 8 + ((plev - 5) / 4);
-            DICE_SID sides = 8;
+            const Dice dice(8 + (plev - 5) / 4, 8);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
@@ -219,7 +215,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
                     return std::nullopt;
                 }
 
-                fire_ball(player_ptr, AttributeType::DISINTEGRATE, dir, damroll(dice, sides), 0);
+                fire_ball(player_ptr, AttributeType::DISINTEGRATE, dir, dice.roll(), 0);
             }
         }
         break;
@@ -278,11 +274,10 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 10 + (plev - 5) / 4;
-            DICE_SID sides = 8;
+            const Dice dice(10 + (plev - 5) / 4, 8);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
@@ -290,7 +285,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
                     return std::nullopt;
                 }
 
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::CHAOS, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::CHAOS, dir, dice.roll());
             }
         }
         break;
@@ -308,7 +303,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
             POSITION rad = plev / 10 + 2;
 
             if (info) {
-                return info_damage(0, 0, dam / 2);
+                return info_damage(dam / 2);
             }
 
             if (cast) {
@@ -327,11 +322,10 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 11 + (plev - 5) / 4;
-            DICE_SID sides = 8;
+            const Dice dice(11 + (plev - 5) / 4, 8);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
@@ -339,7 +333,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
                     return std::nullopt;
                 }
 
-                fire_beam(player_ptr, AttributeType::MANA, dir, damroll(dice, sides));
+                fire_beam(player_ptr, AttributeType::MANA, dir, dice.roll());
             }
         }
         break;
@@ -357,7 +351,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
             POSITION rad = 2;
 
             if (info) {
-                return info_damage(0, 0, dam);
+                return info_damage(dam);
             }
 
             if (cast) {
@@ -426,7 +420,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
             POSITION rad = plev / 5;
 
             if (info) {
-                return info_damage(0, 0, dam);
+                return info_damage(dam);
             }
 
             if (cast) {
@@ -473,16 +467,15 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 5 + plev / 10;
-            DICE_SID sides = 8;
+            const Dice dice(5 + plev / 10, 8);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
                 for (dir = 0; dir <= 9; dir++) {
-                    fire_beam(player_ptr, AttributeType::ELEC, dir, damroll(dice, sides));
+                    fire_beam(player_ptr, AttributeType::ELEC, dir, dice.roll());
                 }
             }
         }
@@ -523,7 +516,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
             POSITION rad = 3 + plev / 40;
 
             if (info) {
-                return info_damage(0, 0, dam);
+                return info_damage(dam);
             }
 
             if (cast) {
@@ -546,14 +539,14 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 15;
-            DICE_SID sides = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_delay(base, sides);
+                return info_delay(base, dice);
             }
 
             if (cast) {
-                reserve_alter_reality(player_ptr, randint0(sides) + base);
+                reserve_alter_reality(player_ptr, dice.roll() + base);
             }
         }
         break;
@@ -571,7 +564,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
             POSITION rad = 2;
 
             if (info) {
-                return info_damage(0, 0, dam);
+                return info_damage(dam);
             }
 
             if (cast) {
@@ -624,18 +617,17 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 9 + (plev - 5) / 4;
-            DICE_SID sides = 8;
+            const Dice dice(9 + (plev - 5) / 4, 8);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
                     return std::nullopt;
                 }
-                fire_beam(player_ptr, AttributeType::GRAVITY, dir, damroll(dice, sides));
+                fire_beam(player_ptr, AttributeType::GRAVITY, dir, dice.roll());
             }
         }
         break;
@@ -675,7 +667,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
             POSITION rad = 8;
 
             if (info) {
-                return info_damage(0, 0, dam / 2);
+                return info_damage(dam / 2);
             }
 
             if (cast) {
@@ -734,7 +726,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
             POSITION rad = 4;
 
             if (info) {
-                return info_damage(0, 0, dam);
+                return info_damage(dam);
             }
 
             if (cast) {
@@ -759,7 +751,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
             POSITION rad = 2;
 
             if (info) {
-                return info_damage(0, 0, dam);
+                return info_damage(dam);
             }
 
             if (cast) {

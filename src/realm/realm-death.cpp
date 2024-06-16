@@ -26,6 +26,7 @@
 #include "status/shape-changer.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
+#include "util/dice.h"
 
 /*!
  * @brief 暗黒領域魔法の各処理を行う
@@ -76,12 +77,11 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 3 + (plev - 1) / 5;
-            DICE_SID sides = 4;
+            const Dice dice(3 + (plev - 1) / 5, 4);
             POSITION rad = 0;
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
@@ -97,7 +97,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
                  * travel to the monster.
                  */
 
-                fire_ball(player_ptr, AttributeType::HELL_FIRE, dir, damroll(dice, sides), rad);
+                fire_ball(player_ptr, AttributeType::HELL_FIRE, dir, dice.roll(), rad);
 
                 if (one_in_(5)) {
                     /* Special effect first */
@@ -151,7 +151,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
             POSITION rad = 2;
 
             if (info) {
-                return info_damage(0, 0, dam);
+                return info_damage(dam);
             }
 
             if (cast) {
@@ -200,13 +200,14 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_oppose_pois(player_ptr, randint1(base) + base, false);
+                set_oppose_pois(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -271,8 +272,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 3;
-            DICE_SID sides = 6;
+            const Dice dice(3, 6);
             POSITION rad = (plev < 30) ? 2 : 3;
             int base;
 
@@ -283,7 +283,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
             }
 
             if (info) {
-                return info_damage(dice, sides, base);
+                return info_damage(dice, base);
             }
 
             if (cast) {
@@ -291,7 +291,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
                     return std::nullopt;
                 }
 
-                fire_ball(player_ptr, AttributeType::HYPODYNAMIA, dir, damroll(dice, sides) + base, rad);
+                fire_ball(player_ptr, AttributeType::HYPODYNAMIA, dir, dice.roll() + base, rad);
             }
         }
         break;
@@ -305,11 +305,10 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 8 + (plev - 5) / 4;
-            DICE_SID sides = 8;
+            const Dice dice(8 + (plev - 5) / 4, 8);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
@@ -317,7 +316,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
                     return std::nullopt;
                 }
 
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::NETHER, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::NETHER, dir, dice.roll());
             }
         }
         break;
@@ -335,7 +334,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
             POSITION rad = plev / 10 + 2;
 
             if (info) {
-                return info_damage(0, 0, dam / 2);
+                return info_damage(dam / 2);
             }
 
             if (cast) {
@@ -394,16 +393,15 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 1;
-            DICE_SID sides = plev * 2;
+            const Dice dice(1, plev * 2);
             int base = plev * 2;
 
             if (info) {
-                return info_damage(dice, sides, base);
+                return info_damage(dice, base);
             }
 
             if (cast) {
-                int dam = base + damroll(dice, sides);
+                int dam = base + dice.roll();
 
                 if (!get_aim_dir(player_ptr, &dir)) {
                     return std::nullopt;
@@ -484,13 +482,14 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 25;
+            const Dice dice(1, 25);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                (void)berserk(player_ptr, base + randint1(base));
+                (void)berserk(player_ptr, base + dice.roll());
             }
         }
         break;
@@ -527,11 +526,10 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_NUMBER dice = 4 + (plev - 5) / 4;
-            DICE_SID sides = 8;
+            const Dice dice(4 + (plev - 5) / 4, 8);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
@@ -539,7 +537,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
                     return std::nullopt;
                 }
 
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::DARK, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::DARK, dir, dice.roll());
             }
         }
         break;
@@ -554,16 +552,17 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int b_base = 25;
+            const Dice b_dice(1, 25);
             int sp_base = plev / 2;
-            int sp_sides = 20 + plev / 2;
+            const Dice sp_dice(1, 20 + plev / 2);
 
             if (info) {
-                return info_duration(b_base, b_base);
+                return info_duration(b_base, b_dice);
             }
 
             if (cast) {
-                (void)berserk(player_ptr, b_base + randint1(b_base));
-                set_acceleration(player_ptr, randint1(sp_sides) + sp_base, false);
+                (void)berserk(player_ptr, b_base + b_dice.roll());
+                set_acceleration(player_ptr, sp_dice.roll() + sp_base, false);
             }
         }
         break;
@@ -626,14 +625,14 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_SID sides = plev * 3;
+            const Dice dice(1, plev * 3);
 
             if (info) {
-                return info_damage(1, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
-                dispel_living(player_ptr, randint1(sides));
+                dispel_living(player_ptr, dice.roll());
             }
         }
         break;
@@ -651,7 +650,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
             POSITION rad = 4;
 
             if (info) {
-                return info_damage(0, 0, dam);
+                return info_damage(dam);
             }
 
             if (cast) {
@@ -729,13 +728,14 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 10 + plev / 2;
+            const Dice dice(1, 10 + plev / 2);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_mimic(player_ptr, base + randint1(base), MimicKindType::VAMPIRE, false);
+                set_mimic(player_ptr, base + dice.roll(), MimicKindType::VAMPIRE, false);
             }
         }
         break;
@@ -791,7 +791,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
             POSITION rad = 3;
 
             if (info) {
-                return info_damage(0, 0, dam);
+                return info_damage(dam);
             }
 
             if (cast) {
@@ -816,13 +816,14 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = plev / 2;
+            const Dice dice(1, plev / 2);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_wraith_form(player_ptr, randint1(base) + base, false);
+                set_wraith_form(player_ptr, dice.roll() + base, false);
             }
         }
         break;

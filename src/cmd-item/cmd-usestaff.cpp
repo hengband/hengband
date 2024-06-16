@@ -38,6 +38,7 @@
 #include "sv-definition/sv-staff-types.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/dice.h"
 #include "view/display-messages.h"
 
 /*!
@@ -190,7 +191,7 @@ int staff_effect(PlayerType *player_ptr, int sval, bool *use_charge, bool powerf
     }
 
     case SV_STAFF_CURE_LIGHT: {
-        ident = cure_light_wounds(player_ptr, (powerful ? 4 : 2), 8);
+        ident = cure_light_wounds(player_ptr, Dice::roll(powerful ? 4 : 2, 8));
         break;
     }
 

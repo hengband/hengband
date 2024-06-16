@@ -46,13 +46,14 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 100;
+            const Dice dice(1, 100);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_tim_infra(player_ptr, base + randint1(base), false);
+                set_tim_infra(player_ptr, base + dice.roll(), false);
             }
         }
         break;
@@ -67,13 +68,14 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 80;
+            const Dice dice(1, 80);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_tim_regen(player_ptr, base + randint1(base), false);
+                set_tim_regen(player_ptr, base + dice.roll(), false);
             }
         }
         break;
@@ -104,13 +106,14 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_oppose_cold(player_ptr, randint1(base) + base, false);
+                set_oppose_cold(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -126,13 +129,14 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_oppose_fire(player_ptr, randint1(base) + base, false);
+                set_oppose_fire(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -147,13 +151,14 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 25;
+            const Dice dice(1, 25);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                (void)heroism(player_ptr, base);
+                (void)heroism(player_ptr, dice.roll() + base);
             }
         }
         break;
@@ -169,13 +174,14 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_oppose_elec(player_ptr, randint1(base) + base, false);
+                set_oppose_elec(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -191,13 +197,14 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_oppose_acid(player_ptr, randint1(base) + base, false);
+                set_oppose_acid(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -212,13 +219,14 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 24;
+            const Dice dice(1, 24);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_tim_invis(player_ptr, randint1(base) + base, false);
+                set_tim_invis(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -249,13 +257,14 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_oppose_pois(player_ptr, randint1(base) + base, false);
+                set_oppose_pois(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -270,13 +279,14 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 25;
+            const Dice dice(1, 25);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                (void)berserk(player_ptr, base + randint1(base));
+                (void)berserk(player_ptr, base + dice.roll());
             }
         }
         break;
@@ -307,14 +317,14 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 3 * plev;
-            DICE_SID sides = 25;
+            const Dice dice(1, 25);
 
             if (info) {
-                return info_duration(base, sides);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_protevil(player_ptr, randint1(sides) + base, false);
+                set_protevil(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -346,13 +356,14 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = plev / 2;
+            const Dice dice(1, plev / 2);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                if (!choose_ele_attack(player_ptr)) {
+                if (!choose_ele_attack(player_ptr, base + dice.roll())) {
                     return std::nullopt;
                 }
             }
@@ -369,14 +380,14 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 25;
-            DICE_SID sides = 30;
+            const Dice dice(1, 30);
 
             if (info) {
-                return info_duration(base, sides);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_tim_esp(player_ptr, randint1(sides) + base, false);
+                set_tim_esp(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -391,14 +402,14 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 30;
-            DICE_SID sides = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_duration(base, sides);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_shield(player_ptr, randint1(sides) + base, false);
+                set_shield(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -415,17 +426,18 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_oppose_acid(player_ptr, randint1(base) + base, false);
-                set_oppose_elec(player_ptr, randint1(base) + base, false);
-                set_oppose_fire(player_ptr, randint1(base) + base, false);
-                set_oppose_cold(player_ptr, randint1(base) + base, false);
-                set_oppose_pois(player_ptr, randint1(base) + base, false);
+                set_oppose_acid(player_ptr, dice.roll() + base, false);
+                set_oppose_elec(player_ptr, dice.roll() + base, false);
+                set_oppose_fire(player_ptr, dice.roll() + base, false);
+                set_oppose_cold(player_ptr, dice.roll() + base, false);
+                set_oppose_pois(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -440,14 +452,14 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = plev;
-            DICE_SID sides = 20 + plev;
+            const Dice dice(1, 20 + plev);
 
             if (info) {
-                return info_duration(base, sides);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_acceleration(player_ptr, randint1(sides) + base, false);
+                set_acceleration(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -462,13 +474,14 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = plev / 2;
+            const Dice dice(1, plev / 2);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_pass_wall(player_ptr, randint1(base) + base, false);
+                set_pass_wall(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -518,13 +531,14 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_magicdef(player_ptr, randint1(base) + base, false);
+                set_magicdef(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -650,13 +664,14 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 13;
+            const Dice dice(1, 13);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                if (!choose_ele_immune(player_ptr, base + randint1(base))) {
+                if (!choose_ele_immune(player_ptr, base + dice.roll())) {
                     return std::nullopt;
                 }
             }
