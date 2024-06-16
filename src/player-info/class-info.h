@@ -1,13 +1,11 @@
 #pragma once
 
-/* 人畜無害なenumヘッダを先に読み込む */
-#include "system/angband.h"
-
 #include "object/tval-types.h"
 #include "player-info/class-types.h"
 #include "realm/realm-types.h"
 #include "spell/technic-info-table.h"
-
+#include "system/angband.h"
+#include <map>
 #include <string>
 #include <vector>
 
@@ -74,6 +72,7 @@ struct player_class_info {
     int mul;
 };
 
+enum class PlayerClassType : short;
 extern const player_class_info *cp_ptr;
 extern const std::vector<player_class_info> class_info;
-extern const std::vector<std::vector<std::string_view>> player_titles;
+extern const std::map<PlayerClassType, std::vector<std::string>> player_titles;

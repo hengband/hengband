@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 #include "util/point-2d.h"
+#include <string_view>
 
 #define ROW_MAP 0
 #define COL_MAP 12
@@ -19,7 +20,7 @@ extern int feat_priority;
 
 class DisplaySymbol;
 class PlayerType;
-void print_field(concptr info, TERM_LEN row, TERM_LEN col);
+void print_field(std::string_view info, TERM_LEN row, TERM_LEN col);
 void print_map(PlayerType *player_ptr);
 void display_map(PlayerType *player_ptr, int *cy, int *cx);
 DisplaySymbol set_term_color(PlayerType *player_ptr, const Pos2D &pos, const DisplaySymbol &symbol_orig);

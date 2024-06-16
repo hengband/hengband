@@ -208,22 +208,16 @@ void print_tomb(PlayerType *player_ptr)
 {
     term_clear();
     read_dead_file();
-    concptr p = w_ptr->total_winner ? _("偉大なる者", "Magnificent") : player_titles[enum2i(player_ptr->pclass)][(player_ptr->lev - 1) / 5].data();
-
+    const std::string p = w_ptr->total_winner ? _("偉大なる者", "Magnificent") : player_titles.at(player_ptr->pclass).at((player_ptr->lev - 1) / 5);
     show_tomb_line(player_ptr->name, GRAVE_PLAYER_NAME_ROW);
-
 #ifdef JP
 #else
     show_tomb_line("the", GRAVE_PLAYER_TITLE_ROW - 1);
 #endif
-
     show_tomb_line(p, GRAVE_PLAYER_TITLE_ROW);
-
     show_tomb_line(cp_ptr->title, GRAVE_PLAYER_CLASS_ROW);
-
     show_basic_params(player_ptr);
     show_tomb_detail(player_ptr);
-
     time_t ct = time((time_t *)0);
     show_tomb_line(format("%-.24s", ctime(&ct)), GRAVE_DEAD_DATETIME_ROW);
     msg_format(_("さようなら、%s!", "Goodbye, %s!"), player_ptr->name);
