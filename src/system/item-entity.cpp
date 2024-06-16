@@ -95,8 +95,7 @@ void ItemEntity::generate(short new_bi_id)
     this->to_d = baseitem.to_d;
     this->to_a = baseitem.to_a;
     this->ac = baseitem.ac;
-    this->dd = baseitem.dd;
-    this->ds = baseitem.ds;
+    this->damage_dice = baseitem.damage_dice;
 
     if (baseitem.act_idx > RandomArtActType::NONE) {
         this->activation_id = baseitem.act_idx;
@@ -581,11 +580,7 @@ bool ItemEntity::can_pile(const ItemEntity *j_ptr) const
         return false;
     }
 
-    if (this->dd != j_ptr->dd) {
-        return false;
-    }
-
-    if (this->ds != j_ptr->ds) {
+    if (this->damage_dice != j_ptr->damage_dice) {
         return false;
     }
 

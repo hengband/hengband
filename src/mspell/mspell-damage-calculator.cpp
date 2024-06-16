@@ -508,8 +508,8 @@ int monspell_bluemage_damage(PlayerType *player_ptr, MonsterAbilityType ms_type,
     }
 
     if (o_ptr) {
-        shoot_dd = o_ptr->dd;
-        shoot_ds = o_ptr->ds;
+        shoot_dd = o_ptr->damage_dice.num;
+        shoot_ds = o_ptr->damage_dice.sides;
         shoot_base = o_ptr->to_d;
     }
 

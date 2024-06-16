@@ -160,11 +160,7 @@ bool store_object_similar(ItemEntity *o_ptr, ItemEntity *j_ptr)
         return false;
     }
 
-    if (o_ptr->dd != j_ptr->dd) {
-        return false;
-    }
-
-    if (o_ptr->ds != j_ptr->ds) {
+    if (o_ptr->damage_dice != j_ptr->damage_dice) {
         return false;
     }
 

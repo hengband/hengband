@@ -54,8 +54,8 @@ void ItemLoader50::rd_item(ItemEntity *o_ptr)
     o_ptr->to_d = any_bits(flags, SaveDataItemFlagType::TO_D) ? rd_s16b() : 0;
     o_ptr->to_a = any_bits(flags, SaveDataItemFlagType::TO_A) ? rd_s16b() : 0;
     o_ptr->ac = any_bits(flags, SaveDataItemFlagType::AC) ? rd_s16b() : 0;
-    o_ptr->dd = any_bits(flags, SaveDataItemFlagType::DD) ? rd_byte() : 0;
-    o_ptr->ds = any_bits(flags, SaveDataItemFlagType::DS) ? rd_byte() : 0;
+    o_ptr->damage_dice.num = any_bits(flags, SaveDataItemFlagType::DD) ? rd_byte() : 0;
+    o_ptr->damage_dice.sides = any_bits(flags, SaveDataItemFlagType::DS) ? rd_byte() : 0;
     o_ptr->ident = any_bits(flags, SaveDataItemFlagType::IDENT) ? rd_byte() : 0;
     o_ptr->marked.clear();
     if (any_bits(flags, SaveDataItemFlagType::MARKED)) {

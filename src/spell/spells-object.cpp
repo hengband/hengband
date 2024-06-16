@@ -225,8 +225,7 @@ bool curse_armor(PlayerType *player_ptr)
     o_ptr->to_h = 0;
     o_ptr->to_d = 0;
     o_ptr->ac = 0;
-    o_ptr->dd = 0;
-    o_ptr->ds = 0;
+    o_ptr->damage_dice = Dice(0, 0);
     o_ptr->art_flags.clear();
     o_ptr->curse_flags.set(CurseTraitType::CURSED);
     o_ptr->ident |= IDENT_BROKEN;
@@ -281,8 +280,7 @@ bool curse_weapon_object(PlayerType *player_ptr, bool force, ItemEntity *o_ptr)
     o_ptr->to_d = 0 - randint1(5) - randint1(5);
     o_ptr->to_a = 0;
     o_ptr->ac = 0;
-    o_ptr->dd = 0;
-    o_ptr->ds = 0;
+    o_ptr->damage_dice = Dice(0, 0);
     o_ptr->art_flags.clear();
     o_ptr->curse_flags.set(CurseTraitType::CURSED);
     o_ptr->ident |= IDENT_BROKEN;

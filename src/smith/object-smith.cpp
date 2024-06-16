@@ -387,8 +387,8 @@ Smith::DrainEssenceResult Smith::drain_essence(ItemEntity *o_ptr)
     auto diff = [](int o, int n) { return std::max(o - n, 0); };
 
     if (o_ptr->is_weapon_ammo()) {
-        drain_values[SmithEssenceType::ATTACK] += diff(old_o.ds, o_ptr->ds) * 10;
-        drain_values[SmithEssenceType::ATTACK] += diff(old_o.dd, o_ptr->dd) * 10;
+        drain_values[SmithEssenceType::ATTACK] += diff(old_o.damage_dice.sides, o_ptr->damage_dice.sides) * 10;
+        drain_values[SmithEssenceType::ATTACK] += diff(old_o.damage_dice.num, o_ptr->damage_dice.num) * 10;
     }
 
     drain_values[SmithEssenceType::ATTACK] += diff(old_o.to_h, o_ptr->to_h) * 10;

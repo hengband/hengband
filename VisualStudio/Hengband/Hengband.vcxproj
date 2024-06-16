@@ -632,6 +632,7 @@
     <ClCompile Include="..\..\src\tracking\lore-tracker.cpp" />
     <ClCompile Include="..\..\src\util\candidate-selector.cpp" />
     <ClCompile Include="..\..\src\util\rng-xoshiro.cpp" />
+    <ClCompile Include="..\..\src\util\dice.cpp" />
     <ClCompile Include="..\..\src\util\sha256.cpp" />
     <ClCompile Include="..\..\src\view\display-inventory.cpp" />
     <ClCompile Include="..\..\src\view\display-map.cpp" />
@@ -1828,6 +1829,7 @@
     <ClInclude Include="..\..\src\util\angband-files.h" />
     <ClInclude Include="..\..\src\util\object-sort.h" />
     <ClInclude Include="..\..\src\util\rng-xoshiro.h" />
+    <ClInclude Include="..\..\src\util\dice.h" />
     <ClInclude Include="..\..\src\util\sha256.h" />
     <ClInclude Include="..\..\src\util\string-processor.h" />
     <ClInclude Include="..\..\src\view\display-symbol.h" />

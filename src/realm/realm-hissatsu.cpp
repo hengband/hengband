@@ -53,6 +53,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <cmath>
 
 /*!
  * @brief 剣術の各処理を行う
@@ -648,7 +649,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                     break;
                 }
                 o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
-                basedam = (o_ptr->dd * (o_ptr->ds + 1)) * 50;
+                basedam = static_cast<int>(std::round(o_ptr->damage_dice.expected_value() * 100));
                 damage = o_ptr->to_d * 100;
 
                 // @todo ヴォーパルの多重定義.
@@ -939,7 +940,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 }
 
                 const auto &item = player_ptr->inventory_list[INVEN_MAIN_HAND + i];
-                auto basedam = (item.dd * (item.ds + 1)) * 50;
+                auto basedam = static_cast<int>(std::round(item.damage_dice.expected_value() * 100));
                 auto damage = item.to_d * 100;
 
                 // @todo ヴォーパルの多重定義.

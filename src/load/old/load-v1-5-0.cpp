@@ -98,9 +98,9 @@ void rd_item_old(ItemEntity *o_ptr)
 
     o_ptr->to_a = rd_s16b();
     o_ptr->ac = rd_s16b();
-    o_ptr->dd = rd_byte();
 
-    o_ptr->ds = rd_byte();
+    o_ptr->damage_dice.num = rd_byte();
+    o_ptr->damage_dice.sides = rd_byte();
 
     o_ptr->ident = rd_byte();
     rd_FlagGroup_bytes(o_ptr->marked, rd_byte, 1);

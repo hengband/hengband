@@ -192,8 +192,8 @@ int calc_attack_damage_with_slay(PlayerType *player_ptr, ItemEntity *o_ptr, int 
             mult = mult_hissatsu(player_ptr, mult, flags, m_ptr, mode);
         }
 
-        if (!pc.equals(PlayerClassType::SAMURAI) && (flags.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) {
-            player_ptr->csp -= (1 + (o_ptr->dd * o_ptr->ds / 5));
+        if (!pc.equals(PlayerClassType::SAMURAI) && (flags.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (o_ptr->damage_dice.maxroll() / 5))) {
+            player_ptr->csp -= (1 + (o_ptr->damage_dice.maxroll() / 5));
             RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
             mult = mult * 3 / 2 + 20;
         }
@@ -285,7 +285,7 @@ AttributeFlags melee_attribute(PlayerType *player_ptr, ItemEntity *o_ptr, combat
         }
     }
 
-    if ((flags.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) {
+    if ((flags.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (o_ptr->damage_dice.maxroll() / 5))) {
         attribute_flags.set(AttributeType::MANA);
     }
 
