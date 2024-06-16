@@ -78,12 +78,12 @@ public:
 };
 
 static const std::array<AmuseDefinition, 13> amuse_info = { {
+    { BaseitemKey{ ItemKindType::FLAVOR_SKELETON }, 5, AmusementFlagType::NOTHING },
     { BaseitemKey{ ItemKindType::BOTTLE }, 5, AmusementFlagType::NOTHING },
     { BaseitemKey{ ItemKindType::JUNK }, 3, AmusementFlagType::MULTIPLE },
     { BaseitemKey{ ItemKindType::SPIKE }, 10, AmusementFlagType::PILE },
     { BaseitemKey{ ItemKindType::STATUE }, 15, AmusementFlagType::NOTHING },
     { BaseitemKey{ ItemKindType::MONSTER_REMAINS }, 15, AmusementFlagType::NO_UNIQUE },
-    { BaseitemKey{ ItemKindType::FLAVOR_SKELETON }, 10, AmusementFlagType::NO_UNIQUE },
     { BaseitemKey{ ItemKindType::FIGURINE }, 10, AmusementFlagType::NO_UNIQUE },
     { BaseitemKey{ ItemKindType::PARCHMENT }, 1, AmusementFlagType::NOTHING },
     { FixedArtifactId::TAIKOBO, 3, AmusementFlagType::NOTHING },
