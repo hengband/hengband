@@ -125,7 +125,7 @@ bool MonsterEntity::is_mimicry() const
     }
 
     const auto &monrace = this->get_appearance_monrace();
-    if (monrace.symbol_char_is_any_of(R"(/|\()[]="$,.!?&`#%<>+~)")) {
+    if (!monrace.symbol_char_is_any_of(R"(/|\()[]="$,.!?&`#%<>+~)")) {
         return false;
     }
 
