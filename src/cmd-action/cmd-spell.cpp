@@ -98,7 +98,7 @@ const uint32_t fake_spell_flags[4] = { 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff0
 static std::string info_string_dice(concptr str, const Dice &dice, int base)
 {
     /* Fix value */
-    if (dice.maxroll() == 0) {
+    if (!dice.is_valid()) {
         return format("%s%d", str, base);
     }
 

@@ -15,6 +15,7 @@ public:
     static std::string to_string(int num, int sides);
     static Dice parse(std::string_view dice_str);
 
+    bool is_valid() const;
     int roll() const;
     int maxroll() const;
     double expected_value() const;
