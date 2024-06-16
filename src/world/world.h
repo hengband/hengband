@@ -71,6 +71,7 @@ public:
     bool is_player_true_winner() const;
     void pass_game_turn_by_stay();
     std::string format_real_playtime() const;
+    void set_gametime();
 
 private:
     bool is_out_arena = false; // アリーナ外部にいる時だけtrue.
