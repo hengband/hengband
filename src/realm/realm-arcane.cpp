@@ -23,6 +23,7 @@
 #include "status/sight-setter.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
+#include "util/dice.h"
 #include "view/display-messages.h"
 
 /*!
@@ -52,11 +53,10 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         {
-            DICE_NUMBER dice = 3 + (plev - 1) / 5;
-            DICE_SID sides = 3;
+            const Dice dice(3 + (plev - 1) / 5, 3);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
@@ -64,7 +64,7 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
                     return std::nullopt;
                 }
 
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::ELEC, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::ELEC, dir, dice.roll());
             }
         }
         break;
@@ -160,16 +160,15 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         {
-            DICE_NUMBER dice = 2;
-            DICE_SID sides = plev / 2;
+            const Dice dice(2, plev / 2);
             POSITION rad = plev / 10 + 1;
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
-                lite_area(player_ptr, damroll(dice, sides), rad);
+                lite_area(player_ptr, dice.roll(), rad);
             }
         }
         break;
@@ -202,14 +201,13 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         {
-            DICE_NUMBER dice = 2;
-            DICE_SID sides = 8;
+            const Dice dice(2, 8);
 
             if (info) {
-                return info_heal(dice, sides, 0);
+                return info_heal(dice);
             }
             if (cast) {
-                (void)cure_light_wounds(player_ptr, dice, sides);
+                (void)cure_light_wounds(player_ptr, dice.roll());
             }
         }
         break;
@@ -342,13 +340,14 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         {
             int base = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_oppose_cold(player_ptr, randint1(base) + base, false);
+                set_oppose_cold(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -364,13 +363,14 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         {
             int base = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_oppose_fire(player_ptr, randint1(base) + base, false);
+                set_oppose_fire(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -386,13 +386,14 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         {
             int base = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_oppose_elec(player_ptr, randint1(base) + base, false);
+                set_oppose_elec(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -408,13 +409,14 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         {
             int base = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_oppose_acid(player_ptr, randint1(base) + base, false);
+                set_oppose_acid(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -428,14 +430,13 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         {
-            DICE_NUMBER dice = 4;
-            DICE_SID sides = 8;
+            const Dice dice(4, 8);
 
             if (info) {
-                return info_heal(dice, sides, 0);
+                return info_heal(dice);
             }
             if (cast) {
-                (void)cure_serious_wounds(player_ptr, 4, 8);
+                (void)cure_serious_wounds(player_ptr, dice.roll());
             }
         }
         break;
@@ -487,12 +488,11 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         {
-            DICE_NUMBER dice = 1;
-            DICE_SID sides = 30;
+            const Dice dice(1, 30);
             int base = 20;
 
             if (info) {
-                return info_damage(dice, sides, base);
+                return info_damage(dice, base);
             }
 
             if (cast) {
@@ -500,7 +500,7 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
                     return std::nullopt;
                 }
 
-                wall_to_mud(player_ptr, dir, 20 + randint1(30));
+                wall_to_mud(player_ptr, dir, base + dice.roll());
             }
         }
         break;
@@ -514,11 +514,10 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         {
-            DICE_NUMBER dice = 6;
-            DICE_SID sides = 8;
+            const Dice dice(6, 8);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
@@ -527,7 +526,7 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
                 }
 
                 msg_print(_("光線が放たれた。", "A line of light appears."));
-                lite_line(player_ptr, dir, damroll(6, 8));
+                lite_line(player_ptr, dir, dice.roll());
             }
         }
         break;
@@ -557,13 +556,14 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         {
             int base = 24;
+            const Dice dice(1, 24);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_tim_invis(player_ptr, randint1(base) + base, false);
+                set_tim_invis(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -640,7 +640,7 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
             POSITION rad = 2;
 
             if (info) {
-                return info_damage(0, 0, dam);
+                return info_damage(dam);
             }
 
             if (cast) {
@@ -694,14 +694,14 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         {
             int base = 15;
-            DICE_SID sides = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_delay(base, sides);
+                return info_delay(base, dice);
             }
 
             if (cast) {
-                if (!recall_player(player_ptr, randint0(21) + 15)) {
+                if (!recall_player(player_ptr, dice.roll() + base)) {
                     return std::nullopt;
                 }
             }
@@ -719,10 +719,10 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         {
             int base = 25;
-            DICE_SID sides = 30;
+            const Dice dice(1, 30);
 
             if (info) {
-                return info_duration(base, sides);
+                return info_duration(base, dice);
             }
 
             if (cast) {
@@ -732,7 +732,7 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
                 wiz_lite(player_ptr, false);
 
                 if (!player_ptr->telepathy) {
-                    set_tim_esp(player_ptr, randint1(sides) + base, false);
+                    set_tim_esp(player_ptr, dice.roll() + base, false);
                 }
             }
         }

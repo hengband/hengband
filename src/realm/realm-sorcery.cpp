@@ -23,6 +23,7 @@
 #include "status/sight-setter.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
+#include "util/dice.h"
 #include "view/display-messages.h"
 
 /*!
@@ -117,16 +118,15 @@ std::optional<std::string> do_sorcery_spell(PlayerType *player_ptr, SPELL_IDX sp
         }
 
         {
-            DICE_NUMBER dice = 2;
-            DICE_SID sides = plev / 2;
+            const Dice dice(2, plev / 2);
             POSITION rad = plev / 10 + 1;
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
-                lite_area(player_ptr, damroll(dice, sides), rad);
+                lite_area(player_ptr, dice.roll(), rad);
             }
         }
         break;
@@ -344,14 +344,14 @@ std::optional<std::string> do_sorcery_spell(PlayerType *player_ptr, SPELL_IDX sp
 
         {
             int base = plev;
-            DICE_SID sides = 20 + plev;
+            const Dice dice(1, 20 + plev);
 
             if (info) {
-                return info_duration(base, sides);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_acceleration(player_ptr, randint1(sides) + base, false);
+                set_acceleration(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -453,14 +453,14 @@ std::optional<std::string> do_sorcery_spell(PlayerType *player_ptr, SPELL_IDX sp
 
         {
             int base = 25;
-            DICE_SID sides = 30;
+            const Dice dice(1, 30);
 
             if (info) {
-                return info_duration(base, sides);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_tim_esp(player_ptr, randint1(sides) + base, false);
+                set_tim_esp(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -527,14 +527,14 @@ std::optional<std::string> do_sorcery_spell(PlayerType *player_ptr, SPELL_IDX sp
 
         {
             int base = 15;
-            DICE_SID sides = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_delay(base, sides);
+                return info_delay(base, dice);
             }
 
             if (cast) {
-                if (!recall_player(player_ptr, randint0(21) + 15)) {
+                if (!recall_player(player_ptr, dice.roll() + base)) {
                     return std::nullopt;
                 }
             }
@@ -590,12 +590,11 @@ std::optional<std::string> do_sorcery_spell(PlayerType *player_ptr, SPELL_IDX sp
         }
 
         {
-            DICE_NUMBER dice = 7;
-            DICE_SID sides = 7;
+            const Dice dice(7, 7);
             int base = plev;
 
             if (info) {
-                return info_damage(dice, sides, base);
+                return info_damage(dice, base);
             }
 
             if (cast) {
@@ -640,10 +639,10 @@ std::optional<std::string> do_sorcery_spell(PlayerType *player_ptr, SPELL_IDX sp
 
         {
             int base = 25;
-            DICE_SID sides = 30;
+            const Dice dice(1, 30);
 
             if (info) {
-                return info_duration(base, sides);
+                return info_duration(base, dice);
             }
 
             if (cast) {
@@ -653,7 +652,7 @@ std::optional<std::string> do_sorcery_spell(PlayerType *player_ptr, SPELL_IDX sp
                 wiz_lite(player_ptr, false);
 
                 if (!player_ptr->telepathy) {
-                    set_tim_esp(player_ptr, randint1(sides) + base, false);
+                    set_tim_esp(player_ptr, dice.roll() + base, false);
                 }
             }
         }
@@ -730,13 +729,14 @@ std::optional<std::string> do_sorcery_spell(PlayerType *player_ptr, SPELL_IDX sp
 
         {
             int base = 4;
+            const Dice dice(1, 4);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_invuln(player_ptr, randint1(base) + base, false);
+                set_invuln(player_ptr, dice.roll() + base, false);
             }
         }
         break;

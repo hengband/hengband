@@ -544,8 +544,7 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
                                                                  : ", ";
         ++idx;
 #endif
-        is_reinforced &= num_dice.num > 0;
-        is_reinforced &= num_dice.sides > 0;
+        is_reinforced &= num_dice.is_valid();
         if (!is_reinforced) {
             continue;
         }

@@ -65,6 +65,7 @@
 #include "term/z-form.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
+#include "util/dice.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "view/display-util.h"
@@ -90,50 +91,58 @@ const uint32_t fake_spell_flags[4] = { 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff0
  * @brief
  * 魔法の効果を「キャプション:ダイス＋定数値」のフォーマットで出力する / Generate dice info string such as "foo 2d10"
  * @param str キャプション
- * @param dice ダイス数
- * @param sides ダイス目
+ * @param dice ダイス
  * @param base 固定値
  * @return フォーマットに従い整形された文字列
  */
-std::string info_string_dice(concptr str, DICE_NUMBER dice, DICE_SID sides, int base)
+static std::string info_string_dice(concptr str, const Dice &dice, int base)
 {
     /* Fix value */
-    if (!dice) {
+    if (!dice.is_valid()) {
         return format("%s%d", str, base);
     }
 
     /* Dice only */
     else if (!base) {
-        return format("%s%dd%d", str, dice, sides);
+        return format("%s%s", str, dice.to_string().data());
     }
 
     /* Dice plus base value */
     else {
-        return format("%s%dd%d%+d", str, dice, sides, base);
+        return format("%s%s%+d", str, dice.to_string().data(), base);
     }
 }
 
 /*!
  * @brief 魔法によるダメージを出力する / Generate damage-dice info string such as "dam 2d10"
- * @param dice ダイス数
- * @param sides ダイス目
+ * @param dice ダイス
  * @param base 固定値
  * @return フォーマットに従い整形された文字列
  */
-std::string info_damage(DICE_NUMBER dice, DICE_SID sides, int base)
+std::string info_damage(const Dice &dice, int base)
 {
-    return info_string_dice(_("損傷:", "dam "), dice, sides, base);
+    return info_string_dice(_("損傷:", "dam "), dice, base);
+}
+
+/*!
+ * @brief 魔法によるダメージを出力する(固定ダメージのみ)
+ * @param base 固定値
+ * @return フォーマットに従い整形された文字列
+ */
+std::string info_damage(int base)
+{
+    return info_damage(Dice(0, 0), base);
 }
 
 /*!
  * @brief 魔法の効果時間を出力する / Generate duration info string such as "dur 20+1d20"
  * @param base 固定値
- * @param sides ダイス目
+ * @param dice ダイス
  * @return フォーマットに従い整形された文字列
  */
-std::string info_duration(int base, DICE_SID sides)
+std::string info_duration(int base, const Dice &dice)
 {
-    return format(_("期間:%d+1d%d", "dur %d+1d%d"), base, sides);
+    return format(_("期間:%d+%s", "dur %d+%s"), base, dice.to_string().data());
 }
 
 /*!
@@ -148,25 +157,34 @@ std::string info_range(POSITION range)
 
 /*!
  * @brief 魔法による回復量を出力する / Generate heal info string such as "heal 2d8"
- * @param dice ダイス数
- * @param sides ダイス目
+ * @param dice ダイス
  * @param base 固定値
  * @return フォーマットに従い整形された文字列
  */
-std::string info_heal(DICE_NUMBER dice, DICE_SID sides, int base)
+std::string info_heal(const Dice &dice, int base)
 {
-    return info_string_dice(_("回復:", "heal "), dice, sides, base);
+    return info_string_dice(_("回復:", "heal "), dice, base);
+}
+
+/*!
+ * @brief 魔法による回復量を出力する(固定回復量)
+ * @param base 固定値
+ * @return フォーマットに従い整形された文字列
+ */
+std::string info_heal(int base)
+{
+    return info_heal(Dice(0, 0), base);
 }
 
 /*!
  * @brief 魔法効果発動までの遅延ターンを出力する / Generate delay info string such as "delay 15+1d15"
  * @param base 固定値
- * @param sides ダイス目
+ * @param dice ダイス
  * @return フォーマットに従い整形された文字列
  */
-std::string info_delay(int base, DICE_SID sides)
+std::string info_delay(int base, const Dice &dice)
 {
-    return format(_("遅延:%d+1d%d", "delay %d+1d%d"), base, sides);
+    return format(_("遅延:%d+%s", "delay %d+%s"), base, dice.to_string().data());
 }
 
 /*!
@@ -181,13 +199,12 @@ std::string info_multi_damage(int dam)
 
 /*!
  * @brief 魔法によるダメージを出力する(ダイスのみ＆複数回処理) / Generate multiple-damage-dice info string such as "dam 5d2 each"
- * @param dice ダイス数
- * @param sides ダイス目
+ * @param dice ダイス
  * @return フォーマットに従い整形された文字列
  */
-std::string info_multi_damage_dice(DICE_NUMBER dice, DICE_SID sides)
+std::string info_multi_damage_dice(const Dice &dice)
 {
-    return format(_("損傷:各%dd%d", "dam %dd%d each"), dice, sides);
+    return format(_("損傷:各%s", "dam %s each"), dice.to_string().data());
 }
 
 /*!
@@ -202,16 +219,12 @@ std::string info_power(int power)
 
 /*!
  * @brief 魔法による一般的な効力値を出力する（ダイス値） / Generate power info string such as "power 100"
- * @param dice ダイス数
- * @param sides ダイス目
+ * @param dice ダイス
  * @return フォーマットに従い整形された文字列
  */
-/*
- * Generate power info string such as "power 1d100"
- */
-std::string info_power_dice(DICE_NUMBER dice, DICE_SID sides)
+std::string info_power_dice(const Dice &dice)
 {
-    return format(_("効力:%dd%d", "power %dd%d"), dice, sides);
+    return format(_("効力:%s", "power %s"), dice.to_string().data());
 }
 
 /*!

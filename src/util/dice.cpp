@@ -115,6 +115,19 @@ Dice Dice::parse(std::string_view dice_str)
     }
 }
 
+/*!
+ * @brief ダイスオブジェクトが有効な値を持っているかどうかを返す
+ *
+ * ダイスオブジェクトの保持するダイスを振ることができる状態、
+ * すなわちダイスの数と面数がそれぞれ1以上の値を持っている場合にtrueを返す。
+ *
+ * @return ダイスオブジェクトが有効な値を持っている場合true
+ */
+bool Dice::is_valid() const
+{
+    return this->num > 0 && this->sides > 0;
+}
+
 int Dice::roll() const
 {
     return Dice::roll(this->num, this->sides);

@@ -340,10 +340,10 @@ bool berserk(PlayerType *player_ptr, int base)
     return ident;
 }
 
-bool cure_light_wounds(PlayerType *player_ptr, DICE_NUMBER dice, DICE_SID sides)
+bool cure_light_wounds(PlayerType *player_ptr, int pow)
 {
     auto ident = false;
-    if (hp_player(player_ptr, damroll(dice, sides))) {
+    if (hp_player(player_ptr, pow)) {
         ident = true;
     }
 
@@ -363,10 +363,10 @@ bool cure_light_wounds(PlayerType *player_ptr, DICE_NUMBER dice, DICE_SID sides)
     return ident;
 }
 
-bool cure_serious_wounds(PlayerType *player_ptr, DICE_NUMBER dice, DICE_SID sides)
+bool cure_serious_wounds(PlayerType *player_ptr, int pow)
 {
     auto ident = false;
-    if (hp_player(player_ptr, damroll(dice, sides))) {
+    if (hp_player(player_ptr, pow)) {
         ident = true;
     }
 

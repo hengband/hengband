@@ -45,6 +45,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "util/dice.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/object-describer.h"
@@ -108,7 +109,7 @@ static bool exe_eat_food_type_object(PlayerType *player_ptr, const BaseitemKey &
     case SV_FOOD_CURE_CONFUSION:
         return bss.set_confusion(0);
     case SV_FOOD_CURE_SERIOUS:
-        return cure_serious_wounds(player_ptr, 4, 8);
+        return cure_serious_wounds(player_ptr, Dice::roll(4, 8));
     case SV_FOOD_RESTORE_STR:
         return do_res_stat(player_ptr, A_STR);
     case SV_FOOD_RESTORE_CON:

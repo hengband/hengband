@@ -38,6 +38,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
+#include "util/dice.h"
 #include "view/display-messages.h"
 
 /*!
@@ -88,12 +89,11 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         {
-            DICE_NUMBER dice = 3 + (plev - 1) / 5;
-            DICE_SID sides = 4;
+            const Dice dice(3 + (plev - 1) / 5, 4);
             POSITION range = plev / 6 + 2;
 
             if (info) {
-                return format("%s%dd%d %s%d", KWD_DAM, dice, sides, KWD_RANGE, range);
+                return format("%s%s %s%d", KWD_DAM, dice.to_string().data(), KWD_RANGE, range);
             }
 
             if (cast) {
@@ -103,7 +103,7 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
                     return std::nullopt;
                 }
 
-                fire_beam(player_ptr, AttributeType::ELEC, dir, damroll(dice, sides));
+                fire_beam(player_ptr, AttributeType::ELEC, dir, dice.roll());
             }
         }
         break;
@@ -157,16 +157,15 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         {
-            DICE_NUMBER dice = 2;
-            DICE_SID sides = plev / 2;
+            const Dice dice(2, plev / 2);
             POSITION rad = (plev / 10) + 1;
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
-                lite_area(player_ptr, damroll(dice, sides), rad);
+                lite_area(player_ptr, dice.roll(), rad);
 
                 PlayerRace race(player_ptr);
                 if (race.life() == PlayerRaceLifeType::UNDEAD && race.tr_flags().has(TR_VUL_LITE) && !has_resist_lite(player_ptr)) {
@@ -214,15 +213,16 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         {
             int base = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_oppose_cold(player_ptr, randint1(base) + base, false);
-                set_oppose_fire(player_ptr, randint1(base) + base, false);
-                set_oppose_elec(player_ptr, randint1(base) + base, false);
+                set_oppose_cold(player_ptr, dice.roll() + base, false);
+                set_oppose_fire(player_ptr, dice.roll() + base, false);
+                set_oppose_elec(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -236,16 +236,15 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         {
-            DICE_NUMBER dice = 2;
-            DICE_SID sides = 8;
+            const Dice dice(2, 8);
 
             if (info) {
-                return info_heal(dice, sides, 0);
+                return info_heal(dice);
             }
 
             if (cast) {
                 BadStatusSetter bss(player_ptr);
-                hp_player(player_ptr, damroll(dice, sides));
+                hp_player(player_ptr, dice.roll());
                 (void)bss.set_cut(0);
                 (void)bss.set_poison(0);
             }
@@ -261,12 +260,11 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         {
-            DICE_NUMBER dice = 1;
-            DICE_SID sides = 30;
+            const Dice dice(1, 30);
             int base = 20;
 
             if (info) {
-                return info_damage(dice, sides, base);
+                return info_damage(dice, base);
             }
 
             if (cast) {
@@ -274,7 +272,7 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
                     return std::nullopt;
                 }
 
-                wall_to_mud(player_ptr, dir, 20 + randint1(30));
+                wall_to_mud(player_ptr, dir, base + dice.roll());
             }
         }
         break;
@@ -288,18 +286,17 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         {
-            DICE_NUMBER dice = 3 + (plev - 5) / 4;
-            DICE_SID sides = 8;
+            const Dice dice(3 + (plev - 5) / 4, 8);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
                     return std::nullopt;
                 }
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::COLD, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::COLD, dir, dice.roll());
             }
         }
         break;
@@ -340,18 +337,17 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         {
-            DICE_NUMBER dice = 5 + (plev - 5) / 4;
-            DICE_SID sides = 8;
+            const Dice dice(5 + (plev - 5) / 4, 8);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
                     return std::nullopt;
                 }
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::FIRE, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::FIRE, dir, dice.roll());
             }
         }
         break;
@@ -365,11 +361,10 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         {
-            DICE_NUMBER dice = 6;
-            DICE_SID sides = 8;
+            const Dice dice(6, 8);
 
             if (info) {
-                return info_damage(dice, sides, 0);
+                return info_damage(dice);
             }
 
             if (cast) {
@@ -377,7 +372,7 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
                     return std::nullopt;
                 }
                 msg_print(_("太陽光線が現れた。", "A line of sunlight appears."));
-                lite_line(player_ptr, dir, damroll(6, 8));
+                lite_line(player_ptr, dir, dice.roll());
             }
         }
         break;
@@ -428,7 +423,7 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
         {
             int heal = 500;
             if (info) {
-                return info_heal(0, 0, heal);
+                return info_heal(heal);
             }
             if (cast) {
                 (void)cure_critical_wounds(player_ptr, heal);
@@ -461,14 +456,14 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         {
             int base = 20;
-            DICE_SID sides = 30;
+            const Dice dice(1, 30);
 
             if (info) {
-                return info_duration(base, sides);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_shield(player_ptr, randint1(sides) + base, false);
+                set_shield(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -485,17 +480,18 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         {
             int base = 20;
+            const Dice dice(1, 20);
 
             if (info) {
-                return info_duration(base, base);
+                return info_duration(base, dice);
             }
 
             if (cast) {
-                set_oppose_acid(player_ptr, randint1(base) + base, false);
-                set_oppose_elec(player_ptr, randint1(base) + base, false);
-                set_oppose_fire(player_ptr, randint1(base) + base, false);
-                set_oppose_cold(player_ptr, randint1(base) + base, false);
-                set_oppose_pois(player_ptr, randint1(base) + base, false);
+                set_oppose_acid(player_ptr, dice.roll() + base, false);
+                set_oppose_elec(player_ptr, dice.roll() + base, false);
+                set_oppose_fire(player_ptr, dice.roll() + base, false);
+                set_oppose_cold(player_ptr, dice.roll() + base, false);
+                set_oppose_pois(player_ptr, dice.roll() + base, false);
             }
         }
         break;
@@ -630,7 +626,7 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
             POSITION rad = plev / 12 + 1;
 
             if (info) {
-                return info_damage(0, 0, dam);
+                return info_damage(dam);
             }
 
             if (cast) {
@@ -656,7 +652,7 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
             POSITION rad = plev / 12 + 1;
 
             if (info) {
-                return info_damage(0, 0, dam);
+                return info_damage(dam);
             }
 
             if (cast) {
@@ -682,7 +678,7 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
             POSITION rad = plev / 12 + 1;
 
             if (info) {
-                return info_damage(0, 0, dam);
+                return info_damage(dam);
             }
 
             if (cast) {
@@ -708,7 +704,7 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
             POSITION rad = 8;
 
             if (info) {
-                return info_damage(0, 0, dam / 2);
+                return info_damage(dam / 2);
             }
 
             if (cast) {
