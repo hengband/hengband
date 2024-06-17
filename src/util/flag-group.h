@@ -188,7 +188,7 @@ public:
      *
      * @return *thisの参照を返す
      */
-    FlagGroup<FlagType, MAX> &clear() &noexcept
+    FlagGroup<FlagType, MAX> &clear() & noexcept
     {
         bs_.reset();
         return *this;
@@ -199,7 +199,7 @@ public:
      *
      * @return *thisを返す
      */
-    FlagGroup<FlagType, MAX> clear() &&noexcept
+    FlagGroup<FlagType, MAX> clear() && noexcept
     {
         this->clear();
         return std::move(*this);

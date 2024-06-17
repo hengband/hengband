@@ -10,8 +10,6 @@
 #include <sstream>
 #include <string>
 
-/// @note clang-formatによるconceptの整形が安定していないので抑制しておく
-// clang-format off
 /*!
  * @brief 型Argのオブジェクトの説明を生成する関数の型Funcを表すコンセプト
  */
@@ -30,7 +28,6 @@ concept SizedContainer = requires(T t) {
     std::size(t);
     typename T::value_type;
 };
-// clang-format on
 
 /*!
  * @brief 候補を選択するためのクラス

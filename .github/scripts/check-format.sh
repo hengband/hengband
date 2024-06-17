@@ -1,11 +1,8 @@
 #!/bin/sh
 
-sudo apt-get update >/dev/null
-sudo apt-get install clang-format-15 >/dev/null
-
 SRC_FILES=$(find src/ -name \*.cpp -or -name \*.h)
 
-clang-format-15 -style=file:.github/scripts/check-clang-format-style -i $SRC_FILES
+clang-format-18 -i $SRC_FILES
 clang_format_result=$?
 
 if [ $clang_format_result -ne 0 ]; then
