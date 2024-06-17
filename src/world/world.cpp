@@ -1,4 +1,5 @@
 #include "world/world.h"
+#include "core/asking-player.h"
 #include "market/arena-entry.h"
 #include "player-info/race-types.h"
 #include "system/monster-race-info.h"
@@ -178,4 +179,17 @@ std::string AngbandWorld::format_real_playtime() const
     const auto min = (this->play_time / 60) % 60;
     const auto sec = this->play_time % 60;
     return format("%.2u:%.2u:%.2u", hour, min, sec);
+}
+
+/*!
+ * @brief プレイ日数を直接変更する (デバッグ専用)
+ */
+void AngbandWorld::set_gametime()
+{
+    const auto game_time = input_integer("Dungeon Turn", 0, this->dungeon_turn_limit - 1);
+    if (!game_time) {
+        return;
+    }
+
+    this->dungeon_turn = this->game_turn = *game_time;
 }

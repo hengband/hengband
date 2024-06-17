@@ -19,7 +19,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
-#include "wizard/wizard-special-process.h"
+#include "world/world.h"
 #include <array>
 #include <sstream>
 #include <string>
@@ -91,7 +91,7 @@ void wizard_game_modifier(PlayerType *player_ptr)
         wiz_restore_monster_max_num(i2enum<MonsterRaceId>(command_arg));
         break;
     case 't':
-        set_gametime();
+        w_ptr->set_gametime();
         break;
     }
 }
