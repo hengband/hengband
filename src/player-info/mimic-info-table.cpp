@@ -1,12 +1,6 @@
 #include "player-info/mimic-info-table.h"
 #include "player-info/race-info.h"
 
-#ifdef JP
-#define N(JAPANESE, ENGLISH) JAPANESE, ENGLISH
-#else
-#define N(JAPANESE, ENGLISH) ENGLISH
-#endif
-
 // clang-format off
 /*!
  * @brief 変身種族情報

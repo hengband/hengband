@@ -624,7 +624,7 @@ void wiz_reset_class(PlayerType *player_ptr)
     const auto new_class_enum = *new_class_opt;
     const auto new_class = enum2i(new_class_enum);
     player_ptr->pclass = new_class_enum;
-    cp_ptr = &class_info[new_class];
+    cp_ptr = &class_info.at(player_ptr->pclass);
     mp_ptr = &class_magics_info[new_class];
     PlayerClass(player_ptr).init_specific_data();
     change_birth_flags();

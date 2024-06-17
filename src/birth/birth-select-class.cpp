@@ -22,10 +22,12 @@ static std::string birth_class_label(int cs, concptr sym)
     }
 
     ss << sym[cs] << p2;
+    const auto pclass = i2enum<PlayerClassType>(cs);
+    const auto title = class_info.at(pclass).title;
     if (!(rp_ptr->choice & (1UL << cs))) {
-        ss << '(' << class_info[cs].title << ')';
+        ss << '(' << title << ')';
     } else {
-        ss << class_info[cs].title;
+        ss << title;
     }
 
     return ss.str();
@@ -34,7 +36,7 @@ static std::string birth_class_label(int cs, concptr sym)
 static void enumerate_class_list(char *sym)
 {
     for (auto n = 0; n < PLAYER_CLASS_TYPE_MAX; n++) {
-        cp_ptr = &class_info[n];
+        cp_ptr = &class_info.at(i2enum<PlayerClassType>(n));
         mp_ptr = &class_magics_info[n];
         if (n < 26) {
             sym[n] = I2A(n);
@@ -62,7 +64,7 @@ static std::string display_class_stat(int cs, int *os, const std::string &cur, c
         put_str("                                   ", 5, 40);
         put_str("                                   ", 6, 40);
     } else {
-        cp_ptr = &class_info[cs];
+        cp_ptr = &class_info.at(i2enum<PlayerClassType>(cs));
         mp_ptr = &class_magics_info[cs];
 
         c_put_str(TERM_L_BLUE, cp_ptr->title, 3, 40);
@@ -211,7 +213,7 @@ bool get_player_class(PlayerType *player_ptr)
     }
 
     player_ptr->pclass = i2enum<PlayerClassType>(k);
-    cp_ptr = &class_info[enum2i(player_ptr->pclass)];
+    cp_ptr = &class_info.at(player_ptr->pclass);
     mp_ptr = &class_magics_info[enum2i(player_ptr->pclass)];
     c_put_str(TERM_L_BLUE, cp_ptr->title, 5, 15);
     return true;

@@ -74,5 +74,5 @@ struct player_class_info {
 
 enum class PlayerClassType : short;
 extern const player_class_info *cp_ptr;
-extern const std::vector<player_class_info> class_info;
+extern const std::map<PlayerClassType, player_class_info> class_info;
 extern const std::map<PlayerClassType, std::vector<std::string>> player_titles;

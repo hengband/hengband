@@ -1,11 +1,5 @@
 #include "player/race-info-table.h"
 
-#ifdef JP
-#define N(JAPANESE, ENGLISH) JAPANESE, ENGLISH
-#else
-#define N(JAPANESE, ENGLISH) ENGLISH
-#endif
-
 // clang-format off
 /*!
  * @brief 種族情報 / Player Races

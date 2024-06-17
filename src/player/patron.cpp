@@ -35,12 +35,6 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
-#ifdef JP
-#define N(JAPANESE, ENGLISH) JAPANESE, ENGLISH
-#else
-#define N(JAPANESE, ENGLISH) ENGLISH
-#endif
-
 std::vector<Patron> patron_list = {
 
     Patron(N("スローター", "Slortar"),
