@@ -744,16 +744,16 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         {
-            DICE_SID m_sides = plev * 3;
-            DICE_SID e_sides = plev * 3;
+            const Dice m_dice(1, plev * 3);
+            const Dice e_dice(1, plev * 3);
 
             if (info) {
-                return format("%s1d%d+1d%d", KWD_DAM, m_sides, e_sides);
+                return format("%s%s+%s", KWD_DAM, m_dice.to_string().data(), e_dice.to_string().data());
             }
 
             if (cont) {
-                dispel_monsters(player_ptr, randint1(m_sides));
-                dispel_evil(player_ptr, randint1(e_sides));
+                dispel_monsters(player_ptr, m_dice.roll());
+                dispel_evil(player_ptr, e_dice.roll());
             }
         }
         break;
