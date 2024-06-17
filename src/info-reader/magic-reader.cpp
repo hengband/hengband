@@ -1,16 +1,19 @@
 #include "info-reader/magic-reader.h"
 #include "info-reader/info-reader-util.h"
+#include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "main/angband-headers.h"
 #include "player-ability/player-ability-types.h"
 #include "player-info/class-info.h"
+#include "util/enum-converter.h"
 #include "util/string-processor.h"
+#include "view/display-messages.h"
 
 namespace {
 /*!
  * @brief 魔法タイプ名とtvalの対応表
  */
-const std::unordered_map<std::string_view, ItemKindType> name_to_tval = {
+const std::unordered_map<std::string_view, ItemKindType> spelltype_to_tval = {
     { "SORCERY", ItemKindType::SORCERY_BOOK },
     { "LIFE", ItemKindType::LIFE_BOOK },
     { "MUSIC", ItemKindType::MUSIC_BOOK },
@@ -29,6 +32,208 @@ const std::unordered_map<std::string_view, int> name_to_stat = {
     { "CON", A_CON },
     { "CHR", A_CHR },
 };
+
+/*!
+ * @brief 魔法領域名とintの対応表
+ */
+const std::unordered_map<std::string_view, int> realms_list = {
+    { "LIFE", 0 },
+    { "SORCERY", 1 },
+    { "NATURE", 2 },
+    { "CHAOS", 3 },
+    { "DEATH", 4 },
+    { "TRUMP", 5 },
+    { "ARCANE", 6 },
+    { "CRAFT", 7 },
+    { "DEMON", 8 },
+    { "CRUSADE", 9 },
+};
+
+/*!
+ * @brief 職業名とenumの対応表
+ */
+const std::unordered_map<std::string_view, PlayerClassType> class_list = {
+    { "WARRIOR", PlayerClassType::WARRIOR },
+    { "MAGE", PlayerClassType::MAGE },
+    { "PRIEST", PlayerClassType::PRIEST },
+    { "ROGUE", PlayerClassType::ROGUE },
+    { "RANGER", PlayerClassType::RANGER },
+    { "PALADIN", PlayerClassType::PALADIN },
+    { "WARRIOR_MAGE", PlayerClassType::WARRIOR_MAGE },
+    { "CHAOS_WARRIOR", PlayerClassType::CHAOS_WARRIOR },
+    { "MONK", PlayerClassType::MONK },
+    { "MINDCRAFTER", PlayerClassType::MINDCRAFTER },
+    { "HIGH_MAGE", PlayerClassType::HIGH_MAGE },
+    { "TOURIST", PlayerClassType::TOURIST },
+    { "IMITATOR", PlayerClassType::IMITATOR },
+    { "BEASTMASTER", PlayerClassType::BEASTMASTER },
+    { "SORCERER", PlayerClassType::SORCERER },
+    { "ARCHER", PlayerClassType::ARCHER },
+    { "MAGIC_EATER", PlayerClassType::MAGIC_EATER },
+    { "BARD", PlayerClassType::BARD },
+    { "RED_MAGE", PlayerClassType::RED_MAGE },
+    { "SAMURAI", PlayerClassType::SAMURAI },
+    { "FORCETRAINER", PlayerClassType::FORCETRAINER },
+    { "BLUE_MAGE", PlayerClassType::BLUE_MAGE },
+    { "CAVALRY", PlayerClassType::CAVALRY },
+    { "BERSERKER", PlayerClassType::BERSERKER },
+    { "SMITH", PlayerClassType::SMITH },
+    { "MIRROR_MASTER", PlayerClassType::MIRROR_MASTER },
+    { "NINJA", PlayerClassType::NINJA },
+    { "SNIPER", PlayerClassType::SNIPER },
+    { "ELEMENTALIST", PlayerClassType::ELEMENTALIST },
+};
+}
+
+/*!
+ * @brief JSON Objectから職業IDを取得する
+ * @param class_data 情報の格納されたJSON Object
+ * @param class_id 職業ID
+ * @return エラーコード
+ */
+static errr set_class_id(const nlohmann::json &class_data, int &class_id)
+{
+    if (class_data.is_null()) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+
+    const auto &classname_obj = class_data["name"];
+    if (!classname_obj.is_string()) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+
+    const auto player_class = class_list.find(classname_obj.get<std::string>());
+    if (player_class == class_list.end()) {
+        return PARSE_ERROR_OUT_OF_BOUNDS;
+    }
+    class_id = enum2i(player_class->second);
+    return PARSE_ERROR_NONE;
+}
+
+/*!
+ * @brief JSON Objectから職業で使用する呪文タイプを取得する
+ * @param class_data 情報の格納されたJSON Object
+ * @param magics_info 保存先の魔法情報構造体
+ * @return エラーコード
+ */
+static errr set_spell_type(const nlohmann::json &class_data, player_magic &magics_info)
+{
+    if (class_data.is_null()) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+
+    const auto &spell_book = class_data["spell_type"];
+    if (!spell_book.is_string()) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+
+    const auto tval = spelltype_to_tval.find(spell_book.get<std::string>());
+    if (tval == spelltype_to_tval.end()) {
+        return PARSE_ERROR_INVALID_FLAG;
+    }
+    magics_info.spell_book = tval->second;
+    return PARSE_ERROR_NONE;
+}
+
+/*!
+ * @brief JSON Objectから職業で呪文行使に使用する能力値を取得する
+ * @param class_data 情報の格納されたJSON Object
+ * @param magics_info 保存先の魔法情報構造体
+ * @return エラーコード
+ */
+static errr set_magic_status(const nlohmann::json &class_data, player_magic &magics_info)
+{
+    if (class_data.is_null()) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+
+    const auto &magic_status = class_data["magic_status"];
+    if (!magic_status.is_string()) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+
+    const auto status = name_to_stat.find(magic_status.get<std::string>());
+    if (status == name_to_stat.end()) {
+        return PARSE_ERROR_INVALID_FLAG;
+    }
+    magics_info.spell_stat = status->second;
+    return PARSE_ERROR_NONE;
+}
+
+/*!
+ * @brief JSON Objectから各呪文の詳細を取得する
+ * @param class_data 情報の格納されたJSON Object
+ * @param magics_info 保存先の魔法情報構造体
+ * @return エラーコード
+ */
+static errr set_spell_data(const nlohmann::json &spell_data, player_magic &magics_info, int realm_id)
+{
+    int spell_id;
+    if (auto err = info_set_integer(spell_data["spell_id"], spell_id, true, Range(0, 31))) {
+        msg_format(_("呪文ID読込失敗。ID: '%d'。", "Failed to load spell ID. ID: '%d'."), error_idx);
+        return err;
+    }
+    auto &info = magics_info.info[realm_id][spell_id];
+
+    if (auto err = info_set_integer(spell_data["learn_level"], info.slevel, true, Range(0, 99))) {
+        msg_format(_("呪文学習レベル読込失敗。ID: '%d'。", "Failed to load spell learn_level. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = info_set_integer(spell_data["mana_cost"], info.smana, true, Range(0, 999))) {
+        msg_format(_("呪文コスト読込失敗。ID: '%d'。", "Failed to load spell mana_cost. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = info_set_integer(spell_data["difficulty"], info.sfail, true, Range(0, 999))) {
+        msg_format(_("呪文難易度読込失敗。ID: '%d'。", "Failed to load spell difficulty. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = info_set_integer(spell_data["first_cast_exp_rate"], info.sexp, true, Range(0, 999))) {
+        msg_format(_("呪文詠唱ボーナスEXP読込失敗。ID: '%d'。", "Failed to load spell first_cast_exp_rate. ID: '%d'."), error_idx);
+        return err;
+    }
+
+    return PARSE_ERROR_NONE;
+}
+
+/*!
+ * @brief JSON Objectから職業毎に定義された各呪文の詳細を取得する
+ * @param class_data 情報の格納されたJSON Object
+ * @param magics_info 保存先の魔法情報構造体
+ * @return エラーコード
+ */
+static errr set_realm_data(const nlohmann::json &class_data, player_magic &magics_info)
+{
+    if (class_data.is_null()) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+
+    for (auto &element : class_data["realms"].items()) {
+        auto &realm = element.value();
+        auto &realm_name_obj = realm["name"];
+        if (!realm_name_obj.is_string()) {
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        }
+
+        const auto realm_name = realms_list.find(realm_name_obj.get<std::string>());
+        if (realm_name == realms_list.end()) {
+            return PARSE_ERROR_INVALID_FLAG;
+        }
+
+        const auto realm_id = realm_name->second;
+        auto &spells_info_obj = realm["spells_info"];
+        if (spells_info_obj.is_null()) {
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        }
+
+        for (auto &spell_info : spells_info_obj.items()) {
+            if (auto err = set_spell_data(spell_info.value(), magics_info, realm_id)) {
+                msg_format(_("呪文データ読込失敗。ID: '%d'。", "Failed to load spell data. ID: '%d'."), error_idx);
+                return err;
+            }
+        }
+    }
+
+    return PARSE_ERROR_NONE;
 }
 
 /*!
@@ -37,83 +242,51 @@ const std::unordered_map<std::string_view, int> name_to_stat = {
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_class_magics_info(std::string_view buf, angband_header *)
+errr parse_class_magics_info(nlohmann::json &class_data, angband_header *)
 {
-    static player_magic *m_ptr = nullptr;
-    static int realm, magic_idx = 0, readable = 0;
-    const auto &tokens = str_split(buf, ':', false, 7);
+    int class_id;
+    if (auto err = set_class_id(class_data, class_id)) {
+        msg_format(_("職業ID読込失敗。ID: '%d'。", "Failed to load class id. ID: '%d'."), error_idx);
+        return err;
+    }
 
-    if (tokens[0] == "N") {
-        // N:class-index
-        if (tokens.size() < 2 && tokens[1].size() == 0) {
-            return PARSE_ERROR_GENERIC;
-        }
+    if (class_id < error_idx) {
+        return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
+    }
+    error_idx = class_id;
+    player_magic &magics_info = class_magics_info[class_id];
 
-        auto i = std::stoi(tokens[1]);
-        if (i < error_idx) {
-            return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
-        }
-        if (i >= std::ssize(class_magics_info)) {
-            return PARSE_ERROR_OUT_OF_BOUNDS;
-        }
-
-        error_idx = i;
-        m_ptr = &class_magics_info[i];
-    } else if (!m_ptr) {
-        return PARSE_ERROR_MISSING_RECORD_HEADER;
-    } else if (tokens[0] == "I") {
-        if (tokens.size() < 7 || tokens[1].size() == 0) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-
-        const auto tval = name_to_tval.find(tokens[1]);
-        if (tval == name_to_tval.end()) {
-            return PARSE_ERROR_INVALID_FLAG;
-        }
-
-        m_ptr->spell_book = tval->second;
-
-        const auto stat = name_to_stat.find(tokens[2]);
-        if (stat == name_to_stat.end()) {
-            return PARSE_ERROR_INVALID_FLAG;
-        }
-
-        m_ptr->spell_stat = stat->second;
-
-        uint extra_flag;
-        info_set_value(extra_flag, tokens[3], 16);
-        m_ptr->has_glove_mp_penalty = any_bits(extra_flag, 1);
-        m_ptr->has_magic_fail_rate_cap = any_bits(extra_flag, 2);
-        m_ptr->is_spell_trainable = any_bits(extra_flag, 4);
-
-        info_set_value(m_ptr->spell_type, tokens[4]);
-        info_set_value(m_ptr->spell_first, tokens[5]);
-        info_set_value(m_ptr->spell_weight, tokens[6]);
-    } else if (tokens[0] == "R") {
-        if (tokens.size() < 3) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-
-        info_set_value(realm, tokens[1]);
-        info_set_value(readable, tokens[2]);
-        magic_idx = 0;
-    } else if (tokens[0] == "T") {
-        if (!readable) {
-            return PARSE_ERROR_GENERIC;
-        }
-
-        if (tokens.size() < 5) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-
-        auto &magic = m_ptr->info[realm][magic_idx];
-        info_set_value(magic.slevel, tokens[1]);
-        info_set_value(magic.smana, tokens[2]);
-        info_set_value(magic.sfail, tokens[3]);
-        info_set_value(magic.sexp, tokens[4]);
-        magic_idx++;
-    } else {
-        return PARSE_ERROR_UNDEFINED_DIRECTIVE;
+    if (auto err = set_spell_type(class_data, magics_info)) {
+        msg_format(_("呪文タイプ読込失敗。ID: '%d'。", "Failed to load spell type. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = set_magic_status(class_data, magics_info)) {
+        msg_format(_("呪文行使に使用する能力値読込失敗。ID: '%d'。", "Failed to load magic status. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = info_set_bool(class_data["has_glove_mp_penalty"], magics_info.has_glove_mp_penalty, true)) {
+        msg_format(_("籠手によるMPペナルティ読込失敗。ID: '%d'。", "Failed to load glove_mp_penalty. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = info_set_bool(class_data["has_magic_fail_rate_cap"], magics_info.has_magic_fail_rate_cap, true)) {
+        msg_format(_("最低呪文失率情報読込失敗。ID: '%d'。", "Failed to load magic_fail_rate_cap. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = info_set_bool(class_data["is_spell_trainable"], magics_info.is_spell_trainable, true)) {
+        msg_format(_("呪文訓練可能性読込失敗。ID: '%d'。", "Failed to load spell_trainability. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = info_set_integer(class_data["first_spell_level"], magics_info.spell_first, true, Range(0, 99))) {
+        msg_format(_("呪文行使開始レベル読込失敗。ID: '%d'。", "Failed to load spell-first level. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = info_set_integer(class_data["armour_weight_limit"], magics_info.spell_weight, true, Range(0, 999))) {
+        msg_format(_("MP重量制限値読込失敗。ID: '%d'。", "Failed to load spell-weight value. ID: '%d'."), error_idx);
+        return err;
+    }
+    if (auto err = set_realm_data(class_data, magics_info)) {
+        msg_format(_("呪文データ読込失敗。ID: '%d'。", "Failed to load spell data. ID: '%d'."), error_idx);
+        return err;
     }
 
     return PARSE_ERROR_NONE;

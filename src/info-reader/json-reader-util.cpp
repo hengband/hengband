@@ -68,3 +68,21 @@ errr info_set_dice(const nlohmann::json &json, Dice &dice, bool is_required)
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 }
+
+/*!
+ * @brief JSON Objectからbool値を取得する
+ * @param json bool値が格納されたJSON Object
+ * @param bool_value bool値を格納する変数への参照
+ * @param is_required 必須かどうか
+ * 必須でJSON Objectがnullやbool場合はエラーを返す。必須でない場合は何もせずに終了する。
+ * @return エラーコード
+ */
+errr info_set_bool(const nlohmann::json &json, bool &bool_value, bool is_required)
+{
+    if (json.is_null() || !json.is_boolean()) {
+        return is_required ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_NONE;
+    }
+
+    bool_value = json.get<bool>();
+    return PARSE_ERROR_NONE;
+}

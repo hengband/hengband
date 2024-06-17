@@ -1,0 +1,198 @@
+{
+    "type": "object",
+    "additionalProperties": false,
+    "description": "職業に関する魔法の定義",
+    "properties": {
+        "version": {
+            "type": "number",
+            "description": "Version情報"
+        },
+        "classes": {
+            "type": "array",
+            "description": "クラス別に魔法定義を格納する配列",
+            "additionalProperties": false,
+            "items": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "spell_type",
+                    "magic_status",
+                    "has_glove_mp_penalty",
+                    "has_magic_fail_rate_cap",
+                    "is_spell_trainable",
+                    "first_spell_level",
+                    "armour_weight_limit",
+                    "realms"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "職業名",
+                        "additionalProperties": false,
+                        "enum": [
+                            "WARRIOR",
+                            "MAGE",
+                            "PRIEST",
+                            "ROGUE",
+                            "RANGER",
+                            "PALADIN",
+                            "WARRIOR_MAGE",
+                            "CHAOS_WARRIOR",
+                            "MONK",
+                            "MINDCRAFTER",
+                            "HIGH_MAGE",
+                            "TOURIST",
+                            "IMITATOR",
+                            "BEASTMASTER",
+                            "SORCERER",
+                            "ARCHER",
+                            "MAGIC_EATER",
+                            "BARD",
+                            "RED_MAGE",
+                            "SAMURAI",
+                            "FORCETRAINER",
+                            "BLUE_MAGE",
+                            "CAVALRY",
+                            "BERSERKER",
+                            "SMITH",
+                            "MIRROR_MASTER",
+                            "NINJA",
+                            "SNIPER",
+                            "ELEMENTALIST"
+                        ]
+                    },
+                    "spell_type": {
+                        "type": "string",
+                        "description": "呪文書による呪文タイプ定義",
+                        "additionalProperties": false,
+                        "enum": [
+                            "LIFE",
+                            "SORCERY",
+                            "MUSIC",
+                            "HISSATSU",
+                            "NONE"
+                        ]
+                    },
+                    "magic_status": {
+                        "type": "string",
+                        "description": "魔法に使用するステータス",
+                        "additionalProperties": false,
+                        "enum": [
+                            "STR",
+                            "INT",
+                            "WIS",
+                            "DEX",
+                            "CON",
+                            "CHR"
+                        ]
+                    },
+                    "has_glove_mp_penalty": {
+                        "type": "boolean",
+                        "description": "籠手装着によるMP減少ペナルティ"
+                    },
+                    "has_magic_fail_rate_cap": {
+                        "type": "boolean",
+                        "description": "呪文失敗率下限5%"
+                    },
+                    "is_spell_trainable": {
+                        "type": "boolean",
+                        "description": "呪文を訓練可能"
+                    },
+                    "first_spell_level": {
+                        "type": "integer",
+                        "description": "初めて呪文行使可能となるレベル",
+                        "minimum": 0,
+                        "maximum": 99
+                    },
+                    "armour_weight_limit": {
+                        "type": "integer",
+                        "description": "装備重量によるMP減少が開始する値",
+                        "minimum": 0,
+                        "maximum": 999
+                    },
+                    "realms": {
+                        "type": "array",
+                        "description": "各領域の呪文情報",
+                        "items": {
+                            "description": "各領域の呪文情報",
+                            "additionalProperties": false,
+                            "required": [
+                                "name",
+                                "spells_info"
+                            ],
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "領域名",
+                                    "enum": [
+                                        "LIFE",
+                                        "SORCERY",
+                                        "NATURE",
+                                        "CHAOS",
+                                        "DEATH",
+                                        "TRUMP",
+                                        "ARCANE",
+                                        "CRAFT",
+                                        "DEMON",
+                                        "CRUSADE"
+                                    ]
+                                },
+                                "spells_info": {
+                                    "type": "array",
+                                    "description": "呪文情報",
+                                    "items": {
+                                        "description": "呪文情報",
+                                        "additionalProperties": false,
+                                        "required": [
+                                            "spell_id",
+                                            "learn_level",
+                                            "mana_cost",
+                                            "difficulty",
+                                            "first_cast_exp_rate"
+                                        ],
+                                        "properties": {
+                                            "spell_id": {
+                                                "type": "integer",
+                                                "description": "呪文番号",
+                                                "minimum": 0,
+                                                "maximum": 31
+                                            },
+                                            "learn_level": {
+                                                "type": "integer",
+                                                "description": "呪文習得可能レベル",
+                                                "minimum": 0,
+                                                "maximum": 99
+                                            },
+                                            "mana_cost": {
+                                                "type": "integer",
+                                                "description": "消費MP",
+                                                "minimum": 0,
+                                                "maximum": 999
+                                            },
+                                            "difficulty": {
+                                                "type": "integer",
+                                                "description": "呪文難易度",
+                                                "minimum": 0,
+                                                "maximum": 999
+                                            },
+                                            "first_cast_exp_rate": {
+                                                "type": "integer",
+                                                "description": "初回詠唱成功時に獲得する経験値レート",
+                                                "minimum": 0,
+                                                "maximum": 999
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "required": [
+        "version",
+        "classes"
+    ]
+}
