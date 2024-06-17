@@ -39,6 +39,7 @@
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
+#include "system/angband-exceptions.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -66,42 +67,36 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &m_ptr->get_monrace();
 
-    int dice_num, dice_side;
+    Dice dice{};
     concptr atk_desc;
     switch (attack) {
     case PlayerMutationType::SCOR_TAIL:
-        dice_num = 3;
-        dice_side = 7;
+        dice = Dice(3, 7);
         n_weight = 5;
         atk_desc = _("尻尾", "tail");
         break;
     case PlayerMutationType::HORNS:
-        dice_num = 2;
-        dice_side = 6;
+        dice = Dice(2, 6);
         n_weight = 15;
         atk_desc = _("角", "horns");
         break;
     case PlayerMutationType::BEAK:
-        dice_num = 2;
-        dice_side = 4;
+        dice = Dice(2, 4);
         n_weight = 5;
         atk_desc = _("クチバシ", "beak");
         break;
     case PlayerMutationType::TRUNK:
-        dice_num = 1;
-        dice_side = 4;
+        dice = Dice(1, 4);
         n_weight = 35;
         atk_desc = _("象の鼻", "trunk");
         break;
     case PlayerMutationType::TENTACLES:
-        dice_num = 2;
-        dice_side = 5;
+        dice = Dice(2, 5);
         n_weight = 5;
         atk_desc = _("触手", "tentacles");
         break;
     default:
-        dice_num = dice_side = n_weight = 1;
-        atk_desc = _("未定義の部位", "undefined body part");
+        THROW_EXCEPTION(std::range_error, _("未定義の部位", "undefined body part"));
     }
 
     const auto m_name = monster_desc(player_ptr, m_ptr, 0);
@@ -119,8 +114,7 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
     sound(SOUND_HIT);
     msg_format(_("%sを%sで攻撃した。", "You hit %s with your %s."), m_name.data(), atk_desc);
 
-    int k = damroll(dice_num, dice_side);
-    k = critical_norm(player_ptr, n_weight, bonus, k, (int16_t)bonus, HISSATSU_NONE);
+    auto k = critical_norm(player_ptr, n_weight, bonus, dice.roll(), (int16_t)bonus, HISSATSU_NONE);
     k += player_ptr->to_d_m;
     if (k < 0) {
         k = 0;
