@@ -149,7 +149,7 @@ int PlayerType::calc_life_rating() const
     // ダイスによる上昇回数は52回（初期3回+LV50までの49回）なので
     // 期待値計算のため2で割っても端数は出ない
     constexpr auto roll_num = 3 + PY_MAX_LEVEL - 1;
-    const auto expected_hp = this->hitdie + roll_num * (this->hitdie + 1) / 2;
+    const auto expected_hp = this->hit_dice.maxroll() + this->hit_dice.floored_expected_value_multiplied_by(roll_num);
 
     return actual_hp * 100 / expected_hp;
 }

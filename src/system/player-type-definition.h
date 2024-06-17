@@ -43,7 +43,7 @@ public:
     int16_t realm2{}; /* Second magic realm */
     int16_t element{}; //!< 元素使い領域番号 / Elementalist system index
 
-    DICE_SID hitdie{}; /* Hit dice (sides) */
+    Dice hit_dice{}; /* Hit dice */
     uint16_t expfact{}; /* Experience factor
                          * Note: was byte, causing overflow for Amberite
                          * characters (such as Amberite Paladins)

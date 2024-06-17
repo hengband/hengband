@@ -229,21 +229,23 @@ bool time_walk(PlayerType *player_ptr)
  */
 void roll_hitdice(PlayerType *player_ptr, spell_operation options)
 {
-    int min_value = player_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (player_ptr->hitdie + 1)) * 3 / 8;
-    int max_value = player_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (player_ptr->hitdie + 1)) * 5 / 8;
+    constexpr auto roll_num = 3 + PY_MAX_LEVEL - 1;
+    const auto expected_hp = player_ptr->hit_dice.maxroll() + player_ptr->hit_dice.floored_expected_value_multiplied_by(roll_num);
+    const auto min_value = expected_hp * 3 / 4;
+    const auto max_value = expected_hp * 5 / 4;
 
     /* Rerate */
     while (true) {
         /* Pre-calculate level 1 hitdice */
-        player_ptr->player_hp[0] = (int)player_ptr->hitdie;
+        player_ptr->player_hp[0] = player_ptr->hit_dice.maxroll();
 
         for (int i = 1; i < 4; i++) {
-            player_ptr->player_hp[0] += randint1(player_ptr->hitdie);
+            player_ptr->player_hp[0] += player_ptr->hit_dice.roll();
         }
 
         /* Roll the hitpoint values */
         for (int i = 1; i < PY_MAX_LEVEL; i++) {
-            player_ptr->player_hp[i] = player_ptr->player_hp[i - 1] + randint1(player_ptr->hitdie);
+            player_ptr->player_hp[i] = player_ptr->player_hp[i - 1] + player_ptr->hit_dice.roll();
         }
 
         /* Require "valid" hitpoints at highest level */

@@ -81,7 +81,7 @@ void rd_base_info(PlayerType *player_ptr)
         set_zangband_realm(player_ptr);
     }
 
-    player_ptr->hitdie = rd_byte();
+    player_ptr->hit_dice = Dice(1, rd_byte());
     player_ptr->expfact = rd_u16b();
 
     player_ptr->age = rd_s16b();
