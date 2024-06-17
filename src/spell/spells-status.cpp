@@ -254,7 +254,6 @@ void roll_hitdice(PlayerType *player_ptr, spell_operation options)
 
     player_ptr->knowledge &= ~(KNOW_HPRATE);
 
-    auto percent = (player_ptr->player_hp[PY_MAX_LEVEL - 1] * 200) / (2 * player_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (player_ptr->hitdie + 1)));
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRecalculatingFlag::HP);
     rfu.set_flag(MainWindowRedrawingFlag::HP);
@@ -268,7 +267,7 @@ void roll_hitdice(PlayerType *player_ptr, spell_operation options)
     }
 
     if (options & SPOP_DEBUG) {
-        msg_format(_("現在の体力ランクは %d/100 です。", "Your life rate is %d/100 now."), percent);
+        msg_format(_("現在の体力ランクは %d/100 です。", "Your life rate is %d/100 now."), player_ptr->calc_life_rating());
         player_ptr->knowledge |= KNOW_HPRATE;
         return;
     }

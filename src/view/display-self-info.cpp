@@ -16,8 +16,8 @@
 void display_life_rating(PlayerType *player_ptr, self_info_type *self_ptr)
 {
     player_ptr->knowledge |= KNOW_STAT | KNOW_HPRATE;
-    const int percent = (int)(((long)player_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) / (2 * player_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (player_ptr->hitdie + 1))));
-    self_ptr->info_list.push_back(format(_("現在の体力ランク : %d/100", "Your current Life Rating is %d/100."), percent));
+    auto info = format(_("現在の体力ランク : %d/100", "Your current Life Rating is %d/100."), player_ptr->calc_life_rating());
+    self_ptr->info_list.push_back(std::move(info));
     self_ptr->info_list.emplace_back("");
 }
 

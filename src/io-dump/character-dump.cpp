@@ -447,18 +447,16 @@ static void dump_aux_virtues(PlayerType *player_ptr, FILE *fff)
 {
     fprintf(fff, _("\n\n  [自分に関する情報]\n\n", "\n\n  [HP-rate & Max stat & Virtues]\n\n"));
 
-    int percent = (int)(((long)player_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) / (2 * player_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (player_ptr->hitdie + 1))));
-
 #ifdef JP
     if (player_ptr->knowledge & KNOW_HPRATE) {
-        fprintf(fff, "現在の体力ランク : %d/100\n\n", percent);
+        fprintf(fff, "現在の体力ランク : %d/100\n\n", player_ptr->calc_life_rating());
     } else {
         fprintf(fff, "現在の体力ランク : ???\n\n");
     }
     fprintf(fff, "能力の最大値\n");
 #else
     if (player_ptr->knowledge & KNOW_HPRATE) {
-        fprintf(fff, "Your current Life Rating is %d/100.\n\n", percent);
+        fprintf(fff, "Your current Life Rating is %d/100.\n\n", player_ptr->calc_life_rating());
     } else {
         fprintf(fff, "Your current Life Rating is ???.\n\n");
     }
