@@ -58,27 +58,3 @@ void append_english_text(std::string &text, std::string_view add)
     text.append(add_trimmed);
 }
 #endif
-
-/*!
- * @brief ダイスを表す文字列を解析してダイスの値をセットする
- *
- * 引数で与えられた文字列 "XdY" をダイスの値に変換し、X を dd に、Y を ds に格納する。
- * 文字列が正しくダイスとして解釈できない場合はエラーを返す。
- *
- * @param dice_str ダイスを表す文字列
- * @param dd ダイスの数を格納する変数への参照
- * @param ds ダイスの面数を格納する変数への参照
- * @return エラーコード
- */
-errr info_set_dice(std::string_view dice_str, DICE_NUMBER &dd, DICE_SID &ds)
-{
-    const auto &dice = str_split(dice_str, 'd', false, 2);
-    if (dice.size() < 2) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    dd = std::stoi(dice[0]);
-    ds = std::stoi(dice[1]);
-
-    return PARSE_ERROR_NONE;
-}

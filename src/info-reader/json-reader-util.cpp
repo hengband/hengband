@@ -50,21 +50,11 @@ errr info_set_string(const nlohmann::json &json, std::string &data, bool is_requ
 /*!
  * @brief JSON Objectからダイスの値を取得する
  * @param json ダイスの値が格納されたJSON Object
- * @param dd ダイスの数を格納する変数への参照
- * @param ds ダイスの面数を格納する変数への参照
+ * @param dice ダイスの値を格納する変数への参照
  * @param is_required 必須かどうか
  * 必須でJSON Objectがnullや文字列でない場合はエラーを返す。必須でない場合は何もせずに終了する。
  * @return エラーコード
  */
-errr info_set_dice(const nlohmann::json &json, DICE_NUMBER &dd, DICE_SID &ds, bool is_required)
-{
-    if (json.is_null() || !json.is_string()) {
-        return is_required ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_NONE;
-    }
-
-    return info_set_dice(json.get<std::string>(), dd, ds);
-}
-
 errr info_set_dice(const nlohmann::json &json, Dice &dice, bool is_required)
 {
     if (json.is_null() || !json.is_string()) {
