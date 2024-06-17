@@ -87,11 +87,8 @@ void change_race(PlayerType *player_ptr, PlayerRaceType new_race, concptr effect
 
     get_height_weight(player_ptr);
 
-    if (pc.equals(PlayerClassType::SORCERER)) {
-        player_ptr->hitdie = rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
-    } else {
-        player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
-    }
+    const auto r_mhp = pc.equals(PlayerClassType::SORCERER) ? rp_ptr->r_mhp / 2 : rp_ptr->r_mhp;
+    player_ptr->hit_dice = Dice(1, r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp);
 
     roll_hitdice(player_ptr, SPOP_NONE);
     check_experience(player_ptr);

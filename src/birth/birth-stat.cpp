@@ -150,8 +150,8 @@ void get_extra(PlayerType *player_ptr, bool roll_hitdie)
         player_ptr->skill_exp[i] = class_skills_info[pclass].s_start[i];
     }
 
-    player_ptr->hitdie = cp_ptr->c_mhp + ap_ptr->a_mhp;
-    player_ptr->hitdie += is_sorcerer ? rp_ptr->r_mhp / 2 : rp_ptr->r_mhp;
+    const auto r_mhp = is_sorcerer ? rp_ptr->r_mhp / 2 : rp_ptr->r_mhp;
+    player_ptr->hit_dice = Dice(1, r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp);
     if (roll_hitdie) {
         roll_hitdice(player_ptr, SPOP_NO_UPDATE);
     }

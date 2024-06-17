@@ -134,3 +134,22 @@ bool PlayerType::in_saved_floor() const
 {
     return this->floor_id != 0;
 }
+
+/*!
+ * @brief プレイヤーの体力ランクを計算する
+ *
+ * プレイヤーの体力ランク（最大レベル時のHPの期待値に対する実際のHPの値の割合）を計算する。
+ *
+ * @return 体力ランク[%]
+ */
+int PlayerType::calc_life_rating() const
+{
+    const auto actual_hp = this->player_hp[PY_MAX_LEVEL - 1];
+
+    // ダイスによる上昇回数は52回（初期3回+LV50までの49回）なので
+    // 期待値計算のため2で割っても端数は出ない
+    constexpr auto roll_num = 3 + PY_MAX_LEVEL - 1;
+    const auto expected_hp = this->hit_dice.maxroll() + this->hit_dice.floored_expected_value_multiplied_by(roll_num);
+
+    return actual_hp * 100 / expected_hp;
+}

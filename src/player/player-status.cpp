@@ -423,18 +423,12 @@ static void update_max_hitpoints(PlayerType *player_ptr)
     int bonus = ((int)(adj_con_mhp[player_ptr->stat_index[A_CON]]) - 128) * player_ptr->lev / 4;
     int mhp = player_ptr->player_hp[player_ptr->lev - 1];
 
-    byte tmp_hitdie;
     PlayerClass pc(player_ptr);
     auto is_sorcerer = pc.equals(PlayerClassType::SORCERER);
     if (player_ptr->mimic_form != MimicKindType::NONE) {
         auto r_mhp = mimic_info.at(player_ptr->mimic_form).r_mhp;
-        if (is_sorcerer) {
-            tmp_hitdie = r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
-        } else {
-            tmp_hitdie = r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
-        }
-
-        mhp = mhp * tmp_hitdie / player_ptr->hitdie;
+        const auto mimic_hit_dice = Dice(1, (is_sorcerer ? r_mhp / 2 : r_mhp) + cp_ptr->c_mhp + ap_ptr->a_mhp);
+        mhp = mhp * mimic_hit_dice.maxroll() / player_ptr->hit_dice.maxroll();
     }
 
     if (is_sorcerer) {

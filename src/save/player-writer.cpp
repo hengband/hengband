@@ -53,7 +53,7 @@ void wr_player(PlayerType *player_ptr)
     wr_relams(player_ptr);
     wr_byte(0);
 
-    wr_byte((byte)player_ptr->hitdie);
+    wr_byte((byte)player_ptr->hit_dice.sides);
     wr_u16b(player_ptr->expfact);
 
     wr_s16b(player_ptr->age);
