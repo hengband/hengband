@@ -77,27 +77,27 @@ static bool exe_eat_food_type_object(PlayerType *player_ptr, const BaseitemKey &
     case SV_FOOD_PARALYSIS:
         return !player_ptr->free_act && bss.mod_paralysis(randint0(10) + 10);
     case SV_FOOD_WEAKNESS:
-        take_hit(player_ptr, DAMAGE_NOESCAPE, damroll(6, 6), _("毒入り食料", "poisonous food"));
+        take_hit(player_ptr, DAMAGE_NOESCAPE, Dice::roll(6, 6), _("毒入り食料", "poisonous food"));
         (void)do_dec_stat(player_ptr, A_STR);
         return true;
     case SV_FOOD_SICKNESS:
-        take_hit(player_ptr, DAMAGE_NOESCAPE, damroll(6, 6), _("毒入り食料", "poisonous food"));
+        take_hit(player_ptr, DAMAGE_NOESCAPE, Dice::roll(6, 6), _("毒入り食料", "poisonous food"));
         (void)do_dec_stat(player_ptr, A_CON);
         return true;
     case SV_FOOD_STUPIDITY:
-        take_hit(player_ptr, DAMAGE_NOESCAPE, damroll(8, 8), _("毒入り食料", "poisonous food"));
+        take_hit(player_ptr, DAMAGE_NOESCAPE, Dice::roll(8, 8), _("毒入り食料", "poisonous food"));
         (void)do_dec_stat(player_ptr, A_INT);
         return true;
     case SV_FOOD_NAIVETY:
-        take_hit(player_ptr, DAMAGE_NOESCAPE, damroll(8, 8), _("毒入り食料", "poisonous food"));
+        take_hit(player_ptr, DAMAGE_NOESCAPE, Dice::roll(8, 8), _("毒入り食料", "poisonous food"));
         (void)do_dec_stat(player_ptr, A_WIS);
         return true;
     case SV_FOOD_UNHEALTH:
-        take_hit(player_ptr, DAMAGE_NOESCAPE, damroll(10, 10), _("毒入り食料", "poisonous food"));
+        take_hit(player_ptr, DAMAGE_NOESCAPE, Dice::roll(10, 10), _("毒入り食料", "poisonous food"));
         (void)do_dec_stat(player_ptr, A_CON);
         return true;
     case SV_FOOD_DISEASE:
-        take_hit(player_ptr, DAMAGE_NOESCAPE, damroll(10, 10), _("毒入り食料", "poisonous food"));
+        take_hit(player_ptr, DAMAGE_NOESCAPE, Dice::roll(10, 10), _("毒入り食料", "poisonous food"));
         (void)do_dec_stat(player_ptr, A_STR);
         return true;
     case SV_FOOD_CURE_POISON:
@@ -131,7 +131,7 @@ static bool exe_eat_food_type_object(PlayerType *player_ptr, const BaseitemKey &
     case SV_FOOD_WAYBREAD:
         msg_print(_("これはひじょうに美味だ。", "That tastes very good."));
         (void)bss.set_poison(0);
-        (void)hp_player(player_ptr, damroll(4, 8));
+        (void)hp_player(player_ptr, Dice::roll(4, 8));
         return true;
     case SV_FOOD_PINT_OF_ALE:
     case SV_FOOD_PINT_OF_WINE:

@@ -90,26 +90,6 @@ int16_t randnor(int mean, int stand)
 }
 
 /*
- * Generates damage for "2d6" style dice rolls
- */
-int16_t damroll(DICE_NUMBER num, DICE_SID sides)
-{
-    int i, sum = 0;
-    for (i = 0; i < num; i++) {
-        sum += randint1(sides);
-    }
-    return (int16_t)(sum);
-}
-
-/*
- * Same as above, but always maximal
- */
-int16_t maxroll(DICE_NUMBER num, DICE_SID sides)
-{
-    return num * sides;
-}
-
-/*
  * Given a numerator and a denominator, supply a properly rounded result,
  * using the RNG to smooth out remainders.  -LM-
  */

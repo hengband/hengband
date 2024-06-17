@@ -113,7 +113,7 @@ static void drain_result(PlayerType *player_ptr, player_attack_type *pa_ptr, boo
         return;
     }
 
-    int drain_heal = damroll(2, pa_ptr->drain_result / 6);
+    int drain_heal = Dice::roll(2, pa_ptr->drain_result / 6);
 
     if (SpellHex(player_ptr).is_spelling_specific(HEX_VAMP_BLADE)) {
         drain_heal *= 2;

@@ -143,7 +143,7 @@ static void attack_dispel(PlayerType *player_ptr, player_attack_type *pa_ptr)
     msg_print(_("武器が敵の魔力を吸い取った！", "The weapon drains mana from your enemy!"));
     dispel_monster_status(player_ptr, pa_ptr->m_idx);
 
-    auto sp = damroll(dd, 8);
+    auto sp = Dice::roll(dd, 8);
     player_ptr->csp = std::min(player_ptr->msp, player_ptr->csp + sp);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
 }

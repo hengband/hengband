@@ -35,13 +35,13 @@ bool StoneOfLore::perilous_secrets()
 
     this->consume_mp();
     auto dam_source = _("危険な秘密", "perilous secrets");
-    take_hit(this->player_ptr, DAMAGE_LOSELIFE, damroll(1, 12), dam_source);
+    take_hit(this->player_ptr, DAMAGE_LOSELIFE, Dice::roll(1, 12), dam_source);
     if (one_in_(5)) {
         (void)BadStatusSetter(this->player_ptr).mod_confusion(randnum1<short>(10));
     }
 
     if (one_in_(20)) {
-        take_hit(this->player_ptr, DAMAGE_LOSELIFE, damroll(4, 10), dam_source);
+        take_hit(this->player_ptr, DAMAGE_LOSELIFE, Dice::roll(4, 10), dam_source);
     }
 
     return true;

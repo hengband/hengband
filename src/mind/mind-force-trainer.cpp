@@ -207,7 +207,7 @@ bool shock_power(PlayerType *player_ptr)
 
     auto pos = player_ptr->get_neighbor(dir);
     PLAYER_LEVEL plev = player_ptr->lev;
-    int dam = damroll(8 + ((plev - 5) / 4) + boost / 12, 8);
+    int dam = Dice::roll(8 + ((plev - 5) / 4) + boost / 12, 8);
     fire_beam(player_ptr, AttributeType::MISSILE, dir, dam);
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(pos);
@@ -279,10 +279,10 @@ bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
             return false;
         }
 
-        fire_ball(player_ptr, AttributeType::MISSILE, dir, damroll(3 + ((plev - 1) / 5) + boost / 12, 4), 0);
+        fire_ball(player_ptr, AttributeType::MISSILE, dir, Dice::roll(3 + ((plev - 1) / 5) + boost / 12, 4), 0);
         break;
     case MindForceTrainerType::FLASH_LIGHT:
-        (void)lite_area(player_ptr, damroll(2, (plev / 2)), (plev / 10) + 1);
+        (void)lite_area(player_ptr, Dice::roll(2, (plev / 2)), (plev / 10) + 1);
         break;
     case MindForceTrainerType::FLYING_TECHNIQUE:
         set_tim_levitation(player_ptr, randint1(30) + 30 + boost / 5, false);
@@ -293,7 +293,7 @@ bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
             return false;
         }
 
-        fire_beam(player_ptr, AttributeType::MISSILE, dir, damroll(5 + ((plev - 1) / 5) + boost / 10, 5));
+        fire_beam(player_ptr, AttributeType::MISSILE, dir, Dice::roll(5 + ((plev - 1) / 5) + boost / 10, 5));
         break;
     case MindForceTrainerType::MAGIC_RESISTANCE:
         set_resist_magic(player_ptr, randint1(20) + 20 + boost / 5, false);
@@ -323,7 +323,7 @@ bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
             return false;
         }
 
-        fire_ball(player_ptr, AttributeType::MISSILE, dir, damroll(10, 6) + plev * 3 / 2 + boost * 3 / 5, (plev < 30) ? 2 : 3);
+        fire_ball(player_ptr, AttributeType::MISSILE, dir, Dice::roll(10, 6) + plev * 3 / 2 + boost * 3 / 5, (plev < 30) ? 2 : 3);
         break;
     case MindForceTrainerType::DISPEL_MAGIC: {
         if (!target_set(player_ptr, TARGET_KILL)) {
@@ -365,7 +365,7 @@ bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
             return false;
         }
 
-        fire_beam(player_ptr, AttributeType::MANA, dir, damroll(10 + (plev / 2) + boost * 3 / 10, 15));
+        fire_beam(player_ptr, AttributeType::MANA, dir, Dice::roll(10 + (plev / 2) + boost * 3 / 10, 15));
         break;
     case MindForceTrainerType::LIGHT_SPEED:
         set_lightspeed(player_ptr, randint1(16) + 16 + boost / 20, false);

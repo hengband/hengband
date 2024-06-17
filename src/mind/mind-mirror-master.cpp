@@ -406,9 +406,9 @@ bool cast_mirror_spell(PlayerType *player_ptr, MindMirrorMasterType spell)
         }
 
         if (plev > 9 && g_ptr->is_mirror()) {
-            fire_beam(player_ptr, AttributeType::LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
+            fire_beam(player_ptr, AttributeType::LITE, dir, Dice::roll(3 + ((plev - 1) / 5), 4));
         } else {
-            fire_bolt(player_ptr, AttributeType::LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
+            fire_bolt(player_ptr, AttributeType::LITE, dir, Dice::roll(3 + ((plev - 1) / 5), 4));
         }
 
         break;
@@ -416,7 +416,7 @@ bool cast_mirror_spell(PlayerType *player_ptr, MindMirrorMasterType spell)
         teleport_player(player_ptr, 10, TELEPORT_SPONTANEOUS);
         break;
     case MindMirrorMasterType::MIRROR_LIGHT:
-        (void)lite_area(player_ptr, damroll(2, (plev / 2)), (plev / 10) + 1);
+        (void)lite_area(player_ptr, Dice::roll(2, (plev / 2)), (plev / 10) + 1);
         break;
     case MindMirrorMasterType::WANDERING_MIRROR:
         teleport_player(player_ptr, plev * 5, TELEPORT_SPONTANEOUS);
@@ -436,7 +436,7 @@ bool cast_mirror_spell(PlayerType *player_ptr, MindMirrorMasterType spell)
             return false;
         }
 
-        fire_ball(player_ptr, AttributeType::SHARDS, dir, damroll(8 + ((plev - 5) / 4), 8), (plev > 20 ? (plev - 20) / 8 + 1 : 0));
+        fire_ball(player_ptr, AttributeType::SHARDS, dir, Dice::roll(8 + ((plev - 5) / 4), 8), (plev > 20 ? (plev - 20) / 8 + 1 : 0));
         break;
     case MindMirrorMasterType::SLEEPING_MIRROR:
         for (x = 0; x < player_ptr->current_floor_ptr->width; x++) {
@@ -454,7 +454,7 @@ bool cast_mirror_spell(PlayerType *player_ptr, MindMirrorMasterType spell)
             return false;
         }
 
-        SpellsMirrorMaster(player_ptr).seeker_ray(dir, damroll(11 + (plev - 5) / 4, 8));
+        SpellsMirrorMaster(player_ptr).seeker_ray(dir, Dice::roll(11 + (plev - 5) / 4, 8));
         break;
     case MindMirrorMasterType::SEALING_MIRROR:
         SpellsMirrorMaster(player_ptr).seal_of_mirror(plev * 4 + 100);

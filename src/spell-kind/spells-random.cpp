@@ -119,7 +119,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
         case 30:
         case 31:
             if (!(*count)) {
-                int dam = damroll(10, 10);
+                int dam = Dice::roll(10, 10);
                 msg_print(_("純粋な魔力の次元への扉が開いた！", "A portal opens to a plane of raw mana!"));
                 project(player_ptr, 0, 8, player_ptr->y, player_ptr->x, dam, AttributeType::MANA, flg);
                 take_hit(player_ptr, DAMAGE_NOESCAPE, dam, _("純粋な魔力の解放", "released pure mana"));
@@ -132,7 +132,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
         case 33:
             if (!(*count)) {
                 msg_print(_("周囲の空間が歪んだ！", "Space warps about you!"));
-                teleport_player(player_ptr, damroll(10, 10), TELEPORT_PASSIVE);
+                teleport_player(player_ptr, Dice::roll(10, 10), TELEPORT_PASSIVE);
                 if (randint0(13)) {
                     (*count) += activate_hi_summon(player_ptr, player_ptr->y, player_ptr->x, false);
                 }
@@ -286,7 +286,7 @@ void wild_magic(PlayerType *player_ptr, int spell)
     case 12:
     case 13:
     case 14:
-        lite_area(player_ptr, damroll(2, 3), 2);
+        lite_area(player_ptr, Dice::roll(2, 3), 2);
         break;
     case 15:
         destroy_doors_touch(player_ptr);
@@ -401,7 +401,7 @@ void cast_wonder(PlayerType *player_ptr, DIRECTION dir)
     }
 
     if (die < 26) {
-        heal_monster(player_ptr, dir, damroll(4, 6));
+        heal_monster(player_ptr, dir, Dice::roll(4, 6));
         return;
     }
 
@@ -411,7 +411,7 @@ void cast_wonder(PlayerType *player_ptr, DIRECTION dir)
     }
 
     if (die < 36) {
-        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::MISSILE, dir, damroll(3 + ((plev - 1) / 5), 4));
+        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::MISSILE, dir, Dice::roll(3 + ((plev - 1) / 5), 4));
         return;
     }
 
@@ -426,27 +426,27 @@ void cast_wonder(PlayerType *player_ptr, DIRECTION dir)
     }
 
     if (die < 51) {
-        (void)lite_line(player_ptr, dir, damroll(6, 8));
+        (void)lite_line(player_ptr, dir, Dice::roll(6, 8));
         return;
     }
 
     if (die < 56) {
-        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::ELEC, dir, damroll(3 + ((plev - 5) / 4), 8));
+        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::ELEC, dir, Dice::roll(3 + ((plev - 5) / 4), 8));
         return;
     }
 
     if (die < 61) {
-        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::COLD, dir, damroll(5 + ((plev - 5) / 4), 8));
+        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::COLD, dir, Dice::roll(5 + ((plev - 5) / 4), 8));
         return;
     }
 
     if (die < 66) {
-        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::ACID, dir, damroll(6 + ((plev - 5) / 4), 8));
+        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::ACID, dir, Dice::roll(6 + ((plev - 5) / 4), 8));
         return;
     }
 
     if (die < 71) {
-        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::FIRE, dir, damroll(8 + ((plev - 5) / 4), 8));
+        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::FIRE, dir, Dice::roll(8 + ((plev - 5) / 4), 8));
         return;
     }
 

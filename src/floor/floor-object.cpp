@@ -102,7 +102,7 @@ static void set_ammo_quantity(ItemEntity *j_ptr)
     auto is_ammo = j_ptr->is_ammo();
     is_ammo |= j_ptr->bi_key.tval() == ItemKindType::SPIKE;
     if (is_ammo && !j_ptr->is_fixed_artifact()) {
-        j_ptr->number = damroll(6, 7);
+        j_ptr->number = Dice::roll(6, 7);
     }
 }
 

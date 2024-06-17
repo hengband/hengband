@@ -440,7 +440,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, 
     if (randint1(BREAK_RUNE_EXPLOSION) > r_ptr->level) {
         if (any_bits(g_ptr->info, CAVE_MARK)) {
             msg_print(_("ルーンが爆発した！", "The rune explodes!"));
-            project(player_ptr, 0, 2, y, x, 2 * (player_ptr->lev + damroll(7, 7)), AttributeType::MANA,
+            project(player_ptr, 0, 2, y, x, 2 * (player_ptr->lev + Dice::roll(7, 7)), AttributeType::MANA,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }
     } else {

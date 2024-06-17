@@ -63,7 +63,7 @@ void get_bloody_moon_flags(ItemEntity *o_ptr)
 {
     o_ptr->art_flags = ArtifactList::get_instance().get_artifact(FixedArtifactId::BLOOD).flags;
 
-    for (int i = 0, count = damroll(2, 2); i < count; i++) {
+    for (int i = 0, count = Dice::roll(2, 2); i < count; i++) {
         const auto flag = rand_choice(BLOODY_MOON_SLAYING_FLAG_CANDIDATES);
         o_ptr->art_flags.set(flag);
     }

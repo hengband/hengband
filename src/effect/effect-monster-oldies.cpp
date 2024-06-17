@@ -272,7 +272,7 @@ ProcessResult effect_monster_old_conf(PlayerType *player_ptr, EffectMonster *em_
         em_ptr->obvious = true;
     }
 
-    em_ptr->do_conf = damroll(3, (em_ptr->dam / 2)) + 1;
+    em_ptr->do_conf = Dice::roll(3, (em_ptr->dam / 2)) + 1;
 
     bool has_resistance = em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     has_resistance |= em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF);
@@ -324,7 +324,7 @@ ProcessResult effect_monster_stun(EffectMonster *em_ptr)
         em_ptr->obvious = true;
     }
 
-    em_ptr->do_stun = damroll((em_ptr->caster_lev / 20) + 3, (em_ptr->dam)) + 1;
+    em_ptr->do_stun = Dice::roll((em_ptr->caster_lev / 20) + 3, (em_ptr->dam)) + 1;
 
     bool has_resistance = em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     has_resistance |= (em_ptr->r_ptr->level > randint1(std::max(1, em_ptr->dam - 10)) + 10);

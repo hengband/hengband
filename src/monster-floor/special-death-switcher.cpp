@@ -518,7 +518,7 @@ void switch_special_death(PlayerType *player_ptr, MonsterDeath *md_ptr, Attribut
         on_dead_can_angel(player_ptr, md_ptr);
         return;
     case MonsterRaceId::ROLENTO:
-        (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, damroll(20, 10), AttributeType::FIRE, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
+        (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, Dice::roll(20, 10), AttributeType::FIRE, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
         return;
     case MonsterRaceId::MIDDLE_AQUA_FIRST:
     case MonsterRaceId::LARGE_AQUA_FIRST:
