@@ -140,7 +140,7 @@ static int16_t calc_to_hit_bow(PlayerType *player_ptr, bool is_real_value);
 static int16_t calc_to_damage_misc(PlayerType *player_ptr);
 static int16_t calc_to_hit_misc(PlayerType *player_ptr);
 
-static DICE_NUMBER calc_to_weapon_dice_num(PlayerType *player_ptr, INVENTORY_IDX slot);
+static int calc_to_weapon_dice_num(PlayerType *player_ptr, INVENTORY_IDX slot);
 static player_hand main_attack_hand(PlayerType *player_ptr);
 
 /*** Player information ***/
@@ -2635,7 +2635,7 @@ static int16_t calc_to_hit_misc(PlayerType *player_ptr)
     return to_hit;
 }
 
-static DICE_NUMBER calc_to_weapon_dice_num(PlayerType *player_ptr, INVENTORY_IDX slot)
+static int calc_to_weapon_dice_num(PlayerType *player_ptr, INVENTORY_IDX slot)
 {
     auto *o_ptr = &player_ptr->inventory_list[slot];
     return (player_ptr->riding > 0) && o_ptr->is_lance() ? 2 : 0;

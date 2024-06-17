@@ -249,7 +249,7 @@ static MagicalBrandEffectType select_magical_brand_effect(PlayerType *player_ptr
  * @param pa_ptr プレイヤー攻撃情報への参照ポインタ
  * @return ダイス数
  */
-static DICE_NUMBER magical_brand_extra_dice(player_attack_type *pa_ptr)
+static int magical_brand_extra_dice(player_attack_type *pa_ptr)
 {
     switch (pa_ptr->magical_effect) {
     case MagicalBrandEffectType::NONE:
