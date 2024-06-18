@@ -26,13 +26,13 @@ static bool has_dark_flag(const TrFlags &flags)
  * @param is_kanji trueならば漢字記述/falseならば英語記述
  * @return アイテムの特性フラグを表す文字列
  */
-static std::string inscribe_flags_aux(const std::vector<flag_insc_table> &fi_vec, const TrFlags &flags, [[maybe_unused]] bool is_kanji)
+static std::string inscribe_flags_aux(const std::vector<flag_insc_table> &fi_vec, const TrFlags &flags, bool is_kanji)
 {
     std::stringstream ss;
 
     for (const auto &fi : fi_vec) {
         if (flags.has(fi.flag) && (!fi.except_flag || flags.has_not(*fi.except_flag))) {
-            const auto flag_str = _(is_kanji ? fi.japanese : fi.english, fi.english);
+            const auto &flag_str = is_kanji ? fi.inscription.string() : fi.inscription.en_string();
             ss << flag_str;
         }
     }
