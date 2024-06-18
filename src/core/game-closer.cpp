@@ -121,7 +121,7 @@ static void kingly(PlayerType *player_ptr)
 #else
     put_str("Veni, Vidi, Vici!", 15, 31);
     put_str("I came, I saw, I conquered!", 16, 26);
-    put_str(format("All Hail the Mighty %s!", sp_ptr->winner), 17, 27);
+    put_str(format("All Hail the Mighty %s!", sp_ptr->winner.data()), 17, 27);
 #endif
 
     if (!seppuku) {

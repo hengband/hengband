@@ -268,7 +268,7 @@ concptr make_screen_dump(PlayerType *player_ptr)
 bool report_score(PlayerType *player_ptr)
 {
     std::stringstream score_ss;
-    std::string personality_desc = ap_ptr->title;
+    std::string personality_desc = ap_ptr->title.string();
     personality_desc.append(_(ap_ptr->no ? "の" : "", " "));
 
     auto realm1_name = PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST) ? get_element_title(player_ptr->element) : realm_names[player_ptr->realm1].data();
