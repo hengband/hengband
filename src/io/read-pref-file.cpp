@@ -86,8 +86,8 @@ static errr process_pref_file_aux(PlayerType *player_ptr, const std::filesystem:
         if (line_str->starts_with("?:")) {
             char f;
             char *s = line_str->data() + 2;
-            concptr v = process_pref_file_expr(player_ptr, &s, &f);
-            bypass = streq(v, "0");
+            auto v = process_pref_file_expr(player_ptr, &s, &f);
+            bypass = v == "0";
             continue;
         }
 
