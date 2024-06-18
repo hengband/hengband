@@ -140,7 +140,7 @@ static int16_t calc_to_hit_bow(PlayerType *player_ptr, bool is_real_value);
 static int16_t calc_to_damage_misc(PlayerType *player_ptr);
 static int16_t calc_to_hit_misc(PlayerType *player_ptr);
 
-static DICE_NUMBER calc_to_weapon_dice_num(PlayerType *player_ptr, INVENTORY_IDX slot);
+static int calc_to_weapon_dice_num(PlayerType *player_ptr, INVENTORY_IDX slot);
 static player_hand main_attack_hand(PlayerType *player_ptr);
 
 /*** Player information ***/
@@ -2635,7 +2635,7 @@ static int16_t calc_to_hit_misc(PlayerType *player_ptr)
     return to_hit;
 }
 
-static DICE_NUMBER calc_to_weapon_dice_num(PlayerType *player_ptr, INVENTORY_IDX slot)
+static int calc_to_weapon_dice_num(PlayerType *player_ptr, INVENTORY_IDX slot)
 {
     auto *o_ptr = &player_ptr->inventory_list[slot];
     return (player_ptr->riding > 0) && o_ptr->is_lance() ? 2 : 0;
@@ -2820,7 +2820,7 @@ void wreck_the_pattern(PlayerType *player_ptr)
     msg_print(_("何か恐ろしい事が起こった！", "Something terrible happens!"));
 
     if (!is_invuln(player_ptr)) {
-        take_hit(player_ptr, DAMAGE_NOESCAPE, damroll(10, 8), _("パターン損壊", "corrupting the Pattern"));
+        take_hit(player_ptr, DAMAGE_NOESCAPE, Dice::roll(10, 8), _("パターン損壊", "corrupting the Pattern"));
     }
 
     auto to_ruin = randint1(45) + 35;

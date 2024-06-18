@@ -603,7 +603,7 @@ static void process_aura_damage(MonsterEntity *m_ptr, PlayerType *player_ptr, bo
         return;
     }
 
-    int aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
+    int aura_damage = Dice::roll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
     msg_print(message);
     (*dam_func)(player_ptr, aura_damage, monster_desc(player_ptr, m_ptr, MD_WRONGDOER_NAME).data(), true);
     if (is_original_ap_and_seen(player_ptr, m_ptr)) {

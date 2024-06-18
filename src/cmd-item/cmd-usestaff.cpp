@@ -130,7 +130,7 @@ int staff_effect(PlayerType *player_ptr, int sval, bool *use_charge, bool powerf
         break;
 
     case SV_STAFF_LITE: {
-        if (lite_area(player_ptr, damroll(2, 8), (powerful ? 4 : 2))) {
+        if (lite_area(player_ptr, Dice::roll(2, 8), (powerful ? 4 : 2))) {
             ident = true;
         }
         break;

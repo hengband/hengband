@@ -43,7 +43,7 @@ static void heal_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     }
 
     bool did_heal = mam_ptr->m_ptr->hp < mam_ptr->m_ptr->maxhp;
-    mam_ptr->m_ptr->hp += damroll(4, mam_ptr->damage / 6);
+    mam_ptr->m_ptr->hp += Dice::roll(4, mam_ptr->damage / 6);
     if (mam_ptr->m_ptr->hp > mam_ptr->m_ptr->maxhp) {
         mam_ptr->m_ptr->hp = mam_ptr->m_ptr->maxhp;
     }
@@ -99,7 +99,7 @@ static void aura_fire_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         monrace_target.aura_flags.set(MonsterAuraType::FIRE);
     }
 
-    const auto dam = damroll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
+    const auto dam = Dice::roll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
     constexpr auto flags = PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED;
     project(player_ptr, mam_ptr->t_idx, 0, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, dam, AttributeType::FIRE, flags);
 }
@@ -126,7 +126,7 @@ static void aura_cold_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         monrace_target.aura_flags.set(MonsterAuraType::COLD);
     }
 
-    const auto dam = damroll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
+    const auto dam = Dice::roll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
     constexpr auto flags = PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED;
     project(player_ptr, mam_ptr->t_idx, 0, monster.fy, monster.fx, dam, AttributeType::COLD, flags);
 }
@@ -153,7 +153,7 @@ static void aura_elec_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         monrace_target.aura_flags.set(MonsterAuraType::ELEC);
     }
 
-    const auto dam = damroll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
+    const auto dam = Dice::roll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
     constexpr auto flags = PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED;
     project(player_ptr, mam_ptr->t_idx, 0, monster.fy, monster.fx, dam, AttributeType::ELEC, flags);
 }

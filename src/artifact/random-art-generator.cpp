@@ -60,7 +60,7 @@ static bool weakening_artifact(ItemEntity *o_ptr)
     }
 
     if (o_ptr->to_d > 10) {
-        o_ptr->to_d = o_ptr->to_d - damroll(1, 6);
+        o_ptr->to_d = o_ptr->to_d - Dice::roll(1, 6);
         if (o_ptr->to_d < 10) {
             o_ptr->to_d = 10;
         }

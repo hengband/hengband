@@ -209,7 +209,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
     simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 
     bool fear, dead; /* dummy */
-    int dam = damroll(4, 8);
+    int dam = Dice::roll(4, 8);
 
     if (monster_to_player || t_idx == player_ptr->riding) {
         teleport_player_to(player_ptr, m_ptr->fy, m_ptr->fx, i2enum<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
@@ -226,7 +226,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
     }
 
     simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
-    dam += damroll(6, 8);
+    dam += Dice::roll(6, 8);
 
     if (monster_to_player || (monster_to_monster && player_ptr->riding == t_idx)) {
         int get_damage = take_hit(player_ptr, DAMAGE_NOESCAPE, dam, m_name);

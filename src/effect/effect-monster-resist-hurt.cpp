@@ -574,7 +574,7 @@ static void effect_monster_gravity_slow(PlayerType *player_ptr, EffectMonster *e
 
 static void effect_monster_gravity_stun(EffectMonster *em_ptr)
 {
-    em_ptr->do_stun = damroll((em_ptr->caster_lev / 20) + 3, (em_ptr->dam)) + 1;
+    em_ptr->do_stun = Dice::roll((em_ptr->caster_lev / 20) + 3, (em_ptr->dam)) + 1;
     bool has_resistance = em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     has_resistance |= (em_ptr->r_ptr->level > randint1(std::max(1, em_ptr->dam - 10)) + 10);
     if (has_resistance) {

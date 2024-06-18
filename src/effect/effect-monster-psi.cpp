@@ -258,7 +258,7 @@ static void effect_monster_psi_drain_resist(PlayerType *player_ptr, EffectMonste
     }
 
     msg_print(_("超能力パワーを吸いとられた！", "Your psychic energy is drained!"));
-    player_ptr->csp -= damroll(5, em_ptr->dam) / 2;
+    player_ptr->csp -= Dice::roll(5, em_ptr->dam) / 2;
     if (player_ptr->csp < 0) {
         player_ptr->csp = 0;
     }
@@ -277,7 +277,7 @@ static void effect_monster_psi_drain_resist(PlayerType *player_ptr, EffectMonste
  */
 static void effect_monster_psi_drain_change_power(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
-    int b = damroll(5, em_ptr->dam) / 4;
+    int b = Dice::roll(5, em_ptr->dam) / 4;
     concptr str = PlayerClass(player_ptr).equals(PlayerClassType::MINDCRAFTER) ? _("超能力パワー", "psychic energy") : _("魔力", "mana");
     concptr msg = _("あなたは%sの苦痛を%sに変換した！", (em_ptr->seen ? "You convert %s's pain into %s!" : "You convert %ss pain into %s!"));
     msg_format(msg, em_ptr->m_name, str);
@@ -333,7 +333,7 @@ ProcessResult effect_monster_telekinesis(PlayerType *player_ptr, EffectMonster *
         }
     }
 
-    em_ptr->do_stun = damroll((em_ptr->caster_lev / 20) + 3, em_ptr->dam) + 1;
+    em_ptr->do_stun = Dice::roll((em_ptr->caster_lev / 20) + 3, em_ptr->dam) + 1;
     if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (em_ptr->r_ptr->level > 5 + randint1(em_ptr->dam))) {
         em_ptr->do_stun = 0;
         em_ptr->obvious = false;

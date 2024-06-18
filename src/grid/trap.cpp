@@ -313,7 +313,7 @@ static void hit_trap_pit(PlayerType *player_ptr, TrapType trap_feat_type)
     }
 
     msg_format(_("%sに落ちてしまった！", "You have fallen into %s!"), trap_name);
-    dam = damroll(2, 6);
+    dam = Dice::roll(2, 6);
     if (((trap_feat_type != TrapType::SPIKED_PIT) && (trap_feat_type != TrapType::POISON_PIT)) || one_in_(2)) {
         take_hit(player_ptr, DAMAGE_NOESCAPE, dam, trap_name);
         return;
@@ -349,7 +349,7 @@ static bool hit_trap_dart(PlayerType *player_ptr)
 
     if (check_hit_from_monster_to_player(player_ptr, 125)) {
         msg_print(_("小さなダーツが飛んできて刺さった！", "A small dart hits you!"));
-        take_hit(player_ptr, DAMAGE_ATTACK, damroll(1, 4), _("ダーツの罠", "a dart trap"));
+        take_hit(player_ptr, DAMAGE_ATTACK, Dice::roll(1, 4), _("ダーツの罠", "a dart trap"));
         if (!check_multishadow(player_ptr)) {
             hit = true;
         }
@@ -413,7 +413,7 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
             }
 
             sound(SOUND_FALL);
-            const auto dam = damroll(2, 8);
+            const auto dam = Dice::roll(2, 8);
             constexpr auto name = _("落とし戸", "a trap door");
 
             take_hit(player_ptr, DAMAGE_NOESCAPE, dam, name);
@@ -464,14 +464,14 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
 
     case TrapType::FIRE: {
         msg_print(_("炎に包まれた！", "You are enveloped in flames!"));
-        const auto dam = damroll(4, 6);
+        const auto dam = Dice::roll(4, 6);
         (void)fire_dam(player_ptr, dam, _("炎のトラップ", "a fire trap"), false);
         break;
     }
 
     case TrapType::ACID: {
         msg_print(_("酸が吹きかけられた！", "You are splashed with acid!"));
-        const auto dam = damroll(4, 6);
+        const auto dam = Dice::roll(4, 6);
         (void)acid_dam(player_ptr, dam, _("酸のトラップ", "an acid trap"), false);
         break;
     }

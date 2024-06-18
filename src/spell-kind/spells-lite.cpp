@@ -376,7 +376,7 @@ bool starlight(PlayerType *player_ptr, bool magic)
         msg_print(_("杖の先が明るく輝いた...", "The end of the staff glows brightly..."));
     }
 
-    int num = damroll(5, 3);
+    int num = Dice::roll(5, 3);
     auto y = 0;
     auto x = 0;
     for (int k = 0; k < num; k++) {
@@ -394,7 +394,7 @@ bool starlight(PlayerType *player_ptr, bool magic)
         }
 
         constexpr uint flags = PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL | PROJECT_LOS;
-        project(player_ptr, 0, 0, y, x, damroll(6 + player_ptr->lev / 8, 10), AttributeType::LITE_WEAK, flags);
+        project(player_ptr, 0, 0, y, x, Dice::roll(6 + player_ptr->lev / 8, 10), AttributeType::LITE_WEAK, flags);
     }
 
     return true;

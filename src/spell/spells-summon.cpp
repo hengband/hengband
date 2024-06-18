@@ -492,21 +492,21 @@ void cast_invoke_spirits(PlayerType *player_ptr, DIRECTION dir)
     } else if (die < 31) {
         poly_monster(player_ptr, dir, plev);
     } else if (die < 36) {
-        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::MISSILE, dir, damroll(3 + ((plev - 1) / 5), 4));
+        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::MISSILE, dir, Dice::roll(3 + ((plev - 1) / 5), 4));
     } else if (die < 41) {
         confuse_monster(player_ptr, dir, plev);
     } else if (die < 46) {
         fire_ball(player_ptr, AttributeType::POIS, dir, 20 + (plev / 2), 3);
     } else if (die < 51) {
-        (void)lite_line(player_ptr, dir, damroll(6, 8));
+        (void)lite_line(player_ptr, dir, Dice::roll(6, 8));
     } else if (die < 56) {
-        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::ELEC, dir, damroll(3 + ((plev - 5) / 4), 8));
+        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::ELEC, dir, Dice::roll(3 + ((plev - 5) / 4), 8));
     } else if (die < 61) {
-        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::COLD, dir, damroll(5 + ((plev - 5) / 4), 8));
+        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::COLD, dir, Dice::roll(5 + ((plev - 5) / 4), 8));
     } else if (die < 66) {
-        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::ACID, dir, damroll(6 + ((plev - 5) / 4), 8));
+        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::ACID, dir, Dice::roll(6 + ((plev - 5) / 4), 8));
     } else if (die < 71) {
-        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::FIRE, dir, damroll(8 + ((plev - 5) / 4), 8));
+        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::FIRE, dir, Dice::roll(8 + ((plev - 5) / 4), 8));
     } else if (die < 76) {
         hypodynamic_bolt(player_ptr, dir, 75);
     } else if (die < 81) {

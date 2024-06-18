@@ -277,7 +277,7 @@ bool potion_smash_effect(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y
     case SV_POTION_RUINATION:
     case SV_POTION_DETONATIONS:
         dt = AttributeType::SHARDS;
-        dam = damroll(25, 25);
+        dam = Dice::roll(25, 25);
         angry = true;
         break;
     case SV_POTION_DEATH:
@@ -291,20 +291,20 @@ bool potion_smash_effect(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y
         break;
     case SV_POTION_CURE_LIGHT:
         dt = AttributeType::OLD_HEAL;
-        dam = damroll(2, 3);
+        dam = Dice::roll(2, 3);
         break;
     case SV_POTION_CURE_SERIOUS:
         dt = AttributeType::OLD_HEAL;
-        dam = damroll(4, 3);
+        dam = Dice::roll(4, 3);
         break;
     case SV_POTION_CURE_CRITICAL:
     case SV_POTION_CURING:
         dt = AttributeType::OLD_HEAL;
-        dam = damroll(6, 3);
+        dam = Dice::roll(6, 3);
         break;
     case SV_POTION_HEALING:
         dt = AttributeType::OLD_HEAL;
-        dam = damroll(10, 10);
+        dam = Dice::roll(10, 10);
         break;
     case SV_POTION_RESTORE_EXP:
         dt = AttributeType::STAR_HEAL;
@@ -313,22 +313,22 @@ bool potion_smash_effect(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y
         break;
     case SV_POTION_LIFE:
         dt = AttributeType::STAR_HEAL;
-        dam = damroll(50, 50);
+        dam = Dice::roll(50, 50);
         radius = 1;
         break;
     case SV_POTION_STAR_HEALING:
         dt = AttributeType::OLD_HEAL;
-        dam = damroll(50, 50);
+        dam = Dice::roll(50, 50);
         radius = 1;
         break;
     case SV_POTION_RESTORE_MANA:
         dt = AttributeType::MANA;
-        dam = damroll(10, 10);
+        dam = Dice::roll(10, 10);
         radius = 1;
         break;
     case SV_POTION_POLY_SELF:
         dt = AttributeType::NEXUS;
-        dam = damroll(20, 20);
+        dam = Dice::roll(20, 20);
         radius = 1;
         break;
     default:

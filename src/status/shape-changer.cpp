@@ -30,7 +30,7 @@
 void do_poly_wounds(PlayerType *player_ptr)
 {
     int16_t hit_p = (player_ptr->mhp - player_ptr->chp);
-    int16_t change = damroll(player_ptr->lev, 5);
+    auto change = static_cast<TIME_EFFECT>(Dice::roll(player_ptr->lev, 5));
     auto nasty_effect = one_in_(5);
     const auto &player_cut = player_ptr->effects()->cut();
     if (!player_cut.is_cut() && (hit_p == 0) && !nasty_effect) {
@@ -176,7 +176,7 @@ void do_poly_self(PlayerType *player_ptr)
         }
         if (one_in_(6)) {
             msg_print(_("現在の姿で生きていくのは困難なようだ！", "You find living difficult in your present form!"));
-            take_hit(player_ptr, DAMAGE_LOSELIFE, damroll(randint1(10), player_ptr->lev), _("致命的な突然変異", "a lethal mutation"));
+            take_hit(player_ptr, DAMAGE_LOSELIFE, Dice::roll(randint1(10), player_ptr->lev), _("致命的な突然変異", "a lethal mutation"));
 
             power -= 10;
         }

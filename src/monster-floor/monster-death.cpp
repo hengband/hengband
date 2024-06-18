@@ -242,19 +242,19 @@ static int decide_drop_numbers(MonsterDeath *md_ptr, const bool drop_item, const
     }
 
     if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_1D2)) {
-        drop_numbers += damroll(1, 2);
+        drop_numbers += Dice::roll(1, 2);
     }
 
     if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_2D2)) {
-        drop_numbers += damroll(2, 2);
+        drop_numbers += Dice::roll(2, 2);
     }
 
     if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_3D2)) {
-        drop_numbers += damroll(3, 2);
+        drop_numbers += Dice::roll(3, 2);
     }
 
     if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_4D2)) {
-        drop_numbers += damroll(4, 2);
+        drop_numbers += Dice::roll(4, 2);
     }
 
     if (md_ptr->cloned && md_ptr->r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {

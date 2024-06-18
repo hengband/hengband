@@ -362,7 +362,7 @@ bool switch_activation(PlayerType *player_ptr, ItemEntity **o_ptr_ptr, const Ran
         return activate_teleport_level(player_ptr);
     case RandomArtActType::STRAIN_HASTE:
         msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name.data());
-        take_hit(player_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("加速した疲労", "the strain of haste"));
+        take_hit(player_ptr, DAMAGE_LOSELIFE, Dice::roll(3, 8), _("加速した疲労", "the strain of haste"));
         (void)mod_acceleration(player_ptr, 25 + randint1(25), false);
         return true;
     case RandomArtActType::FISHING:

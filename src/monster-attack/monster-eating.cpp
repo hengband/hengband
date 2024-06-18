@@ -295,7 +295,7 @@ void process_drain_life(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr, 
     }
 
     bool did_heal = monap_ptr->m_ptr->hp < monap_ptr->m_ptr->maxhp;
-    monap_ptr->m_ptr->hp += damroll(4, monap_ptr->damage / 6);
+    monap_ptr->m_ptr->hp += Dice::roll(4, monap_ptr->damage / 6);
     if (monap_ptr->m_ptr->hp > monap_ptr->m_ptr->maxhp) {
         monap_ptr->m_ptr->hp = monap_ptr->m_ptr->maxhp;
     }

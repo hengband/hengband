@@ -142,7 +142,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
 
             msg_print(msg);
             if (is_damaged) {
-                damage = damroll(10, 4);
+                damage = Dice::roll(10, 4);
                 BadStatusSetter(player_ptr).mod_stun(randnum1<short>(50));
             }
 
@@ -240,7 +240,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 msg_format(_("%s^は苦痛で泣きわめいた！", "%s^ wails out in pain!"), m_name.data());
             }
 
-            damage = (sn ? damroll(4, 8) : (m_ptr->hp + 1));
+            damage = (sn ? Dice::roll(4, 8) : (m_ptr->hp + 1));
             (void)set_monster_csleep(player_ptr, grid.m_idx, 0);
             m_ptr->hp -= damage;
             if (m_ptr->hp < 0) {

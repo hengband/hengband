@@ -415,7 +415,7 @@ bool switch_race_racial_execution(PlayerType *player_ptr, const int32_t command)
         }
 
         msg_print(_("マジック・ミサイルを放った。", "You cast a magic missile."));
-        (void)fire_bolt_or_beam(player_ptr, 10, AttributeType::MISSILE, dir, damroll(3 + ((player_ptr->lev - 1) / 5), 4));
+        (void)fire_bolt_or_beam(player_ptr, 10, AttributeType::MISSILE, dir, Dice::roll(3 + ((player_ptr->lev - 1) / 5), 4));
         return true;
     case PlayerRaceType::DRACONIAN:
         return draconian_breath(player_ptr);

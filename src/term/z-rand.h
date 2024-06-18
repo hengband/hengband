@@ -102,8 +102,6 @@ int randint1(T max)
 
 void Rand_state_init();
 int16_t randnor(int mean, int stand);
-int16_t damroll(DICE_NUMBER num, DICE_SID sides);
-int16_t maxroll(DICE_NUMBER num, DICE_SID sides);
 int32_t div_round(int32_t n, int32_t d);
 int32_t Rand_external(int32_t m);
 

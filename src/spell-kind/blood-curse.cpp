@@ -42,7 +42,7 @@ void blood_curse_to_enemy(PlayerType *player_ptr, MONSTER_IDX m_idx)
         case 5:
         case 6:
             if (!count) {
-                int extra_dam = damroll(10, 10);
+                int extra_dam = Dice::roll(10, 10);
                 msg_print(_("純粋な魔力の次元への扉が開いた！", "A portal opens to a plane of raw mana!"));
                 project(player_ptr, 0, 8, m_ptr->fy, m_ptr->fx, extra_dam, AttributeType::MANA, curse_flg);
                 if (!one_in_(6)) {
@@ -55,7 +55,7 @@ void blood_curse_to_enemy(PlayerType *player_ptr, MONSTER_IDX m_idx)
             if (!count) {
                 msg_print(_("空間が歪んだ！", "Space warps about you!"));
                 if (m_ptr->is_valid()) {
-                    teleport_away(player_ptr, g_ptr->m_idx, damroll(10, 10), TELEPORT_PASSIVE);
+                    teleport_away(player_ptr, g_ptr->m_idx, Dice::roll(10, 10), TELEPORT_PASSIVE);
                 }
                 if (one_in_(13)) {
                     count += activate_hi_summon(player_ptr, m_ptr->fy, m_ptr->fx, true);

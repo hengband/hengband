@@ -471,7 +471,7 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
-        dam = damroll(3 + ((plev - 1) / 5), 4);
+        dam = Dice::roll(3 + ((plev - 1) / 5), 4);
         typ = get_element_spells_type(player_ptr, power.elem);
         (void)fire_bolt(player_ptr, typ, dir, dam);
         break;
@@ -482,14 +482,14 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
     case ElementSpells::PERCEPT:
         return psychometry(player_ptr);
     case ElementSpells::CURE:
-        (void)hp_player(player_ptr, damroll(2, 8));
+        (void)hp_player(player_ptr, Dice::roll(2, 8));
         (void)BadStatusSetter(player_ptr).mod_cut(-10);
         break;
     case ElementSpells::BOLT_2ND:
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
-        dam = damroll(8 + ((plev - 5) / 4), 8);
+        dam = Dice::roll(8 + ((plev - 5) / 4), 8);
         typ = get_element_spells_type(player_ptr, power.elem);
         if (fire_bolt_or_beam(player_ptr, plev, typ, dir, dam)) {
             if (typ == AttributeType::HYPODYNAMIA) {
@@ -540,7 +540,7 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
-        dam = damroll(12 + ((plev - 5) / 4), 8);
+        dam = Dice::roll(12 + ((plev - 5) / 4), 8);
         typ = get_element_spells_type(player_ptr, power.elem);
         fire_bolt_or_beam(player_ptr, plev, typ, dir, dam);
         break;
@@ -564,7 +564,7 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
     case ElementSpells::BURST_1ST:
         y = player_ptr->y;
         x = player_ptr->x;
-        num = damroll(4, 3);
+        num = Dice::roll(4, 3);
         typ = get_element_spells_type(player_ptr, power.elem);
         for (int k = 0; k < num; k++) {
             int attempts = 1000;
@@ -577,7 +577,7 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
                     break;
                 }
             }
-            project(player_ptr, 0, 0, y, x, damroll(6 + plev / 8, 7), typ, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL));
+            project(player_ptr, 0, 0, y, x, Dice::roll(6 + plev / 8, 7), typ, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL));
         }
         break;
     case ElementSpells::STORM_2ND:
@@ -1371,7 +1371,7 @@ bool switch_element_execution(PlayerType *player_ptr)
 
     switch (realm) {
     case ElementRealmType::FIRE:
-        (void)lite_area(player_ptr, damroll(2, plev / 2), plev / 10);
+        (void)lite_area(player_ptr, Dice::roll(2, plev / 2), plev / 10);
         break;
     case ElementRealmType::ICE:
         (void)project(player_ptr, 0, 5, player_ptr->y, player_ptr->x, 1, AttributeType::COLD, PROJECT_ITEM);

@@ -86,7 +86,7 @@ bool wand_effect(PlayerType *player_ptr, int sval, int dir, bool powerful, bool 
     /* Analyze the wand */
     switch (sval) {
     case SV_WAND_HEAL_MONSTER: {
-        int dam = damroll((powerful ? 20 : 10), 10);
+        int dam = Dice::roll((powerful ? 20 : 10), 10);
         if (heal_monster(player_ptr, dir, dam)) {
             ident = true;
         }
@@ -144,7 +144,7 @@ bool wand_effect(PlayerType *player_ptr, int sval, int dir, bool powerful, bool 
     }
 
     case SV_WAND_LITE: {
-        int dam = damroll((powerful ? 12 : 6), 8);
+        int dam = Dice::roll((powerful ? 12 : 6), 8);
         msg_print(_("青く輝く光線が放たれた。", "A line of blue shimmering light appears."));
         (void)lite_line(player_ptr, dir, dam);
         ident = true;
@@ -200,13 +200,13 @@ bool wand_effect(PlayerType *player_ptr, int sval, int dir, bool powerful, bool 
     }
 
     case SV_WAND_MAGIC_MISSILE: {
-        fire_bolt_or_beam(player_ptr, 20, AttributeType::MISSILE, dir, damroll(2 + lev / 10, 6));
+        fire_bolt_or_beam(player_ptr, 20, AttributeType::MISSILE, dir, Dice::roll(2 + lev / 10, 6));
         ident = true;
         break;
     }
 
     case SV_WAND_ACID_BOLT: {
-        fire_bolt_or_beam(player_ptr, 20, AttributeType::ACID, dir, damroll(6 + lev / 7, 8));
+        fire_bolt_or_beam(player_ptr, 20, AttributeType::ACID, dir, Dice::roll(6 + lev / 7, 8));
         ident = true;
         break;
     }
@@ -219,13 +219,13 @@ bool wand_effect(PlayerType *player_ptr, int sval, int dir, bool powerful, bool 
     }
 
     case SV_WAND_FIRE_BOLT: {
-        fire_bolt_or_beam(player_ptr, 20, AttributeType::FIRE, dir, damroll(7 + lev / 6, 8));
+        fire_bolt_or_beam(player_ptr, 20, AttributeType::FIRE, dir, Dice::roll(7 + lev / 6, 8));
         ident = true;
         break;
     }
 
     case SV_WAND_COLD_BOLT: {
-        fire_bolt_or_beam(player_ptr, 20, AttributeType::COLD, dir, damroll(5 + lev / 8, 8));
+        fire_bolt_or_beam(player_ptr, 20, AttributeType::COLD, dir, Dice::roll(5 + lev / 8, 8));
         ident = true;
         break;
     }
@@ -306,7 +306,7 @@ bool wand_effect(PlayerType *player_ptr, int sval, int dir, bool powerful, bool 
     }
 
     case SV_WAND_STRIKING: {
-        fire_bolt(player_ptr, AttributeType::METEOR, dir, damroll(15 + lev / 3, 13));
+        fire_bolt(player_ptr, AttributeType::METEOR, dir, Dice::roll(15 + lev / 3, 13));
         ident = true;
         break;
     }

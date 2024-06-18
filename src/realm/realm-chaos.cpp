@@ -399,10 +399,10 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         {
             int base = 12;
-            DICE_SID sides = 4;
+            const Dice dice(1, 4);
 
             if (cast) {
-                destroy_area(player_ptr, player_ptr->y, player_ptr->x, base + randint1(sides), false);
+                destroy_area(player_ptr, player_ptr->y, player_ptr->x, base + dice.roll(), false);
             }
         }
         break;

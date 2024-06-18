@@ -71,7 +71,7 @@ bool recharge(PlayerType *player_ptr, int power)
         if (one_in_(recharge_strength)) {
             is_recharge_successful = false;
         } else {
-            recharge_amount = (power * damroll(3, 2));
+            recharge_amount = (power * Dice::roll(3, 2));
             if (o_ptr->timeout > recharge_amount) {
                 o_ptr->timeout -= recharge_amount;
             } else {

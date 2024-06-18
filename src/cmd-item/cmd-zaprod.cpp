@@ -91,7 +91,7 @@ int rod_effect(PlayerType *player_ptr, int sval, int dir, bool *use_charge, bool
     }
 
     case SV_ROD_ILLUMINATION: {
-        if (lite_area(player_ptr, damroll(2, 8), (powerful ? 4 : 2))) {
+        if (lite_area(player_ptr, Dice::roll(2, 8), (powerful ? 4 : 2))) {
             ident = true;
         }
         break;
@@ -175,7 +175,7 @@ int rod_effect(PlayerType *player_ptr, int sval, int dir, bool *use_charge, bool
     }
 
     case SV_ROD_LITE: {
-        int dam = damroll((powerful ? 12 : 6), 8);
+        int dam = Dice::roll((powerful ? 12 : 6), 8);
         msg_print(_("青く輝く光線が放たれた。", "A line of blue shimmering light appears."));
         (void)lite_line(player_ptr, dir, dam);
         ident = true;
@@ -211,25 +211,25 @@ int rod_effect(PlayerType *player_ptr, int sval, int dir, bool *use_charge, bool
     }
 
     case SV_ROD_ACID_BOLT: {
-        fire_bolt_or_beam(player_ptr, 10, AttributeType::ACID, dir, damroll(6 + lev / 7, 8));
+        fire_bolt_or_beam(player_ptr, 10, AttributeType::ACID, dir, Dice::roll(6 + lev / 7, 8));
         ident = true;
         break;
     }
 
     case SV_ROD_ELEC_BOLT: {
-        fire_bolt_or_beam(player_ptr, 10, AttributeType::ELEC, dir, damroll(4 + lev / 9, 8));
+        fire_bolt_or_beam(player_ptr, 10, AttributeType::ELEC, dir, Dice::roll(4 + lev / 9, 8));
         ident = true;
         break;
     }
 
     case SV_ROD_FIRE_BOLT: {
-        fire_bolt_or_beam(player_ptr, 10, AttributeType::FIRE, dir, damroll(7 + lev / 6, 8));
+        fire_bolt_or_beam(player_ptr, 10, AttributeType::FIRE, dir, Dice::roll(7 + lev / 6, 8));
         ident = true;
         break;
     }
 
     case SV_ROD_COLD_BOLT: {
-        fire_bolt_or_beam(player_ptr, 10, AttributeType::COLD, dir, damroll(5 + lev / 8, 8));
+        fire_bolt_or_beam(player_ptr, 10, AttributeType::COLD, dir, Dice::roll(5 + lev / 8, 8));
         ident = true;
         break;
     }

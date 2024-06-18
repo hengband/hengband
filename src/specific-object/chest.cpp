@@ -145,14 +145,14 @@ void Chest::fire_trap(const Pos2D &pos, short item_idx)
     /* Lose strength */
     if (trap.has(ChestTrapType::LOSE_STR)) {
         msg_print(_("仕掛けられていた小さな針に刺されてしまった！", "A small needle has pricked you!"));
-        take_hit(this->player_ptr, DAMAGE_NOESCAPE, damroll(1, 4), _("毒針", "a poison needle"));
+        take_hit(this->player_ptr, DAMAGE_NOESCAPE, Dice::roll(1, 4), _("毒針", "a poison needle"));
         (void)do_dec_stat(this->player_ptr, A_STR);
     }
 
     /* Lose constitution */
     if (trap.has(ChestTrapType::LOSE_CON)) {
         msg_print(_("仕掛けられていた小さな針に刺されてしまった！", "A small needle has pricked you!"));
-        take_hit(this->player_ptr, DAMAGE_NOESCAPE, damroll(1, 4), _("毒針", "a poison needle"));
+        take_hit(this->player_ptr, DAMAGE_NOESCAPE, Dice::roll(1, 4), _("毒針", "a poison needle"));
         (void)do_dec_stat(this->player_ptr, A_CON);
     }
 
@@ -251,7 +251,7 @@ void Chest::fire_trap(const Pos2D &pos, short item_idx)
             }
 
             if (one_in_(6)) {
-                take_hit(this->player_ptr, DAMAGE_NOESCAPE, damroll(5, 20), _("破滅のトラップの宝箱", "a chest dispel-player trap"));
+                take_hit(this->player_ptr, DAMAGE_NOESCAPE, Dice::roll(5, 20), _("破滅のトラップの宝箱", "a chest dispel-player trap"));
                 continue;
             }
 
@@ -302,7 +302,7 @@ void Chest::fire_trap(const Pos2D &pos, short item_idx)
         msg_print(_("箱の中の物はすべて粉々に砕け散った！", "Everything inside the chest is destroyed!"));
         o_ptr->pval = 0;
         sound(SOUND_EXPLODE);
-        take_hit(this->player_ptr, DAMAGE_ATTACK, damroll(5, 8), _("爆発する箱", "an exploding chest"));
+        take_hit(this->player_ptr, DAMAGE_ATTACK, Dice::roll(5, 8), _("爆発する箱", "an exploding chest"));
     }
     /* Scatter contents. */
     if ((trap.has(ChestTrapType::SCATTER)) && o_ptr->is_valid()) {

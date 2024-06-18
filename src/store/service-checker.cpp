@@ -232,15 +232,15 @@ static int mass_lite_produce(const PRICE cost)
 {
     int size = 1;
     if (cost <= 5L) {
-        size += damroll(3, 5);
+        size += Dice::roll(3, 5);
     }
 
     if (cost <= 20L) {
-        size += damroll(3, 5);
+        size += Dice::roll(3, 5);
     }
 
     if (cost <= 50L) {
-        size += damroll(2, 2);
+        size += Dice::roll(2, 2);
     }
 
     return size;
@@ -250,20 +250,20 @@ static int mass_scroll_produce(const ItemEntity &item, const PRICE cost)
 {
     int size = 1;
     if (cost <= 60L) {
-        size += damroll(3, 5);
+        size += Dice::roll(3, 5);
     }
 
     if (cost <= 240L) {
-        size += damroll(1, 5);
+        size += Dice::roll(1, 5);
     }
 
     const auto sval = item.bi_key.sval();
     if (sval == SV_SCROLL_STAR_IDENTIFY) {
-        size += damroll(3, 5);
+        size += Dice::roll(3, 5);
     }
 
     if (sval == SV_SCROLL_STAR_REMOVE_CURSE) {
-        size += damroll(1, 4);
+        size += Dice::roll(1, 4);
     }
 
     return size;
@@ -273,11 +273,11 @@ static int mass_book_produce(const PRICE cost)
 {
     int size = 1;
     if (cost <= 50L) {
-        size += damroll(2, 3);
+        size += Dice::roll(2, 3);
     }
 
     if (cost <= 500L) {
-        size += damroll(1, 3);
+        size += Dice::roll(1, 3);
     }
 
     return size;
@@ -291,11 +291,11 @@ static int mass_equipment_produce(const ItemEntity &item, const PRICE cost)
     }
 
     if (cost <= 10L) {
-        size += damroll(3, 5);
+        size += Dice::roll(3, 5);
     }
 
     if (cost <= 100L) {
-        size += damroll(3, 5);
+        size += Dice::roll(3, 5);
     }
 
     return size;
@@ -305,15 +305,15 @@ static int mass_arrow_produce(const PRICE cost)
 {
     int size = 1;
     if (cost <= 5L) {
-        size += damroll(5, 5);
+        size += Dice::roll(5, 5);
     }
 
     if (cost <= 50L) {
-        size += damroll(5, 5);
+        size += Dice::roll(5, 5);
     }
 
     if (cost <= 500L) {
-        size += damroll(5, 5);
+        size += Dice::roll(5, 5);
     }
 
     return size;
@@ -323,11 +323,11 @@ static int mass_figurine_produce(const PRICE cost)
 {
     int size = 1;
     if (cost <= 100L) {
-        size += damroll(2, 2);
+        size += Dice::roll(2, 2);
     }
 
     if (cost <= 1000L) {
-        size += damroll(2, 2);
+        size += Dice::roll(2, 2);
     }
 
     return size;
@@ -341,9 +341,9 @@ static int mass_magic_produce(const PRICE cost, StoreSaleType store_num)
     }
 
     if (cost < 1601L) {
-        size += damroll(1, 5);
+        size += Dice::roll(1, 5);
     } else if (cost < 3201L) {
-        size += damroll(1, 3);
+        size += Dice::roll(1, 3);
     }
 
     return size;
