@@ -55,7 +55,7 @@ void do_poly_wounds(PlayerType *player_ptr)
  */
 void change_race(PlayerType *player_ptr, PlayerRaceType new_race, concptr effect_msg)
 {
-    concptr title = race_info[enum2i(new_race)].title;
+    auto title = race_info[enum2i(new_race)].title.data();
     PlayerRaceType old_race = player_ptr->prace;
 #ifdef JP
     msg_format("あなたは%s%sに変化した！", effect_msg, title);

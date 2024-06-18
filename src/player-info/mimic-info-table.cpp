@@ -9,7 +9,7 @@ const std::map<MimicKindType, player_race_info> mimic_info =
 {
     {
         MimicKindType::NONE, {
-        N("[標準形態]", "Default"), "N",
+        { "[標準形態]", "Default" }, "N",
         {  0,  0,  0,  0,  0,  0 },
         0,  0,  0,  0,  0,  10,  0,  0,
         10,  100,
@@ -25,7 +25,7 @@ const std::map<MimicKindType, player_race_info> mimic_info =
     },
     {
         MimicKindType::DEMON, {
-        N("[悪魔]", "[Demon]"), "uU",
+        { "[悪魔]", "[Demon]" }, "uU",
         {  5,  3,  2,  3,  4,  -6 },
         -5,  18, 20, -2,  3,  10, 40, 20,
         12,  0,
@@ -48,7 +48,7 @@ const std::map<MimicKindType, player_race_info> mimic_info =
     },
     {
         MimicKindType::DEMON_LORD, {
-        N("[魔王]", "[Demon lord]"), "U",
+        { "[魔王]", "[Demon lord]" }, "U",
         {  20,  20,  20,  20,  20,  20 },
         20,  20, 25, -2,  3,  10, 70, 40,
         14,  0,
@@ -82,7 +82,7 @@ const std::map<MimicKindType, player_race_info> mimic_info =
     },
     {
         MimicKindType::VAMPIRE, {
-        N("[吸血鬼]", "[Vampire]"), "V",
+        { "[吸血鬼]", "[Vampire]" }, "V",
         { 4, 4, 1, 1, 2, 3 },
         6, 12, 8, 6, 2, 12, 30, 20,
         11,  0,

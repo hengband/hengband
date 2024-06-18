@@ -1,5 +1,6 @@
 #pragma once
 
+#include "locale/localized-string.h"
 #include "object/tval-types.h"
 #include "player-info/class-types.h"
 #include "realm/realm-types.h"
@@ -37,11 +38,8 @@ extern std::vector<player_magic> class_magics_info;
 extern const player_magic *mp_ptr;
 
 struct player_class_info {
-    concptr title; /* Type of class */
+    LocalizedString title; /* Type of class */
 
-#ifdef JP
-    concptr E_title; /* 英語職業 */
-#endif
     int16_t c_adj[6]; /* Class stat modifier */
 
     int16_t c_dis; /* class disarming */

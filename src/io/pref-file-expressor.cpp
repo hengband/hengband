@@ -163,17 +163,9 @@ std::string process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
             v = "OFF";
         }
     } else if (streq(b + 1, "RACE")) {
-#ifdef JP
-        v = rp_ptr->E_title;
-#else
-        v = rp_ptr->title;
-#endif
+        v = rp_ptr->title.en_string();
     } else if (streq(b + 1, "CLASS")) {
-#ifdef JP
-        v = cp_ptr->E_title;
-#else
-        v = cp_ptr->title;
-#endif
+        v = cp_ptr->title.en_string();
     } else if (streq(b + 1, "PLAYER")) {
         static char tmp_player_name[32];
         char *pn, *tpn;

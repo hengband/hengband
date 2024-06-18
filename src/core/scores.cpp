@@ -315,9 +315,9 @@ void show_highclass(PlayerType *player_ptr)
         clev = (PLAYER_LEVEL)atoi(the_score.cur_lev);
 
 #ifdef JP
-        snprintf(out_val, sizeof(out_val), "   %3d) %sの%s (レベル %2d)", (m + 1), race_info[pr].title, the_score.who, clev);
+        snprintf(out_val, sizeof(out_val), "   %3d) %sの%s (レベル %2d)", (m + 1), race_info[pr].title.data(), the_score.who, clev);
 #else
-        snprintf(out_val, sizeof(out_val), "%3d) %s the %s (Level %2d)", (m + 1), the_score.who, race_info[pr].title, clev);
+        snprintf(out_val, sizeof(out_val), "%3d) %s the %s (Level %2d)", (m + 1), the_score.who, race_info[pr].title.data(), clev);
 #endif
 
         prt(out_val, (m + 7), 0);
@@ -326,9 +326,9 @@ void show_highclass(PlayerType *player_ptr)
     }
 
 #ifdef JP
-    snprintf(out_val, sizeof(out_val), "あなた) %sの%s (レベル %2d)", race_info[enum2i(player_ptr->prace)].title, player_ptr->name, player_ptr->lev);
+    snprintf(out_val, sizeof(out_val), "あなた) %sの%s (レベル %2d)", race_info[enum2i(player_ptr->prace)].title.data(), player_ptr->name, player_ptr->lev);
 #else
-    snprintf(out_val, sizeof(out_val), "You) %s the %s (Level %2d)", player_ptr->name, race_info[enum2i(player_ptr->prace)].title, player_ptr->lev);
+    snprintf(out_val, sizeof(out_val), "You) %s the %s (Level %2d)", player_ptr->name, race_info[enum2i(player_ptr->prace)].title.data(), player_ptr->lev);
 #endif
 
     prt(out_val, (m + 8), 0);
@@ -393,9 +393,9 @@ void race_score(PlayerType *player_ptr, int race_num)
         if (pr == race_num) {
             char out_val[256];
 #ifdef JP
-            snprintf(out_val, sizeof(out_val), "   %3d) %sの%s (レベル %2d)", (m + 1), race_info[pr].title, the_score.who, clev);
+            snprintf(out_val, sizeof(out_val), "   %3d) %sの%s (レベル %2d)", (m + 1), race_info[pr].title.data(), the_score.who, clev);
 #else
-            snprintf(out_val, sizeof(out_val), "%3d) %s the %s (Level %3d)", (m + 1), the_score.who, race_info[pr].title, clev);
+            snprintf(out_val, sizeof(out_val), "%3d) %s the %s (Level %3d)", (m + 1), the_score.who, race_info[pr].title.data(), clev);
 #endif
 
             prt(out_val, (m + 7), 0);
@@ -409,9 +409,9 @@ void race_score(PlayerType *player_ptr, int race_num)
     if ((enum2i(player_ptr->prace) == race_num) && (player_ptr->lev >= lastlev)) {
         char out_val[256];
 #ifdef JP
-        snprintf(out_val, sizeof(out_val), "あなた) %sの%s (レベル %2d)", race_info[enum2i(player_ptr->prace)].title, player_ptr->name, player_ptr->lev);
+        snprintf(out_val, sizeof(out_val), "あなた) %sの%s (レベル %2d)", race_info[enum2i(player_ptr->prace)].title.data(), player_ptr->name, player_ptr->lev);
 #else
-        snprintf(out_val, sizeof(out_val), "You) %s the %s (Level %3d)", player_ptr->name, race_info[enum2i(player_ptr->prace)].title, player_ptr->lev);
+        snprintf(out_val, sizeof(out_val), "You) %s the %s (Level %3d)", player_ptr->name, race_info[enum2i(player_ptr->prace)].title.data(), player_ptr->lev);
 #endif
 
         prt(out_val, (m + 8), 0);

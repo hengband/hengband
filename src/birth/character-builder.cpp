@@ -62,9 +62,9 @@ static void write_birth_diary(PlayerType *player_ptr)
     exe_write_diary(floor, DiaryKind::DIALY, 0);
     const auto mes_sex = format(_("%s性別に%sを選択した。", "%schose %s gender."), indent, sex_info[player_ptr->psex].title);
     exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, mes_sex);
-    const auto mes_race = format(_("%s種族に%sを選択した。", "%schose %s race."), indent, race_info[enum2i(player_ptr->prace)].title);
+    const auto mes_race = format(_("%s種族に%sを選択した。", "%schose %s race."), indent, race_info[enum2i(player_ptr->prace)].title.data());
     exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, mes_race);
-    const auto mes_class = format(_("%s職業に%sを選択した。", "%schose %s class."), indent, class_info.at(player_ptr->pclass).title);
+    const auto mes_class = format(_("%s職業に%sを選択した。", "%schose %s class."), indent, class_info.at(player_ptr->pclass).title.data());
     exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, mes_class);
     if (player_ptr->realm1) {
         const auto mes_realm2 = player_ptr->realm2 ? format(_("と%s", " and %s realms"), realm_names[player_ptr->realm2]) : _("", " realm");
