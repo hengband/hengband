@@ -109,7 +109,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
         std::vector<std::string> m_names;
         for (const auto &separate : separates) {
             const auto &monrace = monraces.get_monrace(separate);
-            m_names.push_back(monrace.name);
+            m_names.push_back(monrace.name.string());
         }
 
         std::stringstream ss;

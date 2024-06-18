@@ -116,11 +116,7 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
                 }
             }
 
-#ifdef JP
-            auto temp2(monrace.E_name);
-#else
-            auto temp2(monrace.name);
-#endif
+            std::string temp2 = monrace.name.en_string();
             for (size_t xx = 0; xx < temp2.length(); xx++) {
                 if (isupper(temp2[xx])) {
                     temp2[xx] = (char)tolower(temp2[xx]);
@@ -128,7 +124,7 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
             }
 
 #ifdef JP
-            if (str_find(temp2, monster_name) || str_find(monrace.name, monster_name))
+            if (str_find(temp2, monster_name) || str_find(monrace.name.string(), monster_name))
 #else
             if (str_find(temp2, monster_name))
 #endif

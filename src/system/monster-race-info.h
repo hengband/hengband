@@ -1,5 +1,6 @@
 #pragma once
 
+#include "locale/localized-string.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-table.h"
 #include "monster-race/monster-aura-types.h"
@@ -67,10 +68,7 @@ public:
     MonsterRaceInfo();
 
     MonsterRaceId idx{};
-    std::string name = ""; //!< 名前データのオフセット(日本語) /  Name offset(Japanese)
-#ifdef JP
-    std::string E_name = ""; //!< 名前データのオフセット(英語) /  Name offset(English)
-#endif
+    LocalizedString name{}; //!< モンスターの名称
     std::string text = ""; //!< 思い出テキストのオフセット / Lore text offset
     Dice hit_dice; //!< HPのダイス / Creatures hit dice
     ARMOUR_CLASS ac{}; //!< アーマークラス / Armour Class
