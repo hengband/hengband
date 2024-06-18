@@ -20,17 +20,18 @@ void prevent_turn_overflow(PlayerType *player_ptr)
 {
     const auto &igd = InnerGameData::get_instance();
     const auto game_turn_limit = igd.get_game_turn_limit();
-    if (w_ptr->game_turn < game_turn_limit) {
+    auto &world = AngbandWorld::get_instance();
+    if (world.game_turn < game_turn_limit) {
         return;
     }
 
-    int rollback_days = 1 + (w_ptr->game_turn - game_turn_limit) / (TURNS_PER_TICK * TOWN_DAWN);
+    int rollback_days = 1 + (world.game_turn - game_turn_limit) / (TURNS_PER_TICK * TOWN_DAWN);
     int32_t rollback_turns = TURNS_PER_TICK * TOWN_DAWN * rollback_days;
 
-    if (w_ptr->game_turn > rollback_turns) {
-        w_ptr->game_turn -= rollback_turns;
+    if (world.game_turn > rollback_turns) {
+        world.game_turn -= rollback_turns;
     } else {
-        w_ptr->game_turn = 1;
+        world.game_turn = 1;
     }
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->generated_turn > rollback_turns) {
@@ -38,10 +39,10 @@ void prevent_turn_overflow(PlayerType *player_ptr)
     } else {
         floor_ptr->generated_turn = 1;
     }
-    if (w_ptr->arena_start_turn > rollback_turns) {
-        w_ptr->arena_start_turn -= rollback_turns;
+    if (world.arena_start_turn > rollback_turns) {
+        world.arena_start_turn -= rollback_turns;
     } else {
-        w_ptr->arena_start_turn = 1;
+        world.arena_start_turn = 1;
     }
     if (player_ptr->feeling_turn > rollback_turns) {
         player_ptr->feeling_turn -= rollback_turns;

@@ -128,7 +128,7 @@ void wipe_o_list(FloorType *floor_ptr)
             continue;
         }
 
-        if (!w_ptr->character_dungeon || preserve_mode) {
+        if (!AngbandWorld::get_instance().character_dungeon || preserve_mode) {
             if (o_ptr->is_fixed_artifact() && !o_ptr->is_known()) {
                 o_ptr->get_fixed_artifact().is_generated = false;
             }

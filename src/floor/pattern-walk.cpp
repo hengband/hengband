@@ -245,7 +245,7 @@ bool pattern_seq(PlayerType *player_ptr, const Pos2D &pos)
         ok_move = PATTERN_TILE_1;
         break;
     default:
-        if (w_ptr->wizard) {
+        if (AngbandWorld::get_instance().wizard) {
             msg_format(_("おかしなパターン歩行、%d。", "Funny Pattern walking, %d."), pattern_type_cur);
         }
         return true;

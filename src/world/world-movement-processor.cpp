@@ -30,6 +30,8 @@ void check_random_quest_auto_failure(PlayerType *player_ptr)
     if (floor.dungeon_idx != DUNGEON_ANGBAND) {
         return;
     }
+
+    auto &world = AngbandWorld::get_instance();
     for (auto quest_id : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
         auto &quest = quests.get_quest(quest_id);
         auto is_taken_quest = (quest.type == QuestKindType::RANDOM);
@@ -41,8 +43,8 @@ void check_random_quest_auto_failure(PlayerType *player_ptr)
 
         quest.status = QuestStatusType::FAILED;
         quest.complev = (byte)player_ptr->lev;
-        w_ptr->update_playtime();
-        quest.comptime = w_ptr->play_time;
+        world.update_playtime();
+        quest.comptime = world.play_time;
         quest.get_bounty().misc_flags.reset(MonsterMiscType::QUESTOR);
     }
 }

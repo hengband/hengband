@@ -378,16 +378,18 @@ static void do_cmd_options_cheat(const FloorType &floor, std::string_view player
             break;
         case 'y':
         case 'Y':
-        case '6':
-            if (!w_ptr->noscore) {
+        case '6': {
+            auto &world = AngbandWorld::get_instance();
+            if (!world.noscore) {
                 exe_write_diary(floor, DiaryKind::DESCRIPTION, 0,
                     _("詐欺オプションをONにして、スコアを残せなくなった。", "gave up sending score to use cheating options."));
             }
 
-            w_ptr->noscore |= cheat_info[k].o_set * 256 + cheat_info[k].o_bit;
+            world.noscore |= cheat_info[k].o_set * 256 + cheat_info[k].o_bit;
             *cheat_info[k].o_var = true;
             k = (k + 1) % n;
             break;
+        }
         case 'n':
         case 'N':
         case '4':
@@ -440,9 +442,10 @@ void do_cmd_options(PlayerType *player_ptr)
     int d, skey;
     TERM_LEN i, y = 0;
     screen_save();
+    const auto &world = AngbandWorld::get_instance();
     while (true) {
         int n = OPT_NUM;
-        if (!w_ptr->noscore && !allow_debug_opts) {
+        if (!world.noscore && !allow_debug_opts) {
             n--;
         }
 
@@ -538,13 +541,13 @@ void do_cmd_options(PlayerType *player_ptr)
         case 'B':
         case 'b': {
             do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH,
-                (!w_ptr->wizard || !allow_debug_opts) ? _("初期オプション(参照のみ)", "Birth Options(browse only)")
-                                                      : _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
+                (!world.wizard || !allow_debug_opts) ? _("初期オプション(参照のみ)", "Birth Options(browse only)")
+                                                     : _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
             break;
         }
         case 'C':
         case 'c': {
-            if (!w_ptr->noscore && !allow_debug_opts) {
+            if (!world.noscore && !allow_debug_opts) {
                 bell();
                 break;
             }
@@ -653,8 +656,8 @@ void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr 
     char ch;
     int i, k = 0, n = 0, l;
     int opt[MAIN_TERM_MIN_ROWS]{};
-    bool browse_only = (page == OPT_PAGE_BIRTH) && w_ptr->character_generated && (!w_ptr->wizard || !allow_debug_opts);
-
+    const auto &world = AngbandWorld::get_instance();
+    const auto browse_only = (page == OPT_PAGE_BIRTH) && world.character_generated && (!world.wizard || !allow_debug_opts);
     for (i = 0; i < MAIN_TERM_MIN_ROWS; i++) {
         opt[i] = 0;
     }

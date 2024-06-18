@@ -1013,9 +1013,11 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
             if (i != '@') {
                 return std::nullopt;
             }
-            if (w_ptr->total_winner) {
+
+            auto &world = AngbandWorld::get_instance();
+            if (world.total_winner) {
                 take_hit(player_ptr, DAMAGE_FORCE, 9999, "Seppuku");
-                w_ptr->total_winner = true;
+                world.total_winner = true;
             } else {
                 msg_print(_("武士道とは、死ぬことと見つけたり。", "The meaning of bushido is found in death."));
                 take_hit(player_ptr, DAMAGE_FORCE, 9999, "Seppuku");

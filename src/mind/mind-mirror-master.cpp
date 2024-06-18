@@ -55,7 +55,7 @@
  */
 bool check_multishadow(PlayerType *player_ptr)
 {
-    return (player_ptr->multishadow != 0) && ((w_ptr->game_turn & 1) != 0);
+    return (player_ptr->multishadow != 0) && ((AngbandWorld::get_instance().game_turn & 1) != 0);
 }
 
 /*!

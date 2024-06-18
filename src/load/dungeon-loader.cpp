@@ -127,7 +127,7 @@ static errr rd_dungeon(PlayerType *player_ptr)
         break;
     }
 
-    w_ptr->character_dungeon = true;
+    AngbandWorld::get_instance().character_dungeon = true;
     return err;
 }
 

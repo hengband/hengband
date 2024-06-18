@@ -20,5 +20,5 @@ bool spell_learnable(PlayerType *player_ptr, MONSTER_IDX m_idx)
     const auto &monster = floor.m_list[m_idx];
     const auto seen = (!player_ptr->effects()->blindness().is_blind() && monster.ml);
     const auto maneable = floor.has_los({ monster.fy, monster.fx });
-    return seen && maneable && (w_ptr->timewalk_m_idx == 0);
+    return seen && maneable && (AngbandWorld::get_instance().timewalk_m_idx == 0);
 }

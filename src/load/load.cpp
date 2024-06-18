@@ -91,7 +91,7 @@ static void rd_total_play_time()
         return;
     }
 
-    w_ptr->sf_play_time = rd_u32b();
+    AngbandWorld::get_instance().sf_play_time = rd_u32b();
 }
 
 /*!
@@ -103,8 +103,8 @@ static void rd_winner_class()
         return;
     }
 
-    rd_FlagGroup(w_ptr->sf_winner, rd_byte);
-    rd_FlagGroup(w_ptr->sf_retired, rd_byte);
+    rd_FlagGroup(AngbandWorld::get_instance().sf_winner, rd_byte);
+    rd_FlagGroup(AngbandWorld::get_instance().sf_retired, rd_byte);
 }
 
 static void load_player_world(PlayerType *player_ptr)
@@ -306,7 +306,7 @@ static bool reset_save_data(PlayerType *player_ptr, bool *new_game)
 {
     *new_game = true;
     player_ptr->is_dead = false;
-    w_ptr->sf_lives++;
+    AngbandWorld::get_instance().sf_lives++;
     return true;
 }
 
@@ -351,7 +351,7 @@ static bool can_takeover_savefile(PlayerType *player_ptr)
 bool load_savedata(PlayerType *player_ptr, bool *new_game)
 {
     auto what = "generic";
-    w_ptr->game_turn = 0;
+    AngbandWorld::get_instance().game_turn = 0;
     player_ptr->is_dead = false;
     if (savefile.empty()) {
         return true;
@@ -438,8 +438,9 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
         }
     }
 
+    auto &world = AngbandWorld::get_instance();
     if (!err) {
-        if (!w_ptr->game_turn) {
+        if (!world.game_turn) {
             err = true;
         }
 
@@ -464,16 +465,17 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
         return reset_save_data(player_ptr, new_game);
     }
 
-    w_ptr->character_loaded = true;
+    world.character_loaded = true;
     auto tmp = counts_read(player_ptr, 2);
     if (tmp > player_ptr->count) {
         player_ptr->count = tmp;
     }
 
-    if (counts_read(player_ptr, 0) > w_ptr->play_time || counts_read(player_ptr, 1) == w_ptr->play_time) {
+    const auto play_time = world.play_time;
+    if (counts_read(player_ptr, 0) > play_time || counts_read(player_ptr, 1) == play_time) {
         counts_write(player_ptr, 2, ++player_ptr->count);
     }
 
-    counts_write(player_ptr, 1, w_ptr->play_time);
+    counts_write(player_ptr, 1, play_time);
     return true;
 }

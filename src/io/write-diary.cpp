@@ -151,7 +151,7 @@ static void write_diary_pet(FILE *fff, int num, std::string_view note)
 int exe_write_diary_quest(PlayerType *player_ptr, DiaryKind dk, QuestId quest_id)
 {
     static auto disable_diary = false;
-    const auto &[day, hour, min] = w_ptr->extract_date_time(InnerGameData::get_instance().get_start_race());
+    const auto &[day, hour, min] = AngbandWorld::get_instance().extract_date_time(InnerGameData::get_instance().get_start_race());
     if (disable_diary) {
         return -1;
     }
@@ -232,7 +232,7 @@ int exe_write_diary_quest(PlayerType *player_ptr, DiaryKind dk, QuestId quest_id
 void exe_write_diary(const FloorType &floor, DiaryKind dk, int num, std::string_view note)
 {
     static auto disable_diary = false;
-    const auto &[day, hour, min] = w_ptr->extract_date_time(InnerGameData::get_instance().get_start_race());
+    const auto &[day, hour, min] = AngbandWorld::get_instance().extract_date_time(InnerGameData::get_instance().get_start_race());
     if (disable_diary) {
         return;
     }

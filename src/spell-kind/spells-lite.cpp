@@ -95,6 +95,7 @@ static void cave_temp_room_lite(PlayerType *player_ptr, const std::vector<Pos2D>
 static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2D> &points)
 {
     auto &floor = *player_ptr->current_floor_ptr;
+    const auto &world = AngbandWorld::get_instance();
     for (const auto &point : points) {
         auto &grid = floor.get_grid(point);
         auto do_dark = !grid.is_mirror();
@@ -103,7 +104,7 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
             continue;
         }
 
-        if (floor.dun_level || !w_ptr->is_daytime()) {
+        if (floor.dun_level || !world.is_daytime()) {
             for (int j = 0; j < 9; j++) {
                 const Pos2D pos_neighbor(point.y + ddy_ddd[j], point.x + ddx_ddd[j]);
                 if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {

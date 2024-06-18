@@ -305,7 +305,7 @@ void do_cmd_knowledge_quests(PlayerType *player_ptr)
     do_cmd_knowledge_quests_completed(player_ptr, fff, quest_ids);
     fputc('\n', fff);
     do_cmd_knowledge_quests_failed(player_ptr, fff, quest_ids);
-    if (w_ptr->wizard) {
+    if (AngbandWorld::get_instance().wizard) {
         fputc('\n', fff);
         do_cmd_knowledge_quests_wiz_random(fff);
     }

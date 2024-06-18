@@ -63,7 +63,8 @@ static void handle_signal_suspend(int sig)
 static void handle_signal_simple(int sig)
 {
     (void)signal(sig, SIG_IGN);
-    if (!w_ptr->character_generated || w_ptr->character_saved) {
+    const auto &world = AngbandWorld::get_instance();
+    if (!world.character_generated || world.character_saved) {
         quit(nullptr);
     }
 
@@ -120,7 +121,8 @@ static void handle_signal_abort(int sig)
 {
     const auto &[wid, hgt] = term_get_size();
     (void)signal(sig, SIG_IGN);
-    if (!w_ptr->character_generated || w_ptr->character_saved) {
+    const auto &world = AngbandWorld::get_instance();
+    if (!world.character_generated || world.character_saved) {
         quit(nullptr);
     }
 

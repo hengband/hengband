@@ -232,7 +232,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
     std::vector<MonsterAbilityType> annoy;
     std::vector<MonsterAbilityType> invul;
     std::vector<MonsterAbilityType> haste;
-    std::vector<MonsterAbilityType> world;
+    std::vector<MonsterAbilityType> world_spells;
     std::vector<MonsterAbilityType> special;
     std::vector<MonsterAbilityType> psy_spe;
     std::vector<MonsterAbilityType> raise;
@@ -275,7 +275,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
         }
 
         if (spell_world(msa_ptr->mspells[i])) {
-            world.push_back(msa_ptr->mspells[i]);
+            world_spells.push_back(msa_ptr->mspells[i]);
         }
 
         if (spell_special(msa_ptr->mspells[i])) {
@@ -299,8 +299,9 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
         }
     }
 
-    if (!world.empty() && (randint0(100) < 15) && !w_ptr->timewalk_m_idx) {
-        return rand_choice(world);
+    const auto &world = AngbandWorld::get_instance();
+    if (!world_spells.empty() && (randint0(100) < 15) && !world.timewalk_m_idx) {
+        return rand_choice(world_spells);
     }
 
     const auto &monrace_list = MonraceList::get_instance();
@@ -332,7 +333,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
     auto should_select_tactic = distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx) < 4;
     should_select_tactic &= !attack.empty() || r_ptr->ability_flags.has(MonsterAbilityType::TRAPS);
     should_select_tactic &= randint0(100) < 75;
-    should_select_tactic &= w_ptr->timewalk_m_idx == 0;
+    should_select_tactic &= world.timewalk_m_idx == 0;
     should_select_tactic &= !tactic.empty();
     if (should_select_tactic) {
         return rand_choice(tactic);
@@ -362,7 +363,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
         return rand_choice(attack);
     }
 
-    if (!tactic.empty() && (randint0(100) < 50) && !w_ptr->timewalk_m_idx) {
+    if (!tactic.empty() && (randint0(100) < 50) && !world.timewalk_m_idx) {
         return rand_choice(tactic);
     }
 

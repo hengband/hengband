@@ -425,7 +425,7 @@ static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     }
 
     get_out_monster(player_ptr);
-    sf_ptr->last_visit = w_ptr->game_turn;
+    sf_ptr->last_visit = AngbandWorld::get_instance().game_turn;
     forget_lite(player_ptr->current_floor_ptr);
     forget_view(player_ptr->current_floor_ptr);
     clear_mon_lite(player_ptr->current_floor_ptr);

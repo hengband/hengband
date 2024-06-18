@@ -66,11 +66,12 @@ static void do_cmd_last_get(const FloorType &floor)
         return;
     }
 
-    GAME_TURN turn_tmp = w_ptr->game_turn;
-    w_ptr->game_turn = record_turn;
+    auto &world = AngbandWorld::get_instance();
+    const auto turn_tmp = world.game_turn;
+    world.game_turn = record_turn;
     const auto mes = format(_("%sを手に入れた。", "discover %s."), record_o_name);
     exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, mes);
-    w_ptr->game_turn = turn_tmp;
+    world.game_turn = turn_tmp;
 }
 
 /*!

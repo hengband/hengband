@@ -91,7 +91,7 @@ void wizard_game_modifier(PlayerType *player_ptr)
         wiz_restore_monster_max_num(i2enum<MonsterRaceId>(command_arg));
         break;
     case 't':
-        w_ptr->set_gametime();
+        AngbandWorld::get_instance().set_gametime();
         break;
     }
 }

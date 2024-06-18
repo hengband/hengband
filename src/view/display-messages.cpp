@@ -280,7 +280,8 @@ static int split_length(std::string_view sv, int max)
  */
 void msg_print(std::string_view msg)
 {
-    if (w_ptr->timewalk_m_idx) {
+    const auto &world = AngbandWorld::get_instance();
+    if (world.timewalk_m_idx) {
         return;
     }
 
@@ -291,7 +292,7 @@ void msg_print(std::string_view msg)
 
     std::string msg_includes_turn;
     if (cheat_turn) {
-        msg = msg_includes_turn = format("T:%d - %s", w_ptr->game_turn, msg.data());
+        msg = msg_includes_turn = format("T:%d - %s", world.game_turn, msg.data());
     }
 
     const auto &[wid, hgt] = term_get_size();
@@ -307,7 +308,7 @@ void msg_print(std::string_view msg)
         return;
     }
 
-    if (w_ptr->character_generated) {
+    if (world.character_generated) {
         message_add(msg);
     }
 
@@ -332,7 +333,7 @@ void msg_print(std::string_view msg)
 
 void msg_print(std::nullptr_t)
 {
-    if (w_ptr->timewalk_m_idx) {
+    if (AngbandWorld::get_instance().timewalk_m_idx) {
         return;
     }
 

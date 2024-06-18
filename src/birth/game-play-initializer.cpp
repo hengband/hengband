@@ -111,12 +111,13 @@ void player_wipe_without_name(PlayerType *player_ptr)
     cheat_turn = false;
     cheat_immortal = false;
 
-    w_ptr->total_winner = false;
+    auto &world = AngbandWorld::get_instance();
+    world.total_winner = false;
     player_ptr->timewalk = false;
     player_ptr->panic_save = 0;
 
-    w_ptr->noscore = 0;
-    w_ptr->wizard = false;
+    world.noscore = 0;
+    world.wizard = false;
     player_ptr->wait_report_score = false;
     player_ptr->pet_follow_distance = PET_FOLLOW_DIST;
     player_ptr->pet_extra_flags = (PF_TELEPORT | PF_ATTACK_SPELL | PF_SUMMON_SPELL);
@@ -130,8 +131,8 @@ void player_wipe_without_name(PlayerType *player_ptr)
 
     player_ptr->max_plv = player_ptr->lev = 1;
     ArenaEntryList::get_instance().reset_entry();
-    w_ptr->set_arena(true);
-    w_ptr->knows_daily_bounty = false;
+    world.set_arena(true);
+    world.knows_daily_bounty = false;
     update_gambling_monsters(player_ptr);
     player_ptr->muta.clear();
 
@@ -188,13 +189,14 @@ void init_dungeon_quests(PlayerType *player_ptr)
  */
 void init_turn(PlayerType *player_ptr)
 {
+    auto &world = AngbandWorld::get_instance();
     if (PlayerRace(player_ptr).life() == PlayerRaceLifeType::UNDEAD) {
-        w_ptr->game_turn = (TURNS_PER_TICK * 3 * TOWN_DAWN) / 4 + 1;
+        world.game_turn = (TURNS_PER_TICK * 3 * TOWN_DAWN) / 4 + 1;
     } else {
-        w_ptr->game_turn = 1;
+        world.game_turn = 1;
     }
 
     InnerGameData::get_instance().init_turn_limit();
-    w_ptr->dungeon_turn = 1;
-    w_ptr->dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+    world.dungeon_turn = 1;
+    world.dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
 }

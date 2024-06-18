@@ -173,10 +173,10 @@ static bool stay_inn(PlayerType *player_ptr)
         return false;
     }
 
-    const auto &[prev_day, prev_hour, prev_min] = w_ptr->extract_date_time(InnerGameData::get_instance().get_start_race());
+    auto &world = AngbandWorld::get_instance();
+    const auto &[prev_day, prev_hour, prev_min] = world.extract_date_time(InnerGameData::get_instance().get_start_race());
     write_diary_stay_inn(player_ptr, prev_hour);
-
-    w_ptr->pass_game_turn_by_stay();
+    world.pass_game_turn_by_stay();
     prevent_turn_overflow(player_ptr);
     if ((prev_hour >= 18) && (prev_hour <= 23)) {
         determine_daily_bounty(player_ptr, false); /* Update daily bounty */

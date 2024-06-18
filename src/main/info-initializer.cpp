@@ -246,6 +246,7 @@ void init_vaults_info()
 
 static bool read_wilderness_definition(std::ifstream &ifs)
 {
+    auto &world = AngbandWorld::get_instance();
     std::string line;
     while (!ifs.eof()) {
         if (!std::getline(ifs, line)) {
@@ -262,15 +263,15 @@ static bool read_wilderness_definition(std::ifstream &ifs)
         }
 
         if (splits[1] == "WX") {
-            w_ptr->max_wild_x = std::stoi(splits[2]);
+            world.max_wild_x = std::stoi(splits[2]);
         } else if (splits[1] == "WY") {
-            w_ptr->max_wild_y = std::stoi(splits[2]);
+            world.max_wild_y = std::stoi(splits[2]);
         } else {
             return false;
         }
 
-        if ((w_ptr->max_wild_x > 0) && (w_ptr->max_wild_y > 0)) {
-            wilderness.assign(w_ptr->max_wild_y, std::vector<wilderness_type>(w_ptr->max_wild_x));
+        if ((world.max_wild_x > 0) && (world.max_wild_y > 0)) {
+            wilderness.assign(world.max_wild_y, std::vector<wilderness_type>(world.max_wild_x));
             init_wilderness_encounter();
             return true;
         }

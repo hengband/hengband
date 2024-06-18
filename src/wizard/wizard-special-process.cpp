@@ -748,7 +748,7 @@ void cheat_death(PlayerType *player_ptr)
     }
     player_ptr->age++;
 
-    w_ptr->noscore |= 0x0001;
+    AngbandWorld::get_instance().noscore |= 0x0001;
     msg_print(_("ウィザードモードに念を送り、死を欺いた。", "You invoke wizard mode and cheat death."));
     msg_print(nullptr);
 

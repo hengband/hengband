@@ -81,7 +81,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
         go_up = false;
     }
 
-    if ((m_idx <= 0) && w_ptr->wizard) {
+    if ((m_idx <= 0) && AngbandWorld::get_instance().wizard) {
         if (input_check("Force to go up? ")) {
             go_up = true;
         } else if (input_check("Force to go down? ")) {
@@ -312,8 +312,9 @@ bool tele_town(PlayerType *player_ptr)
         break;
     }
 
-    for (POSITION y = 0; y < w_ptr->max_wild_y; y++) {
-        for (POSITION x = 0; x < w_ptr->max_wild_x; x++) {
+    const auto &world = AngbandWorld::get_instance();
+    for (POSITION y = 0; y < world.max_wild_y; y++) {
+        for (POSITION x = 0; x < world.max_wild_x; x++) {
             if (wilderness[y][x].town == (key - 'a' + 1)) {
                 player_ptr->wilderness_y = y;
                 player_ptr->wilderness_x = x;

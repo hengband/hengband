@@ -79,7 +79,7 @@ void do_cmd_redraw(PlayerType *player_ptr)
         SubWindowRedrawingFlag::ITEM_KNOWLEDGE,
     };
     rfu.set_flags(flags_swrf);
-    w_ptr->update_playtime();
+    AngbandWorld::get_instance().update_playtime();
     handle_stuff(player_ptr);
     if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
         calc_android_exp(player_ptr);
@@ -115,7 +115,7 @@ static std::optional<int> input_status_command(PlayerType *player_ptr, int page)
 
         const auto &filename = str_ltrim(*input_filename);
         if (!filename.empty()) {
-            w_ptr->update_playtime();
+            AngbandWorld::get_instance().update_playtime();
             file_character(player_ptr, filename);
         }
 
@@ -139,10 +139,11 @@ void do_cmd_player_status(PlayerType *player_ptr)
     auto page = 0;
     screen_save();
     constexpr auto prompt = _("['c'で名前変更, 'f'でファイルへ書出, 'h'でモード変更, ESCで終了]", "['c' to change name, 'f' to file, 'h' to change mode, or ESC]");
+    auto &world = AngbandWorld::get_instance();
     while (true) {
         TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
 
-        w_ptr->update_playtime();
+        world.update_playtime();
         (void)display_player(player_ptr, page);
         if (page == 5) {
             page = 0;

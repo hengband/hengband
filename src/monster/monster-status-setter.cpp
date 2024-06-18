@@ -358,7 +358,8 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId src_idx
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto *m_ptr = &floor.m_list[hack_m_idx];
-    if (w_ptr->timewalk_m_idx) {
+    auto &world = AngbandWorld::get_instance();
+    if (world.timewalk_m_idx) {
         return false;
     }
 
@@ -384,7 +385,7 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId src_idx
         msg_print(nullptr);
     }
 
-    w_ptr->timewalk_m_idx = hack_m_idx;
+    world.timewalk_m_idx = hack_m_idx;
     if (vs_player) {
         do_cmd_redraw(player_ptr);
     }
@@ -394,7 +395,7 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId src_idx
             break;
         }
 
-        process_monster(player_ptr, w_ptr->timewalk_m_idx);
+        process_monster(player_ptr, world.timewalk_m_idx);
         reset_target(m_ptr);
         handle_stuff(player_ptr);
         if (vs_player) {
@@ -410,7 +411,7 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId src_idx
         SubWindowRedrawingFlag::DUNGEON,
     };
     rfu.set_flags(flags);
-    w_ptr->timewalk_m_idx = 0;
+    world.timewalk_m_idx = 0;
     auto should_output_message = floor.has_los({ m_ptr->fy, m_ptr->fx });
     should_output_message &= projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
     if (vs_player || should_output_message) {

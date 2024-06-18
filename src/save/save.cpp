@@ -32,7 +32,7 @@
 #include "save/save-util.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
-#include "system/angband-version.h"
+#include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info.h"
 #include "system/item-entity.h"
@@ -58,9 +58,10 @@ static bool wr_savefile_new(PlayerType *player_ptr)
     compact_monsters(player_ptr, 0);
 
     uint32_t now = (uint32_t)time((time_t *)0);
-    w_ptr->sf_system = 0L;
-    w_ptr->sf_when = now;
-    w_ptr->sf_saves++;
+    auto &world = AngbandWorld::get_instance();
+    world.sf_system = 0L;
+    world.sf_when = now;
+    world.sf_saves++;
 
     save_xor_byte = 0;
     auto variant_length = VARIANT_NAME.length();
@@ -81,10 +82,10 @@ static bool wr_savefile_new(PlayerType *player_ptr)
     v_stamp = 0L;
     x_stamp = 0L;
 
-    wr_u32b(w_ptr->sf_system);
-    wr_u32b(w_ptr->sf_when);
-    wr_u16b(w_ptr->sf_lives);
-    wr_u16b(w_ptr->sf_saves);
+    wr_u32b(world.sf_system);
+    wr_u32b(world.sf_when);
+    wr_u16b(world.sf_lives);
+    wr_u16b(world.sf_saves);
 
     wr_u32b(SAVEFILE_VERSION);
     wr_u16b(0);
@@ -154,10 +155,10 @@ static bool wr_savefile_new(PlayerType *player_ptr)
     wr_s32b(player_ptr->wilderness_y);
     wr_bool(player_ptr->wild_mode);
     wr_bool(player_ptr->ambush_flag);
-    wr_s32b(w_ptr->max_wild_x);
-    wr_s32b(w_ptr->max_wild_y);
-    for (int i = 0; i < w_ptr->max_wild_x; i++) {
-        for (int j = 0; j < w_ptr->max_wild_y; j++) {
+    wr_s32b(world.max_wild_x);
+    wr_s32b(world.max_wild_y);
+    for (int i = 0; i < world.max_wild_x; i++) {
+        for (int j = 0; j < world.max_wild_y; j++) {
             wr_u32b(wilderness[j][i].seed);
         }
     }
@@ -173,9 +174,9 @@ static bool wr_savefile_new(PlayerType *player_ptr)
         wr_s16b(artifact.floor_id);
     }
 
-    wr_u32b(w_ptr->sf_play_time);
-    wr_FlagGroup(w_ptr->sf_winner, wr_byte);
-    wr_FlagGroup(w_ptr->sf_retired, wr_byte);
+    wr_u32b(world.sf_play_time);
+    wr_FlagGroup(world.sf_winner, wr_byte);
+    wr_FlagGroup(world.sf_retired, wr_byte);
 
     wr_player(player_ptr);
     tmp16u = PY_MAX_LEVEL;
@@ -282,8 +283,9 @@ static bool save_player_aux(PlayerType *player_ptr, const std::filesystem::path 
         return false;
     }
 
-    counts_write(player_ptr, 0, w_ptr->play_time);
-    w_ptr->character_saved = true;
+    auto &world = AngbandWorld::get_instance();
+    counts_write(player_ptr, 0, world.play_time);
+    world.character_saved = true;
     return true;
 }
 
@@ -306,7 +308,8 @@ bool save_player(PlayerType *player_ptr, SaveType type)
     fd_kill(savefile_new);
 
     safe_setuid_drop();
-    w_ptr->update_playtime();
+    auto &world = AngbandWorld::get_instance();
+    world.update_playtime();
     auto result = false;
     if (save_player_aux(player_ptr, savefile_new.data())) {
         std::stringstream ss_old;
@@ -318,15 +321,15 @@ bool save_player(PlayerType *player_ptr, SaveType type)
         fd_move(savefile_new, savefile);
         fd_kill(savefile_old);
         safe_setuid_drop();
-        w_ptr->character_loaded = true;
+        world.character_loaded = true;
         result = true;
     }
 
     if (type != SaveType::CLOSE_GAME) {
-        w_ptr->is_loading_now = false;
+        world.is_loading_now = false;
         update_creature(player_ptr);
         mproc_init(player_ptr->current_floor_ptr);
-        w_ptr->is_loading_now = true;
+        world.is_loading_now = true;
     }
 
     return result;

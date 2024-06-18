@@ -788,7 +788,8 @@ bool ItemEntity::is_bounty() const
     }
 
     const auto &monrace = this->get_monrace();
-    if (w_ptr->knows_daily_bounty && (monrace.name == w_ptr->get_today_bounty().name)) {
+    const auto &world = AngbandWorld::get_instance();
+    if (world.knows_daily_bounty && (monrace.name == world.get_today_bounty().name)) {
         return true;
     }
 

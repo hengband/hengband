@@ -171,7 +171,7 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     const auto &terrain = TerrainList::get_instance().get_terrain(feat);
     const auto &dungeon = floor_ptr->get_dungeon_definition();
-    if (!w_ptr->character_dungeon) {
+    if (!AngbandWorld::get_instance().character_dungeon) {
         g_ptr->mimic = 0;
         g_ptr->feat = feat;
         if (terrain.flags.has(TerrainCharacteristics::GLOW) && dungeon.flags.has_not(DungeonFeatureType::DARKNESS)) {

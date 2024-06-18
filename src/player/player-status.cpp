@@ -404,7 +404,7 @@ static void update_bonuses(PlayerType *player_ptr)
         rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     }
 
-    if (w_ptr->character_xtra) {
+    if (AngbandWorld::get_instance().character_xtra) {
         return;
     }
 
@@ -495,7 +495,8 @@ static void update_max_hitpoints(PlayerType *player_ptr)
  */
 static void update_num_of_spells(PlayerType *player_ptr)
 {
-    if ((mp_ptr->spell_book == ItemKindType::NONE) || !w_ptr->character_generated || w_ptr->character_xtra) {
+    const auto &world = AngbandWorld::get_instance();
+    if ((mp_ptr->spell_book == ItemKindType::NONE) || !world.character_generated || world.character_xtra) {
         return;
     }
 
@@ -997,7 +998,7 @@ static void update_max_mana(PlayerType *player_ptr)
         rfu.set_flags(flags);
     }
 
-    if (w_ptr->character_xtra) {
+    if (AngbandWorld::get_instance().character_xtra) {
         return;
     }
 
@@ -2045,7 +2046,7 @@ void put_equipment_warning(PlayerType *player_ptr)
 
         if (player_ptr->is_icky_wield[i]) {
             msg_print(_("今の装備はどうも自分にふさわしくない気がする。", "You do not feel comfortable with your weapon."));
-            if (w_ptr->is_loading_now) {
+            if (AngbandWorld::get_instance().is_loading_now) {
                 chg_virtue(player_ptr, Virtue::FAITH, -1);
             }
         } else if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i)) {
@@ -2079,7 +2080,7 @@ void put_equipment_warning(PlayerType *player_ptr)
     if ((pc.is_martial_arts_pro() || pc.equals(PlayerClassType::NINJA)) && (heavy_armor(player_ptr) != player_ptr->monk_notify_aux)) {
         if (heavy_armor(player_ptr)) {
             msg_print(_("装備が重くてバランスを取れない。", "The weight of your armor disrupts your balance."));
-            if (w_ptr->is_loading_now) {
+            if (AngbandWorld::get_instance().is_loading_now) {
                 chg_virtue(player_ptr, Virtue::HARMONY, -1);
             }
         } else {
@@ -2711,7 +2712,8 @@ void update_creature(PlayerType *player_ptr)
         update_num_of_spells(player_ptr);
     }
 
-    if (!w_ptr->character_generated || (w_ptr->character_icky_depth > 0)) {
+    const auto &world = AngbandWorld::get_instance();
+    if (!world.character_generated || (world.character_icky_depth > 0)) {
         return;
     }
 
@@ -3149,7 +3151,7 @@ long calc_score(PlayerType *player_ptr)
 
     if ((player_ptr->ppersonality == PERSONALITY_MUNCHKIN) && point) {
         point = 1;
-        if (w_ptr->total_winner) {
+        if (AngbandWorld::get_instance().total_winner) {
             point = 2;
         }
     }

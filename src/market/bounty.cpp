@@ -115,9 +115,10 @@ bool exchange_cash(PlayerType *player_ptr)
         vary_item(player_ptr, i, -item.number);
     }
 
+    auto &world = AngbandWorld::get_instance();
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         const auto &item = player_ptr->inventory_list[i];
-        const auto &monrace = w_ptr->get_today_bounty();
+        const auto &monrace = world.get_today_bounty();
         if (!item.is_corpse() || (item.get_monrace().name != monrace.name)) {
             continue;
         }
@@ -137,7 +138,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         const auto &item = player_ptr->inventory_list[i];
-        const auto &monrace = w_ptr->get_today_bounty();
+        const auto &monrace = world.get_today_bounty();
         if ((item.bi_key != BaseitemKey(ItemKindType::MONSTER_REMAINS, SV_SKELETON)) || (item.get_monrace().name != monrace.name)) {
             continue;
         }
@@ -155,7 +156,7 @@ bool exchange_cash(PlayerType *player_ptr)
         vary_item(player_ptr, i, -item.number);
     }
 
-    for (auto &[monrace_id, is_achieved] : w_ptr->bounties) {
+    for (auto &[monrace_id, is_achieved] : world.bounties) {
         if (is_achieved) {
             continue;
         }
@@ -176,7 +177,7 @@ bool exchange_cash(PlayerType *player_ptr)
             chg_virtue(player_ptr, Virtue::JUSTICE, 5);
             is_achieved = true;
 
-            auto num = static_cast<int>(std::count_if(std::begin(w_ptr->bounties), std::end(w_ptr->bounties),
+            const auto num = static_cast<int>(std::count_if(std::begin(world.bounties), std::end(world.bounties),
                 [](const auto &bounty) { return bounty.is_achieved; }));
 
             msg_print(_(format("これで合計 %d ポイント獲得しました。", num), format("You earned %d point%s total.", num, (num > 1 ? "s" : ""))));
@@ -216,13 +217,14 @@ bool exchange_cash(PlayerType *player_ptr)
  */
 void today_target()
 {
-    const auto &monrace = w_ptr->get_today_bounty();
+    auto &world = AngbandWorld::get_instance();
+    const auto &monrace = world.get_today_bounty();
     clear_bldg(4, 18);
     c_put_str(TERM_YELLOW, _("本日の賞金首", "Wanted monster that changes from day to day"), 5, 10);
     c_put_str(TERM_YELLOW, format(_("ターゲット： %s", "target: %s"), monrace.name.data()), 6, 10);
     prt(format(_("死体 ---- $%d", "corpse   ---- $%d"), monrace.level * 50 + 100), 8, 10);
     prt(format(_("骨   ---- $%d", "skeleton ---- $%d"), monrace.level * 30 + 60), 9, 10);
-    w_ptr->knows_daily_bounty = true;
+    world.knows_daily_bounty = true;
 }
 
 /*!
@@ -247,10 +249,11 @@ void show_bounty(void)
     prt(_("死体を持ち帰れば報酬を差し上げます。", "Offer a prize when you bring a wanted monster's corpse"), 4, 10);
     c_put_str(TERM_YELLOW, _("現在の賞金首", "Wanted monsters"), 6, 10);
     const auto &monraces = MonraceList::get_instance();
-    const int size_bounties = std::ssize(w_ptr->bounties);
+    const auto &world = AngbandWorld::get_instance();
+    const int size_bounties = std::ssize(world.bounties);
     auto y = 0;
     for (auto i = 0; i < size_bounties; i++) {
-        const auto &[monrace_id, is_achieved] = w_ptr->bounties[i];
+        const auto &[monrace_id, is_achieved] = world.bounties[i];
         const auto &monrace = monraces.get_monrace(monrace_id);
         const auto color = is_achieved ? TERM_RED : TERM_WHITE;
         const auto done_mark = is_achieved ? _("(済)", "(done)") : "";
@@ -288,10 +291,10 @@ void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
     }
 
     get_mon_num_prep_bounty(player_ptr);
-
+    auto &world = AngbandWorld::get_instance();
     while (true) {
-        w_ptr->today_mon = get_mon_num(player_ptr, std::min(max_dl / 2, 40), max_dl, PM_ARENA);
-        const auto &monrace = w_ptr->get_today_bounty();
+        world.today_mon = get_mon_num(player_ptr, std::min(max_dl / 2, 40), max_dl, PM_ARENA);
+        const auto &monrace = world.get_today_bounty();
         if (cheat_hear) {
             msg_format(_("日替わり候補: %s ", "Today's candidate: %s "), monrace.name.data());
         }
@@ -319,7 +322,7 @@ void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
         break;
     }
 
-    w_ptr->knows_daily_bounty = false;
+    world.knows_daily_bounty = false;
 }
 
 /*!
@@ -341,7 +344,8 @@ void determine_bounty_uniques(PlayerType *player_ptr)
 
     // 賞金首とするモンスターの種族IDのリストを生成
     std::vector<MonsterRaceId> bounty_monrace_ids;
-    while (bounty_monrace_ids.size() < std::size(w_ptr->bounties)) {
+    auto &world = AngbandWorld::get_instance();
+    while (bounty_monrace_ids.size() < std::size(world.bounties)) {
         const auto monrace_id = get_mon_num(player_ptr, 0, MAX_DEPTH - 1, PM_ARENA);
         if (!is_suitable_for_bounty(monrace_id)) {
             continue;
@@ -361,7 +365,7 @@ void determine_bounty_uniques(PlayerType *player_ptr)
         });
 
     // 賞金首情報を設定
-    std::transform(bounty_monrace_ids.begin(), bounty_monrace_ids.end(), std::begin(w_ptr->bounties),
+    std::transform(bounty_monrace_ids.begin(), bounty_monrace_ids.end(), std::begin(world.bounties),
         [](auto monrace_id) -> bounty_type {
             return { monrace_id, false };
         });

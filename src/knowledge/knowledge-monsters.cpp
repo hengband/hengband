@@ -70,7 +70,8 @@ static std::vector<MonsterRaceId> collect_monsters(short grp_cur, monster_lore_m
                 continue;
             }
         } else if (grp_wanted) {
-            auto wanted = w_ptr->knows_daily_bounty && (w_ptr->today_mon == monrace_id);
+            const auto &world = AngbandWorld::get_instance();
+            auto wanted = world.knows_daily_bounty && (world.today_mon == monrace_id);
             wanted |= monrace.is_bounty(false);
             if (!wanted) {
                 continue;
@@ -234,6 +235,7 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
  */
 static void display_monster_list(int col, int row, int per_page, const std::vector<MonsterRaceId> &mon_idx, int mon_cur, int mon_top, bool visual_only)
 {
+    const auto is_wizard = AngbandWorld::get_instance().wizard;
     int i;
     for (i = 0; i < per_page && mon_top + i < static_cast<int>(mon_idx.size()); i++) {
         const auto monrace_id = mon_idx[mon_top + i];
@@ -242,10 +244,10 @@ static void display_monster_list(int col, int row, int per_page, const std::vect
         c_prt(color, (monrace.name.data()), row + i, col);
         const auto &symbol_config = monrace.symbol_config;
         if (per_page == 1) {
-            c_prt(color, format("%02x/%02x", symbol_config.color, symbol_config.character), row + i, (w_ptr->wizard || visual_only) ? 56 : 61);
+            c_prt(color, format("%02x/%02x", symbol_config.color, symbol_config.character), row + i, (is_wizard || visual_only) ? 56 : 61);
         }
 
-        if (w_ptr->wizard || visual_only) {
+        if (is_wizard || visual_only) {
             c_prt(color, format("%d", enum2i(monrace_id)), row + i, 62);
         }
 
@@ -315,6 +317,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
     bool flag = false;
     bool redraw = true;
     auto &tracker = LoreTracker::get_instance();
+    const auto is_wizard = AngbandWorld::get_instance().wizard;
     const auto &symbols_cb = DisplaySymbolsClipboard::get_instance();
     while (!flag) {
         if (redraw) {
@@ -324,7 +327,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
                 prt(_("グループ", "Group"), 4, 0);
             }
             prt(_("名前", "Name"), 4, max + 3);
-            if (w_ptr->wizard || visual_only) {
+            if (is_wizard || visual_only) {
                 prt("Idx", 4, 62);
             }
             prt(_("文字", "Sym"), 4, 67);
@@ -456,14 +459,15 @@ void do_cmd_knowledge_bounty(std::string_view player_name)
         return;
     }
 
+    const auto &world = AngbandWorld::get_instance();
     fprintf(fff, _("今日のターゲット : %s\n", "Today's target : %s\n"),
-        w_ptr->knows_daily_bounty ? w_ptr->get_today_bounty().name.data() : _("不明", "unknown"));
+        world.knows_daily_bounty ? world.get_today_bounty().name.data() : _("不明", "unknown"));
     fprintf(fff, "\n");
     fprintf(fff, _("賞金首リスト\n", "List of wanted monsters\n"));
     fprintf(fff, "----------------------------------------------\n");
     const auto &monraces = MonraceList::get_instance();
     auto listed = false;
-    for (const auto &[monrace_id, is_achieved] : w_ptr->bounties) {
+    for (const auto &[monrace_id, is_achieved] : world.bounties) {
         if (!is_achieved) {
             fprintf(fff, "%s\n", monraces.get_monrace(monrace_id).name.data());
             listed = true;

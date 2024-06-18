@@ -16,7 +16,12 @@ enum class PlayerRaceType;
 class MonsterRaceInfo;
 class AngbandWorld {
 public:
-    AngbandWorld() = default;
+    ~AngbandWorld() = default;
+    AngbandWorld(AngbandWorld &&) = delete;
+    AngbandWorld(const AngbandWorld &) = delete;
+    AngbandWorld &operator=(const AngbandWorld &) = delete;
+    AngbandWorld &operator=(AngbandWorld &&) = delete;
+    static AngbandWorld &get_instance();
 
     POSITION max_wild_x{}; /*!< Maximum size of the wilderness */
     POSITION max_wild_y{}; /*!< Maximum size of the wilderness */
@@ -74,10 +79,11 @@ public:
     void set_gametime();
 
 private:
+    AngbandWorld() = default;
+    static AngbandWorld instance;
+
     bool is_out_arena = false; // アリーナ外部にいる時だけtrue.
 
     bool is_winner_class(PlayerClassType c) const;
     bool is_retired_class(PlayerClassType c) const;
 };
-
-extern AngbandWorld *w_ptr;

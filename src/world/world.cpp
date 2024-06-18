@@ -7,8 +7,12 @@
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
 
-AngbandWorld world;
-AngbandWorld *w_ptr = &world;
+AngbandWorld AngbandWorld::instance{};
+
+AngbandWorld &AngbandWorld::get_instance()
+{
+    return instance;
+}
 
 /*!
  * @brief アリーナへの入場/退出状態を更新する

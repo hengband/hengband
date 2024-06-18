@@ -491,6 +491,7 @@ void teleport_player_to(PlayerType *player_ptr, POSITION ny, POSITION nx, telepo
     /* Find a usable location */
     POSITION y, x;
     POSITION dis = 0, ctr = 0;
+    const auto &world = AngbandWorld::get_instance();
     while (true) {
         while (true) {
             y = (POSITION)rand_spread(ny, dis);
@@ -500,7 +501,7 @@ void teleport_player_to(PlayerType *player_ptr, POSITION ny, POSITION nx, telepo
             }
         }
 
-        bool is_anywhere = w_ptr->wizard;
+        auto is_anywhere = world.wizard;
         is_anywhere &= (mode & TELEPORT_PASSIVE) == 0;
         is_anywhere &= player_ptr->current_floor_ptr->grid_array[y][x].has_monster() || player_ptr->current_floor_ptr->grid_array[y][x].m_idx == player_ptr->riding;
         if (is_anywhere) {
@@ -533,7 +534,7 @@ void teleport_away_followable(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
     bool is_followable = old_ml;
     is_followable &= old_cdis <= MAX_PLAYER_SIGHT;
-    is_followable &= w_ptr->timewalk_m_idx == 0;
+    is_followable &= AngbandWorld::get_instance().timewalk_m_idx == 0;
     is_followable &= !AngbandSystem::get_instance().is_phase_out();
     is_followable &= los(player_ptr, player_ptr->y, player_ptr->x, oldfy, oldfx);
     if (!is_followable) {

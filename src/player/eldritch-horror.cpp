@@ -56,7 +56,8 @@ static bool process_mod_hallucination(PlayerType *player_ptr, std::string_view m
  */
 void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
 {
-    if (AngbandSystem::get_instance().is_phase_out() || !w_ptr->character_dungeon) {
+    const auto &world = AngbandWorld::get_instance();
+    if (AngbandSystem::get_instance().is_phase_out() || !world.character_dungeon) {
         return;
     }
 
@@ -74,7 +75,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
             power *= 2;
         }
 
-        if (!w_ptr->is_loading_now) {
+        if (!world.is_loading_now) {
             return;
         }
 

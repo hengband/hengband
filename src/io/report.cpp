@@ -281,7 +281,7 @@ bool report_score(PlayerType *player_ptr)
              << format("maxdp: %d\n", max_dlv[DUNGEON_ANGBAND])
              << format("au: %d\n", player_ptr->au);
     const auto &igd = InnerGameData::get_instance();
-    score_ss << format("turns: %d\n", igd.get_real_turns(w_ptr->game_turn))
+    score_ss << format("turns: %d\n", igd.get_real_turns(AngbandWorld::get_instance().game_turn))
              << format("sex: %d\n", player_ptr->psex)
              << format("race: %s\n", rp_ptr->title)
              << format("class: %s\n", cp_ptr->title)

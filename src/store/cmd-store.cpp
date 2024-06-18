@@ -87,25 +87,26 @@ void do_cmd_store(PlayerType *player_ptr)
     inner_town_num = player_ptr->town_num;
     auto &town = towns_info[player_ptr->town_num];
     auto &store = town.stores[store_num];
-    if ((store.store_open >= w_ptr->game_turn) || ironman_shops) {
+    auto &world = AngbandWorld::get_instance();
+    if ((store.store_open >= world.game_turn) || ironman_shops) {
         msg_print(_("ドアに鍵がかかっている。", "The doors are locked."));
         player_ptr->town_num = old_town_num;
         return;
     }
 
-    int maintain_num = (w_ptr->game_turn - store.last_visit) / (TURNS_PER_TICK * STORE_TICKS);
+    auto maintain_num = (world.game_turn - store.last_visit) / (TURNS_PER_TICK * STORE_TICKS);
     if (maintain_num > 10) {
         maintain_num = 10;
     }
-    if (maintain_num) {
-        store_maintenance(player_ptr, player_ptr->town_num, store_num, maintain_num);
 
-        store.last_visit = w_ptr->game_turn;
+    if (maintain_num > 0) {
+        store_maintenance(player_ptr, player_ptr->town_num, store_num, maintain_num);
+        store.last_visit = world.game_turn;
     }
 
     forget_lite(&floor);
     forget_view(&floor);
-    w_ptr->character_icky_depth = 1;
+    world.character_icky_depth = 1;
     command_arg = 0;
     command_rep = 0;
     command_new = 0;
@@ -153,7 +154,7 @@ void do_cmd_store(PlayerType *player_ptr)
         store_process_command(player_ptr, store_num);
 
         const auto should_redraw_store_inventory = rfu.has(StatusRecalculatingFlag::BONUS);
-        w_ptr->character_icky_depth = 1;
+        world.character_icky_depth = 1;
         handle_stuff(player_ptr);
         if (player_ptr->inventory_list[INVEN_PACK].bi_id) {
             INVENTORY_IDX i_idx = INVEN_PACK;
@@ -193,7 +194,7 @@ void do_cmd_store(PlayerType *player_ptr)
             display_store_inventory(player_ptr, store_num);
         }
 
-        if (st_ptr->store_open >= w_ptr->game_turn) {
+        if (st_ptr->store_open >= world.game_turn) {
             leave_store = true;
         }
     }
@@ -203,7 +204,7 @@ void do_cmd_store(PlayerType *player_ptr)
 
     select_floor_music(player_ptr);
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    w_ptr->character_icky_depth = 0;
+    world.character_icky_depth = 0;
     command_new = 0;
     command_see = false;
     get_com_no_macros = false;

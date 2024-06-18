@@ -72,7 +72,7 @@ static bool check_battle_metal_babble(PlayerType *player_ptr)
     msg_print(_("挑戦者「死ぬがよい。」", "The challenger says, 'Die, maggots.'"));
     msg_print(nullptr);
 
-    w_ptr->set_arena(false);
+    AngbandWorld::get_instance().set_arena(false);
     reset_tim_flags(player_ptr);
     FloorChangeModesStore::get_instace()->set(FloorChangeMode::SAVE_FLOORS);
     player_ptr->current_floor_ptr->inside_arena = true;
@@ -110,7 +110,7 @@ static bool go_to_arena(PlayerType *player_ptr)
         return false;
     }
 
-    w_ptr->set_arena(false);
+    AngbandWorld::get_instance().set_arena(false);
     reset_tim_flags(player_ptr);
     FloorChangeModesStore::get_instace()->set(FloorChangeMode::SAVE_FLOORS);
     player_ptr->current_floor_ptr->inside_arena = true;
@@ -252,9 +252,10 @@ void update_gambling_monsters(PlayerType *player_ptr)
  */
 bool monster_arena_comm(PlayerType *player_ptr)
 {
-    if ((w_ptr->game_turn - w_ptr->arena_start_turn) > TURNS_PER_TICK * 250) {
+    auto &world = AngbandWorld::get_instance();
+    if ((world.game_turn - world.arena_start_turn) > TURNS_PER_TICK * 250) {
         update_gambling_monsters(player_ptr);
-        w_ptr->arena_start_turn = w_ptr->game_turn;
+        world.arena_start_turn = world.game_turn;
     }
 
     screen_save();

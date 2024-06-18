@@ -44,7 +44,7 @@ void rd_options()
     auto c = rd_u16b();
 
     if (c & 0x0002) {
-        w_ptr->wizard = true;
+        AngbandWorld::get_instance().wizard = true;
     }
 
     cheat_peek = any_bits(c, 0x0100);

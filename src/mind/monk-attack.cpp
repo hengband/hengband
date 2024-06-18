@@ -99,6 +99,7 @@ static int select_blow(PlayerType *player_ptr, player_attack_type *pa_ptr, int m
 {
     int min_level = 1;
     const martial_arts *old_ptr = &ma_blows[0];
+    const auto is_wizard = AngbandWorld::get_instance().wizard;
     for (int times = 0; times < max_blow_selection_times; times++) {
         do {
             pa_ptr->ma_ptr = &rand_choice(ma_blows);
@@ -118,7 +119,7 @@ static int select_blow(PlayerType *player_ptr, player_attack_type *pa_ptr, int m
         }
 
         old_ptr = pa_ptr->ma_ptr;
-        if (w_ptr->wizard && cheat_xtra) {
+        if (is_wizard && cheat_xtra) {
             msg_print(_("攻撃を再選択しました。", "Attack re-selected."));
         }
     }
