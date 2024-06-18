@@ -95,15 +95,25 @@ static std::string describe_weight(const ItemEntity &item)
 
 /*!
  * @brief obj-desc.txt出力用にベースアイテムIDからItemEntityオブジェクトを生成する
- *
  * @param bi_id ベースアイテムID
  * @return obj-desc.txt出力用に使用するItemEntityオブジェクト
+ * @details 人形・像・死体類はpvalが0だと異常アイテム扱いで例外が飛ぶためダミー値を入れておく.
  */
 static ItemEntity prepare_item_for_obj_desc(short bi_id)
 {
     ItemEntity item(bi_id);
     item.ident |= IDENT_KNOWN;
-    item.pval = 0;
+    switch (item.bi_key.tval()) {
+    case ItemKindType::FIGURINE:
+    case ItemKindType::STATUE:
+    case ItemKindType::MONSTER_REMAINS:
+        item.pval = 1;
+        break;
+    default:
+        item.pval = 0;
+        break;
+    }
+
     item.to_a = 0;
     item.to_h = 0;
     item.to_d = 0;
