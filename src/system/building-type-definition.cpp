@@ -6,3 +6,10 @@ uint32_t mon_odds[4];
 int battle_odds;
 int wager_melee;
 int bet_number;
+
+MeleeArena MeleeArena::instance{};
+
+MeleeArena &MeleeArena::get_instance()
+{
+    return instance;
+}

@@ -30,3 +30,18 @@ extern uint32_t mon_odds[4];
 extern int battle_odds;
 extern int wager_melee;
 extern int bet_number;
+
+//!< モンスター闘技場定義.
+class MeleeArena {
+public:
+    ~MeleeArena() = default;
+    MeleeArena(MeleeArena &&) = delete;
+    MeleeArena(const MeleeArena &) = delete;
+    MeleeArena &operator=(const MeleeArena &) = delete;
+    MeleeArena &operator=(MeleeArena &&) = delete;
+    static MeleeArena &get_instance();
+
+private:
+    MeleeArena() = default;
+    static MeleeArena instance;
+};
