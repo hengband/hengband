@@ -178,7 +178,7 @@ void WorldTurnProcessor::process_monster_arena_winner(int win_m_idx)
     msg_format(_("%sが勝利した！", "%s won!"), m_name.data());
     msg_print(nullptr);
 
-    if (win_m_idx == (sel_monster + 1)) {
+    if (win_m_idx == (bet_number + 1)) {
         msg_print(_("おめでとうございます。", "Congratulations."));
         msg_format(_("%d＄を受け取った。", "You received %d gold."), battle_odds);
         this->player_ptr->au += battle_odds;

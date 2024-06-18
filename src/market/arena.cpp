@@ -295,8 +295,8 @@ bool monster_arena_comm(PlayerType *player_ptr)
         }
 
         if (i >= '1' && i <= '4') {
-            sel_monster = i - '1';
-            battle_odds = mon_odds[sel_monster];
+            bet_number = i - '1';
+            battle_odds = mon_odds[bet_number];
             break;
         }
 
@@ -307,7 +307,7 @@ bool monster_arena_comm(PlayerType *player_ptr)
 
     clear_bldg(4, 4);
     for (int i = 0; i < 4; i++) {
-        if (i != sel_monster) {
+        if (i != bet_number) {
             clear_bldg(i + 5, i + 5);
         }
     }

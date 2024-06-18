@@ -5,4 +5,4 @@ MonsterRaceId battle_mon_list[4];
 uint32_t mon_odds[4];
 int battle_odds;
 int wager_melee;
-int sel_monster;
+int bet_number;
