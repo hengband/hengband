@@ -26,6 +26,7 @@
 #include "view/display-messages.h"
 #include <algorithm>
 #include <sstream>
+#include <string>
 
 static concptr variant = "ZANGBAND";
 
@@ -37,90 +38,84 @@ static concptr variant = "ZANGBAND";
  * @param fp
  * @return エラーコード
  */
-static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, char *fp)
+static std::string parse_fixed_map_expression(PlayerType *player_ptr, char **sp, char *fp)
 {
-    static std::string tmp;
-    char b1 = '[';
-    char b2 = ']';
+    constexpr char b1 = '[';
+    constexpr char b2 = ']';
 
     char f = ' ';
 
-    char *s;
-    s = (*sp);
+    char *s = (*sp);
 
     while (iswspace(*s)) {
         s++;
     }
 
-    char *b;
-    b = s;
-    concptr v = "?o?o?";
+    char *b = s;
+    std::string v = "?o?o?";
     if (*s == b1) {
-        concptr p;
-        concptr t;
+        std::string t;
         s++;
         t = parse_fixed_map_expression(player_ptr, &s, &f);
-        if (!*t) {
+        if (t.empty()) {
             /* Nothing */
-        } else if (streq(t, "IOR")) {
+        } else if (t == "IOR") {
             v = "0";
             while (*s && (f != b2)) {
                 t = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (*t && !streq(t, "0")) {
+                if (t != "0") {
                     v = "1";
                 }
             }
-        } else if (streq(t, "AND")) {
+        } else if (t == "AND") {
             v = "1";
             while (*s && (f != b2)) {
                 t = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (*t && streq(t, "0")) {
+                if (t == "0") {
                     v = "0";
                 }
             }
-        } else if (streq(t, "NOT")) {
+        } else if (t == "NOT") {
             v = "1";
             while (*s && (f != b2)) {
                 t = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (*t && streq(t, "1")) {
+                if (t == "1") {
                     v = "0";
                 }
             }
-        } else if (streq(t, "EQU")) {
+        } else if (t == "EQU") {
             v = "0";
             if (*s && (f != b2)) {
                 t = parse_fixed_map_expression(player_ptr, &s, &f);
             }
 
             while (*s && (f != b2)) {
-                p = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (streq(t, p)) {
+                auto p = parse_fixed_map_expression(player_ptr, &s, &f);
+                if (t == p) {
                     v = "1";
                 }
             }
-        } else if (streq(t, "LEQ")) {
+        } else if (t == "LEQ") {
             v = "1";
             if (*s && (f != b2)) {
                 t = parse_fixed_map_expression(player_ptr, &s, &f);
             }
 
             while (*s && (f != b2)) {
-                p = t;
-                t = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (*t && atoi(p) > atoi(t)) {
+                auto p = parse_fixed_map_expression(player_ptr, &s, &f);
+                if (!p.empty() && atoi(t.data()) > atoi(p.data())) {
                     v = "0";
                 }
             }
-        } else if (streq(t, "GEQ")) {
+        } else if (t == "GEQ") {
             v = "1";
             if (*s && (f != b2)) {
                 t = parse_fixed_map_expression(player_ptr, &s, &f);
             }
 
             while (*s && (f != b2)) {
-                p = t;
-                t = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (*t && atoi(p) < atoi(t)) {
+                auto p = parse_fixed_map_expression(player_ptr, &s, &f);
+                if (!p.empty() && atoi(t.data()) < atoi(p.data())) {
                     v = "0";
                 }
             }
@@ -184,7 +179,7 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
     } else if (streq(b + 1, "REALM2")) {
         v = _(E_realm_names[player_ptr->realm2], realm_names[player_ptr->realm2]);
     } else if (streq(b + 1, "PLAYER")) {
-        static char tmp_player_name[32];
+        char tmp_player_name[32];
         char *pn, *tpn;
         for (pn = player_ptr->name, tpn = tmp_player_name; *pn; pn++, tpn++) {
 #ifdef JP
@@ -200,29 +195,22 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
         *tpn = '\0';
         v = tmp_player_name;
     } else if (streq(b + 1, "TOWN")) {
-        tmp = std::to_string(player_ptr->town_num);
-        v = tmp.data();
+        v = std::to_string(player_ptr->town_num);
     } else if (streq(b + 1, "LEVEL")) {
-        tmp = std::to_string(player_ptr->lev);
-        v = tmp.data();
+        v = std::to_string(player_ptr->lev);
     } else if (streq(b + 1, "QUEST_NUMBER")) {
-        tmp = std::to_string(enum2i(player_ptr->current_floor_ptr->quest_number));
-        v = tmp.data();
+        v = std::to_string(enum2i(player_ptr->current_floor_ptr->quest_number));
     } else if (streq(b + 1, "LEAVING_QUEST")) {
-        tmp = std::to_string(enum2i(leaving_quest));
-        v = tmp.data();
+        v = std::to_string(enum2i(leaving_quest));
     } else if (prefix(b + 1, "QUEST_TYPE")) {
         const auto &quests = QuestList::get_instance();
-        tmp = std::to_string(enum2i(quests.get_quest(i2enum<QuestId>(atoi(b + 11))).type));
-        v = tmp.data();
+        v = std::to_string(enum2i(quests.get_quest(i2enum<QuestId>(atoi(b + 11))).type));
     } else if (prefix(b + 1, "QUEST")) {
         const auto &quests = QuestList::get_instance();
-        tmp = std::to_string(enum2i(quests.get_quest(i2enum<QuestId>(atoi(b + 6))).status));
-        v = tmp.data();
+        v = std::to_string(enum2i(quests.get_quest(i2enum<QuestId>(atoi(b + 6))).status));
     } else if (prefix(b + 1, "RANDOM")) {
         const auto &system = AngbandSystem::get_instance();
-        tmp = std::to_string((static_cast<int>(system.get_seed_town()) % std::stoi(b + 7)));
-        v = tmp.data();
+        v = std::to_string((static_cast<int>(system.get_seed_town()) % std::stoi(b + 7)));
     } else if (streq(b + 1, "VARIANT")) {
         v = variant;
     } else if (streq(b + 1, "WILDERNESS")) {
@@ -280,8 +268,8 @@ parse_error_type parse_fixed_map(PlayerType *player_ptr, std::string_view name, 
         if (line_str->starts_with("?:")) {
             char f;
             auto *s = line_str->data() + 2;
-            concptr v = parse_fixed_map_expression(player_ptr, &s, &f);
-            bypass = streq(v, "0");
+            auto v = parse_fixed_map_expression(player_ptr, &s, &f);
+            bypass = v == "0";
             continue;
         }
 
