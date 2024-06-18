@@ -32,6 +32,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
+#include "world/world.h"
 
 /*!
  * @brief ロッドの効果を発動する
@@ -287,7 +288,7 @@ int rod_effect(PlayerType *player_ptr, int sval, int dir, bool *use_charge, bool
  */
 void do_cmd_zap_rod(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         return;
     }
 

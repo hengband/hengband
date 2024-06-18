@@ -359,6 +359,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
+    auto &world = AngbandWorld::get_instance();
     if (player_ptr->chp < 0 && !cheat_immortal) {
         bool android = PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID);
 
@@ -375,7 +376,6 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
             player_ptr->is_dead = true;
         }
 
-        auto &world = AngbandWorld::get_instance();
         if (floor.inside_arena) {
             auto &entries = ArenaEntryList::get_instance();
             entries.set_defeated_entry();
@@ -580,7 +580,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
         flush();
     }
 
-    if (player_ptr->wild_mode && !player_ptr->leaving && (player_ptr->chp < std::max(warning, player_ptr->mhp / 5))) {
+    if (world.is_wild_mode() && !player_ptr->leaving && (player_ptr->chp < std::max(warning, player_ptr->mhp / 5))) {
         change_wild_mode(player_ptr, false);
     }
 

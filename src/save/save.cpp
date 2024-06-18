@@ -153,7 +153,7 @@ static bool wr_savefile_new(PlayerType *player_ptr)
 
     wr_s32b(player_ptr->wilderness_x);
     wr_s32b(player_ptr->wilderness_y);
-    wr_bool(player_ptr->wild_mode);
+    wr_bool(world.is_wild_mode());
     wr_bool(player_ptr->ambush_flag);
     wr_s32b(world.max_wild_x);
     wr_s32b(world.max_wild_y);

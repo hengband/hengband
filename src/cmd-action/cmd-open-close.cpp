@@ -31,6 +31,7 @@
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include "world/world.h"
 
 /*!
  * @brief 箱を開ける実行処理 /
@@ -97,7 +98,7 @@ static bool exe_open_chest(PlayerType *player_ptr, const Pos2D &pos, OBJECT_IDX 
 void do_cmd_open(PlayerType *player_ptr)
 {
     auto more = false;
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         return;
     }
 
@@ -151,7 +152,7 @@ void do_cmd_open(PlayerType *player_ptr)
  */
 void do_cmd_close(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         return;
     }
 
@@ -196,7 +197,7 @@ void do_cmd_close(PlayerType *player_ptr)
  */
 void do_cmd_disarm(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         return;
     }
 
@@ -262,13 +263,11 @@ void do_cmd_disarm(PlayerType *player_ptr)
  */
 void do_cmd_bash(PlayerType *player_ptr)
 {
-    auto more = false;
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         return;
     }
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
-
     if (command_arg) {
         command_rep = command_arg - 1;
         RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
@@ -276,6 +275,7 @@ void do_cmd_bash(PlayerType *player_ptr)
     }
 
     int dir;
+    auto more = false;
     if (get_rep_dir(player_ptr, &dir)) {
         const auto pos = player_ptr->get_neighbor(dir);
         const Grid &grid = player_ptr->current_floor_ptr->get_grid(pos);
@@ -333,13 +333,12 @@ static bool get_spike(PlayerType *player_ptr, INVENTORY_IDX *ip)
  */
 void do_cmd_spike(PlayerType *player_ptr)
 {
-    DIRECTION dir;
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         return;
     }
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
-
+    DIRECTION dir;
     if (!get_rep_dir(player_ptr, &dir)) {
         return;
     }

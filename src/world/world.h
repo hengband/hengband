@@ -63,6 +63,8 @@ public:
 
     bool wizard{}; /* This world under wizard mode */
 
+    bool is_wild_mode() const;
+    void set_wild_mode(bool new_wild_mode);
     void set_arena(const bool new_status);
     bool get_arena() const;
     std::tuple<int, int, int> extract_date_time(PlayerRaceType start_race) const;
@@ -83,6 +85,7 @@ private:
     static AngbandWorld instance;
 
     bool is_out_arena = false; // アリーナ外部にいる時だけtrue.
+    bool wild_mode = false;
 
     bool is_winner_class(PlayerClassType c) const;
     bool is_retired_class(PlayerClassType c) const;

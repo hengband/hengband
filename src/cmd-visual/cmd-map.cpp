@@ -6,6 +6,7 @@
 #include "term/screen-processor.h"
 #include "view/display-map.h"
 #include "window/main-window-util.h"
+#include "world/world.h"
 #include <string_view>
 
 /*
@@ -23,7 +24,7 @@ void do_cmd_view_map(PlayerType *player_ptr)
 
     int cy, cx;
     display_map(player_ptr, &cy, &cx);
-    if (autopick_list.empty() || player_ptr->wild_mode) {
+    if (autopick_list.empty() || AngbandWorld::get_instance().is_wild_mode()) {
         const auto &[wid, hgt] = term_get_size();
         constexpr auto msg = _("何かキーを押すとゲームに戻ります", "Hit any key to continue");
         const auto center_x = (wid - std::string_view(msg).length()) / 2;

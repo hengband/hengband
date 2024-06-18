@@ -475,7 +475,7 @@ static std::string decide_target_floor(PlayerType *player_ptr, GridExamination *
         return towns_info[ge_ptr->g_ptr->special].name;
     }
 
-    if (player_ptr->wild_mode && (ge_ptr->feat == feat_floor)) {
+    if (AngbandWorld::get_instance().is_wild_mode() && (ge_ptr->feat == feat_floor)) {
         return _("道", "road");
     }
 

@@ -266,10 +266,11 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         }
 
         world.game_turn++;
+        const auto is_wild_mode = world.is_wild_mode();
         if (world.dungeon_turn < world.dungeon_turn_limit) {
-            if (!player_ptr->wild_mode || wild_regen) {
+            if (!is_wild_mode || wild_regen) {
                 world.dungeon_turn++;
-            } else if (player_ptr->wild_mode && !(world.game_turn % ((MAX_HGT + MAX_WID) / 2))) {
+            } else if (is_wild_mode && !(world.game_turn % ((MAX_HGT + MAX_WID) / 2))) {
                 world.dungeon_turn++;
             }
         }

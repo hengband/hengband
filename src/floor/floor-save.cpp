@@ -24,6 +24,7 @@
 #include "term/z-form.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
+#include "world/world.h"
 
 static std::string get_saved_floor_name(int level)
 {
@@ -211,14 +212,13 @@ FLOOR_IDX get_unused_floor_id(PlayerType *player_ptr)
  */
 void precalc_cur_num_of_pet(PlayerType *player_ptr)
 {
-    MonsterEntity *m_ptr;
-    int max_num = player_ptr->wild_mode ? 1 : MAX_PARTY_MON;
-    for (int i = 0; i < max_num; i++) {
-        m_ptr = &party_mon[i];
-        if (!m_ptr->is_valid()) {
+    const auto max_num = AngbandWorld::get_instance().is_wild_mode() ? 1 : MAX_PARTY_MON;
+    for (auto i = 0; i < max_num; i++) {
+        auto &monster = party_mon[i];
+        if (!monster.is_valid()) {
             continue;
         }
 
-        m_ptr->get_real_monrace().cur_num++;
+        monster.get_real_monrace().cur_num++;
     }
 }

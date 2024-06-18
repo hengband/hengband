@@ -142,6 +142,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
     auto &terrains = TerrainList::get_instance();
     auto *terrain_mimic_ptr = &grid.get_terrain_mimic();
     const auto &world = AngbandWorld::get_instance();
+    const auto is_wild_mode = world.is_wild_mode();
     DisplaySymbol symbol_config;
     if (terrain_mimic_ptr->flags.has_not(TerrainCharacteristics::REMEMBER)) {
         auto is_visible = any_bits(grid.info, (CAVE_MARK | CAVE_LITE | CAVE_MNLT));
@@ -150,7 +151,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
         const auto is_blind = player_ptr->effects()->blindness().is_blind();
         if (!is_blind && (is_visible || can_view)) {
             symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_STANDARD];
-            if (player_ptr->wild_mode) {
+            if (is_wild_mode) {
                 if (view_special_lite && !world.is_daytime()) {
                     symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_DARK];
                 }
@@ -180,7 +181,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
         if (grid.is_mark() && is_revealed_wall(floor, pos)) {
             symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_STANDARD];
             const auto is_blind = player_ptr->effects()->blindness().is_blind();
-            if (player_ptr->wild_mode) {
+            if (is_wild_mode) {
                 if (view_granite_lite && (is_blind || !world.is_daytime())) {
                     symbol_config = terrain_mimic_ptr->symbol_configs[F_LIT_DARK];
                 }

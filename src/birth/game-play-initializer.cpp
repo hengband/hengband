@@ -127,7 +127,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     }
 
     player_ptr->visit = 1;
-    player_ptr->wild_mode = false;
+    world.set_wild_mode(false);
 
     player_ptr->max_plv = player_ptr->lev = 1;
     ArenaEntryList::get_instance().reset_entry();

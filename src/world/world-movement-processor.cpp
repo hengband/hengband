@@ -114,7 +114,8 @@ void execute_recall(PlayerType *player_ptr)
         }
     }
 
-    if (player_ptr->wild_mode) {
+    auto &world = AngbandWorld::get_instance();
+    if (world.is_wild_mode()) {
         player_ptr->wilderness_y = player_ptr->y;
         player_ptr->wilderness_x = player_ptr->x;
     } else {
@@ -122,7 +123,7 @@ void execute_recall(PlayerType *player_ptr)
         player_ptr->oldpy = player_ptr->y;
     }
 
-    player_ptr->wild_mode = false;
+    world.set_wild_mode(false);
 
     /*
      * Clear all saved floors

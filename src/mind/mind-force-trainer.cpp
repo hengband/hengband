@@ -37,6 +37,7 @@
 #include "target/target-setter.h"
 #include "target/target-types.h"
 #include "view/display-messages.h"
+#include "world/world.h"
 
 /*!
  * @brief 練気術師が「練気」で溜めた気の量を返す
@@ -105,7 +106,7 @@ void set_lightspeed(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return;
     }
 
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         v = 0;
     }
 
