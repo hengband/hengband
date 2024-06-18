@@ -131,13 +131,12 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, MonsterEntity *m_ptr, int
 {
     term_erase(0, y);
     term_gotoxy(x, y);
-    const auto monrace_id = m_ptr->ap_r_idx;
-    if (monrace_id == MonsterRaceId::PLAYER) {
+    const auto &monrace = m_ptr->get_appearance_monrace();
+    if (!monrace.is_valid()) {
         return;
     }
 
     std::string buf;
-    const auto &monrace = monraces_info[monrace_id];
     if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
         buf = format(_("%3s(覚%2d)", "%3s(%2d)"), monrace.is_bounty(true) ? "  W" : "  U", n_awake);
     } else {

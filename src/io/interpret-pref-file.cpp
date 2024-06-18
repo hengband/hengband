@@ -54,11 +54,12 @@ static bool interpret_r_token(char *buf)
     const auto i = std::stoi(zz[0], nullptr, 0);
     const auto n1 = static_cast<uint8_t>(std::stoi(zz[1], nullptr, 0));
     const auto n2 = static_cast<char>(std::stoi(zz[2], nullptr, 0));
-    if (i >= static_cast<int>(monraces_info.size())) {
+    auto &monraces = MonraceList::get_instance();
+    if (i >= std::ssize(monraces)) {
         return false;
     }
 
-    auto &monrace = monraces_info[i2enum<MonsterRaceId>(i)];
+    auto &monrace = monraces.get_monrace(i2enum<MonsterRaceId>(i));
     /* Allow TERM_DARK text */
     if (n1 || (!(n2 & 0x80) && n2)) {
         monrace.symbol_config.color = n1;
