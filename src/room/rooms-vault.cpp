@@ -43,132 +43,125 @@
  */
 std::vector<vault_type> vaults_info;
 
-/*
- * This function creates a random vault that looks like a collection of bubbles.
- * It works by getting a set of coordinates that represent the center of each
- * bubble.  The entire room is made by seeing which bubble center is closest. If
- * two centers are equidistant then the square is a wall, otherwise it is a floor.
- * The only exception is for squares really near a center, these are always floor.
- * (It looks better than without this check.)
- *
- * Note: If two centers are on the same point then this algorithm will create a
- *       blank bubble filled with walls. - This is prevented from happening.
- */
-static void build_bubble_vault(PlayerType *player_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
+constexpr auto NUM_BUBBLES = 10;
+
+namespace {
+std::array<Pos2D, NUM_BUBBLES> allocate_bubbles_center(const Pos2DVec &vec)
 {
-#define BUBBLENUM 10 /* number of bubbles */
+    std::array<Pos2D, NUM_BUBBLES> center_points{ {
+        { randint1(vec.y - 3) + 1, randint1(vec.x - 3) + 1 },
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+        { 0, 0 },
+    } };
+    return center_points;
+}
 
-    /* array of center points of bubbles */
-    coord center[BUBBLENUM];
-
-    int i, j;
-    POSITION x = 0, y = 0;
-    uint16_t min1, min2, temp;
-    bool done;
-
-    /* Offset from center to top left hand corner */
-    POSITION xhsize = xsize / 2;
-    POSITION yhsize = ysize / 2;
-
-    msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("泡型ランダムVaultを生成しました。", "Bubble-shaped Vault."));
-
-    /* Allocate center of bubbles */
-    center[0].x = (byte)randint1(xsize - 3) + 1;
-    center[0].y = (byte)randint1(ysize - 3) + 1;
-
-    for (i = 1; i < BUBBLENUM; i++) {
-        done = false;
-
-        /* get center and check to see if it is unique */
-        while (!done) {
-            done = true;
-
-            x = randint1(xsize - 3) + 1;
-            y = randint1(ysize - 3) + 1;
-
-            for (j = 0; j < i; j++) {
-                /* rough test to see if there is an overlap */
-                if ((x == center[j].x) && (y == center[j].y)) {
-                    done = false;
+std::array<Pos2D, NUM_BUBBLES> create_bubbles_center(const Pos2DVec &vec)
+{
+    auto center_points = allocate_bubbles_center(vec);
+    Pos2D pos(0, 0);
+    bool is_center_checked;
+    for (auto i = 1; i < NUM_BUBBLES; i++) {
+        is_center_checked = false;
+        while (!is_center_checked) {
+            is_center_checked = true;
+            pos = { randint1(vec.y - 3) + 1, randint1(vec.x - 3) + 1 };
+            for (auto j = 0; j < i; j++) {
+                if (pos == center_points[j]) {
+                    is_center_checked = false;
                 }
             }
         }
 
-        center[i].x = x;
-        center[i].y = y;
+        center_points[i] = pos;
     }
 
-    /* Top and bottom boundaries */
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (i = 0; i < xsize; i++) {
-        int side_x = x0 - xhsize + i;
+    return center_points;
+}
 
-        place_bold(player_ptr, y0 - yhsize + 0, side_x, GB_OUTER_NOPERM);
-        floor_ptr->grid_array[y0 - yhsize + 0][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
-        place_bold(player_ptr, y0 - yhsize + ysize - 1, side_x, GB_OUTER_NOPERM);
-        floor_ptr->grid_array[y0 - yhsize + ysize - 1][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
+void set_boundaries(PlayerType *player_ptr, const Pos2D &pos)
+{
+    place_bold(player_ptr, pos.y, pos.x, GB_OUTER_NOPERM);
+    player_ptr->current_floor_ptr->get_grid(pos).add_info(CAVE_ROOM | CAVE_ICKY);
+}
+}
+
+/*!
+ * @brief 泡型Vaultを生成する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param pos0 Vault全体の中心座標
+ * @param vec 中心から部屋の隅までの線分長
+ */
+static void build_bubble_vault(PlayerType *player_ptr, const Pos2D &pos0, const Pos2DVec &vec)
+{
+    msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("泡型ランダムVaultを生成しました。", "Bubble-shaped Vault."));
+    auto center_points = create_bubbles_center(vec);
+
+    const Pos2DVec vec_half(vec.y / 2, vec.x / 2);
+
+    /* Top and bottom boundaries */
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (auto i = 0; i < vec.x; i++) {
+        const auto side_x = pos0.x - vec_half.x + i;
+        set_boundaries(player_ptr, { pos0.y - vec_half.y, side_x });
+        set_boundaries(player_ptr, { pos0.y - vec_half.y + vec.y - 1, side_x });
     }
 
     /* Left and right boundaries */
-    for (i = 1; i < ysize - 1; i++) {
-        int side_y = y0 - yhsize + i;
-
-        place_bold(player_ptr, side_y, x0 - xhsize + 0, GB_OUTER_NOPERM);
-        floor_ptr->grid_array[side_y][x0 - xhsize + 0].info |= (CAVE_ROOM | CAVE_ICKY);
-        place_bold(player_ptr, side_y, x0 - xhsize + xsize - 1, GB_OUTER_NOPERM);
-        floor_ptr->grid_array[side_y][x0 - xhsize + xsize - 1].info |= (CAVE_ROOM | CAVE_ICKY);
+    for (auto i = 1; i < vec.y - 1; i++) {
+        const auto side_y = pos0.y - vec_half.y + i;
+        set_boundaries(player_ptr, { side_y, pos0.x - vec_half.x });
+        set_boundaries(player_ptr, { side_y, pos0.x - vec_half.x + vec.x - 1 });
     }
 
     /* Fill in middle with bubbles */
-    for (x = 1; x < xsize - 1; x++) {
-        for (y = 1; y < ysize - 1; y++) {
+    for (auto x = 1; x < vec.x - 1; x++) {
+        for (auto y = 1; y < vec.y - 1; y++) {
             /* Get distances to two closest centers */
-
-            min1 = (uint16_t)distance(x, y, center[0].x, center[0].y);
-            min2 = (uint16_t)distance(x, y, center[1].x, center[1].y);
-
+            auto min1 = distance(x, y, center_points[0].x, center_points[0].y);
+            auto min2 = distance(x, y, center_points[1].x, center_points[1].y);
             if (min1 > min2) {
-                /* swap if in wrong order */
-                temp = min1;
-                min1 = min2;
-                min2 = temp;
+                std::swap(min1, min2);
             }
 
             /* Scan the rest */
-            for (i = 2; i < BUBBLENUM; i++) {
-                temp = (uint16_t)distance(x, y, center[i].x, center[i].y);
-
+            for (auto i = 2; i < NUM_BUBBLES; i++) {
+                auto temp = distance(x, y, center_points[i].x, center_points[i].y);
                 if (temp < min1) {
-                    /* smallest */
                     min2 = min1;
-                    min1 = temp;
+                    std::swap(temp, min1);
                 } else if (temp < min2) {
-                    /* second smallest */
-                    min2 = temp;
+                    std::swap(min2, temp);
                 }
             }
+
             if (((min2 - min1) <= 2) && (!(min1 < 3))) {
                 /* Boundary at midpoint+ not at inner region of bubble */
-                place_bold(player_ptr, y0 - yhsize + y, x0 - xhsize + x, GB_OUTER_NOPERM);
+                place_bold(player_ptr, pos0.y - vec_half.y + y, pos0.x - vec_half.x + x, GB_OUTER_NOPERM);
             } else {
                 /* middle of a bubble */
-                place_bold(player_ptr, y0 - yhsize + y, x0 - xhsize + x, GB_FLOOR);
+                place_bold(player_ptr, pos0.y - vec_half.y + y, pos0.x - vec_half.x + x, GB_FLOOR);
             }
 
             /* clean up rest of flags */
-            floor_ptr->grid_array[y0 - yhsize + y][x0 - xhsize + x].info |= (CAVE_ROOM | CAVE_ICKY);
+            floor.get_grid({ pos0.y - vec_half.y + y, pos0.x - vec_half.x + x }).add_info(CAVE_ROOM | CAVE_ICKY);
         }
     }
 
     /* Try to add some random doors */
-    for (i = 0; i < 500; i++) {
-        x = randint1(xsize - 3) - xhsize + x0 + 1;
-        y = randint1(ysize - 3) - yhsize + y0 + 1;
-        add_door(player_ptr, x, y);
+    for (auto i = 0; i < 500; i++) {
+        add_door(player_ptr, randint1(vec.x - 3) - vec_half.x + pos0.x + 1, randint1(vec.y - 3) - vec_half.y + pos0.y + 1);
     }
 
     /* Fill with monsters and treasure, low difficulty */
-    fill_treasure(player_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 2, y0 - yhsize + 1, y0 - yhsize + ysize - 2, randint1(5));
+    fill_treasure(player_ptr, pos0.x - vec_half.x + 1, pos0.x - vec_half.x + vec.x - 2, pos0.y - vec_half.y + 1, pos0.y - vec_half.y + vec.y - 2, randint1(5));
 }
 
 /* Create a random vault that looks like a collection of overlapping rooms */
@@ -947,57 +940,52 @@ static void build_castle_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
  */
 bool build_type10(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
-    POSITION y0, x0, xsize, ysize, vtype;
-
-    /* big enough to look good, small enough to be fairly common. */
-    xsize = randint1(22) + 22;
-    ysize = randint1(11) + 11;
-
-    /* Find and reserve some space in the dungeon.  Get center of room. */
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!find_space(player_ptr, dd_ptr, &y0, &x0, ysize + 1, xsize + 1)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto xsize = randint1(22) + 22;
+    const auto ysize = randint1(11) + 11;
+    int y;
+    int x;
+    if (!find_space(player_ptr, dd_ptr, &y, &x, ysize + 1, xsize + 1)) {
         return false;
     }
 
-    /* Select type of vault */
+    int vault_type;
     do {
-        vtype = randint1(15);
-    } while (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::NO_CAVE) && ((vtype == 1) || (vtype == 3) || (vtype == 8) || (vtype == 9) || (vtype == 11)));
+        vault_type = randint1(15);
+    } while (floor.get_dungeon_definition().flags.has(DungeonFeatureType::NO_CAVE) && ((vault_type == 1) || (vault_type == 3) || (vault_type == 8) || (vault_type == 9) || (vault_type == 11)));
 
-    switch (vtype) {
-        /* Build an appropriate room */
+    switch (vault_type) {
     case 1:
     case 9:
-        build_bubble_vault(player_ptr, x0, y0, xsize, ysize);
+        build_bubble_vault(player_ptr, { y, x }, { ysize, xsize });
         break;
     case 2:
     case 10:
-        build_room_vault(player_ptr, x0, y0, xsize, ysize);
+        build_room_vault(player_ptr, x, y, xsize, ysize);
         break;
     case 3:
     case 11:
-        build_cave_vault(player_ptr, x0, y0, xsize, ysize);
+        build_cave_vault(player_ptr, x, y, xsize, ysize);
         break;
     case 4:
     case 12:
-        build_maze_vault(player_ptr, x0, y0, xsize, ysize, true);
+        build_maze_vault(player_ptr, x, y, xsize, ysize, true);
         break;
     case 5:
     case 13:
-        build_mini_c_vault(player_ptr, x0, y0, xsize, ysize);
+        build_mini_c_vault(player_ptr, x, y, xsize, ysize);
         break;
     case 6:
     case 14:
-        build_castle_vault(player_ptr, x0, y0, xsize, ysize);
+        build_castle_vault(player_ptr, x, y, xsize, ysize);
         break;
     case 7:
     case 15:
-        build_target_vault(player_ptr, x0, y0, xsize, ysize);
+        build_target_vault(player_ptr, x, y, xsize, ysize);
         break;
     case 8:
-        build_elemental_vault(player_ptr, x0, y0, xsize, ysize);
+        build_elemental_vault(player_ptr, x, y, xsize, ysize);
         break;
-        /* I know how to add a few more... give me some time. */
     default:
         return false;
     }
@@ -1010,52 +998,31 @@ bool build_type10(PlayerType *player_ptr, dun_data_type *dd_ptr)
  */
 bool build_fixed_room(PlayerType *player_ptr, dun_data_type *dd_ptr, int typ, bool more_space)
 {
-    vault_type *v_ptr = nullptr;
-    POSITION x, y;
-    POSITION xval, yval;
-    POSITION xoffset, yoffset;
-    int transno;
-
     ProbabilityTable<int> prob_table;
-
-    /* Pick fixed room */
-    for (const auto &v_ref : vaults_info) {
-        if (v_ref.typ == typ) {
-            prob_table.entry_item(v_ref.idx, 1);
+    for (const auto &vault : vaults_info) {
+        if (vault.typ == typ) {
+            prob_table.entry_item(vault.idx, 1);
         }
     }
 
-    auto result = prob_table.pick_one_at_random();
-
-    v_ptr = &vaults_info[result];
-
-    /* pick type of transformation (0-7) */
-    transno = randint0(8);
+    const auto result = prob_table.pick_one_at_random();
+    const auto &vault = vaults_info[result];
+    auto num_transformation = randint0(8);
 
     /* calculate offsets */
-    x = v_ptr->wid;
-    y = v_ptr->hgt;
+    auto x = vault.wid;
+    auto y = vault.hgt;
 
     /* Some huge vault cannot be ratated to fit in the dungeon */
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (x + 2 > floor_ptr->height - 2) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (x + 2 > floor.height - 2) {
         /* Forbid 90 or 270 degree ratation */
-        transno &= ~1;
+        num_transformation &= ~1;
     }
 
-    coord_trans(&x, &y, 0, 0, transno);
-
-    if (x < 0) {
-        xoffset = -x - 1;
-    } else {
-        xoffset = 0;
-    }
-
-    if (y < 0) {
-        yoffset = -y - 1;
-    } else {
-        yoffset = 0;
-    }
+    coord_trans(&x, &y, 0, 0, num_transformation);
+    const auto y_offset = y < 0 ? -y - 1 : 0;
+    const auto x_offset = x < 0 ? -x - 1 : 0;
 
     /*
      * Try to allocate space for room.  If fails, exit
@@ -1063,17 +1030,16 @@ bool build_fixed_room(PlayerType *player_ptr, dun_data_type *dd_ptr, int typ, bo
      * Hack -- Prepare a bit larger space (+2, +2) to
      * prevent generation of vaults with no-entrance.
      */
-    int xsize = more_space ? abs(x) + 2 : abs(x);
-    int ysize = more_space ? abs(y) + 2 : abs(y);
+    const auto xsize = more_space ? std::abs(x) + 2 : std::abs(x);
+    const auto ysize = more_space ? std::abs(y) + 2 : std::abs(y);
     /* Find and reserve some space in the dungeon.  Get center of room. */
+    int yval;
+    int xval;
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, ysize, xsize)) {
         return false;
     }
 
-    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("固定部屋(%s)を生成しました。", "Fixed room (%s)."), v_ptr->name.data());
-
-    /* Hack -- Build the vault */
-    build_vault(player_ptr, yval, xval, v_ptr->hgt, v_ptr->wid, v_ptr->text.data(), xoffset, yoffset, transno);
-
+    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("固定部屋(%s)を生成しました。", "Fixed room (%s)."), vault.name.data());
+    build_vault(player_ptr, yval, xval, vault.hgt, vault.wid, vault.text.data(), x_offset, y_offset, num_transformation);
     return true;
 }
