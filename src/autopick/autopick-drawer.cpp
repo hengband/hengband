@@ -46,8 +46,8 @@ static void process_dirty_expression(PlayerType *player_ptr, text_body_type *tb)
         auto ss = const_cast<char *>(s_keep);
 
         char f;
-        concptr v = process_pref_file_expr(player_ptr, &ss, &f);
-        if (streq(v, "0")) {
+        auto v = process_pref_file_expr(player_ptr, &ss, &f);
+        if (v == "0") {
             state |= LSTAT_BYPASS;
         } else {
             state &= ~LSTAT_BYPASS;
