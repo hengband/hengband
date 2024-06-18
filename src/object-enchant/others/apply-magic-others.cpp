@@ -114,9 +114,9 @@ void OtherItemsEnchanter::generate_figurine()
             continue;
         }
 
-        auto *r_ptr = &monraces_info[monrace_id];
-        auto check = (floor.dun_level < r_ptr->level) ? (r_ptr->level - floor.dun_level) : 0;
-        if ((r_ptr->rarity == 0) || (r_ptr->rarity > 100) || (randint0(check) > 0)) {
+        const auto &monrace = monraces.get_monrace(monrace_id);
+        auto check = (floor.dun_level < monrace.level) ? (monrace.level - floor.dun_level) : 0;
+        if ((monrace.rarity == 0) || (monrace.rarity > 100) || (randint0(check) > 0)) {
             continue;
         }
 
@@ -145,25 +145,26 @@ void OtherItemsEnchanter::generate_corpse()
     };
 
     get_mon_num_prep(this->player_ptr, item_monster_okay, nullptr);
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    MonsterRaceId r_idx;
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    const auto &monraces = MonraceList::get_instance();
+    MonsterRaceId monrace_id;
     while (true) {
-        r_idx = get_mon_num(this->player_ptr, 0, floor_ptr->dun_level, PM_NONE);
-        auto &r_ref = monraces_info[r_idx];
-        auto check = (floor_ptr->dun_level < r_ref.level) ? (r_ref.level - floor_ptr->dun_level) : 0;
+        monrace_id = get_mon_num(this->player_ptr, 0, floor.dun_level, PM_NONE);
+        const auto &monrace = monraces.get_monrace(monrace_id);
+        const auto check = (floor.dun_level < monrace.level) ? (monrace.level - floor.dun_level) : 0;
         const auto sval = this->o_ptr->bi_key.sval();
         if (!sval) {
             continue;
         }
 
-        if ((r_ref.rarity == 0) || (match.find(*sval) != match.end() && r_ref.drop_flags.has_not(match.at(*sval))) || (randint0(check) > 0)) {
+        if ((monrace.rarity == 0) || (match.find(*sval) != match.end() && monrace.drop_flags.has_not(match.at(*sval))) || (randint0(check) > 0)) {
             continue;
         }
 
         break;
     }
 
-    this->o_ptr->pval = enum2i(r_idx);
+    this->o_ptr->pval = enum2i(monrace_id);
     object_aware(this->player_ptr, this->o_ptr);
     this->o_ptr->mark_as_known();
 }

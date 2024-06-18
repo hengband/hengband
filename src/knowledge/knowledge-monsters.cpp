@@ -181,7 +181,7 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
     std::vector<MonsterRaceId> monrace_ids = monraces.get_valid_monrace_ids();
     std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
     for (const auto monrace_id : monrace_ids) {
-        const auto &monrace = monraces_info[monrace_id];
+        const auto &monrace = monraces.get_monrace(monrace_id);
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
             if (monrace.max_num == 0) {
                 std::string details;
@@ -236,10 +236,11 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
 static void display_monster_list(int col, int row, int per_page, const std::vector<MonsterRaceId> &mon_idx, int mon_cur, int mon_top, bool visual_only)
 {
     const auto is_wizard = AngbandWorld::get_instance().wizard;
+    const auto &monraces = MonraceList::get_instance();
     int i;
     for (i = 0; i < per_page && mon_top + i < static_cast<int>(mon_idx.size()); i++) {
         const auto monrace_id = mon_idx[mon_top + i];
-        const auto &monrace = monraces_info[monrace_id];
+        const auto &monrace = monraces.get_monrace(monrace_id);
         const auto color = ((i + mon_top == mon_cur) ? TERM_L_BLUE : TERM_WHITE);
         c_prt(color, (monrace.name.data()), row + i, col);
         const auto &symbol_config = monrace.symbol_config;
@@ -291,6 +292,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
     byte character_left = 0;
     monster_lore_mode mode;
     const int browser_rows = hgt - 8;
+    auto &monraces = MonraceList::get_instance();
     if (!direct_r_idx) {
         mode = visual_only ? MONSTER_LORE_DEBUG : MONSTER_LORE_NORMAL;
         const auto size = static_cast<short>(MONSTER_KINDS_GROUP.size());
@@ -301,7 +303,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
         }
     } else {
         monrace_ids.push_back(*direct_r_idx);
-        auto &monrace = monraces_info[*direct_r_idx];
+        auto &monrace = monraces.get_monrace(*direct_r_idx);
         auto &symbol_config = monrace.symbol_config;
         (void)visual_mode_command('v', &visual_list, browser_rows - 1, wid - (max + 3),
             &color_top, &character_left, &symbol_config.color, &symbol_config.character, need_redraw);
@@ -389,7 +391,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
         DisplaySymbol symbol_dummy;
         auto *symbol_ptr = &symbol_dummy;
         if (!monrace_ids.empty()) {
-            auto &monrace = monraces_info[monrace_ids[mon_cur]];
+            auto &monrace = monraces.get_monrace(monrace_ids[mon_cur]);
             symbol_ptr = &monrace.symbol_config;
             if (!visual_only) {
                 tracker.set_trackee(monrace_ids[mon_cur]);
