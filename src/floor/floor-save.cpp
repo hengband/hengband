@@ -205,12 +205,10 @@ FLOOR_IDX get_unused_floor_id(PlayerType *player_ptr)
 }
 
 /*!
- * @brief フロア移動時にペットを伴った場合の準備処理 / Pre-calculate the racial counters of preserved pets
- * @param player_ptr プレイヤーへの参照ポインタ
- * @details
- * To prevent multiple generation of unique monster who is the minion of player
+ * @brief フロアにいるペットの数を数える
+ * @todo party_mon をPartyMonsters クラスに組み上げてそのオブジェクトメソッドに繰り込む
  */
-void precalc_cur_num_of_pet(PlayerType *player_ptr)
+void precalc_cur_num_of_pet()
 {
     const auto max_num = AngbandWorld::get_instance().is_wild_mode() ? 1 : MAX_PARTY_MON;
     for (auto i = 0; i < max_num; i++) {

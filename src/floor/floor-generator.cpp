@@ -378,7 +378,7 @@ void clear_cave(PlayerType *player_ptr)
         floor_ptr->mproc_max[i] = 0;
     }
 
-    precalc_cur_num_of_pet(player_ptr);
+    precalc_cur_num_of_pet();
     for (POSITION y = 0; y < MAX_HGT; y++) {
         for (POSITION x = 0; x < MAX_WID; x++) {
             auto *g_ptr = &floor_ptr->grid_array[y][x];
