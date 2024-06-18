@@ -183,17 +183,9 @@ std::string process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
         *tpn = '\0';
         v = tmp_player_name;
     } else if (streq(b + 1, "REALM1")) {
-#ifdef JP
-        v = E_realm_names[player_ptr->realm1];
-#else
-        v = realm_names[player_ptr->realm1];
-#endif
+        v = realm_names[player_ptr->realm1].en_string();
     } else if (streq(b + 1, "REALM2")) {
-#ifdef JP
-        v = E_realm_names[player_ptr->realm2];
-#else
-        v = realm_names[player_ptr->realm2];
-#endif
+        v = realm_names[player_ptr->realm2].en_string();
     } else if (streq(b + 1, "LEVEL")) {
         v = format("%02d", player_ptr->lev);
     } else if (streq(b + 1, "AUTOREGISTER")) {

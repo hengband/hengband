@@ -209,7 +209,7 @@ static SpoilerOutputResultType spoil_player_spell()
         }
 
         for (int16_t r = 1; r < MAX_MAGIC; r++) {
-            spoil_out(format("[Realm: %s]\n", realm_names[r]));
+            spoil_out(format("[Realm: %s]\n", realm_names[r].data()));
             spoil_out("Name                     Lv Cst Dif Exp\n");
             for (SPELL_IDX i = 0; i < 32; i++) {
                 auto spell_ptr = &magic_ptr->info[r][i];

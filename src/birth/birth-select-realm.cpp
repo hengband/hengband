@@ -150,7 +150,7 @@ static void analyze_realms(const PlayerType *player_ptr, const uint32_t choices,
 
         birth_realm_ptr->sym[birth_realm_ptr->n] = I2A(birth_realm_ptr->n);
 
-        const auto buf = format("%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->n], birth_realm_ptr->p2, realm_names[i + 1]);
+        const auto buf = format("%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->n], birth_realm_ptr->p2, realm_names[i + 1].data());
         put_str(buf, 12 + (birth_realm_ptr->n / 5), 2 + 15 * (birth_realm_ptr->n % 5));
         birth_realm_ptr->picks[birth_realm_ptr->n++] = i + 1;
     }
@@ -168,10 +168,10 @@ static void move_birth_realm_cursor(birth_realm_type *birth_realm_ptr)
         birth_realm_ptr->cur = format("%c%c %s", '*', birth_realm_ptr->p2, _("ランダム", "Random"));
     } else {
         birth_realm_ptr->cur = format("%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->cs], birth_realm_ptr->p2,
-            realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]]);
-        const auto buf = format("%s", realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]]);
-        c_put_str(TERM_L_BLUE, buf, 3, 40);
-        prt(_("の特徴", ": Characteristic"), 3, 40 + buf.length());
+            realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]].data());
+        const auto &realm_name = realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]];
+        c_put_str(TERM_L_BLUE, realm_name, 3, 40);
+        prt(_("の特徴", ": Characteristic"), 3, 40 + realm_name->length());
         prt(realm_subinfo[technic2magic(birth_realm_ptr->picks[birth_realm_ptr->cs]) - 1], 4, 40);
     }
 
@@ -400,7 +400,7 @@ bool get_player_realms(PlayerType *player_ptr)
 
     if (player_ptr->realm2) {
         /* Print the realm */
-        c_put_str(TERM_L_BLUE, format("%s, %s", realm_names[player_ptr->realm1], realm_names[player_ptr->realm2]), 6, 15);
+        c_put_str(TERM_L_BLUE, format("%s, %s", realm_names[player_ptr->realm1].data(), realm_names[player_ptr->realm2].data()), 6, 15);
     }
 
     return true;

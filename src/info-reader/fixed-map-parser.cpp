@@ -175,9 +175,9 @@ static std::string parse_fixed_map_expression(PlayerType *player_ptr, char **sp,
     } else if (streq(b + 1, "CLASS")) {
         v = cp_ptr->title.en_string();
     } else if (streq(b + 1, "REALM1")) {
-        v = _(E_realm_names[player_ptr->realm1], realm_names[player_ptr->realm1]);
+        v = realm_names[player_ptr->realm1].en_string();
     } else if (streq(b + 1, "REALM2")) {
-        v = _(E_realm_names[player_ptr->realm2], realm_names[player_ptr->realm2]);
+        v = realm_names[player_ptr->realm2].en_string();
     } else if (streq(b + 1, "PLAYER")) {
         char tmp_player_name[32];
         char *pn, *tpn;

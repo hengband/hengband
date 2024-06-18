@@ -432,7 +432,7 @@ static void dump_aux_realm_history(PlayerType *player_ptr, FILE *fff)
         if (!(player_ptr->old_realm & 1UL << i)) {
             continue;
         }
-        fprintf(fff, _("\n あなたはかつて%s魔法を使えた。", "\n You were able to use %s magic before."), realm_names[i + 1]);
+        fprintf(fff, _("\n あなたはかつて%s魔法を使えた。", "\n You were able to use %s magic before."), realm_names[i + 1].data());
     }
 
     fputc('\n', fff);
