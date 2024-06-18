@@ -330,7 +330,7 @@ bool monster_arena_comm(PlayerType *player_ptr)
 
     msg_print(nullptr);
     battle_odds = std::max(*wager + 1, *wager * battle_odds / 100);
-    kakekin = *wager;
+    wager_melee = *wager;
     player_ptr->au -= *wager;
     reset_tim_flags(player_ptr);
 

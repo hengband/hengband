@@ -199,7 +199,7 @@ void WorldTurnProcessor::process_monster_arena_draw()
     }
 
     msg_print(_("申し訳ありませんが、この勝負は引き分けとさせていただきます。", "Sorry, but this battle ended in a draw."));
-    this->player_ptr->au += kakekin;
+    this->player_ptr->au += wager_melee;
     msg_print(nullptr);
     this->player_ptr->energy_need = 0;
     update_gambling_monsters(this->player_ptr);

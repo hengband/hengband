@@ -27,5 +27,5 @@ enum class MonsterRaceId : short;
 extern MonsterRaceId battle_mon_list[4];
 extern uint32_t mon_odds[4];
 extern int battle_odds;
-extern int kakekin;
+extern int wager_melee;
 extern int sel_monster;
