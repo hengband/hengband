@@ -1,5 +1,6 @@
 #pragma once
 
+#include "locale/localized-string.h"
 #include "system/angband.h"
 
 enum player_sex : byte {
@@ -9,12 +10,8 @@ enum player_sex : byte {
 };
 
 struct player_sex_type {
-    concptr title; /* Type of sex */
-    concptr winner; /* Name of winner */
-#ifdef JP
-    concptr E_title; /* 英語性別 */
-    concptr E_winner; /* 英語性別 */
-#endif
+    LocalizedString title; /* Type of sex */
+    LocalizedString winner; /* Name of winner */
 };
 
 extern const player_sex_type sex_info[MAX_SEXES];

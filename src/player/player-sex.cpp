@@ -17,17 +17,11 @@ const player_sex_type *sp_ptr;
  */
 const player_sex_type sex_info[MAX_SEXES] = {
     {
-#ifdef JP
-        "女性",
-        "クイーン",
-#endif
-        "Female",
-        "Queen" },
+        { "女性", "Female" },
+        { "クイーン", "Queen" },
+    },
     {
-#ifdef JP
-        "男性",
-        "キング",
-#endif
-        "Male",
-        "King" }
+        { "男性", "Male" },
+        { "キング", "King" },
+    },
 };

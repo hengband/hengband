@@ -60,7 +60,7 @@ static void write_birth_diary(PlayerType *player_ptr)
     const auto &floor = *player_ptr->current_floor_ptr;
     exe_write_diary(floor, DiaryKind::GAMESTART, 1, _("-------- 新規ゲーム開始 --------", "------- Started New Game -------"));
     exe_write_diary(floor, DiaryKind::DIALY, 0);
-    const auto mes_sex = format(_("%s性別に%sを選択した。", "%schose %s gender."), indent, sex_info[player_ptr->psex].title);
+    const auto mes_sex = format(_("%s性別に%sを選択した。", "%schose %s gender."), indent, sex_info[player_ptr->psex].title.data());
     exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, mes_sex);
     const auto mes_race = format(_("%s種族に%sを選択した。", "%schose %s race."), indent, race_info[enum2i(player_ptr->prace)].title.data());
     exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, mes_race);
