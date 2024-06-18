@@ -428,6 +428,9 @@
     <ClCompile Include="..\..\src\locale\japanese.cpp">
       <Filter>locale</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\locale\localized-string.cpp">
+      <Filter>locale</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\grid\grid.cpp">
       <Filter>grid</Filter>
     </ClCompile>
@@ -3891,6 +3894,9 @@
       <Filter>locale</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\locale\english.h">
+      <Filter>locale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\locale\localized-string.h">
       <Filter>locale</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\asking-player.h">

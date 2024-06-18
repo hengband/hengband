@@ -1703,6 +1703,7 @@
     <ClCompile Include="..\..\src\player\player-move.cpp" />
     <ClCompile Include="..\..\src\io\files-util.cpp" />
     <ClCompile Include="..\..\src\grid\grid.cpp" />
+    <ClCompile Include="..\..\src\locale\localized-string.cpp" />
     <ClCompile Include="..\..\src\locale\japanese.cpp" />
     <ClCompile Include="..\..\src\load\load.cpp" />
     <ClCompile Include="..\..\src\main-win.cpp" />
@@ -1931,6 +1932,7 @@
     <ClInclude Include="..\..\src\wizard\wizard-spoiler.h" />
     <ClInclude Include="..\..\src\world\world-movement-processor.h" />
     <ClInclude Include="..\..\src\world\world-turn-processor.h" />
+    <ClInclude Include="..\..\src\locale\localized-string.h" />
     <ClInclude Include="..\..\src\locale\japanese.h" />
     <ClInclude Include="..\..\src\combat\aura-counterattack.h" />
     <ClInclude Include="..\..\src\wizard\tval-descriptions-table.h" />

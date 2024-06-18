@@ -375,6 +375,7 @@ hengband_SOURCES = \
 	locale/character-encoding.h \
 	locale/english.cpp locale/english.h \
 	locale/japanese.cpp locale/japanese.h \
+	locale/localized-string.cpp locale/localized-string.h \
 	locale/utf-8.cpp locale/utf-8.h \
 	locale/language-switcher.h \
 	\
