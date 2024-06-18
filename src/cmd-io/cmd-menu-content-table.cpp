@@ -2,6 +2,7 @@
 #include "player-info/class-types.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
+#include "world/world.h"
 
 SpecialMenuContent::SpecialMenuContent(concptr name, byte window, byte number, SpecialMenuType menu_condition, std::optional<PlayerClassType> class_condition, std::optional<bool> wild_mode)
     : name(name)
@@ -11,6 +12,11 @@ SpecialMenuContent::SpecialMenuContent(concptr name, byte window, byte number, S
     , class_condition(class_condition)
     , wild_mode(wild_mode)
 {
+}
+
+bool SpecialMenuContent::matches_current_wild_mode() const
+{
+    return this->wild_mode == AngbandWorld::get_instance().is_wild_mode();
 }
 
 const std::vector<SpecialMenuContent> special_menu_info = {

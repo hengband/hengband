@@ -372,7 +372,7 @@ std::string InputKeyRequestor::switch_special_menu_condition(const SpecialMenuCo
             return "";
         }
 
-        if (AngbandWorld::get_instance().is_wild_mode() == special_menu.wild_mode) {
+        if (special_menu.matches_current_wild_mode()) {
             return std::string(special_menu.name);
         }
 
