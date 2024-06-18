@@ -71,8 +71,6 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-bool reinit_wilderness = false;
-
 /*!
  * @brief 町に関するヘルプを表示する / Display town history
  * @param player_ptr プレイヤーへの参照ポインタ

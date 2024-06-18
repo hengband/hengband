@@ -35,6 +35,7 @@ struct wilderness_type {
 };
 
 extern std::vector<std::vector<wilderness_type>> wilderness;
+extern bool reinit_wilderness;
 
 class PlayerType;
 void set_floor_and_wall(DUNGEON_IDX type);
