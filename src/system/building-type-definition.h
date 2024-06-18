@@ -1,14 +1,7 @@
 #pragma once
 
-#include "player-info/class-types.h"
-#include "player-info/race-types.h"
-#include "realm/realm-types.h"
 #include <array>
 #include <vector>
-
-constexpr auto MAX_BUILDINGS = 32; /*!< 施設の種類最大数 / Number of buildings */
-
-enum class MonsterRaceId : short;
 
 struct building_type {
     char name[20]{}; /* proprietor name */
@@ -27,5 +20,12 @@ struct building_type {
     std::vector<short> member_realm{}; /* 店主ごとの魔法領域 / which realms are part of guild */
 };
 
+constexpr auto MAX_BUILDINGS = 32; /*!< 施設の種類最大数 / Number of buildings */
 extern std::array<building_type, MAX_BUILDINGS> buildings;
+
+enum class MonsterRaceId : short;
 extern MonsterRaceId battle_mon_list[4];
+extern uint32_t mon_odds[4];
+extern int battle_odds;
+extern int kakekin;
+extern int sel_monster;

@@ -1,7 +1,7 @@
 #include "save/player-writer.h"
-#include "cmd-building/cmd-building.h"
 #include "game-option/birth-options.h"
 #include "market/arena-entry.h"
+#include "object/tval-types.h"
 #include "player-base/player-class.h"
 #include "player/player-skill.h"
 #include "save/info-writer.h"

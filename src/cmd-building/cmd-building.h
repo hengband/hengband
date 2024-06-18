@@ -11,10 +11,5 @@
 
 extern bool reinit_wilderness;
 
-extern uint32_t mon_odds[4];
-extern int battle_odds;
-extern PRICE kakekin;
-extern int sel_monster;
-
 class PlayerType;
 void do_cmd_building(PlayerType *player_ptr);

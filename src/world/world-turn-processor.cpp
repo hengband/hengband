@@ -1,5 +1,4 @@
 #include "world/world-turn-processor.h"
-#include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-save.h"
 #include "core/disturbance.h"
 #include "core/magic-effects-timeout-reducer.h"
@@ -31,6 +30,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/angband-system.h"
+#include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"

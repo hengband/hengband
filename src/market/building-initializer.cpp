@@ -2,6 +2,7 @@
 #include "floor/floor-town.h"
 #include "io/files-util.h"
 #include "player-info/class-types.h"
+#include "realm/realm-types.h"
 #include "store/articles-on-sale.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"

@@ -1,7 +1,6 @@
 #include "market/bounty.h"
 #include "autopick/autopick.h"
 #include "avatar/avatar.h"
-#include "cmd-building/cmd-building.h"
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"

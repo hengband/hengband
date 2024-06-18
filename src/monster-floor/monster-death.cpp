@@ -1,7 +1,6 @@
 #include "monster-floor/monster-death.h"
 #include "artifact/fixed-art-generator.h"
 #include "artifact/fixed-art-types.h"
-#include "cmd-building/cmd-building.h"
 #include "dungeon/quest-completion-checker.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"

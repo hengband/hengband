@@ -71,11 +71,6 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-uint32_t mon_odds[4];
-int battle_odds;
-PRICE kakekin;
-int sel_monster;
-
 bool reinit_wilderness = false;
 
 /*!
