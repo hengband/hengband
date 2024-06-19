@@ -862,6 +862,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                         /* Sniper */
                         if (snipe_type == SP_RUSH) {
                             int n = randint1(5) + 3;
+                            int n0 = n;
                             MONSTER_IDX m_idx = c_mon_ptr->m_idx;
 
                             for (; cur_dis <= tdis;) {
@@ -905,6 +906,8 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                                     lite_spot(player_ptr, oy, ox);
                                     term_fresh();
                                     term_xtra(TERM_XTRA_DELAY, delay_factor);
+                                } else if (n == n0) {
+                                    lite_spot(player_ptr, oy, ox);
                                 }
 
                                 x = nx;
