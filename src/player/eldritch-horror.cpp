@@ -128,7 +128,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
 #else
 
         if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
-            m_name = (is_a_vowel(desc[0])) ? "an " : "a ";
+            m_name = (is_a_vowel(desc.data()[0])) ? "an " : "a ";
         }
 #endif
         m_name.append(desc);

@@ -395,7 +395,7 @@ static void dump_aux_race_history(PlayerType *player_ptr, FILE *fff)
     }
 
     const auto start_race = InnerGameData::get_instance().get_start_race();
-    fprintf(fff, _("\n\n あなたは%sとして生まれた。", "\n\n You were born as %s."), race_info[enum2i(start_race)].title);
+    fprintf(fff, _("\n\n あなたは%sとして生まれた。", "\n\n You were born as %s."), race_info[enum2i(start_race)].title.data());
     for (int i = 0; i < MAX_RACES; i++) {
         if (enum2i(start_race) == i) {
             continue;
@@ -410,7 +410,7 @@ static void dump_aux_race_history(PlayerType *player_ptr, FILE *fff)
             }
         }
 
-        fprintf(fff, _("\n あなたはかつて%sだった。", "\n You were a %s before."), race_info[i].title);
+        fprintf(fff, _("\n あなたはかつて%sだった。", "\n You were a %s before."), race_info[i].title.data());
     }
 
     fputc('\n', fff);
@@ -432,7 +432,7 @@ static void dump_aux_realm_history(PlayerType *player_ptr, FILE *fff)
         if (!(player_ptr->old_realm & 1UL << i)) {
             continue;
         }
-        fprintf(fff, _("\n あなたはかつて%s魔法を使えた。", "\n You were able to use %s magic before."), realm_names[i + 1]);
+        fprintf(fff, _("\n あなたはかつて%s魔法を使えた。", "\n You were able to use %s magic before."), realm_names[i + 1].data());
     }
 
     fputc('\n', fff);

@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "locale/localized-string.h"
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/tr-types.h"
 #include "player-ability/player-ability-types.h"
@@ -67,10 +68,7 @@ struct player_race_condition {
  * @brief プレイヤー種族情報構造体 / Player racial info
  */
 struct player_race_info {
-    concptr title{}; //!< 種族名 / Title of race
-#ifdef JP
-    concptr E_title{}; //!< 英語種族名
-#endif
+    LocalizedString title; //!< 種族名 / Title of race
     concptr symbol{}; //!< 種族シンボル(救援召喚) / Race symbols
     int16_t r_adj[A_MAX]{}; //!< 能力値ボーナス / Racial stat bonuses
 

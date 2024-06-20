@@ -797,7 +797,7 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
 
     if (bi_key == BaseitemKey(ItemKindType::STATUE, SV_PHOTO)) {
         const auto &monrace = o_ptr->get_monrace();
-        const auto name_length = monrace.name.length();
+        const auto name_length = monrace.name->length();
         prt(format("%s: '", monrace.name.data()), 1, 15);
         term_queue_bigchar(18 + name_length, 1, { monrace.symbol_config, {} });
         prt("'", 1, (use_bigtile ? 20 : 19) + name_length);

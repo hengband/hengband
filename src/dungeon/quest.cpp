@@ -341,7 +341,7 @@ void quest_discovery(QuestId quest_id)
 #ifdef JP
     const auto &name = monrace.name;
 #else
-    const auto &name = (num_subjugation != 1) ? pluralize(monrace.name) : monrace.name;
+    const auto &name = (num_subjugation != 1) ? pluralize(monrace.name) : monrace.name.string();
 #endif
 
     msg_print(rand_choice(quest_entered_messages));

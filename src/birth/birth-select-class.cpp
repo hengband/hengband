@@ -68,7 +68,7 @@ static std::string display_class_stat(int cs, int *os, const std::string &cur, c
         mp_ptr = &class_magics_info[cs];
 
         c_put_str(TERM_L_BLUE, cp_ptr->title, 3, 40);
-        put_str(_("の職業修正", ": Class modification"), 3, 40 + strlen(cp_ptr->title));
+        put_str(_("の職業修正", ": Class modification"), 3, 40 + cp_ptr->title->length());
         put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
         const auto stats = format("%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", cp_ptr->c_adj[0], cp_ptr->c_adj[1], cp_ptr->c_adj[2], cp_ptr->c_adj[3], cp_ptr->c_adj[4], cp_ptr->c_adj[5], cp_ptr->c_exp);
         c_put_str(TERM_L_BLUE, stats, 5, 40);

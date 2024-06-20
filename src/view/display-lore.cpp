@@ -559,7 +559,7 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
         hooked_roff(format("、 %s 体の%s", num_dice.to_string().data(), rf_ptr->name.data()));
 #else
         const auto plural = (num_dice.maxroll() > 1);
-        const auto &name = plural ? pluralize(rf_ptr->name) : rf_ptr->name;
+        const auto &name = plural ? pluralize(rf_ptr->name) : rf_ptr->name.string();
         hooked_roff(format("%s%s %s", prefix, num_dice.to_string().data(), name.data()));
 #endif
     }

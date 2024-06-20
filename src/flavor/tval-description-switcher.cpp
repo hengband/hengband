@@ -37,7 +37,7 @@ static std::pair<std::string, std::string> describe_monster_ball(const ItemEntit
 #else
     std::string monrace_name;
     if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        monrace_name = format(" (%s%s)", (is_a_vowel(monrace.name[0]) ? "an " : "a "), monrace.name.data());
+        monrace_name = format(" (%s%s)", (is_a_vowel(monrace.name.data()[0]) ? "an " : "a "), monrace.name.data());
     } else {
         monrace_name = format(" (%s)", monrace.name.data());
     }
@@ -50,11 +50,11 @@ static std::pair<std::string, std::string> describe_statue(const ItemEntity &ite
     const auto &basename = item.get_baseitem().name;
     const auto &monrace = item.get_monrace();
 #ifdef JP
-    const auto &monrace_name = monrace.name;
+    const auto &monrace_name = monrace.name.string();
 #else
     std::string monrace_name;
     if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        monrace_name = format("%s%s", (is_a_vowel(monrace.name[0]) ? "an " : "a "), monrace.name.data());
+        monrace_name = format("%s%s", (is_a_vowel(monrace.name.data()[0]) ? "an " : "a "), monrace.name.data());
     } else {
         monrace_name = monrace.name;
     }
@@ -73,7 +73,7 @@ static std::pair<std::string, std::string> describe_corpse(const ItemEntity &ite
             ? "& % of #"
             : "& # %";
 #endif
-    return { basename, monrace.name };
+    return { basename, monrace.name.string() };
 }
 
 /*!

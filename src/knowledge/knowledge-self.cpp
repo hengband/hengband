@@ -68,27 +68,27 @@ static void dump_yourself(PlayerType *player_ptr, FILE *fff)
     }
 
     fprintf(fff, "\n\n");
-    fprintf(fff, _("種族: %s\n", "Race: %s\n"), race_info[enum2i(player_ptr->prace)].title);
+    fprintf(fff, _("種族: %s\n", "Race: %s\n"), race_info[enum2i(player_ptr->prace)].title.data());
     dump_explanation(race_explanations[enum2i(player_ptr->prace)], fff);
 
     fprintf(fff, "\n");
-    fprintf(fff, _("職業: %s\n", "Class: %s\n"), class_info.at(player_ptr->pclass).title);
+    fprintf(fff, _("職業: %s\n", "Class: %s\n"), class_info.at(player_ptr->pclass).title.data());
     auto short_pclass = enum2i(player_ptr->pclass);
     dump_explanation(class_explanations[short_pclass].data(), fff);
 
     fprintf(fff, "\n");
-    fprintf(fff, _("性格: %s\n", "Pesonality: %s\n"), personality_info[player_ptr->ppersonality].title);
+    fprintf(fff, _("性格: %s\n", "Pesonality: %s\n"), personality_info[player_ptr->ppersonality].title.data());
     dump_explanation(personality_explanations[player_ptr->ppersonality], fff);
 
     fprintf(fff, "\n");
     if (player_ptr->realm1) {
-        fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[player_ptr->realm1]);
+        fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[player_ptr->realm1].data());
         dump_explanation(realm_explanations[technic2magic(player_ptr->realm1) - 1], fff);
     }
 
     fprintf(fff, "\n");
     if (player_ptr->realm2) {
-        fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[player_ptr->realm2]);
+        fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[player_ptr->realm2].data());
         dump_explanation(realm_explanations[technic2magic(player_ptr->realm2) - 1], fff);
     }
 }
@@ -117,7 +117,7 @@ static void dump_winner_classes(FILE *fff)
         }
 
         auto &player_class = class_info.at(i2enum<PlayerClassType>(c));
-        std::string t = player_class.title;
+        std::string t = player_class.title.string();
         if (world.sf_retired.has_not(pclass_enum)) {
             t = "(" + t + ")";
         }

@@ -60,15 +60,15 @@ static void write_birth_diary(PlayerType *player_ptr)
     const auto &floor = *player_ptr->current_floor_ptr;
     exe_write_diary(floor, DiaryKind::GAMESTART, 1, _("-------- 新規ゲーム開始 --------", "------- Started New Game -------"));
     exe_write_diary(floor, DiaryKind::DIALY, 0);
-    const auto mes_sex = format(_("%s性別に%sを選択した。", "%schose %s gender."), indent, sex_info[player_ptr->psex].title);
+    const auto mes_sex = format(_("%s性別に%sを選択した。", "%schose %s gender."), indent, sex_info[player_ptr->psex].title.data());
     exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, mes_sex);
-    const auto mes_race = format(_("%s種族に%sを選択した。", "%schose %s race."), indent, race_info[enum2i(player_ptr->prace)].title);
+    const auto mes_race = format(_("%s種族に%sを選択した。", "%schose %s race."), indent, race_info[enum2i(player_ptr->prace)].title.data());
     exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, mes_race);
-    const auto mes_class = format(_("%s職業に%sを選択した。", "%schose %s class."), indent, class_info.at(player_ptr->pclass).title);
+    const auto mes_class = format(_("%s職業に%sを選択した。", "%schose %s class."), indent, class_info.at(player_ptr->pclass).title.data());
     exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, mes_class);
     if (player_ptr->realm1) {
-        const auto mes_realm2 = player_ptr->realm2 ? format(_("と%s", " and %s realms"), realm_names[player_ptr->realm2]) : _("", " realm");
-        const auto mes_realm = format(_("%s魔法の領域に%s%sを選択した。", "%schose %s%s."), indent, realm_names[player_ptr->realm1], mes_realm2.data());
+        const auto mes_realm2 = player_ptr->realm2 ? format(_("と%s", " and %s realms"), realm_names[player_ptr->realm2].data()) : _("", " realm");
+        const auto mes_realm = format(_("%s魔法の領域に%s%sを選択した。", "%schose %s%s."), indent, realm_names[player_ptr->realm1].data(), mes_realm2.data());
         exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, mes_realm);
     }
 
@@ -77,7 +77,7 @@ static void write_birth_diary(PlayerType *player_ptr)
         exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, mes_element);
     }
 
-    const auto mes_personality = format(_("%s性格に%sを選択した。", "%schose %s personality."), indent, personality_info[player_ptr->ppersonality].title);
+    const auto mes_personality = format(_("%s性格に%sを選択した。", "%schose %s personality."), indent, personality_info[player_ptr->ppersonality].title.data());
     exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, mes_personality);
     if (PlayerClass(player_ptr).equals(PlayerClassType::CHAOS_WARRIOR)) {
         const auto fmt_patron = _("%s守護神%sと契約を交わした。", "%smade a contract with patron %s.");

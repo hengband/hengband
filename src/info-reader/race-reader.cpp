@@ -118,10 +118,9 @@ static errr set_mon_name(const nlohmann::json &name_data, MonsterRaceInfo &monra
     if (!ja_name_sys) {
         return PARSE_ERROR_INVALID_FLAG;
     }
-    monrace.name = std::move(*ja_name_sys);
-    monrace.E_name = en_name;
+    monrace.name = { *ja_name_sys, en_name };
 #else
-    monrace.name = en_name;
+    monrace.name = { "", en_name };
 #endif
     return PARSE_ERROR_NONE;
 }

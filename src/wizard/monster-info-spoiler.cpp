@@ -177,7 +177,7 @@ SpoilerOutputResultType spoil_mon_info()
             spoil_out("[N] ");
         }
 
-        spoil_out(format(_("%s/%s  (", "%s%s ("), monrace.name.data(), _(monrace.E_name.data(), ""))); /* ---)--- */
+        spoil_out(format(_("%s/%s  (", "%s%s ("), monrace.name.data(), _(monrace.name.en_string().data(), ""))); /* ---)--- */
         spoil_out(attr_to_text(monrace));
         spoil_out(format(" '%c')\n", monrace.symbol_definition.character));
         spoil_out("=== ");

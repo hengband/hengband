@@ -206,7 +206,7 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
         fprintf(fff, "     %3d %sの %s\n", this_monster, number_of_kills, monrace.name.data());
 #else
         if (this_monster < 2) {
-            if (monrace.name.find("coins") != std::string::npos) {
+            if (monrace.name->find("coins") != std::string::npos) {
                 fprintf(fff, "     1 pile of %s\n", monrace.name.data());
             } else {
                 fprintf(fff, "     1 %s\n", monrace.name.data());

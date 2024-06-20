@@ -705,7 +705,7 @@ static void change_realm2(PlayerType *player_ptr, int16_t next_realm)
     player_ptr->spell_forgotten2 = 0L;
 
     constexpr auto fmt_realm = _("魔法の領域を%sから%sに変更した。", "changed magic realm from %s to %s.");
-    const auto mes = format(fmt_realm, realm_names[player_ptr->realm2], realm_names[next_realm]);
+    const auto mes = format(fmt_realm, realm_names[player_ptr->realm2].data(), realm_names[next_realm].data());
     exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::DESCRIPTION, 0, mes);
     player_ptr->old_realm |= 1U << (player_ptr->realm2 - 1);
     player_ptr->realm2 = next_realm;

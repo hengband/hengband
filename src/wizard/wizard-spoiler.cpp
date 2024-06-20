@@ -184,7 +184,7 @@ static SpoilerOutputResultType spoil_player_spell()
     dummy_p.lev = 1;
     for (auto c = 0; c < PLAYER_CLASS_TYPE_MAX; c++) {
         auto class_ptr = &class_info.at(i2enum<PlayerClassType>(c));
-        spoil_out(format("[[Class: %s]]\n", class_ptr->title));
+        spoil_out(format("[[Class: %s]]\n", class_ptr->title.data()));
 
         auto magic_ptr = &class_magics_info[c];
         std::string book_name = _("なし", "None");
@@ -209,7 +209,7 @@ static SpoilerOutputResultType spoil_player_spell()
         }
 
         for (int16_t r = 1; r < MAX_MAGIC; r++) {
-            spoil_out(format("[Realm: %s]\n", realm_names[r]));
+            spoil_out(format("[Realm: %s]\n", realm_names[r].data()));
             spoil_out("Name                     Lv Cst Dif Exp\n");
             for (SPELL_IDX i = 0; i < 32; i++) {
                 auto spell_ptr = &magic_ptr->info[r][i];
