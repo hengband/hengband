@@ -147,7 +147,6 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     TERM_LEN column = 0;
     bool flag = false;
     bool redraw = true;
-    DisplaySymbol symbol_orig;
     const auto is_wizard = AngbandWorld::get_instance().wizard;
     auto &terrains = TerrainList::get_instance();
     auto &symbols_cb = DisplaySymbolsClipboard::get_instance();
@@ -224,7 +223,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             hgt - 1, 0);
 
         auto &terrain = terrains.get_terrain(feat_idx[feat_cur]);
-        symbol_orig = terrain.symbol_configs.at(*lighting_level);
+        auto &symbol_orig = terrain.symbol_configs.at(*lighting_level);
         if (visual_list) {
             place_visual_list_cursor(max_length + 3, 7, symbol_orig.color, static_cast<uint8_t>(symbol_orig.character), attr_top, char_left);
         } else if (!column) {
