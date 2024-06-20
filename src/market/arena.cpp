@@ -1,5 +1,4 @@
 #include "market/arena.h"
-#include "cmd-building/cmd-building.h"
 #include "core/asking-player.h"
 #include "core/show-file.h"
 #include "core/stuff-handler.h"
@@ -296,8 +295,8 @@ bool monster_arena_comm(PlayerType *player_ptr)
         }
 
         if (i >= '1' && i <= '4') {
-            sel_monster = i - '1';
-            battle_odds = mon_odds[sel_monster];
+            bet_number = i - '1';
+            battle_odds = mon_odds[bet_number];
             break;
         }
 
@@ -308,7 +307,7 @@ bool monster_arena_comm(PlayerType *player_ptr)
 
     clear_bldg(4, 4);
     for (int i = 0; i < 4; i++) {
-        if (i != sel_monster) {
+        if (i != bet_number) {
             clear_bldg(i + 5, i + 5);
         }
     }
@@ -331,7 +330,7 @@ bool monster_arena_comm(PlayerType *player_ptr)
 
     msg_print(nullptr);
     battle_odds = std::max(*wager + 1, *wager * battle_odds / 100);
-    kakekin = *wager;
+    wager_melee = *wager;
     player_ptr->au -= *wager;
     reset_tim_flags(player_ptr);
 

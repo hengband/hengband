@@ -53,6 +53,9 @@
 constexpr auto MAX_FEAT_IN_TERRAIN = 18;
 
 std::vector<std::vector<wilderness_type>> wilderness;
+
+bool reinit_wilderness = false;
+
 static bool generate_encounter;
 
 struct border_type {

@@ -71,13 +71,6 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-uint32_t mon_odds[4];
-int battle_odds;
-PRICE kakekin;
-int sel_monster;
-
-bool reinit_wilderness = false;
-
 /*!
  * @brief 町に関するヘルプを表示する / Display town history
  * @param player_ptr プレイヤーへの参照ポインタ

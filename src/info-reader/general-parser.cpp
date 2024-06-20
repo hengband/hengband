@@ -8,6 +8,8 @@
 #include "io/tokenizer.h"
 #include "main/angband-headers.h"
 #include "object-enchant/trg-types.h"
+#include "player-info/class-types.h"
+#include "player-info/race-types.h"
 #include "realm/realm-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info.h"

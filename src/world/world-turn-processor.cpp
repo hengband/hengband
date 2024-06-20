@@ -1,5 +1,4 @@
 #include "world/world-turn-processor.h"
-#include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-save.h"
 #include "core/disturbance.h"
 #include "core/magic-effects-timeout-reducer.h"
@@ -31,6 +30,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/angband-system.h"
+#include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -178,7 +178,7 @@ void WorldTurnProcessor::process_monster_arena_winner(int win_m_idx)
     msg_format(_("%sが勝利した！", "%s won!"), m_name.data());
     msg_print(nullptr);
 
-    if (win_m_idx == (sel_monster + 1)) {
+    if (win_m_idx == (bet_number + 1)) {
         msg_print(_("おめでとうございます。", "Congratulations."));
         msg_format(_("%d＄を受け取った。", "You received %d gold."), battle_odds);
         this->player_ptr->au += battle_odds;
@@ -199,7 +199,7 @@ void WorldTurnProcessor::process_monster_arena_draw()
     }
 
     msg_print(_("申し訳ありませんが、この勝負は引き分けとさせていただきます。", "Sorry, but this battle ended in a draw."));
-    this->player_ptr->au += kakekin;
+    this->player_ptr->au += wager_melee;
     msg_print(nullptr);
     this->player_ptr->energy_need = 0;
     update_gambling_monsters(this->player_ptr);

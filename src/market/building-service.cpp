@@ -1,5 +1,4 @@
 #include "market/building-service.h"
-#include "cmd-building/cmd-building.h"
 #include "player-base/player-class.h"
 #include "realm/realm-names-table.h"
 #include "system/building-type-definition.h"
@@ -19,17 +18,18 @@
  */
 bool is_owner(PlayerType *player_ptr, building_type *bldg)
 {
-    if (bldg->member_class[enum2i(player_ptr->pclass)] == BUILDING_OWNER) {
+    constexpr auto building_owner = 2;
+    if (bldg->member_class[enum2i(player_ptr->pclass)] == building_owner) {
         return true;
     }
 
-    if (bldg->member_race[enum2i(player_ptr->prace)] == BUILDING_OWNER) {
+    if (bldg->member_race[enum2i(player_ptr->prace)] == building_owner) {
         return true;
     }
 
     int16_t realm1 = player_ptr->realm1;
     int16_t realm2 = player_ptr->realm2;
-    if ((is_magic(realm1) && (bldg->member_realm[realm1] == BUILDING_OWNER)) || (is_magic(realm2) && (bldg->member_realm[realm2] == BUILDING_OWNER))) {
+    if ((is_magic(realm1) && (bldg->member_realm[realm1] == building_owner)) || (is_magic(realm2) && (bldg->member_realm[realm2] == building_owner))) {
         return true;
     }
 

@@ -1,5 +1,4 @@
 #include "dungeon/dungeon-processor.h"
-#include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/disturbance.h"
 #include "core/object-compressor.h"
@@ -11,6 +10,7 @@
 #include "floor/floor-leaver.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
+#include "floor/wild.h"
 #include "game-option/cheat-options.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/play-record-options.h"

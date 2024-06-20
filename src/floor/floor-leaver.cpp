@@ -1,5 +1,4 @@
 #include "floor/floor-leaver.h"
-#include "cmd-building/cmd-building.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-events.h"
@@ -8,6 +7,7 @@
 #include "floor/floor-save.h"
 #include "floor/geometry.h"
 #include "floor/line-of-sight.h"
+#include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "grid/grid.h"
