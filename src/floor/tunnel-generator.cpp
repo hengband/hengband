@@ -146,7 +146,7 @@ bool build_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, dt_type *dt_ptr
                 door_flag = true;
             }
 
-            if (randint0(100) >= dt_ptr->dun_tun_con) {
+            if (!magik(dt_ptr->dun_tun_con)) {
                 tmp_row = row1 - start_row;
                 if (tmp_row < 0) {
                     tmp_row = (-tmp_row);

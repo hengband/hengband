@@ -493,7 +493,7 @@ void MonsterDamageProcessor::add_monster_fear()
     }
 
     int percentage = (100L * m_ptr->hp) / m_ptr->maxhp;
-    if ((randint1(10) < percentage) && ((this->dam < m_ptr->hp) || (randint0(100) >= 80))) {
+    if ((randint1(10) < percentage) && ((this->dam < m_ptr->hp) || magik(20))) {
         return;
     }
 

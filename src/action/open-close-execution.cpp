@@ -73,7 +73,7 @@ bool exe_open(PlayerType *player_ptr, POSITION y, POSITION x)
         j = 2;
     }
 
-    if (randint0(100) >= j) {
+    if (!magik(j)) {
         if (flush_failure) {
             flush();
         }

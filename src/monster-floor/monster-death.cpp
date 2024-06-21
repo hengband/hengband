@@ -149,7 +149,7 @@ static void drop_artifact_from_unique(PlayerType *player_ptr, MonsterDeath *md_p
 {
     const auto is_wizard = AngbandWorld::get_instance().wizard;
     for (const auto &[a_idx, chance] : md_ptr->r_ptr->drop_artifacts) {
-        if (!is_wizard && (randint0(100) >= chance)) {
+        if (!is_wizard && !magik(chance)) {
             continue;
         }
 

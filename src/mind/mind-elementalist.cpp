@@ -866,7 +866,7 @@ static bool check_element_mp_sufficiency(PlayerType *player_ptr, int mana_cost)
  */
 static bool try_cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx, PERCENTAGE chance)
 {
-    if (randint0(100) >= chance) {
+    if (!magik(chance)) {
         sound(SOUND_ZAP);
         return cast_element_spell(player_ptr, spell_idx);
     }
