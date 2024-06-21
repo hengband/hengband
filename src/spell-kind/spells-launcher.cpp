@@ -260,7 +260,7 @@ bool fire_beam(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam
  */
 bool fire_bolt_or_beam(PlayerType *player_ptr, PERCENTAGE prob, AttributeType typ, DIRECTION dir, int dam)
 {
-    if (randint0(100) < prob) {
+    if (magik(prob)) {
         return (fire_beam(player_ptr, typ, dir, dam));
     }
 

@@ -355,7 +355,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
 #endif
     const auto &world = AngbandWorld::get_instance();
     const auto item_name = describe_flavor(player_ptr, j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    if (!j_ptr->is_fixed_or_random_artifact() && (randint0(100) < chance)) {
+    if (!j_ptr->is_fixed_or_random_artifact() && magik(chance)) {
 #ifdef JP
         msg_format("%sは消えた。", item_name.data());
 #else

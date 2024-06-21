@@ -155,28 +155,28 @@ bool get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx, int *mm)
  */
 static bool random_walk(PlayerType *player_ptr, DIRECTION *mm, MonsterEntity *m_ptr)
 {
-    auto *r_ptr = &m_ptr->get_monrace();
-    if (r_ptr->behavior_flags.has_all_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 }) && (randint0(100) < 75)) {
+    auto &monrace = m_ptr->get_monrace();
+    if (monrace.behavior_flags.has_all_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 }) && magik(75)) {
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-            r_ptr->r_behavior_flags.set({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 });
+            monrace.r_behavior_flags.set({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 });
         }
 
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         return true;
     }
 
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && (randint0(100) < 50)) {
+    if (monrace.behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && one_in_(2)) {
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-            r_ptr->r_behavior_flags.set(MonsterBehaviorType::RAND_MOVE_50);
+            monrace.r_behavior_flags.set(MonsterBehaviorType::RAND_MOVE_50);
         }
 
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         return true;
     }
 
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25) && (randint0(100) < 25)) {
+    if (monrace.behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25) && one_in_(4)) {
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-            r_ptr->r_behavior_flags.set(MonsterBehaviorType::RAND_MOVE_25);
+            monrace.r_behavior_flags.set(MonsterBehaviorType::RAND_MOVE_25);
         }
 
         mm[0] = mm[1] = mm[2] = mm[3] = 5;

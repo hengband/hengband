@@ -105,7 +105,7 @@ bool bless_weapon(PlayerType *player_ptr)
             dis_happened = true;
         }
 
-        if ((o_ptr->to_h > 5) && (randint0(100) < 33)) {
+        if ((o_ptr->to_h > 5) && magik(33)) {
             o_ptr->to_h--;
         }
 
@@ -115,7 +115,7 @@ bool bless_weapon(PlayerType *player_ptr)
             dis_happened = true;
         }
 
-        if ((o_ptr->to_d > 5) && (randint0(100) < 33)) {
+        if ((o_ptr->to_d > 5) && magik(33)) {
             o_ptr->to_d--;
         }
 
@@ -125,7 +125,7 @@ bool bless_weapon(PlayerType *player_ptr)
             dis_happened = true;
         }
 
-        if ((o_ptr->to_a > 5) && (randint0(100) < 33)) {
+        if ((o_ptr->to_a > 5) && magik(33)) {
             o_ptr->to_a--;
         }
 

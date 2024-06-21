@@ -72,7 +72,7 @@ static void check_mspell_smart(const FloorType &floor, msa_type *msa_ptr)
         return;
     }
 
-    if ((msa_ptr->m_ptr->hp < msa_ptr->m_ptr->maxhp / 10) && (randint0(100) < 50)) {
+    if ((msa_ptr->m_ptr->hp < msa_ptr->m_ptr->maxhp / 10) && one_in_(2)) {
         msa_ptr->ability_flags &= RF_ABILITY_INT_MASK;
     }
 
@@ -190,7 +190,7 @@ static bool check_mspell_unexploded(PlayerType *player_ptr, msa_type *msa_ptr)
         fail_rate = 0;
     }
 
-    if (!spell_is_inate(msa_ptr->thrown_spell) && (msa_ptr->in_no_magic_dungeon || (msa_ptr->m_ptr->get_remaining_stun() && one_in_(2)) || (randint0(100) < fail_rate))) {
+    if (!spell_is_inate(msa_ptr->thrown_spell) && (msa_ptr->in_no_magic_dungeon || (msa_ptr->m_ptr->get_remaining_stun() && one_in_(2)) || magik(fail_rate))) {
         disturb(player_ptr, true, true);
         msg_format(_("%s^は呪文を唱えようとしたが失敗した。", "%s^ tries to cast a spell, but fails."), msa_ptr->m_name.data());
         return true;

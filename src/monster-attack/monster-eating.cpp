@@ -37,7 +37,7 @@
 void process_eat_gold(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     const auto is_paralyzed = player_ptr->effects()->paralysis().is_paralyzed();
-    if (!is_paralyzed && (randint0(100) < (adj_dex_safe[player_ptr->stat_index[A_DEX]] + player_ptr->lev))) {
+    if (!is_paralyzed && magik((adj_dex_safe[player_ptr->stat_index[A_DEX]] + player_ptr->lev))) {
         msg_print(_("しかし素早く財布を守った！", "You quickly protect your money pouch!"));
         if (randint0(3)) {
             monap_ptr->blinked = true;
@@ -95,7 +95,7 @@ bool check_eat_item(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
     }
 
     const auto is_paralyzed = player_ptr->effects()->paralysis().is_paralyzed();
-    if (!is_paralyzed && (randint0(100) < (adj_dex_safe[player_ptr->stat_index[A_DEX]] + player_ptr->lev))) {
+    if (!is_paralyzed && magik((adj_dex_safe[player_ptr->stat_index[A_DEX]] + player_ptr->lev))) {
         msg_print(_("しかしあわててザックを取り返した！", "You grab hold of your backpack!"));
         monap_ptr->blinked = true;
         monap_ptr->obvious = true;

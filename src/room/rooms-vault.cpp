@@ -381,7 +381,7 @@ static void build_vault(
 
                 /* Treasure/trap */
             case '*':
-                if (randint0(100) < 75) {
+                if (magik(75)) {
                     place_object(player_ptr, y, x, 0L);
                 } else {
                     place_trap(floor_ptr, y, x);
@@ -580,12 +580,12 @@ static void build_vault(
 
             /* Monster and/or object */
             case ',': {
-                if (randint0(100) < 50) {
+                if (one_in_(2)) {
                     floor_ptr->monster_level = floor_ptr->base_level + 3;
                     place_random_monster(player_ptr, y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
                     floor_ptr->monster_level = floor_ptr->base_level;
                 }
-                if (randint0(100) < 50) {
+                if (one_in_(2)) {
                     floor_ptr->object_level = floor_ptr->base_level + 7;
                     place_object(player_ptr, y, x, 0L);
                     floor_ptr->object_level = floor_ptr->base_level;

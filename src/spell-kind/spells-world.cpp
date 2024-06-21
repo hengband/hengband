@@ -75,7 +75,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     bool go_up;
-    if (randint0(100) < 50) {
+    if (one_in_(2)) {
         go_up = true;
     } else {
         go_up = false;

@@ -95,7 +95,7 @@ void stair_creation(PlayerType *player_ptr)
     }
 
     if (up && down) {
-        if (randint0(100) < 50) {
+        if (one_in_(2)) {
             up = false;
         } else {
             down = false;

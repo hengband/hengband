@@ -315,7 +315,7 @@ void MonsterAttackPlayer::select_cut_stun()
         return;
     }
 
-    if (randint0(100) < 50) {
+    if (one_in_(2)) {
         this->do_cut = 0;
     } else {
         this->do_stun = 0;

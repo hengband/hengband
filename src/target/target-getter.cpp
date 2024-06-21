@@ -153,7 +153,7 @@ std::optional<int> get_direction(PlayerType *player_ptr)
         repeat_push(static_cast<short>(command_dir));
     });
     const auto is_confused = player_ptr->effects()->confusion().is_confused();
-    if (is_confused && (randint0(100) < 75)) {
+    if (is_confused && magik(75)) {
         dir = ddd[randint0(8)];
     }
 
@@ -252,19 +252,19 @@ bool get_rep_dir(PlayerType *player_ptr, int *dp, bool under)
     command_dir = dir;
     auto is_confused = player_ptr->effects()->confusion().is_confused();
     if (is_confused) {
-        if (randint0(100) < 75) {
+        if (magik(75)) {
             dir = ddd[randint0(8)];
         }
     } else if (player_ptr->riding) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
         auto *r_ptr = &m_ptr->get_monrace();
         if (m_ptr->is_confused()) {
-            if (randint0(100) < 75) {
+            if (magik(75)) {
                 dir = ddd[randint0(8)];
             }
-        } else if (r_ptr->behavior_flags.has_all_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 }) && (randint0(100) < 50)) {
+        } else if (r_ptr->behavior_flags.has_all_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 }) && one_in_(2)) {
             dir = ddd[randint0(8)];
-        } else if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && (randint0(100) < 25)) {
+        } else if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && one_in_(4)) {
             dir = ddd[randint0(8)];
         }
     }

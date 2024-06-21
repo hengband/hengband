@@ -362,7 +362,7 @@ static void mind_reflection(PlayerType *player_ptr, cm_type *cm_ptr)
         return;
     }
 
-    bool perm = randint0(100) < 25;
+    const auto perm = one_in_(4);
     msg_print(_("自分の精神を攻撃してしまった！", "You have damaged your mind!"));
     (void)dec_stat(player_ptr, A_WIS, 15 + randint1(10), perm);
 }

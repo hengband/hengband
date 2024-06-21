@@ -114,7 +114,7 @@ void blood_curse_to_enemy(PlayerType *player_ptr, MONSTER_IDX m_idx)
         case 23:
         case 24:
         case 25:
-            if (player_ptr->hold_exp && (randint0(100) < 75)) {
+            if (player_ptr->hold_exp && magik(75)) {
                 break;
             }
 

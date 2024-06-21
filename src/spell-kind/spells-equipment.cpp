@@ -48,7 +48,7 @@ bool apply_disenchant(PlayerType *player_ptr, BIT_FLAGS mode)
     }
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    if (o_ptr->is_fixed_or_random_artifact() && (randint0(100) < 71)) {
+    if (o_ptr->is_fixed_or_random_artifact() && magik(71)) {
 #ifdef JP
         msg_format("%s(%c)は劣化を跳ね返した！", item_name.data(), index_to_label(t));
 #else
@@ -65,21 +65,21 @@ bool apply_disenchant(PlayerType *player_ptr, BIT_FLAGS mode)
     if (o_ptr->to_h > 0) {
         o_ptr->to_h--;
     }
-    if ((o_ptr->to_h > 5) && (randint0(100) < 20)) {
+    if ((o_ptr->to_h > 5) && one_in_(5)) {
         o_ptr->to_h--;
     }
 
     if (o_ptr->to_d > 0) {
         o_ptr->to_d--;
     }
-    if ((o_ptr->to_d > 5) && (randint0(100) < 20)) {
+    if ((o_ptr->to_d > 5) && one_in_(5)) {
         o_ptr->to_d--;
     }
 
     if (o_ptr->to_a > 0) {
         o_ptr->to_a--;
     }
-    if ((o_ptr->to_a > 5) && (randint0(100) < 20)) {
+    if ((o_ptr->to_a > 5) && one_in_(5)) {
         o_ptr->to_a--;
     }
 

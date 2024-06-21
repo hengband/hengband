@@ -918,8 +918,8 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     auto wish_randart = false;
     auto wish_ego = false;
     auto exam_base = true;
-    auto ok_art = randint0(100) < prob;
-    auto ok_ego = randint0(100) < 50 + prob;
+    auto ok_art = magik(prob);
+    auto ok_ego = magik(50 + prob);
     auto must = prob < 0;
     auto blessed = false;
     auto fixed = true;

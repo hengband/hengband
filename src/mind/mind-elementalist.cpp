@@ -333,7 +333,7 @@ static AttributeType get_element_spells_type(PlayerType *player_ptr, int n)
     const auto &realm = element_types.at(i2enum<ElementRealmType>(player_ptr->element));
     const auto t = realm.type.at(n);
     if (realm.extra.find(t) != realm.extra.end()) {
-        if (randint0(100) < player_ptr->lev * 2) {
+        if (magik(player_ptr->lev * 2)) {
             return realm.extra.at(t);
         }
     }
@@ -932,8 +932,8 @@ void do_cmd_element(PlayerType *player_ptr)
         msg_print(_("精神を集中しすぎて気を失ってしまった！", "You faint from the effort!"));
         (void)BadStatusSetter(player_ptr).mod_paralysis(randnum1<short>(5 * oops + 1));
         chg_virtue(player_ptr, Virtue::KNOWLEDGE, -10);
-        if (randint0(100) < 50) {
-            bool perm = (randint0(100) < 25);
+        if (one_in_(2)) {
+            const auto perm = one_in_(4);
             msg_print(_("体を悪くしてしまった！", "You have damaged your health!"));
             (void)dec_stat(player_ptr, A_CON, 15 + randint1(10), perm);
         }

@@ -148,7 +148,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
              * Random trap and random treasure defined
              * 25% chance for trap and 75% chance for object
              */
-            if (randint0(100) < 75) {
+            if (magik(75)) {
                 place_object(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, 0L);
             } else {
                 place_trap(floor_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
@@ -157,9 +157,9 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             floor_ptr->object_level = floor_ptr->base_level;
         } else if (random & RANDOM_OBJECT) {
             floor_ptr->object_level = floor_ptr->base_level + object_index;
-            if (randint0(100) < 75) {
+            if (magik(75)) {
                 place_object(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, 0L);
-            } else if (randint0(100) < 80) {
+            } else if (magik(80)) {
                 place_object(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, AM_GOOD);
             } else {
                 place_object(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, AM_GOOD | AM_GREAT);
