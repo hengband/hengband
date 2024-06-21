@@ -73,7 +73,8 @@ void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBE
         return;
     }
 
-    if (has_melee_weapon(player_ptr, enum2i(INVEN_MAIN_HAND + INVEN_SUB_HAND) - i_idx)) {
+    const auto opposite_hand = (i_idx == INVEN_MAIN_HAND) ? INVEN_SUB_HAND : INVEN_MAIN_HAND;
+    if (has_melee_weapon(player_ptr, enum2i(opposite_hand))) {
         return;
     }
 
