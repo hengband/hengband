@@ -111,6 +111,10 @@ static void set_race_flags(lore_type *lore_ptr)
         lore_ptr->kind_flags.set(MonsterKindType::QUANTUM);
     }
 
+    if (lore_ptr->r_ptr->kind_flags.has(MonsterKindType::ANGEL)) {
+        lore_ptr->kind_flags.set(MonsterKindType::ANGEL);
+    }
+
     if (lore_ptr->r_ptr->misc_flags.has(MonsterMiscType::FORCE_DEPTH)) {
         lore_ptr->misc_flags.set(MonsterMiscType::FORCE_DEPTH);
     }
