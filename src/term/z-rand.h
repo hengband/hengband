@@ -101,11 +101,6 @@ int randint1(T max)
  */
 #define one_in_(X) (randint0(X) == 0)
 
-/*
- * Evaluate to TRUE "S" percent of the time
- */
-#define saving_throw(S) (randint0(100) < (S))
-
 void Rand_state_init();
 int16_t randnor(int mean, int stand);
 int32_t div_round(int32_t n, int32_t d);
