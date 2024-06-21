@@ -155,34 +155,29 @@ bool arena_comm(PlayerType *player_ptr, int cmd)
  */
 void update_gambling_monsters(PlayerType *player_ptr)
 {
-    int total, i;
-    int max_dl = 0;
-    int mon_level;
-    int power[4];
-    bool tekitou;
-
-    for (const auto &d_ref : dungeons_info) {
-        if (max_dl < max_dlv[d_ref.idx]) {
-            max_dl = max_dlv[d_ref.idx];
+    auto max_dl = 0;
+    for (const auto &dungeon : dungeons_info) {
+        if (max_dl < max_dlv[dungeon.idx]) {
+            max_dl = max_dlv[dungeon.idx];
         }
     }
 
-    mon_level = randint1(std::min(max_dl, 122)) + 5;
+    auto mon_level = randint1(std::min(max_dl, 122)) + 5;
     if (evaluate_percent(60)) {
-        i = randint1(std::min(max_dl, 122)) + 5;
+        auto i = randint1(std::min(max_dl, 122)) + 5;
         mon_level = std::max(i, mon_level);
     }
 
     if (evaluate_percent(30)) {
-        i = randint1(std::min(max_dl, 122)) + 5;
+        auto i = randint1(std::min(max_dl, 122)) + 5;
         mon_level = std::max(i, mon_level);
     }
 
     const auto &monraces = MonraceList::get_instance();
     while (true) {
-        total = 0;
-        tekitou = false;
-        for (i = 0; i < 4; i++) {
+        auto total = 0;
+        auto is_applicable = false;
+        for (auto i = 0; i < 4; i++) {
             MonsterRaceId monrace_id;
             int j;
             while (true) {
@@ -204,6 +199,7 @@ void update_gambling_monsters(PlayerType *player_ptr)
                         break;
                     }
                 }
+
                 if (j < i) {
                     continue;
                 }
@@ -213,28 +209,33 @@ void update_gambling_monsters(PlayerType *player_ptr)
 
             battle_mon_list[i] = monrace_id;
             if (monraces.get_monrace(monrace_id).level < 45) {
-                tekitou = true;
+                is_applicable = true;
             }
         }
 
+        int power[4];
         std::transform(std::begin(battle_mon_list), std::end(battle_mon_list), std::begin(power),
             [&monraces](auto monrace_id) { return monraces.get_monrace(monrace_id).calc_power(); });
         total += std::reduce(std::begin(power), std::end(power));
-
+        int i;
         for (i = 0; i < 4; i++) {
             if (power[i] <= 0) {
                 break;
             }
+
             power[i] = total * 60 / power[i];
-            if (tekitou && ((power[i] < 160) || power[i] > 1500)) {
+            if (is_applicable && ((power[i] < 160) || power[i] > 1500)) {
                 break;
             }
+
             if ((power[i] < 160) && randint0(20)) {
                 break;
             }
+
             if (power[i] < 101) {
                 power[i] = 100 + randint1(5);
             }
+
             mon_odds[i] = power[i];
         }
 
