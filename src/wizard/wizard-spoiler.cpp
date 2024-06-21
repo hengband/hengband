@@ -202,7 +202,8 @@ static SpoilerOutputResultType spoil_player_spell()
         auto trainable = magic_ptr->is_spell_trainable ? "Trainable " : "";
         auto glove = magic_ptr->has_glove_mp_penalty ? "GlovePenalty " : "";
         auto failcap = magic_ptr->has_magic_fail_rate_cap ? "5%FailCap " : "";
-        spoil_out(format(mes, book_name.data(), spell.data(), glove, failcap, trainable, magic_ptr->spell_type, magic_ptr->spell_weight));
+        auto spell_type = enum2i(magic_ptr->spell_book);
+        spoil_out(format(mes, book_name.data(), spell.data(), glove, failcap, trainable, spell_type, magic_ptr->spell_weight));
         if (magic_ptr->spell_book == ItemKindType::NONE) {
             spoil_out(_("呪文なし\n\n", "No spells.\n\n"));
             continue;

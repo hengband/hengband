@@ -181,7 +181,7 @@ void init_class_magics_info()
 {
     init_header(&class_magics_header);
     class_magics_info.assign(PLAYER_CLASS_TYPE_MAX, {});
-    init_info("ClassMagicDefinitions.txt", class_magics_header, class_magics_info, parse_class_magics_info);
+    init_json("ClassMagicDefinitions.jsonc", "classes", class_magics_header, class_magics_info, parse_class_magics_info);
 }
 
 /*!

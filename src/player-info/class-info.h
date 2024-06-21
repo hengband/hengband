@@ -26,7 +26,6 @@ struct player_magic {
     bool is_spell_trainable{}; /* 魔法熟練度 */
 
     int spell_stat{}; /* Stat for spells (if any)  */
-    int spell_type{}; /* Spell type (mage/priest) */
 
     int spell_first{}; /* Level of first spell */
     int spell_weight{}; /* Weight that hurts spells */
