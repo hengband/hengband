@@ -320,7 +320,7 @@ void brand_bolts(PlayerType *player_ptr)
             continue;
         }
 
-        if (randint0(100) < 75) {
+        if (magik(75)) {
             continue;
         }
 
@@ -388,7 +388,7 @@ bool enchant_equipment(ItemEntity *o_ptr, int n, int eflag)
                 chance = enchant_table[o_ptr->to_h];
             }
 
-            if (force || ((randint1(1000) > chance) && (!a || (randint0(100) < 50)))) {
+            if (force || ((randint1(1000) > chance) && (!a || one_in_(2)))) {
                 o_ptr->to_h++;
                 res = true;
                 if (o_ptr->to_h >= 0) {
@@ -406,7 +406,7 @@ bool enchant_equipment(ItemEntity *o_ptr, int n, int eflag)
                 chance = enchant_table[o_ptr->to_d];
             }
 
-            if (force || ((randint1(1000) > chance) && (!a || (randint0(100) < 50)))) {
+            if (force || ((randint1(1000) > chance) && (!a || one_in_(2)))) {
                 o_ptr->to_d++;
                 res = true;
                 if (o_ptr->to_d >= 0) {
@@ -427,7 +427,7 @@ bool enchant_equipment(ItemEntity *o_ptr, int n, int eflag)
             chance = enchant_table[o_ptr->to_a];
         }
 
-        if (force || ((randint1(1000) > chance) && (!a || (randint0(100) < 50)))) {
+        if (force || ((randint1(1000) > chance) && (!a || one_in_(2)))) {
             o_ptr->to_a++;
             res = true;
             if (o_ptr->to_a >= 0) {

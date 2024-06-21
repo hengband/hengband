@@ -76,7 +76,7 @@ DisplaySymbol image_monster()
  */
 DisplaySymbol image_random()
 {
-    if (randint0(100) < 75) {
+    if (magik(75)) {
         return image_monster();
     } else {
         return image_object();

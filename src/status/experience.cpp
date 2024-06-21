@@ -75,7 +75,7 @@ bool drain_exp(PlayerType *player_ptr, int32_t drain, int32_t slip, int hold_exp
         return false;
     }
 
-    if (player_ptr->hold_exp && (randint0(100) < hold_exp_prob)) {
+    if (player_ptr->hold_exp && magik(hold_exp_prob)) {
         msg_print(_("しかし自己の経験値を守りきった！", "You keep hold of your experience!"));
         return false;
     }

@@ -201,7 +201,7 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, con
     }
 
     const auto is_open = feat_state(player_ptr->current_floor_ptr, grid.feat, TerrainCharacteristics::OPEN) == grid.feat;
-    if (turn_flags_ptr->did_bash_door && ((randint0(100) < 50) || is_open || terrain.flags.has(TerrainCharacteristics::GLASS))) {
+    if (turn_flags_ptr->did_bash_door && (one_in_(2) || is_open || terrain.flags.has(TerrainCharacteristics::GLASS))) {
         cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::BASH);
         if (!monster.is_valid()) {
             auto &rfu = RedrawingFlagsUpdater::get_instance();

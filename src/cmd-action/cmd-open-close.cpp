@@ -66,7 +66,7 @@ static bool exe_open_chest(PlayerType *player_ptr, const Pos2D &pos, OBJECT_IDX 
             j = 2;
         }
 
-        if (randint0(100) < j) {
+        if (magik(j)) {
             msg_print(_("鍵をはずした。", "You have picked the lock."));
             gain_exp(player_ptr, 1);
             flag = true;

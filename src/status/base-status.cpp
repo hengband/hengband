@@ -50,7 +50,7 @@ bool inc_stat(PlayerType *player_ptr, int stat)
     }
 
     if (value < 18) {
-        value += (randint0(100) < 75) ? 1 : 2;
+        value += magik(75) ? 1 : 2;
     } else if (value < (player_ptr->stat_max_max[stat] - 2)) {
         auto gain = (((player_ptr->stat_max_max[stat]) - value) / 2 + 3) / 2;
         if (gain < 1) {

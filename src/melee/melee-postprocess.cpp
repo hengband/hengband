@@ -229,8 +229,8 @@ static void make_monster_fear(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
         return;
     }
 
-    int percentage = (100L * mam_pp_ptr->m_ptr->hp) / mam_pp_ptr->m_ptr->maxhp;
-    bool can_make_fear = ((percentage <= 10) && (randint0(10) < percentage)) || ((mam_pp_ptr->dam >= mam_pp_ptr->m_ptr->hp) && (randint0(100) < 80));
+    const auto percentage = (100L * mam_pp_ptr->m_ptr->hp) / mam_pp_ptr->m_ptr->maxhp;
+    const auto can_make_fear = ((percentage <= 10) && (randint0(10) < percentage)) || ((mam_pp_ptr->dam >= mam_pp_ptr->m_ptr->hp) && magik(80));
     if (!can_make_fear) {
         return;
     }

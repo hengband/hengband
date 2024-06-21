@@ -36,7 +36,7 @@ static void correct_dir(POSITION *rdir, POSITION *cdir, POSITION y1, POSITION x1
     *cdir = (x1 == x2) ? 0 : (x1 < x2) ? 1
                                        : -1;
     if (*rdir && *cdir) {
-        if (randint0(100) < 50) {
+        if (one_in_(2)) {
             *rdir = 0;
         } else {
             *cdir = 0;
@@ -69,9 +69,9 @@ bool build_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, dt_type *dt_ptr
             return false;
         }
 
-        if (randint0(100) < dt_ptr->dun_tun_chg) {
+        if (magik(dt_ptr->dun_tun_chg)) {
             correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
-            if (randint0(100) < dt_ptr->dun_tun_rnd) {
+            if (magik(dt_ptr->dun_tun_rnd)) {
                 rand_dir(&row_dir, &col_dir);
             }
         }
@@ -80,7 +80,7 @@ bool build_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, dt_type *dt_ptr
         tmp_col = col1 + col_dir;
         while (!in_bounds(floor_ptr, tmp_row, tmp_col)) {
             correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
-            if (randint0(100) < dt_ptr->dun_tun_rnd) {
+            if (magik(dt_ptr->dun_tun_rnd)) {
                 rand_dir(&row_dir, &col_dir);
             }
 

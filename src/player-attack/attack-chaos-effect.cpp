@@ -53,14 +53,14 @@ static void attack_confuse(PlayerType *player_ptr, player_attack_type *pa_ptr, b
         RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     }
 
-    auto *r_ptr = pa_ptr->r_ptr;
-    if (r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) {
+    auto &monrace = *pa_ptr->r_ptr;
+    if (monrace.resistance_flags.has(MonsterResistanceType::NO_CONF)) {
         if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr)) {
-            r_ptr->r_resistance_flags.set(MonsterResistanceType::NO_CONF);
+            monrace.r_resistance_flags.set(MonsterResistanceType::NO_CONF);
         }
         msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), pa_ptr->m_name);
 
-    } else if (can_resist && randint0(100) < r_ptr->level) {
+    } else if (can_resist && magik(monrace.level)) {
         msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), pa_ptr->m_name);
     } else {
         msg_format(_("%s^は混乱したようだ。", "%s^ appears confused."), pa_ptr->m_name);
@@ -78,13 +78,13 @@ static void attack_confuse(PlayerType *player_ptr, player_attack_type *pa_ptr, b
  */
 static void attack_stun(PlayerType *player_ptr, player_attack_type *pa_ptr, bool can_resist = true)
 {
-    auto *r_ptr = pa_ptr->r_ptr;
-    if (r_ptr->resistance_flags.has(MonsterResistanceType::NO_STUN)) {
+    auto &monrace = *pa_ptr->r_ptr;
+    if (monrace.resistance_flags.has(MonsterResistanceType::NO_STUN)) {
         if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr)) {
-            r_ptr->resistance_flags.set(MonsterResistanceType::NO_STUN);
+            monrace.resistance_flags.set(MonsterResistanceType::NO_STUN);
         }
         msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), pa_ptr->m_name);
-    } else if (can_resist && randint0(100) < r_ptr->level) {
+    } else if (can_resist && magik(monrace.level)) {
         msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), pa_ptr->m_name);
     } else {
         msg_format(_("%s^は朦朧としたようだ。", "%s^ appears stunned."), pa_ptr->m_name);
@@ -102,13 +102,13 @@ static void attack_stun(PlayerType *player_ptr, player_attack_type *pa_ptr, bool
  */
 static void attack_scare(PlayerType *player_ptr, player_attack_type *pa_ptr, bool can_resist = true)
 {
-    auto *r_ptr = pa_ptr->r_ptr;
-    if (r_ptr->resistance_flags.has(MonsterResistanceType::NO_FEAR)) {
+    auto &monrace = *pa_ptr->r_ptr;
+    if (monrace.resistance_flags.has(MonsterResistanceType::NO_FEAR)) {
         if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr)) {
-            r_ptr->resistance_flags.set(MonsterResistanceType::NO_FEAR);
+            monrace.resistance_flags.set(MonsterResistanceType::NO_FEAR);
         }
         msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), pa_ptr->m_name);
-    } else if (can_resist && randint0(100) < r_ptr->level) {
+    } else if (can_resist && magik(monrace.level)) {
         msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), pa_ptr->m_name);
     } else {
         msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), pa_ptr->m_name);

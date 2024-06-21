@@ -1093,7 +1093,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
     chance = spell_chance(player_ptr, spell, use_realm);
 
     /* Failed spell */
-    if (randint0(100) < chance) {
+    if (magik(chance)) {
         if (flush_failure) {
             flush();
         }
@@ -1359,12 +1359,9 @@ bool do_cmd_cast(PlayerType *player_ptr)
         }
 
         /* Damage CON (possibly permanently) */
-        if (randint0(100) < 50) {
-            bool perm = (randint0(100) < 25);
-
+        if (one_in_(2)) {
+            const auto perm = one_in_(4);
             msg_print(_("体を悪くしてしまった！", "You have damaged your health!"));
-
-            /* Reduce constitution */
             (void)dec_stat(player_ptr, A_CON, 15 + randint1(10), perm);
         }
     }

@@ -233,11 +233,11 @@ static void decide_drop_quality(MonsterDeath *md_ptr)
 static int decide_drop_numbers(MonsterDeath *md_ptr, const bool drop_item, const bool inside_arena)
 {
     int drop_numbers = 0;
-    if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_60) && (randint0(100) < 60)) {
+    if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_60) && magik(60)) {
         drop_numbers++;
     }
 
-    if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_90) && (randint0(100) < 90)) {
+    if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_90) && magik(90)) {
         drop_numbers++;
     }
 
@@ -284,7 +284,7 @@ static void drop_items_golds(PlayerType *player_ptr, MonsterDeath *md_ptr, int d
         ItemEntity forge;
         auto *q_ptr = &forge;
         q_ptr->wipe();
-        if (md_ptr->do_gold && (!md_ptr->do_item || (randint0(100) < 50))) {
+        if (md_ptr->do_gold && (!md_ptr->do_item || one_in_(2))) {
             if (!make_gold(player_ptr, q_ptr)) {
                 continue;
             }

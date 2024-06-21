@@ -65,11 +65,11 @@ void store_delete(void)
 {
     INVENTORY_IDX what = (INVENTORY_IDX)randint0(st_ptr->stock_num);
     int num = st_ptr->stock[what].number;
-    if (randint0(100) < 50) {
+    if (one_in_(2)) {
         num = (num + 1) / 2;
     }
 
-    if (randint0(100) < 50) {
+    if (one_in_(2)) {
         num = 1;
     }
 

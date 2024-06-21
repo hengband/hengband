@@ -75,7 +75,7 @@ static bool deal_damege_by_feat(PlayerType *player_ptr, const Grid &grid, concpt
         damage /= 5;
     }
 
-    damage = damage / 100 + (randint0(100) < (damage % 100));
+    damage = damage / 100 + magik(damage % 100);
 
     if (damage == 0) {
         return false;

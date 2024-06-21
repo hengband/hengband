@@ -43,7 +43,7 @@ AmuletEnchanter::AmuletEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPT
  */
 void AmuletEnchanter::apply_magic()
 {
-    if ((this->power == 0) && (randint0(100) < 50)) {
+    if ((this->power == 0) && one_in_(2)) {
         this->power = -1;
     }
 

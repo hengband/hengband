@@ -54,7 +54,7 @@ bool do_cmd_cast_learned(PlayerType *player_ptr)
 
     const auto chance = calculate_blue_magic_failure_probability(player_ptr, spell, need_mana);
 
-    if (randint0(100) < chance) {
+    if (magik(chance)) {
         if (flush_failure) {
             flush();
         }
@@ -80,8 +80,8 @@ bool do_cmd_cast_learned(PlayerType *player_ptr)
         msg_print(_("精神を集中しすぎて気を失ってしまった！", "You faint from the effort!"));
         (void)BadStatusSetter(player_ptr).mod_paralysis(randnum1<short>(5 * oops + 1));
         chg_virtue(player_ptr, Virtue::KNOWLEDGE, -10);
-        if (randint0(100) < 50) {
-            bool perm = (randint0(100) < 25);
+        if (one_in_(2)) {
+            const auto perm = one_in_(4);
             msg_print(_("体を悪くしてしまった！", "You have damaged your health!"));
             (void)dec_stat(player_ptr, A_CON, 15 + randint1(10), perm);
         }

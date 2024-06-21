@@ -623,7 +623,7 @@ bool build_type4(PlayerType *player_ptr, dun_data_type *dd_ptr)
         vault_monsters(player_ptr, yval, xval, randint1(3) + 2);
 
         /* Object (80%) */
-        if (randint0(100) < 80) {
+        if (magik(80)) {
             place_object(player_ptr, yval, xval, 0L);
         }
 
@@ -770,7 +770,7 @@ bool build_type4(PlayerType *player_ptr, dun_data_type *dd_ptr)
         }
 
         /* Doors into the rooms */
-        if (randint0(100) < 50) {
+        if (one_in_(2)) {
             int i = randint1(10);
             place_secret_door(player_ptr, y1_inner - 1, xval - i, door_type);
             place_secret_door(player_ptr, y1_inner - 1, xval + i, door_type);
