@@ -196,7 +196,7 @@ static bool decide_select_special(MonsterRaceId r_idx)
     case MonsterRaceId::OHMU:
         return false;
     case MonsterRaceId::ROLENTO:
-        return magik(40);
+        return evaluate_percent(40);
     default:
         return one_in_(2);
     }
@@ -300,7 +300,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
     }
 
     const auto &world = AngbandWorld::get_instance();
-    if (!world_spells.empty() && magik(15) && !world.timewalk_m_idx) {
+    if (!world_spells.empty() && evaluate_percent(15) && !world.timewalk_m_idx) {
         return rand_choice(world_spells);
     }
 
@@ -323,7 +323,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
 
     if (!special.empty()) {
         const auto r_idx = m_ptr->r_idx;
-        auto should_select_special = monrace_list.is_unified(r_idx) && magik(70);
+        auto should_select_special = monrace_list.is_unified(r_idx) && evaluate_percent(70);
         should_select_special |= decide_select_special(r_idx);
         if (should_select_special) {
             return rand_choice(special);
@@ -332,14 +332,14 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
 
     auto should_select_tactic = distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx) < 4;
     should_select_tactic &= !attack.empty() || r_ptr->ability_flags.has(MonsterAbilityType::TRAPS);
-    should_select_tactic &= magik(75);
+    should_select_tactic &= evaluate_percent(75);
     should_select_tactic &= world.timewalk_m_idx == 0;
     should_select_tactic &= !tactic.empty();
     if (should_select_tactic) {
         return rand_choice(tactic);
     }
 
-    if (!summon.empty() && magik(40)) {
+    if (!summon.empty() && evaluate_percent(40)) {
         return rand_choice(summon);
     }
 
@@ -349,17 +349,17 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
         }
     }
 
-    if (!raise.empty() && magik(40)) {
+    if (!raise.empty() && evaluate_percent(40)) {
         return rand_choice(raise);
     }
 
     if (is_invuln(player_ptr)) {
         if (!psy_spe.empty() && one_in_(2)) {
             return rand_choice(psy_spe);
-        } else if (!attack.empty() && magik(40)) {
+        } else if (!attack.empty() && evaluate_percent(40)) {
             return rand_choice(attack);
         }
-    } else if (!attack.empty() && magik(85)) {
+    } else if (!attack.empty() && evaluate_percent(85)) {
         return rand_choice(attack);
     }
 
@@ -381,7 +381,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
         return rand_choice(haste);
     }
 
-    if (!annoy.empty() && magik(80)) {
+    if (!annoy.empty() && evaluate_percent(80)) {
         return rand_choice(annoy);
     }
 

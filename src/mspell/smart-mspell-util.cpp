@@ -26,5 +26,5 @@ bool int_outof(MonsterRaceInfo *r_ptr, int prob)
         prob = prob / 2;
     }
 
-    return magik(prob);
+    return evaluate_percent(prob);
 }

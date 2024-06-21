@@ -149,7 +149,7 @@ static void drop_artifact_from_unique(PlayerType *player_ptr, MonsterDeath *md_p
 {
     const auto is_wizard = AngbandWorld::get_instance().wizard;
     for (const auto &[a_idx, chance] : md_ptr->r_ptr->drop_artifacts) {
-        if (!is_wizard && (randint0(100) >= chance)) {
+        if (!is_wizard && !evaluate_percent(chance)) {
             continue;
         }
 
@@ -233,11 +233,11 @@ static void decide_drop_quality(MonsterDeath *md_ptr)
 static int decide_drop_numbers(MonsterDeath *md_ptr, const bool drop_item, const bool inside_arena)
 {
     int drop_numbers = 0;
-    if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_60) && magik(60)) {
+    if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_60) && evaluate_percent(60)) {
         drop_numbers++;
     }
 
-    if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_90) && magik(90)) {
+    if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_90) && evaluate_percent(90)) {
         drop_numbers++;
     }
 

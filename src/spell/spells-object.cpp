@@ -320,7 +320,7 @@ void brand_bolts(PlayerType *player_ptr)
             continue;
         }
 
-        if (magik(75)) {
+        if (evaluate_percent(75)) {
             continue;
         }
 

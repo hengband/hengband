@@ -17,13 +17,12 @@
 #include <type_traits>
 #include <utility>
 
-/**** Available constants ****/
-
-/*
- * Random Number Generator -- Degree of "complex" RNG -- see "misc.c"
+/*!
+ * @brief Random Number Generator -- Degree of "complex" RNG.
+ *
  * This value is hard-coded at 63 for a wide variety of reasons.
  */
-#define RAND_DEG 63
+constexpr auto RAND_DEG = 63;
 
 /*
  * Generates a random long integer X where A<=X<=B
@@ -91,15 +90,27 @@ int randint1(T max)
     return randnum1<int>(static_cast<int>(max));
 }
 
-/*
- * Evaluate to TRUE "P" percent of the time
+/*!
+ * @brief 指定されたパーセンテージで事象が生起するかを返す
+ * @param p 確率
+ * @return 生起するか否か
  */
-#define magik(P) (randint0(100) < (P))
+template <typename T>
+bool evaluate_percent(T p)
+{
+    return randint0(100) < static_cast<int>(p);
+}
 
-/*
- * Evaluate to TRUE with probability 1/x
+/*!
+ * @brief 1/nの確率で事象が生起するかを返す
+ * @param n 母数
+ * @return 生起するか否か
  */
-#define one_in_(X) (randint0(X) == 0)
+template <typename T>
+bool one_in_(T n)
+{
+    return randint0(static_cast<int>(n)) == 0;
+}
 
 void Rand_state_init();
 int16_t randnor(int mean, int stand);

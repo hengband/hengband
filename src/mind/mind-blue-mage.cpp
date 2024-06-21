@@ -54,7 +54,7 @@ bool do_cmd_cast_learned(PlayerType *player_ptr)
 
     const auto chance = calculate_blue_magic_failure_probability(player_ptr, spell, need_mana);
 
-    if (magik(chance)) {
+    if (evaluate_percent(chance)) {
         if (flush_failure) {
             flush();
         }

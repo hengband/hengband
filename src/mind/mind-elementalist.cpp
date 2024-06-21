@@ -333,7 +333,7 @@ static AttributeType get_element_spells_type(PlayerType *player_ptr, int n)
     const auto &realm = element_types.at(i2enum<ElementRealmType>(player_ptr->element));
     const auto t = realm.type.at(n);
     if (realm.extra.find(t) != realm.extra.end()) {
-        if (magik(player_ptr->lev * 2)) {
+        if (evaluate_percent(player_ptr->lev * 2)) {
             return realm.extra.at(t);
         }
     }
@@ -866,7 +866,7 @@ static bool check_element_mp_sufficiency(PlayerType *player_ptr, int mana_cost)
  */
 static bool try_cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx, PERCENTAGE chance)
 {
-    if (randint0(100) >= chance) {
+    if (!evaluate_percent(chance)) {
         sound(SOUND_ZAP);
         return cast_element_spell(player_ptr, spell_idx);
     }

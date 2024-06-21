@@ -150,7 +150,7 @@ static void make_walls(PlayerType *player_ptr, dun_data_type *dd_ptr, dungeon_ty
         g_ptr = &player_ptr->current_floor_ptr->grid_array[dd_ptr->tunnel_y][dd_ptr->tunnel_x];
         g_ptr->mimic = 0;
         place_grid(player_ptr, g_ptr, GB_FLOOR);
-        if (magik(dt_ptr->dun_tun_pen) && d_ptr->flags.has_not(DungeonFeatureType::NO_DOORS)) {
+        if (evaluate_percent(dt_ptr->dun_tun_pen) && d_ptr->flags.has_not(DungeonFeatureType::NO_DOORS)) {
             place_random_door(player_ptr, dd_ptr->tunnel_y, dd_ptr->tunnel_x, true);
         }
     }

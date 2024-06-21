@@ -76,7 +76,7 @@ DisplaySymbol image_monster()
  */
 DisplaySymbol image_random()
 {
-    if (magik(75)) {
+    if (evaluate_percent(75)) {
         return image_monster();
     } else {
         return image_object();

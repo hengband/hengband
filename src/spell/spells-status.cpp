@@ -635,7 +635,7 @@ void apply_nexus(MonsterEntity *m_ptr, PlayerType *player_ptr)
     }
 
     case 6: {
-        if (magik(player_ptr->skill_sav)) {
+        if (evaluate_percent(player_ptr->skill_sav)) {
             msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
             break;
         }
@@ -645,7 +645,7 @@ void apply_nexus(MonsterEntity *m_ptr, PlayerType *player_ptr)
     }
 
     case 7: {
-        if (magik(player_ptr->skill_sav)) {
+        if (evaluate_percent(player_ptr->skill_sav)) {
             msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
             break;
         }

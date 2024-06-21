@@ -83,7 +83,7 @@ void compact_objects(PlayerType *player_ptr, int size)
                 y = m_ptr->fy;
                 x = m_ptr->fx;
 
-                if (magik(90)) {
+                if (evaluate_percent(90)) {
                     continue;
                 }
             } else {
@@ -100,7 +100,7 @@ void compact_objects(PlayerType *player_ptr, int size)
                 chance = 100;
             }
 
-            if (magik(chance)) {
+            if (evaluate_percent(chance)) {
                 continue;
             }
 

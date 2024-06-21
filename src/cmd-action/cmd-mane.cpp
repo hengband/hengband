@@ -1309,7 +1309,7 @@ bool do_cmd_mane(PlayerType *player_ptr, bool baigaesi)
     }
 
     /* Failed spell */
-    if (magik(chance)) {
+    if (evaluate_percent(chance)) {
         if (flush_failure) {
             flush();
         }

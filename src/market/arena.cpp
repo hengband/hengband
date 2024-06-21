@@ -168,12 +168,12 @@ void update_gambling_monsters(PlayerType *player_ptr)
     }
 
     mon_level = randint1(std::min(max_dl, 122)) + 5;
-    if (magik(60)) {
+    if (evaluate_percent(60)) {
         i = randint1(std::min(max_dl, 122)) + 5;
         mon_level = std::max(i, mon_level);
     }
 
-    if (magik(30)) {
+    if (evaluate_percent(30)) {
         i = randint1(std::min(max_dl, 122)) + 5;
         mon_level = std::max(i, mon_level);
     }

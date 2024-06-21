@@ -73,7 +73,7 @@ bool exe_open(PlayerType *player_ptr, POSITION y, POSITION x)
         j = 2;
     }
 
-    if (randint0(100) >= j) {
+    if (!evaluate_percent(j)) {
         if (flush_failure) {
             flush();
         }
@@ -174,7 +174,7 @@ bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
             power_terrain = 2;
         }
 
-        if (magik(power_terrain)) {
+        if (evaluate_percent(power_terrain)) {
             msg_print(_("鍵をはずした。", "You have picked the lock."));
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::OPEN);
             sound(SOUND_OPENDOOR);
@@ -235,7 +235,7 @@ bool exe_disarm_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJECT_IDX
         msg_print(_("箱にはトラップが仕掛けられていない。", "The chest is not trapped."));
     } else if (chest_traps[o_ptr->pval].none()) {
         msg_print(_("箱にはトラップが仕掛けられていない。", "The chest is not trapped."));
-    } else if (magik(j)) {
+    } else if (evaluate_percent(j)) {
         msg_print(_("箱に仕掛けられていたトラップを解除した。", "You have disarmed the chest."));
         gain_exp(player_ptr, o_ptr->pval);
         o_ptr->pval = (0 - o_ptr->pval);
@@ -294,7 +294,7 @@ bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
     }
 
     auto more = false;
-    if (magik(j)) {
+    if (evaluate_percent(j)) {
         msg_format(_("%sを解除した。", "You have disarmed the %s."), name.data());
         gain_exp(player_ptr, power);
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::DISARM);
@@ -349,7 +349,7 @@ bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
     }
 
     auto more = false;
-    if (magik(power)) {
+    if (evaluate_percent(power)) {
         msg_format(_("%sを壊した！", "The %s crashes open!"), name.data());
         sound(terrain.flags.has(TerrainCharacteristics::GLASS) ? SOUND_GLASS : SOUND_OPENDOOR);
         if (one_in_(2) || (feat_state(player_ptr->current_floor_ptr, grid.feat, TerrainCharacteristics::OPEN) == grid.feat) || terrain.flags.has(TerrainCharacteristics::GLASS)) {
@@ -359,7 +359,7 @@ bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
         }
 
         exe_movement(player_ptr, dir, false, false);
-    } else if (magik(adj_dex_safe[player_ptr->stat_index[A_DEX]] + player_ptr->lev)) {
+    } else if (evaluate_percent(adj_dex_safe[player_ptr->stat_index[A_DEX]] + player_ptr->lev)) {
         msg_format(_("この%sは頑丈だ。", "The %s holds firm."), name.data());
         more = true;
     } else {

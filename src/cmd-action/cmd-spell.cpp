@@ -1093,7 +1093,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
     chance = spell_chance(player_ptr, spell, use_realm);
 
     /* Failed spell */
-    if (magik(chance)) {
+    if (evaluate_percent(chance)) {
         if (flush_failure) {
             flush();
         }

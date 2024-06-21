@@ -69,9 +69,9 @@ bool build_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, dt_type *dt_ptr
             return false;
         }
 
-        if (magik(dt_ptr->dun_tun_chg)) {
+        if (evaluate_percent(dt_ptr->dun_tun_chg)) {
             correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
-            if (magik(dt_ptr->dun_tun_rnd)) {
+            if (evaluate_percent(dt_ptr->dun_tun_rnd)) {
                 rand_dir(&row_dir, &col_dir);
             }
         }
@@ -80,7 +80,7 @@ bool build_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, dt_type *dt_ptr
         tmp_col = col1 + col_dir;
         while (!in_bounds(floor_ptr, tmp_row, tmp_col)) {
             correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
-            if (magik(dt_ptr->dun_tun_rnd)) {
+            if (evaluate_percent(dt_ptr->dun_tun_rnd)) {
                 rand_dir(&row_dir, &col_dir);
             }
 
@@ -146,7 +146,7 @@ bool build_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, dt_type *dt_ptr
                 door_flag = true;
             }
 
-            if (randint0(100) >= dt_ptr->dun_tun_con) {
+            if (!evaluate_percent(dt_ptr->dun_tun_con)) {
                 tmp_row = row1 - start_row;
                 if (tmp_row < 0) {
                     tmp_row = (-tmp_row);

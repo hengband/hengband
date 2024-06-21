@@ -135,7 +135,7 @@ void compact_monsters(PlayerType *player_ptr, int size)
                 chance = 100;
             }
 
-            if (magik(chance)) {
+            if (evaluate_percent(chance)) {
                 continue;
             }
 
