@@ -177,7 +177,7 @@ void update_gambling_monsters(PlayerType *player_ptr)
     while (true) {
         auto total = 0;
         auto is_applicable = false;
-        for (auto i = 0; i < 4; i++) {
+        for (auto i = 0; i < NUM_GLADIATORS; i++) {
             MonsterRaceId monrace_id;
             int j;
             while (true) {
@@ -213,12 +213,12 @@ void update_gambling_monsters(PlayerType *player_ptr)
             }
         }
 
-        int power[4];
+        std::array<int, NUM_GLADIATORS> power;
         std::transform(std::begin(battle_mon_list), std::end(battle_mon_list), std::begin(power),
             [&monraces](auto monrace_id) { return monraces.get_monrace(monrace_id).calc_power(); });
         total += std::reduce(std::begin(power), std::end(power));
         int i;
-        for (i = 0; i < 4; i++) {
+        for (i = 0; i < NUM_GLADIATORS; i++) {
             if (power[i] <= 0) {
                 break;
             }
@@ -239,7 +239,7 @@ void update_gambling_monsters(PlayerType *player_ptr)
             mon_odds[i] = power[i];
         }
 
-        if (i == 4) {
+        if (i == NUM_GLADIATORS) {
             break;
         }
     }
@@ -271,7 +271,7 @@ bool monster_arena_comm(PlayerType *player_ptr)
     clear_bldg(4, 10);
 
     prt(_("モンスター                                                     倍率", "Monsters                                                       Odds"), 4, 4);
-    for (auto i = 0; i < 4; i++) {
+    for (auto i = 0; i < NUM_GLADIATORS; i++) {
         const auto &monrace = monraces_info[battle_mon_list[i]];
         std::string name;
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
@@ -307,7 +307,7 @@ bool monster_arena_comm(PlayerType *player_ptr)
     }
 
     clear_bldg(4, 4);
-    for (int i = 0; i < 4; i++) {
+    for (auto i = 0; i < NUM_GLADIATORS; i++) {
         if (i != bet_number) {
             clear_bldg(i + 5, i + 5);
         }
