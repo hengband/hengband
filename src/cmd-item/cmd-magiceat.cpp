@@ -565,7 +565,7 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
 
     chance = mod_spell_chance_2(player_ptr, chance);
 
-    if (magik(chance)) {
+    if (evaluate_percent(chance)) {
         if (flush_failure) {
             flush();
         }

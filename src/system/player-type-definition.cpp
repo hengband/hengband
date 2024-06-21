@@ -156,5 +156,5 @@ int PlayerType::calc_life_rating() const
 
 bool PlayerType::try_resist_eldritch_horror() const
 {
-    return magik(this->skill_sav) || one_in_(2);
+    return evaluate_percent(this->skill_sav) || one_in_(2);
 }

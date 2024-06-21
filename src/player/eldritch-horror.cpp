@@ -95,7 +95,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
             return;
         }
 
-        if (magik(player_ptr->skill_sav - power)) {
+        if (evaluate_percent(player_ptr->skill_sav - power)) {
             return;
         }
 
@@ -109,7 +109,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
         case PlayerRaceLifeType::DEMON:
             return;
         case PlayerRaceLifeType::UNDEAD:
-            if (magik(25 + player_ptr->lev)) {
+            if (evaluate_percent(25 + player_ptr->lev)) {
                 return;
             }
             break;
@@ -141,7 +141,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
             power *= 2;
         }
 
-        if (magik(player_ptr->skill_sav * 100 / power)) {
+        if (evaluate_percent(player_ptr->skill_sav * 100 / power)) {
             msg_format(_("夢の中で%sに追いかけられた。", "%s^ chases you through your dreams."), m_name.data());
             return;
         }
@@ -154,12 +154,12 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
         monrace.r_misc_flags.set(MonsterMiscType::ELDRITCH_HORROR);
         switch (PlayerRace(player_ptr).life()) {
         case PlayerRaceLifeType::DEMON:
-            if (magik(20 + player_ptr->lev)) {
+            if (evaluate_percent(20 + player_ptr->lev)) {
                 return;
             }
             break;
         case PlayerRaceLifeType::UNDEAD:
-            if (magik(10 + player_ptr->lev)) {
+            if (evaluate_percent(10 + player_ptr->lev)) {
                 return;
             }
             break;
@@ -173,7 +173,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
     /* 過去の効果無効率再現のため5回saving_throw 実行 */
     auto save = true;
     for (auto i = 0; i < 5; i++) {
-        save &= magik(player_ptr->skill_sav - power);
+        save &= evaluate_percent(player_ptr->skill_sav - power);
     }
 
     if (save) {

@@ -48,7 +48,7 @@ bool apply_disenchant(PlayerType *player_ptr, BIT_FLAGS mode)
     }
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    if (o_ptr->is_fixed_or_random_artifact() && magik(71)) {
+    if (o_ptr->is_fixed_or_random_artifact() && evaluate_percent(71)) {
 #ifdef JP
         msg_format("%s(%c)は劣化を跳ね返した！", item_name.data(), index_to_label(t));
 #else

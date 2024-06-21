@@ -81,7 +81,7 @@ void SoftArmorEnchanter::sval_enchant()
 void SoftArmorEnchanter::give_high_ego_index()
 {
     const auto sval = this->o_ptr->bi_key.sval();
-    if ((sval != SV_ROBE) || magik(85)) {
+    if ((sval != SV_ROBE) || evaluate_percent(85)) {
         return;
     }
 

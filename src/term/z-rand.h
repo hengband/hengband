@@ -91,10 +91,16 @@ int randint1(T max)
     return randnum1<int>(static_cast<int>(max));
 }
 
-/*
- * Evaluate to TRUE "P" percent of the time
+/*!
+ * @brief 指定されたパーセンテージで事象が生起するかを返す
+ * @param p 確率
+ * @return 生起するか否か
  */
-#define magik(P) (randint0(100) < (P))
+template <typename T>
+bool evaluate_percent(T p)
+{
+    return randint0(100) < static_cast<int>(p);
+}
 
 /*
  * Evaluate to TRUE with probability 1/x

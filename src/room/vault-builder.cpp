@@ -98,7 +98,7 @@ void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
                 continue;
             }
 
-            if (magik(75)) {
+            if (evaluate_percent(75)) {
                 place_object(player_ptr, j, k, 0L);
             } else {
                 place_gold(player_ptr, j, k);

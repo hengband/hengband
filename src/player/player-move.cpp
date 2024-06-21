@@ -114,7 +114,7 @@ void search(PlayerType *player_ptr)
     }
 
     for (DIRECTION i = 0; i < 9; ++i) {
-        if (magik(chance)) {
+        if (evaluate_percent(chance)) {
             discover_hidden_things(player_ptr, { player_ptr->y + ddy_ddd[i], player_ptr->x + ddx_ddd[i] });
         }
     }

@@ -333,7 +333,7 @@ static void mind_turn_passing(PlayerType *player_ptr, cm_type *cm_ptr)
 
 static bool judge_mind_chance(PlayerType *player_ptr, cm_type *cm_ptr)
 {
-    if (!magik(cm_ptr->chance)) {
+    if (!evaluate_percent(cm_ptr->chance)) {
         sound(SOUND_ZAP);
         return switch_mind_class(player_ptr, cm_ptr) && cm_ptr->cast;
     }

@@ -791,7 +791,7 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
         }
 
         /* Handle item */
-        if (old_terrain.flags.has(TerrainCharacteristics::HAS_ITEM) && new_terrain.flags.has_not(TerrainCharacteristics::HAS_ITEM) && magik(15 - floor_ptr->dun_level / 2)) {
+        if (old_terrain.flags.has(TerrainCharacteristics::HAS_ITEM) && new_terrain.flags.has_not(TerrainCharacteristics::HAS_ITEM) && evaluate_percent(15 - floor_ptr->dun_level / 2)) {
             /* Place object */
             place_object(player_ptr, y, x, 0L);
             found = true;

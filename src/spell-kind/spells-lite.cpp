@@ -72,7 +72,7 @@ static void cave_temp_room_lite(PlayerType *player_ptr, const std::vector<Pos2D>
                 chance = 100;
             }
 
-            if (m_ptr->is_asleep() && magik(chance)) {
+            if (m_ptr->is_asleep() && evaluate_percent(chance)) {
                 (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
                 if (m_ptr->ml) {
                     const auto m_name = monster_desc(player_ptr, m_ptr, 0);

@@ -53,7 +53,7 @@ void inventory_damage(PlayerType *player_ptr, const ObjectBreaker &breaker, int 
 
         /* Count the casualties */
         for (amt = j = 0; j < o_ptr->number; ++j) {
-            if (magik(perc)) {
+            if (evaluate_percent(perc)) {
                 amt++;
             }
         }

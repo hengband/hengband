@@ -623,7 +623,7 @@ bool build_type4(PlayerType *player_ptr, dun_data_type *dd_ptr)
         vault_monsters(player_ptr, yval, xval, randint1(3) + 2);
 
         /* Object (80%) */
-        if (magik(80)) {
+        if (evaluate_percent(80)) {
             place_object(player_ptr, yval, xval, 0L);
         }
 

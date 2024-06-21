@@ -156,7 +156,7 @@ bool get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx, int *mm)
 static bool random_walk(PlayerType *player_ptr, DIRECTION *mm, MonsterEntity *m_ptr)
 {
     auto &monrace = m_ptr->get_monrace();
-    if (monrace.behavior_flags.has_all_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 }) && magik(75)) {
+    if (monrace.behavior_flags.has_all_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 }) && evaluate_percent(75)) {
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
             monrace.r_behavior_flags.set({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 });
         }
