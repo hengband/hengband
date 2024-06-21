@@ -46,6 +46,7 @@ jobs:
       runner: ubuntu-24.04
       cxx: g++-13
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
+      configure-opts: "--disable-pch"
       use-ccache: true
 
   build_test_english:
@@ -55,7 +56,7 @@ jobs:
       runner: ubuntu-24.04
       cxx: g++-13
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
-      configure-opts: "--disable-japanese"
+      configure-opts: "--disable-pch --disable-japanese"
       distcheck: true
       use-ccache: true
 
