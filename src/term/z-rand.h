@@ -17,13 +17,12 @@
 #include <type_traits>
 #include <utility>
 
-/**** Available constants ****/
-
-/*
- * Random Number Generator -- Degree of "complex" RNG -- see "misc.c"
+/*!
+ * @brief Random Number Generator -- Degree of "complex" RNG.
+ *
  * This value is hard-coded at 63 for a wide variety of reasons.
  */
-#define RAND_DEG 63
+constexpr auto RAND_DEG = 63;
 
 /*
  * Generates a random long integer X where A<=X<=B
