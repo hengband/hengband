@@ -263,7 +263,7 @@ static void rd_phase_out(PlayerType *player_ptr)
 static void rd_arena(PlayerType *player_ptr)
 {
     if (h_older_than(0, 0, 3)) {
-        update_gambling_monsters(player_ptr);
+        update_melee_gladiators(player_ptr);
     } else {
         set_gambling_monsters();
     }

@@ -133,7 +133,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     ArenaEntryList::get_instance().reset_entry();
     world.set_arena(true);
     world.knows_daily_bounty = false;
-    update_gambling_monsters(player_ptr);
+    update_melee_gladiators(player_ptr);
     player_ptr->muta.clear();
 
     for (int i = 0; i < 8; i++) {

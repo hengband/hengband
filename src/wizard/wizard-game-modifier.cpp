@@ -79,7 +79,7 @@ void wizard_game_modifier(PlayerType *player_ptr)
     case '\r':
         break;
     case 'g':
-        update_gambling_monsters(player_ptr);
+        update_melee_gladiators(player_ptr);
         break;
     case 'q':
         wiz_complete_quest(player_ptr);

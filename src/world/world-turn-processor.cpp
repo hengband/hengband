@@ -159,7 +159,7 @@ void WorldTurnProcessor::process_monster_arena()
         msg_print(_("相打ちに終わりました。", "Nothing survived."));
         msg_print(nullptr);
         this->player_ptr->energy_need = 0;
-        update_gambling_monsters(this->player_ptr);
+        update_melee_gladiators(this->player_ptr);
         return;
     }
 
@@ -188,7 +188,7 @@ void WorldTurnProcessor::process_monster_arena_winner(int win_m_idx)
 
     msg_print(nullptr);
     this->player_ptr->energy_need = 0;
-    update_gambling_monsters(this->player_ptr);
+    update_melee_gladiators(this->player_ptr);
 }
 
 void WorldTurnProcessor::process_monster_arena_draw()
@@ -202,7 +202,7 @@ void WorldTurnProcessor::process_monster_arena_draw()
     this->player_ptr->au += wager_melee;
     msg_print(nullptr);
     this->player_ptr->energy_need = 0;
-    update_gambling_monsters(this->player_ptr);
+    update_melee_gladiators(this->player_ptr);
 }
 
 void WorldTurnProcessor::decide_auto_save()

@@ -153,7 +153,7 @@ bool arena_comm(PlayerType *player_ptr, int cmd)
  * @brief モンスター闘技場に参加するモンスターを更新する。
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void update_gambling_monsters(PlayerType *player_ptr)
+void update_melee_gladiators(PlayerType *player_ptr)
 {
     auto max_dl = 0;
     for (const auto &dungeon : dungeons_info) {
@@ -254,7 +254,7 @@ bool monster_arena_comm(PlayerType *player_ptr)
 {
     auto &world = AngbandWorld::get_instance();
     if ((world.game_turn - world.arena_start_turn) > TURNS_PER_TICK * 250) {
-        update_gambling_monsters(player_ptr);
+        update_melee_gladiators(player_ptr);
         world.arena_start_turn = world.game_turn;
     }
 
