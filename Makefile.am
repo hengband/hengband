@@ -9,9 +9,9 @@ visual_studio_files = \
 	VisualStudio/Hengband/packages.config
 
 schema_files = \
-	schema/ArtifactDefinitions.schema.json
-	schema/BaseitemDefinitions.schema.json
-	schema/ClassMagicDefinitions.schema.json
+	schema/ArtifactDefinitions.schema.json \
+	schema/BaseitemDefinitions.schema.json \
+	schema/ClassMagicDefinitions.schema.json \
 	schema/MonraceDefinitions.schema.json
 
 EXTRA_DIST = \
