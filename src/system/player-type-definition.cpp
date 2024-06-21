@@ -153,3 +153,8 @@ int PlayerType::calc_life_rating() const
 
     return actual_hp * 100 / expected_hp;
 }
+
+bool PlayerType::try_resist_eldritch_horror() const
+{
+    return magik(this->skill_sav) || one_in_(2);
+}

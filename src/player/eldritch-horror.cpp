@@ -265,11 +265,11 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
 
         do {
             (void)do_dec_stat(player_ptr, A_INT);
-        } while (randint0(100) > player_ptr->skill_sav && one_in_(2));
+        } while (!player_ptr->try_resist_eldritch_horror());
 
         do {
             (void)do_dec_stat(player_ptr, A_WIS);
-        } while (randint0(100) > player_ptr->skill_sav && one_in_(2));
+        } while (!player_ptr->try_resist_eldritch_horror());
 
         break;
     }
