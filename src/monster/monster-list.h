@@ -10,5 +10,5 @@ class PlayerType;
 MONSTER_IDX m_pop(FloorType *floor_ptr);
 
 MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_level, BIT_FLAGS mode);
-void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, MonsterRaceId r_idx, std::optional<MONSTER_IDX> summoner_m_idx = std::nullopt);
+void choose_chameleon_polymorph(PlayerType *player_ptr, MONSTER_IDX m_idx, std::optional<MONSTER_IDX> summoner_m_idx = std::nullopt);
 int get_monster_crowd_number(FloorType *floor_ptr, MONSTER_IDX m_idx);

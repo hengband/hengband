@@ -334,8 +334,20 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, 
     }
 
     if (r_ptr->misc_flags.has(MonsterMiscType::CHAMELEON)) {
-        choose_new_monster(player_ptr, g_ptr->m_idx, true, MonraceList::empty_id(), summoner_m_idx);
+        choose_chameleon_polymorph(player_ptr, g_ptr->m_idx, summoner_m_idx);
+
         r_ptr = &m_ptr->get_monrace();
+
+        if (r_ptr->kind_flags.has_any_of(alignment_mask)) {
+            m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
+            if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
+                m_ptr->sub_align |= SUB_ALIGN_EVIL;
+            }
+            if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
+                m_ptr->sub_align |= SUB_ALIGN_GOOD;
+            }
+        }
+
         m_ptr->mflag2.set(MonsterConstantFlagType::CHAMELEON);
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (!is_monster(src_idx))) {
             m_ptr->sub_align = SUB_ALIGN_NEUTRAL;

@@ -18,6 +18,7 @@
 #include "core/speed-table.h"
 #include "floor/cave.h"
 #include "floor/geometry.h"
+#include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "grid/feature.h"
 #include "io/write-diary.h"
@@ -113,16 +114,51 @@ bool decide_process_continue(PlayerType *player_ptr, MonsterEntity *m_ptr);
 void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
     turn_flags tmp_flags;
     turn_flags *turn_flags_ptr = init_turn_flags(player_ptr->riding, m_idx, &tmp_flags);
     turn_flags_ptr->see_m = is_seen(player_ptr, m_ptr);
 
     decide_drop_from_monster(player_ptr, m_idx, turn_flags_ptr->is_riding_mon);
     if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && one_in_(13) && !m_ptr->is_asleep()) {
-        choose_new_monster(player_ptr, m_idx, false, MonraceList::empty_id());
-        r_ptr = &m_ptr->get_monrace();
+        choose_chameleon_polymorph(player_ptr, m_idx);
+
+        const auto &new_monrace = m_ptr->get_monrace();
+
+        const auto old_m_name = monster_desc(player_ptr, m_ptr, 0);
+
+        if (m_idx == player_ptr->riding) {
+            msg_format(_("突然%sが変身した。", "Suddenly, %s transforms!"), old_m_name.data());
+            if (new_monrace.misc_flags.has_not(MonsterMiscType::RIDING)) {
+                if (process_fall_off_horse(player_ptr, 0, true)) {
+                    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+                    msg_print(_("地面に落とされた。", format("You have fallen from %s.", m_name.data())));
+                }
+            }
+        }
+
+        m_ptr->set_individual_speed(player_ptr->current_floor_ptr->inside_arena);
+
+        const auto old_maxhp = m_ptr->max_maxhp;
+        if (new_monrace.misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
+            m_ptr->max_maxhp = new_monrace.hit_dice.maxroll();
+        } else {
+            m_ptr->max_maxhp = new_monrace.hit_dice.roll();
+        }
+
+        if (ironman_nightmare) {
+            const auto hp = m_ptr->max_maxhp * 2;
+            m_ptr->max_maxhp = std::min(MONSTER_MAXHP, hp);
+        }
+
+        m_ptr->maxhp = m_ptr->maxhp * m_ptr->max_maxhp / old_maxhp;
+        if (m_ptr->maxhp < 1) {
+            m_ptr->maxhp = 1;
+        }
+        m_ptr->hp = m_ptr->hp * m_ptr->max_maxhp / old_maxhp;
+        m_ptr->dealt_damage = 0;
     }
+
+    auto &monrace = m_ptr->get_monrace();
 
     turn_flags_ptr->aware = process_stealth(player_ptr, m_idx);
     if (vanish_summoned_children(player_ptr, m_idx, turn_flags_ptr->see_m)) {
@@ -186,7 +222,7 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     if (!turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && !m_ptr->is_fearful() && !turn_flags_ptr->is_riding_mon && turn_flags_ptr->aware) {
-        if (r_ptr->freq_spell && randint1(100) <= r_ptr->freq_spell) {
+        if (monrace.freq_spell && randint1(100) <= monrace.freq_spell) {
             if (make_attack_spell(player_ptr, m_idx)) {
                 return;
             }
@@ -194,7 +230,7 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     update_map_flags(turn_flags_ptr);
-    update_lite_flags(turn_flags_ptr, r_ptr);
+    update_lite_flags(turn_flags_ptr, &monrace);
     update_monster_race_flags(player_ptr, turn_flags_ptr, m_ptr);
 
     if (!process_monster_fear(player_ptr, turn_flags_ptr, m_idx)) {
