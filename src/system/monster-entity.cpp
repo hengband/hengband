@@ -401,7 +401,7 @@ void MonsterEntity::set_individual_speed(bool force_fixed_speed)
         /* Allow some small variation per monster */
         int i = speed_to_energy(monrace.speed) / (one_in_(4) ? 3 : 10);
         if (i) {
-            speed += rand_spread(0, i);
+            speed += static_cast<uint8_t>(rand_spread(0, i));
         }
     }
 

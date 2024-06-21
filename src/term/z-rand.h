@@ -53,12 +53,18 @@ int randint0(T max)
     return randnum0<int>(static_cast<int>(max));
 }
 
-/*
- * Generate a random long integer X where A-D<=X<=A+D
- * The integer X falls along a uniform distribution.
- * Note: rand_spread(A,D) == rand_range(A-D,A+D)
+/*!
+ * @brief 平均値±振れ幅 の一様乱数を返す
+ * @param average 平均値
+ * @param width 振れ幅
+ * @return 乱数値
  */
-#define rand_spread(A, D) ((A) + (randint0(1 + (D) + (D))) - (D))
+template <typename T>
+int rand_spread(T average, T width)
+{
+    const auto abs_width = static_cast<int>(width);
+    return static_cast<int>(average) + randint0(1 + 2 * std::abs(abs_width)) - std::abs(abs_width);
+}
 
 /*!
  * @brief 1以上/-1以下の一様乱数を返す
