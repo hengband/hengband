@@ -65,7 +65,7 @@ void set_gambling_monsters()
     for (auto i = 0; i < NUM_GLADIATORS; i++) {
         battle_mon_list[i] = i2enum<MonsterRaceId>(rd_s16b());
         if (h_older_than(0, 3, 4)) {
-            set_zangband_gambling_monsters(i);
+            mon_odds[i] = rd_s16b();
         } else {
             mon_odds[i] = rd_u32b();
         }
