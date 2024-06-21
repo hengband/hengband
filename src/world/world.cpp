@@ -14,6 +14,16 @@ AngbandWorld &AngbandWorld::get_instance()
     return instance;
 }
 
+bool AngbandWorld::is_wild_mode() const
+{
+    return this->wild_mode;
+}
+
+void AngbandWorld::set_wild_mode(bool new_wild_mode)
+{
+    this->wild_mode = new_wild_mode;
+}
+
 /*!
  * @brief アリーナへの入場/退出状態を更新する
  * @param 入場ならばtrue、退出ならばfalse

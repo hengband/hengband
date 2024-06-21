@@ -198,7 +198,7 @@ bool set_food(PlayerType *player_ptr, TIME_EFFECT v)
             break;
         }
 
-        if (player_ptr->wild_mode && (new_aux < 2)) {
+        if (AngbandWorld::get_instance().is_wild_mode() && (new_aux < 2)) {
             change_wild_mode(player_ptr, false);
         }
 

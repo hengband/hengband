@@ -66,6 +66,7 @@
 #include "target/projection-path-calculator.h"
 #include "tracking/lore-tracker.h"
 #include "view/display-messages.h"
+#include "world/world.h"
 
 void decide_drop_from_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool is_riding_mon);
 bool process_stealth(PlayerType *player_ptr, MONSTER_IDX m_idx);
@@ -639,7 +640,7 @@ void sweep_monster_process(PlayerType *player_ptr)
             return;
         }
 
-        if (!m_ptr->is_valid() || player_ptr->wild_mode) {
+        if (!m_ptr->is_valid() || AngbandWorld::get_instance().is_wild_mode()) {
             continue;
         }
 

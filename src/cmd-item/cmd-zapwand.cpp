@@ -40,6 +40,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "view/object-describer.h"
+#include "world/world.h"
 
 /*!
  * @brief 魔法棒の効果を発動する
@@ -325,7 +326,7 @@ bool wand_effect(PlayerType *player_ptr, int sval, int dir, bool powerful, bool 
  */
 void do_cmd_aim_wand(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         return;
     }
     if (cmd_limit_arena(player_ptr)) {

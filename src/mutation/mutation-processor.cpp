@@ -53,6 +53,7 @@
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
+#include "world/world.h"
 
 static int get_hack_dir(PlayerType *player_ptr)
 {
@@ -123,7 +124,7 @@ static int get_hack_dir(PlayerType *player_ptr)
  */
 void process_world_aux_mutation(PlayerType *player_ptr)
 {
-    if (player_ptr->muta.none() || AngbandSystem::get_instance().is_phase_out() || player_ptr->wild_mode) {
+    if (player_ptr->muta.none() || AngbandSystem::get_instance().is_phase_out() || AngbandWorld::get_instance().is_wild_mode()) {
         return;
     }
 
@@ -503,7 +504,7 @@ bool drop_weapons(PlayerType *player_ptr)
     INVENTORY_IDX slot = 0;
     ItemEntity *o_ptr = nullptr;
 
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         return false;
     }
 

@@ -68,6 +68,7 @@
 #include "util/string-processor.h"
 #include "view/display-inventory.h"
 #include "view/display-messages.h"
+#include "world/world.h"
 
 /*!
  * @brief 持ち物一覧を表示するコマンドのメインルーチン / Display inventory_list
@@ -250,7 +251,7 @@ void do_cmd_inscribe(PlayerType *player_ptr)
  */
 void do_cmd_use(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode || cmd_limit_arena(player_ptr)) {
+    if (AngbandWorld::get_instance().is_wild_mode() || cmd_limit_arena(player_ptr)) {
         return;
     }
 
@@ -307,7 +308,7 @@ void do_cmd_use(PlayerType *player_ptr)
  */
 void do_cmd_activate(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode || cmd_limit_arena(player_ptr)) {
+    if (AngbandWorld::get_instance().is_wild_mode() || cmd_limit_arena(player_ptr)) {
         return;
     }
 

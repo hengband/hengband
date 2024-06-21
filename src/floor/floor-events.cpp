@@ -64,18 +64,18 @@ static void update_sun_light(PlayerType *player_ptr)
 void day_break(PlayerType *player_ptr)
 {
     msg_print(_("夜が明けた。", "The sun has risen."));
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         update_sun_light(player_ptr);
         return;
     }
 
-    for (auto y = 0; y < floor_ptr->height; y++) {
-        for (auto x = 0; x < floor_ptr->width; x++) {
-            auto *g_ptr = &floor_ptr->grid_array[y][x];
-            g_ptr->info |= CAVE_GLOW;
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (auto y = 0; y < floor.height; y++) {
+        for (auto x = 0; x < floor.width; x++) {
+            auto &grid = floor.get_grid({ y, x });
+            grid.add_info(CAVE_GLOW);
             if (view_perma_grids) {
-                g_ptr->info |= CAVE_MARK;
+                grid.add_info(CAVE_MARK);
             }
 
             note_spot(player_ptr, y, x);
@@ -88,7 +88,7 @@ void day_break(PlayerType *player_ptr)
 void night_falls(PlayerType *player_ptr)
 {
     msg_print(_("日が沈んだ。", "The sun has fallen."));
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         update_sun_light(player_ptr);
         return;
     }

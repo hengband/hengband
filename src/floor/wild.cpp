@@ -907,11 +907,12 @@ bool change_wild_mode(PlayerType *player_ptr, bool encount)
         return false;
     }
 
-    if (player_ptr->wild_mode) {
+    auto &world = AngbandWorld::get_instance();
+    if (world.is_wild_mode()) {
         player_ptr->wilderness_x = player_ptr->x;
         player_ptr->wilderness_y = player_ptr->y;
         player_ptr->energy_need = 0;
-        player_ptr->wild_mode = false;
+        world.set_wild_mode(false);
         player_ptr->leaving = true;
         return true;
     }
@@ -954,7 +955,7 @@ bool change_wild_mode(PlayerType *player_ptr, bool encount)
     }
 
     set_action(player_ptr, ACTION_NONE);
-    player_ptr->wild_mode = true;
+    world.set_wild_mode(true);
     player_ptr->leaving = true;
     return true;
 }

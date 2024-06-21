@@ -25,6 +25,9 @@ public:
     byte number;
     SpecialMenuType menu_condition;
     std::optional<PlayerClassType> class_condition;
+    bool matches_current_wild_mode() const;
+
+private:
     std::optional<bool> wild_mode;
 };
 

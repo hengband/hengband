@@ -378,7 +378,7 @@ void clear_cave(PlayerType *player_ptr)
         floor_ptr->mproc_max[i] = 0;
     }
 
-    precalc_cur_num_of_pet(player_ptr);
+    precalc_cur_num_of_pet();
     for (POSITION y = 0; y < MAX_HGT; y++) {
         for (POSITION x = 0; x < MAX_WID; x++) {
             auto *g_ptr = &floor_ptr->grid_array[y][x];
@@ -496,6 +496,7 @@ void generate_floor(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     set_floor_and_wall(floor.dungeon_idx);
+    const auto is_wild_mode = AngbandWorld::get_instance().is_wild_mode();
     for (int num = 0; true; num++) {
         bool okay = true;
         concptr why = nullptr;
@@ -508,7 +509,7 @@ void generate_floor(PlayerType *player_ptr)
         } else if (floor.is_in_quest()) {
             generate_fixed_floor(player_ptr);
         } else if (!floor.is_in_underground()) {
-            if (player_ptr->wild_mode) {
+            if (is_wild_mode) {
                 wilderness_gen_small(player_ptr);
             } else {
                 wilderness_gen(player_ptr);

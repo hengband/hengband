@@ -40,6 +40,7 @@
 #include "system/player-type-definition.h"
 #include "util/dice.h"
 #include "view/display-messages.h"
+#include "world/world.h"
 
 /*!
  * @brief 杖の効果を発動する
@@ -308,7 +309,7 @@ int staff_effect(PlayerType *player_ptr, int sval, bool *use_charge, bool powerf
  */
 void do_cmd_use_staff(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         return;
     }
 

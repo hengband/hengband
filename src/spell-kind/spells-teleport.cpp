@@ -295,7 +295,7 @@ void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty,
  */
 bool teleport_player_aux(PlayerType *player_ptr, POSITION dis, bool is_quantum_effect, teleport_flags mode)
 {
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         return false;
     }
 

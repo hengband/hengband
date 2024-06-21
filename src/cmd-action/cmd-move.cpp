@@ -42,6 +42,7 @@
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include "world/world.h"
 #include <algorithm>
 
 /*!
@@ -353,6 +354,7 @@ void do_cmd_walk(PlayerType *player_ptr, bool pickup)
 
     bool more = false;
     DIRECTION dir;
+    const auto is_wild_mode = AngbandWorld::get_instance().is_wild_mode();
     if (get_rep_dir(player_ptr, &dir)) {
         PlayerEnergy energy(player_ptr);
         energy.set_player_turn_energy(100);
@@ -360,7 +362,7 @@ void do_cmd_walk(PlayerType *player_ptr, bool pickup)
             PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
         }
 
-        if (player_ptr->wild_mode) {
+        if (is_wild_mode) {
             energy.mul_player_turn_energy((MAX_HGT + MAX_WID) / 2);
         }
 
@@ -373,7 +375,7 @@ void do_cmd_walk(PlayerType *player_ptr, bool pickup)
         more = true;
     }
 
-    if (player_ptr->wild_mode && !cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, TerrainCharacteristics::TOWN)) {
+    if (is_wild_mode && !cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, TerrainCharacteristics::TOWN)) {
         int tmp = 120 + player_ptr->lev * 10 - wilderness[player_ptr->y][player_ptr->x].level + 5;
         if (tmp < 1) {
             tmp = 1;

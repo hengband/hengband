@@ -44,6 +44,7 @@
 #include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include "world/world.h"
 
 /*!
  * Determine if a "boundary" grid is "floor mimic"
@@ -84,7 +85,8 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
     bool p_can_enter = player_can_enter(player_ptr, grid.feat, CEM_P_CAN_ENTER_PATTERN);
-    if (!floor.dun_level && !player_ptr->wild_mode && ((pos.x == 0) || (pos.x == MAX_WID - 1) || (pos.y == 0) || (pos.y == MAX_HGT - 1))) {
+    const auto &world = AngbandWorld::get_instance();
+    if (!floor.dun_level && !world.is_wild_mode() && ((pos.x == 0) || (pos.x == MAX_WID - 1) || (pos.y == 0) || (pos.y == MAX_HGT - 1))) {
         if (grid.mimic && player_can_enter(player_ptr, grid.mimic, 0)) {
             if ((pos.y == 0) && (pos.x == 0)) {
                 player_ptr->wilderness_y--;
@@ -336,7 +338,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
         msg_format(_("%sを押し退けた。", "You push past %s."), m_name.data());
     }
 
-    if (player_ptr->wild_mode) {
+    if (world.is_wild_mode()) {
         if (ddy[dir] > 0) {
             player_ptr->oldpy = 1;
         }

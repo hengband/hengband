@@ -198,7 +198,7 @@ std::string map_name(PlayerType *player_ptr)
     is_fixed_quest &= any_bits(quests.get_quest(floor.quest_number).flags, QUEST_FLAG_PRESET);
     if (is_fixed_quest) {
         return _("クエスト", "Quest");
-    } else if (player_ptr->wild_mode) {
+    } else if (AngbandWorld::get_instance().is_wild_mode()) {
         return _("地上", "Surface");
     } else if (floor.inside_arena) {
         return _("アリーナ", "Arena");

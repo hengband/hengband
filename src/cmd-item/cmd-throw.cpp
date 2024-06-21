@@ -17,6 +17,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "world/world.h"
 
 ThrowCommand::ThrowCommand(PlayerType *player_ptr)
     : player_ptr(player_ptr)
@@ -42,7 +43,7 @@ ThrowCommand::ThrowCommand(PlayerType *player_ptr)
  */
 bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 {
-    if (this->player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         return false;
     }
 

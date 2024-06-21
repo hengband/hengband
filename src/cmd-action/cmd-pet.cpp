@@ -372,7 +372,7 @@ void do_cmd_pet(PlayerType *player_ptr)
     auto command_idx = 0;
     int menu_line = use_menu ? 1 : 0;
     auto num = 0;
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         return;
     }
 

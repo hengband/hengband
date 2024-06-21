@@ -67,7 +67,6 @@ public:
 
     POSITION wilderness_x{}; /* Coordinates in the wilderness */
     POSITION wilderness_y{};
-    bool wild_mode{};
 
     int mhp{}; /* Max hit pts */
     int chp{}; /* Cur hit pts */

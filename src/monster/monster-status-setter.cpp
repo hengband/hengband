@@ -323,7 +323,7 @@ bool set_monster_invulner(PlayerType *player_ptr, MONSTER_IDX m_idx, int v, bool
     } else {
         if (m_ptr->is_invulnerable()) {
             mproc_remove(floor_ptr, m_idx, MTIMED_INVULNER);
-            if (energy_need && !player_ptr->wild_mode) {
+            if (energy_need && !AngbandWorld::get_instance().is_wild_mode()) {
                 m_ptr->energy_need += ENERGY_NEED();
             }
             notice = true;

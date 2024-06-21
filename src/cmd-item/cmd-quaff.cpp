@@ -19,6 +19,7 @@
 #include "spell-realm/spells-hex.h"
 #include "status/action-setter.h"
 #include "system/player-type-definition.h"
+#include "world/world.h"
 
 /*!
  * @brief 薬を飲むコマンドのメインルーチン /
@@ -26,7 +27,7 @@
  */
 void do_cmd_quaff_potion(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         return;
     }
 

@@ -306,7 +306,7 @@ static bool bldg_process_command(PlayerType *player_ptr, building_type *bldg, in
  */
 void do_cmd_building(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         return;
     }
 

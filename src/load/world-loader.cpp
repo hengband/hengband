@@ -160,10 +160,11 @@ void load_wilderness_info(PlayerType *player_ptr)
         player_ptr->wilderness_y = 48;
     }
 
+    auto &world = AngbandWorld::get_instance();
     if (h_older_than(0, 3, 7)) {
-        player_ptr->wild_mode = false;
+        world.set_wild_mode(false);
     } else {
-        player_ptr->wild_mode = rd_bool();
+        world.set_wild_mode(rd_bool());
     }
 
     if (h_older_than(0, 3, 7)) {

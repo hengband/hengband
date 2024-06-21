@@ -132,7 +132,7 @@ void WorldTurnProcessor::process_downward()
     floor_ptr->reset_dungeon_index();
     FloorChangeModesStore::get_instace()->set({ FloorChangeMode::FIRST_FLOOR, FloorChangeMode::RANDOM_PLACE });
     floor_ptr->inside_arena = false;
-    this->player_ptr->wild_mode = false;
+    AngbandWorld::get_instance().set_wild_mode(false);
     this->player_ptr->leaving = true;
 }
 
@@ -354,7 +354,7 @@ void WorldTurnProcessor::ring_nightmare_bell(int prev_min)
 
     disturb(this->player_ptr, true, true);
     msg_print(_("遠くで鐘が何回も鳴り、死んだような静けさの中へ消えていった。", "A distant bell tolls many times, fading into an deathly silence."));
-    if (this->player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         this->player_ptr->oldpy = randint1(MAX_HGT - 2);
         this->player_ptr->oldpx = randint1(MAX_WID - 2);
         change_wild_mode(this->player_ptr, true);

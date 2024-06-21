@@ -10,6 +10,7 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
+#include "world/world.h"
 
 using scene_feel_func = bool (*)(PlayerType *player_ptr, scene_type *value);
 
@@ -21,7 +22,7 @@ static bool scene_basic(PlayerType *player_ptr, scene_type *value)
         return true;
     }
 
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         value->type = TERM_XTRA_MUSIC_BASIC;
         value->val = MUSIC_BASIC_WILD;
         return true;

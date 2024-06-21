@@ -133,7 +133,7 @@ static MonsterRaceInfo &set_pet_params(PlayerType *player_ptr, const int current
  */
 static void place_pet(PlayerType *player_ptr)
 {
-    int max_num = player_ptr->wild_mode ? 1 : MAX_PARTY_MON;
+    const auto max_num = AngbandWorld::get_instance().is_wild_mode() ? 1 : MAX_PARTY_MON;
     auto &floor = *player_ptr->current_floor_ptr;
     for (int current_monster = 0; current_monster < max_num; current_monster++) {
         POSITION cy = 0;

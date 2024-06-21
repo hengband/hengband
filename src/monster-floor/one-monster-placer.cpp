@@ -264,7 +264,8 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, 
     auto &floor = *player_ptr->current_floor_ptr;
     auto *g_ptr = &floor.grid_array[y][x];
     auto *r_ptr = &MonraceList::get_instance().get_monrace(r_idx);
-    if (player_ptr->wild_mode || !in_bounds(&floor, y, x) || !MonraceList::is_valid(r_idx)) {
+    const auto &world = AngbandWorld::get_instance();
+    if (world.is_wild_mode() || !in_bounds(&floor, y, x) || !MonraceList::is_valid(r_idx)) {
         return false;
     }
 
@@ -434,7 +435,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, 
      * Memorize location of the unique monster in saved floors.
      * A unique monster move from old saved floor.
      */
-    if (AngbandWorld::get_instance().character_dungeon && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->population_flags.has(MonsterPopulationType::NAZGUL))) {
+    if (world.character_dungeon && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->population_flags.has(MonsterPopulationType::NAZGUL))) {
         m_ptr->get_real_monrace().floor_id = player_ptr->floor_id;
     }
 

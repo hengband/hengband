@@ -232,7 +232,7 @@ void do_cmd_version()
  */
 void do_cmd_feeling(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         return;
     }
 
