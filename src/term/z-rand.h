@@ -102,10 +102,16 @@ bool evaluate_percent(T p)
     return randint0(100) < static_cast<int>(p);
 }
 
-/*
- * Evaluate to TRUE with probability 1/x
+/*!
+ * @brief 1/nの確率で事象が生起するかを返す
+ * @param n 母数
+ * @return 生起するか否か
  */
-#define one_in_(X) (randint0(X) == 0)
+template <typename T>
+bool one_in_(T n)
+{
+    return randint0(static_cast<int>(n)) == 0;
+}
 
 void Rand_state_init();
 int16_t randnor(int mean, int stand);
