@@ -161,7 +161,7 @@ void init_dungeon_quests(PlayerType *player_ptr)
     floor.quest_number = QuestId::RANDOM_QUEST1;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
     floor.quest_number = QuestId::NONE;
-    for (auto quest_id : EnumRangeInclusive(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
+    for (auto quest_id : RANDOM_QUEST_ID_RANGE) {
         auto &quest = quests.get_quest(quest_id);
         quest.status = QuestStatusType::TAKEN;
         determine_random_questor(player_ptr, quest);
