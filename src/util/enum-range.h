@@ -72,10 +72,7 @@ public:
          * @param other 比較対象となるイテレータ
          * @return 2つのイテレータが指している列挙値が等しければ true、そうでなければ false
          */
-        constexpr bool operator==(const iterator &other) const noexcept
-        {
-            return index == other.index;
-        }
+        constexpr bool operator==(const iterator &other) const noexcept = default;
 
     private:
         //! 現在イテレータが指している列挙値の基底型における整数値
