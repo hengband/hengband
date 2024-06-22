@@ -43,6 +43,7 @@
 #include "market/building-recharger.h"
 #include "market/building-service.h"
 #include "market/building-util.h"
+#include "market/melee-arena.h"
 #include "market/play-gamble.h"
 #include "market/poker.h"
 #include "mutation/mutation-flag-types.h"

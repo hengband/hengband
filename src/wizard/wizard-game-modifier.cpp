@@ -8,7 +8,7 @@
 #include "dungeon/quest.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/input-key-requester.h"
-#include "market/arena.h"
+#include "market/melee-arena.h"
 #include "monster-race/race-indice-types.h"
 #include "player-info/self-info.h"
 #include "system/floor-type-definition.h"
