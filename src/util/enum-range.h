@@ -82,6 +82,9 @@ public:
         std::underlying_type_t<EnumType> index;
     };
 
+    using value_type = EnumType;
+    using const_iterator = iterator;
+
     /*!
      * @brief 引数で与えた範囲の EnumRange クラスのオブジェクトを生成する
      * @details 生成する範囲はfirstからlastまで(lastを含む)。
