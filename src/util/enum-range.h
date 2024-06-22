@@ -1,5 +1,6 @@
 #pragma once
 
+#include <concepts>
 #include <iterator>
 #include <type_traits>
 
@@ -9,9 +10,8 @@
  * @tparam EnumType 対象となる列挙型(enum もしくは enum class)
  */
 template <typename EnumType>
+    requires std::is_enum_v<EnumType>
 class EnumRange {
-    static_assert(std::is_enum_v<EnumType>);
-
 public:
     /*!
      * @brief 列挙値の範囲のイテレータクラス

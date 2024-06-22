@@ -9,6 +9,7 @@
 #include <type_traits>
 
 template <typename T>
+    requires std::is_enum_v<T>
 class EnumRange;
 
 namespace flag_group {
