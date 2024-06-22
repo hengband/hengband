@@ -244,7 +244,7 @@ static bool bldg_process_command(PlayerType *player_ptr, building_type *bldg, in
         return false;
     }
     case BACT_BATTLE:
-        return monster_arena_comm(player_ptr);
+        return melee_arena_comm(player_ptr);
     case BACT_TSUCHINOKO:
         tsuchinoko();
         return false;

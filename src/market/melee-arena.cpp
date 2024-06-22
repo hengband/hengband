@@ -128,7 +128,7 @@ void update_melee_gladiators(PlayerType *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 賭けを開始したか否か
  */
-bool monster_arena_comm(PlayerType *player_ptr)
+bool melee_arena_comm(PlayerType *player_ptr)
 {
     auto &world = AngbandWorld::get_instance();
     if ((world.game_turn - world.arena_start_turn) > TURNS_PER_TICK * 250) {
