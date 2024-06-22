@@ -74,6 +74,6 @@ enum class ItemKindType : short {
     GOLD = 127, /* Gold can only be picked up by players */
 };
 
-constexpr auto TV_WEARABLE_RANGE = EnumRange(ItemKindType::BOW, ItemKindType::CARD);
-constexpr auto TV_WEAPON_RANGE = EnumRange(ItemKindType::BOW, ItemKindType::SWORD);
-constexpr auto TV_MAGIC_BOOK_RANGE = EnumRange(ItemKindType::LIFE_BOOK, ItemKindType::CRUSADE_BOOK);
+constexpr auto TV_WEARABLE_RANGE = EnumRangeInclusive(ItemKindType::BOW, ItemKindType::CARD);
+constexpr auto TV_WEAPON_RANGE = EnumRangeInclusive(ItemKindType::BOW, ItemKindType::SWORD);
+constexpr auto TV_MAGIC_BOOK_RANGE = EnumRangeInclusive(ItemKindType::LIFE_BOOK, ItemKindType::CRUSADE_BOOK);

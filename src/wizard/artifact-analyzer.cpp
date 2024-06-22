@@ -96,11 +96,11 @@ static std::vector<std::string> analyze_vulnerable(const ItemEntity *o_ptr)
 static std::vector<std::string> analyze_sustains(const ItemEntity *o_ptr)
 {
     const auto flags = o_ptr->get_flags();
-    if (flags.has_all_of(EnumRange(TR_SUST_STR, TR_SUST_CHR))) {
+    if (flags.has_all_of(EnumRangeInclusive(TR_SUST_STR, TR_SUST_CHR))) {
         return { _("全能力", "All stats") };
     }
 
-    if (flags.has_any_of(EnumRange(TR_SUST_STR, TR_SUST_CHR))) {
+    if (flags.has_any_of(EnumRangeInclusive(TR_SUST_STR, TR_SUST_CHR))) {
         return extract_spoiler_flags(flags, sustain_flags_desc);
     }
 

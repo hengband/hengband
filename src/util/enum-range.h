@@ -5,7 +5,7 @@
 #include <type_traits>
 
 /*!
- * @brief enum もしくは enum class の列挙値の範囲を扱うクラス
+ * @brief enum もしくは enum class の列挙値の範囲(半開区間)を扱うクラス
  *
  * @tparam EnumType 対象となる列挙型(enum もしくは enum class)
  */
@@ -83,17 +83,16 @@ public:
     using const_iterator = iterator;
 
     /*!
-     * @brief 引数で与えた範囲の EnumRange クラスのオブジェクトを生成する
-     * @details 生成する範囲はfirstからlastまで(lastを含む)。
-     * 範囲の最終値+1の列挙値が存在しない場合を考慮し、半開区間ではなく閉区間で範囲を指定する。
+     * @brief 引数で与えた範囲(半開区間)のオブジェクトを生成する
+     * @details 生成する範囲はfirstからlastの1つ前の値(lastを含まない、半開区間)。
      * 範囲のイテレーションは基底型の整数値をインクリメントする事によって行うので、
      * first から last までの間の整数値が飛んでいる場合、その部分は具体的な定義の無い列挙値がイテレートされる。
      * @param first 範囲の最初となる列挙値
-     * @param last 範囲の最後となる列挙値(lastも含む)
+     * @param last 範囲の最後となる列挙値の次の値(lastは範囲に含まない)
      */
     constexpr EnumRange(EnumType first, EnumType last) noexcept
         : begin_val(first)
-        , end_val(static_cast<EnumType>(std::underlying_type_t<EnumType>(last) + 1))
+        , end_val(last)
     {
     }
 
@@ -130,4 +129,65 @@ public:
 private:
     EnumType begin_val;
     EnumType end_val;
+};
+
+/*!
+ * @brief enum もしくは enum class の列挙値の範囲(閉区間)を扱うクラス
+ *
+ * @tparam EnumType 対象となる列挙型(enum もしくは enum class)
+ */
+template <typename EnumType>
+    requires std::is_enum_v<EnumType>
+class EnumRangeInclusive {
+public:
+    using value_type = EnumType;
+    using iterator = typename EnumRange<EnumType>::iterator;
+    using const_iterator = iterator;
+
+    /*!
+     * @brief 引数で与えた範囲(閉区間)のオブジェクトを生成する
+     * @details 生成する範囲はfirstからlastまで(lastを含む、閉区間)。
+     * 範囲の最終値+1の列挙値が存在しない場合や、列挙値の一部の範囲を指定したい場合に使用する。
+     * 範囲のイテレーションは基底型の整数値をインクリメントする事によって行うので、
+     * first から last までの間の整数値が飛んでいる場合、その部分は具体的な定義の無い列挙値がイテレートされる。
+     * @param first 範囲の最初となる列挙値
+     * @param last 範囲の最後となる列挙値(lastも範囲に含む)
+     */
+    constexpr EnumRangeInclusive(EnumType first, EnumType last) noexcept
+        : range(first, static_cast<EnumType>(std::underlying_type_t<EnumType>(last) + 1))
+    {
+    }
+
+    /*!
+     * @brief 範囲の最初の列挙値を指すイテレータを取得する
+     *
+     * @return 範囲の最初の列挙値を指すイテレータ
+     */
+    constexpr auto begin() const noexcept
+    {
+        return range.begin();
+    }
+
+    /*!
+     * @brief 範囲の最後の列挙値の次の値を指すイテレータを取得する
+     *
+     * @return 範囲の最後の列挙値の次の値を指すイテレータ
+     */
+    constexpr auto end() const noexcept
+    {
+        return range.end();
+    }
+
+    /*!
+     * @brief 範囲に含まれる列挙値の種類数を取得する
+     *
+     * @return 範囲に含まれる列挙値の種類数
+     */
+    constexpr auto size() const noexcept
+    {
+        return range.size();
+    }
+
+private:
+    EnumRange<EnumType> range;
 };

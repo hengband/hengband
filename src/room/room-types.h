@@ -27,4 +27,4 @@ enum class RoomType {
 
 constexpr int ROOM_TYPE_MAX = enum2i(RoomType::MAX);
 
-constexpr auto ROOM_TYPE_LIST = EnumRange(RoomType::NORMAL, RoomType::FIXED);
+constexpr auto ROOM_TYPE_LIST = EnumRange(RoomType::NORMAL, RoomType::MAX);

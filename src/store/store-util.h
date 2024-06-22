@@ -25,7 +25,7 @@ enum class StoreSaleType : int {
 };
 constexpr int MAX_STORES = enum2i(StoreSaleType::MAX); /*!< 店舗の種類最大数 / Total number of stores (see "store.c", etc) */
 
-constexpr auto STORE_SALE_TYPE_LIST = EnumRange(StoreSaleType::GENERAL, StoreSaleType::MUSEUM);
+constexpr auto STORE_SALE_TYPE_LIST = EnumRange(StoreSaleType::GENERAL, StoreSaleType::MAX);
 
 using store_k_idx = std::vector<short>;
 

@@ -115,7 +115,7 @@ void RedrawingFlagsUpdater::reset_flags(const EnumClassFlagGroup<StatusRecalcula
 
 void RedrawingFlagsUpdater::fill_up_sub_flags()
 {
-    constexpr auto all_sub_window_flags = EnumRange(SubWindowRedrawingFlag::INVENTORY, SubWindowRedrawingFlag::FOUND_ITEMS);
+    constexpr auto all_sub_window_flags = EnumRange(SubWindowRedrawingFlag::INVENTORY, SubWindowRedrawingFlag::MAX);
     this->sub_window_flags.set(all_sub_window_flags);
 }
 
