@@ -1,7 +1,7 @@
 #include "mind/mind-explanations-table.h"
 
 /*! 特殊技能の一覧テーブル */
-mind_power const mind_powers[MAX_MINDKINDS] = {
+const std::vector<mind_power> mind_powers = {
     { {
         /* Level gained,  cost,  %fail,  name */
         { 1, 1, 15, _("霊視", "Precognition") },
@@ -20,13 +20,6 @@ mind_power const mind_powers[MAX_MINDKINDS] = {
         { 28, 10, 40, _("サイキック・ドレイン", "Psychic Drain") },
         { 35, 35, 75, _("光の剣", "Psycho-Spear") },
         { 45, 150, 85, _("完全な世界", "The World") },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
     } },
 
     { {
@@ -47,13 +40,6 @@ mind_power const mind_powers[MAX_MINDKINDS] = {
         { 32, 35, 65, _("爆発波", "Exploding Flame") },
         { 38, 42, 75, _("超カメハメ波", "Super Kamehameha") },
         { 44, 50, 80, _("光速移動", "Light Speed") },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
     } },
 
     { {
@@ -63,22 +49,6 @@ mind_power const mind_powers[MAX_MINDKINDS] = {
         { 20, 15, 0, _("トラップ粉砕", "Smash a Trap") },
         { 25, 20, 60, _("地震", "Quake") },
         { 30, 80, 75, _("皆殺し", "Massacre") },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
-        { 99, 0, 0, "" },
     } },
 
     { {
@@ -135,12 +105,11 @@ mind_power const mind_powers[MAX_MINDKINDS] = {
         { 34, 35, 50, _("霧隠れ", "Hide in Mist") },
         { 38, 40, 60, _("煉獄火炎", "Rengoku-Kaen") },
         { 41, 50, 55, _("分身", "Bunshin") },
-        { 99, 0, 0, "" },
     } },
 };
 
 /*! 特殊能力の解説文字列 */
-concptr const mind_tips[MAX_MINDKINDS][MAX_MIND_POWERS] = {
+const std::vector<std::vector<std::string>> mind_tips = {
     {
         _("近くの全ての見えるモンスターを感知する。レベル5で罠/"
           "扉、15で透明なモンスター、30で財宝とアイテムを感知できるようになる。レベル20で周辺の地形を感知し、45でその階全体を永久に照らし、"
@@ -166,13 +135,6 @@ concptr const mind_tips[MAX_MINDKINDS][MAX_MIND_POWERS] = {
         _("無傷球をも切り裂く純粋なエネルギーのビームを放つ。", "Fires a beam of pure energy which penetrates invulnerability barriers."),
         _("時を止める。全MPを消費し、消費したMPに応じて長く時を止めていられる。",
             "Stops time. Consumes all of your SP. The more SP consumed, the longer the duration of the spell."),
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
     },
     {
         _("ごく小さい気の球を放つ。", "Fires a very small energy ball."),
@@ -192,13 +154,6 @@ concptr const mind_tips[MAX_MINDKINDS][MAX_MIND_POWERS] = {
         _("自分を中心とした超巨大な炎の球を発生させる。", "Generates a huge ball of flame centered on you."),
         _("射程の長い、強力な気のビームを放つ。", "Fires a long, powerful energy beam."),
         _("しばらくの間、非常に速く動くことができる。", "Gives extremely fast speed."),
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
     },
     {
         _("近くの思考することができるモンスターを感知する。", "Detects all monsters except the mindless in your vicinity."),
@@ -207,22 +162,6 @@ concptr const mind_tips[MAX_MINDKINDS][MAX_MIND_POWERS] = {
         _("トラップにかかるが、そのトラップを破壊する。", "Sets off a trap, then destroys that trap."),
         _("周囲のダンジョンを揺らし、壁と床をランダムに入れ変える。", "Shakes dungeon structure, and results in random swapping of floors and walls."),
         _("全方向に向かって攻撃する。", "Attacks all adjacent monsters."),
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
     },
     {
         _("近くの全てのモンスターを感知する。レベル15で透明なモンスターを感知する。レベル25で一定時間テレパシーを得る。レベル35で周辺の地形を感知する。"
@@ -294,6 +233,5 @@ concptr const mind_tips[MAX_MINDKINDS][MAX_MIND_POWERS] = {
         _("ランダムな方向に何回か炎か地獄かプラズマのビームを放つ。", "Fires some number of beams of fire, nether or plasma in random directions."),
         _("全ての攻撃が、1/2の確率で無効になる。",
             "Creates shadows of yourself which gives you the ability to completely evade any attacks at one in two chance for a while."),
-        "",
     },
 };
