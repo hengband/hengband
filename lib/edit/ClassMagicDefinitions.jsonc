@@ -1895,7 +1895,7 @@
             {
               "spell_id": 5,
               "learn_level": 10,
-              "mana_cost": 7,
+              "mana_cost": 6,
               "difficulty": 40,
               "first_cast_exp_rate": 6
             },
@@ -1915,59 +1915,59 @@
             },
             {
               "spell_id": 8,
-              "learn_level": 15,
-              "mana_cost": 14,
-              "difficulty": 45,
-              "first_cast_exp_rate": 9
-            },
-            {
-              "spell_id": 9,
               "learn_level": 17,
               "mana_cost": 15,
               "difficulty": 60,
               "first_cast_exp_rate": 10
             },
             {
-              "spell_id": 10,
+              "spell_id": 9,
               "learn_level": 20,
               "mana_cost": 18,
               "difficulty": 50,
               "first_cast_exp_rate": 11
             },
             {
-              "spell_id": 11,
+              "spell_id": 10,
               "learn_level": 23,
               "mana_cost": 15,
               "difficulty": 50,
               "first_cast_exp_rate": 12
             },
             {
-              "spell_id": 12,
+              "spell_id": 11,
               "learn_level": 25,
               "mana_cost": 16,
               "difficulty": 50,
               "first_cast_exp_rate": 12
             },
             {
-              "spell_id": 13,
+              "spell_id": 12,
               "learn_level": 30,
               "mana_cost": 75,
               "difficulty": 80,
               "first_cast_exp_rate": 30
             },
             {
-              "spell_id": 14,
-              "learn_level": 32,
-              "mana_cost": 28,
-              "difficulty": 70,
+              "spell_id": 13,
+              "learn_level": 33,
+              "mana_cost": 30,
+              "difficulty": 85,
               "first_cast_exp_rate": 15
             },
             {
-              "spell_id": 15,
+              "spell_id": 14,
               "learn_level": 36,
               "mana_cost": 70,
               "difficulty": 85,
               "first_cast_exp_rate": 40
+            },
+            {
+              "spell_id": 15,
+              "learn_level": 37,
+              "mana_cost": 18,
+              "difficulty": 85,
+              "first_cast_exp_rate": 100
             },
             {
               "spell_id": 16,
@@ -2006,16 +2006,16 @@
             },
             {
               "spell_id": 21,
-              "learn_level": 37,
+              "learn_level": 36,
               "mana_cost": 35,
-              "difficulty": 85,
+              "difficulty": 60,
               "first_cast_exp_rate": 100
             },
             {
               "spell_id": 22,
               "learn_level": 40,
               "mana_cost": 40,
-              "difficulty": 85,
+              "difficulty": 70,
               "first_cast_exp_rate": 40
             },
             {
@@ -2027,38 +2027,38 @@
             },
             {
               "spell_id": 24,
-              "learn_level": 9,
-              "mana_cost": 9,
-              "difficulty": 50,
-              "first_cast_exp_rate": 8
-            },
-            {
-              "spell_id": 25,
               "learn_level": 26,
               "mana_cost": 25,
               "difficulty": 85,
               "first_cast_exp_rate": 35
             },
             {
-              "spell_id": 26,
+              "spell_id": 25,
               "learn_level": 36,
               "mana_cost": 35,
               "difficulty": 80,
               "first_cast_exp_rate": 200
             },
             {
-              "spell_id": 27,
+              "spell_id": 26,
               "learn_level": 41,
               "mana_cost": 50,
               "difficulty": 85,
               "first_cast_exp_rate": 100
             },
             {
-              "spell_id": 28,
+              "spell_id": 27,
               "learn_level": 43,
               "mana_cost": 100,
               "difficulty": 90,
               "first_cast_exp_rate": 250
+            },
+            {
+              "spell_id": 28,
+              "learn_level": 44,
+              "mana_cost": 58,
+              "difficulty": 85,
+              "first_cast_exp_rate": 200
             },
             {
               "spell_id": 29,
@@ -4197,7 +4197,7 @@
             {
               "spell_id": 5,
               "learn_level": 12,
-              "mana_cost": 9,
+              "mana_cost": 8,
               "difficulty": 50,
               "first_cast_exp_rate": 6
             },
@@ -4217,59 +4217,59 @@
             },
             {
               "spell_id": 8,
-              "learn_level": 17,
-              "mana_cost": 17,
-              "difficulty": 50,
-              "first_cast_exp_rate": 9
-            },
-            {
-              "spell_id": 9,
               "learn_level": 20,
               "mana_cost": 19,
               "difficulty": 65,
               "first_cast_exp_rate": 20
             },
             {
-              "spell_id": 10,
+              "spell_id": 9,
               "learn_level": 23,
               "mana_cost": 23,
               "difficulty": 60,
               "first_cast_exp_rate": 11
             },
             {
-              "spell_id": 11,
+              "spell_id": 10,
               "learn_level": 25,
               "mana_cost": 18,
               "difficulty": 65,
               "first_cast_exp_rate": 12
             },
             {
-              "spell_id": 12,
+              "spell_id": 11,
               "learn_level": 27,
               "mana_cost": 20,
               "difficulty": 65,
               "first_cast_exp_rate": 12
             },
             {
-              "spell_id": 13,
+              "spell_id": 12,
               "learn_level": 33,
               "mana_cost": 75,
               "difficulty": 90,
               "first_cast_exp_rate": 30
             },
             {
-              "spell_id": 14,
+              "spell_id": 13,
               "learn_level": 35,
-              "mana_cost": 32,
-              "difficulty": 70,
+              "mana_cost": 33,
+              "difficulty": 85,
               "first_cast_exp_rate": 30
             },
             {
-              "spell_id": 15,
+              "spell_id": 14,
               "learn_level": 39,
               "mana_cost": 85,
               "difficulty": 85,
               "first_cast_exp_rate": 40
+            },
+            {
+              "spell_id": 15,
+              "learn_level": 39,
+              "mana_cost": 20,
+              "difficulty": 80,
+              "first_cast_exp_rate": 100
             },
             {
               "spell_id": 16,
@@ -4308,16 +4308,16 @@
             },
             {
               "spell_id": 21,
-              "learn_level": 39,
-              "mana_cost": 40,
-              "difficulty": 80,
+              "learn_level": 38,
+              "mana_cost": 35,
+              "difficulty": 60,
               "first_cast_exp_rate": 100
             },
             {
               "spell_id": 22,
               "learn_level": 44,
               "mana_cost": 44,
-              "difficulty": 75,
+              "difficulty": 70,
               "first_cast_exp_rate": 50
             },
             {
@@ -4329,38 +4329,38 @@
             },
             {
               "spell_id": 24,
-              "learn_level": 9,
-              "mana_cost": 9,
-              "difficulty": 66,
-              "first_cast_exp_rate": 8
-            },
-            {
-              "spell_id": 25,
               "learn_level": 28,
               "mana_cost": 28,
               "difficulty": 85,
               "first_cast_exp_rate": 35
             },
             {
-              "spell_id": 26,
+              "spell_id": 25,
               "learn_level": 38,
               "mana_cost": 40,
               "difficulty": 80,
               "first_cast_exp_rate": 200
             },
             {
-              "spell_id": 27,
+              "spell_id": 26,
               "learn_level": 43,
               "mana_cost": 58,
               "difficulty": 85,
               "first_cast_exp_rate": 100
             },
             {
-              "spell_id": 28,
+              "spell_id": 27,
               "learn_level": 45,
               "mana_cost": 100,
               "difficulty": 90,
               "first_cast_exp_rate": 250
+            },
+            {
+              "spell_id": 28,
+              "learn_level": 46,
+              "mana_cost": 60,
+              "difficulty": 90,
+              "first_cast_exp_rate": 150
             },
             {
               "spell_id": 29,
@@ -7198,7 +7198,7 @@
             {
               "spell_id": 5,
               "learn_level": 17,
-              "mana_cost": 11,
+              "mana_cost": 10,
               "difficulty": 60,
               "first_cast_exp_rate": 3
             },
@@ -7218,59 +7218,59 @@
             },
             {
               "spell_id": 8,
-              "learn_level": 27,
-              "mana_cost": 27,
-              "difficulty": 60,
-              "first_cast_exp_rate": 8
-            },
-            {
-              "spell_id": 9,
               "learn_level": 29,
               "mana_cost": 26,
               "difficulty": 70,
               "first_cast_exp_rate": 13
             },
             {
-              "spell_id": 10,
+              "spell_id": 9,
               "learn_level": 32,
               "mana_cost": 30,
               "difficulty": 70,
               "first_cast_exp_rate": 10
             },
             {
-              "spell_id": 11,
+              "spell_id": 10,
               "learn_level": 35,
               "mana_cost": 31,
               "difficulty": 75,
               "first_cast_exp_rate": 15
             },
             {
-              "spell_id": 12,
+              "spell_id": 11,
               "learn_level": 37,
               "mana_cost": 35,
               "difficulty": 75,
               "first_cast_exp_rate": 15
             },
             {
-              "spell_id": 13,
+              "spell_id": 12,
               "learn_level": 38,
               "mana_cost": 80,
               "difficulty": 95,
               "first_cast_exp_rate": 20
             },
             {
-              "spell_id": 14,
+              "spell_id": 13,
               "learn_level": 44,
               "mana_cost": 40,
               "difficulty": 80,
               "first_cast_exp_rate": 15
             },
             {
-              "spell_id": 15,
+              "spell_id": 14,
               "learn_level": 47,
               "mana_cost": 100,
               "difficulty": 90,
               "first_cast_exp_rate": 30
+            },
+            {
+              "spell_id": 15,
+              "learn_level": 44,
+              "mana_cost": 25,
+              "difficulty": 80,
+              "first_cast_exp_rate": 35
             },
             {
               "spell_id": 16,
@@ -7309,9 +7309,9 @@
             },
             {
               "spell_id": 21,
-              "learn_level": 44,
+              "learn_level": 45,
               "mana_cost": 50,
-              "difficulty": 80,
+              "difficulty": 60,
               "first_cast_exp_rate": 35
             },
             {
@@ -7330,31 +7330,31 @@
             },
             {
               "spell_id": 24,
-              "learn_level": 17,
-              "mana_cost": 14,
-              "difficulty": 66,
-              "first_cast_exp_rate": 8
-            },
-            {
-              "spell_id": 25,
               "learn_level": 35,
               "mana_cost": 35,
               "difficulty": 85,
               "first_cast_exp_rate": 35
             },
             {
-              "spell_id": 26,
+              "spell_id": 25,
               "learn_level": 45,
               "mana_cost": 55,
               "difficulty": 85,
               "first_cast_exp_rate": 200
             },
             {
-              "spell_id": 27,
+              "spell_id": 26,
               "learn_level": 50,
               "mana_cost": 70,
               "difficulty": 85,
               "first_cast_exp_rate": 100
+            },
+            {
+              "spell_id": 27,
+              "learn_level": 99,
+              "mana_cost": 0,
+              "difficulty": 0,
+              "first_cast_exp_rate": 0
             },
             {
               "spell_id": 28,
@@ -9741,7 +9741,7 @@
             {
               "spell_id": 5,
               "learn_level": 13,
-              "mana_cost": 10,
+              "mana_cost": 9,
               "difficulty": 50,
               "first_cast_exp_rate": 6
             },
@@ -9761,59 +9761,59 @@
             },
             {
               "spell_id": 8,
-              "learn_level": 19,
-              "mana_cost": 19,
-              "difficulty": 45,
-              "first_cast_exp_rate": 9
-            },
-            {
-              "spell_id": 9,
               "learn_level": 24,
               "mana_cost": 20,
               "difficulty": 60,
               "first_cast_exp_rate": 20
             },
             {
-              "spell_id": 10,
+              "spell_id": 9,
               "learn_level": 26,
               "mana_cost": 25,
               "difficulty": 50,
               "first_cast_exp_rate": 11
             },
             {
-              "spell_id": 11,
+              "spell_id": 10,
               "learn_level": 29,
               "mana_cost": 30,
               "difficulty": 50,
               "first_cast_exp_rate": 12
             },
             {
-              "spell_id": 12,
+              "spell_id": 11,
               "learn_level": 33,
               "mana_cost": 33,
               "difficulty": 50,
               "first_cast_exp_rate": 12
             },
             {
-              "spell_id": 13,
+              "spell_id": 12,
               "learn_level": 35,
               "mana_cost": 75,
               "difficulty": 80,
               "first_cast_exp_rate": 8
             },
             {
-              "spell_id": 14,
-              "learn_level": 42,
-              "mana_cost": 34,
-              "difficulty": 70,
+              "spell_id": 13,
+              "learn_level": 41,
+              "mana_cost": 36,
+              "difficulty": 85,
               "first_cast_exp_rate": 15
             },
             {
-              "spell_id": 15,
+              "spell_id": 14,
               "learn_level": 44,
               "mana_cost": 90,
               "difficulty": 85,
               "first_cast_exp_rate": 40
+            },
+            {
+              "spell_id": 15,
+              "learn_level": 42,
+              "mana_cost": 19,
+              "difficulty": 80,
+              "first_cast_exp_rate": 35
             },
             {
               "spell_id": 16,
@@ -9853,15 +9853,15 @@
             {
               "spell_id": 21,
               "learn_level": 42,
-              "mana_cost": 38,
-              "difficulty": 80,
+              "mana_cost": 40,
+              "difficulty": 60,
               "first_cast_exp_rate": 35
             },
             {
               "spell_id": 22,
               "learn_level": 46,
               "mana_cost": 45,
-              "difficulty": 75,
+              "difficulty": 70,
               "first_cast_exp_rate": 40
             },
             {
@@ -9873,38 +9873,38 @@
             },
             {
               "spell_id": 24,
-              "learn_level": 10,
-              "mana_cost": 10,
-              "difficulty": 66,
-              "first_cast_exp_rate": 8
-            },
-            {
-              "spell_id": 25,
               "learn_level": 32,
               "mana_cost": 32,
               "difficulty": 85,
               "first_cast_exp_rate": 35
             },
             {
-              "spell_id": 26,
+              "spell_id": 25,
               "learn_level": 41,
               "mana_cost": 48,
               "difficulty": 80,
               "first_cast_exp_rate": 200
             },
             {
-              "spell_id": 27,
+              "spell_id": 26,
               "learn_level": 46,
               "mana_cost": 62,
               "difficulty": 85,
               "first_cast_exp_rate": 100
             },
             {
-              "spell_id": 28,
+              "spell_id": 27,
               "learn_level": 48,
               "mana_cost": 111,
               "difficulty": 85,
               "first_cast_exp_rate": 250
+            },
+            {
+              "spell_id": 28,
+              "learn_level": 48,
+              "mana_cost": 60,
+              "difficulty": 80,
+              "first_cast_exp_rate": 200
             },
             {
               "spell_id": 29,
@@ -10440,7 +10440,7 @@
             {
               "spell_id": 5,
               "learn_level": 10,
-              "mana_cost": 8,
+              "mana_cost": 7,
               "difficulty": 50,
               "first_cast_exp_rate": 6
             },
@@ -10460,58 +10460,58 @@
             },
             {
               "spell_id": 8,
-              "learn_level": 16,
-              "mana_cost": 15,
-              "difficulty": 45,
-              "first_cast_exp_rate": 9
-            },
-            {
-              "spell_id": 9,
               "learn_level": 23,
               "mana_cost": 22,
               "difficulty": 50,
               "first_cast_exp_rate": 20
             },
             {
-              "spell_id": 10,
+              "spell_id": 9,
               "learn_level": 24,
               "mana_cost": 24,
               "difficulty": 50,
               "first_cast_exp_rate": 11
             },
             {
-              "spell_id": 11,
+              "spell_id": 10,
               "learn_level": 28,
               "mana_cost": 18,
               "difficulty": 50,
               "first_cast_exp_rate": 12
             },
             {
-              "spell_id": 12,
+              "spell_id": 11,
               "learn_level": 30,
               "mana_cost": 20,
               "difficulty": 50,
               "first_cast_exp_rate": 12
             },
             {
-              "spell_id": 13,
+              "spell_id": 12,
               "learn_level": 33,
               "mana_cost": 75,
               "difficulty": 90,
               "first_cast_exp_rate": 8
             },
             {
-              "spell_id": 14,
+              "spell_id": 13,
               "learn_level": 38,
-              "mana_cost": 32,
-              "difficulty": 70,
+              "mana_cost": 33,
+              "difficulty": 85,
               "first_cast_exp_rate": 15
             },
             {
-              "spell_id": 15,
+              "spell_id": 14,
               "learn_level": 39,
               "mana_cost": 85,
               "difficulty": 90,
+              "first_cast_exp_rate": 40
+            },
+            {
+              "spell_id": 15,
+              "learn_level": 37,
+              "mana_cost": 20,
+              "difficulty": 75,
               "first_cast_exp_rate": 40
             },
             {
@@ -10552,8 +10552,8 @@
             {
               "spell_id": 21,
               "learn_level": 37,
-              "mana_cost": 40,
-              "difficulty": 75,
+              "mana_cost": 35,
+              "difficulty": 60,
               "first_cast_exp_rate": 40
             },
             {
@@ -10572,38 +10572,38 @@
             },
             {
               "spell_id": 24,
-              "learn_level": 11,
-              "mana_cost": 11,
-              "difficulty": 66,
-              "first_cast_exp_rate": 10
-            },
-            {
-              "spell_id": 25,
               "learn_level": 29,
               "mana_cost": 28,
               "difficulty": 85,
               "first_cast_exp_rate": 35
             },
             {
-              "spell_id": 26,
+              "spell_id": 25,
               "learn_level": 36,
               "mana_cost": 37,
               "difficulty": 80,
               "first_cast_exp_rate": 200
             },
             {
-              "spell_id": 27,
+              "spell_id": 26,
               "learn_level": 41,
               "mana_cost": 55,
               "difficulty": 85,
               "first_cast_exp_rate": 100
             },
             {
-              "spell_id": 28,
+              "spell_id": 27,
               "learn_level": 43,
               "mana_cost": 100,
               "difficulty": 85,
               "first_cast_exp_rate": 250
+            },
+            {
+              "spell_id": 28,
+              "learn_level": 44,
+              "mana_cost": 58,
+              "difficulty": 80,
+              "first_cast_exp_rate": 200
             },
             {
               "spell_id": 29,
@@ -13452,7 +13452,7 @@
             {
               "spell_id": 5,
               "learn_level": 7,
-              "mana_cost": 5,
+              "mana_cost": 4,
               "difficulty": 40,
               "first_cast_exp_rate": 6
             },
@@ -13472,59 +13472,59 @@
             },
             {
               "spell_id": 8,
-              "learn_level": 13,
-              "mana_cost": 11,
-              "difficulty": 35,
-              "first_cast_exp_rate": 9
-            },
-            {
-              "spell_id": 9,
               "learn_level": 15,
               "mana_cost": 13,
               "difficulty": 35,
               "first_cast_exp_rate": 10
             },
             {
-              "spell_id": 10,
+              "spell_id": 9,
               "learn_level": 17,
               "mana_cost": 15,
               "difficulty": 40,
               "first_cast_exp_rate": 11
             },
             {
-              "spell_id": 11,
+              "spell_id": 10,
               "learn_level": 21,
               "mana_cost": 12,
               "difficulty": 40,
               "first_cast_exp_rate": 12
             },
             {
-              "spell_id": 12,
+              "spell_id": 11,
               "learn_level": 22,
               "mana_cost": 13,
               "difficulty": 40,
               "first_cast_exp_rate": 12
             },
             {
-              "spell_id": 13,
+              "spell_id": 12,
               "learn_level": 26,
               "mana_cost": 65,
               "difficulty": 70,
               "first_cast_exp_rate": 8
             },
             {
-              "spell_id": 14,
-              "learn_level": 28,
-              "mana_cost": 25,
-              "difficulty": 55,
+              "spell_id": 13,
+              "learn_level": 27,
+              "mana_cost": 28,
+              "difficulty": 65,
               "first_cast_exp_rate": 15
             },
             {
-              "spell_id": 15,
+              "spell_id": 14,
               "learn_level": 33,
               "mana_cost": 65,
               "difficulty": 75,
               "first_cast_exp_rate": 40
+            },
+            {
+              "spell_id": 15,
+              "learn_level": 34,
+              "mana_cost": 16,
+              "difficulty": 75,
+              "first_cast_exp_rate": 100
             },
             {
               "spell_id": 16,
@@ -13563,16 +13563,16 @@
             },
             {
               "spell_id": 21,
-              "learn_level": 34,
-              "mana_cost": 32,
-              "difficulty": 75,
+              "learn_level": 33,
+              "mana_cost": 30,
+              "difficulty": 50,
               "first_cast_exp_rate": 100
             },
             {
               "spell_id": 22,
               "learn_level": 36,
               "mana_cost": 35,
-              "difficulty": 65,
+              "difficulty": 60,
               "first_cast_exp_rate": 40
             },
             {
@@ -13584,38 +13584,38 @@
             },
             {
               "spell_id": 24,
-              "learn_level": 8,
-              "mana_cost": 8,
-              "difficulty": 55,
-              "first_cast_exp_rate": 8
-            },
-            {
-              "spell_id": 25,
               "learn_level": 23,
               "mana_cost": 20,
               "difficulty": 75,
               "first_cast_exp_rate": 35
             },
             {
-              "spell_id": 26,
+              "spell_id": 25,
               "learn_level": 33,
               "mana_cost": 30,
               "difficulty": 70,
               "first_cast_exp_rate": 200
             },
             {
-              "spell_id": 27,
+              "spell_id": 26,
               "learn_level": 36,
               "mana_cost": 44,
               "difficulty": 75,
               "first_cast_exp_rate": 100
             },
             {
-              "spell_id": 28,
+              "spell_id": 27,
               "learn_level": 38,
               "mana_cost": 90,
               "difficulty": 75,
               "first_cast_exp_rate": 250
+            },
+            {
+              "spell_id": 28,
+              "learn_level": 39,
+              "mana_cost": 53,
+              "difficulty": 70,
+              "first_cast_exp_rate": 200
             },
             {
               "spell_id": 29,
@@ -16247,7 +16247,7 @@
             {
               "spell_id": 5,
               "learn_level": 10,
-              "mana_cost": 7,
+              "mana_cost": 6,
               "difficulty": 40,
               "first_cast_exp_rate": 6
             },
@@ -16267,59 +16267,59 @@
             },
             {
               "spell_id": 8,
-              "learn_level": 15,
-              "mana_cost": 14,
-              "difficulty": 45,
-              "first_cast_exp_rate": 9
-            },
-            {
-              "spell_id": 9,
               "learn_level": 17,
               "mana_cost": 15,
               "difficulty": 60,
               "first_cast_exp_rate": 10
             },
             {
-              "spell_id": 10,
+              "spell_id": 9,
               "learn_level": 20,
               "mana_cost": 18,
               "difficulty": 50,
               "first_cast_exp_rate": 11
             },
             {
-              "spell_id": 11,
+              "spell_id": 10,
               "learn_level": 23,
               "mana_cost": 15,
               "difficulty": 50,
               "first_cast_exp_rate": 12
             },
             {
-              "spell_id": 12,
+              "spell_id": 11,
               "learn_level": 25,
               "mana_cost": 16,
               "difficulty": 50,
               "first_cast_exp_rate": 12
             },
             {
-              "spell_id": 13,
+              "spell_id": 12,
               "learn_level": 30,
               "mana_cost": 75,
               "difficulty": 80,
               "first_cast_exp_rate": 30
             },
             {
-              "spell_id": 14,
-              "learn_level": 32,
-              "mana_cost": 28,
-              "difficulty": 70,
+              "spell_id": 13,
+              "learn_level": 33,
+              "mana_cost": 30,
+              "difficulty": 85,
               "first_cast_exp_rate": 15
             },
             {
-              "spell_id": 15,
+              "spell_id": 14,
               "learn_level": 36,
               "mana_cost": 70,
               "difficulty": 85,
               "first_cast_exp_rate": 40
+            },
+            {
+              "spell_id": 15,
+              "learn_level": 37,
+              "mana_cost": 18,
+              "difficulty": 85,
+              "first_cast_exp_rate": 100
             },
             {
               "spell_id": 16,
@@ -16358,16 +16358,16 @@
             },
             {
               "spell_id": 21,
-              "learn_level": 37,
+              "learn_level": 36,
               "mana_cost": 35,
-              "difficulty": 85,
+              "difficulty": 60,
               "first_cast_exp_rate": 100
             },
             {
               "spell_id": 22,
               "learn_level": 40,
               "mana_cost": 40,
-              "difficulty": 85,
+              "difficulty": 70,
               "first_cast_exp_rate": 40
             },
             {
@@ -16379,38 +16379,38 @@
             },
             {
               "spell_id": 24,
-              "learn_level": 9,
-              "mana_cost": 9,
-              "difficulty": 50,
-              "first_cast_exp_rate": 8
-            },
-            {
-              "spell_id": 25,
               "learn_level": 26,
               "mana_cost": 25,
               "difficulty": 85,
               "first_cast_exp_rate": 35
             },
             {
-              "spell_id": 26,
+              "spell_id": 25,
               "learn_level": 36,
               "mana_cost": 35,
               "difficulty": 80,
               "first_cast_exp_rate": 200
             },
             {
-              "spell_id": 27,
+              "spell_id": 26,
               "learn_level": 41,
               "mana_cost": 50,
               "difficulty": 85,
               "first_cast_exp_rate": 100
             },
             {
-              "spell_id": 28,
+              "spell_id": 27,
               "learn_level": 43,
               "mana_cost": 100,
               "difficulty": 90,
               "first_cast_exp_rate": 250
+            },
+            {
+              "spell_id": 28,
+              "learn_level": 44,
+              "mana_cost": 58,
+              "difficulty": 85,
+              "first_cast_exp_rate": 200
             },
             {
               "spell_id": 29,
@@ -18582,7 +18582,7 @@
             {
               "spell_id": 5,
               "learn_level": 20,
-              "mana_cost": 13,
+              "mana_cost": 12,
               "difficulty": 60,
               "first_cast_exp_rate": 3
             },
@@ -18602,59 +18602,59 @@
             },
             {
               "spell_id": 8,
-              "learn_level": 28,
-              "mana_cost": 27,
-              "difficulty": 60,
-              "first_cast_exp_rate": 8
-            },
-            {
-              "spell_id": 9,
               "learn_level": 32,
               "mana_cost": 29,
               "difficulty": 70,
               "first_cast_exp_rate": 13
             },
             {
-              "spell_id": 10,
+              "spell_id": 9,
               "learn_level": 35,
               "mana_cost": 33,
               "difficulty": 70,
               "first_cast_exp_rate": 10
             },
             {
-              "spell_id": 11,
+              "spell_id": 10,
               "learn_level": 38,
               "mana_cost": 36,
               "difficulty": 75,
               "first_cast_exp_rate": 15
             },
             {
-              "spell_id": 12,
+              "spell_id": 11,
               "learn_level": 41,
               "mana_cost": 40,
               "difficulty": 75,
               "first_cast_exp_rate": 15
             },
             {
-              "spell_id": 13,
+              "spell_id": 12,
               "learn_level": 42,
               "mana_cost": 90,
               "difficulty": 90,
               "first_cast_exp_rate": 30
             },
             {
-              "spell_id": 14,
-              "learn_level": 47,
-              "mana_cost": 50,
-              "difficulty": 75,
+              "spell_id": 13,
+              "learn_level": 44,
+              "mana_cost": 58,
+              "difficulty": 85,
               "first_cast_exp_rate": 15
             },
             {
-              "spell_id": 15,
+              "spell_id": 14,
               "learn_level": 49,
               "mana_cost": 111,
               "difficulty": 90,
               "first_cast_exp_rate": 30
+            },
+            {
+              "spell_id": 15,
+              "learn_level": 49,
+              "mana_cost": 58,
+              "difficulty": 80,
+              "first_cast_exp_rate": 0
             },
             {
               "spell_id": 16,
