@@ -9,6 +9,7 @@
 #include "inventory/inventory-util.h"
 #include "locale/japanese.h"
 #include "main/sound-of-music.h"
+#include "mind/mind-elementalist.h"
 #include "mind/mind-explanations-table.h"
 #include "mind/mind-info.h"
 #include "mind/mind-sniper.h"
@@ -731,6 +732,11 @@ static void display_spell_list(PlayerType *player_ptr)
         return;
     }
 
+    if (pc.equals(PlayerClassType::ELEMENTALIST)) {
+        display_element_spell_list(player_ptr);
+        return;
+    }
+
     if (pc.has_listed_magics()) {
         PERCENTAGE minfail = 0;
         PLAYER_LEVEL plev = player_ptr->lev;
@@ -763,9 +769,6 @@ static void display_spell_list(PlayerType *player_ptr)
         case PlayerClassType::NINJA:
             use_mind = MindKindType::NINJUTSU;
             use_hp = true;
-            break;
-        case PlayerClassType::ELEMENTALIST:
-            use_mind = MindKindType::ELEMENTAL;
             break;
         default:
             use_mind = MindKindType::MINDCRAFTER;
