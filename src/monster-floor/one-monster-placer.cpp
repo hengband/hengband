@@ -444,26 +444,8 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, 
     }
 
     warn_unique_generation(player_ptr, r_idx);
-    if (!g_ptr->is_rune_explosion()) {
-        return true;
-    }
 
-    if (randint1(BREAK_RUNE_EXPLOSION) > r_ptr->level) {
-        if (any_bits(g_ptr->info, CAVE_MARK)) {
-            msg_print(_("ルーンが爆発した！", "The rune explodes!"));
-            project(player_ptr, 0, 2, y, x, 2 * (player_ptr->lev + Dice::roll(7, 7)), AttributeType::MANA,
-                (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
-        }
-    } else {
-        msg_print(_("爆発のルーンは解除された。", "An explosive rune was disarmed."));
-    }
-
-    reset_bits(g_ptr->info, CAVE_MARK);
-    reset_bits(g_ptr->info, CAVE_OBJECT);
-    g_ptr->mimic = 0;
-
-    note_spot(player_ptr, y, x);
-    lite_spot(player_ptr, y, x);
+    activate_explosive_rune(player_ptr, Pos2D(y, x), *r_ptr);
 
     return true;
 }
