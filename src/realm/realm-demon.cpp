@@ -167,10 +167,10 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
 
     case 5:
         if (name) {
-            return _("地獄の矢", "Nether Bolt");
+            return _("ファイア・ボルト", "Fire Bolt");
         }
         if (desc) {
-            return _("地獄のボルトもしくはビームを放つ。", "Fires a bolt or beam of nether.");
+            return _("炎のボルトもしくはビームを放つ。", "Fires a bolt or beam of fire.");
         }
 
         {
@@ -185,7 +185,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
                     return std::nullopt;
                 }
 
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::NETHER, dir, dice.roll());
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::FIRE, dir, dice.roll());
             }
         }
         break;
@@ -209,21 +209,21 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
 
     case 7:
         if (name) {
-            return _("地獄の焔", "Hellish Flame");
+            return _("地獄球", "Nether Ball");
         }
         if (desc) {
-            return _("邪悪な力を持つボールを放つ。善良なモンスターには大きなダメージを与える。", "Fires a ball of evil power. Hurts good monsters greatly.");
+            return _("地獄の球を放つ。", "Fires a ball of nether.");
         }
 
         {
-            const Dice dice(3, 6);
+            const Dice dice(6, 6);
             POSITION rad = (plev < 30) ? 2 : 3;
             int base;
 
             if (PlayerClass(player_ptr).is_wizard()) {
-                base = plev + plev / 2;
+                base = plev * 3;
             } else {
-                base = plev + plev / 4;
+                base = plev * 2;
             }
 
             if (info) {
@@ -235,37 +235,12 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
                     return std::nullopt;
                 }
 
-                fire_ball(player_ptr, AttributeType::HELL_FIRE, dir, dice.roll() + base, rad);
+                fire_ball(player_ptr, AttributeType::NETHER, dir, dice.roll() + base, rad);
             }
         }
         break;
 
     case 8:
-        if (name) {
-            return _("デーモン支配", "Dominate Demon");
-        }
-        if (desc) {
-            return _("悪魔1体を魅了する。抵抗されると無効", "Attempts to charm a demon.");
-        }
-
-        {
-            int power = plev;
-
-            if (info) {
-                return info_power(power);
-            }
-
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-
-                control_one_demon(player_ptr, dir, plev);
-            }
-        }
-        break;
-
-    case 9:
         if (name) {
             return _("ビジョン", "Vision");
         }
@@ -286,7 +261,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
         break;
 
-    case 10:
+    case 9:
         if (name) {
             return _("耐地獄", "Resist Nether");
         }
@@ -308,7 +283,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
         break;
 
-    case 11:
+    case 10:
         if (name) {
             return _("プラズマ・ボルト", "Plasma bolt");
         }
@@ -333,7 +308,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
         break;
 
-    case 12:
+    case 11:
         if (name) {
             return _("ファイア・ボール", "Fire Ball");
         }
@@ -359,7 +334,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
         break;
 
-    case 13:
+    case 12:
         if (name) {
             return _("炎の刃", "Fire Branding");
         }
@@ -374,17 +349,16 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
         break;
 
-    case 14:
+    case 13:
         if (name) {
-            return _("地獄球", "Nether Ball");
+            return _("悪魔火", "Demonfire");
         }
         if (desc) {
-            return _("大きな地獄の球を放つ。", "Fires a huge ball of nether.");
+            return _("強力な炎のボルトを放つ。", "Fires a powerful bolt of fire.");
         }
 
         {
-            int dam = plev * 3 / 2 + 100;
-            POSITION rad = plev / 20 + 2;
+            int dam = plev * 5;
 
             if (info) {
                 return info_damage(dam);
@@ -394,13 +368,12 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
                 if (!get_aim_dir(player_ptr, &dir)) {
                     return std::nullopt;
                 }
-
-                fire_ball(player_ptr, AttributeType::NETHER, dir, dam, rad);
+                fire_bolt(player_ptr, AttributeType::FIRE, dir, dam);
             }
         }
         break;
 
-    case 15:
+    case 14:
         if (name) {
             return _("デーモン召喚", "Summon Demon");
         }
@@ -411,6 +384,30 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
         {
             if (cast) {
                 cast_summon_demon(player_ptr, plev * 2 / 3 + randint1(plev / 2));
+            }
+        }
+        break;
+
+    case 15:
+        if (name) {
+            return _("地獄の波動", "Nether Wave");
+        }
+        if (desc) {
+            return _("視界内の全てのモンスターにダメージを与える。善良なモンスターに特に大きなダメージを与える。",
+                "Damages all monsters in sight. Hurts good monsters greatly.");
+        }
+
+        {
+            int sides1 = plev * 2;
+            int sides2 = plev * 2;
+
+            if (info) {
+                return format("%sd%d+d%d", KWD_DAM, sides1, sides2);
+            }
+
+            if (cast) {
+                dispel_monsters(player_ptr, randint1(sides1));
+                dispel_good(player_ptr, randint1(sides2));
             }
         }
         break;
@@ -539,24 +536,25 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
 
     case 21:
         if (name) {
-            return _("地獄の波動", "Nether Wave");
+            return _("火炎破", "Fireblast");
         }
         if (desc) {
-            return _("視界内の全てのモンスターにダメージを与える。善良なモンスターに特に大きなダメージを与える。",
-                "Damages all monsters in sight. Hurts good monsters greatly.");
+            return _("大きな炎の球を放つ。", "Fires a huge ball of fire.");
         }
 
         {
-            int sides1 = plev * 2;
-            int sides2 = plev * 2;
+            int dam = 200 + plev * 2;
+            POSITION rad = 4;
 
             if (info) {
-                return format("%sd%d+d%d", KWD_DAM, sides1, sides2);
+                return info_damage(dam);
             }
 
             if (cast) {
-                dispel_monsters(player_ptr, randint1(sides1));
-                dispel_good(player_ptr, randint1(sides2));
+                if (!get_aim_dir(player_ptr, &dir)) {
+                    return std::nullopt;
+                }
+                fire_ball(player_ptr, AttributeType::FIRE, dir, dam, rad);
             }
         }
         break;
@@ -609,26 +607,6 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
 
     case 24:
         if (name) {
-            return _("士気高揚", "Raise the Morale");
-        }
-        if (desc) {
-            return _("一定時間、ヒーロー気分になる。", "Removes fear. Gives a bonus to hit for a while. Heals you for 10 HP.");
-        }
-
-        {
-            int base = 25;
-            const Dice dice(1, 25);
-            if (info) {
-                return info_duration(base, dice);
-            }
-            if (cast) {
-                heroism(player_ptr, dice.roll() + base);
-            }
-        }
-        break;
-
-    case 25:
-        if (name) {
             return _("不滅の肉体", "Immortal Body");
         }
         if (desc) {
@@ -649,7 +627,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
         break;
 
-    case 26:
+    case 25:
         if (name) {
             return _("狂気の円環", "Insanity Circle");
         }
@@ -675,7 +653,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
         break;
 
-    case 27:
+    case 26:
         if (name) {
             return _("ペット爆破", "Explode Pets");
         }
@@ -690,7 +668,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
         break;
 
-    case 28:
+    case 27:
         if (name) {
             return _("グレーターデーモン召喚", "Summon Greater Demon");
         }
@@ -704,6 +682,32 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
                 if (!cast_summon_greater_demon(player_ptr)) {
                     return std::nullopt;
                 }
+            }
+        }
+        break;
+
+    case 28:
+        if (name) {
+            return _("炎の嵐", "Fire Storm");
+        }
+        if (desc) {
+            return _("超巨大な炎の球を放つ。", "Generates a huge ball of fire.");
+        }
+
+        {
+            int dam = plev * 15;
+            POSITION rad = plev / 5;
+
+            if (info) {
+                return info_damage(dam);
+            }
+
+            if (cast) {
+                if (!get_aim_dir(player_ptr, &dir)) {
+                    return std::nullopt;
+                }
+
+                fire_ball(player_ptr, AttributeType::FIRE, dir, dam, rad);
             }
         }
         break;
