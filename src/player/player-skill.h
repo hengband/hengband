@@ -26,7 +26,7 @@ enum class PlayerSkillRank {
 };
 
 constexpr auto MAX_SKILLS = 10;
-constexpr auto PLAYER_SKILL_KIND_TYPE_RANGE = EnumRange(PlayerSkillKindType::MARTIAL_ARTS, PlayerSkillKindType::SHIELD);
+constexpr auto PLAYER_SKILL_KIND_TYPE_RANGE = EnumRange(PlayerSkillKindType::MARTIAL_ARTS, PlayerSkillKindType::MAX);
 
 enum class ItemKindType : short;
 
