@@ -271,36 +271,20 @@ static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_fla
  */
 static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, const Pos2D &pos)
 {
-    auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
     const auto &monrace = m_ptr->get_monrace();
     auto should_explode = turn_flags_ptr->do_move;
-    should_explode &= grid.is_rune_explosion();
     should_explode &= (monrace.behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW)) || !player_ptr->is_located_at(pos);
     if (!should_explode) {
         return true;
     }
 
-    turn_flags_ptr->do_move = false;
-    if (m_ptr->is_pet()) {
+    if (m_ptr->is_pet() && grid.is_rune_explosion()) {
+        turn_flags_ptr->do_move = false;
         return true;
     }
 
-    if (randint1(BREAK_RUNE_EXPLOSION) > monrace.level) {
-        if (grid.info & CAVE_MARK) {
-            msg_print(_("ルーンが爆発した！", "The rune explodes!"));
-            BIT_FLAGS project_flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI;
-            project(player_ptr, 0, 2, pos.y, pos.x, 2 * (player_ptr->lev + Dice::roll(7, 7)), AttributeType::MANA, project_flags);
-        }
-    } else {
-        msg_print(_("爆発のルーンは解除された。", "An explosive rune was disarmed."));
-    }
-
-    grid.info &= ~(CAVE_MARK);
-    grid.info &= ~(CAVE_OBJECT);
-    grid.mimic = 0;
-
-    note_spot(player_ptr, pos.y, pos.x);
-    lite_spot(player_ptr, pos.y, pos.x);
+    activate_explosive_rune(player_ptr, pos, monrace);
 
     if (!m_ptr->is_valid()) {
         return false;
@@ -356,6 +340,38 @@ static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags
     turn_flags_ptr->do_view = true;
     turn_flags_ptr->do_turn = true;
     return true;
+}
+
+/*!
+ * @brief 爆発のルーンを作動させる
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param pos 爆発のルーンの位置
+ * @param monrace モンスター種族への参照
+ */
+void activate_explosive_rune(PlayerType *player_ptr, const Pos2D &pos, const MonsterRaceInfo &monrace)
+{
+    auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    const auto level = player_ptr->lev;
+    if (!grid.is_rune_explosion()) {
+        return;
+    }
+
+    if (randint1(BREAK_RUNE_EXPLOSION) > monrace.level) {
+        if (grid.info & CAVE_MARK) {
+            msg_print(_("ルーンが爆発した！", "The rune explodes!"));
+            BIT_FLAGS project_flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI;
+            project(player_ptr, 0, 2, pos.y, pos.x, 2 * (level + Dice::roll(7, 7)), AttributeType::MANA, project_flags);
+        }
+    } else {
+        msg_print(_("爆発のルーンは解除された。", "An explosive rune was disarmed."));
+    }
+
+    reset_bits(grid.info, CAVE_MARK);
+    reset_bits(grid.info, CAVE_OBJECT);
+    grid.mimic = 0;
+
+    note_spot(player_ptr, pos.y, pos.x);
+    lite_spot(player_ptr, pos.y, pos.x);
 }
 
 /*!
