@@ -192,6 +192,9 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     init_note(_("[データの初期化中... (ダンジョン)]", "[Initializing arrays... (dungeon)]"));
     init_dungeons_info();
 
+    init_note(_("[データの初期化中... (呪文情報)]", "[Initializing arrays... (magic)]"));
+    init_spell_info();
+
     init_note(_("[データの初期化中... (魔法)]", "[Initializing arrays... (magic)]"));
     init_class_magics_info();
 

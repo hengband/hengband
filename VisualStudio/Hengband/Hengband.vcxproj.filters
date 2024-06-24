@@ -986,6 +986,9 @@
     <ClCompile Include="..\..\src\info-reader\skill-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\spell-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\info-reader\magic-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
@@ -2436,6 +2439,9 @@
     <ClCompile Include="..\..\src\system\baseitem-info.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\spell-info-list.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\system\floor-type-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
@@ -3627,6 +3633,9 @@
       <Filter>info-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\skill-reader.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\spell-reader.h">
       <Filter>info-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\magic-reader.h">
@@ -5350,6 +5359,9 @@
       <Filter>timed-effect</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\baseitem-info.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\spell-info-list.h">
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\dungeon-info.h">

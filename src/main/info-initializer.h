@@ -12,5 +12,6 @@ void init_dungeons_info();
 void init_egos_info();
 void init_monrace_definitions();
 void init_terrains_info();
+void init_spell_info();
 void init_vaults_info();
 void init_wilderness();

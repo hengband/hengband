@@ -1,0 +1,140 @@
+{
+    "type": "object",
+    "additionalProperties": false,
+    "description": "呪文情報の定義",
+    "properties": {
+        "version": {
+            "type": "number",
+            "description": "Version情報"
+        },
+        "realms": {
+            "type": "array",
+            "description": "領域別に呪文情報の定義を格納する配列",
+            "additionalProperties": false,
+            "items": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "books"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "領域名",
+                        "enum": [
+                            "LIFE",
+                            "SORCERY",
+                            "NATURE",
+                            "CHAOS",
+                            "DEATH",
+                            "TRUMP",
+                            "ARCANE",
+                            "CRAFT",
+                            "DEMON",
+                            "CRUSADE"
+                        ]
+                    },
+                    "books": {
+                        "type": "array",
+                        "description": "呪文書別の呪文情報",
+                        "additionalProperties": false,
+                        "items": {
+                            "additionalProperties": false,
+                            "required": [
+                                "name",
+                                "spells"
+                            ],
+                            "properties": {
+                                "name": {
+                                    "type": "object",
+                                    "description": "呪文書名",
+                                    "additionalProperties": false,
+                                    "required": [
+                                        "ja",
+                                        "en"
+                                    ],
+                                    "properties": {
+                                        "ja": {
+                                            "type": "string",
+                                            "description": "日本語呪文書名"
+                                        },
+                                        "en": {
+                                            "type": "string",
+                                            "description": "English Spellbook Name"
+                                        }
+                                    }
+                                },
+                                "spells": {
+                                    "type": "array",
+                                    "description": "呪文情報を格納する配列",
+                                    "items": {
+                                        "additionalProperties": false,
+                                        "required": [
+                                            "spell_id",
+                                            "spell_tag",
+                                            "name",
+                                            "description"
+                                        ],
+                                        "properties": {
+                                            "spell_id": {
+                                                "type": "integer",
+                                                "minimum": 0,
+                                                "maximum": 31
+                                            },
+                                            "spell_tag": {
+                                                "type": "string",
+                                                "description": "呪文読込用タグ"
+                                            },
+                                            "name": {
+                                                "type": "object",
+                                                "description": "呪文名",
+                                                "additionalProperties": false,
+                                                "required": [
+                                                    "ja",
+                                                    "en"
+                                                ],
+                                                "properties": {
+                                                    "ja": {
+                                                        "type": "string",
+                                                        "description": "日本語呪文名"
+                                                    },
+                                                    "en": {
+                                                        "type": "string",
+                                                        "description": "English Spell Name"
+                                                    }
+                                                }
+                                            },
+                                            "description": {
+                                                "type": "object",
+                                                "description": "呪文説明",
+                                                "additionalProperties": false,
+                                                "required": [
+                                                    "ja",
+                                                    "en"
+                                                ],
+                                                "properties": {
+                                                    "ja": {
+                                                        "type": "string",
+                                                        "description": "日本語呪文説明"
+                                                    },
+                                                    "en": {
+                                                        "type": "string",
+                                                        "description": "English Spell Description"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "required": [
+        "version",
+        "realms"
+    ]
+}
