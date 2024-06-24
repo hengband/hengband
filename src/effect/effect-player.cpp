@@ -19,6 +19,7 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-util.h"
+#include "pet/pet-fall-off.h"
 #include "player-base/player-class.h"
 #include "player-info/samurai-data-type.h"
 #include "player/player-status-flags.h"
@@ -220,7 +221,11 @@ bool affect_player(MONSTER_IDX src_idx, PlayerType *player_ptr, concptr src_name
     }
 
     if (player_ptr->riding && ep_ptr->dam > 0) {
-        rakubadam_p = (ep_ptr->dam > 200) ? 200 : ep_ptr->dam;
+        const auto damage_for_falling_off = (ep_ptr->dam > 200) ? 200 : ep_ptr->dam;
+        const auto m_name = monster_desc(player_ptr, &player_ptr->current_floor_ptr->m_list[player_ptr->riding], 0);
+        if (process_fall_off_horse(player_ptr, damage_for_falling_off, false)) {
+            msg_format(_("%s^から落ちてしまった！", "You have fallen from %s."), m_name.data());
+        }
     }
 
     disturb(player_ptr, true, true);
