@@ -7267,9 +7267,9 @@
             },
             {
               "spell_id": 15,
-              "learn_level": 44,
+              "learn_level": 47,
               "mana_cost": 25,
-              "difficulty": 80,
+              "difficulty": 70,
               "first_cast_exp_rate": 35
             },
             {
@@ -9810,9 +9810,9 @@
             },
             {
               "spell_id": 15,
-              "learn_level": 42,
+              "learn_level": 44,
               "mana_cost": 19,
-              "difficulty": 80,
+              "difficulty": 70,
               "first_cast_exp_rate": 35
             },
             {
@@ -10509,9 +10509,9 @@
             },
             {
               "spell_id": 15,
-              "learn_level": 37,
+              "learn_level": 39,
               "mana_cost": 20,
-              "difficulty": 75,
+              "difficulty": 65,
               "first_cast_exp_rate": 40
             },
             {
