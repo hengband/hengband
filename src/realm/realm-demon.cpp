@@ -141,32 +141,6 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
 
     case 4:
         if (name) {
-            return _("恐慌", "Horrify");
-        }
-        if (desc) {
-            return _("モンスター1体を恐怖させ、朦朧させる。抵抗されると無効。", "Attempts to scare and stun a monster.");
-        }
-
-        {
-            PLAYER_LEVEL power = plev;
-
-            if (info) {
-                return info_power(power);
-            }
-
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-
-                fear_monster(player_ptr, dir, power);
-                stun_monster(player_ptr, dir, power);
-            }
-        }
-        break;
-
-    case 5:
-        if (name) {
             return _("ファイア・ボルト", "Fire Bolt");
         }
         if (desc) {
@@ -190,7 +164,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
         break;
 
-    case 6:
+    case 5:
         if (name) {
             return _("古代の死霊召喚", "Summon Manes");
         }
@@ -207,7 +181,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
         break;
 
-    case 7:
+    case 6:
         if (name) {
             return _("地獄球", "Nether Ball");
         }
@@ -223,7 +197,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
             if (PlayerClass(player_ptr).is_wizard()) {
                 base = plev * 3;
             } else {
-                base = plev * 2;
+                base = plev * 2 + plev / 2;
             }
 
             if (info) {
@@ -236,6 +210,26 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
                 }
 
                 fire_ball(player_ptr, AttributeType::NETHER, dir, dice.roll() + base, rad);
+            }
+        }
+        break;
+
+    case 7:
+        if (name) {
+            return _("士気高揚", "Raise the Morale");
+        }
+        if (desc) {
+            return _("一定時間、ヒーロー気分になる。", "Removes fear. Gives a bonus to hit for a while. Heals you for 10 HP.");
+        }
+
+        {
+            int base = 25;
+            const Dice dice(1, 25);
+            if (info) {
+                return info_duration(base, dice);
+            }
+            if (cast) {
+                heroism(player_ptr, dice.roll() + base);
             }
         }
         break;
