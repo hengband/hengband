@@ -281,7 +281,7 @@ int summon_cyber(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, POSITI
 
     int count = 0;
     for (int i = 0; i < max_cyber; i++) {
-        count += summon_specific(player_ptr, src_idx, y, x, 100, SUMMON_CYBER, mode);
+        count += summon_specific(player_ptr, src_idx, y, x, 100, SUMMON_CYBER, mode) ? 1 : 0;
     }
 
     return count;
@@ -373,71 +373,71 @@ int activate_hi_summon(PlayerType *player_ptr, POSITION y, POSITION x, bool can_
         switch (randint1(25) + (dungeon_level / 20)) {
         case 1:
         case 2:
-            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_ANT, mode);
+            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_ANT, mode) ? 1 : 0;
             break;
         case 3:
         case 4:
-            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_SPIDER, mode);
+            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_SPIDER, mode) ? 1 : 0;
             break;
         case 5:
         case 6:
-            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_HOUND, mode);
+            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_HOUND, mode) ? 1 : 0;
             break;
         case 7:
         case 8:
-            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_HYDRA, mode);
+            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_HYDRA, mode) ? 1 : 0;
             break;
         case 9:
         case 10:
-            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_ANGEL, mode);
+            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_ANGEL, mode) ? 1 : 0;
             break;
         case 11:
         case 12:
-            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_UNDEAD, mode);
+            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_UNDEAD, mode) ? 1 : 0;
             break;
         case 13:
         case 14:
-            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_DRAGON, mode);
+            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_DRAGON, mode) ? 1 : 0;
             break;
         case 15:
         case 16:
-            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_DEMON, mode);
+            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_DEMON, mode) ? 1 : 0;
             break;
         case 17:
             if (can_pet) {
                 break;
             }
-            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_AMBERITES, (mode | PM_ALLOW_UNIQUE));
+            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_AMBERITES, (mode | PM_ALLOW_UNIQUE)) ? 1 : 0;
             break;
         case 18:
         case 19:
             if (can_pet) {
                 break;
             }
-            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_UNIQUE, (mode | PM_ALLOW_UNIQUE));
+            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_UNIQUE, (mode | PM_ALLOW_UNIQUE)) ? 1 : 0;
             break;
         case 20:
         case 21:
             if (!can_pet) {
                 mode |= PM_ALLOW_UNIQUE;
             }
-            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_HI_UNDEAD, mode);
+            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_HI_UNDEAD, mode) ? 1 : 0;
             break;
         case 22:
         case 23:
             if (!can_pet) {
                 mode |= PM_ALLOW_UNIQUE;
             }
-            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_HI_DRAGON, mode);
+            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_HI_DRAGON, mode) ? 1 : 0;
             break;
         case 24:
-            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, 100, SUMMON_CYBER, mode);
+            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, 100, SUMMON_CYBER, mode) ? 1 : 0;
             break;
         default:
             if (!can_pet) {
                 mode |= PM_ALLOW_UNIQUE;
             }
-            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, pet ? summon_lev : (((summon_lev * 3) / 2) + 5), SUMMON_NONE, mode);
+            count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, pet ? summon_lev : (((summon_lev * 3) / 2) + 5), SUMMON_NONE, mode) ? 1 : 0;
         }
     }
 

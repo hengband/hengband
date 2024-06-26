@@ -104,8 +104,8 @@ void blood_curse_to_enemy(PlayerType *player_ptr, MONSTER_IDX m_idx)
                 mode |= (PM_NO_PET | PM_FORCE_FRIENDLY);
             }
 
-            count += summon_specific(player_ptr, (pet ? -1 : 0), player_ptr->y, player_ptr->x,
-                (pet ? player_ptr->lev * 2 / 3 + randint1(player_ptr->lev / 2) : player_ptr->current_floor_ptr->dun_level), SUMMON_NONE, mode);
+            const auto level = pet ? player_ptr->lev * 2 / 3 + randint1(player_ptr->lev / 2) : player_ptr->current_floor_ptr->dun_level;
+            count += summon_specific(player_ptr, (pet ? -1 : 0), player_ptr->y, player_ptr->x, level, SUMMON_NONE, mode) ? 1 : 0;
             if (!one_in_(6)) {
                 break;
             }
