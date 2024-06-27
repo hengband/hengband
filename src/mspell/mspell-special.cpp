@@ -66,9 +66,13 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
 
         delete_monster_idx(player_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
         for (const auto separate : it_unified->second) {
-            summon_named_creature(player_ptr, 0, dummy_y, dummy_x, separate, MD_NONE);
-            floor_ptr->m_list[hack_m_idx_ii].hp = separated_hp;
-            floor_ptr->m_list[hack_m_idx_ii].maxhp = separated_maxhp;
+            auto summoned_m_idx = summon_named_creature(player_ptr, 0, dummy_y, dummy_x, separate, MD_NONE);
+            if (!summoned_m_idx) {
+                continue;
+            }
+
+            floor_ptr->m_list[*summoned_m_idx].hp = separated_hp;
+            floor_ptr->m_list[*summoned_m_idx].maxhp = separated_maxhp;
         }
 
         const auto &m_name = monraces.get_monrace(it_unified->first).name;
@@ -103,9 +107,10 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
             delete_monster_idx(player_ptr, k);
         }
 
-        summon_named_creature(player_ptr, 0, dummy_y, dummy_x, unified_unique, MD_NONE);
-        floor_ptr->m_list[hack_m_idx_ii].hp = unified_hp;
-        floor_ptr->m_list[hack_m_idx_ii].maxhp = unified_maxhp;
+        if (auto summoned_m_idx = summon_named_creature(player_ptr, 0, dummy_y, dummy_x, unified_unique, MD_NONE)) {
+            floor_ptr->m_list[*summoned_m_idx].hp = unified_hp;
+            floor_ptr->m_list[*summoned_m_idx].maxhp = unified_maxhp;
+        }
         std::vector<std::string> m_names;
         for (const auto &separate : separates) {
             const auto &monrace = monraces.get_monrace(separate);

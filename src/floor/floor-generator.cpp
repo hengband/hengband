@@ -240,8 +240,10 @@ static void generate_gambling_arena(PlayerType *player_ptr)
     build_battle(player_ptr, &y, &x);
     player_place(player_ptr, y, x);
     for (MONSTER_IDX i = 0; i < 4; i++) {
-        place_specific_monster(player_ptr, 0, player_ptr->y + 8 + (i / 2) * 4, player_ptr->x - 2 + (i % 2) * 4, battle_mon_list[i], (PM_NO_KAGE | PM_NO_PET));
-        set_friendly(&floor_ptr->m_list[floor_ptr->grid_array[player_ptr->y + 8 + (i / 2) * 4][player_ptr->x - 2 + (i % 2) * 4].m_idx]);
+        const auto m_idx = place_specific_monster(player_ptr, 0, player_ptr->y + 8 + (i / 2) * 4, player_ptr->x - 2 + (i % 2) * 4, battle_mon_list[i], (PM_NO_KAGE | PM_NO_PET));
+        if (m_idx) {
+            set_friendly(&floor_ptr->m_list[*m_idx]);
+        }
     }
 
     for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {

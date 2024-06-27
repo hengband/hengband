@@ -586,12 +586,12 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
                     continue;
                 }
 
-                if (summon_specific(player_ptr, 0, y1, x1, lev, SUMMON_ARMAGE_EVIL, (PM_NO_PET))) {
-                    evil_idx = hack_m_idx_ii;
+                if (auto m_idx = summon_specific(player_ptr, 0, y1, x1, lev, SUMMON_ARMAGE_EVIL, (PM_NO_PET))) {
+                    evil_idx = *m_idx;
                 }
 
-                if (summon_specific(player_ptr, 0, y1, x1, lev, SUMMON_ARMAGE_GOOD, (PM_NO_PET))) {
-                    good_idx = hack_m_idx_ii;
+                if (auto m_idx = summon_specific(player_ptr, 0, y1, x1, lev, SUMMON_ARMAGE_GOOD, (PM_NO_PET))) {
+                    good_idx = *m_idx;
                 }
 
                 /* Let them fight each other */

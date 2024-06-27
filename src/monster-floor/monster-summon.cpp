@@ -111,18 +111,18 @@ DEPTH get_dungeon_or_wilderness_level(PlayerType *player_ptr)
  * @param lev 相当生成階
  * @param type 召喚種別
  * @param mode 生成オプション
- * @return 召喚できたらtrueを返す
+ * @return 召喚に成功したらモンスターID、失敗したらstd::nullopt
  */
-bool summon_specific(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y1, POSITION x1, DEPTH lev, summon_type type, BIT_FLAGS mode)
+std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y1, POSITION x1, DEPTH lev, summon_type type, BIT_FLAGS mode)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->inside_arena) {
-        return false;
+        return std::nullopt;
     }
 
     POSITION x, y;
     if (!mon_scatter(player_ptr, MonraceList::empty_id(), &y, &x, y1, x1, 2)) {
-        return false;
+        return std::nullopt;
     }
 
     auto summon_specific_hook = [src_idx, type, is_unique_allowed = (mode & PM_ALLOW_UNIQUE) != 0](PlayerType *player_ptr, MonsterRaceId r_idx) {
@@ -133,7 +133,7 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y1, P
     DEPTH dlev = get_dungeon_or_wilderness_level(player_ptr);
     const auto r_idx = get_mon_num(player_ptr, 0, (dlev + lev) / 2 + 5, mode);
     if (!MonraceList::is_valid(r_idx)) {
-        return false;
+        return std::nullopt;
     }
 
     if (is_dead_summoning(type)) {
@@ -141,8 +141,9 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y1, P
     }
 
     const auto summon_who = is_monster(src_idx) ? std::make_optional(src_idx) : std::nullopt;
-    if (!place_specific_monster(player_ptr, src_idx, y, x, r_idx, mode, summon_who)) {
-        return false;
+    auto summoned_m_idx = place_specific_monster(player_ptr, src_idx, y, x, r_idx, mode, summon_who);
+    if (!summoned_m_idx) {
+        return std::nullopt;
     }
 
     bool notice = false;
@@ -163,7 +164,7 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y1, P
         sound(SOUND_SUMMON);
     }
 
-    return true;
+    return summoned_m_idx;
 }
 
 /*!
@@ -174,9 +175,9 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y1, P
  * @param ox 目標地点x座標
  * @param r_idx 生成するモンスター種族ID
  * @param mode 生成オプション
- * @return 召喚できたらtrueを返す
+ * @return 召喚に成功したらモンスターID、失敗したらstd::nullopt
  */
-bool summon_named_creature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION oy, POSITION ox, MonsterRaceId r_idx, BIT_FLAGS mode)
+std::optional<MONSTER_IDX> summon_named_creature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION oy, POSITION ox, MonsterRaceId r_idx, BIT_FLAGS mode)
 {
     if (!MonraceList::is_valid(r_idx) || (r_idx >= static_cast<MonsterRaceId>(monraces_info.size()))) {
         return false;

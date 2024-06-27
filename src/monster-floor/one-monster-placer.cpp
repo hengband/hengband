@@ -257,24 +257,24 @@ static void warn_unique_generation(PlayerType *player_ptr, MonsterRaceId r_idx)
  * @param r_idx 生成モンスター種族
  * @param mode 生成オプション
  * @param summoner_m_idx モンスターの召喚による場合、召喚主のモンスターID
- * @return 成功したらtrue
+ * @return 生成に成功したらモンスターID、失敗したらstd::nullopt
  */
-bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
+std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto *g_ptr = &floor.grid_array[y][x];
     auto *r_ptr = &MonraceList::get_instance().get_monrace(r_idx);
     const auto &world = AngbandWorld::get_instance();
     if (world.is_wild_mode() || !in_bounds(&floor, y, x) || !MonraceList::is_valid(r_idx)) {
-        return false;
+        return std::nullopt;
     }
 
     if (none_bits(mode, PM_IGNORE_TERRAIN) && (pattern_tile(&floor, y, x) || !monster_can_enter(player_ptr, y, x, r_ptr, 0))) {
-        return false;
+        return std::nullopt;
     }
 
     if (!check_unique_placeable(floor, r_idx, mode) || !check_quest_placeable(floor, r_idx) || !check_procection_rune(player_ptr, r_idx, y, x)) {
-        return false;
+        return std::nullopt;
     }
 
     msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%s(Lv%d)を生成しました。", "%s(Lv%d) was generated."), r_ptr->name.data(), r_ptr->level);
@@ -283,9 +283,8 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, 
     }
 
     g_ptr->m_idx = m_pop(&floor);
-    hack_m_idx_ii = g_ptr->m_idx;
     if (!g_ptr->has_monster()) {
-        return false;
+        return std::nullopt;
     }
 
     MonsterEntity *m_ptr;
@@ -447,5 +446,5 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, 
 
     activate_explosive_rune(player_ptr, Pos2D(y, x), *r_ptr);
 
-    return true;
+    return m_ptr->is_valid() ? std::make_optional(g_ptr->m_idx) : std::nullopt;
 }

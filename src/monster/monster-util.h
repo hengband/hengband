@@ -9,7 +9,6 @@ class PlayerType;
 using monsterrace_hook_type = std::function<bool(PlayerType *, MonsterRaceId)>;
 
 extern MONSTER_IDX hack_m_idx;
-extern MONSTER_IDX hack_m_idx_ii;
 enum summon_type : int;
 
 monsterrace_hook_type get_monster_hook(PlayerType *player_ptr);

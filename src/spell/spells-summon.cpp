@@ -251,7 +251,7 @@ bool summon_kin_player(PlayerType *player_ptr, DEPTH level, POSITION y, POSITION
     if (!pet) {
         mode |= PM_NO_PET;
     }
-    return summon_specific(player_ptr, (pet ? -1 : 0), y, x, level, SUMMON_KIN, mode);
+    return summon_specific(player_ptr, (pet ? -1 : 0), y, x, level, SUMMON_KIN, mode).has_value();
 }
 
 /*!

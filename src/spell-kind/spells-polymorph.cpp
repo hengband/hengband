@@ -107,14 +107,17 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
     m_ptr->hold_o_idx_list.clear();
     delete_monster_idx(player_ptr, g_ptr->m_idx);
     bool polymorphed = false;
-    if (place_specific_monster(player_ptr, 0, y, x, new_r_idx, mode)) {
-        floor_ptr->m_list[hack_m_idx_ii].nickname = back_m.nickname;
-        floor_ptr->m_list[hack_m_idx_ii].parent_m_idx = back_m.parent_m_idx;
-        floor_ptr->m_list[hack_m_idx_ii].hold_o_idx_list = back_m.hold_o_idx_list;
+    auto m_idx = place_specific_monster(player_ptr, 0, y, x, new_r_idx, mode);
+    if (m_idx) {
+        auto &monster = floor_ptr->m_list[*m_idx];
+        monster.nickname = back_m.nickname;
+        monster.parent_m_idx = back_m.parent_m_idx;
+        monster.hold_o_idx_list = back_m.hold_o_idx_list;
         polymorphed = true;
     } else {
-        if (place_specific_monster(player_ptr, 0, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN))) {
-            floor_ptr->m_list[hack_m_idx_ii] = back_m;
+        m_idx = place_specific_monster(player_ptr, 0, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN));
+        if (m_idx) {
+            floor_ptr->m_list[*m_idx] = back_m;
             mproc_init(floor_ptr);
         } else {
             preserve_hold_objects = false;
@@ -124,7 +127,7 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
     if (preserve_hold_objects) {
         for (const auto this_o_idx : back_m.hold_o_idx_list) {
             auto *o_ptr = &floor_ptr->o_list[this_o_idx];
-            o_ptr->held_m_idx = hack_m_idx_ii;
+            o_ptr->held_m_idx = *m_idx;
         }
     } else {
         for (auto it = back_m.hold_o_idx_list.begin(); it != back_m.hold_o_idx_list.end();) {
@@ -134,10 +137,10 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     if (targeted) {
-        target_who = hack_m_idx_ii;
+        target_who = m_idx.value_or(0);
     }
     if (health_tracked) {
-        health_track(player_ptr, hack_m_idx_ii);
+        health_track(player_ptr, m_idx.value_or(0));
     }
     return polymorphed;
 }
