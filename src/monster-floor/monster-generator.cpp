@@ -38,20 +38,6 @@
 #define MON_SCAT_MAXD 10 /*!< mon_scatter()関数によるモンスター配置で許される中心からの最大距離 */
 
 /*!
- * @var place_monster_idx
- * @brief 護衛対象となるモンスター種族IDを渡すグローバル変数 / Hack -- help pick an escort type
- * @todo 関数ポインタの都合を配慮しながら、グローバル変数place_monster_idxを除去し、関数引数化する
- */
-static MonsterRaceId place_monster_idx = MonraceList::empty_id();
-
-/*!
- * @var place_monster_m_idx
- * @brief 護衛対象となるモンスターIDを渡すグローバル変数 / Hack -- help pick an escort type
- * @todo 関数ポインタの都合を配慮しながら、グローバル変数place_monster_m_idxを除去し、関数引数化する
- */
-static MONSTER_IDX place_monster_m_idx = 0;
-
-/*!
  * @brief モンスター1体を目標地点に可能な限り近い位置に生成する / improved version of scatter() for place monster
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param r_idx 生成モンスター種族
@@ -230,17 +216,19 @@ static bool place_monster_group(PlayerType *player_ptr, MONSTER_IDX src_idx, POS
 }
 
 /*!
- * @brief モンスター種族が召喚主の護衛となれるかどうかをチェックする / Hack -- help pick an escort type
- * @param r_idx チェックするモンスター種族のID
+ * @brief モンスター種族が護衛となれるかどうかをチェックする
+ * @param monrace_id チェックするモンスターの種族ID
+ * @param escorted_monrace_id 護衛されるモンスターの種族ID
+ * @param escorted_m_idx 護衛されるモンスターのモンスターID
  * @return 護衛にできるならばtrue
  */
-static bool place_monster_can_escort(PlayerType *player_ptr, MonsterRaceId r_idx)
+static bool place_monster_can_escort(PlayerType *player_ptr, MonsterRaceId monrace_id, MonsterRaceId escorted_monrace_id, MONSTER_IDX escorted_m_idx)
 {
-    auto *r_ptr = &monraces_info[place_monster_idx];
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[place_monster_m_idx];
-    MonsterRaceInfo *z_ptr = &monraces_info[r_idx];
+    auto *r_ptr = &monraces_info[escorted_monrace_id];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[escorted_m_idx];
+    MonsterRaceInfo *z_ptr = &monraces_info[monrace_id];
 
-    if (mon_hook_dungeon(player_ptr, place_monster_idx) != mon_hook_dungeon(player_ptr, r_idx)) {
+    if (mon_hook_dungeon(player_ptr, escorted_monrace_id) != mon_hook_dungeon(player_ptr, monrace_id)) {
         return false;
     }
 
@@ -256,7 +244,7 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MonsterRaceId r_idx
         return false;
     }
 
-    if (place_monster_idx == r_idx) {
+    if (escorted_monrace_id == monrace_id) {
         return false;
     }
 
@@ -304,7 +292,7 @@ bool place_specific_monster(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITIO
         return true;
     }
 
-    place_monster_m_idx = hack_m_idx_ii;
+    const auto place_monster_m_idx = hack_m_idx_ii;
 
     /* Reinforcement */
     for (const auto &[reinforce_monrace_id, num_dice] : r_ptr->reinforces) {
@@ -336,7 +324,6 @@ bool place_specific_monster(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITIO
         return true;
     }
 
-    place_monster_idx = r_idx;
     for (int i = 0; i < 32; i++) {
         POSITION nx, ny, d = 3;
         scatter(player_ptr, &ny, &nx, y, x, d, PROJECT_NONE);
@@ -344,7 +331,10 @@ bool place_specific_monster(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITIO
             continue;
         }
 
-        get_mon_num_prep(player_ptr, place_monster_can_escort, get_monster_hook2(player_ptr, ny, nx));
+        auto hook = [place_monster_monrace_id = r_idx, place_monster_m_idx](PlayerType *player_ptr, MonsterRaceId escort_monrace_id) {
+            return place_monster_can_escort(player_ptr, escort_monrace_id, place_monster_monrace_id, place_monster_m_idx);
+        };
+        get_mon_num_prep(player_ptr, std::move(hook), get_monster_hook2(player_ptr, ny, nx));
         const auto monrace_id = get_mon_num(player_ptr, 0, r_ptr->level, 0);
         if (!MonraceList::is_valid(monrace_id)) {
             break;
