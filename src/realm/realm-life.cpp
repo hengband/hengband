@@ -2,6 +2,7 @@
 #include "cmd-action/cmd-spell.h"
 #include "effect/attribute-types.h"
 #include "player/digestion-processor.h"
+#include "realm/realm-types.h"
 #include "spell-kind/spells-curse-removal.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
@@ -21,6 +22,7 @@
 #include "status/temporary-resistance.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/spell-info-list.h"
 #include "target/target-getter.h"
 #include "util/dice.h"
 
@@ -41,130 +43,91 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
 
+    auto &list = SpellInfoList::get_instance().spell_list[REALM_LIFE];
+
+    if (name) {
+        return list[spell].name;
+    }
+    if (desc) {
+        return list[spell].description;
+    }
+
     switch (spell) {
-    case 0:
-        if (name) {
-            return _("軽傷の治癒", "Cure Light Wounds");
+    case 0: {
+        const Dice dice(2, 10);
+        if (info) {
+            return info_heal(dice);
         }
-        if (desc) {
-            return _("怪我と体力を少し回復させる。", "Heals cuts and HP a little.");
+        if (cast) {
+            (void)cure_light_wounds(player_ptr, dice.roll());
         }
-        {
-            const Dice dice(2, 10);
-            if (info) {
-                return info_heal(dice);
+    } break;
+
+    case 1: {
+        int base = 12;
+        const Dice dice(1, 12);
+
+        if (info) {
+            return info_duration(base, dice);
+        }
+
+        if (cast) {
+            set_blessed(player_ptr, dice.roll() + base, false);
+        }
+    } break;
+
+    case 2: {
+        const Dice dice(3 + (plev - 1) / 5, 4);
+
+        if (info) {
+            return info_damage(dice);
+        }
+
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
             }
-            if (cast) {
-                (void)cure_light_wounds(player_ptr, dice.roll());
-            }
+            fire_ball_hide(player_ptr, AttributeType::WOUNDS, dir, dice.roll(), 0);
         }
-        break;
+    } break;
 
-    case 1:
-        if (name) {
-            return _("祝福", "Bless");
-        }
-        if (desc) {
-            return _("一定時間、命中率とACにボーナスを得る。", "Gives a bonus to hit and AC for a few turns.");
-        }
-        {
-            int base = 12;
-            const Dice dice(1, 12);
+    case 3: {
+        const Dice dice(2, plev / 2);
+        POSITION rad = plev / 10 + 1;
 
-            if (info) {
-                return info_duration(base, dice);
-            }
+        if (info) {
+            return info_damage(dice);
+        }
 
-            if (cast) {
-                set_blessed(player_ptr, dice.roll() + base, false);
-            }
+        if (cast) {
+            lite_area(player_ptr, dice.roll(), rad);
         }
-        break;
+    } break;
 
-    case 2:
-        if (name) {
-            return _("軽傷", "Cause Light Wounds");
-        }
-        if (desc) {
-            return _("1体のモンスターに小ダメージを与える。抵抗されると無効。", "Wounds a monster a little unless resisted.");
-        }
-        {
-            const Dice dice(3 + (plev - 1) / 5, 4);
+    case 4: {
+        POSITION rad = DETECT_RAD_DEFAULT;
 
-            if (info) {
-                return info_damage(dice);
-            }
+        if (info) {
+            return info_radius(rad);
+        }
 
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-                fire_ball_hide(player_ptr, AttributeType::WOUNDS, dir, dice.roll(), 0);
-            }
+        if (cast) {
+            detect_traps(player_ptr, rad, true);
+            detect_doors(player_ptr, rad);
+            detect_stairs(player_ptr, rad);
         }
-        break;
+    } break;
 
-    case 3:
-        if (name) {
-            return _("光の召喚", "Call Light");
-        }
-        if (desc) {
-            return _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
-        }
-        {
-            const Dice dice(2, plev / 2);
-            POSITION rad = plev / 10 + 1;
+    case 5: {
+        const Dice dice(4, 10);
 
-            if (info) {
-                return info_damage(dice);
-            }
-
-            if (cast) {
-                lite_area(player_ptr, dice.roll(), rad);
-            }
+        if (info) {
+            return info_heal(dice);
         }
-        break;
-
-    case 4:
-        if (name) {
-            return _("罠 & 隠し扉感知", "Detect Doors & Traps");
+        if (cast) {
+            (void)cure_serious_wounds(player_ptr, dice.roll());
         }
-        if (desc) {
-            return _("近くの全ての罠と扉と階段を感知する。", "Detects traps, doors, and stairs in your vicinity.");
-        }
-        {
-            POSITION rad = DETECT_RAD_DEFAULT;
-
-            if (info) {
-                return info_radius(rad);
-            }
-
-            if (cast) {
-                detect_traps(player_ptr, rad, true);
-                detect_doors(player_ptr, rad);
-                detect_stairs(player_ptr, rad);
-            }
-        }
-        break;
-
-    case 5:
-        if (name) {
-            return _("重傷の治癒", "Cure Medium Wounds");
-        }
-        if (desc) {
-            return _("怪我と体力を中程度回復させる。", "Heals cuts and HP more.");
-        }
-        {
-            const Dice dice(4, 10);
-
-            if (info) {
-                return info_heal(dice);
-            }
-            if (cast) {
-                (void)cure_serious_wounds(player_ptr, dice.roll());
-            }
-        }
-        break;
+    } break;
 
     case 6:
         if (name) {
@@ -181,493 +144,266 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
 
         break;
 
-    case 7:
-        if (name) {
-            return _("空腹充足", "Satisfy Hunger");
+    case 7: {
+        if (cast) {
+            set_food(player_ptr, PY_FOOD_MAX - 1);
         }
-        if (desc) {
-            return _("満腹にする。", "Satisfies hunger.");
+    } break;
+
+    case 8: {
+        if (cast) {
+            (void)remove_curse(player_ptr);
         }
-        {
-            if (cast) {
-                set_food(player_ptr, PY_FOOD_MAX - 1);
+    } break;
+
+    case 9: {
+        const Dice dice(8 + (plev - 5) / 4, 8);
+
+        if (info) {
+            return info_damage(dice);
+        }
+
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
+            }
+            fire_ball_hide(player_ptr, AttributeType::WOUNDS, dir, dice.roll(), 0);
+        }
+    } break;
+
+    case 10: {
+        const Dice dice(8, 10);
+
+        if (info) {
+            return info_heal(dice);
+        }
+        if (cast) {
+            (void)cure_critical_wounds(player_ptr, dice.roll());
+        }
+    } break;
+
+    case 11: {
+        int base = 20;
+        const Dice dice(1, 20);
+
+        if (info) {
+            return info_duration(base, dice);
+        }
+
+        if (cast) {
+            set_oppose_cold(player_ptr, dice.roll() + base, false);
+            set_oppose_fire(player_ptr, dice.roll() + base, false);
+        }
+    } break;
+
+    case 12: {
+        POSITION rad = DETECT_RAD_MAP;
+
+        if (info) {
+            return info_radius(rad);
+        }
+
+        if (cast) {
+            map_area(player_ptr, rad);
+        }
+    } break;
+
+    case 13: {
+        if (cast) {
+            turn_undead(player_ptr);
+        }
+    } break;
+
+    case 14: {
+        int heal = 300;
+        if (info) {
+            return info_heal(heal);
+        }
+        if (cast) {
+            (void)cure_critical_wounds(player_ptr, heal);
+        }
+    } break;
+
+    case 15: {
+        if (cast) {
+            create_rune_protection_one(player_ptr);
+        }
+    } break;
+
+    case 16: {
+        if (cast) {
+            (void)remove_all_curse(player_ptr);
+        }
+    } break;
+
+    case 17: {
+        if (cast) {
+            if (!ident_spell(player_ptr, false)) {
+                return std::nullopt;
             }
         }
-        break;
+    } break;
 
-    case 8:
-        if (name) {
-            return _("解呪", "Remove Curse");
+    case 18: {
+        const Dice dice(1, plev * 5);
+
+        if (info) {
+            return info_damage(dice);
         }
-        if (desc) {
-            return _("アイテムにかかった弱い呪いを解除する。", "Removes normal curses from equipped items.");
+
+        if (cast) {
+            dispel_undead(player_ptr, dice.roll());
         }
-        {
-            if (cast) {
-                (void)remove_curse(player_ptr);
+    } break;
+
+    case 19: {
+        int power = plev * 2;
+
+        if (info) {
+            return info_power(power);
+        }
+
+        if (cast) {
+            charm_monsters(player_ptr, power);
+        }
+    } break;
+
+    case 20: {
+        const Dice dice(5 + (plev - 5) / 3, 15);
+
+        if (info) {
+            return info_damage(dice);
+        }
+
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
+            }
+            fire_ball_hide(player_ptr, AttributeType::WOUNDS, dir, dice.roll(), 0);
+        }
+    } break;
+
+    case 21: {
+        int base = 15;
+        const Dice dice(1, 20);
+
+        if (info) {
+            return info_delay(base, dice);
+        }
+
+        if (cast) {
+            if (!recall_player(player_ptr, dice.roll() + base)) {
+                return std::nullopt;
             }
         }
-        break;
+    } break;
 
-    case 9:
-        if (name) {
-            return _("重傷", "Cause Medium Wounds");
-        }
-        if (desc) {
-            return _("1体のモンスターに中ダメージを与える。抵抗されると無効。", "Wounds a monster unless resisted.");
-        }
-        {
-            const Dice dice(8 + (plev - 5) / 4, 8);
+    case 22: {
+        int base = 15;
+        const Dice dice(1, 20);
 
-            if (info) {
-                return info_damage(dice);
-            }
-
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-                fire_ball_hide(player_ptr, AttributeType::WOUNDS, dir, dice.roll(), 0);
-            }
-        }
-        break;
-
-    case 10:
-        if (name) {
-            return _("致命傷の治癒", "Cure Critical Wounds");
-        }
-        if (desc) {
-            return _("体力を大幅に回復させ、負傷と朦朧状態も全快する。", "Heals HP greatly. Also cures cuts and being stunned.");
-        }
-        {
-            const Dice dice(8, 10);
-
-            if (info) {
-                return info_heal(dice);
-            }
-            if (cast) {
-                (void)cure_critical_wounds(player_ptr, dice.roll());
-            }
-        }
-        break;
-
-    case 11:
-        if (name) {
-            return _("耐熱耐寒", "Resist Heat and Cold");
-        }
-        if (desc) {
-            return _("一定時間、火炎と冷気に対する耐性を得る。装備による耐性に累積する。",
-                "Gives resistance to fire and cold. These resistances can be added to those from equipment for more powerful resistances.");
+        if (info) {
+            return info_delay(base, dice);
         }
 
-        {
-            int base = 20;
-            const Dice dice(1, 20);
-
-            if (info) {
-                return info_duration(base, dice);
-            }
-
-            if (cast) {
-                set_oppose_cold(player_ptr, dice.roll() + base, false);
-                set_oppose_fire(player_ptr, dice.roll() + base, false);
-            }
+        if (cast) {
+            reserve_alter_reality(player_ptr, dice.roll() + base);
         }
-        break;
+    } break;
 
-    case 12:
-        if (name) {
-            return _("周辺感知", "Sense Surroundings");
-        }
-        if (desc) {
-            return _("周辺の地形を感知する。", "Maps nearby area.");
+    case 23: {
+        POSITION rad = 1;
+
+        if (info) {
+            return info_radius(rad);
         }
 
-        {
-            POSITION rad = DETECT_RAD_MAP;
-
-            if (info) {
-                return info_radius(rad);
-            }
-
-            if (cast) {
-                map_area(player_ptr, rad);
-            }
+        if (cast) {
+            create_rune_protection_one(player_ptr);
+            create_rune_protection_area(player_ptr, player_ptr->y, player_ptr->x);
         }
-        break;
+    } break;
 
-    case 13:
-        if (name) {
-            return _("パニック・アンデッド", "Turn Undead");
+    case 24: {
+        if (cast) {
+            player_ptr->current_floor_ptr->num_repro += MAX_REPRODUCTION;
         }
-        if (desc) {
-            return _("視界内のアンデッドを恐怖させる。抵抗されると無効。", "Attempts to scare undead monsters in sight.");
+    } break;
+
+    case 25: {
+        POSITION rad = DETECT_RAD_DEFAULT;
+
+        if (info) {
+            return info_radius(rad);
         }
 
-        {
-            if (cast) {
-                turn_undead(player_ptr);
+        if (cast) {
+            detect_all(player_ptr, rad);
+        }
+    } break;
+
+    case 26: {
+        int power = plev + 50;
+
+        if (info) {
+            return info_power(power);
+        }
+
+        if (cast) {
+            mass_genocide_undead(player_ptr, power, true);
+        }
+    } break;
+
+    case 27: {
+        if (cast) {
+            wiz_lite(player_ptr, false);
+        }
+    } break;
+
+    case 28: {
+        if (cast) {
+            (void)restore_all_status(player_ptr);
+            restore_level(player_ptr);
+        }
+    } break;
+
+    case 29: {
+        int heal = 2000;
+        if (info) {
+            return info_heal(heal);
+        }
+        if (cast) {
+            (void)cure_critical_wounds(player_ptr, heal);
+        }
+    } break;
+
+    case 30: {
+        if (cast) {
+            if (!identify_fully(player_ptr, false)) {
+                return std::nullopt;
             }
         }
-        break;
+    } break;
 
-    case 14:
-        if (name) {
-            return _("体力回復", "Healing");
-        }
-        if (desc) {
-            return _("極めて強力な回復呪文で、負傷と朦朧状態も全快する。", "Is very powerful healing magic. Also completely cures cuts and being stunned.");
-        }
+    case 31: {
+        TIME_EFFECT base = (TIME_EFFECT)plev / 2;
+        const Dice dice(1, plev / 2);
 
-        {
-            int heal = 300;
-            if (info) {
-                return info_heal(heal);
-            }
-            if (cast) {
-                (void)cure_critical_wounds(player_ptr, heal);
-            }
-        }
-        break;
-
-    case 15:
-        if (name) {
-            return _("結界の紋章", "Rune of Protection");
-        }
-        if (desc) {
-            return _("自分のいる床の上に、モンスターが通り抜けたり召喚されたりすることができなくなるルーンを描く。",
-                "Sets a rune on the floor beneath you. If you are on a rune, monsters cannot attack you but can try to break the rune.");
+        if (info) {
+            return info_duration(base, dice);
         }
 
-        {
-            if (cast) {
-                create_rune_protection_one(player_ptr);
-            }
+        if (cast) {
+            const auto v = static_cast<TIME_EFFECT>(dice.roll() + base);
+            set_acceleration(player_ptr, v, false);
+            set_oppose_acid(player_ptr, v, false);
+            set_oppose_elec(player_ptr, v, false);
+            set_oppose_fire(player_ptr, v, false);
+            set_oppose_cold(player_ptr, v, false);
+            set_oppose_pois(player_ptr, v, false);
+            set_ultimate_res(player_ptr, v, false);
         }
-        break;
-
-    case 16:
-        if (name) {
-            return _("*解呪*", "Dispel Curse");
-        }
-        if (desc) {
-            return _("アイテムにかかった強力な呪いを解除する。", "Removes normal and heavy curses from equipped items.");
-        }
-        {
-            if (cast) {
-                (void)remove_all_curse(player_ptr);
-            }
-        }
-        break;
-
-    case 17:
-        if (name) {
-            return _("鑑識", "Perception");
-        }
-        if (desc) {
-            return _("アイテムを識別する。", "Identifies an item.");
-        }
-
-        {
-            if (cast) {
-                if (!ident_spell(player_ptr, false)) {
-                    return std::nullopt;
-                }
-            }
-        }
-        break;
-
-    case 18:
-        if (name) {
-            return _("アンデッド退散", "Dispel Undead");
-        }
-        if (desc) {
-            return _("視界内の全てのアンデッドにダメージを与える。", "Damages all undead monsters in sight.");
-        }
-
-        {
-            const Dice dice(1, plev * 5);
-
-            if (info) {
-                return info_damage(dice);
-            }
-
-            if (cast) {
-                dispel_undead(player_ptr, dice.roll());
-            }
-        }
-        break;
-
-    case 19:
-        if (name) {
-            return _("凪の刻", "Day of the Dove");
-        }
-        if (desc) {
-            return _("視界内の全てのモンスターを魅了する。抵抗されると無効。", "Attempts to charm all monsters in sight.");
-        }
-
-        {
-            int power = plev * 2;
-
-            if (info) {
-                return info_power(power);
-            }
-
-            if (cast) {
-                charm_monsters(player_ptr, power);
-            }
-        }
-        break;
-
-    case 20:
-        if (name) {
-            return _("致命傷", "Cause Critical Wounds");
-        }
-        if (desc) {
-            return _("1体のモンスターに大ダメージを与える。抵抗されると無効。", "Wounds a monster critically unless resisted.");
-        }
-
-        {
-            const Dice dice(5 + (plev - 5) / 3, 15);
-
-            if (info) {
-                return info_damage(dice);
-            }
-
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-                fire_ball_hide(player_ptr, AttributeType::WOUNDS, dir, dice.roll(), 0);
-            }
-        }
-        break;
-
-    case 21:
-        if (name) {
-            return _("帰還の詔", "Word of Recall");
-        }
-        if (desc) {
-            return _("地上にいるときはダンジョンの最深階へ、ダンジョンにいるときは地上へと移動する。",
-                "Recalls player from dungeon to town or from town to the deepest level of dungeon.");
-        }
-
-        {
-            int base = 15;
-            const Dice dice(1, 20);
-
-            if (info) {
-                return info_delay(base, dice);
-            }
-
-            if (cast) {
-                if (!recall_player(player_ptr, dice.roll() + base)) {
-                    return std::nullopt;
-                }
-            }
-        }
-        break;
-
-    case 22:
-        if (name) {
-            return _("真実の祭壇", "Alter Reality");
-        }
-        if (desc) {
-            return _("現在の階を再構成する。", "Recreates current dungeon level.");
-        }
-
-        {
-            int base = 15;
-            const Dice dice(1, 20);
-
-            if (info) {
-                return info_delay(base, dice);
-            }
-
-            if (cast) {
-                reserve_alter_reality(player_ptr, dice.roll() + base);
-            }
-        }
-        break;
-
-    case 23:
-        if (name) {
-            return _("真・結界", "Warding True");
-        }
-        if (desc) {
-            return _("自分のいる床と周囲8マスの床の上に、モンスターが通り抜けたり召喚されたりすることができなくなるルーンを描く。",
-                "Creates runes in all adjacent squares and under you.");
-        }
-
-        {
-            POSITION rad = 1;
-
-            if (info) {
-                return info_radius(rad);
-            }
-
-            if (cast) {
-                create_rune_protection_one(player_ptr);
-                create_rune_protection_area(player_ptr, player_ptr->y, player_ptr->x);
-            }
-        }
-        break;
-
-    case 24:
-        if (name) {
-            return _("不毛化", "Sterilization");
-        }
-        if (desc) {
-            return _("この階の増殖するモンスターが増殖できなくなる。", "Prevents any breeders on current level from breeding.");
-        }
-
-        {
-            if (cast) {
-                player_ptr->current_floor_ptr->num_repro += MAX_REPRODUCTION;
-            }
-        }
-        break;
-
-    case 25:
-        if (name) {
-            return _("全感知", "Detection");
-        }
-        if (desc) {
-            return _("近くの全てのモンスター、罠、扉、階段、財宝、そしてアイテムを感知する。",
-                "Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.");
-        }
-
-        {
-            POSITION rad = DETECT_RAD_DEFAULT;
-
-            if (info) {
-                return info_radius(rad);
-            }
-
-            if (cast) {
-                detect_all(player_ptr, rad);
-            }
-        }
-        break;
-
-    case 26:
-        if (name) {
-            return _("アンデッド消滅", "Annihilate Undead");
-        }
-        if (desc) {
-            return _("自分の周囲にいるアンデッドを現在の階から消し去る。抵抗されると無効。",
-                "Eliminates all nearby undead monsters, exhausting you. Powerful or unique monsters may be able to resist.");
-        }
-
-        {
-            int power = plev + 50;
-
-            if (info) {
-                return info_power(power);
-            }
-
-            if (cast) {
-                mass_genocide_undead(player_ptr, power, true);
-            }
-        }
-        break;
-
-    case 27:
-        if (name) {
-            return _("千里眼", "Clairvoyance");
-        }
-        if (desc) {
-            return _("その階全体を永久に照らし、ダンジョン内すべてのアイテムを感知する。",
-                "Maps and lights whole dungeon level. Knows all objects location. And gives telepathy for a while.");
-        }
-
-        {
-            if (cast) {
-                wiz_lite(player_ptr, false);
-            }
-        }
-        break;
-
-    case 28:
-        if (name) {
-            return _("全復活", "Restoration");
-        }
-        if (desc) {
-            return _("すべてのステータスと経験値を回復する。", "Restores all stats and experience.");
-        }
-
-        {
-            if (cast) {
-                (void)restore_all_status(player_ptr);
-                restore_level(player_ptr);
-            }
-        }
-        break;
-
-    case 29:
-        if (name) {
-            return _("*体力回復*", "Healing True");
-        }
-        if (desc) {
-            return _("最強の治癒の魔法で、負傷と朦朧状態も全快する。", "Is the greatest healing magic. Heals all HP, cuts and being stunned.");
-        }
-
-        {
-            int heal = 2000;
-            if (info) {
-                return info_heal(heal);
-            }
-            if (cast) {
-                (void)cure_critical_wounds(player_ptr, heal);
-            }
-        }
-        break;
-
-    case 30:
-        if (name) {
-            return _("聖なるビジョン", "Holy Vision");
-        }
-        if (desc) {
-            return _("アイテムの持つ能力を完全に知る。", "*Identifies* an item.");
-        }
-
-        {
-            if (cast) {
-                if (!identify_fully(player_ptr, false)) {
-                    return std::nullopt;
-                }
-            }
-        }
-        break;
-
-    case 31:
-        if (name) {
-            return _("究極の耐性", "Ultimate Resistance");
-        }
-        if (desc) {
-            return _("一定時間、あらゆる耐性を付け、ACと魔法防御能力を上昇させる。", "Gives ultimate resistance, bonus to AC and speed.");
-        }
-
-        {
-            TIME_EFFECT base = (TIME_EFFECT)plev / 2;
-            const Dice dice(1, plev / 2);
-
-            if (info) {
-                return info_duration(base, dice);
-            }
-
-            if (cast) {
-                const auto v = static_cast<TIME_EFFECT>(dice.roll() + base);
-                set_acceleration(player_ptr, v, false);
-                set_oppose_acid(player_ptr, v, false);
-                set_oppose_elec(player_ptr, v, false);
-                set_oppose_fire(player_ptr, v, false);
-                set_oppose_cold(player_ptr, v, false);
-                set_oppose_pois(player_ptr, v, false);
-                set_ultimate_res(player_ptr, v, false);
-            }
-        }
-        break;
+    } break;
     }
 
     return "";

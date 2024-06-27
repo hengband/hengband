@@ -6,6 +6,7 @@
 #include "player-base/player-class.h"
 #include "player-info/race-info.h"
 #include "player/player-damage.h"
+#include "realm/realm-types.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
@@ -25,6 +26,7 @@
 #include "status/sight-setter.h"
 #include "status/temporary-resistance.h"
 #include "system/player-type-definition.h"
+#include "system/spell-info-list.h"
 #include "target/target-getter.h"
 #include "util/dice.h"
 #include "view/display-messages.h"
@@ -46,387 +48,240 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
 
+    auto &list = SpellInfoList::get_instance().spell_list[REALM_DAEMON];
+
+    if (name) {
+        return list[spell].name;
+    }
+    if (desc) {
+        return list[spell].description;
+    }
+
     switch (spell) {
-    case 0:
-        if (name) {
-            return _("マジック・ミサイル", "Magic Missile");
-        }
-        if (desc) {
-            return _("弱い魔法の矢を放つ。", "Fires a weak bolt of magic.");
+    case 0: {
+        const Dice dice(3 + (plev - 1) / 5, 4);
+
+        if (info) {
+            return info_damage(dice);
         }
 
-        {
-            const Dice dice(3 + (plev - 1) / 5, 4);
-
-            if (info) {
-                return info_damage(dice);
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
             }
 
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::MISSILE, dir, dice.roll());
-            }
+            fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::MISSILE, dir, dice.roll());
         }
-        break;
+    } break;
 
-    case 1:
-        if (name) {
-            return _("無生命感知", "Detect Unlife");
-        }
-        if (desc) {
-            return _("近くの生命のないモンスターを感知する。", "Detects all nonliving monsters in your vicinity.");
+    case 1: {
+        POSITION rad = DETECT_RAD_DEFAULT;
+
+        if (info) {
+            return info_radius(rad);
         }
 
-        {
-            POSITION rad = DETECT_RAD_DEFAULT;
-
-            if (info) {
-                return info_radius(rad);
-            }
-
-            if (cast) {
-                detect_monsters_nonliving(player_ptr, rad);
-            }
+        if (cast) {
+            detect_monsters_nonliving(player_ptr, rad);
         }
-        break;
+    } break;
 
-    case 2:
-        if (name) {
-            return _("邪なる祝福", "Evil Bless");
-        }
-        if (desc) {
-            return _("一定時間、命中率とACにボーナスを得る。", "Gives a bonus to hit and AC for a few turns.");
+    case 2: {
+        int base = 12;
+        const Dice dice(1, 12);
+
+        if (info) {
+            return info_duration(base, dice);
         }
 
-        {
-            int base = 12;
-            const Dice dice(1, 12);
-
-            if (info) {
-                return info_duration(base, dice);
-            }
-
-            if (cast) {
-                set_blessed(player_ptr, dice.roll() + base, false);
-            }
+        if (cast) {
+            set_blessed(player_ptr, dice.roll() + base, false);
         }
-        break;
+    } break;
 
-    case 3:
-        if (name) {
-            return _("耐火炎", "Resist Fire");
-        }
-        if (desc) {
-            return _("一定時間、炎への耐性を得る。装備による耐性に累積する。",
-                "Gives resistance to fire, cold and electricity for a while. These resistances can be added to those from equipment for more powerful "
-                "resistances.");
+    case 3: {
+        int base = 20;
+        const Dice dice(1, 20);
+
+        if (info) {
+            return info_duration(base, dice);
         }
 
-        {
-            int base = 20;
-            const Dice dice(1, 20);
+        if (cast) {
+            set_oppose_fire(player_ptr, dice.roll() + base, false);
+        }
+    } break;
 
-            if (info) {
-                return info_duration(base, dice);
+    case 4: {
+        const Dice dice(6 + (plev - 5) / 4, 8);
+
+        if (info) {
+            return info_damage(dice);
+        }
+
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
             }
 
-            if (cast) {
-                set_oppose_fire(player_ptr, dice.roll() + base, false);
+            fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::FIRE, dir, dice.roll());
+        }
+    } break;
+
+    case 5: {
+        if (cast) {
+            if (!summon_specific(player_ptr, -1, player_ptr->y, player_ptr->x, (plev * 3) / 2, SUMMON_MANES, (PM_ALLOW_GROUP | PM_FORCE_PET))) {
+                msg_print(_("古代の死霊は現れなかった。", "No Manes arrive."));
             }
         }
-        break;
+    } break;
 
-    case 4:
-        if (name) {
-            return _("ファイア・ボルト", "Fire Bolt");
+    case 6: {
+        const Dice dice(6, 6);
+        POSITION rad = (plev < 30) ? 2 : 3;
+        int base;
+
+        if (PlayerClass(player_ptr).is_wizard()) {
+            base = plev * 3;
+        } else {
+            base = plev * 2 + plev / 2;
         }
-        if (desc) {
-            return _("炎のボルトもしくはビームを放つ。", "Fires a bolt or beam of fire.");
+
+        if (info) {
+            return info_damage(dice, base);
         }
 
-        {
-            const Dice dice(6 + (plev - 5) / 4, 8);
-
-            if (info) {
-                return info_damage(dice);
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
             }
 
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
+            fire_ball(player_ptr, AttributeType::NETHER, dir, dice.roll() + base, rad);
+        }
+    } break;
 
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::FIRE, dir, dice.roll());
-            }
+    case 7: {
+        int base = 25;
+        const Dice dice(1, 25);
+        if (info) {
+            return info_duration(base, dice);
         }
-        break;
+        if (cast) {
+            heroism(player_ptr, dice.roll() + base);
+        }
+    } break;
 
-    case 5:
-        if (name) {
-            return _("古代の死霊召喚", "Summon Manes");
-        }
-        if (desc) {
-            return _("古代の死霊を召喚する。", "Summons one or more Manes.");
-        }
+    case 8: {
+        POSITION rad = DETECT_RAD_MAP;
 
-        {
-            if (cast) {
-                if (!summon_specific(player_ptr, -1, player_ptr->y, player_ptr->x, (plev * 3) / 2, SUMMON_MANES, (PM_ALLOW_GROUP | PM_FORCE_PET))) {
-                    msg_print(_("古代の死霊は現れなかった。", "No Manes arrive."));
-                }
-            }
-        }
-        break;
-
-    case 6:
-        if (name) {
-            return _("地獄球", "Nether Ball");
-        }
-        if (desc) {
-            return _("地獄の球を放つ。", "Fires a ball of nether.");
+        if (info) {
+            return info_radius(rad);
         }
 
-        {
-            const Dice dice(6, 6);
-            POSITION rad = (plev < 30) ? 2 : 3;
-            int base;
-
-            if (PlayerClass(player_ptr).is_wizard()) {
-                base = plev * 3;
-            } else {
-                base = plev * 2 + plev / 2;
-            }
-
-            if (info) {
-                return info_damage(dice, base);
-            }
-
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-
-                fire_ball(player_ptr, AttributeType::NETHER, dir, dice.roll() + base, rad);
-            }
+        if (cast) {
+            map_area(player_ptr, rad);
         }
-        break;
+    } break;
 
-    case 7:
-        if (name) {
-            return _("士気高揚", "Raise the Morale");
-        }
-        if (desc) {
-            return _("一定時間、ヒーロー気分になる。", "Removes fear. Gives a bonus to hit for a while. Heals you for 10 HP.");
+    case 9: {
+        int base = 20;
+        const Dice dice(1, 20);
+
+        if (info) {
+            return info_duration(base, dice);
         }
 
-        {
-            int base = 25;
-            const Dice dice(1, 25);
-            if (info) {
-                return info_duration(base, dice);
-            }
-            if (cast) {
-                heroism(player_ptr, dice.roll() + base);
-            }
+        if (cast) {
+            set_tim_res_nether(player_ptr, dice.roll() + base, false);
         }
-        break;
+    } break;
 
-    case 8:
-        if (name) {
-            return _("ビジョン", "Vision");
-        }
-        if (desc) {
-            return _("周辺の地形を感知する。", "Maps nearby area.");
+    case 10: {
+        const Dice dice(11 + (plev - 5) / 4, 8);
+
+        if (info) {
+            return info_damage(dice);
         }
 
-        {
-            POSITION rad = DETECT_RAD_MAP;
-
-            if (info) {
-                return info_radius(rad);
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
             }
 
-            if (cast) {
-                map_area(player_ptr, rad);
-            }
+            fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::PLASMA, dir, dice.roll());
         }
-        break;
+    } break;
 
-    case 9:
-        if (name) {
-            return _("耐地獄", "Resist Nether");
-        }
-        if (desc) {
-            return _("一定時間、地獄への耐性を得る。", "Gives resistance to nether for a while.");
+    case 11: {
+        int dam = plev + 55;
+        POSITION rad = 2;
+
+        if (info) {
+            return info_damage(dam);
         }
 
-        {
-            int base = 20;
-            const Dice dice(1, 20);
-
-            if (info) {
-                return info_duration(base, dice);
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
             }
 
-            if (cast) {
-                set_tim_res_nether(player_ptr, dice.roll() + base, false);
+            fire_ball(player_ptr, AttributeType::FIRE, dir, dam, rad);
+        }
+    } break;
+
+    case 12: {
+        if (cast) {
+            brand_weapon(player_ptr, 1);
+        }
+    } break;
+
+    case 13: {
+        int dam = plev * 5;
+
+        if (info) {
+            return info_damage(dam);
+        }
+
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
             }
+            fire_bolt(player_ptr, AttributeType::FIRE, dir, dam);
         }
-        break;
+    } break;
 
-    case 10:
-        if (name) {
-            return _("プラズマ・ボルト", "Plasma bolt");
+    case 14: {
+        if (cast) {
+            cast_summon_demon(player_ptr, plev * 2 / 3 + randint1(plev / 2));
         }
-        if (desc) {
-            return _("プラズマのボルトもしくはビームを放つ。", "Fires a bolt or beam of plasma.");
-        }
+    } break;
 
-        {
-            const Dice dice(11 + (plev - 5) / 4, 8);
+    case 15: {
+        int sides1 = plev * 2;
+        int sides2 = plev * 2;
 
-            if (info) {
-                return info_damage(dice);
-            }
-
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::PLASMA, dir, dice.roll());
-            }
-        }
-        break;
-
-    case 11:
-        if (name) {
-            return _("ファイア・ボール", "Fire Ball");
-        }
-        if (desc) {
-            return _("炎の球を放つ。", "Fires a ball of fire.");
+        if (info) {
+            return format("%sd%d+d%d", KWD_DAM, sides1, sides2);
         }
 
-        {
-            int dam = plev + 55;
-            POSITION rad = 2;
-
-            if (info) {
-                return info_damage(dam);
-            }
-
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-
-                fire_ball(player_ptr, AttributeType::FIRE, dir, dam, rad);
-            }
+        if (cast) {
+            dispel_monsters(player_ptr, randint1(sides1));
+            dispel_good(player_ptr, randint1(sides2));
         }
-        break;
+    } break;
 
-    case 12:
-        if (name) {
-            return _("炎の刃", "Fire Branding");
-        }
-        if (desc) {
-            return _("武器に炎の属性をつける。", "Makes current weapon fire branded.");
+    case 16: {
+        int base = 30;
+        const Dice dice(1, 25);
+
+        if (info) {
+            return info_duration(base, dice);
         }
 
-        {
-            if (cast) {
-                brand_weapon(player_ptr, 1);
-            }
+        if (cast) {
+            set_tim_esp(player_ptr, dice.roll() + base, false);
         }
-        break;
-
-    case 13:
-        if (name) {
-            return _("悪魔火", "Demonfire");
-        }
-        if (desc) {
-            return _("強力な炎のボルトを放つ。", "Fires a powerful bolt of fire.");
-        }
-
-        {
-            int dam = plev * 5;
-
-            if (info) {
-                return info_damage(dam);
-            }
-
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-                fire_bolt(player_ptr, AttributeType::FIRE, dir, dam);
-            }
-        }
-        break;
-
-    case 14:
-        if (name) {
-            return _("デーモン召喚", "Summon Demon");
-        }
-        if (desc) {
-            return _("悪魔1体を召喚する。", "Summons a demon.");
-        }
-
-        {
-            if (cast) {
-                cast_summon_demon(player_ptr, plev * 2 / 3 + randint1(plev / 2));
-            }
-        }
-        break;
-
-    case 15:
-        if (name) {
-            return _("地獄の波動", "Nether Wave");
-        }
-        if (desc) {
-            return _("視界内の全てのモンスターにダメージを与える。善良なモンスターに特に大きなダメージを与える。",
-                "Damages all monsters in sight. Hurts good monsters greatly.");
-        }
-
-        {
-            int sides1 = plev * 2;
-            int sides2 = plev * 2;
-
-            if (info) {
-                return format("%sd%d+d%d", KWD_DAM, sides1, sides2);
-            }
-
-            if (cast) {
-                dispel_monsters(player_ptr, randint1(sides1));
-                dispel_good(player_ptr, randint1(sides2));
-            }
-        }
-        break;
-
-    case 16:
-        if (name) {
-            return _("悪魔の目", "Devilish Eye");
-        }
-        if (desc) {
-            return _("一定時間、テレパシー能力を得る。", "Gives telepathy for a while.");
-        }
-
-        {
-            int base = 30;
-            const Dice dice(1, 25);
-
-            if (info) {
-                return info_duration(base, dice);
-            }
-
-            if (cast) {
-                set_tim_esp(player_ptr, dice.roll() + base, false);
-            }
-        }
-        break;
+    } break;
 
     case 17: {
         if (name) {
@@ -456,333 +311,201 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         break;
     }
-    case 18:
-        if (name) {
-            return _("溶岩流", "Lava Flow");
-        }
-        if (desc) {
-            return _("自分を中心とした炎の球を作り出し、床を溶岩に変える。", "Generates a ball of fire centered on you which transforms floors to magma.");
+    case 18: {
+        int dam = (55 + plev) * 2;
+        POSITION rad = 3;
+
+        if (info) {
+            return info_damage(dam / 2);
         }
 
-        {
-            int dam = (55 + plev) * 2;
-            POSITION rad = 3;
+        if (cast) {
+            fire_ball(player_ptr, AttributeType::FIRE, 0, dam, rad);
+            fire_ball_hide(player_ptr, AttributeType::LAVA_FLOW, 0, 2 + randint1(2), rad);
+        }
+    } break;
 
-            if (info) {
-                return info_damage(dam / 2);
+    case 19: {
+        int dam = plev * 3 / 2 + 80;
+        POSITION rad = 2 + plev / 40;
+
+        if (info) {
+            return info_damage(dam);
+        }
+
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
             }
 
-            if (cast) {
-                fire_ball(player_ptr, AttributeType::FIRE, 0, dam, rad);
-                fire_ball_hide(player_ptr, AttributeType::LAVA_FLOW, 0, 2 + randint1(2), rad);
+            fire_ball(player_ptr, AttributeType::PLASMA, dir, dam, rad);
+        }
+    } break;
+
+    case 20: {
+        int base = 10 + plev / 2;
+        const Dice dice(1, 10 + plev / 2);
+
+        if (info) {
+            return info_duration(base, dice);
+        }
+
+        if (cast) {
+            set_mimic(player_ptr, base + dice.roll(), MimicKindType::DEMON, false);
+        }
+    } break;
+
+    case 21: {
+        int dam = 200 + plev * 2;
+        POSITION rad = 4;
+
+        if (info) {
+            return info_damage(dam);
+        }
+
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
             }
+            fire_ball(player_ptr, AttributeType::FIRE, dir, dam, rad);
         }
-        break;
+    } break;
 
-    case 19:
-        if (name) {
-            return _("プラズマ球", "Plasma Ball");
+    case 22: {
+        int dam = 100 + plev * 2;
+        POSITION rad = 4;
+
+        if (info) {
+            return info_damage(dam);
         }
-        if (desc) {
-            return _("プラズマの球を放つ。", "Fires a ball of plasma.");
-        }
 
-        {
-            int dam = plev * 3 / 2 + 80;
-            POSITION rad = 2 + plev / 40;
-
-            if (info) {
-                return info_damage(dam);
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
             }
-
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-
-                fire_ball(player_ptr, AttributeType::PLASMA, dir, dam, rad);
-            }
+            fire_ball(player_ptr, AttributeType::NEXUS, dir, dam, rad);
         }
-        break;
+    } break;
 
-    case 20:
-        if (name) {
-            return _("悪魔変化", "Polymorph Demon");
-        }
-        if (desc) {
-            return _("一定時間、悪魔に変化する。変化している間は本来の種族の能力を失い、代わりに悪魔としての能力を得る。",
-                "Causes you to mimic a demon for a while. You lose the abilities of your original race and get the abilities of a demon for that time.");
-        }
-
-        {
-            int base = 10 + plev / 2;
-            const Dice dice(1, 10 + plev / 2);
-
-            if (info) {
-                return info_duration(base, dice);
-            }
-
-            if (cast) {
-                set_mimic(player_ptr, base + dice.roll(), MimicKindType::DEMON, false);
-            }
-        }
-        break;
-
-    case 21:
-        if (name) {
-            return _("火炎破", "Fireblast");
-        }
-        if (desc) {
-            return _("大きな炎の球を放つ。", "Fires a huge ball of fire.");
-        }
-
-        {
-            int dam = 200 + plev * 2;
-            POSITION rad = 4;
-
-            if (info) {
-                return info_damage(dam);
+    case 23: {
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
+            } else {
+                msg_print(_("<破滅の手>を放った！", "You invoke the Hand of Doom!"));
             }
 
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-                fire_ball(player_ptr, AttributeType::FIRE, dir, dam, rad);
+            fire_ball_hide(player_ptr, AttributeType::HAND_DOOM, dir, plev * 2, 0);
+        }
+    } break;
+
+    case 24: {
+        int base = 20;
+        const Dice dice(1, 20);
+
+        if (info) {
+            return info_duration(base, dice);
+        }
+
+        if (cast) {
+            set_tim_res_time(player_ptr, dice.roll() + base, false);
+        }
+    } break;
+
+    case 25: {
+        int dam = 50 + plev;
+        int power = 20 + plev;
+        POSITION rad = 3 + plev / 20;
+
+        if (info) {
+            return format("%s%d+%d", KWD_DAM, dam / 2, dam / 2);
+        }
+
+        if (cast) {
+            fire_ball(player_ptr, AttributeType::CHAOS, 0, dam, rad);
+            fire_ball(player_ptr, AttributeType::CONFUSION, 0, dam, rad);
+            fire_ball(player_ptr, AttributeType::CHARM, 0, power, rad);
+        }
+    } break;
+
+    case 26: {
+        if (cast) {
+            discharge_minion(player_ptr);
+        }
+    } break;
+
+    case 27: {
+        if (cast) {
+            if (!cast_summon_greater_demon(player_ptr)) {
+                return std::nullopt;
             }
         }
-        break;
+    } break;
 
-    case 22:
-        if (name) {
-            return _("サキュバスの接吻", "Succubus's Kiss");
+    case 28: {
+        int dam = plev * 15;
+        POSITION rad = plev / 5;
+
+        if (info) {
+            return info_damage(dam);
         }
-        if (desc) {
-            return _("因果混乱の球を放つ。", "Fires a ball of nexus.");
-        }
 
-        {
-            int dam = 100 + plev * 2;
-            POSITION rad = 4;
-
-            if (info) {
-                return info_damage(dam);
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
             }
 
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-                fire_ball(player_ptr, AttributeType::NEXUS, dir, dam, rad);
-            }
+            fire_ball(player_ptr, AttributeType::FIRE, dir, dam, rad);
         }
-        break;
+    } break;
 
-    case 23:
-        if (name) {
-            return _("破滅の手", "Doom Hand");
-        }
-        if (desc) {
-            return _("破滅の手を放つ。食らったモンスターはそのときのHPの半分前後のダメージを受ける。", "Attempts to cut a monster's HP roughly in half.");
+    case 29: {
+        int dam = plev * 15;
+        POSITION rad = plev / 5;
+
+        if (info) {
+            return info_damage(dam);
         }
 
-        {
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                } else {
-                    msg_print(_("<破滅の手>を放った！", "You invoke the Hand of Doom!"));
-                }
-
-                fire_ball_hide(player_ptr, AttributeType::HAND_DOOM, dir, plev * 2, 0);
-            }
-        }
-        break;
-
-    case 24:
-        if (name) {
-            return _("不滅の肉体", "Immortal Body");
-        }
-        if (desc) {
-            return _("一定時間、時間逆転への耐性を得る。", "Gives resistance to time for a while.");
-        }
-
-        {
-            int base = 20;
-            const Dice dice(1, 20);
-
-            if (info) {
-                return info_duration(base, dice);
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
             }
 
-            if (cast) {
-                set_tim_res_time(player_ptr, dice.roll() + base, false);
-            }
+            fire_ball(player_ptr, AttributeType::NETHER, dir, dam, rad);
         }
-        break;
+    } break;
 
-    case 25:
-        if (name) {
-            return _("狂気の円環", "Insanity Circle");
-        }
-        if (desc) {
-            return _("自分を中心としたカオスの球、混乱の球を発生させ、近くのモンスターを魅了する。",
-                "Generates balls of chaos, confusion and charm centered on you.");
+    case 30: {
+        int dam = 600;
+        POSITION rad = 0;
+
+        if (info) {
+            return info_damage(dam);
         }
 
-        {
-            int dam = 50 + plev;
-            int power = 20 + plev;
-            POSITION rad = 3 + plev / 20;
-
-            if (info) {
-                return format("%s%d+%d", KWD_DAM, dam / 2, dam / 2);
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
             }
 
-            if (cast) {
-                fire_ball(player_ptr, AttributeType::CHAOS, 0, dam, rad);
-                fire_ball(player_ptr, AttributeType::CONFUSION, 0, dam, rad);
-                fire_ball(player_ptr, AttributeType::CHARM, 0, power, rad);
-            }
+            fire_ball_hide(player_ptr, AttributeType::BLOOD_CURSE, dir, dam, rad);
+            take_hit(player_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("血の呪い", "Blood curse"));
         }
-        break;
+    } break;
 
-    case 26:
-        if (name) {
-            return _("ペット爆破", "Explode Pets");
-        }
-        if (desc) {
-            return _("全てのペットを強制的に爆破させる。", "Makes all pets explode.");
+    case 31: {
+        int base = 15;
+        const Dice dice(1, 15);
+
+        if (info) {
+            return info_duration(base, dice);
         }
 
-        {
-            if (cast) {
-                discharge_minion(player_ptr);
-            }
+        if (cast) {
+            set_mimic(player_ptr, base + dice.roll(), MimicKindType::DEMON_LORD, false);
         }
-        break;
-
-    case 27:
-        if (name) {
-            return _("グレーターデーモン召喚", "Summon Greater Demon");
-        }
-        if (desc) {
-            return _("上級デーモンを召喚する。召喚するには人間('p','h','t'で表されるモンスター)の死体を捧げなければならない。",
-                "Summons greater demon. Requires the sacrifice of a human corpse ('p', 'h' or 't').");
-        }
-
-        {
-            if (cast) {
-                if (!cast_summon_greater_demon(player_ptr)) {
-                    return std::nullopt;
-                }
-            }
-        }
-        break;
-
-    case 28:
-        if (name) {
-            return _("炎の嵐", "Fire Storm");
-        }
-        if (desc) {
-            return _("超巨大な炎の球を放つ。", "Generates a huge ball of fire.");
-        }
-
-        {
-            int dam = plev * 15;
-            POSITION rad = plev / 5;
-
-            if (info) {
-                return info_damage(dam);
-            }
-
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-
-                fire_ball(player_ptr, AttributeType::FIRE, dir, dam, rad);
-            }
-        }
-        break;
-
-    case 29:
-        if (name) {
-            return _("地獄嵐", "Nether Storm");
-        }
-        if (desc) {
-            return _("超巨大な地獄の球を放つ。", "Generates a huge ball of nether.");
-        }
-
-        {
-            int dam = plev * 15;
-            POSITION rad = plev / 5;
-
-            if (info) {
-                return info_damage(dam);
-            }
-
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-
-                fire_ball(player_ptr, AttributeType::NETHER, dir, dam, rad);
-            }
-        }
-        break;
-
-    case 30:
-        if (name) {
-            return _("血の呪い", "Bloody Curse");
-        }
-        if (desc) {
-            return _("自分がダメージを受けることによって対象に呪いをかけ、ダメージを与え様々な効果を引き起こす。",
-                "Puts blood curse, which damages and causes various effects, on a monster. You also take damage.");
-        }
-
-        {
-            int dam = 600;
-            POSITION rad = 0;
-
-            if (info) {
-                return info_damage(dam);
-            }
-
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-
-                fire_ball_hide(player_ptr, AttributeType::BLOOD_CURSE, dir, dam, rad);
-                take_hit(player_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("血の呪い", "Blood curse"));
-            }
-        }
-        break;
-
-    case 31:
-        if (name) {
-            return _("魔王変化", "Polymorph Demonlord");
-        }
-        if (desc) {
-            return _("悪魔の王に変化する。変化している間は本来の種族の能力を失い、代わりに悪魔の王としての能力を得、壁を破壊しながら歩く。",
-                "Causes you to mimic a demon lord for a while. You lose the abilities of your original race and get the great abilities of a demon lord for "
-                "that time. Even hard walls can't stop your walking.");
-        }
-
-        {
-            int base = 15;
-            const Dice dice(1, 15);
-
-            if (info) {
-                return info_duration(base, dice);
-            }
-
-            if (cast) {
-                set_mimic(player_ptr, base + dice.roll(), MimicKindType::DEMON_LORD, false);
-            }
-        }
-        break;
+    } break;
     }
 
     return "";

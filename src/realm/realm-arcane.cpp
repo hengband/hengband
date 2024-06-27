@@ -6,6 +6,7 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "player/digestion-processor.h"
+#include "realm/realm-types.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
@@ -22,6 +23,7 @@
 #include "status/element-resistance.h"
 #include "status/sight-setter.h"
 #include "system/player-type-definition.h"
+#include "system/spell-info-list.h"
 #include "target/target-getter.h"
 #include "util/dice.h"
 #include "view/display-messages.h"
@@ -43,700 +45,416 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
 
+    auto &list = SpellInfoList::get_instance().spell_list[REALM_ARCANE];
+
+    if (name) {
+        return list[spell].name;
+    }
+    if (desc) {
+        return list[spell].description;
+    }
+
     switch (spell) {
-    case 0:
-        if (name) {
-            return _("電撃", "Zap");
-        }
-        if (desc) {
-            return _("電撃のボルトもしくはビームを放つ。", "Fires a bolt or beam of lightning.");
+    case 0: {
+        const Dice dice(3 + (plev - 1) / 5, 3);
+
+        if (info) {
+            return info_damage(dice);
         }
 
-        {
-            const Dice dice(3 + (plev - 1) / 5, 3);
-
-            if (info) {
-                return info_damage(dice);
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
             }
 
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::ELEC, dir, dice.roll());
-            }
+            fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::ELEC, dir, dice.roll());
         }
-        break;
+    } break;
 
-    case 1:
-        if (name) {
-            return _("魔法の施錠", "Wizard Lock");
-        }
-        if (desc) {
-            return _("扉に鍵をかける。", "Locks a door.");
-        }
-
-        {
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-
-                wizard_lock(player_ptr, dir);
-            }
-        }
-        break;
-
-    case 2:
-        if (name) {
-            return _("透明体感知", "Detect Invisibility");
-        }
-        if (desc) {
-            return _("近くの透明なモンスターを感知する。", "Detects all invisible monsters in your vicinity.");
-        }
-
-        {
-            POSITION rad = DETECT_RAD_DEFAULT;
-
-            if (info) {
-                return info_radius(rad);
+    case 1: {
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
             }
 
-            if (cast) {
-                detect_monsters_invis(player_ptr, rad);
-            }
+            wizard_lock(player_ptr, dir);
         }
-        break;
+    } break;
 
-    case 3:
-        if (name) {
-            return _("モンスター感知", "Detect Monsters");
-        }
-        if (desc) {
-            return _("近くの全ての見えるモンスターを感知する。", "Detects all monsters in your vicinity unless invisible.");
+    case 2: {
+        POSITION rad = DETECT_RAD_DEFAULT;
+
+        if (info) {
+            return info_radius(rad);
         }
 
-        {
-            POSITION rad = DETECT_RAD_DEFAULT;
-
-            if (info) {
-                return info_radius(rad);
-            }
-
-            if (cast) {
-                detect_monsters_normal(player_ptr, rad);
-            }
+        if (cast) {
+            detect_monsters_invis(player_ptr, rad);
         }
-        break;
+    } break;
 
-    case 4:
-        if (name) {
-            return _("ショート・テレポート", "Blink");
-        }
-        if (desc) {
-            return _("近距離のテレポートをする。", "Teleports you a short distance.");
+    case 3: {
+        POSITION rad = DETECT_RAD_DEFAULT;
+
+        if (info) {
+            return info_radius(rad);
         }
 
-        {
-            POSITION range = 10;
-
-            if (info) {
-                return info_range(range);
-            }
-
-            if (cast) {
-                teleport_player(player_ptr, range, TELEPORT_SPONTANEOUS);
-            }
+        if (cast) {
+            detect_monsters_normal(player_ptr, rad);
         }
-        break;
+    } break;
 
-    case 5:
-        if (name) {
-            return _("ライト・エリア", "Light Area");
-        }
-        if (desc) {
-            return _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
+    case 4: {
+        POSITION range = 10;
+
+        if (info) {
+            return info_range(range);
         }
 
-        {
-            const Dice dice(2, plev / 2);
-            POSITION rad = plev / 10 + 1;
+        if (cast) {
+            teleport_player(player_ptr, range, TELEPORT_SPONTANEOUS);
+        }
+    } break;
 
-            if (info) {
-                return info_damage(dice);
+    case 5: {
+        const Dice dice(2, plev / 2);
+        POSITION rad = plev / 10 + 1;
+
+        if (info) {
+            return info_damage(dice);
+        }
+
+        if (cast) {
+            lite_area(player_ptr, dice.roll(), rad);
+        }
+    } break;
+
+    case 6: {
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
             }
 
-            if (cast) {
-                lite_area(player_ptr, dice.roll(), rad);
-            }
+            destroy_door(player_ptr, dir);
         }
-        break;
+    } break;
 
-    case 6:
-        if (name) {
-            return _("罠と扉 破壊", "Trap & Door Destruction");
-        }
-        if (desc) {
-            return _("一直線上の全ての罠と扉を破壊する。", "Fires a beam which destroy traps and doors.");
-        }
+    case 7: {
+        const Dice dice(2, 8);
 
-        {
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-
-                destroy_door(player_ptr, dir);
-            }
+        if (info) {
+            return info_heal(dice);
         }
-        break;
-
-    case 7:
-        if (name) {
-            return _("軽傷の治癒", "Cure Light Wounds");
+        if (cast) {
+            (void)cure_light_wounds(player_ptr, dice.roll());
         }
-        if (desc) {
-            return _("怪我と体力を少し回復させる。", "Heals cuts and HP a little.");
+    } break;
+
+    case 8: {
+        POSITION rad = DETECT_RAD_DEFAULT;
+
+        if (info) {
+            return info_radius(rad);
         }
 
-        {
-            const Dice dice(2, 8);
-
-            if (info) {
-                return info_heal(dice);
-            }
-            if (cast) {
-                (void)cure_light_wounds(player_ptr, dice.roll());
-            }
+        if (cast) {
+            detect_traps(player_ptr, rad, true);
+            detect_doors(player_ptr, rad);
+            detect_stairs(player_ptr, rad);
         }
-        break;
+    } break;
 
-    case 8:
-        if (name) {
-            return _("罠と扉 感知", "Detect Doors & Traps");
+    case 9: {
+        if (cast) {
+            phlogiston(player_ptr);
         }
-        if (desc) {
-            return _("近くの全ての罠と扉と階段を感知する。", "Detects traps, doors, and stairs in your vicinity.");
-        }
+    } break;
 
-        {
-            POSITION rad = DETECT_RAD_DEFAULT;
+    case 10: {
+        POSITION rad = DETECT_RAD_DEFAULT;
 
-            if (info) {
-                return info_radius(rad);
-            }
-
-            if (cast) {
-                detect_traps(player_ptr, rad, true);
-                detect_doors(player_ptr, rad);
-                detect_stairs(player_ptr, rad);
-            }
-        }
-        break;
-
-    case 9:
-        if (name) {
-            return _("燃素", "Phlogiston");
-        }
-        if (desc) {
-            return _("光源に燃料を補給する。", "Adds more turns of light to a lantern or torch.");
+        if (info) {
+            return info_radius(rad);
         }
 
-        {
-            if (cast) {
-                phlogiston(player_ptr);
-            }
+        if (cast) {
+            detect_treasure(player_ptr, rad);
+            detect_objects_gold(player_ptr, rad);
         }
-        break;
+    } break;
 
-    case 10:
-        if (name) {
-            return _("財宝感知", "Detect Treasure");
-        }
-        if (desc) {
-            return _("近くの財宝を感知する。", "Detects all treasures in your vicinity.");
+    case 11: {
+        POSITION rad = DETECT_RAD_DEFAULT;
+
+        if (info) {
+            return info_radius(rad);
         }
 
-        {
-            POSITION rad = DETECT_RAD_DEFAULT;
-
-            if (info) {
-                return info_radius(rad);
-            }
-
-            if (cast) {
-                detect_treasure(player_ptr, rad);
-                detect_objects_gold(player_ptr, rad);
-            }
+        if (cast) {
+            detect_objects_magic(player_ptr, rad);
         }
-        break;
+    } break;
 
-    case 11:
-        if (name) {
-            return _("魔法 感知", "Detect Enchantment");
-        }
-        if (desc) {
-            return _("近くの魔法がかかったアイテムを感知する。", "Detects all magical items in your vicinity.");
+    case 12: {
+        POSITION rad = DETECT_RAD_DEFAULT;
+
+        if (info) {
+            return info_radius(rad);
         }
 
-        {
-            POSITION rad = DETECT_RAD_DEFAULT;
-
-            if (info) {
-                return info_radius(rad);
-            }
-
-            if (cast) {
-                detect_objects_magic(player_ptr, rad);
-            }
+        if (cast) {
+            detect_objects_normal(player_ptr, rad);
         }
-        break;
-
-    case 12:
-        if (name) {
-            return _("アイテム感知", "Detect Objects");
-        }
-        if (desc) {
-            return _("近くの全てのアイテムを感知する。", "Detects all items in your vicinity.");
-        }
-
-        {
-            POSITION rad = DETECT_RAD_DEFAULT;
-
-            if (info) {
-                return info_radius(rad);
-            }
-
-            if (cast) {
-                detect_objects_normal(player_ptr, rad);
-            }
-        }
-        break;
+    } break;
 
     case 13:
-        if (name) {
-            return _("解毒", "Cure Poison");
-        }
-
-        if (desc) {
-            return _("毒を体内から完全に取り除く。", "Cures yourself of any poisons.");
-        }
-
         if (cast) {
             (void)BadStatusSetter(player_ptr).set_poison(0);
         }
 
         break;
 
-    case 14:
-        if (name) {
-            return _("耐冷", "Resist Cold");
-        }
-        if (desc) {
-            return _("一定時間、冷気への耐性を得る。装備による耐性に累積する。",
-                "Gives resistance to cold. This resistance can be added to that from equipment for more powerful resistance.");
-        }
+    case 14: {
+        int base = 20;
+        const Dice dice(1, 20);
 
-        {
-            int base = 20;
-            const Dice dice(1, 20);
-
-            if (info) {
-                return info_duration(base, dice);
-            }
-
-            if (cast) {
-                set_oppose_cold(player_ptr, dice.roll() + base, false);
-            }
-        }
-        break;
-
-    case 15:
-        if (name) {
-            return _("耐火", "Resist Fire");
-        }
-        if (desc) {
-            return _("一定時間、炎への耐性を得る。装備による耐性に累積する。",
-                "Gives resistance to fire. This resistance can be added to that from equipment for more powerful resistance.");
+        if (info) {
+            return info_duration(base, dice);
         }
 
-        {
-            int base = 20;
-            const Dice dice(1, 20);
-
-            if (info) {
-                return info_duration(base, dice);
-            }
-
-            if (cast) {
-                set_oppose_fire(player_ptr, dice.roll() + base, false);
-            }
+        if (cast) {
+            set_oppose_cold(player_ptr, dice.roll() + base, false);
         }
-        break;
+    } break;
 
-    case 16:
-        if (name) {
-            return _("耐電", "Resist Lightning");
-        }
-        if (desc) {
-            return _("一定時間、電撃への耐性を得る。装備による耐性に累積する。",
-                "Gives resistance to electricity. This resistance can be added to that from equipment for more powerful resistance.");
+    case 15: {
+        int base = 20;
+        const Dice dice(1, 20);
+
+        if (info) {
+            return info_duration(base, dice);
         }
 
-        {
-            int base = 20;
-            const Dice dice(1, 20);
-
-            if (info) {
-                return info_duration(base, dice);
-            }
-
-            if (cast) {
-                set_oppose_elec(player_ptr, dice.roll() + base, false);
-            }
+        if (cast) {
+            set_oppose_fire(player_ptr, dice.roll() + base, false);
         }
-        break;
+    } break;
 
-    case 17:
-        if (name) {
-            return _("耐酸", "Resist Acid");
-        }
-        if (desc) {
-            return _("一定時間、酸への耐性を得る。装備による耐性に累積する。",
-                "Gives resistance to acid. This resistance can be added to that from equipment for more powerful resistance.");
+    case 16: {
+        int base = 20;
+        const Dice dice(1, 20);
+
+        if (info) {
+            return info_duration(base, dice);
         }
 
-        {
-            int base = 20;
-            const Dice dice(1, 20);
+        if (cast) {
+            set_oppose_elec(player_ptr, dice.roll() + base, false);
+        }
+    } break;
 
-            if (info) {
-                return info_duration(base, dice);
-            }
+    case 17: {
+        int base = 20;
+        const Dice dice(1, 20);
 
-            if (cast) {
-                set_oppose_acid(player_ptr, dice.roll() + base, false);
+        if (info) {
+            return info_duration(base, dice);
+        }
+
+        if (cast) {
+            set_oppose_acid(player_ptr, dice.roll() + base, false);
+        }
+    } break;
+
+    case 18: {
+        const Dice dice(4, 8);
+
+        if (info) {
+            return info_heal(dice);
+        }
+        if (cast) {
+            (void)cure_serious_wounds(player_ptr, dice.roll());
+        }
+    } break;
+
+    case 19: {
+        POSITION range = plev * 5;
+
+        if (info) {
+            return info_range(range);
+        }
+
+        if (cast) {
+            teleport_player(player_ptr, range, TELEPORT_SPONTANEOUS);
+        }
+    } break;
+
+    case 20: {
+        if (cast) {
+            if (!ident_spell(player_ptr, false)) {
+                return std::nullopt;
             }
         }
-        break;
+    } break;
 
-    case 18:
-        if (name) {
-            return _("重傷の治癒", "Cure Medium Wounds");
-        }
-        if (desc) {
-            return _("怪我と体力を中程度回復させる。", "Heals cuts and HP.");
-        }
+    case 21: {
+        const Dice dice(1, 30);
+        int base = 20;
 
-        {
-            const Dice dice(4, 8);
-
-            if (info) {
-                return info_heal(dice);
-            }
-            if (cast) {
-                (void)cure_serious_wounds(player_ptr, dice.roll());
-            }
-        }
-        break;
-
-    case 19:
-        if (name) {
-            return _("テレポート", "Teleport");
-        }
-        if (desc) {
-            return _("遠距離のテレポートをする。", "Teleports you a long distance.");
+        if (info) {
+            return info_damage(dice, base);
         }
 
-        {
-            POSITION range = plev * 5;
-
-            if (info) {
-                return info_range(range);
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
             }
 
-            if (cast) {
-                teleport_player(player_ptr, range, TELEPORT_SPONTANEOUS);
-            }
+            wall_to_mud(player_ptr, dir, base + dice.roll());
         }
-        break;
+    } break;
 
-    case 20:
-        if (name) {
-            return _("鑑定", "Identify");
-        }
-        if (desc) {
-            return _("アイテムを識別する。", "Identifies an item.");
+    case 22: {
+        const Dice dice(6, 8);
+
+        if (info) {
+            return info_damage(dice);
         }
 
-        {
-            if (cast) {
-                if (!ident_spell(player_ptr, false)) {
-                    return std::nullopt;
-                }
-            }
-        }
-        break;
-
-    case 21:
-        if (name) {
-            return _("岩石溶解", "Stone to Mud");
-        }
-        if (desc) {
-            return _("壁を溶かして床にする。", "Turns one rock square to mud.");
-        }
-
-        {
-            const Dice dice(1, 30);
-            int base = 20;
-
-            if (info) {
-                return info_damage(dice, base);
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
             }
 
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
+            msg_print(_("光線が放たれた。", "A line of light appears."));
+            lite_line(player_ptr, dir, dice.roll());
+        }
+    } break;
 
-                wall_to_mud(player_ptr, dir, base + dice.roll());
+    case 23: {
+        if (cast) {
+            set_food(player_ptr, PY_FOOD_MAX - 1);
+        }
+    } break;
+
+    case 24: {
+        int base = 24;
+        const Dice dice(1, 24);
+
+        if (info) {
+            return info_duration(base, dice);
+        }
+
+        if (cast) {
+            set_tim_invis(player_ptr, dice.roll() + base, false);
+        }
+    } break;
+
+    case 25: {
+        if (cast) {
+            if (!summon_specific(player_ptr, -1, player_ptr->y, player_ptr->x, plev, SUMMON_ELEMENTAL, (PM_ALLOW_GROUP | PM_FORCE_PET))) {
+                msg_print(_("エレメンタルは現れなかった。", "No elementals arrive."));
             }
         }
-        break;
+    } break;
 
-    case 22:
-        if (name) {
-            return _("閃光", "Ray of Light");
+    case 26: {
+        if (cast) {
+            if (!input_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)"))) {
+                return std::nullopt;
+            }
+            teleport_level(player_ptr, 0);
         }
-        if (desc) {
-            return _("光線を放つ。光りを嫌うモンスターに効果がある。", "Fires a beam of light which damages to light-sensitive monsters.");
+    } break;
+
+    case 27: {
+        int power = plev;
+
+        if (info) {
+            return info_power(power);
         }
 
-        {
-            const Dice dice(6, 8);
-
-            if (info) {
-                return info_damage(dice);
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
             }
 
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-
-                msg_print(_("光線が放たれた。", "A line of light appears."));
-                lite_line(player_ptr, dir, dice.roll());
-            }
+            fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, power);
         }
-        break;
+    } break;
 
-    case 23:
-        if (name) {
-            return _("空腹充足", "Satisfy Hunger");
-        }
-        if (desc) {
-            return _("満腹にする。", "Satisfies hunger.");
+    case 28: {
+        int dam = 75 + plev;
+        POSITION rad = 2;
+
+        if (info) {
+            return info_damage(dam);
         }
 
-        {
-            if (cast) {
-                set_food(player_ptr, PY_FOOD_MAX - 1);
-            }
-        }
-        break;
-
-    case 24:
-        if (name) {
-            return _("透明視認", "See Invisible");
-        }
-        if (desc) {
-            return _("一定時間、透明なものが見えるようになる。", "Gives see invisible for a while.");
-        }
-
-        {
-            int base = 24;
-            const Dice dice(1, 24);
-
-            if (info) {
-                return info_duration(base, dice);
+        if (cast) {
+            if (!get_aim_dir(player_ptr, &dir)) {
+                return std::nullopt;
             }
 
-            if (cast) {
-                set_tim_invis(player_ptr, dice.roll() + base, false);
+            constexpr static auto element_types = {
+                AttributeType::FIRE,
+                AttributeType::ELEC,
+                AttributeType::COLD,
+                AttributeType::ACID,
+            };
+
+            const auto type = rand_choice(element_types);
+            fire_ball(player_ptr, type, dir, dam, rad);
+        }
+    } break;
+
+    case 29: {
+        POSITION rad = DETECT_RAD_DEFAULT;
+
+        if (info) {
+            return info_radius(rad);
+        }
+
+        if (cast) {
+            detect_all(player_ptr, rad);
+        }
+    } break;
+
+    case 30: {
+        int base = 15;
+        const Dice dice(1, 20);
+
+        if (info) {
+            return info_delay(base, dice);
+        }
+
+        if (cast) {
+            if (!recall_player(player_ptr, dice.roll() + base)) {
+                return std::nullopt;
             }
         }
-        break;
+    } break;
 
-    case 25:
-        if (name) {
-            return _("エレメンタル召喚", "Conjure Elemental");
+    case 31: {
+        int base = 25;
+        const Dice dice(1, 30);
+
+        if (info) {
+            return info_duration(base, dice);
         }
-        if (desc) {
-            return _("1体のエレメンタルを召喚する。", "Summons an elemental.");
-        }
-        {
-            if (cast) {
-                if (!summon_specific(player_ptr, -1, player_ptr->y, player_ptr->x, plev, SUMMON_ELEMENTAL, (PM_ALLOW_GROUP | PM_FORCE_PET))) {
-                    msg_print(_("エレメンタルは現れなかった。", "No elementals arrive."));
-                }
+
+        if (cast) {
+            chg_virtue(player_ptr, Virtue::KNOWLEDGE, 1);
+            chg_virtue(player_ptr, Virtue::ENLIGHTEN, 1);
+
+            wiz_lite(player_ptr, false);
+
+            if (!player_ptr->telepathy) {
+                set_tim_esp(player_ptr, dice.roll() + base, false);
             }
         }
-        break;
-
-    case 26:
-        if (name) {
-            return _("テレポート・レベル", "Teleport Level");
-        }
-        if (desc) {
-            return _("瞬時に上か下の階にテレポートする。", "Instantly teleports you up or down a level.");
-        }
-
-        {
-            if (cast) {
-                if (!input_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)"))) {
-                    return std::nullopt;
-                }
-                teleport_level(player_ptr, 0);
-            }
-        }
-        break;
-
-    case 27:
-        if (name) {
-            return _("テレポート・モンスター", "Teleport Away");
-        }
-        if (desc) {
-            return _("モンスターをテレポートさせるビームを放つ。抵抗されると無効。", "Teleports all monsters on the line away unless resisted.");
-        }
-
-        {
-            int power = plev;
-
-            if (info) {
-                return info_power(power);
-            }
-
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-
-                fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, power);
-            }
-        }
-        break;
-
-    case 28:
-        if (name) {
-            return _("元素の球", "Elemental Ball");
-        }
-        if (desc) {
-            return _("炎、電撃、冷気、酸のどれかの球を放つ。", "Fires a ball of some elements.");
-        }
-
-        {
-            int dam = 75 + plev;
-            POSITION rad = 2;
-
-            if (info) {
-                return info_damage(dam);
-            }
-
-            if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return std::nullopt;
-                }
-
-                constexpr static auto element_types = {
-                    AttributeType::FIRE,
-                    AttributeType::ELEC,
-                    AttributeType::COLD,
-                    AttributeType::ACID,
-                };
-
-                const auto type = rand_choice(element_types);
-                fire_ball(player_ptr, type, dir, dam, rad);
-            }
-        }
-        break;
-
-    case 29:
-        if (name) {
-            return _("全感知", "Detection");
-        }
-        if (desc) {
-            return _("近くの全てのモンスター、罠、扉、階段、財宝、そしてアイテムを感知する。",
-                "Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.");
-        }
-
-        {
-            POSITION rad = DETECT_RAD_DEFAULT;
-
-            if (info) {
-                return info_radius(rad);
-            }
-
-            if (cast) {
-                detect_all(player_ptr, rad);
-            }
-        }
-        break;
-
-    case 30:
-        if (name) {
-            return _("帰還の呪文", "Word of Recall");
-        }
-        if (desc) {
-            return _("地上にいるときはダンジョンの最深階へ、ダンジョンにいるときは地上へと移動する。",
-                "Recalls player from dungeon to town or from town to the deepest level of dungeon.");
-        }
-
-        {
-            int base = 15;
-            const Dice dice(1, 20);
-
-            if (info) {
-                return info_delay(base, dice);
-            }
-
-            if (cast) {
-                if (!recall_player(player_ptr, dice.roll() + base)) {
-                    return std::nullopt;
-                }
-            }
-        }
-        break;
-
-    case 31:
-        if (name) {
-            return _("千里眼", "Clairvoyance");
-        }
-        if (desc) {
-            return _("その階全体を永久に照らし、ダンジョン内すべてのアイテムを感知する。さらに、一定時間テレパシー能力を得る。",
-                "Maps and lights whole dungeon level. Reveals locations of all objects. Gives telepathy for a while.");
-        }
-
-        {
-            int base = 25;
-            const Dice dice(1, 30);
-
-            if (info) {
-                return info_duration(base, dice);
-            }
-
-            if (cast) {
-                chg_virtue(player_ptr, Virtue::KNOWLEDGE, 1);
-                chg_virtue(player_ptr, Virtue::ENLIGHTEN, 1);
-
-                wiz_lite(player_ptr, false);
-
-                if (!player_ptr->telepathy) {
-                    set_tim_esp(player_ptr, dice.roll() + base, false);
-                }
-            }
-        }
-        break;
+    } break;
     }
 
     return "";
