@@ -2511,6 +2511,9 @@
     <ClCompile Include="..\..\src\tracking\health-bar-tracker.cpp">
       <Filter>tracking</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\market\melee-arena.cpp">
+      <Filter>market</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5435,6 +5438,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\tracking\health-bar-tracker.h">
       <Filter>tracking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\market\melee-arena.h">
+      <Filter>market</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

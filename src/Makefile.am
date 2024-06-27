@@ -403,12 +403,12 @@ hengband_SOURCES = \
 	main-unix/x11-gamma-builder.cpp main-unix/x11-gamma-builder.h \
 	main-unix/x11-type-string.cpp main-unix/x11-type-string.h \
 	\
+	market/arena.cpp market/arena.h \
 	market/arena-entry.cpp market/arena-entry.h \
 	market/building-initializer.cpp market/building-initializer.h \
 	market/building-util.cpp market/building-util.h \
 	market/play-gamble.cpp market/play-gamble.h \
 	market/poker.cpp market/poker.h \
-	market/arena.cpp market/arena.h \
 	market/bounty-prize-table.cpp market/bounty-prize-table.h \
 	market/bounty-type-definition.h \
 	market/bounty.cpp market/bounty.h \
@@ -421,6 +421,7 @@ hengband_SOURCES = \
 	market/building-monster.cpp market/building-monster.h \
 	market/building-enchanter.cpp market/building-enchanter.h \
 	market/building-actions-table.h \
+	market/melee-arena.cpp market/melee-arena.h \
 	\
 	melee/monster-attack-monster.cpp melee/monster-attack-monster.h \
 	melee/melee-postprocess.cpp melee/melee-postprocess.h \
