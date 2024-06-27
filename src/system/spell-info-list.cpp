@@ -5,7 +5,7 @@ SpellInfoList SpellInfoList::instance{};
 
 void SpellInfoList::initiallize()
 {
-    this->spell_list.assign(magic_realm_type::MAX_MAGIC, std::vector<SpellInfo>(SPELLS_IN_REALM));
+    this->spell_list.assign(magic_realm_type::MAX_MAGIC + 1, std::vector<SpellInfo>(SPELLS_IN_REALM));
 }
 
 SpellInfoList &SpellInfoList::get_instance()

@@ -29,7 +29,7 @@ static errr set_realm(const nlohmann::json &spell_data, int &realm_id)
     if (realm == realms_list.end()) {
         return PARSE_ERROR_OUT_OF_BOUNDS;
     }
-    realm_id = realm->second;
+    realm_id = realm->second + 1; //0-origin to 1-origin
     return PARSE_ERROR_NONE;
 }
 
