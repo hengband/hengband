@@ -32,13 +32,6 @@ enum dungeon_mode_type {
 MONSTER_IDX hack_m_idx = 0; /* Hack -- see "process_monsters()" */
 MONSTER_IDX hack_m_idx_ii = 0;
 
-/*!
- * @var chameleon_change_m_idx
- * @brief カメレオンの変身先モンスターIDを受け渡すためのグローバル変数
- * @todo 変数渡しの問題などもあるができればchameleon_change_m_idxのグローバル変数を除去し、関数引き渡しに移行すること
- */
-int chameleon_change_m_idx = 0;
-
 /**
  * @brief モンスターがダンジョンに出現できる条件を満たしているかのフラグ判定関数(AND)
  *
@@ -70,14 +63,15 @@ static bool is_possible_monster_or(const EnumClassFlagGroup<T> &r_flags, const E
  * @param floor_ptr フロアへの参照ポインタ
  * @param r_idx チェックするモンスター種族ID
  * @param summon_specific_type summon_specific() によるものの場合、召喚種別を指定する
+ * @param is_chameleon_polymorph カメレオンの変身の場合、true
  * @return 召喚条件が一致するならtrue / Return TRUE is the monster is OK and FALSE otherwise
  */
-static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonsterRaceId r_idx, std::optional<summon_type> summon_specific_type)
+static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonsterRaceId r_idx, std::optional<summon_type> summon_specific_type, bool is_chameleon_polymorph)
 {
     const auto *d_ptr = &floor_ptr->get_dungeon_definition();
     const auto *r_ptr = &monraces_info[r_idx];
     if (d_ptr->flags.has(DungeonFeatureType::CHAMELEON)) {
-        if (chameleon_change_m_idx) {
+        if (is_chameleon_polymorph) {
             return true;
         }
     }
@@ -222,12 +216,13 @@ monsterrace_hook_type get_monster_hook2(PlayerType *player_ptr, POSITION y, POSI
  * @param hook2 生成制約関数2 (nullptr の場合、制約なし)
  * @param restrict_to_dungeon 現在プレイヤーのいるダンジョンの制約を適用するか
  * @param summon_specific_type summon_specific によるものの場合、召喚種別を指定する
+ * @param is_chameleon_polymorph カメレオンの変身の場合、true
  * @return 常に 0
  *
  * モンスター生成テーブル alloc_race_table の各要素の基本重み prob1 を指定条件
  * に従って変更し、結果を prob2 に書き込む。
  */
-static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, const monsterrace_hook_type &hook2, const bool restrict_to_dungeon, std::optional<summon_type> summon_specific_type)
+static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, const monsterrace_hook_type &hook2, const bool restrict_to_dungeon, std::optional<summon_type> summon_specific_type, bool is_chameleon_polymorph)
 {
     const FloorType *const floor_ptr = player_ptr->current_floor_ptr;
 
@@ -259,7 +254,7 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
         }
 
         // 原則生成禁止するものたち(フェイズアウト状態 / カメレオンの変身先 / ダンジョンの主召喚 は例外)。
-        if (!system.is_phase_out() && !chameleon_change_m_idx && summon_specific_type != SUMMON_GUARDIANS) {
+        if (!system.is_phase_out() && !is_chameleon_polymorph && summon_specific_type != SUMMON_GUARDIANS) {
             // クエストモンスターは生成禁止。
             if (r_ptr->misc_flags.has(MonsterMiscType::QUESTOR)) {
                 continue;
@@ -298,7 +293,7 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
             const bool in_random_quest = floor_ptr->is_in_quest() && !QuestType::is_fixed(floor_ptr->quest_number);
             const bool cond = !system.is_phase_out() && floor_ptr->dun_level > 0 && !in_random_quest;
 
-            if (cond && !restrict_monster_to_dungeon(floor_ptr, entry_r_idx, summon_specific_type)) {
+            if (cond && !restrict_monster_to_dungeon(floor_ptr, entry_r_idx, summon_specific_type, is_chameleon_polymorph)) {
                 // ダンジョンによる制約に掛かった場合、重みを special_div/64 倍する。
                 // 丸めは確率的に行う。
                 const int numer = entry->prob2 * floor_ptr->get_dungeon_definition().special_div;
@@ -341,7 +336,18 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
  */
 errr get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, const monsterrace_hook_type &hook2, std::optional<summon_type> summon_specific_type)
 {
-    return do_get_mon_num_prep(player_ptr, hook1, hook2, true, summon_specific_type);
+    return do_get_mon_num_prep(player_ptr, hook1, hook2, true, summon_specific_type, false);
+}
+
+/*!
+ * @brief モンスター生成テーブルの重み修正(カメレオン変身専用)
+ * @return 常に 0
+ *
+ * get_mon_num() を呼ぶ前に get_mon_num_prep 系関数のいずれかを呼ぶこと。
+ */
+errr get_mon_num_prep_chameleon(PlayerType *player_ptr, const monsterrace_hook_type &hook)
+{
+    return do_get_mon_num_prep(player_ptr, hook, nullptr, true, std::nullopt, true);
 }
 
 /*!
@@ -352,7 +358,7 @@ errr get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1
  */
 errr get_mon_num_prep_bounty(PlayerType *player_ptr)
 {
-    return do_get_mon_num_prep(player_ptr, nullptr, nullptr, false, std::nullopt);
+    return do_get_mon_num_prep(player_ptr, nullptr, nullptr, false, std::nullopt, false);
 }
 
 bool is_player(MONSTER_IDX m_idx)
