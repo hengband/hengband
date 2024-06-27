@@ -679,8 +679,8 @@ ProcessResult effect_monster_void(PlayerType *player_ptr, EffectMonster *em_ptr)
             em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::QUANTUM);
         }
     } else if (em_ptr->r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL)) {
-        em_ptr->note = _("の存在が薄れていく。", "is fading out.");
-        em_ptr->note_dies = _("は消えてしまった。", "has disappeared.");
+        em_ptr->note = _("の存在が薄れていく。", " is fading out.");
+        em_ptr->note_dies = _("は消えてしまった。", " has disappeared.");
         em_ptr->dam *= 3;
         em_ptr->dam /= 2;
         if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
@@ -702,7 +702,7 @@ ProcessResult effect_monster_void(PlayerType *player_ptr, EffectMonster *em_ptr)
             }
         }
     } else {
-        em_ptr->note_dies = _("は消滅してしまった。", "has vanished.");
+        em_ptr->note_dies = _("は消滅してしまった。", " has vanished.");
     }
 
     return ProcessResult::PROCESS_CONTINUE;
