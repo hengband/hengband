@@ -5,6 +5,7 @@
 #include "main/angband-headers.h"
 #include "player-ability/player-ability-types.h"
 #include "player-info/class-info.h"
+#include "system/spell-info-list.h"
 #include "util/enum-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -31,22 +32,6 @@ const std::unordered_map<std::string_view, int> name_to_stat = {
     { "DEX", A_DEX },
     { "CON", A_CON },
     { "CHR", A_CHR },
-};
-
-/*!
- * @brief 魔法領域名とintの対応表
- */
-const std::unordered_map<std::string_view, int> realms_list = {
-    { "LIFE", 0 },
-    { "SORCERY", 1 },
-    { "NATURE", 2 },
-    { "CHAOS", 3 },
-    { "DEATH", 4 },
-    { "TRUMP", 5 },
-    { "ARCANE", 6 },
-    { "CRAFT", 7 },
-    { "DEMON", 8 },
-    { "CRUSADE", 9 },
 };
 
 /*!

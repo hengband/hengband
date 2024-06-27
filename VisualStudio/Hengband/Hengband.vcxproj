@@ -412,6 +412,7 @@
     <ClCompile Include="..\..\src\info-reader\race-info-tokens-table.cpp" />
     <ClCompile Include="..\..\src\info-reader\race-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\skill-reader.cpp" />
+    <ClCompile Include="..\..\src\info-reader\spell-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\vault-reader.cpp" />
     <ClCompile Include="..\..\src\inventory\floor-item-getter.cpp" />
     <ClCompile Include="..\..\src\inventory\item-selection-util.cpp" />
@@ -920,6 +921,7 @@
     <ClCompile Include="..\..\src\flavor\object-flavor.cpp" />
     <ClCompile Include="..\..\src\object\item-tester-hooker.cpp" />
     <ClCompile Include="..\..\src\system\baseitem-info.cpp" />
+    <ClCompile Include="..\..\src\system\spell-info-list.cpp" />
     <ClCompile Include="..\..\src\object\object-kind-hook.cpp" />
     <ClCompile Include="..\..\src\object\object-broken.cpp" />
     <ClCompile Include="..\..\src\object\lite-processor.cpp" />
@@ -1202,6 +1204,7 @@
     <ClInclude Include="..\..\src\info-reader\race-reader.h" />
     <ClInclude Include="..\..\src\info-reader\random-grid-effect-types.h" />
     <ClInclude Include="..\..\src\info-reader\skill-reader.h" />
+    <ClInclude Include="..\..\src\info-reader\spell-reader.h" />
     <ClInclude Include="..\..\src\info-reader\vault-reader.h" />
     <ClInclude Include="..\..\src\inventory\floor-item-getter.h" />
     <ClInclude Include="..\..\src\inventory\inventory-slot-types.h" />
@@ -1976,6 +1979,7 @@
     <ClInclude Include="..\..\src\object\object-info.h" />
     <ClInclude Include="..\..\src\object\object-kind-hook.h" />
     <ClInclude Include="..\..\src\system\baseitem-info.h" />
+    <ClInclude Include="..\..\src\system\spell-info-list.h" />
     <ClInclude Include="..\..\src\player\patron.h" />
     <ClInclude Include="..\..\src\player-info\class-info.h" />
     <ClInclude Include="..\..\src\player\player-damage.h" />
