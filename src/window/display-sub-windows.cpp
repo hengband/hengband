@@ -741,7 +741,6 @@ static void display_spell_list(PlayerType *player_ptr)
         PERCENTAGE minfail = 0;
         PLAYER_LEVEL plev = player_ptr->lev;
         PERCENTAGE chance = 0;
-        mind_type spell;
         MindKindType use_mind;
         bool use_hp = false;
 
@@ -775,9 +774,10 @@ static void display_spell_list(PlayerType *player_ptr)
             break;
         }
 
-        for (int i = 0; i < MAX_MIND_POWERS; i++) {
+        const auto &mind_power = mind_powers[enum2i(use_mind)];
+        for (int i = 0; i < std::ssize(mind_power.info); i++) {
             byte a = TERM_WHITE;
-            spell = mind_powers[static_cast<int>(use_mind)].info[i];
+            const auto &spell = mind_power.info[i];
             if (spell.min_lev > plev) {
                 break;
             }
