@@ -264,14 +264,8 @@ std::string info_weight(WEIGHT weight)
  */
 static bool spell_okay(PlayerType *player_ptr, int spell, bool learned, bool study_pray, int use_realm)
 {
-    const magic_type *s_ptr;
-
     /* Access the spell */
-    if (!is_magic(use_realm)) {
-        s_ptr = &technic_info[use_realm - MIN_TECHNIC][spell];
-    } else {
-        s_ptr = &mp_ptr->info[use_realm - 1][spell];
-    }
+    const auto *s_ptr = PlayerRealm::get_spell_info(use_realm, spell);
 
     /* Spell is illegal */
     if (s_ptr->slevel > player_ptr->lev) {
@@ -944,7 +938,6 @@ bool do_cmd_cast(PlayerType *player_ptr)
     int16_t use_realm;
     MANA_POINT need_mana;
 
-    const magic_type *s_ptr;
     auto over_exerted = false;
 
     /* Require spell ability */
@@ -1054,11 +1047,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
         }
     }
 
-    if (!is_magic(use_realm)) {
-        s_ptr = &technic_info[use_realm - MIN_TECHNIC][spell];
-    } else {
-        s_ptr = &mp_ptr->info[realm - 1][spell];
-    }
+    const auto *s_ptr = PlayerRealm::get_spell_info(use_realm, spell);
 
     /* Extract mana consumption rate */
     need_mana = mod_need_mana(player_ptr, s_ptr->smana, spell, realm);

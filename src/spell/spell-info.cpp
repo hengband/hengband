@@ -2,6 +2,7 @@
 #include "io/input-key-requester.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
+#include "player/player-realm.h"
 #include "player/player-skill.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"
@@ -123,12 +124,7 @@ PERCENTAGE spell_chance(PlayerType *player_ptr, SPELL_IDX spell, int16_t use_rea
         return 0;
     }
 
-    const magic_type *s_ptr;
-    if (!is_magic(use_realm)) {
-        s_ptr = &technic_info[use_realm - MIN_TECHNIC][spell];
-    } else {
-        s_ptr = &mp_ptr->info[use_realm - 1][spell];
-    }
+    const auto *s_ptr = PlayerRealm::get_spell_info(use_realm, spell);
 
     PERCENTAGE chance = s_ptr->sfail;
     chance -= 3 * (player_ptr->lev - s_ptr->slevel);
@@ -249,17 +245,11 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell, SPELL_IDX *spe
     }
 
     int i;
-    const magic_type *s_ptr;
     char ryakuji[5];
     bool max = false;
     for (i = 0; i < num; i++) {
         SPELL_IDX spell = spells[i];
-
-        if (!is_magic(use_realm)) {
-            s_ptr = &technic_info[use_realm - MIN_TECHNIC][spell];
-        } else {
-            s_ptr = &mp_ptr->info[use_realm - 1][spell];
-        }
+        const auto *s_ptr = PlayerRealm::get_spell_info(use_realm, spell);
 
         MANA_POINT need_mana;
         if (use_realm == REALM_HISSATSU) {

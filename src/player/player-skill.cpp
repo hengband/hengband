@@ -365,7 +365,7 @@ void PlayerSkill::gain_spell_skill_exp(int realm, int spell_idx)
     constexpr GainAmountList gain_amount_list_second{ { 60, 8, 2, 0 } };
 
     const auto is_first_realm = (realm == this->player_ptr->realm1);
-    const auto *s_ptr = is_magic(realm) ? &mp_ptr->info[realm - 1][spell_idx] : &technic_info[realm - MIN_TECHNIC][spell_idx];
+    const auto *s_ptr = PlayerRealm::get_spell_info(realm, spell_idx);
 
     gain_spell_skill_exp_aux(this->player_ptr, this->player_ptr->spell_exp[spell_idx + (is_first_realm ? 0 : 32)],
         (is_first_realm ? gain_amount_list_first : gain_amount_list_second), s_ptr->slevel);
@@ -378,7 +378,7 @@ void PlayerSkill::gain_continuous_spell_skill_exp(int realm, int spell_idx)
         return;
     }
 
-    const auto *s_ptr = &technic_info[realm - MIN_TECHNIC][spell_idx];
+    const auto *s_ptr = PlayerRealm::get_spell_info(realm, spell_idx);
 
     const GainAmountList gain_amount_list{ 5, (one_in_(2) ? 1 : 0), (one_in_(5) ? 1 : 0), (one_in_(5) ? 1 : 0) };
 

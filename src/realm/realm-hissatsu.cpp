@@ -29,6 +29,7 @@
 #include "player-info/equipment-info.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"
+#include "player/player-realm.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-launcher.h"
@@ -819,6 +820,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
             const int mana_cost_per_monster = 8;
             bool is_new = true;
             bool mdeath;
+            const auto *s_ptr = PlayerRealm::get_spell_info(REALM_HISSATSU, spell);
 
             do {
                 if (!rush_attack(player_ptr, &mdeath)) {
@@ -826,7 +828,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 }
                 if (is_new) {
                     /* Reserve needed mana point */
-                    player_ptr->csp -= technic_info[REALM_HISSATSU - MIN_TECHNIC][26].smana;
+                    player_ptr->csp -= s_ptr->smana;
                     is_new = false;
                 } else {
                     player_ptr->csp -= mana_cost_per_monster;
@@ -846,7 +848,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
             }
 
             /* Restore reserved mana */
-            player_ptr->csp += technic_info[REALM_HISSATSU - MIN_TECHNIC][26].smana;
+            player_ptr->csp += s_ptr->smana;
         }
         break;
 
