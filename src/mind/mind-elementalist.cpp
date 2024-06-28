@@ -714,8 +714,6 @@ static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_b
         screen_save();
     }
 
-    int elem;
-    mind_type spell;
     auto choice = (always_show_list || use_menu) ? ESCAPE : 1;
     while (!flag) {
         if (choice == ESCAPE) {
@@ -769,39 +767,16 @@ static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_b
                     screen_save();
                 }
 
-                prt("", y, x);
-                put_str(_("名前", "Name"), y, x + 5);
-                put_str(_("Lv   MP   失率 効果", "Lv   MP Fail Info"), y, x + 35);
-                for (i = 0; i < spell_max; i++) {
-                    elem = get_elemental_elem(player_ptr, i);
-                    spell = get_elemental_info(player_ptr, i);
-
+                display_element_spell_list(player_ptr, y, x);
+                for (i = 0; i < spell_max && use_menu; i++) {
+                    const auto spell = get_elemental_info(player_ptr, i);
                     if (spell.min_lev > plev) {
                         break;
                     }
-
-                    PERCENTAGE chance = decide_element_chance(player_ptr, spell);
-                    int mana_cost = decide_element_mana_cost(player_ptr, spell);
-                    const auto comment = get_element_effect_info(player_ptr, i);
-
-                    std::string desc;
-                    if (use_menu) {
-                        if (i == (menu_line - 1)) {
-                            desc = _("  》 ", "  >  ");
-                        } else {
-                            desc = "     ";
-                        }
-                    } else {
-                        desc = format("  %c) ", I2A(i));
-                    }
-
-                    const auto s = get_element_name(player_ptr->element, elem);
-                    const auto name = format(spell.name, s);
-                    desc.append(format("%-30s%2d %4d %3d%%%s", name.data(), spell.min_lev, mana_cost, chance, comment.data()));
-                    prt(desc, y + i + 1, x);
+                    const auto cursor = (i == (menu_line - 1)) ? _("  》 ", "  >  ") : "     ";
+                    put_str(cursor, y + i + 1, x);
                 }
 
-                prt("", y + i + 1, x);
             } else if (!only_browse) {
                 redraw = false;
                 screen_load();
@@ -975,6 +950,38 @@ void do_cmd_element_browse(PlayerType *player_ptr)
         prt(_("何かキーを押して下さい。", "Hit any key."), 0, 0);
         (void)inkey();
     }
+}
+
+/*!
+ * @brief 元素魔法の一覧を表示する
+ */
+void display_element_spell_list(PlayerType *player_ptr, int y, int x)
+{
+    prt("", y, x);
+    put_str(_("名前", "Name"), y, x + 5);
+    put_str(_("Lv   MP 失率 効果", "Lv Mana Fail Info"), y, x + 35);
+
+    constexpr auto spell_max = enum2i(ElementSpells::MAX);
+    int i;
+    for (i = 0; i < spell_max; i++) {
+        const auto spell = get_elemental_info(player_ptr, i);
+        if (spell.min_lev > player_ptr->lev) {
+            break;
+        }
+
+        const auto elem = get_elemental_elem(player_ptr, i);
+        const auto name = format(spell.name, get_element_name(player_ptr->element, elem));
+
+        const auto mana_cost = decide_element_mana_cost(player_ptr, spell);
+        const auto chance = decide_element_chance(player_ptr, spell);
+        const auto comment = get_element_effect_info(player_ptr, i);
+
+        constexpr auto fmt = "  %c) %-30s%2d %4d %3d%%%s";
+        const auto info_str = format(fmt, I2A(i), name.data(), spell.min_lev, mana_cost, chance, comment.data());
+        const auto color = mana_cost > player_ptr->csp ? TERM_ORANGE : TERM_WHITE;
+        c_prt(color, info_str, y + i + 1, x);
+    }
+    prt("", y + i + 1, x);
 }
 
 /*!
