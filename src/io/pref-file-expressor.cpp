@@ -53,7 +53,7 @@ std::string process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
             v = "0";
             while (*s && (f != b2)) {
                 t = process_pref_file_expr(player_ptr, &s, &f);
-                if (t != "0") {
+                if (!t.empty() && t != "0") {
                     v = "1";
                 }
             }
@@ -61,7 +61,7 @@ std::string process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
             v = "1";
             while (*s && (f != b2)) {
                 t = process_pref_file_expr(player_ptr, &s, &f);
-                if (t == "0") {
+                if (!t.empty() && t == "0") {
                     v = "0";
                 }
             }
@@ -69,7 +69,7 @@ std::string process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
             v = "1";
             while (*s && (f != b2)) {
                 t = process_pref_file_expr(player_ptr, &s, &f);
-                if (t == "1") {
+                if (!t.empty() && t == "1") {
                     v = "0";
                 }
             }
