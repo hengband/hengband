@@ -38,7 +38,7 @@ Q:3:T:どうか外にあるお礼を受けとって下さい。
 ?:[EQU $QUEST3 5]
 Q:$3:T:It seems like I've overestimated your power.  But at least
 Q:$3:T:my friend Astinus, the Librarian says that the Logrus Master
-Q:$3:T:has left the town.  Lets hope that he never comes back.
+Q:$3:T:has left the town.  Let's hope that he never comes back.
 Q:3:T:あなたをかいかぶっていたようですな。しかし私の友人である司書の
 Q:3:T:アスティヌスから聞いた話では、あのログルス使いは街を去ったようです。
 Q:3:T:彼が二度と戻ってこないことを願いましょう。
