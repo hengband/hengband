@@ -22,6 +22,7 @@ enum choosable_realm {
     CH_HEX = 0x20000,
 };
 
+enum class ItemKindType : short;
 class PlayerType;
 struct magic_type;
 class PlayerRealm {
@@ -29,9 +30,12 @@ public:
     PlayerRealm(PlayerType *player_ptr);
 
     static const magic_type &get_spell_info(int realm, int num);
+    static ItemKindType get_book(int realm);
 
     const magic_type &get_realm1_spell_info(int num) const;
     const magic_type &get_realm2_spell_info(int num) const;
+    ItemKindType get_realm1_book() const;
+    ItemKindType get_realm2_book() const;
 
 private:
     PlayerType *player_ptr;
@@ -39,8 +43,3 @@ private:
 
 extern const std::vector<BIT_FLAGS> realm_choices1;
 extern const std::vector<BIT_FLAGS> realm_choices2;
-
-class PlayerType;
-enum class ItemKindType : short;
-ItemKindType get_realm1_book(PlayerType *player_ptr);
-ItemKindType get_realm2_book(PlayerType *player_ptr);

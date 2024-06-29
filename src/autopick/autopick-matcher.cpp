@@ -316,11 +316,12 @@ bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const au
     PlayerClass pc(player_ptr);
     auto realm_except_class = pc.equals(PlayerClassType::SORCERER) || pc.equals(PlayerClassType::RED_MAGE);
 
-    if (entry.has(FLG_REALM1) && ((get_realm1_book(player_ptr) != tval) || realm_except_class)) {
+    PlayerRealm pr(player_ptr);
+    if (entry.has(FLG_REALM1) && ((pr.get_realm1_book() != tval) || realm_except_class)) {
         return false;
     }
 
-    if (entry.has(FLG_REALM2) && ((get_realm2_book(player_ptr) != tval) || realm_except_class)) {
+    if (entry.has(FLG_REALM2) && ((pr.get_realm2_book() != tval) || realm_except_class)) {
         return false;
     }
 
