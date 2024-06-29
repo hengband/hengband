@@ -79,5 +79,6 @@ bool item_tester_learn_spell(PlayerType *player_ptr, const ItemEntity *o_ptr)
         return false;
     }
 
-    return (get_realm1_book(player_ptr) == tval) || (get_realm2_book(player_ptr) == tval) || (choices & (0x0001U << (tval2realm(tval) - 1)));
+    PlayerRealm pr(player_ptr);
+    return (pr.get_realm1_book() == tval) || (pr.get_realm2_book() == tval) || (choices & (0x0001U << (tval2realm(tval) - 1)));
 }

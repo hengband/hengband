@@ -99,6 +99,11 @@ const magic_type &PlayerRealm::get_spell_info(int realm, int spell_idx)
     THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", realm));
 }
 
+ItemKindType PlayerRealm::get_book(int realm)
+{
+    return ItemKindType::LIFE_BOOK + realm - 1;
+}
+
 const magic_type &PlayerRealm::get_realm1_spell_info(int num) const
 {
     return PlayerRealm::get_spell_info(this->player_ptr->realm1, num);
@@ -109,12 +114,12 @@ const magic_type &PlayerRealm::get_realm2_spell_info(int num) const
     return PlayerRealm::get_spell_info(this->player_ptr->realm2, num);
 }
 
-ItemKindType get_realm1_book(PlayerType *player_ptr)
+ItemKindType PlayerRealm::get_realm1_book() const
 {
-    return ItemKindType::LIFE_BOOK + player_ptr->realm1 - 1;
+    return PlayerRealm::get_book(this->player_ptr->realm1);
 }
 
-ItemKindType get_realm2_book(PlayerType *player_ptr)
+ItemKindType PlayerRealm::get_realm2_book() const
 {
-    return ItemKindType::LIFE_BOOK + player_ptr->realm2 - 1;
+    return PlayerRealm::get_book(this->player_ptr->realm2);
 }
