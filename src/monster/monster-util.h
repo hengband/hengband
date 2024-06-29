@@ -8,7 +8,6 @@ enum class MonsterRaceId : int16_t;
 class PlayerType;
 using monsterrace_hook_type = std::function<bool(PlayerType *, MonsterRaceId)>;
 
-extern MONSTER_IDX hack_m_idx;
 enum summon_type : int;
 
 monsterrace_hook_type get_monster_hook(PlayerType *player_ptr);

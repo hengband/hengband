@@ -83,9 +83,8 @@ MonsterSpellResult spell_RF4_SHRIEK(MONSTER_IDX m_idx, PlayerType *player_ptr, M
  */
 MonsterSpellResult spell_RF6_WORLD(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     disturb(player_ptr, true, true);
-    (void)set_monster_timewalk(player_ptr, randint1(2) + 2, m_ptr->r_idx, true);
+    (void)set_monster_timewalk(player_ptr, m_idx, randint1(2) + 2, true);
 
     return MonsterSpellResult::make_valid();
 }
