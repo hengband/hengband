@@ -617,7 +617,6 @@ void process_monsters(PlayerType *player_ptr)
     OldRaceFlags flags(old_monrace_id);
     player_ptr->current_floor_ptr->monster_noise = false;
     sweep_monster_process(player_ptr);
-    hack_m_idx = 0;
     if (!tracker.is_tracking() || !tracker.is_tracking(old_monrace_id)) {
         return;
     }
@@ -664,7 +663,6 @@ void sweep_monster_process(PlayerType *player_ptr)
         }
 
         m_ptr->energy_need += ENERGY_NEED();
-        hack_m_idx = m_idx;
         process_monster(player_ptr, m_idx);
         reset_target(m_ptr);
         if (player_ptr->no_flowed && one_in_(3)) {
