@@ -416,10 +416,6 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX
         m_ptr->mflag.set(MonsterTemporaryFlagType::PREVENT_MAGIC);
     }
 
-    if (g_ptr->m_idx < hack_m_idx) {
-        m_ptr->mflag.set(MonsterTemporaryFlagType::BORN);
-    }
-
     auto is_awake_lightning_monster = r_ptr->brightness_flags.has_any_of(self_ld_mask);
     is_awake_lightning_monster |= r_ptr->brightness_flags.has_any_of(has_ld_mask) && !m_ptr->is_asleep();
     if (is_awake_lightning_monster) {
