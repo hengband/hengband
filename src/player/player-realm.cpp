@@ -98,7 +98,8 @@ const std::vector<BIT_FLAGS> realm_choices2 = {
 };
 
 PlayerRealm::PlayerRealm(PlayerType *player_ptr)
-    : player_ptr(player_ptr)
+    : realm1_(player_ptr->realm1)
+    , realm2_(player_ptr->realm2)
 {
 }
 
@@ -129,22 +130,27 @@ ItemKindType PlayerRealm::get_book(int realm)
     return it->second;
 }
 
-const magic_type &PlayerRealm::get_realm1_spell_info(int num) const
+const PlayerRealm::Realm &PlayerRealm::realm1() const
 {
-    return PlayerRealm::get_spell_info(this->player_ptr->realm1, num);
+    return this->realm1_;
 }
 
-const magic_type &PlayerRealm::get_realm2_spell_info(int num) const
+const PlayerRealm::Realm &PlayerRealm::realm2() const
 {
-    return PlayerRealm::get_spell_info(this->player_ptr->realm2, num);
+    return this->realm2_;
 }
 
-ItemKindType PlayerRealm::get_realm1_book() const
+PlayerRealm::Realm::Realm(int realm)
+    : realm(realm)
 {
-    return PlayerRealm::get_book(this->player_ptr->realm1);
 }
 
-ItemKindType PlayerRealm::get_realm2_book() const
+const magic_type &PlayerRealm::Realm::get_spell_info(int num) const
 {
-    return PlayerRealm::get_book(this->player_ptr->realm2);
+    return PlayerRealm::get_spell_info(this->realm, num);
+}
+
+ItemKindType PlayerRealm::Realm::get_book() const
+{
+    return PlayerRealm::get_book(this->realm);
 }

@@ -457,12 +457,12 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, co
     auto realm_except_class = pc.equals(PlayerClassType::SORCERER) || pc.equals(PlayerClassType::RED_MAGE);
 
     PlayerRealm pr(player_ptr);
-    if ((pr.get_realm1_book() == tval) && !realm_except_class) {
+    if ((pr.realm1().get_book() == tval) && !realm_except_class) {
         entry->add(FLG_REALM1);
         name = false;
     }
 
-    if ((pr.get_realm2_book() == tval) && !realm_except_class) {
+    if ((pr.realm2().get_book() == tval) && !realm_except_class) {
         entry->add(FLG_REALM2);
         name = false;
     }
