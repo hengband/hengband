@@ -6,6 +6,27 @@
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 
+namespace {
+
+const std::map<magic_realm_type, ItemKindType> realm_books = {
+    { REALM_NONE, ItemKindType::NONE },
+    { REALM_LIFE, ItemKindType::LIFE_BOOK },
+    { REALM_SORCERY, ItemKindType::SORCERY_BOOK },
+    { REALM_NATURE, ItemKindType::NATURE_BOOK },
+    { REALM_CHAOS, ItemKindType::CHAOS_BOOK },
+    { REALM_DEATH, ItemKindType::DEATH_BOOK },
+    { REALM_TRUMP, ItemKindType::TRUMP_BOOK },
+    { REALM_ARCANE, ItemKindType::ARCANE_BOOK },
+    { REALM_CRAFT, ItemKindType::CRAFT_BOOK },
+    { REALM_DAEMON, ItemKindType::DEMON_BOOK },
+    { REALM_CRUSADE, ItemKindType::CRUSADE_BOOK },
+    { REALM_MUSIC, ItemKindType::MUSIC_BOOK },
+    { REALM_HISSATSU, ItemKindType::HISSATSU_BOOK },
+    { REALM_HEX, ItemKindType::HEX_BOOK },
+};
+
+}
+
 /*!
  * 職業毎に選択可能な第一領域魔法テーブル
  */
@@ -101,7 +122,11 @@ const magic_type &PlayerRealm::get_spell_info(int realm, int spell_idx)
 
 ItemKindType PlayerRealm::get_book(int realm)
 {
-    return ItemKindType::LIFE_BOOK + realm - 1;
+    const auto it = realm_books.find(i2enum<magic_realm_type>(realm));
+    if (it == realm_books.end()) {
+        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", realm));
+    }
+    return it->second;
 }
 
 const magic_type &PlayerRealm::get_realm1_spell_info(int num) const
