@@ -1,5 +1,7 @@
 #pragma once
 
+#include "util/enum-range.h"
+
 enum magic_realm_type {
     REALM_NONE = 0,
     REALM_LIFE = 1,
@@ -19,3 +21,6 @@ enum magic_realm_type {
     REALM_HEX = 18,
     MAX_REALM = 18,
 };
+
+constexpr auto MAGIC_REALM_RANGE = EnumRangeInclusive(REALM_LIFE, REALM_CRUSADE);
+constexpr auto TECHNIC_REALM_RANGE = EnumRangeInclusive(REALM_MUSIC, REALM_HEX);
