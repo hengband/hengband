@@ -5,6 +5,7 @@
 #include <optional>
 
 class MonsterEntity;
+class FallOffHorseEffect;
 class EffectPlayerType {
 public:
     DEPTH rlev; // モンスターのレベル (但し0のモンスターは1になる).
@@ -27,4 +28,4 @@ using project_func = ProjectResult (*)(
     PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION rad, POSITION y, POSITION x, int dam, AttributeType typ, BIT_FLAGS flag, std::optional<CapturedMonsterType *> cap_mon_ptr);
 
 bool affect_player(MONSTER_IDX src_idx, PlayerType *player_ptr, concptr src_name, int r, POSITION y, POSITION x, int dam, AttributeType typ, BIT_FLAGS flag,
-    project_func project);
+    FallOffHorseEffect &fall_off_horse_effect, project_func project);
