@@ -452,8 +452,8 @@ void process_special(PlayerType *player_ptr, MONSTER_IDX m_idx)
     BIT_FLAGS p_mode = m_ptr->is_pet() ? PM_FORCE_PET : PM_NONE;
 
     for (int k = 0; k < A_MAX; k++) {
-        if (summon_specific(player_ptr, m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_MOLD, (PM_ALLOW_GROUP | p_mode))) {
-            if (player_ptr->current_floor_ptr->m_list[hack_m_idx_ii].ml) {
+        if (auto summoned_m_idx = summon_specific(player_ptr, m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_MOLD, (PM_ALLOW_GROUP | p_mode))) {
+            if (player_ptr->current_floor_ptr->m_list[*summoned_m_idx].ml) {
                 count++;
             }
         }
@@ -499,8 +499,8 @@ bool decide_monster_multiplication(PlayerType *player_ptr, MONSTER_IDX m_idx, PO
 
     constexpr auto chance_reproduction = 8;
     if ((k < 4) && (!k || !randint0(k * chance_reproduction))) {
-        if (multiply_monster(player_ptr, m_idx, false, (m_ptr->is_pet() ? PM_FORCE_PET : 0))) {
-            if (player_ptr->current_floor_ptr->m_list[hack_m_idx_ii].ml && is_original_ap_and_seen(player_ptr, m_ptr)) {
+        if (auto multiplied_m_idx = multiply_monster(player_ptr, m_idx, false, (m_ptr->is_pet() ? PM_FORCE_PET : 0))) {
+            if (player_ptr->current_floor_ptr->m_list[*multiplied_m_idx].ml && is_original_ap_and_seen(player_ptr, m_ptr)) {
                 r_ptr->r_misc_flags.set(MonsterMiscType::MULTIPLY);
             }
 

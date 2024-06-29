@@ -30,7 +30,6 @@ enum dungeon_mode_type {
 };
 
 MONSTER_IDX hack_m_idx = 0; /* Hack -- see "process_monsters()" */
-MONSTER_IDX hack_m_idx_ii = 0;
 
 /**
  * @brief モンスターがダンジョンに出現できる条件を満たしているかのフラグ判定関数(AND)
