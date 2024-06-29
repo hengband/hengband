@@ -29,6 +29,7 @@
 #include "player-info/equipment-info.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"
+#include "player/player-realm.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-launcher.h"
@@ -57,11 +58,11 @@
 /*!
  * @brief 剣術の各処理を行う
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param spell 剣術ID
+ * @param spell_id 剣術ID
  * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::CAST)
  * @return SpellProcessType::NAME / SPELL_DESC 時には文字列を返す。SpellProcessType::CAST時は std::nullopt を返す。
  */
-std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
+std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell_id, SpellProcessType mode)
 {
     bool name = mode == SpellProcessType::NAME;
     bool desc = mode == SpellProcessType::DESCRIPTION;
@@ -69,7 +70,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
 
     PLAYER_LEVEL plev = player_ptr->lev;
 
-    switch (spell) {
+    switch (spell_id) {
     case 0:
         if (name) {
             return _("飛飯綱", "Tobi-Izuna");
@@ -819,6 +820,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
             const int mana_cost_per_monster = 8;
             bool is_new = true;
             bool mdeath;
+            const auto &spell = PlayerRealm::get_spell_info(REALM_HISSATSU, spell_id);
 
             do {
                 if (!rush_attack(player_ptr, &mdeath)) {
@@ -826,7 +828,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 }
                 if (is_new) {
                     /* Reserve needed mana point */
-                    player_ptr->csp -= technic_info[REALM_HISSATSU - MIN_TECHNIC][26].smana;
+                    player_ptr->csp -= spell.smana;
                     is_new = false;
                 } else {
                     player_ptr->csp -= mana_cost_per_monster;
@@ -846,7 +848,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
             }
 
             /* Restore reserved mana */
-            player_ptr->csp += technic_info[REALM_HISSATSU - MIN_TECHNIC][26].smana;
+            player_ptr->csp += spell.smana;
         }
         break;
 

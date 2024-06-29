@@ -97,6 +97,18 @@ public:
     }
 
     /*!
+     * @brief 引数で与えた列挙値が範囲に含まれるかどうか調べる
+     *
+     * @param val 調べる列挙値
+     * @return true 引数で与えた列挙値が範囲に含まれる
+     * @return false 引数で与えた列挙値が範囲に含まれない
+     */
+    constexpr bool contains(EnumType val) const noexcept
+    {
+        return begin_val <= val && val < end_val;
+    }
+
+    /*!
      * @brief 範囲の最初の列挙値を指すイテレータを取得する
      *
      * @return 範囲の最初の列挙値を指すイテレータ
@@ -156,6 +168,18 @@ public:
     constexpr EnumRangeInclusive(EnumType first, EnumType last) noexcept
         : range(first, static_cast<EnumType>(std::underlying_type_t<EnumType>(last) + 1))
     {
+    }
+
+    /*!
+     * @brief 引数で与えた列挙値が範囲に含まれるかどうか調べる
+     *
+     * @param val 調べる列挙値
+     * @return true 引数で与えた列挙値が範囲に含まれる
+     * @return false 引数で与えた列挙値が範囲に含まれない
+     */
+    constexpr bool contains(EnumType val) const noexcept
+    {
+        return range.contains(val);
     }
 
     /*!

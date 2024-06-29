@@ -10,6 +10,7 @@
 #include "game-option/text-display-options.h"
 #include "io-dump/dump-util.h"
 #include "player-info/class-info.h"
+#include "player/player-realm.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
 #include "realm/realm-names-table.h"
@@ -83,17 +84,14 @@ void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
         return;
     }
 
+    PlayerRealm pr(player_ptr);
+
     if (player_ptr->realm1 != REALM_NONE) {
         fprintf(fff, _("%sの魔法書\n", "%s Spellbook\n"), realm_names[player_ptr->realm1].data());
         for (SPELL_IDX i = 0; i < 32; i++) {
-            const magic_type *s_ptr;
-            if (!is_magic(player_ptr->realm1)) {
-                s_ptr = &technic_info[player_ptr->realm1 - MIN_TECHNIC][i];
-            } else {
-                s_ptr = &mp_ptr->info[player_ptr->realm1 - 1][i];
-            }
+            const auto &spell = pr.get_realm1_spell_info(i);
 
-            if (s_ptr->slevel >= 99) {
+            if (spell.slevel >= 99) {
                 continue;
             }
             SUB_EXP spell_exp = player_ptr->spell_exp[i];
@@ -127,14 +125,9 @@ void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
     if (player_ptr->realm2 != REALM_NONE) {
         fprintf(fff, _("%sの魔法書\n", "\n%s Spellbook\n"), realm_names[player_ptr->realm2].data());
         for (SPELL_IDX i = 0; i < 32; i++) {
-            const magic_type *s_ptr;
-            if (!is_magic(player_ptr->realm1)) {
-                s_ptr = &technic_info[player_ptr->realm2 - MIN_TECHNIC][i];
-            } else {
-                s_ptr = &mp_ptr->info[player_ptr->realm2 - 1][i];
-            }
+            const auto &spell = pr.get_realm2_spell_info(i);
 
-            if (s_ptr->slevel >= 99) {
+            if (spell.slevel >= 99) {
                 continue;
             }
 

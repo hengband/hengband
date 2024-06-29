@@ -21,6 +21,7 @@
 #include "object/object-info.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
+#include "player/player-realm.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"
@@ -718,7 +719,6 @@ static void display_spell_list(PlayerType *player_ptr)
 {
     TERM_LEN y, x;
     int m[9]{};
-    const magic_type *s_ptr;
 
     clear_from(0);
 
@@ -827,17 +827,12 @@ static void display_spell_list(PlayerType *player_ptr)
         for (int i = 0; i < 32; i++) {
             byte a = TERM_WHITE;
 
-            if (!is_magic((j < 1) ? player_ptr->realm1 : player_ptr->realm2)) {
-                s_ptr = &technic_info[((j < 1) ? player_ptr->realm1 : player_ptr->realm2) - MIN_TECHNIC][i % 32];
-            } else {
-                s_ptr = &mp_ptr->info[((j < 1) ? player_ptr->realm1 : player_ptr->realm2) - 1][i % 32];
-            }
-
             const auto realm = (j < 1) ? player_ptr->realm1 : player_ptr->realm2;
+            const auto &spell = PlayerRealm::get_spell_info(realm, i % 32);
             const auto spell_name = exe_spell(player_ptr, realm, i % 32, SpellProcessType::NAME);
             auto name = spell_name->data();
 
-            if (s_ptr->slevel >= 99) {
+            if (spell.slevel >= 99) {
                 name = _("(判読不能)", "(illegible)");
                 a = TERM_L_DARK;
             } else if ((j < 1) ? ((player_ptr->spell_forgotten1 & (1UL << i))) : ((player_ptr->spell_forgotten2 & (1UL << (i % 32))))) {

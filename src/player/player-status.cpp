@@ -73,6 +73,7 @@
 #include "player/player-move.h"
 #include "player/player-personality-types.h"
 #include "player/player-personality.h"
+#include "player/player-realm.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
@@ -542,6 +543,7 @@ static void update_num_of_spells(PlayerType *player_ptr)
         }
     }
 
+    PlayerRealm pr(player_ptr);
     player_ptr->new_spells = num_allowed + player_ptr->add_spells + num_boukyaku - player_ptr->learned_spells;
     for (int i = 63; i >= 0; i--) {
         if (!player_ptr->spell_learned1 && !player_ptr->spell_learned2) {
@@ -553,20 +555,10 @@ static void update_num_of_spells(PlayerType *player_ptr)
             continue;
         }
 
-        const magic_type *s_ptr;
-        if (!is_magic((j < 32) ? player_ptr->realm1 : player_ptr->realm2)) {
-            if (j < 32) {
-                s_ptr = &technic_info[player_ptr->realm1 - MIN_TECHNIC][j];
-            } else {
-                s_ptr = &technic_info[player_ptr->realm2 - MIN_TECHNIC][j % 32];
-            }
-        } else if (j < 32) {
-            s_ptr = &mp_ptr->info[player_ptr->realm1 - 1][j];
-        } else {
-            s_ptr = &mp_ptr->info[player_ptr->realm2 - 1][j % 32];
-        }
+        const auto get_spell_info = (j < 32) ? &PlayerRealm::get_realm1_spell_info : &PlayerRealm::get_realm2_spell_info;
+        const auto &spell = (pr.*get_spell_info)(j % 32);
 
-        if (s_ptr->slevel <= player_ptr->lev) {
+        if (spell.slevel <= player_ptr->lev) {
             continue;
         }
 
@@ -659,20 +651,10 @@ static void update_num_of_spells(PlayerType *player_ptr)
             break;
         }
 
-        const magic_type *s_ptr;
-        if (!is_magic((j < 32) ? player_ptr->realm1 : player_ptr->realm2)) {
-            if (j < 32) {
-                s_ptr = &technic_info[player_ptr->realm1 - MIN_TECHNIC][j];
-            } else {
-                s_ptr = &technic_info[player_ptr->realm2 - MIN_TECHNIC][j % 32];
-            }
-        } else if (j < 32) {
-            s_ptr = &mp_ptr->info[player_ptr->realm1 - 1][j];
-        } else {
-            s_ptr = &mp_ptr->info[player_ptr->realm2 - 1][j % 32];
-        }
+        const auto get_spell_info = (j < 32) ? &PlayerRealm::get_realm1_spell_info : &PlayerRealm::get_realm2_spell_info;
+        const auto &spell = (pr.*get_spell_info)(j % 32);
 
-        if (s_ptr->slevel > player_ptr->lev) {
+        if (spell.slevel > player_ptr->lev) {
             continue;
         }
 
@@ -710,14 +692,9 @@ static void update_num_of_spells(PlayerType *player_ptr)
     if (player_ptr->realm2 == REALM_NONE) {
         int k = 0;
         for (int j = 0; j < 32; j++) {
-            const magic_type *s_ptr;
-            if (!is_magic(player_ptr->realm1)) {
-                s_ptr = &technic_info[player_ptr->realm1 - MIN_TECHNIC][j];
-            } else {
-                s_ptr = &mp_ptr->info[player_ptr->realm1 - 1][j];
-            }
+            const auto &spell = pr.get_realm1_spell_info(j);
 
-            if (s_ptr->slevel > player_ptr->lev) {
+            if (spell.slevel > player_ptr->lev) {
                 continue;
             }
 

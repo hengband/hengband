@@ -30,6 +30,7 @@
 #include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
+#include "player/player-realm.h"
 #include "player/special-defense-types.h"
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
@@ -41,8 +42,6 @@
 #include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
-
-#define TECHNIC_HISSATSU (REALM_HISSATSU - MIN_TECHNIC)
 
 /*!
  * @brief 使用可能な剣術を選択する /
@@ -71,7 +70,6 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
     char choice;
     concptr p = _("必殺剣", "special attack");
     COMMAND_CODE code;
-    magic_type spell;
     int menu_line = (use_menu ? 1 : 0);
 
     /* Assume cancelled */
@@ -81,7 +79,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
     if (repeat_pull(&code)) {
         *sn = (SPELL_IDX)code;
         /* Verify the spell */
-        if (technic_info[TECHNIC_HISSATSU][*sn].slevel <= plev) {
+        if (0 <= *sn && *sn < 32 && PlayerRealm::get_spell_info(REALM_HISSATSU, *sn).slevel <= plev) {
             /* Success */
             return true;
         }
@@ -93,7 +91,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
     int i;
     int selections[32]{};
     for (i = 0; i < 32; i++) {
-        if (technic_info[TECHNIC_HISSATSU][i].slevel <= PY_MAX_LEVEL) {
+        if (PlayerRealm::get_spell_info(REALM_HISSATSU, i).slevel <= PY_MAX_LEVEL) {
             selections[num] = i;
             num++;
         }
@@ -209,7 +207,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
                 prt("", y + 1, x);
                 /* Dump the spells */
                 for (i = 0, line = 0; i < 32; i++) {
-                    spell = technic_info[TECHNIC_HISSATSU][i];
+                    const auto &spell = PlayerRealm::get_spell_info(REALM_HISSATSU, i);
 
                     if (spell.slevel > PY_MAX_LEVEL) {
                         continue;
@@ -309,7 +307,6 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
 void do_cmd_hissatsu(PlayerType *player_ptr)
 {
     SPELL_IDX n = 0;
-    magic_type spell;
 
     if (cmd_limit_confused(player_ptr)) {
         return;
@@ -332,7 +329,7 @@ void do_cmd_hissatsu(PlayerType *player_ptr)
         return;
     }
 
-    spell = technic_info[TECHNIC_HISSATSU][n];
+    const auto &spell = PlayerRealm::get_spell_info(REALM_HISSATSU, n);
 
     /* Verify "dangerous" spells */
     if (spell.smana > player_ptr->csp) {
@@ -403,7 +400,7 @@ void do_cmd_gain_hissatsu(PlayerType *player_ptr)
             continue;
         }
 
-        if (technic_info[TECHNIC_HISSATSU][i].slevel > player_ptr->lev) {
+        if (PlayerRealm::get_spell_info(REALM_HISSATSU, i).slevel > player_ptr->lev) {
             continue;
         }
 
