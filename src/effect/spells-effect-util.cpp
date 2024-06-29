@@ -8,8 +8,6 @@
 #include "view/display-messages.h"
 #include <algorithm>
 
-int rakubadam_m;
-int rakubadam_p;
 bool sukekaku;
 
 int project_length = 0;

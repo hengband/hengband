@@ -70,8 +70,6 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
     POSITION gx[1024]{};
     POSITION gy[1024]{};
     POSITION gm[32]{};
-    rakubadam_p = 0;
-    rakubadam_m = 0;
     monster_target_y = player_ptr->y;
     monster_target_x = player_ptr->x;
 
