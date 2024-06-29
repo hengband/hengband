@@ -87270,6 +87270,84 @@
         "ja": "ドラゴン族の長にして何百年もの間魔王に仕えている幹部で、多数の巨大なドラゴンを従え、数の暴力で冒険者を圧倒する。「目の前に広がるのは、まるで煉獄のような戦場だ。数百、数千ものドラゴンが火山の上空を旋回している。その中で最も目を引くのは間違いなく、体長数百メートルに及び、全身が烈火に包まれた一体だ。そいつこそがメガフレイムドラゴン、ドラゴン族の長にして、魔王が最も信頼する幹部なのだ。」(Manjuu、Yostar、Yongshi『アズールレーン』、「ゼロから頑張る魔王討伐」、25章「メガフレイムドラゴン討伐！」)",
         "en": "It is the leader of the dragons and the Demon King's officer for hundreds of years.  It defeats you by overwhelming numbers: with its many huge dragon-escorts.  \"Before us lies a battleground like something from hell itself.  Centuries or even millennia-old dragons circle the skies above the volcano.  The most eye-catching of them all is a titan of a monster, its body reaching hundreds of meters in length and entirely bathed in hellfire.  That is the Great Fire Dragon, the leader of the dragons and the Demon King's most trusted officer.\"  (Fighting the Great Fire Dragon, 'From Zero to Hero', \"Azur Lane\" by Manjuu, Yostar and Yongshi, ch.25)"
       }
+    },
+    {
+      "id": 1362,
+      "name": {
+        "ja": "ティーパーティーの魔女『聖園ミカ』",
+        "en": "Mika Misono, the witch of Tea Party"
+      },
+      "symbol": {
+        "character": "p",
+        "color": "White"
+      },
+      "sex": "FEMALE",
+      "speed": 10,
+      "hit_point": "888d7",
+      "vision": 20,
+      "armor_class": 160,
+      "alertness": 0,
+      "level": 60,
+      "rarity": 2,
+      "exp": 25000,
+      "blows": [
+        {
+          "method": "PUNCH",
+          "effect": "SUPERHURT",
+          "damage_dice": "13d13"
+        },
+        {
+          "method": "PUNCH",
+          "effect": "SUPERHURT",
+          "damage_dice": "13d13"
+        },
+        {
+          "method": "HIT",
+          "effect": "SHATTER",
+          "damage_dice": "12d12"
+        },
+        {
+          "method": "HIT",
+          "effect": "SHATTER",
+          "damage_dice": "12d12"
+        }
+      ],
+      "flags": [
+        "SPEAK_ALL",
+        "UNIQUE",
+        "FORCE_MAXHP",
+        "EVIL",
+        "ANGEL",
+        "HUMAN",
+        "CAN_SWIM",
+        "BASH_DOOR",
+        "OPEN_DOOR",
+        "KILL_BODY",
+        "TAKE_ITEM",
+        "DROP_CORPSE",
+        "DROP_SKELETON",
+        "DROP_GOOD",
+        "DROP_2D2",
+        "DROP_4D2",
+        "IM_FIRE",
+        "IM_ACID",
+        "RES_SHAR",
+        "RES_GRAV",
+        "RES_PLAS",
+        "RES_METEOR",
+        "RES_WALL",
+        "NO_FEAR",
+        "NO_CONF",
+        "NO_SLEEP"
+      ],
+      "skill": {
+        "probability": "1_IN_8",
+        "shoot": "175d1"
+      },
+      "flavor": {
+        "ja": "彼女は元々優しい心の持ち主だったが、とある学園の者に利用され、大罪を犯し大事なものを根こそぎ奪われた。哀れで救いたくなるような者であると同時に軽蔑・嫌悪に値する者でもある。その目は復讐の炎に燃えており、復讐の妨げとなるあなたはどうしようもないゴミとみなされている。",
+        "en": "She had a kind heart, but be utilized by one of an one school and she committed a serious crime, then got burning all of her precious things. She is as miserable as to want to save and also deserving of detesting. There feels the thirst for revenge from her eyes. She counts you, obstructing her revenge, one of the hopeless scum."
+      }
     }
   ]
 }
