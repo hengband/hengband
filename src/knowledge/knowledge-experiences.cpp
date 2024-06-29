@@ -89,9 +89,9 @@ void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
     if (player_ptr->realm1 != REALM_NONE) {
         fprintf(fff, _("%sの魔法書\n", "%s Spellbook\n"), realm_names[player_ptr->realm1].data());
         for (SPELL_IDX i = 0; i < 32; i++) {
-            const auto *s_ptr = pr.get_realm1_spell_info(i);
+            const auto &spell = pr.get_realm1_spell_info(i);
 
-            if (s_ptr->slevel >= 99) {
+            if (spell.slevel >= 99) {
                 continue;
             }
             SUB_EXP spell_exp = player_ptr->spell_exp[i];
@@ -125,9 +125,9 @@ void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
     if (player_ptr->realm2 != REALM_NONE) {
         fprintf(fff, _("%sの魔法書\n", "\n%s Spellbook\n"), realm_names[player_ptr->realm2].data());
         for (SPELL_IDX i = 0; i < 32; i++) {
-            const auto *s_ptr = pr.get_realm2_spell_info(i);
+            const auto &spell = pr.get_realm2_spell_info(i);
 
-            if (s_ptr->slevel >= 99) {
+            if (spell.slevel >= 99) {
                 continue;
             }
 

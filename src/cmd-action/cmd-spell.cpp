@@ -256,24 +256,24 @@ std::string info_weight(WEIGHT weight)
  * Determine if a spell is "okay" for the player to cast or study
  * The spell must be legible, not forgotten, and also, to cast,
  * it must be known, and to study, it must not be known.
- * @param spell 呪文ID
+ * @param spell_id 呪文ID
  * @param learned 使用可能な判定ならばTRUE、学習可能かどうかの判定ならばFALSE
  * @param study_pray 祈りの学習判定目的ならばTRUE
  * @param use_realm 魔法領域ID
  * @return 失敗率(%)
  */
-static bool spell_okay(PlayerType *player_ptr, int spell, bool learned, bool study_pray, int use_realm)
+static bool spell_okay(PlayerType *player_ptr, int spell_id, bool learned, bool study_pray, int use_realm)
 {
     /* Access the spell */
-    const auto *s_ptr = PlayerRealm::get_spell_info(use_realm, spell);
+    const auto &spell = PlayerRealm::get_spell_info(use_realm, spell_id);
 
     /* Spell is illegal */
-    if (s_ptr->slevel > player_ptr->lev) {
+    if (spell.slevel > player_ptr->lev) {
         return false;
     }
 
     /* Spell is forgotten */
-    if ((use_realm == player_ptr->realm2) ? (player_ptr->spell_forgotten2 & (1UL << spell)) : (player_ptr->spell_forgotten1 & (1UL << spell))) {
+    if ((use_realm == player_ptr->realm2) ? (player_ptr->spell_forgotten2 & (1UL << spell_id)) : (player_ptr->spell_forgotten1 & (1UL << spell_id))) {
         /* Never okay */
         return false;
     }
@@ -283,7 +283,7 @@ static bool spell_okay(PlayerType *player_ptr, int spell, bool learned, bool stu
     }
 
     /* Spell is learned */
-    if ((use_realm == player_ptr->realm2) ? (player_ptr->spell_learned2 & (1UL << spell)) : (player_ptr->spell_learned1 & (1UL << spell))) {
+    if ((use_realm == player_ptr->realm2) ? (player_ptr->spell_learned2 & (1UL << spell_id)) : (player_ptr->spell_learned1 & (1UL << spell_id))) {
         /* Always true */
         return !study_pray;
     }
@@ -931,7 +931,6 @@ void do_cmd_study(PlayerType *player_ptr)
  */
 bool do_cmd_cast(PlayerType *player_ptr)
 {
-    SPELL_IDX spell;
     int16_t realm;
     int chance;
     auto increment = 0;
@@ -1019,20 +1018,21 @@ bool do_cmd_cast(PlayerType *player_ptr)
     }
 
     /* Ask for a spell */
+    SPELL_IDX spell_id;
 #ifdef JP
-    if (!get_spell(player_ptr, &spell,
+    if (!get_spell(player_ptr, &spell_id,
             ((mp_ptr->spell_book == ItemKindType::LIFE_BOOK)       ? "詠唱する"
                 : (mp_ptr->spell_book == ItemKindType::MUSIC_BOOK) ? "歌う"
                                                                    : "唱える"),
             sval, true, realm)) {
-        if (spell == -2) {
+        if (spell_id == -2) {
             msg_format("その本には知っている%sがない。", prayer.data());
         }
         return false;
     }
 #else
-    if (!get_spell(player_ptr, &spell, ((mp_ptr->spell_book == ItemKindType::LIFE_BOOK) ? "recite" : "cast"), sval, true, realm)) {
-        if (spell == -2) {
+    if (!get_spell(player_ptr, &spell_id, ((mp_ptr->spell_book == ItemKindType::LIFE_BOOK) ? "recite" : "cast"), sval, true, realm)) {
+        if (spell_id == -2) {
             msg_format("You don't know any %ss in that book.", prayer.data());
         }
         return false;
@@ -1041,16 +1041,16 @@ bool do_cmd_cast(PlayerType *player_ptr)
 
     use_realm = tval2realm(tval);
     if (use_realm == REALM_HEX) {
-        if (SpellHex(player_ptr).is_spelling_specific(spell)) {
+        if (SpellHex(player_ptr).is_spelling_specific(spell_id)) {
             msg_print(_("その呪文はすでに詠唱中だ。", "You are already casting it."));
             return false;
         }
     }
 
-    const auto *s_ptr = PlayerRealm::get_spell_info(use_realm, spell);
+    const auto &spell = PlayerRealm::get_spell_info(use_realm, spell_id);
 
     /* Extract mana consumption rate */
-    need_mana = mod_need_mana(player_ptr, s_ptr->smana, spell, realm);
+    need_mana = mod_need_mana(player_ptr, spell.smana, spell_id, realm);
 
     /* Verify "dangerous" spells */
     if (need_mana > player_ptr->csp) {
@@ -1079,7 +1079,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
     }
 
     /* Spell failure chance */
-    chance = spell_chance(player_ptr, spell, use_realm);
+    chance = spell_chance(player_ptr, spell_id, use_realm);
 
     /* Failed spell */
     if (evaluate_percent(chance)) {
@@ -1129,23 +1129,23 @@ bool do_cmd_cast(PlayerType *player_ptr)
         }
 
         /* Failure casting may activate some side effect */
-        exe_spell(player_ptr, realm, spell, SpellProcessType::FAIL);
+        exe_spell(player_ptr, realm, spell_id, SpellProcessType::FAIL);
 
-        if ((tval == ItemKindType::CHAOS_BOOK) && (randint1(100) < spell)) {
+        if ((tval == ItemKindType::CHAOS_BOOK) && (randint1(100) < spell_id)) {
             msg_print(_("カオス的な効果を発生した！", "You produce a chaotic effect!"));
-            wild_magic(player_ptr, spell);
-        } else if ((tval == ItemKindType::DEATH_BOOK) && (randint1(100) < spell)) {
+            wild_magic(player_ptr, spell_id);
+        } else if ((tval == ItemKindType::DEATH_BOOK) && (randint1(100) < spell_id)) {
             if ((sval == 3) && one_in_(2)) {
                 sanity_blast(player_ptr, 0, true);
             } else {
                 msg_print(_("痛い！", "It hurts!"));
                 take_hit(player_ptr, DAMAGE_LOSELIFE, Dice::roll(sval + 1, 6), _("暗黒魔法の逆流", "a miscast Death spell"));
 
-                if ((spell > 15) && one_in_(6) && !player_ptr->hold_exp) {
-                    lose_exp(player_ptr, spell * 250);
+                if ((spell_id > 15) && one_in_(6) && !player_ptr->hold_exp) {
+                    lose_exp(player_ptr, spell_id * 250);
                 }
             }
-        } else if ((tval == ItemKindType::MUSIC_BOOK) && (randint1(200) < spell)) {
+        } else if ((tval == ItemKindType::MUSIC_BOOK) && (randint1(200) < spell_id)) {
             msg_print(_("いやな音が響いた", "An infernal sound echoed."));
             aggravate_monsters(player_ptr, 0);
         }
@@ -1157,7 +1157,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
     /* Process spell */
     else {
         /* Canceled spells cost neither a turn nor mana */
-        if (!exe_spell(player_ptr, realm, spell, SpellProcessType::CAST)) {
+        if (!exe_spell(player_ptr, realm, spell_id, SpellProcessType::CAST)) {
             return false;
         }
 
@@ -1166,17 +1166,17 @@ bool do_cmd_cast(PlayerType *player_ptr)
         }
 
         /* A spell was cast */
-        if (!(increment ? (player_ptr->spell_worked2 & (1UL << spell)) : (player_ptr->spell_worked1 & (1UL << spell))) && !is_every_magic) {
-            int e = s_ptr->sexp;
+        if (!(increment ? (player_ptr->spell_worked2 & (1UL << spell_id)) : (player_ptr->spell_worked1 & (1UL << spell_id))) && !is_every_magic) {
+            int e = spell.sexp;
 
             /* The spell worked */
             if (realm == player_ptr->realm1) {
-                player_ptr->spell_worked1 |= (1UL << spell);
+                player_ptr->spell_worked1 |= (1UL << spell_id);
             } else {
-                player_ptr->spell_worked2 |= (1UL << spell);
+                player_ptr->spell_worked2 |= (1UL << spell_id);
             }
 
-            gain_exp(player_ptr, e * s_ptr->slevel);
+            gain_exp(player_ptr, e * spell.slevel);
             RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
 
             switch (realm) {
@@ -1300,7 +1300,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
             break;
         }
         if (mp_ptr->is_spell_trainable) {
-            PlayerSkill(player_ptr).gain_spell_skill_exp(realm, spell);
+            PlayerSkill(player_ptr).gain_spell_skill_exp(realm, spell_id);
         }
     }
 

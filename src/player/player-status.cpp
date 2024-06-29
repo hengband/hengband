@@ -556,9 +556,9 @@ static void update_num_of_spells(PlayerType *player_ptr)
         }
 
         const auto get_spell_info = (j < 32) ? &PlayerRealm::get_realm1_spell_info : &PlayerRealm::get_realm2_spell_info;
-        const auto *s_ptr = (pr.*get_spell_info)(j % 32);
+        const auto &spell = (pr.*get_spell_info)(j % 32);
 
-        if (s_ptr->slevel <= player_ptr->lev) {
+        if (spell.slevel <= player_ptr->lev) {
             continue;
         }
 
@@ -652,9 +652,9 @@ static void update_num_of_spells(PlayerType *player_ptr)
         }
 
         const auto get_spell_info = (j < 32) ? &PlayerRealm::get_realm1_spell_info : &PlayerRealm::get_realm2_spell_info;
-        const auto *s_ptr = (pr.*get_spell_info)(j % 32);
+        const auto &spell = (pr.*get_spell_info)(j % 32);
 
-        if (s_ptr->slevel > player_ptr->lev) {
+        if (spell.slevel > player_ptr->lev) {
             continue;
         }
 
@@ -692,9 +692,9 @@ static void update_num_of_spells(PlayerType *player_ptr)
     if (player_ptr->realm2 == REALM_NONE) {
         int k = 0;
         for (int j = 0; j < 32; j++) {
-            const auto *s_ptr = pr.get_realm1_spell_info(j);
+            const auto &spell = pr.get_realm1_spell_info(j);
 
-            if (s_ptr->slevel > player_ptr->lev) {
+            if (spell.slevel > player_ptr->lev) {
                 continue;
             }
 

@@ -28,10 +28,10 @@ class PlayerRealm {
 public:
     PlayerRealm(PlayerType *player_ptr);
 
-    static const magic_type *get_spell_info(int realm, int num);
+    static const magic_type &get_spell_info(int realm, int num);
 
-    const magic_type *get_realm1_spell_info(int num) const;
-    const magic_type *get_realm2_spell_info(int num) const;
+    const magic_type &get_realm1_spell_info(int num) const;
+    const magic_type &get_realm2_spell_info(int num) const;
 
 private:
     PlayerType *player_ptr;

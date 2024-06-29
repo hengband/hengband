@@ -39,10 +39,10 @@ void check_music(PlayerType *player_ptr)
         return;
     }
 
-    int spell = get_singing_song_id(player_ptr);
-    const auto *s_ptr = PlayerRealm::get_spell_info(REALM_MUSIC, spell);
+    const auto spell_id = get_singing_song_id(player_ptr);
+    const auto &spell = PlayerRealm::get_spell_info(REALM_MUSIC, spell_id);
 
-    MANA_POINT need_mana = mod_need_mana(player_ptr, s_ptr->smana, spell, REALM_MUSIC);
+    MANA_POINT need_mana = mod_need_mana(player_ptr, spell.smana, spell_id, REALM_MUSIC);
     uint32_t need_mana_frac = 0;
 
     s64b_rshift(&need_mana, &need_mana_frac, 1);
@@ -78,8 +78,8 @@ void check_music(PlayerType *player_ptr)
         rfu.set_flags(flags_swrf);
     }
 
-    PlayerSkill(player_ptr).gain_continuous_spell_skill_exp(REALM_MUSIC, spell);
-    exe_spell(player_ptr, REALM_MUSIC, spell, SpellProcessType::CONTNUATION);
+    PlayerSkill(player_ptr).gain_continuous_spell_skill_exp(REALM_MUSIC, spell_id);
+    exe_spell(player_ptr, REALM_MUSIC, spell_id, SpellProcessType::CONTNUATION);
 }
 
 /*!

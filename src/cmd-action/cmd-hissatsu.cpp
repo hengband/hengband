@@ -79,7 +79,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
     if (repeat_pull(&code)) {
         *sn = (SPELL_IDX)code;
         /* Verify the spell */
-        if (0 <= *sn && *sn < 32 && PlayerRealm::get_spell_info(REALM_HISSATSU, *sn)->slevel <= plev) {
+        if (0 <= *sn && *sn < 32 && PlayerRealm::get_spell_info(REALM_HISSATSU, *sn).slevel <= plev) {
             /* Success */
             return true;
         }
@@ -91,7 +91,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
     int i;
     int selections[32]{};
     for (i = 0; i < 32; i++) {
-        if (PlayerRealm::get_spell_info(REALM_HISSATSU, i)->slevel <= PY_MAX_LEVEL) {
+        if (PlayerRealm::get_spell_info(REALM_HISSATSU, i).slevel <= PY_MAX_LEVEL) {
             selections[num] = i;
             num++;
         }
@@ -207,7 +207,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
                 prt("", y + 1, x);
                 /* Dump the spells */
                 for (i = 0, line = 0; i < 32; i++) {
-                    const auto &spell = *PlayerRealm::get_spell_info(REALM_HISSATSU, i);
+                    const auto &spell = PlayerRealm::get_spell_info(REALM_HISSATSU, i);
 
                     if (spell.slevel > PY_MAX_LEVEL) {
                         continue;
@@ -329,7 +329,7 @@ void do_cmd_hissatsu(PlayerType *player_ptr)
         return;
     }
 
-    const auto &spell = *PlayerRealm::get_spell_info(REALM_HISSATSU, n);
+    const auto &spell = PlayerRealm::get_spell_info(REALM_HISSATSU, n);
 
     /* Verify "dangerous" spells */
     if (spell.smana > player_ptr->csp) {
@@ -400,7 +400,7 @@ void do_cmd_gain_hissatsu(PlayerType *player_ptr)
             continue;
         }
 
-        if (PlayerRealm::get_spell_info(REALM_HISSATSU, i)->slevel > player_ptr->lev) {
+        if (PlayerRealm::get_spell_info(REALM_HISSATSU, i).slevel > player_ptr->lev) {
             continue;
         }
 
