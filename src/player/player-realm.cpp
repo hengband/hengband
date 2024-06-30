@@ -131,3 +131,8 @@ ItemKindType PlayerRealm::Realm::get_book() const
 {
     return PlayerRealm::get_book(this->realm);
 }
+
+bool PlayerRealm::Realm::is_good_attribute() const
+{
+    return this->realm == REALM_LIFE || this->realm == REALM_CRUSADE;
+}

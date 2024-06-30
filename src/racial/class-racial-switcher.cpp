@@ -1,8 +1,8 @@
 #include "racial/class-racial-switcher.h"
 #include "cmd-action/cmd-spell.h"
 #include "mind/mind-elementalist.h"
+#include "player/player-realm.h"
 #include "racial/racial-util.h"
-#include "realm/realm-names-table.h"
 #include "realm/realm-types.h"
 #include "system/player-type-definition.h"
 
@@ -43,7 +43,7 @@ void switch_class_racial(PlayerType *player_ptr, rc_type *rc_ptr)
         rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case PlayerClassType::PRIEST:
-        if (is_good_realm(player_ptr->realm1)) {
+        if (PlayerRealm(player_ptr).realm1().is_good_attribute()) {
             rpi = rpi_type(_("武器祝福", "Bless Weapon"));
             rpi.text = _("武器を祝福する。抵抗されることがある。", "Blesses a weapon. Some weapons can resist it.");
             rpi.min_level = 35;
@@ -84,7 +84,7 @@ void switch_class_racial(PlayerType *player_ptr, rc_type *rc_ptr)
         rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case PlayerClassType::PALADIN:
-        if (is_good_realm(player_ptr->realm1)) {
+        if (PlayerRealm(player_ptr).realm1().is_good_attribute()) {
             rpi = rpi_type(_("ホーリー・ランス", "Holy Lance"));
             rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 3);
             rpi.text = _("聖なる炎のビームを放つ。", "Fires a beam of holy fire.");
