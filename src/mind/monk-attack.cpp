@@ -99,6 +99,7 @@ static int select_blow(PlayerType *player_ptr, player_attack_type *pa_ptr, int m
 {
     int min_level = 1;
     const martial_arts *old_ptr = &ma_blows[0];
+    const auto is_wizard = AngbandWorld::get_instance().wizard;
     for (int times = 0; times < max_blow_selection_times; times++) {
         do {
             pa_ptr->ma_ptr = &rand_choice(ma_blows);
@@ -118,7 +119,7 @@ static int select_blow(PlayerType *player_ptr, player_attack_type *pa_ptr, int m
         }
 
         old_ptr = pa_ptr->ma_ptr;
-        if (w_ptr->wizard && cheat_xtra) {
+        if (is_wizard && cheat_xtra) {
             msg_print(_("攻撃を再選択しました。", "Attack re-selected."));
         }
     }
@@ -248,7 +249,9 @@ void process_monk_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
     int max_blow_selection_times = calc_max_blow_selection_times(player_ptr);
     int min_level = select_blow(player_ptr, pa_ptr, max_blow_selection_times);
 
-    pa_ptr->attack_damage = damroll(pa_ptr->ma_ptr->dd + player_ptr->to_dd[pa_ptr->hand], pa_ptr->ma_ptr->ds + player_ptr->to_ds[pa_ptr->hand]);
+    const auto num = pa_ptr->ma_ptr->damage_dice.num + player_ptr->damage_dice_bonus[pa_ptr->hand].num;
+    const auto sides = pa_ptr->ma_ptr->damage_dice.sides + player_ptr->damage_dice_bonus[pa_ptr->hand].sides;
+    pa_ptr->attack_damage = Dice::roll(num, sides);
     if (player_ptr->special_attack & ATTACK_SUIKEN) {
         pa_ptr->attack_damage *= 2;
     }

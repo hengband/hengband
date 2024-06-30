@@ -127,7 +127,7 @@ static errr rd_dungeon(PlayerType *player_ptr)
         break;
     }
 
-    w_ptr->character_dungeon = true;
+    AngbandWorld::get_instance().character_dungeon = true;
     return err;
 }
 
@@ -135,7 +135,7 @@ errr restore_dungeon(PlayerType *player_ptr)
 {
     if (player_ptr->is_dead) {
         auto &quests = QuestList::get_instance();
-        for (const auto quest_id : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
+        for (const auto quest_id : RANDOM_QUEST_ID_RANGE) {
             quests.get_quest(quest_id).get_bounty().misc_flags.reset(MonsterMiscType::QUESTOR);
         }
 

@@ -139,7 +139,7 @@ static void shuffle_store(PlayerType *player_ptr, StoreSaleType store_num)
     msg_print(_("店主は引退した。", "The shopkeeper retires."));
     store_shuffle(player_ptr, store_num);
     prt("", 3, 0);
-    put_str(format("%s (%s)", ot_ptr->owner_name, race_info[enum2i(ot_ptr->owner_race)].title), 3, 10);
+    put_str(format("%s (%s)", ot_ptr->owner_name, race_info[enum2i(ot_ptr->owner_race)].title.data()), 3, 10);
     const auto &terrains = TerrainList::get_instance();
     prt(format("%s (%d)", terrains.get_terrain(cur_store_feat).name.data(), ot_ptr->max_cost), 3, 50);
 }
@@ -253,8 +253,9 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     msg_format(_("%s(%c)を購入する。", "Buying %s (%c)."), purchased_item_name.data(), I2A(item_num));
     msg_print(nullptr);
 
+    const auto &world = AngbandWorld::get_instance();
     auto res = prompt_to_buy(player_ptr, j_ptr, store_num);
-    if (st_ptr->store_open >= w_ptr->game_turn) {
+    if (st_ptr->store_open >= world.game_turn) {
         return;
     }
     if (!res) {
@@ -283,7 +284,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
 
     msg_format(_("%sを $%ldで購入しました。", "You bought %s for %ld gold."), purchased_item_name.data(), (long)price);
     angband_strcpy(record_o_name, purchased_item_name, MAX_NLEN);
-    record_turn = w_ptr->game_turn;
+    record_turn = world.game_turn;
     const auto &floor = *player_ptr->current_floor_ptr;
     if (record_buy) {
         exe_write_diary(floor, DiaryKind::BUY, 0, purchased_item_name);

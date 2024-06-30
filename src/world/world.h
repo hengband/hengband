@@ -16,7 +16,12 @@ enum class PlayerRaceType;
 class MonsterRaceInfo;
 class AngbandWorld {
 public:
-    AngbandWorld() = default;
+    ~AngbandWorld() = default;
+    AngbandWorld(AngbandWorld &&) = delete;
+    AngbandWorld(const AngbandWorld &) = delete;
+    AngbandWorld &operator=(const AngbandWorld &) = delete;
+    AngbandWorld &operator=(AngbandWorld &&) = delete;
+    static AngbandWorld &get_instance();
 
     POSITION max_wild_x{}; /*!< Maximum size of the wilderness */
     POSITION max_wild_y{}; /*!< Maximum size of the wilderness */
@@ -58,6 +63,8 @@ public:
 
     bool wizard{}; /* This world under wizard mode */
 
+    bool is_wild_mode() const;
+    void set_wild_mode(bool new_wild_mode);
     void set_arena(const bool new_status);
     bool get_arena() const;
     std::tuple<int, int, int> extract_date_time(PlayerRaceType start_race) const;
@@ -68,12 +75,18 @@ public:
     term_color_type get_birth_class_color(PlayerClassType c) const;
     MonsterRaceInfo &get_today_bounty();
     const MonsterRaceInfo &get_today_bounty() const;
+    bool is_player_true_winner() const;
+    void pass_game_turn_by_stay();
+    std::string format_real_playtime() const;
+    void set_gametime();
 
 private:
+    AngbandWorld() = default;
+    static AngbandWorld instance;
+
     bool is_out_arena = false; // アリーナ外部にいる時だけtrue.
+    bool wild_mode = false;
 
     bool is_winner_class(PlayerClassType c) const;
     bool is_retired_class(PlayerClassType c) const;
 };
-
-extern AngbandWorld *w_ptr;

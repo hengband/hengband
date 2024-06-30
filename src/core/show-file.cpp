@@ -4,7 +4,7 @@
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "system/angband-exceptions.h"
-#include "system/angband-version.h"
+#include "system/angband-system.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -307,7 +307,8 @@ void FileDisplayer::display(bool show_version, std::string_view name_with_tag, i
 
         if (show_version) {
             constexpr auto title = _("[%s, %s, %d/%d]", "[%s, %s, Line %d/%d]");
-            prt(format(title, get_version().data(), caption_str.data(), line, size), 0, 0);
+            const auto version = AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL);
+            prt(format(title, version.data(), caption_str.data(), line, size), 0, 0);
         } else {
             constexpr auto title = _("[%s, %d/%d]", "[%s, Line %d/%d]");
             prt(format(title, caption_str.data(), line, size), 0, 0);

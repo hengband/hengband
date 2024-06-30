@@ -323,7 +323,7 @@ bool set_monster_invulner(PlayerType *player_ptr, MONSTER_IDX m_idx, int v, bool
     } else {
         if (m_ptr->is_invulnerable()) {
             mproc_remove(floor_ptr, m_idx, MTIMED_INVULNER);
-            if (energy_need && !player_ptr->wild_mode) {
+            if (energy_need && !AngbandWorld::get_instance().is_wild_mode()) {
                 m_ptr->energy_need += ENERGY_NEED();
             }
             notice = true;
@@ -348,24 +348,25 @@ bool set_monster_invulner(PlayerType *player_ptr, MONSTER_IDX m_idx, int v, bool
 /*!
  * @brief モンスターの時間停止処理
  * @param player_ptr プレイヤーへの参照ポインタ
+ * @param m_idx 時間停止を行う敵のモンスターID
  * @param num 時間停止を行った敵が行動できる回数
- * @param src_idx 時間停止を行う敵の種族番号
  * @param vs_player TRUEならば時間停止開始処理を行う
  * @return 時間停止が行われている状態ならばTRUEを返す
  * @details monster_desc() は視認外のモンスターについて「何か」と返してくるので、この関数ではLOSや透明視等を判定する必要はない
  */
-bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId src_idx, bool vs_player)
+bool set_monster_timewalk(PlayerType *player_ptr, MONSTER_IDX m_idx, int num, bool vs_player)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor.m_list[hack_m_idx];
-    if (w_ptr->timewalk_m_idx) {
+    auto *m_ptr = &floor.m_list[m_idx];
+    auto &world = AngbandWorld::get_instance();
+    if (world.timewalk_m_idx) {
         return false;
     }
 
     if (vs_player) {
         const auto m_name = monster_desc(player_ptr, m_ptr, 0);
         std::string mes;
-        switch (src_idx) {
+        switch (m_ptr->r_idx) {
         case MonsterRaceId::DIO:
             mes = _("「『ザ・ワールド』！　時は止まった！」", format("%s yells 'The World! Time has stopped!'", m_name.data()));
             break;
@@ -384,7 +385,7 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId src_idx
         msg_print(nullptr);
     }
 
-    w_ptr->timewalk_m_idx = hack_m_idx;
+    world.timewalk_m_idx = m_idx;
     if (vs_player) {
         do_cmd_redraw(player_ptr);
     }
@@ -394,7 +395,7 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId src_idx
             break;
         }
 
-        process_monster(player_ptr, w_ptr->timewalk_m_idx);
+        process_monster(player_ptr, world.timewalk_m_idx);
         reset_target(m_ptr);
         handle_stuff(player_ptr);
         if (vs_player) {
@@ -410,12 +411,12 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId src_idx
         SubWindowRedrawingFlag::DUNGEON,
     };
     rfu.set_flags(flags);
-    w_ptr->timewalk_m_idx = 0;
+    world.timewalk_m_idx = 0;
     auto should_output_message = floor.has_los({ m_ptr->fy, m_ptr->fx });
     should_output_message &= projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
     if (vs_player || should_output_message) {
         std::string mes;
-        switch (src_idx) {
+        switch (m_ptr->r_idx) {
         case MonsterRaceId::DIAVOLO:
             mes = _("これが我が『キング・クリムゾン』の能力！　『時間を消し去って』飛び越えさせた…！！",
                 "This is the ability of my 'King Crimson'! 'Erase the time' and let it jump over... !!");

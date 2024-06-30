@@ -62,8 +62,8 @@ int16_t PlayerBasicStatistics::race_bonus()
  */
 int16_t PlayerBasicStatistics::class_bonus()
 {
-    const player_class_info *c_ptr = &class_info[enum2i(this->player_ptr->pclass)];
-    return c_ptr->c_adj[this->ability_type];
+    const auto &player_class = class_info.at(this->player_ptr->pclass);
+    return player_class.c_adj[this->ability_type];
 }
 
 /*!

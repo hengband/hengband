@@ -1,8 +1,6 @@
 #include "system/player-type-definition.h"
 #include "floor/geometry.h"
-#include "market/arena-info-table.h"
 #include "system/angband-exceptions.h"
-#include "system/monster-race-info.h" // @todo 暫定、後で消す.
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "world/world.h"
@@ -20,11 +18,6 @@ PlayerType *p_ptr = &p_body;
 PlayerType::PlayerType()
     : timed_effects(std::make_shared<TimedEffects>())
 {
-}
-
-bool PlayerType::is_true_winner() const
-{
-    return (w_ptr->total_winner > 0) && (this->arena_number > MAX_ARENA_MONS + 2);
 }
 
 std::shared_ptr<TimedEffects> PlayerType::effects() const
@@ -140,4 +133,28 @@ bool PlayerType::is_located_at(const Pos2D &pos) const
 bool PlayerType::in_saved_floor() const
 {
     return this->floor_id != 0;
+}
+
+/*!
+ * @brief プレイヤーの体力ランクを計算する
+ *
+ * プレイヤーの体力ランク（最大レベル時のHPの期待値に対する実際のHPの値の割合）を計算する。
+ *
+ * @return 体力ランク[%]
+ */
+int PlayerType::calc_life_rating() const
+{
+    const auto actual_hp = this->player_hp[PY_MAX_LEVEL - 1];
+
+    // ダイスによる上昇回数は52回（初期3回+LV50までの49回）なので
+    // 期待値計算のため2で割っても端数は出ない
+    constexpr auto roll_num = 3 + PY_MAX_LEVEL - 1;
+    const auto expected_hp = this->hit_dice.maxroll() + this->hit_dice.floored_expected_value_multiplied_by(roll_num);
+
+    return actual_hp * 100 / expected_hp;
+}
+
+bool PlayerType::try_resist_eldritch_horror() const
+{
+    return evaluate_percent(this->skill_sav) || one_in_(2);
 }

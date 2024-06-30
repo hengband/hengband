@@ -184,7 +184,7 @@ int PlayerCut::get_accumulation_rank(int total, int damage)
     }
 
     if (damage >= 20) {
-        while (randint0(100) < 2) {
+        while (one_in_(50)) {
             max++;
         }
     }

@@ -117,11 +117,11 @@ static void kingly(PlayerType *player_ptr)
 #ifdef JP
     put_str("Veni, Vidi, Vici!", 15, 31);
     put_str("来た、見た、勝った！", 16, 30);
-    put_str(format("偉大なる%s万歳！", sp_ptr->winner), 17, 29);
+    put_str(format("偉大なる%s万歳！", sp_ptr->winner.data()), 17, 29);
 #else
     put_str("Veni, Vidi, Vici!", 15, 31);
     put_str("I came, I saw, I conquered!", 16, 26);
-    put_str(format("All Hail the Mighty %s!", sp_ptr->winner), 17, 27);
+    put_str(format("All Hail the Mighty %s!", sp_ptr->winner.data()), 17, 27);
 #endif
 
     if (!seppuku) {
@@ -150,7 +150,8 @@ void close_game(PlayerType *player_ptr)
     flush();
     signals_ignore_tstp();
 
-    w_ptr->character_icky_depth = 1;
+    auto &world = AngbandWorld::get_instance();
+    world.character_icky_depth = 1;
     const auto path = path_build(ANGBAND_DIR_APEX, "scores.raw");
     safe_setuid_grab();
     highscore_fd = fd_open(path, O_RDWR);
@@ -161,7 +162,7 @@ void close_game(PlayerType *player_ptr)
     }
 
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
-    if (w_ptr->total_winner) {
+    if (world.total_winner) {
         kingly(player_ptr);
     }
 
@@ -169,8 +170,8 @@ void close_game(PlayerType *player_ptr)
 
     auto do_send = true;
     if (!cheat_save || input_check(_("死んだデータをセーブしますか？ ", "Save death? "))) {
-        w_ptr->update_playtime();
-        w_ptr->sf_play_time += w_ptr->play_time;
+        world.update_playtime();
+        world.sf_play_time += world.play_time;
 
         if (!save_player(player_ptr, SaveType::CLOSE_GAME)) {
             msg_print(_("セーブ失敗！", "death save failed!"));

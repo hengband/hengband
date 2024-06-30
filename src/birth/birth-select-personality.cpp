@@ -57,7 +57,7 @@ static std::string display_personality_stat(int cs, int *os, const std::string &
     } else {
         ap_ptr = &personality_info[cs];
         c_put_str(TERM_L_BLUE, ap_ptr->title, 3, 40);
-        put_str(_("の性格修正", ": Personality modification"), 3, 40 + strlen(ap_ptr->title));
+        put_str(_("の性格修正", ": Personality modification"), 3, 40 + ap_ptr->title->length());
         put_str(_("腕力 知能 賢さ 器用 耐久 魅力      ", "Str  Int  Wis  Dex  Con  Chr       "), 4, 40);
         const auto stats = format("%+3d  %+3d  %+3d  %+3d  %+3d  %+3d       ", ap_ptr->a_adj[0], ap_ptr->a_adj[1], ap_ptr->a_adj[2], ap_ptr->a_adj[3], ap_ptr->a_adj[4], ap_ptr->a_adj[5]);
         c_put_str(TERM_L_BLUE, stats, 5, 40);

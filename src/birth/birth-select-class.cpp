@@ -22,10 +22,12 @@ static std::string birth_class_label(int cs, concptr sym)
     }
 
     ss << sym[cs] << p2;
+    const auto pclass = i2enum<PlayerClassType>(cs);
+    const auto title = class_info.at(pclass).title;
     if (!(rp_ptr->choice & (1UL << cs))) {
-        ss << '(' << class_info[cs].title << ')';
+        ss << '(' << title << ')';
     } else {
-        ss << class_info[cs].title;
+        ss << title;
     }
 
     return ss.str();
@@ -34,7 +36,7 @@ static std::string birth_class_label(int cs, concptr sym)
 static void enumerate_class_list(char *sym)
 {
     for (auto n = 0; n < PLAYER_CLASS_TYPE_MAX; n++) {
-        cp_ptr = &class_info[n];
+        cp_ptr = &class_info.at(i2enum<PlayerClassType>(n));
         mp_ptr = &class_magics_info[n];
         if (n < 26) {
             sym[n] = I2A(n);
@@ -43,7 +45,7 @@ static void enumerate_class_list(char *sym)
         }
 
         auto cs = i2enum<PlayerClassType>(n);
-        c_put_str(w_ptr->get_birth_class_color(cs), birth_class_label(n, sym), 13 + (n / 4), 2 + 19 * (n % 4));
+        c_put_str(AngbandWorld::get_instance().get_birth_class_color(cs), birth_class_label(n, sym), 13 + (n / 4), 2 + 19 * (n % 4));
     }
 }
 
@@ -54,7 +56,7 @@ static std::string display_class_stat(int cs, int *os, const std::string &cur, c
     }
 
     auto pclass = i2enum<PlayerClassType>(*os);
-    c_put_str(w_ptr->get_birth_class_color(pclass), cur, 13 + (*os / 4), 2 + 19 * (*os % 4));
+    c_put_str(AngbandWorld::get_instance().get_birth_class_color(pclass), cur, 13 + (*os / 4), 2 + 19 * (*os % 4));
     put_str("                                   ", 3, 40);
     auto result = birth_class_label(cs, sym);
     if (cs == PLAYER_CLASS_TYPE_MAX) {
@@ -62,11 +64,11 @@ static std::string display_class_stat(int cs, int *os, const std::string &cur, c
         put_str("                                   ", 5, 40);
         put_str("                                   ", 6, 40);
     } else {
-        cp_ptr = &class_info[cs];
+        cp_ptr = &class_info.at(i2enum<PlayerClassType>(cs));
         mp_ptr = &class_magics_info[cs];
 
         c_put_str(TERM_L_BLUE, cp_ptr->title, 3, 40);
-        put_str(_("の職業修正", ": Class modification"), 3, 40 + strlen(cp_ptr->title));
+        put_str(_("の職業修正", ": Class modification"), 3, 40 + cp_ptr->title->length());
         put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
         const auto stats = format("%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", cp_ptr->c_adj[0], cp_ptr->c_adj[1], cp_ptr->c_adj[2], cp_ptr->c_adj[3], cp_ptr->c_adj[4], cp_ptr->c_adj[5], cp_ptr->c_exp);
         c_put_str(TERM_L_BLUE, stats, 5, 40);
@@ -211,7 +213,7 @@ bool get_player_class(PlayerType *player_ptr)
     }
 
     player_ptr->pclass = i2enum<PlayerClassType>(k);
-    cp_ptr = &class_info[enum2i(player_ptr->pclass)];
+    cp_ptr = &class_info.at(player_ptr->pclass);
     mp_ptr = &class_magics_info[enum2i(player_ptr->pclass)];
     c_put_str(TERM_L_BLUE, cp_ptr->title, 5, 15);
     return true;

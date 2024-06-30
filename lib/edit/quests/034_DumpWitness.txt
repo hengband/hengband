@@ -15,7 +15,7 @@ Q:$34:T:Adventurers are dead in the building behind this one.
 Q:$34:T:All windows and doors are locked.
 Q:$34:T:We guess the murderer still hides in the house.
 Q:$34:T:Your task is to clean everything up in the room.
-Q:$34:T:There should be only junks inside, but you can take them if you need.
+Q:$34:T:There should be only junk inside, but you can take it if you want.
 Q:34:T:この建物の裏の一軒家で冒険者が不審な死に方をしているとの報告がありました。
 Q:34:T:窓にも扉にも鍵がかかっており、殺戮者はまだ内部に潜んでいると思われます。
 Q:34:T:どうかあの家に潜む脅威を排除して下さい。

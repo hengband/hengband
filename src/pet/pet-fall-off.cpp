@@ -26,6 +26,7 @@
 #include "system/terrain-type-definition.h"
 #include "target/target-checker.h"
 #include "view/display-messages.h"
+#include "world/world.h"
 
 /*!
  * @brief モンスターから直接攻撃を受けた時に落馬するかどうかを判定し、判定アウトならば落馬させる
@@ -93,7 +94,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
     auto *r_ptr = &m_ptr->get_monrace();
 
-    if (!player_ptr->riding || player_ptr->wild_mode) {
+    if (!player_ptr->riding || AngbandWorld::get_instance().is_wild_mode()) {
         return false;
     }
 

@@ -30,6 +30,7 @@
 #include "io/input-key-requester.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "market/arena-entry.h"
 #include "market/arena.h"
 #include "market/bounty.h"
 #include "market/building-actions-table.h"
@@ -69,13 +70,6 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
-uint32_t mon_odds[4];
-int battle_odds;
-PRICE kakekin;
-int sel_monster;
-
-bool reinit_wilderness = false;
 
 /*!
  * @brief 町に関するヘルプを表示する / Display town history
@@ -312,7 +306,7 @@ static bool bldg_process_command(PlayerType *player_ptr, building_type *bldg, in
  */
 void do_cmd_building(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         return;
     }
 
@@ -330,15 +324,16 @@ void do_cmd_building(PlayerType *player_ptr)
     bldg = &buildings[which];
 
     reinit_wilderness = false;
-
-    if ((which == 2) && (player_ptr->arena_number < 0)) {
+    const auto &entries = ArenaEntryList::get_instance();
+    if ((which == 2) && entries.get_defeated_entry() && !entries.is_player_true_victor()) {
         msg_print(_("「敗者に用はない。」", "'There's no place here for a LOSER like you!'"));
         return;
     }
 
     auto &fcms = FloorChangeModesStore::get_instace();
+    auto &world = AngbandWorld::get_instance();
     if ((which == 2) && player_ptr->current_floor_ptr->inside_arena) {
-        if (!w_ptr->get_arena() && player_ptr->current_floor_ptr->m_cnt > 0) {
+        if (!world.get_arena() && player_ptr->current_floor_ptr->m_cnt > 0) {
             prt(_("ゲートは閉まっている。モンスターがあなたを待っている！", "The gates are closed.  The monster awaits!"), 0, 0);
         } else {
             fcms->set({ FloorChangeMode::SAVE_FLOORS, FloorChangeMode::NO_RETURN });
@@ -367,7 +362,7 @@ void do_cmd_building(PlayerType *player_ptr)
     player_ptr->oldpx = player_ptr->x;
     forget_lite(player_ptr->current_floor_ptr);
     forget_view(player_ptr->current_floor_ptr);
-    w_ptr->character_icky_depth++;
+    world.character_icky_depth++;
 
     command_arg = 0;
     command_rep = 0;
@@ -411,7 +406,7 @@ void do_cmd_building(PlayerType *player_ptr)
         player_ptr->leaving = true;
     }
 
-    w_ptr->character_icky_depth--;
+    world.character_icky_depth--;
     term_clear();
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();

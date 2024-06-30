@@ -163,7 +163,7 @@ errr parse_artifacts_info(nlohmann::json &art_data, angband_header *)
         msg_format(_("アーティファクトのベースAC読込失敗。ID: '%d'。", "Failed to load base AC of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_dice(art_data["base_dice"], artifact.dd, artifact.ds, false)) {
+    if (auto err = info_set_dice(art_data["base_dice"], artifact.damage_dice, false)) {
         msg_format(_("アーティファクトのベースダイス読込失敗。ID: '%d'。", "Failed to load base dice of artifact. ID: '%d'."), error_idx);
         return err;
     }

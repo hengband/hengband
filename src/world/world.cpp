@@ -1,12 +1,28 @@
 #include "world/world.h"
+#include "core/asking-player.h"
+#include "market/arena-entry.h"
 #include "player-info/race-types.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
 
-AngbandWorld world;
-AngbandWorld *w_ptr = &world;
+AngbandWorld AngbandWorld::instance{};
+
+AngbandWorld &AngbandWorld::get_instance()
+{
+    return instance;
+}
+
+bool AngbandWorld::is_wild_mode() const
+{
+    return this->wild_mode;
+}
+
+void AngbandWorld::set_wild_mode(bool new_wild_mode)
+{
+    this->wild_mode = new_wild_mode;
+}
 
 /*!
  * @brief アリーナへの入場/退出状態を更新する
@@ -120,6 +136,12 @@ const MonsterRaceInfo &AngbandWorld::get_today_bounty() const
     return MonraceList::get_instance().get_monrace(this->today_mon);
 }
 
+bool AngbandWorld::is_player_true_winner() const
+{
+    const auto &entries = ArenaEntryList::get_instance();
+    return (this->total_winner > 0) && (entries.is_player_true_victor());
+}
+
 /*!
  * @brief 勝利したクラスか判定する
  */
@@ -142,4 +164,46 @@ bool AngbandWorld::is_retired_class(PlayerClassType c) const
     }
 
     return this->sf_retired.has(c);
+}
+
+/*!
+ * @brief 宿泊によってゲーム内ターンを経過させる
+ */
+void AngbandWorld::pass_game_turn_by_stay()
+{
+    const auto oldturn = this->game_turn;
+    this->game_turn = (this->game_turn / (TURNS_PER_TICK * TOWN_DAWN / 2) + 1) * (TURNS_PER_TICK * TOWN_DAWN / 2);
+    if (this->dungeon_turn >= this->dungeon_turn_limit) {
+        return;
+    }
+
+    constexpr auto stay_magnificant = 10;
+    this->dungeon_turn += std::min<int>((this->game_turn - oldturn), TURNS_PER_TICK * 250) * stay_magnificant;
+    if (this->dungeon_turn > this->dungeon_turn_limit) {
+        this->dungeon_turn = this->dungeon_turn_limit;
+    }
+}
+
+/*!
+ * @brief 現実のプレイ時間をフォーマットして返す
+ */
+std::string AngbandWorld::format_real_playtime() const
+{
+    const auto hour = this->play_time / (60 * 60);
+    const auto min = (this->play_time / 60) % 60;
+    const auto sec = this->play_time % 60;
+    return format("%.2u:%.2u:%.2u", hour, min, sec);
+}
+
+/*!
+ * @brief プレイ日数を直接変更する (デバッグ専用)
+ */
+void AngbandWorld::set_gametime()
+{
+    const auto game_time = input_integer("Dungeon Turn", 0, this->dungeon_turn_limit - 1);
+    if (!game_time) {
+        return;
+    }
+
+    this->dungeon_turn = this->game_turn = *game_time;
 }

@@ -20,7 +20,7 @@ bool activate_missile_1(PlayerType *player_ptr)
         return false;
     }
 
-    (void)fire_bolt(player_ptr, AttributeType::MISSILE, dir, damroll(2, 6));
+    (void)fire_bolt(player_ptr, AttributeType::MISSILE, dir, Dice::roll(2, 6));
     return true;
 }
 
@@ -56,7 +56,7 @@ bool activate_bolt_acid_1(PlayerType *player_ptr)
         return false;
     }
 
-    (void)fire_bolt(player_ptr, AttributeType::ACID, dir, damroll(5, 8));
+    (void)fire_bolt(player_ptr, AttributeType::ACID, dir, Dice::roll(5, 8));
     return true;
 }
 
@@ -68,7 +68,7 @@ bool activate_bolt_elec_1(PlayerType *player_ptr)
         return false;
     }
 
-    (void)fire_bolt(player_ptr, AttributeType::ELEC, dir, damroll(4, 8));
+    (void)fire_bolt(player_ptr, AttributeType::ELEC, dir, Dice::roll(4, 8));
     return true;
 }
 
@@ -80,7 +80,7 @@ bool activate_bolt_fire_1(PlayerType *player_ptr)
         return false;
     }
 
-    (void)fire_bolt(player_ptr, AttributeType::FIRE, dir, damroll(9, 8));
+    (void)fire_bolt(player_ptr, AttributeType::FIRE, dir, Dice::roll(9, 8));
     return true;
 }
 
@@ -92,7 +92,7 @@ bool activate_bolt_cold_1(PlayerType *player_ptr)
         return false;
     }
 
-    (void)fire_bolt(player_ptr, AttributeType::COLD, dir, damroll(6, 8));
+    (void)fire_bolt(player_ptr, AttributeType::COLD, dir, Dice::roll(6, 8));
     return true;
 }
 
@@ -334,7 +334,7 @@ bool activate_ball_water(PlayerType *player_ptr, std::string_view name)
 
 bool activate_ball_lite(PlayerType *player_ptr, std::string_view name)
 {
-    int num = damroll(5, 3);
+    int num = Dice::roll(5, 3);
     POSITION y = 0, x = 0;
     msg_format(_("%sが稲妻で覆われた...", "The %s is surrounded by lightning..."), name.data());
     for (int k = 0; k < num; k++) {

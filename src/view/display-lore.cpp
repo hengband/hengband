@@ -50,7 +50,7 @@ void roff_top(MonsterRaceId r_idx)
     }
 #endif
 
-    if (w_ptr->wizard || cheat_know) {
+    if (AngbandWorld::get_instance().wizard || cheat_know) {
         term_addstr(-1, TERM_WHITE, "[");
         term_addstr(-1, TERM_L_BLUE, format("%d", enum2i(r_idx)));
         term_addstr(-1, TERM_WHITE, "] ");
@@ -537,31 +537,30 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
     auto idx = 0 * max_idx;
 #endif
 
-    for (const auto &[r_idx, dd, ds] : lore_ptr->r_ptr->reinforces) {
-        auto is_reinforced = MonraceList::is_valid(r_idx);
+    for (const auto &[monrace_id, num_dice] : lore_ptr->r_ptr->reinforces) {
+        auto is_reinforced = MonraceList::is_valid(monrace_id);
 #ifndef JP
         const char *prefix = (idx == 0) ? " " : (idx == max_idx) ? " and "
                                                                  : ", ";
         ++idx;
 #endif
-        is_reinforced &= dd > 0;
-        is_reinforced &= ds > 0;
+        is_reinforced &= num_dice.is_valid();
         if (!is_reinforced) {
             continue;
         }
 
-        const auto *rf_ptr = &monraces_info[r_idx];
+        const auto *rf_ptr = &monraces_info[monrace_id];
         if (rf_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             hooked_roff(format("%s%s", _("、", prefix), rf_ptr->name.data()));
             continue;
         }
 
 #ifdef JP
-        hooked_roff(format("、 %dd%d 体の%s", dd, ds, rf_ptr->name.data()));
+        hooked_roff(format("、 %s 体の%s", num_dice.to_string().data(), rf_ptr->name.data()));
 #else
-        const auto plural = (dd * ds > 1);
-        const auto &name = plural ? pluralize(rf_ptr->name) : rf_ptr->name;
-        hooked_roff(format("%s%dd%d %s", prefix, dd, ds, name.data()));
+        const auto plural = (num_dice.maxroll() > 1);
+        const auto &name = plural ? pluralize(rf_ptr->name) : rf_ptr->name.string();
+        hooked_roff(format("%s%s %s", prefix, num_dice.to_string().data(), name.data()));
 #endif
     }
 
@@ -601,7 +600,7 @@ void display_monster_launching(PlayerType *player_ptr, lore_type *lore_ptr)
 
     std::string msg;
     if (know_details(lore_ptr->r_idx) || lore_ptr->know_everything) {
-        msg = format(_("威力 %dd%d の射撃をする", "fire an arrow (Power:%dd%d)"), lore_ptr->r_ptr->shoot_dam_dice, lore_ptr->r_ptr->shoot_dam_side);
+        msg = format(_("威力 %s の射撃をする", "fire an arrow (Power:%s)"), lore_ptr->r_ptr->shoot_damage_dice.to_string().data());
     } else {
         msg = _("射撃をする", "fire an arrow");
     }

@@ -196,7 +196,7 @@ errr top_twenty(PlayerType *player_ptr)
     the_score.gold[9] = '\0';
 
     const auto &igd = InnerGameData::get_instance();
-    snprintf(the_score.turns, sizeof(the_score.turns), "%9d", igd.get_real_turns(w_ptr->game_turn));
+    snprintf(the_score.turns, sizeof(the_score.turns), "%9d", igd.get_real_turns(AngbandWorld::get_instance().game_turn));
     the_score.turns[9] = '\0';
 
     auto ct = time((time_t *)0);
@@ -258,7 +258,7 @@ errr predict_score(PlayerType *player_ptr)
     snprintf(the_score.what, sizeof(the_score.what), "%u.%u.%u", H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH);
     snprintf(the_score.pts, sizeof(the_score.pts), "%9ld", (long)calc_score(player_ptr));
     snprintf(the_score.gold, sizeof(the_score.gold), "%9lu", (long)player_ptr->au);
-    snprintf(the_score.turns, sizeof(the_score.turns), "%9d", igd.get_real_turns(w_ptr->game_turn));
+    snprintf(the_score.turns, sizeof(the_score.turns), "%9d", igd.get_real_turns(AngbandWorld::get_instance().game_turn));
     angband_strcpy(the_score.day, _("今日", "TODAY"), sizeof(the_score.day));
     the_score.copy_info(*player_ptr);
     strcpy(the_score.how, _("yet", "nobody (yet!)"));
@@ -315,9 +315,9 @@ void show_highclass(PlayerType *player_ptr)
         clev = (PLAYER_LEVEL)atoi(the_score.cur_lev);
 
 #ifdef JP
-        snprintf(out_val, sizeof(out_val), "   %3d) %sの%s (レベル %2d)", (m + 1), race_info[pr].title, the_score.who, clev);
+        snprintf(out_val, sizeof(out_val), "   %3d) %sの%s (レベル %2d)", (m + 1), race_info[pr].title.data(), the_score.who, clev);
 #else
-        snprintf(out_val, sizeof(out_val), "%3d) %s the %s (Level %2d)", (m + 1), the_score.who, race_info[pr].title, clev);
+        snprintf(out_val, sizeof(out_val), "%3d) %s the %s (Level %2d)", (m + 1), the_score.who, race_info[pr].title.data(), clev);
 #endif
 
         prt(out_val, (m + 7), 0);
@@ -326,9 +326,9 @@ void show_highclass(PlayerType *player_ptr)
     }
 
 #ifdef JP
-    snprintf(out_val, sizeof(out_val), "あなた) %sの%s (レベル %2d)", race_info[enum2i(player_ptr->prace)].title, player_ptr->name, player_ptr->lev);
+    snprintf(out_val, sizeof(out_val), "あなた) %sの%s (レベル %2d)", race_info[enum2i(player_ptr->prace)].title.data(), player_ptr->name, player_ptr->lev);
 #else
-    snprintf(out_val, sizeof(out_val), "You) %s the %s (Level %2d)", player_ptr->name, race_info[enum2i(player_ptr->prace)].title, player_ptr->lev);
+    snprintf(out_val, sizeof(out_val), "You) %s the %s (Level %2d)", player_ptr->name, race_info[enum2i(player_ptr->prace)].title.data(), player_ptr->lev);
 #endif
 
     prt(out_val, (m + 8), 0);
@@ -393,9 +393,9 @@ void race_score(PlayerType *player_ptr, int race_num)
         if (pr == race_num) {
             char out_val[256];
 #ifdef JP
-            snprintf(out_val, sizeof(out_val), "   %3d) %sの%s (レベル %2d)", (m + 1), race_info[pr].title, the_score.who, clev);
+            snprintf(out_val, sizeof(out_val), "   %3d) %sの%s (レベル %2d)", (m + 1), race_info[pr].title.data(), the_score.who, clev);
 #else
-            snprintf(out_val, sizeof(out_val), "%3d) %s the %s (Level %3d)", (m + 1), the_score.who, race_info[pr].title, clev);
+            snprintf(out_val, sizeof(out_val), "%3d) %s the %s (Level %3d)", (m + 1), the_score.who, race_info[pr].title.data(), clev);
 #endif
 
             prt(out_val, (m + 7), 0);
@@ -409,9 +409,9 @@ void race_score(PlayerType *player_ptr, int race_num)
     if ((enum2i(player_ptr->prace) == race_num) && (player_ptr->lev >= lastlev)) {
         char out_val[256];
 #ifdef JP
-        snprintf(out_val, sizeof(out_val), "あなた) %sの%s (レベル %2d)", race_info[enum2i(player_ptr->prace)].title, player_ptr->name, player_ptr->lev);
+        snprintf(out_val, sizeof(out_val), "あなた) %sの%s (レベル %2d)", race_info[enum2i(player_ptr->prace)].title.data(), player_ptr->name, player_ptr->lev);
 #else
-        snprintf(out_val, sizeof(out_val), "You) %s the %s (Level %3d)", player_ptr->name, race_info[enum2i(player_ptr->prace)].title, player_ptr->lev);
+        snprintf(out_val, sizeof(out_val), "You) %s the %s (Level %3d)", player_ptr->name, race_info[enum2i(player_ptr->prace)].title.data(), player_ptr->lev);
 #endif
 
         prt(out_val, (m + 8), 0);
@@ -453,28 +453,31 @@ bool check_score(PlayerType *player_ptr)
     }
 
     /* Wizard-mode pre-empts scoring */
-    if (w_ptr->noscore & 0x000F) {
+    auto &world = AngbandWorld::get_instance();
+    const auto no_score = world.noscore;
+    if (no_score & 0x000F) {
         msg_print(_("ウィザード・モードではスコアが記録されません。", "Score not registered for wizards."));
         msg_print(nullptr);
         return false;
     }
 
     /* Cheaters are not scored */
-    if (w_ptr->noscore & 0xFF00) {
+    if (no_score & 0xFF00) {
         msg_print(_("詐欺をやった人はスコアが記録されません。", "Score not registered for cheaters."));
         msg_print(nullptr);
         return false;
     }
 
     /* Interupted */
-    if (!w_ptr->total_winner && streq(player_ptr->died_from, _("強制終了", "Interrupting"))) {
+    const auto is_total_winner = world.total_winner != 0;
+    if (!is_total_winner && streq(player_ptr->died_from, _("強制終了", "Interrupting"))) {
         msg_print(_("強制終了のためスコアが記録されません。", "Score not registered due to interruption."));
         msg_print(nullptr);
         return false;
     }
 
     /* Quitter */
-    if (!w_ptr->total_winner && streq(player_ptr->died_from, _("途中終了", "Quitting"))) {
+    if (!is_total_winner && streq(player_ptr->died_from, _("途中終了", "Quitting"))) {
         msg_print(_("途中終了のためスコアが記録されません。", "Score not registered due to quitting."));
         msg_print(nullptr);
         return false;

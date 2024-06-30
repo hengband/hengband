@@ -14,6 +14,7 @@
 #include "system/angband.h"
 #include "system/baseitem-info.h"
 #include "system/system-variables.h"
+#include "util/dice.h"
 #include "util/flag-group.h"
 #include <optional>
 #include <string>
@@ -66,8 +67,7 @@ public:
     ARMOUR_CLASS to_a{}; /*!< Plusses to AC */
     ARMOUR_CLASS ac{}; /*!< Normal AC */
 
-    DICE_NUMBER dd{}; /*!< Damage dice/nums */
-    DICE_SID ds{}; /*!< Damage dice/sides */
+    Dice damage_dice{}; /*!< Damage dice */
     TIME_EFFECT timeout{}; /*!< Timeout Counter */
     byte ident{}; /*!< Special flags  */
     EnumClassFlagGroup<OmType> marked{}; /*!< Object is marked */

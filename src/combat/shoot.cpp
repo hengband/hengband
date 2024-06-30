@@ -492,7 +492,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     auto tdis = 10;
 
     /* Base damage from thrown object plus launcher bonus */
-    auto tdam_base = damroll(o_ptr->dd, o_ptr->ds) + o_ptr->to_d + j_ptr->to_d;
+    auto tdam_base = o_ptr->damage_dice.roll() + o_ptr->to_d + j_ptr->to_d;
 
     /* Actually "fire" the object */
     const auto tval = j_ptr->bi_key.tval();
@@ -862,6 +862,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                         /* Sniper */
                         if (snipe_type == SP_RUSH) {
                             int n = randint1(5) + 3;
+                            int n0 = n;
                             MONSTER_IDX m_idx = c_mon_ptr->m_idx;
 
                             for (; cur_dis <= tdis;) {
@@ -905,6 +906,8 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                                     lite_spot(player_ptr, oy, ox);
                                     term_fresh();
                                     term_xtra(TERM_XTRA_DELAY, delay_factor);
+                                } else if (n == n0) {
+                                    lite_spot(player_ptr, oy, ox);
                                 }
 
                                 x = nx;
@@ -1297,7 +1300,7 @@ uint32_t calc_expect_dice(
     // 理力
     bool is_force = !PlayerClass(player_ptr).equals(PlayerClassType::SAMURAI);
     is_force &= flags.has(TR_FORCE_WEAPON);
-    is_force &= player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5);
+    is_force &= player_ptr->csp > (o_ptr->damage_dice.maxroll() / 5);
 
     dam = calc_slaydam(dam, 1, 1, is_force);
     dam = calc_expect_crit(player_ptr, o_ptr->weight, o_ptr->to_h, dam, to_h, false, impact);

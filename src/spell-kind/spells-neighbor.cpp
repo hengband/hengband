@@ -151,7 +151,7 @@ void wall_breaker(PlayerType *player_ptr)
         return;
     }
 
-    int num = damroll(5, 3);
+    int num = Dice::roll(5, 3);
     for (int i = 0; i < num; i++) {
         while (true) {
             scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 10, PROJECT_NONE);

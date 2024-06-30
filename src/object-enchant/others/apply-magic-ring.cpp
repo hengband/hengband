@@ -43,7 +43,7 @@ RingEnchanter::RingEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH le
  */
 void RingEnchanter::apply_magic()
 {
-    if ((this->power == 0) && (randint0(100) < 50)) {
+    if ((this->power == 0) && one_in_(2)) {
         this->power = -1;
     }
 
@@ -103,7 +103,7 @@ void RingEnchanter::sval_enchant()
         break;
     case SV_RING_SPEED:
         this->o_ptr->pval = randint1(5) + (PARAMETER_VALUE)m_bonus(5, this->level);
-        while (randint0(100) < 50) {
+        while (one_in_(2)) {
             this->o_ptr->pval++;
         }
 

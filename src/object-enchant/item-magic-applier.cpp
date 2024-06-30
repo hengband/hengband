@@ -106,17 +106,17 @@ std::tuple<int, int> ItemMagicApplier::calculate_chances()
 int ItemMagicApplier::calculate_power(const int chance_good, const int chance_great)
 {
     auto power = 0;
-    if (any_bits(this->mode, AM_GOOD) || magik(chance_good)) {
+    if (any_bits(this->mode, AM_GOOD) || evaluate_percent(chance_good)) {
         power = 1;
-        if (any_bits(this->mode, AM_GREAT) || magik(chance_great)) {
+        if (any_bits(this->mode, AM_GREAT) || evaluate_percent(chance_great)) {
             power = 2;
             if (any_bits(this->mode, AM_SPECIAL)) {
                 power = 3;
             }
         }
-    } else if (magik(chance_good)) {
+    } else if (evaluate_percent(chance_good)) {
         power = -1;
-        if (magik(chance_great)) {
+        if (evaluate_percent(chance_great)) {
             power = -2;
         }
     }

@@ -7,13 +7,16 @@
 #include <optional>
 #include <utility>
 
+class Dice;
+
 using Range = std::pair<int, int>;
 
 template <typename T>
 concept IntegralOrEnum = std::integral<T> || std::is_enum_v<T>;
 
 errr info_set_string(const nlohmann::json &json, std::string &data, bool is_required);
-errr info_set_dice(const nlohmann::json &json, DICE_NUMBER &dd, DICE_SID &ds, bool is_required);
+errr info_set_dice(const nlohmann::json &json, Dice &dice, bool is_required);
+errr info_set_bool(const nlohmann::json &json, bool &bool_value, bool is_required);
 
 /*!
  * @brief JSON Objectから整数値もしくはenum値を取得する

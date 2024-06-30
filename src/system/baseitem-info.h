@@ -4,6 +4,7 @@
 #include "object-enchant/trg-types.h"
 #include "object/tval-types.h"
 #include "system/angband.h"
+#include "util/dice.h"
 #include "util/flag-group.h"
 #include "view/display-symbol.h"
 #include <array>
@@ -49,8 +50,8 @@ public:
 
     ItemKindType tval() const;
     std::optional<int> sval() const;
+    bool is_valid() const;
     bool is(ItemKindType tval) const;
-
     ItemKindType get_arrow_kind() const;
     bool is_spell_book() const;
     bool is_high_level_book() const;
@@ -113,8 +114,7 @@ public:
     ARMOUR_CLASS to_a{}; /*!< ベースアイテムのAC修正値 / Bonus to armor */
     ARMOUR_CLASS ac{}; /*!< ベースアイテムのAC基本値 /  Base armor */
 
-    DICE_NUMBER dd{}; /*!< ダメージダイスの数 / Damage dice */
-    DICE_SID ds{}; /*!< ダメージダイスの大きさ / Damage sides */
+    Dice damage_dice{}; /*!< ダメージダイス */
 
     WEIGHT weight{}; /*!< ベースアイテムの重量 / Weight */
     PRICE cost{}; /*!< ベースアイテムの基本価値 / Object "base cost" */

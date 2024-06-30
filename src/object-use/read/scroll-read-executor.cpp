@@ -231,7 +231,7 @@ bool ScrollReadExecutor::read()
 
         break;
     case SV_SCROLL_LIGHT:
-        if (lite_area(this->player_ptr, damroll(2, 8), 2)) {
+        if (lite_area(this->player_ptr, Dice::roll(2, 8), 2)) {
             this->ident = true;
         }
 

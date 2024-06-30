@@ -47,23 +47,6 @@ void torch_flags(ItemEntity *o_ptr, TrFlags &flags)
 }
 
 /*!
- * @brief 投擲時たいまつにダイスを与える。
- * Torches have special abilities when they are flaming.
- * @param o_ptr 投擲するオブジェクトの構造体参照ポインタ
- * @param dd 特別なダイス数を返す参照ポインタ
- * @param ds 特別なダイス面数を返す参照ポインタ
- */
-void torch_dice(ItemEntity *o_ptr, DICE_NUMBER *dd, DICE_SID *ds)
-{
-    if (!is_active_torch(o_ptr)) {
-        return;
-    }
-
-    *dd = 1;
-    *ds = 6;
-}
-
-/*!
  * @brief 投擲時命中したたいまつの寿命を縮める。
  * Torches have special abilities when they are flaming.
  * @param o_ptr 投擲するオブジェクトの構造体参照ポインタ

@@ -111,6 +111,10 @@ static void set_race_flags(lore_type *lore_ptr)
         lore_ptr->kind_flags.set(MonsterKindType::QUANTUM);
     }
 
+    if (lore_ptr->r_ptr->kind_flags.has(MonsterKindType::ANGEL)) {
+        lore_ptr->kind_flags.set(MonsterKindType::ANGEL);
+    }
+
     if (lore_ptr->r_ptr->misc_flags.has(MonsterMiscType::FORCE_DEPTH)) {
         lore_ptr->misc_flags.set(MonsterMiscType::FORCE_DEPTH);
     }
@@ -136,10 +140,9 @@ void process_monster_lore(PlayerType *player_ptr, MonsterRaceId r_idx, monster_l
     lore_type *lore_ptr = &tmp_lore;
 
     auto is_valid_reinforcer = [](const auto &reinforce) {
-        const auto &[r_idx, dd, ds] = reinforce;
-        auto is_reinforce = MonraceList::is_valid(r_idx);
-        is_reinforce &= dd > 0;
-        is_reinforce &= ds > 0;
+        const auto &[monrace_id, num_dice] = reinforce;
+        auto is_reinforce = MonraceList::is_valid(monrace_id);
+        is_reinforce &= num_dice.is_valid();
         return is_reinforce;
     };
 

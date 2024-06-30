@@ -17,6 +17,7 @@
 #include "info-reader/magic-reader.h"
 #include "info-reader/race-reader.h"
 #include "info-reader/skill-reader.h"
+#include "info-reader/spell-reader.h"
 #include "info-reader/vault-reader.h"
 #include "io/files-util.h"
 #include "io/uid-checker.h"
@@ -32,6 +33,7 @@
 #include "system/dungeon-info.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/spell-info-list.h"
 #include "system/terrain-type-definition.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
@@ -181,7 +183,7 @@ void init_class_magics_info()
 {
     init_header(&class_magics_header);
     class_magics_info.assign(PLAYER_CLASS_TYPE_MAX, {});
-    init_info("ClassMagicDefinitions.txt", class_magics_header, class_magics_info, parse_class_magics_info);
+    init_json("ClassMagicDefinitions.jsonc", "classes", class_magics_header, class_magics_info, parse_class_magics_info);
 }
 
 /*!
@@ -233,6 +235,17 @@ void init_monrace_definitions()
 }
 
 /*!
+ * @brief 呪文情報読み込みのメインルーチン
+ */
+void init_spell_info()
+{
+    init_header(&spells_header);
+    auto &spell_info_list = SpellInfoList::get_instance();
+    spell_info_list.initiallize();
+    init_json("SpellDefinitions.jsonc", "realms", spells_header, spell_info_list, parse_spell_info);
+}
+
+/*!
  * @brief Vault情報読み込みのメインルーチン
  * @note
  * Note that we let each entry have a unique "name" and "text" string,
@@ -246,6 +259,7 @@ void init_vaults_info()
 
 static bool read_wilderness_definition(std::ifstream &ifs)
 {
+    auto &world = AngbandWorld::get_instance();
     std::string line;
     while (!ifs.eof()) {
         if (!std::getline(ifs, line)) {
@@ -262,15 +276,15 @@ static bool read_wilderness_definition(std::ifstream &ifs)
         }
 
         if (splits[1] == "WX") {
-            w_ptr->max_wild_x = std::stoi(splits[2]);
+            world.max_wild_x = std::stoi(splits[2]);
         } else if (splits[1] == "WY") {
-            w_ptr->max_wild_y = std::stoi(splits[2]);
+            world.max_wild_y = std::stoi(splits[2]);
         } else {
             return false;
         }
 
-        if ((w_ptr->max_wild_x > 0) && (w_ptr->max_wild_y > 0)) {
-            wilderness.assign(w_ptr->max_wild_y, std::vector<wilderness_type>(w_ptr->max_wild_x));
+        if ((world.max_wild_x > 0) && (world.max_wild_y > 0)) {
+            wilderness.assign(world.max_wild_y, std::vector<wilderness_type>(world.max_wild_x));
             init_wilderness_encounter();
             return true;
         }

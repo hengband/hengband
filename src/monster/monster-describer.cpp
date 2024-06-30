@@ -126,7 +126,7 @@ static std::string get_describing_monster_name(const MonsterEntity &monster, con
 {
     const auto &monrace = monster.get_appearance_monrace();
     if (!is_hallucinated || any_bits(mode, MD_IGNORE_HALLU)) {
-        return any_bits(mode, MD_TRUE_NAME) ? monster.get_real_monrace().name : monrace.name;
+        return any_bits(mode, MD_TRUE_NAME) ? monster.get_real_monrace().name.string() : monrace.name.string();
     }
 
     if (one_in_(2)) {
@@ -142,7 +142,7 @@ static std::string get_describing_monster_name(const MonsterEntity &monster, con
     do {
         hallu_race = &monraces.pick_monrace_at_random();
     } while (hallu_race->kind_flags.has(MonsterKindType::UNIQUE));
-    return hallu_race->name;
+    return hallu_race->name.string();
 }
 
 #ifdef JP

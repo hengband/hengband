@@ -54,7 +54,7 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
         return true;
     }
 
-    for (this->index = 0; this->index < MAX_MIND_POWERS; this->index++) {
+    for (this->index = 0; this->index < std::ssize(this->mind_ptr->info); this->index++) {
         if (mind_ptr->info[this->index].min_lev <= this->player_ptr->lev) {
             this->num++;
         }
@@ -253,7 +253,7 @@ void MindPowerGetter::display_each_mind_chance()
 {
     const auto has_weapon_main = has_melee_weapon(this->player_ptr, INVEN_MAIN_HAND);
     const auto has_weapon_sub = has_melee_weapon(this->player_ptr, INVEN_SUB_HAND);
-    for (this->index = 0; this->index < MAX_MIND_POWERS; this->index++) {
+    for (this->index = 0; this->index < std::ssize(mind_ptr->info); this->index++) {
         this->spell = &mind_ptr->info[this->index];
         if (this->spell->min_lev > this->player_ptr->lev) {
             break;

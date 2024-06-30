@@ -24,12 +24,12 @@ constexpr std::string_view ROOT_VARIANT_NAME("Hengband");
 #define H_VER_MAJOR 3 //!< ゲームのバージョン定義(メジャー番号)
 #define H_VER_MINOR 0 //!< ゲームのバージョン定義(マイナー番号)
 #define H_VER_PATCH 1 //!< ゲームのバージョン定義(パッチ番号)
-#define H_VER_EXTRA 15 //!< ゲームのバージョン定義(エクストラ番号)
+#define H_VER_EXTRA 16 //!< ゲームのバージョン定義(エクストラ番号)
 
 /*!
  * @brief セーブファイルのバージョン(3.0.0から導入)
  */
-constexpr uint32_t SAVEFILE_VERSION = 22;
+constexpr uint32_t SAVEFILE_VERSION = 23;
 
 /*!
  * @brief バージョンが開発版が安定版かを返す(廃止予定)
@@ -48,4 +48,27 @@ enum class VersionStatusType {
  */
 constexpr VersionStatusType VERSION_STATUS = VersionStatusType::BETA;
 
-std::string get_version();
+enum class VersionExpression {
+    WITHOUT_EXTRA,
+    WITH_EXTRA,
+    FULL,
+};
+
+class AngbandVersion {
+public:
+    AngbandVersion() = default;
+    AngbandVersion(uint8_t major, uint8_t minor, uint8_t patch, uint8_t extra)
+        : major(major)
+        , minor(minor)
+        , patch(patch)
+        , extra(extra)
+    {
+    }
+
+    uint8_t major = 0; //!< 変愚蛮怒バージョン(メジャー番号)
+    uint8_t minor = 0; //!< 変愚蛮怒バージョン(マイナー番号)
+    uint8_t patch = 0; //!< 変愚蛮怒バージョン(パッチ番号)
+    uint8_t extra = 0; //!< 変愚蛮怒バージョン(エクストラ番号)
+
+    std::string build_expression(VersionExpression expression) const;
+};

@@ -412,6 +412,7 @@
     <ClCompile Include="..\..\src\info-reader\race-info-tokens-table.cpp" />
     <ClCompile Include="..\..\src\info-reader\race-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\skill-reader.cpp" />
+    <ClCompile Include="..\..\src\info-reader\spell-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\vault-reader.cpp" />
     <ClCompile Include="..\..\src\inventory\floor-item-getter.cpp" />
     <ClCompile Include="..\..\src\inventory\item-selection-util.cpp" />
@@ -632,6 +633,7 @@
     <ClCompile Include="..\..\src\tracking\lore-tracker.cpp" />
     <ClCompile Include="..\..\src\util\candidate-selector.cpp" />
     <ClCompile Include="..\..\src\util\rng-xoshiro.cpp" />
+    <ClCompile Include="..\..\src\util\dice.cpp" />
     <ClCompile Include="..\..\src\util\sha256.cpp" />
     <ClCompile Include="..\..\src\view\display-inventory.cpp" />
     <ClCompile Include="..\..\src\view\display-map.cpp" />
@@ -887,7 +889,7 @@
     <ClCompile Include="..\..\src\io-dump\special-class-dump.cpp" />
     <ClCompile Include="..\..\src\io\tokenizer.cpp" />
     <ClCompile Include="..\..\src\io\write-diary.cpp" />
-    <ClCompile Include="..\..\src\market\arena-info-table.cpp" />
+    <ClCompile Include="..\..\src\market\arena-entry.cpp" />
     <ClCompile Include="..\..\src\store\articles-on-sale.cpp" />
     <ClCompile Include="..\..\src\store\black-market.cpp" />
     <ClCompile Include="..\..\src\market\building-util.cpp" />
@@ -919,6 +921,7 @@
     <ClCompile Include="..\..\src\flavor\object-flavor.cpp" />
     <ClCompile Include="..\..\src\object\item-tester-hooker.cpp" />
     <ClCompile Include="..\..\src\system\baseitem-info.cpp" />
+    <ClCompile Include="..\..\src\system\spell-info-list.cpp" />
     <ClCompile Include="..\..\src\object\object-kind-hook.cpp" />
     <ClCompile Include="..\..\src\object\object-broken.cpp" />
     <ClCompile Include="..\..\src\object\lite-processor.cpp" />
@@ -1201,6 +1204,7 @@
     <ClInclude Include="..\..\src\info-reader\race-reader.h" />
     <ClInclude Include="..\..\src\info-reader\random-grid-effect-types.h" />
     <ClInclude Include="..\..\src\info-reader\skill-reader.h" />
+    <ClInclude Include="..\..\src\info-reader\spell-reader.h" />
     <ClInclude Include="..\..\src\info-reader\vault-reader.h" />
     <ClInclude Include="..\..\src\inventory\floor-item-getter.h" />
     <ClInclude Include="..\..\src\inventory\inventory-slot-types.h" />
@@ -1702,6 +1706,7 @@
     <ClCompile Include="..\..\src\player\player-move.cpp" />
     <ClCompile Include="..\..\src\io\files-util.cpp" />
     <ClCompile Include="..\..\src\grid\grid.cpp" />
+    <ClCompile Include="..\..\src\locale\localized-string.cpp" />
     <ClCompile Include="..\..\src\locale\japanese.cpp" />
     <ClCompile Include="..\..\src\load\load.cpp" />
     <ClCompile Include="..\..\src\main-win.cpp" />
@@ -1828,6 +1833,7 @@
     <ClInclude Include="..\..\src\util\angband-files.h" />
     <ClInclude Include="..\..\src\util\object-sort.h" />
     <ClInclude Include="..\..\src\util\rng-xoshiro.h" />
+    <ClInclude Include="..\..\src\util\dice.h" />
     <ClInclude Include="..\..\src\util\sha256.h" />
     <ClInclude Include="..\..\src\util\string-processor.h" />
     <ClInclude Include="..\..\src\view\display-symbol.h" />
@@ -1874,7 +1880,7 @@
     <ClInclude Include="..\..\src\io-dump\special-class-dump.h" />
     <ClInclude Include="..\..\src\io\tokenizer.h" />
     <ClInclude Include="..\..\src\io\write-diary.h" />
-    <ClInclude Include="..\..\src\market\arena-info-table.h" />
+    <ClInclude Include="..\..\src\market\arena-entry.h" />
     <ClInclude Include="..\..\src\store\articles-on-sale.h" />
     <ClInclude Include="..\..\src\store\black-market.h" />
     <ClInclude Include="..\..\src\market\building-util.h" />
@@ -1929,6 +1935,7 @@
     <ClInclude Include="..\..\src\wizard\wizard-spoiler.h" />
     <ClInclude Include="..\..\src\world\world-movement-processor.h" />
     <ClInclude Include="..\..\src\world\world-turn-processor.h" />
+    <ClInclude Include="..\..\src\locale\localized-string.h" />
     <ClInclude Include="..\..\src\locale\japanese.h" />
     <ClInclude Include="..\..\src\combat\aura-counterattack.h" />
     <ClInclude Include="..\..\src\wizard\tval-descriptions-table.h" />
@@ -1972,6 +1979,7 @@
     <ClInclude Include="..\..\src\object\object-info.h" />
     <ClInclude Include="..\..\src\object\object-kind-hook.h" />
     <ClInclude Include="..\..\src\system\baseitem-info.h" />
+    <ClInclude Include="..\..\src\system\spell-info-list.h" />
     <ClInclude Include="..\..\src\player\patron.h" />
     <ClInclude Include="..\..\src\player-info\class-info.h" />
     <ClInclude Include="..\..\src\player\player-damage.h" />

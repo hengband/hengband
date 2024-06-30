@@ -1,6 +1,6 @@
 #include "wizard/monster-info-spoiler.h"
 #include "io/files-util.h"
-#include "system/angband-version.h"
+#include "system/angband-system.h"
 #include "system/monster-race-info.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
@@ -78,7 +78,8 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
-    ofs << format("Monster Spoilers for %s\n", get_version().data());
+    constexpr auto fmt_version = "Monster Spoilers for %s\n";
+    ofs << format(fmt_version, AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL).data());
     ofs << "------------------------------------------\n\n";
     ofs << format("%-45.45s%4s %4s %4s %7s %7s  %19.19s\n", "Name", "Lev", "Rar", "Spd", "Hp", "Ac", "Visual Info");
     ofs << format("%-45.45s%4s %4s %4s %7s %7s  %4.19s\n",
@@ -116,10 +117,10 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
         const auto spd = format("%+d", monrace.speed - STANDARD_SPEED);
         const auto ac = format("%d", monrace.ac);
         std::string hp;
-        if (monrace.misc_flags.has(MonsterMiscType::FORCE_MAXHP) || (monrace.hside == 1)) {
-            hp = format("%d", monrace.hdice * monrace.hside);
+        if (monrace.misc_flags.has(MonsterMiscType::FORCE_MAXHP) || (monrace.hit_dice.sides == 1)) {
+            hp = format("%d", monrace.hit_dice.maxroll());
         } else {
-            hp = format("%dd%d", monrace.hdice, monrace.hside);
+            hp = monrace.hit_dice.to_string();
         }
 
         const auto symbol = format("%s '%c'", attr_to_text(monrace).data(), monrace.symbol_definition.character);
@@ -161,7 +162,8 @@ SpoilerOutputResultType spoil_mon_info()
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
-    spoil_out(std::string("Monster Spoilers for ").append(get_version()).append("\n"));
+    constexpr auto fmt_version = "Monster Spoilers for %s\n";
+    spoil_out(format(fmt_version, AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL).data()));
     spoil_out("------------------------------------------\n\n");
 
     const auto &monraces = MonraceList::get_instance();
@@ -175,7 +177,7 @@ SpoilerOutputResultType spoil_mon_info()
             spoil_out("[N] ");
         }
 
-        spoil_out(format(_("%s/%s  (", "%s%s ("), monrace.name.data(), _(monrace.E_name.data(), ""))); /* ---)--- */
+        spoil_out(format(_("%s/%s  (", "%s%s ("), monrace.name.data(), _(monrace.name.en_string().data(), ""))); /* ---)--- */
         spoil_out(attr_to_text(monrace));
         spoil_out(format(" '%c')\n", monrace.symbol_definition.character));
         spoil_out("=== ");
@@ -183,10 +185,10 @@ SpoilerOutputResultType spoil_mon_info()
         spoil_out(format("Lev:%d  ", (int)monrace.level));
         spoil_out(format("Rar:%d  ", monrace.rarity));
         spoil_out(format("Spd:%+d  ", monrace.speed - STANDARD_SPEED));
-        if (monrace.misc_flags.has(MonsterMiscType::FORCE_MAXHP) || (monrace.hside == 1)) {
-            spoil_out(format("Hp:%d  ", monrace.hdice * monrace.hside));
+        if (monrace.misc_flags.has(MonsterMiscType::FORCE_MAXHP) || (monrace.hit_dice.sides == 1)) {
+            spoil_out(format("Hp:%d  ", monrace.hit_dice.maxroll()));
         } else {
-            spoil_out(format("Hp:%dd%d  ", monrace.hdice, monrace.hside));
+            spoil_out(format("Hp:%s  ", monrace.hit_dice.to_string().data()));
         }
 
         spoil_out(format("Ac:%d  ", monrace.ac));

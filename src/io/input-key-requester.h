@@ -45,13 +45,13 @@ private:
     char input_repeat_num();
     void process_command_command(short &cmd);
     void process_control_command(short &cmd);
-    void change_shopping_command();
-    int get_caret_command();
+    void change_shopping_command() const;
+    int get_caret_command() const;
     void sweep_confirmation_equipments();
     void confirm_command(const std::optional<std::string> &inscription, const int caret_command);
 
-    void make_commands_frame();
-    std::string switch_special_menu_condition(const SpecialMenuContent &special_menu);
+    void make_commands_frame() const;
+    std::string switch_special_menu_condition(const SpecialMenuContent &special_menu) const;
     int get_command_per_menu_num();
     bool check_continuous_command();
     bool check_escape_key(const int old_num);

@@ -56,6 +56,6 @@ void effect_player_curse_4(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
 
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
     if (!check_multishadow(player_ptr)) {
-        (void)BadStatusSetter(player_ptr).mod_cut(damroll(10, 10));
+        (void)BadStatusSetter(player_ptr).mod_cut(static_cast<TIME_EFFECT>(Dice::roll(10, 10)));
     }
 }

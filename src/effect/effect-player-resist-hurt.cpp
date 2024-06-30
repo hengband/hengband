@@ -613,7 +613,7 @@ void effect_player_icee(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
 
     BadStatusSetter bss(player_ptr);
     if (!has_resist_shard(player_ptr)) {
-        (void)bss.mod_cut(damroll(5, 8));
+        (void)bss.mod_cut(static_cast<TIME_EFFECT>(Dice::roll(5, 8)));
     }
 
     if (!has_resist_sound(player_ptr)) {

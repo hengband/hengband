@@ -23,12 +23,13 @@ int total_friends = 0;
  */
 bool can_player_ride_pet(PlayerType *player_ptr, const Grid *g_ptr, bool now_riding)
 {
-    bool old_character_xtra = w_ptr->character_xtra;
-    MONSTER_IDX old_riding = player_ptr->riding;
-    bool old_riding_two_hands = player_ptr->riding_ryoute;
-    bool old_old_riding_two_hands = player_ptr->old_riding_ryoute;
-    bool old_pf_two_hands = any_bits(player_ptr->pet_extra_flags, PF_TWO_HANDS);
-    w_ptr->character_xtra = true;
+    auto &world = AngbandWorld::get_instance();
+    const auto old_character_xtra = world.character_xtra;
+    const auto old_riding = player_ptr->riding;
+    const auto old_riding_two_hands = player_ptr->riding_ryoute;
+    const auto old_old_riding_two_hands = player_ptr->old_riding_ryoute;
+    const auto old_pf_two_hands = any_bits(player_ptr->pet_extra_flags, PF_TWO_HANDS);
+    world.character_xtra = true;
 
     if (now_riding) {
         player_ptr->riding = g_ptr->m_idx;
@@ -55,7 +56,7 @@ bool can_player_ride_pet(PlayerType *player_ptr, const Grid *g_ptr, bool now_rid
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
 
-    w_ptr->character_xtra = old_character_xtra;
+    world.character_xtra = old_character_xtra;
     return p_can_enter;
 }
 

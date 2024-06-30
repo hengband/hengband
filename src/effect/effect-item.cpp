@@ -224,7 +224,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
             break;
         }
         case AttributeType::ANIM_DEAD: {
-            if (o_ptr->bi_key.tval() != ItemKindType::CORPSE) {
+            if (o_ptr->bi_key.tval() != ItemKindType::MONSTER_REMAINS) {
                 break;
             }
 

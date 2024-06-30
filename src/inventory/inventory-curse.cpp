@@ -32,6 +32,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include "world/world.h"
 #include <optional>
 #include <string>
 
@@ -449,7 +450,7 @@ static void occur_curse_effects(PlayerType *player_ptr)
 {
     auto is_cursed = player_ptr->cursed.has_any_of(TRC_P_FLAG_MASK);
     is_cursed |= player_ptr->cursed_special.has_any_of(TRCS_P_FLAG_MASK);
-    if (!is_cursed || AngbandSystem::get_instance().is_phase_out() || player_ptr->wild_mode) {
+    if (!is_cursed || AngbandSystem::get_instance().is_phase_out() || AngbandWorld::get_instance().is_wild_mode()) {
         return;
     }
 

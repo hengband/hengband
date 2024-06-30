@@ -22,8 +22,6 @@ RandomArtActType grab_one_activation_flag(std::string_view what);
 void append_english_text(std::string &text, std::string_view add);
 #endif
 
-errr info_set_dice(std::string_view dice_str, DICE_NUMBER &dd, DICE_SID &ds);
-
 /// @note clang-formatによるconceptの整形が安定していないので抑制しておく
 // clang-format off
 /*!

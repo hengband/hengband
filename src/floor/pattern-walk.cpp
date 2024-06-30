@@ -152,7 +152,7 @@ bool pattern_effect(PlayerType *player_ptr)
         if (PlayerRace(player_ptr).equals(PlayerRaceType::AMBERITE) && !one_in_(2)) {
             return true;
         } else if (!is_invuln(player_ptr)) {
-            take_hit(player_ptr, DAMAGE_NOESCAPE, damroll(1, 3), _("「パターン」を歩いたダメージ", "walking the Pattern"));
+            take_hit(player_ptr, DAMAGE_NOESCAPE, Dice::roll(1, 3), _("「パターン」を歩いたダメージ", "walking the Pattern"));
         }
         break;
     }
@@ -245,7 +245,7 @@ bool pattern_seq(PlayerType *player_ptr, const Pos2D &pos)
         ok_move = PATTERN_TILE_1;
         break;
     default:
-        if (w_ptr->wizard) {
+        if (AngbandWorld::get_instance().wizard) {
             msg_format(_("おかしなパターン歩行、%d。", "Funny Pattern walking, %d."), pattern_type_cur);
         }
         return true;

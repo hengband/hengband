@@ -1,4 +1,5 @@
 #include "system/monster-entity.h"
+#include "core/speed-table.h"
 #include "game-option/birth-options.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-kind-flags.h"
@@ -124,7 +125,7 @@ bool MonsterEntity::is_mimicry() const
     }
 
     const auto &monrace = this->get_appearance_monrace();
-    if (monrace.symbol_char_is_any_of(R"(/|\()[]="$,.!?&`#%<>+~)")) {
+    if (!monrace.symbol_char_is_any_of(R"(/|\()[]="$,.!?&`#%<>+~)")) {
         return false;
     }
 
@@ -389,6 +390,29 @@ std::optional<bool> MonsterEntity::order_pet_dismission(const MonsterEntity &oth
 }
 
 /*!
+ * @brief モンスターの個体加速を設定する / Get initial monster speed
+ * @param force_fixed_speed 速度を固定にする(個体差を適用しない)か否か
+ */
+void MonsterEntity::set_individual_speed(bool force_fixed_speed)
+{
+    const auto &monrace = this->get_monrace();
+    auto speed = monrace.speed;
+    if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE) && !force_fixed_speed) {
+        /* Allow some small variation per monster */
+        int i = speed_to_energy(monrace.speed) / (one_in_(4) ? 3 : 10);
+        if (i) {
+            speed += static_cast<uint8_t>(rand_spread(0, i));
+        }
+    }
+
+    if (speed > STANDARD_SPEED + 99) {
+        speed = STANDARD_SPEED + 99;
+    }
+
+    this->mspeed = speed;
+}
+
+/*!
  * @brief モンスターを敵に回す
  */
 void MonsterEntity::set_hostile()
@@ -398,6 +422,16 @@ void MonsterEntity::set_hostile()
     }
 
     this->mflag2.reset({ MonsterConstantFlagType::PET, MonsterConstantFlagType::FRIENDLY });
+}
+
+/*
+ * 捕獲・死亡の際にカメレオンの変身を元に戻す
+ */
+void MonsterEntity::reset_chameleon_polymorph()
+{
+    auto real_monrace_id = this->get_real_monrace_id();
+    this->r_idx = real_monrace_id;
+    this->ap_r_idx = real_monrace_id;
 }
 
 std::string MonsterEntity::get_pronoun_of_summoned_kin() const

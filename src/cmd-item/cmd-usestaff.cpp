@@ -38,7 +38,9 @@
 #include "sv-definition/sv-staff-types.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/dice.h"
 #include "view/display-messages.h"
+#include "world/world.h"
 
 /*!
  * @brief 杖の効果を発動する
@@ -129,7 +131,7 @@ int staff_effect(PlayerType *player_ptr, int sval, bool *use_charge, bool powerf
         break;
 
     case SV_STAFF_LITE: {
-        if (lite_area(player_ptr, damroll(2, 8), (powerful ? 4 : 2))) {
+        if (lite_area(player_ptr, Dice::roll(2, 8), (powerful ? 4 : 2))) {
             ident = true;
         }
         break;
@@ -190,7 +192,7 @@ int staff_effect(PlayerType *player_ptr, int sval, bool *use_charge, bool powerf
     }
 
     case SV_STAFF_CURE_LIGHT: {
-        ident = cure_light_wounds(player_ptr, (powerful ? 4 : 2), 8);
+        ident = cure_light_wounds(player_ptr, Dice::roll(powerful ? 4 : 2, 8));
         break;
     }
 
@@ -307,7 +309,7 @@ int staff_effect(PlayerType *player_ptr, int sval, bool *use_charge, bool powerf
  */
 void do_cmd_use_staff(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         return;
     }
 

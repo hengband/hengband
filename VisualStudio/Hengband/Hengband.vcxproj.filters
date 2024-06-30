@@ -74,7 +74,7 @@
     <ClCompile Include="..\..\src\market\play-gamble.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\arena-info-table.cpp">
+    <ClCompile Include="..\..\src\market\arena-entry.cpp">
       <Filter>market</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\player\race-info-table.cpp">
@@ -426,6 +426,9 @@
       <Filter>locale</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\locale\japanese.cpp">
+      <Filter>locale</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\locale\localized-string.cpp">
       <Filter>locale</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\grid\grid.cpp">
@@ -981,6 +984,9 @@
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\info-reader\skill-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\spell-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\info-reader\magic-reader.cpp">
@@ -2433,6 +2439,9 @@
     <ClCompile Include="..\..\src\system\baseitem-info.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\spell-info-list.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\system\floor-type-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
@@ -2468,6 +2477,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\net\http-client.cpp">
       <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\dice.cpp">
+      <Filter>util</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\util\sha256.cpp">
       <Filter>util</Filter>
@@ -2579,7 +2591,7 @@
     <ClInclude Include="..\..\src\market\play-gamble.h">
       <Filter>market</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\market\arena-info-table.h">
+    <ClInclude Include="..\..\src\market\arena-entry.h">
       <Filter>market</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\race-info-table.h">
@@ -3623,6 +3635,9 @@
     <ClInclude Include="..\..\src\info-reader\skill-reader.h">
       <Filter>info-reader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\spell-reader.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\info-reader\magic-reader.h">
       <Filter>info-reader</Filter>
     </ClInclude>
@@ -3888,6 +3903,9 @@
       <Filter>locale</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\locale\english.h">
+      <Filter>locale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\locale\localized-string.h">
       <Filter>locale</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\asking-player.h">
@@ -5343,6 +5361,9 @@
     <ClInclude Include="..\..\src\system\baseitem-info.h">
       <Filter>system</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\system\spell-info-list.h">
+      <Filter>system</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\system\dungeon-info.h">
       <Filter>system</Filter>
     </ClInclude>
@@ -5374,6 +5395,9 @@
       <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\util\finalizer.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\dice.h">
       <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\util\sha256.h">

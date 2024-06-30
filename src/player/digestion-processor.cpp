@@ -34,7 +34,7 @@ void starve_player(PlayerType *player_ptr)
 
     if (player_ptr->food >= PY_FOOD_MAX) {
         (void)set_food(player_ptr, player_ptr->food - 100);
-    } else if (!(w_ptr->game_turn % (TURNS_PER_TICK * 5))) {
+    } else if (AngbandWorld::get_instance().game_turn % (TURNS_PER_TICK * 5) == 0) {
         int digestion = speed_to_energy(player_ptr->pspeed);
         if (player_ptr->regenerate) {
             digestion += 20;
@@ -65,7 +65,7 @@ void starve_player(PlayerType *player_ptr)
         return;
     }
 
-    if (!player_ptr->effects()->paralysis().is_paralyzed() && (randint0(100) < 10)) {
+    if (!player_ptr->effects()->paralysis().is_paralyzed() && one_in_(10)) {
         msg_print(_("あまりにも空腹で気絶してしまった。", "You faint from the lack of food."));
         disturb(player_ptr, true, true);
         (void)BadStatusSetter(player_ptr).mod_paralysis(1 + randint0(5));
@@ -198,7 +198,7 @@ bool set_food(PlayerType *player_ptr, TIME_EFFECT v)
             break;
         }
 
-        if (player_ptr->wild_mode && (new_aux < 2)) {
+        if (AngbandWorld::get_instance().is_wild_mode() && (new_aux < 2)) {
             change_wild_mode(player_ptr, false);
         }
 

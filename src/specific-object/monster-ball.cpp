@@ -100,11 +100,12 @@ static bool release_monster(PlayerType *player_ptr, ItemEntity &item, DIRECTION 
         return false;
     }
 
-    if (!place_specific_monster(player_ptr, 0, pos.y, pos.x, monrace.idx, PM_FORCE_PET | PM_NO_KAGE)) {
+    const auto m_idx = place_specific_monster(player_ptr, 0, pos.y, pos.x, monrace.idx, PM_FORCE_PET | PM_NO_KAGE);
+    if (!m_idx) {
         return false;
     }
 
-    auto &monster = player_ptr->current_floor_ptr->m_list[hack_m_idx_ii];
+    auto &monster = player_ptr->current_floor_ptr->m_list[*m_idx];
     if (item.captured_monster_speed > 0) {
         monster.mspeed = item.captured_monster_speed;
     }

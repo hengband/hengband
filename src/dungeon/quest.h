@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 #include "util/enum-converter.h"
+#include "util/enum-range.h"
 #include <map>
 #include <string>
 #include <vector>
@@ -59,6 +60,7 @@ enum class QuestId : short{
 	RANDOM_QUEST10 = 49, /*<! ランダムクエストを割り当てるクエストIDの終了値 */
 };
 
+constexpr auto RANDOM_QUEST_ID_RANGE = EnumRangeInclusive(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10);
 constexpr auto MIN_RANDOM_QUEST = enum2i(QuestId::RANDOM_QUEST1);
 constexpr auto MAX_RANDOM_QUEST = enum2i(QuestId::RANDOM_QUEST10);
 

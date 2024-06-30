@@ -42,7 +42,7 @@ void screen_save()
 
     term_save();
 
-    w_ptr->character_icky_depth++;
+    AngbandWorld::get_instance().character_icky_depth++;
     screen_depth++;
 }
 
@@ -54,20 +54,18 @@ void screen_save()
 void screen_load(ScreenLoadOptType opt)
 {
     msg_print(nullptr);
-
+    auto &world = AngbandWorld::get_instance();
     switch (opt) {
     case ScreenLoadOptType::ONE:
         term_load(false);
-        w_ptr->character_icky_depth--;
+        world.character_icky_depth--;
         screen_depth--;
         break;
-
     case ScreenLoadOptType::ALL:
         term_load(true);
-        w_ptr->character_icky_depth -= static_cast<byte>(screen_depth);
+        world.character_icky_depth -= static_cast<byte>(screen_depth);
         screen_depth = 0;
         break;
-
     default:
         break;
     }

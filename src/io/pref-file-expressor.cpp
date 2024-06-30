@@ -25,26 +25,22 @@
  *   result
  * </pre>
  */
-concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
+std::string process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
 {
-    char *s;
-    s = (*sp);
+    char *s = (*sp);
     while (iswspace(*s)) {
         s++;
     }
 
-    char *b;
-    b = s;
+    char *b = s;
 
-    concptr v = "?o?o?";
+    std::string v = "?o?o?";
 
-    char b1 = '[';
-    char b2 = ']';
-    char f = ' ';
-    static char tmp[16];
+    constexpr auto b1 = '[';
+    constexpr auto b2 = ']';
+    auto f = ' ';
     if (*s == b1) {
-        concptr p;
-        concptr t;
+        std::string t;
 
         /* Skip b1 */
         s++;
@@ -52,63 +48,61 @@ concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
         /* First */
         t = process_pref_file_expr(player_ptr, &s, &f);
 
-        if (!*t) {
-        } else if (streq(t, "IOR")) {
+        if (t.empty()) {
+        } else if (t == "IOR") {
             v = "0";
             while (*s && (f != b2)) {
                 t = process_pref_file_expr(player_ptr, &s, &f);
-                if (*t && !streq(t, "0")) {
+                if (!t.empty() && t != "0") {
                     v = "1";
                 }
             }
-        } else if (streq(t, "AND")) {
+        } else if (t == "AND") {
             v = "1";
             while (*s && (f != b2)) {
                 t = process_pref_file_expr(player_ptr, &s, &f);
-                if (*t && streq(t, "0")) {
+                if (!t.empty() && t == "0") {
                     v = "0";
                 }
             }
-        } else if (streq(t, "NOT")) {
+        } else if (t == "NOT") {
             v = "1";
             while (*s && (f != b2)) {
                 t = process_pref_file_expr(player_ptr, &s, &f);
-                if (*t && streq(t, "1")) {
+                if (!t.empty() && t == "1") {
                     v = "0";
                 }
             }
-        } else if (streq(t, "EQU")) {
+        } else if (t == "EQU") {
             v = "0";
             if (*s && (f != b2)) {
                 t = process_pref_file_expr(player_ptr, &s, &f);
             }
             while (*s && (f != b2)) {
-                p = process_pref_file_expr(player_ptr, &s, &f);
-                if (streq(t, p)) {
+                auto p = process_pref_file_expr(player_ptr, &s, &f);
+                if (t == p) {
                     v = "1";
                 }
             }
-        } else if (streq(t, "LEQ")) {
+        } else if (t == "LEQ") {
             v = "1";
             if (*s && (f != b2)) {
                 t = process_pref_file_expr(player_ptr, &s, &f);
             }
             while (*s && (f != b2)) {
-                p = t;
-                t = process_pref_file_expr(player_ptr, &s, &f);
-                if (*t && atoi(p) > atoi(t)) {
+                auto p = process_pref_file_expr(player_ptr, &s, &f);
+                if (!p.empty() && atoi(t.data()) > atoi(p.data())) {
                     v = "0";
                 }
             }
-        } else if (streq(t, "GEQ")) {
+        } else if (t == "GEQ") {
             v = "1";
             if (*s && (f != b2)) {
                 t = process_pref_file_expr(player_ptr, &s, &f);
             }
             while (*s && (f != b2)) {
-                p = t;
-                t = process_pref_file_expr(player_ptr, &s, &f);
-                if (*t && atoi(p) < atoi(t)) {
+                auto p = process_pref_file_expr(player_ptr, &s, &f);
+                if (!p.empty() && atoi(t.data()) < atoi(p.data())) {
                     v = "0";
                 }
             }
@@ -169,17 +163,9 @@ concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
             v = "OFF";
         }
     } else if (streq(b + 1, "RACE")) {
-#ifdef JP
-        v = rp_ptr->E_title;
-#else
-        v = rp_ptr->title;
-#endif
+        v = rp_ptr->title.en_string();
     } else if (streq(b + 1, "CLASS")) {
-#ifdef JP
-        v = cp_ptr->E_title;
-#else
-        v = cp_ptr->title;
-#endif
+        v = cp_ptr->title.en_string();
     } else if (streq(b + 1, "PLAYER")) {
         static char tmp_player_name[32];
         char *pn, *tpn;
@@ -197,21 +183,11 @@ concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
         *tpn = '\0';
         v = tmp_player_name;
     } else if (streq(b + 1, "REALM1")) {
-#ifdef JP
-        v = E_realm_names[player_ptr->realm1];
-#else
-        v = realm_names[player_ptr->realm1];
-#endif
+        v = realm_names[player_ptr->realm1].en_string();
     } else if (streq(b + 1, "REALM2")) {
-#ifdef JP
-        v = E_realm_names[player_ptr->realm2];
-#else
-        v = realm_names[player_ptr->realm2];
-#endif
+        v = realm_names[player_ptr->realm2].en_string();
     } else if (streq(b + 1, "LEVEL")) {
-        const auto plev = format("%02d", player_ptr->lev);
-        angband_strcpy(tmp, plev, sizeof(tmp));
-        v = tmp;
+        v = format("%02d", player_ptr->lev);
     } else if (streq(b + 1, "AUTOREGISTER")) {
         if (player_ptr->autopick_autoregister) {
             v = "1";
@@ -219,9 +195,7 @@ concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
             v = "0";
         }
     } else if (streq(b + 1, "MONEY")) {
-        const auto au = format("%09ld", (long int)player_ptr->au);
-        angband_strcpy(tmp, au, sizeof(tmp));
-        v = tmp;
+        v = format("%09ld", (long int)player_ptr->au);
     }
 
     *fp = f;

@@ -37,7 +37,7 @@
 void process_eat_gold(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     const auto is_paralyzed = player_ptr->effects()->paralysis().is_paralyzed();
-    if (!is_paralyzed && (randint0(100) < (adj_dex_safe[player_ptr->stat_index[A_DEX]] + player_ptr->lev))) {
+    if (!is_paralyzed && evaluate_percent((adj_dex_safe[player_ptr->stat_index[A_DEX]] + player_ptr->lev))) {
         msg_print(_("しかし素早く財布を守った！", "You quickly protect your money pouch!"));
         if (randint0(3)) {
             monap_ptr->blinked = true;
@@ -95,7 +95,7 @@ bool check_eat_item(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
     }
 
     const auto is_paralyzed = player_ptr->effects()->paralysis().is_paralyzed();
-    if (!is_paralyzed && (randint0(100) < (adj_dex_safe[player_ptr->stat_index[A_DEX]] + player_ptr->lev))) {
+    if (!is_paralyzed && evaluate_percent((adj_dex_safe[player_ptr->stat_index[A_DEX]] + player_ptr->lev))) {
         msg_print(_("しかしあわててザックを取り返した！", "You grab hold of your backpack!"));
         monap_ptr->blinked = true;
         monap_ptr->obvious = true;
@@ -176,7 +176,7 @@ void process_eat_food(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         }
 
         const auto tval = monap_ptr->o_ptr->bi_key.tval();
-        if ((tval != ItemKindType::FOOD) && !((tval == ItemKindType::CORPSE) && (monap_ptr->o_ptr->bi_key.sval() != 0))) {
+        if ((tval != ItemKindType::FOOD) && !((tval == ItemKindType::MONSTER_REMAINS) && (monap_ptr->o_ptr->bi_key.sval() != 0))) {
             continue;
         }
 
@@ -295,7 +295,7 @@ void process_drain_life(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr, 
     }
 
     bool did_heal = monap_ptr->m_ptr->hp < monap_ptr->m_ptr->maxhp;
-    monap_ptr->m_ptr->hp += damroll(4, monap_ptr->damage / 6);
+    monap_ptr->m_ptr->hp += Dice::roll(4, monap_ptr->damage / 6);
     if (monap_ptr->m_ptr->hp > monap_ptr->m_ptr->maxhp) {
         monap_ptr->m_ptr->hp = monap_ptr->m_ptr->maxhp;
     }

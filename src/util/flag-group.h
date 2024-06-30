@@ -9,7 +9,11 @@
 #include <type_traits>
 
 template <typename T>
+    requires std::is_enum_v<T>
 class EnumRange;
+template <typename T>
+    requires std::is_enum_v<T>
+class EnumRangeInclusive;
 
 namespace flag_group {
 
@@ -130,6 +134,19 @@ public:
      * @param range 範囲を示すEnumRangeクラスのオブジェクト
      */
     constexpr FlagGroup(const EnumRange<FlagType> &range)
+        : FlagGroup(range.begin(), range.end())
+    {
+    }
+
+    /**
+     * @brief FlagGroupクラスのコンストラクタ
+     *
+     * EnumRangeInclusiveクラスで指定した範囲のフラグがON、それ以外はOFFの状態の
+     * FlagGroupクラスのインスタンスを生成する
+     *
+     * @param range 範囲を示すEnumRangeクラスのオブジェクト
+     */
+    constexpr FlagGroup(const EnumRangeInclusive<FlagType> &range)
         : FlagGroup(range.begin(), range.end())
     {
     }

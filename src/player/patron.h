@@ -1,5 +1,6 @@
 #pragma once
 
+#include "locale/localized-string.h"
 #include "system/angband.h"
 #include <string>
 #include <vector>
@@ -54,13 +55,8 @@ enum player_ability_type : int;
  */
 class Patron {
 public:
-    std::string name; //!< パトロン名
-#ifdef JP
-    std::string ename; //!< PatronName
-    Patron(const char *name, const char *ename, std::vector<patron_reward> reward_table, const player_ability_type boost_stat);
-#else
-    Patron(const char *name, std::vector<patron_reward> reward_table, const player_ability_type boost_stat);
-#endif
+    LocalizedString name; //!< パトロン名
+    Patron(LocalizedString &&name, std::vector<patron_reward> reward_table, const player_ability_type boost_stat);
 
     // @note C4458 クラスメンバーの隠蔽 への対応として末尾に「_」を付ける.
     void gain_level_reward(PlayerType *player_ptr_, int chosen_reward);

@@ -25,9 +25,9 @@
 #include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
+#include "player/player-realm.h"
 #include "player/special-defense-types.h"
 #include "racial/racial-android.h"
-#include "realm/realm-names-table.h"
 #include "status/action-setter.h"
 #include "status/experience.h"
 #include "system/baseitem-info.h"
@@ -129,7 +129,7 @@ static bool decide_magic_book_exp(PlayerType *player_ptr, const ItemEntity &dest
     }
 
     auto is_good_magic_realm = (tval == ItemKindType::LIFE_BOOK) || (tval == ItemKindType::CRUSADE_BOOK);
-    if (is_good_realm(player_ptr->realm1)) {
+    if (PlayerRealm(player_ptr).realm1().is_good_attribute()) {
         return !is_good_magic_realm;
     } else {
         return is_good_magic_realm;

@@ -40,7 +40,7 @@ OBJECT_IDX o_pop(FloorType *floor_ptr)
         return i;
     }
 
-    if (w_ptr->character_dungeon) {
+    if (AngbandWorld::get_instance().character_dungeon) {
         msg_print(_("アイテムが多すぎる！", "Too many objects!"));
     }
 

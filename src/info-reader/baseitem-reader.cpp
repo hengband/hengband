@@ -258,7 +258,7 @@ errr parse_baseitems_info(nlohmann::json &item_data, angband_header *)
         msg_format(_("アイテムのベースAC読込失敗。ID: '%d'。", "Failed to load base AC of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_dice(item_data["base_dice"], baseitem.dd, baseitem.ds, false)) {
+    if (auto err = info_set_dice(item_data["base_dice"], baseitem.damage_dice, false)) {
         msg_format(_("アイテムのベースダイス読込失敗。ID: '%d'。", "Failed to load base dice of item. ID: '%d'."), error_idx);
         return err;
     }

@@ -86,8 +86,8 @@ static errr process_pref_file_aux(PlayerType *player_ptr, const std::filesystem:
         if (line_str->starts_with("?:")) {
             char f;
             char *s = line_str->data() + 2;
-            concptr v = process_pref_file_expr(player_ptr, &s, &f);
-            bypass = streq(v, "0");
+            auto v = process_pref_file_expr(player_ptr, &s, &f);
+            bypass = v == "0";
             continue;
         }
 
@@ -201,11 +201,12 @@ errr process_autopick_file(PlayerType *player_ptr, std::string_view name)
  */
 errr process_histpref_file(PlayerType *player_ptr, std::string_view name)
 {
-    bool old_character_xtra = w_ptr->character_xtra;
+    auto &world = AngbandWorld::get_instance();
+    const auto old_character_xtra = world.character_xtra;
     const auto path = path_build(ANGBAND_DIR_USER, name);
-    w_ptr->character_xtra = true;
+    world.character_xtra = true;
     errr err = process_pref_file_aux(player_ptr, path, PREF_TYPE_HISTPREF);
-    w_ptr->character_xtra = old_character_xtra;
+    world.character_xtra = old_character_xtra;
     return err;
 }
 

@@ -43,7 +43,7 @@ static void heal_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     }
 
     bool did_heal = mam_ptr->m_ptr->hp < mam_ptr->m_ptr->maxhp;
-    mam_ptr->m_ptr->hp += damroll(4, mam_ptr->damage / 6);
+    mam_ptr->m_ptr->hp += Dice::roll(4, mam_ptr->damage / 6);
     if (mam_ptr->m_ptr->hp > mam_ptr->m_ptr->maxhp) {
         mam_ptr->m_ptr->hp = mam_ptr->m_ptr->maxhp;
     }
@@ -99,7 +99,7 @@ static void aura_fire_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         monrace_target.aura_flags.set(MonsterAuraType::FIRE);
     }
 
-    const auto dam = damroll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
+    const auto dam = Dice::roll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
     constexpr auto flags = PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED;
     project(player_ptr, mam_ptr->t_idx, 0, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, dam, AttributeType::FIRE, flags);
 }
@@ -126,7 +126,7 @@ static void aura_cold_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         monrace_target.aura_flags.set(MonsterAuraType::COLD);
     }
 
-    const auto dam = damroll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
+    const auto dam = Dice::roll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
     constexpr auto flags = PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED;
     project(player_ptr, mam_ptr->t_idx, 0, monster.fy, monster.fx, dam, AttributeType::COLD, flags);
 }
@@ -153,7 +153,7 @@ static void aura_elec_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         monrace_target.aura_flags.set(MonsterAuraType::ELEC);
     }
 
-    const auto dam = damroll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
+    const auto dam = Dice::roll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
     constexpr auto flags = PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED;
     project(player_ptr, mam_ptr->t_idx, 0, monster.fy, monster.fx, dam, AttributeType::ELEC, flags);
 }
@@ -248,7 +248,7 @@ static void process_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     describe_melee_method(player_ptr, mam_ptr);
     describe_silly_melee(mam_ptr);
     mam_ptr->obvious = true;
-    mam_ptr->damage = damroll(mam_ptr->d_dice, mam_ptr->d_side);
+    mam_ptr->damage = mam_ptr->damage_dice.roll();
     mam_ptr->attribute = BlowEffectType::NONE;
     mam_ptr->pt = AttributeType::MONSTER_MELEE;
     decide_monster_attack_effect(player_ptr, mam_ptr);
@@ -299,8 +299,7 @@ void repeat_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     for (int ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
         mam_ptr->effect = r_ptr->blows[ap_cnt].effect;
         mam_ptr->method = r_ptr->blows[ap_cnt].method;
-        mam_ptr->d_dice = r_ptr->blows[ap_cnt].d_dice;
-        mam_ptr->d_side = r_ptr->blows[ap_cnt].d_side;
+        mam_ptr->damage_dice = r_ptr->blows[ap_cnt].damage_dice;
 
         if (!m_ptr->is_valid()) {
             break;

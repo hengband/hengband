@@ -105,7 +105,7 @@ bool MonsterDamageProcessor::mon_take_hit(std::string_view note)
         monster.dealt_damage = monster.max_maxhp * 100;
     }
 
-    if (w_ptr->wizard) {
+    if (AngbandWorld::get_instance().wizard) {
         msg_format(_("合計%d/%dのダメージを与えた。", "You do %d (out of %d) damage."), monster.dealt_damage, monster.maxhp);
     }
 
@@ -379,8 +379,8 @@ void MonsterDamageProcessor::get_exp_from_mon(const MonsterEntity &monster, int 
     auto div_l = (uint)((this->player_ptr->max_plv + 2) * speed_to_energy(monrace.speed));
 
     /* Use (average maxhp * 2) as a denominator */
-    auto compensation = monrace.misc_flags.has(MonsterMiscType::FORCE_MAXHP) ? monrace.hside * 2 : monrace.hside + 1;
-    s64b_mul(&div_h, &div_l, 0, monrace.hdice * (ironman_nightmare ? 2 : 1) * compensation);
+    int compensation = monrace.misc_flags.has(MonsterMiscType::FORCE_MAXHP) ? monrace.hit_dice.maxroll() * 2 : monrace.hit_dice.floored_expected_value_multiplied_by(2);
+    s64b_mul(&div_h, &div_l, 0, (ironman_nightmare ? 2 : 1) * compensation);
 
     /* Special penalty in the wilderness */
     if (!this->player_ptr->current_floor_ptr->is_in_underground()) {
@@ -493,7 +493,7 @@ void MonsterDamageProcessor::add_monster_fear()
     }
 
     int percentage = (100L * m_ptr->hp) / m_ptr->maxhp;
-    if ((randint1(10) < percentage) && ((this->dam < m_ptr->hp) || (randint0(100) >= 80))) {
+    if ((randint1(10) < percentage) && ((this->dam < m_ptr->hp) || evaluate_percent(20))) {
         return;
     }
 

@@ -2,7 +2,7 @@
 #include "dungeon/quest.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
-#include "market/arena-info-table.h"
+#include "market/arena-entry.h"
 #include "monster/monster-status.h"
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"
@@ -38,19 +38,18 @@ struct condition_layout_info {
  */
 void print_title(PlayerType *player_ptr)
 {
-    GAME_TEXT str[14];
-    concptr p = "";
-    if (w_ptr->wizard) {
+    std::string p;
+    const auto &world = AngbandWorld::get_instance();
+    if (world.wizard) {
         p = _("[ウィザード]", "[=-WIZARD-=]");
-    } else if (w_ptr->total_winner) {
-        if (player_ptr->is_true_winner()) {
+    } else if (world.total_winner) {
+        if (world.is_player_true_winner()) {
             p = _("*真・勝利者*", "*TRUEWINNER*");
         } else {
             p = _("***勝利者***", "***WINNER***");
         }
     } else {
-        angband_strcpy(str, player_titles[enum2i(player_ptr->pclass)][(player_ptr->lev - 1) / 5], sizeof(str));
-        p = str;
+        p = player_titles.at(player_ptr->pclass).at((player_ptr->lev - 1) / 5);
     }
 
     print_field(p, ROW_TITLE, COL_TITLE);
@@ -242,14 +241,10 @@ void print_depth(PlayerType *player_ptr)
  */
 void print_frame_basic(PlayerType *player_ptr)
 {
-    if (player_ptr->mimic_form != MimicKindType::NONE) {
-        print_field(mimic_info.at(player_ptr->mimic_form).title, ROW_RACE, COL_RACE);
-    } else {
-        char str[14];
-        angband_strcpy(str, rp_ptr->title, sizeof(str));
-        print_field(str, ROW_RACE, COL_RACE);
-    }
-
+    const auto title = player_ptr->mimic_form == MimicKindType::NONE
+                           ? rp_ptr->title
+                           : mimic_info.at(player_ptr->mimic_form).title;
+    print_field(title, ROW_RACE, COL_RACE);
     print_title(player_ptr);
     print_level(player_ptr);
     print_exp(player_ptr);
@@ -360,7 +355,7 @@ void print_health(PlayerType *player_ptr, bool riding)
         col = COL_RIDING_INFO;
     } else {
         // ウィザードモードで闘技場観戦時の表示
-        if (w_ptr->wizard && AngbandSystem::get_instance().is_phase_out()) {
+        if (AngbandWorld::get_instance().wizard && AngbandSystem::get_instance().is_phase_out()) {
             print_health_monster_in_arena_for_wizard(player_ptr);
             return;
         }

@@ -118,7 +118,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         }
 
         msg_print(_("集中している...", "You concentrate..."));
-        fire_bolt(player_ptr, AttributeType::PSI, dir, damroll(3 + ((lvl - 1) / 5), 3));
+        fire_bolt(player_ptr, AttributeType::PSI, dir, Dice::roll(3 + ((lvl - 1) / 5), 3));
         return true;
     }
     case PlayerMutationType::RADIATION:
@@ -159,7 +159,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         (void)aggravate_monsters(player_ptr, 0);
         return true;
     case PlayerMutationType::ILLUMINE:
-        (void)lite_area(player_ptr, damroll(2, (lvl / 2)), (lvl / 10) + 1);
+        (void)lite_area(player_ptr, Dice::roll(2, (lvl / 2)), (lvl / 10) + 1);
         return true;
     case PlayerMutationType::DET_CURSE:
         for (int i = 0; i < INVEN_TOTAL; i++) {

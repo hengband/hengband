@@ -83,11 +83,11 @@ void wizard_player_modifier(PlayerType *player_ptr)
     case 'k':
         self_knowledge(player_ptr);
         break;
+    case 'l':
+        roll_hitdice(player_ptr, i2enum<spell_operation>(SPOP_DISPLAY_MES | SPOP_DEBUG));
+        break;
     case 'm':
         (void)gain_mutation(player_ptr, command_arg);
-        break;
-    case 'n':
-        roll_hitdice(player_ptr, i2enum<spell_operation>(SPOP_DISPLAY_MES | SPOP_DEBUG));
         break;
     case 'r':
         wiz_reset_race(player_ptr);

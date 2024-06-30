@@ -21,7 +21,7 @@
 #include "player/player-personality.h"
 #include "player/player-status.h"
 #include "realm/realm-names-table.h"
-#include "system/angband-version.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/inner-game-data.h"
@@ -268,12 +268,12 @@ concptr make_screen_dump(PlayerType *player_ptr)
 bool report_score(PlayerType *player_ptr)
 {
     std::stringstream score_ss;
-    std::string personality_desc = ap_ptr->title;
+    std::string personality_desc = ap_ptr->title.string();
     personality_desc.append(_(ap_ptr->no ? "の" : "", " "));
 
-    auto realm1_name = PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST) ? get_element_title(player_ptr->element) : realm_names[player_ptr->realm1];
+    auto realm1_name = PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST) ? get_element_title(player_ptr->element) : realm_names[player_ptr->realm1].data();
     score_ss << format("name: %s\n", player_ptr->name)
-             << format("version: %s\n", get_version().data())
+             << format("version: %s\n", AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL).data())
              << format("score: %ld\n", calc_score(player_ptr))
              << format("level: %d\n", player_ptr->lev)
              << format("depth: %d\n", player_ptr->current_floor_ptr->dun_level)
@@ -281,13 +281,13 @@ bool report_score(PlayerType *player_ptr)
              << format("maxdp: %d\n", max_dlv[DUNGEON_ANGBAND])
              << format("au: %d\n", player_ptr->au);
     const auto &igd = InnerGameData::get_instance();
-    score_ss << format("turns: %d\n", igd.get_real_turns(w_ptr->game_turn))
+    score_ss << format("turns: %d\n", igd.get_real_turns(AngbandWorld::get_instance().game_turn))
              << format("sex: %d\n", player_ptr->psex)
-             << format("race: %s\n", rp_ptr->title)
-             << format("class: %s\n", cp_ptr->title)
+             << format("race: %s\n", rp_ptr->title.data())
+             << format("class: %s\n", cp_ptr->title.data())
              << format("seikaku: %s\n", personality_desc.data())
              << format("realm1: %s\n", realm1_name)
-             << format("realm2: %s\n", realm_names[player_ptr->realm2])
+             << format("realm2: %s\n", realm_names[player_ptr->realm2].data())
              << format("killer: %s\n", player_ptr->died_from.data())
              << "-----charcter dump-----\n";
 

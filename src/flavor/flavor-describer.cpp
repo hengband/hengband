@@ -145,8 +145,11 @@ static std::string describe_weapon_dice(PlayerType *player_ptr, const ItemEntity
     }
 
     const auto is_bonus = (player_ptr->riding > 0) && item.is_lance();
-    const auto bonus = is_bonus ? 2 : 0;
-    return format(" (%dd%d)", item.dd + bonus, item.ds);
+    auto bonused_dice = item.damage_dice;
+    if (is_bonus) {
+        bonused_dice.num += 2;
+    }
+    return format(" (%s)", bonused_dice.to_string().data());
 }
 
 static std::string describe_bow_power(PlayerType *player_ptr, const ItemEntity &item, const describe_option_type &opt)
@@ -245,7 +248,7 @@ static std::string describe_fire_energy(PlayerType *player_ptr, const ItemEntity
 
 static std::string describe_ammo_detail(PlayerType *player_ptr, const ItemEntity &ammo, const ItemEntity &bow, const describe_option_type &opt)
 {
-    auto avgdam = ammo.dd * (ammo.ds + 1) * 10 / 2;
+    auto avgdam = ammo.damage_dice.floored_expected_value_multiplied_by(10);
     auto tmul = bow.get_arrow_magnification();
     if (bow.is_known()) {
         avgdam += (bow.to_d * 10);

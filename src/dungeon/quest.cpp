@@ -267,8 +267,9 @@ void record_quest_final_status(QuestType *q_ptr, PLAYER_LEVEL lev, QuestStatusTy
 {
     q_ptr->status = stat;
     q_ptr->complev = lev;
-    w_ptr->update_playtime();
-    q_ptr->comptime = w_ptr->play_time;
+    auto &world = AngbandWorld::get_instance();
+    world.update_playtime();
+    q_ptr->comptime = world.play_time;
 }
 
 /*!
@@ -340,7 +341,7 @@ void quest_discovery(QuestId quest_id)
 #ifdef JP
     const auto &name = monrace.name;
 #else
-    const auto &name = (num_subjugation != 1) ? pluralize(monrace.name) : monrace.name;
+    const auto &name = (num_subjugation != 1) ? pluralize(monrace.name) : monrace.name.string();
 #endif
 
     msg_print(rand_choice(quest_entered_messages));
@@ -431,8 +432,9 @@ void leave_tower_check(PlayerType *player_ptr)
     }
     tower1.status = QuestStatusType::FAILED;
     tower1.complev = player_ptr->lev;
-    w_ptr->update_playtime();
-    tower1.comptime = w_ptr->play_time;
+    auto &world = AngbandWorld::get_instance();
+    world.update_playtime();
+    tower1.comptime = world.play_time;
 }
 
 /*!
@@ -454,7 +456,7 @@ void exe_enter_quest(PlayerType *player_ptr, QuestId quest_id)
  */
 void do_cmd_quest(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         return;
     }
 

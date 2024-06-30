@@ -6,5 +6,4 @@ enum class MindKindType {
     BERSERKER = 2, /*!< 特殊能力: 怒り */
     MIRROR_MASTER = 3, /*!< 特殊能力: 鏡魔法 */
     NINJUTSU = 4, /*!< 特殊能力: 忍術 */
-    ELEMENTAL = 5, //!< 特殊能力: 元素魔法 */
 };

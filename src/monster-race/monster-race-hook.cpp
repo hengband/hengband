@@ -849,7 +849,7 @@ bool monster_can_entry_arena(PlayerType *player_ptr, MonsterRaceId r_idx)
 
     for (const auto &blow : monrace.blows) {
         if (blow.effect != RaceBlowEffectType::DR_MANA) {
-            dam += blow.d_dice;
+            dam += blow.damage_dice.num;
         }
     }
 

@@ -69,8 +69,8 @@ static void compare_weapon_aux(PlayerType *player_ptr, ItemEntity *o_ptr, int co
     bool force = false;
     bool dokubari = false;
 
-    int eff_dd = o_ptr->dd + player_ptr->to_dd[0];
-    int eff_ds = o_ptr->ds + player_ptr->to_ds[0];
+    int eff_dd = o_ptr->damage_dice.num + player_ptr->damage_dice_bonus[0].num;
+    int eff_ds = o_ptr->damage_dice.sides + player_ptr->damage_dice_bonus[0].sides;
 
     int mindice = eff_dd;
     int maxdice = eff_ds * eff_dd;
@@ -104,7 +104,7 @@ static void compare_weapon_aux(PlayerType *player_ptr, ItemEntity *o_ptr, int co
         show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("切れ味:", "Vorpal:"), TERM_L_RED);
     }
 
-    if (!PlayerClass(player_ptr).equals(PlayerClassType::SAMURAI) && flags.has(TR_FORCE_WEAPON) && (player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) {
+    if (!PlayerClass(player_ptr).equals(PlayerClassType::SAMURAI) && flags.has(TR_FORCE_WEAPON) && (player_ptr->csp > (o_ptr->damage_dice.maxroll() / 5))) {
         force = true;
 
         mindam = calc_expect_dice(player_ptr, mindice, 1, 1, force, o_ptr->weight, o_ptr->to_h, player_ptr->to_h[0], dokubari, impact, vorpal_mult, vorpal_div);
@@ -257,8 +257,8 @@ static void compare_weapon_aux(PlayerType *player_ptr, ItemEntity *o_ptr, int co
  */
 static void list_weapon(PlayerType *player_ptr, ItemEntity *o_ptr, TERM_LEN row, TERM_LEN col)
 {
-    const auto eff_dd = o_ptr->dd + player_ptr->to_dd[0];
-    const auto eff_ds = o_ptr->ds + player_ptr->to_ds[0];
+    const auto eff_dd = o_ptr->damage_dice.num + player_ptr->damage_dice_bonus[0].num;
+    const auto eff_ds = o_ptr->damage_dice.sides + player_ptr->damage_dice_bonus[0].sides;
     const auto hit_reliability = player_ptr->skill_thn + (player_ptr->to_h[0] + o_ptr->to_h) * BTH_PLUS_ADJ;
     const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
     c_put_str(TERM_YELLOW, item_name, row, col);
@@ -300,7 +300,8 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
     ItemEntity orig_weapon;
     TERM_LEN row = 2;
     TERM_LEN wid = 38, mgn = 2;
-    bool old_character_xtra = w_ptr->character_xtra;
+    auto &world = AngbandWorld::get_instance();
+    bool old_character_xtra = world.character_xtra;
     char ch;
     PRICE total = 0;
     PRICE cost = 0; /* First time no price */
@@ -326,7 +327,7 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     while (true) {
         clear_bldg(0, 22);
-        w_ptr->character_xtra = true;
+        world.character_xtra = true;
         for (int i = 0; i < n; i++) {
             int col = (wid * i + mgn);
             if (o_ptr[i] != i_ptr) {
@@ -344,7 +345,7 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
         rfu.set_flag(StatusRecalculatingFlag::BONUS);
         handle_stuff(player_ptr);
 
-        w_ptr->character_xtra = old_character_xtra;
+        world.character_xtra = old_character_xtra;
 #ifdef JP
         put_str(format("[ 比較対象: 's'で変更 ($%d) ]", cost), 1, (wid + mgn));
         put_str("(一番高いダメージが適用されます。複数の倍打効果は足し算されません。)", row + 4, 0);

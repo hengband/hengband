@@ -20,6 +20,7 @@
 #include "status/action-setter.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "world/world.h"
 
 /*!
  * @brief 読むコマンドのメインルーチン /
@@ -27,7 +28,7 @@
  */
 void do_cmd_read_scroll(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode || cmd_limit_arena(player_ptr)) {
+    if (AngbandWorld::get_instance().is_wild_mode() || cmd_limit_arena(player_ptr)) {
         return;
     }
 

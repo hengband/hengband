@@ -103,7 +103,7 @@ bool research_mon(PlayerType *player_ptr)
                 }
             }
 
-            std::string temp2 = _(monrace.E_name, monrace.name);
+            std::string temp2 = monrace.name.en_string();
             for (auto &ch : temp2) {
                 if (isupper(ch)) {
                     ch = static_cast<char>(tolower(ch));
@@ -111,7 +111,7 @@ bool research_mon(PlayerType *player_ptr)
             }
 
 #ifdef JP
-            if (str_find(temp2, monster_name) || str_find(monrace.name, monster_name))
+            if (str_find(temp2, monster_name) || str_find(monrace.name.string(), monster_name))
 #else
             if (str_find(temp2, monster_name))
 #endif

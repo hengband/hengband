@@ -184,9 +184,9 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, MindMindcrafterType spell)
         }
 
         if (randint1(100) < plev * 2) {
-            fire_beam(player_ptr, AttributeType::PSI, dir, damroll(3 + ((plev - 1) / 4), (3 + plev / 15)));
+            fire_beam(player_ptr, AttributeType::PSI, dir, Dice::roll(3 + ((plev - 1) / 4), (3 + plev / 15)));
         } else {
-            fire_ball(player_ptr, AttributeType::PSI, dir, damroll(3 + ((plev - 1) / 4), (3 + plev / 15)), 0);
+            fire_ball(player_ptr, AttributeType::PSI, dir, Dice::roll(3 + ((plev - 1) / 4), (3 + plev / 15)), 0);
         }
         break;
     case MindMindcrafterType::MINOR_DISPLACEMENT:
@@ -212,7 +212,7 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, MindMindcrafterType spell)
             return false;
         }
 
-        fire_ball(player_ptr, AttributeType::TELEKINESIS, dir, damroll(8 + ((plev - 5) / 4), 8), (plev > 20 ? (plev - 20) / 8 + 1 : 0));
+        fire_ball(player_ptr, AttributeType::TELEKINESIS, dir, Dice::roll(8 + ((plev - 5) / 4), 8), (plev > 20 ? (plev - 20) / 8 + 1 : 0));
         break;
     case MindMindcrafterType::CHARACTER_ARMOR:
         set_shield(player_ptr, (TIME_EFFECT)plev, false);
@@ -273,7 +273,7 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, MindMindcrafterType spell)
             return false;
         }
 
-        dam = damroll(plev / 2, 6);
+        dam = Dice::roll(plev / 2, 6);
         if (fire_ball(player_ptr, AttributeType::PSI_DRAIN, dir, dam, 0)) {
             player_ptr->energy_need += randnum1<short>(150);
         }

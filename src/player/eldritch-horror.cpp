@@ -56,7 +56,8 @@ static bool process_mod_hallucination(PlayerType *player_ptr, std::string_view m
  */
 void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
 {
-    if (AngbandSystem::get_instance().is_phase_out() || !w_ptr->character_dungeon) {
+    const auto &world = AngbandWorld::get_instance();
+    if (AngbandSystem::get_instance().is_phase_out() || !world.character_dungeon) {
         return;
     }
 
@@ -74,7 +75,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
             power *= 2;
         }
 
-        if (!w_ptr->is_loading_now) {
+        if (!world.is_loading_now) {
             return;
         }
 
@@ -94,7 +95,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
             return;
         }
 
-        if (saving_throw(player_ptr->skill_sav - power)) {
+        if (evaluate_percent(player_ptr->skill_sav - power)) {
             return;
         }
 
@@ -108,7 +109,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
         case PlayerRaceLifeType::DEMON:
             return;
         case PlayerRaceLifeType::UNDEAD:
-            if (saving_throw(25 + player_ptr->lev)) {
+            if (evaluate_percent(25 + player_ptr->lev)) {
                 return;
             }
             break;
@@ -127,7 +128,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
 #else
 
         if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
-            m_name = (is_a_vowel(desc[0])) ? "an " : "a ";
+            m_name = (is_a_vowel(desc.data()[0])) ? "an " : "a ";
         }
 #endif
         m_name.append(desc);
@@ -140,7 +141,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
             power *= 2;
         }
 
-        if (saving_throw(player_ptr->skill_sav * 100 / power)) {
+        if (evaluate_percent(player_ptr->skill_sav * 100 / power)) {
             msg_format(_("夢の中で%sに追いかけられた。", "%s^ chases you through your dreams."), m_name.data());
             return;
         }
@@ -153,12 +154,12 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
         monrace.r_misc_flags.set(MonsterMiscType::ELDRITCH_HORROR);
         switch (PlayerRace(player_ptr).life()) {
         case PlayerRaceLifeType::DEMON:
-            if (saving_throw(20 + player_ptr->lev)) {
+            if (evaluate_percent(20 + player_ptr->lev)) {
                 return;
             }
             break;
         case PlayerRaceLifeType::UNDEAD:
-            if (saving_throw(10 + player_ptr->lev)) {
+            if (evaluate_percent(10 + player_ptr->lev)) {
                 return;
             }
             break;
@@ -172,7 +173,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
     /* 過去の効果無効率再現のため5回saving_throw 実行 */
     auto save = true;
     for (auto i = 0; i < 5; i++) {
-        save &= saving_throw(player_ptr->skill_sav - power);
+        save &= evaluate_percent(player_ptr->skill_sav - power);
     }
 
     if (save) {
@@ -264,11 +265,11 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
 
         do {
             (void)do_dec_stat(player_ptr, A_INT);
-        } while (randint0(100) > player_ptr->skill_sav && one_in_(2));
+        } while (!player_ptr->try_resist_eldritch_horror());
 
         do {
             (void)do_dec_stat(player_ptr, A_WIS);
-        } while (randint0(100) > player_ptr->skill_sav && one_in_(2));
+        } while (!player_ptr->try_resist_eldritch_horror());
 
         break;
     }

@@ -29,7 +29,7 @@ void reduce_lite_life(PlayerType *player_ptr)
     }
 
     if (o_ptr->ego_idx == EgoType::LITE_LONG) {
-        if (w_ptr->game_turn % (TURNS_PER_TICK * 2)) {
+        if (AngbandWorld::get_instance().game_turn % (TURNS_PER_TICK * 2)) {
             o_ptr->fuel--;
         }
     } else {
@@ -64,7 +64,7 @@ void notice_lite_change(PlayerType *player_ptr, ItemEntity *o_ptr)
         };
         rfu.set_flags(flags);
     } else if (o_ptr->ego_idx == EgoType::LITE_LONG) {
-        if ((o_ptr->fuel < 50) && (!(o_ptr->fuel % 5)) && (w_ptr->game_turn % (TURNS_PER_TICK * 2))) {
+        if ((o_ptr->fuel < 50) && (!(o_ptr->fuel % 5)) && (AngbandWorld::get_instance().game_turn % (TURNS_PER_TICK * 2))) {
             if (disturb_minor) {
                 disturb(player_ptr, false, true);
             }

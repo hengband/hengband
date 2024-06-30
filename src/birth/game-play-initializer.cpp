@@ -5,6 +5,7 @@
 #include "game-option/cheat-options.h"
 #include "info-reader/fixed-map-parser.h"
 #include "inventory/inventory-slot-types.h"
+#include "market/arena-entry.h"
 #include "market/arena.h"
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
@@ -110,12 +111,13 @@ void player_wipe_without_name(PlayerType *player_ptr)
     cheat_turn = false;
     cheat_immortal = false;
 
-    w_ptr->total_winner = false;
+    auto &world = AngbandWorld::get_instance();
+    world.total_winner = false;
     player_ptr->timewalk = false;
     player_ptr->panic_save = 0;
 
-    w_ptr->noscore = 0;
-    w_ptr->wizard = false;
+    world.noscore = 0;
+    world.wizard = false;
     player_ptr->wait_report_score = false;
     player_ptr->pet_follow_distance = PET_FOLLOW_DIST;
     player_ptr->pet_extra_flags = (PF_TELEPORT | PF_ATTACK_SPELL | PF_SUMMON_SPELL);
@@ -125,12 +127,12 @@ void player_wipe_without_name(PlayerType *player_ptr)
     }
 
     player_ptr->visit = 1;
-    player_ptr->wild_mode = false;
+    world.set_wild_mode(false);
 
     player_ptr->max_plv = player_ptr->lev = 1;
-    player_ptr->arena_number = 0;
-    w_ptr->set_arena(true);
-    w_ptr->knows_daily_bounty = false;
+    ArenaEntryList::get_instance().reset_entry();
+    world.set_arena(true);
+    world.knows_daily_bounty = false;
     update_gambling_monsters(player_ptr);
     player_ptr->muta.clear();
 
@@ -159,7 +161,7 @@ void init_dungeon_quests(PlayerType *player_ptr)
     floor.quest_number = QuestId::RANDOM_QUEST1;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
     floor.quest_number = QuestId::NONE;
-    for (auto quest_id : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
+    for (auto quest_id : RANDOM_QUEST_ID_RANGE) {
         auto &quest = quests.get_quest(quest_id);
         quest.status = QuestStatusType::TAKEN;
         determine_random_questor(player_ptr, quest);
@@ -187,13 +189,14 @@ void init_dungeon_quests(PlayerType *player_ptr)
  */
 void init_turn(PlayerType *player_ptr)
 {
+    auto &world = AngbandWorld::get_instance();
     if (PlayerRace(player_ptr).life() == PlayerRaceLifeType::UNDEAD) {
-        w_ptr->game_turn = (TURNS_PER_TICK * 3 * TOWN_DAWN) / 4 + 1;
+        world.game_turn = (TURNS_PER_TICK * 3 * TOWN_DAWN) / 4 + 1;
     } else {
-        w_ptr->game_turn = 1;
+        world.game_turn = 1;
     }
 
     InnerGameData::get_instance().init_turn_limit();
-    w_ptr->dungeon_turn = 1;
-    w_ptr->dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+    world.dungeon_turn = 1;
+    world.dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
 }

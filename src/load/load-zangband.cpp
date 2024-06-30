@@ -1,6 +1,5 @@
 #include "load/load-zangband.h"
 #include "avatar/avatar.h"
-#include "cmd-building/cmd-building.h"
 #include "dungeon/quest.h"
 #include "game-option/option-flags.h"
 #include "info-reader/fixed-map-parser.h"
@@ -17,6 +16,7 @@
 #include "player/player-skill.h"
 #include "realm/realm-types.h"
 #include "spell/spells-status.h"
+#include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/inner-game-data.h"
@@ -122,7 +122,7 @@ void set_zangband_bounty_uniques(PlayerType *player_ptr)
 {
     determine_bounty_uniques(player_ptr);
     const auto &monraces = MonraceList::get_instance();
-    for (auto &[monrace_id, is_achieved] : w_ptr->bounties) {
+    for (auto &[monrace_id, is_achieved] : AngbandWorld::get_instance().bounties) {
         /* Is this bounty unique already dead? */
         if (monraces.get_monrace(monrace_id).max_num == 0) {
             is_achieved = true;
@@ -160,8 +160,9 @@ void set_zangband_game_turns(PlayerType *player_ptr)
 {
     player_ptr->current_floor_ptr->generated_turn /= 2;
     player_ptr->feeling_turn /= 2;
-    w_ptr->game_turn /= 2;
-    w_ptr->dungeon_turn /= 2;
+    auto &world = AngbandWorld::get_instance();
+    world.game_turn /= 2;
+    world.dungeon_turn /= 2;
 }
 
 void set_zangband_gambling_monsters(int i)
@@ -214,22 +215,22 @@ void set_zangband_class(PlayerType *player_ptr)
 {
     PlayerClass pc(player_ptr);
     if (h_older_than(0, 2, 2) && pc.equals(PlayerClassType::BEASTMASTER) && !player_ptr->is_dead) {
-        player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
+        player_ptr->hit_dice = Dice(1, rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp);
         roll_hitdice(player_ptr, SPOP_NONE);
     }
 
     if (h_older_than(0, 3, 2) && pc.equals(PlayerClassType::ARCHER) && !player_ptr->is_dead) {
-        player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
+        player_ptr->hit_dice = Dice(1, rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp);
         roll_hitdice(player_ptr, SPOP_NONE);
     }
 
     if (h_older_than(0, 2, 6) && pc.equals(PlayerClassType::SORCERER) && !player_ptr->is_dead) {
-        player_ptr->hitdie = rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
+        player_ptr->hit_dice = Dice(1, rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp);
         roll_hitdice(player_ptr, SPOP_NONE);
     }
 
     if (h_older_than(0, 4, 7) && pc.equals(PlayerClassType::BLUE_MAGE) && !player_ptr->is_dead) {
-        player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
+        player_ptr->hit_dice = Dice(1, rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp);
         roll_hitdice(player_ptr, SPOP_NONE);
     }
 }

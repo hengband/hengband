@@ -10,6 +10,7 @@
 #include "player/player-sex.h"
 #include "system/angband.h"
 #include "system/system-variables.h"
+#include "util/dice.h"
 #include "util/flag-group.h"
 #include "util/point-2d.h"
 #include <array>
@@ -29,7 +30,6 @@ class TimedEffects;
 class PlayerType {
 public:
     PlayerType();
-    bool is_true_winner() const;
 
     FloorType *current_floor_ptr{};
     POSITION oldpy{}; /* Previous player location -KMW- */
@@ -43,7 +43,7 @@ public:
     int16_t realm2{}; /* Second magic realm */
     int16_t element{}; //!< 元素使い領域番号 / Elementalist system index
 
-    DICE_SID hitdie{}; /* Hit dice (sides) */
+    Dice hit_dice{}; /* Hit dice */
     uint16_t expfact{}; /* Experience factor
                          * Note: was byte, causing overflow for Amberite
                          * characters (such as Amberite Paladins)
@@ -64,11 +64,9 @@ public:
     PLAYER_LEVEL lev{}; /* Level */
 
     int16_t town_num{}; /* Current town number */
-    int16_t arena_number{}; /* monster number in on_defeat_arena_monster -KMW- */
 
     POSITION wilderness_x{}; /* Coordinates in the wilderness */
     POSITION wilderness_y{};
-    bool wild_mode{};
 
     int mhp{}; /* Max hit pts */
     int chp{}; /* Cur hit pts */
@@ -331,8 +329,7 @@ public:
     BIT_FLAGS see_nocto{}; /* Noctovision */
     bool invoking_midnight_curse{};
 
-    DICE_NUMBER to_dd[2]{}; /* Extra dice/sides */
-    DICE_SID to_ds[2]{};
+    Dice damage_dice_bonus[2]{}; /* Extra damage dice num/sides */
 
     HIT_PROB dis_to_h[2]{}; /*!< 判明している現在の表記上の近接武器命中修正値 /  Known bonus to hit (wield) */
     HIT_PROB dis_to_h_b{}; /*!< 判明している現在の表記上の射撃武器命中修正値 / Known bonus to hit (bow) */
@@ -397,6 +394,8 @@ public:
     bool is_located_at_running_destination() const;
     bool is_located_at(const Pos2D &pos) const;
     bool in_saved_floor() const;
+    int calc_life_rating() const;
+    bool try_resist_eldritch_horror() const;
 
 private:
     std::shared_ptr<TimedEffects> timed_effects;

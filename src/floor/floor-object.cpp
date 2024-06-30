@@ -102,7 +102,7 @@ static void set_ammo_quantity(ItemEntity *j_ptr)
     auto is_ammo = j_ptr->is_ammo();
     is_ammo |= j_ptr->bi_key.tval() == ItemKindType::SPIKE;
     if (is_ammo && !j_ptr->is_fixed_artifact()) {
-        j_ptr->number = damroll(6, 7);
+        j_ptr->number = Dice::roll(6, 7);
     }
 }
 
@@ -353,14 +353,15 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
 #else
     bool plural = (j_ptr->number != 1);
 #endif
+    const auto &world = AngbandWorld::get_instance();
     const auto item_name = describe_flavor(player_ptr, j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    if (!j_ptr->is_fixed_or_random_artifact() && (randint0(100) < chance)) {
+    if (!j_ptr->is_fixed_or_random_artifact() && evaluate_percent(chance)) {
 #ifdef JP
         msg_format("%sは消えた。", item_name.data());
 #else
         msg_format("The %s disappear%s.", item_name.data(), (plural ? "" : "s"));
 #endif
-        if (w_ptr->wizard) {
+        if (world.wizard) {
             msg_print(_("(破損)", "(breakage)"));
         }
 
@@ -440,7 +441,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
 #else
         msg_format("The %s disappear%s.", item_name.data(), (plural ? "" : "s"));
 #endif
-        if (w_ptr->wizard) {
+        if (world.wizard) {
             msg_print(_("(床スペースがない)", "(no floor space)"));
         }
 
@@ -483,7 +484,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
             msg_format("The %s disappear%s.", item_name.data(), (plural ? "" : "s"));
 #endif
 
-            if (w_ptr->wizard) {
+            if (world.wizard) {
                 msg_print(_("(床スペースがない)", "(no floor space)"));
             }
 
@@ -537,7 +538,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
 #else
         msg_format("The %s disappear%s.", item_name.data(), (plural ? "" : "s"));
 #endif
-        if (w_ptr->wizard) {
+        if (world.wizard) {
             msg_print(_("(アイテムが多過ぎる)", "(too many objects)"));
         }
 
@@ -558,7 +559,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
         done = true;
     }
 
-    if (j_ptr->is_fixed_artifact() && w_ptr->character_dungeon) {
+    if (j_ptr->is_fixed_artifact() && world.character_dungeon) {
         artifact.floor_id = player_ptr->floor_id;
     }
 

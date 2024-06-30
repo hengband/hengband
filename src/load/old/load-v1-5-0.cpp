@@ -98,9 +98,9 @@ void rd_item_old(ItemEntity *o_ptr)
 
     o_ptr->to_a = rd_s16b();
     o_ptr->ac = rd_s16b();
-    o_ptr->dd = rd_byte();
 
-    o_ptr->ds = rd_byte();
+    o_ptr->damage_dice.num = rd_byte();
+    o_ptr->damage_dice.sides = rd_byte();
 
     o_ptr->ident = rd_byte();
     rd_FlagGroup_bytes(o_ptr->marked, rd_byte, 1);
@@ -263,9 +263,9 @@ void rd_item_old(ItemEntity *o_ptr)
         if (tval == ItemKindType::CAPTURE) {
             const auto &monrace = o_ptr->get_monrace();
             if (monrace.misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
-                o_ptr->captured_monster_max_hp = maxroll(monrace.hdice, monrace.hside);
+                o_ptr->captured_monster_max_hp = static_cast<short>(monrace.hit_dice.maxroll());
             } else {
-                o_ptr->captured_monster_max_hp = damroll(monrace.hdice, monrace.hside);
+                o_ptr->captured_monster_max_hp = static_cast<short>(monrace.hit_dice.roll());
             }
             if (ironman_nightmare) {
                 o_ptr->captured_monster_max_hp = std::min<short>(MONSTER_MAXHP, o_ptr->captured_monster_max_hp * 2L);
@@ -753,10 +753,11 @@ errr rd_dungeon_old(PlayerType *player_ptr)
         m_ptr->get_real_monrace().cur_num++;
     }
 
+    auto &world = AngbandWorld::get_instance();
     if (h_older_than(0, 3, 13) && !floor_ptr->dun_level && !floor_ptr->inside_arena) {
-        w_ptr->character_dungeon = false;
+        world.character_dungeon = false;
     } else {
-        w_ptr->character_dungeon = true;
+        world.character_dungeon = true;
     }
 
     return 0;

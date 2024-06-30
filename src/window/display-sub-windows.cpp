@@ -9,6 +9,7 @@
 #include "inventory/inventory-util.h"
 #include "locale/japanese.h"
 #include "main/sound-of-music.h"
+#include "mind/mind-elementalist.h"
 #include "mind/mind-explanations-table.h"
 #include "mind/mind-info.h"
 #include "mind/mind-sniper.h"
@@ -20,6 +21,7 @@
 #include "object/object-info.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
+#include "player/player-realm.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"
@@ -389,7 +391,7 @@ void fix_equip(PlayerType *player_ptr)
  */
 void fix_player(PlayerType *player_ptr)
 {
-    w_ptr->update_playtime();
+    AngbandWorld::get_instance().update_playtime();
     display_sub_windows(SubWindowRedrawingFlag::PLAYER,
         [player_ptr] {
             display_player(player_ptr, 0);
@@ -717,7 +719,6 @@ static void display_spell_list(PlayerType *player_ptr)
 {
     TERM_LEN y, x;
     int m[9]{};
-    const magic_type *s_ptr;
 
     clear_from(0);
 
@@ -731,11 +732,15 @@ static void display_spell_list(PlayerType *player_ptr)
         return;
     }
 
+    if (pc.equals(PlayerClassType::ELEMENTALIST)) {
+        display_element_spell_list(player_ptr);
+        return;
+    }
+
     if (pc.has_listed_magics()) {
         PERCENTAGE minfail = 0;
         PLAYER_LEVEL plev = player_ptr->lev;
         PERCENTAGE chance = 0;
-        mind_type spell;
         MindKindType use_mind;
         bool use_hp = false;
 
@@ -764,17 +769,15 @@ static void display_spell_list(PlayerType *player_ptr)
             use_mind = MindKindType::NINJUTSU;
             use_hp = true;
             break;
-        case PlayerClassType::ELEMENTALIST:
-            use_mind = MindKindType::ELEMENTAL;
-            break;
         default:
             use_mind = MindKindType::MINDCRAFTER;
             break;
         }
 
-        for (int i = 0; i < MAX_MIND_POWERS; i++) {
+        const auto &mind_power = mind_powers[enum2i(use_mind)];
+        for (int i = 0; i < std::ssize(mind_power.info); i++) {
             byte a = TERM_WHITE;
-            spell = mind_powers[static_cast<int>(use_mind)].info[i];
+            const auto &spell = mind_power.info[i];
             if (spell.min_lev > plev) {
                 break;
             }
@@ -824,17 +827,12 @@ static void display_spell_list(PlayerType *player_ptr)
         for (int i = 0; i < 32; i++) {
             byte a = TERM_WHITE;
 
-            if (!is_magic((j < 1) ? player_ptr->realm1 : player_ptr->realm2)) {
-                s_ptr = &technic_info[((j < 1) ? player_ptr->realm1 : player_ptr->realm2) - MIN_TECHNIC][i % 32];
-            } else {
-                s_ptr = &mp_ptr->info[((j < 1) ? player_ptr->realm1 : player_ptr->realm2) - 1][i % 32];
-            }
-
             const auto realm = (j < 1) ? player_ptr->realm1 : player_ptr->realm2;
+            const auto &spell = PlayerRealm::get_spell_info(realm, i % 32);
             const auto spell_name = exe_spell(player_ptr, realm, i % 32, SpellProcessType::NAME);
             auto name = spell_name->data();
 
-            if (s_ptr->slevel >= 99) {
+            if (spell.slevel >= 99) {
                 name = _("(判読不能)", "(illegible)");
                 a = TERM_L_DARK;
             } else if ((j < 1) ? ((player_ptr->spell_forgotten1 & (1UL << i))) : ((player_ptr->spell_forgotten2 & (1UL << (i % 32))))) {

@@ -18,7 +18,7 @@
 
 enum class ItemKindType : short {
     NONE = 0,
-    SKELETON = 1, /* Skeletons ('s'), not specified */
+    FLAVOR_SKELETON = 1, /* Skeletons ('~'), not specified */
     BOTTLE = 2, /* Empty bottles ('!') */
     JUNK = 3, /* Sticks, Pottery, etc ('~') */
     WHISTLE = 4, /* Whistle ('~') */
@@ -26,7 +26,7 @@ enum class ItemKindType : short {
     CHEST = 7, /* Chests ('&') */
     FIGURINE = 8, /* Magical figurines */
     STATUE = 9, /* Statue, what a silly object... */
-    CORPSE = 10, /* Corpses and Skeletons, specific */
+    MONSTER_REMAINS = 10, /* Corpses and Skeletons of the specific monster */
     CAPTURE = 11, /* Monster ball */
     NO_AMMO = 15, /* Ammo for crimson */
     SHOT = 16, /* Ammo for slings */
@@ -74,6 +74,6 @@ enum class ItemKindType : short {
     GOLD = 127, /* Gold can only be picked up by players */
 };
 
-constexpr auto TV_WEARABLE_RANGE = EnumRange(ItemKindType::BOW, ItemKindType::CARD);
-constexpr auto TV_WEAPON_RANGE = EnumRange(ItemKindType::BOW, ItemKindType::SWORD);
-constexpr auto TV_MAGIC_BOOK_RANGE = EnumRange(ItemKindType::LIFE_BOOK, ItemKindType::CRUSADE_BOOK);
+constexpr auto TV_WEARABLE_RANGE = EnumRangeInclusive(ItemKindType::BOW, ItemKindType::CARD);
+constexpr auto TV_WEAPON_RANGE = EnumRangeInclusive(ItemKindType::BOW, ItemKindType::SWORD);
+constexpr auto TV_MAGIC_BOOK_RANGE = EnumRangeInclusive(ItemKindType::LIFE_BOOK, ItemKindType::CRUSADE_BOOK);

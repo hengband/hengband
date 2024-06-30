@@ -21,5 +21,6 @@ extern angband_header class_skills_header;
 extern angband_header dungeons_header;
 extern angband_header egos_header;
 extern angband_header monraces_header;
+extern angband_header spells_header;
 extern angband_header terrains_header;
 extern angband_header vaults_header;

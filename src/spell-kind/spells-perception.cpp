@@ -86,7 +86,7 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     };
     rfu.set_flags(flags_swrf);
     angband_strcpy(record_o_name, known_item_name, MAX_NLEN);
-    record_turn = w_ptr->game_turn;
+    record_turn = AngbandWorld::get_instance().game_turn;
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
     const auto &floor = *player_ptr->current_floor_ptr;

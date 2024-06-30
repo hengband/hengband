@@ -90,9 +90,7 @@ bool know_blow_damage(MonsterRaceId r_idx, int i)
     const auto &monrace = monraces_info[r_idx];
     auto level = monrace.level;
     auto a = monrace.r_blows[i];
-    auto d1 = monrace.blows[i].d_dice;
-    auto d2 = monrace.blows[i].d_side;
-    auto d = d1 * d2;
+    auto d = monrace.blows[i].damage_dice.maxroll();
 
     if (d >= ((4 + level) * MAX_UCHAR) / 80) {
         d = ((4 + level) * MAX_UCHAR - 1) / 80;

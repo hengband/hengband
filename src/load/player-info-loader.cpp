@@ -1,5 +1,4 @@
 #include "load/player-info-loader.h"
-#include "cmd-building/cmd-building.h"
 #include "load/angband-version-comparer.h"
 #include "load/birth-loader.h"
 #include "load/dummy-loader.h"
@@ -10,9 +9,11 @@
 #include "load/player-class-specific-data-loader.h"
 #include "load/savedata-old-flag-types.h"
 #include "load/world-loader.h"
+#include "market/arena-entry.h"
 #include "market/arena.h"
 #include "monster-race/race-ability-flags.h"
 #include "mutation/mutation-calculator.h"
+#include "object/tval-types.h"
 #include "player-base/player-class.h"
 #include "player-info/mane-data-type.h"
 #include "player-info/sniper-data-type.h"
@@ -80,7 +81,7 @@ void rd_base_info(PlayerType *player_ptr)
         set_zangband_realm(player_ptr);
     }
 
-    player_ptr->hitdie = rd_byte();
+    player_ptr->hit_dice = Dice(1, rd_byte());
     player_ptr->expfact = rd_u16b();
 
     player_ptr->age = rd_s16b();
@@ -169,7 +170,7 @@ void rd_bounty_uniques(PlayerType *player_ptr)
         return;
     }
 
-    for (auto &[bounty_monrace_id, is_achieved] : w_ptr->bounties) {
+    for (auto &[bounty_monrace_id, is_achieved] : AngbandWorld::get_instance().bounties) {
         auto monrace_id = rd_s16b();
         if (loading_savefile_version_is_older_than(16)) {
             constexpr auto old_achieved_flag = 10000; // かつて賞金首達成フラグとしてモンスター種族番号を10000増やしていた
@@ -268,21 +269,31 @@ static void rd_arena(PlayerType *player_ptr)
     }
 
     player_ptr->town_num = rd_s16b();
-    player_ptr->arena_number = rd_s16b();
+    auto &entries = ArenaEntryList::get_instance();
+    entries.load_current_entry(rd_s16b());
     if (h_older_than(1, 5, 0, 1)) {
-        if (player_ptr->arena_number >= 99) {
-            player_ptr->arena_number = ARENA_DEFEATED_OLD_VER;
+        if (entries.get_current_entry() >= 99) {
+            entries.reset_entry();
+            entries.set_defeated_entry();
         }
+    } else if (loading_savefile_version < 23) {
+        const auto currrent_entry = entries.get_current_entry();
+        if (currrent_entry < 0) {
+            entries.load_current_entry(-currrent_entry);
+            entries.set_defeated_entry();
+        }
+    } else {
+        entries.load_defeated_entry(rd_s16b());
     }
 
     rd_phase_out(player_ptr);
-    w_ptr->set_arena(rd_bool());
+    AngbandWorld::get_instance().set_arena(rd_bool());
     strip_bytes(1);
 
     player_ptr->oldpx = rd_s16b();
     player_ptr->oldpy = rd_s16b();
-    const auto &floor_ref = *player_ptr->current_floor_ptr;
-    if (h_older_than(0, 3, 13) && !floor_ref.is_in_underground() && !floor_ref.inside_arena) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (h_older_than(0, 3, 13) && !floor.is_in_underground() && !floor.inside_arena) {
         player_ptr->oldpy = 33;
         player_ptr->oldpx = 131;
     }

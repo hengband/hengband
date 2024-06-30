@@ -422,7 +422,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, co
 
     if (o_ptr->is_melee_weapon()) {
         const auto &baseitem = o_ptr->get_baseitem();
-        if ((o_ptr->dd != baseitem.dd) || (o_ptr->ds != baseitem.ds)) {
+        if (o_ptr->damage_dice != baseitem.damage_dice) {
             entry->add(FLG_BOOSTED);
         }
     }
@@ -434,13 +434,13 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, co
 
     const auto &bi_key = o_ptr->bi_key;
     const auto tval = bi_key.tval();
-    if ((tval == ItemKindType::CORPSE) || (tval == ItemKindType::STATUE)) {
+    if ((tval == ItemKindType::MONSTER_REMAINS) || (tval == ItemKindType::STATUE)) {
         if (o_ptr->get_monrace().kind_flags.has(MonsterKindType::UNIQUE)) {
             entry->add(FLG_UNIQUE);
         }
     }
 
-    if (tval == ItemKindType::CORPSE) {
+    if (tval == ItemKindType::MONSTER_REMAINS) {
         if (o_ptr->get_monrace().symbol_char_is_any_of("pht")) {
             entry->add(FLG_HUMAN);
         }
@@ -456,12 +456,13 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, co
     PlayerClass pc(player_ptr);
     auto realm_except_class = pc.equals(PlayerClassType::SORCERER) || pc.equals(PlayerClassType::RED_MAGE);
 
-    if ((get_realm1_book(player_ptr) == tval) && !realm_except_class) {
+    PlayerRealm pr(player_ptr);
+    if ((pr.realm1().get_book() == tval) && !realm_except_class) {
         entry->add(FLG_REALM1);
         name = false;
     }
 
-    if ((get_realm2_book(player_ptr) == tval) && !realm_except_class) {
+    if ((pr.realm2().get_book() == tval) && !realm_except_class) {
         entry->add(FLG_REALM2);
         name = false;
     }
@@ -488,7 +489,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, co
         entry->add(FLG_LIGHTS);
     } else if (o_ptr->is_junk()) {
         entry->add(FLG_JUNKS);
-    } else if (tval == ItemKindType::CORPSE) {
+    } else if (tval == ItemKindType::MONSTER_REMAINS) {
         entry->add(FLG_CORPSES);
     } else if (o_ptr->is_spell_book()) {
         entry->add(FLG_SPELLBOOKS);

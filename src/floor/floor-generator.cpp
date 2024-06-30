@@ -26,7 +26,7 @@
 #include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/write-diary.h"
-#include "market/arena-info-table.h"
+#include "market/arena-entry.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/place-monster-types.h"
@@ -112,38 +112,41 @@ static void build_arena(PlayerType *player_ptr, POSITION *start_y, POSITION *sta
 }
 
 /*!
- * @brief 挑戦時闘技場への入場処理 / Town logic flow for generation of on_defeat_arena_monster -KMW-
+ * @brief 挑戦時闘技場への入場処理
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details 互換性のため、『森トロル』など地上と闘技場の両方に出現するユニークを撃破した際の不戦勝処理を残している
+ * @todo v3.0正式版リリース以降に上記を削除する
  */
 static void generate_challenge_arena(PlayerType *player_ptr)
 {
-    POSITION qy = 0;
-    POSITION qx = 0;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    floor_ptr->height = SCREEN_HGT;
-    floor_ptr->width = SCREEN_WID;
-
-    POSITION y, x;
-    for (y = 0; y < MAX_HGT; y++) {
-        for (x = 0; x < MAX_WID; x++) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    floor.height = SCREEN_HGT;
+    floor.width = SCREEN_WID;
+    for (auto y = 0; y < MAX_HGT; y++) {
+        for (auto x = 0; x < MAX_WID; x++) {
             place_bold(player_ptr, y, x, GB_SOLID_PERM);
-            floor_ptr->grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
+            floor.get_grid({ y, x }).add_info(CAVE_GLOW | CAVE_MARK);
         }
     }
 
-    for (y = qy + 1; y < qy + SCREEN_HGT - 1; y++) {
-        for (x = qx + 1; x < qx + SCREEN_WID - 1; x++) {
-            floor_ptr->grid_array[y][x].feat = feat_floor;
+    int y;
+    int x;
+    for (y = 1; y < SCREEN_HGT - 1; y++) {
+        for (x = 1; x < SCREEN_WID - 1; x++) {
+            floor.get_grid({ y, x }).feat = feat_floor;
         }
     }
 
     build_arena(player_ptr, &y, &x);
     player_place(player_ptr, y, x);
-    if (place_specific_monster(player_ptr, 0, player_ptr->y + 5, player_ptr->x, arena_info[player_ptr->arena_number].r_idx, PM_NO_KAGE | PM_NO_PET)) {
+    auto &entries = ArenaEntryList::get_instance();
+    const auto &monrace = entries.get_monrace();
+    if (place_specific_monster(player_ptr, 0, player_ptr->y + 5, player_ptr->x, monrace.idx, PM_NO_KAGE | PM_NO_PET)) {
         return;
     }
 
-    w_ptr->set_arena(true);
-    player_ptr->arena_number++;
+    AngbandWorld::get_instance().set_arena(true);
+    entries.increment_entry();
     msg_print(_("相手は欠場した。あなたの不戦勝だ。", "The enemy is unable to appear. You won by default."));
 }
 
@@ -237,8 +240,10 @@ static void generate_gambling_arena(PlayerType *player_ptr)
     build_battle(player_ptr, &y, &x);
     player_place(player_ptr, y, x);
     for (MONSTER_IDX i = 0; i < 4; i++) {
-        place_specific_monster(player_ptr, 0, player_ptr->y + 8 + (i / 2) * 4, player_ptr->x - 2 + (i % 2) * 4, battle_mon_list[i], (PM_NO_KAGE | PM_NO_PET));
-        set_friendly(&floor_ptr->m_list[floor_ptr->grid_array[player_ptr->y + 8 + (i / 2) * 4][player_ptr->x - 2 + (i % 2) * 4].m_idx]);
+        const auto m_idx = place_specific_monster(player_ptr, 0, player_ptr->y + 8 + (i / 2) * 4, player_ptr->x - 2 + (i % 2) * 4, battle_mon_list[i], (PM_NO_KAGE | PM_NO_PET));
+        if (m_idx) {
+            set_friendly(&floor_ptr->m_list[*m_idx]);
+        }
     }
 
     for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
@@ -375,7 +380,7 @@ void clear_cave(PlayerType *player_ptr)
         floor_ptr->mproc_max[i] = 0;
     }
 
-    precalc_cur_num_of_pet(player_ptr);
+    precalc_cur_num_of_pet();
     for (POSITION y = 0; y < MAX_HGT; y++) {
         for (POSITION x = 0; x < MAX_WID; x++) {
             auto *g_ptr = &floor_ptr->grid_array[y][x];
@@ -493,6 +498,7 @@ void generate_floor(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     set_floor_and_wall(floor.dungeon_idx);
+    const auto is_wild_mode = AngbandWorld::get_instance().is_wild_mode();
     for (int num = 0; true; num++) {
         bool okay = true;
         concptr why = nullptr;
@@ -505,7 +511,7 @@ void generate_floor(PlayerType *player_ptr)
         } else if (floor.is_in_quest()) {
             generate_fixed_floor(player_ptr);
         } else if (!floor.is_in_underground()) {
-            if (player_ptr->wild_mode) {
+            if (is_wild_mode) {
                 wilderness_gen_small(player_ptr);
             } else {
                 wilderness_gen(player_ptr);

@@ -30,7 +30,9 @@ void check_random_quest_auto_failure(PlayerType *player_ptr)
     if (floor.dungeon_idx != DUNGEON_ANGBAND) {
         return;
     }
-    for (auto quest_id : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
+
+    auto &world = AngbandWorld::get_instance();
+    for (auto quest_id : RANDOM_QUEST_ID_RANGE) {
         auto &quest = quests.get_quest(quest_id);
         auto is_taken_quest = (quest.type == QuestKindType::RANDOM);
         is_taken_quest &= (quest.status == QuestStatusType::TAKEN);
@@ -41,8 +43,8 @@ void check_random_quest_auto_failure(PlayerType *player_ptr)
 
         quest.status = QuestStatusType::FAILED;
         quest.complev = (byte)player_ptr->lev;
-        w_ptr->update_playtime();
-        quest.comptime = w_ptr->play_time;
+        world.update_playtime();
+        quest.comptime = world.play_time;
         quest.get_bounty().misc_flags.reset(MonsterMiscType::QUESTOR);
     }
 }
@@ -112,7 +114,8 @@ void execute_recall(PlayerType *player_ptr)
         }
     }
 
-    if (player_ptr->wild_mode) {
+    auto &world = AngbandWorld::get_instance();
+    if (world.is_wild_mode()) {
         player_ptr->wilderness_y = player_ptr->y;
         player_ptr->wilderness_x = player_ptr->x;
     } else {
@@ -120,7 +123,7 @@ void execute_recall(PlayerType *player_ptr)
         player_ptr->oldpy = player_ptr->y;
     }
 
-    player_ptr->wild_mode = false;
+    world.set_wild_mode(false);
 
     /*
      * Clear all saved floors

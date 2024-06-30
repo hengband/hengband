@@ -338,7 +338,7 @@ static void check_smart(PlayerType *player_ptr, melee_spell_type *ms_ptr)
         return;
     }
 
-    if ((ms_ptr->m_ptr->hp < ms_ptr->m_ptr->maxhp / 10) && (randint0(100) < 50)) {
+    if ((ms_ptr->m_ptr->hp < ms_ptr->m_ptr->maxhp / 10) && one_in_(2)) {
         ms_ptr->ability_flags &= RF_ABILITY_INT_MASK;
     }
 

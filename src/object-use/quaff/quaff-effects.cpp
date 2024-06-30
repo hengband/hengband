@@ -39,6 +39,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
+#include "util/dice.h"
 #include "view/display-messages.h"
 
 QuaffEffects::QuaffEffects(PlayerType *player_ptr)
@@ -119,11 +120,11 @@ bool QuaffEffects::influence(const ItemEntity &item)
     case SV_POTION_BESERK_STRENGTH:
         return berserk(this->player_ptr, randint1(25) + 25);
     case SV_POTION_CURE_LIGHT:
-        return cure_light_wounds(this->player_ptr, 2, 8);
+        return cure_light_wounds(this->player_ptr, Dice::roll(2, 8));
     case SV_POTION_CURE_SERIOUS:
-        return cure_serious_wounds(this->player_ptr, 4, 8);
+        return cure_serious_wounds(this->player_ptr, Dice::roll(4, 8));
     case SV_POTION_CURE_CRITICAL:
-        return cure_critical_wounds(this->player_ptr, damroll(6, 8));
+        return cure_critical_wounds(this->player_ptr, Dice::roll(6, 8));
     case SV_POTION_HEALING:
         return cure_critical_wounds(this->player_ptr, 300);
     case SV_POTION_STAR_HEALING:
@@ -330,7 +331,7 @@ bool QuaffEffects::lose_memories()
 bool QuaffEffects::ruination()
 {
     msg_print(_("身も心も弱ってきて、精気が抜けていくようだ。", "Your nerves and muscles feel weak and lifeless!"));
-    take_hit(this->player_ptr, DAMAGE_LOSELIFE, damroll(10, 10), _("破滅の薬", "a potion of Ruination"));
+    take_hit(this->player_ptr, DAMAGE_LOSELIFE, Dice::roll(10, 10), _("破滅の薬", "a potion of Ruination"));
     (void)dec_stat(this->player_ptr, A_DEX, 25, true);
     (void)dec_stat(this->player_ptr, A_WIS, 25, true);
     (void)dec_stat(this->player_ptr, A_CON, 25, true);
@@ -347,7 +348,7 @@ bool QuaffEffects::ruination()
 bool QuaffEffects::detonation()
 {
     msg_print(_("体の中で激しい爆発が起きた！", "Massive explosions rupture your body!"));
-    take_hit(this->player_ptr, DAMAGE_NOESCAPE, damroll(50, 20), _("爆発の薬", "a potion of Detonation"));
+    take_hit(this->player_ptr, DAMAGE_NOESCAPE, Dice::roll(50, 20), _("爆発の薬", "a potion of Detonation"));
     BadStatusSetter bss(this->player_ptr);
     (void)bss.mod_stun(75);
     (void)bss.mod_cut(5000);

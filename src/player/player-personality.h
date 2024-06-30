@@ -1,14 +1,11 @@
 #pragma once
 
+#include "locale/localized-string.h"
 #include "player/player-personality-types.h"
 #include "system/angband.h"
 
 struct player_personality {
-    concptr title; /* Type of personality */
-
-#ifdef JP
-    concptr E_title; /* 英語性格 */
-#endif
+    LocalizedString title; /* Type of personality */
 
     int16_t a_adj[6]; /* ersonality stat bonuses */
 

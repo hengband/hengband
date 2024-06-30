@@ -1,7 +1,7 @@
 #include "market/building-quest.h"
-#include "cmd-building/cmd-building.h"
 #include "core/asking-player.h"
 #include "dungeon/quest.h"
+#include "floor/wild.h"
 #include "info-reader/fixed-map-parser.h"
 #include "market/building-util.h"
 #include "monster/monster-list.h"

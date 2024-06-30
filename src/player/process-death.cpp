@@ -208,7 +208,7 @@ void print_tomb(PlayerType *player_ptr)
 {
     term_clear();
     read_dead_file();
-    concptr p = w_ptr->total_winner ? _("偉大なる者", "Magnificent") : player_titles[enum2i(player_ptr->pclass)][(player_ptr->lev - 1) / 5].data();
+    std::string p = AngbandWorld::get_instance().total_winner ? _("偉大なる者", "Magnificent") : player_titles.at(player_ptr->pclass)[(player_ptr->lev - 1) / 5];
 
     show_tomb_line(player_ptr->name, GRAVE_PLAYER_NAME_ROW);
 

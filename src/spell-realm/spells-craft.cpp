@@ -179,7 +179,7 @@ bool set_ele_immune(PlayerType *player_ptr, uint32_t immune_type, TIME_EFFECT v)
 /*
  * Choose a warrior-mage elemental attack. -LM-
  */
-bool choose_ele_attack(PlayerType *player_ptr)
+bool choose_ele_attack(PlayerType *player_ptr, TIME_EFFECT turn)
 {
     if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
         msg_format(_("武器を持たないと魔法剣は使えない。", "You cannot use temporary branding with no weapon."));
@@ -224,15 +224,15 @@ bool choose_ele_attack(PlayerType *player_ptr)
     char choice = inkey();
 
     if ((choice == 'a') || (choice == 'A')) {
-        set_ele_attack(player_ptr, ATTACK_FIRE, player_ptr->lev / 2 + randint1(player_ptr->lev / 2));
+        set_ele_attack(player_ptr, ATTACK_FIRE, turn);
     } else if (((choice == 'b') || (choice == 'B')) && (num >= 2)) {
-        set_ele_attack(player_ptr, ATTACK_COLD, player_ptr->lev / 2 + randint1(player_ptr->lev / 2));
+        set_ele_attack(player_ptr, ATTACK_COLD, turn);
     } else if (((choice == 'c') || (choice == 'C')) && (num >= 3)) {
-        set_ele_attack(player_ptr, ATTACK_POIS, player_ptr->lev / 2 + randint1(player_ptr->lev / 2));
+        set_ele_attack(player_ptr, ATTACK_POIS, turn);
     } else if (((choice == 'd') || (choice == 'D')) && (num >= 4)) {
-        set_ele_attack(player_ptr, ATTACK_ACID, player_ptr->lev / 2 + randint1(player_ptr->lev / 2));
+        set_ele_attack(player_ptr, ATTACK_ACID, turn);
     } else if (((choice == 'e') || (choice == 'E')) && (num >= 5)) {
-        set_ele_attack(player_ptr, ATTACK_ELEC, player_ptr->lev / 2 + randint1(player_ptr->lev / 2));
+        set_ele_attack(player_ptr, ATTACK_ELEC, turn);
     } else {
         msg_print(_("魔法剣を使うのをやめた。", "You cancel the temporary branding."));
         screen_load();

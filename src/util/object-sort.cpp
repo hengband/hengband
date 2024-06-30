@@ -46,19 +46,22 @@ bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value
 
     const auto o_tval = o_ptr->bi_key.tval();
     const auto j_tval = j_ptr->bi_key.tval();
-    if ((o_tval == get_realm1_book(player_ptr)) && (j_tval != get_realm1_book(player_ptr))) {
+    PlayerRealm pr(player_ptr);
+    const auto realm1_book = pr.realm1().get_book();
+    const auto realm2_book = pr.realm2().get_book();
+    if ((o_tval == realm1_book) && (j_tval != realm1_book)) {
         return true;
     }
 
-    if ((j_tval == get_realm1_book(player_ptr)) && (o_tval != get_realm1_book(player_ptr))) {
+    if ((j_tval == realm1_book) && (o_tval != realm1_book)) {
         return false;
     }
 
-    if ((o_tval == get_realm2_book(player_ptr)) && (j_tval != get_realm2_book(player_ptr))) {
+    if ((o_tval == realm2_book) && (j_tval != realm2_book)) {
         return true;
     }
 
-    if ((j_tval == get_realm2_book(player_ptr)) && (o_tval != get_realm2_book(player_ptr))) {
+    if ((j_tval == realm2_book) && (o_tval != realm2_book)) {
         return false;
     }
 
@@ -109,7 +112,7 @@ bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value
     switch (o_tval) {
     case ItemKindType::FIGURINE:
     case ItemKindType::STATUE:
-    case ItemKindType::CORPSE:
+    case ItemKindType::MONSTER_REMAINS:
     case ItemKindType::CAPTURE: {
         const auto &monrace1 = o_ptr->get_monrace();
         const auto &monrace2 = j_ptr->get_monrace();

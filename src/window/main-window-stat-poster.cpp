@@ -104,7 +104,7 @@ void print_stun(PlayerType *player_ptr)
  */
 void print_hunger(PlayerType *player_ptr)
 {
-    if (w_ptr->wizard && player_ptr->current_floor_ptr->inside_arena) {
+    if (AngbandWorld::get_instance().wizard && player_ptr->current_floor_ptr->inside_arena) {
         return;
     }
 

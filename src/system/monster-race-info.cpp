@@ -148,8 +148,9 @@ const MonsterRaceInfo &MonsterRaceInfo::get_next() const
  */
 bool MonsterRaceInfo::is_bounty(bool unachieved_only) const
 {
-    const auto end = std::end(w_ptr->bounties);
-    const auto it = std::find_if(std::begin(w_ptr->bounties), end,
+    const auto &world = AngbandWorld::get_instance();
+    const auto end = std::end(world.bounties);
+    const auto it = std::find_if(std::begin(world.bounties), end,
         [this](const auto &bounty) { return bounty.r_idx == this->idx; });
     if (it == end) {
         return false;
@@ -168,9 +169,9 @@ int MonsterRaceInfo::calc_power() const
     auto power = 0;
     const auto num_resistances = EnumClassFlagGroup<MonsterResistanceType>(this->resistance_flags & RFR_EFF_IMMUNE_ELEMENT_MASK).count();
     if (this->misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
-        power = this->hdice * this->hside * 2;
+        power = this->hit_dice.maxroll() * 2;
     } else {
-        power = this->hdice * (this->hside + 1);
+        power = this->hit_dice.floored_expected_value_multiplied_by(2);
     }
 
     power = power * (100 + this->level) / 100;

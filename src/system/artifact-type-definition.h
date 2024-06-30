@@ -4,6 +4,7 @@
 #include "object-enchant/trg-types.h"
 #include "system/angband.h"
 #include "system/baseitem-info.h"
+#include "util/dice.h"
 #include "util/flag-group.h"
 #include <map>
 #include <string>
@@ -27,8 +28,7 @@ public:
     int to_d{}; /*!< ダメージボーナス値 / Bonus to damage */
     ARMOUR_CLASS to_a{}; /*!< ACボーナス値 / Bonus to armor */
     ARMOUR_CLASS ac{}; /*!< 上書きベースAC値 / Base armor */
-    DICE_NUMBER dd{};
-    DICE_SID ds{}; /*!< ダイス値 / Damage when hits */
+    Dice damage_dice; /*!< ダイス値 / Damage when hits */
     WEIGHT weight{}; /*!< 重量 / Weight */
     PRICE cost{}; /*!< 基本価格 / Artifact "cost" */
     TrFlags flags{}; /*! アイテムフラグ / Artifact Flags */

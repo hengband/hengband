@@ -49,18 +49,18 @@ static bool weakening_artifact(ItemEntity *o_ptr)
         return true;
     }
 
-    if (baseitem.dd < o_ptr->dd) {
-        o_ptr->dd--;
+    if (baseitem.damage_dice.num < o_ptr->damage_dice.num) {
+        o_ptr->damage_dice.num--;
         return true;
     }
 
-    if (baseitem.ds < o_ptr->ds) {
-        o_ptr->ds--;
+    if (baseitem.damage_dice.sides < o_ptr->damage_dice.sides) {
+        o_ptr->damage_dice.sides--;
         return true;
     }
 
     if (o_ptr->to_d > 10) {
-        o_ptr->to_d = o_ptr->to_d - damroll(1, 6);
+        o_ptr->to_d = o_ptr->to_d - Dice::roll(1, 6);
         if (o_ptr->to_d < 10) {
             o_ptr->to_d = 10;
         }
@@ -202,7 +202,8 @@ static int decide_random_art_power(const bool a_cursed)
 
 static void invest_powers(PlayerType *player_ptr, ItemEntity *o_ptr, int *powers, bool *has_pval, const bool a_cursed)
 {
-    int max_type = o_ptr->is_weapon_ammo() ? 7 : 5;
+    const auto &world = AngbandWorld::get_instance();
+    const auto max_type = o_ptr->is_weapon_ammo() ? 7 : 5;
     while ((*powers)--) {
         switch (randint1(max_type)) {
         case 1:
@@ -216,13 +217,14 @@ static void invest_powers(PlayerType *player_ptr, ItemEntity *o_ptr, int *powers
                 if (a_cursed && !one_in_(13)) {
                     break;
                 }
+                auto &dice = o_ptr->damage_dice;
                 if (one_in_(13)) {
-                    if (one_in_(o_ptr->ds + 4)) {
-                        o_ptr->ds++;
+                    if (one_in_(dice.sides + 4)) {
+                        dice.sides++;
                     }
                 } else {
-                    if (one_in_(o_ptr->dd + 1)) {
-                        o_ptr->dd++;
+                    if (one_in_(dice.num + 1)) {
+                        dice.num++;
                     }
                 }
             } else {
@@ -238,7 +240,7 @@ static void invest_powers(PlayerType *player_ptr, ItemEntity *o_ptr, int *powers
             random_slay(o_ptr);
             break;
         default:
-            if (w_ptr->wizard) {
+            if (world.wizard) {
                 msg_print("Switch error in become_random_artifact!");
             }
 

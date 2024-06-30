@@ -14,7 +14,6 @@ void wiz_reset_race(PlayerType *player_ptr);
 void wiz_reset_class(PlayerType *player_ptr);
 void wiz_reset_realms(PlayerType *player_ptr);
 void wiz_dump_options();
-void set_gametime();
 void wiz_zap_surrounding_monsters(PlayerType *player_ptr);
 void wiz_zap_floor_monsters(PlayerType *player_ptr);
-extern void cheat_death(PlayerType *player_ptr);
+void cheat_death(PlayerType *player_ptr);

@@ -1,6 +1,7 @@
 #include "info-reader/json-reader-util.h"
 #include "info-reader/info-reader-util.h"
 #include "locale/japanese.h"
+#include "util/dice.h"
 
 /*!
  * @brief JSON Objectから文字列をセットする
@@ -49,17 +50,39 @@ errr info_set_string(const nlohmann::json &json, std::string &data, bool is_requ
 /*!
  * @brief JSON Objectからダイスの値を取得する
  * @param json ダイスの値が格納されたJSON Object
- * @param dd ダイスの数を格納する変数への参照
- * @param ds ダイスの面数を格納する変数への参照
+ * @param dice ダイスの値を格納する変数への参照
  * @param is_required 必須かどうか
  * 必須でJSON Objectがnullや文字列でない場合はエラーを返す。必須でない場合は何もせずに終了する。
  * @return エラーコード
  */
-errr info_set_dice(const nlohmann::json &json, DICE_NUMBER &dd, DICE_SID &ds, bool is_required)
+errr info_set_dice(const nlohmann::json &json, Dice &dice, bool is_required)
 {
     if (json.is_null() || !json.is_string()) {
         return is_required ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_NONE;
     }
 
-    return info_set_dice(json.get<std::string>(), dd, ds);
+    try {
+        dice = Dice::parse(json.get<std::string>());
+        return PARSE_ERROR_NONE;
+    } catch (const std::runtime_error &) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+}
+
+/*!
+ * @brief JSON Objectからbool値を取得する
+ * @param json bool値が格納されたJSON Object
+ * @param bool_value bool値を格納する変数への参照
+ * @param is_required 必須かどうか
+ * 必須でJSON Objectがnullやbool場合はエラーを返す。必須でない場合は何もせずに終了する。
+ * @return エラーコード
+ */
+errr info_set_bool(const nlohmann::json &json, bool &bool_value, bool is_required)
+{
+    if (json.is_null() || !json.is_boolean()) {
+        return is_required ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_NONE;
+    }
+
+    bool_value = json.get<bool>();
+    return PARSE_ERROR_NONE;
 }

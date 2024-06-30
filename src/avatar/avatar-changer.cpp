@@ -167,7 +167,7 @@ void AvatarChanger::change_virtue_wild_thief()
     auto innocent = true;
     auto thief = false;
     for (const auto &blow : r_ptr->blows) {
-        if (blow.d_dice != 0) {
+        if (blow.damage_dice.num != 0) {
             innocent = false;
         }
 

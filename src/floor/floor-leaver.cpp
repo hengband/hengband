@@ -1,5 +1,4 @@
 #include "floor/floor-leaver.h"
-#include "cmd-building/cmd-building.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-events.h"
@@ -8,6 +7,7 @@
 #include "floor/floor-save.h"
 #include "floor/geometry.h"
 #include "floor/line-of-sight.h"
+#include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "grid/grid.h"
@@ -77,7 +77,7 @@ static bool check_pet_preservation_conditions(PlayerType *player_ptr, MonsterEnt
 
 static void sweep_preserving_pet(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode || player_ptr->current_floor_ptr->inside_arena || AngbandSystem::get_instance().is_phase_out()) {
+    if (AngbandWorld::get_instance().is_wild_mode() || player_ptr->current_floor_ptr->inside_arena || AngbandSystem::get_instance().is_phase_out()) {
         return;
     }
 
@@ -425,7 +425,7 @@ static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     }
 
     get_out_monster(player_ptr);
-    sf_ptr->last_visit = w_ptr->game_turn;
+    sf_ptr->last_visit = AngbandWorld::get_instance().game_turn;
     forget_lite(player_ptr->current_floor_ptr);
     forget_view(player_ptr->current_floor_ptr);
     clear_mon_lite(player_ptr->current_floor_ptr);

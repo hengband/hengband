@@ -26,7 +26,7 @@
 #include "player/player-personality-types.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
-#include "system/angband-version.h"
+#include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/inner-game-data.h"
@@ -208,7 +208,7 @@ void do_cmd_colors(PlayerType *player_ptr)
 /*
  * Note something in the message recall
  */
-void do_cmd_note(void)
+void do_cmd_note()
 {
     const auto note = input_string(_("メモ: ", "Note: "), 60);
     if (!note || note->empty()) {
@@ -221,9 +221,9 @@ void do_cmd_note(void)
 /*
  * Mention the current version
  */
-void do_cmd_version(void)
+void do_cmd_version()
 {
-    msg_print(get_version());
+    msg_print(AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL));
 }
 
 /*
@@ -232,7 +232,7 @@ void do_cmd_version(void)
  */
 void do_cmd_feeling(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         return;
     }
 
@@ -272,7 +272,7 @@ void do_cmd_feeling(PlayerType *player_ptr)
  */
 void do_cmd_time(PlayerType *player_ptr)
 {
-    const auto &[day, hour, min] = w_ptr->extract_date_time(InnerGameData::get_instance().get_start_race());
+    const auto &[day, hour, min] = AngbandWorld::get_instance().extract_date_time(InnerGameData::get_instance().get_start_race());
     std::string day_buf = (day < MAX_DAYS) ? std::to_string(day) : "*****";
     constexpr auto mes = _("%s日目, 時刻は%d:%02d %sです。", "This is day %s. The time is %d:%02d %s.");
     msg_format(mes, day_buf.data(), (hour % 12 == 0) ? 12 : (hour % 12), min, (hour < 12) ? "AM" : "PM");

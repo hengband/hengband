@@ -72,7 +72,7 @@ static void cave_temp_room_lite(PlayerType *player_ptr, const std::vector<Pos2D>
                 chance = 100;
             }
 
-            if (m_ptr->is_asleep() && (randint0(100) < chance)) {
+            if (m_ptr->is_asleep() && evaluate_percent(chance)) {
                 (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
                 if (m_ptr->ml) {
                     const auto m_name = monster_desc(player_ptr, m_ptr, 0);
@@ -95,6 +95,7 @@ static void cave_temp_room_lite(PlayerType *player_ptr, const std::vector<Pos2D>
 static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2D> &points)
 {
     auto &floor = *player_ptr->current_floor_ptr;
+    const auto &world = AngbandWorld::get_instance();
     for (const auto &point : points) {
         auto &grid = floor.get_grid(point);
         auto do_dark = !grid.is_mirror();
@@ -103,7 +104,7 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
             continue;
         }
 
-        if (floor.dun_level || !w_ptr->is_daytime()) {
+        if (floor.dun_level || !world.is_daytime()) {
             for (int j = 0; j < 9; j++) {
                 const Pos2D pos_neighbor(point.y + ddy_ddd[j], point.x + ddx_ddd[j]);
                 if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
@@ -376,7 +377,7 @@ bool starlight(PlayerType *player_ptr, bool magic)
         msg_print(_("杖の先が明るく輝いた...", "The end of the staff glows brightly..."));
     }
 
-    int num = damroll(5, 3);
+    int num = Dice::roll(5, 3);
     auto y = 0;
     auto x = 0;
     for (int k = 0; k < num; k++) {
@@ -394,7 +395,7 @@ bool starlight(PlayerType *player_ptr, bool magic)
         }
 
         constexpr uint flags = PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL | PROJECT_LOS;
-        project(player_ptr, 0, 0, y, x, damroll(6 + player_ptr->lev / 8, 10), AttributeType::LITE_WEAK, flags);
+        project(player_ptr, 0, 0, y, x, Dice::roll(6 + player_ptr->lev / 8, 10), AttributeType::LITE_WEAK, flags);
     }
 
     return true;

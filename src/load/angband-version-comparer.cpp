@@ -16,36 +16,36 @@ bool h_older_than(uint8_t major, uint8_t minor, uint8_t patch, uint8_t extra)
         return false;
     }
 
-    const auto &system = AngbandSystem::get_instance();
-    if (system.version_major < major) {
+    const auto &version = AngbandSystem::get_instance().get_version();
+    if (version.major < major) {
         return true;
     }
 
-    if (system.version_major > major) {
+    if (version.major > major) {
         return false;
     }
 
-    if (system.version_minor < minor) {
+    if (version.minor < minor) {
         return true;
     }
 
-    if (system.version_minor > minor) {
+    if (version.minor > minor) {
         return false;
     }
 
-    if (system.version_patch < patch) {
+    if (version.patch < patch) {
         return true;
     }
 
-    if (system.version_patch > patch) {
+    if (version.patch > patch) {
         return false;
     }
 
-    if (system.version_extra < extra) {
+    if (version.extra < extra) {
         return true;
     }
 
-    if (system.version_extra > extra) {
+    if (version.extra > extra) {
         return false;
     }
 
@@ -66,28 +66,28 @@ bool h_older_than(uint8_t major, uint8_t minor, uint8_t patch)
         return false;
     }
 
-    const auto &system = AngbandSystem::get_instance();
-    if (system.version_major < major) {
+    const auto &version = AngbandSystem::get_instance().get_version();
+    if (version.major < major) {
         return true;
     }
 
-    if (system.version_major > major) {
+    if (version.major > major) {
         return false;
     }
 
-    if (system.version_minor < minor) {
+    if (version.minor < minor) {
         return true;
     }
 
-    if (system.version_minor > minor) {
+    if (version.minor > minor) {
         return false;
     }
 
-    if (system.version_patch < patch) {
+    if (version.patch < patch) {
         return true;
     }
 
-    if (system.version_patch > patch) {
+    if (version.patch > patch) {
         return false;
     }
 

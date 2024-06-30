@@ -26,7 +26,7 @@
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "market/arena-info-table.h"
+#include "market/arena-entry.h"
 #include "mind/mind-mirror-master.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
@@ -359,6 +359,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
+    auto &world = AngbandWorld::get_instance();
     if (player_ptr->chp < 0 && !cheat_immortal) {
         bool android = PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID);
 
@@ -376,16 +377,18 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
         }
 
         if (floor.inside_arena) {
-            const auto &m_name = monraces_info[arena_info[player_ptr->arena_number].r_idx].name;
+            auto &entries = ArenaEntryList::get_instance();
+            entries.set_defeated_entry();
+            const auto &m_name = entries.get_monrace().name;
             msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name.data());
             msg_print(nullptr);
             if (record_arena) {
-                exe_write_diary(floor, DiaryKind::ARENA, -1 - player_ptr->arena_number, m_name);
+                exe_write_diary(floor, DiaryKind::ARENA, 0, m_name);
             }
         } else {
             const auto q_idx = floor.get_quest_id();
             const auto seppuku = hit_from == "Seppuku";
-            const auto winning_seppuku = w_ptr->total_winner && seppuku;
+            const auto winning_seppuku = world.total_winner && seppuku;
 
             play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_GAMEOVER);
 
@@ -413,9 +416,9 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
 #endif
             }
 
-            w_ptr->total_winner = false;
+            world.total_winner = false;
             if (winning_seppuku) {
-                w_ptr->add_retired_class(player_ptr->pclass);
+                world.add_retired_class(player_ptr->pclass);
                 exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, _("勝利の後切腹した。", "committed seppuku after the winning."));
             } else {
                 std::string place;
@@ -577,7 +580,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
         flush();
     }
 
-    if (player_ptr->wild_mode && !player_ptr->leaving && (player_ptr->chp < std::max(warning, player_ptr->mhp / 5))) {
+    if (world.is_wild_mode() && !player_ptr->leaving && (player_ptr->chp < std::max(warning, player_ptr->mhp / 5))) {
         change_wild_mode(player_ptr, false);
     }
 
@@ -601,7 +604,7 @@ static void process_aura_damage(MonsterEntity *m_ptr, PlayerType *player_ptr, bo
         return;
     }
 
-    int aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
+    int aura_damage = Dice::roll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
     msg_print(message);
     (*dam_func)(player_ptr, aura_damage, monster_desc(player_ptr, m_ptr, MD_WRONGDOER_NAME).data(), true);
     if (is_original_ap_and_seen(player_ptr, m_ptr)) {

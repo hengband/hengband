@@ -511,7 +511,7 @@ static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH de
     }
 
     floor.inside_arena = false;
-    player_ptr->wild_mode = false;
+    AngbandWorld::get_instance().set_wild_mode(false);
     leave_quest_check(player_ptr);
     auto to = !floor.is_in_underground()
                   ? _("地上", "the surface")
@@ -624,7 +624,7 @@ void wiz_reset_class(PlayerType *player_ptr)
     const auto new_class_enum = *new_class_opt;
     const auto new_class = enum2i(new_class_enum);
     player_ptr->pclass = new_class_enum;
-    cp_ptr = &class_info[new_class];
+    cp_ptr = &class_info.at(player_ptr->pclass);
     mp_ptr = &class_magics_info[new_class];
     PlayerClass(player_ptr).init_specific_data();
     change_birth_flags();
@@ -637,12 +637,12 @@ void wiz_reset_class(PlayerType *player_ptr)
  */
 void wiz_reset_realms(PlayerType *player_ptr)
 {
-    const auto new_realm1 = input_numerics("1st Realm (None=0)", 0, MAX_REALM - 1, player_ptr->realm1);
+    const auto new_realm1 = input_numerics("1st Realm (None=0)", 0, REALM_MAX - 1, player_ptr->realm1);
     if (!new_realm1) {
         return;
     }
 
-    const auto new_realm2 = input_numerics("2nd Realm (None=0)", 0, MAX_REALM - 1, player_ptr->realm2);
+    const auto new_realm2 = input_numerics("2nd Realm (None=0)", 0, REALM_MAX - 1, player_ptr->realm2);
     if (!new_realm2) {
         return;
     }
@@ -678,7 +678,7 @@ void wiz_dump_options(void)
         }
     }
 
-    fprintf(fff, "[Option bits usage on %s\n]", get_version().data());
+    fprintf(fff, "[Option bits usage on %s\n]", AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL).data());
     fputs("Set - Bit (Page) Option Name\n", fff);
     fputs("------------------------------------------------\n", fff);
     for (int i = 0; i < NUM_O_SET; i++) {
@@ -696,20 +696,6 @@ void wiz_dump_options(void)
 
     angband_fclose(fff);
     msg_format(_("オプションbit使用状況をファイル %s に書き出しました。", "Option bits usage dump saved to file %s."), filename.data());
-}
-
-/*!
- * @brief プレイ日数を変更する / Set gametime.
- * @return 実際に変更を行ったらTRUEを返す
- */
-void set_gametime(void)
-{
-    const auto game_time = input_integer("Dungeon Turn", 0, w_ptr->dungeon_turn_limit - 1);
-    if (!game_time) {
-        return;
-    }
-
-    w_ptr->dungeon_turn = w_ptr->game_turn = *game_time;
 }
 
 /*!
@@ -762,7 +748,8 @@ void cheat_death(PlayerType *player_ptr)
     }
     player_ptr->age++;
 
-    w_ptr->noscore |= 0x0001;
+    auto &world = AngbandWorld::get_instance();
+    world.noscore |= 0x0001;
     msg_print(_("ウィザードモードに念を送り、死を欺いた。", "You invoke wizard mode and cheat death."));
     msg_print(nullptr);
 
@@ -803,7 +790,7 @@ void cheat_death(PlayerType *player_ptr)
         player_ptr->oldpx = 131;
     }
 
-    player_ptr->wild_mode = false;
+    world.set_wild_mode(false);
     player_ptr->leaving = true;
     constexpr auto note = _("                            しかし、生き返った。", "                            but revived.");
     exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, note);

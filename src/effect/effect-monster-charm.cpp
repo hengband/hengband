@@ -411,7 +411,7 @@ static int calcutate_capturable_hp(PlayerType *player_ptr, MonsterEntity *m_ptr,
 static void effect_monster_captured(PlayerType *player_ptr, EffectMonster *em_ptr, std::optional<CapturedMonsterType *> tmp_cap_mon_ptr)
 {
     if (em_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
-        choose_new_monster(player_ptr, em_ptr->g_ptr->m_idx, false, MonsterRaceId::CHAMELEON);
+        em_ptr->m_ptr->reset_chameleon_polymorph();
     }
 
     msg_format(_("%sを捕えた！", "You capture %s^!"), em_ptr->m_name);
@@ -456,7 +456,7 @@ ProcessResult effect_monster_capture(PlayerType *player_ptr, EffectMonster *em_p
         return ProcessResult::PROCESS_CONTINUE;
     }
 
-    auto r_max_hp = em_ptr->r_ptr->hdice * em_ptr->r_ptr->hside;
+    auto r_max_hp = em_ptr->r_ptr->hit_dice.maxroll();
     auto threshold_hp = calcutate_capturable_hp(player_ptr, em_ptr->m_ptr, r_max_hp);
     auto capturable_hp = std::max(2, calcutate_capturable_hp(player_ptr, em_ptr->m_ptr, em_ptr->m_ptr->max_maxhp));
 

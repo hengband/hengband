@@ -95,8 +95,7 @@ void ItemEntity::generate(short new_bi_id)
     this->to_d = baseitem.to_d;
     this->to_a = baseitem.to_a;
     this->ac = baseitem.ac;
-    this->dd = baseitem.dd;
-    this->ds = baseitem.ds;
+    this->damage_dice = baseitem.damage_dice;
 
     if (baseitem.act_idx > RandomArtActType::NONE) {
         this->activation_id = baseitem.act_idx;
@@ -581,11 +580,7 @@ bool ItemEntity::can_pile(const ItemEntity *j_ptr) const
         return false;
     }
 
-    if (this->dd != j_ptr->dd) {
-        return false;
-    }
-
-    if (this->ds != j_ptr->ds) {
+    if (this->damage_dice != j_ptr->damage_dice) {
         return false;
     }
 
@@ -784,7 +779,7 @@ bool ItemEntity::has_bias() const
 
 bool ItemEntity::is_bounty() const
 {
-    if (this->bi_key.tval() != ItemKindType::CORPSE) {
+    if (this->bi_key.tval() != ItemKindType::MONSTER_REMAINS) {
         return false;
     }
 
@@ -793,7 +788,8 @@ bool ItemEntity::is_bounty() const
     }
 
     const auto &monrace = this->get_monrace();
-    if (w_ptr->knows_daily_bounty && (monrace.name == w_ptr->get_today_bounty().name)) {
+    const auto &world = AngbandWorld::get_instance();
+    if (world.knows_daily_bounty && (monrace.name == world.get_today_bounty().name)) {
         return true;
     }
 

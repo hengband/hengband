@@ -490,7 +490,7 @@ bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
         teleport_player(player_ptr, 30, TELEPORT_SPONTANEOUS);
         break;
     case MindNinjaType::PURGATORY_FLAME: {
-        int num = damroll(3, 9);
+        int num = Dice::roll(3, 9);
         for (int k = 0; k < num; k++) {
             AttributeType typ = one_in_(2) ? AttributeType::FIRE : one_in_(3) ? AttributeType::NETHER
                                                                               : AttributeType::PLASMA;
@@ -502,7 +502,7 @@ bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
                 }
             }
 
-            project(player_ptr, 0, 0, y, x, damroll(6 + plev / 8, 10), typ, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL));
+            project(player_ptr, 0, 0, y, x, Dice::roll(6 + plev / 8, 10), typ, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL));
         }
 
         break;

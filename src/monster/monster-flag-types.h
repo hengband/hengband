@@ -5,9 +5,8 @@ enum class MonsterTemporaryFlagType {
     LOS = 1, /* Monster is marked for project_all_los(player_ptr, ) */
     ESP = 2, /* Monster is being sensed by ESP */
     ETF = 3, /* Monster is entering the field. */
-    BORN = 4, /* Monster is still being born */
-    PREVENT_MAGIC = 5, /* Monster is still being no-magic */
-    SANITY_BLAST = 6, /* Monster gives sanity blast effects to player */
+    PREVENT_MAGIC = 4, /* Monster is still being no-magic */
+    SANITY_BLAST = 5, /* Monster gives sanity blast effects to player */
     MAX,
 };
 

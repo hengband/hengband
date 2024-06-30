@@ -1,5 +1,4 @@
 #include "world/world-turn-processor.h"
-#include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-save.h"
 #include "core/disturbance.h"
 #include "core/magic-effects-timeout-reducer.h"
@@ -31,6 +30,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/angband-system.h"
+#include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -59,13 +59,14 @@ WorldTurnProcessor::WorldTurnProcessor(PlayerType *player_ptr)
 void WorldTurnProcessor::process_world()
 {
     const int a_day = TURNS_PER_TICK * TOWN_DAWN;
-    const int prev_turn_in_today = ((w_ptr->game_turn - TURNS_PER_TICK) % a_day + a_day / 4) % a_day;
+    const auto &world = AngbandWorld::get_instance();
+    const int prev_turn_in_today = ((world.game_turn - TURNS_PER_TICK) % a_day + a_day / 4) % a_day;
     const int prev_min = (1440 * prev_turn_in_today / a_day) % 60;
-    std::tie(std::ignore, this->hour, this->min) = w_ptr->extract_date_time(InnerGameData::get_instance().get_start_race());
+    std::tie(std::ignore, this->hour, this->min) = world.extract_date_time(InnerGameData::get_instance().get_start_race());
     update_dungeon_feeling(this->player_ptr);
     process_downward();
     process_monster_arena();
-    if (w_ptr->game_turn % TURNS_PER_TICK) {
+    if (world.game_turn % TURNS_PER_TICK) {
         return;
     }
 
@@ -109,7 +110,7 @@ void WorldTurnProcessor::print_time()
 
     c_put_str(TERM_WHITE, "             ", row, COL_DAY);
     auto day = 0;
-    std::tie(day, this->hour, this->min) = w_ptr->extract_date_time(InnerGameData::get_instance().get_start_race());
+    std::tie(day, this->hour, this->min) = AngbandWorld::get_instance().extract_date_time(InnerGameData::get_instance().get_start_race());
     if (day < 1000) {
         c_put_str(TERM_WHITE, format(_("%2d日目", "Day%3d"), day), row, COL_DAY);
     } else {
@@ -131,7 +132,7 @@ void WorldTurnProcessor::process_downward()
     floor_ptr->reset_dungeon_index();
     FloorChangeModesStore::get_instace()->set({ FloorChangeMode::FIRST_FLOOR, FloorChangeMode::RANDOM_PLACE });
     floor_ptr->inside_arena = false;
-    this->player_ptr->wild_mode = false;
+    AngbandWorld::get_instance().set_wild_mode(false);
     this->player_ptr->leaving = true;
 }
 
@@ -177,7 +178,7 @@ void WorldTurnProcessor::process_monster_arena_winner(int win_m_idx)
     msg_format(_("%sが勝利した！", "%s won!"), m_name.data());
     msg_print(nullptr);
 
-    if (win_m_idx == (sel_monster + 1)) {
+    if (win_m_idx == (bet_number + 1)) {
         msg_print(_("おめでとうございます。", "Congratulations."));
         msg_format(_("%d＄を受け取った。", "You received %d gold."), battle_odds);
         this->player_ptr->au += battle_odds;
@@ -193,12 +194,12 @@ void WorldTurnProcessor::process_monster_arena_winner(int win_m_idx)
 void WorldTurnProcessor::process_monster_arena_draw()
 {
     auto turn = this->player_ptr->current_floor_ptr->generated_turn;
-    if (w_ptr->game_turn - turn != 150 * TURNS_PER_TICK) {
+    if (AngbandWorld::get_instance().game_turn - turn != 150 * TURNS_PER_TICK) {
         return;
     }
 
     msg_print(_("申し訳ありませんが、この勝負は引き分けとさせていただきます。", "Sorry, but this battle ended in a draw."));
-    this->player_ptr->au += kakekin;
+    this->player_ptr->au += wager_melee;
     msg_print(nullptr);
     this->player_ptr->energy_need = 0;
     update_gambling_monsters(this->player_ptr);
@@ -212,7 +213,7 @@ void WorldTurnProcessor::decide_auto_save()
 
     auto should_save = autosave_t;
     should_save &= !AngbandSystem::get_instance().is_phase_out();
-    should_save &= w_ptr->game_turn % ((int32_t)autosave_freq * TURNS_PER_TICK) == 0;
+    should_save &= AngbandWorld::get_instance().game_turn % ((int32_t)autosave_freq * TURNS_PER_TICK) == 0;
     if (should_save) {
         do_cmd_save_game(this->player_ptr, true);
     }
@@ -221,9 +222,10 @@ void WorldTurnProcessor::decide_auto_save()
 void WorldTurnProcessor::process_change_daytime_night()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    const auto &world = AngbandWorld::get_instance();
     if (!floor_ptr->dun_level && !floor_ptr->is_in_quest() && !AngbandSystem::get_instance().is_phase_out() && !floor_ptr->inside_arena) {
-        if (!(w_ptr->game_turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2))) {
-            auto dawn = w_ptr->game_turn % (TURNS_PER_TICK * TOWN_DAWN) == 0;
+        if (!(world.game_turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2))) {
+            auto dawn = world.game_turn % (TURNS_PER_TICK * TOWN_DAWN) == 0;
             if (dawn) {
                 day_break(this->player_ptr);
             } else {
@@ -241,7 +243,7 @@ void WorldTurnProcessor::process_change_daytime_night()
         return;
     }
 
-    if ((w_ptr->game_turn % (TURNS_PER_TICK * STORE_TICKS)) != 0) {
+    if ((world.game_turn % (TURNS_PER_TICK * STORE_TICKS)) != 0) {
         return;
     }
 
@@ -251,11 +253,12 @@ void WorldTurnProcessor::process_change_daytime_night()
 void WorldTurnProcessor::process_world_monsters()
 {
     decide_alloc_monster();
-    if (!(w_ptr->game_turn % (TURNS_PER_TICK * 10)) && !AngbandSystem::get_instance().is_phase_out()) {
+    const auto &world = AngbandWorld::get_instance();
+    if (!(world.game_turn % (TURNS_PER_TICK * 10)) && !AngbandSystem::get_instance().is_phase_out()) {
         regenerate_monsters(this->player_ptr);
     }
 
-    if (!(w_ptr->game_turn % (TURNS_PER_TICK * 3))) {
+    if (!(world.game_turn % (TURNS_PER_TICK * 3))) {
         regenerate_captured_monsters(this->player_ptr);
     }
 
@@ -351,7 +354,7 @@ void WorldTurnProcessor::ring_nightmare_bell(int prev_min)
 
     disturb(this->player_ptr, true, true);
     msg_print(_("遠くで鐘が何回も鳴り、死んだような静けさの中へ消えていった。", "A distant bell tolls many times, fading into an deathly silence."));
-    if (this->player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         this->player_ptr->oldpy = randint1(MAX_HGT - 2);
         this->player_ptr->oldpx = randint1(MAX_WID - 2);
         change_wild_mode(this->player_ptr, true);

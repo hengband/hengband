@@ -55,7 +55,7 @@ static std::string display_race_stat(int cs, int *os, const std::string &cur, co
         rp_ptr = &race_info[cs];
         c_put_str(TERM_L_BLUE, rp_ptr->title, 3, 40);
         put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
-        put_str(_("の種族修正", ": Race modification"), 3, 40 + strlen(rp_ptr->title));
+        put_str(_("の種族修正", ": Race modification"), 3, 40 + rp_ptr->title->length());
 
         const auto stats = format("%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", rp_ptr->r_adj[0], rp_ptr->r_adj[1], rp_ptr->r_adj[2], rp_ptr->r_adj[3], rp_ptr->r_adj[4], rp_ptr->r_adj[5], (rp_ptr->r_exp - 100));
         c_put_str(TERM_L_BLUE, stats, 5, 40);

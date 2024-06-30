@@ -107,7 +107,7 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
         } else {
             if (tree) {
                 msg_format(_("%sを切っている。", "You chop away at the %s."), name.data());
-                if (randint0(100) < 25) {
+                if (one_in_(4)) {
                     search(player_ptr);
                 }
             } else {
@@ -118,7 +118,7 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
         }
     }
 
-    if (is_hidden_door(player_ptr, grid) && (randint0(100) < 25)) {
+    if (is_hidden_door(player_ptr, grid) && one_in_(4)) {
         search(player_ptr);
     }
 

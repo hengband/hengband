@@ -190,8 +190,9 @@ PRICE object_value_real(const ItemEntity *o_ptr)
         }
 
         value += ((o_ptr->to_h + o_ptr->to_d + o_ptr->to_a) * 100L);
-        value += (o_ptr->dd - baseitem.dd) * o_ptr->ds * 250L;
-        value += (o_ptr->ds - baseitem.ds) * o_ptr->dd * 250L;
+        const auto &dice = o_ptr->damage_dice;
+        value += (dice.num - baseitem.damage_dice.num) * dice.sides * 250L;
+        value += (dice.sides - baseitem.damage_dice.sides) * dice.num * 250L;
         break;
     }
     case ItemKindType::SHOT:
@@ -202,8 +203,9 @@ PRICE object_value_real(const ItemEntity *o_ptr)
         }
 
         value += ((o_ptr->to_h + o_ptr->to_d) * 5L);
-        value += (o_ptr->dd - baseitem.dd) * o_ptr->ds * 5L;
-        value += (o_ptr->ds - baseitem.ds) * o_ptr->dd * 5L;
+        const auto &dice = o_ptr->damage_dice;
+        value += (dice.num - baseitem.damage_dice.num) * dice.sides * 5L;
+        value += (dice.sides - baseitem.damage_dice.sides) * dice.num * 5L;
         break;
     }
     case ItemKindType::FIGURINE: {

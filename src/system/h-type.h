@@ -130,8 +130,6 @@ typedef int16_t SUB_EXP; /*!< ゲーム中の副経験値の型定義 */
 typedef int16_t PARAMETER_VALUE; /*!< ゲーム中のアイテム能力値の型定義 */
 typedef int32_t WEIGHT; /*!< ゲーム中の重量の型定義(ポンド) */
 
-typedef int DICE_NUMBER; /*!< ゲーム中のダイス数の型定義 */
-typedef int DICE_SID; /*!< ゲーム中のダイス面の型定義 */
 typedef int32_t PRICE; /*!< ゲーム中の金額価値の型定義 */
 
 typedef int POWER; /*!< 魔法の効力定義*/

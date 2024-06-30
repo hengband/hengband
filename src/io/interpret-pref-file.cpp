@@ -336,6 +336,7 @@ static bool interpret_v_token(char *buf)
  */
 static void interpret_xy_token(PlayerType *player_ptr, char *buf)
 {
+    const auto &world = AngbandWorld::get_instance();
     for (int i = 0; option_info[i].o_desc; i++) {
         bool is_option = option_info[i].o_var != nullptr;
         is_option &= option_info[i].o_text != nullptr;
@@ -347,7 +348,7 @@ static void interpret_xy_token(PlayerType *player_ptr, char *buf)
         int os = option_info[i].o_set;
         int ob = option_info[i].o_bit;
 
-        if ((player_ptr->playing || w_ptr->character_xtra) && (OPT_PAGE_BIRTH == option_info[i].o_page) && !w_ptr->wizard) {
+        if ((player_ptr->playing || world.character_xtra) && (OPT_PAGE_BIRTH == option_info[i].o_page) && !world.wizard) {
             msg_format(_("初期オプションは変更できません! '%s'", "Birth options can not be changed! '%s'"), buf);
             msg_print(nullptr);
             return;

@@ -20,7 +20,7 @@
 #include "realm/realm-names-table.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-util.h"
-#include "system/angband-version.h"
+#include "system/angband-system.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -101,7 +101,7 @@ static SpoilerOutputResultType spoil_mon_evol()
     }
 
     std::stringstream ss;
-    ss << "Monster Spoilers for " << get_version() << '\n';
+    ss << "Monster Spoilers for " << AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL) << '\n';
     spoil_out(ss.str());
     spoil_out("------------------------------------------\n\n");
     for (auto monrace_id : get_mon_evol_roots()) {
@@ -177,14 +177,14 @@ static SpoilerOutputResultType spoil_player_spell()
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
-    spoil_out(format("Player spells for %s\n", get_version().data()));
+    spoil_out(format("Player spells for %s\n", AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL).data()));
     spoil_out("------------------------------------------\n\n");
 
     PlayerType dummy_p;
     dummy_p.lev = 1;
     for (auto c = 0; c < PLAYER_CLASS_TYPE_MAX; c++) {
-        auto class_ptr = &class_info[c];
-        spoil_out(format("[[Class: %s]]\n", class_ptr->title));
+        auto class_ptr = &class_info.at(i2enum<PlayerClassType>(c));
+        spoil_out(format("[[Class: %s]]\n", class_ptr->title.data()));
 
         auto magic_ptr = &class_magics_info[c];
         std::string book_name = _("なし", "None");
@@ -202,14 +202,15 @@ static SpoilerOutputResultType spoil_player_spell()
         auto trainable = magic_ptr->is_spell_trainable ? "Trainable " : "";
         auto glove = magic_ptr->has_glove_mp_penalty ? "GlovePenalty " : "";
         auto failcap = magic_ptr->has_magic_fail_rate_cap ? "5%FailCap " : "";
-        spoil_out(format(mes, book_name.data(), spell.data(), glove, failcap, trainable, magic_ptr->spell_type, magic_ptr->spell_weight));
+        auto spell_type = enum2i(magic_ptr->spell_book);
+        spoil_out(format(mes, book_name.data(), spell.data(), glove, failcap, trainable, spell_type, magic_ptr->spell_weight));
         if (magic_ptr->spell_book == ItemKindType::NONE) {
             spoil_out(_("呪文なし\n\n", "No spells.\n\n"));
             continue;
         }
 
         for (int16_t r = 1; r < MAX_MAGIC; r++) {
-            spoil_out(format("[Realm: %s]\n", realm_names[r]));
+            spoil_out(format("[Realm: %s]\n", realm_names[r].data()));
             spoil_out("Name                     Lv Cst Dif Exp\n");
             for (SPELL_IDX i = 0; i < 32; i++) {
                 auto spell_ptr = &magic_ptr->info[r][i];

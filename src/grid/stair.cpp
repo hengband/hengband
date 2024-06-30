@@ -44,7 +44,7 @@ void place_random_stairs(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     if (down_stairs && up_stairs) {
-        if (randint0(100) < 50) {
+        if (one_in_(2)) {
             up_stairs = false;
         } else {
             down_stairs = false;

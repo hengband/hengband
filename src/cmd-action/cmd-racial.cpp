@@ -37,6 +37,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "view/display-util.h"
+#include "world/world.h"
 #include <string>
 
 constexpr auto RC_PAGE_SIZE = 18;
@@ -449,7 +450,7 @@ static bool racial_power_reduce_mana(PlayerType *player_ptr, rc_type *rc_ptr)
  */
 void do_cmd_racial_power(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode) {
+    if (AngbandWorld::get_instance().is_wild_mode()) {
         return;
     }
 

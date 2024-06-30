@@ -1,6 +1,6 @@
 #include "wizard/fixed-artifacts-spoiler.h"
 #include "io/files-util.h"
-#include "system/angband-version.h"
+#include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
@@ -75,8 +75,7 @@ static ItemEntity make_fake_artifact(FixedArtifactId fa_id)
     item.fa_id = fa_id;
     item.pval = artifact.pval;
     item.ac = artifact.ac;
-    item.dd = artifact.dd;
-    item.ds = artifact.ds;
+    item.damage_dice = artifact.damage_dice;
     item.to_a = artifact.to_a;
     item.to_h = artifact.to_h;
     item.to_d = artifact.to_d;
@@ -131,7 +130,7 @@ SpoilerOutputResultType spoil_fixed_artifact()
     }
 
     std::stringstream ss;
-    ss << "Artifact Spoilers for Hengband Version " << get_version();
+    ss << "Artifact Spoilers for Hengband Version " << AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL);
     spoiler_underline(ss.str(), ofs);
     for (const auto &[tval_list, name] : group_artifact_list) {
         spoiler_blanklines(2, ofs);

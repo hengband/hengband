@@ -1472,7 +1472,7 @@ static void setup_menus(void)
 {
     HMENU hm = GetMenu(data[0].w);
 
-    if (w_ptr->character_generated) {
+    if (AngbandWorld::get_instance().character_generated) {
         EnableMenuItem(hm, IDM_FILE_NEW, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
         EnableMenuItem(hm, IDM_FILE_OPEN, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
         EnableMenuItem(hm, IDM_FILE_SAVE, MF_BYCOMMAND | MF_ENABLED);
@@ -1615,7 +1615,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
         break;
     }
     case IDM_FILE_SAVE: {
-        if (game_in_progress && w_ptr->character_generated) {
+        if (game_in_progress && AngbandWorld::get_instance().character_generated) {
             if (!can_save) {
                 plog(_("今はセーブすることは出来ません。", "You may not do that right now."));
                 break;
@@ -1630,7 +1630,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
         break;
     }
     case IDM_FILE_EXIT: {
-        if (game_in_progress && w_ptr->character_generated) {
+        if (game_in_progress && AngbandWorld::get_instance().character_generated) {
             if (!can_save) {
                 plog(_("今は終了できません。", "You may not do that right now."));
                 break;
@@ -2419,7 +2419,7 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
         return 0;
     }
     case WM_CLOSE: {
-        if (!game_in_progress || !w_ptr->character_generated) {
+        if (!game_in_progress || !AngbandWorld::get_instance().character_generated) {
             quit(nullptr);
             return 0;
         }
@@ -2437,7 +2437,7 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
         return 0;
     }
     case WM_QUERYENDSESSION: {
-        if (!game_in_progress || !w_ptr->character_generated) {
+        if (!game_in_progress || !AngbandWorld::get_instance().character_generated) {
             quit(nullptr);
             return 0;
         }

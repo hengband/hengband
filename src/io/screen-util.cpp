@@ -44,7 +44,7 @@
  */
 void resize_map()
 {
-    if (!w_ptr->character_dungeon) {
+    if (!AngbandWorld::get_instance().character_dungeon) {
         return;
     }
 
