@@ -210,9 +210,8 @@ static SpoilerOutputResultType spoil_player_spell()
 
         const auto choices = PlayerRealm::get_realm1_choices(pclass) | PlayerRealm::get_realm2_choices(pclass);
         const auto is_every_magic = pclass == PlayerClassType::SORCERER || pclass == PlayerClassType::RED_MAGE;
-        for (const auto realm : MAGIC_REALM_RANGE) {
-            /// @todo 歌・武芸・呪術への対応
-            if (!is_every_magic && choices.has_not(realm)) {
+        for (const auto realm : EnumRange(REALM_LIFE, REALM_MAX)) {
+            if (!(is_every_magic && MAGIC_REALM_RANGE.contains(realm)) && choices.has_not(realm)) {
                 continue;
             }
 
