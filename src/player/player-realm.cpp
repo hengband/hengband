@@ -1,4 +1,5 @@
 #include "player/player-realm.h"
+#include "locale/localized-string.h"
 #include "object/tval-types.h"
 #include "player-info/class-info.h"
 #include "realm/realm-types.h"
@@ -7,6 +8,23 @@
 #include "util/enum-converter.h"
 
 namespace {
+
+const std::map<magic_realm_type, LocalizedString> realm_names = {
+    { REALM_NONE, { "魔法なし", "none" } },
+    { REALM_LIFE, { "生命", "Life" } },
+    { REALM_SORCERY, { "仙術", "Sorcery" } },
+    { REALM_NATURE, { "自然", "Nature" } },
+    { REALM_CHAOS, { "カオス", "Chaos" } },
+    { REALM_DEATH, { "暗黒", "Death" } },
+    { REALM_TRUMP, { "トランプ", "Trump" } },
+    { REALM_ARCANE, { "秘術", "Arcane" } },
+    { REALM_CRAFT, { "匠", "Craft" } },
+    { REALM_DAEMON, { "悪魔", "Daemon" } },
+    { REALM_CRUSADE, { "破邪", "Crusade" } },
+    { REALM_MUSIC, { "歌", "Music" } },
+    { REALM_HISSATSU, { "武芸", "Kendo" } },
+    { REALM_HEX, { "呪術", "Hex" } },
+};
 
 const std::map<magic_realm_type, ItemKindType> realm_books = {
     { REALM_NONE, ItemKindType::NONE },
@@ -60,6 +78,15 @@ PlayerRealm::PlayerRealm(PlayerType *player_ptr)
     : realm1_(player_ptr->realm1)
     , realm2_(player_ptr->realm2)
 {
+}
+
+const LocalizedString &PlayerRealm::get_name(int realm)
+{
+    const auto it = realm_names.find(i2enum<magic_realm_type>(realm));
+    if (it == realm_names.end()) {
+        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", realm));
+    }
+    return it->second;
 }
 
 const magic_type &PlayerRealm::get_spell_info(int realm, int spell_idx)
@@ -120,6 +147,11 @@ const PlayerRealm::Realm &PlayerRealm::realm2() const
 PlayerRealm::Realm::Realm(int realm)
     : realm(realm)
 {
+}
+
+const LocalizedString &PlayerRealm::Realm::get_name() const
+{
+    return PlayerRealm::get_name(this->realm);
 }
 
 const magic_type &PlayerRealm::Realm::get_spell_info(int num) const

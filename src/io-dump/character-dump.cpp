@@ -22,6 +22,7 @@
 #include "object/object-info.h"
 #include "pet/pet-util.h"
 #include "player-info/alignment.h"
+#include "player/player-realm.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
 #include "player/race-info-table.h"
@@ -432,7 +433,7 @@ static void dump_aux_realm_history(PlayerType *player_ptr, FILE *fff)
         if (!(player_ptr->old_realm & 1UL << i)) {
             continue;
         }
-        fprintf(fff, _("\n あなたはかつて%s魔法を使えた。", "\n You were able to use %s magic before."), realm_names[i + 1].data());
+        fprintf(fff, _("\n あなたはかつて%s魔法を使えた。", "\n You were able to use %s magic before."), PlayerRealm::get_name(i + 1).data());
     }
 
     fputc('\n', fff);

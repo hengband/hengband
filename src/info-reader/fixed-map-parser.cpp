@@ -16,7 +16,7 @@
 #include "main/init-error-messages-table.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
-#include "realm/realm-names-table.h"
+#include "player/player-realm.h"
 #include "system/angband-exceptions.h"
 #include "system/angband-system.h"
 #include "system/floor-type-definition.h"
@@ -175,9 +175,9 @@ static std::string parse_fixed_map_expression(PlayerType *player_ptr, char **sp,
     } else if (streq(b + 1, "CLASS")) {
         v = cp_ptr->title.en_string();
     } else if (streq(b + 1, "REALM1")) {
-        v = realm_names[player_ptr->realm1].en_string();
+        v = PlayerRealm(player_ptr).realm1().get_name().en_string();
     } else if (streq(b + 1, "REALM2")) {
-        v = realm_names[player_ptr->realm2].en_string();
+        v = PlayerRealm(player_ptr).realm2().get_name().en_string();
     } else if (streq(b + 1, "PLAYER")) {
         char tmp_player_name[32];
         char *pn, *tpn;

@@ -17,7 +17,7 @@
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "player-info/class-info.h"
-#include "realm/realm-names-table.h"
+#include "player/player-realm.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-util.h"
 #include "system/angband-system.h"
@@ -210,7 +210,7 @@ static SpoilerOutputResultType spoil_player_spell()
         }
 
         for (int16_t r = 1; r < MAX_MAGIC; r++) {
-            spoil_out(format("[Realm: %s]\n", realm_names[r].data()));
+            spoil_out(format("[Realm: %s]\n", PlayerRealm::get_name(r).data()));
             spoil_out("Name                     Lv Cst Dif Exp\n");
             for (SPELL_IDX i = 0; i < 32; i++) {
                 auto spell_ptr = &magic_ptr->info[r][i];

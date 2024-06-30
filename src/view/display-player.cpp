@@ -23,11 +23,11 @@
 #include "player-info/mimic-info-table.h"
 #include "player/patron.h"
 #include "player/player-personality.h"
+#include "player/player-realm.h"
 #include "player/player-sex.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"
-#include "realm/realm-names-table.h"
 #include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
@@ -42,6 +42,7 @@
 #include "view/display-util.h"
 #include "view/status-first-page.h"
 #include "world/world.h"
+#include <sstream>
 #include <string>
 
 /*!
@@ -100,17 +101,18 @@ static void display_magic_realms(PlayerType *player_ptr)
         return;
     }
 
-    std::string tmp;
     if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
-        tmp = get_element_title(player_ptr->element);
-    } else if (player_ptr->realm2) {
-        tmp = realm_names[player_ptr->realm1];
-        tmp.append(", ").append(realm_names[player_ptr->realm2]);
-    } else {
-        tmp = realm_names[player_ptr->realm1];
+        display_player_one_line(ENTRY_REALM, get_element_title(player_ptr->element), TERM_L_BLUE);
+        return;
     }
 
-    display_player_one_line(ENTRY_REALM, tmp, TERM_L_BLUE);
+    PlayerRealm pr(player_ptr);
+    std::stringstream ss;
+    ss << pr.realm1().get_name();
+    if (player_ptr->realm2) {
+        ss << ", " << pr.realm2().get_name();
+    }
+    display_player_one_line(ENTRY_REALM, ss.str(), TERM_L_BLUE);
 }
 
 /*!

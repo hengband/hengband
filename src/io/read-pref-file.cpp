@@ -14,7 +14,7 @@
 #include "io/pref-file-expressor.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
-#include "realm/realm-names-table.h"
+#include "player/player-realm.h"
 #include "system/player-type-definition.h"
 #include "term/z-form.h"
 #include "util/angband-files.h"
@@ -279,16 +279,18 @@ void close_auto_dump(FILE **fpp, std::string_view mark)
 void load_all_pref_files(PlayerType *player_ptr)
 {
     process_pref_file(player_ptr, "user.prf");
-    process_pref_file(player_ptr, std::string("user-").append(ANGBAND_SYS).append(".prf"));
-    process_pref_file(player_ptr, std::string(rp_ptr->title).append(".prf"));
-    process_pref_file(player_ptr, std::string(cp_ptr->title).append(".prf"));
-    process_pref_file(player_ptr, std::string(player_ptr->base_name).append(".prf"));
+    process_pref_file(player_ptr, format("user-%s.prf", ANGBAND_SYS));
+    constexpr auto fmt = "%s.prf";
+    process_pref_file(player_ptr, format(fmt, rp_ptr->title.data()));
+    process_pref_file(player_ptr, format(fmt, cp_ptr->title.data()));
+    process_pref_file(player_ptr, format(fmt, player_ptr->base_name));
+    PlayerRealm pr(player_ptr);
     if (player_ptr->realm1 != REALM_NONE) {
-        process_pref_file(player_ptr, std::string(realm_names[player_ptr->realm1]).append(".prf"));
+        process_pref_file(player_ptr, format(fmt, pr.realm1().get_name().data()));
     }
 
     if (player_ptr->realm2 != REALM_NONE) {
-        process_pref_file(player_ptr, std::string(realm_names[player_ptr->realm2]).append(".prf"));
+        process_pref_file(player_ptr, format(fmt, pr.realm2().get_name().data()));
     }
 
     autopick_load_pref(player_ptr, false);

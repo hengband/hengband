@@ -31,9 +31,9 @@
 #include "player-info/race-types.h"
 #include "player/patron.h"
 #include "player/player-personality.h"
+#include "player/player-realm.h"
 #include "player/player-sex.h"
 #include "player/race-info-table.h"
-#include "realm/realm-names-table.h"
 #include "store/store-owners.h"
 #include "store/store.h"
 #include "system/player-type-definition.h"
@@ -66,9 +66,10 @@ static void write_birth_diary(PlayerType *player_ptr)
     exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, mes_race);
     const auto mes_class = format(_("%s職業に%sを選択した。", "%schose %s class."), indent, class_info.at(player_ptr->pclass).title.data());
     exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, mes_class);
+    PlayerRealm pr(player_ptr);
     if (player_ptr->realm1) {
-        const auto mes_realm2 = player_ptr->realm2 ? format(_("と%s", " and %s realms"), realm_names[player_ptr->realm2].data()) : _("", " realm");
-        const auto mes_realm = format(_("%s魔法の領域に%s%sを選択した。", "%schose %s%s."), indent, realm_names[player_ptr->realm1].data(), mes_realm2.data());
+        const auto mes_realm2 = player_ptr->realm2 ? format(_("と%s", " and %s realms"), pr.realm2().get_name().data()) : _("", " realm");
+        const auto mes_realm = format(_("%s魔法の領域に%s%sを選択した。", "%schose %s%s."), indent, pr.realm1().get_name().data(), mes_realm2.data());
         exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, mes_realm);
     }
 
