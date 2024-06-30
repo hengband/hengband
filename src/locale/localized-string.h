@@ -11,7 +11,8 @@
  * 日本語版において日本語の文字列とそれに対応する英語の文字列が
  * 必要な場合に使用する std::string のラッパー的なクラス
  */
-struct LocalizedString {
+class LocalizedString {
+public:
     LocalizedString() = default;
     LocalizedString(const std::string &localized, const std::string &english);
 
