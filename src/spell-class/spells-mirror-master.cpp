@@ -248,8 +248,6 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
 {
     constexpr auto typ = AttributeType::SEEKER;
     BIT_FLAGS flag = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM | PROJECT_THRU | PROJECT_MIRROR;
-    rakubadam_p = 0;
-    rakubadam_m = 0;
     monster_target_y = this->player_ptr->y;
     monster_target_x = this->player_ptr->x;
     auto &floor = *this->player_ptr->current_floor_ptr;
@@ -433,8 +431,6 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     POSITION x2;
     constexpr auto typ = AttributeType::SUPER_RAY;
     BIT_FLAGS flag = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM | PROJECT_THRU | PROJECT_MIRROR;
-    rakubadam_p = 0;
-    rakubadam_m = 0;
     monster_target_y = this->player_ptr->y;
     monster_target_x = this->player_ptr->x;
     const auto &floor = *this->player_ptr->current_floor_ptr;

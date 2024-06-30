@@ -657,7 +657,7 @@ static void postprocess_by_effected_pet(PlayerType *player_ptr, EffectMonster *e
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  */
-static void postprocess_by_riding_pet_effected(PlayerType *player_ptr, EffectMonster *em_ptr)
+static void postprocess_by_riding_pet_effected(PlayerType *player_ptr, EffectMonster *em_ptr, FallOffHorseEffect *fall_off_horse_effect)
 {
     if (!player_ptr->riding || (player_ptr->riding != em_ptr->g_ptr->m_idx) || (em_ptr->dam <= 0)) {
         return;
@@ -667,7 +667,9 @@ static void postprocess_by_riding_pet_effected(PlayerType *player_ptr, EffectMon
         em_ptr->dam = (em_ptr->dam + 1) / 2;
     }
 
-    rakubadam_m = (em_ptr->dam > 200) ? 200 : em_ptr->dam;
+    if (fall_off_horse_effect) {
+        fall_off_horse_effect->set_shake_off(em_ptr->dam);
+    }
 }
 
 /*!
@@ -693,10 +695,10 @@ static void postprocess_by_taking_photo(PlayerType *player_ptr, EffectMonster *e
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  */
-static void exe_affect_monster_postprocess(PlayerType *player_ptr, EffectMonster *em_ptr)
+static void exe_affect_monster_postprocess(PlayerType *player_ptr, EffectMonster *em_ptr, FallOffHorseEffect *fall_off_horse_effect)
 {
     postprocess_by_effected_pet(player_ptr, em_ptr);
-    postprocess_by_riding_pet_effected(player_ptr, em_ptr);
+    postprocess_by_riding_pet_effected(player_ptr, em_ptr, fall_off_horse_effect);
     postprocess_by_taking_photo(player_ptr, em_ptr);
     project_m_n++;
     project_m_x = em_ptr->x;
@@ -723,7 +725,7 @@ static void exe_affect_monster_postprocess(PlayerType *player_ptr, EffectMonster
  */
 bool affect_monster(
     PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITION y, POSITION x, int dam, AttributeType attribute, BIT_FLAGS flag, bool see_s_msg,
-    std::optional<CapturedMonsterType *> cap_mon_ptr)
+    std::optional<CapturedMonsterType *> cap_mon_ptr, FallOffHorseEffect *fall_off_horse_effect)
 {
     EffectMonster tmp_effect(player_ptr, src_idx, r, y, x, dam, attribute, flag, see_s_msg);
     auto *em_ptr = &tmp_effect;
@@ -757,6 +759,6 @@ bool affect_monster(
         RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
     }
 
-    exe_affect_monster_postprocess(player_ptr, em_ptr);
+    exe_affect_monster_postprocess(player_ptr, em_ptr, fall_off_horse_effect);
     return em_ptr->obvious;
 }

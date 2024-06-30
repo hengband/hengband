@@ -192,7 +192,7 @@ static void describe_effect_source(PlayerType *player_ptr, EffectPlayerType *ep_
  * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
  */
 bool affect_player(MONSTER_IDX src_idx, PlayerType *player_ptr, concptr src_name, int r, POSITION y, POSITION x, int dam, AttributeType attribute,
-    BIT_FLAGS flag, project_func project)
+    BIT_FLAGS flag, FallOffHorseEffect &fall_off_horse_effect, project_func project)
 {
     EffectPlayerType tmp_effect(src_idx, dam, attribute, flag);
     auto *ep_ptr = &tmp_effect;
@@ -219,8 +219,8 @@ bool affect_player(MONSTER_IDX src_idx, PlayerType *player_ptr, concptr src_name
         }
     }
 
-    if (player_ptr->riding && ep_ptr->dam > 0) {
-        rakubadam_p = (ep_ptr->dam > 200) ? 200 : ep_ptr->dam;
+    if (player_ptr->riding) {
+        fall_off_horse_effect.set_fall_off(ep_ptr->dam);
     }
 
     disturb(player_ptr, true, true);

@@ -70,8 +70,6 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
     POSITION gx[1024]{};
     POSITION gy[1024]{};
     POSITION gm[32]{};
-    rakubadam_p = 0;
-    rakubadam_m = 0;
     monster_target_y = player_ptr->y;
     monster_target_x = player_ptr->x;
 
@@ -352,6 +350,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
         }
     }
 
+    FallOffHorseEffect fall_off_horse_effect(player_ptr);
     if (flag & (PROJECT_KILL)) {
         project_m_n = 0;
         project_m_x = 0;
@@ -474,7 +473,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                 }
             }
 
-            if (affect_monster(player_ptr, src_idx, effective_dist, pos.y, pos.x, dam, typ, flag, see_s_msg, cap_mon_ptr)) {
+            if (affect_monster(player_ptr, src_idx, effective_dist, pos.y, pos.x, dam, typ, flag, see_s_msg, cap_mon_ptr, &fall_off_horse_effect)) {
                 res.notice = true;
             }
         }
@@ -552,27 +551,14 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                 who_name = monster_desc(player_ptr, &floor.m_list[src_idx], MD_WRONGDOER_NAME);
             }
 
-            if (affect_player(src_idx, player_ptr, who_name.data(), effective_dist, pos.y, pos.x, dam, typ, flag, project)) {
+            if (affect_player(src_idx, player_ptr, who_name.data(), effective_dist, pos.y, pos.x, dam, typ, flag, fall_off_horse_effect, project)) {
                 res.notice = true;
                 res.affected_player = true;
             }
         }
     }
 
-    if (player_ptr->riding) {
-        const auto m_name = monster_desc(player_ptr, &floor.m_list[player_ptr->riding], 0);
-        if (rakubadam_m > 0) {
-            if (process_fall_off_horse(player_ptr, rakubadam_m, false)) {
-                msg_format(_("%s^に振り落とされた！", "%s^ has thrown you off!"), m_name.data());
-            }
-        }
-
-        if (player_ptr->riding && rakubadam_p > 0) {
-            if (process_fall_off_horse(player_ptr, rakubadam_p, false)) {
-                msg_format(_("%s^から落ちてしまった！", "You have fallen from %s."), m_name.data());
-            }
-        }
-    }
+    fall_off_horse_effect.apply();
 
     return res;
 }
