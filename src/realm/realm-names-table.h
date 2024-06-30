@@ -13,7 +13,7 @@
 #include "util/enum-converter.h"
 #include <vector>
 
-#define VALID_REALM (MAX_REALM + MAX_MAGIC - MIN_TECHNIC + 1)
+constexpr auto VALID_REALM = std::ssize(MAGIC_REALM_RANGE) + std::ssize(TECHNIC_REALM_RANGE);
 #define is_magic(A) (((A) > REALM_NONE) && ((A) <= MAX_MAGIC))
 
 enum class ItemKindType : short;
