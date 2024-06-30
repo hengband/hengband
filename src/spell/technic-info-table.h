@@ -3,7 +3,7 @@
 #include "realm/realm-types.h"
 #include "system/angband.h"
 
-#define NUM_TECHNIC (MAX_REALM - MIN_TECHNIC + 1)
+constexpr auto NUM_TECHNIC = std::ssize(TECHNIC_REALM_RANGE);
 
 /*
  * The "name" of spell 'N' is stored as spell_names[X][N],

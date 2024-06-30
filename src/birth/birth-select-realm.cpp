@@ -28,77 +28,6 @@ struct birth_realm_type {
     int os;
 };
 
-static byte count_realm_selection(const uint32_t choices, int *count)
-{
-    byte auto_select = REALM_NONE;
-    if (choices & CH_LIFE) {
-        (*count)++;
-        auto_select = REALM_LIFE;
-    }
-
-    if (choices & CH_SORCERY) {
-        (*count)++;
-        auto_select = REALM_SORCERY;
-    }
-
-    if (choices & CH_NATURE) {
-        (*count)++;
-        auto_select = REALM_NATURE;
-    }
-
-    if (choices & CH_CHAOS) {
-        (*count)++;
-        auto_select = REALM_CHAOS;
-    }
-
-    if (choices & CH_DEATH) {
-        (*count)++;
-        auto_select = REALM_DEATH;
-    }
-
-    if (choices & CH_TRUMP) {
-        (*count)++;
-        auto_select = REALM_TRUMP;
-    }
-
-    if (choices & CH_ARCANE) {
-        (*count)++;
-        auto_select = REALM_ARCANE;
-    }
-
-    if (choices & CH_ENCHANT) {
-        (*count)++;
-        auto_select = REALM_CRAFT;
-    }
-
-    if (choices & CH_DAEMON) {
-        (*count)++;
-        auto_select = REALM_DAEMON;
-    }
-
-    if (choices & CH_CRUSADE) {
-        (*count)++;
-        auto_select = REALM_CRUSADE;
-    }
-
-    if (choices & CH_MUSIC) {
-        (*count)++;
-        auto_select = REALM_MUSIC;
-    }
-
-    if (choices & CH_HISSATSU) {
-        (*count)++;
-        auto_select = REALM_HISSATSU;
-    }
-
-    if (choices & CH_HEX) {
-        (*count)++;
-        auto_select = REALM_HEX;
-    }
-
-    return auto_select;
-}
-
 static birth_realm_type *initialize_birth_realm_type(birth_realm_type *birth_realm_ptr)
 {
     birth_realm_ptr->cs = 0;
@@ -112,7 +41,7 @@ static birth_realm_type *initialize_birth_realm_type(birth_realm_type *birth_rea
     return birth_realm_ptr;
 }
 
-static void impose_first_realm(PlayerType *player_ptr, uint32_t *choices)
+static void impose_first_realm(PlayerType *player_ptr, RealmChoices &choices)
 {
     if (player_ptr->realm2 == REALM_SELECT_CANCEL) {
         return;
@@ -123,20 +52,20 @@ static void impose_first_realm(PlayerType *player_ptr, uint32_t *choices)
     }
 
     if (is_good_realm(player_ptr->realm1)) {
-        *choices &= ~(CH_DEATH | CH_DAEMON);
+        choices.reset({ REALM_DEATH, REALM_DAEMON });
     } else {
-        *choices &= ~(CH_LIFE | CH_CRUSADE);
+        choices.reset({ REALM_LIFE, REALM_CRUSADE });
     }
 }
 
-static void analyze_realms(const PlayerType *player_ptr, const uint32_t choices, birth_realm_type *birth_realm_ptr)
+static void analyze_realms(const PlayerType *player_ptr, const RealmChoices &choices, birth_realm_type *birth_realm_ptr)
 {
-    for (int i = 0; i < 32; i++) {
-        if ((choices & (1UL << i)) == 0) {
+    for (auto realm : EnumRange(REALM_LIFE, REALM_MAX)) {
+        if (choices.has_not(realm)) {
             continue;
         }
 
-        if (player_ptr->realm1 == i + 1) {
+        if (player_ptr->realm1 == realm) {
             if (player_ptr->realm2 == REALM_SELECT_CANCEL) {
                 birth_realm_ptr->cs = birth_realm_ptr->n;
             } else {
@@ -144,15 +73,15 @@ static void analyze_realms(const PlayerType *player_ptr, const uint32_t choices,
             }
         }
 
-        if (player_ptr->realm2 == i + 1) {
+        if (player_ptr->realm2 == realm) {
             birth_realm_ptr->cs = birth_realm_ptr->n;
         }
 
         birth_realm_ptr->sym[birth_realm_ptr->n] = I2A(birth_realm_ptr->n);
 
-        const auto buf = format("%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->n], birth_realm_ptr->p2, realm_names[i + 1].data());
+        const auto buf = format("%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->n], birth_realm_ptr->p2, realm_names[realm].data());
         put_str(buf, 12 + (birth_realm_ptr->n / 5), 2 + 15 * (birth_realm_ptr->n % 5));
-        birth_realm_ptr->picks[birth_realm_ptr->n++] = i + 1;
+        birth_realm_ptr->picks[birth_realm_ptr->n++] = realm;
     }
 }
 
@@ -271,15 +200,14 @@ static bool get_a_realm(PlayerType *player_ptr, birth_realm_type *birth_realm_pt
  * @return 選択した魔法領域のID
  * @details 領域数が0 (戦士等)or 1 (観光客等)なら自動での値を返す
  */
-static byte select_realm(PlayerType *player_ptr, uint32_t choices, int *count)
+static byte select_realm(PlayerType *player_ptr, RealmChoices choices)
 {
-    byte auto_select = count_realm_selection(choices, count);
     clear_from(10);
-    if ((*count) < 2) {
-        return auto_select;
+    if (choices.count() <= 1) {
+        return choices.first().value_or(REALM_NONE);
     }
 
-    impose_first_realm(player_ptr, &choices);
+    impose_first_realm(player_ptr, choices);
     put_str(_("注意：魔法の領域の選択によりあなたが習得する呪文のタイプが決まります。", "Note: The realm of magic will determine which spells you can learn."),
         23, 5);
 
@@ -351,8 +279,8 @@ bool get_player_realms(PlayerType *player_ptr)
     }
 
     while (true) {
-        int count = 0;
-        player_ptr->realm1 = select_realm(player_ptr, realm_choices1[enum2i(player_ptr->pclass)], &count);
+        auto choices = PlayerRealm::get_realm1_choices(player_ptr->pclass);
+        player_ptr->realm1 = select_realm(player_ptr, choices);
         if (player_ptr->realm1 == REALM_SELECT_CANCEL) {
             return false;
         }
@@ -363,7 +291,7 @@ bool get_player_realms(PlayerType *player_ptr)
         cleanup_realm_selection_window();
         display_wrap_around(realm_explanations[technic2magic(player_ptr->realm1) - 1], 74, 12, 3);
 
-        if (check_realm_selection(player_ptr, count)) {
+        if (check_realm_selection(player_ptr, choices.count())) {
             break;
         }
     }
@@ -380,8 +308,8 @@ bool get_player_realms(PlayerType *player_ptr)
 
     /* Select the second realm */
     while (true) {
-        int count = 0;
-        player_ptr->realm2 = select_realm(player_ptr, realm_choices2[enum2i(player_ptr->pclass)], &count);
+        auto choices = PlayerRealm::get_realm2_choices(player_ptr->pclass);
+        player_ptr->realm2 = select_realm(player_ptr, choices);
 
         if (player_ptr->realm2 == REALM_SELECT_CANCEL) {
             return false;
@@ -393,7 +321,7 @@ bool get_player_realms(PlayerType *player_ptr)
         cleanup_realm_selection_window();
         display_wrap_around(realm_explanations[technic2magic(player_ptr->realm2) - 1], 74, 12, 3);
 
-        if (check_realm_selection(player_ptr, count)) {
+        if (check_realm_selection(player_ptr, choices.count())) {
             break;
         }
     }

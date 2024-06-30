@@ -25,77 +25,36 @@ const std::map<magic_realm_type, ItemKindType> realm_books = {
     { REALM_HEX, ItemKindType::HEX_BOOK },
 };
 
-}
-
 /*!
  * 職業毎に選択可能な第一領域魔法テーブル
  */
-const std::vector<BIT_FLAGS> realm_choices1 = {
-    (CH_NONE), /* Warrior */
-    (CH_LIFE | CH_SORCERY | CH_NATURE | CH_CHAOS | CH_DEATH | CH_TRUMP | CH_ARCANE | CH_ENCHANT | CH_DAEMON | CH_CRUSADE), /* Mage */
-    (CH_LIFE | CH_DEATH | CH_DAEMON | CH_CRUSADE), /* Priest */
-    (CH_SORCERY | CH_DEATH | CH_TRUMP | CH_ARCANE | CH_ENCHANT), /* Rogue */
-    (CH_NATURE), /* Ranger */
-    (CH_CRUSADE | CH_DEATH), /* Paladin */
-    (CH_ARCANE), /* Warrior-Mage */
-    (CH_CHAOS | CH_DAEMON), /* Chaos-Warrior */
-    (CH_LIFE | CH_NATURE | CH_DEATH | CH_ENCHANT), /* Monk */
-    (CH_NONE), /* Mindcrafter */
-    (CH_LIFE | CH_SORCERY | CH_NATURE | CH_CHAOS | CH_DEATH | CH_TRUMP | CH_ARCANE | CH_ENCHANT | CH_DAEMON | CH_CRUSADE | CH_HEX), /* High-Mage */
-    (CH_ARCANE), /* Tourist */
-    (CH_NONE), /* Imitator */
-    (CH_TRUMP), /* Beastmaster */
-    (CH_NONE), /* Sorcerer */
-    (CH_NONE), /* Archer */
-    (CH_NONE), /* Magic eater */
-    (CH_MUSIC), /* Bard */
-    (CH_NONE), /* Red Mage */
-    (CH_HISSATSU), /* Samurai */
-    (CH_LIFE | CH_NATURE | CH_DEATH | CH_ENCHANT | CH_CRUSADE), /* ForceTrainer */
-    (CH_NONE), /* Blue Mage */
-    (CH_NONE), /* Cavalry */
-    (CH_NONE), /* Berserker */
-    (CH_NONE), /* Weaponsmith */
-    (CH_NONE), /* Mirror-master */
-    (CH_NONE), /* Ninja */
-    (CH_NONE), /* Sniper */
-    (CH_NONE), /* Elementalist */
+const std::map<PlayerClassType, RealmChoices> realm1_choices = {
+    { PlayerClassType::MAGE, { REALM_LIFE, REALM_SORCERY, REALM_NATURE, REALM_CHAOS, REALM_DEATH, REALM_TRUMP, REALM_ARCANE, REALM_CRAFT, REALM_DAEMON, REALM_CRUSADE } },
+    { PlayerClassType::PRIEST, { REALM_LIFE, REALM_DEATH, REALM_DAEMON, REALM_CRUSADE } },
+    { PlayerClassType::ROGUE, { REALM_SORCERY, REALM_DEATH, REALM_TRUMP, REALM_ARCANE, REALM_CRAFT } },
+    { PlayerClassType::RANGER, { REALM_NATURE } },
+    { PlayerClassType::PALADIN, { REALM_CRUSADE, REALM_DEATH } },
+    { PlayerClassType::WARRIOR_MAGE, { REALM_ARCANE } },
+    { PlayerClassType::CHAOS_WARRIOR, { REALM_CHAOS, REALM_DAEMON } },
+    { PlayerClassType::MONK, { REALM_LIFE, REALM_NATURE, REALM_DEATH, REALM_CRAFT } },
+    { PlayerClassType::HIGH_MAGE, { REALM_LIFE, REALM_SORCERY, REALM_NATURE, REALM_CHAOS, REALM_DEATH, REALM_TRUMP, REALM_ARCANE, REALM_CRAFT, REALM_DAEMON, REALM_CRUSADE, REALM_HEX } },
+    { PlayerClassType::TOURIST, { REALM_ARCANE } },
+    { PlayerClassType::BEASTMASTER, { REALM_TRUMP } },
+    { PlayerClassType::BARD, { REALM_MUSIC } },
+    { PlayerClassType::SAMURAI, { REALM_HISSATSU } },
+    { PlayerClassType::FORCETRAINER, { REALM_LIFE, REALM_NATURE, REALM_DEATH, REALM_CRAFT, REALM_CRUSADE } },
 };
 
 /*!
  * 職業毎に選択可能な第二領域魔法テーブル
  */
-const std::vector<BIT_FLAGS> realm_choices2 = {
-    (CH_NONE), /* Warrior */
-    (CH_LIFE | CH_SORCERY | CH_NATURE | CH_CHAOS | CH_DEATH | CH_TRUMP | CH_ARCANE | CH_ENCHANT | CH_DAEMON | CH_CRUSADE), /* Mage */
-    (CH_LIFE | CH_SORCERY | CH_NATURE | CH_CHAOS | CH_DEATH | CH_TRUMP | CH_ARCANE | CH_ENCHANT | CH_DAEMON | CH_CRUSADE), /* Priest */
-    (CH_NONE), /* Rogue */
-    (CH_SORCERY | CH_CHAOS | CH_DEATH | CH_TRUMP | CH_ARCANE | CH_DAEMON), /* Ranger */
-    (CH_NONE), /* Paladin */
-    (CH_LIFE | CH_NATURE | CH_CHAOS | CH_DEATH | CH_TRUMP | CH_ARCANE | CH_SORCERY | CH_ENCHANT | CH_DAEMON | CH_CRUSADE), /* Warrior-Mage */
-    (CH_NONE), /* Chaos-Warrior */
-    (CH_NONE), /* Monk */
-    (CH_NONE), /* Mindcrafter */
-    (CH_NONE), /* High-Mage */
-    (CH_NONE), /* Tourist */
-    (CH_NONE), /* Imitator */
-    (CH_NONE), /* Beastmanster */
-    (CH_NONE), /* Sorcerer */
-    (CH_NONE), /* Archer */
-    (CH_NONE), /* Magic eater */
-    (CH_NONE), /* Bard */
-    (CH_NONE), /* Red Mage */
-    (CH_NONE), /* Samurai */
-    (CH_NONE), /* ForceTrainer */
-    (CH_NONE), /* Blue Mage */
-    (CH_NONE), /* Cavalry */
-    (CH_NONE), /* Berserker */
-    (CH_NONE), /* Weaponsmith */
-    (CH_NONE), /* Mirror-master */
-    (CH_NONE), /* Ninja */
-    (CH_NONE), /* Sniper */
-    (CH_NONE), /* Elementalist */
+const std::map<PlayerClassType, RealmChoices> realm2_choices = {
+    { PlayerClassType::MAGE, { REALM_LIFE, REALM_SORCERY, REALM_NATURE, REALM_CHAOS, REALM_DEATH, REALM_TRUMP, REALM_ARCANE, REALM_CRAFT, REALM_DAEMON, REALM_CRUSADE } },
+    { PlayerClassType::PRIEST, { REALM_LIFE, REALM_SORCERY, REALM_NATURE, REALM_CHAOS, REALM_DEATH, REALM_TRUMP, REALM_ARCANE, REALM_CRAFT, REALM_DAEMON, REALM_CRUSADE } },
+    { PlayerClassType::RANGER, { REALM_SORCERY, REALM_CHAOS, REALM_DEATH, REALM_TRUMP, REALM_ARCANE, REALM_DAEMON } },
+    { PlayerClassType::WARRIOR_MAGE, { REALM_LIFE, REALM_NATURE, REALM_CHAOS, REALM_DEATH, REALM_TRUMP, REALM_ARCANE, REALM_SORCERY, REALM_CRAFT, REALM_DAEMON, REALM_CRUSADE } },
 };
+}
 
 PlayerRealm::PlayerRealm(PlayerType *player_ptr)
     : realm1_(player_ptr->realm1)
@@ -126,6 +85,24 @@ ItemKindType PlayerRealm::get_book(int realm)
     const auto it = realm_books.find(i2enum<magic_realm_type>(realm));
     if (it == realm_books.end()) {
         THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", realm));
+    }
+    return it->second;
+}
+
+RealmChoices PlayerRealm::get_realm1_choices(PlayerClassType pclass)
+{
+    const auto it = realm1_choices.find(pclass);
+    if (it == realm1_choices.end()) {
+        return {};
+    }
+    return it->second;
+}
+
+RealmChoices PlayerRealm::get_realm2_choices(PlayerClassType pclass)
+{
+    const auto it = realm2_choices.find(pclass);
+    if (it == realm2_choices.end()) {
+        return {};
     }
     return it->second;
 }

@@ -19,7 +19,7 @@ enum magic_realm_type {
     REALM_MUSIC = 16,
     REALM_HISSATSU = 17,
     REALM_HEX = 18,
-    MAX_REALM = 18,
+    REALM_MAX,
 };
 
 constexpr auto MAGIC_REALM_RANGE = EnumRangeInclusive(REALM_LIFE, REALM_CRUSADE);

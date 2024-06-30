@@ -637,12 +637,12 @@ void wiz_reset_class(PlayerType *player_ptr)
  */
 void wiz_reset_realms(PlayerType *player_ptr)
 {
-    const auto new_realm1 = input_numerics("1st Realm (None=0)", 0, MAX_REALM - 1, player_ptr->realm1);
+    const auto new_realm1 = input_numerics("1st Realm (None=0)", 0, REALM_MAX - 1, player_ptr->realm1);
     if (!new_realm1) {
         return;
     }
 
-    const auto new_realm2 = input_numerics("2nd Realm (None=0)", 0, MAX_REALM - 1, player_ptr->realm2);
+    const auto new_realm2 = input_numerics("2nd Realm (None=0)", 0, REALM_MAX - 1, player_ptr->realm2);
     if (!new_realm2) {
         return;
     }
