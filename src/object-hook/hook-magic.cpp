@@ -60,10 +60,11 @@ bool item_tester_learn_spell(PlayerType *player_ptr, const ItemEntity *o_ptr)
         return false;
     }
 
+    PlayerRealm pr(player_ptr);
     auto choices = PlayerRealm::get_realm2_choices(player_ptr->pclass);
     PlayerClass pc(player_ptr);
     if (pc.equals(PlayerClassType::PRIEST)) {
-        if (is_good_realm(player_ptr->realm1)) {
+        if (PlayerRealm(player_ptr).realm1().is_good_attribute()) {
             choices.reset({ REALM_DEATH, REALM_DAEMON });
         } else {
             choices.reset({ REALM_LIFE, REALM_CRUSADE });
@@ -80,6 +81,5 @@ bool item_tester_learn_spell(PlayerType *player_ptr, const ItemEntity *o_ptr)
         return false;
     }
 
-    PlayerRealm pr(player_ptr);
     return (pr.realm1().get_book() == tval) || (pr.realm2().get_book() == tval) || choices.has(realm);
 }

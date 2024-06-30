@@ -1,6 +1,6 @@
 #include "player-info/class-ability-info.h"
 #include "player-info/self-info-util.h"
-#include "realm/realm-names-table.h"
+#include "player/player-realm.h"
 #include "realm/realm-types.h"
 #include "system/player-type-definition.h"
 
@@ -26,7 +26,7 @@ void set_class_ability_info(PlayerType *player_ptr, self_info_type *self_ptr)
 
         break;
     case PlayerClassType::PRIEST:
-        if (is_good_realm(player_ptr->realm1)) {
+        if (PlayerRealm(player_ptr).realm1().is_good_attribute()) {
             if (player_ptr->lev > 34) {
                 self_ptr->info_list.emplace_back(_("あなたは武器を祝福することができる。(70 MP)", "You can bless a weapon (cost 70)."));
             }
@@ -52,7 +52,7 @@ void set_class_ability_info(PlayerType *player_ptr, self_info_type *self_ptr)
 
         break;
     case PlayerClassType::PALADIN:
-        if (is_good_realm(player_ptr->realm1)) {
+        if (PlayerRealm(player_ptr).realm1().is_good_attribute()) {
             if (player_ptr->lev > 29) {
                 self_ptr->info_list.emplace_back(_("あなたは聖なる槍を放つことができる。(30 MP)", "You can fire a holy spear (cost 30)."));
             }

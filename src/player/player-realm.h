@@ -26,6 +26,7 @@ public:
         Realm(int realm);
         const magic_type &get_spell_info(int num) const;
         ItemKindType get_book() const;
+        bool is_good_attribute() const;
 
     private:
         int realm;

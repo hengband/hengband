@@ -51,7 +51,7 @@ static void impose_first_realm(PlayerType *player_ptr, RealmChoices &choices)
         return;
     }
 
-    if (is_good_realm(player_ptr->realm1)) {
+    if (PlayerRealm(player_ptr).realm1().is_good_attribute()) {
         choices.reset({ REALM_DEATH, REALM_DAEMON });
     } else {
         choices.reset({ REALM_LIFE, REALM_CRUSADE });
