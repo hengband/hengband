@@ -89,7 +89,7 @@ const LocalizedString &PlayerRealm::get_name(int realm)
     return it->second;
 }
 
-const magic_type &PlayerRealm::get_spell_info(int realm, int spell_idx)
+const magic_type &PlayerRealm::get_spell_info(int realm, int spell_idx, std::optional<PlayerClassType> pclass)
 {
     if (spell_idx < 0 || 32 <= spell_idx) {
         THROW_EXCEPTION(std::invalid_argument, format("Invalid spell idx: %d", spell_idx));
@@ -98,6 +98,9 @@ const magic_type &PlayerRealm::get_spell_info(int realm, int spell_idx)
     const auto realm_enum = i2enum<magic_realm_type>(realm);
 
     if (MAGIC_REALM_RANGE.contains(realm_enum)) {
+        if (pclass) {
+            return class_magics_info.at(enum2i(*pclass)).info[realm - 1][spell_idx];
+        }
         return mp_ptr->info[realm - 1][spell_idx];
     }
     if (TECHNIC_REALM_RANGE.contains(realm_enum)) {

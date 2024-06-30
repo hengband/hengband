@@ -4,6 +4,7 @@
 #include "system/angband.h"
 #include "util/flag-group.h"
 #include <cstdint>
+#include <optional>
 #include <vector>
 
 using RealmChoices = FlagGroup<magic_realm_type, REALM_MAX>;
@@ -18,7 +19,7 @@ public:
     PlayerRealm(PlayerType *player_ptr);
 
     static const LocalizedString &get_name(int realm);
-    static const magic_type &get_spell_info(int realm, int num);
+    static const magic_type &get_spell_info(int realm, int num, std::optional<PlayerClassType> pclass = std::nullopt);
     static ItemKindType get_book(int realm);
     static RealmChoices get_realm1_choices(PlayerClassType pclass);
     static RealmChoices get_realm2_choices(PlayerClassType pclass);
