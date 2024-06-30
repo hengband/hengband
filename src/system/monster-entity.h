@@ -19,8 +19,10 @@ constexpr int MONSTER_MAXHP = 30000; //!< モンスターの最大HP
 enum class MonsterRaceId : int16_t;
 class FloorType;
 class MonsterRaceInfo;
+class MonsterEntityWriter;
 class MonsterEntity {
 public:
+    friend class MonsterEntityWriter;
     MonsterEntity() = default;
     MonsterRaceId r_idx{}; /*!< モンスターの実種族ID (これが0の時は死亡扱いになる) / Monster race index 0 = dead. */
     MonsterRaceId ap_r_idx{}; /*!< モンスターの外見種族ID（あやしい影、たぬき、ジュラル星人誤認などにより変化する）Monster race appearance index */
