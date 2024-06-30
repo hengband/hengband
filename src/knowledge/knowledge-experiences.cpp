@@ -13,7 +13,6 @@
 #include "player/player-realm.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
-#include "realm/realm-names-table.h"
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
 #include "sv-definition/sv-bow-types.h"
@@ -87,7 +86,7 @@ void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
     PlayerRealm pr(player_ptr);
 
     if (player_ptr->realm1 != REALM_NONE) {
-        fprintf(fff, _("%sの魔法書\n", "%s Spellbook\n"), realm_names[player_ptr->realm1].data());
+        fprintf(fff, _("%sの魔法書\n", "%s Spellbook\n"), pr.realm1().get_name().data());
         for (SPELL_IDX i = 0; i < 32; i++) {
             const auto &spell = pr.realm1().get_spell_info(i);
 
@@ -123,7 +122,7 @@ void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
     }
 
     if (player_ptr->realm2 != REALM_NONE) {
-        fprintf(fff, _("%sの魔法書\n", "\n%s Spellbook\n"), realm_names[player_ptr->realm2].data());
+        fprintf(fff, _("%sの魔法書\n", "\n%s Spellbook\n"), pr.realm2().get_name().data());
         for (SPELL_IDX i = 0; i < 32; i++) {
             const auto &spell = pr.realm2().get_spell_info(i);
 

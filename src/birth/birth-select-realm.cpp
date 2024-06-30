@@ -79,7 +79,7 @@ static void analyze_realms(const PlayerType *player_ptr, const RealmChoices &cho
 
         birth_realm_ptr->sym[birth_realm_ptr->n] = I2A(birth_realm_ptr->n);
 
-        const auto buf = format("%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->n], birth_realm_ptr->p2, realm_names[realm].data());
+        const auto buf = format("%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->n], birth_realm_ptr->p2, PlayerRealm::get_name(realm).data());
         put_str(buf, 12 + (birth_realm_ptr->n / 5), 2 + 15 * (birth_realm_ptr->n % 5));
         birth_realm_ptr->picks[birth_realm_ptr->n++] = realm;
     }
@@ -96,9 +96,9 @@ static void move_birth_realm_cursor(birth_realm_type *birth_realm_ptr)
     if (birth_realm_ptr->cs == birth_realm_ptr->n) {
         birth_realm_ptr->cur = format("%c%c %s", '*', birth_realm_ptr->p2, _("ランダム", "Random"));
     } else {
+        const auto &realm_name = PlayerRealm::get_name(birth_realm_ptr->picks[birth_realm_ptr->cs]);
         birth_realm_ptr->cur = format("%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->cs], birth_realm_ptr->p2,
-            realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]].data());
-        const auto &realm_name = realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]];
+            realm_name.data());
         c_put_str(TERM_L_BLUE, realm_name, 3, 40);
         prt(_("の特徴", ": Characteristic"), 3, 40 + realm_name->length());
         prt(realm_subinfo[technic2magic(birth_realm_ptr->picks[birth_realm_ptr->cs]) - 1], 4, 40);
@@ -250,6 +250,21 @@ static bool check_realm_selection(PlayerType *player_ptr, int count)
     return false;
 }
 
+static void print_choosed_realms(PlayerType *player_ptr)
+{
+    put_str(_("魔法        :", "Magic       :"), 6, 1);
+
+    PlayerRealm pr(player_ptr);
+    std::string choosed_realms;
+    if (player_ptr->realm2 == REALM_NONE) {
+        choosed_realms = pr.realm1().get_name();
+    } else {
+        choosed_realms = format("%s, %s", pr.realm1().get_name().data(), pr.realm2().get_name().data());
+    }
+
+    c_put_str(TERM_L_BLUE, choosed_realms, 6, 15);
+}
+
 /*!
  * @brief 選択した魔法領域の解説を表示する / Choose the magical realms
  * @return ユーザが魔法領域の確定を選んだらTRUEを返す。
@@ -302,9 +317,7 @@ bool get_player_realms(PlayerType *player_ptr)
         return true;
     }
 
-    /* Print the realm */
-    put_str(_("魔法        :", "Magic       :"), 6, 1);
-    c_put_str(TERM_L_BLUE, realm_names[player_ptr->realm1], 6, 15);
+    print_choosed_realms(player_ptr);
 
     /* Select the second realm */
     while (true) {
@@ -326,10 +339,7 @@ bool get_player_realms(PlayerType *player_ptr)
         }
     }
 
-    if (player_ptr->realm2) {
-        /* Print the realm */
-        c_put_str(TERM_L_BLUE, format("%s, %s", realm_names[player_ptr->realm1].data(), realm_names[player_ptr->realm2].data()), 6, 15);
-    }
+    print_choosed_realms(player_ptr);
 
     return true;
 }

@@ -2,7 +2,7 @@
 #include "game-option/runtime-arguments.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
-#include "realm/realm-names-table.h"
+#include "player/player-realm.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "term/z-form.h"
@@ -183,9 +183,9 @@ std::string process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
         *tpn = '\0';
         v = tmp_player_name;
     } else if (streq(b + 1, "REALM1")) {
-        v = realm_names[player_ptr->realm1].en_string();
+        v = PlayerRealm(player_ptr).realm1().get_name().en_string();
     } else if (streq(b + 1, "REALM2")) {
-        v = realm_names[player_ptr->realm2].en_string();
+        v = PlayerRealm(player_ptr).realm2().get_name().en_string();
     } else if (streq(b + 1, "LEVEL")) {
         v = format("%02d", player_ptr->lev);
     } else if (streq(b + 1, "AUTOREGISTER")) {
