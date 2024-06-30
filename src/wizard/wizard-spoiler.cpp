@@ -208,7 +208,14 @@ static SpoilerOutputResultType spoil_player_spell()
             continue;
         }
 
+        const auto choices = PlayerRealm::get_realm1_choices(pclass) | PlayerRealm::get_realm2_choices(pclass);
+        const auto is_every_magic = pclass == PlayerClassType::SORCERER || pclass == PlayerClassType::RED_MAGE;
         for (const auto realm : MAGIC_REALM_RANGE) {
+            /// @todo 歌・武芸・呪術への対応
+            if (!is_every_magic && choices.has_not(realm)) {
+                continue;
+            }
+
             spoil_out(format("[Realm: %s]\n", PlayerRealm::get_name(realm).data()));
             spoil_out("Name                     Lv Cst Dif Exp\n");
             for (SPELL_IDX i = 0; i < 32; i++) {
