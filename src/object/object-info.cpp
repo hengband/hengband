@@ -119,7 +119,7 @@ bool check_book_realm(PlayerType *player_ptr, const BaseitemKey &bi_key)
     }
 
     PlayerRealm pr(player_ptr);
-    return (pr.get_realm1_book() == tval) || (pr.get_realm2_book() == tval);
+    return (pr.realm1().get_book() == tval) || (pr.realm2().get_book() == tval);
 }
 
 ItemEntity *ref_item(PlayerType *player_ptr, INVENTORY_IDX i_idx)

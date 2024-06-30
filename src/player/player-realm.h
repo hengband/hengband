@@ -32,13 +32,22 @@ public:
     static const magic_type &get_spell_info(int realm, int num);
     static ItemKindType get_book(int realm);
 
-    const magic_type &get_realm1_spell_info(int num) const;
-    const magic_type &get_realm2_spell_info(int num) const;
-    ItemKindType get_realm1_book() const;
-    ItemKindType get_realm2_book() const;
+    class Realm {
+    public:
+        Realm(int realm);
+        const magic_type &get_spell_info(int num) const;
+        ItemKindType get_book() const;
+
+    private:
+        int realm;
+    };
+
+    const Realm &realm1() const;
+    const Realm &realm2() const;
 
 private:
-    PlayerType *player_ptr;
+    Realm realm1_;
+    Realm realm2_;
 };
 
 extern const std::vector<BIT_FLAGS> realm_choices1;
