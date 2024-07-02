@@ -151,7 +151,7 @@ exit 0
 %license lib/help/jlicense.txt
 
 %changelog
-* Tue Jul 03 2024 whitehara <white@vx-xv.com>
+* Tue Jul 02 2024 whitehara <white@vx-xv.com>
 - hengband RPM 3.0.1.16(Beta)
 
 * Fri Jun 21 2024 whitehara <white@vx-xv.com>
