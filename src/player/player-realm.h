@@ -35,7 +35,7 @@ public:
         bool equals(int realm) const;
 
     private:
-        int realm;
+        int realm_;
     };
 
     const Realm &realm1() const;
