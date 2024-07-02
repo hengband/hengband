@@ -1,5 +1,6 @@
 #pragma once
 
+#include "realm/realm-types.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
 #include <array>
@@ -46,6 +47,8 @@ public:
 
     static SpellInfoList &get_instance();
     std::vector<std::vector<SpellInfo>> spell_list{};
+
+    std::optional<short> get_spell_id(int realm, std::string_view spell_tag);
 
 private:
     SpellInfoList() = default;

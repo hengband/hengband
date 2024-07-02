@@ -153,12 +153,15 @@ static errr set_magic_status(const nlohmann::json &class_data, player_magic &mag
  */
 static errr set_spell_data(const nlohmann::json &spell_data, player_magic &magics_info, int realm_id)
 {
-    int spell_id;
-    if (auto err = info_set_integer(spell_data["spell_id"], spell_id, true, Range(0, 31))) {
-        msg_format(_("呪文ID読込失敗。ID: '%d'。", "Failed to load spell ID. ID: '%d'."), error_idx);
-        return err;
+    const auto &spell_tag_obj = spell_data["spell_tag"];
+    if (!spell_tag_obj.is_string()) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
-    auto &info = magics_info.info[realm_id][spell_id];
+    const auto spell_id = SpellInfoList::get_instance().get_spell_id(realm_id + 1, spell_tag_obj.get<std::string>());
+    if (!spell_id) {
+        return PARSE_ERROR_INVALID_FLAG;
+    }
+    auto &info = magics_info.info[realm_id][*spell_id];
 
     if (auto err = info_set_integer(spell_data["learn_level"], info.slevel, true, Range(0, 99))) {
         msg_format(_("呪文学習レベル読込失敗。ID: '%d'。", "Failed to load spell learn_level. ID: '%d'."), error_idx);
