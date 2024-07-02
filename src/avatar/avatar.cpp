@@ -16,6 +16,7 @@
 #include "game-option/text-display-options.h"
 #include "player-info/class-info.h"
 #include "player-info/race-types.h"
+#include "player/player-realm.h"
 #include "realm/realm-names-table.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -374,14 +375,15 @@ void initialize_virtues(PlayerType *player_ptr)
     }
 
     /* Get a virtue_names for realms */
-    if (player_ptr->realm1) {
+    PlayerRealm pr(player_ptr);
+    if (pr.realm1().is_available()) {
         tmp_vir = get_realm_virtues(player_ptr, player_ptr->realm1);
         if (tmp_vir != Virtue::NONE) {
             player_ptr->vir_types[i++] = tmp_vir;
         }
     }
 
-    if (player_ptr->realm2) {
+    if (pr.realm2().is_available()) {
         tmp_vir = get_realm_virtues(player_ptr, player_ptr->realm2);
         if (tmp_vir != Virtue::NONE) {
             player_ptr->vir_types[i++] = tmp_vir;

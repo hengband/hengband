@@ -815,11 +815,12 @@ static void display_spell_list(PlayerType *player_ptr)
         return;
     }
 
-    if (REALM_NONE == player_ptr->realm1) {
+    PlayerRealm pr(player_ptr);
+    if (!pr.realm1().is_available()) {
         return;
     }
 
-    for (int j = 0; j < ((player_ptr->realm2 > REALM_NONE) ? 2 : 1); j++) {
+    for (int j = 0; j < (pr.realm2().is_available() ? 2 : 1); j++) {
         m[j] = 0;
         y = (j < 3) ? 0 : (m[j - 3] + 2);
         x = 27 * (j % 3);

@@ -560,7 +560,7 @@ static FuncItemTester get_castable_spellbook_tester(PlayerType *player_ptr)
 
 static FuncItemTester get_learnable_spellbook_tester(PlayerType *player_ptr)
 {
-    if (player_ptr->realm2 == REALM_NONE) {
+    if (!PlayerRealm(player_ptr).realm2().is_available()) {
         return get_castable_spellbook_tester(player_ptr);
     } else {
         return FuncItemTester(item_tester_learn_spell, player_ptr);
@@ -584,7 +584,7 @@ void do_cmd_browse(PlayerType *player_ptr)
 
     /* Warriors are illiterate */
     PlayerClass pc(player_ptr);
-    if (!(player_ptr->realm1 || player_ptr->realm2) && !pc.is_every_magic()) {
+    if (!PlayerRealm(player_ptr).realm1().is_available() && !pc.is_every_magic()) {
         msg_print(_("本を読むことができない！", "You cannot read books!"));
         return;
     }
@@ -727,7 +727,8 @@ void do_cmd_study(PlayerType *player_ptr)
     /* Spells of realm2 will have an increment of +32 */
     SPELL_IDX spell = -1;
     const auto spell_category = spell_category_name(mp_ptr->spell_book);
-    if (!player_ptr->realm1) {
+    PlayerRealm pr(player_ptr);
+    if (!pr.realm1().is_available()) {
         msg_print(_("本を読むことができない！", "You cannot read books!"));
         return;
     }
@@ -769,7 +770,6 @@ void do_cmd_study(PlayerType *player_ptr)
 
     const auto tval = o_ptr->bi_key.tval();
     const auto sval = *o_ptr->bi_key.sval();
-    PlayerRealm pr(player_ptr);
     if (tval == pr.realm2().get_book()) {
         increment = 32;
     } else if (tval != pr.realm1().get_book()) {
@@ -943,7 +943,8 @@ bool do_cmd_cast(PlayerType *player_ptr)
     /* Require spell ability */
     PlayerClass pc(player_ptr);
     auto is_every_magic = pc.is_every_magic();
-    if (!player_ptr->realm1 && !is_every_magic) {
+    PlayerRealm pr(player_ptr);
+    if (!pr.realm1().is_available() && !is_every_magic) {
         msg_print(_("呪文を唱えられない！", "You cannot cast spells!"));
         return false;
     }

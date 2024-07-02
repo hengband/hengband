@@ -6,6 +6,7 @@
 #include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
+#include "player/player-realm.h"
 #include "realm/realm-names-table.h"
 #include "spell/spell-info.h"
 #include "system/item-entity.h"
@@ -82,7 +83,8 @@ void display_koff(PlayerType *player_ptr)
     const auto sval = *item.bi_key.sval();
     const short use_realm = tval2realm(item.bi_key.tval());
 
-    if (player_ptr->realm1 || player_ptr->realm2) {
+    PlayerRealm pr(player_ptr);
+    if (pr.realm1().is_available() || pr.realm2().is_available()) {
         if ((use_realm != player_ptr->realm1) && (use_realm != player_ptr->realm2)) {
             return;
         }

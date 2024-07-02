@@ -85,7 +85,7 @@ void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
 
     PlayerRealm pr(player_ptr);
 
-    if (player_ptr->realm1 != REALM_NONE) {
+    if (pr.realm1().is_available()) {
         fprintf(fff, _("%sの魔法書\n", "%s Spellbook\n"), pr.realm1().get_name().data());
         for (SPELL_IDX i = 0; i < 32; i++) {
             const auto &spell = pr.realm1().get_spell_info(i);
@@ -121,7 +121,7 @@ void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
         }
     }
 
-    if (player_ptr->realm2 != REALM_NONE) {
+    if (pr.realm2().is_available()) {
         fprintf(fff, _("%sの魔法書\n", "\n%s Spellbook\n"), pr.realm2().get_name().data());
         for (SPELL_IDX i = 0; i < 32; i++) {
             const auto &spell = pr.realm2().get_spell_info(i);

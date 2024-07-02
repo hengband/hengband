@@ -97,7 +97,8 @@ static void display_player_basic_info(PlayerType *player_ptr)
  */
 static void display_magic_realms(PlayerType *player_ptr)
 {
-    if (player_ptr->realm1 == REALM_NONE && player_ptr->element == REALM_NONE) {
+    PlayerRealm pr(player_ptr);
+    if (!pr.realm1().is_available() && player_ptr->element == REALM_NONE) {
         return;
     }
 
@@ -106,10 +107,9 @@ static void display_magic_realms(PlayerType *player_ptr)
         return;
     }
 
-    PlayerRealm pr(player_ptr);
     std::stringstream ss;
     ss << pr.realm1().get_name();
-    if (player_ptr->realm2) {
+    if (pr.realm2().is_available()) {
         ss << ", " << pr.realm2().get_name();
     }
     display_player_one_line(ENTRY_REALM, ss.str(), TERM_L_BLUE);

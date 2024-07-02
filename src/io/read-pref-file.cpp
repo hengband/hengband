@@ -285,11 +285,11 @@ void load_all_pref_files(PlayerType *player_ptr)
     process_pref_file(player_ptr, format(fmt, cp_ptr->title.data()));
     process_pref_file(player_ptr, format(fmt, player_ptr->base_name));
     PlayerRealm pr(player_ptr);
-    if (player_ptr->realm1 != REALM_NONE) {
+    if (pr.realm1().is_available()) {
         process_pref_file(player_ptr, format(fmt, pr.realm1().get_name().data()));
     }
 
-    if (player_ptr->realm2 != REALM_NONE) {
+    if (pr.realm2().is_available()) {
         process_pref_file(player_ptr, format(fmt, pr.realm2().get_name().data()));
     }
 

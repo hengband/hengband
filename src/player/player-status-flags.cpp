@@ -25,6 +25,7 @@
 #include "player-status/player-stealth.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
+#include "player/player-realm.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
 #include "player/race-info-table.h"
@@ -711,7 +712,8 @@ void check_no_flowed(PlayerType *player_ptr)
         return;
     }
 
-    if (!player_ptr->realm1) {
+    PlayerRealm pr(player_ptr);
+    if (!pr.realm1().is_available()) {
         player_ptr->no_flowed = false;
         return;
     }
