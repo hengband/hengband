@@ -30,6 +30,7 @@ public:
         const LocalizedString &get_name() const;
         const magic_type &get_spell_info(int num) const;
         ItemKindType get_book() const;
+        bool is_available() const;
         bool is_good_attribute() const;
 
     private:

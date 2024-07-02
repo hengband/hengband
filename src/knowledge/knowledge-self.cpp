@@ -83,13 +83,13 @@ static void dump_yourself(PlayerType *player_ptr, FILE *fff)
 
     fprintf(fff, "\n");
     PlayerRealm pr(player_ptr);
-    if (player_ptr->realm1) {
+    if (pr.realm1().is_available()) {
         fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), pr.realm1().get_name().data());
         dump_explanation(realm_explanations[technic2magic(player_ptr->realm1) - 1], fff);
     }
 
     fprintf(fff, "\n");
-    if (player_ptr->realm2) {
+    if (pr.realm2().is_available()) {
         fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), pr.realm2().get_name().data());
         dump_explanation(realm_explanations[technic2magic(player_ptr->realm2) - 1], fff);
     }

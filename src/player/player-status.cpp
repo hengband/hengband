@@ -519,9 +519,10 @@ static void update_num_of_spells(PlayerType *player_ptr)
         bonus = 4;
     }
 
+    PlayerRealm pr(player_ptr);
     if (pc.equals(PlayerClassType::SAMURAI)) {
         num_allowed = 32;
-    } else if (player_ptr->realm2 == REALM_NONE) {
+    } else if (!pr.realm2().is_available()) {
         num_allowed = (num_allowed + 1) / 2;
         if (num_allowed > (32 + bonus)) {
             num_allowed = 32 + bonus;
@@ -543,7 +544,6 @@ static void update_num_of_spells(PlayerType *player_ptr)
         }
     }
 
-    PlayerRealm pr(player_ptr);
     player_ptr->new_spells = num_allowed + player_ptr->add_spells + num_boukyaku - player_ptr->learned_spells;
     for (int i = 63; i >= 0; i--) {
         if (!player_ptr->spell_learned1 && !player_ptr->spell_learned2) {
@@ -689,7 +689,7 @@ static void update_num_of_spells(PlayerType *player_ptr)
         player_ptr->new_spells--;
     }
 
-    if (player_ptr->realm2 == REALM_NONE) {
+    if (!pr.realm2().is_available()) {
         int k = 0;
         for (int j = 0; j < 32; j++) {
             const auto &spell = pr.realm1().get_spell_info(j);
