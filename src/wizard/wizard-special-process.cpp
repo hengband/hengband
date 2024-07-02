@@ -65,6 +65,7 @@
 #include "player/player-status-table.h"
 #include "player/player-status.h"
 #include "player/race-info-table.h"
+#include "realm/realm-names-table.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
@@ -93,6 +94,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/candidate-selector.h"
 #include "util/enum-converter.h"
+#include "util/enum-range.h"
 #include "util/finalizer.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -599,12 +601,16 @@ static void change_birth_flags()
  */
 void wiz_reset_race(PlayerType *player_ptr)
 {
-    const auto new_race = input_numerics("RaceID", 0, MAX_RACES - 1, player_ptr->prace);
-    if (!new_race) {
+    CandidateSelector cs("Which race: ", 15);
+    constexpr EnumRange races(PlayerRaceType::HUMAN, PlayerRaceType::MAX);
+    auto describe_race = [](auto player_race) { return race_info[enum2i(player_race)].title.string(); };
+
+    const auto choice = cs.select(races, describe_race);
+    if (choice == races.end()) {
         return;
     }
 
-    player_ptr->prace = *new_race;
+    player_ptr->prace = *choice;
     rp_ptr = &race_info[enum2i(player_ptr->prace)];
     change_birth_flags();
     handle_stuff(player_ptr);
@@ -616,16 +622,18 @@ void wiz_reset_race(PlayerType *player_ptr)
  */
 void wiz_reset_class(PlayerType *player_ptr)
 {
-    const auto new_class_opt = input_numerics("ClassID", 0, PLAYER_CLASS_TYPE_MAX - 1, player_ptr->pclass);
-    if (!new_class_opt) {
+    CandidateSelector cs("Which class: ", 15);
+    constexpr EnumRange classes(PlayerClassType::WARRIOR, PlayerClassType::MAX);
+    auto describe_class = [](auto player_class) { return class_info.at(player_class).title.string(); };
+
+    const auto choice = cs.select(classes, describe_class);
+    if (choice == classes.end()) {
         return;
     }
 
-    const auto new_class_enum = *new_class_opt;
-    const auto new_class = enum2i(new_class_enum);
-    player_ptr->pclass = new_class_enum;
+    player_ptr->pclass = *choice;
     cp_ptr = &class_info.at(player_ptr->pclass);
-    mp_ptr = &class_magics_info[new_class];
+    mp_ptr = &class_magics_info[enum2i(player_ptr->pclass)];
     PlayerClass(player_ptr).init_specific_data();
     change_birth_flags();
     handle_stuff(player_ptr);
@@ -637,18 +645,26 @@ void wiz_reset_class(PlayerType *player_ptr)
  */
 void wiz_reset_realms(PlayerType *player_ptr)
 {
-    const auto new_realm1 = input_numerics("1st Realm (None=0)", 0, REALM_MAX - 1, player_ptr->realm1);
-    if (!new_realm1) {
+    std::vector<magic_realm_type> candidates{ REALM_NONE };
+    candidates.insert(candidates.end(), MAGIC_REALM_RANGE.begin(), MAGIC_REALM_RANGE.end());
+    candidates.insert(candidates.end(), TECHNIC_REALM_RANGE.begin(), TECHNIC_REALM_RANGE.end());
+
+    auto describe_realm = [](auto realm) { return realm_names[enum2i(realm)].string(); };
+
+    CandidateSelector cs1("1st realm: ", 15);
+    const auto choice_realm1 = cs1.select(candidates, describe_realm);
+    if (choice_realm1 == candidates.end()) {
         return;
     }
 
-    const auto new_realm2 = input_numerics("2nd Realm (None=0)", 0, REALM_MAX - 1, player_ptr->realm2);
-    if (!new_realm2) {
+    CandidateSelector cs2("2nd realm: ", 15);
+    const auto choice_realm2 = cs2.select(candidates, describe_realm);
+    if (choice_realm2 == candidates.end()) {
         return;
     }
 
-    player_ptr->realm1 = *new_realm1;
-    player_ptr->realm2 = *new_realm2;
+    player_ptr->realm1 = *choice_realm1;
+    player_ptr->realm2 = *choice_realm2;
     change_birth_flags();
     handle_stuff(player_ptr);
 }
