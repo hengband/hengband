@@ -32,6 +32,7 @@ public:
         ItemKindType get_book() const;
         bool is_available() const;
         bool is_good_attribute() const;
+        bool equals(int realm) const;
 
     private:
         int realm;
@@ -39,6 +40,7 @@ public:
 
     const Realm &realm1() const;
     const Realm &realm2() const;
+    bool is_realm_hex() const;
 
 private:
     Realm realm1_;

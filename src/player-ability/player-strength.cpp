@@ -5,6 +5,7 @@
 #include "player-info/monk-data-type.h"
 #include "player-info/samurai-data-type.h"
 #include "player/player-personality.h"
+#include "player/player-realm.h"
 #include "player/race-info-table.h"
 #include "player/special-defense-types.h"
 #include "realm/realm-hex-numbers.h"
@@ -53,7 +54,7 @@ int16_t PlayerStrength::time_effect_bonus()
 {
     int16_t result = 0;
 
-    if (this->player_ptr->realm1 == REALM_HEX) {
+    if (PlayerRealm(this->player_ptr).is_realm_hex()) {
         SpellHex spell_hex(this->player_ptr);
         if (spell_hex.is_spelling_specific(HEX_XTRA_MIGHT)) {
             result += 4;

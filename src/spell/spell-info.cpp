@@ -141,7 +141,8 @@ PERCENTAGE spell_chance(PlayerType *player_ptr, SPELL_IDX spell_id, int16_t use_
     }
 
     PlayerClass pc(player_ptr);
-    if ((use_realm != player_ptr->realm1) && (pc.equals(PlayerClassType::MAGE) || pc.equals(PlayerClassType::PRIEST))) {
+    PlayerRealm pr(player_ptr);
+    if (!pr.realm1().equals(use_realm) && (pc.equals(PlayerClassType::MAGE) || pc.equals(PlayerClassType::PRIEST))) {
         chance += 5;
     }
 
@@ -194,7 +195,7 @@ PERCENTAGE spell_chance(PlayerType *player_ptr, SPELL_IDX spell_id, int16_t use_
         chance = 95;
     }
 
-    if ((use_realm == player_ptr->realm1) || (use_realm == player_ptr->realm2) || pc.is_every_magic()) {
+    if (pr.realm1().equals(use_realm) || pr.realm2().equals(use_realm) || pc.is_every_magic()) {
         auto exp = PlayerSkill(player_ptr).exp_of_spell(use_realm, spell_id);
         if (exp >= PlayerSkill::spell_exp_at(PlayerSkillRank::EXPERT)) {
             chance--;
@@ -238,11 +239,12 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL
 
     int increment = 64;
     PlayerClass pc(player_ptr);
+    PlayerRealm pr(player_ptr);
     if (pc.is_every_magic()) {
         increment = 0;
-    } else if (use_realm == player_ptr->realm1) {
+    } else if (pr.realm1().equals(use_realm)) {
         increment = 0;
-    } else if (use_realm == player_ptr->realm2) {
+    } else if (pr.realm2().equals(use_realm)) {
         increment = 32;
     }
 
@@ -310,16 +312,16 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL
                 comment = _("忘却", "forgotten");
                 line_attr = TERM_YELLOW;
             }
-        } else if ((use_realm != player_ptr->realm1) && (use_realm != player_ptr->realm2)) {
+        } else if (!pr.realm1().equals(use_realm) && !pr.realm2().equals(use_realm)) {
             comment = _("未知", "unknown");
             line_attr = TERM_L_BLUE;
-        } else if ((use_realm == player_ptr->realm1) ? ((player_ptr->spell_forgotten1 & (1UL << spell_id))) : ((player_ptr->spell_forgotten2 & (1UL << spell_id)))) {
+        } else if (pr.realm1().equals(use_realm) ? ((player_ptr->spell_forgotten1 & (1UL << spell_id))) : ((player_ptr->spell_forgotten2 & (1UL << spell_id)))) {
             comment = _("忘却", "forgotten");
             line_attr = TERM_YELLOW;
-        } else if (!((use_realm == player_ptr->realm1) ? (player_ptr->spell_learned1 & (1UL << spell_id)) : (player_ptr->spell_learned2 & (1UL << spell_id)))) {
+        } else if (!(pr.realm1().equals(use_realm) ? (player_ptr->spell_learned1 & (1UL << spell_id)) : (player_ptr->spell_learned2 & (1UL << spell_id)))) {
             comment = _("未知", "unknown");
             line_attr = TERM_L_BLUE;
-        } else if (!((use_realm == player_ptr->realm1) ? (player_ptr->spell_worked1 & (1UL << spell_id)) : (player_ptr->spell_worked2 & (1UL << spell_id)))) {
+        } else if (!(pr.realm1().equals(use_realm) ? (player_ptr->spell_worked1 & (1UL << spell_id)) : (player_ptr->spell_worked2 & (1UL << spell_id)))) {
             comment = _("未経験", "untried");
             line_attr = TERM_L_GREEN;
         }

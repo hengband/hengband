@@ -352,9 +352,10 @@ void PlayerSkill::gain_riding_skill_exp_on_fall_off_check(int dam)
 
 void PlayerSkill::gain_spell_skill_exp(int realm, int spell_idx)
 {
+    PlayerRealm pr(this->player_ptr);
     auto is_valid_realm = is_magic(realm) ||
                           (realm == REALM_MUSIC) || (realm == REALM_HEX);
-    is_valid_realm &= (realm == this->player_ptr->realm1) || (realm == this->player_ptr->realm2);
+    is_valid_realm &= pr.realm1().equals(realm) || pr.realm2().equals(realm);
     const auto is_valid_spell_idx = (0 <= spell_idx) && (spell_idx < 32);
 
     if (!is_valid_realm || !is_valid_spell_idx) {
@@ -364,7 +365,7 @@ void PlayerSkill::gain_spell_skill_exp(int realm, int spell_idx)
     constexpr GainAmountList gain_amount_list_first{ { 60, 8, 2, 1 } };
     constexpr GainAmountList gain_amount_list_second{ { 60, 8, 2, 0 } };
 
-    const auto is_first_realm = (realm == this->player_ptr->realm1);
+    const auto is_first_realm = pr.realm1().equals(realm);
     const auto &spell = PlayerRealm::get_spell_info(realm, spell_idx);
 
     gain_spell_skill_exp_aux(this->player_ptr, this->player_ptr->spell_exp[spell_idx + (is_first_realm ? 0 : 32)],
@@ -421,13 +422,14 @@ PlayerSkillRank PlayerSkill::gain_spell_skill_exp_over_learning(int spell_idx)
 EXP PlayerSkill::exp_of_spell(int realm, int spell_idx) const
 {
     PlayerClass pc(this->player_ptr);
+    PlayerRealm pr(this->player_ptr);
     if (pc.equals(PlayerClassType::SORCERER)) {
         return SPELL_EXP_MASTER;
     } else if (pc.equals(PlayerClassType::RED_MAGE)) {
         return SPELL_EXP_SKILLED;
-    } else if (realm == this->player_ptr->realm1) {
+    } else if (pr.realm1().equals(realm)) {
         return this->player_ptr->spell_exp[spell_idx];
-    } else if (realm == this->player_ptr->realm2) {
+    } else if (pr.realm2().equals(realm)) {
         return this->player_ptr->spell_exp[spell_idx + 32];
     } else {
         return 0;

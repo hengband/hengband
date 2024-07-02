@@ -20,7 +20,7 @@ void switch_class_racial(PlayerType *player_ptr, rc_type *rc_ptr)
         rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case PlayerClassType::HIGH_MAGE:
-        if (player_ptr->realm1 == REALM_HEX) {
+        if (PlayerRealm(player_ptr).is_realm_hex()) {
             rpi = rpi_type(_("詠唱をやめる", "Stop spell casting"));
             rpi.text = _("呪術の詠唱を全てやめる。", "Stops all casting hex spells.");
             rpi.min_level = 1;

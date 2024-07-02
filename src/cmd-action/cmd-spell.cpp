@@ -273,7 +273,8 @@ static bool spell_okay(PlayerType *player_ptr, int spell_id, bool learned, bool 
     }
 
     /* Spell is forgotten */
-    if ((use_realm == player_ptr->realm2) ? (player_ptr->spell_forgotten2 & (1UL << spell_id)) : (player_ptr->spell_forgotten1 & (1UL << spell_id))) {
+    PlayerRealm pr(player_ptr);
+    if (pr.realm2().equals(use_realm) ? (player_ptr->spell_forgotten2 & (1UL << spell_id)) : (player_ptr->spell_forgotten1 & (1UL << spell_id))) {
         /* Never okay */
         return false;
     }
@@ -283,7 +284,7 @@ static bool spell_okay(PlayerType *player_ptr, int spell_id, bool learned, bool 
     }
 
     /* Spell is learned */
-    if ((use_realm == player_ptr->realm2) ? (player_ptr->spell_learned2 & (1UL << spell_id)) : (player_ptr->spell_learned1 & (1UL << spell_id))) {
+    if (pr.realm2().equals(use_realm) ? (player_ptr->spell_learned2 & (1UL << spell_id)) : (player_ptr->spell_learned1 & (1UL << spell_id))) {
         /* Always true */
         return !study_pray;
     }
@@ -357,8 +358,9 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view pro
     }
 
     PlayerClass pc(player_ptr);
+    PlayerRealm pr(player_ptr);
     auto is_every_magic = pc.is_every_magic();
-    if (((use_realm) != player_ptr->realm1) && ((use_realm) != player_ptr->realm2) && !is_every_magic) {
+    if (!pr.realm1().equals(use_realm) && !pr.realm2().equals(use_realm) && !is_every_magic) {
         return false;
     }
     if (is_every_magic && !is_magic(use_realm)) {
@@ -964,7 +966,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
         return false;
     }
 
-    if (player_ptr->realm1 == REALM_HEX) {
+    if (pr.is_realm_hex()) {
         if (SpellHex(player_ptr).is_casting_full_capacity()) {
             auto flag = false;
             msg_print(_("これ以上新しい呪文を詠唱することはできない。", "Can not cast more spells."));
@@ -1172,7 +1174,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
             int e = spell.sexp;
 
             /* The spell worked */
-            if (realm == player_ptr->realm1) {
+            if (pr.realm1().equals(realm)) {
                 player_ptr->spell_worked1 |= (1UL << spell_id);
             } else {
                 player_ptr->spell_worked2 |= (1UL << spell_id);

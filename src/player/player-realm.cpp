@@ -147,6 +147,11 @@ const PlayerRealm::Realm &PlayerRealm::realm2() const
     return this->realm2_;
 }
 
+bool PlayerRealm::is_realm_hex() const
+{
+    return this->realm1_.equals(REALM_HEX);
+}
+
 PlayerRealm::Realm::Realm(int realm)
     : realm(realm)
 {
@@ -175,4 +180,9 @@ bool PlayerRealm::Realm::is_available() const
 bool PlayerRealm::Realm::is_good_attribute() const
 {
     return this->realm == REALM_LIFE || this->realm == REALM_CRUSADE;
+}
+
+bool PlayerRealm::Realm::equals(int realm) const
+{
+    return this->realm == realm;
 }
