@@ -1815,7 +1815,7 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
         }
     }
 
-    if (player_ptr->realm1 == REALM_HEX) {
+    if (PlayerRealm(player_ptr).is_realm_hex()) {
         if (SpellHex(player_ptr).is_spelling_specific(HEX_ICE_ARMOR)) {
             ac += 30;
         }
@@ -2118,7 +2118,7 @@ static short calc_to_damage(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_
         }
     }
 
-    if ((player_ptr->realm1 == REALM_HEX) && o_ptr->is_cursed()) {
+    if (PlayerRealm(player_ptr).is_realm_hex() && o_ptr->is_cursed()) {
         if (SpellHex(player_ptr).is_spelling_specific(HEX_RUNESWORD)) {
             if (o_ptr->curse_flags.has(CurseTraitType::CURSED)) {
                 damage += 5;
@@ -2355,7 +2355,7 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
         }
 
         /* Hex realm bonuses */
-        if ((player_ptr->realm1 == REALM_HEX) && o_ptr->is_cursed()) {
+        if (PlayerRealm(player_ptr).is_realm_hex() && o_ptr->is_cursed()) {
             if (o_ptr->curse_flags.has(CurseTraitType::CURSED)) {
                 hit += 5;
             }

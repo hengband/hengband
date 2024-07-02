@@ -85,7 +85,7 @@ void display_koff(PlayerType *player_ptr)
 
     PlayerRealm pr(player_ptr);
     if (pr.realm1().is_available() || pr.realm2().is_available()) {
-        if ((use_realm != player_ptr->realm1) && (use_realm != player_ptr->realm2)) {
+        if (!pr.realm1().equals(use_realm) && !pr.realm2().equals(use_realm)) {
             return;
         }
     } else {

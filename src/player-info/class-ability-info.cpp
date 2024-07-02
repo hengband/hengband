@@ -14,7 +14,7 @@ void set_class_ability_info(PlayerType *player_ptr, self_info_type *self_ptr)
 
         break;
     case PlayerClassType::HIGH_MAGE:
-        if (player_ptr->realm1 == REALM_HEX) {
+        if (PlayerRealm(player_ptr).is_realm_hex()) {
             break;
         }
         [[fallthrough]];

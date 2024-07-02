@@ -147,32 +147,42 @@ const PlayerRealm::Realm &PlayerRealm::realm2() const
     return this->realm2_;
 }
 
+bool PlayerRealm::is_realm_hex() const
+{
+    return this->realm1_.equals(REALM_HEX);
+}
+
 PlayerRealm::Realm::Realm(int realm)
-    : realm(realm)
+    : realm_(realm)
 {
 }
 
 const LocalizedString &PlayerRealm::Realm::get_name() const
 {
-    return PlayerRealm::get_name(this->realm);
+    return PlayerRealm::get_name(this->realm_);
 }
 
 const magic_type &PlayerRealm::Realm::get_spell_info(int num) const
 {
-    return PlayerRealm::get_spell_info(this->realm, num);
+    return PlayerRealm::get_spell_info(this->realm_, num);
 }
 
 ItemKindType PlayerRealm::Realm::get_book() const
 {
-    return PlayerRealm::get_book(this->realm);
+    return PlayerRealm::get_book(this->realm_);
 }
 
 bool PlayerRealm::Realm::is_available() const
 {
-    return this->realm != REALM_NONE;
+    return this->realm_ != REALM_NONE;
 }
 
 bool PlayerRealm::Realm::is_good_attribute() const
 {
-    return this->realm == REALM_LIFE || this->realm == REALM_CRUSADE;
+    return this->realm_ == REALM_LIFE || this->realm_ == REALM_CRUSADE;
+}
+
+bool PlayerRealm::Realm::equals(int realm) const
+{
+    return this->realm_ == realm;
 }

@@ -21,6 +21,7 @@
 #include "player-info/sniper-data-type.h"
 #include "player-info/spell-hex-data-type.h"
 #include "player/attack-defense-types.h"
+#include "player/player-realm.h"
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "realm/realm-types.h"
@@ -518,7 +519,7 @@ void PlayerClass::init_specific_data()
         this->player_ptr->class_specific_data = std::make_shared<ninja_data_type>();
         break;
     case PlayerClassType::HIGH_MAGE:
-        if (this->player_ptr->realm1 == REALM_HEX) {
+        if (PlayerRealm(this->player_ptr).is_realm_hex()) {
             this->player_ptr->class_specific_data = std::make_shared<spell_hex_data_type>();
         } else {
             this->player_ptr->class_specific_data = no_class_specific_data();

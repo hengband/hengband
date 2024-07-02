@@ -11,6 +11,7 @@
 #include "player-info/sniper-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
+#include "player/player-realm.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"
 #include "realm/realm-hex-numbers.h"
@@ -348,7 +349,7 @@ void print_imitation(PlayerType *player_ptr)
  */
 static void add_hex_status_flags(PlayerType *player_ptr, BIT_FLAGS *bar_flags)
 {
-    if (player_ptr->realm1 != REALM_HEX) {
+    if (!PlayerRealm(player_ptr).is_realm_hex()) {
         return;
     }
 
