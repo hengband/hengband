@@ -144,18 +144,16 @@
                                         "description": "呪文情報",
                                         "additionalProperties": false,
                                         "required": [
-                                            "spell_id",
+                                            "spell_tag",
                                             "learn_level",
                                             "mana_cost",
                                             "difficulty",
                                             "first_cast_exp_rate"
                                         ],
                                         "properties": {
-                                            "spell_id": {
-                                                "type": "integer",
-                                                "description": "呪文番号",
-                                                "minimum": 0,
-                                                "maximum": 31
+                                            "spell_tag": {
+                                                "type": "string",
+                                                "description": "呪文タグ"
                                             },
                                             "learn_level": {
                                                 "type": "integer",
