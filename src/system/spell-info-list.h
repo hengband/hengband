@@ -20,6 +20,9 @@ inline const std::unordered_map<std::string_view, int> realms_list = {
     { "CRAFT", 7 },
     { "DEMON", 8 },
     { "CRUSADE", 9 },
+    { "MUSIC", 15 },
+    { "HISSATSU", 16 },
+    { "HEX", 17 },
 };
 
 class SpellInfo {
