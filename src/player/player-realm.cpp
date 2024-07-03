@@ -122,8 +122,8 @@ const std::string &PlayerRealm::get_spell_name(int realm, int spell_id)
         THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", realm));
     }
 
-    const auto &spell_info = SpellInfoList::get_instance().spell_list[realm];
-    return spell_info[spell_id].name;
+    const auto &spell_info = SpellInfoList::get_instance().get_spell_info(realm, spell_id);
+    return spell_info.name;
 }
 
 const std::string &PlayerRealm::get_spell_description(int realm, int spell_id)
@@ -137,8 +137,8 @@ const std::string &PlayerRealm::get_spell_description(int realm, int spell_id)
         THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", realm));
     }
 
-    const auto &spell_info = SpellInfoList::get_instance().spell_list[realm];
-    return spell_info[spell_id].description;
+    const auto &spell_info = SpellInfoList::get_instance().get_spell_info(realm, spell_id);
+    return spell_info.description;
 }
 
 ItemKindType PlayerRealm::get_book(int realm)

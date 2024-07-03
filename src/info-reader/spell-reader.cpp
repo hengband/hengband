@@ -104,10 +104,10 @@ static errr set_book_data(const nlohmann::json &spell_data, std::vector<SpellInf
 /*!
  * @brief 職業魔法情報(ClassMagicDefinitions)のパース関数
  * @param buf テキスト列
- * @param head ヘッダ構造体
+ * @param spell_list パースした結果を格納する領域
  * @return エラーコード
  */
-errr parse_spell_info(nlohmann::json &spell_data, angband_header *)
+errr parse_spell_info(nlohmann::json &spell_data, std::vector<std::vector<SpellInfo>> &spell_list)
 {
     int realm_id;
     if (auto err = set_realm(spell_data, realm_id)) {
@@ -115,8 +115,7 @@ errr parse_spell_info(nlohmann::json &spell_data, angband_header *)
         return err;
     }
 
-    auto &spell_info_list = SpellInfoList::get_instance();
-    auto &realm_spell_list = spell_info_list.spell_list[realm_id];
+    auto &realm_spell_list = spell_list[realm_id];
 
     if (auto err = set_book_data(spell_data, realm_spell_list)) {
         msg_format(_("呪文詳細読込失敗。ID: '%d'。", "Failed to load spell data. ID: '%d'."), error_idx);

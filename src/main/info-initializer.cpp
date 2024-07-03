@@ -17,7 +17,6 @@
 #include "info-reader/magic-reader.h"
 #include "info-reader/race-reader.h"
 #include "info-reader/skill-reader.h"
-#include "info-reader/spell-reader.h"
 #include "info-reader/vault-reader.h"
 #include "io/files-util.h"
 #include "io/uid-checker.h"
@@ -241,8 +240,11 @@ void init_spell_info()
 {
     init_header(&spells_header);
     auto &spell_info_list = SpellInfoList::get_instance();
-    spell_info_list.initiallize();
-    init_json("SpellDefinitions.jsonc", "realms", spells_header, spell_info_list, parse_spell_info);
+    spell_info_list.initialize();
+    auto parser = [&spell_info_list](nlohmann::json &spell_data, angband_header *) {
+        return spell_info_list.parse(spell_data);
+    };
+    init_json("SpellDefinitions.jsonc", "realms", spells_header, spell_info_list, parser);
 }
 
 /*!
