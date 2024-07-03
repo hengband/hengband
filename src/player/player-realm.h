@@ -5,6 +5,8 @@
 #include "util/flag-group.h"
 #include <cstdint>
 #include <optional>
+#include <string>
+#include <string_view>
 #include <vector>
 
 using RealmChoices = FlagGroup<magic_realm_type, REALM_MAX>;
@@ -19,6 +21,8 @@ public:
     PlayerRealm(PlayerType *player_ptr);
 
     static const LocalizedString &get_name(int realm);
+    static std::string_view get_explanation(int realm);
+    static std::string_view get_subinfo(int realm);
     static const magic_type &get_spell_info(int realm, int spell_id, std::optional<PlayerClassType> pclass = std::nullopt);
     static const std::string &get_spell_name(int realm, int spell_id);
     static const std::string &get_spell_description(int realm, int spell_id);
@@ -30,6 +34,8 @@ public:
     public:
         Realm(int realm);
         const LocalizedString &get_name() const;
+        std::string_view get_explanation() const;
+        std::string_view get_subinfo() const;
         const magic_type &get_spell_info(int spell_id) const;
         const std::string &get_spell_name(int spell_id) const;
         const std::string &get_spell_description(int spell_id) const;

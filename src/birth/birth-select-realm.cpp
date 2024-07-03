@@ -1,5 +1,4 @@
 #include "birth/birth-select-realm.h"
-#include "birth/birth-explanations-table.h"
 #include "birth/birth-util.h"
 #include "core/asking-player.h"
 #include "io/input-key-acceptor.h"
@@ -91,12 +90,13 @@ static void move_birth_realm_cursor(birth_realm_type *birth_realm_ptr)
     if (birth_realm_ptr->cs == birth_realm_ptr->n) {
         birth_realm_ptr->cur = format("%c%c %s", '*', birth_realm_ptr->p2, _("ランダム", "Random"));
     } else {
-        const auto &realm_name = PlayerRealm::get_name(birth_realm_ptr->picks[birth_realm_ptr->cs]);
+        const auto realm = birth_realm_ptr->picks[birth_realm_ptr->cs];
+        const auto &realm_name = PlayerRealm::get_name(realm);
         birth_realm_ptr->cur = format("%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->cs], birth_realm_ptr->p2,
             realm_name.data());
         c_put_str(TERM_L_BLUE, realm_name, 3, 40);
         prt(_("の特徴", ": Characteristic"), 3, 40 + realm_name->length());
-        prt(realm_subinfo[technic2magic(birth_realm_ptr->picks[birth_realm_ptr->cs]) - 1], 4, 40);
+        prt(PlayerRealm::get_subinfo(realm), 4, 40);
     }
 
     c_put_str(TERM_YELLOW, birth_realm_ptr->cur, 12 + (birth_realm_ptr->cs / 5), 2 + 15 * (birth_realm_ptr->cs % 5));
@@ -255,7 +255,7 @@ static std::optional<magic_realm_type> process_choose_realm(PlayerType *player_p
         }
 
         cleanup_realm_selection_window();
-        display_wrap_around(realm_explanations[technic2magic(*selected_realm) - 1], 74, 12, 3);
+        display_wrap_around(PlayerRealm::get_explanation(*selected_realm), 74, 12, 3);
 
         if (check_realm_selection(player_ptr, choices.count())) {
             return selected_realm;

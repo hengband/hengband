@@ -1,4 +1,5 @@
 #include "player/player-realm.h"
+#include "birth/birth-explanations-table.h"
 #include "locale/localized-string.h"
 #include "object/tval-types.h"
 #include "player-info/class-info.h"
@@ -88,6 +89,32 @@ const LocalizedString &PlayerRealm::get_name(int realm)
         THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", realm));
     }
     return it->second;
+}
+
+std::string_view PlayerRealm::get_explanation(int realm)
+{
+    const auto realm_enum = i2enum<magic_realm_type>(realm);
+    if (MAGIC_REALM_RANGE.contains(realm_enum)) {
+        return magic_explanations[realm - 1];
+    }
+    if (TECHNIC_REALM_RANGE.contains(realm_enum)) {
+        return technic_explanations[realm - MIN_TECHNIC];
+    }
+
+    THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", realm));
+}
+
+std::string_view PlayerRealm::get_subinfo(int realm)
+{
+    const auto realm_enum = i2enum<magic_realm_type>(realm);
+    if (MAGIC_REALM_RANGE.contains(realm_enum)) {
+        return magic_subinfo[realm - 1];
+    }
+    if (TECHNIC_REALM_RANGE.contains(realm_enum)) {
+        return technic_subinfo[realm - MIN_TECHNIC];
+    }
+
+    THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", realm));
 }
 
 const magic_type &PlayerRealm::get_spell_info(int realm, int spell_id, std::optional<PlayerClassType> pclass)
@@ -191,6 +218,16 @@ PlayerRealm::Realm::Realm(int realm)
 const LocalizedString &PlayerRealm::Realm::get_name() const
 {
     return PlayerRealm::get_name(this->realm_);
+}
+
+std::string_view PlayerRealm::Realm::get_explanation() const
+{
+    return PlayerRealm::get_explanation(this->realm_);
+}
+
+std::string_view PlayerRealm::Realm::get_subinfo() const
+{
+    return PlayerRealm::get_subinfo(this->realm_);
 }
 
 const magic_type &PlayerRealm::Realm::get_spell_info(int spell_id) const
