@@ -219,8 +219,8 @@ static SpoilerOutputResultType spoil_player_spell()
             spoil_out("Name                     Lv Cst Dif Exp\n");
             for (SPELL_IDX i = 0; i < 32; i++) {
                 const auto &spell = PlayerRealm::get_spell_info(realm, i, pclass);
-                const auto spell_name = exe_spell(&dummy_p, realm, i, SpellProcessType::NAME);
-                spoil_out(format("%-24s %2d %3d %3d %3d\n", spell_name->data(), spell.slevel, spell.smana, spell.sfail, spell.sexp));
+                const auto &spell_name = PlayerRealm::get_spell_name(realm, i);
+                spoil_out(format("%-24s %2d %3d %3d %3d\n", spell_name.data(), spell.slevel, spell.smana, spell.sfail, spell.sexp));
             }
             spoil_out("\n");
         }

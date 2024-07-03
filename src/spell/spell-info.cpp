@@ -326,11 +326,11 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL
             line_attr = TERM_L_GREEN;
         }
 
-        const auto spell_name = exe_spell(player_ptr, use_realm, spell_id, SpellProcessType::NAME);
+        const auto &spell_name = PlayerRealm::get_spell_name(use_realm, spell_id);
         if (use_realm == REALM_HISSATSU) {
-            out_val.append(format("%-25s %2d %4d", spell_name->data(), spell.slevel, need_mana));
+            out_val.append(format("%-25s %2d %4d", spell_name.data(), spell.slevel, need_mana));
         } else {
-            out_val.append(format("%-25s%c%-4s %2d %4d %3d%% %s", spell_name->data(), (max ? '!' : ' '), ryakuji, spell.slevel,
+            out_val.append(format("%-25s%c%-4s %2d %4d %3d%% %s", spell_name.data(), (max ? '!' : ' '), ryakuji, spell.slevel,
                 need_mana, spell_chance(player_ptr, spell_id, use_realm), comment));
         }
 

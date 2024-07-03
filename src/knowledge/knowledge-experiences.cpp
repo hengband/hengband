@@ -95,8 +95,8 @@ void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
             }
             SUB_EXP spell_exp = player_ptr->spell_exp[i];
             auto skill_rank = PlayerSkill::spell_skill_rank(spell_exp);
-            const auto spell_name = exe_spell(player_ptr, player_ptr->realm1, i, SpellProcessType::NAME);
-            fprintf(fff, "%-25s ", spell_name->data());
+            const auto &spell_name = pr.realm1().get_spell_name(i);
+            fprintf(fff, "%-25s ", spell_name.data());
             if (pr.realm1().equals(REALM_HISSATSU)) {
                 if (show_actual_value) {
                     fprintf(fff, "----/---- ");
@@ -132,8 +132,8 @@ void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
 
             SUB_EXP spell_exp = player_ptr->spell_exp[i + 32];
             auto skill_rank = PlayerSkill::spell_skill_rank(spell_exp);
-            const auto spell_name = exe_spell(player_ptr, player_ptr->realm2, i, SpellProcessType::NAME);
-            fprintf(fff, "%-25s ", spell_name->data());
+            const auto spell_name = pr.realm2().get_spell_name(i);
+            fprintf(fff, "%-25s ", spell_name.data());
             if (show_actual_value) {
                 fprintf(fff, "%4d/%4d ", spell_exp, PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER));
             }
