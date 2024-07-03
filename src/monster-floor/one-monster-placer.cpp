@@ -289,20 +289,43 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX
 
     MonsterEntity *m_ptr;
     m_ptr = &floor.m_list[g_ptr->m_idx];
-    m_ptr->r_idx = r_idx;
-    m_ptr->ap_r_idx = initial_r_appearance(player_ptr, r_idx, mode);
 
     m_ptr->mflag.clear();
     m_ptr->mflag2.clear();
-    if (any_bits(mode, PM_MULTIPLY) && is_monster(src_idx) && !floor.m_list[src_idx].is_original_ap()) {
+
+    if (r_ptr->misc_flags.has(MonsterMiscType::CHAMELEON)) {
+        m_ptr->r_idx = r_idx;
+
+        choose_chameleon_polymorph(player_ptr, g_ptr->m_idx, *g_ptr, summoner_m_idx);
+
+        r_ptr = &m_ptr->get_monrace();
+
+        m_ptr->mflag2.set(MonsterConstantFlagType::CHAMELEON);
+    } else {
+        m_ptr->r_idx = r_idx;
+        if (any_bits(mode, PM_KAGE) && none_bits(mode, PM_FORCE_PET)) {
+            m_ptr->ap_r_idx = MonsterRaceId::KAGE;
+            m_ptr->mflag2.set(MonsterConstantFlagType::KAGE);
+        } else {
+            m_ptr->ap_r_idx = initial_r_appearance(player_ptr, r_idx, mode);
+        }
+    }
+
+    auto same_appearance_as_parent = m_ptr->mflag2.has_not(MonsterConstantFlagType::CHAMELEON);
+    same_appearance_as_parent &= any_bits(mode, PM_MULTIPLY);
+    same_appearance_as_parent &= is_monster(src_idx) && !floor.m_list[src_idx].is_original_ap();
+    
+    if (same_appearance_as_parent) {
         m_ptr->ap_r_idx = floor.m_list[src_idx].ap_r_idx;
         if (floor.m_list[src_idx].mflag2.has(MonsterConstantFlagType::KAGE)) {
             m_ptr->mflag2.set(MonsterConstantFlagType::KAGE);
         }
     }
 
-    if (is_monster(src_idx) && r_ptr->kind_flags.has_none_of(alignment_mask)) {
+    if (m_ptr->mflag2.has_not(MonsterConstantFlagType::CHAMELEON) && is_monster(src_idx) && r_ptr->kind_flags.has_none_of(alignment_mask)) {
         m_ptr->sub_align = floor.m_list[src_idx].sub_align;
+    } else if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && !is_monster(src_idx)) {
+        m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
     } else {
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
         if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
@@ -331,30 +354,6 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX
         m_ptr->parent_m_idx = src_idx;
     } else {
         m_ptr->parent_m_idx = 0;
-    }
-
-    if (r_ptr->misc_flags.has(MonsterMiscType::CHAMELEON)) {
-        choose_chameleon_polymorph(player_ptr, g_ptr->m_idx, *g_ptr, summoner_m_idx);
-
-        r_ptr = &m_ptr->get_monrace();
-
-        if (r_ptr->kind_flags.has_any_of(alignment_mask)) {
-            m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
-            if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
-                m_ptr->sub_align |= SUB_ALIGN_EVIL;
-            }
-            if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
-                m_ptr->sub_align |= SUB_ALIGN_GOOD;
-            }
-        }
-
-        m_ptr->mflag2.set(MonsterConstantFlagType::CHAMELEON);
-        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (!is_monster(src_idx))) {
-            m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
-        }
-    } else if (any_bits(mode, PM_KAGE) && none_bits(mode, PM_FORCE_PET)) {
-        m_ptr->ap_r_idx = MonsterRaceId::KAGE;
-        m_ptr->mflag2.set(MonsterConstantFlagType::KAGE);
     }
 
     if (any_bits(mode, PM_CLONE)) {
