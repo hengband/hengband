@@ -263,13 +263,13 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto *g_ptr = &floor.grid_array[y][x];
-    auto *r_ptr = &MonraceList::get_instance().get_monrace(r_idx);
+    auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     const auto &world = AngbandWorld::get_instance();
     if (world.is_wild_mode() || !in_bounds(&floor, y, x) || !MonraceList::is_valid(r_idx)) {
         return std::nullopt;
     }
 
-    if (none_bits(mode, PM_IGNORE_TERRAIN) && (pattern_tile(&floor, y, x) || !monster_can_enter(player_ptr, y, x, r_ptr, 0))) {
+    if (none_bits(mode, PM_IGNORE_TERRAIN) && (pattern_tile(&floor, y, x) || !monster_can_enter(player_ptr, y, x, &monrace, 0))) {
         return std::nullopt;
     }
 
@@ -277,8 +277,8 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX
         return std::nullopt;
     }
 
-    msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%s(Lv%d)を生成しました。", "%s(Lv%d) was generated."), r_ptr->name.data(), r_ptr->level);
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->population_flags.has(MonsterPopulationType::NAZGUL) || (r_ptr->level < 10)) {
+    msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%s(Lv%d)を生成しました。", "%s(Lv%d) was generated."), monrace.name.data(), monrace.level);
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || monrace.population_flags.has(MonsterPopulationType::NAZGUL) || (monrace.level < 10)) {
         reset_bits(mode, PM_KAGE);
     }
 
@@ -293,12 +293,10 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX
     m_ptr->mflag.clear();
     m_ptr->mflag2.clear();
 
-    if (r_ptr->misc_flags.has(MonsterMiscType::CHAMELEON)) {
+    if (monrace.misc_flags.has(MonsterMiscType::CHAMELEON)) {
         m_ptr->r_idx = r_idx;
 
         choose_chameleon_polymorph(player_ptr, g_ptr->m_idx, *g_ptr, summoner_m_idx);
-
-        r_ptr = &m_ptr->get_monrace();
 
         m_ptr->mflag2.set(MonsterConstantFlagType::CHAMELEON);
     } else {
@@ -311,10 +309,12 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX
         }
     }
 
+    const auto &new_monrace = m_ptr->get_monrace();
+
     auto same_appearance_as_parent = m_ptr->mflag2.has_not(MonsterConstantFlagType::CHAMELEON);
     same_appearance_as_parent &= any_bits(mode, PM_MULTIPLY);
     same_appearance_as_parent &= is_monster(src_idx) && !floor.m_list[src_idx].is_original_ap();
-    
+
     if (same_appearance_as_parent) {
         m_ptr->ap_r_idx = floor.m_list[src_idx].ap_r_idx;
         if (floor.m_list[src_idx].mflag2.has(MonsterConstantFlagType::KAGE)) {
@@ -322,16 +322,16 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX
         }
     }
 
-    if (m_ptr->mflag2.has_not(MonsterConstantFlagType::CHAMELEON) && is_monster(src_idx) && r_ptr->kind_flags.has_none_of(alignment_mask)) {
+    if (m_ptr->mflag2.has_not(MonsterConstantFlagType::CHAMELEON) && is_monster(src_idx) && new_monrace.kind_flags.has_none_of(alignment_mask)) {
         m_ptr->sub_align = floor.m_list[src_idx].sub_align;
-    } else if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && !is_monster(src_idx)) {
+    } else if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && new_monrace.kind_flags.has(MonsterKindType::UNIQUE) && !is_monster(src_idx)) {
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
     } else {
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
-        if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
+        if (new_monrace.kind_flags.has(MonsterKindType::EVIL)) {
             set_bits(m_ptr->sub_align, SUB_ALIGN_EVIL);
         }
-        if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
+        if (new_monrace.kind_flags.has(MonsterKindType::GOOD)) {
             set_bits(m_ptr->sub_align, SUB_ALIGN_GOOD);
         }
     }
@@ -367,22 +367,22 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX
     m_ptr->ml = false;
     if (any_bits(mode, PM_FORCE_PET)) {
         set_pet(player_ptr, m_ptr);
-    } else if ((is_player(src_idx) && r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY)) || is_friendly_idx(player_ptr, src_idx) || any_bits(mode, PM_FORCE_FRIENDLY)) {
-        if (!monster_has_hostile_align(player_ptr, nullptr, 0, -1, r_ptr) && !player_ptr->current_floor_ptr->inside_arena) {
+    } else if ((is_player(src_idx) && new_monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY)) || is_friendly_idx(player_ptr, src_idx) || any_bits(mode, PM_FORCE_FRIENDLY)) {
+        if (!monster_has_hostile_align(player_ptr, nullptr, 0, -1, &new_monrace) && !player_ptr->current_floor_ptr->inside_arena) {
             set_friendly(m_ptr);
         }
     }
 
     m_ptr->mtimed[MTIMED_CSLEEP] = 0;
-    if (any_bits(mode, PM_ALLOW_SLEEP) && r_ptr->sleep && !ironman_nightmare) {
-        int val = r_ptr->sleep;
+    if (any_bits(mode, PM_ALLOW_SLEEP) && new_monrace.sleep && !ironman_nightmare) {
+        int val = new_monrace.sleep;
         (void)set_monster_csleep(player_ptr, g_ptr->m_idx, (val * 2) + randint1(val * 10));
     }
 
-    if (r_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
-        m_ptr->max_maxhp = r_ptr->hit_dice.maxroll();
+    if (new_monrace.misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
+        m_ptr->max_maxhp = new_monrace.hit_dice.maxroll();
     } else {
-        m_ptr->max_maxhp = r_ptr->hit_dice.roll();
+        m_ptr->max_maxhp = new_monrace.hit_dice.roll();
     }
 
     if (ironman_nightmare) {
@@ -391,8 +391,8 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX
     }
 
     m_ptr->maxhp = m_ptr->max_maxhp;
-    if (r_ptr->cur_hp_per != 0) {
-        m_ptr->hp = m_ptr->maxhp * r_ptr->cur_hp_per / 100;
+    if (new_monrace.cur_hp_per != 0) {
+        m_ptr->hp = m_ptr->maxhp * new_monrace.cur_hp_per / 100;
     } else {
         m_ptr->hp = m_ptr->maxhp;
     }
@@ -415,8 +415,8 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX
         m_ptr->mflag.set(MonsterTemporaryFlagType::PREVENT_MAGIC);
     }
 
-    auto is_awake_lightning_monster = r_ptr->brightness_flags.has_any_of(self_ld_mask);
-    is_awake_lightning_monster |= r_ptr->brightness_flags.has_any_of(has_ld_mask) && !m_ptr->is_asleep();
+    auto is_awake_lightning_monster = new_monrace.brightness_flags.has_any_of(self_ld_mask);
+    is_awake_lightning_monster |= new_monrace.brightness_flags.has_any_of(has_ld_mask) && !m_ptr->is_asleep();
     if (is_awake_lightning_monster) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
@@ -429,17 +429,17 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX
      * Memorize location of the unique monster in saved floors.
      * A unique monster move from old saved floor.
      */
-    if (world.character_dungeon && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->population_flags.has(MonsterPopulationType::NAZGUL))) {
+    if (world.character_dungeon && (new_monrace.kind_flags.has(MonsterKindType::UNIQUE) || new_monrace.population_flags.has(MonsterPopulationType::NAZGUL))) {
         m_ptr->get_real_monrace().floor_id = player_ptr->floor_id;
     }
 
-    if (r_ptr->misc_flags.has(MonsterMiscType::MULTIPLY)) {
+    if (new_monrace.misc_flags.has(MonsterMiscType::MULTIPLY)) {
         floor.num_repro++;
     }
 
     warn_unique_generation(player_ptr, r_idx);
 
-    activate_explosive_rune(player_ptr, Pos2D(y, x), *r_ptr);
+    activate_explosive_rune(player_ptr, Pos2D(y, x), new_monrace);
 
     return m_ptr->is_valid() ? std::make_optional(g_ptr->m_idx) : std::nullopt;
 }
