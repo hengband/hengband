@@ -81,5 +81,5 @@ bool item_tester_learn_spell(PlayerType *player_ptr, const ItemEntity *o_ptr)
         return false;
     }
 
-    return (pr.realm1().get_book() == tval) || (pr.realm2().get_book() == tval) || choices.has(realm);
+    return pr.realm1().equals(book_realm) || pr.realm2().equals(book_realm) || choices.has(book_realm);
 }

@@ -773,9 +773,9 @@ void do_cmd_study(PlayerType *player_ptr)
     const auto tval = o_ptr->bi_key.tval();
     const auto sval = *o_ptr->bi_key.sval();
     const auto study_realm = PlayerRealm::get_realm_of_book(tval);
-    if (tval == pr.realm2().get_book()) {
+    if (pr.realm2().equals(study_realm)) {
         increment = 32;
-    } else if (tval != pr.realm1().get_book()) {
+    } else if (!pr.realm1().equals(study_realm)) {
         if (!input_check(_("本当に魔法の領域を変更しますか？", "Really, change magic realm? "))) {
             return;
         }
