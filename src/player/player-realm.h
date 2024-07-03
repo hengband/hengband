@@ -19,7 +19,7 @@ public:
     PlayerRealm(PlayerType *player_ptr);
 
     static const LocalizedString &get_name(int realm);
-    static const magic_type &get_spell_info(int realm, int num, std::optional<PlayerClassType> pclass = std::nullopt);
+    static const magic_type &get_spell_info(int realm, int spell_id, std::optional<PlayerClassType> pclass = std::nullopt);
     static ItemKindType get_book(int realm);
     static RealmChoices get_realm1_choices(PlayerClassType pclass);
     static RealmChoices get_realm2_choices(PlayerClassType pclass);
@@ -28,7 +28,7 @@ public:
     public:
         Realm(int realm);
         const LocalizedString &get_name() const;
-        const magic_type &get_spell_info(int num) const;
+        const magic_type &get_spell_info(int spell_id) const;
         ItemKindType get_book() const;
         bool is_available() const;
         bool is_good_attribute() const;
