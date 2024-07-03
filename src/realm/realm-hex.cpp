@@ -26,6 +26,7 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "player/attack-defense-types.h"
+#include "player/player-realm.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
 #include "spell-kind/magic-item-recharger.h"
@@ -43,7 +44,6 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "system/spell-info-list.h"
 #include "target/grid-selector.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
@@ -64,23 +64,12 @@
  */
 std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type spell, SpellProcessType mode)
 {
-    auto name = mode == SpellProcessType::NAME;
-    auto description = mode == SpellProcessType::DESCRIPTION;
     auto info = mode == SpellProcessType::INFO;
     auto cast = mode == SpellProcessType::CAST;
     auto continuation = mode == SpellProcessType::CONTNUATION;
     auto stop = mode == SpellProcessType::STOP;
     auto should_continue = true;
     int power;
-
-    auto &list = SpellInfoList::get_instance().spell_list[REALM_HEX];
-
-    if (name) {
-        return list[spell].name;
-    }
-    if (description) {
-        return list[spell].description;
-    }
 
     switch (spell) {
         /*** 1st book (0-7) ***/
@@ -561,8 +550,8 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
             }
 
             if (!flag) {
-                const auto spell_name = exe_spell(player_ptr, REALM_HEX, HEX_RESTORE, SpellProcessType::NAME);
-                msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%s^'."), spell_name->data());
+                const auto &spell_name = PlayerRealm::get_spell_name(REALM_HEX, HEX_RESTORE);
+                msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%s^'."), spell_name.data());
                 SpellHex spell_hex(player_ptr);
                 spell_hex.reset_casting_flag(HEX_RESTORE);
                 if (!spell_hex.is_spelling_any()) {

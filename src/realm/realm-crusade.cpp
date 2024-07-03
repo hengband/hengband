@@ -28,7 +28,6 @@
 #include "status/buff-setter.h"
 #include "status/sight-setter.h"
 #include "system/player-type-definition.h"
-#include "system/spell-info-list.h"
 #include "target/target-getter.h"
 #include "util/dice.h"
 #include "view/display-messages.h"
@@ -43,22 +42,11 @@
  */
 std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
-    bool name = mode == SpellProcessType::NAME;
-    bool desc = mode == SpellProcessType::DESCRIPTION;
     bool info = mode == SpellProcessType::INFO;
     bool cast = mode == SpellProcessType::CAST;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
-
-    auto &list = SpellInfoList::get_instance().spell_list[REALM_CRUSADE];
-
-    if (name) {
-        return list[spell].name;
-    }
-    if (desc) {
-        return list[spell].description;
-    }
 
     switch (spell) {
     case 0: {

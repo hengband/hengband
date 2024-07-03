@@ -5,6 +5,7 @@
 #include "realm/realm-types.h"
 #include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
+#include "system/spell-info-list.h"
 #include "util/enum-converter.h"
 
 namespace {
@@ -110,6 +111,36 @@ const magic_type &PlayerRealm::get_spell_info(int realm, int spell_id, std::opti
     THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", realm));
 }
 
+const std::string &PlayerRealm::get_spell_name(int realm, int spell_id)
+{
+    if (spell_id < 0 || 32 <= spell_id) {
+        THROW_EXCEPTION(std::invalid_argument, format("Invalid spell id: %d", spell_id));
+    }
+
+    const auto realm_enum = i2enum<magic_realm_type>(realm);
+    if (!MAGIC_REALM_RANGE.contains(realm_enum) && !TECHNIC_REALM_RANGE.contains(realm_enum)) {
+        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", realm));
+    }
+
+    const auto &spell_info = SpellInfoList::get_instance().spell_list[realm];
+    return spell_info[spell_id].name;
+}
+
+const std::string &PlayerRealm::get_spell_description(int realm, int spell_id)
+{
+    if (spell_id < 0 || 32 <= spell_id) {
+        THROW_EXCEPTION(std::invalid_argument, format("Invalid spell id: %d", spell_id));
+    }
+
+    const auto realm_enum = i2enum<magic_realm_type>(realm);
+    if (!MAGIC_REALM_RANGE.contains(realm_enum) && !TECHNIC_REALM_RANGE.contains(realm_enum)) {
+        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", realm));
+    }
+
+    const auto &spell_info = SpellInfoList::get_instance().spell_list[realm];
+    return spell_info[spell_id].description;
+}
+
 ItemKindType PlayerRealm::get_book(int realm)
 {
     const auto it = realm_books.find(i2enum<magic_realm_type>(realm));
@@ -165,6 +196,16 @@ const LocalizedString &PlayerRealm::Realm::get_name() const
 const magic_type &PlayerRealm::Realm::get_spell_info(int spell_id) const
 {
     return PlayerRealm::get_spell_info(this->realm_, spell_id);
+}
+
+const std::string &PlayerRealm::Realm::get_spell_name(int spell_id) const
+{
+    return PlayerRealm::get_spell_name(this->realm_, spell_id);
+}
+
+const std::string &PlayerRealm::Realm::get_spell_description(int spell_id) const
+{
+    return PlayerRealm::get_spell_description(this->realm_, spell_id);
 }
 
 ItemKindType PlayerRealm::Realm::get_book() const

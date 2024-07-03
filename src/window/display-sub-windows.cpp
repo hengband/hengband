@@ -828,10 +828,10 @@ static void display_spell_list(PlayerType *player_ptr)
         for (int i = 0; i < 32; i++) {
             byte a = TERM_WHITE;
 
-            const auto realm = (j < 1) ? player_ptr->realm1 : player_ptr->realm2;
-            const auto &spell = PlayerRealm::get_spell_info(realm, i % 32);
-            const auto spell_name = exe_spell(player_ptr, realm, i % 32, SpellProcessType::NAME);
-            auto name = spell_name->data();
+            const auto &realm = (j < 1) ? pr.realm1() : pr.realm2();
+            const auto &spell = realm.get_spell_info(i);
+            const auto &spell_name = realm.get_spell_name(i % 32);
+            auto name = spell_name.data();
 
             if (spell.slevel >= 99) {
                 name = _("(判読不能)", "(illegible)");

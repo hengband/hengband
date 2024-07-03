@@ -23,7 +23,6 @@
 #include "status/experience.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "system/spell-info-list.h"
 #include "target/target-getter.h"
 #include "timed-effect/timed-effects.h"
 #include "util/dice.h"
@@ -61,8 +60,6 @@ static void start_singing(PlayerType *player_ptr, SPELL_IDX spell, int32_t song)
  */
 std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
-    bool name = mode == SpellProcessType::NAME;
-    bool desc = mode == SpellProcessType::DESCRIPTION;
     bool info = mode == SpellProcessType::INFO;
     bool cast = mode == SpellProcessType::CAST;
     bool fail = mode == SpellProcessType::FAIL;
@@ -71,15 +68,6 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
 
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
-
-    auto &list = SpellInfoList::get_instance().spell_list[REALM_MUSIC];
-
-    if (name) {
-        return list[spell].name;
-    }
-    if (desc) {
-        return list[spell].description;
-    }
 
     switch (spell) {
     case 0:

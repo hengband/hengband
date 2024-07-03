@@ -170,8 +170,8 @@ void SpellHex::display_casting_spells_list()
     prt(_("     名前", "     Name"), y, x + 5);
     for (auto spell : this->casting_spells) {
         term_erase(x, y + n + 1);
-        const auto spell_name = exe_spell(this->player_ptr, REALM_HEX, spell, SpellProcessType::NAME);
-        put_str(format("%c)  %s", I2A(n), spell_name->data()), y + n + 1, x + 2);
+        const auto &spell_name = PlayerRealm::get_spell_name(REALM_HEX, spell);
+        put_str(format("%c)  %s", I2A(n), spell_name.data()), y + n + 1, x + 2);
         n++;
     }
 }

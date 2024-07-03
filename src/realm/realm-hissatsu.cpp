@@ -46,7 +46,6 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "system/spell-info-list.h"
 #include "target/grid-selector.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-getter.h"
@@ -65,20 +64,9 @@
  */
 std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell_id, SpellProcessType mode)
 {
-    bool name = mode == SpellProcessType::NAME;
-    bool desc = mode == SpellProcessType::DESCRIPTION;
     bool cast = mode == SpellProcessType::CAST;
 
     PLAYER_LEVEL plev = player_ptr->lev;
-
-    auto &list = SpellInfoList::get_instance().spell_list[REALM_HISSATSU];
-
-    if (name) {
-        return list[spell_id].name;
-    }
-    if (desc) {
-        return list[spell_id].description;
-    }
 
     switch (spell_id) {
     case 0:

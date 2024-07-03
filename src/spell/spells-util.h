@@ -5,13 +5,11 @@
 #define DETECT_RAD_ALL 255
 
 enum class SpellProcessType {
-    NAME = 0,
-    DESCRIPTION = 1,
-    INFO = 2,
-    CAST = 3,
-    FAIL = 4,
-    STOP = 5,
-    CONTNUATION = 6
+    INFO,
+    CAST,
+    FAIL,
+    STOP,
+    CONTNUATION,
 };
 
 enum spell_operation {
