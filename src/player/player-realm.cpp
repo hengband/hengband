@@ -195,6 +195,12 @@ RealmChoices PlayerRealm::get_realm2_choices(PlayerClassType pclass)
     return it->second;
 }
 
+magic_realm_type PlayerRealm::get_realm_of_book(ItemKindType book)
+{
+    auto it = std::find_if(realm_books.begin(), realm_books.end(), [book](const auto &entry) { return entry.second == book; });
+    return it == realm_books.end() ? REALM_NONE : it->first;
+}
+
 const PlayerRealm::Realm &PlayerRealm::realm1() const
 {
     return this->realm1_;
