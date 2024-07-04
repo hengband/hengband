@@ -77,7 +77,8 @@ const std::map<PlayerClassType, RealmChoices> realm2_choices = {
 }
 
 PlayerRealm::PlayerRealm(PlayerType *player_ptr)
-    : realm1_(player_ptr->realm1)
+    : player_ptr(player_ptr)
+    , realm1_(player_ptr->realm1)
     , realm2_(player_ptr->realm2)
 {
 }
@@ -214,6 +215,33 @@ const PlayerRealm::Realm &PlayerRealm::realm2() const
 bool PlayerRealm::is_realm_hex() const
 {
     return this->realm1_.equals(REALM_HEX);
+}
+
+void PlayerRealm::reset()
+{
+    this->set_(REALM_NONE, REALM_NONE);
+}
+
+void PlayerRealm::set(int realm1, int realm2)
+{
+    const auto realm1_enum = i2enum<magic_realm_type>(realm1);
+    if (!MAGIC_REALM_RANGE.contains(realm1_enum) && !TECHNIC_REALM_RANGE.contains(realm1_enum)) {
+        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm1: %d", realm1));
+    }
+    const auto realm2_enum = i2enum<magic_realm_type>(realm2);
+    if (realm2 != REALM_NONE && !MAGIC_REALM_RANGE.contains(realm2_enum) && !TECHNIC_REALM_RANGE.contains(realm2_enum)) {
+        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm2: %d", realm2));
+    }
+
+    this->set_(realm1, realm2);
+}
+
+void PlayerRealm::set_(int realm1, int realm2)
+{
+    this->player_ptr->realm1 = static_cast<int16_t>(realm1);
+    this->player_ptr->realm2 = static_cast<int16_t>(realm2);
+    this->realm1_ = Realm(realm1);
+    this->realm2_ = Realm(realm2);
 }
 
 PlayerRealm::Realm::Realm(int realm)

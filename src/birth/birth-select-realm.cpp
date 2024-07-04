@@ -291,8 +291,8 @@ bool get_player_realms(PlayerType *player_ptr)
     put_str("                                   ", 5, 40);
     put_str("                                   ", 6, 40);
 
-    player_ptr->realm1 = REALM_NONE;
-    player_ptr->realm2 = REALM_NONE;
+    PlayerRealm pr(player_ptr);
+    pr.reset();
 
     if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
         player_ptr->element = select_element_realm(player_ptr);
@@ -313,7 +313,7 @@ bool get_player_realms(PlayerType *player_ptr)
     if (*realm1 == REALM_NONE) {
         return true;
     }
-    player_ptr->realm1 = *realm1;
+    pr.set(*realm1);
     print_choosed_realms(player_ptr);
 
     /* Select the second realm */
@@ -324,7 +324,7 @@ bool get_player_realms(PlayerType *player_ptr)
     if (*realm2 == REALM_NONE) {
         return true;
     }
-    player_ptr->realm2 = *realm2;
+    pr.set(*realm1, *realm2);
     print_choosed_realms(player_ptr);
 
     return true;
