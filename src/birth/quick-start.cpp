@@ -90,11 +90,13 @@ void save_prev_data(PlayerType *player_ptr, birther *birther_ptr)
 
     if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
         birther_ptr->realm1 = player_ptr->element;
+        birther_ptr->realm2 = 0;
     } else {
-        birther_ptr->realm1 = player_ptr->realm1;
+        PlayerRealm pr(player_ptr);
+        birther_ptr->realm1 = pr.realm1().to_enum();
+        birther_ptr->realm2 = pr.realm2().to_enum();
     }
 
-    birther_ptr->realm2 = player_ptr->realm2;
     birther_ptr->age = player_ptr->age;
     birther_ptr->ht = player_ptr->ht;
     birther_ptr->wt = player_ptr->wt;

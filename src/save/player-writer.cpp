@@ -3,6 +3,7 @@
 #include "market/arena-entry.h"
 #include "object/tval-types.h"
 #include "player-base/player-class.h"
+#include "player/player-realm.h"
 #include "player/player-skill.h"
 #include "save/info-writer.h"
 #include "save/player-class-specific-data-writer.h"
@@ -23,12 +24,13 @@
  */
 static void wr_relams(PlayerType *player_ptr)
 {
+    PlayerRealm pr(player_ptr);
     if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
         wr_byte((byte)player_ptr->element);
     } else {
-        wr_byte((byte)player_ptr->realm1);
+        wr_byte((byte)pr.realm1().to_enum());
     }
-    wr_byte((byte)player_ptr->realm2);
+    wr_byte((byte)pr.realm2().to_enum());
 }
 
 /*!
