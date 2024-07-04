@@ -7,6 +7,7 @@
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/player-personality.h"
+#include "player/player-realm.h"
 #include "player/player-sex.h"
 #include "player/player-status.h"
 #include "player/process-name.h"
@@ -136,13 +137,14 @@ void load_prev_data(PlayerType *player_ptr, bool swap)
     player_ptr->pclass = previous_char.pclass;
     player_ptr->ppersonality = previous_char.ppersonality;
 
+    PlayerRealm pr(player_ptr);
+    pr.reset();
     if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
         player_ptr->element = previous_char.realm1;
     } else {
-        player_ptr->realm1 = previous_char.realm1;
+        pr.set(previous_char.realm1, previous_char.realm2);
     }
 
-    player_ptr->realm2 = previous_char.realm2;
     player_ptr->age = previous_char.age;
     player_ptr->ht = previous_char.ht;
     player_ptr->wt = previous_char.wt;

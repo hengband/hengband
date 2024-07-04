@@ -52,8 +52,13 @@ public:
     const Realm &realm1() const;
     const Realm &realm2() const;
     bool is_realm_hex() const;
+    void reset();
+    void set(int realm1, int realm2 = REALM_NONE);
 
 private:
+    void set_(int realm1, int realm2);
+
+    PlayerType *player_ptr;
     Realm realm1_;
     Realm realm2_;
 };
