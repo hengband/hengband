@@ -15,6 +15,3 @@
 
 constexpr auto VALID_REALM = std::ssize(MAGIC_REALM_RANGE) + std::ssize(TECHNIC_REALM_RANGE);
 #define is_magic(A) (((A) > REALM_NONE) && ((A) <= MAX_MAGIC))
-
-enum class ItemKindType : short;
-#define tval2realm(A) (i2enum<magic_realm_type>((A)-ItemKindType::LIFE_BOOK + 1))

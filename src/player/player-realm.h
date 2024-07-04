@@ -29,6 +29,7 @@ public:
     static ItemKindType get_book(int realm);
     static RealmChoices get_realm1_choices(PlayerClassType pclass);
     static RealmChoices get_realm2_choices(PlayerClassType pclass);
+    static magic_realm_type get_realm_of_book(ItemKindType tval);
 
     class Realm {
     public:

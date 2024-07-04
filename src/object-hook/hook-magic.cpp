@@ -76,10 +76,10 @@ bool item_tester_learn_spell(PlayerType *player_ptr, const ItemEntity *o_ptr)
         return true;
     }
 
-    const auto realm = tval2realm(tval);
-    if (!is_magic(realm)) {
+    const auto book_realm = PlayerRealm::get_realm_of_book(tval);
+    if (!is_magic(book_realm)) {
         return false;
     }
 
-    return (pr.realm1().get_book() == tval) || (pr.realm2().get_book() == tval) || choices.has(realm);
+    return pr.realm1().equals(book_realm) || pr.realm2().equals(book_realm) || choices.has(book_realm);
 }

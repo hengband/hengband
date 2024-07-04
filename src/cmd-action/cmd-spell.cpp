@@ -620,7 +620,7 @@ void do_cmd_browse(PlayerType *player_ptr)
     /* Access the item's sval */
     const auto tval = o_ptr->bi_key.tval();
     const auto sval = *o_ptr->bi_key.sval();
-    short use_realm = tval2realm(tval);
+    const auto use_realm = PlayerRealm::get_realm_of_book(tval);
 
     o_ptr->track_baseitem();
     handle_stuff(player_ptr);
@@ -772,14 +772,15 @@ void do_cmd_study(PlayerType *player_ptr)
 
     const auto tval = o_ptr->bi_key.tval();
     const auto sval = *o_ptr->bi_key.sval();
-    if (tval == pr.realm2().get_book()) {
+    const auto study_realm = PlayerRealm::get_realm_of_book(tval);
+    if (pr.realm2().equals(study_realm)) {
         increment = 32;
-    } else if (tval != pr.realm1().get_book()) {
+    } else if (!pr.realm1().equals(study_realm)) {
         if (!input_check(_("本当に魔法の領域を変更しますか？", "Really, change magic realm? "))) {
             return;
         }
 
-        change_realm2(player_ptr, tval2realm(tval));
+        change_realm2(player_ptr, study_realm);
         increment = 32;
     }
 
@@ -789,7 +790,7 @@ void do_cmd_study(PlayerType *player_ptr)
     /* Mage -- Learn a selected spell */
     if (mp_ptr->spell_book != ItemKindType::LIFE_BOOK) {
         /* Ask for a spell, allow cancel */
-        if (!get_spell(player_ptr, &spell, _("学ぶ", "study"), sval, false, tval2realm(tval)) && (spell == -1)) {
+        if (!get_spell(player_ptr, &spell, _("学ぶ", "study"), sval, false, study_realm) && (spell == -1)) {
             return;
         }
     }
@@ -934,10 +935,8 @@ void do_cmd_study(PlayerType *player_ptr)
  */
 bool do_cmd_cast(PlayerType *player_ptr)
 {
-    int16_t realm;
     int chance;
     auto increment = 0;
-    int16_t use_realm;
     MANA_POINT need_mana;
 
     auto over_exerted = false;
@@ -1006,20 +1005,13 @@ bool do_cmd_cast(PlayerType *player_ptr)
 
     const auto tval = o_ptr->bi_key.tval();
     const auto sval = *o_ptr->bi_key.sval();
-    if (!is_every_magic && (tval == PlayerRealm(player_ptr).realm2().get_book())) {
+    const auto use_realm = PlayerRealm::get_realm_of_book(tval);
+    if (!is_every_magic && PlayerRealm(player_ptr).realm2().equals(use_realm)) {
         increment = 32;
     }
 
     o_ptr->track_baseitem();
     handle_stuff(player_ptr);
-
-    if (is_every_magic) {
-        realm = tval2realm(tval);
-    } else if (increment) {
-        realm = player_ptr->realm2;
-    } else {
-        realm = player_ptr->realm1;
-    }
 
     /* Ask for a spell */
     SPELL_IDX spell_id;
@@ -1028,14 +1020,14 @@ bool do_cmd_cast(PlayerType *player_ptr)
             ((mp_ptr->spell_book == ItemKindType::LIFE_BOOK)       ? "詠唱する"
                 : (mp_ptr->spell_book == ItemKindType::MUSIC_BOOK) ? "歌う"
                                                                    : "唱える"),
-            sval, true, realm)) {
+            sval, true, use_realm)) {
         if (spell_id == -2) {
             msg_format("その本には知っている%sがない。", prayer.data());
         }
         return false;
     }
 #else
-    if (!get_spell(player_ptr, &spell_id, ((mp_ptr->spell_book == ItemKindType::LIFE_BOOK) ? "recite" : "cast"), sval, true, realm)) {
+    if (!get_spell(player_ptr, &spell_id, ((mp_ptr->spell_book == ItemKindType::LIFE_BOOK) ? "recite" : "cast"), sval, true, use_realm)) {
         if (spell_id == -2) {
             msg_format("You don't know any %ss in that book.", prayer.data());
         }
@@ -1043,7 +1035,6 @@ bool do_cmd_cast(PlayerType *player_ptr)
     }
 #endif
 
-    use_realm = tval2realm(tval);
     if (use_realm == REALM_HEX) {
         if (SpellHex(player_ptr).is_spelling_specific(spell_id)) {
             msg_print(_("その呪文はすでに詠唱中だ。", "You are already casting it."));
@@ -1054,7 +1045,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
     const auto &spell = PlayerRealm::get_spell_info(use_realm, spell_id);
 
     /* Extract mana consumption rate */
-    need_mana = mod_need_mana(player_ptr, spell.smana, spell_id, realm);
+    need_mana = mod_need_mana(player_ptr, spell.smana, spell_id, use_realm);
 
     /* Verify "dangerous" spells */
     if (need_mana > player_ptr->csp) {
@@ -1094,7 +1085,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
         msg_format(_("%sをうまく唱えられなかった！", "You failed to get the %s off!"), prayer.data());
         sound(SOUND_FAIL);
 
-        switch (realm) {
+        switch (use_realm) {
         case REALM_LIFE:
             if (randint1(100) < chance) {
                 chg_virtue(player_ptr, Virtue::VITALITY, -1);
@@ -1133,7 +1124,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
         }
 
         /* Failure casting may activate some side effect */
-        exe_spell(player_ptr, realm, spell_id, SpellProcessType::FAIL);
+        exe_spell(player_ptr, use_realm, spell_id, SpellProcessType::FAIL);
 
         if ((tval == ItemKindType::CHAOS_BOOK) && (randint1(100) < spell_id)) {
             msg_print(_("カオス的な効果を発生した！", "You produce a chaotic effect!"));
@@ -1161,7 +1152,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
     /* Process spell */
     else {
         /* Canceled spells cost neither a turn nor mana */
-        if (!exe_spell(player_ptr, realm, spell_id, SpellProcessType::CAST)) {
+        if (!exe_spell(player_ptr, use_realm, spell_id, SpellProcessType::CAST)) {
             return false;
         }
 
@@ -1174,7 +1165,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
             int e = spell.sexp;
 
             /* The spell worked */
-            if (pr.realm1().equals(realm)) {
+            if (pr.realm1().equals(use_realm)) {
                 player_ptr->spell_worked1 |= (1UL << spell_id);
             } else {
                 player_ptr->spell_worked2 |= (1UL << spell_id);
@@ -1183,7 +1174,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
             gain_exp(player_ptr, e * spell.slevel);
             RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
 
-            switch (realm) {
+            switch (use_realm) {
             case REALM_LIFE:
                 chg_virtue(player_ptr, Virtue::TEMPERANCE, 1);
                 chg_virtue(player_ptr, Virtue::COMPASSION, 1);
@@ -1223,7 +1214,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
                 break;
             }
         }
-        switch (realm) {
+        switch (use_realm) {
         case REALM_LIFE:
             if (randint1(100 + player_ptr->lev) < need_mana) {
                 chg_virtue(player_ptr, Virtue::TEMPERANCE, 1);
@@ -1302,9 +1293,11 @@ bool do_cmd_cast(PlayerType *player_ptr)
                 chg_virtue(player_ptr, Virtue::COMPASSION, -1);
             }
             break;
+        default:
+            break;
         }
         if (mp_ptr->is_spell_trainable) {
-            PlayerSkill(player_ptr).gain_spell_skill_exp(realm, spell_id);
+            PlayerSkill(player_ptr).gain_spell_skill_exp(use_realm, spell_id);
         }
     }
 
@@ -1327,7 +1320,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
         player_ptr->csp_frac = 0;
         msg_print(_("精神を集中しすぎて気を失ってしまった！", "You faint from the effort!"));
         (void)BadStatusSetter(player_ptr).mod_paralysis(randnum1<short>(5 * oops + 1));
-        switch (realm) {
+        switch (use_realm) {
         case REALM_LIFE:
             chg_virtue(player_ptr, Virtue::VITALITY, -10);
             break;
