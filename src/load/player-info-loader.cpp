@@ -50,7 +50,7 @@ static void rd_realms(PlayerType *player_ptr)
     if (realm2 == 255) { // 何のため？
         realm2 = 0;
     }
-    pr.set(realm1, realm2);
+    pr.set(i2enum<RealmType>(realm1), i2enum<RealmType>(realm2));
 }
 
 /*!

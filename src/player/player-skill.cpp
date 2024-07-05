@@ -349,11 +349,11 @@ void PlayerSkill::gain_riding_skill_exp_on_fall_off_check(int dam)
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
 }
 
-void PlayerSkill::gain_spell_skill_exp(int realm, int spell_idx)
+void PlayerSkill::gain_spell_skill_exp(RealmType realm, int spell_idx)
 {
     PlayerRealm pr(this->player_ptr);
     auto is_valid_realm = PlayerRealm::is_magic(realm) ||
-                          (realm == REALM_MUSIC) || (realm == REALM_HEX);
+                          (realm == RealmType::MUSIC) || (realm == RealmType::HEX);
     is_valid_realm &= pr.realm1().equals(realm) || pr.realm2().equals(realm);
     const auto is_valid_spell_idx = (0 <= spell_idx) && (spell_idx < 32);
 
@@ -371,10 +371,10 @@ void PlayerSkill::gain_spell_skill_exp(int realm, int spell_idx)
         (is_first_realm ? gain_amount_list_first : gain_amount_list_second), spell.slevel);
 }
 
-void PlayerSkill::gain_continuous_spell_skill_exp(int realm, int spell_idx)
+void PlayerSkill::gain_continuous_spell_skill_exp(RealmType realm, int spell_idx)
 {
     if (((spell_idx < 0) || (32 <= spell_idx)) ||
-        ((realm != REALM_MUSIC) && (realm != REALM_HEX))) {
+        ((realm != RealmType::MUSIC) && (realm != RealmType::HEX))) {
         return;
     }
 
@@ -418,7 +418,7 @@ PlayerSkillRank PlayerSkill::gain_spell_skill_exp_over_learning(int spell_idx)
  * @param spell_idx 呪文ID
  * @return 経験値
  */
-EXP PlayerSkill::exp_of_spell(int realm, int spell_idx) const
+EXP PlayerSkill::exp_of_spell(RealmType realm, int spell_idx) const
 {
     PlayerClass pc(this->player_ptr);
     PlayerRealm pr(this->player_ptr);

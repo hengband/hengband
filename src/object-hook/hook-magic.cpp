@@ -64,9 +64,9 @@ bool item_tester_learn_spell(PlayerType *player_ptr, const ItemEntity *o_ptr)
     PlayerClass pc(player_ptr);
     if (pc.equals(PlayerClassType::PRIEST)) {
         if (PlayerRealm(player_ptr).realm1().is_good_attribute()) {
-            choices.reset({ REALM_DEATH, REALM_DAEMON });
+            choices.reset({ RealmType::DEATH, RealmType::DAEMON });
         } else {
-            choices.reset({ REALM_LIFE, REALM_CRUSADE });
+            choices.reset({ RealmType::LIFE, RealmType::CRUSADE });
         }
     }
 

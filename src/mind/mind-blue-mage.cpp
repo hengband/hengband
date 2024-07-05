@@ -40,7 +40,7 @@ bool do_cmd_cast_learned(PlayerType *player_ptr)
     }
 
     const auto &spell = monster_powers.at(*selected_spell);
-    const auto need_mana = mod_need_mana(player_ptr, spell.smana, 0, REALM_NONE);
+    const auto need_mana = mod_need_mana(player_ptr, spell.smana, 0, RealmType::NONE);
     if (need_mana > player_ptr->csp) {
         msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
         if (!over_exert) {

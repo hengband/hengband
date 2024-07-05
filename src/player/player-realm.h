@@ -9,7 +9,7 @@
 #include <string_view>
 #include <vector>
 
-using RealmChoices = FlagGroup<magic_realm_type, REALM_MAX>;
+using RealmChoices = EnumClassFlagGroup<RealmType>;
 
 enum class ItemKindType : short;
 enum class PlayerClassType : short;
@@ -20,22 +20,22 @@ class PlayerRealm {
 public:
     PlayerRealm(PlayerType *player_ptr);
 
-    static const LocalizedString &get_name(int realm);
-    static std::string_view get_explanation(int realm);
-    static std::string_view get_subinfo(int realm);
-    static const magic_type &get_spell_info(int realm, int spell_id, std::optional<PlayerClassType> pclass = std::nullopt);
-    static const std::string &get_spell_name(int realm, int spell_id);
-    static const std::string &get_spell_description(int realm, int spell_id);
-    static ItemKindType get_book(int realm);
+    static const LocalizedString &get_name(RealmType realm);
+    static std::string_view get_explanation(RealmType realm);
+    static std::string_view get_subinfo(RealmType realm);
+    static const magic_type &get_spell_info(RealmType realm, int spell_id, std::optional<PlayerClassType> pclass = std::nullopt);
+    static const std::string &get_spell_name(RealmType realm, int spell_id);
+    static const std::string &get_spell_description(RealmType realm, int spell_id);
+    static ItemKindType get_book(RealmType realm);
     static RealmChoices get_realm1_choices(PlayerClassType pclass);
     static RealmChoices get_realm2_choices(PlayerClassType pclass);
-    static magic_realm_type get_realm_of_book(ItemKindType tval);
-    static bool is_magic(int realm);
-    static bool is_technic(int realm);
+    static RealmType get_realm_of_book(ItemKindType tval);
+    static bool is_magic(RealmType realm);
+    static bool is_technic(RealmType realm);
 
     class Realm {
     public:
-        Realm(int realm);
+        Realm(RealmType realm);
         const LocalizedString &get_name() const;
         std::string_view get_explanation() const;
         std::string_view get_subinfo() const;
@@ -45,21 +45,21 @@ public:
         ItemKindType get_book() const;
         bool is_available() const;
         bool is_good_attribute() const;
-        bool equals(int realm) const;
-        magic_realm_type to_enum() const;
+        bool equals(RealmType realm) const;
+        RealmType to_enum() const;
 
     private:
-        int realm_;
+        RealmType realm_;
     };
 
     const Realm &realm1() const;
     const Realm &realm2() const;
     bool is_realm_hex() const;
     void reset();
-    void set(int realm1, int realm2 = REALM_NONE);
+    void set(RealmType realm1, RealmType realm2 = RealmType::NONE);
 
 private:
-    void set_(int realm1, int realm2);
+    void set_(RealmType realm1, RealmType realm2);
 
     PlayerType *player_ptr;
     Realm realm1_;

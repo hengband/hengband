@@ -325,7 +325,7 @@ static void describe_blue_magic_name(PlayerType *player_ptr, int menu_line, cons
         }
 
         const auto &mp = monster_powers.at(spell);
-        auto need_mana = mod_need_mana(player_ptr, mp.smana, 0, REALM_NONE);
+        auto need_mana = mod_need_mana(player_ptr, mp.smana, 0, RealmType::NONE);
         auto chance = calculate_blue_magic_failure_probability(player_ptr, mp, need_mana);
         char header[80];
         close_blue_magic_name(header, sizeof(header), i, menu_line);

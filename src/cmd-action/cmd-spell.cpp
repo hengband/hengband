@@ -261,7 +261,7 @@ std::string info_weight(WEIGHT weight)
  * @param use_realm 魔法領域ID
  * @return 失敗率(%)
  */
-static bool spell_okay(PlayerType *player_ptr, int spell_id, bool learned, bool study_pray, int use_realm)
+static bool spell_okay(PlayerType *player_ptr, int spell_id, bool learned, bool study_pray, RealmType use_realm)
 {
     /* Access the spell */
     const auto &spell = PlayerRealm::get_spell_info(use_realm, spell_id);
@@ -309,7 +309,7 @@ static bool spell_okay(PlayerType *player_ptr, int spell_id, bool learned, bool 
  * The "known" should be TRUE for cast/pray, FALSE for study
  * </pre>
  */
-static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view prompt_verb, int sval, bool learned, int16_t use_realm)
+static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view prompt_verb, int sval, bool learned, RealmType use_realm)
 {
     int i;
     SPELL_IDX spell = -1;
@@ -365,7 +365,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view pro
     if (is_every_magic && !PlayerRealm::is_magic(use_realm)) {
         return false;
     }
-    if (pc.equals(PlayerClassType::RED_MAGE) && ((use_realm) != REALM_ARCANE) && (sval > 1)) {
+    if (pc.equals(PlayerClassType::RED_MAGE) && ((use_realm) != RealmType::ARCANE) && (sval > 1)) {
         return false;
     }
 
@@ -650,7 +650,7 @@ void do_cmd_browse(PlayerType *player_ptr)
             print_spells(player_ptr, 0, spells.data(), spells.size(), 1, 15, use_realm);
 
             /* Notify that there's nothing to see, and wait. */
-            if (use_realm == REALM_HISSATSU) {
+            if (use_realm == RealmType::HISSATSU) {
                 prt(_("読める技がない。", "No techniques to browse."), 0, 0);
             } else {
                 prt(_("読める呪文がない。", "No spells to browse."), 0, 0);
@@ -679,7 +679,7 @@ void do_cmd_browse(PlayerType *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param next_realm 変更先の魔法領域ID
  */
-static void change_realm2(PlayerType *player_ptr, int16_t next_realm)
+static void change_realm2(PlayerType *player_ptr, RealmType next_realm)
 {
     int i, j = 0;
     for (i = 0; i < 64; i++) {
@@ -1037,7 +1037,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
     }
 #endif
 
-    if (use_realm == REALM_HEX) {
+    if (use_realm == RealmType::HEX) {
         if (SpellHex(player_ptr).is_spelling_specific(spell_id)) {
             msg_print(_("その呪文はすでに詠唱中だ。", "You are already casting it."));
             return false;
@@ -1088,32 +1088,32 @@ bool do_cmd_cast(PlayerType *player_ptr)
         sound(SOUND_FAIL);
 
         switch (use_realm) {
-        case REALM_LIFE:
+        case RealmType::LIFE:
             if (randint1(100) < chance) {
                 chg_virtue(player_ptr, Virtue::VITALITY, -1);
             }
             break;
-        case REALM_DEATH:
+        case RealmType::DEATH:
             if (randint1(100) < chance) {
                 chg_virtue(player_ptr, Virtue::UNLIFE, -1);
             }
             break;
-        case REALM_NATURE:
+        case RealmType::NATURE:
             if (randint1(100) < chance) {
                 chg_virtue(player_ptr, Virtue::NATURE, -1);
             }
             break;
-        case REALM_DAEMON:
+        case RealmType::DAEMON:
             if (randint1(100) < chance) {
                 chg_virtue(player_ptr, Virtue::JUSTICE, 1);
             }
             break;
-        case REALM_CRUSADE:
+        case RealmType::CRUSADE:
             if (randint1(100) < chance) {
                 chg_virtue(player_ptr, Virtue::JUSTICE, -1);
             }
             break;
-        case REALM_HEX:
+        case RealmType::HEX:
             if (randint1(100) < chance) {
                 chg_virtue(player_ptr, Virtue::COMPASSION, -1);
             }
@@ -1177,35 +1177,35 @@ bool do_cmd_cast(PlayerType *player_ptr)
             RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
 
             switch (use_realm) {
-            case REALM_LIFE:
+            case RealmType::LIFE:
                 chg_virtue(player_ptr, Virtue::TEMPERANCE, 1);
                 chg_virtue(player_ptr, Virtue::COMPASSION, 1);
                 chg_virtue(player_ptr, Virtue::VITALITY, 1);
                 chg_virtue(player_ptr, Virtue::DILIGENCE, 1);
                 break;
-            case REALM_DEATH:
+            case RealmType::DEATH:
                 chg_virtue(player_ptr, Virtue::UNLIFE, 1);
                 chg_virtue(player_ptr, Virtue::JUSTICE, -1);
                 chg_virtue(player_ptr, Virtue::FAITH, -1);
                 chg_virtue(player_ptr, Virtue::VITALITY, -1);
                 break;
-            case REALM_DAEMON:
+            case RealmType::DAEMON:
                 chg_virtue(player_ptr, Virtue::JUSTICE, -1);
                 chg_virtue(player_ptr, Virtue::FAITH, -1);
                 chg_virtue(player_ptr, Virtue::HONOUR, -1);
                 chg_virtue(player_ptr, Virtue::TEMPERANCE, -1);
                 break;
-            case REALM_CRUSADE:
+            case RealmType::CRUSADE:
                 chg_virtue(player_ptr, Virtue::FAITH, 1);
                 chg_virtue(player_ptr, Virtue::JUSTICE, 1);
                 chg_virtue(player_ptr, Virtue::SACRIFICE, 1);
                 chg_virtue(player_ptr, Virtue::HONOUR, 1);
                 break;
-            case REALM_NATURE:
+            case RealmType::NATURE:
                 chg_virtue(player_ptr, Virtue::NATURE, 1);
                 chg_virtue(player_ptr, Virtue::HARMONY, 1);
                 break;
-            case REALM_HEX:
+            case RealmType::HEX:
                 chg_virtue(player_ptr, Virtue::JUSTICE, -1);
                 chg_virtue(player_ptr, Virtue::FAITH, -1);
                 chg_virtue(player_ptr, Virtue::HONOUR, -1);
@@ -1217,7 +1217,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
             }
         }
         switch (use_realm) {
-        case REALM_LIFE:
+        case RealmType::LIFE:
             if (randint1(100 + player_ptr->lev) < need_mana) {
                 chg_virtue(player_ptr, Virtue::TEMPERANCE, 1);
             }
@@ -1231,7 +1231,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
                 chg_virtue(player_ptr, Virtue::DILIGENCE, 1);
             }
             break;
-        case REALM_DEATH:
+        case RealmType::DEATH:
             if (randint1(100 + player_ptr->lev) < need_mana) {
                 chg_virtue(player_ptr, Virtue::UNLIFE, 1);
             }
@@ -1245,7 +1245,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
                 chg_virtue(player_ptr, Virtue::VITALITY, -1);
             }
             break;
-        case REALM_DAEMON:
+        case RealmType::DAEMON:
             if (randint1(100 + player_ptr->lev) < need_mana) {
                 chg_virtue(player_ptr, Virtue::JUSTICE, -1);
             }
@@ -1259,7 +1259,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
                 chg_virtue(player_ptr, Virtue::TEMPERANCE, -1);
             }
             break;
-        case REALM_CRUSADE:
+        case RealmType::CRUSADE:
             if (randint1(100 + player_ptr->lev) < need_mana) {
                 chg_virtue(player_ptr, Virtue::FAITH, 1);
             }
@@ -1273,7 +1273,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
                 chg_virtue(player_ptr, Virtue::HONOUR, 1);
             }
             break;
-        case REALM_NATURE:
+        case RealmType::NATURE:
             if (randint1(100 + player_ptr->lev) < need_mana) {
                 chg_virtue(player_ptr, Virtue::NATURE, 1);
             }
@@ -1281,7 +1281,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
                 chg_virtue(player_ptr, Virtue::HARMONY, 1);
             }
             break;
-        case REALM_HEX:
+        case RealmType::HEX:
             if (randint1(100 + player_ptr->lev) < need_mana) {
                 chg_virtue(player_ptr, Virtue::JUSTICE, -1);
             }
@@ -1323,22 +1323,22 @@ bool do_cmd_cast(PlayerType *player_ptr)
         msg_print(_("精神を集中しすぎて気を失ってしまった！", "You faint from the effort!"));
         (void)BadStatusSetter(player_ptr).mod_paralysis(randnum1<short>(5 * oops + 1));
         switch (use_realm) {
-        case REALM_LIFE:
+        case RealmType::LIFE:
             chg_virtue(player_ptr, Virtue::VITALITY, -10);
             break;
-        case REALM_DEATH:
+        case RealmType::DEATH:
             chg_virtue(player_ptr, Virtue::UNLIFE, -10);
             break;
-        case REALM_DAEMON:
+        case RealmType::DAEMON:
             chg_virtue(player_ptr, Virtue::JUSTICE, 10);
             break;
-        case REALM_NATURE:
+        case RealmType::NATURE:
             chg_virtue(player_ptr, Virtue::NATURE, -10);
             break;
-        case REALM_CRUSADE:
+        case RealmType::CRUSADE:
             chg_virtue(player_ptr, Virtue::JUSTICE, -10);
             break;
-        case REALM_HEX:
+        case RealmType::HEX:
             chg_virtue(player_ptr, Virtue::COMPASSION, 10);
             break;
         default:
