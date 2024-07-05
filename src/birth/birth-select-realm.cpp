@@ -22,7 +22,7 @@ struct birth_realm_type {
     int n;
     char p2;
     char sym[TOTAL_REALM_NUM];
-    int picks[TOTAL_REALM_NUM];
+    RealmType picks[TOTAL_REALM_NUM];
     std::string cur;
     int k;
     int os;
@@ -34,7 +34,7 @@ static birth_realm_type *initialize_birth_realm_type(birth_realm_type *birth_rea
     birth_realm_ptr->n = 0;
     birth_realm_ptr->p2 = ')';
     for (int i = 0; i < TOTAL_REALM_NUM; i++) {
-        birth_realm_ptr->picks[i] = 0;
+        birth_realm_ptr->picks[i] = RealmType::NONE;
     }
 
     birth_realm_ptr->k = -1;
@@ -53,16 +53,16 @@ static void impose_first_realm(PlayerType *player_ptr, RealmChoices &choices)
     }
 
     if (pr.realm1().is_good_attribute()) {
-        choices.reset({ REALM_DEATH, REALM_DAEMON });
+        choices.reset({ RealmType::DEATH, RealmType::DAEMON });
     } else {
-        choices.reset({ REALM_LIFE, REALM_CRUSADE });
+        choices.reset({ RealmType::LIFE, RealmType::CRUSADE });
     }
 }
 
-static void analyze_realms(PlayerType *player_ptr, magic_realm_type selecting_realm, const RealmChoices &choices, birth_realm_type *birth_realm_ptr)
+static void analyze_realms(PlayerType *player_ptr, RealmType selecting_realm, const RealmChoices &choices, birth_realm_type *birth_realm_ptr)
 {
     PlayerRealm pr(player_ptr);
-    for (auto realm : EnumRange(REALM_LIFE, REALM_MAX)) {
+    for (auto realm : EnumRange(RealmType::LIFE, RealmType::MAX)) {
         if (choices.has_not(realm) || pr.realm1().equals(realm)) {
             continue;
         }
@@ -195,11 +195,11 @@ static bool get_a_realm(PlayerType *player_ptr, birth_realm_type *birth_realm_pt
  * @return 選択した魔法領域のID
  * @details 領域数が0 (戦士等)or 1 (観光客等)なら自動での値を返す
  */
-static std::optional<magic_realm_type> select_realm(PlayerType *player_ptr, magic_realm_type selecting_realm, RealmChoices choices)
+static std::optional<RealmType> select_realm(PlayerType *player_ptr, RealmType selecting_realm, RealmChoices choices)
 {
     clear_from(10);
     if (choices.count() <= 1) {
-        return choices.first().value_or(REALM_NONE);
+        return choices.first().value_or(RealmType::NONE);
     }
 
     impose_first_realm(player_ptr, choices);
@@ -215,7 +215,7 @@ static std::optional<magic_realm_type> select_realm(PlayerType *player_ptr, magi
     }
 
     clear_from(10);
-    return i2enum<magic_realm_type>(birth_realm_ptr->picks[birth_realm_ptr->k]);
+    return birth_realm_ptr->picks[birth_realm_ptr->k];
 }
 
 static void cleanup_realm_selection_window(void)
@@ -245,12 +245,12 @@ static bool check_realm_selection(PlayerType *player_ptr, int count)
     return false;
 }
 
-static std::optional<magic_realm_type> process_choose_realm(PlayerType *player_ptr, RealmChoices choices)
+static std::optional<RealmType> process_choose_realm(PlayerType *player_ptr, RealmChoices choices)
 {
-    auto selecting_realm = REALM_NONE;
+    auto selecting_realm = RealmType::NONE;
     while (true) {
         const auto selected_realm = select_realm(player_ptr, selecting_realm, choices);
-        if (!selected_realm || *selected_realm == REALM_NONE) {
+        if (!selected_realm || *selected_realm == RealmType::NONE) {
             return selected_realm;
         }
 
@@ -310,7 +310,7 @@ bool get_player_realms(PlayerType *player_ptr)
     if (!realm1) {
         return false;
     }
-    if (*realm1 == REALM_NONE) {
+    if (*realm1 == RealmType::NONE) {
         return true;
     }
     pr.set(*realm1);
@@ -321,7 +321,7 @@ bool get_player_realms(PlayerType *player_ptr)
     if (!realm2) {
         return false;
     }
-    if (*realm2 == REALM_NONE) {
+    if (*realm2 == RealmType::NONE) {
         return true;
     }
     pr.set(*realm1, *realm2);

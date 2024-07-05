@@ -95,7 +95,7 @@ void display_koff(PlayerType *player_ptr)
         if (!PlayerRealm::is_magic(use_realm)) {
             return;
         }
-        if (pc.equals(PlayerClassType::RED_MAGE) && (use_realm != REALM_ARCANE) && (sval > 1)) {
+        if (pc.equals(PlayerClassType::RED_MAGE) && (use_realm != RealmType::ARCANE) && (sval > 1)) {
             return;
         }
     }

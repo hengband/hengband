@@ -741,16 +741,16 @@ void check_no_flowed(PlayerType *player_ptr)
     }
 
     PlayerClass pc(player_ptr);
-    if (has_sw && (pr.realm1().equals(REALM_NATURE) || pr.realm2().equals(REALM_NATURE) || pc.equals(PlayerClassType::SORCERER))) {
-        const magic_type *s_ptr = &mp_ptr->info[REALM_NATURE - 1][SPELL_SW];
-        if (player_ptr->lev >= s_ptr->slevel) {
+    if (has_sw && (pr.realm1().equals(RealmType::NATURE) || pr.realm2().equals(RealmType::NATURE) || pc.equals(PlayerClassType::SORCERER))) {
+        const auto &spell = PlayerRealm::get_spell_info(RealmType::NATURE, SPELL_SW);
+        if (player_ptr->lev >= spell.slevel) {
             player_ptr->no_flowed = true;
         }
     }
 
-    if (has_kabe && (pr.realm1().equals(REALM_CRAFT) || pr.realm2().equals(REALM_CRAFT) || pc.equals(PlayerClassType::SORCERER))) {
-        const magic_type *s_ptr = &mp_ptr->info[REALM_CRAFT - 1][SPELL_WALL];
-        if (player_ptr->lev >= s_ptr->slevel) {
+    if (has_kabe && (pr.realm1().equals(RealmType::CRAFT) || pr.realm2().equals(RealmType::CRAFT) || pc.equals(PlayerClassType::SORCERER))) {
+        const auto &spell = PlayerRealm::get_spell_info(RealmType::CRAFT, SPELL_WALL);
+        if (player_ptr->lev >= spell.slevel) {
             player_ptr->no_flowed = true;
         }
     }

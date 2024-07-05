@@ -97,7 +97,7 @@ void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
             auto skill_rank = PlayerSkill::spell_skill_rank(spell_exp);
             const auto &spell_name = pr.realm1().get_spell_name(i);
             fprintf(fff, "%-25s ", spell_name.data());
-            if (pr.realm1().equals(REALM_HISSATSU)) {
+            if (pr.realm1().equals(RealmType::HISSATSU)) {
                 if (show_actual_value) {
                     fprintf(fff, "----/---- ");
                 }

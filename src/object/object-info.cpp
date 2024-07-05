@@ -116,7 +116,7 @@ bool check_book_realm(PlayerType *player_ptr, const BaseitemKey &bi_key)
         if (!PlayerRealm::is_magic(book_realm)) {
             return false;
         }
-        return ((book_realm == REALM_ARCANE) || (bi_key.sval() < 2));
+        return ((book_realm == RealmType::ARCANE) || (bi_key.sval() < 2));
     }
 
     PlayerRealm pr(player_ptr);

@@ -472,7 +472,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
             auto *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
 
             if ((!o_ptr->is_valid()) || (!o_ptr->is_cursed())) {
-                exe_spell(player_ptr, REALM_HEX, spell, SpellProcessType::STOP);
+                exe_spell(player_ptr, RealmType::HEX, spell, SpellProcessType::STOP);
                 SpellHex spell_hex(player_ptr);
                 spell_hex.reset_casting_flag(spell);
                 if (!spell_hex.is_spelling_any()) {
@@ -550,7 +550,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
             }
 
             if (!flag) {
-                const auto &spell_name = PlayerRealm::get_spell_name(REALM_HEX, HEX_RESTORE);
+                const auto &spell_name = PlayerRealm::get_spell_name(RealmType::HEX, HEX_RESTORE);
                 msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%s^'."), spell_name.data());
                 SpellHex spell_hex(player_ptr);
                 spell_hex.reset_casting_flag(HEX_RESTORE);

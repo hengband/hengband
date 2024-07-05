@@ -52,7 +52,7 @@ SpellHex::SpellHex(PlayerType *player_ptr)
 void SpellHex::stop_all_spells()
 {
     for (auto spell : this->casting_spells) {
-        exe_spell(this->player_ptr, REALM_HEX, spell, SpellProcessType::STOP);
+        exe_spell(this->player_ptr, RealmType::HEX, spell, SpellProcessType::STOP);
     }
 
     this->spell_hex_data->casting_spells.clear();
@@ -104,7 +104,7 @@ bool SpellHex::stop_spells_with_selection()
     screen_load();
     if (choice) {
         auto n = this->casting_spells[A2I(*choice)];
-        exe_spell(this->player_ptr, REALM_HEX, n, SpellProcessType::STOP);
+        exe_spell(this->player_ptr, RealmType::HEX, n, SpellProcessType::STOP);
         this->reset_casting_flag(i2enum<spell_hex_type>(n));
     }
 
@@ -170,7 +170,7 @@ void SpellHex::display_casting_spells_list()
     prt(_("     名前", "     Name"), y, x + 5);
     for (auto spell : this->casting_spells) {
         term_erase(x, y + n + 1);
-        const auto &spell_name = PlayerRealm::get_spell_name(REALM_HEX, spell);
+        const auto &spell_name = PlayerRealm::get_spell_name(RealmType::HEX, spell);
         put_str(format("%c)  %s", I2A(n), spell_name.data()), y + n + 1, x + 2);
         n++;
     }
@@ -201,7 +201,7 @@ void SpellHex::decrease_mana()
 
     this->gain_exp();
     for (auto spell : this->casting_spells) {
-        exe_spell(this->player_ptr, REALM_HEX, spell, SpellProcessType::CONTNUATION);
+        exe_spell(this->player_ptr, RealmType::HEX, spell, SpellProcessType::CONTNUATION);
     }
 }
 
@@ -268,8 +268,8 @@ int SpellHex::calc_need_mana()
 {
     auto need_mana = 0;
     for (auto spell_id : this->casting_spells) {
-        const auto &spell = PlayerRealm::get_spell_info(REALM_HEX, spell_id);
-        need_mana += mod_need_mana(this->player_ptr, spell.smana, spell_id, REALM_HEX);
+        const auto &spell = PlayerRealm::get_spell_info(RealmType::HEX, spell_id);
+        need_mana += mod_need_mana(this->player_ptr, spell.smana, spell_id, RealmType::HEX);
     }
 
     return need_mana;
@@ -283,7 +283,7 @@ void SpellHex::gain_exp()
             continue;
         }
 
-        ps.gain_continuous_spell_skill_exp(REALM_HEX, spell);
+        ps.gain_continuous_spell_skill_exp(RealmType::HEX, spell);
     }
 }
 
@@ -309,10 +309,10 @@ void SpellHex::continue_revenge()
 
     switch (this->get_revenge_type()) {
     case SpellHexRevengeType::PATIENCE:
-        exe_spell(this->player_ptr, REALM_HEX, HEX_PATIENCE, SpellProcessType::CONTNUATION);
+        exe_spell(this->player_ptr, RealmType::HEX, HEX_PATIENCE, SpellProcessType::CONTNUATION);
         return;
     case SpellHexRevengeType::REVENGE:
-        exe_spell(this->player_ptr, REALM_HEX, HEX_REVENGE, SpellProcessType::CONTNUATION);
+        exe_spell(this->player_ptr, RealmType::HEX, HEX_REVENGE, SpellProcessType::CONTNUATION);
         return;
     default:
         return;

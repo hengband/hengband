@@ -616,7 +616,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
             const int mana_cost_per_monster = 8;
             bool is_new = true;
             bool mdeath;
-            const auto &spell = PlayerRealm::get_spell_info(REALM_HISSATSU, spell_id);
+            const auto &spell = PlayerRealm::get_spell_info(RealmType::HISSATSU, spell_id);
 
             do {
                 if (!rush_attack(player_ptr, &mdeath)) {

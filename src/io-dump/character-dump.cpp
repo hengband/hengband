@@ -428,11 +428,11 @@ static void dump_aux_realm_history(PlayerType *player_ptr, FILE *fff)
     }
 
     fputc('\n', fff);
-    for (int i = 0; i < MAX_MAGIC; i++) {
-        if (!(player_ptr->old_realm & 1UL << i)) {
+    for (auto realm : MAGIC_REALM_RANGE) {
+        if (!(player_ptr->old_realm & (1UL << (enum2i(realm) - 1)))) {
             continue;
         }
-        fprintf(fff, _("\n あなたはかつて%s魔法を使えた。", "\n You were able to use %s magic before."), PlayerRealm::get_name(i + 1).data());
+        fprintf(fff, _("\n あなたはかつて%s魔法を使えた。", "\n You were able to use %s magic before."), PlayerRealm::get_name(realm).data());
     }
 
     fputc('\n', fff);

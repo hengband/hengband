@@ -1,6 +1,7 @@
 #pragma once
 
 #include "external-lib/include-json.h"
+#include "realm/realm-types.h"
 #include "system/angband.h"
 #include <optional>
 #include <string>
@@ -12,21 +13,23 @@ constexpr int SPELLS_IN_REALM = 32;
 /*!
  * @brief 魔法領域名とintの対応表
  */
-inline const std::unordered_map<std::string_view, int> realms_list = {
-    { "LIFE", 0 },
-    { "SORCERY", 1 },
-    { "NATURE", 2 },
-    { "CHAOS", 3 },
-    { "DEATH", 4 },
-    { "TRUMP", 5 },
-    { "ARCANE", 6 },
-    { "CRAFT", 7 },
-    { "DEMON", 8 },
-    { "CRUSADE", 9 },
-    { "MUSIC", 15 },
-    { "HISSATSU", 16 },
-    { "HEX", 17 },
+inline const std::unordered_map<std::string_view, RealmType> realms_list = {
+    { "LIFE", RealmType::LIFE },
+    { "SORCERY", RealmType::SORCERY },
+    { "NATURE", RealmType::NATURE },
+    { "CHAOS", RealmType::CHAOS },
+    { "DEATH", RealmType::DEATH },
+    { "TRUMP", RealmType::TRUMP },
+    { "ARCANE", RealmType::ARCANE },
+    { "CRAFT", RealmType::CRAFT },
+    { "DEMON", RealmType::DAEMON },
+    { "CRUSADE", RealmType::CRUSADE },
+    { "MUSIC", RealmType::MUSIC },
+    { "HISSATSU", RealmType::HISSATSU },
+    { "HEX", RealmType::HEX },
 };
+
+enum class RealmType;
 
 class SpellInfo {
 public:
@@ -50,8 +53,8 @@ public:
 
     static SpellInfoList &get_instance();
 
-    std::optional<short> get_spell_id(int realm, std::string_view spell_tag) const;
-    const SpellInfo &get_spell_info(int realm, int spell_id) const;
+    std::optional<short> get_spell_id(RealmType realm, std::string_view spell_tag) const;
+    const SpellInfo &get_spell_info(RealmType realm, int spell_id) const;
 
 private:
     SpellInfoList() = default;

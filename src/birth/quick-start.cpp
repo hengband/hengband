@@ -93,8 +93,8 @@ void save_prev_data(PlayerType *player_ptr, birther *birther_ptr)
         birther_ptr->realm2 = 0;
     } else {
         PlayerRealm pr(player_ptr);
-        birther_ptr->realm1 = pr.realm1().to_enum();
-        birther_ptr->realm2 = pr.realm2().to_enum();
+        birther_ptr->realm1 = static_cast<int16_t>(pr.realm1().to_enum());
+        birther_ptr->realm2 = static_cast<int16_t>(pr.realm2().to_enum());
     }
 
     birther_ptr->age = player_ptr->age;
@@ -144,7 +144,7 @@ void load_prev_data(PlayerType *player_ptr, bool swap)
     if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
         player_ptr->element = previous_char.realm1;
     } else {
-        pr.set(previous_char.realm1, previous_char.realm2);
+        pr.set(i2enum<RealmType>(previous_char.realm1), i2enum<RealmType>(previous_char.realm2));
     }
 
     player_ptr->age = previous_char.age;

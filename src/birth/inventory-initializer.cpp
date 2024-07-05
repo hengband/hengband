@@ -264,7 +264,7 @@ void player_outfit(PlayerType *player_ptr)
 
         /* Only assassins get a poisoned weapon */
         ItemEntity item({ tval, sval });
-        if (((tval == ItemKindType::SWORD) || (tval == ItemKindType::HAFTED)) && (pc.equals(PlayerClassType::ROGUE) && prealm.realm1().equals(REALM_DEATH))) {
+        if (((tval == ItemKindType::SWORD) || (tval == ItemKindType::HAFTED)) && (pc.equals(PlayerClassType::ROGUE) && prealm.realm1().equals(RealmType::DEATH))) {
             item.ego_idx = EgoType::BRAND_POIS;
         }
 

@@ -29,6 +29,7 @@ constexpr auto MAX_SKILLS = 10;
 constexpr auto PLAYER_SKILL_KIND_TYPE_RANGE = EnumRange(PlayerSkillKindType::MARTIAL_ARTS, PlayerSkillKindType::MAX);
 
 enum class ItemKindType : short;
+enum class RealmType;
 
 /*
  * Information about "skill"
@@ -66,11 +67,11 @@ public:
     void gain_riding_skill_exp_on_melee_attack(const MonsterRaceInfo *r_ptr);
     void gain_riding_skill_exp_on_range_attack();
     void gain_riding_skill_exp_on_fall_off_check(int dam);
-    void gain_spell_skill_exp(int realm, int spell_idx);
-    void gain_continuous_spell_skill_exp(int realm, int spell_idx);
+    void gain_spell_skill_exp(RealmType realm, int spell_idx);
+    void gain_continuous_spell_skill_exp(RealmType realm, int spell_idx);
     PlayerSkillRank gain_spell_skill_exp_over_learning(int spell_idx);
 
-    EXP exp_of_spell(int realm, int spell_idx) const;
+    EXP exp_of_spell(RealmType realm, int spell_idx) const;
 
     void apply_special_weapon_skill_max_values();
     void limit_weapon_skills_by_max_value();

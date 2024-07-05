@@ -11,68 +11,68 @@
 
 namespace {
 
-const std::map<magic_realm_type, LocalizedString> realm_names = {
-    { REALM_NONE, { "魔法なし", "none" } },
-    { REALM_LIFE, { "生命", "Life" } },
-    { REALM_SORCERY, { "仙術", "Sorcery" } },
-    { REALM_NATURE, { "自然", "Nature" } },
-    { REALM_CHAOS, { "カオス", "Chaos" } },
-    { REALM_DEATH, { "暗黒", "Death" } },
-    { REALM_TRUMP, { "トランプ", "Trump" } },
-    { REALM_ARCANE, { "秘術", "Arcane" } },
-    { REALM_CRAFT, { "匠", "Craft" } },
-    { REALM_DAEMON, { "悪魔", "Daemon" } },
-    { REALM_CRUSADE, { "破邪", "Crusade" } },
-    { REALM_MUSIC, { "歌", "Music" } },
-    { REALM_HISSATSU, { "武芸", "Kendo" } },
-    { REALM_HEX, { "呪術", "Hex" } },
+const std::map<RealmType, LocalizedString> realm_names = {
+    { RealmType::NONE, { "魔法なし", "none" } },
+    { RealmType::LIFE, { "生命", "Life" } },
+    { RealmType::SORCERY, { "仙術", "Sorcery" } },
+    { RealmType::NATURE, { "自然", "Nature" } },
+    { RealmType::CHAOS, { "カオス", "Chaos" } },
+    { RealmType::DEATH, { "暗黒", "Death" } },
+    { RealmType::TRUMP, { "トランプ", "Trump" } },
+    { RealmType::ARCANE, { "秘術", "Arcane" } },
+    { RealmType::CRAFT, { "匠", "Craft" } },
+    { RealmType::DAEMON, { "悪魔", "Daemon" } },
+    { RealmType::CRUSADE, { "破邪", "Crusade" } },
+    { RealmType::MUSIC, { "歌", "Music" } },
+    { RealmType::HISSATSU, { "武芸", "Kendo" } },
+    { RealmType::HEX, { "呪術", "Hex" } },
 };
 
-const std::map<magic_realm_type, ItemKindType> realm_books = {
-    { REALM_NONE, ItemKindType::NONE },
-    { REALM_LIFE, ItemKindType::LIFE_BOOK },
-    { REALM_SORCERY, ItemKindType::SORCERY_BOOK },
-    { REALM_NATURE, ItemKindType::NATURE_BOOK },
-    { REALM_CHAOS, ItemKindType::CHAOS_BOOK },
-    { REALM_DEATH, ItemKindType::DEATH_BOOK },
-    { REALM_TRUMP, ItemKindType::TRUMP_BOOK },
-    { REALM_ARCANE, ItemKindType::ARCANE_BOOK },
-    { REALM_CRAFT, ItemKindType::CRAFT_BOOK },
-    { REALM_DAEMON, ItemKindType::DEMON_BOOK },
-    { REALM_CRUSADE, ItemKindType::CRUSADE_BOOK },
-    { REALM_MUSIC, ItemKindType::MUSIC_BOOK },
-    { REALM_HISSATSU, ItemKindType::HISSATSU_BOOK },
-    { REALM_HEX, ItemKindType::HEX_BOOK },
+const std::map<RealmType, ItemKindType> realm_books = {
+    { RealmType::NONE, ItemKindType::NONE },
+    { RealmType::LIFE, ItemKindType::LIFE_BOOK },
+    { RealmType::SORCERY, ItemKindType::SORCERY_BOOK },
+    { RealmType::NATURE, ItemKindType::NATURE_BOOK },
+    { RealmType::CHAOS, ItemKindType::CHAOS_BOOK },
+    { RealmType::DEATH, ItemKindType::DEATH_BOOK },
+    { RealmType::TRUMP, ItemKindType::TRUMP_BOOK },
+    { RealmType::ARCANE, ItemKindType::ARCANE_BOOK },
+    { RealmType::CRAFT, ItemKindType::CRAFT_BOOK },
+    { RealmType::DAEMON, ItemKindType::DEMON_BOOK },
+    { RealmType::CRUSADE, ItemKindType::CRUSADE_BOOK },
+    { RealmType::MUSIC, ItemKindType::MUSIC_BOOK },
+    { RealmType::HISSATSU, ItemKindType::HISSATSU_BOOK },
+    { RealmType::HEX, ItemKindType::HEX_BOOK },
 };
 
 /*!
  * 職業毎に選択可能な第一領域魔法テーブル
  */
 const std::map<PlayerClassType, RealmChoices> realm1_choices = {
-    { PlayerClassType::MAGE, { REALM_LIFE, REALM_SORCERY, REALM_NATURE, REALM_CHAOS, REALM_DEATH, REALM_TRUMP, REALM_ARCANE, REALM_CRAFT, REALM_DAEMON, REALM_CRUSADE } },
-    { PlayerClassType::PRIEST, { REALM_LIFE, REALM_DEATH, REALM_DAEMON, REALM_CRUSADE } },
-    { PlayerClassType::ROGUE, { REALM_SORCERY, REALM_DEATH, REALM_TRUMP, REALM_ARCANE, REALM_CRAFT } },
-    { PlayerClassType::RANGER, { REALM_NATURE } },
-    { PlayerClassType::PALADIN, { REALM_CRUSADE, REALM_DEATH } },
-    { PlayerClassType::WARRIOR_MAGE, { REALM_ARCANE } },
-    { PlayerClassType::CHAOS_WARRIOR, { REALM_CHAOS, REALM_DAEMON } },
-    { PlayerClassType::MONK, { REALM_LIFE, REALM_NATURE, REALM_DEATH, REALM_CRAFT } },
-    { PlayerClassType::HIGH_MAGE, { REALM_LIFE, REALM_SORCERY, REALM_NATURE, REALM_CHAOS, REALM_DEATH, REALM_TRUMP, REALM_ARCANE, REALM_CRAFT, REALM_DAEMON, REALM_CRUSADE, REALM_HEX } },
-    { PlayerClassType::TOURIST, { REALM_ARCANE } },
-    { PlayerClassType::BEASTMASTER, { REALM_TRUMP } },
-    { PlayerClassType::BARD, { REALM_MUSIC } },
-    { PlayerClassType::SAMURAI, { REALM_HISSATSU } },
-    { PlayerClassType::FORCETRAINER, { REALM_LIFE, REALM_NATURE, REALM_DEATH, REALM_CRAFT, REALM_CRUSADE } },
+    { PlayerClassType::MAGE, { RealmType::LIFE, RealmType::SORCERY, RealmType::NATURE, RealmType::CHAOS, RealmType::DEATH, RealmType::TRUMP, RealmType::ARCANE, RealmType::CRAFT, RealmType::DAEMON, RealmType::CRUSADE } },
+    { PlayerClassType::PRIEST, { RealmType::LIFE, RealmType::DEATH, RealmType::DAEMON, RealmType::CRUSADE } },
+    { PlayerClassType::ROGUE, { RealmType::SORCERY, RealmType::DEATH, RealmType::TRUMP, RealmType::ARCANE, RealmType::CRAFT } },
+    { PlayerClassType::RANGER, { RealmType::NATURE } },
+    { PlayerClassType::PALADIN, { RealmType::CRUSADE, RealmType::DEATH } },
+    { PlayerClassType::WARRIOR_MAGE, { RealmType::ARCANE } },
+    { PlayerClassType::CHAOS_WARRIOR, { RealmType::CHAOS, RealmType::DAEMON } },
+    { PlayerClassType::MONK, { RealmType::LIFE, RealmType::NATURE, RealmType::DEATH, RealmType::CRAFT } },
+    { PlayerClassType::HIGH_MAGE, { RealmType::LIFE, RealmType::SORCERY, RealmType::NATURE, RealmType::CHAOS, RealmType::DEATH, RealmType::TRUMP, RealmType::ARCANE, RealmType::CRAFT, RealmType::DAEMON, RealmType::CRUSADE, RealmType::HEX } },
+    { PlayerClassType::TOURIST, { RealmType::ARCANE } },
+    { PlayerClassType::BEASTMASTER, { RealmType::TRUMP } },
+    { PlayerClassType::BARD, { RealmType::MUSIC } },
+    { PlayerClassType::SAMURAI, { RealmType::HISSATSU } },
+    { PlayerClassType::FORCETRAINER, { RealmType::LIFE, RealmType::NATURE, RealmType::DEATH, RealmType::CRAFT, RealmType::CRUSADE } },
 };
 
 /*!
  * 職業毎に選択可能な第二領域魔法テーブル
  */
 const std::map<PlayerClassType, RealmChoices> realm2_choices = {
-    { PlayerClassType::MAGE, { REALM_LIFE, REALM_SORCERY, REALM_NATURE, REALM_CHAOS, REALM_DEATH, REALM_TRUMP, REALM_ARCANE, REALM_CRAFT, REALM_DAEMON, REALM_CRUSADE } },
-    { PlayerClassType::PRIEST, { REALM_LIFE, REALM_SORCERY, REALM_NATURE, REALM_CHAOS, REALM_DEATH, REALM_TRUMP, REALM_ARCANE, REALM_CRAFT, REALM_DAEMON, REALM_CRUSADE } },
-    { PlayerClassType::RANGER, { REALM_SORCERY, REALM_CHAOS, REALM_DEATH, REALM_TRUMP, REALM_ARCANE, REALM_DAEMON } },
-    { PlayerClassType::WARRIOR_MAGE, { REALM_LIFE, REALM_NATURE, REALM_CHAOS, REALM_DEATH, REALM_TRUMP, REALM_ARCANE, REALM_SORCERY, REALM_CRAFT, REALM_DAEMON, REALM_CRUSADE } },
+    { PlayerClassType::MAGE, { RealmType::LIFE, RealmType::SORCERY, RealmType::NATURE, RealmType::CHAOS, RealmType::DEATH, RealmType::TRUMP, RealmType::ARCANE, RealmType::CRAFT, RealmType::DAEMON, RealmType::CRUSADE } },
+    { PlayerClassType::PRIEST, { RealmType::LIFE, RealmType::SORCERY, RealmType::NATURE, RealmType::CHAOS, RealmType::DEATH, RealmType::TRUMP, RealmType::ARCANE, RealmType::CRAFT, RealmType::DAEMON, RealmType::CRUSADE } },
+    { PlayerClassType::RANGER, { RealmType::SORCERY, RealmType::CHAOS, RealmType::DEATH, RealmType::TRUMP, RealmType::ARCANE, RealmType::DAEMON } },
+    { PlayerClassType::WARRIOR_MAGE, { RealmType::LIFE, RealmType::NATURE, RealmType::CHAOS, RealmType::DEATH, RealmType::TRUMP, RealmType::ARCANE, RealmType::SORCERY, RealmType::CRAFT, RealmType::DAEMON, RealmType::CRUSADE } },
 };
 }
 
@@ -83,97 +83,91 @@ PlayerRealm::PlayerRealm(PlayerType *player_ptr)
 {
 }
 
-const LocalizedString &PlayerRealm::get_name(int realm)
+const LocalizedString &PlayerRealm::get_name(RealmType realm)
 {
-    const auto it = realm_names.find(i2enum<magic_realm_type>(realm));
+    const auto it = realm_names.find(realm);
     if (it == realm_names.end()) {
-        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", realm));
+        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", enum2i(realm)));
     }
     return it->second;
 }
 
-std::string_view PlayerRealm::get_explanation(int realm)
+std::string_view PlayerRealm::get_explanation(RealmType realm)
 {
-    const auto realm_enum = i2enum<magic_realm_type>(realm);
-    if (is_magic(realm_enum)) {
-        return magic_explanations[realm - 1];
+    if (is_magic(realm)) {
+        return magic_explanations[enum2i(realm) - 1];
     }
-    if (is_technic(realm_enum)) {
-        return technic_explanations[realm - MIN_TECHNIC];
+    if (is_technic(realm)) {
+        return technic_explanations[enum2i(realm) - MIN_TECHNIC];
     }
 
-    THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", realm));
+    THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", enum2i(realm)));
 }
 
-std::string_view PlayerRealm::get_subinfo(int realm)
+std::string_view PlayerRealm::get_subinfo(RealmType realm)
 {
-    const auto realm_enum = i2enum<magic_realm_type>(realm);
-    if (is_magic(realm_enum)) {
-        return magic_subinfo[realm - 1];
+    if (is_magic(realm)) {
+        return magic_subinfo[enum2i(realm) - 1];
     }
-    if (is_technic(realm_enum)) {
-        return technic_subinfo[realm - MIN_TECHNIC];
+    if (is_technic(realm)) {
+        return technic_subinfo[enum2i(realm) - MIN_TECHNIC];
     }
 
-    THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", realm));
+    THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", enum2i(realm)));
 }
 
-const magic_type &PlayerRealm::get_spell_info(int realm, int spell_id, std::optional<PlayerClassType> pclass)
+const magic_type &PlayerRealm::get_spell_info(RealmType realm, int spell_id, std::optional<PlayerClassType> pclass)
 {
     if (spell_id < 0 || 32 <= spell_id) {
         THROW_EXCEPTION(std::invalid_argument, format("Invalid spell id: %d", spell_id));
     }
 
-    const auto realm_enum = i2enum<magic_realm_type>(realm);
-
-    if (is_magic(realm_enum)) {
+    if (is_magic(realm)) {
         if (pclass) {
-            return class_magics_info.at(enum2i(*pclass)).info[realm - 1][spell_id];
+            return class_magics_info.at(enum2i(*pclass)).info[enum2i(realm) - 1][spell_id];
         }
-        return mp_ptr->info[realm - 1][spell_id];
+        return mp_ptr->info[enum2i(realm) - 1][spell_id];
     }
-    if (is_technic(realm_enum)) {
-        return technic_info[realm - MIN_TECHNIC][spell_id];
+    if (is_technic(realm)) {
+        return technic_info[enum2i(realm) - MIN_TECHNIC][spell_id];
     }
 
-    THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", realm));
+    THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", enum2i(realm)));
 }
 
-const std::string &PlayerRealm::get_spell_name(int realm, int spell_id)
+const std::string &PlayerRealm::get_spell_name(RealmType realm, int spell_id)
 {
     if (spell_id < 0 || 32 <= spell_id) {
         THROW_EXCEPTION(std::invalid_argument, format("Invalid spell id: %d", spell_id));
     }
 
-    const auto realm_enum = i2enum<magic_realm_type>(realm);
-    if (!is_magic(realm_enum) && !is_technic(realm_enum)) {
-        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", realm));
+    if (!is_magic(realm) && !is_technic(realm)) {
+        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", enum2i(realm)));
     }
 
     const auto &spell_info = SpellInfoList::get_instance().get_spell_info(realm, spell_id);
     return spell_info.name;
 }
 
-const std::string &PlayerRealm::get_spell_description(int realm, int spell_id)
+const std::string &PlayerRealm::get_spell_description(RealmType realm, int spell_id)
 {
     if (spell_id < 0 || 32 <= spell_id) {
         THROW_EXCEPTION(std::invalid_argument, format("Invalid spell id: %d", spell_id));
     }
 
-    const auto realm_enum = i2enum<magic_realm_type>(realm);
-    if (!is_magic(realm_enum) && !is_technic(realm_enum)) {
-        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", realm));
+    if (!is_magic(realm) && !is_technic(realm)) {
+        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", enum2i(realm)));
     }
 
     const auto &spell_info = SpellInfoList::get_instance().get_spell_info(realm, spell_id);
     return spell_info.description;
 }
 
-ItemKindType PlayerRealm::get_book(int realm)
+ItemKindType PlayerRealm::get_book(RealmType realm)
 {
-    const auto it = realm_books.find(i2enum<magic_realm_type>(realm));
+    const auto it = realm_books.find(realm);
     if (it == realm_books.end()) {
-        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", realm));
+        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", enum2i(realm)));
     }
     return it->second;
 }
@@ -196,20 +190,20 @@ RealmChoices PlayerRealm::get_realm2_choices(PlayerClassType pclass)
     return it->second;
 }
 
-magic_realm_type PlayerRealm::get_realm_of_book(ItemKindType book)
+RealmType PlayerRealm::get_realm_of_book(ItemKindType book)
 {
     auto it = std::find_if(realm_books.begin(), realm_books.end(), [book](const auto &entry) { return entry.second == book; });
-    return it == realm_books.end() ? REALM_NONE : it->first;
+    return it == realm_books.end() ? RealmType::NONE : it->first;
 }
 
-bool PlayerRealm::is_magic(int realm)
+bool PlayerRealm::is_magic(RealmType realm)
 {
-    return MAGIC_REALM_RANGE.contains(i2enum<magic_realm_type>(realm));
+    return MAGIC_REALM_RANGE.contains(realm);
 }
 
-bool PlayerRealm::is_technic(int realm)
+bool PlayerRealm::is_technic(RealmType realm)
 {
-    return TECHNIC_REALM_RANGE.contains(i2enum<magic_realm_type>(realm));
+    return TECHNIC_REALM_RANGE.contains(realm);
 }
 
 const PlayerRealm::Realm &PlayerRealm::realm1() const
@@ -224,37 +218,35 @@ const PlayerRealm::Realm &PlayerRealm::realm2() const
 
 bool PlayerRealm::is_realm_hex() const
 {
-    return this->realm1_.equals(REALM_HEX);
+    return this->realm1_.equals(RealmType::HEX);
 }
 
 void PlayerRealm::reset()
 {
-    this->set_(REALM_NONE, REALM_NONE);
+    this->set_(RealmType::NONE, RealmType::NONE);
 }
 
-void PlayerRealm::set(int realm1, int realm2)
+void PlayerRealm::set(RealmType realm1, RealmType realm2)
 {
-    const auto realm1_enum = i2enum<magic_realm_type>(realm1);
-    if (!is_magic(realm1_enum) && !is_technic(realm1_enum)) {
-        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm1: %d", realm1));
+    if (!is_magic(realm1) && !is_technic(realm1)) {
+        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm1: %d", enum2i(realm1)));
     }
-    const auto realm2_enum = i2enum<magic_realm_type>(realm2);
-    if (realm2 != REALM_NONE && !is_magic(realm2_enum) && !is_technic(realm2_enum)) {
-        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm2: %d", realm2));
+    if (realm2 != RealmType::NONE && !is_magic(realm2) && !is_technic(realm2)) {
+        THROW_EXCEPTION(std::invalid_argument, format("Invalid realm2: %d", enum2i(realm2)));
     }
 
     this->set_(realm1, realm2);
 }
 
-void PlayerRealm::set_(int realm1, int realm2)
+void PlayerRealm::set_(RealmType realm1, RealmType realm2)
 {
-    this->player_ptr->realm1 = static_cast<int16_t>(realm1);
-    this->player_ptr->realm2 = static_cast<int16_t>(realm2);
+    this->player_ptr->realm1 = realm1;
+    this->player_ptr->realm2 = realm2;
     this->realm1_ = Realm(realm1);
     this->realm2_ = Realm(realm2);
 }
 
-PlayerRealm::Realm::Realm(int realm)
+PlayerRealm::Realm::Realm(RealmType realm)
     : realm_(realm)
 {
 }
@@ -296,20 +288,20 @@ ItemKindType PlayerRealm::Realm::get_book() const
 
 bool PlayerRealm::Realm::is_available() const
 {
-    return this->realm_ != REALM_NONE;
+    return this->realm_ != RealmType::NONE;
 }
 
 bool PlayerRealm::Realm::is_good_attribute() const
 {
-    return this->realm_ == REALM_LIFE || this->realm_ == REALM_CRUSADE;
+    return this->realm_ == RealmType::LIFE || this->realm_ == RealmType::CRUSADE;
 }
 
-bool PlayerRealm::Realm::equals(int realm) const
+bool PlayerRealm::Realm::equals(RealmType realm) const
 {
     return this->realm_ == realm;
 }
 
-magic_realm_type PlayerRealm::Realm::to_enum() const
+RealmType PlayerRealm::Realm::to_enum() const
 {
-    return i2enum<magic_realm_type>(this->realm_);
+    return this->realm_;
 }
