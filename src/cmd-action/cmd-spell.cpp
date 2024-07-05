@@ -677,9 +677,10 @@ void do_cmd_browse(PlayerType *player_ptr)
 /*!
  * @brief プレイヤーの第二魔法領域を変更する /
  * @param player_ptr プレイヤーへの参照ポインタ
+ * @param pr プレイヤーの魔法領域情報
  * @param next_realm 変更先の魔法領域ID
  */
-static void change_realm2(PlayerType *player_ptr, RealmType next_realm)
+static void change_realm2(PlayerType *player_ptr, PlayerRealm &pr, RealmType next_realm)
 {
     int i, j = 0;
     for (i = 0; i < 64; i++) {
@@ -699,10 +700,8 @@ static void change_realm2(PlayerType *player_ptr, RealmType next_realm)
     player_ptr->spell_worked2 = 0L;
     player_ptr->spell_forgotten2 = 0L;
 
-    PlayerRealm pr(player_ptr);
-
     constexpr auto fmt_realm = _("魔法の領域を%sから%sに変更した。", "changed magic realm from %s to %s.");
-    const auto mes = format(fmt_realm, PlayerRealm(player_ptr).realm2().get_name().data(), PlayerRealm::get_name(next_realm).data());
+    const auto mes = format(fmt_realm, pr.realm2().get_name().data(), PlayerRealm::get_name(next_realm).data());
     exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::DESCRIPTION, 0, mes);
     player_ptr->old_realm |= 1U << (enum2i(pr.realm2().to_enum()) - 1);
     pr.set(pr.realm1().to_enum(), next_realm);
@@ -781,7 +780,7 @@ void do_cmd_study(PlayerType *player_ptr)
             return;
         }
 
-        change_realm2(player_ptr, study_realm);
+        change_realm2(player_ptr, pr, study_realm);
         increment = 32;
     }
 
