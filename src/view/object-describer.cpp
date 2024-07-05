@@ -7,7 +7,6 @@
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
 #include "player/player-realm.h"
-#include "realm/realm-names-table.h"
 #include "spell/spell-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
@@ -93,7 +92,7 @@ void display_koff(PlayerType *player_ptr)
         if (!pc.is_every_magic()) {
             return;
         }
-        if (!is_magic(use_realm)) {
+        if (!PlayerRealm::is_magic(use_realm)) {
             return;
         }
         if (pc.equals(PlayerClassType::RED_MAGE) && (use_realm != REALM_ARCANE) && (sval > 1)) {

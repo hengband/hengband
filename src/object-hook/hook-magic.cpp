@@ -5,7 +5,6 @@
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player/player-realm.h"
-#include "realm/realm-names-table.h"
 #include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
@@ -77,7 +76,7 @@ bool item_tester_learn_spell(PlayerType *player_ptr, const ItemEntity *o_ptr)
     }
 
     const auto book_realm = PlayerRealm::get_realm_of_book(tval);
-    if (!is_magic(book_realm)) {
+    if (!PlayerRealm::is_magic(book_realm)) {
         return false;
     }
 

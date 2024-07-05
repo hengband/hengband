@@ -767,9 +767,6 @@
     <ClCompile Include="..\..\src\object\object-value.cpp">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\realm\realm-names-table.cpp">
-      <Filter>realm</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd-building\cmd-building.cpp">
       <Filter>cmd-building</Filter>
     </ClCompile>
@@ -3331,9 +3328,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-value.h">
       <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\realm\realm-names-table.h">
-      <Filter>realm</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-building\cmd-building.h">
       <Filter>cmd-building</Filter>

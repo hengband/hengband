@@ -6,7 +6,6 @@
 #include "player/player-skill.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"
-#include "realm/realm-names-table.h"
 #include "realm/realm-types.h"
 #include "spell/spells-execution.h"
 #include "system/floor-type-definition.h"
@@ -37,7 +36,7 @@ MANA_POINT mod_need_mana(PlayerType *player_ptr, MANA_POINT need_mana, SPELL_IDX
 #define MANA_DIV 4
 #define DEC_MANA_DIV 3
     const auto realm_enum = i2enum<magic_realm_type>(realm);
-    if (MAGIC_REALM_RANGE.contains(realm_enum) || TECHNIC_REALM_RANGE.contains(realm_enum)) {
+    if (PlayerRealm::is_magic(realm_enum) || PlayerRealm::is_technic(realm_enum)) {
         need_mana = need_mana * (MANA_CONST + PlayerSkill::spell_exp_at(PlayerSkillRank::EXPERT) - PlayerSkill(player_ptr).exp_of_spell(realm, spell_id)) + (MANA_CONST - 1);
         need_mana *= player_ptr->dec_mana ? DEC_MANA_DIV : MANA_DIV;
         need_mana /= MANA_CONST * MANA_DIV;
@@ -222,7 +221,7 @@ PERCENTAGE spell_chance(PlayerType *player_ptr, SPELL_IDX spell_id, int16_t use_
 void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL_IDX *spell_ids, int num, TERM_LEN y, TERM_LEN x, int16_t use_realm)
 {
     const auto realm = i2enum<magic_realm_type>(use_realm);
-    if ((!MAGIC_REALM_RANGE.contains(realm) && !TECHNIC_REALM_RANGE.contains(realm)) && AngbandWorld::get_instance().wizard) {
+    if ((!PlayerRealm::is_magic(realm) && !PlayerRealm::is_technic(realm)) && AngbandWorld::get_instance().wizard) {
         msg_print(_("警告！ print_spell が領域なしに呼ばれた", "Warning! print_spells called with null realm"));
     }
 

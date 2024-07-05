@@ -5,7 +5,6 @@
 #include "mind/mind-elementalist.h"
 #include "player-base/player-class.h"
 #include "player/player-realm.h"
-#include "realm/realm-names-table.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -15,14 +14,15 @@
 #include <optional>
 #include <string>
 
-static const byte REALM_SELECT_CANCEL = 255;
+constexpr auto TOTAL_REALM_NUM = std::ssize(MAGIC_REALM_RANGE) + std::ssize(TECHNIC_REALM_RANGE);
+constexpr byte REALM_SELECT_CANCEL = 255;
 
 struct birth_realm_type {
     int cs;
     int n;
     char p2;
-    char sym[VALID_REALM];
-    int picks[VALID_REALM];
+    char sym[TOTAL_REALM_NUM];
+    int picks[TOTAL_REALM_NUM];
     std::string cur;
     int k;
     int os;
@@ -33,7 +33,7 @@ static birth_realm_type *initialize_birth_realm_type(birth_realm_type *birth_rea
     birth_realm_ptr->cs = 0;
     birth_realm_ptr->n = 0;
     birth_realm_ptr->p2 = ')';
-    for (int i = 0; i < VALID_REALM; i++) {
+    for (int i = 0; i < TOTAL_REALM_NUM; i++) {
         birth_realm_ptr->picks[i] = 0;
     }
 

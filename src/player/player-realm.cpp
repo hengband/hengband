@@ -95,10 +95,10 @@ const LocalizedString &PlayerRealm::get_name(int realm)
 std::string_view PlayerRealm::get_explanation(int realm)
 {
     const auto realm_enum = i2enum<magic_realm_type>(realm);
-    if (MAGIC_REALM_RANGE.contains(realm_enum)) {
+    if (is_magic(realm_enum)) {
         return magic_explanations[realm - 1];
     }
-    if (TECHNIC_REALM_RANGE.contains(realm_enum)) {
+    if (is_technic(realm_enum)) {
         return technic_explanations[realm - MIN_TECHNIC];
     }
 
@@ -108,10 +108,10 @@ std::string_view PlayerRealm::get_explanation(int realm)
 std::string_view PlayerRealm::get_subinfo(int realm)
 {
     const auto realm_enum = i2enum<magic_realm_type>(realm);
-    if (MAGIC_REALM_RANGE.contains(realm_enum)) {
+    if (is_magic(realm_enum)) {
         return magic_subinfo[realm - 1];
     }
-    if (TECHNIC_REALM_RANGE.contains(realm_enum)) {
+    if (is_technic(realm_enum)) {
         return technic_subinfo[realm - MIN_TECHNIC];
     }
 
@@ -126,13 +126,13 @@ const magic_type &PlayerRealm::get_spell_info(int realm, int spell_id, std::opti
 
     const auto realm_enum = i2enum<magic_realm_type>(realm);
 
-    if (MAGIC_REALM_RANGE.contains(realm_enum)) {
+    if (is_magic(realm_enum)) {
         if (pclass) {
             return class_magics_info.at(enum2i(*pclass)).info[realm - 1][spell_id];
         }
         return mp_ptr->info[realm - 1][spell_id];
     }
-    if (TECHNIC_REALM_RANGE.contains(realm_enum)) {
+    if (is_technic(realm_enum)) {
         return technic_info[realm - MIN_TECHNIC][spell_id];
     }
 
@@ -146,7 +146,7 @@ const std::string &PlayerRealm::get_spell_name(int realm, int spell_id)
     }
 
     const auto realm_enum = i2enum<magic_realm_type>(realm);
-    if (!MAGIC_REALM_RANGE.contains(realm_enum) && !TECHNIC_REALM_RANGE.contains(realm_enum)) {
+    if (!is_magic(realm_enum) && !is_technic(realm_enum)) {
         THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", realm));
     }
 
@@ -161,7 +161,7 @@ const std::string &PlayerRealm::get_spell_description(int realm, int spell_id)
     }
 
     const auto realm_enum = i2enum<magic_realm_type>(realm);
-    if (!MAGIC_REALM_RANGE.contains(realm_enum) && !TECHNIC_REALM_RANGE.contains(realm_enum)) {
+    if (!is_magic(realm_enum) && !is_technic(realm_enum)) {
         THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", realm));
     }
 
@@ -202,6 +202,16 @@ magic_realm_type PlayerRealm::get_realm_of_book(ItemKindType book)
     return it == realm_books.end() ? REALM_NONE : it->first;
 }
 
+bool PlayerRealm::is_magic(int realm)
+{
+    return MAGIC_REALM_RANGE.contains(i2enum<magic_realm_type>(realm));
+}
+
+bool PlayerRealm::is_technic(int realm)
+{
+    return TECHNIC_REALM_RANGE.contains(i2enum<magic_realm_type>(realm));
+}
+
 const PlayerRealm::Realm &PlayerRealm::realm1() const
 {
     return this->realm1_;
@@ -225,11 +235,11 @@ void PlayerRealm::reset()
 void PlayerRealm::set(int realm1, int realm2)
 {
     const auto realm1_enum = i2enum<magic_realm_type>(realm1);
-    if (!MAGIC_REALM_RANGE.contains(realm1_enum) && !TECHNIC_REALM_RANGE.contains(realm1_enum)) {
+    if (!is_magic(realm1_enum) && !is_technic(realm1_enum)) {
         THROW_EXCEPTION(std::invalid_argument, format("Invalid realm1: %d", realm1));
     }
     const auto realm2_enum = i2enum<magic_realm_type>(realm2);
-    if (realm2 != REALM_NONE && !MAGIC_REALM_RANGE.contains(realm2_enum) && !TECHNIC_REALM_RANGE.contains(realm2_enum)) {
+    if (realm2 != REALM_NONE && !is_magic(realm2_enum) && !is_technic(realm2_enum)) {
         THROW_EXCEPTION(std::invalid_argument, format("Invalid realm2: %d", realm2));
     }
 

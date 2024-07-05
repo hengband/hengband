@@ -81,7 +81,6 @@
 #include "player/race-info-table.h"
 #include "player/special-defense-types.h"
 #include "realm/realm-hex-numbers.h"
-#include "realm/realm-names-table.h"
 #include "realm/realm-song-numbers.h"
 #include "specific-object/torch.h"
 #include "spell-realm/spells-hex.h"

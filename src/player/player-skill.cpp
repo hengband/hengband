@@ -3,7 +3,6 @@
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player/player-realm.h"
-#include "realm/realm-names-table.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
@@ -353,7 +352,7 @@ void PlayerSkill::gain_riding_skill_exp_on_fall_off_check(int dam)
 void PlayerSkill::gain_spell_skill_exp(int realm, int spell_idx)
 {
     PlayerRealm pr(this->player_ptr);
-    auto is_valid_realm = is_magic(realm) ||
+    auto is_valid_realm = PlayerRealm::is_magic(realm) ||
                           (realm == REALM_MUSIC) || (realm == REALM_HEX);
     is_valid_realm &= pr.realm1().equals(realm) || pr.realm2().equals(realm);
     const auto is_valid_spell_idx = (0 <= spell_idx) && (spell_idx < 32);
