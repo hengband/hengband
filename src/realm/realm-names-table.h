@@ -14,4 +14,3 @@
 #include <vector>
 
 constexpr auto VALID_REALM = std::ssize(MAGIC_REALM_RANGE) + std::ssize(TECHNIC_REALM_RANGE);
-#define is_magic(A) (((A) > REALM_NONE) && ((A) <= MAX_MAGIC))

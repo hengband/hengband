@@ -31,7 +31,7 @@ bool is_owner(PlayerType *player_ptr, building_type *bldg)
     PlayerRealm pr(player_ptr);
     const auto realm1 = pr.realm1().to_enum();
     const auto realm2 = pr.realm2().to_enum();
-    if ((is_magic(realm1) && (bldg->member_realm[realm1] == building_owner)) || (is_magic(realm2) && (bldg->member_realm[realm2] == building_owner))) {
+    if ((PlayerRealm::is_magic(realm1) && (bldg->member_realm[realm1] == building_owner)) || (PlayerRealm::is_magic(realm2) && (bldg->member_realm[realm2] == building_owner))) {
         return true;
     }
 
@@ -61,7 +61,7 @@ bool is_member(PlayerType *player_ptr, building_type *bldg)
     PlayerRealm pr(player_ptr);
     const auto realm1 = pr.realm1().to_enum();
     const auto realm2 = pr.realm2().to_enum();
-    if ((is_magic(realm1) && bldg->member_realm[realm1]) || (is_magic(realm2) && bldg->member_realm[realm2])) {
+    if ((PlayerRealm::is_magic(realm1) && bldg->member_realm[realm1]) || (PlayerRealm::is_magic(realm2) && bldg->member_realm[realm2])) {
         return true;
     }
 

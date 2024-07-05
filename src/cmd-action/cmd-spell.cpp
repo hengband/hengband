@@ -363,7 +363,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view pro
     if (!pr.realm1().equals(use_realm) && !pr.realm2().equals(use_realm) && !is_every_magic) {
         return false;
     }
-    if (is_every_magic && !is_magic(use_realm)) {
+    if (is_every_magic && !PlayerRealm::is_magic(use_realm)) {
         return false;
     }
     if (pc.equals(PlayerClassType::RED_MAGE) && ((use_realm) != REALM_ARCANE) && (sval > 1)) {

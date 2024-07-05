@@ -30,6 +30,8 @@ public:
     static RealmChoices get_realm1_choices(PlayerClassType pclass);
     static RealmChoices get_realm2_choices(PlayerClassType pclass);
     static magic_realm_type get_realm_of_book(ItemKindType tval);
+    static bool is_magic(int realm);
+    static bool is_technic(int realm);
 
     class Realm {
     public:

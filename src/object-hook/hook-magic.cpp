@@ -77,7 +77,7 @@ bool item_tester_learn_spell(PlayerType *player_ptr, const ItemEntity *o_ptr)
     }
 
     const auto book_realm = PlayerRealm::get_realm_of_book(tval);
-    if (!is_magic(book_realm)) {
+    if (!PlayerRealm::is_magic(book_realm)) {
         return false;
     }
 

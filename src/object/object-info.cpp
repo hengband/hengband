@@ -112,11 +112,12 @@ bool check_book_realm(PlayerType *player_ptr, const BaseitemKey &bi_key)
     const auto book_realm = PlayerRealm::get_realm_of_book(tval);
     PlayerClass pc(player_ptr);
     if (pc.equals(PlayerClassType::SORCERER)) {
-        return is_magic(book_realm);
+        return PlayerRealm::is_magic(book_realm);
     } else if (pc.equals(PlayerClassType::RED_MAGE)) {
-        if (is_magic(book_realm)) {
-            return ((tval == ItemKindType::ARCANE_BOOK) || (bi_key.sval() < 2));
+        if (!PlayerRealm::is_magic(book_realm)) {
+            return false;
         }
+        return ((book_realm == REALM_ARCANE) || (bi_key.sval() < 2));
     }
 
     PlayerRealm pr(player_ptr);
