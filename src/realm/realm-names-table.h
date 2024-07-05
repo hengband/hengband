@@ -12,5 +12,3 @@
 #include "system/angband.h"
 #include "util/enum-converter.h"
 #include <vector>
-
-constexpr auto VALID_REALM = std::ssize(MAGIC_REALM_RANGE) + std::ssize(TECHNIC_REALM_RANGE);
