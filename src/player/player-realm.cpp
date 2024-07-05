@@ -298,3 +298,8 @@ bool PlayerRealm::Realm::equals(int realm) const
 {
     return this->realm_ == realm;
 }
+
+magic_realm_type PlayerRealm::Realm::to_enum() const
+{
+    return i2enum<magic_realm_type>(this->realm_);
+}

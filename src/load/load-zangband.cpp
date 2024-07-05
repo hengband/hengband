@@ -86,11 +86,12 @@ void load_zangband_options(void)
 void set_zangband_realm(PlayerType *player_ptr)
 {
     PlayerRealm pr(player_ptr);
-    if (player_ptr->realm1 == 9) {
+    const auto realm1 = enum2i(pr.realm1().to_enum());
+    if (realm1 == 9) {
         pr.set(REALM_MUSIC);
     }
 
-    if (player_ptr->realm1 == 10) {
+    if (realm1 == 10) {
         pr.set(REALM_HISSATSU);
     }
 }

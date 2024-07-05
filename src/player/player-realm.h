@@ -44,6 +44,7 @@ public:
         bool is_available() const;
         bool is_good_attribute() const;
         bool equals(int realm) const;
+        magic_realm_type to_enum() const;
 
     private:
         int realm_;

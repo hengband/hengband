@@ -705,8 +705,8 @@ static void change_realm2(PlayerType *player_ptr, int16_t next_realm)
     constexpr auto fmt_realm = _("魔法の領域を%sから%sに変更した。", "changed magic realm from %s to %s.");
     const auto mes = format(fmt_realm, PlayerRealm(player_ptr).realm2().get_name().data(), PlayerRealm::get_name(next_realm).data());
     exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::DESCRIPTION, 0, mes);
-    player_ptr->old_realm |= 1U << (player_ptr->realm2 - 1);
-    pr.set(player_ptr->realm1, next_realm);
+    player_ptr->old_realm |= 1U << (enum2i(pr.realm2().to_enum()) - 1);
+    pr.set(pr.realm1().to_enum(), next_realm);
 
     static constexpr auto flags = {
         StatusRecalculatingFlag::REORDER,
@@ -807,7 +807,8 @@ void do_cmd_study(PlayerType *player_ptr)
             /* Check spells in the book */
             if ((fake_spell_flags[sval] & (1UL << spell))) {
                 /* Skip non "okay" prayers */
-                if (!spell_okay(player_ptr, spell, false, true, (increment ? player_ptr->realm2 : player_ptr->realm1))) {
+                const auto &realm = increment ? pr.realm2() : pr.realm1();
+                if (!spell_okay(player_ptr, spell, false, true, realm.to_enum())) {
                     continue;
                 }
 

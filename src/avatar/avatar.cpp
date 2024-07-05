@@ -377,14 +377,14 @@ void initialize_virtues(PlayerType *player_ptr)
     /* Get a virtue_names for realms */
     PlayerRealm pr(player_ptr);
     if (pr.realm1().is_available()) {
-        tmp_vir = get_realm_virtues(player_ptr, player_ptr->realm1);
+        tmp_vir = get_realm_virtues(player_ptr, pr.realm1().to_enum());
         if (tmp_vir != Virtue::NONE) {
             player_ptr->vir_types[i++] = tmp_vir;
         }
     }
 
     if (pr.realm2().is_available()) {
-        tmp_vir = get_realm_virtues(player_ptr, player_ptr->realm2);
+        tmp_vir = get_realm_virtues(player_ptr, pr.realm2().to_enum());
         if (tmp_vir != Virtue::NONE) {
             player_ptr->vir_types[i++] = tmp_vir;
         }
