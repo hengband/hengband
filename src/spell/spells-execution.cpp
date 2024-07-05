@@ -8,11 +8,11 @@
 #include "realm/realm-hex.h"
 #include "realm/realm-hissatsu.h"
 #include "realm/realm-life.h"
-#include "realm/realm-names-table.h"
 #include "realm/realm-nature.h"
 #include "realm/realm-song.h"
 #include "realm/realm-sorcery.h"
 #include "realm/realm-trump.h"
+#include "realm/realm-types.h"
 #include "system/player-type-definition.h"
 
 /*!

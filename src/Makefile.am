@@ -770,7 +770,6 @@ hengband_SOURCES = \
 	realm/realm-hex-numbers.h \
 	realm/realm-hissatsu.cpp realm/realm-hissatsu.h \
 	realm/realm-life.cpp realm/realm-life.h \
-	realm/realm-names-table.cpp realm/realm-names-table.h \
 	realm/realm-nature.cpp realm/realm-nature.h \
 	realm/realm-song.cpp realm/realm-song.h \
 	realm/realm-song-numbers.h \

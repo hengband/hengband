@@ -1,7 +1,6 @@
 #include "market/building-service.h"
 #include "player-base/player-class.h"
 #include "player/player-realm.h"
-#include "realm/realm-names-table.h"
 #include "system/building-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"

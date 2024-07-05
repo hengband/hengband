@@ -1725,7 +1725,6 @@
     <ClCompile Include="..\..\src\realm\realm-hex.cpp" />
     <ClCompile Include="..\..\src\realm\realm-life.cpp" />
     <ClCompile Include="..\..\src\realm\realm-trump.cpp" />
-    <ClCompile Include="..\..\src\realm\realm-names-table.cpp" />
     <ClCompile Include="..\..\src\io\report.cpp" />
     <ClCompile Include="..\..\src\room\rooms-city.cpp" />
     <ClCompile Include="..\..\src\room\rooms-fractal.cpp" />
@@ -2005,7 +2004,6 @@
     <ClInclude Include="..\..\src\realm\realm-song.h" />
     <ClInclude Include="..\..\src\realm\realm-sorcery.h" />
     <ClInclude Include="..\..\src\realm\realm-trump.h" />
-    <ClInclude Include="..\..\src\realm\realm-names-table.h" />
     <ClInclude Include="..\..\src\io\report.h" />
     <ClInclude Include="..\..\src\room\rooms-city.h" />
     <ClInclude Include="..\..\src\room\rooms-fractal.h" />

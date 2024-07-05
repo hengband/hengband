@@ -43,7 +43,6 @@
 #include "player/player-skill.h"
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
-#include "realm/realm-names-table.h"
 #include "spell-kind/spells-random.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-realm/spells-hex.h"

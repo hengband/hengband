@@ -25,7 +25,6 @@
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"
-#include "realm/realm-names-table.h"
 #include "spell/spells-execution.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"

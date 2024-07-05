@@ -18,7 +18,6 @@
 #include "player/player-realm.h"
 #include "player/player-status-table.h"
 #include "player/race-info-table.h"
-#include "realm/realm-names-table.h"
 #include "store/store-util.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
