@@ -124,9 +124,9 @@ const magic_type &PlayerRealm::get_spell_info(RealmType realm, int spell_id, std
 
     if (is_magic(realm)) {
         if (pclass) {
-            return class_magics_info.at(enum2i(*pclass)).info[enum2i(realm) - 1][spell_id];
+            return class_magics_info.at(enum2i(*pclass)).info[enum2i(realm)][spell_id];
         }
-        return mp_ptr->info[enum2i(realm) - 1][spell_id];
+        return mp_ptr->info[enum2i(realm)][spell_id];
     }
     if (is_technic(realm)) {
         return technic_info[enum2i(realm) - MIN_TECHNIC][spell_id];

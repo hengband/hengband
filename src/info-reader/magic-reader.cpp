@@ -161,7 +161,7 @@ static errr set_spell_data(const nlohmann::json &spell_data, player_magic &magic
     if (!spell_id) {
         return PARSE_ERROR_INVALID_FLAG;
     }
-    auto &info = magics_info.info[enum2i(realm) - 1][*spell_id];
+    auto &info = magics_info.info[enum2i(realm)][*spell_id];
 
     if (auto err = info_set_integer(spell_data["learn_level"], info.slevel, true, Range(0, 99))) {
         msg_format(_("呪文学習レベル読込失敗。ID: '%d'。", "Failed to load spell learn_level. ID: '%d'."), error_idx);
