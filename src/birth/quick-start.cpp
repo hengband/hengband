@@ -144,7 +144,11 @@ void load_prev_data(PlayerType *player_ptr, bool swap)
     if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
         player_ptr->element = previous_char.realm1;
     } else {
-        pr.set(i2enum<RealmType>(previous_char.realm1), i2enum<RealmType>(previous_char.realm2));
+        const auto realm1 = i2enum<RealmType>(previous_char.realm1);
+        const auto realm2 = i2enum<RealmType>(previous_char.realm2);
+        if (realm1 != RealmType::NONE) {
+            pr.set(realm1, realm2);
+        }
     }
 
     player_ptr->age = previous_char.age;
