@@ -121,7 +121,9 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
     decide_drop_from_monster(player_ptr, m_idx, turn_flags_ptr->is_riding_mon);
     if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && one_in_(13) && !m_ptr->is_asleep()) {
-        choose_chameleon_polymorph(player_ptr, m_idx);
+        const auto &floor = *player_ptr->current_floor_ptr;
+
+        choose_chameleon_polymorph(player_ptr, m_idx, floor.get_grid(Pos2D(m_ptr->fy, m_ptr->fx)));
 
         const auto &new_monrace = m_ptr->get_monrace();
 
@@ -137,7 +139,7 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
             }
         }
 
-        m_ptr->set_individual_speed(player_ptr->current_floor_ptr->inside_arena);
+        m_ptr->set_individual_speed(floor.inside_arena);
 
         const auto old_maxhp = m_ptr->max_maxhp;
         if (new_monrace.misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {

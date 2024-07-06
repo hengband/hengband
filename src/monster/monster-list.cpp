@@ -204,10 +204,11 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
  * @brief カメレオンの王の変身対象となるモンスターかどうか判定する / Hack -- the index of the summoning monster
  * @param r_idx モンスター種族ID
  * @param m_idx 変身するモンスターのモンスターID
+ * @param grid カメレオンの足元の地形
  * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
  * @return 対象にできるならtrueを返す
  */
-static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_idx, MONSTER_IDX m_idx, std::optional<MONSTER_IDX> summoner_m_idx)
+static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_idx, MONSTER_IDX m_idx, const Grid &grid, std::optional<MONSTER_IDX> summoner_m_idx)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *r_ptr = &monraces_info[r_idx];
@@ -229,7 +230,7 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_
         return false;
     }
 
-    if (!monster_can_cross_terrain(player_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) {
+    if (!monster_can_cross_terrain(player_ptr, grid.feat, r_ptr, 0)) {
         return false;
     }
 
@@ -248,11 +249,12 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_
  * @brief カメレオンの変身対象となるモンスターかどうか判定する / Hack -- the index of the summoning monster
  * @param r_idx モンスター種族ID
  * @param m_idx 変身するモンスターのモンスターID
+ * @param grid カメレオンの足元の地形
  * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
  * @return 対象にできるならtrueを返す
  * @todo グローバル変数対策の上 monster_hook.cへ移す。
  */
-static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx, MONSTER_IDX m_idx, std::optional<MONSTER_IDX> summoner_m_idx)
+static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx, MONSTER_IDX m_idx, const Grid &grid, std::optional<MONSTER_IDX> summoner_m_idx)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *r_ptr = &monraces_info[r_idx];
@@ -273,7 +275,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx, 
         return false;
     }
 
-    if (!monster_can_cross_terrain(player_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) {
+    if (!monster_can_cross_terrain(player_ptr, grid.feat, r_ptr, 0)) {
         return false;
     }
 
@@ -295,7 +297,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx, 
     return hook_pf(player_ptr, r_idx);
 }
 
-static std::optional<MonsterRaceId> polymorph_of_chameleon(PlayerType *player_ptr, MONSTER_IDX m_idx, const std::optional<MONSTER_IDX> summoner_m_idx)
+static std::optional<MonsterRaceId> polymorph_of_chameleon(PlayerType *player_ptr, MONSTER_IDX m_idx, const Grid &grid, const std::optional<MONSTER_IDX> summoner_m_idx)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
@@ -306,8 +308,8 @@ static std::optional<MonsterRaceId> polymorph_of_chameleon(PlayerType *player_pt
     }
 
     auto hook_fp = old_unique ? monster_hook_chameleon_lord : monster_hook_chameleon;
-    auto hook = [m_idx, summoner_m_idx, hook_fp](PlayerType *player_ptr, MonsterRaceId r_idx) {
-        return hook_fp(player_ptr, r_idx, m_idx, summoner_m_idx);
+    auto hook = [m_idx, grid, summoner_m_idx, hook_fp](PlayerType *player_ptr, MonsterRaceId r_idx) {
+        return hook_fp(player_ptr, r_idx, m_idx, grid, summoner_m_idx);
     };
     get_mon_num_prep_chameleon(player_ptr, std::move(hook));
 
@@ -338,14 +340,15 @@ static std::optional<MonsterRaceId> polymorph_of_chameleon(PlayerType *player_pt
  * @brief カメレオンの変身処理
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 変身処理を受けるモンスター情報のID
+ * @param grid カメレオンの足元の地形
  * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
  */
-void choose_chameleon_polymorph(PlayerType *player_ptr, MONSTER_IDX m_idx, std::optional<MONSTER_IDX> summoner_m_idx)
+void choose_chameleon_polymorph(PlayerType *player_ptr, MONSTER_IDX m_idx, const Grid &grid, std::optional<MONSTER_IDX> summoner_m_idx)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto &monster = floor.m_list[m_idx];
 
-    auto new_monrace_id = polymorph_of_chameleon(player_ptr, m_idx, summoner_m_idx);
+    auto new_monrace_id = polymorph_of_chameleon(player_ptr, m_idx, grid, summoner_m_idx);
     if (!new_monrace_id) {
         return;
     }
