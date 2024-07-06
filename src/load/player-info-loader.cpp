@@ -45,12 +45,15 @@ static void rd_realms(PlayerType *player_ptr)
         return;
     }
 
-    const auto realm1 = rd_byte();
+    const auto realm1 = i2enum<RealmType>(rd_byte());
     auto realm2 = rd_byte();
+    if (realm1 == RealmType::NONE) {
+        return;
+    }
     if (realm2 == 255) { // 何のため？
         realm2 = 0;
     }
-    pr.set(i2enum<RealmType>(realm1), i2enum<RealmType>(realm2));
+    pr.set(realm1, i2enum<RealmType>(realm2));
 }
 
 /*!
