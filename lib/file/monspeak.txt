@@ -909,10 +909,10 @@ says, 'Located a target, I'll begin to eliminate...!'
 says, '"The Ship That Would Not Die" won't go down that easy...'
 
 N:1362:Mika Misono, a witch of the Tea Party
-says, 'Hi, can you get out of my way? ...Can't? Okay, I'll have you get out forcefully.'
-says, 'Saori is... there probably, isn't?'
-says, 'I guess you will kill me, will not? Hmm, that's too bad...'
-is seeking someone by her eyes that a thirst for deprive all from it...
+says, 'Hi, can you get out of my way? ...Can't? Okay, I'll have to force you then.'
+says, 'Saori is... there probably, isn't she?'
+says, 'I guess you will kill me, will you? Hmm, that's too bad...'
+is looking for a certain person to take everything from that person...
 
 N:*:Default lines
 cackles evilly.
