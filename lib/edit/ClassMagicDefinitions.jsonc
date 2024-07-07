@@ -1950,9 +1950,9 @@
             },
             {
               "spell_tag": "Demonfire",
-              "learn_level": 33,
-              "mana_cost": 30,
-              "difficulty": 85,
+              "learn_level": 31,
+              "mana_cost": 33,
+              "difficulty": 70,
               "first_cast_exp_rate": 15
             },
             {
@@ -4252,9 +4252,9 @@
             },
             {
               "spell_tag": "Demonfire",
-              "learn_level": 35,
-              "mana_cost": 33,
-              "difficulty": 85,
+              "learn_level": 34,
+              "mana_cost": 36,
+              "difficulty": 70,
               "first_cast_exp_rate": 30
             },
             {
@@ -7253,9 +7253,9 @@
             },
             {
               "spell_tag": "Demonfire",
-              "learn_level": 44,
-              "mana_cost": 40,
-              "difficulty": 80,
+              "learn_level": 41,
+              "mana_cost": 46,
+              "difficulty": 70,
               "first_cast_exp_rate": 15
             },
             {
@@ -9796,9 +9796,9 @@
             },
             {
               "spell_tag": "Demonfire",
-              "learn_level": 41,
-              "mana_cost": 36,
-              "difficulty": 85,
+              "learn_level": 38,
+              "mana_cost": 42,
+              "difficulty": 70,
               "first_cast_exp_rate": 15
             },
             {
@@ -10495,9 +10495,9 @@
             },
             {
               "spell_tag": "Demonfire",
-              "learn_level": 38,
-              "mana_cost": 33,
-              "difficulty": 85,
+              "learn_level": 35,
+              "mana_cost": 37,
+              "difficulty": 70,
               "first_cast_exp_rate": 15
             },
             {
@@ -16302,9 +16302,9 @@
             },
             {
               "spell_tag": "Demonfire",
-              "learn_level": 33,
-              "mana_cost": 30,
-              "difficulty": 85,
+              "learn_level": 31,
+              "mana_cost": 33,
+              "difficulty": 70,
               "first_cast_exp_rate": 15
             },
             {
@@ -18637,9 +18637,9 @@
             },
             {
               "spell_tag": "Demonfire",
-              "learn_level": 44,
-              "mana_cost": 58,
-              "difficulty": 85,
+              "learn_level": 43,
+              "mana_cost": 64,
+              "difficulty": 70,
               "first_cast_exp_rate": 15
             },
             {
