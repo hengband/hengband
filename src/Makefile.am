@@ -400,6 +400,7 @@ hengband_SOURCES = \
 	main/sound-definitions-table.cpp main/sound-definitions-table.h \
 	main/sound-of-music.cpp main/sound-of-music.h \
 	\
+	main-unix/stack-trace-unix.cpp \
 	main-unix/unix-user-ids.cpp main-unix/unix-user-ids.h \
 	main-unix/x11-gamma-builder.cpp main-unix/x11-gamma-builder.h \
 	main-unix/x11-type-string.cpp main-unix/x11-type-string.h \
@@ -986,6 +987,7 @@ hengband_SOURCES = \
 	util/probability-table.h \
 	util/rng-xoshiro.cpp util/rng-xoshiro.h \
 	util/sha256.cpp util/sha256.h \
+	util/stack-trace.h \
 	util/string-processor.cpp util/string-processor.h \
 	\
 	view/display-birth.cpp view/display-birth.h \
@@ -1059,6 +1061,7 @@ EXTRA_hengband_SOURCES = \
 	main-win/main-win-term.cpp main-win/main-win-term.h \
 	main-win/main-win-tokenizer.cpp main-win/main-win-tokenizer.h \
 	main-win/main-win-utils.cpp main-win/main-win-utils.h \
+	main-win/stack-trace-win.cpp \
 	main-win/wav-reader.cpp main-win/wav-reader.h \
 	test/test-sha256.cpp \
 	wall.bmp \
