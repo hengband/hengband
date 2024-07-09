@@ -2187,6 +2187,9 @@
     <ClCompile Include="..\..\src\main-win\wav-reader.cpp">
       <Filter>main-win</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\main-win\stack-trace-win.cpp">
+      <Filter>main-win</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\monster\monster-damage.cpp">
       <Filter>monster</Filter>
     </ClCompile>
@@ -5397,6 +5400,9 @@
     <ClInclude Include="..\..\src\util\sha256.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\src\util\stack-trace.h">
+      <Filter>util</Filter>
+    </ClCompile>
     <ClInclude Include="..\..\src\external-lib\json.hpp">
       <Filter>external-lib</Filter>
     </ClInclude>
