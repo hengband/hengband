@@ -225,7 +225,7 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_
         return false;
     }
 
-    if (m_ptr->is_explodable()) {
+    if (r_ptr->is_explodable()) {
         return false;
     }
 
@@ -269,7 +269,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx, 
         return false;
     }
 
-    if (m_ptr->is_explodable()) {
+    if (r_ptr->is_explodable()) {
         return false;
     }
 
