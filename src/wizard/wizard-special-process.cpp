@@ -94,6 +94,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/candidate-selector.h"
 #include "util/enum-converter.h"
+#include "util/enum-range.h"
 #include "util/finalizer.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -595,17 +596,60 @@ static void change_birth_flags()
     rfu.set_flags(flags_mwrf);
 }
 
+static std::optional<RealmType> wiz_select_realm(const RealmChoices &choices, const std::string &msg)
+{
+    if (choices.count() <= 1) {
+        return choices.first().value_or(RealmType::NONE);
+    }
+
+    std::vector<RealmType> candidates;
+    RealmChoices::get_flags(choices, std::back_inserter(candidates));
+    auto describe_realm = [](auto realm) { return PlayerRealm::get_name(realm).string(); };
+
+    CandidateSelector cs(msg, 15);
+    const auto choice = cs.select(candidates, describe_realm);
+    return (choice != candidates.end()) ? std::make_optional(*choice) : std::nullopt;
+}
+
+static std::optional<std::pair<RealmType, RealmType>> wiz_select_realms(PlayerClassType pclass)
+{
+    const auto realm1 = wiz_select_realm(PlayerRealm::get_realm1_choices(pclass), "1st realm: ");
+    if (!realm1) {
+        return std::nullopt;
+    }
+
+    auto realm2_choices = PlayerRealm::get_realm2_choices(pclass).reset(*realm1);
+    if (pclass == PlayerClassType::PRIEST) {
+        if (PlayerRealm::Realm(*realm1).is_good_attribute()) {
+            realm2_choices.reset({ RealmType::DEATH, RealmType::DAEMON });
+        } else {
+            realm2_choices.reset({ RealmType::LIFE, RealmType::CRUSADE });
+        }
+    }
+
+    const auto realm2 = wiz_select_realm(realm2_choices, "2nd realm: ");
+    if (!realm2) {
+        return std::nullopt;
+    }
+
+    return std::make_pair(*realm1, *realm2);
+}
+
 /*!
  * @brief プレイヤーの種族を変更する
  */
 void wiz_reset_race(PlayerType *player_ptr)
 {
-    const auto new_race = input_numerics("RaceID", 0, MAX_RACES - 1, player_ptr->prace);
-    if (!new_race) {
+    CandidateSelector cs("Which race: ", 15);
+    constexpr EnumRange races(PlayerRaceType::HUMAN, PlayerRaceType::MAX);
+    auto describe_race = [](auto player_race) { return race_info[enum2i(player_race)].title.string(); };
+
+    const auto chosen_race = cs.select(races, describe_race);
+    if (chosen_race == races.end()) {
         return;
     }
 
-    player_ptr->prace = *new_race;
+    player_ptr->prace = *chosen_race;
     rp_ptr = &race_info[enum2i(player_ptr->prace)];
     change_birth_flags();
     handle_stuff(player_ptr);
@@ -617,17 +661,29 @@ void wiz_reset_race(PlayerType *player_ptr)
  */
 void wiz_reset_class(PlayerType *player_ptr)
 {
-    const auto new_class_opt = input_numerics("ClassID", 0, PLAYER_CLASS_TYPE_MAX - 1, player_ptr->pclass);
-    if (!new_class_opt) {
+    CandidateSelector cs("Which class: ", 15);
+    constexpr EnumRange classes(PlayerClassType::WARRIOR, PlayerClassType::MAX);
+    auto describe_class = [](auto player_class) { return class_info.at(player_class).title.string(); };
+
+    const auto chosen_class = cs.select(classes, describe_class);
+    if (chosen_class == classes.end()) {
         return;
     }
 
-    const auto new_class_enum = *new_class_opt;
-    const auto new_class = enum2i(new_class_enum);
-    player_ptr->pclass = new_class_enum;
+    const auto chosen_realms = wiz_select_realms(*chosen_class);
+    if (!chosen_realms) {
+        return;
+    }
+
+    player_ptr->pclass = *chosen_class;
     cp_ptr = &class_info.at(player_ptr->pclass);
-    mp_ptr = &class_magics_info[new_class];
+    mp_ptr = &class_magics_info[enum2i(player_ptr->pclass)];
     PlayerClass(player_ptr).init_specific_data();
+    PlayerRealm pr(player_ptr);
+    pr.reset();
+    if (chosen_realms->first != RealmType::NONE) {
+        pr.set(chosen_realms->first, chosen_realms->second);
+    }
     change_birth_flags();
     handle_stuff(player_ptr);
 }
@@ -638,18 +694,16 @@ void wiz_reset_class(PlayerType *player_ptr)
  */
 void wiz_reset_realms(PlayerType *player_ptr)
 {
+    const auto chosen_realms = wiz_select_realms(player_ptr->pclass);
+    if (!chosen_realms) {
+        return;
+    }
+
     PlayerRealm pr(player_ptr);
-    const auto new_realm1 = input_numerics("1st Realm (None=0)", 0, enum2i(RealmType::MAX) - 1, pr.realm1().to_enum());
-    if (!new_realm1) {
-        return;
+    pr.reset();
+    if (chosen_realms->first != RealmType::NONE) {
+        pr.set(chosen_realms->first, chosen_realms->second);
     }
-
-    const auto new_realm2 = input_numerics("2nd Realm (None=0)", 0, enum2i(RealmType::MAX) - 1, pr.realm2().to_enum());
-    if (!new_realm2) {
-        return;
-    }
-
-    pr.set(*new_realm1, *new_realm2);
     change_birth_flags();
     handle_stuff(player_ptr);
 }
