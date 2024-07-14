@@ -87348,6 +87348,71 @@
         "ja": "彼女は元々優しい心の持ち主だったが、とある学園の者に利用され、大罪を犯し大事なものを根こそぎ奪われた。哀れで救いたくなるような者であると同時に軽蔑・嫌悪に値する者でもある。その目は復讐の炎に燃えており、復讐の妨げとなるあなたはどうしようもないゴミとみなされている。",
         "en": "She had a kind heart, but was taken advantage of by someone at a certain school, committed a serious crime, then all of her precious things were burned. She is deserving of contempt and, in her misery, compassion. Her eyes burn with revenge. She counts you, obstructing her revenge, as one of the hopeless scum."
       }
+    },
+    {
+      "id": 1363,
+      "name": {
+        "ja": "地獄の出店",
+        "en": "Hell's market stall"
+      },
+      "symbol": {
+        "character": "7",
+        "color": "Dark Gray"
+      },
+      "level": 30,
+      "hit_point": "30d20",
+      "speed": 10,
+      "rarity": 4,
+      "exp": 300,
+      "alertness": 0,
+      "armor_class": 80,
+      "vision": 10,
+      "blows": [
+        {
+          "method": "BEG",
+          "effect": "EAT_FOOD",
+          "damage_dice": "12d6"
+        },
+        {
+          "method": "BEG",
+          "effect": "EAT_GOLD",
+          "damage_dice": "12d6"
+        },
+        {
+          "method": "BEG",
+          "effect": "EAT_ITEM",
+          "damage_dice": "12d6"
+        },
+        {
+          "method": "BEG",
+          "effect": "EAT_ITEM",
+          "damage_dice": "12d6"
+        }
+      ],
+      "flags": [
+        "EVIL",
+        "UNDEAD",
+        "COLD_BLOOD",
+        "NONLIVING",
+        "NEVER_MOVE",
+        "EMPTY_MIND",
+        "RES_NETH",
+        "NO_CONF",
+        "NO_SLEEP",
+        "NO_FEAR",
+        "DROP_3D2",
+        "DROP_4D2"
+      ],
+      "skill": {
+        "probability": "1_IN_10",
+        "list": [
+          "SHRIEK"
+        ]
+      },
+      "flavor": {
+        "ja": "それは冒険者の来店を待っている。持ち物を狙って…",
+        "en": "It waits for your coming. Aims at your things..."
+      }
     }
   ]
 }
