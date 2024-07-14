@@ -1,6 +1,7 @@
 #pragma once
 
 #include "system/angband.h"
+#include <optional>
 
 enum summon_type : int;
 
@@ -15,6 +16,6 @@ bool cast_summon_octopus(PlayerType *player_ptr);
 bool cast_summon_greater_demon(PlayerType *player_ptr);
 bool summon_kin_player(PlayerType *player_ptr, DEPTH level, POSITION y, POSITION x, BIT_FLAGS mode);
 void mitokohmon(PlayerType *player_ptr);
-int summon_cyber(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, POSITION x);
+int summon_cyber(PlayerType *player_ptr, POSITION y, POSITION x, std::optional<MONSTER_IDX> summoner_m_idx = std::nullopt);
 int activate_hi_summon(PlayerType *player_ptr, POSITION y, POSITION x, bool can_pet);
 void cast_invoke_spirits(PlayerType *player_ptr, DIRECTION dir);

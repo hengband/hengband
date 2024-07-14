@@ -163,11 +163,11 @@ bool switch_activation(PlayerType *player_ptr, ItemEntity **o_ptr_ptr, const Ran
     case RandomArtActType::CHARM_OTHERS:
         return activate_charm_others(player_ptr);
     case RandomArtActType::SUMMON_ANIMAL:
-        (void)summon_specific(player_ptr, -1, player_ptr->y, player_ptr->x, player_ptr->lev, SUMMON_ANIMAL_RANGER, PM_ALLOW_GROUP | PM_FORCE_PET);
+        (void)summon_specific(player_ptr, player_ptr->y, player_ptr->x, player_ptr->lev, SUMMON_ANIMAL_RANGER, PM_ALLOW_GROUP | PM_FORCE_PET);
         return true;
     case RandomArtActType::SUMMON_PHANTOM:
         msg_print(_("幻霊を召喚した。", "You summon a phantasmal servant."));
-        (void)summon_specific(player_ptr, -1, player_ptr->y, player_ptr->x, player_ptr->current_floor_ptr->dun_level, SUMMON_PHANTOM, PM_ALLOW_GROUP | PM_FORCE_PET);
+        (void)summon_specific(player_ptr, player_ptr->y, player_ptr->x, player_ptr->current_floor_ptr->dun_level, SUMMON_PHANTOM, PM_ALLOW_GROUP | PM_FORCE_PET);
         return true;
     case RandomArtActType::SUMMON_ELEMENTAL:
         return cast_summon_elemental(player_ptr, (player_ptr->lev * 3) / 2);
@@ -180,7 +180,7 @@ bool switch_activation(PlayerType *player_ptr, ItemEntity **o_ptr_ptr, const Ran
         return cast_summon_hound(player_ptr, (player_ptr->lev * 3) / 2);
     case RandomArtActType::SUMMON_DAWN:
         msg_print(_("暁の師団を召喚した。", "You summon the Legion of the Dawn."));
-        (void)summon_specific(player_ptr, -1, player_ptr->y, player_ptr->x, player_ptr->current_floor_ptr->dun_level, SUMMON_DAWN, PM_ALLOW_GROUP | PM_FORCE_PET);
+        (void)summon_specific(player_ptr, player_ptr->y, player_ptr->x, player_ptr->current_floor_ptr->dun_level, SUMMON_DAWN, PM_ALLOW_GROUP | PM_FORCE_PET);
         return true;
     case RandomArtActType::SUMMON_OCTOPUS:
         return cast_summon_octopus(player_ptr);

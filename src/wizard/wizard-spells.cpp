@@ -214,7 +214,7 @@ void wiz_summon_random_monster(PlayerType *player_ptr, int num)
     const auto y = player_ptr->y;
     const auto x = player_ptr->x;
     for (auto i = 0; i < num; i++) {
-        if (!summon_specific(player_ptr, 0, y, x, level, SUMMON_NONE, flags)) {
+        if (!summon_specific(player_ptr, y, x, level, SUMMON_NONE, flags)) {
             msg_print_wizard(player_ptr, 1, "Monster isn't summoned correctly...");
             return;
         }

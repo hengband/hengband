@@ -441,7 +441,7 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
         msg_print(_("何かがピカッと光った！", "There is a flash of shimmering light!"));
         const auto num = 2 + randint1(3);
         for (auto i = 0; i < num; i++) {
-            (void)summon_specific(player_ptr, 0, p_pos.y, p_pos.x, player_ptr->current_floor_ptr->dun_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+            (void)summon_specific(player_ptr, p_pos.y, p_pos.x, player_ptr->current_floor_ptr->dun_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
         }
 
         if (player_ptr->current_floor_ptr->dun_level > randint1(100)) /* No nasty effect for low levels */
@@ -586,11 +586,11 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
                     continue;
                 }
 
-                if (auto m_idx = summon_specific(player_ptr, 0, y1, x1, lev, SUMMON_ARMAGE_EVIL, (PM_NO_PET))) {
+                if (auto m_idx = summon_specific(player_ptr, y1, x1, lev, SUMMON_ARMAGE_EVIL, (PM_NO_PET))) {
                     evil_idx = *m_idx;
                 }
 
-                if (auto m_idx = summon_specific(player_ptr, 0, y1, x1, lev, SUMMON_ARMAGE_GOOD, (PM_NO_PET))) {
+                if (auto m_idx = summon_specific(player_ptr, y1, x1, lev, SUMMON_ARMAGE_GOOD, (PM_NO_PET))) {
                     good_idx = *m_idx;
                 }
 
@@ -618,7 +618,7 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
         /* Summon Piranhas */
         const auto num = 1 + player_ptr->current_floor_ptr->dun_level / 20;
         for (auto i = 0; i < num; i++) {
-            (void)summon_specific(player_ptr, 0, p_pos.y, p_pos.x, player_ptr->current_floor_ptr->dun_level, SUMMON_PIRANHAS, (PM_ALLOW_GROUP | PM_NO_PET));
+            (void)summon_specific(player_ptr, p_pos.y, p_pos.x, player_ptr->current_floor_ptr->dun_level, SUMMON_PIRANHAS, (PM_ALLOW_GROUP | PM_NO_PET));
         }
         break;
     }
