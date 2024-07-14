@@ -28,7 +28,6 @@
 #include "status/buff-setter.h"
 #include "status/sight-setter.h"
 #include "system/player-type-definition.h"
-#include "system/spell-info-list.h"
 #include "target/target-getter.h"
 #include "util/dice.h"
 #include "view/display-messages.h"
@@ -43,22 +42,11 @@
  */
 std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
-    bool name = mode == SpellProcessType::NAME;
-    bool desc = mode == SpellProcessType::DESCRIPTION;
     bool info = mode == SpellProcessType::INFO;
     bool cast = mode == SpellProcessType::CAST;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
-
-    auto &list = SpellInfoList::get_instance().spell_list[REALM_CRUSADE];
-
-    if (name) {
-        return list[spell].name;
-    }
-    if (desc) {
-        return list[spell].description;
-    }
 
     switch (spell) {
     case 0: {
@@ -85,14 +73,6 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
     } break;
 
     case 2:
-        if (name) {
-            return _("恐怖除去", "Remove Fear");
-        }
-
-        if (desc) {
-            return _("恐怖を取り除く。", "Removes fear.");
-        }
-
         if (cast) {
             (void)BadStatusSetter(player_ptr).set_fear(0);
         }
@@ -145,14 +125,6 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
     } break;
 
     case 7:
-        if (name) {
-            return _("身体浄化", "Purify");
-        }
-
-        if (desc) {
-            return _("傷、毒、朦朧から全快する。", "Heals all cuts, poisons and being stunned.");
-        }
-
         if (cast) {
             BadStatusSetter bss(player_ptr);
             (void)bss.set_cut(0);
@@ -260,15 +232,6 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
     } break;
 
     case 15: {
-        if (name) {
-            return _("聖なる御言葉", "Holy Word");
-        }
-
-        if (desc) {
-            return _("視界内の邪悪な存在に大きなダメージを与え、体力を回復し、毒、恐怖、朦朧状態、負傷から全快する。",
-                "Damages all evil monsters in sight, heals HP somewhat and completely cures fear, poisons, cuts and being stunned.");
-        }
-
         auto dam_sides = plev * 6;
         auto heal = 100;
         if (info) {
@@ -312,9 +275,7 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
         }
     } break;
 
-    case 18:
-
-    {
+    case 18: {
         int base = 20;
         const Dice dice(1, 20);
 
@@ -491,17 +452,6 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
     } break;
 
     case 31:
-        if (name) {
-            return _("聖戦", "Crusade");
-        }
-
-        if (desc) {
-            return _("視界内の善良なモンスターをペットにしようとし、ならなかった場合及び善良でないモンスターを恐怖させる。さらに多数の加速された騎士を召喚し、"
-                     "ヒーロー、祝福、加速、対邪悪結界を得る。",
-                "Attempts to charm all good monsters in sight and scares all non-charmed monsters. Summons a great number of knights. Gives heroism, bless, "
-                "speed and protection from evil to the caster.");
-        }
-
         if (cast) {
             auto base = 25;
             auto sp_sides = 20 + plev;

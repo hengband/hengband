@@ -26,7 +26,6 @@
 #include "status/sight-setter.h"
 #include "status/temporary-resistance.h"
 #include "system/player-type-definition.h"
-#include "system/spell-info-list.h"
 #include "target/target-getter.h"
 #include "util/dice.h"
 #include "view/display-messages.h"
@@ -40,22 +39,11 @@
  */
 std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
-    bool name = mode == SpellProcessType::NAME;
-    bool desc = mode == SpellProcessType::DESCRIPTION;
     bool info = mode == SpellProcessType::INFO;
     bool cast = mode == SpellProcessType::CAST;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
-
-    auto &list = SpellInfoList::get_instance().spell_list[REALM_DAEMON];
-
-    if (name) {
-        return list[spell].name;
-    }
-    if (desc) {
-        return list[spell].description;
-    }
 
     switch (spell) {
     case 0: {
@@ -284,16 +272,6 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
     } break;
 
     case 17: {
-        if (name) {
-            return _("悪魔のクローク", "Devil Cloak");
-        }
-
-        if (desc) {
-            return _("恐怖を取り除き、一定時間、炎と冷気の耐性、炎のオーラを得る。耐性は装備による耐性に累積する。",
-                "Removes fear. Gives resistance to fire and cold, and aura of fire. These resistances can be added to those from equipment for more powerful "
-                "resistances.");
-        }
-
         TIME_EFFECT base = 20;
         const Dice dice(1, 20);
         if (info) {

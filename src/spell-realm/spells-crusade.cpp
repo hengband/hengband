@@ -90,8 +90,7 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
             continue;
         }
 
-        auto should_cast = in_bounds(&floor, pos_explode.y, pos_explode.x);
-        should_cast &= !cave_stop_disintegration(&floor, pos_explode.y, pos_explode.x);
+        auto should_cast = in_bounds(&floor, pos_explode.y, pos_explode.x) && !cave_stop_disintegration(&floor, pos_explode.y, pos_explode.x);
         should_cast &= in_disintegration_range(&floor, pos_target.y, pos_target.x, pos_explode.y, pos_explode.x);
         if (!should_cast) {
             continue;

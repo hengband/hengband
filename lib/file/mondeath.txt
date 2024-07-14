@@ -93,7 +93,7 @@ N:1356:Laffey II
 says, 'My battle... isn't over yet... Nope.'
 
 N:1362:Mika Misono, a witch of the Tea Party
-says with crying, 'I... I haven't revenged on her yet... no...' Her halo is broken then she fall down.
+sobs and says, 'I... I haven't wreaked my revenge on her yet... no...' Her halo breaks, and then she falls down.
 
 N:*:Default
 shouts, 'AAAARRRGGGHHH!!!'

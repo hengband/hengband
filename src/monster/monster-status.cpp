@@ -20,6 +20,7 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
+#include "tracking/health-bar-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #if JP
@@ -354,7 +355,9 @@ void process_monsters_mtimed(PlayerType *player_ptr, int mtimed_idx)
 
     /* Process the monsters (backwards) */
     for (auto i = floor_ptr->mproc_max[mtimed_idx] - 1; i >= 0; i--) {
-        process_monsters_mtimed_aux(player_ptr, cur_mproc_list[i], mtimed_idx);
+        const auto m_idx = cur_mproc_list[i];
+        process_monsters_mtimed_aux(player_ptr, m_idx, mtimed_idx);
+        HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
     }
 }
 

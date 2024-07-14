@@ -25,6 +25,7 @@
 #include "player-status/player-stealth.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
+#include "player/player-realm.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
 #include "player/race-info-table.h"
@@ -532,7 +533,7 @@ BIT_FLAGS has_xtra_might(PlayerType *player_ptr)
 BIT_FLAGS has_esp_evil(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_ESP_EVIL);
-    if (player_ptr->realm1 == REALM_HEX) {
+    if (PlayerRealm(player_ptr).is_realm_hex()) {
         if (SpellHex(player_ptr).is_spelling_specific(HEX_DETECT_EVIL)) {
             result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
         }
@@ -711,7 +712,8 @@ void check_no_flowed(PlayerType *player_ptr)
         return;
     }
 
-    if (!player_ptr->realm1) {
+    PlayerRealm pr(player_ptr);
+    if (!pr.realm1().is_available()) {
         player_ptr->no_flowed = false;
         return;
     }
@@ -739,16 +741,16 @@ void check_no_flowed(PlayerType *player_ptr)
     }
 
     PlayerClass pc(player_ptr);
-    if (has_sw && ((player_ptr->realm1 == REALM_NATURE) || (player_ptr->realm2 == REALM_NATURE) || pc.equals(PlayerClassType::SORCERER))) {
-        const magic_type *s_ptr = &mp_ptr->info[REALM_NATURE - 1][SPELL_SW];
-        if (player_ptr->lev >= s_ptr->slevel) {
+    if (has_sw && (pr.realm1().equals(RealmType::NATURE) || pr.realm2().equals(RealmType::NATURE) || pc.equals(PlayerClassType::SORCERER))) {
+        const auto &spell = PlayerRealm::get_spell_info(RealmType::NATURE, SPELL_SW);
+        if (player_ptr->lev >= spell.slevel) {
             player_ptr->no_flowed = true;
         }
     }
 
-    if (has_kabe && ((player_ptr->realm1 == REALM_CRAFT) || (player_ptr->realm2 == REALM_CRAFT) || pc.equals(PlayerClassType::SORCERER))) {
-        const magic_type *s_ptr = &mp_ptr->info[REALM_CRAFT - 1][SPELL_WALL];
-        if (player_ptr->lev >= s_ptr->slevel) {
+    if (has_kabe && (pr.realm1().equals(RealmType::CRAFT) || pr.realm2().equals(RealmType::CRAFT) || pc.equals(PlayerClassType::SORCERER))) {
+        const auto &spell = PlayerRealm::get_spell_info(RealmType::CRAFT, SPELL_WALL);
+        if (player_ptr->lev >= spell.slevel) {
             player_ptr->no_flowed = true;
         }
     }

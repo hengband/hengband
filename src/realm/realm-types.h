@@ -1,26 +1,27 @@
 #pragma once
 
+#include "util/enum-converter.h"
 #include "util/enum-range.h"
 
-enum magic_realm_type {
-    REALM_NONE = 0,
-    REALM_LIFE = 1,
-    REALM_SORCERY = 2,
-    REALM_NATURE = 3,
-    REALM_CHAOS = 4,
-    REALM_DEATH = 5,
-    REALM_TRUMP = 6,
-    REALM_ARCANE = 7,
-    REALM_CRAFT = 8,
-    REALM_DAEMON = 9,
-    REALM_CRUSADE = 10,
-    MAX_MAGIC = 10,
-    MIN_TECHNIC = 16,
-    REALM_MUSIC = 16,
-    REALM_HISSATSU = 17,
-    REALM_HEX = 18,
-    REALM_MAX,
+enum class RealmType {
+    NONE = 0,
+    LIFE = 1,
+    SORCERY = 2,
+    NATURE = 3,
+    CHAOS = 4,
+    DEATH = 5,
+    TRUMP = 6,
+    ARCANE = 7,
+    CRAFT = 8,
+    DAEMON = 9,
+    CRUSADE = 10,
+    MUSIC = 16,
+    HISSATSU = 17,
+    HEX = 18,
+    MAX,
 };
 
-constexpr auto MAGIC_REALM_RANGE = EnumRangeInclusive(REALM_LIFE, REALM_CRUSADE);
-constexpr auto TECHNIC_REALM_RANGE = EnumRangeInclusive(REALM_MUSIC, REALM_HEX);
+constexpr auto MAGIC_REALM_RANGE = EnumRangeInclusive(RealmType::LIFE, RealmType::CRUSADE);
+constexpr auto TECHNIC_REALM_RANGE = EnumRangeInclusive(RealmType::MUSIC, RealmType::HEX);
+constexpr auto MAX_MAGIC = std::ssize(MAGIC_REALM_RANGE);
+constexpr auto MIN_TECHNIC = enum2i(RealmType::MUSIC);

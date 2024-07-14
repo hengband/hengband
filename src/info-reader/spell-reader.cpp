@@ -11,10 +11,10 @@
 /*!
  * @brief JSON Objectから呪文領域IDを取得する
  * @param spell_data 情報の格納されたJSON Object
- * @param realm_id 呪文領域ID
+ * @param realm 呪文領域
  * @return エラーコード
  */
-static errr set_realm(const nlohmann::json &spell_data, int &realm_id)
+static errr set_realm(const nlohmann::json &spell_data, RealmType &realm)
 {
     if (spell_data.is_null()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
@@ -25,11 +25,11 @@ static errr set_realm(const nlohmann::json &spell_data, int &realm_id)
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto realm = realms_list.find(realmname_obj.get<std::string>());
-    if (realm == realms_list.end()) {
+    const auto it = realms_list.find(realmname_obj.get<std::string>());
+    if (it == realms_list.end()) {
         return PARSE_ERROR_OUT_OF_BOUNDS;
     }
-    realm_id = realm->second + 1; // 0-origin to 1-origin
+    realm = it->second;
     return PARSE_ERROR_NONE;
 }
 
@@ -104,19 +104,18 @@ static errr set_book_data(const nlohmann::json &spell_data, std::vector<SpellInf
 /*!
  * @brief 職業魔法情報(ClassMagicDefinitions)のパース関数
  * @param buf テキスト列
- * @param head ヘッダ構造体
+ * @param spell_list パースした結果を格納する領域
  * @return エラーコード
  */
-errr parse_spell_info(nlohmann::json &spell_data, angband_header *)
+errr parse_spell_info(nlohmann::json &spell_data, std::vector<std::vector<SpellInfo>> &spell_list)
 {
-    int realm_id;
+    RealmType realm_id;
     if (auto err = set_realm(spell_data, realm_id)) {
         msg_format(_("領域名読込失敗。ID: '%d'。", "Failed to load realm name. ID: '%d'."), error_idx);
         return err;
     }
 
-    auto &spell_info_list = SpellInfoList::get_instance();
-    auto &realm_spell_list = spell_info_list.spell_list[realm_id];
+    auto &realm_spell_list = spell_list[enum2i(realm_id)];
 
     if (auto err = set_book_data(spell_data, realm_spell_list)) {
         msg_format(_("呪文詳細読込失敗。ID: '%d'。", "Failed to load spell data. ID: '%d'."), error_idx);

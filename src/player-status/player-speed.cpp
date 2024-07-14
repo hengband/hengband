@@ -13,6 +13,7 @@
 #include "player-info/race-info.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
+#include "player/player-realm.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
@@ -195,7 +196,7 @@ int16_t PlayerSpeed::time_effect_bonus()
         bonus -= 10;
     }
 
-    if (this->player_ptr->realm1 == REALM_HEX) {
+    if (PlayerRealm(this->player_ptr).is_realm_hex()) {
         if (SpellHex(this->player_ptr).is_spelling_specific(HEX_SHOCK_CLOAK)) {
             bonus += 3;
         }

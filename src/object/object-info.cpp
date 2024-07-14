@@ -14,7 +14,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "player-base/player-class.h"
 #include "player/player-realm.h"
-#include "realm/realm-names-table.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "util/int-char-converter.h"
@@ -109,17 +108,19 @@ bool check_book_realm(PlayerType *player_ptr, const BaseitemKey &bi_key)
     }
 
     const auto tval = bi_key.tval();
+    const auto book_realm = PlayerRealm::get_realm_of_book(tval);
     PlayerClass pc(player_ptr);
     if (pc.equals(PlayerClassType::SORCERER)) {
-        return is_magic(tval2realm(tval));
+        return PlayerRealm::is_magic(book_realm);
     } else if (pc.equals(PlayerClassType::RED_MAGE)) {
-        if (is_magic(tval2realm(tval))) {
-            return ((tval == ItemKindType::ARCANE_BOOK) || (bi_key.sval() < 2));
+        if (!PlayerRealm::is_magic(book_realm)) {
+            return false;
         }
+        return ((book_realm == RealmType::ARCANE) || (bi_key.sval() < 2));
     }
 
     PlayerRealm pr(player_ptr);
-    return (pr.realm1().get_book() == tval) || (pr.realm2().get_book() == tval);
+    return pr.realm1().equals(book_realm) || pr.realm2().equals(book_realm);
 }
 
 ItemEntity *ref_item(PlayerType *player_ptr, INVENTORY_IDX i_idx)

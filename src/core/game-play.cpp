@@ -70,7 +70,6 @@
 #include "player/player-status.h"
 #include "player/process-name.h"
 #include "racial/racial-android.h"
-#include "realm/realm-names-table.h"
 #include "save/save.h"
 #include "spell/spells-status.h"
 #include "spell/technic-info-table.h"

@@ -17,7 +17,7 @@
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "player-info/class-info.h"
-#include "realm/realm-names-table.h"
+#include "player/player-realm.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-util.h"
 #include "system/angband-system.h"
@@ -182,11 +182,10 @@ static SpoilerOutputResultType spoil_player_spell()
 
     PlayerType dummy_p;
     dummy_p.lev = 1;
-    for (auto c = 0; c < PLAYER_CLASS_TYPE_MAX; c++) {
-        auto class_ptr = &class_info.at(i2enum<PlayerClassType>(c));
-        spoil_out(format("[[Class: %s]]\n", class_ptr->title.data()));
+    for (const auto pclass : EnumRange(PlayerClassType::WARRIOR, PlayerClassType::MAX)) {
+        spoil_out(format("[[Class: %s]]\n", class_info.at(pclass).title.data()));
 
-        auto magic_ptr = &class_magics_info[c];
+        const auto *magic_ptr = &class_magics_info[enum2i(pclass)];
         std::string book_name = _("なし", "None");
         if (magic_ptr->spell_book != ItemKindType::NONE) {
             ItemEntity item({ magic_ptr->spell_book, 0 });
@@ -198,24 +197,30 @@ static SpoilerOutputResultType spoil_player_spell()
         }
 
         constexpr auto mes = "BookType:%s Stat:%s %s%s%sType:%d Weight:%d\n";
-        const auto &spell = wiz_spell_stat[magic_ptr->spell_stat];
+        const auto &spell_stat_txt = wiz_spell_stat[magic_ptr->spell_stat];
         auto trainable = magic_ptr->is_spell_trainable ? "Trainable " : "";
         auto glove = magic_ptr->has_glove_mp_penalty ? "GlovePenalty " : "";
         auto failcap = magic_ptr->has_magic_fail_rate_cap ? "5%FailCap " : "";
         auto spell_type = enum2i(magic_ptr->spell_book);
-        spoil_out(format(mes, book_name.data(), spell.data(), glove, failcap, trainable, spell_type, magic_ptr->spell_weight));
+        spoil_out(format(mes, book_name.data(), spell_stat_txt.data(), glove, failcap, trainable, spell_type, magic_ptr->spell_weight));
         if (magic_ptr->spell_book == ItemKindType::NONE) {
             spoil_out(_("呪文なし\n\n", "No spells.\n\n"));
             continue;
         }
 
-        for (int16_t r = 1; r < MAX_MAGIC; r++) {
-            spoil_out(format("[Realm: %s]\n", realm_names[r].data()));
+        const auto choices = PlayerRealm::get_realm1_choices(pclass) | PlayerRealm::get_realm2_choices(pclass);
+        const auto is_every_magic = pclass == PlayerClassType::SORCERER || pclass == PlayerClassType::RED_MAGE;
+        for (const auto realm : EnumRange(RealmType::LIFE, RealmType::MAX)) {
+            if (!(is_every_magic && PlayerRealm::is_magic(realm)) && choices.has_not(realm)) {
+                continue;
+            }
+
+            spoil_out(format("[Realm: %s]\n", PlayerRealm::get_name(realm).data()));
             spoil_out("Name                     Lv Cst Dif Exp\n");
             for (SPELL_IDX i = 0; i < 32; i++) {
-                auto spell_ptr = &magic_ptr->info[r][i];
-                const auto spell_name = exe_spell(&dummy_p, r, i, SpellProcessType::NAME);
-                spoil_out(format("%-24s %2d %3d %3d %3d\n", spell_name->data(), spell_ptr->slevel, spell_ptr->smana, spell_ptr->sfail, spell_ptr->sexp));
+                const auto &spell = PlayerRealm::get_spell_info(realm, i, pclass);
+                const auto &spell_name = PlayerRealm::get_spell_name(realm, i);
+                spoil_out(format("%-24s %2d %3d %3d %3d\n", spell_name.data(), spell.slevel, spell.smana, spell.sfail, spell.sexp));
             }
             spoil_out("\n");
         }

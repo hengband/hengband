@@ -22,10 +22,10 @@
 #include "object/object-info.h"
 #include "pet/pet-util.h"
 #include "player-info/alignment.h"
+#include "player/player-realm.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
 #include "player/race-info-table.h"
-#include "realm/realm-names-table.h"
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/angband-system.h"
@@ -428,11 +428,11 @@ static void dump_aux_realm_history(PlayerType *player_ptr, FILE *fff)
     }
 
     fputc('\n', fff);
-    for (int i = 0; i < MAX_MAGIC; i++) {
-        if (!(player_ptr->old_realm & 1UL << i)) {
+    for (auto realm : MAGIC_REALM_RANGE) {
+        if (!(player_ptr->old_realm & (1UL << (enum2i(realm) - 1)))) {
             continue;
         }
-        fprintf(fff, _("\n あなたはかつて%s魔法を使えた。", "\n You were able to use %s magic before."), realm_names[i + 1].data());
+        fprintf(fff, _("\n あなたはかつて%s魔法を使えた。", "\n You were able to use %s magic before."), PlayerRealm::get_name(realm).data());
     }
 
     fputc('\n', fff);

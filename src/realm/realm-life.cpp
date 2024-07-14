@@ -22,7 +22,6 @@
 #include "status/temporary-resistance.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
-#include "system/spell-info-list.h"
 #include "target/target-getter.h"
 #include "util/dice.h"
 
@@ -35,22 +34,11 @@
  */
 std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
-    bool name = mode == SpellProcessType::NAME;
-    bool desc = mode == SpellProcessType::DESCRIPTION;
     bool info = mode == SpellProcessType::INFO;
     bool cast = mode == SpellProcessType::CAST;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
-
-    auto &list = SpellInfoList::get_instance().spell_list[REALM_LIFE];
-
-    if (name) {
-        return list[spell].name;
-    }
-    if (desc) {
-        return list[spell].description;
-    }
 
     switch (spell) {
     case 0: {
@@ -130,14 +118,6 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
     } break;
 
     case 6:
-        if (name) {
-            return _("解毒", "Cure Poison");
-        }
-
-        if (desc) {
-            return _("体内の毒を取り除く。", "Cures yourself of any poisons.");
-        }
-
         if (cast) {
             (void)BadStatusSetter(player_ptr).set_poison(0);
         }

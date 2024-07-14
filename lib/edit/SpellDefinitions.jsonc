@@ -4210,6 +4210,1269 @@
           ]
         }
       ]
+    },
+    {
+      "name": "MUSIC",
+      "books": [
+        {
+          "name": {
+            "ja": "[見習い教本]",
+            "en": "[Apprentice Handbook]"
+          },
+          "spells": [
+            {
+              "spell_id": 0,
+              "spell_tag": "Song_of_Holding",
+              "name": {
+                "ja": "遅鈍の歌",
+                "en": "Song of Holding"
+              },
+              "description": {
+                "ja": "視界内の全てのモンスターを減速させる。抵抗されると無効。",
+                "en": "Attempts to slow all monsters in sight."
+              }
+            },
+            {
+              "spell_id": 1,
+              "spell_tag": "Song_of_Blessing",
+              "name": {
+                "ja": "祝福の歌",
+                "en": "Song of Blessing"
+              },
+              "description": {
+                "ja": "命中率とACのボーナスを得る。",
+                "en": "Gives a bonus to hit and AC for a few turns."
+              }
+            },
+            {
+              "spell_id": 2,
+              "spell_tag": "Wrecking_Note",
+              "name": {
+                "ja": "崩壊の音色",
+                "en": "Wrecking Note"
+              },
+              "description": {
+                "ja": "轟音のボルトを放つ。",
+                "en": "Fires a bolt of sound."
+              }
+            },
+            {
+              "spell_id": 3,
+              "spell_tag": "Stun_Pattern",
+              "name": {
+                "ja": "朦朧の旋律",
+                "en": "Stun Pattern"
+              },
+              "description": {
+                "ja": "視界内の全てのモンスターを朦朧させる。抵抗されると無効。",
+                "en": "Attempts to stun all monsters in sight."
+              }
+            },
+            {
+              "spell_id": 4,
+              "spell_tag": "Flow_of_Life",
+              "name": {
+                "ja": "生命の流れ",
+                "en": "Flow of Life"
+              },
+              "description": {
+                "ja": "体力を少し回復させる。",
+                "en": "Heals HP a little."
+              }
+            },
+            {
+              "spell_id": 5,
+              "spell_tag": "Song_of_the_Sun",
+              "name": {
+                "ja": "太陽の歌",
+                "en": "Song of the Sun"
+              },
+              "description": {
+                "ja": "光源が照らしている範囲か部屋全体を永久に明るくする。",
+                "en": "Lights up nearby area and the inside of a room permanently."
+              }
+            },
+            {
+              "spell_id": 6,
+              "spell_tag": "Song_of_Fear",
+              "name": {
+                "ja": "恐怖の歌",
+                "en": "Song of Fear"
+              },
+              "description": {
+                "ja": "視界内の全てのモンスターを恐怖させる。抵抗されると無効。",
+                "en": "Attempts to scare all monsters in sight."
+              }
+            },
+            {
+              "spell_id": 7,
+              "spell_tag": "Heroic_Ballad",
+              "name": {
+                "ja": "戦いの歌",
+                "en": "Heroic Ballad"
+              },
+              "description": {
+                "ja": "ヒーロー気分になる。",
+                "en": "Removes fear. Gives a bonus to hit for a while. Heals you for 10 HP."
+              }
+            }
+          ]
+        },
+        {
+          "name": {
+            "ja": "[詩人楽曲集]",
+            "en": "[Minstrel's Music]"
+          },
+          "spells": [
+            {
+              "spell_id": 8,
+              "spell_tag": "Clairaudience",
+              "name": {
+                "ja": "霊的知覚",
+                "en": "Clairaudience"
+              },
+              "description": {
+                "ja": "近くの罠/扉/階段を感知する。レベル15で全てのモンスター、20で財宝とアイテムを感知できるようになる。レベル25で周辺の地形を感知し、40でその階全体を永久に照らし、ダンジョン内のすべてのアイテムを感知する。この効果は歌い続けることで順に起こる。",
+                "en": "Detects traps, doors and stairs in your vicinity. And detects all monsters at level 15, treasures and items at level 20. Maps nearby area at level 25. Lights and know the whole level at level 40. These effects accumulate as the song continues."
+              }
+            },
+            {
+              "spell_id": 9,
+              "spell_tag": "Soul Shriek",
+              "name": {
+                "ja": "魂の歌",
+                "en": "Soul Shriek"
+              },
+              "description": {
+                "ja": "視界内の全てのモンスターに対して精神攻撃を行う。",
+                "en": "Damages all monsters in sight with PSI damages."
+              }
+            },
+            {
+              "spell_id": 10,
+              "spell_tag": "Song_of_Lore",
+              "name": {
+                "ja": "知識の歌",
+                "en": "Song of Lore"
+              },
+              "description": {
+                "ja": "自分のいるマスと隣りのマスに落ちているアイテムを鑑定する。",
+                "en": "Identifies all items which are in the adjacent squares."
+              }
+            },
+            {
+              "spell_id": 11,
+              "spell_tag": "Hiding_Tune",
+              "name": {
+                "ja": "隠遁の歌",
+                "en": "Hiding Tune"
+              },
+              "description": {
+                "ja": "隠密行動能力を上昇させる。",
+                "en": "Gives improved stealth."
+              }
+            },
+            {
+              "spell_id": 12,
+              "spell_tag": "Illusion_Pattern",
+              "name": {
+                "ja": "幻影の旋律",
+                "en": "Illusion Pattern"
+              },
+              "description": {
+                "ja": "視界内の全てのモンスターを混乱させる。抵抗されると無効。",
+                "en": "Attempts to confuse all monsters in sight."
+              }
+            },
+            {
+              "spell_id": 13,
+              "spell_tag": "Doomcall",
+              "name": {
+                "ja": "破滅の叫び",
+                "en": "Doomcall"
+              },
+              "description": {
+                "ja": "視界内の全てのモンスターに対して轟音攻撃を行う。",
+                "en": "Damages all monsters in sight with booming sound."
+              }
+            },
+            {
+              "spell_id": 14,
+              "spell_tag": "Firiels_Song",
+              "name": {
+                "ja": "フィリエルの歌",
+                "en": "Firiel's Song"
+              },
+              "description": {
+                "ja": "周囲の死体や骨を生き返す。",
+                "en": "Resurrects nearby corpses and skeletons. And makes them your pets."
+              }
+            },
+            {
+              "spell_id": 15,
+              "spell_tag": "Fellowship_Chant",
+              "name": {
+                "ja": "旅の仲間",
+                "en": "Fellowship Chant"
+              },
+              "description": {
+                "ja": "視界内の全てのモンスターを魅了する。抵抗されると無効。",
+                "en": "Attempts to charm all monsters in sight."
+              }
+            }
+          ]
+        },
+        {
+          "name": {
+            "ja": "[リヴェンデルの竪琴]",
+            "en": "[Harps of Rivendell]"
+          },
+          "spells": [
+            {
+              "spell_id": 16,
+              "spell_tag": "Hrus_March",
+              "name": {
+                "ja": "フルゥの行進曲",
+                "en": "Hru's March"
+              },
+              "description": {
+                "ja": "壁を掘り進む。自分の足元のアイテムは蒸発する。",
+                "en": "Makes you be able to burrow into walls. Objects under your feet evaporate."
+              }
+            },
+            {
+              "spell_id": 17,
+              "spell_tag": "Finrods_Resistance",
+              "name": {
+                "ja": "フィンロドの護り",
+                "en": "Finrod's Resistance"
+              },
+              "description": {
+                "ja": "酸、電撃、炎、冷気、毒に対する耐性を得る。装備による耐性に累積する。",
+                "en": "Gives resistance to fire, cold, electricity, acid and poison. These resistances can be added to those from equipment for more powerful resistances."
+              }
+            },
+            {
+              "spell_id": 18,
+              "spell_tag": "Hobbit_Melodies",
+              "name": {
+                "ja": "ホビットのメロディ",
+                "en": "Hobbit Melodies"
+              },
+              "description": {
+                "ja": "加速する。",
+                "en": "Hastes you."
+              }
+            },
+            {
+              "spell_id": 19,
+              "spell_tag": "World_Contortion",
+              "name": {
+                "ja": "歪んだ世界",
+                "en": "World Contortion"
+              },
+              "description": {
+                "ja": "近くのモンスターをテレポートさせる。抵抗されると無効。",
+                "en": "Teleports all nearby monsters away unless resisted."
+              }
+            },
+            {
+              "spell_id": 20,
+              "spell_tag": "Dispelling_Chant",
+              "name": {
+                "ja": "退散の歌",
+                "en": "Dispelling Chant"
+              },
+              "description": {
+                "ja": "視界内の全てのモンスターにダメージを与える。邪悪なモンスターに特に大きなダメージを与える。",
+                "en": "Damages all monsters in sight. Hurts evil monsters greatly."
+              }
+            },
+            {
+              "spell_id": 21,
+              "spell_tag": "The_Voice_of_Saruman",
+              "name": {
+                "ja": "サルマンの甘言",
+                "en": "The Voice of Saruman"
+              },
+              "description": {
+                "ja": "視界内の全てのモンスターを減速させ、眠らせようとする。抵抗されると無効。",
+                "en": "Attempts to slow and put to sleep all monsters in sight."
+              }
+            },
+            {
+              "spell_id": 22,
+              "spell_tag": "Song_of_the_Tempest",
+              "name": {
+                "ja": "嵐の音色",
+                "en": "Song of the Tempest"
+              },
+              "description": {
+                "ja": "轟音のビームを放つ。",
+                "en": "Fires a beam of sound."
+              }
+            },
+            {
+              "spell_id": 23,
+              "spell_tag": "Ambarkanta",
+              "name": {
+                "ja": "もう一つの世界",
+                "en": "Ambarkanta"
+              },
+              "description": {
+                "ja": "現在の階を再構成する。",
+                "en": "Recreates current dungeon level."
+              }
+            }
+          ]
+        },
+        {
+          "name": {
+            "ja": "[ベレリアンドの詩]",
+            "en": "[Lays of Beleriand]"
+          },
+          "spells": [
+            {
+              "spell_id": 24,
+              "spell_tag": "Wrecking_Pattern",
+              "name": {
+                "ja": "破壊の旋律",
+                "en": "Wrecking Pattern"
+              },
+              "description": {
+                "ja": "周囲のダンジョンを揺らし、壁と床をランダムに入れ変える。",
+                "en": "Shakes dungeon structure, and results in random swapping of floors and walls."
+              }
+            },
+            {
+              "spell_id": 25,
+              "spell_tag": "Stationary_Shriek",
+              "name": {
+                "ja": "停滞の歌",
+                "en": "Stationary Shriek"
+              },
+              "description": {
+                "ja": "視界内の全てのモンスターを麻痺させようとする。抵抗されると無効。",
+                "en": "Attempts to freeze all monsters in sight."
+              }
+            },
+            {
+              "spell_id": 26,
+              "spell_tag": "Elbereths_Chant",
+              "name": {
+                "ja": "エルベレスの聖歌",
+                "en": "Elbereth's Chant"
+              },
+              "description": {
+                "ja": "自分のいる床の上に、モンスターが通り抜けたり召喚されたりすることができなくなるルーンを描く。",
+                "en": "Sets a rune on the floor beneath you. If you are on a rune, monsters cannot attack you but can try to break the rune."
+              }
+            },
+            {
+              "spell_id": 27,
+              "spell_tag": "The_Heros_Poem",
+              "name": {
+                "ja": "英雄の詩",
+                "en": "The Hero's Poem"
+              },
+              "description": {
+                "ja": "加速し、ヒーロー気分になり、視界内の全てのモンスターにダメージを与える。",
+                "en": "Hastes you. Gives heroism. Damages all monsters in sight."
+              }
+            },
+            {
+              "spell_id": 28,
+              "spell_tag": "Relief_of_Yavanna",
+              "name": {
+                "ja": "ヤヴァンナの助け",
+                "en": "Relief of Yavanna"
+              },
+              "description": {
+                "ja": "強力な回復の歌で、負傷と朦朧状態も全快する。",
+                "en": "Powerful healing song. Also completely heals cuts and being stunned."
+              }
+            },
+            {
+              "spell_id": 29,
+              "spell_tag": "Goddess_rebirth",
+              "name": {
+                "ja": "再生の歌",
+                "en": "Goddess's rebirth"
+              },
+              "description": {
+                "ja": "すべてのステータスと経験値を回復する。",
+                "en": "Restores all stats and experience."
+              }
+            },
+            {
+              "spell_id": 30,
+              "spell_tag": "Wizardry_of_Sauron",
+              "name": {
+                "ja": "サウロンの魔術",
+                "en": "Wizardry of Sauron"
+              },
+              "description": {
+                "ja": "非常に強力でごく小さい轟音の球を放つ。",
+                "en": "Fires an extremely powerful tiny ball of sound."
+              }
+            },
+            {
+              "spell_id": 31,
+              "spell_tag": "Fingolfins_Challenge",
+              "name": {
+                "ja": "フィンゴルフィンの挑戦",
+                "en": "Fingolfin's Challenge"
+              },
+              "description": {
+                "ja": "ダメージを受けなくなるバリアを張る。",
+                "en": "Generates a barrier which completely protects you from almost all damage."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HISSATSU",
+      "books": [
+        {
+          "name": {
+            "ja": "[武芸諸譜]",
+            "en": "[Bugei Shofu]"
+          },
+          "spells": [
+            {
+              "spell_id": 0,
+              "spell_tag": "Tobi-Izuna",
+              "name": {
+                "ja": "飛飯綱",
+                "en": "Tobi-Izuna"
+              },
+              "description": {
+                "ja": "2マス離れたところにいるモンスターを攻撃する。",
+                "en": "Attacks a monster two squares away."
+              }
+            },
+            {
+              "spell_id": 1,
+              "spell_tag": "3-Way_Attack",
+              "name": {
+                "ja": "五月雨斬り",
+                "en": "3-Way Attack"
+              },
+              "description": {
+                "ja": "3方向に対して攻撃する。",
+                "en": "Attacks in 3 directions at one time."
+              }
+            },
+            {
+              "spell_id": 2,
+              "spell_tag": "Boomerang",
+              "name": {
+                "ja": "ブーメラン",
+                "en": "Boomerang"
+              },
+              "description": {
+                "ja": "武器を手元に戻ってくるように投げる。戻ってこないこともある。",
+                "en": "Throws current weapon. It'll return to your hand unless the action failed."
+              }
+            },
+            {
+              "spell_id": 3,
+              "spell_tag": "Burning_Strike",
+              "name": {
+                "ja": "焔霊",
+                "en": "Burning Strike"
+              },
+              "description": {
+                "ja": "火炎耐性のないモンスターに大ダメージを与える。",
+                "en": "Attacks a monster with more damage unless it has resistance to fire."
+              }
+            },
+            {
+              "spell_id": 4,
+              "spell_tag": "Detect_Ferocity",
+              "name": {
+                "ja": "殺気感知",
+                "en": "Detect Ferocity"
+              },
+              "description": {
+                "ja": "近くの思考することができるモンスターを感知する。",
+                "en": "Detects all monsters except the mindless in your vicinity."
+              }
+            },
+            {
+              "spell_id": 5,
+              "spell_tag": "Strike_to_Stun",
+              "name": {
+                "ja": "みね打ち",
+                "en": "Strike to Stun"
+              },
+              "description": {
+                "ja": "相手にダメージを与えないが、朦朧とさせる。",
+                "en": "Attempts to stun a monster next to you."
+              }
+            },
+            {
+              "spell_id": 6,
+              "spell_tag": "Counter",
+              "name": {
+                "ja": "カウンター",
+                "en": "Counter"
+              },
+              "description": {
+                "ja": "相手に攻撃されたときに反撃する。反撃するたびにMPを消費。",
+                "en": "Prepares to counterattack. When attacked by a monster, strikes back using SP each time."
+              }
+            },
+            {
+              "spell_id": 7,
+              "spell_tag": "Harainuke",
+              "name": {
+                "ja": "払い抜け",
+                "en": "Harainuke"
+              },
+              "description": {
+                "ja": "攻撃した後、反対側に抜ける。",
+                "en": "In one action, attacks a monster with your weapons normally and then moves to the space beyond the monster if that space is not blocked."
+              }
+            }
+          ]
+        },
+        {
+          "name": {
+            "ja": "[柳生武芸帳]",
+            "en": "[Yagyuu Bugeichou]"
+          },
+          "spells": [
+            {
+              "spell_id": 8,
+              "spell_tag": "Serpents_Tongue",
+              "name": {
+                "ja": "サーペンツタン",
+                "en": "Serpent's Tongue"
+              },
+              "description": {
+                "ja": "毒耐性のないモンスターに大ダメージを与える。",
+                "en": "Attacks a monster with more damage unless it has resistance to poison."
+              }
+            },
+            {
+              "spell_id": 9,
+              "spell_tag": "Zammaken",
+              "name": {
+                "ja": "斬魔剣弐の太刀",
+                "en": "Zammaken"
+              },
+              "description": {
+                "ja": "生命のない邪悪なモンスターに大ダメージを与えるが、他のモンスターには全く効果がない。",
+                "en": "Attacks an evil unliving monster with great damage. Has no effect on other monsters."
+              }
+            },
+            {
+              "spell_id": 10,
+              "spell_tag": "Wind_Blast",
+              "name": {
+                "ja": "裂風剣",
+                "en": "Wind Blast"
+              },
+              "description": {
+                "ja": "攻撃した相手を後方へ吹き飛ばす。",
+                "en": "Attacks an adjacent monster and blows it away."
+              }
+            },
+            {
+              "spell_id": 11,
+              "spell_tag": "Judge",
+              "name": {
+                "ja": "刀匠の目利き",
+                "en": "Judge"
+              },
+              "description": {
+                "ja": "武器・防具を1つ識別する。レベル45以上で武器・防具の能力を完全に知ることができる。",
+                "en": "Identifies a weapon or armor. *Identifies* the item at level 45."
+              }
+            },
+            {
+              "spell_id": 12,
+              "spell_tag": "Rock_Smash",
+              "name": {
+                "ja": "破岩斬",
+                "en": "Rock Smash"
+              },
+              "description": {
+                "ja": "岩を壊し、岩石系のモンスターに大ダメージを与える。",
+                "en": "Breaks rock or greatly damages a monster made of rocks."
+              }
+            },
+            {
+              "spell_id": 13,
+              "spell_tag": "Midare-Setsugekka",
+              "name": {
+                "ja": "乱れ雪月花",
+                "en": "Midare-Setsugekka"
+              },
+              "description": {
+                "ja": "攻撃回数が増え、冷気耐性のないモンスターに大ダメージを与える。",
+                "en": "Attacks a monster with an increased number of attacks and more damage unless it has resistance to cold."
+              }
+            },
+            {
+              "spell_id": 14,
+              "spell_tag": "Spot_Aiming",
+              "name": {
+                "ja": "急所突き",
+                "en": "Spot Aiming"
+              },
+              "description": {
+                "ja": "モンスターを一撃で倒す攻撃を繰り出す。失敗すると1点しかダメージを与えられない。",
+                "en": "Attempts to kill a monster instantly. If that fails, causes only 1HP of damage."
+              }
+            },
+            {
+              "spell_id": 15,
+              "spell_tag": "Majingiri",
+              "name": {
+                "ja": "魔神斬り",
+                "en": "Majingiri"
+              },
+              "description": {
+                "ja": "会心の一撃で攻撃する。攻撃がかわされやすい。",
+                "en": "Attempts to attack with a critical hit, but this attack is easy to evade for a monster."
+              }
+            }
+          ]
+        },
+        {
+          "name": {
+            "ja": "[五輪書]",
+            "en": "[Gorinnosho]"
+          },
+          "spells": [
+            {
+              "spell_id": 16,
+              "spell_tag": "Desperate_Attack",
+              "name": {
+                "ja": "捨て身",
+                "en": "Desperate Attack"
+              },
+              "description": {
+                "ja": "強力な攻撃を繰り出す。次のターンまでの間、食らうダメージが増える。",
+                "en": "Attacks with all of your power, but all damage you take will be doubled for one turn."
+              }
+            },
+            {
+              "spell_id": 17,
+              "spell_tag": "Lightning_Eagle",
+              "name": {
+                "ja": "雷撃鷲爪斬",
+                "en": "Lightning Eagle"
+              },
+              "description": {
+                "ja": "電撃耐性のないモンスターに非常に大きいダメージを与える。",
+                "en": "Attacks a monster with more damage unless it has resistance to electricity."
+              }
+            },
+            {
+              "spell_id": 18,
+              "spell_tag": "Rush_Attack",
+              "name": {
+                "ja": "入身",
+                "en": "Rush Attack"
+              },
+              "description": {
+                "ja": "素早く相手に近寄り攻撃する。",
+                "en": "Steps close to a monster and attacks at the same time."
+              }
+            },
+            {
+              "spell_id": 19,
+              "spell_tag": "Bloody_Maelstrom",
+              "name": {
+                "ja": "赤流渦",
+                "en": "Bloody Maelstrom"
+              },
+              "description": {
+                "ja": "自分自身も傷を作りつつ、その傷が深いほど大きい威力で全方向の敵を攻撃できる。生きていないモンスターには効果がない。",
+                "en": "Attacks all adjacent monsters with power corresponding to your cuts. Then increases your cuts. Has no effect on unliving monsters."
+              }
+            },
+            {
+              "spell_id": 20,
+              "spell_tag": "Earthquake_Blow",
+              "name": {
+                "ja": "激震撃",
+                "en": "Earthquake Blow"
+              },
+              "description": {
+                "ja": "地震を起こす。",
+                "en": "Shakes dungeon structure, and results in random swapping of floors and walls."
+              }
+            },
+            {
+              "spell_id": 21,
+              "spell_tag": "Crack",
+              "name": {
+                "ja": "地走り",
+                "en": "Crack"
+              },
+              "description": {
+                "ja": "衝撃波のビームを放つ。",
+                "en": "Fires a shock wave as a beam."
+              }
+            },
+            {
+              "spell_id": 22,
+              "spell_tag": "War_Cry",
+              "name": {
+                "ja": "気迫の雄叫び",
+                "en": "War Cry"
+              },
+              "description": {
+                "ja": "視界内の全モンスターに対して轟音の攻撃を行う。さらに、近くにいるモンスターを怒らせる。",
+                "en": "Damages all monsters in sight with sound. Aggravates nearby monsters."
+              }
+            },
+            {
+              "spell_id": 23,
+              "spell_tag": "Musou-Sandan",
+              "name": {
+                "ja": "無双三段",
+                "en": "Musou-Sandan"
+              },
+              "description": {
+                "ja": "強力な3段攻撃を繰り出す。",
+                "en": "Attacks with three powerful strikes."
+              }
+            }
+          ]
+        },
+        {
+          "name": {
+            "ja": "[北辰一刀流皆伝]",
+            "en": "[Hokusin Ittouryuu Kaiden]"
+          },
+          "spells": [
+            {
+              "spell_id": 24,
+              "spell_tag": "Vampires_Fang",
+              "name": {
+                "ja": "吸血鬼の牙",
+                "en": "Vampire's Fang"
+              },
+              "description": {
+                "ja": "攻撃した相手の体力を吸いとり、自分の体力を回復させる。生命を持たないモンスターには通じない。",
+                "en": "Attacks with vampiric strikes which absorb HP from a monster and heal you. Has no effect on unliving monsters."
+              }
+            },
+            {
+              "spell_id": 25,
+              "spell_tag": "Moon_Dazzling",
+              "name": {
+                "ja": "幻惑",
+                "en": "Moon Dazzling"
+              },
+              "description": {
+                "ja": "視界内の起きている全モンスターに朦朧、混乱、眠りを与えようとする。",
+                "en": "Attempts to stun, confuse and put to sleep all waking monsters."
+              }
+            },
+            {
+              "spell_id": 26,
+              "spell_tag": "Hundred_Slaughter",
+              "name": {
+                "ja": "百人斬り",
+                "en": "Hundred Slaughter"
+              },
+              "description": {
+                "ja": "連続して入身でモンスターを攻撃する。攻撃するたびにMPを消費。MPがなくなるか、モンスターを倒せなかったら百人斬りは終了する。",
+                "en": "Performs a series of rush attacks. The series continues as long as the attacked monster dies and you have sufficient SP."
+              }
+            },
+            {
+              "spell_id": 27,
+              "spell_tag": "Dragonic_Flash",
+              "name": {
+                "ja": "天翔龍閃",
+                "en": "Dragonic Flash"
+              },
+              "description": {
+                "ja": "視界内の場所を指定して、その場所と自分の間にいる全モンスターを攻撃し、その場所に移動する。",
+                "en": "Runs toward given location while attacking all monsters on the path."
+              }
+            },
+            {
+              "spell_id": 28,
+              "spell_tag": "Twin_Slash",
+              "name": {
+                "ja": "二重の剣撃",
+                "en": "Twin Slash"
+              },
+              "description": {
+                "ja": "1ターンで2度攻撃を行う。",
+                "en": "Attack twice in one turn."
+              }
+            },
+            {
+              "spell_id": 29,
+              "spell_tag": "Kofuku-Zettousei",
+              "name": {
+                "ja": "虎伏絶刀勢",
+                "en": "Kofuku-Zettousei"
+              },
+              "description": {
+                "ja": "強力な攻撃を行い、近くの場所にも効果が及ぶ。",
+                "en": "Performs a powerful attack which even affects nearby monsters."
+              }
+            },
+            {
+              "spell_id": 30,
+              "spell_tag": "Keiun-Kininken",
+              "name": {
+                "ja": "慶雲鬼忍剣",
+                "en": "Keiun-Kininken"
+              },
+              "description": {
+                "ja": "自分もダメージをくらうが、相手に非常に大きなダメージを与える。アンデッドには特に効果がある。",
+                "en": "Attacks a monster with extremely powerful damage, but you also take some damage. Hurts an undead monster greatly."
+              }
+            },
+            {
+              "spell_id": 31,
+              "spell_tag": "Harakiri",
+              "name": {
+                "ja": "切腹",
+                "en": "Harakiri"
+              },
+              "description": {
+                "ja": "「武士道とは、死ぬことと見つけたり。」",
+                "en": "'Bushido, the way of warriors, is found in death'"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HEX",
+      "books": [
+        {
+          "name": {
+            "ja": "[呪術入門]",
+            "en": "[Handbook of Hex]"
+          },
+          "spells": [
+            {
+              "spell_id": 0,
+              "spell_tag": "Evily_blessing",
+              "name": {
+                "ja": "邪なる祝福",
+                "en": "Evily blessing"
+              },
+              "description": {
+                "ja": "祝福により攻撃精度と防御力が上がる。",
+                "en": "Attempts to increase +to_hit of a weapon and AC"
+              }
+            },
+            {
+              "spell_id": 1,
+              "spell_tag": "Cure_light_wounds",
+              "name": {
+                "ja": "軽傷の治癒",
+                "en": "Cure light wounds"
+              },
+              "description": {
+                "ja": "HPや傷を少し回復させる。",
+                "en": "Heals cuts and HP a little."
+              }
+            },
+            {
+              "spell_id": 2,
+              "spell_tag": "Demonic_aura",
+              "name": {
+                "ja": "悪魔のオーラ",
+                "en": "Demonic aura"
+              },
+              "description": {
+                "ja": "炎のオーラを身にまとい、回復速度が速くなる。",
+                "en": "Gives fire aura and regeneration."
+              }
+            },
+            {
+              "spell_id": 3,
+              "spell_tag": "Stinking_mist",
+              "name": {
+                "ja": "悪臭霧",
+                "en": "Stinking mist"
+              },
+              "description": {
+                "ja": "視界内のモンスターに微弱量の毒のダメージを与える。",
+                "en": "Deals a little poison damage to all monsters in your sight."
+              }
+            },
+            {
+              "spell_id": 4,
+              "spell_tag": "Extra_might",
+              "name": {
+                "ja": "腕力強化",
+                "en": "Extra might"
+              },
+              "description": {
+                "ja": "術者の腕力を上昇させる。",
+                "en": "Attempts to increase your strength."
+              }
+            },
+            {
+              "spell_id": 5,
+              "spell_tag": "Curse weapon",
+              "name": {
+                "ja": "武器呪縛",
+                "en": "Curse weapon"
+              },
+              "description": {
+                "ja": "装備している武器を呪う。",
+                "en": "Curses your weapon."
+              }
+            },
+            {
+              "spell_id": 6,
+              "spell_tag": "Evil_detection",
+              "name": {
+                "ja": "邪悪感知",
+                "en": "Evil detection"
+              },
+              "description": {
+                "ja": "周囲の邪悪なモンスターを感知する。",
+                "en": "Detects evil monsters."
+              }
+            },
+            {
+              "spell_id": 7,
+              "spell_tag": "Patience",
+              "name": {
+                "ja": "我慢",
+                "en": "Patience"
+              },
+              "description": {
+                "ja": "数ターン攻撃を耐えた後、受けたダメージを地獄の業火として周囲に放出する。",
+                "en": "Bursts hell fire strongly after enduring damage for a few turns."
+              }
+            }
+          ]
+        },
+        {
+          "name": {
+            "ja": "[上級呪法]",
+            "en": "[High Curse]"
+          },
+          "spells": [
+            {
+              "spell_id": 8,
+              "spell_tag": "Armor_of_ice",
+              "name": {
+                "ja": "氷の鎧",
+                "en": "Armor of ice"
+              },
+              "description": {
+                "ja": "氷のオーラを身にまとい、防御力が上昇する。",
+                "en": "Surrounds you with an icy aura and gives a bonus to AC."
+              }
+            },
+            {
+              "spell_id": 9,
+              "spell_tag": "Cure_serious_wounds",
+              "name": {
+                "ja": "重傷の治癒",
+                "en": "Cure serious wounds"
+              },
+              "description": {
+                "ja": "体力や傷を多少回復させる。",
+                "en": "Heals cuts and HP."
+              }
+            },
+            {
+              "spell_id": 10,
+              "spell_tag": "Inhale_potion",
+              "name": {
+                "ja": "薬品吸入",
+                "en": "Inhale potion"
+              },
+              "description": {
+                "ja": "呪文詠唱を中止することなく、薬の効果を得ることができる。",
+                "en": "Quaffs a potion without canceling spell casting."
+              }
+            },
+            {
+              "spell_id": 11,
+              "spell_tag": "Hypodynamic_mist",
+              "name": {
+                "ja": "衰弱の霧",
+                "en": "Hypodynamic mist"
+              },
+              "description": {
+                "ja": "視界内のモンスターに微弱量の衰弱属性のダメージを与える。",
+                "en": "Deals a little life-draining damage to all monsters in your sight."
+              }
+            },
+            {
+              "spell_id": 12,
+              "spell_tag": "Swords_to_runeswords",
+              "name": {
+                "ja": "魔剣化",
+                "en": "Swords to runeswords"
+              },
+              "description": {
+                "ja": "武器の攻撃力を上げる。切れ味を得、呪いに応じて与えるダメージが上昇し、善良なモンスターに対するダメージが2倍になる。",
+                "en": "Gives vorpal ability to your weapon. Increases damage from your weapon acccording to curse of your weapon."
+              }
+            },
+            {
+              "spell_id": 13,
+              "spell_tag": "Touch_of_confusion",
+              "name": {
+                "ja": "混乱の手",
+                "en": "Touch of confusion"
+              },
+              "description": {
+                "ja": "攻撃した際モンスターを混乱させる。",
+                "en": "Confuses a monster when you attack."
+              }
+            },
+            {
+              "spell_id": 14,
+              "spell_tag": "Building_up",
+              "name": {
+                "ja": "肉体強化",
+                "en": "Building up"
+              },
+              "description": {
+                "ja": "術者の腕力、器用さ、耐久力を上昇させる。攻撃回数の上限を 1 増加させる。",
+                "en": "Attempts to increases your strength, dexterity and constitusion."
+              }
+            },
+            {
+              "spell_id": 15,
+              "spell_tag": "Anti_teleport_barrier",
+              "name": {
+                "ja": "反テレポート結界",
+                "en": "Anti teleport barrier"
+              },
+              "description": {
+                "ja": "視界内のモンスターのテレポートを阻害するバリアを張る。",
+                "en": "Obstructs all teleportations by monsters in your sight."
+              }
+            }
+          ]
+        },
+        {
+          "name": {
+            "ja": "[怨恨呪縛]",
+            "en": "[Curse and Spelling]"
+          },
+          "spells": [
+            {
+              "spell_id": 16,
+              "spell_tag": "Cloak_of_shock",
+              "name": {
+                "ja": "衝撃のクローク",
+                "en": "Cloak of shock"
+              },
+              "description": {
+                "ja": "電気のオーラを身にまとい、動きが速くなる。",
+                "en": "Gives lightning aura and a bonus to speed."
+              }
+            },
+            {
+              "spell_id": 17,
+              "spell_tag": "Cure_critical_wounds",
+              "name": {
+                "ja": "致命傷の治癒",
+                "en": "Cure critical wounds"
+              },
+              "description": {
+                "ja": "体力や傷を回復させる。",
+                "en": "Heals cuts and HP greatly."
+              }
+            },
+            {
+              "spell_id": 18,
+              "spell_tag": "Recharging",
+              "name": {
+                "ja": "呪力封入",
+                "en": "Recharging"
+              },
+              "description": {
+                "ja": "魔法の道具に魔力を再充填する。",
+                "en": "Recharges a magic device."
+              }
+            },
+            {
+              "spell_id": 19,
+              "spell_tag": "Animate_Dead",
+              "name": {
+                "ja": "死者復活",
+                "en": "Animate Dead"
+              },
+              "description": {
+                "ja": "死体を蘇らせてペットにする。",
+                "en": "Raises corpses and skeletons from dead."
+              }
+            },
+            {
+              "spell_id": 20,
+              "spell_tag": "Curse_armor",
+              "name": {
+                "ja": "防具呪縛",
+                "en": "Curse armor"
+              },
+              "description": {
+                "ja": "装備している防具に呪いをかける。",
+                "en": "Curse a piece of armour that you are wielding."
+              }
+            },
+            {
+              "spell_id": 21,
+              "spell_tag": "Cloak_of_shadow",
+              "name": {
+                "ja": "影のクローク",
+                "en": "Cloak of shadow"
+              },
+              "description": {
+                "ja": "影のオーラを身にまとい、敵に影のダメージを与える。",
+                "en": "Gives aura of shadow."
+              }
+            },
+            {
+              "spell_id": 22,
+              "spell_tag": "Pain_to_mana",
+              "name": {
+                "ja": "苦痛を魔力に",
+                "en": "Pain to mana"
+              },
+              "description": {
+                "ja": "視界内のモンスターに精神ダメージ与え、魔力を吸い取る。",
+                "en": "Deals psychic damage to all monsters in sight and drains some mana."
+              }
+            },
+            {
+              "spell_id": 23,
+              "spell_tag": "Eye_for_an_eye",
+              "name": {
+                "ja": "目には目を",
+                "en": "Eye for an eye"
+              },
+              "description": {
+                "ja": "打撃や魔法で受けたダメージを、攻撃元のモンスターにも与える。",
+                "en": "Returns same damage which you got to the monster which damaged you."
+              }
+            }
+          ]
+        },
+        {
+          "name": {
+            "ja": "[禁呪法大全]",
+            "en": "[Forbidden Cursebook]"
+          },
+          "spells": [
+            {
+              "spell_id": 24,
+              "spell_tag": "Anti_multiply_barrier",
+              "name": {
+                "ja": "反増殖結界",
+                "en": "Anti multiply barrier"
+              },
+              "description": {
+                "ja": "その階の増殖するモンスターの増殖を阻止する。",
+                "en": "Obstructs all multiplying by monsters on entire floor."
+              }
+            },
+            {
+              "spell_id": 25,
+              "spell_tag": "Restoration",
+              "name": {
+                "ja": "全復活",
+                "en": "Restoration"
+              },
+              "description": {
+                "ja": "経験値を徐々に復活し、減少した能力値を回復させる。",
+                "en": "Restores experience and status."
+              }
+            },
+            {
+              "spell_id": 26,
+              "spell_tag": "Drain_curse_power",
+              "name": {
+                "ja": "呪力吸収",
+                "en": "Drain curse power"
+              },
+              "description": {
+                "ja": "呪われた装備品の呪いを吸収して魔力を回復する。",
+                "en": "Drains curse on your equipment and heals SP a little."
+              }
+            },
+            {
+              "spell_id": 27,
+              "spell_tag": "Swords_to_vampires",
+              "name": {
+                "ja": "吸血の刃",
+                "en": "Swords to vampires"
+              },
+              "description": {
+                "ja": "吸血属性で攻撃する。",
+                "en": "Gives vampiric ability to your weapon."
+              }
+            },
+            {
+              "spell_id": 28,
+              "spell_tag": "Word_of_stun",
+              "name": {
+                "ja": "朦朧の言葉",
+                "en": "Word of stun"
+              },
+              "description": {
+                "ja": "視界内のモンスターを朦朧とさせる。",
+                "en": "Stuns all monsters in your sight."
+              }
+            },
+            {
+              "spell_id": 29,
+              "spell_tag": "Moving_into_shadow",
+              "name": {
+                "ja": "影移動",
+                "en": "Moving into shadow"
+              },
+              "description": {
+                "ja": "モンスターの隣のマスに瞬間移動する。",
+                "en": "Teleports you close to a monster."
+              }
+            },
+            {
+              "spell_id": 30,
+              "spell_tag": "Anti_magic_barrier",
+              "name": {
+                "ja": "反魔法結界",
+                "en": "Anti magic barrier"
+              },
+              "description": {
+                "ja": "視界内のモンスターの魔法を阻害するバリアを張る。",
+                "en": "Obstructs all magic spells of monsters in your sight."
+              }
+            },
+            {
+              "spell_id": 31,
+              "spell_tag": "Revenge_sentence",
+              "name": {
+                "ja": "復讐の宣告",
+                "en": "Revenge sentence"
+              },
+              "description": {
+                "ja": "数ターン後にそれまで受けたダメージに応じた威力の地獄の劫火の弾を放つ。",
+                "en": "Fires a ball of hell fire to try avenging damage from a few turns."
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

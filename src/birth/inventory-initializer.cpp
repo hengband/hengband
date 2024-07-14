@@ -17,6 +17,7 @@
 #include "player-base/player-race.h"
 #include "player-info/race-types.h"
 #include "player/player-personality-types.h"
+#include "player/player-realm.h"
 #include "realm/realm-types.h"
 #include "sv-definition/sv-bow-types.h"
 #include "sv-definition/sv-food-types.h"
@@ -249,10 +250,11 @@ void player_outfit(PlayerType *player_ptr)
             continue;
         }
 
+        PlayerRealm prealm(player_ptr);
         if (tval == ItemKindType::SORCERY_BOOK) {
-            tval = i2enum<ItemKindType>(enum2i(ItemKindType::LIFE_BOOK) + player_ptr->realm1 - 1);
+            tval = prealm.realm1().get_book();
         } else if (tval == ItemKindType::DEATH_BOOK) {
-            tval = i2enum<ItemKindType>(enum2i(ItemKindType::LIFE_BOOK) + player_ptr->realm2 - 1);
+            tval = prealm.realm2().get_book();
         } else if (tval == ItemKindType::RING && sval == SV_RING_RES_FEAR && pr.equals(PlayerRaceType::BARBARIAN)) {
             sval = SV_RING_SUSTAIN_STR;
         } else if (tval == ItemKindType::RING && sval == SV_RING_SUSTAIN_INT && pr.equals(PlayerRaceType::MIND_FLAYER)) {
@@ -262,7 +264,7 @@ void player_outfit(PlayerType *player_ptr)
 
         /* Only assassins get a poisoned weapon */
         ItemEntity item({ tval, sval });
-        if (((tval == ItemKindType::SWORD) || (tval == ItemKindType::HAFTED)) && (pc.equals(PlayerClassType::ROGUE) && (player_ptr->realm1 == REALM_DEATH))) {
+        if (((tval == ItemKindType::SWORD) || (tval == ItemKindType::HAFTED)) && (pc.equals(PlayerClassType::ROGUE) && prealm.realm1().equals(RealmType::DEATH))) {
             item.ego_idx = EgoType::BRAND_POIS;
         }
 

@@ -30,7 +30,7 @@ struct player_magic {
     int spell_first{}; /* Level of first spell */
     int spell_weight{}; /* Weight that hurts spells */
 
-    magic_type info[MAX_MAGIC][32]{}; /* The available spells */
+    magic_type info[MAX_MAGIC + 1][32]{}; /* The available spells */
 };
 
 extern std::vector<player_magic> class_magics_info;

@@ -25,7 +25,6 @@
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"
-#include "realm/realm-names-table.h"
 #include "spell/spells-execution.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -815,11 +814,12 @@ static void display_spell_list(PlayerType *player_ptr)
         return;
     }
 
-    if (REALM_NONE == player_ptr->realm1) {
+    PlayerRealm pr(player_ptr);
+    if (!pr.realm1().is_available()) {
         return;
     }
 
-    for (int j = 0; j < ((player_ptr->realm2 > REALM_NONE) ? 2 : 1); j++) {
+    for (int j = 0; j < (pr.realm2().is_available() ? 2 : 1); j++) {
         m[j] = 0;
         y = (j < 3) ? 0 : (m[j - 3] + 2);
         x = 27 * (j % 3);
@@ -827,10 +827,10 @@ static void display_spell_list(PlayerType *player_ptr)
         for (int i = 0; i < 32; i++) {
             byte a = TERM_WHITE;
 
-            const auto realm = (j < 1) ? player_ptr->realm1 : player_ptr->realm2;
-            const auto &spell = PlayerRealm::get_spell_info(realm, i % 32);
-            const auto spell_name = exe_spell(player_ptr, realm, i % 32, SpellProcessType::NAME);
-            auto name = spell_name->data();
+            const auto &realm = (j < 1) ? pr.realm1() : pr.realm2();
+            const auto &spell = realm.get_spell_info(i);
+            const auto &spell_name = realm.get_spell_name(i % 32);
+            auto name = spell_name.data();
 
             if (spell.slevel >= 99) {
                 name = _("(判読不能)", "(illegible)");

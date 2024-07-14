@@ -5,7 +5,6 @@
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player/player-realm.h"
-#include "realm/realm-names-table.h"
 #include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
@@ -65,9 +64,9 @@ bool item_tester_learn_spell(PlayerType *player_ptr, const ItemEntity *o_ptr)
     PlayerClass pc(player_ptr);
     if (pc.equals(PlayerClassType::PRIEST)) {
         if (PlayerRealm(player_ptr).realm1().is_good_attribute()) {
-            choices.reset({ REALM_DEATH, REALM_DAEMON });
+            choices.reset({ RealmType::DEATH, RealmType::DAEMON });
         } else {
-            choices.reset({ REALM_LIFE, REALM_CRUSADE });
+            choices.reset({ RealmType::LIFE, RealmType::CRUSADE });
         }
     }
 
@@ -76,10 +75,10 @@ bool item_tester_learn_spell(PlayerType *player_ptr, const ItemEntity *o_ptr)
         return true;
     }
 
-    const auto realm = tval2realm(tval);
-    if (!is_magic(realm)) {
+    const auto book_realm = PlayerRealm::get_realm_of_book(tval);
+    if (!PlayerRealm::is_magic(book_realm)) {
         return false;
     }
 
-    return (pr.realm1().get_book() == tval) || (pr.realm2().get_book() == tval) || choices.has(realm);
+    return pr.realm1().equals(book_realm) || pr.realm2().equals(book_realm) || choices.has(book_realm);
 }

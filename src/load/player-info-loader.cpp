@@ -18,6 +18,7 @@
 #include "player-info/mane-data-type.h"
 #include "player-info/sniper-data-type.h"
 #include "player/attack-defense-types.h"
+#include "player/player-realm.h"
 #include "player/player-skill.h"
 #include "spell-realm/spells-song.h"
 #include "system/angband-exceptions.h"
@@ -35,16 +36,24 @@
  */
 static void rd_realms(PlayerType *player_ptr)
 {
+    PlayerRealm pr(player_ptr);
+    pr.reset();
+
     if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
         player_ptr->element = rd_byte();
-    } else {
-        player_ptr->realm1 = rd_byte();
+        (void)rd_byte();
+        return;
     }
 
-    player_ptr->realm2 = rd_byte();
-    if (player_ptr->realm2 == 255) {
-        player_ptr->realm2 = 0;
+    const auto realm1 = i2enum<RealmType>(rd_byte());
+    auto realm2 = rd_byte();
+    if (realm1 == RealmType::NONE) {
+        return;
     }
+    if (realm2 == 255) { // 何のため？
+        realm2 = 0;
+    }
+    pr.set(realm1, i2enum<RealmType>(realm2));
 }
 
 /*!

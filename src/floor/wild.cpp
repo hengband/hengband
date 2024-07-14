@@ -34,7 +34,6 @@
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status.h"
-#include "realm/realm-names-table.h"
 #include "spell-realm/spells-hex.h"
 #include "status/action-setter.h"
 #include "system/angband-system.h"

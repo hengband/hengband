@@ -13,6 +13,7 @@
 #include "player/attack-defense-types.h"
 #include "player/patron.h"
 #include "player/player-personality.h"
+#include "player/player-realm.h"
 #include "player/player-skill.h"
 #include "realm/realm-types.h"
 #include "spell/spells-status.h"
@@ -84,20 +85,14 @@ void load_zangband_options(void)
 
 void set_zangband_realm(PlayerType *player_ptr)
 {
-    if (player_ptr->realm1 == 9) {
-        player_ptr->realm1 = REALM_MUSIC;
+    PlayerRealm pr(player_ptr);
+    const auto realm1 = enum2i(pr.realm1().to_enum());
+    if (realm1 == 9) {
+        pr.set(RealmType::MUSIC);
     }
 
-    if (player_ptr->realm2 == 9) {
-        player_ptr->realm2 = REALM_MUSIC;
-    }
-
-    if (player_ptr->realm1 == 10) {
-        player_ptr->realm1 = REALM_HISSATSU;
-    }
-
-    if (player_ptr->realm2 == 10) {
-        player_ptr->realm2 = REALM_HISSATSU;
+    if (realm1 == 10) {
+        pr.set(RealmType::HISSATSU);
     }
 }
 

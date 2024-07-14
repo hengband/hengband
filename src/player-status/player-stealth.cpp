@@ -8,6 +8,7 @@
 #include "player-info/mimic-info-table.h"
 #include "player-info/race-types.h"
 #include "player/player-personality.h"
+#include "player/player-realm.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
@@ -115,7 +116,7 @@ int16_t PlayerStealth::mutation_bonus()
 int16_t PlayerStealth::time_effect_bonus()
 {
     int16_t bonus = 0;
-    if (this->player_ptr->realm1 == REALM_HEX) {
+    if (PlayerRealm(this->player_ptr).is_realm_hex()) {
         SpellHex spell_hex(this->player_ptr);
         if (spell_hex.is_spelling_any()) {
             bonus -= spell_hex.get_casting_num() + 1;

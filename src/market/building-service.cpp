@@ -1,6 +1,6 @@
 #include "market/building-service.h"
 #include "player-base/player-class.h"
-#include "realm/realm-names-table.h"
+#include "player/player-realm.h"
 #include "system/building-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
@@ -27,9 +27,10 @@ bool is_owner(PlayerType *player_ptr, building_type *bldg)
         return true;
     }
 
-    int16_t realm1 = player_ptr->realm1;
-    int16_t realm2 = player_ptr->realm2;
-    if ((is_magic(realm1) && (bldg->member_realm[realm1] == building_owner)) || (is_magic(realm2) && (bldg->member_realm[realm2] == building_owner))) {
+    PlayerRealm pr(player_ptr);
+    const auto realm1 = pr.realm1().to_enum();
+    const auto realm2 = pr.realm2().to_enum();
+    if ((PlayerRealm::is_magic(realm1) && (bldg->member_realm[enum2i(realm1)] == building_owner)) || (PlayerRealm::is_magic(realm2) && (bldg->member_realm[enum2i(realm2)] == building_owner))) {
         return true;
     }
 
@@ -56,9 +57,10 @@ bool is_member(PlayerType *player_ptr, building_type *bldg)
         return true;
     }
 
-    int16_t realm1 = player_ptr->realm1;
-    int16_t realm2 = player_ptr->realm2;
-    if ((is_magic(realm1) && bldg->member_realm[realm1]) || (is_magic(realm2) && bldg->member_realm[realm2])) {
+    PlayerRealm pr(player_ptr);
+    const auto realm1 = pr.realm1().to_enum();
+    const auto realm2 = pr.realm2().to_enum();
+    if ((PlayerRealm::is_magic(realm1) && bldg->member_realm[enum2i(realm1)]) || (PlayerRealm::is_magic(realm2) && bldg->member_realm[enum2i(realm2)])) {
         return true;
     }
 
