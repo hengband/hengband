@@ -123,11 +123,11 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
     if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && one_in_(13) && !m_ptr->is_asleep()) {
         const auto &floor = *player_ptr->current_floor_ptr;
 
+        const auto old_m_name = monster_desc(player_ptr, m_ptr, 0);
+
         choose_chameleon_polymorph(player_ptr, m_idx, floor.get_grid(Pos2D(m_ptr->fy, m_ptr->fx)));
 
         const auto &new_monrace = m_ptr->get_monrace();
-
-        const auto old_m_name = monster_desc(player_ptr, m_ptr, 0);
 
         if (m_idx == player_ptr->riding) {
             msg_format(_("突然%sが変身した。", "Suddenly, %s transforms!"), old_m_name.data());
