@@ -91,9 +91,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     }
 
     player_ptr->spell_forgotten1 = player_ptr->spell_forgotten2 = 0L;
-    for (int i = 0; i < 64; i++) {
-        player_ptr->spell_order[i] = 99;
-    }
+    player_ptr->spell_order_learned.clear();
 
     player_ptr->learned_spells = 0;
     player_ptr->add_spells = 0;

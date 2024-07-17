@@ -544,15 +544,12 @@ static void update_num_of_spells(PlayerType *player_ptr)
     }
 
     player_ptr->new_spells = num_allowed + player_ptr->add_spells + num_boukyaku - player_ptr->learned_spells;
-    for (int i = 63; i >= 0; i--) {
+    for (auto it = player_ptr->spell_order_learned.crbegin(); it != player_ptr->spell_order_learned.crend(); ++it) {
         if (!player_ptr->spell_learned1 && !player_ptr->spell_learned2) {
             break;
         }
 
-        int j = player_ptr->spell_order[i];
-        if (j >= 99) {
-            continue;
-        }
+        const auto j = *it;
 
         const auto &realm = (j < 32) ? pr.realm1() : pr.realm2();
         const auto &spell = realm.get_spell_info(j % 32);
@@ -588,7 +585,7 @@ static void update_num_of_spells(PlayerType *player_ptr)
     }
 
     /* Forget spells if we know too many spells */
-    for (int i = 63; i >= 0; i--) {
+    for (auto it = player_ptr->spell_order_learned.crbegin(); it != player_ptr->spell_order_learned.crend(); ++it) {
         if (player_ptr->new_spells >= 0) {
             break;
         }
@@ -596,10 +593,7 @@ static void update_num_of_spells(PlayerType *player_ptr)
             break;
         }
 
-        int j = player_ptr->spell_order[i];
-        if (j >= 99) {
-            continue;
-        }
+        const auto j = *it;
 
         bool is_spell_learned = (j < 32) ? any_bits(player_ptr->spell_learned1, (1UL << j)) : any_bits(player_ptr->spell_learned2, (1UL << (j - 32)));
         if (!is_spell_learned) {
@@ -629,15 +623,11 @@ static void update_num_of_spells(PlayerType *player_ptr)
     }
 
     /* Check for spells to remember */
-    for (int i = 0; i < 64; i++) {
+    for (const auto j : player_ptr->spell_order_learned) {
         if (player_ptr->new_spells <= 0) {
             break;
         }
         if (!player_ptr->spell_forgotten1 && !player_ptr->spell_forgotten2) {
-            break;
-        }
-        int j = player_ptr->spell_order[i];
-        if (j >= 99) {
             break;
         }
 

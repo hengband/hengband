@@ -408,15 +408,7 @@ void do_cmd_gain_hissatsu(PlayerType *player_ptr)
         player_ptr->spell_worked1 |= (1UL << i);
         const auto &spell_name = PlayerRealm::get_spell_name(RealmType::HISSATSU, i);
         msg_format(_("%sの技を覚えた。", "You have learned the special attack of %s."), spell_name.data());
-        int j;
-        for (j = 0; j < 64; j++) {
-            /* Stop at the first empty space */
-            if (player_ptr->spell_order[j] == 99) {
-                break;
-            }
-        }
-
-        player_ptr->spell_order[j] = i;
+        player_ptr->spell_order_learned.push_back(i);
         gain = true;
     }
 
