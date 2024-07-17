@@ -180,7 +180,7 @@ void Chest::fire_trap(const Pos2D &pos, short item_idx)
             if (randint1(100) < this->player_ptr->current_floor_ptr->dun_level) {
                 activate_hi_summon(this->player_ptr, this->player_ptr->y, this->player_ptr->x, false);
             } else {
-                (void)summon_specific(this->player_ptr, 0, pos.y, pos.x, mon_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+                (void)summon_specific(this->player_ptr, pos.y, pos.x, mon_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
             }
         }
     }
@@ -189,7 +189,7 @@ void Chest::fire_trap(const Pos2D &pos, short item_idx)
     if (trap.has(ChestTrapType::E_SUMMON)) {
         msg_print(_("宝を守るためにエレメンタルが現れた！", "Elemental beings appear to protect their treasures!"));
         for (auto i = 0; i < randint1(3) + 5; i++) {
-            (void)summon_specific(this->player_ptr, 0, pos.y, pos.x, mon_level, SUMMON_ELEMENTAL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+            (void)summon_specific(this->player_ptr, pos.y, pos.x, mon_level, SUMMON_ELEMENTAL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
         }
     }
 
@@ -202,7 +202,7 @@ void Chest::fire_trap(const Pos2D &pos, short item_idx)
         }
 
         for (auto i = 0; i < randint1(5) + o_ptr->pval / 5; i++) {
-            (void)summon_specific(this->player_ptr, 0, pos.y, pos.x, mon_level, SUMMON_BIRD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+            (void)summon_specific(this->player_ptr, pos.y, pos.x, mon_level, SUMMON_BIRD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
         }
     }
 
@@ -213,7 +213,7 @@ void Chest::fire_trap(const Pos2D &pos, short item_idx)
             msg_print(_("炎と硫黄の雲の中に悪魔が姿を現した！", "Demons materialize in clouds of fire and brimstone!"));
             for (auto i = 0; i < randint1(3) + 2; i++) {
                 (void)fire_meteor(this->player_ptr, -1, AttributeType::FIRE, pos.y, pos.x, 10, 5);
-                (void)summon_specific(this->player_ptr, 0, pos.y, pos.x, mon_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+                (void)summon_specific(this->player_ptr, pos.y, pos.x, mon_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
             }
         }
 
@@ -221,7 +221,7 @@ void Chest::fire_trap(const Pos2D &pos, short item_idx)
         else if (one_in_(3)) {
             msg_print(_("暗闇にドラゴンの影がぼんやりと現れた！", "Draconic forms loom out of the darkness!"));
             for (auto i = 0; i < randint1(3) + 2; i++) {
-                (void)summon_specific(this->player_ptr, 0, pos.y, pos.x, mon_level, SUMMON_DRAGON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+                (void)summon_specific(this->player_ptr, pos.y, pos.x, mon_level, SUMMON_DRAGON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
             }
         }
 
@@ -229,7 +229,7 @@ void Chest::fire_trap(const Pos2D &pos, short item_idx)
         else if (one_in_(2)) {
             msg_print(_("奇妙な姿の怪物が襲って来た！", "Creatures strange and twisted assault you!"));
             for (auto i = 0; i < randint1(5) + 3; i++) {
-                (void)summon_specific(this->player_ptr, 0, pos.y, pos.x, mon_level, SUMMON_HYBRID, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+                (void)summon_specific(this->player_ptr, pos.y, pos.x, mon_level, SUMMON_HYBRID, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
             }
         }
 
@@ -237,7 +237,7 @@ void Chest::fire_trap(const Pos2D &pos, short item_idx)
         else {
             msg_print(_("渦巻が合体し、破裂した！", "Vortices coalesce and wreak destruction!"));
             for (auto i = 0; i < randint1(3) + 2; i++) {
-                (void)summon_specific(this->player_ptr, 0, pos.y, pos.x, mon_level, SUMMON_VORTEX, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+                (void)summon_specific(this->player_ptr, pos.y, pos.x, mon_level, SUMMON_VORTEX, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
             }
         }
     }

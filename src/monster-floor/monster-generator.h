@@ -6,7 +6,7 @@
 enum summon_type : int;
 enum class MonsterRaceId : int16_t;
 class PlayerType;
-using summon_specific_pf = std::optional<MONSTER_IDX>(PlayerType *, MONSTER_IDX, POSITION, POSITION, DEPTH, summon_type, BIT_FLAGS);
+using summon_specific_pf = std::optional<MONSTER_IDX>(PlayerType *, POSITION, POSITION, DEPTH, summon_type, BIT_FLAGS, std::optional<MONSTER_IDX>);
 
 bool mon_scatter(PlayerType *player_ptr, MonsterRaceId r_idx, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION max_dist);
 std::optional<MONSTER_IDX> multiply_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode);

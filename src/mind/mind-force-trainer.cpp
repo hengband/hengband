@@ -345,7 +345,7 @@ bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
     case MindForceTrainerType::SUMMON_GHOST: {
         bool success = false;
         for (int i = 0; i < 1 + boost / 100; i++) {
-            if (summon_specific(player_ptr, -1, player_ptr->y, player_ptr->x, plev, SUMMON_PHANTOM, PM_FORCE_PET)) {
+            if (summon_specific(player_ptr, player_ptr->y, player_ptr->x, plev, SUMMON_PHANTOM, PM_FORCE_PET)) {
                 success = true;
             }
         }

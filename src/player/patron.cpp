@@ -251,7 +251,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), this->name.data());
             msg_print(_("「我が下僕たちよ、かの傲慢なる者を倒すべし！」", "'My pets, destroy the arrogant mortal!'"));
             for (int i = 0, summon_num = randint1(5) + 1; i < summon_num; i++) {
-                (void)summon_specific(this->player_ptr, 0, this->player_ptr->y, this->player_ptr->x, floor_ptr->dun_level, SUMMON_NONE,
+                (void)summon_specific(this->player_ptr, this->player_ptr->y, this->player_ptr->x, floor_ptr->dun_level, SUMMON_NONE,
                     (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
             }
 
@@ -469,7 +469,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
             break;
         case REW_SER_DEMO:
             msg_format(_("%sは褒美として悪魔の使いをよこした！", "%s rewards you with a demonic servant!"), this->name.data());
-            if (!summon_specific(this->player_ptr, -1, this->player_ptr->y, this->player_ptr->x, floor_ptr->dun_level, SUMMON_DEMON, PM_FORCE_PET)) {
+            if (!summon_specific(this->player_ptr, this->player_ptr->y, this->player_ptr->x, floor_ptr->dun_level, SUMMON_DEMON, PM_FORCE_PET)) {
                 msg_print(_("何も現れなかった...", "Nobody ever turns up..."));
             } else {
                 reward = _("悪魔がペットになった。", "a demonic servant");
@@ -478,7 +478,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
             break;
         case REW_SER_MONS:
             msg_format(_("%sは褒美として使いをよこした！", "%s rewards you with a servant!"), this->name.data());
-            if (!summon_specific(this->player_ptr, -1, this->player_ptr->y, this->player_ptr->x, floor_ptr->dun_level, SUMMON_NONE, PM_FORCE_PET)) {
+            if (!summon_specific(this->player_ptr, this->player_ptr->y, this->player_ptr->x, floor_ptr->dun_level, SUMMON_NONE, PM_FORCE_PET)) {
                 msg_print(_("何も現れなかった...", "Nobody ever turns up..."));
             } else {
                 reward = _("モンスターがペットになった。", "a servant");
@@ -487,7 +487,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
             break;
         case REW_SER_UNDE:
             msg_format(_("%sは褒美としてアンデッドの使いをよこした。", "%s rewards you with an undead servant!"), this->name.data());
-            if (!summon_specific(this->player_ptr, -1, this->player_ptr->y, this->player_ptr->x, floor_ptr->dun_level, SUMMON_UNDEAD, PM_FORCE_PET)) {
+            if (!summon_specific(this->player_ptr, this->player_ptr->y, this->player_ptr->x, floor_ptr->dun_level, SUMMON_UNDEAD, PM_FORCE_PET)) {
                 msg_print(_("何も現れなかった...", "Nobody ever turns up..."));
             } else {
                 reward = _("アンデッドがペットになった。", "an undead servant");

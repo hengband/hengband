@@ -186,7 +186,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         return alchemy(player_ptr);
     case PlayerMutationType::GROW_MOLD:
         for (DIRECTION i = 0; i < 8; i++) {
-            summon_specific(player_ptr, -1, player_ptr->y, player_ptr->x, lvl, SUMMON_MOLD, PM_FORCE_PET);
+            summon_specific(player_ptr, player_ptr->y, player_ptr->x, lvl, SUMMON_MOLD, PM_FORCE_PET);
         }
 
         return true;
