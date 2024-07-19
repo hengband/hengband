@@ -8,7 +8,6 @@
 #include "main-win/main-win-sound.h"
 #include "main-win/main-win-cfg-reader.h"
 #include "main-win/main-win-define.h"
-#include "main-win/main-win-file-utils.h"
 #include "main-win/main-win-utils.h"
 #include "main-win/wav-reader.h"
 #include "main/sound-definitions-table.h"
@@ -182,14 +181,14 @@ static bool add_sound_queue(const WAVEFORMATEX *wf, BYTE *buf, DWORD bufsize, in
 /*!
  * 指定ファイルを再生する
  *
- * @param buf ファイル名
+ * @param path ファイルパス
  * @retval true 正常に処理された
  * @retval false 処理エラー
  */
-static bool play_sound_impl(char *filename, int volume)
+static bool play_sound_impl(const std::filesystem::path &path, int volume)
 {
     wav_reader reader;
-    if (!reader.open(filename)) {
+    if (!reader.open(path)) {
         return false;
     }
     auto wf = reader.get_waveformat();
@@ -258,8 +257,7 @@ int play_sound(int val, int volume)
     }
 
     auto path = path_build(ANGBAND_DIR_XTRA_SOUND, filename);
-    auto filename_sound = path.string();
-    if (play_sound_impl(filename_sound.data(), volume)) {
+    if (play_sound_impl(path, volume)) {
         return 0;
     }
 

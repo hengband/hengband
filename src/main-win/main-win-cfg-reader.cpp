@@ -6,7 +6,6 @@
 #include "main-win/main-win-cfg-reader.h"
 #include "locale/japanese.h"
 #include "main-win/main-win-define.h"
-#include "main-win/main-win-file-utils.h"
 #include "main-win/main-win-tokenizer.h"
 #include "main/sound-definitions-table.h"
 #include "term/z-term.h"
@@ -76,10 +75,13 @@ void CfgData::insert(int key1_type, int key2_val, cfg_values *value)
  * @param dir .cfgファイルのディレクトリ
  * @param files .cfgファイル名。複数指定可能で、最初に見つかったファイルから読み取る。
  */
-CfgReader::CfgReader(std::filesystem::path dir, std::initializer_list<concptr> files)
+CfgReader::CfgReader(const std::filesystem::path &dir, std::initializer_list<concptr> files)
 {
     this->dir = dir;
-    this->cfg_path = find_any_file(dir, files);
+    auto exists_in_dir = [dir](const char *filename) { return is_regular_file(path_build(dir, filename)); };
+    if (auto it = std::find_if(files.begin(), files.end(), exists_in_dir); it != files.end()) {
+        this->cfg_path = path_build(dir, *it);
+    }
 }
 
 /*!
@@ -91,7 +93,7 @@ CfgData *CfgReader::read_sections(std::initializer_list<cfg_section> sections)
 {
     CfgData *result = new CfgData();
 
-    if (!check_file(this->cfg_path.data())) {
+    if (!is_regular_file(this->cfg_path)) {
         return result;
     }
 
@@ -105,7 +107,7 @@ CfgData *CfgReader::read_sections(std::initializer_list<cfg_section> sections)
         int index = 0;
         concptr read_key;
         while ((read_key = section.key_at(index, key_buf)) != nullptr) {
-            GetPrivateProfileStringA(section.section_name, read_key, "", buf, MAIN_WIN_MAX_PATH, this->cfg_path.data());
+            GetPrivateProfileStringA(section.section_name, read_key, "", buf, MAIN_WIN_MAX_PATH, this->cfg_path.string().data());
             if (*buf != '\0') {
                 cfg_values *filenames = new cfg_values();
 #ifdef JP
@@ -115,7 +117,7 @@ CfgData *CfgReader::read_sections(std::initializer_list<cfg_section> sections)
                 const int num = tokenize_whitespace(buf, SAMPLE_MAX, tokens);
                 for (auto j = 0; j < num; j++) {
                     const auto path = path_build(dir, tokens[j]);
-                    if (check_file(path)) {
+                    if (is_regular_file(path)) {
                         filenames->push_back(string_make(tokens[j]));
                     }
                 }

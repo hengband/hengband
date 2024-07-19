@@ -1052,7 +1052,6 @@ EXTRA_hengband_SOURCES = \
 	main-win/main-win-cfg-reader.cpp main-win/main-win-cfg-reader.h \
 	main-win/main-win-define.h \
 	main-win/main-win-exception.cpp main-win/main-win-exception.h \
-	main-win/main-win-file-utils.cpp main-win/main-win-file-utils.h \
 	main-win/main-win-mci.cpp main-win/main-win-mci.h \
 	main-win/main-win-menuitem.h \
 	main-win/main-win-mmsystem.h \

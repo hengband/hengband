@@ -6,11 +6,11 @@
 #include "main-win/wav-reader.h"
 #include "main-win/main-win-utils.h"
 
-bool wav_reader::open(char *filename)
+bool wav_reader::open(const std::filesystem::path &path)
 {
     close();
 
-    this->hmmio = ::mmioOpenW(to_wchar(filename).wc_str(), NULL, MMIO_READ);
+    this->hmmio = ::mmioOpenW(path.wstring().data(), NULL, MMIO_READ);
     if (this->hmmio == NULL) {
         return false;
     }

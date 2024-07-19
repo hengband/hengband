@@ -2111,9 +2111,6 @@
     <ClCompile Include="..\..\src\main-win\main-win-tokenizer.cpp">
       <Filter>main-win</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\main-win\main-win-file-utils.cpp">
-      <Filter>main-win</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\stdafx.cpp" />
     <ClCompile Include="..\..\src\main\scene-table.cpp">
       <Filter>main</Filter>
@@ -4911,9 +4908,6 @@
       <Filter>main-win</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\main-win\main-win-tokenizer.h">
-      <Filter>main-win</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\main-win\main-win-file-utils.h">
       <Filter>main-win</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\stdafx.h" />
