@@ -629,7 +629,7 @@ static std::optional<std::pair<RealmType, RealmType>> wiz_select_realms(PlayerCl
 
     const auto realm2 = wiz_select_realm(realm2_choices, "2nd realm: ");
     if (!realm2) {
-        return std::nullopt;
+        return std::make_pair(*realm1, RealmType::NONE);
     }
 
     return std::make_pair(*realm1, *realm2);
