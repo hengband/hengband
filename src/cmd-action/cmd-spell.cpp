@@ -69,6 +69,7 @@
 #include "view/display-messages.h"
 #include "view/display-util.h"
 #include <string_view>
+#include <vector>
 
 concptr KWD_DAM = _("損傷:", "dam ");
 concptr KWD_RANGE = _("射程:", "rng ");
@@ -682,18 +683,10 @@ void do_cmd_browse(PlayerType *player_ptr)
  */
 static void change_realm2(PlayerType *player_ptr, PlayerRealm &pr, RealmType next_realm)
 {
-    int i, j = 0;
-    for (i = 0; i < 64; i++) {
-        player_ptr->spell_order[j] = player_ptr->spell_order[i];
-        if (player_ptr->spell_order[i] < 32) {
-            j++;
-        }
-    }
-    for (; j < 64; j++) {
-        player_ptr->spell_order[j] = 99;
-    }
+    auto is_realm2_spell = [](auto spell_id) { return spell_id >= 32; };
+    std::erase_if(player_ptr->spell_order_learned, is_realm2_spell);
 
-    for (i = 32; i < 64; i++) {
+    for (auto i = 32; i < 64; i++) {
         player_ptr->spell_exp[i] = PlayerSkill::spell_exp_at(PlayerSkillRank::UNSKILLED);
     }
     player_ptr->spell_learned2 = 0L;
@@ -874,17 +867,8 @@ void do_cmd_study(PlayerType *player_ptr)
         auto new_rank_str = PlayerSkill::skill_rank_str(new_rank);
         msg_format(_("%sの熟練度が%sに上がった。", "Your proficiency of %s is now %s rank."), spell_name.data(), new_rank_str);
     } else {
-        /* Find the next open entry in "player_ptr->spell_order[]" */
-        int i;
-        for (i = 0; i < 64; i++) {
-            /* Stop at the first empty space */
-            if (player_ptr->spell_order[i] == 99) {
-                break;
-            }
-        }
-
         /* Add the spell to the known list */
-        player_ptr->spell_order[i++] = spell;
+        player_ptr->spell_order_learned.push_back(spell);
 
         /* Mention the result */
         const auto &realm = increment ? pr.realm2() : pr.realm1();

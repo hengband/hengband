@@ -173,7 +173,7 @@ public:
     BIT_FLAGS spell_worked2{}; /* bit mask of spells tried and worked */
     BIT_FLAGS spell_forgotten1{}; /* bit mask of spells learned but forgotten */
     BIT_FLAGS spell_forgotten2{}; /* bit mask of spells learned but forgotten */
-    SPELL_IDX spell_order[64]{}; /* order spells learned/remembered/forgotten */
+    std::vector<int> spell_order_learned{}; /* order spells learned */
 
     SUB_EXP spell_exp[64]{}; /* Proficiency of spells */
     std::map<ItemKindType, std::array<SUB_EXP, 64>> weapon_exp{}; /* Proficiency of weapons */
