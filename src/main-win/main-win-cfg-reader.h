@@ -56,14 +56,14 @@ protected:
 
 class CfgReader {
 public:
-    CfgReader(std::filesystem::path dir, std::initializer_list<concptr> files);
+    CfgReader(const std::filesystem::path &dir, std::initializer_list<concptr> files);
     CfgData *read_sections(std::initializer_list<cfg_section> sections);
-    std::string get_cfg_path()
+    const std::filesystem::path &get_cfg_path() const
     {
         return cfg_path;
     }
 
 protected:
     std::filesystem::path dir;
-    std::string cfg_path;
+    std::filesystem::path cfg_path;
 };

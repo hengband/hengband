@@ -6,6 +6,7 @@
 
 #include <windows.h>
 
+#include <filesystem>
 #include <memory>
 #include <mmsystem.h>
 
@@ -29,11 +30,11 @@ public:
     /*!
      * WAVファイルを開く
      *
-     * @param filename
+     * @param path ファイルパス
      * @retval true 正常に処理された
      * @retval false 処理エラー
      */
-    bool open(char *filename);
+    bool open(const std::filesystem::path &path);
     /*!
      * PCMデータ取得
      * @details 呼び出し元でdelete[]すること
