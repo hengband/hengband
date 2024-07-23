@@ -689,6 +689,7 @@ hengband_SOURCES = \
 	player/player-personality.cpp player/player-personality.h \
 	player/player-realm.cpp player/player-realm.h \
 	player/player-skill.cpp player/player-skill.h \
+	player/player-spell-status.cpp player/player-spell-status.h \
 	player/player-status.cpp player/player-status.h \
 	player/player-status-flags.cpp player/player-status-flags.h \
 	player/player-status-table.cpp player/player-status-table.h \

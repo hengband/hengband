@@ -41,6 +41,7 @@
 #include "player/player-damage.h"
 #include "player/player-realm.h"
 #include "player/player-skill.h"
+#include "player/player-spell-status.h"
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-random.h"
@@ -274,7 +275,9 @@ static bool spell_okay(PlayerType *player_ptr, int spell_id, bool learned, bool 
 
     /* Spell is forgotten */
     PlayerRealm pr(player_ptr);
-    if (pr.realm2().equals(use_realm) ? (player_ptr->spell_forgotten2 & (1UL << spell_id)) : (player_ptr->spell_forgotten1 & (1UL << spell_id))) {
+    PlayerSpellStatus pss(player_ptr);
+    const auto realm_status = pr.realm2().equals(use_realm) ? pss.realm2() : pss.realm1();
+    if (realm_status.is_forgotten(spell_id)) {
         /* Never okay */
         return false;
     }
@@ -284,7 +287,7 @@ static bool spell_okay(PlayerType *player_ptr, int spell_id, bool learned, bool 
     }
 
     /* Spell is learned */
-    if (pr.realm2().equals(use_realm) ? (player_ptr->spell_learned2 & (1UL << spell_id)) : (player_ptr->spell_learned1 & (1UL << spell_id))) {
+    if (realm_status.is_learned(spell_id)) {
         /* Always true */
         return !study_pray;
     }
@@ -683,15 +686,11 @@ void do_cmd_browse(PlayerType *player_ptr)
  */
 static void change_realm2(PlayerType *player_ptr, PlayerRealm &pr, RealmType next_realm)
 {
-    auto is_realm2_spell = [](auto spell_id) { return spell_id >= 32; };
-    std::erase_if(player_ptr->spell_order_learned, is_realm2_spell);
+    PlayerSpellStatus(player_ptr).realm2().initialize();
 
     for (auto i = 32; i < 64; i++) {
         player_ptr->spell_exp[i] = PlayerSkill::spell_exp_at(PlayerSkillRank::UNSKILLED);
     }
-    player_ptr->spell_learned2 = 0L;
-    player_ptr->spell_worked2 = 0L;
-    player_ptr->spell_forgotten2 = 0L;
 
     constexpr auto fmt_realm = _("魔法の領域を%sから%sに変更した。", "changed magic realm from %s to %s.");
     const auto mes = format(fmt_realm, pr.realm2().get_name().data(), PlayerRealm::get_name(next_realm).data());
@@ -717,7 +716,6 @@ static void change_realm2(PlayerType *player_ptr, PlayerRealm &pr, RealmType nex
 void do_cmd_study(PlayerType *player_ptr)
 {
     auto increment = 0;
-    auto learned = false;
 
     /* Spells of realm2 will have an increment of +32 */
     SPELL_IDX spell = -1;
@@ -830,21 +828,10 @@ void do_cmd_study(PlayerType *player_ptr)
     }
 
     /* Learn the spell */
-    if (spell < 32) {
-        if (player_ptr->spell_learned1 & (1UL << spell)) {
-            learned = true;
-        } else {
-            player_ptr->spell_learned1 |= (1UL << spell);
-        }
-    } else {
-        if (player_ptr->spell_learned2 & (1UL << (spell - 32))) {
-            learned = true;
-        } else {
-            player_ptr->spell_learned2 |= (1UL << (spell - 32));
-        }
-    }
+    PlayerSpellStatus pss(player_ptr);
+    auto realm_status = increment ? pss.realm2() : pss.realm1();
 
-    if (learned) {
+    if (realm_status.is_learned(spell % 32)) {
         auto max_exp = PlayerSkill::spell_exp_at((spell < 32) ? PlayerSkillRank::MASTER : PlayerSkillRank::EXPERT);
         const auto old_exp = player_ptr->spell_exp[spell];
         const auto &realm = increment ? pr.realm2() : pr.realm1();
@@ -867,6 +854,8 @@ void do_cmd_study(PlayerType *player_ptr)
         auto new_rank_str = PlayerSkill::skill_rank_str(new_rank);
         msg_format(_("%sの熟練度が%sに上がった。", "Your proficiency of %s is now %s rank."), spell_name.data(), new_rank_str);
     } else {
+        realm_status.set_learned(spell % 32);
+
         /* Add the spell to the known list */
         player_ptr->spell_order_learned.push_back(spell);
 
@@ -1146,15 +1135,13 @@ bool do_cmd_cast(PlayerType *player_ptr)
         }
 
         /* A spell was cast */
-        if (!(increment ? (player_ptr->spell_worked2 & (1UL << spell_id)) : (player_ptr->spell_worked1 & (1UL << spell_id))) && !is_every_magic) {
+        PlayerSpellStatus pss(player_ptr);
+        auto realm_status = increment ? pss.realm2() : pss.realm1();
+        if (!realm_status.is_worked(spell_id) && !is_every_magic) {
             int e = spell.sexp;
 
             /* The spell worked */
-            if (pr.realm1().equals(use_realm)) {
-                player_ptr->spell_worked1 |= (1UL << spell_id);
-            } else {
-                player_ptr->spell_worked2 |= (1UL << spell_id);
-            }
+            realm_status.set_worked(spell_id);
 
             gain_exp(player_ptr, e * spell.slevel);
             RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);

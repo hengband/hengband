@@ -15,6 +15,7 @@
 #include "player/player-personality.h"
 #include "player/player-realm.h"
 #include "player/player-skill.h"
+#include "player/player-spell-status.h"
 #include "realm/realm-types.h"
 #include "spell/spells-status.h"
 #include "system/building-type-definition.h"
@@ -233,9 +234,12 @@ void set_zangband_class(PlayerType *player_ptr)
 void set_zangband_learnt_spells(PlayerType *player_ptr)
 {
     player_ptr->learned_spells = 0;
-    for (int i = 0; i < 64; i++) {
-        if ((i < 32) ? (player_ptr->spell_learned1 & (1UL << i)) : (player_ptr->spell_learned2 & (1UL << (i - 32)))) {
-            player_ptr->learned_spells++;
+    PlayerSpellStatus pss(player_ptr);
+    for (const auto &realm_status : { pss.realm1(), pss.realm2() }) {
+        for (auto i = 0; i < 32; i++) {
+            if (realm_status.is_learned(i)) {
+                player_ptr->learned_spells++;
+            }
         }
     }
 }

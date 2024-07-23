@@ -517,6 +517,7 @@
     <ClCompile Include="..\..\src\object-use\read\read-execution.cpp" />
     <ClCompile Include="..\..\src\player\player-status-flags.cpp" />
     <ClCompile Include="..\..\src\player\player-status-table.cpp" />
+    <ClCompile Include="..\..\src\player\player-spell-status.cpp" />
     <ClCompile Include="..\..\src\player\player-view.cpp" />
     <ClCompile Include="..\..\src\racial\class-racial-switcher.cpp" />
     <ClCompile Include="..\..\src\racial\mutation-racial-selector.cpp" />
@@ -1318,6 +1319,7 @@
     <ClInclude Include="..\..\src\object-use\read\read-execution.h" />
     <ClInclude Include="..\..\src\player\player-status-flags.h" />
     <ClInclude Include="..\..\src\player\player-status-table.h" />
+    <ClInclude Include="..\..\src\player\player-spell-status.h" />
     <ClInclude Include="..\..\src\player\player-view.h" />
     <ClInclude Include="..\..\src\racial\class-racial-switcher.h" />
     <ClInclude Include="..\..\src\racial\mutation-racial-selector.h" />

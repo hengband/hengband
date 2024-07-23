@@ -4,6 +4,7 @@
 #include "player-info/class-info.h"
 #include "player/player-realm.h"
 #include "player/player-skill.h"
+#include "player/player-spell-status.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"
 #include "realm/realm-types.h"
@@ -303,6 +304,8 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL
         const auto info = exe_spell(player_ptr, use_realm, spell_id, SpellProcessType::INFO);
         concptr comment = info->data();
         byte line_attr = TERM_WHITE;
+        PlayerSpellStatus pss(player_ptr);
+        const auto realm_status = pr.realm1().equals(use_realm) ? pss.realm1() : pss.realm2();
         if (pc.is_every_magic()) {
             if (spell.slevel > player_ptr->max_plv) {
                 comment = _("未知", "unknown");
@@ -314,13 +317,13 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL
         } else if (!pr.realm1().equals(use_realm) && !pr.realm2().equals(use_realm)) {
             comment = _("未知", "unknown");
             line_attr = TERM_L_BLUE;
-        } else if (pr.realm1().equals(use_realm) ? ((player_ptr->spell_forgotten1 & (1UL << spell_id))) : ((player_ptr->spell_forgotten2 & (1UL << spell_id)))) {
+        } else if (realm_status.is_forgotten(spell_id)) {
             comment = _("忘却", "forgotten");
             line_attr = TERM_YELLOW;
-        } else if (!(pr.realm1().equals(use_realm) ? (player_ptr->spell_learned1 & (1UL << spell_id)) : (player_ptr->spell_learned2 & (1UL << spell_id)))) {
+        } else if (!realm_status.is_learned(spell_id)) {
             comment = _("未知", "unknown");
             line_attr = TERM_L_BLUE;
-        } else if (!(pr.realm1().equals(use_realm) ? (player_ptr->spell_worked1 & (1UL << spell_id)) : (player_ptr->spell_worked2 & (1UL << spell_id)))) {
+        } else if (!realm_status.is_worked(spell_id)) {
             comment = _("未経験", "untried");
             line_attr = TERM_L_GREEN;
         }
