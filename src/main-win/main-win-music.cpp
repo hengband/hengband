@@ -36,7 +36,7 @@ std::filesystem::path ANGBAND_DIR_XTRA_MUSIC;
 /*
  * "music.cfg" data
  */
-CfgData *music_cfg_data;
+std::optional<CfgData> music_cfg_data;
 
 namespace main_win_music {
 
@@ -183,12 +183,16 @@ errr play_music(int type, int val)
         return 0;
     } // now playing
 
+    if (!music_cfg_data) {
+        return 1;
+    }
+
     auto filename = music_cfg_data->get_rand(type, val);
     if (!filename) {
         return 1;
     } // no setting
 
-    auto path_music = path_build(ANGBAND_DIR_XTRA_MUSIC, filename);
+    auto path_music = path_build(ANGBAND_DIR_XTRA_MUSIC, *filename);
     if (current_music_type != TERM_XTRA_MUSIC_MUTE) {
         if (current_music_path == path_music) {
             return 0;
