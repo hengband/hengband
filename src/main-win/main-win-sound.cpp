@@ -91,18 +91,19 @@ std::queue<sound_res *> sound_queue;
  */
 static void modulate_amplitude(int bits_per_sample, BYTE *pcm_buf, size_t bufsize, int mult, int div)
 {
-    auto modulate = [mult, div](auto sample) {
+    auto modulate = [mult, div](auto sample, int standard = 0) {
         using sample_t = decltype(sample);
         constexpr auto min = std::numeric_limits<sample_t>::min();
         constexpr auto max = std::numeric_limits<sample_t>::max();
-        const auto modulated_sample = std::clamp<int>(sample * mult / div, min, max);
+        const auto diff = sample - standard;
+        const auto modulated_sample = std::clamp<int>(standard + diff * mult / div, min, max);
         return static_cast<sample_t>(modulated_sample);
     };
 
     switch (bits_per_sample) {
     case 8:
         for (auto i = 0U; i < bufsize; ++i) {
-            pcm_buf[i] = modulate(pcm_buf[i]);
+            pcm_buf[i] = modulate(pcm_buf[i], 128);
         }
         break;
 
