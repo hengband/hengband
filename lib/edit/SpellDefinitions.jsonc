@@ -3544,14 +3544,14 @@
             },
             {
               "spell_id": 13,
-              "spell_tag": "Demonfire",
+              "spell_tag": "Corrupt",
               "name": {
-                "ja": "悪魔火",
-                "en": "Demonfire"
+                "ja": "堕落",
+                "en": "Corrupt"
               },
               "description": {
-                "ja": "強力な炎のボルトを放つ。",
-                "en": "Fires a powerful bolt of fire."
+                "ja": "強力な深淵のボルトを放つ。",
+                "en": "Fires a powerful bolt of abyss."
               }
             },
             {

@@ -224,7 +224,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
     } break;
 
     case 13: {
-        int dam = plev * 5;
+        int dam = plev * 3;
 
         if (info) {
             return info_damage(dam);
@@ -234,7 +234,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
             if (!get_aim_dir(player_ptr, &dir)) {
                 return std::nullopt;
             }
-            fire_bolt(player_ptr, AttributeType::FIRE, dir, dam);
+            fire_bolt(player_ptr, AttributeType::ABYSS, dir, dam);
         }
     } break;
 

@@ -1949,10 +1949,10 @@
               "first_cast_exp_rate": 30
             },
             {
-              "spell_tag": "Demonfire",
+              "spell_tag": "Corrupt",
               "learn_level": 33,
               "mana_cost": 30,
-              "difficulty": 85,
+              "difficulty": 70,
               "first_cast_exp_rate": 15
             },
             {
@@ -4251,10 +4251,10 @@
               "first_cast_exp_rate": 30
             },
             {
-              "spell_tag": "Demonfire",
+              "spell_tag": "Corrupt",
               "learn_level": 35,
-              "mana_cost": 33,
-              "difficulty": 85,
+              "mana_cost": 38,
+              "difficulty": 70,
               "first_cast_exp_rate": 30
             },
             {
@@ -7252,9 +7252,9 @@
               "first_cast_exp_rate": 20
             },
             {
-              "spell_tag": "Demonfire",
+              "spell_tag": "Corrupt",
               "learn_level": 44,
-              "mana_cost": 40,
+              "mana_cost": 60,
               "difficulty": 80,
               "first_cast_exp_rate": 15
             },
@@ -9795,10 +9795,10 @@
               "first_cast_exp_rate": 8
             },
             {
-              "spell_tag": "Demonfire",
+              "spell_tag": "Corrupt",
               "learn_level": 41,
-              "mana_cost": 36,
-              "difficulty": 85,
+              "mana_cost": 58,
+              "difficulty": 70,
               "first_cast_exp_rate": 15
             },
             {
@@ -10494,10 +10494,10 @@
               "first_cast_exp_rate": 8
             },
             {
-              "spell_tag": "Demonfire",
+              "spell_tag": "Corrupt",
               "learn_level": 38,
-              "mana_cost": 33,
-              "difficulty": 85,
+              "mana_cost": 38,
+              "difficulty": 70,
               "first_cast_exp_rate": 15
             },
             {
@@ -13506,7 +13506,7 @@
               "first_cast_exp_rate": 8
             },
             {
-              "spell_tag": "Demonfire",
+              "spell_tag": "Corrupt",
               "learn_level": 27,
               "mana_cost": 28,
               "difficulty": 65,
@@ -16301,10 +16301,10 @@
               "first_cast_exp_rate": 30
             },
             {
-              "spell_tag": "Demonfire",
+              "spell_tag": "Corrupt",
               "learn_level": 33,
               "mana_cost": 30,
-              "difficulty": 85,
+              "difficulty": 70,
               "first_cast_exp_rate": 15
             },
             {
@@ -18636,10 +18636,10 @@
               "first_cast_exp_rate": 30
             },
             {
-              "spell_tag": "Demonfire",
+              "spell_tag": "Corrupt",
               "learn_level": 44,
-              "mana_cost": 58,
-              "difficulty": 85,
+              "mana_cost": 75,
+              "difficulty": 80,
               "first_cast_exp_rate": 15
             },
             {
