@@ -24,7 +24,7 @@ std::filesystem::path ANGBAND_DIR_XTRA_SOUND;
 /*
  * "sound.cfg" data
  */
-CfgData *sound_cfg_data;
+std::optional<CfgData> sound_cfg_data;
 
 /*!
  * 効果音データ
@@ -251,12 +251,16 @@ void finalize_sound(void)
  */
 int play_sound(int val, int volume)
 {
+    if (!sound_cfg_data) {
+        return 1;
+    }
+
     auto filename = sound_cfg_data->get_rand(TERM_XTRA_SOUND, val);
     if (!filename) {
         return 1;
     }
 
-    auto path = path_build(ANGBAND_DIR_XTRA_SOUND, filename);
+    auto path = path_build(ANGBAND_DIR_XTRA_SOUND, *filename);
     if (play_sound_impl(path, volume)) {
         return 0;
     }
