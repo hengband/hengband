@@ -22,6 +22,7 @@
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player/player-realm.h"
+#include "player/player-spell-status.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"
@@ -824,22 +825,26 @@ static void display_spell_list(PlayerType *player_ptr)
         y = (j < 3) ? 0 : (m[j - 3] + 2);
         x = 27 * (j % 3);
         int n = 0;
-        for (int i = 0; i < 32; i++) {
+
+        PlayerSpellStatus pss(player_ptr);
+        const auto realm_status = (j < 1) ? pss.realm1() : pss.realm2();
+
+        for (auto spell_id = 0; spell_id < 32; spell_id++) {
             byte a = TERM_WHITE;
 
             const auto &realm = (j < 1) ? pr.realm1() : pr.realm2();
-            const auto &spell = realm.get_spell_info(i);
-            const auto &spell_name = realm.get_spell_name(i % 32);
+            const auto &spell = realm.get_spell_info(spell_id);
+            const auto &spell_name = realm.get_spell_name(spell_id);
             auto name = spell_name.data();
 
             if (spell.slevel >= 99) {
                 name = _("(判読不能)", "(illegible)");
                 a = TERM_L_DARK;
-            } else if ((j < 1) ? ((player_ptr->spell_forgotten1 & (1UL << i))) : ((player_ptr->spell_forgotten2 & (1UL << (i % 32))))) {
+            } else if (realm_status.is_forgotten(spell_id)) {
                 a = TERM_ORANGE;
-            } else if (!((j < 1) ? (player_ptr->spell_learned1 & (1UL << i)) : (player_ptr->spell_learned2 & (1UL << (i % 32))))) {
+            } else if (!realm_status.is_learned(spell_id)) {
                 a = TERM_RED;
-            } else if (!((j < 1) ? (player_ptr->spell_worked1 & (1UL << i)) : (player_ptr->spell_worked2 & (1UL << (i % 32))))) {
+            } else if (!realm_status.is_worked(spell_id)) {
                 a = TERM_YELLOW;
             }
 

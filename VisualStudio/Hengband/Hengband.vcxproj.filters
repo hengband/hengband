@@ -1850,6 +1850,9 @@
     <ClCompile Include="..\..\src\player\player-status-table.cpp">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player\player-spell-status.cpp">
+      <Filter>player</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\monster-floor\monster-lite-util.cpp">
       <Filter>monster-floor</Filter>
     </ClCompile>
@@ -4635,6 +4638,9 @@
       <Filter>racial</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\player-status-table.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-spell-status.h">
       <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster-floor\monster-lite-util.h">
