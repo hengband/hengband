@@ -1912,7 +1912,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
     }
     case IDM_OPTIONS_OPEN_MUSIC_DIR: {
         const auto path = path_build(ANGBAND_DIR_XTRA_MUSIC, "music.cfg");
-        open_dir_in_explorer(path.string());
+        open_dir_in_explorer(path);
         break;
     }
     case IDM_OPTIONS_SOUND: {
@@ -1935,7 +1935,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
     }
     case IDM_OPTIONS_OPEN_SOUND_DIR: {
         const auto path = path_build(ANGBAND_DIR_XTRA_SOUND, "sound.cfg");
-        open_dir_in_explorer(path.string());
+        open_dir_in_explorer(path);
         break;
     }
     case IDM_OPTIONS_NO_BG: {

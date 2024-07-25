@@ -56,13 +56,13 @@ void save_screen_as_html(HWND hWnd)
 
 /*!
  * @brief 対象ファイルを選択した状態でエクスプローラーを開く
- * @param filename 対象ファイル
+ * @param path 対象ファイルのパス
  */
-void open_dir_in_explorer(std::string_view filename)
+void open_dir_in_explorer(const std::filesystem::path &path)
 {
-    std::stringstream ss;
-    ss << "/select," << filename;
-    ShellExecuteW(NULL, NULL, L"explorer.exe", to_wchar(ss.str().data()).wc_str(), NULL, SW_SHOWNORMAL);
+    std::wstringstream ss;
+    ss << L"/select," << path.wstring();
+    ShellExecuteW(NULL, NULL, L"explorer.exe", ss.str().data(), NULL, SW_SHOWNORMAL);
 }
 
 /*!
