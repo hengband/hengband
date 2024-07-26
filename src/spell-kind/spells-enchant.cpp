@@ -120,10 +120,9 @@ bool artifact_scroll(PlayerType *player_ptr)
  */
 bool mundane_spell(PlayerType *player_ptr, bool only_equip)
 {
-    std::unique_ptr<ItemTester> item_tester = std::make_unique<AllMatchItemTester>();
-    if (only_equip) {
-        item_tester = std::make_unique<FuncItemTester>(&ItemEntity::is_weapon_armour_ammo);
-    }
+    std::unique_ptr<ItemTester> item_tester =
+        only_equip ? std::make_unique<FuncItemTester>(&ItemEntity::is_weapon_armour_ammo)
+                   : std::make_unique<FuncItemTester>([](const ItemEntity *o_ptr) { return !o_ptr->bi_key.is_monster(); });
 
     constexpr auto q = _("どのアイテムを凡庸化しますか？", "Mundanify which item? ");
     constexpr auto s = _("凡庸化できるアイテムがない。", "You have nothing to mundanify.");
