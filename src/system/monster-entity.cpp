@@ -1,7 +1,6 @@
 #include "system/monster-entity.h"
 #include "core/speed-table.h"
 #include "game-option/birth-options.h"
-#include "monster-floor/monster-move.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-kind-flags.h"
 #include "monster/monster-pain-describer.h"
@@ -480,9 +479,20 @@ std::optional<bool> MonsterEntity::order_pet_hp(const MonsterEntity &other) cons
 }
 
 /*!
+ * @brief モンスターの目標地点をセットする / Set the target of counter attack
+ * @param y 目標y座標
+ * @param x 目標x座標
+ */
+void MonsterEntity::set_target(POSITION y, POSITION x)
+{
+    this->target_y = y;
+    this->target_x = x;
+}
+
+/*!
  * @brief モンスターの目標地点をリセットする / Reset the target of counter attack
  */
 void MonsterEntity::reset_target()
 {
-    set_target(this, 0, 0);
+    this->set_target(0, 0);
 }
