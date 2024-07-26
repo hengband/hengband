@@ -31,15 +31,6 @@
 #include "util/string-processor.h"
 
 /*!
- * @brief モンスターを友好的にする
- * @param m_ptr モンスター情報構造体の参照ポインタ
- */
-void set_friendly(MonsterEntity *m_ptr)
-{
-    m_ptr->mflag2.set(MonsterConstantFlagType::FRIENDLY);
-}
-
-/*!
  * @brief モンスターが地形を踏破できるかどうかを返す
  * Check if monster can cross terrain
  * @param player_ptr プレイヤーへの参照ポインタ

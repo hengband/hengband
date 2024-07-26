@@ -311,7 +311,7 @@ bool make_attack_spell(PlayerType *player_ptr, MONSTER_IDX m_idx)
     msa_type tmp_msa(player_ptr, m_idx);
     msa_type *msa_ptr = &tmp_msa;
     if (msa_ptr->m_ptr->is_confused()) {
-        reset_target(msa_ptr->m_ptr);
+        msa_ptr->m_ptr->reset_target();
         return false;
     }
 
@@ -328,7 +328,7 @@ bool make_attack_spell(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return false;
     }
 
-    reset_target(msa_ptr->m_ptr);
+    msa_ptr->m_ptr->reset_target();
     msa_ptr->rlev = ((msa_ptr->r_ptr->level >= 1) ? msa_ptr->r_ptr->level : 1);
     set_no_magic_mask(msa_ptr);
     decide_lite_area(player_ptr, msa_ptr);

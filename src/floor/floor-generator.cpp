@@ -242,7 +242,7 @@ static void generate_gambling_arena(PlayerType *player_ptr)
     for (MONSTER_IDX i = 0; i < 4; i++) {
         const auto m_idx = place_specific_monster(player_ptr, 0, player_ptr->y + 8 + (i / 2) * 4, player_ptr->x - 2 + (i % 2) * 4, battle_mon_list[i], (PM_NO_KAGE | PM_NO_PET));
         if (m_idx) {
-            set_friendly(&floor_ptr->m_list[*m_idx]);
+            floor_ptr->m_list[*m_idx].set_friendly();
         }
     }
 

@@ -413,10 +413,10 @@ void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
     m_ptr->mtimed[MTIMED_MONFEAR] = rd_byte();
 
     if (h_older_than(0, 0, 10)) {
-        reset_target(m_ptr);
+        m_ptr->reset_target();
     } else if (h_older_than(0, 0, 11)) {
         strip_bytes(2);
-        reset_target(m_ptr);
+        m_ptr->reset_target();
     } else {
         m_ptr->target_y = rd_s16b();
         m_ptr->target_x = rd_s16b();

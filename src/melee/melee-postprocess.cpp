@@ -300,7 +300,7 @@ void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *
     if ((dam > 0) && !m_ptr->is_pet() && !m_ptr->is_friendly() && (mam_pp_ptr->src_idx != m_idx)) {
         const auto &m_ref = floor_ptr->m_list[src_idx];
         if (m_ref.is_pet() && !player_ptr->is_located_at({ m_ptr->target_y, m_ptr->target_x })) {
-            set_target(m_ptr, m_ref.fy, m_ref.fx);
+            m_ptr->set_target(m_ref.fy, m_ref.fx);
         }
     }
 

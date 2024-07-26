@@ -345,7 +345,7 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX
     }
 
     m_ptr->cdis = 0;
-    reset_target(m_ptr);
+    m_ptr->reset_target();
     m_ptr->nickname.clear();
     m_ptr->exp = 0;
 
@@ -369,7 +369,7 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX
         set_pet(player_ptr, m_ptr);
     } else if ((is_player(src_idx) && new_monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY)) || is_friendly_idx(player_ptr, src_idx) || any_bits(mode, PM_FORCE_FRIENDLY)) {
         if (!monster_has_hostile_align(player_ptr, nullptr, 0, -1, &new_monrace) && !player_ptr->current_floor_ptr->inside_arena) {
-            set_friendly(m_ptr);
+            m_ptr->set_friendly();
         }
     }
 

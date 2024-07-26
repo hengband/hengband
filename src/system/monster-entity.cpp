@@ -477,3 +477,30 @@ std::optional<bool> MonsterEntity::order_pet_hp(const MonsterEntity &other) cons
 
     return std::nullopt;
 }
+
+/*!
+ * @brief モンスターの目標地点をセットする / Set the target of counter attack
+ * @param y 目標y座標
+ * @param x 目標x座標
+ */
+void MonsterEntity::set_target(POSITION y, POSITION x)
+{
+    this->target_y = y;
+    this->target_x = x;
+}
+
+/*!
+ * @brief モンスターの目標地点をリセットする / Reset the target of counter attack
+ */
+void MonsterEntity::reset_target()
+{
+    this->set_target(0, 0);
+}
+
+/*!
+ * @brief モンスターを友好的にする
+ */
+void MonsterEntity::set_friendly()
+{
+    this->mflag2.set(MonsterConstantFlagType::FRIENDLY);
+}

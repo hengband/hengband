@@ -178,7 +178,7 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
     m_ptr->fy = ny;
     m_ptr->fx = nx;
 
-    reset_target(m_ptr);
+    m_ptr->reset_target();
     update_monster(player_ptr, m_idx, true);
     lite_spot(player_ptr, oy, ox);
     lite_spot(player_ptr, ny, nx);
