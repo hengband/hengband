@@ -1949,10 +1949,10 @@
               "first_cast_exp_rate": 30
             },
             {
-              "spell_tag": "Demonfire",
+              "spell_tag": "Corrupt",
               "learn_level": 33,
               "mana_cost": 30,
-              "difficulty": 85,
+              "difficulty": 70,
               "first_cast_exp_rate": 15
             },
             {
@@ -2068,9 +2068,9 @@
               "first_cast_exp_rate": 200
             },
             {
-              "spell_tag": "Bloody_Curse",
+              "spell_tag": "Call_the_Abyss",
               "learn_level": 47,
-              "mana_cost": 85,
+              "mana_cost": 90,
               "difficulty": 80,
               "first_cast_exp_rate": 200
             },
@@ -4251,10 +4251,10 @@
               "first_cast_exp_rate": 30
             },
             {
-              "spell_tag": "Demonfire",
+              "spell_tag": "Corrupt",
               "learn_level": 35,
-              "mana_cost": 33,
-              "difficulty": 85,
+              "mana_cost": 38,
+              "difficulty": 70,
               "first_cast_exp_rate": 30
             },
             {
@@ -4370,10 +4370,10 @@
               "first_cast_exp_rate": 150
             },
             {
-              "spell_tag": "Bloody_Curse",
+              "spell_tag": "Call_the_Abyss",
               "learn_level": 49,
               "mana_cost": 95,
-              "difficulty": 80,
+              "difficulty": 85,
               "first_cast_exp_rate": 200
             },
             {
@@ -7252,9 +7252,9 @@
               "first_cast_exp_rate": 20
             },
             {
-              "spell_tag": "Demonfire",
+              "spell_tag": "Corrupt",
               "learn_level": 44,
-              "mana_cost": 40,
+              "mana_cost": 60,
               "difficulty": 80,
               "first_cast_exp_rate": 15
             },
@@ -7371,7 +7371,7 @@
               "first_cast_exp_rate": 0
             },
             {
-              "spell_tag": "Bloody_Curse",
+              "spell_tag": "Call_the_Abyss",
               "learn_level": 99,
               "mana_cost": 0,
               "difficulty": 0,
@@ -9795,10 +9795,10 @@
               "first_cast_exp_rate": 8
             },
             {
-              "spell_tag": "Demonfire",
+              "spell_tag": "Corrupt",
               "learn_level": 41,
-              "mana_cost": 36,
-              "difficulty": 85,
+              "mana_cost": 58,
+              "difficulty": 70,
               "first_cast_exp_rate": 15
             },
             {
@@ -9914,10 +9914,10 @@
               "first_cast_exp_rate": 200
             },
             {
-              "spell_tag": "Bloody_Curse",
+              "spell_tag": "Call_the_Abyss",
               "learn_level": 50,
               "mana_cost": 105,
-              "difficulty": 80,
+              "difficulty": 85,
               "first_cast_exp_rate": 200
             },
             {
@@ -10494,10 +10494,10 @@
               "first_cast_exp_rate": 8
             },
             {
-              "spell_tag": "Demonfire",
+              "spell_tag": "Corrupt",
               "learn_level": 38,
-              "mana_cost": 33,
-              "difficulty": 85,
+              "mana_cost": 38,
+              "difficulty": 70,
               "first_cast_exp_rate": 15
             },
             {
@@ -10613,9 +10613,9 @@
               "first_cast_exp_rate": 200
             },
             {
-              "spell_tag": "Bloody_Curse",
+              "spell_tag": "Call_the_Abyss",
               "learn_level": 48,
-              "mana_cost": 105,
+              "mana_cost": 90,
               "difficulty": 80,
               "first_cast_exp_rate": 200
             },
@@ -13506,7 +13506,7 @@
               "first_cast_exp_rate": 8
             },
             {
-              "spell_tag": "Demonfire",
+              "spell_tag": "Corrupt",
               "learn_level": 27,
               "mana_cost": 28,
               "difficulty": 65,
@@ -13625,10 +13625,10 @@
               "first_cast_exp_rate": 200
             },
             {
-              "spell_tag": "Bloody_Curse",
+              "spell_tag": "Call_the_Abyss",
               "learn_level": 43,
-              "mana_cost": 75,
-              "difficulty": 70,
+              "mana_cost": 80,
+              "difficulty": 75,
               "first_cast_exp_rate": 200
             },
             {
@@ -16301,10 +16301,10 @@
               "first_cast_exp_rate": 30
             },
             {
-              "spell_tag": "Demonfire",
+              "spell_tag": "Corrupt",
               "learn_level": 33,
               "mana_cost": 30,
-              "difficulty": 85,
+              "difficulty": 70,
               "first_cast_exp_rate": 15
             },
             {
@@ -16420,9 +16420,9 @@
               "first_cast_exp_rate": 200
             },
             {
-              "spell_tag": "Bloody_Curse",
+              "spell_tag": "Call_the_Abyss",
               "learn_level": 47,
-              "mana_cost": 85,
+              "mana_cost": 90,
               "difficulty": 80,
               "first_cast_exp_rate": 200
             },
@@ -18636,10 +18636,10 @@
               "first_cast_exp_rate": 30
             },
             {
-              "spell_tag": "Demonfire",
+              "spell_tag": "Corrupt",
               "learn_level": 44,
-              "mana_cost": 58,
-              "difficulty": 85,
+              "mana_cost": 75,
+              "difficulty": 80,
               "first_cast_exp_rate": 15
             },
             {
@@ -18755,7 +18755,7 @@
               "first_cast_exp_rate": 0
             },
             {
-              "spell_tag": "Bloody_Curse",
+              "spell_tag": "Call_the_Abyss",
               "learn_level": 99,
               "mana_cost": 0,
               "difficulty": 0,

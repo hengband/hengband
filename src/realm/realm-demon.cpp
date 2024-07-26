@@ -224,7 +224,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
     } break;
 
     case 13: {
-        int dam = plev * 5;
+        int dam = plev * 3;
 
         if (info) {
             return info_damage(dam);
@@ -234,7 +234,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
             if (!get_aim_dir(player_ptr, &dir)) {
                 return std::nullopt;
             }
-            fire_bolt(player_ptr, AttributeType::FIRE, dir, dam);
+            fire_bolt(player_ptr, AttributeType::ABYSS, dir, dam);
         }
     } break;
 
@@ -455,7 +455,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
     } break;
 
     case 30: {
-        int dam = 600;
+        int dam = 300 + plev * 4;
         POSITION rad = 0;
 
         if (info) {
@@ -467,8 +467,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
                 return std::nullopt;
             }
 
-            fire_ball_hide(player_ptr, AttributeType::BLOOD_CURSE, dir, dam, rad);
-            take_hit(player_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("血の呪い", "Blood curse"));
+            fire_ball_hide(player_ptr, AttributeType::ABYSS, dir, dam, rad);
         }
     } break;
 

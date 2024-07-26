@@ -3544,14 +3544,14 @@
             },
             {
               "spell_id": 13,
-              "spell_tag": "Demonfire",
+              "spell_tag": "Corrupt",
               "name": {
-                "ja": "悪魔火",
-                "en": "Demonfire"
+                "ja": "堕落",
+                "en": "Corrupt"
               },
               "description": {
-                "ja": "強力な炎のボルトを放つ。",
-                "en": "Fires a powerful bolt of fire."
+                "ja": "強力な深淵のボルトを放つ。",
+                "en": "Fires a powerful bolt of abyss."
               }
             },
             {
@@ -3764,14 +3764,14 @@
             },
             {
               "spell_id": 30,
-              "spell_tag": "Bloody_Curse",
+              "spell_tag": "Call_the_Abyss",
               "name": {
-                "ja": "血の呪い",
-                "en": "Bloody Curse"
+                "ja": "深淵招来",
+                "en": "Call the Abyss"
               },
               "description": {
-                "ja": "自分がダメージを受けることによって対象に呪いをかけ、ダメージを与え様々な効果を引き起こす。",
-                "en": "Puts blood curse, which damages and causes various effects, on a monster. You also take damage."
+                "ja": "非常に強力な極小の深淵の球を放つ。",
+                "en": "Fires an extremely powerful tiny ball of abyss."
               }
             },
             {
