@@ -589,12 +589,3 @@ void set_target(MonsterEntity *m_ptr, POSITION y, POSITION x)
     m_ptr->target_y = y;
     m_ptr->target_x = x;
 }
-
-/*!
- * @brief モンスターの目標地点をリセットする / Reset the target of counter attack
- * @param m_ptr モンスターの参照ポインタ
- */
-void reset_target(MonsterEntity *m_ptr)
-{
-    set_target(m_ptr, 0, 0);
-}

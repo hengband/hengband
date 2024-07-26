@@ -101,6 +101,7 @@ public:
     void set_hostile();
     void make_lore_treasure(int num_item, int num_gold) const;
     void reset_chameleon_polymorph();
+    void reset_target();
 
 private:
     std::optional<bool> order_pet_named(const MonsterEntity &other) const;

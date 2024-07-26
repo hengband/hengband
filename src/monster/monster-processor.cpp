@@ -666,7 +666,7 @@ void sweep_monster_process(PlayerType *player_ptr)
 
         m_ptr->energy_need += ENERGY_NEED();
         process_monster(player_ptr, m_idx);
-        reset_target(m_ptr);
+        m_ptr->reset_target();
         if (player_ptr->no_flowed && one_in_(3)) {
             m_ptr->mflag2.set(MonsterConstantFlagType::NOFLOW);
         }

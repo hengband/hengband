@@ -345,7 +345,7 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX
     }
 
     m_ptr->cdis = 0;
-    reset_target(m_ptr);
+    m_ptr->reset_target();
     m_ptr->nickname.clear();
     m_ptr->exp = 0;
 
