@@ -496,3 +496,11 @@ void MonsterEntity::reset_target()
 {
     this->set_target(0, 0);
 }
+
+/*!
+ * @brief モンスターを友好的にする
+ */
+void MonsterEntity::set_friendly()
+{
+    this->mflag2.set(MonsterConstantFlagType::FRIENDLY);
+}

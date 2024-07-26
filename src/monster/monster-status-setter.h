@@ -5,7 +5,6 @@
 enum class MonsterRaceId : int16_t;
 class MonsterEntity;
 class PlayerType;
-void set_friendly(MonsterEntity *m_ptr);
 void set_pet(PlayerType *player_ptr, MonsterEntity *m_ptr);
 void anger_monster(PlayerType *player_ptr, MonsterEntity *m_ptr);
 bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v);
