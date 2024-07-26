@@ -53,9 +53,9 @@ bool wav_reader::open(const std::filesystem::path &path)
         return false;
     }
 
-    this->buffer.reset(new BYTE[data_chunk.cksize]);
+    this->buffer.resize(data_chunk.cksize);
     read_size = this->data_chunk.cksize;
-    readed_size = ::mmioRead(this->hmmio, (HPSTR)this->buffer.get(), read_size);
+    readed_size = ::mmioRead(this->hmmio, reinterpret_cast<HPSTR>(this->buffer.data()), read_size);
     if (readed_size != read_size) {
         return false;
     }
@@ -63,13 +63,14 @@ bool wav_reader::open(const std::filesystem::path &path)
     return true;
 }
 
-BYTE *wav_reader::read_data()
+std::vector<uint8_t> wav_reader::retrieve_data()
 {
-    return this->buffer.release();
+    return std::move(this->buffer);
 }
 
 void wav_reader::close()
 {
+    this->buffer.clear();
     if (this->hmmio != NULL) {
         ::mmioClose(this->hmmio, 0);
         this->hmmio = NULL;

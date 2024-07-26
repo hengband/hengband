@@ -15,6 +15,7 @@
 #include <memory>
 #include <mmsystem.h>
 #include <queue>
+#include <span>
 
 /*
  * Directory name
@@ -30,24 +31,33 @@ std::optional<CfgData> sound_cfg_data;
  * 効果音データ
  */
 struct sound_res {
-    sound_res(BYTE *_buf)
+    sound_res(std::vector<uint8_t> &&_buf)
+        : buf(std::move(_buf))
     {
-        buf.reset(_buf);
+        this->wh.lpData = reinterpret_cast<LPSTR>(this->buf.data());
+        this->wh.dwBufferLength = this->buf.size();
+        this->wh.dwFlags = 0;
     }
     sound_res(const sound_res &) = delete;
     sound_res &operator=(const sound_res &) = delete;
 
     ~sound_res()
     {
-        dispose();
+        if (this->hwo == nullptr) {
+            return;
+        }
+
+        ::waveOutReset(this->hwo);
+        ::waveOutUnprepareHeader(this->hwo, &this->wh, sizeof(WAVEHDR));
+        ::waveOutClose(this->hwo);
     }
 
     HWAVEOUT hwo = NULL;
     /*!
      * PCMデータバッファ
      */
-    std::unique_ptr<BYTE[]> buf;
-    WAVEHDR wh = { 0 };
+    std::vector<uint8_t> buf;
+    WAVEHDR wh{};
 
     /*!
      * 再生完了判定
@@ -58,22 +68,12 @@ struct sound_res {
     {
         return (this->hwo == NULL) || (this->wh.dwFlags & WHDR_DONE);
     }
-
-    void dispose()
-    {
-        if (hwo != NULL) {
-            ::waveOutReset(hwo);
-            ::waveOutUnprepareHeader(hwo, &wh, sizeof(WAVEHDR));
-            ::waveOutClose(hwo);
-            hwo = NULL;
-            wh.lpData = NULL;
-        }
-    }
 };
+
 /*!
  * 効果音リソースの管理キュー
  */
-std::queue<sound_res *> sound_queue;
+std::queue<std::unique_ptr<sound_res>> sound_queue;
 
 /*!
  * @brief PCMデータの振幅を変調する
@@ -84,12 +84,11 @@ std::queue<sound_res *> sound_queue;
  * サンプリングビット数で有効なのは 8 か 16 のみであり、それ以外の値が指定された場合はなにも行わない。
  *
  * @param bits_per_sample PCMデータのサンプリングビット数 (8 or 16)
- * @param pcm_buf PCMデータバッファ領域へのポインタ
- * @param bufsize PCMデータバッファ領域のサイズ
+ * @param pcm_buf PCMデータ
  * @param mult 振幅変調倍率 mult/div の mult
  * @param div 振幅変調倍率 mult/div の div
  */
-static void modulate_amplitude(int bits_per_sample, BYTE *pcm_buf, size_t bufsize, int mult, int div)
+static void modulate_amplitude(int bits_per_sample, std::span<uint8_t> pcm_buf, int mult, int div)
 {
     auto modulate = [mult, div](auto sample, int standard = 0) {
         using sample_t = decltype(sample);
@@ -102,17 +101,17 @@ static void modulate_amplitude(int bits_per_sample, BYTE *pcm_buf, size_t bufsiz
 
     switch (bits_per_sample) {
     case 8:
-        for (auto i = 0U; i < bufsize; ++i) {
-            pcm_buf[i] = modulate(pcm_buf[i], 128);
+        for (auto &sample : pcm_buf) {
+            sample = modulate(sample, 128);
         }
         break;
 
     case 16:
-        for (auto i = 0U; i < bufsize; i += 2) {
-            const auto sample = static_cast<int16_t>((static_cast<uint16_t>(pcm_buf[i + 1]) << 8) | static_cast<uint16_t>(pcm_buf[i]));
-            const auto modulated_sample = modulate(sample);
-            pcm_buf[i + 1] = static_cast<uint16_t>(modulated_sample) >> 8;
-            pcm_buf[i] = static_cast<uint16_t>(modulated_sample) & 0xFF;
+        for (auto i = 0; i < std::ssize(pcm_buf) - 1; i += 2) {
+            const auto sample = static_cast<int16_t>(pcm_buf[i] | (pcm_buf[i + 1] << 8));
+            const auto modulated_sample = static_cast<uint16_t>(modulate(sample));
+            pcm_buf[i + 1] = modulated_sample >> 8;
+            pcm_buf[i] = modulated_sample & 0xff;
         }
         break;
 
@@ -125,54 +124,40 @@ static void modulate_amplitude(int bits_per_sample, BYTE *pcm_buf, size_t bufsiz
  * 効果音の再生と管理キューへの追加.
  *
  * @param wf WAVEFORMATEXへのポインタ
- * @param buf PCMデータバッファ。使用後にdelete[]すること。
- * @param bufsize バッファサイズ
+ * @param buf PCMデータバッファ
  * @retval true 正常に処理された
  * @retval false 処理エラー
  */
-static bool add_sound_queue(const WAVEFORMATEX *wf, BYTE *buf, DWORD bufsize, int volume)
+static bool add_sound_queue(const WAVEFORMATEX *wf, std::vector<uint8_t> &&buf, int volume)
 {
+    if (buf.empty()) {
+        return false;
+    }
+
     // 再生完了データをキューから削除する
     while (!sound_queue.empty()) {
-        auto res = sound_queue.front();
-        if (res->isDone()) {
-            delete res;
-            sound_queue.pop();
-            continue;
+        if (!sound_queue.front()->isDone()) {
+            break;
         }
-        break;
+        sound_queue.pop();
     }
 
-    auto res = new sound_res(buf);
-    sound_queue.push(res);
+    modulate_amplitude(wf->wBitsPerSample, buf, volume, SOUND_VOLUME_MAX);
 
-    MMRESULT mr = ::waveOutOpen(&res->hwo, WAVE_MAPPER, wf, NULL, NULL, CALLBACK_NULL);
-    if (mr != MMSYSERR_NOERROR) {
+    auto res = std::make_unique<sound_res>(std::move(buf));
+
+    if (auto mr = ::waveOutOpen(&res->hwo, WAVE_MAPPER, wf, NULL, NULL, CALLBACK_NULL); mr != MMSYSERR_NOERROR) {
+        return false;
+    }
+    if (auto mr = ::waveOutPrepareHeader(res->hwo, &res->wh, sizeof(WAVEHDR)); mr != MMSYSERR_NOERROR) {
+        return false;
+    }
+    if (auto mr = ::waveOutWrite(res->hwo, &res->wh, sizeof(WAVEHDR)); mr != MMSYSERR_NOERROR) {
         return false;
     }
 
-    modulate_amplitude(wf->wBitsPerSample, buf, bufsize, volume, SOUND_VOLUME_MAX);
-
-    WAVEHDR *wh = &res->wh;
-    wh->lpData = (LPSTR)buf;
-    wh->dwBufferLength = bufsize;
-    wh->dwFlags = 0;
-
-    mr = ::waveOutPrepareHeader(res->hwo, wh, sizeof(WAVEHDR));
-    if (mr != MMSYSERR_NOERROR) {
-        res->dispose();
-        return false;
-    }
-
-    mr = ::waveOutWrite(res->hwo, wh, sizeof(WAVEHDR));
-    if (mr != MMSYSERR_NOERROR) {
-        res->dispose();
-        return false;
-    }
-
+    sound_queue.push(std::move(res));
     while (sound_queue.size() >= 16) {
-        auto over = sound_queue.front();
-        delete over;
         sound_queue.pop();
     }
 
@@ -192,14 +177,8 @@ static bool play_sound_impl(const std::filesystem::path &path, int volume)
     if (!reader.open(path)) {
         return false;
     }
-    auto wf = reader.get_waveformat();
 
-    auto data_buffer = reader.read_data();
-    if (data_buffer == NULL) {
-        return false;
-    }
-
-    return add_sound_queue(wf, data_buffer, reader.get_data_chunk()->cksize, volume);
+    return add_sound_queue(reader.get_waveformat(), reader.retrieve_data(), volume);
 }
 
 /*!
@@ -237,8 +216,6 @@ void load_sound_prefs(void)
 void finalize_sound(void)
 {
     while (!sound_queue.empty()) {
-        auto res = sound_queue.front();
-        delete res;
         sound_queue.pop();
     }
 }
