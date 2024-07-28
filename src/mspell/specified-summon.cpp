@@ -3,14 +3,20 @@
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
 #include "floor/floor-util.h"
+#include "grid/grid.h"
+#include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
+#include "monster/monster-update.h"
 #include "mspell/mspell-checker.h"
 #include "mspell/mspell-util.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/summon-types.h"
+#include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
+#include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/timed-effects.h"
@@ -30,7 +36,7 @@ MONSTER_NUMBER summon_EAGLE(PlayerType *player_ptr, POSITION y, POSITION x, int 
     int count = 0;
     int num = 4 + randint1(3);
     for (int k = 0; k < num; k++) {
-        count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_EAGLES, PM_ALLOW_GROUP | PM_ALLOW_UNIQUE) ? 1 : 0;
+        count += summon_specific(player_ptr, y, x, rlev, SUMMON_EAGLES, PM_ALLOW_GROUP | PM_ALLOW_UNIQUE, m_idx) ? 1 : 0;
     }
 
     return count;
@@ -88,7 +94,7 @@ MONSTER_NUMBER summon_guardian(PlayerType *player_ptr, POSITION y, POSITION x, i
 
     int count = 0;
     for (int k = 0; k < num; k++) {
-        count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_GUARDIANS, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE)) ? 1 : 0;
+        count += summon_specific(player_ptr, y, x, rlev, SUMMON_GUARDIANS, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE), m_idx) ? 1 : 0;
     }
 
     return count;
@@ -127,7 +133,7 @@ MONSTER_NUMBER summon_LOUSE(PlayerType *player_ptr, POSITION y, POSITION x, int 
     int count = 0;
     int num = 2 + randint1(3);
     for (int k = 0; k < num; k++) {
-        count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_LOUSE, PM_ALLOW_GROUP) ? 1 : 0;
+        count += summon_specific(player_ptr, y, x, rlev, SUMMON_LOUSE, PM_ALLOW_GROUP, m_idx) ? 1 : 0;
     }
 
     return count;
@@ -138,7 +144,7 @@ MONSTER_NUMBER summon_MOAI(PlayerType *player_ptr, POSITION y, POSITION x, int r
     int count = 0;
     int num = 3 + randint1(3);
     for (int k = 0; k < num; k++) {
-        count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_SMALL_MOAI, PM_NONE) ? 1 : 0;
+        count += summon_specific(player_ptr, y, x, rlev, SUMMON_SMALL_MOAI, PM_NONE, m_idx) ? 1 : 0;
     }
 
     return count;
@@ -234,7 +240,7 @@ MONSTER_NUMBER summon_APOCRYPHA(PlayerType *player_ptr, POSITION y, POSITION x, 
     int num = 4 + randint1(4);
     summon_type followers = one_in_(2) ? SUMMON_APOCRYPHA_FOLLOWERS : SUMMON_APOCRYPHA_DRAGONS;
     for (int k = 0; k < num; k++) {
-        count += summon_specific(player_ptr, m_idx, y, x, 200, followers, PM_ALLOW_UNIQUE) ? 1 : 0;
+        count += summon_specific(player_ptr, y, x, 200, followers, PM_ALLOW_UNIQUE, m_idx) ? 1 : 0;
     }
 
     return count;
@@ -245,7 +251,7 @@ MONSTER_NUMBER summon_HIGHEST_DRAGON(PlayerType *player_ptr, POSITION y, POSITIO
     int count = 0;
     int num = 4 + randint1(4);
     for (int k = 0; k < num; k++) {
-        count += summon_specific(player_ptr, m_idx, y, x, 100, SUMMON_APOCRYPHA_DRAGONS, PM_ALLOW_UNIQUE) ? 1 : 0;
+        count += summon_specific(player_ptr, y, x, 100, SUMMON_APOCRYPHA_DRAGONS, PM_ALLOW_UNIQUE, m_idx) ? 1 : 0;
     }
 
     return count;
@@ -256,7 +262,7 @@ MONSTER_NUMBER summon_PYRAMID(PlayerType *player_ptr, POSITION y, POSITION x, in
     int count = 0;
     int num = 2 + randint1(3);
     for (int k = 0; k < num; k++) {
-        count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_PYRAMID, PM_NONE) ? 1 : 0;
+        count += summon_specific(player_ptr, y, x, rlev, SUMMON_PYRAMID, PM_NONE, m_idx) ? 1 : 0;
     }
 
     return count;
@@ -278,7 +284,7 @@ MONSTER_NUMBER summon_VESPOID(PlayerType *player_ptr, POSITION y, POSITION x, in
     int count = 0;
     int num = 2 + randint1(3);
     for (int k = 0; k < num; k++) {
-        count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_VESPOID, PM_NONE) ? 1 : 0;
+        count += summon_specific(player_ptr, y, x, rlev, SUMMON_VESPOID, PM_NONE, m_idx) ? 1 : 0;
     }
 
     return count;
@@ -289,7 +295,7 @@ MONSTER_NUMBER summon_THUNDERS(PlayerType *player_ptr, POSITION y, POSITION x, i
     auto count = (MONSTER_NUMBER)0;
     auto num = 11;
     for (auto k = 0; k < num; k++) {
-        count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_ANTI_TIGERS, PM_NONE) ? 1 : 0;
+        count += summon_specific(player_ptr, y, x, rlev, SUMMON_ANTI_TIGERS, PM_NONE, m_idx) ? 1 : 0;
     }
 
     return count;
@@ -343,9 +349,38 @@ MONSTER_NUMBER summon_PLASMA(PlayerType *player_ptr, POSITION y, POSITION x, int
  */
 MONSTER_NUMBER summon_LAFFEY_II(PlayerType *player_ptr, const Pos2D &position, MONSTER_IDX m_idx)
 {
+    auto &floor = *player_ptr->current_floor_ptr;
     auto count = 0;
     constexpr auto summon_num = 2;
-    for (auto k = 0; k < summon_num; k++) {
+    auto real_num = summon_num - monraces_info[MonsterRaceId::BUNBUN_STRIKERS].cur_num;
+
+    if (!floor.inside_arena && real_num < MAX_BUNBUN_NUM) {
+        for (auto &monster : floor.m_list) {
+            if (monster.r_idx == MonsterRaceId::BUNBUN_STRIKERS) {
+                Pos2D attract_position(0, 0);
+                Pos2D current_position(monster.fy, monster.fx);
+                auto &current_grid = floor.get_grid(current_position);
+                auto target_m_idx = current_grid.m_idx;
+
+                if (!mon_scatter(player_ptr, MonsterRaceId::BUNBUN_STRIKERS, &attract_position.y, &attract_position.x, position.y, position.x, 2)) {
+                    continue;
+                }
+
+                current_grid.m_idx = 0;
+                floor.get_grid(attract_position).m_idx = target_m_idx;
+
+                monster.fy = attract_position.y;
+                monster.fx = attract_position.x;
+
+                update_monster(player_ptr, target_m_idx, true);
+                lite_spot(player_ptr, current_position.y, current_position.x);
+                lite_spot(player_ptr, attract_position.y, attract_position.x);
+
+                count++;
+            }
+        }
+    }
+    for (auto k = 0; k < real_num; k++) {
         count += summon_named_creature(player_ptr, m_idx, position.y, position.x, MonsterRaceId::BUNBUN_STRIKERS, PM_NONE) ? 1 : 0;
     }
     return count;

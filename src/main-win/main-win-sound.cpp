@@ -8,7 +8,6 @@
 #include "main-win/main-win-sound.h"
 #include "main-win/main-win-cfg-reader.h"
 #include "main-win/main-win-define.h"
-#include "main-win/main-win-file-utils.h"
 #include "main-win/main-win-utils.h"
 #include "main-win/wav-reader.h"
 #include "main/sound-definitions-table.h"
@@ -25,7 +24,7 @@ std::filesystem::path ANGBAND_DIR_XTRA_SOUND;
 /*
  * "sound.cfg" data
  */
-CfgData *sound_cfg_data;
+std::optional<CfgData> sound_cfg_data;
 
 /*!
  * 効果音データ
@@ -92,18 +91,19 @@ std::queue<sound_res *> sound_queue;
  */
 static void modulate_amplitude(int bits_per_sample, BYTE *pcm_buf, size_t bufsize, int mult, int div)
 {
-    auto modulate = [mult, div](auto sample) {
+    auto modulate = [mult, div](auto sample, int standard = 0) {
         using sample_t = decltype(sample);
         constexpr auto min = std::numeric_limits<sample_t>::min();
         constexpr auto max = std::numeric_limits<sample_t>::max();
-        const auto modulated_sample = std::clamp<int>(sample * mult / div, min, max);
+        const auto diff = sample - standard;
+        const auto modulated_sample = std::clamp<int>(standard + diff * mult / div, min, max);
         return static_cast<sample_t>(modulated_sample);
     };
 
     switch (bits_per_sample) {
     case 8:
         for (auto i = 0U; i < bufsize; ++i) {
-            pcm_buf[i] = modulate(pcm_buf[i]);
+            pcm_buf[i] = modulate(pcm_buf[i], 128);
         }
         break;
 
@@ -182,14 +182,14 @@ static bool add_sound_queue(const WAVEFORMATEX *wf, BYTE *buf, DWORD bufsize, in
 /*!
  * 指定ファイルを再生する
  *
- * @param buf ファイル名
+ * @param path ファイルパス
  * @retval true 正常に処理された
  * @retval false 処理エラー
  */
-static bool play_sound_impl(char *filename, int volume)
+static bool play_sound_impl(const std::filesystem::path &path, int volume)
 {
     wav_reader reader;
-    if (!reader.open(filename)) {
+    if (!reader.open(path)) {
         return false;
     }
     auto wf = reader.get_waveformat();
@@ -252,14 +252,17 @@ void finalize_sound(void)
  */
 int play_sound(int val, int volume)
 {
+    if (!sound_cfg_data) {
+        return 1;
+    }
+
     auto filename = sound_cfg_data->get_rand(TERM_XTRA_SOUND, val);
     if (!filename) {
         return 1;
     }
 
-    auto path = path_build(ANGBAND_DIR_XTRA_SOUND, filename);
-    auto filename_sound = path.string();
-    if (play_sound_impl(filename_sound.data(), volume)) {
+    auto path = path_build(ANGBAND_DIR_XTRA_SOUND, *filename);
+    if (play_sound_impl(path, volume)) {
         return 0;
     }
 

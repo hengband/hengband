@@ -13,5 +13,3 @@ struct turn_flags;
 void activate_explosive_rune(PlayerType *player_ptr, const Pos2D &pos, const MonsterRaceInfo &monrace);
 bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, DIRECTION *mm, const Pos2D &pos, int *count);
 void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware);
-void set_target(MonsterEntity *m_ptr, POSITION y, POSITION x);
-void reset_target(MonsterEntity *m_ptr);

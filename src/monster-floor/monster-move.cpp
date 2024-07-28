@@ -577,24 +577,3 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
         msg_format(_("%s^%s", "%s^ %s"), m_name.data(), monmessage->data());
     }
 }
-
-/*!
- * @brief モンスターの目標地点をセットする / Set the target of counter attack
- * @param m_ptr モンスターの参照ポインタ
- * @param y 目標y座標
- * @param x 目標x座標
- */
-void set_target(MonsterEntity *m_ptr, POSITION y, POSITION x)
-{
-    m_ptr->target_y = y;
-    m_ptr->target_x = x;
-}
-
-/*!
- * @brief モンスターの目標地点をリセットする / Reset the target of counter attack
- * @param m_ptr モンスターの参照ポインタ
- */
-void reset_target(MonsterEntity *m_ptr)
-{
-    set_target(m_ptr, 0, 0);
-}

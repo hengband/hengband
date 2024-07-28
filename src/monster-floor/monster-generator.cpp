@@ -436,7 +436,7 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
     POSITION cx = x;
     for (auto attempts = randint1(10) + 5; attempts > 0; attempts--) {
         scatter(player_ptr, &cy, &cx, y, x, 5, PROJECT_NONE);
-        (void)(*summon_specific)(player_ptr, m_idx, cy, cx, floor.dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP);
+        (void)(*summon_specific)(player_ptr, cy, cx, floor.dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP, m_idx);
         y = cy;
         x = cx;
     }

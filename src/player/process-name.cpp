@@ -139,11 +139,8 @@ void get_name(PlayerType *player_ptr)
     const auto copy_size = sizeof(player_ptr->name);
     constexpr auto prompt = _("キャラクターの名前を入力して下さい: ", "Enter a name for your character: ");
     const auto name = input_string(prompt, max_name_size, initial_name);
-    if (name) {
-        if (!name->empty()) {
-            angband_strcpy(player_ptr->name, *name, copy_size);
-        }
-
+    if (name && !name->empty()) {
+        angband_strcpy(player_ptr->name, *name, copy_size);
         return;
     }
 

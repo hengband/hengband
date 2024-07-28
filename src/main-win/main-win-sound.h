@@ -3,9 +3,10 @@
 #include "main-win/main-win-cfg-reader.h"
 #include <array>
 #include <filesystem>
+#include <optional>
 
 extern std::filesystem::path ANGBAND_DIR_XTRA_SOUND;
-extern CfgData *sound_cfg_data;
+extern std::optional<CfgData> sound_cfg_data;
 
 void load_sound_prefs();
 void finalize_sound();

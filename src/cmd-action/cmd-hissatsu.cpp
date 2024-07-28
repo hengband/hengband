@@ -31,6 +31,7 @@
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-realm.h"
+#include "player/player-spell-status.h"
 #include "player/special-defense-types.h"
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
@@ -105,6 +106,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
     }
     choice = always_show_list ? ESCAPE : 1;
 
+    const auto realm_status = PlayerSpellStatus(player_ptr).realm1();
     while (!flag) {
         if (choice == ESCAPE) {
             choice = ' ';
@@ -133,7 +135,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
                     if (menu_line > 32) {
                         menu_line -= 32;
                     }
-                } while (!(player_ptr->spell_learned1 & (1UL << (menu_line - 1))));
+                } while (!realm_status.is_learned(menu_line - 1));
                 break;
             }
 
@@ -145,7 +147,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
                     if (menu_line > 32) {
                         menu_line -= 32;
                     }
-                } while (!(player_ptr->spell_learned1 & (1UL << (menu_line - 1))));
+                } while (!realm_status.is_learned(menu_line - 1));
                 break;
             }
 
@@ -165,7 +167,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
                 } else {
                     menu_line += 16;
                 }
-                while (!(player_ptr->spell_learned1 & (1UL << (menu_line - 1)))) {
+                while (!realm_status.is_learned(menu_line - 1)) {
                     if (reverse) {
                         menu_line--;
                         if (menu_line < 2) {
@@ -213,15 +215,12 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
                         continue;
                     }
                     line++;
-                    if (!(player_ptr->spell_learned1 >> i)) {
-                        break;
-                    }
 
                     /* Access the spell */
                     if (spell.slevel > plev) {
                         continue;
                     }
-                    if (!(player_ptr->spell_learned1 & (1UL << i))) {
+                    if (!realm_status.is_learned(i)) {
                         continue;
                     }
                     std::string psi_desc;
@@ -270,7 +269,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
         }
 
         /* Totally Illegal */
-        if ((i < 0) || (i >= 32) || !(player_ptr->spell_learned1 & (1U << selections[i]))) {
+        if ((i < 0) || (i >= 32) || !realm_status.is_learned(selections[i])) {
             bell();
             continue;
         }
@@ -318,7 +317,7 @@ void do_cmd_hissatsu(PlayerType *player_ptr)
         msg_print(_("武器を持たないと必殺技は使えない！", "You need to wield a weapon!"));
         return;
     }
-    if (!player_ptr->spell_learned1) {
+    if (PlayerSpellStatus(player_ptr).realm1().is_nothing_learned()) {
         msg_print(_("何も技を知らない。", "You don't know any special attacks."));
         return;
     }
@@ -395,8 +394,9 @@ void do_cmd_gain_hissatsu(PlayerType *player_ptr)
 
     const auto sval = *o_ptr->bi_key.sval();
     auto gain = false;
+    auto realm_status = PlayerSpellStatus(player_ptr).realm1();
     for (auto i = sval * 8; i < sval * 8 + 8; i++) {
-        if (player_ptr->spell_learned1 & (1UL << i)) {
+        if (realm_status.is_learned(i)) {
             continue;
         }
 
@@ -404,19 +404,11 @@ void do_cmd_gain_hissatsu(PlayerType *player_ptr)
             continue;
         }
 
-        player_ptr->spell_learned1 |= (1UL << i);
-        player_ptr->spell_worked1 |= (1UL << i);
+        realm_status.set_learned(i);
+        realm_status.set_worked(i);
         const auto &spell_name = PlayerRealm::get_spell_name(RealmType::HISSATSU, i);
         msg_format(_("%sの技を覚えた。", "You have learned the special attack of %s."), spell_name.data());
-        int j;
-        for (j = 0; j < 64; j++) {
-            /* Stop at the first empty space */
-            if (player_ptr->spell_order[j] == 99) {
-                break;
-            }
-        }
-
-        player_ptr->spell_order[j] = i;
+        player_ptr->spell_order_learned.push_back(i);
         gain = true;
     }
 

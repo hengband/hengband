@@ -65,8 +65,10 @@ static errr rd_inventory(PlayerType *player_ptr)
 
 errr load_inventory(PlayerType *player_ptr)
 {
-    for (int i = 0; i < 64; i++) {
-        player_ptr->spell_order[i] = rd_byte();
+    for (auto i = 0; i < 64; i++) {
+        if (const auto spell_id = rd_byte(); spell_id < 64) {
+            player_ptr->spell_order_learned.push_back(spell_id);
+        }
     }
 
     if (!rd_inventory(player_ptr)) {

@@ -449,6 +449,7 @@ ProcessResult effect_monster_capture(PlayerType *player_ptr, EffectMonster *em_p
     cannot_capture |= em_ptr->r_ptr->misc_flags.has(MonsterMiscType::QUESTOR);
     cannot_capture |= em_ptr->r_ptr->population_flags.has(MonsterPopulationType::NAZGUL);
     cannot_capture |= em_ptr->r_ptr->population_flags.has(MonsterPopulationType::ONLY_ONE);
+    cannot_capture |= em_ptr->r_ptr->population_flags.has(MonsterPopulationType::BUNBUN_STRIKER);
     cannot_capture |= em_ptr->m_ptr->has_parent();
     if (cannot_capture) {
         msg_format(_("%sには効果がなかった。", "%s is unaffected."), em_ptr->m_name);

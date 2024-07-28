@@ -350,7 +350,7 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
                 flg |= PM_ALLOW_GROUP;
             }
 
-            if (summon_specific(player_ptr, (pet ? -1 : 0), player_ptr->y, player_ptr->x, (plev * 3) / 2, SUMMON_ANGEL, flg)) {
+            if (summon_specific(player_ptr, player_ptr->y, player_ptr->x, (plev * 3) / 2, SUMMON_ANGEL, flg)) {
                 if (pet) {
                     msg_print(_("「ご用でございますか、ご主人様」", "'What is thy bidding... Master?'"));
                 } else {
@@ -471,7 +471,7 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
                     continue;
                 }
 
-                summon_specific(player_ptr, -1, my, mx, plev, SUMMON_KNIGHTS, PM_ALLOW_GROUP | PM_FORCE_PET | PM_HASTE);
+                summon_specific(player_ptr, my, mx, plev, SUMMON_KNIGHTS, PM_ALLOW_GROUP | PM_FORCE_PET | PM_HASTE);
             }
 
             set_hero(player_ptr, randint1(base) + base, false);

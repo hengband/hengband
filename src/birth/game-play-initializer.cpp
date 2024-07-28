@@ -13,6 +13,7 @@
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
 #include "player/digestion-processor.h"
+#include "player/player-spell-status.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info.h"
 #include "system/dungeon-info.h"
@@ -75,6 +76,8 @@ void player_wipe_without_name(PlayerType *player_ptr)
             monrace.max_num = MAX_UNIQUE_NUM;
         } else if (monrace.population_flags.has(MonsterPopulationType::NAZGUL)) {
             monrace.max_num = MAX_NAZGUL_NUM;
+        } else if (monrace.population_flags.has(MonsterPopulationType::BUNBUN_STRIKER)) {
+            monrace.max_num = MAX_BUNBUN_NUM;
         }
 
         monrace.r_pkills = 0;
@@ -82,18 +85,10 @@ void player_wipe_without_name(PlayerType *player_ptr)
     }
 
     player_ptr->food = PY_FOOD_FULL - 1;
-    if (PlayerClass(player_ptr).equals(PlayerClassType::SORCERER)) {
-        player_ptr->spell_learned1 = player_ptr->spell_learned2 = 0xffffffffL;
-        player_ptr->spell_worked1 = player_ptr->spell_worked2 = 0xffffffffL;
-    } else {
-        player_ptr->spell_learned1 = player_ptr->spell_learned2 = 0L;
-        player_ptr->spell_worked1 = player_ptr->spell_worked2 = 0L;
-    }
 
-    player_ptr->spell_forgotten1 = player_ptr->spell_forgotten2 = 0L;
-    for (int i = 0; i < 64; i++) {
-        player_ptr->spell_order[i] = 99;
-    }
+    PlayerSpellStatus pss(player_ptr);
+    pss.realm1().initialize();
+    pss.realm2().initialize();
 
     player_ptr->learned_spells = 0;
     player_ptr->add_spells = 0;

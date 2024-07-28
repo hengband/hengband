@@ -175,7 +175,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
         case 8:
         case 9:
         case 18:
-            (*count) += summon_specific(player_ptr, 0, player_ptr->y, player_ptr->x, floor_ptr->dun_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)) ? 1 : 0;
+            (*count) += summon_specific(player_ptr, player_ptr->y, player_ptr->x, floor_ptr->dun_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)) ? 1 : 0;
             if (!one_in_(6)) {
                 break;
             }
@@ -226,7 +226,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
             [[fallthrough]];
         case 25:
             if ((floor_ptr->dun_level > 65) && !stop_ty) {
-                (*count) += summon_cyber(player_ptr, -1, player_ptr->y, player_ptr->x);
+                (*count) += summon_cyber(player_ptr, player_ptr->y, player_ptr->x);
                 stop_ty = true;
                 break;
             }
@@ -334,7 +334,7 @@ void wild_magic(PlayerType *player_ptr, int spell)
     case 35:
         for (int counter = 0; counter < 8; counter++) {
             (void)summon_specific(
-                player_ptr, 0, player_ptr->y, player_ptr->x, (floor_ptr->dun_level * 3) / 2, i2enum<summon_type>(type), (PM_ALLOW_GROUP | PM_NO_PET));
+                player_ptr, player_ptr->y, player_ptr->x, (floor_ptr->dun_level * 3) / 2, i2enum<summon_type>(type), (PM_ALLOW_GROUP | PM_NO_PET));
         }
 
         break;
@@ -343,7 +343,7 @@ void wild_magic(PlayerType *player_ptr, int spell)
         activate_hi_summon(player_ptr, player_ptr->y, player_ptr->x, false);
         break;
     case 38:
-        (void)summon_cyber(player_ptr, -1, player_ptr->y, player_ptr->x);
+        (void)summon_cyber(player_ptr, player_ptr->y, player_ptr->x);
         break;
     default: {
         int count = 0;

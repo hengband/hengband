@@ -103,7 +103,6 @@
 #include "main-win/graphics-win.h"
 #include "main-win/main-win-bg.h"
 #include "main-win/main-win-exception.h"
-#include "main-win/main-win-file-utils.h"
 #include "main-win/main-win-mci.h"
 #include "main-win/main-win-menuitem.h"
 #include "main-win/main-win-music.h"
@@ -1913,7 +1912,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
     }
     case IDM_OPTIONS_OPEN_MUSIC_DIR: {
         const auto path = path_build(ANGBAND_DIR_XTRA_MUSIC, "music.cfg");
-        open_dir_in_explorer(path.string());
+        open_dir_in_explorer(path);
         break;
     }
     case IDM_OPTIONS_SOUND: {
@@ -1936,7 +1935,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
     }
     case IDM_OPTIONS_OPEN_SOUND_DIR: {
         const auto path = path_build(ANGBAND_DIR_XTRA_SOUND, "sound.cfg");
-        open_dir_in_explorer(path.string());
+        open_dir_in_explorer(path);
         break;
     }
     case IDM_OPTIONS_NO_BG: {
@@ -2645,7 +2644,7 @@ static void init_stuff()
     init_file_paths(path);
     validate_dir(ANGBAND_DIR_APEX, false);
     validate_dir(ANGBAND_DIR_BONE, false);
-    if (!check_dir(ANGBAND_DIR_EDIT)) {
+    if (!is_directory(ANGBAND_DIR_EDIT)) {
         validate_dir(ANGBAND_DIR_DATA, true);
     } else {
         validate_dir(ANGBAND_DIR_DATA, false);

@@ -4,12 +4,13 @@
 #include <cstddef>
 #include <filesystem>
 #include <initializer_list>
+#include <optional>
 #include <unordered_map>
 #include <vector>
 
 typedef uint cfg_key;
-using cfg_values = std::vector<concptr>;
-using cfg_map = std::unordered_map<cfg_key, cfg_values *>;
+using cfg_values = std::vector<std::string>;
+using cfg_map = std::unordered_map<cfg_key, cfg_values>;
 using key_name_func = concptr (*)(int, char *);
 
 /*!
@@ -38,32 +39,26 @@ struct cfg_section {
 
 class CfgData {
 public:
-    CfgData()
-    {
-        map = new cfg_map();
-    }
-    virtual ~CfgData()
-    {
-        delete map;
-    }
-    concptr get_rand(int key1_type, int key2_val);
-    bool has_key(int key1_type, int key2_val);
-    void insert(int key1_type, int key2_val, cfg_values *value);
+    CfgData() = default;
+
+    std::optional<std::string> get_rand(int key1_type, int key2_val) const;
+    bool has_key(int key1_type, int key2_val) const;
+    void insert(int key1_type, int key2_val, cfg_values &&value);
 
 protected:
-    cfg_map *map;
+    cfg_map map{};
 };
 
 class CfgReader {
 public:
-    CfgReader(std::filesystem::path dir, std::initializer_list<concptr> files);
-    CfgData *read_sections(std::initializer_list<cfg_section> sections);
-    std::string get_cfg_path()
+    CfgReader(const std::filesystem::path &dir, std::initializer_list<concptr> files);
+    CfgData read_sections(std::initializer_list<cfg_section> sections) const;
+    const std::filesystem::path &get_cfg_path() const
     {
         return cfg_path;
     }
 
 protected:
     std::filesystem::path dir;
-    std::string cfg_path;
+    std::filesystem::path cfg_path;
 };

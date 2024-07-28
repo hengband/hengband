@@ -2,6 +2,9 @@
 #include "locale/japanese.h"
 #include "system/angband-exceptions.h"
 #include "util/string-processor.h"
+#ifdef WINDOWS
+#include "main-win/main-win-utils.h"
+#endif
 #include <sstream>
 #include <string>
 
@@ -167,7 +170,13 @@ std::filesystem::path path_build(const std::filesystem::path &path, std::string_
     }
 
     auto parsed_path = path_parse(path);
+#ifdef WINDOWS
+    // システムロケールがUTF-8の場合、appendによるUTF-16への変換時に
+    // Shift-JISをUTF-8とみなしてしまい変換に失敗するので、自前でUTF-16に変換してからappendする
+    const auto &path_ret = parsed_path.append(to_wchar(file.data()).wc_str());
+#else
     const auto &path_ret = parsed_path.append(file);
+#endif
     constexpr auto max_path_length = 1024;
     const auto path_str = path_ret.string();
     if (path_str.length() > max_path_length) {

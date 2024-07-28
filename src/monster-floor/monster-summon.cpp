@@ -22,12 +22,12 @@
 /*!
  * @brief モンスターが召喚の基本条件に合っているかをチェックする / Hack -- help decide if a monster race is "okay" to summon
  * @param r_idx チェックするモンスター種族ID
- * @param summon_who 召喚主のモンスター情報ID
  * @param type 召喚種別
- * @param is_unique_allowed ユニークモンスターを召喚対象に含めるかどうか
+ * @param mode 生成オプション
+ * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
  * @return 召喚対象にできるならばTRUE
  */
-static bool summon_specific_okay(PlayerType *player_ptr, MonsterRaceId r_idx, MONSTER_IDX summon_who, summon_type type, bool is_unique_allowed)
+static bool summon_specific_okay(PlayerType *player_ptr, MonsterRaceId r_idx, summon_type type, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
 {
     auto *r_ptr = &monraces_info[r_idx];
     if (!mon_hook_dungeon(player_ptr, r_idx)) {
@@ -35,18 +35,18 @@ static bool summon_specific_okay(PlayerType *player_ptr, MonsterRaceId r_idx, MO
     }
 
     auto &floor = *player_ptr->current_floor_ptr;
-    if (summon_who > 0) {
-        auto *m_ptr = &floor.m_list[summon_who];
+    if (summoner_m_idx) {
+        auto *m_ptr = &floor.m_list[*summoner_m_idx];
         if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, r_ptr)) {
             return false;
         }
-    } else if (summon_who < 0) {
+    } else if (any_bits(mode, PM_FORCE_PET)) {
         if (monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr) && !one_in_(std::abs(player_ptr->alignment) / 2 + 1)) {
             return false;
         }
     }
 
-    if (!is_unique_allowed && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)))) {
+    if (none_bits(mode, PM_ALLOW_UNIQUE) && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)))) {
         return false;
     }
 
@@ -55,7 +55,7 @@ static bool summon_specific_okay(PlayerType *player_ptr, MonsterRaceId r_idx, MO
     }
 
     const auto is_like_unique = r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL));
-    if ((summon_who < 0) && is_like_unique && monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr)) {
+    if (any_bits(mode, PM_FORCE_PET) && is_like_unique && monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr)) {
         return false;
     }
 
@@ -63,8 +63,8 @@ static bool summon_specific_okay(PlayerType *player_ptr, MonsterRaceId r_idx, MO
         return true;
     }
 
-    if (summon_who > 0) {
-        auto *m_ptr = &floor.m_list[summon_who];
+    if (summoner_m_idx) {
+        auto *m_ptr = &floor.m_list[*summoner_m_idx];
         return check_summon_specific(player_ptr, m_ptr->r_idx, r_idx, type);
     } else {
         return check_summon_specific(player_ptr, MonsterRaceId::PLAYER, r_idx, type);
@@ -105,15 +105,15 @@ DEPTH get_dungeon_or_wilderness_level(PlayerType *player_ptr)
 /*!
  * @brief モンスターを召喚により配置する / Place a monster (of the specified "type") near the given location. Return TRUE if a monster was actually summoned.
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param src_idx 召喚主のモンスター情報ID
  * @param y1 目標地点y座標
  * @param x1 目標地点x座標
  * @param lev 相当生成階
  * @param type 召喚種別
  * @param mode 生成オプション
+ * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
  * @return 召喚に成功したらモンスターID、失敗したらstd::nullopt
  */
-std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y1, POSITION x1, DEPTH lev, summon_type type, BIT_FLAGS mode)
+std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, POSITION x1, DEPTH lev, summon_type type, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->inside_arena) {
@@ -125,8 +125,8 @@ std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, MONSTER_IDX s
         return std::nullopt;
     }
 
-    auto summon_specific_hook = [src_idx, type, is_unique_allowed = (mode & PM_ALLOW_UNIQUE) != 0](PlayerType *player_ptr, MonsterRaceId r_idx) {
-        return summon_specific_okay(player_ptr, r_idx, src_idx, type, is_unique_allowed);
+    auto summon_specific_hook = [type, mode, summoner_m_idx](PlayerType *player_ptr, MonsterRaceId r_idx) {
+        return summon_specific_okay(player_ptr, r_idx, type, mode, summoner_m_idx);
     };
     get_mon_num_prep(player_ptr, std::move(summon_specific_hook), get_monster_hook2(player_ptr, y, x), type);
 
@@ -140,17 +140,16 @@ std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, MONSTER_IDX s
         mode |= PM_NO_KAGE;
     }
 
-    const auto summon_who = is_monster(src_idx) ? std::make_optional(src_idx) : std::nullopt;
-    auto summoned_m_idx = place_specific_monster(player_ptr, src_idx, y, x, r_idx, mode, summon_who);
+    auto summoned_m_idx = place_specific_monster(player_ptr, summoner_m_idx.value_or(0), y, x, r_idx, mode, summoner_m_idx);
     if (!summoned_m_idx) {
         return std::nullopt;
     }
 
     bool notice = false;
-    if (!is_monster(src_idx)) {
+    if (!summoner_m_idx) {
         notice = true;
     } else {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[src_idx];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[*summoner_m_idx];
         if (m_ptr->is_pet()) {
             notice = true;
         } else if (is_seen(player_ptr, m_ptr)) {

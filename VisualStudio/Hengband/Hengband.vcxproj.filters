@@ -1850,6 +1850,9 @@
     <ClCompile Include="..\..\src\player\player-status-table.cpp">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player\player-spell-status.cpp">
+      <Filter>player</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\monster-floor\monster-lite-util.cpp">
       <Filter>monster-floor</Filter>
     </ClCompile>
@@ -2109,9 +2112,6 @@
       <Filter>main-win</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\main-win\main-win-tokenizer.cpp">
-      <Filter>main-win</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\main-win\main-win-file-utils.cpp">
       <Filter>main-win</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stdafx.cpp" />
@@ -4640,6 +4640,9 @@
     <ClInclude Include="..\..\src\player\player-status-table.h">
       <Filter>player</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\player\player-spell-status.h">
+      <Filter>player</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\monster-floor\monster-lite-util.h">
       <Filter>monster-floor</Filter>
     </ClInclude>
@@ -4911,9 +4914,6 @@
       <Filter>main-win</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\main-win\main-win-tokenizer.h">
-      <Filter>main-win</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\main-win\main-win-file-utils.h">
       <Filter>main-win</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\stdafx.h" />

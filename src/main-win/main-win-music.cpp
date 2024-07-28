@@ -7,7 +7,6 @@
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
 #include "main-win/main-win-define.h"
-#include "main-win/main-win-file-utils.h"
 #include "main-win/main-win-mci.h"
 #include "main-win/main-win-mmsystem.h"
 #include "main-win/main-win-tokenizer.h"
@@ -37,7 +36,7 @@ std::filesystem::path ANGBAND_DIR_XTRA_MUSIC;
 /*
  * "music.cfg" data
  */
-CfgData *music_cfg_data;
+std::optional<CfgData> music_cfg_data;
 
 namespace main_win_music {
 
@@ -134,7 +133,7 @@ void load_music_prefs()
     CfgReader reader(ANGBAND_DIR_XTRA_MUSIC, { "music_debug.cfg", "music.cfg" });
 
     char device_type[256];
-    GetPrivateProfileStringA("Device", "type", "MPEGVideo", device_type, _countof(device_type), reader.get_cfg_path().data());
+    GetPrivateProfileStringA("Device", "type", "MPEGVideo", device_type, _countof(device_type), reader.get_cfg_path().string().data());
     mci_device_type = to_wchar(device_type).wc_str();
 
     // clang-format off
@@ -184,12 +183,16 @@ errr play_music(int type, int val)
         return 0;
     } // now playing
 
+    if (!music_cfg_data) {
+        return 1;
+    }
+
     auto filename = music_cfg_data->get_rand(type, val);
     if (!filename) {
         return 1;
     } // no setting
 
-    auto path_music = path_build(ANGBAND_DIR_XTRA_MUSIC, filename);
+    auto path_music = path_build(ANGBAND_DIR_XTRA_MUSIC, *filename);
     if (current_music_type != TERM_XTRA_MUSIC_MUTE) {
         if (current_music_path == path_music) {
             return 0;
@@ -200,10 +203,9 @@ errr play_music(int type, int val)
     current_music_id = val;
     current_music_path = path_music;
 
-    const auto &filename_music = path_music.string();
-    to_wchar path(filename_music.data());
+    const auto path_music_str = path_music.wstring();
     mci_open_parms.lpstrDeviceType = mci_device_type.data();
-    mci_open_parms.lpstrElementName = path.wc_str();
+    mci_open_parms.lpstrElementName = path_music_str.data();
     mciSendCommandW(mci_open_parms.wDeviceID, MCI_STOP, MCI_WAIT, 0);
     mciSendCommandW(mci_open_parms.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);
     mciSendCommandW(mci_open_parms.wDeviceID, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT | MCI_NOTIFY, (DWORD)&mci_open_parms);

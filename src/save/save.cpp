@@ -193,8 +193,9 @@ static bool wr_savefile_new(PlayerType *player_ptr)
     wr_u32b(player_ptr->spell_forgotten2);
     wr_s16b(player_ptr->learned_spells);
     wr_s16b(player_ptr->add_spells);
-    for (int i = 0; i < 64; i++) {
-        wr_byte((byte)player_ptr->spell_order[i]);
+    for (auto i = 0; i < 64; i++) {
+        const auto spell_id = (i < std::ssize(player_ptr->spell_order_learned)) ? player_ptr->spell_order_learned[i] : 255;
+        wr_byte(static_cast<byte>(spell_id));
     }
 
     for (int i = 0; i < INVEN_TOTAL; i++) {

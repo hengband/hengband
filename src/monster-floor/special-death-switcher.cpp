@@ -79,7 +79,6 @@ static void summon_self(PlayerType *player_ptr, MonsterDeath *md_ptr, summon_typ
     POSITION wy = md_ptr->md_y;
     POSITION wx = md_ptr->md_x;
     int attempts = 100;
-    bool pet = md_ptr->m_ptr->is_pet();
     do {
         scatter(player_ptr, &wy, &wx, md_ptr->md_y, md_ptr->md_x, radius, PROJECT_NONE);
     } while (!(in_bounds(floor_ptr, wy, wx) && is_cave_empty_bold2(player_ptr, wy, wx)) && --attempts);
@@ -89,7 +88,7 @@ static void summon_self(PlayerType *player_ptr, MonsterDeath *md_ptr, summon_typ
     }
 
     BIT_FLAGS mode = dead_mode(md_ptr);
-    if (summon_specific(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, 100, type, mode) && player_can_see_bold(player_ptr, wy, wx)) {
+    if (summon_specific(player_ptr, wy, wx, 100, type, mode) && player_can_see_bold(player_ptr, wy, wx)) {
         msg_print(message);
     }
 }
@@ -105,9 +104,8 @@ static void on_dead_pink_horror(PlayerType *player_ptr, MonsterDeath *md_ptr)
     for (int i = 0; i < blue_horrors; i++) {
         POSITION wy = md_ptr->md_y;
         POSITION wx = md_ptr->md_x;
-        bool pet = md_ptr->m_ptr->is_pet();
         BIT_FLAGS mode = dead_mode(md_ptr);
-        if (summon_specific(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, 100, SUMMON_BLUE_HORROR, mode) && player_can_see_bold(player_ptr, wy, wx)) {
+        if (summon_specific(player_ptr, wy, wx, 100, SUMMON_BLUE_HORROR, mode) && player_can_see_bold(player_ptr, wy, wx)) {
             notice = true;
         }
     }

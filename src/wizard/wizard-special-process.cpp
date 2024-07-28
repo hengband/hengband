@@ -63,6 +63,7 @@
 #include "player/patron.h"
 #include "player/player-realm.h"
 #include "player/player-skill.h"
+#include "player/player-spell-status.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"
 #include "player/race-info-table.h"
@@ -684,6 +685,10 @@ void wiz_reset_class(PlayerType *player_ptr)
     if (chosen_realms->first != RealmType::NONE) {
         pr.set(chosen_realms->first, chosen_realms->second);
     }
+    PlayerSpellStatus pss(player_ptr);
+    pss.realm1().initialize();
+    pss.realm2().initialize();
+    player_ptr->learned_spells = 0;
     change_birth_flags();
     handle_stuff(player_ptr);
 }
@@ -704,6 +709,10 @@ void wiz_reset_realms(PlayerType *player_ptr)
     if (chosen_realms->first != RealmType::NONE) {
         pr.set(chosen_realms->first, chosen_realms->second);
     }
+    PlayerSpellStatus pss(player_ptr);
+    pss.realm1().initialize();
+    pss.realm2().initialize();
+    player_ptr->learned_spells = 0;
     change_birth_flags();
     handle_stuff(player_ptr);
 }

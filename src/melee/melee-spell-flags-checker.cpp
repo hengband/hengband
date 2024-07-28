@@ -374,7 +374,7 @@ bool check_melee_spell_set(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 
     ms_ptr->y = ms_ptr->t_ptr->fy;
     ms_ptr->x = ms_ptr->t_ptr->fx;
-    reset_target(ms_ptr->m_ptr);
+    ms_ptr->m_ptr->reset_target();
     ms_ptr->ability_flags.reset({ MonsterAbilityType::WORLD, MonsterAbilityType::TRAPS, MonsterAbilityType::FORGET });
     if (ms_ptr->ability_flags.has(MonsterAbilityType::BR_LITE) && !los(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx)) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);

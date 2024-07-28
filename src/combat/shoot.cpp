@@ -857,7 +857,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                             msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), m_name.data());
                         }
 
-                        set_target(m_ptr, player_ptr->y, player_ptr->x);
+                        m_ptr->set_target(player_ptr->y, player_ptr->x);
 
                         /* Sniper */
                         if (snipe_type == SP_RUSH) {

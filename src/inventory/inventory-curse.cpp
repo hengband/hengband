@@ -331,7 +331,7 @@ static void curse_call_monster(PlayerType *player_ptr)
     const int obj_desc_type = OD_OMIT_PREFIX | OD_NAME_ONLY;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (player_ptr->cursed.has(CurseTraitType::CALL_ANIMAL) && one_in_(2500)) {
-        if (summon_specific(player_ptr, 0, player_ptr->y, player_ptr->x, floor_ptr->dun_level, SUMMON_ANIMAL, call_type)) {
+        if (summon_specific(player_ptr, player_ptr->y, player_ptr->x, floor_ptr->dun_level, SUMMON_ANIMAL, call_type)) {
             const auto item_name = describe_flavor(player_ptr, choose_cursed_obj_name(player_ptr, CurseTraitType::CALL_ANIMAL), obj_desc_type);
             msg_format(_("%sが動物を引き寄せた！", "Your %s has attracted an animal!"), item_name.data());
             disturb(player_ptr, false, true);
@@ -339,7 +339,7 @@ static void curse_call_monster(PlayerType *player_ptr)
     }
 
     if (player_ptr->cursed.has(CurseTraitType::CALL_DEMON) && one_in_(1111)) {
-        if (summon_specific(player_ptr, 0, player_ptr->y, player_ptr->x, floor_ptr->dun_level, SUMMON_DEMON, call_type)) {
+        if (summon_specific(player_ptr, player_ptr->y, player_ptr->x, floor_ptr->dun_level, SUMMON_DEMON, call_type)) {
             const auto item_name = describe_flavor(player_ptr, choose_cursed_obj_name(player_ptr, CurseTraitType::CALL_DEMON), obj_desc_type);
             msg_format(_("%sが悪魔を引き寄せた！", "Your %s has attracted a demon!"), item_name.data());
             disturb(player_ptr, false, true);
@@ -347,7 +347,7 @@ static void curse_call_monster(PlayerType *player_ptr)
     }
 
     if (player_ptr->cursed.has(CurseTraitType::CALL_DRAGON) && one_in_(800)) {
-        if (summon_specific(player_ptr, 0, player_ptr->y, player_ptr->x, floor_ptr->dun_level, SUMMON_DRAGON, call_type)) {
+        if (summon_specific(player_ptr, player_ptr->y, player_ptr->x, floor_ptr->dun_level, SUMMON_DRAGON, call_type)) {
             const auto item_name = describe_flavor(player_ptr, choose_cursed_obj_name(player_ptr, CurseTraitType::CALL_DRAGON), obj_desc_type);
             msg_format(_("%sがドラゴンを引き寄せた！", "Your %s has attracted a dragon!"), item_name.data());
             disturb(player_ptr, false, true);
@@ -355,7 +355,7 @@ static void curse_call_monster(PlayerType *player_ptr)
     }
 
     if (player_ptr->cursed.has(CurseTraitType::CALL_UNDEAD) && one_in_(1111)) {
-        if (summon_specific(player_ptr, 0, player_ptr->y, player_ptr->x, floor_ptr->dun_level, SUMMON_UNDEAD, call_type)) {
+        if (summon_specific(player_ptr, player_ptr->y, player_ptr->x, floor_ptr->dun_level, SUMMON_UNDEAD, call_type)) {
             const auto item_name = describe_flavor(player_ptr, choose_cursed_obj_name(player_ptr, CurseTraitType::CALL_UNDEAD), obj_desc_type);
             msg_format(_("%sが死霊を引き寄せた！", "Your %s has attracted an undead!"), item_name.data());
             disturb(player_ptr, false, true);

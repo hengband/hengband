@@ -75,6 +75,7 @@
 #include "player/player-personality.h"
 #include "player/player-realm.h"
 #include "player/player-skill.h"
+#include "player/player-spell-status.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
 #include "player/player-view.h"
@@ -536,49 +537,38 @@ static void update_num_of_spells(PlayerType *player_ptr)
         }
     }
 
-    int num_boukyaku = 0;
-    for (int j = 0; j < 64; j++) {
-        if ((j < 32) ? any_bits(player_ptr->spell_forgotten1, (1UL << j)) : any_bits(player_ptr->spell_forgotten2, (1UL << (j - 32)))) {
-            num_boukyaku++;
+    PlayerSpellStatus pss(player_ptr);
+
+    auto num_forgotten = 0;
+    for (const auto &realm_status : { pss.realm1(), pss.realm2() }) {
+        for (auto spell_id = 0; spell_id < 32; spell_id++) {
+            if (realm_status.is_forgotten(spell_id)) {
+                num_forgotten++;
+            }
         }
     }
 
-    player_ptr->new_spells = num_allowed + player_ptr->add_spells + num_boukyaku - player_ptr->learned_spells;
-    for (int i = 63; i >= 0; i--) {
-        if (!player_ptr->spell_learned1 && !player_ptr->spell_learned2) {
-            break;
-        }
+    player_ptr->new_spells = num_allowed + player_ptr->add_spells + num_forgotten - player_ptr->learned_spells;
 
-        int j = player_ptr->spell_order[i];
-        if (j >= 99) {
-            continue;
-        }
-
-        const auto &realm = (j < 32) ? pr.realm1() : pr.realm2();
-        const auto &spell = realm.get_spell_info(j % 32);
+    for (auto it = player_ptr->spell_order_learned.crbegin(); it != player_ptr->spell_order_learned.crend(); ++it) {
+        const auto is_realm1 = *it < 32;
+        const auto spell_id = *it % 32;
+        const auto &realm = is_realm1 ? pr.realm1() : pr.realm2();
+        const auto &spell = realm.get_spell_info(spell_id);
 
         if (spell.slevel <= player_ptr->lev) {
             continue;
         }
 
-        bool is_spell_learned = (j < 32) ? any_bits(player_ptr->spell_learned1, (1UL << j)) : any_bits(player_ptr->spell_learned2, (1UL << (j - 32)));
-        if (!is_spell_learned) {
+        auto realm_status = is_realm1 ? pss.realm1() : pss.realm2();
+        if (!realm_status.is_learned(spell_id)) {
             continue;
         }
 
-        if (j < 32) {
-            set_bits(player_ptr->spell_forgotten1, (1UL << j));
-        } else {
-            set_bits(player_ptr->spell_forgotten2, (1UL << (j - 32)));
-        }
+        realm_status.set_forgotten(spell_id);
+        realm_status.set_learned(spell_id, false);
 
-        if (j < 32) {
-            reset_bits(player_ptr->spell_learned1, (1UL << j));
-        } else {
-            reset_bits(player_ptr->spell_learned2, (1UL << (j - 32)));
-        }
-
-        const auto &spell_name = realm.get_spell_name(j % 32);
+        const auto &spell_name = realm.get_spell_name(spell_id);
 #ifdef JP
         msg_format("%sの%sを忘れてしまった。", spell_name.data(), spell_category.data());
 #else
@@ -588,38 +578,24 @@ static void update_num_of_spells(PlayerType *player_ptr)
     }
 
     /* Forget spells if we know too many spells */
-    for (int i = 63; i >= 0; i--) {
+    for (auto it = player_ptr->spell_order_learned.crbegin(); it != player_ptr->spell_order_learned.crend(); ++it) {
         if (player_ptr->new_spells >= 0) {
             break;
         }
-        if (!player_ptr->spell_learned1 && !player_ptr->spell_learned2) {
-            break;
-        }
 
-        int j = player_ptr->spell_order[i];
-        if (j >= 99) {
+        const auto is_realm1 = *it < 32;
+        const auto spell_id = *it % 32;
+
+        auto realm_status = is_realm1 ? pss.realm1() : pss.realm2();
+        if (!realm_status.is_learned(spell_id)) {
             continue;
         }
 
-        bool is_spell_learned = (j < 32) ? any_bits(player_ptr->spell_learned1, (1UL << j)) : any_bits(player_ptr->spell_learned2, (1UL << (j - 32)));
-        if (!is_spell_learned) {
-            continue;
-        }
+        realm_status.set_forgotten(spell_id);
+        realm_status.set_learned(spell_id, false);
 
-        if (j < 32) {
-            set_bits(player_ptr->spell_forgotten1, (1UL << j));
-        } else {
-            set_bits(player_ptr->spell_forgotten2, (1UL << (j - 32)));
-        }
-
-        if (j < 32) {
-            reset_bits(player_ptr->spell_learned1, (1UL << j));
-        } else {
-            reset_bits(player_ptr->spell_learned2, (1UL << (j - 32)));
-        }
-
-        const auto &realm = (j < 32) ? pr.realm1() : pr.realm2();
-        const auto &spell_name = realm.get_spell_name(j % 32);
+        const auto &realm = is_realm1 ? pr.realm1() : pr.realm2();
+        const auto &spell_name = realm.get_spell_name(spell_id);
 #ifdef JP
         msg_format("%sの%sを忘れてしまった。", spell_name.data(), spell_category.data());
 #else
@@ -629,44 +605,30 @@ static void update_num_of_spells(PlayerType *player_ptr)
     }
 
     /* Check for spells to remember */
-    for (int i = 0; i < 64; i++) {
+    for (const auto j : player_ptr->spell_order_learned) {
         if (player_ptr->new_spells <= 0) {
             break;
         }
-        if (!player_ptr->spell_forgotten1 && !player_ptr->spell_forgotten2) {
-            break;
-        }
-        int j = player_ptr->spell_order[i];
-        if (j >= 99) {
-            break;
-        }
 
-        const auto &realm = (j < 32) ? pr.realm1() : pr.realm2();
-        const auto &spell = realm.get_spell_info(j % 32);
+        const auto is_realm1 = j < 32;
+        const auto spell_id = j % 32;
+
+        const auto &realm = is_realm1 ? pr.realm1() : pr.realm2();
+        const auto &spell = realm.get_spell_info(spell_id);
 
         if (spell.slevel > player_ptr->lev) {
             continue;
         }
 
-        bool is_spell_learned = (j < 32) ? any_bits(player_ptr->spell_forgotten1, (1UL << j)) : any_bits(player_ptr->spell_forgotten2, (1UL << (j - 32)));
-        if (!is_spell_learned) {
+        auto realm_status = is_realm1 ? pss.realm1() : pss.realm2();
+        if (!realm_status.is_forgotten(spell_id)) {
             continue;
         }
 
-        if (j < 32) {
-            reset_bits(player_ptr->spell_forgotten1, (1UL << j));
-        } else {
-            reset_bits(player_ptr->spell_forgotten2, (1UL << (j - 32)));
-        }
+        realm_status.set_forgotten(spell_id, false);
+        realm_status.set_learned(spell_id);
 
-        if (j < 32) {
-            set_bits(player_ptr->spell_learned1, (1UL << j));
-
-        } else {
-            set_bits(player_ptr->spell_learned2, (1UL << (j - 32)));
-        }
-
-        const auto &spell_name = realm.get_spell_name(j % 32);
+        const auto &spell_name = realm.get_spell_name(spell_id);
 #ifdef JP
         msg_format("%sの%sを思い出した。", spell_name.data(), spell_category.data());
 #else
@@ -684,7 +646,7 @@ static void update_num_of_spells(PlayerType *player_ptr)
                 continue;
             }
 
-            if (any_bits(player_ptr->spell_learned1, (1UL << j))) {
+            if (pss.realm1().is_learned(j)) {
                 continue;
             }
 

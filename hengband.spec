@@ -1,4 +1,4 @@
-%define version 3.0.1.16
+%define version 3.0.1.17
 %define release 1
 
 Summary: hengband %{version}
@@ -151,6 +151,9 @@ exit 0
 %license lib/help/jlicense.txt
 
 %changelog
+* Sun Jul 14 2024 whitehara <white@vx-xv.com>
+- hengband RPM 3.0.1.17(Beta)
+
 * Tue Jul 02 2024 whitehara <white@vx-xv.com>
 - hengband RPM 3.0.1.16(Beta)
 
