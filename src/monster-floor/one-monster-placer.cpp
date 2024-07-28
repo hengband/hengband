@@ -403,7 +403,8 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX
     m_ptr->set_individual_speed(floor.inside_arena);
 
     if (any_bits(mode, PM_HASTE)) {
-        (void)set_monster_fast(player_ptr, g_ptr->m_idx, 100);
+        m_ptr->mtimed[MTIMED_FAST] = 100;
+        mproc_add(floor_ptr, m_idx, MTIMED_FAST);
     }
 
     if (!ironman_nightmare) {
