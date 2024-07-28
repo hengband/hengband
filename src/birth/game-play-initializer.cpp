@@ -76,6 +76,8 @@ void player_wipe_without_name(PlayerType *player_ptr)
             monrace.max_num = MAX_UNIQUE_NUM;
         } else if (monrace.population_flags.has(MonsterPopulationType::NAZGUL)) {
             monrace.max_num = MAX_NAZGUL_NUM;
+        } else if (monrace.population_flags.has(MonsterPopulationType::BUNBUN_STRIKER)) {
+            monrace.max_num = MAX_BUNBUN_NUM;
         }
 
         monrace.r_pkills = 0;

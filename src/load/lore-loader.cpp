@@ -429,6 +429,8 @@ void load_lore(void)
             max_num = MAX_UNIQUE_NUM;
         } else if (monrace.population_flags.has(MonsterPopulationType::NAZGUL)) {
             max_num = MAX_NAZGUL_NUM;
+        } else if (monrace.population_flags.has(MonsterPopulationType::BUNBUN_STRIKER)) {
+            max_num = MAX_BUNBUN_NUM;
         }
 
         monrace.max_num = max_num;

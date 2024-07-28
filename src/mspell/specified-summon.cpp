@@ -3,14 +3,20 @@
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
 #include "floor/floor-util.h"
+#include "grid/grid.h"
+#include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
+#include "monster/monster-update.h"
 #include "mspell/mspell-checker.h"
 #include "mspell/mspell-util.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/summon-types.h"
+#include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
+#include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/timed-effects.h"
@@ -343,9 +349,38 @@ MONSTER_NUMBER summon_PLASMA(PlayerType *player_ptr, POSITION y, POSITION x, int
  */
 MONSTER_NUMBER summon_LAFFEY_II(PlayerType *player_ptr, const Pos2D &position, MONSTER_IDX m_idx)
 {
+    auto &floor = *player_ptr->current_floor_ptr;
     auto count = 0;
     constexpr auto summon_num = 2;
-    for (auto k = 0; k < summon_num; k++) {
+    auto real_num = summon_num - monraces_info[MonsterRaceId::BUNBUN_STRIKERS].cur_num;
+
+    if (!floor.inside_arena && real_num < MAX_BUNBUN_NUM) {
+        for (auto &monster : floor.m_list) {
+            if (monster.r_idx == MonsterRaceId::BUNBUN_STRIKERS) {
+                Pos2D attract_position(0, 0);
+                Pos2D current_position(monster.fy, monster.fx);
+                auto &current_grid = floor.get_grid(current_position);
+                auto target_m_idx = current_grid.m_idx;
+
+                if (!mon_scatter(player_ptr, MonsterRaceId::BUNBUN_STRIKERS, &attract_position.y, &attract_position.x, position.y, position.x, 2)) {
+                    continue;
+                }
+
+                current_grid.m_idx = 0;
+                floor.get_grid(attract_position).m_idx = target_m_idx;
+
+                monster.fy = attract_position.y;
+                monster.fx = attract_position.x;
+
+                update_monster(player_ptr, target_m_idx, true);
+                lite_spot(player_ptr, current_position.y, current_position.x);
+                lite_spot(player_ptr, attract_position.y, attract_position.x);
+
+                count++;
+            }
+        }
+    }
+    for (auto k = 0; k < real_num; k++) {
         count += summon_named_creature(player_ptr, m_idx, position.y, position.x, MonsterRaceId::BUNBUN_STRIKERS, PM_NONE) ? 1 : 0;
     }
     return count;
