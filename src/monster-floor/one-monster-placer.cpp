@@ -375,8 +375,9 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX
 
     m_ptr->mtimed[MTIMED_CSLEEP] = 0;
     if (any_bits(mode, PM_ALLOW_SLEEP) && new_monrace.sleep && !ironman_nightmare) {
-        int val = new_monrace.sleep;
-        (void)set_monster_csleep(player_ptr, g_ptr->m_idx, (val * 2) + randint1(val * 10));
+        int val = std::clamp((new_monrace.sleep * 2) + randint1(new_monrace.sleep * 10), 0, 10000);
+        m_ptr->mtimed[MTIMED_CSLEEP] = (int16_t)val;
+        mproc_add(floor_ptr, m_idx, MTIMED_CSLEEP);
     }
 
     if (new_monrace.misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
