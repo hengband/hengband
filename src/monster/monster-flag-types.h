@@ -21,5 +21,6 @@ enum class MonsterConstantFlagType {
     FRIENDLY = 7, /*!< 友好的である / Friendly */
     PET = 8, /*!< ペットである / Pet */
     CLONED = 9, /*!< クローンである / Cloned */
+    RIDING = 10, /*!< 乗馬中である / riding */
     MAX,
 };
