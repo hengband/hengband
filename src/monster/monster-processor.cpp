@@ -21,6 +21,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "grid/feature.h"
+#include "grid/grid.h"
 #include "io/write-diary.h"
 #include "melee/melee-postprocess.h"
 #include "melee/melee-spell.h"
@@ -32,6 +33,7 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-floor/quantum-effect.h"
+#include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
@@ -125,9 +127,18 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
         const auto old_m_name = monster_desc(player_ptr, m_ptr, 0);
 
+        const auto &monrace = m_ptr->get_monrace();
+
         choose_chameleon_polymorph(player_ptr, m_idx, floor.get_grid(Pos2D(m_ptr->fy, m_ptr->fx)));
 
+        update_monster(player_ptr, m_idx, false);
+        lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
+
         const auto &new_monrace = m_ptr->get_monrace();
+
+        if (new_monrace.brightness_flags.has_any_of(ld_mask) || monrace.brightness_flags.has_any_of(ld_mask)) {
+            RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
+        }
 
         if (m_idx == player_ptr->riding) {
             msg_format(_("突然%sが変身した。", "Suddenly, %s transforms!"), old_m_name.data());
