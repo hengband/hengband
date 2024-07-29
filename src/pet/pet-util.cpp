@@ -32,9 +32,9 @@ bool can_player_ride_pet(PlayerType *player_ptr, const Grid *g_ptr, bool now_rid
     world.character_xtra = true;
 
     if (now_riding) {
-        player_ptr->riding = g_ptr->m_idx;
+        player_ptr->ride_monster(g_ptr->m_idx);
     } else {
-        player_ptr->riding = 0;
+        player_ptr->ride_monster(0);
         player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
         player_ptr->riding_ryoute = player_ptr->old_riding_ryoute = false;
     }
@@ -44,7 +44,7 @@ bool can_player_ride_pet(PlayerType *player_ptr, const Grid *g_ptr, bool now_rid
     handle_stuff(player_ptr);
 
     bool p_can_enter = player_can_enter(player_ptr, g_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
-    player_ptr->riding = old_riding;
+    player_ptr->ride_monster(old_riding);
     if (old_pf_two_hands) {
         player_ptr->pet_extra_flags |= (PF_TWO_HANDS);
     } else {

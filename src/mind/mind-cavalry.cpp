@@ -62,7 +62,7 @@ bool rodeo(PlayerType *player_ptr)
         process_fall_off_horse(player_ptr, 1, true);
 
         /* 落馬処理に失敗してもとにかく乗馬解除 */
-        player_ptr->riding = 0;
+        player_ptr->ride_monster(0);
     }
 
     return true;
