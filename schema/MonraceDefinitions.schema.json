@@ -62,7 +62,7 @@
                             "character": {
                                 "type": "string",
                                 "description": "表示される文字",
-                                "pattern": "[a-zA-Z!\/.!?#$%&()@,|*'`<>+{}=~\\[\\]]|\\\\"
+                                "pattern": "[a-zA-Z0-9!\/.!?#$%&()@,|*'`<>+{}=~\\[\\]]|\\\\"
                             },
                             "color": {
                                 "type": "string",
@@ -508,7 +508,8 @@
                                 "QUESTOR",
                                 "EMPTY_MIND",
                                 "WEIRD_MIND",
-                                "DIMINISH_MAX_DAMAGE"
+                                "DIMINISH_MAX_DAMAGE",
+                                "BUNBUN_STRIKER"
                             ]
                         }
                     },
