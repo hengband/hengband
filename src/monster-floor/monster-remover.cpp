@@ -76,7 +76,7 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
         player_ptr->riding_t_m_idx = 0;
     }
     if (player_ptr->riding == i) {
-        player_ptr->riding = 0;
+        player_ptr->ride_monster(0);
     }
 
     floor_ptr->grid_array[y][x].m_idx = 0;

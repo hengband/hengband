@@ -43,7 +43,7 @@ static void check_riding_preservation(PlayerType *player_ptr)
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
     if (m_ptr->has_parent()) {
-        player_ptr->riding = 0;
+        player_ptr->ride_monster(0);
         player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
         player_ptr->riding_ryoute = player_ptr->old_riding_ryoute = false;
     } else {
