@@ -120,7 +120,7 @@ void place_monsters_in_nest(PlayerType *player_ptr, const Pos2D &center, std::ar
 {
     Rect2D(center, Vector2D(2, 9)).each_area([player_ptr, &nest_mon_info_list](const Pos2D &pos) {
         auto &nest_mon_info = rand_choice(nest_mon_info_list);
-        (void)place_specific_monster(player_ptr, 0, pos.y, pos.x, nest_mon_info.monrace_id, 0L);
+        (void)place_specific_monster(player_ptr, pos.y, pos.x, nest_mon_info.monrace_id, 0L);
         nest_mon_info.used = true;
     });
 }

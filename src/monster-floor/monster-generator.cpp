@@ -137,7 +137,7 @@ std::optional<MONSTER_IDX> multiply_monster(PlayerType *player_ptr, MONSTER_IDX 
         mode |= PM_NO_PET;
     }
 
-    const auto multiplied_m_idx = place_specific_monster(player_ptr, m_idx, y, x, m_ptr->r_idx, (mode | PM_NO_KAGE | PM_MULTIPLY));
+    const auto multiplied_m_idx = place_specific_monster(player_ptr, y, x, m_ptr->r_idx, (mode | PM_NO_KAGE | PM_MULTIPLY), m_idx);
     if (!multiplied_m_idx) {
         return std::nullopt;
     }
@@ -151,7 +151,6 @@ std::optional<MONSTER_IDX> multiply_monster(PlayerType *player_ptr, MONSTER_IDX 
 
 /*!
  * @brief モンスターを目標地点に集団生成する / Attempt to place a "group" of monsters around the given location
- * @param src_idx 召喚主のモンスター情報ID
  * @param y 中心生成位置y座標
  * @param x 中心生成位置x座標
  * @param r_idx 生成モンスター種族
@@ -159,7 +158,7 @@ std::optional<MONSTER_IDX> multiply_monster(PlayerType *player_ptr, MONSTER_IDX 
  * @param summoner_m_idx モンスターの召喚による場合、召喚主のモンスターID
  * @return 成功したらtrue
  */
-static bool place_monster_group(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
+static bool place_monster_group(PlayerType *player_ptr, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
 {
     auto *r_ptr = &monraces_info[r_idx];
     auto total = randint1(10);
@@ -205,7 +204,7 @@ static bool place_monster_group(PlayerType *player_ptr, MONSTER_IDX src_idx, POS
                 continue;
             }
 
-            if (place_monster_one(player_ptr, src_idx, my, mx, r_idx, mode, summoner_m_idx)) {
+            if (place_monster_one(player_ptr, my, mx, r_idx, mode, summoner_m_idx)) {
                 hack_y[hack_n] = my;
                 hack_x[hack_n] = mx;
                 hack_n++;
@@ -278,7 +277,7 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MonsterRaceId monra
  * @return 生成に成功したらモンスターID、失敗したらstd::nullopt
  * @details 護衛も一緒に生成する
  */
-std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
+std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
 {
     auto *r_ptr = &monraces_info[r_idx];
 
@@ -286,7 +285,7 @@ std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, MONSTE
         mode |= PM_KAGE;
     }
 
-    const auto m_idx = place_monster_one(player_ptr, src_idx, y, x, r_idx, mode, summoner_m_idx);
+    const auto m_idx = place_monster_one(player_ptr, y, x, r_idx, mode, summoner_m_idx);
     if (!m_idx) {
         return std::nullopt;
     }
@@ -306,7 +305,7 @@ std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, MONSTE
             const POSITION scatter_max = 40;
             for (d = scatter_min; d <= scatter_max; d++) {
                 scatter(player_ptr, &ny, &nx, y, x, d, PROJECT_NONE);
-                if (place_monster_one(player_ptr, *m_idx, ny, nx, reinforce_monrace_id, mode, summoner_m_idx)) {
+                if (place_monster_one(player_ptr, ny, nx, reinforce_monrace_id, mode, *m_idx)) {
                     break;
                 }
             }
@@ -317,7 +316,7 @@ std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, MONSTE
     }
 
     if (r_ptr->misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
-        (void)place_monster_group(player_ptr, src_idx, y, x, r_idx, mode, summoner_m_idx);
+        (void)place_monster_group(player_ptr, y, x, r_idx, mode, summoner_m_idx);
     }
 
     if (r_ptr->misc_flags.has_not(MonsterMiscType::ESCORT)) {
@@ -340,9 +339,9 @@ std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, MONSTE
             break;
         }
 
-        (void)place_monster_one(player_ptr, *m_idx, ny, nx, monrace_id, mode, summoner_m_idx);
+        (void)place_monster_one(player_ptr, ny, nx, monrace_id, mode, *m_idx);
         if (monraces_info[monrace_id].misc_flags.has(MonsterMiscType::HAS_FRIENDS) || r_ptr->misc_flags.has(MonsterMiscType::MORE_ESCORT)) {
-            (void)place_monster_group(player_ptr, *m_idx, ny, nx, monrace_id, mode, summoner_m_idx);
+            (void)place_monster_group(player_ptr, ny, nx, monrace_id, mode, *m_idx);
         }
     }
 
@@ -375,7 +374,7 @@ std::optional<MONSTER_IDX> place_random_monster(PlayerType *player_ptr, POSITION
         mode |= PM_JURAL;
     }
 
-    return place_specific_monster(player_ptr, 0, y, x, monrace_id, mode);
+    return place_specific_monster(player_ptr, y, x, monrace_id, mode);
 }
 
 static std::optional<MonsterRaceId> select_horde_leader_r_idx(PlayerType *player_ptr)
@@ -423,7 +422,7 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
             return false;
         }
 
-        if (place_specific_monster(player_ptr, 0, y, x, *r_idx, 0L)) {
+        if (place_specific_monster(player_ptr, y, x, *r_idx, 0L)) {
             break;
         }
     }
@@ -484,7 +483,7 @@ bool alloc_guardian(PlayerType *player_ptr, bool def_val)
             continue;
         }
 
-        if (place_specific_monster(player_ptr, 0, pos.y, pos.x, dungeon.final_guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) {
+        if (place_specific_monster(player_ptr, pos.y, pos.x, dungeon.final_guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) {
             return true;
         }
 

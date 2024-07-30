@@ -107,7 +107,7 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
     m_ptr->hold_o_idx_list.clear();
     delete_monster_idx(player_ptr, g_ptr->m_idx);
     bool polymorphed = false;
-    auto m_idx = place_specific_monster(player_ptr, 0, y, x, new_r_idx, mode);
+    auto m_idx = place_specific_monster(player_ptr, y, x, new_r_idx, mode);
     if (m_idx) {
         auto &monster = floor_ptr->m_list[*m_idx];
         monster.nickname = back_m.nickname;
@@ -115,7 +115,7 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
         monster.hold_o_idx_list = back_m.hold_o_idx_list;
         polymorphed = true;
     } else {
-        m_idx = place_specific_monster(player_ptr, 0, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN));
+        m_idx = place_specific_monster(player_ptr, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN));
         if (m_idx) {
             floor_ptr->m_list[*m_idx] = back_m;
             mproc_init(floor_ptr);
