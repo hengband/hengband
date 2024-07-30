@@ -180,8 +180,11 @@ const std::vector<option_type> option_info = {
 
     { &disturb_move, false, OPT_PAGE_DISTURBANCE, 0, 20, "disturb_move", _("どこのモンスターが動いても行動を中止する", "Disturb whenever any monster moves") },
 
-    { &disturb_high, false, OPT_PAGE_DISTURBANCE, 1, 3, "disturb_high",
+    { &disturb_high, true, OPT_PAGE_DISTURBANCE, 1, 3, "disturb_high",
         _("レベルの高いモンスターが動いたら行動を中止する", "Disturb whenever high-level monster moves") },
+
+    { &disturb_unknown, true, OPT_PAGE_DISTURBANCE, 0, 26, "disturb_unknown",
+        _("レベル不明のモンスターが動いたら行動を中止する", "Disturb whenever unknown-level monster moves") },
 
     { &disturb_near, true, OPT_PAGE_DISTURBANCE, 0, 21, "disturb_near",
         _("視界内のモンスターが動いたら行動を中止する", "Disturb whenever viewable monster moves") },
