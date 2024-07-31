@@ -41,6 +41,7 @@ public:
     Grid *g_ptr;
     MonsterEntity *m_ptr;
     MonsterEntity *m_caster_ptr;
+    MonsterEntity *src_ptr;
     MonsterRaceInfo *r_ptr;
     bool seen;
     bool seen_msg;

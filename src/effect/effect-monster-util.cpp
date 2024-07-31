@@ -45,6 +45,7 @@ EffectMonster::EffectMonster(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITI
     this->g_ptr = &floor_ptr->grid_array[this->y][this->x];
     this->m_ptr = &floor_ptr->m_list[this->g_ptr->m_idx];
     this->m_caster_ptr = is_monster(this->src_idx) ? &floor_ptr->m_list[this->src_idx] : nullptr;
+    this->src_ptr = &floor_ptr->m_list[src_idx];
     this->r_ptr = &this->m_ptr->get_monrace();
     this->seen = this->m_ptr->ml;
     this->seen_msg = is_seen(player_ptr, this->m_ptr);
