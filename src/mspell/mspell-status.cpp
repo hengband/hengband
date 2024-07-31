@@ -615,7 +615,7 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
 
     monspell_message_base(player_ptr, m_idx, t_idx, msg, !seen, target_type);
     HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
-    if (player_ptr->riding == m_idx) {
+    if (m_ptr->is_riding()) {
         RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 

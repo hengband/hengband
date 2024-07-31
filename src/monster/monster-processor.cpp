@@ -392,7 +392,7 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
     const auto m_name = monster_desc(player_ptr, &monster, monster.is_pet() ? MD_ASSUME_VISIBLE : 0);
 
     /* When riding a hostile alignment pet */
-    if (player_ptr->riding == m_idx) {
+    if (monster.is_riding()) {
         if (abs(player_ptr->alignment / 10) < randint0(player_ptr->skill_exp[PlayerSkillKindType::RIDING])) {
             return;
         }
@@ -658,7 +658,7 @@ void sweep_monster_process(PlayerType *player_ptr)
             continue;
         }
 
-        byte speed = (player_ptr->riding == m_idx) ? player_ptr->pspeed : m_ptr->get_temporary_speed();
+        byte speed = m_ptr->is_riding() ? player_ptr->pspeed : m_ptr->get_temporary_speed();
         m_ptr->energy_need -= speed_to_energy(speed);
         if (m_ptr->energy_need > 0) {
             continue;

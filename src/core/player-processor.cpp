@@ -365,7 +365,7 @@ void process_player(PlayerType *player_ptr)
                         m_ptr->ml = false;
                         update_monster(player_ptr, m_idx, false);
                         HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
-                        if (player_ptr->riding == m_idx) {
+                        if (m_ptr->is_riding()) {
                             rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
                         }
 

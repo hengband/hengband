@@ -427,8 +427,9 @@ void MonsterDamageProcessor::get_exp_from_mon(const MonsterEntity &monster, int 
 
 void MonsterDamageProcessor::set_redraw()
 {
+    auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     HealthBarTracker::get_instance().set_flag_if_tracking(this->m_idx);
-    if (this->player_ptr->riding == this->m_idx) {
+    if (monster.is_riding()) {
         RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 }

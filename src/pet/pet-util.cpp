@@ -91,7 +91,7 @@ PERCENTAGE calculate_upkeep(PlayerType *player_ptr)
             continue;
         }
 
-        if (player_ptr->riding == m_idx) {
+        if (m_ptr->is_riding()) {
             total_friend_levels += (r_ptr->level + 5) * 2;
         } else if (!has_a_unique && m_ptr->get_monrace().misc_flags.has(MonsterMiscType::RIDING)) {
             total_friend_levels += (r_ptr->level + 5) * 7 / 2;

@@ -56,7 +56,7 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
         player_ptr->riding_t_m_idx = i2;
     }
 
-    if (player_ptr->riding == i1) {
+    if (m_ptr->is_riding()) { // player_ptr->riding == i1 のままの方がいい？
         player_ptr->riding = i2;
     }
 
