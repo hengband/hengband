@@ -1,5 +1,6 @@
 #include "birth/game-play-initializer.h"
 #include "dungeon/quest.h"
+#include "floor/floor-list.h"
 #include "floor/floor-util.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
@@ -39,7 +40,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     *player_ptr = {};
 
     // TODO: キャラ作成からゲーム開始までに  current_floor_ptr を参照しなければならない処理は今後整理して外す。
-    player_ptr->current_floor_ptr = &floor_info;
+    player_ptr->current_floor_ptr = &FloorList::get_instance().get_floor(0);
     //! @todo std::make_shared の配列対応版は C++20 から
     player_ptr->inventory_list = std::shared_ptr<ItemEntity[]>{ new ItemEntity[INVEN_TOTAL] };
     for (int i = 0; i < 4; i++) {
