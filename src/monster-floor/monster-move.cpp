@@ -474,7 +474,8 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
         const auto is_projectable = projectable(player_ptr, player_ptr->y, player_ptr->x, monster.fy, monster.fx);
         const auto can_see = disturb_near && monster.mflag.has(MonsterTemporaryFlagType::VIEW) && is_projectable;
         const auto is_high_level = disturb_high && (ap_r_ref.r_tkills > 0) && (ap_r_ref.level >= player_ptr->lev);
-        if (monster.ml && (disturb_move || can_see || is_high_level)) {
+        const auto is_unknown_level = disturb_unknown && (ap_r_ref.r_tkills == 0);
+        if (monster.ml && (disturb_move || can_see || is_high_level || is_unknown_level)) {
             if (monster.is_hostile()) {
                 disturb(player_ptr, false, true);
             }

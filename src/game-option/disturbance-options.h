@@ -10,6 +10,7 @@ extern bool flush_failure; /* Flush input on various failures */
 extern bool flush_disturb; /* Flush input whenever disturbed */
 extern bool disturb_move; /* Disturb whenever any monster moves */
 extern bool disturb_high; /* Disturb whenever high-level monster moves */
+extern bool disturb_unknown; /* Disturb whenever unknown-level monster moves */
 extern bool disturb_near; /* Disturb whenever viewable monster moves */
 extern bool disturb_pets; /* Disturb when visible pets move */
 extern bool disturb_panel; /* Disturb whenever map panel changes */
