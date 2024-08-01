@@ -111,7 +111,7 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
             const auto y = yval + 2 * ddy_ddd[dir1];
             const auto x = xval + 2 * ddx_ddd[dir1];
             if (MonraceList::is_valid(monrace_id)) {
-                place_specific_monster(player_ptr, 0, y, x, monrace_id, PM_ALLOW_SLEEP);
+                place_specific_monster(player_ptr, y, x, monrace_id, PM_ALLOW_SLEEP);
             }
 
             /* Walls around the breather */
@@ -153,7 +153,7 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
         const auto monrace_id = get_mon_num(player_ptr, 0, floor.dun_level, 0);
         if (MonraceList::is_valid(monrace_id)) {
-            place_specific_monster(player_ptr, 0, yval, xval, monrace_id, 0L);
+            place_specific_monster(player_ptr, yval, xval, monrace_id, 0L);
         }
 
         /* Walls around the breather */
@@ -202,7 +202,7 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
             const auto y = yval + ddy_ddd[dir1];
             const auto x = xval + ddx_ddd[dir1];
             if (MonraceList::is_valid(monrace_id)) {
-                place_specific_monster(player_ptr, 0, y, x, monrace_id, 0L);
+                place_specific_monster(player_ptr, y, x, monrace_id, 0L);
             }
         }
 

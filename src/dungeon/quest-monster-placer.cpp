@@ -74,7 +74,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
                     return false;
                 }
 
-                if (place_specific_monster(player_ptr, 0, pos.y, pos.x, quest.r_idx, mode)) {
+                if (place_specific_monster(player_ptr, pos.y, pos.x, quest.r_idx, mode)) {
                     break;
                 }
 

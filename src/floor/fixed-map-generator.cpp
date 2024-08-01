@@ -133,7 +133,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
                 }
             }
 
-            const auto m_idx = place_specific_monster(player_ptr, 0, *qtwg_ptr->y, *qtwg_ptr->x, r_idx, (PM_ALLOW_SLEEP | PM_NO_KAGE));
+            const auto m_idx = place_specific_monster(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, r_idx, (PM_ALLOW_SLEEP | PM_NO_KAGE));
             if (clone && m_idx) {
                 floor_ptr->m_list[*m_idx].mflag2.set(MonsterConstantFlagType::CLONED);
                 r_ref.cur_num = old_cur_num;

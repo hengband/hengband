@@ -246,49 +246,49 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     /* Top and bottom rows */
     for (auto x = center.x - 9; x <= center.x + 9; x++) {
-        place_specific_monster(player_ptr, 0, center.y - 2, x, (*whats)[0], PM_NO_KAGE);
-        place_specific_monster(player_ptr, 0, center.y + 2, x, (*whats)[0], PM_NO_KAGE);
+        place_specific_monster(player_ptr, center.y - 2, x, (*whats)[0], PM_NO_KAGE);
+        place_specific_monster(player_ptr, center.y + 2, x, (*whats)[0], PM_NO_KAGE);
     }
 
     /* Middle columns */
     for (auto y = center.y - 1; y <= center.y + 1; y++) {
-        place_specific_monster(player_ptr, 0, y, center.x - 9, (*whats)[0], PM_NO_KAGE);
-        place_specific_monster(player_ptr, 0, y, center.x + 9, (*whats)[0], PM_NO_KAGE);
+        place_specific_monster(player_ptr, y, center.x - 9, (*whats)[0], PM_NO_KAGE);
+        place_specific_monster(player_ptr, y, center.x + 9, (*whats)[0], PM_NO_KAGE);
 
-        place_specific_monster(player_ptr, 0, y, center.x - 8, (*whats)[1], PM_NO_KAGE);
-        place_specific_monster(player_ptr, 0, y, center.x + 8, (*whats)[1], PM_NO_KAGE);
+        place_specific_monster(player_ptr, y, center.x - 8, (*whats)[1], PM_NO_KAGE);
+        place_specific_monster(player_ptr, y, center.x + 8, (*whats)[1], PM_NO_KAGE);
 
-        place_specific_monster(player_ptr, 0, y, center.x - 7, (*whats)[1], PM_NO_KAGE);
-        place_specific_monster(player_ptr, 0, y, center.x + 7, (*whats)[1], PM_NO_KAGE);
+        place_specific_monster(player_ptr, y, center.x - 7, (*whats)[1], PM_NO_KAGE);
+        place_specific_monster(player_ptr, y, center.x + 7, (*whats)[1], PM_NO_KAGE);
 
-        place_specific_monster(player_ptr, 0, y, center.x - 6, (*whats)[2], PM_NO_KAGE);
-        place_specific_monster(player_ptr, 0, y, center.x + 6, (*whats)[2], PM_NO_KAGE);
+        place_specific_monster(player_ptr, y, center.x - 6, (*whats)[2], PM_NO_KAGE);
+        place_specific_monster(player_ptr, y, center.x + 6, (*whats)[2], PM_NO_KAGE);
 
-        place_specific_monster(player_ptr, 0, y, center.x - 5, (*whats)[2], PM_NO_KAGE);
-        place_specific_monster(player_ptr, 0, y, center.x + 5, (*whats)[2], PM_NO_KAGE);
+        place_specific_monster(player_ptr, y, center.x - 5, (*whats)[2], PM_NO_KAGE);
+        place_specific_monster(player_ptr, y, center.x + 5, (*whats)[2], PM_NO_KAGE);
 
-        place_specific_monster(player_ptr, 0, y, center.x - 4, (*whats)[3], PM_NO_KAGE);
-        place_specific_monster(player_ptr, 0, y, center.x + 4, (*whats)[3], PM_NO_KAGE);
+        place_specific_monster(player_ptr, y, center.x - 4, (*whats)[3], PM_NO_KAGE);
+        place_specific_monster(player_ptr, y, center.x + 4, (*whats)[3], PM_NO_KAGE);
 
-        place_specific_monster(player_ptr, 0, y, center.x - 3, (*whats)[3], PM_NO_KAGE);
-        place_specific_monster(player_ptr, 0, y, center.x + 3, (*whats)[3], PM_NO_KAGE);
+        place_specific_monster(player_ptr, y, center.x - 3, (*whats)[3], PM_NO_KAGE);
+        place_specific_monster(player_ptr, y, center.x + 3, (*whats)[3], PM_NO_KAGE);
 
-        place_specific_monster(player_ptr, 0, y, center.x - 2, (*whats)[4], PM_NO_KAGE);
-        place_specific_monster(player_ptr, 0, y, center.x + 2, (*whats)[4], PM_NO_KAGE);
+        place_specific_monster(player_ptr, y, center.x - 2, (*whats)[4], PM_NO_KAGE);
+        place_specific_monster(player_ptr, y, center.x + 2, (*whats)[4], PM_NO_KAGE);
     }
 
     /* Above/Below the center monster */
     for (auto x = center.x - 1; x <= center.x + 1; x++) {
-        place_specific_monster(player_ptr, 0, center.y + 1, x, (*whats)[5], PM_NO_KAGE);
-        place_specific_monster(player_ptr, 0, center.y - 1, x, (*whats)[5], PM_NO_KAGE);
+        place_specific_monster(player_ptr, center.y + 1, x, (*whats)[5], PM_NO_KAGE);
+        place_specific_monster(player_ptr, center.y - 1, x, (*whats)[5], PM_NO_KAGE);
     }
 
     /* Next to the center monster */
-    place_specific_monster(player_ptr, 0, center.y, center.x + 1, (*whats)[6], PM_NO_KAGE);
-    place_specific_monster(player_ptr, 0, center.y, center.x - 1, (*whats)[6], PM_NO_KAGE);
+    place_specific_monster(player_ptr, center.y, center.x + 1, (*whats)[6], PM_NO_KAGE);
+    place_specific_monster(player_ptr, center.y, center.x - 1, (*whats)[6], PM_NO_KAGE);
 
     /* Center monster */
-    place_specific_monster(player_ptr, 0, center.y, center.x, (*whats)[7], PM_NO_KAGE);
+    place_specific_monster(player_ptr, center.y, center.x, (*whats)[7], PM_NO_KAGE);
 
     return true;
 }
@@ -496,7 +496,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
     const Pos2DVec vec(yval, xval);
     for (const auto &trapped_monster : place_table_trapped_pit) {
         const auto trapped_pos = trapped_monster.pos + vec;
-        place_specific_monster(player_ptr, 0, trapped_pos.y, trapped_pos.x, (*whats)[trapped_monster.strength], PM_NO_KAGE);
+        place_specific_monster(player_ptr, trapped_pos.y, trapped_pos.x, (*whats)[trapped_monster.strength], PM_NO_KAGE);
     }
 
     return true;
