@@ -4,6 +4,9 @@
 #include "term/z-rand.h"
 #include <algorithm>
 #include <exception>
+#include <numeric>
+#include <optional>
+#include <random>
 #include <stdexcept>
 #include <tuple>
 #include <vector>
@@ -30,7 +33,8 @@ public:
      */
     void clear()
     {
-        return item_list_.clear();
+        dist_.reset();
+        item_list_.clear();
     }
 
     /**
@@ -48,9 +52,8 @@ public:
     void entry_item(IdType id, int prob)
     {
         if (prob > 0) {
-            // 二分探索を行うため、probは累積値を格納する
-            auto cumulative_prob = item_list_.empty() ? 0 : std::get<1>(item_list_.back());
-            item_list_.emplace_back(id, cumulative_prob + prob);
+            item_list_.emplace_back(id, prob);
+            dist_.reset();
         }
     }
 
@@ -63,11 +66,12 @@ public:
      */
     int total_prob() const
     {
-        if (item_list_.empty()) {
-            return 0;
-        }
+        auto total = std::transform_reduce(
+            item_list_.begin(), item_list_.end(), 0,
+            [](int a, int b) { return a + b; },
+            [](const auto &i) { return std::get<1>(i); });
 
-        return std::get<1>(item_list_.back());
+        return total;
     }
 
     /**
@@ -112,11 +116,14 @@ public:
             THROW_EXCEPTION(std::runtime_error, "There is no entry in the probability table.");
         }
 
-        // probの合計の範囲からランダムでkeyを取得し、二分探索で選択する項目を決定する
-        const int key = randint0(total_prob());
-        auto it = std::partition_point(item_list_.begin(), item_list_.end(), [key](const auto &i) { return std::get<1>(i) <= key; });
+        if (!dist_) {
+            std::vector<int> probs(item_list_.size());
+            std::transform(item_list_.begin(), item_list_.end(), probs.begin(), [](const auto &item) { return std::get<1>(item); });
+            dist_ = std::discrete_distribution<>(probs.begin(), probs.end());
+        }
 
-        return std::get<0>(*it);
+        const auto choice = rand_dist(*dist_);
+        return std::get<0>(item_list_[choice]);
     }
 
     /**
@@ -140,4 +147,6 @@ public:
 private:
     /** 項目のIDと確率のセットを格納する配列 */
     std::vector<std::tuple<IdType, int>> item_list_;
+
+    mutable std::optional<std::discrete_distribution<>> dist_;
 };
