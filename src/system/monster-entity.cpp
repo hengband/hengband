@@ -504,3 +504,8 @@ void MonsterEntity::set_friendly()
 {
     this->mflag2.set(MonsterConstantFlagType::FRIENDLY);
 }
+
+bool MonsterEntity::is_riding() const
+{
+    return this->mflag2.has(MonsterConstantFlagType::RIDING);
+}
