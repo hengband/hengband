@@ -22,7 +22,6 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-kind-mask.h"
-#include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
@@ -358,17 +357,8 @@ void choose_chameleon_polymorph(PlayerType *player_ptr, MONSTER_IDX m_idx, const
         return;
     }
 
-    const auto &monrace = MonraceList::get_instance().get_monrace(*new_monrace_id);
-
     monster.r_idx = *new_monrace_id;
     monster.ap_r_idx = *new_monrace_id;
-    update_monster(player_ptr, m_idx, false);
-    lite_spot(player_ptr, monster.fy, monster.fx);
-
-    const auto &new_monrace = monster.get_monrace();
-    if (new_monrace.brightness_flags.has_any_of(ld_mask) || monrace.brightness_flags.has_any_of(ld_mask)) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
-    }
 }
 
 /*!
