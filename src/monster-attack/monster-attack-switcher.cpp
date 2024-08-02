@@ -275,7 +275,7 @@ static void calc_blow_drain_life(PlayerType *player_ptr, MonsterAttackPlayer *mo
     }
 
     bool resist_drain = check_drain_hp(player_ptr, d);
-    process_drain_life(player_ptr, monap_ptr, resist_drain);
+    process_drain_life(monap_ptr, resist_drain);
 }
 
 /*!
@@ -556,7 +556,7 @@ void switch_monster_blow_to_player(PlayerType *player_ptr, MonsterAttackPlayer *
                 int32_t d = Dice::roll(60, 6) + (player_ptr->exp / 100) * MON_DRAIN_LIFE;
 
                 bool resist_drain = check_drain_hp(player_ptr, d);
-                process_drain_life(player_ptr, monap_ptr, resist_drain);
+                process_drain_life(monap_ptr, resist_drain);
             }
             break;
         }

@@ -109,7 +109,7 @@ bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (m_ptr->ml) {
         HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
-        if (player_ptr->riding == m_idx) {
+        if (m_ptr->is_riding()) {
             rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
         }
     }
@@ -153,7 +153,7 @@ bool set_monster_fast(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
         return false;
     }
 
-    if ((player_ptr->riding == m_idx) && !player_ptr->leaving) {
+    if (m_ptr->is_riding() && !player_ptr->leaving) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     }
 
@@ -187,7 +187,7 @@ bool set_monster_slow(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
         return false;
     }
 
-    if ((player_ptr->riding == m_idx) && !player_ptr->leaving) {
+    if (m_ptr->is_riding() && !player_ptr->leaving) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     }
 
@@ -291,7 +291,7 @@ bool set_monster_monfear(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
 
     if (m_ptr->ml) {
         HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
-        if (player_ptr->riding == m_idx) {
+        if (m_ptr->is_riding()) {
             RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
         }
     }
@@ -337,7 +337,7 @@ bool set_monster_invulner(PlayerType *player_ptr, MONSTER_IDX m_idx, int v, bool
 
     if (m_ptr->ml) {
         HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
-        if (player_ptr->riding == m_idx) {
+        if (m_ptr->is_riding()) {
             RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
         }
     }

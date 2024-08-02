@@ -36,7 +36,7 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
-static void heal_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
+static void heal_monster_by_melee(mam_type *mam_ptr)
 {
     if (!mam_ptr->t_ptr->has_living_flag() || (mam_ptr->damage <= 2)) {
         return;
@@ -49,7 +49,7 @@ static void heal_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     }
 
     HealthBarTracker::get_instance().set_flag_if_tracking(mam_ptr->m_idx);
-    if (player_ptr->riding == mam_ptr->m_idx) {
+    if (mam_ptr->m_ptr->is_riding()) {
         RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
@@ -71,7 +71,7 @@ static void process_blow_effect(PlayerType *player_ptr, mam_type *mam_ptr)
             AttributeType::OLD_SLEEP, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
         break;
     case BlowEffectType::HEAL:
-        heal_monster_by_melee(player_ptr, mam_ptr);
+        heal_monster_by_melee(mam_ptr);
         break;
     default:
         break;
@@ -176,14 +176,14 @@ static bool check_same_monster(PlayerType *player_ptr, mam_type *mam_ptr)
     return true;
 }
 
-static void redraw_health_bar(PlayerType *player_ptr, mam_type *mam_ptr)
+static void redraw_health_bar(mam_type *mam_ptr)
 {
     if (!mam_ptr->t_ptr->ml) {
         return;
     }
 
     HealthBarTracker::get_instance().set_flag_if_tracking(mam_ptr->t_idx);
-    if (player_ptr->riding == mam_ptr->t_idx) {
+    if (mam_ptr->t_ptr->is_riding()) {
         RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 }
@@ -244,7 +244,7 @@ static void process_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     }
 
     (void)set_monster_csleep(player_ptr, mam_ptr->t_idx, 0);
-    redraw_health_bar(player_ptr, mam_ptr);
+    redraw_health_bar(mam_ptr);
     describe_melee_method(player_ptr, mam_ptr);
     describe_silly_melee(mam_ptr);
     mam_ptr->obvious = true;

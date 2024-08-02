@@ -75,7 +75,7 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
     if (player_ptr->riding_t_m_idx == i) {
         player_ptr->riding_t_m_idx = 0;
     }
-    if (player_ptr->riding == i) {
+    if (m_ptr->is_riding()) { // player_ptr->riding == i のままの方がいい？
         player_ptr->ride_monster(0);
     }
 

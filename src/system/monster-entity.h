@@ -96,6 +96,7 @@ public:
     std::optional<std::string> get_pain_message(std::string_view monster_name, int damage) const;
     std::optional<bool> order_pet_whistle(const MonsterEntity &other) const;
     std::optional<bool> order_pet_dismission(const MonsterEntity &other) const;
+    bool is_riding() const;
     void set_individual_speed(bool force_fixed_speed);
 
     void set_hostile();

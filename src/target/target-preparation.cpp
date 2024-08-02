@@ -54,7 +54,7 @@ bool target_able(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return false;
     }
 
-    if (player_ptr->riding && (player_ptr->riding == m_idx)) {
+    if (m_ptr->is_riding()) {
         return true;
     }
 
