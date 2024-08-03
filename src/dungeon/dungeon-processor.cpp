@@ -18,7 +18,7 @@
 #include "io/cursor.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
-#include "market/arena.h"
+#include "market/melee-arena.h"
 #include "mind/mind-ninja.h"
 #include "monster/monster-compaction.h"
 #include "monster/monster-processor.h"
@@ -164,7 +164,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     if (is_watching) {
         if (load_game) {
             player_ptr->energy_need = 0;
-            update_gambling_monsters(player_ptr);
+            update_melee_gladiators(player_ptr);
         } else {
             msg_print(_("試合開始！", "Ready..Fight!"));
             msg_print(nullptr);

@@ -60,13 +60,12 @@ void rd_alter_reality(PlayerType *player_ptr)
     }
 }
 
-void set_gambling_monsters(void)
+void set_gambling_monsters()
 {
-    const int max_gambling_monsters = 4;
-    for (int i = 0; i < max_gambling_monsters; i++) {
+    for (auto i = 0; i < NUM_GLADIATORS; i++) {
         battle_mon_list[i] = i2enum<MonsterRaceId>(rd_s16b());
         if (h_older_than(0, 3, 4)) {
-            set_zangband_gambling_monsters(i);
+            mon_odds[i] = rd_s16b();
         } else {
             mon_odds[i] = rd_u32b();
         }

@@ -10,7 +10,7 @@
 #include "load/savedata-old-flag-types.h"
 #include "load/world-loader.h"
 #include "market/arena-entry.h"
-#include "market/arena.h"
+#include "market/melee-arena.h"
 #include "monster-race/race-ability-flags.h"
 #include "mutation/mutation-calculator.h"
 #include "object/tval-types.h"
@@ -272,7 +272,7 @@ static void rd_phase_out(PlayerType *player_ptr)
 static void rd_arena(PlayerType *player_ptr)
 {
     if (h_older_than(0, 0, 3)) {
-        update_gambling_monsters(player_ptr);
+        update_melee_gladiators(player_ptr);
     } else {
         set_gambling_monsters();
     }

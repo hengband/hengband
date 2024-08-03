@@ -116,7 +116,7 @@ void wr_player(PlayerType *player_ptr)
         wr_bool(is_achieved);
     }
 
-    for (int i = 0; i < 4; i++) {
+    for (auto i = 0; i < NUM_GLADIATORS; i++) {
         wr_s16b(enum2i(battle_mon_list[i]));
         wr_u32b(mon_odds[i]);
     }
