@@ -565,7 +565,8 @@
     <ClCompile Include="..\..\src\save\floor-writer.cpp" />
     <ClCompile Include="..\..\src\save\info-writer.cpp" />
     <ClCompile Include="..\..\src\save\item-writer.cpp" />
-    <ClCompile Include="..\..\src\save\monster-writer.cpp" />
+    <ClCompile Include="..\..\src\save\monster-entity-writer.cpp" />
+    <ClCompile Include="..\..\src\save\lore-writer.cpp" />
     <ClCompile Include="..\..\src\save\player-writer.cpp" />
     <ClCompile Include="..\..\src\save\save-util.cpp" />
     <ClCompile Include="..\..\src\object-activation\activation-others.cpp" />
@@ -1378,7 +1379,8 @@
     <ClInclude Include="..\..\src\save\floor-writer.h" />
     <ClInclude Include="..\..\src\save\info-writer.h" />
     <ClInclude Include="..\..\src\save\item-writer.h" />
-    <ClInclude Include="..\..\src\save\monster-writer.h" />
+    <ClInclude Include="..\..\src\save\monster-entity-writer.h" />
+    <ClInclude Include="..\..\src\save\lore-writer.h" />
     <ClInclude Include="..\..\src\save\player-writer.h" />
     <ClInclude Include="..\..\src\save\save-util.h" />
     <ClInclude Include="..\..\src\object-activation\activation-others.h" />
