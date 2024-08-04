@@ -52,10 +52,12 @@ void update_melee_gladiators(PlayerType *player_ptr)
     }
 
     const auto &monraces = MonraceList::get_instance();
+    auto &melee_arena = MeleeArena::get_instance();
     while (true) {
         auto total = 0;
         auto is_applicable = false;
         for (auto i = 0; i < NUM_GLADIATORS; i++) {
+            auto &gladiator = melee_arena.get_gladiator(i);
             MonsterRaceId monrace_id;
             int j;
             while (true) {
@@ -73,7 +75,7 @@ void update_melee_gladiators(PlayerType *player_ptr)
                 }
 
                 for (j = 0; j < i; j++) {
-                    if (monrace_id == battle_mon_list[j]) {
+                    if (monrace_id == melee_arena.get_gladiator(j).monrace_id) {
                         break;
                     }
                 }
@@ -85,15 +87,16 @@ void update_melee_gladiators(PlayerType *player_ptr)
                 break;
             }
 
-            battle_mon_list[i] = monrace_id;
+            gladiator.monrace_id = monrace_id;
             if (monraces.get_monrace(monrace_id).level < 45) {
                 is_applicable = true;
             }
         }
 
         std::array<int, NUM_GLADIATORS> power;
-        std::transform(std::begin(battle_mon_list), std::end(battle_mon_list), std::begin(power),
-            [&monraces](auto monrace_id) { return monraces.get_monrace(monrace_id).calc_power(); });
+        auto &gladiators = melee_arena.get_gladiators();
+        std::transform(std::begin(gladiators), std::end(gladiators), std::begin(power),
+            [&monraces](const auto &gladiator) { return monraces.get_monrace(gladiator.monrace_id).calc_power(); });
         total += std::reduce(std::begin(power), std::end(power));
         int i;
         for (i = 0; i < NUM_GLADIATORS; i++) {
@@ -114,7 +117,7 @@ void update_melee_gladiators(PlayerType *player_ptr)
                 power[i] = 100 + randint1(5);
             }
 
-            mon_odds[i] = power[i];
+            gladiators[i].odds = power[i];
         }
 
         if (i == NUM_GLADIATORS) {
@@ -149,8 +152,10 @@ bool melee_arena_comm(PlayerType *player_ptr)
     clear_bldg(4, 10);
 
     prt(_("モンスター                                                     倍率", "Monsters                                                       Odds"), 4, 4);
+    const auto &melee_arena = MeleeArena::get_instance();
     for (auto i = 0; i < NUM_GLADIATORS; i++) {
-        const auto &monrace = monraces_info[battle_mon_list[i]];
+        const auto &gladiator = melee_arena.get_gladiator(i);
+        const auto &monrace = monraces_info[gladiator.monrace_id]; //@ 後でシングルトンに差し替え.
         std::string name;
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
             name = _(monrace.name, "Fake ");
@@ -160,14 +165,13 @@ bool melee_arena_comm(PlayerType *player_ptr)
             name.append(_("      ", ""));
         }
 
-        constexpr auto fmt = _("%d) %-58s  %4ld.%02ld倍", "%d) %-58s  %4ld.%02ld");
-        prt(format(fmt, i + 1, name.data(), (long int)mon_odds[i] / 100, (long int)mon_odds[i] % 100), 5 + i, 1);
+        constexpr auto fmt = _("%d) %-58s  %4d.%02d倍", "%d) %-58s  %4d.%02d");
+        prt(format(fmt, i + 1, name.data(), gladiator.odds / 100, gladiator.odds % 100), 5 + i, 1);
     }
 
     prt(_("どれに賭けますか:", "Which monster: "), 0, 0);
     while (true) {
-        int i = inkey();
-
+        const auto i = inkey();
         if (i == ESCAPE) {
             screen_load();
             return false;
@@ -175,7 +179,7 @@ bool melee_arena_comm(PlayerType *player_ptr)
 
         if (i >= '1' && i <= '4') {
             bet_number = i - '1';
-            battle_odds = mon_odds[bet_number];
+            battle_odds = melee_arena.get_gladiator(bet_number).odds;
             break;
         }
 

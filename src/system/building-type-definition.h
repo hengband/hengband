@@ -28,18 +28,17 @@ enum class MonsterRaceId : short;
 class MeleeGladiator {
 public:
     MeleeGladiator() = default;
+    MeleeGladiator(MonsterRaceId monrace_id, uint32_t odds);
     MonsterRaceId monrace_id{};
     uint32_t odds = 0;
 };
 
-constexpr auto NUM_GLADIATORS = 4;
-extern MonsterRaceId battle_mon_list[4];
-extern uint32_t mon_odds[4];
 extern int battle_odds;
 extern int wager_melee;
 extern int bet_number;
 
 //!< モンスター闘技場定義.
+constexpr auto NUM_GLADIATORS = 4;
 class MeleeArena {
 public:
     ~MeleeArena() = default;
@@ -52,6 +51,8 @@ public:
     MeleeGladiator &get_gladiator(int n);
     const MeleeGladiator &get_gladiator(int n) const;
     void set_gladiator(int n, const MeleeGladiator &gladiator);
+    const std::array<MeleeGladiator, NUM_GLADIATORS> &get_gladiators() const; //!< @todo 暫定、セーブデータへの書き込みにしか使わないこと.
+    std::array<MeleeGladiator, NUM_GLADIATORS> &get_gladiators(); //!< @todo 暫定、後で消す.
 
 private:
     MeleeArena() = default;
