@@ -25,7 +25,6 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
-#include <numeric>
 
 /*!
  * @brief モンスター闘技場に参加するモンスターを更新する。
@@ -93,34 +92,9 @@ void update_melee_gladiators(PlayerType *player_ptr)
             }
         }
 
-        std::array<int, NUM_GLADIATORS> power;
-        auto &gladiators = melee_arena.get_gladiators();
-        std::transform(std::begin(gladiators), std::end(gladiators), std::begin(power),
-            [&monraces](const auto &gladiator) { return monraces.get_monrace(gladiator.monrace_id).calc_power(); });
-        total += std::reduce(std::begin(power), std::end(power));
-        int i;
-        for (i = 0; i < NUM_GLADIATORS; i++) {
-            if (power[i] <= 0) {
-                break;
-            }
-
-            power[i] = total * 60 / power[i];
-            if (is_applicable && ((power[i] < 160) || power[i] > 1500)) {
-                break;
-            }
-
-            if ((power[i] < 160) && randint0(20)) {
-                break;
-            }
-
-            if (power[i] < 101) {
-                power[i] = 100 + randint1(5);
-            }
-
-            gladiators[i].odds = power[i];
-        }
-
-        if (i == NUM_GLADIATORS) {
+        const auto &[count, new_total] = melee_arena.set_odds(total, is_applicable);
+        total = new_total;
+        if (count == NUM_GLADIATORS) {
             break;
         }
     }

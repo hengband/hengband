@@ -52,7 +52,7 @@ public:
     const MeleeGladiator &get_gladiator(int n) const;
     void set_gladiator(int n, const MeleeGladiator &gladiator);
     const std::array<MeleeGladiator, NUM_GLADIATORS> &get_gladiators() const; //!< @todo 暫定、セーブデータへの書き込みにしか使わないこと.
-    std::array<MeleeGladiator, NUM_GLADIATORS> &get_gladiators(); //!< @todo 暫定、後で消す.
+    std::pair<int, int> set_odds(int current_total, bool is_applicable);
 
 private:
     MeleeArena() = default;
