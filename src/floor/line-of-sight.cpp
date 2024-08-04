@@ -1,5 +1,6 @@
 #include "floor/line-of-sight.h"
 #include "floor/cave.h"
+#include "floor/floor-list.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 
@@ -46,7 +47,7 @@
  *\n
  * Use the "update_view()" function to determine player line-of-sight.\n
  */
-bool los(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
     POSITION dy = y2 - y1;
     POSITION dx = x2 - x1;
@@ -57,7 +58,7 @@ bool los(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION
     }
 
     /* Directly South/North */
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     POSITION tx, ty;
     if (!dx) {
         /* South -- check for walls */

@@ -139,10 +139,10 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
                 hityou = true;
             }
         } else if (flg & PROJECT_LOS) {
-            if (los(player_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) {
+            if (los(y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) {
                 hit2 = true;
             }
-            if (los(player_ptr, y1, x1, player_ptr->y, player_ptr->x) && (distance(y1, x1, player_ptr->y, player_ptr->x) <= rad)) {
+            if (los(y1, x1, player_ptr->y, player_ptr->x) && (distance(y1, x1, player_ptr->y, player_ptr->x) <= rad)) {
                 hityou = true;
             }
         } else {

@@ -238,7 +238,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                         switch (typ) {
                         case AttributeType::LITE:
                         case AttributeType::LITE_WEAK:
-                            if (!los(player_ptr, by, bx, y, x)) {
+                            if (!los(by, bx, y, x)) {
                                 continue;
                             }
                             break;

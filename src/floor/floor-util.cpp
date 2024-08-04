@@ -170,7 +170,7 @@ void scatter(PlayerType *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POS
             continue;
         }
         if (mode & PROJECT_LOS) {
-            if (los(player_ptr, y, x, ny, nx)) {
+            if (los(y, x, ny, nx)) {
                 break;
             }
             continue;
