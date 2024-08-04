@@ -156,7 +156,7 @@ void ObjectThrowEntity::reflect_inventory_by_throw()
     }
 
     if (this->i_idx < 0) {
-        floor_item_increase(this->player_ptr, 0 - this->i_idx, -1);
+        floor_item_increase(0 - this->i_idx, -1);
         floor_item_optimize(this->player_ptr, 0 - this->i_idx);
         return;
     }

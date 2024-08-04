@@ -11,6 +11,7 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
+#include "floor/floor-list.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"
@@ -117,7 +118,7 @@ static void set_ammo_quantity(ItemEntity *j_ptr)
  */
 bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, std::optional<int> rq_mon_level)
 {
-    auto *floor_ptr = &FloorData::get_instance().get_floor(0);
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     auto prob = any_bits(mode, AM_GOOD) ? 10 : 1000;
     auto base = get_base_floor(floor_ptr, mode, rq_mon_level);
     if (!one_in_(prob) || !make_artifact_special(player_ptr, j_ptr)) {
@@ -157,9 +158,9 @@ bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, std:
  * @param j_ptr 生成結果を収めたいアイテムの参照ポインタ
  * @return 生成に成功したらTRUEを返す。
  */
-bool make_gold(PlayerType *player_ptr, ItemEntity *j_ptr)
+bool make_gold(ItemEntity *j_ptr)
 {
-    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &floor = FloorList::get_instance().get_floor(0);
     auto i = ((randint1(floor.object_level + 2) + 2) / 2) - 1;
     if (one_in_(CHANCE_BASEITEM_LEVEL_BOOST)) {
         i += randint1(floor.object_level + 1);
@@ -190,7 +191,7 @@ bool make_gold(PlayerType *player_ptr, ItemEntity *j_ptr)
 void delete_all_items_from_floor(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     Grid *g_ptr;
-    auto *floor_ptr = &FloorData::get_instance().get_floor(0);
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     if (!in_bounds(floor_ptr, y, x)) {
         return;
     }
@@ -214,9 +215,9 @@ void delete_all_items_from_floor(PlayerType *player_ptr, POSITION y, POSITION x)
  * @param i_idx 増やしたいアイテムの所持スロット
  * @param num 増やしたいアイテムの数
  */
-void floor_item_increase(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBER num)
+void floor_item_increase(INVENTORY_IDX i_idx, ITEM_NUMBER num)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
 
     auto *o_ptr = &floor_ptr->o_list[i_idx];
     num += o_ptr->number;
@@ -243,7 +244,7 @@ void floor_item_increase(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBE
  */
 void floor_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 {
-    auto *o_ptr = &FloorData::get_instance().get_floor(0).o_list[i_idx];
+    auto *o_ptr = &FloorList::get_instance().get_floor(0).o_list[i_idx];
     if (!o_ptr->is_valid()) {
         return;
     }
@@ -270,7 +271,7 @@ void floor_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 void delete_object_idx(PlayerType *player_ptr, OBJECT_IDX o_idx)
 {
     ItemEntity *j_ptr;
-    auto *floor_ptr = &FloorData::get_instance().get_floor(0);
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     excise_object_idx(floor_ptr, o_idx);
     j_ptr = &floor_ptr->o_list[o_idx];
     if (!j_ptr->is_held_by_monster()) {
@@ -373,7 +374,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
 
     POSITION by = y;
     POSITION bx = x;
-    auto *floor_ptr = &FloorData::get_instance().get_floor(0);
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     for (dy = -3; dy <= 3; dy++) {
         for (dx = -3; dx <= 3; dx++) {
             bool comb = false;
@@ -618,7 +619,7 @@ void floor_item_charges(FloorType *floor_ptr, INVENTORY_IDX i_idx)
  */
 void floor_item_describe(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 {
-    auto &floor = FloorData::get_instance().get_floor(0);
+    auto &floor = FloorList::get_instance().get_floor(0);
     auto *o_ptr = &floor.o_list[i_idx];
     const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
 #ifdef JP
