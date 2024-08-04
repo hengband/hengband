@@ -51,7 +51,7 @@ ProcessResult effect_monster_drain_mana(PlayerType *player_ptr, EffectMonster *e
     }
 
     HealthBarTracker::get_instance().set_flag_if_tracking(em_ptr->src_idx);
-    if (em_ptr->src_ptr->is_riding()) {
+    if (em_ptr->m_caster_ptr && em_ptr->m_caster_ptr->is_riding()) {
         RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 

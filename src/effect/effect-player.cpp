@@ -39,19 +39,17 @@
 #include <string>
 
 /*!
- * @brief EffectPlayerType構造体を初期化する
- * @param ep_ptr 初期化前の構造体
+ * @brief EffectPlayerTypeクラスのコンストラクタ
+ * @param src_floor モンスターのいるフロア
  * @param src_idx 魔法を唱えたモンスター (0ならプレイヤー自身)
  * @param dam 基本威力
  * @param attribute 効果属性
  * @param flag 効果フラグ
- * @param monspell 効果元のモンスター魔法ID
- * @return 初期化後の構造体ポインタ
  */
-EffectPlayerType::EffectPlayerType(MonsterEntity *src_ptr, MONSTER_IDX src_idx, int dam, AttributeType attribute, BIT_FLAGS flag)
+EffectPlayerType::EffectPlayerType(FloorType &src_floor, MONSTER_IDX src_idx, int dam, AttributeType attribute, BIT_FLAGS flag)
     : rlev(0)
     , m_ptr(nullptr)
-    , src_ptr(src_ptr)
+    , src_ptr(is_monster(src_idx) ? &src_floor.m_list[src_idx] : nullptr)
     , killer("")
     , m_name("")
     , get_damage(0)
@@ -195,7 +193,7 @@ static void describe_effect_source(PlayerType *player_ptr, EffectPlayerType *ep_
 bool affect_player(MONSTER_IDX src_idx, PlayerType *player_ptr, concptr src_name, int r, POSITION y, POSITION x, int dam, AttributeType attribute,
     BIT_FLAGS flag, FallOffHorseEffect &fall_off_horse_effect, project_func project)
 {
-    EffectPlayerType tmp_effect(&player_ptr->current_floor_ptr->m_list[src_idx], src_idx, dam, attribute, flag);
+    EffectPlayerType tmp_effect(*player_ptr->current_floor_ptr, src_idx, dam, attribute, flag);
     auto *ep_ptr = &tmp_effect;
     auto check_result = check_continue_player_effect(player_ptr, ep_ptr, { y, x }, project);
     if (check_result != ProcessResult::PROCESS_CONTINUE) {

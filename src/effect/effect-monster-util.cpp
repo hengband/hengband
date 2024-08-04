@@ -21,7 +21,6 @@
 /*!
  * @brief EffectMonster構造体のコンストラクタ
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param em_ptr モンスター効果構造体への参照ポインタ
  * @param src_idx 魔法を発動したモンスター (0ならばプレイヤー)
  * @param r 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
  * @param y 目標y座標 / Target y location (or location to travel "towards")
@@ -45,7 +44,6 @@ EffectMonster::EffectMonster(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITI
     this->g_ptr = &floor_ptr->grid_array[this->y][this->x];
     this->m_ptr = &floor_ptr->m_list[this->g_ptr->m_idx];
     this->m_caster_ptr = is_monster(this->src_idx) ? &floor_ptr->m_list[this->src_idx] : nullptr;
-    this->src_ptr = &floor_ptr->m_list[src_idx];
     this->r_ptr = &this->m_ptr->get_monrace();
     this->seen = this->m_ptr->ml;
     this->seen_msg = is_seen(player_ptr, this->m_ptr);
