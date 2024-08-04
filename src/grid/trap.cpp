@@ -6,6 +6,7 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
+#include "floor/floor-list.h"
 #include "floor/floor-mode-changer.h"
 #include "game-option/birth-options.h"
 #include "game-option/special-options.h"
@@ -193,7 +194,8 @@ short choose_random_trap(FloorType *floor_ptr)
  */
 void disclose_grid(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto &floor = FloorList::get_instance().get_floor(0);
+    auto *g_ptr = &floor.grid_array[y][x];
 
     if (g_ptr->cave_has_flag(TerrainCharacteristics::SECRET)) {
         /* No longer hidden */
@@ -390,7 +392,7 @@ static void hit_trap_slow(PlayerType *player_ptr)
 void hit_trap(PlayerType *player_ptr, bool break_trap)
 {
     const Pos2D p_pos(player_ptr->y, player_ptr->x);
-    const auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(p_pos);
     const auto &terrain = grid.get_terrain();
     TrapType trap_feat_type = terrain.flags.has(TerrainCharacteristics::TRAP) ? i2enum<TrapType>(terrain.subtype) : TrapType::NOT_TRAP;
@@ -441,10 +443,10 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
         msg_print(_("何かがピカッと光った！", "There is a flash of shimmering light!"));
         const auto num = 2 + randint1(3);
         for (auto i = 0; i < num; i++) {
-            (void)summon_specific(player_ptr, p_pos.y, p_pos.x, player_ptr->current_floor_ptr->dun_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+            (void)summon_specific(player_ptr, p_pos.y, p_pos.x, floor.dun_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
         }
 
-        if (player_ptr->current_floor_ptr->dun_level > randint1(100)) /* No nasty effect for low levels */
+        if (floor.dun_level > randint1(100)) /* No nasty effect for low levels */
         {
             bool stop_ty = false;
             int count = 0;
@@ -571,13 +573,13 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
         msg_print(_("突然天界の戦争に巻き込まれた！", "Suddenly, you are surrounded by immotal beings!"));
 
         /* Summon Demons and Angels */
-        for (lev = player_ptr->current_floor_ptr->dun_level; lev >= 20; lev -= 1 + lev / 16) {
+        for (lev = floor.dun_level; lev >= 20; lev -= 1 + lev / 16) {
             const auto num = levs[std::min(lev / 10, 9)];
             for (auto i = 0; i < num; i++) {
                 POSITION x1 = rand_spread(p_pos.x, 7);
                 POSITION y1 = rand_spread(p_pos.y, 5);
 
-                if (!in_bounds(player_ptr->current_floor_ptr, y1, x1)) {
+                if (!in_bounds(&floor, y1, x1)) {
                     continue;
                 }
 
@@ -596,8 +598,8 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
 
                 /* Let them fight each other */
                 if (evil_idx && good_idx) {
-                    MonsterEntity *evil_ptr = &player_ptr->current_floor_ptr->m_list[evil_idx];
-                    MonsterEntity *good_ptr = &player_ptr->current_floor_ptr->m_list[good_idx];
+                    MonsterEntity *evil_ptr = &floor.m_list[evil_idx];
+                    MonsterEntity *good_ptr = &floor.m_list[good_idx];
                     evil_ptr->target_y = good_ptr->fy;
                     evil_ptr->target_x = good_ptr->fx;
                     good_ptr->target_y = evil_ptr->fy;
@@ -616,9 +618,9 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
         fire_ball_hide(player_ptr, AttributeType::WATER_FLOW, 0, 1, 10);
 
         /* Summon Piranhas */
-        const auto num = 1 + player_ptr->current_floor_ptr->dun_level / 20;
+        const auto num = 1 + floor.dun_level / 20;
         for (auto i = 0; i < num; i++) {
-            (void)summon_specific(player_ptr, p_pos.y, p_pos.x, player_ptr->current_floor_ptr->dun_level, SUMMON_PIRANHAS, (PM_ALLOW_GROUP | PM_NO_PET));
+            (void)summon_specific(player_ptr, p_pos.y, p_pos.x, floor.dun_level, SUMMON_PIRANHAS, (PM_ALLOW_GROUP | PM_NO_PET));
         }
         break;
     }

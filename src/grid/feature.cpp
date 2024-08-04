@@ -1,6 +1,7 @@
 #include "grid/feature.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/cave.h"
+#include "floor/floor-list.h"
 #include "floor/geometry.h"
 #include "game-option/map-screen-options.h"
 #include "grid/grid.h"
@@ -167,7 +168,7 @@ FEAT_IDX feat_jammed_door_random(int door_type)
  */
 void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     const auto &terrain = TerrainList::get_instance().get_terrain(feat);
     const auto &dungeon = floor_ptr->get_dungeon_definition();

@@ -7,6 +7,7 @@
  */
 
 #include "floor/cave.h"
+#include "floor/floor-list.h"
 #include "grid/grid.h"
 #include "system/angband-system.h"
 #include "system/floor-type-definition.h"
@@ -51,7 +52,7 @@ bool in_bounds2u(const FloorType *floor_ptr, int y, int x)
  */
 bool is_cave_empty_bold(PlayerType *player_ptr, int y, int x)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     bool is_empty_grid = cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PLACE);
     is_empty_grid &= !(floor_ptr->grid_array[y][x].m_idx);
     is_empty_grid &= !player_ptr->is_located_at({ y, x });
@@ -67,8 +68,9 @@ bool is_cave_empty_bold(PlayerType *player_ptr, int y, int x)
  */
 bool is_cave_empty_bold2(PlayerType *player_ptr, int y, int x)
 {
+    const auto &floor = FloorList::get_instance().get_floor(0);
     bool is_empty_grid = is_cave_empty_bold(player_ptr, y, x);
-    is_empty_grid &= AngbandWorld::get_instance().character_dungeon || !cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::TREE);
+    is_empty_grid &= AngbandWorld::get_instance().character_dungeon || !cave_has_flag_bold(&floor, y, x, TerrainCharacteristics::TREE);
     return is_empty_grid;
 }
 

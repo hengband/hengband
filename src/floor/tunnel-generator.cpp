@@ -1,6 +1,7 @@
 #include "floor/tunnel-generator.h"
 #include "floor/cave.h"
 #include "floor/dungeon-tunnel-util.h"
+#include "floor/floor-list.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
 #include "system/dungeon-data-definition.h"
@@ -63,7 +64,7 @@ bool build_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, dt_type *dt_ptr
     start_row = row1;
     start_col = col1;
     correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     while ((row1 != row2) || (col1 != col2)) {
         if (main_loop_count++ > 2000) {
             return false;
@@ -177,7 +178,7 @@ bool build_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, dt_type *dt_ptr
  */
 static bool set_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION *x, POSITION *y, bool affectwall)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     auto *g_ptr = &floor_ptr->grid_array[*y][*x];
     if (!in_bounds(floor_ptr, *y, *x) || g_ptr->is_inner()) {
         return true;
@@ -379,7 +380,7 @@ bool build_tunnel2(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION x1, P
     Grid *g_ptr;
 
     int length = distance(x1, y1, x2, y2);
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     if (length <= cutoff) {
         retval = true;
         short_seg_hack(player_ptr, dd_ptr, x1, y1, x2, y2, type, 0, &retval);

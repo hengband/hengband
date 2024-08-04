@@ -3,6 +3,7 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h" // 暫定、後で消す.
 #include "floor/cave.h"
+#include "floor/floor-list.h"
 #include "floor/geometry.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
@@ -37,7 +38,7 @@
  */
 static bool cave_naked_bold(PlayerType *player_ptr, const Pos2D &pos)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     return cave_clean_bold(floor_ptr, pos.y, pos.x) && (floor_ptr->get_grid(pos).m_idx == 0) && !player_ptr->is_located_at(pos);
 }
 
@@ -70,7 +71,7 @@ static bool cave_naked_bold(PlayerType *player_ptr, const Pos2D &pos)
 bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITION y, POSITION x, int dam, AttributeType typ)
 {
     const Pos2D pos(y, x);
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     auto &grid = floor.get_grid(pos);
     const auto &terrain = grid.get_terrain();
 

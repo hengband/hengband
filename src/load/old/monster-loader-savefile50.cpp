@@ -20,7 +20,7 @@ void MonsterLoader50::rd_monster(MonsterEntity *m_ptr_)
 {
     this->m_ptr = m_ptr_;
     if (h_older_than(1, 5, 0, 0)) {
-        rd_monster_old(this->player_ptr, this->m_ptr);
+        rd_monster_old(this->m_ptr);
         return;
     }
 

@@ -6,6 +6,7 @@
 
 #include "io/write-diary.h"
 #include "dungeon/quest.h"
+#include "floor/floor-list.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/files-util.h"
 #include "market/arena-entry.h"
@@ -156,7 +157,7 @@ int exe_write_diary_quest(PlayerType *player_ptr, DiaryKind dk, QuestId quest_id
         return -1;
     }
 
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     const auto old_quest = floor.quest_number;
     const auto &quests = QuestList::get_instance();
     const auto &quest = quests.get_quest(quest_id);

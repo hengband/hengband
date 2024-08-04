@@ -1,4 +1,5 @@
 #include "load/player-info-loader.h"
+#include "floor/floor-list.h"
 #include "load/angband-version-comparer.h"
 #include "load/birth-loader.h"
 #include "load/dummy-loader.h"
@@ -249,9 +250,10 @@ static void set_imitation(PlayerType *player_ptr)
     }
 }
 
-static void rd_phase_out(PlayerType *player_ptr)
+static void rd_phase_out()
 {
-    player_ptr->current_floor_ptr->inside_arena = rd_s16b() != 0;
+    auto &floor = FloorList::get_instance().get_floor(0);
+    floor.inside_arena = rd_s16b() != 0;
     const auto quest_number = rd_s16b();
     if (loading_savefile_version_is_older_than(15)) {
         if (quest_number == enum2i(OldQuestId15::CITY_SEA)) {
@@ -260,7 +262,7 @@ static void rd_phase_out(PlayerType *player_ptr)
             throw(SaveDataNotSupportedException(msg));
         }
     }
-    player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(quest_number);
+    floor.quest_number = i2enum<QuestId>(quest_number);
     auto &system = AngbandSystem::get_instance();
     if (h_older_than(0, 3, 5)) {
         system.set_phase_out(false);
@@ -296,13 +298,13 @@ static void rd_arena(PlayerType *player_ptr)
         entries.load_defeated_entry(rd_s16b());
     }
 
-    rd_phase_out(player_ptr);
+    rd_phase_out();
     AngbandWorld::get_instance().set_arena(rd_bool());
     strip_bytes(1);
 
     player_ptr->oldpx = rd_s16b();
     player_ptr->oldpy = rd_s16b();
-    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &floor = FloorList::get_instance().get_floor(0);
     if (h_older_than(0, 3, 13) && !floor.is_in_underground() && !floor.inside_arena) {
         player_ptr->oldpy = 33;
         player_ptr->oldpx = 131;

@@ -1,5 +1,6 @@
 #include "load/dungeon-loader.h"
 #include "dungeon/quest.h"
+#include "floor/floor-list.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
 #include "load/angband-version-comparer.h"
@@ -27,7 +28,7 @@ static errr rd_dungeon(PlayerType *player_ptr)
 {
     init_saved_floors(false);
     errr err = 0;
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     if (h_older_than(1, 5, 0, 0)) {
         err = rd_dungeon_old(player_ptr);
         if (floor.dungeon_idx) {

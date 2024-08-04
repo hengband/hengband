@@ -2,6 +2,7 @@
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-events.h"
+#include "floor/floor-list.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
@@ -54,6 +55,7 @@ static void check_riding_preservation(PlayerType *player_ptr)
 
 static bool check_pet_preservation_conditions(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
+    auto &floor = FloorList::get_instance().get_floor(0);
     if (reinit_wilderness) {
         return false;
     }
@@ -64,7 +66,7 @@ static bool check_pet_preservation_conditions(PlayerType *player_ptr, MonsterEnt
     }
 
     const auto should_preserve = m_ptr->is_named();
-    auto sight_from_player = player_ptr->current_floor_ptr->has_los({ m_ptr->fy, m_ptr->fx });
+    auto sight_from_player = floor.has_los({ m_ptr->fy, m_ptr->fx });
     sight_from_player &= projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
     auto sight_from_monster = los(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x);
     sight_from_monster &= projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x);
@@ -215,7 +217,7 @@ static void get_out_monster(PlayerType *player_ptr)
     POSITION dis = 1;
     POSITION oy = player_ptr->y;
     POSITION ox = player_ptr->x;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     MONSTER_IDX m_idx = floor_ptr->grid_array[oy][ox].m_idx;
     if (m_idx == 0) {
         return;
@@ -347,7 +349,7 @@ static void jump_floors(FloorType &floor)
 //!< @details SAVE_FLOORS フラグを抜く箇所に「TODO」のコメントがあった、何をするかは書いておらず詳細不明
 static void exit_to_wilderness(PlayerType *player_ptr)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     if (floor.is_in_underground() || (floor.dungeon_idx == 0)) {
         return;
     }
@@ -409,8 +411,9 @@ static void update_upper_lower_or_floor_id(saved_floor_type *sf_ptr)
 
 static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    auto g_ptr = set_grid_by_leaving_floor(*player_ptr->current_floor_ptr, player_ptr->get_position());
-    jump_floors(*player_ptr->current_floor_ptr);
+    auto &floor = FloorList::get_instance().get_floor(0);
+    auto g_ptr = set_grid_by_leaving_floor(floor, player_ptr->get_position());
+    jump_floors(floor);
     exit_to_wilderness(player_ptr);
     kill_saved_floors(player_ptr, sf_ptr);
     if (!player_ptr->in_saved_floor()) {
@@ -426,9 +429,9 @@ static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 
     get_out_monster(player_ptr);
     sf_ptr->last_visit = AngbandWorld::get_instance().game_turn;
-    forget_lite(player_ptr->current_floor_ptr);
-    forget_view(player_ptr->current_floor_ptr);
-    clear_mon_lite(player_ptr->current_floor_ptr);
+    forget_lite(&floor);
+    forget_view(&floor);
+    clear_mon_lite(&floor);
     if (save_floor(player_ptr, sf_ptr, 0)) {
         return;
     }
@@ -444,6 +447,7 @@ static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
  */
 void leave_floor(PlayerType *player_ptr)
 {
+    auto &floor = FloorList::get_instance().get_floor(0);
     preserve_pet(player_ptr);
     SpellsMirrorMaster(player_ptr).remove_all_mirrors(false);
     set_superstealth(player_ptr, false);
@@ -453,7 +457,7 @@ void leave_floor(PlayerType *player_ptr)
     preserve_info(player_ptr);
     saved_floor_type *sf_ptr = get_sf_ptr(player_ptr->floor_id);
     if (FloorChangeModesStore::get_instace()->has(FloorChangeMode::RANDOM_CONNECT)) {
-        locate_connected_stairs(player_ptr, player_ptr->current_floor_ptr, sf_ptr);
+        locate_connected_stairs(player_ptr, &floor, sf_ptr);
     }
 
     exe_leave_floor(player_ptr, sf_ptr);

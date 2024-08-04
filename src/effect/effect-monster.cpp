@@ -14,6 +14,7 @@
 #include "effect/effect-monster-switcher.h"
 #include "effect/effect-monster-util.h"
 #include "effect/spells-effect-util.h"
+#include "floor/floor-list.h"
 #include "floor/floor-object.h"
 #include "game-option/play-record-options.h"
 #include "grid/grid.h"
@@ -177,13 +178,14 @@ static ProcessResult exe_affect_monster_by_effect(PlayerType *player_ptr, Effect
  */
 static void effect_damage_killed_pet(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
+    auto &floor = FloorList::get_instance().get_floor(0);
     bool sad = em_ptr->m_ptr->is_pet() && !(em_ptr->m_ptr->ml);
     if (em_ptr->known && !em_ptr->note.empty()) {
         angband_strcpy(em_ptr->m_name, monster_desc(player_ptr, em_ptr->m_ptr, MD_TRUE_NAME), sizeof(em_ptr->m_name));
         if (em_ptr->see_s_msg) {
             msg_format("%s^%s", em_ptr->m_name, em_ptr->note.data());
         } else {
-            player_ptr->current_floor_ptr->monster_noise = true;
+            floor.monster_noise = true;
         }
     }
 
@@ -205,6 +207,7 @@ static void effect_damage_killed_pet(PlayerType *player_ptr, EffectMonster *em_p
  */
 static void effect_damage_makes_sleep(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
+    auto &floor = FloorList::get_instance().get_floor(0);
     if (!em_ptr->note.empty() && em_ptr->seen_msg) {
         msg_format("%s^%s", em_ptr->m_name, em_ptr->note.data());
     } else if (em_ptr->see_s_msg) {
@@ -214,7 +217,7 @@ static void effect_damage_makes_sleep(PlayerType *player_ptr, EffectMonster *em_
             msg_print(*pain_message);
         }
     } else {
-        player_ptr->current_floor_ptr->monster_noise = true;
+        floor.monster_noise = true;
     }
 
     if (em_ptr->do_sleep) {

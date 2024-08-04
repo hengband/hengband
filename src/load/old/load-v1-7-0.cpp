@@ -1,5 +1,6 @@
 #include "load/old/load-v1-7-0.h"
 #include "dungeon/quest.h"
+#include "floor/floor-list.h"
 #include "game-option/birth-options.h"
 #include "load/load-util.h"
 #include "load/old/load-v1-5-0.h"
@@ -28,9 +29,9 @@ void set_exp_frac_old(PlayerType *player_ptr)
     player_ptr->exp_frac = rd_u16b();
 }
 
-void remove_water_cave(PlayerType *player_ptr)
+void remove_water_cave()
 {
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     if (floor.quest_number != i2enum<QuestId>(OLD_QUEST_WATER_CAVE)) {
         return;
     }

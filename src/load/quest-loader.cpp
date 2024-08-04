@@ -1,6 +1,7 @@
 #include "load/quest-loader.h"
 #include "artifact/fixed-art-types.h"
 #include "dungeon/quest.h"
+#include "floor/floor-list.h"
 #include "floor/floor-town.h"
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
@@ -137,7 +138,8 @@ static bool is_loadable_quest(const QuestId q_idx, const byte max_rquests_load)
 
 void analyze_quests(PlayerType *player_ptr, const uint16_t max_quests_load, const byte max_rquests_load)
 {
-    QuestId old_inside_quest = player_ptr->current_floor_ptr->quest_number;
+    const auto &floor = FloorList::get_instance().get_floor(0);
+    QuestId old_inside_quest = floor.quest_number;
     for (auto i = 0; i < max_quests_load; i++) {
         QuestId quest_id;
         if (loading_savefile_version_is_older_than(17)) {

@@ -9,6 +9,7 @@
 #include "info-reader/fixed-map-parser.h"
 #include "dungeon/quest.h"
 #include "floor/fixed-map-generator.h"
+#include "floor/floor-list.h"
 #include "game-option/birth-options.h"
 #include "game-option/runtime-arguments.h"
 #include "info-reader/parse-error-types.h"
@@ -199,7 +200,8 @@ static std::string parse_fixed_map_expression(PlayerType *player_ptr, char **sp,
     } else if (streq(b + 1, "LEVEL")) {
         v = std::to_string(player_ptr->lev);
     } else if (streq(b + 1, "QUEST_NUMBER")) {
-        v = std::to_string(enum2i(player_ptr->current_floor_ptr->quest_number));
+        const auto &floor = FloorList::get_instance().get_floor(0);
+        v = std::to_string(enum2i(floor.quest_number));
     } else if (streq(b + 1, "LEAVING_QUEST")) {
         v = std::to_string(enum2i(leaving_quest));
     } else if (prefix(b + 1, "QUEST_TYPE")) {

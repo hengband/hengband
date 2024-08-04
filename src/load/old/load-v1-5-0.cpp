@@ -7,6 +7,7 @@
 
 #include "load/old/load-v1-5-0.h"
 #include "artifact/fixed-art-types.h"
+#include "floor/floor-list.h"
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
@@ -345,8 +346,9 @@ void rd_item_old(ItemEntity *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr モンスター保存先ポインタ
  */
-void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
+void rd_monster_old(MonsterEntity *m_ptr)
 {
+    auto &floor = FloorList::get_instance().get_floor(0);
     m_ptr->r_idx = i2enum<MonsterRaceId>(rd_s16b());
 
     if (h_older_than(1, 0, 12)) {
@@ -371,7 +373,7 @@ void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
 
     m_ptr->fy = rd_byte();
     m_ptr->fx = rd_byte();
-    m_ptr->current_floor_ptr = player_ptr->current_floor_ptr;
+    m_ptr->current_floor_ptr = &floor;
 
     m_ptr->hp = rd_s16b();
     m_ptr->maxhp = rd_s16b();
@@ -538,7 +540,7 @@ void set_old_lore(MonsterRaceInfo *r_ptr, BIT_FLAGS f3, BIT_FLAGS f4, const Mons
  */
 errr rd_dungeon_old(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     floor_ptr->dun_level = rd_s16b();
     if (h_older_than(0, 3, 8)) {
         floor_ptr->set_dungeon_index(DUNGEON_ANGBAND);

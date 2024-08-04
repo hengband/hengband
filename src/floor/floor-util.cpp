@@ -7,6 +7,7 @@
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
+#include "floor/floor-list.h"
 #include "floor/floor-object.h"
 #include "floor/floor-town.h"
 #include "floor/geometry.h"
@@ -156,7 +157,7 @@ void wipe_o_list(FloorType *floor_ptr)
  */
 void scatter(PlayerType *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     POSITION nx, ny;
     while (true) {
         ny = rand_spread(y, d);

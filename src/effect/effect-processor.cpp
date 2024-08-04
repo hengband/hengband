@@ -8,6 +8,7 @@
 #include "effect/effect-player.h"
 #include "effect/spells-effect-util.h"
 #include "floor/cave.h"
+#include "floor/floor-list.h"
 #include "floor/geometry.h"
 #include "floor/line-of-sight.h"
 #include "game-option/map-screen-options.h"
@@ -70,6 +71,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
     POSITION gx[1024]{};
     POSITION gy[1024]{};
     POSITION gm[32]{};
+    auto &floor = FloorList::get_instance().get_floor(0);
     monster_target_y = player_ptr->y;
     monster_target_x = player_ptr->x;
 
@@ -82,8 +84,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
         x1 = player_ptr->x;
         y1 = player_ptr->y;
     } else if (is_monster(src_idx)) {
-        x1 = player_ptr->current_floor_ptr->m_list[src_idx].fx;
-        y1 = player_ptr->current_floor_ptr->m_list[src_idx].fy;
+        x1 = floor.m_list[src_idx].fx;
+        y1 = floor.m_list[src_idx].fy;
     } else {
         x1 = target_x;
         y1 = target_y;
@@ -143,11 +145,10 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
     auto visual = false;
     bool see_s_msg = true;
     const auto is_blind = player_ptr->effects()->blindness().is_blind();
-    auto &floor = *player_ptr->current_floor_ptr;
     for (const auto &[ny, nx] : path_g) {
         const Pos2D pos(ny, nx);
         if (flag & PROJECT_DISI) {
-            if (cave_stop_disintegration(player_ptr->current_floor_ptr, ny, nx) && (rad > 0)) {
+            if (cave_stop_disintegration(&floor, ny, nx) && (rad > 0)) {
                 break;
             }
         } else if (flag & PROJECT_LOS) {
@@ -227,7 +228,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
             for (auto dist = 0; dist <= rad; dist++) {
                 for (auto y = by - dist; y <= by + dist; y++) {
                     for (auto x = bx - dist; x <= bx + dist; x++) {
-                        if (!in_bounds2(player_ptr->current_floor_ptr, y, x)) {
+                        if (!in_bounds2(&floor, y, x)) {
                             continue;
                         }
                         if (distance(by, bx, y, x) != dist) {
@@ -242,7 +243,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                             }
                             break;
                         case AttributeType::DISINTEGRATE:
-                            if (!in_disintegration_range(player_ptr->current_floor_ptr, by, bx, y, x)) {
+                            if (!in_disintegration_range(&floor, by, bx, y, x)) {
                                 continue;
                             }
                             break;
@@ -302,7 +303,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
     update_creature(player_ptr);
 
     if (flag & PROJECT_KILL) {
-        see_s_msg = is_monster(src_idx) ? is_seen(player_ptr, &player_ptr->current_floor_ptr->m_list[src_idx])
+        see_s_msg = is_monster(src_idx) ? is_seen(player_ptr, &floor.m_list[src_idx])
                                         : (is_player(src_idx) ? true : (player_can_see_bold(player_ptr, y1, x1) && projectable(player_ptr, player_ptr->y, player_ptr->x, y1, x1)));
     }
 
@@ -376,7 +377,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                         t_y = y1 - 1 + randint1(3);
                         t_x = x1 - 1 + randint1(3);
                         max_attempts--;
-                    } while (max_attempts && in_bounds2u(player_ptr->current_floor_ptr, t_y, t_x) && !projectable(player_ptr, pos.y, pos.x, t_y, t_x));
+                    } while (max_attempts && in_bounds2u(&floor, t_y, t_x) && !projectable(player_ptr, pos.y, pos.x, t_y, t_x));
 
                     if (max_attempts < 1) {
                         t_y = y1;

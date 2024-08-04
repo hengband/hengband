@@ -4,6 +4,7 @@
 #include "floor/dungeon-tunnel-util.h"
 #include "floor/floor-allocation-types.h"
 #include "floor/floor-generator-util.h"
+#include "floor/floor-list.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"
 #include "grid/feature.h"
@@ -57,9 +58,9 @@ static int next_to_walls(FloorType *floor_ptr, POSITION y, POSITION x)
  * @param walls 最低減隣接させたい外壁の数
  * @return 階段を生成して問題がないならばTRUEを返す。
  */
-static bool alloc_stairs_aux(PlayerType *player_ptr, POSITION y, POSITION x, int walls)
+static bool alloc_stairs_aux(POSITION y, POSITION x, int walls)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     if (!g_ptr->is_floor() || pattern_tile(floor_ptr, y, x) || !g_ptr->o_idx_list.empty() || g_ptr->has_monster() || next_to_walls(floor_ptr, y, x) < walls) {
         return false;
@@ -76,11 +77,11 @@ static bool alloc_stairs_aux(PlayerType *player_ptr, POSITION y, POSITION x, int
  * @param walls 最低減隣接させたい外壁の数
  * @return 規定数通りに生成に成功したらTRUEを返す。
  */
-bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
+bool alloc_stairs(FEAT_IDX feat, int num, int walls)
 {
     int shaft_num = 0;
     const auto &terrain = TerrainList::get_instance().get_terrain(feat);
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     const auto &dungeon = floor.get_dungeon_definition();
     if (terrain.flags.has(TerrainCharacteristics::LESS)) {
         if (ironman_downward || !floor.dun_level) {
@@ -118,7 +119,7 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
             const POSITION max_x = floor.width - 1;
             for (POSITION y = 1; y < floor.height - 1; y++) {
                 for (POSITION x = 1; x < max_x; x++) {
-                    if (alloc_stairs_aux(player_ptr, y, x, walls)) {
+                    if (alloc_stairs_aux(y, x, walls)) {
                         candidates++;
                     }
                 }
@@ -138,7 +139,7 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
             POSITION x = max_x;
             for (y = 1; y < floor.height - 1; y++) {
                 for (x = 1; x < floor.width - 1; x++) {
-                    if (alloc_stairs_aux(player_ptr, y, x, walls)) {
+                    if (alloc_stairs_aux(y, x, walls)) {
                         pick--;
                         if (pick == 0) {
                             break;
@@ -184,7 +185,7 @@ void alloc_object(PlayerType *player_ptr, dap_type set, dungeon_allocation_type 
     POSITION y = 0;
     POSITION x = 0;
     int dummy = 0;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     num = num * floor_ptr->height * floor_ptr->width / (MAX_HGT * MAX_WID) + 1;
     for (int k = 0; k < num; k++) {
         while (dummy < SAFE_MAX_ATTEMPTS) {
