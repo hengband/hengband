@@ -28,7 +28,7 @@ enum class MonsterRaceId : short;
 class MeleeGladiator {
 public:
     MeleeGladiator() = default;
-    MonsterRaceId gladiator{};
+    MonsterRaceId monrace_id{};
     uint32_t odds = 0;
 };
 
