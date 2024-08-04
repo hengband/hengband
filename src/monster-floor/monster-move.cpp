@@ -189,7 +189,7 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, con
 {
     auto &monrace = monster.get_monrace();
     const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
-    if (!is_closed_door(player_ptr, grid.feat)) {
+    if (!is_closed_door(grid.feat)) {
         return true;
     }
 

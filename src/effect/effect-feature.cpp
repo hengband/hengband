@@ -172,14 +172,14 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         break;
     }
     case AttributeType::KILL_TRAP: {
-        if (is_hidden_door(player_ptr, grid)) {
+        if (is_hidden_door(grid)) {
             disclose_grid(player_ptr, y, x);
             if (known) {
                 obvious = true;
             }
         }
 
-        if (is_trap(player_ptr, grid.feat)) {
+        if (is_trap(grid.feat)) {
             if (known) {
                 msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
                 obvious = true;
@@ -188,7 +188,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::DISARM);
         }
 
-        if (is_closed_door(player_ptr, grid.feat) && terrain.power && terrain.flags.has(TerrainCharacteristics::OPEN)) {
+        if (is_closed_door(grid.feat) && terrain.power && terrain.flags.has(TerrainCharacteristics::OPEN)) {
             FEAT_IDX old_feat = grid.feat;
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::DISARM);
             if (known && (old_feat != grid.feat)) {
@@ -207,7 +207,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         break;
     }
     case AttributeType::KILL_DOOR: {
-        if (is_trap(player_ptr, grid.feat) || terrain.flags.has(TerrainCharacteristics::DOOR)) {
+        if (is_trap(grid.feat) || terrain.flags.has(TerrainCharacteristics::DOOR)) {
             if (known) {
                 msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
                 obvious = true;

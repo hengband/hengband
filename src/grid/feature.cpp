@@ -120,10 +120,8 @@ FEAT_IDX feat_ground_type[100], feat_wall_type[100];
  * @param feat 地形情報のID
  * @return 罠持ちの地形ならばTRUEを返す。
  */
-bool is_trap(PlayerType *player_ptr, FEAT_IDX feat)
+bool is_trap(FEAT_IDX feat)
 {
-    /* 関数ポインタの都合 */
-    (void)player_ptr;
     return TerrainList::get_instance().get_terrain(feat).flags.has(TerrainCharacteristics::TRAP);
 }
 
@@ -132,10 +130,8 @@ bool is_trap(PlayerType *player_ptr, FEAT_IDX feat)
  * @param feat 地形情報のID
  * @return 閉じたドアのある地形ならばTRUEを返す。
  */
-bool is_closed_door(PlayerType *player_ptr, FEAT_IDX feat)
+bool is_closed_door(FEAT_IDX feat)
 {
-    /* 関数ポインタの都合 */
-    (void)player_ptr;
     const auto &terrain = TerrainList::get_instance().get_terrain(feat);
     return (terrain.flags.has(TerrainCharacteristics::OPEN) || terrain.flags.has(TerrainCharacteristics::BASH)) &&
            terrain.flags.has_not(TerrainCharacteristics::MOVE);

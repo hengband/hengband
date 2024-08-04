@@ -150,7 +150,7 @@ bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
     const Pos2D pos(y, x);
     const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
     const auto &terrain = grid.get_terrain();
-    if (!is_closed_door(player_ptr, grid.feat)) {
+    if (!is_closed_door(grid.feat)) {
         return false;
     }
 

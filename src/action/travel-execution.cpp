@@ -82,7 +82,7 @@ static DIRECTION travel_test(PlayerType *player_ptr, DIRECTION prev_dir)
 
     const auto pos_new = player_ptr->get_neighbor(new_dir);
     const auto &grid = floor_ptr->get_grid(pos_new);
-    if (!easy_open && is_closed_door(player_ptr, grid.feat)) {
+    if (!easy_open && is_closed_door(grid.feat)) {
         return 0;
     }
 

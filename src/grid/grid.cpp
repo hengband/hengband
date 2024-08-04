@@ -23,6 +23,7 @@
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
 #include "floor/floor-generator.h"
+#include "floor/floor-list.h"
 #include "floor/geometry.h"
 #include "game-option/game-play-options.h"
 #include "game-option/map-screen-options.h"
@@ -150,9 +151,9 @@ bool new_player_spot(PlayerType *player_ptr)
  * @param grid マス構造体の参照ポインタ
  * @return 隠されたドアがあるならTRUEを返す。
  */
-bool is_hidden_door(PlayerType *player_ptr, const Grid &grid)
+bool is_hidden_door(const Grid &grid)
 {
-    return (grid.mimic || grid.cave_has_flag(TerrainCharacteristics::SECRET)) && is_closed_door(player_ptr, grid.feat);
+    return (grid.mimic || grid.cave_has_flag(TerrainCharacteristics::SECRET)) && is_closed_door(grid.feat);
 }
 
 /*!
@@ -167,7 +168,7 @@ bool check_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x)
                                                                         : y;
     const auto xx = (x < player_ptr->x) ? (x + 1) : (x > player_ptr->x) ? (x - 1)
                                                                         : x;
-    const auto *floor_ptr = &FloorData::get_instance().get_floor(0);
+    const auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     const auto &grid_yyxx = floor_ptr->grid_array[yy][xx];
     const auto &grid_yxx = floor_ptr->grid_array[y][xx];
     const auto &grid_yyx = floor_ptr->grid_array[yy][x];
@@ -185,7 +186,7 @@ bool check_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 static void update_local_illumination_aux(PlayerType *player_ptr, int y, int x)
 {
-    const auto &floor = FloorData::get_instance().get_floor(0);
+    const auto &floor = FloorList::get_instance().get_floor(0);
     const Pos2D pos(y, x);
     const auto &grid = floor.get_grid(pos);
     if (!grid.has_los()) {
@@ -210,7 +211,7 @@ void update_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     int i;
     POSITION yy, xx;
-    const auto &floor = FloorData::get_instance().get_floor(0);
+    const auto &floor = FloorList::get_instance().get_floor(0);
 
     if (!in_bounds(&floor, y, x)) {
         return;
@@ -322,7 +323,7 @@ void print_bolt_pict(PlayerType *player_ptr, POSITION y, POSITION x, POSITION ny
 void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     const Pos2D pos(y, x);
-    auto &floor = FloorData::get_instance().get_floor(0);
+    auto &floor = FloorList::get_instance().get_floor(0);
     auto &grid = floor.get_grid(pos);
 
     /* Blind players see nothing */
@@ -403,7 +404,7 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 void lite_spot(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    const auto &floor = FloorData::get_instance().get_floor(0);
+    const auto &floor = FloorList::get_instance().get_floor(0);
     if (panel_contains(y, x) && in_bounds2(&floor, y, x)) {
         auto symbol_pair = map_info(player_ptr, { y, x });
         symbol_pair.symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_pair.symbol_foreground.color);
@@ -646,7 +647,7 @@ static POSITION flow_y = 0;
  */
 void update_flow(PlayerType *player_ptr)
 {
-    auto &floor = FloorData::get_instance().get_floor(0);
+    auto &floor = FloorList::get_instance().get_floor(0);
 
     /* The last way-point is on the map */
     if (player_ptr->running && in_bounds(&floor, flow_y, flow_x)) {
@@ -692,7 +693,7 @@ void update_flow(PlayerType *player_ptr)
                 }
 
                 auto &grid_neighbor = floor.get_grid(pos_neighbor);
-                if (is_closed_door(player_ptr, grid_neighbor.feat)) {
+                if (is_closed_door(grid_neighbor.feat)) {
                     m += 3;
                 }
 
@@ -712,7 +713,7 @@ void update_flow(PlayerType *player_ptr)
                     break;
                 }
 
-                if (!can_move && !is_closed_door(player_ptr, grid_neighbor.feat)) {
+                if (!can_move && !is_closed_door(grid_neighbor.feat)) {
                     continue;
                 }
 
@@ -765,7 +766,7 @@ FEAT_IDX feat_state(const FloorType *floor_ptr, FEAT_IDX feat, TerrainCharacteri
 void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainCharacteristics action)
 {
     /* Set old feature */
-    auto *floor_ptr = &FloorData::get_instance().get_floor(0);
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     FEAT_IDX oldfeat = floor_ptr->grid_array[y][x].feat;
 
     /* Get the new feat */
@@ -825,7 +826,7 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
 bool cave_monster_teleportable_bold(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, teleport_flags mode)
 {
     const Pos2D pos(y, x);
-    const auto &floor = FloorData::get_instance().get_floor(0);
+    const auto &floor = FloorList::get_instance().get_floor(0);
     const auto &grid = floor.get_grid(pos);
     const auto &terrain = grid.get_terrain();
 
@@ -926,7 +927,7 @@ bool cave_player_teleportable_bold(PlayerType *player_ptr, POSITION y, POSITION 
 bool is_open(FEAT_IDX feat)
 {
     const auto &terrain = TerrainList::get_instance().get_terrain(feat);
-    const auto &floor = FloorData::get_instance().get_floor(0);
+    const auto &floor = FloorList::get_instance().get_floor(0);
     return terrain.flags.has(TerrainCharacteristics::CLOSE) && (feat != feat_state(&floor, feat, TerrainCharacteristics::CLOSE));
 }
 
@@ -969,7 +970,7 @@ bool player_can_enter(PlayerType *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mode
 
 void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
 {
-    const auto &floor = FloorData::get_instance().get_floor(0);
+    const auto &floor = FloorList::get_instance().get_floor(0);
     switch (gb_type) {
     case GB_FLOOR: {
         g_ptr->feat = rand_choice(feat_ground_type);
@@ -1065,7 +1066,7 @@ bool darkened_grid(PlayerType *player_ptr, Grid *g_ptr)
 
 void place_bold(PlayerType *player_ptr, POSITION y, POSITION x, grid_bold_type gb_type)
 {
-    auto &floor = FloorData::get_instance().get_floor(0);
+    auto &floor = FloorList::get_instance().get_floor(0);
     Grid *const g_ptr = &floor.grid_array[y][x];
     place_grid(player_ptr, g_ptr, gb_type);
 }
@@ -1082,7 +1083,7 @@ void set_cave_feat(FloorType *floor_ptr, POSITION y, POSITION x, FEAT_IDX featur
  * @param under TRUEならばプレイヤーの直下の座標も走査対象にする
  * @return 該当する地形の数と、該当する地形の中から1つの座標
  */
-std::pair<int, Pos2D> count_dt(PlayerType *player_ptr, bool (*test)(PlayerType *, short), bool under)
+std::pair<int, Pos2D> count_dt(PlayerType *player_ptr, bool (*test)(short), bool under)
 {
     auto count = 0;
     Pos2D pos(0, 0);
@@ -1092,13 +1093,14 @@ std::pair<int, Pos2D> count_dt(PlayerType *player_ptr, bool (*test)(PlayerType *
         }
 
         Pos2D pos_neighbor(player_ptr->y + ddy_ddd[d], player_ptr->x + ddx_ddd[d]);
-        const auto &grid = player_ptr->current_floor_ptr->get_grid(pos_neighbor);
+        const auto &floor = FloorList::get_instance().get_floor(0);
+        const auto &grid = floor.get_grid(pos_neighbor);
         if (!grid.is_mark()) {
             continue;
         }
 
         const auto feat = grid.get_feat_mimic();
-        if (!((*test)(player_ptr, feat))) {
+        if (!((*test)(feat))) {
             continue;
         }
 

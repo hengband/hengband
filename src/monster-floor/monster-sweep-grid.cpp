@@ -370,7 +370,7 @@ bool MonsterSweepGrid::is_best_cost(const POSITION y, const POSITION x, const in
         }
 
         auto *g_ptr = &floor_ptr->grid_array[y][x];
-        if (!this->can_open_door && is_closed_door(this->player_ptr, g_ptr->feat)) {
+        if (!this->can_open_door && is_closed_door(g_ptr->feat)) {
             return false;
         }
     }
