@@ -391,7 +391,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
 
     QuestCompletionChecker(player_ptr, md_ptr->m_ptr).complete();
     on_defeat_arena_monster(player_ptr, md_ptr);
-    if (m_idx == player_ptr->riding && process_fall_off_horse(player_ptr, -1, false)) {
+    if (md_ptr->m_ptr->is_riding() && process_fall_off_horse(player_ptr, -1, false)) {
         msg_print(_("地面に落とされた。", "You have fallen from the pet you were riding."));
     }
 

@@ -118,7 +118,7 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     turn_flags tmp_flags;
-    turn_flags *turn_flags_ptr = init_turn_flags(player_ptr->riding, m_idx, &tmp_flags);
+    turn_flags *turn_flags_ptr = init_turn_flags(m_ptr->is_riding(), &tmp_flags);
     turn_flags_ptr->see_m = is_seen(player_ptr, m_ptr);
 
     decide_drop_from_monster(player_ptr, m_idx, turn_flags_ptr->is_riding_mon);
@@ -140,7 +140,7 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
             RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
         }
 
-        if (m_idx == player_ptr->riding) {
+        if (turn_flags_ptr->is_riding_mon) {
             msg_format(_("突然%sが変身した。", "Suddenly, %s transforms!"), old_m_name.data());
             if (new_monrace.misc_flags.has_not(MonsterMiscType::RIDING)) {
                 if (process_fall_off_horse(player_ptr, 0, true)) {

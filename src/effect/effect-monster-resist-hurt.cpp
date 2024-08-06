@@ -591,7 +591,7 @@ static void effect_monster_gravity_stun(EffectMonster *em_ptr)
 ProcessResult effect_monster_gravity(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     em_ptr->do_dist = effect_monster_gravity_resist_teleport(player_ptr, em_ptr) ? 0 : 10;
-    if (player_ptr->riding && (em_ptr->g_ptr->m_idx == player_ptr->riding)) {
+    if (em_ptr->m_ptr->is_riding()) {
         em_ptr->do_dist = 0;
     }
 

@@ -83,7 +83,7 @@ static void sweep_preserving_pet(PlayerType *player_ptr)
 
     for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1, party_monster_num = 1; (i >= 1) && (party_monster_num < MAX_PARTY_MON); i--) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!m_ptr->is_valid() || !m_ptr->is_pet() || (i == player_ptr->riding) || check_pet_preservation_conditions(player_ptr, m_ptr)) {
+        if (!m_ptr->is_valid() || !m_ptr->is_pet() || m_ptr->is_riding() || check_pet_preservation_conditions(player_ptr, m_ptr)) {
             continue;
         }
 

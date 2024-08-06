@@ -878,8 +878,8 @@ bool cave_player_teleportable_bold(PlayerType *player_ptr, POSITION y, POSITION 
     if (!(mode & TELEPORT_NONMAGICAL) && grid.is_icky()) {
         return false;
     }
-
-    if (grid.has_monster() && (grid.m_idx != player_ptr->riding)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (grid.has_monster() && !floor.m_list[grid.m_idx].is_riding()) {
         return false;
     }
 

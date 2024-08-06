@@ -173,15 +173,17 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             }
 
             auto &grid = floor.get_grid(pos);
-            if (grid.m_idx == player_ptr->riding) {
-                continue;
-            }
 
             if (!grid.has_monster()) {
                 continue;
             }
 
             auto *m_ptr = &floor.m_list[grid.m_idx];
+
+            if (m_ptr->is_riding()) {
+                continue;
+            }
+
             auto *r_ptr = &m_ptr->get_monrace();
             if (r_ptr->misc_flags.has(MonsterMiscType::QUESTOR)) {
                 map[16 + pos.y - cy][16 + pos.x - cx] = false;
