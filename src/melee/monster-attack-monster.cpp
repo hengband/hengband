@@ -348,7 +348,7 @@ bool monst_attack_monst(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
         player_ptr->current_floor_ptr->monster_noise = true;
     }
 
-    if (player_ptr->riding && (m_idx == player_ptr->riding)) {
+    if (mam_ptr->m_ptr->is_riding()) {
         disturb(player_ptr, true, true);
     }
 

@@ -52,7 +52,7 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
     } else if (monrace.resistance_flags.has(MonsterResistanceType::NO_INSTANTLY_DEATH)) {
         monrace.r_resistance_flags.set(MonsterResistanceType::NO_INSTANTLY_DEATH);
         resist = true;
-    } else if (m_idx == player_ptr->riding) {
+    } else if (monster.is_riding()) {
         resist = true;
     } else if (floor.is_special()) {
         resist = true;

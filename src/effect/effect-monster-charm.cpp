@@ -421,7 +421,7 @@ static void effect_monster_captured(PlayerType *player_ptr, EffectMonster *em_pt
     cap_mon_ptr->current_hp = static_cast<short>(em_ptr->m_ptr->hp);
     cap_mon_ptr->max_hp = static_cast<short>(em_ptr->m_ptr->max_maxhp);
     cap_mon_ptr->nickname = em_ptr->m_ptr->nickname;
-    if ((em_ptr->g_ptr->m_idx == player_ptr->riding) && process_fall_off_horse(player_ptr, -1, false)) {
+    if (em_ptr->m_ptr->is_riding() && process_fall_off_horse(player_ptr, -1, false)) {
         msg_print(_("地面に落とされた。", format("You have fallen from %s.", em_ptr->m_name)));
     }
 

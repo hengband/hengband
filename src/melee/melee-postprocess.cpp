@@ -247,7 +247,7 @@ static void make_monster_fear(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
  */
 static void fall_off_horse_by_melee(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
 {
-    if (!player_ptr->riding || (player_ptr->riding != mam_pp_ptr->m_idx) || (mam_pp_ptr->dam <= 0)) {
+    if (!mam_pp_ptr->m_ptr->is_riding() || (mam_pp_ptr->dam <= 0)) {
         return;
     }
 
@@ -281,7 +281,7 @@ void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *
     prepare_redraw(mam_pp_ptr);
     (void)set_monster_csleep(player_ptr, m_idx, 0);
 
-    if (player_ptr->riding && (m_idx == player_ptr->riding)) {
+    if (m_ptr->is_riding()) {
         disturb(player_ptr, true, true);
     }
 

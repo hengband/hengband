@@ -792,7 +792,7 @@ void wiz_zap_floor_monsters(PlayerType *player_ptr)
     const auto &floor = *player_ptr->current_floor_ptr;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
         const auto &monster = floor.m_list[i];
-        if (!monster.is_valid() || (i == player_ptr->riding)) {
+        if (!monster.is_valid() || monster.is_riding()) {
             continue;
         }
 

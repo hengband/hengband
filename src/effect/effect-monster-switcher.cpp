@@ -384,7 +384,7 @@ ProcessResult switch_effects_monster(PlayerType *player_ptr, EffectMonster *em_p
     case AttributeType::PSI_DRAIN:
         return effect_monster_psi_drain(player_ptr, em_ptr);
     case AttributeType::TELEKINESIS:
-        return effect_monster_telekinesis(player_ptr, em_ptr);
+        return effect_monster_telekinesis(em_ptr);
     case AttributeType::DOMINATION:
         return effect_monster_domination(player_ptr, em_ptr);
     case AttributeType::ICE:

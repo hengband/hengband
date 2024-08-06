@@ -56,7 +56,7 @@ bool MonsterSweepGrid::get_movable_grid()
     this->will_run = this->mon_will_run();
     Pos2D pos_monster_from(monster_from.fy, monster_from.fx);
     const auto no_flow = monster_from.mflag2.has(MonsterConstantFlagType::NOFLOW) && (floor.get_grid(pos_monster_from).get_cost(&monrace) > 2);
-    this->can_pass_wall = monrace.feature_flags.has(MonsterFeatureType::PASS_WALL) && ((this->m_idx != this->player_ptr->riding) || has_pass_wall(this->player_ptr));
+    this->can_pass_wall = monrace.feature_flags.has(MonsterFeatureType::PASS_WALL) && (!monster_from.is_riding() || has_pass_wall(this->player_ptr));
     if (!this->will_run && monster_from.target_y) {
         Pos2D pos_target(monster_from.target_y, monster_from.target_x);
         int t_m_idx = floor.get_grid(pos_target).m_idx;
@@ -286,7 +286,8 @@ void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_fl
 
 bool MonsterSweepGrid::check_movable_grid(POSITION *yp, POSITION *xp, const bool no_flow)
 {
-    const auto &monrace = this->player_ptr->current_floor_ptr->m_list[this->m_idx].get_monrace();
+    const auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
+    const auto &monrace = monster.get_monrace();
     if ((monrace.ability_flags.has_any_of(RF_ABILITY_ATTACK_MASK)) && (sweep_ranged_attack_grid(yp, xp))) {
         return false;
     }
@@ -295,11 +296,11 @@ bool MonsterSweepGrid::check_movable_grid(POSITION *yp, POSITION *xp, const bool
         return false;
     }
 
-    if (monrace.feature_flags.has(MonsterFeatureType::PASS_WALL) && ((this->m_idx != this->player_ptr->riding) || has_pass_wall(this->player_ptr))) {
+    if (monrace.feature_flags.has(MonsterFeatureType::PASS_WALL) && (!monster.is_riding() || has_pass_wall(this->player_ptr))) {
         return false;
     }
 
-    if (monrace.feature_flags.has(MonsterFeatureType::KILL_WALL) && (this->m_idx != this->player_ptr->riding)) {
+    if (monrace.feature_flags.has(MonsterFeatureType::KILL_WALL) && !monster.is_riding()) {
         return false;
     }
 
@@ -360,8 +361,9 @@ bool MonsterSweepGrid::sweep_ranged_attack_grid(POSITION *yp, POSITION *xp)
 bool MonsterSweepGrid::is_best_cost(const POSITION y, const POSITION x, const int now_cost)
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    const auto &monrace = floor_ptr->m_list[this->m_idx].get_monrace();
-    auto is_riding = this->m_idx == this->player_ptr->riding;
+    const auto &monster = floor_ptr->m_list[this->m_idx];
+    const auto &monrace = monster.get_monrace();
+    auto is_riding = monster.is_riding();
     if ((monrace.feature_flags.has_not(MonsterFeatureType::PASS_WALL) || (is_riding && !has_pass_wall(this->player_ptr))) && (monrace.feature_flags.has_not(MonsterFeatureType::KILL_WALL) || is_riding)) {
         if (this->cost == 0) {
             return false;

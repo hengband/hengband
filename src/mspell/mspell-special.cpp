@@ -216,7 +216,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
     bool fear, dead; /* dummy */
     int dam = Dice::roll(4, 8);
 
-    if (monster_to_player || t_idx == player_ptr->riding) {
+    if (monster_to_player || t_ptr->is_riding()) {
         teleport_player_to(player_ptr, m_ptr->fy, m_ptr->fx, i2enum<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
     } else {
         teleport_monster_to(player_ptr, t_idx, m_ptr->fy, m_ptr->fx, 100, i2enum<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));

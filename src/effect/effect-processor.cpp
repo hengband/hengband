@@ -368,7 +368,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
             if (grids <= 1) {
                 auto *m_ptr = &floor.m_list[grid.m_idx];
                 MonsterRaceInfo *ref_ptr = &m_ptr->get_monrace();
-                if ((flag & PROJECT_REFLECTABLE) && grid.m_idx && ref_ptr->misc_flags.has(MonsterMiscType::REFLECTING) && ((grid.m_idx != player_ptr->riding) || !(flag & PROJECT_PLAYER)) && (!src_idx || path_n > 1) && !one_in_(10)) {
+                if ((flag & PROJECT_REFLECTABLE) && grid.m_idx && ref_ptr->misc_flags.has(MonsterMiscType::REFLECTING) && (!m_ptr->is_riding() || !(flag & PROJECT_PLAYER)) && (!src_idx || path_n > 1) && !one_in_(10)) {
 
                     POSITION t_y, t_x;
                     int max_attempts = 10;

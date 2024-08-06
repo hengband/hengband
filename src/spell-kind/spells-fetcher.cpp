@@ -10,6 +10,7 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-update.h"
+#include "monster/monster-util.h"
 #include "system/angband-system.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -123,10 +124,11 @@ bool fetch_monster(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     const Pos2D pos(target_row, target_col);
     auto m_idx = floor.get_grid(pos).m_idx;
-    if (!m_idx) {
+    if (!is_monster(m_idx)) {
         return false;
     }
-    if (m_idx == player_ptr->riding) {
+    auto &monster = floor.m_list[m_idx];
+    if (monster.is_riding()) {
         return false;
     }
     if (!floor.has_los(pos)) {
@@ -136,7 +138,6 @@ bool fetch_monster(PlayerType *player_ptr)
         return false;
     }
 
-    auto &monster = floor.m_list[m_idx];
     const auto m_name = monster_desc(player_ptr, &monster, 0);
     msg_format(_("%sを引き戻した。", "You pull back %s."), m_name.data());
     ProjectionPath path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), { target_row, target_col }, player_ptr->get_position(), 0);
