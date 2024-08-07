@@ -67,7 +67,7 @@ static void dump_aux_pet(PlayerType *player_ptr, FILE *fff)
             continue;
         }
         pet_settings = true;
-        if (!m_ptr->is_named() && (player_ptr->riding != i)) {
+        if (!m_ptr->is_named() && !m_ptr->is_riding()) {
             continue;
         }
         if (!pet) {
