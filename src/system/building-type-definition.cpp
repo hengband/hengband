@@ -18,6 +18,11 @@ MeleeGladiator::MeleeGladiator(MonsterRaceId monrace_id, uint32_t odds)
 {
 }
 
+const MonsterRaceInfo &MeleeGladiator::get_monrace() const
+{
+    return MonraceList::get_instance().get_monrace(this->monrace_id);
+}
+
 MeleeArena MeleeArena::instance{};
 
 MeleeArena &MeleeArena::get_instance()
@@ -47,36 +52,12 @@ const std::array<MeleeGladiator, NUM_GLADIATORS> &MeleeArena::get_gladiators() c
 
 std::pair<int, bool> MeleeArena::set_gladiators(PlayerType *player_ptr, int mon_level)
 {
-    const auto &monraces = MonraceList::get_instance();
     auto total = 0;
     auto is_applicable = false;
     for (auto i = 0; i < NUM_GLADIATORS; i++) {
         auto &gladiator = this->get_gladiator(i);
-        MonsterRaceId monrace_id;
-        while (true) {
-            get_mon_num_prep(player_ptr, monster_can_entry_arena, nullptr);
-            monrace_id = get_mon_num(player_ptr, 0, mon_level, PM_ARENA);
-            if (!MonraceList::is_valid(monrace_id)) {
-                continue;
-            }
-
-            const auto &monrace = monraces.get_monrace(monrace_id);
-            if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || monrace.population_flags.has(MonsterPopulationType::ONLY_ONE)) {
-                if ((monrace.level + 10) > mon_level) {
-                    continue;
-                }
-            }
-
-            const auto count = this->matches_gladiator(monrace_id, i);
-            if (count < i) {
-                continue;
-            }
-
-            break;
-        }
-
-        gladiator.monrace_id = monrace_id;
-        if (monraces.get_monrace(monrace_id).level < 45) {
+        gladiator.monrace_id = this->search_gladiator(player_ptr, mon_level, i);
+        if (gladiator.get_monrace().level < 45) {
             is_applicable = true;
         }
     }
@@ -121,6 +102,33 @@ std::pair<int, int> MeleeArena::set_odds(int current_total, bool is_applicable)
     }
 
     return { count, total };
+}
+
+MonsterRaceId MeleeArena::search_gladiator(PlayerType *player_ptr, int mon_level, int num_gladiator) const
+{
+    const auto &monraces = MonraceList::get_instance();
+    MonsterRaceId monrace_id;
+    while (true) {
+        get_mon_num_prep(player_ptr, monster_can_entry_arena, nullptr);
+        monrace_id = get_mon_num(player_ptr, 0, mon_level, PM_ARENA);
+        if (!MonraceList::is_valid(monrace_id)) {
+            continue;
+        }
+
+        const auto &monrace = monraces.get_monrace(monrace_id);
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || monrace.population_flags.has(MonsterPopulationType::ONLY_ONE)) {
+            if ((monrace.level + 10) > mon_level) {
+                continue;
+            }
+        }
+
+        const auto count = this->matches_gladiator(monrace_id, num_gladiator);
+        if (count < num_gladiator) {
+            continue;
+        }
+
+        return monrace_id;
+    }
 }
 
 int MeleeArena::matches_gladiator(MonsterRaceId monrace_id, int current_num) const

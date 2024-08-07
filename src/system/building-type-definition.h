@@ -25,12 +25,15 @@ constexpr auto MAX_BUILDINGS = 32; /*!< 施設の種類最大数 / Number of bui
 extern std::array<building_type, MAX_BUILDINGS> buildings;
 
 enum class MonsterRaceId : short;
+class MonsterRaceInfo;
 class MeleeGladiator {
 public:
     MeleeGladiator() = default;
     MeleeGladiator(MonsterRaceId monrace_id, uint32_t odds);
     MonsterRaceId monrace_id{};
     uint32_t odds = 0;
+
+    const MonsterRaceInfo &get_monrace() const;
 };
 
 extern int battle_odds;
@@ -62,5 +65,6 @@ private:
 
     std::array<MeleeGladiator, NUM_GLADIATORS> gladiators{};
 
+    MonsterRaceId search_gladiator(PlayerType *player_ptr, int mon_level, int num_gladiator) const;
     int matches_gladiator(MonsterRaceId monrace_id, int current_num) const;
 };
