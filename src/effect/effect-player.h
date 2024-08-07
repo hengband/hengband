@@ -6,6 +6,7 @@
 
 class MonsterEntity;
 class FallOffHorseEffect;
+class FloorType;
 class EffectPlayerType {
 public:
     DEPTH rlev; // モンスターのレベル (但し0のモンスターは1になる).
@@ -19,7 +20,7 @@ public:
     int dam;
     AttributeType attribute;
     BIT_FLAGS flag;
-    EffectPlayerType(MonsterEntity *src_ptr, MONSTER_IDX src_idx, int dam, AttributeType attribute, BIT_FLAGS flag);
+    EffectPlayerType(FloorType &src_floor, MONSTER_IDX src_idx, int dam, AttributeType attribute, BIT_FLAGS flag);
 };
 
 struct ProjectResult;

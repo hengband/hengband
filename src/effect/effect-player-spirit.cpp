@@ -61,7 +61,7 @@ void effect_player_drain_mana(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     }
 
     HealthBarTracker::get_instance().set_flag_if_tracking(ep_ptr->src_idx);
-    if (ep_ptr->src_ptr->is_riding()) {
+    if (ep_ptr->src_ptr && ep_ptr->src_ptr->is_riding()) {
         rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
