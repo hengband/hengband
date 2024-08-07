@@ -3,6 +3,7 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
+#include "system/dungeon-info.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include <numeric>
@@ -50,8 +51,9 @@ const std::array<MeleeGladiator, NUM_GLADIATORS> &MeleeArena::get_gladiators() c
     return this->gladiators;
 }
 
-void MeleeArena::update_gladiators(PlayerType *player_ptr, int mon_level)
+void MeleeArena::update_gladiators(PlayerType *player_ptr)
 {
+    const auto mon_level = this->decide_max_level();
     while (true) {
         auto [total, is_applicable] = this->set_gladiators(player_ptr, mon_level);
         const auto &[count, new_total] = this->set_odds(total, is_applicable);
@@ -60,6 +62,29 @@ void MeleeArena::update_gladiators(PlayerType *player_ptr, int mon_level)
             break;
         }
     }
+}
+
+int MeleeArena::decide_max_level() const
+{
+    auto max_dl = 0;
+    for (const auto &dungeon : dungeons_info) {
+        if (max_dl < max_dlv[dungeon.idx]) {
+            max_dl = max_dlv[dungeon.idx];
+        }
+    }
+
+    auto max_level = randint1(std::min(max_dl, 122)) + 5;
+    if (evaluate_percent(60)) {
+        const auto i = randint1(std::min(max_dl, 122)) + 5;
+        max_level = std::max(i, max_level);
+    }
+
+    if (evaluate_percent(30)) {
+        const auto i = randint1(std::min(max_dl, 122)) + 5;
+        max_level = std::max(i, max_level);
+    }
+
+    return max_level;
 }
 
 std::pair<int, bool> MeleeArena::set_gladiators(PlayerType *player_ptr, int mon_level)

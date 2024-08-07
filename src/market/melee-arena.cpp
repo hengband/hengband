@@ -13,7 +13,6 @@
 #include "status/buff-setter.h"
 #include "system/angband-system.h"
 #include "system/building-type-definition.h"
-#include "system/dungeon-info.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
@@ -28,26 +27,8 @@
  */
 void update_melee_gladiators(PlayerType *player_ptr)
 {
-    auto max_dl = 0;
-    for (const auto &dungeon : dungeons_info) {
-        if (max_dl < max_dlv[dungeon.idx]) {
-            max_dl = max_dlv[dungeon.idx];
-        }
-    }
-
-    auto mon_level = randint1(std::min(max_dl, 122)) + 5;
-    if (evaluate_percent(60)) {
-        auto i = randint1(std::min(max_dl, 122)) + 5;
-        mon_level = std::max(i, mon_level);
-    }
-
-    if (evaluate_percent(30)) {
-        auto i = randint1(std::min(max_dl, 122)) + 5;
-        mon_level = std::max(i, mon_level);
-    }
-
     auto &melee_arena = MeleeArena::get_instance();
-    melee_arena.update_gladiators();
+    melee_arena.update_gladiators(player_ptr);
 }
 
 /*!
