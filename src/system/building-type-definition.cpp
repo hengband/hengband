@@ -1,5 +1,10 @@
 #include "system/building-type-definition.h"
+#include "monster-floor/place-monster-types.h"
+#include "monster-race/monster-race-hook.h"
+#include "monster/monster-list.h"
+#include "monster/monster-util.h"
 #include "system/monster-race-info.h"
+#include "system/player-type-definition.h"
 #include <numeric>
 
 std::array<building_type, MAX_BUILDINGS> buildings;
@@ -38,6 +43,51 @@ void MeleeArena::set_gladiator(int n, const MeleeGladiator &gladiator)
 const std::array<MeleeGladiator, NUM_GLADIATORS> &MeleeArena::get_gladiators() const
 {
     return this->gladiators;
+}
+
+std::pair<int, bool> MeleeArena::set_gladiators(PlayerType *player_ptr, int mon_level)
+{
+    const auto &monraces = MonraceList::get_instance();
+    auto total = 0;
+    auto is_applicable = false;
+    for (auto i = 0; i < NUM_GLADIATORS; i++) {
+        auto &gladiator = this->get_gladiator(i);
+        MonsterRaceId monrace_id;
+        while (true) {
+            get_mon_num_prep(player_ptr, monster_can_entry_arena, nullptr);
+            monrace_id = get_mon_num(player_ptr, 0, mon_level, PM_ARENA);
+            if (!MonraceList::is_valid(monrace_id)) {
+                continue;
+            }
+
+            const auto &monrace = monraces.get_monrace(monrace_id);
+            if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || monrace.population_flags.has(MonsterPopulationType::ONLY_ONE)) {
+                if ((monrace.level + 10) > mon_level) {
+                    continue;
+                }
+            }
+
+            int j;
+            for (j = 0; j < i; j++) {
+                if (monrace_id == this->get_gladiator(j).monrace_id) {
+                    break;
+                }
+            }
+
+            if (j < i) {
+                continue;
+            }
+
+            break;
+        }
+
+        gladiator.monrace_id = monrace_id;
+        if (monraces.get_monrace(monrace_id).level < 45) {
+            is_applicable = true;
+        }
+    }
+
+    return { total, is_applicable };
 }
 
 /*!

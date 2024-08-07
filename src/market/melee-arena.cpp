@@ -10,10 +10,6 @@
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "market/building-util.h"
-#include "monster-floor/place-monster-types.h"
-#include "monster-race/monster-race-hook.h"
-#include "monster/monster-list.h"
-#include "monster/monster-util.h"
 #include "status/buff-setter.h"
 #include "system/angband-system.h"
 #include "system/building-type-definition.h"
@@ -50,48 +46,9 @@ void update_melee_gladiators(PlayerType *player_ptr)
         mon_level = std::max(i, mon_level);
     }
 
-    const auto &monraces = MonraceList::get_instance();
     auto &melee_arena = MeleeArena::get_instance();
     while (true) {
-        auto total = 0;
-        auto is_applicable = false;
-        for (auto i = 0; i < NUM_GLADIATORS; i++) {
-            auto &gladiator = melee_arena.get_gladiator(i);
-            MonsterRaceId monrace_id;
-            int j;
-            while (true) {
-                get_mon_num_prep(player_ptr, monster_can_entry_arena, nullptr);
-                monrace_id = get_mon_num(player_ptr, 0, mon_level, PM_ARENA);
-                if (!MonraceList::is_valid(monrace_id)) {
-                    continue;
-                }
-
-                const auto &monrace = monraces.get_monrace(monrace_id);
-                if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || monrace.population_flags.has(MonsterPopulationType::ONLY_ONE)) {
-                    if ((monrace.level + 10) > mon_level) {
-                        continue;
-                    }
-                }
-
-                for (j = 0; j < i; j++) {
-                    if (monrace_id == melee_arena.get_gladiator(j).monrace_id) {
-                        break;
-                    }
-                }
-
-                if (j < i) {
-                    continue;
-                }
-
-                break;
-            }
-
-            gladiator.monrace_id = monrace_id;
-            if (monraces.get_monrace(monrace_id).level < 45) {
-                is_applicable = true;
-            }
-        }
-
+        auto [total, is_applicable] = melee_arena.set_gladiators(player_ptr, mon_level);
         const auto &[count, new_total] = melee_arena.set_odds(total, is_applicable);
         total = new_total;
         if (count == NUM_GLADIATORS) {
