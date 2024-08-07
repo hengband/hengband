@@ -7,7 +7,6 @@
 #include "info-reader/fixed-map-parser.h"
 #include "inventory/inventory-slot-types.h"
 #include "market/arena-entry.h"
-#include "market/melee-arena.h"
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
@@ -17,6 +16,7 @@
 #include "player/player-spell-status.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info.h"
+#include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/inner-game-data.h"
@@ -129,7 +129,8 @@ void player_wipe_without_name(PlayerType *player_ptr)
     ArenaEntryList::get_instance().reset_entry();
     world.set_arena(true);
     world.knows_daily_bounty = false;
-    update_melee_gladiators(player_ptr);
+    auto &melee_arena = MeleeArena::get_instance();
+    melee_arena.update_gladiators(player_ptr);
     player_ptr->muta.clear();
 
     for (int i = 0; i < 8; i++) {

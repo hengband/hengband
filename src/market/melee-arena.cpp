@@ -22,16 +22,6 @@
 #include <algorithm>
 
 /*!
- * @brief モンスター闘技場に参加するモンスターを更新する。
- * @param player_ptr プレイヤーへの参照ポインタ
- */
-void update_melee_gladiators(PlayerType *player_ptr)
-{
-    auto &melee_arena = MeleeArena::get_instance();
-    melee_arena.update_gladiators(player_ptr);
-}
-
-/*!
  * @brief モンスター闘技場のメインルーチン
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 賭けを開始したか否か
@@ -40,7 +30,8 @@ bool melee_arena_comm(PlayerType *player_ptr)
 {
     auto &world = AngbandWorld::get_instance();
     if ((world.game_turn - world.arena_start_turn) > TURNS_PER_TICK * 250) {
-        update_melee_gladiators(player_ptr);
+        auto &melee_arena = MeleeArena::get_instance();
+        melee_arena.update_gladiators(player_ptr);
         world.arena_start_turn = world.game_turn;
     }
 

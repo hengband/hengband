@@ -51,6 +51,10 @@ const std::array<MeleeGladiator, NUM_GLADIATORS> &MeleeArena::get_gladiators() c
     return this->gladiators;
 }
 
+/*!
+ * @brief モンスター闘技場に参加するモンスターを更新する。
+ * @param player_ptr プレイヤーへの参照ポインタ
+ */
 void MeleeArena::update_gladiators(PlayerType *player_ptr)
 {
     const auto mon_level = this->decide_max_level();

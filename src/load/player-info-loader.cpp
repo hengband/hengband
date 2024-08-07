@@ -10,7 +10,6 @@
 #include "load/savedata-old-flag-types.h"
 #include "load/world-loader.h"
 #include "market/arena-entry.h"
-#include "market/melee-arena.h"
 #include "monster-race/race-ability-flags.h"
 #include "mutation/mutation-calculator.h"
 #include "object/tval-types.h"
@@ -23,6 +22,7 @@
 #include "spell-realm/spells-song.h"
 #include "system/angband-exceptions.h"
 #include "system/angband-system.h"
+#include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/inner-game-data.h"
@@ -272,7 +272,8 @@ static void rd_phase_out(PlayerType *player_ptr)
 static void rd_arena(PlayerType *player_ptr)
 {
     if (h_older_than(0, 0, 3)) {
-        update_melee_gladiators(player_ptr);
+        auto &melee_arena = MeleeArena::get_instance();
+        melee_arena.update_gladiators(player_ptr);
     } else {
         set_gambling_monsters();
     }
