@@ -2520,6 +2520,9 @@
     <ClCompile Include="..\..\src\market\melee-arena.cpp">
       <Filter>market</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\floor\floor-list.cpp">
+      <Filter>floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5403,9 +5406,9 @@
     <ClInclude Include="..\..\src\util\sha256.h">
       <Filter>util</Filter>
     </ClInclude>
-    <ClCompile Include="..\..\src\util\stack-trace.h">
+    <ClInclude Include="..\..\src\util\stack-trace.h">
       <Filter>util</Filter>
-    </ClCompile>
+    </ClInclude>
     <ClInclude Include="..\..\src\external-lib\json.hpp">
       <Filter>external-lib</Filter>
     </ClInclude>
@@ -5453,6 +5456,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\market\melee-arena.h">
       <Filter>market</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\floor-list.h">
+      <Filter>floor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -62,7 +62,7 @@ public:
     MONSTER_IDX m_max = 0; /* Number of allocated monsters */
     MONSTER_IDX m_cnt = 0; /* Number of live monsters */
 
-    std::vector<int16_t> mproc_list[MAX_MTIMED]{}; /*!< The array to process dungeon monsters[max_m_idx] */
+    std::vector<std::vector<int16_t>> mproc_list; /*!< The array to process dungeon monsters[max_m_idx] */
     int16_t mproc_max[MAX_MTIMED]{}; /*!< Number of monsters to be processed */
 
     POSITION_IDX lite_n = 0; //!< Array of grids lit by player lite
