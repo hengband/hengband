@@ -47,14 +47,7 @@ void update_melee_gladiators(PlayerType *player_ptr)
     }
 
     auto &melee_arena = MeleeArena::get_instance();
-    while (true) {
-        auto [total, is_applicable] = melee_arena.set_gladiators(player_ptr, mon_level);
-        const auto &[count, new_total] = melee_arena.set_odds(total, is_applicable);
-        total = new_total;
-        if (count == NUM_GLADIATORS) {
-            break;
-        }
-    }
+    melee_arena.update_gladiators();
 }
 
 /*!

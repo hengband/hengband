@@ -50,6 +50,18 @@ const std::array<MeleeGladiator, NUM_GLADIATORS> &MeleeArena::get_gladiators() c
     return this->gladiators;
 }
 
+void MeleeArena::update_gladiators(PlayerType *player_ptr, int mon_level)
+{
+    while (true) {
+        auto [total, is_applicable] = this->set_gladiators(player_ptr, mon_level);
+        const auto &[count, new_total] = this->set_odds(total, is_applicable);
+        total = new_total;
+        if (count == NUM_GLADIATORS) {
+            break;
+        }
+    }
+}
+
 std::pair<int, bool> MeleeArena::set_gladiators(PlayerType *player_ptr, int mon_level)
 {
     auto total = 0;

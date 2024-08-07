@@ -56,8 +56,7 @@ public:
     const MeleeGladiator &get_gladiator(int n) const;
     void set_gladiator(int n, const MeleeGladiator &gladiator);
     const std::array<MeleeGladiator, NUM_GLADIATORS> &get_gladiators() const; //!< @detail セーブデータへの書き込みにしか使わないこと.
-    std::pair<int, bool> set_gladiators(PlayerType *player_ptr, int mon_level);
-    std::pair<int, int> set_odds(int current_total, bool is_applicable);
+    void update_gladiators(PlayerType *player_ptr, int mon_level);
 
 private:
     MeleeArena() = default;
@@ -65,6 +64,8 @@ private:
 
     std::array<MeleeGladiator, NUM_GLADIATORS> gladiators{};
 
+    std::pair<int, bool> set_gladiators(PlayerType *player_ptr, int mon_level);
     MonsterRaceId search_gladiator(PlayerType *player_ptr, int mon_level, int num_gladiator) const;
     int matches_gladiator(MonsterRaceId monrace_id, int current_num) const;
+    std::pair<int, int> set_odds(int current_total, bool is_applicable);
 };
