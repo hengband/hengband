@@ -67,14 +67,8 @@ std::pair<int, bool> MeleeArena::set_gladiators(PlayerType *player_ptr, int mon_
                 }
             }
 
-            int j;
-            for (j = 0; j < i; j++) {
-                if (monrace_id == this->get_gladiator(j).monrace_id) {
-                    break;
-                }
-            }
-
-            if (j < i) {
+            const auto count = this->matches_gladiator(monrace_id, i);
+            if (count < i) {
                 continue;
             }
 
@@ -127,4 +121,15 @@ std::pair<int, int> MeleeArena::set_odds(int current_total, bool is_applicable)
     }
 
     return { count, total };
+}
+
+int MeleeArena::matches_gladiator(MonsterRaceId monrace_id, int current_num) const
+{
+    for (auto count = 0; count < current_num; count++) {
+        if (monrace_id == this->get_gladiator(count).monrace_id) {
+            return count;
+        }
+    }
+
+    return NUM_GLADIATORS;
 }

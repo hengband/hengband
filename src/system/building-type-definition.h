@@ -61,4 +61,6 @@ private:
     static MeleeArena instance;
 
     std::array<MeleeGladiator, NUM_GLADIATORS> gladiators{};
+
+    int matches_gladiator(MonsterRaceId monrace_id, int current_num) const;
 };
