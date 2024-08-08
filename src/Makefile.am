@@ -1067,6 +1067,7 @@ EXTRA_hengband_SOURCES = \
 	main-win/stack-trace-win.cpp \
 	main-win/wav-reader.cpp main-win/wav-reader.h \
 	test/test-sha256.cpp \
+	test/test-probability-table.cpp \
 	wall.bmp \
 	stdafx.cpp stdafx.h
 

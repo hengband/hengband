@@ -73,7 +73,7 @@ int rand_range(int a, int b)
         return a;
     }
     std::uniform_int_distribution<> d(a, b);
-    return d(AngbandSystem::get_instance().get_rng());
+    return rand_dist(d);
 }
 
 /*
@@ -85,7 +85,7 @@ int16_t randnor(int mean, int stand)
         return static_cast<int16_t>(mean);
     }
     std::normal_distribution<> d(mean, stand);
-    auto result = std::round(d(AngbandSystem::get_instance().get_rng()));
+    auto result = std::round(rand_dist(d));
     return static_cast<int16_t>(result);
 }
 
