@@ -3544,6 +3544,18 @@
             },
             {
               "spell_id": 13,
+              "spell_tag": "Nether_Wave",
+              "name": {
+                "ja": "地獄の波動",
+                "en": "Nether Wave"
+              },
+              "description": {
+                "ja": "視界内の全てのモンスターにダメージを与える。善良なモンスターに特に大きなダメージを与える。",
+                "en": "Damages all monsters in sight. Hurts good monsters greatly."
+              }
+            },
+            {
+              "spell_id": 14,
               "spell_tag": "Corrupt",
               "name": {
                 "ja": "堕落",
@@ -3555,7 +3567,7 @@
               }
             },
             {
-              "spell_id": 14,
+              "spell_id": 15,
               "spell_tag": "Summon_Demon",
               "name": {
                 "ja": "デーモン召喚",
@@ -3564,18 +3576,6 @@
               "description": {
                 "ja": "悪魔1体を召喚する。",
                 "en": "Summons a demon."
-              }
-            },
-            {
-              "spell_id": 15,
-              "spell_tag": "Nether_Wave",
-              "name": {
-                "ja": "地獄の波動",
-                "en": "Nether Wave"
-              },
-              "description": {
-                "ja": "視界内の全てのモンスターにダメージを与える。善良なモンスターに特に大きなダメージを与える。",
-                "en": "Damages all monsters in sight. Hurts good monsters greatly."
               }
             }
           ]

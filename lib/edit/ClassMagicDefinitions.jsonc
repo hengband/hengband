@@ -1887,21 +1887,21 @@
             },
             {
               "spell_tag": "Fire_Bolt",
-              "learn_level": 10,
+              "learn_level": 7,
               "mana_cost": 6,
               "difficulty": 40,
               "first_cast_exp_rate": 6
             },
             {
               "spell_tag": "Summon_Manes",
-              "learn_level": 11,
+              "learn_level": 9,
               "mana_cost": 9,
               "difficulty": 35,
               "first_cast_exp_rate": 5
             },
             {
               "spell_tag": "Nether_Ball",
-              "learn_level": 13,
+              "learn_level": 11,
               "mana_cost": 13,
               "difficulty": 40,
               "first_cast_exp_rate": 10
@@ -1937,37 +1937,37 @@
             {
               "spell_tag": "Fire_Ball",
               "learn_level": 25,
-              "mana_cost": 16,
-              "difficulty": 50,
+              "mana_cost": 13,
+              "difficulty": 45,
               "first_cast_exp_rate": 12
             },
             {
               "spell_tag": "Fire_Branding",
-              "learn_level": 30,
+              "learn_level": 27,
               "mana_cost": 75,
               "difficulty": 80,
               "first_cast_exp_rate": 30
             },
             {
+              "spell_tag": "Nether_Wave",
+              "learn_level": 28,
+              "mana_cost": 18,
+              "difficulty": 80,
+              "first_cast_exp_rate": 100
+            },
+            {
               "spell_tag": "Corrupt",
-              "learn_level": 33,
+              "learn_level": 30,
               "mana_cost": 30,
               "difficulty": 70,
               "first_cast_exp_rate": 15
             },
             {
               "spell_tag": "Summon_Demon",
-              "learn_level": 36,
+              "learn_level": 33,
               "mana_cost": 70,
               "difficulty": 85,
               "first_cast_exp_rate": 40
-            },
-            {
-              "spell_tag": "Nether_Wave",
-              "learn_level": 37,
-              "mana_cost": 18,
-              "difficulty": 85,
-              "first_cast_exp_rate": 100
             },
             {
               "spell_tag": "Devilish_Eye",
@@ -4189,28 +4189,28 @@
             },
             {
               "spell_tag": "Fire_Bolt",
-              "learn_level": 12,
+              "learn_level": 8,
               "mana_cost": 8,
               "difficulty": 50,
               "first_cast_exp_rate": 6
             },
             {
               "spell_tag": "Summon_Manes",
-              "learn_level": 14,
+              "learn_level": 11,
               "mana_cost": 12,
               "difficulty": 35,
               "first_cast_exp_rate": 5
             },
             {
               "spell_tag": "Nether_Ball",
-              "learn_level": 15,
+              "learn_level": 13,
               "mana_cost": 15,
               "difficulty": 50,
               "first_cast_exp_rate": 7
             },
             {
               "spell_tag": "Raise_the_Morale",
-              "learn_level": 16,
+              "learn_level": 15,
               "mana_cost": 9,
               "difficulty": 66,
               "first_cast_exp_rate": 5
@@ -4239,37 +4239,37 @@
             {
               "spell_tag": "Fire_Ball",
               "learn_level": 27,
-              "mana_cost": 20,
-              "difficulty": 65,
+              "mana_cost": 17,
+              "difficulty": 60,
               "first_cast_exp_rate": 12
             },
             {
               "spell_tag": "Fire_Branding",
-              "learn_level": 33,
+              "learn_level": 30,
               "mana_cost": 75,
               "difficulty": 90,
               "first_cast_exp_rate": 30
             },
             {
+              "spell_tag": "Nether_Wave",
+              "learn_level": 32,
+              "mana_cost": 20,
+              "difficulty": 80,
+              "first_cast_exp_rate": 100
+            },
+            {
               "spell_tag": "Corrupt",
-              "learn_level": 35,
+              "learn_level": 34,
               "mana_cost": 38,
               "difficulty": 70,
               "first_cast_exp_rate": 30
             },
             {
               "spell_tag": "Summon_Demon",
-              "learn_level": 39,
+              "learn_level": 37,
               "mana_cost": 85,
               "difficulty": 85,
               "first_cast_exp_rate": 40
-            },
-            {
-              "spell_tag": "Nether_Wave",
-              "learn_level": 39,
-              "mana_cost": 20,
-              "difficulty": 80,
-              "first_cast_exp_rate": 100
             },
             {
               "spell_tag": "Devilish_Eye",
@@ -7190,28 +7190,28 @@
             },
             {
               "spell_tag": "Fire_Bolt",
-              "learn_level": 17,
+              "learn_level": 13,
               "mana_cost": 10,
               "difficulty": 60,
               "first_cast_exp_rate": 3
             },
             {
               "spell_tag": "Summon_Manes",
-              "learn_level": 20,
+              "learn_level": 17,
               "mana_cost": 15,
               "difficulty": 60,
               "first_cast_exp_rate": 3
             },
             {
               "spell_tag": "Nether_Ball",
-              "learn_level": 25,
+              "learn_level": 21,
               "mana_cost": 25,
               "difficulty": 60,
               "first_cast_exp_rate": 5
             },
             {
               "spell_tag": "Raise_the_Morale",
-              "learn_level": 26,
+              "learn_level": 24,
               "mana_cost": 14,
               "difficulty": 66,
               "first_cast_exp_rate": 2
@@ -7240,8 +7240,8 @@
             {
               "spell_tag": "Fire_Ball",
               "learn_level": 37,
-              "mana_cost": 35,
-              "difficulty": 75,
+              "mana_cost": 31,
+              "difficulty": 70,
               "first_cast_exp_rate": 15
             },
             {
@@ -7250,6 +7250,13 @@
               "mana_cost": 80,
               "difficulty": 95,
               "first_cast_exp_rate": 20
+            },
+            {
+              "spell_tag": "Nether_Wave",
+              "learn_level": 41,
+              "mana_cost": 25,
+              "difficulty": 70,
+              "first_cast_exp_rate": 35
             },
             {
               "spell_tag": "Corrupt",
@@ -7264,13 +7271,6 @@
               "mana_cost": 100,
               "difficulty": 90,
               "first_cast_exp_rate": 30
-            },
-            {
-              "spell_tag": "Nether_Wave",
-              "learn_level": 47,
-              "mana_cost": 25,
-              "difficulty": 70,
-              "first_cast_exp_rate": 35
             },
             {
               "spell_tag": "Devilish_Eye",
@@ -9733,21 +9733,21 @@
             },
             {
               "spell_tag": "Fire_Bolt",
-              "learn_level": 13,
+              "learn_level": 10,
               "mana_cost": 9,
               "difficulty": 50,
               "first_cast_exp_rate": 6
             },
             {
               "spell_tag": "Summon_Manes",
-              "learn_level": 15,
+              "learn_level": 13,
               "mana_cost": 13,
               "difficulty": 35,
               "first_cast_exp_rate": 5
             },
             {
               "spell_tag": "Nether_Ball",
-              "learn_level": 16,
+              "learn_level": 15,
               "mana_cost": 16,
               "difficulty": 45,
               "first_cast_exp_rate": 7
@@ -9783,8 +9783,8 @@
             {
               "spell_tag": "Fire_Ball",
               "learn_level": 33,
-              "mana_cost": 33,
-              "difficulty": 50,
+              "mana_cost": 30,
+              "difficulty": 45,
               "first_cast_exp_rate": 12
             },
             {
@@ -9793,6 +9793,13 @@
               "mana_cost": 75,
               "difficulty": 80,
               "first_cast_exp_rate": 8
+            },
+            {
+              "spell_tag": "Nether_Wave",
+              "learn_level": 38,
+              "mana_cost": 19,
+              "difficulty": 70,
+              "first_cast_exp_rate": 35
             },
             {
               "spell_tag": "Corrupt",
@@ -9807,13 +9814,6 @@
               "mana_cost": 90,
               "difficulty": 85,
               "first_cast_exp_rate": 40
-            },
-            {
-              "spell_tag": "Nether_Wave",
-              "learn_level": 44,
-              "mana_cost": 19,
-              "difficulty": 70,
-              "first_cast_exp_rate": 35
             },
             {
               "spell_tag": "Devilish_Eye",
@@ -10432,7 +10432,7 @@
             },
             {
               "spell_tag": "Fire_Bolt",
-              "learn_level": 10,
+              "learn_level": 9,
               "mana_cost": 7,
               "difficulty": 50,
               "first_cast_exp_rate": 6
@@ -10482,8 +10482,8 @@
             {
               "spell_tag": "Fire_Ball",
               "learn_level": 30,
-              "mana_cost": 20,
-              "difficulty": 50,
+              "mana_cost": 18,
+              "difficulty": 45,
               "first_cast_exp_rate": 12
             },
             {
@@ -10494,6 +10494,13 @@
               "first_cast_exp_rate": 8
             },
             {
+              "spell_tag": "Nether_Wave",
+              "learn_level": 35,
+              "mana_cost": 20,
+              "difficulty": 65,
+              "first_cast_exp_rate": 40
+            },
+            {
               "spell_tag": "Corrupt",
               "learn_level": 38,
               "mana_cost": 38,
@@ -10502,16 +10509,9 @@
             },
             {
               "spell_tag": "Summon_Demon",
-              "learn_level": 39,
+              "learn_level": 40,
               "mana_cost": 85,
               "difficulty": 90,
-              "first_cast_exp_rate": 40
-            },
-            {
-              "spell_tag": "Nether_Wave",
-              "learn_level": 39,
-              "mana_cost": 20,
-              "difficulty": 65,
               "first_cast_exp_rate": 40
             },
             {
@@ -13444,7 +13444,7 @@
             },
             {
               "spell_tag": "Fire_Bolt",
-              "learn_level": 7,
+              "learn_level": 6,
               "mana_cost": 4,
               "difficulty": 40,
               "first_cast_exp_rate": 6
@@ -13494,16 +13494,23 @@
             {
               "spell_tag": "Fire_Ball",
               "learn_level": 22,
-              "mana_cost": 13,
-              "difficulty": 40,
+              "mana_cost": 11,
+              "difficulty": 35,
               "first_cast_exp_rate": 12
             },
             {
               "spell_tag": "Fire_Branding",
-              "learn_level": 26,
+              "learn_level": 24,
               "mana_cost": 65,
               "difficulty": 70,
               "first_cast_exp_rate": 8
+            },
+            {
+              "spell_tag": "Nether_Wave",
+              "learn_level": 25,
+              "mana_cost": 16,
+              "difficulty": 75,
+              "first_cast_exp_rate": 100
             },
             {
               "spell_tag": "Corrupt",
@@ -13514,17 +13521,10 @@
             },
             {
               "spell_tag": "Summon_Demon",
-              "learn_level": 33,
+              "learn_level": 30,
               "mana_cost": 65,
               "difficulty": 75,
               "first_cast_exp_rate": 40
-            },
-            {
-              "spell_tag": "Nether_Wave",
-              "learn_level": 34,
-              "mana_cost": 16,
-              "difficulty": 75,
-              "first_cast_exp_rate": 100
             },
             {
               "spell_tag": "Devilish_Eye",
@@ -16239,21 +16239,21 @@
             },
             {
               "spell_tag": "Fire_Bolt",
-              "learn_level": 10,
+              "learn_level": 7,
               "mana_cost": 6,
               "difficulty": 40,
               "first_cast_exp_rate": 6
             },
             {
               "spell_tag": "Summon_Manes",
-              "learn_level": 11,
+              "learn_level": 9,
               "mana_cost": 9,
               "difficulty": 35,
               "first_cast_exp_rate": 5
             },
             {
               "spell_tag": "Nether_Ball",
-              "learn_level": 13,
+              "learn_level": 11,
               "mana_cost": 13,
               "difficulty": 40,
               "first_cast_exp_rate": 10
@@ -16289,37 +16289,37 @@
             {
               "spell_tag": "Fire_Ball",
               "learn_level": 25,
-              "mana_cost": 16,
-              "difficulty": 50,
+              "mana_cost": 13,
+              "difficulty": 45,
               "first_cast_exp_rate": 12
             },
             {
               "spell_tag": "Fire_Branding",
-              "learn_level": 30,
+              "learn_level": 27,
               "mana_cost": 75,
               "difficulty": 80,
               "first_cast_exp_rate": 30
             },
             {
+              "spell_tag": "Nether_Wave",
+              "learn_level": 28,
+              "mana_cost": 18,
+              "difficulty": 80,
+              "first_cast_exp_rate": 100
+            },
+            {
               "spell_tag": "Corrupt",
-              "learn_level": 33,
+              "learn_level": 30,
               "mana_cost": 30,
               "difficulty": 70,
               "first_cast_exp_rate": 15
             },
             {
               "spell_tag": "Summon_Demon",
-              "learn_level": 36,
+              "learn_level": 33,
               "mana_cost": 70,
               "difficulty": 85,
               "first_cast_exp_rate": 40
-            },
-            {
-              "spell_tag": "Nether_Wave",
-              "learn_level": 37,
-              "mana_cost": 18,
-              "difficulty": 85,
-              "first_cast_exp_rate": 100
             },
             {
               "spell_tag": "Devilish_Eye",
@@ -18574,21 +18574,21 @@
             },
             {
               "spell_tag": "Fire_Bolt",
-              "learn_level": 20,
+              "learn_level": 16,
               "mana_cost": 12,
               "difficulty": 60,
               "first_cast_exp_rate": 3
             },
             {
               "spell_tag": "Summon_Manes",
-              "learn_level": 23,
+              "learn_level": 21,
               "mana_cost": 18,
               "difficulty": 60,
               "first_cast_exp_rate": 3
             },
             {
               "spell_tag": "Nether_Ball",
-              "learn_level": 25,
+              "learn_level": 23,
               "mana_cost": 25,
               "difficulty": 60,
               "first_cast_exp_rate": 5
@@ -18624,8 +18624,8 @@
             {
               "spell_tag": "Fire_Ball",
               "learn_level": 41,
-              "mana_cost": 40,
-              "difficulty": 75,
+              "mana_cost": 37,
+              "difficulty": 70,
               "first_cast_exp_rate": 15
             },
             {
@@ -18636,6 +18636,13 @@
               "first_cast_exp_rate": 30
             },
             {
+              "spell_tag": "Nether_Wave",
+              "learn_level": 43,
+              "mana_cost": 58,
+              "difficulty": 80,
+              "first_cast_exp_rate": 0
+            },
+            {
               "spell_tag": "Corrupt",
               "learn_level": 44,
               "mana_cost": 75,
@@ -18644,17 +18651,10 @@
             },
             {
               "spell_tag": "Summon_Demon",
-              "learn_level": 49,
+              "learn_level": 47,
               "mana_cost": 111,
               "difficulty": 90,
               "first_cast_exp_rate": 30
-            },
-            {
-              "spell_tag": "Nether_Wave",
-              "learn_level": 49,
-              "mana_cost": 58,
-              "difficulty": 80,
-              "first_cast_exp_rate": 0
             },
             {
               "spell_tag": "Devilish_Eye",
