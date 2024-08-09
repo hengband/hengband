@@ -909,10 +909,12 @@ says, 'Located a target, I'll begin to eliminate...!'
 says, '"The Ship That Would Not Die" won't go down that easy...'
 
 N:1362:Mika Misono, a witch of the Tea Party
-says, 'Hi, can you get out of my way? ...Can't? Okay, I'll have to force you then.'
+says, 'Hi, can you get out of my way? ...Can't? Okay, I'll kill you.'
 says, 'Saori is... there probably, isn't she?'
-says, 'I guess you will kill me, will you? Hmm, that's too bad...'
+says, 'One more trash in the way... this adventurer is also ready to kill me.'
+says, 'Because you are an obstructor for my revenge... Can you vanish from me?'
 is looking for a certain person to take everything from that person...
+murmurs the grudge against the person called Saori.
 
 N:*:Default lines
 cackles evilly.
