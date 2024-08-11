@@ -161,11 +161,6 @@ void set_zangband_game_turns(PlayerType *player_ptr)
     world.dungeon_turn /= 2;
 }
 
-void set_zangband_gambling_monsters(int i)
-{
-    mon_odds[i] = rd_s16b();
-}
-
 void set_zangband_special_attack(PlayerType *player_ptr)
 {
     if (rd_byte() != 0) {

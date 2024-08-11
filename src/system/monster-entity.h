@@ -19,8 +19,10 @@ constexpr int MONSTER_MAXHP = 30000; //!< モンスターの最大HP
 enum class MonsterRaceId : int16_t;
 class FloorType;
 class MonsterRaceInfo;
+class MonsterEntityWriter;
 class MonsterEntity {
 public:
+    friend class MonsterEntityWriter;
     MonsterEntity() = default;
     MonsterRaceId r_idx{}; /*!< モンスターの実種族ID (これが0の時は死亡扱いになる) / Monster race index 0 = dead. */
     MonsterRaceId ap_r_idx{}; /*!< モンスターの外見種族ID（あやしい影、たぬき、ジュラル星人誤認などにより変化する）Monster race appearance index */
@@ -96,6 +98,7 @@ public:
     std::optional<std::string> get_pain_message(std::string_view monster_name, int damage) const;
     std::optional<bool> order_pet_whistle(const MonsterEntity &other) const;
     std::optional<bool> order_pet_dismission(const MonsterEntity &other) const;
+    bool is_riding() const;
     void set_individual_speed(bool force_fixed_speed);
 
     void set_hostile();

@@ -198,7 +198,7 @@ void regenerate_monsters(PlayerType *player_ptr)
             }
 
             tracker.set_flag_if_tracking(i);
-            if (player_ptr->riding == i) {
+            if (monster.is_riding()) {
                 rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
             }
         }

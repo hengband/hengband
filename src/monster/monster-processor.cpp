@@ -21,6 +21,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "grid/feature.h"
+#include "grid/grid.h"
 #include "io/write-diary.h"
 #include "melee/melee-postprocess.h"
 #include "melee/melee-spell.h"
@@ -32,6 +33,7 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-floor/quantum-effect.h"
+#include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
@@ -125,9 +127,18 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
         const auto old_m_name = monster_desc(player_ptr, m_ptr, 0);
 
+        const auto &monrace = m_ptr->get_monrace();
+
         choose_chameleon_polymorph(player_ptr, m_idx, floor.get_grid(Pos2D(m_ptr->fy, m_ptr->fx)));
 
+        update_monster(player_ptr, m_idx, false);
+        lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
+
         const auto &new_monrace = m_ptr->get_monrace();
+
+        if (new_monrace.brightness_flags.has_any_of(ld_mask) || monrace.brightness_flags.has_any_of(ld_mask)) {
+            RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
+        }
 
         if (m_idx == player_ptr->riding) {
             msg_format(_("突然%sが変身した。", "Suddenly, %s transforms!"), old_m_name.data());
@@ -392,7 +403,7 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
     const auto m_name = monster_desc(player_ptr, &monster, monster.is_pet() ? MD_ASSUME_VISIBLE : 0);
 
     /* When riding a hostile alignment pet */
-    if (player_ptr->riding == m_idx) {
+    if (monster.is_riding()) {
         if (abs(player_ptr->alignment / 10) < randint0(player_ptr->skill_exp[PlayerSkillKindType::RIDING])) {
             return;
         }
@@ -658,7 +669,7 @@ void sweep_monster_process(PlayerType *player_ptr)
             continue;
         }
 
-        byte speed = (player_ptr->riding == m_idx) ? player_ptr->pspeed : m_ptr->get_temporary_speed();
+        byte speed = m_ptr->is_riding() ? player_ptr->pspeed : m_ptr->get_temporary_speed();
         m_ptr->energy_need -= speed_to_energy(speed);
         if (m_ptr->energy_need > 0) {
             continue;

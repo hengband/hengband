@@ -484,7 +484,7 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
     lite_spot(player_ptr, um_ptr->fy, um_ptr->fx);
 
     HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
-    if (player_ptr->riding == m_idx) {
+    if (m_ptr->is_riding()) {
         RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
@@ -521,7 +521,7 @@ static void update_visible_monster(PlayerType *player_ptr, um_type *um_ptr, MONS
     lite_spot(player_ptr, um_ptr->fy, um_ptr->fx);
 
     HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
-    if (player_ptr->riding == m_idx) {
+    if (um_ptr->m_ptr->is_riding()) {
         RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 

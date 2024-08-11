@@ -27,7 +27,7 @@
 #include "save/floor-writer.h"
 #include "save/info-writer.h"
 #include "save/item-writer.h"
-#include "save/monster-writer.h"
+#include "save/lore-writer.h"
 #include "save/player-writer.h"
 #include "save/save-util.h"
 #include "store/store-owners.h"

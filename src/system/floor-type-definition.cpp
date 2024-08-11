@@ -1,9 +1,11 @@
 #include "system/floor-type-definition.h"
 #include "dungeon/quest.h"
 #include "game-option/birth-options.h"
+#include "monster/monster-timed-effect-types.h"
 #include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/dungeon-info.h"
+#include "system/gamevalue.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
@@ -11,7 +13,11 @@
 #include "util/enum-range.h"
 
 FloorType::FloorType()
-    : quest_number(QuestId::NONE)
+    : grid_array(MAX_HGT, std::vector<Grid>(MAX_WID))
+    , o_list(MAX_FLOOR_ITEMS)
+    , m_list(MAX_FLOOR_MONSTERS)
+    , mproc_list(MAX_MTIMED, std::vector<int16_t>(MAX_FLOOR_MONSTERS, {}))
+    , quest_number(QuestId::NONE)
 {
 }
 

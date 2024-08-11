@@ -252,7 +252,7 @@ bool process_un_power(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
     monap_ptr->m_ptr->hp += recovery;
 
     HealthBarTracker::get_instance().set_flag_if_tracking(monap_ptr->m_idx);
-    if (player_ptr->riding == monap_ptr->m_idx) {
+    if (monap_ptr->m_ptr->is_riding()) {
         RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
@@ -288,7 +288,7 @@ bool check_drain_hp(PlayerType *player_ptr, const int32_t d)
     }
 }
 
-void process_drain_life(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr, const bool resist_drain)
+void process_drain_life(MonsterAttackPlayer *monap_ptr, const bool resist_drain)
 {
     if ((monap_ptr->damage <= 5) || resist_drain) {
         return;
@@ -301,7 +301,7 @@ void process_drain_life(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr, 
     }
 
     HealthBarTracker::get_instance().set_flag_if_tracking(monap_ptr->m_idx);
-    if (player_ptr->riding == monap_ptr->m_idx) {
+    if (monap_ptr->m_ptr->is_riding()) {
         RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 

@@ -6,6 +6,7 @@
 #include "main/game-data-initializer.h"
 #include "cmd-io/macro-util.h"
 #include "dungeon/quest.h"
+#include "floor/floor-list.h"
 #include "floor/floor-util.h"
 #include "game-option/option-flags.h"
 #include "game-option/option-types-table.h"
@@ -45,16 +46,11 @@ static void init_gf_colors()
  */
 void init_other(PlayerType *player_ptr)
 {
-    player_ptr->current_floor_ptr = &floor_info; // TODO:本当はこんなところで初期化したくない
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    floor_ptr->o_list.assign(MAX_FLOOR_ITEMS, {});
-    floor_ptr->m_list.assign(MAX_FLOOR_MONSTERS, {});
-    for (auto &list : floor_ptr->mproc_list) {
-        list.assign(MAX_FLOOR_MONSTERS, {});
-    }
+    auto &floor_data = FloorList::get_instance();
+    auto *floor_ptr = &floor_data.get_floor(0);
+    player_ptr->current_floor_ptr = floor_ptr; // TODO:本当はこんなところで初期化したくない ← FloorTypeの方で初期化するべき？
 
     max_dlv.assign(dungeons_info.size(), {});
-    floor_ptr->grid_array.assign(MAX_HGT, std::vector<Grid>(MAX_WID));
     init_gf_colors();
 
     macro_patterns.assign(MACRO_MAX, {});

@@ -8,6 +8,7 @@ bool flush_failure; /* Flush input on various failures */
 bool flush_disturb; /* Flush input whenever disturbed */
 bool disturb_move; /* Disturb whenever any monster moves */
 bool disturb_high; /* Disturb whenever high-level monster moves */
+bool disturb_unknown; /* Disturb whenever unknown-level monster moves */
 bool disturb_near; /* Disturb whenever viewable monster moves */
 bool disturb_pets; /* Disturb when visible pets move */
 bool disturb_panel; /* Disturb whenever map panel changes */

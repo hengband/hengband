@@ -21,7 +21,6 @@
 /*!
  * @brief EffectMonster構造体のコンストラクタ
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param em_ptr モンスター効果構造体への参照ポインタ
  * @param src_idx 魔法を発動したモンスター (0ならばプレイヤー)
  * @param r 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
  * @param y 目標y座標 / Target y location (or location to travel "towards")

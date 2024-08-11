@@ -386,6 +386,7 @@ public:
     GAME_TEXT name[32]{}; /*!< 現在のプレイヤー名 / Current player's character name */
     char base_name[32]{}; /*!< Stripped version of "player_name" */
 
+    void ride_monster(MONSTER_IDX m_idx);
     std::shared_ptr<TimedEffects> effects() const;
     bool is_fully_healthy() const;
     std::string decrease_ability_random();

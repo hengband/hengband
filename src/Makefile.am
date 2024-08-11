@@ -214,6 +214,7 @@ hengband_SOURCES = \
 	floor/floor-generator-util.h \
 	floor/floor-generator.cpp floor/floor-generator.h \
 	floor/floor-leaver.cpp floor/floor-leaver.h \
+	floor/floor-list.cpp floor/floor-list.h \
 	floor/floor-mode-changer.cpp floor/floor-mode-changer.h \
 	floor/floor-object.cpp floor/floor-object.h \
 	floor/floor-save.cpp floor/floor-save.h \
@@ -405,12 +406,12 @@ hengband_SOURCES = \
 	main-unix/x11-gamma-builder.cpp main-unix/x11-gamma-builder.h \
 	main-unix/x11-type-string.cpp main-unix/x11-type-string.h \
 	\
+	market/arena.cpp market/arena.h \
 	market/arena-entry.cpp market/arena-entry.h \
 	market/building-initializer.cpp market/building-initializer.h \
 	market/building-util.cpp market/building-util.h \
 	market/play-gamble.cpp market/play-gamble.h \
 	market/poker.cpp market/poker.h \
-	market/arena.cpp market/arena.h \
 	market/bounty-prize-table.cpp market/bounty-prize-table.h \
 	market/bounty-type-definition.h \
 	market/bounty.cpp market/bounty.h \
@@ -423,6 +424,7 @@ hengband_SOURCES = \
 	market/building-monster.cpp market/building-monster.h \
 	market/building-enchanter.cpp market/building-enchanter.h \
 	market/building-actions-table.h \
+	market/melee-arena.cpp market/melee-arena.h \
 	\
 	melee/monster-attack-monster.cpp melee/monster-attack-monster.h \
 	melee/melee-postprocess.cpp melee/melee-postprocess.h \
@@ -802,7 +804,8 @@ hengband_SOURCES = \
 	save/floor-writer.cpp save/floor-writer.h \
 	save/info-writer.cpp save/info-writer.h \
 	save/item-writer.cpp save/item-writer.h \
-	save/monster-writer.cpp save/monster-writer.h \
+	save/lore-writer.cpp save/lore-writer.h \
+	save/monster-entity-writer.cpp save/monster-entity-writer.h \
 	save/player-class-specific-data-writer.cpp save/player-class-specific-data-writer.h \
 	save/player-writer.cpp save/player-writer.h \
 	save/save.cpp save/save.h \

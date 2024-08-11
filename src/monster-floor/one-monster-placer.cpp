@@ -45,16 +45,6 @@
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
 
-static bool is_friendly_idx(PlayerType *player_ptr, MONSTER_IDX m_idx)
-{
-    if (m_idx == 0) {
-        return false;
-    }
-
-    const auto &m_ref = player_ptr->current_floor_ptr->m_list[m_idx];
-    return m_ref.is_friendly();
-}
-
 /*!
  * @brief たぬきの変身対象となるモンスターかどうか判定する / Hook for Tanuki
  * @param r_idx モンスター種族ID
@@ -251,7 +241,6 @@ static void warn_unique_generation(PlayerType *player_ptr, MonsterRaceId r_idx)
 /*!
  * @brief モンスターを一体生成する / Attempt to place a monster of the given race at the given location.
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param src_idx 召喚を行ったモンスターID
  * @param y 生成位置y座標
  * @param x 生成位置x座標
  * @param r_idx 生成モンスター種族
@@ -259,7 +248,7 @@ static void warn_unique_generation(PlayerType *player_ptr, MonsterRaceId r_idx)
  * @param summoner_m_idx モンスターの召喚による場合、召喚主のモンスターID
  * @return 生成に成功したらモンスターID、失敗したらstd::nullopt
  */
-std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
+std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto *g_ptr = &floor.grid_array[y][x];
@@ -310,21 +299,23 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX
     }
 
     const auto &new_monrace = m_ptr->get_monrace();
+    const auto is_summoned = summoner_m_idx.has_value();
+    const MonsterEntity &summoner = floor.m_list[summoner_m_idx.value_or(0)];
 
     auto same_appearance_as_parent = m_ptr->mflag2.has_not(MonsterConstantFlagType::CHAMELEON);
     same_appearance_as_parent &= any_bits(mode, PM_MULTIPLY);
-    same_appearance_as_parent &= is_monster(src_idx) && !floor.m_list[src_idx].is_original_ap();
+    same_appearance_as_parent &= is_summoned && !summoner.is_original_ap();
 
     if (same_appearance_as_parent) {
-        m_ptr->ap_r_idx = floor.m_list[src_idx].ap_r_idx;
-        if (floor.m_list[src_idx].mflag2.has(MonsterConstantFlagType::KAGE)) {
+        m_ptr->ap_r_idx = summoner.ap_r_idx;
+        if (summoner.mflag2.has(MonsterConstantFlagType::KAGE)) {
             m_ptr->mflag2.set(MonsterConstantFlagType::KAGE);
         }
     }
 
-    if (m_ptr->mflag2.has_not(MonsterConstantFlagType::CHAMELEON) && is_monster(src_idx) && new_monrace.kind_flags.has_none_of(alignment_mask)) {
-        m_ptr->sub_align = floor.m_list[src_idx].sub_align;
-    } else if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && new_monrace.kind_flags.has(MonsterKindType::UNIQUE) && !is_monster(src_idx)) {
+    if (m_ptr->mflag2.has_not(MonsterConstantFlagType::CHAMELEON) && is_summoned && new_monrace.kind_flags.has_none_of(alignment_mask)) {
+        m_ptr->sub_align = summoner.sub_align;
+    } else if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && new_monrace.kind_flags.has(MonsterKindType::UNIQUE) && !is_summoned) {
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
     } else {
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
@@ -349,9 +340,9 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX
     m_ptr->nickname.clear();
     m_ptr->exp = 0;
 
-    if (is_monster(src_idx) && floor.m_list[src_idx].is_pet()) {
+    if (is_summoned && summoner.is_pet()) {
         set_bits(mode, PM_FORCE_PET);
-        m_ptr->parent_m_idx = src_idx;
+        m_ptr->parent_m_idx = *summoner_m_idx;
     } else {
         m_ptr->parent_m_idx = 0;
     }
@@ -367,8 +358,13 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, MONSTER_IDX
     m_ptr->ml = false;
     if (any_bits(mode, PM_FORCE_PET)) {
         set_pet(player_ptr, m_ptr);
-    } else if ((is_player(src_idx) && new_monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY)) || is_friendly_idx(player_ptr, src_idx) || any_bits(mode, PM_FORCE_FRIENDLY)) {
-        if (!monster_has_hostile_align(player_ptr, nullptr, 0, -1, &new_monrace) && !player_ptr->current_floor_ptr->inside_arena) {
+    } else {
+        auto should_be_friendly = !is_summoned && new_monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY);
+        should_be_friendly |= is_summoned && summoner.is_friendly();
+        should_be_friendly |= any_bits(mode, PM_FORCE_FRIENDLY);
+        auto force_hostile = monster_has_hostile_align(player_ptr, nullptr, 0, -1, &new_monrace);
+        force_hostile |= player_ptr->current_floor_ptr->inside_arena;
+        if (should_be_friendly && !force_hostile) {
             m_ptr->set_friendly();
         }
     }

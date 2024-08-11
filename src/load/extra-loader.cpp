@@ -20,9 +20,9 @@
 void rd_extra(PlayerType *player_ptr)
 {
     if (h_older_than(0, 0, 7)) {
-        player_ptr->riding = 0;
+        player_ptr->ride_monster(0);
     } else {
-        player_ptr->riding = rd_s16b();
+        player_ptr->ride_monster(rd_s16b());
     }
 
     if (h_older_than(1, 5, 0, 0)) {

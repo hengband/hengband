@@ -6,10 +6,12 @@
 
 class MonsterEntity;
 class FallOffHorseEffect;
+class FloorType;
 class EffectPlayerType {
 public:
     DEPTH rlev; // モンスターのレベル (但し0のモンスターは1になる).
     MonsterEntity *m_ptr;
+    MonsterEntity *src_ptr;
     std::string killer;
     std::string m_name;
     int get_damage;
@@ -18,7 +20,7 @@ public:
     int dam;
     AttributeType attribute;
     BIT_FLAGS flag;
-    EffectPlayerType(MONSTER_IDX src_idx, int dam, AttributeType attribute, BIT_FLAGS flag);
+    EffectPlayerType(FloorType &src_floor, MONSTER_IDX src_idx, int dam, AttributeType attribute, BIT_FLAGS flag);
 };
 
 struct ProjectResult;

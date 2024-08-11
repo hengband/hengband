@@ -140,7 +140,7 @@ std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, 
         mode |= PM_NO_KAGE;
     }
 
-    auto summoned_m_idx = place_specific_monster(player_ptr, summoner_m_idx.value_or(0), y, x, r_idx, mode, summoner_m_idx);
+    auto summoned_m_idx = place_specific_monster(player_ptr, y, x, r_idx, mode, summoner_m_idx);
     if (!summoned_m_idx) {
         return std::nullopt;
     }
@@ -187,5 +187,6 @@ std::optional<MONSTER_IDX> summon_named_creature(PlayerType *player_ptr, MONSTER
         return false;
     }
 
-    return place_specific_monster(player_ptr, src_idx, y, x, r_idx, (mode | PM_NO_KAGE));
+    const auto summon_who = is_monster(src_idx) ? std::make_optional(src_idx) : std::nullopt;
+    return place_specific_monster(player_ptr, y, x, r_idx, (mode | PM_NO_KAGE), summon_who);
 }

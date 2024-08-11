@@ -237,7 +237,7 @@ static bool deal_effect_damage_from_monster(PlayerType *player_ptr, EffectMonste
     }
 
     HealthBarTracker::get_instance().set_flag_if_tracking(em_ptr->g_ptr->m_idx);
-    if (player_ptr->riding == em_ptr->g_ptr->m_idx) {
+    if (em_ptr->m_ptr->is_riding()) {
         RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 

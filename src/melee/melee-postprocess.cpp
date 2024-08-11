@@ -74,14 +74,14 @@ mam_pp_type::mam_pp_type(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, boo
     this->m_name = monster_desc(player_ptr, m_ptr, 0);
 }
 
-static void prepare_redraw(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
+static void prepare_redraw(mam_pp_type *mam_pp_ptr)
 {
     if (!mam_pp_ptr->m_ptr->ml) {
         return;
     }
 
     HealthBarTracker::get_instance().set_flag_if_tracking(mam_pp_ptr->m_idx);
-    if (player_ptr->riding == mam_pp_ptr->m_idx) {
+    if (mam_pp_ptr->m_ptr->is_riding()) {
         RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 }
@@ -278,7 +278,7 @@ void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     mam_pp_type tmp_mam_pp(player_ptr, m_idx, dam, dead, fear, note, src_idx);
     mam_pp_type *mam_pp_ptr = &tmp_mam_pp;
-    prepare_redraw(player_ptr, mam_pp_ptr);
+    prepare_redraw(mam_pp_ptr);
     (void)set_monster_csleep(player_ptr, m_idx, 0);
 
     if (player_ptr->riding && (m_idx == player_ptr->riding)) {

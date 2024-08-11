@@ -272,12 +272,14 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-tunnel.cpp" />
     <ClCompile Include="..\..\src\action\movement-execution.cpp" />
     <ClCompile Include="..\..\src\core\score-util.cpp" />
+    <ClCompile Include="..\..\src\floor\floor-list.cpp" />
     <ClCompile Include="..\..\src\item-info\flavor-initializer.cpp" />
     <ClCompile Include="..\..\src\load\item\item-loader-base.cpp" />
     <ClCompile Include="..\..\src\load\item\item-loader-factory.cpp" />
     <ClCompile Include="..\..\src\load\monster\monster-loader-factory.cpp" />
     <ClCompile Include="..\..\src\load\player-class-specific-data-loader.cpp" />
     <ClCompile Include="..\..\src\main-win\main-win-exception.cpp" />
+    <ClCompile Include="..\..\src\market\melee-arena.cpp" />
     <ClCompile Include="..\..\src\monster-race\race-brightness-mask.cpp" />
     <ClCompile Include="..\..\src\monster-race\race-sex-const.cpp" />
     <ClCompile Include="..\..\src\monster\monster-pain-describer.cpp" />
@@ -564,7 +566,8 @@
     <ClCompile Include="..\..\src\save\floor-writer.cpp" />
     <ClCompile Include="..\..\src\save\info-writer.cpp" />
     <ClCompile Include="..\..\src\save\item-writer.cpp" />
-    <ClCompile Include="..\..\src\save\monster-writer.cpp" />
+    <ClCompile Include="..\..\src\save\monster-entity-writer.cpp" />
+    <ClCompile Include="..\..\src\save\lore-writer.cpp" />
     <ClCompile Include="..\..\src\save\player-writer.cpp" />
     <ClCompile Include="..\..\src\save\save-util.cpp" />
     <ClCompile Include="..\..\src\object-activation\activation-others.cpp" />
@@ -981,6 +984,7 @@
     <ClInclude Include="..\..\src\action\run-execution.h" />
     <ClInclude Include="..\..\src\external-lib\include-json.h" />
     <ClInclude Include="..\..\src\external-lib\json.hpp" />
+    <ClInclude Include="..\..\src\floor\floor-list.h" />
     <ClInclude Include="..\..\src\item-info\flavor-initializer.h" />
     <ClInclude Include="..\..\src\load\item\item-loader-version-types.h" />
     <ClInclude Include="..\..\src\load\item\item-loader-base.h" />
@@ -993,6 +997,7 @@
     <ClInclude Include="..\..\src\load\savedata-old-flag-types.h" />
     <ClInclude Include="..\..\src\main-win\main-win-exception.h" />
     <ClInclude Include="..\..\src\market\bounty-type-definition.h" />
+    <ClInclude Include="..\..\src\market\melee-arena.h" />
     <ClInclude Include="..\..\src\monster-race\monster-aura-types.h" />
     <ClInclude Include="..\..\src\monster-race\monster-kind-mask.h" />
     <ClInclude Include="..\..\src\monster-race\race-behavior-flags.h" />
@@ -1376,7 +1381,8 @@
     <ClInclude Include="..\..\src\save\floor-writer.h" />
     <ClInclude Include="..\..\src\save\info-writer.h" />
     <ClInclude Include="..\..\src\save\item-writer.h" />
-    <ClInclude Include="..\..\src\save\monster-writer.h" />
+    <ClInclude Include="..\..\src\save\monster-entity-writer.h" />
+    <ClInclude Include="..\..\src\save\lore-writer.h" />
     <ClInclude Include="..\..\src\save\player-writer.h" />
     <ClInclude Include="..\..\src\save\save-util.h" />
     <ClInclude Include="..\..\src\object-activation\activation-others.h" />
