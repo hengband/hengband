@@ -224,6 +224,20 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
     } break;
 
     case 13: {
+        int sides1 = plev * 2;
+        int sides2 = plev * 2;
+
+        if (info) {
+            return format("%sd%d+d%d", KWD_DAM, sides1, sides2);
+        }
+
+        if (cast) {
+            dispel_monsters(player_ptr, randint1(sides1));
+            dispel_good(player_ptr, randint1(sides2));
+        }
+    } break;
+
+    case 14: {
         int dam = plev * 3;
 
         if (info) {
@@ -238,23 +252,9 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
     } break;
 
-    case 14: {
+    case 15: {
         if (cast) {
             cast_summon_demon(player_ptr, plev * 2 / 3 + randint1(plev / 2));
-        }
-    } break;
-
-    case 15: {
-        int sides1 = plev * 2;
-        int sides2 = plev * 2;
-
-        if (info) {
-            return format("%sd%d+d%d", KWD_DAM, sides1, sides2);
-        }
-
-        if (cast) {
-            dispel_monsters(player_ptr, randint1(sides1));
-            dispel_good(player_ptr, randint1(sides2));
         }
     } break;
 
