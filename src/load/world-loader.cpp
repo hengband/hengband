@@ -62,13 +62,17 @@ void rd_alter_reality(PlayerType *player_ptr)
 
 void set_gambling_monsters()
 {
+    auto &melee_arena = MeleeArena::get_instance();
     for (auto i = 0; i < NUM_GLADIATORS; i++) {
-        battle_mon_list[i] = i2enum<MonsterRaceId>(rd_s16b());
+        const auto monrace_id = i2enum<MonsterRaceId>(rd_s16b());
+        uint32_t odds;
         if (h_older_than(0, 3, 4)) {
-            mon_odds[i] = rd_s16b();
+            odds = rd_s16b();
         } else {
-            mon_odds[i] = rd_u32b();
+            odds = rd_u32b();
         }
+
+        melee_arena.set_gladiator(i, { monrace_id, odds });
     }
 }
 

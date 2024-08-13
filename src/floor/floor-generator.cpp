@@ -239,9 +239,13 @@ static void generate_gambling_arena(PlayerType *player_ptr)
 
     build_battle(player_ptr, &y, &x);
     player_place(player_ptr, y, x);
-    for (MONSTER_IDX i = 0; i < 4; i++) {
-        const auto m_idx = place_specific_monster(player_ptr, player_ptr->y + 8 + (i / 2) * 4, player_ptr->x - 2 + (i % 2) * 4, battle_mon_list[i], (PM_NO_KAGE | PM_NO_PET));
-        if (m_idx) {
+    const auto &melee_arena = MeleeArena::get_instance();
+    for (auto i = 0; i < NUM_GLADIATORS; i++) {
+        const auto &gladiator = melee_arena.get_gladiator(i);
+        const Pos2D pos(player_ptr->y + 8 + (i / 2) * 4, player_ptr->x - 2 + (i % 2) * 4);
+        constexpr auto mode = PM_NO_KAGE | PM_NO_PET;
+        const auto m_idx = place_specific_monster(player_ptr, pos.y, pos.x, gladiator.monrace_id, mode);
+        if (m_idx > 0) {
             floor_ptr->m_list[*m_idx].set_friendly();
         }
     }

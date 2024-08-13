@@ -18,7 +18,6 @@
 #include "io/cursor.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
-#include "market/melee-arena.h"
 #include "mind/mind-ninja.h"
 #include "monster/monster-compaction.h"
 #include "monster/monster-processor.h"
@@ -31,6 +30,7 @@
 #include "realm/realm-song.h"
 #include "spell-realm/spells-song.h"
 #include "system/angband-system.h"
+#include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-info.h"
@@ -164,7 +164,8 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     if (is_watching) {
         if (load_game) {
             player_ptr->energy_need = 0;
-            update_melee_gladiators(player_ptr);
+            auto &melee_arena = MeleeArena::get_instance();
+            melee_arena.update_gladiators(player_ptr);
         } else {
             msg_print(_("試合開始！", "Ready..Fight!"));
             msg_print(nullptr);
