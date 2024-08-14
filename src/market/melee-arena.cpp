@@ -23,6 +23,22 @@
 #include <sstream>
 #include <string>
 
+namespace {
+void display_gladiators()
+{
+    prt(_("モンスター                                                     倍率", "Monsters                                                       Odds"), 4, 4);
+    const auto &melee_arena = MeleeArena::get_instance();
+    const auto names = melee_arena.build_gladiators_names();
+    for (auto i = 0; i < NUM_GLADIATORS; i++) {
+        constexpr auto fmt = _("%d) %-58s  %4d.%02d倍", "%d) %-58s  %4d.%02d");
+        const auto &gladiator = melee_arena.get_gladiator(i);
+        prt(format(fmt, i + 1, names[i].data(), gladiator.odds / 100, gladiator.odds % 100), 5 + i, 1);
+    }
+
+    prt(_("どれに賭けますか:", "Which monster: "), 0, 0);
+}
+}
+
 /*!
  * @brief モンスター闘技場のメインルーチン
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -48,17 +64,8 @@ bool melee_arena_comm(PlayerType *player_ptr)
     }
 
     clear_bldg(4, 10);
-
-    prt(_("モンスター                                                     倍率", "Monsters                                                       Odds"), 4, 4);
-    const auto &melee_arena = MeleeArena::get_instance();
-    const auto names = melee_arena.build_gladiators_names();
-    for (auto i = 0; i < NUM_GLADIATORS; i++) {
-        constexpr auto fmt = _("%d) %-58s  %4d.%02d倍", "%d) %-58s  %4d.%02d");
-        const auto &gladiator = melee_arena.get_gladiator(i);
-        prt(format(fmt, i + 1, names[i].data(), gladiator.odds / 100, gladiator.odds % 100), 5 + i, 1);
-    }
-
-    prt(_("どれに賭けますか:", "Which monster: "), 0, 0);
+    display_gladiators();
+    auto &melee_arena = MeleeArena::get_instance();
     while (true) {
         const auto i = inkey();
         if (i == ESCAPE) {
