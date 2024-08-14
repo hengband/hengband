@@ -20,6 +20,8 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
+#include <sstream>
+#include <string>
 
 /*!
  * @brief モンスター闘技場のメインルーチン
@@ -51,18 +53,16 @@ bool melee_arena_comm(PlayerType *player_ptr)
     const auto &melee_arena = MeleeArena::get_instance();
     for (auto i = 0; i < NUM_GLADIATORS; i++) {
         const auto &gladiator = melee_arena.get_gladiator(i);
-        const auto &monrace = monraces_info[gladiator.monrace_id]; //@ 後でシングルトンに差し替え.
-        std::string name;
+        const auto &monrace = gladiator.get_monrace();
+        std::stringstream ss;
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
-            name = _(monrace.name, "Fake ");
-            name.append(_("もどき", monrace.name));
+            ss << _(monrace.name, "Fake ") << _("もどき", monrace.name);
         } else {
-            name = monrace.name;
-            name.append(_("      ", ""));
+            ss << monrace.name << _("      ", "");
         }
 
         constexpr auto fmt = _("%d) %-58s  %4d.%02d倍", "%d) %-58s  %4d.%02d");
-        prt(format(fmt, i + 1, name.data(), gladiator.odds / 100, gladiator.odds % 100), 5 + i, 1);
+        prt(format(fmt, i + 1, ss.str().data(), gladiator.odds / 100, gladiator.odds % 100), 5 + i, 1);
     }
 
     prt(_("どれに賭けますか:", "Which monster: "), 0, 0);
