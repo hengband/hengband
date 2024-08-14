@@ -51,6 +51,24 @@ const std::array<MeleeGladiator, NUM_GLADIATORS> &MeleeArena::get_gladiators() c
     return this->gladiators;
 }
 
+std::vector<std::string> MeleeArena::build_gladiators_names() const
+{
+    std::vector<std::string> names;
+    for (const auto &gladiator : this->gladiators) {
+        const auto &monrace = gladiator.get_monrace();
+        std::stringstream ss;
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+            ss << _(monrace.name, "Fake ") << _("もどき", monrace.name);
+        } else {
+            ss << monrace.name << _("      ", "");
+        }
+
+        names.push_back(ss.str());
+    }
+
+    return names;
+}
+
 /*!
  * @brief モンスター闘技場に参加するモンスターを更新する。
  * @param player_ptr プレイヤーへの参照ポインタ

@@ -2,6 +2,7 @@
 
 #include <array>
 #include <cstdint>
+#include <string>
 #include <vector>
 
 struct building_type {
@@ -56,6 +57,7 @@ public:
     const MeleeGladiator &get_gladiator(int n) const;
     void set_gladiator(int n, const MeleeGladiator &gladiator);
     const std::array<MeleeGladiator, NUM_GLADIATORS> &get_gladiators() const; //!< @detail セーブデータへの書き込みにしか使わないこと.
+    std::vector<std::string> build_gladiators_names() const; //!< @detail 要素数は常にNUM_GLADIATORSと同じ.
     void update_gladiators(PlayerType *player_ptr);
 
 private:

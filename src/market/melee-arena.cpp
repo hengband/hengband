@@ -51,18 +51,11 @@ bool melee_arena_comm(PlayerType *player_ptr)
 
     prt(_("モンスター                                                     倍率", "Monsters                                                       Odds"), 4, 4);
     const auto &melee_arena = MeleeArena::get_instance();
+    const auto names = melee_arena.build_gladiators_names();
     for (auto i = 0; i < NUM_GLADIATORS; i++) {
-        const auto &gladiator = melee_arena.get_gladiator(i);
-        const auto &monrace = gladiator.get_monrace();
-        std::stringstream ss;
-        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
-            ss << _(monrace.name, "Fake ") << _("もどき", monrace.name);
-        } else {
-            ss << monrace.name << _("      ", "");
-        }
-
         constexpr auto fmt = _("%d) %-58s  %4d.%02d倍", "%d) %-58s  %4d.%02d");
-        prt(format(fmt, i + 1, ss.str().data(), gladiator.odds / 100, gladiator.odds % 100), 5 + i, 1);
+        const auto &gladiator = melee_arena.get_gladiator(i);
+        prt(format(fmt, i + 1, names[i].data(), gladiator.odds / 100, gladiator.odds % 100), 5 + i, 1);
     }
 
     prt(_("どれに賭けますか:", "Which monster: "), 0, 0);
