@@ -178,18 +178,19 @@ void WorldTurnProcessor::process_monster_arena_winner(int win_m_idx)
     msg_format(_("%sが勝利した！", "%s won!"), m_name.data());
     msg_print(nullptr);
 
-    if (win_m_idx == MeleeArena::get_instance().bet_number + 1) {
+    auto &melee_arena = MeleeArena::get_instance();
+    if (win_m_idx == melee_arena.bet_number + 1) {
         msg_print(_("おめでとうございます。", "Congratulations."));
-        msg_format(_("%d＄を受け取った。", "You received %d gold."), battle_odds);
-        this->player_ptr->au += battle_odds;
+        const auto odds = melee_arena.get_odds();
+        msg_format(_("%d＄を受け取った。", "You received %d gold."), odds);
+        this->player_ptr->au += odds;
     } else {
         msg_print(_("残念でした。", "You lost gold."));
     }
 
     msg_print(nullptr);
     this->player_ptr->energy_need = 0;
-    auto &melee_arena = MeleeArena::get_instance();
-    melee_arena.update_gladiators(player_ptr);
+    melee_arena.update_gladiators(this->player_ptr);
 }
 
 void WorldTurnProcessor::process_monster_arena_draw()

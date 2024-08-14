@@ -37,8 +37,6 @@ public:
     const MonsterRaceInfo &get_monrace() const;
 };
 
-extern int battle_odds;
-
 //!< モンスター闘技場定義.
 constexpr auto NUM_GLADIATORS = 4;
 class PlayerType; //!< @todo 暫定、後で消す.
@@ -54,6 +52,9 @@ public:
     int bet_number = 0;
     int get_wager() const;
     void set_wager(int value);
+    int get_odds() const;
+    void set_odds(int input_wager);
+    void update_odds();
     MeleeGladiator &get_gladiator(int n);
     const MeleeGladiator &get_gladiator(int n) const;
     void set_gladiator(int n, const MeleeGladiator &gladiator);
@@ -66,6 +67,7 @@ private:
     static MeleeArena instance;
 
     int wager = 0; //!< @detail 引き分け時の払い戻しに必要.
+    int odds = 0;
     std::array<MeleeGladiator, NUM_GLADIATORS> gladiators{};
 
     int decide_max_level() const;
