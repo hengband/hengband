@@ -11,7 +11,6 @@
 std::array<building_type, MAX_BUILDINGS> buildings;
 int battle_odds;
 int wager_melee;
-int bet_number;
 
 MeleeGladiator::MeleeGladiator(MonsterRaceId monrace_id, uint32_t odds)
     : monrace_id(monrace_id)

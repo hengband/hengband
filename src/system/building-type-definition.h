@@ -39,7 +39,6 @@ public:
 
 extern int battle_odds;
 extern int wager_melee;
-extern int bet_number;
 
 //!< モンスター闘技場定義.
 constexpr auto NUM_GLADIATORS = 4;
@@ -52,6 +51,8 @@ public:
     MeleeArena &operator=(const MeleeArena &) = delete;
     MeleeArena &operator=(MeleeArena &&) = delete;
     static MeleeArena &get_instance();
+
+    int bet_number = 0;
 
     MeleeGladiator &get_gladiator(int n);
     const MeleeGladiator &get_gladiator(int n) const;
