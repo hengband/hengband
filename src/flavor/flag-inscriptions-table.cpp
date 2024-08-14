@@ -128,6 +128,7 @@ const std::vector<flag_insc_table> flag_insc_brand = {
     { { "震", "Q" }, TR_EARTHQUAKE },
     { { "切", "Sl" }, TR_VORPAL },
     { { "強", "Sm" }, TR_IMPACT },
+    { { "会", "Sc" }, TR_SUPERCRITICAL },
     { { "理", "Mf" }, TR_FORCE_WEAPON }
 };
 

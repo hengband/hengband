@@ -473,6 +473,7 @@ static void display_brand_info(PlayerType *player_ptr, void (*display_player_equ
     process_one_characteristic(player_ptr, row++, col, _("毒殺        :", "Poison Brand:"), TR_BRAND_POIS, f, DP_WP);
     process_one_characteristic(player_ptr, row++, col, _("切れ味      :", "Sharpness   :"), TR_VORPAL, f, DP_WP);
     process_one_characteristic(player_ptr, row++, col, _("強撃        :", "Impactive   :"), TR_IMPACT, f, DP_WP);
+    process_one_characteristic(player_ptr, row++, col, _("超会心      :", "Overcritical:"), TR_SUPERCRITICAL, f, DP_WP);
     process_one_characteristic(player_ptr, row++, col, _("地震        :", "Quake       :"), TR_EARTHQUAKE, f, DP_WP);
     process_one_characteristic(player_ptr, row++, col, _("吸血        :", "Vampiric    :"), TR_VAMPIRIC, f, DP_WP);
     process_one_characteristic(player_ptr, row++, col, _("カオス効果  :", "Chaotic     :"), TR_CHAOTIC, f, DP_WP);
