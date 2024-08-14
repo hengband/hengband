@@ -311,9 +311,7 @@ static bool does_weapon_has_flag(BIT_FLAGS &attacker_flags, player_attack_type *
         return true;
     }
 
-    auto flags = attacker_flags;
-    reset_bits(flags, FLAG_CAUSE_INVEN_MAIN_HAND | FLAG_CAUSE_INVEN_SUB_HAND);
-    return flags != 0;
+    return does_equip_has_flag_except_weapon(attacker_flags);
 }
 
 /*!
