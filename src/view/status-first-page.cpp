@@ -99,10 +99,11 @@ static bool calc_weapon_damage_limit(PlayerType *player_ptr, int hand, int *dama
         *basedam = monk_ave_damage[level][0];
     }
     bool impact = player_ptr->impact != 0;
+    auto supercritical = player_ptr->supercritical != 0;
     WEIGHT weight = player_ptr->lev * calc_monk_attack_weight(player_ptr);
     int to_h = player_ptr->lev * 7 / 10; // 命中計算が煩雑なのでおよその値を使用する
 
-    *basedam = calc_expect_crit(player_ptr, weight, to_h, *basedam, player_ptr->to_h[0], false, impact, 100);
+    *basedam = calc_expect_crit(player_ptr, weight, to_h, *basedam, player_ptr->to_h[0], false, supercritical, impact, 100);
 
     damage[hand] += *basedam;
     if (o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) {
