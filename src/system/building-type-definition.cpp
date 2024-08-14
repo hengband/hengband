@@ -10,7 +10,6 @@
 
 std::array<building_type, MAX_BUILDINGS> buildings;
 int battle_odds;
-int wager_melee;
 
 MeleeGladiator::MeleeGladiator(MonsterRaceId monrace_id, uint32_t odds)
     : monrace_id(monrace_id)
@@ -28,6 +27,16 @@ MeleeArena MeleeArena::instance{};
 MeleeArena &MeleeArena::get_instance()
 {
     return instance;
+}
+
+int MeleeArena::get_wager() const
+{
+    return this->wager;
+}
+
+void MeleeArena::set_wager(int value)
+{
+    this->wager = value;
 }
 
 MeleeGladiator &MeleeArena::get_gladiator(int n)

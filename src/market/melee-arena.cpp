@@ -109,7 +109,7 @@ bool melee_arena_comm(PlayerType *player_ptr)
 
     msg_print(nullptr);
     battle_odds = std::max(*wager + 1, *wager * battle_odds / 100);
-    wager_melee = *wager;
+    melee_arena.set_wager(*wager);
     player_ptr->au -= *wager;
     reset_tim_flags(player_ptr);
 

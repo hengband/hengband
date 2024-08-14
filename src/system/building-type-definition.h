@@ -38,7 +38,6 @@ public:
 };
 
 extern int battle_odds;
-extern int wager_melee;
 
 //!< モンスター闘技場定義.
 constexpr auto NUM_GLADIATORS = 4;
@@ -53,7 +52,8 @@ public:
     static MeleeArena &get_instance();
 
     int bet_number = 0;
-
+    int get_wager() const;
+    void set_wager(int value);
     MeleeGladiator &get_gladiator(int n);
     const MeleeGladiator &get_gladiator(int n) const;
     void set_gladiator(int n, const MeleeGladiator &gladiator);
@@ -65,6 +65,7 @@ private:
     MeleeArena() = default;
     static MeleeArena instance;
 
+    int wager = 0; //!< @detail 引き分け時の払い戻しに必要.
     std::array<MeleeGladiator, NUM_GLADIATORS> gladiators{};
 
     int decide_max_level() const;
