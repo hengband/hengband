@@ -12,6 +12,21 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
+#include <sstream>
+
+/*!
+ * @brief 指定したメッセージに超会心などのメッセージを加える
+ *
+ * @param msg 会心のメッセージ
+ * @param supercritical 超会心があるか
+ * @return 超会心などのメッセージを加えたクリティカル時のダメージメッセージ
+ */
+std::string make_critical_message(std::string_view msg, bool supercritical)
+{
+    std::stringstream result;
+    result << msg << (supercritical ? _("とても良い当て心地だ！", "And you got feeling of more brutality!") : "");
+    return result.str();
+}
 
 /*!
  * @brief クリティカルダメージを適用する
