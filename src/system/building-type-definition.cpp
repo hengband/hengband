@@ -28,6 +28,16 @@ MeleeArena &MeleeArena::get_instance()
     return instance;
 }
 
+bool MeleeArena::matches_bet_number(int value) const
+{
+    return this->bet_number == value;
+}
+
+void MeleeArena::set_bet_number(int value)
+{
+    this->bet_number = value;
+}
+
 int MeleeArena::get_wager() const
 {
     return this->wager;

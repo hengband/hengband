@@ -74,7 +74,7 @@ bool melee_arena_comm(PlayerType *player_ptr)
         }
 
         if (i >= '1' && i <= '4') {
-            melee_arena.bet_number = i - '1';
+            melee_arena.set_bet_number(i - '1');
             melee_arena.update_odds();
             break;
         }
@@ -86,7 +86,7 @@ bool melee_arena_comm(PlayerType *player_ptr)
 
     clear_bldg(4, 4);
     for (auto i = 0; i < NUM_GLADIATORS; i++) {
-        if (i != melee_arena.bet_number) {
+        if (!melee_arena.matches_bet_number(i)) {
             clear_bldg(i + 5, i + 5);
         }
     }

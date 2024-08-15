@@ -49,7 +49,8 @@ public:
     MeleeArena &operator=(MeleeArena &&) = delete;
     static MeleeArena &get_instance();
 
-    int bet_number = 0;
+    bool matches_bet_number(int value) const;
+    void set_bet_number(int value);
     int get_wager() const;
     void set_wager(int value);
     int get_odds() const;
@@ -66,6 +67,7 @@ private:
     MeleeArena() = default;
     static MeleeArena instance;
 
+    int bet_number = 0;
     int wager = 0; //!< @detail 引き分け時の払い戻しに必要.
     int odds = 0;
     std::array<MeleeGladiator, NUM_GLADIATORS> gladiators{};
