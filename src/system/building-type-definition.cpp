@@ -55,12 +55,8 @@ int MeleeArena::get_payback() const
 
 void MeleeArena::set_payback(int input_wager)
 {
-    this->payback = std::max(input_wager + 1, input_wager * this->odds / 100);
-}
-
-void MeleeArena::update_odds()
-{
-    this->odds = this->get_gladiator(this->bet_number).odds;
+    const int odds = this->get_gladiator(this->bet_number).odds;
+    this->payback = std::max(input_wager + 1, input_wager * odds / 100);
 }
 
 MeleeGladiator &MeleeArena::get_gladiator(int n)

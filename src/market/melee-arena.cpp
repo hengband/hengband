@@ -75,7 +75,6 @@ bool melee_arena_comm(PlayerType *player_ptr)
 
         if ((i >= '1') && (i <= '4')) {
             melee_arena.set_bet_number(i - '1');
-            melee_arena.update_odds();
             break;
         }
 
