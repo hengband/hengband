@@ -48,14 +48,14 @@ void MeleeArena::set_wager(int value)
     this->wager = value;
 }
 
-int MeleeArena::get_odds() const
+int MeleeArena::get_payback() const
 {
-    return this->odds;
+    return this->payback;
 }
 
-void MeleeArena::set_odds(int input_wager)
+void MeleeArena::set_payback(int input_wager)
 {
-    this->odds = std::max(input_wager + 1, input_wager * this->get_odds() / 100);
+    this->payback = std::max(input_wager + 1, input_wager * this->odds / 100);
 }
 
 void MeleeArena::update_odds()

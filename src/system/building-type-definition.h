@@ -53,8 +53,8 @@ public:
     void set_bet_number(int value);
     int get_wager() const;
     void set_wager(int value);
-    int get_odds() const;
-    void set_odds(int input_wager);
+    int get_payback() const;
+    void set_payback(int input_wager);
     void update_odds();
     MeleeGladiator &get_gladiator(int n);
     const MeleeGladiator &get_gladiator(int n) const;
@@ -70,6 +70,7 @@ private:
     int bet_number = 0;
     int wager = 0; //!< @detail 引き分け時の払い戻しに必要.
     int odds = 0;
+    int payback = 0;
     std::array<MeleeGladiator, NUM_GLADIATORS> gladiators{};
 
     int decide_max_level() const;

@@ -181,7 +181,7 @@ void WorldTurnProcessor::process_monster_arena_winner(int win_m_idx)
     auto &melee_arena = MeleeArena::get_instance();
     if (melee_arena.matches_bet_number(win_m_idx - 1)) {
         msg_print(_("おめでとうございます。", "Congratulations."));
-        const auto odds = melee_arena.get_odds();
+        const auto odds = melee_arena.get_payback();
         msg_format(_("%d＄を受け取った。", "You received %d gold."), odds);
         this->player_ptr->au += odds;
     } else {
