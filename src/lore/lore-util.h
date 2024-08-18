@@ -47,7 +47,6 @@ struct lore_type {
     bool sin = false;
 #endif
 
-    bool has_reinforce = false;
     bool know_everything = false;
     bool old = false;
     int count = 0;
@@ -84,6 +83,8 @@ struct lore_type {
     EnumClassFlagGroup<MonsterBrightnessType> brightness_flags;
     EnumClassFlagGroup<MonsterSpecialType> special_flags;
     EnumClassFlagGroup<MonsterMiscType> misc_flags;
+
+    bool has_reinforce() const;
 };
 
 using hook_c_roff_pf = void (*)(TERM_COLOR attr, std::string_view str);

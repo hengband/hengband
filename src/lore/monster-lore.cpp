@@ -138,12 +138,6 @@ void process_monster_lore(PlayerType *player_ptr, MonsterRaceId r_idx, monster_l
 {
     lore_type tmp_lore(r_idx, mode);
     lore_type *lore_ptr = &tmp_lore;
-    const auto end = lore_ptr->r_ptr->reinforces.end();
-    const auto it_reinforce = std::find_if(
-        lore_ptr->r_ptr->reinforces.begin(), end,
-        [](const auto &reinforce) { return reinforce.is_valid(); });
-    lore_ptr->has_reinforce = it_reinforce != end;
-
     if (cheat_know || (mode == MONSTER_LORE_RESEARCH) || (mode == MONSTER_LORE_DEBUG)) {
         lore_ptr->know_everything = true;
     }

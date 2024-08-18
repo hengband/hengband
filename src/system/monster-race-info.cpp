@@ -256,6 +256,14 @@ std::string MonsterRaceInfo::build_eldritch_horror_message(std::string_view desc
     return format(fmt, horror_message.data(), description.data());
 }
 
+bool MonsterRaceInfo::has_reinforce() const
+{
+    const auto end = this->reinforces.end();
+    const auto it = std::find_if(this->reinforces.begin(), end,
+        [](const auto &reinforce) { return reinforce.is_valid(); });
+    return it != end;
+}
+
 std::optional<std::string> MonsterRaceInfo::probe_lore()
 {
     auto n = false;

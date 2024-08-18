@@ -56,6 +56,11 @@ lore_type::lore_type(MonsterRaceId r_idx, monster_lore_mode mode)
     this->misc_flags = (this->r_ptr->misc_flags & this->r_ptr->r_misc_flags);
 }
 
+bool lore_type::has_reinforce() const
+{
+    return this->r_ptr->has_reinforce();
+}
+
 /*!
  * @brief モンスターの思い出メッセージをあらかじめ指定された関数ポインタに基づき出力する
  * @param str 出力文字列
