@@ -139,10 +139,10 @@ void process_monster_lore(PlayerType *player_ptr, MonsterRaceId r_idx, monster_l
     lore_type tmp_lore(r_idx, mode);
     lore_type *lore_ptr = &tmp_lore;
     const auto end = lore_ptr->r_ptr->reinforces.end();
-    lore_ptr->has_reinforce =
-        std::find_if(
-            lore_ptr->r_ptr->reinforces.begin(), end,
-            [](const auto &reinforce) { return reinforce.is_valid(); }) != end;
+    const auto it_reinforce = std::find_if(
+        lore_ptr->r_ptr->reinforces.begin(), end,
+        [](const auto &reinforce) { return reinforce.is_valid(); });
+    lore_ptr->has_reinforce = it_reinforce != end;
 
     if (cheat_know || (mode == MONSTER_LORE_RESEARCH) || (mode == MONSTER_LORE_DEBUG)) {
         lore_ptr->know_everything = true;
@@ -153,9 +153,9 @@ void process_monster_lore(PlayerType *player_ptr, MonsterRaceId r_idx, monster_l
     set_flags1(lore_ptr);
     set_race_flags(lore_ptr);
     display_kill_numbers(lore_ptr);
-    concptr tmp = lore_ptr->r_ptr->text.data();
-    if (tmp[0]) {
-        hooked_roff(tmp);
+    const auto &text = lore_ptr->r_ptr->text;
+    if (!text.empty()) {
+        hooked_roff(text);
         hooked_roff("\n");
     }
 
