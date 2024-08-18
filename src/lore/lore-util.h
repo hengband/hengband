@@ -47,7 +47,7 @@ struct lore_type {
     bool sin = false;
 #endif
 
-    bool reinforce = false;
+    bool has_reinforce = false;
     bool know_everything = false;
     bool old = false;
     int count = 0;

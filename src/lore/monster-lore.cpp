@@ -139,7 +139,7 @@ void process_monster_lore(PlayerType *player_ptr, MonsterRaceId r_idx, monster_l
     lore_type tmp_lore(r_idx, mode);
     lore_type *lore_ptr = &tmp_lore;
     const auto end = lore_ptr->r_ptr->reinforces.end();
-    lore_ptr->reinforce =
+    lore_ptr->has_reinforce =
         std::find_if(
             lore_ptr->r_ptr->reinforces.begin(), end,
             [](const auto &reinforce) { return reinforce.is_valid(); }) != end;

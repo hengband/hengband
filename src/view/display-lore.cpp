@@ -521,7 +521,7 @@ void display_lore_this(PlayerType *player_ptr, lore_type *lore_ptr)
 
 static void display_monster_escort_contents(lore_type *lore_ptr)
 {
-    if (!lore_ptr->reinforce) {
+    if (!lore_ptr->has_reinforce) {
         return;
     }
 
@@ -540,8 +540,8 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
     for (const auto &reinforce : lore_ptr->r_ptr->reinforces) {
 #ifdef JP
 #else
-        const char *prefix = (idx == 0) ? " " : (idx == max_idx) ? " and "
-                                                                 : ", ";
+        const std::string prefix = (idx == 0) ? " " : (idx == max_idx) ? " and "
+                                                                       : ", ";
         ++idx;
 #endif
         if (!reinforce.is_valid()) {
@@ -550,7 +550,7 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
 
         const auto &monrace = reinforce.get_monrace();
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
-            hooked_roff(format("%s%s", _("、", prefix), monrace.name.data()));
+            hooked_roff(format("%s%s", _("、", prefix.data()), monrace.name.data()));
             continue;
         }
 
@@ -559,7 +559,7 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
 #else
         const auto is_plural = reinforce.roll_max_dice() > 1;
         const auto &name = is_plural ? pluralize(monrace.name) : monrace.name.string();
-        hooked_roff(format("%s%s %s", prefix, reinforce.get_dice_as_string().data(), name.data()));
+        hooked_roff(format("%s%s %s", prefix.data(), reinforce.get_dice_as_string().data(), name.data()));
 #endif
     }
 
@@ -568,7 +568,7 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
 
 void display_monster_collective(lore_type *lore_ptr)
 {
-    if (lore_ptr->misc_flags.has(MonsterMiscType::ESCORT) || lore_ptr->misc_flags.has(MonsterMiscType::MORE_ESCORT) || lore_ptr->reinforce) {
+    if (lore_ptr->misc_flags.has(MonsterMiscType::ESCORT) || lore_ptr->misc_flags.has(MonsterMiscType::MORE_ESCORT) || lore_ptr->has_reinforce) {
         hooked_roff(format(_("%s^は通常護衛を伴って現れる。", "%s^ usually appears with escorts.  "), Who::who(lore_ptr->msex)));
         display_monster_escort_contents(lore_ptr);
     } else if (lore_ptr->misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
