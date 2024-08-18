@@ -537,30 +537,29 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
     auto idx = 0 * max_idx;
 #endif
 
-    for (const auto &[monrace_id, num_dice] : lore_ptr->r_ptr->reinforces) {
-        auto is_reinforced = MonraceList::is_valid(monrace_id);
-#ifndef JP
+    for (const auto &reinforce : lore_ptr->r_ptr->reinforces) {
+#ifdef JP
+#else
         const char *prefix = (idx == 0) ? " " : (idx == max_idx) ? " and "
                                                                  : ", ";
         ++idx;
 #endif
-        is_reinforced &= num_dice.is_valid();
-        if (!is_reinforced) {
+        if (!reinforce.is_valid()) {
             continue;
         }
 
-        const auto *rf_ptr = &monraces_info[monrace_id];
-        if (rf_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            hooked_roff(format("%s%s", _("、", prefix), rf_ptr->name.data()));
+        const auto &monrace = reinforce.get_monrace();
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+            hooked_roff(format("%s%s", _("、", prefix), monrace.name.data()));
             continue;
         }
 
 #ifdef JP
-        hooked_roff(format("、 %s 体の%s", num_dice.to_string().data(), rf_ptr->name.data()));
+        hooked_roff(format("、 %s 体の%s", reinforce.get_dice_as_string().data(), monrace.name.data()));
 #else
-        const auto plural = (num_dice.maxroll() > 1);
-        const auto &name = plural ? pluralize(rf_ptr->name) : rf_ptr->name.string();
-        hooked_roff(format("%s%s %s", prefix, num_dice.to_string().data(), name.data()));
+        const auto is_plural = reinforce.roll_max_dice() > 1;
+        const auto &name = is_plural ? pluralize(monrace.name) : monrace.name.string();
+        hooked_roff(format("%s%s %s", prefix, reinforce.get_dice_as_string().data(), name.data()));
 #endif
     }
 

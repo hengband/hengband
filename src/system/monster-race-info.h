@@ -63,6 +63,7 @@ public:
  * monster recall (no knowledge of spells, etc).  All of the "recall"
  * fields have a special prefix to aid in searching for them.
  */
+class Reinforce;
 class MonsterRaceInfo {
 public:
     MonsterRaceInfo();
@@ -96,7 +97,7 @@ public:
     Dice shoot_damage_dice; //!< 射撃ダメージダイス / shoot damage dice
 
     //! 指定護衛リスト <モンスター種族ID,護衛数ダイス>
-    std::vector<std::tuple<MonsterRaceId, Dice>> reinforces;
+    std::vector<Reinforce> reinforces;
 
     //! 特定アーティファクトドロップリスト <アーティファクトID,ドロップ率>
     std::vector<std::tuple<FixedArtifactId, PERCENTAGE>> drop_artifacts;
@@ -156,6 +157,21 @@ public:
 
 private:
     const std::string &decide_horror_message() const;
+};
+
+class Reinforce {
+public:
+    Reinforce(MonsterRaceId monrace_id, Dice dice);
+    MonsterRaceId get_monrace_id() const;
+    bool is_valid() const;
+    const MonsterRaceInfo &get_monrace() const;
+    std::string get_dice_as_string() const;
+    int roll_dice() const;
+    int roll_max_dice() const;
+
+private:
+    MonsterRaceId monrace_id;
+    Dice dice;
 };
 
 extern std::map<MonsterRaceId, MonsterRaceInfo> monraces_info;

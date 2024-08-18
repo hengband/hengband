@@ -378,6 +378,42 @@ const std::string &MonsterRaceInfo::decide_horror_message() const
     return horror_desc_neutral[horror_num - horror_desc_common_size];
 }
 
+Reinforce::Reinforce(MonsterRaceId monrace_id, Dice dice)
+    : monrace_id(monrace_id)
+    , dice(dice)
+{
+}
+
+MonsterRaceId Reinforce::get_monrace_id() const
+{
+    return this->monrace_id;
+}
+
+bool Reinforce::is_valid() const
+{
+    return MonraceList::is_valid(this->monrace_id) && this->dice.is_valid();
+}
+
+const MonsterRaceInfo &Reinforce::get_monrace() const
+{
+    return MonraceList::get_instance().get_monrace(this->monrace_id);
+}
+
+std::string Reinforce::get_dice_as_string() const
+{
+    return this->dice.to_string();
+}
+
+int Reinforce::roll_dice() const
+{
+    return this->dice.roll();
+}
+
+int Reinforce::roll_max_dice() const
+{
+    return this->dice.maxroll();
+}
+
 const std::map<MonsterRaceId, std::set<MonsterRaceId>> MonraceList::unified_uniques = {
     { MonsterRaceId::BANORLUPART, { MonsterRaceId::BANOR, MonsterRaceId::LUPART } },
 };

@@ -271,12 +271,12 @@ static errr set_mon_escorts(nlohmann::json &escort_data, MonsterRaceInfo &monrac
             return err;
         }
 
-        Dice num_dice;
-        if (auto err = info_set_dice(escort.value()["escort_num"], num_dice, true)) {
+        Dice dice;
+        if (auto err = info_set_dice(escort.value()["escort_num"], dice, true)) {
             return err;
         }
 
-        monrace.reinforces.emplace_back(monrace_id, num_dice);
+        monrace.reinforces.emplace_back(monrace_id, dice);
     }
     return PARSE_ERROR_NONE;
 }
