@@ -46,7 +46,7 @@ void set_monster_blow_method(lore_type *lore_ptr, int m)
         lore_ptr->pc = TERM_L_WHITE;
         break;
     case RaceBlowMethodType::CRUSH:
-        lore_ptr->p = _("締めつける", "crush");
+        lore_ptr->p = _("押し潰す", "crush");
         lore_ptr->pc = TERM_L_WHITE;
         break;
     case RaceBlowMethodType::ENGULF:
