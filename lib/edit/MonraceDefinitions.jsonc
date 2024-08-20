@@ -87417,6 +87417,100 @@
         "ja": "それは冒険者の来店を待っている。持ち物を狙って…",
         "en": "It waits for your coming. Aims at your things..."
       }
+    },
+    {
+      "id": 1364,
+      "name": {
+        "ja": "這いずる粘体",
+        "en": "Creeping Ooze"
+      },
+      "symbol": { "character": "j", "color": "Dark Gray" },
+      "speed": 8,
+      "hit_point": "100d20",
+      "vision": 20,
+      "armor_class": 80,
+      "alertness": 80,
+      "level": 60,
+      "rarity": 3,
+      "exp": 8000,
+      "blows": [
+        { "method": "TOUCH", "effect": "UN_BONUS", "damage_dice": "4d8" },
+        { "method": "TOUCH", "effect": "UN_BONUS", "damage_dice": "5d8" },
+        { "method": "CRAWL", "effect": "UN_BONUS", "damage_dice": "6d8" },
+        { "method": "ENGULF", "effect": "UN_BONUS", "damage_dice": "8d8" }
+      ],
+      "flags": [
+        "FORCE_MAXHP",
+        "IM_ACID",
+        "RES_DISE",
+        "NO_FEAR", 
+        "NO_STUN",
+        "NO_CONF",
+        "NO_SLEEP",
+        "KILL_BODY",
+        "KILL_WALL",
+        "TAKE_ITEM",
+        "RAND_50",
+        "ATTR_MULTI",
+        "DROP_60", 
+        "DROP_3D2",
+        "DROP_4D2",
+        "SELF_LITE_2",
+        "ANIMAL",
+        "WEIRD_MIND"        
+      ],
+      "skill": {
+        "probability": "1_IN_8",
+        "list": ["BR_DISE"]
+      },
+      "flavor": {
+        "ja": "奇妙に輝きながら地面を這いずる粘体だ。触れたものを分別なしに体内に取り込んでいるようだ。",
+        "en": "It is a strange glowing slime crawling on the ground. It seems to be taking in what it touches into its body without any sort of discrimination."
+      }
+    },
+    {
+      "id": 1365,
+      "name": { "ja": "タイタン・ゾンビ", "en": "Fallen titan" },
+      "symbol": { "character": "P", "color": "Brown" },
+      "speed": 10,
+      "hit_point": "50d90",
+      "vision": 30,
+      "armor_class": 90,
+      "alertness": 5,
+      "level": 63,
+      "rarity": 1,
+      "exp": 12000,
+      "sex": "MALE",
+      "blows": [
+        { "method": "HIT", "effect": "CONFUSE", "damage_dice": "6d12" },
+        { "method": "TOUCH", "effect": "BLIND", "damage_dice": "8d12" },
+        { "method": "TOUCH", "effect": "POISON", "damage_dice": "22d12" },
+        { "method": "HIT", "effect": "POISON", "damage_dice": "24d12" }
+      ],
+      "flags": [
+        "FORCE_MAXHP",
+        "IM_COLD",
+        "RES_POIS",
+        "NO_FEAR",
+        "NO_SLEEP",
+        "ONLY_ITEM",
+        "DROP_2D2",
+        "DROP_4D2",
+        "MOVE_BODY",
+        "STUPID",
+        "BASH_DOOR",
+        "EVIL",
+        "GIANT",
+        "UNDEAD"
+      ],
+      "skill": {
+        "probability": "1_IN_6",
+        "list": ["TELE_TO"]
+      },
+      "flavor": {
+        "ja": "斃れた巨人が邪悪な術で再び動き出したものだ。かつてのような力強さは感じられないが、汚れた一撃には注意が必要だ。",
+        "en": "A fallen giant, reborn with evil magic. Though it no longer has the strength it once had, its unholy blows must be heeded."
+      }
     }
   ]
 }
