@@ -20,6 +20,24 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
+#include <sstream>
+#include <string>
+
+namespace {
+void display_gladiators()
+{
+    prt(_("モンスター                                                     倍率", "Monsters                                                       Odds"), 4, 4);
+    const auto &melee_arena = MeleeArena::get_instance();
+    const auto names = melee_arena.build_gladiators_names();
+    for (auto i = 0; i < NUM_GLADIATORS; i++) {
+        constexpr auto fmt = _("%d) %-58s  %4d.%02d倍", "%d) %-58s  %4d.%02d");
+        const auto &gladiator = melee_arena.get_gladiator(i);
+        prt(format(fmt, i + 1, names[i].data(), gladiator.odds / 100, gladiator.odds % 100), 5 + i, 1);
+    }
+
+    prt(_("どれに賭けますか:", "Which monster: "), 0, 0);
+}
+}
 
 /*!
  * @brief モンスター闘技場のメインルーチン
@@ -46,26 +64,8 @@ bool melee_arena_comm(PlayerType *player_ptr)
     }
 
     clear_bldg(4, 10);
-
-    prt(_("モンスター                                                     倍率", "Monsters                                                       Odds"), 4, 4);
-    const auto &melee_arena = MeleeArena::get_instance();
-    for (auto i = 0; i < NUM_GLADIATORS; i++) {
-        const auto &gladiator = melee_arena.get_gladiator(i);
-        const auto &monrace = monraces_info[gladiator.monrace_id]; //@ 後でシングルトンに差し替え.
-        std::string name;
-        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
-            name = _(monrace.name, "Fake ");
-            name.append(_("もどき", monrace.name));
-        } else {
-            name = monrace.name;
-            name.append(_("      ", ""));
-        }
-
-        constexpr auto fmt = _("%d) %-58s  %4d.%02d倍", "%d) %-58s  %4d.%02d");
-        prt(format(fmt, i + 1, name.data(), gladiator.odds / 100, gladiator.odds % 100), 5 + i, 1);
-    }
-
-    prt(_("どれに賭けますか:", "Which monster: "), 0, 0);
+    display_gladiators();
+    auto &melee_arena = MeleeArena::get_instance();
     while (true) {
         const auto i = inkey();
         if (i == ESCAPE) {
@@ -73,20 +73,17 @@ bool melee_arena_comm(PlayerType *player_ptr)
             return false;
         }
 
-        if (i >= '1' && i <= '4') {
-            bet_number = i - '1';
-            battle_odds = melee_arena.get_gladiator(bet_number).odds;
+        if ((i >= '1') && (i <= '4')) {
+            melee_arena.set_bet_number(i - '1');
             break;
         }
 
-        else {
-            bell();
-        }
+        bell();
     }
 
     clear_bldg(4, 4);
     for (auto i = 0; i < NUM_GLADIATORS; i++) {
-        if (i != bet_number) {
+        if (!melee_arena.matches_bet_number(i)) {
             clear_bldg(i + 5, i + 5);
         }
     }
@@ -108,8 +105,7 @@ bool melee_arena_comm(PlayerType *player_ptr)
     }
 
     msg_print(nullptr);
-    battle_odds = std::max(*wager + 1, *wager * battle_odds / 100);
-    wager_melee = *wager;
+    melee_arena.set_wager(*wager);
     player_ptr->au -= *wager;
     reset_tim_flags(player_ptr);
 

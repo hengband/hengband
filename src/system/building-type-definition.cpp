@@ -9,9 +9,6 @@
 #include <numeric>
 
 std::array<building_type, MAX_BUILDINGS> buildings;
-int battle_odds;
-int wager_melee;
-int bet_number;
 
 MeleeGladiator::MeleeGladiator(MonsterRaceId monrace_id, uint32_t odds)
     : monrace_id(monrace_id)
@@ -29,6 +26,31 @@ MeleeArena MeleeArena::instance{};
 MeleeArena &MeleeArena::get_instance()
 {
     return instance;
+}
+
+bool MeleeArena::matches_bet_number(int value) const
+{
+    return this->bet_number == value;
+}
+
+void MeleeArena::set_bet_number(int value)
+{
+    this->bet_number = value;
+}
+
+void MeleeArena::set_wager(int value)
+{
+    this->wager = value;
+}
+
+int MeleeArena::get_payback(bool is_draw) const
+{
+    if (is_draw) {
+        return this->wager;
+    }
+
+    const int odds = this->get_gladiator(this->bet_number).odds;
+    return std::max(this->wager + 1, this->wager * odds / 100);
 }
 
 MeleeGladiator &MeleeArena::get_gladiator(int n)
@@ -49,6 +71,24 @@ void MeleeArena::set_gladiator(int n, const MeleeGladiator &gladiator)
 const std::array<MeleeGladiator, NUM_GLADIATORS> &MeleeArena::get_gladiators() const
 {
     return this->gladiators;
+}
+
+std::vector<std::string> MeleeArena::build_gladiators_names() const
+{
+    std::vector<std::string> names;
+    for (const auto &gladiator : this->gladiators) {
+        const auto &monrace = gladiator.get_monrace();
+        std::stringstream ss;
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+            ss << _(monrace.name, "Fake ") << _("もどき", monrace.name);
+        } else {
+            ss << monrace.name << _("      ", "");
+        }
+
+        names.push_back(ss.str());
+    }
+
+    return names;
 }
 
 /*!

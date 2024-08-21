@@ -2,6 +2,7 @@
 
 #include <array>
 #include <cstdint>
+#include <string>
 #include <vector>
 
 struct building_type {
@@ -36,10 +37,6 @@ public:
     const MonsterRaceInfo &get_monrace() const;
 };
 
-extern int battle_odds;
-extern int wager_melee;
-extern int bet_number;
-
 //!< モンスター闘技場定義.
 constexpr auto NUM_GLADIATORS = 4;
 class PlayerType; //!< @todo 暫定、後で消す.
@@ -52,16 +49,23 @@ public:
     MeleeArena &operator=(MeleeArena &&) = delete;
     static MeleeArena &get_instance();
 
+    bool matches_bet_number(int value) const;
+    void set_bet_number(int value);
+    void set_wager(int value);
+    int get_payback(bool is_draw = false) const;
     MeleeGladiator &get_gladiator(int n);
     const MeleeGladiator &get_gladiator(int n) const;
     void set_gladiator(int n, const MeleeGladiator &gladiator);
     const std::array<MeleeGladiator, NUM_GLADIATORS> &get_gladiators() const; //!< @detail セーブデータへの書き込みにしか使わないこと.
+    std::vector<std::string> build_gladiators_names() const; //!< @detail 要素数は常にNUM_GLADIATORSと同じ.
     void update_gladiators(PlayerType *player_ptr);
 
 private:
     MeleeArena() = default;
     static MeleeArena instance;
 
+    int bet_number = 0;
+    int wager = 0;
     std::array<MeleeGladiator, NUM_GLADIATORS> gladiators{};
 
     int decide_max_level() const;
