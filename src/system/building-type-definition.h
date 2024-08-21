@@ -51,10 +51,8 @@ public:
 
     bool matches_bet_number(int value) const;
     void set_bet_number(int value);
-    int get_wager() const;
     void set_wager(int value);
-    int get_payback() const;
-    void set_payback(int input_wager);
+    int get_payback(bool is_draw = false) const;
     MeleeGladiator &get_gladiator(int n);
     const MeleeGladiator &get_gladiator(int n) const;
     void set_gladiator(int n, const MeleeGladiator &gladiator);
@@ -67,8 +65,7 @@ private:
     static MeleeArena instance;
 
     int bet_number = 0;
-    int wager = 0; //!< @detail 引き分け時の払い戻しに必要.
-    int payback = 0;
+    int wager = 0;
     std::array<MeleeGladiator, NUM_GLADIATORS> gladiators{};
 
     int decide_max_level() const;

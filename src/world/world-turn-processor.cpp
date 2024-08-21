@@ -201,7 +201,7 @@ void WorldTurnProcessor::process_monster_arena_draw()
     }
 
     msg_print(_("申し訳ありませんが、この勝負は引き分けとさせていただきます。", "Sorry, but this battle ended in a draw."));
-    this->player_ptr->au += MeleeArena::get_instance().get_wager();
+    this->player_ptr->au += MeleeArena::get_instance().get_payback(true);
     msg_print(nullptr);
     this->player_ptr->energy_need = 0;
     auto &melee_arena = MeleeArena::get_instance();

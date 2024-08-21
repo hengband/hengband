@@ -105,7 +105,6 @@ bool melee_arena_comm(PlayerType *player_ptr)
     }
 
     msg_print(nullptr);
-    melee_arena.set_payback(*wager);
     melee_arena.set_wager(*wager);
     player_ptr->au -= *wager;
     reset_tim_flags(player_ptr);

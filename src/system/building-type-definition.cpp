@@ -38,25 +38,19 @@ void MeleeArena::set_bet_number(int value)
     this->bet_number = value;
 }
 
-int MeleeArena::get_wager() const
-{
-    return this->wager;
-}
-
 void MeleeArena::set_wager(int value)
 {
     this->wager = value;
 }
 
-int MeleeArena::get_payback() const
+int MeleeArena::get_payback(bool is_draw) const
 {
-    return this->payback;
-}
+    if (is_draw) {
+        return this->wager;
+    }
 
-void MeleeArena::set_payback(int input_wager)
-{
     const int odds = this->get_gladiator(this->bet_number).odds;
-    this->payback = std::max(input_wager + 1, input_wager * odds / 100);
+    return std::max(this->wager + 1, this->wager * odds / 100);
 }
 
 MeleeGladiator &MeleeArena::get_gladiator(int n)
