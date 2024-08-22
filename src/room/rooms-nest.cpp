@@ -172,12 +172,9 @@ bool NestMonsterInfo::order_nest(const NestMonsterInfo &other) const
 
     const auto &monrace1 = this->get_monrace();
     const auto &monrace2 = other.get_monrace();
-    if (monrace1.level < monrace2.level) {
-        return true;
-    }
-
-    if (monrace1.level > monrace2.level) {
-        return false;
+    const auto order_level = monrace2.order_level(monrace1);
+    if (order_level) {
+        return *order_level;
     }
 
     if (monrace1.mexp < monrace2.mexp) {

@@ -98,6 +98,19 @@ std::string MonsterRaceInfo::get_died_message() const
     return is_explodable ? _("は爆発して粉々になった。", " explodes into tiny shreds.") : _("を倒した。", " is destroyed.");
 }
 
+std::optional<bool> MonsterRaceInfo::order_level(const MonsterRaceInfo &other) const
+{
+    if (this->level > other.level) {
+        return true;
+    }
+
+    if (this->level < other.level) {
+        return false;
+    }
+
+    return std::nullopt;
+}
+
 std::optional<bool> MonsterRaceInfo::order_pet(const MonsterRaceInfo &other) const
 {
     if (this->kind_flags.has(MonsterKindType::UNIQUE) && other.kind_flags.has_not(MonsterKindType::UNIQUE)) {
@@ -108,15 +121,7 @@ std::optional<bool> MonsterRaceInfo::order_pet(const MonsterRaceInfo &other) con
         return false;
     }
 
-    if (this->level > other.level) {
-        return true;
-    }
-
-    if (this->level < other.level) {
-        return false;
-    }
-
-    return std::nullopt;
+    return this->order_level(other);
 }
 
 /*!
@@ -775,12 +780,9 @@ bool MonraceList::order_level_unique(MonsterRaceId id1, MonsterRaceId id2) const
 {
     const auto &monrace1 = this->get_monrace(id1);
     const auto &monrace2 = this->get_monrace(id2);
-    if (monrace1.level < monrace2.level) {
-        return true;
-    }
-
-    if (monrace1.level > monrace2.level) {
-        return false;
+    const auto order_level = monrace2.order_level(monrace1);
+    if (order_level) {
+        return *order_level;
     }
 
     if (monrace1.kind_flags.has_not(MonsterKindType::UNIQUE) && monrace2.kind_flags.has(MonsterKindType::UNIQUE)) {
