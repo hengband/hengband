@@ -95,7 +95,7 @@ static std::vector<MonsterRaceId> collect_monsters(short grp_cur, monster_lore_m
         }
     }
 
-    std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order_level(x, y); });
+    std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order_level_unique(x, y); });
     return monrace_ids;
 }
 

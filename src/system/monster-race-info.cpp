@@ -771,10 +771,10 @@ bool MonraceList::order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed) 
     return id1 < id2;
 }
 
-bool MonraceList::order_level(MonsterRaceId id1, MonsterRaceId id2) const
+bool MonraceList::order_level_unique(MonsterRaceId id1, MonsterRaceId id2) const
 {
-    const auto &monrace1 = monraces_info[id1];
-    const auto &monrace2 = monraces_info[id2];
+    const auto &monrace1 = this->get_monrace(id1);
+    const auto &monrace2 = this->get_monrace(id2);
     if (monrace1.level < monrace2.level) {
         return true;
     }
