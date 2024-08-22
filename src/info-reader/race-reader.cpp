@@ -265,7 +265,7 @@ static errr set_mon_escorts(nlohmann::json &escort_data, MonsterRaceInfo &monrac
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    for (auto &escort : escort_data.items()) {
+    for (const auto &escort : escort_data.items()) {
         MonsterRaceId monrace_id;
         if (auto err = info_set_integer(escort.value()["escorts_id"], monrace_id, true, Range(0, 8192))) {
             return err;
@@ -276,7 +276,7 @@ static errr set_mon_escorts(nlohmann::json &escort_data, MonsterRaceInfo &monrac
             return err;
         }
 
-        monrace.reinforces.emplace_back(monrace_id, dice);
+        monrace.emplace_reinforce(monrace_id, dice);
     }
     return PARSE_ERROR_NONE;
 }

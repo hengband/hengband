@@ -530,14 +530,15 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
         hooked_roff(_("少なくとも", " at the least"));
     }
 
+    const auto &reinforces = lore_ptr->r_ptr->get_reinforces();
 #ifdef JP
 #else
     hooked_roff(" contain");
-    auto max_idx = lore_ptr->r_ptr->reinforces.size() - 1;
-    auto idx = 0 * max_idx;
+    const auto max_idx = reinforces.size() - 1;
+    auto idx = 0U;
 #endif
 
-    for (const auto &reinforce : lore_ptr->r_ptr->reinforces) {
+    for (const auto &reinforce : reinforces) {
 #ifdef JP
 #else
         const std::string prefix = (idx == 0) ? " " : (idx == max_idx) ? " and "

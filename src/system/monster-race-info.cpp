@@ -264,6 +264,11 @@ bool MonsterRaceInfo::has_reinforce() const
     return it != end;
 }
 
+const std::vector<Reinforce> &MonsterRaceInfo::get_reinforces() const
+{
+    return this->reinforces;
+}
+
 std::optional<std::string> MonsterRaceInfo::probe_lore()
 {
     auto n = false;
@@ -365,6 +370,11 @@ void MonsterRaceInfo::make_lore_treasure(int num_item, int num_gold)
     if (this->drop_flags.has(MonsterDropType::DROP_GREAT)) {
         this->r_drop_flags.set(MonsterDropType::DROP_GREAT);
     }
+}
+
+void MonsterRaceInfo::emplace_reinforce(MonsterRaceId monrace_id, const Dice &dice)
+{
+    this->reinforces.emplace_back(monrace_id, dice);
 }
 
 /*!
