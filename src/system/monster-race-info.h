@@ -139,6 +139,7 @@ public:
     bool is_explodable() const;
     bool symbol_char_is_any_of(std::string_view symbol_characters) const;
     std::string get_died_message() const;
+    std::optional<bool> order_level(const MonsterRaceInfo &other) const;
     std::optional<bool> order_pet(const MonsterRaceInfo &other) const;
     void kill_unique();
     std::string get_pronoun_of_summoned_kin() const;
