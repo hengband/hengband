@@ -316,7 +316,7 @@ std::optional<std::string> MonsterRaceInfo::probe_lore()
 
     this->r_wake = MAX_UCHAR;
     this->r_ignore = MAX_UCHAR;
-    for (auto i = 0; i < 4; i++) {
+    for (auto i = 0; i < std::ssize(this->blows); i++) {
         const auto &blow = this->blows[i];
         if ((blow.effect != RaceBlowEffectType::NONE) || (blow.method != RaceBlowMethodType::NONE)) {
             if (this->r_blows[i] != MAX_UCHAR) {
