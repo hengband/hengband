@@ -148,12 +148,12 @@ static void drop_corpse(PlayerType *player_ptr, MonsterDeath *md_ptr)
 static void drop_artifact_from_unique(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
     const auto is_wizard = AngbandWorld::get_instance().wizard;
-    for (const auto &[a_idx, chance] : md_ptr->r_ptr->drop_artifacts) {
+    for (const auto &[fa_id, chance] : md_ptr->r_ptr->get_drop_artifacts()) {
         if (!is_wizard && !evaluate_percent(chance)) {
             continue;
         }
 
-        if (drop_single_artifact(player_ptr, md_ptr, a_idx)) {
+        if (drop_single_artifact(player_ptr, md_ptr, fa_id)) {
             return;
         }
     }

@@ -63,6 +63,7 @@ public:
  * monster recall (no knowledge of spells, etc).  All of the "recall"
  * fields have a special prefix to aid in searching for them.
  */
+class DropArtifact;
 class Reinforce;
 class MonsterRaceInfo {
 public:
@@ -95,9 +96,6 @@ public:
     EnumClassFlagGroup<MonsterMiscType> misc_flags; //!< 能力フラグ（その他） / Speaking Other
     MonsterBlow blows[MAX_NUM_BLOWS]{}; //!< 打撃能力定義 / Up to four blows per round
     Dice shoot_damage_dice; //!< 射撃ダメージダイス / shoot damage dice
-
-    //! 特定アーティファクトドロップリスト <アーティファクトID,ドロップ率>
-    std::vector<std::tuple<FixedArtifactId, PERCENTAGE>> drop_artifacts;
 
     PERCENTAGE arena_ratio{}; //!< モンスター闘技場の掛け金倍率修正値(%基準 / 0=100%) / The adjustment ratio for gambling monster
     MonsterRaceId next_r_idx{}; //!< 進化先モンスター種族ID
@@ -149,16 +147,26 @@ public:
     int calc_capture_value() const;
     std::string build_eldritch_horror_message(std::string_view description) const;
     bool has_reinforce() const;
+    const std::vector<DropArtifact> &get_drop_artifacts() const;
     const std::vector<Reinforce> &get_reinforces() const;
 
     std::optional<std::string> probe_lore();
     void make_lore_treasure(int num_item, int num_drop);
+    void emplace_drop_artifact(FixedArtifactId fa_id, int percentage);
     void emplace_reinforce(MonsterRaceId monrace_id, const Dice &dice);
 
 private:
+    std::vector<DropArtifact> drop_artifacts; //!< 特定アーティファクトドロップリスト
     std::vector<Reinforce> reinforces; //!< 指定護衛リスト
 
     const std::string &decide_horror_message() const;
+};
+
+class DropArtifact {
+public:
+    DropArtifact(FixedArtifactId fa_id, int chance);
+    FixedArtifactId fa_id;
+    int chance; //!< ドロップ確率 (%)
 };
 
 class Reinforce {

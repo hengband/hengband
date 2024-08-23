@@ -240,12 +240,12 @@ static errr set_mon_artifacts(nlohmann::json &artifact_data, MonsterRaceInfo &mo
         if (auto err = info_set_integer(artifact.value()["drop_artifact_id"], fa_id, true, Range(0, 1024))) {
             return err;
         }
-        int prob;
-        if (auto err = info_set_integer(artifact.value()["drop_probability"], prob, true, Range(1, 100))) {
+        int chance;
+        if (auto err = info_set_integer(artifact.value()["drop_probability"], chance, true, Range(1, 100))) {
             return err;
         }
 
-        monrace.drop_artifacts.emplace_back(fa_id, prob);
+        monrace.emplace_drop_artifact(fa_id, chance);
     }
     return PARSE_ERROR_NONE;
 }
