@@ -100,7 +100,7 @@ void init_monsters_alloc()
 
     std::sort(elements.begin(), elements.end(),
         [](const MonsterRaceInfo *r1_ptr, const MonsterRaceInfo *r2_ptr) {
-            return r1_ptr->level < r2_ptr->level;
+            return r2_ptr->order_level_strictly(*r1_ptr);
         });
 
     alloc_race_table.clear();

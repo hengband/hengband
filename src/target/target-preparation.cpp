@@ -232,7 +232,7 @@ void target_sensing_monsters_prepare(PlayerType *player_ptr, std::vector<MONSTER
 
         /* Higher level monsters first (if known) */
         if (monrace1.r_tkills && monrace2.r_tkills && monrace1.level != monrace2.level) {
-            return monrace1.level > monrace2.level;
+            return monrace1.order_level_strictly(monrace2);
         }
 
         /* Sort by index if all conditions are same */
@@ -288,7 +288,7 @@ std::vector<MONSTER_IDX> target_pets_prepare(PlayerType *player_ptr)
         }
 
         if (ap_monrace1.r_tkills && ap_monrace2.r_tkills && (ap_monrace1.level != ap_monrace2.level)) {
-            return ap_monrace1.level > ap_monrace2.level;
+            return ap_monrace1.order_level_strictly(ap_monrace2);
         }
 
         return idx1 < idx2;

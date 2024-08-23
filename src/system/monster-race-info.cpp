@@ -111,6 +111,11 @@ std::optional<bool> MonsterRaceInfo::order_level(const MonsterRaceInfo &other) c
     return std::nullopt;
 }
 
+bool MonsterRaceInfo::order_level_strictly(const MonsterRaceInfo &other) const
+{
+    return this->level > other.level;
+}
+
 std::optional<bool> MonsterRaceInfo::order_pet(const MonsterRaceInfo &other) const
 {
     if (this->kind_flags.has(MonsterKindType::UNIQUE) && other.kind_flags.has_not(MonsterKindType::UNIQUE)) {
