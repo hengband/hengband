@@ -224,6 +224,7 @@ public:
     bool is_separated(const MonsterRaceId r_idx) const;
     bool can_select_separate(const MonsterRaceId morace_id, const int hp, const int maxhp) const;
     bool order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed = false) const;
+    bool order_level(MonsterRaceId id1, MonsterRaceId id2) const;
     bool order_level_unique(MonsterRaceId id1, MonsterRaceId id2) const;
     MonsterRaceId pick_id_at_random() const;
     const MonsterRaceInfo &pick_monrace_at_random() const;
