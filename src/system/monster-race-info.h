@@ -1,8 +1,6 @@
 #pragma once
 
 #include "locale/localized-string.h"
-#include "monster-attack/monster-attack-effect.h"
-#include "monster-attack/monster-attack-table.h"
 #include "monster-race/monster-aura-types.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-behavior-flags.h"
@@ -33,7 +31,9 @@
 constexpr int MAX_NUM_BLOWS = 4;
 
 enum class FixedArtifactId : short;
-enum class MonsterRaceId : int16_t;
+enum class MonsterRaceId : short;
+enum class RaceBlowEffectType;
+enum class RaceBlowMethodType;
 
 class MonsterBlow {
 public:

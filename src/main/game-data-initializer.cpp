@@ -6,6 +6,7 @@
 #include "main/game-data-initializer.h"
 #include "cmd-io/macro-util.h"
 #include "dungeon/quest.h"
+#include "effect/attribute-types.h"
 #include "floor/floor-list.h"
 #include "floor/floor-util.h"
 #include "game-option/option-flags.h"

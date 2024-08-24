@@ -1,4 +1,6 @@
 #include "system/monster-race-info.h"
+#include "monster-attack/monster-attack-effect.h"
+#include "monster-attack/monster-attack-table.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-resistance-mask.h"
 #include "monster/horror-descriptions.h"
