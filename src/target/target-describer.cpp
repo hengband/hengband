@@ -16,6 +16,7 @@
 #include "io/input-key-acceptor.h"
 #include "locale/english.h"
 #include "lore/lore-util.h"
+#include "monster-race/race-sex.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"

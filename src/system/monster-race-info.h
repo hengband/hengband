@@ -11,7 +11,6 @@
 #include "monster-race/race-kind-flags.h"
 #include "monster-race/race-misc-flags.h"
 #include "monster-race/race-population-flags.h"
-#include "monster-race/race-sex-const.h"
 #include "monster-race/race-speak-flags.h"
 #include "monster-race/race-special-flags.h"
 #include "monster-race/race-visual-flags.h"
@@ -35,6 +34,7 @@ enum class MonsterRaceId : short;
 enum class RaceBlowEffectType;
 enum class RaceBlowMethodType;
 enum class MonsterSex;
+enum class RaceBlowMethodType;
 
 class MonsterBlow {
 public:

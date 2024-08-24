@@ -1,7 +1,7 @@
 #include "monster/monster-describer.h"
 #include "io/files-util.h"
 #include "locale/english.h"
-#include "monster-race/race-sex-const.h"
+#include "monster-race/race-sex.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"

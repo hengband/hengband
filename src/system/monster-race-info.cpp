@@ -3,6 +3,7 @@
 #include "monster-attack/monster-attack-table.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-resistance-mask.h"
+#include "monster-race/race-sex.h"
 #include "monster/horror-descriptions.h"
 #include "system/redrawing-flags-updater.h"
 #include "tracking/lore-tracker.h"

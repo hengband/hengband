@@ -281,7 +281,6 @@
     <ClCompile Include="..\..\src\main-win\main-win-exception.cpp" />
     <ClCompile Include="..\..\src\market\melee-arena.cpp" />
     <ClCompile Include="..\..\src\monster-race\race-brightness-mask.cpp" />
-    <ClCompile Include="..\..\src\monster-race\race-sex-const.cpp" />
     <ClCompile Include="..\..\src\monster\monster-pain-describer.cpp" />
     <ClCompile Include="..\..\src\net\curl-easy-session.cpp" />
     <ClCompile Include="..\..\src\net\curl-slist.cpp" />
@@ -1952,7 +1951,7 @@
     <ClInclude Include="..\..\src\wizard\tval-descriptions-table.h" />
     <ClInclude Include="..\..\src\load\quest-loader.h" />
     <ClInclude Include="..\..\src\view\display-store.h" />
-    <ClInclude Include="..\..\src\monster-race\race-sex-const.h" />
+    <ClInclude Include="..\..\src\monster-race\race-sex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\system\angband.h" />

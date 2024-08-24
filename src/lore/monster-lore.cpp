@@ -11,7 +11,6 @@
 #include "lore/magic-types-setter.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-misc-flags.h"
-#include "monster-race/race-sex-const.h"
 #include "player-ability/player-ability-types.h"
 #include "system/angband.h"
 #include "system/monster-race-info.h"
