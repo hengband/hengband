@@ -87511,6 +87511,136 @@
         "ja": "斃れた巨人が邪悪な術で再び動き出したものだ。かつてのような力強さは感じられないが、汚れた一撃には注意が必要だ。",
         "en": "A fallen giant, reborn with evil magic. Though it no longer has the strength it once had, its unholy blows must be heeded."
       }
-    }
+    },
+    {
+      "id": 1366,
+      "name": { "ja": "虹色の宝箱", "en": "Legendary loot box mimic" },
+      "symbol": { "character": "&", "color": "Yellow" },
+      "speed": 12,
+      "hit_point": "20d130",
+      "vision": 30,
+      "armor_class": 140,
+      "alertness": 0,
+      "level": 66,
+      "rarity": 8,
+      "exp": 7000,
+      "blows": [
+          { "method": "DROOL", "effect": "PARALYZE" },
+          { "method": "BITE", "effect": "HURT", "damage_dice": "11d11" },
+          { "method": "BITE", "effect": "SUPERHURT", "damage_dice": "9d9" },
+          { "method": "BITE", "effect": "SHATTER", "damage_dice": "12d12" }
+      ],
+      "flags": [
+        "FORCE_MAXHP",
+        "ATTR_MULTI",
+        "ATTR_ANY",
+        "NEVER_MOVE",
+        "SELF_LITE_1",
+        "COLD_BLOOD",
+        "EVIL",
+        "NO_CONF",
+        "NO_SLEEP",
+        "NO_FEAR",
+        "DROP_60",
+        "DROP_90",
+        "DROP_1D2",
+        "DROP_2D2",
+        "DROP_3D2",
+        "DROP_4D2"
+
+      ],
+      "escorts": [
+        {
+          "escorts_id": 1367,
+          "escort_num": "1d2"
+        },
+        {
+          "escorts_id": 1368,
+          "escort_num": "2d3"
+        }
+
+      ],
+      "skill": {
+        "probability": "1_IN_4",
+        "list": ["TELE_TO","S_KIN"]
+      },
+      "flavor": {
+        "ja": "やった！虹色の宝箱だ！ 特別品のアイテムが入っているに違いない！",
+        "en": "Yes! A legendary loot box! It must have a special item inside!"
+      }
+    },
+    {
+        "id": 1367,
+        "name": { "ja": "金色の宝箱", "en": "Golden loot box mimic" },
+        "symbol": { "character": "&", "color": "Yellow" },
+        "speed": 7,
+        "hit_point": "20d51",
+        "vision": 30,
+        "armor_class": 80,
+        "alertness": 0,
+        "level": 60,
+        "rarity": 4,
+        "exp": 3000,
+        "blows": [
+            { "method": "BITE", "effect": "HURT", "damage_dice": "8d12" },
+            { "method": "BITE", "effect": "SHATTER", "damage_dice": "8d12" }
+        ],
+        "flags": [
+          "NEVER_MOVE",
+          "SELF_LITE_1",
+          "COLD_BLOOD",
+          "ESCORTS",
+          "EVIL",
+          "NO_CONF",
+          "NO_SLEEP",
+          "NO_FEAR",
+          "DROP_3D2"
+        ],
+        "skill": {
+          "probability": "1_IN_2",
+          "list": ["BO_MANA","TELE_TO"]
+        },
+        "flavor": {
+          "ja": "金の宝箱だ！ いいアイテムが期待できそうだ！",
+          "en": "A golden loot box! I'm sure I'll find some great items inside!"
+        }
+      },
+      {
+        "id": 1368,
+        "name": { "ja": "石の宝箱", "en": "Stone loot box mimic" },
+        "symbol": { "character": "&", "color": "Light Gray" },
+        "speed": 5,
+        "hit_point": "200d25",
+        "vision": 30,
+        "armor_class": 160,
+        "alertness": 0,
+        "level": 55,
+        "rarity": 1,
+        "exp": 1000,
+        "blows": [
+            { "method": "BITE", "effect": "SHATTER", "damage_dice": "58d1" },
+            { "method": "BITE", "effect": "SHATTER", "damage_dice": "58d1" }
+        ],
+        "flags": [
+          "NEVER_MOVE",
+          "COLD_BLOOD",
+          "KILL_WALL",
+          "RIDING",
+          "IM_ACID",
+          "IM_FIRE",
+          "IM_COLD",
+          "IM_ELEC",
+          "IM_POIS",
+          "RES_TELE",    
+          "NO_CONF",
+          "NO_SLEEP",
+          "NO_FEAR",
+          "DROP_90"
+        ],
+        "flavor": {
+          "ja": "石の箱だ。 中身は少ないくせに重いしでかくて邪魔だ。",
+          "en": "It is a stone box. It's big and heavy, even though it doesn't have much inside."
+        }
+      }
   ]
 }
