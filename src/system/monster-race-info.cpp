@@ -42,6 +42,16 @@ bool MonsterRaceInfo::is_valid() const
     return this->idx != MonsterRaceId::PLAYER;
 }
 
+bool MonsterRaceInfo::is_male() const
+{
+    return this->sex == MonsterSex::MALE;
+}
+
+bool MonsterRaceInfo::is_female() const
+{
+    return this->sex == MonsterSex::FEMALE;
+}
+
 /*!
  * @brief モンスターが生命体かどうかを返す
  * @return 生命体ならばtrue
