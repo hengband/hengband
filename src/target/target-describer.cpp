@@ -16,7 +16,6 @@
 #include "io/input-key-acceptor.h"
 #include "locale/english.h"
 #include "lore/lore-util.h"
-#include "monster-race/race-sex.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
@@ -221,9 +220,9 @@ static void describe_monster_person(GridExamination *ge_ptr)
 {
     const auto &monrace = ge_ptr->m_ptr->get_appearance_monrace();
     ge_ptr->s1 = _("それは", "It is ");
-    if (monrace.sex == MonsterSex::FEMALE) {
+    if (monrace.is_female()) {
         ge_ptr->s1 = _("彼女は", "She is ");
-    } else if (monrace.sex == MonsterSex::MALE) {
+    } else if (monrace.is_male()) {
         ge_ptr->s1 = _("彼は", "He is ");
     }
 

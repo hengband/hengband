@@ -80,7 +80,6 @@ public:
     byte speed{}; //!< 加速(110で+0) / Speed (normally 110)
     EXP mexp{}; //!< 殺害時基本経験値 / Exp value for kill
     RARITY freq_spell{}; //!< 魔法＆特殊能力仕様頻度(1/n) /  Spell frequency
-    MonsterSex sex{}; //!< 性別 / Sex
     EnumClassFlagGroup<MonsterAbilityType> ability_flags; //!< 能力フラグ(魔法/ブレス) / Ability Flags
     EnumClassFlagGroup<MonsterAuraType> aura_flags; //!< オーラフラグ / Aura Flags
     EnumClassFlagGroup<MonsterBehaviorType> behavior_flags; //!< 能力フラグ（習性）
@@ -153,6 +152,7 @@ public:
     const std::vector<DropArtifact> &get_drop_artifacts() const;
     const std::vector<Reinforce> &get_reinforces() const;
 
+    void init_sex(uint32_t value);
     std::optional<std::string> probe_lore();
     void make_lore_treasure(int num_item, int num_drop);
     void emplace_drop_artifact(FixedArtifactId fa_id, int percentage);
@@ -161,6 +161,7 @@ public:
 private:
     std::vector<DropArtifact> drop_artifacts; //!< 特定アーティファクトドロップリスト
     std::vector<Reinforce> reinforces; //!< 指定護衛リスト
+    MonsterSex sex{}; //!< 性別 / Sex
 
     const std::string &decide_horror_message() const;
 };
