@@ -1,8 +1,6 @@
 #pragma once
 
 #include "locale/localized-string.h"
-#include "monster-attack/monster-attack-effect.h"
-#include "monster-attack/monster-attack-table.h"
 #include "monster-race/monster-aura-types.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-behavior-flags.h"
@@ -13,7 +11,6 @@
 #include "monster-race/race-kind-flags.h"
 #include "monster-race/race-misc-flags.h"
 #include "monster-race/race-population-flags.h"
-#include "monster-race/race-sex-const.h"
 #include "monster-race/race-speak-flags.h"
 #include "monster-race/race-special-flags.h"
 #include "monster-race/race-visual-flags.h"
@@ -33,7 +30,11 @@
 constexpr int MAX_NUM_BLOWS = 4;
 
 enum class FixedArtifactId : short;
-enum class MonsterRaceId : int16_t;
+enum class MonsterRaceId : short;
+enum class RaceBlowEffectType;
+enum class RaceBlowMethodType;
+enum class MonsterSex;
+enum class RaceBlowMethodType;
 
 class MonsterBlow {
 public:
@@ -79,7 +80,6 @@ public:
     byte speed{}; //!< 加速(110で+0) / Speed (normally 110)
     EXP mexp{}; //!< 殺害時基本経験値 / Exp value for kill
     RARITY freq_spell{}; //!< 魔法＆特殊能力仕様頻度(1/n) /  Spell frequency
-    MonsterSex sex{}; //!< 性別 / Sex
     EnumClassFlagGroup<MonsterAbilityType> ability_flags; //!< 能力フラグ(魔法/ブレス) / Ability Flags
     EnumClassFlagGroup<MonsterAuraType> aura_flags; //!< オーラフラグ / Aura Flags
     EnumClassFlagGroup<MonsterBehaviorType> behavior_flags; //!< 能力フラグ（習性）
@@ -133,6 +133,8 @@ public:
     PERCENTAGE cur_hp_per{}; //!< 生成時現在HP率(%)
 
     bool is_valid() const;
+    bool is_male() const;
+    bool is_female() const;
     bool has_living_flag() const;
     bool is_explodable() const;
     bool symbol_char_is_any_of(std::string_view symbol_characters) const;
@@ -150,6 +152,7 @@ public:
     const std::vector<DropArtifact> &get_drop_artifacts() const;
     const std::vector<Reinforce> &get_reinforces() const;
 
+    void init_sex(uint32_t value);
     std::optional<std::string> probe_lore();
     void make_lore_treasure(int num_item, int num_drop);
     void emplace_drop_artifact(FixedArtifactId fa_id, int percentage);
@@ -158,6 +161,7 @@ public:
 private:
     std::vector<DropArtifact> drop_artifacts; //!< 特定アーティファクトドロップリスト
     std::vector<Reinforce> reinforces; //!< 指定護衛リスト
+    MonsterSex sex{}; //!< 性別 / Sex
 
     const std::string &decide_horror_message() const;
 };

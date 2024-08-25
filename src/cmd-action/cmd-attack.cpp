@@ -157,11 +157,10 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
  */
 bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_options mode)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
-    auto *g_ptr = &floor.grid_array[y][x];
-    auto *m_ptr = &floor.m_list[g_ptr->m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &grid = floor.grid_array[y][x];
+    const auto &monster = floor.m_list[grid.m_idx];
+    const auto &monrace = monster.get_monrace();
     const auto mutation_attack_methods = {
         PlayerMutationType::HORNS,
         PlayerMutationType::BEAK,
@@ -171,29 +170,27 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     };
 
     disturb(player_ptr, false, true);
-
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-
     if (!can_attack_with_main_hand(player_ptr) && !can_attack_with_sub_hand(player_ptr) && player_ptr->muta.has_none_of(mutation_attack_methods)) {
         sound(SOUND_ATTACK_FAILED);
         msg_print(_(format("%s攻撃できない。", (empty_hands(player_ptr, false) == EMPTY_HAND_NONE) ? "両手がふさがって" : ""), "You cannot attack."));
         return false;
     }
 
-    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+    const auto m_name = monster_desc(player_ptr, &monster, 0);
     const auto effects = player_ptr->effects();
     const auto is_hallucinated = effects->hallucination().is_hallucinated();
-    if (m_ptr->ml) {
+    if (monster.ml) {
         if (!is_hallucinated) {
-            LoreTracker::get_instance().set_trackee(m_ptr->ap_r_idx);
+            LoreTracker::get_instance().set_trackee(monster.ap_r_idx);
         }
 
-        health_track(player_ptr, g_ptr->m_idx);
+        health_track(player_ptr, grid.m_idx);
     }
 
     const auto is_confused = effects->confusion().is_confused();
     const auto is_stunned = effects->stun().is_stunned();
-    if (is_female(*r_ptr) && !(is_stunned || is_confused || is_hallucinated || !m_ptr->ml)) {
+    if (monrace.is_female() && !(is_stunned || is_confused || is_hallucinated || !monster.ml)) {
         // @todo 「特定の武器を装備している」旨のメソッドを別途作る
         constexpr auto zantetsu = FixedArtifactId::ZANTETSU;
         const auto is_main_hand_zantetsu = player_ptr->inventory_list[INVEN_MAIN_HAND].is_specific_artifact(zantetsu);
@@ -211,7 +208,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
         return false;
     }
 
-    if (!m_ptr->is_hostile() && !(is_stunned || is_confused || is_hallucinated || is_shero(player_ptr) || !m_ptr->ml)) {
+    if (!monster.is_hostile() && !(is_stunned || is_confused || is_hallucinated || is_shero(player_ptr) || !monster.ml)) {
         constexpr auto stormbringer = FixedArtifactId::STORMBRINGER;
         auto is_stormbringer = false;
         if (player_ptr->inventory_list[INVEN_MAIN_HAND].is_specific_artifact(stormbringer)) {
@@ -242,7 +239,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     }
 
     if (effects->fear().is_fearful()) {
-        if (m_ptr->ml) {
+        if (monster.ml) {
             sound(SOUND_ATTACK_FAILED);
             msg_format(_("恐くて%sを攻撃できない！", "You are too fearful to attack %s!"), m_name.data());
         } else {
@@ -250,30 +247,30 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
             msg_format(_("そっちには何か恐いものがいる！", "There is something scary in your way!"));
         }
 
-        (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
+        (void)set_monster_csleep(player_ptr, grid.m_idx, 0);
         return false;
     }
 
-    if (m_ptr->is_asleep()) {
-        if (r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5)) {
+    if (monster.is_asleep()) {
+        if (monrace.kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5)) {
             chg_virtue(player_ptr, Virtue::COMPASSION, -1);
         }
-        if (r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5)) {
+        if (monrace.kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5)) {
             chg_virtue(player_ptr, Virtue::HONOUR, -1);
         }
     }
 
     if (can_attack_with_main_hand(player_ptr) && can_attack_with_sub_hand(player_ptr)) {
-        if (((player_ptr->skill_exp[PlayerSkillKindType::TWO_WEAPON] - 1000) / 200) < r_ptr->level) {
+        if (((player_ptr->skill_exp[PlayerSkillKindType::TWO_WEAPON] - 1000) / 200) < monrace.level) {
             PlayerSkill(player_ptr).gain_two_weapon_skill_exp();
         }
     }
 
     if (player_ptr->riding) {
-        PlayerSkill(player_ptr).gain_riding_skill_exp_on_melee_attack(r_ptr);
+        PlayerSkill(player_ptr).gain_riding_skill_exp_on_melee_attack(&monrace);
     }
 
-    player_ptr->riding_t_m_idx = g_ptr->m_idx;
+    player_ptr->riding_t_m_idx = grid.m_idx;
     bool fear = false;
     bool mdeath = false;
     if (can_attack_with_main_hand(player_ptr)) {
@@ -286,12 +283,12 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     if (!mdeath) {
         for (auto m : mutation_attack_methods) {
             if (player_ptr->muta.has(m) && !mdeath) {
-                natural_attack(player_ptr, g_ptr->m_idx, m, &fear, &mdeath);
+                natural_attack(player_ptr, grid.m_idx, m, &fear, &mdeath);
             }
         }
     }
 
-    if (fear && m_ptr->ml && !mdeath) {
+    if (fear && monster.ml && !mdeath) {
         sound(SOUND_FLEE);
         msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), m_name.data());
     }

@@ -216,7 +216,7 @@ static errr set_mon_sex(const nlohmann::json &sex_data, MonsterRaceInfo &monrace
     if (!info_grab_one_const(sex, r_info_sex, sex_data.get<std::string>())) {
         return PARSE_ERROR_INVALID_FLAG;
     }
-    monrace.sex = static_cast<MonsterSex>(sex);
+    monrace.init_sex(sex);
     return PARSE_ERROR_NONE;
 }
 

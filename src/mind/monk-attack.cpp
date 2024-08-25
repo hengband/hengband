@@ -136,9 +136,9 @@ static int select_blow(PlayerType *player_ptr, player_attack_type *pa_ptr, int m
 static int process_monk_additional_effect(player_attack_type *pa_ptr, int *stun_effect)
 {
     int special_effect = 0;
-    auto *r_ptr = &pa_ptr->m_ptr->get_monrace();
+    const auto &monrace = pa_ptr->m_ptr->get_monrace();
     if (pa_ptr->ma_ptr->effect == MA_KNEE) {
-        if (is_male(*r_ptr)) {
+        if (monrace.is_male()) {
             msg_format(_("%sに金的膝蹴りをくらわした！", "You hit %s in the groin with your knee!"), pa_ptr->m_name);
             sound(SOUND_PAIN);
             special_effect = MA_KNEE;
@@ -148,7 +148,7 @@ static int process_monk_additional_effect(player_attack_type *pa_ptr, int *stun_
     }
 
     else if (pa_ptr->ma_ptr->effect == MA_SLOW) {
-        if (!(r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_MOVE) || r_ptr->symbol_char_is_any_of("~#{}.UjmeEv$,DdsbBFIJQSXclnw!=?"))) {
+        if (!(monrace.behavior_flags.has(MonsterBehaviorType::NEVER_MOVE) || monrace.symbol_char_is_any_of("~#{}.UjmeEv$,DdsbBFIJQSXclnw!=?"))) {
             msg_format(_("%sの足首に関節蹴りをくらわした！", "You kick %s in the ankle."), pa_ptr->m_name);
             special_effect = MA_SLOW;
         } else {

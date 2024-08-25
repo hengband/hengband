@@ -1,9 +1,13 @@
 #include "system/monster-race-info.h"
+#include "monster-attack/monster-attack-effect.h"
+#include "monster-attack/monster-attack-table.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-resistance-mask.h"
+#include "monster-race/race-sex.h"
 #include "monster/horror-descriptions.h"
 #include "system/redrawing-flags-updater.h"
 #include "tracking/lore-tracker.h"
+#include "util/enum-converter.h"
 #include "util/probability-table.h"
 #include "world/world.h"
 #include <algorithm>
@@ -38,6 +42,16 @@ MonsterRaceInfo::MonsterRaceInfo()
 bool MonsterRaceInfo::is_valid() const
 {
     return this->idx != MonsterRaceId::PLAYER;
+}
+
+bool MonsterRaceInfo::is_male() const
+{
+    return this->sex == MonsterSex::MALE;
+}
+
+bool MonsterRaceInfo::is_female() const
+{
+    return this->sex == MonsterSex::FEMALE;
 }
 
 /*!
@@ -272,6 +286,16 @@ const std::vector<DropArtifact> &MonsterRaceInfo::get_drop_artifacts() const
 const std::vector<Reinforce> &MonsterRaceInfo::get_reinforces() const
 {
     return this->reinforces;
+}
+
+void MonsterRaceInfo::init_sex(uint32_t value)
+{
+    const auto sex_tmp = i2enum<MonsterSex>(value);
+    if ((sex_tmp < MonsterSex::NONE) || (sex_tmp >= MonsterSex::MAX)) {
+        THROW_EXCEPTION(std::logic_error, "Invalid monrace sex is specified!");
+    }
+
+    this->sex = sex_tmp;
 }
 
 std::optional<std::string> MonsterRaceInfo::probe_lore()

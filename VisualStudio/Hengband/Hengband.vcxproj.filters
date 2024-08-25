@@ -2496,9 +2496,6 @@
     <ClCompile Include="..\..\src\system\angband-system.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-race\race-sex-const.cpp">
-      <Filter>monster-race</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\room\rooms-pit.cpp">
       <Filter>room</Filter>
     </ClCompile>
@@ -5427,7 +5424,7 @@
     <ClInclude Include="..\..\src\system\angband-system.h">
       <Filter>system</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster-race\race-sex-const.h">
+    <ClInclude Include="..\..\src\monster-race\race-sex.h">
       <Filter>monster-race</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-misc-flags.h">

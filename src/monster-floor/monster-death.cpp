@@ -11,6 +11,7 @@
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "market/arena-entry.h"
+#include "monster-attack/monster-attack-table.h"
 #include "monster-floor/monster-death-util.h"
 #include "monster-floor/monster-object.h"
 #include "monster-floor/special-death-switcher.h"
