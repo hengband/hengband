@@ -264,6 +264,11 @@ bool MonsterRaceInfo::has_reinforce() const
     return it != end;
 }
 
+const std::vector<DropArtifact> &MonsterRaceInfo::get_drop_artifacts() const
+{
+    return this->drop_artifacts;
+}
+
 const std::vector<Reinforce> &MonsterRaceInfo::get_reinforces() const
 {
     return this->reinforces;
@@ -372,6 +377,11 @@ void MonsterRaceInfo::make_lore_treasure(int num_item, int num_gold)
     }
 }
 
+void MonsterRaceInfo::emplace_drop_artifact(FixedArtifactId fa_id, int chance)
+{
+    this->drop_artifacts.emplace_back(fa_id, chance);
+}
+
 void MonsterRaceInfo::emplace_reinforce(MonsterRaceId monrace_id, const Dice &dice)
 {
     this->reinforces.emplace_back(monrace_id, dice);
@@ -394,6 +404,12 @@ const std::string &MonsterRaceInfo::decide_horror_message() const
     }
 
     return horror_desc_neutral[horror_num - horror_desc_common_size];
+}
+
+DropArtifact::DropArtifact(FixedArtifactId fa_id, int chance)
+    : fa_id(fa_id)
+    , chance(chance)
+{
 }
 
 Reinforce::Reinforce(MonsterRaceId monrace_id, Dice dice)
