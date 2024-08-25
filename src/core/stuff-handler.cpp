@@ -1,6 +1,8 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "player/player-status.h"
+#include "system/floor-type-definition.h"
+#include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "tracking/baseitem-tracker.h"
@@ -33,7 +35,9 @@ void handle_stuff(PlayerType *player_ptr)
  */
 void health_track(PlayerType *player_ptr, short m_idx)
 {
-    if (m_idx && m_idx == player_ptr->riding) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monster = floor.m_list[m_idx];
+    if (monster.is_riding()) {
         return;
     }
 

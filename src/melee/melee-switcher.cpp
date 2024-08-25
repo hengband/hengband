@@ -206,7 +206,7 @@ void decide_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr)
         break;
     case RaceBlowEffectType::EAT_ITEM:
     case RaceBlowEffectType::EAT_GOLD:
-        if ((player_ptr->riding != mam_ptr->m_idx) && one_in_(2)) {
+        if (!mam_ptr->m_ptr->is_riding() && one_in_(2)) {
             mam_ptr->blinked = true;
         }
 

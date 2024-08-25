@@ -924,7 +924,7 @@ bool change_wild_mode(PlayerType *player_ptr, bool encount)
             continue;
         }
 
-        if (m_ptr->is_pet() && i != player_ptr->riding) {
+        if (m_ptr->is_pet() && !m_ptr->is_riding()) {
             has_pet = true;
         }
 

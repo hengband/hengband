@@ -60,7 +60,7 @@
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return 効果が何もないならFALSE、何かあるならTRUE
  */
-static ProcessResult is_affective(PlayerType *player_ptr, EffectMonster *em_ptr)
+static ProcessResult is_affective(EffectMonster *em_ptr)
 {
     if (!em_ptr->g_ptr->has_monster()) {
         return ProcessResult::PROCESS_FALSE;
@@ -74,7 +74,7 @@ static ProcessResult is_affective(PlayerType *player_ptr, EffectMonster *em_ptr)
     if (em_ptr->m_ptr->hp < 0) {
         return ProcessResult::PROCESS_FALSE;
     }
-    if (is_monster(em_ptr->src_idx) || em_ptr->g_ptr->m_idx != player_ptr->riding) {
+    if (is_monster(em_ptr->src_idx) || !em_ptr->m_ptr->is_riding()) {
         return ProcessResult::PROCESS_TRUE;
     }
 
@@ -133,7 +133,7 @@ static ProcessResult exe_affect_monster_by_effect(PlayerType *player_ptr, Effect
         return em_ptr->attribute == attribute;
     };
 
-    ProcessResult result = is_affective(player_ptr, em_ptr);
+    ProcessResult result = is_affective(em_ptr);
     if (result != ProcessResult::PROCESS_TRUE) {
         if (result == ProcessResult::PROCESS_CONTINUE) {
             em_ptr->note = _("には効果がなかった。", " is unaffected.");
@@ -378,12 +378,12 @@ static void effect_makes_change_virtues(PlayerType *player_ptr, EffectMonster *e
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  */
-static void affected_monster_prevents_bad_status(PlayerType *player_ptr, EffectMonster *em_ptr)
+static void affected_monster_prevents_bad_status(EffectMonster *em_ptr)
 {
     const auto *r_ptr = em_ptr->r_ptr;
     auto can_avoid_polymorph = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     can_avoid_polymorph |= r_ptr->misc_flags.has(MonsterMiscType::QUESTOR);
-    can_avoid_polymorph |= (player_ptr->riding != 0) && (em_ptr->g_ptr->m_idx == player_ptr->riding);
+    can_avoid_polymorph |= em_ptr->m_ptr->is_riding();
     if (can_avoid_polymorph) {
         em_ptr->do_polymorph = false;
     }
@@ -603,7 +603,7 @@ static void effect_damage_gives_bad_status(PlayerType *player_ptr, EffectMonster
 static void exe_affect_monster_by_damage(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     effect_makes_change_virtues(player_ptr, em_ptr);
-    affected_monster_prevents_bad_status(player_ptr, em_ptr);
+    affected_monster_prevents_bad_status(em_ptr);
     effect_damage_gives_bad_status(player_ptr, em_ptr);
     deal_effect_damage_to_monster(player_ptr, em_ptr);
     if ((em_ptr->attribute == AttributeType::BLOOD_CURSE) && one_in_(4)) {
@@ -657,9 +657,9 @@ static void postprocess_by_effected_pet(PlayerType *player_ptr, EffectMonster *e
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  */
-static void postprocess_by_riding_pet_effected(PlayerType *player_ptr, EffectMonster *em_ptr, FallOffHorseEffect *fall_off_horse_effect)
+static void postprocess_by_riding_pet_effected(EffectMonster *em_ptr, FallOffHorseEffect *fall_off_horse_effect)
 {
-    if (!player_ptr->riding || (player_ptr->riding != em_ptr->g_ptr->m_idx) || (em_ptr->dam <= 0)) {
+    if (!em_ptr->m_ptr->is_riding() || (em_ptr->dam <= 0)) {
         return;
     }
 
@@ -698,7 +698,7 @@ static void postprocess_by_taking_photo(PlayerType *player_ptr, EffectMonster *e
 static void exe_affect_monster_postprocess(PlayerType *player_ptr, EffectMonster *em_ptr, FallOffHorseEffect *fall_off_horse_effect)
 {
     postprocess_by_effected_pet(player_ptr, em_ptr);
-    postprocess_by_riding_pet_effected(player_ptr, em_ptr, fall_off_horse_effect);
+    postprocess_by_riding_pet_effected(em_ptr, fall_off_horse_effect);
     postprocess_by_taking_photo(player_ptr, em_ptr);
     project_m_n++;
     project_m_x = em_ptr->x;
@@ -733,7 +733,7 @@ bool affect_monster(
 
     make_description_of_affecred_monster(player_ptr, em_ptr);
 
-    if (player_ptr->riding && (target_m_idx == player_ptr->riding)) {
+    if (is_monster(target_m_idx) && em_ptr->m_ptr->is_riding()) {
         disturb(player_ptr, true, true);
     }
 

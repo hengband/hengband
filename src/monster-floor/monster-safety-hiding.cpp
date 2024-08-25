@@ -45,7 +45,7 @@ static coordinate_candidate sweep_safe_coordinate(PlayerType *player_ptr, MONSTE
         Grid *g_ptr;
         g_ptr = &floor_ptr->grid_array[y][x];
 
-        BIT_FLAGS16 riding_mode = (m_idx == player_ptr->riding) ? CEM_RIDING : 0;
+        BIT_FLAGS16 riding_mode = m_ptr->is_riding() ? CEM_RIDING : 0;
         if (!monster_can_cross_terrain(player_ptr, g_ptr->feat, r_ptr, riding_mode)) {
             continue;
         }

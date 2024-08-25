@@ -141,7 +141,7 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
                 exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_DISMISS, m_name);
             }
 
-            if (pet_ctr == player_ptr->riding) {
+            if (monster.is_riding()) {
                 msg_format(_("%sから降りた。", "You dismount from %s. "), friend_name.data());
                 player_ptr->ride_monster(0);
                 rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
