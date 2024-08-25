@@ -521,7 +521,7 @@ void display_lore_this(PlayerType *player_ptr, lore_type *lore_ptr)
 
 static void display_monster_escort_contents(lore_type *lore_ptr)
 {
-    if (!lore_ptr->reinforce) {
+    if (!lore_ptr->has_reinforce()) {
         return;
     }
 
@@ -530,37 +530,37 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
         hooked_roff(_("少なくとも", " at the least"));
     }
 
+    const auto &reinforces = lore_ptr->r_ptr->get_reinforces();
 #ifdef JP
 #else
     hooked_roff(" contain");
-    auto max_idx = lore_ptr->r_ptr->reinforces.size() - 1;
-    auto idx = 0 * max_idx;
+    const auto max_idx = reinforces.size() - 1;
+    auto idx = 0U;
 #endif
 
-    for (const auto &[monrace_id, num_dice] : lore_ptr->r_ptr->reinforces) {
-        auto is_reinforced = MonraceList::is_valid(monrace_id);
-#ifndef JP
-        const char *prefix = (idx == 0) ? " " : (idx == max_idx) ? " and "
-                                                                 : ", ";
+    for (const auto &reinforce : reinforces) {
+#ifdef JP
+#else
+        const std::string prefix = (idx == 0) ? " " : (idx == max_idx) ? " and "
+                                                                       : ", ";
         ++idx;
 #endif
-        is_reinforced &= num_dice.is_valid();
-        if (!is_reinforced) {
+        if (!reinforce.is_valid()) {
             continue;
         }
 
-        const auto *rf_ptr = &monraces_info[monrace_id];
-        if (rf_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            hooked_roff(format("%s%s", _("、", prefix), rf_ptr->name.data()));
+        const auto &monrace = reinforce.get_monrace();
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+            hooked_roff(format("%s%s", _("、", prefix.data()), monrace.name.data()));
             continue;
         }
 
 #ifdef JP
-        hooked_roff(format("、 %s 体の%s", num_dice.to_string().data(), rf_ptr->name.data()));
+        hooked_roff(format("、 %s 体の%s", reinforce.get_dice_as_string().data(), monrace.name.data()));
 #else
-        const auto plural = (num_dice.maxroll() > 1);
-        const auto &name = plural ? pluralize(rf_ptr->name) : rf_ptr->name.string();
-        hooked_roff(format("%s%s %s", prefix, num_dice.to_string().data(), name.data()));
+        const auto is_plural = reinforce.roll_max_dice() > 1;
+        const auto &name = is_plural ? pluralize(monrace.name) : monrace.name.string();
+        hooked_roff(format("%s%s %s", prefix.data(), reinforce.get_dice_as_string().data(), name.data()));
 #endif
     }
 
@@ -569,7 +569,7 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
 
 void display_monster_collective(lore_type *lore_ptr)
 {
-    if (lore_ptr->misc_flags.has(MonsterMiscType::ESCORT) || lore_ptr->misc_flags.has(MonsterMiscType::MORE_ESCORT) || lore_ptr->reinforce) {
+    if (lore_ptr->misc_flags.has(MonsterMiscType::ESCORT) || lore_ptr->misc_flags.has(MonsterMiscType::MORE_ESCORT) || lore_ptr->has_reinforce()) {
         hooked_roff(format(_("%s^は通常護衛を伴って現れる。", "%s^ usually appears with escorts.  "), Who::who(lore_ptr->msex)));
         display_monster_escort_contents(lore_ptr);
     } else if (lore_ptr->misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
