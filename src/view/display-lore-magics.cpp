@@ -11,7 +11,7 @@ void display_monster_breath(lore_type *lore_ptr)
     }
 
     lore_ptr->breath = true;
-    hooked_roff(format(_("%s^は", "%s^"), Who::who(lore_ptr->msex)));
+    hooked_roff(format(_("%s^は", "%s^"), Who::who(lore_ptr->msex).data()));
     for (int n = 0; const auto &[msg, color] : lore_ptr->lore_msgs) {
 #ifdef JP
         if (n != 0) {
@@ -46,7 +46,7 @@ void display_monster_magic_types(lore_type *lore_ptr)
     if (lore_ptr->breath) {
         hooked_roff(_("、なおかつ", ", and is also"));
     } else {
-        hooked_roff(format(_("%s^は", "%s^ is"), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^は", "%s^ is"), Who::who(lore_ptr->msex).data()));
     }
 
 #ifdef JP
