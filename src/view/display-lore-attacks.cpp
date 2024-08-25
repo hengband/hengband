@@ -18,7 +18,7 @@
 static void display_monster_blow_jp(lore_type *lore_ptr, int attack_numbers, const Dice &damage_dice, int m)
 {
     if (attack_numbers == 0) {
-        hooked_roff(format("%s^は", Who::who(lore_ptr->msex)));
+        hooked_roff(format("%s^は", Who::who(lore_ptr->msex).data()));
     }
 
     if (damage_dice.is_valid() && (lore_ptr->know_everything || know_blow_damage(lore_ptr->r_idx, m))) {
@@ -66,7 +66,7 @@ static void display_monster_blow_jp(lore_type *lore_ptr, int attack_numbers, con
 static void display_monster_blow_en(lore_type *lore_ptr, int attack_numbers, const Dice &damage_dice, int m)
 {
     if (attack_numbers == 0) {
-        hooked_roff(format("%s^ can ", Who::who(lore_ptr->msex)));
+        hooked_roff(format("%s^ can ", Who::who(lore_ptr->msex).data()));
     } else if (attack_numbers < lore_ptr->count - 1) {
         hooked_roff(", ");
     } else {
@@ -134,8 +134,8 @@ void display_monster_blows(lore_type *lore_ptr)
     if (attack_numbers > 0) {
         hooked_roff(_("。", ".  "));
     } else if (lore_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
-        hooked_roff(format(_("%s^は物理的な攻撃方法を持たない。", "%s^ has no physical attacks.  "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^は物理的な攻撃方法を持たない。", "%s^ has no physical attacks.  "), Who::who(lore_ptr->msex).data()));
     } else {
-        hooked_roff(format(_("%s攻撃については何も知らない。", "Nothing is known about %s attack.  "), Who::whose(lore_ptr->msex)));
+        hooked_roff(format(_("%s攻撃については何も知らない。", "Nothing is known about %s attack.  "), Who::whose(lore_ptr->msex).data()));
     }
 }

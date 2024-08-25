@@ -171,12 +171,12 @@ void process_monster_lore(PlayerType *player_ptr, MonsterRaceId r_idx, monster_l
 
     display_lore_this(player_ptr, lore_ptr);
     if (lore_ptr->special_flags.has(MonsterSpecialType::DIMINISH_MAX_DAMAGE)) {
-        hooked_roff(format(_("%s^は", "%s^ "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^は", "%s^ "), Who::who(lore_ptr->msex).data()));
         hook_c_roff(TERM_RED, _("致命的な威力の攻撃に対して大きな耐性を持っている。", "has the strong resistance for a critical damage.  "));
     }
     display_monster_aura(lore_ptr);
     if (lore_ptr->misc_flags.has(MonsterMiscType::REFLECTING)) {
-        hooked_roff(format(_("%s^は矢の呪文を跳ね返す。", "%s^ reflects bolt spells.  "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^は矢の呪文を跳ね返す。", "%s^ reflects bolt spells.  "), Who::who(lore_ptr->msex).data()));
     }
 
     display_monster_collective(lore_ptr);

@@ -101,7 +101,7 @@ public:
      * @param msex モンスターの性別
      * @return 主語
      */
-    static concptr who(MonsterSex msex)
+    static std::string who(MonsterSex msex)
     {
         return who(msex, false);
     }
@@ -112,7 +112,7 @@ public:
      * @param multi 複数かどうか
      * @return 主語
      */
-    static concptr who(MonsterSex msex, bool multi)
+    static std::string who(MonsterSex msex, bool multi)
     {
         return words.at(WHO_WORD_TYPE::WHO).at(multi).at(msex).data();
     }
@@ -122,7 +122,7 @@ public:
      * @param msex モンスターの性別
      * @return 所有格
      */
-    static concptr whose(MonsterSex msex)
+    static std::string whose(MonsterSex msex)
     {
         return whose(msex, false);
     }
@@ -133,7 +133,7 @@ public:
      * @param multi 複数かどうか
      * @return 所有格
      */
-    static concptr whose(MonsterSex msex, bool multi)
+    static std::string whose(MonsterSex msex, bool multi)
     {
         return words.at(WHO_WORD_TYPE::WHOSE).at(multi).at(msex).data();
     }
@@ -143,7 +143,7 @@ public:
      * @param msex モンスターの性別
      * @return 目的語
      */
-    static concptr whom(MonsterSex msex)
+    static std::string whom(MonsterSex msex)
     {
         return whom(msex, false);
     }
@@ -154,7 +154,7 @@ public:
      * @param multi 複数かどうか
      * @return 目的語
      */
-    static concptr whom(MonsterSex msex, bool multi)
+    static std::string whom(MonsterSex msex, bool multi)
     {
         return words.at(WHO_WORD_TYPE::WHOM).at(multi).at(msex).data();
     }
