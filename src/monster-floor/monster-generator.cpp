@@ -340,7 +340,7 @@ std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITI
         }
 
         (void)place_monster_one(player_ptr, ny, nx, monrace_id, mode, *m_idx);
-        if (monraces_info[monrace_id].misc_flags.has(MonsterMiscType::HAS_FRIENDS) || monrace.misc_flags.has(MonsterMiscType::MORE_ESCORT)) {
+        if (monrace.misc_flags.has(MonsterMiscType::HAS_FRIENDS) || monrace.misc_flags.has(MonsterMiscType::MORE_ESCORT)) {
             (void)place_monster_group(player_ptr, ny, nx, monrace_id, mode, *m_idx);
         }
     }
