@@ -124,7 +124,7 @@ void describe_monster_attack_method(MonsterAttackPlayer *monap_ptr)
         break;
     }
     case RaceBlowMethodType::CRUSH: {
-        monap_ptr->act = _("体当たりされた。", "crushes you.");
+        monap_ptr->act = _("押し潰された。", "crushes you.");
         monap_ptr->do_stun = 1;
         monap_ptr->touched = true;
         sound(SOUND_CRUSH);

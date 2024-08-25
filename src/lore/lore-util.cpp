@@ -1,6 +1,7 @@
 #include "lore/lore-util.h"
 #include "game-option/birth-options.h"
 #include "monster-attack/monster-attack-table.h"
+#include "monster-race/race-sex.h"
 #include "system/monster-race-info.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -8,18 +9,18 @@
 const who_word_definition Who::words = {
     { WHO_WORD_TYPE::WHO,
         {
-            { false, { { MSEX_NONE, _("それ", "it") }, { MSEX_MALE, _("彼", "he") }, { MSEX_FEMALE, _("彼女", "she") } } },
-            { true, { { MSEX_NONE, _("それら", "they") }, { MSEX_MALE, _("彼ら", "they") }, { MSEX_FEMALE, _("彼女ら", "they") } } },
+            { false, { { MonsterSex::NONE, _("それ", "it") }, { MonsterSex::MALE, _("彼", "he") }, { MonsterSex::FEMALE, _("彼女", "she") } } },
+            { true, { { MonsterSex::NONE, _("それら", "they") }, { MonsterSex::MALE, _("彼ら", "they") }, { MonsterSex::FEMALE, _("彼女ら", "they") } } },
         } },
     { WHO_WORD_TYPE::WHOSE,
         {
-            { false, { { MSEX_NONE, _("それの", "its") }, { MSEX_MALE, _("彼の", "his") }, { MSEX_FEMALE, _("彼女の", "her") } } },
-            { true, { { MSEX_NONE, _("それらの", "their") }, { MSEX_MALE, _("彼らの", "their") }, { MSEX_FEMALE, _("彼女らの", "their") } } },
+            { false, { { MonsterSex::NONE, _("それの", "its") }, { MonsterSex::MALE, _("彼の", "his") }, { MonsterSex::FEMALE, _("彼女の", "her") } } },
+            { true, { { MonsterSex::NONE, _("それらの", "their") }, { MonsterSex::MALE, _("彼らの", "their") }, { MonsterSex::FEMALE, _("彼女らの", "their") } } },
         } },
     { WHO_WORD_TYPE::WHOM,
         {
-            { false, { { MSEX_NONE, _("それ", "it") }, { MSEX_MALE, _("彼", "him") }, { MSEX_FEMALE, _("彼女", "her") } } },
-            { true, { { MSEX_NONE, _("それら", "them") }, { MSEX_MALE, _("彼ら", "them") }, { MSEX_FEMALE, _("彼女ら", "them") } } },
+            { false, { { MonsterSex::NONE, _("それ", "it") }, { MonsterSex::MALE, _("彼", "him") }, { MonsterSex::FEMALE, _("彼女", "her") } } },
+            { true, { { MonsterSex::NONE, _("それら", "them") }, { MonsterSex::MALE, _("彼ら", "them") }, { MonsterSex::FEMALE, _("彼女ら", "them") } } },
         } },
 };
 
@@ -37,7 +38,7 @@ lore_msg::lore_msg(std::string_view msg, byte color)
 lore_type::lore_type(MonsterRaceId r_idx, monster_lore_mode mode)
     : r_idx(r_idx)
     , mode(mode)
-    , msex(MSEX_NONE)
+    , msex(MonsterSex::NONE)
     , method(RaceBlowMethodType::NONE)
 {
     this->nightmare = ironman_nightmare && (mode != MONSTER_LORE_DEBUG);
@@ -54,6 +55,11 @@ lore_type::lore_type(MonsterRaceId r_idx, monster_lore_mode mode)
     this->brightness_flags = this->r_ptr->brightness_flags;
     this->special_flags = (this->r_ptr->special_flags & this->r_ptr->r_special_flags);
     this->misc_flags = (this->r_ptr->misc_flags & this->r_ptr->r_misc_flags);
+}
+
+bool lore_type::has_reinforce() const
+{
+    return this->r_ptr->has_reinforce();
 }
 
 /*!

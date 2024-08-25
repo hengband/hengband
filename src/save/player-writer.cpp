@@ -116,9 +116,10 @@ void wr_player(PlayerType *player_ptr)
         wr_bool(is_achieved);
     }
 
-    for (auto i = 0; i < NUM_GLADIATORS; i++) {
-        wr_s16b(enum2i(battle_mon_list[i]));
-        wr_u32b(mon_odds[i]);
+    const auto &melee_arena = MeleeArena::get_instance();
+    for (const auto &gladiator : melee_arena.get_gladiators()) {
+        wr_s16b(enum2i(gladiator.monrace_id));
+        wr_u32b(gladiator.odds);
     }
 
     wr_s16b(player_ptr->town_num);

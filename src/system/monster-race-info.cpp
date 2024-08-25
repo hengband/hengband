@@ -1,9 +1,13 @@
 #include "system/monster-race-info.h"
+#include "monster-attack/monster-attack-effect.h"
+#include "monster-attack/monster-attack-table.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-resistance-mask.h"
+#include "monster-race/race-sex.h"
 #include "monster/horror-descriptions.h"
 #include "system/redrawing-flags-updater.h"
 #include "tracking/lore-tracker.h"
+#include "util/enum-converter.h"
 #include "util/probability-table.h"
 #include "world/world.h"
 #include <algorithm>
@@ -38,6 +42,16 @@ MonsterRaceInfo::MonsterRaceInfo()
 bool MonsterRaceInfo::is_valid() const
 {
     return this->idx != MonsterRaceId::PLAYER;
+}
+
+bool MonsterRaceInfo::is_male() const
+{
+    return this->sex == MonsterSex::MALE;
+}
+
+bool MonsterRaceInfo::is_female() const
+{
+    return this->sex == MonsterSex::FEMALE;
 }
 
 /*!
@@ -256,6 +270,34 @@ std::string MonsterRaceInfo::build_eldritch_horror_message(std::string_view desc
     return format(fmt, horror_message.data(), description.data());
 }
 
+bool MonsterRaceInfo::has_reinforce() const
+{
+    const auto end = this->reinforces.end();
+    const auto it = std::find_if(this->reinforces.begin(), end,
+        [](const auto &reinforce) { return reinforce.is_valid(); });
+    return it != end;
+}
+
+const std::vector<DropArtifact> &MonsterRaceInfo::get_drop_artifacts() const
+{
+    return this->drop_artifacts;
+}
+
+const std::vector<Reinforce> &MonsterRaceInfo::get_reinforces() const
+{
+    return this->reinforces;
+}
+
+void MonsterRaceInfo::init_sex(uint32_t value)
+{
+    const auto sex_tmp = i2enum<MonsterSex>(value);
+    if ((sex_tmp < MonsterSex::NONE) || (sex_tmp >= MonsterSex::MAX)) {
+        THROW_EXCEPTION(std::logic_error, "Invalid monrace sex is specified!");
+    }
+
+    this->sex = sex_tmp;
+}
+
 std::optional<std::string> MonsterRaceInfo::probe_lore()
 {
     auto n = false;
@@ -359,6 +401,16 @@ void MonsterRaceInfo::make_lore_treasure(int num_item, int num_gold)
     }
 }
 
+void MonsterRaceInfo::emplace_drop_artifact(FixedArtifactId fa_id, int chance)
+{
+    this->drop_artifacts.emplace_back(fa_id, chance);
+}
+
+void MonsterRaceInfo::emplace_reinforce(MonsterRaceId monrace_id, const Dice &dice)
+{
+    this->reinforces.emplace_back(monrace_id, dice);
+}
+
 /*!
  * @brief エルドリッチホラーの形容詞種別を決める
  * @return エルドリッチホラーの形容詞
@@ -376,6 +428,48 @@ const std::string &MonsterRaceInfo::decide_horror_message() const
     }
 
     return horror_desc_neutral[horror_num - horror_desc_common_size];
+}
+
+DropArtifact::DropArtifact(FixedArtifactId fa_id, int chance)
+    : fa_id(fa_id)
+    , chance(chance)
+{
+}
+
+Reinforce::Reinforce(MonsterRaceId monrace_id, Dice dice)
+    : monrace_id(monrace_id)
+    , dice(dice)
+{
+}
+
+MonsterRaceId Reinforce::get_monrace_id() const
+{
+    return this->monrace_id;
+}
+
+bool Reinforce::is_valid() const
+{
+    return MonraceList::is_valid(this->monrace_id) && this->dice.is_valid();
+}
+
+const MonsterRaceInfo &Reinforce::get_monrace() const
+{
+    return MonraceList::get_instance().get_monrace(this->monrace_id);
+}
+
+std::string Reinforce::get_dice_as_string() const
+{
+    return this->dice.to_string();
+}
+
+int Reinforce::roll_dice() const
+{
+    return this->dice.roll();
+}
+
+int Reinforce::roll_max_dice() const
+{
+    return this->dice.maxroll();
 }
 
 const std::map<MonsterRaceId, std::set<MonsterRaceId>> MonraceList::unified_uniques = {

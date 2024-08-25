@@ -216,7 +216,7 @@ static errr set_mon_sex(const nlohmann::json &sex_data, MonsterRaceInfo &monrace
     if (!info_grab_one_const(sex, r_info_sex, sex_data.get<std::string>())) {
         return PARSE_ERROR_INVALID_FLAG;
     }
-    monrace.sex = static_cast<MonsterSex>(sex);
+    monrace.init_sex(sex);
     return PARSE_ERROR_NONE;
 }
 
@@ -240,12 +240,12 @@ static errr set_mon_artifacts(nlohmann::json &artifact_data, MonsterRaceInfo &mo
         if (auto err = info_set_integer(artifact.value()["drop_artifact_id"], fa_id, true, Range(0, 1024))) {
             return err;
         }
-        int prob;
-        if (auto err = info_set_integer(artifact.value()["drop_probability"], prob, true, Range(1, 100))) {
+        int chance;
+        if (auto err = info_set_integer(artifact.value()["drop_probability"], chance, true, Range(1, 100))) {
             return err;
         }
 
-        monrace.drop_artifacts.emplace_back(fa_id, prob);
+        monrace.emplace_drop_artifact(fa_id, chance);
     }
     return PARSE_ERROR_NONE;
 }
@@ -265,18 +265,18 @@ static errr set_mon_escorts(nlohmann::json &escort_data, MonsterRaceInfo &monrac
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    for (auto &escort : escort_data.items()) {
+    for (const auto &escort : escort_data.items()) {
         MonsterRaceId monrace_id;
         if (auto err = info_set_integer(escort.value()["escorts_id"], monrace_id, true, Range(0, 8192))) {
             return err;
         }
 
-        Dice num_dice;
-        if (auto err = info_set_dice(escort.value()["escort_num"], num_dice, true)) {
+        Dice dice;
+        if (auto err = info_set_dice(escort.value()["escort_num"], dice, true)) {
             return err;
         }
 
-        monrace.reinforces.emplace_back(monrace_id, num_dice);
+        monrace.emplace_reinforce(monrace_id, dice);
     }
     return PARSE_ERROR_NONE;
 }

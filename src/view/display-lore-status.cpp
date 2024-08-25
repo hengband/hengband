@@ -14,7 +14,7 @@ void display_monster_hp_ac(lore_type *lore_ptr)
         return;
     }
 
-    hooked_roff(format(_("%s^は AC%d の防御力と", "%s^ has an armor rating of %d"), Who::who(lore_ptr->msex), lore_ptr->r_ptr->ac));
+    hooked_roff(format(_("%s^は AC%d の防御力と", "%s^ has an armor rating of %d"), Who::who(lore_ptr->msex).data(), lore_ptr->r_ptr->ac));
     if (lore_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP) || (lore_ptr->r_ptr->hit_dice.sides == 1)) {
         auto hp = lore_ptr->r_ptr->hit_dice.maxroll() * (lore_ptr->nightmare ? 2 : 1);
         hooked_roff(format(_(" %d の体力がある。", " and a life rating of %d.  "), std::min(MONSTER_MAXHP, hp)));
@@ -85,7 +85,7 @@ void display_monster_abilities(lore_type *lore_ptr)
         return;
     }
 
-    hooked_roff(format(_("%s^は", "%s^"), Who::who(lore_ptr->msex)));
+    hooked_roff(format(_("%s^は", "%s^"), Who::who(lore_ptr->msex).data()));
     for (int n = 0; const auto &[msg, color] : lore_ptr->lore_msgs) {
 #ifdef JP
         if (n != std::ssize(lore_ptr->lore_msgs) - 1) {
@@ -115,41 +115,41 @@ void display_monster_abilities(lore_type *lore_ptr)
 void display_monster_constitutions(lore_type *lore_ptr)
 {
     if (lore_ptr->r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC)) {
-        hooked_roff(format(_("%s^は水中に棲んでいる。", "%s^ lives in water.  "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^は水中に棲んでいる。", "%s^ lives in water.  "), Who::who(lore_ptr->msex).data()));
     }
 
     if (lore_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::SELF_LITE_1, MonsterBrightnessType::SELF_LITE_2 })) {
-        hooked_roff(format(_("%s^は光っている。", "%s^ is shining.  "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^は光っている。", "%s^ is shining.  "), Who::who(lore_ptr->msex).data()));
     }
 
     if (lore_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::SELF_DARK_1, MonsterBrightnessType::SELF_DARK_2 })) {
-        hook_c_roff(TERM_L_DARK, format(_("%s^は暗黒に包まれている。", "%s^ is surrounded by darkness.  "), Who::who(lore_ptr->msex)));
+        hook_c_roff(TERM_L_DARK, format(_("%s^は暗黒に包まれている。", "%s^ is surrounded by darkness.  "), Who::who(lore_ptr->msex).data()));
     }
 
     if (lore_ptr->misc_flags.has(MonsterMiscType::INVISIBLE)) {
-        hooked_roff(format(_("%s^は透明で目に見えない。", "%s^ is invisible.  "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^は透明で目に見えない。", "%s^ is invisible.  "), Who::who(lore_ptr->msex).data()));
     }
 
     if (lore_ptr->misc_flags.has(MonsterMiscType::COLD_BLOOD)) {
-        hooked_roff(format(_("%s^は冷血動物である。", "%s^ is cold blooded.  "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^は冷血動物である。", "%s^ is cold blooded.  "), Who::who(lore_ptr->msex).data()));
     }
 
     if (lore_ptr->misc_flags.has(MonsterMiscType::EMPTY_MIND)) {
-        hooked_roff(format(_("%s^はテレパシーでは感知できない。", "%s^ is not detected by telepathy.  "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^はテレパシーでは感知できない。", "%s^ is not detected by telepathy.  "), Who::who(lore_ptr->msex).data()));
     } else if (lore_ptr->misc_flags.has(MonsterMiscType::WEIRD_MIND)) {
-        hooked_roff(format(_("%s^はまれにテレパシーで感知できる。", "%s^ is rarely detected by telepathy.  "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^はまれにテレパシーで感知できる。", "%s^ is rarely detected by telepathy.  "), Who::who(lore_ptr->msex).data()));
     }
 
     if (lore_ptr->misc_flags.has(MonsterMiscType::MULTIPLY)) {
-        hook_c_roff(TERM_L_UMBER, format(_("%s^は爆発的に増殖する。", "%s^ breeds explosively.  "), Who::who(lore_ptr->msex)));
+        hook_c_roff(TERM_L_UMBER, format(_("%s^は爆発的に増殖する。", "%s^ breeds explosively.  "), Who::who(lore_ptr->msex).data()));
     }
 
     if (lore_ptr->misc_flags.has(MonsterMiscType::REGENERATE)) {
-        hook_c_roff(TERM_L_WHITE, format(_("%s^は素早く体力を回復する。", "%s^ regenerates quickly.  "), Who::who(lore_ptr->msex)));
+        hook_c_roff(TERM_L_WHITE, format(_("%s^は素早く体力を回復する。", "%s^ regenerates quickly.  "), Who::who(lore_ptr->msex).data()));
     }
 
     if (lore_ptr->misc_flags.has(MonsterMiscType::RIDING)) {
-        hook_c_roff(TERM_SLATE, format(_("%s^に乗ることができる。", "%s^ is suitable for riding.  "), Who::who(lore_ptr->msex)));
+        hook_c_roff(TERM_SLATE, format(_("%s^に乗ることができる。", "%s^ is suitable for riding.  "), Who::who(lore_ptr->msex).data()));
     }
 }
 
@@ -178,7 +178,7 @@ void display_monster_weakness(lore_type *lore_ptr)
         return;
     }
 
-    hooked_roff(format(_("%s^には", "%s^"), Who::who(lore_ptr->msex)));
+    hooked_roff(format(_("%s^には", "%s^"), Who::who(lore_ptr->msex).data()));
     for (int n = 0; const auto &[msg, color] : lore_ptr->lore_msgs) {
 #ifdef JP
         if (n != 0) {
@@ -297,7 +297,7 @@ void display_monster_resistances(lore_type *lore_ptr)
         return;
     }
 
-    hooked_roff(format(_("%s^は", "%s^"), Who::who(lore_ptr->msex)));
+    hooked_roff(format(_("%s^は", "%s^"), Who::who(lore_ptr->msex).data()));
     for (int n = 0; const auto &[msg, color] : lore_ptr->lore_msgs) {
 #ifdef JP
         if (n != 0) {
@@ -327,11 +327,11 @@ void display_monster_evolution(lore_type *lore_ptr)
 
     const auto &monrace_next = lore_ptr->r_ptr->get_next();
     if (monrace_next.is_valid()) {
-        hooked_roff(format(_("%s^は経験を積むと、", "%s^ will evolve into "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^は経験を積むと、", "%s^ will evolve into "), Who::who(lore_ptr->msex).data()));
         hook_c_roff(TERM_YELLOW, format("%s", monrace_next.name.data()));
-        hooked_roff(_(format("に進化する。"), format(" when %s gets enough experience.  ", Who::who(lore_ptr->msex))));
+        hooked_roff(_(format("に進化する。"), format(" when %s gets enough experience.  ", Who::who(lore_ptr->msex).data())));
     } else if (lore_ptr->r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        hooked_roff(format(_("%sは進化しない。", "%s won't evolve.  "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%sは進化しない。", "%s won't evolve.  "), Who::who(lore_ptr->msex).data()));
     }
 }
 
@@ -368,7 +368,7 @@ void display_monster_immunities(lore_type *lore_ptr)
         return;
     }
 
-    hooked_roff(format(_("%s^は", "%s^"), Who::who(lore_ptr->msex)));
+    hooked_roff(format(_("%s^は", "%s^"), Who::who(lore_ptr->msex).data()));
     for (int n = 0; const auto &[msg, color] : lore_ptr->lore_msgs) {
 #ifdef JP
         if (n != 0) {
@@ -392,7 +392,7 @@ void display_monster_immunities(lore_type *lore_ptr)
 
 void display_monster_alert(lore_type *lore_ptr)
 {
-    bool alert = ((int)lore_ptr->r_ptr->r_wake * (int)lore_ptr->r_ptr->r_wake) > lore_ptr->r_ptr->sleep;
+    auto alert = ((int)lore_ptr->r_ptr->r_wake * (int)lore_ptr->r_ptr->r_wake) > lore_ptr->r_ptr->sleep;
     alert |= lore_ptr->r_ptr->r_ignore == MAX_UCHAR;
     alert |= (lore_ptr->r_ptr->sleep == 0) && (lore_ptr->r_ptr->r_tkills >= 10);
     alert |= lore_ptr->know_everything;
@@ -400,31 +400,33 @@ void display_monster_alert(lore_type *lore_ptr)
         return;
     }
 
-    concptr act;
+    std::string action;
     if (lore_ptr->r_ptr->sleep > 200) {
-        act = _("を無視しがちであるが", "prefers to ignore");
+        action = _("を無視しがちであるが", "prefers to ignore");
     } else if (lore_ptr->r_ptr->sleep > 95) {
-        act = _("に対してほとんど注意を払わないが", "pays very little attention to");
+        action = _("に対してほとんど注意を払わないが", "pays very little attention to");
     } else if (lore_ptr->r_ptr->sleep > 75) {
-        act = _("に対してあまり注意を払わないが", "pays little attention to");
+        action = _("に対してあまり注意を払わないが", "pays little attention to");
     } else if (lore_ptr->r_ptr->sleep > 45) {
-        act = _("を見過ごしがちであるが", "tends to overlook");
+        action = _("を見過ごしがちであるが", "tends to overlook");
     } else if (lore_ptr->r_ptr->sleep > 25) {
-        act = _("をほんの少しは見ており", "takes quite a while to see");
+        action = _("をほんの少しは見ており", "takes quite a while to see");
     } else if (lore_ptr->r_ptr->sleep > 10) {
-        act = _("をしばらくは見ており", "takes a while to see");
+        action = _("をしばらくは見ており", "takes a while to see");
     } else if (lore_ptr->r_ptr->sleep > 5) {
-        act = _("を幾分注意深く見ており", "is fairly observant of");
+        action = _("を幾分注意深く見ており", "is fairly observant of");
     } else if (lore_ptr->r_ptr->sleep > 3) {
-        act = _("を注意深く見ており", "is observant of");
+        action = _("を注意深く見ており", "is observant of");
     } else if (lore_ptr->r_ptr->sleep > 1) {
-        act = _("をかなり注意深く見ており", "is very observant of");
+        action = _("をかなり注意深く見ており", "is very observant of");
     } else if (lore_ptr->r_ptr->sleep > 0) {
-        act = _("を警戒しており", "is vigilant for");
+        action = _("を警戒しており", "is vigilant for");
     } else {
-        act = _("をかなり警戒しており", "is ever vigilant for");
+        action = _("をかなり警戒しており", "is ever vigilant for");
     }
 
-    hooked_roff(_(format("%s^は侵入者%s、 %d フィート先から侵入者に気付くことがある。", Who::who(lore_ptr->msex), act, 10 * lore_ptr->r_ptr->aaf),
-        format("%s^ %s intruders, which %s may notice from %d feet.  ", Who::who(lore_ptr->msex), act, Who::who(lore_ptr->msex), 10 * lore_ptr->r_ptr->aaf)));
+    constexpr auto fmt = _("%s^は侵入者%s、 %d フィート先から侵入者に気付くことがある。", "%s^ %s intruders, which %s may notice from %d feet.  ");
+    const auto who = Who::who(lore_ptr->msex);
+    hooked_roff(_(format(fmt, who.data(), action.data(), 10 * lore_ptr->r_ptr->aaf),
+        format(fmt, who.data(), action.data(), who.data(), 10 * lore_ptr->r_ptr->aaf)));
 }

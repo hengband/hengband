@@ -466,7 +466,7 @@ bool activate_whistle(PlayerType *player_ptr, const ItemEntity &item)
     std::vector<short> pet_index;
     for (short pet_indice = floor.m_max - 1; pet_indice >= 1; pet_indice--) {
         const auto &monster = floor.m_list[pet_indice];
-        if (monster.is_pet() && (player_ptr->riding != pet_indice)) {
+        if (monster.is_pet() && !monster.is_riding()) {
             pet_index.push_back(pet_indice);
         }
     }

@@ -119,7 +119,7 @@ void compact_monsters(PlayerType *player_ptr, int size)
             if (monrace.level > cur_lev) {
                 continue;
             }
-            if (i == player_ptr->riding) {
+            if (monster.is_riding()) {
                 continue;
             }
             if ((cur_dis > 0) && (monster.cdis < cur_dis)) {

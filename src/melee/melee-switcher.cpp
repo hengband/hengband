@@ -91,7 +91,7 @@ void describe_melee_method(PlayerType *player_ptr, mam_type *mam_ptr)
         break;
     }
     case RaceBlowMethodType::CRUSH: {
-        mam_ptr->act = _("%sに体当りした。", "crushes %s.");
+        mam_ptr->act = _("%sを押し潰した", "crushes %s.");
         mam_ptr->touched = true;
         break;
     }
@@ -206,7 +206,7 @@ void decide_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr)
         break;
     case RaceBlowEffectType::EAT_ITEM:
     case RaceBlowEffectType::EAT_GOLD:
-        if ((player_ptr->riding != mam_ptr->m_idx) && one_in_(2)) {
+        if (!mam_ptr->m_ptr->is_riding() && one_in_(2)) {
             mam_ptr->blinked = true;
         }
 

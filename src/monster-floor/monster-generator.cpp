@@ -279,8 +279,7 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MonsterRaceId monra
  */
 std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
-
+    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     if (!(mode & PM_NO_KAGE) && one_in_(333)) {
         mode |= PM_KAGE;
     }
@@ -294,18 +293,19 @@ std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITI
     }
 
     /* Reinforcement */
-    for (const auto &[reinforce_monrace_id, num_dice] : r_ptr->reinforces) {
-        if (!MonraceList::is_valid(reinforce_monrace_id)) {
+    for (const auto &reinforce : monrace.get_reinforces()) {
+        if (!reinforce.is_valid()) {
             continue;
         }
-        auto n = num_dice.roll();
+
+        const auto n = reinforce.roll_dice();
         for (int j = 0; j < n; j++) {
             POSITION nx, ny, d;
             const POSITION scatter_min = 7;
             const POSITION scatter_max = 40;
             for (d = scatter_min; d <= scatter_max; d++) {
                 scatter(player_ptr, &ny, &nx, y, x, d, PROJECT_NONE);
-                if (place_monster_one(player_ptr, ny, nx, reinforce_monrace_id, mode, *m_idx)) {
+                if (place_monster_one(player_ptr, ny, nx, reinforce.get_monrace_id(), mode, *m_idx)) {
                     break;
                 }
             }
@@ -315,11 +315,11 @@ std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITI
         }
     }
 
-    if (r_ptr->misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
+    if (monrace.misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
         (void)place_monster_group(player_ptr, y, x, r_idx, mode, summoner_m_idx);
     }
 
-    if (r_ptr->misc_flags.has_not(MonsterMiscType::ESCORT)) {
+    if (monrace.misc_flags.has_not(MonsterMiscType::ESCORT)) {
         return m_idx;
     }
 
@@ -334,13 +334,13 @@ std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITI
             return place_monster_can_escort(player_ptr, escort_monrace_id, place_monster_monrace_id, place_monster_m_idx);
         };
         get_mon_num_prep(player_ptr, std::move(hook), get_monster_hook2(player_ptr, ny, nx));
-        const auto monrace_id = get_mon_num(player_ptr, 0, r_ptr->level, 0);
+        const auto monrace_id = get_mon_num(player_ptr, 0, monrace.level, 0);
         if (!MonraceList::is_valid(monrace_id)) {
             break;
         }
 
         (void)place_monster_one(player_ptr, ny, nx, monrace_id, mode, *m_idx);
-        if (monraces_info[monrace_id].misc_flags.has(MonsterMiscType::HAS_FRIENDS) || r_ptr->misc_flags.has(MonsterMiscType::MORE_ESCORT)) {
+        if (monrace.misc_flags.has(MonsterMiscType::HAS_FRIENDS) || monrace.misc_flags.has(MonsterMiscType::MORE_ESCORT)) {
             (void)place_monster_group(player_ptr, ny, nx, monrace_id, mode, *m_idx);
         }
     }

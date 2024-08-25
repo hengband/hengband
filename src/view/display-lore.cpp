@@ -130,7 +130,7 @@ static bool display_kill_unique(lore_type *lore_ptr)
 
     bool dead = (lore_ptr->r_ptr->max_num == 0);
     if (lore_ptr->r_ptr->r_deaths) {
-        hooked_roff(format(_("%s^はあなたの先祖を %d 人葬っている", "%s^ has slain %d of your ancestors"), Who::who(lore_ptr->msex), lore_ptr->r_ptr->r_deaths));
+        hooked_roff(format(_("%s^はあなたの先祖を %d 人葬っている", "%s^ has slain %d of your ancestors"), Who::who(lore_ptr->msex).data(), lore_ptr->r_ptr->r_deaths));
 
         if (dead) {
             hooked_roff(
@@ -167,7 +167,7 @@ static void display_killed(lore_type *lore_ptr)
             _("が、あなたの先祖はこのモンスターを少なくとも %d 体は倒している。", "and your ancestors have exterminated at least %d of the creatures.  "),
             lore_ptr->r_ptr->r_tkills));
     } else {
-        hooked_roff(format(_("が、まだ%sを倒したことはない。", "and %s is not ever known to have been defeated.  "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("が、まだ%sを倒したことはない。", "and %s is not ever known to have been defeated.  "), Who::who(lore_ptr->msex).data()));
     }
 }
 
@@ -199,20 +199,22 @@ static void display_number_of_nazguls(lore_type *lore_ptr)
         return;
     }
 
-    int remain = lore_ptr->r_ptr->max_num;
-    int killed = lore_ptr->r_ptr->r_akills;
+    const auto remain = lore_ptr->r_ptr->max_num;
+    const auto killed = lore_ptr->r_ptr->r_akills;
     if (remain == 0) {
+        const auto whom = Who::whom(lore_ptr->msex, (killed > 1));
 #ifdef JP
-        hooked_roff(format("%sはかつて %d 体存在した。", Who::who(lore_ptr->msex, (killed > 1)), killed));
+        hooked_roff(format("%sはかつて %d 体存在した。", whom.data(), killed));
 #else
-        hooked_roff(format("You already killed all %d of %s.  ", killed, Who::whom(lore_ptr->msex, (killed > 1))));
+        hooked_roff(format("You already killed all %d of %s.  ", killed, whom.data()));
 #endif
     } else {
+        const auto whom = Who::whom(lore_ptr->msex, (remain + killed > 1));
 #ifdef JP
-        hooked_roff(format("%sはまだ %d 体生きている。", Who::who(lore_ptr->msex, (remain + killed > 1)), remain));
+        hooked_roff(format("%sはまだ %d 体生きている。", whom.data(), remain));
 #else
-        concptr be = (remain > 1) ? "are" : "is";
-        hooked_roff(format("%d of %s %s still alive.  ", remain, Who::whom(lore_ptr->msex, (remain + killed > 1)), be));
+        std::string be((remain > 1) ? "are" : "is");
+        hooked_roff(format("%d of %s %s still alive.  ", remain, whom.data(), be.data()));
 #endif
     }
 }
@@ -247,14 +249,14 @@ bool display_where_to_appear(lore_type *lore_ptr)
 {
     lore_ptr->old = false;
     if (lore_ptr->r_ptr->level == 0) {
-        hooked_roff(format(_("%s^は町に住み", "%s^ lives in the town"), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^は町に住み", "%s^ lives in the town"), Who::who(lore_ptr->msex).data()));
         lore_ptr->old = true;
     } else if (lore_ptr->r_ptr->r_tkills || lore_ptr->know_everything) {
         if (depth_in_feet) {
             hooked_roff(format(
-                _("%s^は通常地下 %d フィートで出現し", "%s^ is normally found at depths of %d feet"), Who::who(lore_ptr->msex), lore_ptr->r_ptr->level * 50));
+                _("%s^は通常地下 %d フィートで出現し", "%s^ is normally found at depths of %d feet"), Who::who(lore_ptr->msex).data(), lore_ptr->r_ptr->level * 50));
         } else {
-            hooked_roff(format(_("%s^は通常地下 %d 階で出現し", "%s^ is normally found on dungeon level %d"), Who::who(lore_ptr->msex), lore_ptr->r_ptr->level));
+            hooked_roff(format(_("%s^は通常地下 %d 階で出現し", "%s^ is normally found on dungeon level %d"), Who::who(lore_ptr->msex).data(), lore_ptr->r_ptr->level));
         }
 
         lore_ptr->old = true;
@@ -268,7 +270,7 @@ bool display_where_to_appear(lore_type *lore_ptr)
     if (lore_ptr->old) {
         hooked_roff(_("、", ", and "));
     } else {
-        hooked_roff(format(_("%s^は", "%s^ "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^は", "%s^ "), Who::who(lore_ptr->msex).data()));
         lore_ptr->old = true;
     }
 
@@ -346,7 +348,7 @@ void display_monster_never_move(lore_type *lore_ptr)
     if (lore_ptr->old) {
         hooked_roff(_("、しかし", ", but "));
     } else {
-        hooked_roff(format(_("%s^は", "%s^ "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^は", "%s^ "), Who::who(lore_ptr->msex).data()));
         lore_ptr->old = true;
     }
 
@@ -482,19 +484,19 @@ void display_monster_aura(lore_type *lore_ptr)
     auto has_cold_aura = lore_ptr->aura_flags.has(MonsterAuraType::COLD);
     if (has_fire_aura && has_elec_aura && has_cold_aura) {
         hook_c_roff(
-            TERM_VIOLET, format(_("%s^は炎と氷とスパークに包まれている。", "%s^ is surrounded by flames, ice and electricity.  "), Who::who(lore_ptr->msex)));
+            TERM_VIOLET, format(_("%s^は炎と氷とスパークに包まれている。", "%s^ is surrounded by flames, ice and electricity.  "), Who::who(lore_ptr->msex).data()));
     } else if (has_fire_aura && has_elec_aura) {
-        hook_c_roff(TERM_L_RED, format(_("%s^は炎とスパークに包まれている。", "%s^ is surrounded by flames and electricity.  "), Who::who(lore_ptr->msex)));
+        hook_c_roff(TERM_L_RED, format(_("%s^は炎とスパークに包まれている。", "%s^ is surrounded by flames and electricity.  "), Who::who(lore_ptr->msex).data()));
     } else if (has_fire_aura && has_cold_aura) {
-        hook_c_roff(TERM_BLUE, format(_("%s^は炎と氷に包まれている。", "%s^ is surrounded by flames and ice.  "), Who::who(lore_ptr->msex)));
+        hook_c_roff(TERM_BLUE, format(_("%s^は炎と氷に包まれている。", "%s^ is surrounded by flames and ice.  "), Who::who(lore_ptr->msex).data()));
     } else if (has_cold_aura && has_elec_aura) {
-        hook_c_roff(TERM_L_GREEN, format(_("%s^は氷とスパークに包まれている。", "%s^ is surrounded by ice and electricity.  "), Who::who(lore_ptr->msex)));
+        hook_c_roff(TERM_L_GREEN, format(_("%s^は氷とスパークに包まれている。", "%s^ is surrounded by ice and electricity.  "), Who::who(lore_ptr->msex).data()));
     } else if (has_fire_aura) {
-        hook_c_roff(TERM_RED, format(_("%s^は炎に包まれている。", "%s^ is surrounded by flames.  "), Who::who(lore_ptr->msex)));
+        hook_c_roff(TERM_RED, format(_("%s^は炎に包まれている。", "%s^ is surrounded by flames.  "), Who::who(lore_ptr->msex).data()));
     } else if (has_cold_aura) {
-        hook_c_roff(TERM_BLUE, format(_("%s^は氷に包まれている。", "%s^ is surrounded by ice.  "), Who::who(lore_ptr->msex)));
+        hook_c_roff(TERM_BLUE, format(_("%s^は氷に包まれている。", "%s^ is surrounded by ice.  "), Who::who(lore_ptr->msex).data()));
     } else if (has_elec_aura) {
-        hook_c_roff(TERM_L_BLUE, format(_("%s^はスパークに包まれている。", "%s^ is surrounded by electricity.  "), Who::who(lore_ptr->msex)));
+        hook_c_roff(TERM_L_BLUE, format(_("%s^はスパークに包まれている。", "%s^ is surrounded by electricity.  "), Who::who(lore_ptr->msex).data()));
     }
 }
 
@@ -521,7 +523,7 @@ void display_lore_this(PlayerType *player_ptr, lore_type *lore_ptr)
 
 static void display_monster_escort_contents(lore_type *lore_ptr)
 {
-    if (!lore_ptr->reinforce) {
+    if (!lore_ptr->has_reinforce()) {
         return;
     }
 
@@ -530,37 +532,37 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
         hooked_roff(_("少なくとも", " at the least"));
     }
 
+    const auto &reinforces = lore_ptr->r_ptr->get_reinforces();
 #ifdef JP
 #else
     hooked_roff(" contain");
-    auto max_idx = lore_ptr->r_ptr->reinforces.size() - 1;
-    auto idx = 0 * max_idx;
+    const auto max_idx = reinforces.size() - 1;
+    auto idx = 0U;
 #endif
 
-    for (const auto &[monrace_id, num_dice] : lore_ptr->r_ptr->reinforces) {
-        auto is_reinforced = MonraceList::is_valid(monrace_id);
-#ifndef JP
-        const char *prefix = (idx == 0) ? " " : (idx == max_idx) ? " and "
-                                                                 : ", ";
+    for (const auto &reinforce : reinforces) {
+#ifdef JP
+#else
+        const std::string prefix = (idx == 0) ? " " : (idx == max_idx) ? " and "
+                                                                       : ", ";
         ++idx;
 #endif
-        is_reinforced &= num_dice.is_valid();
-        if (!is_reinforced) {
+        if (!reinforce.is_valid()) {
             continue;
         }
 
-        const auto *rf_ptr = &monraces_info[monrace_id];
-        if (rf_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            hooked_roff(format("%s%s", _("、", prefix), rf_ptr->name.data()));
+        const auto &monrace = reinforce.get_monrace();
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+            hooked_roff(format("%s%s", _("、", prefix.data()), monrace.name.data()));
             continue;
         }
 
 #ifdef JP
-        hooked_roff(format("、 %s 体の%s", num_dice.to_string().data(), rf_ptr->name.data()));
+        hooked_roff(format("、 %s 体の%s", reinforce.get_dice_as_string().data(), monrace.name.data()));
 #else
-        const auto plural = (num_dice.maxroll() > 1);
-        const auto &name = plural ? pluralize(rf_ptr->name) : rf_ptr->name.string();
-        hooked_roff(format("%s%s %s", prefix, num_dice.to_string().data(), name.data()));
+        const auto is_plural = reinforce.roll_max_dice() > 1;
+        const auto &name = is_plural ? pluralize(monrace.name) : monrace.name.string();
+        hooked_roff(format("%s%s %s", prefix.data(), reinforce.get_dice_as_string().data(), name.data()));
 #endif
     }
 
@@ -569,11 +571,11 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
 
 void display_monster_collective(lore_type *lore_ptr)
 {
-    if (lore_ptr->misc_flags.has(MonsterMiscType::ESCORT) || lore_ptr->misc_flags.has(MonsterMiscType::MORE_ESCORT) || lore_ptr->reinforce) {
-        hooked_roff(format(_("%s^は通常護衛を伴って現れる。", "%s^ usually appears with escorts.  "), Who::who(lore_ptr->msex)));
+    if (lore_ptr->misc_flags.has(MonsterMiscType::ESCORT) || lore_ptr->misc_flags.has(MonsterMiscType::MORE_ESCORT) || lore_ptr->has_reinforce()) {
+        hooked_roff(format(_("%s^は通常護衛を伴って現れる。", "%s^ usually appears with escorts.  "), Who::who(lore_ptr->msex).data()));
         display_monster_escort_contents(lore_ptr);
     } else if (lore_ptr->misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
-        hooked_roff(format(_("%s^は通常集団で現れる。", "%s^ usually appears in groups.  "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^は通常集団で現れる。", "%s^ usually appears in groups.  "), Who::who(lore_ptr->msex).data()));
     }
 }
 
@@ -615,7 +617,7 @@ void display_monster_sometimes(lore_type *lore_ptr)
         return;
     }
 
-    hooked_roff(format(_("%s^は", "%s^"), Who::who(lore_ptr->msex)));
+    hooked_roff(format(_("%s^は", "%s^"), Who::who(lore_ptr->msex).data()));
     for (int n = 0; const auto &[msg, color] : lore_ptr->lore_msgs) {
 #ifdef JP
         if (n != std::ssize(lore_ptr->lore_msgs) - 1) {

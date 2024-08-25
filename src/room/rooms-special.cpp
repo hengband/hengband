@@ -28,7 +28,7 @@ namespace {
 void place_floor_glass(PlayerType *player_ptr, Grid &grid)
 {
     place_grid(player_ptr, &grid, GB_FLOOR);
-    grid.feat = feat_glass_wall;
+    grid.feat = feat_glass_floor;
 }
 
 void place_outer_glass(PlayerType *player_ptr, Grid &grid)

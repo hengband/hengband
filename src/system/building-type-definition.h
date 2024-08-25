@@ -2,6 +2,7 @@
 
 #include <array>
 #include <cstdint>
+#include <string>
 #include <vector>
 
 struct building_type {
@@ -25,21 +26,20 @@ constexpr auto MAX_BUILDINGS = 32; /*!< 施設の種類最大数 / Number of bui
 extern std::array<building_type, MAX_BUILDINGS> buildings;
 
 enum class MonsterRaceId : short;
+class MonsterRaceInfo;
 class MeleeGladiator {
 public:
     MeleeGladiator() = default;
-    MonsterRaceId gladiator{};
+    MeleeGladiator(MonsterRaceId monrace_id, uint32_t odds);
+    MonsterRaceId monrace_id{};
     uint32_t odds = 0;
+
+    const MonsterRaceInfo &get_monrace() const;
 };
 
-constexpr auto NUM_GLADIATORS = 4;
-extern MonsterRaceId battle_mon_list[4];
-extern uint32_t mon_odds[4];
-extern int battle_odds;
-extern int wager_melee;
-extern int bet_number;
-
 //!< モンスター闘技場定義.
+constexpr auto NUM_GLADIATORS = 4;
+class PlayerType; //!< @todo 暫定、後で消す.
 class MeleeArena {
 public:
     ~MeleeArena() = default;
@@ -49,13 +49,28 @@ public:
     MeleeArena &operator=(MeleeArena &&) = delete;
     static MeleeArena &get_instance();
 
+    bool matches_bet_number(int value) const;
+    void set_bet_number(int value);
+    void set_wager(int value);
+    int get_payback(bool is_draw = false) const;
     MeleeGladiator &get_gladiator(int n);
     const MeleeGladiator &get_gladiator(int n) const;
     void set_gladiator(int n, const MeleeGladiator &gladiator);
+    const std::array<MeleeGladiator, NUM_GLADIATORS> &get_gladiators() const; //!< @detail セーブデータへの書き込みにしか使わないこと.
+    std::vector<std::string> build_gladiators_names() const; //!< @detail 要素数は常にNUM_GLADIATORSと同じ.
+    void update_gladiators(PlayerType *player_ptr);
 
 private:
     MeleeArena() = default;
     static MeleeArena instance;
 
+    int bet_number = 0;
+    int wager = 0;
     std::array<MeleeGladiator, NUM_GLADIATORS> gladiators{};
+
+    int decide_max_level() const;
+    std::pair<int, bool> set_gladiators(PlayerType *player_ptr, int mon_level);
+    MonsterRaceId search_gladiator(PlayerType *player_ptr, int mon_level, int num_gladiator) const;
+    int matches_gladiator(MonsterRaceId monrace_id, int current_num) const;
+    std::pair<int, int> set_odds(int current_total, bool is_applicable);
 };

@@ -23,6 +23,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
+#include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
@@ -123,12 +124,13 @@ void do_cmd_open(PlayerType *player_ptr)
 
     int dir;
     if (get_rep_dir(player_ptr, &dir, true)) {
+        auto &floor = *player_ptr->current_floor_ptr;
         const auto pos = player_ptr->get_neighbor(dir);
-        const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
-        const auto o_idx = chest_check(player_ptr->current_floor_ptr, pos, false);
+        const auto &grid = floor.get_grid(pos);
+        const auto o_idx = chest_check(&floor, pos, false);
         if (grid.get_terrain_mimic().flags.has_not(TerrainCharacteristics::OPEN) && !o_idx) {
             msg_print(_("そこには開けるものが見当たらない。", "You see nothing there to open."));
-        } else if (grid.has_monster() && player_ptr->riding != grid.m_idx) {
+        } else if (grid.has_monster() && !floor.m_list[grid.m_idx].is_riding()) {
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
             do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
@@ -223,13 +225,14 @@ void do_cmd_disarm(PlayerType *player_ptr)
     int dir;
     auto more = false;
     if (get_rep_dir(player_ptr, &dir, true)) {
+        auto &floor = *player_ptr->current_floor_ptr;
         const auto pos = player_ptr->get_neighbor(dir);
-        const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+        const auto &grid = floor.get_grid(pos);
         const auto feat = grid.get_feat_mimic();
-        const auto o_idx = chest_check(player_ptr->current_floor_ptr, pos, true);
+        const auto o_idx = chest_check(&floor, pos, true);
         if (!is_trap(player_ptr, feat) && !o_idx) {
             msg_print(_("そこには解除するものが見当たらない。", "You see nothing there to disarm."));
-        } else if (grid.has_monster() && player_ptr->riding != grid.m_idx) {
+        } else if (grid.has_monster() && !floor.m_list[grid.m_idx].is_riding()) {
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
             do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
         } else if (o_idx) {

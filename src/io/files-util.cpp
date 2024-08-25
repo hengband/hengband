@@ -116,6 +116,8 @@ std::optional<std::string> get_random_line(concptr file_name, int entry)
 
     int test;
     auto line_num = 0;
+    const auto monrace_id = i2enum<MonsterRaceId>(entry);
+    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
     while (true) {
         const auto line_str = angband_fgets(fp);
         if (!line_str) {
@@ -134,11 +136,11 @@ std::optional<std::string> get_random_line(concptr file_name, int entry)
         }
 
         if (buf[2] == 'M') {
-            if (is_male(monraces_info[i2enum<MonsterRaceId>(entry)])) {
+            if (monrace.is_male()) {
                 break;
             }
         } else if (buf[2] == 'F') {
-            if (is_female(monraces_info[i2enum<MonsterRaceId>(entry)])) {
+            if (monrace.is_female()) {
                 break;
             }
         } else if (sscanf(&(buf[2]), "%d", &test) != EOF) {

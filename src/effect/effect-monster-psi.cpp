@@ -320,13 +320,13 @@ ProcessResult effect_monster_psi_drain(PlayerType *player_ptr, EffectMonster *em
  * @details
  * 朦朧＋ショートテレポートアウェイ
  */
-ProcessResult effect_monster_telekinesis(PlayerType *player_ptr, EffectMonster *em_ptr)
+ProcessResult effect_monster_telekinesis(EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
     }
     if (one_in_(4)) {
-        if (player_ptr->riding && (em_ptr->g_ptr->m_idx == player_ptr->riding)) {
+        if (em_ptr->m_ptr->is_riding()) {
             em_ptr->do_dist = 0;
         } else {
             em_ptr->do_dist = 7;

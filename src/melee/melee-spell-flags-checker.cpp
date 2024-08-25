@@ -267,9 +267,9 @@ static void check_melee_spell_special(PlayerType *player_ptr, melee_spell_type *
     ms_ptr->ability_flags.reset(MonsterAbilityType::SPECIAL);
 }
 
-static void check_riding(PlayerType *player_ptr, melee_spell_type *ms_ptr)
+static void check_riding(melee_spell_type *ms_ptr)
 {
-    if (ms_ptr->m_idx != player_ptr->riding) {
+    if (!ms_ptr->m_ptr->is_riding()) {
         return;
     }
 
@@ -295,7 +295,7 @@ static void check_pet(PlayerType *player_ptr, melee_spell_type *ms_ptr)
         ms_ptr->ability_flags.reset(RF_ABILITY_SUMMON_MASK);
     }
 
-    if (!(player_ptr->pet_extra_flags & PF_BALL_SPELL) && (ms_ptr->m_idx != player_ptr->riding)) {
+    if (!(player_ptr->pet_extra_flags & PF_BALL_SPELL) && !ms_ptr->m_ptr->is_riding()) {
         check_melee_spell_distance(player_ptr, ms_ptr);
         check_melee_spell_rocket(player_ptr, ms_ptr);
         check_melee_spell_beam(player_ptr, ms_ptr);
@@ -343,7 +343,7 @@ static void check_smart(PlayerType *player_ptr, melee_spell_type *ms_ptr)
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (ms_ptr->ability_flags.has(MonsterAbilityType::TELE_LEVEL) && floor.can_teleport_level((ms_ptr->target_idx != player_ptr->riding) ? ms_ptr->target_idx != 0 : false)) {
+    if (ms_ptr->ability_flags.has(MonsterAbilityType::TELE_LEVEL) && floor.can_teleport_level(!ms_ptr->t_ptr->is_riding() ? ms_ptr->target_idx != 0 : false)) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::TELE_LEVEL);
     }
 }
@@ -391,7 +391,7 @@ bool check_melee_spell_set(PlayerType *player_ptr, melee_spell_type *ms_ptr)
         ms_ptr->ability_flags.reset(MonsterAbilityType::HEAL);
     }
 
-    check_riding(player_ptr, ms_ptr);
+    check_riding(ms_ptr);
     check_pet(player_ptr, ms_ptr);
     check_non_stupid(player_ptr, ms_ptr);
     check_smart(player_ptr, ms_ptr);

@@ -11,6 +11,7 @@
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "market/arena-entry.h"
+#include "monster-attack/monster-attack-table.h"
 #include "monster-floor/monster-death-util.h"
 #include "monster-floor/monster-object.h"
 #include "monster-floor/special-death-switcher.h"
@@ -148,12 +149,12 @@ static void drop_corpse(PlayerType *player_ptr, MonsterDeath *md_ptr)
 static void drop_artifact_from_unique(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
     const auto is_wizard = AngbandWorld::get_instance().wizard;
-    for (const auto &[a_idx, chance] : md_ptr->r_ptr->drop_artifacts) {
+    for (const auto &[fa_id, chance] : md_ptr->r_ptr->get_drop_artifacts()) {
         if (!is_wizard && !evaluate_percent(chance)) {
             continue;
         }
 
-        if (drop_single_artifact(player_ptr, md_ptr, a_idx)) {
+        if (drop_single_artifact(player_ptr, md_ptr, fa_id)) {
             return;
         }
     }
@@ -391,7 +392,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
 
     QuestCompletionChecker(player_ptr, md_ptr->m_ptr).complete();
     on_defeat_arena_monster(player_ptr, md_ptr);
-    if (m_idx == player_ptr->riding && process_fall_off_horse(player_ptr, -1, false)) {
+    if (md_ptr->m_ptr->is_riding() && process_fall_off_horse(player_ptr, -1, false)) {
         msg_print(_("地面に落とされた。", "You have fallen from the pet you were riding."));
     }
 

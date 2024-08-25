@@ -1,7 +1,6 @@
 #include "monster/monster-describer.h"
 #include "io/files-util.h"
 #include "locale/english.h"
-#include "monster-race/race-sex-const.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
@@ -25,10 +24,10 @@ static int get_monster_pronoun_kind(const MonsterRaceInfo &monrace, const bool p
     if (!pron) {
         return 0x00;
     }
-    if (monrace.sex == MonsterSex::FEMALE) {
+    if (monrace.is_female()) {
         return 0x20;
     }
-    if (monrace.sex == MonsterSex::MALE) {
+    if (monrace.is_male()) {
         return 0x10;
     }
     return 0x00;
@@ -111,11 +110,11 @@ static std::optional<std::string> get_monster_self_pronoun(const MonsterEntity &
         return std::nullopt;
     }
 
-    if (monrace.sex == MonsterSex::FEMALE) {
+    if (monrace.is_female()) {
         return _("彼女自身", "herself");
     }
 
-    if (monrace.sex == MonsterSex::MALE) {
+    if (monrace.is_male()) {
         return _("彼自身", "himself");
     }
 
@@ -176,7 +175,7 @@ static std::optional<std::string> get_fake_monster_name(const PlayerType &player
         return _(replace_monster_name_undefined(name), format("%s?", name.data()));
     }
 
-    if (AngbandSystem::get_instance().is_phase_out() && !(player.riding && (&player.current_floor_ptr->m_list[player.riding] == &monster))) {
+    if (AngbandSystem::get_instance().is_phase_out() && !monster.is_riding()) {
         return format(_("%sもどき", "fake %s"), name.data());
     }
 
@@ -259,7 +258,7 @@ std::string monster_desc(PlayerType *player_ptr, const MonsterEntity *m_ptr, BIT
         ss << _("「", " called ") << m_ptr->nickname << _("」", "");
     }
 
-    if (player_ptr->riding && (&player_ptr->current_floor_ptr->m_list[player_ptr->riding] == m_ptr)) {
+    if (m_ptr->is_riding()) {
         ss << _("(乗馬中)", "(riding)");
     }
 

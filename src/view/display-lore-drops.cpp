@@ -102,7 +102,7 @@ void display_monster_drops(lore_type *lore_ptr)
         return;
     }
 
-    hooked_roff(format(_("%s^は", "%s^ may carry"), Who::who(lore_ptr->msex)));
+    hooked_roff(format(_("%s^は", "%s^ may carry"), Who::who(lore_ptr->msex).data()));
 #ifdef JP
 #else
     lore_ptr->sin = false;

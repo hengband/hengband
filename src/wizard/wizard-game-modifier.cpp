@@ -8,9 +8,9 @@
 #include "dungeon/quest.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/input-key-requester.h"
-#include "market/melee-arena.h"
 #include "monster-race/race-indice-types.h"
 #include "player-info/self-info.h"
+#include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -78,9 +78,11 @@ void wizard_game_modifier(PlayerType *player_ptr)
     case '\n':
     case '\r':
         break;
-    case 'g':
-        update_melee_gladiators(player_ptr);
+    case 'g': {
+        auto &melee_arena = MeleeArena::get_instance();
+        melee_arena.update_gladiators(player_ptr);
         break;
+    }
     case 'q':
         wiz_complete_quest(player_ptr);
         break;

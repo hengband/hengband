@@ -18,13 +18,8 @@
 #include <string_view>
 #include <unordered_map>
 
-enum class MonsterRaceId : int16_t;
-
-enum monster_sex {
-    MSEX_NONE = 0,
-    MSEX_MALE = 1,
-    MSEX_FEMALE = 2,
-};
+enum class MonsterRaceId : short;
+enum class MonsterSex;
 
 enum monster_lore_mode {
     MONSTER_LORE_NONE,
@@ -47,7 +42,6 @@ struct lore_type {
     bool sin = false;
 #endif
 
-    bool reinforce = false;
     bool know_everything = false;
     bool old = false;
     int count = 0;
@@ -65,7 +59,7 @@ struct lore_type {
 
     MonsterRaceId r_idx;
     BIT_FLAGS mode;
-    monster_sex msex;
+    MonsterSex msex;
     RaceBlowMethodType method;
 
     bool nightmare;
@@ -84,6 +78,8 @@ struct lore_type {
     EnumClassFlagGroup<MonsterBrightnessType> brightness_flags;
     EnumClassFlagGroup<MonsterSpecialType> special_flags;
     EnumClassFlagGroup<MonsterMiscType> misc_flags;
+
+    bool has_reinforce() const;
 };
 
 using hook_c_roff_pf = void (*)(TERM_COLOR attr, std::string_view str);
@@ -94,7 +90,7 @@ void hooked_roff(std::string_view str);
 enum WHO_WORD_TYPE { WHO = 0,
     WHOSE = 1,
     WHOM = 2 };
-using who_word_definition = std::unordered_map<WHO_WORD_TYPE, const std::unordered_map<bool, const std::unordered_map<monster_sex, std::string>>>;
+using who_word_definition = std::unordered_map<WHO_WORD_TYPE, const std::unordered_map<bool, const std::unordered_map<MonsterSex, std::string>>>;
 
 class Who {
 public:
@@ -105,7 +101,7 @@ public:
      * @param msex モンスターの性別
      * @return 主語
      */
-    static concptr who(monster_sex msex)
+    static std::string who(MonsterSex msex)
     {
         return who(msex, false);
     }
@@ -116,7 +112,7 @@ public:
      * @param multi 複数かどうか
      * @return 主語
      */
-    static concptr who(monster_sex msex, bool multi)
+    static std::string who(MonsterSex msex, bool multi)
     {
         return words.at(WHO_WORD_TYPE::WHO).at(multi).at(msex).data();
     }
@@ -126,7 +122,7 @@ public:
      * @param msex モンスターの性別
      * @return 所有格
      */
-    static concptr whose(monster_sex msex)
+    static std::string whose(MonsterSex msex)
     {
         return whose(msex, false);
     }
@@ -137,7 +133,7 @@ public:
      * @param multi 複数かどうか
      * @return 所有格
      */
-    static concptr whose(monster_sex msex, bool multi)
+    static std::string whose(MonsterSex msex, bool multi)
     {
         return words.at(WHO_WORD_TYPE::WHOSE).at(multi).at(msex).data();
     }
@@ -147,7 +143,7 @@ public:
      * @param msex モンスターの性別
      * @return 目的語
      */
-    static concptr whom(monster_sex msex)
+    static std::string whom(MonsterSex msex)
     {
         return whom(msex, false);
     }
@@ -158,7 +154,7 @@ public:
      * @param multi 複数かどうか
      * @return 目的語
      */
-    static concptr whom(monster_sex msex, bool multi)
+    static std::string whom(MonsterSex msex, bool multi)
     {
         return words.at(WHO_WORD_TYPE::WHOM).at(multi).at(msex).data();
     }
