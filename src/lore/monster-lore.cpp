@@ -162,6 +162,7 @@ void process_monster_lore(PlayerType *player_ptr, MonsterRaceId r_idx, monster_l
         return;
     }
 
+    display_random_move(lore_ptr);
     display_monster_move(lore_ptr);
     display_monster_never_move(lore_ptr);
     if (lore_ptr->old) {
