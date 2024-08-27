@@ -139,6 +139,8 @@ public:
     bool is_explodable() const;
     bool symbol_char_is_any_of(std::string_view symbol_characters) const;
     std::string get_died_message() const;
+    std::optional<bool> order_level(const MonsterRaceInfo &other) const;
+    bool order_level_strictly(const MonsterRaceInfo &other) const;
     std::optional<bool> order_pet(const MonsterRaceInfo &other) const;
     void kill_unique();
     std::string get_pronoun_of_summoned_kin() const;
@@ -223,6 +225,7 @@ public:
     bool can_select_separate(const MonsterRaceId morace_id, const int hp, const int maxhp) const;
     bool order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed = false) const;
     bool order_level(MonsterRaceId id1, MonsterRaceId id2) const;
+    bool order_level_unique(MonsterRaceId id1, MonsterRaceId id2) const;
     MonsterRaceId pick_id_at_random() const;
     const MonsterRaceInfo &pick_monrace_at_random() const;
 

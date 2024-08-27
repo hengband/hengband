@@ -98,6 +98,24 @@ std::string MonsterRaceInfo::get_died_message() const
     return is_explodable ? _("は爆発して粉々になった。", " explodes into tiny shreds.") : _("を倒した。", " is destroyed.");
 }
 
+std::optional<bool> MonsterRaceInfo::order_level(const MonsterRaceInfo &other) const
+{
+    if (this->level > other.level) {
+        return true;
+    }
+
+    if (this->level < other.level) {
+        return false;
+    }
+
+    return std::nullopt;
+}
+
+bool MonsterRaceInfo::order_level_strictly(const MonsterRaceInfo &other) const
+{
+    return this->level > other.level;
+}
+
 std::optional<bool> MonsterRaceInfo::order_pet(const MonsterRaceInfo &other) const
 {
     if (this->kind_flags.has(MonsterKindType::UNIQUE) && other.kind_flags.has_not(MonsterKindType::UNIQUE)) {
@@ -108,15 +126,7 @@ std::optional<bool> MonsterRaceInfo::order_pet(const MonsterRaceInfo &other) con
         return false;
     }
 
-    if (this->level > other.level) {
-        return true;
-    }
-
-    if (this->level < other.level) {
-        return false;
-    }
-
-    return std::nullopt;
+    return this->order_level(other);
 }
 
 /*!
@@ -311,7 +321,7 @@ std::optional<std::string> MonsterRaceInfo::probe_lore()
 
     this->r_wake = MAX_UCHAR;
     this->r_ignore = MAX_UCHAR;
-    for (auto i = 0; i < 4; i++) {
+    for (auto i = 0; i < std::ssize(this->blows); i++) {
         const auto &blow = this->blows[i];
         if ((blow.effect != RaceBlowEffectType::NONE) || (blow.method != RaceBlowMethodType::NONE)) {
             if (this->r_blows[i] != MAX_UCHAR) {
@@ -773,14 +783,18 @@ bool MonraceList::order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed) 
 
 bool MonraceList::order_level(MonsterRaceId id1, MonsterRaceId id2) const
 {
-    const auto &monrace1 = monraces_info[id1];
-    const auto &monrace2 = monraces_info[id2];
-    if (monrace1.level < monrace2.level) {
-        return true;
-    }
+    const auto &monrace1 = this->get_monrace(id1);
+    const auto &monrace2 = this->get_monrace(id2);
+    return monrace1.order_level_strictly(monrace2);
+}
 
-    if (monrace1.level > monrace2.level) {
-        return false;
+bool MonraceList::order_level_unique(MonsterRaceId id1, MonsterRaceId id2) const
+{
+    const auto &monrace1 = this->get_monrace(id1);
+    const auto &monrace2 = this->get_monrace(id2);
+    const auto order_level = monrace2.order_level(monrace1);
+    if (order_level) {
+        return *order_level;
     }
 
     if (monrace1.kind_flags.has_not(MonsterKindType::UNIQUE) && monrace2.kind_flags.has(MonsterKindType::UNIQUE)) {
