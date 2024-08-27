@@ -34,15 +34,14 @@
 
 /*!
  * @brief モンスター情報のヘッダを記述する
- * Hack -- Display the "name" and "attr/chars" of a monster race
- * @param r_idx モンスターの種族ID
+ * @param monrace_id モンスターの種族ID
  */
-void roff_top(MonsterRaceId r_idx)
+void roff_top(MonsterRaceId monrace_id)
 {
     term_erase(0, 0);
     term_gotoxy(0, 0);
 
-    const auto &monrace = monraces_info[r_idx];
+    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
 #ifdef JP
 #else
     if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
@@ -52,7 +51,7 @@ void roff_top(MonsterRaceId r_idx)
 
     if (AngbandWorld::get_instance().wizard || cheat_know) {
         term_addstr(-1, TERM_WHITE, "[");
-        term_addstr(-1, TERM_L_BLUE, format("%d", enum2i(r_idx)));
+        term_addstr(-1, TERM_L_BLUE, format("%d", enum2i(monrace_id)));
         term_addstr(-1, TERM_WHITE, "] ");
     }
 

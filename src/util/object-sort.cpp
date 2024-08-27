@@ -116,7 +116,7 @@ bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value
     case ItemKindType::CAPTURE: {
         const auto &monrace1 = o_ptr->get_monrace();
         const auto &monrace2 = j_ptr->get_monrace();
-        if (monrace1.level < monrace2.level) {
+        if (monrace2.order_level_strictly(monrace1)) {
             return true;
         }
 

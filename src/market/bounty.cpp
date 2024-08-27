@@ -360,7 +360,7 @@ void determine_bounty_uniques(PlayerType *player_ptr)
     // モンスターのLVで昇順に並び替える
     std::sort(bounty_monrace_ids.begin(), bounty_monrace_ids.end(),
         [&monraces](auto id1, auto id2) {
-            return monraces.get_monrace(id1).level < monraces.get_monrace(id2).level;
+            return monraces.order_level(id2, id1);
         });
 
     // 賞金首情報を設定

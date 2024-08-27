@@ -91,6 +91,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
     *qtwg_ptr->x = qtwg_ptr->xmin;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     int len = strlen(s);
+    auto &monraces = MonraceList::get_instance();
     for (int i = 0; ((*qtwg_ptr->x < qtwg_ptr->xmax) && (i < len)); (*qtwg_ptr->x)++, s++, i++) {
         auto *g_ptr = &floor_ptr->grid_array[*qtwg_ptr->y][*qtwg_ptr->x];
         int idx = s[0];
@@ -110,34 +111,30 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
 
             floor_ptr->monster_level = floor_ptr->base_level;
         } else if (monster_index) {
-            int old_cur_num, old_max_num;
-            bool clone = false;
-
+            auto clone = false;
             if (monster_index < 0) {
                 monster_index = -monster_index;
                 clone = true;
             }
 
-            const auto r_idx = i2enum<MonsterRaceId>(monster_index);
-            auto &r_ref = monraces_info[r_idx];
-
-            old_cur_num = r_ref.cur_num;
-            old_max_num = r_ref.max_num;
-
-            if (r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
-                r_ref.cur_num = 0;
-                r_ref.max_num = MAX_UNIQUE_NUM;
-            } else if (r_ref.population_flags.has(MonsterPopulationType::NAZGUL)) {
-                if (r_ref.cur_num == r_ref.max_num) {
-                    r_ref.max_num++;
+            const auto monrace_id = i2enum<MonsterRaceId>(monster_index);
+            auto &monrace = monraces.get_monrace(monrace_id);
+            const auto old_cur_num = monrace.cur_num;
+            const auto old_max_num = monrace.max_num;
+            if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+                monrace.cur_num = 0;
+                monrace.max_num = MAX_UNIQUE_NUM;
+            } else if (monrace.population_flags.has(MonsterPopulationType::NAZGUL)) {
+                if (monrace.cur_num == monrace.max_num) {
+                    monrace.max_num++;
                 }
             }
 
-            const auto m_idx = place_specific_monster(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, r_idx, (PM_ALLOW_SLEEP | PM_NO_KAGE));
+            const auto m_idx = place_specific_monster(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, monrace_id, (PM_ALLOW_SLEEP | PM_NO_KAGE));
             if (clone && m_idx) {
                 floor_ptr->m_list[*m_idx].mflag2.set(MonsterConstantFlagType::CLONED);
-                r_ref.cur_num = old_cur_num;
-                r_ref.max_num = old_max_num;
+                monrace.cur_num = old_cur_num;
+                monrace.max_num = old_max_num;
             }
         }
 
