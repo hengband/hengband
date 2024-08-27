@@ -73,28 +73,36 @@ std::vector<lore_msg> lore_type::build_speed_description() const
     const auto random_movement_description = this->build_random_movement_description();
     texts.insert(texts.end(), random_movement_description.begin(), random_movement_description.end());
     if (this->speed > STANDARD_SPEED) {
-        if (this->speed > 139) {
-            texts.emplace_back(_("信じ難いほど", " incredibly"), TERM_RED);
+        if (this->speed > 149) {
+            texts.emplace_back(_("信じ難いほど", " incredibly"), TERM_VIOLET);
+        } else if (this->speed > 144) {
+            texts.emplace_back(_("音速よりも", " inexplicably"), TERM_RED);
+        } else if (this->speed > 139) {
+            texts.emplace_back(_("悪夢的に", " nightmarely"), TERM_L_RED);
         } else if (this->speed > 134) {
             texts.emplace_back(_("猛烈に", " extremely"), TERM_ORANGE);
         } else if (this->speed > 129) {
-            texts.emplace_back(_("非常に", " very"), TERM_ORANGE);
+            texts.emplace_back(_("非常に", " very"), TERM_UMBER);
         } else if (this->speed > 124) {
-            texts.emplace_back(_("かなり", " fairly"), TERM_UMBER);
+            texts.emplace_back(_("かなり", " fairly"), TERM_L_UMBER);
+        } else if (this->speed < 115) {
+            texts.emplace_back(_("僅かに", " slightly"), TERM_L_GREEN);
         } else if (this->speed < 120) {
-            texts.emplace_back(_("やや", " somewhat"), TERM_L_UMBER);
+            texts.emplace_back(_("やや", " somewhat"), TERM_YELLOW);
         }
 
         texts.emplace_back(_("素早く", " quickly"), TERM_L_RED);
     } else if (this->speed < STANDARD_SPEED) {
-        if (this->speed < 90) {
+        if (this->speed < 86) {
             texts.emplace_back(_("信じ難いほど", " incredibly"), TERM_L_GREEN);
-        } else if (this->speed < 95) {
-            texts.emplace_back(_("非常に", " very"), TERM_BLUE);
-        } else if (this->speed < 100) {
-            texts.emplace_back(_("かなり", " fairly"), TERM_BLUE);
-        } else if (this->speed > 104) {
-            texts.emplace_back(_("やや", " somewhat"), TERM_GREEN);
+        } else if (this->speed < 91) {
+            texts.emplace_back(_("非常に", " very"), TERM_GREEN);
+        } else if (this->speed < 96) {
+            texts.emplace_back(_("かなり", " fairly"), TERM_L_BLUE);
+        } else if (this->speed > 105) {
+            texts.emplace_back(_("僅かに", " slightly"));
+        } else if (this->speed > 100) {
+            texts.emplace_back(_("やや", " somewhat"), TERM_BLUE);
         }
 
         texts.emplace_back(_("ゆっくりと", " slowly"), TERM_L_BLUE);
