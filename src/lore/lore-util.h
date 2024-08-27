@@ -84,6 +84,7 @@ struct lore_type {
 
     bool has_reinforce() const;
 
+    std::string build_revenge_description(bool has_defeated) const;
     std::vector<lore_msg> build_speed_description() const;
 
 private:

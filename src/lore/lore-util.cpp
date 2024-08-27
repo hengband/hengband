@@ -118,6 +118,21 @@ std::vector<lore_msg> lore_type::build_speed_description() const
     return texts;
 }
 
+std::string lore_type::build_revenge_description(bool has_defeated) const
+{
+#ifdef JP
+    return has_defeated ? "が、すでに仇討ちは果たしている！" : "のに、まだ仇討ちを果たしていない。";
+#else
+    if (has_defeated) {
+        return format(", but you have avenged %s!  ", Who::whom(this->msex, this->r_ptr->r_deaths == 1).data());
+    }
+
+    std::stringstream ss;
+    ss << ", who remain" << (this->r_ptr->r_deaths == 1 ? "" : "s") << "unavenged.  ";
+    return ss.str();
+#endif
+}
+
 std::vector<lore_msg> lore_type::build_random_movement_description() const
 {
     if (this->behavior_flags.has_none_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 })) {

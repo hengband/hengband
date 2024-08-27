@@ -28,11 +28,6 @@
 #include "world/world.h"
 
 /*!
- * 英語の複数系記述用マクロ / Pluralizer.  Args(count, singular, plural)
- */
-#define plural(c, s, p) (((c) == 1) ? (s) : (p))
-
-/*!
  * @brief モンスター情報のヘッダを記述する
  * @param monrace_id モンスターの種族ID
  */
@@ -127,26 +122,19 @@ static bool display_kill_unique(lore_type *lore_ptr)
         return false;
     }
 
-    bool dead = (lore_ptr->r_ptr->max_num == 0);
-    if (lore_ptr->r_ptr->r_deaths) {
-        hooked_roff(format(_("%s^はあなたの先祖を %d 人葬っている", "%s^ has slain %d of your ancestors"), Who::who(lore_ptr->msex).data(), lore_ptr->r_ptr->r_deaths));
-
-        if (dead) {
-            hooked_roff(
-                _(format("が、すでに仇討ちは果たしている！"), format(", but you have avenged %s!  ", plural(lore_ptr->r_ptr->r_deaths, "him", "them"))));
-        } else {
-            hooked_roff(
-                _(format("のに、まだ仇討ちを果たしていない。"), format(", who %s unavenged.  ", plural(lore_ptr->r_ptr->r_deaths, "remains", "remain"))));
-        }
-
+    const auto is_dead = (lore_ptr->r_ptr->max_num == 0);
+    if (lore_ptr->r_ptr->r_deaths > 0) {
+        constexpr auto fmt = _("%s^はあなたの先祖を %d 人葬っている", "%s^ has slain %d of your ancestors");
+        hooked_roff(format(fmt, Who::who(lore_ptr->msex).data(), lore_ptr->r_ptr->r_deaths));
+        hooked_roff(lore_ptr->build_revenge_description(is_dead));
         hooked_roff("\n");
     } else {
-        if (dead) {
-            hooked_roff(_("あなたはこの仇敵をすでに葬り去っている。", "You have slain this foe.  "));
-        } else {
-            hooked_roff(_("この仇敵はまだ生きている！", "This foe is still alive!  "));
-        }
-
+#ifdef JP
+        const auto mes = is_dead ? "あなたはこの仇敵をすでに葬り去っている。" : "この仇敵はまだ生きている！";
+#else
+        const auto mes = is_dead ? "You have slain this foe.  " : "This foe is still alive!  ";
+#endif
+        hooked_roff(mes);
         hooked_roff("\n");
     }
 
@@ -155,9 +143,12 @@ static bool display_kill_unique(lore_type *lore_ptr)
 
 static void display_killed(lore_type *lore_ptr)
 {
-    hooked_roff(_(format("このモンスターはあなたの先祖を %d 人葬っている", lore_ptr->r_ptr->r_deaths),
-        format("%d of your ancestors %s been killed by this creature, ", lore_ptr->r_ptr->r_deaths, plural(lore_ptr->r_ptr->r_deaths, "has", "have"))));
-
+#ifdef JP
+    hooked_roff(format("このモンスターはあなたの先祖を %d 人葬っている", lore_ptr->r_ptr->r_deaths));
+#else
+    const auto present_perfect_tense = lore_ptr->r_ptr->r_deaths == 1 ? "has" : "have";
+    hooked_roff(format("%d of your ancestors %s been killed by this creature, ", lore_ptr->r_ptr->r_deaths, present_perfect_tense));
+#endif
     if (lore_ptr->r_ptr->r_pkills) {
         hooked_roff(format(_("が、あなたはこのモンスターを少なくとも %d 体は倒している。", "and you have exterminated at least %d of the creatures.  "),
             lore_ptr->r_ptr->r_pkills));
