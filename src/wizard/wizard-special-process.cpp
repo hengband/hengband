@@ -112,9 +112,6 @@
 #include <tuple>
 #include <vector>
 
-#define NUM_O_SET 8
-#define NUM_O_BIT 32
-
 /*!
  * @brief プレイヤーを完全回復する
  */
@@ -733,7 +730,10 @@ void wiz_dump_options(void)
         return;
     }
 
-    std::vector<std::vector<int>> exist(NUM_O_SET, std::vector<int>(NUM_O_BIT));
+    constexpr auto num_o_set = 8;
+    constexpr auto num_o_bit = 32;
+
+    std::vector<std::vector<int>> exist(num_o_set, std::vector<int>(num_o_bit));
 
     for (int i = 0; option_info[i].o_desc; i++) {
         const option_type *ot_ptr = &option_info[i];
@@ -745,8 +745,8 @@ void wiz_dump_options(void)
     fprintf(fff, "[Option bits usage on %s\n]", AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL).data());
     fputs("Set - Bit (Page) Option Name\n", fff);
     fputs("------------------------------------------------\n", fff);
-    for (int i = 0; i < NUM_O_SET; i++) {
-        for (int j = 0; j < NUM_O_BIT; j++) {
+    for (int i = 0; i < num_o_set; i++) {
+        for (int j = 0; j < num_o_bit; j++) {
             if (exist[i][j]) {
                 const option_type *ot_ptr = &option_info[exist[i][j] - 1];
                 fprintf(fff, "  %d -  %02d (%4d) %s\n", i, j, ot_ptr->o_page, ot_ptr->o_text);
