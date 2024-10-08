@@ -5,6 +5,7 @@
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
 #include "player-status/player-hand-types.h"
+#include "player/player-status-flags.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -78,4 +79,16 @@ bool heavy_armor(PlayerType *player_ptr)
     monk_arm_wgt += player_ptr->inventory_list[INVEN_FEET].weight;
 
     return monk_arm_wgt > (100 + (player_ptr->lev * 4));
+}
+
+/*!
+ * @brief 手にしている武器以外の装備品がフラグを持つか判定
+ * @param attacker_flags 装備状況で集計されたフラグ
+ * @return 持つならtrue、持たないならfalse
+ */
+bool does_equip_has_flag_except_weapon(const BIT_FLAGS &attacker_flags)
+{
+    auto flags = attacker_flags;
+    reset_bits(flags, FLAG_CAUSE_INVEN_MAIN_HAND | FLAG_CAUSE_INVEN_SUB_HAND);
+    return flags != 0;
 }

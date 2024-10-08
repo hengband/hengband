@@ -342,6 +342,7 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_BERS_RAGE, {}, -1 },
     { TR_BRAND_MAGIC, { SmithEssenceType::BRAND_MAGIC }, 10 },
     { TR_IMPACT, {}, 0 },
+    { TR_SUPERCRITICAL, {}, 0 },
     { TR_VUL_ACID, {}, -1 },
     { TR_VUL_COLD, {}, -1 },
     { TR_VUL_ELEC, {}, -1 },
