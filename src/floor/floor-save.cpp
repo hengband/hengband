@@ -11,6 +11,7 @@
 
 #include "floor/floor-save.h"
 #include "core/asking-player.h"
+#include "floor/floor-list.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-save-util.h"
 #include "io/files-util.h"
@@ -174,6 +175,7 @@ static FLOOR_IDX find_oldest_floor_idx(PlayerType *player_ptr)
 FLOOR_IDX get_unused_floor_id(PlayerType *player_ptr)
 {
     saved_floor_type *sf_ptr = nullptr;
+    const auto &floor = FloorList::get_instance().get_floor(0);
     FLOOR_IDX fl_idx;
     for (fl_idx = 0; fl_idx < MAX_SAVED_FLOORS; fl_idx++) {
         sf_ptr = &saved_floors[fl_idx];
@@ -194,7 +196,7 @@ FLOOR_IDX get_unused_floor_id(PlayerType *player_ptr)
     sf_ptr->upper_floor_id = 0;
     sf_ptr->lower_floor_id = 0;
     sf_ptr->visit_mark = latest_visit_mark++;
-    sf_ptr->dun_level = player_ptr->current_floor_ptr->dun_level;
+    sf_ptr->dun_level = floor.dun_level;
     if (max_floor_id < MAX_SHORT) {
         max_floor_id++;
     } else {

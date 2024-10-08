@@ -306,7 +306,7 @@ void mitokohmon(PlayerType *player_ptr)
             if (!((m_ptr->r_idx == MonsterRaceId::SUKE) || (m_ptr->r_idx == MonsterRaceId::KAKU))) {
                 continue;
             }
-            if (!los(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x)) {
+            if (!los(m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x)) {
                 continue;
             }
             if (!projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x)) {

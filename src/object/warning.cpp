@@ -541,7 +541,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
     }
 
     auto *g_ptr = &floor.grid_array[yy][xx];
-    bool is_warning = (!easy_disarm && is_trap(player_ptr, g_ptr->feat)) || (g_ptr->mimic && is_trap(player_ptr, g_ptr->feat));
+    bool is_warning = (!easy_disarm && is_trap(g_ptr->feat)) || (g_ptr->mimic && is_trap(g_ptr->feat));
     is_warning &= !one_in_(13);
     if (!is_warning) {
         return true;

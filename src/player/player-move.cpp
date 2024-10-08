@@ -67,13 +67,13 @@ static void discover_hidden_things(PlayerType *player_ptr, const Pos2D &pos)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(pos);
-    if (grid.mimic && is_trap(player_ptr, grid.feat)) {
+    if (grid.mimic && is_trap(grid.feat)) {
         disclose_grid(player_ptr, pos.y, pos.x);
         msg_print(_("トラップを発見した。", "You have found a trap."));
         disturb(player_ptr, false, true);
     }
 
-    if (is_hidden_door(player_ptr, grid)) {
+    if (is_hidden_door(grid)) {
         msg_print(_("隠しドアを発見した。", "You have found a secret door."));
         disclose_grid(player_ptr, pos.y, pos.x);
         disturb(player_ptr, false, false);
@@ -183,7 +183,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
             SubWindowRedrawingFlag::DUNGEON,
         };
         rfu.set_flags(flags_swrf);
-        if ((!player_ptr->effects()->blindness().is_blind() && !no_lite(player_ptr)) || !is_trap(player_ptr, grid_new.feat)) {
+        if ((!player_ptr->effects()->blindness().is_blind() && !no_lite(player_ptr)) || !is_trap(grid_new.feat)) {
             grid_new.info &= ~(CAVE_UNSAFE);
         }
 

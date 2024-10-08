@@ -1,4 +1,5 @@
 #include "core/turn-compensator.h"
+#include "floor/floor-list.h"
 #include "floor/floor-town.h"
 #include "player-info/race-types.h"
 #include "store/store-owners.h"
@@ -33,7 +34,7 @@ void prevent_turn_overflow(PlayerType *player_ptr)
     } else {
         world.game_turn = 1;
     }
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     if (floor_ptr->generated_turn > rollback_turns) {
         floor_ptr->generated_turn -= rollback_turns;
     } else {

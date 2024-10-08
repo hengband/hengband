@@ -1,6 +1,7 @@
 #include "load/load-zangband.h"
 #include "avatar/avatar.h"
 #include "dungeon/quest.h"
+#include "floor/floor-list.h"
 #include "game-option/option-flags.h"
 #include "info-reader/fixed-map-parser.h"
 #include "load/angband-version-comparer.h"
@@ -154,7 +155,8 @@ void rd_zangband_dungeon()
 
 void set_zangband_game_turns(PlayerType *player_ptr)
 {
-    player_ptr->current_floor_ptr->generated_turn /= 2;
+    auto &floor = FloorList::get_instance().get_floor(0);
+    floor.generated_turn /= 2;
     player_ptr->feeling_turn /= 2;
     auto &world = AngbandWorld::get_instance();
     world.game_turn /= 2;
@@ -196,10 +198,11 @@ void set_zangband_quest(PlayerType *player_ptr, QuestType *const q_ptr, const Qu
         return;
     }
 
+    auto &floor = FloorList::get_instance().get_floor(0);
     init_flags = INIT_ASSIGN;
-    player_ptr->current_floor_ptr->quest_number = loading_quest_index;
+    floor.quest_number = loading_quest_index;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
-    player_ptr->current_floor_ptr->quest_number = old_inside_quest;
+    floor.quest_number = old_inside_quest;
 }
 
 void set_zangband_class(PlayerType *player_ptr)

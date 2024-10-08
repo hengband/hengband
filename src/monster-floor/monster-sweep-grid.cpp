@@ -62,7 +62,7 @@ bool MonsterSweepGrid::get_movable_grid()
         int t_m_idx = floor.get_grid(pos_target).m_idx;
         if (t_m_idx > 0) {
             const auto is_enemies = monster_from.is_hostile_to_melee(floor.m_list[t_m_idx]);
-            const auto is_los = los(this->player_ptr, monster_from.fy, monster_from.fx, monster_from.target_y, monster_from.target_x);
+            const auto is_los = los(monster_from.fy, monster_from.fx, monster_from.target_y, monster_from.target_x);
             const auto is_projectable = projectable(this->player_ptr, monster_from.fy, monster_from.fx, monster_from.target_y, monster_from.target_x);
             if (is_enemies && is_los && is_projectable) {
                 y = monster_from.fy - monster_from.target_y;
@@ -141,7 +141,7 @@ void MonsterSweepGrid::check_hiding_grid(POSITION *y, POSITION *x, POSITION *y2,
         return;
     }
 
-    if ((!los(this->player_ptr, m_ptr->fy, m_ptr->fx, this->player_ptr->y, this->player_ptr->x) || !projectable(this->player_ptr, m_ptr->fy, m_ptr->fx, this->player_ptr->y, this->player_ptr->x))) {
+    if ((!los(m_ptr->fy, m_ptr->fx, this->player_ptr->y, this->player_ptr->x) || !projectable(this->player_ptr, m_ptr->fy, m_ptr->fx, this->player_ptr->y, this->player_ptr->x))) {
         if (floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].get_distance(r_ptr) >= MAX_PLAYER_SIGHT / 2) {
             return;
         }
@@ -370,7 +370,7 @@ bool MonsterSweepGrid::is_best_cost(const POSITION y, const POSITION x, const in
         }
 
         auto *g_ptr = &floor_ptr->grid_array[y][x];
-        if (!this->can_open_door && is_closed_door(this->player_ptr, g_ptr->feat)) {
+        if (!this->can_open_door && is_closed_door(g_ptr->feat)) {
             return false;
         }
     }

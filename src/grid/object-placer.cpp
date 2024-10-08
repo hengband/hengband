@@ -1,5 +1,6 @@
 #include "grid/object-placer.h"
 #include "floor/cave.h"
+#include "floor/floor-list.h"
 #include "floor/floor-object.h"
 #include "grid/grid.h"
 #include "system/artifact-type-definition.h"
@@ -21,7 +22,7 @@
  */
 void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     if (!in_bounds(floor_ptr, y, x)) {
         return;
@@ -37,7 +38,7 @@ void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
     ItemEntity *q_ptr;
     q_ptr = &forge;
     q_ptr->wipe();
-    if (!make_gold(player_ptr, q_ptr)) {
+    if (!make_gold(q_ptr)) {
         return;
     }
 
@@ -73,7 +74,7 @@ void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 void place_object(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     ItemEntity forge;
     ItemEntity *q_ptr;

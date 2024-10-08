@@ -30,6 +30,7 @@
 #include "floor/floor-changer.h"
 #include "floor/floor-events.h"
 #include "floor/floor-leaver.h"
+#include "floor/floor-list.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-save.h"
 #include "floor/floor-util.h"
@@ -183,7 +184,7 @@ static void init_random_seed(PlayerType *player_ptr, bool new_game)
 static void init_world_floor_info(PlayerType *player_ptr)
 {
     AngbandWorld::get_instance().character_dungeon = false;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     floor_ptr->reset_dungeon_index();
     floor_ptr->dun_level = 0;
     floor_ptr->quest_number = QuestId::NONE;
@@ -212,7 +213,7 @@ static void restore_world_floor_info(PlayerType *player_ptr)
 {
     write_level = false;
     constexpr auto mes = _("                            ----ゲーム再開----", "                            --- Restarted Game ---");
-    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &floor = FloorList::get_instance().get_floor(0);
     exe_write_diary(floor, DiaryKind::GAMESTART, 1, mes);
 
     if (player_ptr->riding != -1) {
@@ -244,7 +245,7 @@ static void reset_world_info(PlayerType *player_ptr)
 
 static void generate_wilderness(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     if ((floor_ptr->dun_level == 0) && floor_ptr->is_in_quest()) {
         return;
     }
@@ -282,7 +283,7 @@ static void change_floor_if_error(PlayerType *player_ptr)
 static void generate_world(PlayerType *player_ptr, bool new_game)
 {
     reset_world_info(player_ptr);
-    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &floor = FloorList::get_instance().get_floor(0);
     panel_row_min = floor.height;
     panel_col_min = floor.width;
 
@@ -372,7 +373,7 @@ static void decide_arena_death(PlayerType *player_ptr)
 static void process_game_turn(PlayerType *player_ptr)
 {
     auto load_game = true;
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     auto &world = AngbandWorld::get_instance();
     while (true) {
         process_dungeon(player_ptr, load_game);

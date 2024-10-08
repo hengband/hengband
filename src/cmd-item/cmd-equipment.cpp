@@ -283,7 +283,7 @@ void do_cmd_wield(PlayerType *player_ptr)
         inven_item_increase(player_ptr, i_idx, -1);
         inven_item_optimize(player_ptr, i_idx);
     } else {
-        floor_item_increase(player_ptr, 0 - i_idx, -1);
+        floor_item_increase(0 - i_idx, -1);
         floor_item_optimize(player_ptr, 0 - i_idx);
     }
 

@@ -1,6 +1,7 @@
 #include "dungeon/quest-monster-placer.h"
 #include "dungeon/quest.h"
 #include "floor/floor-generator-util.h"
+#include "floor/floor-list.h"
 #include "floor/geometry.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
@@ -19,7 +20,7 @@
  */
 bool place_quest_monsters(PlayerType *player_ptr)
 {
-    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &floor = FloorList::get_instance().get_floor(0);
     const auto &quests = QuestList::get_instance();
     for (const auto &[quest_id, quest] : quests) {
         auto no_quest_monsters = quest.status != QuestStatusType::TAKEN;

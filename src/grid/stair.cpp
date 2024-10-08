@@ -1,6 +1,7 @@
 #include "grid/stair.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
+#include "floor/floor-list.h"
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
@@ -17,11 +18,11 @@
  * @param y 配置を試みたいマスのY座標
  * @param x 配置を試みたいマスのX座標
  */
-void place_random_stairs(PlayerType *player_ptr, POSITION y, POSITION x)
+void place_random_stairs(POSITION y, POSITION x)
 {
     bool up_stairs = true;
     bool down_stairs = true;
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     const auto *g_ptr = &floor.grid_array[y][x];
     if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty()) {
         return;

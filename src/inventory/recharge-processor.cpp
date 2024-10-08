@@ -3,6 +3,7 @@
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
+#include "floor/floor-list.h"
 #include "hpmp/hp-mp-regenerator.h"
 #include "inventory/inventory-slot-types.h"
 #include "object/tval-types.h"
@@ -113,9 +114,9 @@ void recharge_magic_items(PlayerType *player_ptr)
         rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
         wild_regen = 20;
     }
-
-    for (i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
-        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
+    auto &floor = FloorList::get_instance().get_floor(0);
+    for (i = 1; i < floor.o_max; i++) {
+        auto *o_ptr = &floor.o_list[i];
         if (!o_ptr->is_valid()) {
             continue;
         }

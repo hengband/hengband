@@ -72,7 +72,7 @@ static bool update_view_aux(PlayerType *player_ptr, POSITION y, POSITION x, POSI
         return wall;
     }
 
-    if (los(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
+    if (los(player_ptr->y, player_ptr->x, y, x)) {
         cave_view_hack(floor_ptr, y, x);
         return wall;
     }

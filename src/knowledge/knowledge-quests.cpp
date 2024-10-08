@@ -10,6 +10,7 @@
 #include "dungeon/quest.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
+#include "floor/floor-list.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io-dump/dump-util.h"
 #include "locale/english.h"
@@ -47,6 +48,7 @@ void do_cmd_checkquest(PlayerType *player_ptr)
 static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
 {
     const auto &quests = QuestList::get_instance();
+    auto &floor = FloorList::get_instance().get_floor(0);
     std::string rand_tmp_str;
     int rand_level = 100;
     int total = 0;
@@ -65,14 +67,14 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
             continue;
         }
 
-        const auto old_quest = player_ptr->current_floor_ptr->quest_number;
+        const auto old_quest = floor.quest_number;
 
         quest_text_lines.clear();
 
-        player_ptr->current_floor_ptr->quest_number = quest_id;
+        floor.quest_number = quest_id;
         init_flags = INIT_SHOW_TEXT;
         parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
-        player_ptr->current_floor_ptr->quest_number = old_quest;
+        floor.quest_number = old_quest;
         if (quest.flags & QUEST_FLAG_SILENT) {
             continue;
         }
@@ -173,7 +175,7 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, Quest
     const auto &quests = QuestList::get_instance();
     const auto &quest = quests.get_quest(q_idx);
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     auto is_fixed_quest = QuestType::is_fixed(q_idx);
     if (is_fixed_quest) {
         QuestId old_quest = floor_ptr->quest_number;

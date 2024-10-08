@@ -52,7 +52,7 @@ static bool check_floor_item_tag_aux(PlayerType *player_ptr, fis_type *fis_ptr, 
     }
 
     if (*prev_tag && command_cmd) {
-        fis_ptr->floor_num = scan_floor_items(player_ptr, fis_ptr->floor_list, player_ptr->y, player_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
+        fis_ptr->floor_num = scan_floor_items(fis_ptr->floor_list, player_ptr->y, player_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
         if (get_tag_floor(player_ptr->current_floor_ptr, &fis_ptr->k, *prev_tag, fis_ptr->floor_list, fis_ptr->floor_num)) {
             *fis_ptr->cp = 0 - fis_ptr->floor_list[fis_ptr->k];
             command_cmd = 0;
@@ -260,7 +260,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
     fis_ptr->floor_num = 0;
     if (fis_ptr->floor) {
         constexpr auto options = SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED;
-        fis_ptr->floor_num = scan_floor_items(player_ptr, fis_ptr->floor_list, player_ptr->y, player_ptr->x, options, item_tester);
+        fis_ptr->floor_num = scan_floor_items(fis_ptr->floor_list, player_ptr->y, player_ptr->x, options, item_tester);
     }
 
     if ((mode & USE_INVEN) && (fis_ptr->i1 <= fis_ptr->i2)) {
@@ -670,7 +670,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
             rfu.set_flag(SubWindowRedrawingFlag::FLOOR_ITEMS);
             window_stuff(player_ptr);
             constexpr auto options = SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED;
-            fis_ptr->floor_num = scan_floor_items(player_ptr, fis_ptr->floor_list, player_ptr->y, player_ptr->x, options, item_tester);
+            fis_ptr->floor_num = scan_floor_items(fis_ptr->floor_list, player_ptr->y, player_ptr->x, options, item_tester);
             if (command_see) {
                 screen_load();
                 screen_save();

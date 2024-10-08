@@ -26,7 +26,7 @@ void vary_item(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBER num)
         return;
     }
 
-    floor_item_increase(player_ptr, 0 - i_idx, num);
+    floor_item_increase(0 - i_idx, num);
     floor_item_describe(player_ptr, 0 - i_idx);
     floor_item_optimize(player_ptr, 0 - i_idx);
 }

@@ -132,7 +132,7 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
         const auto x = xval + 2 * ddx_ddd[dir1];
         place_secret_door(player_ptr, y, x, DOOR_GLASS_DOOR);
         auto &grid = floor.get_grid({ y, x });
-        if (is_closed_door(player_ptr, grid.feat)) {
+        if (is_closed_door(grid.feat)) {
             grid.mimic = feat_glass_wall;
         }
 

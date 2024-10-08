@@ -15,6 +15,7 @@
 #include "floor/cave-generator.h"
 #include "floor/floor-events.h"
 #include "floor/floor-generator.h"
+#include "floor/floor-list.h"
 #include "floor/floor-save.h" //!< @todo precalc_cur_num_of_pet() が依存している、違和感.
 #include "floor/floor-util.h"
 #include "floor/wild.h"
@@ -67,7 +68,7 @@ static void build_arena(PlayerType *player_ptr, POSITION *start_y, POSITION *sta
     POSITION y_depth = yval + 10;
     POSITION x_left = xval - 32;
     POSITION x_right = xval + 32;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     for (POSITION i = y_height; i <= y_height + 5; i++) {
         for (POSITION j = x_left; j <= x_right; j++) {
             place_bold(player_ptr, i, j, GB_EXTRA_PERM);
@@ -119,7 +120,7 @@ static void build_arena(PlayerType *player_ptr, POSITION *start_y, POSITION *sta
  */
 static void generate_challenge_arena(PlayerType *player_ptr)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     floor.height = SCREEN_HGT;
     floor.width = SCREEN_WID;
     for (auto y = 0; y < MAX_HGT; y++) {
@@ -163,7 +164,7 @@ static void build_battle(PlayerType *player_ptr, POSITION *y, POSITION *x)
     POSITION x_left = xval - 32;
     POSITION x_right = xval + 32;
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     for (int i = y_height; i <= y_height + 5; i++) {
         for (int j = x_left; j <= x_right; j++) {
             place_bold(player_ptr, i, j, GB_EXTRA_PERM);
@@ -223,7 +224,7 @@ static void generate_gambling_arena(PlayerType *player_ptr)
     POSITION y, x;
     POSITION qy = 0;
     POSITION qx = 0;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     for (y = 0; y < MAX_HGT; y++) {
         for (x = 0; x < MAX_WID; x++) {
             place_bold(player_ptr, y, x, GB_SOLID_PERM);
@@ -267,7 +268,7 @@ static void generate_gambling_arena(PlayerType *player_ptr)
  */
 static void generate_fixed_floor(PlayerType *player_ptr)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     for (auto y = 0; y < floor.height; y++) {
         for (auto x = 0; x < floor.width; x++) {
             place_bold(player_ptr, y, x, GB_SOLID_PERM);
@@ -295,7 +296,7 @@ static void generate_fixed_floor(PlayerType *player_ptr)
  */
 static bool level_gen(PlayerType *player_ptr, concptr *why)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     DUNGEON_IDX d_idx = floor_ptr->dungeon_idx;
     const auto &dungeon = dungeons_info[d_idx];
     constexpr auto chance_small_floor = 3;
@@ -366,9 +367,9 @@ void wipe_generate_random_floor_flags(FloorType *floor_ptr)
  * @brief フロアの全情報を初期化する / Clear and empty floor.
  * @parama player_ptr プレイヤーへの参照ポインタ
  */
-void clear_cave(PlayerType *player_ptr)
+void clear_cave()
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     std::fill_n(floor_ptr->o_list.begin(), floor_ptr->o_max, ItemEntity{});
     floor_ptr->o_max = 1;
     floor_ptr->o_cnt = 0;
@@ -500,13 +501,13 @@ static bool floor_is_connected(const FloorType *const floor_ptr, const IsWallFun
  */
 void generate_floor(PlayerType *player_ptr)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     set_floor_and_wall(floor.dungeon_idx);
     const auto is_wild_mode = AngbandWorld::get_instance().is_wild_mode();
     for (int num = 0; true; num++) {
         bool okay = true;
         concptr why = nullptr;
-        clear_cave(player_ptr);
+        clear_cave();
         player_ptr->x = player_ptr->y = 0;
         if (floor.inside_arena) {
             generate_challenge_arena(player_ptr);
@@ -559,7 +560,7 @@ void generate_floor(PlayerType *player_ptr)
         wipe_monsters_list(player_ptr);
     }
 
-    glow_deep_lava_and_bldg(player_ptr);
+    glow_deep_lava_and_bldg();
     player_ptr->enter_dungeon = false;
     wipe_generate_random_floor_flags(&floor);
 }
