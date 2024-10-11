@@ -87641,6 +87641,125 @@
           "ja": "石の箱だ。 中身は少ないくせに重いしでかくて邪魔だ。",
           "en": "It is a stone box. It's big and heavy, even though it doesn't have much inside."
         }
+    },
+    {
+      "id": 1369,
+      "name": {
+        "ja": "デカアゴムシ",
+        "en": "jaw worm"
+      },
+      "symbol": {
+        "character": "w",
+        "color": "Dark Gray"
+      },
+      "level": 18,
+      "speed": 0,
+      "hit_point": "25d14",
+      "armor_class": 40,
+      "blows": [
+        {
+          "method": "BITE",
+          "damage_dice": "5d5",
+          "effect": "HURT"
+        },
+        {
+          "method": "BITE",
+          "damage_dice": "5d5",
+          "effect": "HURT"
+        },
+        {
+          "method": "BITE",
+          "damage_dice": "17d1",
+          "effect": "HURT"
+        }
+      ],
+      "rarity": 2,
+      "exp": 150,
+      "vision": 15,
+      "alertness": 15,
+      "flags": [
+        "FORCE_MAXHP",
+        "EVIL",
+        "WEIRD_MIND",
+        "RIDING",
+        "BASH_DOOR",
+        "KILL_BODY",
+        "RES_ABYSS",
+        "DROP_2D2",
+        "DROP_1D2"
+      ],
+      "flavor": {
+        "ja": "大きな口をした奇妙な生き物だ。噛み付かれたら骨ごと持って行かれそうである！",
+        "en": "It is the mysterious creature: having big jaw. Its bite looks to smash a bone even!"
       }
+    },
+    {
+      "id": 1370,
+      "name": {
+        "ja": "スネッコ",
+        "en": "Snecko"
+      },
+      "symbol": {
+        "character": "H",
+        "color": "Light Green"
+      },
+      "level": 35,
+      "hit_point": "30d20",
+      "armor_class": 80,
+      "speed": 5,
+      "rarity": 2,
+      "exp": 1100,
+      "vision": 20,
+      "alertness": 20,
+      "flags": [
+        "FORCE_MAXHP",
+        "EVIL",
+        "WEIRD_MIND",
+        "RIDING",
+        "BASH_DOOR",
+        "DROP_1D2",
+        "DROP_3D2",
+        "ONLY_ITEM",
+        "IM_POIS",
+        "RES_CHAO",
+        "RES_NEXU",
+        "NO_CONF",
+        "NO_SLEEP",
+        "DROP_CORPSE",
+        "DROP_SKELETON"
+      ],
+      "blows": [
+        {
+          "method": "GAZE",
+          "effect": "CONFUSE"
+        },
+        {
+          "method": "BITE",
+          "damage_dice": "6d5",
+          "effect": "HURT"
+        },
+        {
+          "method": "BITE",
+          "damage_dice": "6d7",
+          "effect": "POISON"
+        },
+        {
+          "method": "HIT",
+          "damage_dice": "4d3",
+          "effect": "LOSE_CON"
+        }
+      ],
+      "skill": {
+        "probability": "1_IN_6",
+        "list": [
+          "BR_CONF",
+          "CONF"
+        ]
+      },
+      "flavor": {
+        "ja": "ヘビとヤモリが混合した生物で、それに睨まれるとまともな判断をすることにも一苦労させられる。",
+        "en": "It is a mixed snake and gecko. When you glared by it, you'll struggle with a normal thinking even."
+      }
+    }
   ]
 }
