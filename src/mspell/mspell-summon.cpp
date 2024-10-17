@@ -773,7 +773,7 @@ MonsterSpellResult spell_RF6_S_HI_UNDEAD(PlayerType *player_ptr, POSITION y, POS
     summon_disturb(player_ptr, target_type, known, see_either);
 
     int count = 0;
-    if (((m_ptr->r_idx == MonsterRaceId::MORGOTH) || (m_ptr->r_idx == MonsterRaceId::SAURON) || (m_ptr->r_idx == MonsterRaceId::ANGMAR)) && ((monraces_info[MonsterRaceId::NAZGUL].cur_num + 2) < monraces_info[MonsterRaceId::NAZGUL].max_num) && mon_to_player) {
+    if (m_ptr->can_ring_boss_call_nazgul() && mon_to_player) {
         count += summon_NAZGUL(player_ptr, y, x, m_idx);
     } else {
         mspell_cast_msg_blind msg(_("%s^が何かをつぶやいた。", "%s^ mumbles."),
