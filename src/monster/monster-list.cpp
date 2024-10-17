@@ -214,15 +214,12 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
  */
 static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_idx, MONSTER_IDX m_idx, const Grid &grid, std::optional<MONSTER_IDX> summoner_m_idx)
 {
-    const auto &floor = *player_ptr->current_floor_ptr;
     const auto &monraces = MonraceList::get_instance();
     const auto &monrace = monraces.get_monrace(r_idx);
-    const auto &monster = floor.m_list[m_idx];
-    const auto &old_monrace = monster.get_monrace();
-
     if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return false;
     }
+
     if (monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY) || monrace.misc_flags.has(MonsterMiscType::CHAMELEON)) {
         return false;
     }
@@ -239,15 +236,14 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_
         return false;
     }
 
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monster = floor.m_list[m_idx];
+    const auto &old_monrace = monster.get_monrace();
     if (old_monrace.misc_flags.has_not(MonsterMiscType::CHAMELEON)) {
-        if (monster_has_hostile_align(player_ptr, &monster, 0, 0, &monrace)) {
-            return false;
-        }
-    } else if (summoner_m_idx && monster_has_hostile_align(player_ptr, &floor.m_list[*summoner_m_idx], 0, 0, &monrace)) {
-        return false;
+        return !monster_has_hostile_align(player_ptr, &monster, 0, 0, &monrace);
     }
 
-    return true;
+    return !summoner_m_idx || !monster_has_hostile_align(player_ptr, &floor.m_list[*summoner_m_idx], 0, 0, &monrace);
 }
 
 /*!
