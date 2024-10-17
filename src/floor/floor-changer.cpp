@@ -159,7 +159,7 @@ static void place_pet(PlayerType *player_ptr)
             }
 
             if (monrace.cur_num) {
-                monrace.cur_num--;
+                monrace.decrement_current_numbers();
             }
         }
     }

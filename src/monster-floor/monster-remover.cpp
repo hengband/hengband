@@ -34,7 +34,7 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
     POSITION y = m_ptr->fy;
     POSITION x = m_ptr->fx;
 
-    m_ptr->get_real_monrace().cur_num--;
+    m_ptr->get_real_monrace().decrement_current_numbers();
     if (r_ptr->misc_flags.has(MonsterMiscType::MULTIPLY)) {
         floor_ptr->num_repro--;
     }

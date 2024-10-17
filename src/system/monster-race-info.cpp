@@ -431,6 +431,11 @@ void MonsterRaceInfo::increment_current_numbers()
     this->cur_num++;
 }
 
+void MonsterRaceInfo::decrement_current_numbers()
+{
+    this->cur_num--;
+}
+
 /*!
  * @brief エルドリッチホラーの形容詞種別を決める
  * @return エルドリッチホラーの形容詞

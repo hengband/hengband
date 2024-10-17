@@ -163,6 +163,7 @@ public:
     //!< @todo ここから先はミュータブルなフィールドなので分離すべき.
     void reset_current_numbers();
     void increment_current_numbers();
+    void decrement_current_numbers();
 
 private:
     std::vector<DropArtifact> drop_artifacts; //!< 特定アーティファクトドロップリスト
