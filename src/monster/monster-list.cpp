@@ -155,7 +155,7 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
         auto monrace_id = i2enum<MonsterRaceId>(entry.index);
         auto &monrace = monraces.get_monrace(monrace_id);
         if (none_bits(mode, PM_ARENA | PM_CHAMELEON)) {
-            if ((monrace.kind_flags.has(MonsterKindType::UNIQUE) || monrace.population_flags.has(MonsterPopulationType::NAZGUL)) && (monrace.cur_num >= monrace.max_num) && none_bits(mode, PM_CLONE)) {
+            if (monrace.can_generate() && none_bits(mode, PM_CLONE)) {
                 continue;
             }
 

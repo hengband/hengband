@@ -153,6 +153,7 @@ public:
     bool has_reinforce() const;
     const std::vector<DropArtifact> &get_drop_artifacts() const;
     const std::vector<Reinforce> &get_reinforces() const;
+    bool can_generate() const;
 
     void init_sex(uint32_t value);
     std::optional<std::string> probe_lore();
