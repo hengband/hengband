@@ -203,20 +203,7 @@ void MonsterDamageProcessor::death_special_flag_monster()
         return;
     }
 
-    this->death_unique_monster(monrace_id);
-}
-
-/*
- * @brief ユニークの死亡処理
- * @param r_idx 死亡したユニークの種族番号
- */
-void MonsterDamageProcessor::death_unique_monster(MonsterRaceId r_idx)
-{
-    monraces_info[r_idx].max_num = 0;
-    auto &monraces = MonraceList::get_instance();
-    if (monraces.can_unify_separate(r_idx)) {
-        monraces.kill_unified_unique(r_idx);
-    }
+    MonraceList::get_instance().kill_unique_monster(monrace_id);
 }
 
 void MonsterDamageProcessor::increase_kill_numbers()

@@ -29,7 +29,6 @@ private:
     bool genocide_chaos_patron();
     bool process_dead_exp_virtue(std::string_view note, const MonsterEntity &exp_mon);
     void death_special_flag_monster();
-    void death_unique_monster(MonsterRaceId r_idx);
     void increase_kill_numbers();
     void death_amberites(std::string_view m_name);
     void dying_scream(std::string_view m_name);
