@@ -88,20 +88,21 @@ bool mon_hook_quest(PlayerType *player_ptr, MonsterRaceId r_idx)
     /* Unused */
     (void)player_ptr;
 
-    auto *r_ptr = &monraces_info[r_idx];
-    if (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_ONLY)) {
+    const auto &monraces = MonraceList::get_instance();
+    const auto &monrace = monraces.get_monrace(r_idx);
+    if (monrace.wilderness_flags.has(MonsterWildernessType::WILD_ONLY)) {
         return false;
     }
 
-    if (r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC)) {
+    if (monrace.feature_flags.has(MonsterFeatureType::AQUATIC)) {
         return false;
     }
 
-    if (r_ptr->misc_flags.has(MonsterMiscType::MULTIPLY)) {
+    if (monrace.misc_flags.has(MonsterMiscType::MULTIPLY)) {
         return false;
     }
 
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY)) {
+    if (monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY)) {
         return false;
     }
 

@@ -209,10 +209,11 @@ bool QuestList::order_completed(QuestId id1, QuestId id2) const
 void determine_random_questor(PlayerType *player_ptr, QuestType &quest)
 {
     get_mon_num_prep(player_ptr, mon_hook_quest, nullptr);
+    const auto &monraces = MonraceList::get_instance();
     MonsterRaceId r_idx;
     while (true) {
         r_idx = get_mon_num(player_ptr, 0, quest.level + 5 + randint1(quest.level / 10), PM_ARENA);
-        const auto &monrace = monraces_info[r_idx];
+        const auto &monrace = monraces.get_monrace(r_idx);
         if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
             continue;
         }
@@ -241,7 +242,7 @@ void determine_random_questor(PlayerType *player_ptr, QuestType &quest)
             continue;
         }
 
-        if (MonraceList::get_instance().can_unify_separate(r_idx)) {
+        if (monraces.can_unify_separate(r_idx)) {
             continue;
         }
 
