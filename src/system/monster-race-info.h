@@ -229,6 +229,7 @@ public:
     MonsterRaceId pick_id_at_random() const;
     const MonsterRaceInfo &pick_monrace_at_random() const;
 
+    void reset_current_numbers();
     void reset_all_visuals();
     std::optional<std::string> probe_lore(MonsterRaceId monrace_id);
 

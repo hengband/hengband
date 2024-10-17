@@ -832,6 +832,17 @@ const MonsterRaceInfo &MonraceList::pick_monrace_at_random() const
     return monraces_info.at(this->pick_id_at_random());
 }
 
+/*!
+ * @brief 現在フロアに存在している1種別辺りのモンスター数を全てリセットする
+ * @todo そもそもcur_num はMonsterRaceInfo にいるべきではない、後で分離する
+ */
+void MonraceList::reset_current_numbers()
+{
+    for (auto &[_, monrace] : monraces_info) {
+        monrace.cur_num = 0;
+    }
+}
+
 void MonraceList::reset_all_visuals()
 {
     for (auto &[_, monrace] : monraces_info) {
