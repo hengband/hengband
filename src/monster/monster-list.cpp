@@ -204,8 +204,8 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
 }
 
 /*!
+ * @brief カメレオンの王の変身対象となるモンスターかどうか判定する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @brief カメレオンの王の変身対象となるモンスターかどうか判定する / Hack -- the index of the summoning monster
  * @param r_idx モンスター種族ID
  * @param m_idx 変身するモンスターのモンスターID
  * @param grid カメレオンの足元の地形
@@ -214,35 +214,36 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
  */
 static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_idx, MONSTER_IDX m_idx, const Grid &grid, std::optional<MONSTER_IDX> summoner_m_idx)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *r_ptr = &monraces_info[r_idx];
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
-    MonsterRaceInfo *old_r_ptr = &m_ptr->get_monrace();
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monraces = MonraceList::get_instance();
+    const auto &monrace = monraces.get_monrace(r_idx);
+    const auto &monster = floor.m_list[m_idx];
+    const auto &old_monrace = monster.get_monrace();
 
-    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
+    if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return false;
     }
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY) || r_ptr->misc_flags.has(MonsterMiscType::CHAMELEON)) {
-        return false;
-    }
-
-    if (std::abs(r_ptr->level - monraces_info[MonsterRaceId::CHAMELEON_K].level) > 5) {
+    if (monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY) || monrace.misc_flags.has(MonsterMiscType::CHAMELEON)) {
         return false;
     }
 
-    if (r_ptr->is_explodable()) {
+    if (std::abs(monrace.level - monraces.get_monrace(MonsterRaceId::CHAMELEON_K).level) > 5) {
         return false;
     }
 
-    if (!monster_can_cross_terrain(player_ptr, grid.feat, r_ptr, 0)) {
+    if (monrace.is_explodable()) {
         return false;
     }
 
-    if (old_r_ptr->misc_flags.has_not(MonsterMiscType::CHAMELEON)) {
-        if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, r_ptr)) {
+    if (!monster_can_cross_terrain(player_ptr, grid.feat, &monrace, 0)) {
+        return false;
+    }
+
+    if (old_monrace.misc_flags.has_not(MonsterMiscType::CHAMELEON)) {
+        if (monster_has_hostile_align(player_ptr, &monster, 0, 0, &monrace)) {
             return false;
         }
-    } else if (summoner_m_idx && monster_has_hostile_align(player_ptr, &floor_ptr->m_list[*summoner_m_idx], 0, 0, r_ptr)) {
+    } else if (summoner_m_idx && monster_has_hostile_align(player_ptr, &floor.m_list[*summoner_m_idx], 0, 0, &monrace)) {
         return false;
     }
 
