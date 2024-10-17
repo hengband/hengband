@@ -421,6 +421,15 @@ void MonsterRaceInfo::emplace_reinforce(MonsterRaceId monrace_id, const Dice &di
     this->reinforces.emplace_back(monrace_id, dice);
 }
 
+/*!
+ * @brief 該当モンスター種族が1体以上実体化されているかを返す
+ * @return 実体の有無
+ */
+bool MonsterRaceInfo::has_entity() const
+{
+    return this->cur_num > 0;
+}
+
 void MonsterRaceInfo::reset_current_numbers()
 {
     this->cur_num = 0;
@@ -668,7 +677,7 @@ bool MonraceList::is_selectable(const MonsterRaceId r_idx) const
         return true;
     }
 
-    return std::all_of(it->second.begin(), it->second.end(), [this](const auto x) { return this->get_monrace(x).cur_num == 0; });
+    return std::all_of(it->second.begin(), it->second.end(), [this](const auto x) { return !this->get_monrace(x).has_entity(); });
 }
 
 /*!
@@ -705,7 +714,7 @@ bool MonraceList::is_unified(const MonsterRaceId r_idx) const
 bool MonraceList::exists_separates(const MonsterRaceId r_idx) const
 {
     const auto &separates = unified_uniques.at(r_idx);
-    return std::all_of(separates.begin(), separates.end(), [this](const auto x) { return this->get_monrace(x).cur_num > 0; });
+    return std::all_of(separates.begin(), separates.end(), [this](const auto x) { return this->get_monrace(x).has_entity(); });
 }
 
 /*!

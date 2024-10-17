@@ -159,7 +159,7 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
                 continue;
             }
 
-            if (r_ptr->population_flags.has(MonsterPopulationType::ONLY_ONE) && (r_ptr->cur_num >= 1)) {
+            if (r_ptr->population_flags.has(MonsterPopulationType::ONLY_ONE) && r_ptr->has_entity()) {
                 continue;
             }
 

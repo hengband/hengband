@@ -158,7 +158,7 @@ static void place_pet(PlayerType *player_ptr)
                 exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE));
             }
 
-            if (monrace.cur_num) {
+            if (monrace.has_entity()) {
                 monrace.decrement_current_numbers();
             }
         }
