@@ -172,39 +172,38 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(std::string_view note, cons
  */
 void MonsterDamageProcessor::death_special_flag_monster()
 {
-    auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    auto r_idx = m_ptr->r_idx;
-    auto *r_ptr = &monraces_info[r_idx];
-    if (monraces_info[r_idx].misc_flags.has(MonsterMiscType::TANUKI)) {
-        r_ptr = &monraces_info[r_idx];
-        m_ptr->ap_r_idx = r_idx;
-        if (r_ptr->r_sights < MAX_SHORT) {
-            r_ptr->r_sights++;
+    auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
+    auto monrace_id = monster.r_idx;
+    auto &monrace = monster.get_monrace();
+    if (monrace.misc_flags.has(MonsterMiscType::TANUKI)) {
+        monster.ap_r_idx = monrace_id;
+        if (monrace.r_sights < MAX_SHORT) {
+            monrace.r_sights++;
         }
     }
 
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
-        auto &real_r_ref = m_ptr->get_real_monrace();
-        r_idx = m_ptr->get_real_monrace_id();
-        if (real_r_ref.r_sights < MAX_SHORT) {
-            real_r_ref.r_sights++;
+    if (monster.mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
+        auto &real_monrace = monster.get_real_monrace();
+        monrace_id = monster.get_real_monrace_id();
+        if (real_monrace.r_sights < MAX_SHORT) {
+            real_monrace.r_sights++;
         }
     }
 
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::CLONED)) {
+    if (monster.mflag2.has(MonsterConstantFlagType::CLONED)) {
         return;
     }
 
-    if (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) {
-        r_ptr->max_num--;
+    if (monrace.population_flags.has(MonsterPopulationType::NAZGUL)) {
+        monrace.max_num--;
         return;
     }
 
-    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
+    if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return;
     }
 
-    this->death_unique_monster(r_idx);
+    this->death_unique_monster(monrace_id);
 }
 
 /*
