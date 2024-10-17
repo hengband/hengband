@@ -418,8 +418,7 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, POSITION y,
     }
 
     update_monster(player_ptr, g_ptr->m_idx, true);
-
-    m_ptr->get_real_monrace().cur_num++;
+    m_ptr->get_real_monrace().increment_current_numbers();
 
     /*
      * Memorize location of the unique monster in saved floors.

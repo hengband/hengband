@@ -450,7 +450,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId m
     m_ptr->r_idx = r_ptr->next_r_idx;
 
     /* Count the monsters on the level */
-    m_ptr->get_real_monrace().cur_num++;
+    m_ptr->get_real_monrace().increment_current_numbers();
 
     m_ptr->ap_r_idx = m_ptr->r_idx;
     r_ptr = &m_ptr->get_monrace();

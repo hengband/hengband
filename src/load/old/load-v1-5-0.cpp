@@ -750,7 +750,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
         monster_loader->rd_monster(m_ptr);
         auto *g_ptr = &floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
         g_ptr->m_idx = m_idx;
-        m_ptr->get_real_monrace().cur_num++;
+        m_ptr->get_real_monrace().increment_current_numbers();
     }
 
     auto &world = AngbandWorld::get_instance();
