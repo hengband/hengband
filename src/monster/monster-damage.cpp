@@ -215,14 +215,15 @@ void MonsterDamageProcessor::increase_kill_numbers()
         return;
     }
 
-    if (monster.mflag2.has(MonsterConstantFlagType::KAGE) && (monraces_info[MonsterRaceId::KAGE].r_pkills < MAX_SHORT)) {
-        monraces_info[MonsterRaceId::KAGE].r_pkills++;
+    auto &shadower = MonraceList::get_instance().get_monrace(MonsterRaceId::KAGE);
+    if (monster.mflag2.has(MonsterConstantFlagType::KAGE) && (shadower.r_pkills < MAX_SHORT)) {
+        shadower.r_pkills++;
     } else if (monrace.r_pkills < MAX_SHORT) {
         monrace.r_pkills++;
     }
 
-    if (monster.mflag2.has(MonsterConstantFlagType::KAGE) && (monraces_info[MonsterRaceId::KAGE].r_tkills < MAX_SHORT)) {
-        monraces_info[MonsterRaceId::KAGE].r_tkills++;
+    if (monster.mflag2.has(MonsterConstantFlagType::KAGE) && (shadower.r_tkills < MAX_SHORT)) {
+        shadower.r_tkills++;
     } else if (monrace.r_tkills < MAX_SHORT) {
         monrace.r_tkills++;
     }
