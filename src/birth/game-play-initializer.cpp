@@ -71,7 +71,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
         if (!monrace.is_valid()) {
             continue;
         }
-        monrace.cur_num = 0;
+        monrace.reset_current_numbers();
         monrace.max_num = MAX_MONSTER_NUM;
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
             monrace.max_num = MAX_UNIQUE_NUM;

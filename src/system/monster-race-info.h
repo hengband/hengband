@@ -160,6 +160,9 @@ public:
     void emplace_drop_artifact(FixedArtifactId fa_id, int percentage);
     void emplace_reinforce(MonsterRaceId monrace_id, const Dice &dice);
 
+    //!< @todo ここから先はミュータブルなフィールドなので分離すべき.
+    void reset_current_numbers();
+
 private:
     std::vector<DropArtifact> drop_artifacts; //!< 特定アーティファクトドロップリスト
     std::vector<Reinforce> reinforces; //!< 指定護衛リスト

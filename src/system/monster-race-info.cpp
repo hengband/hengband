@@ -421,6 +421,11 @@ void MonsterRaceInfo::emplace_reinforce(MonsterRaceId monrace_id, const Dice &di
     this->reinforces.emplace_back(monrace_id, dice);
 }
 
+void MonsterRaceInfo::reset_current_numbers()
+{
+    this->cur_num = 0;
+}
+
 /*!
  * @brief エルドリッチホラーの形容詞種別を決める
  * @return エルドリッチホラーの形容詞
@@ -839,7 +844,7 @@ const MonsterRaceInfo &MonraceList::pick_monrace_at_random() const
 void MonraceList::reset_current_numbers()
 {
     for (auto &[_, monrace] : monraces_info) {
-        monrace.cur_num = 0;
+        monrace.reset_current_numbers();
     }
 }
 
