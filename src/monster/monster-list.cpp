@@ -152,22 +152,22 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
         if (max_level < entry.level) {
             break;
         } // sorted by depth array,
-        auto r_idx = i2enum<MonsterRaceId>(entry.index);
-        auto r_ptr = &monraces_info[r_idx];
+        auto monrace_id = i2enum<MonsterRaceId>(entry.index);
+        auto &monrace = monraces.get_monrace(monrace_id);
         if (none_bits(mode, PM_ARENA | PM_CHAMELEON)) {
-            if ((r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) && (r_ptr->cur_num >= r_ptr->max_num) && none_bits(mode, PM_CLONE)) {
+            if ((monrace.kind_flags.has(MonsterKindType::UNIQUE) || monrace.population_flags.has(MonsterPopulationType::NAZGUL)) && (monrace.cur_num >= monrace.max_num) && none_bits(mode, PM_CLONE)) {
                 continue;
             }
 
-            if (r_ptr->population_flags.has(MonsterPopulationType::ONLY_ONE) && r_ptr->has_entity()) {
+            if (monrace.population_flags.has(MonsterPopulationType::ONLY_ONE) && monrace.has_entity()) {
                 continue;
             }
 
-            if (r_ptr->population_flags.has(MonsterPopulationType::BUNBUN_STRIKER) && (r_ptr->cur_num >= MAX_BUNBUN_NUM)) {
+            if (monrace.population_flags.has(MonsterPopulationType::BUNBUN_STRIKER) && (monrace.cur_num >= MAX_BUNBUN_NUM)) {
                 continue;
             }
 
-            if (!monraces.is_selectable(r_idx)) {
+            if (!monraces.is_selectable(monrace_id)) {
                 continue;
             }
         }
