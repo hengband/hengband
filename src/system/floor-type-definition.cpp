@@ -201,7 +201,7 @@ bool FloorType::order_pet_dismission(short index1, short index2, short riding_in
  * @brief モンスターの時限ステータスリストを初期化する
  * @details リストは逆順に走査し、死んでいるモンスターは初期化対象外とする
  */
-void FloorType::mproc_init()
+void FloorType::reset_mproc()
 {
     for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
         this->mproc_max[mte] = 0;
@@ -215,7 +215,7 @@ void FloorType::mproc_init()
 
         for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
             if (monster.mtimed.at(mte) > 0) {
-                this->mproc_add(i, mte);
+                this->add_mproc(i, mte);
             }
         }
     }
@@ -227,7 +227,7 @@ void FloorType::mproc_init()
  * @param mte モンスターの時限ステータスID
  * @return 残りターン値
  */
-std::optional<int> FloorType::get_mproc_idx(short m_idx, MonsterTimedEffect mte)
+std::optional<int> FloorType::get_mproc_index(short m_idx, MonsterTimedEffect mte)
 {
     const auto &cur_mproc_list = this->mproc_list[mte];
     for (auto i = this->mproc_max[mte] - 1; i >= 0; i--) {
@@ -244,7 +244,7 @@ std::optional<int> FloorType::get_mproc_idx(short m_idx, MonsterTimedEffect mte)
  * @param m_idx モンスターの参照ID
  * @return mte 追加したいモンスターの時限ステータスID
  */
-void FloorType::mproc_add(short m_idx, MonsterTimedEffect mte)
+void FloorType::add_mproc(short m_idx, MonsterTimedEffect mte)
 {
     if (this->mproc_max[mte] < MAX_FLOOR_MONSTERS) {
         this->mproc_list[mte][this->mproc_max[mte]++] = m_idx;
@@ -256,9 +256,9 @@ void FloorType::mproc_add(short m_idx, MonsterTimedEffect mte)
  * @return m_idx モンスターの参照ID
  * @return mte 削除したいモンスターの時限ステータスID
  */
-void FloorType::mproc_remove(short m_idx, MonsterTimedEffect mte)
+void FloorType::remove_mproc(short m_idx, MonsterTimedEffect mte)
 {
-    const auto mproc_idx = this->get_mproc_idx(m_idx, mte);
+    const auto mproc_idx = this->get_mproc_index(m_idx, mte);
     if (mproc_idx >= 0) {
         this->mproc_list[mte][*mproc_idx] = this->mproc_list[mte][--this->mproc_max[mte]];
     }

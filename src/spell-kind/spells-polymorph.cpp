@@ -117,7 +117,7 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
         m_idx = place_specific_monster(player_ptr, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN));
         if (m_idx) {
             floor_ptr->m_list[*m_idx] = back_m;
-            floor_ptr->mproc_init();
+            floor_ptr->reset_mproc();
         } else {
             preserve_hold_objects = false;
         }

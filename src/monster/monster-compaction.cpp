@@ -75,9 +75,9 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
     floor.m_list[i1] = {};
 
     for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
-        const auto mproc_idx = floor.get_mproc_idx(i1, mte);
-        if (mproc_idx >= 0) {
-            floor.mproc_list[mte][*mproc_idx] = i2;
+        const auto index = floor.get_mproc_index(i1, mte);
+        if (index >= 0) {
+            floor.mproc_list[mte][*index] = i2;
         }
     }
 }

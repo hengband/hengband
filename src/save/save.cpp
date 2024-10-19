@@ -329,7 +329,7 @@ bool save_player(PlayerType *player_ptr, SaveType type)
     if (type != SaveType::CLOSE_GAME) {
         world.is_loading_now = false;
         update_creature(player_ptr);
-        player_ptr->current_floor_ptr->mproc_init();
+        player_ptr->current_floor_ptr->reset_mproc();
         world.is_loading_now = true;
     }
 

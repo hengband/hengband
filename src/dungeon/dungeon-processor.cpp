@@ -209,7 +209,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     }
 
     player_ptr->leaving_dungeon = false;
-    floor.mproc_init();
+    floor.reset_mproc();
 
     while (true) {
         if ((floor.m_cnt + 32 > MAX_FLOOR_MONSTERS) && !is_watching) {
