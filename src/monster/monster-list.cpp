@@ -45,9 +45,6 @@
 #include <cmath>
 #include <iterator>
 
-#define HORDE_NOGOOD 0x01 /*!< (未実装フラグ)HORDE生成でGOODなモンスターの生成を禁止する？ */
-#define HORDE_NOEVIL 0x02 /*!< (未実装フラグ)HORDE生成でEVILなモンスターの生成を禁止する？ */
-
 /*!
  * @brief モンスター配列の空きを探す / Acquires and returns the index of a "free" monster.
  * @return 利用可能なモンスター配列の添字
