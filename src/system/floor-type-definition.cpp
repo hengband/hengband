@@ -203,10 +203,7 @@ bool FloorType::order_pet_dismission(short index1, short index2, short riding_in
  */
 void FloorType::reset_mproc()
 {
-    for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
-        this->mproc_max[mte] = 0;
-    }
-
+    this->reset_mproc_max();
     for (short i = this->m_max - 1; i >= 1; i--) {
         const auto &monster = this->m_list[i];
         if (!monster.is_valid()) {
@@ -218,6 +215,13 @@ void FloorType::reset_mproc()
                 this->add_mproc(i, mte);
             }
         }
+    }
+}
+
+void FloorType::reset_mproc_max()
+{
+    for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
+        this->mproc_max[mte] = 0;
     }
 }
 
