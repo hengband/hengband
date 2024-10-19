@@ -1,7 +1,7 @@
 #pragma once
 
 #include "monster/monster-flag-types.h"
-#include "monster/monster-timed-effect-types.h"
+#include "monster/monster-timed-effects.h"
 #include "monster/smart-learn-types.h"
 #include "object/object-index-list.h"
 #include "util/flag-group.h"

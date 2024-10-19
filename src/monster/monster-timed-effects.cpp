@@ -1,4 +1,4 @@
-#include "window/main-window-row-column.h"
+#include "monster/monster-timed-effects.h"
 #include "locale/language-switcher.h"
 
 const std::map<MonsterTimedEffect, std::string> effect_type_to_label = {

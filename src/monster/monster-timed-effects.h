@@ -1,5 +1,8 @@
 #pragma once
 
+#include <map>
+#include <string>
+
 enum MonsterTimedEffect {
     MTIMED_CSLEEP = 0, /* Monster is sleeping */
     MTIMED_FAST = 1, /* Monster is temporarily fast */
@@ -10,3 +13,5 @@ enum MonsterTimedEffect {
     MTIMED_INVULNER = 6, /* Monster is temporarily invulnerable */
     MAX_MTIMED = 7,
 };
+
+extern const std::map<MonsterTimedEffect, std::string> effect_type_to_label;
