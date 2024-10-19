@@ -2451,9 +2451,6 @@
     <ClCompile Include="..\..\src\system\terrain-type-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\window\main-window-row-column.cpp">
-      <Filter>window</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monster-race\race-brightness-mask.cpp">
       <Filter>monster-race</Filter>
     </ClCompile>
@@ -2519,6 +2516,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\floor\floor-list.cpp">
       <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-timed-effects.cpp">
+      <Filter>monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3698,7 +3698,7 @@
     <ClInclude Include="..\..\src\monster\monster-description-types.h">
       <Filter>monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster\monster-timed-effect-types.h">
+    <ClInclude Include="..\..\src\monster\monster-timed-effects.h">
       <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\eldritch-horror.h">

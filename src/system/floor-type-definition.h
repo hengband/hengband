@@ -1,7 +1,7 @@
 #pragma once
 
 #include "floor/floor-base-definitions.h"
-#include "monster/monster-timed-effect-types.h"
+#include "monster/monster-timed-effects.h"
 #include "system/angband.h"
 #include "util/point-2d.h"
 #include <array>

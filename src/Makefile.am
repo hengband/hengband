@@ -476,12 +476,12 @@ hengband_SOURCES = \
 	monster/monster-pain-describer.cpp monster/monster-pain-describer.h \
 	monster/monster-processor.cpp monster/monster-processor.h \
 	monster/monster-processor-util.cpp monster/monster-processor-util.h \
-	monster/monster-timed-effect-types.h \
-	monster/smart-learn-types.h \
+	monster/monster-timed-effects.cpp monster/monster-timed-effects.h \
 	monster/monster-status.cpp monster/monster-status.h \
 	monster/monster-status-setter.cpp monster/monster-status-setter.h \
 	monster/monster-update.cpp monster/monster-update.h \
 	monster/monster-util.cpp monster/monster-util.h \
+	monster/smart-learn-types.h \
 	\
 	monster-attack/insults-moans.cpp monster-attack/insults-moans.h \
 	monster-attack/monster-attack-describer.cpp monster-attack/monster-attack-describer.h \
@@ -1021,7 +1021,7 @@ hengband_SOURCES = \
 	\
 	window/display-sub-windows.cpp window/display-sub-windows.h \
 	window/main-window-left-frame.cpp window/main-window-left-frame.h \
-	window/main-window-row-column.cpp window/main-window-row-column.h \
+	window/main-window-row-column.h \
 	window/main-window-stat-poster.cpp window/main-window-stat-poster.h \
 	window/main-window-util.cpp window/main-window-util.h \
 	window/main-window-equipments.cpp window/main-window-equipments.h \

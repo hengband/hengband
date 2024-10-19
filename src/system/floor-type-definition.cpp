@@ -1,7 +1,7 @@
 #include "system/floor-type-definition.h"
 #include "dungeon/quest.h"
 #include "game-option/birth-options.h"
-#include "monster/monster-timed-effect-types.h"
+#include "monster/monster-timed-effects.h"
 #include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/dungeon-info.h"
