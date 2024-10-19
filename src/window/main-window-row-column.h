@@ -80,4 +80,4 @@
 #define COL_STATBAR 0
 #define MAX_COL_STATBAR (-26)
 
-extern const std::map<monster_timed_effect_type, std::string> effect_type_to_label;
+extern const std::map<MonsterTimedEffect, std::string> effect_type_to_label;
