@@ -1,10 +1,10 @@
 #pragma once
 
 #include "floor/floor-base-definitions.h"
-#include "monster/monster-timed-effects.h"
 #include "system/angband.h"
 #include "util/point-2d.h"
 #include <array>
+#include <map>
 #include <optional>
 #include <vector>
 
@@ -34,6 +34,7 @@ constexpr auto VIEW_MAX = 1536;
  */
 constexpr auto REDRAW_MAX = 2298;
 
+enum MonsterTimedEffect : int;
 enum class QuestId : short;
 struct dungeon_type;
 class Grid;
@@ -62,8 +63,8 @@ public:
     MONSTER_IDX m_max = 0; /* Number of allocated monsters */
     MONSTER_IDX m_cnt = 0; /* Number of live monsters */
 
-    std::vector<std::vector<int16_t>> mproc_list; /*!< The array to process dungeon monsters[max_m_idx] */
-    int16_t mproc_max[MAX_MTIMED]{}; /*!< Number of monsters to be processed */
+    std::map<MonsterTimedEffect, std::vector<short>> mproc_list; /*!< The array to process dungeon monsters[max_m_idx] */
+    std::map<MonsterTimedEffect, short> mproc_max; /*!< Number of monsters to be processed */
 
     POSITION_IDX lite_n = 0; //!< Array of grids lit by player lite
     std::array<POSITION, LITE_MAX> lite_y{};

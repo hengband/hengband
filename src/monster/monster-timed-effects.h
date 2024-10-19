@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 
-enum MonsterTimedEffect {
+enum MonsterTimedEffect : int {
     MTIMED_CSLEEP = 0, /* Monster is sleeping */
     MTIMED_FAST = 1, /* Monster is temporarily fast */
     MTIMED_SLOW = 2, /* Monster is temporarily slow */
