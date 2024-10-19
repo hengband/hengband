@@ -33,7 +33,7 @@ void MonsterEntityWriter::write_to_savedata() const
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::CSLEEP)) {
-        wr_s16b(this->monster.mtimed[MTIMED_CSLEEP]);
+        wr_s16b(this->monster.mtimed.at(MTIMED_CSLEEP));
     }
 
     wr_byte((byte)this->monster.mspeed);
@@ -116,27 +116,27 @@ void MonsterEntityWriter::write_monster_info(uint32_t flags) const
 {
     byte tmp8u;
     if (any_bits(flags, SaveDataMonsterFlagType::FAST)) {
-        tmp8u = (byte)this->monster.mtimed[MTIMED_FAST];
+        tmp8u = (byte)this->monster.mtimed.at(MTIMED_FAST);
         wr_byte(tmp8u);
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::SLOW)) {
-        tmp8u = (byte)this->monster.mtimed[MTIMED_SLOW];
+        tmp8u = (byte)this->monster.mtimed.at(MTIMED_SLOW);
         wr_byte(tmp8u);
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::STUNNED)) {
-        tmp8u = (byte)this->monster.mtimed[MTIMED_STUNNED];
+        tmp8u = (byte)this->monster.mtimed.at(MTIMED_STUNNED);
         wr_byte(tmp8u);
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::CONFUSED)) {
-        tmp8u = (byte)this->monster.mtimed[MTIMED_CONFUSED];
+        tmp8u = (byte)this->monster.mtimed.at(MTIMED_CONFUSED);
         wr_byte(tmp8u);
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::MONFEAR)) {
-        tmp8u = (byte)this->monster.mtimed[MTIMED_MONFEAR];
+        tmp8u = (byte)this->monster.mtimed.at(MTIMED_MONFEAR);
         wr_byte(tmp8u);
     }
 
@@ -149,7 +149,7 @@ void MonsterEntityWriter::write_monster_info(uint32_t flags) const
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::INVULNER)) {
-        tmp8u = (byte)this->monster.mtimed[MTIMED_INVULNER];
+        tmp8u = (byte)this->monster.mtimed.at(MTIMED_INVULNER);
         wr_byte(tmp8u);
     }
 

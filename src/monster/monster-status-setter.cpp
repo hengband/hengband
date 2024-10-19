@@ -64,13 +64,13 @@ void anger_monster(PlayerType *player_ptr, MonsterEntity *m_ptr)
  * @brief モンスターの時限ステータスリストを削除
  * @param floor_ptr 現在フロアへの参照ポインタ
  * @return m_idx モンスターの参照ID
- * @return mproc_type 削除したいモンスターの時限ステータスID
+ * @return mte 削除したいモンスターの時限ステータスID
  */
-static void mproc_remove(FloorType *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
+static void mproc_remove(FloorType *floor_ptr, MONSTER_IDX m_idx, MonsterTimedEffect mte)
 {
-    int mproc_idx = get_mproc_idx(floor_ptr, m_idx, mproc_type);
+    const auto mproc_idx = get_mproc_idx(floor_ptr, m_idx, mte);
     if (mproc_idx >= 0) {
-        floor_ptr->mproc_list[mproc_type][mproc_idx] = floor_ptr->mproc_list[mproc_type][--floor_ptr->mproc_max[mproc_type]];
+        floor_ptr->mproc_list[mte][mproc_idx] = floor_ptr->mproc_list[mte][--floor_ptr->mproc_max[mte]];
     }
 }
 
