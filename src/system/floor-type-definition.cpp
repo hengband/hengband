@@ -196,3 +196,70 @@ bool FloorType::order_pet_dismission(short index1, short index2, short riding_in
 
     return index1 < index2;
 }
+
+/*!
+ * @brief モンスターの時限ステータスリストを初期化する
+ * @details リストは逆順に走査し、死んでいるモンスターは初期化対象外とする
+ */
+void FloorType::mproc_init()
+{
+    for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
+        this->mproc_max[mte] = 0;
+    }
+
+    for (short i = this->m_max - 1; i >= 1; i--) {
+        const auto &monster = this->m_list[i];
+        if (!monster.is_valid()) {
+            continue;
+        }
+
+        for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
+            if (monster.mtimed.at(mte) > 0) {
+                this->mproc_add(i, mte);
+            }
+        }
+    }
+}
+
+/*!
+ * @brief モンスターの時限ステータスを取得する
+ * @param m_idx モンスターの参照ID
+ * @param mte モンスターの時限ステータスID
+ * @return 残りターン値
+ */
+std::optional<int> FloorType::get_mproc_idx(short m_idx, MonsterTimedEffect mte)
+{
+    const auto &cur_mproc_list = this->mproc_list[mte];
+    for (auto i = this->mproc_max[mte] - 1; i >= 0; i--) {
+        if (cur_mproc_list[i] == m_idx) {
+            return i;
+        }
+    }
+
+    return std::nullopt;
+}
+
+/*!
+ * @brief モンスターの時限ステータスリストを追加する
+ * @param m_idx モンスターの参照ID
+ * @return mte 追加したいモンスターの時限ステータスID
+ */
+void FloorType::mproc_add(short m_idx, MonsterTimedEffect mte)
+{
+    if (this->mproc_max[mte] < MAX_FLOOR_MONSTERS) {
+        this->mproc_list[mte][this->mproc_max[mte]++] = m_idx;
+    }
+}
+
+/*!
+ * @brief モンスターの時限ステータスリストを削除
+ * @return m_idx モンスターの参照ID
+ * @return mte 削除したいモンスターの時限ステータスID
+ */
+void FloorType::mproc_remove(short m_idx, MonsterTimedEffect mte)
+{
+    const auto mproc_idx = this->get_mproc_idx(m_idx, mte);
+    if (mproc_idx >= 0) {
+        this->mproc_list[mte][*mproc_idx] = this->mproc_list[mte][--this->mproc_max[mte]];
+    }
+}

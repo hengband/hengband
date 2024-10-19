@@ -101,66 +101,6 @@ int mon_damage_mod(PlayerType *player_ptr, MonsterEntity *m_ptr, int dam, bool i
 }
 
 /*!
- * @brief モンスターの時限ステータスを取得する
- * @param floor_ptr 現在フロアへの参照ポインタ
- * @return m_idx モンスターの参照ID
- * @return mte モンスターの時限ステータスID
- * @return 残りターン値
- */
-int get_mproc_idx(FloorType *floor_ptr, MONSTER_IDX m_idx, MonsterTimedEffect mte)
-{
-    const auto &cur_mproc_list = floor_ptr->mproc_list[mte];
-    for (int i = floor_ptr->mproc_max[mte] - 1; i >= 0; i--) {
-        if (cur_mproc_list[i] == m_idx) {
-            return i;
-        }
-    }
-
-    return -1;
-}
-
-/*!
- * @brief モンスターの時限ステータスリストを追加する
- * @param floor_ptr 現在フロアへの参照ポインタ
- * @return m_idx モンスターの参照ID
- * @return mte 追加したいモンスターの時限ステータスID
- */
-void mproc_add(FloorType *floor_ptr, MONSTER_IDX m_idx, MonsterTimedEffect mte)
-{
-    if (floor_ptr->mproc_max[mte] < MAX_FLOOR_MONSTERS) {
-        floor_ptr->mproc_list[mte][floor_ptr->mproc_max[mte]++] = m_idx;
-    }
-}
-
-/*!
- * @brief モンスターの時限ステータスリストを初期化する
- * @param floor_ptr 現在フロアへの参照ポインタ
- */
-void mproc_init(FloorType *floor_ptr)
-{
-    /* Reset "player_ptr->current_floor_ptr->mproc_max[]" */
-    for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
-        floor_ptr->mproc_max[mte] = 0;
-    }
-
-    /* Process the monsters (backwards) */
-    for (MONSTER_IDX i = floor_ptr->m_max - 1; i >= 1; i--) {
-        auto *m_ptr = &floor_ptr->m_list[i];
-
-        /* Ignore "dead" monsters */
-        if (!m_ptr->is_valid()) {
-            continue;
-        }
-
-        for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
-            if (m_ptr->mtimed[mte] > 0) {
-                mproc_add(floor_ptr, i, mte);
-            }
-        }
-    }
-}
-
-/*!
  * @brief モンスターの各種状態値を時間経過により更新するサブルーチン
  * @param floor_ptr 現在フロアへの参照ポインタ
  * @param m_idx モンスター参照ID

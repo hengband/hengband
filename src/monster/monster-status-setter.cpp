@@ -11,7 +11,6 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-processor.h"
-#include "monster/monster-status.h" //!< @todo 相互依存. 後で何とかする.
 #include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
 #include "system/angband-system.h"
@@ -61,20 +60,6 @@ void anger_monster(PlayerType *player_ptr, MonsterEntity *m_ptr)
 }
 
 /*!
- * @brief モンスターの時限ステータスリストを削除
- * @param floor_ptr 現在フロアへの参照ポインタ
- * @return m_idx モンスターの参照ID
- * @return mte 削除したいモンスターの時限ステータスID
- */
-static void mproc_remove(FloorType *floor_ptr, MONSTER_IDX m_idx, MonsterTimedEffect mte)
-{
-    const auto mproc_idx = get_mproc_idx(floor_ptr, m_idx, mte);
-    if (mproc_idx >= 0) {
-        floor_ptr->mproc_list[mte][mproc_idx] = floor_ptr->mproc_list[mte][--floor_ptr->mproc_max[mte]];
-    }
-}
-
-/*!
  * @brief モンスターの睡眠状態値をセットする。0で起きる。 /
  * Set "m_ptr->mtimed[MTIMED_CSLEEP]", notice observable changes
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -84,37 +69,37 @@ static void mproc_remove(FloorType *floor_ptr, MONSTER_IDX m_idx, MonsterTimedEf
  */
 bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &monster = floor.m_list[m_idx];
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0
                                       : v;
     if (v) {
-        if (!m_ptr->is_asleep()) {
-            mproc_add(floor_ptr, m_idx, MTIMED_CSLEEP);
+        if (!monster.is_asleep()) {
+            floor.mproc_add(m_idx, MTIMED_CSLEEP);
             notice = true;
         }
     } else {
-        if (m_ptr->is_asleep()) {
-            mproc_remove(floor_ptr, m_idx, MTIMED_CSLEEP);
+        if (monster.is_asleep()) {
+            floor.mproc_remove(m_idx, MTIMED_CSLEEP);
             notice = true;
         }
     }
 
-    m_ptr->mtimed[MTIMED_CSLEEP] = (int16_t)v;
+    monster.mtimed[MTIMED_CSLEEP] = (int16_t)v;
     if (!notice) {
         return false;
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (m_ptr->ml) {
+    if (monster.ml) {
         HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
-        if (m_ptr->is_riding()) {
+        if (monster.is_riding()) {
             rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
         }
     }
 
-    if (m_ptr->get_monrace().brightness_flags.has_any_of(has_ld_mask)) {
+    if (monster.get_monrace().brightness_flags.has_any_of(has_ld_mask)) {
         rfu.set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 
@@ -131,29 +116,29 @@ bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
  */
 bool set_monster_fast(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &monster = floor.m_list[m_idx];
     bool notice = false;
     v = (v > 200) ? 200 : (v < 0) ? 0
                                   : v;
     if (v) {
-        if (!m_ptr->is_accelerated()) {
-            mproc_add(floor_ptr, m_idx, MTIMED_FAST);
+        if (!monster.is_accelerated()) {
+            floor.mproc_add(m_idx, MTIMED_FAST);
             notice = true;
         }
     } else {
-        if (m_ptr->is_accelerated()) {
-            mproc_remove(floor_ptr, m_idx, MTIMED_FAST);
+        if (monster.is_accelerated()) {
+            floor.mproc_remove(m_idx, MTIMED_FAST);
             notice = true;
         }
     }
 
-    m_ptr->mtimed[MTIMED_FAST] = (int16_t)v;
+    monster.mtimed[MTIMED_FAST] = (int16_t)v;
     if (!notice) {
         return false;
     }
 
-    if (m_ptr->is_riding() && !player_ptr->leaving) {
+    if (monster.is_riding() && !player_ptr->leaving) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     }
 
@@ -165,29 +150,29 @@ bool set_monster_fast(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
  */
 bool set_monster_slow(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &monster = floor.m_list[m_idx];
     bool notice = false;
     v = (v > 200) ? 200 : (v < 0) ? 0
                                   : v;
     if (v) {
-        if (!m_ptr->is_decelerated()) {
-            mproc_add(floor_ptr, m_idx, MTIMED_SLOW);
+        if (!monster.is_decelerated()) {
+            floor.mproc_add(m_idx, MTIMED_SLOW);
             notice = true;
         }
     } else {
-        if (m_ptr->is_decelerated()) {
-            mproc_remove(floor_ptr, m_idx, MTIMED_SLOW);
+        if (monster.is_decelerated()) {
+            floor.mproc_remove(m_idx, MTIMED_SLOW);
             notice = true;
         }
     }
 
-    m_ptr->mtimed[MTIMED_SLOW] = (int16_t)v;
+    monster.mtimed[MTIMED_SLOW] = (int16_t)v;
     if (!notice) {
         return false;
     }
 
-    if (m_ptr->is_riding() && !player_ptr->leaving) {
+    if (monster.is_riding() && !player_ptr->leaving) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     }
 
@@ -204,24 +189,24 @@ bool set_monster_slow(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
  */
 bool set_monster_stunned(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &monster = floor.m_list[m_idx];
     bool notice = false;
     v = (v > 200) ? 200 : (v < 0) ? 0
                                   : v;
     if (v) {
-        if (!m_ptr->is_stunned()) {
-            mproc_add(floor_ptr, m_idx, MTIMED_STUNNED);
+        if (!monster.is_stunned()) {
+            floor.mproc_add(m_idx, MTIMED_STUNNED);
             notice = true;
         }
     } else {
-        if (m_ptr->is_stunned()) {
-            mproc_remove(floor_ptr, m_idx, MTIMED_STUNNED);
+        if (monster.is_stunned()) {
+            floor.mproc_remove(m_idx, MTIMED_STUNNED);
             notice = true;
         }
     }
 
-    m_ptr->mtimed[MTIMED_STUNNED] = (int16_t)v;
+    monster.mtimed[MTIMED_STUNNED] = (int16_t)v;
     return notice;
 }
 
@@ -235,24 +220,24 @@ bool set_monster_stunned(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
  */
 bool set_monster_confused(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &monster = floor.m_list[m_idx];
     bool notice = false;
     v = (v > 200) ? 200 : (v < 0) ? 0
                                   : v;
     if (v) {
-        if (!m_ptr->is_confused()) {
-            mproc_add(floor_ptr, m_idx, MTIMED_CONFUSED);
+        if (!monster.is_confused()) {
+            floor.mproc_add(m_idx, MTIMED_CONFUSED);
             notice = true;
         }
     } else {
-        if (m_ptr->is_confused()) {
-            mproc_remove(floor_ptr, m_idx, MTIMED_CONFUSED);
+        if (monster.is_confused()) {
+            floor.mproc_remove(m_idx, MTIMED_CONFUSED);
             notice = true;
         }
     }
 
-    m_ptr->mtimed[MTIMED_CONFUSED] = (int16_t)v;
+    monster.mtimed[MTIMED_CONFUSED] = (int16_t)v;
     return notice;
 }
 
@@ -266,32 +251,32 @@ bool set_monster_confused(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
  */
 bool set_monster_monfear(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &monster = floor.m_list[m_idx];
     bool notice = false;
     v = (v > 200) ? 200 : (v < 0) ? 0
                                   : v;
     if (v) {
-        if (!m_ptr->is_fearful()) {
-            mproc_add(floor_ptr, m_idx, MTIMED_MONFEAR);
+        if (!monster.is_fearful()) {
+            floor.mproc_add(m_idx, MTIMED_MONFEAR);
             notice = true;
         }
     } else {
-        if (m_ptr->is_fearful()) {
-            mproc_remove(floor_ptr, m_idx, MTIMED_MONFEAR);
+        if (monster.is_fearful()) {
+            floor.mproc_remove(m_idx, MTIMED_MONFEAR);
             notice = true;
         }
     }
 
-    m_ptr->mtimed[MTIMED_MONFEAR] = (int16_t)v;
+    monster.mtimed[MTIMED_MONFEAR] = (int16_t)v;
 
     if (!notice) {
         return false;
     }
 
-    if (m_ptr->ml) {
+    if (monster.ml) {
         HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
-        if (m_ptr->is_riding()) {
+        if (monster.is_riding()) {
             RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
         }
     }
@@ -310,34 +295,34 @@ bool set_monster_monfear(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
  */
 bool set_monster_invulner(PlayerType *player_ptr, MONSTER_IDX m_idx, int v, bool energy_need)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &monster = floor.m_list[m_idx];
     bool notice = false;
     v = (v > 200) ? 200 : (v < 0) ? 0
                                   : v;
     if (v) {
-        if (!m_ptr->is_invulnerable()) {
-            mproc_add(floor_ptr, m_idx, MTIMED_INVULNER);
+        if (!monster.is_invulnerable()) {
+            floor.mproc_add(m_idx, MTIMED_INVULNER);
             notice = true;
         }
     } else {
-        if (m_ptr->is_invulnerable()) {
-            mproc_remove(floor_ptr, m_idx, MTIMED_INVULNER);
+        if (monster.is_invulnerable()) {
+            floor.mproc_remove(m_idx, MTIMED_INVULNER);
             if (energy_need && !AngbandWorld::get_instance().is_wild_mode()) {
-                m_ptr->energy_need += ENERGY_NEED();
+                monster.energy_need += ENERGY_NEED();
             }
             notice = true;
         }
     }
 
-    m_ptr->mtimed[MTIMED_INVULNER] = (int16_t)v;
+    monster.mtimed[MTIMED_INVULNER] = (int16_t)v;
     if (!notice) {
         return false;
     }
 
-    if (m_ptr->ml) {
+    if (monster.ml) {
         HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
-        if (m_ptr->is_riding()) {
+        if (monster.is_riding()) {
             RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
         }
     }
