@@ -221,7 +221,8 @@ monsterrace_hook_type get_monster_hook2(PlayerType *player_ptr, POSITION y, POSI
  */
 static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, const monsterrace_hook_type &hook2, const bool restrict_to_dungeon, std::optional<summon_type> summon_specific_type, bool is_chameleon_polymorph)
 {
-    const FloorType *const floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto dungeon_level = floor.dun_level;
 
     // デバッグ用統計情報。
     int mon_num = 0; // 重み(prob2)が正の要素数
@@ -234,7 +235,6 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
     auto &table = MonraceAllocationTable::get_instance();
     for (auto &entry : table) {
         const auto monrace_id = entry.index;
-        const auto &monrace = entry.get_monrace();
 
         // 生成を禁止する要素は重み 0 とする。
         entry.prob2 = 0;
@@ -252,28 +252,13 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
 
         // 原則生成禁止するものたち(フェイズアウト状態 / カメレオンの変身先 / ダンジョンの主召喚 は例外)。
         if (!system.is_phase_out() && !is_chameleon_polymorph && summon_specific_type != SUMMON_GUARDIANS) {
-            // クエストモンスターは生成禁止。
-            if (monrace.misc_flags.has(MonsterMiscType::QUESTOR)) {
+            if (!entry.is_permitted(dungeon_level)) {
                 continue;
             }
 
-            // ダンジョンの主は生成禁止。
-            if (monrace.misc_flags.has(MonsterMiscType::GUARDIAN)) {
+            // 殲滅系クエストの詰み防止 (クエスト内では特殊なフラグ持ちの生成を禁止する)
+            if (floor.is_in_quest() && !entry.is_defeatable(dungeon_level)) {
                 continue;
-            }
-
-            // FORCE_DEPTH フラグ持ちは指定階未満では生成禁止。
-            if (monrace.misc_flags.has(MonsterMiscType::FORCE_DEPTH) && (monrace.level > floor_ptr->dun_level)) {
-                continue;
-            }
-
-            // クエスト内でRES_ALL及び指定階未満でのDIMINISH_MAX_DAMAGEの生成を禁止する (殲滅系クエストの詰み防止)
-            if (player_ptr->current_floor_ptr->is_in_quest()) {
-                auto is_indefeatable = monrace.resistance_flags.has(MonsterResistanceType::RESIST_ALL);
-                is_indefeatable |= monrace.special_flags.has(MonsterSpecialType::DIMINISH_MAX_DAMAGE) && monrace.level > floor_ptr->dun_level;
-                if (is_indefeatable) {
-                    continue;
-                }
             }
         }
 
@@ -287,13 +272,13 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
             //   * フェイズアウト状態でない
             //   * 1階かそれより深いところにいる
             //   * ランダムクエスト中でない
-            const bool in_random_quest = floor_ptr->is_in_quest() && !QuestType::is_fixed(floor_ptr->quest_number);
-            const bool cond = !system.is_phase_out() && floor_ptr->dun_level > 0 && !in_random_quest;
+            const bool in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
+            const bool cond = !system.is_phase_out() && floor.dun_level > 0 && !in_random_quest;
 
-            if (cond && !restrict_monster_to_dungeon(floor_ptr, monrace_id, summon_specific_type, is_chameleon_polymorph)) {
+            if (cond && !restrict_monster_to_dungeon(&floor, monrace_id, summon_specific_type, is_chameleon_polymorph)) {
                 // ダンジョンによる制約に掛かった場合、重みを special_div/64 倍する。
                 // 丸めは確率的に行う。
-                const int numer = entry.prob2 * floor_ptr->get_dungeon_definition().special_div;
+                const int numer = entry.prob2 * floor.get_dungeon_definition().special_div;
                 const int q = numer / 64;
                 const int r = numer % 64;
                 entry.prob2 = (PROB)(randint0(64) < r ? q + 1 : q);

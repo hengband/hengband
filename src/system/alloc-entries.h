@@ -20,6 +20,10 @@ public:
     int level; /* Base dungeon level */
     short prob1; /* Probability, pass 1 */
     short prob2; /* Probability, pass 2 */
+    bool is_permitted(int threshold_level) const;
+    bool is_defeatable(int threshold_level) const;
+
+private:
     const MonsterRaceInfo &get_monrace() const;
 };
 
