@@ -269,9 +269,9 @@ void WorldTurnProcessor::process_world_monsters()
         return;
     }
 
-    for (auto i = 0; i < MAX_MTIMED; i++) {
-        if (this->player_ptr->current_floor_ptr->mproc_max[i] > 0) {
-            process_monsters_mtimed(this->player_ptr, i);
+    for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
+        if (this->player_ptr->current_floor_ptr->mproc_max[mte] > 0) {
+            process_monsters_mtimed(this->player_ptr, mte);
         }
     }
 }
