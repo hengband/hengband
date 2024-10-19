@@ -105,3 +105,13 @@ const PlayerPoison &TimedEffects::poison() const
 {
     return this->player_poison;
 }
+
+PlayerProtection &TimedEffects::protection()
+{
+    return this->player_protection;
+}
+
+const PlayerProtection &TimedEffects::protection() const
+{
+    return this->player_protection;
+}
