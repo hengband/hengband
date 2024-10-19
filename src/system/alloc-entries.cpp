@@ -29,27 +29,16 @@ size_t MonraceAllocationTable::size() const
 
 void MonraceAllocationTable::initialize()
 {
-    const auto &monraces = MonraceList::get_instance();
-    std::vector<const MonsterRaceInfo *> elements;
-    for (const auto &[monrace_id, monrace] : monraces) {
-        if (monrace.is_valid()) {
-            elements.push_back(&monrace);
-        }
-    }
-
-    std::stable_sort(elements.begin(), elements.end(), [](const auto *r_ptr1, const auto *r_ptr2) {
-        return r_ptr2->order_level_strictly(*r_ptr1);
-    });
-    this->entries.reserve(monraces.size());
-    for (const auto *r_ptr : elements) {
+    auto &monraces = MonraceList::get_instance();
+    const auto &elements = monraces.get_sorted_monraces();
+    this->entries.reserve(elements.size());
+    for (const auto &[monrace_id, r_ptr] : elements) {
         if (r_ptr->rarity == 0) { //!< ここ要検討、jsoncロード時に弾くべき.
             continue;
         }
 
-        const auto index = r_ptr->idx;
-        const auto level = r_ptr->level;
         const auto prob = static_cast<short>(100 / r_ptr->rarity);
-        this->entries.emplace_back(index, level, prob, prob);
+        this->entries.emplace_back(monrace_id, r_ptr->level, prob, prob);
     }
 }
 

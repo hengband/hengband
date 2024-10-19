@@ -223,6 +223,7 @@ public:
     MonsterRaceInfo &get_monrace(MonsterRaceId monrace_id);
     const MonsterRaceInfo &get_monrace(MonsterRaceId monrace_id) const;
     const std::vector<MonsterRaceId> &get_valid_monrace_ids() const;
+    const std::vector<std::pair<MonsterRaceId, const MonsterRaceInfo *>> &get_sorted_monraces() const;
     bool can_unify_separate(const MonsterRaceId r_idx) const;
     void kill_unified_unique(const MonsterRaceId r_idx);
     bool is_selectable(const MonsterRaceId r_idx) const;
