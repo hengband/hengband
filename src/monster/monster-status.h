@@ -16,7 +16,3 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
 
 enum MonsterTimedEffect : int;
 void process_monsters_mtimed(PlayerType *player_ptr, MonsterTimedEffect mte);
-
-int get_mproc_idx(FloorType *floor_ptr, MONSTER_IDX m_idx, MonsterTimedEffect mte);
-void mproc_init(FloorType *floor_ptr);
-void mproc_add(FloorType *floor_ptr, MONSTER_IDX m_idx, MonsterTimedEffect mte);

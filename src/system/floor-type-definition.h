@@ -101,4 +101,9 @@ public:
 
     bool order_pet_whistle(short index1, short index2) const;
     bool order_pet_dismission(short index1, short index2, short riding_index) const;
+
+    void mproc_init();
+    std::optional<int> get_mproc_idx(short m_idx, MonsterTimedEffect mte);
+    void mproc_add(short m_idx, MonsterTimedEffect mte);
+    void mproc_remove(short m_idx, MonsterTimedEffect mte);
 };
