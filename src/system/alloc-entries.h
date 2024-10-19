@@ -10,6 +10,19 @@
 
 #include <vector>
 
+enum class MonsterRaceId : short;
+class MonsterRaceInfo;
+class MonraceAllocationEntry {
+public:
+    MonraceAllocationEntry() = default;
+    MonraceAllocationEntry(MonsterRaceId index, int level, short prob1, short prob2);
+    MonsterRaceId index{}; /* The actual index */
+    int level; /* Base dungeon level */
+    short prob1; /* Probability, pass 1 */
+    short prob2; /* Probability, pass 2 */
+    const MonsterRaceInfo &get_monrace() const;
+};
+
 /*
  * An entry for the object/monster allocation functions
  *
@@ -34,18 +47,18 @@ public:
     static MonraceAllocationTable &get_instance();
 
     void initialize();
-    std::vector<alloc_entry>::iterator begin();
-    std::vector<alloc_entry>::const_iterator begin() const;
-    std::vector<alloc_entry>::iterator end();
-    std::vector<alloc_entry>::const_iterator end() const;
+    std::vector<MonraceAllocationEntry>::iterator begin();
+    std::vector<MonraceAllocationEntry>::const_iterator begin() const;
+    std::vector<MonraceAllocationEntry>::iterator end();
+    std::vector<MonraceAllocationEntry>::const_iterator end() const;
     size_t size() const;
-    const alloc_entry &get_entry(int index) const;
-    alloc_entry &get_entry(int index);
+    const MonraceAllocationEntry &get_entry(int index) const;
+    MonraceAllocationEntry &get_entry(int index);
 
 private:
     static MonraceAllocationTable instance;
     MonraceAllocationTable() = default;
-    std::vector<alloc_entry> entries{};
+    std::vector<MonraceAllocationEntry> entries{};
 };
 
 extern std::vector<alloc_entry> alloc_kind_table;

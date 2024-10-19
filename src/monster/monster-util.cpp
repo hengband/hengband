@@ -231,11 +231,10 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
 
     // モンスター生成テーブルの各要素について重みを修正する。
     const auto &system = AngbandSystem::get_instance();
-    const auto &monraces = MonraceList::get_instance();
     auto &table = MonraceAllocationTable::get_instance();
     for (auto &entry : table) {
-        const auto monrace_id = i2enum<MonsterRaceId>(entry.index);
-        const auto &monrace = monraces.get_monrace(monrace_id);
+        const auto monrace_id = entry.index;
+        const auto &monrace = entry.get_monrace();
 
         // 生成を禁止する要素は重み 0 とする。
         entry.prob2 = 0;

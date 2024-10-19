@@ -2,6 +2,19 @@
 #include "system/baseitem-info.h"
 #include "system/monster-race-info.h"
 
+MonraceAllocationEntry::MonraceAllocationEntry(MonsterRaceId index, int level, short prob1, short prob2)
+    : index(index)
+    , level(level)
+    , prob1(prob1)
+    , prob2(prob2)
+{
+}
+
+const MonsterRaceInfo &MonraceAllocationEntry::get_monrace() const
+{
+    return MonraceList::get_instance().get_monrace(index);
+}
+
 MonraceAllocationTable MonraceAllocationTable::instance{};
 
 MonraceAllocationTable &MonraceAllocationTable::get_instance()
@@ -33,39 +46,39 @@ void MonraceAllocationTable::initialize()
             continue;
         }
 
-        const auto index = static_cast<short>(r_ptr->idx);
+        const auto index = r_ptr->idx;
         const auto level = r_ptr->level;
         const auto prob = static_cast<short>(100 / r_ptr->rarity);
         this->entries.emplace_back(index, level, prob, prob);
     }
 }
 
-std::vector<alloc_entry>::iterator MonraceAllocationTable::begin()
+std::vector<MonraceAllocationEntry>::iterator MonraceAllocationTable::begin()
 {
     return this->entries.begin();
 }
 
-std::vector<alloc_entry>::const_iterator MonraceAllocationTable::begin() const
+std::vector<MonraceAllocationEntry>::const_iterator MonraceAllocationTable::begin() const
 {
     return this->entries.begin();
 }
 
-std::vector<alloc_entry>::iterator MonraceAllocationTable::end()
+std::vector<MonraceAllocationEntry>::iterator MonraceAllocationTable::end()
 {
     return this->entries.end();
 }
 
-std::vector<alloc_entry>::const_iterator MonraceAllocationTable::end() const
+std::vector<MonraceAllocationEntry>::const_iterator MonraceAllocationTable::end() const
 {
     return this->entries.end();
 }
 
-const alloc_entry &MonraceAllocationTable::get_entry(int index) const
+const MonraceAllocationEntry &MonraceAllocationTable::get_entry(int index) const
 {
     return this->entries.at(index);
 }
 
-alloc_entry &MonraceAllocationTable::get_entry(int index)
+MonraceAllocationEntry &MonraceAllocationTable::get_entry(int index)
 {
     return this->entries.at(index);
 }
