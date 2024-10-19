@@ -33,10 +33,6 @@ void MonraceAllocationTable::initialize()
     const auto &elements = monraces.get_sorted_monraces();
     this->entries.reserve(elements.size());
     for (const auto &[monrace_id, r_ptr] : elements) {
-        if (r_ptr->rarity == 0) { //!< ここ要検討、jsoncロード時に弾くべき.
-            continue;
-        }
-
         const auto prob = static_cast<short>(100 / r_ptr->rarity);
         this->entries.emplace_back(monrace_id, r_ptr->level, prob, prob);
     }
