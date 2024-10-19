@@ -103,6 +103,7 @@ public:
     bool order_pet_dismission(short index1, short index2, short riding_index) const;
 
     void reset_mproc();
+    void reset_mproc_max();
     std::optional<int> get_mproc_index(short m_idx, MonsterTimedEffect mte);
     void add_mproc(short m_idx, MonsterTimedEffect mte);
     void remove_mproc(short m_idx, MonsterTimedEffect mte);
