@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include "system/angband.h"
 #include <vector>
 
 /*
@@ -20,12 +19,29 @@
 class BaseitemInfo;
 struct alloc_entry {
     short index; /* The actual index */
-
-    DEPTH level; /* Base dungeon level */
-    PROB prob1; /* Probability, pass 1 */
-    PROB prob2; /* Probability, pass 2 */
-
+    int level; /* Base dungeon level */
+    short prob1; /* Probability, pass 1 */
+    short prob2; /* Probability, pass 2 */
     BaseitemInfo &get_baseitem() const;
+};
+
+class MonraceAllocationTable {
+public:
+    MonraceAllocationTable(const MonraceAllocationTable &) = delete;
+    MonraceAllocationTable(MonraceAllocationTable &&) = delete;
+    MonraceAllocationTable operator=(const MonraceAllocationTable &) = delete;
+    MonraceAllocationTable operator=(MonraceAllocationTable &&) = delete;
+    static MonraceAllocationTable &get_instance();
+
+    void initialize();
+    size_t size() const;
+    const alloc_entry &get_entry(int index) const;
+    alloc_entry &get_entry(int index);
+
+private:
+    static MonraceAllocationTable instance;
+    MonraceAllocationTable() = default;
+    std::vector<alloc_entry> entries{};
 };
 
 extern std::vector<alloc_entry> alloc_race_table;
