@@ -139,8 +139,8 @@ void mproc_add(FloorType *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
 void mproc_init(FloorType *floor_ptr)
 {
     /* Reset "player_ptr->current_floor_ptr->mproc_max[]" */
-    for (int i = 0; i < MAX_MTIMED; i++) {
-        floor_ptr->mproc_max[i] = 0;
+    for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
+        floor_ptr->mproc_max[mte] = 0;
     }
 
     /* Process the monsters (backwards) */
@@ -152,9 +152,9 @@ void mproc_init(FloorType *floor_ptr)
             continue;
         }
 
-        for (int cmi = 0; cmi < MAX_MTIMED; cmi++) {
-            if (m_ptr->mtimed[cmi]) {
-                mproc_add(floor_ptr, i, cmi);
+        for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
+            if (m_ptr->mtimed[mte] > 0) {
+                mproc_add(floor_ptr, i, mte);
             }
         }
     }
@@ -242,7 +242,6 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
-
     case MTIMED_FAST:
         /* Reduce by one, note if expires */
         if (set_monster_fast(player_ptr, m_idx, m_ptr->get_remaining_acceleration() - 1)) {
@@ -253,7 +252,6 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         }
 
         break;
-
     case MTIMED_SLOW:
         /* Reduce by one, note if expires */
         if (set_monster_slow(player_ptr, m_idx, m_ptr->get_remaining_deceleration() - 1)) {
@@ -264,7 +262,6 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         }
 
         break;
-
     case MTIMED_STUNNED: {
         int rlev = m_ptr->get_monrace().level;
 
@@ -279,7 +276,6 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
-
     case MTIMED_CONFUSED: {
         /* Reduce the confusion */
         if (!set_monster_confused(player_ptr, m_idx, m_ptr->get_remaining_confusion() - randint1(m_ptr->get_monrace().level / 20 + 1))) {
@@ -294,7 +290,6 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
-
     case MTIMED_MONFEAR: {
         /* Reduce the fear */
         if (!set_monster_monfear(player_ptr, m_idx, m_ptr->get_remaining_fear() - randint1(m_ptr->get_monrace().level / 20 + 1))) {
@@ -318,7 +313,6 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
-
     case MTIMED_INVULNER: {
         /* Reduce by one, note if expires */
         if (!set_monster_invulner(player_ptr, m_idx, m_ptr->get_remaining_invulnerability() - 1, true)) {
@@ -332,6 +326,8 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
+    default:
+        THROW_EXCEPTION(std::logic_error, format("Invalid MonsterTimedEffect is specified! %d", mtimed_idx));
     }
 }
 

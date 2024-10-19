@@ -125,8 +125,8 @@ void wipe_monsters_list(PlayerType *player_ptr)
     monraces.reset_current_numbers();
     floor_ptr->m_max = 1;
     floor_ptr->m_cnt = 0;
-    for (int i = 0; i < MAX_MTIMED; i++) {
-        floor_ptr->mproc_max[i] = 0;
+    for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
+        floor_ptr->mproc_max[mte] = 0;
     }
 
     floor_ptr->num_repro = 0;

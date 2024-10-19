@@ -377,8 +377,8 @@ void clear_cave(PlayerType *player_ptr)
     std::fill_n(floor_ptr->m_list.begin(), floor_ptr->m_max, MonsterEntity{});
     floor_ptr->m_max = 1;
     floor_ptr->m_cnt = 0;
-    for (int i = 0; i < MAX_MTIMED; i++) {
-        floor_ptr->mproc_max[i] = 0;
+    for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
+        floor_ptr->mproc_max[mte] = 0;
     }
 
     precalc_cur_num_of_pet();

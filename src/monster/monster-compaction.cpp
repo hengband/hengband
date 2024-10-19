@@ -77,10 +77,10 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
     floor_ptr->m_list[i2] = floor_ptr->m_list[i1];
     floor_ptr->m_list[i1] = {};
 
-    for (int i = 0; i < MAX_MTIMED; i++) {
-        int mproc_idx = get_mproc_idx(floor_ptr, i1, i);
+    for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
+        const auto mproc_idx = get_mproc_idx(floor_ptr, i1, mte);
         if (mproc_idx >= 0) {
-            floor_ptr->mproc_list[i][mproc_idx] = i2;
+            floor_ptr->mproc_list[mte][mproc_idx] = i2;
         }
     }
 }
