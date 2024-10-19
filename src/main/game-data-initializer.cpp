@@ -91,29 +91,8 @@ void init_other(PlayerType *player_ptr)
  */
 void init_monsters_alloc()
 {
-    std::vector<const MonsterRaceInfo *> elements;
-    for (const auto &[monrace_id, monrace] : monraces_info) {
-        if (monrace.is_valid()) {
-            elements.push_back(&monrace);
-        }
-    }
-
-    std::sort(elements.begin(), elements.end(),
-        [](const MonsterRaceInfo *r1_ptr, const MonsterRaceInfo *r2_ptr) {
-            return r2_ptr->order_level_strictly(*r1_ptr);
-        });
-
-    alloc_race_table.clear();
-    for (const auto r_ptr : elements) {
-        if (r_ptr->rarity == 0) {
-            continue;
-        }
-
-        const auto index = static_cast<short>(r_ptr->idx);
-        const auto level = r_ptr->level;
-        const auto prob = static_cast<PROB>(100 / r_ptr->rarity);
-        alloc_race_table.push_back({ index, level, prob, prob });
-    }
+    auto &table = MonraceAllocationTable::get_instance();
+    table.initialize();
 }
 
 /*!

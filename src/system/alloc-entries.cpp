@@ -2,9 +2,6 @@
 #include "system/baseitem-info.h"
 #include "system/monster-race-info.h"
 
-/* The entries in the "race allocator table" */
-std::vector<alloc_entry> alloc_race_table;
-
 MonraceAllocationTable MonraceAllocationTable::instance{};
 
 MonraceAllocationTable &MonraceAllocationTable::get_instance()
@@ -21,7 +18,7 @@ void MonraceAllocationTable::initialize()
 {
     const auto &monraces = MonraceList::get_instance();
     std::vector<const MonsterRaceInfo *> elements;
-    for (const auto &[monrace_id, monrace] : monraces_info) {
+    for (const auto &[monrace_id, monrace] : monraces) {
         if (monrace.is_valid()) {
             elements.push_back(&monrace);
         }
@@ -41,6 +38,26 @@ void MonraceAllocationTable::initialize()
         const auto prob = static_cast<short>(100 / r_ptr->rarity);
         this->entries.emplace_back(index, level, prob, prob);
     }
+}
+
+std::vector<alloc_entry>::iterator MonraceAllocationTable::begin()
+{
+    return this->entries.begin();
+}
+
+std::vector<alloc_entry>::const_iterator MonraceAllocationTable::begin() const
+{
+    return this->entries.begin();
+}
+
+std::vector<alloc_entry>::iterator MonraceAllocationTable::end()
+{
+    return this->entries.end();
+}
+
+std::vector<alloc_entry>::const_iterator MonraceAllocationTable::end() const
+{
+    return this->entries.end();
 }
 
 const alloc_entry &MonraceAllocationTable::get_entry(int index) const

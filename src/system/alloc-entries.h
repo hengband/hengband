@@ -34,6 +34,10 @@ public:
     static MonraceAllocationTable &get_instance();
 
     void initialize();
+    std::vector<alloc_entry>::iterator begin();
+    std::vector<alloc_entry>::const_iterator begin() const;
+    std::vector<alloc_entry>::iterator end();
+    std::vector<alloc_entry>::const_iterator end() const;
     size_t size() const;
     const alloc_entry &get_entry(int index) const;
     alloc_entry &get_entry(int index);
@@ -43,7 +47,5 @@ private:
     MonraceAllocationTable() = default;
     std::vector<alloc_entry> entries{};
 };
-
-extern std::vector<alloc_entry> alloc_race_table;
 
 extern std::vector<alloc_entry> alloc_kind_table;

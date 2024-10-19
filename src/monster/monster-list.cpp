@@ -144,8 +144,9 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
 
     /* Process probabilities */
     const auto &monraces = MonraceList::get_instance();
-    for (auto i = 0U; i < alloc_race_table.size(); i++) {
-        const auto &entry = alloc_race_table[i];
+    const auto &table = MonraceAllocationTable::get_instance();
+    for (auto i = 0U; i < table.size(); i++) {
+        const auto &entry = table.get_entry(i);
         if (entry.level < min_level) {
             continue;
         }
@@ -197,10 +198,9 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
 
     std::vector<int> result;
     ProbabilityTable<int>::lottery(std::back_inserter(result), prob_table, n);
-
-    auto it = std::max_element(result.begin(), result.end(), [](int a, int b) { return alloc_race_table[a].level < alloc_race_table[b].level; });
-
-    return i2enum<MonsterRaceId>(alloc_race_table[*it].index);
+    const auto it = std::max_element(result.begin(), result.end(),
+        [&table](int a, int b) { return table.get_entry(a).level < table.get_entry(b).level; });
+    return i2enum<MonsterRaceId>(table.get_entry(*it).index);
 }
 
 /*!
