@@ -111,7 +111,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
     auto &floor = *player_ptr->current_floor_ptr;
     auto *m_ptr = &floor.m_list[m_idx];
     switch (mte) {
-    case MonsterTimedEffect::CSLEEP: {
+    case MonsterTimedEffect::SLEEP: {
         auto *r_ptr = &m_ptr->get_monrace();
         auto is_wakeup = false;
         if (m_ptr->cdis < MAX_MONSTER_SENSING) {
@@ -202,7 +202,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         }
 
         break;
-    case MonsterTimedEffect::STUNNED: {
+    case MonsterTimedEffect::STUN: {
         int rlev = m_ptr->get_monrace().level;
 
         /* Recover from stun */
@@ -216,7 +216,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
-    case MonsterTimedEffect::CONFUSED: {
+    case MonsterTimedEffect::CONFUSION: {
         /* Reduce the confusion */
         if (!set_monster_confused(player_ptr, m_idx, m_ptr->get_remaining_confusion() - randint1(m_ptr->get_monrace().level / 20 + 1))) {
             break;
@@ -230,7 +230,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
-    case MonsterTimedEffect::MONFEAR: {
+    case MonsterTimedEffect::FEAR: {
         /* Reduce the fear */
         if (!set_monster_monfear(player_ptr, m_idx, m_ptr->get_remaining_fear() - randint1(m_ptr->get_monrace().level / 20 + 1))) {
             break;
@@ -253,7 +253,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
-    case MonsterTimedEffect::INVULNER: {
+    case MonsterTimedEffect::INVULNERABILITY: {
         /* Reduce by one, note if expires */
         if (!set_monster_invulner(player_ptr, m_idx, m_ptr->get_remaining_invulnerability() - 1, true)) {
             break;
@@ -285,7 +285,7 @@ void process_monsters_mtimed(PlayerType *player_ptr, MonsterTimedEffect mte)
     const auto &cur_mproc_list = floor_ptr->mproc_list[mte];
 
     /* Hack -- calculate the "player noise" */
-    if (mte == MonsterTimedEffect::CSLEEP) {
+    if (mte == MonsterTimedEffect::SLEEP) {
         csleep_noise = (1U << (30 - player_ptr->skill_stl));
     }
 

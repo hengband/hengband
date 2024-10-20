@@ -116,7 +116,7 @@ static MonsterRaceInfo &set_pet_params(PlayerType *player_ptr, const int current
     m_ptr->fx = cx;
     m_ptr->current_floor_ptr = player_ptr->current_floor_ptr;
     m_ptr->ml = true;
-    m_ptr->mtimed[MonsterTimedEffect::CSLEEP] = 0;
+    m_ptr->mtimed[MonsterTimedEffect::SLEEP] = 0;
     m_ptr->hold_o_idx_list.clear();
     m_ptr->target_y = 0;
     auto &r_ref = m_ptr->get_real_monrace();

@@ -179,7 +179,7 @@ MonsterRaceInfo &MonsterEntity::get_monrace() const
 
 short MonsterEntity::get_remaining_sleep() const
 {
-    return this->mtimed.at(MonsterTimedEffect::CSLEEP);
+    return this->mtimed.at(MonsterTimedEffect::SLEEP);
 }
 
 bool MonsterEntity::is_dead() const
@@ -214,7 +214,7 @@ bool MonsterEntity::is_decelerated() const
 
 short MonsterEntity::get_remaining_stun() const
 {
-    return this->mtimed.at(MonsterTimedEffect::STUNNED);
+    return this->mtimed.at(MonsterTimedEffect::STUN);
 }
 
 bool MonsterEntity::is_stunned() const
@@ -224,7 +224,7 @@ bool MonsterEntity::is_stunned() const
 
 short MonsterEntity::get_remaining_confusion() const
 {
-    return this->mtimed.at(MonsterTimedEffect::CONFUSED);
+    return this->mtimed.at(MonsterTimedEffect::CONFUSION);
 }
 
 bool MonsterEntity::is_confused() const
@@ -234,7 +234,7 @@ bool MonsterEntity::is_confused() const
 
 short MonsterEntity::get_remaining_fear() const
 {
-    return this->mtimed.at(MonsterTimedEffect::MONFEAR);
+    return this->mtimed.at(MonsterTimedEffect::FEAR);
 }
 
 bool MonsterEntity::is_fearful() const
@@ -244,7 +244,7 @@ bool MonsterEntity::is_fearful() const
 
 short MonsterEntity::get_remaining_invulnerability() const
 {
-    return this->mtimed.at(MonsterTimedEffect::INVULNER);
+    return this->mtimed.at(MonsterTimedEffect::INVULNERABILITY);
 }
 
 bool MonsterEntity::is_invulnerable() const
