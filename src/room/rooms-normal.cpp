@@ -629,7 +629,7 @@ bool build_type4(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
         /* Stairs (20%) */
         else {
-            place_random_stairs(player_ptr, yval, xval);
+            place_random_stairs(yval, xval);
         }
 
         /* Traps to protect the treasure */

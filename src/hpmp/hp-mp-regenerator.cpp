@@ -1,6 +1,7 @@
 #include "hpmp/hp-mp-regenerator.h"
 #include "cmd-item/cmd-magiceat.h"
 #include "core/window-redrawer.h"
+#include "floor/floor-list.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster/monster-status.h"
 #include "player-base/player-class.h"
@@ -169,12 +170,13 @@ void regenmagic(PlayerType *player_ptr, int regen_amount)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @note Should probably be done during monster turns.
  */
-void regenerate_monsters(PlayerType *player_ptr)
+void regenerate_monsters()
 {
     auto &tracker = HealthBarTracker::get_instance();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    for (short i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        auto &monster = player_ptr->current_floor_ptr->m_list[i];
+    auto &floor = FloorList::get_instance().get_floor(0);
+    for (short i = 1; i < floor.m_max; i++) {
+        auto &monster = floor.m_list[i];
         const auto &monrace = monster.get_monrace();
         if (!monster.is_valid()) {
             continue;

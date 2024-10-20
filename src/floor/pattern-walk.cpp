@@ -3,6 +3,7 @@
 #include "core/asking-player.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
+#include "floor/floor-list.h"
 #include "floor/floor-mode-changer.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
@@ -40,7 +41,7 @@ void pattern_teleport(PlayerType *player_ptr)
 {
     auto min_level = 0;
     auto max_level = 99;
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     auto current_level = static_cast<short>(floor.dun_level);
     if (input_check(_("他の階にテレポートしますか？", "Teleport level? "))) {
         if (ironman_downward) {
@@ -84,7 +85,7 @@ void pattern_teleport(PlayerType *player_ptr)
         exe_write_diary(floor, DiaryKind::PAT_TELE, 0);
     }
 
-    player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
+    floor.quest_number = QuestId::NONE;
     PlayerEnergy(player_ptr).reset_player_turn();
 
     /*

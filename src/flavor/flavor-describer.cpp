@@ -10,6 +10,7 @@
 #include "flavor/flavor-util.h"
 #include "flavor/named-item-describer.h"
 #include "flavor/object-flavor-types.h"
+#include "floor/floor-list.h"
 #include "game-option/text-display-options.h"
 #include "grid/trap.h"
 #include "inventory/inventory-slot-types.h"
@@ -140,7 +141,8 @@ static bool should_show_slaying_bonus(const ItemEntity &item)
 
 static std::string describe_weapon_dice(PlayerType *player_ptr, const ItemEntity &item, const describe_option_type &opt)
 {
-    if (!opt.known && item.is_target_of(player_ptr->current_floor_ptr->quest_number)) {
+    const auto &floor = FloorList::get_instance().get_floor(0);
+    if (!opt.known && item.is_target_of(floor.quest_number)) {
         return "";
     }
 

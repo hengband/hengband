@@ -1,6 +1,7 @@
 #include "grid/door.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/cave.h"
+#include "floor/floor-list.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "room/door-definition.h"
@@ -19,7 +20,7 @@
  */
 void add_door(PlayerType *player_ptr, POSITION x, POSITION y)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     if (!floor_ptr->grid_array[y][x].is_outer()) {
         return;
     }
@@ -63,7 +64,7 @@ void add_door(PlayerType *player_ptr, POSITION x, POSITION y)
  */
 void place_secret_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     const Pos2D pos(y, x);
     const auto &dungeon = floor.get_dungeon_definition();
     if (dungeon.flags.has(DungeonFeatureType::NO_DOORS)) {
@@ -103,7 +104,7 @@ void place_secret_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
  */
 void place_locked_door(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     const auto &dungeon = floor_ptr->get_dungeon_definition();
     if (dungeon.flags.has(DungeonFeatureType::NO_DOORS)) {
         place_bold(player_ptr, y, x, GB_FLOOR);
@@ -125,7 +126,7 @@ void place_locked_door(PlayerType *player_ptr, POSITION y, POSITION x)
 void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room)
 {
     const Pos2D pos(y, x);
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     auto &grid = floor.get_grid(pos);
     grid.mimic = 0;
     const auto &dungeon = floor.get_dungeon_definition();
@@ -183,7 +184,7 @@ void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room
  */
 void place_closed_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     if (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::NO_DOORS)) {
         place_bold(player_ptr, y, x, GB_FLOOR);
         return;

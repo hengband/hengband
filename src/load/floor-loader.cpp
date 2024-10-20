@@ -1,5 +1,6 @@
 #include "load/floor-loader.h"
 #include "floor/floor-generator.h"
+#include "floor/floor-list.h"
 #include "floor/floor-object.h"
 #include "floor/floor-save-util.h"
 #include "game-option/birth-options.h"
@@ -48,8 +49,8 @@
  */
 errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    clear_cave(player_ptr);
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
+    clear_cave();
     player_ptr->x = player_ptr->y = 0;
 
     if (!sf_ptr) {

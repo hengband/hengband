@@ -80,7 +80,7 @@ void Chest::open(bool scatter, const Pos2D &pos, short item_idx)
         /* Small chests often drop gold */
         if (small && one_in_(4)) {
             /* Make some gold */
-            if (!make_gold(this->player_ptr, q_ptr)) {
+            if (!make_gold(q_ptr)) {
                 continue;
             }
         }

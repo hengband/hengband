@@ -74,7 +74,7 @@ bool artifact_scroll(PlayerType *player_ptr)
             if (i_idx >= 0) {
                 inven_item_increase(player_ptr, i_idx, 1 - (o_ptr->number));
             } else {
-                floor_item_increase(player_ptr, 0 - i_idx, 1 - (o_ptr->number));
+                floor_item_increase(0 - i_idx, 1 - (o_ptr->number));
             }
         }
 

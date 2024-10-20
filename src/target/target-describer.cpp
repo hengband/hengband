@@ -121,13 +121,13 @@ static std::string evaluate_monster_exp(PlayerType *player_ptr, MonsterEntity *m
     return format("%03ld", (long int)num);
 }
 
-static void describe_scan_result(PlayerType *player_ptr, GridExamination *ge_ptr)
+static void describe_scan_result(GridExamination *ge_ptr)
 {
     if (!easy_floor) {
         return;
     }
 
-    ge_ptr->floor_num = scan_floor_items(player_ptr, ge_ptr->floor_list, ge_ptr->y, ge_ptr->x, SCAN_FLOOR_ONLY_MARKED, AllMatchItemTester());
+    ge_ptr->floor_num = scan_floor_items(ge_ptr->floor_list, ge_ptr->y, ge_ptr->x, SCAN_FLOOR_ONLY_MARKED, AllMatchItemTester());
     if (ge_ptr->floor_num > 0) {
         ge_ptr->x_info = _("x物 ", "x,");
     }
@@ -523,7 +523,7 @@ char examine_grid(PlayerType *player_ptr, const POSITION y, const POSITION x, ta
 {
     GridExamination tmp_eg(*player_ptr->current_floor_ptr, y, x, mode, info);
     GridExamination *ge_ptr = &tmp_eg;
-    describe_scan_result(player_ptr, ge_ptr);
+    describe_scan_result(ge_ptr);
     describe_target(player_ptr, ge_ptr);
     ProcessResult next_target = describe_hallucinated_target(player_ptr, ge_ptr);
     switch (next_target) {

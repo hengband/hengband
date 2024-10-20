@@ -4,6 +4,7 @@
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/dungeon-tunnel-util.h"
+#include "floor/floor-list.h"
 #include "floor/geometry.h"
 #include "game-option/cheat-types.h"
 #include "game-option/game-play-options.h"
@@ -62,7 +63,7 @@ static bool decide_cavern(const FloorType &floor_ref, const dungeon_type &dungeo
  */
 void gen_caverns_and_lakes(PlayerType *player_ptr, dungeon_type *dungeon_ptr, dun_data_type *dd_ptr)
 {
-    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &floor = FloorList::get_instance().get_floor(0);
     constexpr auto chance_destroyed = 18;
     if ((floor.dun_level > 30) && one_in_(chance_destroyed * 2) && small_levels && dungeon_ptr->flags.has(DungeonFeatureType::DESTROY)) {
         dd_ptr->destroyed = true;
@@ -194,7 +195,7 @@ static bool possible_doorway(FloorType *floor_ptr, POSITION y, POSITION x)
  */
 void try_door(PlayerType *player_ptr, dt_type *dt_ptr, POSITION y, POSITION x)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     if (!in_bounds(floor_ptr, y, x) || cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::WALL) || floor_ptr->grid_array[y][x].is_room()) {
         return;
     }

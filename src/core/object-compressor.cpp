@@ -1,5 +1,6 @@
 #include "core/object-compressor.h"
 #include "core/window-redrawer.h"
+#include "floor/floor-list.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
@@ -65,7 +66,7 @@ void compact_objects(PlayerType *player_ptr, int size)
         rfu.set_flags(flags_swrf);
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     for (int num = 0, cnt = 1; num < size; cnt++) {
         int cur_lev = 5 * cnt;
         int cur_dis = 5 * (20 - cnt);

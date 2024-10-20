@@ -2,6 +2,7 @@
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
+#include "floor/floor-list.h"
 #include "floor/floor-object.h"
 #include "floor/floor-util.h"
 #include "grid/feature-flag-types.h"
@@ -55,9 +56,9 @@ void QuestCompletionChecker::complete()
     this->make_reward(pos);
 }
 
-static bool check_quest_completion(PlayerType *player_ptr, const QuestType &quest, MonsterEntity *m_ptr)
+static bool check_quest_completion(const QuestType &quest, MonsterEntity *m_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     if (quest.status != QuestStatusType::TAKEN) {
         return false;
     }
@@ -91,13 +92,13 @@ static bool check_quest_completion(PlayerType *player_ptr, const QuestType &ques
 
 void QuestCompletionChecker::set_quest_idx()
 {
-    const auto &floor = *this->player_ptr->current_floor_ptr;
+    const auto &floor = FloorList::get_instance().get_floor(0);
     const auto &quests = QuestList::get_instance();
     this->quest_idx = floor.quest_number;
     if (inside_quest(this->quest_idx)) {
         return;
     }
-    auto q = std::find_if(quests.rbegin(), quests.rend(), [this](auto q) { return check_quest_completion(this->player_ptr, q.second, this->m_ptr); });
+    auto q = std::find_if(quests.rbegin(), quests.rend(), [this](auto q) { return check_quest_completion(q.second, this->m_ptr); });
 
     if (q != quests.rend()) {
         this->quest_idx = q->first;
@@ -162,8 +163,9 @@ std::tuple<bool, bool> QuestCompletionChecker::complete_random()
     complete_quest(this->player_ptr, this->quest_idx);
     auto create_stairs = false;
     if (none_bits(this->q_ptr->flags, QUEST_FLAG_PRESET)) {
+        auto &floor = FloorList::get_instance().get_floor(0);
         create_stairs = true;
-        this->player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
+        floor.quest_number = QuestId::NONE;
     }
 
     if ((this->quest_idx == QuestId::OBERON) || (this->quest_idx == QuestId::SERPENT)) {
@@ -205,7 +207,7 @@ void QuestCompletionChecker::complete_tower()
  */
 int QuestCompletionChecker::count_all_hostile_monsters()
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     auto number_mon = 0;
     for (auto x = 0; x < floor_ptr->width; ++x) {
         for (auto y = 0; y < floor_ptr->height; ++y) {
@@ -227,7 +229,7 @@ Pos2D QuestCompletionChecker::make_stairs(const bool create_stairs)
         return Pos2D(y, x);
     }
 
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     while (cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PERMANENT) || !g_ptr->o_idx_list.empty() || g_ptr->is_object()) {
         int ny;
@@ -246,7 +248,8 @@ Pos2D QuestCompletionChecker::make_stairs(const bool create_stairs)
 
 void QuestCompletionChecker::make_reward(const Pos2D pos)
 {
-    auto dun_level = this->player_ptr->current_floor_ptr->dun_level;
+    auto &floor = FloorList::get_instance().get_floor(0);
+    auto dun_level = floor.dun_level;
     for (auto i = 0; i < (dun_level / 15) + 1; i++) {
         ItemEntity item;
         while (true) {

@@ -79,13 +79,15 @@ void decide_lite_range(PlayerType *player_ptr, msa_type *msa_ptr)
 
     msa_ptr->y_br_lite = msa_ptr->y;
     msa_ptr->x_br_lite = msa_ptr->x;
-    if (los(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y_br_lite, msa_ptr->x_br_lite)) {
+    if (los(msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y_br_lite, msa_ptr->x_br_lite)) {
         const Pos2D pos(msa_ptr->y_br_lite, msa_ptr->x_br_lite);
         const auto &terrain = player_ptr->current_floor_ptr->get_grid(pos).get_terrain();
         if (terrain.flags.has_not(TerrainCharacteristics::LOS) && terrain.flags.has(TerrainCharacteristics::PROJECT) && one_in_(2)) {
             msa_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);
         }
-    } else if (!adjacent_grid_check(player_ptr, msa_ptr->m_ptr, &msa_ptr->y_br_lite, &msa_ptr->x_br_lite, TerrainCharacteristics::LOS, los)) {
+    } else if (!adjacent_grid_check(
+                   player_ptr, msa_ptr->m_ptr, &msa_ptr->y_br_lite, &msa_ptr->x_br_lite, TerrainCharacteristics::LOS,
+                   [](PlayerType *, POSITION y1, POSITION x1, POSITION y2, POSITION x2) { return los(y1, x1, y2, x2); })) {
         msa_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);
     }
 
@@ -130,7 +132,7 @@ static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
 
     auto light_by_lite = msa_ptr->ability_flags.has(MonsterAbilityType::BR_LITE);
     light_by_lite &= msa_ptr->m_ptr->cdis < system.get_max_range() / 2;
-    light_by_lite &= los(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x);
+    light_by_lite &= los(msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x);
     light_by_lite &= one_in_(5);
     if (light_by_lite) {
         msa_ptr->do_spell = DO_SPELL_BR_LITE;
@@ -145,7 +147,7 @@ static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
     auto by = msa_ptr->y;
     auto bx = msa_ptr->x;
     get_project_point(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, &by, &bx, 0L);
-    if ((distance(by, bx, msa_ptr->y, msa_ptr->x) <= 3) && los(player_ptr, by, bx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
+    if ((distance(by, bx, msa_ptr->y, msa_ptr->x) <= 3) && los(by, bx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
         msa_ptr->do_spell = DO_SPELL_BA_LITE;
         msa_ptr->success = true;
     }

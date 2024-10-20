@@ -240,7 +240,7 @@ void breath_shape(PlayerType *player_ptr, const ProjectionPath &path, int dist, 
                     case AttributeType::LITE:
                     case AttributeType::LITE_WEAK:
                         /* Lights are stopped by opaque terrains */
-                        if (!los(player_ptr, by, bx, y, x)) {
+                        if (!los(by, bx, y, x)) {
                             continue;
                         }
                         break;

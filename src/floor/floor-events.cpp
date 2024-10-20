@@ -5,6 +5,7 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
+#include "floor/floor-list.h"
 #include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
@@ -56,7 +57,8 @@ static void update_sun_light(PlayerType *player_ptr)
         SubWindowRedrawingFlag::DUNGEON,
     };
     rfu.set_flags(flags);
-    if ((player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0) {
+    const auto &floor = FloorList::get_instance().get_floor(0);
+    if (any_bits(floor.grid_array[player_ptr->y][player_ptr->x].info, CAVE_GLOW)) {
         set_superstealth(player_ptr, false);
     }
 }
@@ -69,7 +71,7 @@ void day_break(PlayerType *player_ptr)
         return;
     }
 
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     for (auto y = 0; y < floor.height; y++) {
         for (auto x = 0; x < floor.width; x++) {
             auto &grid = floor.get_grid({ y, x });
@@ -93,7 +95,7 @@ void night_falls(PlayerType *player_ptr)
         return;
     }
 
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     for (auto y = 0; y < floor.height; y++) {
         for (auto x = 0; x < floor.width; x++) {
             const Pos2D pos(y, x);
@@ -111,7 +113,7 @@ void night_falls(PlayerType *player_ptr)
             }
         }
 
-        glow_deep_lava_and_bldg(player_ptr);
+        glow_deep_lava_and_bldg();
     }
 
     update_sun_light(player_ptr);
@@ -130,9 +132,9 @@ static int rating_boost(int delta)
  * / Examine all monsters and unidentified objects, and get the feeling of current dungeon floor
  * @return 算出されたダンジョンの雰囲気ランク
  */
-static byte get_dungeon_feeling(PlayerType *player_ptr)
+static byte get_dungeon_feeling()
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     if (!floor_ptr->dun_level) {
         return 0;
     }
@@ -280,7 +282,7 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
  */
 void update_dungeon_feeling(PlayerType *player_ptr)
 {
-    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &floor = FloorList::get_instance().get_floor(0);
     if (!floor.dun_level) {
         return;
     }
@@ -308,7 +310,7 @@ void update_dungeon_feeling(PlayerType *player_ptr)
     if (feeling_quest) {
         return;
     }
-    byte new_feeling = get_dungeon_feeling(player_ptr);
+    byte new_feeling = get_dungeon_feeling();
     player_ptr->feeling_turn = world.game_turn;
     if (player_ptr->feeling == new_feeling) {
         return;
@@ -326,9 +328,9 @@ void update_dungeon_feeling(PlayerType *player_ptr)
 /*
  * Glow deep lava and building entrances in the floor
  */
-void glow_deep_lava_and_bldg(PlayerType *player_ptr)
+void glow_deep_lava_and_bldg()
 {
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
         return;
     }

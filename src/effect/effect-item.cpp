@@ -2,6 +2,7 @@
 #include "autopick/autopick.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
+#include "floor/floor-list.h"
 #include "floor/floor-object.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-summon.h"
@@ -38,7 +39,7 @@
  */
 bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITION y, POSITION x, int dam, AttributeType typ)
 {
-    const auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     const Pos2D pos(y, x);
     const auto &grid = floor.get_grid(pos);
 
@@ -56,7 +57,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
 
         processed_list.insert(this_o_idx);
 
-        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
+        auto *o_ptr = &floor.o_list[this_o_idx];
         bool ignore = false;
         bool do_kill = false;
         concptr note_kill = nullptr;
@@ -229,7 +230,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
             }
 
             BIT_FLAGS mode = 0L;
-            if (is_player(src_idx) || player_ptr->current_floor_ptr->m_list[src_idx].is_pet()) {
+            if (is_player(src_idx) || floor.m_list[src_idx].is_pet()) {
                 mode |= PM_FORCE_PET;
             }
 
