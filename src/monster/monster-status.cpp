@@ -101,76 +101,16 @@ int mon_damage_mod(PlayerType *player_ptr, MonsterEntity *m_ptr, int dam, bool i
 }
 
 /*!
- * @brief モンスターの時限ステータスを取得する
- * @param floor_ptr 現在フロアへの参照ポインタ
- * @return m_idx モンスターの参照ID
- * @return mproc_type モンスターの時限ステータスID
- * @return 残りターン値
- */
-int get_mproc_idx(FloorType *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
-{
-    const auto &cur_mproc_list = floor_ptr->mproc_list[mproc_type];
-    for (int i = floor_ptr->mproc_max[mproc_type] - 1; i >= 0; i--) {
-        if (cur_mproc_list[i] == m_idx) {
-            return i;
-        }
-    }
-
-    return -1;
-}
-
-/*!
- * @brief モンスターの時限ステータスリストを追加する
- * @param floor_ptr 現在フロアへの参照ポインタ
- * @return m_idx モンスターの参照ID
- * @return mproc_type 追加したいモンスターの時限ステータスID
- */
-void mproc_add(FloorType *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
-{
-    if (floor_ptr->mproc_max[mproc_type] < MAX_FLOOR_MONSTERS) {
-        floor_ptr->mproc_list[mproc_type][floor_ptr->mproc_max[mproc_type]++] = (int16_t)m_idx;
-    }
-}
-
-/*!
- * @brief モンスターの時限ステータスリストを初期化する / Initialize monster process
- * @param floor_ptr 現在フロアへの参照ポインタ
- */
-void mproc_init(FloorType *floor_ptr)
-{
-    /* Reset "player_ptr->current_floor_ptr->mproc_max[]" */
-    for (int i = 0; i < MAX_MTIMED; i++) {
-        floor_ptr->mproc_max[i] = 0;
-    }
-
-    /* Process the monsters (backwards) */
-    for (MONSTER_IDX i = floor_ptr->m_max - 1; i >= 1; i--) {
-        auto *m_ptr = &floor_ptr->m_list[i];
-
-        /* Ignore "dead" monsters */
-        if (!m_ptr->is_valid()) {
-            continue;
-        }
-
-        for (int cmi = 0; cmi < MAX_MTIMED; cmi++) {
-            if (m_ptr->mtimed[cmi]) {
-                mproc_add(floor_ptr, i, cmi);
-            }
-        }
-    }
-}
-
-/*!
  * @brief モンスターの各種状態値を時間経過により更新するサブルーチン
  * @param floor_ptr 現在フロアへの参照ポインタ
  * @param m_idx モンスター参照ID
- * @param mtimed_idx 更新するモンスターの時限ステータスID
+ * @param mte 更新するモンスターの時限ステータスID
  */
-static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int mtimed_idx)
+static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterTimedEffect mte)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto *m_ptr = &floor.m_list[m_idx];
-    switch (mtimed_idx) {
+    switch (mte) {
     case MTIMED_CSLEEP: {
         auto *r_ptr = &m_ptr->get_monrace();
         auto is_wakeup = false;
@@ -242,7 +182,6 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
-
     case MTIMED_FAST:
         /* Reduce by one, note if expires */
         if (set_monster_fast(player_ptr, m_idx, m_ptr->get_remaining_acceleration() - 1)) {
@@ -253,7 +192,6 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         }
 
         break;
-
     case MTIMED_SLOW:
         /* Reduce by one, note if expires */
         if (set_monster_slow(player_ptr, m_idx, m_ptr->get_remaining_deceleration() - 1)) {
@@ -264,7 +202,6 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         }
 
         break;
-
     case MTIMED_STUNNED: {
         int rlev = m_ptr->get_monrace().level;
 
@@ -279,7 +216,6 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
-
     case MTIMED_CONFUSED: {
         /* Reduce the confusion */
         if (!set_monster_confused(player_ptr, m_idx, m_ptr->get_remaining_confusion() - randint1(m_ptr->get_monrace().level / 20 + 1))) {
@@ -294,7 +230,6 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
-
     case MTIMED_MONFEAR: {
         /* Reduce the fear */
         if (!set_monster_monfear(player_ptr, m_idx, m_ptr->get_remaining_fear() - randint1(m_ptr->get_monrace().level / 20 + 1))) {
@@ -318,7 +253,6 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
-
     case MTIMED_INVULNER: {
         /* Reduce by one, note if expires */
         if (!set_monster_invulner(player_ptr, m_idx, m_ptr->get_remaining_invulnerability() - 1, true)) {
@@ -332,31 +266,33 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
+    default:
+        THROW_EXCEPTION(std::logic_error, format("Invalid MonsterTimedEffect is specified! %d", enum2i(mte)));
     }
 }
 
 /*!
  * @brief 全モンスターの各種状態値を時間経過により更新するメインルーチン
- * @param mtimed_idx 更新するモンスターの時限ステータスID
+ * @param mte 更新するモンスターの時限ステータスID
  * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * Process the counters of monsters (once per 10 game turns)\n
  * These functions are to process monsters' counters same as player's.
  */
-void process_monsters_mtimed(PlayerType *player_ptr, int mtimed_idx)
+void process_monsters_mtimed(PlayerType *player_ptr, MonsterTimedEffect mte)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto &cur_mproc_list = floor_ptr->mproc_list[mtimed_idx];
+    const auto &cur_mproc_list = floor_ptr->mproc_list[mte];
 
     /* Hack -- calculate the "player noise" */
-    if (mtimed_idx == MTIMED_CSLEEP) {
+    if (mte == MTIMED_CSLEEP) {
         csleep_noise = (1U << (30 - player_ptr->skill_stl));
     }
 
     /* Process the monsters (backwards) */
-    for (auto i = floor_ptr->mproc_max[mtimed_idx] - 1; i >= 0; i--) {
+    for (auto i = floor_ptr->mproc_max[mte] - 1; i >= 0; i--) {
         const auto m_idx = cur_mproc_list[i];
-        process_monsters_mtimed_aux(player_ptr, m_idx, mtimed_idx);
+        process_monsters_mtimed_aux(player_ptr, m_idx, mte);
         HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
     }
 }

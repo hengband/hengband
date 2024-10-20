@@ -331,8 +331,8 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, POSITION y,
     m_ptr->fx = x;
     m_ptr->current_floor_ptr = &floor;
 
-    for (int cmi = 0; cmi < MAX_MTIMED; cmi++) {
-        m_ptr->mtimed[cmi] = 0;
+    for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
+        m_ptr->mtimed[mte] = 0;
     }
 
     m_ptr->cdis = 0;
