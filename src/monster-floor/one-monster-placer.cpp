@@ -369,7 +369,7 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, POSITION y,
         }
     }
 
-    m_ptr->mtimed[MTIMED_CSLEEP] = 0;
+    m_ptr->mtimed[MonsterTimedEffect::CSLEEP] = 0;
     if (any_bits(mode, PM_ALLOW_SLEEP) && new_monrace.sleep && !ironman_nightmare) {
         int val = new_monrace.sleep;
         (void)set_monster_csleep(player_ptr, g_ptr->m_idx, (val * 2) + randint1(val * 10));

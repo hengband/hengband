@@ -111,7 +111,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
     auto &floor = *player_ptr->current_floor_ptr;
     auto *m_ptr = &floor.m_list[m_idx];
     switch (mte) {
-    case MTIMED_CSLEEP: {
+    case MonsterTimedEffect::CSLEEP: {
         auto *r_ptr = &m_ptr->get_monrace();
         auto is_wakeup = false;
         if (m_ptr->cdis < MAX_MONSTER_SENSING) {
@@ -182,7 +182,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
-    case MTIMED_FAST:
+    case MonsterTimedEffect::FAST:
         /* Reduce by one, note if expires */
         if (set_monster_fast(player_ptr, m_idx, m_ptr->get_remaining_acceleration() - 1)) {
             if (is_seen(player_ptr, m_ptr)) {
@@ -192,7 +192,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         }
 
         break;
-    case MTIMED_SLOW:
+    case MonsterTimedEffect::SLOW:
         /* Reduce by one, note if expires */
         if (set_monster_slow(player_ptr, m_idx, m_ptr->get_remaining_deceleration() - 1)) {
             if (is_seen(player_ptr, m_ptr)) {
@@ -202,7 +202,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         }
 
         break;
-    case MTIMED_STUNNED: {
+    case MonsterTimedEffect::STUNNED: {
         int rlev = m_ptr->get_monrace().level;
 
         /* Recover from stun */
@@ -216,7 +216,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
-    case MTIMED_CONFUSED: {
+    case MonsterTimedEffect::CONFUSED: {
         /* Reduce the confusion */
         if (!set_monster_confused(player_ptr, m_idx, m_ptr->get_remaining_confusion() - randint1(m_ptr->get_monrace().level / 20 + 1))) {
             break;
@@ -230,7 +230,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
-    case MTIMED_MONFEAR: {
+    case MonsterTimedEffect::MONFEAR: {
         /* Reduce the fear */
         if (!set_monster_monfear(player_ptr, m_idx, m_ptr->get_remaining_fear() - randint1(m_ptr->get_monrace().level / 20 + 1))) {
             break;
@@ -253,7 +253,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
-    case MTIMED_INVULNER: {
+    case MonsterTimedEffect::INVULNER: {
         /* Reduce by one, note if expires */
         if (!set_monster_invulner(player_ptr, m_idx, m_ptr->get_remaining_invulnerability() - 1, true)) {
             break;
@@ -285,7 +285,7 @@ void process_monsters_mtimed(PlayerType *player_ptr, MonsterTimedEffect mte)
     const auto &cur_mproc_list = floor_ptr->mproc_list[mte];
 
     /* Hack -- calculate the "player noise" */
-    if (mte == MTIMED_CSLEEP) {
+    if (mte == MonsterTimedEffect::CSLEEP) {
         csleep_noise = (1U << (30 - player_ptr->skill_stl));
     }
 

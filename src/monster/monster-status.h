@@ -14,5 +14,5 @@ int mon_damage_mod(PlayerType *player_ptr, MonsterEntity *m_ptr, int dam, bool i
 void dispel_monster_status(PlayerType *player_ptr, MONSTER_IDX m_idx);
 void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s_idx);
 
-enum MonsterTimedEffect : int;
+enum class MonsterTimedEffect : int;
 void process_monsters_mtimed(PlayerType *player_ptr, MonsterTimedEffect mte);

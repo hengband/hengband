@@ -34,7 +34,7 @@ constexpr auto VIEW_MAX = 1536;
  */
 constexpr auto REDRAW_MAX = 2298;
 
-enum MonsterTimedEffect : int;
+enum class MonsterTimedEffect : int;
 enum class QuestId : short;
 struct dungeon_type;
 class Grid;
