@@ -38,8 +38,8 @@ void reset_tim_flags(PlayerType *player_ptr)
     effects->poison().reset();
     effects->cut().reset();
     effects->stun().reset();
+    effects->protection().reset();
 
-    player_ptr->protevil = 0; /* Timed -- Protection */
     player_ptr->invuln = 0; /* Timed -- Invulnerable */
     player_ptr->ult_res = 0;
     player_ptr->hero = 0; /* Timed -- Heroism */

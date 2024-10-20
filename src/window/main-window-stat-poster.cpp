@@ -488,7 +488,7 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_INFRAVISION);
     }
 
-    if (player_ptr->protevil) {
+    if (effects->protection().is_protected()) {
         ADD_BAR_FLAG(BAR_PROTEVIL);
     }
 

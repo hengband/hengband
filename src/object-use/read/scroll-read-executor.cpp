@@ -40,6 +40,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -307,7 +308,7 @@ bool ScrollReadExecutor::read()
         break;
     case SV_SCROLL_PROTECTION_FROM_EVIL: {
         auto k = 3 * this->player_ptr->lev;
-        if (set_protevil(this->player_ptr, this->player_ptr->protevil + randint1(25) + k, false)) {
+        if (set_protevil(this->player_ptr, this->player_ptr->effects()->protection().current() + randint1(25) + k, false)) {
             this->ident = true;
         }
 

@@ -10,6 +10,7 @@
 #include "spell-realm/spells-song.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!
@@ -28,23 +29,25 @@ bool set_protevil(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
+    auto &protection = player_ptr->effects()->protection();
+    auto is_protected = protection.is_protected();
     if (v) {
-        if (player_ptr->protevil && !do_dec) {
-            if (player_ptr->protevil > v) {
+        if (is_protected && !do_dec) {
+            if (protection.is_larger_than(v)) {
                 return false;
             }
-        } else if (!player_ptr->protevil) {
+        } else if (!is_protected) {
             msg_print(_("邪悪なる存在から守られているような感じがする！", "You feel safe from evil!"));
             notice = true;
         }
     } else {
-        if (player_ptr->protevil) {
+        if (is_protected) {
             msg_print(_("邪悪なる存在から守られている感じがなくなった。", "You no longer feel safe from evil."));
             notice = true;
         }
     }
 
-    player_ptr->protevil = v;
+    protection.set(v);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 
     if (!notice) {

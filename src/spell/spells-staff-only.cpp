@@ -9,6 +9,7 @@
 #include "status/bad-status-setter.h"
 #include "status/body-improvement.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!
@@ -25,7 +26,7 @@ bool cleansing_nova(PlayerType *player_ptr, bool magic, bool powerful)
     }
 
     int k = 3 * player_ptr->lev;
-    if (set_protevil(player_ptr, (magic ? 0 : player_ptr->protevil) + randint1(25) + k, false)) {
+    if (set_protevil(player_ptr, (magic ? 0 : player_ptr->effects()->protection().current()) + randint1(25) + k, false)) {
         ident = true;
     }
 

@@ -16,6 +16,7 @@ public:
 
     short current() const;
     bool is_protected() const;
+    bool is_larger_than(short value) const;
     void set(short value);
     void reset();
 
