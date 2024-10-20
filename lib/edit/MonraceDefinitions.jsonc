@@ -87538,6 +87538,7 @@
         "SELF_LITE_1",
         "COLD_BLOOD",
         "EVIL",
+        "RES_TELE",    
         "NO_CONF",
         "NO_SLEEP",
         "NO_FEAR",
@@ -87547,7 +87548,6 @@
         "DROP_2D2",
         "DROP_3D2",
         "DROP_4D2"
-
       ],
       "escorts": [
         {
