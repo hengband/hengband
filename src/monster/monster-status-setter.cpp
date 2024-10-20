@@ -60,8 +60,7 @@ void anger_monster(PlayerType *player_ptr, MonsterEntity *m_ptr)
 }
 
 /*!
- * @brief モンスターの睡眠状態値をセットする。0で起きる。 /
- * Set "m_ptr->mtimed[MonsterTimedEffect::CSLEEP]", notice observable changes
+ * @brief モンスターの睡眠状態値をセットする。0で起きる
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスター参照ID
  * @param v セットする値
@@ -76,17 +75,17 @@ bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
                                       : v;
     if (v) {
         if (!monster.is_asleep()) {
-            floor.add_mproc(m_idx, MonsterTimedEffect::CSLEEP);
+            floor.add_mproc(m_idx, MonsterTimedEffect::SLEEP);
             notice = true;
         }
     } else {
         if (monster.is_asleep()) {
-            floor.remove_mproc(m_idx, MonsterTimedEffect::CSLEEP);
+            floor.remove_mproc(m_idx, MonsterTimedEffect::SLEEP);
             notice = true;
         }
     }
 
-    monster.mtimed[MonsterTimedEffect::CSLEEP] = (int16_t)v;
+    monster.mtimed[MonsterTimedEffect::SLEEP] = (int16_t)v;
     if (!notice) {
         return false;
     }
@@ -107,8 +106,7 @@ bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
 }
 
 /*!
- * @brief モンスターの加速状態値をセット /
- * Set "m_ptr->mtimed[MonsterTimedEffect::FAST]", notice observable changes
+ * @brief モンスターの加速状態値をセット
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスター参照ID
  * @param v セットする値
@@ -146,7 +144,11 @@ bool set_monster_fast(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
 }
 
 /*
- * Set "m_ptr->mtimed[MonsterTimedEffect::SLOW]", notice observable changes
+ * @brief モンスターの原則状態値をセット
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param m_idx モンスター参照ID
+ * @param v セットする値
+ * @return 別途更新処理が必要な場合TRUEを返す
  */
 bool set_monster_slow(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
 {
@@ -180,8 +182,7 @@ bool set_monster_slow(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
 }
 
 /*!
- * @brief モンスターの朦朧状態値をセット /
- * Set "m_ptr->mtimed[MonsterTimedEffect::STUNNED]", notice observable changes
+ * @brief モンスターの朦朧状態値をセット
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスター参照ID
  * @param v セットする値
@@ -196,23 +197,22 @@ bool set_monster_stunned(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
                                   : v;
     if (v) {
         if (!monster.is_stunned()) {
-            floor.add_mproc(m_idx, MonsterTimedEffect::STUNNED);
+            floor.add_mproc(m_idx, MonsterTimedEffect::STUN);
             notice = true;
         }
     } else {
         if (monster.is_stunned()) {
-            floor.remove_mproc(m_idx, MonsterTimedEffect::STUNNED);
+            floor.remove_mproc(m_idx, MonsterTimedEffect::STUN);
             notice = true;
         }
     }
 
-    monster.mtimed[MonsterTimedEffect::STUNNED] = (int16_t)v;
+    monster.mtimed[MonsterTimedEffect::STUN] = (int16_t)v;
     return notice;
 }
 
 /*!
- * @brief モンスターの混乱状態値をセット /
- * Set "m_ptr->mtimed[MonsterTimedEffect::CONFUSED]", notice observable changes
+ * @brief モンスターの混乱状態値をセット
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスター参照ID
  * @param v セットする値
@@ -227,23 +227,22 @@ bool set_monster_confused(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
                                   : v;
     if (v) {
         if (!monster.is_confused()) {
-            floor.add_mproc(m_idx, MonsterTimedEffect::CONFUSED);
+            floor.add_mproc(m_idx, MonsterTimedEffect::CONFUSION);
             notice = true;
         }
     } else {
         if (monster.is_confused()) {
-            floor.remove_mproc(m_idx, MonsterTimedEffect::CONFUSED);
+            floor.remove_mproc(m_idx, MonsterTimedEffect::CONFUSION);
             notice = true;
         }
     }
 
-    monster.mtimed[MonsterTimedEffect::CONFUSED] = (int16_t)v;
+    monster.mtimed[MonsterTimedEffect::CONFUSION] = (int16_t)v;
     return notice;
 }
 
 /*!
- * @brief モンスターの恐慌状態値をセット /
- * Set "m_ptr->mtimed[MonsterTimedEffect::MONFEAR]", notice observable changes
+ * @brief モンスターの恐慌状態値をセット
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスター参照ID
  * @param v セットする値
@@ -258,17 +257,17 @@ bool set_monster_monfear(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
                                   : v;
     if (v) {
         if (!monster.is_fearful()) {
-            floor.add_mproc(m_idx, MonsterTimedEffect::MONFEAR);
+            floor.add_mproc(m_idx, MonsterTimedEffect::FEAR);
             notice = true;
         }
     } else {
         if (monster.is_fearful()) {
-            floor.remove_mproc(m_idx, MonsterTimedEffect::MONFEAR);
+            floor.remove_mproc(m_idx, MonsterTimedEffect::FEAR);
             notice = true;
         }
     }
 
-    monster.mtimed[MonsterTimedEffect::MONFEAR] = (int16_t)v;
+    monster.mtimed[MonsterTimedEffect::FEAR] = (int16_t)v;
 
     if (!notice) {
         return false;
@@ -285,8 +284,7 @@ bool set_monster_monfear(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
 }
 
 /*!
- * @brief モンスターの無敵状態値をセット /
- * Set "m_ptr->mtimed[MonsterTimedEffect::INVULNER]", notice observable changes
+ * @brief モンスターの無敵状態値をセット
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスター参照ID
  * @param v セットする値
@@ -302,12 +300,12 @@ bool set_monster_invulner(PlayerType *player_ptr, MONSTER_IDX m_idx, int v, bool
                                   : v;
     if (v) {
         if (!monster.is_invulnerable()) {
-            floor.add_mproc(m_idx, MonsterTimedEffect::INVULNER);
+            floor.add_mproc(m_idx, MonsterTimedEffect::INVULNERABILITY);
             notice = true;
         }
     } else {
         if (monster.is_invulnerable()) {
-            floor.remove_mproc(m_idx, MonsterTimedEffect::INVULNER);
+            floor.remove_mproc(m_idx, MonsterTimedEffect::INVULNERABILITY);
             if (energy_need && !AngbandWorld::get_instance().is_wild_mode()) {
                 monster.energy_need += ENERGY_NEED();
             }
@@ -315,7 +313,7 @@ bool set_monster_invulner(PlayerType *player_ptr, MONSTER_IDX m_idx, int v, bool
         }
     }
 
-    monster.mtimed[MonsterTimedEffect::INVULNER] = (int16_t)v;
+    monster.mtimed[MonsterTimedEffect::INVULNERABILITY] = (int16_t)v;
     if (!notice) {
         return false;
     }

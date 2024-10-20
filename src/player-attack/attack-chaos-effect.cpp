@@ -136,7 +136,7 @@ static void attack_dispel(PlayerType *player_ptr, player_attack_type *pa_ptr)
     if (pa_ptr->m_ptr->mtimed[MonsterTimedEffect::FAST]) {
         dd += 2;
     }
-    if (pa_ptr->m_ptr->mtimed[MonsterTimedEffect::INVULNER]) {
+    if (pa_ptr->m_ptr->mtimed[MonsterTimedEffect::INVULNERABILITY]) {
         dd += 3;
     }
 

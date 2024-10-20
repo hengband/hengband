@@ -299,7 +299,7 @@ static std::vector<condition_layout_info> get_condition_layout_info(const Monste
     std::vector<condition_layout_info> result;
 
     if (monster.is_invulnerable()) {
-        result.push_back({ effect_type_to_label.at(MonsterTimedEffect::INVULNER), TERM_WHITE });
+        result.push_back({ effect_type_to_label.at(MonsterTimedEffect::INVULNERABILITY), TERM_WHITE });
     }
     if (monster.is_accelerated()) {
         result.push_back({ effect_type_to_label.at(MonsterTimedEffect::FAST), TERM_L_GREEN });
@@ -308,16 +308,16 @@ static std::vector<condition_layout_info> get_condition_layout_info(const Monste
         result.push_back({ effect_type_to_label.at(MonsterTimedEffect::SLOW), TERM_UMBER });
     }
     if (monster.is_fearful()) {
-        result.push_back({ effect_type_to_label.at(MonsterTimedEffect::MONFEAR), TERM_SLATE });
+        result.push_back({ effect_type_to_label.at(MonsterTimedEffect::FEAR), TERM_SLATE });
     }
     if (monster.is_confused()) {
-        result.push_back({ effect_type_to_label.at(MonsterTimedEffect::CONFUSED), TERM_L_UMBER });
+        result.push_back({ effect_type_to_label.at(MonsterTimedEffect::CONFUSION), TERM_L_UMBER });
     }
     if (monster.is_asleep()) {
-        result.push_back({ effect_type_to_label.at(MonsterTimedEffect::CSLEEP), TERM_BLUE });
+        result.push_back({ effect_type_to_label.at(MonsterTimedEffect::SLEEP), TERM_BLUE });
     }
     if (monster.is_stunned()) {
-        result.push_back({ effect_type_to_label.at(MonsterTimedEffect::STUNNED), TERM_ORANGE });
+        result.push_back({ effect_type_to_label.at(MonsterTimedEffect::STUN), TERM_ORANGE });
     }
 
     return result;
