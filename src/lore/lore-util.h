@@ -13,10 +13,13 @@
 #include "monster-race/race-special-flags.h"
 #include "monster-race/race-visual-flags.h"
 #include "system/angband.h"
+#include "term/term-color-types.h"
 #include "util/flag-group.h"
 #include <string>
 #include <string_view>
 #include <unordered_map>
+#include <utility>
+#include <vector>
 
 enum class MonsterRaceId : short;
 enum class MonsterSex;
@@ -30,7 +33,7 @@ enum monster_lore_mode {
 
 class MonsterRaceInfo;
 struct lore_msg {
-    lore_msg(std::string_view msg, byte color);
+    lore_msg(std::string_view msg, byte color = TERM_WHITE);
     std::string msg;
     byte color;
 };
@@ -80,6 +83,11 @@ struct lore_type {
     EnumClassFlagGroup<MonsterMiscType> misc_flags;
 
     bool has_reinforce() const;
+
+    std::vector<lore_msg> build_speed_description() const;
+
+private:
+    std::vector<lore_msg> build_random_movement_description() const;
 };
 
 using hook_c_roff_pf = void (*)(TERM_COLOR attr, std::string_view str);

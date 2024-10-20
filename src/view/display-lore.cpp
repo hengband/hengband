@@ -276,65 +276,10 @@ bool display_where_to_appear(lore_type *lore_ptr)
     return true;
 }
 
-// @todo モンスターの速度表記はmonster_typeのオブジェクトメソッドにした方がベター
 void display_monster_move(lore_type *lore_ptr)
 {
-#ifdef JP
-#else
-    hooked_roff("moves");
-#endif
-
-    display_random_move(lore_ptr);
-    if (lore_ptr->speed > STANDARD_SPEED) {
-        if (lore_ptr->speed > 139) {
-            hook_c_roff(TERM_RED, _("信じ難いほど", " incredibly"));
-        } else if (lore_ptr->speed > 134) {
-            hook_c_roff(TERM_ORANGE, _("猛烈に", " extremely"));
-        } else if (lore_ptr->speed > 129) {
-            hook_c_roff(TERM_ORANGE, _("非常に", " very"));
-        } else if (lore_ptr->speed > 124) {
-            hook_c_roff(TERM_UMBER, _("かなり", " fairly"));
-        } else if (lore_ptr->speed < 120) {
-            hook_c_roff(TERM_L_UMBER, _("やや", " somewhat"));
-        }
-        hook_c_roff(TERM_L_RED, _("素早く", " quickly"));
-    } else if (lore_ptr->speed < STANDARD_SPEED) {
-        if (lore_ptr->speed < 90) {
-            hook_c_roff(TERM_L_GREEN, _("信じ難いほど", " incredibly"));
-        } else if (lore_ptr->speed < 95) {
-            hook_c_roff(TERM_BLUE, _("非常に", " very"));
-        } else if (lore_ptr->speed < 100) {
-            hook_c_roff(TERM_BLUE, _("かなり", " fairly"));
-        } else if (lore_ptr->speed > 104) {
-            hook_c_roff(TERM_GREEN, _("やや", " somewhat"));
-        }
-        hook_c_roff(TERM_L_BLUE, _("ゆっくりと", " slowly"));
-    } else {
-        hooked_roff(_("普通の速さで", " at normal speed"));
-    }
-
-#ifdef JP
-    hooked_roff("動いている");
-#endif
-}
-
-void display_random_move(lore_type *lore_ptr)
-{
-    if (lore_ptr->behavior_flags.has_none_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 })) {
-        return;
-    }
-
-    if (lore_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && lore_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25)) {
-        hooked_roff(_("かなり", " extremely"));
-    } else if (lore_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50)) {
-        hooked_roff(_("幾分", " somewhat"));
-    } else if (lore_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25)) {
-        hooked_roff(_("少々", " a bit"));
-    }
-
-    hooked_roff(_("不規則に", " erratically"));
-    if (lore_ptr->speed != STANDARD_SPEED) {
-        hooked_roff(_("、かつ", ", and"));
+    for (const auto &[text, color] : lore_ptr->build_speed_description()) {
+        hook_c_roff(color, text);
     }
 }
 
