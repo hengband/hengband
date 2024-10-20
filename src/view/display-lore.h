@@ -5,7 +5,7 @@
 
 struct lore_type;
 class PlayerType;
-void roff_top(MonsterRaceId r_idx);
+void roff_top(MonsterRaceId monrace_id);
 void screen_roff(PlayerType *player_ptr, MonsterRaceId r_idx, monster_lore_mode mode);
 void display_roff(PlayerType *player_ptr);
 void output_monster_spoiler(MonsterRaceId r_idx, hook_c_roff_pf roff_func);

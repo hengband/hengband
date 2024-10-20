@@ -34,10 +34,10 @@ bool dungeon_type::has_guardian() const
 
 MonsterRaceInfo &dungeon_type::get_guardian()
 {
-    return monraces_info[this->final_guardian];
+    return MonraceList::get_instance().get_monrace(this->final_guardian);
 }
 
 const MonsterRaceInfo &dungeon_type::get_guardian() const
 {
-    return monraces_info[this->final_guardian];
+    return MonraceList::get_instance().get_monrace(this->final_guardian);
 }

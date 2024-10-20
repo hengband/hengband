@@ -100,17 +100,17 @@ static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
         fputs(no_unique_desc, fff);
     }
 
+    const auto &monraces = MonraceList::get_instance();
     for (auto monrace_id : unique_list_ptr->monrace_ids) {
-        auto *r_ptr = &monraces_info[monrace_id];
+        const auto &monrace = monraces.get_monrace(monrace_id);
         std::string details;
-
-        if (r_ptr->defeat_level && r_ptr->defeat_time) {
-            details = format(_(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
-                (r_ptr->defeat_time / 60) % 60, r_ptr->defeat_time % 60);
+        if (monrace.defeat_level && monrace.defeat_time) {
+            details = format(_(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), monrace.defeat_level, monrace.defeat_time / (60 * 60),
+                (monrace.defeat_time / 60) % 60, monrace.defeat_time % 60);
         }
 
-        const auto name = str_separate(r_ptr->name, 40);
-        fprintf(fff, _("     %-40s (レベル%3d)%s\n", "     %-40s (level %3d)%s\n"), name.front().data(), (int)r_ptr->level, details.data());
+        const auto name = str_separate(monrace.name, 40);
+        fprintf(fff, _("     %-40s (レベル%3d)%s\n", "     %-40s (level %3d)%s\n"), name.front().data(), (int)monrace.level, details.data());
         for (auto i = 1U; i < name.size(); ++i) {
             fprintf(fff, "     %s\n", name[i].data());
         }
