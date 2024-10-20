@@ -387,7 +387,7 @@ void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
         m_ptr->dealt_damage = rd_s32b();
     }
 
-    m_ptr->mtimed[MTIMED_CSLEEP] = rd_s16b();
+    m_ptr->mtimed[MonsterTimedEffect::CSLEEP] = rd_s16b();
     m_ptr->mspeed = rd_byte();
 
     if (h_older_than(0, 4, 2)) {
@@ -401,16 +401,16 @@ void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
     }
 
     if (h_older_than(0, 0, 7)) {
-        m_ptr->mtimed[MTIMED_FAST] = 0;
-        m_ptr->mtimed[MTIMED_SLOW] = 0;
+        m_ptr->mtimed[MonsterTimedEffect::FAST] = 0;
+        m_ptr->mtimed[MonsterTimedEffect::SLOW] = 0;
     } else {
-        m_ptr->mtimed[MTIMED_FAST] = rd_byte();
-        m_ptr->mtimed[MTIMED_SLOW] = rd_byte();
+        m_ptr->mtimed[MonsterTimedEffect::FAST] = rd_byte();
+        m_ptr->mtimed[MonsterTimedEffect::SLOW] = rd_byte();
     }
 
-    m_ptr->mtimed[MTIMED_STUNNED] = rd_byte();
-    m_ptr->mtimed[MTIMED_CONFUSED] = rd_byte();
-    m_ptr->mtimed[MTIMED_MONFEAR] = rd_byte();
+    m_ptr->mtimed[MonsterTimedEffect::STUNNED] = rd_byte();
+    m_ptr->mtimed[MonsterTimedEffect::CONFUSED] = rd_byte();
+    m_ptr->mtimed[MonsterTimedEffect::MONFEAR] = rd_byte();
 
     if (h_older_than(0, 0, 10)) {
         m_ptr->reset_target();
@@ -422,7 +422,7 @@ void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
         m_ptr->target_x = rd_s16b();
     }
 
-    m_ptr->mtimed[MTIMED_INVULNER] = rd_byte();
+    m_ptr->mtimed[MonsterTimedEffect::INVULNER] = rd_byte();
 
     auto tmp32u = rd_u32b();
     migrate_bitflag_to_flaggroup(m_ptr->smart, tmp32u);
