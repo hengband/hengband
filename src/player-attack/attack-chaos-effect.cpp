@@ -130,13 +130,13 @@ static void attack_dispel(PlayerType *player_ptr, player_attack_type *pa_ptr)
     }
 
     auto dd = 2;
-    if (pa_ptr->m_ptr->mtimed[MTIMED_SLOW]) {
+    if (pa_ptr->m_ptr->mtimed[MonsterTimedEffect::SLOW]) {
         dd += 1;
     }
-    if (pa_ptr->m_ptr->mtimed[MTIMED_FAST]) {
+    if (pa_ptr->m_ptr->mtimed[MonsterTimedEffect::FAST]) {
         dd += 2;
     }
-    if (pa_ptr->m_ptr->mtimed[MTIMED_INVULNER]) {
+    if (pa_ptr->m_ptr->mtimed[MonsterTimedEffect::INVULNERABILITY]) {
         dd += 3;
     }
 
