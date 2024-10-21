@@ -882,3 +882,15 @@ std::optional<std::string> MonraceList::probe_lore(MonsterRaceId monrace_id)
 
     return this->get_monrace(monrace_id).probe_lore();
 }
+
+/*
+ * @brief ユニークの死亡処理
+ * @param monrace_id 死亡したユニークの種族番号
+ */
+void MonraceList::kill_unique_monster(MonsterRaceId monrace_id)
+{
+    this->get_monrace(monrace_id).max_num = 0;
+    if (this->can_unify_separate(monrace_id)) {
+        this->kill_unified_unique(monrace_id);
+    }
+}

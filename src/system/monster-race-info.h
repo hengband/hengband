@@ -239,6 +239,7 @@ public:
     void reset_current_numbers();
     void reset_all_visuals();
     std::optional<std::string> probe_lore(MonsterRaceId monrace_id);
+    void kill_unique_monster(MonsterRaceId monrace_id);
 
 private:
     MonraceList() = default;
