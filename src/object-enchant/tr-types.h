@@ -176,7 +176,9 @@ enum tr_type : int {
     TR_PERSISTENT_CURSE = 161, //!< 頻繁に自身を呪いなおすフラグ
     TR_VUL_CURSE = 162, //!< 呪力弱点
 
-    TR_FLAG_MAX = 163,
+    TR_SUPERCRITICAL = 163, //!< 超会心
+
+    TR_FLAG_MAX = 164,
 };
 
 /** 能力値(STR,INT,WIS,DEX,CON,CHR)のpvalを増減させるフラグのリスト */

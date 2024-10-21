@@ -112,6 +112,7 @@ const std::vector<flag_desc> brand_flags_desc = {
     { TR_EARTHQUAKE, _("地震", "Earthquake impact on hit") },
     { TR_VORPAL, _("切れ味", "Very sharp") },
     { TR_IMPACT, _("強撃", "Smash hit") },
+    { TR_SUPERCRITICAL, _("超会心", "Supercritical hit") },
 };
 
 const std::vector<flag_desc> resist_flags_desc = {

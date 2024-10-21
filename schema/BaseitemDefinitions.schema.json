@@ -481,6 +481,7 @@
                                 "SELF_ELEC",
                                 "PERSISTENT_CURSE",
                                 "VUL_CURSE",
+                                "SUPERCRITICAL",
                                 "INSTA_ART",
                                 "QUESTITEM",
                                 "XTRA_POWER",

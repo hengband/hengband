@@ -101,6 +101,7 @@ BIT_FLAGS has_slow_digest(PlayerType *player_ptr);
 BIT_FLAGS has_regenerate(PlayerType *player_ptr);
 void update_curses(PlayerType *player_ptr);
 BIT_FLAGS has_impact(PlayerType *player_ptr);
+BIT_FLAGS has_supercritical(PlayerType *player_ptr);
 BIT_FLAGS has_earthquake(PlayerType *player_ptr);
 void update_extra_blows(PlayerType *player_ptr);
 BIT_FLAGS has_resist_acid(PlayerType *player_ptr);
