@@ -34,7 +34,7 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
     POSITION y = m_ptr->fy;
     POSITION x = m_ptr->fx;
 
-    m_ptr->get_real_monrace().cur_num--;
+    m_ptr->get_real_monrace().decrement_current_numbers();
     if (r_ptr->misc_flags.has(MonsterMiscType::MULTIPLY)) {
         floor_ptr->num_repro--;
     }
@@ -109,7 +109,8 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
  */
 void wipe_monsters_list(PlayerType *player_ptr)
 {
-    MonraceList::get_instance().defeat_separated_uniques();
+    auto &monraces = MonraceList::get_instance();
+    monraces.defeat_separated_uniques();
     auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = floor_ptr->m_max - 1; i >= 1; i--) {
         auto *m_ptr = &floor_ptr->m_list[i];
@@ -121,15 +122,7 @@ void wipe_monsters_list(PlayerType *player_ptr)
         *m_ptr = {};
     }
 
-    /*
-     * Wiping racial counters of all monsters and incrementing of racial
-     * counters of monsters in party_mon[] are required to prevent multiple
-     * generation of unique monster who is the minion of player.
-     */
-    for (auto &[r_idx, r_ref] : monraces_info) {
-        r_ref.cur_num = 0;
-    }
-
+    monraces.reset_current_numbers();
     floor_ptr->m_max = 1;
     floor_ptr->m_cnt = 0;
     for (int i = 0; i < MAX_MTIMED; i++) {

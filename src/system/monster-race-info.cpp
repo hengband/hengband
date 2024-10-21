@@ -422,6 +422,30 @@ void MonsterRaceInfo::emplace_reinforce(MonsterRaceId monrace_id, const Dice &di
 }
 
 /*!
+ * @brief 該当モンスター種族が1体以上実体化されているかを返す
+ * @return 実体の有無
+ */
+bool MonsterRaceInfo::has_entity() const
+{
+    return this->cur_num > 0;
+}
+
+void MonsterRaceInfo::reset_current_numbers()
+{
+    this->cur_num = 0;
+}
+
+void MonsterRaceInfo::increment_current_numbers()
+{
+    this->cur_num++;
+}
+
+void MonsterRaceInfo::decrement_current_numbers()
+{
+    this->cur_num--;
+}
+
+/*!
  * @brief エルドリッチホラーの形容詞種別を決める
  * @return エルドリッチホラーの形容詞
  */
@@ -653,7 +677,7 @@ bool MonraceList::is_selectable(const MonsterRaceId r_idx) const
         return true;
     }
 
-    return std::all_of(it->second.begin(), it->second.end(), [this](const auto x) { return this->get_monrace(x).cur_num == 0; });
+    return std::all_of(it->second.begin(), it->second.end(), [this](const auto x) { return !this->get_monrace(x).has_entity(); });
 }
 
 /*!
@@ -690,7 +714,7 @@ bool MonraceList::is_unified(const MonsterRaceId r_idx) const
 bool MonraceList::exists_separates(const MonsterRaceId r_idx) const
 {
     const auto &separates = unified_uniques.at(r_idx);
-    return std::all_of(separates.begin(), separates.end(), [this](const auto x) { return this->get_monrace(x).cur_num > 0; });
+    return std::all_of(separates.begin(), separates.end(), [this](const auto x) { return this->get_monrace(x).has_entity(); });
 }
 
 /*!
@@ -830,6 +854,17 @@ MonsterRaceId MonraceList::pick_id_at_random() const
 const MonsterRaceInfo &MonraceList::pick_monrace_at_random() const
 {
     return monraces_info.at(this->pick_id_at_random());
+}
+
+/*!
+ * @brief 現在フロアに存在している1種別辺りのモンスター数を全てリセットする
+ * @todo そもそもcur_num はMonsterRaceInfo にいるべきではない、後で分離する
+ */
+void MonraceList::reset_current_numbers()
+{
+    for (auto &[_, monrace] : monraces_info) {
+        monrace.reset_current_numbers();
+    }
 }
 
 void MonraceList::reset_all_visuals()

@@ -122,7 +122,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             const auto old_cur_num = monrace.cur_num;
             const auto old_max_num = monrace.max_num;
             if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
-                monrace.cur_num = 0;
+                monrace.reset_current_numbers();
                 monrace.max_num = MAX_UNIQUE_NUM;
             } else if (monrace.population_flags.has(MonsterPopulationType::NAZGUL)) {
                 if (monrace.cur_num == monrace.max_num) {

@@ -160,6 +160,13 @@ public:
     void emplace_drop_artifact(FixedArtifactId fa_id, int percentage);
     void emplace_reinforce(MonsterRaceId monrace_id, const Dice &dice);
 
+    //!< @todo ここから先はミュータブルなフィールドなので分離すべき.
+    bool has_entity() const;
+
+    void reset_current_numbers();
+    void increment_current_numbers();
+    void decrement_current_numbers();
+
 private:
     std::vector<DropArtifact> drop_artifacts; //!< 特定アーティファクトドロップリスト
     std::vector<Reinforce> reinforces; //!< 指定護衛リスト
@@ -229,6 +236,7 @@ public:
     MonsterRaceId pick_id_at_random() const;
     const MonsterRaceInfo &pick_monrace_at_random() const;
 
+    void reset_current_numbers();
     void reset_all_visuals();
     std::optional<std::string> probe_lore(MonsterRaceId monrace_id);
 
