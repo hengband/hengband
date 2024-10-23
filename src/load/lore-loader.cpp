@@ -411,29 +411,22 @@ static void rd_lore(MonsterRaceInfo *r_ptr, const MonsterRaceId r_idx)
     r_ptr->r_misc_flags &= r_ptr->misc_flags;
 }
 
-void load_lore(void)
+void load_lore()
 {
-    auto loading_max_r_idx = rd_u16b();
+    auto &monraces = MonraceList::get_instance();
+    const auto monraces_size = monraces.size();
+    const auto loading_max_monrace_id = rd_u16b();
     MonsterRaceInfo dummy;
-    for (auto i = 0U; i < loading_max_r_idx; i++) {
-        auto r_idx = static_cast<MonsterRaceId>(i);
-        auto *r_ptr = i < monraces_info.size() ? &monraces_info[r_idx] : &dummy;
-        rd_lore(r_ptr, r_idx);
+    for (size_t i = 0; i < loading_max_monrace_id; i++) {
+        const auto monrace_id = static_cast<MonsterRaceId>(i);
+        auto &monrace = i < monraces_size ? monraces.get_monrace(monrace_id) : dummy;
+        rd_lore(&monrace, monrace_id);
     }
 
-    for (size_t i = loading_max_r_idx; i < monraces_info.size(); i++) {
-        auto monrace_id = i2enum<MonsterRaceId>(i);
-        auto &monrace = monraces_info[monrace_id];
-        auto max_num = MAX_MONSTER_NUM;
-        if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || monrace.population_flags.has(MonsterPopulationType::ONLY_ONE)) {
-            max_num = MAX_UNIQUE_NUM;
-        } else if (monrace.population_flags.has(MonsterPopulationType::NAZGUL)) {
-            max_num = MAX_NAZGUL_NUM;
-        } else if (monrace.population_flags.has(MonsterPopulationType::BUNBUN_STRIKER)) {
-            max_num = MAX_BUNBUN_NUM;
-        }
-
-        monrace.max_num = max_num;
+    for (size_t i = loading_max_monrace_id; i < monraces_size; i++) {
+        const auto monrace_id = i2enum<MonsterRaceId>(i);
+        auto &monrace = monraces.get_monrace(monrace_id);
+        monrace.reset_max_number();
     }
 
     load_note(_("モンスターの思い出をロードしました", "Loaded Monster Memory"));
