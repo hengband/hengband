@@ -192,7 +192,7 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            (void)BodyImprovement(player_ptr).set_protection(dice.roll() + base, false);
+            BodyImprovement(player_ptr).set_protection(dice.roll() + base, false);
         }
     } break;
 

@@ -212,7 +212,7 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
         }
 
         if (cast) {
-            (void)BodyImprovement(player_ptr).set_protection(dice.roll() + base, false);
+            BodyImprovement(player_ptr).set_protection(dice.roll() + base, false);
         }
     } break;
 
@@ -477,7 +477,7 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
             set_hero(player_ptr, randint1(base) + base, false);
             set_blessed(player_ptr, randint1(base) + base, false);
             set_acceleration(player_ptr, randint1(sp_sides) + sp_base, false);
-            (void)BodyImprovement(player_ptr).set_protection(randint1(base) + base, false);
+            BodyImprovement(player_ptr).set_protection(randint1(base) + base, false);
             (void)BadStatusSetter(player_ptr).set_fear(0);
         }
 

@@ -18,9 +18,14 @@ BodyImprovement::BodyImprovement(PlayerType *player_ptr)
 {
 }
 
-bool BodyImprovement::mod_protection(short v, bool do_dec)
+bool BodyImprovement::has_effect() const
 {
-    return this->set_protection(this->player_ptr->effects()->protection().current() + v, do_dec);
+    return this->is_affected;
+}
+
+void BodyImprovement::mod_protection(short v, bool do_dec)
+{
+    this->set_protection(this->player_ptr->effects()->protection().current() + v, do_dec);
 }
 
 /*!
@@ -29,13 +34,14 @@ bool BodyImprovement::mod_protection(short v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool BodyImprovement::set_protection(short v, bool do_dec)
+void BodyImprovement::set_protection(short v, bool do_dec)
 {
+    this->is_affected = false;
     auto notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0
                                       : v;
     if (this->player_ptr->is_dead) {
-        return false;
+        return;
     }
 
     auto &protection = this->player_ptr->effects()->protection();
@@ -43,7 +49,7 @@ bool BodyImprovement::set_protection(short v, bool do_dec)
     if (v) {
         if (is_protected && !do_dec) {
             if (protection.is_larger_than(v)) {
-                return false;
+                return;
             }
         } else if (!is_protected) {
             msg_print(_("邪悪なる存在から守られているような感じがする！", "You feel safe from evil!"));
@@ -59,7 +65,7 @@ bool BodyImprovement::set_protection(short v, bool do_dec)
     protection.set(v);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
-        return false;
+        return;
     }
 
     if (disturb_state) {
@@ -67,7 +73,7 @@ bool BodyImprovement::set_protection(short v, bool do_dec)
     }
 
     handle_stuff(this->player_ptr);
-    return true;
+    this->is_affected = true;
 }
 
 /*!
