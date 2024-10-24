@@ -13,24 +13,33 @@
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
+BodyImprovement::BodyImprovement(PlayerType *player_ptr)
+    : player_ptr(player_ptr)
+{
+}
+
+bool BodyImprovement::mod_protection(short v, bool do_dec)
+{
+    return this->set_protection(this->player_ptr->effects()->protection().current() + v, do_dec);
+}
+
 /*!
- * @brief 対邪悪結界の継続時間をセットする / Set "protevil", notice observable changes
+ * @brief 対邪悪結界の継続時間をセットする
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_protevil(PlayerType *player_ptr, short v, bool do_dec)
+bool BodyImprovement::set_protection(short v, bool do_dec)
 {
-    bool notice = false;
+    auto notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0
                                       : v;
-
-    if (player_ptr->is_dead) {
+    if (this->player_ptr->is_dead) {
         return false;
     }
 
-    auto &protection = player_ptr->effects()->protection();
-    auto is_protected = protection.is_protected();
+    auto &protection = this->player_ptr->effects()->protection();
+    const auto is_protected = protection.is_protected();
     if (v) {
         if (is_protected && !do_dec) {
             if (protection.is_larger_than(v)) {
@@ -49,16 +58,15 @@ bool set_protevil(PlayerType *player_ptr, short v, bool do_dec)
 
     protection.set(v);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
-
     if (!notice) {
         return false;
     }
 
     if (disturb_state) {
-        disturb(player_ptr, false, false);
+        disturb(this->player_ptr, false, false);
     }
 
-    handle_stuff(player_ptr);
+    handle_stuff(this->player_ptr);
     return true;
 }
 

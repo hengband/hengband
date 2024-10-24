@@ -146,7 +146,7 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
     }
 
     if (effects->protection().is_protected()) {
-        (void)set_protevil(player_ptr, player_ptr->effects()->protection().current() - 1, true);
+        (void)BodyImprovement(player_ptr).mod_protection(-1, true);
     }
 
     if (player_ptr->invuln) {

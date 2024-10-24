@@ -25,8 +25,17 @@ bool cleansing_nova(PlayerType *player_ptr, bool magic, bool powerful)
         ident = true;
     }
 
-    int k = 3 * player_ptr->lev;
-    if (set_protevil(player_ptr, (magic ? 0 : player_ptr->effects()->protection().current()) + randint1(25) + k, false)) {
+    const auto k = 3 * player_ptr->lev;
+    const short turns = randint1(25) + k;
+    BodyImprovement improvement(player_ptr);
+    bool has_improved;
+    if (magic) {
+        has_improved = improvement.set_protection(turns, false);
+    } else {
+        has_improved = improvement.mod_protection(turns, false);
+    }
+
+    if (has_improved) {
         ident = true;
     }
 
