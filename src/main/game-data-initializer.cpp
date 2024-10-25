@@ -57,15 +57,15 @@ void init_other(PlayerType *player_ptr)
     macro_patterns.assign(MACRO_MAX, {});
     macro_actions.assign(MACRO_MAX, {});
     macro_buffers.assign(FILE_READ_BUFF_SIZE, {});
-    for (auto i = 0; option_info[i].o_desc; i++) {
-        int os = option_info[i].o_set;
-        int ob = option_info[i].o_bit;
-        if (option_info[i].o_var == nullptr) {
+    for (auto &option : option_info) {
+        int os = option.o_set;
+        int ob = option.o_bit;
+        if (option.o_var == nullptr) {
             continue;
         }
 
         g_option_masks[os] |= (1UL << ob);
-        if (option_info[i].o_norm) {
+        if (option.o_norm) {
             set_bits(g_option_flags[os], 1U << ob);
         } else {
             reset_bits(g_option_flags[os], 1U << ob);

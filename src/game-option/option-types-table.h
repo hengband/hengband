@@ -1,6 +1,7 @@
 #pragma once
 
 #include "system/angband.h"
+#include <string>
 #include <vector>
 
 /*
@@ -13,14 +14,15 @@
  *	- Textual name (or nullptr)
  *	- Textual description
  */
+enum class GameOptionPage : int;
 struct option_type {
     bool *o_var{};
-    byte o_norm{};
-    byte o_page{};
+    bool o_norm = false;
+    GameOptionPage o_page{};
     byte o_set{};
     byte o_bit{};
-    concptr o_text{};
-    concptr o_desc{};
+    std::string o_text = "";
+    std::string o_desc = "";
 };
 
 extern const std::vector<option_type> option_info;

@@ -715,11 +715,10 @@ void wiz_reset_realms(PlayerType *player_ptr)
 }
 
 /*!
- * @brief 現在のオプション設定をダンプ出力する /
+ * @brief 現在のオプション設定をダンプ出力する
  * @param player_ptr プレイヤーへの参照ポインタ
- * Hack -- Dump option bits usage
  */
-void wiz_dump_options(void)
+void wiz_dump_options()
 {
     const auto path = path_build(ANGBAND_DIR_USER, "opt_info.txt");
     const auto &filename = path.string();
@@ -734,22 +733,23 @@ void wiz_dump_options(void)
     constexpr auto num_o_bit = 32;
 
     std::vector<std::vector<int>> exist(num_o_set, std::vector<int>(num_o_bit));
-
-    for (int i = 0; option_info[i].o_desc; i++) {
-        const option_type *ot_ptr = &option_info[i];
-        if (ot_ptr->o_var) {
-            exist[ot_ptr->o_set][ot_ptr->o_bit] = i + 1;
+    auto option_count = 0;
+    for (const auto &option : option_info) {
+        if (option.o_var) {
+            exist[option.o_set][option.o_bit] = option_count + 1;
         }
+
+        option_count++;
     }
 
     fprintf(fff, "[Option bits usage on %s\n]", AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL).data());
     fputs("Set - Bit (Page) Option Name\n", fff);
     fputs("------------------------------------------------\n", fff);
-    for (int i = 0; i < num_o_set; i++) {
-        for (int j = 0; j < num_o_bit; j++) {
+    for (auto i = 0; i < num_o_set; i++) {
+        for (auto j = 0; j < num_o_bit; j++) {
             if (exist[i][j]) {
-                const option_type *ot_ptr = &option_info[exist[i][j] - 1];
-                fprintf(fff, "  %d -  %02d (%4d) %s\n", i, j, ot_ptr->o_page, ot_ptr->o_text);
+                const auto &option = option_info[exist[i][j] - 1];
+                fprintf(fff, "  %d -  %02d (%4d) %s\n", i, j, option.o_page, option.o_text.data());
             } else {
                 fprintf(fff, "  %d -  %02d\n", i, j);
             }

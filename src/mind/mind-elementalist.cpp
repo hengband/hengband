@@ -1218,7 +1218,7 @@ static int get_element_realm(PlayerType *player_ptr, int is, int n)
 
         if (c == '=') {
             screen_save();
-            do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
+            do_cmd_options_aux(player_ptr, GameOptionPage::BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
             screen_load();
         } else if (c != '2' && c != '4' && c != '6' && c != '8') {
             bell();
