@@ -929,7 +929,6 @@ hengband_SOURCES = \
 	system/dungeon-info.cpp system/dungeon-info.h \
 	system/floor-type-definition.cpp system/floor-type-definition.h \
 	system/grid-type-definition.cpp system/grid-type-definition.h \
-	system/game-option-types.h \
 	system/h-basic.h system/h-config.h \
 	system/h-system.h system/h-type.h \
 	system/inner-game-data.cpp system/inner-game-data.h \
@@ -942,6 +941,8 @@ hengband_SOURCES = \
 	system/system-variables.cpp system/system-variables.h \
 	system/terrain-type-definition.cpp system/terrain-type-definition.h \
 	system/gamevalue.h \
+	\
+	system/enums/game-option-page.h \
 	\
 	target/grid-selector.cpp target/grid-selector.h \
 	target/projection-path-calculator.cpp target/projection-path-calculator.h \

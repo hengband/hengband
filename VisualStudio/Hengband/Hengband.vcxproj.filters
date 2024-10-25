@@ -2520,6 +2520,9 @@
     <ClCompile Include="..\..\src\monster\monster-timed-effects.cpp">
       <Filter>monster</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\save\monster-entity-writer.cpp">
+      <Filter>save</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3823,9 +3826,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster-floor\monster-summon.h">
       <Filter>monster-floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\system\game-option-types.h">
-      <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\game-option\input-options.h">
       <Filter>game-option</Filter>
@@ -5457,6 +5457,12 @@
     <ClInclude Include="..\..\src\floor\floor-list.h">
       <Filter>floor</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\save\monster-entity-writer.h">
+      <Filter>save</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\enums\game-option-page.h">
+      <Filter>system\enums</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5723,6 +5729,9 @@
     </Filter>
     <Filter Include="tracking">
       <UniqueIdentifier>{a5b8bf13-a675-4500-8b4c-37ea664757eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\enums">
+      <UniqueIdentifier>{31491e27-d3e4-4605-b68a-c2c00d563479}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

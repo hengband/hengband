@@ -10,7 +10,7 @@
 #include "player/player-personality.h"
 #include "player/player-sex.h"
 #include "player/player-status-table.h"
-#include "system/game-option-types.h"
+#include "system/enums/game-option-page.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
