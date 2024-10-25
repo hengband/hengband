@@ -104,7 +104,7 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
 {
     char *s = *bufptr;
     concptr str = *strptr;
-    bool mod_status[MAX_MACRO_MOD];
+    bool mod_status[MAX_MACRO_MOD]{};
 
     int i, len = 0;
     int shiftstatus = 0;
@@ -263,7 +263,7 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
 {
     char *s = *bufptr;
     concptr str = *strptr;
-    char key_code[100];
+    char key_code[100]{};
     int i;
     if (macro_template == nullptr) {
         return false;
