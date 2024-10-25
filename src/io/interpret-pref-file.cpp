@@ -23,8 +23,6 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-#define MAX_MACRO_CHARS 16128 // 1つのマクロキー押下で実行可能なコマンド最大数 (エスケープシーケンス含む).
-
 std::optional<std::string> histpref_buf;
 
 /*!
@@ -449,7 +447,9 @@ static bool decide_template_modifier(int tok, char **zz)
  */
 static bool interpret_macro_keycodes(int tok, char **zz)
 {
-    char buf_aux[MAX_MACRO_CHARS]{};
+    //!< @details 1つのマクロキー押下で実行可能なコマンド最大数 (エスケープシーケンス含む).
+    constexpr auto max_macro_chars = 16128;
+    char buf_aux[max_macro_chars]{};
     if (max_macrotrigger >= MAX_MACRO_TRIG) {
         msg_print(_("マクロトリガーの設定が多すぎます!", "Too many macro triggers!"));
         return false;
