@@ -2,7 +2,7 @@
 #include "cmd-io/cmd-gameoption.h"
 #include "core/show-file.h"
 #include "main/sound-of-music.h"
-#include "system/game-option-types.h"
+#include "system/enums/game-option-page.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 

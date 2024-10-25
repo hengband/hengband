@@ -14,7 +14,7 @@
 #include "io/input-key-acceptor.h"
 #include "io/write-diary.h"
 #include "main/sound-of-music.h"
-#include "system/game-option-types.h"
+#include "system/enums/game-option-page.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
@@ -651,7 +651,7 @@ void do_cmd_options(PlayerType *player_ptr)
  * @param page オプションページ番号
  * @param info 表示メッセージ
  */
-void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr info)
+void do_cmd_options_aux(PlayerType *player_ptr, game_option_page page, concptr info)
 {
     char ch;
     int i, k = 0, n = 0, l;

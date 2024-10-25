@@ -30,7 +30,7 @@
 #include "player/player-status-table.h"
 #include "player/player-status.h"
 #include "player/process-name.h"
-#include "system/game-option-types.h"
+#include "system/enums/game-option-page.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
