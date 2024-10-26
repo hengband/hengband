@@ -404,12 +404,10 @@ void extract_option_vars(void)
     for (auto &option : option_info) {
         int os = option.o_set;
         int ob = option.o_bit;
-        if (option.o_var != nullptr) {
-            if (g_option_flags[os] & (1UL << ob)) {
-                *option.o_var = true;
-            } else {
-                *option.o_var = false;
-            }
+        if (g_option_flags[os] & (1UL << ob)) {
+            *option.o_var = true;
+        } else {
+            *option.o_var = false;
         }
     }
 }

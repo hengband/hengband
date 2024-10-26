@@ -123,10 +123,6 @@ void wr_options()
     for (auto &option : option_info) {
         int os = option.o_set;
         int ob = option.o_bit;
-        if (!option.o_var) {
-            continue;
-        }
-
         if (*option.o_var) {
             g_option_flags[os] |= (1UL << ob);
         } else {

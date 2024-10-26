@@ -735,10 +735,7 @@ void wiz_dump_options()
     std::vector<std::vector<int>> exist(num_o_set, std::vector<int>(num_o_bit));
     auto option_count = 0;
     for (const auto &option : option_info) {
-        if (option.o_var) {
-            exist[option.o_set][option.o_bit] = option_count + 1;
-        }
-
+        exist[option.o_set][option.o_bit] = option_count + 1;
         option_count++;
     }
 

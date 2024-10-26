@@ -337,7 +337,7 @@ static void interpret_xy_token(PlayerType *player_ptr, char *buf)
 {
     const auto &world = AngbandWorld::get_instance();
     for (auto &option : option_info) {
-        if ((option.o_var == nullptr) || (option.o_text != buf + 2)) {
+        if (option.o_text != buf + 2) {
             continue;
         }
 

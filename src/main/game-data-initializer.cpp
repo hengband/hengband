@@ -60,10 +60,6 @@ void init_other(PlayerType *player_ptr)
     for (auto &option : option_info) {
         int os = option.o_set;
         int ob = option.o_bit;
-        if (option.o_var == nullptr) {
-            continue;
-        }
-
         g_option_masks[os] |= (1UL << ob);
         if (option.o_norm) {
             set_bits(g_option_flags[os], 1U << ob);
