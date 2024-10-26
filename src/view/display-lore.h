@@ -11,7 +11,6 @@ void display_roff(PlayerType *player_ptr);
 void output_monster_spoiler(MonsterRaceId r_idx, hook_c_roff_pf roff_func);
 void display_kill_numbers(lore_type *lore_ptr);
 bool display_where_to_appear(lore_type *lore_ptr);
-void display_random_move(lore_type *lore_ptr);
 void display_monster_move(lore_type *lore_ptr);
 void display_monster_never_move(lore_type *lore_ptr);
 void display_monster_kind(lore_type *lore_ptr);
