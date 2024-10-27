@@ -79,8 +79,8 @@ void vault_prep_dragon(PlayerType *player_ptr)
 }
 
 /*!
- * @brief モンスターがクエストの討伐対象に成り得るかを返す / Hook function for quest monsters
- * @param r_idx モンスターＩＤ
+ * @brief モンスター種族がランダムクエストの討伐対象に成り得るかを返す
+ * @param r_idx モンスター種族ID
  * @return 討伐対象にできるならTRUEを返す。
  */
 bool mon_hook_quest(PlayerType *player_ptr, MonsterRaceId r_idx)
@@ -88,20 +88,37 @@ bool mon_hook_quest(PlayerType *player_ptr, MonsterRaceId r_idx)
     /* Unused */
     (void)player_ptr;
 
-    auto *r_ptr = &monraces_info[r_idx];
-    if (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_ONLY)) {
+    const auto &monraces = MonraceList::get_instance();
+    const auto &monrace = monraces.get_monrace(r_idx);
+    if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return false;
     }
 
-    if (r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC)) {
+    if (monrace.misc_flags.has(MonsterMiscType::NO_QUEST)) {
         return false;
     }
 
-    if (r_ptr->misc_flags.has(MonsterMiscType::MULTIPLY)) {
+    if (monrace.misc_flags.has(MonsterMiscType::QUESTOR)) {
         return false;
     }
 
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY)) {
+    if (monrace.rarity > 100) {
+        return false;
+    }
+
+    if (monrace.wilderness_flags.has(MonsterWildernessType::WILD_ONLY)) {
+        return false;
+    }
+
+    if (monrace.feature_flags.has(MonsterFeatureType::AQUATIC)) {
+        return false;
+    }
+
+    if (monrace.misc_flags.has(MonsterMiscType::MULTIPLY)) {
+        return false;
+    }
+
+    if (monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY)) {
         return false;
     }
 

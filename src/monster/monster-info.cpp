@@ -155,7 +155,7 @@ bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, const Mon
  * @details
  * If user is player, m_ptr == nullptr.
  */
-bool monster_has_hostile_align(PlayerType *player_ptr, MonsterEntity *m_ptr, int pa_good, int pa_evil, const MonsterRaceInfo *r_ptr)
+bool monster_has_hostile_align(PlayerType *player_ptr, const MonsterEntity *m_ptr, int pa_good, int pa_evil, const MonsterRaceInfo *r_ptr)
 {
     byte sub_align1 = SUB_ALIGN_NEUTRAL;
     byte sub_align2 = SUB_ALIGN_NEUTRAL;

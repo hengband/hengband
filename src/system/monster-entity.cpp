@@ -509,3 +509,13 @@ bool MonsterEntity::is_riding() const
 {
     return this->mflag2.has(MonsterConstantFlagType::RIDING);
 }
+
+bool MonsterEntity::can_ring_boss_call_nazgul() const
+{
+    auto is_boss = this->r_idx == MonsterRaceId::MORGOTH;
+    is_boss |= this->r_idx == MonsterRaceId::SAURON;
+    is_boss |= this->r_idx == MonsterRaceId::ANGMAR;
+    const auto &nazgul = MonraceList::get_instance().get_monrace(MonsterRaceId::NAZGUL);
+    const auto is_nazgul_alive = (nazgul.cur_num + 2) < nazgul.max_num;
+    return is_boss && is_nazgul_alive;
+}

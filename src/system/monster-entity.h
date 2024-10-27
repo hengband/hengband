@@ -99,6 +99,7 @@ public:
     std::optional<bool> order_pet_whistle(const MonsterEntity &other) const;
     std::optional<bool> order_pet_dismission(const MonsterEntity &other) const;
     bool is_riding() const;
+    bool can_ring_boss_call_nazgul() const;
     void set_individual_speed(bool force_fixed_speed);
 
     void set_hostile();

@@ -209,46 +209,15 @@ bool QuestList::order_completed(QuestId id1, QuestId id2) const
 void determine_random_questor(PlayerType *player_ptr, QuestType &quest)
 {
     get_mon_num_prep(player_ptr, mon_hook_quest, nullptr);
+    const auto &monraces = MonraceList::get_instance();
     MonsterRaceId r_idx;
     while (true) {
         r_idx = get_mon_num(player_ptr, 0, quest.level + 5 + randint1(quest.level / 10), PM_ARENA);
-        const auto &monrace = monraces_info[r_idx];
-        if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        if (monraces.can_unify_separate(r_idx)) {
             continue;
         }
 
-        if (monrace.misc_flags.has(MonsterMiscType::NO_QUEST)) {
-            continue;
-        }
-
-        if (monrace.misc_flags.has(MonsterMiscType::QUESTOR)) {
-            continue;
-        }
-
-        if (monrace.rarity > 100) {
-            continue;
-        }
-
-        if (monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY)) {
-            continue;
-        }
-
-        if (monrace.feature_flags.has(MonsterFeatureType::AQUATIC)) {
-            continue;
-        }
-
-        if (monrace.wilderness_flags.has(MonsterWildernessType::WILD_ONLY)) {
-            continue;
-        }
-
-        if (MonraceList::get_instance().can_unify_separate(r_idx)) {
-            continue;
-        }
-
-        /*
-         * Accept monsters that are 2 - 6 levels
-         * out of depth depending on the quest level
-         */
+        const auto &monrace = monraces.get_monrace(r_idx);
         if (monrace.level > (quest.level + (quest.level / 20))) {
             break;
         }
