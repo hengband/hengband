@@ -106,6 +106,7 @@
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
 #include <algorithm>
+#include <fstream>
 #include <optional>
 #include <span>
 #include <sstream>
@@ -722,8 +723,8 @@ void wiz_dump_options()
 {
     const auto path = path_build(ANGBAND_DIR_USER, "opt_info.txt");
     const auto &filename = path.string();
-    auto *fff = angband_fopen(path, FileOpenMode::APPEND);
-    if (fff == nullptr) {
+    std::ofstream ofs(path);
+    if (ofs.bad()) {
         msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), filename.data());
         msg_print(nullptr);
         return;
@@ -739,23 +740,22 @@ void wiz_dump_options()
         option_count++;
     }
 
-    fprintf(fff, "[Option bits usage on %s\n]", AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL).data());
-    fputs("Set - Bit (Page) Option Name\n", fff);
-    fputs("------------------------------------------------\n", fff);
+    ofs << "[Option bits usage on %s\n]", AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL);
+    ofs << "Set - Bit (Page) Option Name\n";
+    ofs << "------------------------------------------------\n";
     for (auto i = 0; i < num_o_set; i++) {
         for (auto j = 0; j < num_o_bit; j++) {
             if (exist[i][j]) {
                 const auto &option = option_info[exist[i][j] - 1];
-                fprintf(fff, "  %d -  %02d (%4d) %s\n", i, j, option.o_page, option.o_text.data());
+                ofs << format("  %d -  %02d (%4d) %s\n", i, j, option.o_page, option.o_text.data());
             } else {
-                fprintf(fff, "  %d -  %02d\n", i, j);
+                ofs << format("  %d -  %02d\n", i, j);
             }
         }
 
-        fputc('\n', fff);
+        ofs << '\n';
     }
 
-    angband_fclose(fff);
     msg_format(_("オプションbit使用状況をファイル %s に書き出しました。", "Option bits usage dump saved to file %s."), filename.data());
 }
 
