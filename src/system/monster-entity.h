@@ -1,10 +1,11 @@
 #pragma once
 
 #include "monster/monster-flag-types.h"
-#include "monster/monster-timed-effect-types.h"
+#include "monster/monster-timed-effects.h"
 #include "monster/smart-learn-types.h"
 #include "object/object-index-list.h"
 #include "util/flag-group.h"
+#include <map>
 #include <string>
 
 /*!
@@ -23,7 +24,7 @@ class MonsterEntityWriter;
 class MonsterEntity {
 public:
     friend class MonsterEntityWriter;
-    MonsterEntity() = default;
+    MonsterEntity();
     MonsterRaceId r_idx{}; /*!< モンスターの実種族ID (これが0の時は死亡扱いになる) / Monster race index 0 = dead. */
     MonsterRaceId ap_r_idx{}; /*!< モンスターの外見種族ID（あやしい影、たぬき、ジュラル星人誤認などにより変化する）Monster race appearance index */
     FloorType *current_floor_ptr{}; /*!< 所在フロアID（現状はFloorType構造体によるオブジェクトは1つしかないためソースコード設計上の意義以外はない）*/
@@ -40,7 +41,7 @@ public:
     int maxhp{}; /*!< 現在の最大HP(衰弱効果などにより低下したものの反映) / Max Hit points */
     int max_maxhp{}; /*!< 生成時の初期最大HP / Max Max Hit points */
     int dealt_damage{}; /*!< これまでに蓄積して与えてきたダメージ / Sum of damages dealt by player */
-    TIME_EFFECT mtimed[MAX_MTIMED]{}; /*!< 与えられた時限効果の残りターン / Timed status counter */
+    std::map<MonsterTimedEffect, short> mtimed; /*!< 与えられた時限効果の残りターン / Timed status counter */
     byte mspeed{}; /*!< モンスターの個体加速値 / Monster "speed" */
     ACTION_ENERGY energy_need{}; /*!< モンスター次ターンまでに必要な行動エネルギー / Monster "energy" */
     POSITION cdis{}; /*!< 現在のプレイヤーから距離(逐一計算を避けるためのテンポラリ変数) Current dis from player */

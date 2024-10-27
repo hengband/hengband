@@ -1,6 +1,10 @@
 #pragma once
 
-enum monster_timed_effect_type {
+#include "util/enum-range.h"
+#include <map>
+#include <string>
+
+enum MonsterTimedEffect : int {
     MTIMED_CSLEEP = 0, /* Monster is sleeping */
     MTIMED_FAST = 1, /* Monster is temporarily fast */
     MTIMED_SLOW = 2, /* Monster is temporarily slow */
@@ -10,3 +14,7 @@ enum monster_timed_effect_type {
     MTIMED_INVULNER = 6, /* Monster is temporarily invulnerable */
     MAX_MTIMED = 7,
 };
+
+constexpr auto MONSTER_TIMED_EFFECT_RANGE = EnumRange<MonsterTimedEffect>(MTIMED_CSLEEP, MAX_MTIMED);
+
+extern const std::map<MonsterTimedEffect, std::string> effect_type_to_label;
