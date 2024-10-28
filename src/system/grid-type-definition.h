@@ -2,6 +2,7 @@
 
 #include "object/object-index-list.h"
 #include "system/angband.h"
+#include "system/enums/grid-flow.h"
 
 /*
  * 特殊なマス状態フラグ / Special grid flags
@@ -37,12 +38,6 @@
 #define CAVE_IN_DETECT 0x4000 /* trap detected area (inner circle only) */
 
 // clang-format on
-
-enum flow_type {
-    FLOW_NORMAL = 0,
-    FLOW_CAN_FLY = 1,
-    FLOW_MAX = 2,
-};
 
 class MonsterRaceInfo;
 class TerrainType;
