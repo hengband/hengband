@@ -106,7 +106,7 @@ static void do_cmd_options_autosave(PlayerType *player_ptr, std::string_view inf
             }
 
             const auto &autosave = autosave_info[i];
-            c_prt(a, format("%-48s: %s (%s)", autosave.o_desc.data(), (*autosave.o_var ? _("はい  ", "yes") : _("いいえ", "no ")), autosave.o_text.data()), i + 2, 0);
+            c_prt(a, format("%-48s: %s (%s)", autosave.description.data(), (*autosave.value ? _("はい  ", "yes") : _("いいえ", "no ")), autosave.text.data()), i + 2, 0);
         }
 
         prt(format(_("自動セーブの頻度： %d ターン毎", "Timed autosave frequency: every %d turns"), autosave_freq), 5, 0);
@@ -129,13 +129,13 @@ static void do_cmd_options_autosave(PlayerType *player_ptr, std::string_view inf
         case 'y':
         case 'Y':
         case '6':
-            *autosave.o_var = true;
+            *autosave.value = true;
             k = (k + 1) % n;
             break;
         case 'n':
         case 'N':
         case '4':
-            *autosave.o_var = false;
+            *autosave.value = false;
             k = (k + 1) % n;
             break;
         case 'f':
@@ -340,8 +340,8 @@ static void do_cmd_options_cheat(const FloorType &floor, std::string_view player
             }
 
             const auto &cheat = cheat_info[i];
-            const auto yesno = *cheat.o_var ? _("はい  ", "yes") : _("いいえ", "no ");
-            c_prt(enum2i(a), format("%-48s: %s (%s)", cheat.o_desc.data(), yesno, cheat.o_text.data()), i + 2, 0);
+            const auto yesno = *cheat.value ? _("はい  ", "yes") : _("いいえ", "no ");
+            c_prt(enum2i(a), format("%-48s: %s (%s)", cheat.description.data(), yesno, cheat.text.data()), i + 2, 0);
         }
 
         move_cursor(k + 2, 50);
@@ -374,19 +374,19 @@ static void do_cmd_options_cheat(const FloorType &floor, std::string_view player
                     _("詐欺オプションをONにして、スコアを残せなくなった。", "gave up sending score to use cheating options."));
             }
 
-            world.noscore |= cheat.o_set * 256 + cheat.o_bit;
-            *cheat.o_var = true;
+            world.noscore |= cheat.flag_position * 256 + cheat.offset;
+            *cheat.value = true;
             k = (k + 1) % n;
             break;
         }
         case 'n':
         case 'N':
         case '4':
-            *cheat.o_var = false;
+            *cheat.value = false;
             k = (k + 1) % n;
             break;
         case '?':
-            FileDisplayer(player_name).display(true, std::string(_("joption.txt#", "option.txt#")).append(cheat.o_text), 0, 0);
+            FileDisplayer(player_name).display(true, std::string(_("joption.txt#", "option.txt#")).append(cheat.text), 0, 0);
             term_clear();
             break;
         default:
@@ -402,12 +402,12 @@ static void do_cmd_options_cheat(const FloorType &floor, std::string_view player
 void extract_option_vars(void)
 {
     for (auto &option : option_info) {
-        int os = option.o_set;
-        int ob = option.o_bit;
+        int os = option.flag_position;
+        int ob = option.offset;
         if (g_option_flags[os] & (1UL << ob)) {
-            *option.o_var = true;
+            *option.value = true;
         } else {
-            *option.o_var = false;
+            *option.value = false;
         }
     }
 }
@@ -650,7 +650,7 @@ void do_cmd_options_aux(PlayerType *player_ptr, GameOptionPage page, std::string
 
     auto option_num = 0;
     for (auto &option : option_info) {
-        if (option.o_page == page) {
+        if (option.page == page) {
             opt[n++] = option_num;
         }
 
@@ -674,8 +674,8 @@ void do_cmd_options_aux(PlayerType *player_ptr, GameOptionPage page, std::string
             }
 
             const auto &option = option_info[opt[i]];
-            const auto reply = *option.o_var ? _("はい  ", "yes") : _("いいえ", "no ");
-            const auto label = format("%-48s: %s (%.19s)", option.o_desc.data(), reply, option.o_text.data());
+            const auto reply = *option.value ? _("はい  ", "yes") : _("いいえ", "no ");
+            const auto label = format("%-48s: %s (%.19s)", option.description.data(), reply, option.text.data());
             if ((page == GameOptionPage::AUTODESTROY) && i > 2) {
                 c_prt(a, label, i + 5, 0);
             } else {
@@ -717,7 +717,7 @@ void do_cmd_options_aux(PlayerType *player_ptr, GameOptionPage page, std::string
                 break;
             }
 
-            *option.o_var = true;
+            *option.value = true;
             k = (k + 1) % n;
             break;
         case 'n':
@@ -727,18 +727,18 @@ void do_cmd_options_aux(PlayerType *player_ptr, GameOptionPage page, std::string
                 break;
             }
 
-            *option.o_var = false;
+            *option.value = false;
             k = (k + 1) % n;
             break;
         case 't':
         case 'T':
             if (!browse_only) {
-                *option.o_var = !*option.o_var;
+                *option.value = !*option.value;
             }
 
             break;
         case '?':
-            FileDisplayer(player_ptr->name).display(true, std::string(_("joption.txt#", "option.txt#")).append(option.o_text), 0, 0);
+            FileDisplayer(player_ptr->name).display(true, std::string(_("joption.txt#", "option.txt#")).append(option.text), 0, 0);
             term_clear();
             break;
         default:

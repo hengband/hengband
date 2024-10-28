@@ -82,8 +82,11 @@ static std::optional<std::pair<AttributeType, std::string>> decide_breath_kind(P
         }
 
         return std::pair(AttributeType::SOUND, _("轟音", "sound"));
-    case PlayerClassType::ELEMENTALIST:
-        return std::pair(get_element_type(player_ptr->element, 0), std::string(get_element_name(player_ptr->element, 0)));
+    case PlayerClassType::ELEMENTALIST: {
+        const auto type = get_element_type(player_ptr->element, 0);
+        const std::string name(get_element_name(player_ptr->element, 0));
+        return std::pair(type, name);
+    }
     default:
         return std::nullopt;
     }
@@ -106,7 +109,6 @@ bool draconian_breath(PlayerType *player_ptr)
 
     stop_mouth(player_ptr);
     msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), breath_type_description.data());
-
     fire_breath(player_ptr, breath_type, dir, player_ptr->lev * 2, (player_ptr->lev / 15) + 1);
     return true;
 }

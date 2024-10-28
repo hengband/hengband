@@ -121,9 +121,9 @@ void wr_options()
     wr_s16b(autosave_freq);
 
     for (auto &option : option_info) {
-        int os = option.o_set;
-        int ob = option.o_bit;
-        if (*option.o_var) {
+        int os = option.flag_position;
+        int ob = option.offset;
+        if (*option.value) {
             g_option_flags[os] |= (1UL << ob);
         } else {
             g_option_flags[os] &= ~(1UL << ob);

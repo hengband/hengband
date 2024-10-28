@@ -736,7 +736,7 @@ void wiz_dump_options()
     std::vector<std::vector<int>> exist(num_o_set, std::vector<int>(num_o_bit));
     auto option_count = 0;
     for (const auto &option : option_info) {
-        exist[option.o_set][option.o_bit] = option_count + 1;
+        exist[option.flag_position][option.offset] = option_count + 1;
         option_count++;
     }
 
@@ -747,7 +747,8 @@ void wiz_dump_options()
         for (auto j = 0; j < num_o_bit; j++) {
             if (exist[i][j]) {
                 const auto &option = option_info[exist[i][j] - 1];
-                ofs << format("  %d -  %02d (%4d) %s\n", i, j, option.o_page, option.o_text.data());
+                const auto page = option.page ? enum2i(*option.page) : 255; //!< @details かつてnulloptではなかった頃の値.
+                ofs << format("  %d -  %02d (%4d) %s\n", i, j, page, option.text.data());
             } else {
                 ofs << format("  %d -  %02d\n", i, j);
             }

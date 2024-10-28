@@ -58,10 +58,10 @@ void init_other(PlayerType *player_ptr)
     macro_actions.assign(MACRO_MAX, {});
     macro_buffers.assign(FILE_READ_BUFF_SIZE, {});
     for (auto &option : option_info) {
-        int os = option.o_set;
-        int ob = option.o_bit;
+        int os = option.flag_position;
+        int ob = option.offset;
         g_option_masks[os] |= (1UL << ob);
-        if (option.o_norm) {
+        if (option.default_value) {
             set_bits(g_option_flags[os], 1U << ob);
         } else {
             reset_bits(g_option_flags[os], 1U << ob);
