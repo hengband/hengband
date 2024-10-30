@@ -5,6 +5,7 @@
 #include "monster-race/race-resistance-mask.h"
 #include "monster-race/race-sex.h"
 #include "monster/horror-descriptions.h"
+#include "system/enums/grid-flow.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/system-variables.h"
 #include "tracking/lore-tracker.h"
@@ -306,6 +307,11 @@ bool MonsterRaceInfo::can_generate() const
     auto can_generate = this->kind_flags.has(MonsterKindType::UNIQUE) || this->population_flags.has(MonsterPopulationType::NAZGUL);
     can_generate &= this->cur_num >= this->max_num;
     return can_generate;
+}
+
+flow_type MonsterRaceInfo::get_grid_flow_type() const
+{
+    return this->feature_flags.has(MonsterFeatureType::CAN_FLY) ? FLOW_CAN_FLY : FLOW_NORMAL;
 }
 
 void MonsterRaceInfo::init_sex(uint32_t value)

@@ -51,11 +51,11 @@ static coordinate_candidate sweep_safe_coordinate(PlayerType *player_ptr, MONSTE
         }
 
         if (m_ptr->mflag2.has_not(MonsterConstantFlagType::NOFLOW)) {
-            byte dist = g_ptr->get_distance(r_ptr);
+            byte dist = g_ptr->get_distance(r_ptr->get_grid_flow_type());
             if (dist == 0) {
                 continue;
             }
-            if (dist > floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].get_distance(r_ptr) + 2 * d) {
+            if (dist > floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].get_distance(r_ptr->get_grid_flow_type()) + 2 * d) {
                 continue;
             }
         }

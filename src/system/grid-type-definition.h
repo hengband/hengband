@@ -2,7 +2,7 @@
 
 #include "object/object-index-list.h"
 #include "system/angband.h"
-#include "system/enums/grid-flow.h"
+#include <map>
 
 /*
  * 特殊なマス状態フラグ / Special grid flags
@@ -39,11 +39,12 @@
 
 // clang-format on
 
-class MonsterRaceInfo;
+enum flow_type : int;
 class TerrainType;
 enum class TerrainCharacteristics;
 class Grid {
 public:
+    Grid();
     BIT_FLAGS info{}; /* Hack -- grid flags */
 
     FEAT_IDX feat{}; /* Hack -- feature type */
@@ -59,8 +60,8 @@ public:
 
     FEAT_IDX mimic{}; /* Feature to mimic */
 
-    byte costs[FLOW_MAX]{}; /* Hack -- cost of flowing */
-    byte dists[FLOW_MAX]{}; /* Hack -- distance from player */
+    std::map<flow_type, uint8_t> costs; //!< Cost of flowing
+    std::map<flow_type, uint8_t> dists; //!< Distance from player
     byte when{}; /* Hack -- when cost was computed */
 
     bool is_floor() const;
@@ -79,8 +80,8 @@ public:
     bool is_rune_protection() const;
     bool is_rune_explosion() const;
     bool has_monster() const;
-    byte get_cost(const MonsterRaceInfo *r_ptr) const;
-    byte get_distance(const MonsterRaceInfo *r_ptr) const;
+    uint8_t get_cost(flow_type gf) const;
+    uint8_t get_distance(flow_type gf) const;
     FEAT_IDX get_feat_mimic() const;
     bool cave_has_flag(TerrainCharacteristics feature_flags) const;
     bool is_symbol(const int ch) const;
@@ -95,7 +96,4 @@ public:
     const TerrainType &get_terrain_mimic_raw() const;
     void place_closed_curtain();
     void add_info(int grid_info);
-
-private:
-    flow_type get_grid_flow_type(const MonsterRaceInfo *r_ptr) const;
 };
