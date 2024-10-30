@@ -1,5 +1,6 @@
 #include "system/dungeon-info.h"
 #include "dungeon/dungeon-flag-mask.h"
+#include "grid/feature-action-flags.h"
 #include "grid/feature.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/monster-race-info.h"
@@ -52,6 +53,29 @@ MonsterRaceInfo &dungeon_type::get_guardian()
 const MonsterRaceInfo &dungeon_type::get_guardian() const
 {
     return MonraceList::get_instance().get_monrace(this->final_guardian);
+}
+
+/*
+ * Take a feature, determine what that feature becomes
+ * through applying the given action.
+ */
+short dungeon_type::feat_state(short terrain_id, TerrainCharacteristics action) const
+{
+    const auto &terrain = TerrainList::get_instance().get_terrain(terrain_id);
+
+    /* Get the new feature */
+    for (auto i = 0; i < MAX_FEAT_STATES; i++) {
+        if (terrain.state[i].action == action) {
+            return this->convert_terrain_id(terrain.state[i].result);
+        }
+    }
+
+    if (terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
+        return terrain_id;
+    }
+
+    const auto has_action_flag = any_bits(terrain_action_flags[enum2i(action)], FAF_DESTROY);
+    return has_action_flag ? this->convert_terrain_id(terrain.destroyed) : terrain_id;
 }
 
 short dungeon_type::convert_terrain_id(short terrain_id) const

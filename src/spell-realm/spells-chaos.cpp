@@ -6,7 +6,6 @@
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
 #include "floor/geometry.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-status-setter.h"
@@ -15,6 +14,7 @@
 #include "player/player-damage.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-launcher.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
@@ -114,7 +114,7 @@ static void erase_wall(FloorType &floor, const Pos2D &pos)
         return;
     }
 
-    grid.mimic = feat_state(&floor, grid.mimic, TerrainCharacteristics::HURT_DISI);
+    grid.mimic = floor.get_dungeon_definition().feat_state(grid.mimic, TerrainCharacteristics::HURT_DISI);
     const auto &terrain_changed = grid.get_terrain_mimic_raw();
     if (terrain_changed.flags.has_not(TerrainCharacteristics::REMEMBER)) {
         grid.info &= ~(CAVE_MARK);

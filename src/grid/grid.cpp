@@ -738,29 +738,6 @@ void update_flow(PlayerType *player_ptr)
 }
 
 /*
- * Take a feature, determine what that feature becomes
- * through applying the given action.
- */
-FEAT_IDX feat_state(const FloorType *floor_ptr, FEAT_IDX feat, TerrainCharacteristics action)
-{
-    const auto &dungeon = floor_ptr->get_dungeon_definition();
-    const auto &terrain = TerrainList::get_instance().get_terrain(feat);
-
-    /* Get the new feature */
-    for (auto i = 0; i < MAX_FEAT_STATES; i++) {
-        if (terrain.state[i].action == action) {
-            return dungeon.convert_terrain_id(terrain.state[i].result);
-        }
-    }
-
-    if (terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
-        return feat;
-    }
-
-    return (terrain_action_flags[enum2i(action)] & FAF_DESTROY) ? dungeon.convert_terrain_id(terrain.destroyed) : feat;
-}
-
-/*
  * Takes a location and action and changes the feature at that
  * location through applying the given action.
  */
@@ -771,7 +748,8 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
     FEAT_IDX oldfeat = floor_ptr->grid_array[y][x].feat;
 
     /* Get the new feat */
-    FEAT_IDX newfeat = feat_state(player_ptr->current_floor_ptr, oldfeat, action);
+    const auto &dungeon = floor_ptr->get_dungeon_definition();
+    FEAT_IDX newfeat = dungeon.feat_state(oldfeat, action);
 
     /* No change */
     if (newfeat == oldfeat) {
@@ -928,7 +906,8 @@ bool cave_player_teleportable_bold(PlayerType *player_ptr, POSITION y, POSITION 
 bool is_open(PlayerType *player_ptr, FEAT_IDX feat)
 {
     const auto &terrain = TerrainList::get_instance().get_terrain(feat);
-    return terrain.flags.has(TerrainCharacteristics::CLOSE) && (feat != feat_state(player_ptr->current_floor_ptr, feat, TerrainCharacteristics::CLOSE));
+    const auto &dungeon = player_ptr->current_floor_ptr->get_dungeon_definition();
+    return terrain.flags.has(TerrainCharacteristics::CLOSE) && (feat != dungeon.feat_state(feat, TerrainCharacteristics::CLOSE));
 }
 
 /*!
@@ -970,6 +949,7 @@ bool player_can_enter(PlayerType *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mode
 
 void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
 {
+    const auto &dungeon = player_ptr->current_floor_ptr->get_dungeon_definition();
     switch (gb_type) {
     case GB_FLOOR: {
         g_ptr->feat = rand_choice(feat_ground_type);
@@ -1010,7 +990,7 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
     case GB_OUTER_NOPERM: {
         const auto &terrain = TerrainList::get_instance().get_terrain(feat_wall_outer);
         if (terrain.is_permanent_wall()) {
-            g_ptr->feat = (int16_t)feat_state(player_ptr->current_floor_ptr, feat_wall_outer, TerrainCharacteristics::UNPERM);
+            g_ptr->feat = dungeon.feat_state(feat_wall_outer, TerrainCharacteristics::UNPERM);
         } else {
             g_ptr->feat = feat_wall_outer;
         }
@@ -1034,7 +1014,7 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
     case GB_SOLID_NOPERM: {
         const auto &terrain = TerrainList::get_instance().get_terrain(feat_wall_solid);
         if ((g_ptr->info & CAVE_VAULT) && terrain.is_permanent_wall()) {
-            g_ptr->feat = (int16_t)feat_state(player_ptr->current_floor_ptr, feat_wall_solid, TerrainCharacteristics::UNPERM);
+            g_ptr->feat = dungeon.feat_state(feat_wall_solid, TerrainCharacteristics::UNPERM);
         } else {
             g_ptr->feat = feat_wall_solid;
         }
