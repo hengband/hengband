@@ -4,17 +4,17 @@
 #include <map>
 #include <string>
 
-enum MonsterTimedEffect : int {
-    MTIMED_CSLEEP = 0, /* Monster is sleeping */
-    MTIMED_FAST = 1, /* Monster is temporarily fast */
-    MTIMED_SLOW = 2, /* Monster is temporarily slow */
-    MTIMED_STUNNED = 3, /* Monster is stunned */
-    MTIMED_CONFUSED = 4, /* Monster is confused */
-    MTIMED_MONFEAR = 5, /* Monster is fearful */
-    MTIMED_INVULNER = 6, /* Monster is temporarily invulnerable */
-    MAX_MTIMED = 7,
+enum class MonsterTimedEffect : int {
+    SLEEP = 0,
+    FAST = 1,
+    SLOW = 2,
+    STUN = 3,
+    CONFUSION = 4,
+    FEAR = 5,
+    INVULNERABILITY = 6,
+    MAX = 7,
 };
 
-constexpr auto MONSTER_TIMED_EFFECT_RANGE = EnumRange<MonsterTimedEffect>(MTIMED_CSLEEP, MAX_MTIMED);
+constexpr auto MONSTER_TIMED_EFFECT_RANGE = EnumRange<MonsterTimedEffect>(MonsterTimedEffect::SLEEP, MonsterTimedEffect::MAX);
 
 extern const std::map<MonsterTimedEffect, std::string> effect_type_to_label;

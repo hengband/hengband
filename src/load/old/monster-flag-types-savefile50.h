@@ -3,7 +3,7 @@
 enum class SaveDataMonsterFlagType {
     AP_R_IDX = 0x00000001,
     SUB_ALIGN = 0x00000002,
-    CSLEEP = 0x00000004,
+    SLEEP = 0x00000004,
     FAST = 0x00000008,
     SLOW = 0x00000010,
     STUNNED = 0x00000020,
