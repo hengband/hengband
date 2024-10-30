@@ -115,6 +115,7 @@ struct dungeon_type {
     bool has_guardian() const;
     MonsterRaceInfo &get_guardian();
     const MonsterRaceInfo &get_guardian() const;
+    short convert_terrain_id(short terrain_id) const;
 };
 
 extern std::vector<DEPTH> max_dlv;

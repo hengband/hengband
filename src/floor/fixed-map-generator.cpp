@@ -25,6 +25,7 @@
 #include "room/rooms-vault.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "system/artifact-type-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -92,13 +93,14 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     int len = strlen(s);
     auto &monraces = MonraceList::get_instance();
+    const auto &dungeon = floor_ptr->get_dungeon_definition();
     for (int i = 0; ((*qtwg_ptr->x < qtwg_ptr->xmax) && (i < len)); (*qtwg_ptr->x)++, s++, i++) {
         auto *g_ptr = &floor_ptr->grid_array[*qtwg_ptr->y][*qtwg_ptr->x];
         int idx = s[0];
         OBJECT_IDX object_index = letter[idx].object;
         MONSTER_IDX monster_index = letter[idx].monster;
         int random = letter[idx].random;
-        g_ptr->feat = conv_dungeon_feat(floor_ptr, letter[idx].feature);
+        g_ptr->feat = dungeon.convert_terrain_id(letter[idx].feature);
         if (init_flags & INIT_ONLY_FEATURES) {
             continue;
         }
@@ -167,7 +169,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             place_trap(floor_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
         } else if (letter[idx].trap) {
             g_ptr->mimic = g_ptr->feat;
-            g_ptr->feat = conv_dungeon_feat(floor_ptr, letter[idx].trap);
+            g_ptr->feat = dungeon.convert_terrain_id(letter[idx].trap);
         } else if (object_index) {
             ItemEntity item(object_index);
             if (item.bi_key.tval() == ItemKindType::GOLD) {

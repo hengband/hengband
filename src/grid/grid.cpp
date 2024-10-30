@@ -743,12 +743,13 @@ void update_flow(PlayerType *player_ptr)
  */
 FEAT_IDX feat_state(const FloorType *floor_ptr, FEAT_IDX feat, TerrainCharacteristics action)
 {
+    const auto &dungeon = floor_ptr->get_dungeon_definition();
     const auto &terrain = TerrainList::get_instance().get_terrain(feat);
 
     /* Get the new feature */
     for (auto i = 0; i < MAX_FEAT_STATES; i++) {
         if (terrain.state[i].action == action) {
-            return conv_dungeon_feat(floor_ptr, terrain.state[i].result);
+            return dungeon.convert_terrain_id(terrain.state[i].result);
         }
     }
 
@@ -756,7 +757,7 @@ FEAT_IDX feat_state(const FloorType *floor_ptr, FEAT_IDX feat, TerrainCharacteri
         return feat;
     }
 
-    return (terrain_action_flags[enum2i(action)] & FAF_DESTROY) ? conv_dungeon_feat(floor_ptr, terrain.destroyed) : feat;
+    return (terrain_action_flags[enum2i(action)] & FAF_DESTROY) ? dungeon.convert_terrain_id(terrain.destroyed) : feat;
 }
 
 /*

@@ -1,7 +1,19 @@
 #include "system/dungeon-info.h"
 #include "dungeon/dungeon-flag-mask.h"
+#include "grid/feature.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/monster-race-info.h"
+#include "system/terrain-type-definition.h"
+
+enum conversion_type {
+    CONVERT_TYPE_FLOOR = 0,
+    CONVERT_TYPE_WALL = 1,
+    CONVERT_TYPE_INNER = 2,
+    CONVERT_TYPE_OUTER = 3,
+    CONVERT_TYPE_SOLID = 4,
+    CONVERT_TYPE_STREAM1 = 5,
+    CONVERT_TYPE_STREAM2 = 6,
+};
 
 /*
  * The dungeon arrays
@@ -40,4 +52,31 @@ MonsterRaceInfo &dungeon_type::get_guardian()
 const MonsterRaceInfo &dungeon_type::get_guardian() const
 {
     return MonraceList::get_instance().get_monrace(this->final_guardian);
+}
+
+short dungeon_type::convert_terrain_id(short terrain_id) const
+{
+    const auto &terrain = TerrainList::get_instance().get_terrain(terrain_id);
+    if (terrain.flags.has_not(TerrainCharacteristics::CONVERT)) {
+        return terrain_id;
+    }
+
+    switch (terrain.subtype) {
+    case CONVERT_TYPE_FLOOR:
+        return rand_choice(feat_ground_type);
+    case CONVERT_TYPE_WALL:
+        return rand_choice(feat_wall_type);
+    case CONVERT_TYPE_INNER:
+        return feat_wall_inner;
+    case CONVERT_TYPE_OUTER:
+        return feat_wall_outer;
+    case CONVERT_TYPE_SOLID:
+        return feat_wall_solid;
+    case CONVERT_TYPE_STREAM1:
+        return this->stream1;
+    case CONVERT_TYPE_STREAM2:
+        return this->stream2;
+    default:
+        return terrain_id;
+    }
 }
