@@ -56,14 +56,14 @@ const MonsterRaceInfo &dungeon_type::get_guardian() const
 }
 
 /*
- * Take a feature, determine what that feature becomes
- * through applying the given action.
+ * @brief 地形とそれへのアクションから新しい地形IDを返す
+ * @param terrain_id 元の地形ID
+ * @param action 地形特性
+ * @return 新しい地形ID
  */
-short dungeon_type::feat_state(short terrain_id, TerrainCharacteristics action) const
+short dungeon_type::convert_terrain_id(short terrain_id, TerrainCharacteristics action) const
 {
     const auto &terrain = TerrainList::get_instance().get_terrain(terrain_id);
-
-    /* Get the new feature */
     for (auto i = 0; i < MAX_FEAT_STATES; i++) {
         if (terrain.state[i].action == action) {
             return this->convert_terrain_id(terrain.state[i].result);

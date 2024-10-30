@@ -201,7 +201,7 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, con
         return true;
     }
 
-    const auto is_open = player_ptr->current_floor_ptr->get_dungeon_definition().feat_state(grid.feat, TerrainCharacteristics::OPEN) == grid.feat;
+    const auto is_open = player_ptr->current_floor_ptr->get_dungeon_definition().convert_terrain_id(grid.feat, TerrainCharacteristics::OPEN) == grid.feat;
     if (turn_flags_ptr->did_bash_door && (one_in_(2) || is_open || terrain.flags.has(TerrainCharacteristics::GLASS))) {
         cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::BASH);
         if (!monster.is_valid()) {

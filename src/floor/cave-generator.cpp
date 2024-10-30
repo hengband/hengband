@@ -294,7 +294,7 @@ static void place_bound_perm_wall(PlayerType *player_ptr, Grid &grid)
 
     const auto &terrain = grid.get_terrain();
     if (terrain.flags.has_any_of({ TerrainCharacteristics::HAS_GOLD, TerrainCharacteristics::HAS_ITEM }) && terrain.flags.has_not(TerrainCharacteristics::SECRET)) {
-        grid.feat = player_ptr->current_floor_ptr->get_dungeon_definition().feat_state(grid.feat, TerrainCharacteristics::ENSECRET);
+        grid.feat = player_ptr->current_floor_ptr->get_dungeon_definition().convert_terrain_id(grid.feat, TerrainCharacteristics::ENSECRET);
     }
 
     grid.mimic = grid.feat;

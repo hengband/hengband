@@ -338,9 +338,9 @@ static void set_stairs(PlayerType *player_ptr)
     const auto &fcms = FloorChangeModesStore::get_instace();
     const auto &dungeon = floor.get_dungeon_definition();
     if (fcms->has(FloorChangeMode::UP) && !inside_quest(floor.get_quest_id())) {
-        grid.feat = fcms->has(FloorChangeMode::SHAFT) ? dungeon.feat_state(feat_down_stair, TerrainCharacteristics::SHAFT) : feat_down_stair;
+        grid.feat = fcms->has(FloorChangeMode::SHAFT) ? dungeon.convert_terrain_id(feat_down_stair, TerrainCharacteristics::SHAFT) : feat_down_stair;
     } else if (fcms->has(FloorChangeMode::DOWN) && !ironman_downward) {
-        grid.feat = fcms->has(FloorChangeMode::SHAFT) ? dungeon.feat_state(feat_up_stair, TerrainCharacteristics::SHAFT) : feat_up_stair;
+        grid.feat = fcms->has(FloorChangeMode::SHAFT) ? dungeon.convert_terrain_id(feat_up_stair, TerrainCharacteristics::SHAFT) : feat_up_stair;
     }
 
     grid.mimic = 0;

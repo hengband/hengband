@@ -114,7 +114,7 @@ bool exe_close(PlayerType *player_ptr, POSITION y, POSITION x)
         return more;
     }
 
-    const auto closed_feat = floor.get_dungeon_definition().feat_state(terrain_id, TerrainCharacteristics::CLOSE);
+    const auto closed_feat = floor.get_dungeon_definition().convert_terrain_id(terrain_id, TerrainCharacteristics::CLOSE);
     auto is_preventing = !grid.o_idx_list.empty() || grid.is_object();
     is_preventing &= closed_feat != terrain_id;
     is_preventing &= TerrainList::get_instance().get_terrain(closed_feat).flags.has_not(TerrainCharacteristics::DROP);
@@ -355,7 +355,7 @@ bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
         msg_format(_("%sを壊した！", "The %s crashes open!"), name.data());
         sound(terrain.flags.has(TerrainCharacteristics::GLASS) ? SOUND_GLASS : SOUND_OPENDOOR);
         const auto &dungeon = floor.get_dungeon_definition();
-        if (one_in_(2) || (dungeon.feat_state(grid.feat, TerrainCharacteristics::OPEN) == grid.feat) || terrain.flags.has(TerrainCharacteristics::GLASS)) {
+        if (one_in_(2) || (dungeon.convert_terrain_id(grid.feat, TerrainCharacteristics::OPEN) == grid.feat) || terrain.flags.has(TerrainCharacteristics::GLASS)) {
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::BASH);
         } else {
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::OPEN);

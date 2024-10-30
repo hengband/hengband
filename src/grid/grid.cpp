@@ -749,7 +749,7 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
 
     /* Get the new feat */
     const auto &dungeon = floor_ptr->get_dungeon_definition();
-    FEAT_IDX newfeat = dungeon.feat_state(oldfeat, action);
+    FEAT_IDX newfeat = dungeon.convert_terrain_id(oldfeat, action);
 
     /* No change */
     if (newfeat == oldfeat) {
@@ -907,7 +907,7 @@ bool is_open(PlayerType *player_ptr, FEAT_IDX feat)
 {
     const auto &terrain = TerrainList::get_instance().get_terrain(feat);
     const auto &dungeon = player_ptr->current_floor_ptr->get_dungeon_definition();
-    return terrain.flags.has(TerrainCharacteristics::CLOSE) && (feat != dungeon.feat_state(feat, TerrainCharacteristics::CLOSE));
+    return terrain.flags.has(TerrainCharacteristics::CLOSE) && (feat != dungeon.convert_terrain_id(feat, TerrainCharacteristics::CLOSE));
 }
 
 /*!
@@ -990,7 +990,7 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
     case GB_OUTER_NOPERM: {
         const auto &terrain = TerrainList::get_instance().get_terrain(feat_wall_outer);
         if (terrain.is_permanent_wall()) {
-            g_ptr->feat = dungeon.feat_state(feat_wall_outer, TerrainCharacteristics::UNPERM);
+            g_ptr->feat = dungeon.convert_terrain_id(feat_wall_outer, TerrainCharacteristics::UNPERM);
         } else {
             g_ptr->feat = feat_wall_outer;
         }
@@ -1014,7 +1014,7 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
     case GB_SOLID_NOPERM: {
         const auto &terrain = TerrainList::get_instance().get_terrain(feat_wall_solid);
         if ((g_ptr->info & CAVE_VAULT) && terrain.is_permanent_wall()) {
-            g_ptr->feat = dungeon.feat_state(feat_wall_solid, TerrainCharacteristics::UNPERM);
+            g_ptr->feat = dungeon.convert_terrain_id(feat_wall_solid, TerrainCharacteristics::UNPERM);
         } else {
             g_ptr->feat = feat_wall_solid;
         }

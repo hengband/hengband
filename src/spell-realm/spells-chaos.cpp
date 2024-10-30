@@ -114,7 +114,7 @@ static void erase_wall(FloorType &floor, const Pos2D &pos)
         return;
     }
 
-    grid.mimic = floor.get_dungeon_definition().feat_state(grid.mimic, TerrainCharacteristics::HURT_DISI);
+    grid.mimic = floor.get_dungeon_definition().convert_terrain_id(grid.mimic, TerrainCharacteristics::HURT_DISI);
     const auto &terrain_changed = grid.get_terrain_mimic_raw();
     if (terrain_changed.flags.has_not(TerrainCharacteristics::REMEMBER)) {
         grid.info &= ~(CAVE_MARK);
