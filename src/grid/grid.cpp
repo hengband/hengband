@@ -1057,11 +1057,11 @@ void set_cave_feat(FloorType *floor_ptr, POSITION y, POSITION x, FEAT_IDX featur
 /*!
  * @brief プレイヤーの周辺9マスに該当する地形がいくつあるかを返す
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param test 地形条件を判定するための関数ポインタ
+ * @param gck 判定条件
  * @param under TRUEならばプレイヤーの直下の座標も走査対象にする
  * @return 該当する地形の数と、該当する地形の中から1つの座標
  */
-std::pair<int, Pos2D> count_dt(PlayerType *player_ptr, bool (*test)(PlayerType *, short), bool under)
+std::pair<int, Pos2D> count_dt(PlayerType *player_ptr, GridCountKind gck, bool under)
 {
     auto count = 0;
     Pos2D pos(0, 0);
@@ -1077,8 +1077,27 @@ std::pair<int, Pos2D> count_dt(PlayerType *player_ptr, bool (*test)(PlayerType *
         }
 
         const auto feat = grid.get_feat_mimic();
-        if (!((*test)(player_ptr, feat))) {
-            continue;
+        switch (gck) {
+        case GridCountKind::OPEN:
+            if (!is_open(player_ptr, feat)) {
+                continue;
+            }
+
+            break;
+        case GridCountKind::CLOSED_DOOR:
+            if (!is_closed_door(player_ptr, feat)) {
+                continue;
+            }
+
+            break;
+        case GridCountKind::TRAP:
+            if (!is_trap(player_ptr, feat)) {
+                continue;
+            }
+
+            break;
+        default:
+            THROW_EXCEPTION(std::logic_error, format("Invalid GridCountKind is Specified! %d", enum2i(gck)));
         }
 
         ++count;
