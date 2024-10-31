@@ -15,6 +15,7 @@
 #include "system/angband.h"
 #include "term/term-color-types.h"
 #include "util/flag-group.h"
+#include <optional>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -84,6 +85,7 @@ struct lore_type {
 
     bool has_reinforce() const;
 
+    std::optional<std::vector<lore_msg>> build_kill_unique_description() const;
     std::string build_revenge_description(bool has_defeated) const;
     std::vector<lore_msg> build_speed_description() const;
 

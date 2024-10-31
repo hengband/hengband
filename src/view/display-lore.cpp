@@ -116,31 +116,6 @@ void output_monster_spoiler(MonraceId r_idx, hook_c_roff_pf roff_func)
     process_monster_lore(&dummy, r_idx, MONSTER_LORE_DEBUG);
 }
 
-static bool display_kill_unique(lore_type *lore_ptr)
-{
-    if (lore_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        return false;
-    }
-
-    const auto is_dead = (lore_ptr->r_ptr->max_num == 0);
-    if (lore_ptr->r_ptr->r_deaths > 0) {
-        constexpr auto fmt = _("%s^はあなたの先祖を %d 人葬っている", "%s^ has slain %d of your ancestors");
-        hooked_roff(format(fmt, Who::who(lore_ptr->msex).data(), lore_ptr->r_ptr->r_deaths));
-        hooked_roff(lore_ptr->build_revenge_description(is_dead));
-        hooked_roff("\n");
-    } else {
-#ifdef JP
-        const auto mes = is_dead ? "あなたはこの仇敵をすでに葬り去っている。" : "この仇敵はまだ生きている！";
-#else
-        const auto mes = is_dead ? "You have slain this foe.  " : "This foe is still alive!  ";
-#endif
-        hooked_roff(mes);
-        hooked_roff("\n");
-    }
-
-    return true;
-}
-
 static void display_killed(lore_type *lore_ptr)
 {
 #ifdef JP
@@ -215,8 +190,13 @@ void display_kill_numbers(lore_type *lore_ptr)
         return;
     }
 
-    if (display_kill_unique(lore_ptr)) {
+    const auto kill_unique_description = lore_ptr->build_kill_unique_description();
+    if (!kill_unique_description) {
         return;
+    }
+
+    for (const auto &[text, color] : *kill_unique_description) {
+        hook_c_roff(color, text);
     }
 
     if (lore_ptr->r_ptr->r_deaths == 0) {
