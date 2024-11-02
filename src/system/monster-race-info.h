@@ -167,6 +167,7 @@ public:
     void reset_current_numbers();
     void increment_current_numbers();
     void decrement_current_numbers();
+    void reset_max_number();
 
 private:
     std::vector<DropArtifact> drop_artifacts; //!< 特定アーティファクトドロップリスト
