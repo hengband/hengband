@@ -76,8 +76,7 @@ std::vector<lore_msg> lore_type::build_speed_description() const
         texts.emplace_back(_("光速で", " at light speed"), TERM_YELLOW);
     } else if (this->speed > 189) {
         texts.emplace_back(_("亜光速で", " at sub-light speed"), TERM_YELLOW);
-    }
-    else if (this->speed > STANDARD_SPEED) {
+    } else if (this->speed > STANDARD_SPEED) {
         if (this->speed > 149) {
             texts.emplace_back(_("信じ難いほど", " incredibly"), TERM_VIOLET);
         } else if (this->speed > 144) {
