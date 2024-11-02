@@ -107,7 +107,7 @@ bool raise_possible(PlayerType *player_ptr, MonsterEntity *m_ptr)
             if (distance(y, x, yy, xx) > 5) {
                 continue;
             }
-            if (!los(player_ptr, y, x, yy, xx)) {
+            if (!los(y, x, yy, xx)) {
                 continue;
             }
             if (!projectable(player_ptr, y, x, yy, xx)) {

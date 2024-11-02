@@ -8,6 +8,7 @@
 #include "core/window-redrawer.h"
 #include "dungeon/quest.h"
 #include "floor/floor-leaver.h"
+#include "floor/floor-list.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
 #include "floor/wild.h"
@@ -98,7 +99,7 @@ static void redraw_character_xtra(PlayerType *player_ptr)
  */
 void process_dungeon(PlayerType *player_ptr, bool load_game)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     floor.base_level = floor.dun_level;
     auto &world = AngbandWorld::get_instance();
     world.is_loading_now = false;

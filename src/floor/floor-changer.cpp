@@ -4,6 +4,7 @@
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor-generator.h"
+#include "floor/floor-list.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-object.h"
 #include "floor/floor-save-util.h"
@@ -50,22 +51,23 @@
  */
 static void build_dead_end(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
+    auto &floor = FloorList::get_instance().get_floor(0);
     msg_print(_("階段は行き止まりだった。", "The staircases come to a dead end..."));
-    clear_cave(player_ptr);
+    clear_cave();
     player_ptr->x = player_ptr->y = 0;
     set_floor_and_wall(0);
-    player_ptr->current_floor_ptr->height = SCREEN_HGT;
-    player_ptr->current_floor_ptr->width = SCREEN_WID;
+    floor.height = SCREEN_HGT;
+    floor.width = SCREEN_WID;
     for (POSITION y = 0; y < MAX_HGT; y++) {
         for (POSITION x = 0; x < MAX_WID; x++) {
             place_bold(player_ptr, y, x, GB_SOLID_PERM);
         }
     }
 
-    player_ptr->y = player_ptr->current_floor_ptr->height / 2;
-    player_ptr->x = player_ptr->current_floor_ptr->width / 2;
+    player_ptr->y = floor.height / 2;
+    player_ptr->x = floor.width / 2;
     place_bold(player_ptr, player_ptr->y, player_ptr->x, GB_FLOOR);
-    wipe_generate_random_floor_flags(player_ptr->current_floor_ptr);
+    wipe_generate_random_floor_flags(&floor);
     const auto &fcms = FloorChangeModesStore::get_instace();
     if (fcms->has(FloorChangeMode::UP)) {
         sf_ptr->upper_floor_id = 0;
@@ -76,7 +78,7 @@ static void build_dead_end(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 
 static MONSTER_IDX decide_pet_index(PlayerType *player_ptr, const int current_monster, POSITION *cy, POSITION *cx)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     if (current_monster == 0) {
         MONSTER_IDX m_idx = m_pop(floor_ptr);
         player_ptr->riding = m_idx;
@@ -106,15 +108,16 @@ static MONSTER_IDX decide_pet_index(PlayerType *player_ptr, const int current_mo
     return (d == 6) ? 0 : m_pop(floor_ptr);
 }
 
-static MonsterRaceInfo &set_pet_params(PlayerType *player_ptr, const int current_monster, MONSTER_IDX m_idx, const POSITION cy, const POSITION cx)
+static MonsterRaceInfo &set_pet_params(const int current_monster, MONSTER_IDX m_idx, const POSITION cy, const POSITION cx)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    player_ptr->current_floor_ptr->grid_array[cy][cx].m_idx = m_idx;
+    auto &floor = FloorList::get_instance().get_floor(0);
+    auto *m_ptr = &floor.m_list[m_idx];
+    floor.grid_array[cy][cx].m_idx = m_idx;
     m_ptr->r_idx = party_mon[current_monster].r_idx;
     *m_ptr = party_mon[current_monster];
     m_ptr->fy = cy;
     m_ptr->fx = cx;
-    m_ptr->current_floor_ptr = player_ptr->current_floor_ptr;
+    m_ptr->current_floor_ptr = &floor;
     m_ptr->ml = true;
     m_ptr->mtimed[MonsterTimedEffect::SLEEP] = 0;
     m_ptr->hold_o_idx_list.clear();
@@ -134,7 +137,7 @@ static MonsterRaceInfo &set_pet_params(PlayerType *player_ptr, const int current
 static void place_pet(PlayerType *player_ptr)
 {
     const auto max_num = AngbandWorld::get_instance().is_wild_mode() ? 1 : MAX_PARTY_MON;
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     for (int current_monster = 0; current_monster < max_num; current_monster++) {
         POSITION cy = 0;
         POSITION cx = 0;
@@ -144,7 +147,7 @@ static void place_pet(PlayerType *player_ptr)
 
         MONSTER_IDX m_idx = decide_pet_index(player_ptr, current_monster, &cy, &cx);
         if (m_idx != 0) {
-            auto &r_ref = set_pet_params(player_ptr, current_monster, m_idx, cy, cx);
+            auto &r_ref = set_pet_params(current_monster, m_idx, cy, cx);
             update_monster(player_ptr, m_idx, true);
             lite_spot(player_ptr, cy, cx);
             if (r_ref.misc_flags.has(MonsterMiscType::MULTIPLY)) {
@@ -262,7 +265,7 @@ static void update_floor_id(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 
 static void reset_unique_by_floor_change(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
         auto *m_ptr = &floor_ptr->m_list[i];
         if (!m_ptr->is_valid()) {
@@ -293,7 +296,7 @@ static void reset_unique_by_floor_change(PlayerType *player_ptr)
 static void allocate_loaded_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
     GAME_TURN tmp_last_visit = sf_ptr->last_visit;
-    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &floor = FloorList::get_instance().get_floor(0);
     auto alloc_chance = floor.get_dungeon_definition().max_m_alloc_chance;
     const auto &world = AngbandWorld::get_instance();
     while (tmp_last_visit > world.game_turn) {
@@ -333,7 +336,7 @@ static void allocate_loaded_floor(PlayerType *player_ptr, saved_floor_type *sf_p
  */
 static void set_stairs(PlayerType *player_ptr)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     auto &grid = floor.grid_array[player_ptr->y][player_ptr->x];
     const auto &fcms = FloorChangeModesStore::get_instace();
     if (fcms->has(FloorChangeMode::UP) && !inside_quest(floor.get_quest_id())) {
@@ -360,7 +363,7 @@ static void generate_new_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     }
 
     sf_ptr->last_visit = AngbandWorld::get_instance().game_turn;
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     sf_ptr->dun_level = floor.dun_level;
     if (FloorChangeModesStore::get_instace()->has(FloorChangeMode::NO_RETURN)) {
         return;
@@ -390,6 +393,7 @@ static void cut_off_the_upstair(PlayerType *player_ptr)
 
 static void update_floor(PlayerType *player_ptr)
 {
+    auto &floor = FloorList::get_instance().get_floor(0);
     const auto &fcms = FloorChangeModesStore::get_instace();
     if (fcms->has_none_of({ FloorChangeMode::SAVE_FLOORS, FloorChangeMode::FIRST_FLOOR })) {
         generate_floor(player_ptr);
@@ -404,7 +408,7 @@ static void update_floor(PlayerType *player_ptr)
     saved_floor_type *sf_ptr;
     sf_ptr = get_sf_ptr(new_floor_id);
     const bool loaded = is_visited_floor(sf_ptr) && load_floor(player_ptr, sf_ptr, 0);
-    set_player_grid(*player_ptr->current_floor_ptr, player_ptr->get_position());
+    set_player_grid(floor, player_ptr->get_position());
     update_floor_id(player_ptr, sf_ptr);
 
     if (loaded) {
@@ -427,6 +431,7 @@ static void update_floor(PlayerType *player_ptr)
  */
 void change_floor(PlayerType *player_ptr)
 {
+    auto &floor = FloorList::get_instance().get_floor(0);
     auto &world = AngbandWorld::get_instance();
     world.character_dungeon = false;
     player_ptr->dtrap = false;
@@ -437,16 +442,16 @@ void change_floor(PlayerType *player_ptr)
     player_ptr->ambush_flag = false;
     update_floor(player_ptr);
     place_pet(player_ptr);
-    forget_travel_flow(player_ptr->current_floor_ptr);
-    update_unique_artifact(player_ptr->current_floor_ptr, new_floor_id);
+    forget_travel_flow(&floor);
+    update_unique_artifact(&floor, new_floor_id);
     player_ptr->floor_id = new_floor_id;
     world.character_dungeon = true;
     if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
         wiz_lite(player_ptr, PlayerClass(player_ptr).equals(PlayerClassType::NINJA));
     }
 
-    player_ptr->current_floor_ptr->generated_turn = world.game_turn;
-    player_ptr->feeling_turn = player_ptr->current_floor_ptr->generated_turn;
+    floor.generated_turn = world.game_turn;
+    player_ptr->feeling_turn = floor.generated_turn;
     player_ptr->feeling = 0;
     auto &fcms = FloorChangeModesStore::get_instace();
     fcms->clear();

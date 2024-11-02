@@ -7,6 +7,7 @@
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
+#include "floor/floor-list.h"
 #include "floor/floor-object.h"
 #include "floor/floor-town.h"
 #include "floor/geometry.h"
@@ -82,7 +83,7 @@ void update_smell(FloorType *floor_ptr, PlayerType *player_ptr)
             }
 
             auto &grid = floor_ptr->get_grid(pos);
-            auto update_when = !grid.cave_has_flag(TerrainCharacteristics::MOVE) && !is_closed_door(player_ptr, grid.feat);
+            auto update_when = !grid.cave_has_flag(TerrainCharacteristics::MOVE) && !is_closed_door(grid.feat);
             update_when |= !grid.has_los();
             update_when |= scent_adjust[i][j] == -1;
             if (update_when) {
@@ -156,7 +157,7 @@ void wipe_o_list(FloorType *floor_ptr)
  */
 void scatter(PlayerType *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     POSITION nx, ny;
     while (true) {
         ny = rand_spread(y, d);
@@ -169,7 +170,7 @@ void scatter(PlayerType *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POS
             continue;
         }
         if (mode & PROJECT_LOS) {
-            if (los(player_ptr, y, x, ny, nx)) {
+            if (los(y, x, ny, nx)) {
                 break;
             }
             continue;

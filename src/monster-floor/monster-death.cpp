@@ -286,7 +286,7 @@ static void drop_items_golds(PlayerType *player_ptr, MonsterDeath *md_ptr, int d
         auto *q_ptr = &forge;
         q_ptr->wipe();
         if (md_ptr->do_gold && (!md_ptr->do_item || one_in_(2))) {
-            if (!make_gold(player_ptr, q_ptr)) {
+            if (!make_gold(q_ptr)) {
                 continue;
             }
 

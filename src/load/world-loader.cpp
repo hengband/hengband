@@ -1,4 +1,5 @@
 #include "load/world-loader.h"
+#include "floor/floor-list.h"
 #include "floor/wild.h"
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
@@ -89,10 +90,11 @@ static void rd_world_info(PlayerType *player_ptr)
     auto &igd = InnerGameData::get_instance();
     igd.init_turn_limit();
     auto &world = AngbandWorld::get_instance();
+    auto &floor = FloorList::get_instance().get_floor(0);
     world.dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
-    player_ptr->current_floor_ptr->generated_turn = rd_s32b();
+    floor.generated_turn = rd_s32b();
     if (h_older_than(1, 7, 0, 4)) {
-        player_ptr->feeling_turn = player_ptr->current_floor_ptr->generated_turn;
+        player_ptr->feeling_turn = floor.generated_turn;
     } else {
         player_ptr->feeling_turn = rd_s32b();
     }

@@ -256,7 +256,7 @@ static errr exe_reading_savefile(PlayerType *player_ptr)
     }
 
     if (h_older_than(1, 7, 0, 6)) {
-        remove_water_cave(player_ptr);
+        remove_water_cave();
     }
 
     auto checksum_result = verify_checksum();

@@ -19,6 +19,7 @@
 #include "floor/cave.h"
 #include "floor/floor-generator-util.h"
 #include "floor/floor-generator.h"
+#include "floor/floor-list.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
 #include "game-option/birth-options.h"
@@ -291,7 +292,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
     bool streamer_may_have_gold = streamer.flags.has(TerrainCharacteristics::MAY_HAVE_GOLD);
 
     /* Hack -- Choose starting point */
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     auto y = rand_spread(floor.height / 2, floor.height / 6);
     auto x = rand_spread(floor.width / 2, floor.width / 6);
 
@@ -336,7 +337,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
                 if (!grid.is_extra() && !grid.is_inner() && !grid.is_outer() && !grid.is_solid()) {
                     continue;
                 }
-                if (is_closed_door(player_ptr, grid.feat)) {
+                if (is_closed_door(grid.feat)) {
                     continue;
                 }
             }
@@ -423,13 +424,13 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
  * This happens in real world lava tubes.
  * </pre>
  */
-void place_trees(PlayerType *player_ptr, POSITION x, POSITION y)
+void place_trees(POSITION x, POSITION y)
 {
     int i, j;
     Grid *g_ptr;
 
     /* place trees/ rubble in ovalish distribution */
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     for (i = x - 3; i < x + 4; i++) {
         for (j = y - 3; j < y + 4; j++) {
             if (!in_bounds(floor_ptr, j, i)) {
@@ -486,7 +487,7 @@ void destroy_level(PlayerType *player_ptr)
 
     /* Drop a few epi-centers (usually about two) */
     POSITION y1, x1;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     for (int n = 0; n < randint1(5); n++) {
         /* Pick an epi-center */
         x1 = rand_range(5, floor_ptr->width - 1 - 5);

@@ -14,6 +14,7 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
+#include "floor/floor-list.h"
 #include "floor/floor-town.h"
 #include "game-option/birth-options.h"
 #include "game-option/map-screen-options.h"
@@ -314,7 +315,7 @@ static void generate_wilderness_area(FloorType *floor_ptr, int terrain, uint32_t
 static void generate_area(PlayerType *player_ptr, POSITION y, POSITION x, bool is_border, bool is_corner)
 {
     player_ptr->town_num = wilderness[y][x].town;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     floor_ptr->base_level = wilderness[y][x].level;
     floor_ptr->dun_level = 0;
     floor_ptr->monster_level = floor_ptr->base_level;
@@ -425,7 +426,7 @@ static void generate_wild_monsters(PlayerType *player_ptr)
  */
 void wilderness_gen(PlayerType *player_ptr)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
+    auto &floor = FloorList::get_instance().get_floor(0);
     floor.height = MAX_HGT;
     floor.width = MAX_WID;
     panel_row_min = floor.height;
@@ -611,7 +612,7 @@ void wilderness_gen(PlayerType *player_ptr)
  */
 void wilderness_gen_small(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = &FloorList::get_instance().get_floor(0);
     for (int i = 0; i < MAX_WID; i++) {
         for (int j = 0; j < MAX_HGT; j++) {
             floor_ptr->grid_array[j][i].feat = feat_permanent;
@@ -918,8 +919,9 @@ bool change_wild_mode(PlayerType *player_ptr, bool encount)
 
     bool has_pet = false;
     PlayerEnergy energy(player_ptr);
-    for (int i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+    auto &floor = FloorList::get_instance().get_floor(0);
+    for (int i = 1; i < floor.m_max; i++) {
+        auto *m_ptr = &floor.m_list[i];
         if (!m_ptr->is_valid()) {
             continue;
         }
