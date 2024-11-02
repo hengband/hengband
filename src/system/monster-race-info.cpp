@@ -6,6 +6,7 @@
 #include "monster-race/race-sex.h"
 #include "monster/horror-descriptions.h"
 #include "system/redrawing-flags-updater.h"
+#include "system/system-variables.h"
 #include "tracking/lore-tracker.h"
 #include "util/enum-converter.h"
 #include "util/probability-table.h"
@@ -16,6 +17,8 @@
 #endif
 
 namespace {
+constexpr auto MAX_MONSTER_NUM = 100; /*!< 1種類の非ユニークモンスターが1フロアに存在できる最大数 */
+
 template <class T>
 static int count_lore_mflag_group(const EnumClassFlagGroup<T> &flags, const EnumClassFlagGroup<T> &r_flags)
 {
@@ -450,6 +453,26 @@ void MonsterRaceInfo::increment_current_numbers()
 void MonsterRaceInfo::decrement_current_numbers()
 {
     this->cur_num--;
+}
+
+void MonsterRaceInfo::reset_max_number()
+{
+    if (this->kind_flags.has(MonsterKindType::UNIQUE) || this->population_flags.has(MonsterPopulationType::ONLY_ONE)) {
+        this->max_num = MAX_UNIQUE_NUM;
+        return;
+    }
+
+    if (this->population_flags.has(MonsterPopulationType::NAZGUL)) {
+        this->max_num = MAX_NAZGUL_NUM;
+        return;
+    }
+
+    if (this->population_flags.has(MonsterPopulationType::BUNBUN_STRIKER)) {
+        this->max_num = MAX_BUNBUN_NUM;
+        return;
+    }
+
+    this->max_num = MAX_MONSTER_NUM;
 }
 
 /*!
