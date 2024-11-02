@@ -72,7 +72,11 @@ std::vector<lore_msg> lore_type::build_speed_description() const
 #endif
     const auto random_movement_description = this->build_random_movement_description();
     texts.insert(texts.end(), random_movement_description.begin(), random_movement_description.end());
-    if (this->speed > STANDARD_SPEED) {
+    if (this->speed > 199) {
+        texts.emplace_back(_("光速で", " at light speed"), TERM_YELLOW);
+    } else if (this->speed > 189) {
+        texts.emplace_back(_("亜光速で", " at sub-light speed"), TERM_YELLOW);
+    } else if (this->speed > STANDARD_SPEED) {
         if (this->speed > 149) {
             texts.emplace_back(_("信じ難いほど", " incredibly"), TERM_VIOLET);
         } else if (this->speed > 144) {
@@ -90,7 +94,6 @@ std::vector<lore_msg> lore_type::build_speed_description() const
         } else if (this->speed < 120) {
             texts.emplace_back(_("やや", " somewhat"), TERM_YELLOW);
         }
-
         texts.emplace_back(_("素早く", " quickly"), TERM_L_RED);
     } else if (this->speed < STANDARD_SPEED) {
         if (this->speed < 86) {
@@ -104,7 +107,6 @@ std::vector<lore_msg> lore_type::build_speed_description() const
         } else if (this->speed > 100) {
             texts.emplace_back(_("やや", " somewhat"), TERM_BLUE);
         }
-
         texts.emplace_back(_("ゆっくりと", " slowly"), TERM_L_BLUE);
     } else {
         texts.emplace_back(_("普通の速さで", " at normal speed"));
