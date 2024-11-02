@@ -1,5 +1,4 @@
 #include "market/arena-entry.h"
-#include "monster-race/race-indice-types.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-amulet-types.h"
 #include "sv-definition/sv-food-types.h"
@@ -10,6 +9,7 @@
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-wand-types.h"
 #include "system/baseitem-info.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/monster-race-info.h"
 #ifndef JP
 #include <sstream>

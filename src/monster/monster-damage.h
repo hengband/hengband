@@ -1,14 +1,13 @@
 #pragma once
 
 #include "effect/attribute-types.h"
-#include "monster-race/race-indice-types.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
 #include <string_view>
 #include <tuple>
 #include <vector>
 
-enum class MonsterRaceId : int16_t;
+enum class MonsterRaceId : short;
 class MonsterRaceInfo;
 class MonsterEntity;
 class PlayerType;

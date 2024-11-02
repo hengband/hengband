@@ -1,6 +1,6 @@
 #include "monster/monster-pain-describer.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
