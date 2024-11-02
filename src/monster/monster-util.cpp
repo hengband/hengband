@@ -221,7 +221,8 @@ monsterrace_hook_type get_monster_hook2(PlayerType *player_ptr, POSITION y, POSI
  */
 static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, const monsterrace_hook_type &hook2, const bool restrict_to_dungeon, std::optional<summon_type> summon_specific_type, bool is_chameleon_polymorph)
 {
-    const FloorType *const floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto dungeon_level = floor.dun_level;
 
     // デバッグ用統計情報。
     int mon_num = 0; // 重み(prob2)が正の要素数
@@ -231,54 +232,38 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
 
     // モンスター生成テーブルの各要素について重みを修正する。
     const auto &system = AngbandSystem::get_instance();
-    for (auto i = 0U; i < alloc_race_table.size(); i++) {
-        alloc_entry *const entry = &alloc_race_table[i];
-        const auto entry_r_idx = i2enum<MonsterRaceId>(entry->index);
-        const MonsterRaceInfo *const r_ptr = &monraces_info[entry_r_idx];
+    auto &table = MonraceAllocationTable::get_instance();
+    for (auto &entry : table) {
+        const auto monrace_id = entry.index;
 
         // 生成を禁止する要素は重み 0 とする。
-        entry->prob2 = 0;
+        entry.prob2 = 0;
 
         // 基本重みが 0 以下なら生成禁止。
         // テーブル内の無効エントリもこれに該当する(alloc_race_table は生成時にゼロクリアされるため)。
-        if (entry->prob1 <= 0) {
+        if (entry.prob1 <= 0) {
             continue;
         }
 
         // いずれかの生成制約関数が偽を返したら生成禁止。
-        if ((hook1 && !hook1(player_ptr, entry_r_idx)) || (hook2 && !hook2(player_ptr, entry_r_idx))) {
+        if ((hook1 && !hook1(player_ptr, monrace_id)) || (hook2 && !hook2(player_ptr, monrace_id))) {
             continue;
         }
 
         // 原則生成禁止するものたち(フェイズアウト状態 / カメレオンの変身先 / ダンジョンの主召喚 は例外)。
         if (!system.is_phase_out() && !is_chameleon_polymorph && summon_specific_type != SUMMON_GUARDIANS) {
-            // クエストモンスターは生成禁止。
-            if (r_ptr->misc_flags.has(MonsterMiscType::QUESTOR)) {
+            if (!entry.is_permitted(dungeon_level)) {
                 continue;
             }
 
-            // ダンジョンの主は生成禁止。
-            if (r_ptr->misc_flags.has(MonsterMiscType::GUARDIAN)) {
+            // 殲滅系クエストの詰み防止 (クエスト内では特殊なフラグ持ちの生成を禁止する)
+            if (floor.is_in_quest() && !entry.is_defeatable(dungeon_level)) {
                 continue;
-            }
-
-            // FORCE_DEPTH フラグ持ちは指定階未満では生成禁止。
-            if (r_ptr->misc_flags.has(MonsterMiscType::FORCE_DEPTH) && (r_ptr->level > floor_ptr->dun_level)) {
-                continue;
-            }
-
-            // クエスト内でRES_ALL及び指定階未満でのDIMINISH_MAX_DAMAGEの生成を禁止する (殲滅系クエストの詰み防止)
-            if (player_ptr->current_floor_ptr->is_in_quest()) {
-                auto is_indefeatable = r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL);
-                is_indefeatable |= r_ptr->special_flags.has(MonsterSpecialType::DIMINISH_MAX_DAMAGE) && r_ptr->level > floor_ptr->dun_level;
-                if (is_indefeatable) {
-                    continue;
-                }
             }
         }
 
         // 生成を許可するものは基本重みをそのまま引き継ぐ。
-        entry->prob2 = entry->prob1;
+        entry.prob2 = entry.prob1;
 
         // 引数で指定されていればさらにダンジョンによる制約を試みる。
         if (restrict_to_dungeon) {
@@ -287,29 +272,29 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
             //   * フェイズアウト状態でない
             //   * 1階かそれより深いところにいる
             //   * ランダムクエスト中でない
-            const bool in_random_quest = floor_ptr->is_in_quest() && !QuestType::is_fixed(floor_ptr->quest_number);
-            const bool cond = !system.is_phase_out() && floor_ptr->dun_level > 0 && !in_random_quest;
+            const bool in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
+            const bool cond = !system.is_phase_out() && floor.dun_level > 0 && !in_random_quest;
 
-            if (cond && !restrict_monster_to_dungeon(floor_ptr, entry_r_idx, summon_specific_type, is_chameleon_polymorph)) {
+            if (cond && !restrict_monster_to_dungeon(&floor, monrace_id, summon_specific_type, is_chameleon_polymorph)) {
                 // ダンジョンによる制約に掛かった場合、重みを special_div/64 倍する。
                 // 丸めは確率的に行う。
-                const int numer = entry->prob2 * floor_ptr->get_dungeon_definition().special_div;
+                const int numer = entry.prob2 * floor.get_dungeon_definition().special_div;
                 const int q = numer / 64;
                 const int r = numer % 64;
-                entry->prob2 = (PROB)(randint0(64) < r ? q + 1 : q);
+                entry.prob2 = (PROB)(randint0(64) < r ? q + 1 : q);
             }
         }
 
         // 統計情報更新。
-        if (entry->prob2 > 0) {
+        if (entry.prob2 > 0) {
             mon_num++;
-            if (lev_min > entry->level) {
-                lev_min = entry->level;
+            if (lev_min > entry.level) {
+                lev_min = entry.level;
             }
-            if (lev_max < entry->level) {
-                lev_max = entry->level;
+            if (lev_max < entry.level) {
+                lev_max = entry.level;
             }
-            prob2_total += entry->prob2;
+            prob2_total += entry.prob2;
         }
     }
 

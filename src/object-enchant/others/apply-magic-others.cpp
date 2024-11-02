@@ -116,7 +116,7 @@ void OtherItemsEnchanter::generate_figurine()
 
         const auto &monrace = monraces.get_monrace(monrace_id);
         auto check = (floor.dun_level < monrace.level) ? (monrace.level - floor.dun_level) : 0;
-        if ((monrace.rarity == 0) || (monrace.rarity > 100) || (randint0(check) > 0)) {
+        if ((monrace.rarity > 100) || (randint0(check) > 0)) {
             continue;
         }
 
@@ -157,7 +157,7 @@ void OtherItemsEnchanter::generate_corpse()
             continue;
         }
 
-        if ((monrace.rarity == 0) || (match.find(*sval) != match.end() && monrace.drop_flags.has_not(match.at(*sval))) || (randint0(check) > 0)) {
+        if ((match.find(*sval) != match.end() && monrace.drop_flags.has_not(match.at(*sval))) || (randint0(check) > 0)) {
             continue;
         }
 
@@ -171,7 +171,6 @@ void OtherItemsEnchanter::generate_corpse()
 
 /*
  * @brief ランダムに選択したモンスター種族IDからその像を作る
- * @details レアリティが1以上のものだけ生成対象になる
  */
 void OtherItemsEnchanter::generate_statue()
 {
@@ -179,9 +178,7 @@ void OtherItemsEnchanter::generate_statue()
     const auto pick_monrace_id_for_statue = [&monraces] {
         while (true) {
             auto &monrace = monraces.pick_monrace_at_random();
-            if (monrace.rarity > 0) {
-                return monrace.idx;
-            }
+            return monrace.idx;
         }
     };
     const auto monrace_id = pick_monrace_id_for_statue();

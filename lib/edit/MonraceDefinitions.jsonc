@@ -161,7 +161,7 @@
       "armor_class": 0,
       "alertness": 0,
       "level": 0,
-      "rarity": 0,
+      "rarity": 255,
       "exp": 0
     },
     //##### Town monsters #####

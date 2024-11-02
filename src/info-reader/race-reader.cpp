@@ -473,6 +473,10 @@ errr parse_monraces_info(nlohmann::json &mon_data, angband_header *)
         msg_format(_("モンスター希少度読込失敗。ID: '%d'。", "Failed to load monster rarity. ID: '%d'."), error_idx);
         return err;
     }
+    if (err) {
+        msg_format(_("モンスター希少度範囲外。ID: '%d'。", "Monster rarity is out of range. ID: '%d'."), error_idx);
+        return err;
+    }
     err = info_set_integer(mon_data["exp"], monrace.mexp, true, Range(0, 9999999));
     if (err) {
         msg_format(_("モンスター経験値読込失敗。ID: '%d'。", "Failed to load monster exp. ID: '%d'."), error_idx);

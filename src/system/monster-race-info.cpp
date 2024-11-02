@@ -625,6 +625,26 @@ const std::vector<MonsterRaceId> &MonraceList::get_valid_monrace_ids() const
     return valid_monraces;
 }
 
+//!< @todo ややトリッキーだが、元のmapでMonsterRaceInfo をshared_ptr で持つようにすればかなりスッキリ書けるはず.
+const std::vector<std::pair<MonsterRaceId, const MonsterRaceInfo *>> &MonraceList::get_sorted_monraces() const
+{
+    static std::vector<std::pair<MonsterRaceId, const MonsterRaceInfo *>> sorted_monraces;
+    if (!sorted_monraces.empty()) {
+        return sorted_monraces;
+    }
+
+    for (const auto &pair : monraces_info) {
+        if (pair.second.is_valid()) {
+            sorted_monraces.emplace_back(pair.first, &pair.second);
+        }
+    }
+
+    std::stable_sort(sorted_monraces.begin(), sorted_monraces.end(), [](const auto &pair1, const auto &pair2) {
+        return pair2.second->order_level_strictly(*pair1.second);
+    });
+    return sorted_monraces;
+}
+
 /*!
  * @brief 合体/分離ユニーク判定
  * @param r_idx 調査対象のモンスター種族ID
