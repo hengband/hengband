@@ -10,13 +10,13 @@
 
 #include <vector>
 
-enum class MonsterRaceId : short;
+enum class MonraceId : short;
 class MonsterRaceInfo;
 class MonraceAllocationEntry {
 public:
     MonraceAllocationEntry() = default;
-    MonraceAllocationEntry(MonsterRaceId index, int level, short prob1, short prob2);
-    MonsterRaceId index{}; /* The actual index */
+    MonraceAllocationEntry(MonraceId index, int level, short prob1, short prob2);
+    MonraceId index{}; /* The actual index */
     int level; /* Base dungeon level */
     short prob1; /* Probability, pass 1 */
     short prob2; /* Probability, pass 2 */

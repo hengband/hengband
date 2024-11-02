@@ -97,7 +97,7 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
 
     if (bi_key.tval() == ItemKindType::STATUE) {
         const auto &monrace = o_ptr->get_monrace();
-        if (monrace.idx == MonsterRaceId::BULLGATES) {
+        if (monrace.idx == MonraceId::BULLGATES) {
             info[i++] = _("それは部屋に飾ると恥ずかしい。", "It is shameful.");
         } else if (monrace.misc_flags.has(MonsterMiscType::ELDRITCH_HORROR)) {
             info[i++] = _("それは部屋に飾ると恐い。", "It is fearful.");

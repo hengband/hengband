@@ -51,7 +51,7 @@ bool exchange_cash(PlayerType *player_ptr)
             continue;
         }
 
-        if (item.get_monrace().idx != MonsterRaceId::TSUCHINOKO) {
+        if (item.get_monrace().idx != MonraceId::TSUCHINOKO) {
             continue;
         }
 
@@ -74,7 +74,7 @@ bool exchange_cash(PlayerType *player_ptr)
             continue;
         }
 
-        if (item.get_monrace().idx != MonsterRaceId::TSUCHINOKO) {
+        if (item.get_monrace().idx != MonraceId::TSUCHINOKO) {
             continue;
         }
 
@@ -97,7 +97,7 @@ bool exchange_cash(PlayerType *player_ptr)
             continue;
         }
 
-        if (item.get_monrace().idx != MonsterRaceId::TSUCHINOKO) {
+        if (item.get_monrace().idx != MonraceId::TSUCHINOKO) {
             continue;
         }
 
@@ -342,7 +342,7 @@ void determine_bounty_uniques(PlayerType *player_ptr)
     };
 
     // 賞金首とするモンスターの種族IDのリストを生成
-    std::vector<MonsterRaceId> bounty_monrace_ids;
+    std::vector<MonraceId> bounty_monrace_ids;
     auto &world = AngbandWorld::get_instance();
     while (bounty_monrace_ids.size() < std::size(world.bounties)) {
         const auto monrace_id = get_mon_num(player_ptr, 0, MAX_DEPTH - 1, PM_ARENA);

@@ -19,7 +19,7 @@ POSITION monster_target_x;
 POSITION monster_target_y;
 
 CapturedMonsterType::CapturedMonsterType()
-    : r_idx(MonsterRaceId::PLAYER)
+    : r_idx(MonraceId::PLAYER)
 {
 }
 

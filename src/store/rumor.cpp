@@ -124,7 +124,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
 
         // @details プレイヤーもダミーで入っているので、1つ引いておかないと数が合わなくなる.
         const auto monraces_size = static_cast<short>(monraces_info.size() - 1);
-        auto monrace_id = i2enum<MonsterRaceId>(get_rumor_num(monster_name, monraces_size));
+        auto monrace_id = i2enum<MonraceId>(get_rumor_num(monster_name, monraces_size));
         auto *r_ptr = &monraces_info[monrace_id];
         fullname = r_ptr->name;
         if (!r_ptr->r_sights) {

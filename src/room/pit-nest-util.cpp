@@ -74,7 +74,7 @@ std::optional<PitKind> pick_pit_type(const FloorType &floor, const std::map<PitK
  * @return モンスター種族ID (見つからなかったらnullopt)
  * @details Nestにはそのフロアの通常レベルより11高いモンスターを中心に選ぶ
  */
-std::optional<MonsterRaceId> select_pit_nest_monrace_id(PlayerType *player_ptr, MonsterEntity &align, int boost)
+std::optional<MonraceId> select_pit_nest_monrace_id(PlayerType *player_ptr, MonsterEntity &align, int boost)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     for (auto attempts = 100; attempts > 0; attempts--) {

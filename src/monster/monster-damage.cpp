@@ -216,7 +216,7 @@ void MonsterDamageProcessor::increase_kill_numbers()
         return;
     }
 
-    auto &shadower = MonraceList::get_instance().get_monrace(MonsterRaceId::KAGE);
+    auto &shadower = MonraceList::get_instance().get_monrace(MonraceId::KAGE);
     if (monster.mflag2.has(MonsterConstantFlagType::KAGE) && (shadower.r_pkills < MAX_SHORT)) {
         shadower.r_pkills++;
     } else if (monrace.r_pkills < MAX_SHORT) {
@@ -264,7 +264,7 @@ void MonsterDamageProcessor::dying_scream(std::string_view m_name)
     }
 
 #ifdef WORLD_SCORE
-    if (m_ptr->r_idx == MonsterRaceId::SERPENT) {
+    if (m_ptr->r_idx == MonraceId::SERPENT) {
         screen_dump = make_screen_dump(this->player_ptr);
     }
 #endif
@@ -383,7 +383,7 @@ void MonsterDamageProcessor::get_exp_from_mon(const MonsterEntity &monster, int 
     s64b_div(&new_exp, &new_exp_frac, div_h, div_l);
 
     /* Special penalty for mutiply-monster */
-    if (monrace.misc_flags.has(MonsterMiscType::MULTIPLY) || (monster.r_idx == MonsterRaceId::DAWN)) {
+    if (monrace.misc_flags.has(MonsterMiscType::MULTIPLY) || (monster.r_idx == MonraceId::DAWN)) {
         int monnum_penarty = monrace.r_akills / 400;
         if (monnum_penarty > 8) {
             monnum_penarty = 8;
@@ -429,8 +429,8 @@ void MonsterDamageProcessor::set_redraw()
 void MonsterDamageProcessor::summon_special_unique()
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    bool is_special_summon = m_ptr->r_idx == MonsterRaceId::IKETA;
-    is_special_summon |= m_ptr->r_idx == MonsterRaceId::DOPPIO;
+    bool is_special_summon = m_ptr->r_idx == MonraceId::IKETA;
+    is_special_summon |= m_ptr->r_idx == MonraceId::DOPPIO;
     if (!is_special_summon || this->player_ptr->current_floor_ptr->inside_arena || AngbandSystem::get_instance().is_phase_out()) {
         delete_monster_idx(this->player_ptr, this->m_idx);
         return;
@@ -443,15 +443,15 @@ void MonsterDamageProcessor::summon_special_unique()
         mode |= PM_FORCE_PET;
     }
 
-    MonsterRaceId new_unique_idx;
+    MonraceId new_unique_idx;
     concptr mes;
     switch (m_ptr->r_idx) {
-    case MonsterRaceId::IKETA:
-        new_unique_idx = MonsterRaceId::BIKETAL;
+    case MonraceId::IKETA:
+        new_unique_idx = MonraceId::BIKETAL;
         mes = _("「ハァッハッハッハ！！私がバイケタルだ！！」", "Uwa-hahaha!  *I* am Biketal!");
         break;
-    case MonsterRaceId::DOPPIO:
-        new_unique_idx = MonsterRaceId::DIAVOLO;
+    case MonraceId::DOPPIO:
+        new_unique_idx = MonraceId::DIAVOLO;
         mes = _("「これは『試練』だ　過去に打ち勝てという『試練』とオレは受けとった」", "This is a 'trial'. I took it as a 'trial' to overcome in the past.");
         break;
     default: // バグでなければ入らない.

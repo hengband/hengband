@@ -350,13 +350,13 @@ bool set_monster_timewalk(PlayerType *player_ptr, MONSTER_IDX m_idx, int num, bo
         const auto m_name = monster_desc(player_ptr, m_ptr, 0);
         std::string mes;
         switch (m_ptr->r_idx) {
-        case MonsterRaceId::DIO:
+        case MonraceId::DIO:
             mes = _("「『ザ・ワールド』！　時は止まった！」", format("%s yells 'The World! Time has stopped!'", m_name.data()));
             break;
-        case MonsterRaceId::WONG:
+        case MonraceId::WONG:
             mes = _("「時よ！」", format("%s yells 'Time!'", m_name.data()));
             break;
-        case MonsterRaceId::DIAVOLO:
+        case MonraceId::DIAVOLO:
             mes = _("『キング・クリムゾン』！", format("%s yells 'King Crison!'", m_name.data()));
             break;
         default:
@@ -400,7 +400,7 @@ bool set_monster_timewalk(PlayerType *player_ptr, MONSTER_IDX m_idx, int num, bo
     if (vs_player || should_output_message) {
         std::string mes;
         switch (m_ptr->r_idx) {
-        case MonsterRaceId::DIAVOLO:
+        case MonraceId::DIAVOLO:
             mes = _("これが我が『キング・クリムゾン』の能力！　『時間を消し去って』飛び越えさせた…！！",
                 "This is the ability of my 'King Crimson'! 'Erase the time' and let it jump over... !!");
             break;

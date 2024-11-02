@@ -405,7 +405,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
     coin_type = md_ptr->force_coin;
     floor.object_level = (floor.dun_level + md_ptr->r_ptr->level) / 2;
     drop_items_golds(player_ptr, md_ptr, drop_numbers);
-    if ((md_ptr->r_ptr->misc_flags.has_not(MonsterMiscType::QUESTOR)) || AngbandSystem::get_instance().is_phase_out() || (md_ptr->m_ptr->r_idx != MonsterRaceId::SERPENT) || md_ptr->cloned) {
+    if ((md_ptr->r_ptr->misc_flags.has_not(MonsterMiscType::QUESTOR)) || AngbandSystem::get_instance().is_phase_out() || (md_ptr->m_ptr->r_idx != MonraceId::SERPENT) || md_ptr->cloned) {
         return;
     }
 

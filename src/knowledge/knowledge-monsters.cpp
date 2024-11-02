@@ -46,7 +46,7 @@
  * @param mode 思い出の扱いに関するモード
  * @return 作成したモンスターのIDリスト
  */
-static std::vector<MonsterRaceId> collect_monsters(short grp_cur, monster_lore_mode mode)
+static std::vector<MonraceId> collect_monsters(short grp_cur, monster_lore_mode mode)
 {
     const auto &group_char = MONRACE_CHARACTERS_GROUP[grp_cur];
     const auto grp_unique = (MONRACE_CHARACTERS_GROUP[grp_cur] == "Uniques");
@@ -55,7 +55,7 @@ static std::vector<MonsterRaceId> collect_monsters(short grp_cur, monster_lore_m
     const auto grp_amberite = (MONRACE_CHARACTERS_GROUP[grp_cur] == "Amberites");
 
     const auto &monraces = MonraceList::get_instance();
-    std::vector<MonsterRaceId> monrace_ids;
+    std::vector<MonraceId> monrace_ids;
     for (const auto &[monrace_id, monrace] : monraces) {
         if (((mode != MONSTER_LORE_DEBUG) && (mode != MONSTER_LORE_RESEARCH)) && !cheat_know && !monrace.r_sights) {
             continue;
@@ -178,7 +178,7 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
     }
 
     const auto &monraces = MonraceList::get_instance();
-    std::vector<MonsterRaceId> monrace_ids = monraces.get_valid_monrace_ids();
+    std::vector<MonraceId> monrace_ids = monraces.get_valid_monrace_ids();
     std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
     for (const auto monrace_id : monrace_ids) {
         const auto &monrace = monraces.get_monrace(monrace_id);
@@ -233,7 +233,7 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
 /*
  * Display the monsters in a group.
  */
-static void display_monster_list(int col, int row, int per_page, const std::vector<MonsterRaceId> &mon_idx, int mon_cur, int mon_top, bool visual_only)
+static void display_monster_list(int col, int row, int per_page, const std::vector<MonraceId> &mon_idx, int mon_cur, int mon_top, bool visual_only)
 {
     const auto is_wizard = AngbandWorld::get_instance().wizard;
     const auto &monraces = MonraceList::get_instance();
@@ -276,12 +276,12 @@ static void display_monster_list(int col, int row, int per_page, const std::vect
  * @param direct_r_idx モンスターID
  * @todo 引数の詳細について加筆求む
  */
-void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool visual_only, std::optional<MonsterRaceId> direct_r_idx)
+void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool visual_only, std::optional<MonraceId> direct_r_idx)
 {
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, std::nullopt);
 
     const auto &[wid, hgt] = term_get_size();
-    std::vector<MonsterRaceId> monrace_ids;
+    std::vector<MonraceId> monrace_ids;
     std::vector<IDX> grp_idx;
 
     const auto max_element = std::max_element(MONSTER_KINDS_GROUP.begin(), MONSTER_KINDS_GROUP.end(),

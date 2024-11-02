@@ -340,7 +340,7 @@ static MULTIPLY calc_shot_damage_with_slay(
 
             auto can_eliminate_smaug = arrow_ptr->is_specific_artifact(FixedArtifactId::BARD_ARROW);
             can_eliminate_smaug &= player_ptr->inventory_list[INVEN_BOW].is_specific_artifact(FixedArtifactId::BARD);
-            can_eliminate_smaug &= monster_ptr->r_idx == MonsterRaceId::SMAUG;
+            can_eliminate_smaug &= monster_ptr->r_idx == MonraceId::SMAUG;
             if (can_eliminate_smaug) {
                 mult *= 5;
             }
@@ -1021,7 +1021,7 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, MonsterEntity *m_ptr, int
     ac = r_ptr->ac;
     ac = ac * (8 - sniper_concent) / 8;
 
-    if (m_ptr->r_idx == MonsterRaceId::GOEMON && !m_ptr->is_asleep()) {
+    if (m_ptr->r_idx == MonraceId::GOEMON && !m_ptr->is_asleep()) {
         ac *= 3;
     }
 
@@ -1032,7 +1032,7 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, MonsterEntity *m_ptr, int
 
     /* Power competes against armor */
     if (randint0(chance) < (ac * 3 / 4)) {
-        if (m_ptr->r_idx == MonsterRaceId::GOEMON && !m_ptr->is_asleep()) {
+        if (m_ptr->r_idx == MonraceId::GOEMON && !m_ptr->is_asleep()) {
             const auto m_name = monster_desc(player_ptr, m_ptr, 0);
             msg_format(_("%sは%sを斬り捨てた！", "%s cuts down %s!"), m_name.data(), item_name.data());
         }

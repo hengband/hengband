@@ -76,9 +76,9 @@ const std::vector<TrappedMonster> place_table_trapped_pit = {
 };
 // clang-format on
 
-std::optional<std::array<MonsterRaceId, NUM_PIT_MONRACES>> pick_pit_monraces(PlayerType *player_ptr, MonsterEntity &align, int boost = 0)
+std::optional<std::array<MonraceId, NUM_PIT_MONRACES>> pick_pit_monraces(PlayerType *player_ptr, MonsterEntity &align, int boost = 0)
 {
-    std::array<MonsterRaceId, NUM_PIT_MONRACES> whats{};
+    std::array<MonraceId, NUM_PIT_MONRACES> whats{};
     for (auto &what : whats) {
         const auto monrace_id = select_pit_nest_monrace_id(player_ptr, align, boost);
         if (!monrace_id) {
@@ -298,7 +298,7 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
  * @detai;
  * 穴を掘るモンスター、壁を抜けるモンスターは却下
  */
-static bool vault_aux_trapped_pit(PlayerType *player_ptr, MonsterRaceId r_idx)
+static bool vault_aux_trapped_pit(PlayerType *player_ptr, MonraceId r_idx)
 {
     /* Unused */
     (void)player_ptr;

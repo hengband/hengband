@@ -192,7 +192,7 @@ bool cast_summon_octopus(PlayerType *player_ptr)
     if (pet) {
         mode |= PM_FORCE_PET;
     }
-    if (summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, MonsterRaceId::JIZOTAKO, mode)) {
+    if (summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, MonraceId::JIZOTAKO, mode)) {
         if (pet) {
             msg_print(_("蛸があなたの下僕として出現した。", "A group of octopuses appear as your servants."));
         } else {
@@ -284,13 +284,13 @@ void mitokohmon(PlayerType *player_ptr)
 {
     int count = 0;
     [[maybe_unused]] concptr sukekakusan = "";
-    if (summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, MonsterRaceId::SUKE, PM_FORCE_PET)) {
+    if (summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, MonraceId::SUKE, PM_FORCE_PET)) {
         msg_print(_("『助さん』が現れた。", "Suke-san apperars."));
         sukekakusan = "Suke-san";
         count++;
     }
 
-    if (summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, MonsterRaceId::KAKU, PM_FORCE_PET)) {
+    if (summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, MonraceId::KAKU, PM_FORCE_PET)) {
         msg_print(_("『格さん』が現れた。", "Kaku-san appears."));
         sukekakusan = "Kaku-san";
         count++;
@@ -303,7 +303,7 @@ void mitokohmon(PlayerType *player_ptr)
             if (!m_ptr->is_valid()) {
                 continue;
             }
-            if (!((m_ptr->r_idx == MonsterRaceId::SUKE) || (m_ptr->r_idx == MonsterRaceId::KAKU))) {
+            if (!((m_ptr->r_idx == MonraceId::SUKE) || (m_ptr->r_idx == MonraceId::KAKU))) {
                 continue;
             }
             if (!los(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x)) {

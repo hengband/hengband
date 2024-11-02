@@ -117,7 +117,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
                 clone = true;
             }
 
-            const auto monrace_id = i2enum<MonsterRaceId>(monster_index);
+            const auto monrace_id = i2enum<MonraceId>(monster_index);
             auto &monrace = monraces.get_monrace(monrace_id);
             const auto old_cur_num = monrace.cur_num;
             const auto old_max_num = monrace.max_num;
@@ -204,7 +204,7 @@ static bool parse_qtw_QQ(QuestType *q_ptr, char **zz, int num)
     q_ptr->cur_num = (MONSTER_NUMBER)atoi(zz[4]);
     q_ptr->max_num = (MONSTER_NUMBER)atoi(zz[5]);
     q_ptr->level = (DEPTH)atoi(zz[6]);
-    q_ptr->r_idx = i2enum<MonsterRaceId>(atoi(zz[7]));
+    q_ptr->r_idx = i2enum<MonraceId>(atoi(zz[7]));
     const auto fa_id = i2enum<FixedArtifactId>(atoi(zz[8]));
     q_ptr->reward_fa_id = fa_id;
     q_ptr->dungeon = (DUNGEON_IDX)atoi(zz[9]);

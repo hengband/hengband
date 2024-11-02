@@ -7,7 +7,7 @@
 #include <tuple>
 #include <vector>
 
-enum class MonsterRaceId : short;
+enum class MonraceId : short;
 class MonsterRaceInfo;
 class MonsterEntity;
 class PlayerType;

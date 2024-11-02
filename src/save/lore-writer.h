@@ -1,7 +1,5 @@
 #pragma once
 
-#include "system/angband.h"
-
-enum class MonsterRaceId : int16_t;
+enum class MonraceId : short;
 class MonsterEntity;
-void wr_lore(MonsterRaceId r_idx);
+void wr_lore(MonraceId r_idx);

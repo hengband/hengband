@@ -432,7 +432,7 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
 bool explode_grenade(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    if (m_ptr->r_idx != MonsterRaceId::GRENADE) {
+    if (m_ptr->r_idx != MonraceId::GRENADE) {
         return false;
     }
 
@@ -451,7 +451,7 @@ void process_special(PlayerType *player_ptr, MONSTER_IDX m_idx)
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &m_ptr->get_monrace();
     auto can_do_special = r_ptr->ability_flags.has(MonsterAbilityType::SPECIAL);
-    can_do_special &= m_ptr->r_idx == MonsterRaceId::OHMU;
+    can_do_special &= m_ptr->r_idx == MonraceId::OHMU;
     can_do_special &= !player_ptr->current_floor_ptr->inside_arena;
     can_do_special &= !AngbandSystem::get_instance().is_phase_out();
     can_do_special &= r_ptr->freq_spell != 0;

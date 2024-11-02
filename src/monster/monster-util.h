@@ -4,9 +4,9 @@
 #include <functional>
 #include <optional>
 
-enum class MonsterRaceId : int16_t;
+enum class MonraceId : short;
 class PlayerType;
-using monsterrace_hook_type = std::function<bool(PlayerType *, MonsterRaceId)>;
+using monsterrace_hook_type = std::function<bool(PlayerType *, MonraceId)>;
 
 enum summon_type : int;
 

@@ -37,7 +37,7 @@ public:
 
     bounty_type bounties[MAX_BOUNTY]{}; //!< 賞金首ユニーク
     bool knows_daily_bounty{}; //!< 日替わり賞金首を知っているか否か
-    MonsterRaceId today_mon{}; //!< 実際の日替わり賞金首
+    MonraceId today_mon{}; //!< 実際の日替わり賞金首
 
     uint32_t play_time{}; /*!< 実プレイ時間 */
 

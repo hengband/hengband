@@ -59,8 +59,8 @@ static constexpr std::array<std::string_view, 6> wiz_spell_stat = { {
  */
 static auto get_mon_evol_roots()
 {
-    std::set<MonsterRaceId> evol_parents;
-    std::set<MonsterRaceId> evol_children;
+    std::set<MonraceId> evol_parents;
+    std::set<MonraceId> evol_children;
     const auto &monraces = MonraceList::get_instance();
     for (const auto &[monrace_id, monrace] : monraces) {
         if (monrace.get_next().is_valid()) {
@@ -69,7 +69,7 @@ static auto get_mon_evol_roots()
         }
     }
 
-    const auto evol_root_sort = [&monraces](MonsterRaceId i1, MonsterRaceId i2) {
+    const auto evol_root_sort = [&monraces](MonraceId i1, MonraceId i2) {
         const auto &monrace1 = monraces.get_monrace(i1);
         const auto &monrace2 = monraces.get_monrace(i2);
         if (monrace1.level != monrace2.level) {
@@ -81,7 +81,7 @@ static auto get_mon_evol_roots()
         return i1 <= i2;
     };
 
-    std::set<MonsterRaceId, decltype(evol_root_sort)> evol_roots(evol_root_sort);
+    std::set<MonraceId, decltype(evol_root_sort)> evol_roots(evol_root_sort);
     std::set_difference(evol_parents.begin(), evol_parents.end(), evol_children.begin(), evol_children.end(),
         std::inserter(evol_roots, evol_roots.end()));
 

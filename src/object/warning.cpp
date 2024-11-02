@@ -226,7 +226,7 @@ static void spell_damcalc(PlayerType *player_ptr, MonsterEntity *m_ptr, Attribut
         break;
 
     case AttributeType::CAUSE_4:
-        if ((100 + rlev / 2 <= player_ptr->skill_sav) && (m_ptr->r_idx != MonsterRaceId::KENSHIROU)) {
+        if ((100 + rlev / 2 <= player_ptr->skill_sav) && (m_ptr->r_idx != MonraceId::KENSHIROU)) {
             dam = 0;
             ignore_wraith_form = true;
         }

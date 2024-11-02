@@ -116,7 +116,7 @@ std::optional<std::string> get_random_line(concptr file_name, int entry)
 
     int test;
     auto line_num = 0;
-    const auto monrace_id = i2enum<MonsterRaceId>(entry);
+    const auto monrace_id = i2enum<MonraceId>(entry);
     const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
     while (true) {
         const auto line_str = angband_fgets(fp);

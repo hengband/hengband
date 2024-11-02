@@ -28,7 +28,7 @@
  * @details
  * Note that this function is one of the more "dangerous" ones...
  */
-static MonsterRaceId poly_r_idx(PlayerType *player_ptr, MonsterRaceId r_idx)
+static MonraceId poly_r_idx(PlayerType *player_ptr, MonraceId r_idx)
 {
     auto *r_ptr = &monraces_info[r_idx];
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->misc_flags.has(MonsterMiscType::QUESTOR)) {
@@ -37,7 +37,7 @@ static MonsterRaceId poly_r_idx(PlayerType *player_ptr, MonsterRaceId r_idx)
 
     DEPTH lev1 = r_ptr->level - ((randint1(20) / randint1(9)) + 1);
     DEPTH lev2 = r_ptr->level + ((randint1(20) / randint1(9)) + 1);
-    MonsterRaceId monrace_id;
+    MonraceId monrace_id;
     for (int i = 0; i < 1000; i++) {
         monrace_id = get_mon_num(player_ptr, 0, (player_ptr->current_floor_ptr->dun_level + r_ptr->level) / 2 + 5, PM_NONE);
         if (!MonraceList::is_valid(monrace_id)) {
@@ -72,8 +72,8 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-    MonsterRaceId new_r_idx;
-    MonsterRaceId old_r_idx = m_ptr->r_idx;
+    MonraceId new_r_idx;
+    MonraceId old_r_idx = m_ptr->r_idx;
     bool targeted = target_who == g_ptr->m_idx;
     auto health_tracked = HealthBarTracker::get_instance().is_tracking(g_ptr->m_idx);
 

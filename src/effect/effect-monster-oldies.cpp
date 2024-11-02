@@ -165,7 +165,7 @@ ProcessResult effect_monster_old_heal(PlayerType *player_ptr, EffectMonster *em_
     }
 
     effect_monster_old_heal_check_player(player_ptr, em_ptr);
-    if (em_ptr->m_ptr->r_idx == MonsterRaceId::LEPER) {
+    if (em_ptr->m_ptr->r_idx == MonraceId::LEPER) {
         em_ptr->heal_leper = true;
         if (is_player(em_ptr->src_idx)) {
             chg_virtue(player_ptr, Virtue::COMPASSION, 5);

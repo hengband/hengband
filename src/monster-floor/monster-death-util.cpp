@@ -18,19 +18,19 @@
  * Used to allocate proper treasure when "Creeping coins" die
  * Note the use of actual "monster names"
  */
-static int get_coin_type(MonsterRaceId r_idx)
+static int get_coin_type(MonraceId r_idx)
 {
     switch (r_idx) {
-    case MonsterRaceId::COPPER_COINS:
+    case MonraceId::COPPER_COINS:
         return 2;
-    case MonsterRaceId::SILVER_COINS:
+    case MonraceId::SILVER_COINS:
         return 5;
-    case MonsterRaceId::GOLD_COINS:
+    case MonraceId::GOLD_COINS:
         return 10;
-    case MonsterRaceId::MITHRIL_COINS:
-    case MonsterRaceId::MITHRIL_GOLEM:
+    case MonraceId::MITHRIL_COINS:
+    case MonraceId::MITHRIL_GOLEM:
         return 16;
-    case MonsterRaceId::ADAMANT_COINS:
+    case MonraceId::ADAMANT_COINS:
         return 17;
     default:
         return 0;

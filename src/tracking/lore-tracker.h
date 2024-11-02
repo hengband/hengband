@@ -1,6 +1,6 @@
 #pragma once
 
-enum class MonsterRaceId : short;
+enum class MonraceId : short;
 class MonsterRaceInfo;
 class LoreTracker {
 public:
@@ -12,14 +12,14 @@ public:
 
     static LoreTracker &get_instance();
     bool is_tracking() const;
-    bool is_tracking(MonsterRaceId trackee) const;
-    MonsterRaceId get_trackee() const;
+    bool is_tracking(MonraceId trackee) const;
+    MonraceId get_trackee() const;
     const MonsterRaceInfo &get_tracking_monrace() const;
-    void set_trackee(MonsterRaceId new_monrace_id);
+    void set_trackee(MonraceId new_monrace_id);
 
 private:
     LoreTracker() = default;
 
     static LoreTracker instance;
-    MonsterRaceId monrace_id{};
+    MonraceId monrace_id{};
 };

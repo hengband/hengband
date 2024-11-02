@@ -186,16 +186,16 @@ static bool spell_dispel(MonsterAbilityType spell)
  * @return 特殊魔法を使用するか否か
  * @details 分離/合体ユニークは常に使用しない (その前に判定済のため).
  */
-static bool decide_select_special(MonsterRaceId r_idx)
+static bool decide_select_special(MonraceId r_idx)
 {
     if (MonraceList::get_instance().is_separated(r_idx)) {
         return false;
     }
 
     switch (r_idx) {
-    case MonsterRaceId::OHMU:
+    case MonraceId::OHMU:
         return false;
-    case MonsterRaceId::ROLENTO:
+    case MonraceId::ROLENTO:
         return evaluate_percent(40);
     default:
         return one_in_(2);

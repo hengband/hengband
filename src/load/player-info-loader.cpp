@@ -192,7 +192,7 @@ void rd_bounty_uniques(PlayerType *player_ptr)
             is_achieved = rd_bool();
         }
 
-        bounty_monrace_id = i2enum<MonsterRaceId>(monrace_id);
+        bounty_monrace_id = i2enum<MonraceId>(monrace_id);
     }
 }
 

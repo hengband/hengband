@@ -52,7 +52,7 @@ std::string dice_to_string(int base_damage, int dice_num, int dice_side, int dic
  * @details
  * The higher the level, the fewer kills needed.
  */
-bool know_details(MonsterRaceId r_idx)
+bool know_details(MonraceId r_idx)
 {
     const auto &monrace = monraces_info[r_idx];
     const auto level = monrace.level;
@@ -85,7 +85,7 @@ bool know_details(MonsterRaceId r_idx)
  * the more damage an attack does, the more attacks you need
  * </pre>
  */
-bool know_blow_damage(MonsterRaceId r_idx, int i)
+bool know_blow_damage(MonraceId r_idx, int i)
 {
     const auto &monrace = monraces_info[r_idx];
     auto level = monrace.level;
@@ -120,7 +120,7 @@ bool know_blow_damage(MonsterRaceId r_idx, int i)
  */
 void add_lore_of_damage_skill(PlayerType *player_ptr, lore_type *lore_ptr, MonsterAbilityType ms_type, concptr msg, byte color)
 {
-    MonsterRaceId r_idx = lore_ptr->r_idx;
+    MonraceId r_idx = lore_ptr->r_idx;
 
     if (!know_details(r_idx) && !lore_ptr->know_everything) {
         // ダメージ量の情報なし

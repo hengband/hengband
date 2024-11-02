@@ -103,7 +103,7 @@ bool kawarimi(PlayerType *player_ptr, bool success)
     teleport_player(player_ptr, 10 + randint1(90), TELEPORT_SPONTANEOUS);
     constexpr int sv_wooden_statue = 0;
     ItemEntity item({ ItemKindType::STATUE, sv_wooden_statue });
-    item.pval = enum2i(MonsterRaceId::NINJA);
+    item.pval = enum2i(MonraceId::NINJA);
     (void)drop_near(player_ptr, &item, -1, y, x);
 
     if (success) {

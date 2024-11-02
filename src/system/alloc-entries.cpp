@@ -2,7 +2,7 @@
 #include "system/baseitem-info.h"
 #include "system/monster-race-info.h"
 
-MonraceAllocationEntry::MonraceAllocationEntry(MonsterRaceId index, int level, short prob1, short prob2)
+MonraceAllocationEntry::MonraceAllocationEntry(MonraceId index, int level, short prob1, short prob2)
     : index(index)
     , level(level)
     , prob1(prob1)

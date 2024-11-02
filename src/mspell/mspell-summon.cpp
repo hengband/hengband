@@ -91,7 +91,7 @@ static void decide_summon_kin_caster(
     bool mon_to_mon = target_type == MONSTER_TO_MONSTER;
     bool mon_to_player = target_type == MONSTER_TO_PLAYER;
 
-    if (m_ptr->r_idx == MonsterRaceId::SERPENT || m_ptr->r_idx == MonsterRaceId::ZOMBI_SERPENT) {
+    if (m_ptr->r_idx == MonraceId::SERPENT || m_ptr->r_idx == MonraceId::ZOMBI_SERPENT) {
         mspell_cast_msg_blind msg(_("%s^が何かをつぶやいた。", "%s^ mumbles."),
             _("%s^がダンジョンの主を召喚した。", "%s^ magically summons guardians of dungeons."),
             _("%s^がダンジョンの主を召喚した。", "%s^ magically summons guardians of dungeons."));
@@ -146,61 +146,61 @@ MonsterSpellResult spell_RF6_S_KIN(PlayerType *player_ptr, POSITION y, POSITION 
     decide_summon_kin_caster(player_ptr, m_idx, t_idx, target_type, m_name.data(), m_poss.data(), known);
     int count = 0;
     switch (m_ptr->r_idx) {
-    case MonsterRaceId::MENELDOR:
-    case MonsterRaceId::GWAIHIR:
-    case MonsterRaceId::THORONDOR:
+    case MonraceId::MENELDOR:
+    case MonraceId::GWAIHIR:
+    case MonraceId::THORONDOR:
         count += summon_EAGLE(player_ptr, y, x, rlev, m_idx);
         break;
-    case MonsterRaceId::BULLGATES:
+    case MonraceId::BULLGATES:
         count += summon_EDGE(player_ptr, y, x, rlev, m_idx);
         break;
-    case MonsterRaceId::SERPENT:
-    case MonsterRaceId::ZOMBI_SERPENT:
+    case MonraceId::SERPENT:
+    case MonraceId::ZOMBI_SERPENT:
         count += summon_guardian(player_ptr, y, x, rlev, m_idx, t_idx, target_type);
         break;
-    case MonsterRaceId::TIAMAT:
+    case MonraceId::TIAMAT:
         count += summon_HIGHEST_DRAGON(player_ptr, y, x, m_idx);
         break;
-    case MonsterRaceId::CALDARM:
+    case MonraceId::CALDARM:
         count += summon_LOCKE_CLONE(player_ptr, y, x, m_idx);
         break;
-    case MonsterRaceId::LOUSY:
+    case MonraceId::LOUSY:
         count += summon_LOUSE(player_ptr, y, x, rlev, m_idx);
         break;
-    case MonsterRaceId::VAIF:
+    case MonraceId::VAIF:
         count += summon_MOAI(player_ptr, y, x, rlev, m_idx);
         break;
-    case MonsterRaceId::DEMON_SLAYER_SENIOR:
+    case MonraceId::DEMON_SLAYER_SENIOR:
         count += summon_DEMON_SLAYER(player_ptr, y, x, m_idx);
         break;
-    case MonsterRaceId::ALDUIN:
+    case MonraceId::ALDUIN:
         count += summon_HIGHEST_DRAGON(player_ptr, y, x, m_idx);
         break;
-    case MonsterRaceId::MIRAAK:
+    case MonraceId::MIRAAK:
         count += summon_APOCRYPHA(player_ptr, y, x, m_idx);
         break;
-    case MonsterRaceId::IMHOTEP:
+    case MonraceId::IMHOTEP:
         count += summon_PYRAMID(player_ptr, y, x, rlev, m_idx);
         break;
-    case MonsterRaceId::JOBZ:
+    case MonraceId::JOBZ:
         count += summon_EYE_PHORN(player_ptr, y, x, rlev, m_idx);
         break;
-    case MonsterRaceId::QUEEN_VESPOID:
+    case MonraceId::QUEEN_VESPOID:
         count += summon_VESPOID(player_ptr, y, x, rlev, m_idx);
         break;
-    case MonsterRaceId::YENDOR_WIZARD_1:
+    case MonraceId::YENDOR_WIZARD_1:
         count += summon_YENDER_WIZARD(player_ptr, y, x, m_idx);
         break;
-    case MonsterRaceId::LEE_QIEZI:
+    case MonraceId::LEE_QIEZI:
         msg_print(_("しかし、誰も来てくれなかった…。", "However, no one answered the call..."));
         break;
-    case MonsterRaceId::THUNDERS:
+    case MonraceId::THUNDERS:
         count += summon_THUNDERS(player_ptr, y, x, rlev, m_idx);
         break;
-    case MonsterRaceId::OOTSUKI:
+    case MonraceId::OOTSUKI:
         count += summon_PLASMA(player_ptr, y, x, rlev, m_idx);
         break;
-    case MonsterRaceId::LAFFEY_II:
+    case MonraceId::LAFFEY_II:
         count += summon_LAFFEY_II(player_ptr, Pos2D(y, x), m_idx);
         break;
     default:

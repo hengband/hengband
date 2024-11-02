@@ -68,7 +68,7 @@ static ProcessResult is_affective(EffectMonster *em_ptr)
     if (is_monster(em_ptr->src_idx) && (em_ptr->g_ptr->m_idx == em_ptr->src_idx)) {
         return ProcessResult::PROCESS_FALSE;
     }
-    if (sukekaku && ((em_ptr->m_ptr->r_idx == MonsterRaceId::SUKE) || (em_ptr->m_ptr->r_idx == MonsterRaceId::KAKU))) {
+    if (sukekaku && ((em_ptr->m_ptr->r_idx == MonraceId::SUKE) || (em_ptr->m_ptr->r_idx == MonraceId::KAKU))) {
         return ProcessResult::PROCESS_FALSE;
     }
     if (em_ptr->m_ptr->hp < 0) {

@@ -4,6 +4,7 @@
 #include "monster/monster-timed-effects.h"
 #include "monster/smart-learn-types.h"
 #include "object/object-index-list.h"
+#include "system/angband.h"
 #include "util/flag-group.h"
 #include <map>
 #include <string>
@@ -17,7 +18,7 @@
  */
 constexpr int MONSTER_MAXHP = 30000; //!< モンスターの最大HP
 
-enum class MonsterRaceId : int16_t;
+enum class MonraceId : short;
 class FloorType;
 class MonsterRaceInfo;
 class MonsterEntityWriter;
@@ -25,8 +26,8 @@ class MonsterEntity {
 public:
     friend class MonsterEntityWriter;
     MonsterEntity();
-    MonsterRaceId r_idx{}; /*!< モンスターの実種族ID (これが0の時は死亡扱いになる) / Monster race index 0 = dead. */
-    MonsterRaceId ap_r_idx{}; /*!< モンスターの外見種族ID（あやしい影、たぬき、ジュラル星人誤認などにより変化する）Monster race appearance index */
+    MonraceId r_idx{}; /*!< モンスターの実種族ID (これが0の時は死亡扱いになる) / Monster race index 0 = dead. */
+    MonraceId ap_r_idx{}; /*!< モンスターの外見種族ID（あやしい影、たぬき、ジュラル星人誤認などにより変化する）Monster race appearance index */
     FloorType *current_floor_ptr{}; /*!< 所在フロアID（現状はFloorType構造体によるオブジェクトは1つしかないためソースコード設計上の意義以外はない）*/
 
 /* Sub-alignment flags for neutral monsters */
@@ -70,7 +71,7 @@ public:
     bool is_original_ap() const;
     bool is_mimicry() const;
     bool is_valid() const;
-    MonsterRaceId get_real_monrace_id() const;
+    MonraceId get_real_monrace_id() const;
     MonsterRaceInfo &get_real_monrace() const;
     MonsterRaceInfo &get_appearance_monrace() const;
     MonsterRaceInfo &get_monrace() const;

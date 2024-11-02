@@ -27,7 +27,7 @@
  * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
  * @return 召喚対象にできるならばTRUE
  */
-static bool summon_specific_okay(PlayerType *player_ptr, MonsterRaceId r_idx, summon_type type, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
+static bool summon_specific_okay(PlayerType *player_ptr, MonraceId r_idx, summon_type type, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
 {
     auto *r_ptr = &monraces_info[r_idx];
     if (!mon_hook_dungeon(player_ptr, r_idx)) {
@@ -67,7 +67,7 @@ static bool summon_specific_okay(PlayerType *player_ptr, MonsterRaceId r_idx, su
         auto *m_ptr = &floor.m_list[*summoner_m_idx];
         return check_summon_specific(player_ptr, m_ptr->r_idx, r_idx, type);
     } else {
-        return check_summon_specific(player_ptr, MonsterRaceId::PLAYER, r_idx, type);
+        return check_summon_specific(player_ptr, MonraceId::PLAYER, r_idx, type);
     }
 }
 
@@ -125,7 +125,7 @@ std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, 
         return std::nullopt;
     }
 
-    auto summon_specific_hook = [type, mode, summoner_m_idx](PlayerType *player_ptr, MonsterRaceId r_idx) {
+    auto summon_specific_hook = [type, mode, summoner_m_idx](PlayerType *player_ptr, MonraceId r_idx) {
         return summon_specific_okay(player_ptr, r_idx, type, mode, summoner_m_idx);
     };
     get_mon_num_prep(player_ptr, std::move(summon_specific_hook), get_monster_hook2(player_ptr, y, x), type);
@@ -176,9 +176,9 @@ std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, 
  * @param mode 生成オプション
  * @return 召喚に成功したらモンスターID、失敗したらstd::nullopt
  */
-std::optional<MONSTER_IDX> summon_named_creature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION oy, POSITION ox, MonsterRaceId r_idx, BIT_FLAGS mode)
+std::optional<MONSTER_IDX> summon_named_creature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION oy, POSITION ox, MonraceId r_idx, BIT_FLAGS mode)
 {
-    if (!MonraceList::is_valid(r_idx) || (r_idx >= static_cast<MonsterRaceId>(monraces_info.size()))) {
+    if (!MonraceList::is_valid(r_idx) || (r_idx >= static_cast<MonraceId>(monraces_info.size()))) {
         return false;
     }
 

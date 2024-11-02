@@ -62,7 +62,7 @@ static void load_quest_details(PlayerType *player_ptr, QuestType *q_ptr, const Q
     q_ptr->max_num = rd_s16b();
     q_ptr->type = i2enum<QuestKindType>(rd_s16b());
 
-    q_ptr->r_idx = i2enum<MonsterRaceId>(rd_s16b());
+    q_ptr->r_idx = i2enum<MonraceId>(rd_s16b());
     if ((q_ptr->type == QuestKindType::RANDOM) && !q_ptr->get_bounty().is_valid()) {
         auto &quests = QuestList::get_instance();
         determine_random_questor(player_ptr, quests.get_quest(loading_quest_id));

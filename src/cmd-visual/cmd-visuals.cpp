@@ -246,7 +246,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     }
 
                     const auto new_monrace_id = *new_monrace_id_opt;
-                    monrace_id = i2enum<MonsterRaceId>(new_monrace_id);
+                    monrace_id = i2enum<MonraceId>(new_monrace_id);
                     num = new_monrace_id;
                     break;
                 }

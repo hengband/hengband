@@ -107,10 +107,10 @@ void OtherItemsEnchanter::generate_figurine()
 {
     const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto &monraces = MonraceList::get_instance();
-    MonsterRaceId monrace_id;
+    MonraceId monrace_id;
     while (true) {
         monrace_id = monraces.pick_id_at_random();
-        if (!item_monster_okay(this->player_ptr, monrace_id) || (monrace_id == MonsterRaceId::TSUCHINOKO)) {
+        if (!item_monster_okay(this->player_ptr, monrace_id) || (monrace_id == MonraceId::TSUCHINOKO)) {
             continue;
         }
 
@@ -147,7 +147,7 @@ void OtherItemsEnchanter::generate_corpse()
     get_mon_num_prep(this->player_ptr, item_monster_okay, nullptr);
     const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto &monraces = MonraceList::get_instance();
-    MonsterRaceId monrace_id;
+    MonraceId monrace_id;
     while (true) {
         monrace_id = get_mon_num(this->player_ptr, 0, floor.dun_level, PM_NONE);
         const auto &monrace = monraces.get_monrace(monrace_id);

@@ -36,7 +36,7 @@ lore_msg::lore_msg(std::string_view msg, byte color)
 {
 }
 
-lore_type::lore_type(MonsterRaceId r_idx, monster_lore_mode mode)
+lore_type::lore_type(MonraceId r_idx, monster_lore_mode mode)
     : r_idx(r_idx)
     , mode(mode)
     , msex(MonsterSex::NONE)

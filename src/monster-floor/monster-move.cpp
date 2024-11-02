@@ -554,7 +554,7 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &monster = floor.m_list[m_idx];
     constexpr auto chance_noise = 20;
-    if (monster.ap_r_idx == MonsterRaceId::CYBER && one_in_(chance_noise) && !monster.ml && (monster.cdis <= MAX_PLAYER_SIGHT)) {
+    if (monster.ap_r_idx == MonraceId::CYBER && one_in_(chance_noise) && !monster.ml && (monster.cdis <= MAX_PLAYER_SIGHT)) {
         if (disturb_minor) {
             disturb(player_ptr, false, false);
         }

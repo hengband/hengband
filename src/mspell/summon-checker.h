@@ -1,8 +1,6 @@
 #pragma once
 
-#include "system/angband.h"
-
 enum summon_type : int;
-enum class MonsterRaceId : int16_t;
+enum class MonraceId : short;
 class PlayerType;
-bool check_summon_specific(PlayerType *player_ptr, MonsterRaceId summoner_idx, MonsterRaceId r_idx, summon_type type);
+bool check_summon_specific(PlayerType *player_ptr, MonraceId summoner_idx, MonraceId r_idx, summon_type type);
