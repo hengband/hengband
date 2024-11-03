@@ -19,26 +19,26 @@ store_type *st_ptr = nullptr;
  * @param i_idx 増やしたいアイテムのインベントリID
  * @param num 増やしたい数
  */
-void store_item_increase(INVENTORY_IDX i_idx, ITEM_NUMBER num)
+void store_item_increase(short i_idx, int item_num)
 {
     ItemEntity *o_ptr;
     o_ptr = &st_ptr->stock[i_idx];
-    int cnt = o_ptr->number + num;
+    int cnt = o_ptr->number + item_num;
     if (cnt > 255) {
         cnt = 255;
     } else if (cnt < 0) {
         cnt = 0;
     }
 
-    num = cnt - o_ptr->number;
-    o_ptr->number += num;
+    item_num = cnt - o_ptr->number;
+    o_ptr->number += item_num;
 }
 
 /*!
  * @brief 店舗のオブジェクト数を削除する
  * @param i_idx 削除したいアイテムのID
  */
-void store_item_optimize(INVENTORY_IDX i_idx)
+void store_item_optimize(short i_idx)
 {
     const auto *o_ptr = &st_ptr->stock[i_idx];
     if (!o_ptr->is_valid() || (o_ptr->number != 0)) {
@@ -54,16 +54,11 @@ void store_item_optimize(INVENTORY_IDX i_idx)
 }
 
 /*!
- * @brief 店舗の品揃え変化のためにアイテムを削除する /
- * Attempt to delete (some of) a random item from the store
- * @details
- * <pre>
- * Hack -- we attempt to "maintain" piles of items when possible.
- * </pre>
+ * @brief 店舗の品揃え変化のためにアイテムを削除する
  */
-void store_delete(void)
+void store_delete()
 {
-    INVENTORY_IDX what = (INVENTORY_IDX)randint0(st_ptr->stock_num);
+    const auto what = randnum0<short>(st_ptr->stock_num);
     int num = st_ptr->stock[what].number;
     if (one_in_(2)) {
         num = (num + 1) / 2;
@@ -85,12 +80,11 @@ void store_delete(void)
  * @brief 店舗販売中の杖と魔法棒のpvalのリストを返す
  * @param j_ptr これから売ろうとしているオブジェクト
  * @return plavリスト(充填数)
- * @details
- * 回数の違う杖と魔法棒がスロットを圧迫するのでスロット数制限をかける
+ * @details 回数の違う杖と魔法棒がスロットを圧迫するのでスロット数制限をかける
  */
-std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(ItemEntity *j_ptr)
+std::vector<short> store_same_magic_device_pvals(ItemEntity *j_ptr)
 {
-    auto list = std::vector<PARAMETER_VALUE>();
+    auto list = std::vector<short>();
     for (INVENTORY_IDX i = 0; i < st_ptr->stock_num; i++) {
         auto *o_ptr = &st_ptr->stock[i];
         if ((o_ptr == j_ptr) || (o_ptr->bi_id != j_ptr->bi_id) || !o_ptr->is_wand_staff()) {
@@ -211,17 +205,9 @@ static void store_object_absorb(ItemEntity *o_ptr, ItemEntity *j_ptr)
 }
 
 /*!
- * @brief 店舗にオブジェクトを加える /
- * Add the item "o_ptr" to a real stores inventory.
+ * @brief 店舗にオブジェクトを加える
  * @param o_ptr 加えたいオブジェクトの構造体参照ポインタ
- * @return 収めた先のID
- * @details
- * <pre>
- * In all cases, return the slot (or -1) where the object was placed
- * Note that this is a hacked up version of "store_item_to_inventory()".
- * Also note that it may not correctly "adapt" to "knowledge" bacoming
- * known, the player may have to pick stuff up and drop it again.
- * </pre>
+ * @return 収めた先の商品インデックス、但し無価値アイテムは店頭に並べない.
  */
 int store_carry(ItemEntity *o_ptr)
 {
