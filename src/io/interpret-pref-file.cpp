@@ -336,18 +336,14 @@ static bool interpret_v_token(char *buf)
 static void interpret_xy_token(PlayerType *player_ptr, char *buf)
 {
     const auto &world = AngbandWorld::get_instance();
-    for (int i = 0; option_info[i].o_desc; i++) {
-        bool is_option = option_info[i].o_var != nullptr;
-        is_option &= option_info[i].o_text != nullptr;
-        is_option &= streq(option_info[i].o_text, buf + 2);
-        if (!is_option) {
+    for (auto &option : option_info) {
+        if (option.text != buf + 2) {
             continue;
         }
 
-        int os = option_info[i].o_set;
-        int ob = option_info[i].o_bit;
-
-        if ((player_ptr->playing || world.character_xtra) && (OPT_PAGE_BIRTH == option_info[i].o_page) && !world.wizard) {
+        int os = option.flag_position;
+        int ob = option.offset;
+        if ((player_ptr->playing || world.character_xtra) && (GameOptionPage::BIRTH == option.page) && !world.wizard) {
             msg_format(_("初期オプションは変更できません! '%s'", "Birth options can not be changed! '%s'"), buf);
             msg_print(nullptr);
             return;
@@ -355,12 +351,12 @@ static void interpret_xy_token(PlayerType *player_ptr, char *buf)
 
         if (buf[0] == 'X') {
             g_option_flags[os] &= ~(1UL << ob);
-            (*option_info[i].o_var) = false;
+            *option.value = false;
             return;
         }
 
         g_option_flags[os] |= (1UL << ob);
-        (*option_info[i].o_var) = true;
+        *option.value = true;
         return;
     }
 

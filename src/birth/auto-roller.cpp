@@ -16,6 +16,8 @@
 #include "term/term-color-types.h"
 #include "term/z-form.h"
 #include "util/int-char-converter.h"
+#include <string>
+#include <vector>
 
 /*! オートローラの能力値的要求水準 / Autoroll limit */
 int16_t stat_limit[6];
@@ -328,7 +330,7 @@ bool get_stat_limits(PlayerType *player_ptr)
             break;
         case '=':
             screen_save();
-            do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
+            do_cmd_options_aux(player_ptr, GameOptionPage::BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
             screen_load();
             break;
         default:
@@ -365,8 +367,7 @@ void initialize_chara_limit(chara_limit_type *chara_limit_ptr)
  */
 bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
 {
-    concptr itemname[] = { _("年齢", "age"), _("身長(cm)", "height"), _("体重(kg)", "weight"), _("社会的地位", "social class") };
-
+    static const std::vector<std::string> item_names = { _("年齢", "age"), _("身長(cm)", "height"), _("体重(kg)", "weight"), _("社会的地位", "social class") };
     clear_from(10);
     put_str(_("2/4/6/8で項目選択、+/-で値の増減、Enterで次へ", "2/4/6/8 for Select, +/- for Change value, Enter for Goto next"), 11, 10);
     put_str(
@@ -449,7 +450,7 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
     }
 
     for (int i = 0; i < 4; i++) {
-        auto buf = format("%-12s (%3d - %3d)", itemname[i], mval[i * 2], mval[i * 2 + 1]);
+        auto buf = format("%-12s (%3d - %3d)", item_names[i].data(), mval[i * 2], mval[i * 2 + 1]);
         put_str(buf, 14 + i, 20);
         for (int j = 0; j < 2; j++) {
             buf = format("     %3d", cval[i * 2 + j]);
@@ -599,7 +600,7 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
             break;
         case '=':
             screen_save();
-            do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
+            do_cmd_options_aux(player_ptr, GameOptionPage::BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
             screen_load();
             break;
         default:

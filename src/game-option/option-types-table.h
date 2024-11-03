@@ -1,28 +1,23 @@
 #pragma once
 
-#include "system/angband.h"
+#include <cstdint>
+#include <optional>
+#include <string>
 #include <vector>
 
-/*
- * Available "options"
- *	- Address of actual option variable (or nullptr)
- *	- Normal Value (TRUE or FALSE)
- *	- Option Page Number (or zero)
- *	- Savefile Set (or zero)
- *	- Savefile Bit in that set
- *	- Textual name (or nullptr)
- *	- Textual description
- */
-struct option_type {
-    bool *o_var{};
-    byte o_norm{};
-    byte o_page{};
-    byte o_set{};
-    byte o_bit{};
-    concptr o_text{};
-    concptr o_desc{};
+enum class GameOptionPage : int;
+class GameOption {
+public:
+    GameOption(bool *value, bool norm, uint8_t set, uint8_t bits, std::string &&text, std::string &&description, const std::optional<GameOptionPage> &page = std::nullopt);
+    bool *value;
+    bool default_value;
+    uint8_t flag_position;
+    uint8_t offset;
+    std::string text;
+    std::string description;
+    std::optional<GameOptionPage> page;
 };
 
-extern const std::vector<option_type> option_info;
-extern const std::vector<option_type> cheat_info;
-extern const std::vector<option_type> autosave_info;
+extern const std::vector<GameOption> option_info;
+extern const std::vector<GameOption> cheat_info;
+extern const std::vector<GameOption> autosave_info;
