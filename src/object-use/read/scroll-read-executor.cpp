@@ -309,7 +309,7 @@ bool ScrollReadExecutor::read()
     case SV_SCROLL_PROTECTION_FROM_EVIL: {
         const auto k = 3 * this->player_ptr->lev;
         BodyImprovement improvement(this->player_ptr);
-        improvement.mod_protection(randint1(25) + k, false);
+        improvement.mod_protection(randint1(25) + k);
         if (improvement.has_effect()) {
             this->ident = true;
         }

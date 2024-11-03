@@ -29,9 +29,9 @@ bool cleansing_nova(PlayerType *player_ptr, bool magic, bool powerful)
     const short turns = randint1(25) + k;
     BodyImprovement improvement(player_ptr);
     if (magic) {
-        improvement.set_protection(turns, false);
+        improvement.set_protection(turns);
     } else {
-        improvement.mod_protection(turns, false);
+        improvement.mod_protection(turns);
     }
 
     if (improvement.has_effect()) {

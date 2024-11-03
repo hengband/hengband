@@ -23,18 +23,18 @@ bool BodyImprovement::has_effect() const
     return this->is_affected;
 }
 
-void BodyImprovement::mod_protection(short v, bool do_dec)
+void BodyImprovement::mod_protection(short v, bool is_decrease)
 {
-    this->set_protection(this->player_ptr->effects()->protection().current() + v, do_dec);
+    this->set_protection(this->player_ptr->effects()->protection().current() + v, is_decrease);
 }
 
 /*!
  * @brief 対邪悪結界の継続時間をセットする
  * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @param is_decrease ターン経過による減少か魔力消去の場合のみtrue
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-void BodyImprovement::set_protection(short v, bool do_dec)
+void BodyImprovement::set_protection(short v, bool is_decrease)
 {
     this->is_affected = false;
     auto notice = false;
@@ -47,7 +47,7 @@ void BodyImprovement::set_protection(short v, bool do_dec)
     auto &protection = this->player_ptr->effects()->protection();
     const auto is_protected = protection.is_protected();
     if (v) {
-        if (is_protected && !do_dec) {
+        if (is_protected && !is_decrease) {
             if (protection.is_larger_than(v)) {
                 return;
             }
