@@ -14,7 +14,7 @@
 #include "io/input-key-acceptor.h"
 #include "io/write-diary.h"
 #include "main/sound-of-music.h"
-#include "system/game-option-types.h"
+#include "system/enums/game-option-page.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
@@ -27,16 +27,16 @@
 #include "view/display-messages.h"
 #include "view/display-symbol.h"
 #include "world/world.h"
+#include <string>
 
-#define OPT_NUM 15
-
+namespace {
 struct opts {
     char key;
-    concptr name;
+    std::string name;
     int row;
 };
 
-static opts option_fields[OPT_NUM] = {
+const std::vector<opts> option_fields = {
     { '1', _("    キー入力     オプション", "Input Options"), 3 },
     { '2', _("   マップ画面    オプション", "Map Screen Options"), 4 },
     { '3', _("  テキスト表示   オプション", "Text Display Options"), 5 },
@@ -55,6 +55,7 @@ static opts option_fields[OPT_NUM] = {
     { 'b', _("      初期       オプション (参照のみ)", "Birth Options (Browse Only)"), 18 },
     { 'c', _("      詐欺       オプション", "Cheat Options"), 19 },
 };
+}
 
 /*!
  * @brief セーブ頻度ターンの次の値を返す
@@ -444,7 +445,7 @@ void do_cmd_options(PlayerType *player_ptr)
     screen_save();
     const auto &world = AngbandWorld::get_instance();
     while (true) {
-        int n = OPT_NUM;
+        auto n = std::ssize(option_fields);
         if (!world.noscore && !allow_debug_opts) {
             n--;
         }
@@ -457,7 +458,7 @@ void do_cmd_options(PlayerType *player_ptr)
                 if (i == y) {
                     a = TERM_L_BLUE;
                 }
-                term_putstr(5, option_fields[i].row, -1, a, format("(%c) %s", toupper(option_fields[i].key), option_fields[i].name));
+                term_putstr(5, option_fields[i].row, -1, a, format("(%c) %s", toupper(option_fields[i].key), option_fields[i].name.data()));
             }
 
             prt(_("<方向>で移動, Enterで決定, ESCでキャンセル, ?でヘルプ: ", "Move to <dir>, Select to Enter, Cancel to ESC, ? to help: "), 21, 0);
@@ -651,7 +652,7 @@ void do_cmd_options(PlayerType *player_ptr)
  * @param page オプションページ番号
  * @param info 表示メッセージ
  */
-void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr info)
+void do_cmd_options_aux(PlayerType *player_ptr, game_option_page page, concptr info)
 {
     char ch;
     int i, k = 0, n = 0, l;

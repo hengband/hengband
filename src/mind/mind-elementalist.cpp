@@ -54,8 +54,8 @@
 #include "spell-kind/spells-world.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
+#include "system/enums/game-option-page.h"
 #include "system/floor-type-definition.h"
-#include "system/game-option-types.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -990,7 +990,7 @@ void display_element_spell_list(PlayerType *player_ptr, int y, int x)
  * @param type 魔法攻撃属性
  * @return 効果があるならTRUE、なければFALSE
  */
-bool is_elemental_genocide_effective(MonsterRaceInfo *r_ptr, AttributeType type)
+static bool is_elemental_genocide_effective(MonsterRaceInfo *r_ptr, AttributeType type)
 {
     switch (type) {
     case AttributeType::FIRE:

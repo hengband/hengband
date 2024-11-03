@@ -9,7 +9,7 @@
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
-#include "system/game-option-types.h"
+#include "system/enums/game-option-page.h"
 
 /*!
  * @brief オプションテーブル /

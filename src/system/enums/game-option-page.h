@@ -1,6 +1,6 @@
 #pragma once
 
-enum game_option_types {
+enum game_option_page : int {
     OPT_PAGE_INPUT,
     OPT_PAGE_MAPSCREEN,
     OPT_PAGE_TEXT,
