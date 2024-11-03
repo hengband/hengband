@@ -943,6 +943,7 @@ hengband_SOURCES = \
 	system/gamevalue.h \
 	\
 	system/enums/game-option-page.h \
+	system/enums/grid-flow.h \
 	\
 	target/grid-selector.cpp target/grid-selector.h \
 	target/projection-path-calculator.cpp target/projection-path-calculator.h \

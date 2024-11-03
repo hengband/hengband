@@ -43,6 +43,7 @@
 #include "player/player-status.h"
 #include "room/rooms-builder.h"
 #include "system/dungeon-info.h"
+#include "system/enums/grid-flow.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -667,7 +668,7 @@ void update_flow(PlayerType *player_ptr)
     flow_y = player_ptr->y;
     flow_x = player_ptr->x;
 
-    for (auto i = 0; i < FLOW_MAX; i++) {
+    for (const auto gf : GRID_FLOW_RANGE) {
         // 幅優先探索用のキュー。
         std::queue<Pos2D> que;
         que.emplace(player_ptr->y, player_ptr->x);
@@ -680,8 +681,8 @@ void update_flow(PlayerType *player_ptr)
 
             /* Add the "children" */
             for (auto d = 0; d < 8; d++) {
-                byte m = grid.costs[i] + 1;
-                byte n = grid.dists[i] + 1;
+                uint8_t m = grid.costs.at(gf) + 1;
+                const uint8_t n = grid.dists.at(gf) + 1;
                 const Pos2D pos_neighbor(pos.y + ddy_ddd[d], pos.x + ddx_ddd[d]);
 
                 /* Ignore player's grid */
@@ -695,14 +696,16 @@ void update_flow(PlayerType *player_ptr)
                 }
 
                 /* Ignore "pre-stamped" entries */
-                if ((grid_neighbor.dists[i] != 0) && (grid_neighbor.dists[i] <= n) && (grid_neighbor.costs[i] <= m)) {
+                auto &cost_neighbor = grid_neighbor.costs.at(gf);
+                auto &dist_neighbor = grid_neighbor.dists.at(gf);
+                if ((dist_neighbor != 0) && (dist_neighbor <= n) && (cost_neighbor <= m)) {
                     continue;
                 }
 
                 /* Ignore "walls", "holes" and "rubble" */
                 auto can_move = false;
-                switch (i) {
-                case FLOW_CAN_FLY:
+                switch (gf) {
+                case GridFlow::CAN_FLY:
                     can_move = grid_neighbor.cave_has_flag(TerrainCharacteristics::MOVE) || grid_neighbor.cave_has_flag(TerrainCharacteristics::CAN_FLY);
                     break;
                 default:
@@ -715,11 +718,11 @@ void update_flow(PlayerType *player_ptr)
                 }
 
                 /* Save the flow cost */
-                if (grid_neighbor.costs[i] == 0 || (grid_neighbor.costs[i] > m)) {
-                    grid_neighbor.costs[i] = m;
+                if (cost_neighbor == 0 || (cost_neighbor > m)) {
+                    cost_neighbor = m;
                 }
-                if (grid_neighbor.dists[i] == 0 || (grid_neighbor.dists[i] > n)) {
-                    grid_neighbor.dists[i] = n;
+                if (dist_neighbor == 0 || (dist_neighbor > n)) {
+                    dist_neighbor = n;
                 }
 
                 // 敵のプレイヤーに対する移動道のりの最大値(この値以上は処理を打ち切る).

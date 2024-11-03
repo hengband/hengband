@@ -5463,6 +5463,9 @@
     <ClInclude Include="..\..\src\system\enums\game-option-page.h">
       <Filter>system\enums</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\system\enums\grid-flow.h">
+      <Filter>system\enums</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

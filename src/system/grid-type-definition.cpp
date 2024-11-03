@@ -2,9 +2,17 @@
 #include "monster/monster-util.h"
 #include "room/door-definition.h"
 #include "system/angband-system.h"
-#include "system/monster-race-info.h"
+#include "system/enums/grid-flow.h"
 #include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
+
+Grid::Grid()
+{
+    for (const auto gf : GRID_FLOW_RANGE) {
+        this->costs[gf] = 0;
+        this->dists[gf] = 0;
+    }
+}
 
 /*!
  * @brief 指定座標がFLOOR属性を持ったマスかどうかを返す
@@ -98,19 +106,14 @@ bool Grid::has_monster() const
     return is_monster(this->m_idx);
 }
 
-byte Grid::get_cost(const MonsterRaceInfo *r_ptr) const
+uint8_t Grid::get_cost(GridFlow gf) const
 {
-    return this->costs[get_grid_flow_type(r_ptr)];
+    return this->costs.at(gf);
 }
 
-byte Grid::get_distance(const MonsterRaceInfo *r_ptr) const
+uint8_t Grid::get_distance(GridFlow gf) const
 {
-    return this->dists[get_grid_flow_type(r_ptr)];
-}
-
-flow_type Grid::get_grid_flow_type(const MonsterRaceInfo *r_ptr) const
-{
-    return r_ptr->feature_flags.has(MonsterFeatureType::CAN_FLY) ? FLOW_CAN_FLY : FLOW_NORMAL;
+    return this->dists.at(gf);
 }
 
 /*
@@ -140,15 +143,15 @@ bool Grid::is_symbol(const int ch) const
 
 void Grid::reset_costs()
 {
-    for (auto &cost : this->costs) {
-        cost = 0;
+    for (const auto gf : GRID_FLOW_RANGE) {
+        this->costs[gf] = 0;
     }
 }
 
 void Grid::reset_dists()
 {
-    for (auto &dist : this->dists) {
-        dist = 0;
+    for (const auto gf : GRID_FLOW_RANGE) {
+        this->dists[gf] = 0;
     }
 }
 

@@ -64,6 +64,7 @@ public:
  * monster recall (no knowledge of spells, etc).  All of the "recall"
  * fields have a special prefix to aid in searching for them.
  */
+enum class GridFlow : int;
 class DropArtifact;
 class Reinforce;
 class MonsterRaceInfo {
@@ -154,6 +155,7 @@ public:
     const std::vector<DropArtifact> &get_drop_artifacts() const;
     const std::vector<Reinforce> &get_reinforces() const;
     bool can_generate() const;
+    GridFlow get_grid_flow_type() const;
 
     void init_sex(uint32_t value);
     std::optional<std::string> probe_lore();
