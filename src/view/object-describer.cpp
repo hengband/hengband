@@ -47,10 +47,10 @@ void inven_item_charges(const ItemEntity &item)
  */
 void inven_item_describe(PlayerType *player_ptr, short i_idx)
 {
-    auto *o_ptr = &player_ptr->inventory_list[i_idx];
-    const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
+    const auto &item = player_ptr->inventory_list[i_idx];
+    const auto item_name = describe_flavor(player_ptr, item, 0);
 #ifdef JP
-    if (o_ptr->number <= 0) {
+    if (item.number <= 0) {
         msg_format("もう%sを持っていない。", item_name.data());
     } else {
         msg_format("まだ %sを持っている。", item_name.data());

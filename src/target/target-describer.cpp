@@ -238,8 +238,8 @@ static void describe_monster_person(GridExamination *ge_ptr)
 static short describe_monster_item(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
     for (const auto this_o_idx : ge_ptr->m_ptr->hold_o_idx_list) {
-        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-        const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
+        const auto &item = player_ptr->current_floor_ptr->o_list[this_o_idx];
+        const auto item_name = describe_flavor(player_ptr, item, 0);
 #ifdef JP
         const auto out_val = format("%s%s%s%s[%s]", ge_ptr->s1, item_name.data(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
 #else
@@ -307,8 +307,8 @@ static short describe_footing(PlayerType *player_ptr, GridExamination *ge_ptr)
         return CONTINUOUS_DESCRIPTION;
     }
 
-    auto *o_ptr = &player_ptr->current_floor_ptr->o_list[ge_ptr->floor_list[0]];
-    const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
+    const auto &item = player_ptr->current_floor_ptr->o_list[ge_ptr->floor_list[0]];
+    const auto item_name = describe_flavor(player_ptr, item, 0);
 #ifdef JP
     const auto out_val = format("%s%s%s%s[%s]", ge_ptr->s1, item_name.data(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
 #else
@@ -393,14 +393,14 @@ static short loop_describing_grid(PlayerType *player_ptr, GridExamination *ge_pt
     }
 }
 
-static short describe_footing_sight(PlayerType *player_ptr, GridExamination *ge_ptr, ItemEntity *o_ptr)
+static short describe_footing_sight(PlayerType *player_ptr, GridExamination *ge_ptr, const ItemEntity &item)
 {
-    if (o_ptr->marked.has_not(OmType::FOUND)) {
+    if (item.marked.has_not(OmType::FOUND)) {
         return CONTINUOUS_DESCRIPTION;
     }
 
     ge_ptr->boring = false;
-    const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, item, 0);
 #ifdef JP
     const auto out_val = format("%s%s%s%s[%s]", ge_ptr->s1, item_name.data(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
 #else
@@ -417,11 +417,7 @@ static short describe_footing_sight(PlayerType *player_ptr, GridExamination *ge_
         return ge_ptr->query;
     }
 
-    ge_ptr->s1 = _("それは", "It is ");
-    if (o_ptr->number != 1) {
-        ge_ptr->s1 = _("それらは", "They are ");
-    }
-
+    ge_ptr->s1 = item.number == 1 ? _("それは", "It is ") : _("それらは", "They are ");
 #ifdef JP
     ge_ptr->s2 = "の上";
     ge_ptr->s3 = "に見える";
@@ -434,8 +430,8 @@ static short describe_footing_sight(PlayerType *player_ptr, GridExamination *ge_
 static int16_t sweep_footing_items(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
     for (const auto this_o_idx : ge_ptr->g_ptr->o_idx_list) {
-        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-        const auto ret = describe_footing_sight(player_ptr, ge_ptr, o_ptr);
+        const auto &item = player_ptr->current_floor_ptr->o_list[this_o_idx];
+        const auto ret = describe_footing_sight(player_ptr, ge_ptr, item);
         if (within_char_util(ret)) {
             return (char)ret;
         }
