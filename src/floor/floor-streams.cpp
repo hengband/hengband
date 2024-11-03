@@ -351,16 +351,16 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
 
                 /* Scan all objects in the grid */
                 for (const auto this_o_idx : grid.o_idx_list) {
-                    auto *o_ptr = &floor.o_list[this_o_idx];
+                    auto &item = floor.o_list[this_o_idx];
 
                     /* Hack -- Preserve unknown artifacts */
-                    if (o_ptr->is_fixed_artifact()) {
-                        o_ptr->get_fixed_artifact().is_generated = false;
+                    if (item.is_fixed_artifact()) {
+                        item.get_fixed_artifact().is_generated = false;
                         if (cheat_peek) {
-                            const auto item_name = describe_flavor(player_ptr, *o_ptr, (OD_NAME_ONLY | OD_STORE));
+                            const auto item_name = describe_flavor(player_ptr, item, (OD_NAME_ONLY | OD_STORE));
                             msg_format(_("伝説のアイテム (%s) はストリーマーにより削除された。", "Artifact (%s) was deleted by streamer."), item_name.data());
                         }
-                    } else if (cheat_peek && o_ptr->is_random_artifact()) {
+                    } else if (cheat_peek && item.is_random_artifact()) {
                         msg_print(_("ランダム・アーティファクトの1つはストリーマーにより削除された。", "One of the random artifacts was deleted by streamer."));
                     }
                 }
