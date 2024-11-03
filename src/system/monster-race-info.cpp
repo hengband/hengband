@@ -309,9 +309,9 @@ bool MonsterRaceInfo::can_generate() const
     return can_generate;
 }
 
-flow_type MonsterRaceInfo::get_grid_flow_type() const
+GridFlow MonsterRaceInfo::get_grid_flow_type() const
 {
-    return this->feature_flags.has(MonsterFeatureType::CAN_FLY) ? FLOW_CAN_FLY : FLOW_NORMAL;
+    return this->feature_flags.has(MonsterFeatureType::CAN_FLY) ? GridFlow::CAN_FLY : GridFlow::NORMAL;
 }
 
 void MonsterRaceInfo::init_sex(uint32_t value)

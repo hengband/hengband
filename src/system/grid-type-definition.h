@@ -39,7 +39,7 @@
 
 // clang-format on
 
-enum flow_type : int;
+enum class GridFlow : int;
 class TerrainType;
 enum class TerrainCharacteristics;
 class Grid {
@@ -60,8 +60,8 @@ public:
 
     FEAT_IDX mimic{}; /* Feature to mimic */
 
-    std::map<flow_type, uint8_t> costs; //!< Cost of flowing
-    std::map<flow_type, uint8_t> dists; //!< Distance from player
+    std::map<GridFlow, uint8_t> costs; //!< Cost of flowing
+    std::map<GridFlow, uint8_t> dists; //!< Distance from player
     byte when{}; /* Hack -- when cost was computed */
 
     bool is_floor() const;
@@ -80,8 +80,8 @@ public:
     bool is_rune_protection() const;
     bool is_rune_explosion() const;
     bool has_monster() const;
-    uint8_t get_cost(flow_type gf) const;
-    uint8_t get_distance(flow_type gf) const;
+    uint8_t get_cost(GridFlow gf) const;
+    uint8_t get_distance(GridFlow gf) const;
     FEAT_IDX get_feat_mimic() const;
     bool cave_has_flag(TerrainCharacteristics feature_flags) const;
     bool is_symbol(const int ch) const;

@@ -106,12 +106,12 @@ bool Grid::has_monster() const
     return is_monster(this->m_idx);
 }
 
-uint8_t Grid::get_cost(flow_type gf) const
+uint8_t Grid::get_cost(GridFlow gf) const
 {
     return this->costs.at(gf);
 }
 
-uint8_t Grid::get_distance(flow_type gf) const
+uint8_t Grid::get_distance(GridFlow gf) const
 {
     return this->dists.at(gf);
 }

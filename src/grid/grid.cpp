@@ -705,7 +705,7 @@ void update_flow(PlayerType *player_ptr)
                 /* Ignore "walls", "holes" and "rubble" */
                 auto can_move = false;
                 switch (gf) {
-                case FLOW_CAN_FLY:
+                case GridFlow::CAN_FLY:
                     can_move = grid_neighbor.cave_has_flag(TerrainCharacteristics::MOVE) || grid_neighbor.cave_has_flag(TerrainCharacteristics::CAN_FLY);
                     break;
                 default:

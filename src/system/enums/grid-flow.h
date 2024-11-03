@@ -2,10 +2,10 @@
 
 #include "util/enum-range.h"
 
-enum flow_type : int {
-    FLOW_NORMAL = 0,
-    FLOW_CAN_FLY = 1,
-    FLOW_MAX = 2,
+enum class GridFlow : int {
+    NORMAL = 0,
+    CAN_FLY = 1,
+    MAX = 2,
 };
 
-constexpr EnumRange<flow_type> GRID_FLOW_RANGE(FLOW_NORMAL, FLOW_MAX);
+constexpr EnumRange<GridFlow> GRID_FLOW_RANGE(GridFlow::NORMAL, GridFlow::MAX);

@@ -328,7 +328,7 @@ bool MonsterSweepGrid::sweep_ranged_attack_grid(POSITION *yp, POSITION *xp)
     }
 
     const auto gf = r_ptr->get_grid_flow_type();
-    auto now_cost = (int)floor_ptr->grid_array[y1][x1].get_cost(gf);
+    int now_cost = floor_ptr->grid_array[y1][x1].get_cost(gf);
     if (now_cost == 0) {
         now_cost = 999;
     }
