@@ -135,7 +135,6 @@ bool ident_spell(PlayerType *player_ptr, bool only_equip)
     }
 
     auto old_known = identify_item(player_ptr, o_ptr);
-
     const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
     if (i_idx >= INVEN_MAIN_HAND) {
         msg_format(_("%s^: %s(%c)。", "%s^: %s (%c)."), describe_use(player_ptr, i_idx), item_name.data(), index_to_label(i_idx));
@@ -176,19 +175,15 @@ bool identify_fully(PlayerType *player_ptr, bool only_equip)
     }
 
     constexpr auto s = _("*鑑定*するべきアイテムがない。", "You have nothing to *identify*.");
-
     short i_idx;
     auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
-    if (!o_ptr) {
+    if (o_ptr == nullptr) {
         return false;
     }
 
     auto old_known = identify_item(player_ptr, o_ptr);
-
     o_ptr->ident |= (IDENT_FULL_KNOWN);
-
     window_stuff(player_ptr);
-
     const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
     if (i_idx >= INVEN_MAIN_HAND) {
         msg_format(_("%s^: %s(%c)。", "%s^: %s (%c)."), describe_use(player_ptr, i_idx), item_name.data(), index_to_label(i_idx));

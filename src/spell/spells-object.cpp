@@ -201,14 +201,14 @@ void acquirement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool
 bool curse_armor(PlayerType *player_ptr)
 {
     /* Curse the body armor */
-    auto *o_ptr = &player_ptr->inventory_list[INVEN_BODY];
-    if (!o_ptr->is_valid()) {
+    auto &item = player_ptr->inventory_list[INVEN_BODY];
+    if (!item.is_valid()) {
         return false;
     }
 
-    const auto item_name = describe_flavor(player_ptr, *o_ptr, OD_OMIT_PREFIX);
+    const auto item_name = describe_flavor(player_ptr, item, OD_OMIT_PREFIX);
 
-    if (o_ptr->is_fixed_or_random_artifact() && one_in_(2)) {
+    if (item.is_fixed_or_random_artifact() && one_in_(2)) {
 #ifdef JP
         msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返した！", "恐怖の暗黒オーラ", "防具", item_name.data());
 #else
@@ -219,16 +219,16 @@ bool curse_armor(PlayerType *player_ptr)
 
     msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), item_name.data());
     chg_virtue(player_ptr, Virtue::ENCHANT, -5);
-    o_ptr->fa_id = FixedArtifactId::NONE;
-    o_ptr->ego_idx = EgoType::BLASTED;
-    o_ptr->to_a = 0 - randint1(5) - randint1(5);
-    o_ptr->to_h = 0;
-    o_ptr->to_d = 0;
-    o_ptr->ac = 0;
-    o_ptr->damage_dice = Dice(0, 0);
-    o_ptr->art_flags.clear();
-    o_ptr->curse_flags.set(CurseTraitType::CURSED);
-    o_ptr->ident |= IDENT_BROKEN;
+    item.fa_id = FixedArtifactId::NONE;
+    item.ego_idx = EgoType::BLASTED;
+    item.to_a = 0 - randint1(5) - randint1(5);
+    item.to_h = 0;
+    item.to_d = 0;
+    item.ac = 0;
+    item.damage_dice = Dice(0, 0);
+    item.art_flags.clear();
+    item.curse_flags.set(CurseTraitType::CURSED);
+    item.ident |= IDENT_BROKEN;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
@@ -478,7 +478,7 @@ bool enchant_spell(PlayerType *player_ptr, HIT_PROB num_hit, int num_dam, ARMOUR
     short i_idx;
     const auto options = USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT;
     auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, options, item_tester);
-    if (!o_ptr) {
+    if (o_ptr == nullptr) {
         return false;
     }
 
