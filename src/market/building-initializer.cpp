@@ -14,6 +14,7 @@
 #include "util/angband-files.h"
 #include <filesystem>
 #include <set>
+#include <utility>
 #include <vector>
 
 /*!
@@ -57,7 +58,12 @@ void init_towns()
             }
 
             store_ptr->stock_size = store_get_stock_max(sst);
-            store_ptr->stock = std::make_unique<ItemEntity[]>(store_ptr->stock_size);
+            std::vector<std::unique_ptr<ItemEntity>> stock;
+            for (auto j = 0; j < store_ptr->stock_size; j++) {
+                stock.push_back(std::make_unique<ItemEntity>());
+            }
+
+            store_ptr->stock = std::move(stock);
             if ((sst == StoreSaleType::BLACK) || (sst == StoreSaleType::HOME) || (sst == StoreSaleType::MUSEUM)) {
                 continue;
             }

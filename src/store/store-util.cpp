@@ -21,17 +21,16 @@ store_type *st_ptr = nullptr;
  */
 void store_item_increase(short i_idx, int item_num)
 {
-    ItemEntity *o_ptr;
-    o_ptr = &st_ptr->stock[i_idx];
-    int cnt = o_ptr->number + item_num;
+    auto &item = st_ptr->stock[i_idx];
+    auto cnt = item->number + item_num;
     if (cnt > 255) {
         cnt = 255;
     } else if (cnt < 0) {
         cnt = 0;
     }
 
-    item_num = cnt - o_ptr->number;
-    o_ptr->number += item_num;
+    item_num = cnt - item->number;
+    item->number += item_num;
 }
 
 /*!
@@ -40,17 +39,17 @@ void store_item_increase(short i_idx, int item_num)
  */
 void store_item_optimize(short i_idx)
 {
-    const auto *o_ptr = &st_ptr->stock[i_idx];
-    if (!o_ptr->is_valid() || (o_ptr->number != 0)) {
+    const auto &item = st_ptr->stock[i_idx];
+    if (!item->is_valid() || (item->number != 0)) {
         return;
     }
 
     st_ptr->stock_num--;
     for (int j = i_idx; j < st_ptr->stock_num; j++) {
-        st_ptr->stock[j] = st_ptr->stock[j + 1];
+        *st_ptr->stock[j] = *st_ptr->stock[j + 1];
     }
 
-    (&st_ptr->stock[st_ptr->stock_num])->wipe();
+    st_ptr->stock[st_ptr->stock_num]->wipe();
 }
 
 /*!
@@ -59,7 +58,7 @@ void store_item_optimize(short i_idx)
 void store_delete()
 {
     const auto what = randnum0<short>(st_ptr->stock_num);
-    int num = st_ptr->stock[what].number;
+    int num = st_ptr->stock[what]->number;
     if (one_in_(2)) {
         num = (num + 1) / 2;
     }
@@ -68,8 +67,8 @@ void store_delete()
         num = 1;
     }
 
-    if (st_ptr->stock[what].is_wand_rod()) {
-        st_ptr->stock[what].pval -= num * st_ptr->stock[what].pval / st_ptr->stock[what].number;
+    if (st_ptr->stock[what]->is_wand_rod()) {
+        st_ptr->stock[what]->pval -= num * st_ptr->stock[what]->pval / st_ptr->stock[what]->number;
     }
 
     store_item_increase(what, -num);
@@ -86,12 +85,12 @@ std::vector<short> store_same_magic_device_pvals(ItemEntity *j_ptr)
 {
     auto list = std::vector<short>();
     for (INVENTORY_IDX i = 0; i < st_ptr->stock_num; i++) {
-        auto *o_ptr = &st_ptr->stock[i];
-        if ((o_ptr == j_ptr) || (o_ptr->bi_id != j_ptr->bi_id) || !o_ptr->is_wand_staff()) {
+        auto &item = st_ptr->stock[i];
+        if ((item.get() == j_ptr) || (item->bi_id != j_ptr->bi_id) || !item->is_wand_staff()) {
             continue;
         }
 
-        list.push_back(o_ptr->pval);
+        list.push_back(item->pval);
     }
 
     return list;
@@ -221,10 +220,9 @@ int store_carry(ItemEntity *o_ptr)
     o_ptr->feeling = FEEL_NONE;
     int slot;
     for (slot = 0; slot < st_ptr->stock_num; slot++) {
-        ItemEntity *j_ptr;
-        j_ptr = &st_ptr->stock[slot];
-        if (store_object_similar(j_ptr, o_ptr)) {
-            store_object_absorb(j_ptr, o_ptr);
+        auto &item = st_ptr->stock[slot];
+        if (store_object_similar(item.get(), o_ptr)) {
+            store_object_absorb(item.get(), o_ptr);
             return slot;
         }
     }
@@ -236,9 +234,9 @@ int store_carry(ItemEntity *o_ptr)
     const auto o_tval = o_ptr->bi_key.tval();
     const auto o_sval = o_ptr->bi_key.sval();
     for (slot = 0; slot < st_ptr->stock_num; slot++) {
-        const auto *j_ptr = &st_ptr->stock[slot];
-        const auto j_tval = j_ptr->bi_key.tval();
-        const auto j_sval = j_ptr->bi_key.sval();
+        const auto &item = st_ptr->stock[slot];
+        const auto j_tval = item->bi_key.tval();
+        const auto j_sval = item->bi_key.sval();
         if (o_tval > j_tval) {
             break;
         }
@@ -256,15 +254,15 @@ int store_carry(ItemEntity *o_ptr)
         }
 
         if (o_tval == ItemKindType::ROD) {
-            if (o_ptr->pval < j_ptr->pval) {
+            if (o_ptr->pval < item->pval) {
                 break;
             }
-            if (o_ptr->pval > j_ptr->pval) {
+            if (o_ptr->pval > item->pval) {
                 continue;
             }
         }
 
-        auto j_value = j_ptr->get_price();
+        auto j_value = item->get_price();
         if (value > j_value) {
             break;
         }
@@ -275,10 +273,10 @@ int store_carry(ItemEntity *o_ptr)
     }
 
     for (int i = st_ptr->stock_num; i > slot; i--) {
-        st_ptr->stock[i] = st_ptr->stock[i - 1];
+        *st_ptr->stock[i] = *st_ptr->stock[i - 1];
     }
 
     st_ptr->stock_num++;
-    st_ptr->stock[slot] = *o_ptr;
+    *st_ptr->stock[slot] = *o_ptr;
     return slot;
 }

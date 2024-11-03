@@ -541,7 +541,7 @@ static void dump_aux_home_museum(PlayerType *player_ptr, FILE *fff)
                 fprintf(fff, _("\n ( %d ページ )\n", "\n ( page %d )\n"), page++);
             }
 
-            const auto item_name = describe_flavor(player_ptr, &store_ptr->stock[i], 0);
+            const auto item_name = describe_flavor(player_ptr, store_ptr->stock[i].get(), 0);
             fprintf(fff, "%c) %s\n", I2A(i % 12), item_name.data());
         }
 
@@ -562,7 +562,7 @@ static void dump_aux_home_museum(PlayerType *player_ptr, FILE *fff)
             fprintf(fff, _("\n ( %d ページ )\n", "\n ( page %d )\n"), page++);
         }
 
-        const auto item_name = describe_flavor(player_ptr, &store_ptr->stock[i], 0);
+        const auto item_name = describe_flavor(player_ptr, store_ptr->stock[i].get(), 0);
         fprintf(fff, "%c) %s\n", I2A(i % 12), item_name.data());
     }
 
