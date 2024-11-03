@@ -107,7 +107,7 @@ std::vector<short> store_same_magic_device_pvals(ItemEntity *j_ptr)
  * See "object_similar()" for the same function for the "player"
  * </pre>
  */
-bool store_object_similar(ItemEntity *o_ptr, ItemEntity *j_ptr)
+bool store_object_similar(const ItemEntity *o_ptr, const ItemEntity *j_ptr)
 {
     if (o_ptr == j_ptr) {
         return false;

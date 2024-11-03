@@ -102,7 +102,7 @@ static int check_free_space(StoreSaleType store_num)
  *  1 : Cannot be combined but there are empty spaces.
  * </pre>
  */
-int store_check_num(ItemEntity *o_ptr, StoreSaleType store_num)
+int store_check_num(const ItemEntity *o_ptr, StoreSaleType store_num)
 {
     if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM)) {
         bool old_stack_force_notes = stack_force_notes;
