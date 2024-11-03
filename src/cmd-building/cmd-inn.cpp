@@ -5,6 +5,7 @@
 #include "io/write-diary.h"
 #include "market/bounty.h"
 #include "market/building-actions-table.h"
+#include "object/tval-types.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/magic-eater-data-type.h"
