@@ -314,8 +314,8 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
             break;
         }
 
-        auto o_ptr = &player_ptr->inventory_list[i];
-        auto do_disp = player_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(o_ptr);
+        const auto &item = player_ptr->inventory_list[i];
+        auto do_disp = player_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(&item);
         std::string tmp_val = "   ";
 
         if (do_disp) {
@@ -334,17 +334,17 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
             item_name = _("(武器を両手持ち)", "(wielding with two-hands)");
             attr = TERM_WHITE;
         } else {
-            item_name = describe_flavor(player_ptr, *o_ptr, 0);
-            attr = tval_to_attr[enum2i(o_ptr->bi_key.tval()) % 128];
+            item_name = describe_flavor(player_ptr, item, 0);
+            attr = tval_to_attr[enum2i(item.bi_key.tval()) % 128];
         }
 
         int n = item_name.length();
-        if (o_ptr->timeout) {
+        if (item.timeout) {
             attr = TERM_L_DARK;
         }
 
         if (show_item_graph) {
-            term_queue_bigchar(cur_col, cur_row, { o_ptr->get_symbol(), {} });
+            term_queue_bigchar(cur_col, cur_row, { item.get_symbol(), {} });
             if (use_bigtile) {
                 cur_col++;
             }
@@ -354,7 +354,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
 
         term_putstr(cur_col, cur_row, n, attr, item_name);
         if (show_weights) {
-            int wgt = o_ptr->weight * o_ptr->number;
+            int wgt = item.weight * item.number;
             tmp_val = format(_("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
             prt(tmp_val, cur_row, wid - (show_labels ? 28 : 9));
         }
