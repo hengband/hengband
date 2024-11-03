@@ -110,15 +110,15 @@ static std::pair<short, ItemEntity *> select_repairing_broken_weapon(PlayerType 
     return { i_idx, o_ptr };
 }
 
-static void display_reparing_weapon(PlayerType *player_ptr, ItemEntity *o_ptr, const int row)
+static void display_reparing_weapon(PlayerType *player_ptr, const ItemEntity &item, const int row)
 {
-    const auto item_name = describe_flavor(player_ptr, *o_ptr, OD_NAME_ONLY);
+    const auto item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
     prt(format(_("修復する武器　： %s", "Repairing: %s"), item_name.data()), row + 3, 2);
 }
 
-static void display_repair_success_message(PlayerType *player_ptr, ItemEntity *o_ptr, const int cost)
+static void display_repair_success_message(PlayerType *player_ptr, const ItemEntity &item, const int cost)
 {
-    const auto item_name = describe_flavor(player_ptr, *o_ptr, OD_NAME_ONLY);
+    const auto item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
 #ifdef JP
     msg_format("＄%dで%sに修復しました。", cost, item_name.data());
 #else
@@ -142,7 +142,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         return 0;
     }
 
-    display_reparing_weapon(player_ptr, o_ptr, row);
+    display_reparing_weapon(player_ptr, *o_ptr, row);
     constexpr auto q = _("材料となる武器は？", "Which weapon for material? ");
     constexpr auto s = _("材料となる武器がありません。", "You have no material for the repair.");
     short mater;
@@ -291,7 +291,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         msg_print(_("これはかなりの業物だったようだ。", "This blade seems to be exceptional."));
     }
 
-    display_repair_success_message(player_ptr, o_ptr, cost);
+    display_repair_success_message(player_ptr, *o_ptr, cost);
     o_ptr->ident &= ~(IDENT_BROKEN);
     o_ptr->discount = 99;
 
