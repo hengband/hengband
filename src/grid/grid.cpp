@@ -743,27 +743,22 @@ void update_flow(PlayerType *player_ptr)
  */
 void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainCharacteristics action)
 {
-    /* Set old feature */
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    FEAT_IDX oldfeat = floor_ptr->grid_array[y][x].feat;
-
-    /* Get the new feat */
-    const auto &dungeon = floor_ptr->get_dungeon_definition();
-    FEAT_IDX newfeat = dungeon.convert_terrain_id(oldfeat, action);
-
-    /* No change */
-    if (newfeat == oldfeat) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto old_terrain_id = floor.get_grid({ y, x }).feat;
+    const auto &dungeon = floor.get_dungeon_definition();
+    const auto new_terrain_id = dungeon.convert_terrain_id(old_terrain_id, action);
+    if (new_terrain_id == old_terrain_id) {
         return;
     }
 
     /* Set the new feature */
-    cave_set_feat(player_ptr, y, x, newfeat);
+    cave_set_feat(player_ptr, y, x, new_terrain_id);
     const auto &terrains = TerrainList::get_instance();
     const auto &world = AngbandWorld::get_instance();
     if (!(terrain_action_flags[enum2i(action)] & FAF_NO_DROP)) {
-        const auto &old_terrain = terrains.get_terrain(oldfeat);
-        const auto &new_terrain = terrains.get_terrain(newfeat);
-        bool found = false;
+        const auto &old_terrain = terrains.get_terrain(old_terrain_id);
+        const auto &new_terrain = terrains.get_terrain(new_terrain_id);
+        auto found = false;
 
         /* Handle gold */
         if (old_terrain.flags.has(TerrainCharacteristics::HAS_GOLD) && new_terrain.flags.has_not(TerrainCharacteristics::HAS_GOLD)) {
@@ -773,7 +768,7 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
         }
 
         /* Handle item */
-        if (old_terrain.flags.has(TerrainCharacteristics::HAS_ITEM) && new_terrain.flags.has_not(TerrainCharacteristics::HAS_ITEM) && evaluate_percent(15 - floor_ptr->dun_level / 2)) {
+        if (old_terrain.flags.has(TerrainCharacteristics::HAS_ITEM) && new_terrain.flags.has_not(TerrainCharacteristics::HAS_ITEM) && evaluate_percent(15 - floor.dun_level / 2)) {
             /* Place object */
             place_object(player_ptr, y, x, 0L);
             found = true;
@@ -785,9 +780,9 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
     }
 
     if (terrain_action_flags[enum2i(action)] & FAF_CRASH_GLASS) {
-        const auto &old_terrain = terrains.get_terrain(oldfeat);
+        const auto &old_terrain = terrains.get_terrain(old_terrain_id);
         if (old_terrain.flags.has(TerrainCharacteristics::GLASS) && world.character_dungeon) {
-            project(player_ptr, PROJECT_WHO_GLASS_SHARDS, 1, y, x, std::min(floor_ptr->dun_level, 100) / 4, AttributeType::SHARDS,
+            project(player_ptr, PROJECT_WHO_GLASS_SHARDS, 1, y, x, std::min(floor.dun_level, 100) / 4, AttributeType::SHARDS,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }
     }
