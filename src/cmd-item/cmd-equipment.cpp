@@ -81,7 +81,7 @@ static void do_curse_on_equip(OBJECT_IDX slot, ItemEntity *o_ptr, PlayerType *pl
         return;
     }
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
     msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), item_name.data());
     o_ptr->feeling = FEEL_NONE;
@@ -221,7 +221,7 @@ void do_cmd_wield(PlayerType *player_ptr)
     }
 
     if (player_ptr->inventory_list[slot].is_cursed()) {
-        const auto item_name = describe_flavor(player_ptr, &player_ptr->inventory_list[slot], OD_OMIT_PREFIX | OD_NAME_ONLY);
+        const auto item_name = describe_flavor(player_ptr, player_ptr->inventory_list[slot], OD_OMIT_PREFIX | OD_NAME_ONLY);
 #ifdef JP
         msg_format("%s%sは呪われているようだ。", describe_use(player_ptr, slot), item_name.data());
 #else
@@ -234,7 +234,7 @@ void do_cmd_wield(PlayerType *player_ptr)
     should_equip_cursed |= any_bits(o_ptr->ident, IDENT_SENSE) && (FEEL_BROKEN <= o_ptr->feeling) && (o_ptr->feeling <= FEEL_CURSED);
     should_equip_cursed &= confirm_wear;
     if (should_equip_cursed) {
-        const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        const auto item_name = describe_flavor(player_ptr, *o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         if (!input_check(format(_("本当に%s{呪われている}を使いますか？", "Really use the %s {cursed}? "), item_name.data()))) {
             return;
         }
@@ -246,7 +246,7 @@ void do_cmd_wield(PlayerType *player_ptr)
     should_change_vampire &= !pr.equals(PlayerRaceType::VAMPIRE);
     should_change_vampire &= !pr.equals(PlayerRaceType::ANDROID);
     if (should_change_vampire) {
-        const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        const auto item_name = describe_flavor(player_ptr, *o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         constexpr auto mes = _("%sを装備すると吸血鬼になります。よろしいですか？",
             "%s will transform you into a vampire permanently when equipped. Do you become a vampire? ");
         if (!input_check(format(mes, item_name.data()))) {
@@ -260,7 +260,7 @@ void do_cmd_wield(PlayerType *player_ptr)
         ItemEntity *switch_o_ptr = &player_ptr->inventory_list[need_switch_wielding];
         ItemEntity object_tmp;
         ItemEntity *otmp_ptr = &object_tmp;
-        const auto item_name = describe_flavor(player_ptr, switch_o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        const auto item_name = describe_flavor(player_ptr, *switch_o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         otmp_ptr->copy_from(switch_o_ptr);
         switch_o_ptr->copy_from(slot_o_ptr);
         slot_o_ptr->copy_from(otmp_ptr);
@@ -328,7 +328,7 @@ void do_cmd_wield(PlayerType *player_ptr)
         break;
     }
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
     msg_format(act, item_name.data(), index_to_label(slot));
     if (o_ptr->is_cursed()) {
         msg_print(_("うわ！ すさまじく冷たい！", "Oops! It feels deathly cold!"));

@@ -24,7 +24,7 @@
  */
 static std::string analyze_general(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
-    return describe_flavor(player_ptr, o_ptr, OD_NAME_AND_ENCHANT | OD_STORE | OD_DEBUG);
+    return describe_flavor(player_ptr, *o_ptr, OD_NAME_AND_ENCHANT | OD_STORE | OD_DEBUG);
 }
 
 /*!

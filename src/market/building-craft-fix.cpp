@@ -112,13 +112,13 @@ static std::pair<short, ItemEntity *> select_repairing_broken_weapon(PlayerType 
 
 static void display_reparing_weapon(PlayerType *player_ptr, ItemEntity *o_ptr, const int row)
 {
-    const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, OD_NAME_ONLY);
     prt(format(_("修復する武器　： %s", "Repairing: %s"), item_name.data()), row + 3, 2);
 }
 
 static void display_repair_success_message(PlayerType *player_ptr, ItemEntity *o_ptr, const int cost)
 {
-    const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, OD_NAME_ONLY);
 #ifdef JP
     msg_format("＄%dで%sに修復しました。", cost, item_name.data());
 #else
@@ -156,7 +156,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         return 0;
     }
 
-    const auto item_name = describe_flavor(player_ptr, mo_ptr, OD_NAME_ONLY);
+    const auto item_name = describe_flavor(player_ptr, *mo_ptr, OD_NAME_ONLY);
     prt(format(_("材料とする武器： %s", "Material : %s"), item_name.data()), row + 4, 2);
     const auto cost = bcost + object_value_real(o_ptr) * 2;
     if (!input_check(format(_("＄%dかかりますがよろしいですか？ ", "Costs %d gold, okay? "), cost))) {

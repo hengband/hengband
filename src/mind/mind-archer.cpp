@@ -128,7 +128,7 @@ bool create_ammo(PlayerType *player_ptr)
         ItemMagicApplier(player_ptr, &item, player_ptr->lev, AM_NO_FIXED_ART).execute();
         item.discount = 99;
         int16_t slot = store_item_to_inventory(player_ptr, &item);
-        const auto item_name = describe_flavor(player_ptr, &item, 0);
+        const auto item_name = describe_flavor(player_ptr, item, 0);
         msg_print(_(format("%sを作った。", item_name.data()), "You make some ammo."));
         if (slot >= 0) {
             autopick_alter_item(player_ptr, slot, false);
@@ -152,7 +152,7 @@ bool create_ammo(PlayerType *player_ptr)
         ammo.mark_as_known();
         ItemMagicApplier(player_ptr, &ammo, player_ptr->lev, AM_NO_FIXED_ART).execute();
         ammo.discount = 99;
-        const auto item_name = describe_flavor(player_ptr, &ammo, 0);
+        const auto item_name = describe_flavor(player_ptr, ammo, 0);
         msg_print(_(format("%sを作った。", item_name.data()), "You make some ammo."));
         vary_item(player_ptr, i_idx, -1);
         int16_t slot = store_item_to_inventory(player_ptr, &ammo);
@@ -177,7 +177,7 @@ bool create_ammo(PlayerType *player_ptr)
         ammo.mark_as_known();
         ItemMagicApplier(player_ptr, &ammo, player_ptr->lev, AM_NO_FIXED_ART).execute();
         ammo.discount = 99;
-        const auto item_name = describe_flavor(player_ptr, &ammo, 0);
+        const auto item_name = describe_flavor(player_ptr, ammo, 0);
         msg_print(_(format("%sを作った。", item_name.data()), "You make some ammo."));
         vary_item(player_ptr, i_idx, -1);
         int16_t slot = store_item_to_inventory(player_ptr, &ammo);

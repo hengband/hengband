@@ -64,7 +64,7 @@ void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
             maxwid -= 10;
         }
 
-        const auto item_name = describe_flavor(player_ptr, item.get(), 0, maxwid);
+        const auto item_name = describe_flavor(player_ptr, *item, 0, maxwid);
         c_put_str(tval_to_attr[enum2i(item->bi_key.tval())], item_name, i + 6, cur_col);
 
         if (show_weights) {
@@ -80,7 +80,7 @@ void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
         maxwid -= 7;
     }
 
-    const auto item_name = describe_flavor(player_ptr, item.get(), 0, maxwid);
+    const auto item_name = describe_flavor(player_ptr, *item, 0, maxwid);
     c_put_str(tval_to_attr[enum2i(item->bi_key.tval())], item_name, i + 6, cur_col);
 
     if (show_weights) {

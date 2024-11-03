@@ -118,7 +118,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         ItemEntity item(bi_id);
         item.fa_id = a_idx;
         item.ident = IDENT_STORE;
-        fullname = describe_flavor(player_ptr, &item, OD_NAME_ONLY);
+        fullname = describe_flavor(player_ptr, item, OD_NAME_ONLY);
     } else if (category == "MONSTER") {
         const auto &monster_name = tokens[1];
 

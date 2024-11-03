@@ -62,7 +62,7 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
             out_color[k] = TERM_L_DARK;
         }
 
-        out_desc[k] = describe_flavor(player_ptr, o_ptr, 0);
+        out_desc[k] = describe_flavor(player_ptr, *o_ptr, 0);
         l = out_desc[k].length() + 5;
         if (show_weights) {
             l += 9;
@@ -167,7 +167,7 @@ void display_inventory(PlayerType *player_ptr, const ItemTester &item_tester)
         int cur_col = 3;
         term_erase(cur_col, i);
         term_putstr(0, i, cur_col, TERM_WHITE, label);
-        const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+        const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
         attr = tval_to_attr[enum2i(o_ptr->bi_key.tval()) % 128];
         if (o_ptr->timeout) {
             attr = TERM_L_DARK;

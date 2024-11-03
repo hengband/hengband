@@ -264,7 +264,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
         std::string item_name("");
         if (known && o_ptr->marked.has(OmType::FOUND)) {
             is_item_affected = true;
-            item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+            item_name = describe_flavor(player_ptr, *o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         }
 
         if ((is_fixed_or_random_artifact || ignore)) {

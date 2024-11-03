@@ -190,7 +190,7 @@ static SpoilerOutputResultType spoil_player_spell()
         std::string book_name = _("なし", "None");
         if (magic_ptr->spell_book != ItemKindType::NONE) {
             ItemEntity item({ magic_ptr->spell_book, 0 });
-            book_name = describe_flavor(&dummy_p, &item, OD_NAME_ONLY);
+            book_name = describe_flavor(&dummy_p, item, OD_NAME_ONLY);
             auto *s = angband_strchr(book_name.data(), '[');
             if (s != nullptr) {
                 book_name.erase(s - book_name.data());

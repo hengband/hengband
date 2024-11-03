@@ -67,7 +67,7 @@ bool psychometry(PlayerType *player_ptr)
     }
 
     item_feel_type feel = pseudo_value_check_heavy(o_ptr);
-    const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (!feel) {
         msg_format(_("%sからは特に変わった事は感じとれなかった。", "You do not perceive anything unusual about the %s."), item_name.data());
         return true;

@@ -74,7 +74,7 @@ static void object_mention(PlayerType *player_ptr, ItemEntity *o_ptr)
     o_ptr->mark_as_known();
 
     o_ptr->ident |= (IDENT_FULL_KNOWN);
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
     msg_format_wizard(player_ptr, CHEAT_OBJECT, _("%sを生成しました。", "%s was generated."), item_name.data());
 }
 
@@ -323,7 +323,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
     bool plural = (j_ptr->number != 1);
 #endif
     const auto &world = AngbandWorld::get_instance();
-    const auto item_name = describe_flavor(player_ptr, j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    const auto item_name = describe_flavor(player_ptr, *j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (!j_ptr->is_fixed_or_random_artifact() && evaluate_percent(chance)) {
 #ifdef JP
         msg_format("%sは消えた。", item_name.data());
@@ -588,7 +588,7 @@ void floor_item_charges(FloorType *floor_ptr, INVENTORY_IDX i_idx)
 void floor_item_describe(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 {
     auto *o_ptr = &player_ptr->current_floor_ptr->o_list[i_idx];
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
 #ifdef JP
     if (o_ptr->number <= 0) {
         msg_format("床上には、もう%sはない。", item_name.data());

@@ -29,7 +29,7 @@ void pack_overflow(PlayerType *player_ptr)
     disturb(player_ptr, false, true);
     msg_print(_("ザックからアイテムがあふれた！", "Your pack overflows!"));
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
     msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), item_name.data(), index_to_label(INVEN_PACK));
     (void)drop_near(player_ptr, o_ptr, 0, player_ptr->y, player_ptr->x);
 

@@ -177,7 +177,7 @@ void do_cmd_store(PlayerType *player_ptr)
                 msg_print(_("ザックからアイテムがあふれてしまった！", "Your pack overflows!"));
                 q_ptr = &forge;
                 q_ptr->copy_from(o_ptr);
-                const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
+                const auto item_name = describe_flavor(player_ptr, *q_ptr, 0);
                 msg_format(_("%sが落ちた。(%c)", "You drop %s (%c)."), item_name.data(), index_to_label(i_idx));
                 vary_item(player_ptr, i_idx, -255);
                 handle_stuff(player_ptr);

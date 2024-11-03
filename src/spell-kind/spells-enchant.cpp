@@ -34,7 +34,7 @@ bool artifact_scroll(PlayerType *player_ptr)
         return false;
     }
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
     msg_format("%s は眩い光を発した！", item_name.data());
 #else
@@ -96,7 +96,7 @@ bool artifact_scroll(PlayerType *player_ptr)
     }
 
     if (record_rand_art) {
-        const auto diary_item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
+        const auto diary_item_name = describe_flavor(player_ptr, *o_ptr, OD_NAME_ONLY);
         exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::ART_SCROLL, 0, diary_item_name);
     }
 
