@@ -133,7 +133,7 @@ int store_check_num(const ItemEntity *o_ptr, StoreSaleType store_num)
     } else {
         for (auto i = 0; i < st_ptr->stock_num; i++) {
             auto &item = st_ptr->stock[i];
-            if (store_object_similar(item.get(), o_ptr)) {
+            if (item->is_similar_for_store(*o_ptr)) {
                 return -1;
             }
         }

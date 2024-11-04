@@ -957,6 +957,85 @@ void ItemEntity::track_baseitem() const
     BaseitemTracker::get_instance().set_trackee(this->bi_id);
 }
 
+/*!
+ * @brief 店舗に並べた品を同一品であるかどうか判定する
+ * @param other 比較対象アイテムへの参照
+ * @return 同一扱いできるならTRUEを返す
+ */
+bool ItemEntity::is_similar_for_store(const ItemEntity &other) const
+{
+    if (this == &other) {
+        return false;
+    }
+
+    if (this->bi_id != other.bi_id) {
+        return false;
+    }
+
+    if ((this->pval != other.pval) && !this->is_wand_rod()) {
+        return false;
+    }
+
+    if (this->to_h != other.to_h) {
+        return false;
+    }
+
+    if (this->to_d != other.to_d) {
+        return false;
+    }
+
+    if (this->to_a != other.to_a) {
+        return false;
+    }
+
+    if (this->ego_idx != other.ego_idx) {
+        return false;
+    }
+
+    if (this->is_fixed_or_random_artifact() || other.is_fixed_or_random_artifact()) {
+        return false;
+    }
+
+    if (this->art_flags != other.art_flags) {
+        return false;
+    }
+
+    if (this->timeout || other.timeout) {
+        return false;
+    }
+
+    if (this->ac != other.ac) {
+        return false;
+    }
+
+    if (this->damage_dice != other.damage_dice) {
+        return false;
+    }
+
+    const auto tval = this->bi_key.tval();
+    if (tval == ItemKindType::CHEST) {
+        return false;
+    }
+
+    if (tval == ItemKindType::STATUE) {
+        return false;
+    }
+
+    if (tval == ItemKindType::CAPTURE) {
+        return false;
+    }
+
+    if ((tval == ItemKindType::LITE) && (this->fuel != other.fuel)) {
+        return false;
+    }
+
+    if (this->discount != other.discount) {
+        return false;
+    }
+
+    return true;
+}
+
 std::string ItemEntity::build_timeout_description(const ActivationType &act) const
 {
     const auto description = act.build_timeout_description();

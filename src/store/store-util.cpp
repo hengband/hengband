@@ -97,91 +97,6 @@ std::vector<short> store_same_magic_device_pvals(ItemEntity *j_ptr)
 }
 
 /*!
- * @brief 店舗に並べた品を同一品であるかどうか判定する /
- * Determine if a store item can "absorb" another item
- * @param o_ptr 判定するオブジェクト構造体の参照ポインタ1
- * @param j_ptr 判定するオブジェクト構造体の参照ポインタ2
- * @return 同一扱いできるならTRUEを返す
- * @details
- * <pre>
- * See "object_similar()" for the same function for the "player"
- * </pre>
- */
-bool store_object_similar(const ItemEntity *o_ptr, const ItemEntity *j_ptr)
-{
-    if (o_ptr == j_ptr) {
-        return false;
-    }
-
-    if (o_ptr->bi_id != j_ptr->bi_id) {
-        return false;
-    }
-
-    if ((o_ptr->pval != j_ptr->pval) && !o_ptr->is_wand_rod()) {
-        return false;
-    }
-
-    if (o_ptr->to_h != j_ptr->to_h) {
-        return false;
-    }
-
-    if (o_ptr->to_d != j_ptr->to_d) {
-        return false;
-    }
-
-    if (o_ptr->to_a != j_ptr->to_a) {
-        return false;
-    }
-
-    if (o_ptr->ego_idx != j_ptr->ego_idx) {
-        return false;
-    }
-
-    if (o_ptr->is_fixed_or_random_artifact() || j_ptr->is_fixed_or_random_artifact()) {
-        return false;
-    }
-
-    if (o_ptr->art_flags != j_ptr->art_flags) {
-        return false;
-    }
-
-    if (o_ptr->timeout || j_ptr->timeout) {
-        return false;
-    }
-
-    if (o_ptr->ac != j_ptr->ac) {
-        return false;
-    }
-
-    if (o_ptr->damage_dice != j_ptr->damage_dice) {
-        return false;
-    }
-
-    const auto tval = o_ptr->bi_key.tval();
-    if (tval == ItemKindType::CHEST) {
-        return false;
-    }
-
-    if (tval == ItemKindType::STATUE) {
-        return false;
-    }
-
-    if (tval == ItemKindType::CAPTURE) {
-        return false;
-    }
-
-    if ((tval == ItemKindType::LITE) && (o_ptr->fuel != j_ptr->fuel)) {
-        return false;
-    }
-
-    if (o_ptr->discount != j_ptr->discount) {
-        return false;
-    }
-
-    return true;
-}
-
-/*!
  * @brief 店舗に並べた品を重ね合わせできるかどうか判定する /
  * Allow a store item to absorb another item
  * @param o_ptr 判定するオブジェクト構造体の参照ポインタ1
@@ -259,7 +174,7 @@ int store_carry(ItemEntity *o_ptr)
     o_ptr->feeling = FEEL_NONE;
     for (auto slot = 0; slot < st_ptr->stock_num; slot++) {
         auto &item = st_ptr->stock[slot];
-        if (store_object_similar(item.get(), o_ptr)) {
+        if (item->is_similar_for_store(*o_ptr)) {
             store_object_absorb(item.get(), o_ptr);
             return slot;
         }
