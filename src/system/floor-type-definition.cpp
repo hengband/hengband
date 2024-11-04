@@ -204,13 +204,14 @@ bool FloorType::order_pet_dismission(short index1, short index2, short riding_in
  */
 ItemEntity FloorType::make_gold() const
 {
-    auto num_gold = ((randint1(this->object_level + 2) + 2) / 2) - 1;
-    if (one_in_(CHANCE_BASEITEM_LEVEL_BOOST)) {
-        num_gold += randint1(this->object_level + 1);
-    }
-
-    if (coin_type) {
+    int num_gold;
+    if (coin_type > 0) {
         num_gold = coin_type;
+    } else {
+        num_gold = ((randint1(this->object_level + 2) + 2) / 2) - 1;
+        if (one_in_(CHANCE_BASEITEM_LEVEL_BOOST)) {
+            num_gold += randint1(this->object_level + 1);
+        }
     }
 
     //!< @todo 後でベースアイテムリストから動的に引けるようにする.
