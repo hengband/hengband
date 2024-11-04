@@ -114,37 +114,43 @@ static void set_ammo_quantity(ItemEntity *j_ptr)
  */
 bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, std::optional<int> rq_mon_level)
 {
+    const auto apply = [player_ptr, j_ptr, mode] {
+        ItemMagicApplier(player_ptr, j_ptr, player_ptr->current_floor_ptr->object_level, mode).execute();
+        set_ammo_quantity(j_ptr);
+        if (cheat_peek) {
+            object_mention(player_ptr, *j_ptr);
+        }
+    };
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto prob = any_bits(mode, AM_GOOD) ? 10 : 1000;
     auto base = get_base_floor(floor_ptr, mode, rq_mon_level);
-    if (!one_in_(prob) || !make_artifact_special(player_ptr, j_ptr)) {
-        if (any_bits(mode, AM_GOOD) && !get_obj_index_hook) {
-            get_obj_index_hook = kind_is_good;
+    if (one_in_(prob)) {
+        if (make_artifact_special(player_ptr, j_ptr)) {
+            apply();
+            return true;
         }
-
-        if (get_obj_index_hook) {
-            get_obj_index_prep();
-        }
-
-        auto bi_id = get_obj_index(floor_ptr, base, mode);
-        if (get_obj_index_hook) {
-            get_obj_index_hook = nullptr;
-            get_obj_index_prep();
-        }
-
-        if (bi_id == 0) {
-            return false;
-        }
-
-        j_ptr->generate(bi_id);
     }
 
-    ItemMagicApplier(player_ptr, j_ptr, floor_ptr->object_level, mode).execute();
-    set_ammo_quantity(j_ptr);
-    if (cheat_peek) {
-        object_mention(player_ptr, *j_ptr);
+    if (any_bits(mode, AM_GOOD) && !get_obj_index_hook) {
+        get_obj_index_hook = kind_is_good;
     }
 
+    if (get_obj_index_hook) {
+        get_obj_index_prep();
+    }
+
+    auto bi_id = get_obj_index(floor_ptr, base, mode);
+    if (get_obj_index_hook) {
+        get_obj_index_hook = nullptr;
+        get_obj_index_prep();
+    }
+
+    if (bi_id == 0) {
+        return false;
+    }
+
+    j_ptr->generate(bi_id);
+    apply();
     return true;
 }
 
