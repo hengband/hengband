@@ -226,7 +226,7 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MonraceId monrace_i
 {
     auto *r_ptr = &monraces_info[escorted_monrace_id];
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[escorted_m_idx];
-    MonsterRaceInfo *z_ptr = &monraces_info[monrace_id];
+    MonraceDefinition *z_ptr = &monraces_info[monrace_id];
 
     if (mon_hook_dungeon(player_ptr, escorted_monrace_id) != mon_hook_dungeon(player_ptr, monrace_id)) {
         return false;

@@ -49,7 +49,7 @@ bool MonraceAllocationEntry::is_defeatable(int threshold_level) const
     return !has_resist_all && !(can_diminish && is_shallow);
 }
 
-const MonsterRaceInfo &MonraceAllocationEntry::get_monrace() const
+const MonraceDefinition &MonraceAllocationEntry::get_monrace() const
 {
     return MonraceList::get_instance().get_monrace(index);
 }

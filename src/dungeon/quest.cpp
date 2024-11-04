@@ -78,7 +78,7 @@ ArtifactType &QuestType::get_reward() const
  * @brief 討伐対象モンスターを返す. いなければプレイヤー (無効値の意)
  * @return 討伐対象モンスター
  */
-MonsterRaceInfo &QuestType::get_bounty()
+MonraceDefinition &QuestType::get_bounty()
 {
     return MonraceList::get_instance().get_monrace(this->r_idx);
 }
@@ -87,7 +87,7 @@ MonsterRaceInfo &QuestType::get_bounty()
  * @brief 討伐対象モンスターを返す. いなければプレイヤー (無効値の意)
  * @return 討伐対象モンスター
  */
-const MonsterRaceInfo &QuestType::get_bounty() const
+const MonraceDefinition &QuestType::get_bounty() const
 {
     return MonraceList::get_instance().get_monrace(this->r_idx);
 }

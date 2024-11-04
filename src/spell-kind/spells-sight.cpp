@@ -370,7 +370,7 @@ bool deathray_monsters(PlayerType *player_ptr)
  * @param r_ptr モンスター種族への参照ポインタ
  * @return 調査結果 善悪アライメント、最大HP、残りHP、AC、速度、ステータス
  */
-std::string probed_monster_info(PlayerType *player_ptr, MonsterEntity *m_ptr, MonsterRaceInfo *r_ptr)
+std::string probed_monster_info(PlayerType *player_ptr, MonsterEntity *m_ptr, MonraceDefinition *r_ptr)
 {
     if (!m_ptr->is_original_ap()) {
         if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {

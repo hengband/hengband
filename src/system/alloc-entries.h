@@ -11,7 +11,7 @@
 #include <vector>
 
 enum class MonraceId : short;
-class MonsterRaceInfo;
+class MonraceDefinition;
 class MonraceAllocationEntry {
 public:
     MonraceAllocationEntry() = default;
@@ -24,7 +24,7 @@ public:
     bool is_defeatable(int threshold_level) const;
 
 private:
-    const MonsterRaceInfo &get_monrace() const;
+    const MonraceDefinition &get_monrace() const;
 };
 
 /*

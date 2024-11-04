@@ -70,7 +70,7 @@ class DisplaySymbol;
 class FloorType;
 class Grid;
 class PlayerType;
-class MonsterRaceInfo;
+class MonraceDefinition;
 enum class TerrainCharacteristics;
 bool new_player_spot(PlayerType *player_ptr);
 bool is_hidden_door(PlayerType *player_ptr, const Grid &grid);

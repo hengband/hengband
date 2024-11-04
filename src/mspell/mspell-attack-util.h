@@ -15,7 +15,7 @@ enum mspell_lite_type {
 
 // Monster Spell Attack.
 class MonsterEntity;
-class MonsterRaceInfo;
+class MonraceDefinition;
 class PlayerType;
 struct msa_type {
     msa_type(PlayerType *player_ptr, MONSTER_IDX m_idx);
@@ -37,7 +37,7 @@ struct msa_type {
     mspell_lite_type do_spell;
     MonsterAbilityType thrown_spell;
 
-    MonsterRaceInfo *r_ptr;
+    MonraceDefinition *r_ptr;
     bool no_inate;
     EnumClassFlagGroup<MonsterAbilityType> ability_flags;
 };

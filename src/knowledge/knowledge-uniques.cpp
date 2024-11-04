@@ -37,7 +37,7 @@ unique_list_type::unique_list_type(bool is_alive)
  * @return is_aliveの条件に見合うユニークがいたらTRUE、それ以外はFALSE
  * @details 闘技場のモンスターとは再戦できないので、生きているなら表示から外す
  */
-static bool sweep_uniques(MonsterRaceInfo *r_ptr, bool is_alive)
+static bool sweep_uniques(MonraceDefinition *r_ptr, bool is_alive)
 {
     if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
 

@@ -942,7 +942,7 @@ bool ItemEntity::has_monrace() const
  * @return モンスター種族定義
  * @details 死体/骨・モンスターボール・人形・像が該当する.
  */
-const MonsterRaceInfo &ItemEntity::get_monrace() const
+const MonraceDefinition &ItemEntity::get_monrace() const
 {
     if (!this->has_monrace()) {
         THROW_EXCEPTION(std::logic_error, "This item is not related to monrace!");

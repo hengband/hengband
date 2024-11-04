@@ -5,7 +5,7 @@
 
 enum class MonraceId : short;
 class FloorType;
-class MonsterRaceInfo;
+class MonraceDefinition;
 class PlayerType;
 class Grid;
 MONSTER_IDX m_pop(FloorType *floor_ptr);

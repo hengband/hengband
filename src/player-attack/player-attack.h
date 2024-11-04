@@ -37,7 +37,7 @@ enum class MagicalBrandEffectType { NONE = 0,
 enum class MonraceId : short;
 class Grid;
 class FloorType;
-class MonsterRaceInfo;
+class MonraceDefinition;
 class MonsterEntity;
 struct player_attack_type {
     player_attack_type(FloorType &floor, POSITION y, POSITION x, int16_t hand, combat_options mode, bool *fear, bool *mdeath);
@@ -67,7 +67,7 @@ struct player_attack_type {
     MONSTER_IDX m_idx; //!< モンスターID
     MonsterEntity *m_ptr; //!< モンスター情報(参照ポインタ)
     MonraceId r_idx; //!< モンスター種族ID
-    MonsterRaceInfo *r_ptr; //!< モンスター種族情報(参照ポインタ)
+    MonraceDefinition *r_ptr; //!< モンスター種族情報(参照ポインタ)
     const martial_arts *ma_ptr; //!< マーシャルアーツ種別
 };
 

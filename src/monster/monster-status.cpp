@@ -426,7 +426,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonraceId monra
         if (!ignore_unview || player_can_see_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
             if (is_hallucinated) {
                 const auto &monraces = MonraceList::get_instance();
-                const MonsterRaceInfo *hallucinated_race = nullptr;
+                const MonraceDefinition *hallucinated_race = nullptr;
                 do {
                     hallucinated_race = &monraces.pick_monrace_at_random();
                 } while (hallucinated_race->kind_flags.has(MonsterKindType::UNIQUE));

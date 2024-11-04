@@ -8,7 +8,7 @@
 #include <vector>
 
 enum class MonraceId : short;
-class MonsterRaceInfo;
+class MonraceDefinition;
 class MonsterEntity;
 class PlayerType;
 class MonsterDamageProcessor {

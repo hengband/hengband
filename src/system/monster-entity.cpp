@@ -162,17 +162,17 @@ MonraceId MonsterEntity::get_real_monrace_id() const
  * @brief モンスターの真の種族定義を返す (CHAMAELEONフラグ専用)
  * @return 真のモンスター種族参照
  */
-MonsterRaceInfo &MonsterEntity::get_real_monrace() const
+MonraceDefinition &MonsterEntity::get_real_monrace() const
 {
     return monraces_info[this->get_real_monrace_id()];
 }
 
-MonsterRaceInfo &MonsterEntity::get_appearance_monrace() const
+MonraceDefinition &MonsterEntity::get_appearance_monrace() const
 {
     return monraces_info[this->ap_r_idx];
 }
 
-MonsterRaceInfo &MonsterEntity::get_monrace() const
+MonraceDefinition &MonsterEntity::get_monrace() const
 {
     return monraces_info[this->r_idx];
 }

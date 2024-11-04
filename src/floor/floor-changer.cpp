@@ -106,7 +106,7 @@ static MONSTER_IDX decide_pet_index(PlayerType *player_ptr, const int current_mo
     return (d == 6) ? 0 : m_pop(floor_ptr);
 }
 
-static MonsterRaceInfo &set_pet_params(PlayerType *player_ptr, const int current_monster, MONSTER_IDX m_idx, const POSITION cy, const POSITION cx)
+static MonraceDefinition &set_pet_params(PlayerType *player_ptr, const int current_monster, MONSTER_IDX m_idx, const POSITION cy, const POSITION cx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     player_ptr->current_floor_ptr->grid_array[cy][cx].m_idx = m_idx;

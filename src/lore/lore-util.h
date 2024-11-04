@@ -31,7 +31,7 @@ enum monster_lore_mode {
     MONSTER_LORE_DEBUG
 };
 
-class MonsterRaceInfo;
+class MonraceDefinition;
 struct lore_msg {
     lore_msg(std::string_view msg, byte color = TERM_WHITE);
     std::string msg;
@@ -66,7 +66,7 @@ struct lore_type {
     RaceBlowMethodType method;
 
     bool nightmare;
-    MonsterRaceInfo *r_ptr;
+    MonraceDefinition *r_ptr;
     byte speed;
     ITEM_NUMBER drop_gold;
     ITEM_NUMBER drop_item;
