@@ -22,7 +22,6 @@
 #include "object/tval-types.h"
 #include "smith/object-smith.h"
 #include "sv-definition/sv-lite-types.h"
-#include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-ring-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/artifact-type-definition.h"
@@ -990,9 +989,7 @@ int ItemEntity::is_similar_part(const ItemEntity &other) const
     case ItemKindType::CAPTURE:
         return 0;
     case ItemKindType::STATUE: {
-        const auto o_sval = this->bi_key.sval();
-        const auto j_sval = other.bi_key.sval();
-        if ((o_sval != SV_PHOTO) || (j_sval != SV_PHOTO) || (this->pval != other.pval)) {
+        if (this->bi_key.are_both_statue(other.bi_key) || (this->pval != other.pval)) {
             return 0;
         }
 
@@ -1020,7 +1017,7 @@ int ItemEntity::is_similar_part(const ItemEntity &other) const
 
         break;
     case ItemKindType::WAND:
-        if ((!(this->ident & (IDENT_EMPTY)) && !this->is_known()) || (!(other.ident & (IDENT_EMPTY)) && !other.is_known())) {
+        if ((none_bits(this->ident, IDENT_EMPTY) && !this->is_known()) || (none_bits(other.ident, IDENT_EMPTY) && !other.is_known())) {
             return 0;
         }
 
