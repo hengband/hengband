@@ -104,3 +104,15 @@ short dungeon_type::convert_terrain_id(short terrain_id) const
         return terrain_id;
     }
 }
+
+/*!
+ * @brief ドアやカーテンが開いているかを調べる
+ * @param terrain_id 地形情報のID
+ * @return 開いているか否か
+ * @details 上流で地形側の判定と併せて判定すること
+ */
+bool dungeon_type::is_open(short terrain_id) const
+{
+    const auto is_open = TerrainList::get_instance().get_terrain(terrain_id).is_open();
+    return is_open && (terrain_id != this->convert_terrain_id(terrain_id, TerrainCharacteristics::CLOSE));
+}

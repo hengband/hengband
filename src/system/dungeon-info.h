@@ -118,6 +118,7 @@ struct dungeon_type {
     const MonraceDefinition &get_guardian() const;
     short convert_terrain_id(short terrain_id, TerrainCharacteristics action) const;
     short convert_terrain_id(short terrain_id) const;
+    bool is_open(short terrain_id) const;
 };
 
 extern std::vector<DEPTH> max_dlv;
