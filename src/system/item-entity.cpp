@@ -1293,6 +1293,57 @@ bool ItemEntity::try_become_artifact(int dungeon_level)
 }
 
 /*!
+ * @brief 両オブジェクトをスロットに重ね合わせる
+ * @param other 重ね合わせ元アイテムへの参照
+ */
+void ItemEntity::absorb(ItemEntity &other)
+{
+    int max_num = this->is_similar_part(other);
+    int total = this->number + other.number;
+    int diff = (total > max_num) ? total - max_num : 0;
+
+    this->number = (total > max_num) ? max_num : total;
+    if (other.is_known()) {
+        this->mark_as_known();
+    }
+
+    if (((this->ident & IDENT_STORE) || (other.ident & IDENT_STORE)) && (!((this->ident & IDENT_STORE) && (other.ident & IDENT_STORE)))) {
+        if (other.ident & IDENT_STORE) {
+            other.ident &= 0xEF;
+        }
+
+        if (this->ident & IDENT_STORE) {
+            this->ident &= 0xEF;
+        }
+    }
+
+    if (other.is_fully_known()) {
+        this->ident |= (IDENT_FULL_KNOWN);
+    }
+
+    if (other.is_inscribed()) {
+        this->inscription = other.inscription;
+    }
+
+    if (other.feeling) {
+        this->feeling = other.feeling;
+    }
+
+    if (this->discount < other.discount) {
+        this->discount = other.discount;
+    }
+
+    const auto tval = this->bi_key.tval();
+    if (tval == ItemKindType::ROD) {
+        this->pval += other.pval * (other.number - diff) / other.number;
+        this->timeout += other.timeout * (other.number - diff) / other.number;
+    }
+
+    if (tval == ItemKindType::WAND) {
+        this->pval += other.pval * (other.number - diff) / other.number;
+    }
+}
+/*!
  * @brief エゴ光源のフラグを修正する
  *
  * 寿命のある光源で寿命が0ターンの時、光源エゴアイテムに起因するフラグは

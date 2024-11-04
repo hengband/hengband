@@ -168,6 +168,7 @@ public:
     void mark_as_tried() const;
 
     bool try_become_artifact(int dungeon_level);
+    void absorb(ItemEntity &other);
 
 private:
     int get_baseitem_price() const;

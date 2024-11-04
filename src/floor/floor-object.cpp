@@ -496,7 +496,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
     for (const auto this_o_idx : g_ptr->o_idx_list) {
         auto &item = floor_ptr->o_list[this_o_idx];
         if (item.is_similar(*j_ptr)) {
-            object_absorb(&item, j_ptr);
+            item.absorb(*j_ptr);
             done = true;
             break;
         }
