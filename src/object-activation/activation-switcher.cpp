@@ -237,7 +237,7 @@ bool switch_activation(PlayerType *player_ptr, ItemEntity **o_ptr_ptr, const Ran
         return true;
     case RandomArtActType::PROT_EVIL:
         msg_format(_("%sから鋭い音が流れ出た...", "The %s lets out a shrill wail..."), name.data());
-        (void)set_protevil(player_ptr, randint1(25) + player_ptr->lev * 3, false);
+        BodyImprovement(player_ptr).set_protection(randint1(25) + player_ptr->lev * 3);
         return true;
     case RandomArtActType::RESIST_ALL:
         return activate_resistance_elements(player_ptr);

@@ -9,6 +9,7 @@
 #include "status/bad-status-setter.h"
 #include "status/body-improvement.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!
@@ -19,13 +20,17 @@
  */
 bool cleansing_nova(PlayerType *player_ptr, bool magic, bool powerful)
 {
-    bool ident = false;
-    if (dispel_evil(player_ptr, powerful ? 225 : 150)) {
-        ident = true;
+    auto ident = dispel_evil(player_ptr, powerful ? 225 : 150);
+    const auto k = 3 * player_ptr->lev;
+    const short turns = randint1(25) + k;
+    BodyImprovement improvement(player_ptr);
+    if (magic) {
+        improvement.set_protection(turns);
+    } else {
+        improvement.mod_protection(turns);
     }
 
-    int k = 3 * player_ptr->lev;
-    if (set_protevil(player_ptr, (magic ? 0 : player_ptr->protevil) + randint1(25) + k, false)) {
+    if (improvement.has_effect()) {
         ident = true;
     }
 

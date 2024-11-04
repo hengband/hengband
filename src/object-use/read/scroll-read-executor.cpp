@@ -40,6 +40,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -306,8 +307,10 @@ bool ScrollReadExecutor::read()
         this->ident = true;
         break;
     case SV_SCROLL_PROTECTION_FROM_EVIL: {
-        auto k = 3 * this->player_ptr->lev;
-        if (set_protevil(this->player_ptr, this->player_ptr->protevil + randint1(25) + k, false)) {
+        const auto k = 3 * this->player_ptr->lev;
+        BodyImprovement improvement(this->player_ptr);
+        improvement.mod_protection(randint1(25) + k);
+        if (improvement.has_effect()) {
             this->ident = true;
         }
 

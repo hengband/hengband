@@ -174,7 +174,7 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(effects->stun().current());
     wr_s16b(effects->poison().current());
     wr_s16b(effects->hallucination().current());
-    wr_s16b(player_ptr->protevil);
+    wr_s16b(effects->protection().current());
     wr_s16b(player_ptr->invuln);
     wr_s16b(player_ptr->ult_res);
     wr_s16b(player_ptr->hero);
