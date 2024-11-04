@@ -374,9 +374,8 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
 
             k = 0;
             for (const auto this_o_idx : g_ptr->o_idx_list) {
-                ItemEntity *o_ptr;
-                o_ptr = &floor_ptr->o_list[this_o_idx];
-                if (object_similar(o_ptr, j_ptr)) {
+                const auto &item = floor_ptr->o_list[this_o_idx];
+                if (item.is_similar(*j_ptr)) {
                     comb = true;
                 }
 
@@ -495,10 +494,9 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
 
     g_ptr = &floor_ptr->grid_array[by][bx];
     for (const auto this_o_idx : g_ptr->o_idx_list) {
-        ItemEntity *o_ptr;
-        o_ptr = &floor_ptr->o_list[this_o_idx];
-        if (object_similar(o_ptr, j_ptr)) {
-            object_absorb(o_ptr, j_ptr);
+        auto &item = floor_ptr->o_list[this_o_idx];
+        if (item.is_similar(*j_ptr)) {
+            object_absorb(&item, j_ptr);
             done = true;
             break;
         }

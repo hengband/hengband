@@ -1,6 +1,6 @@
 #pragma once
 
-enum inventory_slot_type {
+enum inventory_slot_type : short {
     INVEN_PACK = 23, /*!< アイテムスロット…所持品(0～) */
     INVEN_MAIN_HAND = 24, /*!< アイテムスロット…利手 */
     INVEN_SUB_HAND = 25, /*!< アイテムスロット…逆手 */

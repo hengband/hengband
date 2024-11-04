@@ -175,33 +175,27 @@ void combine_pack(PlayerType *player_ptr)
         is_first_combination = false;
         combined = false;
 
-        for (int i = INVEN_PACK; i > 0; i--) {
-            ItemEntity *o_ptr;
-            o_ptr = &player_ptr->inventory_list[i];
-            if (!o_ptr->is_valid()) {
+        for (auto i = enum2i(INVEN_PACK); i > 0; i--) {
+            auto &item1 = player_ptr->inventory_list[i];
+            if (!item1.is_valid()) {
                 continue;
             }
-            for (int j = 0; j < i; j++) {
-                ItemEntity *j_ptr;
-                j_ptr = &player_ptr->inventory_list[j];
-                if (!j_ptr->is_valid()) {
+
+            for (short j = 0; j < i; j++) {
+                auto &item2 = player_ptr->inventory_list[j];
+                if (!item2.is_valid()) {
                     continue;
                 }
 
-                /*
-                 * Get maximum number of the stack if these
-                 * are similar, get zero otherwise.
-                 */
-                int max_num = object_similar_part(j_ptr, o_ptr);
-
-                bool is_max = (max_num != 0) && (j_ptr->number < max_num);
+                auto max_num = item2.is_similar_part(item1);
+                auto is_max = (max_num != 0) && (item2.number < max_num);
                 if (!is_max) {
                     continue;
                 }
 
-                if (o_ptr->number + j_ptr->number <= max_num) {
+                if (item1.number + item2.number <= max_num) {
                     flag = true;
-                    object_absorb(j_ptr, o_ptr);
+                    object_absorb(&item2, &item1);
                     player_ptr->inven_cnt--;
                     int k;
                     for (k = i; k < INVEN_PACK; k++) {
@@ -210,18 +204,18 @@ void combine_pack(PlayerType *player_ptr)
 
                     (&player_ptr->inventory_list[k])->wipe();
                 } else {
-                    int old_num = o_ptr->number;
-                    int remain = j_ptr->number + o_ptr->number - max_num;
-                    object_absorb(j_ptr, o_ptr);
-                    o_ptr->number = remain;
-                    const auto tval = o_ptr->bi_key.tval();
+                    int old_num = item1.number;
+                    int remain = item2.number + item1.number - max_num;
+                    object_absorb(&item2, &item1);
+                    item1.number = remain;
+                    const auto tval = item1.bi_key.tval();
                     if (tval == ItemKindType::ROD) {
-                        o_ptr->pval = o_ptr->pval * remain / old_num;
-                        o_ptr->timeout = o_ptr->timeout * remain / old_num;
+                        item1.pval = item1.pval * remain / old_num;
+                        item1.timeout = item1.timeout * remain / old_num;
                     }
 
                     if (tval == ItemKindType::WAND) {
-                        o_ptr->pval = o_ptr->pval * remain / old_num;
+                        item1.pval = item1.pval * remain / old_num;
                     }
                 }
 
@@ -312,7 +306,7 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
         }
 
         n = j;
-        if (object_similar(j_ptr, o_ptr)) {
+        if (j_ptr->is_similar(*o_ptr)) {
             object_absorb(j_ptr, o_ptr);
             rfu.set_flag(StatusRecalculatingFlag::BONUS);
             rfu.set_flags(flags_swrf);
@@ -383,7 +377,7 @@ bool check_store_item_to_inventory(PlayerType *player_ptr, const ItemEntity *o_p
             continue;
         }
 
-        if (object_similar(j_ptr, o_ptr)) {
+        if (j_ptr->is_similar(*o_ptr)) {
             return true;
         }
     }

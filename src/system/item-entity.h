@@ -160,6 +160,8 @@ public:
     bool has_monrace() const;
     const MonraceDefinition &get_monrace() const;
     void track_baseitem() const;
+    bool is_similar(const ItemEntity &other) const;
+    int is_similar_part(const ItemEntity &other) const;
     bool is_similar_for_store(const ItemEntity &other) const;
 
     void mark_as_known();
