@@ -113,6 +113,5 @@ short dungeon_type::convert_terrain_id(short terrain_id) const
  */
 bool dungeon_type::is_open(short terrain_id) const
 {
-    const auto is_open = TerrainList::get_instance().get_terrain(terrain_id).is_open();
-    return is_open && (terrain_id != this->convert_terrain_id(terrain_id, TerrainCharacteristics::CLOSE));
+    return terrain_id != this->convert_terrain_id(terrain_id, TerrainCharacteristics::CLOSE);
 }

@@ -5,10 +5,12 @@
 #include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/dungeon-info.h"
+#include "system/enums/grid-count-kind.h"
 #include "system/gamevalue.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
+#include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-range.h"
 
@@ -151,6 +153,24 @@ bool FloorType::can_teleport_level(bool to_player) const
     is_invalid_floor &= this->dun_level >= 1;
     is_invalid_floor &= ironman_downward;
     return this->is_special() || is_invalid_floor;
+}
+
+bool FloorType::check_terrain_state(const Pos2D &pos, GridCountKind gck) const
+{
+    const auto &grid = this->get_grid(pos);
+    switch (gck) {
+    case GridCountKind::OPEN: {
+        const auto is_open_grid = grid.get_terrain_mimic().is_open();
+        const auto is_open_dungeon = this->get_dungeon_definition().is_open(grid.get_feat_mimic());
+        return is_open_grid && is_open_dungeon;
+    }
+    case GridCountKind::CLOSED_DOOR:
+        return grid.get_terrain_mimic().is_closed_door();
+    case GridCountKind::TRAP:
+        return grid.get_terrain_mimic().is_trap();
+    default:
+        THROW_EXCEPTION(std::logic_error, format("Invalid GridCountKind is Specified! %d", enum2i(gck)));
+    }
 }
 
 /*!
