@@ -60,17 +60,12 @@ enum grid_bold_type {
     GB_SOLID_NOPERM
 };
 
-enum class GridCountKind {
-    OPEN,
-    CLOSED_DOOR,
-    TRAP,
-};
-
 class DisplaySymbol;
 class FloorType;
 class Grid;
 class PlayerType;
 class MonraceDefinition;
+enum class GridCountKind;
 enum class TerrainCharacteristics;
 bool new_player_spot(PlayerType *player_ptr);
 bool is_hidden_door(PlayerType *player_ptr, const Grid &grid);
