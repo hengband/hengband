@@ -198,6 +198,35 @@ bool FloorType::order_pet_dismission(short index1, short index2, short riding_in
 }
 
 /*!
+ * @brief 生成階に応じた財宝を生成する.
+ * @return 財宝データで初期化したアイテム
+ * @todo クリーピングコインのドロップ判定はグローバル変数で判定しており、後で何とかする.
+ */
+ItemEntity FloorType::make_gold() const
+{
+    auto num_gold = ((randint1(this->object_level + 2) + 2) / 2) - 1;
+    if (one_in_(CHANCE_BASEITEM_LEVEL_BOOST)) {
+        num_gold += randint1(this->object_level + 1);
+    }
+
+    if (coin_type) {
+        num_gold = coin_type;
+    }
+
+    //!< @todo 後でベースアイテムリストから動的に引けるようにする.
+    constexpr auto num_gold_subtypes = 18;
+    if (num_gold >= num_gold_subtypes) {
+        num_gold = num_gold_subtypes - 1;
+    }
+
+    ItemEntity item(OBJ_GOLD_LIST + num_gold);
+    const auto &baseitems = BaseitemList::get_instance();
+    const auto base = baseitems.get_baseitem(OBJ_GOLD_LIST + num_gold).cost;
+    item.pval = base + (8 * randint1(base)) + randint1(8);
+    return item;
+}
+
+/*!
  * @brief モンスターの時限ステータスリストを初期化する
  * @details リストは逆順に走査し、死んでいるモンスターは初期化対象外とする
  */

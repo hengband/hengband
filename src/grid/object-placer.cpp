@@ -37,10 +37,7 @@ void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
     ItemEntity *q_ptr;
     q_ptr = &forge;
     q_ptr->wipe();
-    if (!make_gold(player_ptr, q_ptr)) {
-        return;
-    }
-
+    *q_ptr = floor_ptr->make_gold();
     OBJECT_IDX o_idx = o_pop(floor_ptr);
     if (o_idx == 0) {
         return;

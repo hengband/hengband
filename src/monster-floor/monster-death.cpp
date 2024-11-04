@@ -281,15 +281,13 @@ static void drop_items_golds(PlayerType *player_ptr, MonsterDeath *md_ptr, int d
 {
     int dump_item = 0;
     int dump_gold = 0;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = 0; i < drop_numbers; i++) {
         ItemEntity forge;
         auto *q_ptr = &forge;
         q_ptr->wipe();
         if (md_ptr->do_gold && (!md_ptr->do_item || one_in_(2))) {
-            if (!make_gold(player_ptr, q_ptr)) {
-                continue;
-            }
-
+            *q_ptr = floor_ptr->make_gold();
             dump_gold++;
         } else {
             if (!make_object(player_ptr, q_ptr, md_ptr->mo_mode)) {
@@ -302,7 +300,6 @@ static void drop_items_golds(PlayerType *player_ptr, MonsterDeath *md_ptr, int d
         (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->object_level = floor_ptr->base_level;
     coin_type = 0;
     auto visible = md_ptr->m_ptr->ml && !player_ptr->effects()->hallucination().is_hallucinated();
