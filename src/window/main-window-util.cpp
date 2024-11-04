@@ -6,8 +6,8 @@
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
 #include "grid/grid.h"
-#include "monster-race/race-indice-types.h"
 #include "player/player-status.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
@@ -292,7 +292,7 @@ DisplaySymbol set_term_color(PlayerType *player_ptr, const Pos2D &pos, const Dis
     }
 
     feat_priority = 31;
-    const auto &monrace = monraces_info[MonsterRaceId::PLAYER];
+    const auto &monrace = monraces_info[MonraceId::PLAYER];
     return monrace.symbol_config;
 }
 

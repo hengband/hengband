@@ -22,7 +22,6 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-kind-mask.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-update.h"
@@ -31,6 +30,7 @@
 #include "player/player-status.h"
 #include "system/alloc-entries.h"
 #include "system/dungeon-info.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
@@ -87,7 +87,7 @@ MONSTER_IDX m_pop(FloorType *floor_ptr)
  * @return 選択されたモンスター生成種族
  * @details nasty生成 (ゲーム内経過日数に応じて、現在フロアより深いフロアのモンスターを出現させる仕様)は
  */
-MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_level, BIT_FLAGS mode)
+MonraceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_level, BIT_FLAGS mode)
 {
     /* town max_level : same delay as 10F, no nasty mons till day18 */
     auto delay = static_cast<int>(std::sqrt(max_level * 10000)) + (max_level * 5);
@@ -209,7 +209,7 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
  * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
  * @return 対象にできるならtrueを返す
  */
-static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_idx, MONSTER_IDX m_idx, const Grid &grid, std::optional<MONSTER_IDX> summoner_m_idx)
+static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonraceId r_idx, MONSTER_IDX m_idx, const Grid &grid, std::optional<MONSTER_IDX> summoner_m_idx)
 {
     const auto &monraces = MonraceList::get_instance();
     const auto &monrace = monraces.get_monrace(r_idx);
@@ -221,7 +221,7 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_
         return false;
     }
 
-    if (std::abs(monrace.level - monraces.get_monrace(MonsterRaceId::CHAMELEON_K).level) > 5) {
+    if (std::abs(monrace.level - monraces.get_monrace(MonraceId::CHAMELEON_K).level) > 5) {
         return false;
     }
 
@@ -253,7 +253,7 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_
  * @return 対象にできるならtrueを返す
  * @todo グローバル変数対策の上 monster_hook.cへ移す。
  */
-static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx, MONSTER_IDX m_idx, const Grid &grid, std::optional<MONSTER_IDX> summoner_m_idx)
+static bool monster_hook_chameleon(PlayerType *player_ptr, MonraceId r_idx, MONSTER_IDX m_idx, const Grid &grid, std::optional<MONSTER_IDX> summoner_m_idx)
 {
     const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
@@ -299,7 +299,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx, 
     return hook_pf(player_ptr, r_idx);
 }
 
-static std::optional<MonsterRaceId> polymorph_of_chameleon(PlayerType *player_ptr, MONSTER_IDX m_idx, const Grid &grid, const std::optional<MONSTER_IDX> summoner_m_idx)
+static std::optional<MonraceId> polymorph_of_chameleon(PlayerType *player_ptr, MONSTER_IDX m_idx, const Grid &grid, const std::optional<MONSTER_IDX> summoner_m_idx)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
@@ -310,7 +310,7 @@ static std::optional<MonsterRaceId> polymorph_of_chameleon(PlayerType *player_pt
     }
 
     auto hook_fp = old_unique ? monster_hook_chameleon_lord : monster_hook_chameleon;
-    auto hook = [m_idx, grid, summoner_m_idx, hook_fp](PlayerType *player_ptr, MonsterRaceId r_idx) {
+    auto hook = [m_idx, grid, summoner_m_idx, hook_fp](PlayerType *player_ptr, MonraceId r_idx) {
         return hook_fp(player_ptr, r_idx, m_idx, grid, summoner_m_idx);
     };
     get_mon_num_prep_chameleon(player_ptr, std::move(hook));
@@ -318,7 +318,7 @@ static std::optional<MonsterRaceId> polymorph_of_chameleon(PlayerType *player_pt
     int level;
 
     if (old_unique) {
-        level = monraces_info[MonsterRaceId::CHAMELEON_K].level;
+        level = monraces_info[MonraceId::CHAMELEON_K].level;
     } else if (!floor_ptr->dun_level) {
         level = wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].level;
     } else {

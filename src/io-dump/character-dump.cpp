@@ -312,7 +312,7 @@ static void dump_aux_arena(FILE *fff)
 static void dump_aux_monsters(FILE *fff)
 {
     fprintf(fff, _("\n  [倒したモンスター]\n\n", "\n  [Defeated Monsters]\n\n"));
-    std::vector<MonsterRaceId> monrace_ids;
+    std::vector<MonraceId> monrace_ids;
     const auto &monraces = MonraceList::get_instance();
     auto norm_total = 0;
     for (const auto &[monrace_id, monrace] : monraces) {

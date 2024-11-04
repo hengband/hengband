@@ -15,7 +15,6 @@
 #include "mind/drs-types.h"
 #include "monster-race/race-brightness-flags.h"
 #include "monster-race/race-brightness-mask.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-processor-util.h"
@@ -30,6 +29,7 @@
 #include "status/element-resistance.h"
 #include "system/angband-system.h"
 #include "system/dungeon-info.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
@@ -490,8 +490,8 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
 
     if (!player_ptr->effects()->hallucination().is_hallucinated()) {
         auto *r_ptr = &m_ptr->get_monrace();
-        if ((m_ptr->ap_r_idx == MonsterRaceId::KAGE) && (monraces_info[MonsterRaceId::KAGE].r_sights < MAX_SHORT)) {
-            monraces_info[MonsterRaceId::KAGE].r_sights++;
+        if ((m_ptr->ap_r_idx == MonraceId::KAGE) && (monraces_info[MonraceId::KAGE].r_sights < MAX_SHORT)) {
+            monraces_info[MonraceId::KAGE].r_sights++;
         } else if (m_ptr->is_original_ap() && (r_ptr->r_sights < MAX_SHORT)) {
             r_ptr->r_sights++;
         }

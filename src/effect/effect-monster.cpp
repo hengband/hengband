@@ -24,7 +24,6 @@
 #include "monster-floor/monster-move.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-race/race-flags-resistance.h"
-#include "monster-race/race-indice-types.h"
 #include "monster-race/race-resistance-mask.h"
 #include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
@@ -40,6 +39,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/angband-system.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -68,7 +68,7 @@ static ProcessResult is_affective(EffectMonster *em_ptr)
     if (is_monster(em_ptr->src_idx) && (em_ptr->g_ptr->m_idx == em_ptr->src_idx)) {
         return ProcessResult::PROCESS_FALSE;
     }
-    if (sukekaku && ((em_ptr->m_ptr->r_idx == MonsterRaceId::SUKE) || (em_ptr->m_ptr->r_idx == MonsterRaceId::KAKU))) {
+    if (sukekaku && ((em_ptr->m_ptr->r_idx == MonraceId::SUKE) || (em_ptr->m_ptr->r_idx == MonraceId::KAKU))) {
         return ProcessResult::PROCESS_FALSE;
     }
     if (em_ptr->m_ptr->hp < 0) {

@@ -12,7 +12,6 @@
 #include "artifact/random-art-effects.h"
 #include "dungeon/quest.h"
 #include "game-option/birth-options.h"
-#include "monster-race/race-indice-types.h"
 #include "object-enchant/activation-info-table.h"
 #include "object-enchant/dragon-breaths-table.h"
 #include "object-enchant/item-feeling.h"
@@ -26,6 +25,7 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/monster-race-info.h"
 #include "term/term-color-types.h"
 #include "tracking/baseitem-tracker.h"
@@ -793,7 +793,7 @@ bool ItemEntity::is_bounty() const
         return true;
     }
 
-    if (monrace.idx == MonsterRaceId::TSUCHINOKO) {
+    if (monrace.idx == MonraceId::TSUCHINOKO) {
         return true;
     }
 
@@ -948,7 +948,7 @@ const MonsterRaceInfo &ItemEntity::get_monrace() const
         THROW_EXCEPTION(std::logic_error, "This item is not related to monrace!");
     }
 
-    const auto monrace_id = i2enum<MonsterRaceId>(this->pval);
+    const auto monrace_id = i2enum<MonraceId>(this->pval);
     return MonraceList::get_instance().get_monrace(monrace_id);
 }
 

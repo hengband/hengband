@@ -14,7 +14,7 @@
 #include "lore/monster-lore.h"
 #include "monster-attack/monster-attack-table.h"
 #include "monster-race/race-ability-flags.h"
-#include "monster-race/race-indice-types.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
@@ -36,7 +36,7 @@
  * @brief モンスター情報のヘッダを記述する
  * @param monrace_id モンスターの種族ID
  */
-void roff_top(MonsterRaceId monrace_id)
+void roff_top(MonraceId monrace_id)
 {
     term_erase(0, 0);
     term_gotoxy(0, 0);
@@ -72,7 +72,7 @@ void roff_top(MonsterRaceId monrace_id)
  * @param r_idx モンスターの種族ID
  * @param mode 表示オプション
  */
-void screen_roff(PlayerType *player_ptr, MonsterRaceId r_idx, monster_lore_mode mode)
+void screen_roff(PlayerType *player_ptr, MonraceId r_idx, monster_lore_mode mode)
 {
     msg_erase();
     term_erase(0, 1);
@@ -111,7 +111,7 @@ void display_roff(PlayerType *player_ptr)
  * @param roff_func 出力処理を行う関数ポインタ
  * @todo ここのroff_funcの引数にFILE* を追加しないとspoiler_file をローカル関数化することができないと判明した、保留.
  */
-void output_monster_spoiler(MonsterRaceId r_idx, hook_c_roff_pf roff_func)
+void output_monster_spoiler(MonraceId r_idx, hook_c_roff_pf roff_func)
 {
     hook_c_roff = roff_func;
     PlayerType dummy;
@@ -261,7 +261,7 @@ bool display_where_to_appear(lore_type *lore_ptr)
         lore_ptr->old = true;
     }
 
-    if (lore_ptr->r_idx == MonsterRaceId::CHAMELEON) {
+    if (lore_ptr->r_idx == MonraceId::CHAMELEON) {
         hooked_roff(_("、他のモンスターに化ける。", "and can take the shape of other monster."));
         return false;
     }
@@ -594,7 +594,7 @@ void display_monster_guardian(lore_type *lore_ptr)
     bool is_kingpin = lore_ptr->misc_flags.has(MonsterMiscType::QUESTOR);
     is_kingpin &= lore_ptr->r_ptr->r_sights > 0;
     is_kingpin &= lore_ptr->r_ptr->max_num > 0;
-    is_kingpin &= (lore_ptr->r_idx == MonsterRaceId::OBERON) || (lore_ptr->r_idx == MonsterRaceId::SERPENT);
+    is_kingpin &= (lore_ptr->r_idx == MonraceId::OBERON) || (lore_ptr->r_idx == MonraceId::SERPENT);
     if (is_kingpin) {
         hook_c_roff(TERM_VIOLET, _("あなたはこのモンスターを殺したいという強い欲望を感じている...", "You feel an intense desire to kill this monster...  "));
     } else if (lore_ptr->misc_flags.has(MonsterMiscType::GUARDIAN)) {

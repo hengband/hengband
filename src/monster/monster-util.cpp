@@ -6,12 +6,12 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster-race/race-flags-resistance.h"
-#include "monster-race/race-indice-types.h"
 #include "monster-race/race-misc-flags.h"
 #include "spell/summon-types.h"
 #include "system/alloc-entries.h"
 #include "system/angband-system.h"
 #include "system/dungeon-info.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-info.h"
@@ -63,7 +63,7 @@ static bool is_possible_monster_or(const EnumClassFlagGroup<T> &r_flags, const E
  * @param is_chameleon_polymorph カメレオンの変身の場合、true
  * @return 召喚条件が一致するならtrue / Return TRUE is the monster is OK and FALSE otherwise
  */
-static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonsterRaceId r_idx, std::optional<summon_type> summon_specific_type, bool is_chameleon_polymorph)
+static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonraceId r_idx, std::optional<summon_type> summon_specific_type, bool is_chameleon_polymorph)
 {
     const auto *d_ptr = &floor_ptr->get_dungeon_definition();
     const auto *r_ptr = &monraces_info[r_idx];
@@ -74,13 +74,13 @@ static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonsterRaceI
     }
 
     if (d_ptr->flags.has(DungeonFeatureType::NO_MAGIC)) {
-        if (r_idx != MonsterRaceId::CHAMELEON && r_ptr->freq_spell && r_ptr->ability_flags.has_none_of(RF_ABILITY_NOMAGIC_MASK)) {
+        if (r_idx != MonraceId::CHAMELEON && r_ptr->freq_spell && r_ptr->ability_flags.has_none_of(RF_ABILITY_NOMAGIC_MASK)) {
             return false;
         }
     }
 
     if (d_ptr->flags.has(DungeonFeatureType::NO_MELEE)) {
-        if (r_idx == MonsterRaceId::CHAMELEON) {
+        if (r_idx == MonraceId::CHAMELEON) {
             return true;
         }
         if (r_ptr->ability_flags.has_none_of(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK) && r_ptr->ability_flags.has_none_of(

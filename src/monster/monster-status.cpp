@@ -331,7 +331,7 @@ void dispel_monster_status(PlayerType *player_ptr, MONSTER_IDX m_idx)
  * @param m_idx 経験値を得るモンスターの参照ID
  * @param monrace_id 撃破されたモンスター種族ID
  */
-void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId monrace_id)
+void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonraceId monrace_id)
 {
     if (m_idx <= 0 || !MonraceList::is_valid(monrace_id)) {
         return;

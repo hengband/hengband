@@ -3680,9 +3680,6 @@
     <ClInclude Include="..\..\src\object-enchant\activation-info-table.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster-race\race-indice-types.h">
-      <Filter>monster-race</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster-race\monster-race-hook.h">
       <Filter>monster-race</Filter>
     </ClInclude>
@@ -5472,6 +5469,9 @@
     <ClInclude Include="..\..\src\timed-effect\player-protection.h">
       <Filter>timed-effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\system\enums\monrace\monrace-id.h">
+      <Filter>system\enums\monrace</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5741,6 +5741,9 @@
     </Filter>
     <Filter Include="system\enums">
       <UniqueIdentifier>{31491e27-d3e4-4605-b68a-c2c00d563479}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\enums\monrace">
+      <UniqueIdentifier>{123780c8-0bf5-47ac-aabd-c9f3dbe74855}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -1,11 +1,11 @@
 #include "system/monster-entity.h"
 #include "core/speed-table.h"
 #include "game-option/birth-options.h"
-#include "monster-race/race-indice-types.h"
 #include "monster-race/race-kind-flags.h"
 #include "monster/monster-pain-describer.h"
 #include "monster/monster-status.h"
 #include "system/angband-system.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/monster-race-info.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/term-color-types.h"
@@ -126,7 +126,7 @@ bool MonsterEntity::is_original_ap() const
  */
 bool MonsterEntity::is_mimicry() const
 {
-    auto is_special_mimic = this->ap_r_idx == MonsterRaceId::BEHINDER;
+    auto is_special_mimic = this->ap_r_idx == MonraceId::BEHINDER;
     if (is_special_mimic) {
         return true;
     }
@@ -148,14 +148,14 @@ bool MonsterEntity::is_valid() const
     return MonraceList::is_valid(this->r_idx);
 }
 
-MonsterRaceId MonsterEntity::get_real_monrace_id() const
+MonraceId MonsterEntity::get_real_monrace_id() const
 {
     const auto &monrace = this->get_monrace();
     if (this->mflag2.has_not(MonsterConstantFlagType::CHAMELEON)) {
         return this->r_idx;
     }
 
-    return monrace.kind_flags.has(MonsterKindType::UNIQUE) ? MonsterRaceId::CHAMELEON_K : MonsterRaceId::CHAMELEON;
+    return monrace.kind_flags.has(MonsterKindType::UNIQUE) ? MonraceId::CHAMELEON_K : MonraceId::CHAMELEON;
 }
 
 /*!
@@ -519,10 +519,10 @@ bool MonsterEntity::is_riding() const
 
 bool MonsterEntity::can_ring_boss_call_nazgul() const
 {
-    auto is_boss = this->r_idx == MonsterRaceId::MORGOTH;
-    is_boss |= this->r_idx == MonsterRaceId::SAURON;
-    is_boss |= this->r_idx == MonsterRaceId::ANGMAR;
-    const auto &nazgul = MonraceList::get_instance().get_monrace(MonsterRaceId::NAZGUL);
+    auto is_boss = this->r_idx == MonraceId::MORGOTH;
+    is_boss |= this->r_idx == MonraceId::SAURON;
+    is_boss |= this->r_idx == MonraceId::ANGMAR;
+    const auto &nazgul = MonraceList::get_instance().get_monrace(MonraceId::NAZGUL);
     const auto is_nazgul_alive = (nazgul.cur_num + 2) < nazgul.max_num;
     return is_boss && is_nazgul_alive;
 }

@@ -1,11 +1,11 @@
 #include "system/monster-race-info.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-table.h"
-#include "monster-race/race-indice-types.h"
 #include "monster-race/race-resistance-mask.h"
 #include "monster-race/race-sex.h"
 #include "monster/horror-descriptions.h"
 #include "system/enums/grid-flow.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/system-variables.h"
 #include "tracking/lore-tracker.h"
@@ -29,23 +29,23 @@ static int count_lore_mflag_group(const EnumClassFlagGroup<T> &flags, const Enum
 }
 }
 
-std::map<MonsterRaceId, MonsterRaceInfo> monraces_info;
+std::map<MonraceId, MonsterRaceInfo> monraces_info;
 
 MonsterRaceInfo::MonsterRaceInfo()
-    : idx(MonsterRaceId::PLAYER)
+    : idx(MonraceId::PLAYER)
 {
 }
 
 /*!
  * @brief 正当なモンスター (実際に存在するモンスター種族IDである)かどうかを調べる
- * @details モンスター種族IDが MonsterRaceDefinitions に実在するもの(MonsterRaceId::PLAYERは除く)であるかどうかの用途の他、
- * m_list 上の要素などの r_idx にMonsterRaceId::PLAYER を入れることで死亡扱いとして使われるのでその判定に使用する事もある
+ * @details モンスター種族IDが MonsterRaceDefinitions に実在するもの(MonraceId::PLAYERは除く)であるかどうかの用途の他、
+ * m_list 上の要素などの r_idx にMonraceId::PLAYER を入れることで死亡扱いとして使われるのでその判定に使用する事もある
  * @return 正当なものであれば true、そうでなければ false
  * @todo 将来的に定義側のIDが廃止されたら有効フラグのフィールド変数を代わりに作る.
  */
 bool MonsterRaceInfo::is_valid() const
 {
-    return this->idx != MonsterRaceId::PLAYER;
+    return this->idx != MonraceId::PLAYER;
 }
 
 bool MonsterRaceInfo::is_male() const
@@ -153,7 +153,7 @@ std::string MonsterRaceInfo::get_pronoun_of_summoned_kin() const
         return _("手下", "minions");
     }
     switch (this->idx) {
-    case MonsterRaceId::LAFFEY_II:
+    case MonraceId::LAFFEY_II:
         return _("ウサウサストライカー", "Bunbun Strikers");
     default:
         return _("仲間", "kin");
@@ -432,7 +432,7 @@ void MonsterRaceInfo::emplace_drop_artifact(FixedArtifactId fa_id, int chance)
     this->drop_artifacts.emplace_back(fa_id, chance);
 }
 
-void MonsterRaceInfo::emplace_reinforce(MonsterRaceId monrace_id, const Dice &dice)
+void MonsterRaceInfo::emplace_reinforce(MonraceId monrace_id, const Dice &dice)
 {
     this->reinforces.emplace_back(monrace_id, dice);
 }
@@ -506,13 +506,13 @@ DropArtifact::DropArtifact(FixedArtifactId fa_id, int chance)
 {
 }
 
-Reinforce::Reinforce(MonsterRaceId monrace_id, Dice dice)
+Reinforce::Reinforce(MonraceId monrace_id, Dice dice)
     : monrace_id(monrace_id)
     , dice(dice)
 {
 }
 
-MonsterRaceId Reinforce::get_monrace_id() const
+MonraceId Reinforce::get_monrace_id() const
 {
     return this->monrace_id;
 }
@@ -542,18 +542,18 @@ int Reinforce::roll_max_dice() const
     return this->dice.maxroll();
 }
 
-const std::map<MonsterRaceId, std::set<MonsterRaceId>> MonraceList::unified_uniques = {
-    { MonsterRaceId::BANORLUPART, { MonsterRaceId::BANOR, MonsterRaceId::LUPART } },
+const std::map<MonraceId, std::set<MonraceId>> MonraceList::unified_uniques = {
+    { MonraceId::BANORLUPART, { MonraceId::BANOR, MonraceId::LUPART } },
 };
 
 MonraceList MonraceList::instance{};
 
-bool MonraceList::is_valid(MonsterRaceId monrace_id)
+bool MonraceList::is_valid(MonraceId monrace_id)
 {
-    return monrace_id != MonsterRaceId::PLAYER;
+    return monrace_id != MonraceId::PLAYER;
 }
 
-const std::map<MonsterRaceId, std::set<MonsterRaceId>> &MonraceList::get_unified_uniques()
+const std::map<MonraceId, std::set<MonraceId>> &MonraceList::get_unified_uniques()
 {
     return unified_uniques;
 }
@@ -564,54 +564,54 @@ MonraceList &MonraceList::get_instance()
 }
 
 /*!
- * @brief どのモンスター種族でもない事を意味する MonsterRaceId を返す
- * @details 実態は MonsterRaceId::PLAYER だが、この値は実際にプレイヤーとしての意味として使われる場合
+ * @brief どのモンスター種族でもない事を意味する MonraceId を返す
+ * @details 実態は MonraceId::PLAYER だが、この値は実際にプレイヤーとしての意味として使われる場合
  * （召喚主がプレイヤーの場合やマップ上の表示属性情報等）とどのモンスターでもない意味として使われる場合があるので、
  * 後者ではこれを使用することでコード上の意図をわかりやすくする。
  *
- * @return (どのモンスター種族でもないという意味での) MonsterRaceId::PLAYER を返す
+ * @return (どのモンスター種族でもないという意味での) MonraceId::PLAYER を返す
  */
-MonsterRaceId MonraceList::empty_id()
+MonraceId MonraceList::empty_id()
 {
-    return MonsterRaceId::PLAYER;
+    return MonraceId::PLAYER;
 }
 
-std::map<MonsterRaceId, MonsterRaceInfo>::iterator MonraceList::begin()
+std::map<MonraceId, MonsterRaceInfo>::iterator MonraceList::begin()
 {
     return monraces_info.begin();
 }
 
-std::map<MonsterRaceId, MonsterRaceInfo>::const_iterator MonraceList::begin() const
+std::map<MonraceId, MonsterRaceInfo>::const_iterator MonraceList::begin() const
 {
     return monraces_info.cbegin();
 }
 
-std::map<MonsterRaceId, MonsterRaceInfo>::iterator MonraceList::end()
+std::map<MonraceId, MonsterRaceInfo>::iterator MonraceList::end()
 {
     return monraces_info.end();
 }
 
-std::map<MonsterRaceId, MonsterRaceInfo>::const_iterator MonraceList::end() const
+std::map<MonraceId, MonsterRaceInfo>::const_iterator MonraceList::end() const
 {
     return monraces_info.cend();
 }
 
-std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator MonraceList::rbegin()
+std::map<MonraceId, MonsterRaceInfo>::reverse_iterator MonraceList::rbegin()
 {
     return monraces_info.rbegin();
 }
 
-std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator MonraceList::rbegin() const
+std::map<MonraceId, MonsterRaceInfo>::const_reverse_iterator MonraceList::rbegin() const
 {
     return monraces_info.crbegin();
 }
 
-std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator MonraceList::rend()
+std::map<MonraceId, MonsterRaceInfo>::reverse_iterator MonraceList::rend()
 {
     return monraces_info.rend();
 }
 
-std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator MonraceList::rend() const
+std::map<MonraceId, MonsterRaceInfo>::const_reverse_iterator MonraceList::rend() const
 {
     return monraces_info.crend();
 }
@@ -627,7 +627,7 @@ size_t MonraceList::size() const
  * @return モンスター定義への参照
  * @details モンスター実体からモンスター定義を得るためには使用しないこと
  */
-MonsterRaceInfo &MonraceList::get_monrace(MonsterRaceId monrace_id)
+MonsterRaceInfo &MonraceList::get_monrace(MonraceId monrace_id)
 {
     return monraces_info.at(monrace_id);
 }
@@ -638,14 +638,14 @@ MonsterRaceInfo &MonraceList::get_monrace(MonsterRaceId monrace_id)
  * @return モンスター定義への参照
  * @details モンスター実体からモンスター定義を得るためには使用しないこと
  */
-const MonsterRaceInfo &MonraceList::get_monrace(MonsterRaceId monrace_id) const
+const MonsterRaceInfo &MonraceList::get_monrace(MonraceId monrace_id) const
 {
     return monraces_info.at(monrace_id);
 }
 
-const std::vector<MonsterRaceId> &MonraceList::get_valid_monrace_ids() const
+const std::vector<MonraceId> &MonraceList::get_valid_monrace_ids() const
 {
-    static std::vector<MonsterRaceId> valid_monraces;
+    static std::vector<MonraceId> valid_monraces;
     if (!valid_monraces.empty()) {
         return valid_monraces;
     }
@@ -655,9 +655,9 @@ const std::vector<MonsterRaceId> &MonraceList::get_valid_monrace_ids() const
 }
 
 //!< @todo ややトリッキーだが、元のmapでMonsterRaceInfo をshared_ptr で持つようにすればかなりスッキリ書けるはず.
-const std::vector<std::pair<MonsterRaceId, const MonsterRaceInfo *>> &MonraceList::get_sorted_monraces() const
+const std::vector<std::pair<MonraceId, const MonsterRaceInfo *>> &MonraceList::get_sorted_monraces() const
 {
-    static std::vector<std::pair<MonsterRaceId, const MonsterRaceInfo *>> sorted_monraces;
+    static std::vector<std::pair<MonraceId, const MonsterRaceInfo *>> sorted_monraces;
     if (!sorted_monraces.empty()) {
         return sorted_monraces;
     }
@@ -680,7 +680,7 @@ const std::vector<std::pair<MonsterRaceId, const MonsterRaceInfo *>> &MonraceLis
  * @return 合体/分離ユニークか否か
  * @details 合体/分離ユニークは、賞金首にもランダムクエスト討伐対象にもならない.
  */
-bool MonraceList::can_unify_separate(const MonsterRaceId r_idx) const
+bool MonraceList::can_unify_separate(const MonraceId r_idx) const
 {
     if (unified_uniques.contains(r_idx)) {
         return true;
@@ -696,7 +696,7 @@ bool MonraceList::can_unify_separate(const MonsterRaceId r_idx) const
  * v3.0.0 α89現在は、分離後のユニーク数は2のみ。3以上は将来の拡張。
  * @param r_idx 実際に死亡したモンスターの種族ID
  */
-void MonraceList::kill_unified_unique(const MonsterRaceId r_idx)
+void MonraceList::kill_unified_unique(const MonraceId r_idx)
 {
     const auto it_unique = unified_uniques.find(r_idx);
     if (it_unique != unified_uniques.end()) {
@@ -726,7 +726,7 @@ void MonraceList::kill_unified_unique(const MonsterRaceId r_idx)
  * 分離ユニークもtrueだが、通常レアリティ255のためこのメソッドとは別処理で生成不能
  * 分離/合体が A = B + C + D という図式の時、B・C・Dのいずれか1体がフロア内に生成済の場合、Aの生成を抑制する
  */
-bool MonraceList::is_selectable(const MonsterRaceId r_idx) const
+bool MonraceList::is_selectable(const MonraceId r_idx) const
 {
     const auto it = unified_uniques.find(r_idx);
     if (it == unified_uniques.end()) {
@@ -757,7 +757,7 @@ void MonraceList::defeat_separated_uniques()
     }
 }
 
-bool MonraceList::is_unified(const MonsterRaceId r_idx) const
+bool MonraceList::is_unified(const MonraceId r_idx) const
 {
     return unified_uniques.contains(r_idx);
 }
@@ -767,7 +767,7 @@ bool MonraceList::is_unified(const MonsterRaceId r_idx) const
  * @param r_idx 合体ユニークの種族ID
  * @return 全員が現在フロアに生成されているか
  */
-bool MonraceList::exists_separates(const MonsterRaceId r_idx) const
+bool MonraceList::exists_separates(const MonraceId r_idx) const
 {
     const auto &separates = unified_uniques.at(r_idx);
     return std::all_of(separates.begin(), separates.end(), [this](const auto x) { return this->get_monrace(x).has_entity(); });
@@ -777,7 +777,7 @@ bool MonraceList::exists_separates(const MonsterRaceId r_idx) const
  * @brief 与えられたIDが分離ユニークのいずれかに一致するかをチェックする
  * @param r_idx 調査対象のモンスター種族ID
  */
-bool MonraceList::is_separated(const MonsterRaceId r_idx) const
+bool MonraceList::is_separated(const MonraceId r_idx) const
 {
     if (unified_uniques.contains(r_idx)) {
         return false;
@@ -792,7 +792,7 @@ bool MonraceList::is_separated(const MonsterRaceId r_idx) const
  * @param hp 分離ユニークの現在HP
  * @param maxhp 分離ユニークの最大HP (衰弱を含)
  */
-bool MonraceList::can_select_separate(const MonsterRaceId monrace_id, const int hp, const int maxhp) const
+bool MonraceList::can_select_separate(const MonraceId monrace_id, const int hp, const int maxhp) const
 {
     if (unified_uniques.contains(monrace_id)) {
         return false;
@@ -812,7 +812,7 @@ bool MonraceList::can_select_separate(const MonsterRaceId monrace_id, const int 
     return std::all_of(found_separates.begin(), found_separates.end(), [this](const auto x) { return this->get_monrace(x).max_num > 0; });
 }
 
-bool MonraceList::order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed) const
+bool MonraceList::order(MonraceId id1, MonraceId id2, bool is_detailed) const
 {
     const auto &monrace1 = monraces_info[id1];
     const auto &monrace2 = monraces_info[id2];
@@ -861,14 +861,14 @@ bool MonraceList::order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed) 
     return id1 < id2;
 }
 
-bool MonraceList::order_level(MonsterRaceId id1, MonsterRaceId id2) const
+bool MonraceList::order_level(MonraceId id1, MonraceId id2) const
 {
     const auto &monrace1 = this->get_monrace(id1);
     const auto &monrace2 = this->get_monrace(id2);
     return monrace1.order_level_strictly(monrace2);
 }
 
-bool MonraceList::order_level_unique(MonsterRaceId id1, MonsterRaceId id2) const
+bool MonraceList::order_level_unique(MonraceId id1, MonraceId id2) const
 {
     const auto &monrace1 = this->get_monrace(id1);
     const auto &monrace2 = this->get_monrace(id2);
@@ -889,13 +889,13 @@ bool MonraceList::order_level_unique(MonsterRaceId id1, MonsterRaceId id2) const
 }
 
 /*!
- * @brief (MonsterRaceId::PLAYERを除く)実在するすべてのモンスター種族IDから等確率で1つ選択する
+ * @brief (MonraceId::PLAYERを除く)実在するすべてのモンスター種族IDから等確率で1つ選択する
  *
  * @return 選択したモンスター種族ID
  */
-MonsterRaceId MonraceList::pick_id_at_random() const
+MonraceId MonraceList::pick_id_at_random() const
 {
-    static ProbabilityTable<MonsterRaceId> table;
+    static ProbabilityTable<MonraceId> table;
     if (table.empty()) {
         for (const auto &[monrace_id, monrace] : monraces_info) {
             if (monrace.is_valid()) {
@@ -930,7 +930,7 @@ void MonraceList::reset_all_visuals()
     }
 }
 
-std::optional<std::string> MonraceList::probe_lore(MonsterRaceId monrace_id)
+std::optional<std::string> MonraceList::probe_lore(MonraceId monrace_id)
 {
     if (LoreTracker::get_instance().is_tracking(monrace_id)) {
         RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
@@ -943,7 +943,7 @@ std::optional<std::string> MonraceList::probe_lore(MonsterRaceId monrace_id)
  * @brief ユニークの死亡処理
  * @param monrace_id 死亡したユニークの種族番号
  */
-void MonraceList::kill_unique_monster(MonsterRaceId monrace_id)
+void MonraceList::kill_unique_monster(MonraceId monrace_id)
 {
     this->get_monrace(monrace_id).max_num = 0;
     if (this->can_unify_separate(monrace_id)) {

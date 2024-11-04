@@ -21,7 +21,7 @@ enum class ItemKindType : short;
 enum class PlayerSkillKindType;
 enum class MimicKindType;
 enum class MonsterAbilityType;
-enum class MonsterRaceId : int16_t;
+enum class MonraceId : short;
 enum class Virtue : short;
 enum class RealmType;
 

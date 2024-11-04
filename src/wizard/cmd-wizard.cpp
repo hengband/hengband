@@ -205,13 +205,13 @@ bool exe_cmd_debug(PlayerType *player_ptr, char cmd)
         map_area(player_ptr, DETECT_RAD_ALL * 3);
         return true;
     case 'n':
-        wiz_summon_specific_monster(player_ptr, i2enum<MonsterRaceId>(command_arg));
+        wiz_summon_specific_monster(player_ptr, i2enum<MonraceId>(command_arg));
         return true;
     case 'N':
-        wiz_summon_pet(player_ptr, i2enum<MonsterRaceId>(command_arg));
+        wiz_summon_pet(player_ptr, i2enum<MonraceId>(command_arg));
         return true;
     case KTRL('N'):
-        wiz_summon_clone(player_ptr, i2enum<MonsterRaceId>(command_arg));
+        wiz_summon_clone(player_ptr, i2enum<MonraceId>(command_arg));
         return true;
     case 'o':
         wiz_modify_item(player_ptr);

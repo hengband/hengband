@@ -1481,7 +1481,7 @@
     <ClInclude Include="..\..\src\monster-floor\monster-death.h" />
     <ClInclude Include="..\..\src\lore\monster-lore.h" />
     <ClInclude Include="..\..\src\monster-race\race-flags-resistance.h" />
-    <ClInclude Include="..\..\src\monster-race\race-indice-types.h" />
+    <ClInclude Include="..\..\src\system\enums\monrace\monrace-id.h" />
     <ClInclude Include="..\..\src\monster\monster-describer.h" />
     <ClInclude Include="..\..\src\monster\monster-description-types.h" />
     <ClInclude Include="..\..\src\monster\monster-flag-types.h" />

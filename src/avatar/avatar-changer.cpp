@@ -9,9 +9,9 @@
 #include "monster-attack/monster-attack-table.h"
 #include "monster-race/monster-kind-mask.h"
 #include "monster-race/race-ability-mask.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
 #include "system/dungeon-info.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -35,7 +35,7 @@ void AvatarChanger::change_virtue()
     this->change_virtue_non_beginner();
     this->change_virtue_unique();
     const auto &r_ref = this->m_ptr->get_real_monrace();
-    if (m_ptr->r_idx == MonsterRaceId::BEGGAR || m_ptr->r_idx == MonsterRaceId::LEPER) {
+    if (m_ptr->r_idx == MonraceId::BEGGAR || m_ptr->r_idx == MonraceId::LEPER) {
         chg_virtue(this->player_ptr, Virtue::COMPASSION, -1);
     }
 

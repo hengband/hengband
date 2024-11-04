@@ -89,7 +89,7 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
         "---", "---", "---", "-----", "-----", "-------------------");
 
     const auto &monraces = MonraceList::get_instance();
-    std::vector<MonsterRaceId> monrace_ids = monraces.get_valid_monrace_ids();
+    std::vector<MonraceId> monrace_ids = monraces.get_valid_monrace_ids();
     std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
     for (auto monrace_id : monrace_ids) {
         const auto &monrace = monraces.get_monrace(monrace_id);
@@ -167,7 +167,7 @@ SpoilerOutputResultType spoil_mon_info()
     spoil_out("------------------------------------------\n\n");
 
     const auto &monraces = MonraceList::get_instance();
-    std::vector<MonsterRaceId> monrace_ids = monraces.get_valid_monrace_ids();
+    std::vector<MonraceId> monrace_ids = monraces.get_valid_monrace_ids();
     std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
     for (auto monrace_id : monrace_ids) {
         const auto &monrace = monraces.get_monrace(monrace_id);

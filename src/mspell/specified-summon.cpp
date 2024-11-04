@@ -7,13 +7,13 @@
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-update.h"
 #include "mspell/mspell-checker.h"
 #include "mspell/mspell-util.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/summon-types.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
@@ -56,7 +56,7 @@ MONSTER_NUMBER summon_EDGE(PlayerType *player_ptr, POSITION y, POSITION x, int r
     int count = 0;
     int num = 2 + randint1(1 + rlev / 20);
     for (int k = 0; k < num; k++) {
-        count += summon_named_creature(player_ptr, m_idx, y, x, MonsterRaceId::EDGE, PM_NONE) ? 1 : 0;
+        count += summon_named_creature(player_ptr, m_idx, y, x, MonraceId::EDGE, PM_NONE) ? 1 : 0;
     }
 
     return count;
@@ -79,7 +79,7 @@ MONSTER_NUMBER summon_guardian(PlayerType *player_ptr, POSITION y, POSITION x, i
     bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
     bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
 
-    if (monraces_info[MonsterRaceId::JORMUNGAND].cur_num < monraces_info[MonsterRaceId::JORMUNGAND].max_num && one_in_(6)) {
+    if (monraces_info[MonraceId::JORMUNGAND].cur_num < monraces_info[MonraceId::JORMUNGAND].max_num && one_in_(6)) {
         mspell_cast_msg_simple msg(_("地面から水が吹き出した！", "Water blew off from the ground!"),
             _("地面から水が吹き出した！", "Water blew off from the ground!"));
 
@@ -113,7 +113,7 @@ MONSTER_NUMBER summon_LOCKE_CLONE(PlayerType *player_ptr, POSITION y, POSITION x
     int count = 0;
     int num = randint1(3);
     for (int k = 0; k < num; k++) {
-        count += summon_named_creature(player_ptr, m_idx, y, x, MonsterRaceId::LOCKE_CLONE, PM_NONE) ? 1 : 0;
+        count += summon_named_creature(player_ptr, m_idx, y, x, MonraceId::LOCKE_CLONE, PM_NONE) ? 1 : 0;
     }
 
     return count;
@@ -152,7 +152,7 @@ MONSTER_NUMBER summon_MOAI(PlayerType *player_ptr, POSITION y, POSITION x, int r
 
 MONSTER_NUMBER summon_DEMON_SLAYER(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
-    auto *r_ptr = &monraces_info[MonsterRaceId::DEMON_SLAYER_MEMBER];
+    auto *r_ptr = &monraces_info[MonraceId::DEMON_SLAYER_MEMBER];
     if (r_ptr->max_num == 0) {
         msg_print(_("しかし、隊士は全滅していた…。", "However, all demon slayer members were murdered..."));
         return 0;
@@ -160,7 +160,7 @@ MONSTER_NUMBER summon_DEMON_SLAYER(PlayerType *player_ptr, POSITION y, POSITION 
 
     auto count = 0;
     for (auto k = 0; k < MAX_NAZGUL_NUM; k++) {
-        count += summon_named_creature(player_ptr, m_idx, y, x, MonsterRaceId::DEMON_SLAYER_MEMBER, PM_NONE) ? 1 : 0;
+        count += summon_named_creature(player_ptr, m_idx, y, x, MonraceId::DEMON_SLAYER_MEMBER, PM_NONE) ? 1 : 0;
     }
 
     if (count == 0) {
@@ -213,7 +213,7 @@ MONSTER_NUMBER summon_NAZGUL(PlayerType *player_ptr, POSITION y, POSITION x, MON
             continue;
         }
 
-        if (!summon_named_creature(player_ptr, m_idx, cy, cx, MonsterRaceId::NAZGUL, mode)) {
+        if (!summon_named_creature(player_ptr, m_idx, cy, cx, MonraceId::NAZGUL, mode)) {
             continue;
         }
 
@@ -273,7 +273,7 @@ MONSTER_NUMBER summon_EYE_PHORN(PlayerType *player_ptr, POSITION y, POSITION x, 
     int count = 0;
     int num = 2 + randint1(1 + rlev / 20);
     for (int k = 0; k < num; k++) {
-        count += summon_named_creature(player_ptr, m_idx, y, x, MonsterRaceId::EYE_PHORN, PM_NONE) ? 1 : 0;
+        count += summon_named_creature(player_ptr, m_idx, y, x, MonraceId::EYE_PHORN, PM_NONE) ? 1 : 0;
     }
 
     return count;
@@ -311,13 +311,13 @@ MONSTER_NUMBER summon_THUNDERS(PlayerType *player_ptr, POSITION y, POSITION x, i
  */
 MONSTER_NUMBER summon_YENDER_WIZARD(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
-    auto *r_ptr = &monraces_info[MonsterRaceId::YENDOR_WIZARD_2];
+    auto *r_ptr = &monraces_info[MonraceId::YENDOR_WIZARD_2];
     if (r_ptr->max_num == 0) {
         msg_print(_("しかし、誰も来なかった…。", "However, no kin was appeared..."));
         return 0;
     }
 
-    auto count = summon_named_creature(player_ptr, m_idx, y, x, MonsterRaceId::YENDOR_WIZARD_2, PM_NONE) ? 1 : 0;
+    auto count = summon_named_creature(player_ptr, m_idx, y, x, MonraceId::YENDOR_WIZARD_2, PM_NONE) ? 1 : 0;
     if (count == 0) {
         msg_print(_("どこからか声が聞こえる…「三重苦は負わぬ。。。」", "Heard a voice from somewhere... 'I will deny the triple suffering...'"));
         return 0;
@@ -332,7 +332,7 @@ MONSTER_NUMBER summon_PLASMA(PlayerType *player_ptr, POSITION y, POSITION x, int
     auto count = 0;
     auto num = 2 + randint1(1 + rlev / 20);
     for (auto k = 0; k < num; k++) {
-        count += summon_named_creature(player_ptr, m_idx, y, x, MonsterRaceId::PLASMA_VORTEX, PM_NONE) ? 1 : 0;
+        count += summon_named_creature(player_ptr, m_idx, y, x, MonraceId::PLASMA_VORTEX, PM_NONE) ? 1 : 0;
     }
 
     msg_print(_("プーラーズーマーッ！！", "P--la--s--ma--!!"));
@@ -352,17 +352,17 @@ MONSTER_NUMBER summon_LAFFEY_II(PlayerType *player_ptr, const Pos2D &position, M
     auto &floor = *player_ptr->current_floor_ptr;
     auto count = 0;
     constexpr auto summon_num = 2;
-    auto real_num = summon_num - monraces_info[MonsterRaceId::BUNBUN_STRIKERS].cur_num;
+    auto real_num = summon_num - monraces_info[MonraceId::BUNBUN_STRIKERS].cur_num;
 
     if (!floor.inside_arena && real_num < MAX_BUNBUN_NUM) {
         for (auto &monster : floor.m_list) {
-            if (monster.r_idx == MonsterRaceId::BUNBUN_STRIKERS) {
+            if (monster.r_idx == MonraceId::BUNBUN_STRIKERS) {
                 Pos2D attract_position(0, 0);
                 Pos2D current_position(monster.fy, monster.fx);
                 auto &current_grid = floor.get_grid(current_position);
                 auto target_m_idx = current_grid.m_idx;
 
-                if (!mon_scatter(player_ptr, MonsterRaceId::BUNBUN_STRIKERS, &attract_position.y, &attract_position.x, position.y, position.x, 2)) {
+                if (!mon_scatter(player_ptr, MonraceId::BUNBUN_STRIKERS, &attract_position.y, &attract_position.x, position.y, position.x, 2)) {
                     continue;
                 }
 
@@ -381,7 +381,7 @@ MONSTER_NUMBER summon_LAFFEY_II(PlayerType *player_ptr, const Pos2D &position, M
         }
     }
     for (auto k = 0; k < real_num; k++) {
-        count += summon_named_creature(player_ptr, m_idx, position.y, position.x, MonsterRaceId::BUNBUN_STRIKERS, PM_NONE) ? 1 : 0;
+        count += summon_named_creature(player_ptr, m_idx, position.y, position.x, MonraceId::BUNBUN_STRIKERS, PM_NONE) ? 1 : 0;
     }
     return count;
 }

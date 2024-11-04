@@ -2,10 +2,10 @@
 #include "blue-magic/blue-magic-checker.h"
 #include "effect/effect-player.h"
 #include "mind/mind-mirror-master.h"
-#include "monster-race/race-indice-types.h"
 #include "object-enchant/object-curse.h"
 #include "player/player-damage.h"
 #include "status/bad-status-setter.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
@@ -49,7 +49,7 @@ void effect_player_curse_3(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
 
 void effect_player_curse_4(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
 {
-    if ((randint0(100 + ep_ptr->rlev / 2) < player_ptr->skill_sav) && (ep_ptr->m_ptr->r_idx != MonsterRaceId::KENSHIROU) && !check_multishadow(player_ptr)) {
+    if ((randint0(100 + ep_ptr->rlev / 2) < player_ptr->skill_sav) && (ep_ptr->m_ptr->r_idx != MonraceId::KENSHIROU) && !check_multishadow(player_ptr)) {
         msg_print(_("しかし秘孔を跳ね返した！", "You resist the effects!"));
         return;
     }

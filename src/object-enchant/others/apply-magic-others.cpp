@@ -11,7 +11,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "object-enchant/object-ego.h"
@@ -22,6 +21,7 @@
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/baseitem-info.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
@@ -107,10 +107,10 @@ void OtherItemsEnchanter::generate_figurine()
 {
     const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto &monraces = MonraceList::get_instance();
-    MonsterRaceId monrace_id;
+    MonraceId monrace_id;
     while (true) {
         monrace_id = monraces.pick_id_at_random();
-        if (!item_monster_okay(this->player_ptr, monrace_id) || (monrace_id == MonsterRaceId::TSUCHINOKO)) {
+        if (!item_monster_okay(this->player_ptr, monrace_id) || (monrace_id == MonraceId::TSUCHINOKO)) {
             continue;
         }
 
@@ -147,7 +147,7 @@ void OtherItemsEnchanter::generate_corpse()
     get_mon_num_prep(this->player_ptr, item_monster_okay, nullptr);
     const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto &monraces = MonraceList::get_instance();
-    MonsterRaceId monrace_id;
+    MonraceId monrace_id;
     while (true) {
         monrace_id = get_mon_num(this->player_ptr, 0, floor.dun_level, PM_NONE);
         const auto &monrace = monraces.get_monrace(monrace_id);

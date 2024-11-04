@@ -18,7 +18,7 @@ struct unique_list_type {
     unique_list_type(bool is_alive);
     int num_uniques[10]{};
     bool is_alive;
-    std::vector<MonsterRaceId> monrace_ids{};
+    std::vector<MonraceId> monrace_ids{};
     int num_uniques_surface = 0;
     int num_uniques_over100 = 0;
     int num_uniques_total = 0;

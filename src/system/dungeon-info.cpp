@@ -1,6 +1,6 @@
 #include "system/dungeon-info.h"
 #include "dungeon/dungeon-flag-mask.h"
-#include "monster-race/race-indice-types.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/monster-race-info.h"
 
 /*
@@ -29,7 +29,7 @@ bool dungeon_type::is_dungeon() const
 
 bool dungeon_type::has_guardian() const
 {
-    return this->final_guardian != MonsterRaceId::PLAYER;
+    return this->final_guardian != MonraceId::PLAYER;
 }
 
 MonsterRaceInfo &dungeon_type::get_guardian()

@@ -9,12 +9,12 @@
 #include "dungeon/quest-completion-checker.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-remover.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-processor-util.h"
 #include "pet/pet-fall-off.h"
 #include "system/angband-system.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -27,11 +27,11 @@
  * @param r_idx モンスター種族ID
  * @return 会話内容が行動のみのモンスターか否か
  */
-static bool is_acting_monster(const MonsterRaceId r_idx)
+static bool is_acting_monster(const MonraceId r_idx)
 {
-    auto is_acting_monster = r_idx == MonsterRaceId::GRIP;
-    is_acting_monster |= r_idx == MonsterRaceId::WOLF;
-    is_acting_monster |= r_idx == MonsterRaceId::FANG;
+    auto is_acting_monster = r_idx == MonraceId::GRIP;
+    is_acting_monster |= r_idx == MonraceId::WOLF;
+    is_acting_monster |= r_idx == MonraceId::FANG;
     return is_acting_monster;
 }
 

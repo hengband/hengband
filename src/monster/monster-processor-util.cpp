@@ -245,7 +245,7 @@ void store_moves_val(int *mm, int y, int x)
  * @brief 古いモンスター情報の保存
  * @param monrace_id モンスター種族ID
  */
-OldRaceFlags::OldRaceFlags(MonsterRaceId monrace_id)
+OldRaceFlags::OldRaceFlags(MonraceId monrace_id)
 {
     if (!MonraceList::is_valid(monrace_id)) {
         return;

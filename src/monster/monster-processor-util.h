@@ -16,7 +16,7 @@
 #include "system/angband.h"
 #include "util/flag-group.h"
 
-enum class MonsterRaceId : int16_t;
+enum class MonraceId : short;
 
 struct turn_flags {
     bool see_m;
@@ -41,7 +41,7 @@ struct turn_flags {
 class MonsterRaceInfo;
 class OldRaceFlags {
 public:
-    OldRaceFlags(MonsterRaceId monrace_id);
+    OldRaceFlags(MonraceId monrace_id);
 
     EnumClassFlagGroup<MonsterAbilityType> old_r_ability_flags{};
     EnumClassFlagGroup<MonsterBehaviorType> old_r_behavior_flags{};

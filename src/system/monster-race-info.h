@@ -30,7 +30,7 @@
 constexpr int MAX_NUM_BLOWS = 4;
 
 enum class FixedArtifactId : short;
-enum class MonsterRaceId : short;
+enum class MonraceId : short;
 enum class RaceBlowEffectType;
 enum class RaceBlowMethodType;
 enum class MonsterSex;
@@ -71,7 +71,7 @@ class MonsterRaceInfo {
 public:
     MonsterRaceInfo();
 
-    MonsterRaceId idx{};
+    MonraceId idx{};
     LocalizedString name{}; //!< モンスターの名称
     std::string text = ""; //!< 思い出テキストのオフセット / Lore text offset
     Dice hit_dice; //!< HPのダイス / Creatures hit dice
@@ -99,7 +99,7 @@ public:
     Dice shoot_damage_dice; //!< 射撃ダメージダイス / shoot damage dice
 
     PERCENTAGE arena_ratio{}; //!< モンスター闘技場の掛け金倍率修正値(%基準 / 0=100%) / The adjustment ratio for gambling monster
-    MonsterRaceId next_r_idx{}; //!< 進化先モンスター種族ID
+    MonraceId next_r_idx{}; //!< 進化先モンスター種族ID
     EXP next_exp{}; //!< 進化に必要な経験値
     DEPTH level{}; //!< レベル / Level of creature
     RARITY rarity{}; //!< レアリティ / Rarity of creature
@@ -161,7 +161,7 @@ public:
     std::optional<std::string> probe_lore();
     void make_lore_treasure(int num_item, int num_drop);
     void emplace_drop_artifact(FixedArtifactId fa_id, int percentage);
-    void emplace_reinforce(MonsterRaceId monrace_id, const Dice &dice);
+    void emplace_reinforce(MonraceId monrace_id, const Dice &dice);
 
     //!< @todo ここから先はミュータブルなフィールドなので分離すべき.
     bool has_entity() const;
@@ -188,8 +188,8 @@ public:
 
 class Reinforce {
 public:
-    Reinforce(MonsterRaceId monrace_id, Dice dice);
-    MonsterRaceId get_monrace_id() const;
+    Reinforce(MonraceId monrace_id, Dice dice);
+    MonraceId get_monrace_id() const;
     bool is_valid() const;
     const MonsterRaceInfo &get_monrace() const;
     std::string get_dice_as_string() const;
@@ -197,11 +197,11 @@ public:
     int roll_max_dice() const;
 
 private:
-    MonsterRaceId monrace_id;
+    MonraceId monrace_id;
     Dice dice;
 };
 
-extern std::map<MonsterRaceId, MonsterRaceInfo> monraces_info;
+extern std::map<MonraceId, MonsterRaceInfo> monraces_info;
 
 class MonraceList {
 public:
@@ -210,46 +210,46 @@ public:
     MonraceList &operator=(const MonraceList &) = delete;
     MonraceList &operator=(MonraceList &&) = delete;
 
-    static bool is_valid(MonsterRaceId monrace_id);
-    static const std::map<MonsterRaceId, std::set<MonsterRaceId>> &get_unified_uniques();
+    static bool is_valid(MonraceId monrace_id);
+    static const std::map<MonraceId, std::set<MonraceId>> &get_unified_uniques();
     static MonraceList &get_instance();
-    static MonsterRaceId empty_id();
-    std::map<MonsterRaceId, MonsterRaceInfo>::iterator begin();
-    std::map<MonsterRaceId, MonsterRaceInfo>::const_iterator begin() const;
-    std::map<MonsterRaceId, MonsterRaceInfo>::iterator end();
-    std::map<MonsterRaceId, MonsterRaceInfo>::const_iterator end() const;
-    std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator rbegin();
-    std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator rbegin() const;
-    std::map<MonsterRaceId, MonsterRaceInfo>::reverse_iterator rend();
-    std::map<MonsterRaceId, MonsterRaceInfo>::const_reverse_iterator rend() const;
+    static MonraceId empty_id();
+    std::map<MonraceId, MonsterRaceInfo>::iterator begin();
+    std::map<MonraceId, MonsterRaceInfo>::const_iterator begin() const;
+    std::map<MonraceId, MonsterRaceInfo>::iterator end();
+    std::map<MonraceId, MonsterRaceInfo>::const_iterator end() const;
+    std::map<MonraceId, MonsterRaceInfo>::reverse_iterator rbegin();
+    std::map<MonraceId, MonsterRaceInfo>::const_reverse_iterator rbegin() const;
+    std::map<MonraceId, MonsterRaceInfo>::reverse_iterator rend();
+    std::map<MonraceId, MonsterRaceInfo>::const_reverse_iterator rend() const;
     size_t size() const;
-    MonsterRaceInfo &get_monrace(MonsterRaceId monrace_id);
-    const MonsterRaceInfo &get_monrace(MonsterRaceId monrace_id) const;
-    const std::vector<MonsterRaceId> &get_valid_monrace_ids() const;
-    const std::vector<std::pair<MonsterRaceId, const MonsterRaceInfo *>> &get_sorted_monraces() const;
-    bool can_unify_separate(const MonsterRaceId r_idx) const;
-    void kill_unified_unique(const MonsterRaceId r_idx);
-    bool is_selectable(const MonsterRaceId r_idx) const;
+    MonsterRaceInfo &get_monrace(MonraceId monrace_id);
+    const MonsterRaceInfo &get_monrace(MonraceId monrace_id) const;
+    const std::vector<MonraceId> &get_valid_monrace_ids() const;
+    const std::vector<std::pair<MonraceId, const MonsterRaceInfo *>> &get_sorted_monraces() const;
+    bool can_unify_separate(const MonraceId r_idx) const;
+    void kill_unified_unique(const MonraceId r_idx);
+    bool is_selectable(const MonraceId r_idx) const;
     void defeat_separated_uniques();
-    bool is_unified(const MonsterRaceId r_idx) const;
-    bool exists_separates(const MonsterRaceId r_idx) const;
-    bool is_separated(const MonsterRaceId r_idx) const;
-    bool can_select_separate(const MonsterRaceId morace_id, const int hp, const int maxhp) const;
-    bool order(MonsterRaceId id1, MonsterRaceId id2, bool is_detailed = false) const;
-    bool order_level(MonsterRaceId id1, MonsterRaceId id2) const;
-    bool order_level_unique(MonsterRaceId id1, MonsterRaceId id2) const;
-    MonsterRaceId pick_id_at_random() const;
+    bool is_unified(const MonraceId r_idx) const;
+    bool exists_separates(const MonraceId r_idx) const;
+    bool is_separated(const MonraceId r_idx) const;
+    bool can_select_separate(const MonraceId morace_id, const int hp, const int maxhp) const;
+    bool order(MonraceId id1, MonraceId id2, bool is_detailed = false) const;
+    bool order_level(MonraceId id1, MonraceId id2) const;
+    bool order_level_unique(MonraceId id1, MonraceId id2) const;
+    MonraceId pick_id_at_random() const;
     const MonsterRaceInfo &pick_monrace_at_random() const;
 
     void reset_current_numbers();
     void reset_all_visuals();
-    std::optional<std::string> probe_lore(MonsterRaceId monrace_id);
-    void kill_unique_monster(MonsterRaceId monrace_id);
+    std::optional<std::string> probe_lore(MonraceId monrace_id);
+    void kill_unique_monster(MonraceId monrace_id);
 
 private:
     MonraceList() = default;
 
     static MonraceList instance;
 
-    const static std::map<MonsterRaceId, std::set<MonsterRaceId>> unified_uniques;
+    const static std::map<MonraceId, std::set<MonraceId>> unified_uniques;
 };

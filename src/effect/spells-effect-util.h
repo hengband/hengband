@@ -3,13 +3,13 @@
 #include "system/angband.h"
 #include <string>
 
-enum class MonsterRaceId : int16_t;
+enum class MonraceId : short;
 class PlayerType;
 
 class CapturedMonsterType {
 public:
     CapturedMonsterType();
-    MonsterRaceId r_idx;
+    MonraceId r_idx;
     byte speed = STANDARD_SPEED;
     short current_hp = 0;
     short max_hp = 0;

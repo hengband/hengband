@@ -57,7 +57,7 @@ static bool interpret_r_token(char *buf)
         return false;
     }
 
-    auto &monrace = monraces.get_monrace(i2enum<MonsterRaceId>(i));
+    auto &monrace = monraces.get_monrace(i2enum<MonraceId>(i));
     /* Allow TERM_DARK text */
     if (n1 || (!(n2 & 0x80) && n2)) {
         monrace.symbol_config.color = n1;

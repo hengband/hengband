@@ -1,6 +1,6 @@
 #pragma once
 
-enum class MonsterRaceId : short;
+enum class MonraceId : short;
 class PlayerType;
 bool exchange_cash(PlayerType *player_ptr);
 void today_target();

@@ -1,7 +1,7 @@
 #include "effect/spells-effect-util.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "pet/pet-fall-off.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
@@ -19,7 +19,7 @@ POSITION monster_target_x;
 POSITION monster_target_y;
 
 CapturedMonsterType::CapturedMonsterType()
-    : r_idx(MonsterRaceId::PLAYER)
+    : r_idx(MonraceId::PLAYER)
 {
 }
 

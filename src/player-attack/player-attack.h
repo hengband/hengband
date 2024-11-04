@@ -34,7 +34,7 @@ enum class MagicalBrandEffectType { NONE = 0,
  * @brief プレイヤーの打撃に関する情報
  * @todo fear とmdeath はポインタである必要はないはず
  */
-enum class MonsterRaceId : short;
+enum class MonraceId : short;
 class Grid;
 class FloorType;
 class MonsterRaceInfo;
@@ -66,7 +66,7 @@ struct player_attack_type {
 
     MONSTER_IDX m_idx; //!< モンスターID
     MonsterEntity *m_ptr; //!< モンスター情報(参照ポインタ)
-    MonsterRaceId r_idx; //!< モンスター種族ID
+    MonraceId r_idx; //!< モンスター種族ID
     MonsterRaceInfo *r_ptr; //!< モンスター種族情報(参照ポインタ)
     const martial_arts *ma_ptr; //!< マーシャルアーツ種別
 };

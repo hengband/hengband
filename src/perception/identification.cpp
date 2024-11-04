@@ -4,7 +4,6 @@
 #include "flavor/object-flavor-types.h"
 #include "game-option/special-options.h"
 #include "io/input-key-acceptor.h"
-#include "monster-race/race-indice-types.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
@@ -16,6 +15,7 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "term/screen-processor.h"
@@ -97,7 +97,7 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
 
     if (bi_key.tval() == ItemKindType::STATUE) {
         const auto &monrace = o_ptr->get_monrace();
-        if (monrace.idx == MonsterRaceId::BULLGATES) {
+        if (monrace.idx == MonraceId::BULLGATES) {
             info[i++] = _("それは部屋に飾ると恥ずかしい。", "It is shameful.");
         } else if (monrace.misc_flags.has(MonsterMiscType::ELDRITCH_HORROR)) {
             info[i++] = _("それは部屋に飾ると恐い。", "It is fearful.");
