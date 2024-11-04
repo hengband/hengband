@@ -1,5 +1,6 @@
 #include "system/floor-type-definition.h"
 #include "dungeon/quest.h"
+#include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "monster/monster-timed-effects.h"
 #include "system/angband-system.h"
@@ -158,6 +159,38 @@ bool FloorType::can_teleport_level(bool to_player) const
 bool FloorType::is_mark(const Pos2D &pos) const
 {
     return this->get_grid(pos).is_mark();
+}
+
+/*!
+ * @brief プレイヤーの周辺9マスに該当する地形がいくつあるかを返す
+ * @param p_pos プレイヤーの現在位置
+ * @param gck 判定条件
+ * @param under TRUEならばプレイヤーの直下の座標も走査対象にする
+ * @return 該当する地形の数と、該当する地形の中から1つの座標
+ */
+std::pair<int, Pos2D> FloorType::count_doors_traps(const Pos2D &p_pos, GridCountKind gck, bool under) const
+{
+    auto count = 0;
+    Pos2D pos(0, 0);
+    for (auto d = 0; d < 9; d++) {
+        if ((d == 8) && !under) {
+            continue;
+        }
+
+        Pos2D pos_neighbor = p_pos + Pos2DVec(ddy_ddd[d], ddx_ddd[d]);
+        if (!this->is_mark(pos_neighbor)) {
+            continue;
+        }
+
+        if (!this->check_terrain_state(pos_neighbor, gck)) {
+            continue;
+        }
+
+        ++count;
+        pos = pos_neighbor;
+    }
+
+    return { count, pos };
 }
 
 bool FloorType::check_terrain_state(const Pos2D &pos, GridCountKind gck) const

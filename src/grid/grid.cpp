@@ -43,7 +43,6 @@
 #include "player/player-status.h"
 #include "room/rooms-builder.h"
 #include "system/dungeon-info.h"
-#include "system/enums/grid-count-kind.h"
 #include "system/enums/grid-flow.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -1035,39 +1034,6 @@ void place_bold(PlayerType *player_ptr, POSITION y, POSITION x, grid_bold_type g
 void set_cave_feat(FloorType *floor_ptr, POSITION y, POSITION x, FEAT_IDX feature_idx)
 {
     floor_ptr->grid_array[y][x].feat = feature_idx;
-}
-
-/*!
- * @brief プレイヤーの周辺9マスに該当する地形がいくつあるかを返す
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param gck 判定条件
- * @param under TRUEならばプレイヤーの直下の座標も走査対象にする
- * @return 該当する地形の数と、該当する地形の中から1つの座標
- */
-std::pair<int, Pos2D> count_dt(PlayerType *player_ptr, GridCountKind gck, bool under)
-{
-    auto count = 0;
-    Pos2D pos(0, 0);
-    const auto &floor = *player_ptr->current_floor_ptr;
-    for (auto d = 0; d < 9; d++) {
-        if ((d == 8) && !under) {
-            continue;
-        }
-
-        Pos2D pos_neighbor(player_ptr->y + ddy_ddd[d], player_ptr->x + ddx_ddd[d]);
-        if (!floor.is_mark(pos_neighbor)) {
-            continue;
-        }
-
-        if (!floor.check_terrain_state(pos_neighbor, gck)) {
-            continue;
-        }
-
-        ++count;
-        pos = pos_neighbor;
-    }
-
-    return { count, pos };
 }
 
 /*!
