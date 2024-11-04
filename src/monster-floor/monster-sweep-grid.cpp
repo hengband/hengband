@@ -373,8 +373,7 @@ bool MonsterSweepGrid::is_best_cost(const Pos2D &pos, const int now_cost)
             return false;
         }
 
-        const auto &grid = floor.get_grid(pos);
-        if (!this->can_open_door && is_closed_door(this->player_ptr, grid.feat)) {
+        if (!this->can_open_door && floor.is_closed_door(pos)) {
             return false;
         }
     }

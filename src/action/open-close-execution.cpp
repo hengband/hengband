@@ -150,12 +150,13 @@ bool exe_close(PlayerType *player_ptr, POSITION y, POSITION x)
 bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     const Pos2D pos(y, x);
-    const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
-    const auto &terrain = grid.get_terrain();
-    if (!is_closed_door(player_ptr, grid.feat)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (!floor.is_closed_door(pos)) {
         return false;
     }
 
+    const auto &grid = floor.get_grid(pos);
+    const auto &terrain = grid.get_terrain();
     if (terrain.flags.has_not(TerrainCharacteristics::OPEN)) {
         constexpr auto fmt = _("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck.");
         msg_format(fmt, grid.get_terrain_mimic().name.data());

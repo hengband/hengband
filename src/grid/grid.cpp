@@ -153,7 +153,7 @@ bool new_player_spot(PlayerType *player_ptr)
  */
 bool is_hidden_door(PlayerType *player_ptr, const Grid &grid)
 {
-    return (grid.mimic || grid.cave_has_flag(TerrainCharacteristics::SECRET)) && is_closed_door(player_ptr, grid.feat);
+    return (grid.mimic || grid.cave_has_flag(TerrainCharacteristics::SECRET)) && player_ptr->current_floor_ptr->is_closed_door(player_ptr->get_position());
 }
 
 /*!
@@ -690,12 +690,12 @@ void update_flow(PlayerType *player_ptr)
                     continue;
                 }
 
-                auto &grid_neighbor = floor.get_grid(pos_neighbor);
-                if (is_closed_door(player_ptr, grid_neighbor.feat)) {
+                if (floor.is_closed_door(pos_neighbor)) {
                     m += 3;
                 }
 
                 /* Ignore "pre-stamped" entries */
+                auto &grid_neighbor = floor.get_grid(pos_neighbor);
                 auto &cost_neighbor = grid_neighbor.costs.at(gf);
                 auto &dist_neighbor = grid_neighbor.dists.at(gf);
                 if ((dist_neighbor != 0) && (dist_neighbor <= n) && (cost_neighbor <= m)) {
@@ -713,7 +713,7 @@ void update_flow(PlayerType *player_ptr)
                     break;
                 }
 
-                if (!can_move && !is_closed_door(player_ptr, grid_neighbor.feat)) {
+                if (!can_move && !floor.is_closed_door(pos_neighbor)) {
                     continue;
                 }
 

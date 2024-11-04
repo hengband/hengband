@@ -190,11 +190,11 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, con
 {
     auto &monrace = monster.get_monrace();
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto &grid = floor.get_grid(pos);
-    if (!is_closed_door(player_ptr, grid.feat)) {
+    if (!floor.is_closed_door(pos)) {
         return true;
     }
 
+    const auto &grid = floor.get_grid(pos);
     auto &terrain = grid.get_terrain();
     auto may_bash = bash_normal_door(player_ptr, turn_flags_ptr, monster, pos);
     bash_glass_door(player_ptr, turn_flags_ptr, monster, terrain, may_bash);

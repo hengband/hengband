@@ -161,6 +161,16 @@ bool FloorType::is_mark(const Pos2D &pos) const
     return this->get_grid(pos).is_mark();
 }
 
+bool FloorType::is_closed_door(const Pos2D &pos, bool is_mimic) const
+{
+    const auto &grid = this->get_grid(pos);
+    if (is_mimic) {
+        return grid.get_terrain_mimic().is_closed_door();
+    }
+
+    return grid.get_terrain().is_closed_door();
+}
+
 bool FloorType::is_trap(const Pos2D &pos) const
 {
     return this->get_grid(pos).get_terrain().is_trap();

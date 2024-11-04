@@ -291,7 +291,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
                     energy.reset_player_turn();
                 }
             } else {
-                if (easy_open && is_closed_door(player_ptr, grid.get_feat_mimic()) && easy_open_door(player_ptr, pos.y, pos.x)) {
+                if (easy_open && floor.is_closed_door(pos, true) && easy_open_door(player_ptr, pos.y, pos.x)) {
                     return;
                 }
 

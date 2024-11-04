@@ -82,7 +82,7 @@ void update_smell(FloorType *floor_ptr, PlayerType *player_ptr)
             }
 
             auto &grid = floor_ptr->get_grid(pos);
-            auto update_when = !grid.cave_has_flag(TerrainCharacteristics::MOVE) && !is_closed_door(player_ptr, grid.feat);
+            auto update_when = !grid.cave_has_flag(TerrainCharacteristics::MOVE) && !floor_ptr->is_closed_door(pos);
             update_when |= !grid.has_los();
             update_when |= scent_adjust[i][j] == -1;
             if (update_when) {

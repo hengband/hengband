@@ -104,20 +104,6 @@ FEAT_IDX feat_wall_inner;
 FEAT_IDX feat_wall_solid;
 FEAT_IDX feat_ground_type[100], feat_wall_type[100];
 
-/*!
- * @brief 地形が閉じたドアであるかの判定を行う。 / Return TRUE if the given grid is a closed door
- * @param feat 地形情報のID
- * @return 閉じたドアのある地形ならばTRUEを返す。
- */
-bool is_closed_door(PlayerType *player_ptr, FEAT_IDX feat)
-{
-    /* 関数ポインタの都合 */
-    (void)player_ptr;
-    const auto &terrain = TerrainList::get_instance().get_terrain(feat);
-    return (terrain.flags.has(TerrainCharacteristics::OPEN) || terrain.flags.has(TerrainCharacteristics::BASH)) &&
-           terrain.flags.has_not(TerrainCharacteristics::MOVE);
-}
-
 /*
  * Not using graphical tiles for this feature?
  */
