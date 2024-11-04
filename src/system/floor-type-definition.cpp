@@ -249,8 +249,7 @@ ItemEntity FloorType::make_gold(std::optional<int> initial_offset) const
 
 /*!
  * @brief INSTA_ART型の固定アーティファクトの生成を確率に応じて試行する
- * @param item 生成に割り当てたいアイテムへの参照
- * @return 生成に成功したらTRUEを返す
+ * @return 生成したアイテム (失敗したらnullopt)
  */
 std::optional<ItemEntity> FloorType::try_make_instant_artifact() const
 {
