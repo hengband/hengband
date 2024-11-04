@@ -175,7 +175,7 @@ void do_cmd_travel(PlayerType *player_ptr)
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(pos);
     const auto &terrain = grid.get_terrain();
-    const auto is_marked = any_bits(grid.info, CAVE_MARK);
+    const auto is_marked = grid.is_mark();
     const auto is_wall = terrain.flags.has_any_of({ TerrainCharacteristics::WALL, TerrainCharacteristics::CAN_DIG });
     const auto is_door = terrain.flags.has(TerrainCharacteristics::DOOR) && (grid.mimic > 0);
     if (is_marked && (is_wall || is_door)) {

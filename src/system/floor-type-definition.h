@@ -96,9 +96,10 @@ public:
     dungeon_type &get_dungeon_definition() const;
     QuestId get_random_quest_id(std::optional<int> level_opt = std::nullopt) const;
     QuestId get_quest_id(const int bonus = 0) const;
-    bool has_los(const Pos2D pos) const;
+    bool has_los(const Pos2D &pos) const;
     bool is_special() const;
     bool can_teleport_level(bool to_player = false) const;
+    bool is_mark(const Pos2D &pos) const;
     bool check_terrain_state(const Pos2D &pos, GridCountKind gck) const;
     bool order_pet_whistle(short index1, short index2) const;
     bool order_pet_dismission(short index1, short index2, short riding_index) const;

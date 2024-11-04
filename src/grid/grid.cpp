@@ -1055,8 +1055,7 @@ std::pair<int, Pos2D> count_dt(PlayerType *player_ptr, GridCountKind gck, bool u
         }
 
         Pos2D pos_neighbor(player_ptr->y + ddy_ddd[d], player_ptr->x + ddx_ddd[d]);
-        const auto &grid = floor.get_grid(pos_neighbor);
-        if (!grid.is_mark()) {
+        if (!floor.is_mark(pos_neighbor)) {
             continue;
         }
 

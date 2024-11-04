@@ -125,7 +125,7 @@ QuestId FloorType::get_quest_id(const int bonus) const
  * @param pos 座標
  * @return LOSフラグを持つか否か
  */
-bool FloorType::has_los(const Pos2D pos) const
+bool FloorType::has_los(const Pos2D &pos) const
 {
     return this->get_grid(pos).has_los();
 }
@@ -153,6 +153,11 @@ bool FloorType::can_teleport_level(bool to_player) const
     is_invalid_floor &= this->dun_level >= 1;
     is_invalid_floor &= ironman_downward;
     return this->is_special() || is_invalid_floor;
+}
+
+bool FloorType::is_mark(const Pos2D &pos) const
+{
+    return this->get_grid(pos).is_mark();
 }
 
 bool FloorType::check_terrain_state(const Pos2D &pos, GridCountKind gck) const
