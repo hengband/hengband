@@ -97,24 +97,18 @@ std::vector<short> store_same_magic_device_pvals(ItemEntity *j_ptr)
 }
 
 /*!
- * @brief 店舗に並べた品を重ね合わせできるかどうか判定する /
- * Allow a store item to absorb another item
- * @param o_ptr 判定するオブジェクト構造体の参照ポインタ1
- * @param j_ptr 判定するオブジェクト構造体の参照ポインタ2
- * @return 重ね合わせできるならTRUEを返す
- * @details
- * <pre>
- * See "object_similar()" for the same function for the "player"
- * </pre>
+ * @brief 店舗に並べた品を重ね合わせる
+ * @param item1 重ね合わせられて残る方のアイテムへの参照
+ * @param item2 重ね合わせるて消える方のアイテムへの参照
  */
-static void store_object_absorb(ItemEntity *o_ptr, ItemEntity *j_ptr)
+static void store_object_absorb(ItemEntity &item1, const ItemEntity &item2)
 {
-    int max_num = (o_ptr->bi_key.tval() == ItemKindType::ROD) ? std::min(99, MAX_SHORT / o_ptr->get_baseitem().pval) : 99;
-    int total = o_ptr->number + j_ptr->number;
-    int diff = (total > max_num) ? total - max_num : 0;
-    o_ptr->number = (total > max_num) ? max_num : total;
-    if (o_ptr->is_wand_rod()) {
-        o_ptr->pval += j_ptr->pval * (j_ptr->number - diff) / j_ptr->number;
+    const auto max_num = (item1.bi_key.tval() == ItemKindType::ROD) ? std::min(99, MAX_SHORT / item1.get_baseitem().pval) : 99;
+    const auto total = item1.number + item2.number;
+    const auto diff = (total > max_num) ? total - max_num : 0;
+    item1.number = (total > max_num) ? max_num : total;
+    if (item1.is_wand_rod()) {
+        item1.pval += item2.pval * (item2.number - diff) / item2.number;
     }
 }
 
@@ -175,7 +169,7 @@ int store_carry(ItemEntity *o_ptr)
     for (auto slot = 0; slot < st_ptr->stock_num; slot++) {
         auto &item = st_ptr->stock[slot];
         if (item->is_similar_for_store(*o_ptr)) {
-            store_object_absorb(item.get(), o_ptr);
+            store_object_absorb(*item, *o_ptr);
             return slot;
         }
     }
