@@ -6,7 +6,6 @@
  */
 
 #include "floor/floor-object.h"
-#include "artifact/fixed-art-generator.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -125,7 +124,9 @@ bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, std:
     auto prob = any_bits(mode, AM_GOOD) ? 10 : 1000;
     auto base = get_base_floor(floor_ptr, mode, rq_mon_level);
     if (one_in_(prob)) {
-        if (make_artifact_special(player_ptr, j_ptr)) {
+        const auto fa_opt = floor_ptr->try_make_instant_artifact();
+        if (fa_opt) {
+            *j_ptr = *fa_opt;
             apply();
             return true;
         }
