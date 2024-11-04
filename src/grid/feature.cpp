@@ -105,18 +105,6 @@ FEAT_IDX feat_wall_solid;
 FEAT_IDX feat_ground_type[100], feat_wall_type[100];
 
 /*!
- * @brief 地形が罠持ちであるかの判定を行う。 / Return TRUE if the given feature is a trap
- * @param feat 地形情報のID
- * @return 罠持ちの地形ならばTRUEを返す。
- */
-bool is_trap(PlayerType *player_ptr, FEAT_IDX feat)
-{
-    /* 関数ポインタの都合 */
-    (void)player_ptr;
-    return TerrainList::get_instance().get_terrain(feat).flags.has(TerrainCharacteristics::TRAP);
-}
-
-/*!
  * @brief 地形が閉じたドアであるかの判定を行う。 / Return TRUE if the given grid is a closed door
  * @param feat 地形情報のID
  * @return 閉じたドアのある地形ならばTRUEを返す。

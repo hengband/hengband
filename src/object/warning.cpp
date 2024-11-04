@@ -541,8 +541,8 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
         old_damage = old_damage / 2;
     }
 
-    auto *g_ptr = &floor.grid_array[yy][xx];
-    bool is_warning = (!easy_disarm && is_trap(player_ptr, g_ptr->feat)) || (g_ptr->mimic && is_trap(player_ptr, g_ptr->feat));
+    const Pos2D pos(yy, xx);
+    auto is_warning = (!easy_disarm && floor.is_trap(pos)) || (floor.get_grid(pos).mimic && floor.is_trap(pos));
     is_warning &= !one_in_(13);
     if (!is_warning) {
         return true;

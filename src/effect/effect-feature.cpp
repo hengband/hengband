@@ -178,7 +178,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
             }
         }
 
-        if (is_trap(player_ptr, grid.feat)) {
+        if (floor.is_trap(pos)) {
             if (known) {
                 msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
                 obvious = true;
@@ -206,7 +206,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         break;
     }
     case AttributeType::KILL_DOOR: {
-        if (is_trap(player_ptr, grid.feat) || terrain.flags.has(TerrainCharacteristics::DOOR)) {
+        if (floor.is_trap(pos) || terrain.flags.has(TerrainCharacteristics::DOOR)) {
             if (known) {
                 msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
                 obvious = true;

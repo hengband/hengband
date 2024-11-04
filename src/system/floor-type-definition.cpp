@@ -161,6 +161,11 @@ bool FloorType::is_mark(const Pos2D &pos) const
     return this->get_grid(pos).is_mark();
 }
 
+bool FloorType::is_trap(const Pos2D &pos) const
+{
+    return this->get_grid(pos).get_terrain().is_trap();
+}
+
 /*!
  * @brief プレイヤーの周辺9マスに該当する地形がいくつあるかを返す
  * @param p_pos プレイヤーの現在位置
