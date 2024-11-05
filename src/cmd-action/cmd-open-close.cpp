@@ -105,7 +105,7 @@ void do_cmd_open(PlayerType *player_ptr)
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
     if (easy_open) {
-        const auto &[num_doors, pos_door] = count_dt(player_ptr, is_closed_door, false);
+        const auto &[num_doors, pos_door] = count_dt(player_ptr, GridCountKind::CLOSED_DOOR, false);
         const auto &[num_chests, pos_chest] = count_chests(player_ptr, false);
         if ((num_doors > 0) || (num_chests > 0)) {
             const auto pos = pos_chest == Pos2D(0, 0) ? pos_door : pos_chest;
@@ -160,7 +160,7 @@ void do_cmd_close(PlayerType *player_ptr)
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
     if (easy_open) {
-        const auto &[num_doors, pos] = count_dt(player_ptr, is_open, false);
+        const auto &[num_doors, pos] = count_dt(player_ptr, GridCountKind::OPEN, false);
         if (num_doors == 1) {
             command_dir = coords_to_dir(player_ptr, pos.y, pos.x);
         }
@@ -205,7 +205,7 @@ void do_cmd_disarm(PlayerType *player_ptr)
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
     if (easy_disarm) {
-        const auto &[num_traps, pos_trap] = count_dt(player_ptr, is_trap, true);
+        const auto &[num_traps, pos_trap] = count_dt(player_ptr, GridCountKind::TRAP, true);
         const auto &[num_chests, pos_chest] = count_chests(player_ptr, true);
         if ((num_traps > 0) || (num_chests > 0)) {
             const auto pos = pos_chest == Pos2D(0, 0) ? pos_trap : pos_chest;

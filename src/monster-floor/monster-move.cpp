@@ -28,6 +28,7 @@
 #include "pet/pet-util.h"
 #include "player/player-status-flags.h"
 #include "system/angband-system.h"
+#include "system/dungeon-info.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -188,7 +189,8 @@ static void bash_glass_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, 
 static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MonsterEntity &monster, const Pos2D &pos)
 {
     auto &monrace = monster.get_monrace();
-    const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &grid = floor.get_grid(pos);
     if (!is_closed_door(player_ptr, grid.feat)) {
         return true;
     }
@@ -200,7 +202,8 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, con
         return true;
     }
 
-    const auto is_open = feat_state(player_ptr->current_floor_ptr, grid.feat, TerrainCharacteristics::OPEN) == grid.feat;
+    const auto &dungeon = floor.get_dungeon_definition();
+    const auto is_open = dungeon.convert_terrain_id(grid.feat, TerrainCharacteristics::OPEN) == grid.feat;
     if (turn_flags_ptr->did_bash_door && (one_in_(2) || is_open || terrain.flags.has(TerrainCharacteristics::GLASS))) {
         cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::BASH);
         if (!monster.is_valid()) {

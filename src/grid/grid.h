@@ -60,6 +60,12 @@ enum grid_bold_type {
     GB_SOLID_NOPERM
 };
 
+enum class GridCountKind {
+    OPEN,
+    CLOSED_DOOR,
+    TRAP,
+};
+
 class DisplaySymbol;
 class FloorType;
 class Grid;
@@ -77,7 +83,6 @@ void print_bolt_pict(PlayerType *player_ptr, POSITION y, POSITION x, POSITION ny
 void note_spot(PlayerType *player_ptr, POSITION y, POSITION x);
 void lite_spot(PlayerType *player_ptr, POSITION y, POSITION x);
 void update_flow(PlayerType *player_ptr);
-FEAT_IDX feat_state(const FloorType *floor_ptr, FEAT_IDX feat, TerrainCharacteristics action);
 void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainCharacteristics action);
 bool is_open(PlayerType *player_ptr, FEAT_IDX feat);
 bool check_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x);
@@ -88,7 +93,7 @@ bool darkened_grid(PlayerType *player_ptr, Grid *g_ptr);
 void delete_monster(PlayerType *player_ptr, POSITION y, POSITION x);
 void place_bold(PlayerType *player_ptr, POSITION y, POSITION x, grid_bold_type gh_type);
 void set_cave_feat(FloorType *floor_ptr, POSITION y, POSITION x, FEAT_IDX feature_idx);
-std::pair<int, Pos2D> count_dt(PlayerType *player_ptr, bool (*test)(PlayerType *, short), bool under);
+std::pair<int, Pos2D> count_dt(PlayerType *player_ptr, GridCountKind gck, bool under);
 void cave_lite_hack(FloorType *floor_ptr, POSITION y, POSITION x);
 void cave_redraw_later(FloorType *floor_ptr, POSITION y, POSITION x);
 void cave_note_and_redraw_later(FloorType *floor_ptr, POSITION y, POSITION x);

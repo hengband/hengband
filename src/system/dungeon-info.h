@@ -56,6 +56,7 @@ struct feat_prob {
 };
 
 /* A structure for the != dungeon types */
+enum class TerrainCharacteristics;
 class MonsterRaceInfo;
 struct dungeon_type {
     DUNGEON_IDX idx{};
@@ -115,6 +116,8 @@ struct dungeon_type {
     bool has_guardian() const;
     MonsterRaceInfo &get_guardian();
     const MonsterRaceInfo &get_guardian() const;
+    short convert_terrain_id(short terrain_id, TerrainCharacteristics action) const;
+    short convert_terrain_id(short terrain_id) const;
 };
 
 extern std::vector<DEPTH> max_dlv;

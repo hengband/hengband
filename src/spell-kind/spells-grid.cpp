@@ -143,13 +143,14 @@ void stair_creation(PlayerType *player_ptr)
 
     saved_floor_type *dest_sf_ptr;
     dest_sf_ptr = get_sf_ptr(dest_floor_id);
+    const auto &dungeon = floor.get_dungeon_definition();
     if (up) {
         cave_set_feat(player_ptr, player_ptr->y, player_ptr->x,
-            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= floor.dun_level - 2)) ? feat_state(&floor, feat_up_stair, TerrainCharacteristics::SHAFT)
+            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= floor.dun_level - 2)) ? dungeon.convert_terrain_id(feat_up_stair, TerrainCharacteristics::SHAFT)
                                                                                          : feat_up_stair);
     } else {
         cave_set_feat(player_ptr, player_ptr->y, player_ptr->x,
-            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= floor.dun_level + 2)) ? feat_state(&floor, feat_down_stair, TerrainCharacteristics::SHAFT)
+            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= floor.dun_level + 2)) ? dungeon.convert_terrain_id(feat_down_stair, TerrainCharacteristics::SHAFT)
                                                                                          : feat_down_stair);
     }
 
