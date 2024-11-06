@@ -1,6 +1,7 @@
 #include "system/artifact-type-definition.h"
 #include "artifact/fixed-art-types.h"
 #include "object/tval-types.h"
+#include "system/item-entity.h"
 
 ArtifactType::ArtifactType()
     : bi_key(BaseitemKey(ItemKindType::NONE))
@@ -27,6 +28,35 @@ bool ArtifactType::can_generate(const BaseitemKey &generaing_bi_key) const
     }
 
     return this->bi_key == generaing_bi_key;
+}
+
+/*!
+ * @brief INSTA_ART型の固定アーティファクト生成を試みる
+ * @param 生成基準階層 (現在フロアそのものではなくボーナスつき)
+ * @param fa_id 固定アーティファクトID
+ * @return 生成に成功したらそのアイテム、失敗したらnullopt
+ */
+std::optional<ItemEntity> ArtifactType::try_generate_instant_artifact(int making_level, FixedArtifactId fa_id) const
+{
+    if (!this->can_make_instant_artifact()) {
+        return std::nullopt;
+    }
+
+    if (!this->evaluate_shallow_instant_artifact(making_level)) {
+        return std::nullopt;
+    }
+
+    if (!this->evaluate_rarity()) {
+        return std::nullopt;
+    }
+
+    if (!this->evaluate_shallow_baseitem(making_level)) {
+        return std::nullopt;
+    }
+
+    ItemEntity instant_artifact(this->bi_key);
+    instant_artifact.fa_id = fa_id;
+    return instant_artifact;
 }
 
 /*!

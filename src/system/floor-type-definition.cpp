@@ -304,6 +304,7 @@ ItemEntity FloorType::make_gold(std::optional<int> initial_offset) const
  * @brief INSTA_ART型の固定アーティファクトの生成を確率に応じて試行する
  * @return 生成したアイテム (失敗したらnullopt)
  * @details 地上生成は禁止、生成制限がある場合も禁止、個々のアーティファクト生成条件及び生成確率を潜り抜けなければ生成失敗とする
+ * 最初に潜り抜けたINSTA_ART型の固定アーティファクトを生成し、以後はチェックせずスキップする
  */
 std::optional<ItemEntity> FloorType::try_make_instant_artifact() const
 {
@@ -312,26 +313,10 @@ std::optional<ItemEntity> FloorType::try_make_instant_artifact() const
     }
 
     for (const auto &[fa_id, artifact] : ArtifactList::get_instance()) {
-        if (!artifact.can_make_instant_artifact()) {
-            continue;
+        const auto instant_artifact = artifact.try_make_instant_artifact(this->object_level, fa_id);
+        if (instant_artifact) {
+            return instant_artifact;
         }
-
-        if (!artifact.evaluate_shallow_instant_artifact(this->object_level)) {
-            continue;
-        }
-
-        if (!artifact.evaluate_rarity()) {
-            continue;
-        }
-
-        if (!artifact.evaluate_shallow_baseitem(this->object_level)) {
-            continue;
-        }
-
-        //<! @note 前述の条件を満たしたら、後のIDのアーティファクトはチェックせずすぐ確定し生成処理に移す.
-        ItemEntity instant_artifact(artifact.bi_key);
-        instant_artifact.fa_id = fa_id;
-        return instant_artifact;
     }
 
     /*! @note 全INSTA_ART固定アーティファクトを試行しても決まらなかった場合 FALSEを返す / Failure */
