@@ -56,6 +56,15 @@ bool ArtifactType::evaluate_shallow_instant_artifact(int making_level) const
     return one_in_((this->level - making_level) * 2);
 }
 
+/*!
+ * @brief レアリティによる生成制限を判定する
+ * @return 生成可否
+ */
+bool ArtifactType::evaluate_rarity() const
+{
+    return one_in_(this->rarity);
+}
+
 std::map<FixedArtifactId, ArtifactType> artifacts;
 
 ArtifactList ArtifactList::instance{};

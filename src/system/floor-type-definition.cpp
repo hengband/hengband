@@ -267,8 +267,7 @@ std::optional<ItemEntity> FloorType::try_make_instant_artifact() const
             continue;
         }
 
-        /*! @note 1/(レア度)の確率を満たさないと除外される / Artifact "rarity roll" */
-        if (!one_in_(artifact.rarity)) {
+        if (!artifact.evaluate_rarity()) {
             continue;
         }
 
