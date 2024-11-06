@@ -43,6 +43,7 @@ public:
     bool can_make_instant_artifact() const;
     bool evaluate_shallow_instant_artifact(int making_level) const;
     bool evaluate_rarity() const;
+    bool evaluate_shallow_baseitem(int making_level) const;
 };
 
 class ArtifactList {

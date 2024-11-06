@@ -65,6 +65,22 @@ bool ArtifactType::evaluate_rarity() const
     return one_in_(this->rarity);
 }
 
+/*!
+ * @brief 標準生成階層より浅い階層でのベースアイテム生成制限を判定する
+ * @return 生成可否
+ * @details 1/(不足階層*5) を満たさないと生成しない
+ */
+bool ArtifactType::evaluate_shallow_baseitem(int making_level) const
+{
+    const auto &baseitems = BaseitemList::get_instance();
+    const auto &baseitem = baseitems.lookup_baseitem(this->bi_key);
+    if (baseitem.level <= making_level) {
+        return true;
+    }
+
+    return one_in_((baseitem.level - making_level) * 5);
+}
+
 std::map<FixedArtifactId, ArtifactType> artifacts;
 
 ArtifactList ArtifactList::instance{};

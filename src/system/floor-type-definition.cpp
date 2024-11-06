@@ -271,17 +271,8 @@ std::optional<ItemEntity> FloorType::try_make_instant_artifact() const
             continue;
         }
 
-        /*!
-         * @note INSTA_ART型固定アーティファクトのベースアイテムもチェック対象とする。
-         * ベースアイテムの生成階層が足りない場合1/(不足階層*5)を満たさないと除外される。
-         */
-        const auto &baseitems = BaseitemList::get_instance();
-        const auto &baseitem = baseitems.lookup_baseitem(artifact.bi_key);
-        if (baseitem.level > this->object_level) {
-            int d = (baseitem.level - this->object_level) * 5;
-            if (!one_in_(d)) {
-                continue;
-            }
+        if (!artifact.evaluate_shallow_baseitem(this->object_level)) {
+            continue;
         }
 
         //<! @note 前述の条件を満たしたら、後のIDのアーティファクトはチェックせずすぐ確定し生成処理に移す.
