@@ -312,15 +312,7 @@ std::optional<ItemEntity> FloorType::try_make_instant_artifact() const
         return std::nullopt;
     }
 
-    for (const auto &[fa_id, artifact] : ArtifactList::get_instance()) {
-        const auto instant_artifact = artifact.try_make_instant_artifact(this->object_level, fa_id);
-        if (instant_artifact) {
-            return instant_artifact;
-        }
-    }
-
-    /*! @note 全INSTA_ART固定アーティファクトを試行しても決まらなかった場合 FALSEを返す / Failure */
-    return std::nullopt;
+    return ArtifactList::get_instance().try_make_instant_artifact(this->object_level);
 }
 
 /*!

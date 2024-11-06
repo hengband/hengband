@@ -36,7 +36,7 @@ bool ArtifactType::can_generate(const BaseitemKey &generaing_bi_key) const
  * @param fa_id 固定アーティファクトID
  * @return 生成に成功したらそのアイテム、失敗したらnullopt
  */
-std::optional<ItemEntity> ArtifactType::try_generate_instant_artifact(int making_level, FixedArtifactId fa_id) const
+std::optional<BaseitemKey> ArtifactType::try_make_instant_artifact(int making_level) const
 {
     if (!this->can_make_instant_artifact()) {
         return std::nullopt;
@@ -54,9 +54,7 @@ std::optional<ItemEntity> ArtifactType::try_generate_instant_artifact(int making
         return std::nullopt;
     }
 
-    ItemEntity instant_artifact(this->bi_key);
-    instant_artifact.fa_id = fa_id;
-    return instant_artifact;
+    return this->bi_key;
 }
 
 /*!
@@ -213,4 +211,18 @@ void ArtifactList::reset_generated_flags()
     for (auto &[_, artifact] : this->artifacts) {
         artifact.is_generated = false;
     }
+}
+
+std::optional<ItemEntity> ArtifactList::try_make_instant_artifact(int making_level) const
+{
+    for (const auto &[fa_id, artifact] : this->artifacts) {
+        const auto bi_key = artifact.try_make_instant_artifact(making_level);
+        if (bi_key) {
+            ItemEntity instant_artifact(*bi_key);
+            instant_artifact.fa_id = fa_id;
+            return instant_artifact;
+        }
+    }
+
+    return std::nullopt;
 }
