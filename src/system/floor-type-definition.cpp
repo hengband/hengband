@@ -265,14 +265,7 @@ std::optional<ItemEntity> FloorType::try_make_instant_artifact() const
 
     /*! @note 全固定アーティファクト中からIDの若い順に生成対象とその確率を走査する / Check the artifact list (just the "specials") */
     for (const auto &[fa_id, artifact] : ArtifactList::get_instance()) {
-        /*! @note 既に生成回数がカウントされたアーティファクト、QUESTITEMと非INSTA_ARTは除外 / Cannot make an artifact twice */
-        if (artifact.is_generated) {
-            continue;
-        }
-        if (artifact.gen_flags.has(ItemGenerationTraitType::QUESTITEM)) {
-            continue;
-        }
-        if (!(artifact.gen_flags.has(ItemGenerationTraitType::INSTA_ART))) {
+        if (!artifact.can_make_instant_artifact()) {
             continue;
         }
 

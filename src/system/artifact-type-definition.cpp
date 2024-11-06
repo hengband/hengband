@@ -29,6 +29,19 @@ bool ArtifactType::can_generate(const BaseitemKey &generaing_bi_key) const
     return this->bi_key == generaing_bi_key;
 }
 
+/*!
+ * @brief INSTA_ARTフラグ付きアーティファクトの生成可否を判定する
+ * @return 生成可否
+ * @details 生成済、クエスト属性付き、非INSTA_ARTはfalse、普通のINSTA_ARTはtrue
+ */
+bool ArtifactType::can_make_instant_artifact() const
+{
+    auto can_make = !this->is_generated;
+    can_make &= this->gen_flags.has_not(ItemGenerationTraitType::QUESTITEM);
+    can_make &= this->gen_flags.has(ItemGenerationTraitType::INSTA_ART);
+    return can_make;
+}
+
 std::map<FixedArtifactId, ArtifactType> artifacts;
 
 ArtifactList ArtifactList::instance{};

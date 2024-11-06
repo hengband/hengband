@@ -40,6 +40,7 @@ public:
     RandomArtActType act_idx{}; /*! 発動能力ID / Activative ability index */
 
     bool can_generate(const BaseitemKey &bi_key) const;
+    bool can_make_instant_artifact() const;
 };
 
 class ArtifactList {
