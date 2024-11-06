@@ -498,7 +498,7 @@ void PlayerClass::init_specific_data()
         this->player_ptr->class_specific_data = std::make_shared<bluemage_data_type>();
         break;
     case PlayerClassType::MAGIC_EATER:
-        this->player_ptr->class_specific_data = std::make_shared<magic_eater_data_type>();
+        this->player_ptr->class_specific_data = std::make_shared<MagicEaterDataList>();
         break;
     case PlayerClassType::BARD:
         this->player_ptr->class_specific_data = std::make_shared<bard_data_type>();

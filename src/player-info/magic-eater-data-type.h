@@ -13,22 +13,25 @@ inline constexpr int EATER_ROD_CHARGE = 0x10L;
 
 enum class ItemKindType : short;
 class BaseitemKey;
-struct magic_eater_data_type {
-    struct magic_type {
+class MagicEaterDataList {
+public:
+    class MagicEaterDatum {
+    public:
+        MagicEaterDatum() = default;
         int charge{}; //!< 充填量 (杖/魔法棒とロッドで仕様が異なる)
         uint8_t count{}; //!< 取り込んだ回数(杖/魔法棒)もしくは本数(ロッド)
     };
 
-    magic_eater_data_type();
+    MagicEaterDataList();
 
-    std::vector<magic_type> staves{}; //!< 杖のデータ
-    std::vector<magic_type> wands{}; //!< 魔法棒のデータ
-    std::vector<magic_type> rods{}; //!< ロッドのデータ
-    inline static std::vector<magic_eater_data_type::magic_type> none{}; //!< いずれの魔道具でもないダミー
+    std::vector<MagicEaterDatum> staves{}; //!< 杖のデータ
+    std::vector<MagicEaterDatum> wands{}; //!< 魔法棒のデータ
+    std::vector<MagicEaterDatum> rods{}; //!< ロッドのデータ
+    inline static std::vector<MagicEaterDataList::MagicEaterDatum> none{}; //!< いずれの魔道具でもないダミー
 
     std::optional<BaseitemKey> check_magic_eater_spell_repeat() const;
-    std::vector<magic_type> &get_item_group(ItemKindType tval);
+    std::vector<MagicEaterDatum> &get_item_group(ItemKindType tval);
 
 private:
-    const std::vector<magic_type> &get_item_group(ItemKindType tval) const;
+    const std::vector<MagicEaterDatum> &get_item_group(ItemKindType tval) const;
 };

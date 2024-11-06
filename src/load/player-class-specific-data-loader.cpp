@@ -91,7 +91,7 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<bluemage_data_typ
     }
 }
 
-void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<magic_eater_data_type> &magic_eater_data) const
+void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<MagicEaterDataList> &magic_eater_data) const
 {
     if (loading_savefile_version_is_older_than(9)) {
         auto [magic_num1, magic_num2] = load_old_savfile_magic_num();
