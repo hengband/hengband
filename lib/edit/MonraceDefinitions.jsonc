@@ -71523,12 +71523,12 @@
       "exp": 800,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "10d4"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "10d4"
         }
@@ -71708,7 +71708,7 @@
           "damage_dice": "11d4"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "11d4"
         }
@@ -71767,7 +71767,7 @@
       "exp": 7777,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "14d10"
         },
@@ -71833,7 +71833,7 @@
       "exp": 1000,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "SUPERHURT",
           "damage_dice": "10d4"
         },
@@ -71895,12 +71895,12 @@
       "exp": 1100,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "SUPERHURT",
           "damage_dice": "10d4"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "SUPERHURT",
           "damage_dice": "10d4"
         }
@@ -73227,7 +73227,7 @@
       "exp": 40,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "4d4"
         }
@@ -73330,7 +73330,7 @@
       "exp": 50,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "6d6"
         }
@@ -73374,7 +73374,7 @@
       "exp": 100,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "7d7"
         }
@@ -73417,7 +73417,7 @@
       "exp": 200,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "8d8"
         }
@@ -73460,7 +73460,7 @@
       "exp": 400,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "9d9"
         }
@@ -73502,12 +73502,12 @@
       "exp": 125,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "6d6"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "6d6"
         }
@@ -73559,12 +73559,12 @@
       "exp": 250,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "7d7"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "7d7"
         }
@@ -73614,12 +73614,12 @@
       "exp": 500,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "8d8"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "8d8"
         }
@@ -73669,12 +73669,12 @@
       "exp": 1000,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "9d9"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "9d9"
         }
@@ -73724,7 +73724,7 @@
       "exp": 250,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "8d8"
         }
@@ -73944,22 +73944,22 @@
       "exp": 2500,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "SHATTER",
           "damage_dice": "10d7"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "SHATTER",
           "damage_dice": "10d7"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "SHATTER",
           "damage_dice": "10d7"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "SHATTER",
           "damage_dice": "10d7"
         }
@@ -78945,7 +78945,7 @@
           "damage_dice": "4d10"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "4d10"
         }
@@ -82445,7 +82445,7 @@
           "effect": "CONFUSE"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "6d6"
         },
