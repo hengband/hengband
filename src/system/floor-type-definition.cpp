@@ -250,32 +250,21 @@ ItemEntity FloorType::make_gold(std::optional<int> initial_offset) const
 /*!
  * @brief INSTA_ART型の固定アーティファクトの生成を確率に応じて試行する
  * @return 生成したアイテム (失敗したらnullopt)
+ * @details 地上生成は禁止、生成制限がある場合も禁止、個々のアーティファクト生成条件及び生成確率を潜り抜けなければ生成失敗とする
  */
 std::optional<ItemEntity> FloorType::try_make_instant_artifact() const
 {
-    /*! @note 地上ではキャンセルする / No artifacts in the town */
-    if (!this->is_in_underground()) {
+    if (!this->is_in_underground() || (get_obj_index_hook != nullptr)) {
         return std::nullopt;
     }
 
-    /*! @note get_obj_index_hookによる指定がある場合は生成をキャンセルする / Themed object */
-    if (get_obj_index_hook) {
-        return std::nullopt;
-    }
-
-    /*! @note 全固定アーティファクト中からIDの若い順に生成対象とその確率を走査する / Check the artifact list (just the "specials") */
     for (const auto &[fa_id, artifact] : ArtifactList::get_instance()) {
         if (!artifact.can_make_instant_artifact()) {
             continue;
         }
 
-        /*! @note アーティファクト生成階が現在に対して足りない場合は高確率で1/(不足階層*2)を満たさないと生成リストに加えられない */
-        if (artifact.level > this->object_level) {
-            /* @note  / Acquire the "out-of-depth factor". Roll for out-of-depth creation. */
-            int d = (artifact.level - this->object_level) * 2;
-            if (!one_in_(d)) {
-                continue;
-            }
+        if (!artifact.evaluate_shallow_instant_artifact(this->object_level)) {
+            continue;
         }
 
         /*! @note 1/(レア度)の確率を満たさないと除外される / Artifact "rarity roll" */
