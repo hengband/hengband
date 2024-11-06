@@ -32,7 +32,7 @@ static bool grab_one_dungeon_flag(dungeon_type *d_ptr, std::string_view what)
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(モンスターのダンジョン出現条件用1) /
- * Grab one (basic) flag in a MonsterRaceInfo from a textual string
+ * Grab one (basic) flag in a MonraceDefinition from a textual string
  * @param d_ptr 保管先のダンジョン構造体参照ポインタ
  * @param what 参照元の文字列ポインタ
  * @return 見つけたらtrue
@@ -92,7 +92,7 @@ static bool grab_one_basic_monster_flag(dungeon_type *d_ptr, std::string_view wh
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(モンスターのダンジョン出現条件用2) /
- * Grab one (spell) flag in a MonsterRaceInfo from a textual string
+ * Grab one (spell) flag in a MonraceDefinition from a textual string
  * @param d_ptr 保管先のダンジョン構造体参照ポインタ
  * @param what 参照元の文字列ポインタ
  * @return 見つけたらtrue

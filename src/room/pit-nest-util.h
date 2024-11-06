@@ -45,14 +45,14 @@ struct nest_pit_type {
 };
 
 /*! デバッグ時にnestのモンスター情報を確認するための構造体 / A struct for nest monster information with cheat_hear */
-class MonsterRaceInfo;
+class MonraceDefinition;
 class NestMonsterInfo {
 public:
     NestMonsterInfo() = default;
     MonraceId monrace_id{}; //!< モンスター種族ID
     bool used = false; //!< 既に選んだかどうか
     bool order_nest(const NestMonsterInfo &other) const;
-    const MonsterRaceInfo &get_monrace() const;
+    const MonraceDefinition &get_monrace() const;
 };
 
 class FloorType;

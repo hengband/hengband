@@ -11,7 +11,7 @@ enum class ArenaRecord {
 };
 
 class BaseitemKey;
-class MonsterRaceInfo;
+class MonraceDefinition;
 class ArenaEntryList {
 public:
     ~ArenaEntryList() = default;
@@ -28,8 +28,8 @@ public:
     bool is_player_victor() const;
     bool is_player_true_victor() const;
     const BaseitemKey &get_bi_key() const;
-    MonsterRaceInfo &get_monrace();
-    const MonsterRaceInfo &get_monrace() const;
+    MonraceDefinition &get_monrace();
+    const MonraceDefinition &get_monrace() const;
     ArenaRecord check_arena_record() const;
     std::string get_poster_message() const;
     std::string get_fight_number(bool is_current) const;

@@ -186,7 +186,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
-    MonsterRaceInfo *tr_ptr = &t_ptr->get_monrace();
+    MonraceDefinition *tr_ptr = &t_ptr->get_monrace();
     bool monster_to_player = (target_type == MONSTER_TO_PLAYER);
     bool monster_to_monster = (target_type == MONSTER_TO_MONSTER);
     bool direct = player_ptr->is_located_at({ y, x });

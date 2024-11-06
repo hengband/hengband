@@ -126,12 +126,12 @@ const BaseitemKey &ArenaEntryList::get_bi_key() const
     return ARENA_ENTRIES.at(this->current_entry).key;
 }
 
-MonsterRaceInfo &ArenaEntryList::get_monrace()
+MonraceDefinition &ArenaEntryList::get_monrace()
 {
     return MonraceList::get_instance().get_monrace(ARENA_ENTRIES.at(this->current_entry).monrace_id);
 }
 
-const MonsterRaceInfo &ArenaEntryList::get_monrace() const
+const MonraceDefinition &ArenaEntryList::get_monrace() const
 {
     return MonraceList::get_instance().get_monrace(ARENA_ENTRIES.at(this->current_entry).monrace_id);
 }

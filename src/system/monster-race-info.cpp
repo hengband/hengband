@@ -29,9 +29,9 @@ static int count_lore_mflag_group(const EnumClassFlagGroup<T> &flags, const Enum
 }
 }
 
-std::map<MonraceId, MonsterRaceInfo> monraces_info;
+std::map<MonraceId, MonraceDefinition> monraces_info;
 
-MonsterRaceInfo::MonsterRaceInfo()
+MonraceDefinition::MonraceDefinition()
     : idx(MonraceId::PLAYER)
 {
 }
@@ -43,17 +43,17 @@ MonsterRaceInfo::MonsterRaceInfo()
  * @return 正当なものであれば true、そうでなければ false
  * @todo 将来的に定義側のIDが廃止されたら有効フラグのフィールド変数を代わりに作る.
  */
-bool MonsterRaceInfo::is_valid() const
+bool MonraceDefinition::is_valid() const
 {
     return this->idx != MonraceId::PLAYER;
 }
 
-bool MonsterRaceInfo::is_male() const
+bool MonraceDefinition::is_male() const
 {
     return this->sex == MonsterSex::MALE;
 }
 
-bool MonsterRaceInfo::is_female() const
+bool MonraceDefinition::is_female() const
 {
     return this->sex == MonsterSex::FEMALE;
 }
@@ -62,7 +62,7 @@ bool MonsterRaceInfo::is_female() const
  * @brief モンスターが生命体かどうかを返す
  * @return 生命体ならばtrue
  */
-bool MonsterRaceInfo::has_living_flag() const
+bool MonraceDefinition::has_living_flag() const
 {
     return this->kind_flags.has_none_of({ MonsterKindType::DEMON, MonsterKindType::UNDEAD, MonsterKindType::NONLIVING });
 }
@@ -71,7 +71,7 @@ bool MonsterRaceInfo::has_living_flag() const
  * @brief モンスターが自爆するか否か
  * @return 自爆するならtrue
  */
-bool MonsterRaceInfo::is_explodable() const
+bool MonraceDefinition::is_explodable() const
 {
     return std::any_of(std::begin(this->blows), std::end(this->blows),
         [](const auto &blow) { return blow.method == RaceBlowMethodType::EXPLODE; });
@@ -83,7 +83,7 @@ bool MonsterRaceInfo::is_explodable() const
  * @return モンスターのシンボル文字が candidate_chars に含まれるならばtrue
  * @note ASCIIのみ対応。マルチバイト文字が指定された場合の動作は未定義。
  */
-bool MonsterRaceInfo::symbol_char_is_any_of(std::string_view candidate_chars) const
+bool MonraceDefinition::symbol_char_is_any_of(std::string_view candidate_chars) const
 {
     return candidate_chars.find(this->symbol_definition.character) != std::string_view::npos;
 }
@@ -92,7 +92,7 @@ bool MonsterRaceInfo::symbol_char_is_any_of(std::string_view candidate_chars) co
  * @brief モンスターを撃破した際の述語メッセージを返す
  * @return 撃破されたモンスターの述語
  */
-std::string MonsterRaceInfo::get_died_message() const
+std::string MonraceDefinition::get_died_message() const
 {
     const auto is_explodable = this->is_explodable();
     if (this->has_living_flag()) {
@@ -102,7 +102,7 @@ std::string MonsterRaceInfo::get_died_message() const
     return is_explodable ? _("は爆発して粉々になった。", " explodes into tiny shreds.") : _("を倒した。", " is destroyed.");
 }
 
-std::optional<bool> MonsterRaceInfo::order_level(const MonsterRaceInfo &other) const
+std::optional<bool> MonraceDefinition::order_level(const MonraceDefinition &other) const
 {
     if (this->level > other.level) {
         return true;
@@ -115,12 +115,12 @@ std::optional<bool> MonsterRaceInfo::order_level(const MonsterRaceInfo &other) c
     return std::nullopt;
 }
 
-bool MonsterRaceInfo::order_level_strictly(const MonsterRaceInfo &other) const
+bool MonraceDefinition::order_level_strictly(const MonraceDefinition &other) const
 {
     return this->level > other.level;
 }
 
-std::optional<bool> MonsterRaceInfo::order_pet(const MonsterRaceInfo &other) const
+std::optional<bool> MonraceDefinition::order_pet(const MonraceDefinition &other) const
 {
     if (this->kind_flags.has(MonsterKindType::UNIQUE) && other.kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return true;
@@ -137,7 +137,7 @@ std::optional<bool> MonsterRaceInfo::order_pet(const MonsterRaceInfo &other) con
  * @brief ユニークモンスターの撃破状態を更新する
  * @todo 状態変更はモンスター「定義」ではないので将来的に別クラスへ分離する
  */
-void MonsterRaceInfo::kill_unique()
+void MonraceDefinition::kill_unique()
 {
     this->max_num = 0;
     this->r_pkills++;
@@ -147,7 +147,7 @@ void MonsterRaceInfo::kill_unique()
     }
 }
 
-std::string MonsterRaceInfo::get_pronoun_of_summoned_kin() const
+std::string MonraceDefinition::get_pronoun_of_summoned_kin() const
 {
     if (this->kind_flags.has(MonsterKindType::UNIQUE)) {
         return _("手下", "minions");
@@ -164,7 +164,7 @@ std::string MonsterRaceInfo::get_pronoun_of_summoned_kin() const
  * @brief 進化先モンスターを返す. 進化しなければプレイヤー (無効値の意)
  * @return 進化先モンスター
  */
-const MonsterRaceInfo &MonsterRaceInfo::get_next() const
+const MonraceDefinition &MonraceDefinition::get_next() const
 {
     return MonraceList::get_instance().get_monrace(this->next_r_idx);
 }
@@ -174,7 +174,7 @@ const MonsterRaceInfo &MonsterRaceInfo::get_next() const
  * @param unachieved_only true の場合未達成の賞金首のみを対象とする。false の場合達成未達成に関わらずすべての賞金首を対象とする。
  * @return モンスター種族が賞金首の対象ならば true、そうでなければ false
  */
-bool MonsterRaceInfo::is_bounty(bool unachieved_only) const
+bool MonraceDefinition::is_bounty(bool unachieved_only) const
 {
     const auto &world = AngbandWorld::get_instance();
     const auto end = std::end(world.bounties);
@@ -192,7 +192,7 @@ bool MonsterRaceInfo::is_bounty(bool unachieved_only) const
  * @details 現在はモンスター闘技場でのモンスターの強さの総合的な評価にのみ使用されている。
  * @return 計算した結果のモンスター種族の総合的な強さの値を返す。
  */
-int MonsterRaceInfo::calc_power() const
+int MonraceDefinition::calc_power() const
 {
     auto power = 0;
     const auto num_resistances = EnumClassFlagGroup<MonsterResistanceType>(this->resistance_flags & RFR_EFF_IMMUNE_ELEMENT_MASK).count();
@@ -240,7 +240,7 @@ int MonsterRaceInfo::calc_power() const
     return power;
 }
 
-int MonsterRaceInfo::calc_figurine_value() const
+int MonraceDefinition::calc_figurine_value() const
 {
     const auto figurine_level = this->level;
     if (figurine_level < 20) {
@@ -262,7 +262,7 @@ int MonsterRaceInfo::calc_figurine_value() const
     return 14000 + (figurine_level - 50) * 2000;
 }
 
-int MonsterRaceInfo::calc_capture_value() const
+int MonraceDefinition::calc_capture_value() const
 {
     if (!this->is_valid()) {
         return 1000;
@@ -277,14 +277,14 @@ int MonsterRaceInfo::calc_capture_value() const
  * @return 反応メッセージ
  * @details 実際に見るとは限らない (悪夢モードで宿に泊まった時など)
  */
-std::string MonsterRaceInfo::build_eldritch_horror_message(std::string_view description) const
+std::string MonraceDefinition::build_eldritch_horror_message(std::string_view description) const
 {
     const auto &horror_message = this->decide_horror_message();
     constexpr auto fmt = _("%s%sの顔を見てしまった！", "You behold the %s visage of %s!");
     return format(fmt, horror_message.data(), description.data());
 }
 
-bool MonsterRaceInfo::has_reinforce() const
+bool MonraceDefinition::has_reinforce() const
 {
     const auto end = this->reinforces.end();
     const auto it = std::find_if(this->reinforces.begin(), end,
@@ -292,29 +292,29 @@ bool MonsterRaceInfo::has_reinforce() const
     return it != end;
 }
 
-const std::vector<DropArtifact> &MonsterRaceInfo::get_drop_artifacts() const
+const std::vector<DropArtifact> &MonraceDefinition::get_drop_artifacts() const
 {
     return this->drop_artifacts;
 }
 
-const std::vector<Reinforce> &MonsterRaceInfo::get_reinforces() const
+const std::vector<Reinforce> &MonraceDefinition::get_reinforces() const
 {
     return this->reinforces;
 }
 
-bool MonsterRaceInfo::can_generate() const
+bool MonraceDefinition::can_generate() const
 {
     auto can_generate = this->kind_flags.has(MonsterKindType::UNIQUE) || this->population_flags.has(MonsterPopulationType::NAZGUL);
     can_generate &= this->cur_num >= this->max_num;
     return can_generate;
 }
 
-GridFlow MonsterRaceInfo::get_grid_flow_type() const
+GridFlow MonraceDefinition::get_grid_flow_type() const
 {
     return this->feature_flags.has(MonsterFeatureType::CAN_FLY) ? GridFlow::CAN_FLY : GridFlow::NORMAL;
 }
 
-void MonsterRaceInfo::init_sex(uint32_t value)
+void MonraceDefinition::init_sex(uint32_t value)
 {
     const auto sex_tmp = i2enum<MonsterSex>(value);
     if ((sex_tmp < MonsterSex::NONE) || (sex_tmp >= MonsterSex::MAX)) {
@@ -324,7 +324,7 @@ void MonsterRaceInfo::init_sex(uint32_t value)
     this->sex = sex_tmp;
 }
 
-std::optional<std::string> MonsterRaceInfo::probe_lore()
+std::optional<std::string> MonraceDefinition::probe_lore()
 {
     auto n = false;
     if (this->r_wake != MAX_UCHAR) {
@@ -408,7 +408,7 @@ std::optional<std::string> MonsterRaceInfo::probe_lore()
 #endif
 }
 
-void MonsterRaceInfo::make_lore_treasure(int num_item, int num_gold)
+void MonraceDefinition::make_lore_treasure(int num_item, int num_gold)
 {
     if (this->r_drop_item < num_item) {
         this->r_drop_item = num_item;
@@ -427,12 +427,12 @@ void MonsterRaceInfo::make_lore_treasure(int num_item, int num_gold)
     }
 }
 
-void MonsterRaceInfo::emplace_drop_artifact(FixedArtifactId fa_id, int chance)
+void MonraceDefinition::emplace_drop_artifact(FixedArtifactId fa_id, int chance)
 {
     this->drop_artifacts.emplace_back(fa_id, chance);
 }
 
-void MonsterRaceInfo::emplace_reinforce(MonraceId monrace_id, const Dice &dice)
+void MonraceDefinition::emplace_reinforce(MonraceId monrace_id, const Dice &dice)
 {
     this->reinforces.emplace_back(monrace_id, dice);
 }
@@ -441,27 +441,27 @@ void MonsterRaceInfo::emplace_reinforce(MonraceId monrace_id, const Dice &dice)
  * @brief 該当モンスター種族が1体以上実体化されているかを返す
  * @return 実体の有無
  */
-bool MonsterRaceInfo::has_entity() const
+bool MonraceDefinition::has_entity() const
 {
     return this->cur_num > 0;
 }
 
-void MonsterRaceInfo::reset_current_numbers()
+void MonraceDefinition::reset_current_numbers()
 {
     this->cur_num = 0;
 }
 
-void MonsterRaceInfo::increment_current_numbers()
+void MonraceDefinition::increment_current_numbers()
 {
     this->cur_num++;
 }
 
-void MonsterRaceInfo::decrement_current_numbers()
+void MonraceDefinition::decrement_current_numbers()
 {
     this->cur_num--;
 }
 
-void MonsterRaceInfo::reset_max_number()
+void MonraceDefinition::reset_max_number()
 {
     if (this->kind_flags.has(MonsterKindType::UNIQUE) || this->population_flags.has(MonsterPopulationType::ONLY_ONE)) {
         this->max_num = MAX_UNIQUE_NUM;
@@ -485,7 +485,7 @@ void MonsterRaceInfo::reset_max_number()
  * @brief エルドリッチホラーの形容詞種別を決める
  * @return エルドリッチホラーの形容詞
  */
-const std::string &MonsterRaceInfo::decide_horror_message() const
+const std::string &MonraceDefinition::decide_horror_message() const
 {
     const int horror_desc_common_size = horror_desc_common.size();
     auto horror_num = randint0(horror_desc_common_size + horror_desc_evil.size());
@@ -522,7 +522,7 @@ bool Reinforce::is_valid() const
     return MonraceList::is_valid(this->monrace_id) && this->dice.is_valid();
 }
 
-const MonsterRaceInfo &Reinforce::get_monrace() const
+const MonraceDefinition &Reinforce::get_monrace() const
 {
     return MonraceList::get_instance().get_monrace(this->monrace_id);
 }
@@ -576,42 +576,42 @@ MonraceId MonraceList::empty_id()
     return MonraceId::PLAYER;
 }
 
-std::map<MonraceId, MonsterRaceInfo>::iterator MonraceList::begin()
+std::map<MonraceId, MonraceDefinition>::iterator MonraceList::begin()
 {
     return monraces_info.begin();
 }
 
-std::map<MonraceId, MonsterRaceInfo>::const_iterator MonraceList::begin() const
+std::map<MonraceId, MonraceDefinition>::const_iterator MonraceList::begin() const
 {
     return monraces_info.cbegin();
 }
 
-std::map<MonraceId, MonsterRaceInfo>::iterator MonraceList::end()
+std::map<MonraceId, MonraceDefinition>::iterator MonraceList::end()
 {
     return monraces_info.end();
 }
 
-std::map<MonraceId, MonsterRaceInfo>::const_iterator MonraceList::end() const
+std::map<MonraceId, MonraceDefinition>::const_iterator MonraceList::end() const
 {
     return monraces_info.cend();
 }
 
-std::map<MonraceId, MonsterRaceInfo>::reverse_iterator MonraceList::rbegin()
+std::map<MonraceId, MonraceDefinition>::reverse_iterator MonraceList::rbegin()
 {
     return monraces_info.rbegin();
 }
 
-std::map<MonraceId, MonsterRaceInfo>::const_reverse_iterator MonraceList::rbegin() const
+std::map<MonraceId, MonraceDefinition>::const_reverse_iterator MonraceList::rbegin() const
 {
     return monraces_info.crbegin();
 }
 
-std::map<MonraceId, MonsterRaceInfo>::reverse_iterator MonraceList::rend()
+std::map<MonraceId, MonraceDefinition>::reverse_iterator MonraceList::rend()
 {
     return monraces_info.rend();
 }
 
-std::map<MonraceId, MonsterRaceInfo>::const_reverse_iterator MonraceList::rend() const
+std::map<MonraceId, MonraceDefinition>::const_reverse_iterator MonraceList::rend() const
 {
     return monraces_info.crend();
 }
@@ -627,7 +627,7 @@ size_t MonraceList::size() const
  * @return モンスター定義への参照
  * @details モンスター実体からモンスター定義を得るためには使用しないこと
  */
-MonsterRaceInfo &MonraceList::get_monrace(MonraceId monrace_id)
+MonraceDefinition &MonraceList::get_monrace(MonraceId monrace_id)
 {
     return monraces_info.at(monrace_id);
 }
@@ -638,7 +638,7 @@ MonsterRaceInfo &MonraceList::get_monrace(MonraceId monrace_id)
  * @return モンスター定義への参照
  * @details モンスター実体からモンスター定義を得るためには使用しないこと
  */
-const MonsterRaceInfo &MonraceList::get_monrace(MonraceId monrace_id) const
+const MonraceDefinition &MonraceList::get_monrace(MonraceId monrace_id) const
 {
     return monraces_info.at(monrace_id);
 }
@@ -655,9 +655,9 @@ const std::vector<MonraceId> &MonraceList::get_valid_monrace_ids() const
 }
 
 //!< @todo ややトリッキーだが、元のmapでMonsterRaceInfo をshared_ptr で持つようにすればかなりスッキリ書けるはず.
-const std::vector<std::pair<MonraceId, const MonsterRaceInfo *>> &MonraceList::get_sorted_monraces() const
+const std::vector<std::pair<MonraceId, const MonraceDefinition *>> &MonraceList::get_sorted_monraces() const
 {
-    static std::vector<std::pair<MonraceId, const MonsterRaceInfo *>> sorted_monraces;
+    static std::vector<std::pair<MonraceId, const MonraceDefinition *>> sorted_monraces;
     if (!sorted_monraces.empty()) {
         return sorted_monraces;
     }
@@ -907,7 +907,7 @@ MonraceId MonraceList::pick_id_at_random() const
     return table.pick_one_at_random();
 }
 
-const MonsterRaceInfo &MonraceList::pick_monrace_at_random() const
+const MonraceDefinition &MonraceList::pick_monrace_at_random() const
 {
     return monraces_info.at(this->pick_id_at_random());
 }

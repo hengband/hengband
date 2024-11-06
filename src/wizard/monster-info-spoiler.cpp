@@ -16,9 +16,9 @@
  * @brief シンボル職の記述名を返す
  * @param monrace モンスター種族の構造体ポインタ
  * @return シンボル職の記述名
- * @todo MonsterRaceInfo のオブジェクトメソッドへ繰り込む
+ * @todo MonraceDefinition のオブジェクトメソッドへ繰り込む
  */
-static std::string attr_to_text(const MonsterRaceInfo &monrace)
+static std::string attr_to_text(const MonraceDefinition &monrace)
 {
     if (monrace.visual_flags.has(MonsterVisualType::CLEAR_COLOR)) {
         return _("透明な", "Clear");
@@ -70,7 +70,7 @@ static std::string attr_to_text(const MonsterRaceInfo &monrace)
     return _("変な色の", "Icky");
 }
 
-SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<bool(const MonsterRaceInfo *)> filter_monster)
+SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<bool(const MonraceDefinition *)> filter_monster)
 {
     const auto path = path_build(ANGBAND_DIR_USER, filename);
     std::ofstream ofs(path);

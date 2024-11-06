@@ -10,7 +10,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 
-static void migrate_old_misc_flags(MonsterRaceInfo &monrace, BIT_FLAGS old_flags1, BIT_FLAGS old_flags2)
+static void migrate_old_misc_flags(MonraceDefinition &monrace, BIT_FLAGS old_flags1, BIT_FLAGS old_flags2)
 {
     if (!loading_savefile_version_is_older_than(20)) {
         rd_FlagGroup(monrace.r_misc_flags, rd_byte);
@@ -58,7 +58,7 @@ static void migrate_old_misc_flags(MonsterRaceInfo &monrace, BIT_FLAGS old_flags
     }
 }
 
-static void migrate_old_feature_flags(MonsterRaceInfo &monrace, BIT_FLAGS old_flags)
+static void migrate_old_feature_flags(MonraceDefinition &monrace, BIT_FLAGS old_flags)
 {
     if (!loading_savefile_version_is_older_than(19)) {
         rd_FlagGroup(monrace.r_feature_flags, rd_byte);
@@ -73,7 +73,7 @@ static void migrate_old_feature_flags(MonsterRaceInfo &monrace, BIT_FLAGS old_fl
     }
 }
 
-static void migrate_old_aura_flags(MonsterRaceInfo &monrace, BIT_FLAGS old_flags2, BIT_FLAGS old_flags3)
+static void migrate_old_aura_flags(MonraceDefinition &monrace, BIT_FLAGS old_flags2, BIT_FLAGS old_flags3)
 {
     if (!loading_savefile_version_is_older_than(10)) {
         rd_FlagGroup(monrace.r_aura_flags, rd_byte);
@@ -93,7 +93,7 @@ static void migrate_old_aura_flags(MonsterRaceInfo &monrace, BIT_FLAGS old_flags
     }
 }
 
-static void migrate_old_resistance_flags(MonsterRaceInfo &monrace, BIT_FLAGS old_flags)
+static void migrate_old_resistance_flags(MonraceDefinition &monrace, BIT_FLAGS old_flags)
 {
     if (!loading_savefile_version_is_older_than(14)) {
         return;
@@ -138,7 +138,7 @@ static void migrate_old_resistance_flags(MonsterRaceInfo &monrace, BIT_FLAGS old
     }
 }
 
-static void migrate_old_drop_flags(MonsterRaceInfo &monrace, BIT_FLAGS old_flags1)
+static void migrate_old_drop_flags(MonraceDefinition &monrace, BIT_FLAGS old_flags1)
 {
     if (!loading_savefile_version_is_older_than(18)) {
         rd_FlagGroup(monrace.r_drop_flags, rd_byte);
@@ -170,7 +170,7 @@ static void migrate_old_drop_flags(MonsterRaceInfo &monrace, BIT_FLAGS old_flags
     }
 }
 
-static void migrate_old_no_debuff_flags(MonsterRaceInfo &monrace, BIT_FLAGS old_flags3)
+static void migrate_old_no_debuff_flags(MonraceDefinition &monrace, BIT_FLAGS old_flags3)
 {
     if (!loading_savefile_version_is_older_than(19)) {
         return;
@@ -195,7 +195,7 @@ static void migrate_old_no_debuff_flags(MonsterRaceInfo &monrace, BIT_FLAGS old_
     }
 }
 
-static void migrate_old_resistance_and_ability_flags(MonsterRaceInfo &monrace, BIT_FLAGS f3, const MonraceId r_idx)
+static void migrate_old_resistance_and_ability_flags(MonraceDefinition &monrace, BIT_FLAGS f3, const MonraceId r_idx)
 {
     if (loading_savefile_version_is_older_than(3)) {
         BIT_FLAGS r_flagsr = 0;
@@ -224,7 +224,7 @@ static void migrate_old_resistance_and_ability_flags(MonsterRaceInfo &monrace, B
     }
 }
 
-static void migrate_old_kind_flags(MonsterRaceInfo &monrace, BIT_FLAGS old_flags1, BIT_FLAGS old_flags2, BIT_FLAGS old_flags3)
+static void migrate_old_kind_flags(MonraceDefinition &monrace, BIT_FLAGS old_flags1, BIT_FLAGS old_flags2, BIT_FLAGS old_flags3)
 {
     if (!loading_savefile_version_is_older_than(12)) {
         rd_FlagGroup(monrace.r_kind_flags, rd_byte);
@@ -280,7 +280,7 @@ static void migrate_old_kind_flags(MonsterRaceInfo &monrace, BIT_FLAGS old_flags
     }
 }
 
-static void migrate_old_behavior_flags(MonsterRaceInfo &monrace, BIT_FLAGS old_flags1, BIT_FLAGS old_flags2)
+static void migrate_old_behavior_flags(MonraceDefinition &monrace, BIT_FLAGS old_flags1, BIT_FLAGS old_flags2)
 {
     if (!loading_savefile_version_is_older_than(11)) {
         rd_FlagGroup(monrace.r_behavior_flags, rd_byte);
@@ -328,7 +328,7 @@ static void migrate_old_behavior_flags(MonsterRaceInfo &monrace, BIT_FLAGS old_f
  * @param r_ptr 読み込み先モンスター種族情報へのポインタ
  * @param r_idx 読み込み先モンスターID(種族特定用)
  */
-static void rd_lore(MonsterRaceInfo &monrace, const MonraceId r_idx)
+static void rd_lore(MonraceDefinition &monrace, const MonraceId r_idx)
 {
     monrace.r_sights = rd_s16b();
     monrace.r_deaths = rd_s16b();
@@ -416,7 +416,7 @@ void load_lore()
     auto &monraces = MonraceList::get_instance();
     const auto monraces_size = monraces.size();
     const auto loading_max_monrace_id = rd_u16b();
-    MonsterRaceInfo dummy;
+    MonraceDefinition dummy;
     for (size_t i = 0; i < loading_max_monrace_id; i++) {
         const auto monrace_id = static_cast<MonraceId>(i);
         auto &monrace = i < monraces_size ? monraces.get_monrace(monrace_id) : dummy;

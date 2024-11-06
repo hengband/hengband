@@ -34,7 +34,7 @@ MonraceId LoreTracker::get_trackee() const
  * @brief トラッキング中のモンスター種族定義を取得する
  * @return モンスター種族定義 (トラッキングしていなければ無効モンスター)
  */
-const MonsterRaceInfo &LoreTracker::get_tracking_monrace() const
+const MonraceDefinition &LoreTracker::get_tracking_monrace() const
 {
     return MonraceList::get_instance().get_monrace(this->monrace_id);
 }

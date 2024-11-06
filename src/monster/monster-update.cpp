@@ -115,7 +115,7 @@ void update_map_flags(turn_flags *turn_flags_ptr)
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param r_ptr モンスター種族への参照ポインタ
  */
-void update_lite_flags(turn_flags *turn_flags_ptr, MonsterRaceInfo *r_ptr)
+void update_lite_flags(turn_flags *turn_flags_ptr, MonraceDefinition *r_ptr)
 {
     using Mbt = MonsterBrightnessType;
     const auto has_lite = r_ptr->brightness_flags.has_any_of({ Mbt::HAS_LITE_1, Mbt::HAS_LITE_2 });
@@ -202,7 +202,7 @@ static POSITION decide_updated_distance(PlayerType *player_ptr, um_type *um_ptr)
     return distance;
 }
 
-static void update_smart_stupid_flags(MonsterRaceInfo *r_ptr)
+static void update_smart_stupid_flags(MonraceDefinition *r_ptr)
 {
     if (r_ptr->behavior_flags.has(MonsterBehaviorType::SMART)) {
         r_ptr->r_behavior_flags.set(MonsterBehaviorType::SMART);

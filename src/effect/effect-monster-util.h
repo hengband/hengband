@@ -6,7 +6,7 @@
 enum class AttributeType;
 class Grid;
 class MonsterEntity;
-class MonsterRaceInfo;
+class MonraceDefinition;
 class PlayerType;
 class EffectMonster {
 public:
@@ -41,7 +41,7 @@ public:
     Grid *g_ptr;
     MonsterEntity *m_ptr;
     MonsterEntity *m_caster_ptr;
-    MonsterRaceInfo *r_ptr;
+    MonraceDefinition *r_ptr;
     bool seen;
     bool seen_msg;
     bool slept;

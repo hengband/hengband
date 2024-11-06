@@ -351,7 +351,7 @@ static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags
  * @param pos 爆発のルーンの位置
  * @param monrace モンスター種族への参照
  */
-void activate_explosive_rune(PlayerType *player_ptr, const Pos2D &pos, const MonsterRaceInfo &monrace)
+void activate_explosive_rune(PlayerType *player_ptr, const Pos2D &pos, const MonraceDefinition &monrace)
 {
     auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
     const auto level = player_ptr->lev;
@@ -510,7 +510,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
     return true;
 }
 
-static bool can_speak(const MonsterRaceInfo &ap_r_ref, MonsterSpeakType mon_speak_type)
+static bool can_speak(const MonraceDefinition &ap_r_ref, MonsterSpeakType mon_speak_type)
 {
     const auto can_speak_all = ap_r_ref.speak_flags.has(MonsterSpeakType::SPEAK_ALL);
     const auto can_speak_specific = ap_r_ref.speak_flags.has(mon_speak_type);

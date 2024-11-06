@@ -45,12 +45,12 @@ bool dungeon_type::has_guardian() const
     return this->final_guardian != MonraceId::PLAYER;
 }
 
-MonsterRaceInfo &dungeon_type::get_guardian()
+MonraceDefinition &dungeon_type::get_guardian()
 {
     return MonraceList::get_instance().get_monrace(this->final_guardian);
 }
 
-const MonsterRaceInfo &dungeon_type::get_guardian() const
+const MonraceDefinition &dungeon_type::get_guardian() const
 {
     return MonraceList::get_instance().get_monrace(this->final_guardian);
 }

@@ -16,7 +16,7 @@ MeleeGladiator::MeleeGladiator(MonraceId monrace_id, uint32_t odds)
 {
 }
 
-const MonsterRaceInfo &MeleeGladiator::get_monrace() const
+const MonraceDefinition &MeleeGladiator::get_monrace() const
 {
     return MonraceList::get_instance().get_monrace(this->monrace_id);
 }

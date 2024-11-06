@@ -163,7 +163,7 @@ void update_mon_lite(PlayerType *player_ptr)
     const auto &world = AngbandWorld::get_instance();
     if (!world.timewalk_m_idx) {
         MonsterEntity *m_ptr;
-        MonsterRaceInfo *r_ptr;
+        MonraceDefinition *r_ptr;
         for (int i = 1; i < floor.m_max; i++) {
             m_ptr = &floor.m_list[i];
             r_ptr = &m_ptr->get_monrace();

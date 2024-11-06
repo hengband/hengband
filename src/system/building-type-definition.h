@@ -26,7 +26,7 @@ constexpr auto MAX_BUILDINGS = 32; /*!< 施設の種類最大数 / Number of bui
 extern std::array<building_type, MAX_BUILDINGS> buildings;
 
 enum class MonraceId : short;
-class MonsterRaceInfo;
+class MonraceDefinition;
 class MeleeGladiator {
 public:
     MeleeGladiator() = default;
@@ -34,7 +34,7 @@ public:
     MonraceId monrace_id{};
     uint32_t odds = 0;
 
-    const MonsterRaceInfo &get_monrace() const;
+    const MonraceDefinition &get_monrace() const;
 };
 
 //!< モンスター闘技場定義.

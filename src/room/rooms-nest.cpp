@@ -188,7 +188,7 @@ bool NestMonsterInfo::order_nest(const NestMonsterInfo &other) const
     return this->monrace_id < other.monrace_id;
 }
 
-const MonsterRaceInfo &NestMonsterInfo::get_monrace() const
+const MonraceDefinition &NestMonsterInfo::get_monrace() const
 {
     return MonraceList::get_instance().get_monrace(this->monrace_id);
 }

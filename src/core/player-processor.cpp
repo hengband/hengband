@@ -332,7 +332,7 @@ void process_player(PlayerType *player_ptr)
 
             for (MONSTER_IDX m_idx = 1; m_idx < player_ptr->current_floor_ptr->m_max; m_idx++) {
                 MonsterEntity *m_ptr;
-                MonsterRaceInfo *r_ptr;
+                MonraceDefinition *r_ptr;
                 m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
                 if (!m_ptr->is_valid()) {
                     continue;

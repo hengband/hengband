@@ -40,15 +40,15 @@
 #include "view/display-messages.h"
 
 struct samurai_slaying_type {
-    samurai_slaying_type(MULTIPLY mult, const TrFlags &flags, MonsterEntity *m_ptr, combat_options mode, MonsterRaceInfo *r_ptr);
+    samurai_slaying_type(MULTIPLY mult, const TrFlags &flags, MonsterEntity *m_ptr, combat_options mode, MonraceDefinition *r_ptr);
     MULTIPLY mult;
     TrFlags flags;
     MonsterEntity *m_ptr;
     combat_options mode;
-    MonsterRaceInfo *r_ptr;
+    MonraceDefinition *r_ptr;
 };
 
-samurai_slaying_type::samurai_slaying_type(MULTIPLY mult, const TrFlags &flags, MonsterEntity *m_ptr, combat_options mode, MonsterRaceInfo *r_ptr)
+samurai_slaying_type::samurai_slaying_type(MULTIPLY mult, const TrFlags &flags, MonsterEntity *m_ptr, combat_options mode, MonraceDefinition *r_ptr)
     : mult(mult)
     , flags(flags)
     , m_ptr(m_ptr)

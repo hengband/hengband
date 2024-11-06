@@ -990,7 +990,7 @@ void display_element_spell_list(PlayerType *player_ptr, int y, int x)
  * @param type 魔法攻撃属性
  * @return 効果があるならTRUE、なければFALSE
  */
-static bool is_elemental_genocide_effective(MonsterRaceInfo *r_ptr, AttributeType type)
+static bool is_elemental_genocide_effective(MonraceDefinition *r_ptr, AttributeType type)
 {
     switch (type) {
     case AttributeType::FIRE:

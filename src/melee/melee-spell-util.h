@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-class MonsterRaceInfo;
+class MonraceDefinition;
 class MonsterEntity;
 class PlayerType;
 struct melee_spell_type {
@@ -26,7 +26,7 @@ struct melee_spell_type {
 
     MonsterEntity *m_ptr;
     MonsterEntity *t_ptr;
-    MonsterRaceInfo *r_ptr;
+    MonraceDefinition *r_ptr;
     bool see_m;
     bool maneable;
     bool pet;
