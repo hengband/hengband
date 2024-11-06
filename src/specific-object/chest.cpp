@@ -70,51 +70,34 @@ void Chest::open(bool scatter, const Pos2D &pos, short item_idx)
         number = 0;
     }
 
-    /* Drop some objects (non-chests) */
-    ItemEntity forge;
-    ItemEntity *q_ptr;
     for (; number > 0; --number) {
-        q_ptr = &forge;
-        q_ptr->wipe();
-
-        /* Small chests often drop gold */
+        ItemEntity item_inner_chest;
         if (small && one_in_(4)) {
-            /* Make some gold */
-            if (!make_gold(this->player_ptr, q_ptr)) {
-                continue;
-            }
+            item_inner_chest = floor.make_gold();
+        } else if (!make_object(this->player_ptr, &item_inner_chest, mode)) {
+            continue;
         }
 
-        /* Otherwise drop an item */
-        else {
-            /* Make a good object */
-            if (!make_object(this->player_ptr, q_ptr, mode)) {
-                continue;
-            }
+        if (!scatter) {
+            /* Normally, drop object near the chest. */
+            (void)drop_near(this->player_ptr, &item_inner_chest, -1, pos.y, pos.x);
+            continue;
         }
 
         /* If chest scatters its contents, pick any floor square. */
-        if (scatter) {
-            for (auto i = 0; i < 200; i++) {
-                /* Pick a totally random spot. */
-                const auto y = randint0(MAX_HGT);
-                const auto x = randint0(MAX_WID);
+        for (auto i = 0; i < 200; i++) {
+            /* Pick a totally random spot. */
+            const auto y = randint0(MAX_HGT);
+            const auto x = randint0(MAX_WID);
 
-                /* Must be an empty floor. */
-                if (!is_cave_empty_bold(this->player_ptr, y, x)) {
-                    continue;
-                }
-
-                /* Place the object there. */
-                (void)drop_near(this->player_ptr, q_ptr, -1, y, x);
-
-                /* Done. */
-                break;
+            /* Must be an empty floor. */
+            if (!is_cave_empty_bold(this->player_ptr, y, x)) {
+                continue;
             }
-        }
-        /* Normally, drop object near the chest. */
-        else {
-            (void)drop_near(this->player_ptr, q_ptr, -1, pos.y, pos.x);
+
+            /* Place the object there. */
+            (void)drop_near(this->player_ptr, &item_inner_chest, -1, y, x);
+            break;
         }
     }
 

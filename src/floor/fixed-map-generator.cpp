@@ -172,7 +172,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             ItemEntity item(item_index);
             if (item.bi_key.tval() == ItemKindType::GOLD) {
                 coin_type = item_index - OBJ_GOLD_LIST;
-                make_gold(player_ptr, &item);
+                item = floor.make_gold();
                 coin_type = 0;
             }
 

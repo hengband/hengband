@@ -3,8 +3,6 @@
 #include "object/tval-types.h"
 #include "system/angband.h"
 
-#define OBJ_GOLD_LIST 480 /* First "gold" entry */
-
 class BaseitemKey;
 class ItemEntity;
 class PlayerType;

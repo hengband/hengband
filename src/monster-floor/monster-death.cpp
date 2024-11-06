@@ -279,31 +279,26 @@ static int decide_drop_numbers(MonsterDeath *md_ptr, const bool drop_item, const
 
 static void drop_items_golds(PlayerType *player_ptr, MonsterDeath *md_ptr, int drop_numbers)
 {
-    int dump_item = 0;
-    int dump_gold = 0;
-    for (int i = 0; i < drop_numbers; i++) {
-        ItemEntity forge;
-        auto *q_ptr = &forge;
-        q_ptr->wipe();
+    auto dump_item = 0;
+    auto dump_gold = 0;
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (auto i = 0; i < drop_numbers; i++) {
+        ItemEntity item;
         if (md_ptr->do_gold && (!md_ptr->do_item || one_in_(2))) {
-            if (!make_gold(player_ptr, q_ptr)) {
-                continue;
-            }
-
+            item = floor.make_gold();
             dump_gold++;
         } else {
-            if (!make_object(player_ptr, q_ptr, md_ptr->mo_mode)) {
+            if (!make_object(player_ptr, &item, md_ptr->mo_mode)) {
                 continue;
             }
 
             dump_item++;
         }
 
-        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
+        (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    floor_ptr->object_level = floor_ptr->base_level;
+    floor.object_level = floor.base_level;
     coin_type = 0;
     auto visible = md_ptr->m_ptr->ml && !player_ptr->effects()->hallucination().is_hallucinated();
     visible |= (md_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE));

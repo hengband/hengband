@@ -44,8 +44,6 @@
 #include "world/world-object.h"
 #include "world/world.h"
 
-#define MAX_GOLD 18 /* Number of "gold" entries */
-
 /*!
  * @brief オブジェクト生成テーブルに生成制約を加える /
  * Apply a "object restriction function" to the "object allocation table"
@@ -148,35 +146,6 @@ bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, std:
         object_mention(player_ptr, j_ptr);
     }
 
-    return true;
-}
-
-/*!
- * @brief 生成階に応じた財宝オブジェクトの生成を行う。
- * @param floor 現在フロアへの参照
- * @param j_ptr 生成結果を収めたいアイテムの参照ポインタ
- * @return 生成に成功したらTRUEを返す。
- */
-bool make_gold(PlayerType *player_ptr, ItemEntity *j_ptr)
-{
-    const auto &floor = *player_ptr->current_floor_ptr;
-    auto i = ((randint1(floor.object_level + 2) + 2) / 2) - 1;
-    if (one_in_(CHANCE_BASEITEM_LEVEL_BOOST)) {
-        i += randint1(floor.object_level + 1);
-    }
-
-    if (coin_type) {
-        i = coin_type;
-    }
-
-    if (i >= MAX_GOLD) {
-        i = MAX_GOLD - 1;
-    }
-
-    j_ptr->generate(OBJ_GOLD_LIST + i);
-    const auto &baseitems = BaseitemList::get_instance();
-    const auto base = baseitems.get_baseitem(OBJ_GOLD_LIST + i).cost;
-    j_ptr->pval = (base + (8L * randint1(base)) + randint1(8));
     return true;
 }
 
