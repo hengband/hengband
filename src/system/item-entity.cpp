@@ -788,13 +788,14 @@ bool ItemEntity::is_bounty() const
         return false;
     }
 
-    const auto &monrace = this->get_monrace();
-    const auto &world = AngbandWorld::get_instance();
-    if (world.knows_daily_bounty && (monrace.name == world.get_today_bounty().name)) {
+    const auto monrace_id = this->get_monrace_id();
+    if (monrace_id == MonraceId::TSUCHINOKO) {
         return true;
     }
 
-    if (monrace.idx == MonraceId::TSUCHINOKO) {
+    const auto &world = AngbandWorld::get_instance();
+    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
+    if (world.knows_daily_bounty && (monrace.name == world.get_today_bounty().name)) {
         return true;
     }
 
@@ -949,7 +950,7 @@ const MonraceDefinition &ItemEntity::get_monrace() const
         THROW_EXCEPTION(std::logic_error, "This item is not related to monrace!");
     }
 
-    const auto monrace_id = i2enum<MonraceId>(this->pval);
+    const auto monrace_id = this->get_monrace_id();
     return MonraceList::get_instance().get_monrace(monrace_id);
 }
 
@@ -1459,4 +1460,13 @@ char ItemEntity::get_character() const
     const auto &baseitem = this->get_baseitem();
     const auto flavor = baseitem.flavor;
     return flavor ? BaseitemList::get_instance().get_baseitem(flavor).symbol_config.character : baseitem.symbol_config.character;
+}
+
+MonraceId ItemEntity::get_monrace_id() const
+{
+    if (!this->has_monrace()) {
+        THROW_EXCEPTION(std::logic_error, "This item is not related to monrace!");
+    }
+
+    return i2enum<MonraceId>(this->pval);
 }
