@@ -131,7 +131,7 @@ public:
     bool is_glove_same_temper(const ItemEntity *j_ptr) const;
     bool can_pile(const ItemEntity *j_ptr) const;
     DisplaySymbol get_symbol() const;
-    int get_price() const;
+    int calc_price() const;
     bool is_specific_artifact(FixedArtifactId id) const;
     bool has_unidentified_name() const;
     ItemKindType get_arrow_kind() const;

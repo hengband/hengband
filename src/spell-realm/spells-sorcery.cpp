@@ -50,7 +50,7 @@ bool alchemy(PlayerType *player_ptr)
     o_ptr->number = old_number;
 
     if (!force) {
-        if (confirm_destroy || (o_ptr->get_price() > 0)) {
+        if (confirm_destroy || (o_ptr->calc_price() > 0)) {
             const auto out_val = format(_("本当に%sを金に変えますか？", "Really turn %s to gold? "), item_name.data());
             if (!input_check(out_val)) {
                 return false;

@@ -365,11 +365,11 @@ static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType 
         }
 
         if (store_num == StoreSaleType::BLACK) {
-            if (black_market_crap(player_ptr, &item) || (item.get_price() < 10)) {
+            if (black_market_crap(player_ptr, &item) || (item.calc_price() < 10)) {
                 continue;
             }
         } else {
-            if (item.get_price() <= 0) {
+            if (item.calc_price() <= 0) {
                 continue;
             }
         }

@@ -151,5 +151,5 @@ bool object_sort_comp(PlayerType *player_ptr, const ItemEntity &item1, const Ite
         break;
     }
 
-    return item1.get_price() > item2.get_price();
+    return item1.calc_price() > item2.calc_price();
 }
