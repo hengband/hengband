@@ -22,11 +22,11 @@
 
 enum class FixedArtifactId : short;
 enum class ItemKindType : short;
-enum class SmithEffectType : short;
+enum class MonraceId : short;
 enum class QuestId : short;
 enum class RandomArtifactBias : int;
 enum class RandomArtActType : short;
-
+enum class SmithEffectType : short;
 class ActivationType;
 class ArtifactType;
 class BaseitemInfo;

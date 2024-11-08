@@ -26,7 +26,6 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info.h"
-#include "system/enums/monrace/monrace-id.h"
 #include "system/monster-race-info.h"
 #include "term/term-color-types.h"
 #include "tracking/baseitem-tracker.h"
@@ -789,7 +788,7 @@ bool ItemEntity::is_bounty() const
     }
 
     const auto monrace_id = this->get_monrace_id();
-    if (monrace_id == MonraceId::TSUCHINOKO) {
+    if (MonraceList::is_tsuchinoko(monrace_id)) {
         return true;
     }
 

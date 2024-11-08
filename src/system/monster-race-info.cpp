@@ -648,6 +648,11 @@ MonraceId MonraceList::empty_id()
     return MonraceId::PLAYER;
 }
 
+bool MonraceList::is_tsuchinoko(MonraceId monrace_id)
+{
+    return monrace_id == MonraceId::TSUCHINOKO;
+}
+
 std::map<MonraceId, MonraceDefinition>::iterator MonraceList::begin()
 {
     return monraces_info.begin();
