@@ -34,11 +34,10 @@ static int get_item_sort_rank(const ItemEntity &item)
  * @brief オブジェクトを定義された基準に従いソートするための関数 /
  * Check if we have space for an item in the pack without overflow
  * @param o_ptr 比較対象オブジェクトの構造体参照ポインタ1
- * @param o_value o_ptrのアイテム価値（手動であらかじめ代入する必要がある？）
  * @param j_ptr 比較対象オブジェクトの構造体参照ポインタ2
  * @return o_ptrの方が上位ならばTRUEを返す。
  */
-bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value, ItemEntity *j_ptr)
+bool object_sort_comp(PlayerType *player_ptr, const ItemEntity *o_ptr, const ItemEntity *j_ptr)
 {
     if (!j_ptr->is_valid()) {
         return true;
@@ -152,5 +151,5 @@ bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value
         break;
     }
 
-    return o_value > j_ptr->get_price();
+    return o_ptr->get_price() > j_ptr->get_price();
 }

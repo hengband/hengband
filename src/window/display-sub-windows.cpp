@@ -660,7 +660,7 @@ static void display_found_item_list(PlayerType *player_ptr)
     std::sort(
         found_item_list.begin(), found_item_list.end(),
         [player_ptr](ItemEntity *left, ItemEntity *right) -> bool {
-            return object_sort_comp(player_ptr, left, left->get_price(), right);
+            return object_sort_comp(player_ptr, left, right);
         });
 
     term_clear();

@@ -66,10 +66,9 @@ int home_carry(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_nu
         }
     }
 
-    const auto value = o_ptr->get_price();
     int slot;
     for (slot = 0; slot < st_ptr->stock_num; slot++) {
-        if (object_sort_comp(player_ptr, o_ptr, value, st_ptr->stock[slot].get())) {
+        if (object_sort_comp(player_ptr, o_ptr, st_ptr->stock[slot].get())) {
             break;
         }
     }
@@ -145,10 +144,9 @@ static void exe_reorder_store_item(PlayerType *player_ptr, bool *flag)
             continue;
         }
 
-        const auto o_value = item->get_price();
         int j;
         for (j = 0; j < st_ptr->stock_num; j++) {
-            if (object_sort_comp(player_ptr, item.get(), o_value, st_ptr->stock[j].get())) {
+            if (object_sort_comp(player_ptr, item.get(), st_ptr->stock[j].get())) {
                 break;
             }
         }

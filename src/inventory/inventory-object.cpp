@@ -250,7 +250,6 @@ void combine_pack(PlayerType *player_ptr)
 void reorder_pack(PlayerType *player_ptr)
 {
     int i, j, k;
-    int32_t o_value;
     ItemEntity forge;
     ItemEntity *q_ptr;
     ItemEntity *o_ptr;
@@ -266,9 +265,8 @@ void reorder_pack(PlayerType *player_ptr)
             continue;
         }
 
-        o_value = o_ptr->get_price();
         for (j = 0; j < INVEN_PACK; j++) {
-            if (object_sort_comp(player_ptr, o_ptr, o_value, &player_ptr->inventory_list[j])) {
+            if (object_sort_comp(player_ptr, o_ptr, &player_ptr->inventory_list[j])) {
                 break;
             }
         }
@@ -338,9 +336,8 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
 
     i = j;
     if (i < INVEN_PACK) {
-        const auto o_value = o_ptr->get_price();
         for (j = 0; j < INVEN_PACK; j++) {
-            if (object_sort_comp(player_ptr, o_ptr, o_value, &player_ptr->inventory_list[j])) {
+            if (object_sort_comp(player_ptr, o_ptr, &player_ptr->inventory_list[j])) {
                 break;
             }
         }
