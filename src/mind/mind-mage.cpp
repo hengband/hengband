@@ -95,7 +95,7 @@ bool eat_magic(PlayerType *player_ptr, int power)
     }
 
     if (o_ptr->is_fixed_artifact()) {
-        const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
+        const auto item_name = describe_flavor(player_ptr, *o_ptr, OD_NAME_ONLY);
         msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), item_name.data());
         if (tval == ItemKindType::ROD) {
             o_ptr->timeout = baseitem.pval * o_ptr->number;
@@ -106,7 +106,7 @@ bool eat_magic(PlayerType *player_ptr, int power)
         return redraw_player(player_ptr);
     }
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
     /* Mages recharge objects more safely. */
     if (PlayerClass(player_ptr).is_wizard()) {

@@ -157,7 +157,7 @@ void drop_from_inventory(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBE
     distribute_charges(o_ptr, q_ptr, amt);
 
     q_ptr->number = amt;
-    const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, *q_ptr, 0);
     msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), item_name.data(), index_to_label(i_idx));
     (void)drop_near(player_ptr, q_ptr, 0, player_ptr->y, player_ptr->x);
     vary_item(player_ptr, i_idx, -amt);
@@ -422,7 +422,7 @@ INVENTORY_IDX inven_takeoff(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NU
     q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
     q_ptr->number = amt;
-    const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, *q_ptr, 0);
     if (((i_idx == INVEN_MAIN_HAND) || (i_idx == INVEN_SUB_HAND)) && o_ptr->is_melee_weapon()) {
         act = _("を装備からはずした", "You were wielding");
     } else if (i_idx == INVEN_BOW) {

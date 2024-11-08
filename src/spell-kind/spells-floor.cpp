@@ -370,7 +370,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                         item.get_fixed_artifact().is_generated = false;
 
                         if (in_generate && cheat_peek) {
-                            const auto item_name = describe_flavor(player_ptr, &item, (OD_NAME_ONLY | OD_STORE));
+                            const auto item_name = describe_flavor(player_ptr, item, (OD_NAME_ONLY | OD_STORE));
                             msg_format(_("伝説のアイテム (%s) は生成中に*破壊*された。", "Artifact (%s) was *destroyed* during generation."), item_name.data());
                         }
                     } else if (in_generate && cheat_peek && item.is_random_artifact()) {

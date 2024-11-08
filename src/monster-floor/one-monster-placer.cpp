@@ -231,7 +231,7 @@ static void warn_unique_generation(PlayerType *player_ptr, MonraceId r_idx)
 
     auto *o_ptr = choose_warning_item(player_ptr);
     if (o_ptr != nullptr) {
-        const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        const auto item_name = describe_flavor(player_ptr, *o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         msg_format(_("%sは%s光った。", "%s glows %s."), item_name.data(), color.data());
     } else {
         msg_format(_("%s光る物が頭に浮かんだ。", "A %s image forms in your mind."), color.data());

@@ -357,7 +357,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
                     if (o_ptr->is_fixed_artifact()) {
                         o_ptr->get_fixed_artifact().is_generated = false;
                         if (cheat_peek) {
-                            const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_NAME_ONLY | OD_STORE));
+                            const auto item_name = describe_flavor(player_ptr, *o_ptr, (OD_NAME_ONLY | OD_STORE));
                             msg_format(_("伝説のアイテム (%s) はストリーマーにより削除された。", "Artifact (%s) was deleted by streamer."), item_name.data());
                         }
                     } else if (cheat_peek && o_ptr->is_random_artifact()) {

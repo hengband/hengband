@@ -233,7 +233,7 @@ void store_examine(PlayerType *player_ptr, StoreSaleType store_num)
         return;
     }
 
-    const auto item_name = describe_flavor(player_ptr, item.get(), 0);
+    const auto item_name = describe_flavor(player_ptr, *item, 0);
     msg_format(_("%sを調べている...", "Examining %s..."), item_name.data());
     if (!screen_object(player_ptr, item.get(), SCROBJ_FORCE_DETAIL)) {
         msg_print(_("特に変わったところはないようだ。", "You see nothing special."));

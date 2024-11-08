@@ -28,7 +28,7 @@ bool rustproof(PlayerType *player_ptr)
         return false;
     }
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
     o_ptr->art_flags.set(TR_IGNORE_ACID);
     if ((o_ptr->to_a < 0) && !o_ptr->is_cursed()) {
 #ifdef JP

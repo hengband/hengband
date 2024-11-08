@@ -239,7 +239,7 @@ static short describe_monster_item(PlayerType *player_ptr, GridExamination *ge_p
 {
     for (const auto this_o_idx : ge_ptr->m_ptr->hold_o_idx_list) {
         auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-        const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+        const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
 #ifdef JP
         const auto out_val = format("%s%s%s%s[%s]", ge_ptr->s1, item_name.data(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
 #else
@@ -308,7 +308,7 @@ static short describe_footing(PlayerType *player_ptr, GridExamination *ge_ptr)
     }
 
     auto *o_ptr = &player_ptr->current_floor_ptr->o_list[ge_ptr->floor_list[0]];
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
 #ifdef JP
     const auto out_val = format("%s%s%s%s[%s]", ge_ptr->s1, item_name.data(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
 #else
@@ -400,7 +400,7 @@ static short describe_footing_sight(PlayerType *player_ptr, GridExamination *ge_
     }
 
     ge_ptr->boring = false;
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
 #ifdef JP
     const auto out_val = format("%s%s%s%s[%s]", ge_ptr->s1, item_name.data(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
 #else

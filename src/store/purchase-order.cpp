@@ -100,7 +100,7 @@ static void take_item_from_home(PlayerType *player_ptr, ItemEntity *o_ptr, ItemE
     distribute_charges(o_ptr, j_ptr, amt);
 
     auto item_new = store_item_to_inventory(player_ptr, j_ptr);
-    const auto item_name = describe_flavor(player_ptr, &player_ptr->inventory_list[item_new], 0);
+    const auto item_name = describe_flavor(player_ptr, player_ptr->inventory_list[item_new], 0);
     handle_stuff(player_ptr);
     msg_format(_("%s(%c)を取った。", "You have %s (%c)."), item_name.data(), index_to_label(item_new));
 
@@ -246,7 +246,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     COMMAND_CODE item_new;
-    const auto purchased_item_name = describe_flavor(player_ptr, &item, 0);
+    const auto purchased_item_name = describe_flavor(player_ptr, item, 0);
     msg_format(_("%s(%c)を購入する。", "Buying %s (%c)."), purchased_item_name.data(), I2A(item_num));
     msg_print(nullptr);
 
@@ -287,7 +287,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
         exe_write_diary(floor, DiaryKind::BUY, 0, purchased_item_name);
     }
 
-    const auto diary_item_name = describe_flavor(player_ptr, item_store.get(), OD_NAME_ONLY);
+    const auto diary_item_name = describe_flavor(player_ptr, *item_store, OD_NAME_ONLY);
     if (record_rand_art && item_store->is_random_artifact()) {
         exe_write_diary(floor, DiaryKind::ART, 0, diary_item_name);
     }
@@ -302,7 +302,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     item_new = store_item_to_inventory(player_ptr, &item);
     handle_stuff(player_ptr);
 
-    const auto got_item_name = describe_flavor(player_ptr, &player_ptr->inventory_list[item_new], 0);
+    const auto got_item_name = describe_flavor(player_ptr, player_ptr->inventory_list[item_new], 0);
     msg_format(_("%s(%c)を手に入れた。", "You have %s (%c)."), got_item_name.data(), index_to_label(item_new));
 
     if (item_store->is_wand_rod()) {

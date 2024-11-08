@@ -260,7 +260,7 @@ static void attack_golden_hammer(PlayerType *player_ptr, player_attack_type *pa_
     }
 
     auto *q_ptr = &floor_ptr->o_list[m_ptr->hold_o_idx_list.front()];
-    const auto item_name = describe_flavor(player_ptr, q_ptr, OD_NAME_ONLY);
+    const auto item_name = describe_flavor(player_ptr, *q_ptr, OD_NAME_ONLY);
     q_ptr->held_m_idx = 0;
     q_ptr->marked.clear().set(OmType::TOUCHED);
     m_ptr->hold_o_idx_list.pop_front();

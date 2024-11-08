@@ -45,7 +45,7 @@ static void autopick_delayed_alter_aux(PlayerType *player_ptr, INVENTORY_IDX i_i
         return;
     }
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
     if (i_idx >= 0) {
         inven_item_increase(player_ptr, i_idx, -(o_ptr->number));
         inven_item_optimize(player_ptr, i_idx);
@@ -113,7 +113,7 @@ void autopick_pickup_items(PlayerType *player_ptr, Grid *g_ptr)
 
         disturb(player_ptr, false, false);
         if (!check_store_item_to_inventory(player_ptr, o_ptr)) {
-            const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+            const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
             msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), item_name.data());
             o_ptr->marked.set(OmType::SUPRESS_MESSAGE);
             continue;
@@ -128,7 +128,7 @@ void autopick_pickup_items(PlayerType *player_ptr, Grid *g_ptr)
             continue;
         }
 
-        const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+        const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
         std::stringstream ss;
         ss << _(item_name, "Pick up ") << _("を拾いますか", item_name) << "? ";
         if (!input_check(ss.str())) {

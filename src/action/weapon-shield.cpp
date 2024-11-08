@@ -30,7 +30,7 @@ void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX i_idx)
         }
 
         o_ptr = &player_ptr->inventory_list[INVEN_SUB_HAND];
-        item_name = describe_flavor(player_ptr, o_ptr, 0);
+        item_name = describe_flavor(player_ptr, *o_ptr, 0);
 
         if (o_ptr->is_cursed()) {
             if (o_ptr->allow_two_hands_wielding() && can_two_hands_wielding(player_ptr)) {
@@ -58,7 +58,7 @@ void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 
     o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
     if (o_ptr->is_valid()) {
-        item_name = describe_flavor(player_ptr, o_ptr, 0);
+        item_name = describe_flavor(player_ptr, *o_ptr, 0);
     }
 
     if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND)) {

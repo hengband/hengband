@@ -334,7 +334,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
             item_name = _("(武器を両手持ち)", "(wielding with two-hands)");
             attr = TERM_WHITE;
         } else {
-            item_name = describe_flavor(player_ptr, o_ptr, 0);
+            item_name = describe_flavor(player_ptr, *o_ptr, 0);
             attr = tval_to_attr[enum2i(o_ptr->bi_key.tval()) % 128];
         }
 
@@ -608,7 +608,7 @@ static void display_floor_item_list(PlayerType *player_ptr, const Pos2D &pos)
         if (is_hallucinated) {
             term_addstr(-1, TERM_WHITE, _("何か奇妙な物", "something strange"));
         } else {
-            const auto item_name = describe_flavor(player_ptr, &item, 0);
+            const auto item_name = describe_flavor(player_ptr, item, 0);
             TERM_COLOR attr = tval_to_attr[enum2i(tval) % 128];
             term_addstr(-1, attr, item_name);
         }
@@ -671,7 +671,7 @@ static void display_found_item_list(PlayerType *player_ptr)
 
     // 発見済みのアイテムを表示
     TERM_LEN term_y = 1;
-    for (auto item : found_item_list) {
+    for (auto item_ptr : found_item_list) {
         // 途中で行数が足りなくなったら終了。
         if (term_y >= hgt) {
             break;
@@ -680,16 +680,16 @@ static void display_found_item_list(PlayerType *player_ptr)
         term_gotoxy(0, term_y);
 
         // アイテムシンボル表示
-        const auto symbol = item->get_symbol();
+        const auto symbol = item_ptr->get_symbol();
         const auto symbol_str = format(" %c ", symbol.character);
         term_addstr(-1, symbol.color, symbol_str);
 
-        const auto item_name = describe_flavor(player_ptr, item, 0);
-        const auto color_code_for_item = tval_to_attr[enum2i(item->bi_key.tval()) % 128];
+        const auto item_name = describe_flavor(player_ptr, *item_ptr, 0);
+        const auto color_code_for_item = tval_to_attr[enum2i(item_ptr->bi_key.tval()) % 128];
         term_addstr(-1, color_code_for_item, item_name);
 
         // アイテム座標表示
-        const auto item_location = format("(X:%3d Y:%3d)", item->ix, item->iy);
+        const auto item_location = format("(X:%3d Y:%3d)", item_ptr->ix, item_ptr->iy);
         prt(item_location, term_y, wid - item_location.length() - 1);
 
         ++term_y;

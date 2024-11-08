@@ -95,7 +95,7 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
     for (auto it = o_idx_list.begin(); it != o_idx_list.end();) {
         const OBJECT_IDX this_o_idx = *it++;
         auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-        const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+        const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
         disturb(player_ptr, false, false);
         if (o_ptr->bi_key.tval() == ItemKindType::GOLD) {
             constexpr auto mes = _(" $%ld の価値がある%sを見つけた。", "You have found %ld gold pieces worth of %s.");
@@ -126,7 +126,7 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
     if (!pickup) {
         if (floor_num == 1) {
             auto *o_ptr = &player_ptr->current_floor_ptr->o_list[floor_o_idx];
-            const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+            const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
             msg_format(_("%sがある。", "You see %s."), item_name.data());
         } else {
             msg_format(_("%d 個のアイテムの山がある。", "You see a pile of %d items."), floor_num);
@@ -138,7 +138,7 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
     if (!can_pickup) {
         if (floor_num == 1) {
             auto *o_ptr = &player_ptr->current_floor_ptr->o_list[floor_o_idx];
-            const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+            const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
             msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), item_name.data());
         } else {
             msg_print(_("ザックには床にあるどのアイテムも入らない。", "You have no room for any of the objects on the floor."));
@@ -163,7 +163,7 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
     }
 
     auto *o_ptr = &player_ptr->current_floor_ptr->o_list[floor_o_idx];
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
     const auto prompt = format(_("%sを拾いますか? ", "Pick up %s? "), item_name.data());
     if (!input_check(prompt)) {
         return;
@@ -189,7 +189,7 @@ void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
 {
     auto *o_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
 #ifdef JP
-    const auto old_item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
+    const auto old_item_name = describe_flavor(player_ptr, *o_ptr, OD_NAME_ONLY);
     const auto picked_count_str = describe_count_with_counter_suffix(*o_ptr);
     const auto picked_count = o_ptr->number;
 #else
@@ -207,7 +207,7 @@ void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
         }
     }
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
 #ifdef JP
     if (o_ptr->is_specific_artifact(FixedArtifactId::CRIMSON) && (player_ptr->ppersonality == PERSONALITY_COMBAT)) {
         msg_format("こうして、%sは『クリムゾン』を手に入れた。", player_ptr->name);
@@ -257,7 +257,7 @@ void carry(PlayerType *player_ptr, bool pickup)
     for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
         const OBJECT_IDX this_o_idx = *it++;
         auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-        const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+        const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
         disturb(player_ptr, false, false);
         if (o_ptr->bi_key.tval() == ItemKindType::GOLD) {
             int value = (long)o_ptr->pval;
