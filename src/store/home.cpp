@@ -68,7 +68,7 @@ int home_carry(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_nu
 
     int slot;
     for (slot = 0; slot < st_ptr->stock_num; slot++) {
-        if (object_sort_comp(player_ptr, o_ptr, st_ptr->stock[slot].get())) {
+        if (object_sort_comp(player_ptr, *o_ptr, *st_ptr->stock[slot])) {
             break;
         }
     }
@@ -139,14 +139,14 @@ static void sweep_reorder_store_item(ItemEntity *o_ptr, const int i, bool *combi
 static void exe_reorder_store_item(PlayerType *player_ptr, bool *flag)
 {
     for (auto i = 0; i < st_ptr->stock_num; i++) {
-        auto &item = st_ptr->stock[i];
-        if (!item->is_valid()) {
+        const auto &item = *st_ptr->stock[i];
+        if (!item.is_valid()) {
             continue;
         }
 
         int j;
         for (j = 0; j < st_ptr->stock_num; j++) {
-            if (object_sort_comp(player_ptr, item.get(), st_ptr->stock[j].get())) {
+            if (object_sort_comp(player_ptr, item, *st_ptr->stock[j])) {
                 break;
             }
         }
