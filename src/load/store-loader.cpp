@@ -30,12 +30,12 @@
 static void home_carry_load(PlayerType *player_ptr, store_type *store_ptr, ItemEntity *o_ptr)
 {
     for (auto i = 0; i < store_ptr->stock_num; i++) {
-        auto *j_ptr = &store_ptr->stock[i];
-        if (!object_similar(j_ptr, o_ptr)) {
+        auto &item = store_ptr->stock[i];
+        if (!object_similar(item.get(), o_ptr)) {
             continue;
         }
 
-        object_absorb(j_ptr, o_ptr);
+        object_absorb(item.get(), o_ptr);
         return;
     }
 
@@ -46,17 +46,17 @@ static void home_carry_load(PlayerType *player_ptr, store_type *store_ptr, ItemE
     const auto value = o_ptr->get_price();
     int slot;
     for (slot = 0; slot < store_ptr->stock_num; slot++) {
-        if (object_sort_comp(player_ptr, o_ptr, value, &store_ptr->stock[slot])) {
+        if (object_sort_comp(player_ptr, o_ptr, value, store_ptr->stock[slot].get())) {
             break;
         }
     }
 
     for (auto i = store_ptr->stock_num; i > slot; i--) {
-        store_ptr->stock[i] = store_ptr->stock[i - 1];
+        *store_ptr->stock[i] = *store_ptr->stock[i - 1];
     }
 
     store_ptr->stock_num++;
-    store_ptr->stock[slot] = *o_ptr;
+    *store_ptr->stock[slot] = *o_ptr;
     chg_virtue(player_ptr, Virtue::SACRIFICE, -1);
 }
 
@@ -113,7 +113,7 @@ static void rd_store(PlayerType *player_ptr, int town_number, StoreSaleType stor
             home_carry_load(player_ptr, store_ptr, &item);
         } else {
             int k = store_ptr->stock_num++;
-            store_ptr->stock[k].copy_from(&item);
+            *store_ptr->stock[k] = item;
         }
     }
 }

@@ -83,25 +83,25 @@ void spoil_random_artifact(PlayerType *player_ptr)
     for (const auto &[tval_list, name] : group_artifact_list) {
         for (auto tval : tval_list) {
             for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-                auto *q_ptr = &player_ptr->inventory_list[i];
-                spoil_random_artifact_aux(player_ptr, q_ptr, tval, ofs);
+                auto &item = player_ptr->inventory_list[i];
+                spoil_random_artifact_aux(player_ptr, &item, tval, ofs);
             }
 
             for (int i = 0; i < INVEN_PACK; i++) {
-                auto *q_ptr = &player_ptr->inventory_list[i];
-                spoil_random_artifact_aux(player_ptr, q_ptr, tval, ofs);
+                auto &item = player_ptr->inventory_list[i];
+                spoil_random_artifact_aux(player_ptr, &item, tval, ofs);
             }
 
             const auto *store_ptr = &towns_info[1].stores[StoreSaleType::HOME];
             for (int i = 0; i < store_ptr->stock_num; i++) {
-                auto *q_ptr = &store_ptr->stock[i];
-                spoil_random_artifact_aux(player_ptr, q_ptr, tval, ofs);
+                auto &item = store_ptr->stock[i];
+                spoil_random_artifact_aux(player_ptr, item.get(), tval, ofs);
             }
 
             store_ptr = &towns_info[1].stores[StoreSaleType::MUSEUM];
             for (int i = 0; i < store_ptr->stock_num; i++) {
-                auto *q_ptr = &store_ptr->stock[i];
-                spoil_random_artifact_aux(player_ptr, q_ptr, tval, ofs);
+                auto &item = store_ptr->stock[i];
+                spoil_random_artifact_aux(player_ptr, item.get(), tval, ofs);
             }
         }
     }

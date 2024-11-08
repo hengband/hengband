@@ -19,52 +19,46 @@ store_type *st_ptr = nullptr;
  * @param i_idx 増やしたいアイテムのインベントリID
  * @param num 増やしたい数
  */
-void store_item_increase(INVENTORY_IDX i_idx, ITEM_NUMBER num)
+void store_item_increase(short i_idx, int item_num)
 {
-    ItemEntity *o_ptr;
-    o_ptr = &st_ptr->stock[i_idx];
-    int cnt = o_ptr->number + num;
+    auto &item = st_ptr->stock[i_idx];
+    auto cnt = item->number + item_num;
     if (cnt > 255) {
         cnt = 255;
     } else if (cnt < 0) {
         cnt = 0;
     }
 
-    num = cnt - o_ptr->number;
-    o_ptr->number += num;
+    item_num = cnt - item->number;
+    item->number += item_num;
 }
 
 /*!
  * @brief 店舗のオブジェクト数を削除する
  * @param i_idx 削除したいアイテムのID
  */
-void store_item_optimize(INVENTORY_IDX i_idx)
+void store_item_optimize(short i_idx)
 {
-    const auto *o_ptr = &st_ptr->stock[i_idx];
-    if (!o_ptr->is_valid() || (o_ptr->number != 0)) {
+    const auto &item = st_ptr->stock[i_idx];
+    if (!item->is_valid() || (item->number != 0)) {
         return;
     }
 
     st_ptr->stock_num--;
     for (int j = i_idx; j < st_ptr->stock_num; j++) {
-        st_ptr->stock[j] = st_ptr->stock[j + 1];
+        *st_ptr->stock[j] = *st_ptr->stock[j + 1];
     }
 
-    (&st_ptr->stock[st_ptr->stock_num])->wipe();
+    st_ptr->stock[st_ptr->stock_num]->wipe();
 }
 
 /*!
- * @brief 店舗の品揃え変化のためにアイテムを削除する /
- * Attempt to delete (some of) a random item from the store
- * @details
- * <pre>
- * Hack -- we attempt to "maintain" piles of items when possible.
- * </pre>
+ * @brief 店舗の品揃え変化のためにアイテムを削除する
  */
-void store_delete(void)
+void store_delete()
 {
-    INVENTORY_IDX what = (INVENTORY_IDX)randint0(st_ptr->stock_num);
-    int num = st_ptr->stock[what].number;
+    const auto what = randnum0<short>(st_ptr->stock_num);
+    int num = st_ptr->stock[what]->number;
     if (one_in_(2)) {
         num = (num + 1) / 2;
     }
@@ -73,8 +67,8 @@ void store_delete(void)
         num = 1;
     }
 
-    if (st_ptr->stock[what].is_wand_rod()) {
-        st_ptr->stock[what].pval -= num * st_ptr->stock[what].pval / st_ptr->stock[what].number;
+    if (st_ptr->stock[what]->is_wand_rod()) {
+        st_ptr->stock[what]->pval -= num * st_ptr->stock[what]->pval / st_ptr->stock[what]->number;
     }
 
     store_item_increase(what, -num);
@@ -85,19 +79,18 @@ void store_delete(void)
  * @brief 店舗販売中の杖と魔法棒のpvalのリストを返す
  * @param j_ptr これから売ろうとしているオブジェクト
  * @return plavリスト(充填数)
- * @details
- * 回数の違う杖と魔法棒がスロットを圧迫するのでスロット数制限をかける
+ * @details 回数の違う杖と魔法棒がスロットを圧迫するのでスロット数制限をかける
  */
-std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(ItemEntity *j_ptr)
+std::vector<short> store_same_magic_device_pvals(ItemEntity *j_ptr)
 {
-    auto list = std::vector<PARAMETER_VALUE>();
+    auto list = std::vector<short>();
     for (INVENTORY_IDX i = 0; i < st_ptr->stock_num; i++) {
-        auto *o_ptr = &st_ptr->stock[i];
-        if ((o_ptr == j_ptr) || (o_ptr->bi_id != j_ptr->bi_id) || !o_ptr->is_wand_staff()) {
+        auto &item = st_ptr->stock[i];
+        if ((item.get() == j_ptr) || (item->bi_id != j_ptr->bi_id) || !item->is_wand_staff()) {
             continue;
         }
 
-        list.push_back(o_ptr->pval);
+        list.push_back(item->pval);
     }
 
     return list;
@@ -211,17 +204,9 @@ static void store_object_absorb(ItemEntity *o_ptr, ItemEntity *j_ptr)
 }
 
 /*!
- * @brief 店舗にオブジェクトを加える /
- * Add the item "o_ptr" to a real stores inventory.
+ * @brief 店舗にオブジェクトを加える
  * @param o_ptr 加えたいオブジェクトの構造体参照ポインタ
- * @return 収めた先のID
- * @details
- * <pre>
- * In all cases, return the slot (or -1) where the object was placed
- * Note that this is a hacked up version of "store_item_to_inventory()".
- * Also note that it may not correctly "adapt" to "knowledge" bacoming
- * known, the player may have to pick stuff up and drop it again.
- * </pre>
+ * @return 収めた先の商品インデックス、但し無価値アイテムは店頭に並べない.
  */
 int store_carry(ItemEntity *o_ptr)
 {
@@ -235,10 +220,9 @@ int store_carry(ItemEntity *o_ptr)
     o_ptr->feeling = FEEL_NONE;
     int slot;
     for (slot = 0; slot < st_ptr->stock_num; slot++) {
-        ItemEntity *j_ptr;
-        j_ptr = &st_ptr->stock[slot];
-        if (store_object_similar(j_ptr, o_ptr)) {
-            store_object_absorb(j_ptr, o_ptr);
+        auto &item = st_ptr->stock[slot];
+        if (store_object_similar(item.get(), o_ptr)) {
+            store_object_absorb(item.get(), o_ptr);
             return slot;
         }
     }
@@ -250,9 +234,9 @@ int store_carry(ItemEntity *o_ptr)
     const auto o_tval = o_ptr->bi_key.tval();
     const auto o_sval = o_ptr->bi_key.sval();
     for (slot = 0; slot < st_ptr->stock_num; slot++) {
-        const auto *j_ptr = &st_ptr->stock[slot];
-        const auto j_tval = j_ptr->bi_key.tval();
-        const auto j_sval = j_ptr->bi_key.sval();
+        const auto &item = st_ptr->stock[slot];
+        const auto j_tval = item->bi_key.tval();
+        const auto j_sval = item->bi_key.sval();
         if (o_tval > j_tval) {
             break;
         }
@@ -270,15 +254,15 @@ int store_carry(ItemEntity *o_ptr)
         }
 
         if (o_tval == ItemKindType::ROD) {
-            if (o_ptr->pval < j_ptr->pval) {
+            if (o_ptr->pval < item->pval) {
                 break;
             }
-            if (o_ptr->pval > j_ptr->pval) {
+            if (o_ptr->pval > item->pval) {
                 continue;
             }
         }
 
-        auto j_value = j_ptr->get_price();
+        auto j_value = item->get_price();
         if (value > j_value) {
             break;
         }
@@ -289,10 +273,10 @@ int store_carry(ItemEntity *o_ptr)
     }
 
     for (int i = st_ptr->stock_num; i > slot; i--) {
-        st_ptr->stock[i] = st_ptr->stock[i - 1];
+        *st_ptr->stock[i] = *st_ptr->stock[i - 1];
     }
 
     st_ptr->stock_num++;
-    st_ptr->stock[slot] = *o_ptr;
+    *st_ptr->stock[slot] = *o_ptr;
     return slot;
 }
