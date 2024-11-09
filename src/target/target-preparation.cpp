@@ -40,9 +40,9 @@
  */
 bool target_able(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
-    if (!m_ptr->is_valid()) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monster = floor.m_list[m_idx];
+    if (!monster.is_valid()) {
         return false;
     }
 
@@ -50,15 +50,15 @@ bool target_able(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return false;
     }
 
-    if (!m_ptr->ml) {
+    if (!monster.ml) {
         return false;
     }
 
-    if (m_ptr->is_riding()) {
+    if (monster.is_riding()) {
         return true;
     }
 
-    if (!projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx)) {
+    if (!projectable(player_ptr, player_ptr->get_position(), monster.get_position())) {
         return false;
     }
 

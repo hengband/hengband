@@ -257,17 +257,13 @@ ProjectionPath::ProjectionPath(PlayerType *player_ptr, int range, const Pos2D &p
  *
  * This is slightly (but significantly) different from "los(y1,x1,y2,x2)".
  */
-bool projectable(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+bool projectable(PlayerType *player_ptr, const Pos2D &pos1, const Pos2D &pos2)
 {
-    ProjectionPath grid_g(player_ptr, (project_length ? project_length : AngbandSystem::get_instance().get_max_range()), { y1, x1 }, { y2, x2 }, 0);
+    ProjectionPath grid_g(player_ptr, (project_length ? project_length : AngbandSystem::get_instance().get_max_range()), pos1, pos2, 0);
     if (grid_g.path_num() == 0) {
         return true;
     }
 
-    const auto &[y, x] = grid_g.back();
-    if ((y != y2) || (x != x2)) {
-        return false;
-    }
-
-    return true;
+    const auto &pos = grid_g.back();
+    return pos == pos2;
 }

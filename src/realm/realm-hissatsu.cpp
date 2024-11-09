@@ -651,14 +651,15 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
     case 27:
         if (cast) {
             POSITION y, x;
-
             if (!tgt_pt(player_ptr, &x, &y)) {
                 return std::nullopt;
             }
 
+            const Pos2D pos(y, x);
+            const auto p_pos = player_ptr->get_position();
             const auto is_teleportable = cave_player_teleportable_bold(player_ptr, y, x, TELEPORT_SPONTANEOUS);
-            const auto dist = distance(y, x, player_ptr->y, player_ptr->x);
-            if (!is_teleportable || (dist > MAX_PLAYER_SIGHT / 2) || !projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
+            const auto dist = distance(y, x, p_pos.y, p_pos.x);
+            if (!is_teleportable || (dist > MAX_PLAYER_SIGHT / 2) || !projectable(player_ptr, p_pos, pos)) {
                 msg_print(_("失敗！", "You cannot move to that place!"));
                 break;
             }

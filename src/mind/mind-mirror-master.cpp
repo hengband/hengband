@@ -80,6 +80,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
 
     const auto max_range = AngbandSystem::get_instance().get_max_range();
     const auto &floor = *player_ptr->current_floor_ptr;
+    const auto p_pos = player_ptr->get_position();
     for (auto x = 0; x < floor.width; x++) {
         for (auto y = 0; y < floor.height; y++) {
             const Pos2D pos(y, x);
@@ -88,8 +89,8 @@ bool binding_field(PlayerType *player_ptr, int dam)
                 continue;
             }
 
-            const auto dist = distance(player_ptr->y, player_ptr->x, pos.y, pos.x);
-            const auto is_projectable = projectable(player_ptr, player_ptr->y, player_ptr->x, pos.y, pos.x);
+            const auto dist = distance(p_pos.y, p_pos.x, pos.y, pos.x);
+            const auto is_projectable = projectable(player_ptr, p_pos, pos);
             if ((dist == 0) || (dist > max_range) || !grid.has_los() || !is_projectable) {
                 continue;
             }
@@ -149,7 +150,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
                 continue;
             }
 
-            if (floor.has_los(pos) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
+            if (floor.has_los(pos) && projectable(player_ptr, p_pos, pos)) {
                 if (!(player_ptr->effects()->blindness().is_blind()) && panel_contains(y, x)) {
                     print_bolt_pict(player_ptr, y, x, y, x, AttributeType::MANA);
                     move_cursor_relative(y, x);
@@ -175,7 +176,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
                 continue;
             }
 
-            if (floor.has_los(pos) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
+            if (floor.has_los(pos) && projectable(player_ptr, p_pos, pos)) {
                 (void)affect_feature(player_ptr, 0, 0, y, x, dam, AttributeType::MANA);
             }
         }
@@ -196,7 +197,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
                 continue;
             }
 
-            if (floor.has_los(pos) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
+            if (floor.has_los(pos) && projectable(player_ptr, p_pos, pos)) {
                 (void)affect_item(player_ptr, 0, 0, y, x, dam, AttributeType::MANA);
             }
         }
@@ -217,7 +218,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
                 continue;
             }
 
-            if (floor.has_los(pos) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
+            if (floor.has_los(pos) && projectable(player_ptr, p_pos, pos)) {
                 constexpr auto flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP;
                 (void)affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::MANA, flags, true);
             }

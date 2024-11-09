@@ -38,6 +38,7 @@
  */
 bool adjacent_grid_check(PlayerType *player_ptr, MonsterEntity *m_ptr, POSITION *yp, POSITION *xp, TerrainCharacteristics f_flag, PathChecker checker)
 {
+    const Pos2D pos(*yp, *xp);
     static int tonari_y[4][8] = { { -1, -1, -1, 0, 0, 1, 1, 1 }, { -1, -1, -1, 0, 0, 1, 1, 1 }, { 1, 1, 1, 0, 0, -1, -1, -1 }, { 1, 1, 1, 0, 0, -1, -1, -1 } };
     static int tonari_x[4][8] = { { -1, 0, 1, -1, 1, -1, 0, 1 }, { 1, 0, -1, 1, -1, 1, 0, -1 }, { -1, 0, 1, -1, 1, -1, 0, 1 }, { 1, 0, -1, 1, -1, 1, 0, -1 } };
 
@@ -53,29 +54,28 @@ bool adjacent_grid_check(PlayerType *player_ptr, MonsterEntity *m_ptr, POSITION 
     }
 
     for (int i = 0; i < 8; i++) {
-        int next_x = *xp + tonari_x[next][i];
-        int next_y = *yp + tonari_y[next][i];
-        Grid *g_ptr;
-        g_ptr = &player_ptr->current_floor_ptr->grid_array[next_y][next_x];
-        if (!g_ptr->cave_has_flag(f_flag)) {
+        const Pos2DVec vec(tonari_y[next][i], tonari_x[next][i]);
+        const auto pos_next = pos + vec;
+        const auto &grid = player_ptr->current_floor_ptr->get_grid(pos_next);
+        if (!grid.cave_has_flag(f_flag)) {
             continue;
         }
 
         bool check_result;
         switch (checker) {
         case PathChecker::PROJECTION:
-            check_result = projectable(player_ptr, m_ptr->fy, m_ptr->fx, next_y, next_x);
+            check_result = projectable(player_ptr, m_ptr->get_position(), pos_next);
             break;
         case PathChecker::LOS:
-            check_result = los(player_ptr, m_ptr->fy, m_ptr->fx, next_y, next_x);
+            check_result = los(player_ptr, m_ptr->fy, m_ptr->fx, pos_next.y, pos_next.x);
             break;
         default:
             THROW_EXCEPTION(std::logic_error, format("Invalid PathChecker is specified! %d", enum2i(checker)));
         }
 
         if (check_result) {
-            *yp = next_y;
-            *xp = next_x;
+            *yp = pos_next.y;
+            *xp = pos_next.x;
             return true;
         }
     }
@@ -133,7 +133,7 @@ static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
     auto light_by_disintegration = msa_ptr->ability_flags.has(MonsterAbilityType::BR_DISI);
     light_by_disintegration &= msa_ptr->m_ptr->cdis < system.get_max_range() / 2;
     light_by_disintegration &= in_disintegration_range(player_ptr->current_floor_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x);
-    light_by_disintegration &= one_in_(10) || (projectable(player_ptr, msa_ptr->y, msa_ptr->x, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx) && one_in_(2));
+    light_by_disintegration &= one_in_(10) || (projectable(player_ptr, msa_ptr->get_position(), msa_ptr->m_ptr->get_position()) && one_in_(2));
     if (light_by_disintegration) {
         msa_ptr->do_spell = DO_SPELL_BR_DISI;
         msa_ptr->success = true;
@@ -197,7 +197,7 @@ static void decide_lite_breath(msa_type *msa_ptr)
 
 bool decide_lite_projection(PlayerType *player_ptr, msa_type *msa_ptr)
 {
-    if (projectable(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x)) {
+    if (projectable(player_ptr, msa_ptr->m_ptr->get_position(), msa_ptr->get_position())) {
         feature_projection(*player_ptr->current_floor_ptr, msa_ptr);
         return true;
     }

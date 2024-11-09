@@ -340,16 +340,16 @@ bool set_monster_invulner(PlayerType *player_ptr, MONSTER_IDX m_idx, int v, bool
 bool set_monster_timewalk(PlayerType *player_ptr, MONSTER_IDX m_idx, int num, bool vs_player)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor.m_list[m_idx];
+    auto &monster = floor.m_list[m_idx];
     auto &world = AngbandWorld::get_instance();
     if (world.timewalk_m_idx) {
         return false;
     }
 
     if (vs_player) {
-        const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+        const auto m_name = monster_desc(player_ptr, &monster, 0);
         std::string mes;
-        switch (m_ptr->r_idx) {
+        switch (monster.r_idx) {
         case MonraceId::DIO:
             mes = _("「『ザ・ワールド』！　時は止まった！」", format("%s yells 'The World! Time has stopped!'", m_name.data()));
             break;
@@ -374,12 +374,12 @@ bool set_monster_timewalk(PlayerType *player_ptr, MONSTER_IDX m_idx, int num, bo
     }
 
     while (num--) {
-        if (!m_ptr->is_valid()) {
+        if (!monster.is_valid()) {
             break;
         }
 
         process_monster(player_ptr, world.timewalk_m_idx);
-        m_ptr->reset_target();
+        monster.reset_target();
         handle_stuff(player_ptr);
         if (vs_player) {
             term_xtra(TERM_XTRA_DELAY, 500);
@@ -395,11 +395,12 @@ bool set_monster_timewalk(PlayerType *player_ptr, MONSTER_IDX m_idx, int num, bo
     };
     rfu.set_flags(flags);
     world.timewalk_m_idx = 0;
-    auto should_output_message = floor.has_los({ m_ptr->fy, m_ptr->fx });
-    should_output_message &= projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
+    const auto m_pos = monster.get_position();
+    auto should_output_message = floor.has_los(m_pos);
+    should_output_message &= projectable(player_ptr, player_ptr->get_position(), m_pos);
     if (vs_player || should_output_message) {
         std::string mes;
-        switch (m_ptr->r_idx) {
+        switch (monster.r_idx) {
         case MonraceId::DIAVOLO:
             mes = _("これが我が『キング・クリムゾン』の能力！　『時間を消し去って』飛び越えさせた…！！",
                 "This is the ability of my 'King Crimson'! 'Erase the time' and let it jump over... !!");

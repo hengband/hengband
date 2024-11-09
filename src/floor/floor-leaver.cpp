@@ -58,16 +58,18 @@ static bool check_pet_preservation_conditions(PlayerType *player_ptr, MonsterEnt
         return false;
     }
 
-    auto dis = distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
+    const auto p_pos = player_ptr->get_position();
+    const auto m_pos = m_ptr->get_position();
+    const auto dis = distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
     if (m_ptr->is_confused() || m_ptr->is_stunned() || m_ptr->is_asleep() || m_ptr->has_parent()) {
         return true;
     }
 
     const auto should_preserve = m_ptr->is_named();
-    auto sight_from_player = player_ptr->current_floor_ptr->has_los({ m_ptr->fy, m_ptr->fx });
-    sight_from_player &= projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
+    auto sight_from_player = player_ptr->current_floor_ptr->has_los(m_pos);
+    sight_from_player &= projectable(player_ptr, player_ptr->get_position(), m_ptr->get_position());
     auto sight_from_monster = los(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x);
-    sight_from_monster &= projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x);
+    sight_from_monster &= projectable(player_ptr, m_pos, p_pos);
     if (should_preserve && (sight_from_player || sight_from_monster)) {
         return dis > 3;
     }

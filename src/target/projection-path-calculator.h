@@ -21,4 +21,4 @@ private:
     std::vector<Pos2D> position;
 };
 
-bool projectable(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
+bool projectable(PlayerType *player_ptr, const Pos2D &pos1, const Pos2D &pos2);

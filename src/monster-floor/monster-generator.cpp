@@ -51,6 +51,7 @@
  */
 bool mon_scatter(PlayerType *player_ptr, MonraceId r_idx, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION max_dist)
 {
+    const Pos2D pos(y, x);
     int place_x[MON_SCAT_MAXD]{};
     int place_y[MON_SCAT_MAXD]{};
     int num[MON_SCAT_MAXD]{};
@@ -65,12 +66,13 @@ bool mon_scatter(PlayerType *player_ptr, MonraceId r_idx, POSITION *yp, POSITION
     }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (POSITION nx = x - max_dist; nx <= x + max_dist; nx++) {
-        for (POSITION ny = y - max_dist; ny <= y + max_dist; ny++) {
+    for (auto nx = x - max_dist; nx <= x + max_dist; nx++) {
+        for (auto ny = y - max_dist; ny <= y + max_dist; ny++) {
+            const Pos2D pos_neighbor(ny, nx);
             if (!in_bounds(floor_ptr, ny, nx)) {
                 continue;
             }
-            if (!projectable(player_ptr, y, x, ny, nx)) {
+            if (!projectable(player_ptr, pos, pos_neighbor)) {
                 continue;
             }
             if (MonraceList::is_valid(r_idx)) {

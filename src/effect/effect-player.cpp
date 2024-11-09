@@ -88,27 +88,25 @@ static bool process_bolt_reflection(PlayerType *player_ptr, EffectPlayerType *ep
     }
 
     msg_print(mes);
-    POSITION t_y;
-    POSITION t_x;
+    Pos2D pos(0, 0);
     if (is_monster(ep_ptr->src_idx)) {
-        auto *floor_ptr = player_ptr->current_floor_ptr;
-        auto *m_ptr = &floor_ptr->m_list[ep_ptr->src_idx];
+        const auto &floor = *player_ptr->current_floor_ptr;
+        const auto &monster = floor.m_list[ep_ptr->src_idx];
         do {
-            t_y = m_ptr->fy - 1 + randint1(3);
-            t_x = m_ptr->fx - 1 + randint1(3);
+            const Pos2DVec vec(randint1(3) - 1, randint1(3) - 1);
+            pos = monster.get_position() + vec;
             max_attempts--;
-        } while (max_attempts && in_bounds2u(floor_ptr, t_y, t_x) && !projectable(player_ptr, player_ptr->y, player_ptr->x, t_y, t_x));
+        } while (max_attempts && in_bounds2u(&floor, pos.y, pos.x) && !projectable(player_ptr, player_ptr->get_position(), pos));
 
         if (max_attempts < 1) {
-            t_y = m_ptr->fy;
-            t_x = m_ptr->fx;
+            pos = monster.get_position();
         }
     } else {
-        t_y = player_ptr->y - 1 + randint1(3);
-        t_x = player_ptr->x - 1 + randint1(3);
+        const Pos2DVec vec(randint1(3) - 1, randint1(3) - 1);
+        pos = player_ptr->get_position() + vec;
     }
 
-    (*project)(player_ptr, 0, 0, t_y, t_x, ep_ptr->dam, ep_ptr->attribute, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE), std::nullopt);
+    (*project)(player_ptr, 0, 0, pos.y, pos.x, ep_ptr->dam, ep_ptr->attribute, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE), std::nullopt);
     disturb(player_ptr, true, true);
     return true;
 }

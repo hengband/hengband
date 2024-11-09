@@ -32,45 +32,45 @@
 static coordinate_candidate sweep_safe_coordinate(PlayerType *player_ptr, MONSTER_IDX m_idx, const POSITION *y_offsets, const POSITION *x_offsets, int d)
 {
     coordinate_candidate candidate;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    for (POSITION i = 0, dx = x_offsets[0], dy = y_offsets[0]; dx != 0 || dy != 0; i++, dx = x_offsets[i], dy = y_offsets[i]) {
-        POSITION y = m_ptr->fy + dy;
-        POSITION x = m_ptr->fx + dx;
-        if (!in_bounds(floor_ptr, y, x)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto p_pos = player_ptr->get_position();
+    const auto m_pos = monster.get_position();
+    for (auto i = 0, dx = x_offsets[0], dy = y_offsets[0]; dx != 0 || dy != 0; i++, dx = x_offsets[i], dy = y_offsets[i]) {
+        const Pos2DVec vec(dy, dx);
+        const auto pos = m_pos + vec;
+        if (!in_bounds(&floor, pos.y, pos.x)) {
             continue;
         }
 
-        auto *r_ptr = &m_ptr->get_monrace();
-        Grid *g_ptr;
-        g_ptr = &floor_ptr->grid_array[y][x];
-
-        BIT_FLAGS16 riding_mode = m_ptr->is_riding() ? CEM_RIDING : 0;
-        if (!monster_can_cross_terrain(player_ptr, g_ptr->feat, r_ptr, riding_mode)) {
+        const auto &monrace = monster.get_monrace();
+        const auto &grid = floor.get_grid(pos);
+        BIT_FLAGS16 riding_mode = monster.is_riding() ? CEM_RIDING : 0;
+        if (!monster_can_cross_terrain(player_ptr, grid.feat, &monrace, riding_mode)) {
             continue;
         }
 
-        if (m_ptr->mflag2.has_not(MonsterConstantFlagType::NOFLOW)) {
-            const auto dist = g_ptr->get_distance(r_ptr->get_grid_flow_type());
+        if (monster.mflag2.has_not(MonsterConstantFlagType::NOFLOW)) {
+            const auto dist = grid.get_distance(monrace.get_grid_flow_type());
             if (dist == 0) {
                 continue;
             }
-            if (dist > floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].get_distance(r_ptr->get_grid_flow_type()) + 2 * d) {
+            if (dist > floor.get_grid(m_pos).get_distance(monrace.get_grid_flow_type()) + 2 * d) {
                 continue;
             }
         }
 
-        if (projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
+        if (projectable(player_ptr, p_pos, pos)) {
             continue;
         }
 
-        POSITION dis = distance(y, x, player_ptr->y, player_ptr->x);
+        POSITION dis = distance(pos.y, pos.x, p_pos.y, p_pos.x);
         if (dis <= candidate.gdis) {
             continue;
         }
 
-        candidate.gy = y;
-        candidate.gx = x;
+        candidate.gy = pos.y;
+        candidate.gx = pos.x;
         candidate.gdis = dis;
     }
 
@@ -132,24 +132,26 @@ bool find_safety(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITI
 static void sweep_hiding_candidate(
     PlayerType *player_ptr, MonsterEntity *m_ptr, const POSITION *y_offsets, const POSITION *x_offsets, coordinate_candidate *candidate)
 {
-    auto *r_ptr = &m_ptr->get_monrace();
+    const auto &monrace = m_ptr->get_monrace();
+    const auto p_pos = player_ptr->get_position();
+    const auto m_pos = m_ptr->get_position();
     for (POSITION i = 0, dx = x_offsets[0], dy = y_offsets[0]; dx != 0 || dy != 0; i++, dx = x_offsets[i], dy = y_offsets[i]) {
-        POSITION y = m_ptr->fy + dy;
-        POSITION x = m_ptr->fx + dx;
-        if (!in_bounds(player_ptr->current_floor_ptr, y, x)) {
+        const Pos2DVec vec(dy, dx);
+        const auto pos = m_pos + vec;
+        if (!in_bounds(player_ptr->current_floor_ptr, pos.y, pos.x)) {
             continue;
         }
-        if (!monster_can_enter(player_ptr, y, x, r_ptr, 0)) {
+        if (!monster_can_enter(player_ptr, pos.y, pos.x, &monrace, 0)) {
             continue;
         }
-        if (projectable(player_ptr, player_ptr->y, player_ptr->x, y, x) || !clean_shot(player_ptr, m_ptr->fy, m_ptr->fx, y, x, false)) {
+        if (projectable(player_ptr, p_pos, pos) || !clean_shot(player_ptr, m_ptr->fy, m_ptr->fx, pos.y, pos.x, false)) {
             continue;
         }
 
-        POSITION dis = distance(y, x, player_ptr->y, player_ptr->x);
+        POSITION dis = distance(pos.y, pos.x, player_ptr->y, player_ptr->x);
         if (dis < candidate->gdis && dis >= 2) {
-            candidate->gy = y;
-            candidate->gx = x;
+            candidate->gy = pos.y;
+            candidate->gx = pos.x;
             candidate->gdis = dis;
         }
     }

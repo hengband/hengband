@@ -297,19 +297,22 @@ void mitokohmon(PlayerType *player_ptr)
     }
 
     if (!count) {
-        for (int i = player_ptr->current_floor_ptr->m_max - 1; i > 0; i--) {
-            MonsterEntity *m_ptr;
-            m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-            if (!m_ptr->is_valid()) {
+        const auto &floor = *player_ptr->current_floor_ptr;
+        const auto p_pos = player_ptr->get_position();
+        for (auto i = floor.m_max - 1; i > 0; i--) {
+            const auto &monster = floor.m_list[i];
+            if (!monster.is_valid()) {
                 continue;
             }
-            if (!((m_ptr->r_idx == MonraceId::SUKE) || (m_ptr->r_idx == MonraceId::KAKU))) {
+            if (!((monster.r_idx == MonraceId::SUKE) || (monster.r_idx == MonraceId::KAKU))) {
                 continue;
             }
-            if (!los(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x)) {
+
+            const auto m_pos = monster.get_position();
+            if (!los(player_ptr, m_pos.y, m_pos.x, p_pos.y, p_pos.x)) {
                 continue;
             }
-            if (!projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x)) {
+            if (!projectable(player_ptr, m_pos, p_pos)) {
                 continue;
             }
             count++;

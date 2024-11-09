@@ -319,7 +319,7 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         const auto m_idx = grid.m_idx;
         auto should_dispel = m_idx == 0;
         should_dispel &= grid.has_los();
-        should_dispel &= projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col);
+        should_dispel &= projectable(player_ptr, player_ptr->get_position(), pos);
         if (!should_dispel) {
             break;
         }
@@ -959,7 +959,7 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         const auto &grid_target = floor.get_grid(pos);
         auto should_teleport = grid_target.has_monster();
         should_teleport &= grid_target.has_los();
-        should_teleport &= projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col);
+        should_teleport &= projectable(player_ptr, player_ptr->get_position(), pos);
         if (!should_teleport) {
             break;
         }
