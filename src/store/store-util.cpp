@@ -11,6 +11,7 @@
 #include "object/tval-types.h"
 #include "system/baseitem-info.h"
 #include "system/item-entity.h"
+#include <algorithm>
 
 store_type *st_ptr = nullptr;
 
@@ -204,6 +205,45 @@ static void store_object_absorb(ItemEntity *o_ptr, ItemEntity *j_ptr)
 }
 
 /*!
+ * @brief 店舗のアイテムをソートするための比較関数
+ *
+ * @param item1 比較対象アイテムへの参照
+ * @param item2 比較対象アイテムへの参照
+ * @return item1の方が上位ならばTRUEを返す。
+ */
+static bool store_item_sort_comp(const ItemEntity &item1, const ItemEntity &item2)
+{
+    const auto item1_tval = item1.bi_key.tval();
+    const auto item2_tval = item2.bi_key.tval();
+    if (item1_tval > item2_tval) {
+        return true;
+    }
+    if (item1_tval < item2_tval) {
+        return false;
+    }
+
+    const auto item1_sval = item1.bi_key.sval();
+    const auto item2_sval = item2.bi_key.sval();
+    if (item1_sval < item2_sval) {
+        return true;
+    }
+    if (item1_sval > item2_sval) {
+        return false;
+    }
+
+    if (item1_tval == ItemKindType::ROD) {
+        if (item1.pval < item2.pval) {
+            return true;
+        }
+        if (item1.pval > item2.pval) {
+            return false;
+        }
+    }
+
+    return item1.calc_price() > item2.calc_price();
+}
+
+/*!
  * @brief 店舗にオブジェクトを加える
  * @param o_ptr 加えたいオブジェクトの構造体参照ポインタ
  * @return 収めた先の商品インデックス、但し無価値アイテムは店頭に並べない.
@@ -218,8 +258,7 @@ int store_carry(ItemEntity *o_ptr)
     o_ptr->ident |= IDENT_FULL_KNOWN;
     o_ptr->inscription.reset();
     o_ptr->feeling = FEEL_NONE;
-    int slot;
-    for (slot = 0; slot < st_ptr->stock_num; slot++) {
+    for (auto slot = 0; slot < st_ptr->stock_num; slot++) {
         auto &item = st_ptr->stock[slot];
         if (store_object_similar(item.get(), o_ptr)) {
             store_object_absorb(item.get(), o_ptr);
@@ -231,46 +270,11 @@ int store_carry(ItemEntity *o_ptr)
         return -1;
     }
 
-    const auto o_tval = o_ptr->bi_key.tval();
-    const auto o_sval = o_ptr->bi_key.sval();
-    for (slot = 0; slot < st_ptr->stock_num; slot++) {
-        const auto &item = st_ptr->stock[slot];
-        const auto j_tval = item->bi_key.tval();
-        const auto j_sval = item->bi_key.sval();
-        if (o_tval > j_tval) {
-            break;
-        }
-
-        if (o_tval < j_tval) {
-            continue;
-        }
-
-        if (o_sval < j_sval) {
-            break;
-        }
-
-        if (o_sval > j_sval) {
-            continue;
-        }
-
-        if (o_tval == ItemKindType::ROD) {
-            if (o_ptr->pval < item->pval) {
-                break;
-            }
-            if (o_ptr->pval > item->pval) {
-                continue;
-            }
-        }
-
-        auto j_value = item->calc_price();
-        if (value > j_value) {
-            break;
-        }
-
-        if (value < j_value) {
-            continue;
-        }
-    }
+    const auto first = st_ptr->stock.begin();
+    const auto last = first + st_ptr->stock_num;
+    const auto slot_it = std::find_if(first, last,
+        [&](const auto &item) { return store_item_sort_comp(*o_ptr, *item); });
+    const auto slot = std::distance(first, slot_it);
 
     for (int i = st_ptr->stock_num; i > slot; i--) {
         *st_ptr->stock[i] = *st_ptr->stock[i - 1];
