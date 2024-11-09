@@ -136,8 +136,6 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
  */
 void drop_from_inventory(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBER amt)
 {
-    ItemEntity forge;
-    ItemEntity *q_ptr;
     auto *o_ptr = &player_ptr->inventory_list[i_idx];
     if (amt <= 0) {
         return;
@@ -152,14 +150,13 @@ void drop_from_inventory(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBE
         o_ptr = &player_ptr->inventory_list[i_idx];
     }
 
-    q_ptr = &forge;
-    q_ptr->copy_from(o_ptr);
-    distribute_charges(o_ptr, q_ptr, amt);
+    ItemEntity item = *o_ptr;
+    distribute_charges(o_ptr, &item, amt);
 
-    q_ptr->number = amt;
-    const auto item_name = describe_flavor(player_ptr, *q_ptr, 0);
+    item.number = amt;
+    const auto item_name = describe_flavor(player_ptr, item, 0);
     msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), item_name.data(), index_to_label(i_idx));
-    (void)drop_near(player_ptr, q_ptr, 0, player_ptr->y, player_ptr->x);
+    (void)drop_near(player_ptr, &item, 0, player_ptr->y, player_ptr->x);
     vary_item(player_ptr, i_idx, -amt);
 }
 
@@ -403,24 +400,20 @@ bool check_store_item_to_inventory(PlayerType *player_ptr, const ItemEntity *o_p
  */
 INVENTORY_IDX inven_takeoff(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBER amt)
 {
-    INVENTORY_IDX slot;
-    ItemEntity forge;
-    ItemEntity *q_ptr;
-    ItemEntity *o_ptr;
-    concptr act;
-    o_ptr = &player_ptr->inventory_list[i_idx];
+    const auto &item_inventory = player_ptr->inventory_list[i_idx];
     if (amt <= 0) {
         return -1;
     }
 
-    if (amt > o_ptr->number) {
-        amt = o_ptr->number;
+    if (amt > item_inventory.number) {
+        amt = item_inventory.number;
     }
-    q_ptr = &forge;
-    q_ptr->copy_from(o_ptr);
-    q_ptr->number = amt;
-    const auto item_name = describe_flavor(player_ptr, *q_ptr, 0);
-    if (((i_idx == INVEN_MAIN_HAND) || (i_idx == INVEN_SUB_HAND)) && o_ptr->is_melee_weapon()) {
+
+    ItemEntity item = item_inventory;
+    item.number = amt;
+    const auto item_name = describe_flavor(player_ptr, item, 0);
+    std::string act;
+    if (((i_idx == INVEN_MAIN_HAND) || (i_idx == INVEN_SUB_HAND)) && item_inventory.is_melee_weapon()) {
         act = _("を装備からはずした", "You were wielding");
     } else if (i_idx == INVEN_BOW) {
         act = _("を装備からはずした", "You were holding");
@@ -433,11 +426,11 @@ INVENTORY_IDX inven_takeoff(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NU
     inven_item_increase(player_ptr, i_idx, -amt);
     inven_item_optimize(player_ptr, i_idx);
 
-    slot = store_item_to_inventory(player_ptr, q_ptr);
+    const auto slot = store_item_to_inventory(player_ptr, &item);
 #ifdef JP
-    msg_format("%s(%c)%s。", item_name.data(), index_to_label(slot), act);
+    msg_format("%s(%c)%s。", item_name.data(), index_to_label(slot), act.data());
 #else
-    msg_format("%s %s (%c).", act, item_name.data(), index_to_label(slot));
+    msg_format("%s %s (%c).", act.data(), item_name.data(), index_to_label(slot));
 #endif
 
     return slot;

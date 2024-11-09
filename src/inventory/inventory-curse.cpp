@@ -194,21 +194,20 @@ static void curse_teleport(PlayerType *player_ptr)
         return;
     }
 
-    ItemEntity *o_ptr;
     int i_keep = 0, count = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->is_valid()) {
+        const auto &item = player_ptr->inventory_list[i];
+        if (!item.is_valid()) {
             continue;
         }
 
-        const auto flags = o_ptr->get_flags();
+        const auto flags = item.get_flags();
 
         if (flags.has_not(TR_TELEPORT)) {
             continue;
         }
 
-        if (o_ptr->is_inscribed() && angband_strchr(o_ptr->inscription->data(), '.')) {
+        if (item.is_inscribed() && angband_strchr(item.inscription->data(), '.')) {
             continue;
         }
 
@@ -218,8 +217,8 @@ static void curse_teleport(PlayerType *player_ptr)
         }
     }
 
-    o_ptr = &player_ptr->inventory_list[i_keep];
-    const auto item_name = describe_flavor(player_ptr, *o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    const auto &item = player_ptr->inventory_list[i_keep];
+    const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     msg_format(_("%sがテレポートの能力を発動させようとしている。", "Your %s tries to teleport you."), item_name.data());
     if (input_check_strict(player_ptr, _("テレポートしますか？", "Teleport? "), UserCheck::OKAY_CANCEL)) {
         disturb(player_ptr, false, true);
@@ -292,8 +291,7 @@ static void multiply_high_curse(PlayerType *player_ptr)
         return;
     }
 
-    ItemEntity *o_ptr;
-    o_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::ADD_H_CURSE);
+    auto *o_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::ADD_H_CURSE);
     auto new_curse = get_curse(1, o_ptr);
     if (o_ptr->curse_flags.has(new_curse)) {
         return;
@@ -312,8 +310,7 @@ static void persist_curse(PlayerType *player_ptr)
         return;
     }
 
-    ItemEntity *o_ptr;
-    o_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::PERSISTENT_CURSE);
+    auto *o_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::PERSISTENT_CURSE);
     if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
         return;
     }
