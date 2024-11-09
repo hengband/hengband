@@ -182,7 +182,7 @@ bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const au
         }
     }
 
-    if (entry.has(FLG_WORTHLESS) && (o_ptr->get_price() > 0)) {
+    if (entry.has(FLG_WORTHLESS) && (o_ptr->calc_price() > 0)) {
         return false;
     }
 

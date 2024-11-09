@@ -45,7 +45,7 @@ using SelectionResult = std::tuple<ItemEntity *, short, int>;
 
 static bool check_destory_item(PlayerType *player_ptr, const ItemEntity &destroying_item, short i_idx)
 {
-    if (!confirm_destroy && (destroying_item.get_price() <= 0)) {
+    if (!confirm_destroy && (destroying_item.calc_price() <= 0)) {
         return true;
     }
 

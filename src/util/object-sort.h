@@ -4,4 +4,4 @@
 
 class ItemEntity;
 class PlayerType;
-bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value, ItemEntity *j_ptr);
+bool object_sort_comp(PlayerType *player_ptr, const ItemEntity &item1, const ItemEntity &item2);

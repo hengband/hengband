@@ -225,7 +225,7 @@ bool store_will_buy(PlayerType *, const ItemEntity *o_ptr, StoreSaleType store_n
         return false;
     }
 
-    return o_ptr->get_price() > 0;
+    return o_ptr->calc_price() > 0;
 }
 
 static int mass_lite_produce(const PRICE cost)
@@ -443,7 +443,7 @@ static byte decide_discount_rate(const PRICE cost)
  */
 void mass_produce(ItemEntity *o_ptr, StoreSaleType store_num)
 {
-    const auto cost = o_ptr->get_price();
+    const auto cost = o_ptr->calc_price();
     int size = switch_mass_production(*o_ptr, cost, store_num);
     auto discount = decide_discount_rate(cost);
     if (o_ptr->is_random_artifact()) {

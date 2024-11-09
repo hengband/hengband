@@ -210,7 +210,7 @@ static void store_object_absorb(ItemEntity *o_ptr, ItemEntity *j_ptr)
  */
 int store_carry(ItemEntity *o_ptr)
 {
-    const auto value = o_ptr->get_price();
+    const auto value = o_ptr->calc_price();
     if (value <= 0) {
         return -1;
     }
@@ -262,7 +262,7 @@ int store_carry(ItemEntity *o_ptr)
             }
         }
 
-        auto j_value = item->get_price();
+        auto j_value = item->calc_price();
         if (value > j_value) {
             break;
         }

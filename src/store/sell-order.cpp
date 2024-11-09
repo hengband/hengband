@@ -153,7 +153,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
 
             player_ptr->au += price;
             store_prt_gold(player_ptr);
-            const auto dummy = q_ptr->get_price() * q_ptr->number;
+            const auto dummy = q_ptr->calc_price() * q_ptr->number;
 
             identify_item(player_ptr, o_ptr);
             q_ptr = &forge;
@@ -165,7 +165,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
                 q_ptr->pval = o_ptr->pval * amt / o_ptr->number;
             }
 
-            const auto value = q_ptr->get_price() * q_ptr->number;
+            const auto value = q_ptr->calc_price() * q_ptr->number;
             const auto sold_item_name = describe_flavor(player_ptr, *q_ptr, 0);
             msg_format(_("%sを $%dで売却しました。", "You sold %s for %d gold."), sold_item_name.data(), price);
 

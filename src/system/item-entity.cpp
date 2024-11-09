@@ -609,7 +609,7 @@ DisplaySymbol ItemEntity::get_symbol() const
  * @brief アイテム価格算出のメインルーチン
  * @return 判明している現価格
  */
-int ItemEntity::get_price() const
+int ItemEntity::calc_price() const
 {
     int value;
     const auto is_worthless = this->is_broken() || this->is_cursed();
