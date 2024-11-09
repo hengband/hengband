@@ -55,7 +55,7 @@
 /*!
  * @brief 装備時にアイテムを呪う処理
  */
-static void do_curse_on_equip(OBJECT_IDX slot, ItemEntity *o_ptr, PlayerType *player_ptr)
+static void do_curse_on_equip(OBJECT_IDX slot, ItemEntity &item, PlayerType *player_ptr)
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (set_anubis_and_chariot(player_ptr) && ((slot == INVEN_MAIN_HAND) || (slot == INVEN_SUB_HAND))) {
@@ -75,16 +75,16 @@ static void do_curse_on_equip(OBJECT_IDX slot, ItemEntity *o_ptr, PlayerType *pl
         return;
     }
 
-    auto should_curse = o_ptr->get_flags().has(TR_PERSISTENT_CURSE) || o_ptr->curse_flags.has(CurseTraitType::PERSISTENT_CURSE);
-    should_curse &= o_ptr->curse_flags.has_not(CurseTraitType::HEAVY_CURSE);
+    auto should_curse = item.get_flags().has(TR_PERSISTENT_CURSE) || item.curse_flags.has(CurseTraitType::PERSISTENT_CURSE);
+    should_curse &= item.curse_flags.has_not(CurseTraitType::HEAVY_CURSE);
     if (!should_curse) {
         return;
     }
 
-    const auto item_name = describe_flavor(player_ptr, *o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
+    const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    item.curse_flags.set(CurseTraitType::HEAVY_CURSE);
     msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), item_name.data());
-    o_ptr->feeling = FEEL_NONE;
+    item.feeling = FEEL_NONE;
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
 }
 
@@ -336,7 +336,7 @@ void do_cmd_wield(PlayerType *player_ptr)
         o_ptr->ident |= (IDENT_SENSE);
     }
 
-    do_curse_on_equip(slot, o_ptr, player_ptr);
+    do_curse_on_equip(slot, *o_ptr, player_ptr);
     if (o_ptr->is_specific_artifact(FixedArtifactId::STONEMASK)) {
         auto is_specific_race = pr.equals(PlayerRaceType::VAMPIRE);
         is_specific_race |= pr.equals(PlayerRaceType::ANDROID);
