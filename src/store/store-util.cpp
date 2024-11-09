@@ -45,11 +45,10 @@ void store_item_optimize(short i_idx)
         return;
     }
 
-    st_ptr->stock_num--;
-    for (int j = i_idx; j < st_ptr->stock_num; j++) {
-        *st_ptr->stock[j] = *st_ptr->stock[j + 1];
-    }
+    const auto begin = st_ptr->stock.begin();
+    std::rotate(begin + i_idx, begin + i_idx + 1, begin + st_ptr->stock_num);
 
+    st_ptr->stock_num--;
     st_ptr->stock[st_ptr->stock_num]->wipe();
 }
 
@@ -276,9 +275,7 @@ int store_carry(ItemEntity *o_ptr)
         [&](const auto &item) { return store_item_sort_comp(*o_ptr, *item); });
     const auto slot = std::distance(first, slot_it);
 
-    for (int i = st_ptr->stock_num; i > slot; i--) {
-        *st_ptr->stock[i] = *st_ptr->stock[i - 1];
-    }
+    std::rotate(first + slot, last, last + 1);
 
     st_ptr->stock_num++;
     *st_ptr->stock[slot] = *o_ptr;
