@@ -16,3 +16,8 @@ msa_type::msa_type(PlayerType *player_ptr, MONSTER_IDX m_idx)
     this->no_inate = !evaluate_percent(this->r_ptr->freq_spell * 2);
     this->ability_flags = this->r_ptr->ability_flags;
 }
+
+Pos2D msa_type::get_position() const
+{
+    return Pos2D(this->y, this->x);
+}

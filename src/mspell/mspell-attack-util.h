@@ -3,6 +3,7 @@
 #include "monster-race/race-ability-flags.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
+#include "util/point-2d.h"
 #include <string>
 #include <vector>
 
@@ -40,4 +41,6 @@ struct msa_type {
     MonraceDefinition *r_ptr;
     bool no_inate;
     EnumClassFlagGroup<MonsterAbilityType> ability_flags;
+
+    Pos2D get_position() const;
 };
