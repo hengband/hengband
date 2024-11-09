@@ -33,10 +33,10 @@
  * @param yp 最適な目標地点のY座標を返す参照ポインタ
  * @param xp 最適な目標地点のX座標を返す参照ポインタ
  * @param f_flag 射線に入れるのを避ける地形の所持フラグ
- * @param path_check 射線を判定するための関数ポインタ
+ * @param checker 射線判定の振り分け
  * @return 有効な座標があった場合TRUEを返す
  */
-bool adjacent_grid_check(PlayerType *player_ptr, MonsterEntity *m_ptr, POSITION *yp, POSITION *xp, TerrainCharacteristics f_flag, path_check_pf path_check)
+bool adjacent_grid_check(PlayerType *player_ptr, MonsterEntity *m_ptr, POSITION *yp, POSITION *xp, TerrainCharacteristics f_flag, PathChecker checker)
 {
     static int tonari_y[4][8] = { { -1, -1, -1, 0, 0, 1, 1, 1 }, { -1, -1, -1, 0, 0, 1, 1, 1 }, { 1, 1, 1, 0, 0, -1, -1, -1 }, { 1, 1, 1, 0, 0, -1, -1, -1 } };
     static int tonari_x[4][8] = { { -1, 0, 1, -1, 1, -1, 0, 1 }, { 1, 0, -1, 1, -1, 1, 0, -1 }, { -1, 0, 1, -1, 1, -1, 0, 1 }, { 1, 0, -1, 1, -1, 1, 0, -1 } };
@@ -61,7 +61,19 @@ bool adjacent_grid_check(PlayerType *player_ptr, MonsterEntity *m_ptr, POSITION 
             continue;
         }
 
-        if (path_check(player_ptr, m_ptr->fy, m_ptr->fx, next_y, next_x)) {
+        bool check_result;
+        switch (checker) {
+        case PathChecker::PROJECTION:
+            check_result = projectable(player_ptr, m_ptr->fy, m_ptr->fx, next_y, next_x);
+            break;
+        case PathChecker::LOS:
+            check_result = los(player_ptr, m_ptr->fy, m_ptr->fx, next_y, next_x);
+            break;
+        default:
+            THROW_EXCEPTION(std::logic_error, format("Invalid PathChecker is specified! %d", enum2i(checker)));
+        }
+
+        if (check_result) {
             *yp = next_y;
             *xp = next_x;
             return true;
@@ -85,7 +97,7 @@ void decide_lite_range(PlayerType *player_ptr, msa_type *msa_ptr)
         if (terrain.flags.has_not(TerrainCharacteristics::LOS) && terrain.flags.has(TerrainCharacteristics::PROJECT) && one_in_(2)) {
             msa_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);
         }
-    } else if (!adjacent_grid_check(player_ptr, msa_ptr->m_ptr, &msa_ptr->y_br_lite, &msa_ptr->x_br_lite, TerrainCharacteristics::LOS, los)) {
+    } else if (!adjacent_grid_check(player_ptr, msa_ptr->m_ptr, &msa_ptr->y_br_lite, &msa_ptr->x_br_lite, TerrainCharacteristics::LOS, PathChecker::LOS)) {
         msa_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);
     }
 
@@ -193,7 +205,7 @@ bool decide_lite_projection(PlayerType *player_ptr, msa_type *msa_ptr)
     msa_ptr->success = false;
     check_lite_area_by_mspell(player_ptr, msa_ptr);
     if (!msa_ptr->success) {
-        msa_ptr->success = adjacent_grid_check(player_ptr, msa_ptr->m_ptr, &msa_ptr->y, &msa_ptr->x, TerrainCharacteristics::PROJECT, projectable);
+        msa_ptr->success = adjacent_grid_check(player_ptr, msa_ptr->m_ptr, &msa_ptr->y, &msa_ptr->x, TerrainCharacteristics::PROJECT, PathChecker::PROJECTION);
     }
 
     decide_lite_breath(msa_ptr);
