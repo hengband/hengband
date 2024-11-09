@@ -45,7 +45,7 @@ bool import_magic_device(PlayerType *player_ptr)
         return false;
     }
 
-    auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
+    auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<MagicEaterDataList>();
     const auto tval = bi_key.tval();
     auto &target_item = magic_eater_data->get_item_group(tval)[*bi_key.sval()];
     auto pval = o_ptr->pval;

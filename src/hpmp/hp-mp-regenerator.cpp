@@ -124,7 +124,7 @@ void regenmana(PlayerType *player_ptr, MANA_POINT upkeep_factor, MANA_POINT rege
  */
 void regenmagic(PlayerType *player_ptr, int regen_amount)
 {
-    auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
+    auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<MagicEaterDataList>();
     if (!magic_eater_data) {
         return;
     }
