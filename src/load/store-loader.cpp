@@ -43,16 +43,13 @@ static void home_carry_load(PlayerType *player_ptr, store_type *store_ptr, ItemE
         return;
     }
 
-    int slot;
-    for (slot = 0; slot < store_ptr->stock_num; slot++) {
-        if (object_sort_comp(player_ptr, *o_ptr, *store_ptr->stock[slot])) {
-            break;
-        }
-    }
+    const auto first = store_ptr->stock.begin();
+    const auto last = store_ptr->stock.begin() + store_ptr->stock_num;
+    const auto slot_it = std::find_if(first, last,
+        [&](const auto &item) { return object_sort_comp(player_ptr, *o_ptr, *item); });
+    const int slot = std::distance(first, slot_it);
 
-    for (auto i = store_ptr->stock_num; i > slot; i--) {
-        *store_ptr->stock[i] = *store_ptr->stock[i - 1];
-    }
+    std::rotate(first + slot, last, last + 1);
 
     store_ptr->stock_num++;
     *store_ptr->stock[slot] = *o_ptr;
