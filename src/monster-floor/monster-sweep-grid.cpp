@@ -54,11 +54,11 @@ bool MonsterSweepGrid::get_movable_grid()
     auto y2 = this->player_ptr->y;
     auto x2 = this->player_ptr->x;
     this->will_run = this->mon_will_run();
-    Pos2D pos_monster_from(monster_from.fy, monster_from.fx);
+    const auto pos_monster_from = monster_from.get_position();
     const auto no_flow = monster_from.mflag2.has(MonsterConstantFlagType::NOFLOW) && (floor.get_grid(pos_monster_from).get_cost(monrace.get_grid_flow_type()) > 2);
     this->can_pass_wall = monrace.feature_flags.has(MonsterFeatureType::PASS_WALL) && (!monster_from.is_riding() || has_pass_wall(this->player_ptr));
     if (!this->will_run && monster_from.target_y) {
-        Pos2D pos_target(monster_from.target_y, monster_from.target_x);
+        const auto pos_target = monster_from.get_target_position();
         int t_m_idx = floor.get_grid(pos_target).m_idx;
         if (t_m_idx > 0) {
             const auto is_enemies = monster_from.is_hostile_to_melee(floor.m_list[t_m_idx]);

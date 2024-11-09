@@ -517,6 +517,16 @@ bool MonsterEntity::is_riding() const
     return this->mflag2.has(MonsterConstantFlagType::RIDING);
 }
 
+Pos2D MonsterEntity::get_position() const
+{
+    return { this->fy, this->fx };
+}
+
+Pos2D MonsterEntity::get_target_position() const
+{
+    return { this->target_y, this->target_x };
+}
+
 bool MonsterEntity::can_ring_boss_call_nazgul() const
 {
     auto is_boss = this->r_idx == MonraceId::MORGOTH;

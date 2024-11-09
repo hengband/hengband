@@ -6,6 +6,7 @@
 #include "object/object-index-list.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
+#include "util/point-2d.h"
 #include <map>
 #include <string>
 
@@ -101,6 +102,8 @@ public:
     std::optional<bool> order_pet_whistle(const MonsterEntity &other) const;
     std::optional<bool> order_pet_dismission(const MonsterEntity &other) const;
     bool is_riding() const;
+    Pos2D get_position() const;
+    Pos2D get_target_position() const;
     bool can_ring_boss_call_nazgul() const;
     void set_individual_speed(bool force_fixed_speed);
 
