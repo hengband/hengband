@@ -118,6 +118,47 @@ std::vector<lore_msg> lore_type::build_speed_description() const
     return texts;
 }
 
+std::optional<std::vector<lore_msg>> lore_type::build_kill_unique_description() const
+{
+    if (this->kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        return std::nullopt;
+    }
+
+    std::vector<lore_msg> texts;
+    const auto is_dead = (this->r_ptr->max_num == 0);
+    if (this->r_ptr->r_deaths > 0) {
+        constexpr auto fmt = _("%s^はあなたの先祖を %d 人葬っている", "%s^ has slain %d of your ancestors");
+        texts.emplace_back(format(fmt, Who::who(this->msex).data(), this->r_ptr->r_deaths));
+        texts.emplace_back(this->build_revenge_description(is_dead));
+        texts.emplace_back("\n");
+    } else {
+#ifdef JP
+        const auto mes = is_dead ? "あなたはこの仇敵をすでに葬り去っている。" : "この仇敵はまだ生きている！";
+#else
+        const auto mes = is_dead ? "You have slain this foe.  " : "This foe is still alive!  ";
+#endif
+        texts.emplace_back(mes);
+        texts.emplace_back("\n");
+    }
+
+    return texts;
+}
+
+std::string lore_type::build_revenge_description(bool has_defeated) const
+{
+#ifdef JP
+    return has_defeated ? "が、すでに仇討ちは果たしている！" : "のに、まだ仇討ちを果たしていない。";
+#else
+    if (has_defeated) {
+        return format(", but you have avenged %s!  ", Who::whom(this->msex, this->r_ptr->r_deaths == 1).data());
+    }
+
+    std::stringstream ss;
+    ss << ", who remain" << (this->r_ptr->r_deaths == 1 ? "" : "s") << "unavenged.  ";
+    return ss.str();
+#endif
+}
+
 std::vector<lore_msg> lore_type::build_random_movement_description() const
 {
     if (this->behavior_flags.has_none_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 })) {

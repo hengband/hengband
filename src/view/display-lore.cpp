@@ -28,11 +28,6 @@
 #include "world/world.h"
 
 /*!
- * 英語の複数系記述用マクロ / Pluralizer.  Args(count, singular, plural)
- */
-#define plural(c, s, p) (((c) == 1) ? (s) : (p))
-
-/*!
  * @brief モンスター情報のヘッダを記述する
  * @param monrace_id モンスターの種族ID
  */
@@ -121,43 +116,14 @@ void output_monster_spoiler(MonraceId r_idx, hook_c_roff_pf roff_func)
     process_monster_lore(&dummy, r_idx, MONSTER_LORE_DEBUG);
 }
 
-static bool display_kill_unique(lore_type *lore_ptr)
-{
-    if (lore_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        return false;
-    }
-
-    bool dead = (lore_ptr->r_ptr->max_num == 0);
-    if (lore_ptr->r_ptr->r_deaths) {
-        hooked_roff(format(_("%s^はあなたの先祖を %d 人葬っている", "%s^ has slain %d of your ancestors"), Who::who(lore_ptr->msex).data(), lore_ptr->r_ptr->r_deaths));
-
-        if (dead) {
-            hooked_roff(
-                _(format("が、すでに仇討ちは果たしている！"), format(", but you have avenged %s!  ", plural(lore_ptr->r_ptr->r_deaths, "him", "them"))));
-        } else {
-            hooked_roff(
-                _(format("のに、まだ仇討ちを果たしていない。"), format(", who %s unavenged.  ", plural(lore_ptr->r_ptr->r_deaths, "remains", "remain"))));
-        }
-
-        hooked_roff("\n");
-    } else {
-        if (dead) {
-            hooked_roff(_("あなたはこの仇敵をすでに葬り去っている。", "You have slain this foe.  "));
-        } else {
-            hooked_roff(_("この仇敵はまだ生きている！", "This foe is still alive!  "));
-        }
-
-        hooked_roff("\n");
-    }
-
-    return true;
-}
-
 static void display_killed(lore_type *lore_ptr)
 {
-    hooked_roff(_(format("このモンスターはあなたの先祖を %d 人葬っている", lore_ptr->r_ptr->r_deaths),
-        format("%d of your ancestors %s been killed by this creature, ", lore_ptr->r_ptr->r_deaths, plural(lore_ptr->r_ptr->r_deaths, "has", "have"))));
-
+#ifdef JP
+    hooked_roff(format("このモンスターはあなたの先祖を %d 人葬っている", lore_ptr->r_ptr->r_deaths));
+#else
+    const auto present_perfect_tense = lore_ptr->r_ptr->r_deaths == 1 ? "has" : "have";
+    hooked_roff(format("%d of your ancestors %s been killed by this creature, ", lore_ptr->r_ptr->r_deaths, present_perfect_tense));
+#endif
     if (lore_ptr->r_ptr->r_pkills) {
         hooked_roff(format(_("が、あなたはこのモンスターを少なくとも %d 体は倒している。", "and you have exterminated at least %d of the creatures.  "),
             lore_ptr->r_ptr->r_pkills));
@@ -224,8 +190,13 @@ void display_kill_numbers(lore_type *lore_ptr)
         return;
     }
 
-    if (display_kill_unique(lore_ptr)) {
+    const auto kill_unique_description = lore_ptr->build_kill_unique_description();
+    if (!kill_unique_description) {
         return;
+    }
+
+    for (const auto &[text, color] : *kill_unique_description) {
+        hook_c_roff(color, text);
     }
 
     if (lore_ptr->r_ptr->r_deaths == 0) {
