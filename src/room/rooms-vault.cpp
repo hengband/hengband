@@ -598,45 +598,36 @@ static void build_vault(
  */
 static void build_target_vault(PlayerType *player_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
 {
-    POSITION rad, x, y;
-
     /* Make a random metric */
-    POSITION h1, h2, h3, h4;
-    h1 = randint1(32) - 16;
-    h2 = randint1(16);
-    h3 = randint1(32);
-    h4 = randint1(32) - 16;
+    const auto h1 = randint1(32) - 16;
+    const auto h2 = randint1(16);
+    const auto h3 = randint1(32);
+    const auto h4 = randint1(32) - 16;
 
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("対称形ランダムVaultを生成しました。", "Target Vault"));
 
-    /* work out outer radius */
-    if (xsize > ysize) {
-        rad = ysize / 2;
-    } else {
-        rad = xsize / 2;
-    }
+    const auto rad = xsize > ysize ? ysize / 2 : xsize / 2;
 
     /* Make floor */
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (x = x0 - rad; x <= x0 + rad; x++) {
-        for (y = y0 - rad; y <= y0 + rad; y++) {
-            /* clear room flag */
-            floor_ptr->grid_array[y][x].info &= ~(CAVE_ROOM);
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (auto x = x0 - rad; x <= x0 + rad; x++) {
+        for (auto y = y0 - rad; y <= y0 + rad; y++) {
+            const Pos2D pos(y, x);
+            auto &grid = floor.get_grid(pos);
+            grid.info &= ~(CAVE_ROOM);
+            grid.info |= CAVE_ICKY;
 
-            /* Vault - so is "icky" */
-            floor_ptr->grid_array[y][x].info |= CAVE_ICKY;
-
-            if (dist2(y0, x0, y, x, h1, h2, h3, h4) <= rad - 1) {
+            if (dist2(y0, x0, pos.y, pos.x, h1, h2, h3, h4) <= rad - 1) {
                 /* inside- so is floor */
-                place_bold(player_ptr, y, x, GB_FLOOR);
+                place_bold(player_ptr, pos.y, pos.x, GB_FLOOR);
             } else {
                 /* make granite outside so on_defeat_arena_monster works */
-                place_bold(player_ptr, y, x, GB_EXTRA);
+                place_bold(player_ptr, pos.y, pos.x, GB_EXTRA);
             }
 
             /* proper boundary for on_defeat_arena_monster */
-            if (((y + rad) == y0) || ((y - rad) == y0) || ((x + rad) == x0) || ((x - rad) == x0)) {
-                place_bold(player_ptr, y, x, GB_EXTRA);
+            if (((pos.y + rad) == y0) || ((pos.y - rad) == y0) || ((pos.x + rad) == x0) || ((pos.x - rad) == x0)) {
+                place_bold(player_ptr, pos.y, pos.x, GB_EXTRA);
             }
         }
     }
@@ -645,8 +636,8 @@ static void build_target_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
     add_outer_wall(player_ptr, x0, y0, false, x0 - rad - 1, y0 - rad - 1, x0 + rad + 1, y0 + rad + 1);
 
     /* Add inner wall */
-    for (x = x0 - rad / 2; x <= x0 + rad / 2; x++) {
-        for (y = y0 - rad / 2; y <= y0 + rad / 2; y++) {
+    for (auto x = x0 - rad / 2; x <= x0 + rad / 2; x++) {
+        for (auto y = y0 - rad / 2; y <= y0 + rad / 2; y++) {
             if (dist2(y0, x0, y, x, h1, h2, h3, h4) == rad / 2) {
                 /* Make an internal wall */
                 place_bold(player_ptr, y, x, GB_INNER);
@@ -655,20 +646,20 @@ static void build_target_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
     }
 
     /* Add perpendicular walls */
-    for (x = x0 - rad; x <= x0 + rad; x++) {
+    for (auto x = x0 - rad; x <= x0 + rad; x++) {
         place_bold(player_ptr, y0, x, GB_INNER);
     }
 
-    for (y = y0 - rad; y <= y0 + rad; y++) {
+    for (auto y = y0 - rad; y <= y0 + rad; y++) {
         place_bold(player_ptr, y, x0, GB_INNER);
     }
 
     /* Make inner vault */
-    for (y = y0 - 1; y <= y0 + 1; y++) {
+    for (auto y = y0 - 1; y <= y0 + 1; y++) {
         place_bold(player_ptr, y, x0 - 1, GB_INNER);
         place_bold(player_ptr, y, x0 + 1, GB_INNER);
     }
-    for (x = x0 - 1; x <= x0 + 1; x++) {
+    for (auto x = x0 - 1; x <= x0 + 1; x++) {
         place_bold(player_ptr, y0 - 1, x, GB_INNER);
         place_bold(player_ptr, y0 + 1, x, GB_INNER);
     }
@@ -677,8 +668,8 @@ static void build_target_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
 
     /* Add doors to vault */
     /* get two distances so can place doors relative to centre */
-    x = (rad - 2) / 4 + 1;
-    y = rad / 2 + x;
+    auto x = (rad - 2) / 4 + 1;
+    auto y = rad / 2 + x;
 
     add_door(player_ptr, x0 + x, y0);
     add_door(player_ptr, x0 + y, y0);
