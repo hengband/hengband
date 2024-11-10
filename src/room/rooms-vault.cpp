@@ -249,18 +249,14 @@ static void build_cave_vault(PlayerType *player_ptr, POSITION x0, POSITION y0, P
 }
 
 /*!
- * @brief Vault地形を回転、上下左右反転するための座標変換を返す / coordinate translation code
- * @param x 変換したい点のX座標参照ポインタ
- * @param y 変換したい点のY座標参照ポインタ
- * @param xoffset Vault生成時の基準X座標
- * @param yoffset Vault生成時の基準Y座標
+ * @brief Vault地形を回転、上下左右反転するための座標変換を返す
+ * @param pos_initial 変換したい点
+ * @param offset Vault生成時の座標オフセット
  * @param transno 処理ID
+ * @return 回転後の座標
  */
-static void coord_trans(POSITION *x, POSITION *y, POSITION xoffset, POSITION yoffset, int transno)
+static Pos2D coord_trans(const Pos2D &pos_initial, const Pos2DVec &offset, int transno)
 {
-    int i;
-    int temp;
-
     /*
      * transno specifies what transformation is required. (0-7)
      * The lower two bits indicate by how much the vault is rotated,
@@ -270,21 +266,22 @@ static void coord_trans(POSITION *x, POSITION *y, POSITION xoffset, POSITION yof
      * be expressed simply in terms of swapping and inverting the
      * x and y coordinates.
      */
-    for (i = 0; i < transno % 4; i++) {
+    Pos2D pos = pos_initial;
+    for (auto i = 0; i < transno % 4; i++) {
         /* rotate by 90 degrees */
-        temp = *x;
-        *x = -(*y);
-        *y = temp;
+        auto temp = pos.x;
+        pos.x = -pos.y;
+        pos.y = temp;
     }
 
     if (transno / 4) {
         /* Reflect depending on status of 3rd bit. */
-        *x = -(*x);
+        pos.x = -pos.x;
     }
 
     /* Add offsets so vault stays in the first quadrant */
-    *x += xoffset;
-    *y += yoffset;
+    pos += offset;
+    return pos;
 }
 
 /*!
@@ -315,8 +312,9 @@ static void build_vault(
             j = dy;
 
             /* Flip / rotate */
-            coord_trans(&i, &j, xoffset, yoffset, transno);
-
+            const auto pos = coord_trans({ j, i }, { yoffset, xoffset }, transno);
+            i = pos.x;
+            j = pos.y;
             if (transno % 2 == 0) {
                 /* no swap of x/y */
                 x = xval - (xmax / 2) + i;
@@ -514,8 +512,9 @@ static void build_vault(
             j = dy;
 
             /* Flip / rotate */
-            coord_trans(&i, &j, xoffset, yoffset, transno);
-
+            const auto pos = coord_trans({ j, i }, { yoffset, xoffset }, transno);
+            i = pos.x;
+            j = pos.y;
             if (transno % 2 == 0) {
                 /* no swap of x/y */
                 x = xval - (xmax / 2) + i;
@@ -1012,7 +1011,9 @@ bool build_fixed_room(PlayerType *player_ptr, dun_data_type *dd_ptr, int typ, bo
         num_transformation &= ~1;
     }
 
-    coord_trans(&x, &y, 0, 0, num_transformation);
+    const auto pos = coord_trans({ y, x }, { 0, 0 }, num_transformation);
+    y = pos.y;
+    x = pos.x;
     const auto y_offset = y < 0 ? -y - 1 : 0;
     const auto x_offset = x < 0 ? -x - 1 : 0;
 
