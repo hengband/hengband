@@ -299,22 +299,21 @@ static Pos2D coord_trans(const Pos2D &pos_initial, const Pos2DVec &offset, int t
 static void build_vault(
     PlayerType *player_ptr, POSITION yval, POSITION xval, POSITION ymax, POSITION xmax, concptr data, POSITION xoffset, POSITION yoffset, int transno)
 {
-    POSITION dx, dy, x, y, i, j;
-    concptr t;
-    Grid *g_ptr;
-
     /* Place dungeon features and objects */
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (t = data, dy = 0; dy < ymax; dy++) {
-        for (dx = 0; dx < xmax; dx++, t++) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto t = data;
+    for (auto dy = 0; dy < ymax; dy++) {
+        for (auto dx = 0; dx < xmax; dx++, t++) {
             /* prevent loop counter from being overwritten */
-            i = dx;
-            j = dy;
+            auto i = dx;
+            auto j = dy;
 
             /* Flip / rotate */
             const auto pos = coord_trans({ j, i }, { yoffset, xoffset }, transno);
             i = pos.x;
             j = pos.y;
+            int x;
+            int y;
             if (transno % 2 == 0) {
                 /* no swap of x/y */
                 x = xval - (xmax / 2) + i;
@@ -329,44 +328,45 @@ static void build_vault(
             if (*t == ' ') {
                 continue;
             }
-            g_ptr = &floor_ptr->grid_array[y][x];
+
+            auto &grid = floor.grid_array[y][x];
 
             /* Lay down a floor */
-            place_grid(player_ptr, g_ptr, GB_FLOOR);
+            place_grid(player_ptr, &grid, GB_FLOOR);
 
             /* Remove any mimic */
-            g_ptr->mimic = 0;
+            grid.mimic = 0;
 
             /* Part of a vault */
-            g_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
+            grid.info |= (CAVE_ROOM | CAVE_ICKY);
 
             /* Analyze the grid */
             switch (*t) {
                 /* Granite wall (outer) */
             case '%':
-                place_grid(player_ptr, g_ptr, GB_OUTER_NOPERM);
+                place_grid(player_ptr, &grid, GB_OUTER_NOPERM);
                 break;
 
                 /* Granite wall (inner) */
             case '#':
-                place_grid(player_ptr, g_ptr, GB_INNER);
+                place_grid(player_ptr, &grid, GB_INNER);
                 break;
 
                 /* Glass wall (inner) */
             case '$':
-                place_grid(player_ptr, g_ptr, GB_INNER);
-                g_ptr->feat = feat_glass_wall;
+                place_grid(player_ptr, &grid, GB_INNER);
+                grid.feat = feat_glass_wall;
                 break;
 
                 /* Permanent wall (inner) */
             case 'X':
-                place_grid(player_ptr, g_ptr, GB_INNER_PERM);
+                place_grid(player_ptr, &grid, GB_INNER_PERM);
                 break;
 
                 /* Permanent glass wall (inner) */
             case 'Y':
-                place_grid(player_ptr, g_ptr, GB_INNER_PERM);
-                g_ptr->feat = feat_permanent_glass_wall;
+                place_grid(player_ptr, &grid, GB_INNER_PERM);
+                grid.feat = feat_permanent_glass_wall;
                 break;
 
                 /* Treasure/trap */
@@ -374,7 +374,7 @@ static void build_vault(
                 if (evaluate_percent(75)) {
                     place_object(player_ptr, y, x, 0L);
                 } else {
-                    place_trap(floor_ptr, y, x);
+                    place_trap(&floor, y, x);
                 }
                 break;
 
@@ -385,7 +385,7 @@ static void build_vault(
 
                 /* Tree */
             case ':':
-                g_ptr->feat = feat_tree;
+                grid.feat = feat_tree;
                 break;
 
                 /* Secret doors */
@@ -396,8 +396,8 @@ static void build_vault(
                 /* Secret glass doors */
             case '-':
                 place_secret_door(player_ptr, y, x, DOOR_GLASS_DOOR);
-                if (is_closed_door(player_ptr, g_ptr->feat)) {
-                    g_ptr->mimic = feat_glass_wall;
+                if (is_closed_door(player_ptr, grid.feat)) {
+                    grid.mimic = feat_glass_wall;
                 }
                 break;
 
@@ -408,113 +408,116 @@ static void build_vault(
 
                 /* Trap */
             case '^':
-                place_trap(floor_ptr, y, x);
+                place_trap(&floor, y, x);
                 break;
 
                 /* Black market in a dungeon */
             case 'S':
-                set_cave_feat(floor_ptr, y, x, feat_black_market);
+                set_cave_feat(&floor, y, x, feat_black_market);
                 store_init(VALID_TOWNS, StoreSaleType::BLACK);
                 break;
 
                 /* The Pattern */
             case 'p':
-                set_cave_feat(floor_ptr, y, x, feat_pattern_start);
+                set_cave_feat(&floor, y, x, feat_pattern_start);
                 break;
 
             case 'a':
-                set_cave_feat(floor_ptr, y, x, feat_pattern_1);
+                set_cave_feat(&floor, y, x, feat_pattern_1);
                 break;
 
             case 'b':
-                set_cave_feat(floor_ptr, y, x, feat_pattern_2);
+                set_cave_feat(&floor, y, x, feat_pattern_2);
                 break;
 
             case 'c':
-                set_cave_feat(floor_ptr, y, x, feat_pattern_3);
+                set_cave_feat(&floor, y, x, feat_pattern_3);
                 break;
 
             case 'd':
-                set_cave_feat(floor_ptr, y, x, feat_pattern_4);
+                set_cave_feat(&floor, y, x, feat_pattern_4);
                 break;
 
             case 'P':
-                set_cave_feat(floor_ptr, y, x, feat_pattern_end);
+                set_cave_feat(&floor, y, x, feat_pattern_end);
                 break;
 
             case 'B':
-                set_cave_feat(floor_ptr, y, x, feat_pattern_exit);
+                set_cave_feat(&floor, y, x, feat_pattern_exit);
                 break;
 
             case 'A':
                 /* Reward for Pattern walk */
-                floor_ptr->object_level = floor_ptr->base_level + 12;
+                floor.object_level = floor.base_level + 12;
                 place_object(player_ptr, y, x, AM_GOOD | AM_GREAT);
-                floor_ptr->object_level = floor_ptr->base_level;
+                floor.object_level = floor.base_level;
                 break;
 
             case '~':
-                set_cave_feat(floor_ptr, y, x, feat_shallow_water);
+                set_cave_feat(&floor, y, x, feat_shallow_water);
                 break;
 
             case '=':
-                set_cave_feat(floor_ptr, y, x, feat_deep_water);
+                set_cave_feat(&floor, y, x, feat_deep_water);
                 break;
 
             case 'v':
-                set_cave_feat(floor_ptr, y, x, feat_shallow_lava);
+                set_cave_feat(&floor, y, x, feat_shallow_lava);
                 break;
 
             case 'w':
-                set_cave_feat(floor_ptr, y, x, feat_deep_lava);
+                set_cave_feat(&floor, y, x, feat_deep_lava);
                 break;
 
             case 'f':
-                set_cave_feat(floor_ptr, y, x, feat_shallow_acid_puddle);
+                set_cave_feat(&floor, y, x, feat_shallow_acid_puddle);
                 break;
 
             case 'F':
-                set_cave_feat(floor_ptr, y, x, feat_deep_acid_puddle);
+                set_cave_feat(&floor, y, x, feat_deep_acid_puddle);
                 break;
 
             case 'g':
-                set_cave_feat(floor_ptr, y, x, feat_shallow_poisonous_puddle);
+                set_cave_feat(&floor, y, x, feat_shallow_poisonous_puddle);
                 break;
 
             case 'G':
-                set_cave_feat(floor_ptr, y, x, feat_deep_poisonous_puddle);
+                set_cave_feat(&floor, y, x, feat_deep_poisonous_puddle);
                 break;
 
             case 'h':
-                set_cave_feat(floor_ptr, y, x, feat_cold_zone);
+                set_cave_feat(&floor, y, x, feat_cold_zone);
                 break;
 
             case 'H':
-                set_cave_feat(floor_ptr, y, x, feat_heavy_cold_zone);
+                set_cave_feat(&floor, y, x, feat_heavy_cold_zone);
                 break;
 
             case 'i':
-                set_cave_feat(floor_ptr, y, x, feat_electrical_zone);
+                set_cave_feat(&floor, y, x, feat_electrical_zone);
                 break;
 
             case 'I':
-                set_cave_feat(floor_ptr, y, x, feat_heavy_electrical_zone);
+                set_cave_feat(&floor, y, x, feat_heavy_electrical_zone);
                 break;
             }
         }
     }
 
     /* Place dungeon monsters and objects */
-    for (t = data, dy = 0; dy < ymax; dy++) {
-        for (dx = 0; dx < xmax; dx++, t++) {
+    t = data;
+    for (auto dy = 0; dy < ymax; dy++) {
+        for (auto dx = 0; dx < xmax; dx++, t++) {
             /* prevent loop counter from being overwritten */
-            i = dx;
-            j = dy;
+            auto i = dx;
+            auto j = dy;
 
             /* Flip / rotate */
             const auto pos = coord_trans({ j, i }, { yoffset, xoffset }, transno);
             i = pos.x;
             j = pos.y;
+            int y;
+            int x;
             if (transno % 2 == 0) {
                 /* no swap of x/y */
                 x = xval - (xmax / 2) + i;
@@ -533,53 +536,53 @@ static void build_vault(
             /* Analyze the symbol */
             switch (*t) {
             case '&': {
-                floor_ptr->monster_level = floor_ptr->base_level + 5;
+                floor.monster_level = floor.base_level + 5;
                 place_random_monster(player_ptr, y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-                floor_ptr->monster_level = floor_ptr->base_level;
+                floor.monster_level = floor.base_level;
                 break;
             }
 
             /* Meaner monster */
             case '@': {
-                floor_ptr->monster_level = floor_ptr->base_level + 11;
+                floor.monster_level = floor.base_level + 11;
                 place_random_monster(player_ptr, y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-                floor_ptr->monster_level = floor_ptr->base_level;
+                floor.monster_level = floor.base_level;
                 break;
             }
 
             /* Meaner monster, plus treasure */
             case '9': {
-                floor_ptr->monster_level = floor_ptr->base_level + 9;
+                floor.monster_level = floor.base_level + 9;
                 place_random_monster(player_ptr, y, x, PM_ALLOW_SLEEP);
-                floor_ptr->monster_level = floor_ptr->base_level;
-                floor_ptr->object_level = floor_ptr->base_level + 7;
+                floor.monster_level = floor.base_level;
+                floor.object_level = floor.base_level + 7;
                 place_object(player_ptr, y, x, AM_GOOD);
-                floor_ptr->object_level = floor_ptr->base_level;
+                floor.object_level = floor.base_level;
                 break;
             }
 
             /* Nasty monster and treasure */
             case '8': {
-                floor_ptr->monster_level = floor_ptr->base_level + 40;
+                floor.monster_level = floor.base_level + 40;
                 place_random_monster(player_ptr, y, x, PM_ALLOW_SLEEP);
-                floor_ptr->monster_level = floor_ptr->base_level;
-                floor_ptr->object_level = floor_ptr->base_level + 20;
+                floor.monster_level = floor.base_level;
+                floor.object_level = floor.base_level + 20;
                 place_object(player_ptr, y, x, AM_GOOD | AM_GREAT);
-                floor_ptr->object_level = floor_ptr->base_level;
+                floor.object_level = floor.base_level;
                 break;
             }
 
             /* Monster and/or object */
             case ',': {
                 if (one_in_(2)) {
-                    floor_ptr->monster_level = floor_ptr->base_level + 3;
+                    floor.monster_level = floor.base_level + 3;
                     place_random_monster(player_ptr, y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-                    floor_ptr->monster_level = floor_ptr->base_level;
+                    floor.monster_level = floor.base_level;
                 }
                 if (one_in_(2)) {
-                    floor_ptr->object_level = floor_ptr->base_level + 7;
+                    floor.object_level = floor.base_level + 7;
                     place_object(player_ptr, y, x, 0L);
-                    floor_ptr->object_level = floor_ptr->base_level;
+                    floor.object_level = floor.base_level;
                 }
                 break;
             }
