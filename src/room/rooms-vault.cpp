@@ -167,41 +167,36 @@ static void build_bubble_vault(PlayerType *player_ptr, const Pos2D &pos0, const 
 /* Create a random vault that looks like a collection of overlapping rooms */
 static void build_room_vault(PlayerType *player_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
 {
-    POSITION x1, x2, y1, y2, xhsize, yhsize;
-    int i;
-
     /* get offset from center */
-    xhsize = xsize / 2;
-    yhsize = ysize / 2;
+    const auto xhsize = xsize / 2;
+    const auto yhsize = ysize / 2;
 
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("部屋型ランダムVaultを生成しました。", "Room Vault."));
 
     /* fill area so don't get problems with on_defeat_arena_monster levels */
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (x1 = 0; x1 < xsize; x1++) {
-        POSITION x = x0 - xhsize + x1;
-
-        for (y1 = 0; y1 < ysize; y1++) {
-            POSITION y = y0 - yhsize + y1;
-
-            place_bold(player_ptr, y, x, GB_EXTRA);
-            floor_ptr->grid_array[y][x].info &= (~CAVE_ICKY);
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (auto x1 = 0; x1 < xsize; x1++) {
+        const auto x = x0 - xhsize + x1;
+        for (auto y1 = 0; y1 < ysize; y1++) {
+            const Pos2D pos(y0 - yhsize + y1, x);
+            place_bold(player_ptr, pos.y, pos.x, GB_EXTRA);
+            floor.get_grid(pos).info &= (~CAVE_ICKY);
         }
     }
 
     /* add ten random rooms */
-    for (i = 0; i < 10; i++) {
-        x1 = randint1(xhsize) * 2 + x0 - xhsize;
-        x2 = randint1(xhsize) * 2 + x0 - xhsize;
-        y1 = randint1(yhsize) * 2 + y0 - yhsize;
-        y2 = randint1(yhsize) * 2 + y0 - yhsize;
+    for (auto i = 0; i < 10; i++) {
+        const auto x1 = randint1(xhsize) * 2 + x0 - xhsize;
+        const auto x2 = randint1(xhsize) * 2 + x0 - xhsize;
+        const auto y1 = randint1(yhsize) * 2 + y0 - yhsize;
+        const auto y2 = randint1(yhsize) * 2 + y0 - yhsize;
         build_room(player_ptr, x1, x2, y1, y2);
     }
 
     /* Add some random doors */
-    for (i = 0; i < 500; i++) {
-        x1 = randint1(xsize - 3) - xhsize + x0 + 1;
-        y1 = randint1(ysize - 3) - yhsize + y0 + 1;
+    for (auto i = 0; i < 500; i++) {
+        const auto x1 = randint1(xsize - 3) - xhsize + x0 + 1;
+        const auto y1 = randint1(ysize - 3) - yhsize + y0 + 1;
         add_door(player_ptr, x1, y1);
     }
 
