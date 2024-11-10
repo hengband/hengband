@@ -184,18 +184,15 @@ static bool find_space_aux(dun_data_type *dd_ptr, const Pos2D &max_block_size, c
  */
 bool find_space(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION *y, POSITION *x, POSITION height, POSITION width)
 {
-    int pick;
-    POSITION block_y = 0;
-    POSITION block_x = 0;
-    POSITION blocks_high = 1 + ((height - 1) / BLOCK_HGT);
-    POSITION blocks_wide = 1 + ((width - 1) / BLOCK_WID);
+    const auto blocks_high = 1 + ((height - 1) / BLOCK_HGT);
+    const auto blocks_wide = 1 + ((width - 1) / BLOCK_WID);
     if ((dd_ptr->row_rooms < blocks_high) || (dd_ptr->col_rooms < blocks_wide)) {
         return false;
     }
 
-    int candidates = 0;
-    for (block_y = dd_ptr->row_rooms - blocks_high; block_y >= 0; block_y--) {
-        for (block_x = dd_ptr->col_rooms - blocks_wide; block_x >= 0; block_x--) {
+    auto candidates = 0;
+    for (auto block_y = dd_ptr->row_rooms - blocks_high; block_y >= 0; block_y--) {
+        for (auto block_x = dd_ptr->col_rooms - blocks_wide; block_x >= 0; block_x--) {
             if (find_space_aux(dd_ptr, { blocks_high, blocks_wide }, { block_y, block_x })) {
                 /* Find a valid place */
                 candidates++;
@@ -203,16 +200,15 @@ bool find_space(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION *y, POSI
         }
     }
 
-    if (!candidates) {
+    if (candidates == 0) {
         return false;
     }
 
-    if (player_ptr->current_floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::NO_CAVE)) {
-        pick = randint1(candidates);
-    } else {
-        pick = candidates / 2 + 1;
-    }
-
+    auto block_y = 0;
+    auto block_x = 0;
+    const auto &dungeon = player_ptr->current_floor_ptr->get_dungeon_definition();
+    const auto has_cave = dungeon.flags.has_not(DungeonFeatureType::NO_CAVE);
+    auto pick = has_cave ? randint1(candidates) : candidates / 2 + 1;
     for (block_y = dd_ptr->row_rooms - blocks_high; block_y >= 0; block_y--) {
         for (block_x = dd_ptr->col_rooms - blocks_wide; block_x >= 0; block_x--) {
             if (find_space_aux(dd_ptr, { blocks_high, blocks_wide }, { block_y, block_x })) {
@@ -223,25 +219,26 @@ bool find_space(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION *y, POSI
             }
         }
 
-        if (!pick) {
+        if (pick == 0) {
             break;
         }
     }
 
-    POSITION by1 = block_y;
-    POSITION bx1 = block_x;
-    POSITION by2 = block_y + blocks_high;
-    POSITION bx2 = block_x + blocks_wide;
+    const auto by1 = block_y;
+    const auto bx1 = block_x;
+    const auto by2 = block_y + blocks_high;
+    const auto bx2 = block_x + blocks_wide;
     *y = ((by1 + by2) * BLOCK_HGT) / 2;
     *x = ((bx1 + bx2) * BLOCK_WID) / 2;
+    const Pos2D pos(*y, *x);
     if (dd_ptr->cent_n < CENT_MAX) {
-        dd_ptr->cent[dd_ptr->cent_n].y = (byte)*y;
-        dd_ptr->cent[dd_ptr->cent_n].x = (byte)*x;
+        dd_ptr->cent[dd_ptr->cent_n].y = pos.y;
+        dd_ptr->cent[dd_ptr->cent_n].x = pos.x;
         dd_ptr->cent_n++;
     }
 
-    for (POSITION by = by1; by < by2; by++) {
-        for (POSITION bx = bx1; bx < bx2; bx++) {
+    for (auto by = by1; by < by2; by++) {
+        for (auto bx = bx1; bx < bx2; bx++) {
             if ((by < 0) || (bx < 0)) {
                 continue;
             }
