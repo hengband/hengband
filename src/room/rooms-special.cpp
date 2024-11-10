@@ -54,7 +54,7 @@ void place_inner_perm_glass(PlayerType *player_ptr, Grid &grid)
  * @brief タイプ15の部屋…ガラス部屋の生成 / Type 15 -- glass rooms
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
+bool build_type15(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     /* Pick a room size */
     const auto width = rand_range(9, 13);

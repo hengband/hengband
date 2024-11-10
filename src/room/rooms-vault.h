@@ -19,7 +19,7 @@ struct vault_type {
 
 extern std::vector<vault_type> vaults_info;
 
-struct dun_data_type;
+class DungeonData;
 class PlayerType;
-bool build_type10(PlayerType *player_ptr, dun_data_type *dd_ptr);
-bool build_fixed_room(PlayerType *player_ptr, dun_data_type *dd_ptr, int typ, bool more_space);
+bool build_type10(PlayerType *player_ptr, DungeonData *dd_ptr);
+bool build_fixed_room(PlayerType *player_ptr, DungeonData *dd_ptr, int typ, bool more_space);

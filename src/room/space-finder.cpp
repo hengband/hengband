@@ -114,7 +114,7 @@ static void check_room_boundary(PlayerType *player_ptr, const Pos2D &pos1, const
  * @param block_y 範囲の上端
  * @param block_x 範囲の左端
  */
-static bool find_space_aux(dun_data_type *dd_ptr, const Pos2D &max_block_size, const Pos2D &block)
+static bool find_space_aux(DungeonData *dd_ptr, const Pos2D &max_block_size, const Pos2D &block)
 {
     if (max_block_size.x < 3) {
         if ((max_block_size.x == 2) && (block.x % 3) == 2) {
@@ -182,7 +182,7 @@ static bool find_space_aux(dun_data_type *dd_ptr, const Pos2D &max_block_size, c
  * Return TRUE and values for the center of the room if all went well.\n
  * Otherwise, return FALSE.\n
  */
-bool find_space(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION *y, POSITION *x, POSITION height, POSITION width)
+bool find_space(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION *y, POSITION *x, POSITION height, POSITION width)
 {
     const auto blocks_high = 1 + ((height - 1) / BLOCK_HGT);
     const auto blocks_wide = 1 + ((width - 1) / BLOCK_WID);

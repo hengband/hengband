@@ -171,7 +171,7 @@ static void recursive_river(FloorType *floor_ptr, POSITION x1, POSITION y1, POSI
  * @param feat1 中央部地形ID
  * @param feat2 境界部地形ID
  */
-void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
+void add_river(FloorType *floor_ptr, DungeonData *dd_ptr)
 {
     short feat1 = 0;
     short feat2 = 0;
