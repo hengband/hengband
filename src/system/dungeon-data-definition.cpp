@@ -1,8 +1,8 @@
 #include "system/dungeon-data-definition.h"
+#include "floor/floor-base-definitions.h"
 
 DungeonData::DungeonData()
-    : room_map(std::vector<std::vector<bool>>(MAX_ROOMS_ROW, std::vector<bool>(MAX_ROOMS_COL)))
-    , tunnel_pos(0, 0)
+    : tunnel_pos(0, 0)
 {
     constexpr auto max_centers = 100;
     for (auto i = 0; i < max_centers; i++) {
@@ -23,4 +23,8 @@ DungeonData::DungeonData()
     for (auto i = 0; i < max_tunnels; i++) {
         this->tunnels.emplace_back(0, 0);
     }
+
+    constexpr auto max_rooms_row = MAX_HGT / BLOCK_HGT;
+    constexpr auto max_rooms_col = MAX_WID / BLOCK_WID;
+    this->room_map = std::vector<std::vector<bool>>(max_rooms_row, std::vector<bool>(max_rooms_col));
 }

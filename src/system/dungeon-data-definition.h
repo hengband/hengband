@@ -1,22 +1,9 @@
 #pragma once
 
-#include "floor/floor-base-definitions.h"
 #include "util/point-2d.h"
 #include <optional>
 #include <string>
 #include <vector>
-
-/*
- * The "size" of a "generation block" in grids
- */
-#define BLOCK_HGT 11
-#define BLOCK_WID 11
-
-/*
- * Maximum numbers of rooms along each axis (currently 6x6)
- */
-#define MAX_ROOMS_ROW (MAX_HGT / BLOCK_HGT)
-#define MAX_ROOMS_COL (MAX_WID / BLOCK_WID)
 
 /*
  * Structure to hold all "dungeon generation" data
