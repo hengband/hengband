@@ -5,18 +5,18 @@ DungeonData::DungeonData()
     , tunnel_pos(0, 0)
 {
     for (auto i = 0; i < CENT_MAX; i++) {
-        this->cent.emplace_back(0, 0);
+        this->centers.emplace_back(0, 0);
     }
 
     for (auto i = 0; i < DOOR_MAX; i++) {
-        this->door.emplace_back(0, 0);
+        this->doors.emplace_back(0, 0);
     }
 
     for (auto i = 0; i < WALL_MAX; i++) {
-        this->wall.emplace_back(0, 0);
+        this->walls.emplace_back(0, 0);
     }
 
     for (auto i = 0; i < TUNN_MAX; i++) {
-        this->tunn.emplace_back(0, 0);
+        this->tunnels.emplace_back(0, 0);
     }
 }

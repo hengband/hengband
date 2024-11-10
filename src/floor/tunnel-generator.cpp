@@ -107,8 +107,8 @@ bool build_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, dt_type *dt_ptr, 
                 return false;
             }
 
-            dd_ptr->wall[dd_ptr->wall_n].y = row1;
-            dd_ptr->wall[dd_ptr->wall_n].x = col1;
+            dd_ptr->walls[dd_ptr->wall_n].y = row1;
+            dd_ptr->walls[dd_ptr->wall_n].x = col1;
             dd_ptr->wall_n++;
             for (y = row1 - 1; y <= row1 + 1; y++) {
                 for (x = col1 - 1; x <= col1 + 1; x++) {
@@ -128,8 +128,8 @@ bool build_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, dt_type *dt_ptr, 
                 return false;
             }
 
-            dd_ptr->tunn[dd_ptr->tunn_n].y = row1;
-            dd_ptr->tunn[dd_ptr->tunn_n].x = col1;
+            dd_ptr->tunnels[dd_ptr->tunn_n].y = row1;
+            dd_ptr->tunnels[dd_ptr->tunn_n].x = col1;
             dd_ptr->tunn_n++;
             door_flag = false;
         } else {
@@ -140,8 +140,8 @@ bool build_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, dt_type *dt_ptr, 
                     return false;
                 }
 
-                dd_ptr->door[dd_ptr->door_n].y = row1;
-                dd_ptr->door[dd_ptr->door_n].x = col1;
+                dd_ptr->doors[dd_ptr->door_n].y = row1;
+                dd_ptr->doors[dd_ptr->door_n].x = col1;
                 dd_ptr->door_n++;
                 door_flag = true;
             }
@@ -188,8 +188,8 @@ static bool set_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION *x,
             return false;
         }
 
-        dd_ptr->tunn[dd_ptr->tunn_n].y = *y;
-        dd_ptr->tunn[dd_ptr->tunn_n].x = *x;
+        dd_ptr->tunnels[dd_ptr->tunn_n].y = *y;
+        dd_ptr->tunnels[dd_ptr->tunn_n].x = *x;
         dd_ptr->tunn_n++;
         return true;
     }
@@ -203,8 +203,8 @@ static bool set_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION *x,
             return false;
         }
 
-        dd_ptr->wall[dd_ptr->wall_n].y = *y;
-        dd_ptr->wall[dd_ptr->wall_n].x = *x;
+        dd_ptr->walls[dd_ptr->wall_n].y = *y;
+        dd_ptr->walls[dd_ptr->wall_n].x = *x;
         dd_ptr->wall_n++;
         for (int j = *y - 1; j <= *y + 1; j++) {
             for (int i = *x - 1; i <= *x + 1; i++) {
@@ -433,8 +433,8 @@ bool build_tunnel2(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION x1, POS
                     return false;
                 }
 
-                dd_ptr->door[dd_ptr->door_n].y = y3;
-                dd_ptr->door[dd_ptr->door_n].x = x3;
+                dd_ptr->doors[dd_ptr->door_n].y = y3;
+                dd_ptr->doors[dd_ptr->door_n].x = x3;
                 dd_ptr->door_n++;
             }
 

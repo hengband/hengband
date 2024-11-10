@@ -34,21 +34,17 @@ class DungeonData {
 public:
     DungeonData();
 
-    /* Array of centers of rooms */
     int cent_n = 0;
-    std::vector<Pos2D> cent;
+    std::vector<Pos2D> centers;
 
-    /* Array of possible door locations */
     int door_n = 0;
-    std::vector<Pos2D> door;
+    std::vector<Pos2D> doors;
 
-    /* Array of wall piercing locations */
     int wall_n = 0;
-    std::vector<Pos2D> wall;
+    std::vector<Pos2D> walls;
 
-    /* Array of tunnel grids */
     int tunn_n = 0;
-    std::vector<Pos2D> tunn;
+    std::vector<Pos2D> tunnels;
 
     /* Number of blocks along each axis */
     int row_rooms = 0;

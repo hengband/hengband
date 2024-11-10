@@ -232,8 +232,8 @@ bool find_space(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION *y, POSITI
     *x = ((bx1 + bx2) * BLOCK_WID) / 2;
     const Pos2D pos(*y, *x);
     if (dd_ptr->cent_n < CENT_MAX) {
-        dd_ptr->cent[dd_ptr->cent_n].y = pos.y;
-        dd_ptr->cent[dd_ptr->cent_n].x = pos.x;
+        dd_ptr->centers[dd_ptr->cent_n].y = pos.y;
+        dd_ptr->centers[dd_ptr->cent_n].x = pos.x;
         dd_ptr->cent_n++;
     }
 

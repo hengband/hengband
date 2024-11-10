@@ -264,8 +264,8 @@ void add_river(FloorType *floor_ptr, DungeonData *dd_ptr)
 
     /* Hack - Save the location as a "room" */
     if (dd_ptr->cent_n < CENT_MAX) {
-        dd_ptr->cent[dd_ptr->cent_n].y = y2;
-        dd_ptr->cent[dd_ptr->cent_n].x = x2;
+        dd_ptr->centers[dd_ptr->cent_n].y = y2;
+        dd_ptr->centers[dd_ptr->cent_n].x = x2;
         dd_ptr->cent_n++;
     }
 }

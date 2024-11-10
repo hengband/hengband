@@ -90,12 +90,12 @@ static void place_cave_contents(PlayerType *player_ptr, DungeonData *dd_ptr, dun
     for (int i = 0; i < dd_ptr->cent_n; i++) {
         POSITION ty, tx;
         int pick = rand_range(0, i);
-        ty = dd_ptr->cent[i].y;
-        tx = dd_ptr->cent[i].x;
-        dd_ptr->cent[i].y = dd_ptr->cent[pick].y;
-        dd_ptr->cent[i].x = dd_ptr->cent[pick].x;
-        dd_ptr->cent[pick].y = ty;
-        dd_ptr->cent[pick].x = tx;
+        ty = dd_ptr->centers[i].y;
+        tx = dd_ptr->centers[i].x;
+        dd_ptr->centers[i].y = dd_ptr->centers[pick].y;
+        dd_ptr->centers[i].x = dd_ptr->centers[pick].x;
+        dd_ptr->centers[pick].y = ty;
+        dd_ptr->centers[pick].x = tx;
     }
 }
 
@@ -104,8 +104,8 @@ static bool decide_tunnel_planned_site(PlayerType *player_ptr, DungeonData *dd_p
     dd_ptr->tunn_n = 0;
     dd_ptr->wall_n = 0;
     if (randint1(player_ptr->current_floor_ptr->dun_level) > d_ptr->tunnel_percent) {
-        (void)build_tunnel2(player_ptr, dd_ptr, dd_ptr->cent[i].x, dd_ptr->cent[i].y, dd_ptr->tunnel_pos.x, dd_ptr->tunnel_pos.y, 2, 2);
-    } else if (!build_tunnel(player_ptr, dd_ptr, dt_ptr, dd_ptr->cent[i].y, dd_ptr->cent[i].x, dd_ptr->tunnel_pos.y, dd_ptr->tunnel_pos.x)) {
+        (void)build_tunnel2(player_ptr, dd_ptr, dd_ptr->centers[i].x, dd_ptr->centers[i].y, dd_ptr->tunnel_pos.x, dd_ptr->tunnel_pos.y, 2, 2);
+    } else if (!build_tunnel(player_ptr, dd_ptr, dt_ptr, dd_ptr->centers[i].y, dd_ptr->centers[i].x, dd_ptr->tunnel_pos.y, dd_ptr->tunnel_pos.x)) {
         dd_ptr->tunnel_fail_count++;
     }
 
@@ -120,7 +120,7 @@ static bool decide_tunnel_planned_site(PlayerType *player_ptr, DungeonData *dd_p
 static void make_tunnels(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     for (auto i = 0; i < dd_ptr->tunn_n; i++) {
-        dd_ptr->tunnel_pos = dd_ptr->tunn[i];
+        dd_ptr->tunnel_pos = dd_ptr->tunnels[i];
         auto &grid = player_ptr->current_floor_ptr->get_grid(dd_ptr->tunnel_pos);
         const auto &terrain = grid.get_terrain();
         if (terrain.flags.has_not(TerrainCharacteristics::MOVE) || terrain.flags.has_none_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::LAVA })) {
@@ -134,7 +134,7 @@ static void make_walls(PlayerType *player_ptr, DungeonData *dd_ptr, dungeon_type
 {
     for (int j = 0; j < dd_ptr->wall_n; j++) {
         Grid *g_ptr;
-        dd_ptr->tunnel_pos = dd_ptr->wall[j];
+        dd_ptr->tunnel_pos = dd_ptr->walls[j];
         g_ptr = &player_ptr->current_floor_ptr->get_grid(dd_ptr->tunnel_pos);
         g_ptr->mimic = 0;
         place_grid(player_ptr, g_ptr, GB_FLOOR);
@@ -148,7 +148,7 @@ static bool make_centers(PlayerType *player_ptr, DungeonData *dd_ptr, dungeon_ty
 {
     dd_ptr->tunnel_fail_count = 0;
     dd_ptr->door_n = 0;
-    dd_ptr->tunnel_pos = dd_ptr->cent[dd_ptr->cent_n - 1];
+    dd_ptr->tunnel_pos = dd_ptr->centers[dd_ptr->cent_n - 1];
     for (int i = 0; i < dd_ptr->cent_n; i++) {
         if (!decide_tunnel_planned_site(player_ptr, dd_ptr, d_ptr, dt_ptr, i)) {
             return false;
@@ -156,7 +156,7 @@ static bool make_centers(PlayerType *player_ptr, DungeonData *dd_ptr, dungeon_ty
 
         make_tunnels(player_ptr, dd_ptr);
         make_walls(player_ptr, dd_ptr, d_ptr, dt_ptr);
-        dd_ptr->tunnel_pos = dd_ptr->cent[i];
+        dd_ptr->tunnel_pos = dd_ptr->centers[i];
     }
 
     return true;
@@ -165,7 +165,7 @@ static bool make_centers(PlayerType *player_ptr, DungeonData *dd_ptr, dungeon_ty
 static void make_doors(PlayerType *player_ptr, DungeonData *dd_ptr, dt_type *dt_ptr)
 {
     for (int i = 0; i < dd_ptr->door_n; i++) {
-        dd_ptr->tunnel_pos = dd_ptr->door[i];
+        dd_ptr->tunnel_pos = dd_ptr->doors[i];
         try_door(player_ptr, dt_ptr, dd_ptr->tunnel_pos.y, dd_ptr->tunnel_pos.x - 1);
         try_door(player_ptr, dt_ptr, dd_ptr->tunnel_pos.y, dd_ptr->tunnel_pos.x + 1);
         try_door(player_ptr, dt_ptr, dd_ptr->tunnel_pos.y - 1, dd_ptr->tunnel_pos.x);
@@ -178,8 +178,8 @@ static void make_only_tunnel_points(FloorType *floor_ptr, DungeonData *dd_ptr)
     int point_num = (floor_ptr->width * floor_ptr->height) / 200 + randint1(3);
     dd_ptr->cent_n = point_num;
     for (int i = 0; i < point_num; i++) {
-        dd_ptr->cent[i].y = randint0(floor_ptr->height);
-        dd_ptr->cent[i].x = randint0(floor_ptr->width);
+        dd_ptr->centers[i].y = randint0(floor_ptr->height);
+        dd_ptr->centers[i].x = randint0(floor_ptr->width);
     }
 }
 
