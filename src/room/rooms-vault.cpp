@@ -876,28 +876,24 @@ static void build_mini_c_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
  */
 static void build_castle_vault(PlayerType *player_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
 {
-    POSITION dy, dx;
-    POSITION y1, x1, y2, x2;
-    POSITION y, x;
-
     /* Pick a random room size */
-    dy = ysize / 2 - 1;
-    dx = xsize / 2 - 1;
-
-    y1 = y0 - dy;
-    x1 = x0 - dx;
-    y2 = y0 + dy;
-    x2 = x0 + dx;
+    const auto dy = ysize / 2 - 1;
+    const auto dx = xsize / 2 - 1;
+    const auto y1 = y0 - dy;
+    const auto x1 = x0 - dx;
+    const auto y2 = y0 + dy;
+    const auto x2 = x0 + dx;
 
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("城型ランダムVaultを生成しました。", "Castle Vault"));
 
     /* generate the room */
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (y = y1 - 1; y <= y2 + 1; y++) {
-        for (x = x1 - 1; x <= x2 + 1; x++) {
-            floor_ptr->grid_array[y][x].info |= (CAVE_ROOM | CAVE_ICKY);
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (auto y = y1 - 1; y <= y2 + 1; y++) {
+        for (auto x = x1 - 1; x <= x2 + 1; x++) {
+            const Pos2D pos(y, x);
+            floor.get_grid(pos).info |= (CAVE_ROOM | CAVE_ICKY);
             /* Make everything a floor */
-            place_bold(player_ptr, y, x, GB_FLOOR);
+            place_bold(player_ptr, pos.y, pos.x, GB_FLOOR);
         }
     }
 
