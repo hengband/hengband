@@ -767,78 +767,72 @@ static void build_elemental_vault(PlayerType *player_ptr, POSITION x0, POSITION 
  */
 static void build_mini_c_vault(PlayerType *player_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
 {
-    POSITION dy, dx;
-    POSITION y1, x1, y2, x2, y, x, total;
-    int m, n, num_vertices;
-
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("小型チェッカーランダムVaultを生成しました。", "Mini Checker Board Vault."));
 
     /* Pick a random room size */
-    dy = ysize / 2 - 1;
-    dx = xsize / 2 - 1;
-
-    y1 = y0 - dy;
-    x1 = x0 - dx;
-    y2 = y0 + dy;
-    x2 = x0 + dx;
+    const auto dy = ysize / 2 - 1;
+    const auto dx = xsize / 2 - 1;
+    const auto y1 = y0 - dy;
+    const auto x1 = x0 - dx;
+    const auto y2 = y0 + dy;
+    const auto x2 = x0 + dx;
 
     /* generate the room */
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (x = x1 - 2; x <= x2 + 2; x++) {
-        if (!in_bounds(floor_ptr, y1 - 2, x)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (auto x = x1 - 2; x <= x2 + 2; x++) {
+        const Pos2D pos(y1 - 2, x);
+        if (!in_bounds(&floor, pos.y, pos.x)) {
             break;
         }
 
-        floor_ptr->grid_array[y1 - 2][x].info |= (CAVE_ROOM | CAVE_ICKY);
-
-        place_bold(player_ptr, y1 - 2, x, GB_OUTER_NOPERM);
+        floor.get_grid(pos).info |= (CAVE_ROOM | CAVE_ICKY);
+        place_bold(player_ptr, pos.y, pos.x, GB_OUTER_NOPERM);
     }
 
-    for (x = x1 - 2; x <= x2 + 2; x++) {
-        if (!in_bounds(floor_ptr, y2 + 2, x)) {
+    for (auto x = x1 - 2; x <= x2 + 2; x++) {
+        const Pos2D pos(y2 + 2, x);
+        if (!in_bounds(&floor, pos.y, pos.x)) {
             break;
         }
 
-        floor_ptr->grid_array[y2 + 2][x].info |= (CAVE_ROOM | CAVE_ICKY);
-
-        place_bold(player_ptr, y2 + 2, x, GB_OUTER_NOPERM);
+        floor.get_grid(pos).info |= (CAVE_ROOM | CAVE_ICKY);
+        place_bold(player_ptr, pos.y, pos.x, GB_OUTER_NOPERM);
     }
 
-    for (y = y1 - 2; y <= y2 + 2; y++) {
-        if (!in_bounds(floor_ptr, y, x1 - 2)) {
+    for (auto y = y1 - 2; y <= y2 + 2; y++) {
+        const Pos2D pos(y, x1 - 2);
+        if (!in_bounds(&floor, pos.y, pos.x)) {
             break;
         }
 
-        floor_ptr->grid_array[y][x1 - 2].info |= (CAVE_ROOM | CAVE_ICKY);
-
-        place_bold(player_ptr, y, x1 - 2, GB_OUTER_NOPERM);
+        floor.get_grid(pos).info |= (CAVE_ROOM | CAVE_ICKY);
+        place_bold(player_ptr, pos.y, pos.x, GB_OUTER_NOPERM);
     }
 
-    for (y = y1 - 2; y <= y2 + 2; y++) {
-        if (!in_bounds(floor_ptr, y, x2 + 2)) {
+    for (auto y = y1 - 2; y <= y2 + 2; y++) {
+        if (!in_bounds(&floor, y, x2 + 2)) {
             break;
         }
 
-        floor_ptr->grid_array[y][x2 + 2].info |= (CAVE_ROOM | CAVE_ICKY);
-
-        place_bold(player_ptr, y, x2 + 2, GB_OUTER_NOPERM);
+        const Pos2D pos(y, x2 + 2);
+        floor.get_grid(pos).info |= (CAVE_ROOM | CAVE_ICKY);
+        place_bold(player_ptr, pos.y, pos.x, GB_OUTER_NOPERM);
     }
 
-    for (y = y1 - 1; y <= y2 + 1; y++) {
-        for (x = x1 - 1; x <= x2 + 1; x++) {
-            auto *g_ptr = &floor_ptr->grid_array[y][x];
-
-            g_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
+    for (auto y = y1 - 1; y <= y2 + 1; y++) {
+        for (auto x = x1 - 1; x <= x2 + 1; x++) {
+            auto &grid = floor.get_grid({ y, x });
+            grid.info |= (CAVE_ROOM | CAVE_ICKY);
 
             /* Permanent walls */
-            place_grid(player_ptr, g_ptr, GB_INNER_PERM);
+            place_grid(player_ptr, &grid, GB_INNER_PERM);
         }
     }
 
     /* dimensions of vertex array */
-    m = dx + 1;
-    n = dy + 1;
-    num_vertices = m * n;
+    const auto m = dx + 1;
+    const auto n = dy + 1;
+    const auto num_vertices = m * n;
 
     /* initialize array of visited vertices */
     std::vector<int> visited(num_vertices);
@@ -847,11 +841,11 @@ static void build_mini_c_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
     r_visit(player_ptr, y1, x1, y2, x2, randint0(num_vertices), 0, visited.data());
 
     /* Make it look like a checker board vault */
-    for (x = x1; x <= x2; x++) {
-        for (y = y1; y <= y2; y++) {
-            total = x - x1 + y - y1;
+    for (auto x = x1; x <= x2; x++) {
+        for (auto y = y1; y <= y2; y++) {
+            const auto total = x - x1 + y - y1;
             /* If total is odd- and is a floor then make a wall */
-            if ((total % 2 == 1) && floor_ptr->grid_array[y][x].is_floor()) {
+            if ((total % 2 == 1) && floor.grid_array[y][x].is_floor()) {
                 place_bold(player_ptr, y, x, GB_INNER);
             }
         }
@@ -860,12 +854,12 @@ static void build_mini_c_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
     /* Make a couple of entrances */
     if (one_in_(2)) {
         /* left and right */
-        y = randint1(dy) + dy / 2;
+        const auto y = randint1(dy) + dy / 2;
         place_bold(player_ptr, y1 + y, x1 - 1, GB_INNER);
         place_bold(player_ptr, y1 + y, x2 + 1, GB_INNER);
     } else {
         /* top and bottom */
-        x = randint1(dx) + dx / 2;
+        const auto x = randint1(dx) + dx / 2;
         place_bold(player_ptr, y1 - 1, x1 + x, GB_INNER);
         place_bold(player_ptr, y2 + 1, x1 + x, GB_INNER);
     }
