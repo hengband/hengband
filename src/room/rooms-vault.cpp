@@ -693,29 +693,23 @@ static void build_target_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
  */
 static void build_elemental_vault(PlayerType *player_ptr, POSITION x0, POSITION y0, POSITION xsiz, POSITION ysiz)
 {
-    int grd, roug;
-    int c1, c2, c3;
-    bool done = false;
-    POSITION xsize, ysize, xhsize, yhsize, x, y;
-    int i;
-    int type;
-
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("精霊界ランダムVaultを生成しました。", "Elemental Vault"));
 
     /* round to make sizes even */
-    xhsize = xsiz / 2;
-    yhsize = ysiz / 2;
-    xsize = xhsize * 2;
-    ysize = yhsize * 2;
+    const auto xhsize = xsiz / 2;
+    const auto yhsize = ysiz / 2;
+    const auto xsize = xhsize * 2;
+    const auto ysize = yhsize * 2;
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->dun_level < 25) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    lake_type type;
+    if (floor.dun_level < 25) {
         /* Earth vault  (Rubble) */
         type = LAKE_T_EARTH_VAULT;
-    } else if (floor_ptr->dun_level < 50) {
+    } else if (floor.dun_level < 50) {
         /* Air vault (Trees) */
         type = LAKE_T_AIR_VAULT;
-    } else if (floor_ptr->dun_level < 75) {
+    } else if (floor.dun_level < 75) {
         /* Water vault (shallow water) */
         type = LAKE_T_WATER_VAULT;
     } else {
@@ -723,39 +717,40 @@ static void build_elemental_vault(PlayerType *player_ptr, POSITION x0, POSITION 
         type = LAKE_T_FIRE_VAULT;
     }
 
+    auto done = false;
     while (!done) {
         /* testing values for these parameters: feel free to adjust */
-        grd = 1 << (randint0(3));
+        const auto grd = 1 << (randint0(3));
 
         /* want average of about 16 */
-        roug = randint1(8) * randint1(4);
+        const auto roug = randint1(8) * randint1(4);
 
         /* Make up size of various componants */
         /* Floor */
-        c3 = 2 * xsize / 3;
+        const auto c3 = 2 * xsize / 3;
 
         /* Deep water/lava */
-        c1 = randint0(c3 / 2) + randint0(c3 / 2) - 5;
+        const auto c1 = randint0(c3 / 2) + randint0(c3 / 2) - 5;
 
         /* Shallow boundary */
-        c2 = (c1 + c3) / 2;
+        const auto c2 = (c1 + c3) / 2;
 
         /* make it */
-        generate_hmap(floor_ptr, y0, x0, xsize, ysize, grd, roug, c3);
+        generate_hmap(&floor, y0, x0, xsize, ysize, grd, roug, c3);
 
         /* Convert to normal format+ clean up */
         done = generate_lake(player_ptr, y0, x0, xsize, ysize, c1, c2, c3, type);
     }
 
     /* Set icky flag because is a vault */
-    for (x = 0; x <= xsize; x++) {
-        for (y = 0; y <= ysize; y++) {
-            floor_ptr->grid_array[y0 - yhsize + y][x0 - xhsize + x].info |= CAVE_ICKY;
+    for (auto x = 0; x <= xsize; x++) {
+        for (auto y = 0; y <= ysize; y++) {
+            floor.grid_array[y0 - yhsize + y][x0 - xhsize + x].info |= CAVE_ICKY;
         }
     }
 
     /* make a few rooms in the vault */
-    for (i = 1; i <= (xsize * ysize) / 50; i++) {
+    for (auto i = 1; i <= (xsize * ysize) / 50; i++) {
         build_small_room(player_ptr, x0 + randint0(xsize - 4) - xsize / 2 + 2, y0 + randint0(ysize - 4) - ysize / 2 + 2);
     }
 
