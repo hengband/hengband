@@ -104,8 +104,8 @@ static bool decide_tunnel_planned_site(PlayerType *player_ptr, DungeonData *dd_p
     dd_ptr->tunn_n = 0;
     dd_ptr->wall_n = 0;
     if (randint1(player_ptr->current_floor_ptr->dun_level) > d_ptr->tunnel_percent) {
-        (void)build_tunnel2(player_ptr, dd_ptr, dd_ptr->cent[i].x, dd_ptr->cent[i].y, dd_ptr->tunnel_x, dd_ptr->tunnel_y, 2, 2);
-    } else if (!build_tunnel(player_ptr, dd_ptr, dt_ptr, dd_ptr->cent[i].y, dd_ptr->cent[i].x, dd_ptr->tunnel_y, dd_ptr->tunnel_x)) {
+        (void)build_tunnel2(player_ptr, dd_ptr, dd_ptr->cent[i].x, dd_ptr->cent[i].y, dd_ptr->tunnel_pos.x, dd_ptr->tunnel_pos.y, 2, 2);
+    } else if (!build_tunnel(player_ptr, dd_ptr, dt_ptr, dd_ptr->cent[i].y, dd_ptr->cent[i].x, dd_ptr->tunnel_pos.y, dd_ptr->tunnel_pos.x)) {
         dd_ptr->tunnel_fail_count++;
     }
 
@@ -120,9 +120,8 @@ static bool decide_tunnel_planned_site(PlayerType *player_ptr, DungeonData *dd_p
 static void make_tunnels(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     for (auto i = 0; i < dd_ptr->tunn_n; i++) {
-        dd_ptr->tunnel_y = dd_ptr->tunn[i].y;
-        dd_ptr->tunnel_x = dd_ptr->tunn[i].x;
-        auto &grid = player_ptr->current_floor_ptr->grid_array[dd_ptr->tunnel_y][dd_ptr->tunnel_x];
+        dd_ptr->tunnel_pos = dd_ptr->tunn[i];
+        auto &grid = player_ptr->current_floor_ptr->get_grid(dd_ptr->tunnel_pos);
         const auto &terrain = grid.get_terrain();
         if (terrain.flags.has_not(TerrainCharacteristics::MOVE) || terrain.flags.has_none_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::LAVA })) {
             grid.mimic = 0;
@@ -135,13 +134,12 @@ static void make_walls(PlayerType *player_ptr, DungeonData *dd_ptr, dungeon_type
 {
     for (int j = 0; j < dd_ptr->wall_n; j++) {
         Grid *g_ptr;
-        dd_ptr->tunnel_y = dd_ptr->wall[j].y;
-        dd_ptr->tunnel_x = dd_ptr->wall[j].x;
-        g_ptr = &player_ptr->current_floor_ptr->grid_array[dd_ptr->tunnel_y][dd_ptr->tunnel_x];
+        dd_ptr->tunnel_pos = dd_ptr->wall[j];
+        g_ptr = &player_ptr->current_floor_ptr->get_grid(dd_ptr->tunnel_pos);
         g_ptr->mimic = 0;
         place_grid(player_ptr, g_ptr, GB_FLOOR);
         if (evaluate_percent(dt_ptr->dun_tun_pen) && d_ptr->flags.has_not(DungeonFeatureType::NO_DOORS)) {
-            place_random_door(player_ptr, dd_ptr->tunnel_y, dd_ptr->tunnel_x, true);
+            place_random_door(player_ptr, dd_ptr->tunnel_pos.y, dd_ptr->tunnel_pos.x, true);
         }
     }
 }
@@ -150,8 +148,7 @@ static bool make_centers(PlayerType *player_ptr, DungeonData *dd_ptr, dungeon_ty
 {
     dd_ptr->tunnel_fail_count = 0;
     dd_ptr->door_n = 0;
-    dd_ptr->tunnel_y = dd_ptr->cent[dd_ptr->cent_n - 1].y;
-    dd_ptr->tunnel_x = dd_ptr->cent[dd_ptr->cent_n - 1].x;
+    dd_ptr->tunnel_pos = dd_ptr->cent[dd_ptr->cent_n - 1];
     for (int i = 0; i < dd_ptr->cent_n; i++) {
         if (!decide_tunnel_planned_site(player_ptr, dd_ptr, d_ptr, dt_ptr, i)) {
             return false;
@@ -159,8 +156,7 @@ static bool make_centers(PlayerType *player_ptr, DungeonData *dd_ptr, dungeon_ty
 
         make_tunnels(player_ptr, dd_ptr);
         make_walls(player_ptr, dd_ptr, d_ptr, dt_ptr);
-        dd_ptr->tunnel_y = dd_ptr->cent[i].y;
-        dd_ptr->tunnel_x = dd_ptr->cent[i].x;
+        dd_ptr->tunnel_pos = dd_ptr->cent[i];
     }
 
     return true;
@@ -169,12 +165,11 @@ static bool make_centers(PlayerType *player_ptr, DungeonData *dd_ptr, dungeon_ty
 static void make_doors(PlayerType *player_ptr, DungeonData *dd_ptr, dt_type *dt_ptr)
 {
     for (int i = 0; i < dd_ptr->door_n; i++) {
-        dd_ptr->tunnel_y = dd_ptr->door[i].y;
-        dd_ptr->tunnel_x = dd_ptr->door[i].x;
-        try_door(player_ptr, dt_ptr, dd_ptr->tunnel_y, dd_ptr->tunnel_x - 1);
-        try_door(player_ptr, dt_ptr, dd_ptr->tunnel_y, dd_ptr->tunnel_x + 1);
-        try_door(player_ptr, dt_ptr, dd_ptr->tunnel_y - 1, dd_ptr->tunnel_x);
-        try_door(player_ptr, dt_ptr, dd_ptr->tunnel_y + 1, dd_ptr->tunnel_x);
+        dd_ptr->tunnel_pos = dd_ptr->door[i];
+        try_door(player_ptr, dt_ptr, dd_ptr->tunnel_pos.y, dd_ptr->tunnel_pos.x - 1);
+        try_door(player_ptr, dt_ptr, dd_ptr->tunnel_pos.y, dd_ptr->tunnel_pos.x + 1);
+        try_door(player_ptr, dt_ptr, dd_ptr->tunnel_pos.y - 1, dd_ptr->tunnel_pos.x);
+        try_door(player_ptr, dt_ptr, dd_ptr->tunnel_pos.y + 1, dd_ptr->tunnel_pos.x);
     }
 }
 

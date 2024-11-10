@@ -1,9 +1,10 @@
 #pragma once
 
 #include "floor/floor-base-definitions.h"
-#include "system/angband.h"
+#include "util/point-2d.h"
 #include <optional>
 #include <string>
+#include <vector>
 
 /*
  * Bounds on some arrays used in the DungeonData.
@@ -27,42 +28,34 @@
 #define MAX_ROOMS_COL (MAX_WID / BLOCK_WID)
 
 /*
- * Simple structure to hold a map location
- */
-struct coord {
-    POSITION y;
-    POSITION x;
-};
-
-/*
  * Structure to hold all "dungeon generation" data
  */
 class DungeonData {
 public:
-    DungeonData() = default;
+    DungeonData();
 
     /* Array of centers of rooms */
     int cent_n = 0;
-    coord cent[CENT_MAX];
+    std::vector<Pos2D> cent;
 
     /* Array of possible door locations */
     int door_n = 0;
-    coord door[DOOR_MAX];
+    std::vector<Pos2D> door;
 
     /* Array of wall piercing locations */
     int wall_n = 0;
-    coord wall[WALL_MAX];
+    std::vector<Pos2D> wall;
 
     /* Array of tunnel grids */
     int tunn_n = 0;
-    coord tunn[TUNN_MAX];
+    std::vector<Pos2D> tunn;
 
     /* Number of blocks along each axis */
     int row_rooms = 0;
     int col_rooms = 0;
 
     /* Array of which blocks are used */
-    bool room_map[MAX_ROOMS_ROW][MAX_ROOMS_COL];
+    std::vector<std::vector<bool>> room_map;
 
     /* Various type of dungeon floors */
     bool destroyed = false;
@@ -71,8 +64,7 @@ public:
     int laketype = 0;
     int tunnel_fail_count = 0;
 
-    POSITION tunnel_y = 0;
-    POSITION tunnel_x = 0;
+    Pos2D tunnel_pos;
 
     int alloc_object_num = 0;
     int alloc_monster_num = 0;
