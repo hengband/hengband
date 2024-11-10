@@ -207,43 +207,40 @@ static void build_room_vault(PlayerType *player_ptr, POSITION x0, POSITION y0, P
 /* Create a random vault out of a fractal grid */
 static void build_cave_vault(PlayerType *player_ptr, POSITION x0, POSITION y0, POSITION xsiz, POSITION ysiz)
 {
-    int grd, roug, cutoff;
-    bool done, light, room;
-    POSITION xhsize, yhsize, xsize, ysize, x, y;
-
     /* round to make sizes even */
-    xhsize = xsiz / 2;
-    yhsize = ysiz / 2;
-    xsize = xhsize * 2;
-    ysize = yhsize * 2;
+    const auto xhsize = xsiz / 2;
+    const auto yhsize = ysiz / 2;
+    const auto xsize = xhsize * 2;
+    const auto ysize = yhsize * 2;
 
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("洞穴ランダムVaultを生成しました。", "Cave Vault."));
 
-    light = done = false;
-    room = true;
+    auto light = false;
+    auto done = false;
+    auto room = true;
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
     while (!done) {
         /* testing values for these parameters feel free to adjust */
-        grd = 1 << randint0(4);
+        const auto grd = 1 << randint0(4);
 
         /* want average of about 16 */
-        roug = randint1(8) * randint1(4);
+        const auto roug = randint1(8) * randint1(4);
 
         /* about size/2 */
-        cutoff = randint1(xsize / 4) + randint1(ysize / 4) + randint1(xsize / 4) + randint1(ysize / 4);
+        const auto cutoff = randint1(xsize / 4) + randint1(ysize / 4) + randint1(xsize / 4) + randint1(ysize / 4);
 
         /* make it */
-        generate_hmap(floor_ptr, y0, x0, xsize, ysize, grd, roug, cutoff);
+        generate_hmap(&floor, y0, x0, xsize, ysize, grd, roug, cutoff);
 
         /* Convert to normal format+ clean up */
         done = generate_fracave(player_ptr, y0, x0, xsize, ysize, cutoff, light, room);
     }
 
     /* Set icky flag because is a vault */
-    for (x = 0; x <= xsize; x++) {
-        for (y = 0; y <= ysize; y++) {
-            floor_ptr->grid_array[y0 - yhsize + y][x0 - xhsize + x].info |= CAVE_ICKY;
+    for (auto x = 0; x <= xsize; x++) {
+        for (auto y = 0; y <= ysize; y++) {
+            floor.get_grid({ y0 - yhsize + y, x0 - xhsize + x }).info |= CAVE_ICKY;
         }
     }
 
