@@ -924,7 +924,7 @@ hengband_SOURCES = \
 	system/artifact-type-definition.cpp system/artifact-type-definition.h \
 	system/baseitem-info.cpp system/baseitem-info.h \
 	system/building-type-definition.cpp system/building-type-definition.h \
-	system/dungeon-data-definition.h \
+	system/dungeon-data-definition.cpp system/dungeon-data-definition.h \
 	system/dungeon-info.cpp system/dungeon-info.h \
 	system/floor-type-definition.cpp system/floor-type-definition.h \
 	system/grid-type-definition.cpp system/grid-type-definition.h \

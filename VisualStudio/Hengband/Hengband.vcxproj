@@ -324,6 +324,7 @@
     <ClCompile Include="..\..\src\specific-object\stone-of-lore.cpp" />
     <ClCompile Include="..\..\src\spell-class\spells-mirror-master.cpp" />
     <ClCompile Include="..\..\src\system\angband-system.cpp" />
+    <ClCompile Include="..\..\src\system\dungeon-data-definition.cpp" />
     <ClCompile Include="..\..\src\system\inner-game-data.cpp" />
     <ClCompile Include="..\..\src\system\redrawing-flags-updater.cpp" />
     <ClCompile Include="..\..\src\system\floor-type-definition.cpp" />

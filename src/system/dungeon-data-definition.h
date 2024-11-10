@@ -2,6 +2,8 @@
 
 #include "floor/floor-base-definitions.h"
 #include "system/angband.h"
+#include <optional>
+#include <string>
 
 /*
  * Bounds on some arrays used in the DungeonData.
@@ -37,41 +39,43 @@ struct coord {
  */
 class DungeonData {
 public:
+    DungeonData() = default;
+
     /* Array of centers of rooms */
-    int cent_n;
+    int cent_n = 0;
     coord cent[CENT_MAX];
 
     /* Array of possible door locations */
-    int door_n;
+    int door_n = 0;
     coord door[DOOR_MAX];
 
     /* Array of wall piercing locations */
-    int wall_n;
+    int wall_n = 0;
     coord wall[WALL_MAX];
 
     /* Array of tunnel grids */
-    int tunn_n;
+    int tunn_n = 0;
     coord tunn[TUNN_MAX];
 
     /* Number of blocks along each axis */
-    int row_rooms;
-    int col_rooms;
+    int row_rooms = 0;
+    int col_rooms = 0;
 
     /* Array of which blocks are used */
     bool room_map[MAX_ROOMS_ROW][MAX_ROOMS_COL];
 
     /* Various type of dungeon floors */
-    bool destroyed;
-    bool empty_level;
-    bool cavern;
-    int laketype;
-    int tunnel_fail_count;
+    bool destroyed = false;
+    bool empty_level = false;
+    bool cavern = false;
+    int laketype = 0;
+    int tunnel_fail_count = 0;
 
-    POSITION tunnel_y;
-    POSITION tunnel_x;
+    POSITION tunnel_y = 0;
+    POSITION tunnel_x = 0;
 
-    int alloc_object_num;
-    int alloc_monster_num;
+    int alloc_object_num = 0;
+    int alloc_monster_num = 0;
 
-    concptr *why;
+    std::optional<std::string> why;
 };

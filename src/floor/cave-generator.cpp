@@ -39,16 +39,6 @@ static void reset_lite_area(FloorType *floor_ptr)
     floor_ptr->view_n = 0;
 }
 
-static DungeonData *initialize_dun_data_type(DungeonData *dd_ptr, concptr *why)
-{
-    dd_ptr->destroyed = false;
-    dd_ptr->empty_level = false;
-    dd_ptr->cavern = false;
-    dd_ptr->laketype = 0;
-    dd_ptr->why = why;
-    return dd_ptr;
-}
-
 static void check_arena_floor(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
@@ -120,7 +110,7 @@ static bool decide_tunnel_planned_site(PlayerType *player_ptr, DungeonData *dd_p
     }
 
     if (dd_ptr->tunnel_fail_count >= 2) {
-        *dd_ptr->why = _("トンネル接続に失敗", "Failed to generate tunnels");
+        dd_ptr->why = _("トンネル接続に失敗", "Failed to generate tunnels");
         return false;
     }
 
@@ -206,7 +196,7 @@ static bool make_one_floor(PlayerType *player_ptr, DungeonData *dd_ptr, dungeon_
         make_only_tunnel_points(floor_ptr, dd_ptr);
     } else {
         if (!generate_rooms(player_ptr, dd_ptr)) {
-            *dd_ptr->why = _("部屋群の生成に失敗", "Failed to generate rooms");
+            dd_ptr->why = _("部屋群の生成に失敗", "Failed to generate rooms");
             return false;
         }
     }
@@ -220,12 +210,12 @@ static bool make_one_floor(PlayerType *player_ptr, DungeonData *dd_ptr, dungeon_
 
     make_doors(player_ptr, dd_ptr, dt_ptr);
     if (!alloc_stairs(player_ptr, feat_down_stair, rand_range(3, 4), 3)) {
-        *dd_ptr->why = _("下り階段生成に失敗", "Failed to generate down stairs.");
+        dd_ptr->why = _("下り階段生成に失敗", "Failed to generate down stairs.");
         return false;
     }
 
     if (!alloc_stairs(player_ptr, feat_up_stair, rand_range(1, 2), 3)) {
-        *dd_ptr->why = _("上り階段生成に失敗", "Failed to generate up stairs.");
+        dd_ptr->why = _("上り階段生成に失敗", "Failed to generate up stairs.");
         return false;
     }
 
@@ -238,12 +228,12 @@ static bool switch_making_floor(PlayerType *player_ptr, DungeonData *dd_ptr, dun
         auto *floor_ptr = player_ptr->current_floor_ptr;
         build_maze_vault(player_ptr, floor_ptr->width / 2 - 1, floor_ptr->height / 2 - 1, floor_ptr->width - 4, floor_ptr->height - 4, false);
         if (!alloc_stairs(player_ptr, feat_down_stair, rand_range(2, 3), 3)) {
-            *dd_ptr->why = _("迷宮ダンジョンの下り階段生成に失敗", "Failed to alloc up stairs in maze dungeon.");
+            dd_ptr->why = _("迷宮ダンジョンの下り階段生成に失敗", "Failed to alloc up stairs in maze dungeon.");
             return false;
         }
 
         if (!alloc_stairs(player_ptr, feat_up_stair, 1, 3)) {
-            *dd_ptr->why = _("迷宮ダンジョンの上り階段生成に失敗", "Failed to alloc down stairs in maze dungeon.");
+            dd_ptr->why = _("迷宮ダンジョンの上り階段生成に失敗", "Failed to alloc down stairs in maze dungeon.");
             return false;
         }
 
@@ -318,12 +308,12 @@ static void make_perm_walls(PlayerType *player_ptr)
 static bool check_place_necessary_objects(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     if (!new_player_spot(player_ptr)) {
-        *dd_ptr->why = _("プレイヤー配置に失敗", "Failed to place a player");
+        dd_ptr->why = _("プレイヤー配置に失敗", "Failed to place a player");
         return false;
     }
 
     if (!place_quest_monsters(player_ptr)) {
-        *dd_ptr->why = _("クエストモンスター配置に失敗", "Failed to place a quest monster");
+        dd_ptr->why = _("クエストモンスター配置に失敗", "Failed to place a quest monster");
         return false;
     }
 
@@ -387,7 +377,7 @@ static bool allocate_dungeon_data(PlayerType *player_ptr, DungeonData *dd_ptr, d
         return true;
     }
 
-    *dd_ptr->why = _("ダンジョンの主配置に失敗", "Failed to place a dungeon guardian");
+    dd_ptr->why = _("ダンジョンの主配置に失敗", "Failed to place a dungeon guardian");
     return false;
 }
 
@@ -409,54 +399,51 @@ static void decide_grid_glowing(FloorType *floor_ptr, DungeonData *dd_ptr, dunge
 }
 
 /*!
- * @brief ダンジョン生成のメインルーチン / Generate a new dungeon level
- * @details Note that "dun_body" adds about 4000 bytes of memory to the stack.
+ * @brief ダンジョン生成のメインルーチン
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param why エラー原因メッセージを返す
- * @return ダンジョン生成が全て無事に成功したらTRUEを返す。
+ * @return ダンジョン生成が全て無事に成功したらnullopt、何かエラーがあったらその文字列
  */
-bool cave_gen(PlayerType *player_ptr, concptr *why)
+std::optional<std::string> cave_gen(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     reset_lite_area(floor_ptr);
     set_floor_and_wall(floor_ptr->dungeon_idx);
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), nullptr);
 
-    DungeonData tmp_dd;
-    DungeonData *dd_ptr = initialize_dun_data_type(&tmp_dd, why);
-    dd_ptr->row_rooms = floor_ptr->height / BLOCK_HGT;
-    dd_ptr->col_rooms = floor_ptr->width / BLOCK_WID;
-    for (POSITION y = 0; y < dd_ptr->row_rooms; y++) {
-        for (POSITION x = 0; x < dd_ptr->col_rooms; x++) {
-            dd_ptr->room_map[y][x] = false;
+    DungeonData dd;
+    dd.row_rooms = floor_ptr->height / BLOCK_HGT;
+    dd.col_rooms = floor_ptr->width / BLOCK_WID;
+    for (POSITION y = 0; y < dd.row_rooms; y++) {
+        for (POSITION x = 0; x < dd.col_rooms; x++) {
+            dd.room_map[y][x] = false;
         }
     }
 
-    dd_ptr->cent_n = 0;
+    dd.cent_n = 0;
     auto *d_ptr = &floor_ptr->get_dungeon_definition();
     constexpr auto chance_empty_floor = 24;
     if (ironman_empty_levels || (d_ptr->flags.has(DungeonFeatureType::ARENA) && (empty_levels && one_in_(chance_empty_floor)))) {
-        dd_ptr->empty_level = true;
+        dd.empty_level = true;
         msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("アリーナレベルを生成。", "Arena level."));
     }
 
-    check_arena_floor(player_ptr, dd_ptr);
-    gen_caverns_and_lakes(player_ptr, d_ptr, dd_ptr);
-    if (!switch_making_floor(player_ptr, dd_ptr, d_ptr)) {
-        return false;
+    check_arena_floor(player_ptr, &dd);
+    gen_caverns_and_lakes(player_ptr, d_ptr, &dd);
+    if (!switch_making_floor(player_ptr, &dd, d_ptr)) {
+        return dd.why;
     }
 
-    make_aqua_streams(player_ptr, dd_ptr, d_ptr);
+    make_aqua_streams(player_ptr, &dd, d_ptr);
     make_perm_walls(player_ptr);
-    if (!check_place_necessary_objects(player_ptr, dd_ptr)) {
-        return false;
+    if (!check_place_necessary_objects(player_ptr, &dd)) {
+        return dd.why;
     }
 
-    decide_dungeon_data_allocation(player_ptr, dd_ptr, d_ptr);
-    if (!allocate_dungeon_data(player_ptr, dd_ptr, d_ptr)) {
-        return false;
+    decide_dungeon_data_allocation(player_ptr, &dd, d_ptr);
+    if (!allocate_dungeon_data(player_ptr, &dd, d_ptr)) {
+        return dd.why;
     }
 
-    decide_grid_glowing(floor_ptr, dd_ptr, d_ptr);
-    return true;
+    decide_grid_glowing(floor_ptr, &dd, d_ptr);
+    return std::nullopt;
 }
