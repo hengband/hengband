@@ -263,7 +263,7 @@ void add_river(FloorType *floor_ptr, DungeonData *dd_ptr)
     recursive_river(floor_ptr, x1, y1, x2, y2, feat1, feat2, wid);
 
     /* Hack - Save the location as a "room" */
-    if (dd_ptr->cent_n < CENT_MAX) {
+    if (dd_ptr->cent_n < dd_ptr->centers.size()) {
         dd_ptr->centers[dd_ptr->cent_n].y = y2;
         dd_ptr->centers[dd_ptr->cent_n].x = x2;
         dd_ptr->cent_n++;

@@ -87,15 +87,9 @@ static void place_cave_contents(PlayerType *player_ptr, DungeonData *dd_ptr, dun
         add_river(floor_ptr, dd_ptr);
     }
 
-    for (int i = 0; i < dd_ptr->cent_n; i++) {
-        POSITION ty, tx;
-        int pick = rand_range(0, i);
-        ty = dd_ptr->centers[i].y;
-        tx = dd_ptr->centers[i].x;
-        dd_ptr->centers[i].y = dd_ptr->centers[pick].y;
-        dd_ptr->centers[i].x = dd_ptr->centers[pick].x;
-        dd_ptr->centers[pick].y = ty;
-        dd_ptr->centers[pick].x = tx;
+    for (size_t i = 0; i < dd_ptr->cent_n; i++) {
+        const auto pick = rand_range(0, i);
+        std::swap(dd_ptr->centers[i], dd_ptr->centers[pick]);
     }
 }
 
@@ -119,7 +113,7 @@ static bool decide_tunnel_planned_site(PlayerType *player_ptr, DungeonData *dd_p
 
 static void make_tunnels(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
-    for (auto i = 0; i < dd_ptr->tunn_n; i++) {
+    for (size_t i = 0; i < dd_ptr->tunn_n; i++) {
         dd_ptr->tunnel_pos = dd_ptr->tunnels[i];
         auto &grid = player_ptr->current_floor_ptr->get_grid(dd_ptr->tunnel_pos);
         const auto &terrain = grid.get_terrain();
@@ -132,7 +126,7 @@ static void make_tunnels(PlayerType *player_ptr, DungeonData *dd_ptr)
 
 static void make_walls(PlayerType *player_ptr, DungeonData *dd_ptr, dungeon_type *d_ptr, dt_type *dt_ptr)
 {
-    for (int j = 0; j < dd_ptr->wall_n; j++) {
+    for (size_t j = 0; j < dd_ptr->wall_n; j++) {
         Grid *g_ptr;
         dd_ptr->tunnel_pos = dd_ptr->walls[j];
         g_ptr = &player_ptr->current_floor_ptr->get_grid(dd_ptr->tunnel_pos);
@@ -149,7 +143,7 @@ static bool make_centers(PlayerType *player_ptr, DungeonData *dd_ptr, dungeon_ty
     dd_ptr->tunnel_fail_count = 0;
     dd_ptr->door_n = 0;
     dd_ptr->tunnel_pos = dd_ptr->centers[dd_ptr->cent_n - 1];
-    for (int i = 0; i < dd_ptr->cent_n; i++) {
+    for (size_t i = 0; i < dd_ptr->cent_n; i++) {
         if (!decide_tunnel_planned_site(player_ptr, dd_ptr, d_ptr, dt_ptr, i)) {
             return false;
         }
@@ -164,7 +158,7 @@ static bool make_centers(PlayerType *player_ptr, DungeonData *dd_ptr, dungeon_ty
 
 static void make_doors(PlayerType *player_ptr, DungeonData *dd_ptr, dt_type *dt_ptr)
 {
-    for (int i = 0; i < dd_ptr->door_n; i++) {
+    for (size_t i = 0; i < dd_ptr->door_n; i++) {
         dd_ptr->tunnel_pos = dd_ptr->doors[i];
         try_door(player_ptr, dt_ptr, dd_ptr->tunnel_pos.y, dd_ptr->tunnel_pos.x - 1);
         try_door(player_ptr, dt_ptr, dd_ptr->tunnel_pos.y, dd_ptr->tunnel_pos.x + 1);

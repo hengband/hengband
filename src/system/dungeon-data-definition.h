@@ -7,15 +7,6 @@
 #include <vector>
 
 /*
- * Bounds on some arrays used in the DungeonData.
- * These bounds are checked, though usually this is a formality.
- */
-#define CENT_MAX 100
-#define DOOR_MAX 200
-#define WALL_MAX 500
-#define TUNN_MAX 900
-
-/*
  * The "size" of a "generation block" in grids
  */
 #define BLOCK_HGT 11
@@ -34,16 +25,16 @@ class DungeonData {
 public:
     DungeonData();
 
-    int cent_n = 0;
+    size_t cent_n = 0;
     std::vector<Pos2D> centers;
 
-    int door_n = 0;
+    size_t door_n = 0;
     std::vector<Pos2D> doors;
 
-    int wall_n = 0;
+    size_t wall_n = 0;
     std::vector<Pos2D> walls;
 
-    int tunn_n = 0;
+    size_t tunn_n = 0;
     std::vector<Pos2D> tunnels;
 
     /* Number of blocks along each axis */
