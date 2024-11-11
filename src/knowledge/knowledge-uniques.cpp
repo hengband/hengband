@@ -124,44 +124,43 @@ static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
  */
 void do_cmd_knowledge_uniques(PlayerType *player_ptr, bool is_alive)
 {
-    unique_list_type tmp_list(is_alive);
-    unique_list_type *unique_list_ptr = &tmp_list;
+    unique_list_type unique_list(is_alive);
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
     if (!open_temporary_file(&fff, file_name)) {
         return;
     }
 
-    for (auto &[monrace_id, monrace] : monraces_info) {
+    auto &monraces = MonraceList::get_instance();
+    for (auto &[monrace_id, monrace] : monraces) {
         if (!monrace.is_valid()) {
             continue;
         }
-        if (!sweep_uniques(&monrace, unique_list_ptr->is_alive)) {
+        if (!sweep_uniques(&monrace, unique_list.is_alive)) {
             continue;
         }
 
         if (monrace.level) {
             int lev = (monrace.level - 1) / 10;
             if (lev < 10) {
-                unique_list_ptr->num_uniques[lev]++;
-                if (unique_list_ptr->max_lev < lev) {
-                    unique_list_ptr->max_lev = lev;
+                unique_list.num_uniques[lev]++;
+                if (unique_list.max_lev < lev) {
+                    unique_list.max_lev = lev;
                 }
             } else {
-                unique_list_ptr->num_uniques_over100++;
+                unique_list.num_uniques_over100++;
             }
         } else {
-            unique_list_ptr->num_uniques_surface++;
+            unique_list.num_uniques_surface++;
         }
 
-        unique_list_ptr->monrace_ids.push_back(monrace_id);
+        unique_list.monrace_ids.push_back(monrace_id);
     }
 
-    const auto &monraces = MonraceList::get_instance();
-    std::stable_sort(unique_list_ptr->monrace_ids.begin(), unique_list_ptr->monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
-    display_uniques(unique_list_ptr, fff);
+    std::stable_sort(unique_list.monrace_ids.begin(), unique_list.monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
+    display_uniques(&unique_list, fff);
     angband_fclose(fff);
-    concptr title_desc = unique_list_ptr->is_alive ? _("まだ生きているユニーク・モンスター", "Alive Uniques") : _("もう撃破したユニーク・モンスター", "Dead Uniques");
+    concptr title_desc = unique_list.is_alive ? _("まだ生きているユニーク・モンスター", "Alive Uniques") : _("もう撃破したユニーク・モンスター", "Dead Uniques");
     FileDisplayer(player_ptr->name).display(true, file_name, 0, 0, title_desc);
     fd_kill(file_name);
 }
