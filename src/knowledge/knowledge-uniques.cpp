@@ -23,6 +23,8 @@ struct unique_list_type {
     int num_uniques_over100 = 0;
     int num_uniques_total = 0;
     int max_lev = -1;
+
+    void count_uniques();
 };
 
 unique_list_type::unique_list_type(bool is_alive)
@@ -40,7 +42,6 @@ unique_list_type::unique_list_type(bool is_alive)
 static bool sweep_uniques(MonraceDefinition *r_ptr, bool is_alive)
 {
     if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-
         return false;
     }
 
@@ -64,6 +65,36 @@ static bool sweep_uniques(MonraceDefinition *r_ptr, bool is_alive)
     }
 
     return true;
+}
+
+void unique_list_type::count_uniques()
+{
+    auto &monraces = MonraceList::get_instance();
+    for (auto &[monrace_id, monrace] : monraces) {
+        if (!monrace.is_valid() || !sweep_uniques(&monrace, this->is_alive)) {
+            continue;
+        }
+
+        if (!monrace.level) {
+            this->num_uniques_surface++;
+            this->monrace_ids.push_back(monrace_id);
+            continue;
+        }
+
+        const auto lev = (monrace.level - 1) / 10;
+        if (lev >= 10) {
+            this->num_uniques_over100++;
+            this->monrace_ids.push_back(monrace_id);
+            continue;
+        }
+
+        this->num_uniques[lev]++;
+        if (this->max_lev < lev) {
+            this->max_lev = lev;
+        }
+
+        this->monrace_ids.push_back(monrace_id);
+    }
 }
 
 static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
@@ -131,32 +162,8 @@ void do_cmd_knowledge_uniques(PlayerType *player_ptr, bool is_alive)
         return;
     }
 
-    auto &monraces = MonraceList::get_instance();
-    for (auto &[monrace_id, monrace] : monraces) {
-        if (!monrace.is_valid()) {
-            continue;
-        }
-        if (!sweep_uniques(&monrace, unique_list.is_alive)) {
-            continue;
-        }
-
-        if (monrace.level) {
-            int lev = (monrace.level - 1) / 10;
-            if (lev < 10) {
-                unique_list.num_uniques[lev]++;
-                if (unique_list.max_lev < lev) {
-                    unique_list.max_lev = lev;
-                }
-            } else {
-                unique_list.num_uniques_over100++;
-            }
-        } else {
-            unique_list.num_uniques_surface++;
-        }
-
-        unique_list.monrace_ids.push_back(monrace_id);
-    }
-
+    unique_list.count_uniques();
+    const auto &monraces = MonraceList::get_instance();
     std::stable_sort(unique_list.monrace_ids.begin(), unique_list.monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
     display_uniques(&unique_list, fff);
     angband_fclose(fff);
