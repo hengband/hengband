@@ -13,8 +13,9 @@
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 
-struct unique_list_type {
-    unique_list_type(bool is_alive);
+class UniqueList {
+public:
+    UniqueList(bool is_alive);
     int num_uniques[10]{};
     bool is_alive;
     std::vector<MonraceId> monrace_ids{};
@@ -26,12 +27,12 @@ struct unique_list_type {
     void sweep();
 };
 
-unique_list_type::unique_list_type(bool is_alive)
+UniqueList::UniqueList(bool is_alive)
     : is_alive(is_alive)
 {
 }
 
-void unique_list_type::sweep()
+void UniqueList::sweep()
 {
     auto &monraces = MonraceList::get_instance();
     for (auto &[monrace_id, monrace] : monraces) {
@@ -61,7 +62,7 @@ void unique_list_type::sweep()
     }
 }
 
-static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
+static void display_uniques(UniqueList *unique_list_ptr, FILE *fff)
 {
     if (unique_list_ptr->num_uniques_surface) {
         concptr surface_desc = unique_list_ptr->is_alive ? _("     地上  生存: %3d体\n", "      Surface  alive: %3d\n")
@@ -119,7 +120,7 @@ static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
  */
 void do_cmd_knowledge_uniques(PlayerType *player_ptr, bool is_alive)
 {
-    unique_list_type unique_list(is_alive);
+    UniqueList unique_list(is_alive);
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
     if (!open_temporary_file(&fff, file_name)) {
