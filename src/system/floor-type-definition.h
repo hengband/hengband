@@ -109,6 +109,7 @@ public:
     bool order_pet_dismission(short index1, short index2, short riding_index) const;
 
     ItemEntity make_gold() const;
+    std::optional<ItemEntity> try_make_instant_artifact() const;
 
     void reset_mproc();
     void reset_mproc_max();

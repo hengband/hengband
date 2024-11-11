@@ -228,6 +228,73 @@ ItemEntity FloorType::make_gold() const
 }
 
 /*!
+ * @brief INSTA_ART型の固定アーティファクトの生成を確率に応じて試行する
+ * @param item 生成に割り当てたいアイテムへの参照
+ * @return 生成に成功したらTRUEを返す
+ */
+std::optional<ItemEntity> FloorType::try_make_instant_artifact() const
+{
+    /*! @note 地上ではキャンセルする / No artifacts in the town */
+    if (!this->is_in_underground()) {
+        return std::nullopt;
+    }
+
+    /*! @note get_obj_index_hookによる指定がある場合は生成をキャンセルする / Themed object */
+    if (get_obj_index_hook) {
+        return std::nullopt;
+    }
+
+    /*! @note 全固定アーティファクト中からIDの若い順に生成対象とその確率を走査する / Check the artifact list (just the "specials") */
+    for (const auto &[fa_id, artifact] : ArtifactList::get_instance()) {
+        /*! @note 既に生成回数がカウントされたアーティファクト、QUESTITEMと非INSTA_ARTは除外 / Cannot make an artifact twice */
+        if (artifact.is_generated) {
+            continue;
+        }
+        if (artifact.gen_flags.has(ItemGenerationTraitType::QUESTITEM)) {
+            continue;
+        }
+        if (!(artifact.gen_flags.has(ItemGenerationTraitType::INSTA_ART))) {
+            continue;
+        }
+
+        /*! @note アーティファクト生成階が現在に対して足りない場合は高確率で1/(不足階層*2)を満たさないと生成リストに加えられない */
+        if (artifact.level > this->object_level) {
+            /* @note  / Acquire the "out-of-depth factor". Roll for out-of-depth creation. */
+            int d = (artifact.level - this->object_level) * 2;
+            if (!one_in_(d)) {
+                continue;
+            }
+        }
+
+        /*! @note 1/(レア度)の確率を満たさないと除外される / Artifact "rarity roll" */
+        if (!one_in_(artifact.rarity)) {
+            continue;
+        }
+
+        /*!
+         * @note INSTA_ART型固定アーティファクトのベースアイテムもチェック対象とする。
+         * ベースアイテムの生成階層が足りない場合1/(不足階層*5)を満たさないと除外される。
+         */
+        const auto &baseitems = BaseitemList::get_instance();
+        const auto &baseitem = baseitems.lookup_baseitem(artifact.bi_key);
+        if (baseitem.level > this->object_level) {
+            int d = (baseitem.level - this->object_level) * 5;
+            if (!one_in_(d)) {
+                continue;
+            }
+        }
+
+        //<! @note 前述の条件を満たしたら、後のIDのアーティファクトはチェックせずすぐ確定し生成処理に移す.
+        ItemEntity instant_artifact(artifact.bi_key);
+        instant_artifact.fa_id = fa_id;
+        return instant_artifact;
+    }
+
+    /*! @note 全INSTA_ART固定アーティファクトを試行しても決まらなかった場合 FALSEを返す / Failure */
+    return std::nullopt;
+}
+
+/*!
  * @brief モンスターの時限ステータスリストを初期化する
  * @details リストは逆順に走査し、死んでいるモンスターは初期化対象外とする
  */

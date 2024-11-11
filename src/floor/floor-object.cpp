@@ -6,7 +6,6 @@
  */
 
 #include "floor/floor-object.h"
-#include "artifact/fixed-art-generator.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -77,21 +76,21 @@ static void object_mention(PlayerType *player_ptr, ItemEntity &item)
     msg_format_wizard(player_ptr, CHEAT_OBJECT, _("%sを生成しました。", "%s was generated."), item_name.data());
 }
 
-static int get_base_floor(FloorType *floor_ptr, BIT_FLAGS mode, std::optional<int> rq_mon_level)
+static int get_base_floor(const FloorType &floor, BIT_FLAGS mode, std::optional<int> rq_mon_level)
 {
     if (any_bits(mode, AM_GREAT)) {
         if (rq_mon_level) {
             return *rq_mon_level + 10 + randint1(10);
         }
 
-        return floor_ptr->object_level + 15;
+        return floor.object_level + 15;
     }
 
     if (any_bits(mode, AM_GOOD)) {
-        return floor_ptr->object_level + 10;
+        return floor.object_level + 10;
     }
 
-    return floor_ptr->object_level;
+    return floor.object_level;
 }
 
 static void set_ammo_quantity(ItemEntity *j_ptr)
@@ -114,37 +113,45 @@ static void set_ammo_quantity(ItemEntity *j_ptr)
  */
 bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, std::optional<int> rq_mon_level)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto prob = any_bits(mode, AM_GOOD) ? 10 : 1000;
-    auto base = get_base_floor(floor_ptr, mode, rq_mon_level);
-    if (!one_in_(prob) || !make_artifact_special(player_ptr, j_ptr)) {
-        if (any_bits(mode, AM_GOOD) && !get_obj_index_hook) {
-            get_obj_index_hook = kind_is_good;
+    const auto apply = [player_ptr, j_ptr, mode] {
+        ItemMagicApplier(player_ptr, j_ptr, player_ptr->current_floor_ptr->object_level, mode).execute();
+        set_ammo_quantity(j_ptr);
+        if (cheat_peek) {
+            object_mention(player_ptr, *j_ptr);
         }
-
-        if (get_obj_index_hook) {
-            get_obj_index_prep();
+    };
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto prob = any_bits(mode, AM_GOOD) ? 10 : 1000;
+    const auto base = get_base_floor(floor, mode, rq_mon_level);
+    if (one_in_(prob)) {
+        const auto fa_opt = floor.try_make_instant_artifact();
+        if (fa_opt) {
+            *j_ptr = *fa_opt;
+            apply();
+            return true;
         }
-
-        auto bi_id = get_obj_index(floor_ptr, base, mode);
-        if (get_obj_index_hook) {
-            get_obj_index_hook = nullptr;
-            get_obj_index_prep();
-        }
-
-        if (bi_id == 0) {
-            return false;
-        }
-
-        j_ptr->generate(bi_id);
     }
 
-    ItemMagicApplier(player_ptr, j_ptr, floor_ptr->object_level, mode).execute();
-    set_ammo_quantity(j_ptr);
-    if (cheat_peek) {
-        object_mention(player_ptr, *j_ptr);
+    if (any_bits(mode, AM_GOOD) && !get_obj_index_hook) {
+        get_obj_index_hook = kind_is_good;
     }
 
+    if (get_obj_index_hook) {
+        get_obj_index_prep();
+    }
+
+    const auto bi_id = get_obj_index(&floor, base, mode);
+    if (get_obj_index_hook) {
+        get_obj_index_hook = nullptr;
+        get_obj_index_prep();
+    }
+
+    if (bi_id == 0) {
+        return false;
+    }
+
+    j_ptr->generate(bi_id);
+    apply();
     return true;
 }
 
