@@ -98,7 +98,7 @@ static bool decide_tunnel_planned_site(PlayerType *player_ptr, DungeonData *dd_p
     dd_ptr->tunn_n = 0;
     dd_ptr->wall_n = 0;
     if (randint1(player_ptr->current_floor_ptr->dun_level) > d_ptr->tunnel_percent) {
-        (void)build_tunnel2(player_ptr, dd_ptr, dd_ptr->centers[i].x, dd_ptr->centers[i].y, dd_ptr->tunnel_pos.x, dd_ptr->tunnel_pos.y, 2, 2);
+        (void)build_tunnel2(player_ptr, dd_ptr, dd_ptr->centers[i], dd_ptr->tunnel_pos, 2, 2);
     } else if (!build_tunnel(player_ptr, dd_ptr, dt_ptr, dd_ptr->centers[i], dd_ptr->tunnel_pos)) {
         dd_ptr->tunnel_fail_count++;
     }

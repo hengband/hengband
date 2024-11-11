@@ -361,41 +361,36 @@ static void short_seg_hack(
  * @brief 特定の壁(永久壁など)を避けながら部屋間の通路を作成する / This routine maps a path from (x1, y1) to (x2, y2) avoiding SOLID walls.
  * @todo 詳細要調査
  */
-bool build_tunnel2(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type, int cutoff)
+bool build_tunnel2(PlayerType *player_ptr, DungeonData *dd_ptr, const Pos2D &pos_start, const Pos2D &pos_end, int type, int cutoff)
 {
-    POSITION x3, y3, dx, dy;
-    POSITION changex, changey;
-    bool retval, firstsuccede;
-    Grid *g_ptr;
-
-    int length = distance(x1, y1, x2, y2);
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto length = distance(pos_start.x, pos_start.y, pos_end.x, pos_end.y);
+    auto &floor = *player_ptr->current_floor_ptr;
     if (length <= cutoff) {
-        retval = true;
-        short_seg_hack(player_ptr, dd_ptr, x1, y1, x2, y2, type, 0, &retval);
+        auto initial_failure = true;
+        short_seg_hack(player_ptr, dd_ptr, pos_start.x, pos_start.y, pos_end.x, pos_end.y, type, 0, &initial_failure);
         return true;
     }
 
-    dx = (x2 - x1) / 2;
-    dy = (y2 - y1) / 2;
-    changex = (randint0(abs(dy) + 2) * 2 - abs(dy) - 1) / 2;
-    changey = (randint0(abs(dx) + 2) * 2 - abs(dx) - 1) / 2;
-    x3 = x1 + dx + changex;
-    y3 = y1 + dy + changey;
-    if (!in_bounds(floor_ptr, y3, x3)) {
-        x3 = (x1 + x2) / 2;
-        y3 = (y1 + y2) / 2;
+    auto dx = (pos_end.x - pos_start.x) / 2;
+    auto dy = (pos_end.y - pos_start.y) / 2;
+    const auto changex = (randint0(abs(dy) + 2) * 2 - abs(dy) - 1) / 2;
+    const auto changey = (randint0(abs(dx) + 2) * 2 - abs(dx) - 1) / 2;
+    auto x = pos_start.x + dx + changex;
+    auto y = pos_start.y + dy + changey;
+    if (!in_bounds(&floor, y, x)) {
+        x = (pos_start.x + pos_end.x) / 2;
+        y = (pos_start.y + pos_end.y) / 2;
     }
 
-    g_ptr = &floor_ptr->grid_array[y3][x3];
+    const auto *g_ptr = &floor.grid_array[y][x];
     if (g_ptr->is_solid()) {
         int i = 50;
         dy = 0;
         dx = 0;
-        while ((i > 0) && floor_ptr->grid_array[y3 + dy][x3 + dx].is_solid()) {
+        while ((i > 0) && floor.grid_array[y + dy][x + dx].is_solid()) {
             dy = randint0(3) - 1;
             dx = randint0(3) - 1;
-            if (!in_bounds(floor_ptr, y3 + dy, x3 + dx)) {
+            if (!in_bounds(&floor, y + dy, x + dx)) {
                 dx = 0;
                 dy = 0;
             }
@@ -403,49 +398,51 @@ bool build_tunnel2(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION x1, POS
         }
 
         if (i == 0) {
-            place_bold(player_ptr, y3, x3, GB_OUTER);
+            place_bold(player_ptr, y, x, GB_OUTER);
             dx = 0;
             dy = 0;
         }
 
-        y3 += dy;
-        x3 += dx;
-        g_ptr = &floor_ptr->grid_array[y3][x3];
+        y += dy;
+        x += dx;
+        g_ptr = &floor.grid_array[y][x];
     }
 
-    const Pos2D pos3(y3, x3);
+    const Pos2D pos(y, x);
+    bool is_tunnel_built;
+    bool is_successful;
     if (g_ptr->is_floor()) {
-        if (build_tunnel2(player_ptr, dd_ptr, x1, y1, pos3.x, pos3.y, type, cutoff)) {
-            if (floor_ptr->grid_array[y3][x3].is_room() || (randint1(100) > 95)) {
-                retval = build_tunnel2(player_ptr, dd_ptr, pos3.x, pos3.y, x2, y2, type, cutoff);
+        if (build_tunnel2(player_ptr, dd_ptr, pos_start, pos, type, cutoff)) {
+            if (floor.grid_array[y][x].is_room() || (randint1(100) > 95)) {
+                is_tunnel_built = build_tunnel2(player_ptr, dd_ptr, pos, pos_end, type, cutoff);
             } else {
-                retval = false;
+                is_tunnel_built = false;
                 if (dd_ptr->door_n >= dd_ptr->doors.size()) {
                     return false;
                 }
 
-                dd_ptr->doors[dd_ptr->door_n] = pos3;
+                dd_ptr->doors[dd_ptr->door_n] = pos;
                 dd_ptr->door_n++;
             }
 
-            firstsuccede = true;
+            is_successful = true;
         } else {
-            retval = false;
-            firstsuccede = false;
+            is_tunnel_built = false;
+            is_successful = false;
         }
     } else {
-        if (build_tunnel2(player_ptr, dd_ptr, x1, y1, pos3.x, pos3.y, type, cutoff)) {
-            retval = build_tunnel2(player_ptr, dd_ptr, pos3.x, pos3.y, x2, y2, type, cutoff);
-            firstsuccede = true;
+        if (build_tunnel2(player_ptr, dd_ptr, pos_start, pos, type, cutoff)) {
+            is_tunnel_built = build_tunnel2(player_ptr, dd_ptr, pos, pos_end, type, cutoff);
+            is_successful = true;
         } else {
-            retval = false;
-            firstsuccede = false;
+            is_tunnel_built = false;
+            is_successful = false;
         }
     }
 
-    if (firstsuccede) {
-        (void)set_tunnel(player_ptr, dd_ptr, &x3, &y3, true);
+    if (is_successful) {
+        (void)set_tunnel(player_ptr, dd_ptr, &x, &y, true);
     }
 
-    return retval;
+    return is_tunnel_built;
 }
