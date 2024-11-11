@@ -1,4 +1,5 @@
 #include "system/monster-race-info.h"
+#include "game-option/cheat-options.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-table.h"
 #include "monster-race/race-resistance-mask.h"
@@ -444,6 +445,34 @@ void MonraceDefinition::emplace_reinforce(MonraceId monrace_id, const Dice &dice
 bool MonraceDefinition::has_entity() const
 {
     return this->cur_num > 0;
+}
+
+/*!
+ * @brief モンスターリストを走査し、生きているか死んでいるユニークだけを抽出する
+ * @param is_alive 生きているユニークのリストならばTRUE、撃破したユニークのリストならばFALSE
+ * @return is_aliveの条件に見合うユニークがいたらTRUE、それ以外はFALSE
+ * @details 闘技場のモンスターとは再戦できないので、生きているなら表示から外す
+ */
+bool MonraceDefinition::should_display(bool is_alive) const
+{
+    if (this->kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        return false;
+    }
+
+    if (!cheat_know && !this->r_sights) {
+        return false;
+    }
+
+    const auto is_except_arena = is_alive ? (this->rarity > 100) && (this->misc_flags.has_not(MonsterMiscType::QUESTOR)) : false;
+    if (is_except_arena) {
+        return false;
+    }
+
+    if (is_alive) {
+        return this->max_num > 0;
+    }
+
+    return this->max_num == 0;
 }
 
 void MonraceDefinition::reset_current_numbers()

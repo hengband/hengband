@@ -6,7 +6,6 @@
 
 #include "knowledge/knowledge-uniques.h"
 #include "core/show-file.h"
-#include "game-option/cheat-options.h"
 #include "io-dump/dump-util.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -24,7 +23,7 @@ struct unique_list_type {
     int num_uniques_total = 0;
     int max_lev = -1;
 
-    void count_uniques();
+    void sweep();
 };
 
 unique_list_type::unique_list_type(bool is_alive)
@@ -32,46 +31,11 @@ unique_list_type::unique_list_type(bool is_alive)
 {
 }
 
-/*!
- * @brief モンスターリストを走査し、生きているか死んでいるユニークだけを抽出する
- * @param r_ptr モンスター種別への参照ポインタ
- * @param is_alive 生きているユニークのリストならばTRUE、撃破したユニークのリストならばFALSE
- * @return is_aliveの条件に見合うユニークがいたらTRUE、それ以外はFALSE
- * @details 闘技場のモンスターとは再戦できないので、生きているなら表示から外す
- */
-static bool sweep_uniques(MonraceDefinition *r_ptr, bool is_alive)
-{
-    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        return false;
-    }
-
-    if (!cheat_know && !r_ptr->r_sights) {
-        return false;
-    }
-
-    const auto is_except_arena = is_alive ? (r_ptr->rarity > 100) && (r_ptr->misc_flags.has_not(MonsterMiscType::QUESTOR)) : false;
-    if (is_except_arena) {
-        return false;
-    }
-
-    if (is_alive) {
-        if (r_ptr->max_num == 0) {
-            return false;
-        }
-    } else {
-        if (r_ptr->max_num > 0) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-void unique_list_type::count_uniques()
+void unique_list_type::sweep()
 {
     auto &monraces = MonraceList::get_instance();
     for (auto &[monrace_id, monrace] : monraces) {
-        if (!monrace.is_valid() || !sweep_uniques(&monrace, this->is_alive)) {
+        if (!monrace.is_valid() || !monrace.should_display(this->is_alive)) {
             continue;
         }
 
@@ -162,7 +126,7 @@ void do_cmd_knowledge_uniques(PlayerType *player_ptr, bool is_alive)
         return;
     }
 
-    unique_list.count_uniques();
+    unique_list.sweep();
     const auto &monraces = MonraceList::get_instance();
     std::stable_sort(unique_list.monrace_ids.begin(), unique_list.monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
     display_uniques(&unique_list, fff);

@@ -150,6 +150,7 @@ public:
 
     //!< @todo ここから先はミュータブルなフィールドなので分離すべき.
     bool has_entity() const;
+    bool should_display(bool is_alive) const;
 
     void reset_current_numbers();
     void increment_current_numbers();
