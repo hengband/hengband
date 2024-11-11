@@ -109,8 +109,6 @@ bool ArtifactType::evaluate_shallow_baseitem(int making_level) const
     return one_in_((baseitem.level - making_level) * 5);
 }
 
-std::map<FixedArtifactId, ArtifactType> artifacts;
-
 ArtifactList ArtifactList::instance{};
 
 ArtifactType ArtifactList::dummy{};
