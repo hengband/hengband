@@ -72326,7 +72326,7 @@
           "damage_dice": "5d2"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "5d2"
         }
@@ -72371,7 +72371,7 @@
           "damage_dice": "7d3"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "7d3"
         }
@@ -73067,12 +73067,12 @@
       "exp": 2000,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "5d10"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "5d10"
         }
@@ -73125,7 +73125,7 @@
       "exp": 2000,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "5d10"
         },
@@ -74338,7 +74338,7 @@
       "exp": 6,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "3d1"
         }
@@ -77521,12 +77521,12 @@
       "sex": "MALE",
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "LOSE_INT",
           "damage_dice": "10d11"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "LOSE_WIS",
           "damage_dice": "10d11"
         },
@@ -77722,7 +77722,7 @@
           "damage_dice": "4d6"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "4d6"
         }
@@ -77786,7 +77786,7 @@
           "damage_dice": "7d6"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "7d6"
         }
@@ -77852,7 +77852,7 @@
           "damage_dice": "8d8"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "8d9"
         }
@@ -77921,7 +77921,7 @@
           "damage_dice": "12d11"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "8d11"
         }
@@ -79055,7 +79055,7 @@
           "damage_dice": "12d11"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "FIRE",
           "damage_dice": "30d2"
         }
@@ -79207,7 +79207,7 @@
       "sex": "MALE",
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "1d13"
         },
@@ -80039,7 +80039,7 @@
           "damage_dice": "3d3"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "PARALYZE",
           "damage_dice": "3d4"
         }
@@ -80093,7 +80093,7 @@
           "damage_dice": "3d10"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "SUPERHURT",
           "damage_dice": "3d12"
         }
@@ -80448,7 +80448,7 @@
       "exp": 15000,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "SUPERHURT",
           "damage_dice": "6d12"
         },
@@ -81004,12 +81004,12 @@
       "exp": 350,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "SHATTER",
           "damage_dice": "6d6"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "TERRIFY",
           "damage_dice": "6d6"
         }
@@ -81054,12 +81054,12 @@
       "exp": 7000,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "SHATTER",
           "damage_dice": "7d12"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "TERRIFY",
           "damage_dice": "7d12"
         }
@@ -81459,12 +81459,12 @@
           "damage_dice": "4d8"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "6d10"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "6d10"
         }
@@ -83724,7 +83724,7 @@
       "exp": 12,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "3d6"
         }
@@ -85019,12 +85019,12 @@
           "damage_dice": "1d20"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "ELEC",
           "damage_dice": "3d33"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "ELEC",
           "damage_dice": "3d33"
         }
@@ -85082,7 +85082,7 @@
       "exp": 500,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "1d10"
         }
@@ -85427,17 +85427,17 @@
       "exp": 600,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "3d6"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "3d6"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "3d6"
         }
@@ -86767,7 +86767,7 @@
           "damage_dice": "10d10"
         },
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "HURT",
           "damage_dice": "8d13"
         },
@@ -86845,7 +86845,7 @@
       "sex": "MALE",
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "CRASH",
           "effect": "CHAOS",
           "damage_dice": "12d6"
         },
