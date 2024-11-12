@@ -397,6 +397,7 @@ public:
     bool in_saved_floor() const;
     int calc_life_rating() const;
     bool try_resist_eldritch_horror() const;
+    int point_direction(const Pos2D &pos) const;
 
 private:
     std::shared_ptr<TimedEffects> timed_effects;

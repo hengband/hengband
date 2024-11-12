@@ -112,7 +112,7 @@ void do_cmd_open(PlayerType *player_ptr)
             const auto pos = pos_chest == Pos2D(0, 0) ? pos_door : pos_chest;
             const auto too_many = (num_doors && num_chests) || (num_doors > 1) || (num_chests > 1);
             if (!too_many) {
-                command_dir = coords_to_dir(player_ptr, pos.y, pos.x);
+                command_dir = player_ptr->point_direction(pos);
             }
         }
     }
@@ -163,7 +163,7 @@ void do_cmd_close(PlayerType *player_ptr)
     if (easy_open) {
         const auto &[num_doors, pos] = floor.count_doors_traps(player_ptr->get_position(), GridCountKind::OPEN, false);
         if (num_doors == 1) {
-            command_dir = coords_to_dir(player_ptr, pos.y, pos.x);
+            command_dir = player_ptr->point_direction(pos);
         }
     }
 
@@ -213,7 +213,7 @@ void do_cmd_disarm(PlayerType *player_ptr)
             const auto pos = pos_chest == Pos2D(0, 0) ? pos_trap : pos_chest;
             const auto too_many = (num_traps && num_chests) || (num_traps > 1) || (num_chests > 1);
             if (!too_many) {
-                command_dir = coords_to_dir(player_ptr, pos.y, pos.x);
+                command_dir = player_ptr->point_direction(pos);
             }
         }
     }
