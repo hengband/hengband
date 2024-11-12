@@ -249,7 +249,7 @@ bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y,
     ItemEntity item(artifact.bi_key);
     item.fa_id = a_idx;
     apply_artifact(player_ptr, &item);
-    if (drop_near(player_ptr, &item, -1, y, x) == 0) {
+    if (drop_near(player_ptr, &item, { y, x }) == 0) {
         return false;
     }
 

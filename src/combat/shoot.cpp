@@ -924,10 +924,9 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
         /* Chance of breakage (during attacks) */
         auto j = (hit_body ? breakage_chance(player_ptr, &fire_item, PlayerClass(player_ptr).equals(PlayerClassType::ARCHER), snipe_type) : 0);
-
+        const Pos2D pos_impact(y, x);
         if (stick_to) {
-            const auto m_idx = floor.grid_array[y][x].m_idx;
-            auto &monster = floor.m_list[m_idx];
+            const auto m_idx = floor.get_grid(pos_impact).m_idx;
             const auto item_idx = floor.pop_empty_index_item();
             if (item_idx == 0) {
                 msg_format(_("%sはどこかへ行った。", "The %s went somewhere."), item_name.data());
@@ -949,13 +948,14 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             floor.o_list[item_idx] = std::move(fire_item);
 
             /* Carry object */
+            auto &monster = floor.m_list[m_idx];
             monster.hold_o_idx_list.add(&floor, item_idx);
-        } else if (floor.has_terrain_characteristics({ y, x }, TerrainCharacteristics::PROJECT)) {
+        } else if (floor.has_terrain_characteristics(pos_impact, TerrainCharacteristics::PROJECT)) {
             /* Drop (or break) near that location */
-            (void)drop_near(player_ptr, &fire_item, j, y, x);
+            (void)drop_near(player_ptr, &fire_item, pos_impact, j);
         } else {
             /* Drop (or break) near that location */
-            (void)drop_near(player_ptr, &fire_item, j, prev_y, prev_x);
+            (void)drop_near(player_ptr, &fire_item, { prev_y, prev_x }, j);
         }
 
         /* Sniper - Repeat shooting when double shots */

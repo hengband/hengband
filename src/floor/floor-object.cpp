@@ -268,29 +268,13 @@ ObjectIndexList &get_o_idx_list_contains(FloorType *floor_ptr, OBJECT_IDX o_idx)
 }
 
 /*!
- * @brief 生成済のオブジェクトをフロアの所定の位置に落とす。
- * Let an object fall to the ground at or near a location.
+ * @brief アイテムを所定の位置に落とす。
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param j_ptr 落としたいオブジェクト構造体の参照ポインタ
- * @param chance ドロップの消滅率(%)
- * @param y 配置したいフロアのY座標
- * @param x 配置したいフロアのX座標
- * @return 生成に成功したらオブジェクトのIDを返す。
- * @details
- * The initial location is assumed to be "in_bounds(floor, )".\n
- *\n
- * This function takes a parameter "chance".  This is the percentage\n
- * chance that the item will "disappear" instead of drop.  If the object\n
- * has been thrown, then this is the chance of disappearance on contact.\n
- *\n
- * Hack -- this function uses "chance" to determine if it should produce\n
- * some form of "description" of the drop event (under the player).\n
- *\n
- * We check several locations to see if we can find a location at which\n
- * the object can combine, stack, or be placed.  Artifacts will try very\n
- * hard to be placed, including "teleporting" to a useful grid if needed.\n
+ * @param j_ptr 落としたいアイテムへの参照ポインタ
+ * @param pos 配置したい座標
+ * @param chance 投擲物の消滅率(%)。投擲物以外はnullopt
  */
-OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chance, POSITION y, POSITION x)
+short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std::optional<int> chance)
 {
     int i, k, d, s;
     POSITION dy, dx;
@@ -304,7 +288,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
 #endif
     const auto &world = AngbandWorld::get_instance();
     const auto item_name = describe_flavor(player_ptr, *j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    if (!j_ptr->is_fixed_or_random_artifact() && evaluate_percent(chance)) {
+    if (!j_ptr->is_fixed_or_random_artifact() && chance && evaluate_percent(*chance)) {
 #ifdef JP
         msg_format("%sは消えた。", item_name.data());
 #else
@@ -320,8 +304,8 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
     int bs = -1;
     int bn = 0;
 
-    POSITION by = y;
-    POSITION bx = x;
+    auto by = pos.y;
+    auto bx = pos.x;
     auto &floor = *player_ptr->current_floor_ptr;
     for (dy = -3; dy <= 3; dy++) {
         for (dx = -3; dx <= 3; dx++) {
@@ -331,13 +315,13 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
                 continue;
             }
 
-            ty = y + dy;
-            tx = x + dx;
+            ty = pos.y + dy;
+            tx = pos.x + dx;
             const Pos2D pos_target(ty, tx);
             if (!in_bounds(&floor, ty, tx)) {
                 continue;
             }
-            if (!projectable(player_ptr, { y, x }, pos_target)) {
+            if (!projectable(player_ptr, pos, pos_target)) {
                 continue;
             }
 
