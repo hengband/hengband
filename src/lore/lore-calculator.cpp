@@ -46,44 +46,6 @@ std::string dice_to_string(int base_damage, int dice_num, int dice_side, int dic
 }
 
 /*!
- * @brief モンスターの打撃威力を知ることができるかどうかを返す
- * Determine if the "damage" of the given attack is known
- * @param r_idx モンスターの種族ID
- * @param i 確認したい攻撃手番
- * @return 敵のダメージダイスを知る条件が満たされているならtrue、そうでないならfalse
- * @details
- * <pre>
- * the higher the level of the monster, the fewer the attacks you need,
- * the more damage an attack does, the more attacks you need
- * </pre>
- */
-bool know_blow_damage(MonraceId r_idx, int i)
-{
-    const auto &monrace = monraces_info[r_idx];
-    auto level = monrace.level;
-    auto a = monrace.r_blows[i];
-    auto d = monrace.blows[i].damage_dice.maxroll();
-
-    if (d >= ((4 + level) * MAX_UCHAR) / 80) {
-        d = ((4 + level) * MAX_UCHAR - 1) / 80;
-    }
-
-    if ((4 + level) * a > 80 * d) {
-        return true;
-    }
-
-    if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        return false;
-    }
-
-    if ((4 + level) * (2 * a) > 80 * d) {
-        return true;
-    }
-
-    return false;
-}
-
-/*!
  * @brief lore_ptrにダメージを与えるスキルの情報を追加する
  * @param lore_ptr 知識情報
  * @param ms_type スキル

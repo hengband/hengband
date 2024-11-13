@@ -152,6 +152,7 @@ public:
     bool has_entity() const;
     bool should_display(bool is_alive) const;
     bool is_details_known() const;
+    bool is_blow_damage_known(int num_blow) const;
 
     void reset_current_numbers();
     void increment_current_numbers();

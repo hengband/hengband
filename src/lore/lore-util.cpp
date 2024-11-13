@@ -68,6 +68,11 @@ bool lore_type::is_details_known() const
     return MonraceList::get_instance().get_monrace(this->r_idx).is_details_known();
 }
 
+bool lore_type::is_blow_damage_known(int num_blow) const
+{
+    return MonraceList::get_instance().get_monrace(this->r_idx).is_blow_damage_known(num_blow);
+}
+
 std::vector<lore_msg> lore_type::build_speed_description() const
 {
     std::vector<lore_msg> texts;
