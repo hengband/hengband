@@ -475,6 +475,24 @@ bool MonraceDefinition::should_display(bool is_alive) const
     return this->max_num == 0;
 }
 
+/*!
+ * @brief 詳細情報(HP,AC,スキルダメージの量)を得ることができるかを返す
+ * @return モンスターの詳細情報を得る条件が満たされているか否か
+ * @details 高レベルモンスターほど撃破数は少なくても詳細を知ることができる
+ */
+bool MonraceDefinition::is_details_known() const
+{
+    if ((this->r_cast_spell == MAX_UCHAR) || (this->r_tkills > 304 / (4 + this->level))) {
+        return true;
+    }
+
+    if (this->kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        return false;
+    }
+
+    return this->r_tkills > 304 / (38 + (5 * this->level) / 4);
+}
+
 void MonraceDefinition::reset_current_numbers()
 {
     this->cur_num = 0;

@@ -516,7 +516,7 @@ void display_monster_launching(PlayerType *player_ptr, lore_type *lore_ptr)
     }
 
     std::string msg;
-    if (know_details(lore_ptr->r_idx) || lore_ptr->know_everything) {
+    if (lore_ptr->is_details_known() || lore_ptr->know_everything) {
         msg = format(_("威力 %s の射撃をする", "fire an arrow (Power:%s)"), lore_ptr->r_ptr->shoot_damage_dice.to_string().data());
     } else {
         msg = _("射撃をする", "fire an arrow");

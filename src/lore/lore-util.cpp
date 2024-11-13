@@ -63,6 +63,11 @@ bool lore_type::has_reinforce() const
     return this->r_ptr->has_reinforce();
 }
 
+bool lore_type::is_details_known() const
+{
+    return MonraceList::get_instance().get_monrace(this->r_idx).is_details_known();
+}
+
 std::vector<lore_msg> lore_type::build_speed_description() const
 {
     std::vector<lore_msg> texts;
