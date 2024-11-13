@@ -407,23 +407,23 @@ bool MonsterSweepGrid::sweep_runnable_away_grid(POSITION *yp, POSITION *xp)
 {
     auto gy = 0;
     auto gx = 0;
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-    auto fy = m_ptr->fy;
-    auto fx = m_ptr->fx;
-    auto y1 = fy - *yp;
-    auto x1 = fx - *xp;
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    const auto &monster = floor.m_list[this->m_idx];
+    const auto &monrace = monster.get_monrace();
+    const auto m_pos = monster.get_position();
+    auto y1 = m_pos.y - *yp;
+    auto x1 = m_pos.x - *xp;
     auto score = -1;
     for (auto i = 7; i >= 0; i--) {
-        auto y = fy + ddy_ddd[i];
-        auto x = fx + ddx_ddd[i];
-        if (!in_bounds2(floor_ptr, y, x)) {
+        auto y = m_pos.y + ddy_ddd[i];
+        auto x = m_pos.x + ddx_ddd[i];
+        if (!in_bounds2(&floor, y, x)) {
             continue;
         }
 
-        const auto dis = Grid::calc_distance({ y, x }, { y1, x1 });
-        auto s = 5000 / (dis + 3) - 500 / (floor_ptr->grid_array[y][x].get_distance(r_ptr->get_grid_flow_type()) + 1);
+        const Pos2D pos(y, x);
+        const auto dis = Grid::calc_distance(pos, { y1, x1 });
+        auto s = 5000 / (dis + 3) - 500 / (floor.get_grid(pos).get_distance(monrace.get_grid_flow_type()) + 1);
         if (s < 0) {
             s = 0;
         }
@@ -441,8 +441,8 @@ bool MonsterSweepGrid::sweep_runnable_away_grid(POSITION *yp, POSITION *xp)
         return false;
     }
 
-    *yp = fy - gy;
-    *xp = fx - gx;
+    *yp = m_pos.y - gy;
+    *xp = m_pos.x - gx;
     return true;
 }
 
