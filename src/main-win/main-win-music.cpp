@@ -110,7 +110,7 @@ static std::optional<std::string> town_key_at(int index)
  */
 static std::optional<std::string> monster_key_at(int index)
 {
-    if (index >= static_cast<int>(monraces_info.size())) {
+    if (index >= static_cast<int>(MonraceList::get_instance().size())) {
         return std::nullopt;
     }
 
