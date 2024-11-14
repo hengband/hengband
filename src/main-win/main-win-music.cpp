@@ -167,30 +167,30 @@ void stop_music()
 /*
  * Play a music
  */
-errr play_music(int type, int val)
+bool play_music(int type, int val)
 {
     if (type == TERM_XTRA_MUSIC_MUTE) {
         stop_music();
-        return 0;
+        return true;
     }
 
     if (current_music_type == type && current_music_id == val) {
-        return 0;
+        return true;
     } // now playing
 
     if (!music_cfg_data) {
-        return 1;
+        return false;
     }
 
     auto filename = music_cfg_data->get_rand(type, val);
     if (!filename) {
-        return 1;
+        return false;
     } // no setting
 
     auto path_music = path_build(ANGBAND_DIR_XTRA_MUSIC, *filename);
     if (current_music_type != TERM_XTRA_MUSIC_MUTE) {
         if (current_music_path == path_music) {
-            return 0;
+            return true;
         }
     } // now playing same file
 
@@ -205,7 +205,7 @@ errr play_music(int type, int val)
     mciSendCommandW(mci_open_parms.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);
     mciSendCommandW(mci_open_parms.wDeviceID, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT | MCI_NOTIFY, (DWORD)&mci_open_parms);
     // Send MCI_PLAY in the notification event once MCI_OPEN is completed
-    return 0;
+    return true;
 }
 
 /*
@@ -231,9 +231,8 @@ errr play_music_scene(int val)
 {
     // リストの先頭から順に再生を試み、再生できたら抜ける
     auto &list = get_scene_type_list(val);
-    const errr err_sucsess = 0;
     for (auto &item : list) {
-        if (play_music(item.type, item.val) == err_sucsess) {
+        if (play_music(item.type, item.val)) {
             break;
         }
     }

@@ -923,10 +923,10 @@ static errr term_xtra_win_sound(int v)
 /*!
  * @brief Hack -- play a music
  */
-static errr term_xtra_win_music(int n, int v)
+static bool term_xtra_win_music(int n, int v)
 {
     if (!use_music) {
-        return 1;
+        return false;
     }
 
     return main_win_music::play_music(n, v);
@@ -976,7 +976,7 @@ static errr term_xtra_win(int n, int v)
     case TERM_XTRA_MUSIC_QUEST:
     case TERM_XTRA_MUSIC_TOWN:
     case TERM_XTRA_MUSIC_MONSTER: {
-        return term_xtra_win_music(n, v);
+        return term_xtra_win_music(n, v) ? 0 : 1;
     }
     case TERM_XTRA_MUSIC_MUTE:
         main_win_music::stop_music();
