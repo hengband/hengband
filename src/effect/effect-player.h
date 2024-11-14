@@ -22,6 +22,7 @@ public:
     AttributeType attribute;
     BIT_FLAGS flag;
 
+    bool is_player() const;
     bool is_monster() const;
 };
 

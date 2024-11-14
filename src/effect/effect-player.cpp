@@ -60,6 +60,11 @@ EffectPlayerType::EffectPlayerType(const FloorType &floor, short src_idx, int da
     this->src_ptr = this->is_monster() ? &floor.m_list[src_idx] : nullptr;
 }
 
+bool EffectPlayerType::is_player() const
+{
+    return this->src_idx == 0;
+}
+
 bool EffectPlayerType::is_monster() const
 {
     return this->src_idx > 0;
@@ -138,7 +143,7 @@ static ProcessResult check_continue_player_effect(PlayerType *player_ptr, Effect
         return ProcessResult::PROCESS_FALSE;
     }
 
-    if (is_player(ep_ptr->src_idx) || (ep_ptr->src_ptr && ep_ptr->src_ptr->is_riding())) {
+    if (ep_ptr->is_player() || (ep_ptr->src_ptr && ep_ptr->src_ptr->is_riding())) {
         return ProcessResult::PROCESS_FALSE;
     }
 
