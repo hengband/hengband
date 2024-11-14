@@ -935,14 +935,15 @@ static bool term_xtra_win_music(int n, int v)
 /*!
  * @brief Hack -- play a music matches a situation
  */
-static errr term_xtra_win_scene(int v)
+static bool term_xtra_win_scene(int v)
 {
     // TODO 場面に合った壁紙変更対応
     if (!use_music) {
-        return 1;
+        return false;
     }
 
-    return main_win_music::play_music_scene(v);
+    main_win_music::play_music_scene(v);
+    return true;
 }
 
 /*!
@@ -982,7 +983,7 @@ static errr term_xtra_win(int n, int v)
         main_win_music::stop_music();
         return 0;
     case TERM_XTRA_SCENE: {
-        return term_xtra_win_scene(v);
+        return term_xtra_win_scene(v) ? 0 : 1;
     }
     case TERM_XTRA_SOUND: {
         return term_xtra_win_sound(v);

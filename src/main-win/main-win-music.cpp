@@ -6,11 +6,13 @@
 #include "main-win/main-win-music.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
+#include "main-win/main-win-cfg-reader.h"
 #include "main-win/main-win-define.h"
 #include "main-win/main-win-mci.h"
 #include "main-win/main-win-mmsystem.h"
 #include "main-win/main-win-tokenizer.h"
 #include "main-win/main-win-utils.h"
+#include "main/music-definitions-table.h"
 #include "main/scene-table.h"
 #include "main/sound-of-music.h"
 #include "system/dungeon-info.h"
@@ -227,7 +229,7 @@ void resume_music(void)
 /*
  * Play a music matches a situation
  */
-errr play_music_scene(int val)
+void play_music_scene(int val)
 {
     // リストの先頭から順に再生を試み、再生できたら抜ける
     auto &list = get_scene_type_list(val);
@@ -236,8 +238,6 @@ errr play_music_scene(int val)
             break;
         }
     }
-
-    return 0;
 }
 
 void set_music_volume(int volume)
