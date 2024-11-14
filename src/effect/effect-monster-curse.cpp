@@ -67,7 +67,7 @@ ProcessResult effect_monster_curse_4(EffectMonster *em_ptr)
             em_ptr->m_name);
     }
 
-    if ((randint0(100 + (em_ptr->caster_lev / 2)) < (em_ptr->r_ptr->level + 35)) && (!is_monster(em_ptr->src_idx) || (em_ptr->m_caster_ptr->r_idx != MonraceId::KENSHIROU))) {
+    if ((randint0(100 + (em_ptr->caster_lev / 2)) < (em_ptr->r_ptr->level + 35)) && (!em_ptr->is_monster() || (em_ptr->m_caster_ptr->r_idx != MonraceId::KENSHIROU))) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->dam = 0;
     }

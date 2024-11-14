@@ -65,7 +65,7 @@ static ProcessResult is_affective(EffectMonster *em_ptr)
     if (!em_ptr->g_ptr->has_monster()) {
         return ProcessResult::PROCESS_FALSE;
     }
-    if (is_monster(em_ptr->src_idx) && (em_ptr->g_ptr->m_idx == em_ptr->src_idx)) {
+    if (em_ptr->is_monster() && (em_ptr->g_ptr->m_idx == em_ptr->src_idx)) {
         return ProcessResult::PROCESS_FALSE;
     }
     if (sukekaku && ((em_ptr->m_ptr->r_idx == MonraceId::SUKE) || (em_ptr->m_ptr->r_idx == MonraceId::KAKU))) {
@@ -74,7 +74,7 @@ static ProcessResult is_affective(EffectMonster *em_ptr)
     if (em_ptr->m_ptr->hp < 0) {
         return ProcessResult::PROCESS_FALSE;
     }
-    if (is_monster(em_ptr->src_idx) || !em_ptr->m_ptr->is_riding()) {
+    if (em_ptr->is_monster() || !em_ptr->m_ptr->is_riding()) {
         return ProcessResult::PROCESS_TRUE;
     }
 
@@ -187,7 +187,7 @@ static void effect_damage_killed_pet(PlayerType *player_ptr, EffectMonster *em_p
         }
     }
 
-    if (is_monster(em_ptr->src_idx)) {
+    if (em_ptr->is_monster()) {
         monster_gain_exp(player_ptr, em_ptr->src_idx, em_ptr->m_ptr->r_idx);
     }
 
@@ -232,7 +232,7 @@ static void effect_damage_makes_sleep(PlayerType *player_ptr, EffectMonster *em_
  */
 static bool deal_effect_damage_from_monster(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
-    if (!is_monster(em_ptr->src_idx)) {
+    if (!em_ptr->is_monster()) {
         return false;
     }
 
@@ -361,7 +361,7 @@ static void deal_effect_damage_to_monster(PlayerType *player_ptr, EffectMonster 
  */
 static void effect_makes_change_virtues(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
-    if (is_monster(em_ptr->src_idx) || !em_ptr->slept) {
+    if (em_ptr->is_monster() || !em_ptr->slept) {
         return;
     }
 
@@ -391,7 +391,7 @@ static void affected_monster_prevents_bad_status(EffectMonster *em_ptr)
     auto should_alive = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     should_alive |= r_ptr->misc_flags.has(MonsterMiscType::QUESTOR);
     should_alive |= r_ptr->population_flags.has(MonsterPopulationType::NAZGUL);
-    if (should_alive && !AngbandSystem::get_instance().is_phase_out() && is_monster(em_ptr->src_idx) && (em_ptr->dam > em_ptr->m_ptr->hp)) {
+    if (should_alive && !AngbandSystem::get_instance().is_phase_out() && em_ptr->is_monster() && (em_ptr->dam > em_ptr->m_ptr->hp)) {
         em_ptr->dam = em_ptr->m_ptr->hp;
     }
 }
@@ -546,11 +546,11 @@ static void effect_damage_makes_teleport(PlayerType *player_ptr, EffectMonster *
 
     em_ptr->note = _("が消え去った！", " disappears!");
 
-    if (is_monster(em_ptr->src_idx)) {
+    if (em_ptr->is_monster()) {
         chg_virtue(player_ptr, Virtue::VALOUR, -1);
     }
 
-    teleport_flags tflag = i2enum<teleport_flags>((is_monster(em_ptr->src_idx) ? TELEPORT_DEC_VALOUR : TELEPORT_SPONTANEOUS) | TELEPORT_PASSIVE);
+    teleport_flags tflag = i2enum<teleport_flags>((em_ptr->is_monster() ? TELEPORT_DEC_VALOUR : TELEPORT_SPONTANEOUS) | TELEPORT_PASSIVE);
     teleport_away(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_dist, tflag);
 
     em_ptr->y = em_ptr->m_ptr->fy;
@@ -647,7 +647,7 @@ static void postprocess_by_effected_pet(PlayerType *player_ptr, EffectMonster *e
     }
 
     const auto &m_caster_ref = *em_ptr->m_caster_ptr;
-    if (is_monster(em_ptr->src_idx) && m_caster_ref.is_pet() && !player_ptr->is_located_at({ m_ptr->target_y, m_ptr->target_x })) {
+    if (em_ptr->is_monster() && m_caster_ref.is_pet() && !player_ptr->is_located_at({ m_ptr->target_y, m_ptr->target_x })) {
         m_ptr->set_target(m_caster_ref.fy, m_caster_ref.fx);
     }
 }

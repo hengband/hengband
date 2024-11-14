@@ -97,7 +97,7 @@ ProcessResult effect_monster_star_heal(PlayerType *player_ptr, EffectMonster *em
 // who == 0ならばプレイヤーなので、それの判定.
 static void effect_monster_old_heal_check_player(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
-    if (is_monster(em_ptr->src_idx)) {
+    if (em_ptr->is_monster()) {
         return;
     }
 

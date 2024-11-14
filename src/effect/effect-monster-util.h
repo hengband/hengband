@@ -48,4 +48,6 @@ public:
     bool known;
     std::string note_dies;
     int caster_lev;
+
+    bool is_monster() const;
 };

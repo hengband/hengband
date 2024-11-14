@@ -136,8 +136,8 @@ ProcessResult effect_monster_hand_doom(EffectMonster *em_ptr)
         return ProcessResult::PROCESS_CONTINUE;
     }
 
-    if (is_monster(em_ptr->src_idx) ? ((em_ptr->caster_lev + randint1(em_ptr->dam)) > (em_ptr->r_ptr->level + 10 + randint1(20)))
-                                    : (((em_ptr->caster_lev / 2) + randint1(em_ptr->dam)) > (em_ptr->r_ptr->level + randint1(200)))) {
+    if (em_ptr->is_monster() ? ((em_ptr->caster_lev + randint1(em_ptr->dam)) > (em_ptr->r_ptr->level + 10 + randint1(20)))
+                             : (((em_ptr->caster_lev / 2) + randint1(em_ptr->dam)) > (em_ptr->r_ptr->level + randint1(200)))) {
         em_ptr->dam = ((40 + randint1(20)) * em_ptr->m_ptr->hp) / 100;
         if (em_ptr->m_ptr->hp < em_ptr->dam) {
             em_ptr->dam = em_ptr->m_ptr->hp - 1;
