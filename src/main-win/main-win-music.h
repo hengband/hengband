@@ -14,7 +14,7 @@ extern std::optional<CfgData> music_cfg_data;
 
 namespace main_win_music {
 void load_music_prefs();
-errr stop_music();
+void stop_music();
 errr play_music(int type, int val);
 errr play_music_scene(int val);
 void pause_music();

@@ -978,9 +978,9 @@ static errr term_xtra_win(int n, int v)
     case TERM_XTRA_MUSIC_MONSTER: {
         return term_xtra_win_music(n, v);
     }
-    case TERM_XTRA_MUSIC_MUTE: {
-        return main_win_music::stop_music();
-    }
+    case TERM_XTRA_MUSIC_MUTE:
+        main_win_music::stop_music();
+        return 0;
     case TERM_XTRA_SCENE: {
         return term_xtra_win_scene(v);
     }
@@ -1880,14 +1880,16 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
     case IDM_OPTIONS_MUSIC: {
         arg_music = !arg_music;
         use_music = arg_music;
-        if (use_music) {
-            init_music();
-            if (game_in_progress) {
-                select_floor_music(player_ptr);
-            }
-        } else {
+        if (!use_music) {
             main_win_music::stop_music();
+            break;
         }
+
+        init_music();
+        if (game_in_progress) {
+            select_floor_music(player_ptr);
+        }
+
         break;
     }
     case IDM_OPTIONS_MUSIC_VOLUME_100:

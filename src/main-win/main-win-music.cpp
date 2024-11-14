@@ -155,14 +155,13 @@ void load_music_prefs()
 /*
  * Stop a music
  */
-errr stop_music(void)
+void stop_music()
 {
     mciSendCommandW(mci_open_parms.wDeviceID, MCI_STOP, MCI_WAIT, 0);
     mciSendCommandW(mci_open_parms.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);
     current_music_type = TERM_XTRA_MUSIC_MUTE;
     current_music_id = 0;
     current_music_path = "";
-    return 0;
 }
 
 /*
@@ -171,7 +170,8 @@ errr stop_music(void)
 errr play_music(int type, int val)
 {
     if (type == TERM_XTRA_MUSIC_MUTE) {
-        return stop_music();
+        stop_music();
+        return 0;
     }
 
     if (current_music_type == type && current_music_id == val) {
