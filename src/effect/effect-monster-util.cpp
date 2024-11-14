@@ -53,6 +53,11 @@ EffectMonster::EffectMonster(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITI
     this->caster_lev = (this->is_monster() && (this->m_caster_ptr != nullptr)) ? this->m_caster_ptr->get_monrace().level : (player_ptr->lev * 2);
 }
 
+bool EffectMonster::is_player() const
+{
+    return this->src_idx == 0;
+}
+
 bool EffectMonster::is_monster() const
 {
     return this->src_idx > 0;

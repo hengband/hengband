@@ -167,7 +167,7 @@ ProcessResult effect_monster_old_heal(PlayerType *player_ptr, EffectMonster *em_
     effect_monster_old_heal_check_player(player_ptr, em_ptr);
     if (em_ptr->m_ptr->r_idx == MonraceId::LEPER) {
         em_ptr->heal_leper = true;
-        if (is_player(em_ptr->src_idx)) {
+        if (em_ptr->is_player()) {
             chg_virtue(player_ptr, Virtue::COMPASSION, 5);
         }
     }
@@ -192,7 +192,7 @@ ProcessResult effect_monster_old_speed(PlayerType *player_ptr, EffectMonster *em
         em_ptr->note = _("の動きが速くなった。", " starts moving faster.");
     }
 
-    if (is_player(em_ptr->src_idx)) {
+    if (em_ptr->is_player()) {
         if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             chg_virtue(player_ptr, Virtue::INDIVIDUALISM, 1);
         }

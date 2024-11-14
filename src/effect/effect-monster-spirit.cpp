@@ -69,7 +69,7 @@ ProcessResult effect_monster_mind_blast(PlayerType *player_ptr, EffectMonster *e
     if (em_ptr->seen) {
         em_ptr->obvious = true;
     }
-    if (is_player(em_ptr->src_idx)) {
+    if (em_ptr->is_player()) {
         msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), em_ptr->m_name);
     }
 
@@ -117,7 +117,7 @@ ProcessResult effect_monster_brain_smash(PlayerType *player_ptr, EffectMonster *
     if (em_ptr->seen) {
         em_ptr->obvious = true;
     }
-    if (is_player(em_ptr->src_idx)) {
+    if (em_ptr->is_player()) {
         msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), em_ptr->m_name);
     }
 

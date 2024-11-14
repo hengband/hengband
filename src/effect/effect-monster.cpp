@@ -638,7 +638,7 @@ static void postprocess_by_effected_pet(PlayerType *player_ptr, EffectMonster *e
         return;
     }
 
-    if (is_player(em_ptr->src_idx)) {
+    if (em_ptr->is_player()) {
         if (!(em_ptr->flag & PROJECT_NO_HANGEKI)) {
             m_ptr->set_target(monster_target_y, monster_target_x);
         }
