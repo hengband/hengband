@@ -337,95 +337,91 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonraceId monra
         return;
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
-
-    if (!m_ptr->is_valid()) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &monster = floor.m_list[m_idx];
+    if (!monster.is_valid()) {
         return;
     }
 
-    auto *r_ptr = &m_ptr->get_monrace();
-    auto *s_ptr = &monraces_info[monrace_id];
-
-    if (AngbandSystem::get_instance().is_phase_out() || (r_ptr->next_exp == 0)) {
+    auto &old_monrace = monster.get_monrace(); //!< @details 現在 (進化前)の種族.
+    const auto &monraces = MonraceList::get_instance();
+    const auto &monrace_defeated = monraces.get_monrace(monrace_id);
+    if (AngbandSystem::get_instance().is_phase_out() || (old_monrace.next_exp == 0)) {
         return;
     }
 
-    auto new_exp = s_ptr->mexp * s_ptr->level / (r_ptr->level + 2);
-    if (m_ptr->is_riding()) {
+    auto new_exp = monrace_defeated.mexp * monrace_defeated.level / (old_monrace.level + 2);
+    if (monster.is_riding()) {
         new_exp = (new_exp + 1) / 2;
     }
 
-    if (!floor_ptr->dun_level) {
+    if (!floor.is_in_underground()) {
         new_exp /= 5;
     }
 
-    m_ptr->exp += new_exp;
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
+    monster.exp += new_exp;
+    if (monster.mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
         return;
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (m_ptr->exp < r_ptr->next_exp) {
-        if (m_ptr->is_riding()) {
+    if (monster.exp < old_monrace.next_exp) {
+        if (monster.is_riding()) {
             rfu.set_flag(StatusRecalculatingFlag::BONUS);
         }
 
         return;
     }
 
-    auto old_hp = m_ptr->hp;
-    auto old_maxhp = m_ptr->max_maxhp;
-    auto &old_monrace = m_ptr->get_monrace();
-    auto old_sub_align = m_ptr->sub_align;
+    const auto old_hp = monster.hp;
+    const auto old_maxhp = monster.max_maxhp;
+    const auto old_sub_align = monster.sub_align;
 
     /* Hack -- Reduce the racial counter of previous monster */
-    m_ptr->get_real_monrace().decrement_current_numbers();
+    monster.get_real_monrace().decrement_current_numbers();
 
-    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-    m_ptr->r_idx = r_ptr->next_r_idx;
+    const auto m_name = monster_desc(player_ptr, &monster, 0);
+    monster.r_idx = old_monrace.next_r_idx;
 
     /* Count the monsters on the level */
-    m_ptr->get_real_monrace().increment_current_numbers();
+    monster.get_real_monrace().increment_current_numbers();
+    monster.ap_r_idx = monster.r_idx;
 
-    m_ptr->ap_r_idx = m_ptr->r_idx;
-    r_ptr = &m_ptr->get_monrace();
-
-    m_ptr->max_maxhp = r_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP) ? r_ptr->hit_dice.maxroll() : r_ptr->hit_dice.roll();
+    const auto &new_monrace = monster.get_monrace(); //!< @details 進化後の種族.
+    monster.max_maxhp = new_monrace.misc_flags.has(MonsterMiscType::FORCE_MAXHP) ? new_monrace.hit_dice.maxroll() : new_monrace.hit_dice.roll();
     if (ironman_nightmare) {
-        auto hp = m_ptr->max_maxhp * 2;
-        m_ptr->max_maxhp = std::min(MONSTER_MAXHP, hp);
+        const auto hp = monster.max_maxhp * 2;
+        monster.max_maxhp = std::min(MONSTER_MAXHP, hp);
     }
 
-    m_ptr->maxhp = m_ptr->max_maxhp;
-    m_ptr->hp = old_hp * m_ptr->maxhp / old_maxhp;
+    monster.maxhp = monster.max_maxhp;
+    monster.hp = old_hp * monster.maxhp / old_maxhp;
 
     /* dealt damage is 0 at initial*/
-    m_ptr->dealt_damage = 0;
+    monster.dealt_damage = 0;
 
     /* Extract the monster base speed */
-    m_ptr->set_individual_speed(floor_ptr->inside_arena);
+    monster.set_individual_speed(floor.inside_arena);
 
     /* Sub-alignment of a monster */
-    if (!m_ptr->is_pet() && r_ptr->kind_flags.has_none_of(alignment_mask)) {
-        m_ptr->sub_align = old_sub_align;
+    if (!monster.is_pet() && new_monrace.kind_flags.has_none_of(alignment_mask)) {
+        monster.sub_align = old_sub_align;
     } else {
-        m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
-        if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
-            m_ptr->sub_align |= SUB_ALIGN_EVIL;
+        monster.sub_align = SUB_ALIGN_NEUTRAL;
+        if (new_monrace.kind_flags.has(MonsterKindType::EVIL)) {
+            monster.sub_align |= SUB_ALIGN_EVIL;
         }
 
-        if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
-            m_ptr->sub_align |= SUB_ALIGN_GOOD;
+        if (new_monrace.kind_flags.has(MonsterKindType::GOOD)) {
+            monster.sub_align |= SUB_ALIGN_GOOD;
         }
     }
 
-    m_ptr->exp = 0;
-    if (m_ptr->is_pet() || m_ptr->ml) {
+    monster.exp = 0;
+    if (monster.is_pet() || monster.ml) {
         const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
-        if (!ignore_unview || player_can_see_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
+        if (!ignore_unview || player_can_see_bold(player_ptr, monster.fy, monster.fx)) {
             if (is_hallucinated) {
-                const auto &monraces = MonraceList::get_instance();
                 const MonraceDefinition *hallucinated_race = nullptr;
                 do {
                     hallucinated_race = &monraces.pick_monrace_at_random();
@@ -435,7 +431,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonraceId monra
                 auto mes = randint0(2) == 0 ? mes_evolution : mes_degeneration;
                 msg_format(mes, m_name.data(), hallucinated_race->name.data());
             } else {
-                msg_format(_("%sは%sに進化した。", "%s^ evolved into %s."), m_name.data(), r_ptr->name.data());
+                msg_format(_("%sは%sに進化した。", "%s^ evolved into %s."), m_name.data(), new_monrace.name.data());
             }
         }
 
@@ -444,13 +440,13 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonraceId monra
         }
 
         /* Now you feel very close to this pet. */
-        m_ptr->parent_m_idx = 0;
+        monster.parent_m_idx = 0;
     }
 
     update_monster(player_ptr, m_idx, false);
-    lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
+    lite_spot(player_ptr, monster.fy, monster.fx);
 
-    if (m_ptr->is_riding()) {
+    if (monster.is_riding()) {
         rfu.set_flag(StatusRecalculatingFlag::BONUS);
     }
 }
