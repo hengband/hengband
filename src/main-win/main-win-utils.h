@@ -4,7 +4,6 @@
  * @brief Windows版固有実装(ユーティリティー)ヘッダ
  */
 
-#include "system/angband.h"
 #include <filesystem>
 #include <optional>
 #include <string>
