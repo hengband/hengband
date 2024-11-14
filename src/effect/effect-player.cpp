@@ -40,24 +40,29 @@
 
 /*!
  * @brief EffectPlayerTypeクラスのコンストラクタ
- * @param src_floor モンスターのいるフロア
+ * @param floor モンスターのいるフロア
  * @param src_idx 魔法を唱えたモンスター (0ならプレイヤー自身)
  * @param dam 基本威力
  * @param attribute 効果属性
  * @param flag 効果フラグ
  */
-EffectPlayerType::EffectPlayerType(FloorType &src_floor, MONSTER_IDX src_idx, int dam, AttributeType attribute, BIT_FLAGS flag)
+EffectPlayerType::EffectPlayerType(const FloorType &floor, short src_idx, int dam, AttributeType attribute, BIT_FLAGS flag)
     : rlev(0)
     , m_ptr(nullptr)
-    , src_ptr(is_monster(src_idx) ? &src_floor.m_list[src_idx] : nullptr)
+    , src_idx(src_idx)
     , killer("")
     , m_name("")
     , get_damage(0)
-    , src_idx(src_idx)
     , dam(dam)
     , attribute(attribute)
     , flag(flag)
 {
+    this->src_ptr = this->is_monster() ? &floor.m_list[src_idx] : nullptr;
+}
+
+bool EffectPlayerType::is_monster() const
+{
+    return this->src_idx > 0;
 }
 
 /*!
@@ -89,7 +94,7 @@ static bool process_bolt_reflection(PlayerType *player_ptr, EffectPlayerType *ep
 
     msg_print(mes);
     Pos2D pos(0, 0);
-    if (is_monster(ep_ptr->src_idx)) {
+    if (ep_ptr->is_monster()) {
         const auto &floor = *player_ptr->current_floor_ptr;
         const auto &monster = floor.m_list[ep_ptr->src_idx];
         do {
@@ -127,7 +132,7 @@ static ProcessResult check_continue_player_effect(PlayerType *player_ptr, Effect
 
     auto is_effective = ep_ptr->dam > 0;
     is_effective &= randint0(55) < (player_ptr->lev * 3 / 5 + 20);
-    is_effective &= is_monster(ep_ptr->src_idx);
+    is_effective &= ep_ptr->is_monster();
     is_effective &= !ep_ptr->src_ptr || !ep_ptr->src_ptr->is_riding();
     if (is_effective && kawarimi(player_ptr, true)) {
         return ProcessResult::PROCESS_FALSE;
@@ -152,7 +157,7 @@ static ProcessResult check_continue_player_effect(PlayerType *player_ptr, Effect
  */
 static void describe_effect_source(PlayerType *player_ptr, EffectPlayerType *ep_ptr, concptr src_name)
 {
-    if (is_monster(ep_ptr->src_idx)) {
+    if (ep_ptr->is_monster()) {
         ep_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[ep_ptr->src_idx];
         ep_ptr->rlev = ep_ptr->m_ptr->get_monrace().level >= 1 ? ep_ptr->m_ptr->get_monrace().level : 1;
         ep_ptr->m_name = monster_desc(player_ptr, ep_ptr->m_ptr, 0);
@@ -207,7 +212,7 @@ bool affect_player(MONSTER_IDX src_idx, PlayerType *player_ptr, concptr src_name
     switch_effects_player(player_ptr, ep_ptr);
 
     SpellHex(player_ptr).store_vengeful_damage(ep_ptr->get_damage);
-    if ((player_ptr->tim_eyeeye || SpellHex(player_ptr).is_spelling_specific(HEX_EYE_FOR_EYE)) && (ep_ptr->get_damage > 0) && !player_ptr->is_dead && is_monster(ep_ptr->src_idx)) {
+    if ((player_ptr->tim_eyeeye || SpellHex(player_ptr).is_spelling_specific(HEX_EYE_FOR_EYE)) && (ep_ptr->get_damage > 0) && !player_ptr->is_dead && ep_ptr->is_monster()) {
         const auto m_name_self = monster_desc(player_ptr, ep_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
         msg_print(_(format("攻撃が%s自身を傷つけた！", ep_ptr->m_name.data()), format("The attack of %s has wounded %s!", ep_ptr->m_name.data(), m_name_self.data())));
         (*project)(player_ptr, 0, 0, ep_ptr->m_ptr->fy, ep_ptr->m_ptr->fx, ep_ptr->get_damage, AttributeType::MISSILE, PROJECT_KILL, std::nullopt);
@@ -221,7 +226,7 @@ bool affect_player(MONSTER_IDX src_idx, PlayerType *player_ptr, concptr src_name
     }
 
     disturb(player_ptr, true, true);
-    if (ep_ptr->dam && ep_ptr->src_idx && (!ep_ptr->src_ptr || !ep_ptr->src_ptr->is_riding())) {
+    if (ep_ptr->dam && ep_ptr->is_monster() && (!ep_ptr->src_ptr || !ep_ptr->src_ptr->is_riding())) {
         (void)kawarimi(player_ptr, false);
     }
 
