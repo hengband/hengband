@@ -47,10 +47,8 @@ namespace main_win_music {
  * @param buf 使用しない
  * @return 対応するキー名を返す
  */
-static std::optional<std::string> basic_key_at(int index, char *buf)
+static std::optional<std::string> basic_key_at(int index)
 {
-    (void)buf;
-
     if (index >= MUSIC_BASIC_MAX) {
         return std::nullopt;
     }
@@ -64,14 +62,13 @@ static std::optional<std::string> basic_key_at(int index, char *buf)
  * @param buf バッファ
  * @return 対応するキー名を返す
  */
-static std::optional<std::string> dungeon_key_at(int index, char *buf)
+static std::optional<std::string> dungeon_key_at(int index)
 {
     if (index >= static_cast<int>(dungeons_info.size())) {
         return std::nullopt;
     }
 
-    sprintf(buf, "dungeon%03d", index);
-    return buf;
+    return format("dungeon%03d", index);
 }
 
 /*!
@@ -80,15 +77,14 @@ static std::optional<std::string> dungeon_key_at(int index, char *buf)
  * @param buf バッファ
  * @return 対応するキー名を返す
  */
-static std::optional<std::string> quest_key_at(int index, char *buf)
+static std::optional<std::string> quest_key_at(int index)
 {
     const auto &quests = QuestList::get_instance();
     if (index > enum2i(quests.rbegin()->first)) {
         return std::nullopt;
     }
 
-    sprintf(buf, "quest%03d", index);
-    return buf;
+    return format("quest%03d", index);
 }
 
 /*!
@@ -97,14 +93,13 @@ static std::optional<std::string> quest_key_at(int index, char *buf)
  * @param buf バッファ
  * @return 対応するキー名を返す
  */
-static std::optional<std::string> town_key_at(int index, char *buf)
+static std::optional<std::string> town_key_at(int index)
 {
     if (index >= static_cast<int>(towns_info.size())) {
         return std::nullopt;
     }
 
-    sprintf(buf, "town%03d", index);
-    return buf;
+    return format("town%03d", index);
 }
 
 /*!
@@ -113,14 +108,13 @@ static std::optional<std::string> town_key_at(int index, char *buf)
  * @param buf バッファ
  * @return 対応するキー名を返す
  */
-static std::optional<std::string> monster_key_at(int index, char *buf)
+static std::optional<std::string> monster_key_at(int index)
 {
     if (index >= static_cast<int>(monraces_info.size())) {
         return std::nullopt;
     }
 
-    sprintf(buf, "monster%04d", index);
-    return buf;
+    return format("monster%04d", index);
 }
 
 /*!

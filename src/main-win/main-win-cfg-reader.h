@@ -12,7 +12,6 @@
 typedef uint cfg_key;
 using cfg_values = std::vector<std::string>;
 using cfg_map = std::unordered_map<cfg_key, cfg_values>;
-using key_name_func = std::optional<std::string> (*)(int, char *);
 
 /*!
  * @brief .cfgファイルの読み取り対象とCfgData格納先のキー指定
@@ -33,7 +32,7 @@ struct cfg_section {
      * Returns a reference to the name of the key at a specified action-val* in the section.
      * *action-val : the 2nd parameter of "term_xtra()"
      */
-    key_name_func key_at;
+    std::function<std::optional<std::string>(int)> key_at;
     //! 1つでもデータを読み込めた場合にtrueを設定する。（nullptrの場合を除く）
     bool *has_data = nullptr;
 };

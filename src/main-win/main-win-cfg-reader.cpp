@@ -86,8 +86,7 @@ CfgData CfgReader::read_sections(std::initializer_list<cfg_section> sections) co
 
     for (auto &section : sections) {
         std::optional<std::string> read_key;
-        char key_buf[80]{};
-        for (auto index = 0; (read_key = section.key_at(index, key_buf)) != std::nullopt; ++index) {
+        for (auto index = 0; (read_key = section.key_at(index)) != std::nullopt; ++index) {
             char buf[MAIN_WIN_MAX_PATH]{};
             if (GetPrivateProfileStringA(section.section_name.data(), read_key->data(), "", buf, MAIN_WIN_MAX_PATH, cfg_path_str.data()) == 0) {
                 continue;
