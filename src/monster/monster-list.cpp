@@ -301,14 +301,9 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MonraceId r_idx, MONS
 
 static std::optional<MonraceId> polymorph_of_chameleon(PlayerType *player_ptr, MONSTER_IDX m_idx, const Grid &grid, const std::optional<MONSTER_IDX> summoner_m_idx)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
-
-    bool old_unique = false;
-    if (m_ptr->get_monrace().kind_flags.has(MonsterKindType::UNIQUE)) {
-        old_unique = true;
-    }
-
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &monster = floor.m_list[m_idx];
+    const auto old_unique = monster.get_monrace().kind_flags.has(MonsterKindType::UNIQUE);
     auto hook_fp = old_unique ? monster_hook_chameleon_lord : monster_hook_chameleon;
     auto hook = [m_idx, grid, summoner_m_idx, hook_fp](PlayerType *player_ptr, MonraceId r_idx) {
         return hook_fp(player_ptr, r_idx, m_idx, grid, summoner_m_idx);
@@ -316,21 +311,19 @@ static std::optional<MonraceId> polymorph_of_chameleon(PlayerType *player_ptr, M
     get_mon_num_prep_chameleon(player_ptr, std::move(hook));
 
     int level;
-
     if (old_unique) {
-        level = monraces_info[MonraceId::CHAMELEON_K].level;
-    } else if (!floor_ptr->dun_level) {
+        level = MonraceList::get_instance().get_monrace(MonraceId::CHAMELEON_K).level;
+    } else if (!floor.is_in_underground()) {
         level = wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].level;
     } else {
-        level = floor_ptr->dun_level;
+        level = floor.dun_level;
     }
 
-    if (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::CHAMELEON)) {
+    if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::CHAMELEON)) {
         level += 2 + randint1(3);
     }
 
     const auto new_monrace_id = get_mon_num(player_ptr, 0, level, PM_CHAMELEON);
-
     if (!MonraceList::is_valid(new_monrace_id)) {
         return std::nullopt;
     }
