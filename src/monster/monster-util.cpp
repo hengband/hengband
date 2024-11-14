@@ -22,13 +22,6 @@
 #include <algorithm>
 #include <iterator>
 
-enum dungeon_mode_type {
-    DUNGEON_MODE_AND = 1,
-    DUNGEON_MODE_NAND = 2,
-    DUNGEON_MODE_OR = 3,
-    DUNGEON_MODE_NOR = 4,
-};
-
 /**
  * @brief モンスターがダンジョンに出現できる条件を満たしているかのフラグ判定関数(AND)
  *
@@ -107,13 +100,14 @@ static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonraceId mo
     if (dungeon.special_div >= 64) {
         return true;
     }
+
     if (summon_specific_type && dungeon.flags.has_not(DungeonFeatureType::CHAMELEON)) {
         return true;
     }
 
     switch (dungeon.mode) {
-    case DUNGEON_MODE_AND:
-    case DUNGEON_MODE_NAND: {
+    case DungeonMode::AND:
+    case DungeonMode::NAND: {
         std::vector<bool> is_possible = {
             is_possible_monster_and(monrace.ability_flags, dungeon.mon_ability_flags),
             is_possible_monster_and(monrace.behavior_flags, dungeon.mon_behavior_flags),
@@ -130,11 +124,10 @@ static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonraceId mo
 
         auto result = std::all_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });
         result &= std::all_of(dungeon.r_chars.begin(), dungeon.r_chars.end(), [monrace](const auto &v) { return v == monrace.symbol_definition.character; });
-
-        return dungeon.mode == DUNGEON_MODE_AND ? result : !result;
+        return dungeon.mode == DungeonMode::AND ? result : !result;
     }
-    case DUNGEON_MODE_OR:
-    case DUNGEON_MODE_NOR: {
+    case DungeonMode::OR:
+    case DungeonMode::NOR: {
         std::vector<bool> is_possible = {
             is_possible_monster_or(monrace.ability_flags, dungeon.mon_ability_flags),
             is_possible_monster_or(monrace.behavior_flags, dungeon.mon_behavior_flags),
@@ -151,8 +144,7 @@ static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonraceId mo
 
         auto result = std::any_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });
         result |= std::any_of(dungeon.r_chars.begin(), dungeon.r_chars.end(), [monrace](const auto &v) { return v == monrace.symbol_definition.character; });
-
-        return dungeon.mode == DUNGEON_MODE_OR ? result : !result;
+        return dungeon.mode == DungeonMode::OR ? result : !result;
     }
     }
 
