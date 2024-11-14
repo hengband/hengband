@@ -187,12 +187,12 @@ static bool play_sound_impl(const std::filesystem::path &path, int volume)
  * @param buf 使用しない
  * @return 対応するキー名を返す
  */
-static concptr sound_key_at(int index, char *buf)
+static std::optional<std::string> sound_key_at(int index, char *buf)
 {
     (void)buf;
 
     if (index >= SOUND_MAX) {
-        return nullptr;
+        return std::nullopt;
     }
 
     return angband_sound_name[index];
