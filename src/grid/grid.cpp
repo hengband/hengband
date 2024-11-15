@@ -43,6 +43,7 @@
 #include "player/player-status.h"
 #include "room/rooms-builder.h"
 #include "system/dungeon-info.h"
+#include "system/enums/grid-count-kind.h"
 #include "system/enums/grid-flow.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -893,19 +894,6 @@ bool cave_player_teleportable_bold(PlayerType *player_ptr, POSITION y, POSITION 
 }
 
 /*!
- * @brief 地形は開くものであって、かつ開かれているかを返す /
- * Attempt to open the given chest at the given location
- * @param feat 地形ID
- * @return 開いた地形である場合TRUEを返す /  Return TRUE if the given feature is an open door
- */
-bool is_open(PlayerType *player_ptr, FEAT_IDX feat)
-{
-    const auto &terrain = TerrainList::get_instance().get_terrain(feat);
-    const auto &dungeon = player_ptr->current_floor_ptr->get_dungeon_definition();
-    return terrain.flags.has(TerrainCharacteristics::CLOSE) && (feat != dungeon.convert_terrain_id(feat, TerrainCharacteristics::CLOSE));
-}
-
-/*!
  * @brief プレイヤーが地形踏破可能かを返す
  * @param feature 判定したい地形ID
  * @param mode 移動に関するオプションフラグ
@@ -1060,33 +1048,34 @@ std::pair<int, Pos2D> count_dt(PlayerType *player_ptr, GridCountKind gck, bool u
 {
     auto count = 0;
     Pos2D pos(0, 0);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &dungeon = floor.get_dungeon_definition();
     for (auto d = 0; d < 9; d++) {
         if ((d == 8) && !under) {
             continue;
         }
 
         Pos2D pos_neighbor(player_ptr->y + ddy_ddd[d], player_ptr->x + ddx_ddd[d]);
-        const auto &grid = player_ptr->current_floor_ptr->get_grid(pos_neighbor);
+        const auto &grid = floor.get_grid(pos_neighbor);
         if (!grid.is_mark()) {
             continue;
         }
 
-        const auto feat = grid.get_feat_mimic();
         switch (gck) {
         case GridCountKind::OPEN:
-            if (!is_open(player_ptr, feat)) {
+            if (!dungeon.is_open(grid.get_feat_mimic())) {
                 continue;
             }
 
             break;
         case GridCountKind::CLOSED_DOOR:
-            if (!is_closed_door(player_ptr, feat)) {
+            if (!grid.get_terrain_mimic().is_closed_door()) {
                 continue;
             }
 
             break;
         case GridCountKind::TRAP:
-            if (!is_trap(player_ptr, feat)) {
+            if (!grid.get_terrain_mimic().is_trap()) {
                 continue;
             }
 
