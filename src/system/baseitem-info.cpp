@@ -831,6 +831,36 @@ void BaseitemList::shrink_to_fit()
 }
 
 /*!
+ * @brief ベースアイテムキーからIDを引いて返す
+ * @param key ベースアイテムキー、但しsvalはランダム(nullopt) の可能性がある
+ * @return ベースアイテムID
+ * @details ベースアイテムIDが存在しなければ例外
+ */
+short BaseitemList::lookup_baseitem_id(const BaseitemKey &bi_key) const
+{
+    const auto sval = bi_key.sval();
+    if (sval) {
+        return exe_lookup(bi_key);
+    }
+
+    static const auto &cache = create_baseitems_cache();
+    const auto itr = cache.find(bi_key.tval());
+    if (itr == cache.end()) {
+        constexpr auto fmt = "Specified ItemKindType has no subtype! %d";
+        THROW_EXCEPTION(std::runtime_error, format(fmt, enum2i(bi_key.tval())));
+    }
+
+    const auto &svals = itr->second;
+    return exe_lookup({ bi_key.tval(), rand_choice(svals) });
+}
+
+const BaseitemInfo &BaseitemList::lookup_baseitem(const BaseitemKey &bi_key) const
+{
+    const auto bi_id = this->lookup_baseitem_id(bi_key);
+    return this->baseitems[bi_id];
+}
+
+/*!
  * @brief モンスター種族IDから財宝アイテムの価値を引く
  * @param monrace_id モンスター種族ID
  * @return 特定の財宝を落とすならそのアイテムの価値オフセット、一般的な財宝ドロップならばnullopt
@@ -938,36 +968,6 @@ void BaseitemList::mark_common_items_as_aware()
     }
 }
 
-/*!
- * @brief ベースアイテムキーからIDを引いて返す
- * @param key ベースアイテムキー、但しsvalはランダム(nullopt) の可能性がある
- * @return ベースアイテムID
- * @details ベースアイテムIDが存在しなければ例外
- */
-short BaseitemList::lookup_baseitem_id(const BaseitemKey &bi_key) const
-{
-    const auto sval = bi_key.sval();
-    if (sval) {
-        return exe_lookup(bi_key);
-    }
-
-    static const auto &cache = create_baseitems_cache();
-    const auto itr = cache.find(bi_key.tval());
-    if (itr == cache.end()) {
-        constexpr auto fmt = "Specified ItemKindType has no subtype! %d";
-        THROW_EXCEPTION(std::runtime_error, format(fmt, enum2i(bi_key.tval())));
-    }
-
-    const auto &svals = itr->second;
-    return exe_lookup({ bi_key.tval(), rand_choice(svals) });
-}
-
-const BaseitemInfo &BaseitemList::lookup_baseitem(const BaseitemKey &bi_key) const
-{
-    const auto bi_id = this->lookup_baseitem_id(bi_key);
-    return this->baseitems[bi_id];
-}
-
 void BaseitemList::shuffle_flavors()
 {
     this->shuffle_flavors(ItemKindType::RING);
@@ -978,12 +978,6 @@ void BaseitemList::shuffle_flavors()
     this->shuffle_flavors(ItemKindType::FOOD);
     this->shuffle_flavors(ItemKindType::POTION);
     this->shuffle_flavors(ItemKindType::SCROLL);
-}
-
-BaseitemInfo &BaseitemList::lookup_baseitem(const BaseitemKey &bi_key)
-{
-    const auto bi_id = this->lookup_baseitem_id(bi_key);
-    return this->baseitems[bi_id];
 }
 
 /*!
@@ -1112,6 +1106,12 @@ std::map<MoneyKind, std::vector<BaseitemKey>> BaseitemList::create_unsorted_gold
     }
 
     return list;
+}
+
+BaseitemInfo &BaseitemList::lookup_baseitem(const BaseitemKey &bi_key)
+{
+    const auto bi_id = this->lookup_baseitem_id(bi_key);
+    return this->baseitems[bi_id];
 }
 
 /*!

@@ -196,6 +196,8 @@ public:
     void shrink_to_fit();
 
     std::optional<int> lookup_creeping_coin_drop_offset(MonraceId monrace_id) const;
+    short lookup_baseitem_id(const BaseitemKey &bi_key) const;
+    const BaseitemInfo &lookup_baseitem(const BaseitemKey &bi_key) const;
     int calc_num_gold_subtypes() const;
     const BaseitemInfo &lookup_gold(int target_offset) const;
     int lookup_gold_offset(short bi_id) const;
@@ -203,8 +205,6 @@ public:
     void reset_all_visuals();
     void reset_identification_flags();
     void mark_common_items_as_aware();
-    short lookup_baseitem_id(const BaseitemKey &bi_key) const;
-    const BaseitemInfo &lookup_baseitem(const BaseitemKey &bi_key) const;
     void shuffle_flavors();
 
 private:
@@ -213,13 +213,13 @@ private:
     static BaseitemList instance;
     std::vector<BaseitemInfo> baseitems{};
 
-    BaseitemInfo &lookup_baseitem(const BaseitemKey &bi_key);
     short exe_lookup(const BaseitemKey &bi_key) const;
     const std::map<BaseitemKey, short> &create_baseitem_index_chache() const;
     const std::map<ItemKindType, std::vector<int>> &create_baseitems_cache() const;
     int lookup_gold_offset(const BaseitemKey &finding_bi_key) const;
     const std::map<MoneyKind, std::vector<BaseitemKey>> &create_sorted_golds() const;
     std::map<MoneyKind, std::vector<BaseitemKey>> create_unsorted_golds() const;
-    
+
+    BaseitemInfo &lookup_baseitem(const BaseitemKey &bi_key);
     void shuffle_flavors(ItemKindType tval);
 };
