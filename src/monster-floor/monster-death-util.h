@@ -15,7 +15,6 @@ public:
     bool do_gold;
     bool do_item;
     bool cloned;
-    int force_coin;
     bool drop_chosen_item;
     POSITION md_y = 0;
     POSITION md_x = 0;

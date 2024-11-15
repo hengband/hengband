@@ -9,34 +9,6 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-/*!
- * @brief モンスターを倒した際の財宝svalを返す
- * @param r_idx 倒したモンスターの種族ID
- * @return 財宝のsval
- * @details
- * Hack -- Return the "automatic coin type" of a monster race
- * Used to allocate proper treasure when "Creeping coins" die
- * Note the use of actual "monster names"
- */
-static int get_coin_type(MonraceId r_idx)
-{
-    switch (r_idx) {
-    case MonraceId::COPPER_COINS:
-        return 2;
-    case MonraceId::SILVER_COINS:
-        return 5;
-    case MonraceId::GOLD_COINS:
-        return 10;
-    case MonraceId::MITHRIL_COINS:
-    case MonraceId::MITHRIL_GOLEM:
-        return 16;
-    case MonraceId::ADAMANT_COINS:
-        return 17;
-    default:
-        return 0;
-    }
-}
-
 MonsterDeath::MonsterDeath(FloorType &floor, MONSTER_IDX m_idx, bool drop_item)
     : m_idx(m_idx)
     , m_ptr(&floor.m_list[m_idx])
@@ -50,6 +22,5 @@ MonsterDeath::MonsterDeath(FloorType &floor, MONSTER_IDX m_idx, bool drop_item)
     this->do_item = this->r_ptr->drop_flags.has_not(MonsterDropType::ONLY_GOLD);
     this->do_item |= this->r_ptr->drop_flags.has_any_of({ MonsterDropType::DROP_GOOD, MonsterDropType::DROP_GREAT });
     this->cloned = this->m_ptr->mflag2.has(MonsterConstantFlagType::CLONED);
-    this->force_coin = get_coin_type(this->m_ptr->r_idx);
     this->drop_chosen_item = drop_item && !this->cloned && !floor.inside_arena && !AngbandSystem::get_instance().is_phase_out() && !this->m_ptr->is_pet();
 }
