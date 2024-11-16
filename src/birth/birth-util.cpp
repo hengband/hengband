@@ -12,7 +12,7 @@
  */
 void birth_quit(void)
 {
-    quit(nullptr);
+    quit("");
 }
 
 /*!

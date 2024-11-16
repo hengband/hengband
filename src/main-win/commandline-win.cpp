@@ -57,7 +57,7 @@ void CommandLine::handle(void)
         ::LocalFree(argv);
     } else {
         fprintf(stdout, "CommandLineToArgvW failed.");
-        quit(nullptr);
+        quit("");
     }
 }
 
