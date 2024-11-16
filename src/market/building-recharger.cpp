@@ -13,7 +13,6 @@
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"
 #include "spell-kind/spells-perception.h"
-#include "system/baseitem/baseitem-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -66,7 +65,7 @@ void building_recharge(PlayerType *player_ptr)
     const auto item_level = o_ptr->get_baseitem_level();
     const auto tval = o_ptr->bi_key.tval();
     const auto base_pval = o_ptr->get_baseitem_pval();
-    const auto &baseitem = o_ptr->get_baseitem();
+    const auto base_cost = o_ptr->get_baseitem_cost();
     int price;
     switch (tval) {
     case ItemKindType::ROD:
@@ -79,11 +78,11 @@ void building_recharge(PlayerType *player_ptr)
         msg_format(_("それは再充填する必要はありません。", "That doesn't need to be recharged."));
         return;
     case ItemKindType::STAFF:
-        price = (baseitem.cost / 10) * o_ptr->number;
+        price = (base_cost / 10) * o_ptr->number;
         price = std::max(10, price);
         break;
     default:
-        price = baseitem.cost / 10;
+        price = base_cost / 10;
         price = std::max(10, price);
         break;
     }
@@ -192,20 +191,20 @@ void building_recharge_all(PlayerType *player_ptr)
             total_cost += 50;
         }
 
-        const auto &baseitem = item.get_baseitem();
         const auto item_level = item.get_baseitem_level();
         const auto base_pval = item.get_baseitem_pval();
+        const auto base_cost = item.get_baseitem_cost();
         switch (item.bi_key.tval()) {
         case ItemKindType::ROD:
             price = (item_level * 50 * item.timeout) / base_pval;
             break;
         case ItemKindType::STAFF:
-            price = (baseitem.cost / 10) * item.number;
+            price = (base_cost / 10) * item.number;
             price = std::max(10, price);
             price = (base_pval - item.pval) * price;
             break;
         case ItemKindType::WAND:
-            price = (baseitem.cost / 10);
+            price = (base_cost / 10);
             price = std::max(10, price);
             price = (item.number * base_pval - item.pval) * price;
             break;

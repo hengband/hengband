@@ -103,7 +103,7 @@ void ItemEntity::generate(short new_bi_id)
         this->activation_id = baseitem.act_idx;
     }
 
-    if (this->get_baseitem().cost <= 0) {
+    if (this->is_worthless()) {
         this->ident |= (IDENT_BROKEN);
     }
 
@@ -1210,6 +1210,16 @@ int ItemEntity::get_baseitem_level() const
 short ItemEntity::get_baseitem_pval() const
 {
     return this->get_baseitem().pval;
+}
+
+bool ItemEntity::is_worthless() const
+{
+    return this->get_baseitem().cost <= 0;
+}
+
+int ItemEntity::get_baseitem_cost() const
+{
+    return this->get_baseitem().cost;
 }
 
 std::string ItemEntity::build_timeout_description(const ActivationType &act) const
