@@ -51,7 +51,6 @@
 #include "player/player-status-table.h"
 #include "racial/racial-android.h"
 #include "specific-object/torch.h"
-#include "system/baseitem/baseitem-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -66,6 +65,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include "view/display-symbol.h"
 #include "view/object-describer.h"
 #include "wizard/wizard-messages.h"
 

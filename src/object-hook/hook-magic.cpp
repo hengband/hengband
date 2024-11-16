@@ -5,7 +5,7 @@
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player/player-realm.h"
-#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-key.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"

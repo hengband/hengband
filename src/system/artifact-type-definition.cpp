@@ -1,6 +1,7 @@
 #include "system/artifact-type-definition.h"
 #include "artifact/fixed-art-types.h"
 #include "object/tval-types.h"
+#include "system/baseitem/baseitem-definition.h"
 #include "system/item-entity.h"
 
 ArtifactType::ArtifactType()

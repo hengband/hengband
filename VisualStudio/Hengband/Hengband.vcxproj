@@ -325,6 +325,7 @@
     <ClCompile Include="..\..\src\spell-class\spells-mirror-master.cpp" />
     <ClCompile Include="..\..\src\system\angband-system.cpp" />
     <ClCompile Include="..\..\src\system\dungeon-data-definition.cpp" />
+    <ClCompile Include="..\..\src\system\baseitem\baseitem-key.cpp" />
     <ClCompile Include="..\..\src\system\inner-game-data.cpp" />
     <ClCompile Include="..\..\src\system\redrawing-flags-updater.cpp" />
     <ClCompile Include="..\..\src\system\floor-type-definition.cpp" />
@@ -1429,6 +1430,7 @@
     <ClInclude Include="..\..\src\system\alloc-entries.h" />
     <ClInclude Include="..\..\src\system\angband-exceptions.h" />
     <ClInclude Include="..\..\src\system\angband-system.h" />
+    <ClInclude Include="..\..\src\system\baseitem\baseitem-key.h" />
     <ClInclude Include="..\..\src\system\enums\grid-count-kind.h" />
     <ClInclude Include="..\..\src\system\enums\grid-flow.h" />
     <ClInclude Include="..\..\src\system\inner-game-data.h" />

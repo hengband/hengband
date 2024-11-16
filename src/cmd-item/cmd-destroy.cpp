@@ -30,7 +30,7 @@
 #include "racial/racial-android.h"
 #include "status/action-setter.h"
 #include "status/experience.h"
-#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-key.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"

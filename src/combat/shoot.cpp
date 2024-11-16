@@ -47,7 +47,7 @@
 #include "player/player-status-table.h"
 #include "sv-definition/sv-bow-types.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-key.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"

@@ -9,7 +9,7 @@
 #include "player-info/mimic-info-table.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
-#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-key.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"

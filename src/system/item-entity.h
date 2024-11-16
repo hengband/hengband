@@ -12,7 +12,7 @@
 #include "object-enchant/trc-types.h"
 #include "object/object-mark-types.h"
 #include "system/angband.h"
-#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-key.h"
 #include "system/system-variables.h"
 #include "util/dice.h"
 #include "util/flag-group.h"

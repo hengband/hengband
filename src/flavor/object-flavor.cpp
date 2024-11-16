@@ -32,7 +32,7 @@
 #include "player/player-status.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-lite-types.h"
-#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-key.h"
 #include "util/bit-flags-calculator.h"
 #include <functional>
 #include <sstream>

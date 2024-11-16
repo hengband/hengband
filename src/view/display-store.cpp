@@ -11,7 +11,7 @@
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h" //!< @todo 相互依存している、こっちは残す？.
-#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-key.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
