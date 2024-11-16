@@ -242,7 +242,7 @@ bool process_un_power(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
     }
 
     monap_ptr->obvious = true;
-    auto recovery = drain * baseitem.level;
+    auto recovery = drain * monap_ptr->o_ptr->get_baseitem_level();
     const auto tval = monap_ptr->o_ptr->bi_key.tval();
     if (tval == ItemKindType::STAFF) {
         recovery *= monap_ptr->o_ptr->number;

@@ -198,12 +198,12 @@ void OtherItemsEnchanter::generate_statue()
  */
 void OtherItemsEnchanter::generate_chest()
 {
-    auto obj_level = this->o_ptr->get_baseitem().level;
-    if (obj_level <= 0) {
+    const auto item_level = this->o_ptr->get_baseitem_level();
+    if (item_level <= 0) {
         return;
     }
 
-    this->o_ptr->pval = randnum1<short>(obj_level);
+    this->o_ptr->pval = randnum1<short>(item_level);
     if (this->o_ptr->bi_key.sval() == SV_CHEST_KANDUME) {
         this->o_ptr->pval = 6;
     }

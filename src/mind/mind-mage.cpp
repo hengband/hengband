@@ -38,24 +38,24 @@ bool eat_magic(PlayerType *player_ptr, int power)
     }
 
     const auto &baseitem = o_ptr->get_baseitem();
-    const auto lev = baseitem.level;
+    const auto item_level = o_ptr->get_baseitem_level();
     const auto tval = o_ptr->bi_key.tval();
     auto recharge_strength = 0;
     auto is_eating_successful = true;
     if (tval == ItemKindType::ROD) {
-        recharge_strength = ((power > lev / 2) ? (power - lev / 2) : 0) / 5;
+        recharge_strength = ((power > item_level / 2) ? (power - item_level / 2) : 0) / 5;
         if (one_in_(recharge_strength)) {
             is_eating_successful = false;
         } else {
             if (o_ptr->timeout > (o_ptr->number - 1) * baseitem.pval) {
                 msg_print(_("充填中のロッドから魔力を吸収することはできません。", "You can't absorb energy from a discharged rod."));
             } else {
-                player_ptr->csp += lev;
+                player_ptr->csp += item_level;
                 o_ptr->timeout += baseitem.pval;
             }
         }
     } else {
-        recharge_strength = (100 + power - lev) / 15;
+        recharge_strength = (100 + power - item_level) / 15;
         if (recharge_strength < 0) {
             recharge_strength = 0;
         }
@@ -64,7 +64,7 @@ bool eat_magic(PlayerType *player_ptr, int power)
             is_eating_successful = false;
         } else {
             if (o_ptr->pval > 0) {
-                player_ptr->csp += lev / 2;
+                player_ptr->csp += item_level / 2;
                 o_ptr->pval--;
 
                 if ((tval == ItemKindType::STAFF) && (i_idx >= 0) && (o_ptr->number > 1)) {

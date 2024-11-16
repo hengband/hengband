@@ -63,14 +63,14 @@ void building_recharge(PlayerType *player_ptr)
         return;
     }
 
-    const auto &baseitem = o_ptr->get_baseitem();
-    const auto lev = baseitem.level;
+    const auto item_level = o_ptr->get_baseitem_level();
     const auto tval = o_ptr->bi_key.tval();
+    const auto &baseitem = o_ptr->get_baseitem();
     int price;
     switch (tval) {
     case ItemKindType::ROD:
         if (o_ptr->timeout > 0) {
-            price = (lev * 50 * o_ptr->timeout) / baseitem.pval;
+            price = (item_level * 50 * o_ptr->timeout) / baseitem.pval;
             break;
         }
 
@@ -192,10 +192,10 @@ void building_recharge_all(PlayerType *player_ptr)
         }
 
         const auto &baseitem = item.get_baseitem();
-        const auto lev = baseitem.level;
+        const auto item_level = item.get_baseitem_level();
         switch (item.bi_key.tval()) {
         case ItemKindType::ROD:
-            price = (lev * 50 * item.timeout) / baseitem.pval;
+            price = (item_level * 50 * item.timeout) / baseitem.pval;
             break;
         case ItemKindType::STAFF:
             price = (baseitem.cost / 10) * item.number;

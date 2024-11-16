@@ -1202,6 +1202,11 @@ bool ItemEntity::is_similar_for_store(const ItemEntity &other) const
     return true;
 }
 
+int ItemEntity::get_baseitem_level() const
+{
+    return this->get_baseitem().level;
+}
+
 std::string ItemEntity::build_timeout_description(const ActivationType &act) const
 {
     const auto description = act.build_timeout_description();

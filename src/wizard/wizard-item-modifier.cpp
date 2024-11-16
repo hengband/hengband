@@ -400,7 +400,7 @@ static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 
     auto line = 4;
     const auto &bi_key = o_ptr->bi_key;
-    const auto item_level = o_ptr->get_baseitem().level;
+    const auto item_level = o_ptr->get_baseitem_level();
     prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->bi_id, item_level, enum2i(bi_key.tval()), *bi_key.sval()), line, j);
     prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %s", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->damage_dice.to_string().data()), ++line, j);
     prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), ++line, j);

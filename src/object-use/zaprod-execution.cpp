@@ -63,13 +63,13 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
         return;
     }
 
-    auto lev = o_ptr->get_baseitem().level;
+    const auto item_level = o_ptr->get_baseitem_level();
     auto chance = this->player_ptr->skill_dev;
     if (this->player_ptr->effects()->confusion().is_confused()) {
         chance = chance / 2;
     }
 
-    auto fail = lev + 5;
+    auto fail = item_level + 5;
     if (chance > fail) {
         fail -= (chance - fail) * 2;
     } else {
@@ -141,7 +141,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
     o_ptr->mark_as_tried();
     if ((ident != 0) && !o_ptr->is_aware()) {
         object_aware(this->player_ptr, o_ptr);
-        gain_exp(this->player_ptr, (lev + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
+        gain_exp(this->player_ptr, (item_level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
     static constexpr auto flags_swrf = {
