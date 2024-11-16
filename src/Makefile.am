@@ -942,6 +942,7 @@ hengband_SOURCES = \
 	\
 	system/baseitem/baseitem-definition.cpp system/baseitem/baseitem-definition.h \
 	system/baseitem/baseitem-key.cpp system/baseitem/baseitem-key.h \
+	system/baseitem/baseitem-list.cpp system/baseitem/baseitem-list.h \
 	\
 	system/enums/game-option-page.h \
 	system/enums/grid-flow.h \

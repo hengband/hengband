@@ -2532,6 +2532,9 @@
     <ClCompile Include="..\..\src\system\baseitem\baseitem-key.cpp">
       <Filter>system\baseitem</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\baseitem\baseitem-list.cpp">
+      <Filter>system\baseitem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5482,6 +5485,9 @@
       <Filter>system\baseitem</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\baseitem\baseitem-key.h">
+      <Filter>system\baseitem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\baseitem\baseitem-list.h">
       <Filter>system\baseitem</Filter>
     </ClInclude>
   </ItemGroup>

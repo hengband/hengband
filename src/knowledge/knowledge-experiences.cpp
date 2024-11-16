@@ -17,6 +17,7 @@
 #include "spell/technic-info-table.h"
 #include "sv-definition/sv-bow-types.h"
 #include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 

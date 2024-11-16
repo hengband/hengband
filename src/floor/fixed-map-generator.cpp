@@ -26,6 +26,7 @@
 #include "sv-definition/sv-scroll-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"

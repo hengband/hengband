@@ -10,6 +10,7 @@
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-ring-types.h"
 #include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include <algorithm>
 #include <map>
 #include <sstream>

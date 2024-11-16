@@ -12,6 +12,7 @@
 #include "object/tval-types.h"
 #include "sv-definition/sv-potion-types.h"
 #include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"

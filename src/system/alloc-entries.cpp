@@ -1,5 +1,6 @@
 #include "system/alloc-entries.h"
 #include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "system/monster-race-info.h"
 
 MonraceAllocationEntry::MonraceAllocationEntry(MonraceId index, int level, short prob1, short prob2)

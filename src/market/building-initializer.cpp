@@ -9,6 +9,7 @@
 #include "store/store.h"
 #include "system/angband.h"
 #include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "system/building-type-definition.h"
 #include "system/item-entity.h"
 #include "util/angband-files.h"

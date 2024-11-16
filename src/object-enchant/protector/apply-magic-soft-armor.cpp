@@ -8,6 +8,7 @@
 #include "object/tval-types.h"
 #include "sv-definition/sv-armor-types.h"
 #include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 

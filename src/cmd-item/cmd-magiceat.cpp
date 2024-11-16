@@ -72,6 +72,7 @@
 #include "player/player-status-table.h"
 #include "spell/spell-info.h"
 #include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
