@@ -22,7 +22,6 @@
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
 #include "status/experience.h"
-#include "system/baseitem/baseitem-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
@@ -227,10 +226,9 @@ bool process_un_power(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
     }
 
     const auto is_magic_mastery = has_magic_mastery(player_ptr) != 0;
-    const auto &baseitem = monap_ptr->o_ptr->get_baseitem();
-    const auto pval = baseitem.pval;
+    const auto base_pval = monap_ptr->o_ptr->get_baseitem_pval();
     const auto level = monap_ptr->rlev;
-    auto drain = is_magic_mastery ? std::min<short>(pval, pval * level / 400 + pval * randint1(level) / 400) : pval;
+    auto drain = is_magic_mastery ? std::min<short>(base_pval, base_pval * level / 400 + base_pval * randint1(level) / 400) : base_pval;
     drain = std::min(drain, monap_ptr->o_ptr->pval);
     if (drain <= 0) {
         return false;

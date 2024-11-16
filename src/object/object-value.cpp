@@ -140,19 +140,20 @@ PRICE object_value_real(const ItemEntity *o_ptr)
         break;
     }
 
+    const auto base_pval = o_ptr->get_baseitem_pval();
     switch (o_ptr->bi_key.tval()) {
     case ItemKindType::WAND: {
         /* Pay extra for charges, depending on standard number of
          * charges.  Handle new-style wands correctly. -LM-
          */
-        value += (value * o_ptr->pval / o_ptr->number / (baseitem.pval * 2));
+        value += (value * o_ptr->pval / o_ptr->number / (base_pval * 2));
         break;
     }
     case ItemKindType::STAFF: {
         /* Pay extra for charges, depending on standard number of
          * charges.  -LM-
          */
-        value += (value * o_ptr->pval / (baseitem.pval * 2));
+        value += (value * o_ptr->pval / (base_pval * 2));
         break;
     }
     case ItemKindType::RING:

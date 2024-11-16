@@ -19,7 +19,6 @@
 #include "status/experience.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-rod-types.h"
-#include "system/baseitem/baseitem-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -103,7 +102,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
         return;
     }
 
-    const auto &baseitem = o_ptr->get_baseitem();
+    const auto base_pval = o_ptr->get_baseitem_pval();
     if ((o_ptr->number == 1) && (o_ptr->timeout)) {
         if (flush_failure) {
             flush();
@@ -111,7 +110,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
 
         msg_print(_("このロッドはまだ魔力を充填している最中だ。", "The rod is still charging."));
         return;
-    } else if ((o_ptr->number > 1) && (o_ptr->timeout > baseitem.pval * (o_ptr->number - 1))) {
+    } else if ((o_ptr->number > 1) && (o_ptr->timeout > base_pval * (o_ptr->number - 1))) {
         if (flush_failure) {
             flush();
         }
@@ -123,7 +122,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
     sound(SOUND_ZAP);
     auto ident = rod_effect(this->player_ptr, *o_ptr->bi_key.sval(), dir, &use_charge, false);
     if (use_charge) {
-        o_ptr->timeout += baseitem.pval;
+        o_ptr->timeout += base_pval;
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();

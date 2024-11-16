@@ -1207,6 +1207,11 @@ int ItemEntity::get_baseitem_level() const
     return this->get_baseitem().level;
 }
 
+short ItemEntity::get_baseitem_pval() const
+{
+    return this->get_baseitem().pval;
+}
+
 std::string ItemEntity::build_timeout_description(const ActivationType &act) const
 {
     const auto description = act.build_timeout_description();

@@ -15,7 +15,6 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "player-base/player-class.h"
-#include "system/baseitem/baseitem-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
@@ -37,7 +36,7 @@ bool eat_magic(PlayerType *player_ptr, int power)
         return false;
     }
 
-    const auto &baseitem = o_ptr->get_baseitem();
+    const auto base_pval = o_ptr->get_baseitem_pval();
     const auto item_level = o_ptr->get_baseitem_level();
     const auto tval = o_ptr->bi_key.tval();
     auto recharge_strength = 0;
@@ -47,11 +46,11 @@ bool eat_magic(PlayerType *player_ptr, int power)
         if (one_in_(recharge_strength)) {
             is_eating_successful = false;
         } else {
-            if (o_ptr->timeout > (o_ptr->number - 1) * baseitem.pval) {
+            if (o_ptr->timeout > (o_ptr->number - 1) * base_pval) {
                 msg_print(_("充填中のロッドから魔力を吸収することはできません。", "You can't absorb energy from a discharged rod."));
             } else {
                 player_ptr->csp += item_level;
-                o_ptr->timeout += baseitem.pval;
+                o_ptr->timeout += base_pval;
             }
         }
     } else {
@@ -98,7 +97,7 @@ bool eat_magic(PlayerType *player_ptr, int power)
         const auto item_name = describe_flavor(player_ptr, *o_ptr, OD_NAME_ONLY);
         msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), item_name.data());
         if (tval == ItemKindType::ROD) {
-            o_ptr->timeout = baseitem.pval * o_ptr->number;
+            o_ptr->timeout = base_pval * o_ptr->number;
         } else if (o_ptr->is_wand_staff()) {
             o_ptr->pval = 0;
         }
@@ -163,7 +162,7 @@ bool eat_magic(PlayerType *player_ptr, int power)
     if (fail_type == 1) {
         if (tval == ItemKindType::ROD) {
             msg_print(_("ロッドは破損を免れたが、魔力は全て失なわれた。", "You save your rod from destruction, but all charges are lost."));
-            o_ptr->timeout = baseitem.pval * o_ptr->number;
+            o_ptr->timeout = base_pval * o_ptr->number;
         } else if (tval == ItemKindType::WAND) {
             constexpr auto mes = _("%sは破損を免れたが、魔力が全て失われた。", "You save your %s from destruction, but all charges are lost.");
             msg_format(mes, item_name.data());
@@ -176,7 +175,7 @@ bool eat_magic(PlayerType *player_ptr, int power)
             msg_format(_("乱暴な魔法のために%sが一本壊れた！", "Wild magic consumes one of your %s!"), item_name.data());
             /* Reduce rod stack maximum timeout, drain wands. */
             if (tval == ItemKindType::ROD) {
-                o_ptr->timeout = std::min<short>(o_ptr->timeout, baseitem.pval * (o_ptr->number - 1));
+                o_ptr->timeout = std::min<short>(o_ptr->timeout, base_pval * (o_ptr->number - 1));
             } else if (tval == ItemKindType::WAND) {
                 o_ptr->pval = o_ptr->pval * (o_ptr->number - 1) / o_ptr->number;
             }

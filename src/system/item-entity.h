@@ -164,6 +164,7 @@ public:
     int is_similar_part(const ItemEntity &other) const;
     bool is_similar_for_store(const ItemEntity &other) const;
     int get_baseitem_level() const;
+    short get_baseitem_pval() const;
 
     void mark_as_known();
     void mark_as_tried() const;

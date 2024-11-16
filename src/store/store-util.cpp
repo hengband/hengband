@@ -9,7 +9,6 @@
 #include "object-enchant/special-object-flags.h"
 #include "object/object-value.h"
 #include "object/tval-types.h"
-#include "system/baseitem/baseitem-definition.h"
 #include "system/item-entity.h"
 #include <algorithm>
 
@@ -103,7 +102,7 @@ std::vector<short> store_same_magic_device_pvals(ItemEntity *j_ptr)
  */
 static void store_object_absorb(ItemEntity &item1, const ItemEntity &item2)
 {
-    const auto max_num = (item1.bi_key.tval() == ItemKindType::ROD) ? std::min(99, MAX_SHORT / item1.get_baseitem().pval) : 99;
+    const auto max_num = (item1.bi_key.tval() == ItemKindType::ROD) ? std::min(99, MAX_SHORT / item1.get_baseitem_pval()) : 99;
     const auto total = item1.number + item2.number;
     const auto diff = (total > max_num) ? total - max_num : 0;
     item1.number = (total > max_num) ? max_num : total;
