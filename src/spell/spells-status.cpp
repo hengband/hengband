@@ -41,7 +41,7 @@
 #include "status/experience.h"
 #include "status/shape-changer.h"
 #include "status/sight-setter.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"

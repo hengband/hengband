@@ -3,7 +3,7 @@
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/trg-types.h"
 #include "system/angband.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
 #include "util/dice.h"
 #include "util/flag-group.h"
 #include <map>

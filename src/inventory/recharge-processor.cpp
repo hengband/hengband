@@ -6,7 +6,7 @@
 #include "hpmp/hp-mp-regenerator.h"
 #include "inventory/inventory-slot-types.h"
 #include "object/tval-types.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"

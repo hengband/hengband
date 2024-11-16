@@ -33,7 +33,7 @@
 #include "store/store-util.h"
 #include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"

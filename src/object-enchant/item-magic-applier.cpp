@@ -13,7 +13,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "player/player-status-flags.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"

@@ -13,7 +13,7 @@
 #include "object/tval-types.h"
 #include "smith/object-smith.h"
 #include "sv-definition/sv-other-types.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
 #include "system/item-entity.h"
 #include "util/bit-flags-calculator.h"
 

@@ -3,7 +3,7 @@
 #include "sv-definition/sv-rod-types.h"
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-wand-types.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
 
 MagicEaterDataList::MagicEaterDataList()
     : staves(SV_STAFF_MAX)

@@ -11,7 +11,7 @@
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "player/player-status.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"

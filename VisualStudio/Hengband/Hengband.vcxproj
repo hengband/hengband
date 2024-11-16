@@ -929,7 +929,7 @@
     <ClCompile Include="..\..\src\object-enchant\object-ego.cpp" />
     <ClCompile Include="..\..\src\flavor\object-flavor.cpp" />
     <ClCompile Include="..\..\src\object\item-tester-hooker.cpp" />
-    <ClCompile Include="..\..\src\system\baseitem-info.cpp" />
+    <ClCompile Include="..\..\src\system\baseitem\baseitem-definition.cpp" />
     <ClCompile Include="..\..\src\system\spell-info-list.cpp" />
     <ClCompile Include="..\..\src\object\object-kind-hook.cpp" />
     <ClCompile Include="..\..\src\object\object-broken.cpp" />
@@ -1993,7 +1993,7 @@
     <ClInclude Include="..\..\src\object\object-broken.h" />
     <ClInclude Include="..\..\src\object\object-info.h" />
     <ClInclude Include="..\..\src\object\object-kind-hook.h" />
-    <ClInclude Include="..\..\src\system\baseitem-info.h" />
+    <ClInclude Include="..\..\src\system\baseitem\baseitem-definition.h" />
     <ClInclude Include="..\..\src\system\spell-info-list.h" />
     <ClInclude Include="..\..\src\player\patron.h" />
     <ClInclude Include="..\..\src\player-info\class-info.h" />

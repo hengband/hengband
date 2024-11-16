@@ -20,7 +20,7 @@
 #include "perception/object-perception.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"

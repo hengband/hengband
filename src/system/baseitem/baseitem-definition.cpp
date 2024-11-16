@@ -7,7 +7,7 @@
  * Only "aware" and "tried" are saved in the savefile
  */
 
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-bow-types.h"

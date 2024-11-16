@@ -13,7 +13,7 @@
 #include "io/gf-descriptions.h"
 #include "io/input-key-requester.h"
 #include "io/tokenizer.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
 #include "system/enums/game-option-page.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"

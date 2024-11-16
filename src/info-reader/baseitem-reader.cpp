@@ -14,7 +14,7 @@
 #include "main/angband-headers.h"
 #include "object-enchant/tr-types.h"
 #include "object/tval-types.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"

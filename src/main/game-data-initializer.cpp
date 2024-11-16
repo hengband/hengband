@@ -12,7 +12,7 @@
 #include "game-option/option-flags.h"
 #include "game-option/option-types-table.h"
 #include "system/alloc-entries.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"

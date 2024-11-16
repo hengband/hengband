@@ -922,7 +922,6 @@ hengband_SOURCES = \
 	system/angband-system.h system/angband-system.cpp \
 	system/angband-version.cpp system/angband-version.h \
 	system/artifact-type-definition.cpp system/artifact-type-definition.h \
-	system/baseitem-info.cpp system/baseitem-info.h \
 	system/building-type-definition.cpp system/building-type-definition.h \
 	system/dungeon-data-definition.cpp system/dungeon-data-definition.h \
 	system/dungeon-info.cpp system/dungeon-info.h \
@@ -940,6 +939,8 @@ hengband_SOURCES = \
 	system/system-variables.cpp system/system-variables.h \
 	system/terrain-type-definition.cpp system/terrain-type-definition.h \
 	system/gamevalue.h \
+	\
+	system/baseitem/baseitem-key.cpp system/baseitem/baseitem-key.h \
 	\
 	system/enums/game-option-page.h \
 	system/enums/grid-flow.h \

@@ -1,7 +1,7 @@
 #include "core/visuals-reseter.h"
 #include "game-option/special-options.h"
 #include "io/read-pref-file.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
