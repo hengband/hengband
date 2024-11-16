@@ -9,12 +9,6 @@
 #include <vector>
 
 /*!
- * @brief ベースアイテムリストの内、財宝を示す最初のID
- * @todo 後でベースアイテムリストから動的に引けるようにする.
- */
-constexpr short OBJ_GOLD_LIST = 480;
-
-/*!
  * @brief プレイヤー用光源処理配列サイズ / Max array size of player's lite
  * @details 光源の最大半径は14,実グリッド数では581である.
  */
@@ -108,7 +102,7 @@ public:
     bool order_pet_whistle(short index1, short index2) const;
     bool order_pet_dismission(short index1, short index2, short riding_index) const;
 
-    ItemEntity make_gold() const;
+    ItemEntity make_gold(std::optional<int> initial_offset = std::nullopt) const;
     std::optional<ItemEntity> try_make_instant_artifact() const;
 
     void reset_mproc();

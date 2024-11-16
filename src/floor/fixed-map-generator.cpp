@@ -171,9 +171,8 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
         } else if (item_index) {
             ItemEntity item(item_index);
             if (item.bi_key.tval() == ItemKindType::GOLD) {
-                coin_type = item_index - OBJ_GOLD_LIST;
-                item = floor.make_gold();
-                coin_type = 0;
+                const auto offset = BaseitemList::get_instance().lookup_gold_offset(item_index);
+                item = floor.make_gold(offset);
             }
 
             ItemMagicApplier(player_ptr, &item, floor.base_level, AM_NO_FIXED_ART | AM_GOOD).execute();

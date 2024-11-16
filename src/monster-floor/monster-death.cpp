@@ -282,10 +282,12 @@ static void drop_items_golds(PlayerType *player_ptr, MonsterDeath *md_ptr, int d
     auto dump_item = 0;
     auto dump_gold = 0;
     auto &floor = *player_ptr->current_floor_ptr;
+    const auto &baseitems = BaseitemList::get_instance();
     for (auto i = 0; i < drop_numbers; i++) {
         ItemEntity item;
         if (md_ptr->do_gold && (!md_ptr->do_item || one_in_(2))) {
-            item = floor.make_gold();
+            const auto offset = baseitems.lookup_creeping_coin_drop_offset(md_ptr->m_ptr->r_idx);
+            item = floor.make_gold(offset);
             dump_gold++;
         } else {
             if (!make_object(player_ptr, &item, md_ptr->mo_mode)) {
@@ -299,7 +301,6 @@ static void drop_items_golds(PlayerType *player_ptr, MonsterDeath *md_ptr, int d
     }
 
     floor.object_level = floor.base_level;
-    coin_type = 0;
     auto visible = md_ptr->m_ptr->ml && !player_ptr->effects()->hallucination().is_hallucinated();
     visible |= (md_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE));
     if (visible && (dump_item || dump_gold)) {
@@ -396,8 +397,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
     decide_drop_quality(md_ptr);
     switch_special_death(player_ptr, md_ptr, attribute_flags);
     drop_artifacts(player_ptr, md_ptr);
-    int drop_numbers = decide_drop_numbers(md_ptr, drop_item, floor.inside_arena);
-    coin_type = md_ptr->force_coin;
+    const auto drop_numbers = decide_drop_numbers(md_ptr, drop_item, floor.inside_arena);
     floor.object_level = (floor.dun_level + md_ptr->r_ptr->level) / 2;
     drop_items_golds(player_ptr, md_ptr, drop_numbers);
     if ((md_ptr->r_ptr->misc_flags.has_not(MonsterMiscType::QUESTOR)) || AngbandSystem::get_instance().is_phase_out() || (md_ptr->m_ptr->r_idx != MonraceId::SERPENT) || md_ptr->cloned) {
