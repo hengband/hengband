@@ -107,14 +107,24 @@ void BaseitemDefinition::decide_easy_know()
 }
 
 /*!
- * @brief オブジェクトを試行済にする
+ * @brief 試行状態を変える
+ * @param state trueなら試行済、falseなら未試行に変える
  */
-void BaseitemDefinition::mark_as_tried()
+void BaseitemDefinition::mark_trial(bool state)
 {
-    this->tried = true;
+    this->tried = state;
 }
 
-void BaseitemDefinition::mark_as_aware()
+/*!
+ * @brief 鑑定状態を変える
+ * @param state trueなら鑑定済、falseなら未鑑定に変える
+ */
+void BaseitemDefinition::mark_awareness(bool state)
 {
-    this->aware = true;
+    this->aware = state;
+}
+
+void BaseitemDefinition::reset_visual()
+{
+    this->symbol_config = this->symbol_definition;
 }

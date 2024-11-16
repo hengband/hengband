@@ -278,7 +278,7 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
         }
 
         auto &baseitem = o_ptr->get_baseitem();
-        baseitem.mark_as_aware(); //!< @note 記録には残さないためTRUEを立てるのみ
+        baseitem.mark_awareness(true); //!< @note 記録には残さない.
         set_bits(o_ptr->ident, IDENT_KNOWN | IDENT_FULL_KNOWN);
         o_ptr->marked.set(OmType::TOUCHED);
     }

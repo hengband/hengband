@@ -67,6 +67,7 @@ public:
     bool aware{}; /*!< ベースアイテムが鑑定済かどうか /  The player is "aware" of the item's effects */
     bool tried{}; /*!< ベースアイテムを未鑑定のまま試したことがあるか /  The player has "tried" one of the items */
 
-    void mark_as_tried();
-    void mark_as_aware();
+    void mark_trial(bool state);
+    void mark_awareness(bool state);
+    void reset_visual();
 };
