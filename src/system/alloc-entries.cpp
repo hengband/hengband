@@ -108,10 +108,28 @@ MonraceAllocationEntry &MonraceAllocationTable::get_entry(int index)
     return this->entries.at(index);
 }
 
-/* The entries in the "kind allocator table" */
-std::vector<alloc_entry> alloc_kind_table;
+BaseitemAllocationEntry::BaseitemAllocationEntry(short index, int level, short prob1, short prob2)
+    : index(index)
+    , level(level)
+    , prob1(prob1)
+    , prob2(prob2)
+{
+}
 
-BaseitemDefinition &alloc_entry::get_baseitem() const
+const BaseitemKey &BaseitemAllocationEntry::get_bi_key() const
+{
+    return this->get_baseitem().bi_key;
+}
+
+int BaseitemAllocationEntry::get_baseitem_level() const
+{
+    return this->get_baseitem().level;
+}
+
+/* The entries in the "kind allocator table" */
+std::vector<BaseitemAllocationEntry> alloc_kind_table;
+
+const BaseitemDefinition &BaseitemAllocationEntry::get_baseitem() const
 {
     return BaseitemList::get_instance().get_baseitem(this->index);
 }

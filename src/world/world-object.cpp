@@ -86,8 +86,7 @@ OBJECT_IDX get_obj_index(const FloorType *floor_ptr, DEPTH level, BIT_FLAGS mode
             break;
         }
 
-        const auto &baseitem = entry.get_baseitem();
-        if ((mode & AM_FORBID_CHEST) && (baseitem.bi_key.tval() == ItemKindType::CHEST)) {
+        if ((mode & AM_FORBID_CHEST) && (entry.get_bi_key().tval() == ItemKindType::CHEST)) {
             continue;
         }
 

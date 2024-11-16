@@ -27,21 +27,6 @@ private:
     const MonraceDefinition &get_monrace() const;
 };
 
-/*
- * An entry for the object/monster allocation functions
- *
- * Pass 1 is determined from allocation information
- * Pass 2 is determined from allocation restriction
- */
-class BaseitemDefinition;
-struct alloc_entry {
-    short index; /* The actual index */
-    int level; /* Base dungeon level */
-    short prob1; /* Probability, pass 1 */
-    short prob2; /* Probability, pass 2 */
-    BaseitemDefinition &get_baseitem() const;
-};
-
 class MonraceAllocationTable {
 public:
     MonraceAllocationTable(const MonraceAllocationTable &) = delete;
@@ -65,4 +50,27 @@ private:
     std::vector<MonraceAllocationEntry> entries{};
 };
 
-extern std::vector<alloc_entry> alloc_kind_table;
+/*
+ * An entry for the object/monster allocation functions
+ *
+ * Pass 1 is determined from allocation information
+ * Pass 2 is determined from allocation restriction
+ */
+class BaseitemKey;
+class BaseitemDefinition;
+class BaseitemAllocationEntry {
+public:
+    BaseitemAllocationEntry() = default;
+    BaseitemAllocationEntry(short index, int level, short prob1, short prob2);
+    short index; /* The actual index */
+    int level; /* Base dungeon level */
+    short prob1; /* Probability, pass 1 */
+    short prob2; /* Probability, pass 2 */
+    const BaseitemKey &get_bi_key() const;
+    int get_baseitem_level() const;
+
+private:
+    const BaseitemDefinition &get_baseitem() const;
+};
+
+extern std::vector<BaseitemAllocationEntry> alloc_kind_table;
