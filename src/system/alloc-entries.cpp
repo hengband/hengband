@@ -1,7 +1,9 @@
 #include "system/alloc-entries.h"
+#include "floor/floor-base-definitions.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "system/monster-race-info.h"
+#include <array>
 
 MonraceAllocationEntry::MonraceAllocationEntry(MonraceId index, int level, short prob1, short prob2)
     : index(index)
@@ -129,7 +131,89 @@ int BaseitemAllocationEntry::get_baseitem_level() const
 /* The entries in the "kind allocator table" */
 std::vector<BaseitemAllocationEntry> alloc_kind_table;
 
+BaseitemAllocationTable BaseitemAllocationTable::instance{};
+
 const BaseitemDefinition &BaseitemAllocationEntry::get_baseitem() const
 {
     return BaseitemList::get_instance().get_baseitem(this->index);
+}
+
+BaseitemAllocationTable &BaseitemAllocationTable::get_instance()
+{
+    return instance;
+}
+
+void BaseitemAllocationTable::initialize()
+{
+    std::array<short, MAX_DEPTH> num{};
+    auto allocation_size = 0;
+    const auto &baseitems = BaseitemList::get_instance();
+    for (const auto &baseitem : baseitems) {
+        for (const auto &[level, chance] : baseitem.alloc_tables) {
+            if (chance != 0) {
+                allocation_size++;
+                num[level]++;
+            }
+        }
+    }
+
+    for (auto i = 1; i < MAX_DEPTH; i++) {
+        num[i] += num[i - 1];
+    }
+
+    if (num[0] == 0) {
+        THROW_EXCEPTION(std::runtime_error, _("町のアイテムがない！", "No town items!"));
+    }
+
+    this->entries = std::vector<BaseitemAllocationEntry>(allocation_size);
+    std::array<short, MAX_DEPTH> aux{};
+    for (const auto &baseitem : baseitems) {
+        for (const auto &[level, chance] : baseitem.alloc_tables) {
+            if (chance == 0) {
+                continue;
+            }
+
+            const auto x = level;
+            const short p = 100 / chance;
+            const auto y = (x > 0) ? num[x - 1] : 0;
+            const auto z = y + aux[x];
+            this->entries[z] = BaseitemAllocationEntry(baseitem.idx, x, p, p);
+            aux[x]++;
+        }
+    }
+}
+
+std::vector<BaseitemAllocationEntry>::iterator BaseitemAllocationTable::begin()
+{
+    return this->entries.begin();
+}
+
+std::vector<BaseitemAllocationEntry>::const_iterator BaseitemAllocationTable::begin() const
+{
+    return this->entries.cbegin();
+}
+
+std::vector<BaseitemAllocationEntry>::iterator BaseitemAllocationTable::end()
+{
+    return this->entries.end();
+}
+
+std::vector<BaseitemAllocationEntry>::const_iterator BaseitemAllocationTable::end() const
+{
+    return this->entries.cend();
+}
+
+size_t BaseitemAllocationTable::size() const
+{
+    return this->entries.size();
+}
+
+const BaseitemAllocationEntry &BaseitemAllocationTable::get_entry(int index) const
+{
+    return this->entries.at(index);
+}
+
+BaseitemAllocationEntry &BaseitemAllocationTable::get_entry(int index)
+{
+    return this->entries.at(index);
 }
