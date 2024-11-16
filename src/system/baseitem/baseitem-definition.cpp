@@ -1,5 +1,5 @@
 /*!
- * @brief ベースアイテム定義
+ * @brief ベースアイテム定義の実装
  * @date 2024/11/16
  * @author deskull, Hourier
  */
