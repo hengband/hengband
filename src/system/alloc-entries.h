@@ -66,11 +66,14 @@ public:
     int level; /* Base dungeon level */
     short prob1; /* Probability, pass 1 */
     short prob2; /* Probability, pass 2 */
-    const BaseitemKey &get_bi_key() const;
+    bool is_same_bi_key(const BaseitemKey &bi_key) const;
+    bool is_chest() const;
     int get_baseitem_level() const;
+    bool order_level(const BaseitemAllocationEntry &other) const;
 
 private:
     const BaseitemDefinition &get_baseitem() const;
+    const BaseitemKey &get_bi_key() const;
 };
 
 class BaseitemAllocationTable {
@@ -89,6 +92,7 @@ public:
     size_t size() const;
     const BaseitemAllocationEntry &get_entry(int index) const;
     BaseitemAllocationEntry &get_entry(int index);
+    bool order_level(int index1, int index2) const;
 
 private:
     static BaseitemAllocationTable instance;

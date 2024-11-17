@@ -1,7 +1,6 @@
 #include "world/world-object.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "object-enchant/item-apply-magic.h"
-#include "object/tval-types.h"
 #include "system/alloc-entries.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/dungeon-info.h"
@@ -87,7 +86,7 @@ OBJECT_IDX get_obj_index(const FloorType *floor_ptr, DEPTH level, BIT_FLAGS mode
             break;
         }
 
-        if ((mode & AM_FORBID_CHEST) && (entry.get_bi_key().tval() == ItemKindType::CHEST)) {
+        if ((mode & AM_FORBID_CHEST) && (entry.is_chest())) {
             continue;
         }
 
@@ -112,6 +111,6 @@ OBJECT_IDX get_obj_index(const FloorType *floor_ptr, DEPTH level, BIT_FLAGS mode
 
     std::vector<int> result;
     ProbabilityTable<int>::lottery(std::back_inserter(result), prob_table, n);
-    const auto it = std::max_element(result.begin(), result.end(), [&table](int a, int b) { return table.get_entry(a).level < table.get_entry(b).level; });
+    const auto it = std::max_element(result.begin(), result.end(), [&table](int a, int b) { return table.order_level(a, b); });
     return table.get_entry(*it).index;
 }

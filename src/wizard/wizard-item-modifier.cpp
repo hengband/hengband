@@ -324,7 +324,7 @@ static void prt_alloc(const BaseitemKey &bi_key, TERM_LEN row, TERM_LEN col)
             total[i] += prob / magnificant;
             total_frac += prob % magnificant;
 
-            if (entry.get_bi_key() == bi_key) {
+            if (entry.is_same_bi_key(bi_key)) {
                 home = entry.get_baseitem_level();
                 rarity[i] += prob / magnificant;
             }
