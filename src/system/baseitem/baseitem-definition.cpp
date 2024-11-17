@@ -7,7 +7,7 @@
 #include "system/baseitem/baseitem-definition.h"
 #include "util/string-processor.h"
 
-BaseitemInfo::BaseitemInfo()
+BaseitemDefinition::BaseitemDefinition()
     : bi_key(ItemKindType::NONE)
     , symbol_definition(DisplaySymbol(0, '\0'))
     , symbol_config(DisplaySymbol(0, '\0'))
@@ -21,7 +21,7 @@ BaseitemInfo::BaseitemInfo()
  * その他、ベースアイテムIDは歴史的事情により歯抜けが多数あり、それらは名前が空欄になるようにオブジェクトを生成している
  * @todo v3.1以降で歯抜けを埋めるようにベースアイテムを追加していきたい (詳細未定)
  */
-bool BaseitemInfo::is_valid() const
+bool BaseitemDefinition::is_valid() const
 {
     return (this->idx > 0) && !this->name.empty();
 }
@@ -30,7 +30,7 @@ bool BaseitemInfo::is_valid() const
  * @brief ベースアイテム名を返す
  * @return ベースアイテム名
  */
-std::string BaseitemInfo::stripped_name() const
+std::string BaseitemDefinition::stripped_name() const
 {
     const auto tokens = str_split(this->name, ' ');
     std::stringstream ss;
@@ -62,7 +62,7 @@ std::string BaseitemInfo::stripped_name() const
     return ss.str();
 }
 
-bool BaseitemInfo::order_cost(const BaseitemInfo &other) const
+bool BaseitemDefinition::order_cost(const BaseitemDefinition &other) const
 {
     return this->cost < other.cost;
 }
@@ -70,7 +70,7 @@ bool BaseitemInfo::order_cost(const BaseitemInfo &other) const
 /*!
  * @brief 最初から簡易な名称が明らかなベースアイテムにその旨のフラグを立てる
  */
-void BaseitemInfo::decide_easy_know()
+void BaseitemDefinition::decide_easy_know()
 {
     switch (this->bi_key.tval()) {
     case ItemKindType::LIFE_BOOK:
@@ -109,12 +109,12 @@ void BaseitemInfo::decide_easy_know()
 /*!
  * @brief オブジェクトを試行済にする
  */
-void BaseitemInfo::mark_as_tried()
+void BaseitemDefinition::mark_as_tried()
 {
     this->tried = true;
 }
 
-void BaseitemInfo::mark_as_aware()
+void BaseitemDefinition::mark_as_aware()
 {
     this->aware = true;
 }

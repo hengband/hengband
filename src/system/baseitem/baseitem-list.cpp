@@ -53,7 +53,7 @@ BaseitemList &BaseitemList::get_instance()
     return instance;
 }
 
-BaseitemInfo &BaseitemList::get_baseitem(const short bi_id)
+BaseitemDefinition &BaseitemList::get_baseitem(const short bi_id)
 {
     if ((bi_id < 0) || (bi_id >= static_cast<short>(this->baseitems.size()))) {
         THROW_EXCEPTION(std::logic_error, format(INVALID_BI_ID_FORMAT, bi_id));
@@ -62,7 +62,7 @@ BaseitemInfo &BaseitemList::get_baseitem(const short bi_id)
     return this->baseitems[bi_id];
 }
 
-const BaseitemInfo &BaseitemList::get_baseitem(const short bi_id) const
+const BaseitemDefinition &BaseitemList::get_baseitem(const short bi_id) const
 {
     if ((bi_id < 0) || (bi_id >= static_cast<short>(this->baseitems.size()))) {
         THROW_EXCEPTION(std::logic_error, format(INVALID_BI_ID_FORMAT, bi_id));
@@ -71,42 +71,42 @@ const BaseitemInfo &BaseitemList::get_baseitem(const short bi_id) const
     return this->baseitems[bi_id];
 }
 
-std::vector<BaseitemInfo>::iterator BaseitemList::begin()
+std::vector<BaseitemDefinition>::iterator BaseitemList::begin()
 {
     return this->baseitems.begin();
 }
 
-std::vector<BaseitemInfo>::const_iterator BaseitemList::begin() const
+std::vector<BaseitemDefinition>::const_iterator BaseitemList::begin() const
 {
     return this->baseitems.begin();
 }
 
-std::vector<BaseitemInfo>::iterator BaseitemList::end()
+std::vector<BaseitemDefinition>::iterator BaseitemList::end()
 {
     return this->baseitems.end();
 }
 
-std::vector<BaseitemInfo>::const_iterator BaseitemList::end() const
+std::vector<BaseitemDefinition>::const_iterator BaseitemList::end() const
 {
     return this->baseitems.end();
 }
 
-std::vector<BaseitemInfo>::reverse_iterator BaseitemList::rbegin()
+std::vector<BaseitemDefinition>::reverse_iterator BaseitemList::rbegin()
 {
     return this->baseitems.rbegin();
 }
 
-std::vector<BaseitemInfo>::const_reverse_iterator BaseitemList::rbegin() const
+std::vector<BaseitemDefinition>::const_reverse_iterator BaseitemList::rbegin() const
 {
     return this->baseitems.rbegin();
 }
 
-std::vector<BaseitemInfo>::reverse_iterator BaseitemList::rend()
+std::vector<BaseitemDefinition>::reverse_iterator BaseitemList::rend()
 {
     return this->baseitems.rend();
 }
 
-std::vector<BaseitemInfo>::const_reverse_iterator BaseitemList::rend() const
+std::vector<BaseitemDefinition>::const_reverse_iterator BaseitemList::rend() const
 {
     return this->baseitems.rend();
 }
@@ -155,7 +155,7 @@ short BaseitemList::lookup_baseitem_id(const BaseitemKey &bi_key) const
     return exe_lookup({ bi_key.tval(), rand_choice(svals) });
 }
 
-const BaseitemInfo &BaseitemList::lookup_baseitem(const BaseitemKey &bi_key) const
+const BaseitemDefinition &BaseitemList::lookup_baseitem(const BaseitemKey &bi_key) const
 {
     const auto bi_id = this->lookup_baseitem_id(bi_key);
     return this->baseitems[bi_id];
@@ -197,7 +197,7 @@ int BaseitemList::calc_num_gold_subtypes() const
  * @details 同一の財宝カテゴリ内ならば常に大きいほど価値が高い.
  * カテゴリが異なるならば価値の大小は保証しない. 即ち「最も高い銅貨>最も安い銀貨」はあり得る.
  */
-const BaseitemInfo &BaseitemList::lookup_gold(int target_offset) const
+const BaseitemDefinition &BaseitemList::lookup_gold(int target_offset) const
 {
     auto offset = 0;
     for (const auto &pair : this->create_sorted_golds()) {
@@ -403,7 +403,7 @@ std::map<MoneyKind, std::vector<BaseitemKey>> BaseitemList::create_unsorted_gold
     return list;
 }
 
-BaseitemInfo &BaseitemList::lookup_baseitem(const BaseitemKey &bi_key)
+BaseitemDefinition &BaseitemList::lookup_baseitem(const BaseitemKey &bi_key)
 {
     const auto bi_id = this->lookup_baseitem_id(bi_key);
     return this->baseitems[bi_id];

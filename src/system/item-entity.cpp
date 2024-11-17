@@ -822,7 +822,7 @@ bool ItemEntity::is_target_of(QuestId quest_id) const
     return this->bi_key == artifact.bi_key;
 }
 
-BaseitemInfo &ItemEntity::get_baseitem() const
+BaseitemDefinition &ItemEntity::get_baseitem() const
 {
     return BaseitemList::get_instance().get_baseitem(this->bi_id);
 }

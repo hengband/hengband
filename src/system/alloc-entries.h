@@ -33,13 +33,13 @@ private:
  * Pass 1 is determined from allocation information
  * Pass 2 is determined from allocation restriction
  */
-class BaseitemInfo;
+class BaseitemDefinition;
 struct alloc_entry {
     short index; /* The actual index */
     int level; /* Base dungeon level */
     short prob1; /* Probability, pass 1 */
     short prob2; /* Probability, pass 2 */
-    BaseitemInfo &get_baseitem() const;
+    BaseitemDefinition &get_baseitem() const;
 };
 
 class MonraceAllocationTable {

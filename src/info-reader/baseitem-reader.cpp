@@ -28,7 +28,7 @@
  * @param what 参照元の文字列
  * @return 見つけたらtrue
  */
-static bool grab_one_baseitem_flag(BaseitemInfo &baseitem, std::string_view what)
+static bool grab_one_baseitem_flag(BaseitemDefinition &baseitem, std::string_view what)
 {
     if (TrFlags::grab_one_flag(baseitem.flags, baseitem_flags, what)) {
         return true;
@@ -48,7 +48,7 @@ static bool grab_one_baseitem_flag(BaseitemInfo &baseitem, std::string_view what
  * @param baseitem 保管先のベースアイテム情報インスタンス
  * @return エラーコード
  */
-static errr set_baseitem_symbol(const nlohmann::json &symbol_data, BaseitemInfo &baseitem)
+static errr set_baseitem_symbol(const nlohmann::json &symbol_data, BaseitemDefinition &baseitem)
 {
     if (symbol_data.is_null()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
@@ -82,7 +82,7 @@ static errr set_baseitem_symbol(const nlohmann::json &symbol_data, BaseitemInfo 
  * @param baseitem 保管先のベースアイテム情報インスタンス
  * @return エラーコード
  */
-static errr set_baseitem_kind(nlohmann::json &baseitem_data, BaseitemInfo &baseitem)
+static errr set_baseitem_kind(nlohmann::json &baseitem_data, BaseitemDefinition &baseitem)
 {
     if (baseitem_data.is_null()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
@@ -107,7 +107,7 @@ static errr set_baseitem_kind(nlohmann::json &baseitem_data, BaseitemInfo &basei
  * @param baseitem 保管先のベースアイテム情報インスタンス
  * @return エラーコード
  */
-static errr set_baseitem_parameter_value(const nlohmann::json &pval_data, BaseitemInfo &baseitem)
+static errr set_baseitem_parameter_value(const nlohmann::json &pval_data, BaseitemDefinition &baseitem)
 {
     if (auto err = info_set_integer(pval_data, baseitem.pval, false, Range(-9999, 9999))) {
         return err;
@@ -125,7 +125,7 @@ static errr set_baseitem_parameter_value(const nlohmann::json &pval_data, Baseit
  * @param baseitem 保管先のベースアイテム情報インスタンス
  * @return エラーコード
  */
-static errr set_baseitem_allocations(nlohmann::json &allocations_data, BaseitemInfo &baseitem)
+static errr set_baseitem_allocations(nlohmann::json &allocations_data, BaseitemDefinition &baseitem)
 {
     if (allocations_data.is_null()) {
         return PARSE_ERROR_NONE;
@@ -154,7 +154,7 @@ static errr set_baseitem_allocations(nlohmann::json &allocations_data, BaseitemI
  * @param baseitem 保管先のベースアイテム情報インスタンス
  * @return エラーコード
  */
-static errr set_baseitem_activate(const nlohmann::json &act_data, BaseitemInfo &baseitem)
+static errr set_baseitem_activate(const nlohmann::json &act_data, BaseitemDefinition &baseitem)
 {
     if (!act_data.is_string()) {
         return PARSE_ERROR_NONE;
@@ -176,7 +176,7 @@ static errr set_baseitem_activate(const nlohmann::json &act_data, BaseitemInfo &
  * @param baseitem 保管先のベースアイテム情報インスタンス
  * @return エラーコード
  */
-static errr set_baseitem_flags(const nlohmann::json &flag_data, BaseitemInfo &baseitem)
+static errr set_baseitem_flags(const nlohmann::json &flag_data, BaseitemDefinition &baseitem)
 {
     if (flag_data.is_null()) {
         return PARSE_ERROR_NONE;

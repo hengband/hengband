@@ -29,7 +29,7 @@ enum class RandomArtActType : short;
 enum class SmithEffectType : short;
 class ActivationType;
 class ArtifactType;
-class BaseitemInfo;
+class BaseitemDefinition;
 class DisplaySymbol;
 class EgoItemDefinition;
 class MonraceDefinition;
@@ -151,7 +151,7 @@ public:
     bool has_bias() const;
     bool is_bounty() const;
     bool is_target_of(QuestId quest_id) const;
-    BaseitemInfo &get_baseitem() const;
+    BaseitemDefinition &get_baseitem() const;
     EgoItemDefinition &get_ego() const;
     ArtifactType &get_fixed_artifact() const;
     TrFlags get_flags() const;

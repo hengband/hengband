@@ -122,7 +122,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
  * @param baseitem ベースアイテムへの参照
  * @return collect_objects() の処理を続行するか否か
  */
-static bool check_baseitem_chance(const BIT_FLAGS8 mode, const BaseitemInfo &baseitem)
+static bool check_baseitem_chance(const BIT_FLAGS8 mode, const BaseitemDefinition &baseitem)
 {
     if (mode & 0x02) {
         return true;

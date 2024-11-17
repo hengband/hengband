@@ -46,7 +46,7 @@ DisplaySymbol image_object()
 {
     if (use_graphics) {
         auto &baseitems = BaseitemList::get_instance();
-        const std::span<BaseitemInfo> candidates(baseitems.begin() + 1, baseitems.end());
+        const std::span<BaseitemDefinition> candidates(baseitems.begin() + 1, baseitems.end());
         const auto &baseitem = rand_choice(candidates);
         return baseitem.symbol_config;
     }

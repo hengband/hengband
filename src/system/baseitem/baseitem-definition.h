@@ -12,9 +12,9 @@
 
 enum class ItemKindType : short;
 enum class RandomArtActType : short;
-class BaseitemInfo {
+class BaseitemDefinition {
 public:
-    BaseitemInfo();
+    BaseitemDefinition();
     short idx{};
 
     std::string name; /*!< ベースアイテム名 */
@@ -51,7 +51,7 @@ public:
 
     bool is_valid() const;
     std::string stripped_name() const;
-    bool order_cost(const BaseitemInfo &other) const;
+    bool order_cost(const BaseitemDefinition &other) const;
     void decide_easy_know();
 
     /* @todo ここから下はBaseitemDefinitions.txt に依存しないミュータブルなフィールド群なので、将来的に分離予定 */

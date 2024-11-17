@@ -14,7 +14,7 @@
 void ItemLoaderBase::load_item()
 {
     auto loading_max_k_idx = rd_u16b();
-    BaseitemInfo dummy;
+    BaseitemDefinition dummy;
     auto &baseitems = BaseitemList::get_instance();
     for (uint16_t i = 0; i < loading_max_k_idx; i++) {
         auto &baseitem = i < baseitems.size() ? baseitems.get_baseitem(i) : dummy;
