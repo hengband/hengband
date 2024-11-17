@@ -34,7 +34,6 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "system/system-variables.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -42,25 +41,6 @@
 #include "wizard/wizard-messages.h"
 #include "world/world-object.h"
 #include "world/world.h"
-
-/*!
- * @brief オブジェクト生成テーブルに生成制約を加える /
- * Apply a "object restriction function" to the "object allocation table"
- * @return 常に0を返す。
- * @details 生成の制約はグローバルのget_obj_index_hook関数ポインタで加える
- */
-static errr get_obj_index_prep(void)
-{
-    for (auto &entry : BaseitemAllocationTable::get_instance()) {
-        if (!get_obj_index_hook || (*get_obj_index_hook)(entry.index)) {
-            entry.prob2 = entry.prob1;
-        } else {
-            entry.prob2 = 0;
-        }
-    }
-
-    return 0;
-}
 
 /*!
  * @brief デバッグ時にアイテム生成情報をメッセージに出力する / Cheat -- describe a created object for the user
@@ -136,14 +116,15 @@ bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, std:
         get_obj_index_hook = kind_is_good;
     }
 
+    auto &table = BaseitemAllocationTable::get_instance();
     if (get_obj_index_hook) {
-        get_obj_index_prep();
+        table.prepare_allocation();
     }
 
     const auto bi_id = get_obj_index(&floor, base, mode);
     if (get_obj_index_hook) {
         get_obj_index_hook = nullptr;
-        get_obj_index_prep();
+        table.prepare_allocation();
     }
 
     if (bi_id == 0) {

@@ -94,6 +94,8 @@ public:
     BaseitemAllocationEntry &get_entry(int index);
     bool order_level(int index1, int index2) const;
 
+    void prepare_allocation();
+
 private:
     static BaseitemAllocationTable instance;
     BaseitemAllocationTable() = default;
