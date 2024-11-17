@@ -51,7 +51,7 @@
  */
 static errr get_obj_index_prep(void)
 {
-    for (auto &entry : alloc_kind_table) {
+    for (auto &entry : BaseitemAllocationTable::get_instance()) {
         if (!get_obj_index_hook || (*get_obj_index_hook)(entry.index)) {
             entry.prob2 = entry.prob1;
         } else {

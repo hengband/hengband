@@ -128,9 +128,6 @@ int BaseitemAllocationEntry::get_baseitem_level() const
     return this->get_baseitem().level;
 }
 
-/* The entries in the "kind allocator table" */
-std::vector<BaseitemAllocationEntry> alloc_kind_table;
-
 BaseitemAllocationTable BaseitemAllocationTable::instance{};
 
 const BaseitemDefinition &BaseitemAllocationEntry::get_baseitem() const

@@ -79,9 +79,10 @@ OBJECT_IDX get_obj_index(const FloorType *floor_ptr, DEPTH level, BIT_FLAGS mode
     }
 
     // 候補の確率テーブル生成
+    const auto &table = BaseitemAllocationTable::get_instance();
     ProbabilityTable<int> prob_table;
-    for (auto i = 0U; i < alloc_kind_table.size(); i++) {
-        const auto &entry = alloc_kind_table[i];
+    for (size_t i = 0; i < table.size(); i++) {
+        const auto &entry = table.get_entry(i);
         if (entry.level > level) {
             break;
         }
@@ -111,8 +112,6 @@ OBJECT_IDX get_obj_index(const FloorType *floor_ptr, DEPTH level, BIT_FLAGS mode
 
     std::vector<int> result;
     ProbabilityTable<int>::lottery(std::back_inserter(result), prob_table, n);
-
-    auto it = std::max_element(result.begin(), result.end(), [](int a, int b) { return alloc_kind_table[a].level < alloc_kind_table[b].level; });
-
-    return alloc_kind_table[*it].index;
+    const auto it = std::max_element(result.begin(), result.end(), [&table](int a, int b) { return table.get_entry(a).level < table.get_entry(b).level; });
+    return table.get_entry(*it).index;
 }

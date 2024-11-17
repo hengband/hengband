@@ -313,7 +313,7 @@ static void prt_alloc(const BaseitemKey &bi_key, TERM_LEN row, TERM_LEN col)
     for (auto i = 0; i < BASEITEM_MAX_DEPTH; i++) {
         auto total_frac = 0;
         constexpr auto magnificant = CHANCE_BASEITEM_LEVEL_BOOST * BASEITEM_MAX_DEPTH;
-        for (const auto &entry : alloc_kind_table) {
+        for (const auto &entry : BaseitemAllocationTable::get_instance()) {
             auto prob = 0;
             if (entry.level <= i) {
                 prob = entry.prob1 * magnificant;

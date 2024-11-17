@@ -95,5 +95,3 @@ private:
     BaseitemAllocationTable() = default;
     std::vector<BaseitemAllocationEntry> entries;
 };
-
-extern std::vector<BaseitemAllocationEntry> alloc_kind_table;
