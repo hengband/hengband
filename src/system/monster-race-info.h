@@ -150,6 +150,7 @@ public:
 
     //!< @todo ここから先はミュータブルなフィールドなので分離すべき.
     bool has_entity() const;
+    bool should_display(bool is_alive) const;
 
     void reset_current_numbers();
     void increment_current_numbers();
@@ -225,6 +226,7 @@ public:
     bool order_level_unique(MonraceId id1, MonraceId id2) const;
     MonraceId pick_id_at_random() const;
     const MonraceDefinition &pick_monrace_at_random() const;
+    int calc_defeat_count() const;
 
     void reset_current_numbers();
     void reset_all_visuals();

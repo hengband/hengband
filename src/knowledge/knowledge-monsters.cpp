@@ -154,19 +154,8 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
         return;
     }
 
-    auto total = 0;
-    for (const auto &[monrace_id, monrace] : monraces_info) {
-        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
-            if (monrace.max_num == 0) {
-                total++;
-            }
-        } else {
-            if (monrace.r_pkills > 0) {
-                total += monrace.r_pkills;
-            }
-        }
-    }
-
+    const auto &monraces = MonraceList::get_instance();
+    const auto total = monraces.calc_defeat_count();
     if (total < 1) {
         fprintf(fff, _("あなたはまだ敵を倒していない。\n\n", "You have defeated no enemies yet.\n\n"));
     } else {
@@ -177,7 +166,6 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
 #endif
     }
 
-    const auto &monraces = MonraceList::get_instance();
     std::vector<MonraceId> monrace_ids = monraces.get_valid_monrace_ids();
     std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
     for (const auto monrace_id : monrace_ids) {
