@@ -1049,7 +1049,6 @@ std::pair<int, Pos2D> count_dt(PlayerType *player_ptr, GridCountKind gck, bool u
     auto count = 0;
     Pos2D pos(0, 0);
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto &dungeon = floor.get_dungeon_definition();
     for (auto d = 0; d < 9; d++) {
         if ((d == 8) && !under) {
             continue;
@@ -1061,27 +1060,8 @@ std::pair<int, Pos2D> count_dt(PlayerType *player_ptr, GridCountKind gck, bool u
             continue;
         }
 
-        switch (gck) {
-        case GridCountKind::OPEN:
-            if (!dungeon.is_open(grid.get_feat_mimic())) {
-                continue;
-            }
-
-            break;
-        case GridCountKind::CLOSED_DOOR:
-            if (!grid.get_terrain_mimic().is_closed_door()) {
-                continue;
-            }
-
-            break;
-        case GridCountKind::TRAP:
-            if (!grid.get_terrain_mimic().is_trap()) {
-                continue;
-            }
-
-            break;
-        default:
-            THROW_EXCEPTION(std::logic_error, format("Invalid GridCountKind is Specified! %d", enum2i(gck)));
+        if (!floor.check_terrain_state(pos_neighbor, gck)) {
+            continue;
         }
 
         ++count;
