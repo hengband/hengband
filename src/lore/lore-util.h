@@ -84,6 +84,8 @@ struct lore_type {
     EnumClassFlagGroup<MonsterMiscType> misc_flags;
 
     bool has_reinforce() const;
+    bool is_details_known() const;
+    bool is_blow_damage_known(int num_blow) const;
 
     std::optional<std::vector<lore_msg>> build_kill_unique_description() const;
     std::string build_revenge_description(bool has_defeated) const;
