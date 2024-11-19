@@ -97,8 +97,8 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
         }
     }
 
-    auto *o_ptr = &floor.o_list[g_ptr->o_idx_list.front()];
-    if (o_ptr->weight > wgt) {
+    auto &item = floor.o_list[g_ptr->o_idx_list.front()];
+    if (item.weight > wgt) {
         msg_print(_("そのアイテムは重過ぎます。", "The object is too heavy."));
         return;
     }
@@ -106,10 +106,10 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
     OBJECT_IDX i = g_ptr->o_idx_list.front();
     g_ptr->o_idx_list.pop_front();
     floor.grid_array[p_pos.y][p_pos.x].o_idx_list.add(&floor, i); /* 'move' it */
-    o_ptr->iy = p_pos.y;
-    o_ptr->ix = p_pos.x;
+    item.iy = p_pos.y;
+    item.ix = p_pos.x;
 
-    const auto item_name = describe_flavor(player_ptr, *o_ptr, OD_NAME_ONLY);
+    const auto item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
     msg_format(_("%s^があなたの足元に飛んできた。", "%s^ flies through the air to your feet."), item_name.data());
     note_spot(player_ptr, p_pos.y, p_pos.x);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MAP);

@@ -136,7 +136,7 @@ bool mundane_spell(PlayerType *player_ptr, bool only_equip)
     POSITION iy = item_ptr->iy;
     POSITION ix = item_ptr->ix;
     auto marked = item_ptr->marked;
-    auto inscription = std::move(item_ptr->inscription);
+    auto &&inscription = std::move(item_ptr->inscription);
     item_ptr->generate(item_ptr->bi_id);
     item_ptr->iy = iy;
     item_ptr->ix = ix;
