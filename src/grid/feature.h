@@ -64,8 +64,6 @@ extern FEAT_IDX feat_wall_type[100];
 
 class FloorType;
 class PlayerType;
-bool is_closed_door(PlayerType *player_ptr, FEAT_IDX feat);
-bool is_trap(PlayerType *player_ptr, FEAT_IDX feat);
 bool is_ascii_graphics(char x);
 FEAT_IDX feat_locked_door_random(int door_type);
 FEAT_IDX feat_jammed_door_random(int door_type);

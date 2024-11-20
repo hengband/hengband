@@ -131,9 +131,9 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
         const auto y = yval + 2 * ddy_ddd[dir1];
         const auto x = xval + 2 * ddx_ddd[dir1];
         place_secret_door(player_ptr, y, x, DOOR_GLASS_DOOR);
-        auto &grid = floor.get_grid({ y, x });
-        if (is_closed_door(player_ptr, grid.feat)) {
-            grid.mimic = feat_glass_wall;
+        const Pos2D pos(y, x);
+        if (floor.is_closed_door(pos)) {
+            floor.get_grid(pos).mimic = feat_glass_wall;
         }
 
         /* Place a potion */

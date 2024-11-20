@@ -39,10 +39,10 @@ static DIRECTION travel_test(PlayerType *player_ptr, DIRECTION prev_dir)
         return 0;
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((disturb_trap_detect || alert_trap_detect) && player_ptr->dtrap && !(floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_IN_DETECT)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    if ((disturb_trap_detect || alert_trap_detect) && player_ptr->dtrap && !(floor.grid_array[player_ptr->y][player_ptr->x].info & CAVE_IN_DETECT)) {
         player_ptr->dtrap = false;
-        if (!(floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_UNSAFE)) {
+        if (!(floor.grid_array[player_ptr->y][player_ptr->x].info & CAVE_UNSAFE)) {
             if (alert_trap_detect) {
                 msg_print(_("* 注意:この先はトラップの感知範囲外です！ *", "*Leaving trap detect region!*"));
             }
@@ -57,9 +57,9 @@ static DIRECTION travel_test(PlayerType *player_ptr, DIRECTION prev_dir)
     for (int i = -max; i <= max; i++) {
         DIRECTION dir = cycle[chome[prev_dir] + i];
         const auto pos = player_ptr->get_neighbor(dir);
-        const auto &grid = floor_ptr->get_grid(pos);
+        const auto &grid = floor.get_grid(pos);
         if (grid.has_monster()) {
-            const auto &monster = floor_ptr->m_list[grid.m_idx];
+            const auto &monster = floor.m_list[grid.m_idx];
             if (monster.ml) {
                 return 0;
             }
@@ -81,11 +81,11 @@ static DIRECTION travel_test(PlayerType *player_ptr, DIRECTION prev_dir)
     }
 
     const auto pos_new = player_ptr->get_neighbor(new_dir);
-    const auto &grid = floor_ptr->get_grid(pos_new);
-    if (!easy_open && is_closed_door(player_ptr, grid.feat)) {
+    if (!easy_open && floor.is_closed_door(pos_new)) {
         return 0;
     }
 
+    const auto &grid = floor.get_grid(pos_new);
     if (!grid.mimic && !trap_can_be_ignored(player_ptr, grid.feat)) {
         return 0;
     }

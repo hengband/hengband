@@ -336,7 +336,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
                 if (!grid.is_extra() && !grid.is_inner() && !grid.is_outer() && !grid.is_solid()) {
                     continue;
                 }
-                if (is_closed_door(player_ptr, grid.feat)) {
+                if (floor.is_closed_door(pos)) {
                     continue;
                 }
             }
