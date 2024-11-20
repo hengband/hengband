@@ -132,8 +132,10 @@ static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
     const auto &system = AngbandSystem::get_instance();
     auto light_by_disintegration = msa_ptr->ability_flags.has(MonsterAbilityType::BR_DISI);
     light_by_disintegration &= msa_ptr->m_ptr->cdis < system.get_max_range() / 2;
-    light_by_disintegration &= in_disintegration_range(player_ptr->current_floor_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x);
-    light_by_disintegration &= one_in_(10) || (projectable(player_ptr, msa_ptr->get_position(), msa_ptr->m_ptr->get_position()) && one_in_(2));
+    const auto pos = msa_ptr->get_position();
+    const auto m_pos = msa_ptr->m_ptr->get_position();
+    light_by_disintegration &= in_disintegration_range(player_ptr->current_floor_ptr, m_pos.y, m_pos.x, pos.y, pos.x);
+    light_by_disintegration &= one_in_(10) || (projectable(player_ptr, pos, m_pos) && one_in_(2));
     if (light_by_disintegration) {
         msa_ptr->do_spell = DO_SPELL_BR_DISI;
         msa_ptr->success = true;
@@ -142,7 +144,7 @@ static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
 
     auto light_by_lite = msa_ptr->ability_flags.has(MonsterAbilityType::BR_LITE);
     light_by_lite &= msa_ptr->m_ptr->cdis < system.get_max_range() / 2;
-    light_by_lite &= los(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x);
+    light_by_lite &= los(player_ptr, m_pos.y, m_pos.x, msa_ptr->y, msa_ptr->x);
     light_by_lite &= one_in_(5);
     if (light_by_lite) {
         msa_ptr->do_spell = DO_SPELL_BR_LITE;
@@ -156,8 +158,8 @@ static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
 
     auto by = msa_ptr->y;
     auto bx = msa_ptr->x;
-    get_project_point(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, &by, &bx, 0L);
-    if ((distance(by, bx, msa_ptr->y, msa_ptr->x) <= 3) && los(player_ptr, by, bx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
+    get_project_point(player_ptr, m_pos.y, m_pos.x, &by, &bx, 0L);
+    if ((distance(by, bx, pos.y, pos.x) <= 3) && los(player_ptr, by, bx, pos.y, pos.x) && one_in_(5)) {
         msa_ptr->do_spell = DO_SPELL_BA_LITE;
         msa_ptr->success = true;
     }
