@@ -359,10 +359,11 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
 
             ty = y + dy;
             tx = x + dx;
+            const Pos2D pos_target(ty, tx);
             if (!in_bounds(floor_ptr, ty, tx)) {
                 continue;
             }
-            if (!projectable(player_ptr, y, x, ty, tx)) {
+            if (!projectable(player_ptr, { y, x }, pos_target)) {
                 continue;
             }
 

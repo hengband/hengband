@@ -440,7 +440,7 @@ bool activate_dispel_magic(PlayerType *player_ptr)
         return true;
     }
 
-    if (!floor.has_los(pos) || !projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
+    if (!floor.has_los(pos) || !projectable(player_ptr, player_ptr->get_position(), pos)) {
         return true;
     }
 

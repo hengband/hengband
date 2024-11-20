@@ -223,16 +223,18 @@ void breath_shape(PlayerType *player_ptr, const ProjectionPath &path, int dist, 
         }
 
         /* Travel from center outward */
+        const Pos2D pos_breath(by, bx);
         for (cdis = 0; cdis <= brad; cdis++) {
-            for (POSITION y = by - cdis; y <= by + cdis; y++) {
-                for (POSITION x = bx - cdis; x <= bx + cdis; x++) {
-                    if (!in_bounds(floor_ptr, y, x)) {
+            for (auto y = pos_breath.y - cdis; y <= pos_breath.y + cdis; y++) {
+                for (auto x = pos_breath.x - cdis; x <= pos_breath.x + cdis; x++) {
+                    const Pos2D pos(y, x);
+                    if (!in_bounds(floor_ptr, pos.y, pos.x)) {
                         continue;
                     }
-                    if (distance(y1, x1, y, x) != bdis) {
+                    if (distance(y1, x1, pos.y, pos.x) != bdis) {
                         continue;
                     }
-                    if (distance(by, bx, y, x) != cdis) {
+                    if (distance(pos_breath.y, pos_breath.x, pos.y, pos.x) != cdis) {
                         continue;
                     }
 
@@ -240,26 +242,26 @@ void breath_shape(PlayerType *player_ptr, const ProjectionPath &path, int dist, 
                     case AttributeType::LITE:
                     case AttributeType::LITE_WEAK:
                         /* Lights are stopped by opaque terrains */
-                        if (!los(player_ptr, by, bx, y, x)) {
+                        if (!los(player_ptr, pos_breath.y, pos_breath.x, pos.y, pos.x)) {
                             continue;
                         }
                         break;
                     case AttributeType::DISINTEGRATE:
                         /* Disintegration are stopped only by perma-walls */
-                        if (!in_disintegration_range(floor_ptr, by, bx, y, x)) {
+                        if (!in_disintegration_range(floor_ptr, pos_breath.y, pos_breath.x, pos.y, pos.x)) {
                             continue;
                         }
                         break;
                     default:
                         /* Ball explosions are stopped by walls */
-                        if (!projectable(player_ptr, by, bx, y, x)) {
+                        if (!projectable(player_ptr, pos_breath, pos)) {
                             continue;
                         }
                         break;
                     }
 
-                    gy[*pgrids] = y;
-                    gx[*pgrids] = x;
+                    gy[*pgrids] = pos.y;
+                    gx[*pgrids] = pos.x;
                     (*pgrids)++;
                 }
             }

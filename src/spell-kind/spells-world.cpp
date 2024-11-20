@@ -232,7 +232,7 @@ bool teleport_level_other(PlayerType *player_ptr)
     if (!grid.has_los()) {
         return true;
     }
-    if (!projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
+    if (!projectable(player_ptr, player_ptr->get_position(), pos)) {
         return true;
     }
 

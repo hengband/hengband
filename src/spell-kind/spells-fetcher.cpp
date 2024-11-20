@@ -72,7 +72,7 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
             if (!floor.has_los(pos)) {
                 msg_print(_("そこはあなたの視界に入っていません。", "You have no direct line of sight to that location."));
                 return;
-            } else if (!projectable(player_ptr, p_pos.y, p_pos.x, ty, tx)) {
+            } else if (!projectable(player_ptr, p_pos, pos)) {
                 msg_print(_("そこは壁の向こうです。", "You have no direct line of sight to that location."));
                 return;
             }
@@ -134,7 +134,7 @@ bool fetch_monster(PlayerType *player_ptr)
     if (!floor.has_los(pos)) {
         return false;
     }
-    if (!projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
+    if (!projectable(player_ptr, player_ptr->get_position(), pos)) {
         return false;
     }
 

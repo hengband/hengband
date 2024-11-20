@@ -207,31 +207,29 @@ bool vanish_dungeon(PlayerType *player_ptr)
  */
 void cast_meteor(PlayerType *player_ptr, int dam, POSITION rad)
 {
-    int b = 10 + randint1(10);
-    for (int i = 0; i < b; i++) {
-        POSITION y = 0, x = 0;
+    const auto b = 10 + randint1(10);
+    const auto p_pos = player_ptr->get_position();
+    for (auto i = 0; i < b; i++) {
+        Pos2D pos(0, 0);
         int count;
-
         for (count = 0; count <= 20; count++) {
-            int dy, dx, d;
-
-            x = player_ptr->x - 8 + randint0(17);
-            y = player_ptr->y - 8 + randint0(17);
-            dx = (player_ptr->x > x) ? (player_ptr->x - x) : (x - player_ptr->x);
-            dy = (player_ptr->y > y) ? (player_ptr->y - y) : (y - player_ptr->y);
-            d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
+            const Pos2DVec vec(randint0(17) - 8, randint0(17) - 8);
+            pos = p_pos + vec;
+            const auto dx = std::abs(player_ptr->x - pos.x);
+            const auto dy = std::abs(player_ptr->y - pos.y);
+            const auto d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
 
             if (d >= 9) {
                 continue;
             }
 
             auto *floor_ptr = player_ptr->current_floor_ptr;
-            if (!in_bounds(floor_ptr, y, x)) {
+            if (!in_bounds(floor_ptr, pos.y, pos.x)) {
                 continue;
             }
 
-            const auto is_projectable = projectable(player_ptr, player_ptr->y, player_ptr->x, y, x);
-            if (!is_projectable || !cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PROJECT)) {
+            const auto is_projectable = projectable(player_ptr, p_pos, pos);
+            if (!is_projectable || !cave_has_flag_bold(floor_ptr, pos.y, pos.x, TerrainCharacteristics::PROJECT)) {
                 continue;
             }
 
@@ -242,6 +240,6 @@ void cast_meteor(PlayerType *player_ptr, int dam, POSITION rad)
             continue;
         }
 
-        project(player_ptr, 0, rad, y, x, dam, AttributeType::METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM);
+        project(player_ptr, 0, rad, pos.y, pos.x, dam, AttributeType::METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM);
     }
 }

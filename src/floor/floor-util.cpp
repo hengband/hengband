@@ -156,13 +156,14 @@ void wipe_o_list(FloorType *floor_ptr)
  */
 void scatter(PlayerType *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const Pos2D pos(y, x);
+    const auto &floor = *player_ptr->current_floor_ptr;
     POSITION nx, ny;
     while (true) {
         ny = rand_spread(y, d);
         nx = rand_spread(x, d);
-
-        if (!in_bounds(floor_ptr, ny, nx)) {
+        const Pos2D pos_neighbor(ny, nx);
+        if (!in_bounds(&floor, ny, nx)) {
             continue;
         }
         if ((d > 1) && (distance(y, x, ny, nx) > d)) {
@@ -175,7 +176,7 @@ void scatter(PlayerType *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POS
             continue;
         }
 
-        if (projectable(player_ptr, y, x, ny, nx)) {
+        if (projectable(player_ptr, { y, x }, pos_neighbor)) {
             break;
         }
     }

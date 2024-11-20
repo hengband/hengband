@@ -475,37 +475,39 @@ static void decide_sight_invisible_monster(PlayerType *player_ptr, um_type *um_p
  */
 static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
-    auto *m_ptr = um_ptr->m_ptr;
-    if (m_ptr->ml) {
+    auto &monster = *um_ptr->m_ptr;
+    if (monster.ml) {
         return;
     }
 
-    m_ptr->ml = true;
+    monster.ml = true;
     lite_spot(player_ptr, um_ptr->fy, um_ptr->fx);
 
     HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
-    if (m_ptr->is_riding()) {
+    if (monster.is_riding()) {
         RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     if (!player_ptr->effects()->hallucination().is_hallucinated()) {
-        auto *r_ptr = &m_ptr->get_monrace();
-        if ((m_ptr->ap_r_idx == MonraceId::KAGE) && (monraces_info[MonraceId::KAGE].r_sights < MAX_SHORT)) {
+        auto *r_ptr = &monster.get_monrace();
+        if ((monster.ap_r_idx == MonraceId::KAGE) && (monraces_info[MonraceId::KAGE].r_sights < MAX_SHORT)) {
             monraces_info[MonraceId::KAGE].r_sights++;
-        } else if (m_ptr->is_original_ap() && (r_ptr->r_sights < MAX_SHORT)) {
+        } else if (monster.is_original_ap() && (r_ptr->r_sights < MAX_SHORT)) {
             r_ptr->r_sights++;
         }
     }
 
     const auto &world = AngbandWorld::get_instance();
-    if (world.is_loading_now && world.character_dungeon && !AngbandSystem::get_instance().is_phase_out() && m_ptr->get_appearance_monrace().misc_flags.has(MonsterMiscType::ELDRITCH_HORROR)) {
-        m_ptr->mflag.set(MonsterTemporaryFlagType::SANITY_BLAST);
+    if (world.is_loading_now && world.character_dungeon && !AngbandSystem::get_instance().is_phase_out() && monster.get_appearance_monrace().misc_flags.has(MonsterMiscType::ELDRITCH_HORROR)) {
+        monster.mflag.set(MonsterTemporaryFlagType::SANITY_BLAST);
     }
 
-    const auto projectable_from_monster = projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x);
-    const auto projectable_from_player = projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
+    const auto p_pos = player_ptr->get_position();
+    const auto m_pos = monster.get_position();
+    const auto projectable_from_monster = projectable(player_ptr, m_pos, p_pos);
+    const auto projectable_from_player = projectable(player_ptr, p_pos, m_pos);
     if (disturb_near && projectable_from_monster && projectable_from_player) {
-        if (disturb_pets || m_ptr->is_hostile()) {
+        if (disturb_pets || monster.is_hostile()) {
             disturb(player_ptr, true, true);
         }
     }

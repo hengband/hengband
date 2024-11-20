@@ -65,10 +65,12 @@
  */
 bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (POSITION y = y1 - 2; y <= y1 + 2; y++) {
-        for (POSITION x = x1 - 2; x <= x1 + 2; x++) {
-            if (!in_bounds(floor_ptr, y, x)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const Pos2D pos1(y1, x1);
+    for (auto y = y1 - 2; y <= y1 + 2; y++) {
+        for (auto x = x1 - 2; x <= x1 + 2; x++) {
+            const Pos2D pos(y, x);
+            if (!in_bounds(&floor, y, x)) {
                 continue;
             }
 
@@ -76,11 +78,11 @@ bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
                 continue;
             }
 
-            if (pattern_tile(floor_ptr, y, x)) {
+            if (pattern_tile(&floor, y, x)) {
                 continue;
             }
 
-            if (is_cave_empty_bold(player_ptr, y, x) && projectable(player_ptr, y1, x1, y, x) && projectable(player_ptr, y, x, y1, x1)) {
+            if (is_cave_empty_bold(player_ptr, y, x) && projectable(player_ptr, pos1, pos) && projectable(player_ptr, pos, pos1)) {
                 return true;
             }
         }
@@ -98,25 +100,24 @@ bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
  */
 bool raise_possible(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
-    POSITION y = m_ptr->fy;
-    POSITION x = m_ptr->fx;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (POSITION xx = x - 5; xx <= x + 5; xx++) {
-        Grid *g_ptr;
-        for (POSITION yy = y - 5; yy <= y + 5; yy++) {
-            if (distance(y, x, yy, xx) > 5) {
+    const auto m_pos = m_ptr->get_position();
+    const auto &floor = *player_ptr->current_floor_ptr;
+    for (auto xx = m_pos.x - 5; xx <= m_pos.x + 5; xx++) {
+        for (auto yy = m_pos.y - 5; yy <= m_pos.y + 5; yy++) {
+            const Pos2D pos(yy, xx);
+            if (distance(m_pos.y, m_pos.x, yy, xx) > 5) {
                 continue;
             }
-            if (!los(player_ptr, y, x, yy, xx)) {
+            if (!los(player_ptr, m_pos.y, m_pos.x, yy, xx)) {
                 continue;
             }
-            if (!projectable(player_ptr, y, x, yy, xx)) {
+            if (!projectable(player_ptr, m_pos, pos)) {
                 continue;
             }
 
-            g_ptr = &floor_ptr->grid_array[yy][xx];
-            for (const auto this_o_idx : g_ptr->o_idx_list) {
-                const auto &item = floor_ptr->o_list[this_o_idx];
+            const auto &grid = floor.get_grid(pos);
+            for (const auto this_o_idx : grid.o_idx_list) {
+                const auto &item = floor.o_list[this_o_idx];
                 if (item.bi_key.tval() == ItemKindType::MONSTER_REMAINS) {
                     const auto &monrace = item.get_monrace();
                     if (!monster_has_hostile_align(player_ptr, m_ptr, 0, 0, &monrace)) {

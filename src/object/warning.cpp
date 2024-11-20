@@ -348,17 +348,18 @@ static int blow_damcalc(MonsterEntity *m_ptr, PlayerType *player_ptr, const Mons
  */
 bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
 {
-    POSITION mx, my;
-#define WARNING_AWARE_RANGE 12
+    const Pos2D pos(yy, xx);
+    constexpr auto warning_aware_range = 12;
     int dam_max = 0;
     static int old_damage = 0;
 
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &dungeon = floor.get_dungeon_definition();
-    for (mx = xx - WARNING_AWARE_RANGE; mx < xx + WARNING_AWARE_RANGE + 1; mx++) {
-        for (my = yy - WARNING_AWARE_RANGE; my < yy + WARNING_AWARE_RANGE + 1; my++) {
+    for (auto mx = xx - warning_aware_range; mx < xx + warning_aware_range + 1; mx++) {
+        for (auto my = yy - warning_aware_range; my < yy + warning_aware_range + 1; my++) {
+            const Pos2D pos_neighbor(my, mx);
             int dam_max0 = 0;
-            if (!in_bounds(&floor, my, mx) || (distance(my, mx, yy, xx) > WARNING_AWARE_RANGE)) {
+            if (!in_bounds(&floor, my, mx) || (distance(my, mx, yy, xx) > warning_aware_range)) {
                 continue;
             }
 
@@ -380,7 +381,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
             auto *r_ptr = &m_ptr->get_monrace();
 
             /* Monster spells (only powerful ones)*/
-            if (projectable(player_ptr, my, mx, yy, xx)) {
+            if (projectable(player_ptr, pos_neighbor, pos)) {
                 const auto flags = r_ptr->ability_flags;
 
                 if (dungeon.flags.has_not(DungeonFeatureType::NO_MAGIC)) {

@@ -60,8 +60,9 @@ static void escape_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, M
 
         auto speak = m_ptr->get_monrace().speak_flags.has_any_of(flags);
         speak &= !is_acting_monster(m_ptr->r_idx);
-        speak &= player_ptr->current_floor_ptr->has_los({ m_ptr->fy, m_ptr->fx });
-        speak &= projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x);
+        const auto m_pos = m_ptr->get_position();
+        speak &= player_ptr->current_floor_ptr->has_los(m_pos);
+        speak &= projectable(player_ptr, m_pos, player_ptr->get_position());
         if (speak) {
             msg_format(_("%s^「ピンチだ！退却させてもらう！」", "%s^ says 'It is the pinch! I will retreat'."), m_name);
         }

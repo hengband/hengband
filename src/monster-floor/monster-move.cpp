@@ -474,7 +474,9 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
         }
 
         const auto &ap_r_ref = monster.get_appearance_monrace();
-        const auto is_projectable = projectable(player_ptr, player_ptr->y, player_ptr->x, monster.fy, monster.fx);
+        const auto p_pos = player_ptr->get_position(); //!< @details 関数が長すぎてプレイヤーの座標が不変であることを保証できない.
+        const auto m_pos = monster.get_position();
+        const auto is_projectable = projectable(player_ptr, p_pos, m_pos);
         const auto can_see = disturb_near && monster.mflag.has(MonsterTemporaryFlagType::VIEW) && is_projectable;
         const auto is_high_level = disturb_high && (ap_r_ref.r_tkills > 0) && (ap_r_ref.level >= player_ptr->lev);
         const auto is_unknown_level = disturb_unknown && (ap_r_ref.r_tkills == 0);
@@ -550,6 +552,7 @@ static std::string_view get_speak_filename(const MonsterEntity &monster)
  */
 void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware)
 {
+    const Pos2D pos(oy, ox);
     if (AngbandSystem::get_instance().is_phase_out()) {
         return;
     }
@@ -566,7 +569,7 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
 
     const auto can_speak = monster.get_appearance_monrace().speak_flags.any();
     constexpr auto chance_speak = 8;
-    if (!can_speak || !aware || !one_in_(chance_speak) || !floor.has_los({ oy, ox }) || !projectable(player_ptr, oy, ox, player_ptr->y, player_ptr->x)) {
+    if (!can_speak || !aware || !one_in_(chance_speak) || !floor.has_los({ oy, ox }) || !projectable(player_ptr, pos, player_ptr->get_position())) {
         return;
     }
 
