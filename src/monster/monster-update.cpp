@@ -489,11 +489,11 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
     }
 
     if (!player_ptr->effects()->hallucination().is_hallucinated()) {
-        auto *r_ptr = &monster.get_monrace();
+        auto &monrace = monster.get_monrace();
         if ((monster.ap_r_idx == MonraceId::KAGE) && (monraces_info[MonraceId::KAGE].r_sights < MAX_SHORT)) {
             monraces_info[MonraceId::KAGE].r_sights++;
-        } else if (monster.is_original_ap() && (r_ptr->r_sights < MAX_SHORT)) {
-            r_ptr->r_sights++;
+        } else if (monster.is_original_ap() && (monrace.r_sights < MAX_SHORT)) {
+            monrace.r_sights++;
         }
     }
 
