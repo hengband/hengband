@@ -923,10 +923,10 @@ static errr term_xtra_win_sound(int v)
 /*!
  * @brief Hack -- play a music
  */
-static errr term_xtra_win_music(int n, int v)
+static bool term_xtra_win_music(int n, int v)
 {
     if (!use_music) {
-        return 1;
+        return false;
     }
 
     return main_win_music::play_music(n, v);
@@ -935,14 +935,15 @@ static errr term_xtra_win_music(int n, int v)
 /*!
  * @brief Hack -- play a music matches a situation
  */
-static errr term_xtra_win_scene(int v)
+static bool term_xtra_win_scene(int v)
 {
     // TODO 場面に合った壁紙変更対応
     if (!use_music) {
-        return 1;
+        return false;
     }
 
-    return main_win_music::play_music_scene(v);
+    main_win_music::play_music_scene(v);
+    return true;
 }
 
 /*!
@@ -976,13 +977,13 @@ static errr term_xtra_win(int n, int v)
     case TERM_XTRA_MUSIC_QUEST:
     case TERM_XTRA_MUSIC_TOWN:
     case TERM_XTRA_MUSIC_MONSTER: {
-        return term_xtra_win_music(n, v);
+        return term_xtra_win_music(n, v) ? 0 : 1;
     }
-    case TERM_XTRA_MUSIC_MUTE: {
-        return main_win_music::stop_music();
-    }
+    case TERM_XTRA_MUSIC_MUTE:
+        main_win_music::stop_music();
+        return 0;
     case TERM_XTRA_SCENE: {
-        return term_xtra_win_scene(v);
+        return term_xtra_win_scene(v) ? 0 : 1;
     }
     case TERM_XTRA_SOUND: {
         return term_xtra_win_sound(v);
@@ -1880,14 +1881,16 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
     case IDM_OPTIONS_MUSIC: {
         arg_music = !arg_music;
         use_music = arg_music;
-        if (use_music) {
-            init_music();
-            if (game_in_progress) {
-                select_floor_music(player_ptr);
-            }
-        } else {
+        if (!use_music) {
             main_win_music::stop_music();
+            break;
         }
+
+        init_music();
+        if (game_in_progress) {
+            select_floor_music(player_ptr);
+        }
+
         break;
     }
     case IDM_OPTIONS_MUSIC_VOLUME_100:
