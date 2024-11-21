@@ -1,6 +1,7 @@
 #include "system/artifact-type-definition.h"
 #include "artifact/fixed-art-types.h"
 #include "object/tval-types.h"
+#include "system/item-entity.h"
 
 ArtifactType::ArtifactType()
     : bi_key(BaseitemKey(ItemKindType::NONE))
@@ -27,6 +28,33 @@ bool ArtifactType::can_generate(const BaseitemKey &generaing_bi_key) const
     }
 
     return this->bi_key == generaing_bi_key;
+}
+
+/*!
+ * @brief INSTA_ART型の固定アーティファクト生成を試みる
+ * @param 生成基準階層 (現在フロアそのものではなくボーナスつき)
+ * @param fa_id 固定アーティファクトID
+ * @return 生成に成功したらそのアイテム、失敗したらnullopt
+ */
+std::optional<BaseitemKey> ArtifactType::try_make_instant_artifact(int making_level) const
+{
+    if (!this->can_make_instant_artifact()) {
+        return std::nullopt;
+    }
+
+    if (!this->evaluate_shallow_instant_artifact(making_level)) {
+        return std::nullopt;
+    }
+
+    if (!this->evaluate_rarity()) {
+        return std::nullopt;
+    }
+
+    if (!this->evaluate_shallow_baseitem(making_level)) {
+        return std::nullopt;
+    }
+
+    return this->bi_key;
 }
 
 /*!
@@ -80,8 +108,6 @@ bool ArtifactType::evaluate_shallow_baseitem(int making_level) const
 
     return one_in_((baseitem.level - making_level) * 5);
 }
-
-std::map<FixedArtifactId, ArtifactType> artifacts;
 
 ArtifactList ArtifactList::instance{};
 
@@ -183,4 +209,18 @@ void ArtifactList::reset_generated_flags()
     for (auto &[_, artifact] : this->artifacts) {
         artifact.is_generated = false;
     }
+}
+
+std::optional<ItemEntity> ArtifactList::try_make_instant_artifact(int making_level) const
+{
+    for (const auto &[fa_id, artifact] : this->artifacts) {
+        const auto bi_key = artifact.try_make_instant_artifact(making_level);
+        if (bi_key) {
+            ItemEntity instant_artifact(*bi_key);
+            instant_artifact.fa_id = fa_id;
+            return instant_artifact;
+        }
+    }
+
+    return std::nullopt;
 }
