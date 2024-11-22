@@ -197,7 +197,7 @@ const MonraceDefinition &NestMonsterInfo::get_monrace() const
  * @brief タイプ5の部屋…nestを生成する / Type 5 -- Monster nests
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
+bool build_type5(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto nest_type = pick_nest_type(floor, nest_types);

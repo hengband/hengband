@@ -1,5 +1,5 @@
 #pragma once
 
-struct dun_data_type;
+class DungeonData;
 class PlayerType;
-bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr);
+bool build_type15(PlayerType *player_ptr, DungeonData *dd_ptr);

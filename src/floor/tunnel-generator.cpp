@@ -53,7 +53,7 @@ static void correct_dir(POSITION *rdir, POSITION *cdir, POSITION y1, POSITION x1
  * @param col2 終点X座標
  * @return 生成に成功したらTRUEを返す
  */
-bool build_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, dt_type *dt_ptr, POSITION row1, POSITION col1, POSITION row2, POSITION col2)
+bool build_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, dt_type *dt_ptr, POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 {
     POSITION tmp_row, tmp_col;
     POSITION row_dir, col_dir;
@@ -175,7 +175,7 @@ bool build_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, dt_type *dt_ptr
  * @param affectwall (調査中)
  * @todo 特に詳細な処理の意味を調査すべし
  */
-static bool set_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION *x, POSITION *y, bool affectwall)
+static bool set_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION *x, POSITION *y, bool affectwall)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[*y][*x];
@@ -254,7 +254,7 @@ static bool set_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION *
  * @param x 基準点のX座標
  * @param y 基準点のY座標
  */
-static void create_cata_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION x, POSITION y)
+static void create_cata_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION x, POSITION y)
 {
     POSITION x1 = x - 1;
     POSITION y1 = y;
@@ -279,7 +279,7 @@ static void create_cata_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, PO
  * @todo 詳細用調査
  */
 static void short_seg_hack(
-    PlayerType *player_ptr, dun_data_type *dd_ptr, const POSITION x1, const POSITION y1, const POSITION x2, const POSITION y2, int type, int count, bool *fail)
+    PlayerType *player_ptr, DungeonData *dd_ptr, const POSITION x1, const POSITION y1, const POSITION x2, const POSITION y2, int type, int count, bool *fail)
 {
     if (!(*fail)) {
         return;
@@ -371,7 +371,7 @@ static void short_seg_hack(
  * @brief 特定の壁(永久壁など)を避けながら部屋間の通路を作成する / This routine maps a path from (x1, y1) to (x2, y2) avoiding SOLID walls.
  * @todo 詳細要調査
  */
-bool build_tunnel2(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type, int cutoff)
+bool build_tunnel2(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type, int cutoff)
 {
     POSITION x3, y3, dx, dy;
     POSITION changex, changey;

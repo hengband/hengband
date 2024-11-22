@@ -910,7 +910,7 @@ static void build_castle_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
  * @brief タイプ10の部屋…ランダム生成vault / Type 10 -- Random vaults
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-bool build_type10(PlayerType *player_ptr, dun_data_type *dd_ptr)
+bool build_type10(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto xsize = randint1(22) + 22;
@@ -968,7 +968,7 @@ bool build_type10(PlayerType *player_ptr, dun_data_type *dd_ptr)
 /*!
  * @brief VaultDefinitions からの部屋生成
  */
-bool build_fixed_room(PlayerType *player_ptr, dun_data_type *dd_ptr, int typ, bool more_space)
+bool build_fixed_room(PlayerType *player_ptr, DungeonData *dd_ptr, int typ, bool more_space)
 {
     ProbabilityTable<int> prob_table;
     for (const auto &vault : vaults_info) {

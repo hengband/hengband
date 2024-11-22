@@ -196,7 +196,7 @@ void place_pit_inner(PlayerType *player_ptr, const Pos2D &center)
  *\n
  * Note that "monster pits" will never contain "unique" monsters.\n
  */
-bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
+bool build_type6(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto pit_type = pick_pit_type(floor, pit_types);
@@ -361,7 +361,7 @@ static bool vault_aux_trapped_pit(PlayerType *player_ptr, MonraceId r_idx)
  *\n
  * Note that "monster pits" will never contain "unique" monsters.\n
  */
-bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
+bool build_type13(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto pit_type = pick_pit_type(floor, pit_types);

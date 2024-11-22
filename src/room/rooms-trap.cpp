@@ -19,7 +19,7 @@
  * @details
  * A special trap is placed at center of the room
  */
-bool build_type14(PlayerType *player_ptr, dun_data_type *dd_ptr)
+bool build_type14(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     /* Pick a room size */
     const auto room_seed_y1 = randint1(4);
