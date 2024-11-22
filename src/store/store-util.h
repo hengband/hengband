@@ -57,4 +57,3 @@ std::vector<short> store_same_magic_device_pvals(ItemEntity *j_ptr);
 void store_item_increase(short i_idx, int item_num);
 void store_item_optimize(short i_idx);
 int store_carry(ItemEntity *o_ptr);
-bool store_object_similar(const ItemEntity *o_ptr, const ItemEntity *j_ptr);
