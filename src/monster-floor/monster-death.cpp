@@ -286,7 +286,7 @@ static void drop_items_golds(PlayerType *player_ptr, MonsterDeath *md_ptr, int d
     for (auto i = 0; i < drop_numbers; i++) {
         ItemEntity item;
         if (md_ptr->do_gold && (!md_ptr->do_item || one_in_(2))) {
-            const auto offset = baseitems.lookup_creeping_coin_drop_offset(md_ptr->m_ptr->r_idx);
+            const auto offset = baseitems.lookup_specific_coin_drop_offset(md_ptr->r_ptr->drop_flags);
             item = floor.make_gold(offset);
             dump_gold++;
         } else {

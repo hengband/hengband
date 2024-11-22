@@ -8,6 +8,7 @@
  */
 
 #include "system/baseitem-info.h"
+#include "monster-race/race-drop-flags.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-bow-types.h"
@@ -46,14 +47,6 @@ const std::map<MoneyKind, std::string> GOLD_KINDS = {
     { MoneyKind::EMERALD, _("エメラルド", "emeralds") },
     { MoneyKind::MITHRIL, _("ミスリル", "mithril") },
     { MoneyKind::ADAMANTITE, _("アダマンタイト", "adamantite") },
-};
-const std::map<MonraceId, BaseitemKey> CREEPING_COIN_DROPS = {
-    { MonraceId::COPPER_COINS, { ItemKindType::GOLD, 3 } },
-    { MonraceId::SILVER_COINS, { ItemKindType::GOLD, 6 } },
-    { MonraceId::GOLD_COINS, { ItemKindType::GOLD, 11 } },
-    { MonraceId::MITHRIL_COINS, { ItemKindType::GOLD, 17 } },
-    { MonraceId::MITHRIL_GOLEM, { ItemKindType::GOLD, 17 } },
-    { MonraceId::ADAMANT_COINS, { ItemKindType::GOLD, 18 } },
 };
 }
 
@@ -861,18 +854,47 @@ const BaseitemInfo &BaseitemList::lookup_baseitem(const BaseitemKey &bi_key) con
 }
 
 /*!
- * @brief モンスター種族IDから財宝アイテムの価値を引く
- * @param monrace_id モンスター種族ID
+ * @brief ドロップフラグから財宝アイテムの価値を引く
+ * @param drop_flags 該当モンスターのドロップ関連フラググループ
  * @return 特定の財宝を落とすならそのアイテムの価値オフセット、一般的な財宝ドロップならばnullopt
  */
-std::optional<int> BaseitemList::lookup_creeping_coin_drop_offset(MonraceId monrace_id) const
+std::optional<int> BaseitemList::lookup_specific_coin_drop_offset(EnumClassFlagGroup<MonsterDropType> &drop_flags) const
 {
-    const auto it = CREEPING_COIN_DROPS.find(monrace_id);
-    if (it == CREEPING_COIN_DROPS.end()) {
-        return std::nullopt;
+    if (drop_flags.has(MonsterDropType::DROP_COPPER)) {
+        return 2;
+    }
+    if (drop_flags.has(MonsterDropType::DROP_SILVER)) {
+        return 5;
+    }
+    if (drop_flags.has(MonsterDropType::DROP_GARNET)) {
+        return 7;
+    }
+    if (drop_flags.has(MonsterDropType::DROP_GOLD)) {
+        return 10;
+    }
+    if (drop_flags.has(MonsterDropType::DROP_OPAL)) {
+        return 11;
+    }
+    if (drop_flags.has(MonsterDropType::DROP_SAPPHIRE)) {
+        return 12;
+    }
+    if (drop_flags.has(MonsterDropType::DROP_RUBY)) {
+        return 13;
+    }
+    if (drop_flags.has(MonsterDropType::DROP_DIAMOND)) {
+        return 14;
+    }
+    if (drop_flags.has(MonsterDropType::DROP_EMERALD)) {
+        return 15;
+    }
+    if (drop_flags.has(MonsterDropType::DROP_MITHRIL)) {
+        return 16;
+    }
+    if (drop_flags.has(MonsterDropType::DROP_ADAMANTITE)) {
+        return 17;
     }
 
-    return this->lookup_gold_offset(it->second);
+    return std::nullopt;
 }
 
 /*!

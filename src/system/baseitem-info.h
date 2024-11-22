@@ -1,5 +1,6 @@
 #pragma once
 
+#include "monster-race/race-drop-flags.h"
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/trg-types.h"
 #include "object/tval-types.h"
@@ -195,7 +196,7 @@ public:
     void resize(size_t new_size);
     void shrink_to_fit();
 
-    std::optional<int> lookup_creeping_coin_drop_offset(MonraceId monrace_id) const;
+    std::optional<int> lookup_specific_coin_drop_offset(EnumClassFlagGroup<MonsterDropType> &drop_flags) const;
     short lookup_baseitem_id(const BaseitemKey &bi_key) const;
     const BaseitemInfo &lookup_baseitem(const BaseitemKey &bi_key) const;
     int calc_num_gold_subtypes() const;
