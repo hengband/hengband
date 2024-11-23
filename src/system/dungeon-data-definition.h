@@ -1,77 +1,47 @@
 #pragma once
 
-#include "floor/floor-base-definitions.h"
-#include "system/angband.h"
-
-/*
- * Bounds on some arrays used in the DungeonData.
- * These bounds are checked, though usually this is a formality.
- */
-#define CENT_MAX 100
-#define DOOR_MAX 200
-#define WALL_MAX 500
-#define TUNN_MAX 900
-
-/*
- * The "size" of a "generation block" in grids
- */
-#define BLOCK_HGT 11
-#define BLOCK_WID 11
-
-/*
- * Maximum numbers of rooms along each axis (currently 6x6)
- */
-#define MAX_ROOMS_ROW (MAX_HGT / BLOCK_HGT)
-#define MAX_ROOMS_COL (MAX_WID / BLOCK_WID)
-
-/*
- * Simple structure to hold a map location
- */
-struct coord {
-    POSITION y;
-    POSITION x;
-};
+#include "util/point-2d.h"
+#include <optional>
+#include <string>
+#include <vector>
 
 /*
  * Structure to hold all "dungeon generation" data
  */
 class DungeonData {
 public:
-    /* Array of centers of rooms */
-    int cent_n;
-    coord cent[CENT_MAX];
+    DungeonData();
 
-    /* Array of possible door locations */
-    int door_n;
-    coord door[DOOR_MAX];
+    size_t cent_n = 0;
+    std::vector<Pos2D> centers;
 
-    /* Array of wall piercing locations */
-    int wall_n;
-    coord wall[WALL_MAX];
+    size_t door_n = 0;
+    std::vector<Pos2D> doors;
 
-    /* Array of tunnel grids */
-    int tunn_n;
-    coord tunn[TUNN_MAX];
+    size_t wall_n = 0;
+    std::vector<Pos2D> walls;
+
+    size_t tunn_n = 0;
+    std::vector<Pos2D> tunnels;
 
     /* Number of blocks along each axis */
-    int row_rooms;
-    int col_rooms;
+    int row_rooms = 0;
+    int col_rooms = 0;
 
     /* Array of which blocks are used */
-    bool room_map[MAX_ROOMS_ROW][MAX_ROOMS_COL];
+    std::vector<std::vector<bool>> room_map;
 
     /* Various type of dungeon floors */
-    bool destroyed;
-    bool empty_level;
-    bool cavern;
-    int laketype;
-    int tunnel_fail_count;
+    bool destroyed = false;
+    bool empty_level = false;
+    bool cavern = false;
+    int laketype = 0;
+    int tunnel_fail_count = 0;
 
-    POSITION tunnel_y;
-    POSITION tunnel_x;
+    Pos2D tunnel_pos;
 
-    int alloc_object_num;
-    int alloc_monster_num;
+    int alloc_object_num = 0;
+    int alloc_monster_num = 0;
 
-    concptr *why;
+    std::optional<std::string> why;
 };

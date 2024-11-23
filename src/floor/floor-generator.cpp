@@ -293,7 +293,7 @@ static void generate_fixed_floor(PlayerType *player_ptr)
  * @param concptr
  * @return フロアの生成に成功したらTRUE
  */
-static bool level_gen(PlayerType *player_ptr, concptr *why)
+static std::optional<std::string> level_gen(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     DUNGEON_IDX d_idx = floor_ptr->dungeon_idx;
@@ -339,7 +339,7 @@ static bool level_gen(PlayerType *player_ptr, concptr *why)
         panel_col_min = floor_ptr->width;
     }
 
-    return cave_gen(player_ptr, why);
+    return cave_gen(player_ptr);
 }
 
 /*!
@@ -501,8 +501,7 @@ void generate_floor(PlayerType *player_ptr)
     set_floor_and_wall(floor.dungeon_idx);
     const auto is_wild_mode = AngbandWorld::get_instance().is_wild_mode();
     for (int num = 0; true; num++) {
-        bool okay = true;
-        concptr why = nullptr;
+        std::optional<std::string> why;
         clear_cave(player_ptr);
         player_ptr->x = player_ptr->y = 0;
         if (floor.inside_arena) {
@@ -518,40 +517,34 @@ void generate_floor(PlayerType *player_ptr)
                 wilderness_gen(player_ptr);
             }
         } else {
-            okay = level_gen(player_ptr, &why);
+            why = level_gen(player_ptr);
         }
 
         if (floor.o_max >= MAX_FLOOR_ITEMS) {
             why = _("アイテムが多すぎる", "too many objects");
-            okay = false;
         } else if (floor.m_max >= MAX_FLOOR_MONSTERS) {
             why = _("モンスターが多すぎる", "too many monsters");
-            okay = false;
         }
 
         // ダンジョン内フロアが連結でない(永久壁で区切られた孤立部屋がある)場合、
         // 狂戦士でのプレイに支障をきたしうるので再生成する。
         // 地上、荒野マップ、クエストでは連結性判定は行わない。
         // TODO: 本来はダンジョン生成アルゴリズム自身で連結性を保証するのが理想ではある。
-        const bool check_conn = okay && floor.is_in_underground() && !floor.is_in_quest();
+        const auto check_conn = why && floor.is_in_underground() && !floor.is_in_quest();
         if (check_conn && !floor_is_connected(&floor, is_permanent_blocker)) {
             // 一定回数試しても連結にならないなら諦める。
             if (num >= 1000) {
                 plog("cannot generate connected floor. giving up...");
             } else {
                 why = _("フロアが連結でない", "floor is not connected");
-                okay = false;
             }
         }
 
-        if (okay) {
+        if (!why) {
             break;
         }
 
-        if (why) {
-            msg_format(_("生成やり直し(%s)", "Generation restarted (%s)"), why);
-        }
-
+        msg_format(_("生成やり直し(%s)", "Generation restarted (%s)"), why->data());
         wipe_o_list(&floor);
         wipe_monsters_list(player_ptr);
     }

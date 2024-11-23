@@ -55,37 +55,39 @@ static void correct_dir(POSITION *rdir, POSITION *cdir, POSITION y1, POSITION x1
  */
 bool build_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, dt_type *dt_ptr, POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 {
+    Pos2D pos1(row1, col1);
+    const Pos2D pos2(row2, col2);
     POSITION tmp_row, tmp_col;
     POSITION row_dir, col_dir;
     POSITION start_row, start_col;
     int main_loop_count = 0;
     bool door_flag = false;
-    start_row = row1;
-    start_col = col1;
-    correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
+    start_row = pos1.y;
+    start_col = pos1.x;
+    correct_dir(&row_dir, &col_dir, pos1.y, pos1.x, pos2.y, pos2.x);
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    while ((row1 != row2) || (col1 != col2)) {
+    while (pos1 != pos2) {
         if (main_loop_count++ > 2000) {
             return false;
         }
 
         if (evaluate_percent(dt_ptr->dun_tun_chg)) {
-            correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
+            correct_dir(&row_dir, &col_dir, pos1.y, pos1.x, pos2.y, pos2.x);
             if (evaluate_percent(dt_ptr->dun_tun_rnd)) {
                 rand_dir(&row_dir, &col_dir);
             }
         }
 
-        tmp_row = row1 + row_dir;
-        tmp_col = col1 + col_dir;
+        tmp_row = pos1.y + row_dir;
+        tmp_col = pos1.x + col_dir;
         while (!in_bounds(floor_ptr, tmp_row, tmp_col)) {
-            correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
+            correct_dir(&row_dir, &col_dir, pos1.y, pos1.x, pos2.y, pos2.x);
             if (evaluate_percent(dt_ptr->dun_tun_rnd)) {
                 rand_dir(&row_dir, &col_dir);
             }
 
-            tmp_row = row1 + row_dir;
-            tmp_col = col1 + col_dir;
+            tmp_row = pos1.y + row_dir;
+            tmp_col = pos1.x + col_dir;
         }
 
         auto *tmp_g_ptr = &floor_ptr->grid_array[tmp_row][tmp_col];
@@ -101,17 +103,15 @@ bool build_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, dt_type *dt_ptr, 
                 continue;
             }
 
-            row1 = tmp_row;
-            col1 = tmp_col;
-            if (dd_ptr->wall_n >= WALL_MAX) {
+            pos1 = { tmp_row, tmp_col };
+            if (dd_ptr->wall_n >= dd_ptr->walls.size()) {
                 return false;
             }
 
-            dd_ptr->wall[dd_ptr->wall_n].y = row1;
-            dd_ptr->wall[dd_ptr->wall_n].x = col1;
+            dd_ptr->walls[dd_ptr->wall_n] = pos1;
             dd_ptr->wall_n++;
-            for (y = row1 - 1; y <= row1 + 1; y++) {
-                for (x = col1 - 1; x <= col1 + 1; x++) {
+            for (y = pos1.y - 1; y <= pos1.y + 1; y++) {
+                for (x = pos1.x - 1; x <= pos1.x + 1; x++) {
                     if (floor_ptr->grid_array[y][x].is_outer()) {
                         place_bold(player_ptr, y, x, GB_SOLID_NOPERM);
                     }
@@ -119,40 +119,35 @@ bool build_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, dt_type *dt_ptr, 
             }
 
         } else if (tmp_g_ptr->info & (CAVE_ROOM)) {
-            row1 = tmp_row;
-            col1 = tmp_col;
+            pos1 = { tmp_row, tmp_col };
         } else if (tmp_g_ptr->is_extra() || tmp_g_ptr->is_inner() || tmp_g_ptr->is_solid()) {
-            row1 = tmp_row;
-            col1 = tmp_col;
-            if (dd_ptr->tunn_n >= TUNN_MAX) {
+            pos1 = { tmp_row, tmp_col };
+            if (dd_ptr->tunn_n >= dd_ptr->tunnels.size()) {
                 return false;
             }
 
-            dd_ptr->tunn[dd_ptr->tunn_n].y = row1;
-            dd_ptr->tunn[dd_ptr->tunn_n].x = col1;
+            dd_ptr->tunnels[dd_ptr->tunn_n] = pos1;
             dd_ptr->tunn_n++;
             door_flag = false;
         } else {
-            row1 = tmp_row;
-            col1 = tmp_col;
+            pos1 = { tmp_row, tmp_col };
             if (!door_flag) {
-                if (dd_ptr->door_n >= DOOR_MAX) {
+                if (dd_ptr->door_n >= dd_ptr->doors.size()) {
                     return false;
                 }
 
-                dd_ptr->door[dd_ptr->door_n].y = row1;
-                dd_ptr->door[dd_ptr->door_n].x = col1;
+                dd_ptr->doors[dd_ptr->door_n] = pos1;
                 dd_ptr->door_n++;
                 door_flag = true;
             }
 
             if (!evaluate_percent(dt_ptr->dun_tun_con)) {
-                tmp_row = row1 - start_row;
+                tmp_row = pos1.y - start_row;
                 if (tmp_row < 0) {
                     tmp_row = (-tmp_row);
                 }
 
-                tmp_col = col1 - start_col;
+                tmp_col = pos1.x - start_col;
                 if (tmp_col < 0) {
                     tmp_col = (-tmp_col);
                 }
@@ -184,12 +179,11 @@ static bool set_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION *x,
     }
 
     if (g_ptr->is_extra()) {
-        if (dd_ptr->tunn_n >= TUNN_MAX) {
+        if (dd_ptr->tunn_n >= dd_ptr->tunnels.size()) {
             return false;
         }
 
-        dd_ptr->tunn[dd_ptr->tunn_n].y = *y;
-        dd_ptr->tunn[dd_ptr->tunn_n].x = *x;
+        dd_ptr->tunnels[dd_ptr->tunn_n] = { *y, *x };
         dd_ptr->tunn_n++;
         return true;
     }
@@ -199,12 +193,11 @@ static bool set_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION *x,
     }
 
     if (g_ptr->is_outer() && affectwall) {
-        if (dd_ptr->wall_n >= WALL_MAX) {
+        if (dd_ptr->wall_n >= dd_ptr->walls.size()) {
             return false;
         }
 
-        dd_ptr->wall[dd_ptr->wall_n].y = *y;
-        dd_ptr->wall[dd_ptr->wall_n].x = *x;
+        dd_ptr->walls[dd_ptr->wall_n] = { *y, *x };
         dd_ptr->wall_n++;
         for (int j = *y - 1; j <= *y + 1; j++) {
             for (int i = *x - 1; i <= *x + 1; i++) {
@@ -423,18 +416,18 @@ bool build_tunnel2(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION x1, POS
         g_ptr = &floor_ptr->grid_array[y3][x3];
     }
 
+    const Pos2D pos3(y3, x3);
     if (g_ptr->is_floor()) {
-        if (build_tunnel2(player_ptr, dd_ptr, x1, y1, x3, y3, type, cutoff)) {
+        if (build_tunnel2(player_ptr, dd_ptr, x1, y1, pos3.x, pos3.y, type, cutoff)) {
             if (floor_ptr->grid_array[y3][x3].is_room() || (randint1(100) > 95)) {
-                retval = build_tunnel2(player_ptr, dd_ptr, x3, y3, x2, y2, type, cutoff);
+                retval = build_tunnel2(player_ptr, dd_ptr, pos3.x, pos3.y, x2, y2, type, cutoff);
             } else {
                 retval = false;
-                if (dd_ptr->door_n >= DOOR_MAX) {
+                if (dd_ptr->door_n >= dd_ptr->doors.size()) {
                     return false;
                 }
 
-                dd_ptr->door[dd_ptr->door_n].y = y3;
-                dd_ptr->door[dd_ptr->door_n].x = x3;
+                dd_ptr->doors[dd_ptr->door_n] = pos3;
                 dd_ptr->door_n++;
             }
 
@@ -444,8 +437,8 @@ bool build_tunnel2(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION x1, POS
             firstsuccede = false;
         }
     } else {
-        if (build_tunnel2(player_ptr, dd_ptr, x1, y1, x3, y3, type, cutoff)) {
-            retval = build_tunnel2(player_ptr, dd_ptr, x3, y3, x2, y2, type, cutoff);
+        if (build_tunnel2(player_ptr, dd_ptr, x1, y1, pos3.x, pos3.y, type, cutoff)) {
+            retval = build_tunnel2(player_ptr, dd_ptr, pos3.x, pos3.y, x2, y2, type, cutoff);
             firstsuccede = true;
         } else {
             retval = false;
@@ -454,7 +447,7 @@ bool build_tunnel2(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION x1, POS
     }
 
     if (firstsuccede) {
-        set_tunnel(player_ptr, dd_ptr, &x3, &y3, true);
+        (void)set_tunnel(player_ptr, dd_ptr, &x3, &y3, true);
     }
 
     return retval;
