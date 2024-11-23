@@ -22,13 +22,6 @@
 #include <algorithm>
 #include <iterator>
 
-enum dungeon_mode_type {
-    DUNGEON_MODE_AND = 1,
-    DUNGEON_MODE_NAND = 2,
-    DUNGEON_MODE_OR = 3,
-    DUNGEON_MODE_NOR = 4,
-};
-
 /**
  * @brief モンスターがダンジョンに出現できる条件を満たしているかのフラグ判定関数(AND)
  *
@@ -58,92 +51,100 @@ static bool is_possible_monster_or(const EnumClassFlagGroup<T> &r_flags, const E
 /*!
  * @brief 指定されたモンスター種族がダンジョンの制限にかかるかどうかをチェックする / Some dungeon types restrict the possible monsters.
  * @param floor_ptr フロアへの参照ポインタ
- * @param r_idx チェックするモンスター種族ID
+ * @param monrace_id チェックするモンスター種族ID
  * @param summon_specific_type summon_specific() によるものの場合、召喚種別を指定する
  * @param is_chameleon_polymorph カメレオンの変身の場合、true
  * @return 召喚条件が一致するならtrue / Return TRUE is the monster is OK and FALSE otherwise
  */
-static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonraceId r_idx, std::optional<summon_type> summon_specific_type, bool is_chameleon_polymorph)
+static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonraceId monrace_id, std::optional<summon_type> summon_specific_type, bool is_chameleon_polymorph)
 {
-    const auto *d_ptr = &floor_ptr->get_dungeon_definition();
-    const auto *r_ptr = &monraces_info[r_idx];
-    if (d_ptr->flags.has(DungeonFeatureType::CHAMELEON)) {
+    const auto &dungeon = floor_ptr->get_dungeon_definition();
+    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
+    if (dungeon.flags.has(DungeonFeatureType::CHAMELEON)) {
         if (is_chameleon_polymorph) {
             return true;
         }
     }
 
-    if (d_ptr->flags.has(DungeonFeatureType::NO_MAGIC)) {
-        if (r_idx != MonraceId::CHAMELEON && r_ptr->freq_spell && r_ptr->ability_flags.has_none_of(RF_ABILITY_NOMAGIC_MASK)) {
+    if (dungeon.flags.has(DungeonFeatureType::NO_MAGIC)) {
+        if (monrace_id != MonraceId::CHAMELEON && monrace.freq_spell && monrace.ability_flags.has_none_of(RF_ABILITY_NOMAGIC_MASK)) {
             return false;
         }
     }
 
-    if (d_ptr->flags.has(DungeonFeatureType::NO_MELEE)) {
-        if (r_idx == MonraceId::CHAMELEON) {
+    if (dungeon.flags.has(DungeonFeatureType::NO_MELEE)) {
+        if (monrace_id == MonraceId::CHAMELEON) {
             return true;
         }
-        if (r_ptr->ability_flags.has_none_of(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK) && r_ptr->ability_flags.has_none_of(
-                                                                                                                        { MonsterAbilityType::CAUSE_1, MonsterAbilityType::CAUSE_2, MonsterAbilityType::CAUSE_3, MonsterAbilityType::CAUSE_4, MonsterAbilityType::MIND_BLAST, MonsterAbilityType::BRAIN_SMASH })) {
+
+        static const EnumClassFlagGroup<MonsterAbilityType> rf_ability_masks(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK);
+        static const EnumClassFlagGroup<MonsterAbilityType> abilities = {
+            MonsterAbilityType::CAUSE_1,
+            MonsterAbilityType::CAUSE_2,
+            MonsterAbilityType::CAUSE_3,
+            MonsterAbilityType::CAUSE_4,
+            MonsterAbilityType::MIND_BLAST,
+            MonsterAbilityType::BRAIN_SMASH,
+        };
+        if (monrace.ability_flags.has_none_of(rf_ability_masks) && monrace.ability_flags.has_none_of(abilities)) {
             return false;
         }
     }
 
-    if (d_ptr->flags.has(DungeonFeatureType::BEGINNER)) {
-        if (r_ptr->level > floor_ptr->dun_level) {
+    if (dungeon.flags.has(DungeonFeatureType::BEGINNER)) {
+        if (monrace.level > floor_ptr->dun_level) {
             return false;
         }
     }
 
-    if (d_ptr->special_div >= 64) {
-        return true;
-    }
-    if (summon_specific_type && d_ptr->flags.has_not(DungeonFeatureType::CHAMELEON)) {
+    if (dungeon.special_div >= 64) {
         return true;
     }
 
-    switch (d_ptr->mode) {
-    case DUNGEON_MODE_AND:
-    case DUNGEON_MODE_NAND: {
+    if (summon_specific_type && dungeon.flags.has_not(DungeonFeatureType::CHAMELEON)) {
+        return true;
+    }
+
+    switch (dungeon.mode) {
+    case DungeonMode::AND:
+    case DungeonMode::NAND: {
         std::vector<bool> is_possible = {
-            is_possible_monster_and(r_ptr->ability_flags, d_ptr->mon_ability_flags),
-            is_possible_monster_and(r_ptr->behavior_flags, d_ptr->mon_behavior_flags),
-            is_possible_monster_and(r_ptr->resistance_flags, d_ptr->mon_resistance_flags),
-            is_possible_monster_and(r_ptr->drop_flags, d_ptr->mon_drop_flags),
-            is_possible_monster_and(r_ptr->kind_flags, d_ptr->mon_kind_flags),
-            is_possible_monster_and(r_ptr->wilderness_flags, d_ptr->mon_wilderness_flags),
-            is_possible_monster_and(r_ptr->feature_flags, d_ptr->mon_feature_flags),
-            is_possible_monster_and(r_ptr->population_flags, d_ptr->mon_population_flags),
-            is_possible_monster_and(r_ptr->speak_flags, d_ptr->mon_speak_flags),
-            is_possible_monster_and(r_ptr->brightness_flags, d_ptr->mon_brightness_flags),
-            is_possible_monster_and(r_ptr->misc_flags, d_ptr->mon_misc_flags),
+            is_possible_monster_and(monrace.ability_flags, dungeon.mon_ability_flags),
+            is_possible_monster_and(monrace.behavior_flags, dungeon.mon_behavior_flags),
+            is_possible_monster_and(monrace.resistance_flags, dungeon.mon_resistance_flags),
+            is_possible_monster_and(monrace.drop_flags, dungeon.mon_drop_flags),
+            is_possible_monster_and(monrace.kind_flags, dungeon.mon_kind_flags),
+            is_possible_monster_and(monrace.wilderness_flags, dungeon.mon_wilderness_flags),
+            is_possible_monster_and(monrace.feature_flags, dungeon.mon_feature_flags),
+            is_possible_monster_and(monrace.population_flags, dungeon.mon_population_flags),
+            is_possible_monster_and(monrace.speak_flags, dungeon.mon_speak_flags),
+            is_possible_monster_and(monrace.brightness_flags, dungeon.mon_brightness_flags),
+            is_possible_monster_and(monrace.misc_flags, dungeon.mon_misc_flags),
         };
 
         auto result = std::all_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });
-        result &= std::all_of(d_ptr->r_chars.begin(), d_ptr->r_chars.end(), [r_ptr](const auto &v) { return v == r_ptr->symbol_definition.character; });
-
-        return d_ptr->mode == DUNGEON_MODE_AND ? result : !result;
+        result &= std::all_of(dungeon.r_chars.begin(), dungeon.r_chars.end(), [monrace](const auto &v) { return v == monrace.symbol_definition.character; });
+        return dungeon.mode == DungeonMode::AND ? result : !result;
     }
-    case DUNGEON_MODE_OR:
-    case DUNGEON_MODE_NOR: {
+    case DungeonMode::OR:
+    case DungeonMode::NOR: {
         std::vector<bool> is_possible = {
-            is_possible_monster_or(r_ptr->ability_flags, d_ptr->mon_ability_flags),
-            is_possible_monster_or(r_ptr->behavior_flags, d_ptr->mon_behavior_flags),
-            is_possible_monster_or(r_ptr->resistance_flags, d_ptr->mon_resistance_flags),
-            is_possible_monster_or(r_ptr->drop_flags, d_ptr->mon_drop_flags),
-            is_possible_monster_or(r_ptr->kind_flags, d_ptr->mon_kind_flags),
-            is_possible_monster_or(r_ptr->wilderness_flags, d_ptr->mon_wilderness_flags),
-            is_possible_monster_or(r_ptr->feature_flags, d_ptr->mon_feature_flags),
-            is_possible_monster_or(r_ptr->population_flags, d_ptr->mon_population_flags),
-            is_possible_monster_or(r_ptr->speak_flags, d_ptr->mon_speak_flags),
-            is_possible_monster_or(r_ptr->brightness_flags, d_ptr->mon_brightness_flags),
-            is_possible_monster_or(r_ptr->misc_flags, d_ptr->mon_misc_flags),
+            is_possible_monster_or(monrace.ability_flags, dungeon.mon_ability_flags),
+            is_possible_monster_or(monrace.behavior_flags, dungeon.mon_behavior_flags),
+            is_possible_monster_or(monrace.resistance_flags, dungeon.mon_resistance_flags),
+            is_possible_monster_or(monrace.drop_flags, dungeon.mon_drop_flags),
+            is_possible_monster_or(monrace.kind_flags, dungeon.mon_kind_flags),
+            is_possible_monster_or(monrace.wilderness_flags, dungeon.mon_wilderness_flags),
+            is_possible_monster_or(monrace.feature_flags, dungeon.mon_feature_flags),
+            is_possible_monster_or(monrace.population_flags, dungeon.mon_population_flags),
+            is_possible_monster_or(monrace.speak_flags, dungeon.mon_speak_flags),
+            is_possible_monster_or(monrace.brightness_flags, dungeon.mon_brightness_flags),
+            is_possible_monster_or(monrace.misc_flags, dungeon.mon_misc_flags),
         };
 
         auto result = std::any_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });
-        result |= std::any_of(d_ptr->r_chars.begin(), d_ptr->r_chars.end(), [r_ptr](const auto &v) { return v == r_ptr->symbol_definition.character; });
-
-        return d_ptr->mode == DUNGEON_MODE_OR ? result : !result;
+        result |= std::any_of(dungeon.r_chars.begin(), dungeon.r_chars.end(), [monrace](const auto &v) { return v == monrace.symbol_definition.character; });
+        return dungeon.mode == DungeonMode::OR ? result : !result;
     }
     }
 

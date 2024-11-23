@@ -50,6 +50,13 @@ enum class FixedArtifactId : short;
 enum class MonraceId : short;
 enum class MonsterSex;
 
+enum class DungeonMode {
+    AND = 1,
+    NAND = 2,
+    OR = 3,
+    NOR = 4,
+};
+
 struct feat_prob {
     FEAT_IDX feat{}; /* Feature tile */
     PERCENTAGE percent{}; /* Chance of type */
@@ -79,7 +86,7 @@ struct dungeon_type {
     PLAYER_LEVEL min_plev{}; /* Minimal plev needed to enter -- it's an anti-cheating mesure */
     BIT_FLAGS16 pit{};
     BIT_FLAGS16 nest{};
-    BIT_FLAGS8 mode{}; /* Mode of combinaison of the monster flags */
+    DungeonMode mode{}; /* Mode of combinaison of the monster flags */
 
     int min_m_alloc_level{}; /* Minimal number of monsters per level */
     int max_m_alloc_chance{}; /* There is a 1/max_m_alloc_chance chance per round of creating a new monster */
