@@ -35,7 +35,7 @@ static void home_carry_load(PlayerType *player_ptr, store_type *store_ptr, ItemE
             continue;
         }
 
-        object_absorb(item.get(), o_ptr);
+        item->absorb(*o_ptr);
         return;
     }
 

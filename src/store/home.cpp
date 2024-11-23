@@ -37,7 +37,7 @@ int home_carry(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_nu
     for (int slot = 0; slot < st_ptr->stock_num; slot++) {
         auto &item_store = st_ptr->stock[slot];
         if (item_store->is_similar(*o_ptr)) {
-            object_absorb(item_store.get(), o_ptr);
+            item_store->absorb(*o_ptr);
             if (store_num != StoreSaleType::HOME) {
                 stack_force_notes = old_stack_force_notes;
                 stack_force_costs = old_stack_force_costs;
@@ -88,8 +88,7 @@ static bool exe_combine_store_items(ItemEntity *o_ptr, ItemEntity *j_ptr, const 
         return false;
     }
 
-    object_absorb(j_ptr, o_ptr);
-
+    j_ptr->absorb(*o_ptr);
     const auto begin = st_ptr->stock.begin();
     std::rotate(begin + i, begin + i + 1, begin + st_ptr->stock_num);
 
@@ -118,7 +117,7 @@ static void sweep_reorder_store_item(ItemEntity *o_ptr, const int i, bool *combi
 
         ITEM_NUMBER old_num = o_ptr->number;
         ITEM_NUMBER remain = item->number + o_ptr->number - max_num;
-        object_absorb(item.get(), o_ptr);
+        item->absorb(*o_ptr);
         o_ptr->number = remain;
         const auto tval = o_ptr->bi_key.tval();
         if (tval == ItemKindType::ROD) {

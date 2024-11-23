@@ -195,7 +195,7 @@ void combine_pack(PlayerType *player_ptr)
 
                 if (item1.number + item2.number <= max_num) {
                     flag = true;
-                    object_absorb(&item2, &item1);
+                    item2.absorb(item1);
                     player_ptr->inven_cnt--;
                     int k;
                     for (k = i; k < INVEN_PACK; k++) {
@@ -206,7 +206,7 @@ void combine_pack(PlayerType *player_ptr)
                 } else {
                     int old_num = item1.number;
                     int remain = item2.number + item1.number - max_num;
-                    object_absorb(&item2, &item1);
+                    item2.absorb(item1);
                     item1.number = remain;
                     const auto tval = item1.bi_key.tval();
                     if (tval == ItemKindType::ROD) {
@@ -307,7 +307,7 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
 
         n = j;
         if (j_ptr->is_similar(*o_ptr)) {
-            object_absorb(j_ptr, o_ptr);
+            j_ptr->absorb(*o_ptr);
             rfu.set_flag(StatusRecalculatingFlag::BONUS);
             rfu.set_flags(flags_swrf);
             return j;
