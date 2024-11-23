@@ -600,6 +600,24 @@ bool BaseitemKey::is_monster() const
     }
 }
 
+/*!
+ * @brief 2つのアイテムが同時に「普通の」像であることを示す
+ * @param チェック対象のベースアイテムキー
+ * @return 両方が写真の時だけfalse、少なくとも片方が「普通の」像ならばtrue、像ですらないならば例外
+ */
+bool BaseitemKey::are_both_statue(const BaseitemKey &other) const
+{
+    if ((this->type_value != ItemKindType::STATUE)) {
+        THROW_EXCEPTION(std::logic_error, "This item is not a statue!");
+    }
+
+    if (other.type_value != ItemKindType::STATUE) {
+        THROW_EXCEPTION(std::logic_error, "The other item is not a statue!");
+    }
+
+    return (this->subtype_value != SV_PHOTO) || (other.subtype_value != SV_PHOTO);
+}
+
 bool BaseitemKey::is_mushrooms() const
 {
     if (!this->subtype_value) {

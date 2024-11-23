@@ -12,6 +12,7 @@
 #include "artifact/random-art-effects.h"
 #include "dungeon/quest.h"
 #include "game-option/birth-options.h"
+#include "game-option/game-play-options.h"
 #include "object-enchant/activation-info-table.h"
 #include "object-enchant/dragon-breaths-table.h"
 #include "object-enchant/item-feeling.h"
@@ -955,6 +956,169 @@ const MonraceDefinition &ItemEntity::get_monrace() const
 void ItemEntity::track_baseitem() const
 {
     BaseitemTracker::get_instance().set_trackee(this->bi_id);
+}
+
+/*!
+ * @brief アイテムを同一スロットへ重ねることができるかどうかを返す
+ * @param other 検証したいアイテムへの参照
+ * @return 重ね合わせ可能ならばTRUE
+ */
+bool ItemEntity::is_similar(const ItemEntity &other) const
+{
+    const auto total = this->number + other.number;
+    const auto max_num = this->is_similar_part(other);
+    return (max_num != 0) && (total <= max_num);
+}
+
+/*!
+ * @brief 両オブジェクトをスロットに重ね合わせ可能な最大数を返す
+ * @param other 検証したいアイテムへの参照
+ * @return 重ね合わせ可能なアイテム数
+ */
+int ItemEntity::is_similar_part(const ItemEntity &other) const
+{
+    if (this->bi_id != other.bi_id) {
+        return 0;
+    }
+
+    constexpr auto max_stack_size = 99;
+    auto max_num = max_stack_size;
+    switch (this->bi_key.tval()) {
+    case ItemKindType::CHEST:
+    case ItemKindType::CARD:
+    case ItemKindType::CAPTURE:
+        return 0;
+    case ItemKindType::STATUE: {
+        if (this->bi_key.are_both_statue(other.bi_key) || (this->pval != other.pval)) {
+            return 0;
+        }
+
+        break;
+    }
+    case ItemKindType::FIGURINE:
+    case ItemKindType::MONSTER_REMAINS:
+        if (this->pval != other.pval) {
+            return 0;
+        }
+
+        break;
+    case ItemKindType::FOOD:
+    case ItemKindType::POTION:
+    case ItemKindType::SCROLL:
+        break;
+    case ItemKindType::STAFF:
+        if ((none_bits(this->ident, IDENT_EMPTY) && !this->is_known()) || (none_bits(other.ident, IDENT_EMPTY) && !other.is_known())) {
+            return 0;
+        }
+
+        if (this->pval != other.pval) {
+            return 0;
+        }
+
+        break;
+    case ItemKindType::WAND:
+        if ((none_bits(this->ident, IDENT_EMPTY) && !this->is_known()) || (none_bits(other.ident, IDENT_EMPTY) && !other.is_known())) {
+            return 0;
+        }
+
+        break;
+    case ItemKindType::ROD:
+        max_num = std::min(max_num, MAX_SHORT / this->get_baseitem().pval);
+        break;
+    case ItemKindType::GLOVES:
+        if (this->is_glove_same_temper(&other)) {
+            return 0;
+        }
+
+        if (!this->is_known() || !other.is_known()) {
+            return 0;
+        }
+
+        if (!this->can_pile(&other)) {
+            return 0;
+        }
+
+        break;
+    case ItemKindType::LITE:
+        if (this->fuel != other.fuel) {
+            return 0;
+        }
+
+        if (!this->is_known() || !other.is_known()) {
+            return 0;
+        }
+
+        if (!this->can_pile(&other)) {
+            return 0;
+        }
+
+        break;
+    case ItemKindType::BOW:
+    case ItemKindType::DIGGING:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD:
+    case ItemKindType::BOOTS:
+    case ItemKindType::HELM:
+    case ItemKindType::CROWN:
+    case ItemKindType::SHIELD:
+    case ItemKindType::CLOAK:
+    case ItemKindType::SOFT_ARMOR:
+    case ItemKindType::HARD_ARMOR:
+    case ItemKindType::DRAG_ARMOR:
+    case ItemKindType::RING:
+    case ItemKindType::AMULET:
+    case ItemKindType::WHISTLE:
+        if (!this->is_known() || !other.is_known()) {
+            return 0;
+        }
+
+        if (!this->can_pile(&other)) {
+            return 0;
+        }
+
+        break;
+    case ItemKindType::BOLT:
+    case ItemKindType::ARROW:
+    case ItemKindType::SHOT:
+        if (!this->can_pile(&other)) {
+            return 0;
+        }
+
+        break;
+    default:
+        if (!this->is_known() || !other.is_known()) {
+            return 0;
+        }
+
+        break;
+    }
+
+    if (this->art_flags != other.art_flags) {
+        return 0;
+    }
+
+    if (this->curse_flags != other.curse_flags) {
+        return 0;
+    }
+
+    if (any_bits(this->ident, IDENT_BROKEN) != any_bits(other.ident, IDENT_BROKEN)) {
+        return 0;
+    }
+
+    if (this->is_inscribed() && other.is_inscribed() && (this->inscription != other.inscription)) {
+        return 0;
+    }
+
+    if (!stack_force_notes && (this->inscription != other.inscription)) {
+        return 0;
+    }
+
+    if (!stack_force_costs && (this->discount != other.discount)) {
+        return 0;
+    }
+
+    return max_num;
 }
 
 /*!

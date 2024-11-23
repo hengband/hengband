@@ -31,7 +31,7 @@ static void home_carry_load(PlayerType *player_ptr, store_type *store_ptr, ItemE
 {
     for (auto i = 0; i < store_ptr->stock_num; i++) {
         auto &item = store_ptr->stock[i];
-        if (!object_similar(item.get(), o_ptr)) {
+        if (!item->is_similar(*o_ptr)) {
             continue;
         }
 

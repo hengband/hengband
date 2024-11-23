@@ -36,7 +36,7 @@ int home_carry(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_nu
 
     for (int slot = 0; slot < st_ptr->stock_num; slot++) {
         auto &item_store = st_ptr->stock[slot];
-        if (object_similar(item_store.get(), o_ptr)) {
+        if (item_store->is_similar(*o_ptr)) {
             object_absorb(item_store.get(), o_ptr);
             if (store_num != StoreSaleType::HOME) {
                 stack_force_notes = old_stack_force_notes;
@@ -107,7 +107,7 @@ static void sweep_reorder_store_item(ItemEntity *o_ptr, const int i, bool *combi
             continue;
         }
 
-        int max_num = object_similar_part(item.get(), o_ptr);
+        const auto max_num = item->is_similar_part(*o_ptr);
         if (max_num == 0 || item->number >= max_num) {
             continue;
         }
