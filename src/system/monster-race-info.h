@@ -202,6 +202,7 @@ public:
     static const std::map<MonraceId, std::set<MonraceId>> &get_unified_uniques();
     static MonraceList &get_instance();
     static MonraceId empty_id();
+    static bool is_tsuchinoko(MonraceId monrace_id);
     std::map<MonraceId, MonraceDefinition>::iterator begin();
     std::map<MonraceId, MonraceDefinition>::const_iterator begin() const;
     std::map<MonraceId, MonraceDefinition>::iterator end();
