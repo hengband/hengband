@@ -371,49 +371,45 @@ bool build_tunnel2(PlayerType *player_ptr, DungeonData *dd_ptr, const Pos2D &pos
         return true;
     }
 
-    auto dx = (pos_end.x - pos_start.x) / 2;
-    auto dy = (pos_end.y - pos_start.y) / 2;
-    const auto changex = (randint0(abs(dy) + 2) * 2 - abs(dy) - 1) / 2;
-    const auto changey = (randint0(abs(dx) + 2) * 2 - abs(dx) - 1) / 2;
-    auto x = pos_start.x + dx + changex;
-    auto y = pos_start.y + dy + changey;
-    if (!in_bounds(&floor, y, x)) {
-        x = (pos_start.x + pos_end.x) / 2;
-        y = (pos_start.y + pos_end.y) / 2;
+    auto vec = pos_end - pos_start;
+    vec = Pos2DVec(vec.y / 2, vec.x / 2);
+    const auto changex = (randint0(std::abs(vec.y) + 2) * 2 - std::abs(vec.y) - 1) / 2;
+    const auto changey = (randint0(std::abs(vec.x) + 2) * 2 - std::abs(vec.x) - 1) / 2;
+    auto pos = pos_start + vec;
+    pos += Pos2DVec(changey, changex);
+    if (!in_bounds(&floor, pos.y, pos.x)) {
+        pos.x = (pos_start.x + pos_end.x) / 2;
+        pos.y = (pos_start.y + pos_end.y) / 2;
     }
 
-    const auto *g_ptr = &floor.grid_array[y][x];
+    const auto *g_ptr = &floor.get_grid(pos);
     if (g_ptr->is_solid()) {
-        int i = 50;
-        dy = 0;
-        dx = 0;
-        while ((i > 0) && floor.grid_array[y + dy][x + dx].is_solid()) {
-            dy = randint0(3) - 1;
-            dx = randint0(3) - 1;
-            if (!in_bounds(&floor, y + dy, x + dx)) {
-                dx = 0;
-                dy = 0;
+        auto i = 50;
+        vec = { 0, 0 };
+        while ((i > 0) && floor.get_grid(pos + vec).is_solid()) {
+            vec = { randint0(3) - 1, randint0(3) - 1 };
+            const auto pos_tmp = pos + vec;
+            if (!in_bounds(&floor, pos_tmp.y, pos_tmp.x)) {
+                vec = { 0, 0 };
             }
+
             i--;
         }
 
         if (i == 0) {
-            place_bold(player_ptr, y, x, GB_OUTER);
-            dx = 0;
-            dy = 0;
+            place_bold(player_ptr, pos.y, pos.x, GB_OUTER);
+            vec = { 0, 0 };
         }
 
-        y += dy;
-        x += dx;
-        g_ptr = &floor.grid_array[y][x];
+        pos += vec;
+        g_ptr = &floor.get_grid(pos);
     }
 
-    const Pos2D pos(y, x);
     bool is_tunnel_built;
     bool is_successful;
     if (g_ptr->is_floor()) {
         if (build_tunnel2(player_ptr, dd_ptr, pos_start, pos, type, cutoff)) {
-            if (floor.grid_array[y][x].is_room() || (randint1(100) > 95)) {
+            if (floor.get_grid(pos).is_room() || (randint1(100) > 95)) {
                 is_tunnel_built = build_tunnel2(player_ptr, dd_ptr, pos, pos_end, type, cutoff);
             } else {
                 is_tunnel_built = false;
@@ -441,7 +437,7 @@ bool build_tunnel2(PlayerType *player_ptr, DungeonData *dd_ptr, const Pos2D &pos
     }
 
     if (is_successful) {
-        (void)set_tunnel(player_ptr, dd_ptr, &x, &y, true);
+        (void)set_tunnel(player_ptr, dd_ptr, &pos.x, &pos.y, true);
     }
 
     return is_tunnel_built;
