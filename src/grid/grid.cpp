@@ -153,7 +153,7 @@ bool new_player_spot(PlayerType *player_ptr)
  */
 bool is_hidden_door(PlayerType *player_ptr, const Grid &grid)
 {
-    return (grid.mimic || grid.cave_has_flag(TerrainCharacteristics::SECRET)) && player_ptr->current_floor_ptr->is_closed_door(player_ptr->get_position());
+    return (grid.mimic || grid.cave_has_flag(TerrainCharacteristics::SECRET)) && grid.get_terrain().is_closed_door();
 }
 
 /*!
