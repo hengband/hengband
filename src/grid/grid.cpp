@@ -146,18 +146,6 @@ bool new_player_spot(PlayerType *player_ptr)
 }
 
 /*!
- * @brief マスに隠されたドアがあるかの判定を行う。 / Return TRUE if the given grid is a hidden closed door
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param grid マス構造体の参照ポインタ
- * @return 隠されたドアがあるならTRUEを返す。
- */
-bool is_hidden_door(PlayerType *player_ptr, const Grid &grid)
-{
-    (void)player_ptr; // 後でリファクタリングする.
-    return (grid.mimic || grid.cave_has_flag(TerrainCharacteristics::SECRET)) && grid.get_terrain().is_closed_door();
-}
-
-/*!
  * @brief 指定された座標のマスが現在照らされているかを返す。 / Check for "local" illumination
  * @param y y座標
  * @param x x座標
