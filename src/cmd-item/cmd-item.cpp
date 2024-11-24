@@ -161,7 +161,7 @@ void do_cmd_observe(PlayerType *player_ptr)
         return;
     }
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
     msg_format(_("%sを調べている...", "Examining %s..."), item_name.data());
     if (!screen_object(player_ptr, o_ptr, SCROBJ_FORCE_DETAIL)) {
         msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
@@ -218,7 +218,7 @@ void do_cmd_inscribe(PlayerType *player_ptr)
         return;
     }
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, OD_OMIT_INSCRIPTION);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, OD_OMIT_INSCRIPTION);
     msg_format(_("%sに銘を刻む。", "Inscribing %s."), item_name.data());
     msg_print(nullptr);
     const auto initial_inscription = o_ptr->is_inscribed() ? *o_ptr->inscription : "";

@@ -574,23 +574,21 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
         for (lev = player_ptr->current_floor_ptr->dun_level; lev >= 20; lev -= 1 + lev / 16) {
             const auto num = levs[std::min(lev / 10, 9)];
             for (auto i = 0; i < num; i++) {
-                POSITION x1 = rand_spread(p_pos.x, 7);
-                POSITION y1 = rand_spread(p_pos.y, 5);
-
-                if (!in_bounds(player_ptr->current_floor_ptr, y1, x1)) {
+                const Pos2D pos(rand_spread(p_pos.y, 5), rand_spread(p_pos.x, 7));
+                if (!in_bounds(player_ptr->current_floor_ptr, pos.y, pos.x)) {
                     continue;
                 }
 
                 /* Require line of projection */
-                if (!projectable(player_ptr, player_ptr->y, player_ptr->x, y1, x1)) {
+                if (!projectable(player_ptr, p_pos, pos)) {
                     continue;
                 }
 
-                if (auto m_idx = summon_specific(player_ptr, y1, x1, lev, SUMMON_ARMAGE_EVIL, (PM_NO_PET))) {
+                if (auto m_idx = summon_specific(player_ptr, pos.y, pos.x, lev, SUMMON_ARMAGE_EVIL, (PM_NO_PET))) {
                     evil_idx = *m_idx;
                 }
 
-                if (auto m_idx = summon_specific(player_ptr, y1, x1, lev, SUMMON_ARMAGE_GOOD, (PM_NO_PET))) {
+                if (auto m_idx = summon_specific(player_ptr, pos.y, pos.x, lev, SUMMON_ARMAGE_GOOD, (PM_NO_PET))) {
                     good_idx = *m_idx;
                 }
 
@@ -627,7 +625,7 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
         break;
     }
 
-    if (break_trap && is_trap(player_ptr, grid.feat)) {
+    if (break_trap && floor.is_trap(p_pos)) {
         cave_alter_feat(player_ptr, p_pos.y, p_pos.x, TerrainCharacteristics::DISARM);
         msg_print(_("トラップを粉砕した。", "You destroyed the trap."));
     }

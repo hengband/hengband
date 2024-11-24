@@ -16,7 +16,6 @@
 #include "monster-floor/monster-death.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/monster-summon.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
@@ -28,6 +27,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-crusade.h"
 #include "system/angband-system.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
@@ -162,7 +162,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_ROLENTO(PlayerType *player_ptr, POSI
     }
 
     for (k = 0; k < num; k++) {
-        count += summon_named_creature(player_ptr, m_idx, y, x, MonsterRaceId::GRENADE, mode) ? 1 : 0;
+        count += summon_named_creature(player_ptr, m_idx, y, x, MonraceId::GRENADE, mode) ? 1 : 0;
     }
     if (player_ptr->effects()->blindness().is_blind() && count) {
         msg_print(_("多くのものが間近にばらまかれる音がする。", "You hear many things scattered nearby."));
@@ -186,7 +186,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
-    MonsterRaceInfo *tr_ptr = &t_ptr->get_monrace();
+    MonraceDefinition *tr_ptr = &t_ptr->get_monrace();
     bool monster_to_player = (target_type == MONSTER_TO_PLAYER);
     bool monster_to_monster = (target_type == MONSTER_TO_MONSTER);
     bool direct = player_ptr->is_located_at({ y, x });
@@ -277,9 +277,9 @@ MonsterSpellResult spell_RF6_SPECIAL(PlayerType *player_ptr, POSITION y, POSITIO
     }
 
     switch (r_idx) {
-    case MonsterRaceId::OHMU:
+    case MonraceId::OHMU:
         return MonsterSpellResult::make_invalid();
-    case MonsterRaceId::ROLENTO:
+    case MonraceId::ROLENTO:
         return spell_RF6_SPECIAL_ROLENTO(player_ptr, y, x, m_idx, t_idx, target_type);
     default:
         if (monrace.symbol_char_is_any_of("B")) {

@@ -192,7 +192,7 @@ void rd_bounty_uniques(PlayerType *player_ptr)
             is_achieved = rd_bool();
         }
 
-        bounty_monrace_id = i2enum<MonsterRaceId>(monrace_id);
+        bounty_monrace_id = i2enum<MonraceId>(monrace_id);
     }
 }
 
@@ -385,7 +385,7 @@ static void rd_status(PlayerType *player_ptr)
     effects->stun().set(rd_s16b());
     effects->poison().set(rd_s16b());
     effects->hallucination().set(rd_s16b());
-    player_ptr->protevil = rd_s16b();
+    effects->protection().set(rd_s16b());
     player_ptr->invuln = rd_s16b();
     if (h_older_than(0, 0, 0)) {
         player_ptr->ult_res = 0;

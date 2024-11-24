@@ -47,8 +47,15 @@ constexpr auto DUNGEON_FEAT_PROB_NUM = 3;
 #define DUNGEON_MAX 20
 
 enum class FixedArtifactId : short;
-enum class MonsterRaceId : int16_t;
+enum class MonraceId : short;
 enum class MonsterSex;
+
+enum class DungeonMode {
+    AND = 1,
+    NAND = 2,
+    OR = 3,
+    NOR = 4,
+};
 
 struct feat_prob {
     FEAT_IDX feat{}; /* Feature tile */
@@ -56,7 +63,8 @@ struct feat_prob {
 };
 
 /* A structure for the != dungeon types */
-class MonsterRaceInfo;
+enum class TerrainCharacteristics;
+class MonraceDefinition;
 struct dungeon_type {
     DUNGEON_IDX idx{};
 
@@ -78,7 +86,7 @@ struct dungeon_type {
     PLAYER_LEVEL min_plev{}; /* Minimal plev needed to enter -- it's an anti-cheating mesure */
     BIT_FLAGS16 pit{};
     BIT_FLAGS16 nest{};
-    BIT_FLAGS8 mode{}; /* Mode of combinaison of the monster flags */
+    DungeonMode mode{}; /* Mode of combinaison of the monster flags */
 
     int min_m_alloc_level{}; /* Minimal number of monsters per level */
     int max_m_alloc_chance{}; /* There is a 1/max_m_alloc_chance chance per round of creating a new monster */
@@ -103,7 +111,7 @@ struct dungeon_type {
     std::vector<char> r_chars; /* Monster symbols allowed */
     short final_object{}; /* The object you'll find at the bottom */
     FixedArtifactId final_artifact{}; /* The artifact you'll find at the bottom */
-    MonsterRaceId final_guardian{}; /* The artifact's guardian. If an artifact is specified, then it's NEEDED */
+    MonraceId final_guardian{}; /* The artifact's guardian. If an artifact is specified, then it's NEEDED */
 
     PROB special_div{}; /* % of monsters affected by the flags/races allowed, to add some variety */
     int tunnel_percent{};
@@ -113,8 +121,11 @@ struct dungeon_type {
     bool has_river_flag() const;
     bool is_dungeon() const;
     bool has_guardian() const;
-    MonsterRaceInfo &get_guardian();
-    const MonsterRaceInfo &get_guardian() const;
+    MonraceDefinition &get_guardian();
+    const MonraceDefinition &get_guardian() const;
+    short convert_terrain_id(short terrain_id, TerrainCharacteristics action) const;
+    short convert_terrain_id(short terrain_id) const;
+    bool is_open(short terrain_id) const;
 };
 
 extern std::vector<DEPTH> max_dlv;

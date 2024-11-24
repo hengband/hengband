@@ -1,7 +1,6 @@
 #pragma once
 
 #include "system/angband.h"
-#include "system/monster-entity.h"
 
 // TODO: 更に分割する可能性が中程度あるのでヘッダに置いておく
 enum old_monster_resistance_type {
@@ -36,9 +35,12 @@ extern const int OLD_QUEST_WATER_CAVE;
 extern const int QUEST_OLD_CASTLE;
 extern const int QUEST_ROYAL_CRYPT;
 
+enum class MonraceId : short;
 class ItemEntity;
+class MonsterEntity;
+class MonraceDefinition;
 class PlayerType;
 void rd_item_old(ItemEntity *o_ptr);
 void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr);
-void set_old_lore(MonsterRaceInfo *r_ptr, BIT_FLAGS f3, BIT_FLAGS f4, const MonsterRaceId r_idx);
+void set_old_lore(MonraceDefinition *r_ptr, BIT_FLAGS f3, BIT_FLAGS f4, const MonraceId r_idx);
 errr rd_dungeon_old(PlayerType *player_ptr);

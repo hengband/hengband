@@ -3,10 +3,12 @@
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/timed-effects.h"
 
 /*!< @todo 並び順の都合で連番を付ける。まとめても良いならまとめてしまう予定 */
 void set_body_improvement_info_1(PlayerType *player_ptr, self_info_type *self_ptr)
 {
+    const auto effects = player_ptr->effects();
     if (is_blessed(player_ptr)) {
         self_ptr->info_list.emplace_back(_("あなたは高潔さを感じている。", "You feel rightous."));
     }
@@ -19,7 +21,7 @@ void set_body_improvement_info_1(PlayerType *player_ptr, self_info_type *self_pt
         self_ptr->info_list.emplace_back(_("あなたは戦闘狂だ。", "You are in a battle rage."));
     }
 
-    if (player_ptr->protevil) {
+    if (effects->protection().is_protected()) {
         self_ptr->info_list.emplace_back(_("あなたは邪悪なる存在から守られている。", "You are protected from evil."));
     }
 

@@ -126,12 +126,12 @@ term_color_type AngbandWorld::get_birth_class_color(PlayerClassType c) const
     return this->is_winner_class(c) ? TERM_SLATE : TERM_WHITE;
 }
 
-MonsterRaceInfo &AngbandWorld::get_today_bounty()
+MonraceDefinition &AngbandWorld::get_today_bounty()
 {
     return MonraceList::get_instance().get_monrace(this->today_mon);
 }
 
-const MonsterRaceInfo &AngbandWorld::get_today_bounty() const
+const MonraceDefinition &AngbandWorld::get_today_bounty() const
 {
     return MonraceList::get_instance().get_monrace(this->today_mon);
 }

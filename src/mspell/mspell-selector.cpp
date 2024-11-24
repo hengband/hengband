@@ -8,12 +8,12 @@
 #include "mspell/mspell-selector.h"
 #include "floor/geometry.h"
 #include "monster-race/race-ability-mask.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
 #include "mspell/mspell-attack-util.h"
 #include "mspell/mspell-judgement.h"
 #include "player/player-status.h"
 #include "system/angband-system.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -186,16 +186,16 @@ static bool spell_dispel(MonsterAbilityType spell)
  * @return 特殊魔法を使用するか否か
  * @details 分離/合体ユニークは常に使用しない (その前に判定済のため).
  */
-static bool decide_select_special(MonsterRaceId r_idx)
+static bool decide_select_special(MonraceId r_idx)
 {
     if (MonraceList::get_instance().is_separated(r_idx)) {
         return false;
     }
 
     switch (r_idx) {
-    case MonsterRaceId::OHMU:
+    case MonraceId::OHMU:
         return false;
-    case MonsterRaceId::ROLENTO:
+    case MonraceId::ROLENTO:
         return evaluate_percent(40);
     default:
         return one_in_(2);
@@ -367,7 +367,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
         return rand_choice(tactic);
     }
 
-    if (!invul.empty() && !m_ptr->mtimed[MTIMED_INVULNER] && one_in_(2)) {
+    if (!invul.empty() && !m_ptr->mtimed[MonsterTimedEffect::INVULNERABILITY] && one_in_(2)) {
         return rand_choice(invul);
     }
 

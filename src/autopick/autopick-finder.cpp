@@ -39,7 +39,7 @@ int find_autopick_list(PlayerType *player_ptr, const ItemEntity *o_ptr)
         return -1;
     }
 
-    auto item_name = describe_flavor(player_ptr, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
+    auto item_name = describe_flavor(player_ptr, *o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
     str_tolower(item_name.data());
     for (auto i = 0U; i < autopick_list.size(); i++) {
         const auto &entry = autopick_list[i];
@@ -66,7 +66,7 @@ bool get_object_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concpt
 
     *o_handle = o_ptr;
     string_free(*search_strp);
-    const auto item_name = describe_flavor(player_ptr, *o_handle, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
+    const auto item_name = describe_flavor(player_ptr, **o_handle, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
     *search_strp = string_make(format("<%s>", item_name.data()).data());
     return true;
 }
@@ -82,7 +82,7 @@ bool get_destroyed_object_for_search(PlayerType *player_ptr, ItemEntity **o_hand
 
     *o_handle = &autopick_last_destroyed_object;
     string_free(*search_strp);
-    const auto item_name = describe_flavor(player_ptr, *o_handle, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
+    const auto item_name = describe_flavor(player_ptr, **o_handle, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
     *search_strp = string_make(format("<%s>", item_name.data()).data());
     return true;
 }
@@ -313,7 +313,7 @@ void search_for_object(PlayerType *player_ptr, text_body_type *tb, const ItemEnt
     autopick_type an_entry, *entry = &an_entry;
     int bypassed_cy = -1;
     int i = tb->cy;
-    auto item_name = describe_flavor(player_ptr, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
+    auto item_name = describe_flavor(player_ptr, *o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
     str_tolower(item_name.data());
 
     while (true) {

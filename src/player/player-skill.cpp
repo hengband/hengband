@@ -280,7 +280,7 @@ void PlayerSkill::gain_two_weapon_skill_exp()
     }
 }
 
-void PlayerSkill::gain_riding_skill_exp_on_melee_attack(const MonsterRaceInfo *r_ptr)
+void PlayerSkill::gain_riding_skill_exp_on_melee_attack(const MonraceDefinition *r_ptr)
 {
     auto now_exp = this->player_ptr->skill_exp[PlayerSkillKindType::RIDING];
     auto max_exp = class_skills_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING];

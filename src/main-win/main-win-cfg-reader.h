@@ -5,13 +5,13 @@
 #include <filesystem>
 #include <initializer_list>
 #include <optional>
+#include <string>
 #include <unordered_map>
 #include <vector>
 
 typedef uint cfg_key;
 using cfg_values = std::vector<std::string>;
 using cfg_map = std::unordered_map<cfg_key, cfg_values>;
-using key_name_func = concptr (*)(int, char *);
 
 /*!
  * @brief .cfgファイルの読み取り対象とCfgData格納先のキー指定
@@ -25,14 +25,14 @@ using key_name_func = concptr (*)(int, char *);
 struct cfg_section {
 
     //! The name of the section in cfg file
-    concptr section_name;
+    std::string section_name;
     //! the "actions" value of "term_xtra()". see:z-term.h TERM_XTRA_xxxxx
     int action_type;
     /*!
      * Returns a reference to the name of the key at a specified action-val* in the section.
      * *action-val : the 2nd parameter of "term_xtra()"
      */
-    key_name_func key_at;
+    std::function<std::optional<std::string>(int)> key_at;
     //! 1つでもデータを読み込めた場合にtrueを設定する。（nullptrの場合を除く）
     bool *has_data = nullptr;
 };

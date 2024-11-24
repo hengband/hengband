@@ -131,7 +131,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
 
     auto placed = false;
     if ((store_num != StoreSaleType::HOME) && (store_num != StoreSaleType::MUSEUM)) {
-        const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
+        const auto item_name = describe_flavor(player_ptr, *q_ptr, 0);
         msg_format(_("%s(%c)を売却する。", "Selling %s (%c)."), item_name.data(), index_to_label(i_idx));
         msg_print(nullptr);
 
@@ -153,7 +153,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
 
             player_ptr->au += price;
             store_prt_gold(player_ptr);
-            const auto dummy = q_ptr->get_price() * q_ptr->number;
+            const auto dummy = q_ptr->calc_price() * q_ptr->number;
 
             identify_item(player_ptr, o_ptr);
             q_ptr = &forge;
@@ -165,8 +165,8 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
                 q_ptr->pval = o_ptr->pval * amt / o_ptr->number;
             }
 
-            const auto value = q_ptr->get_price() * q_ptr->number;
-            const auto sold_item_name = describe_flavor(player_ptr, q_ptr, 0);
+            const auto value = q_ptr->calc_price() * q_ptr->number;
+            const auto sold_item_name = describe_flavor(player_ptr, *q_ptr, 0);
             msg_format(_("%sを $%dで売却しました。", "You sold %s for %d gold."), sold_item_name.data(), price);
 
             if (record_sell) {
@@ -193,7 +193,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
             }
         }
     } else if (store_num == StoreSaleType::MUSEUM) {
-        const auto museum_item_name = describe_flavor(player_ptr, q_ptr, OD_NAME_ONLY);
+        const auto museum_item_name = describe_flavor(player_ptr, *q_ptr, OD_NAME_ONLY);
         if (-1 == store_check_num(q_ptr, store_num)) {
             msg_print(_("それと同じ品物は既に博物館にあるようです。", "The Museum already has one of those items."));
         } else {
@@ -220,7 +220,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
         }
     } else {
         distribute_charges(o_ptr, q_ptr, amt);
-        const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
+        const auto item_name = describe_flavor(player_ptr, *q_ptr, 0);
         msg_format(_("%sを置いた。(%c)", "You drop %s (%c)."), item_name.data(), index_to_label(i_idx));
         placed = true;
         vary_item(player_ptr, i_idx, -amt);

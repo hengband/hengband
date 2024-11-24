@@ -171,7 +171,7 @@ static void recursive_river(FloorType *floor_ptr, POSITION x1, POSITION y1, POSI
  * @param feat1 中央部地形ID
  * @param feat2 境界部地形ID
  */
-void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
+void add_river(FloorType *floor_ptr, DungeonData *dd_ptr)
 {
     short feat1 = 0;
     short feat2 = 0;
@@ -263,9 +263,9 @@ void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
     recursive_river(floor_ptr, x1, y1, x2, y2, feat1, feat2, wid);
 
     /* Hack - Save the location as a "room" */
-    if (dd_ptr->cent_n < CENT_MAX) {
-        dd_ptr->cent[dd_ptr->cent_n].y = y2;
-        dd_ptr->cent[dd_ptr->cent_n].x = x2;
+    if (dd_ptr->cent_n < dd_ptr->centers.size()) {
+        dd_ptr->centers[dd_ptr->cent_n].y = y2;
+        dd_ptr->centers[dd_ptr->cent_n].x = x2;
         dd_ptr->cent_n++;
     }
 }
@@ -336,7 +336,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
                 if (!grid.is_extra() && !grid.is_inner() && !grid.is_outer() && !grid.is_solid()) {
                     continue;
                 }
-                if (is_closed_door(player_ptr, grid.feat)) {
+                if (floor.is_closed_door(pos)) {
                     continue;
                 }
             }
@@ -351,16 +351,16 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
 
                 /* Scan all objects in the grid */
                 for (const auto this_o_idx : grid.o_idx_list) {
-                    auto *o_ptr = &floor.o_list[this_o_idx];
+                    auto &item = floor.o_list[this_o_idx];
 
                     /* Hack -- Preserve unknown artifacts */
-                    if (o_ptr->is_fixed_artifact()) {
-                        o_ptr->get_fixed_artifact().is_generated = false;
+                    if (item.is_fixed_artifact()) {
+                        item.get_fixed_artifact().is_generated = false;
                         if (cheat_peek) {
-                            const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_NAME_ONLY | OD_STORE));
+                            const auto item_name = describe_flavor(player_ptr, item, (OD_NAME_ONLY | OD_STORE));
                             msg_format(_("伝説のアイテム (%s) はストリーマーにより削除された。", "Artifact (%s) was deleted by streamer."), item_name.data());
                         }
-                    } else if (cheat_peek && o_ptr->is_random_artifact()) {
+                    } else if (cheat_peek && item.is_random_artifact()) {
                         msg_print(_("ランダム・アーティファクトの1つはストリーマーにより削除された。", "One of the random artifacts was deleted by streamer."));
                     }
                 }

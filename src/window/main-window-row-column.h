@@ -1,9 +1,5 @@
 #pragma once
 
-#include "monster/monster-timed-effect-types.h"
-#include <map>
-#include <string>
-
 /*
  * Some screen locations for various display routines
  * Currently, row 8 and 15 are the only "blank" rows.
@@ -79,5 +75,3 @@
 #define ROW_STATBAR (-1)
 #define COL_STATBAR 0
 #define MAX_COL_STATBAR (-26)
-
-extern const std::map<monster_timed_effect_type, std::string> effect_type_to_label;

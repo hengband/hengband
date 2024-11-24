@@ -6,7 +6,6 @@
 
 #include "knowledge/knowledge-uniques.h"
 #include "core/show-file.h"
-#include "game-option/cheat-options.h"
 #include "io-dump/dump-util.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -14,59 +13,56 @@
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 
-struct unique_list_type {
-    unique_list_type(bool is_alive);
+class UniqueList {
+public:
+    UniqueList(bool is_alive);
     int num_uniques[10]{};
     bool is_alive;
-    std::vector<MonsterRaceId> monrace_ids{};
+    std::vector<MonraceId> monrace_ids{};
     int num_uniques_surface = 0;
     int num_uniques_over100 = 0;
     int num_uniques_total = 0;
     int max_lev = -1;
+
+    void sweep();
 };
 
-unique_list_type::unique_list_type(bool is_alive)
+UniqueList::UniqueList(bool is_alive)
     : is_alive(is_alive)
 {
 }
 
-/*!
- * @brief モンスターリストを走査し、生きているか死んでいるユニークだけを抽出する
- * @param r_ptr モンスター種別への参照ポインタ
- * @param is_alive 生きているユニークのリストならばTRUE、撃破したユニークのリストならばFALSE
- * @return is_aliveの条件に見合うユニークがいたらTRUE、それ以外はFALSE
- * @details 闘技場のモンスターとは再戦できないので、生きているなら表示から外す
- */
-static bool sweep_uniques(MonsterRaceInfo *r_ptr, bool is_alive)
+void UniqueList::sweep()
 {
-    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-
-        return false;
-    }
-
-    if (!cheat_know && !r_ptr->r_sights) {
-        return false;
-    }
-
-    bool is_except_arena = is_alive ? (r_ptr->rarity > 100) && (r_ptr->misc_flags.has_not(MonsterMiscType::QUESTOR)) : false;
-    if (!r_ptr->rarity || is_except_arena) {
-        return false;
-    }
-
-    if (is_alive) {
-        if (r_ptr->max_num == 0) {
-            return false;
+    auto &monraces = MonraceList::get_instance();
+    for (auto &[monrace_id, monrace] : monraces) {
+        if (!monrace.is_valid() || !monrace.should_display(this->is_alive)) {
+            continue;
         }
-    } else {
-        if (r_ptr->max_num > 0) {
-            return false;
-        }
-    }
 
-    return true;
+        if (!monrace.level) {
+            this->num_uniques_surface++;
+            this->monrace_ids.push_back(monrace_id);
+            continue;
+        }
+
+        const auto lev = (monrace.level - 1) / 10;
+        if (lev >= 10) {
+            this->num_uniques_over100++;
+            this->monrace_ids.push_back(monrace_id);
+            continue;
+        }
+
+        this->num_uniques[lev]++;
+        if (this->max_lev < lev) {
+            this->max_lev = lev;
+        }
+
+        this->monrace_ids.push_back(monrace_id);
+    }
 }
 
-static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
+static void display_uniques(UniqueList *unique_list_ptr, FILE *fff)
 {
     if (unique_list_ptr->num_uniques_surface) {
         concptr surface_desc = unique_list_ptr->is_alive ? _("     地上  生存: %3d体\n", "      Surface  alive: %3d\n")
@@ -100,17 +96,17 @@ static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
         fputs(no_unique_desc, fff);
     }
 
+    const auto &monraces = MonraceList::get_instance();
     for (auto monrace_id : unique_list_ptr->monrace_ids) {
-        auto *r_ptr = &monraces_info[monrace_id];
+        const auto &monrace = monraces.get_monrace(monrace_id);
         std::string details;
-
-        if (r_ptr->defeat_level && r_ptr->defeat_time) {
-            details = format(_(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
-                (r_ptr->defeat_time / 60) % 60, r_ptr->defeat_time % 60);
+        if (monrace.defeat_level && monrace.defeat_time) {
+            details = format(_(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), monrace.defeat_level, monrace.defeat_time / (60 * 60),
+                (monrace.defeat_time / 60) % 60, monrace.defeat_time % 60);
         }
 
-        const auto name = str_separate(r_ptr->name, 40);
-        fprintf(fff, _("     %-40s (レベル%3d)%s\n", "     %-40s (level %3d)%s\n"), name.front().data(), (int)r_ptr->level, details.data());
+        const auto name = str_separate(monrace.name, 40);
+        fprintf(fff, _("     %-40s (レベル%3d)%s\n", "     %-40s (level %3d)%s\n"), name.front().data(), (int)monrace.level, details.data());
         for (auto i = 1U; i < name.size(); ++i) {
             fprintf(fff, "     %s\n", name[i].data());
         }
@@ -124,44 +120,19 @@ static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
  */
 void do_cmd_knowledge_uniques(PlayerType *player_ptr, bool is_alive)
 {
-    unique_list_type tmp_list(is_alive);
-    unique_list_type *unique_list_ptr = &tmp_list;
+    UniqueList unique_list(is_alive);
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
     if (!open_temporary_file(&fff, file_name)) {
         return;
     }
 
-    for (auto &[monrace_id, monrace] : monraces_info) {
-        if (!monrace.is_valid()) {
-            continue;
-        }
-        if (!sweep_uniques(&monrace, unique_list_ptr->is_alive)) {
-            continue;
-        }
-
-        if (monrace.level) {
-            int lev = (monrace.level - 1) / 10;
-            if (lev < 10) {
-                unique_list_ptr->num_uniques[lev]++;
-                if (unique_list_ptr->max_lev < lev) {
-                    unique_list_ptr->max_lev = lev;
-                }
-            } else {
-                unique_list_ptr->num_uniques_over100++;
-            }
-        } else {
-            unique_list_ptr->num_uniques_surface++;
-        }
-
-        unique_list_ptr->monrace_ids.push_back(monrace_id);
-    }
-
+    unique_list.sweep();
     const auto &monraces = MonraceList::get_instance();
-    std::stable_sort(unique_list_ptr->monrace_ids.begin(), unique_list_ptr->monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
-    display_uniques(unique_list_ptr, fff);
+    std::stable_sort(unique_list.monrace_ids.begin(), unique_list.monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
+    display_uniques(&unique_list, fff);
     angband_fclose(fff);
-    concptr title_desc = unique_list_ptr->is_alive ? _("まだ生きているユニーク・モンスター", "Alive Uniques") : _("もう撃破したユニーク・モンスター", "Dead Uniques");
+    concptr title_desc = unique_list.is_alive ? _("まだ生きているユニーク・モンスター", "Alive Uniques") : _("もう撃破したユニーク・モンスター", "Dead Uniques");
     FileDisplayer(player_ptr->name).display(true, file_name, 0, 0, title_desc);
     fd_kill(file_name);
 }

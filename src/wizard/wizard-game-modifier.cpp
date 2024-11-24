@@ -8,9 +8,9 @@
 #include "dungeon/quest.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/input-key-requester.h"
-#include "monster-race/race-indice-types.h"
 #include "player-info/self-info.h"
 #include "system/building-type-definition.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -28,7 +28,7 @@
 
 void wiz_enter_quest(PlayerType *player_ptr);
 void wiz_complete_quest(PlayerType *player_ptr);
-void wiz_restore_monster_max_num(MonsterRaceId r_idx);
+void wiz_restore_monster_max_num(MonraceId r_idx);
 
 /*!
  * @brief ゲーム設定コマンド一覧表
@@ -90,7 +90,7 @@ void wizard_game_modifier(PlayerType *player_ptr)
         wiz_enter_quest(player_ptr);
         break;
     case 'u':
-        wiz_restore_monster_max_num(i2enum<MonsterRaceId>(command_arg));
+        wiz_restore_monster_max_num(i2enum<MonraceId>(command_arg));
         break;
     case 't':
         AngbandWorld::get_instance().set_gametime();
@@ -140,10 +140,10 @@ void wiz_complete_quest(PlayerType *player_ptr)
     }
 }
 
-void wiz_restore_monster_max_num(MonsterRaceId r_idx)
+void wiz_restore_monster_max_num(MonraceId r_idx)
 {
     if (!MonraceList::is_valid(r_idx)) {
-        const auto restore_monrace_id = input_numerics("MonsterID", 1, monraces_info.size() - 1, MonsterRaceId::FILTHY_URCHIN);
+        const auto restore_monrace_id = input_numerics("MonsterID", 1, monraces_info.size() - 1, MonraceId::FILTHY_URCHIN);
         if (!restore_monrace_id) {
             return;
         }

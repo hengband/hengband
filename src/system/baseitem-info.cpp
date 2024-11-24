@@ -20,8 +20,11 @@
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/angband-exceptions.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "util/enum-converter.h"
 #include "util/string-processor.h"
+#include <algorithm>
+#include <numeric>
 #include <set>
 #include <unordered_map>
 
@@ -30,6 +33,28 @@ constexpr auto ITEM_NOT_BOW = "This item is not a bow!";
 constexpr auto ITEM_NOT_ROD = "This item is not a rod!";
 constexpr auto ITEM_NOT_LITE = "This item is not a lite!";
 constexpr auto INVALID_BI_ID_FORMAT = "Invalid Baseitem ID is specified! %d";
+constexpr auto INVALID_BASEITEM_KEY = "Invalid Baseitem Key is specified! Type: %d, Subtype: %d";
+const std::map<MoneyKind, std::string> GOLD_KINDS = {
+    { MoneyKind::COPPER, _("銅塊", "copper") },
+    { MoneyKind::SILVER, _("銀塊", "silver") },
+    { MoneyKind::GARNET, _("ガーネット", "garnets") },
+    { MoneyKind::GOLD, _("金塊", "gold") },
+    { MoneyKind::OPAL, _("オパール", "opals") },
+    { MoneyKind::SAPPHIRE, _("サファイア", "sapphires") },
+    { MoneyKind::RUBY, _("ルビー", "rubies") },
+    { MoneyKind::DIAMOND, _("ダイヤモンド", "diamonds") },
+    { MoneyKind::EMERALD, _("エメラルド", "emeralds") },
+    { MoneyKind::MITHRIL, _("ミスリル", "mithril") },
+    { MoneyKind::ADAMANTITE, _("アダマンタイト", "adamantite") },
+};
+const std::map<MonraceId, BaseitemKey> CREEPING_COIN_DROPS = {
+    { MonraceId::COPPER_COINS, { ItemKindType::GOLD, 3 } },
+    { MonraceId::SILVER_COINS, { ItemKindType::GOLD, 6 } },
+    { MonraceId::GOLD_COINS, { ItemKindType::GOLD, 11 } },
+    { MonraceId::MITHRIL_COINS, { ItemKindType::GOLD, 17 } },
+    { MonraceId::MITHRIL_GOLEM, { ItemKindType::GOLD, 17 } },
+    { MonraceId::ADAMANT_COINS, { ItemKindType::GOLD, 18 } },
+};
 }
 
 bool BaseitemKey::operator==(const BaseitemKey &other) const
@@ -575,6 +600,24 @@ bool BaseitemKey::is_monster() const
     }
 }
 
+/*!
+ * @brief 2つのアイテムが同時に「普通の」像であることを示す
+ * @param チェック対象のベースアイテムキー
+ * @return 両方が写真の時だけfalse、少なくとも片方が「普通の」像ならばtrue、像ですらないならば例外
+ */
+bool BaseitemKey::are_both_statue(const BaseitemKey &other) const
+{
+    if ((this->type_value != ItemKindType::STATUE)) {
+        THROW_EXCEPTION(std::logic_error, "This item is not a statue!");
+    }
+
+    if (other.type_value != ItemKindType::STATUE) {
+        THROW_EXCEPTION(std::logic_error, "The other item is not a statue!");
+    }
+
+    return (this->subtype_value != SV_PHOTO) || (other.subtype_value != SV_PHOTO);
+}
+
 bool BaseitemKey::is_mushrooms() const
 {
     if (!this->subtype_value) {
@@ -661,6 +704,11 @@ std::string BaseitemInfo::stripped_name() const
 
     ss << " ";
     return ss.str();
+}
+
+bool BaseitemInfo::order_cost(const BaseitemInfo &other) const
+{
+    return this->cost < other.cost;
 }
 
 /*!
@@ -800,6 +848,111 @@ void BaseitemList::shrink_to_fit()
     this->baseitems.shrink_to_fit();
 }
 
+/*!
+ * @brief ベースアイテムキーからIDを引いて返す
+ * @param key ベースアイテムキー、但しsvalはランダム(nullopt) の可能性がある
+ * @return ベースアイテムID
+ * @details ベースアイテムIDが存在しなければ例外
+ */
+short BaseitemList::lookup_baseitem_id(const BaseitemKey &bi_key) const
+{
+    const auto sval = bi_key.sval();
+    if (sval) {
+        return exe_lookup(bi_key);
+    }
+
+    static const auto &cache = create_baseitems_cache();
+    const auto itr = cache.find(bi_key.tval());
+    if (itr == cache.end()) {
+        constexpr auto fmt = "Specified ItemKindType has no subtype! %d";
+        THROW_EXCEPTION(std::runtime_error, format(fmt, enum2i(bi_key.tval())));
+    }
+
+    const auto &svals = itr->second;
+    return exe_lookup({ bi_key.tval(), rand_choice(svals) });
+}
+
+const BaseitemInfo &BaseitemList::lookup_baseitem(const BaseitemKey &bi_key) const
+{
+    const auto bi_id = this->lookup_baseitem_id(bi_key);
+    return this->baseitems[bi_id];
+}
+
+/*!
+ * @brief モンスター種族IDから財宝アイテムの価値を引く
+ * @param monrace_id モンスター種族ID
+ * @return 特定の財宝を落とすならそのアイテムの価値オフセット、一般的な財宝ドロップならばnullopt
+ */
+std::optional<int> BaseitemList::lookup_creeping_coin_drop_offset(MonraceId monrace_id) const
+{
+    const auto it = CREEPING_COIN_DROPS.find(monrace_id);
+    if (it == CREEPING_COIN_DROPS.end()) {
+        return std::nullopt;
+    }
+
+    return this->lookup_gold_offset(it->second);
+}
+
+/*!
+ * @brief ベースアイテム定義群から財宝アイテムの数を計算する
+ * @return 財宝を示すベースアイテム数
+ */
+int BaseitemList::calc_num_gold_subtypes() const
+{
+    static const auto &golds = this->create_sorted_golds();
+    static const auto sum = std::accumulate(golds.begin(), golds.end(), 0,
+        [](int count, const auto &pair) {
+            return count + pair.second.size();
+        });
+    return sum;
+}
+
+/*!
+ * @brief 財宝アイテムの価値からベースアイテムを引く
+ * @param target_offset 財宝アイテムの価値
+ * @return ベースアイテムID
+ * @details 同一の財宝カテゴリ内ならば常に大きいほど価値が高い.
+ * カテゴリが異なるならば価値の大小は保証しない. 即ち「最も高い銅貨>最も安い銀貨」はあり得る.
+ */
+const BaseitemInfo &BaseitemList::lookup_gold(int target_offset) const
+{
+    auto offset = 0;
+    for (const auto &pair : this->create_sorted_golds()) {
+        for (const auto &bi_key : pair.second) {
+            if (offset == target_offset) {
+                return this->get_baseitem(this->exe_lookup(bi_key));
+            }
+
+            offset++;
+        }
+    }
+
+    THROW_EXCEPTION(std::runtime_error, format("Invalid gold offset is specified! %d", target_offset));
+}
+
+/*!
+ * @brief ベースアイテムIDから財宝アイテムの価値を引く
+ * @param bi_id ベースアイテムID
+ * @return 財宝アイテムの価値オフセット
+ * @details 同一の財宝カテゴリ内ならば常に大きいほど価値が高い.
+ * カテゴリが異なるならば価値の大小は保証しない. 即ち「最も高い銅貨>最も安い銀貨」はあり得る.
+ */
+int BaseitemList::lookup_gold_offset(short bi_id) const
+{
+    auto offset = 0;
+    for (const auto &pair : this->create_sorted_golds()) {
+        for (const auto &bi_key : pair.second) {
+            if (bi_id == this->exe_lookup(bi_key)) {
+                return offset;
+            }
+
+            offset++;
+        }
+    }
+
+    THROW_EXCEPTION(std::runtime_error, format(INVALID_BI_ID_FORMAT, bi_id));
+}
+
 void BaseitemList::reset_all_visuals()
 {
     for (auto &baseitem : this->baseitems) {
@@ -833,36 +986,6 @@ void BaseitemList::mark_common_items_as_aware()
     }
 }
 
-/*!
- * @brief ベースアイテムキーからIDを引いて返す
- * @param key ベースアイテムキー、但しsvalはランダム(nullopt) の可能性がある
- * @return ベースアイテムID
- * @details ベースアイテムIDが存在しなければ例外
- */
-short BaseitemList::lookup_baseitem_id(const BaseitemKey &bi_key) const
-{
-    const auto sval = bi_key.sval();
-    if (sval) {
-        return exe_lookup(bi_key);
-    }
-
-    static const auto &cache = create_baseitems_cache();
-    const auto itr = cache.find(bi_key.tval());
-    if (itr == cache.end()) {
-        constexpr auto fmt = "Specified ItemKindType has no subtype! %d";
-        THROW_EXCEPTION(std::runtime_error, format(fmt, enum2i(bi_key.tval())));
-    }
-
-    const auto &svals = itr->second;
-    return exe_lookup({ bi_key.tval(), rand_choice(svals) });
-}
-
-const BaseitemInfo &BaseitemList::lookup_baseitem(const BaseitemKey &bi_key) const
-{
-    const auto bi_id = this->lookup_baseitem_id(bi_key);
-    return this->baseitems[bi_id];
-}
-
 void BaseitemList::shuffle_flavors()
 {
     this->shuffle_flavors(ItemKindType::RING);
@@ -873,12 +996,6 @@ void BaseitemList::shuffle_flavors()
     this->shuffle_flavors(ItemKindType::FOOD);
     this->shuffle_flavors(ItemKindType::POTION);
     this->shuffle_flavors(ItemKindType::SCROLL);
-}
-
-BaseitemInfo &BaseitemList::lookup_baseitem(const BaseitemKey &bi_key)
-{
-    const auto bi_id = this->lookup_baseitem_id(bi_key);
-    return this->baseitems[bi_id];
 }
 
 /*!
@@ -892,8 +1009,7 @@ short BaseitemList::exe_lookup(const BaseitemKey &bi_key) const
     static const auto &cache = create_baseitem_index_chache();
     const auto itr = cache.find(bi_key);
     if (itr == cache.end()) {
-        constexpr auto fmt = "Invalid Baseitem Key is specified! %d, %d";
-        THROW_EXCEPTION(std::runtime_error, format(fmt, enum2i(bi_key.tval()), *bi_key.sval()));
+        THROW_EXCEPTION(std::runtime_error, format(INVALID_BASEITEM_KEY, enum2i(bi_key.tval()), *bi_key.sval()));
     }
 
     return itr->second;
@@ -936,6 +1052,84 @@ const std::map<ItemKindType, std::vector<int>> &BaseitemList::create_baseitems_c
     }
 
     return cache;
+}
+
+/*!
+ * @brief ベースアイテムキーから財宝アイテムの価値を引く
+ * @param finding_bi_key 探索対象のベースアイテムキー
+ * @return 財宝アイテムの価値番号 (大きいほど価値が高い)
+ * @details 同一の財宝カテゴリ内ならば常に番号が大きいほど価値も高い.
+ * カテゴリが異なるならば価値の大小は保証しない. 即ち「最も高い銅貨>最も安い銀貨」はあり得る.
+ */
+int BaseitemList::lookup_gold_offset(const BaseitemKey &finding_bi_key) const
+{
+    auto offset = 0;
+    for (const auto &pair : this->create_sorted_golds()) {
+        for (const auto &bi_key : pair.second) {
+            if (finding_bi_key == bi_key) {
+                return offset;
+            }
+
+            offset++;
+        }
+    }
+
+    THROW_EXCEPTION(std::runtime_error, format(INVALID_BASEITEM_KEY, enum2i(finding_bi_key.tval()), *finding_bi_key.sval()));
+}
+
+/*!
+ * @brief ベースアイテム定義リストから財宝の辞書を作る (価値順)
+ * @return 財宝種別をキー、それに対応するベースアイテムキーの配列 (安い順にソート済)を値とした辞書
+ */
+const std::map<MoneyKind, std::vector<BaseitemKey>> &BaseitemList::create_sorted_golds() const
+{
+    static std::map<MoneyKind, std::vector<BaseitemKey>> list;
+    if (!list.empty()) {
+        return list;
+    }
+
+    list = this->create_unsorted_golds();
+    for (auto &[money_kind, bi_keys] : list) {
+        std::stable_sort(bi_keys.begin(), bi_keys.end(),
+            [this](const auto &bi_key1, const auto &bi_key2) {
+                const auto &baseitem1 = this->lookup_baseitem(bi_key1);
+                const auto &baseitem2 = this->lookup_baseitem(bi_key2);
+                return baseitem1.order_cost(baseitem2);
+            });
+    }
+
+    return list;
+}
+
+/*!
+ * @brief ベースアイテム定義リストから財宝の辞書を作る (ベースアイテムID順)
+ * @return 財宝種別をキー、それに対応するベースアイテムキーの配列を値とした辞書
+ */
+std::map<MoneyKind, std::vector<BaseitemKey>> BaseitemList::create_unsorted_golds() const
+{
+    std::map<MoneyKind, std::vector<BaseitemKey>> list;
+    for (const auto &baseitem : this->baseitems) {
+        const auto &bi_key = baseitem.bi_key;
+        if (bi_key.tval() != ItemKindType::GOLD) {
+            continue;
+        }
+
+        for (const auto money_kind : MONEY_KIND_RANGE) {
+            if (baseitem.name != GOLD_KINDS.at(money_kind)) {
+                continue;
+            }
+
+            list[money_kind].push_back(bi_key);
+        }
+    }
+
+    return list;
+}
+
+BaseitemInfo &BaseitemList::lookup_baseitem(const BaseitemKey &bi_key)
+{
+    const auto bi_id = this->lookup_baseitem_id(bi_key);
+    return this->baseitems[bi_id];
 }
 
 /*!

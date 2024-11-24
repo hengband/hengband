@@ -94,24 +94,24 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     for (auto it = o_idx_list.begin(); it != o_idx_list.end();) {
         const OBJECT_IDX this_o_idx = *it++;
-        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-        const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+        auto &item = player_ptr->current_floor_ptr->o_list[this_o_idx];
+        const auto item_name = describe_flavor(player_ptr, item, 0);
         disturb(player_ptr, false, false);
-        if (o_ptr->bi_key.tval() == ItemKindType::GOLD) {
-            constexpr auto mes = _(" $%ld の価値がある%sを見つけた。", "You have found %ld gold pieces worth of %s.");
-            msg_format(mes, (long)o_ptr->pval, item_name.data());
+        if (item.bi_key.tval() == ItemKindType::GOLD) {
+            constexpr auto mes = _(" $%d の価値がある%sを見つけた。", "You have found %d gold pieces worth of %s.");
+            msg_format(mes, item.pval, item_name.data());
             sound(SOUND_SELL);
-            player_ptr->au += o_ptr->pval;
+            player_ptr->au += item.pval;
             rfu.set_flag(MainWindowRedrawingFlag::GOLD);
             rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
             delete_object_idx(player_ptr, this_o_idx);
             continue;
-        } else if (o_ptr->marked.has(OmType::SUPRESS_MESSAGE)) {
-            o_ptr->marked.reset(OmType::SUPRESS_MESSAGE);
+        } else if (item.marked.has(OmType::SUPRESS_MESSAGE)) {
+            item.marked.reset(OmType::SUPRESS_MESSAGE);
             continue;
         }
 
-        if (check_store_item_to_inventory(player_ptr, o_ptr)) {
+        if (check_store_item_to_inventory(player_ptr, &item)) {
             can_pickup++;
         }
 
@@ -125,8 +125,8 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
 
     if (!pickup) {
         if (floor_num == 1) {
-            auto *o_ptr = &player_ptr->current_floor_ptr->o_list[floor_o_idx];
-            const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+            const auto &item = player_ptr->current_floor_ptr->o_list[floor_o_idx];
+            const auto item_name = describe_flavor(player_ptr, item, 0);
             msg_format(_("%sがある。", "You see %s."), item_name.data());
         } else {
             msg_format(_("%d 個のアイテムの山がある。", "You see a pile of %d items."), floor_num);
@@ -137,8 +137,8 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
 
     if (!can_pickup) {
         if (floor_num == 1) {
-            auto *o_ptr = &player_ptr->current_floor_ptr->o_list[floor_o_idx];
-            const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+            const auto &item = player_ptr->current_floor_ptr->o_list[floor_o_idx];
+            const auto item_name = describe_flavor(player_ptr, item, 0);
             msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), item_name.data());
         } else {
             msg_print(_("ザックには床にあるどのアイテムも入らない。", "You have no room for any of the objects on the floor."));
@@ -162,8 +162,8 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
         return;
     }
 
-    auto *o_ptr = &player_ptr->current_floor_ptr->o_list[floor_o_idx];
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto &item = player_ptr->current_floor_ptr->o_list[floor_o_idx];
+    const auto item_name = describe_flavor(player_ptr, item, 0);
     const auto prompt = format(_("%sを拾いますか? ", "Pick up %s? "), item_name.data());
     if (!input_check(prompt)) {
         return;
@@ -189,7 +189,7 @@ void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
 {
     auto *o_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
 #ifdef JP
-    const auto old_item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
+    const auto old_item_name = describe_flavor(player_ptr, *o_ptr, OD_NAME_ONLY);
     const auto picked_count_str = describe_count_with_counter_suffix(*o_ptr);
     const auto picked_count = o_ptr->number;
 #else
@@ -207,7 +207,7 @@ void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
         }
     }
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
 #ifdef JP
     if (o_ptr->is_specific_artifact(FixedArtifactId::CRIMSON) && (player_ptr->ppersonality == PERSONALITY_COMBAT)) {
         msg_format("こうして、%sは『クリムゾン』を手に入れた。", player_ptr->name);
@@ -256,13 +256,13 @@ void carry(PlayerType *player_ptr, bool pickup)
 
     for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
         const OBJECT_IDX this_o_idx = *it++;
-        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-        const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+        auto &item = player_ptr->current_floor_ptr->o_list[this_o_idx];
+        const auto item_name = describe_flavor(player_ptr, item, 0);
         disturb(player_ptr, false, false);
-        if (o_ptr->bi_key.tval() == ItemKindType::GOLD) {
-            int value = (long)o_ptr->pval;
+        if (item.bi_key.tval() == ItemKindType::GOLD) {
+            const auto value = item.pval;
             delete_object_idx(player_ptr, this_o_idx);
-            msg_format(_(" $%ld の価値がある%sを見つけた。", "You collect %ld gold pieces worth of %s."), (long)value, item_name.data());
+            msg_format(_(" $%d の価値がある%sを見つけた。", "You collect %d gold pieces worth of %s."), value, item_name.data());
             sound(SOUND_SELL);
             player_ptr->au += value;
             rfu.set_flag(MainWindowRedrawingFlag::GOLD);
@@ -270,8 +270,8 @@ void carry(PlayerType *player_ptr, bool pickup)
             continue;
         }
 
-        if (o_ptr->marked.has(OmType::SUPRESS_MESSAGE)) {
-            o_ptr->marked.reset(OmType::SUPRESS_MESSAGE);
+        if (item.marked.has(OmType::SUPRESS_MESSAGE)) {
+            item.marked.reset(OmType::SUPRESS_MESSAGE);
             continue;
         }
 
@@ -280,7 +280,7 @@ void carry(PlayerType *player_ptr, bool pickup)
             continue;
         }
 
-        if (!check_store_item_to_inventory(player_ptr, o_ptr)) {
+        if (!check_store_item_to_inventory(player_ptr, &item)) {
             msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), item_name.data());
             continue;
         }

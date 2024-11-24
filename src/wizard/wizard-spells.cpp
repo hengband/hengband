@@ -18,7 +18,6 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/race-ability-flags.h"
-#include "monster-race/race-indice-types.h"
 #include "mutation/mutation-processor.h"
 #include "object-activation/activation-others.h"
 #include "player-base/player-class.h"
@@ -31,6 +30,7 @@
 #include "spell-realm/spells-chaos.h"
 #include "spell/spells-status.h"
 #include "spell/summon-types.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -54,12 +54,12 @@ static const std::vector<debug_spell_command> debug_spell_commands_list = {
     { 5, "pattern teleport", { .spell5 = { pattern_teleport } } },
 };
 
-static std::optional<MonsterRaceId> input_monster_race_id(const MonsterRaceId r_idx)
+static std::optional<MonraceId> input_monster_race_id(const MonraceId r_idx)
 {
     if (MonraceList::is_valid(r_idx)) {
         return r_idx;
     }
-    return input_numerics("MonsterID", 1, monraces_info.size() - 1, MonsterRaceId::FILTHY_URCHIN);
+    return input_numerics("MonsterID", 1, monraces_info.size() - 1, MonraceId::FILTHY_URCHIN);
 }
 
 /*!
@@ -228,7 +228,7 @@ void wiz_summon_random_monster(PlayerType *player_ptr, int num)
  * @details
  * This function is rather dangerous
  */
-void wiz_summon_specific_monster(PlayerType *player_ptr, const MonsterRaceId r_idx)
+void wiz_summon_specific_monster(PlayerType *player_ptr, const MonraceId r_idx)
 {
     const auto new_monrace_id = input_monster_race_id(r_idx);
     if (!new_monrace_id) {
@@ -245,7 +245,7 @@ void wiz_summon_specific_monster(PlayerType *player_ptr, const MonsterRaceId r_i
  * @details
  * This function is rather dangerous
  */
-void wiz_summon_pet(PlayerType *player_ptr, const MonsterRaceId r_idx)
+void wiz_summon_pet(PlayerType *player_ptr, const MonraceId r_idx)
 {
     const auto new_monrace_id = input_monster_race_id(r_idx);
     if (!new_monrace_id) {
@@ -260,7 +260,7 @@ void wiz_summon_pet(PlayerType *player_ptr, const MonsterRaceId r_idx)
  * Summon a creature of the specified type
  * @param r_idx モンスター種族ID（回数指定コマンド'0'で指定した回数がIDになる）
  */
-void wiz_summon_clone(PlayerType *player_ptr, const MonsterRaceId r_idx)
+void wiz_summon_clone(PlayerType *player_ptr, const MonraceId r_idx)
 {
     const auto new_monrace_id = input_monster_race_id(r_idx);
     if (!new_monrace_id) {

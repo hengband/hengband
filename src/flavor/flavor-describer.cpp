@@ -577,14 +577,13 @@ static describe_option_type decide_describe_option(const ItemEntity &item, BIT_F
  * @param mode 表記に関するオプション指定
  * @return modeに応じたオブジェクトの表記
  */
-std::string describe_flavor(PlayerType *player_ptr, const ItemEntity *o_ptr, BIT_FLAGS mode, const size_t max_length)
+std::string describe_flavor(PlayerType *player_ptr, const ItemEntity &item, BIT_FLAGS mode, const size_t max_length)
 {
-    const auto &item = *o_ptr;
     const auto opt = decide_describe_option(item, mode);
     std::stringstream ss;
     ss << describe_named_item(player_ptr, item, opt);
 
-    if (any_bits(mode, OD_NAME_ONLY) || !o_ptr->is_valid()) {
+    if (any_bits(mode, OD_NAME_ONLY) || !item.is_valid()) {
         return str_substr(ss.str(), 0, max_length);
     }
 

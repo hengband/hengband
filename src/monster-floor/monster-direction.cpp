@@ -23,27 +23,27 @@
 /*!
  * @brief ペットが敵に接近するための方向を決定する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param m_ptr 移動を試みているモンスターへの参照ポインタ
- * @param t_ptr 移動先モンスターへの参照ポインタ
+ * @param monster_from 移動を試みているモンスターへの参照ポインタ
+ * @param monster_to 移動先モンスターへの参照ポインタ
  * @param plus モンスターIDの増減 (1/2 の確率で+1、1/2の確率で-1)
  * @return ペットがモンスターに近づくならばTRUE
  */
-static bool decide_pet_approch_direction(PlayerType *player_ptr, MonsterEntity *m_ptr, MonsterEntity *t_ptr)
+static bool decide_pet_approch_direction(PlayerType *player_ptr, const MonsterEntity &monster_from, const MonsterEntity &monster_to)
 {
-    auto *r_ptr = &m_ptr->get_monrace();
-    if (!m_ptr->is_pet()) {
+    if (!monster_from.is_pet()) {
         return false;
     }
 
     if (player_ptr->pet_follow_distance < 0) {
-        if (t_ptr->cdis <= (0 - player_ptr->pet_follow_distance)) {
+        if (monster_to.cdis <= (0 - player_ptr->pet_follow_distance)) {
             return true;
         }
-    } else if ((m_ptr->cdis < t_ptr->cdis) && (t_ptr->cdis > player_ptr->pet_follow_distance)) {
+    } else if ((monster_from.cdis < monster_to.cdis) && (monster_to.cdis > player_ptr->pet_follow_distance)) {
         return true;
     }
 
-    return r_ptr->aaf < t_ptr->cdis;
+    const auto &monrace = monster_from.get_monrace();
+    return monrace.aaf < monster_to.cdis;
 }
 
 /*!
@@ -57,44 +57,46 @@ static bool decide_pet_approch_direction(PlayerType *player_ptr, MonsterEntity *
  */
 static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m_idx, int start, int plus, POSITION *y, POSITION *x)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-    for (int i = start; ((i < start + floor_ptr->m_max) && (i > start - floor_ptr->m_max)); i += plus) {
-        MONSTER_IDX dummy = (i % floor_ptr->m_max);
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monster_from = floor.m_list[m_idx];
+    const auto &monrace = monster_from.get_monrace();
+    for (int i = start; ((i < start + floor.m_max) && (i > start - floor.m_max)); i += plus) {
+        const auto dummy = (i % floor.m_max);
         if (dummy == 0) {
             continue;
         }
 
-        MONSTER_IDX t_idx = dummy;
-        auto *t_ptr = &floor_ptr->m_list[t_idx];
-        if (t_ptr == m_ptr) {
+        const auto t_idx = dummy;
+        const auto &monster_to = floor.m_list[t_idx];
+        if (&monster_to == &monster_from) {
             continue;
         }
-        if (!t_ptr->is_valid()) {
+        if (!monster_to.is_valid()) {
             continue;
         }
-        if (decide_pet_approch_direction(player_ptr, m_ptr, t_ptr)) {
+        if (decide_pet_approch_direction(player_ptr, monster_from, monster_to)) {
             continue;
         }
-        if (!m_ptr->is_hostile_to_melee(*t_ptr)) {
+        if (!monster_from.is_hostile_to_melee(monster_to)) {
             continue;
         }
 
-        const auto can_pass_wall = r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL) && (!m_ptr->is_riding() || has_pass_wall(player_ptr));
-        const auto can_kill_wall = r_ptr->feature_flags.has(MonsterFeatureType::KILL_WALL) && !m_ptr->is_riding();
+        const auto can_pass_wall = monrace.feature_flags.has(MonsterFeatureType::PASS_WALL) && (!monster_from.is_riding() || has_pass_wall(player_ptr));
+        const auto can_kill_wall = monrace.feature_flags.has(MonsterFeatureType::KILL_WALL) && !monster_from.is_riding();
+        const auto m_pos_from = monster_from.get_position();
+        const auto m_pos_to = monster_to.get_position();
         if (can_pass_wall || can_kill_wall) {
-            if (!in_disintegration_range(floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) {
+            if (!in_disintegration_range(&floor, m_pos_from.y, m_pos_from.x, m_pos_to.y, m_pos_to.x)) {
                 continue;
             }
         } else {
-            if (!projectable(player_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) {
+            if (!projectable(player_ptr, m_pos_from, m_pos_to)) {
                 continue;
             }
         }
 
-        *y = t_ptr->fy;
-        *x = t_ptr->fx;
+        *y = monster_to.fy;
+        *x = monster_to.fx;
         return;
     }
 }

@@ -172,12 +172,9 @@ bool NestMonsterInfo::order_nest(const NestMonsterInfo &other) const
 
     const auto &monrace1 = this->get_monrace();
     const auto &monrace2 = other.get_monrace();
-    if (monrace1.level < monrace2.level) {
-        return true;
-    }
-
-    if (monrace1.level > monrace2.level) {
-        return false;
+    const auto order_level = monrace2.order_level(monrace1);
+    if (order_level) {
+        return *order_level;
     }
 
     if (monrace1.mexp < monrace2.mexp) {
@@ -191,7 +188,7 @@ bool NestMonsterInfo::order_nest(const NestMonsterInfo &other) const
     return this->monrace_id < other.monrace_id;
 }
 
-const MonsterRaceInfo &NestMonsterInfo::get_monrace() const
+const MonraceDefinition &NestMonsterInfo::get_monrace() const
 {
     return MonraceList::get_instance().get_monrace(this->monrace_id);
 }
@@ -200,7 +197,7 @@ const MonsterRaceInfo &NestMonsterInfo::get_monrace() const
  * @brief タイプ5の部屋…nestを生成する / Type 5 -- Monster nests
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
+bool build_type5(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto nest_type = pick_nest_type(floor, nest_types);

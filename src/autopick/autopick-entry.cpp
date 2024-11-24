@@ -520,7 +520,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, co
         return;
     }
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL | OD_NAME_ONLY));
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL | OD_NAME_ONLY));
 
     /*
      * If necessary, add a '^' which indicates the

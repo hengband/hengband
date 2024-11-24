@@ -10,10 +10,10 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 
-static void migrate_old_misc_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_flags1, BIT_FLAGS old_flags2)
+static void migrate_old_misc_flags(MonraceDefinition &monrace, BIT_FLAGS old_flags1, BIT_FLAGS old_flags2)
 {
     if (!loading_savefile_version_is_older_than(20)) {
-        rd_FlagGroup(r_ptr->r_misc_flags, rd_byte);
+        rd_FlagGroup(monrace.r_misc_flags, rd_byte);
         return;
     }
 
@@ -48,52 +48,52 @@ static void migrate_old_misc_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_flags1,
         const auto &f = flag_list[i];
         if (i < SIZE_OF_RF1) {
             if (any_bits(old_flags1, f.old_flag)) {
-                r_ptr->r_misc_flags.set(f.flag);
+                monrace.r_misc_flags.set(f.flag);
             }
         } else {
             if (any_bits(old_flags2, f.old_flag)) {
-                r_ptr->r_misc_flags.set(f.flag);
+                monrace.r_misc_flags.set(f.flag);
             }
         }
     }
 }
 
-static void migrate_old_feature_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_flags)
+static void migrate_old_feature_flags(MonraceDefinition &monrace, BIT_FLAGS old_flags)
 {
     if (!loading_savefile_version_is_older_than(19)) {
-        rd_FlagGroup(r_ptr->r_feature_flags, rd_byte);
+        rd_FlagGroup(monrace.r_feature_flags, rd_byte);
         return;
     }
 
     if (any_bits(old_flags, enum2i(SavedataLoreOlderThan19FlagType::RF2_PASS_WALL))) {
-        r_ptr->r_feature_flags.set(MonsterFeatureType::PASS_WALL);
+        monrace.r_feature_flags.set(MonsterFeatureType::PASS_WALL);
     }
     if (any_bits(old_flags, enum2i(SavedataLoreOlderThan19FlagType::RF2_KILL_WALL))) {
-        r_ptr->r_feature_flags.set(MonsterFeatureType::KILL_WALL);
+        monrace.r_feature_flags.set(MonsterFeatureType::KILL_WALL);
     }
 }
 
-static void migrate_old_aura_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_flags2, BIT_FLAGS old_flags3)
+static void migrate_old_aura_flags(MonraceDefinition &monrace, BIT_FLAGS old_flags2, BIT_FLAGS old_flags3)
 {
     if (!loading_savefile_version_is_older_than(10)) {
-        rd_FlagGroup(r_ptr->r_aura_flags, rd_byte);
+        rd_FlagGroup(monrace.r_aura_flags, rd_byte);
         return;
     }
 
     if (any_bits(old_flags2, SavedataLoreOlderThan10FlagType::AURA_FIRE_OLD)) {
-        r_ptr->r_aura_flags.set(MonsterAuraType::FIRE);
+        monrace.r_aura_flags.set(MonsterAuraType::FIRE);
     }
 
     if (any_bits(old_flags3, SavedataLoreOlderThan10FlagType::AURA_COLD_OLD)) {
-        r_ptr->r_aura_flags.set(MonsterAuraType::COLD);
+        monrace.r_aura_flags.set(MonsterAuraType::COLD);
     }
 
     if (any_bits(old_flags2, SavedataLoreOlderThan10FlagType::AURA_ELEC_OLD)) {
-        r_ptr->r_aura_flags.set(MonsterAuraType::ELEC);
+        monrace.r_aura_flags.set(MonsterAuraType::ELEC);
     }
 }
 
-static void migrate_old_resistance_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_flags)
+static void migrate_old_resistance_flags(MonraceDefinition &monrace, BIT_FLAGS old_flags)
 {
     if (!loading_savefile_version_is_older_than(14)) {
         return;
@@ -133,15 +133,15 @@ static void migrate_old_resistance_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_f
 
     for (const auto &f : flag_list) {
         if (any_bits(old_flags, f.old_flag)) {
-            r_ptr->r_resistance_flags.set(f.flag);
+            monrace.r_resistance_flags.set(f.flag);
         }
     }
 }
 
-static void migrate_old_drop_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_flags1)
+static void migrate_old_drop_flags(MonraceDefinition &monrace, BIT_FLAGS old_flags1)
 {
     if (!loading_savefile_version_is_older_than(18)) {
-        rd_FlagGroup(r_ptr->r_drop_flags, rd_byte);
+        rd_FlagGroup(monrace.r_drop_flags, rd_byte);
         return;
     }
 
@@ -165,12 +165,12 @@ static void migrate_old_drop_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_flags1)
 
     for (const auto &l : flag_list) {
         if (any_bits(old_flags1, enum2i(l.old_flag))) {
-            r_ptr->r_drop_flags.set(l.flag);
+            monrace.r_drop_flags.set(l.flag);
         }
     }
 }
 
-static void migrate_old_no_debuff_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_flags3)
+static void migrate_old_no_debuff_flags(MonraceDefinition &monrace, BIT_FLAGS old_flags3)
 {
     if (!loading_savefile_version_is_older_than(19)) {
         return;
@@ -190,12 +190,12 @@ static void migrate_old_no_debuff_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_fl
 
     for (const auto &l : flag_list) {
         if (any_bits(old_flags3, l.old_flag)) {
-            r_ptr->r_resistance_flags.set(l.flag);
+            monrace.r_resistance_flags.set(l.flag);
         }
     }
 }
 
-static void migrate_old_resistance_and_ability_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS f3, const MonsterRaceId r_idx)
+static void migrate_old_resistance_and_ability_flags(MonraceDefinition &monrace, BIT_FLAGS f3, const MonraceId r_idx)
 {
     if (loading_savefile_version_is_older_than(3)) {
         BIT_FLAGS r_flagsr = 0;
@@ -203,31 +203,31 @@ static void migrate_old_resistance_and_ability_flags(MonsterRaceInfo *r_ptr, BIT
         uint32_t f5 = rd_u32b();
         uint32_t f6 = rd_u32b();
         if (h_older_than(1, 5, 0, 3)) {
-            set_old_lore(r_ptr, f3, f4, r_idx);
+            set_old_lore(&monrace, f3, f4, r_idx);
         } else {
             r_flagsr = rd_u32b();
         }
 
-        migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f4, sizeof(uint32_t) * 8 * 0);
-        migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f5, sizeof(uint32_t) * 8 * 1);
-        migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f6, sizeof(uint32_t) * 8 * 2);
+        migrate_bitflag_to_flaggroup(monrace.r_ability_flags, f4, sizeof(uint32_t) * 8 * 0);
+        migrate_bitflag_to_flaggroup(monrace.r_ability_flags, f5, sizeof(uint32_t) * 8 * 1);
+        migrate_bitflag_to_flaggroup(monrace.r_ability_flags, f6, sizeof(uint32_t) * 8 * 2);
 
-        migrate_old_resistance_flags(r_ptr, r_flagsr);
+        migrate_old_resistance_flags(monrace, r_flagsr);
     } else if (loading_savefile_version_is_older_than(14)) {
         BIT_FLAGS r_flagsr = rd_u32b();
-        rd_FlagGroup(r_ptr->r_ability_flags, rd_byte);
+        rd_FlagGroup(monrace.r_ability_flags, rd_byte);
 
-        migrate_old_resistance_flags(r_ptr, r_flagsr);
+        migrate_old_resistance_flags(monrace, r_flagsr);
     } else {
-        rd_FlagGroup(r_ptr->r_resistance_flags, rd_byte);
-        rd_FlagGroup(r_ptr->r_ability_flags, rd_byte);
+        rd_FlagGroup(monrace.r_resistance_flags, rd_byte);
+        rd_FlagGroup(monrace.r_ability_flags, rd_byte);
     }
 }
 
-static void migrate_old_kind_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_flags1, BIT_FLAGS old_flags2, BIT_FLAGS old_flags3)
+static void migrate_old_kind_flags(MonraceDefinition &monrace, BIT_FLAGS old_flags1, BIT_FLAGS old_flags2, BIT_FLAGS old_flags3)
 {
     if (!loading_savefile_version_is_older_than(12)) {
-        rd_FlagGroup(r_ptr->r_kind_flags, rd_byte);
+        rd_FlagGroup(monrace.r_kind_flags, rd_byte);
         return;
     }
 
@@ -263,27 +263,27 @@ static void migrate_old_kind_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_flags1,
 
     for (const auto &f : flag1) {
         if (any_bits(old_flags1, f.check_flag)) {
-            r_ptr->r_kind_flags.set(f.flag);
+            monrace.r_kind_flags.set(f.flag);
         }
     }
 
     for (const auto &f : flag2) {
         if (any_bits(old_flags2, f.check_flag)) {
-            r_ptr->r_kind_flags.set(f.flag);
+            monrace.r_kind_flags.set(f.flag);
         }
     }
 
     for (const auto &f : flag3) {
         if (any_bits(old_flags3, f.check_flag)) {
-            r_ptr->r_kind_flags.set(f.flag);
+            monrace.r_kind_flags.set(f.flag);
         }
     }
 }
 
-static void migrate_old_behavior_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_flags1, BIT_FLAGS old_flags2)
+static void migrate_old_behavior_flags(MonraceDefinition &monrace, BIT_FLAGS old_flags1, BIT_FLAGS old_flags2)
 {
     if (!loading_savefile_version_is_older_than(11)) {
-        rd_FlagGroup(r_ptr->r_behavior_flags, rd_byte);
+        rd_FlagGroup(monrace.r_behavior_flags, rd_byte);
         return;
     }
 
@@ -312,13 +312,13 @@ static void migrate_old_behavior_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_fla
 
     for (const auto &f : flag1) {
         if (any_bits(old_flags1, f.check_flag)) {
-            r_ptr->r_behavior_flags.set(f.flag);
+            monrace.r_behavior_flags.set(f.flag);
         }
     }
 
     for (const auto &f : flag2) {
         if (any_bits(old_flags2, f.check_flag)) {
-            r_ptr->r_behavior_flags.set(f.flag);
+            monrace.r_behavior_flags.set(f.flag);
         }
     }
 }
@@ -328,112 +328,105 @@ static void migrate_old_behavior_flags(MonsterRaceInfo *r_ptr, BIT_FLAGS old_fla
  * @param r_ptr 読み込み先モンスター種族情報へのポインタ
  * @param r_idx 読み込み先モンスターID(種族特定用)
  */
-static void rd_lore(MonsterRaceInfo *r_ptr, const MonsterRaceId r_idx)
+static void rd_lore(MonraceDefinition &monrace, const MonraceId r_idx)
 {
-    r_ptr->r_sights = rd_s16b();
-    r_ptr->r_deaths = rd_s16b();
-    r_ptr->r_pkills = rd_s16b();
+    monrace.r_sights = rd_s16b();
+    monrace.r_deaths = rd_s16b();
+    monrace.r_pkills = rd_s16b();
 
     if (h_older_than(1, 7, 0, 5)) {
-        r_ptr->r_akills = r_ptr->r_pkills;
+        monrace.r_akills = monrace.r_pkills;
     } else {
-        r_ptr->r_akills = rd_s16b();
+        monrace.r_akills = rd_s16b();
     }
 
-    r_ptr->r_tkills = rd_s16b();
+    monrace.r_tkills = rd_s16b();
 
-    r_ptr->r_wake = rd_byte();
-    r_ptr->r_ignore = rd_byte();
+    monrace.r_wake = rd_byte();
+    monrace.r_ignore = rd_byte();
 
-    r_ptr->r_can_evolve = rd_byte() > 0;
+    monrace.r_can_evolve = rd_byte() > 0;
     if (loading_savefile_version_is_older_than(6)) {
-        // かつては未使用フラグr_ptr->r_xtra2だった.
+        // かつては未使用フラグmonrace.r_xtra2だった.
         strip_bytes(1);
     }
 
-    r_ptr->r_drop_gold = rd_byte();
-    r_ptr->r_drop_item = rd_byte();
+    monrace.r_drop_gold = rd_byte();
+    monrace.r_drop_item = rd_byte();
 
     strip_bytes(1);
-    r_ptr->r_cast_spell = rd_byte();
+    monrace.r_cast_spell = rd_byte();
 
-    r_ptr->r_blows[0] = rd_byte();
-    r_ptr->r_blows[1] = rd_byte();
-    r_ptr->r_blows[2] = rd_byte();
-    r_ptr->r_blows[3] = rd_byte();
+    monrace.r_blows[0] = rd_byte();
+    monrace.r_blows[1] = rd_byte();
+    monrace.r_blows[2] = rd_byte();
+    monrace.r_blows[3] = rd_byte();
 
     if (loading_savefile_version_is_older_than(21)) {
         auto r_flags1 = rd_u32b();
         auto r_flags2 = rd_u32b();
         auto r_flags3 = rd_u32b();
 
-        migrate_old_no_debuff_flags(r_ptr, r_flags3);
-        migrate_old_resistance_and_ability_flags(r_ptr, r_flags3, r_idx);
-        migrate_old_aura_flags(r_ptr, r_flags2, r_flags3);
-        migrate_old_behavior_flags(r_ptr, r_flags1, r_flags2);
-        migrate_old_kind_flags(r_ptr, r_flags1, r_flags2, r_flags3);
-        migrate_old_drop_flags(r_ptr, r_flags1);
-        migrate_old_feature_flags(r_ptr, r_flags2);
+        migrate_old_no_debuff_flags(monrace, r_flags3);
+        migrate_old_resistance_and_ability_flags(monrace, r_flags3, r_idx);
+        migrate_old_aura_flags(monrace, r_flags2, r_flags3);
+        migrate_old_behavior_flags(monrace, r_flags1, r_flags2);
+        migrate_old_kind_flags(monrace, r_flags1, r_flags2, r_flags3);
+        migrate_old_drop_flags(monrace, r_flags1);
+        migrate_old_feature_flags(monrace, r_flags2);
         if (!loading_savefile_version_is_older_than(20)) {
-            rd_FlagGroup(r_ptr->r_special_flags, rd_byte);
+            rd_FlagGroup(monrace.r_special_flags, rd_byte);
         }
-        migrate_old_misc_flags(r_ptr, r_flags1, r_flags2);
+        migrate_old_misc_flags(monrace, r_flags1, r_flags2);
     } else {
-        rd_FlagGroup(r_ptr->r_resistance_flags, rd_byte);
-        rd_FlagGroup(r_ptr->r_ability_flags, rd_byte);
-        rd_FlagGroup(r_ptr->r_aura_flags, rd_byte);
-        rd_FlagGroup(r_ptr->r_behavior_flags, rd_byte);
-        rd_FlagGroup(r_ptr->r_kind_flags, rd_byte);
-        rd_FlagGroup(r_ptr->r_drop_flags, rd_byte);
-        rd_FlagGroup(r_ptr->r_feature_flags, rd_byte);
-        rd_FlagGroup(r_ptr->r_special_flags, rd_byte);
-        rd_FlagGroup(r_ptr->r_misc_flags, rd_byte);
+        rd_FlagGroup(monrace.r_resistance_flags, rd_byte);
+        rd_FlagGroup(monrace.r_ability_flags, rd_byte);
+        rd_FlagGroup(monrace.r_aura_flags, rd_byte);
+        rd_FlagGroup(monrace.r_behavior_flags, rd_byte);
+        rd_FlagGroup(monrace.r_kind_flags, rd_byte);
+        rd_FlagGroup(monrace.r_drop_flags, rd_byte);
+        rd_FlagGroup(monrace.r_feature_flags, rd_byte);
+        rd_FlagGroup(monrace.r_special_flags, rd_byte);
+        rd_FlagGroup(monrace.r_misc_flags, rd_byte);
     }
 
-    r_ptr->max_num = rd_byte();
-    r_ptr->floor_id = rd_s16b();
+    monrace.max_num = rd_byte();
+    monrace.floor_id = rd_s16b();
 
     if (!loading_savefile_version_is_older_than(4)) {
-        r_ptr->defeat_level = rd_s16b();
-        r_ptr->defeat_time = rd_u32b();
+        monrace.defeat_level = rd_s16b();
+        monrace.defeat_time = rd_u32b();
     }
 
     strip_bytes(1);
 
-    r_ptr->r_resistance_flags &= r_ptr->resistance_flags;
-    r_ptr->r_ability_flags &= r_ptr->ability_flags;
-    r_ptr->r_aura_flags &= r_ptr->aura_flags;
-    r_ptr->r_behavior_flags &= r_ptr->behavior_flags;
-    r_ptr->r_drop_flags &= r_ptr->drop_flags;
-    r_ptr->r_kind_flags &= r_ptr->kind_flags;
-    r_ptr->r_feature_flags &= r_ptr->feature_flags;
-    r_ptr->r_special_flags &= r_ptr->special_flags;
-    r_ptr->r_misc_flags &= r_ptr->misc_flags;
+    monrace.r_resistance_flags &= monrace.resistance_flags;
+    monrace.r_ability_flags &= monrace.ability_flags;
+    monrace.r_aura_flags &= monrace.aura_flags;
+    monrace.r_behavior_flags &= monrace.behavior_flags;
+    monrace.r_drop_flags &= monrace.drop_flags;
+    monrace.r_kind_flags &= monrace.kind_flags;
+    monrace.r_feature_flags &= monrace.feature_flags;
+    monrace.r_special_flags &= monrace.special_flags;
+    monrace.r_misc_flags &= monrace.misc_flags;
 }
 
-void load_lore(void)
+void load_lore()
 {
-    auto loading_max_r_idx = rd_u16b();
-    MonsterRaceInfo dummy;
-    for (auto i = 0U; i < loading_max_r_idx; i++) {
-        auto r_idx = static_cast<MonsterRaceId>(i);
-        auto *r_ptr = i < monraces_info.size() ? &monraces_info[r_idx] : &dummy;
-        rd_lore(r_ptr, r_idx);
+    auto &monraces = MonraceList::get_instance();
+    const auto monraces_size = monraces.size();
+    const auto loading_max_monrace_id = rd_u16b();
+    MonraceDefinition dummy;
+    for (size_t i = 0; i < loading_max_monrace_id; i++) {
+        const auto monrace_id = static_cast<MonraceId>(i);
+        auto &monrace = i < monraces_size ? monraces.get_monrace(monrace_id) : dummy;
+        rd_lore(monrace, monrace_id);
     }
 
-    for (size_t i = loading_max_r_idx; i < monraces_info.size(); i++) {
-        auto monrace_id = i2enum<MonsterRaceId>(i);
-        auto &monrace = monraces_info[monrace_id];
-        auto max_num = MAX_MONSTER_NUM;
-        if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || monrace.population_flags.has(MonsterPopulationType::ONLY_ONE)) {
-            max_num = MAX_UNIQUE_NUM;
-        } else if (monrace.population_flags.has(MonsterPopulationType::NAZGUL)) {
-            max_num = MAX_NAZGUL_NUM;
-        } else if (monrace.population_flags.has(MonsterPopulationType::BUNBUN_STRIKER)) {
-            max_num = MAX_BUNBUN_NUM;
-        }
-
-        monrace.max_num = max_num;
+    for (size_t i = loading_max_monrace_id; i < monraces_size; i++) {
+        const auto monrace_id = i2enum<MonraceId>(i);
+        auto &monrace = monraces.get_monrace(monrace_id);
+        monrace.reset_max_number();
     }
 
     load_note(_("モンスターの思い出をロードしました", "Loaded Monster Memory"));

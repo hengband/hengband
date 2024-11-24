@@ -17,14 +17,13 @@
 #include <sstream>
 
 /*!
- * @brief アイテムの特定記述内容を返す /
- * Acquire a "basic" description "The Cloak of Death [1,+10]"
- * @param o_ptr 記述を得たいオブジェクトの参照ポインタ
+ * @brief アイテムの特定記述内容を返す
+ * @param item 記述を得たいアイテムへの参照
  * @param desc_ptr 記述内容を返すための文字列参照ポインタ
  */
-static std::string analyze_general(PlayerType *player_ptr, const ItemEntity *o_ptr)
+static std::string analyze_general(PlayerType *player_ptr, const ItemEntity &item)
 {
-    return describe_flavor(player_ptr, o_ptr, OD_NAME_AND_ENCHANT | OD_STORE | OD_DEBUG);
+    return describe_flavor(player_ptr, item, OD_NAME_AND_ENCHANT | OD_STORE | OD_DEBUG);
 }
 
 /*!
@@ -255,7 +254,7 @@ static std::string analyze_misc(const ItemEntity *o_ptr)
 ArtifactsDumpInfo object_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
     ArtifactsDumpInfo info{};
-    info.description = analyze_general(player_ptr, o_ptr);
+    info.description = analyze_general(player_ptr, *o_ptr);
     info.pval_info.analyze(*o_ptr);
     info.brands = analyze_brand(o_ptr);
     info.slays = analyze_slay(o_ptr);
@@ -279,7 +278,7 @@ ArtifactsDumpInfo object_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr
 ArtifactsDumpInfo random_artifact_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
     ArtifactsDumpInfo info{};
-    info.description = analyze_general(player_ptr, o_ptr);
+    info.description = analyze_general(player_ptr, *o_ptr);
     info.pval_info.analyze(*o_ptr);
     info.brands = analyze_brand(o_ptr);
     info.slays = analyze_slay(o_ptr);

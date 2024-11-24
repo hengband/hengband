@@ -19,16 +19,6 @@
 #include "world/world.h"
 #include <span>
 
-enum conversion_type {
-    CONVERT_TYPE_FLOOR = 0,
-    CONVERT_TYPE_WALL = 1,
-    CONVERT_TYPE_INNER = 2,
-    CONVERT_TYPE_OUTER = 3,
-    CONVERT_TYPE_SOLID = 4,
-    CONVERT_TYPE_STREAM1 = 5,
-    CONVERT_TYPE_STREAM2 = 6,
-};
-
 /*** Terrain feature variables ***/
 
 /* Nothing */
@@ -113,32 +103,6 @@ FEAT_IDX feat_wall_outer;
 FEAT_IDX feat_wall_inner;
 FEAT_IDX feat_wall_solid;
 FEAT_IDX feat_ground_type[100], feat_wall_type[100];
-
-/*!
- * @brief 地形が罠持ちであるかの判定を行う。 / Return TRUE if the given feature is a trap
- * @param feat 地形情報のID
- * @return 罠持ちの地形ならばTRUEを返す。
- */
-bool is_trap(PlayerType *player_ptr, FEAT_IDX feat)
-{
-    /* 関数ポインタの都合 */
-    (void)player_ptr;
-    return TerrainList::get_instance().get_terrain(feat).flags.has(TerrainCharacteristics::TRAP);
-}
-
-/*!
- * @brief 地形が閉じたドアであるかの判定を行う。 / Return TRUE if the given grid is a closed door
- * @param feat 地形情報のID
- * @return 閉じたドアのある地形ならばTRUEを返す。
- */
-bool is_closed_door(PlayerType *player_ptr, FEAT_IDX feat)
-{
-    /* 関数ポインタの都合 */
-    (void)player_ptr;
-    const auto &terrain = TerrainList::get_instance().get_terrain(feat);
-    return (terrain.flags.has(TerrainCharacteristics::OPEN) || terrain.flags.has(TerrainCharacteristics::BASH)) &&
-           terrain.flags.has_not(TerrainCharacteristics::MOVE);
-}
 
 /*
  * Not using graphical tiles for this feature?
@@ -251,33 +215,5 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
 
     if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
         set_superstealth(player_ptr, false);
-    }
-}
-
-FEAT_IDX conv_dungeon_feat(const FloorType *floor_ptr, FEAT_IDX newfeat)
-{
-    const auto &terrain = TerrainList::get_instance().get_terrain(newfeat);
-    if (terrain.flags.has_not(TerrainCharacteristics::CONVERT)) {
-        return newfeat;
-    }
-
-    const auto &dungeon = floor_ptr->get_dungeon_definition();
-    switch (terrain.subtype) {
-    case CONVERT_TYPE_FLOOR:
-        return rand_choice(feat_ground_type);
-    case CONVERT_TYPE_WALL:
-        return rand_choice(feat_wall_type);
-    case CONVERT_TYPE_INNER:
-        return feat_wall_inner;
-    case CONVERT_TYPE_OUTER:
-        return feat_wall_outer;
-    case CONVERT_TYPE_SOLID:
-        return feat_wall_solid;
-    case CONVERT_TYPE_STREAM1:
-        return dungeon.stream1;
-    case CONVERT_TYPE_STREAM2:
-        return dungeon.stream2;
-    default:
-        return newfeat;
     }
 }

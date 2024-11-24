@@ -94,15 +94,14 @@ static bool acid_minus_ac(PlayerType *player_ptr)
     };
 
     const auto slot = rand_choice(candidates);
-    auto *o_ptr = &player_ptr->inventory_list[slot];
-
-    if ((o_ptr == nullptr) || !o_ptr->is_valid() || !o_ptr->is_protector()) {
+    auto &item = player_ptr->inventory_list[slot];
+    if (!item.is_valid() || !item.is_protector()) {
         return false;
     }
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
-    const auto item_flags = o_ptr->get_flags();
-    if (o_ptr->ac + o_ptr->to_a <= 0) {
+    const auto item_name = describe_flavor(player_ptr, item, OD_OMIT_PREFIX | OD_NAME_ONLY);
+    const auto item_flags = item.get_flags();
+    if (item.ac + item.to_a <= 0) {
         msg_format(_("%sは既にボロボロだ！", "Your %s is already fully corroded!"), item_name.data());
         return false;
     }
@@ -113,7 +112,7 @@ static bool acid_minus_ac(PlayerType *player_ptr)
     }
 
     msg_format(_("%sが酸で腐食した！", "Your %s is corroded!"), item_name.data());
-    o_ptr->to_a--;
+    item.to_a--;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
     static constexpr auto flags_swrf = {

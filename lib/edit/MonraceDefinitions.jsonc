@@ -161,7 +161,7 @@
       "armor_class": 0,
       "alertness": 0,
       "level": 0,
-      "rarity": 0,
+      "rarity": 255,
       "exp": 0
     },
     //##### Town monsters #####
@@ -4163,6 +4163,7 @@
         "ONLY_GOLD",
         "DROP_1D2",
         "COLD_BLOOD",
+        "DROP_COPPER",
         "BASH_DOOR",
         "ANIMAL",
         "IM_POIS",
@@ -5704,6 +5705,7 @@
         "ONLY_GOLD",
         "DROP_60",
         "DROP_1D2",
+        "DROP_SILVER",
         "COLD_BLOOD",
         "BASH_DOOR",
         "ANIMAL",
@@ -9769,6 +9771,7 @@
         "ONLY_GOLD",
         "DROP_90",
         "DROP_1D2",
+        "DROP_GOLD",
         "COLD_BLOOD",
         "BASH_DOOR",
         "ANIMAL",
@@ -12118,6 +12121,7 @@
         "ONLY_GOLD",
         "DROP_90",
         "DROP_2D2",
+        "DROP_MITHRIL",
         "COLD_BLOOD",
         "BASH_DOOR",
         "ANIMAL",
@@ -22366,6 +22370,7 @@
         "ONLY_GOLD",
         "DROP_90",
         "DROP_2D2",
+        "DROP_ADAMANTITE",
         "COLD_BLOOD",
         "BASH_DOOR",
         "ANIMAL",
@@ -24982,6 +24987,7 @@
       "flags": [
         "ONLY_GOLD",
         "DROP_2D2",
+        "DROP_MITHRIL",
         "EMPTY_MIND",
         "COLD_BLOOD",
         "BASH_DOOR",
@@ -87424,7 +87430,10 @@
         "ja": "這いずる粘体",
         "en": "Creeping Ooze"
       },
-      "symbol": { "character": "j", "color": "Dark Gray" },
+      "symbol": {
+        "character": "j",
+        "color": "Dark Gray"
+      },
       "speed": 8,
       "hit_point": "100d20",
       "vision": 20,
@@ -87434,16 +87443,32 @@
       "rarity": 3,
       "exp": 8000,
       "blows": [
-        { "method": "TOUCH", "effect": "UN_BONUS", "damage_dice": "4d8" },
-        { "method": "TOUCH", "effect": "UN_BONUS", "damage_dice": "5d8" },
-        { "method": "CRAWL", "effect": "UN_BONUS", "damage_dice": "6d8" },
-        { "method": "ENGULF", "effect": "UN_BONUS", "damage_dice": "8d8" }
+        {
+          "method": "TOUCH",
+          "effect": "UN_BONUS",
+          "damage_dice": "4d8"
+        },
+        {
+          "method": "TOUCH",
+          "effect": "UN_BONUS",
+          "damage_dice": "5d8"
+        },
+        {
+          "method": "CRAWL",
+          "effect": "UN_BONUS",
+          "damage_dice": "6d8"
+        },
+        {
+          "method": "ENGULF",
+          "effect": "UN_BONUS",
+          "damage_dice": "8d8"
+        }
       ],
       "flags": [
         "FORCE_MAXHP",
         "IM_ACID",
         "RES_DISE",
-        "NO_FEAR", 
+        "NO_FEAR",
         "NO_STUN",
         "NO_CONF",
         "NO_SLEEP",
@@ -87452,16 +87477,18 @@
         "TAKE_ITEM",
         "RAND_50",
         "ATTR_MULTI",
-        "DROP_60", 
+        "DROP_60",
         "DROP_3D2",
         "DROP_4D2",
         "SELF_LITE_2",
         "ANIMAL",
-        "WEIRD_MIND"        
+        "WEIRD_MIND"
       ],
       "skill": {
         "probability": "1_IN_8",
-        "list": ["BR_DISE"]
+        "list": [
+          "BR_DISE"
+        ]
       },
       "flavor": {
         "ja": "奇妙に輝きながら地面を這いずる粘体だ。触れたものを分別なしに体内に取り込んでいるようだ。",
@@ -87470,8 +87497,14 @@
     },
     {
       "id": 1365,
-      "name": { "ja": "タイタン・ゾンビ", "en": "Fallen titan" },
-      "symbol": { "character": "P", "color": "Brown" },
+      "name": {
+        "ja": "タイタン・ゾンビ",
+        "en": "Fallen titan"
+      },
+      "symbol": {
+        "character": "P",
+        "color": "Brown"
+      },
       "speed": 10,
       "hit_point": "50d90",
       "vision": 30,
@@ -87482,10 +87515,26 @@
       "exp": 12000,
       "sex": "MALE",
       "blows": [
-        { "method": "HIT", "effect": "CONFUSE", "damage_dice": "6d12" },
-        { "method": "TOUCH", "effect": "BLIND", "damage_dice": "8d12" },
-        { "method": "TOUCH", "effect": "POISON", "damage_dice": "22d12" },
-        { "method": "HIT", "effect": "POISON", "damage_dice": "24d12" }
+        {
+          "method": "HIT",
+          "effect": "CONFUSE",
+          "damage_dice": "6d12"
+        },
+        {
+          "method": "TOUCH",
+          "effect": "BLIND",
+          "damage_dice": "8d12"
+        },
+        {
+          "method": "TOUCH",
+          "effect": "POISON",
+          "damage_dice": "22d12"
+        },
+        {
+          "method": "HIT",
+          "effect": "POISON",
+          "damage_dice": "24d12"
+        }
       ],
       "flags": [
         "FORCE_MAXHP",
@@ -87505,11 +87554,316 @@
       ],
       "skill": {
         "probability": "1_IN_6",
-        "list": ["TELE_TO"]
+        "list": [
+          "TELE_TO"
+        ]
       },
       "flavor": {
         "ja": "斃れた巨人が邪悪な術で再び動き出したものだ。かつてのような力強さは感じられないが、汚れた一撃には注意が必要だ。",
         "en": "A fallen giant, reborn with evil magic. Though it no longer has the strength it once had, its unholy blows must be heeded."
+      }
+    },
+    {
+      "id": 1366,
+      "name": {
+        "ja": "虹色の宝箱",
+        "en": "Legendary loot box mimic"
+      },
+      "symbol": {
+        "character": "&",
+        "color": "Yellow"
+      },
+      "speed": 12,
+      "hit_point": "20d130",
+      "vision": 30,
+      "armor_class": 140,
+      "alertness": 0,
+      "level": 66,
+      "rarity": 8,
+      "exp": 7000,
+      "blows": [
+        {
+          "method": "DROOL",
+          "effect": "PARALYZE"
+        },
+        {
+          "method": "BITE",
+          "effect": "HURT",
+          "damage_dice": "11d11"
+        },
+        {
+          "method": "BITE",
+          "effect": "SUPERHURT",
+          "damage_dice": "9d9"
+        },
+        {
+          "method": "BITE",
+          "effect": "SHATTER",
+          "damage_dice": "12d12"
+        }
+      ],
+      "flags": [
+        "FORCE_MAXHP",
+        "ATTR_MULTI",
+        "ATTR_ANY",
+        "NEVER_MOVE",
+        "SELF_LITE_1",
+        "COLD_BLOOD",
+        "EVIL",
+        "RES_TELE",
+        "NO_CONF",
+        "NO_SLEEP",
+        "NO_FEAR",
+        "DROP_60",
+        "DROP_90",
+        "DROP_1D2",
+        "DROP_2D2",
+        "DROP_3D2",
+        "DROP_4D2"
+      ],
+      "escorts": [
+        {
+          "escorts_id": 1367,
+          "escort_num": "1d2"
+        },
+        {
+          "escorts_id": 1368,
+          "escort_num": "2d3"
+        }
+      ],
+      "skill": {
+        "probability": "1_IN_4",
+        "list": [
+          "TELE_TO",
+          "S_KIN"
+        ]
+      },
+      "flavor": {
+        "ja": "やった！虹色の宝箱だ！ 特別品のアイテムが入っているに違いない！",
+        "en": "Yes! A legendary loot box! It must have a special item inside!"
+      }
+    },
+    {
+      "id": 1367,
+      "name": {
+        "ja": "金色の宝箱",
+        "en": "Golden loot box mimic"
+      },
+      "symbol": {
+        "character": "&",
+        "color": "Yellow"
+      },
+      "speed": 7,
+      "hit_point": "20d51",
+      "vision": 30,
+      "armor_class": 80,
+      "alertness": 0,
+      "level": 60,
+      "rarity": 4,
+      "exp": 3000,
+      "blows": [
+        {
+          "method": "BITE",
+          "effect": "HURT",
+          "damage_dice": "8d12"
+        },
+        {
+          "method": "BITE",
+          "effect": "SHATTER",
+          "damage_dice": "8d12"
+        }
+      ],
+      "flags": [
+        "NEVER_MOVE",
+        "SELF_LITE_1",
+        "COLD_BLOOD",
+        "ESCORTS",
+        "EVIL",
+        "NO_CONF",
+        "NO_SLEEP",
+        "NO_FEAR",
+        "DROP_3D2"
+      ],
+      "skill": {
+        "probability": "1_IN_2",
+        "list": [
+          "BO_MANA",
+          "TELE_TO"
+        ]
+      },
+      "flavor": {
+        "ja": "金の宝箱だ！ いいアイテムが期待できそうだ！",
+        "en": "A golden loot box! I'm sure I'll find some great items inside!"
+      }
+    },
+    {
+      "id": 1368,
+      "name": {
+        "ja": "石の宝箱",
+        "en": "Stone loot box mimic"
+      },
+      "symbol": {
+        "character": "&",
+        "color": "Light Gray"
+      },
+      "speed": 5,
+      "hit_point": "200d25",
+      "vision": 30,
+      "armor_class": 160,
+      "alertness": 0,
+      "level": 55,
+      "rarity": 1,
+      "exp": 1000,
+      "blows": [
+        {
+          "method": "BITE",
+          "effect": "SHATTER",
+          "damage_dice": "58d1"
+        },
+        {
+          "method": "BITE",
+          "effect": "SHATTER",
+          "damage_dice": "58d1"
+        }
+      ],
+      "flags": [
+        "NEVER_MOVE",
+        "COLD_BLOOD",
+        "KILL_WALL",
+        "RIDING",
+        "IM_ACID",
+        "IM_FIRE",
+        "IM_COLD",
+        "IM_ELEC",
+        "IM_POIS",
+        "RES_TELE",
+        "NO_CONF",
+        "NO_SLEEP",
+        "NO_FEAR",
+        "DROP_90"
+      ],
+      "flavor": {
+        "ja": "石の箱だ。 中身は少ないくせに重いしでかくて邪魔だ。",
+        "en": "It is a stone box. It's big and heavy, even though it doesn't have much inside."
+      }
+    },
+    {
+      "id": 1369,
+      "name": {
+        "ja": "デカアゴムシ",
+        "en": "jaw worm"
+      },
+      "symbol": {
+        "character": "w",
+        "color": "Dark Gray"
+      },
+      "level": 18,
+      "speed": 0,
+      "hit_point": "25d14",
+      "armor_class": 40,
+      "blows": [
+        {
+          "method": "BITE",
+          "damage_dice": "5d5",
+          "effect": "HURT"
+        },
+        {
+          "method": "BITE",
+          "damage_dice": "5d5",
+          "effect": "HURT"
+        },
+        {
+          "method": "BITE",
+          "damage_dice": "17d1",
+          "effect": "HURT"
+        }
+      ],
+      "rarity": 2,
+      "exp": 150,
+      "vision": 15,
+      "alertness": 15,
+      "flags": [
+        "FORCE_MAXHP",
+        "EVIL",
+        "WEIRD_MIND",
+        "RIDING",
+        "BASH_DOOR",
+        "KILL_BODY",
+        "RES_ABYSS",
+        "DROP_2D2",
+        "DROP_1D2"
+      ],
+      "flavor": {
+        "ja": "大きな口をした奇妙な生き物だ。噛み付かれたら骨ごと持って行かれそうである！",
+        "en": "It is the mysterious creature: having big jaw. Its bite looks to smash a bone even!"
+      }
+    },
+    {
+      "id": 1370,
+      "name": {
+        "ja": "スネッコ",
+        "en": "Snecko"
+      },
+      "symbol": {
+        "character": "H",
+        "color": "Light Green"
+      },
+      "level": 35,
+      "hit_point": "30d20",
+      "armor_class": 80,
+      "speed": 5,
+      "rarity": 2,
+      "exp": 1100,
+      "vision": 20,
+      "alertness": 20,
+      "flags": [
+        "FORCE_MAXHP",
+        "EVIL",
+        "WEIRD_MIND",
+        "RIDING",
+        "BASH_DOOR",
+        "DROP_1D2",
+        "DROP_3D2",
+        "ONLY_ITEM",
+        "IM_POIS",
+        "RES_CHAO",
+        "RES_NEXU",
+        "NO_CONF",
+        "NO_SLEEP",
+        "DROP_CORPSE",
+        "DROP_SKELETON"
+      ],
+      "blows": [
+        {
+          "method": "GAZE",
+          "effect": "CONFUSE"
+        },
+        {
+          "method": "BITE",
+          "damage_dice": "6d5",
+          "effect": "HURT"
+        },
+        {
+          "method": "BITE",
+          "damage_dice": "6d7",
+          "effect": "POISON"
+        },
+        {
+          "method": "HIT",
+          "damage_dice": "4d3",
+          "effect": "LOSE_CON"
+        }
+      ],
+      "skill": {
+        "probability": "1_IN_6",
+        "list": [
+          "BR_CONF",
+          "CONF"
+        ]
+      },
+      "flavor": {
+        "ja": "ヘビとヤモリが混合した生物で、それに睨まれるとまともな判断をすることにも一苦労させられる。",
+        "en": "It is a mixed snake and gecko. When you glared by it, you'll struggle with a normal thinking even."
       }
     }
   ]

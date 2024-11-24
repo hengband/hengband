@@ -22,7 +22,6 @@
 #include "io/uid-checker.h"
 #include "locale/character-encoding.h"
 #include "monster/monster-compaction.h"
-#include "monster/monster-status.h"
 #include "player/player-status.h"
 #include "save/floor-writer.h"
 #include "save/info-writer.h"
@@ -35,6 +34,7 @@
 #include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info.h"
+#include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -109,7 +109,7 @@ static bool wr_savefile_new(PlayerType *player_ptr)
     uint16_t tmp16u = static_cast<uint16_t>(monraces_info.size());
     wr_u16b(tmp16u);
     for (auto r_idx = 0; r_idx < tmp16u; r_idx++) {
-        wr_lore(i2enum<MonsterRaceId>(r_idx));
+        wr_lore(i2enum<MonraceId>(r_idx));
     }
 
     tmp16u = static_cast<uint16_t>(BaseitemList::get_instance().size());
@@ -329,7 +329,7 @@ bool save_player(PlayerType *player_ptr, SaveType type)
     if (type != SaveType::CLOSE_GAME) {
         world.is_loading_now = false;
         update_creature(player_ptr);
-        mproc_init(player_ptr->current_floor_ptr);
+        player_ptr->current_floor_ptr->reset_mproc();
         world.is_loading_now = true;
     }
 

@@ -5948,7 +5948,8 @@
         "XTRA_H_RES"
       ],
       "flavor": {
-        "ja": "玉祖命が造り、のちに邇邇芸命に授けられた勾玉だ。身に着ける者を様々な危機から守る霊力が備わっている。"
+        "ja": "玉祖命が造り、のちに邇邇芸命に授けられた勾玉だ。身に着ける者を様々な危機から守る霊力が備わっている。",
+        "en": "A jewel-bead carved by Tamanoya, later gifted to Ninigi the Heavenly Grandson, divine ancestor of Emperor Jimmu. Its spiritual power will protect its wearer from many dangers."
       }
     },
     {
@@ -6188,7 +6189,8 @@
         "SHOW_MODS"
       ],
       "flavor": {
-        "ja": "剛力無双のデンマークの英雄王ベーオウルフが巨人族から奪い、最後の戦いではこの剣によって竜を退治した。"
+        "ja": "剛力無双のデンマークの英雄王ベーオウルフが巨人族から奪い、最後の戦いではこの剣によって竜を退治した。",
+        "en": "Forged by the giants, this sword was taken from the monster Grendel's lair by the mighty hero Beowulf, who used it to slay the dragon terrorising his people."
       }
     },
     {
@@ -6558,7 +6560,8 @@
         "SHOW_MODS"
       ],
       "flavor": {
-        "ja": "「…その名も有名なカウディモルダクス剣、つまり物語の本などでおなじみの、あの俗にいわゆる噛尾刀であるぞ。…竜が５マイル以内に近付くと、さやの中にはおさまっていないのじゃ。これが勇者の手ににぎられれば、いかなる竜もたちうちはできんという剣じゃぞ。」(J.R.R.トールキン、吉田新一訳、農夫ジャイルズの冒険)"
+        "ja": "「…その名も有名なカウディモルダクス剣、つまり物語の本などでおなじみの、あの俗にいわゆる噛尾刀であるぞ。…竜が５マイル以内に近付くと、さやの中にはおさまっていないのじゃ。これが勇者の手ににぎられれば、いかなる竜もたちうちはできんという剣じゃぞ。」(J.R.R.トールキン、吉田新一訳、農夫ジャイルズの冒険)",
+        "en": "The dragon-slaying sword Caudimordax, unwittingly gifted to Farmer Giles by king Augustus Bonifacius. When a dragon is nearby, it flies out of its sheath and practically fights by itself."
       }
     },
     {
@@ -6588,7 +6591,8 @@
         "HIDE_TYPE"
       ],
       "flavor": {
-        "ja": "「むかし南の国からりっぱな本物の鎖かたびらを買えなかった者は、革のシャツに鉄の輪を縫い付けて、それでがまんしたということを聞いたことがある。ひとつその手でやってみることにするか！」(J.R.R.トールキン、吉田新一訳、農夫ジャイルズの冒険)"
+        "ja": "「むかし南の国からりっぱな本物の鎖かたびらを買えなかった者は、革のシャツに鉄の輪を縫い付けて、それでがまんしたということを聞いたことがある。ひとつその手でやってみることにするか！」(J.R.R.トールキン、吉田新一訳、農夫ジャイルズの冒険)",
+        "en": "In preparation for his battle with the dragon Chrysophylax, the villagers of Ham stitched steel rings all over Farmer Giles' clothes to create this makeshift armour."
       }
     },
     {
@@ -6788,7 +6792,8 @@
         "RES_DISEN"
       ],
       "flavor": {
-        "ja": "復讐のため、三姉妹を探して時間流を旅する＜薔薇＞と呼ばれる女性の剣だ。恐るべき速度と狙いをはずさぬ正確さを秘めている。『小さき刺』と対を成している。"
+        "ja": "復讐のため、三姉妹を探して時間流を旅する＜薔薇＞と呼ばれる女性の剣だ。恐るべき速度と狙いをはずさぬ正確さを秘めている。『小さき刺』と対を成している。",
+        "en": "A sword wielded by the Rose, a woman who searches the Multiverse for three sisters on a quest for revenge. It possesses awesome speed and precision. Its companion is 'Littlethorn'."
       }
     },
     //#英語名は適当です。エルリックサーガ８「薔薇の復讐」より。
@@ -6822,7 +6827,8 @@
         "SHOW_MODS"
       ],
       "flavor": {
-        "ja": "復讐のため、三姉妹を探して時間流を旅する＜薔薇＞と呼ばれる女性の剣だ。『すばやき刺』と対を成している。"
+        "ja": "復讐のため、三姉妹を探して時間流を旅する＜薔薇＞と呼ばれる女性の剣だ。『すばやき刺』と対を成している。",
+        "en": "A dagger wielded by the Rose, a woman who searches the Multiverse for three sisters on a quest for revenge. Its companion is 'Quickthorn'."
       }
     },
     //#N:*:『カレイドウルフ』
@@ -6868,7 +6874,8 @@
         "SHOW_MODS"
       ],
       "flavor": {
-        "ja": "「妖精郷にて鍛えられし我はいや高き刃なりて、相応しき王の佩刀とならん」（トマス・マロリー、アーサー王の死）"
+        "ja": "「妖精郷にて鍛えられし我はいや高き刃なりて、相応しき王の佩刀とならん」（トマス・マロリー、アーサー王の死）",
+        "en": "\"The name of it, said the lady, is Excalibur, that is as much to say as Cut-steel.\""
       }
     },
     {
@@ -7395,7 +7402,8 @@
         "BRAND_POIS"
       ],
       "flavor": {
-        "ja": "強力な破壊力をほこる「はかいのつるぎ」と素早く攻撃を繰りだす「はやぶさのけん」を合わせた武器だ。この剣を使えば破壊神シドーを倒すことなど赤子の手を捻るようなものだ。"
+        "ja": "強力な破壊力をほこる「はかいのつるぎ」と素早く攻撃を繰りだす「はやぶさのけん」を合わせた武器だ。この剣を使えば破壊神シドーを倒すことなど赤子の手を捻るようなものだ。",
+        "en": "A sword which somehow combines the speed of the Falcon Sword with the power of the Sword of Destruction. With a weapon like this, defeating Sidoh the Master of Destruction would be a piece of cake."
       }
     },
     {
@@ -8298,7 +8306,8 @@
         "RES_COLD"
       ],
       "flavor": {
-        "ja": "「盾持つ乙女」ことローハン王国のエオウィン姫が、ベレンノールの野において魔王に振るった剣だ。「しかしわたしは生き身の人間の男ではない！お前が向き合っているのは女だ。わたしはエオウィン、エオムンドの娘だ。」"
+        "ja": "「盾持つ乙女」ことローハン王国のエオウィン姫が、ベレンノールの野において魔王に振るった剣だ。「しかしわたしは生き身の人間の男ではない！お前が向き合っているのは女だ。わたしはエオウィン、エオムンドの娘だ。」",
+        "en": "The sword wielded by Eowyn the shieldmaiden, princess of Rohan, on the battle of the Pelennor Fields. It slew the Witch-King of Angmar, who boasted that no living man could hinder him. \"But no living man am I! You look upon a woman. Eowyn I am, Eomund's daughter.\""
       }
     },
     {

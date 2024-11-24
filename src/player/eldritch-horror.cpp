@@ -34,7 +34,7 @@
 #include <string>
 #include <string_view>
 
-static bool process_mod_hallucination(PlayerType *player_ptr, std::string_view m_name, const MonsterRaceInfo &monrace)
+static bool process_mod_hallucination(PlayerType *player_ptr, std::string_view m_name, const MonraceDefinition &monrace)
 {
     if (!player_ptr->effects()->hallucination().is_hallucinated()) {
         return false;

@@ -6,12 +6,12 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster-race/race-flags-resistance.h"
-#include "monster-race/race-indice-types.h"
 #include "monster-race/race-misc-flags.h"
 #include "spell/summon-types.h"
 #include "system/alloc-entries.h"
 #include "system/angband-system.h"
 #include "system/dungeon-info.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-info.h"
@@ -21,13 +21,6 @@
 #include "view/display-messages.h"
 #include <algorithm>
 #include <iterator>
-
-enum dungeon_mode_type {
-    DUNGEON_MODE_AND = 1,
-    DUNGEON_MODE_NAND = 2,
-    DUNGEON_MODE_OR = 3,
-    DUNGEON_MODE_NOR = 4,
-};
 
 /**
  * @brief モンスターがダンジョンに出現できる条件を満たしているかのフラグ判定関数(AND)
@@ -58,92 +51,100 @@ static bool is_possible_monster_or(const EnumClassFlagGroup<T> &r_flags, const E
 /*!
  * @brief 指定されたモンスター種族がダンジョンの制限にかかるかどうかをチェックする / Some dungeon types restrict the possible monsters.
  * @param floor_ptr フロアへの参照ポインタ
- * @param r_idx チェックするモンスター種族ID
+ * @param monrace_id チェックするモンスター種族ID
  * @param summon_specific_type summon_specific() によるものの場合、召喚種別を指定する
  * @param is_chameleon_polymorph カメレオンの変身の場合、true
  * @return 召喚条件が一致するならtrue / Return TRUE is the monster is OK and FALSE otherwise
  */
-static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonsterRaceId r_idx, std::optional<summon_type> summon_specific_type, bool is_chameleon_polymorph)
+static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonraceId monrace_id, std::optional<summon_type> summon_specific_type, bool is_chameleon_polymorph)
 {
-    const auto *d_ptr = &floor_ptr->get_dungeon_definition();
-    const auto *r_ptr = &monraces_info[r_idx];
-    if (d_ptr->flags.has(DungeonFeatureType::CHAMELEON)) {
+    const auto &dungeon = floor_ptr->get_dungeon_definition();
+    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
+    if (dungeon.flags.has(DungeonFeatureType::CHAMELEON)) {
         if (is_chameleon_polymorph) {
             return true;
         }
     }
 
-    if (d_ptr->flags.has(DungeonFeatureType::NO_MAGIC)) {
-        if (r_idx != MonsterRaceId::CHAMELEON && r_ptr->freq_spell && r_ptr->ability_flags.has_none_of(RF_ABILITY_NOMAGIC_MASK)) {
+    if (dungeon.flags.has(DungeonFeatureType::NO_MAGIC)) {
+        if (monrace_id != MonraceId::CHAMELEON && monrace.freq_spell && monrace.ability_flags.has_none_of(RF_ABILITY_NOMAGIC_MASK)) {
             return false;
         }
     }
 
-    if (d_ptr->flags.has(DungeonFeatureType::NO_MELEE)) {
-        if (r_idx == MonsterRaceId::CHAMELEON) {
+    if (dungeon.flags.has(DungeonFeatureType::NO_MELEE)) {
+        if (monrace_id == MonraceId::CHAMELEON) {
             return true;
         }
-        if (r_ptr->ability_flags.has_none_of(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK) && r_ptr->ability_flags.has_none_of(
-                                                                                                                        { MonsterAbilityType::CAUSE_1, MonsterAbilityType::CAUSE_2, MonsterAbilityType::CAUSE_3, MonsterAbilityType::CAUSE_4, MonsterAbilityType::MIND_BLAST, MonsterAbilityType::BRAIN_SMASH })) {
+
+        static const EnumClassFlagGroup<MonsterAbilityType> rf_ability_masks(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK);
+        static const EnumClassFlagGroup<MonsterAbilityType> abilities = {
+            MonsterAbilityType::CAUSE_1,
+            MonsterAbilityType::CAUSE_2,
+            MonsterAbilityType::CAUSE_3,
+            MonsterAbilityType::CAUSE_4,
+            MonsterAbilityType::MIND_BLAST,
+            MonsterAbilityType::BRAIN_SMASH,
+        };
+        if (monrace.ability_flags.has_none_of(rf_ability_masks) && monrace.ability_flags.has_none_of(abilities)) {
             return false;
         }
     }
 
-    if (d_ptr->flags.has(DungeonFeatureType::BEGINNER)) {
-        if (r_ptr->level > floor_ptr->dun_level) {
+    if (dungeon.flags.has(DungeonFeatureType::BEGINNER)) {
+        if (monrace.level > floor_ptr->dun_level) {
             return false;
         }
     }
 
-    if (d_ptr->special_div >= 64) {
-        return true;
-    }
-    if (summon_specific_type && d_ptr->flags.has_not(DungeonFeatureType::CHAMELEON)) {
+    if (dungeon.special_div >= 64) {
         return true;
     }
 
-    switch (d_ptr->mode) {
-    case DUNGEON_MODE_AND:
-    case DUNGEON_MODE_NAND: {
+    if (summon_specific_type && dungeon.flags.has_not(DungeonFeatureType::CHAMELEON)) {
+        return true;
+    }
+
+    switch (dungeon.mode) {
+    case DungeonMode::AND:
+    case DungeonMode::NAND: {
         std::vector<bool> is_possible = {
-            is_possible_monster_and(r_ptr->ability_flags, d_ptr->mon_ability_flags),
-            is_possible_monster_and(r_ptr->behavior_flags, d_ptr->mon_behavior_flags),
-            is_possible_monster_and(r_ptr->resistance_flags, d_ptr->mon_resistance_flags),
-            is_possible_monster_and(r_ptr->drop_flags, d_ptr->mon_drop_flags),
-            is_possible_monster_and(r_ptr->kind_flags, d_ptr->mon_kind_flags),
-            is_possible_monster_and(r_ptr->wilderness_flags, d_ptr->mon_wilderness_flags),
-            is_possible_monster_and(r_ptr->feature_flags, d_ptr->mon_feature_flags),
-            is_possible_monster_and(r_ptr->population_flags, d_ptr->mon_population_flags),
-            is_possible_monster_and(r_ptr->speak_flags, d_ptr->mon_speak_flags),
-            is_possible_monster_and(r_ptr->brightness_flags, d_ptr->mon_brightness_flags),
-            is_possible_monster_and(r_ptr->misc_flags, d_ptr->mon_misc_flags),
+            is_possible_monster_and(monrace.ability_flags, dungeon.mon_ability_flags),
+            is_possible_monster_and(monrace.behavior_flags, dungeon.mon_behavior_flags),
+            is_possible_monster_and(monrace.resistance_flags, dungeon.mon_resistance_flags),
+            is_possible_monster_and(monrace.drop_flags, dungeon.mon_drop_flags),
+            is_possible_monster_and(monrace.kind_flags, dungeon.mon_kind_flags),
+            is_possible_monster_and(monrace.wilderness_flags, dungeon.mon_wilderness_flags),
+            is_possible_monster_and(monrace.feature_flags, dungeon.mon_feature_flags),
+            is_possible_monster_and(monrace.population_flags, dungeon.mon_population_flags),
+            is_possible_monster_and(monrace.speak_flags, dungeon.mon_speak_flags),
+            is_possible_monster_and(monrace.brightness_flags, dungeon.mon_brightness_flags),
+            is_possible_monster_and(monrace.misc_flags, dungeon.mon_misc_flags),
         };
 
         auto result = std::all_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });
-        result &= std::all_of(d_ptr->r_chars.begin(), d_ptr->r_chars.end(), [r_ptr](const auto &v) { return v == r_ptr->symbol_definition.character; });
-
-        return d_ptr->mode == DUNGEON_MODE_AND ? result : !result;
+        result &= std::all_of(dungeon.r_chars.begin(), dungeon.r_chars.end(), [monrace](const auto &v) { return v == monrace.symbol_definition.character; });
+        return dungeon.mode == DungeonMode::AND ? result : !result;
     }
-    case DUNGEON_MODE_OR:
-    case DUNGEON_MODE_NOR: {
+    case DungeonMode::OR:
+    case DungeonMode::NOR: {
         std::vector<bool> is_possible = {
-            is_possible_monster_or(r_ptr->ability_flags, d_ptr->mon_ability_flags),
-            is_possible_monster_or(r_ptr->behavior_flags, d_ptr->mon_behavior_flags),
-            is_possible_monster_or(r_ptr->resistance_flags, d_ptr->mon_resistance_flags),
-            is_possible_monster_or(r_ptr->drop_flags, d_ptr->mon_drop_flags),
-            is_possible_monster_or(r_ptr->kind_flags, d_ptr->mon_kind_flags),
-            is_possible_monster_or(r_ptr->wilderness_flags, d_ptr->mon_wilderness_flags),
-            is_possible_monster_or(r_ptr->feature_flags, d_ptr->mon_feature_flags),
-            is_possible_monster_or(r_ptr->population_flags, d_ptr->mon_population_flags),
-            is_possible_monster_or(r_ptr->speak_flags, d_ptr->mon_speak_flags),
-            is_possible_monster_or(r_ptr->brightness_flags, d_ptr->mon_brightness_flags),
-            is_possible_monster_or(r_ptr->misc_flags, d_ptr->mon_misc_flags),
+            is_possible_monster_or(monrace.ability_flags, dungeon.mon_ability_flags),
+            is_possible_monster_or(monrace.behavior_flags, dungeon.mon_behavior_flags),
+            is_possible_monster_or(monrace.resistance_flags, dungeon.mon_resistance_flags),
+            is_possible_monster_or(monrace.drop_flags, dungeon.mon_drop_flags),
+            is_possible_monster_or(monrace.kind_flags, dungeon.mon_kind_flags),
+            is_possible_monster_or(monrace.wilderness_flags, dungeon.mon_wilderness_flags),
+            is_possible_monster_or(monrace.feature_flags, dungeon.mon_feature_flags),
+            is_possible_monster_or(monrace.population_flags, dungeon.mon_population_flags),
+            is_possible_monster_or(monrace.speak_flags, dungeon.mon_speak_flags),
+            is_possible_monster_or(monrace.brightness_flags, dungeon.mon_brightness_flags),
+            is_possible_monster_or(monrace.misc_flags, dungeon.mon_misc_flags),
         };
 
         auto result = std::any_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });
-        result |= std::any_of(d_ptr->r_chars.begin(), d_ptr->r_chars.end(), [r_ptr](const auto &v) { return v == r_ptr->symbol_definition.character; });
-
-        return d_ptr->mode == DUNGEON_MODE_OR ? result : !result;
+        result |= std::any_of(dungeon.r_chars.begin(), dungeon.r_chars.end(), [monrace](const auto &v) { return v == monrace.symbol_definition.character; });
+        return dungeon.mode == DungeonMode::OR ? result : !result;
     }
     }
 
@@ -221,7 +222,8 @@ monsterrace_hook_type get_monster_hook2(PlayerType *player_ptr, POSITION y, POSI
  */
 static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, const monsterrace_hook_type &hook2, const bool restrict_to_dungeon, std::optional<summon_type> summon_specific_type, bool is_chameleon_polymorph)
 {
-    const FloorType *const floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto dungeon_level = floor.dun_level;
 
     // デバッグ用統計情報。
     int mon_num = 0; // 重み(prob2)が正の要素数
@@ -231,54 +233,38 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
 
     // モンスター生成テーブルの各要素について重みを修正する。
     const auto &system = AngbandSystem::get_instance();
-    for (auto i = 0U; i < alloc_race_table.size(); i++) {
-        alloc_entry *const entry = &alloc_race_table[i];
-        const auto entry_r_idx = i2enum<MonsterRaceId>(entry->index);
-        const MonsterRaceInfo *const r_ptr = &monraces_info[entry_r_idx];
+    auto &table = MonraceAllocationTable::get_instance();
+    for (auto &entry : table) {
+        const auto monrace_id = entry.index;
 
         // 生成を禁止する要素は重み 0 とする。
-        entry->prob2 = 0;
+        entry.prob2 = 0;
 
         // 基本重みが 0 以下なら生成禁止。
         // テーブル内の無効エントリもこれに該当する(alloc_race_table は生成時にゼロクリアされるため)。
-        if (entry->prob1 <= 0) {
+        if (entry.prob1 <= 0) {
             continue;
         }
 
         // いずれかの生成制約関数が偽を返したら生成禁止。
-        if ((hook1 && !hook1(player_ptr, entry_r_idx)) || (hook2 && !hook2(player_ptr, entry_r_idx))) {
+        if ((hook1 && !hook1(player_ptr, monrace_id)) || (hook2 && !hook2(player_ptr, monrace_id))) {
             continue;
         }
 
         // 原則生成禁止するものたち(フェイズアウト状態 / カメレオンの変身先 / ダンジョンの主召喚 は例外)。
         if (!system.is_phase_out() && !is_chameleon_polymorph && summon_specific_type != SUMMON_GUARDIANS) {
-            // クエストモンスターは生成禁止。
-            if (r_ptr->misc_flags.has(MonsterMiscType::QUESTOR)) {
+            if (!entry.is_permitted(dungeon_level)) {
                 continue;
             }
 
-            // ダンジョンの主は生成禁止。
-            if (r_ptr->misc_flags.has(MonsterMiscType::GUARDIAN)) {
+            // 殲滅系クエストの詰み防止 (クエスト内では特殊なフラグ持ちの生成を禁止する)
+            if (floor.is_in_quest() && !entry.is_defeatable(dungeon_level)) {
                 continue;
-            }
-
-            // FORCE_DEPTH フラグ持ちは指定階未満では生成禁止。
-            if (r_ptr->misc_flags.has(MonsterMiscType::FORCE_DEPTH) && (r_ptr->level > floor_ptr->dun_level)) {
-                continue;
-            }
-
-            // クエスト内でRES_ALL及び指定階未満でのDIMINISH_MAX_DAMAGEの生成を禁止する (殲滅系クエストの詰み防止)
-            if (player_ptr->current_floor_ptr->is_in_quest()) {
-                auto is_indefeatable = r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL);
-                is_indefeatable |= r_ptr->special_flags.has(MonsterSpecialType::DIMINISH_MAX_DAMAGE) && r_ptr->level > floor_ptr->dun_level;
-                if (is_indefeatable) {
-                    continue;
-                }
             }
         }
 
         // 生成を許可するものは基本重みをそのまま引き継ぐ。
-        entry->prob2 = entry->prob1;
+        entry.prob2 = entry.prob1;
 
         // 引数で指定されていればさらにダンジョンによる制約を試みる。
         if (restrict_to_dungeon) {
@@ -287,29 +273,29 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
             //   * フェイズアウト状態でない
             //   * 1階かそれより深いところにいる
             //   * ランダムクエスト中でない
-            const bool in_random_quest = floor_ptr->is_in_quest() && !QuestType::is_fixed(floor_ptr->quest_number);
-            const bool cond = !system.is_phase_out() && floor_ptr->dun_level > 0 && !in_random_quest;
+            const bool in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
+            const bool cond = !system.is_phase_out() && floor.dun_level > 0 && !in_random_quest;
 
-            if (cond && !restrict_monster_to_dungeon(floor_ptr, entry_r_idx, summon_specific_type, is_chameleon_polymorph)) {
+            if (cond && !restrict_monster_to_dungeon(&floor, monrace_id, summon_specific_type, is_chameleon_polymorph)) {
                 // ダンジョンによる制約に掛かった場合、重みを special_div/64 倍する。
                 // 丸めは確率的に行う。
-                const int numer = entry->prob2 * floor_ptr->get_dungeon_definition().special_div;
+                const int numer = entry.prob2 * floor.get_dungeon_definition().special_div;
                 const int q = numer / 64;
                 const int r = numer % 64;
-                entry->prob2 = (PROB)(randint0(64) < r ? q + 1 : q);
+                entry.prob2 = (PROB)(randint0(64) < r ? q + 1 : q);
             }
         }
 
         // 統計情報更新。
-        if (entry->prob2 > 0) {
+        if (entry.prob2 > 0) {
             mon_num++;
-            if (lev_min > entry->level) {
-                lev_min = entry->level;
+            if (lev_min > entry.level) {
+                lev_min = entry.level;
             }
-            if (lev_max < entry->level) {
-                lev_max = entry->level;
+            if (lev_max < entry.level) {
+                lev_max = entry.level;
             }
-            prob2_total += entry->prob2;
+            prob2_total += entry.prob2;
         }
     }
 

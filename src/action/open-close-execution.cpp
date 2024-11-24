@@ -22,6 +22,7 @@
 #include "specific-object/chest.h"
 #include "status/bad-status-setter.h"
 #include "status/experience.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -104,7 +105,8 @@ bool exe_open(PlayerType *player_ptr, POSITION y, POSITION x)
 bool exe_close(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     const Pos2D pos(y, x);
-    const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &grid = floor.get_grid(pos);
     const auto terrain_id = grid.feat;
     auto more = false;
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
@@ -112,7 +114,7 @@ bool exe_close(PlayerType *player_ptr, POSITION y, POSITION x)
         return more;
     }
 
-    const auto closed_feat = feat_state(player_ptr->current_floor_ptr, terrain_id, TerrainCharacteristics::CLOSE);
+    const auto closed_feat = floor.get_dungeon_definition().convert_terrain_id(terrain_id, TerrainCharacteristics::CLOSE);
     auto is_preventing = !grid.o_idx_list.empty() || grid.is_object();
     is_preventing &= closed_feat != terrain_id;
     is_preventing &= TerrainList::get_instance().get_terrain(closed_feat).flags.has_not(TerrainCharacteristics::DROP);
@@ -148,12 +150,13 @@ bool exe_close(PlayerType *player_ptr, POSITION y, POSITION x)
 bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     const Pos2D pos(y, x);
-    const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
-    const auto &terrain = grid.get_terrain();
-    if (!is_closed_door(player_ptr, grid.feat)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (!floor.is_closed_door(pos)) {
         return false;
     }
 
+    const auto &grid = floor.get_grid(pos);
+    const auto &terrain = grid.get_terrain();
     if (terrain.flags.has_not(TerrainCharacteristics::OPEN)) {
         constexpr auto fmt = _("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck.");
         msg_format(fmt, grid.get_terrain_mimic().name.data());
@@ -352,7 +355,8 @@ bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
     if (evaluate_percent(power)) {
         msg_format(_("%sを壊した！", "The %s crashes open!"), name.data());
         sound(terrain.flags.has(TerrainCharacteristics::GLASS) ? SOUND_GLASS : SOUND_OPENDOOR);
-        if (one_in_(2) || (feat_state(player_ptr->current_floor_ptr, grid.feat, TerrainCharacteristics::OPEN) == grid.feat) || terrain.flags.has(TerrainCharacteristics::GLASS)) {
+        const auto &dungeon = floor.get_dungeon_definition();
+        if (one_in_(2) || (dungeon.convert_terrain_id(grid.feat, TerrainCharacteristics::OPEN) == grid.feat) || terrain.flags.has(TerrainCharacteristics::GLASS)) {
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::BASH);
         } else {
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::OPEN);

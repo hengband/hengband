@@ -84,52 +84,6 @@
 #include <algorithm>
 #include <optional>
 
-static std::optional<BaseitemKey> check_magic_eater_spell_repeat(magic_eater_data_type *magic_eater_data)
-{
-    COMMAND_CODE sn;
-    if (!repeat_pull(&sn)) {
-        return std::nullopt;
-    }
-
-    auto tval = ItemKindType::NONE;
-    if (EATER_STAFF_BASE <= sn && sn < EATER_STAFF_BASE + EATER_ITEM_GROUP_SIZE) {
-        tval = ItemKindType::STAFF;
-    } else if (EATER_WAND_BASE <= sn && sn < EATER_WAND_BASE + EATER_ITEM_GROUP_SIZE) {
-        tval = ItemKindType::WAND;
-    } else if (EATER_ROD_BASE <= sn && sn < EATER_ROD_BASE + EATER_ITEM_GROUP_SIZE) {
-        tval = ItemKindType::ROD;
-    }
-
-    const auto &item_group = magic_eater_data->get_item_group(tval);
-    auto sval = sn % EATER_ITEM_GROUP_SIZE;
-    if (sval >= static_cast<int>(item_group.size())) {
-        return std::nullopt;
-    }
-
-    auto &item = item_group[sval];
-    /* Verify the spell */
-    switch (tval) {
-    case ItemKindType::ROD: {
-        const auto &baseitems = BaseitemList::get_instance();
-        const auto &baseitem = baseitems.lookup_baseitem({ ItemKindType::ROD, sval });
-        if (item.charge <= baseitem.pval * (item.count - 1) * EATER_ROD_CHARGE) {
-            return BaseitemKey(tval, sval);
-        }
-
-        return std::nullopt;
-    }
-    case ItemKindType::STAFF:
-    case ItemKindType::WAND:
-        if (item.charge >= EATER_CHARGE) {
-            return BaseitemKey(tval, sval);
-        }
-
-        return std::nullopt;
-    default:
-        return std::nullopt;
-    }
-}
-
 /*!
  * @brief 魔道具術師の取り込んだ魔力一覧から選択/閲覧する /
  * @param only_browse 閲覧するだけならばTRUE
@@ -141,9 +95,8 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
     auto tval = ItemKindType::NONE;
     int menu_line = (use_menu ? 1 : 0);
 
-    auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
-
-    if (auto result = check_magic_eater_spell_repeat(magic_eater_data.get());
+    const auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<MagicEaterDataList>();
+    if (const auto result = magic_eater_data->check_magic_eater_spell_repeat();
         result) {
         return result;
     }
@@ -631,7 +584,7 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
         }
     }
 
-    auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
+    auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<MagicEaterDataList>();
     const auto sval = bi_key->sval();
     if (!sval) {
         return false;

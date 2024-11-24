@@ -211,7 +211,7 @@ Rect2D UndergroundBuilding::get_inner_room(const Pos2D &pos_ug) const
  * This function does NOT do anything about the owners of the stores,\n
  * nor the contents thereof.  It only handles the physical layout.\n
  */
-bool build_type16(PlayerType *player_ptr, dun_data_type *dd_ptr)
+bool build_type16(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     const auto town_hgt = rand_range(MIN_TOWN_HGT, MAX_TOWN_HGT);
     const auto town_wid = rand_range(MIN_TOWN_WID, MAX_TOWN_WID);

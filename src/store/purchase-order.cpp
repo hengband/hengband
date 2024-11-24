@@ -100,7 +100,7 @@ static void take_item_from_home(PlayerType *player_ptr, ItemEntity *o_ptr, ItemE
     distribute_charges(o_ptr, j_ptr, amt);
 
     auto item_new = store_item_to_inventory(player_ptr, j_ptr);
-    const auto item_name = describe_flavor(player_ptr, &player_ptr->inventory_list[item_new], 0);
+    const auto item_name = describe_flavor(player_ptr, player_ptr->inventory_list[item_new], 0);
     handle_stuff(player_ptr);
     msg_format(_("%s(%c)を取った。", "You have %s (%c)."), item_name.data(), index_to_label(item_new));
 
@@ -199,62 +199,59 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     const short item_num = *item_num_opt + store_top;
-    auto *o_ptr = &st_ptr->stock[item_num];
+    auto &item_store = st_ptr->stock[item_num];
 
     ITEM_NUMBER amt = 1;
-    ItemEntity forge;
-    auto *j_ptr = &forge;
-    j_ptr->copy_from(o_ptr);
+    ItemEntity item = *item_store;
 
     /*
      * If a rod or wand, allocate total maximum timeouts or charges
      * between those purchased and left on the shelf.
      */
-    reduce_charges(j_ptr, o_ptr->number - amt);
-    j_ptr->number = amt;
-    if (!check_store_item_to_inventory(player_ptr, j_ptr)) {
+    reduce_charges(&item, item_store->number - amt);
+    item.number = amt;
+    if (!check_store_item_to_inventory(player_ptr, &item)) {
         msg_print(_("そんなにアイテムを持てない。", "You cannot carry that many different items."));
         return;
     }
 
-    const auto best = price_item(player_ptr, j_ptr, ot_ptr->inflate, false, store_num);
-    if (o_ptr->number > 1) {
+    const auto best = price_item(player_ptr, &item, ot_ptr->inflate, false, store_num);
+    if (item_store->number > 1) {
         if (store_num != StoreSaleType::HOME) {
             msg_format(_("一つにつき $%dです。", "That costs %d gold per item."), best);
         }
 
-        amt = input_quantity(o_ptr->number);
+        amt = input_quantity(item_store->number);
         if (amt <= 0) {
             return;
         }
     }
 
-    j_ptr = &forge;
-    j_ptr->copy_from(o_ptr);
+    item = *item_store;
 
     /*
      * If a rod or wand, allocate total maximum timeouts or charges
      * between those purchased and left on the shelf.
      */
-    reduce_charges(j_ptr, o_ptr->number - amt);
-    j_ptr->number = amt;
-    if (!check_store_item_to_inventory(player_ptr, j_ptr)) {
+    reduce_charges(&item, item_store->number - amt);
+    item.number = amt;
+    if (!check_store_item_to_inventory(player_ptr, &item)) {
         msg_print(_("ザックにそのアイテムを入れる隙間がない。", "You cannot carry that many items."));
         return;
     }
 
     if (store_num == StoreSaleType::HOME) {
-        take_item_from_home(player_ptr, o_ptr, j_ptr, item_num);
+        take_item_from_home(player_ptr, item_store.get(), &item, item_num);
         return;
     }
 
     COMMAND_CODE item_new;
-    const auto purchased_item_name = describe_flavor(player_ptr, j_ptr, 0);
+    const auto purchased_item_name = describe_flavor(player_ptr, item, 0);
     msg_format(_("%s(%c)を購入する。", "Buying %s (%c)."), purchased_item_name.data(), I2A(item_num));
     msg_print(nullptr);
 
     const auto &world = AngbandWorld::get_instance();
-    auto res = prompt_to_buy(player_ptr, j_ptr, store_num);
+    auto res = prompt_to_buy(player_ptr, &item, store_num);
     if (st_ptr->store_open >= world.game_turn) {
         return;
     }
@@ -273,14 +270,14 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     if (store_num == StoreSaleType::BLACK) {
         chg_virtue(player_ptr, Virtue::JUSTICE, -1);
     }
-    if ((o_ptr->bi_key.tval() == ItemKindType::BOTTLE) && (store_num != StoreSaleType::HOME)) {
+    if ((item_store->bi_key.tval() == ItemKindType::BOTTLE) && (store_num != StoreSaleType::HOME)) {
         chg_virtue(player_ptr, Virtue::NATURE, -1);
     }
 
     sound(SOUND_BUY);
     player_ptr->au -= price;
     store_prt_gold(player_ptr);
-    object_aware(player_ptr, j_ptr);
+    object_aware(player_ptr, &item);
 
     msg_format(_("%sを $%ldで購入しました。", "You bought %s for %ld gold."), purchased_item_name.data(), (long)price);
     angband_strcpy(record_o_name, purchased_item_name, MAX_NLEN);
@@ -290,26 +287,26 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
         exe_write_diary(floor, DiaryKind::BUY, 0, purchased_item_name);
     }
 
-    const auto diary_item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
-    if (record_rand_art && o_ptr->is_random_artifact()) {
+    const auto diary_item_name = describe_flavor(player_ptr, *item_store, OD_NAME_ONLY);
+    if (record_rand_art && item_store->is_random_artifact()) {
         exe_write_diary(floor, DiaryKind::ART, 0, diary_item_name);
     }
 
-    j_ptr->inscription.reset();
-    j_ptr->feeling = FEEL_NONE;
-    j_ptr->ident &= ~(IDENT_STORE);
+    item.inscription.reset();
+    item.feeling = FEEL_NONE;
+    item.ident &= ~(IDENT_STORE);
 
-    const auto idx = find_autopick_list(player_ptr, j_ptr);
-    auto_inscribe_item(j_ptr, idx);
+    const auto idx = find_autopick_list(player_ptr, &item);
+    auto_inscribe_item(&item, idx);
 
-    item_new = store_item_to_inventory(player_ptr, j_ptr);
+    item_new = store_item_to_inventory(player_ptr, &item);
     handle_stuff(player_ptr);
 
-    const auto got_item_name = describe_flavor(player_ptr, &player_ptr->inventory_list[item_new], 0);
+    const auto got_item_name = describe_flavor(player_ptr, player_ptr->inventory_list[item_new], 0);
     msg_format(_("%s(%c)を手に入れた。", "You have %s (%c)."), got_item_name.data(), index_to_label(item_new));
 
-    if (o_ptr->is_wand_rod()) {
-        o_ptr->pval -= j_ptr->pval;
+    if (item_store->is_wand_rod()) {
+        item_store->pval -= item.pval;
     }
 
     i = st_ptr->stock_num;

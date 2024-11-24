@@ -153,7 +153,7 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
 
             g_ptr = &floor.grid_array[y][x];
             g_ptr->mimic = 0;
-            g_ptr->feat = (i < shaft_num) ? feat_state(&floor, feat, TerrainCharacteristics::SHAFT) : feat;
+            g_ptr->feat = (i < shaft_num) ? dungeon.convert_terrain_id(feat, TerrainCharacteristics::SHAFT) : feat;
             g_ptr->info &= ~(CAVE_FLOOR);
             break;
         }

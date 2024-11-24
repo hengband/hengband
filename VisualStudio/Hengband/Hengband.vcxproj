@@ -324,6 +324,7 @@
     <ClCompile Include="..\..\src\specific-object\stone-of-lore.cpp" />
     <ClCompile Include="..\..\src\spell-class\spells-mirror-master.cpp" />
     <ClCompile Include="..\..\src\system\angband-system.cpp" />
+    <ClCompile Include="..\..\src\system\dungeon-data-definition.cpp" />
     <ClCompile Include="..\..\src\system\inner-game-data.cpp" />
     <ClCompile Include="..\..\src\system\redrawing-flags-updater.cpp" />
     <ClCompile Include="..\..\src\system\floor-type-definition.cpp" />
@@ -633,6 +634,7 @@
     <ClCompile Include="..\..\src\timed-effect\player-hallucination.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-paralysis.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-poison.cpp" />
+    <ClCompile Include="..\..\src\timed-effect\player-protection.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-stun.cpp" />
     <ClCompile Include="..\..\src\timed-effect\timed-effects.cpp" />
     <ClCompile Include="..\..\src\tracking\baseitem-tracker.cpp" />
@@ -648,7 +650,6 @@
     <ClCompile Include="..\..\src\view\display-scores.cpp" />
     <ClCompile Include="..\..\src\window\display-sub-windows.cpp" />
     <ClCompile Include="..\..\src\window\main-window-left-frame.cpp" />
-    <ClCompile Include="..\..\src\window\main-window-row-column.cpp" />
     <ClCompile Include="..\..\src\window\main-window-stat-poster.cpp" />
     <ClCompile Include="..\..\src\window\main-window-util.cpp" />
     <ClCompile Include="..\..\src\mspell\monster-power-table.cpp" />
@@ -920,6 +921,7 @@
     <ClCompile Include="..\..\src\monster-floor\monster-sweep-grid.cpp" />
     <ClCompile Include="..\..\src\monster\monster-update.cpp" />
     <ClCompile Include="..\..\src\monster\monster-processor-util.cpp" />
+    <ClCompile Include="..\..\src\monster\monster-timed-effects.cpp" />
     <ClCompile Include="..\..\src\monster-floor\quantum-effect.cpp" />
     <ClCompile Include="..\..\src\mutation\mutation-processor.cpp" />
     <ClCompile Include="..\..\src\object-enchant\object-boost.cpp" />
@@ -1427,6 +1429,8 @@
     <ClInclude Include="..\..\src\system\alloc-entries.h" />
     <ClInclude Include="..\..\src\system\angband-exceptions.h" />
     <ClInclude Include="..\..\src\system\angband-system.h" />
+    <ClInclude Include="..\..\src\system\enums\grid-count-kind.h" />
+    <ClInclude Include="..\..\src\system\enums\grid-flow.h" />
     <ClInclude Include="..\..\src\system\inner-game-data.h" />
     <ClInclude Include="..\..\src\system\redrawing-flags-updater.h" />
     <ClInclude Include="..\..\src\system\dungeon-data-definition.h" />
@@ -1451,6 +1455,7 @@
     <ClInclude Include="..\..\src\timed-effect\player-hallucination.h" />
     <ClInclude Include="..\..\src\timed-effect\player-paralysis.h" />
     <ClInclude Include="..\..\src\timed-effect\player-poison.h" />
+    <ClInclude Include="..\..\src\timed-effect\player-protection.h" />
     <ClInclude Include="..\..\src\timed-effect\player-stun.h" />
     <ClInclude Include="..\..\src\timed-effect\timed-effects.h" />
     <ClInclude Include="..\..\src\tracking\baseitem-tracker.h" />
@@ -1478,13 +1483,13 @@
     <ClInclude Include="..\..\src\monster-floor\monster-death.h" />
     <ClInclude Include="..\..\src\lore\monster-lore.h" />
     <ClInclude Include="..\..\src\monster-race\race-flags-resistance.h" />
-    <ClInclude Include="..\..\src\monster-race\race-indice-types.h" />
+    <ClInclude Include="..\..\src\system\enums\monrace\monrace-id.h" />
     <ClInclude Include="..\..\src\monster\monster-describer.h" />
     <ClInclude Include="..\..\src\monster\monster-description-types.h" />
     <ClInclude Include="..\..\src\monster\monster-flag-types.h" />
     <ClInclude Include="..\..\src\monster-floor\monster-generator.h" />
     <ClInclude Include="..\..\src\monster-floor\monster-remover.h" />
-    <ClInclude Include="..\..\src\monster\monster-timed-effect-types.h" />
+    <ClInclude Include="..\..\src\monster\monster-timed-effects.h" />
     <ClInclude Include="..\..\src\monster\monster-util.h" />
     <ClInclude Include="..\..\src\monster\monster-info.h" />
     <ClInclude Include="..\..\src\monster\monster-list.h" />
@@ -1595,7 +1600,7 @@
     <ClInclude Include="..\..\src\object\item-use-flags.h" />
     <ClInclude Include="..\..\src\object\object-mark-types.h" />
     <ClInclude Include="..\..\src\system\building-type-definition.h" />
-    <ClInclude Include="..\..\src\system\game-option-types.h" />
+    <ClInclude Include="..\..\src\system\enums\game-option-page.h" />
     <ClInclude Include="..\..\src\system\monster-race-info.h" />
     <ClInclude Include="..\..\src\system\item-entity.h" />
     <ClInclude Include="..\..\src\object-enchant\old-ego-extra-values.h" />

@@ -102,9 +102,8 @@ static int check_free_space(StoreSaleType store_num)
  *  1 : Cannot be combined but there are empty spaces.
  * </pre>
  */
-int store_check_num(ItemEntity *o_ptr, StoreSaleType store_num)
+int store_check_num(const ItemEntity *o_ptr, StoreSaleType store_num)
 {
-    ItemEntity *j_ptr;
     if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM)) {
         bool old_stack_force_notes = stack_force_notes;
         bool old_stack_force_costs = stack_force_costs;
@@ -113,9 +112,9 @@ int store_check_num(ItemEntity *o_ptr, StoreSaleType store_num)
             stack_force_costs = false;
         }
 
-        for (int i = 0; i < st_ptr->stock_num; i++) {
-            j_ptr = &st_ptr->stock[i];
-            if (!object_similar(j_ptr, o_ptr)) {
+        for (auto i = 0; i < st_ptr->stock_num; i++) {
+            auto &item = st_ptr->stock[i];
+            if (!item->is_similar(*o_ptr)) {
                 continue;
             }
 
@@ -132,9 +131,9 @@ int store_check_num(ItemEntity *o_ptr, StoreSaleType store_num)
             stack_force_costs = old_stack_force_costs;
         }
     } else {
-        for (int i = 0; i < st_ptr->stock_num; i++) {
-            j_ptr = &st_ptr->stock[i];
-            if (store_object_similar(j_ptr, o_ptr)) {
+        for (auto i = 0; i < st_ptr->stock_num; i++) {
+            auto &item = st_ptr->stock[i];
+            if (item->is_similar_for_store(*o_ptr)) {
                 return -1;
             }
         }
@@ -228,15 +227,15 @@ void store_examine(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     const auto item_num = *item_num_opt + store_top;
-    auto *o_ptr = &st_ptr->stock[item_num];
-    if (!o_ptr->is_fully_known()) {
+    auto &item = st_ptr->stock[item_num];
+    if (!item->is_fully_known()) {
         msg_print(_("このアイテムについて特に知っていることはない。", "You have no special knowledge about that item."));
         return;
     }
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, *item, 0);
     msg_format(_("%sを調べている...", "Examining %s..."), item_name.data());
-    if (!screen_object(player_ptr, o_ptr, SCROBJ_FORCE_DETAIL)) {
+    if (!screen_object(player_ptr, item.get(), SCROBJ_FORCE_DETAIL)) {
         msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
     }
 }
@@ -285,15 +284,14 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
     st_ptr->store_open = 0;
     st_ptr->good_buy = 0;
     st_ptr->bad_buy = 0;
-    for (int i = 0; i < st_ptr->stock_num; i++) {
-        ItemEntity *o_ptr;
-        o_ptr = &st_ptr->stock[i];
-        if (o_ptr->is_fixed_or_random_artifact()) {
+    for (auto i = 0; i < st_ptr->stock_num; i++) {
+        auto &item = st_ptr->stock[i];
+        if (item->is_fixed_or_random_artifact()) {
             continue;
         }
 
-        o_ptr->discount = 50;
-        o_ptr->inscription.emplace(_("売出中", "on sale"));
+        item->discount = 50;
+        item->inscription.emplace(_("売出中", "on sale"));
     }
 }
 
@@ -367,11 +365,11 @@ static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType 
         }
 
         if (store_num == StoreSaleType::BLACK) {
-            if (black_market_crap(player_ptr, &item) || (item.get_price() < 10)) {
+            if (black_market_crap(player_ptr, &item) || (item.calc_price() < 10)) {
                 continue;
             }
         } else {
-            if (item.get_price() <= 0) {
+            if (item.calc_price() <= 0) {
                 continue;
             }
         }
@@ -401,9 +399,9 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
     st_ptr->insult_cur = 0;
     if (store_num == StoreSaleType::BLACK) {
         for (INVENTORY_IDX j = st_ptr->stock_num - 1; j >= 0; j--) {
-            auto *o_ptr = &st_ptr->stock[j];
-            if (black_market_crap(player_ptr, o_ptr)) {
-                store_item_increase(j, 0 - o_ptr->number);
+            auto &item = st_ptr->stock[j];
+            if (black_market_crap(player_ptr, item.get())) {
+                store_item_increase(j, 0 - item->number);
                 store_item_optimize(j);
             }
         }
@@ -502,6 +500,6 @@ void store_init(int town_num, StoreSaleType store_num)
     st_ptr->stock_num = 0;
     st_ptr->last_visit = -10L * TURNS_PER_TICK * STORE_TICKS;
     for (int k = 0; k < st_ptr->stock_size; k++) {
-        (&st_ptr->stock[k])->wipe();
+        st_ptr->stock[k]->wipe();
     }
 }

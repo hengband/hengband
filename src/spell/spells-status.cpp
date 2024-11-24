@@ -468,7 +468,7 @@ bool restore_mana(PlayerType *player_ptr, bool magic_eater)
         // 魔力復活による、魔道具術師の取り込んだ魔法の回復量
         // 取り込み数が10回未満: 3 回分回復
         // 取り込み数が10回以上: 取り込み回数/3 回分回復
-        auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
+        auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<MagicEaterDataList>();
         for (auto tval : { ItemKindType::STAFF, ItemKindType::WAND }) {
             for (auto &item : magic_eater_data->get_item_group(tval)) {
                 item.charge += (item.count < 10) ? EATER_CHARGE * 3 : item.count * EATER_CHARGE / 3;
@@ -568,7 +568,7 @@ bool fishing(PlayerType *player_ptr)
  */
 bool cosmic_cast_off(PlayerType *player_ptr, ItemEntity **o_ptr_ptr)
 {
-    auto *o_ptr = (*o_ptr_ptr);
+    auto *o_ptr = *o_ptr_ptr;
 
     /* Cast off activated item */
     INVENTORY_IDX slot;
@@ -582,15 +582,14 @@ bool cosmic_cast_off(PlayerType *player_ptr, ItemEntity **o_ptr_ptr)
         return false;
     }
 
-    ItemEntity forge;
-    (&forge)->copy_from(o_ptr);
+    ItemEntity item = *o_ptr;
     inven_item_increase(player_ptr, slot, (0 - o_ptr->number));
     inven_item_optimize(player_ptr, slot);
 
-    OBJECT_IDX old_o_idx = drop_near(player_ptr, &forge, 0, player_ptr->y, player_ptr->x);
+    OBJECT_IDX old_o_idx = drop_near(player_ptr, &item, 0, player_ptr->y, player_ptr->x);
     *o_ptr_ptr = &player_ptr->current_floor_ptr->o_list[old_o_idx];
 
-    const auto item_name = describe_flavor(player_ptr, &forge, OD_NAME_ONLY);
+    const auto item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
     msg_format(_("%sを脱ぎ捨てた。", "You cast off %s."), item_name.data());
     sound(SOUND_TAKE_OFF);
 

@@ -72,7 +72,7 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
             if (!floor.has_los(pos)) {
                 msg_print(_("そこはあなたの視界に入っていません。", "You have no direct line of sight to that location."));
                 return;
-            } else if (!projectable(player_ptr, p_pos.y, p_pos.x, ty, tx)) {
+            } else if (!projectable(player_ptr, p_pos, pos)) {
                 msg_print(_("そこは壁の向こうです。", "You have no direct line of sight to that location."));
                 return;
             }
@@ -97,8 +97,8 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
         }
     }
 
-    auto *o_ptr = &floor.o_list[g_ptr->o_idx_list.front()];
-    if (o_ptr->weight > wgt) {
+    auto &item = floor.o_list[g_ptr->o_idx_list.front()];
+    if (item.weight > wgt) {
         msg_print(_("そのアイテムは重過ぎます。", "The object is too heavy."));
         return;
     }
@@ -106,10 +106,10 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
     OBJECT_IDX i = g_ptr->o_idx_list.front();
     g_ptr->o_idx_list.pop_front();
     floor.grid_array[p_pos.y][p_pos.x].o_idx_list.add(&floor, i); /* 'move' it */
-    o_ptr->iy = p_pos.y;
-    o_ptr->ix = p_pos.x;
+    item.iy = p_pos.y;
+    item.ix = p_pos.x;
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
+    const auto item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
     msg_format(_("%s^があなたの足元に飛んできた。", "%s^ flies through the air to your feet."), item_name.data());
     note_spot(player_ptr, p_pos.y, p_pos.x);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MAP);
@@ -134,7 +134,7 @@ bool fetch_monster(PlayerType *player_ptr)
     if (!floor.has_los(pos)) {
         return false;
     }
-    if (!projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
+    if (!projectable(player_ptr, player_ptr->get_position(), pos)) {
         return false;
     }
 

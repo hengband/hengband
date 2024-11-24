@@ -32,7 +32,7 @@ bool alchemy(PlayerType *player_ptr)
     constexpr auto s = _("金に変えられる物がありません。", "You have nothing to turn to gold.");
     short i_idx;
     auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_INVEN | USE_FLOOR));
-    if (!o_ptr) {
+    if (o_ptr == nullptr) {
         return false;
     }
 
@@ -46,11 +46,11 @@ bool alchemy(PlayerType *player_ptr)
 
     const auto old_number = o_ptr->number;
     o_ptr->number = amt;
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
     o_ptr->number = old_number;
 
     if (!force) {
-        if (confirm_destroy || (o_ptr->get_price() > 0)) {
+        if (confirm_destroy || (o_ptr->calc_price() > 0)) {
             const auto out_val = format(_("本当に%sを金に変えますか？", "Really turn %s to gold? "), item_name.data());
             if (!input_check(out_val)) {
                 return false;

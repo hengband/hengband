@@ -105,7 +105,6 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
 {
     COMMAND_CODE i, m;
     int j, k, l;
-    ItemEntity *o_ptr;
     COMMAND_CODE out_index[23]{};
     TERM_COLOR out_color[23]{};
     std::array<std::string, 23> descriptions{};
@@ -117,12 +116,12 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
     const auto &[wid, hgt] = term_get_size();
     auto len = std::max((*min_width), 20);
     floor_num = scan_floor_items(player_ptr, floor_list, y, x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
     for (k = 0, i = 0; i < floor_num && i < 23; i++) {
-        o_ptr = &floor_ptr->o_list[floor_list[i]];
-        const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+        const auto &item = floor.o_list[floor_list[i]];
+        const auto item_name = describe_flavor(player_ptr, item, 0);
         out_index[k] = i;
-        const auto tval = o_ptr->bi_key.tval();
+        const auto tval = item.bi_key.tval();
         out_color[k] = tval_to_attr[enum2i(tval) & 0x7F];
         descriptions[k] = item_name;
         l = descriptions[k].length() + 5;
@@ -147,10 +146,10 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
 
     *min_width = len;
     int col = (len > wid - 4) ? 0 : (wid - len - 1);
-    prepare_label_string_floor(floor_ptr, floor_label, floor_list, floor_num);
+    prepare_label_string_floor(&floor, floor_label, floor_list, floor_num);
     for (j = 0; j < k; j++) {
         m = floor_list[out_index[j]];
-        o_ptr = &floor_ptr->o_list[m];
+        const auto &item = floor.o_list[m];
         prt("", j + 1, col ? col - 2 : col);
         std::string head;
         if (use_menu && target_item) {
@@ -166,8 +165,8 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
 
         put_str(head, j + 1, col);
         c_put_str(out_color[j], descriptions[j], j + 1, col + 3);
-        if (show_weights && (o_ptr->bi_key.tval() != ItemKindType::GOLD)) {
-            int wgt = o_ptr->weight * o_ptr->number;
+        if (show_weights && (item.bi_key.tval() != ItemKindType::GOLD)) {
+            int wgt = item.weight * item.number;
             const auto weight = format(_("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
             prt(weight, j + 1, wid - 9);
         }

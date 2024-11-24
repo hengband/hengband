@@ -312,7 +312,7 @@ static void dump_aux_arena(FILE *fff)
 static void dump_aux_monsters(FILE *fff)
 {
     fprintf(fff, _("\n  [倒したモンスター]\n\n", "\n  [Defeated Monsters]\n\n"));
-    std::vector<MonsterRaceId> monrace_ids;
+    std::vector<MonraceId> monrace_ids;
     const auto &monraces = MonraceList::get_instance();
     auto norm_total = 0;
     for (const auto &[monrace_id, monrace] : monraces) {
@@ -499,7 +499,7 @@ static void dump_aux_equipment_inventory(PlayerType *player_ptr, FILE *fff)
     if (player_ptr->equip_cnt) {
         fprintf(fff, _("  [キャラクタの装備]\n\n", "  [Character Equipment]\n\n"));
         for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-            auto item_name = describe_flavor(player_ptr, &player_ptr->inventory_list[i], 0);
+            auto item_name = describe_flavor(player_ptr, player_ptr->inventory_list[i], 0);
             auto is_two_handed = ((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr));
             is_two_handed |= ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr));
             if (is_two_handed && has_two_handed_weapons(player_ptr)) {
@@ -519,7 +519,7 @@ static void dump_aux_equipment_inventory(PlayerType *player_ptr, FILE *fff)
             break;
         }
 
-        const auto item_name = describe_flavor(player_ptr, &player_ptr->inventory_list[i], 0);
+        const auto item_name = describe_flavor(player_ptr, player_ptr->inventory_list[i], 0);
         fprintf(fff, "%c) %s\n", index_to_label(i), item_name.data());
     }
 
@@ -541,7 +541,7 @@ static void dump_aux_home_museum(PlayerType *player_ptr, FILE *fff)
                 fprintf(fff, _("\n ( %d ページ )\n", "\n ( page %d )\n"), page++);
             }
 
-            const auto item_name = describe_flavor(player_ptr, &store_ptr->stock[i], 0);
+            const auto item_name = describe_flavor(player_ptr, *store_ptr->stock[i], 0);
             fprintf(fff, "%c) %s\n", I2A(i % 12), item_name.data());
         }
 
@@ -562,7 +562,7 @@ static void dump_aux_home_museum(PlayerType *player_ptr, FILE *fff)
             fprintf(fff, _("\n ( %d ページ )\n", "\n ( page %d )\n"), page++);
         }
 
-        const auto item_name = describe_flavor(player_ptr, &store_ptr->stock[i], 0);
+        const auto item_name = describe_flavor(player_ptr, *store_ptr->stock[i], 0);
         fprintf(fff, "%c) %s\n", I2A(i % 12), item_name.data());
     }
 

@@ -35,7 +35,6 @@
 #include "monster-floor/quantum-effect.h"
 #include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-flags-resistance.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
@@ -59,6 +58,7 @@
 #include "spell-realm/spells-hex.h"
 #include "spell/summon-types.h"
 #include "system/angband-system.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
@@ -432,7 +432,7 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
 bool explode_grenade(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    if (m_ptr->r_idx != MonsterRaceId::GRENADE) {
+    if (m_ptr->r_idx != MonraceId::GRENADE) {
         return false;
     }
 
@@ -451,7 +451,7 @@ void process_special(PlayerType *player_ptr, MONSTER_IDX m_idx)
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &m_ptr->get_monrace();
     auto can_do_special = r_ptr->ability_flags.has(MonsterAbilityType::SPECIAL);
-    can_do_special &= m_ptr->r_idx == MonsterRaceId::OHMU;
+    can_do_special &= m_ptr->r_idx == MonraceId::OHMU;
     can_do_special &= !player_ptr->current_floor_ptr->inside_arena;
     can_do_special &= !AngbandSystem::get_instance().is_phase_out();
     can_do_special &= r_ptr->freq_spell != 0;
@@ -533,25 +533,26 @@ bool decide_monster_multiplication(PlayerType *player_ptr, MONSTER_IDX m_idx, PO
  */
 bool cast_spell(PlayerType *player_ptr, MONSTER_IDX m_idx, bool aware)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     const auto &monster_from = floor.m_list[m_idx];
     const auto &monrace = monster_from.get_monrace();
     if ((monrace.freq_spell == 0) || (randint1(100) > monrace.freq_spell)) {
         return false;
     }
 
-    bool counterattack = false;
+    auto counter_attack = false;
     if (monster_from.target_y) {
-        Pos2D pos(monster_from.target_y, monster_from.target_x);
-        const auto t_m_idx = floor.get_grid(pos).m_idx;
+        const auto pos_to = monster_from.get_target_position();
+        const auto t_m_idx = floor.get_grid(pos_to).m_idx;
         const auto &monster_to = floor.m_list[t_m_idx];
-        const auto is_projectable = projectable(player_ptr, monster_from.fy, monster_from.fx, monster_from.target_y, monster_from.target_x);
+        const auto pos_from = monster_from.get_position();
+        const auto is_projectable = projectable(player_ptr, pos_from, pos_to);
         if (t_m_idx && monster_from.is_hostile_to_melee(monster_to) && is_projectable) {
-            counterattack = true;
+            counter_attack = true;
         }
     }
 
-    if (counterattack) {
+    if (counter_attack) {
         if (monst_spell_monst(player_ptr, m_idx) || (aware && make_attack_spell(player_ptr, m_idx))) {
             return true;
         }

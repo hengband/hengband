@@ -31,96 +31,95 @@ static int get_item_sort_rank(const ItemEntity &item)
 }
 
 /*!
- * @brief オブジェクトを定義された基準に従いソートするための関数 /
+ * @brief アイテムを定義された基準に従いソートするための関数 /
  * Check if we have space for an item in the pack without overflow
- * @param o_ptr 比較対象オブジェクトの構造体参照ポインタ1
- * @param o_value o_ptrのアイテム価値（手動であらかじめ代入する必要がある？）
- * @param j_ptr 比較対象オブジェクトの構造体参照ポインタ2
- * @return o_ptrの方が上位ならばTRUEを返す。
+ * @param item1 比較対象アイテムへの参照
+ * @param item2 比較対象アイテムへの参照
+ * @return item1の方が上位ならばTRUEを返す。
  */
-bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value, ItemEntity *j_ptr)
+bool object_sort_comp(PlayerType *player_ptr, const ItemEntity &item1, const ItemEntity &item2)
 {
-    if (!j_ptr->is_valid()) {
+    if (!item2.is_valid()) {
         return true;
     }
 
-    const auto o_tval = o_ptr->bi_key.tval();
-    const auto j_tval = j_ptr->bi_key.tval();
+    const auto item1_tval = item1.bi_key.tval();
+    const auto item2_tval = item2.bi_key.tval();
     PlayerRealm pr(player_ptr);
     const auto realm1_book = pr.realm1().get_book();
     const auto realm2_book = pr.realm2().get_book();
-    if ((o_tval == realm1_book) && (j_tval != realm1_book)) {
+    if ((item1_tval == realm1_book) && (item2_tval != realm1_book)) {
         return true;
     }
 
-    if ((j_tval == realm1_book) && (o_tval != realm1_book)) {
+    if ((item2_tval == realm1_book) && (item1_tval != realm1_book)) {
         return false;
     }
 
-    if ((o_tval == realm2_book) && (j_tval != realm2_book)) {
+    if ((item1_tval == realm2_book) && (item2_tval != realm2_book)) {
         return true;
     }
 
-    if ((j_tval == realm2_book) && (o_tval != realm2_book)) {
+    if ((item2_tval == realm2_book) && (item1_tval != realm2_book)) {
         return false;
     }
 
-    if (o_tval > j_tval) {
+    if (item1_tval > item2_tval) {
         return true;
     }
 
-    if (o_tval < j_tval) {
+    if (item1_tval < item2_tval) {
         return false;
     }
 
-    if (!o_ptr->is_aware()) {
+    if (!item1.is_aware()) {
         return false;
     }
 
-    if (!j_ptr->is_aware()) {
+    if (!item2.is_aware()) {
         return true;
     }
 
-    const auto o_sval = o_ptr->bi_key.sval();
-    const auto j_sval = j_ptr->bi_key.sval();
-    if (o_sval < j_sval) {
+    const auto item1_sval = item1.bi_key.sval();
+    const auto item2_sval = item2.bi_key.sval();
+    if (item1_sval < item2_sval) {
         return true;
     }
 
-    if (o_sval > j_sval) {
+    if (item1_sval > item2_sval) {
         return false;
     }
 
-    if (!o_ptr->is_known()) {
+    if (!item1.is_known()) {
         return false;
     }
 
-    if (!j_ptr->is_known()) {
+    if (!item2.is_known()) {
         return true;
     }
 
-    const auto o_rank = get_item_sort_rank(*o_ptr);
-    const auto j_rank = get_item_sort_rank(*j_ptr);
-    if (o_rank < j_rank) {
+    const auto item1_rank = get_item_sort_rank(item1);
+    const auto item2_rank = get_item_sort_rank(item2);
+    if (item1_rank < item2_rank) {
         return true;
     }
 
-    if (o_rank > j_rank) {
+    if (item1_rank > item2_rank) {
         return false;
     }
 
-    switch (o_tval) {
+    switch (item1_tval) {
     case ItemKindType::FIGURINE:
     case ItemKindType::STATUE:
     case ItemKindType::MONSTER_REMAINS:
     case ItemKindType::CAPTURE: {
-        const auto &monrace1 = o_ptr->get_monrace();
-        const auto &monrace2 = j_ptr->get_monrace();
-        if (monrace1.level < monrace2.level) {
+        const auto &monrace1 = item1.get_monrace();
+        const auto &monrace2 = item2.get_monrace();
+        if (monrace2.order_level_strictly(monrace1)) {
             return true;
         }
 
-        if ((monrace1.level == monrace2.level) && (o_ptr->pval < j_ptr->pval)) {
+        if ((monrace1.level == monrace2.level) && (item1.pval < item2.pval)) {
             return true;
         }
 
@@ -129,21 +128,21 @@ bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value
     case ItemKindType::SHOT:
     case ItemKindType::ARROW:
     case ItemKindType::BOLT:
-        if (o_ptr->to_h + o_ptr->to_d < j_ptr->to_h + j_ptr->to_d) {
+        if (item1.to_h + item1.to_d < item2.to_h + item2.to_d) {
             return true;
         }
 
-        if (o_ptr->to_h + o_ptr->to_d > j_ptr->to_h + j_ptr->to_d) {
+        if (item1.to_h + item1.to_d > item2.to_h + item2.to_d) {
             return false;
         }
 
         break;
     case ItemKindType::ROD:
-        if (o_ptr->pval < j_ptr->pval) {
+        if (item1.pval < item2.pval) {
             return true;
         }
 
-        if (o_ptr->pval > j_ptr->pval) {
+        if (item1.pval > item2.pval) {
             return false;
         }
 
@@ -152,5 +151,5 @@ bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value
         break;
     }
 
-    return o_value > j_ptr->get_price();
+    return item1.calc_price() > item2.calc_price();
 }

@@ -45,7 +45,7 @@ static void autopick_delayed_alter_aux(PlayerType *player_ptr, INVENTORY_IDX i_i
         return;
     }
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
     if (i_idx >= 0) {
         inven_item_increase(player_ptr, i_idx, -(o_ptr->number));
         inven_item_optimize(player_ptr, i_idx);
@@ -103,19 +103,19 @@ void autopick_pickup_items(PlayerType *player_ptr, Grid *g_ptr)
 {
     for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
         OBJECT_IDX this_o_idx = *it++;
-        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-        int idx = find_autopick_list(player_ptr, o_ptr);
-        auto_inscribe_item(o_ptr, idx);
+        auto &item = player_ptr->current_floor_ptr->o_list[this_o_idx];
+        int idx = find_autopick_list(player_ptr, &item);
+        auto_inscribe_item(&item, idx);
         if ((idx < 0) || (autopick_list[idx].action & (DO_AUTOPICK | DO_QUERY_AUTOPICK)) == 0) {
-            auto_destroy_item(player_ptr, o_ptr, idx);
+            auto_destroy_item(player_ptr, &item, idx);
             continue;
         }
 
         disturb(player_ptr, false, false);
-        if (!check_store_item_to_inventory(player_ptr, o_ptr)) {
-            const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+        if (!check_store_item_to_inventory(player_ptr, &item)) {
+            const auto item_name = describe_flavor(player_ptr, item, 0);
             msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), item_name.data());
-            o_ptr->marked.set(OmType::SUPRESS_MESSAGE);
+            item.marked.set(OmType::SUPRESS_MESSAGE);
             continue;
         }
 
@@ -124,15 +124,15 @@ void autopick_pickup_items(PlayerType *player_ptr, Grid *g_ptr)
             continue;
         }
 
-        if (o_ptr->marked.has(OmType::NO_QUERY)) {
+        if (item.marked.has(OmType::NO_QUERY)) {
             continue;
         }
 
-        const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+        const auto item_name = describe_flavor(player_ptr, item, 0);
         std::stringstream ss;
         ss << _(item_name, "Pick up ") << _("を拾いますか", item_name) << "? ";
         if (!input_check(ss.str())) {
-            o_ptr->marked.set({ OmType::SUPRESS_MESSAGE, OmType::NO_QUERY });
+            item.marked.set({ OmType::SUPRESS_MESSAGE, OmType::NO_QUERY });
             continue;
         }
 

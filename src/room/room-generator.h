@@ -1,5 +1,5 @@
 #pragma once
 
-struct dun_data_type;
+class DungeonData;
 class PlayerType;
-bool generate_rooms(PlayerType *player_ptr, dun_data_type *dun_data);
+bool generate_rooms(PlayerType *player_ptr, DungeonData *dun_data);

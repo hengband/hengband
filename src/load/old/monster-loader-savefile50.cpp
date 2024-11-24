@@ -25,7 +25,7 @@ void MonsterLoader50::rd_monster(MonsterEntity *m_ptr_)
     }
 
     auto flags = rd_u32b();
-    this->m_ptr->r_idx = i2enum<MonsterRaceId>(rd_s16b());
+    this->m_ptr->r_idx = i2enum<MonraceId>(rd_s16b());
     this->m_ptr->fy = rd_byte();
     this->m_ptr->fx = rd_byte();
 
@@ -39,19 +39,19 @@ void MonsterLoader50::rd_monster(MonsterEntity *m_ptr_)
         this->m_ptr->dealt_damage = rd_s32b();
     }
 
-    this->m_ptr->ap_r_idx = any_bits(flags, SaveDataMonsterFlagType::AP_R_IDX) ? i2enum<MonsterRaceId>(rd_s16b()) : this->m_ptr->r_idx;
+    this->m_ptr->ap_r_idx = any_bits(flags, SaveDataMonsterFlagType::AP_R_IDX) ? i2enum<MonraceId>(rd_s16b()) : this->m_ptr->r_idx;
     this->m_ptr->sub_align = any_bits(flags, SaveDataMonsterFlagType::SUB_ALIGN) ? rd_byte() : 0;
-    this->m_ptr->mtimed[MTIMED_CSLEEP] = any_bits(flags, SaveDataMonsterFlagType::CSLEEP) ? rd_s16b() : 0;
+    this->m_ptr->mtimed[MonsterTimedEffect::SLEEP] = any_bits(flags, SaveDataMonsterFlagType::SLEEP) ? rd_s16b() : 0;
     this->m_ptr->mspeed = rd_byte();
     this->m_ptr->energy_need = rd_s16b();
-    this->m_ptr->mtimed[MTIMED_FAST] = any_bits(flags, SaveDataMonsterFlagType::FAST) ? rd_byte() : 0;
-    this->m_ptr->mtimed[MTIMED_SLOW] = any_bits(flags, SaveDataMonsterFlagType::SLOW) ? rd_byte() : 0;
-    this->m_ptr->mtimed[MTIMED_STUNNED] = any_bits(flags, SaveDataMonsterFlagType::STUNNED) ? rd_byte() : 0;
-    this->m_ptr->mtimed[MTIMED_CONFUSED] = any_bits(flags, SaveDataMonsterFlagType::CONFUSED) ? rd_byte() : 0;
-    this->m_ptr->mtimed[MTIMED_MONFEAR] = any_bits(flags, SaveDataMonsterFlagType::MONFEAR) ? rd_byte() : 0;
+    this->m_ptr->mtimed[MonsterTimedEffect::FAST] = any_bits(flags, SaveDataMonsterFlagType::FAST) ? rd_byte() : 0;
+    this->m_ptr->mtimed[MonsterTimedEffect::SLOW] = any_bits(flags, SaveDataMonsterFlagType::SLOW) ? rd_byte() : 0;
+    this->m_ptr->mtimed[MonsterTimedEffect::STUN] = any_bits(flags, SaveDataMonsterFlagType::STUNNED) ? rd_byte() : 0;
+    this->m_ptr->mtimed[MonsterTimedEffect::CONFUSION] = any_bits(flags, SaveDataMonsterFlagType::CONFUSED) ? rd_byte() : 0;
+    this->m_ptr->mtimed[MonsterTimedEffect::FEAR] = any_bits(flags, SaveDataMonsterFlagType::MONFEAR) ? rd_byte() : 0;
     this->m_ptr->target_y = any_bits(flags, SaveDataMonsterFlagType::TARGET_Y) ? rd_s16b() : 0;
     this->m_ptr->target_x = any_bits(flags, SaveDataMonsterFlagType::TARGET_X) ? rd_s16b() : 0;
-    this->m_ptr->mtimed[MTIMED_INVULNER] = any_bits(flags, SaveDataMonsterFlagType::INVULNER) ? rd_byte() : 0;
+    this->m_ptr->mtimed[MonsterTimedEffect::INVULNERABILITY] = any_bits(flags, SaveDataMonsterFlagType::INVULNER) ? rd_byte() : 0;
     this->m_ptr->mflag.clear();
     this->m_ptr->mflag2.clear();
     if (any_bits(flags, SaveDataMonsterFlagType::SMART)) {

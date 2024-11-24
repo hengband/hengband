@@ -5,6 +5,7 @@
 #include "io/write-diary.h"
 #include "market/bounty.h"
 #include "market/building-actions-table.h"
+#include "object/tval-types.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/magic-eater-data-type.h"
@@ -123,7 +124,7 @@ static void back_to_health(PlayerType *player_ptr)
  */
 static void charge_magic_eating_energy(PlayerType *player_ptr)
 {
-    auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
+    auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<MagicEaterDataList>();
     if (!magic_eater_data) {
         return;
     }

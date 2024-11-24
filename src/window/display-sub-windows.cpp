@@ -14,7 +14,6 @@
 #include "mind/mind-info.h"
 #include "mind/mind-sniper.h"
 #include "mind/mind-types.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "object/item-tester-hooker.h"
@@ -27,6 +26,7 @@
 #include "player/player-status-table.h"
 #include "player/player-status.h"
 #include "spell/spells-execution.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -131,13 +131,12 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, MonsterEntity *m_ptr, int
 {
     term_erase(0, y);
     term_gotoxy(x, y);
-    const auto monrace_id = m_ptr->ap_r_idx;
-    if (monrace_id == MonsterRaceId::PLAYER) {
+    const auto &monrace = m_ptr->get_appearance_monrace();
+    if (!monrace.is_valid()) {
         return;
     }
 
     std::string buf;
-    const auto &monrace = monraces_info[monrace_id];
     if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
         buf = format(_("%3s(覚%2d)", "%3s(%2d)"), monrace.is_bounty(true) ? "  W" : "  U", n_awake);
     } else {
@@ -315,8 +314,8 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
             break;
         }
 
-        auto o_ptr = &player_ptr->inventory_list[i];
-        auto do_disp = player_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(o_ptr);
+        const auto &item = player_ptr->inventory_list[i];
+        auto do_disp = player_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(&item);
         std::string tmp_val = "   ";
 
         if (do_disp) {
@@ -335,17 +334,17 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
             item_name = _("(武器を両手持ち)", "(wielding with two-hands)");
             attr = TERM_WHITE;
         } else {
-            item_name = describe_flavor(player_ptr, o_ptr, 0);
-            attr = tval_to_attr[enum2i(o_ptr->bi_key.tval()) % 128];
+            item_name = describe_flavor(player_ptr, item, 0);
+            attr = tval_to_attr[enum2i(item.bi_key.tval()) % 128];
         }
 
         int n = item_name.length();
-        if (o_ptr->timeout) {
+        if (item.timeout) {
             attr = TERM_L_DARK;
         }
 
         if (show_item_graph) {
-            term_queue_bigchar(cur_col, cur_row, { o_ptr->get_symbol(), {} });
+            term_queue_bigchar(cur_col, cur_row, { item.get_symbol(), {} });
             if (use_bigtile) {
                 cur_col++;
             }
@@ -355,7 +354,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
 
         term_putstr(cur_col, cur_row, n, attr, item_name);
         if (show_weights) {
-            int wgt = o_ptr->weight * o_ptr->number;
+            int wgt = item.weight * item.number;
             tmp_val = format(_("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
             prt(tmp_val, cur_row, wid - (show_labels ? 28 : 9));
         }
@@ -570,7 +569,7 @@ static void display_floor_item_list(PlayerType *player_ptr, const Pos2D &pos)
         if (is_hallucinated) {
             line = format(_("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), pos.x, pos.y);
         } else {
-            const MonsterRaceInfo *const r_ptr = &m_ptr->get_appearance_monrace();
+            const MonraceDefinition *const r_ptr = &m_ptr->get_appearance_monrace();
             line = format(_("(X:%03d Y:%03d) %sの足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under %s"), pos.x, pos.y, r_ptr->name.data());
         }
     } else {
@@ -609,7 +608,7 @@ static void display_floor_item_list(PlayerType *player_ptr, const Pos2D &pos)
         if (is_hallucinated) {
             term_addstr(-1, TERM_WHITE, _("何か奇妙な物", "something strange"));
         } else {
-            const auto item_name = describe_flavor(player_ptr, &item, 0);
+            const auto item_name = describe_flavor(player_ptr, item, 0);
             TERM_COLOR attr = tval_to_attr[enum2i(tval) % 128];
             term_addstr(-1, attr, item_name);
         }
@@ -660,8 +659,8 @@ static void display_found_item_list(PlayerType *player_ptr)
 
     std::sort(
         found_item_list.begin(), found_item_list.end(),
-        [player_ptr](ItemEntity *left, ItemEntity *right) -> bool {
-            return object_sort_comp(player_ptr, left, left->get_price(), right);
+        [player_ptr](const ItemEntity *left, const ItemEntity *right) -> bool {
+            return object_sort_comp(player_ptr, *left, *right);
         });
 
     term_clear();
@@ -672,7 +671,7 @@ static void display_found_item_list(PlayerType *player_ptr)
 
     // 発見済みのアイテムを表示
     TERM_LEN term_y = 1;
-    for (auto item : found_item_list) {
+    for (auto item_ptr : found_item_list) {
         // 途中で行数が足りなくなったら終了。
         if (term_y >= hgt) {
             break;
@@ -681,16 +680,16 @@ static void display_found_item_list(PlayerType *player_ptr)
         term_gotoxy(0, term_y);
 
         // アイテムシンボル表示
-        const auto symbol = item->get_symbol();
+        const auto symbol = item_ptr->get_symbol();
         const auto symbol_str = format(" %c ", symbol.character);
         term_addstr(-1, symbol.color, symbol_str);
 
-        const auto item_name = describe_flavor(player_ptr, item, 0);
-        const auto color_code_for_item = tval_to_attr[enum2i(item->bi_key.tval()) % 128];
+        const auto item_name = describe_flavor(player_ptr, *item_ptr, 0);
+        const auto color_code_for_item = tval_to_attr[enum2i(item_ptr->bi_key.tval()) % 128];
         term_addstr(-1, color_code_for_item, item_name);
 
         // アイテム座標表示
-        const auto item_location = format("(X:%3d Y:%3d)", item->ix, item->iy);
+        const auto item_location = format("(X:%3d Y:%3d)", item_ptr->ix, item_ptr->iy);
         prt(item_location, term_y, wid - item_location.length() - 1);
 
         ++term_y;

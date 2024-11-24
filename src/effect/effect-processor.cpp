@@ -18,7 +18,6 @@
 #include "io/screen-util.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
@@ -28,6 +27,7 @@
 #include "spell-class/spells-mirror-master.h"
 #include "spell/range-calc.h"
 #include "system/angband-system.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
@@ -227,6 +227,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
             for (auto dist = 0; dist <= rad; dist++) {
                 for (auto y = by - dist; y <= by + dist; y++) {
                     for (auto x = bx - dist; x <= bx + dist; x++) {
+                        const Pos2D pos(y, x);
+                        const Pos2D pos_breath(by, bx);
                         if (!in_bounds2(player_ptr->current_floor_ptr, y, x)) {
                             continue;
                         }
@@ -247,7 +249,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                             }
                             break;
                         default:
-                            if (!projectable(player_ptr, by, bx, y, x)) {
+                            if (!projectable(player_ptr, pos_breath, pos)) {
                                 continue;
                             }
                             break;
@@ -303,7 +305,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
 
     if (flag & PROJECT_KILL) {
         see_s_msg = is_monster(src_idx) ? is_seen(player_ptr, &player_ptr->current_floor_ptr->m_list[src_idx])
-                                        : (is_player(src_idx) ? true : (player_can_see_bold(player_ptr, y1, x1) && projectable(player_ptr, player_ptr->y, player_ptr->x, y1, x1)));
+                                        : (is_player(src_idx) ? true : (player_can_see_bold(player_ptr, y1, x1) && projectable(player_ptr, player_ptr->get_position(), { y1, x1 })));
     }
 
     if (flag & (PROJECT_GRID)) {
@@ -367,27 +369,27 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
             const auto &grid = floor.get_grid(pos);
             if (grids <= 1) {
                 auto *m_ptr = &floor.m_list[grid.m_idx];
-                MonsterRaceInfo *ref_ptr = &m_ptr->get_monrace();
+                MonraceDefinition *ref_ptr = &m_ptr->get_monrace();
                 if ((flag & PROJECT_REFLECTABLE) && grid.m_idx && ref_ptr->misc_flags.has(MonsterMiscType::REFLECTING) && (!m_ptr->is_riding() || !(flag & PROJECT_PLAYER)) && (!src_idx || path_n > 1) && !one_in_(10)) {
 
-                    POSITION t_y, t_x;
+                    Pos2D pos_target(0, 0);
                     int max_attempts = 10;
                     do {
-                        t_y = y1 - 1 + randint1(3);
-                        t_x = x1 - 1 + randint1(3);
+                        pos_target.y = y1 - 1 + randint1(3);
+                        pos_target.x = x1 - 1 + randint1(3);
                         max_attempts--;
-                    } while (max_attempts && in_bounds2u(player_ptr->current_floor_ptr, t_y, t_x) && !projectable(player_ptr, pos.y, pos.x, t_y, t_x));
+                    } while (max_attempts && in_bounds2u(player_ptr->current_floor_ptr, pos_target.y, pos_target.x) && !projectable(player_ptr, pos, pos_target));
 
                     if (max_attempts < 1) {
-                        t_y = y1;
-                        t_x = x1;
+                        pos_target.y = y1;
+                        pos_target.x = x1;
                     }
 
                     if (is_seen(player_ptr, m_ptr)) {
                         sound(SOUND_REFLECT);
-                        if ((m_ptr->r_idx == MonsterRaceId::KENSHIROU) || (m_ptr->r_idx == MonsterRaceId::RAOU)) {
+                        if ((m_ptr->r_idx == MonraceId::KENSHIROU) || (m_ptr->r_idx == MonraceId::RAOU)) {
                             msg_print(_("「北斗神拳奥義・二指真空把！」", "The attack bounces!"));
-                        } else if (m_ptr->r_idx == MonsterRaceId::DIO) {
+                        } else if (m_ptr->r_idx == MonraceId::DIO) {
                             msg_print(_("ディオ・ブランドーは指一本で攻撃を弾き返した！", "The attack bounces!"));
                         } else {
                             msg_print(_("攻撃は跳ね返った！", "The attack bounces!"));
@@ -406,7 +408,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                         flag |= PROJECT_PLAYER;
                     }
 
-                    project(player_ptr, grid.m_idx, 0, t_y, t_x, dam, typ, flag);
+                    project(player_ptr, grid.m_idx, 0, pos_target.y, pos_target.x, dam, typ, flag);
                     continue;
                 }
             }

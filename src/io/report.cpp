@@ -272,7 +272,7 @@ bool report_score(PlayerType *player_ptr)
     personality_desc.append(_(ap_ptr->no ? "の" : "", " "));
 
     PlayerRealm pr(player_ptr);
-    auto realm1_name = PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST) ? get_element_title(player_ptr->element) : pr.realm1().get_name().data();
+    const auto &realm1_name = PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST) ? get_element_title(player_ptr->element) : pr.realm1().get_name().string();
     score_ss << format("name: %s\n", player_ptr->name)
              << format("version: %s\n", AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL).data())
              << format("score: %ld\n", calc_score(player_ptr))
@@ -287,7 +287,7 @@ bool report_score(PlayerType *player_ptr)
              << format("race: %s\n", rp_ptr->title.data())
              << format("class: %s\n", cp_ptr->title.data())
              << format("seikaku: %s\n", personality_desc.data())
-             << format("realm1: %s\n", realm1_name)
+             << format("realm1: %s\n", realm1_name.data())
              << format("realm2: %s\n", pr.realm2().get_name().data())
              << format("killer: %s\n", player_ptr->died_from.data())
              << "-----charcter dump-----\n";

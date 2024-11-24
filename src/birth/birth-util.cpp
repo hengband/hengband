@@ -2,9 +2,10 @@
 #include "cmd-io/cmd-gameoption.h"
 #include "core/show-file.h"
 #include "main/sound-of-music.h"
-#include "system/game-option-types.h"
+#include "system/enums/game-option-page.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include <string>
 
 /*!
  * @brief プレイヤー作成を中断して変愚蛮怒を終了する
@@ -19,7 +20,7 @@ void birth_quit(void)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param helpfile ファイル名
  */
-void show_help(PlayerType *player_ptr, concptr helpfile)
+void show_help(PlayerType *player_ptr, std::string_view helpfile)
 {
     screen_save();
     FileDisplayer(player_ptr->name).display(true, helpfile, 0, 0);
@@ -28,7 +29,7 @@ void show_help(PlayerType *player_ptr, concptr helpfile)
 
 void birth_help_option(PlayerType *player_ptr, char c, BirthKind bk)
 {
-    concptr help_file;
+    std::string help_file;
     switch (bk) {
     case BirthKind::RACE:
         help_file = _("jraceclas.txt#TheRaces", "raceclas.txt#TheRaces");
@@ -54,7 +55,7 @@ void birth_help_option(PlayerType *player_ptr, char c, BirthKind bk)
         show_help(player_ptr, help_file);
     } else if (c == '=') {
         screen_save();
-        do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
+        do_cmd_options_aux(player_ptr, GameOptionPage::BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
         screen_load();
     } else if (c != '2' && c != '4' && c != '6' && c != '8') {
         bell();

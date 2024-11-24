@@ -54,6 +54,9 @@ public:
     std::map<int, DisplaySymbol> symbol_configs; //!< 設定変更後の地形シンボル (色/文字).
 
     bool is_permanent_wall() const;
+    bool is_open() const;
+    bool is_closed_door() const;
+    bool is_trap() const;
 
     void reset_lighting(bool is_config = true);
 

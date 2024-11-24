@@ -40,7 +40,7 @@ bool enchant_item(PlayerType *player_ptr, PRICE cost, HIT_PROB to_hit, int to_da
 
     const PRICE total_cost = cost * o_ptr->number;
     if (player_ptr->au < total_cost) {
-        const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
+        const auto item_name = describe_flavor(player_ptr, *o_ptr, OD_NAME_ONLY);
         msg_format(_("%sを改良するだけのゴールドがありません！", "You do not have the gold to improve %s!"), item_name.data());
         return false;
     }
@@ -75,7 +75,7 @@ bool enchant_item(PlayerType *player_ptr, PRICE cost, HIT_PROB to_hit, int to_da
         return false;
     }
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_AND_ENCHANT);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, OD_NAME_AND_ENCHANT);
 #ifdef JP
     msg_format("＄%dで%sに改良しました。", total_cost, item_name.data());
 #else

@@ -18,7 +18,6 @@
 #include "mind/mind-numbers.h"
 #include "mind/mind-warrior.h"
 #include "monster-race/race-flags-resistance.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
@@ -44,6 +43,7 @@
 #include "status/body-improvement.h"
 #include "status/element-resistance.h"
 #include "status/temporary-resistance.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -103,7 +103,7 @@ bool kawarimi(PlayerType *player_ptr, bool success)
     teleport_player(player_ptr, 10 + randint1(90), TELEPORT_SPONTANEOUS);
     constexpr int sv_wooden_statue = 0;
     ItemEntity item({ ItemKindType::STATUE, sv_wooden_statue });
-    item.pval = enum2i(MonsterRaceId::NINJA);
+    item.pval = enum2i(MonraceId::NINJA);
     (void)drop_near(player_ptr, &item, -1, y, x);
 
     if (success) {

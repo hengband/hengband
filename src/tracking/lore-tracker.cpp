@@ -20,12 +20,12 @@ bool LoreTracker::is_tracking() const
     return MonraceList::is_valid(this->monrace_id);
 }
 
-bool LoreTracker::is_tracking(MonsterRaceId trackee) const
+bool LoreTracker::is_tracking(MonraceId trackee) const
 {
     return this->monrace_id == trackee;
 }
 
-MonsterRaceId LoreTracker::get_trackee() const
+MonraceId LoreTracker::get_trackee() const
 {
     return this->monrace_id;
 }
@@ -34,12 +34,12 @@ MonsterRaceId LoreTracker::get_trackee() const
  * @brief トラッキング中のモンスター種族定義を取得する
  * @return モンスター種族定義 (トラッキングしていなければ無効モンスター)
  */
-const MonsterRaceInfo &LoreTracker::get_tracking_monrace() const
+const MonraceDefinition &LoreTracker::get_tracking_monrace() const
 {
     return MonraceList::get_instance().get_monrace(this->monrace_id);
 }
 
-void LoreTracker::set_trackee(MonsterRaceId new_monrace_id)
+void LoreTracker::set_trackee(MonraceId new_monrace_id)
 {
     this->monrace_id = new_monrace_id;
     RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);

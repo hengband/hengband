@@ -69,54 +69,54 @@ void curse_equipment(PlayerType *player_ptr, PERCENTAGE chance, PERCENTAGE heavy
         return;
     }
 
-    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + randint0(12)];
-    if (!o_ptr->is_valid()) {
+    auto &item = player_ptr->inventory_list[INVEN_MAIN_HAND + randint0(12)];
+    if (!item.is_valid()) {
         return;
     }
 
-    const auto oflags = o_ptr->get_flags();
-    const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    const auto oflags = item.get_flags();
+    const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
     /* Extra, biased saving throw for blessed items */
     if (oflags.has(TR_BLESSED)) {
 #ifdef JP
         msg_format("祝福された%sは呪いを跳ね返した！", item_name.data());
 #else
-        msg_format("Your blessed %s resist%s cursing!", item_name.data(), ((o_ptr->number > 1) ? "" : "s"));
+        msg_format("Your blessed %s resist%s cursing!", item_name.data(), ((item.number > 1) ? "" : "s"));
 #endif
         /* Hmmm -- can we wear multiple items? If not, this is unnecessary */
         return;
     }
 
-    bool changed = false;
-    int curse_power = 0;
-    if ((randint1(100) <= heavy_chance) && (o_ptr->is_fixed_or_random_artifact() || o_ptr->is_ego())) {
-        if (o_ptr->curse_flags.has_not(CurseTraitType::HEAVY_CURSE)) {
+    auto changed = false;
+    auto curse_power = 0;
+    if ((randint1(100) <= heavy_chance) && (item.is_fixed_or_random_artifact() || item.is_ego())) {
+        if (item.curse_flags.has_not(CurseTraitType::HEAVY_CURSE)) {
             changed = true;
         }
-        o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
-        o_ptr->curse_flags.set(CurseTraitType::CURSED);
+        item.curse_flags.set(CurseTraitType::HEAVY_CURSE);
+        item.curse_flags.set(CurseTraitType::CURSED);
         curse_power++;
     } else {
-        if (!o_ptr->is_cursed()) {
+        if (!item.is_cursed()) {
             changed = true;
         }
-        o_ptr->curse_flags.set(CurseTraitType::CURSED);
+        item.curse_flags.set(CurseTraitType::CURSED);
     }
 
     if (heavy_chance >= 50) {
         curse_power++;
     }
 
-    auto new_curse = get_curse(curse_power, o_ptr);
-    if (o_ptr->curse_flags.has_not(new_curse)) {
+    auto new_curse = get_curse(curse_power, &item);
+    if (item.curse_flags.has_not(new_curse)) {
         changed = true;
-        o_ptr->curse_flags.set(new_curse);
+        item.curse_flags.set(new_curse);
     }
 
     if (changed) {
         msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding %s..."), item_name.data());
-        o_ptr->feeling = FEEL_NONE;
+        item.feeling = FEEL_NONE;
     }
 
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);

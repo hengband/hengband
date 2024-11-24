@@ -84,7 +84,7 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
     }
 
     prt(buf, 0, 0);
-    std::vector<MonsterRaceId> monrace_ids;
+    std::vector<MonraceId> monrace_ids;
     const auto &monraces = MonraceList::get_instance();
     for (const auto &[monrace_id, monrace] : monraces) {
         if (!cheat_know && !monrace.r_sights) {

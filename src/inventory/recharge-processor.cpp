@@ -20,20 +20,20 @@
  * If player has inscribed the object with "!!", let him know when it's recharged. -LM-
  * @param o_ptr 対象オブジェクトの構造体参照ポインタ
  */
-static void recharged_notice(PlayerType *player_ptr, ItemEntity *o_ptr)
+static void recharged_notice(PlayerType *player_ptr, const ItemEntity &item)
 {
-    if (!o_ptr->is_inscribed()) {
+    if (!item.is_inscribed()) {
         return;
     }
 
-    auto s = angband_strchr(o_ptr->inscription->data(), '!');
+    auto s = angband_strchr(item.inscription->data(), '!');
     while (s) {
         if (s[1] == '!') {
-            const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+            const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
             msg_format("%sは再充填された。", item_name.data());
 #else
-            if (o_ptr->number > 1) {
+            if (item.number > 1) {
                 msg_format("Your %s are recharged.", item_name.data());
             } else {
                 msg_format("Your %s is recharged.", item_name.data());
@@ -57,15 +57,15 @@ void recharge_magic_items(PlayerType *player_ptr)
     bool changed;
 
     for (changed = false, i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->is_valid()) {
+        auto &item = player_ptr->inventory_list[i];
+        if (!item.is_valid()) {
             continue;
         }
 
-        if (o_ptr->timeout > 0) {
-            o_ptr->timeout--;
-            if (!o_ptr->timeout) {
-                recharged_notice(player_ptr, o_ptr);
+        if (item.timeout > 0) {
+            item.timeout--;
+            if (!item.timeout) {
+                recharged_notice(player_ptr, item);
                 changed = true;
             }
         }
@@ -83,27 +83,27 @@ void recharge_magic_items(PlayerType *player_ptr)
      * one per turn. -LM-
      */
     for (changed = false, i = 0; i < INVEN_PACK; i++) {
-        auto *o_ptr = &player_ptr->inventory_list[i];
-        const auto &baseitem = o_ptr->get_baseitem();
-        if (!o_ptr->is_valid()) {
+        auto &item = player_ptr->inventory_list[i];
+        const auto &baseitem = item.get_baseitem();
+        if (!item.is_valid()) {
             continue;
         }
 
-        if ((o_ptr->bi_key.tval() == ItemKindType::ROD) && (o_ptr->timeout)) {
-            TIME_EFFECT temp = (o_ptr->timeout + (baseitem.pval - 1)) / baseitem.pval;
-            if (temp > o_ptr->number) {
-                temp = (TIME_EFFECT)o_ptr->number;
+        if ((item.bi_key.tval() == ItemKindType::ROD) && (item.timeout)) {
+            TIME_EFFECT temp = (item.timeout + (baseitem.pval - 1)) / baseitem.pval;
+            if (temp > item.number) {
+                temp = (TIME_EFFECT)item.number;
             }
 
-            o_ptr->timeout -= temp;
-            if (o_ptr->timeout < 0) {
-                o_ptr->timeout = 0;
+            item.timeout -= temp;
+            if (item.timeout < 0) {
+                item.timeout = 0;
             }
 
-            if (!(o_ptr->timeout)) {
-                recharged_notice(player_ptr, o_ptr);
+            if (!(item.timeout)) {
+                recharged_notice(player_ptr, item);
                 changed = true;
-            } else if (o_ptr->timeout % baseitem.pval) {
+            } else if (item.timeout % baseitem.pval) {
                 changed = true;
             }
         }

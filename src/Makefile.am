@@ -476,12 +476,12 @@ hengband_SOURCES = \
 	monster/monster-pain-describer.cpp monster/monster-pain-describer.h \
 	monster/monster-processor.cpp monster/monster-processor.h \
 	monster/monster-processor-util.cpp monster/monster-processor-util.h \
-	monster/monster-timed-effect-types.h \
-	monster/smart-learn-types.h \
+	monster/monster-timed-effects.cpp monster/monster-timed-effects.h \
 	monster/monster-status.cpp monster/monster-status.h \
 	monster/monster-status-setter.cpp monster/monster-status-setter.h \
 	monster/monster-update.cpp monster/monster-update.h \
 	monster/monster-util.cpp monster/monster-util.h \
+	monster/smart-learn-types.h \
 	\
 	monster-attack/insults-moans.cpp monster-attack/insults-moans.h \
 	monster-attack/monster-attack-describer.cpp monster-attack/monster-attack-describer.h \
@@ -524,7 +524,6 @@ hengband_SOURCES = \
 	monster-race/race-drop-flags.h \
 	monster-race/race-feature-flags.h \
 	monster-race/race-flags-resistance.h \
-	monster-race/race-indice-types.h \
 	monster-race/race-kind-flags.h \
 	monster-race/race-misc-flags.h \
 	monster-race/race-population-flags.h \
@@ -925,11 +924,10 @@ hengband_SOURCES = \
 	system/artifact-type-definition.cpp system/artifact-type-definition.h \
 	system/baseitem-info.cpp system/baseitem-info.h \
 	system/building-type-definition.cpp system/building-type-definition.h \
-	system/dungeon-data-definition.h \
+	system/dungeon-data-definition.cpp system/dungeon-data-definition.h \
 	system/dungeon-info.cpp system/dungeon-info.h \
 	system/floor-type-definition.cpp system/floor-type-definition.h \
 	system/grid-type-definition.cpp system/grid-type-definition.h \
-	system/game-option-types.h \
 	system/h-basic.h system/h-config.h \
 	system/h-system.h system/h-type.h \
 	system/inner-game-data.cpp system/inner-game-data.h \
@@ -942,6 +940,11 @@ hengband_SOURCES = \
 	system/system-variables.cpp system/system-variables.h \
 	system/terrain-type-definition.cpp system/terrain-type-definition.h \
 	system/gamevalue.h \
+	\
+	system/enums/game-option-page.h \
+	system/enums/grid-flow.h \
+	system/enums/monrace/monrace-id.h \
+	system/enums/grid-count-kind.h \
 	\
 	target/grid-selector.cpp target/grid-selector.h \
 	target/projection-path-calculator.cpp target/projection-path-calculator.h \
@@ -969,6 +972,7 @@ hengband_SOURCES = \
 	timed-effect/player-hallucination.cpp timed-effect/player-hallucination.h \
 	timed-effect/player-paralysis.cpp timed-effect/player-paralysis.h \
 	timed-effect/player-poison.cpp timed-effect/player-poison.h \
+	timed-effect/player-protection.cpp timed-effect/player-protection.h \
 	timed-effect/player-stun.cpp timed-effect/player-stun.h \
 	timed-effect/timed-effects.cpp timed-effect/timed-effects.h \
 	\
@@ -1021,7 +1025,7 @@ hengband_SOURCES = \
 	\
 	window/display-sub-windows.cpp window/display-sub-windows.h \
 	window/main-window-left-frame.cpp window/main-window-left-frame.h \
-	window/main-window-row-column.cpp window/main-window-row-column.h \
+	window/main-window-row-column.h \
 	window/main-window-stat-poster.cpp window/main-window-stat-poster.h \
 	window/main-window-util.cpp window/main-window-util.h \
 	window/main-window-equipments.cpp window/main-window-equipments.h \

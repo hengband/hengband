@@ -30,7 +30,7 @@
 #include "player/player-status-table.h"
 #include "player/player-status.h"
 #include "player/process-name.h"
-#include "system/game-option-types.h"
+#include "system/enums/game-option-page.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
@@ -46,16 +46,6 @@
 #include "view/display-util.h"
 #include "world/world.h"
 #include <sstream>
-
-/*!
- * オートローラーの内容を描画する間隔 /
- * How often the autoroller will update the display and pause
- * to check for user interuptions.
- * Bigger values will make the autoroller faster, but slower
- * system may have problems because the user can't stop the
- * autoroller for this number of rolls.
- */
-#define AUTOROLLER_STEP 54321L
 
 static void display_initial_birth_message(PlayerType *player_ptr)
 {
@@ -80,7 +70,7 @@ static void display_help_on_sex_select(PlayerType *player_ptr, char c)
         do_cmd_help(player_ptr);
     } else if (c == '=') {
         screen_save();
-        do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
+        do_cmd_options_aux(player_ptr, GameOptionPage::BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
         screen_load();
     } else if (c != '4' && c != '6') {
         bell();
@@ -273,7 +263,7 @@ static bool let_player_build_character(PlayerType *player_ptr)
 static void display_initial_options(PlayerType *player_ptr)
 {
     const auto expfact_mod = static_cast<int>(get_expfact(player_ptr)) - 100;
-    int16_t adj[A_MAX];
+    int16_t adj[A_MAX]{};
     for (int i = 0; i < A_MAX; i++) {
         adj[i] = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
     }
@@ -303,7 +293,7 @@ static void display_initial_options(PlayerType *player_ptr)
 
     clear_from(10);
     screen_save();
-    do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
+    do_cmd_options_aux(player_ptr, GameOptionPage::BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
     screen_load();
 }
 
@@ -399,7 +389,13 @@ static bool decide_body_spec(PlayerType *player_ptr, chara_limit_type chara_limi
 
 static bool display_auto_roller_count(PlayerType *player_ptr, const int col)
 {
-    if ((auto_round % AUTOROLLER_STEP) != 0) {
+    /*!
+     * @details ここで指定された回数だけロールする度にその時の結果を画面に表示する
+     * @todo この定数を定義した時代に比べて、CPUパワーが相当に上がっている.
+     * 表示部で足を引っ張っているので、タイマで数えて0.1秒/表示 くらいで良いと思われる.
+     */
+    constexpr auto roll_results_per_display = 54321;
+    if ((auto_round % roll_results_per_display) != 0) {
         return false;
     }
 

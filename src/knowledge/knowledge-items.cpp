@@ -105,7 +105,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         ItemEntity item(artifact.bi_key);
         item.fa_id = fa_id;
         item.ident |= IDENT_STORE;
-        const auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         fprintf(fff, template_basename, item_name.data());
     }
 

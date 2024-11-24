@@ -57,15 +57,11 @@ void init_other(PlayerType *player_ptr)
     macro_patterns.assign(MACRO_MAX, {});
     macro_actions.assign(MACRO_MAX, {});
     macro_buffers.assign(FILE_READ_BUFF_SIZE, {});
-    for (auto i = 0; option_info[i].o_desc; i++) {
-        int os = option_info[i].o_set;
-        int ob = option_info[i].o_bit;
-        if (option_info[i].o_var == nullptr) {
-            continue;
-        }
-
+    for (auto &option : option_info) {
+        int os = option.flag_position;
+        int ob = option.offset;
         g_option_masks[os] |= (1UL << ob);
-        if (option_info[i].o_norm) {
+        if (option.default_value) {
             set_bits(g_option_flags[os], 1U << ob);
         } else {
             reset_bits(g_option_flags[os], 1U << ob);
@@ -91,29 +87,8 @@ void init_other(PlayerType *player_ptr)
  */
 void init_monsters_alloc()
 {
-    std::vector<const MonsterRaceInfo *> elements;
-    for (const auto &[monrace_id, monrace] : monraces_info) {
-        if (monrace.is_valid()) {
-            elements.push_back(&monrace);
-        }
-    }
-
-    std::sort(elements.begin(), elements.end(),
-        [](const MonsterRaceInfo *r1_ptr, const MonsterRaceInfo *r2_ptr) {
-            return r1_ptr->level < r2_ptr->level;
-        });
-
-    alloc_race_table.clear();
-    for (const auto r_ptr : elements) {
-        if (r_ptr->rarity == 0) {
-            continue;
-        }
-
-        const auto index = static_cast<short>(r_ptr->idx);
-        const auto level = r_ptr->level;
-        const auto prob = static_cast<PROB>(100 / r_ptr->rarity);
-        alloc_race_table.push_back({ index, level, prob, prob });
-    }
+    auto &table = MonraceAllocationTable::get_instance();
+    table.initialize();
 }
 
 /*!

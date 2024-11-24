@@ -2,6 +2,7 @@
 
 #include "effect/attribute-types.h"
 #include "system/angband.h"
+#include <string_view>
 
 enum class ElementRealmType {
     FIRE = 1,
@@ -19,9 +20,9 @@ class PlayerType;
 class EffectMonster;
 struct rc_type;
 
-concptr get_element_title(int realm_idx);
+const std::string &get_element_title(int realm_idx);
 AttributeType get_element_type(int realm_idx, int n);
-concptr get_element_name(int realm_idx, int n);
+const std::string &get_element_name(int realm_idx, int n);
 void do_cmd_element(PlayerType *player_ptr);
 void do_cmd_element_browse(PlayerType *player_ptr);
 void display_element_spell_list(PlayerType *player_ptr, int y = 1, int x = 1);

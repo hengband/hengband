@@ -298,7 +298,7 @@ bool pulish_shield(PlayerType *player_ptr)
         return false;
     }
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
     auto is_pulish_successful = o_ptr->is_valid() && !o_ptr->is_fixed_or_random_artifact() && !o_ptr->is_ego();
     is_pulish_successful &= !o_ptr->is_cursed();
     is_pulish_successful &= (o_ptr->bi_key.sval() != SV_MIRROR_SHIELD);

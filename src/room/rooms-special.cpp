@@ -54,7 +54,7 @@ void place_inner_perm_glass(PlayerType *player_ptr, Grid &grid)
  * @brief タイプ15の部屋…ガラス部屋の生成 / Type 15 -- glass rooms
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
+bool build_type15(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     /* Pick a room size */
     const auto width = rand_range(9, 13);
@@ -131,9 +131,9 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
         const auto y = yval + 2 * ddy_ddd[dir1];
         const auto x = xval + 2 * ddx_ddd[dir1];
         place_secret_door(player_ptr, y, x, DOOR_GLASS_DOOR);
-        auto &grid = floor.get_grid({ y, x });
-        if (is_closed_door(player_ptr, grid.feat)) {
-            grid.mimic = feat_glass_wall;
+        const Pos2D pos(y, x);
+        if (floor.is_closed_door(pos)) {
+            floor.get_grid(pos).mimic = feat_glass_wall;
         }
 
         /* Place a potion */

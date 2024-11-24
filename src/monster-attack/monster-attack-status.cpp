@@ -7,12 +7,12 @@
 #include "monster-attack/monster-attack-status.h"
 #include "mind/mind-mirror-master.h"
 #include "monster-attack/monster-attack-player.h"
-#include "monster-race/race-indice-types.h"
 #include "player-base/player-race.h"
 #include "player/player-status-flags.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "status/experience.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -25,7 +25,7 @@ void process_blind_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr
         return;
     }
 
-    auto is_dio = monap_ptr->m_ptr->r_idx == MonsterRaceId::DIO;
+    auto is_dio = monap_ptr->m_ptr->r_idx == MonraceId::DIO;
     auto dio_msg = _("どうだッ！この血の目潰しはッ！", "How is it! This blood-blinding!");
     if (is_dio && PlayerRace(player_ptr).equals(PlayerRaceType::SKELETON)) {
         msg_print(dio_msg);

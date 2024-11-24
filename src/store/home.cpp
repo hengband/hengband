@@ -10,6 +10,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/object-sort.h"
+#include <algorithm>
 
 /*!
  * @brief 我が家にオブジェクトを加える /
@@ -34,10 +35,9 @@ int home_carry(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_nu
     }
 
     for (int slot = 0; slot < st_ptr->stock_num; slot++) {
-        ItemEntity *j_ptr;
-        j_ptr = &st_ptr->stock[slot];
-        if (object_similar(j_ptr, o_ptr)) {
-            object_absorb(j_ptr, o_ptr);
+        auto &item_store = st_ptr->stock[slot];
+        if (item_store->is_similar(*o_ptr)) {
+            item_store->absorb(*o_ptr);
             if (store_num != StoreSaleType::HOME) {
                 stack_force_notes = old_stack_force_notes;
                 stack_force_costs = old_stack_force_costs;
@@ -67,20 +67,16 @@ int home_carry(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_nu
         }
     }
 
-    const auto value = o_ptr->get_price();
-    int slot;
-    for (slot = 0; slot < st_ptr->stock_num; slot++) {
-        if (object_sort_comp(player_ptr, o_ptr, value, &st_ptr->stock[slot])) {
-            break;
-        }
-    }
+    const auto first = st_ptr->stock.begin();
+    const auto last = st_ptr->stock.begin() + st_ptr->stock_num;
+    const auto slot_it = std::find_if(first, last,
+        [&](const auto &item) { return object_sort_comp(player_ptr, *o_ptr, *item); });
+    const int slot = std::distance(first, slot_it);
 
-    for (int i = st_ptr->stock_num; i > slot; i--) {
-        st_ptr->stock[i] = st_ptr->stock[i - 1];
-    }
+    std::rotate(first + slot, last, last + 1);
 
     st_ptr->stock_num++;
-    st_ptr->stock[slot] = *o_ptr;
+    *st_ptr->stock[slot] = *o_ptr;
     chg_virtue(player_ptr, Virtue::SACRIFICE, -1);
     (void)combine_and_reorder_home(player_ptr, store_num);
     return slot;
@@ -92,39 +88,36 @@ static bool exe_combine_store_items(ItemEntity *o_ptr, ItemEntity *j_ptr, const 
         return false;
     }
 
-    object_absorb(j_ptr, o_ptr);
-    st_ptr->stock_num--;
-    int k;
-    for (k = i; k < st_ptr->stock_num; k++) {
-        st_ptr->stock[k] = st_ptr->stock[k + 1];
-    }
+    j_ptr->absorb(*o_ptr);
+    const auto begin = st_ptr->stock.begin();
+    std::rotate(begin + i, begin + i + 1, begin + st_ptr->stock_num);
 
-    (&st_ptr->stock[k])->wipe();
+    st_ptr->stock_num--;
+    st_ptr->stock[st_ptr->stock_num]->wipe();
     *combined = true;
     return true;
 }
 
 static void sweep_reorder_store_item(ItemEntity *o_ptr, const int i, bool *combined)
 {
-    for (int j = 0; j < i; j++) {
-        ItemEntity *j_ptr;
-        j_ptr = &st_ptr->stock[j];
-        if (!j_ptr->is_valid()) {
+    for (auto j = 0; j < i; j++) {
+        const auto &item = st_ptr->stock[j];
+        if (!item->is_valid()) {
             continue;
         }
 
-        int max_num = object_similar_part(j_ptr, o_ptr);
-        if (max_num == 0 || j_ptr->number >= max_num) {
+        const auto max_num = item->is_similar_part(*o_ptr);
+        if (max_num == 0 || item->number >= max_num) {
             continue;
         }
 
-        if (exe_combine_store_items(o_ptr, j_ptr, max_num, i, combined)) {
+        if (exe_combine_store_items(o_ptr, item.get(), max_num, i, combined)) {
             break;
         }
 
         ITEM_NUMBER old_num = o_ptr->number;
-        ITEM_NUMBER remain = j_ptr->number + o_ptr->number - max_num;
-        object_absorb(j_ptr, o_ptr);
+        ITEM_NUMBER remain = item->number + o_ptr->number - max_num;
+        item->absorb(*o_ptr);
         o_ptr->number = remain;
         const auto tval = o_ptr->bi_key.tval();
         if (tval == ItemKindType::ROD) {
@@ -139,38 +132,21 @@ static void sweep_reorder_store_item(ItemEntity *o_ptr, const int i, bool *combi
     }
 }
 
-static void exe_reorder_store_item(PlayerType *player_ptr, bool *flag)
+static bool exe_reorder_store_item(PlayerType *player_ptr)
 {
-    for (int i = 0; i < st_ptr->stock_num; i++) {
-        ItemEntity *o_ptr;
-        o_ptr = &st_ptr->stock[i];
-        if (!o_ptr->is_valid()) {
-            continue;
-        }
+    const auto comp = [player_ptr](const auto &item1, const auto &item2) {
+        return object_sort_comp(player_ptr, *item1, *item2);
+    };
 
-        const auto o_value = o_ptr->get_price();
-        int j;
-        for (j = 0; j < st_ptr->stock_num; j++) {
-            if (object_sort_comp(player_ptr, o_ptr, o_value, &st_ptr->stock[j])) {
-                break;
-            }
-        }
+    const auto first = st_ptr->stock.begin();
+    const auto last = st_ptr->stock.begin() + st_ptr->stock_num;
 
-        if (j >= i) {
-            continue;
-        }
-
-        *flag = true;
-        ItemEntity *j_ptr;
-        ItemEntity forge;
-        j_ptr = &forge;
-        j_ptr->copy_from(&st_ptr->stock[i]);
-        for (int k = i; k > j; k--) {
-            (&st_ptr->stock[k])->copy_from(&st_ptr->stock[k - 1]);
-        }
-
-        (&st_ptr->stock[j])->copy_from(j_ptr);
+    if (std::is_sorted(first, last, comp)) {
+        return false;
     }
+
+    std::stable_sort(first, last, comp);
+    return true;
 }
 
 /*!
@@ -181,33 +157,33 @@ static void exe_reorder_store_item(PlayerType *player_ptr, bool *flag)
  */
 bool combine_and_reorder_home(PlayerType *player_ptr, const StoreSaleType store_num)
 {
-    bool old_stack_force_notes = stack_force_notes;
-    bool old_stack_force_costs = stack_force_costs;
-    store_type *old_st_ptr = st_ptr;
+    auto old_stack_force_notes = stack_force_notes;
+    auto old_stack_force_costs = stack_force_costs;
+    auto *old_st_ptr = st_ptr;
     st_ptr = &towns_info[1].stores[store_num];
-    bool flag = false;
+    auto flag = false;
     if (store_num != StoreSaleType::HOME) {
         stack_force_notes = false;
         stack_force_costs = false;
     }
 
-    bool combined = true;
+    auto combined = true;
     while (combined) {
         combined = false;
-        for (int i = st_ptr->stock_num - 1; i > 0; i--) {
-            ItemEntity *o_ptr;
-            o_ptr = &st_ptr->stock[i];
-            if (!o_ptr->is_valid()) {
+        for (auto i = st_ptr->stock_num - 1; i > 0; i--) {
+            auto &item = st_ptr->stock[i];
+            if (!item->is_valid()) {
                 continue;
             }
 
-            sweep_reorder_store_item(o_ptr, i, &combined);
+            sweep_reorder_store_item(item.get(), i, &combined);
         }
 
         flag |= combined;
     }
 
-    exe_reorder_store_item(player_ptr, &flag);
+    flag |= exe_reorder_store_item(player_ptr);
+
     st_ptr = old_st_ptr;
     if (store_num != StoreSaleType::HOME) {
         stack_force_notes = old_stack_force_notes;

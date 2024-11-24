@@ -9,6 +9,7 @@
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-poison.h"
+#include "timed-effect/player-protection.h"
 #include "timed-effect/player-stun.h"
 
 class TimedEffects {
@@ -40,6 +41,8 @@ public:
     const PlayerDeceleration &deceleration() const;
     PlayerPoison &poison();
     const PlayerPoison &poison() const;
+    PlayerProtection &protection();
+    const PlayerProtection &protection() const;
 
 private:
     PlayerBlindness player_blindness{};
@@ -52,4 +55,5 @@ private:
     PlayerAcceleration player_acceleration{};
     PlayerDeceleration player_deceleration{};
     PlayerPoison player_poison{};
+    PlayerProtection player_protection{};
 };

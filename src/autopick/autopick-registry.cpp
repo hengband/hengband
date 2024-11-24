@@ -128,7 +128,7 @@ bool autopick_autoregister(PlayerType *player_ptr, const ItemEntity *o_ptr)
     }
 
     if ((o_ptr->is_known() && o_ptr->is_fixed_or_random_artifact()) || ((o_ptr->ident & IDENT_SENSE) && (o_ptr->feeling == FEEL_TERRIBLE || o_ptr->feeling == FEEL_SPECIAL))) {
-        const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+        const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
         msg_format(_("%sは破壊不能だ。", "You cannot auto-destroy %s."), item_name.data());
         return false;
     }

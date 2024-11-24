@@ -67,20 +67,12 @@ void player_wipe_without_name(PlayerType *player_ptr)
 
     ArtifactList::get_instance().reset_generated_flags();
     BaseitemList::get_instance().reset_identification_flags();
-    for (auto &[_, monrace] : monraces_info) {
+    for (auto &[_, monrace] : MonraceList::get_instance()) {
         if (!monrace.is_valid()) {
             continue;
         }
-        monrace.cur_num = 0;
-        monrace.max_num = MAX_MONSTER_NUM;
-        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
-            monrace.max_num = MAX_UNIQUE_NUM;
-        } else if (monrace.population_flags.has(MonsterPopulationType::NAZGUL)) {
-            monrace.max_num = MAX_NAZGUL_NUM;
-        } else if (monrace.population_flags.has(MonsterPopulationType::BUNBUN_STRIKER)) {
-            monrace.max_num = MAX_BUNBUN_NUM;
-        }
-
+        monrace.reset_current_numbers();
+        monrace.reset_max_number();
         monrace.r_pkills = 0;
         monrace.r_akills = 0;
     }

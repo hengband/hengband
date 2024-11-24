@@ -13,7 +13,6 @@
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-table.h"
 #include "monster-race/race-ability-flags.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "mspell/mspell-damage-calculator.h"
@@ -25,6 +24,7 @@
 #include "player/special-defense-types.h"
 #include "status/element-resistance.h"
 #include "system/dungeon-info.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -226,7 +226,7 @@ static void spell_damcalc(PlayerType *player_ptr, MonsterEntity *m_ptr, Attribut
         break;
 
     case AttributeType::CAUSE_4:
-        if ((100 + rlev / 2 <= player_ptr->skill_sav) && (m_ptr->r_idx != MonsterRaceId::KENSHIROU)) {
+        if ((100 + rlev / 2 <= player_ptr->skill_sav) && (m_ptr->r_idx != MonraceId::KENSHIROU)) {
             dam = 0;
             ignore_wraith_form = true;
         }
@@ -348,17 +348,18 @@ static int blow_damcalc(MonsterEntity *m_ptr, PlayerType *player_ptr, const Mons
  */
 bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
 {
-    POSITION mx, my;
-#define WARNING_AWARE_RANGE 12
+    const Pos2D pos(yy, xx);
+    constexpr auto warning_aware_range = 12;
     int dam_max = 0;
     static int old_damage = 0;
 
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &dungeon = floor.get_dungeon_definition();
-    for (mx = xx - WARNING_AWARE_RANGE; mx < xx + WARNING_AWARE_RANGE + 1; mx++) {
-        for (my = yy - WARNING_AWARE_RANGE; my < yy + WARNING_AWARE_RANGE + 1; my++) {
+    for (auto mx = xx - warning_aware_range; mx < xx + warning_aware_range + 1; mx++) {
+        for (auto my = yy - warning_aware_range; my < yy + warning_aware_range + 1; my++) {
+            const Pos2D pos_neighbor(my, mx);
             int dam_max0 = 0;
-            if (!in_bounds(&floor, my, mx) || (distance(my, mx, yy, xx) > WARNING_AWARE_RANGE)) {
+            if (!in_bounds(&floor, my, mx) || (distance(my, mx, yy, xx) > warning_aware_range)) {
                 continue;
             }
 
@@ -380,7 +381,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
             auto *r_ptr = &m_ptr->get_monrace();
 
             /* Monster spells (only powerful ones)*/
-            if (projectable(player_ptr, my, mx, yy, xx)) {
+            if (projectable(player_ptr, pos_neighbor, pos)) {
                 const auto flags = r_ptr->ability_flags;
 
                 if (dungeon.flags.has_not(DungeonFeatureType::NO_MAGIC)) {
@@ -526,7 +527,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
             auto *o_ptr = choose_warning_item(player_ptr);
             std::string item_name;
             if (o_ptr != nullptr) {
-                item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+                item_name = describe_flavor(player_ptr, *o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
             } else {
                 item_name = _("体", "body");
             }
@@ -540,8 +541,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
         old_damage = old_damage / 2;
     }
 
-    auto *g_ptr = &floor.grid_array[yy][xx];
-    bool is_warning = (!easy_disarm && is_trap(player_ptr, g_ptr->feat)) || (g_ptr->mimic && is_trap(player_ptr, g_ptr->feat));
+    auto is_warning = (!easy_disarm || floor.get_grid(pos).mimic) && floor.is_trap(pos);
     is_warning &= !one_in_(13);
     if (!is_warning) {
         return true;
@@ -550,7 +550,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
     auto *o_ptr = choose_warning_item(player_ptr);
     std::string item_name;
     if (o_ptr != nullptr) {
-        item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        item_name = describe_flavor(player_ptr, *o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     } else {
         item_name = _("体", "body");
     }

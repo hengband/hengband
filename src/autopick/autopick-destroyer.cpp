@@ -80,7 +80,7 @@ static bool is_opt_confirm_destroy(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     if (leave_worth) {
-        if (o_ptr->get_price() > 0) {
+        if (o_ptr->calc_price() > 0) {
             return false;
         }
     }
@@ -150,7 +150,7 @@ void auto_destroy_item(PlayerType *player_ptr, ItemEntity *o_ptr, int autopick_i
 
     disturb(player_ptr, false, false);
     if (!can_player_destroy_object(o_ptr)) {
-        const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+        const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
         msg_format(_("%sは破壊不能だ。", "You cannot auto-destroy %s."), item_name.data());
         return;
     }

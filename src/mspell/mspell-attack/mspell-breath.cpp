@@ -6,7 +6,6 @@
 #include "main/sound-of-music.h"
 #include "mind/drs-types.h"
 #include "monster-race/race-ability-flags.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-update.h"
 #include "mspell/mspell-checker.h"
@@ -14,6 +13,7 @@
 #include "mspell/mspell-data.h"
 #include "mspell/mspell-result.h"
 #include "mspell/mspell-util.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
@@ -26,17 +26,17 @@
  * @param GF_TYPE 魔法効果
  * @return 表示したらTRUE、しなかったらFALSE
  */
-static bool spell_RF4_BREATH_special_message(MonsterRaceId r_idx, AttributeType GF_TYPE, concptr m_name)
+static bool spell_RF4_BREATH_special_message(MonraceId r_idx, AttributeType GF_TYPE, concptr m_name)
 {
-    if (r_idx == MonsterRaceId::JAIAN && GF_TYPE == AttributeType::SOUND) {
+    if (r_idx == MonraceId::JAIAN && GF_TYPE == AttributeType::SOUND) {
         msg_format(_("%s^「ボォエ～～～～～～」", "%s^ sings, 'Booooeeeeee'"), m_name);
         return true;
     }
-    if (r_idx == MonsterRaceId::BOTEI && GF_TYPE == AttributeType::SHARDS) {
+    if (r_idx == MonraceId::BOTEI && GF_TYPE == AttributeType::SHARDS) {
         msg_format(_("%s^「ボ帝ビルカッター！！！」", "%s^ shouts, 'Boty-Build cutter!!!'"), m_name);
         return true;
     }
-    if (r_idx == MonsterRaceId::RAOU && (GF_TYPE == AttributeType::FORCE)) {
+    if (r_idx == MonraceId::RAOU && (GF_TYPE == AttributeType::FORCE)) {
         if (one_in_(2)) {
             msg_format(_("%s^「北斗剛掌波！！」", "%s^ says, 'Hokuto Goh-Sho-Ha!!'"), m_name);
         } else {

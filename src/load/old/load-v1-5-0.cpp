@@ -23,7 +23,6 @@
 #include "mind/mind-weaponsmith.h"
 #include "monster-floor/monster-move.h"
 #include "monster-race/race-flags-resistance.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
@@ -38,9 +37,11 @@
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info.h"
 #include "system/dungeon-info.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
+#include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -347,12 +348,12 @@ void rd_item_old(ItemEntity *o_ptr)
  */
 void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
-    m_ptr->r_idx = i2enum<MonsterRaceId>(rd_s16b());
+    m_ptr->r_idx = i2enum<MonraceId>(rd_s16b());
 
     if (h_older_than(1, 0, 12)) {
         m_ptr->ap_r_idx = m_ptr->r_idx;
     } else {
-        m_ptr->ap_r_idx = i2enum<MonsterRaceId>(rd_s16b());
+        m_ptr->ap_r_idx = i2enum<MonraceId>(rd_s16b());
     }
 
     if (h_older_than(1, 0, 14)) {
@@ -387,7 +388,7 @@ void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
         m_ptr->dealt_damage = rd_s32b();
     }
 
-    m_ptr->mtimed[MTIMED_CSLEEP] = rd_s16b();
+    m_ptr->mtimed[MonsterTimedEffect::SLEEP] = rd_s16b();
     m_ptr->mspeed = rd_byte();
 
     if (h_older_than(0, 4, 2)) {
@@ -401,16 +402,16 @@ void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
     }
 
     if (h_older_than(0, 0, 7)) {
-        m_ptr->mtimed[MTIMED_FAST] = 0;
-        m_ptr->mtimed[MTIMED_SLOW] = 0;
+        m_ptr->mtimed[MonsterTimedEffect::FAST] = 0;
+        m_ptr->mtimed[MonsterTimedEffect::SLOW] = 0;
     } else {
-        m_ptr->mtimed[MTIMED_FAST] = rd_byte();
-        m_ptr->mtimed[MTIMED_SLOW] = rd_byte();
+        m_ptr->mtimed[MonsterTimedEffect::FAST] = rd_byte();
+        m_ptr->mtimed[MonsterTimedEffect::SLOW] = rd_byte();
     }
 
-    m_ptr->mtimed[MTIMED_STUNNED] = rd_byte();
-    m_ptr->mtimed[MTIMED_CONFUSED] = rd_byte();
-    m_ptr->mtimed[MTIMED_MONFEAR] = rd_byte();
+    m_ptr->mtimed[MonsterTimedEffect::STUN] = rd_byte();
+    m_ptr->mtimed[MonsterTimedEffect::CONFUSION] = rd_byte();
+    m_ptr->mtimed[MonsterTimedEffect::FEAR] = rd_byte();
 
     if (h_older_than(0, 0, 10)) {
         m_ptr->reset_target();
@@ -422,7 +423,7 @@ void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
         m_ptr->target_x = rd_s16b();
     }
 
-    m_ptr->mtimed[MTIMED_INVULNER] = rd_byte();
+    m_ptr->mtimed[MonsterTimedEffect::INVULNERABILITY] = rd_byte();
 
     auto tmp32u = rd_u32b();
     migrate_bitflag_to_flaggroup(m_ptr->smart, tmp32u);
@@ -443,7 +444,7 @@ void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
 
     if (h_older_than(0, 2, 2)) {
         if (enum2i(m_ptr->r_idx) < 0) {
-            m_ptr->r_idx = i2enum<MonsterRaceId>(0 - enum2i(m_ptr->r_idx));
+            m_ptr->r_idx = i2enum<MonraceId>(0 - enum2i(m_ptr->r_idx));
             m_ptr->mflag2.set(MonsterConstantFlagType::KAGE);
         }
     } else {
@@ -454,7 +455,7 @@ void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
 
     if (h_older_than(1, 0, 12)) {
         if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {
-            m_ptr->ap_r_idx = MonsterRaceId::KAGE;
+            m_ptr->ap_r_idx = MonraceId::KAGE;
         }
     }
 
@@ -470,14 +471,14 @@ void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
     strip_bytes(1);
 }
 
-static void move_RF3_to_RFR(MonsterRaceInfo *r_ptr, BIT_FLAGS f3, const BIT_FLAGS rf3, const MonsterResistanceType rfr)
+static void move_RF3_to_RFR(MonraceDefinition *r_ptr, BIT_FLAGS f3, const BIT_FLAGS rf3, const MonsterResistanceType rfr)
 {
     if (f3 & rf3) {
         r_ptr->resistance_flags.set(rfr);
     }
 }
 
-static void move_RF4_BR_to_RFR(MonsterRaceInfo *r_ptr, BIT_FLAGS f4, const BIT_FLAGS rf4_br, const MonsterResistanceType rfr)
+static void move_RF4_BR_to_RFR(MonraceDefinition *r_ptr, BIT_FLAGS f4, const BIT_FLAGS rf4_br, const MonsterResistanceType rfr)
 {
     if (f4 & rf4_br) {
         r_ptr->resistance_flags.set(rfr);
@@ -490,7 +491,7 @@ static void move_RF4_BR_to_RFR(MonsterRaceInfo *r_ptr, BIT_FLAGS f4, const BIT_F
  * @param r_idx モンスター種族ID
  * @details 本来はr_idxからr_ptrを決定可能だが、互換性を優先するため元コードのままとする
  */
-void set_old_lore(MonsterRaceInfo *r_ptr, BIT_FLAGS f3, BIT_FLAGS f4, const MonsterRaceId r_idx)
+void set_old_lore(MonraceDefinition *r_ptr, BIT_FLAGS f3, BIT_FLAGS f4, const MonraceId r_idx)
 {
     r_ptr->r_resistance_flags.clear();
     move_RF3_to_RFR(r_ptr, f3, RF3_IM_ACID, MonsterResistanceType::IMMUNE_ACID);
@@ -520,7 +521,7 @@ void set_old_lore(MonsterRaceInfo *r_ptr, BIT_FLAGS f3, BIT_FLAGS f4, const Mons
         r_ptr->r_resistance_flags.set(MonsterResistanceType::NO_CONF);
     }
 
-    if (r_idx == MonsterRaceId::STORMBRINGER) {
+    if (r_idx == MonraceId::STORMBRINGER) {
         r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_CHAOS);
     }
 
@@ -750,7 +751,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
         monster_loader->rd_monster(m_ptr);
         auto *g_ptr = &floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
         g_ptr->m_idx = m_idx;
-        m_ptr->get_real_monrace().cur_num++;
+        m_ptr->get_real_monrace().increment_current_numbers();
     }
 
     auto &world = AngbandWorld::get_instance();

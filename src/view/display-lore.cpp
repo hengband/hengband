@@ -14,7 +14,7 @@
 #include "lore/monster-lore.h"
 #include "monster-attack/monster-attack-table.h"
 #include "monster-race/race-ability-flags.h"
-#include "monster-race/race-indice-types.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
@@ -28,21 +28,15 @@
 #include "world/world.h"
 
 /*!
- * 英語の複数系記述用マクロ / Pluralizer.  Args(count, singular, plural)
- */
-#define plural(c, s, p) (((c) == 1) ? (s) : (p))
-
-/*!
  * @brief モンスター情報のヘッダを記述する
- * Hack -- Display the "name" and "attr/chars" of a monster race
- * @param r_idx モンスターの種族ID
+ * @param monrace_id モンスターの種族ID
  */
-void roff_top(MonsterRaceId r_idx)
+void roff_top(MonraceId monrace_id)
 {
     term_erase(0, 0);
     term_gotoxy(0, 0);
 
-    const auto &monrace = monraces_info[r_idx];
+    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
 #ifdef JP
 #else
     if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
@@ -52,7 +46,7 @@ void roff_top(MonsterRaceId r_idx)
 
     if (AngbandWorld::get_instance().wizard || cheat_know) {
         term_addstr(-1, TERM_WHITE, "[");
-        term_addstr(-1, TERM_L_BLUE, format("%d", enum2i(r_idx)));
+        term_addstr(-1, TERM_L_BLUE, format("%d", enum2i(monrace_id)));
         term_addstr(-1, TERM_WHITE, "] ");
     }
 
@@ -73,7 +67,7 @@ void roff_top(MonsterRaceId r_idx)
  * @param r_idx モンスターの種族ID
  * @param mode 表示オプション
  */
-void screen_roff(PlayerType *player_ptr, MonsterRaceId r_idx, monster_lore_mode mode)
+void screen_roff(PlayerType *player_ptr, MonraceId r_idx, monster_lore_mode mode)
 {
     msg_erase();
     term_erase(0, 1);
@@ -112,7 +106,7 @@ void display_roff(PlayerType *player_ptr)
  * @param roff_func 出力処理を行う関数ポインタ
  * @todo ここのroff_funcの引数にFILE* を追加しないとspoiler_file をローカル関数化することができないと判明した、保留.
  */
-void output_monster_spoiler(MonsterRaceId r_idx, hook_c_roff_pf roff_func)
+void output_monster_spoiler(MonraceId r_idx, hook_c_roff_pf roff_func)
 {
     hook_c_roff = roff_func;
     PlayerType dummy;
@@ -122,43 +116,14 @@ void output_monster_spoiler(MonsterRaceId r_idx, hook_c_roff_pf roff_func)
     process_monster_lore(&dummy, r_idx, MONSTER_LORE_DEBUG);
 }
 
-static bool display_kill_unique(lore_type *lore_ptr)
-{
-    if (lore_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        return false;
-    }
-
-    bool dead = (lore_ptr->r_ptr->max_num == 0);
-    if (lore_ptr->r_ptr->r_deaths) {
-        hooked_roff(format(_("%s^はあなたの先祖を %d 人葬っている", "%s^ has slain %d of your ancestors"), Who::who(lore_ptr->msex).data(), lore_ptr->r_ptr->r_deaths));
-
-        if (dead) {
-            hooked_roff(
-                _(format("が、すでに仇討ちは果たしている！"), format(", but you have avenged %s!  ", plural(lore_ptr->r_ptr->r_deaths, "him", "them"))));
-        } else {
-            hooked_roff(
-                _(format("のに、まだ仇討ちを果たしていない。"), format(", who %s unavenged.  ", plural(lore_ptr->r_ptr->r_deaths, "remains", "remain"))));
-        }
-
-        hooked_roff("\n");
-    } else {
-        if (dead) {
-            hooked_roff(_("あなたはこの仇敵をすでに葬り去っている。", "You have slain this foe.  "));
-        } else {
-            hooked_roff(_("この仇敵はまだ生きている！", "This foe is still alive!  "));
-        }
-
-        hooked_roff("\n");
-    }
-
-    return true;
-}
-
 static void display_killed(lore_type *lore_ptr)
 {
-    hooked_roff(_(format("このモンスターはあなたの先祖を %d 人葬っている", lore_ptr->r_ptr->r_deaths),
-        format("%d of your ancestors %s been killed by this creature, ", lore_ptr->r_ptr->r_deaths, plural(lore_ptr->r_ptr->r_deaths, "has", "have"))));
-
+#ifdef JP
+    hooked_roff(format("このモンスターはあなたの先祖を %d 人葬っている", lore_ptr->r_ptr->r_deaths));
+#else
+    const auto present_perfect_tense = lore_ptr->r_ptr->r_deaths == 1 ? "has" : "have";
+    hooked_roff(format("%d of your ancestors %s been killed by this creature, ", lore_ptr->r_ptr->r_deaths, present_perfect_tense));
+#endif
     if (lore_ptr->r_ptr->r_pkills) {
         hooked_roff(format(_("が、あなたはこのモンスターを少なくとも %d 体は倒している。", "and you have exterminated at least %d of the creatures.  "),
             lore_ptr->r_ptr->r_pkills));
@@ -225,8 +190,13 @@ void display_kill_numbers(lore_type *lore_ptr)
         return;
     }
 
-    if (display_kill_unique(lore_ptr)) {
+    const auto kill_unique_description = lore_ptr->build_kill_unique_description();
+    if (!kill_unique_description) {
         return;
+    }
+
+    for (const auto &[text, color] : *kill_unique_description) {
+        hook_c_roff(color, text);
     }
 
     if (lore_ptr->r_ptr->r_deaths == 0) {
@@ -262,7 +232,7 @@ bool display_where_to_appear(lore_type *lore_ptr)
         lore_ptr->old = true;
     }
 
-    if (lore_ptr->r_idx == MonsterRaceId::CHAMELEON) {
+    if (lore_ptr->r_idx == MonraceId::CHAMELEON) {
         hooked_roff(_("、他のモンスターに化ける。", "and can take the shape of other monster."));
         return false;
     }
@@ -277,65 +247,10 @@ bool display_where_to_appear(lore_type *lore_ptr)
     return true;
 }
 
-// @todo モンスターの速度表記はmonster_typeのオブジェクトメソッドにした方がベター
 void display_monster_move(lore_type *lore_ptr)
 {
-#ifdef JP
-#else
-    hooked_roff("moves");
-#endif
-
-    display_random_move(lore_ptr);
-    if (lore_ptr->speed > STANDARD_SPEED) {
-        if (lore_ptr->speed > 139) {
-            hook_c_roff(TERM_RED, _("信じ難いほど", " incredibly"));
-        } else if (lore_ptr->speed > 134) {
-            hook_c_roff(TERM_ORANGE, _("猛烈に", " extremely"));
-        } else if (lore_ptr->speed > 129) {
-            hook_c_roff(TERM_ORANGE, _("非常に", " very"));
-        } else if (lore_ptr->speed > 124) {
-            hook_c_roff(TERM_UMBER, _("かなり", " fairly"));
-        } else if (lore_ptr->speed < 120) {
-            hook_c_roff(TERM_L_UMBER, _("やや", " somewhat"));
-        }
-        hook_c_roff(TERM_L_RED, _("素早く", " quickly"));
-    } else if (lore_ptr->speed < STANDARD_SPEED) {
-        if (lore_ptr->speed < 90) {
-            hook_c_roff(TERM_L_GREEN, _("信じ難いほど", " incredibly"));
-        } else if (lore_ptr->speed < 95) {
-            hook_c_roff(TERM_BLUE, _("非常に", " very"));
-        } else if (lore_ptr->speed < 100) {
-            hook_c_roff(TERM_BLUE, _("かなり", " fairly"));
-        } else if (lore_ptr->speed > 104) {
-            hook_c_roff(TERM_GREEN, _("やや", " somewhat"));
-        }
-        hook_c_roff(TERM_L_BLUE, _("ゆっくりと", " slowly"));
-    } else {
-        hooked_roff(_("普通の速さで", " at normal speed"));
-    }
-
-#ifdef JP
-    hooked_roff("動いている");
-#endif
-}
-
-void display_random_move(lore_type *lore_ptr)
-{
-    if (lore_ptr->behavior_flags.has_none_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 })) {
-        return;
-    }
-
-    if (lore_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && lore_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25)) {
-        hooked_roff(_("かなり", " extremely"));
-    } else if (lore_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50)) {
-        hooked_roff(_("幾分", " somewhat"));
-    } else if (lore_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25)) {
-        hooked_roff(_("少々", " a bit"));
-    }
-
-    hooked_roff(_("不規則に", " erratically"));
-    if (lore_ptr->speed != STANDARD_SPEED) {
-        hooked_roff(_("、かつ", ", and"));
+    for (const auto &[text, color] : lore_ptr->build_speed_description()) {
+        hook_c_roff(color, text);
     }
 }
 
@@ -601,7 +516,7 @@ void display_monster_launching(PlayerType *player_ptr, lore_type *lore_ptr)
     }
 
     std::string msg;
-    if (know_details(lore_ptr->r_idx) || lore_ptr->know_everything) {
+    if (lore_ptr->is_details_known() || lore_ptr->know_everything) {
         msg = format(_("威力 %s の射撃をする", "fire an arrow (Power:%s)"), lore_ptr->r_ptr->shoot_damage_dice.to_string().data());
     } else {
         msg = _("射撃をする", "fire an arrow");
@@ -650,7 +565,7 @@ void display_monster_guardian(lore_type *lore_ptr)
     bool is_kingpin = lore_ptr->misc_flags.has(MonsterMiscType::QUESTOR);
     is_kingpin &= lore_ptr->r_ptr->r_sights > 0;
     is_kingpin &= lore_ptr->r_ptr->max_num > 0;
-    is_kingpin &= (lore_ptr->r_idx == MonsterRaceId::OBERON) || (lore_ptr->r_idx == MonsterRaceId::SERPENT);
+    is_kingpin &= (lore_ptr->r_idx == MonraceId::OBERON) || (lore_ptr->r_idx == MonraceId::SERPENT);
     if (is_kingpin) {
         hook_c_roff(TERM_VIOLET, _("あなたはこのモンスターを殺したいという強い欲望を感じている...", "You feel an intense desire to kill this monster...  "));
     } else if (lore_ptr->misc_flags.has(MonsterMiscType::GUARDIAN)) {

@@ -21,6 +21,35 @@ bool TerrainType::is_permanent_wall() const
 }
 
 /*!
+ * @brief ドアやカーテンが開いているかを調べる
+ * @return 開いているか否か
+ * @details 上流でダンジョン側の判定と併せて判定すること
+ */
+bool TerrainType::is_open() const
+{
+    return this->flags.has(TerrainCharacteristics::CLOSE);
+}
+
+/*!
+ * @brief 閉じたドアであるかを調べる
+ * @return 閉じたドアか否か
+ */
+bool TerrainType::is_closed_door() const
+{
+    return (this->flags.has(TerrainCharacteristics::OPEN) || this->flags.has(TerrainCharacteristics::BASH)) &&
+           this->flags.has_not(TerrainCharacteristics::MOVE);
+}
+
+/*!
+ * @brief 罠持ちの地形であるかを調べる
+ * @return 罠持ちか否か
+ * @todo 発見済の罠はtrueになるが、未発見の罠でどうなるかは要確認
+ */
+bool TerrainType::is_trap() const
+{
+    return this->flags.has(TerrainCharacteristics::TRAP);
+}
+/*!
  * @brief 地形のライティング状況をリセットする
  * @param is_config 設定値ならばtrue、定義値ならばfalse (定義値が入るのは初期化時のみ)
  */

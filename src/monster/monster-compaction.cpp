@@ -6,7 +6,6 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
-#include "monster/monster-status.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -29,19 +28,17 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
         return;
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    MonsterEntity *m_ptr;
-    m_ptr = &floor_ptr->m_list[i1];
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monster = floor.m_list[i1];
 
-    POSITION y = m_ptr->fy;
-    POSITION x = m_ptr->fx;
-    Grid *g_ptr;
-    g_ptr = &floor_ptr->grid_array[y][x];
-    g_ptr->m_idx = i2;
+    const auto y = monster.fy;
+    const auto x = monster.fx;
+    auto &grid = floor.grid_array[y][x];
+    grid.m_idx = i2;
 
-    for (const auto this_o_idx : m_ptr->hold_o_idx_list) {
+    for (const auto this_o_idx : monster.hold_o_idx_list) {
         ItemEntity *o_ptr;
-        o_ptr = &floor_ptr->o_list[this_o_idx];
+        o_ptr = &floor.o_list[this_o_idx];
         o_ptr->held_m_idx = i2;
     }
 
@@ -56,7 +53,7 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
         player_ptr->riding_t_m_idx = i2;
     }
 
-    if (m_ptr->is_riding()) { // player_ptr->riding == i1 のままの方がいい？
+    if (monster.is_riding()) { // player_ptr->riding == i1 のままの方がいい？
         player_ptr->riding = i2;
     }
 
@@ -64,9 +61,9 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
         health_track(player_ptr, i2);
     }
 
-    if (m_ptr->is_pet()) {
-        for (int i = 1; i < floor_ptr->m_max; i++) {
-            MonsterEntity *m2_ptr = &floor_ptr->m_list[i];
+    if (monster.is_pet()) {
+        for (int i = 1; i < floor.m_max; i++) {
+            MonsterEntity *m2_ptr = &floor.m_list[i];
 
             if (m2_ptr->parent_m_idx == i1) {
                 m2_ptr->parent_m_idx = i2;
@@ -74,13 +71,13 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
         }
     }
 
-    floor_ptr->m_list[i2] = floor_ptr->m_list[i1];
-    floor_ptr->m_list[i1] = {};
+    floor.m_list[i2] = floor.m_list[i1];
+    floor.m_list[i1] = {};
 
-    for (int i = 0; i < MAX_MTIMED; i++) {
-        int mproc_idx = get_mproc_idx(floor_ptr, i1, i);
-        if (mproc_idx >= 0) {
-            floor_ptr->mproc_list[i][mproc_idx] = i2;
+    for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
+        const auto index = floor.get_mproc_index(i1, mte);
+        if (index >= 0) {
+            floor.mproc_list[mte][*index] = i2;
         }
     }
 }

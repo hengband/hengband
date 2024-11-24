@@ -6,7 +6,6 @@
  */
 
 #include "floor/floor-object.h"
-#include "artifact/fixed-art-generator.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -44,8 +43,6 @@
 #include "world/world-object.h"
 #include "world/world.h"
 
-#define MAX_GOLD 18 /* Number of "gold" entries */
-
 /*!
  * @brief オブジェクト生成テーブルに生成制約を加える /
  * Apply a "object restriction function" to the "object allocation table"
@@ -70,31 +67,30 @@ static errr get_obj_index_prep(void)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr デバッグ出力するオブジェクトの構造体参照ポインタ
  */
-static void object_mention(PlayerType *player_ptr, ItemEntity *o_ptr)
+static void object_mention(PlayerType *player_ptr, ItemEntity &item)
 {
-    object_aware(player_ptr, o_ptr);
-    o_ptr->mark_as_known();
-
-    o_ptr->ident |= (IDENT_FULL_KNOWN);
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    object_aware(player_ptr, &item);
+    item.mark_as_known();
+    item.ident |= (IDENT_FULL_KNOWN);
+    const auto item_name = describe_flavor(player_ptr, item, 0);
     msg_format_wizard(player_ptr, CHEAT_OBJECT, _("%sを生成しました。", "%s was generated."), item_name.data());
 }
 
-static int get_base_floor(FloorType *floor_ptr, BIT_FLAGS mode, std::optional<int> rq_mon_level)
+static int get_base_floor(const FloorType &floor, BIT_FLAGS mode, std::optional<int> rq_mon_level)
 {
     if (any_bits(mode, AM_GREAT)) {
         if (rq_mon_level) {
             return *rq_mon_level + 10 + randint1(10);
         }
 
-        return floor_ptr->object_level + 15;
+        return floor.object_level + 15;
     }
 
     if (any_bits(mode, AM_GOOD)) {
-        return floor_ptr->object_level + 10;
+        return floor.object_level + 10;
     }
 
-    return floor_ptr->object_level;
+    return floor.object_level;
 }
 
 static void set_ammo_quantity(ItemEntity *j_ptr)
@@ -117,66 +113,45 @@ static void set_ammo_quantity(ItemEntity *j_ptr)
  */
 bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, std::optional<int> rq_mon_level)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto prob = any_bits(mode, AM_GOOD) ? 10 : 1000;
-    auto base = get_base_floor(floor_ptr, mode, rq_mon_level);
-    if (!one_in_(prob) || !make_artifact_special(player_ptr, j_ptr)) {
-        if (any_bits(mode, AM_GOOD) && !get_obj_index_hook) {
-            get_obj_index_hook = kind_is_good;
+    const auto apply = [player_ptr, j_ptr, mode] {
+        ItemMagicApplier(player_ptr, j_ptr, player_ptr->current_floor_ptr->object_level, mode).execute();
+        set_ammo_quantity(j_ptr);
+        if (cheat_peek) {
+            object_mention(player_ptr, *j_ptr);
         }
-
-        if (get_obj_index_hook) {
-            get_obj_index_prep();
-        }
-
-        auto bi_id = get_obj_index(floor_ptr, base, mode);
-        if (get_obj_index_hook) {
-            get_obj_index_hook = nullptr;
-            get_obj_index_prep();
-        }
-
-        if (bi_id == 0) {
-            return false;
-        }
-
-        j_ptr->generate(bi_id);
-    }
-
-    ItemMagicApplier(player_ptr, j_ptr, floor_ptr->object_level, mode).execute();
-    set_ammo_quantity(j_ptr);
-    if (cheat_peek) {
-        object_mention(player_ptr, j_ptr);
-    }
-
-    return true;
-}
-
-/*!
- * @brief 生成階に応じた財宝オブジェクトの生成を行う。
- * @param floor 現在フロアへの参照
- * @param j_ptr 生成結果を収めたいアイテムの参照ポインタ
- * @return 生成に成功したらTRUEを返す。
- */
-bool make_gold(PlayerType *player_ptr, ItemEntity *j_ptr)
-{
+    };
     const auto &floor = *player_ptr->current_floor_ptr;
-    auto i = ((randint1(floor.object_level + 2) + 2) / 2) - 1;
-    if (one_in_(CHANCE_BASEITEM_LEVEL_BOOST)) {
-        i += randint1(floor.object_level + 1);
+    const auto prob = any_bits(mode, AM_GOOD) ? 10 : 1000;
+    const auto base = get_base_floor(floor, mode, rq_mon_level);
+    if (one_in_(prob)) {
+        const auto fa_opt = floor.try_make_instant_artifact();
+        if (fa_opt) {
+            *j_ptr = *fa_opt;
+            apply();
+            return true;
+        }
     }
 
-    if (coin_type) {
-        i = coin_type;
+    if (any_bits(mode, AM_GOOD) && !get_obj_index_hook) {
+        get_obj_index_hook = kind_is_good;
     }
 
-    if (i >= MAX_GOLD) {
-        i = MAX_GOLD - 1;
+    if (get_obj_index_hook) {
+        get_obj_index_prep();
     }
 
-    j_ptr->generate(OBJ_GOLD_LIST + i);
-    const auto &baseitems = BaseitemList::get_instance();
-    const auto base = baseitems.get_baseitem(OBJ_GOLD_LIST + i).cost;
-    j_ptr->pval = (base + (8L * randint1(base)) + randint1(8));
+    const auto bi_id = get_obj_index(&floor, base, mode);
+    if (get_obj_index_hook) {
+        get_obj_index_hook = nullptr;
+        get_obj_index_prep();
+    }
+
+    if (bi_id == 0) {
+        return false;
+    }
+
+    j_ptr->generate(bi_id);
+    apply();
     return true;
 }
 
@@ -354,7 +329,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
     bool plural = (j_ptr->number != 1);
 #endif
     const auto &world = AngbandWorld::get_instance();
-    const auto item_name = describe_flavor(player_ptr, j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    const auto item_name = describe_flavor(player_ptr, *j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (!j_ptr->is_fixed_or_random_artifact() && evaluate_percent(chance)) {
 #ifdef JP
         msg_format("%sは消えた。", item_name.data());
@@ -384,10 +359,11 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
 
             ty = y + dy;
             tx = x + dx;
+            const Pos2D pos_target(ty, tx);
             if (!in_bounds(floor_ptr, ty, tx)) {
                 continue;
             }
-            if (!projectable(player_ptr, y, x, ty, tx)) {
+            if (!projectable(player_ptr, { y, x }, pos_target)) {
                 continue;
             }
 
@@ -398,9 +374,8 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
 
             k = 0;
             for (const auto this_o_idx : g_ptr->o_idx_list) {
-                ItemEntity *o_ptr;
-                o_ptr = &floor_ptr->o_list[this_o_idx];
-                if (object_similar(o_ptr, j_ptr)) {
+                const auto &item = floor_ptr->o_list[this_o_idx];
+                if (item.is_similar(*j_ptr)) {
                     comb = true;
                 }
 
@@ -519,10 +494,9 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
 
     g_ptr = &floor_ptr->grid_array[by][bx];
     for (const auto this_o_idx : g_ptr->o_idx_list) {
-        ItemEntity *o_ptr;
-        o_ptr = &floor_ptr->o_list[this_o_idx];
-        if (object_similar(o_ptr, j_ptr)) {
-            object_absorb(o_ptr, j_ptr);
+        auto &item = floor_ptr->o_list[this_o_idx];
+        if (item.is_similar(*j_ptr)) {
+            item.absorb(*j_ptr);
             done = true;
             break;
         }
@@ -618,10 +592,10 @@ void floor_item_charges(FloorType *floor_ptr, INVENTORY_IDX i_idx)
  */
 void floor_item_describe(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 {
-    auto *o_ptr = &player_ptr->current_floor_ptr->o_list[i_idx];
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto &item = player_ptr->current_floor_ptr->o_list[i_idx];
+    const auto item_name = describe_flavor(player_ptr, item, 0);
 #ifdef JP
-    if (o_ptr->number <= 0) {
+    if (item.number <= 0) {
         msg_format("床上には、もう%sはない。", item_name.data());
     } else {
         msg_format("床上には、まだ %sがある。", item_name.data());

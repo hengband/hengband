@@ -4,7 +4,7 @@
 #include "system/angband.h"
 #include <string>
 
-class MonsterRaceInfo;
+class MonraceDefinition;
 class MonsterEntity;
 class PlayerType;
 bool project_all_los(PlayerType *player_ptr, AttributeType typ, int dam);
@@ -31,5 +31,5 @@ bool banish_monsters(PlayerType *player_ptr, int dist);
 bool turn_evil(PlayerType *player_ptr, int dam);
 bool turn_monsters(PlayerType *player_ptr, int dam);
 bool deathray_monsters(PlayerType *player_ptr);
-std::string probed_monster_info(PlayerType *player_ptr, MonsterEntity *m_ptr, MonsterRaceInfo *r_ptr);
+std::string probed_monster_info(PlayerType *player_ptr, MonsterEntity *m_ptr, MonraceDefinition *r_ptr);
 bool probing(PlayerType *player_ptr);

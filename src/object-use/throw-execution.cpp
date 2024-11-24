@@ -107,7 +107,7 @@ void ObjectThrowEntity::calc_throw_range()
     torch_flags(this->q_ptr, this->obj_flags);
     distribute_charges(this->o_ptr, this->q_ptr, 1);
     this->q_ptr->number = 1;
-    this->o_name = describe_flavor(this->player_ptr, this->q_ptr, OD_OMIT_PREFIX);
+    this->o_name = describe_flavor(this->player_ptr, *this->q_ptr, OD_OMIT_PREFIX);
     if (this->player_ptr->mighty_throw) {
         this->mult += 3;
     }
@@ -231,7 +231,7 @@ void ObjectThrowEntity::display_figurine_throw()
     }
 
     this->corruption_possibility = 100;
-    auto figure_r_idx = i2enum<MonsterRaceId>(this->q_ptr->pval);
+    auto figure_r_idx = i2enum<MonraceId>(this->q_ptr->pval);
     if (!(summon_named_creature(this->player_ptr, 0, this->y, this->x, figure_r_idx, !(this->q_ptr->is_cursed()) ? PM_FORCE_PET : PM_NONE))) {
         msg_print(_("人形は捻じ曲がり砕け散ってしまった！", "The Figurine writhes and then shatters."));
         return;
@@ -290,7 +290,7 @@ void ObjectThrowEntity::check_boomerang_throw()
         this->back_chance += 100;
     }
 
-    this->o2_name = describe_flavor(this->player_ptr, this->q_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
+    this->o2_name = describe_flavor(this->player_ptr, *this->q_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
     this->process_boomerang_throw();
 }
 

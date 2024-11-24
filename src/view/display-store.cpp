@@ -41,8 +41,7 @@ void store_prt_gold(PlayerType *player_ptr)
  */
 void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
 {
-    ItemEntity *o_ptr;
-    o_ptr = &st_ptr->stock[pos];
+    const auto &item = st_ptr->stock[pos];
     int i = (pos % store_bottom);
 
     /* Label it, clear the line --(-- */
@@ -50,7 +49,7 @@ void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
 
     int cur_col = 3;
     if (show_item_graph) {
-        term_queue_bigchar(cur_col, i + 6, { o_ptr->get_symbol(), {} });
+        term_queue_bigchar(cur_col, i + 6, { item->get_symbol(), {} });
         if (use_bigtile) {
             cur_col++;
         }
@@ -65,11 +64,11 @@ void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
             maxwid -= 10;
         }
 
-        const auto item_name = describe_flavor(player_ptr, o_ptr, 0, maxwid);
-        c_put_str(tval_to_attr[enum2i(o_ptr->bi_key.tval())], item_name, i + 6, cur_col);
+        const auto item_name = describe_flavor(player_ptr, *item, 0, maxwid);
+        c_put_str(tval_to_attr[enum2i(item->bi_key.tval())], item_name, i + 6, cur_col);
 
         if (show_weights) {
-            WEIGHT wgt = o_ptr->weight;
+            const auto wgt = item->weight;
             put_str(format(_("%3d.%1d kg", "%3d.%d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10)), i + 6, _(67, 68));
         }
 
@@ -81,15 +80,15 @@ void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
         maxwid -= 7;
     }
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0, maxwid);
-    c_put_str(tval_to_attr[enum2i(o_ptr->bi_key.tval())], item_name, i + 6, cur_col);
+    const auto item_name = describe_flavor(player_ptr, *item, 0, maxwid);
+    c_put_str(tval_to_attr[enum2i(item->bi_key.tval())], item_name, i + 6, cur_col);
 
     if (show_weights) {
-        int wgt = o_ptr->weight;
+        const auto wgt = item->weight;
         put_str(format("%3d.%1d", _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10)), i + 6, _(60, 61));
     }
 
-    const auto price = price_item(player_ptr, o_ptr, ot_ptr->inflate, false, store_num);
+    const auto price = price_item(player_ptr, item.get(), ot_ptr->inflate, false, store_num);
     put_str(format("%9ld  ", (long)price), i + 6, 68);
 }
 

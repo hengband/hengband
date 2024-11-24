@@ -134,7 +134,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                 return "";
             }
 
-            const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
+            const auto item_name = describe_flavor(player_ptr, *o_ptr, OD_NAME_ONLY);
             if (!input_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really?"), item_name.data()))) {
                 return "";
             }
@@ -393,7 +393,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
             }
 
             o_ptr = &player_ptr->inventory_list[i_idx];
-            const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
+            const auto item_name = describe_flavor(player_ptr, *o_ptr, OD_NAME_ONLY);
             if (!input_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really?"), item_name.data()))) {
                 return "";
             }

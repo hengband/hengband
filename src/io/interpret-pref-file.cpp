@@ -14,7 +14,7 @@
 #include "io/input-key-requester.h"
 #include "io/tokenizer.h"
 #include "system/baseitem-info.h"
-#include "system/game-option-types.h"
+#include "system/enums/game-option-page.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
@@ -22,8 +22,6 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
-#define MAX_MACRO_CHARS 16128 // 1つのマクロキー押下で実行可能なコマンド最大数 (エスケープシーケンス含む).
 
 std::optional<std::string> histpref_buf;
 
@@ -54,11 +52,12 @@ static bool interpret_r_token(char *buf)
     const auto i = std::stoi(zz[0], nullptr, 0);
     const auto n1 = static_cast<uint8_t>(std::stoi(zz[1], nullptr, 0));
     const auto n2 = static_cast<char>(std::stoi(zz[2], nullptr, 0));
-    if (i >= static_cast<int>(monraces_info.size())) {
+    auto &monraces = MonraceList::get_instance();
+    if (i >= std::ssize(monraces)) {
         return false;
     }
 
-    auto &monrace = monraces_info[i2enum<MonsterRaceId>(i)];
+    auto &monrace = monraces.get_monrace(i2enum<MonraceId>(i));
     /* Allow TERM_DARK text */
     if (n1 || (!(n2 & 0x80) && n2)) {
         monrace.symbol_config.color = n1;
@@ -337,18 +336,14 @@ static bool interpret_v_token(char *buf)
 static void interpret_xy_token(PlayerType *player_ptr, char *buf)
 {
     const auto &world = AngbandWorld::get_instance();
-    for (int i = 0; option_info[i].o_desc; i++) {
-        bool is_option = option_info[i].o_var != nullptr;
-        is_option &= option_info[i].o_text != nullptr;
-        is_option &= streq(option_info[i].o_text, buf + 2);
-        if (!is_option) {
+    for (auto &option : option_info) {
+        if (option.text != buf + 2) {
             continue;
         }
 
-        int os = option_info[i].o_set;
-        int ob = option_info[i].o_bit;
-
-        if ((player_ptr->playing || world.character_xtra) && (OPT_PAGE_BIRTH == option_info[i].o_page) && !world.wizard) {
+        int os = option.flag_position;
+        int ob = option.offset;
+        if ((player_ptr->playing || world.character_xtra) && (GameOptionPage::BIRTH == option.page) && !world.wizard) {
             msg_format(_("初期オプションは変更できません! '%s'", "Birth options can not be changed! '%s'"), buf);
             msg_print(nullptr);
             return;
@@ -356,12 +351,12 @@ static void interpret_xy_token(PlayerType *player_ptr, char *buf)
 
         if (buf[0] == 'X') {
             g_option_flags[os] &= ~(1UL << ob);
-            (*option_info[i].o_var) = false;
+            *option.value = false;
             return;
         }
 
         g_option_flags[os] |= (1UL << ob);
-        (*option_info[i].o_var) = true;
+        *option.value = true;
         return;
     }
 
@@ -448,7 +443,9 @@ static bool decide_template_modifier(int tok, char **zz)
  */
 static bool interpret_macro_keycodes(int tok, char **zz)
 {
-    char buf_aux[MAX_MACRO_CHARS]{};
+    //!< @details 1つのマクロキー押下で実行可能なコマンド最大数 (エスケープシーケンス含む).
+    constexpr auto max_macro_chars = 16128;
+    char buf_aux[max_macro_chars]{};
     if (max_macrotrigger >= MAX_MACRO_TRIG) {
         msg_print(_("マクロトリガーの設定が多すぎます!", "Too many macro triggers!"));
         return false;

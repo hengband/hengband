@@ -3,7 +3,6 @@
 #include "effect/attribute-types.h"
 #include "mind/mind-samurai.h"
 #include "monster-race/race-flags-resistance.h"
-#include "monster-race/race-indice-types.h"
 #include "monster-race/race-resistance-mask.h"
 #include "monster/monster-info.h"
 #include "object-enchant/tr-types.h"
@@ -13,6 +12,7 @@
 #include "realm/realm-hex-numbers.h"
 #include "specific-object/torch.h"
 #include "spell-realm/spells-hex.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -198,7 +198,7 @@ int calc_attack_damage_with_slay(PlayerType *player_ptr, ItemEntity *o_ptr, int 
             mult = mult * 3 / 2 + 20;
         }
 
-        if ((o_ptr->is_specific_artifact(FixedArtifactId::NOTHUNG)) && (m_ptr->r_idx == MonsterRaceId::FAFNER)) {
+        if ((o_ptr->is_specific_artifact(FixedArtifactId::NOTHUNG)) && (m_ptr->r_idx == MonraceId::FAFNER)) {
             mult = 150;
         }
         break;

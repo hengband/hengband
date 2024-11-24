@@ -16,7 +16,7 @@
 #include "system/angband.h"
 #include "util/flag-group.h"
 
-enum class MonsterRaceId : int16_t;
+enum class MonraceId : short;
 
 struct turn_flags {
     bool see_m;
@@ -38,10 +38,10 @@ struct turn_flags {
 };
 
 // @details ダミーIDが渡されるとオブジェクトが生焼けになるので、ヘッダ側で全て初期化しておく.
-class MonsterRaceInfo;
+class MonraceDefinition;
 class OldRaceFlags {
 public:
-    OldRaceFlags(MonsterRaceId monrace_id);
+    OldRaceFlags(MonraceId monrace_id);
 
     EnumClassFlagGroup<MonsterAbilityType> old_r_ability_flags{};
     EnumClassFlagGroup<MonsterBehaviorType> old_r_behavior_flags{};
@@ -58,7 +58,7 @@ public:
 
     byte old_r_cast_spell = 0;
 
-    void update_lore_window_flag(const MonsterRaceInfo &monrace) const;
+    void update_lore_window_flag(const MonraceDefinition &monrace) const;
 };
 
 struct coordinate_candidate {

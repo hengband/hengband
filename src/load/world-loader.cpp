@@ -64,7 +64,7 @@ void set_gambling_monsters()
 {
     auto &melee_arena = MeleeArena::get_instance();
     for (auto i = 0; i < NUM_GLADIATORS; i++) {
-        const auto monrace_id = i2enum<MonsterRaceId>(rd_s16b());
+        const auto monrace_id = i2enum<MonraceId>(rd_s16b());
         uint32_t odds;
         if (h_older_than(0, 3, 4)) {
             odds = rd_s16b();
@@ -117,7 +117,7 @@ static void rd_world_info(PlayerType *player_ptr)
     if (h_older_than(0, 0, 3)) {
         determine_daily_bounty(player_ptr, true);
     } else {
-        world.today_mon = i2enum<MonsterRaceId>(rd_s16b());
+        world.today_mon = i2enum<MonraceId>(rd_s16b());
         world.knows_daily_bounty = rd_s16b() != 0; // 現在bool型だが、かつてモンスター種族IDを保存していた仕様に合わせる
     }
 }

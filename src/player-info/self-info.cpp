@@ -358,8 +358,9 @@ void report_magics(PlayerType *player_ptr)
             _("あなたは戦闘狂だ", "You are in a battle rage"));
     }
 
-    if (player_ptr->protevil) {
-        info.emplace_back(report_magics_aux(player_ptr->protevil),
+    const auto &protection = effects->protection();
+    if (protection.is_protected()) {
+        info.emplace_back(report_magics_aux(protection.current()),
             _("あなたは邪悪なる存在から守られている", "You are protected from evil"));
     }
 

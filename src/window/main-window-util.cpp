@@ -6,8 +6,8 @@
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
 #include "grid/grid.h"
-#include "monster-race/race-indice-types.h"
 #include "player/player-status.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
@@ -109,13 +109,13 @@ void print_map(PlayerType *player_ptr)
 /*!
  * @brief 短縮マップにおける自動拾い対象のアイテムを短縮表記する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param o_ptr アイテムへの参照ポインタ
+ * @param item アイテムへの参照
  * @param y 表示する行番号
  */
-static void display_shortened_item_name(PlayerType *player_ptr, ItemEntity *o_ptr, int y)
+static void display_shortened_item_name(PlayerType *player_ptr, const ItemEntity &item, int y)
 {
-    auto item_name = describe_flavor(player_ptr, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
-    auto attr = tval_to_attr[enum2i(o_ptr->bi_key.tval()) % 128];
+    auto item_name = describe_flavor(player_ptr, item, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
+    auto attr = tval_to_attr[enum2i(item.bi_key.tval()) % 128];
     if (player_ptr->effects()->hallucination().is_hallucinated()) {
         attr = TERM_WHITE;
         item_name = _("何か奇妙な物", "something strange");
@@ -270,7 +270,7 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
 
         term_putstr(0, y, 12, 0, "            ");
         if (match_autopick != -1) {
-            display_shortened_item_name(player_ptr, autopick_obj, y);
+            display_shortened_item_name(player_ptr, *autopick_obj, y);
         }
     }
 
@@ -292,7 +292,7 @@ DisplaySymbol set_term_color(PlayerType *player_ptr, const Pos2D &pos, const Dis
     }
 
     feat_priority = 31;
-    const auto &monrace = monraces_info[MonsterRaceId::PLAYER];
+    const auto &monrace = monraces_info[MonraceId::PLAYER];
     return monrace.symbol_config;
 }
 

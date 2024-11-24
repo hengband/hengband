@@ -19,7 +19,7 @@
 #include <string_view>
 
 // @todo 性別をEnumFlags に切り替えたら引数の型も変えること.
-static int get_monster_pronoun_kind(const MonsterRaceInfo &monrace, const bool pron)
+static int get_monster_pronoun_kind(const MonraceDefinition &monrace, const bool pron)
 {
     if (!pron) {
         return 0x00;
@@ -136,7 +136,7 @@ static std::string get_describing_monster_name(const MonsterEntity &monster, con
         }
     }
 
-    const MonsterRaceInfo *hallu_race = nullptr;
+    const MonraceDefinition *hallu_race = nullptr;
     const auto &monraces = MonraceList::get_instance();
     do {
         hallu_race = &monraces.pick_monrace_at_random();

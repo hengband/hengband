@@ -35,7 +35,7 @@ void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<bluemage_da
     wr_FlagGroup(bluemage_data->learnt_blue_magics, wr_byte);
 }
 
-void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<magic_eater_data_type> &magic_eater_data) const
+void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<MagicEaterDataList> &magic_eater_data) const
 {
     auto write_item_group = [](const auto &item_group) {
         wr_u16b(static_cast<uint16_t>(item_group.size()));

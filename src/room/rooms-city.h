@@ -23,6 +23,6 @@ private:
     Rect2D rectangle; // 地下店舗の領域.
 };
 
-struct dun_data_type;
+class DungeonData;
 class PlayerType;
-bool build_type16(PlayerType *player_ptr, dun_data_type *dd_ptr);
+bool build_type16(PlayerType *player_ptr, DungeonData *dd_ptr);

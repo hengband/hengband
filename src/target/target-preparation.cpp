@@ -40,9 +40,9 @@
  */
 bool target_able(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
-    if (!m_ptr->is_valid()) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monster = floor.m_list[m_idx];
+    if (!monster.is_valid()) {
         return false;
     }
 
@@ -50,15 +50,15 @@ bool target_able(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return false;
     }
 
-    if (!m_ptr->ml) {
+    if (!monster.ml) {
         return false;
     }
 
-    if (m_ptr->is_riding()) {
+    if (monster.is_riding()) {
         return true;
     }
 
-    if (!projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx)) {
+    if (!projectable(player_ptr, player_ptr->get_position(), monster.get_position())) {
         return false;
     }
 
@@ -232,7 +232,7 @@ void target_sensing_monsters_prepare(PlayerType *player_ptr, std::vector<MONSTER
 
         /* Higher level monsters first (if known) */
         if (monrace1.r_tkills && monrace2.r_tkills && monrace1.level != monrace2.level) {
-            return monrace1.level > monrace2.level;
+            return monrace1.order_level_strictly(monrace2);
         }
 
         /* Sort by index if all conditions are same */
@@ -288,7 +288,7 @@ std::vector<MONSTER_IDX> target_pets_prepare(PlayerType *player_ptr)
         }
 
         if (ap_monrace1.r_tkills && ap_monrace2.r_tkills && (ap_monrace1.level != ap_monrace2.level)) {
-            return ap_monrace1.level > ap_monrace2.level;
+            return ap_monrace1.order_level_strictly(ap_monrace2);
         }
 
         return idx1 < idx2;

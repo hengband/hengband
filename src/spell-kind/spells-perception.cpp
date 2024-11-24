@@ -58,7 +58,7 @@ void identify_pack(PlayerType *player_ptr)
  */
 bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    const auto known_item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto known_item_name = describe_flavor(player_ptr, *o_ptr, 0);
     const auto old_known = any_bits(o_ptr->ident, IDENT_KNOWN);
     if (!o_ptr->is_fully_known()) {
         if (o_ptr->is_fixed_or_random_artifact() || one_in_(5)) {
@@ -88,7 +88,7 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     angband_strcpy(record_o_name, known_item_name, MAX_NLEN);
     record_turn = AngbandWorld::get_instance().game_turn;
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, OD_NAME_ONLY);
     const auto &floor = *player_ptr->current_floor_ptr;
     if (record_fix_art && !old_known && o_ptr->is_fixed_artifact()) {
         exe_write_diary(floor, DiaryKind::ART, 0, item_name);
@@ -135,8 +135,7 @@ bool ident_spell(PlayerType *player_ptr, bool only_equip)
     }
 
     auto old_known = identify_item(player_ptr, o_ptr);
-
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
     if (i_idx >= INVEN_MAIN_HAND) {
         msg_format(_("%s^: %s(%c)。", "%s^: %s (%c)."), describe_use(player_ptr, i_idx), item_name.data(), index_to_label(i_idx));
     } else if (i_idx >= 0) {
@@ -176,20 +175,16 @@ bool identify_fully(PlayerType *player_ptr, bool only_equip)
     }
 
     constexpr auto s = _("*鑑定*するべきアイテムがない。", "You have nothing to *identify*.");
-
     short i_idx;
     auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
-    if (!o_ptr) {
+    if (o_ptr == nullptr) {
         return false;
     }
 
     auto old_known = identify_item(player_ptr, o_ptr);
-
     o_ptr->ident |= (IDENT_FULL_KNOWN);
-
     window_stuff(player_ptr);
-
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
     if (i_idx >= INVEN_MAIN_HAND) {
         msg_format(_("%s^: %s(%c)。", "%s^: %s (%c)."), describe_use(player_ptr, i_idx), item_name.data(), index_to_label(i_idx));
     } else if (i_idx >= 0) {

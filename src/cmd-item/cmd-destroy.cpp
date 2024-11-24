@@ -45,11 +45,11 @@ using SelectionResult = std::tuple<ItemEntity *, short, int>;
 
 static bool check_destory_item(PlayerType *player_ptr, const ItemEntity &destroying_item, short i_idx)
 {
-    if (!confirm_destroy && (destroying_item.get_price() <= 0)) {
+    if (!confirm_destroy && (destroying_item.calc_price() <= 0)) {
         return true;
     }
 
-    const auto item_name = describe_flavor(player_ptr, &destroying_item, OD_OMIT_PREFIX);
+    const auto item_name = describe_flavor(player_ptr, destroying_item, OD_OMIT_PREFIX);
     constexpr auto fmt = _("本当に%sを壊しますか? [y/n/Auto]", "Really destroy %s? [y/n/Auto]");
     const auto msg = format(fmt, item_name.data());
     msg_print(nullptr);
@@ -192,7 +192,7 @@ static void exe_destroy_item(PlayerType *player_ptr, ItemEntity &destroying_item
 {
     ItemEntity destroyed_item = destroying_item;
     destroyed_item.number = amount;
-    const auto item_name = describe_flavor(player_ptr, &destroyed_item, 0);
+    const auto item_name = describe_flavor(player_ptr, destroyed_item, 0);
     msg_format(_("%sを壊した。", "You destroy %s."), item_name.data());
     sound(SOUND_DESTITEM);
     reduce_charges(&destroying_item, amount);
@@ -220,13 +220,12 @@ void do_cmd_destroy(PlayerType *player_ptr)
         return;
     }
 
-    auto [o_ptr, i_idx, amt] = *selection_result;
-
+    const auto &[o_ptr, i_idx, amt] = *selection_result;
     PlayerEnergy energy(player_ptr);
     energy.set_player_turn_energy(100);
     if (!can_player_destroy_object(o_ptr)) {
         energy.reset_player_turn();
-        const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+        const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
         msg_format(_("%sは破壊不可能だ。", "You cannot destroy %s."), item_name.data());
         return;
     }

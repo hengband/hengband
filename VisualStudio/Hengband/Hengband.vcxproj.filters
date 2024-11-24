@@ -2451,9 +2451,6 @@
     <ClCompile Include="..\..\src\system\terrain-type-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\window\main-window-row-column.cpp">
-      <Filter>window</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monster-race\race-brightness-mask.cpp">
       <Filter>monster-race</Filter>
     </ClCompile>
@@ -2519,6 +2516,18 @@
     </ClCompile>
     <ClCompile Include="..\..\src\floor\floor-list.cpp">
       <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-timed-effects.cpp">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\save\monster-entity-writer.cpp">
+      <Filter>save</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\timed-effect\player-protection.cpp">
+      <Filter>timed-effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\dungeon-data-definition.cpp">
+      <Filter>system</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3674,9 +3683,6 @@
     <ClInclude Include="..\..\src\object-enchant\activation-info-table.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster-race\race-indice-types.h">
-      <Filter>monster-race</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster-race\monster-race-hook.h">
       <Filter>monster-race</Filter>
     </ClInclude>
@@ -3698,7 +3704,7 @@
     <ClInclude Include="..\..\src\monster\monster-description-types.h">
       <Filter>monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster\monster-timed-effect-types.h">
+    <ClInclude Include="..\..\src\monster\monster-timed-effects.h">
       <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\eldritch-horror.h">
@@ -3823,9 +3829,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster-floor\monster-summon.h">
       <Filter>monster-floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\system\game-option-types.h">
-      <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\game-option\input-options.h">
       <Filter>game-option</Filter>
@@ -5457,6 +5460,24 @@
     <ClInclude Include="..\..\src\floor\floor-list.h">
       <Filter>floor</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\save\monster-entity-writer.h">
+      <Filter>save</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\enums\game-option-page.h">
+      <Filter>system\enums</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\enums\grid-flow.h">
+      <Filter>system\enums</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\timed-effect\player-protection.h">
+      <Filter>timed-effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\enums\monrace\monrace-id.h">
+      <Filter>system\enums\monrace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\enums\grid-count-kind.h">
+      <Filter>system\enums</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5723,6 +5744,12 @@
     </Filter>
     <Filter Include="tracking">
       <UniqueIdentifier>{a5b8bf13-a675-4500-8b4c-37ea664757eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\enums">
+      <UniqueIdentifier>{31491e27-d3e4-4605-b68a-c2c00d563479}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\enums\monrace">
+      <UniqueIdentifier>{123780c8-0bf5-47ac-aabd-c9f3dbe74855}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

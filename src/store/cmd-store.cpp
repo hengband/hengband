@@ -158,7 +158,7 @@ void do_cmd_store(PlayerType *player_ptr)
         handle_stuff(player_ptr);
         if (player_ptr->inventory_list[INVEN_PACK].bi_id) {
             INVENTORY_IDX i_idx = INVEN_PACK;
-            auto *o_ptr = &player_ptr->inventory_list[i_idx];
+            const auto &item_inventory = player_ptr->inventory_list[i_idx];
             if (store_num != StoreSaleType::HOME) {
                 if (store_num == StoreSaleType::MUSEUM) {
                     msg_print(_("ザックからアイテムがあふれそうなので、あわてて博物館から出た...", "Your pack is so full that you flee the Museum..."));
@@ -167,22 +167,17 @@ void do_cmd_store(PlayerType *player_ptr)
                 }
 
                 leave_store = true;
-            } else if (!store_check_num(o_ptr, store_num)) {
+            } else if (!store_check_num(&item_inventory, store_num)) {
                 msg_print(_("ザックからアイテムがあふれそうなので、あわてて家から出た...", "Your pack is so full that you flee your home..."));
                 leave_store = true;
             } else {
-                int item_pos;
-                ItemEntity forge;
-                ItemEntity *q_ptr;
                 msg_print(_("ザックからアイテムがあふれてしまった！", "Your pack overflows!"));
-                q_ptr = &forge;
-                q_ptr->copy_from(o_ptr);
-                const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
+                ItemEntity item = item_inventory;
+                const auto item_name = describe_flavor(player_ptr, item, 0);
                 msg_format(_("%sが落ちた。(%c)", "You drop %s (%c)."), item_name.data(), index_to_label(i_idx));
                 vary_item(player_ptr, i_idx, -255);
                 handle_stuff(player_ptr);
-
-                item_pos = home_carry(player_ptr, q_ptr, store_num);
+                const auto item_pos = home_carry(player_ptr, &item, store_num);
                 if (item_pos >= 0) {
                     store_top = (item_pos / store_bottom) * store_bottom;
                     display_store_inventory(player_ptr, store_num);

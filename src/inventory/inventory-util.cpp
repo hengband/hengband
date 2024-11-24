@@ -281,14 +281,8 @@ INVENTORY_IDX label_to_inventory(PlayerType *player_ptr, int c)
  */
 bool verify(PlayerType *player_ptr, concptr prompt, INVENTORY_IDX i_idx)
 {
-    ItemEntity *o_ptr;
-    if (i_idx >= 0) {
-        o_ptr = &player_ptr->inventory_list[i_idx];
-    } else {
-        o_ptr = &player_ptr->current_floor_ptr->o_list[0 - i_idx];
-    }
-
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto &item = i_idx >= 0 ? player_ptr->inventory_list[i_idx] : player_ptr->current_floor_ptr->o_list[0 - i_idx];
+    const auto item_name = describe_flavor(player_ptr, item, 0);
     std::stringstream ss;
     ss << prompt;
 #ifndef JP

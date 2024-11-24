@@ -101,77 +101,17 @@ int mon_damage_mod(PlayerType *player_ptr, MonsterEntity *m_ptr, int dam, bool i
 }
 
 /*!
- * @brief モンスターの時限ステータスを取得する
- * @param floor_ptr 現在フロアへの参照ポインタ
- * @return m_idx モンスターの参照ID
- * @return mproc_type モンスターの時限ステータスID
- * @return 残りターン値
- */
-int get_mproc_idx(FloorType *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
-{
-    const auto &cur_mproc_list = floor_ptr->mproc_list[mproc_type];
-    for (int i = floor_ptr->mproc_max[mproc_type] - 1; i >= 0; i--) {
-        if (cur_mproc_list[i] == m_idx) {
-            return i;
-        }
-    }
-
-    return -1;
-}
-
-/*!
- * @brief モンスターの時限ステータスリストを追加する
- * @param floor_ptr 現在フロアへの参照ポインタ
- * @return m_idx モンスターの参照ID
- * @return mproc_type 追加したいモンスターの時限ステータスID
- */
-void mproc_add(FloorType *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
-{
-    if (floor_ptr->mproc_max[mproc_type] < MAX_FLOOR_MONSTERS) {
-        floor_ptr->mproc_list[mproc_type][floor_ptr->mproc_max[mproc_type]++] = (int16_t)m_idx;
-    }
-}
-
-/*!
- * @brief モンスターの時限ステータスリストを初期化する / Initialize monster process
- * @param floor_ptr 現在フロアへの参照ポインタ
- */
-void mproc_init(FloorType *floor_ptr)
-{
-    /* Reset "player_ptr->current_floor_ptr->mproc_max[]" */
-    for (int i = 0; i < MAX_MTIMED; i++) {
-        floor_ptr->mproc_max[i] = 0;
-    }
-
-    /* Process the monsters (backwards) */
-    for (MONSTER_IDX i = floor_ptr->m_max - 1; i >= 1; i--) {
-        auto *m_ptr = &floor_ptr->m_list[i];
-
-        /* Ignore "dead" monsters */
-        if (!m_ptr->is_valid()) {
-            continue;
-        }
-
-        for (int cmi = 0; cmi < MAX_MTIMED; cmi++) {
-            if (m_ptr->mtimed[cmi]) {
-                mproc_add(floor_ptr, i, cmi);
-            }
-        }
-    }
-}
-
-/*!
  * @brief モンスターの各種状態値を時間経過により更新するサブルーチン
  * @param floor_ptr 現在フロアへの参照ポインタ
  * @param m_idx モンスター参照ID
- * @param mtimed_idx 更新するモンスターの時限ステータスID
+ * @param mte 更新するモンスターの時限ステータスID
  */
-static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int mtimed_idx)
+static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterTimedEffect mte)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto *m_ptr = &floor.m_list[m_idx];
-    switch (mtimed_idx) {
-    case MTIMED_CSLEEP: {
+    switch (mte) {
+    case MonsterTimedEffect::SLEEP: {
         auto *r_ptr = &m_ptr->get_monrace();
         auto is_wakeup = false;
         if (m_ptr->cdis < MAX_MONSTER_SENSING) {
@@ -242,8 +182,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
-
-    case MTIMED_FAST:
+    case MonsterTimedEffect::FAST:
         /* Reduce by one, note if expires */
         if (set_monster_fast(player_ptr, m_idx, m_ptr->get_remaining_acceleration() - 1)) {
             if (is_seen(player_ptr, m_ptr)) {
@@ -253,8 +192,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         }
 
         break;
-
-    case MTIMED_SLOW:
+    case MonsterTimedEffect::SLOW:
         /* Reduce by one, note if expires */
         if (set_monster_slow(player_ptr, m_idx, m_ptr->get_remaining_deceleration() - 1)) {
             if (is_seen(player_ptr, m_ptr)) {
@@ -264,8 +202,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         }
 
         break;
-
-    case MTIMED_STUNNED: {
+    case MonsterTimedEffect::STUN: {
         int rlev = m_ptr->get_monrace().level;
 
         /* Recover from stun */
@@ -279,8 +216,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
-
-    case MTIMED_CONFUSED: {
+    case MonsterTimedEffect::CONFUSION: {
         /* Reduce the confusion */
         if (!set_monster_confused(player_ptr, m_idx, m_ptr->get_remaining_confusion() - randint1(m_ptr->get_monrace().level / 20 + 1))) {
             break;
@@ -294,8 +230,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
-
-    case MTIMED_MONFEAR: {
+    case MonsterTimedEffect::FEAR: {
         /* Reduce the fear */
         if (!set_monster_monfear(player_ptr, m_idx, m_ptr->get_remaining_fear() - randint1(m_ptr->get_monrace().level / 20 + 1))) {
             break;
@@ -318,8 +253,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
-
-    case MTIMED_INVULNER: {
+    case MonsterTimedEffect::INVULNERABILITY: {
         /* Reduce by one, note if expires */
         if (!set_monster_invulner(player_ptr, m_idx, m_ptr->get_remaining_invulnerability() - 1, true)) {
             break;
@@ -332,31 +266,33 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         break;
     }
+    default:
+        THROW_EXCEPTION(std::logic_error, format("Invalid MonsterTimedEffect is specified! %d", enum2i(mte)));
     }
 }
 
 /*!
  * @brief 全モンスターの各種状態値を時間経過により更新するメインルーチン
- * @param mtimed_idx 更新するモンスターの時限ステータスID
+ * @param mte 更新するモンスターの時限ステータスID
  * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * Process the counters of monsters (once per 10 game turns)\n
  * These functions are to process monsters' counters same as player's.
  */
-void process_monsters_mtimed(PlayerType *player_ptr, int mtimed_idx)
+void process_monsters_mtimed(PlayerType *player_ptr, MonsterTimedEffect mte)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto &cur_mproc_list = floor_ptr->mproc_list[mtimed_idx];
+    const auto &cur_mproc_list = floor_ptr->mproc_list[mte];
 
     /* Hack -- calculate the "player noise" */
-    if (mtimed_idx == MTIMED_CSLEEP) {
+    if (mte == MonsterTimedEffect::SLEEP) {
         csleep_noise = (1U << (30 - player_ptr->skill_stl));
     }
 
     /* Process the monsters (backwards) */
-    for (auto i = floor_ptr->mproc_max[mtimed_idx] - 1; i >= 0; i--) {
+    for (auto i = floor_ptr->mproc_max[mte] - 1; i >= 0; i--) {
         const auto m_idx = cur_mproc_list[i];
-        process_monsters_mtimed_aux(player_ptr, m_idx, mtimed_idx);
+        process_monsters_mtimed_aux(player_ptr, m_idx, mte);
         HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
     }
 }
@@ -395,102 +331,98 @@ void dispel_monster_status(PlayerType *player_ptr, MONSTER_IDX m_idx)
  * @param m_idx 経験値を得るモンスターの参照ID
  * @param monrace_id 撃破されたモンスター種族ID
  */
-void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId monrace_id)
+void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonraceId monrace_id)
 {
     if (m_idx <= 0 || !MonraceList::is_valid(monrace_id)) {
         return;
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
-
-    if (!m_ptr->is_valid()) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &monster = floor.m_list[m_idx];
+    if (!monster.is_valid()) {
         return;
     }
 
-    auto *r_ptr = &m_ptr->get_monrace();
-    auto *s_ptr = &monraces_info[monrace_id];
-
-    if (AngbandSystem::get_instance().is_phase_out() || (r_ptr->next_exp == 0)) {
+    auto &old_monrace = monster.get_monrace(); //!< @details 現在 (進化前)の種族.
+    const auto &monraces = MonraceList::get_instance();
+    const auto &monrace_defeated = monraces.get_monrace(monrace_id);
+    if (AngbandSystem::get_instance().is_phase_out() || (old_monrace.next_exp == 0)) {
         return;
     }
 
-    auto new_exp = s_ptr->mexp * s_ptr->level / (r_ptr->level + 2);
-    if (m_ptr->is_riding()) {
+    auto new_exp = monrace_defeated.mexp * monrace_defeated.level / (old_monrace.level + 2);
+    if (monster.is_riding()) {
         new_exp = (new_exp + 1) / 2;
     }
 
-    if (!floor_ptr->dun_level) {
+    if (!floor.is_in_underground()) {
         new_exp /= 5;
     }
 
-    m_ptr->exp += new_exp;
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
+    monster.exp += new_exp;
+    if (monster.mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
         return;
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (m_ptr->exp < r_ptr->next_exp) {
-        if (m_ptr->is_riding()) {
+    if (monster.exp < old_monrace.next_exp) {
+        if (monster.is_riding()) {
             rfu.set_flag(StatusRecalculatingFlag::BONUS);
         }
 
         return;
     }
 
-    auto old_hp = m_ptr->hp;
-    auto old_maxhp = m_ptr->max_maxhp;
-    auto &old_monrace = m_ptr->get_monrace();
-    auto old_sub_align = m_ptr->sub_align;
+    const auto old_hp = monster.hp;
+    const auto old_maxhp = monster.max_maxhp;
+    const auto old_sub_align = monster.sub_align;
 
     /* Hack -- Reduce the racial counter of previous monster */
-    m_ptr->get_real_monrace().cur_num--;
+    monster.get_real_monrace().decrement_current_numbers();
 
-    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-    m_ptr->r_idx = r_ptr->next_r_idx;
+    const auto m_name = monster_desc(player_ptr, &monster, 0);
+    monster.r_idx = old_monrace.next_r_idx;
 
     /* Count the monsters on the level */
-    m_ptr->get_real_monrace().cur_num++;
+    monster.get_real_monrace().increment_current_numbers();
+    monster.ap_r_idx = monster.r_idx;
 
-    m_ptr->ap_r_idx = m_ptr->r_idx;
-    r_ptr = &m_ptr->get_monrace();
-
-    m_ptr->max_maxhp = r_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP) ? r_ptr->hit_dice.maxroll() : r_ptr->hit_dice.roll();
+    const auto &new_monrace = monster.get_monrace(); //!< @details 進化後の種族.
+    monster.max_maxhp = new_monrace.misc_flags.has(MonsterMiscType::FORCE_MAXHP) ? new_monrace.hit_dice.maxroll() : new_monrace.hit_dice.roll();
     if (ironman_nightmare) {
-        auto hp = m_ptr->max_maxhp * 2;
-        m_ptr->max_maxhp = std::min(MONSTER_MAXHP, hp);
+        const auto hp = monster.max_maxhp * 2;
+        monster.max_maxhp = std::min(MONSTER_MAXHP, hp);
     }
 
-    m_ptr->maxhp = m_ptr->max_maxhp;
-    m_ptr->hp = old_hp * m_ptr->maxhp / old_maxhp;
+    monster.maxhp = monster.max_maxhp;
+    monster.hp = old_hp * monster.maxhp / old_maxhp;
 
     /* dealt damage is 0 at initial*/
-    m_ptr->dealt_damage = 0;
+    monster.dealt_damage = 0;
 
     /* Extract the monster base speed */
-    m_ptr->set_individual_speed(floor_ptr->inside_arena);
+    monster.set_individual_speed(floor.inside_arena);
 
     /* Sub-alignment of a monster */
-    if (!m_ptr->is_pet() && r_ptr->kind_flags.has_none_of(alignment_mask)) {
-        m_ptr->sub_align = old_sub_align;
+    if (!monster.is_pet() && new_monrace.kind_flags.has_none_of(alignment_mask)) {
+        monster.sub_align = old_sub_align;
     } else {
-        m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
-        if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
-            m_ptr->sub_align |= SUB_ALIGN_EVIL;
+        monster.sub_align = SUB_ALIGN_NEUTRAL;
+        if (new_monrace.kind_flags.has(MonsterKindType::EVIL)) {
+            monster.sub_align |= SUB_ALIGN_EVIL;
         }
 
-        if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
-            m_ptr->sub_align |= SUB_ALIGN_GOOD;
+        if (new_monrace.kind_flags.has(MonsterKindType::GOOD)) {
+            monster.sub_align |= SUB_ALIGN_GOOD;
         }
     }
 
-    m_ptr->exp = 0;
-    if (m_ptr->is_pet() || m_ptr->ml) {
+    monster.exp = 0;
+    if (monster.is_pet() || monster.ml) {
         const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
-        if (!ignore_unview || player_can_see_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
+        if (!ignore_unview || player_can_see_bold(player_ptr, monster.fy, monster.fx)) {
             if (is_hallucinated) {
-                const auto &monraces = MonraceList::get_instance();
-                const MonsterRaceInfo *hallucinated_race = nullptr;
+                const MonraceDefinition *hallucinated_race = nullptr;
                 do {
                     hallucinated_race = &monraces.pick_monrace_at_random();
                 } while (hallucinated_race->kind_flags.has(MonsterKindType::UNIQUE));
@@ -499,7 +431,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId m
                 auto mes = randint0(2) == 0 ? mes_evolution : mes_degeneration;
                 msg_format(mes, m_name.data(), hallucinated_race->name.data());
             } else {
-                msg_format(_("%sは%sに進化した。", "%s^ evolved into %s."), m_name.data(), r_ptr->name.data());
+                msg_format(_("%sは%sに進化した。", "%s^ evolved into %s."), m_name.data(), new_monrace.name.data());
             }
         }
 
@@ -508,13 +440,13 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId m
         }
 
         /* Now you feel very close to this pet. */
-        m_ptr->parent_m_idx = 0;
+        monster.parent_m_idx = 0;
     }
 
     update_monster(player_ptr, m_idx, false);
-    lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
+    lite_spot(player_ptr, monster.fy, monster.fx);
 
-    if (m_ptr->is_riding()) {
+    if (monster.is_riding()) {
         rfu.set_flag(StatusRecalculatingFlag::BONUS);
     }
 }

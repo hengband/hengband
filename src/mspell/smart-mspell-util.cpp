@@ -20,7 +20,7 @@ msr_type::msr_type(PlayerType *player_ptr, short m_idx, const EnumClassFlagGroup
  * @param prob 基本確率(%)
  * @return 適した選択を取るならばTRUEを返す。
  */
-bool int_outof(MonsterRaceInfo *r_ptr, int prob)
+bool int_outof(MonraceDefinition *r_ptr, int prob)
 {
     if (r_ptr->behavior_flags.has_not(MonsterBehaviorType::SMART)) {
         prob = prob / 2;

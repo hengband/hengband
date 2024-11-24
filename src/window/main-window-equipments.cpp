@@ -33,7 +33,6 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
 {
     COMMAND_CODE i;
     int j, k, l;
-    ItemEntity *o_ptr;
     COMMAND_CODE out_index[23]{};
     TERM_COLOR out_color[23]{};
     std::array<std::string, 23> out_desc{};
@@ -43,8 +42,8 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     const auto &[wid, hgt] = term_get_size();
     auto len = wid - col - 1;
     for (k = 0, i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        o_ptr = &player_ptr->inventory_list[i];
-        auto only_slot = !(player_ptr->select_ring_slot ? is_ring_slot(i) : (item_tester.okay(o_ptr) || any_bits(mode, USE_FULL)));
+        const auto &item = player_ptr->inventory_list[i];
+        auto only_slot = !(player_ptr->select_ring_slot ? is_ring_slot(i) : (item_tester.okay(&item) || any_bits(mode, USE_FULL)));
         auto is_any_hand = (i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr);
         is_any_hand |= (i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr);
         auto is_two_handed = is_any_hand && has_two_handed_weapons(player_ptr);
@@ -53,17 +52,17 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
             continue;
         }
 
-        const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+        const auto item_name = describe_flavor(player_ptr, item, 0);
         if (is_two_handed) {
             out_desc[k] = _("(武器を両手持ち)", "(wielding with two-hands)");
             out_color[k] = TERM_WHITE;
         } else {
             out_desc[k] = item_name;
-            out_color[k] = tval_to_attr[enum2i(o_ptr->bi_key.tval()) % 128];
+            out_color[k] = tval_to_attr[enum2i(item.bi_key.tval()) % 128];
         }
 
         out_index[k] = i;
-        if (o_ptr->timeout) {
+        if (item.timeout) {
             out_color[k] = TERM_L_DARK;
         }
         l = out_desc[k].length() + (2 + _(1, 3));
@@ -91,7 +90,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     prepare_label_string(player_ptr, equip_label, USE_EQUIP, item_tester);
     for (j = 0; j < k; j++) {
         i = out_index[j];
-        o_ptr = &player_ptr->inventory_list[i];
+        const auto &item = player_ptr->inventory_list[i];
         prt("", j + 1, col ? col - 2 : col);
         std::string head;
         if (use_menu && target_item) {
@@ -110,7 +109,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
         put_str(head, j + 1, col);
         int cur_col = col + 3;
         if (show_item_graph) {
-            term_queue_bigchar(cur_col, j + 1, { o_ptr->get_symbol(), {} });
+            term_queue_bigchar(cur_col, j + 1, { item.get_symbol(), {} });
             if (use_bigtile) {
                 cur_col++;
             }
@@ -130,7 +129,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
             continue;
         }
 
-        int wgt = o_ptr->weight * o_ptr->number;
+        auto wgt = item.weight * item.number;
         const auto weight = format(_("%3d.%1d kg", "%3d.%d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
         prt(weight, j + 1, wid - 9);
     }

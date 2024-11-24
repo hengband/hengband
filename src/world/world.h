@@ -13,7 +13,7 @@ constexpr auto MAX_BOUNTY = 20;
  */
 enum term_color_type : unsigned char;
 enum class PlayerRaceType;
-class MonsterRaceInfo;
+class MonraceDefinition;
 class AngbandWorld {
 public:
     ~AngbandWorld() = default;
@@ -37,7 +37,7 @@ public:
 
     bounty_type bounties[MAX_BOUNTY]{}; //!< 賞金首ユニーク
     bool knows_daily_bounty{}; //!< 日替わり賞金首を知っているか否か
-    MonsterRaceId today_mon{}; //!< 実際の日替わり賞金首
+    MonraceId today_mon{}; //!< 実際の日替わり賞金首
 
     uint32_t play_time{}; /*!< 実プレイ時間 */
 
@@ -73,8 +73,8 @@ public:
     void add_winner_class(PlayerClassType c);
     void add_retired_class(PlayerClassType c);
     term_color_type get_birth_class_color(PlayerClassType c) const;
-    MonsterRaceInfo &get_today_bounty();
-    const MonsterRaceInfo &get_today_bounty() const;
+    MonraceDefinition &get_today_bounty();
+    const MonraceDefinition &get_today_bounty() const;
     bool is_player_true_winner() const;
     void pass_game_turn_by_stay();
     std::string format_real_playtime() const;

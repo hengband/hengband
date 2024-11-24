@@ -9,11 +9,11 @@
 #include "lore/lore-calculator.h"
 #include "lore/lore-util.h"
 #include "lore/magic-types-setter.h"
-#include "monster-race/race-indice-types.h"
 #include "monster-race/race-misc-flags.h"
 #include "monster-race/race-sex.h"
 #include "player-ability/player-ability-types.h"
 #include "system/angband.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/monster-race-info.h"
 #include "term/term-color-types.h"
 #include "view/display-lore-attacks.h"
@@ -134,7 +134,7 @@ static void set_race_flags(lore_type *lore_ptr)
  * left edge of the screen, on a cleared line, in which the recall is
  * to take place.  One extra blank line is left after the recall.
  */
-void process_monster_lore(PlayerType *player_ptr, MonsterRaceId r_idx, monster_lore_mode mode)
+void process_monster_lore(PlayerType *player_ptr, MonraceId r_idx, monster_lore_mode mode)
 {
     lore_type tmp_lore(r_idx, mode);
     lore_type *lore_ptr = &tmp_lore;
@@ -153,7 +153,7 @@ void process_monster_lore(PlayerType *player_ptr, MonsterRaceId r_idx, monster_l
         hooked_roff("\n");
     }
 
-    if (r_idx == MonsterRaceId::KAGE) {
+    if (r_idx == MonraceId::KAGE) {
         hooked_roff("\n");
         return;
     }

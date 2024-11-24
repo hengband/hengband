@@ -1,6 +1,6 @@
 #pragma once
 
-enum class MonsterRaceId : short {
+enum class MonraceId : short {
     PLAYER = 0,
     FILTHY_URCHIN = 1,
     BEGGAR = 12,

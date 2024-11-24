@@ -216,7 +216,7 @@ void do_cmd_knowledge_home(PlayerType *player_ptr)
             fprintf(fff, "\n ( %d ページ )\n", x++);
         }
 
-        const auto item_name = describe_flavor(player_ptr, &store.stock[i], 0);
+        const auto item_name = describe_flavor(player_ptr, *store.stock[i], 0);
         const int item_length = item_name.length();
         if (item_length <= 80 - 3) {
             fprintf(fff, "%c%s %s\n", I2A(i % 12), close_bracket, item_name.data());
@@ -229,7 +229,7 @@ void do_cmd_knowledge_home(PlayerType *player_ptr)
         fprintf(fff, "%c%s %.*s\n", I2A(i % 12), close_bracket, n, item_name.substr(0, n).data());
         fprintf(fff, "   %.77s\n", item_name.substr(n).data());
 #else
-        const auto item_name = describe_flavor(player_ptr, &store.stock[i], 0);
+        const auto item_name = describe_flavor(player_ptr, *store.stock[i], 0);
         fprintf(fff, "%c%s %s\n", I2A(i % 12), close_bracket, item_name.data());
 #endif
     }

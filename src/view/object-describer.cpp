@@ -47,10 +47,10 @@ void inven_item_charges(const ItemEntity &item)
  */
 void inven_item_describe(PlayerType *player_ptr, short i_idx)
 {
-    auto *o_ptr = &player_ptr->inventory_list[i_idx];
-    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto &item = player_ptr->inventory_list[i_idx];
+    const auto item_name = describe_flavor(player_ptr, item, 0);
 #ifdef JP
-    if (o_ptr->number <= 0) {
+    if (item.number <= 0) {
         msg_format("もう%sを持っていない。", item_name.data());
     } else {
         msg_format("まだ %sを持っている。", item_name.data());
@@ -77,7 +77,7 @@ void display_koff(PlayerType *player_ptr)
     }
 
     const auto item = tracker.get_trackee();
-    const auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+    const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
     term_putstr(0, 0, -1, TERM_WHITE, item_name);
     const auto sval = *item.bi_key.sval();
     const auto use_realm = PlayerRealm::get_realm_of_book(item.bi_key.tval());

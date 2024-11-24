@@ -12,7 +12,7 @@
 #include "artifact/random-art-effects.h"
 #include "dungeon/quest.h"
 #include "game-option/birth-options.h"
-#include "monster-race/race-indice-types.h"
+#include "game-option/game-play-options.h"
 #include "object-enchant/activation-info-table.h"
 #include "object-enchant/dragon-breaths-table.h"
 #include "object-enchant/item-feeling.h"
@@ -609,7 +609,7 @@ DisplaySymbol ItemEntity::get_symbol() const
  * @brief アイテム価格算出のメインルーチン
  * @return 判明している現価格
  */
-int ItemEntity::get_price() const
+int ItemEntity::calc_price() const
 {
     int value;
     const auto is_worthless = this->is_broken() || this->is_cursed();
@@ -787,13 +787,14 @@ bool ItemEntity::is_bounty() const
         return false;
     }
 
-    const auto &monrace = this->get_monrace();
-    const auto &world = AngbandWorld::get_instance();
-    if (world.knows_daily_bounty && (monrace.name == world.get_today_bounty().name)) {
+    const auto monrace_id = this->get_monrace_id();
+    if (MonraceList::is_tsuchinoko(monrace_id)) {
         return true;
     }
 
-    if (monrace.idx == MonsterRaceId::TSUCHINOKO) {
+    const auto &world = AngbandWorld::get_instance();
+    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
+    if (world.knows_daily_bounty && (monrace.name == world.get_today_bounty().name)) {
         return true;
     }
 
@@ -942,19 +943,261 @@ bool ItemEntity::has_monrace() const
  * @return モンスター種族定義
  * @details 死体/骨・モンスターボール・人形・像が該当する.
  */
-const MonsterRaceInfo &ItemEntity::get_monrace() const
+const MonraceDefinition &ItemEntity::get_monrace() const
 {
     if (!this->has_monrace()) {
         THROW_EXCEPTION(std::logic_error, "This item is not related to monrace!");
     }
 
-    const auto monrace_id = i2enum<MonsterRaceId>(this->pval);
+    const auto monrace_id = this->get_monrace_id();
     return MonraceList::get_instance().get_monrace(monrace_id);
 }
 
 void ItemEntity::track_baseitem() const
 {
     BaseitemTracker::get_instance().set_trackee(this->bi_id);
+}
+
+/*!
+ * @brief アイテムを同一スロットへ重ねることができるかどうかを返す
+ * @param other 検証したいアイテムへの参照
+ * @return 重ね合わせ可能ならばTRUE
+ */
+bool ItemEntity::is_similar(const ItemEntity &other) const
+{
+    const auto total = this->number + other.number;
+    const auto max_num = this->is_similar_part(other);
+    return (max_num != 0) && (total <= max_num);
+}
+
+/*!
+ * @brief 両オブジェクトをスロットに重ね合わせ可能な最大数を返す
+ * @param other 検証したいアイテムへの参照
+ * @return 重ね合わせ可能なアイテム数
+ */
+int ItemEntity::is_similar_part(const ItemEntity &other) const
+{
+    if (this->bi_id != other.bi_id) {
+        return 0;
+    }
+
+    constexpr auto max_stack_size = 99;
+    auto max_num = max_stack_size;
+    switch (this->bi_key.tval()) {
+    case ItemKindType::CHEST:
+    case ItemKindType::CARD:
+    case ItemKindType::CAPTURE:
+        return 0;
+    case ItemKindType::STATUE: {
+        if (this->bi_key.are_both_statue(other.bi_key) || (this->pval != other.pval)) {
+            return 0;
+        }
+
+        break;
+    }
+    case ItemKindType::FIGURINE:
+    case ItemKindType::MONSTER_REMAINS:
+        if (this->pval != other.pval) {
+            return 0;
+        }
+
+        break;
+    case ItemKindType::FOOD:
+    case ItemKindType::POTION:
+    case ItemKindType::SCROLL:
+        break;
+    case ItemKindType::STAFF:
+        if ((none_bits(this->ident, IDENT_EMPTY) && !this->is_known()) || (none_bits(other.ident, IDENT_EMPTY) && !other.is_known())) {
+            return 0;
+        }
+
+        if (this->pval != other.pval) {
+            return 0;
+        }
+
+        break;
+    case ItemKindType::WAND:
+        if ((none_bits(this->ident, IDENT_EMPTY) && !this->is_known()) || (none_bits(other.ident, IDENT_EMPTY) && !other.is_known())) {
+            return 0;
+        }
+
+        break;
+    case ItemKindType::ROD:
+        max_num = std::min(max_num, MAX_SHORT / this->get_baseitem().pval);
+        break;
+    case ItemKindType::GLOVES:
+        if (this->is_glove_same_temper(&other)) {
+            return 0;
+        }
+
+        if (!this->is_known() || !other.is_known()) {
+            return 0;
+        }
+
+        if (!this->can_pile(&other)) {
+            return 0;
+        }
+
+        break;
+    case ItemKindType::LITE:
+        if (this->fuel != other.fuel) {
+            return 0;
+        }
+
+        if (!this->is_known() || !other.is_known()) {
+            return 0;
+        }
+
+        if (!this->can_pile(&other)) {
+            return 0;
+        }
+
+        break;
+    case ItemKindType::BOW:
+    case ItemKindType::DIGGING:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD:
+    case ItemKindType::BOOTS:
+    case ItemKindType::HELM:
+    case ItemKindType::CROWN:
+    case ItemKindType::SHIELD:
+    case ItemKindType::CLOAK:
+    case ItemKindType::SOFT_ARMOR:
+    case ItemKindType::HARD_ARMOR:
+    case ItemKindType::DRAG_ARMOR:
+    case ItemKindType::RING:
+    case ItemKindType::AMULET:
+    case ItemKindType::WHISTLE:
+        if (!this->is_known() || !other.is_known()) {
+            return 0;
+        }
+
+        if (!this->can_pile(&other)) {
+            return 0;
+        }
+
+        break;
+    case ItemKindType::BOLT:
+    case ItemKindType::ARROW:
+    case ItemKindType::SHOT:
+        if (!this->can_pile(&other)) {
+            return 0;
+        }
+
+        break;
+    default:
+        if (!this->is_known() || !other.is_known()) {
+            return 0;
+        }
+
+        break;
+    }
+
+    if (this->art_flags != other.art_flags) {
+        return 0;
+    }
+
+    if (this->curse_flags != other.curse_flags) {
+        return 0;
+    }
+
+    if (any_bits(this->ident, IDENT_BROKEN) != any_bits(other.ident, IDENT_BROKEN)) {
+        return 0;
+    }
+
+    if (this->is_inscribed() && other.is_inscribed() && (this->inscription != other.inscription)) {
+        return 0;
+    }
+
+    if (!stack_force_notes && (this->inscription != other.inscription)) {
+        return 0;
+    }
+
+    if (!stack_force_costs && (this->discount != other.discount)) {
+        return 0;
+    }
+
+    return max_num;
+}
+
+/*!
+ * @brief 店舗に並べた品を同一品であるかどうか判定する
+ * @param other 比較対象アイテムへの参照
+ * @return 同一扱いできるならTRUEを返す
+ */
+bool ItemEntity::is_similar_for_store(const ItemEntity &other) const
+{
+    if (this == &other) {
+        return false;
+    }
+
+    if (this->bi_id != other.bi_id) {
+        return false;
+    }
+
+    if ((this->pval != other.pval) && !this->is_wand_rod()) {
+        return false;
+    }
+
+    if (this->to_h != other.to_h) {
+        return false;
+    }
+
+    if (this->to_d != other.to_d) {
+        return false;
+    }
+
+    if (this->to_a != other.to_a) {
+        return false;
+    }
+
+    if (this->ego_idx != other.ego_idx) {
+        return false;
+    }
+
+    if (this->is_fixed_or_random_artifact() || other.is_fixed_or_random_artifact()) {
+        return false;
+    }
+
+    if (this->art_flags != other.art_flags) {
+        return false;
+    }
+
+    if (this->timeout || other.timeout) {
+        return false;
+    }
+
+    if (this->ac != other.ac) {
+        return false;
+    }
+
+    if (this->damage_dice != other.damage_dice) {
+        return false;
+    }
+
+    const auto tval = this->bi_key.tval();
+    if (tval == ItemKindType::CHEST) {
+        return false;
+    }
+
+    if (tval == ItemKindType::STATUE) {
+        return false;
+    }
+
+    if (tval == ItemKindType::CAPTURE) {
+        return false;
+    }
+
+    if ((tval == ItemKindType::LITE) && (this->fuel != other.fuel)) {
+        return false;
+    }
+
+    if (this->discount != other.discount) {
+        return false;
+    }
+
+    return true;
 }
 
 std::string ItemEntity::build_timeout_description(const ActivationType &act) const
@@ -1049,6 +1292,57 @@ bool ItemEntity::try_become_artifact(int dungeon_level)
     return false;
 }
 
+/*!
+ * @brief 両オブジェクトをスロットに重ね合わせる
+ * @param other 重ね合わせ元アイテムへの参照
+ */
+void ItemEntity::absorb(ItemEntity &other)
+{
+    int max_num = this->is_similar_part(other);
+    int total = this->number + other.number;
+    int diff = (total > max_num) ? total - max_num : 0;
+
+    this->number = (total > max_num) ? max_num : total;
+    if (other.is_known()) {
+        this->mark_as_known();
+    }
+
+    if (((this->ident & IDENT_STORE) || (other.ident & IDENT_STORE)) && (!((this->ident & IDENT_STORE) && (other.ident & IDENT_STORE)))) {
+        if (other.ident & IDENT_STORE) {
+            other.ident &= 0xEF;
+        }
+
+        if (this->ident & IDENT_STORE) {
+            this->ident &= 0xEF;
+        }
+    }
+
+    if (other.is_fully_known()) {
+        this->ident |= (IDENT_FULL_KNOWN);
+    }
+
+    if (other.is_inscribed()) {
+        this->inscription = other.inscription;
+    }
+
+    if (other.feeling) {
+        this->feeling = other.feeling;
+    }
+
+    if (this->discount < other.discount) {
+        this->discount = other.discount;
+    }
+
+    const auto tval = this->bi_key.tval();
+    if (tval == ItemKindType::ROD) {
+        this->pval += other.pval * (other.number - diff) / other.number;
+        this->timeout += other.timeout * (other.number - diff) / other.number;
+    }
+
+    if (tval == ItemKindType::WAND) {
+        this->pval += other.pval * (other.number - diff) / other.number;
+    }
+}
 /*!
  * @brief エゴ光源のフラグを修正する
  *
@@ -1216,4 +1510,13 @@ char ItemEntity::get_character() const
     const auto &baseitem = this->get_baseitem();
     const auto flavor = baseitem.flavor;
     return flavor ? BaseitemList::get_instance().get_baseitem(flavor).symbol_config.character : baseitem.symbol_config.character;
+}
+
+MonraceId ItemEntity::get_monrace_id() const
+{
+    if (!this->has_monrace()) {
+        THROW_EXCEPTION(std::logic_error, "This item is not related to monrace!");
+    }
+
+    return i2enum<MonraceId>(this->pval);
 }

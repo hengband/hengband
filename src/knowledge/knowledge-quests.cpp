@@ -104,7 +104,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                         ItemEntity item(artifact.bi_key);
                         item.fa_id = quest.reward_fa_id;
                         item.ident = IDENT_STORE;
-                        item_name = describe_flavor(player_ptr, &item, OD_NAME_ONLY);
+                        item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
                     }
 
                     note = format(_("\n   - %sを見つけ出す。", "\n   - Find %s."), item_name.data());

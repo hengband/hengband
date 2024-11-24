@@ -187,24 +187,23 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
         EnumClassFlagGroup<MonsterKindType> flg_monster_kind;
         EnumClassFlagGroup<MonsterResistanceType> flgr;
         OBJECT_IDX this_o_idx = *it++;
-        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-
+        auto &item = player_ptr->current_floor_ptr->o_list[this_o_idx];
         if (turn_flags_ptr->do_take) {
-            const auto tval = o_ptr->bi_key.tval();
+            const auto tval = item.bi_key.tval();
             if (tval == ItemKindType::GOLD || (tval == ItemKindType::MONSTER_REMAINS) || (tval == ItemKindType::STATUE)) {
                 continue;
             }
         }
 
-        const auto flags = o_ptr->get_flags();
-        const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+        const auto flags = item.get_flags();
+        const auto item_name = describe_flavor(player_ptr, item, 0);
         const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_HIDDEN);
         update_object_flags(flags, flg_monster_kind, flgr);
 
-        auto is_unpickable_object = o_ptr->is_fixed_or_random_artifact();
+        auto is_unpickable_object = item.is_fixed_or_random_artifact();
         is_unpickable_object |= r_ptr->kind_flags.has_any_of(flg_monster_kind);
         is_unpickable_object |= !r_ptr->resistance_flags.has_all_of(flgr) && r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_ALL);
-        monster_pickup_object(player_ptr, turn_flags_ptr, m_idx, o_ptr, is_unpickable_object, ny, nx, m_name, item_name, this_o_idx);
+        monster_pickup_object(player_ptr, turn_flags_ptr, m_idx, &item, is_unpickable_object, ny, nx, m_name, item_name, this_o_idx);
     }
 }
 

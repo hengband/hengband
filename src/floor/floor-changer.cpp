@@ -106,7 +106,7 @@ static MONSTER_IDX decide_pet_index(PlayerType *player_ptr, const int current_mo
     return (d == 6) ? 0 : m_pop(floor_ptr);
 }
 
-static MonsterRaceInfo &set_pet_params(PlayerType *player_ptr, const int current_monster, MONSTER_IDX m_idx, const POSITION cy, const POSITION cx)
+static MonraceDefinition &set_pet_params(PlayerType *player_ptr, const int current_monster, MONSTER_IDX m_idx, const POSITION cy, const POSITION cx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     player_ptr->current_floor_ptr->grid_array[cy][cx].m_idx = m_idx;
@@ -116,7 +116,7 @@ static MonsterRaceInfo &set_pet_params(PlayerType *player_ptr, const int current
     m_ptr->fx = cx;
     m_ptr->current_floor_ptr = player_ptr->current_floor_ptr;
     m_ptr->ml = true;
-    m_ptr->mtimed[MTIMED_CSLEEP] = 0;
+    m_ptr->mtimed[MonsterTimedEffect::SLEEP] = 0;
     m_ptr->hold_o_idx_list.clear();
     m_ptr->target_y = 0;
     auto &r_ref = m_ptr->get_real_monrace();
@@ -158,8 +158,8 @@ static void place_pet(PlayerType *player_ptr)
                 exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE));
             }
 
-            if (monrace.cur_num) {
-                monrace.cur_num--;
+            if (monrace.has_entity()) {
+                monrace.decrement_current_numbers();
             }
         }
     }
@@ -336,10 +336,11 @@ static void set_stairs(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.grid_array[player_ptr->y][player_ptr->x];
     const auto &fcms = FloorChangeModesStore::get_instace();
+    const auto &dungeon = floor.get_dungeon_definition();
     if (fcms->has(FloorChangeMode::UP) && !inside_quest(floor.get_quest_id())) {
-        grid.feat = fcms->has(FloorChangeMode::SHAFT) ? feat_state(&floor, feat_down_stair, TerrainCharacteristics::SHAFT) : feat_down_stair;
+        grid.feat = fcms->has(FloorChangeMode::SHAFT) ? dungeon.convert_terrain_id(feat_down_stair, TerrainCharacteristics::SHAFT) : feat_down_stair;
     } else if (fcms->has(FloorChangeMode::DOWN) && !ironman_downward) {
-        grid.feat = fcms->has(FloorChangeMode::SHAFT) ? feat_state(&floor, feat_up_stair, TerrainCharacteristics::SHAFT) : feat_up_stair;
+        grid.feat = fcms->has(FloorChangeMode::SHAFT) ? dungeon.convert_terrain_id(feat_up_stair, TerrainCharacteristics::SHAFT) : feat_up_stair;
     }
 
     grid.mimic = 0;

@@ -54,8 +54,8 @@
 #include "spell-kind/spells-world.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
+#include "system/enums/game-option-page.h"
 #include "system/floor-type-definition.h"
-#include "system/game-option-types.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -104,9 +104,9 @@ enum class ElementSpells {
  * @brief 元素魔法タイプ構造体
  */
 struct element_type {
-    std::string_view title; //!< 領域名
+    std::string title; //!< 領域名
     std::array<AttributeType, 3> type; //!< 属性タイプリスト
-    std::array<std::string_view, 3> name; //!< 属性名リスト
+    std::array<std::string, 3> name; //!< 属性名リスト
     std::unordered_map<AttributeType, AttributeType> extra; //!< 追加属性タイプ
 };
 
@@ -120,8 +120,8 @@ struct element_power {
 
 using element_type_list = const std::unordered_map<ElementRealmType, element_type>;
 using element_power_list = const std::unordered_map<ElementSpells, element_power>;
-using element_tip_list = const std::unordered_map<ElementSpells, std::string_view>;
-using element_text_list = const std::unordered_map<ElementRealmType, std::string_view>;
+using element_tip_list = const std::unordered_map<ElementSpells, std::string>;
+using element_text_list = const std::unordered_map<ElementRealmType, std::string>;
 
 // clang-format off
 /*!
@@ -294,10 +294,10 @@ static element_text_list element_texts = {
  * @param realm_idx 領域番号
  * @return 領域名
  */
-concptr get_element_title(int realm_idx)
+const std::string &get_element_title(int realm_idx)
 {
     auto realm = i2enum<ElementRealmType>(realm_idx);
-    return element_types.at(realm).title.data();
+    return element_types.at(realm).title;
 }
 
 /*!
@@ -305,7 +305,7 @@ concptr get_element_title(int realm_idx)
  * @param realm_idx 領域番号
  * @return 領域で使用できる属性リスト
  */
-static std::array<AttributeType, 3> get_element_types(int realm_idx)
+static const std::array<AttributeType, 3> &get_element_types(int realm_idx)
 {
     auto realm = i2enum<ElementRealmType>(realm_idx);
     return element_types.at(realm).type;
@@ -319,7 +319,7 @@ static std::array<AttributeType, 3> get_element_types(int realm_idx)
  */
 AttributeType get_element_type(int realm_idx, int n)
 {
-    return get_element_types(realm_idx)[n];
+    return get_element_types(realm_idx).at(n);
 }
 
 /*!
@@ -345,9 +345,9 @@ static AttributeType get_element_spells_type(PlayerType *player_ptr, int n)
  * @param realm_idx 領域番号
  * @return 領域で使用できる属性の名称リスト
  */
-static std::array<std::string_view, 3> get_element_names(int realm_idx)
+static const std::array<std::string, 3> &get_element_names(int realm_idx)
 {
-    auto realm = i2enum<ElementRealmType>(realm_idx);
+    const auto realm = i2enum<ElementRealmType>(realm_idx);
     return element_types.at(realm).name;
 }
 
@@ -357,9 +357,9 @@ static std::array<std::string_view, 3> get_element_names(int realm_idx)
  * @param n 属性の何番目か
  * @return 属性名
  */
-concptr get_element_name(int realm_idx, int n)
+const std::string &get_element_name(int realm_idx, int n)
 {
-    return get_element_names(realm_idx)[n].data();
+    return get_element_names(realm_idx).at(n);
 }
 
 /*!
@@ -970,7 +970,7 @@ void display_element_spell_list(PlayerType *player_ptr, int y, int x)
         }
 
         const auto elem = get_elemental_elem(player_ptr, i);
-        const auto name = format(spell.name, get_element_name(player_ptr->element, elem));
+        const auto name = format(spell.name, get_element_name(player_ptr->element, elem).data());
 
         const auto mana_cost = decide_element_mana_cost(player_ptr, spell);
         const auto chance = decide_element_chance(player_ptr, spell);
@@ -990,7 +990,7 @@ void display_element_spell_list(PlayerType *player_ptr, int y, int x)
  * @param type 魔法攻撃属性
  * @return 効果があるならTRUE、なければFALSE
  */
-bool is_elemental_genocide_effective(MonsterRaceInfo *r_ptr, AttributeType type)
+static bool is_elemental_genocide_effective(MonraceDefinition *r_ptr, AttributeType type)
 {
     switch (type) {
     case AttributeType::FIRE:
@@ -1048,19 +1048,18 @@ bool is_elemental_genocide_effective(MonsterRaceInfo *r_ptr, AttributeType type)
  */
 ProcessResult effect_monster_elemental_genocide(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
-    auto type = get_element_type(player_ptr->element, 0);
-    auto name = get_element_name(player_ptr->element, 0);
-    bool b = is_elemental_genocide_effective(em_ptr->r_ptr, type);
-
+    const auto &name = get_element_name(player_ptr->element, 0);
     if (em_ptr->seen_msg) {
-        msg_format(_("%sが%sを包み込んだ。", "The %s surrounds %s."), name, em_ptr->m_name);
+        msg_format(_("%sが%sを包み込んだ。", "The %s surrounds %s."), name.data(), em_ptr->m_name);
     }
 
     if (em_ptr->seen) {
         em_ptr->obvious = true;
     }
 
-    if (!b) {
+    const auto type = get_element_type(player_ptr->element, 0);
+    const auto is_effective = is_elemental_genocide_effective(em_ptr->r_ptr, type);
+    if (!is_effective) {
         if (em_ptr->seen_msg) {
             msg_format(_("%sには効果がなかった。", "%s^ is unaffected."), em_ptr->m_name);
         }
@@ -1068,7 +1067,7 @@ ProcessResult effect_monster_elemental_genocide(PlayerType *player_ptr, EffectMo
         return ProcessResult::PROCESS_TRUE;
     }
 
-    if (genocide_aux(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, is_player(em_ptr->src_idx), (em_ptr->r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One"))) {
+    if (genocide_aux(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, em_ptr->is_player(), (em_ptr->r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One"))) {
         if (em_ptr->seen_msg) {
             msg_format(_("%sは消滅した！", "%s^ disappeared!"), em_ptr->m_name);
         }
@@ -1109,7 +1108,7 @@ bool has_element_resist(PlayerType *player_ptr, ElementRealmType realm, PLAYER_L
 static void display_realm_cursor(int i, int n, term_color_type color)
 {
     char sym;
-    concptr name;
+    std::string name;
     if (i == n) {
         sym = '*';
         name = _("ランダム", "Random");
@@ -1118,7 +1117,7 @@ static void display_realm_cursor(int i, int n, term_color_type color)
         name = element_types.at(i2enum<ElementRealmType>(i + 1)).title.data();
     }
 
-    c_put_str(color, format("%c) %s", sym, name), 12 + (i / 5), 2 + 15 * (i % 5));
+    c_put_str(color, format("%c) %s", sym, name.data()), 12 + (i / 5), 2 + 15 * (i % 5));
 }
 
 /*!
@@ -1218,7 +1217,7 @@ static int get_element_realm(PlayerType *player_ptr, int is, int n)
 
         if (c == '=') {
             screen_save();
-            do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
+            do_cmd_options_aux(player_ptr, GameOptionPage::BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
             screen_load();
         } else if (c != '2' && c != '4' && c != '6' && c != '8') {
             bell();

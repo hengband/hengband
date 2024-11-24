@@ -10,12 +10,14 @@
 #include "player/player-personality.h"
 #include "player/player-sex.h"
 #include "player/player-status-table.h"
-#include "system/game-option-types.h"
+#include "system/enums/game-option-page.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
 #include "util/int-char-converter.h"
+#include <string>
+#include <vector>
 
 /*! オートローラの能力値的要求水準 / Autoroll limit */
 int16_t stat_limit[6];
@@ -36,8 +38,8 @@ static int32_t get_autoroller_prob(int *minval)
     /* 1 percent of the valid random space (60^6 && 72<sum<87) */
     int32_t tot_rand_1p = 320669745;
     int i, j, tmp;
-    int ii[6];
-    int tval[6];
+    int ii[6]{};
+    int tval[6]{};
     int tot = 0;
 
     /* success count */
@@ -328,7 +330,7 @@ bool get_stat_limits(PlayerType *player_ptr)
             break;
         case '=':
             screen_save();
-            do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
+            do_cmd_options_aux(player_ptr, GameOptionPage::BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
             screen_load();
             break;
         default:
@@ -365,10 +367,7 @@ void initialize_chara_limit(chara_limit_type *chara_limit_ptr)
  */
 bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
 {
-#define MAXITEMS 8
-
-    concptr itemname[] = { _("年齢", "age"), _("身長(cm)", "height"), _("体重(kg)", "weight"), _("社会的地位", "social class") };
-
+    static const std::vector<std::string> item_names = { _("年齢", "age"), _("身長(cm)", "height"), _("体重(kg)", "weight"), _("社会的地位", "social class") };
     clear_from(10);
     put_str(_("2/4/6/8で項目選択、+/-で値の増減、Enterで次へ", "2/4/6/8 for Select, +/- for Change value, Enter for Goto next"), 11, 10);
     put_str(
@@ -385,9 +384,10 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
 
     put_str(_("体格/地位の最小値/最大値を設定して下さい。", "Set minimum/maximum attribute."), 10, 10);
     put_str(_("  項    目                 最小値  最大値", " Parameter                    Min     Max"), 13, 20);
-    int mval[MAXITEMS];
-    int cval[MAXITEMS];
-    for (int i = 0; i < MAXITEMS; i++) {
+    constexpr auto max_items = 8;
+    int mval[max_items]{};
+    int cval[max_items]{};
+    for (int i = 0; i < max_items; i++) {
         int m;
         switch (i) {
         case 0: /* Minimum age */
@@ -445,12 +445,12 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
     mval[4] = lb_to_kg(mval[4]);
     mval[5] = lb_to_kg(mval[5]);
 #endif
-    for (auto i = 0; i < MAXITEMS; i++) {
+    for (auto i = 0; i < max_items; i++) {
         cval[i] = mval[i];
     }
 
     for (int i = 0; i < 4; i++) {
-        auto buf = format("%-12s (%3d - %3d)", itemname[i], mval[i * 2], mval[i * 2 + 1]);
+        auto buf = format("%-12s (%3d - %3d)", item_names[i].data(), mval[i * 2], mval[i * 2 + 1]);
         put_str(buf, 14 + i, 20);
         for (int j = 0; j < 2; j++) {
             buf = format("     %3d", cval[i * 2 + j]);
@@ -460,17 +460,17 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
 
     std::string cur;
     int cs = 0;
-    int os = MAXITEMS;
+    int os = max_items;
     while (true) {
         if (cs != os) {
             constexpr auto accept = _("決定する", "Accept");
-            if (os == MAXITEMS) {
+            if (os == max_items) {
                 c_put_str(TERM_WHITE, accept, 19, 35);
             } else {
                 c_put_str(TERM_WHITE, cur, 14 + os / 2, 45 + 8 * (os % 2));
             }
 
-            if (cs == MAXITEMS) {
+            if (cs == max_items) {
                 c_put_str(TERM_YELLOW, accept, 19, 35);
             } else {
                 cur = format("     %3d", cval[cs]);
@@ -492,7 +492,7 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
         case ' ':
         case '\r':
         case '\n':
-            if (cs == MAXITEMS) {
+            if (cs == max_items) {
                 break;
             }
             cs++;
@@ -506,11 +506,11 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
             break;
         case '2':
         case 'j':
-            if (cs < MAXITEMS) {
+            if (cs < max_items) {
                 cs += 2;
             }
-            if (cs > MAXITEMS) {
-                cs = MAXITEMS;
+            if (cs > max_items) {
+                cs = max_items;
             }
             break;
         case '4':
@@ -521,13 +521,13 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
             break;
         case '6':
         case 'l':
-            if (cs < MAXITEMS) {
+            if (cs < max_items) {
                 cs++;
             }
             break;
         case '-':
         case '<':
-            if (cs != MAXITEMS) {
+            if (cs != max_items) {
                 if (cs % 2) {
                     if (cval[cs] > cval[cs - 1]) {
                         cval[cs]--;
@@ -544,7 +544,7 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
             break;
         case '+':
         case '>':
-            if (cs != MAXITEMS) {
+            if (cs != max_items) {
                 if (cs % 2) {
                     if (cval[cs] < mval[cs]) {
                         cval[cs]++;
@@ -560,7 +560,7 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
 
             break;
         case 'm':
-            if (cs != MAXITEMS) {
+            if (cs != max_items) {
                 if (cs % 2) {
                     if (cval[cs] < mval[cs]) {
                         cval[cs] = mval[cs];
@@ -576,7 +576,7 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
 
             break;
         case 'n':
-            if (cs != MAXITEMS) {
+            if (cs != max_items) {
                 if (cs % 2) {
                     if (cval[cs] > cval[cs - 1]) {
                         cval[cs] = cval[cs - 1];
@@ -600,7 +600,7 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
             break;
         case '=':
             screen_save();
-            do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
+            do_cmd_options_aux(player_ptr, GameOptionPage::BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
             screen_load();
             break;
         default:
@@ -608,7 +608,7 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
             break;
         }
 
-        if (c == ESCAPE || ((c == ' ' || c == '\r' || c == '\n') && cs == MAXITEMS)) {
+        if (c == ESCAPE || ((c == ' ' || c == '\r' || c == '\n') && cs == max_items)) {
             break;
         }
     }

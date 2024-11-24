@@ -21,7 +21,6 @@
 #include "mind/mind-ninja.h"
 #include "monster/monster-compaction.h"
 #include "monster/monster-processor.h"
-#include "monster/monster-status.h"
 #include "monster/monster-util.h"
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
@@ -210,7 +209,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     }
 
     player_ptr->leaving_dungeon = false;
-    mproc_init(&floor);
+    floor.reset_mproc();
 
     while (true) {
         if ((floor.m_cnt + 32 > MAX_FLOOR_MONSTERS) && !is_watching) {

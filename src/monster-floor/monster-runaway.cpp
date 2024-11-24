@@ -9,12 +9,12 @@
 #include "dungeon/quest-completion-checker.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-remover.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-processor-util.h"
 #include "pet/pet-fall-off.h"
 #include "system/angband-system.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -27,11 +27,11 @@
  * @param r_idx モンスター種族ID
  * @return 会話内容が行動のみのモンスターか否か
  */
-static bool is_acting_monster(const MonsterRaceId r_idx)
+static bool is_acting_monster(const MonraceId r_idx)
 {
-    auto is_acting_monster = r_idx == MonsterRaceId::GRIP;
-    is_acting_monster |= r_idx == MonsterRaceId::WOLF;
-    is_acting_monster |= r_idx == MonsterRaceId::FANG;
+    auto is_acting_monster = r_idx == MonraceId::GRIP;
+    is_acting_monster |= r_idx == MonraceId::WOLF;
+    is_acting_monster |= r_idx == MonraceId::FANG;
     return is_acting_monster;
 }
 
@@ -60,8 +60,9 @@ static void escape_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, M
 
         auto speak = m_ptr->get_monrace().speak_flags.has_any_of(flags);
         speak &= !is_acting_monster(m_ptr->r_idx);
-        speak &= player_ptr->current_floor_ptr->has_los({ m_ptr->fy, m_ptr->fx });
-        speak &= projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x);
+        const auto m_pos = m_ptr->get_position();
+        speak &= player_ptr->current_floor_ptr->has_los(m_pos);
+        speak &= projectable(player_ptr, m_pos, player_ptr->get_position());
         if (speak) {
             msg_format(_("%s^「ピンチだ！退却させてもらう！」", "%s^ says 'It is the pinch! I will retreat'."), m_name);
         }

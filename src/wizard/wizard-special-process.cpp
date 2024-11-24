@@ -106,14 +106,12 @@
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
 #include <algorithm>
+#include <fstream>
 #include <optional>
 #include <span>
 #include <sstream>
 #include <tuple>
 #include <vector>
-
-#define NUM_O_SET 8
-#define NUM_O_BIT 32
 
 /*!
  * @brief プレイヤーを完全回復する
@@ -227,7 +225,7 @@ static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArt
     ItemEntity item(artifact.bi_key);
     item.fa_id = fa_id;
     item.mark_as_known();
-    return describe_flavor(player_ptr, &item, OD_NAME_ONLY);
+    return describe_flavor(player_ptr, item, OD_NAME_ONLY);
 }
 
 /**
@@ -718,47 +716,47 @@ void wiz_reset_realms(PlayerType *player_ptr)
 }
 
 /*!
- * @brief 現在のオプション設定をダンプ出力する /
+ * @brief 現在のオプション設定をダンプ出力する
  * @param player_ptr プレイヤーへの参照ポインタ
- * Hack -- Dump option bits usage
  */
-void wiz_dump_options(void)
+void wiz_dump_options()
 {
     const auto path = path_build(ANGBAND_DIR_USER, "opt_info.txt");
     const auto &filename = path.string();
-    auto *fff = angband_fopen(path, FileOpenMode::APPEND);
-    if (fff == nullptr) {
+    std::ofstream ofs(path);
+    if (ofs.bad()) {
         msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), filename.data());
         msg_print(nullptr);
         return;
     }
 
-    std::vector<std::vector<int>> exist(NUM_O_SET, std::vector<int>(NUM_O_BIT));
+    constexpr auto num_o_set = 8;
+    constexpr auto num_o_bit = 32;
 
-    for (int i = 0; option_info[i].o_desc; i++) {
-        const option_type *ot_ptr = &option_info[i];
-        if (ot_ptr->o_var) {
-            exist[ot_ptr->o_set][ot_ptr->o_bit] = i + 1;
-        }
+    std::vector<std::vector<int>> exist(num_o_set, std::vector<int>(num_o_bit));
+    auto option_count = 0;
+    for (const auto &option : option_info) {
+        exist[option.flag_position][option.offset] = option_count + 1;
+        option_count++;
     }
 
-    fprintf(fff, "[Option bits usage on %s\n]", AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL).data());
-    fputs("Set - Bit (Page) Option Name\n", fff);
-    fputs("------------------------------------------------\n", fff);
-    for (int i = 0; i < NUM_O_SET; i++) {
-        for (int j = 0; j < NUM_O_BIT; j++) {
+    ofs << "[Option bits usage on %s\n]", AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL);
+    ofs << "Set - Bit (Page) Option Name\n";
+    ofs << "------------------------------------------------\n";
+    for (auto i = 0; i < num_o_set; i++) {
+        for (auto j = 0; j < num_o_bit; j++) {
             if (exist[i][j]) {
-                const option_type *ot_ptr = &option_info[exist[i][j] - 1];
-                fprintf(fff, "  %d -  %02d (%4d) %s\n", i, j, ot_ptr->o_page, ot_ptr->o_text);
+                const auto &option = option_info[exist[i][j] - 1];
+                const auto page = option.page ? enum2i(*option.page) : 255; //!< @details かつてnulloptではなかった頃の値.
+                ofs << format("  %d -  %02d (%4d) %s\n", i, j, page, option.text.data());
             } else {
-                fprintf(fff, "  %d -  %02d\n", i, j);
+                ofs << format("  %d -  %02d\n", i, j);
             }
         }
 
-        fputc('\n', fff);
+        ofs << '\n';
     }
 
-    angband_fclose(fff);
     msg_format(_("オプションbit使用状況をファイル %s に書き出しました。", "Option bits usage dump saved to file %s."), filename.data());
 }
 

@@ -34,63 +34,63 @@ bool apply_disenchant(PlayerType *player_ptr, BIT_FLAGS mode)
     };
 
     const auto t = rand_choice(candidates);
-    auto *o_ptr = &player_ptr->inventory_list[t];
-    if (!o_ptr->is_valid()) {
+    auto &item = player_ptr->inventory_list[t];
+    if (!item.is_valid()) {
         return false;
     }
 
-    if (!o_ptr->is_weapon_armour_ammo()) {
+    if (!item.is_weapon_armour_ammo()) {
         return false;
     }
 
-    if ((o_ptr->to_h <= 0) && (o_ptr->to_d <= 0) && (o_ptr->to_a <= 0) && (o_ptr->pval <= 1)) {
+    if ((item.to_h <= 0) && (item.to_d <= 0) && (item.to_a <= 0) && (item.pval <= 1)) {
         return false;
     }
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    if (o_ptr->is_fixed_or_random_artifact() && evaluate_percent(71)) {
+    const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    if (item.is_fixed_or_random_artifact() && evaluate_percent(71)) {
 #ifdef JP
         msg_format("%s(%c)は劣化を跳ね返した！", item_name.data(), index_to_label(t));
 #else
-        msg_format("Your %s (%c) resist%s disenchantment!", item_name.data(), index_to_label(t), ((o_ptr->number != 1) ? "" : "s"));
+        msg_format("Your %s (%c) resist%s disenchantment!", item_name.data(), index_to_label(t), (item.number != 1) ? "" : "s");
 #endif
         return true;
     }
 
-    int to_h = o_ptr->to_h;
-    int to_d = o_ptr->to_d;
-    int to_a = o_ptr->to_a;
-    int pval = o_ptr->pval;
+    int to_h = item.to_h;
+    int to_d = item.to_d;
+    int to_a = item.to_a;
+    int pval = item.pval;
 
-    if (o_ptr->to_h > 0) {
-        o_ptr->to_h--;
+    if (item.to_h > 0) {
+        item.to_h--;
     }
-    if ((o_ptr->to_h > 5) && one_in_(5)) {
-        o_ptr->to_h--;
-    }
-
-    if (o_ptr->to_d > 0) {
-        o_ptr->to_d--;
-    }
-    if ((o_ptr->to_d > 5) && one_in_(5)) {
-        o_ptr->to_d--;
+    if ((item.to_h > 5) && one_in_(5)) {
+        item.to_h--;
     }
 
-    if (o_ptr->to_a > 0) {
-        o_ptr->to_a--;
+    if (item.to_d > 0) {
+        item.to_d--;
     }
-    if ((o_ptr->to_a > 5) && one_in_(5)) {
-        o_ptr->to_a--;
-    }
-
-    if ((o_ptr->pval > 1) && one_in_(13) && !(mode & 0x01)) {
-        o_ptr->pval--;
+    if ((item.to_d > 5) && one_in_(5)) {
+        item.to_d--;
     }
 
-    bool is_actually_disenchanted = to_h != o_ptr->to_h;
-    is_actually_disenchanted |= to_d != o_ptr->to_d;
-    is_actually_disenchanted |= to_a != o_ptr->to_a;
-    is_actually_disenchanted |= pval != o_ptr->pval;
+    if (item.to_a > 0) {
+        item.to_a--;
+    }
+    if ((item.to_a > 5) && one_in_(5)) {
+        item.to_a--;
+    }
+
+    if ((item.pval > 1) && one_in_(13) && !(mode & 0x01)) {
+        item.pval--;
+    }
+
+    auto is_actually_disenchanted = to_h != item.to_h;
+    is_actually_disenchanted |= to_d != item.to_d;
+    is_actually_disenchanted |= to_a != item.to_a;
+    is_actually_disenchanted |= pval != item.pval;
     if (!is_actually_disenchanted) {
         return true;
     }
@@ -98,7 +98,7 @@ bool apply_disenchant(PlayerType *player_ptr, BIT_FLAGS mode)
 #ifdef JP
     msg_format("%s(%c)は劣化してしまった！", item_name.data(), index_to_label(t));
 #else
-    msg_format("Your %s (%c) %s disenchanted!", item_name.data(), index_to_label(t), ((o_ptr->number != 1) ? "were" : "was"));
+    msg_format("Your %s (%c) %s disenchanted!", item_name.data(), index_to_label(t), (item.number != 1) ? "were" : "was");
 #endif
     chg_virtue(player_ptr, Virtue::HARMONY, 1);
     chg_virtue(player_ptr, Virtue::ENCHANT, -2);

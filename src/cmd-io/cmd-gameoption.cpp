@@ -14,7 +14,7 @@
 #include "io/input-key-acceptor.h"
 #include "io/write-diary.h"
 #include "main/sound-of-music.h"
-#include "system/game-option-types.h"
+#include "system/enums/game-option-page.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
@@ -27,16 +27,16 @@
 #include "view/display-messages.h"
 #include "view/display-symbol.h"
 #include "world/world.h"
+#include <string>
 
-#define OPT_NUM 15
-
+namespace {
 struct opts {
     char key;
-    concptr name;
+    std::string name;
     int row;
 };
 
-static opts option_fields[OPT_NUM] = {
+const std::vector<opts> option_fields = {
     { '1', _("    キー入力     オプション", "Input Options"), 3 },
     { '2', _("   マップ画面    オプション", "Map Screen Options"), 4 },
     { '3', _("  テキスト表示   オプション", "Text Display Options"), 5 },
@@ -55,6 +55,7 @@ static opts option_fields[OPT_NUM] = {
     { 'b', _("      初期       オプション (参照のみ)", "Birth Options (Browse Only)"), 18 },
     { 'c', _("      詐欺       オプション", "Cheat Options"), 19 },
 };
+}
 
 /*!
  * @brief セーブ頻度ターンの次の値を返す
@@ -91,78 +92,64 @@ static int16_t toggle_frequency(int16_t current)
  * @brief 自動セーブオプションを変更するコマンドのメインルーチン
  * @param info 表示メッセージ
  */
-static void do_cmd_options_autosave(PlayerType *player_ptr, concptr info)
+static void do_cmd_options_autosave(PlayerType *player_ptr, std::string_view info)
 {
-    char ch;
-    int i, k = 0, n = 2;
+    auto k = 0;
+    constexpr auto n = 2;
     term_clear();
     while (true) {
-        prt(format(_("%s ( リターンで次へ, y/n でセット, F で頻度を入力, ESC で決定 ) ", "%s (RET to advance, y/n to set, 'F' for frequency, ESC to accept) "), info), 0, 0);
-        for (i = 0; i < n; i++) {
+        prt(format(_("%s ( リターンで次へ, y/n でセット, F で頻度を入力, ESC で決定 ) ", "%s (RET to advance, y/n to set, 'F' for frequency, ESC to accept) "), info.data()), 0, 0);
+        for (auto i = 0; i < n; i++) {
             byte a = TERM_WHITE;
             if (i == k) {
                 a = TERM_L_BLUE;
             }
 
-            c_prt(a, format("%-48s: %s (%s)", autosave_info[i].o_desc, (*autosave_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ")), autosave_info[i].o_text), i + 2, 0);
+            const auto &autosave = autosave_info[i];
+            c_prt(a, format("%-48s: %s (%s)", autosave.description.data(), (*autosave.value ? _("はい  ", "yes") : _("いいえ", "no ")), autosave.text.data()), i + 2, 0);
         }
 
         prt(format(_("自動セーブの頻度： %d ターン毎", "Timed autosave frequency: every %d turns"), autosave_freq), 5, 0);
         move_cursor(k + 2, 50);
-        ch = inkey();
+        auto ch = inkey();
+        auto &autosave = autosave_info[k];
         switch (ch) {
-        case ESCAPE: {
+        case ESCAPE:
             return;
-        }
-
         case '-':
-        case '8': {
+        case '8':
             k = (n + k - 1) % n;
             break;
-        }
-
         case ' ':
         case '\n':
         case '\r':
-        case '2': {
+        case '2':
             k = (k + 1) % n;
             break;
-        }
-
         case 'y':
         case 'Y':
-        case '6': {
-
-            (*autosave_info[k].o_var) = true;
+        case '6':
+            *autosave.value = true;
             k = (k + 1) % n;
             break;
-        }
-
         case 'n':
         case 'N':
-        case '4': {
-            (*autosave_info[k].o_var) = false;
+        case '4':
+            *autosave.value = false;
             k = (k + 1) % n;
             break;
-        }
-
         case 'f':
-        case 'F': {
+        case 'F':
             autosave_freq = toggle_frequency(autosave_freq);
             prt(format(_("自動セーブの頻度： %d ターン毎", "Timed autosave frequency: every %d turns"), autosave_freq), 5, 0);
             break;
-        }
-
-        case '?': {
+        case '?':
             FileDisplayer(player_ptr->name).display(true, _("joption.txt#Autosave", "option.txt#Autosave"), 0, 0);
             term_clear();
             break;
-        }
-
-        default: {
+        default:
             bell();
             break;
-        }
         }
     }
 }
@@ -352,8 +339,9 @@ static void do_cmd_options_cheat(const FloorType &floor, std::string_view player
                 a = TERM_L_BLUE;
             }
 
-            const auto yesno = *cheat_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ");
-            c_prt(enum2i(a), format("%-48s: %s (%s)", cheat_info[i].o_desc, yesno, cheat_info[i].o_text), i + 2, 0);
+            const auto &cheat = cheat_info[i];
+            const auto yesno = *cheat.value ? _("はい  ", "yes") : _("いいえ", "no ");
+            c_prt(enum2i(a), format("%-48s: %s (%s)", cheat.description.data(), yesno, cheat.text.data()), i + 2, 0);
         }
 
         move_cursor(k + 2, 50);
@@ -363,6 +351,7 @@ static void do_cmd_options_cheat(const FloorType &floor, std::string_view player
             ch = I2D(dir);
         }
 
+        const auto &cheat = cheat_info[k];
         switch (ch) {
         case ESCAPE:
             return;
@@ -385,19 +374,19 @@ static void do_cmd_options_cheat(const FloorType &floor, std::string_view player
                     _("詐欺オプションをONにして、スコアを残せなくなった。", "gave up sending score to use cheating options."));
             }
 
-            world.noscore |= cheat_info[k].o_set * 256 + cheat_info[k].o_bit;
-            *cheat_info[k].o_var = true;
+            world.noscore |= cheat.flag_position * 256 + cheat.offset;
+            *cheat.value = true;
             k = (k + 1) % n;
             break;
         }
         case 'n':
         case 'N':
         case '4':
-            *cheat_info[k].o_var = false;
+            *cheat.value = false;
             k = (k + 1) % n;
             break;
         case '?':
-            FileDisplayer(player_name).display(true, std::string(_("joption.txt#", "option.txt#")).append(cheat_info[k].o_text), 0, 0);
+            FileDisplayer(player_name).display(true, std::string(_("joption.txt#", "option.txt#")).append(cheat.text), 0, 0);
             term_clear();
             break;
         default:
@@ -412,15 +401,13 @@ static void do_cmd_options_cheat(const FloorType &floor, std::string_view player
  */
 void extract_option_vars(void)
 {
-    for (int i = 0; option_info[i].o_desc; i++) {
-        int os = option_info[i].o_set;
-        int ob = option_info[i].o_bit;
-        if (option_info[i].o_var) {
-            if (g_option_flags[os] & (1UL << ob)) {
-                (*option_info[i].o_var) = true;
-            } else {
-                (*option_info[i].o_var) = false;
-            }
+    for (auto &option : option_info) {
+        int os = option.flag_position;
+        int ob = option.offset;
+        if (g_option_flags[os] & (1UL << ob)) {
+            *option.value = true;
+        } else {
+            *option.value = false;
         }
     }
 }
@@ -444,7 +431,7 @@ void do_cmd_options(PlayerType *player_ptr)
     screen_save();
     const auto &world = AngbandWorld::get_instance();
     while (true) {
-        int n = OPT_NUM;
+        auto n = std::ssize(option_fields);
         if (!world.noscore && !allow_debug_opts) {
             n--;
         }
@@ -457,7 +444,7 @@ void do_cmd_options(PlayerType *player_ptr)
                 if (i == y) {
                     a = TERM_L_BLUE;
                 }
-                term_putstr(5, option_fields[i].row, -1, a, format("(%c) %s", toupper(option_fields[i].key), option_fields[i].name));
+                term_putstr(5, option_fields[i].row, -1, a, format("(%c) %s", toupper(option_fields[i].key), option_fields[i].name.data()));
             }
 
             prt(_("<方向>で移動, Enterで決定, ESCでキャンセル, ?でヘルプ: ", "Move to <dir>, Select to Enter, Cancel to ESC, ? to help: "), 21, 0);
@@ -510,37 +497,37 @@ void do_cmd_options(PlayerType *player_ptr)
 
         switch (k) {
         case '1': {
-            do_cmd_options_aux(player_ptr, OPT_PAGE_INPUT, _("キー入力オプション", "Input Options"));
+            do_cmd_options_aux(player_ptr, GameOptionPage::INPUT, _("キー入力オプション", "Input Options"));
             break;
         }
         case '2': {
-            do_cmd_options_aux(player_ptr, OPT_PAGE_MAPSCREEN, _("マップ画面オプション", "Map Screen Options"));
+            do_cmd_options_aux(player_ptr, GameOptionPage::MAPSCREEN, _("マップ画面オプション", "Map Screen Options"));
             break;
         }
         case '3': {
-            do_cmd_options_aux(player_ptr, OPT_PAGE_TEXT, _("テキスト表示オプション", "Text Display Options"));
+            do_cmd_options_aux(player_ptr, GameOptionPage::TEXT, _("テキスト表示オプション", "Text Display Options"));
             break;
         }
         case '4': {
-            do_cmd_options_aux(player_ptr, OPT_PAGE_GAMEPLAY, _("ゲームプレイ・オプション", "Game-Play Options"));
+            do_cmd_options_aux(player_ptr, GameOptionPage::GAMEPLAY, _("ゲームプレイ・オプション", "Game-Play Options"));
             break;
         }
         case '5': {
-            do_cmd_options_aux(player_ptr, OPT_PAGE_DISTURBANCE, _("行動中止関係のオプション", "Disturbance Options"));
+            do_cmd_options_aux(player_ptr, GameOptionPage::DISTURBANCE, _("行動中止関係のオプション", "Disturbance Options"));
             break;
         }
         case '6': {
-            do_cmd_options_aux(player_ptr, OPT_PAGE_AUTODESTROY, _("簡易自動破壊オプション", "Easy Auto-Destroyer Options"));
+            do_cmd_options_aux(player_ptr, GameOptionPage::AUTODESTROY, _("簡易自動破壊オプション", "Easy Auto-Destroyer Options"));
             break;
         }
         case 'R':
         case 'r': {
-            do_cmd_options_aux(player_ptr, OPT_PAGE_PLAYRECORD, _("プレイ記録オプション", "Play-record Options"));
+            do_cmd_options_aux(player_ptr, GameOptionPage::PLAYRECORD, _("プレイ記録オプション", "Play-record Options"));
             break;
         }
         case 'B':
         case 'b': {
-            do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH,
+            do_cmd_options_aux(player_ptr, GameOptionPage::BIRTH,
                 (!world.wizard || !allow_debug_opts) ? _("初期オプション(参照のみ)", "Birth Options(browse only)")
                                                      : _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
             break;
@@ -646,54 +633,57 @@ void do_cmd_options(PlayerType *player_ptr)
 }
 
 /*!
- * @brief 標準オプションを変更するコマンドのサブルーチン /
- * Interact with some options
+ * @brief 標準オプションを変更するコマンドのサブルーチン
  * @param page オプションページ番号
  * @param info 表示メッセージ
  */
-void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr info)
+void do_cmd_options_aux(PlayerType *player_ptr, GameOptionPage page, std::string_view info)
 {
     char ch;
-    int i, k = 0, n = 0, l;
+    int k = 0, n = 0, l;
     int opt[MAIN_TERM_MIN_ROWS]{};
     const auto &world = AngbandWorld::get_instance();
-    const auto browse_only = (page == OPT_PAGE_BIRTH) && world.character_generated && (!world.wizard || !allow_debug_opts);
-    for (i = 0; i < MAIN_TERM_MIN_ROWS; i++) {
+    const auto browse_only = (page == GameOptionPage::BIRTH) && world.character_generated && (!world.wizard || !allow_debug_opts);
+    for (auto i = 0; i < MAIN_TERM_MIN_ROWS; i++) {
         opt[i] = 0;
     }
 
-    for (i = 0; option_info[i].o_desc; i++) {
-        if (option_info[i].o_page == page) {
-            opt[n++] = i;
+    auto option_num = 0;
+    for (auto &option : option_info) {
+        if (option.page == page) {
+            opt[n++] = option_num;
         }
+
+        option_num++;
     }
 
     term_clear();
     while (true) {
         DIRECTION dir;
         constexpr auto command = _("%s (リターン:次, %sESC:終了, ?:ヘルプ) ", "%s (RET:next, %s, ?:help) ");
-        prt(format(command, info, browse_only ? _("", "ESC:exit") : _("y/n:変更, ", "y/n:change, ESC:accept")), 0, 0);
-        if (page == OPT_PAGE_AUTODESTROY) {
+        prt(format(command, info.data(), browse_only ? _("", "ESC:exit") : _("y/n:変更, ", "y/n:change, ESC:accept")), 0, 0);
+        if (page == GameOptionPage::AUTODESTROY) {
             constexpr auto mes = _("以下のオプションは、簡易自動破壊を使用するときのみ有効", "Following options will protect items from easy auto-destroyer.");
             c_prt(TERM_YELLOW, mes, 6, _(6, 3));
         }
 
-        for (i = 0; i < n; i++) {
+        for (auto i = 0; i < n; i++) {
             byte a = TERM_WHITE;
             if (i == k) {
                 a = TERM_L_BLUE;
             }
 
-            const auto reply = *option_info[opt[i]].o_var ? _("はい  ", "yes") : _("いいえ", "no ");
-            const auto label = format("%-48s: %s (%.19s)", option_info[opt[i]].o_desc, reply, option_info[opt[i]].o_text);
-            if ((page == OPT_PAGE_AUTODESTROY) && i > 2) {
+            const auto &option = option_info[opt[i]];
+            const auto reply = *option.value ? _("はい  ", "yes") : _("いいえ", "no ");
+            const auto label = format("%-48s: %s (%.19s)", option.description.data(), reply, option.text.data());
+            if ((page == GameOptionPage::AUTODESTROY) && i > 2) {
                 c_prt(a, label, i + 5, 0);
             } else {
                 c_prt(a, label, i + 2, 0);
             }
         }
 
-        if ((page == OPT_PAGE_AUTODESTROY) && (k > 2)) {
+        if ((page == GameOptionPage::AUTODESTROY) && (k > 2)) {
             l = 3;
         } else {
             l = 0;
@@ -706,58 +696,54 @@ void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr 
             ch = I2D(dir);
         }
 
+        const auto &option = option_info[opt[k]];
         switch (ch) {
-        case ESCAPE: {
+        case ESCAPE:
             return;
-        }
         case '-':
-        case '8': {
+        case '8':
             k = (n + k - 1) % n;
             break;
-        }
         case ' ':
         case '\n':
         case '\r':
-        case '2': {
+        case '2':
             k = (k + 1) % n;
             break;
-        }
         case 'y':
         case 'Y':
-        case '6': {
+        case '6':
             if (browse_only) {
                 break;
             }
-            (*option_info[opt[k]].o_var) = true;
+
+            *option.value = true;
             k = (k + 1) % n;
             break;
-        }
         case 'n':
         case 'N':
-        case '4': {
+        case '4':
             if (browse_only) {
                 break;
             }
-            (*option_info[opt[k]].o_var) = false;
+
+            *option.value = false;
             k = (k + 1) % n;
             break;
-        }
         case 't':
-        case 'T': {
+        case 'T':
             if (!browse_only) {
-                (*option_info[opt[k]].o_var) = !(*option_info[opt[k]].o_var);
+                *option.value = !*option.value;
             }
+
             break;
-        }
-        case '?': {
-            FileDisplayer(player_ptr->name).display(true, std::string(_("joption.txt#", "option.txt#")).append(option_info[opt[k]].o_text), 0, 0);
+        case '?':
+            FileDisplayer(player_ptr->name).display(true, std::string(_("joption.txt#", "option.txt#")).append(option.text), 0, 0);
             term_clear();
             break;
-        }
-        default: {
+        default:
             bell();
             break;
-        }
         }
     }
 }

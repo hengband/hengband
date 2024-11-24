@@ -34,7 +34,7 @@ struct learnt_spell_table {
  */
 static void dump_magic_eater(PlayerType *player_ptr, FILE *fff)
 {
-    auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
+    auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<MagicEaterDataList>();
     if (!magic_eater_data) {
         return;
     }

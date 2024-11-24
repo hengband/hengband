@@ -77,12 +77,9 @@ bool TargetSorter::compare_importance(const FloorType &floor, const Pos2D &pos_a
         }
 
         if (appearent_monrace1.r_tkills && appearent_monrace2.r_tkills) {
-            if (appearent_monrace1.level > appearent_monrace2.level) {
-                return true;
-            }
-
-            if (appearent_monrace1.level < appearent_monrace2.level) {
-                return false;
+            const auto order_level = appearent_monrace1.order_level(appearent_monrace2);
+            if (order_level) {
+                return *order_level;
             }
         }
 

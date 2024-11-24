@@ -5,12 +5,31 @@
 #include "object/tval-types.h"
 #include "system/angband.h"
 #include "util/dice.h"
+#include "util/enum-range.h"
 #include "util/flag-group.h"
 #include "view/display-symbol.h"
 #include <array>
+#include <map>
 #include <optional>
 #include <string>
 #include <vector>
+
+enum class MoneyKind {
+    COPPER,
+    SILVER,
+    GARNET,
+    GOLD,
+    OPAL,
+    SAPPHIRE,
+    RUBY,
+    DIAMOND,
+    EMERALD,
+    MITHRIL,
+    ADAMANTITE,
+    MAX,
+};
+
+constexpr EnumRange<MoneyKind> MONEY_KIND_RANGE(MoneyKind::COPPER, MoneyKind::MAX);
 
 class BaseitemKey {
 public:
@@ -86,6 +105,7 @@ public:
     bool is_readable() const;
     bool is_corpse() const;
     bool is_monster() const;
+    bool are_both_statue(const BaseitemKey &other) const;
 
 private:
     ItemKindType type_value;
@@ -135,6 +155,7 @@ public:
 
     bool is_valid() const;
     std::string stripped_name() const;
+    bool order_cost(const BaseitemInfo &other) const;
     void decide_easy_know();
 
     /* @todo ここから下はBaseitemDefinitions.txt に依存しないミュータブルなフィールド群なので、将来的に分離予定 */
@@ -149,6 +170,7 @@ public:
     void mark_as_aware();
 };
 
+enum class MonraceId : short;
 class BaseitemList {
 public:
     BaseitemList(BaseitemList &&) = delete;
@@ -174,11 +196,16 @@ public:
     void resize(size_t new_size);
     void shrink_to_fit();
 
+    std::optional<int> lookup_creeping_coin_drop_offset(MonraceId monrace_id) const;
+    short lookup_baseitem_id(const BaseitemKey &bi_key) const;
+    const BaseitemInfo &lookup_baseitem(const BaseitemKey &bi_key) const;
+    int calc_num_gold_subtypes() const;
+    const BaseitemInfo &lookup_gold(int target_offset) const;
+    int lookup_gold_offset(short bi_id) const;
+
     void reset_all_visuals();
     void reset_identification_flags();
     void mark_common_items_as_aware();
-    short lookup_baseitem_id(const BaseitemKey &bi_key) const;
-    const BaseitemInfo &lookup_baseitem(const BaseitemKey &bi_key) const;
     void shuffle_flavors();
 
 private:
@@ -187,9 +214,13 @@ private:
     static BaseitemList instance;
     std::vector<BaseitemInfo> baseitems{};
 
-    BaseitemInfo &lookup_baseitem(const BaseitemKey &bi_key);
     short exe_lookup(const BaseitemKey &bi_key) const;
     const std::map<BaseitemKey, short> &create_baseitem_index_chache() const;
     const std::map<ItemKindType, std::vector<int>> &create_baseitems_cache() const;
+    int lookup_gold_offset(const BaseitemKey &finding_bi_key) const;
+    const std::map<MoneyKind, std::vector<BaseitemKey>> &create_sorted_golds() const;
+    std::map<MoneyKind, std::vector<BaseitemKey>> create_unsorted_golds() const;
+
+    BaseitemInfo &lookup_baseitem(const BaseitemKey &bi_key);
     void shuffle_flavors(ItemKindType tval);
 };

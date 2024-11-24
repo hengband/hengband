@@ -1,14 +1,17 @@
 #include "system/floor-type-definition.h"
 #include "dungeon/quest.h"
+#include "floor/geometry.h"
 #include "game-option/birth-options.h"
-#include "monster/monster-timed-effect-types.h"
+#include "monster/monster-timed-effects.h"
 #include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/dungeon-info.h"
+#include "system/enums/grid-count-kind.h"
 #include "system/gamevalue.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
+#include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-range.h"
 
@@ -16,9 +19,12 @@ FloorType::FloorType()
     : grid_array(MAX_HGT, std::vector<Grid>(MAX_WID))
     , o_list(MAX_FLOOR_ITEMS)
     , m_list(MAX_FLOOR_MONSTERS)
-    , mproc_list(MAX_MTIMED, std::vector<int16_t>(MAX_FLOOR_MONSTERS, {}))
     , quest_number(QuestId::NONE)
 {
+    for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
+        this->mproc_list[mte] = std::vector<short>(MAX_FLOOR_MONSTERS, {});
+        this->mproc_max[mte] = 0;
+    }
 }
 
 Grid &FloorType::get_grid(const Pos2D pos)
@@ -120,7 +126,7 @@ QuestId FloorType::get_quest_id(const int bonus) const
  * @param pos 座標
  * @return LOSフラグを持つか否か
  */
-bool FloorType::has_los(const Pos2D pos) const
+bool FloorType::has_los(const Pos2D &pos) const
 {
     return this->get_grid(pos).has_los();
 }
@@ -148,6 +154,76 @@ bool FloorType::can_teleport_level(bool to_player) const
     is_invalid_floor &= this->dun_level >= 1;
     is_invalid_floor &= ironman_downward;
     return this->is_special() || is_invalid_floor;
+}
+
+bool FloorType::is_mark(const Pos2D &pos) const
+{
+    return this->get_grid(pos).is_mark();
+}
+
+bool FloorType::is_closed_door(const Pos2D &pos, bool is_mimic) const
+{
+    const auto &grid = this->get_grid(pos);
+    if (is_mimic) {
+        return grid.get_terrain_mimic().is_closed_door();
+    }
+
+    return grid.get_terrain().is_closed_door();
+}
+
+bool FloorType::is_trap(const Pos2D &pos) const
+{
+    return this->get_grid(pos).get_terrain().is_trap();
+}
+
+/*!
+ * @brief プレイヤーの周辺9マスに該当する地形がいくつあるかを返す
+ * @param p_pos プレイヤーの現在位置
+ * @param gck 判定条件
+ * @param under TRUEならばプレイヤーの直下の座標も走査対象にする
+ * @return 該当する地形の数と、該当する地形の中から1つの座標
+ */
+std::pair<int, Pos2D> FloorType::count_doors_traps(const Pos2D &p_pos, GridCountKind gck, bool under) const
+{
+    auto count = 0;
+    Pos2D pos(0, 0);
+    for (auto d = 0; d < 9; d++) {
+        if ((d == 8) && !under) {
+            continue;
+        }
+
+        Pos2D pos_neighbor = p_pos + Pos2DVec(ddy_ddd[d], ddx_ddd[d]);
+        if (!this->is_mark(pos_neighbor)) {
+            continue;
+        }
+
+        if (!this->check_terrain_state(pos_neighbor, gck)) {
+            continue;
+        }
+
+        ++count;
+        pos = pos_neighbor;
+    }
+
+    return { count, pos };
+}
+
+bool FloorType::check_terrain_state(const Pos2D &pos, GridCountKind gck) const
+{
+    const auto &grid = this->get_grid(pos);
+    switch (gck) {
+    case GridCountKind::OPEN: {
+        const auto is_open_grid = grid.get_terrain_mimic().is_open();
+        const auto is_open_dungeon = this->get_dungeon_definition().is_open(grid.get_feat_mimic());
+        return is_open_grid && is_open_dungeon;
+    }
+    case GridCountKind::CLOSED_DOOR:
+        return grid.get_terrain_mimic().is_closed_door();
+    case GridCountKind::TRAP:
+        return grid.get_terrain_mimic().is_trap();
+    default:
+        THROW_EXCEPTION(std::logic_error, format("Invalid GridCountKind is Specified! %d", enum2i(gck)));
+    }
 }
 
 /*!
@@ -192,4 +268,120 @@ bool FloorType::order_pet_dismission(short index1, short index2, short riding_in
     }
 
     return index1 < index2;
+}
+
+/*!
+ * @brief 生成階に応じた財宝を生成する.
+ * @param initial_offset 財宝を価値の低い順に並べた時の番号 (0スタート、nulloptならば乱数で決定)
+ * @return 財宝データで初期化したアイテム
+ */
+ItemEntity FloorType::make_gold(std::optional<int> initial_offset) const
+{
+    int offset;
+    if (initial_offset) {
+        offset = *initial_offset;
+    } else {
+        offset = ((randint1(this->object_level + 2) + 2) / 2) - 1;
+        if (one_in_(CHANCE_BASEITEM_LEVEL_BOOST)) {
+            offset += randint1(this->object_level + 1);
+        }
+    }
+
+    const auto &baseitems = BaseitemList::get_instance();
+    const auto num_gold_subtypes = baseitems.calc_num_gold_subtypes();
+    if (offset >= num_gold_subtypes) {
+        offset = num_gold_subtypes - 1;
+    }
+
+    const auto &baseitem = baseitems.lookup_gold(offset);
+    const auto base = baseitem.cost;
+    ItemEntity item(baseitem.bi_key);
+    item.pval = base + (8 * randint1(base)) + randint1(8);
+    return item;
+}
+
+/*!
+ * @brief INSTA_ART型の固定アーティファクトの生成を確率に応じて試行する
+ * @return 生成したアイテム (失敗したらnullopt)
+ * @details 地上生成は禁止、生成制限がある場合も禁止、個々のアーティファクト生成条件及び生成確率を潜り抜けなければ生成失敗とする
+ * 最初に潜り抜けたINSTA_ART型の固定アーティファクトを生成し、以後はチェックせずスキップする
+ */
+std::optional<ItemEntity> FloorType::try_make_instant_artifact() const
+{
+    if (!this->is_in_underground() || (get_obj_index_hook != nullptr)) {
+        return std::nullopt;
+    }
+
+    return ArtifactList::get_instance().try_make_instant_artifact(this->object_level);
+}
+
+/*!
+ * @brief モンスターの時限ステータスリストを初期化する
+ * @details リストは逆順に走査し、死んでいるモンスターは初期化対象外とする
+ */
+void FloorType::reset_mproc()
+{
+    this->reset_mproc_max();
+    for (short i = this->m_max - 1; i >= 1; i--) {
+        const auto &monster = this->m_list[i];
+        if (!monster.is_valid()) {
+            continue;
+        }
+
+        for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
+            if (monster.mtimed.at(mte) > 0) {
+                this->add_mproc(i, mte);
+            }
+        }
+    }
+}
+
+void FloorType::reset_mproc_max()
+{
+    for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
+        this->mproc_max[mte] = 0;
+    }
+}
+
+/*!
+ * @brief モンスターの時限ステータスを取得する
+ * @param m_idx モンスターの参照ID
+ * @param mte モンスターの時限ステータスID
+ * @return 残りターン値
+ */
+std::optional<int> FloorType::get_mproc_index(short m_idx, MonsterTimedEffect mte)
+{
+    const auto &cur_mproc_list = this->mproc_list[mte];
+    for (auto i = this->mproc_max[mte] - 1; i >= 0; i--) {
+        if (cur_mproc_list[i] == m_idx) {
+            return i;
+        }
+    }
+
+    return std::nullopt;
+}
+
+/*!
+ * @brief モンスターの時限ステータスリストを追加する
+ * @param m_idx モンスターの参照ID
+ * @return mte 追加したいモンスターの時限ステータスID
+ */
+void FloorType::add_mproc(short m_idx, MonsterTimedEffect mte)
+{
+    if (this->mproc_max[mte] < MAX_FLOOR_MONSTERS) {
+        this->mproc_list[mte][this->mproc_max[mte]++] = m_idx;
+    }
+}
+
+/*!
+ * @brief モンスターの時限ステータスリストを削除
+ * @return m_idx モンスターの参照ID
+ * @return mte 削除したいモンスターの時限ステータスID
+ */
+void FloorType::remove_mproc(short m_idx, MonsterTimedEffect mte)
+{
+    const auto mproc_idx = this->get_mproc_index(m_idx, mte);
+    if (mproc_idx >= 0) {
+        this->mproc_list[mte][*mproc_idx] = this->mproc_list[mte][--this->mproc_max[mte]];
+    }
 }

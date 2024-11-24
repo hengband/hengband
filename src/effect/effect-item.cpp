@@ -56,20 +56,20 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
 
         processed_list.insert(this_o_idx);
 
-        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-        bool ignore = false;
-        bool do_kill = false;
+        auto &item = player_ptr->current_floor_ptr->o_list[this_o_idx];
+        auto ignore = false;
+        auto do_kill = false;
         concptr note_kill = nullptr;
 
 #ifdef JP
 #else
-        bool plural = (o_ptr->number > 1);
+        bool plural = (item.number > 1);
 #endif
-        const auto flags = o_ptr->get_flags();
-        bool is_fixed_or_random_artifact = o_ptr->is_fixed_or_random_artifact();
+        const auto flags = item.get_flags();
+        bool is_fixed_or_random_artifact = item.is_fixed_or_random_artifact();
         switch (typ) {
         case AttributeType::ACID: {
-            if (BreakerAcid().hates(o_ptr)) {
+            if (BreakerAcid().hates(&item)) {
                 do_kill = true;
                 note_kill = _("融けてしまった！", (plural ? " melt!" : " melts!"));
                 if (flags.has(TR_IGNORE_ACID)) {
@@ -80,7 +80,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
             break;
         }
         case AttributeType::ELEC: {
-            if (BreakerElec().hates(o_ptr)) {
+            if (BreakerElec().hates(&item)) {
                 do_kill = true;
                 note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
                 if (flags.has(TR_IGNORE_ELEC)) {
@@ -91,7 +91,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
             break;
         }
         case AttributeType::FIRE: {
-            if (BreakerFire().hates(o_ptr)) {
+            if (BreakerFire().hates(&item)) {
                 do_kill = true;
                 note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
                 if (flags.has(TR_IGNORE_FIRE)) {
@@ -102,7 +102,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
             break;
         }
         case AttributeType::COLD: {
-            if (BreakerCold().hates(o_ptr)) {
+            if (BreakerCold().hates(&item)) {
                 note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
                 do_kill = true;
                 if (flags.has(TR_IGNORE_COLD)) {
@@ -113,7 +113,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
             break;
         }
         case AttributeType::PLASMA: {
-            if (BreakerFire().hates(o_ptr)) {
+            if (BreakerFire().hates(&item)) {
                 do_kill = true;
                 note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
                 if (flags.has(TR_IGNORE_FIRE)) {
@@ -121,7 +121,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
                 }
             }
 
-            if (BreakerElec().hates(o_ptr)) {
+            if (BreakerElec().hates(&item)) {
                 ignore = false;
                 do_kill = true;
                 note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
@@ -133,7 +133,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
             break;
         }
         case AttributeType::METEOR: {
-            if (BreakerFire().hates(o_ptr)) {
+            if (BreakerFire().hates(&item)) {
                 do_kill = true;
                 note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
                 if (flags.has(TR_IGNORE_FIRE)) {
@@ -141,7 +141,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
                 }
             }
 
-            if (BreakerCold().hates(o_ptr)) {
+            if (BreakerCold().hates(&item)) {
                 ignore = false;
                 do_kill = true;
                 note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
@@ -156,7 +156,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
         case AttributeType::SHARDS:
         case AttributeType::FORCE:
         case AttributeType::SOUND: {
-            if (BreakerCold().hates(o_ptr)) {
+            if (BreakerCold().hates(&item)) {
                 note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
                 do_kill = true;
             }
@@ -180,14 +180,14 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
             note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
             if (flags.has(TR_RES_CHAOS)) {
                 ignore = true;
-            } else if (o_ptr->bi_key == BaseitemKey(ItemKindType::SCROLL, SV_SCROLL_CHAOS)) {
+            } else if (item.bi_key == BaseitemKey(ItemKindType::SCROLL, SV_SCROLL_CHAOS)) {
                 ignore = true;
             }
             break;
         }
         case AttributeType::HOLY_FIRE:
         case AttributeType::HELL_FIRE: {
-            if (o_ptr->is_cursed()) {
+            if (item.is_cursed()) {
                 do_kill = true;
                 note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
             }
@@ -200,23 +200,23 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
             break;
         }
         case AttributeType::IDENTIFY: {
-            identify_item(player_ptr, o_ptr);
+            identify_item(player_ptr, &item);
             autopick_alter_item(player_ptr, (-this_o_idx), false);
             break;
         }
         case AttributeType::KILL_TRAP:
         case AttributeType::KILL_DOOR: {
-            if (o_ptr->bi_key.tval() != ItemKindType::CHEST) {
+            if (item.bi_key.tval() != ItemKindType::CHEST) {
                 break;
             }
 
-            if (o_ptr->pval <= 0) {
+            if (item.pval <= 0) {
                 break;
             }
 
-            o_ptr->pval = (0 - o_ptr->pval);
-            o_ptr->mark_as_known();
-            if (known && o_ptr->marked.has(OmType::FOUND)) {
+            item.pval = (0 - item.pval);
+            item.mark_as_known();
+            if (known && item.marked.has(OmType::FOUND)) {
                 msg_print(_("カチッと音がした！", "Click!"));
                 is_item_affected = true;
             }
@@ -224,7 +224,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
             break;
         }
         case AttributeType::ANIM_DEAD: {
-            if (o_ptr->bi_key.tval() != ItemKindType::MONSTER_REMAINS) {
+            if (item.bi_key.tval() != ItemKindType::MONSTER_REMAINS) {
                 break;
             }
 
@@ -233,9 +233,9 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
                 mode |= PM_FORCE_PET;
             }
 
-            for (int i = 0; i < o_ptr->number; i++) {
-                const auto &monrace = o_ptr->get_monrace();
-                const auto sval = *o_ptr->bi_key.sval();
+            for (int i = 0; i < item.number; i++) {
+                const auto &monrace = item.get_monrace();
+                const auto sval = *item.bi_key.sval();
                 if (((sval == SV_CORPSE) && (randint1(100) > 80)) || ((sval == SV_SKELETON) && (randint1(100) > 60))) {
                     if (!note_kill) {
                         note_kill = _("灰になった。", (plural ? " become dust." : " becomes dust."));
@@ -262,25 +262,25 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
         }
 
         std::string item_name("");
-        if (known && o_ptr->marked.has(OmType::FOUND)) {
+        if (known && item.marked.has(OmType::FOUND)) {
             is_item_affected = true;
-            item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+            item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         }
 
         if ((is_fixed_or_random_artifact || ignore)) {
-            if (known && o_ptr->marked.has(OmType::FOUND)) {
+            if (known && item.marked.has(OmType::FOUND)) {
                 msg_format(_("%sは影響を受けない！", (plural ? "The %s are unaffected!" : "The %s is unaffected!")), item_name.data());
             }
 
             continue;
         }
 
-        if (known && o_ptr->marked.has(OmType::FOUND) && note_kill) {
+        if (known && item.marked.has(OmType::FOUND) && note_kill) {
             msg_format(_("%sは%s", "The %s%s"), item_name.data(), note_kill);
         }
 
-        const auto bi_id = o_ptr->bi_id;
-        const auto is_potion = o_ptr->is_potion();
+        const auto bi_id = item.bi_id;
+        const auto is_potion = item.is_potion();
         delete_object_idx(player_ptr, this_o_idx);
         if (is_potion) {
             (void)potion_smash_effect(player_ptr, src_idx, y, x, bi_id);

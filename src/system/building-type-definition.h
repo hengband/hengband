@@ -25,16 +25,16 @@ struct building_type {
 constexpr auto MAX_BUILDINGS = 32; /*!< 施設の種類最大数 / Number of buildings */
 extern std::array<building_type, MAX_BUILDINGS> buildings;
 
-enum class MonsterRaceId : short;
-class MonsterRaceInfo;
+enum class MonraceId : short;
+class MonraceDefinition;
 class MeleeGladiator {
 public:
     MeleeGladiator() = default;
-    MeleeGladiator(MonsterRaceId monrace_id, uint32_t odds);
-    MonsterRaceId monrace_id{};
+    MeleeGladiator(MonraceId monrace_id, uint32_t odds);
+    MonraceId monrace_id{};
     uint32_t odds = 0;
 
-    const MonsterRaceInfo &get_monrace() const;
+    const MonraceDefinition &get_monrace() const;
 };
 
 //!< モンスター闘技場定義.
@@ -70,7 +70,7 @@ private:
 
     int decide_max_level() const;
     std::pair<int, bool> set_gladiators(PlayerType *player_ptr, int mon_level);
-    MonsterRaceId search_gladiator(PlayerType *player_ptr, int mon_level, int num_gladiator) const;
-    int matches_gladiator(MonsterRaceId monrace_id, int current_num) const;
+    MonraceId search_gladiator(PlayerType *player_ptr, int mon_level, int num_gladiator) const;
+    int matches_gladiator(MonraceId monrace_id, int current_num) const;
     std::pair<int, int> set_odds(int current_total, bool is_applicable);
 };

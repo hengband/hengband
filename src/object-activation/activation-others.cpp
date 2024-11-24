@@ -15,7 +15,6 @@
 #include "game-option/special-options.h"
 #include "hpmp/hp-mp-processor.h"
 #include "mind/mind-archer.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
 #include "player-attack/player-attack.h"
 #include "player/player-damage.h"
@@ -42,6 +41,7 @@
 #include "status/bad-status-setter.h"
 #include "status/body-improvement.h"
 #include "status/buff-setter.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -165,7 +165,7 @@ bool activate_telekinesis(PlayerType *player_ptr, std::string_view name)
 bool activate_unique_detection(PlayerType *player_ptr)
 {
     MonsterEntity *m_ptr;
-    MonsterRaceInfo *r_ptr;
+    MonraceDefinition *r_ptr;
     msg_print(_("奇妙な場所が頭の中に浮かんだ．．．", "Some strange places show up in your mind. And you see ..."));
     for (int i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
         m_ptr = &player_ptr->current_floor_ptr->m_list[i];
@@ -178,11 +178,11 @@ bool activate_unique_detection(PlayerType *player_ptr)
             msg_format(_("%s． ", "%s. "), r_ptr->name.data());
         }
 
-        if (m_ptr->r_idx == MonsterRaceId::DIO) {
+        if (m_ptr->r_idx == MonraceId::DIO) {
             msg_print(_("きさま！　見ているなッ！", "You bastard! You're watching me, well watch this!"));
         }
 
-        if (m_ptr->r_idx == MonsterRaceId::SAURON) {
+        if (m_ptr->r_idx == MonraceId::SAURON) {
             msg_print(_("あなたは一瞬、瞼なき御目に凝視される感覚に襲われた！",
                 "For a moment, you had the horrible sensation of being stared at by the lidless eye!"));
         }
@@ -440,7 +440,7 @@ bool activate_dispel_magic(PlayerType *player_ptr)
         return true;
     }
 
-    if (!floor.has_los(pos) || !projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
+    if (!floor.has_los(pos) || !projectable(player_ptr, player_ptr->get_position(), pos)) {
         return true;
     }
 

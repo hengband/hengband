@@ -141,7 +141,7 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
     int rating = 0;
     for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
         auto *m_ptr = &floor_ptr->m_list[i];
-        MonsterRaceInfo *r_ptr;
+        MonraceDefinition *r_ptr;
         int delta = 0;
         if (!m_ptr->is_valid() || m_ptr->is_pet()) {
             continue;

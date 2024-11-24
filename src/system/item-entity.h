@@ -22,17 +22,17 @@
 
 enum class FixedArtifactId : short;
 enum class ItemKindType : short;
-enum class SmithEffectType : short;
+enum class MonraceId : short;
 enum class QuestId : short;
 enum class RandomArtifactBias : int;
 enum class RandomArtActType : short;
-
+enum class SmithEffectType : short;
 class ActivationType;
 class ArtifactType;
 class BaseitemInfo;
 class DisplaySymbol;
 class EgoItemDefinition;
-class MonsterRaceInfo;
+class MonraceDefinition;
 class ItemEntity {
 public:
     ItemEntity();
@@ -131,7 +131,7 @@ public:
     bool is_glove_same_temper(const ItemEntity *j_ptr) const;
     bool can_pile(const ItemEntity *j_ptr) const;
     DisplaySymbol get_symbol() const;
-    int get_price() const;
+    int calc_price() const;
     bool is_specific_artifact(FixedArtifactId id) const;
     bool has_unidentified_name() const;
     ItemKindType get_arrow_kind() const;
@@ -158,13 +158,17 @@ public:
     TrFlags get_flags_known() const;
     std::string explain_activation() const;
     bool has_monrace() const;
-    const MonsterRaceInfo &get_monrace() const;
+    const MonraceDefinition &get_monrace() const;
     void track_baseitem() const;
+    bool is_similar(const ItemEntity &other) const;
+    int is_similar_part(const ItemEntity &other) const;
+    bool is_similar_for_store(const ItemEntity &other) const;
 
     void mark_as_known();
     void mark_as_tried() const;
 
     bool try_become_artifact(int dungeon_level);
+    void absorb(ItemEntity &other);
 
 private:
     int get_baseitem_price() const;
@@ -179,4 +183,5 @@ private:
     std::string build_activation_description_dragon_breath() const;
     uint8_t get_color() const;
     char get_character() const;
+    MonraceId get_monrace_id() const;
 };

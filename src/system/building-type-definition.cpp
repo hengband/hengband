@@ -10,13 +10,13 @@
 
 std::array<building_type, MAX_BUILDINGS> buildings;
 
-MeleeGladiator::MeleeGladiator(MonsterRaceId monrace_id, uint32_t odds)
+MeleeGladiator::MeleeGladiator(MonraceId monrace_id, uint32_t odds)
     : monrace_id(monrace_id)
     , odds(odds)
 {
 }
 
-const MonsterRaceInfo &MeleeGladiator::get_monrace() const
+const MonraceDefinition &MeleeGladiator::get_monrace() const
 {
     return MonraceList::get_instance().get_monrace(this->monrace_id);
 }
@@ -185,10 +185,10 @@ std::pair<int, int> MeleeArena::set_odds(int current_total, bool is_applicable)
     return { count, total };
 }
 
-MonsterRaceId MeleeArena::search_gladiator(PlayerType *player_ptr, int mon_level, int num_gladiator) const
+MonraceId MeleeArena::search_gladiator(PlayerType *player_ptr, int mon_level, int num_gladiator) const
 {
     const auto &monraces = MonraceList::get_instance();
-    MonsterRaceId monrace_id;
+    MonraceId monrace_id;
     while (true) {
         get_mon_num_prep(player_ptr, monster_can_entry_arena, nullptr);
         monrace_id = get_mon_num(player_ptr, 0, mon_level, PM_ARENA);
@@ -212,7 +212,7 @@ MonsterRaceId MeleeArena::search_gladiator(PlayerType *player_ptr, int mon_level
     }
 }
 
-int MeleeArena::matches_gladiator(MonsterRaceId monrace_id, int current_num) const
+int MeleeArena::matches_gladiator(MonraceId monrace_id, int current_num) const
 {
     for (auto count = 0; count < current_num; count++) {
         if (monrace_id == this->get_gladiator(count).monrace_id) {

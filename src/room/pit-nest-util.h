@@ -34,31 +34,31 @@ enum class PitKind {
 };
 
 /*! pit/nest型情報の構造体定義 */
-enum class MonsterRaceId : short;
+enum class MonraceId : short;
 class PlayerType;
 struct nest_pit_type {
     std::string name; //<! 部屋名
-    std::function<bool(PlayerType *, MonsterRaceId)> hook_func; //<! モンスターフィルタ関数
+    std::function<bool(PlayerType *, MonraceId)> hook_func; //<! モンスターフィルタ関数
     std::optional<std::function<void(PlayerType *)>> prep_func; //<! 能力フィルタ関数
     int level; //<! 相当階
     int chance; //!< 生成確率
 };
 
 /*! デバッグ時にnestのモンスター情報を確認するための構造体 / A struct for nest monster information with cheat_hear */
-class MonsterRaceInfo;
+class MonraceDefinition;
 class NestMonsterInfo {
 public:
     NestMonsterInfo() = default;
-    MonsterRaceId monrace_id{}; //!< モンスター種族ID
+    MonraceId monrace_id{}; //!< モンスター種族ID
     bool used = false; //!< 既に選んだかどうか
     bool order_nest(const NestMonsterInfo &other) const;
-    const MonsterRaceInfo &get_monrace() const;
+    const MonraceDefinition &get_monrace() const;
 };
 
 class FloorType;
 class MonsterEntity;
 std::optional<NestKind> pick_nest_type(const FloorType &floor, const std::map<NestKind, nest_pit_type> &np_types);
 std::optional<PitKind> pick_pit_type(const FloorType &floor, const std::map<PitKind, nest_pit_type> &np_types);
-std::optional<MonsterRaceId> select_pit_nest_monrace_id(PlayerType *player_ptr, MonsterEntity &align, int boost);
+std::optional<MonraceId> select_pit_nest_monrace_id(PlayerType *player_ptr, MonsterEntity &align, int boost);
 std::string pit_subtype_string(PitKind type);
 std::string nest_subtype_string(NestKind type);

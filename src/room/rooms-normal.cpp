@@ -20,7 +20,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 部屋の配置スペースを確保できたか否か
  */
-bool build_type1(PlayerType *player_ptr, dun_data_type *dd_ptr)
+bool build_type1(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &dungeon = floor.get_dungeon_definition();
@@ -174,7 +174,7 @@ bool build_type1(PlayerType *player_ptr, dun_data_type *dd_ptr)
  * @brief タイプ2の部屋…二重長方形の部屋を生成する / Type 2 -- Overlapping rectangular rooms
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-bool build_type2(PlayerType *player_ptr, dun_data_type *dd_ptr)
+bool build_type2(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     /* Find and reserve some space in the dungeon.  Get center of room. */
     auto &floor = *player_ptr->current_floor_ptr;
@@ -274,7 +274,7 @@ bool build_type2(PlayerType *player_ptr, dun_data_type *dd_ptr)
  * the code below will work (with "bounds checking") for 5x5, or even\n
  * for unsymetric values like 4x3 or 5x3 or 3x4 or 3x5, or even larger.\n
  */
-bool build_type3(PlayerType *player_ptr, dun_data_type *dd_ptr)
+bool build_type3(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     /* Find and reserve some space in the dungeon.  Get center of room. */
     auto &floor = *player_ptr->current_floor_ptr;
@@ -490,7 +490,7 @@ bool build_type3(PlayerType *player_ptr, dun_data_type *dd_ptr)
  *	4 - Inner room has a maze\n
  *	5 - A set of four inner rooms\n
  */
-bool build_type4(PlayerType *player_ptr, dun_data_type *dd_ptr)
+bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     /* Find and reserve some space in the dungeon.  Get center of room. */
     auto &floor = *player_ptr->current_floor_ptr;
@@ -809,7 +809,7 @@ bool build_type4(PlayerType *player_ptr, dun_data_type *dd_ptr)
  *\n
  * When done fill from the inside to find the walls,\n
  */
-bool build_type11(PlayerType *player_ptr, dun_data_type *dd_ptr)
+bool build_type11(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     /* Occasional light */
     auto &floor = *player_ptr->current_floor_ptr;
@@ -851,7 +851,7 @@ bool build_type11(PlayerType *player_ptr, dun_data_type *dd_ptr)
  *\n
  * When done fill from the inside to find the walls,\n
  */
-bool build_type12(PlayerType *player_ptr, dun_data_type *dd_ptr)
+bool build_type12(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     /* Make a random metric */
     const auto h1 = randint1(32) - 16;

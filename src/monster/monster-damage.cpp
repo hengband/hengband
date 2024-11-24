@@ -32,6 +32,7 @@
 #include "spell-kind/spells-random.h"
 #include "status/experience.h"
 #include "system/angband-system.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
@@ -172,52 +173,38 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(std::string_view note, cons
  */
 void MonsterDamageProcessor::death_special_flag_monster()
 {
-    auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    auto r_idx = m_ptr->r_idx;
-    auto *r_ptr = &monraces_info[r_idx];
-    if (monraces_info[r_idx].misc_flags.has(MonsterMiscType::TANUKI)) {
-        r_ptr = &monraces_info[r_idx];
-        m_ptr->ap_r_idx = r_idx;
-        if (r_ptr->r_sights < MAX_SHORT) {
-            r_ptr->r_sights++;
+    auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
+    auto monrace_id = monster.r_idx;
+    auto &monrace = monster.get_monrace();
+    if (monrace.misc_flags.has(MonsterMiscType::TANUKI)) {
+        monster.ap_r_idx = monrace_id;
+        if (monrace.r_sights < MAX_SHORT) {
+            monrace.r_sights++;
         }
     }
 
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
-        auto &real_r_ref = m_ptr->get_real_monrace();
-        r_idx = m_ptr->get_real_monrace_id();
-        if (real_r_ref.r_sights < MAX_SHORT) {
-            real_r_ref.r_sights++;
+    if (monster.mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
+        auto &real_monrace = monster.get_real_monrace();
+        monrace_id = monster.get_real_monrace_id();
+        if (real_monrace.r_sights < MAX_SHORT) {
+            real_monrace.r_sights++;
         }
     }
 
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::CLONED)) {
+    if (monster.mflag2.has(MonsterConstantFlagType::CLONED)) {
         return;
     }
 
-    if (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) {
-        r_ptr->max_num--;
+    if (monrace.population_flags.has(MonsterPopulationType::NAZGUL)) {
+        monrace.max_num--;
         return;
     }
 
-    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
+    if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return;
     }
 
-    this->death_unique_monster(r_idx);
-}
-
-/*
- * @brief ユニークの死亡処理
- * @param r_idx 死亡したユニークの種族番号
- */
-void MonsterDamageProcessor::death_unique_monster(MonsterRaceId r_idx)
-{
-    monraces_info[r_idx].max_num = 0;
-    auto &monraces = MonraceList::get_instance();
-    if (monraces.can_unify_separate(r_idx)) {
-        monraces.kill_unified_unique(r_idx);
-    }
+    MonraceList::get_instance().kill_unique_monster(monrace_id);
 }
 
 void MonsterDamageProcessor::increase_kill_numbers()
@@ -229,14 +216,15 @@ void MonsterDamageProcessor::increase_kill_numbers()
         return;
     }
 
-    if (monster.mflag2.has(MonsterConstantFlagType::KAGE) && (monraces_info[MonsterRaceId::KAGE].r_pkills < MAX_SHORT)) {
-        monraces_info[MonsterRaceId::KAGE].r_pkills++;
+    auto &shadower = MonraceList::get_instance().get_monrace(MonraceId::KAGE);
+    if (monster.mflag2.has(MonsterConstantFlagType::KAGE) && (shadower.r_pkills < MAX_SHORT)) {
+        shadower.r_pkills++;
     } else if (monrace.r_pkills < MAX_SHORT) {
         monrace.r_pkills++;
     }
 
-    if (monster.mflag2.has(MonsterConstantFlagType::KAGE) && (monraces_info[MonsterRaceId::KAGE].r_tkills < MAX_SHORT)) {
-        monraces_info[MonsterRaceId::KAGE].r_tkills++;
+    if (monster.mflag2.has(MonsterConstantFlagType::KAGE) && (shadower.r_tkills < MAX_SHORT)) {
+        shadower.r_tkills++;
     } else if (monrace.r_tkills < MAX_SHORT) {
         monrace.r_tkills++;
     }
@@ -276,7 +264,7 @@ void MonsterDamageProcessor::dying_scream(std::string_view m_name)
     }
 
 #ifdef WORLD_SCORE
-    if (m_ptr->r_idx == MonsterRaceId::SERPENT) {
+    if (m_ptr->r_idx == MonraceId::SERPENT) {
         screen_dump = make_screen_dump(this->player_ptr);
     }
 #endif
@@ -395,7 +383,7 @@ void MonsterDamageProcessor::get_exp_from_mon(const MonsterEntity &monster, int 
     s64b_div(&new_exp, &new_exp_frac, div_h, div_l);
 
     /* Special penalty for mutiply-monster */
-    if (monrace.misc_flags.has(MonsterMiscType::MULTIPLY) || (monster.r_idx == MonsterRaceId::DAWN)) {
+    if (monrace.misc_flags.has(MonsterMiscType::MULTIPLY) || (monster.r_idx == MonraceId::DAWN)) {
         int monnum_penarty = monrace.r_akills / 400;
         if (monnum_penarty > 8) {
             monnum_penarty = 8;
@@ -441,8 +429,8 @@ void MonsterDamageProcessor::set_redraw()
 void MonsterDamageProcessor::summon_special_unique()
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    bool is_special_summon = m_ptr->r_idx == MonsterRaceId::IKETA;
-    is_special_summon |= m_ptr->r_idx == MonsterRaceId::DOPPIO;
+    bool is_special_summon = m_ptr->r_idx == MonraceId::IKETA;
+    is_special_summon |= m_ptr->r_idx == MonraceId::DOPPIO;
     if (!is_special_summon || this->player_ptr->current_floor_ptr->inside_arena || AngbandSystem::get_instance().is_phase_out()) {
         delete_monster_idx(this->player_ptr, this->m_idx);
         return;
@@ -455,15 +443,15 @@ void MonsterDamageProcessor::summon_special_unique()
         mode |= PM_FORCE_PET;
     }
 
-    MonsterRaceId new_unique_idx;
+    MonraceId new_unique_idx;
     concptr mes;
     switch (m_ptr->r_idx) {
-    case MonsterRaceId::IKETA:
-        new_unique_idx = MonsterRaceId::BIKETAL;
+    case MonraceId::IKETA:
+        new_unique_idx = MonraceId::BIKETAL;
         mes = _("「ハァッハッハッハ！！私がバイケタルだ！！」", "Uwa-hahaha!  *I* am Biketal!");
         break;
-    case MonsterRaceId::DOPPIO:
-        new_unique_idx = MonsterRaceId::DIAVOLO;
+    case MonraceId::DOPPIO:
+        new_unique_idx = MonraceId::DIAVOLO;
         mes = _("「これは『試練』だ　過去に打ち勝てという『試練』とオレは受けとった」", "This is a 'trial'. I took it as a 'trial' to overcome in the past.");
         break;
     default: // バグでなければ入らない.

@@ -149,7 +149,7 @@ void process_eat_item(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
             continue;
         }
 
-        const auto item_name = describe_flavor(player_ptr, monap_ptr->o_ptr, OD_OMIT_PREFIX);
+        const auto item_name = describe_flavor(player_ptr, *monap_ptr->o_ptr, OD_OMIT_PREFIX);
 #ifdef JP
         msg_format("%s(%c)を%s盗まれた！", item_name.data(), index_to_label(i_idx), ((monap_ptr->o_ptr->number > 1) ? "一つ" : ""));
 #else
@@ -180,7 +180,7 @@ void process_eat_food(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
             continue;
         }
 
-        const auto item_name = describe_flavor(player_ptr, monap_ptr->o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        const auto item_name = describe_flavor(player_ptr, *monap_ptr->o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
         msg_format("%s(%c)を%s食べられてしまった！", item_name.data(), index_to_label(i_idx), ((monap_ptr->o_ptr->number > 1) ? "一つ" : ""));
 #else

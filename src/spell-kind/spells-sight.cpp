@@ -45,15 +45,15 @@
 bool project_all_los(PlayerType *player_ptr, AttributeType typ, int dam)
 {
     auto &floor = *player_ptr->current_floor_ptr;
+    const auto p_pos = player_ptr->get_position();
     for (short i = 1; i < floor.m_max; i++) {
         auto &monster = floor.m_list[i];
         if (!monster.is_valid()) {
             continue;
         }
 
-        auto y = monster.fy;
-        auto x = monster.fx;
-        if (!floor.has_los({ y, x }) || !projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
+        const auto m_pos = monster.get_position();
+        if (!floor.has_los(m_pos) || !projectable(player_ptr, p_pos, m_pos)) {
             continue;
         }
 
@@ -69,10 +69,8 @@ bool project_all_los(PlayerType *player_ptr, AttributeType typ, int dam)
         }
 
         monster.mflag.reset(MonsterTemporaryFlagType::LOS);
-        auto y = monster.fy;
-        auto x = monster.fx;
-
-        if (project(player_ptr, 0, 0, y, x, dam, typ, flg).notice) {
+        const auto m_pos = monster.get_position();
+        if (project(player_ptr, 0, 0, m_pos.y, m_pos.x, dam, typ, flg).notice) {
             obvious = true;
         }
     }
@@ -370,7 +368,7 @@ bool deathray_monsters(PlayerType *player_ptr)
  * @param r_ptr モンスター種族への参照ポインタ
  * @return 調査結果 善悪アライメント、最大HP、残りHP、AC、速度、ステータス
  */
-std::string probed_monster_info(PlayerType *player_ptr, MonsterEntity *m_ptr, MonsterRaceInfo *r_ptr)
+std::string probed_monster_info(PlayerType *player_ptr, MonsterEntity *m_ptr, MonraceDefinition *r_ptr)
 {
     if (!m_ptr->is_original_ap()) {
         if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {

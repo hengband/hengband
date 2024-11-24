@@ -21,38 +21,29 @@
  */
 void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *g_ptr = &floor_ptr->grid_array[y][x];
-    if (!in_bounds(floor_ptr, y, x)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &grid = floor.grid_array[y][x];
+    if (!in_bounds(&floor, y, x)) {
         return;
     }
-    if (!cave_drop_bold(floor_ptr, y, x)) {
+    if (!cave_drop_bold(&floor, y, x)) {
         return;
     }
-    if (!g_ptr->o_idx_list.empty()) {
-        return;
-    }
-
-    ItemEntity forge;
-    ItemEntity *q_ptr;
-    q_ptr = &forge;
-    q_ptr->wipe();
-    if (!make_gold(player_ptr, q_ptr)) {
+    if (!grid.o_idx_list.empty()) {
         return;
     }
 
-    OBJECT_IDX o_idx = o_pop(floor_ptr);
+    const auto item = floor.make_gold();
+    const auto o_idx = o_pop(&floor);
     if (o_idx == 0) {
         return;
     }
 
-    ItemEntity *o_ptr;
-    o_ptr = &floor_ptr->o_list[o_idx];
-    o_ptr->copy_from(q_ptr);
-
-    o_ptr->iy = y;
-    o_ptr->ix = x;
-    g_ptr->o_idx_list.add(floor_ptr, o_idx);
+    auto &item_pop = floor.o_list[o_idx];
+    item_pop = item;
+    item_pop.iy = y;
+    item_pop.ix = x;
+    grid.o_idx_list.add(&floor, o_idx);
 
     note_spot(player_ptr, y, x);
     lite_spot(player_ptr, y, x);

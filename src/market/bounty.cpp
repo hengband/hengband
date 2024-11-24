@@ -12,7 +12,6 @@
 #include "market/building-util.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "object-enchant/item-apply-magic.h"
@@ -21,6 +20,7 @@
 #include "perception/object-perception.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/dungeon-info.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
@@ -51,12 +51,12 @@ bool exchange_cash(PlayerType *player_ptr)
             continue;
         }
 
-        if (item.get_monrace().idx != MonsterRaceId::TSUCHINOKO) {
+        if (item.get_monrace().idx != MonraceId::TSUCHINOKO) {
             continue;
         }
 
         change = true;
-        const auto item_name = describe_flavor(player_ptr, &item, 0);
+        const auto item_name = describe_flavor(player_ptr, item, 0);
         if (!input_check(format(fmt_convert, item_name.data()))) {
             continue;
         }
@@ -74,12 +74,12 @@ bool exchange_cash(PlayerType *player_ptr)
             continue;
         }
 
-        if (item.get_monrace().idx != MonsterRaceId::TSUCHINOKO) {
+        if (item.get_monrace().idx != MonraceId::TSUCHINOKO) {
             continue;
         }
 
         change = true;
-        const auto item_name = describe_flavor(player_ptr, &item, 0);
+        const auto item_name = describe_flavor(player_ptr, item, 0);
         if (!input_check(format(fmt_convert, item_name.data()))) {
             continue;
         }
@@ -97,12 +97,12 @@ bool exchange_cash(PlayerType *player_ptr)
             continue;
         }
 
-        if (item.get_monrace().idx != MonsterRaceId::TSUCHINOKO) {
+        if (item.get_monrace().idx != MonraceId::TSUCHINOKO) {
             continue;
         }
 
         change = true;
-        const auto item_name = describe_flavor(player_ptr, &item, 0);
+        const auto item_name = describe_flavor(player_ptr, item, 0);
         if (!input_check(format(fmt_convert, item_name.data()))) {
             continue;
         }
@@ -123,7 +123,7 @@ bool exchange_cash(PlayerType *player_ptr)
         }
 
         change = true;
-        const auto item_name = describe_flavor(player_ptr, &item, 0);
+        const auto item_name = describe_flavor(player_ptr, item, 0);
         if (!input_check(format(fmt_convert, item_name.data()))) {
             continue;
         }
@@ -143,7 +143,7 @@ bool exchange_cash(PlayerType *player_ptr)
         }
 
         change = true;
-        const auto item_name = describe_flavor(player_ptr, &item, 0);
+        const auto item_name = describe_flavor(player_ptr, item, 0);
         if (!input_check(format(fmt_convert, item_name.data()))) {
             continue;
         }
@@ -167,7 +167,7 @@ bool exchange_cash(PlayerType *player_ptr)
             }
 
             INVENTORY_IDX inventory_new;
-            const auto item_name = describe_flavor(player_ptr, &item, 0);
+            const auto item_name = describe_flavor(player_ptr, item, 0);
             if (!input_check(format(_("%sを渡しますか？", "Hand %s over? "), item_name.data()))) {
                 continue;
             }
@@ -192,7 +192,7 @@ bool exchange_cash(PlayerType *player_ptr)
              * there is at least one empty slot.
              */
             inventory_new = store_item_to_inventory(player_ptr, &prize_item);
-            const auto got_item_name = describe_flavor(player_ptr, &prize_item, 0);
+            const auto got_item_name = describe_flavor(player_ptr, prize_item, 0);
             msg_format(_("%s(%c)を貰った。", "You get %s (%c). "), got_item_name.data(), index_to_label(inventory_new));
 
             autopick_alter_item(player_ptr, inventory_new, false);
@@ -342,7 +342,7 @@ void determine_bounty_uniques(PlayerType *player_ptr)
     };
 
     // 賞金首とするモンスターの種族IDのリストを生成
-    std::vector<MonsterRaceId> bounty_monrace_ids;
+    std::vector<MonraceId> bounty_monrace_ids;
     auto &world = AngbandWorld::get_instance();
     while (bounty_monrace_ids.size() < std::size(world.bounties)) {
         const auto monrace_id = get_mon_num(player_ptr, 0, MAX_DEPTH - 1, PM_ARENA);
@@ -360,7 +360,7 @@ void determine_bounty_uniques(PlayerType *player_ptr)
     // モンスターのLVで昇順に並び替える
     std::sort(bounty_monrace_ids.begin(), bounty_monrace_ids.end(),
         [&monraces](auto id1, auto id2) {
-            return monraces.get_monrace(id1).level < monraces.get_monrace(id2).level;
+            return monraces.order_level(id2, id1);
         });
 
     // 賞金首情報を設定

@@ -16,9 +16,9 @@
  * @brief シンボル職の記述名を返す
  * @param monrace モンスター種族の構造体ポインタ
  * @return シンボル職の記述名
- * @todo MonsterRaceInfo のオブジェクトメソッドへ繰り込む
+ * @todo MonraceDefinition のオブジェクトメソッドへ繰り込む
  */
-static std::string attr_to_text(const MonsterRaceInfo &monrace)
+static std::string attr_to_text(const MonraceDefinition &monrace)
 {
     if (monrace.visual_flags.has(MonsterVisualType::CLEAR_COLOR)) {
         return _("透明な", "Clear");
@@ -70,7 +70,7 @@ static std::string attr_to_text(const MonsterRaceInfo &monrace)
     return _("変な色の", "Icky");
 }
 
-SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<bool(const MonsterRaceInfo *)> filter_monster)
+SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<bool(const MonraceDefinition *)> filter_monster)
 {
     const auto path = path_build(ANGBAND_DIR_USER, filename);
     std::ofstream ofs(path);
@@ -89,10 +89,10 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
         "---", "---", "---", "-----", "-----", "-------------------");
 
     const auto &monraces = MonraceList::get_instance();
-    std::vector<MonsterRaceId> monrace_ids = monraces.get_valid_monrace_ids();
+    std::vector<MonraceId> monrace_ids = monraces.get_valid_monrace_ids();
     std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
     for (auto monrace_id : monrace_ids) {
-        const auto &monrace = monraces_info[monrace_id];
+        const auto &monrace = monraces.get_monrace(monrace_id);
         if (filter_monster && !filter_monster(&monrace)) {
             continue;
         }
@@ -167,10 +167,10 @@ SpoilerOutputResultType spoil_mon_info()
     spoil_out("------------------------------------------\n\n");
 
     const auto &monraces = MonraceList::get_instance();
-    std::vector<MonsterRaceId> monrace_ids = monraces.get_valid_monrace_ids();
+    std::vector<MonraceId> monrace_ids = monraces.get_valid_monrace_ids();
     std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
     for (auto monrace_id : monrace_ids) {
-        const auto &monrace = monraces_info[monrace_id];
+        const auto &monrace = monraces.get_monrace(monrace_id);
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
             spoil_out("[U] ");
         } else if (monrace.population_flags.has(MonsterPopulationType::NAZGUL)) {

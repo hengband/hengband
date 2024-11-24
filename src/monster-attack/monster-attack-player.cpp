@@ -258,13 +258,17 @@ bool MonsterAttackPlayer::process_monster_attack_hit()
  */
 bool MonsterAttackPlayer::effect_protecion_from_evil()
 {
-    auto *r_ptr = &this->m_ptr->get_monrace();
-    if ((this->player_ptr->protevil <= 0) || r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || (this->player_ptr->lev < this->rlev) || ((randint0(100) + this->player_ptr->lev) <= 50)) {
+    auto &monrace = this->m_ptr->get_monrace();
+    auto is_protected = this->player_ptr->effects()->protection().is_protected();
+    is_protected &= monrace.kind_flags.has(MonsterKindType::EVIL);
+    is_protected &= this->player_ptr->lev >= this->rlev;
+    is_protected &= (randint0(100) + this->player_ptr->lev) > 50;
+    if (!is_protected) {
         return false;
     }
 
     if (is_original_ap_and_seen(this->player_ptr, this->m_ptr)) {
-        r_ptr->r_kind_flags.set(MonsterKindType::EVIL);
+        monrace.r_kind_flags.set(MonsterKindType::EVIL);
     }
 
 #ifdef JP

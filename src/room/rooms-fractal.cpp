@@ -13,7 +13,7 @@
  * @brief タイプ9の部屋…フラクタルカーブによる洞窟生成 / Type 9 -- Driver routine to create fractal grid
  * @return なし
  */
-bool build_type9(PlayerType *player_ptr, dun_data_type *dd_ptr)
+bool build_type9(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     /* get size: note 'Evenness'*/
     auto width = randint1(22) * 2 + 6;

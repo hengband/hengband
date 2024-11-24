@@ -21,7 +21,7 @@ enum class ItemKindType : short;
 enum class PlayerSkillKindType;
 enum class MimicKindType;
 enum class MonsterAbilityType;
-enum class MonsterRaceId : int16_t;
+enum class MonraceId : short;
 enum class Virtue : short;
 enum class RealmType;
 
@@ -89,7 +89,6 @@ public:
 
     uint32_t count{};
 
-    TIME_EFFECT protevil{}; /* Timed -- Protection */
     TIME_EFFECT invuln{}; /* Timed -- Invulnerable */
     TIME_EFFECT ult_res{}; /* Timed -- Ultimate Resistance */
     TIME_EFFECT hero{}; /* Timed -- Heroism */

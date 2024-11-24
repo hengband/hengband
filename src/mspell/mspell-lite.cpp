@@ -33,11 +33,12 @@
  * @param yp 最適な目標地点のY座標を返す参照ポインタ
  * @param xp 最適な目標地点のX座標を返す参照ポインタ
  * @param f_flag 射線に入れるのを避ける地形の所持フラグ
- * @param path_check 射線を判定するための関数ポインタ
+ * @param checker 射線判定の振り分け
  * @return 有効な座標があった場合TRUEを返す
  */
-bool adjacent_grid_check(PlayerType *player_ptr, MonsterEntity *m_ptr, POSITION *yp, POSITION *xp, TerrainCharacteristics f_flag, path_check_pf path_check)
+bool adjacent_grid_check(PlayerType *player_ptr, MonsterEntity *m_ptr, POSITION *yp, POSITION *xp, TerrainCharacteristics f_flag, PathChecker checker)
 {
+    const Pos2D pos(*yp, *xp);
     static int tonari_y[4][8] = { { -1, -1, -1, 0, 0, 1, 1, 1 }, { -1, -1, -1, 0, 0, 1, 1, 1 }, { 1, 1, 1, 0, 0, -1, -1, -1 }, { 1, 1, 1, 0, 0, -1, -1, -1 } };
     static int tonari_x[4][8] = { { -1, 0, 1, -1, 1, -1, 0, 1 }, { 1, 0, -1, 1, -1, 1, 0, -1 }, { -1, 0, 1, -1, 1, -1, 0, 1 }, { 1, 0, -1, 1, -1, 1, 0, -1 } };
 
@@ -53,17 +54,28 @@ bool adjacent_grid_check(PlayerType *player_ptr, MonsterEntity *m_ptr, POSITION 
     }
 
     for (int i = 0; i < 8; i++) {
-        int next_x = *xp + tonari_x[next][i];
-        int next_y = *yp + tonari_y[next][i];
-        Grid *g_ptr;
-        g_ptr = &player_ptr->current_floor_ptr->grid_array[next_y][next_x];
-        if (!g_ptr->cave_has_flag(f_flag)) {
+        const Pos2DVec vec(tonari_y[next][i], tonari_x[next][i]);
+        const auto pos_next = pos + vec;
+        const auto &grid = player_ptr->current_floor_ptr->get_grid(pos_next);
+        if (!grid.cave_has_flag(f_flag)) {
             continue;
         }
 
-        if (path_check(player_ptr, m_ptr->fy, m_ptr->fx, next_y, next_x)) {
-            *yp = next_y;
-            *xp = next_x;
+        bool check_result;
+        switch (checker) {
+        case PathChecker::PROJECTION:
+            check_result = projectable(player_ptr, m_ptr->get_position(), pos_next);
+            break;
+        case PathChecker::LOS:
+            check_result = los(player_ptr, m_ptr->fy, m_ptr->fx, pos_next.y, pos_next.x);
+            break;
+        default:
+            THROW_EXCEPTION(std::logic_error, format("Invalid PathChecker is specified! %d", enum2i(checker)));
+        }
+
+        if (check_result) {
+            *yp = pos_next.y;
+            *xp = pos_next.x;
             return true;
         }
     }
@@ -85,7 +97,7 @@ void decide_lite_range(PlayerType *player_ptr, msa_type *msa_ptr)
         if (terrain.flags.has_not(TerrainCharacteristics::LOS) && terrain.flags.has(TerrainCharacteristics::PROJECT) && one_in_(2)) {
             msa_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);
         }
-    } else if (!adjacent_grid_check(player_ptr, msa_ptr->m_ptr, &msa_ptr->y_br_lite, &msa_ptr->x_br_lite, TerrainCharacteristics::LOS, los)) {
+    } else if (!adjacent_grid_check(player_ptr, msa_ptr->m_ptr, &msa_ptr->y_br_lite, &msa_ptr->x_br_lite, TerrainCharacteristics::LOS, PathChecker::LOS)) {
         msa_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);
     }
 
@@ -120,8 +132,10 @@ static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
     const auto &system = AngbandSystem::get_instance();
     auto light_by_disintegration = msa_ptr->ability_flags.has(MonsterAbilityType::BR_DISI);
     light_by_disintegration &= msa_ptr->m_ptr->cdis < system.get_max_range() / 2;
-    light_by_disintegration &= in_disintegration_range(player_ptr->current_floor_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x);
-    light_by_disintegration &= one_in_(10) || (projectable(player_ptr, msa_ptr->y, msa_ptr->x, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx) && one_in_(2));
+    const auto pos = msa_ptr->get_position();
+    const auto m_pos = msa_ptr->m_ptr->get_position();
+    light_by_disintegration &= in_disintegration_range(player_ptr->current_floor_ptr, m_pos.y, m_pos.x, pos.y, pos.x);
+    light_by_disintegration &= one_in_(10) || (projectable(player_ptr, pos, m_pos) && one_in_(2));
     if (light_by_disintegration) {
         msa_ptr->do_spell = DO_SPELL_BR_DISI;
         msa_ptr->success = true;
@@ -130,7 +144,7 @@ static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
 
     auto light_by_lite = msa_ptr->ability_flags.has(MonsterAbilityType::BR_LITE);
     light_by_lite &= msa_ptr->m_ptr->cdis < system.get_max_range() / 2;
-    light_by_lite &= los(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x);
+    light_by_lite &= los(player_ptr, m_pos.y, m_pos.x, msa_ptr->y, msa_ptr->x);
     light_by_lite &= one_in_(5);
     if (light_by_lite) {
         msa_ptr->do_spell = DO_SPELL_BR_LITE;
@@ -144,8 +158,8 @@ static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
 
     auto by = msa_ptr->y;
     auto bx = msa_ptr->x;
-    get_project_point(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, &by, &bx, 0L);
-    if ((distance(by, bx, msa_ptr->y, msa_ptr->x) <= 3) && los(player_ptr, by, bx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
+    get_project_point(player_ptr, m_pos.y, m_pos.x, &by, &bx, 0L);
+    if ((distance(by, bx, pos.y, pos.x) <= 3) && los(player_ptr, by, bx, pos.y, pos.x) && one_in_(5)) {
         msa_ptr->do_spell = DO_SPELL_BA_LITE;
         msa_ptr->success = true;
     }
@@ -185,7 +199,7 @@ static void decide_lite_breath(msa_type *msa_ptr)
 
 bool decide_lite_projection(PlayerType *player_ptr, msa_type *msa_ptr)
 {
-    if (projectable(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x)) {
+    if (projectable(player_ptr, msa_ptr->m_ptr->get_position(), msa_ptr->get_position())) {
         feature_projection(*player_ptr->current_floor_ptr, msa_ptr);
         return true;
     }
@@ -193,7 +207,7 @@ bool decide_lite_projection(PlayerType *player_ptr, msa_type *msa_ptr)
     msa_ptr->success = false;
     check_lite_area_by_mspell(player_ptr, msa_ptr);
     if (!msa_ptr->success) {
-        msa_ptr->success = adjacent_grid_check(player_ptr, msa_ptr->m_ptr, &msa_ptr->y, &msa_ptr->x, TerrainCharacteristics::PROJECT, projectable);
+        msa_ptr->success = adjacent_grid_check(player_ptr, msa_ptr->m_ptr, &msa_ptr->y, &msa_ptr->x, TerrainCharacteristics::PROJECT, PathChecker::PROJECTION);
     }
 
     decide_lite_breath(msa_ptr);

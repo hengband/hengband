@@ -35,15 +35,12 @@
  */
 static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool heavy)
 {
-    auto *o_ptr = &player_ptr->inventory_list[slot];
-    if (o_ptr->ident & (IDENT_SENSE)) {
-        return;
-    }
-    if (o_ptr->is_known()) {
+    auto &item = player_ptr->inventory_list[slot];
+    if (any_bits(item.ident, IDENT_SENSE) || item.is_known()) {
         return;
     }
 
-    item_feel_type feel = (heavy ? pseudo_value_check_heavy(o_ptr) : pseudo_value_check_light(o_ptr));
+    item_feel_type feel = (heavy ? pseudo_value_check_heavy(&item) : pseudo_value_check_light(&item));
     if (!feel) {
         return;
     }
@@ -96,7 +93,7 @@ static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool
         disturb(player_ptr, false, false);
     }
 
-    const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (slot >= INVEN_MAIN_HAND) {
 #ifdef JP
         constexpr auto mes = "%s%s(%c)は%sという感じがする...";
@@ -104,7 +101,7 @@ static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool
 #else
         constexpr auto mes = "You feel the %s (%c) you are %s %s %s...";
         msg_format(mes, item_name.data(), index_to_label(slot), describe_use(player_ptr, slot),
-            ((o_ptr->number == 1) ? "is" : "are"), game_inscriptions[feel]);
+            ((item.number == 1) ? "is" : "are"), game_inscriptions[feel]);
 #endif
 
     } else {
@@ -113,12 +110,12 @@ static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool
         msg_format(mes, item_name.data(), index_to_label(slot), game_inscriptions[feel]);
 #else
         constexpr auto mes = "You feel the %s (%c) in your pack %s %s...";
-        msg_format(mes, item_name.data(), index_to_label(slot), ((o_ptr->number == 1) ? "is" : "are"), game_inscriptions[feel]);
+        msg_format(mes, item_name.data(), index_to_label(slot), ((item.number == 1) ? "is" : "are"), game_inscriptions[feel]);
 #endif
     }
 
-    o_ptr->ident |= (IDENT_SENSE);
-    o_ptr->feeling = feel;
+    item.ident |= (IDENT_SENSE);
+    item.feeling = feel;
 
     autopick_alter_item(player_ptr, slot, destroy_feeling);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
@@ -447,7 +444,7 @@ void sense_inventory2(PlayerType *player_ptr)
  * @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
  * @return 擬似鑑定結果のIDを返す。
  */
-item_feel_type pseudo_value_check_heavy(ItemEntity *o_ptr)
+item_feel_type pseudo_value_check_heavy(const ItemEntity *o_ptr)
 {
     if (o_ptr->is_fixed_or_random_artifact()) {
         if (o_ptr->is_cursed() || o_ptr->is_broken()) {
@@ -494,7 +491,7 @@ item_feel_type pseudo_value_check_heavy(ItemEntity *o_ptr)
  * @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
  * @return 擬似鑑定結果のIDを返す。
  */
-item_feel_type pseudo_value_check_light(ItemEntity *o_ptr)
+item_feel_type pseudo_value_check_light(const ItemEntity *o_ptr)
 {
     if (o_ptr->is_cursed()) {
         return FEEL_CURSED;

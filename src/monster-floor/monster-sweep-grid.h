@@ -1,6 +1,7 @@
 #pragma once
 
 #include "system/angband.h"
+#include "util/point-2d.h"
 
 class PlayerType;
 class MonsterSweepGrid {
@@ -28,5 +29,5 @@ private:
     void search_room_to_run(POSITION *y, POSITION *x);
     void search_pet_runnable_grid(POSITION *y, POSITION *x, bool no_flow);
     void determine_when_cost(POSITION *yp, POSITION *xp, POSITION y1, POSITION x1, const bool use_scent);
-    bool is_best_cost(const POSITION y, const POSITION x, const int now_cost);
+    bool is_best_cost(const Pos2D &pos, const int now_cost);
 };

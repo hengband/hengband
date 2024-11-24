@@ -109,7 +109,8 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, std::nullopt);
     std::map<int, DisplaySymbol> symbols;
     const auto &[wid, hgt] = term_get_size();
-    std::vector<FEAT_IDX> feat_idx(TerrainList::get_instance().size());
+    auto &terrains = TerrainList::get_instance();
+    std::vector<FEAT_IDX> feat_idx(terrains.size());
 
     const std::string terrain_group(_("地形    ", "Terrains")); //!< @details 他と合わせるためgroupと呼ぶ.
     const auto max_length = terrain_group.length();
@@ -126,7 +127,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
 
         feat_cnt = 0;
     } else {
-        auto &terrain = TerrainList::get_instance().get_terrain(direct_f_idx);
+        auto &terrain = terrains.get_terrain(direct_f_idx);
         auto &symbol_config = terrain.symbol_configs.at(*lighting_level);
         feat_idx[0] = direct_f_idx;
         feat_cnt = 1;
@@ -148,7 +149,6 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     bool flag = false;
     bool redraw = true;
     const auto is_wizard = AngbandWorld::get_instance().wizard;
-    auto &terrains = TerrainList::get_instance();
     auto &symbols_cb = DisplaySymbolsClipboard::get_instance();
     while (!flag) {
         char ch;

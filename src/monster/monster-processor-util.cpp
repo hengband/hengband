@@ -245,7 +245,7 @@ void store_moves_val(int *mm, int y, int x)
  * @brief 古いモンスター情報の保存
  * @param monrace_id モンスター種族ID
  */
-OldRaceFlags::OldRaceFlags(MonsterRaceId monrace_id)
+OldRaceFlags::OldRaceFlags(MonraceId monrace_id)
 {
     if (!MonraceList::is_valid(monrace_id)) {
         return;
@@ -272,7 +272,7 @@ OldRaceFlags::OldRaceFlags(MonsterRaceId monrace_id)
  * @brief モンスターフラグの更新に基づき、モンスター表示を更新する
  * @param monrace 表示対象のモンスター種族定義
  */
-void OldRaceFlags::update_lore_window_flag(const MonsterRaceInfo &monrace) const
+void OldRaceFlags::update_lore_window_flag(const MonraceDefinition &monrace) const
 {
     if ((this->old_r_ability_flags != monrace.r_ability_flags) ||
         (this->old_r_resistance_flags != monrace.r_resistance_flags) || (this->old_r_blows0 != monrace.r_blows[0]) ||

@@ -4,10 +4,10 @@
 #include "floor/floor-object.h"
 #include "grid/grid.h"
 #include "monster-race/race-brightness-mask.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -34,7 +34,7 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
     POSITION y = m_ptr->fy;
     POSITION x = m_ptr->fx;
 
-    m_ptr->get_real_monrace().cur_num--;
+    m_ptr->get_real_monrace().decrement_current_numbers();
     if (r_ptr->misc_flags.has(MonsterMiscType::MULTIPLY)) {
         floor_ptr->num_repro--;
     }
@@ -109,34 +109,24 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
  */
 void wipe_monsters_list(PlayerType *player_ptr)
 {
-    MonraceList::get_instance().defeat_separated_uniques();
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (int i = floor_ptr->m_max - 1; i >= 1; i--) {
-        auto *m_ptr = &floor_ptr->m_list[i];
-        if (!m_ptr->is_valid()) {
+    auto &monraces = MonraceList::get_instance();
+    monraces.defeat_separated_uniques();
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (auto i = floor.m_max - 1; i >= 1; i--) {
+        auto &monster = floor.m_list[i];
+        if (!monster.is_valid()) {
             continue;
         }
 
-        floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx = 0;
-        *m_ptr = {};
+        floor.grid_array[monster.fy][monster.fx].m_idx = 0;
+        monster = {};
     }
 
-    /*
-     * Wiping racial counters of all monsters and incrementing of racial
-     * counters of monsters in party_mon[] are required to prevent multiple
-     * generation of unique monster who is the minion of player.
-     */
-    for (auto &[r_idx, r_ref] : monraces_info) {
-        r_ref.cur_num = 0;
-    }
-
-    floor_ptr->m_max = 1;
-    floor_ptr->m_cnt = 0;
-    for (int i = 0; i < MAX_MTIMED; i++) {
-        floor_ptr->mproc_max[i] = 0;
-    }
-
-    floor_ptr->num_repro = 0;
+    monraces.reset_current_numbers();
+    floor.m_max = 1;
+    floor.m_cnt = 0;
+    floor.reset_mproc_max();
+    floor.num_repro = 0;
     target_who = 0;
     player_ptr->pet_t_m_idx = 0;
     player_ptr->riding_t_m_idx = 0;

@@ -8,7 +8,7 @@
  * @brief モンスターの思い出を書き込む / Write a "lore" record
  * @param r_idx モンスター種族ID
  */
-void wr_lore(MonsterRaceId r_idx)
+void wr_lore(MonraceId r_idx)
 {
     auto *r_ptr = &monraces_info[r_idx];
     wr_s16b((int16_t)r_ptr->r_sights);
