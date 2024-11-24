@@ -366,7 +366,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                 }
             }
 
-            delete_all_items_from_floor(player_ptr, pos.y, pos.x);
+            delete_all_items_from_floor(player_ptr, pos);
 
             /* Destroy "non-permanent" grids */
             if (grid.has(TerrainCharacteristics::PERMANENT)) {

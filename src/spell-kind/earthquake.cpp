@@ -277,7 +277,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            delete_all_items_from_floor(player_ptr, pos.y, pos.x);
+            delete_all_items_from_floor(player_ptr, pos);
             const auto t = floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT) ? randint0(100) : 200;
             if (t < 20) {
                 set_terrain_id_to_grid(player_ptr, pos, TerrainTag::GRANITE_WALL);

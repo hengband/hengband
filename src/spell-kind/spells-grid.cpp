@@ -82,7 +82,7 @@ void stair_creation(PlayerType *player_ptr)
         return;
     }
 
-    delete_all_items_from_floor(player_ptr, player_ptr->y, player_ptr->x);
+    delete_all_items_from_floor(player_ptr, player_ptr->get_position());
     auto *sf_ptr = get_sf_ptr(player_ptr->floor_id);
     if (!sf_ptr) {
         player_ptr->floor_id = get_unused_floor_id(player_ptr);

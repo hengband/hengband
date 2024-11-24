@@ -135,30 +135,26 @@ bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, std:
 }
 
 /*!
- * @brief フロア中のアイテムを全て削除する / Deletes all objects at given location
- * Delete a dungeon object
+ * @brief フロア中のアイテムを全て削除する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y 削除したフロアマスのY座標
- * @param x 削除したフロアマスのX座標
+ * @param pos 削除したフロアマスの座標
  */
-void delete_all_items_from_floor(PlayerType *player_ptr, POSITION y, POSITION x)
+void delete_all_items_from_floor(PlayerType *player_ptr, const Pos2D &pos)
 {
-    Grid *g_ptr;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!in_bounds(floor_ptr, y, x)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (!in_bounds(&floor, pos.y, pos.x)) {
         return;
     }
 
-    g_ptr = &floor_ptr->grid_array[y][x];
-    for (const auto this_o_idx : g_ptr->o_idx_list) {
-        ItemEntity *o_ptr;
-        o_ptr = &floor_ptr->o_list[this_o_idx];
-        o_ptr->wipe();
-        floor_ptr->o_cnt--;
+    auto &grid = floor.get_grid(pos);
+    for (const auto this_o_idx : grid.o_idx_list) {
+        auto &item = floor.o_list[this_o_idx];
+        item.wipe();
+        floor.o_cnt--;
     }
 
-    g_ptr->o_idx_list.clear();
-    lite_spot(player_ptr, y, x);
+    grid.o_idx_list.clear();
+    lite_spot(player_ptr, pos.y, pos.x);
 }
 
 /*!
