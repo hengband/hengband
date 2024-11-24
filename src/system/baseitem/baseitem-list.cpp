@@ -144,7 +144,7 @@ short BaseitemList::lookup_baseitem_id(const BaseitemKey &bi_key) const
         return exe_lookup(bi_key);
     }
 
-    static const auto &cache = this->create_baseitems_cache();
+    static const auto &cache = this->create_baseitem_subtypes_cache();
     const auto it = cache.find(bi_key.tval());
     if (it == cache.end()) {
         constexpr auto fmt = "Specified ItemKindType has no subtype! %d";
@@ -289,7 +289,7 @@ void BaseitemList::shuffle_flavors()
  */
 short BaseitemList::exe_lookup(const BaseitemKey &bi_key) const
 {
-    static const auto &cache = this->create_baseitem_index_chache();
+    static const auto &cache = this->create_baseitem_keys_cache();
     const auto it = cache.find(bi_key);
     if (it == cache.end()) {
         THROW_EXCEPTION(std::runtime_error, format(INVALID_BASEITEM_KEY, enum2i(bi_key.tval()), *bi_key.sval()));
@@ -302,7 +302,7 @@ short BaseitemList::exe_lookup(const BaseitemKey &bi_key) const
  * @brief tvalとbi_key.svalに対応する、BaseitenDefinitions のIDを返すためのキャッシュを生成する
  * @return tvalと(実在する)svalの組み合わせをキーに、ベースアイテムIDを値とした辞書
  */
-const std::map<BaseitemKey, short> &BaseitemList::create_baseitem_index_chache() const
+const std::map<BaseitemKey, short> &BaseitemList::create_baseitem_keys_cache() const
 {
     static std::map<BaseitemKey, short> cache;
     for (const auto &baseitem : this->baseitems) {
@@ -319,7 +319,7 @@ const std::map<BaseitemKey, short> &BaseitemList::create_baseitem_index_chache()
  * @brief 特定のtvalとランダムなsvalの組み合わせからベースアイテムを選択するためのキャッシュを生成する
  * @return tvalをキーに、svalのリストを値とした辞書
  */
-const std::map<ItemKindType, std::vector<int>> &BaseitemList::create_baseitems_cache() const
+const std::map<ItemKindType, std::vector<int>> &BaseitemList::create_baseitem_subtypes_cache() const
 {
     static std::map<ItemKindType, std::vector<int>> cache;
     for (const auto &baseitem : this->baseitems) {

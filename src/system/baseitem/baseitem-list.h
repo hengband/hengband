@@ -73,8 +73,8 @@ private:
     std::vector<BaseitemDefinition> baseitems{};
 
     short exe_lookup(const BaseitemKey &bi_key) const;
-    const std::map<BaseitemKey, short> &create_baseitem_index_chache() const;
-    const std::map<ItemKindType, std::vector<int>> &create_baseitems_cache() const;
+    const std::map<BaseitemKey, short> &create_baseitem_keys_cache() const;
+    const std::map<ItemKindType, std::vector<int>> &create_baseitem_subtypes_cache() const;
     int lookup_gold_offset(const BaseitemKey &finding_bi_key) const;
     const std::map<MoneyKind, std::vector<BaseitemKey>> &create_sorted_golds() const;
     std::map<MoneyKind, std::vector<BaseitemKey>> create_unsorted_golds() const;
