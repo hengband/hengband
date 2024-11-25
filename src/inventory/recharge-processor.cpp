@@ -6,7 +6,6 @@
 #include "hpmp/hp-mp-regenerator.h"
 #include "inventory/inventory-slot-types.h"
 #include "object/tval-types.h"
-#include "system/baseitem/baseitem-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
@@ -84,28 +83,30 @@ void recharge_magic_items(PlayerType *player_ptr)
      */
     for (changed = false, i = 0; i < INVEN_PACK; i++) {
         auto &item = player_ptr->inventory_list[i];
-        const auto &baseitem = item.get_baseitem();
         if (!item.is_valid()) {
             continue;
         }
 
-        if ((item.bi_key.tval() == ItemKindType::ROD) && (item.timeout)) {
-            TIME_EFFECT temp = (item.timeout + (baseitem.pval - 1)) / baseitem.pval;
-            if (temp > item.number) {
-                temp = (TIME_EFFECT)item.number;
-            }
+        if ((item.bi_key.tval() != ItemKindType::ROD) || (item.timeout == 0)) {
+            continue;
+        }
 
-            item.timeout -= temp;
-            if (item.timeout < 0) {
-                item.timeout = 0;
-            }
+        const auto base_pval = item.get_baseitem_pval();
+        short temp = (item.timeout + (base_pval - 1)) / base_pval;
+        if (temp > item.number) {
+            temp = static_cast<short>(item.number);
+        }
 
-            if (!(item.timeout)) {
-                recharged_notice(player_ptr, item);
-                changed = true;
-            } else if (item.timeout % baseitem.pval) {
-                changed = true;
-            }
+        item.timeout -= temp;
+        if (item.timeout < 0) {
+            item.timeout = 0;
+        }
+
+        if (!(item.timeout)) {
+            recharged_notice(player_ptr, item);
+            changed = true;
+        } else if (item.timeout % base_pval) {
+            changed = true;
         }
     }
 

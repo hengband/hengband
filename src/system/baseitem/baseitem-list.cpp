@@ -239,7 +239,7 @@ int BaseitemList::lookup_gold_offset(short bi_id) const
 void BaseitemList::reset_all_visuals()
 {
     for (auto &baseitem : this->baseitems) {
-        baseitem.symbol_config = baseitem.symbol_definition;
+        baseitem.reset_visual();
     }
 }
 
@@ -250,8 +250,8 @@ void BaseitemList::reset_all_visuals()
 void BaseitemList::reset_identification_flags()
 {
     for (auto &baseitem : this->baseitems) {
-        baseitem.tried = false;
-        baseitem.aware = false;
+        baseitem.mark_trial(false);
+        baseitem.mark_awareness(false);
     }
 }
 
@@ -265,7 +265,7 @@ void BaseitemList::mark_common_items_as_aware()
     bi_keys.emplace_back(ItemKindType::POTION, SV_POTION_WATER);
     bi_keys.emplace_back(ItemKindType::STAFF, SV_STAFF_NOTHING);
     for (const auto &bi_key : bi_keys) {
-        this->lookup_baseitem(bi_key).mark_as_aware();
+        this->lookup_baseitem(bi_key).mark_awareness(true);
     }
 }
 

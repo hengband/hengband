@@ -1,8 +1,13 @@
+/*!
+ * @brief ベースアイテムの定義
+ * @date 2024/11/16
+ * @author deskull, Hourier
+ */
+
 #pragma once
 
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/trg-types.h"
-#include "system/angband.h"
 #include "system/baseitem/baseitem-key.h"
 #include "util/dice.h"
 #include "util/flag-group.h"
@@ -23,21 +28,21 @@ public:
 
     BaseitemKey bi_key;
 
-    PARAMETER_VALUE pval{}; /*!< ベースアイテムのpval（能力修正共通値） Object extra info */
+    short pval{}; /*!< ベースアイテムのpval（能力修正共通値） Object extra info */
 
-    HIT_PROB to_h{}; /*!< ベースアイテムの命中修正値 / Bonus to hit */
+    short to_h{}; /*!< ベースアイテムの命中修正値 / Bonus to hit */
     int to_d{}; /*!< ベースアイテムのダメージ修正値 / Bonus to damage */
-    ARMOUR_CLASS to_a{}; /*!< ベースアイテムのAC修正値 / Bonus to armor */
-    ARMOUR_CLASS ac{}; /*!< ベースアイテムのAC基本値 /  Base armor */
+    short to_a{}; /*!< ベースアイテムのAC修正値 / Bonus to armor */
+    short ac{}; /*!< ベースアイテムのAC基本値 /  Base armor */
 
     Dice damage_dice{}; /*!< ダメージダイス */
 
-    WEIGHT weight{}; /*!< ベースアイテムの重量 / Weight */
-    PRICE cost{}; /*!< ベースアイテムの基本価値 / Object "base cost" */
+    int weight{}; /*!< ベースアイテムの重量 / Weight */
+    int cost{}; /*!< ベースアイテムの基本価値 / Object "base cost" */
     TrFlags flags{}; /*!< ベースアイテムの基本特性ビット配列 / Flags */
     EnumClassFlagGroup<ItemGenerationTraitType> gen_flags; /*!< ベースアイテムの生成特性ビット配列 / flags for generate */
 
-    DEPTH level{}; /*!< ベースアイテムの基本生成階 / Level */
+    int level{}; /*!< ベースアイテムの基本生成階 / Level */
 
     struct alloc_table {
         int level; /*!< ベースアイテムの生成階 */
@@ -58,10 +63,11 @@ public:
 
     DisplaySymbol symbol_config; //!< ユーザ個別の設定シンボル (色/文字).
 
-    IDX flavor{}; /*!< 未鑑定名の何番目を当てるか(0は未鑑定名なし) / Special object flavor (or zero) */
+    short flavor{}; /*!< 未鑑定名の何番目を当てるか(0は未鑑定名なし) / Special object flavor (or zero) */
     bool aware{}; /*!< ベースアイテムが鑑定済かどうか /  The player is "aware" of the item's effects */
     bool tried{}; /*!< ベースアイテムを未鑑定のまま試したことがあるか /  The player has "tried" one of the items */
 
-    void mark_as_tried();
-    void mark_as_aware();
+    void mark_trial(bool state);
+    void mark_awareness(bool state);
+    void reset_visual();
 };

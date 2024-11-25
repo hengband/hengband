@@ -22,7 +22,6 @@
 #include "object/item-use-flags.h"
 #include "player-base/player-class.h"
 #include "system/angband-exceptions.h"
-#include "system/baseitem/baseitem-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
@@ -59,15 +58,14 @@ bool recharge(PlayerType *player_ptr, int power)
         return false;
     }
 
-    const auto &baseitem = o_ptr->get_baseitem();
-    const auto lev = baseitem.level;
+    const auto item_level = o_ptr->get_baseitem_level();
 
     TIME_EFFECT recharge_amount;
     int recharge_strength;
     auto is_recharge_successful = true;
     const auto tval = o_ptr->bi_key.tval();
     if (tval == ItemKindType::ROD) {
-        recharge_strength = ((power > lev / 2) ? (power - lev / 2) : 0) / 5;
+        recharge_strength = ((power > item_level / 2) ? (power - item_level / 2) : 0) / 5;
         if (one_in_(recharge_strength)) {
             is_recharge_successful = false;
         } else {
@@ -80,9 +78,9 @@ bool recharge(PlayerType *player_ptr, int power)
         }
     } else {
         if ((tval == ItemKindType::WAND) && (o_ptr->number > 1)) {
-            recharge_strength = (100 + power - lev - (8 * o_ptr->pval / o_ptr->number)) / 15;
+            recharge_strength = (100 + power - item_level - (8 * o_ptr->pval / o_ptr->number)) / 15;
         } else {
-            recharge_strength = (100 + power - lev - (8 * o_ptr->pval)) / 15;
+            recharge_strength = (100 + power - item_level - (8 * o_ptr->pval)) / 15;
         }
 
         if (recharge_strength < 0) {
@@ -92,7 +90,7 @@ bool recharge(PlayerType *player_ptr, int power)
         if (one_in_(recharge_strength)) {
             is_recharge_successful = false;
         } else {
-            recharge_amount = randnum1<short>(1 + baseitem.pval / 2);
+            recharge_amount = randnum1<short>(1 + o_ptr->get_baseitem_pval() / 2);
             if ((tval == ItemKindType::WAND) && (o_ptr->number > 1)) {
                 recharge_amount += (randint1(recharge_amount * (o_ptr->number - 1))) / 2;
                 if (recharge_amount < 1) {
@@ -205,7 +203,7 @@ bool recharge(PlayerType *player_ptr, int power)
         }
 
         if (tval == ItemKindType::ROD) {
-            o_ptr->timeout = (o_ptr->number - 1) * baseitem.pval;
+            o_ptr->timeout = (o_ptr->number - 1) * o_ptr->get_baseitem_pval();
         }
 
         if (tval == ItemKindType::WAND) {

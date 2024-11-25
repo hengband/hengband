@@ -204,11 +204,11 @@ void ItemMagicApplier::apply_cursed()
         return;
     }
 
-    const auto &baseitem = this->o_ptr->get_baseitem();
-    if (!baseitem.cost) {
+    if (this->o_ptr->is_worthless()) {
         set_bits(this->o_ptr->ident, IDENT_BROKEN);
     }
 
+    const auto &baseitem = this->o_ptr->get_baseitem();
     if (baseitem.gen_flags.has(ItemGenerationTraitType::CURSED)) {
         this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
     }

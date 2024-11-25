@@ -41,7 +41,6 @@
 #include "status/experience.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-other-types.h"
-#include "system/baseitem/baseitem-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -228,7 +227,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     sound(SOUND_EAT);
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    const auto lev = o_ptr->get_baseitem().level;
+    const auto level = o_ptr->get_baseitem_level();
 
     /* Identity not known yet */
     const auto &bi_key = o_ptr->bi_key;
@@ -264,7 +263,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     /* The player is now aware of the object */
     if (ident && !o_ptr->is_aware()) {
         object_aware(player_ptr, o_ptr);
-        gain_exp(player_ptr, (lev + (player_ptr->lev >> 1)) / player_ptr->lev);
+        gain_exp(player_ptr, (level + (player_ptr->lev >> 1)) / player_ptr->lev);
     }
 
     static constexpr auto flags_swrf = {

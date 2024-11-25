@@ -19,7 +19,6 @@
 #include "status/experience.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-rod-types.h"
-#include "system/baseitem/baseitem-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -63,13 +62,13 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
         return;
     }
 
-    auto lev = o_ptr->get_baseitem().level;
+    const auto item_level = o_ptr->get_baseitem_level();
     auto chance = this->player_ptr->skill_dev;
     if (this->player_ptr->effects()->confusion().is_confused()) {
         chance = chance / 2;
     }
 
-    auto fail = lev + 5;
+    auto fail = item_level + 5;
     if (chance > fail) {
         fail -= (chance - fail) * 2;
     } else {
@@ -103,7 +102,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
         return;
     }
 
-    const auto &baseitem = o_ptr->get_baseitem();
+    const auto base_pval = o_ptr->get_baseitem_pval();
     if ((o_ptr->number == 1) && (o_ptr->timeout)) {
         if (flush_failure) {
             flush();
@@ -111,7 +110,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
 
         msg_print(_("このロッドはまだ魔力を充填している最中だ。", "The rod is still charging."));
         return;
-    } else if ((o_ptr->number > 1) && (o_ptr->timeout > baseitem.pval * (o_ptr->number - 1))) {
+    } else if ((o_ptr->number > 1) && (o_ptr->timeout > base_pval * (o_ptr->number - 1))) {
         if (flush_failure) {
             flush();
         }
@@ -123,7 +122,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
     sound(SOUND_ZAP);
     auto ident = rod_effect(this->player_ptr, *o_ptr->bi_key.sval(), dir, &use_charge, false);
     if (use_charge) {
-        o_ptr->timeout += baseitem.pval;
+        o_ptr->timeout += base_pval;
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
@@ -141,7 +140,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
     o_ptr->mark_as_tried();
     if ((ident != 0) && !o_ptr->is_aware()) {
         object_aware(this->player_ptr, o_ptr);
-        gain_exp(this->player_ptr, (lev + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
+        gain_exp(this->player_ptr, (item_level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
     static constexpr auto flags_swrf = {

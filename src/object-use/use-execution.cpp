@@ -20,7 +20,6 @@
 #include "player-base/player-class.h"
 #include "player-status/player-energy.h"
 #include "status/experience.h"
-#include "system/baseitem/baseitem-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -58,9 +57,9 @@ void ObjectUseEntity::execute()
         return;
     }
 
-    auto lev = o_ptr->get_baseitem().level;
-    if (lev > 50) {
-        lev = 50 + (lev - 50) / 2;
+    auto item_level = o_ptr->get_baseitem_level();
+    if (item_level > 50) {
+        item_level = 50 + (item_level - 50) / 2;
     }
 
     auto chance = this->player_ptr->skill_dev;
@@ -68,7 +67,7 @@ void ObjectUseEntity::execute()
         chance = chance / 2;
     }
 
-    chance = chance - lev;
+    chance = chance - item_level;
     if ((chance < USE_DEVICE) && one_in_(USE_DEVICE - chance + 1)) {
         chance = USE_DEVICE;
     }
@@ -119,7 +118,7 @@ void ObjectUseEntity::execute()
     o_ptr->mark_as_tried();
     if (ident && !o_ptr->is_aware()) {
         object_aware(this->player_ptr, o_ptr);
-        gain_exp(this->player_ptr, (lev + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
+        gain_exp(this->player_ptr, (item_level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
     static constexpr auto flags_swrf = {

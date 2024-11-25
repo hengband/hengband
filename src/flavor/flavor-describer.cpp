@@ -345,7 +345,7 @@ static std::string describe_charges_rod(const ItemEntity &item)
         return _("(充填中)", " (charging)");
     }
 
-    const auto timeout_per_one = item.get_baseitem().pval;
+    const auto timeout_per_one = item.get_baseitem_pval();
     auto num_of_charging = (item.timeout + (timeout_per_one - 1)) / timeout_per_one;
     if (num_of_charging > item.number) {
         num_of_charging = item.number;

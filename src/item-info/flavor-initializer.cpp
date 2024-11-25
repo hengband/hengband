@@ -36,7 +36,7 @@ void initialize_items_flavor()
         }
 
         if (!baseitem.flavor) {
-            baseitem.mark_as_aware();
+            baseitem.mark_awareness(true);
         }
 
         baseitem.decide_easy_know();

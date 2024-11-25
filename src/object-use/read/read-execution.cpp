@@ -20,7 +20,6 @@
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
 #include "status/experience.h"
-#include "system/baseitem/baseitem-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -119,6 +118,6 @@ void ObjectReadEntity::gain_exp_from_item_use(ItemEntity *o_ptr, bool is_identif
     }
 
     object_aware(this->player_ptr, o_ptr);
-    auto lev = o_ptr->get_baseitem().level;
-    gain_exp(this->player_ptr, (lev + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
+    const auto item_level = o_ptr->get_baseitem_level();
+    gain_exp(this->player_ptr, (item_level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
 }

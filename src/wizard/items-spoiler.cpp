@@ -25,7 +25,7 @@
  */
 static std::pair<DEPTH, PRICE> get_info(const ItemEntity &item)
 {
-    const auto level = item.get_baseitem().level;
+    const auto level = item.get_baseitem_level();
     const auto price = item.calc_price();
     return { level, price };
 }

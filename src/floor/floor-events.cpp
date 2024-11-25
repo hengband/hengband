@@ -28,7 +28,6 @@
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-ring-types.h"
 #include "system/angband-system.h"
-#include "system/baseitem/baseitem-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -231,9 +230,9 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
             delta += 15 * base;
         }
 
-        const auto &baseitem = o_ptr->get_baseitem();
-        if (!o_ptr->is_cursed() && !o_ptr->is_broken() && baseitem.level > floor_ptr->dun_level) {
-            delta += (baseitem.level - floor_ptr->dun_level) * base;
+        const auto item_level = o_ptr->get_baseitem_level();
+        if (!o_ptr->is_cursed() && !o_ptr->is_broken() && item_level > floor_ptr->dun_level) {
+            delta += (item_level - floor_ptr->dun_level) * base;
         }
 
         rating += rating_boost(delta);

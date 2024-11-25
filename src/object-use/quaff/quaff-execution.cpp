@@ -23,7 +23,6 @@
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
 #include "status/experience.h"
-#include "system/baseitem/baseitem-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -71,7 +70,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX i_idx)
     item.mark_as_tried();
     if (ident && !item.is_aware()) {
         object_aware(this->player_ptr, &item);
-        gain_exp(this->player_ptr, (item.get_baseitem().level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
+        gain_exp(this->player_ptr, (item.get_baseitem_level() + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
     static constexpr auto flags = {
