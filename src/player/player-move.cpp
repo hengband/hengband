@@ -73,7 +73,7 @@ static void discover_hidden_things(PlayerType *player_ptr, const Pos2D &pos)
         disturb(player_ptr, false, true);
     }
 
-    if (is_hidden_door(player_ptr, grid)) {
+    if (grid.is_hidden_door()) {
         msg_print(_("隠しドアを発見した。", "You have found a secret door."));
         disclose_grid(player_ptr, pos.y, pos.x);
         disturb(player_ptr, false, false);

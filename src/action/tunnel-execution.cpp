@@ -118,7 +118,7 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
         }
     }
 
-    if (is_hidden_door(player_ptr, grid) && one_in_(4)) {
+    if (grid.is_hidden_door() && one_in_(4)) {
         search(player_ptr);
     }
 

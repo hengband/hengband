@@ -101,6 +101,16 @@ bool Grid::is_rune_explosion() const
     return this->is_object() && TerrainList::get_instance().get_terrain(this->mimic).flags.has(TerrainCharacteristics::RUNE_EXPLOSION);
 }
 
+/*!
+ * @brief マスに隠されたドアがあるかの判定
+ * @return 隠されたドアがあるか否か
+ */
+bool Grid::is_hidden_door() const
+{
+    const auto is_secret = (this->mimic > 0) || this->cave_has_flag(TerrainCharacteristics::SECRET);
+    return is_secret && this->get_terrain().is_closed_door();
+}
+
 bool Grid::has_monster() const
 {
     return is_monster(this->m_idx);
