@@ -419,6 +419,12 @@ void MonsterEntity::set_individual_speed(bool force_fixed_speed)
     this->mspeed = speed;
 }
 
+void MonsterEntity::set_position(const Pos2D &pos)
+{
+    this->fy = pos.y;
+    this->fx = pos.x;
+}
+
 /*!
  * @brief モンスターを敵に回す
  */
