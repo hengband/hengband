@@ -357,24 +357,20 @@ MONSTER_NUMBER summon_LAFFEY_II(PlayerType *player_ptr, const Pos2D &position, M
     if (!floor.inside_arena && real_num < MAX_BUNBUN_NUM) {
         for (auto &monster : floor.m_list) {
             if (monster.r_idx == MonraceId::BUNBUN_STRIKERS) {
-                Pos2D attract_position(0, 0);
-                Pos2D current_position(monster.fy, monster.fx);
+                const auto current_position = monster.get_position();
                 auto &current_grid = floor.get_grid(current_position);
                 auto target_m_idx = current_grid.m_idx;
-
-                if (!mon_scatter(player_ptr, MonraceId::BUNBUN_STRIKERS, &attract_position.y, &attract_position.x, position.y, position.x, 2)) {
+                const auto attract_position = mon_scatter(player_ptr, MonraceId::BUNBUN_STRIKERS, position, 2);
+                if (!attract_position) {
                     continue;
                 }
 
                 current_grid.m_idx = 0;
-                floor.get_grid(attract_position).m_idx = target_m_idx;
-
-                monster.fy = attract_position.y;
-                monster.fx = attract_position.x;
-
+                floor.get_grid(*attract_position).m_idx = target_m_idx;
+                monster.set_position(*attract_position);
                 update_monster(player_ptr, target_m_idx, true);
                 lite_spot(player_ptr, current_position.y, current_position.x);
-                lite_spot(player_ptr, attract_position.y, attract_position.x);
+                lite_spot(player_ptr, attract_position->y, attract_position->x);
 
                 count++;
             }

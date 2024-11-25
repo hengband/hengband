@@ -36,20 +36,16 @@
 #include <optional>
 
 /*!
- * @brief モンスター1体を目標地点に可能な限り近い位置に生成する / improved version of scatter() for place monster
+ * @brief モンスター1体を目標地点に可能な限り近い位置に生成する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param monracde_id 生成モンスター種族
- * @param yp 結果生成位置y座標
- * @param xp 結果生成位置x座標
- * @param y 中心生成位置y座標
- * @param x 中心生成位置x座標
+ * @param pos 中心生成位置座標
  * @param max_distance 生成位置の最大半径
- * @return 成功したらtrue
+ * @return 生成成功ならば結果生成位置座標、失敗ならばnullopt
  *
  */
-bool mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION max_distance)
+std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, const Pos2D &pos, int max_distance)
 {
-    const Pos2D pos(y, x);
     constexpr auto max_distance_permitted = 10;
     std::vector<Pos2D> places;
     for (auto i = 0; i < max_distance_permitted; i++) {
@@ -58,14 +54,14 @@ bool mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, POSITION *yp, POS
 
     std::vector<int> numbers(max_distance_permitted);
     if (max_distance >= max_distance_permitted) {
-        return false;
+        return std::nullopt;
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &monraces = MonraceList::get_instance();
     auto dist = 0;
-    for (auto nx = x - max_distance; nx <= x + max_distance; nx++) {
-        for (auto ny = y - max_distance; ny <= y + max_distance; ny++) {
+    for (auto nx = pos.x - max_distance; nx <= pos.x + max_distance; nx++) {
+        for (auto ny = pos.y - max_distance; ny <= pos.y + max_distance; ny++) {
             const Pos2D pos_neighbor(ny, nx);
             if (!in_bounds(&floor, pos_neighbor.y, pos_neighbor.x)) {
                 continue;
@@ -90,7 +86,7 @@ bool mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, POSITION *yp, POS
                 }
             }
 
-            dist = distance(y, x, pos_neighbor.y, pos_neighbor.x);
+            dist = distance(pos.y, pos.x, pos_neighbor.y, pos_neighbor.x);
             if (dist > max_distance) {
                 continue;
             }
@@ -108,12 +104,10 @@ bool mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, POSITION *yp, POS
     }
 
     if (i >= max_distance_permitted) {
-        return false;
+        return std::nullopt;
     }
 
-    *xp = places[i].x;
-    *yp = places[i].y;
-    return true;
+    return places[i];
 }
 
 /*!
@@ -128,24 +122,24 @@ bool mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, POSITION *yp, POS
  */
 std::optional<MONSTER_IDX> multiply_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
-    POSITION y, x;
-    if (!mon_scatter(player_ptr, m_ptr->r_idx, &y, &x, m_ptr->fy, m_ptr->fx, 1)) {
+    auto &floor = player_ptr->current_floor_ptr;
+    auto &monster = floor->m_list[m_idx];
+    const auto pos = mon_scatter(player_ptr, monster.r_idx, monster.get_position(), 1);
+    if (!pos) {
         return std::nullopt;
     }
 
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::NOPET)) {
+    if (monster.mflag2.has(MonsterConstantFlagType::NOPET)) {
         mode |= PM_NO_PET;
     }
 
-    const auto multiplied_m_idx = place_specific_monster(player_ptr, y, x, m_ptr->r_idx, (mode | PM_NO_KAGE | PM_MULTIPLY), m_idx);
+    const auto multiplied_m_idx = place_specific_monster(player_ptr, pos->y, pos->x, monster.r_idx, (mode | PM_NO_KAGE | PM_MULTIPLY), m_idx);
     if (!multiplied_m_idx) {
         return std::nullopt;
     }
 
-    if (clone || m_ptr->mflag2.has(MonsterConstantFlagType::CLONED)) {
-        floor_ptr->m_list[*multiplied_m_idx].mflag2.set({ MonsterConstantFlagType::CLONED, MonsterConstantFlagType::NOPET });
+    if (clone || monster.mflag2.has(MonsterConstantFlagType::CLONED)) {
+        floor->m_list[*multiplied_m_idx].mflag2.set({ MonsterConstantFlagType::CLONED, MonsterConstantFlagType::NOPET });
     }
 
     return multiplied_m_idx;
