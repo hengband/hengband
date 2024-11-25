@@ -60,7 +60,7 @@ void add_lore_of_damage_skill(PlayerType *player_ptr, lore_type *lore_ptr, Monst
         return;
     }
 
-    const auto monrace_id = lore_ptr->r_idx;
+    const auto monrace_id = lore_ptr->monrace_id;
     const auto base_damage = monspell_race_damage(player_ptr, ms_type, monrace_id, BASE_DAM);
     const auto dice_num = monspell_race_damage(player_ptr, ms_type, monrace_id, DICE_NUM);
     const auto dice_side = monspell_race_damage(player_ptr, ms_type, monrace_id, DICE_SIDE);

@@ -40,7 +40,7 @@ struct lore_msg {
 };
 
 struct lore_type {
-    lore_type(MonraceId r_idx, monster_lore_mode mode);
+    lore_type(MonraceId monrace_id, monster_lore_mode mode);
 
 #ifndef JP
     bool sin = false;
@@ -61,7 +61,7 @@ struct lore_type {
     concptr q = "";
     byte qc = 0;
 
-    MonraceId r_idx;
+    MonraceId monrace_id;
     BIT_FLAGS mode;
     MonsterSex msex;
     RaceBlowMethodType method;
