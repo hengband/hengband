@@ -11,7 +11,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trc-types.h"
 #include "sv-definition/sv-ring-types.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"

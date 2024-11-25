@@ -7,7 +7,8 @@
 #include "object-enchant/special-object-flags.h"
 #include "system/angband-exceptions.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "system/dungeon-info.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
@@ -57,7 +58,7 @@ static std::string bind_rumor_name(std::string_view base, std::string_view item_
  * @return トークン読み込み成否 とトークン群の配列
  * @todo tmp_tokensを使わず単なるsplitにすればもっと簡略化できそう
  */
-std::pair<bool, std::vector<std::string>> get_rumor_tokens(std::string rumor)
+static std::pair<bool, std::vector<std::string>> get_rumor_tokens(std::string rumor)
 {
     constexpr auto num_tokens = 3;
     char *tmp_tokens[num_tokens];

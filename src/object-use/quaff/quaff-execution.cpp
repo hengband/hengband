@@ -23,7 +23,7 @@
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
 #include "status/experience.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -124,7 +124,7 @@ bool ObjectQuaffEntity::can_quaff()
 ItemEntity ObjectQuaffEntity::copy_object(const INVENTORY_IDX i_idx)
 {
     auto *tmp_o_ptr = ref_item(this->player_ptr, i_idx);
-    auto o_val = *tmp_o_ptr;
+    ItemEntity o_val = *tmp_o_ptr;
     o_val.number = 1;
     return o_val;
 }

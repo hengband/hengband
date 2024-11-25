@@ -11,7 +11,6 @@
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
 #include "player/player-status-flags.h"
-#include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
@@ -20,6 +19,7 @@
 #include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
+#include "view/display-symbol.h"
 #include <array>
 #include <vector>
 

@@ -25,7 +25,9 @@
 #include "sv-definition/sv-ring-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
+#include "system/enums/monrace/monrace-id.h"
 #include "system/monster-race-info.h"
 #include "term/term-color-types.h"
 #include "tracking/baseitem-tracker.h"
@@ -820,7 +822,7 @@ bool ItemEntity::is_target_of(QuestId quest_id) const
     return this->bi_key == artifact.bi_key;
 }
 
-BaseitemInfo &ItemEntity::get_baseitem() const
+BaseitemDefinition &ItemEntity::get_baseitem() const
 {
     return BaseitemList::get_instance().get_baseitem(this->bi_id);
 }

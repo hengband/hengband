@@ -30,6 +30,8 @@
 #include "sv-definition/sv-scroll-types.h"
 #include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/enums/monrace/monrace-id.h"

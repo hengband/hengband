@@ -2436,9 +2436,6 @@
     <ClCompile Include="..\..\src\system\monster-entity.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\baseitem-info.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\system\spell-info-list.cpp">
       <Filter>system</Filter>
     </ClCompile>
@@ -2528,6 +2525,15 @@
     </ClCompile>
     <ClCompile Include="..\..\src\system\dungeon-data-definition.cpp">
       <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\baseitem\baseitem-definition.cpp">
+      <Filter>system\baseitem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\baseitem\baseitem-key.cpp">
+      <Filter>system\baseitem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\baseitem\baseitem-list.cpp">
+      <Filter>system\baseitem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5361,9 +5367,6 @@
     <ClInclude Include="..\..\src\timed-effect\player-blindness.h">
       <Filter>timed-effect</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\baseitem-info.h">
-      <Filter>system</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\system\spell-info-list.h">
       <Filter>system</Filter>
     </ClInclude>
@@ -5477,6 +5480,15 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\enums\grid-count-kind.h">
       <Filter>system\enums</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\baseitem\baseitem-definition.h">
+      <Filter>system\baseitem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\baseitem\baseitem-key.h">
+      <Filter>system\baseitem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\baseitem\baseitem-list.h">
+      <Filter>system\baseitem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -5750,6 +5762,9 @@
     </Filter>
     <Filter Include="system\enums\monrace">
       <UniqueIdentifier>{123780c8-0bf5-47ac-aabd-c9f3dbe74855}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\baseitem">
+      <UniqueIdentifier>{b1f45c00-0add-4e05-8c05-bac1f29550c6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

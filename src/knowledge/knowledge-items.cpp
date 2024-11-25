@@ -19,6 +19,8 @@
 #include "perception/identification.h"
 #include "perception/object-perception.h"
 #include "system/artifact-type-definition.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -120,7 +122,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
  * @param baseitem ベースアイテムへの参照
  * @return collect_objects() の処理を続行するか否か
  */
-static bool check_baseitem_chance(const BIT_FLAGS8 mode, const BaseitemInfo &baseitem)
+static bool check_baseitem_chance(const BIT_FLAGS8 mode, const BaseitemDefinition &baseitem)
 {
     if (mode & 0x02) {
         return true;

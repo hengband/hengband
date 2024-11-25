@@ -11,7 +11,8 @@
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "player/player-status.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -45,7 +46,7 @@ DisplaySymbol image_object()
 {
     if (use_graphics) {
         auto &baseitems = BaseitemList::get_instance();
-        const std::span<BaseitemInfo> candidates(baseitems.begin() + 1, baseitems.end());
+        const std::span<BaseitemDefinition> candidates(baseitems.begin() + 1, baseitems.end());
         const auto &baseitem = rand_choice(candidates);
         return baseitem.symbol_config;
     }

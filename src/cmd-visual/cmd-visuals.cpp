@@ -14,6 +14,8 @@
 #include "knowledge/knowledge-monsters.h"
 #include "knowledge/lighting-level-table.h"
 #include "main/sound-of-music.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
