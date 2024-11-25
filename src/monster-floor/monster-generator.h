@@ -8,7 +8,7 @@ enum class MonraceId : short;
 class PlayerType;
 using summon_specific_pf = std::optional<MONSTER_IDX>(PlayerType *, POSITION, POSITION, DEPTH, summon_type, BIT_FLAGS, std::optional<MONSTER_IDX>);
 
-bool mon_scatter(PlayerType *player_ptr, MonraceId r_idx, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION max_dist);
+bool mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION max_distance);
 std::optional<MONSTER_IDX> multiply_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode);
 std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITION y, POSITION x, MonraceId r_idx, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx = std::nullopt);
 std::optional<MONSTER_IDX> place_random_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode);
