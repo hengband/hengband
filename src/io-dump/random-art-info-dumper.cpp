@@ -60,7 +60,7 @@ static void spoil_random_artifact_aux(PlayerType *player_ptr, const ItemEntity &
         return;
     }
 
-    const auto artifacts_list = random_artifact_analyze(player_ptr, &item);
+    const auto artifacts_list = random_artifact_analyze(player_ptr, item);
     spoiler_print_randart(item, &artifacts_list, ofs);
 }
 
