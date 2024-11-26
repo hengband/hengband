@@ -313,7 +313,7 @@ static void prt_alloc(const BaseitemKey &bi_key, TERM_LEN row, TERM_LEN col)
     for (auto i = 0; i < BASEITEM_MAX_DEPTH; i++) {
         auto total_frac = 0;
         constexpr auto magnificant = CHANCE_BASEITEM_LEVEL_BOOST * BASEITEM_MAX_DEPTH;
-        for (const auto &entry : alloc_kind_table) {
+        for (const auto &entry : BaseitemAllocationTable::get_instance()) {
             auto prob = 0;
             if (entry.level <= i) {
                 prob = entry.prob1 * magnificant;
@@ -321,12 +321,11 @@ static void prt_alloc(const BaseitemKey &bi_key, TERM_LEN row, TERM_LEN col)
                 prob = entry.prob1 * i * BASEITEM_MAX_DEPTH / (entry.level - 1);
             }
 
-            const auto &baseitem = entry.get_baseitem();
             total[i] += prob / magnificant;
             total_frac += prob % magnificant;
 
-            if (baseitem.bi_key == bi_key) {
-                home = baseitem.level;
+            if (entry.is_same_bi_key(bi_key)) {
+                home = entry.get_baseitem_level();
                 rarity[i] += prob / magnificant;
             }
         }

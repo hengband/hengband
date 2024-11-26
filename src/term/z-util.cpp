@@ -11,11 +11,10 @@
 /* Purpose: Low level utilities -BEN- */
 
 #include "term/z-util.h"
+#include <cstdio>
+#include <cstdlib>
 
-/*
- * Convenient storage of the program name
- */
-concptr argv0 = nullptr;
+std::string_view program_name = "";
 
 /*
  * Determine if string "t" is equal to string "t"
@@ -50,29 +49,28 @@ bool prefix(std::string_view s, std::string_view t)
 /*
  * Redefinable "plog" action
  */
-void (*plog_aux)(concptr) = nullptr;
+void (*plog_aux)(std::string_view) = nullptr;
 
 /*
  * Print (or log) a "warning" message (ala "perror()")
  * Note the use of the (optional) "plog_aux" hook.
  */
-void plog(concptr str)
+void plog(std::string_view str)
 {
     /* Use the "alternative" function if possible */
     if (plog_aux) {
         (*plog_aux)(str);
+        return;
     }
 
     /* Just do a labeled fprintf to stderr */
-    else {
-        (void)(fprintf(stderr, "%s: %s\n", argv0 ? argv0 : "???", str));
-    }
+    (void)(fprintf(stderr, "%s: %s\n", program_name.empty() ? "???" : program_name.data(), str.data()));
 }
 
 /*
  * Redefinable "quit" action
  */
-void (*quit_aux)(concptr) = nullptr;
+void (*quit_aux)(std::string_view) = nullptr;
 
 /*
  * Exit (ala "exit()").  If 'str' is nullptr, do "exit(0)".
@@ -80,7 +78,7 @@ void (*quit_aux)(concptr) = nullptr;
  * Otherwise, plog() 'str' and exit with an error code of -1.
  * But always use 'quit_aux', if set, before anything else.
  */
-void quit(concptr str)
+void quit(std::string_view str)
 {
     /* Attempt to use the aux function */
     if (quit_aux) {
@@ -88,26 +86,26 @@ void quit(concptr str)
     }
 
     /* Success */
-    if (!str) {
-        (void)(exit(0));
+    if (str.empty()) {
+        std::exit(0);
     }
 
     /* Extract a "special error code" */
     if ((str[0] == '-') || (str[0] == '+')) {
-        (void)(exit(atoi(str)));
+        std::exit(std::atoi(str.data()));
     }
 
     /* Send the string to plog() */
     plog(str);
 
     /* Failure */
-    (void)(exit(EXIT_FAILURE));
+    std::exit(EXIT_FAILURE);
 }
 
 /*
  * Redefinable "core" action
  */
-void (*core_aux)(concptr) = nullptr;
+void (*core_aux)(std::string_view) = nullptr;
 
 /*
  * @brief 意図的にクラッシュさせ、コアファイルをダンプする
@@ -115,14 +113,14 @@ void (*core_aux)(concptr) = nullptr;
  * @details MSVC以外のコンパイラはpragma warning をコンパイルエラーにする.
  * 汚いがプリプロで分岐する.
  */
-void core(concptr str)
+void core(std::string_view str)
 {
     char *crash = nullptr;
     if (core_aux) {
         (*core_aux)(str);
     }
 
-    if (str) {
+    if (!str.empty()) {
         plog(str);
     }
 
@@ -294,7 +292,7 @@ void s64b_mod(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2)
  * @param x ビット数を調べたい変数
  * @return ビット数
  */
-int count_bits(BIT_FLAGS x)
+int count_bits(uint32_t x)
 {
     int n = 0;
 

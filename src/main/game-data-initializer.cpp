@@ -97,43 +97,6 @@ void init_monsters_alloc()
  */
 void init_items_alloc()
 {
-    short num[MAX_DEPTH]{};
-    auto alloc_kind_size = 0;
-    const auto &baseitems = BaseitemList::get_instance();
-    for (const auto &baseitem : baseitems) {
-        for (const auto &[level, chance] : baseitem.alloc_tables) {
-            if (chance != 0) {
-                alloc_kind_size++;
-                num[level]++;
-            }
-        }
-    }
-
-    for (auto i = 1; i < MAX_DEPTH; i++) {
-        num[i] += num[i - 1];
-    }
-
-    if (num[0] == 0) {
-        quit(_("町のアイテムがない！", "No town objects!"));
-    }
-
-    alloc_kind_table.assign(alloc_kind_size, {});
-    short aux[MAX_DEPTH]{};
-    for (const auto &baseitem : baseitems) {
-        for (const auto &[level, chance] : baseitem.alloc_tables) {
-            if (chance == 0) {
-                continue;
-            }
-
-            const auto x = level;
-            const short p = 100 / chance;
-            const auto y = (x > 0) ? num[x - 1] : 0;
-            const auto z = y + aux[x];
-            alloc_kind_table[z].index = baseitem.idx;
-            alloc_kind_table[z].level = x;
-            alloc_kind_table[z].prob1 = p;
-            alloc_kind_table[z].prob2 = p;
-            aux[x]++;
-        }
-    }
+    auto &table = BaseitemAllocationTable::get_instance();
+    table.initialize();
 }
