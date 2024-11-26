@@ -86,7 +86,15 @@ OBJECT_IDX get_obj_index(const FloorType *floor_ptr, DEPTH level, BIT_FLAGS mode
             break;
         }
 
-        if ((mode & AM_FORBID_CHEST) && (entry.is_chest())) {
+        if (any_bits(mode, AM_FORBID_CHEST) && entry.is_chest()) {
+            continue;
+        }
+
+        if (any_bits(mode, AM_GOLD) && !entry.is_gold()) {
+            continue;
+        }
+
+        if (none_bits(mode, AM_GOLD) && entry.is_gold()) {
             continue;
         }
 

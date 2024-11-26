@@ -16328,7 +16328,13 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 3
+      "cost": 3,
+      "allocations": [
+        {
+          "depth": 1,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 481,
@@ -16347,7 +16353,13 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 4
+      "cost": 4,
+      "allocations": [
+        {
+          "depth": 2,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 482,
@@ -16366,7 +16378,13 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 5
+      "cost": 5,
+      "allocations": [
+        {
+          "depth": 4,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 483,
@@ -16385,7 +16403,13 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 6
+      "cost": 6,
+      "allocations": [
+        {
+          "depth": 6,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 484,
@@ -16404,7 +16428,13 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 7
+      "cost": 7,
+      "allocations": [
+        {
+          "depth": 8,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 485,
@@ -16423,7 +16453,13 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 8
+      "cost": 8,
+      "allocations": [
+        {
+          "depth": 10,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 486,
@@ -16442,7 +16478,13 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 9
+      "cost": 9,
+      "allocations": [
+        {
+          "depth": 12,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 487,
@@ -16461,7 +16503,13 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 10
+      "cost": 10,
+      "allocations": [
+        {
+          "depth": 14,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 488,
@@ -16480,7 +16528,13 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 12
+      "cost": 12,
+      "allocations": [
+        {
+          "depth": 16,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 489,
@@ -16499,7 +16553,13 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 14
+      "cost": 14,
+      "allocations": [
+        {
+          "depth": 18,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 490,
@@ -16518,7 +16578,13 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 16
+      "cost": 16,
+      "allocations": [
+        {
+          "depth": 20,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 491,
@@ -16537,7 +16603,13 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 18
+      "cost": 18,
+      "allocations": [
+        {
+          "depth": 22,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 492,
@@ -16556,7 +16628,13 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 20
+      "cost": 20,
+      "allocations": [
+        {
+          "depth": 24,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 493,
@@ -16575,7 +16653,13 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 24
+      "cost": 24,
+      "allocations": [
+        {
+          "depth": 26,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 494,
@@ -16594,7 +16678,13 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 28
+      "cost": 28,
+      "allocations": [
+        {
+          "depth": 28,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 495,
@@ -16613,7 +16703,13 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 32
+      "cost": 32,
+      "allocations": [
+        {
+          "depth": 30,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 496,
@@ -16632,7 +16728,13 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 40
+      "cost": 40,
+      "allocations": [
+        {
+          "depth": 32,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 497,
@@ -16651,7 +16753,13 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 80
+      "cost": 80,
+      "allocations": [
+        {
+          "depth": 34,
+          "rarity": 1
+        }
+      ]
     },
     //##### Objects 498 and 499 are the "Morgoth Artifacts" #####
     //# These objects, like objects 500 to 511, are never created

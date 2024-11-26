@@ -68,6 +68,7 @@ public:
     short prob2; /* Probability, pass 2 */
     bool is_same_bi_key(const BaseitemKey &bi_key) const;
     bool is_chest() const;
+    bool is_gold() const;
     int get_baseitem_level() const;
     bool order_level(const BaseitemAllocationEntry &other) const;
 
