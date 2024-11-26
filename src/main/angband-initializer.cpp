@@ -189,7 +189,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
 
     init_note(_("[データの初期化中... (モンスター)]", "[Initializing arrays... (monsters)]"));
     init_monrace_definitions();
-    const auto error = BaseitemMonraceService::check_drop_flags();
+    const auto error = BaseitemMonraceService::check_specific_drop_gold_flags_duplication();
     if (error) {
         quit(*error);
     }
