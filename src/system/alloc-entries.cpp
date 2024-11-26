@@ -129,6 +129,11 @@ bool BaseitemAllocationEntry::is_chest() const
     return this->get_bi_key().tval() == ItemKindType::CHEST;
 }
 
+bool BaseitemAllocationEntry::is_gold() const
+{
+    return this->get_bi_key().tval() == ItemKindType::GOLD;
+}
+
 int BaseitemAllocationEntry::get_baseitem_level() const
 {
     return this->get_baseitem().level;
