@@ -69,7 +69,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX i_idx)
     this->change_virtue_as_quaff(item);
     item.mark_as_tried();
     if (ident && !item.is_aware()) {
-        object_aware(this->player_ptr, &item);
+        object_aware(this->player_ptr, item);
         gain_exp(this->player_ptr, (item.get_baseitem_level() + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 

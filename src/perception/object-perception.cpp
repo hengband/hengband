@@ -8,15 +8,14 @@
 #include "system/player-type-definition.h"
 
 /*!
- * @brief オブジェクトを＊鑑定＊済にする /
- * The player is now aware of the effects of the given object.
+ * @brief オブジェクトを＊鑑定＊済にする
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param o_ptr ＊鑑定＊済にするオブジェクトの構造体参照ポインタ
+ * @param item ＊鑑定＊済にするアイテムへの参照
  */
-void object_aware(PlayerType *player_ptr, const ItemEntity *o_ptr)
+void object_aware(PlayerType *player_ptr, const ItemEntity &item)
 {
-    const bool is_already_awared = o_ptr->is_aware();
-    auto &baseitem = o_ptr->get_baseitem();
+    const bool is_already_awared = item.is_aware();
+    auto &baseitem = item.get_baseitem();
     baseitem.mark_awareness(true);
 
     // 以下、playrecordに記録しない場合はreturnする
@@ -33,13 +32,13 @@ void object_aware(PlayerType *player_ptr, const ItemEntity *o_ptr)
         return;
     }
 
-    if (!o_ptr->has_unidentified_name()) {
+    if (!item.has_unidentified_name()) {
         return;
     }
 
     // playrecordに識別したアイテムを記録
-    ItemEntity item = *o_ptr;
-    item.number = 1;
-    const auto item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
+    ItemEntity item_record = item;
+    item_record.number = 1;
+    const auto item_name = describe_flavor(player_ptr, item_record, OD_NAME_ONLY);
     exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::FOUND, 0, item_name);
 }

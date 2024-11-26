@@ -277,7 +277,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     sound(SOUND_BUY);
     player_ptr->au -= price;
     store_prt_gold(player_ptr);
-    object_aware(player_ptr, &item);
+    object_aware(player_ptr, item);
 
     msg_format(_("%sを $%ldで購入しました。", "You bought %s for %ld gold."), purchased_item_name.data(), (long)price);
     angband_strcpy(record_o_name, purchased_item_name, MAX_NLEN);

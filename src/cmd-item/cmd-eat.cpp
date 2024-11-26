@@ -262,7 +262,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 
     /* The player is now aware of the object */
     if (ident && !o_ptr->is_aware()) {
-        object_aware(player_ptr, o_ptr);
+        object_aware(player_ptr, *o_ptr);
         gain_exp(player_ptr, (level + (player_ptr->lev >> 1)) / player_ptr->lev);
     }
 

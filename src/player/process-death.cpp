@@ -242,7 +242,7 @@ static void inventory_aware(PlayerType *player_ptr)
             continue;
         }
 
-        object_aware(player_ptr, o_ptr);
+        object_aware(player_ptr, *o_ptr);
         o_ptr->mark_as_known();
     }
 }
@@ -261,7 +261,7 @@ static void home_aware(PlayerType *player_ptr)
                 continue;
             }
 
-            object_aware(player_ptr, item.get());
+            object_aware(player_ptr, *item);
             item->mark_as_known();
         }
     }

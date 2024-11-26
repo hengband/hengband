@@ -117,7 +117,7 @@ void ObjectReadEntity::gain_exp_from_item_use(ItemEntity *o_ptr, bool is_identif
         return;
     }
 
-    object_aware(this->player_ptr, o_ptr);
+    object_aware(this->player_ptr, *o_ptr);
     const auto item_level = o_ptr->get_baseitem_level();
     gain_exp(this->player_ptr, (item_level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
 }

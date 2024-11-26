@@ -49,7 +49,7 @@
  */
 static void object_mention(PlayerType *player_ptr, ItemEntity &item)
 {
-    object_aware(player_ptr, &item);
+    object_aware(player_ptr, item);
     item.mark_as_known();
     item.ident |= (IDENT_FULL_KNOWN);
     const auto item_name = describe_flavor(player_ptr, item, 0);
