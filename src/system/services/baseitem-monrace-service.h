@@ -16,6 +16,6 @@
 class BaseitemMonraceService {
 public:
     BaseitemMonraceService() = delete;
-    static std::optional<BaseitemKey> lookup_specific_gold_by_dropflags(const EnumClassFlagGroup<MonsterDropType> &flags);
+    static std::optional<BaseitemKey> lookup_fixed_gold_drop(const EnumClassFlagGroup<MonsterDropType> &flags);
     static std::optional<std::string> check_specific_drop_gold_flags_duplication();
 };

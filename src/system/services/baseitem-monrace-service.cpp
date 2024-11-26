@@ -15,7 +15,7 @@
 #include <set>
 
 namespace {
-const std::map<MonsterDropType, BaseitemKey> SPECIFIC_GOLD_DROPS = {
+const std::map<MonsterDropType, BaseitemKey> FIXED_GOLD_DROPS = {
     { MonsterDropType::DROP_COPPER, { ItemKindType::GOLD, 3 } },
     { MonsterDropType::DROP_SILVER, { ItemKindType::GOLD, 6 } },
     { MonsterDropType::DROP_GARNET, { ItemKindType::GOLD, 8 } },
@@ -29,10 +29,10 @@ const std::map<MonsterDropType, BaseitemKey> SPECIFIC_GOLD_DROPS = {
     { MonsterDropType::DROP_ADAMANTITE, { ItemKindType::GOLD, 18 } },
 };
 
-EnumClassFlagGroup<MonsterDropType> make_specific_gold_drop_flags()
+EnumClassFlagGroup<MonsterDropType> make_fixed_gold_drop_flags()
 {
     EnumClassFlagGroup<MonsterDropType> flags;
-    for (const auto &[flag, _] : SPECIFIC_GOLD_DROPS) {
+    for (const auto &[flag, _] : FIXED_GOLD_DROPS) {
         flags.set(flag);
     }
 
@@ -45,9 +45,9 @@ EnumClassFlagGroup<MonsterDropType> make_specific_gold_drop_flags()
  * @param flags ドロップ関連フラグリスト
  * @return 特定の財宝を落とすならそのアイテムのBaseitemKey、一般的な財宝ドロップならばnullopt
  */
-std::optional<BaseitemKey> BaseitemMonraceService::lookup_specific_gold_by_dropflags(const EnumClassFlagGroup<MonsterDropType> &flags)
+std::optional<BaseitemKey> BaseitemMonraceService::lookup_fixed_gold_drop(const EnumClassFlagGroup<MonsterDropType> &flags)
 {
-    for (const auto &pair : SPECIFIC_GOLD_DROPS) {
+    for (const auto &pair : FIXED_GOLD_DROPS) {
         if (flags.has_not(pair.first)) {
             continue;
         }
@@ -59,7 +59,7 @@ std::optional<BaseitemKey> BaseitemMonraceService::lookup_specific_gold_by_dropf
 
 std::optional<std::string> BaseitemMonraceService::check_specific_drop_gold_flags_duplication()
 {
-    const auto specific_gold_drop_flags = make_specific_gold_drop_flags();
+    const auto specific_gold_drop_flags = make_fixed_gold_drop_flags();
 
     const auto &monraces = MonraceList::get_instance();
     for (const auto &[monrace_id, monrace] : monraces) {
