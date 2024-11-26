@@ -290,8 +290,8 @@ static void drop_items_golds(PlayerType *player_ptr, MonsterDeath *md_ptr, int d
         ItemEntity item;
         if (md_ptr->do_gold && (!md_ptr->do_item || one_in_(2))) {
             const auto &monrace = monraces.get_monrace(md_ptr->m_ptr->r_idx);
-            const auto offset = BaseitemMonraceService::lookup_specific_gold_drop_offset(monrace.drop_flags);
-            item = floor.make_gold(offset);
+            const auto gold_bi_key = BaseitemMonraceService::lookup_specific_gold_by_dropflags(monrace.drop_flags);
+            item = floor.make_gold(gold_bi_key);
             dump_gold++;
         } else {
             if (!make_object(player_ptr, &item, md_ptr->mo_mode)) {

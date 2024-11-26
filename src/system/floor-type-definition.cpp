@@ -274,14 +274,15 @@ bool FloorType::order_pet_dismission(short index1, short index2, short riding_in
 
 /*!
  * @brief 生成階に応じた財宝を生成する.
- * @param initial_offset 財宝を価値の低い順に並べた時の番号 (0スタート、nulloptならば乱数で決定)
+ * @param fixed_bi_key 財宝を固定生成する場合のBaseitemKey
  * @return 財宝データで初期化したアイテム
  */
-ItemEntity FloorType::make_gold(std::optional<int> initial_offset) const
+ItemEntity FloorType::make_gold(std::optional<BaseitemKey> fixed_bi_key) const
 {
+    const auto &baseitem_list = BaseitemList::get_instance();
     int offset;
-    if (initial_offset) {
-        offset = *initial_offset;
+    if (fixed_bi_key) {
+        offset = baseitem_list.lookup_gold_offset(fixed_bi_key.value());
     } else {
         offset = ((randint1(this->object_level + 2) + 2) / 2) - 1;
         if (one_in_(CHANCE_BASEITEM_LEVEL_BOOST)) {
@@ -289,13 +290,12 @@ ItemEntity FloorType::make_gold(std::optional<int> initial_offset) const
         }
     }
 
-    const auto &baseitems = BaseitemList::get_instance();
-    const auto num_gold_subtypes = baseitems.calc_num_gold_subtypes();
+    const auto num_gold_subtypes = baseitem_list.calc_num_gold_subtypes();
     if (offset >= num_gold_subtypes) {
         offset = num_gold_subtypes - 1;
     }
 
-    const auto &baseitem = baseitems.lookup_gold(offset);
+    const auto &baseitem = baseitem_list.lookup_gold(offset);
     const auto base = baseitem.cost;
     ItemEntity item(baseitem.bi_key);
     item.pval = base + (8 * randint1(base)) + randint1(8);

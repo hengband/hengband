@@ -8,7 +8,6 @@
 #include "locale/language-switcher.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-key.h"
-#include "system/baseitem/baseitem-list.h"
 #include "system/monster-race-info.h"
 #include "term/z-form.h"
 #include "util/enum-converter.h"
@@ -42,19 +41,17 @@ EnumClassFlagGroup<MonsterDropType> make_specific_gold_drop_flags()
 }
 
 /*!
- * @brief モンスター種族IDから財宝アイテムの価値を引く
- * @param monrace_id モンスター種族ID
- * @return 特定の財宝を落とすならそのアイテムの価値オフセット、一般的な財宝ドロップならばnullopt
+ * @brief ドロップ関連フラグリストから固定ドロップの財宝アイテムを取得する
+ * @param flags ドロップ関連フラグリスト
+ * @return 特定の財宝を落とすならそのアイテムのBaseitemKey、一般的な財宝ドロップならばnullopt
  */
-std::optional<int> BaseitemMonraceService::lookup_specific_gold_drop_offset(const EnumClassFlagGroup<MonsterDropType> &flags)
+std::optional<BaseitemKey> BaseitemMonraceService::lookup_specific_gold_by_dropflags(const EnumClassFlagGroup<MonsterDropType> &flags)
 {
-    const auto &baseitems = BaseitemList::get_instance();
     for (const auto &pair : SPECIFIC_GOLD_DROPS) {
         if (flags.has_not(pair.first)) {
             continue;
         }
-
-        return baseitems.lookup_gold_offset(pair.second);
+        return pair.second;
     }
 
     return std::nullopt;
