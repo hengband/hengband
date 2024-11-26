@@ -2535,6 +2535,9 @@
     <ClCompile Include="..\..\src\system\baseitem\baseitem-list.cpp">
       <Filter>system\baseitem</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\services\baseitem-monrace-service.cpp">
+      <Filter>system\services</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5490,6 +5493,9 @@
     <ClInclude Include="..\..\src\system\baseitem\baseitem-list.h">
       <Filter>system\baseitem</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\system\services\baseitem-monrace-service.h">
+      <Filter>system\services</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5765,6 +5771,9 @@
     </Filter>
     <Filter Include="system\baseitem">
       <UniqueIdentifier>{b1f45c00-0add-4e05-8c05-bac1f29550c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\services">
+      <UniqueIdentifier>{0f6862b2-2ab3-4d92-abc2-09a28f3a17b4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
