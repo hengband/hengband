@@ -11,7 +11,6 @@
 #include "system/angband-exceptions.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-key.h"
-#include "system/enums/monrace/monrace-id.h"
 #include "util/enum-converter.h"
 #include "util/enum-range.h"
 #include "util/string-processor.h"
@@ -35,14 +34,6 @@ const std::map<MoneyKind, std::string> GOLD_KINDS = {
     { MoneyKind::EMERALD, _("エメラルド", "emeralds") },
     { MoneyKind::MITHRIL, _("ミスリル", "mithril") },
     { MoneyKind::ADAMANTITE, _("アダマンタイト", "adamantite") },
-};
-const std::map<MonraceId, BaseitemKey> CREEPING_COIN_DROPS = {
-    { MonraceId::COPPER_COINS, { ItemKindType::GOLD, 3 } },
-    { MonraceId::SILVER_COINS, { ItemKindType::GOLD, 6 } },
-    { MonraceId::GOLD_COINS, { ItemKindType::GOLD, 11 } },
-    { MonraceId::MITHRIL_COINS, { ItemKindType::GOLD, 17 } },
-    { MonraceId::MITHRIL_GOLEM, { ItemKindType::GOLD, 17 } },
-    { MonraceId::ADAMANT_COINS, { ItemKindType::GOLD, 18 } },
 };
 }
 
@@ -162,21 +153,6 @@ const BaseitemDefinition &BaseitemList::lookup_baseitem(const BaseitemKey &bi_ke
 }
 
 /*!
- * @brief モンスター種族IDから財宝アイテムの価値を引く
- * @param monrace_id モンスター種族ID
- * @return 特定の財宝を落とすならそのアイテムの価値オフセット、一般的な財宝ドロップならばnullopt
- */
-std::optional<int> BaseitemList::lookup_creeping_coin_drop_offset(MonraceId monrace_id) const
-{
-    const auto it = CREEPING_COIN_DROPS.find(monrace_id);
-    if (it == CREEPING_COIN_DROPS.end()) {
-        return std::nullopt;
-    }
-
-    return this->lookup_gold_offset(it->second);
-}
-
-/*!
  * @brief ベースアイテム定義群から財宝アイテムの数を計算する
  * @return 財宝を示すベースアイテム数
  */
@@ -234,6 +210,29 @@ int BaseitemList::lookup_gold_offset(short bi_id) const
     }
 
     THROW_EXCEPTION(std::runtime_error, format(INVALID_BI_ID_FORMAT, bi_id));
+}
+
+/*!
+ * @brief ベースアイテムキーから財宝アイテムの価値を引く
+ * @param finding_bi_key 探索対象のベースアイテムキー
+ * @return 財宝アイテムの価値番号 (大きいほど価値が高い)
+ * @details 同一の財宝カテゴリ内ならば常に番号が大きいほど価値も高い.
+ * カテゴリが異なるならば価値の大小は保証しない. 即ち「最も高い銅貨>最も安い銀貨」はあり得る.
+ */
+int BaseitemList::lookup_gold_offset(const BaseitemKey &finding_bi_key) const
+{
+    auto offset = 0;
+    for (const auto &pair : this->create_sorted_golds()) {
+        for (const auto &bi_key : pair.second) {
+            if (finding_bi_key == bi_key) {
+                return offset;
+            }
+
+            offset++;
+        }
+    }
+
+    THROW_EXCEPTION(std::runtime_error, format(INVALID_BASEITEM_KEY, enum2i(finding_bi_key.tval()), *finding_bi_key.sval()));
 }
 
 void BaseitemList::reset_all_visuals()
@@ -331,29 +330,6 @@ const std::map<ItemKindType, std::vector<int>> &BaseitemList::create_baseitem_su
     }
 
     return cache;
-}
-
-/*!
- * @brief ベースアイテムキーから財宝アイテムの価値を引く
- * @param finding_bi_key 探索対象のベースアイテムキー
- * @return 財宝アイテムの価値番号 (大きいほど価値が高い)
- * @details 同一の財宝カテゴリ内ならば常に番号が大きいほど価値も高い.
- * カテゴリが異なるならば価値の大小は保証しない. 即ち「最も高い銅貨>最も安い銀貨」はあり得る.
- */
-int BaseitemList::lookup_gold_offset(const BaseitemKey &finding_bi_key) const
-{
-    auto offset = 0;
-    for (const auto &pair : this->create_sorted_golds()) {
-        for (const auto &bi_key : pair.second) {
-            if (finding_bi_key == bi_key) {
-                return offset;
-            }
-
-            offset++;
-        }
-    }
-
-    THROW_EXCEPTION(std::runtime_error, format(INVALID_BASEITEM_KEY, enum2i(finding_bi_key.tval()), *finding_bi_key.sval()));
 }
 
 /*!

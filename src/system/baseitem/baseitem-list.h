@@ -54,12 +54,12 @@ public:
     void resize(size_t new_size);
     void shrink_to_fit();
 
-    std::optional<int> lookup_creeping_coin_drop_offset(MonraceId monrace_id) const;
     short lookup_baseitem_id(const BaseitemKey &bi_key) const;
     const BaseitemDefinition &lookup_baseitem(const BaseitemKey &bi_key) const;
     int calc_num_gold_subtypes() const;
     const BaseitemDefinition &lookup_gold(int target_offset) const;
     int lookup_gold_offset(short bi_id) const;
+    int lookup_gold_offset(const BaseitemKey &finding_bi_key) const;
 
     void reset_all_visuals();
     void reset_identification_flags();
@@ -75,7 +75,6 @@ private:
     short exe_lookup(const BaseitemKey &bi_key) const;
     const std::map<BaseitemKey, short> &create_baseitem_keys_cache() const;
     const std::map<ItemKindType, std::vector<int>> &create_baseitem_subtypes_cache() const;
-    int lookup_gold_offset(const BaseitemKey &finding_bi_key) const;
     const std::map<MoneyKind, std::vector<BaseitemKey>> &create_sorted_golds() const;
     std::map<MoneyKind, std::vector<BaseitemKey>> create_unsorted_golds() const;
 

@@ -25,6 +25,7 @@
 #include "system/angband-system.h"
 #include "system/dungeon-info.h"
 #include "system/monster-race-info.h"
+#include "system/services/baseitem-monrace-service.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -188,6 +189,10 @@ void init_angband(PlayerType *player_ptr, bool no_term)
 
     init_note(_("[データの初期化中... (モンスター)]", "[Initializing arrays... (monsters)]"));
     init_monrace_definitions();
+    const auto error = BaseitemMonraceService::check_drop_flags();
+    if (error) {
+        quit(*error);
+    }
 
     init_note(_("[データの初期化中... (ダンジョン)]", "[Initializing arrays... (dungeon)]"));
     init_dungeons_info();

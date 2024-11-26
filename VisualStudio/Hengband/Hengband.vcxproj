@@ -620,6 +620,7 @@
     <ClCompile Include="..\..\src\system\item-entity.cpp" />
     <ClCompile Include="..\..\src\system\monster-race-info.cpp" />
     <ClCompile Include="..\..\src\system\player-type-definition.cpp" />
+    <ClCompile Include="..\..\src\system\services\baseitem-monrace-service.cpp" />
     <ClCompile Include="..\..\src\system\terrain-type-definition.cpp" />
     <ClCompile Include="..\..\src\target\grid-selector.cpp" />
     <ClCompile Include="..\..\src\target\projection-path-calculator.cpp" />
@@ -1441,6 +1442,7 @@
     <ClInclude Include="..\..\src\system\floor-type-definition.h" />
     <ClInclude Include="..\..\src\system\grid-type-definition.h" />
     <ClInclude Include="..\..\src\system\player-type-definition.h" />
+    <ClInclude Include="..\..\src\system\services\baseitem-monrace-service.h" />
     <ClInclude Include="..\..\src\system\terrain-type-definition.h" />
     <ClInclude Include="..\..\src\target\grid-selector.h" />
     <ClInclude Include="..\..\src\target\projection-path-calculator.h" />

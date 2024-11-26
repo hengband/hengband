@@ -949,6 +949,8 @@ hengband_SOURCES = \
 	system/enums/monrace/monrace-id.h \
 	system/enums/grid-count-kind.h \
 	\
+	system/services/baseitem-monrace-service.cpp system/services/baseitem-monrace-service.h \
+	\
 	target/grid-selector.cpp target/grid-selector.h \
 	target/projection-path-calculator.cpp target/projection-path-calculator.h \
 	target/target-checker.cpp target/target-checker.h \
