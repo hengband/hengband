@@ -15,20 +15,18 @@
 #include <sstream>
 
 /*!
- * @brief ランダムアーティファクト1件をスポイラー出力する /
- * Create a spoiler file entry for an artifact
- * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
+ * @brief ランダムアーティファクト1件をスポイラー出力する
+ * @param item ランダムアーティファクトへの参照
  * @param art_ptr 記述内容を収めた構造体参照ポインタ
- * Fill in an object description structure for a given object
  */
-static void spoiler_print_randart(ItemEntity *o_ptr, const ArtifactsDumpInfo *art_ptr, std::ofstream &ofs)
+static void spoiler_print_randart(const ItemEntity &item, const ArtifactsDumpInfo *art_ptr, std::ofstream &ofs)
 {
     const auto finalizer = util::make_finalizer([art_ptr, &ofs]() {
         ofs << spoiler_indent << art_ptr->misc_desc << "\n\n";
     });
     const auto *pval_ptr = &art_ptr->pval_info;
     ofs << art_ptr->description << '\n';
-    if (!o_ptr->is_fully_known()) {
+    if (!item.is_fully_known()) {
         ofs << format(_("%s不明\n", "%sUnknown\n"), spoiler_indent.data());
         return;
     }
@@ -53,17 +51,17 @@ static void spoiler_print_randart(ItemEntity *o_ptr, const ArtifactsDumpInfo *ar
 /*!
  * @brief ランダムアーティファクト内容をスポイラー出力するサブルーチン /
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
+ * @param item ランダムアーティファクトのオブジェクト構造体参照ポインタ
  * @param tval 出力したいランダムアーティファクトの種類
  */
-static void spoil_random_artifact_aux(PlayerType *player_ptr, ItemEntity *o_ptr, ItemKindType tval, std::ofstream &ofs)
+static void spoil_random_artifact_aux(PlayerType *player_ptr, const ItemEntity &item, ItemKindType tval, std::ofstream &ofs)
 {
-    if (!o_ptr->is_known() || !o_ptr->is_random_artifact() || (o_ptr->bi_key.tval() != tval)) {
+    if (!item.is_known() || !item.is_random_artifact() || (item.bi_key.tval() != tval)) {
         return;
     }
 
-    const auto artifacts_list = random_artifact_analyze(player_ptr, o_ptr);
-    spoiler_print_randart(o_ptr, &artifacts_list, ofs);
+    const auto artifacts_list = random_artifact_analyze(player_ptr, &item);
+    spoiler_print_randart(item, &artifacts_list, ofs);
 }
 
 /*!
@@ -84,24 +82,24 @@ void spoil_random_artifact(PlayerType *player_ptr)
         for (auto tval : tval_list) {
             for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
                 auto &item = player_ptr->inventory_list[i];
-                spoil_random_artifact_aux(player_ptr, &item, tval, ofs);
+                spoil_random_artifact_aux(player_ptr, item, tval, ofs);
             }
 
             for (int i = 0; i < INVEN_PACK; i++) {
                 auto &item = player_ptr->inventory_list[i];
-                spoil_random_artifact_aux(player_ptr, &item, tval, ofs);
+                spoil_random_artifact_aux(player_ptr, item, tval, ofs);
             }
 
             const auto *store_ptr = &towns_info[1].stores[StoreSaleType::HOME];
             for (int i = 0; i < store_ptr->stock_num; i++) {
                 auto &item = store_ptr->stock[i];
-                spoil_random_artifact_aux(player_ptr, item.get(), tval, ofs);
+                spoil_random_artifact_aux(player_ptr, *item, tval, ofs);
             }
 
             store_ptr = &towns_info[1].stores[StoreSaleType::MUSEUM];
             for (int i = 0; i < store_ptr->stock_num; i++) {
                 auto &item = store_ptr->stock[i];
-                spoil_random_artifact_aux(player_ptr, item.get(), tval, ofs);
+                spoil_random_artifact_aux(player_ptr, *item, tval, ofs);
             }
         }
     }
