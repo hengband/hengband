@@ -11,7 +11,6 @@
 #include "system/angband-exceptions.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-key.h"
-#include "system/enums/monrace/monrace-id.h"
 #include "util/enum-converter.h"
 #include "util/enum-range.h"
 #include "util/string-processor.h"
@@ -36,13 +35,18 @@ const std::map<MoneyKind, std::string> GOLD_KINDS = {
     { MoneyKind::MITHRIL, _("ミスリル", "mithril") },
     { MoneyKind::ADAMANTITE, _("アダマンタイト", "adamantite") },
 };
-const std::map<MonraceId, BaseitemKey> CREEPING_COIN_DROPS = {
-    { MonraceId::COPPER_COINS, { ItemKindType::GOLD, 3 } },
-    { MonraceId::SILVER_COINS, { ItemKindType::GOLD, 6 } },
-    { MonraceId::GOLD_COINS, { ItemKindType::GOLD, 11 } },
-    { MonraceId::MITHRIL_COINS, { ItemKindType::GOLD, 17 } },
-    { MonraceId::MITHRIL_GOLEM, { ItemKindType::GOLD, 17 } },
-    { MonraceId::ADAMANT_COINS, { ItemKindType::GOLD, 18 } },
+const std::map<MonsterDropType, BaseitemKey> CREEPING_COIN_DROPS = {
+    { MonsterDropType::DROP_COPPER, { ItemKindType::GOLD, 3 } },
+    { MonsterDropType::DROP_SILVER, { ItemKindType::GOLD, 6 } },
+    { MonsterDropType::DROP_GARNET, { ItemKindType::GOLD, 8 } },
+    { MonsterDropType::DROP_GOLD, { ItemKindType::GOLD, 11 } },
+    { MonsterDropType::DROP_OPAL, { ItemKindType::GOLD, 12 } },
+    { MonsterDropType::DROP_SAPPHIRE, { ItemKindType::GOLD, 13 } },
+    { MonsterDropType::DROP_RUBY, { ItemKindType::GOLD, 14 } },
+    { MonsterDropType::DROP_DIAMOND, { ItemKindType::GOLD, 15 } },
+    { MonsterDropType::DROP_EMERALD, { ItemKindType::GOLD, 16 } },
+    { MonsterDropType::DROP_MITHRIL, { ItemKindType::GOLD, 17 } },
+    { MonsterDropType::DROP_ADAMANTITE, { ItemKindType::GOLD, 18 } },
 };
 }
 
@@ -166,14 +170,17 @@ const BaseitemDefinition &BaseitemList::lookup_baseitem(const BaseitemKey &bi_ke
  * @param monrace_id モンスター種族ID
  * @return 特定の財宝を落とすならそのアイテムの価値オフセット、一般的な財宝ドロップならばnullopt
  */
-std::optional<int> BaseitemList::lookup_creeping_coin_drop_offset(MonraceId monrace_id) const
+std::optional<int> BaseitemList::lookup_creeping_coin_drop_offset(const EnumClassFlagGroup<MonsterDropType> &flags) const
 {
-    const auto it = CREEPING_COIN_DROPS.find(monrace_id);
-    if (it == CREEPING_COIN_DROPS.end()) {
-        return std::nullopt;
+    for (const auto &pair : CREEPING_COIN_DROPS) {
+        if (flags.has_not(pair.first)) {
+            continue;
+        }
+
+        return this->lookup_gold_offset(pair.second);
     }
 
-    return this->lookup_gold_offset(it->second);
+    return std::nullopt;
 }
 
 /*!

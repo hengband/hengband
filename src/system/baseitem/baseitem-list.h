@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "monster-race/race-drop-flags.h"
+#include "util/flag-group.h"
 #include <map>
 #include <optional>
 #include <vector>
@@ -54,7 +56,7 @@ public:
     void resize(size_t new_size);
     void shrink_to_fit();
 
-    std::optional<int> lookup_creeping_coin_drop_offset(MonraceId monrace_id) const;
+    std::optional<int> lookup_creeping_coin_drop_offset(const EnumClassFlagGroup<MonsterDropType> &flags) const;
     short lookup_baseitem_id(const BaseitemKey &bi_key) const;
     const BaseitemDefinition &lookup_baseitem(const BaseitemKey &bi_key) const;
     int calc_num_gold_subtypes() const;
