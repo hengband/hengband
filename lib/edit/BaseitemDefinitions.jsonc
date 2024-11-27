@@ -16328,8 +16328,12 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 3,
+      "cost": 5,
       "allocations": [
+        {
+          "depth": 1,
+          "rarity": 10
+        },
         {
           "depth": 1,
           "rarity": 1
@@ -16353,8 +16357,12 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 4,
+      "cost": 6,
       "allocations": [
+        {
+          "depth": 1,
+          "rarity": 10
+        },
         {
           "depth": 2,
           "rarity": 1
@@ -16378,8 +16386,12 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 5,
+      "cost": 7,
       "allocations": [
+        {
+          "depth": 1,
+          "rarity": 10
+        },
         {
           "depth": 4,
           "rarity": 1
@@ -16403,8 +16415,12 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 6,
+      "cost": 8,
       "allocations": [
+        {
+          "depth": 1,
+          "rarity": 8
+        },
         {
           "depth": 6,
           "rarity": 1
@@ -16428,8 +16444,12 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 7,
+      "cost": 9,
       "allocations": [
+        {
+          "depth": 1,
+          "rarity": 8
+        },
         {
           "depth": 8,
           "rarity": 1
@@ -16453,8 +16473,12 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 8,
+      "cost": 10,
       "allocations": [
+        {
+          "depth": 1,
+          "rarity": 8
+        },
         {
           "depth": 10,
           "rarity": 1
@@ -16478,11 +16502,19 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 9,
+      "cost": 22,
       "allocations": [
         {
+          "depth": 1,
+          "rarity": 10
+        },
+        {
+          "depth": 10,
+          "rarity": 5
+        },
+        {
           "depth": 12,
-          "rarity": 1
+          "rarity": 2
         }
       ]
     },
@@ -16503,11 +16535,19 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 10,
+      "cost": 24,
       "allocations": [
         {
+          "depth": 1,
+          "rarity": 10
+        },
+        {
+          "depth": 10,
+          "rarity": 5
+        },
+        {
           "depth": 14,
-          "rarity": 1
+          "rarity": 2
         }
       ]
     },
@@ -16528,8 +16568,16 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 12,
+      "cost": 16,
       "allocations": [
+        {
+          "depth": 1,
+          "rarity": 10
+        },
+        {
+          "depth": 10,
+          "rarity": 5
+        },
         {
           "depth": 16,
           "rarity": 1
@@ -16553,8 +16601,16 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 14,
+      "cost": 17,
       "allocations": [
+        {
+          "depth": 1,
+          "rarity": 10
+        },
+        {
+          "depth": 10,
+          "rarity": 5
+        },
         {
           "depth": 18,
           "rarity": 1
@@ -16578,8 +16634,16 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 16,
+      "cost": 18,
       "allocations": [
+        {
+          "depth": 1,
+          "rarity": 10
+        },
+        {
+          "depth": 10,
+          "rarity": 5
+        },
         {
           "depth": 20,
           "rarity": 1
@@ -16603,11 +16667,23 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 18,
+      "cost": 40,
       "allocations": [
         {
+          "depth": 1,
+          "rarity": 10
+        },
+        {
+          "depth": 10,
+          "rarity": 5
+        },
+        {
+          "depth": 20,
+          "rarity": 3
+        },
+        {
           "depth": 22,
-          "rarity": 1
+          "rarity": 2
         }
       ]
     },
@@ -16628,11 +16704,23 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 20,
+      "cost": 48,
       "allocations": [
         {
+          "depth": 1,
+          "rarity": 10
+        },
+        {
+          "depth": 10,
+          "rarity": 5
+        },
+        {
+          "depth": 20,
+          "rarity": 3
+        },
+        {
           "depth": 24,
-          "rarity": 1
+          "rarity": 2
         }
       ]
     },
@@ -16653,11 +16741,23 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 24,
+      "cost": 52,
       "allocations": [
         {
+          "depth": 1,
+          "rarity": 10
+        },
+        {
+          "depth": 10,
+          "rarity": 5
+        },
+        {
+          "depth": 20,
+          "rarity": 3
+        },
+        {
           "depth": 26,
-          "rarity": 1
+          "rarity": 2
         }
       ]
     },
@@ -16678,11 +16778,23 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 28,
+      "cost": 56,
       "allocations": [
         {
+          "depth": 1,
+          "rarity": 10
+        },
+        {
+          "depth": 10,
+          "rarity": 5
+        },
+        {
+          "depth": 20,
+          "rarity": 3
+        },
+        {
           "depth": 28,
-          "rarity": 1
+          "rarity": 2
         }
       ]
     },
@@ -16703,11 +16815,23 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 32,
+      "cost": 64,
       "allocations": [
         {
+          "depth": 1,
+          "rarity": 10
+        },
+        {
+          "depth": 10,
+          "rarity": 5
+        },
+        {
+          "depth": 20,
+          "rarity": 3
+        },
+        {
           "depth": 30,
-          "rarity": 1
+          "rarity": 2
         }
       ]
     },
@@ -16728,11 +16852,23 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 40,
+      "cost": 120,
       "allocations": [
         {
-          "depth": 32,
-          "rarity": 1
+          "depth": 1,
+          "rarity": 12
+        },
+        {
+          "depth": 10,
+          "rarity": 6
+        },
+        {
+          "depth": 20,
+          "rarity": 4
+        },
+        {
+          "depth": 40,
+          "rarity": 3
         }
       ]
     },
@@ -16753,11 +16889,23 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 80,
+      "cost": 160,
       "allocations": [
         {
-          "depth": 34,
-          "rarity": 1
+          "depth": 1,
+          "rarity": 12
+        },
+        {
+          "depth": 10,
+          "rarity": 6
+        },
+        {
+          "depth": 20,
+          "rarity": 4
+        },
+        {
+          "depth": 50,
+          "rarity": 3
         }
       ]
     },
