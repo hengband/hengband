@@ -3,10 +3,10 @@
 #include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "monster/monster-timed-effects.h"
+#include "object-enchant/item-apply-magic.h"
 #include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem/baseitem-definition.h"
-#include "system/baseitem/baseitem-list.h"
 #include "system/dungeon-info.h"
 #include "system/enums/grid-count-kind.h"
 #include "system/gamevalue.h"
@@ -16,6 +16,7 @@
 #include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-range.h"
+#include "world/world-object.h"
 
 FloorType::FloorType()
     : grid_array(MAX_HGT, std::vector<Grid>(MAX_WID))
@@ -273,31 +274,20 @@ bool FloorType::order_pet_dismission(short index1, short index2, short riding_in
 }
 
 /*!
- * @brief 生成階に応じた財宝を生成する.
- * @param initial_offset 財宝を価値の低い順に並べた時の番号 (0スタート、nulloptならば乱数で決定)
+ * @brief 特定の財宝を生成する。指定がない場合、生成階に応じたランダムな財宝を生成する。
+ * @param bi_key 財宝を固定生成する場合のBaseitemKey
  * @return 財宝データで初期化したアイテム
  */
-ItemEntity FloorType::make_gold(std::optional<int> initial_offset) const
+ItemEntity FloorType::make_gold(std::optional<BaseitemKey> bi_key) const
 {
-    int offset;
-    if (initial_offset) {
-        offset = *initial_offset;
+    ItemEntity item;
+    if (bi_key) {
+        item = ItemEntity(*bi_key);
     } else {
-        offset = ((randint1(this->object_level + 2) + 2) / 2) - 1;
-        if (one_in_(CHANCE_BASEITEM_LEVEL_BOOST)) {
-            offset += randint1(this->object_level + 1);
-        }
+        item = ItemEntity(get_obj_index(this, this->object_level, AM_GOLD));
     }
 
-    const auto &baseitems = BaseitemList::get_instance();
-    const auto num_gold_subtypes = baseitems.calc_num_gold_subtypes();
-    if (offset >= num_gold_subtypes) {
-        offset = num_gold_subtypes - 1;
-    }
-
-    const auto &baseitem = baseitems.lookup_gold(offset);
-    const auto base = baseitem.cost;
-    ItemEntity item(baseitem.bi_key);
+    const auto base = item.get_baseitem_cost();
     item.pval = base + (8 * randint1(base)) + randint1(8);
     return item;
 }
