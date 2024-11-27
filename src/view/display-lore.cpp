@@ -191,12 +191,11 @@ void display_kill_numbers(lore_type *lore_ptr)
     }
 
     const auto kill_unique_description = lore_ptr->build_kill_unique_description();
-    if (!kill_unique_description) {
+    if (kill_unique_description) {
+        for (const auto &[text, color] : *kill_unique_description) {
+            hook_c_roff(color, text);
+        }
         return;
-    }
-
-    for (const auto &[text, color] : *kill_unique_description) {
-        hook_c_roff(color, text);
     }
 
     if (lore_ptr->r_ptr->r_deaths == 0) {
