@@ -365,7 +365,7 @@ static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType 
         }
 
         if (store_num == StoreSaleType::BLACK) {
-            if (black_market_crap(player_ptr, &item) || (item.calc_price() < 10)) {
+            if (black_market_crap(player_ptr, item) || (item.calc_price() < 10)) {
                 continue;
             }
         } else {
@@ -400,7 +400,7 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
     if (store_num == StoreSaleType::BLACK) {
         for (INVENTORY_IDX j = st_ptr->stock_num - 1; j >= 0; j--) {
             auto &item = st_ptr->stock[j];
-            if (black_market_crap(player_ptr, item.get())) {
+            if (black_market_crap(player_ptr, *item)) {
                 store_item_increase(j, 0 - item->number);
                 store_item_optimize(j);
             }
