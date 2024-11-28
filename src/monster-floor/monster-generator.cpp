@@ -149,23 +149,21 @@ std::optional<MONSTER_IDX> multiply_monster(PlayerType *player_ptr, MONSTER_IDX 
  * @brief モンスターを目標地点に集団生成する / Attempt to place a "group" of monsters around the given location
  * @param y 中心生成位置y座標
  * @param x 中心生成位置x座標
- * @param r_idx 生成モンスター種族
+ * @param monrace_id 生成モンスター種族
  * @param mode 生成オプション
  * @param summoner_m_idx モンスターの召喚による場合、召喚主のモンスターID
  * @return 成功したらtrue
  */
-static bool place_monster_group(PlayerType *player_ptr, POSITION y, POSITION x, MonraceId r_idx, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
+static bool place_monster_group(PlayerType *player_ptr, POSITION y, POSITION x, MonraceId monrace_id, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
-    auto total = randint1(10);
-
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
+    const auto floor_level = player_ptr->current_floor_ptr->dun_level;
     auto extra = 0;
-    if (r_ptr->level > floor_ptr->dun_level) {
-        extra = r_ptr->level - floor_ptr->dun_level;
+    if (monrace.level > floor_level) {
+        extra = monrace.level - floor_level;
         extra = 0 - randint1(extra);
-    } else if (r_ptr->level < floor_ptr->dun_level) {
-        extra = floor_ptr->dun_level - r_ptr->level;
+    } else if (monrace.level < floor_level) {
+        extra = floor_level - monrace.level;
         extra = randint1(extra);
     }
 
@@ -173,8 +171,7 @@ static bool place_monster_group(PlayerType *player_ptr, POSITION y, POSITION x, 
         extra = 9;
     }
 
-    total += extra;
-
+    auto total = randint1(10) + extra;
     if (total < 1) {
         total = 1;
     }
@@ -193,14 +190,14 @@ static bool place_monster_group(PlayerType *player_ptr, POSITION y, POSITION x, 
     for (auto n = 0; (n < hack_n) && (hack_n < total); n++) {
         POSITION hx = hack_x[n];
         POSITION hy = hack_y[n];
-        for (int i = 0; (i < 8) && (hack_n < total); i++) {
+        for (auto i = 0; (i < 8) && (hack_n < total); i++) {
             POSITION mx, my;
             scatter(player_ptr, &my, &mx, hy, hx, 4, PROJECT_NONE);
             if (!is_cave_empty_bold2(player_ptr, my, mx)) {
                 continue;
             }
 
-            if (place_monster_one(player_ptr, my, mx, r_idx, mode, summoner_m_idx)) {
+            if (place_monster_one(player_ptr, my, mx, monrace_id, mode, summoner_m_idx)) {
                 hack_y[hack_n] = my;
                 hack_x[hack_n] = mx;
                 hack_n++;
