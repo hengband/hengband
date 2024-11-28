@@ -16506,15 +16506,15 @@
       "allocations": [
         {
           "depth": 1,
-          "rarity": 10
+          "rarity": 15
         },
         {
           "depth": 10,
-          "rarity": 5
+          "rarity": 10
         },
         {
           "depth": 12,
-          "rarity": 2
+          "rarity": 4
         }
       ]
     },
@@ -16539,15 +16539,15 @@
       "allocations": [
         {
           "depth": 1,
-          "rarity": 10
+          "rarity": 15
         },
         {
           "depth": 10,
-          "rarity": 5
+          "rarity": 10
         },
         {
           "depth": 14,
-          "rarity": 2
+          "rarity": 4
         }
       ]
     },
@@ -16671,19 +16671,19 @@
       "allocations": [
         {
           "depth": 1,
-          "rarity": 10
+          "rarity": 15
         },
         {
           "depth": 10,
-          "rarity": 5
+          "rarity": 10
         },
         {
           "depth": 20,
-          "rarity": 3
+          "rarity": 6
         },
         {
           "depth": 22,
-          "rarity": 2
+          "rarity": 4
         }
       ]
     },
@@ -16708,19 +16708,19 @@
       "allocations": [
         {
           "depth": 1,
-          "rarity": 10
+          "rarity": 15
         },
         {
           "depth": 10,
-          "rarity": 5
+          "rarity": 10
         },
         {
           "depth": 20,
-          "rarity": 3
+          "rarity": 6
         },
         {
           "depth": 24,
-          "rarity": 2
+          "rarity": 4
         }
       ]
     },
@@ -16745,19 +16745,19 @@
       "allocations": [
         {
           "depth": 1,
-          "rarity": 10
+          "rarity": 15
         },
         {
           "depth": 10,
-          "rarity": 5
+          "rarity": 12
         },
         {
           "depth": 20,
-          "rarity": 3
+          "rarity": 8
         },
         {
           "depth": 26,
-          "rarity": 2
+          "rarity": 6
         }
       ]
     },
@@ -16782,19 +16782,19 @@
       "allocations": [
         {
           "depth": 1,
-          "rarity": 10
+          "rarity": 15
         },
         {
           "depth": 10,
-          "rarity": 5
+          "rarity": 12
         },
         {
           "depth": 20,
-          "rarity": 3
+          "rarity": 8
         },
         {
           "depth": 28,
-          "rarity": 2
+          "rarity": 6
         }
       ]
     },
@@ -16819,19 +16819,19 @@
       "allocations": [
         {
           "depth": 1,
-          "rarity": 10
+          "rarity": 15
         },
         {
           "depth": 10,
-          "rarity": 5
+          "rarity": 12
         },
         {
           "depth": 20,
-          "rarity": 3
+          "rarity": 8
         },
         {
           "depth": 30,
-          "rarity": 2
+          "rarity": 6
         }
       ]
     },
@@ -16856,19 +16856,19 @@
       "allocations": [
         {
           "depth": 1,
-          "rarity": 12
+          "rarity": 20
         },
         {
           "depth": 10,
-          "rarity": 6
+          "rarity": 16
         },
         {
-          "depth": 20,
-          "rarity": 4
+          "depth": 25,
+          "rarity": 12
         },
         {
           "depth": 40,
-          "rarity": 3
+          "rarity": 8
         }
       ]
     },
@@ -16893,19 +16893,19 @@
       "allocations": [
         {
           "depth": 1,
-          "rarity": 12
+          "rarity": 20
         },
         {
           "depth": 10,
-          "rarity": 6
+          "rarity": 16
         },
         {
-          "depth": 20,
-          "rarity": 4
+          "depth": 25,
+          "rarity": 12
         },
         {
           "depth": 50,
-          "rarity": 3
+          "rarity": 8
         }
       ]
     },
