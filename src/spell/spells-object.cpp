@@ -162,7 +162,7 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
         }
 
         if (known) {
-            object_aware(player_ptr, &*item);
+            object_aware(player_ptr, *item);
             item->mark_as_known();
         }
 

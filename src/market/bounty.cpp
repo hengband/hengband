@@ -183,7 +183,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
             ItemEntity prize_item(prize_list[num - 1]);
             ItemMagicApplier(player_ptr, &prize_item, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART).execute();
-            object_aware(player_ptr, &prize_item);
+            object_aware(player_ptr, prize_item);
             prize_item.mark_as_known();
 
             /*

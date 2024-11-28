@@ -123,7 +123,7 @@ bool create_ammo(PlayerType *player_ptr)
 
         ItemEntity item({ ItemKindType::SHOT, m_bonus(1, player_ptr->lev) + 1 });
         item.number = (byte)rand_range(15, 30);
-        object_aware(player_ptr, &item);
+        object_aware(player_ptr, item);
         item.mark_as_known();
         ItemMagicApplier(player_ptr, &item, player_ptr->lev, AM_NO_FIXED_ART).execute();
         item.discount = 99;
@@ -148,7 +148,7 @@ bool create_ammo(PlayerType *player_ptr)
         }
         ItemEntity ammo({ ItemKindType::ARROW, m_bonus(1, player_ptr->lev) + 1 });
         ammo.number = (byte)rand_range(5, 10);
-        object_aware(player_ptr, &ammo);
+        object_aware(player_ptr, ammo);
         ammo.mark_as_known();
         ItemMagicApplier(player_ptr, &ammo, player_ptr->lev, AM_NO_FIXED_ART).execute();
         ammo.discount = 99;
@@ -173,7 +173,7 @@ bool create_ammo(PlayerType *player_ptr)
 
         ItemEntity ammo({ ItemKindType::BOLT, m_bonus(1, player_ptr->lev) + 1 });
         ammo.number = (byte)rand_range(4, 8);
-        object_aware(player_ptr, &ammo);
+        object_aware(player_ptr, ammo);
         ammo.mark_as_known();
         ItemMagicApplier(player_ptr, &ammo, player_ptr->lev, AM_NO_FIXED_ART).execute();
         ammo.discount = 99;

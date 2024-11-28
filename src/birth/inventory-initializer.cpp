@@ -87,7 +87,7 @@ void wield_all(PlayerType *player_ptr)
  */
 static void add_outfit(PlayerType *player_ptr, ItemEntity &item)
 {
-    object_aware(player_ptr, &item);
+    object_aware(player_ptr, item);
     item.mark_as_known();
     const auto slot = store_item_to_inventory(player_ptr, &item);
     autopick_alter_item(player_ptr, slot, false);

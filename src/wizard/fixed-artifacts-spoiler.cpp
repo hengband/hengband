@@ -145,7 +145,7 @@ SpoilerOutputResultType spoil_fixed_artifact()
 
                 const auto item = make_fake_artifact(fa_id);
                 PlayerType dummy;
-                const auto artifacts_list = object_analyze(&dummy, &item);
+                const auto artifacts_list = object_analyze(&dummy, item);
                 spoiler_print_art(&artifacts_list, ofs);
             }
         }
