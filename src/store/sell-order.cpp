@@ -50,7 +50,7 @@
  */
 static std::optional<PRICE> prompt_to_sell(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_num)
 {
-    auto price_ask = price_item(player_ptr, o_ptr, ot_ptr->inflate, true, store_num);
+    auto price_ask = price_item(player_ptr, o_ptr->calc_price(), ot_ptr->inflate, true, store_num);
 
     price_ask = std::min(price_ask, ot_ptr->max_cost);
     price_ask *= o_ptr->number;

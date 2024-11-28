@@ -50,7 +50,7 @@
  */
 static std::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_num)
 {
-    auto price_ask = price_item(player_ptr, o_ptr, ot_ptr->inflate, false, store_num);
+    auto price_ask = price_item(player_ptr, o_ptr->calc_price(), ot_ptr->inflate, false, store_num);
 
     price_ask *= o_ptr->number;
     const auto s = format(_("買値 $%ld で買いますか？", "Do you buy for $%ld? "), static_cast<long>(price_ask));
@@ -215,7 +215,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
         return;
     }
 
-    const auto best = price_item(player_ptr, &item, ot_ptr->inflate, false, store_num);
+    const auto best = price_item(player_ptr, item.calc_price(), ot_ptr->inflate, false, store_num);
     if (item_store->number > 1) {
         if (store_num != StoreSaleType::HOME) {
             msg_format(_("一つにつき $%dです。", "That costs %d gold per item."), best);

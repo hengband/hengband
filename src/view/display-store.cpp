@@ -88,7 +88,7 @@ void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
         put_str(format("%3d.%1d", _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10)), i + 6, _(60, 61));
     }
 
-    const auto price = price_item(player_ptr, item.get(), ot_ptr->inflate, false, store_num);
+    const auto price = price_item(player_ptr, item->calc_price(), ot_ptr->inflate, false, store_num);
     put_str(format("%9ld  ", (long)price), i + 6, 68);
 }
 
