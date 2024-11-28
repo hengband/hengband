@@ -120,15 +120,15 @@ std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, 
         return std::nullopt;
     }
 
-    POSITION x, y;
-    if (!mon_scatter(player_ptr, MonraceList::empty_id(), &y, &x, y1, x1, 2)) {
+    const auto pos = mon_scatter(player_ptr, MonraceList::empty_id(), { y1, x1 }, 2);
+    if (!pos) {
         return std::nullopt;
     }
 
     auto summon_specific_hook = [type, mode, summoner_m_idx](PlayerType *player_ptr, MonraceId r_idx) {
         return summon_specific_okay(player_ptr, r_idx, type, mode, summoner_m_idx);
     };
-    get_mon_num_prep(player_ptr, std::move(summon_specific_hook), get_monster_hook2(player_ptr, y, x), type);
+    get_mon_num_prep(player_ptr, std::move(summon_specific_hook), get_monster_hook2(player_ptr, pos->y, pos->x), type);
 
     DEPTH dlev = get_dungeon_or_wilderness_level(player_ptr);
     const auto r_idx = get_mon_num(player_ptr, 0, (dlev + lev) / 2 + 5, mode);
@@ -140,7 +140,7 @@ std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, 
         mode |= PM_NO_KAGE;
     }
 
-    auto summoned_m_idx = place_specific_monster(player_ptr, y, x, r_idx, mode, summoner_m_idx);
+    auto summoned_m_idx = place_specific_monster(player_ptr, pos->y, pos->x, r_idx, mode, summoner_m_idx);
     if (!summoned_m_idx) {
         return std::nullopt;
     }
@@ -154,7 +154,7 @@ std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, 
             notice = true;
         } else if (is_seen(player_ptr, m_ptr)) {
             notice = true;
-        } else if (player_can_see_bold(player_ptr, y, x)) {
+        } else if (player_can_see_bold(player_ptr, pos->y, pos->x)) {
             notice = true;
         }
     }
@@ -182,11 +182,15 @@ std::optional<MONSTER_IDX> summon_named_creature(PlayerType *player_ptr, MONSTER
         return false;
     }
 
-    POSITION x, y;
-    if (player_ptr->current_floor_ptr->inside_arena || !mon_scatter(player_ptr, r_idx, &y, &x, oy, ox, 2)) {
+    if (player_ptr->current_floor_ptr->inside_arena) {
+        return false;
+    }
+
+    const auto pos = mon_scatter(player_ptr, r_idx, { oy, ox }, 2);
+    if (!pos) {
         return false;
     }
 
     const auto summon_who = is_monster(src_idx) ? std::make_optional(src_idx) : std::nullopt;
-    return place_specific_monster(player_ptr, y, x, r_idx, (mode | PM_NO_KAGE), summon_who);
+    return place_specific_monster(player_ptr, pos->y, pos->x, r_idx, (mode | PM_NO_KAGE), summon_who);
 }

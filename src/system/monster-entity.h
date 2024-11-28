@@ -105,8 +105,9 @@ public:
     Pos2D get_position() const;
     Pos2D get_target_position() const;
     bool can_ring_boss_call_nazgul() const;
-    void set_individual_speed(bool force_fixed_speed);
 
+    void set_individual_speed(bool force_fixed_speed);
+    void set_position(const Pos2D &pos);
     void set_hostile();
     void make_lore_treasure(int num_item, int num_gold) const;
     void reset_chameleon_polymorph();
