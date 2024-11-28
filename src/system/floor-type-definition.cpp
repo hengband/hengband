@@ -288,7 +288,7 @@ ItemEntity FloorType::make_gold(std::optional<BaseitemKey> bi_key) const
     }
 
     const auto base = item.get_baseitem_cost();
-    item.pval = base + (8 * randint1(base)) + randint1(8);
+    item.pval = 3 * base + randint1(6 * base);
     return item;
 }
 
