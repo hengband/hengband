@@ -222,7 +222,7 @@ static void desc_obj_fake(PlayerType *player_ptr, short bi_id)
     ItemEntity item(bi_id);
     item.ident |= IDENT_KNOWN;
     handle_stuff(player_ptr);
-    if (screen_object(player_ptr, &item, SCROBJ_FAKE_OBJECT | SCROBJ_FORCE_DETAIL)) {
+    if (screen_object(player_ptr, item, SCROBJ_FAKE_OBJECT | SCROBJ_FORCE_DETAIL)) {
         return;
     }
 
