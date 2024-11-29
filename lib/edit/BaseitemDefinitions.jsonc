@@ -16332,7 +16332,7 @@
       "allocations": [
         {
           "depth": 1,
-          "rarity": 10
+          "rarity": 1
         },
         {
           "depth": 1,
@@ -16361,10 +16361,10 @@
       "allocations": [
         {
           "depth": 1,
-          "rarity": 10
+          "rarity": 1
         },
         {
-          "depth": 2,
+          "depth": 1,
           "rarity": 1
         }
       ]
@@ -16390,10 +16390,10 @@
       "allocations": [
         {
           "depth": 1,
-          "rarity": 10
+          "rarity": 1
         },
         {
-          "depth": 4,
+          "depth": 1,
           "rarity": 1
         }
       ]
@@ -16415,11 +16415,15 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 8,
+      "cost": 9,
       "allocations": [
         {
           "depth": 1,
-          "rarity": 8
+          "rarity": 3
+        },
+        {
+          "depth": 5,
+          "rarity": 2
         },
         {
           "depth": 6,
@@ -16444,11 +16448,15 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 9,
+      "cost": 10,
       "allocations": [
         {
           "depth": 1,
-          "rarity": 8
+          "rarity": 3
+        },
+        {
+          "depth": 5,
+          "rarity": 2
         },
         {
           "depth": 8,
@@ -16473,11 +16481,15 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 10,
+      "cost": 11,
       "allocations": [
         {
           "depth": 1,
-          "rarity": 8
+          "rarity": 3
+        },
+        {
+          "depth": 5,
+          "rarity": 2
         },
         {
           "depth": 10,
@@ -16506,15 +16518,19 @@
       "allocations": [
         {
           "depth": 1,
-          "rarity": 15
+          "rarity": 12
         },
         {
-          "depth": 10,
+          "depth": 5,
           "rarity": 10
         },
         {
+          "depth": 10,
+          "rarity": 8
+        },
+        {
           "depth": 12,
-          "rarity": 4
+          "rarity": 5
         }
       ]
     },
@@ -16539,15 +16555,19 @@
       "allocations": [
         {
           "depth": 1,
-          "rarity": 15
+          "rarity": 12
         },
         {
-          "depth": 10,
+          "depth": 5,
           "rarity": 10
         },
         {
+          "depth": 10,
+          "rarity": 8
+        },
+        {
           "depth": 14,
-          "rarity": 4
+          "rarity": 5
         }
       ]
     },
@@ -16568,15 +16588,19 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 16,
+      "cost": 15,
       "allocations": [
         {
           "depth": 1,
           "rarity": 10
         },
         {
+          "depth": 5,
+          "rarity": 3
+        },
+        {
           "depth": 10,
-          "rarity": 5
+          "rarity": 2
         },
         {
           "depth": 16,
@@ -16601,15 +16625,19 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 17,
+      "cost": 16,
       "allocations": [
         {
           "depth": 1,
           "rarity": 10
         },
         {
+          "depth": 5,
+          "rarity": 3
+        },
+        {
           "depth": 10,
-          "rarity": 5
+          "rarity": 2
         },
         {
           "depth": 18,
@@ -16634,15 +16662,19 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 18,
+      "cost": 17,
       "allocations": [
         {
           "depth": 1,
           "rarity": 10
         },
         {
+          "depth": 5,
+          "rarity": 3
+        },
+        {
           "depth": 10,
-          "rarity": 5
+          "rarity": 2
         },
         {
           "depth": 20,
@@ -16683,7 +16715,7 @@
         },
         {
           "depth": 22,
-          "rarity": 4
+          "rarity": 5
         }
       ]
     },
@@ -16720,7 +16752,7 @@
         },
         {
           "depth": 24,
-          "rarity": 4
+          "rarity": 5
         }
       ]
     },
@@ -16856,7 +16888,7 @@
       "allocations": [
         {
           "depth": 1,
-          "rarity": 20
+          "rarity": 25
         },
         {
           "depth": 10,
@@ -16893,7 +16925,7 @@
       "allocations": [
         {
           "depth": 1,
-          "rarity": 20
+          "rarity": 25
         },
         {
           "depth": 10,
@@ -22869,6 +22901,43 @@
         "ja": "安っぽい紙切れだ。グングニルの隠し場所でも書いてあるのだろうか。",
         "en": "It's a cheap piece of paper.  You should wonder if the hidden location of Gungnir is written."
       }
+    },
+    {
+      "id": 682,
+      "name": {
+        "ja": "黒曜石",
+        "en": "obsidian"
+      },
+      "symbol": {
+        "character": "$",
+        "color": "Dark Gray"
+      },
+      "itemkind": {
+        "type_value": 127,
+        "subtype_value": 19
+      },
+      "parameter_value": 0,
+      "level": 1,
+      "weight": 0,
+      "cost": 20,
+      "allocations": [
+        {
+          "depth": 1,
+          "rarity": 12
+        },
+        {
+          "depth": 5,
+          "rarity": 10
+        },
+        {
+          "depth": 10,
+          "rarity": 8
+        },
+        {
+          "depth": 12,
+          "rarity": 5
+        }
+      ]
     }
   ]
 }
