@@ -24986,7 +24986,8 @@
       ],
       "flags": [
         "ONLY_GOLD",
-        "DROP_2D2",
+        "DROP_3D2",
+        "DROP_4D2",
         "DROP_MITHRIL",
         "EMPTY_MIND",
         "COLD_BLOOD",
@@ -87864,6 +87865,286 @@
       "flavor": {
         "ja": "ヘビとヤモリが混合した生物で、それに睨まれるとまともな判断をすることにも一苦労させられる。",
         "en": "It is a mixed snake and gecko. When you glared by it, you'll struggle with a normal thinking even."
+      }
+    },
+    {
+      "id": 1371,
+      "name": {
+        "ja": "オブシディアン・ゴーレム",
+        "en": "Obsidian golem"
+      },
+      "symbol": {
+        "character": "g",
+        "color": "Dark Gray"
+      },
+      "speed": 0,
+      "hit_point": "14d8",
+      "vision": 20,
+      "armor_class": 50,
+      "alertness": 10,
+      "level": 14,
+      "rarity": 4,
+      "exp": 70,
+      "blows": [
+        {
+          "method": "SLASH",
+          "effect": "HURT",
+          "damage_dice": "2d10"
+        },
+        {
+          "method": "SLASH",
+          "effect": "HURT",
+          "damage_dice": "2d10"
+        }
+      ],
+      "flags": [
+        "COLD_BLOOD",
+        "EMPTY_MIND",
+        "BASH_DOOR",
+        "IM_FIRE",
+        "IM_COLD",
+        "IM_ELEC",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP",
+        "NO_FEAR",
+        "NONLIVING",
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_4D2",
+        "DROP_OBSIDIAN"
+      ],
+      "flavor": {
+        "ja": "それは黒い宝石で造られた堂々たる巨像だ。",
+        "en": "It is a massive statue of black jewels."
+      }
+    },
+    {
+      "id": 1372,
+      "name": {
+        "ja": "エメラルド・ゴーレム",
+        "en": "Ruby golem"
+      },
+      "symbol": {
+        "character": "g",
+        "color": "Light Green"
+      },
+      "speed": 0,
+      "hit_point": "80d10",
+      "vision": 20,
+      "armor_class": 80,
+      "alertness": 10,
+      "level": 24,
+      "rarity": 4,
+      "exp": 400,
+      "blows": [
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "3d8"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "5d5"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "5d5"
+        }
+      ],
+      "flags": [
+        "COLD_BLOOD",
+        "EMPTY_MIND",
+        "BASH_DOOR",
+        "IM_FIRE",
+        "IM_COLD",
+        "IM_ELEC",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP",
+        "NO_FEAR",
+        "NONLIVING",
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_4D2",
+        "DROP_EMERALD"
+      ],
+      "flavor": {
+        "ja": "それは緑の宝石で造られた堂々たる巨像だ。それは値段にしたら相当高価だろう！",
+        "en": "It is a massive statue of grenn jewels. It looks expensive!"
+      }
+    },
+    {
+      "id": 1373,
+      "name": {
+        "ja": "サファイア・ゴーレム",
+        "en": "Sapphire golem"
+      },
+      "symbol": {
+        "character": "g",
+        "color": "Blue"
+      },
+      "speed": 0,
+      "hit_point": "80d12",
+      "vision": 20,
+      "armor_class": 90,
+      "alertness": 10,
+      "level": 26,
+      "rarity": 4,
+      "exp": 500,
+      "blows": [
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "3d8"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "5d5"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "5d5"
+        }
+      ],
+      "flags": [
+        "COLD_BLOOD",
+        "EMPTY_MIND",
+        "BASH_DOOR",
+        "IM_FIRE",
+        "IM_COLD",
+        "IM_ELEC",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP",
+        "NO_FEAR",
+        "NONLIVING",
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_4D2",
+        "DROP_SAPPHIRE"
+      ],
+      "flavor": {
+        "ja": "それは青い宝石で造られた堂々たる巨像だ。それは値段にしたら相当高価だろう！",
+        "en": "It is a massive statue of blue jewels. It looks expensive!"
+      }
+    },
+    {
+      "id": 1374,
+      "name": {
+        "ja": "ルビー・ゴーレム",
+        "en": "Ruby golem"
+      },
+      "symbol": {
+        "character": "g",
+        "color": "Light Red"
+      },
+      "speed": 0,
+      "hit_point": "80d12",
+      "vision": 20,
+      "armor_class": 90,
+      "alertness": 10,
+      "level": 26,
+      "rarity": 4,
+      "exp": 500,
+      "blows": [
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "3d8"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "5d5"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "5d5"
+        }
+      ],
+      "flags": [
+        "COLD_BLOOD",
+        "EMPTY_MIND",
+        "BASH_DOOR",
+        "IM_FIRE",
+        "IM_COLD",
+        "IM_ELEC",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP",
+        "NO_FEAR",
+        "NONLIVING",
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_4D2",
+        "DROP_RUBY"
+      ],
+      "flavor": {
+        "ja": "それは赤い宝石で造られた堂々たる巨像だ。それは値段にしたら相当高価だろう！",
+        "en": "It is a massive statue of red jewels. It looks expensive!"
+      }
+    },
+    {
+      "id": 1375,
+      "name": {
+        "ja": "ダイヤモンド・ゴーレム",
+        "en": "Diamond golem"
+      },
+      "symbol": {
+        "character": "g",
+        "color": "White"
+      },
+      "speed": 0,
+      "hit_point": "80d14",
+      "vision": 20,
+      "armor_class": 100,
+      "alertness": 10,
+      "level": 28,
+      "rarity": 4,
+      "exp": 600,
+      "blows": [
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "3d8"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "5d5"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "5d5"
+        }
+      ],
+      "flags": [
+        "COLD_BLOOD",
+        "EMPTY_MIND",
+        "BASH_DOOR",
+        "IM_FIRE",
+        "IM_COLD",
+        "IM_ELEC",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP",
+        "NO_FEAR",
+        "NONLIVING",
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_4D2",
+        "DROP_DIAMOND"
+      ],
+      "flavor": {
+        "ja": "それは金剛石で造られた堂々たる巨像だ。それは値段にしたら相当高価だろう！",
+        "en": "It is a massive statue of diamonds. It looks expensive!"
       }
     }
   ]
