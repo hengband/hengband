@@ -87,35 +87,32 @@ static std::optional<short> show_store_select_item(const int i, StoreSaleType st
 /*!
  * @brief 家のアイテムを取得する
  * @param player_ptr プレイヤー情報の参照ポインタ
- * @param o_ptr 取得元オブジェクト
- * @param j_ptr 取得先オブジェクト(指定数量分)
- * @param item_new 取得先インベントリ番号(アドレス渡し)
- * @param amt 数量
- * @param i お店のストック数(アドレス渡し)
- * @param 取得元インベントリ番号
+ * @param item_home 取得元オブジェクト
+ * @param item_inventory 取得先オブジェクト(指定数量分)
+ * @param i_idx 取得先インベントリ番号
  */
-static void take_item_from_home(PlayerType *player_ptr, ItemEntity *o_ptr, ItemEntity *j_ptr, const COMMAND_CODE item)
+static void take_item_from_home(PlayerType *player_ptr, ItemEntity &item_home, ItemEntity &item_inventory, short i_idx)
 {
-    const int amt = j_ptr->number;
-    distribute_charges(o_ptr, j_ptr, amt);
+    const auto amt = item_inventory.number;
+    distribute_charges(&item_home, &item_inventory, amt);
 
-    auto item_new = store_item_to_inventory(player_ptr, j_ptr);
+    const auto item_new = store_item_to_inventory(player_ptr, &item_inventory);
     const auto item_name = describe_flavor(player_ptr, player_ptr->inventory_list[item_new], 0);
     handle_stuff(player_ptr);
     msg_format(_("%s(%c)を取った。", "You have %s (%c)."), item_name.data(), index_to_label(item_new));
 
-    auto i = st_ptr->stock_num;
-    store_item_increase(item, -amt);
-    store_item_optimize(item);
+    const auto stock_num = st_ptr->stock_num;
+    store_item_increase(i_idx, -amt);
+    store_item_optimize(i_idx);
 
-    auto combined_or_reordered = combine_and_reorder_home(player_ptr, StoreSaleType::HOME);
-
-    if (i == st_ptr->stock_num) {
+    const auto combined_or_reordered = combine_and_reorder_home(player_ptr, StoreSaleType::HOME);
+    if (stock_num == st_ptr->stock_num) {
         if (combined_or_reordered) {
             display_store_inventory(player_ptr, StoreSaleType::HOME);
-        } else {
-            display_entry(player_ptr, item, StoreSaleType::HOME);
+            return;
         }
+
+        display_entry(player_ptr, i_idx, StoreSaleType::HOME);
         return;
     }
 
@@ -241,7 +238,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     if (store_num == StoreSaleType::HOME) {
-        take_item_from_home(player_ptr, item_store.get(), &item, item_num);
+        take_item_from_home(player_ptr, *item_store, item, item_num);
         return;
     }
 
