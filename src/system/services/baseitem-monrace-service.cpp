@@ -27,6 +27,7 @@ const std::map<MonsterDropType, BaseitemKey> FIXED_GOLD_DROPS = {
     { MonsterDropType::DROP_EMERALD, { ItemKindType::GOLD, 16 } },
     { MonsterDropType::DROP_MITHRIL, { ItemKindType::GOLD, 17 } },
     { MonsterDropType::DROP_ADAMANTITE, { ItemKindType::GOLD, 18 } },
+    { MonsterDropType::DROP_OBSIDIAN, { ItemKindType::GOLD, 19 } },
 };
 
 EnumClassFlagGroup<MonsterDropType> make_fixed_gold_drop_flags()

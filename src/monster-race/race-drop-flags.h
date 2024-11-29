@@ -24,5 +24,6 @@ enum class MonsterDropType {
     DROP_EMERALD = 20,
     DROP_MITHRIL = 21,
     DROP_ADAMANTITE = 22,
+    DROP_OBSIDIAN = 23,
     MAX,
 };
