@@ -30,12 +30,12 @@
 static void home_carry_load(PlayerType *player_ptr, store_type *store_ptr, ItemEntity *o_ptr)
 {
     for (auto i = 0; i < store_ptr->stock_num; i++) {
-        auto &item = store_ptr->stock[i];
-        if (!item->is_similar(*o_ptr)) {
+        auto &item = *store_ptr->stock[i];
+        if (!item.is_similar(*o_ptr)) {
             continue;
         }
 
-        item->absorb(*o_ptr);
+        item.absorb(*o_ptr);
         return;
     }
 
