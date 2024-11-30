@@ -292,7 +292,7 @@ DisplaySymbol set_term_color(PlayerType *player_ptr, const Pos2D &pos, const Dis
     }
 
     feat_priority = 31;
-    const auto &monrace = monraces_info[MonraceId::PLAYER];
+    const auto &monrace = MonraceList::get_instance().get_monrace(MonraceId::PLAYER);
     return monrace.symbol_config;
 }
 
