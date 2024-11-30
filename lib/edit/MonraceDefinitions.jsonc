@@ -88146,6 +88146,97 @@
         "ja": "それは金剛石で造られた堂々たる巨像だ。それは値段にしたら相当高価だろう！",
         "en": "It is a massive statue of diamonds. It looks expensive!"
       }
+    },
+    {
+      "id": 1376,
+      "name": {
+        "ja": "ライト・ボルテックス",
+        "en": "Light vortex"
+      },
+      "symbol": {
+        "character": "v",
+        "color": "Orange"
+      },
+      "speed": 0,
+      "hit_point": "12d12",
+      "vision": 100,
+      "armor_class": 30,
+      "alertness": 0,
+      "level": 25,
+      "rarity": 1,
+      "exp": 200,
+      "odds_correction_ratio": 150,
+      "flags": [
+        "RAND_50",
+        "CAN_FLY",
+        "SELF_LITE_1",
+        "SELF_LITE_2",
+        "EMPTY_MIND",
+        "BASH_DOOR",
+        "POWERFUL",
+        "RES_LITE",
+        "HURT_DARK",
+        "NO_FEAR",
+        "NO_CONF",
+        "NO_SLEEP",
+        "NO_STUN",
+        "NONLIVING"
+      ],
+      "skill": {
+        "probability": "1_IN_6",
+        "list": [
+          "BR_LITE"
+        ]
+      },
+      "flavor": {
+        "ja": "それは渦を巻く光で、時折閃光を放っている。",
+        "en": "It is a swirling light, with occasional flashes."
+      }
+    },
+    {
+      "id": 1377,
+      "name": {
+        "ja": "シャドウ・ボルテックス",
+        "en": "Shadow vortex"
+      },
+      "symbol": {
+        "character": "v",
+        "color": "Dark Gray"
+      },
+      "speed": 0,
+      "hit_point": "12d12",
+      "vision": 100,
+      "armor_class": 30,
+      "alertness": 0,
+      "level": 25,
+      "rarity": 1,
+      "exp": 200,
+      "odds_correction_ratio": 150,
+      "flags": [
+        "RAND_50",
+        "CAN_FLY",
+        "SELF_DARK_2",
+        "EMPTY_MIND",
+        "BASH_DOOR",
+        "POWERFUL",
+        "RES_DARK",
+        "HURT_LITE",
+        "NO_FEAR",
+        "NO_CONF",
+        "NO_SLEEP",
+        "NO_STUN",
+        "NONLIVING"
+      ],
+      "skill": {
+        "probability": "1_IN_6",
+        "list": [
+          "BR_DARK"
+        ]
+      },
+      "flavor": {
+        "ja": "それは渦を巻く影で、時折暗黒の波動を放っている。",
+        "en": "It was a swirling shadow, occasionally emitting dark waves."
+      }
     }
   ]
 }
