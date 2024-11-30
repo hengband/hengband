@@ -28,7 +28,7 @@
 
 void wiz_enter_quest(PlayerType *player_ptr);
 void wiz_complete_quest(PlayerType *player_ptr);
-void wiz_restore_monster_max_num(MonraceId r_idx);
+void wiz_restore_monster_max_num(MonraceId monrace_id);
 
 /*!
  * @brief ゲーム設定コマンド一覧表
@@ -140,22 +140,23 @@ void wiz_complete_quest(PlayerType *player_ptr)
     }
 }
 
-void wiz_restore_monster_max_num(MonraceId r_idx)
+void wiz_restore_monster_max_num(MonraceId monrace_id)
 {
-    if (!MonraceList::is_valid(r_idx)) {
-        const auto restore_monrace_id = input_numerics("MonsterID", 1, monraces_info.size() - 1, MonraceId::FILTHY_URCHIN);
+    auto &monraces = MonraceList::get_instance();
+    if (!MonraceList::is_valid(monrace_id)) {
+        const auto restore_monrace_id = input_numerics("MonsterID", 1, monraces.size() - 1, MonraceId::FILTHY_URCHIN);
         if (!restore_monrace_id) {
             return;
         }
 
-        r_idx = *restore_monrace_id;
+        monrace_id = *restore_monrace_id;
     }
 
-    auto *r_ptr = &monraces_info[r_idx];
+    auto &monrace = monraces.get_monrace(monrace_id);
     std::optional<int> max_num;
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
         max_num = MAX_UNIQUE_NUM;
-    } else if (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) {
+    } else if (monrace.population_flags.has(MonsterPopulationType::NAZGUL)) {
         max_num = MAX_NAZGUL_NUM;
     }
 
@@ -165,12 +166,12 @@ void wiz_restore_monster_max_num(MonraceId r_idx)
         return;
     }
 
-    r_ptr->max_num = *max_num;
-    r_ptr->r_pkills = 0;
-    r_ptr->r_akills = 0;
+    monrace.max_num = *max_num;
+    monrace.r_pkills = 0;
+    monrace.r_akills = 0;
 
     std::stringstream ss;
-    ss << r_ptr->name << _("の出現数を復元しました。", " can appear again now.");
+    ss << monrace.name << _("の出現数を復元しました。", " can appear again now.");
     msg_print(ss.str());
     msg_print(nullptr);
 }
