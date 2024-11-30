@@ -51,7 +51,7 @@ bool exchange_cash(PlayerType *player_ptr)
             continue;
         }
 
-        if (item.get_monrace().idx != MonraceId::TSUCHINOKO) {
+        if (!MonraceList::is_tsuchinoko(item.get_monrace_id())) {
             continue;
         }
 
@@ -74,7 +74,7 @@ bool exchange_cash(PlayerType *player_ptr)
             continue;
         }
 
-        if (item.get_monrace().idx != MonraceId::TSUCHINOKO) {
+        if (!MonraceList::is_tsuchinoko(item.get_monrace_id())) {
             continue;
         }
 
@@ -97,7 +97,7 @@ bool exchange_cash(PlayerType *player_ptr)
             continue;
         }
 
-        if (item.get_monrace().idx != MonraceId::TSUCHINOKO) {
+        if (!MonraceList::is_tsuchinoko(item.get_monrace_id())) {
             continue;
         }
 
