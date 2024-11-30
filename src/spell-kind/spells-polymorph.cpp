@@ -20,43 +20,40 @@
 #include "util/bit-flags-calculator.h"
 
 /*!
- * @brief 変身処理向けにモンスターの近隣レベル帯モンスターを返す /
- * Helper function -- return a "nearby" race for polymorphing
- * @param floor_ptr 配置するフロアの参照ポインタ
- * @param r_idx 基準となるモンスター種族ID
+ * @brief 変身処理向けにモンスターの近隣レベル帯モンスターを返す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monrace_id 基準となるモンスター種族ID
  * @return 変更先のモンスター種族ID
- * @details
- * Note that this function is one of the more "dangerous" ones...
  */
-static MonraceId poly_r_idx(PlayerType *player_ptr, MonraceId r_idx)
+static MonraceId select_polymorph_monrace_id(PlayerType *player_ptr, MonraceId monrace_id)
 {
-    auto *r_ptr = &monraces_info[r_idx];
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->misc_flags.has(MonsterMiscType::QUESTOR)) {
-        return r_idx;
+    const auto &monraces = MonraceList::get_instance();
+    const auto &monrace = monraces.get_monrace(monrace_id);
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || monrace.misc_flags.has(MonsterMiscType::QUESTOR)) {
+        return monrace_id;
     }
 
-    DEPTH lev1 = r_ptr->level - ((randint1(20) / randint1(9)) + 1);
-    DEPTH lev2 = r_ptr->level + ((randint1(20) / randint1(9)) + 1);
-    MonraceId monrace_id;
-    for (int i = 0; i < 1000; i++) {
-        monrace_id = get_mon_num(player_ptr, 0, (player_ptr->current_floor_ptr->dun_level + r_ptr->level) / 2 + 5, PM_NONE);
-        if (!MonraceList::is_valid(monrace_id)) {
+    const auto lev1 = monrace.level - ((randint1(20) / randint1(9)) + 1);
+    const auto lev2 = monrace.level + ((randint1(20) / randint1(9)) + 1);
+    for (auto i = 0; i < 1000; i++) {
+        const auto new_monrace_id = get_mon_num(player_ptr, 0, (player_ptr->current_floor_ptr->dun_level + monrace.level) / 2 + 5, PM_NONE);
+        if (!MonraceList::is_valid(new_monrace_id)) {
             break;
         }
 
-        r_ptr = &monraces_info[monrace_id];
-        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            continue;
-        }
-        if ((r_ptr->level < lev1) || (r_ptr->level > lev2)) {
+        const auto &new_monrace = monraces.get_monrace(new_monrace_id);
+        if (new_monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
             continue;
         }
 
-        r_idx = monrace_id;
-        break;
+        if ((new_monrace.level < lev1) || (new_monrace.level > lev2)) {
+            continue;
+        }
+
+        return new_monrace_id;
     }
 
-    return r_idx;
+    return monrace_id;
 }
 
 /*!
@@ -85,7 +82,7 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     MonsterEntity back_m = *m_ptr;
-    new_r_idx = poly_r_idx(player_ptr, old_r_idx);
+    new_r_idx = select_polymorph_monrace_id(player_ptr, old_r_idx);
     if (new_r_idx == old_r_idx) {
         return false;
     }
