@@ -324,7 +324,7 @@
     <ClCompile Include="..\..\src\specific-object\stone-of-lore.cpp" />
     <ClCompile Include="..\..\src\spell-class\spells-mirror-master.cpp" />
     <ClCompile Include="..\..\src\system\angband-system.cpp" />
-    <ClCompile Include="..\..\src\system\dungeon-data-definition.cpp" />
+    <ClCompile Include="..\..\src\system\dungeon\dungeon-data-definition.cpp" />
     <ClCompile Include="..\..\src\system\baseitem\baseitem-key.cpp" />
     <ClCompile Include="..\..\src\system\baseitem\baseitem-list.cpp" />
     <ClCompile Include="..\..\src\system\inner-game-data.cpp" />
@@ -882,7 +882,7 @@
     <ClCompile Include="..\..\src\core\show-file.cpp" />
     <ClCompile Include="..\..\src\core\speed-table.cpp" />
     <ClCompile Include="..\..\src\info-reader\fixed-map-parser.cpp" />
-    <ClCompile Include="..\..\src\system\dungeon-info.cpp" />
+    <ClCompile Include="..\..\src\system\dungeon\dungeon-definition.cpp" />
     <ClCompile Include="..\..\src\locale\english.cpp" />
     <ClCompile Include="..\..\src\grid\feature.cpp" />
     <ClCompile Include="..\..\src\floor\floor-events.cpp" />
@@ -1438,7 +1438,7 @@
     <ClInclude Include="..\..\src\system\enums\grid-flow.h" />
     <ClInclude Include="..\..\src\system\inner-game-data.h" />
     <ClInclude Include="..\..\src\system\redrawing-flags-updater.h" />
-    <ClInclude Include="..\..\src\system\dungeon-data-definition.h" />
+    <ClInclude Include="..\..\src\system\dungeon\dungeon-data-definition.h" />
     <ClInclude Include="..\..\src\system\floor-type-definition.h" />
     <ClInclude Include="..\..\src\system\grid-type-definition.h" />
     <ClInclude Include="..\..\src\system\player-type-definition.h" />
@@ -1969,7 +1969,7 @@
     <ClInclude Include="..\..\src\system\system-variables.h" />
     <ClInclude Include="..\..\src\core\speed-table.h" />
     <ClInclude Include="..\..\src\info-reader\fixed-map-parser.h" />
-    <ClInclude Include="..\..\src\system\dungeon-info.h" />
+    <ClInclude Include="..\..\src\system\dungeon\dungeon-definition.h" />
     <ClInclude Include="..\..\src\grid\feature.h" />
     <ClInclude Include="..\..\src\io\files-util.h" />
     <ClInclude Include="..\..\src\floor\floor-events.h" />

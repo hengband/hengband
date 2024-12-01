@@ -10,7 +10,7 @@
 #include "io/files-util.h"
 #include "market/arena-entry.h"
 #include "player/player-status.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/inner-game-data.h"
 #include "system/monster-race-info.h"

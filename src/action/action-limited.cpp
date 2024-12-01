@@ -11,7 +11,7 @@
 #include "main/sound-of-music.h"
 #include "player-base/player-class.h"
 #include "player/player-status.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"

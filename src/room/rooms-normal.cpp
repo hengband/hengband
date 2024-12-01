@@ -10,7 +10,7 @@
 #include "room/rooms-builder.h"
 #include "room/space-finder.h"
 #include "room/vault-builder.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"

@@ -3,7 +3,7 @@
 #include "game-option/birth-options.h"
 #include "load/load-util.h"
 #include "load/old/load-v1-5-0.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 

@@ -1,4 +1,4 @@
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "dungeon/dungeon-flag-mask.h"
 #include "grid/feature-action-flags.h"
 #include "grid/feature.h"

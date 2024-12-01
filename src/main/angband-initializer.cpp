@@ -23,7 +23,7 @@
 #include "main/info-initializer.h"
 #include "market/building-initializer.h"
 #include "system/angband-system.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/monster-race-info.h"
 #include "system/services/baseitem-monrace-service.h"
 #include "system/system-variables.h"

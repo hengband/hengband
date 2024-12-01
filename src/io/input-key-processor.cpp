@@ -84,7 +84,7 @@
 #include "store/cmd-store.h"
 #include "store/home.h"
 #include "store/store-util.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"

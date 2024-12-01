@@ -16,7 +16,7 @@
 #include "realm/realm-song-numbers.h"
 #include "realm/realm-song.h"
 #include "spell-realm/spells-song.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"

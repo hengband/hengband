@@ -15,7 +15,7 @@
 #include "locale/english.h"
 #include "object-enchant/special-object-flags.h"
 #include "system/artifact-type-definition.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"

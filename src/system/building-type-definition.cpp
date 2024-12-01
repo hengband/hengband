@@ -3,7 +3,7 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include <numeric>

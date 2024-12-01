@@ -25,7 +25,7 @@
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "status/bad-status-setter.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"

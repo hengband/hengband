@@ -923,8 +923,6 @@ hengband_SOURCES = \
 	system/angband-version.cpp system/angband-version.h \
 	system/artifact-type-definition.cpp system/artifact-type-definition.h \
 	system/building-type-definition.cpp system/building-type-definition.h \
-	system/dungeon-data-definition.cpp system/dungeon-data-definition.h \
-	system/dungeon-info.cpp system/dungeon-info.h \
 	system/floor-type-definition.cpp system/floor-type-definition.h \
 	system/grid-type-definition.cpp system/grid-type-definition.h \
 	system/h-basic.h system/h-config.h \
@@ -943,6 +941,9 @@ hengband_SOURCES = \
 	system/baseitem/baseitem-definition.cpp system/baseitem/baseitem-definition.h \
 	system/baseitem/baseitem-key.cpp system/baseitem/baseitem-key.h \
 	system/baseitem/baseitem-list.cpp system/baseitem/baseitem-list.h \
+	\
+	system/dungeon/dungeon-data-definition.cpp system/dungeon/dungeon-data-definition.h \
+	system/dungeon/dungeon-definition.cpp system/dungeon/dungeon-definition.h \
 	\
 	system/enums/game-option-page.h \
 	system/enums/grid-flow.h \

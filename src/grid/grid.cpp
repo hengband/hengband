@@ -42,7 +42,7 @@
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "room/rooms-builder.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/enums/grid-flow.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"

@@ -3,7 +3,7 @@
 #include "dungeon/quest.h"
 #include "floor/geometry.h"
 #include "monster/monster-info.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
