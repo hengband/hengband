@@ -164,17 +164,17 @@ MonraceId MonsterEntity::get_real_monrace_id() const
  */
 MonraceDefinition &MonsterEntity::get_real_monrace() const
 {
-    return monraces_info[this->get_real_monrace_id()];
+    return MonraceList::get_instance().get_monrace(this->get_real_monrace_id());
 }
 
 MonraceDefinition &MonsterEntity::get_appearance_monrace() const
 {
-    return monraces_info[this->ap_r_idx];
+    return MonraceList::get_instance().get_monrace(this->ap_r_idx);
 }
 
 MonraceDefinition &MonsterEntity::get_monrace() const
 {
-    return monraces_info[this->r_idx];
+    return MonraceList::get_instance().get_monrace(this->r_idx);
 }
 
 short MonsterEntity::get_remaining_sleep() const

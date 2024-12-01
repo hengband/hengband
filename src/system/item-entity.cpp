@@ -1222,6 +1222,15 @@ int ItemEntity::get_baseitem_cost() const
     return this->get_baseitem().cost;
 }
 
+MonraceId ItemEntity::get_monrace_id() const
+{
+    if (!this->has_monrace()) {
+        THROW_EXCEPTION(std::logic_error, "This item is not related to monrace!");
+    }
+
+    return i2enum<MonraceId>(this->pval);
+}
+
 std::string ItemEntity::build_timeout_description(const ActivationType &act) const
 {
     const auto description = act.build_timeout_description();
@@ -1532,13 +1541,4 @@ char ItemEntity::get_character() const
     const auto &baseitem = this->get_baseitem();
     const auto flavor = baseitem.flavor;
     return flavor ? BaseitemList::get_instance().get_baseitem(flavor).symbol_config.character : baseitem.symbol_config.character;
-}
-
-MonraceId ItemEntity::get_monrace_id() const
-{
-    if (!this->has_monrace()) {
-        THROW_EXCEPTION(std::logic_error, "This item is not related to monrace!");
-    }
-
-    return i2enum<MonraceId>(this->pval);
 }
