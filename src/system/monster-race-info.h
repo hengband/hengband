@@ -212,6 +212,8 @@ public:
     std::map<MonraceId, MonraceDefinition>::reverse_iterator rend();
     std::map<MonraceId, MonraceDefinition>::const_reverse_iterator rend() const;
     size_t size() const;
+    MonraceDefinition &emplace(MonraceId monrace_id);
+    std::map<MonraceId, MonraceDefinition> &get_raw_map();
     MonraceDefinition &get_monrace(MonraceId monrace_id);
     const MonraceDefinition &get_monrace(MonraceId monrace_id) const;
     const std::vector<MonraceId> &get_valid_monrace_ids() const;

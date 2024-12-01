@@ -419,13 +419,16 @@ errr parse_monraces_info(nlohmann::json &mon_data, angband_header *)
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto monster_idx = mon_data["id"].get<int>();
-    if (monster_idx < error_idx) {
+    const auto monrace_id_int = mon_data["id"].get<int>();
+    if (monrace_id_int < error_idx) {
         return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
     }
-    error_idx = monster_idx;
-    auto &monrace = monraces_info.emplace_hint(monraces_info.end(), i2enum<MonraceId>(monster_idx), MonraceDefinition{})->second;
-    monrace.idx = i2enum<MonraceId>(monster_idx);
+
+    error_idx = monrace_id_int;
+    const auto monrace_id = i2enum<MonraceId>(monrace_id_int);
+    auto &monraces = MonraceList::get_instance();
+    auto &monrace = monraces.emplace(monrace_id);
+    monrace.idx = monrace_id;
 
     errr err;
     err = set_mon_name(mon_data["name"], monrace);

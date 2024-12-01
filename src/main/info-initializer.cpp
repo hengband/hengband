@@ -231,7 +231,7 @@ void init_terrains_info()
 void init_monrace_definitions()
 {
     init_header(&monraces_header);
-    init_json("MonraceDefinitions.jsonc", "monsters", monraces_header, monraces_info, parse_monraces_info);
+    init_json("MonraceDefinitions.jsonc", "monsters", monraces_header, MonraceList::get_instance().get_raw_map(), parse_monraces_info);
 }
 
 /*!

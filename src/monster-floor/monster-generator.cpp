@@ -151,9 +151,8 @@ std::optional<MONSTER_IDX> multiply_monster(PlayerType *player_ptr, MONSTER_IDX 
  * @param monrace_id 生成モンスター種族
  * @param mode 生成オプション
  * @param summoner_m_idx モンスターの召喚による場合、召喚主のモンスターID
- * @return 成功したらtrue
  */
-static bool place_monster_group(PlayerType *player_ptr, const Pos2D &pos_center, MonraceId monrace_id, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
+static void place_monster_group(PlayerType *player_ptr, const Pos2D &pos_center, MonraceId monrace_id, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
 {
     const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
     const auto floor_level = player_ptr->current_floor_ptr->dun_level;
@@ -185,6 +184,7 @@ static bool place_monster_group(PlayerType *player_ptr, const Pos2D &pos_center,
     positions.push_back(pos_center);
     for (size_t n = 0; (n < positions.size()) && (positions.size() < total_size); n++) {
         for (auto i = 0; (i < 8) && (positions.size() < total_size); i++) {
+            //!< @details 要素数が変わると参照がダングリング状態になるので毎回取得する必要がある.
             const auto &pos_neighbor = positions.at(n);
             int mx, my;
             scatter(player_ptr, &my, &mx, pos_neighbor.y, pos_neighbor.x, 4, PROJECT_NONE);
@@ -197,8 +197,6 @@ static bool place_monster_group(PlayerType *player_ptr, const Pos2D &pos_center,
             }
         }
     }
-
-    return true;
 }
 
 /*!
@@ -303,7 +301,7 @@ std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITI
     }
 
     if (monrace.misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
-        (void)place_monster_group(player_ptr, { y, x }, r_idx, mode, summoner_m_idx);
+        place_monster_group(player_ptr, { y, x }, r_idx, mode, summoner_m_idx);
     }
 
     if (monrace.misc_flags.has_not(MonsterMiscType::ESCORT)) {
@@ -328,7 +326,7 @@ std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITI
 
         (void)place_monster_one(player_ptr, ny, nx, monrace_id, mode, *m_idx);
         if (monrace.misc_flags.has(MonsterMiscType::HAS_FRIENDS) || monrace.misc_flags.has(MonsterMiscType::MORE_ESCORT)) {
-            (void)place_monster_group(player_ptr, { ny, nx }, monrace_id, mode, *m_idx);
+            place_monster_group(player_ptr, { ny, nx }, monrace_id, mode, *m_idx);
         }
     }
 

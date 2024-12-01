@@ -47,13 +47,14 @@ const std::map<NestKind, nest_pit_type> nest_types = {
 std::optional<std::array<NestMonsterInfo, NUM_NEST_MON_TYPE>> pick_nest_monraces(PlayerType *player_ptr, MonsterEntity &align)
 {
     std::array<NestMonsterInfo, NUM_NEST_MON_TYPE> nest_mon_info_list{};
+    const auto &monraces = MonraceList::get_instance();
     for (auto &nest_mon_info : nest_mon_info_list) {
         const auto monrace_id = select_pit_nest_monrace_id(player_ptr, align, 11);
         if (!monrace_id) {
             return std::nullopt;
         }
 
-        const auto &monrace = monraces_info[*monrace_id];
+        const auto &monrace = monraces.get_monrace(*monrace_id);
         if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
             align.sub_align |= SUB_ALIGN_EVIL;
         }
