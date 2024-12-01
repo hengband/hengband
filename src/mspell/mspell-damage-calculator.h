@@ -17,5 +17,5 @@ enum class MonsterAbilityType;
 enum class MonraceId : short;
 class PlayerType;
 int monspell_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, MONSTER_IDX m_idx, int TYPE);
-int monspell_race_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, MonraceId r_idx, int TYPE);
-int monspell_bluemage_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, PLAYER_LEVEL plev, int TYPE);
+int monspell_race_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, MonraceId monrace_id, int type);
+int monspell_bluemage_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, PLAYER_LEVEL plev, int type);

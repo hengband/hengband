@@ -107,10 +107,10 @@ static bool wr_savefile_new(PlayerType *player_ptr)
     wr_options();
     wr_message_history();
 
-    uint16_t tmp16u = static_cast<uint16_t>(monraces_info.size());
+    uint16_t tmp16u = static_cast<uint16_t>(MonraceList::get_instance().size());
     wr_u16b(tmp16u);
-    for (auto r_idx = 0; r_idx < tmp16u; r_idx++) {
-        wr_lore(i2enum<MonraceId>(r_idx));
+    for (auto monrace_id = 0; monrace_id < tmp16u; monrace_id++) {
+        wr_lore(i2enum<MonraceId>(monrace_id));
     }
 
     tmp16u = static_cast<uint16_t>(BaseitemList::get_instance().size());
