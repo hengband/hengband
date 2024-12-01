@@ -944,6 +944,7 @@ hengband_SOURCES = \
 	\
 	system/dungeon/dungeon-data-definition.cpp system/dungeon/dungeon-data-definition.h \
 	system/dungeon/dungeon-definition.cpp system/dungeon/dungeon-definition.h \
+	system/dungeon/dungeon-record.cpp system/dungeon/dungeon-record.h \
 	\
 	system/enums/game-option-page.h \
 	system/enums/grid-flow.h \

@@ -31,6 +31,7 @@
 #include "system/angband-system.h"
 #include "system/building-type-definition.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-record.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"

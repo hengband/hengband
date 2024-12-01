@@ -25,6 +25,7 @@
 #include "monster/monster-description-types.h"
 #include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-record.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
