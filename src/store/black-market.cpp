@@ -6,32 +6,26 @@
 #include "system/player-type-definition.h"
 
 /*!
- * @brief ブラックマーケット用の無価値品の排除判定 /
- * This function will keep 'crap' out of the black market.
+ * @brief ブラックマーケット用の無価値品の排除判定
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
+ * @param item 判定したいアイテムへの参照
  * @return ブラックマーケットにとって無価値な品ならばTRUEを返す
- * @details
- * <pre>
- * Crap is defined as any item that is "available" elsewhere
- * Based on a suggestion by "Lee Vogt" <lvogt@cig.mcel.mot.com>
- * </pre>
  */
-bool black_market_crap(PlayerType *player_ptr, ItemEntity *o_ptr)
+bool black_market_crap(PlayerType *player_ptr, const ItemEntity &item)
 {
-    if (o_ptr->is_ego()) {
+    if (item.is_ego()) {
         return false;
     }
 
-    if (o_ptr->to_a > 0) {
+    if (item.to_a > 0) {
         return false;
     }
 
-    if (o_ptr->to_h > 0) {
+    if (item.to_h > 0) {
         return false;
     }
 
-    if (o_ptr->to_d > 0) {
+    if (item.to_d > 0) {
         return false;
     }
 
@@ -42,7 +36,7 @@ bool black_market_crap(PlayerType *player_ptr, ItemEntity *o_ptr)
 
         const auto &store = towns_info[player_ptr->town_num].stores[sst];
         for (auto j = 0; j < store.stock_num; j++) {
-            if (o_ptr->bi_id == store.stock[j]->bi_id) {
+            if (item.bi_id == store.stock[j]->bi_id) {
                 return true;
             }
         }

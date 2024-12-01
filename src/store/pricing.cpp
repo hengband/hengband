@@ -5,7 +5,6 @@
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
-#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 
@@ -31,9 +30,8 @@
  * "greed" value is always something (?).
  * </pre>
  */
-int price_item(PlayerType *player_ptr, const ItemEntity *o_ptr, int greed, bool flip, StoreSaleType store_num)
+int price_item(PlayerType *player_ptr, int price, int greed, bool flip, StoreSaleType store_num)
 {
-    auto price = o_ptr->calc_price();
     if (price <= 0) {
         return 0L;
     }

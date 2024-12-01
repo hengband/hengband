@@ -6,4 +6,4 @@
 #define SCROBJ_FORCE_DETAIL 0x00000002
 class ItemEntity;
 class PlayerType;
-bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode);
+bool screen_object(PlayerType *player_ptr, const ItemEntity &item, BIT_FLAGS mode);
