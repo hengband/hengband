@@ -88237,6 +88237,328 @@
         "ja": "それは渦を巻く影で、時折暗黒の波動を放っている。",
         "en": "It was a swirling shadow, occasionally emitting dark waves."
       }
+    },
+    {
+      "id": 1378,
+      "name": {
+        "ja": "クリーピング・オブシディアン",
+        "en": "Creeping obsidians"
+      },
+      "symbol": {
+        "character": "$",
+        "color": "Dark Gray"
+      },
+      "speed": 0,
+      "hit_point": "14d11",
+      "vision": 5,
+      "armor_class": 50,
+      "alertness": 10,
+      "level": 12,
+      "rarity": 6,
+      "exp": 50,
+      "blows": [
+        {
+          "method": "SLASH",
+          "effect": "HURT",
+          "damage_dice": "2d10"
+        },
+        {
+          "method": "SLASH",
+          "effect": "HURT",
+          "damage_dice": "2d10"
+        }
+      ],
+      "flags": [
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_OBSIDIAN",
+        "COLD_BLOOD",
+        "BASH_DOOR",
+        "ANIMAL",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP"
+      ],
+      "flavor": {
+        "ja": "それは黒い宝石の塊で、何千もの小さな足で前によろめき歩く。",
+        "en": "It is a pile of black jewels, shambling forward on thousands of tiny legs."
+      }
+    },
+    {
+      "id": 1379,
+      "name": {
+        "ja": "クリーピング・ガーネット",
+        "en": "Creeping garnets"
+      },
+      "symbol": {
+        "character": "$",
+        "color": "Red"
+      },
+      "speed": 0,
+      "hit_point": "16d8",
+      "vision": 5,
+      "armor_class": 70,
+      "alertness": 10,
+      "level": 14,
+      "rarity": 6,
+      "exp": 70,
+      "blows": [
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "2d8"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "2d8"
+        }
+      ],
+      "flags": [
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_GARNET",
+        "COLD_BLOOD",
+        "BASH_DOOR",
+        "ANIMAL",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP"
+      ],
+      "flavor": {
+        "ja": "それは赤い宝石の塊で、何千もの小さな足で前によろめき歩く。",
+        "en": "It is a pile of red jewels, shambling forward on thousands of tiny legs."
+      }
+    },
+    {
+      "id": 1380,
+      "name": {
+        "ja": "クリーピング・オパール",
+        "en": "Creeping opals"
+      },
+      "symbol": {
+        "character": "$",
+        "color": "Light Gray"
+      },
+      "speed": 0,
+      "hit_point": "32d8",
+      "vision": 5,
+      "armor_class": 60,
+      "alertness": 10,
+      "level": 22,
+      "rarity": 6,
+      "exp": 100,
+      "blows": [
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "2d8"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "2d8"
+        }
+      ],
+      "flags": [
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_OPAL",
+        "COLD_BLOOD",
+        "BASH_DOOR",
+        "ANIMAL",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP"
+      ],
+      "flavor": {
+        "ja": "それは白い宝石の塊で、何千もの小さな足で前によろめき歩く。",
+        "en": "It is a pile of white jewels, shambling forward on thousands of tiny legs."
+      }
+    },
+    {
+      "id": 1381,
+      "name": {
+        "ja": "クリーピング・エメラルド",
+        "en": "Creeping emeralds"
+      },
+      "symbol": {
+        "character": "$",
+        "color": "Green"
+      },
+      "speed": 5,
+      "hit_point": "34d8",
+      "vision": 0,
+      "armor_class": 80,
+      "alertness": 10,
+      "level": 24,
+      "rarity": 6,
+      "exp": 150,
+      "blows": [
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "2d9"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "2d9"
+        }
+      ],
+      "flags": [
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_EMERALD",
+        "COLD_BLOOD",
+        "BASH_DOOR",
+        "ANIMAL",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP"
+      ],
+      "flavor": {
+        "ja": "それは緑の宝石の塊で、何千もの小さな足で前によろめき歩く。",
+        "en": "It is a pile of green jewels, shambling forward on thousands of tiny legs."
+      }
+    },
+    {
+      "id": 1382,
+      "name": {
+        "ja": "クリーピング・サファイア",
+        "en": "Creeping saphires"
+      },
+      "symbol": {
+        "character": "$",
+        "color": "Blue"
+      },
+      "speed": 5,
+      "hit_point": "34d8",
+      "vision": 0,
+      "armor_class": 90,
+      "alertness": 10,
+      "level": 26,
+      "rarity": 6,
+      "exp": 150,
+      "blows": [
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "2d10"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "2d10"
+        }
+      ],
+      "flags": [
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_SAPPHIRE",
+        "COLD_BLOOD",
+        "BASH_DOOR",
+        "ANIMAL",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP"
+      ],
+      "flavor": {
+        "ja": "それは青い宝石の塊で、何千もの小さな足で前によろめき歩く。",
+        "en": "It is a pile of blue jewels, shambling forward on thousands of tiny legs."
+      }
+    },
+    {
+      "id": 1383,
+      "name": {
+        "ja": "クリーピング・ルビー",
+        "en": "Creeping rubies"
+      },
+      "symbol": {
+        "character": "$",
+        "color": "Red"
+      },
+      "speed": 0,
+      "hit_point": "34d8",
+      "vision": 5,
+      "armor_class": 90,
+      "alertness": 10,
+      "level": 28,
+      "rarity": 6,
+      "exp": 150,
+      "blows": [
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "2d10"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "2d10"
+        }
+      ],
+      "flags": [
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_RUBY",
+        "COLD_BLOOD",
+        "BASH_DOOR",
+        "ANIMAL",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP"
+      ],
+      "flavor": {
+        "ja": "それは赤い宝石の塊で、何千もの小さな足で前によろめき歩く。",
+        "en": "It is a pile of red jewels, shambling forward on thousands of tiny legs."
+      }
+    },
+    {
+      "id": 1384,
+      "name": {
+        "ja": "クリーピング・ダイヤモンド",
+        "en": "Creeping diamonds"
+      },
+      "symbol": {
+        "character": "$",
+        "color": "White"
+      },
+      "speed": 0,
+      "hit_point": "40d8",
+      "vision": 5,
+      "armor_class": 100,
+      "alertness": 10,
+      "level": 32,
+      "rarity": 6,
+      "exp": 200,
+      "blows": [
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "3d10"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "3d10"
+        }
+      ],
+      "flags": [
+        "ONLY_GOLD",
+        "DROP_4D2",
+        "DROP_DIAMOND",
+        "COLD_BLOOD",
+        "BASH_DOOR",
+        "ANIMAL",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP"
+      ],
+      "flavor": {
+        "ja": "それは白い宝石の塊で、何千もの小さな足で前によろめき歩く。",
+        "en": "It is a pile of white jewels, shambling forward on thousands of tiny legs."
+      }
     }
   ]
 }
