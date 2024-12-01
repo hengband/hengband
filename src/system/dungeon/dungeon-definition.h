@@ -65,7 +65,8 @@ struct feat_prob {
 /* A structure for the != dungeon types */
 enum class TerrainCharacteristics;
 class MonraceDefinition;
-struct dungeon_type {
+class DungeonDefinition {
+public:
     DUNGEON_IDX idx{};
 
     std::string name; /* Name */

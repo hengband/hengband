@@ -40,7 +40,7 @@ constexpr auto REDRAW_MAX = 2298;
 enum class GridCountKind;
 enum class MonsterTimedEffect : int;
 enum class QuestId : short;
-struct dungeon_type;
+class DungeonDefinition;
 class Grid;
 class MonsterEntity;
 class ItemEntity;
@@ -96,7 +96,7 @@ public:
     bool is_in_quest() const;
     void set_dungeon_index(short dungeon_idx_); /*!< @todo 後でenum class にする */
     void reset_dungeon_index();
-    dungeon_type &get_dungeon_definition() const;
+    DungeonDefinition &get_dungeon_definition() const;
     QuestId get_random_quest_id(std::optional<int> level_opt = std::nullopt) const;
     QuestId get_quest_id(const int bonus = 0) const;
     bool has_los(const Pos2D &pos) const;

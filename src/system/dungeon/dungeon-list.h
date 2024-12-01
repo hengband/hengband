@@ -8,5 +8,5 @@
 
 #include <vector>
 
-struct dungeon_type;
-extern std::vector<dungeon_type> dungeons_info;
+class DungeonDefinition;
+extern std::vector<DungeonDefinition> dungeons_info;

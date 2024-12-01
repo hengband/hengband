@@ -137,7 +137,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         }
     } else if (category == "DUNGEON") {
         DUNGEON_IDX d_idx;
-        dungeon_type *d_ptr;
+        DungeonDefinition *d_ptr;
         const auto dungeons_size = static_cast<short>(dungeons_info.size());
         const auto &d_idx_str = tokens[1];
         while (true) {

@@ -7,4 +7,4 @@
 #include "system/dungeon/dungeon-list.h"
 #include "system/dungeon/dungeon-definition.h"
 
-std::vector<dungeon_type> dungeons_info;
+std::vector<DungeonDefinition> dungeons_info;
