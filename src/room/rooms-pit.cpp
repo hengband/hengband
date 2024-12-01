@@ -79,13 +79,14 @@ const std::vector<TrappedMonster> place_table_trapped_pit = {
 std::optional<std::array<MonraceId, NUM_PIT_MONRACES>> pick_pit_monraces(PlayerType *player_ptr, MonsterEntity &align, int boost = 0)
 {
     std::array<MonraceId, NUM_PIT_MONRACES> whats{};
+    const auto &monraces = MonraceList::get_instance();
     for (auto &what : whats) {
         const auto monrace_id = select_pit_nest_monrace_id(player_ptr, align, boost);
         if (!monrace_id) {
             return std::nullopt;
         }
 
-        const auto &monrace = monraces_info[*monrace_id];
+        const auto &monrace = monraces.get_monrace(*monrace_id);
         if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
             align.sub_align |= SUB_ALIGN_EVIL;
         }
@@ -229,19 +230,19 @@ bool build_type6(PlayerType *player_ptr, DungeonData *dd_ptr)
     const Pos2D center(yval, xval);
     place_pit_outer(player_ptr, center);
     place_pit_inner(player_ptr, center);
-    std::stable_sort(whats->begin(), whats->end(), [](const auto monrace_id1, const auto monrace_id2) {
-        return monraces_info[monrace_id1].level < monraces_info[monrace_id2].level;
+    const auto &monraces = MonraceList::get_instance();
+    std::stable_sort(whats->begin(), whats->end(), [&monraces](const auto monrace_id1, const auto monrace_id2) {
+        return monraces.order_level(monrace_id2, monrace_id1);
     });
     constexpr auto fmt_generate = _("モンスター部屋(pit)(%s%s)を生成します。", "Monster pit (%s%s)");
-    msg_format_wizard(
-        player_ptr, CHEAT_DUNGEON, fmt_generate, pit.name.data(), pit_subtype_string(*pit_type).data());
+    const auto pit_subtype = pit_subtype_string(*pit_type);
+    msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_generate, pit.name.data(), pit_subtype.data());
 
-    /* Select the entries */
     for (auto i = 0; i < NUM_PIT_MONRACES / 2; i++) {
-        /* Every other entry */
         (*whats)[i] = (*whats)[i * 2];
         constexpr auto fmt_pit_num = _("Pit構成モンスター選択No.%d:%s", "Pit Monster Select No.%d:%s");
-        msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_pit_num, i, monraces_info[(*whats)[i]].name.data());
+        const auto &monrace = monraces.get_monrace((*whats)[i]);
+        msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_pit_num, i, monrace.name.data());
     }
 
     /* Top and bottom rows */
@@ -476,20 +477,18 @@ bool build_type13(PlayerType *player_ptr, DungeonData *dd_ptr)
     auto &grid = floor.get_grid(pos);
     grid.mimic = grid.feat;
     grid.feat = feat_trap_open;
-
-    std::stable_sort(whats->begin(), whats->end(), [](const auto monrace_id1, const auto monrace_id2) {
-        return monraces_info[monrace_id1].level < monraces_info[monrace_id2].level;
+    const auto &monraces = MonraceList::get_instance();
+    std::stable_sort(whats->begin(), whats->end(), [&monraces](const auto monrace_id1, const auto monrace_id2) {
+        return monraces.order_level(monrace_id2, monrace_id1);
     });
     constexpr auto fmt = _("%s%sの罠ピットが生成されました。", "Trapped monster pit (%s%s)");
-    msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt, pit.name.data(), pit_subtype_string(*pit_type).data());
+    const auto pit_subtype = pit_subtype_string(*pit_type);
+    msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt, pit.name.data(), pit_subtype.data());
 
-    /* Select the entries */
     for (auto i = 0; i < NUM_PIT_MONRACES / 2; i++) {
-        /* Every other entry */
         (*whats)[i] = (*whats)[i * 2];
-
         if (cheat_hear) {
-            msg_print(monraces_info[(*whats)[i]].name);
+            msg_print(monraces.get_monrace((*whats)[i]).name);
         }
     }
 
