@@ -698,6 +698,11 @@ size_t MonraceList::size() const
     return monraces_info.size();
 }
 
+MonraceDefinition &MonraceList::emplace(MonraceId monrace_id)
+{
+    return monraces_info.emplace_hint(monraces_info.end(), monrace_id, MonraceDefinition{})->second;
+}
+
 /*!
  * @brief モンスター定義を種族IDから直接得る (非const版)
  * @param monrace_id モンスター種族ID
