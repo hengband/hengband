@@ -184,8 +184,8 @@ static bool place_monster_group(PlayerType *player_ptr, const Pos2D &pos_center,
     std::vector<Pos2D> positions;
     positions.push_back(pos_center);
     for (size_t n = 0; (n < positions.size()) && (positions.size() < total_size); n++) {
-        const auto &pos_neighbor = positions[n];
         for (auto i = 0; (i < 8) && (positions.size() < total_size); i++) {
+            const auto &pos_neighbor = positions.at(n);
             int mx, my;
             scatter(player_ptr, &my, &mx, pos_neighbor.y, pos_neighbor.x, 4, PROJECT_NONE);
             if (!is_cave_empty_bold2(player_ptr, my, mx)) {
