@@ -12,6 +12,7 @@
 #include "io/input-key-acceptor.h"
 #include "knowledge/lighting-level-table.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
 #include "system/dungeon/dungeon-record.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"

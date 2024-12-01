@@ -25,6 +25,7 @@
 #include "player/player-status-table.h"
 #include "system/building-type-definition.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
 #include "system/enums/grid-flow.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"

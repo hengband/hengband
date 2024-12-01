@@ -127,5 +127,3 @@ struct dungeon_type {
     short convert_terrain_id(short terrain_id) const;
     bool is_open(short terrain_id) const;
 };
-
-extern std::vector<dungeon_type> dungeons_info;

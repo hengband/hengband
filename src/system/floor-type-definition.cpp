@@ -8,6 +8,7 @@
 #include "system/artifact-type-definition.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
 #include "system/enums/grid-count-kind.h"
 #include "system/gamevalue.h"
 #include "system/grid-type-definition.h"

@@ -20,6 +20,7 @@
 #include "perception/object-perception.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
 #include "system/dungeon/dungeon-record.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"

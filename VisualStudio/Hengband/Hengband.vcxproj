@@ -327,6 +327,7 @@
     <ClCompile Include="..\..\src\system\dungeon\dungeon-data-definition.cpp" />
     <ClCompile Include="..\..\src\system\baseitem\baseitem-key.cpp" />
     <ClCompile Include="..\..\src\system\baseitem\baseitem-list.cpp" />
+    <ClCompile Include="..\..\src\system\dungeon\dungeon-list.cpp" />
     <ClCompile Include="..\..\src\system\dungeon\dungeon-record.cpp" />
     <ClCompile Include="..\..\src\system\inner-game-data.cpp" />
     <ClCompile Include="..\..\src\system\redrawing-flags-updater.cpp" />
@@ -1435,6 +1436,7 @@
     <ClInclude Include="..\..\src\system\angband-system.h" />
     <ClInclude Include="..\..\src\system\baseitem\baseitem-key.h" />
     <ClInclude Include="..\..\src\system\baseitem\baseitem-list.h" />
+    <ClInclude Include="..\..\src\system\dungeon\dungeon-list.h" />
     <ClInclude Include="..\..\src\system\dungeon\dungeon-record.h" />
     <ClInclude Include="..\..\src\system\enums\grid-count-kind.h" />
     <ClInclude Include="..\..\src\system\enums\grid-flow.h" />

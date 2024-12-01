@@ -16,6 +16,7 @@
 #include "main/scene-table.h"
 #include "main/sound-of-music.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
 #include "system/monster-race-info.h"
 #include "term/z-term.h"
 #include "util/angband-files.h"

@@ -16,11 +16,6 @@ enum conversion_type {
     CONVERT_TYPE_STREAM2 = 6,
 };
 
-/*
- * The dungeon arrays
- */
-std::vector<dungeon_type> dungeons_info;
-
 bool dungeon_type::has_river_flag() const
 {
     return this->flags.has_any_of(DF_RIVER_MASK);
