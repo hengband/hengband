@@ -703,6 +703,11 @@ MonraceDefinition &MonraceList::emplace(MonraceId monrace_id)
     return monraces_info.emplace_hint(monraces_info.end(), monrace_id, MonraceDefinition{})->second;
 }
 
+std::map<MonraceId, MonraceDefinition> &MonraceList::get_raw_map()
+{
+    return monraces_info;
+}
+
 /*!
  * @brief モンスター定義を種族IDから直接得る (非const版)
  * @param monrace_id モンスター種族ID
