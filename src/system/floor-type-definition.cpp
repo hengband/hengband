@@ -359,19 +359,9 @@ short FloorType::get_obj_index(int level, uint32_t mode) const
         return 0;
     }
 
-    // 40%で1回、50%で2回、10%で3回抽選し、その中で一番レベルが高いアイテムを選択する
-    int n = 1;
-
-    const int p = randint0(100);
-    if (p < 60) {
-        n++;
-    }
-    if (p < 10) {
-        n++;
-    }
-
+    const auto count = decide_selection_count();
     std::vector<int> result;
-    ProbabilityTable<int>::lottery(std::back_inserter(result), prob_table, n);
+    ProbabilityTable<int>::lottery(std::back_inserter(result), prob_table, count);
     const auto it = std::max_element(result.begin(), result.end(), [&table](int a, int b) { return table.order_level(a, b); });
     return table.get_entry(*it).index;
 }
@@ -445,4 +435,25 @@ void FloorType::remove_mproc(short m_idx, MonsterTimedEffect mte)
     if (mproc_idx >= 0) {
         this->mproc_list[mte][*mproc_idx] = this->mproc_list[mte][--this->mproc_max[mte]];
     }
+}
+
+/*!
+ * @brief アイテムの抽選回数をランダムに決定する
+ * @return 抽選回数
+ * @details 40 % で1回、50 % で2回、10 % で3回.
+ * モンスターも同一ルーチンだが将来に亘って同一である保証はないので、アイテムはアイテムで定義する
+ */
+int FloorType::decide_selection_count()
+{
+    auto count = 1;
+    const auto p = randint0(100);
+    if (p < 60) {
+        count++;
+    }
+
+    if (p < 10) {
+        count++;
+    }
+
+    return count;
 }

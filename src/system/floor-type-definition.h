@@ -119,4 +119,7 @@ public:
     std::optional<int> get_mproc_index(short m_idx, MonsterTimedEffect mte);
     void add_mproc(short m_idx, MonsterTimedEffect mte);
     void remove_mproc(short m_idx, MonsterTimedEffect mte);
+
+private:
+    static int decide_selection_count();
 };
