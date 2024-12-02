@@ -259,12 +259,12 @@ bool BaseitemAllocationTable::order_level(int index1, int index2) const
 
 /*!
  * @brief オブジェクト生成テーブルに生成制約を加える
- * @todo get_obj_index_hook グローバル関数ポインタは引数化して除去する
+ * @todo select_baseitem_id_hook グローバル関数ポインタは引数化して除去する
  */
 void BaseitemAllocationTable::prepare_allocation()
 {
     for (auto &entry : this->entries) {
-        if (!get_obj_index_hook || (*get_obj_index_hook)(entry.index)) {
+        if (!select_baseitem_id_hook || (*select_baseitem_id_hook)(entry.index)) {
             entry.prob2 = entry.prob1;
         } else {
             entry.prob2 = 0;

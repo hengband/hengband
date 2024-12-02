@@ -112,18 +112,18 @@ bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, std:
         }
     }
 
-    if (any_bits(mode, AM_GOOD) && !get_obj_index_hook) {
-        get_obj_index_hook = kind_is_good;
+    if (any_bits(mode, AM_GOOD) && !select_baseitem_id_hook) {
+        select_baseitem_id_hook = kind_is_good;
     }
 
     auto &table = BaseitemAllocationTable::get_instance();
-    if (get_obj_index_hook) {
+    if (select_baseitem_id_hook) {
         table.prepare_allocation();
     }
 
     const auto bi_id = floor.select_baseitem_id(base, mode);
-    if (get_obj_index_hook) {
-        get_obj_index_hook = nullptr;
+    if (select_baseitem_id_hook) {
+        select_baseitem_id_hook = nullptr;
         table.prepare_allocation();
     }
 

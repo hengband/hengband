@@ -304,7 +304,7 @@ ItemEntity FloorType::make_gold(std::optional<BaseitemKey> bi_key) const
  */
 std::optional<ItemEntity> FloorType::try_make_instant_artifact() const
 {
-    if (!this->is_in_underground() || (get_obj_index_hook != nullptr)) {
+    if (!this->is_in_underground() || (select_baseitem_id_hook != nullptr)) {
         return std::nullopt;
     }
 
