@@ -121,7 +121,7 @@ bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, std:
         table.prepare_allocation();
     }
 
-    const auto bi_id = floor.get_obj_index(base, mode);
+    const auto bi_id = floor.select_baseitem_id(base, mode);
     if (get_obj_index_hook) {
         get_obj_index_hook = nullptr;
         table.prepare_allocation();

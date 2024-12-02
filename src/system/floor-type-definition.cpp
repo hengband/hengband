@@ -289,7 +289,7 @@ ItemEntity FloorType::make_gold(std::optional<BaseitemKey> bi_key) const
         item = ItemEntity(*bi_key);
     } else {
         const auto level = this->object_level <= 0 ? 1 : this->object_level;
-        item = ItemEntity(this->get_obj_index(level, AM_GOLD));
+        item = ItemEntity(this->select_baseitem_id(level, AM_GOLD));
     }
 
     const auto base = item.get_baseitem_cost();
@@ -318,7 +318,7 @@ std::optional<ItemEntity> FloorType::try_make_instant_artifact() const
  * @param mode 生成モード
  * @return 選ばれたベースアイテムID
  */
-short FloorType::get_obj_index(int level, uint32_t mode) const
+short FloorType::select_baseitem_id(int level, uint32_t mode) const
 {
     if (level > MAX_DEPTH - 1) {
         level = MAX_DEPTH - 1;
