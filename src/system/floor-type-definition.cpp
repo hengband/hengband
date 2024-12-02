@@ -314,12 +314,13 @@ std::optional<ItemEntity> FloorType::try_make_instant_artifact() const
 
 /*!
  * @brief アイテム生成テーブルからベースアイテムIDを取得する
- * @param level 生成基準階層
+ * @param level_initial 生成基準階層 (天界や地獄の階層もそのまま渡ってくる)
  * @param mode 生成モード
  * @return 選ばれたベースアイテムID
  */
-short FloorType::select_baseitem_id(int level, uint32_t mode) const
+short FloorType::select_baseitem_id(int level_initial, uint32_t mode) const
 {
+    auto level = level_initial;
     if (level > MAX_DEPTH - 1) {
         level = MAX_DEPTH - 1;
     }
