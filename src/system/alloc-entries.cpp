@@ -1,5 +1,6 @@
 #include "system/alloc-entries.h"
 #include "floor/floor-base-definitions.h"
+#include "object-enchant/item-apply-magic.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "system/monster-race-info.h"
@@ -236,6 +237,19 @@ BaseitemAllocationEntry &BaseitemAllocationTable::get_entry(int index)
     return this->entries.at(index);
 }
 
+short BaseitemAllocationTable::draw_lottery(int level, uint32_t mode, int count) const
+{
+    const auto prob_table = this->make_table(level, mode);
+    if (prob_table.empty()) {
+        return 0;
+    }
+
+    std::vector<int> result;
+    ProbabilityTable<int>::lottery(std::back_inserter(result), prob_table, count);
+    const auto it = std::max_element(result.begin(), result.end(), [this](int a, int b) { return this->order_level(a, b); });
+    return this->get_entry(*it).index;
+}
+
 bool BaseitemAllocationTable::order_level(int index1, int index2) const
 {
     const auto &entry1 = this->entries.at(index1);
@@ -256,4 +270,31 @@ void BaseitemAllocationTable::prepare_allocation()
             entry.prob2 = 0;
         }
     }
+}
+
+ProbabilityTable<int> BaseitemAllocationTable::make_table(int level, uint32_t mode) const
+{
+    ProbabilityTable<int> prob_table;
+    for (size_t i = 0; i < this->size(); i++) {
+        const auto &entry = this->get_entry(i);
+        if (entry.level > level) {
+            break;
+        }
+
+        if (any_bits(mode, AM_FORBID_CHEST) && entry.is_chest()) {
+            continue;
+        }
+
+        if (any_bits(mode, AM_GOLD) && !entry.is_gold()) {
+            continue;
+        }
+
+        if (none_bits(mode, AM_GOLD) && entry.is_gold()) {
+            continue;
+        }
+
+        prob_table.entry_item(i, entry.prob2);
+    }
+
+    return prob_table;
 }

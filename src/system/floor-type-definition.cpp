@@ -18,7 +18,6 @@
 #include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-range.h"
-#include "util/probability-table.h"
 #include "world/world-object.h"
 
 FloorType::FloorType()
@@ -331,40 +330,8 @@ short FloorType::select_baseitem_id(int level_initial, uint32_t mode) const
         }
     }
 
-    // 候補の確率テーブル生成
     const auto &table = BaseitemAllocationTable::get_instance();
-    ProbabilityTable<int> prob_table;
-    for (size_t i = 0; i < table.size(); i++) {
-        const auto &entry = table.get_entry(i);
-        if (entry.level > level) {
-            break;
-        }
-
-        if (any_bits(mode, AM_FORBID_CHEST) && entry.is_chest()) {
-            continue;
-        }
-
-        if (any_bits(mode, AM_GOLD) && !entry.is_gold()) {
-            continue;
-        }
-
-        if (none_bits(mode, AM_GOLD) && entry.is_gold()) {
-            continue;
-        }
-
-        prob_table.entry_item(i, entry.prob2);
-    }
-
-    // 候補なし
-    if (prob_table.empty()) {
-        return 0;
-    }
-
-    const auto count = decide_selection_count();
-    std::vector<int> result;
-    ProbabilityTable<int>::lottery(std::back_inserter(result), prob_table, count);
-    const auto it = std::max_element(result.begin(), result.end(), [&table](int a, int b) { return table.order_level(a, b); });
-    return table.get_entry(*it).index;
+    return table.draw_lottery(level, mode, decide_selection_count());
 }
 
 /*!
